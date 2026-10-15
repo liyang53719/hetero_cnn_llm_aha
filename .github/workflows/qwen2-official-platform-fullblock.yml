@@ -1,0 +1,68 @@
+name: qwen2-official-platform-fullblock
+# One externally reviewed complete job. No rerun or automatic retry.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/qwen2-official-platform-fullblock.yml
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  fullblock:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      PYTHONNOUSERSITE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      MKL_NUM_THREADS: '4'
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      ATEN_CPU_CAPABILITY: avx2
+      QWEN2_CI_RUNTIME_PROFILE: avx2-aten-gemm-v1
+      PYTHONPATH: '${{ github.workspace }}/work/runtime_recovery/site-packages'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Admit exact new source policy and three single-use approvals
+        run: |
+          mkdir -p work/official_platform_fullblock_logs
+          python -B -m candidates.qwen2_official_platform_fullblock.job admit > work/official_platform_fullblock_logs/admit.log 2>&1 || { echo '{"schema":1,"status":"FULLBLOCK_STAGE_FAILED","phase":"ADMIT"}'; exit 1; }
+      - name: Install exact official runtime once
+        timeout-minutes: 7
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple --target work/runtime_recovery/site-packages -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt -r candidates/qwen2_fullblock_ci_dut/requirements-extra.txt > work/official_platform_fullblock_logs/install.log 2>&1 || { echo '{"schema":1,"status":"FULLBLOCK_STAGE_FAILED","phase":"INSTALL"}'; exit 1; }
+      - name: Prepare fresh fixed raw and native identities
+        timeout-minutes: 3
+        run: |
+          python -B -m candidates.qwen2_ci_prepare_diagnostic.diagnostic --execute --download > work/official_platform_fullblock_logs/prepare.log 2>&1 || { echo '{"schema":1,"status":"FULLBLOCK_STAGE_FAILED","phase":"PREPARE"}'; exit 1; }
+      - name: Capture and verify two full official references locally
+        timeout-minutes: 5
+        run: |
+          python -B -m candidates.qwen2_official_platform_fullblock.job capture > work/official_platform_fullblock_logs/reference.log 2>&1 || { echo '{"schema":1,"status":"FULLBLOCK_STAGE_FAILED","phase":"REFERENCE_PAIR"}'; exit 1; }
+      - name: Freeze the verified same-job reference then execute one complete block
+        id: actual
+        timeout-minutes: 58
+        run: |
+          python -B -m candidates.qwen2_official_platform_fullblock.job actual > work/official_platform_fullblock_logs/actual.log 2>&1 || { echo '{"schema":1,"status":"FULLBLOCK_STAGE_FAILED","phase":"ACTUAL"}'; exit 1; }
+      - name: Collect strictly allowlisted aggregate
+        if: always() && (steps.actual.outcome == 'success' || steps.actual.outcome == 'failure')
+        timeout-minutes: 1
+        run: |
+          python -B -m candidates.qwen2_official_platform_fullblock.job aggregate > work/official_platform_fullblock_logs/aggregate.log 2>&1 || { echo '{"schema":1,"status":"FULLBLOCK_STAGE_FAILED","phase":"AGGREGATE"}'; exit 1; }
+      - name: Upload only validated aggregate
+        if: always() && (steps.actual.outcome == 'success' || steps.actual.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-official-platform-fullblock-aggregate-${{ github.sha }}-${{ github.run_id }}
+          path: work/qwen2_official_platform_fullblock_summary.json
+          if-no-files-found: error
+          retention-days: 7

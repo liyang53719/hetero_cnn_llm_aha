@@ -1,0 +1,146 @@
+{
+  "files": {
+    "aggregate.py": {
+      "replacements": [
+        {
+          "after": "'work/qwen2_official_platform_fullblock_numeric/ci01/RESULT.json'",
+          "before": "'work/qwen2_fullblock_ci_dut_numeric/ci01/RESULT.json'",
+          "count": 1
+        },
+        {
+          "after": "'work/qwen2_official_platform_fullblock_numeric/ci01.LAUNCH.json'",
+          "before": "'work/qwen2_fullblock_ci_dut_numeric/ci01.LAUNCH.json'",
+          "count": 1
+        },
+        {
+          "after": "    # Exact-copy and numerical policy are separate, explicitly versioned gates.\n    legacy = report.get('cold_cache_comparisons')\n    copy=obj(report.get('same_run_cache_comparison'))\n    numeric=report.get('same_run_cache_original_comparisons')\n    if (report.get('cache_contract')!='sealed-same-live-cold-cache-v1' or\n        report.get('reference_contract')!='official-ast-ci-aten-avx2-reference-v1' or\n        type(legacy) is not dict or set(legacy)!={'cache_k','cache_v'} or\n        not all(type(obj(v).get('exact_cold_alias')) is bool for v in legacy.values()) or\n        type(obj(report.get('official_kv_comparison')).get('official_kv_exact_copy')) is not bool or\n        type(report.get('legacy_cross_oracle_contract_pass')) is not bool or\n        set(copy)!={'scope','same_live_exact_copy','official_kv_exact_copy','numerical_acceptance_claimed',\n                    'whole_block_acceptance_claimed','historical_run_upgraded'} or\n        copy.get('scope')!='COLD_CACHE_IDENTITY_AND_COPY_ONLY' or copy.get('same_live_exact_copy') is not True or\n        any(copy.get(k) is not False for k in ('numerical_acceptance_claimed','whole_block_acceptance_claimed','historical_run_upgraded')) or\n        copy.get('official_kv_exact_copy') is not report['official_kv_comparison']['official_kv_exact_copy'] or\n        type(numeric) is not dict or set(numeric)!={'cache_k','cache_v'}):return False\n    for row in numeric.values():\n        verdict=obj(obj(row).get('verdict'));metrics=obj(obj(row).get('metrics'))\n        if (obj(row).get('finite') is not True or integer(obj(row).get('observed_elements'))!=32768 or\n            obj(row).get('origin')!='final sealed physical KV subspan' or\n            verdict.get('contract')!='spec/numerical_contract.md:operator' or\n            not same(verdict.get('limits'),dict(max_abs=0.03125,mean_abs=0.005)) or\n            type(obj(row).get('official_numeric_pass')) is not bool or\n            verdict.get('passed') is not row['official_numeric_pass'] or\n            number(metrics.get('max_abs')) is None or number(metrics.get('mean_abs')) is None or\n            (metrics['max_abs']<=0.03125 and metrics['mean_abs']<=0.005) is not verdict['passed'] or\n            (require_pass and row['official_numeric_pass'] is not True)):return False\n    for item in (obj(report.get('official_kv_comparison')).get('official_numeric_pass'),\n                 obj(report.get('softmax_probability_sum')).get('passed')):\n        if (item is not True if require_pass else type(item) is not bool):return False\n    return True",
+          "before": "    cache = report.get('cold_cache_comparisons')\n    return (type(cache) is dict and set(cache)=={'cache_k','cache_v'} and\n        all((obj(v).get('exact_cold_alias') is True if require_pass else\n             type(obj(v).get('exact_cold_alias')) is bool) for v in cache.values()) and\n        (obj(report.get('official_kv_comparison')).get('official_kv_exact_copy') is True if require_pass else\n         type(obj(report.get('official_kv_comparison')).get('official_kv_exact_copy')) is bool) and\n        (obj(report.get('softmax_probability_sum')).get('passed') is True if require_pass else\n         type(obj(report.get('softmax_probability_sum')).get('passed')) is bool))",
+          "count": 1
+        },
+        {
+          "after": "    return dict(schema=1, scope='Qwen2_M128_PUBLIC21_SOFTWARE', status='INCOMPLETE',\n        reference_contract='official-ast-ci-aten-avx2-reference-v1',cache_contract='sealed-same-live-cold-cache-v1',",
+          "before": "    return dict(schema=1, scope='Qwen2_M128_PUBLIC21_SOFTWARE', status='INCOMPLETE',",
+          "count": 1
+        },
+        {
+          "after": "    need(value['status'] in ('PASS_OFFICIAL_OBSERVED','FAILED','INCOMPLETE'), 'summary status')\n    need(value['reference_contract']=='official-ast-ci-aten-avx2-reference-v1' and\n         value['cache_contract']=='sealed-same-live-cold-cache-v1','fixed public policy enums')",
+          "before": "    need(value['status'] in ('PASS_OFFICIAL_OBSERVED','FAILED','INCOMPLETE'), 'summary status')",
+          "count": 1
+        }
+      ],
+      "sha256": "0324b253a129f52ce943d4fe30c744fa84d7e2dd3bc20b766351e9415008a845",
+      "source": "candidates/qwen2_fullblock_ci_dut/aggregate.py"
+    },
+    "audit_probe.py": {
+      "replacements": [
+        {
+          "after": "from candidates.qwen2_official_platform_fullblock import gates,runner\nfrom candidates.qwen2_fullblock_ci_dut import statistics",
+          "before": "from candidates.qwen2_fullblock_ci_dut import gates,runner,statistics",
+          "count": 1
+        }
+      ],
+      "sha256": "51079692880e3ee6bfc5fef7366543da03a7092f5d4548517064896d0ede9da2",
+      "source": "candidates/qwen2_fullblock_ci_dut/audit_probe.py"
+    },
+    "gates.py": {
+      "replacements": [
+        {
+          "after": "'work/qwen2_official_platform_fullblock_numeric'",
+          "before": "'work/qwen2_fullblock_ci_dut_numeric'",
+          "count": 1
+        },
+        {
+          "after": "    for path,spec in binding['metadata_files'].items():\n        dependencies[path]=spec['sha256']\n    dependencies[R.FROZEN_BINDING]=os.environ[R.BINDING_ENV]",
+          "before": "    dependencies[R.FROZEN_BINDING]=os.environ[R.BINDING_ENV]",
+          "count": 1
+        },
+        {
+          "after": "    from . import job\n    job.authorize()\n    require(type(value) is str and re.fullmatch('[0-9a-f]{64}',value),\n            'explicit reviewed source-only DUT closure required')",
+          "before": "    require(type(value) is str and re.fullmatch('[0-9a-f]{64}',value),\n            'explicit reviewed source-only DUT closure required')",
+          "count": 1
+        },
+        {
+          "after": "(ROOT / 'candidates/qwen2_fullblock_ci_dut/BUDGET.json')",
+          "before": "(HERE / 'BUDGET.json')",
+          "count": 1
+        },
+        {
+          "after": "bootstrap_status_preserved=True,policy_conditions_satisfied=True,",
+          "before": "bootstrap_status_preserved=True,fixed_expectations_match=True,",
+          "count": 1
+        }
+      ],
+      "sha256": "fbbe3997ac9047922434e43ceed067ff8885a55ff7e45e1d2adfac328b983203",
+      "source": "candidates/qwen2_fullblock_ci_dut/gates.py"
+    },
+    "launch.py": {
+      "replacements": [
+        {
+          "after": "from candidates.qwen2_official_platform_fullblock import gates, runner",
+          "before": "from candidates.qwen2_fullblock_ci_dut import gates, runner",
+          "count": 1
+        }
+      ],
+      "sha256": "dec6ae241f313bd7ba7bc593f3d64bc88c0b2ab61f199c9920b585dc29a3d54a",
+      "source": "candidates/qwen2_fullblock_ci_dut/launch.py"
+    },
+    "native_artifact.py": {
+      "replacements": [
+        {
+          "after": "BINDING=ROOT/'work/qwen2_official_platform_fullblock/ci01/FROZEN_BINDING.json'",
+          "before": "BINDING=ROOT/'work/qwen2_fullblock_ci_dut/ci01/FROZEN_BINDING.json'",
+          "count": 1
+        },
+        {
+          "after": "BINDING_ENV='QWEN2_PLATFORM_DUT_FROZEN_BINDING_SHA256'",
+          "before": "BINDING_ENV='QWEN2_DUT_FROZEN_BINDING_SHA256'",
+          "count": 1
+        },
+        {
+          "after": "'LOCAL_SAME_JOB_PAIR_POLICY_CONDITIONS_SATISFIED_ORACLE_ONLY'",
+          "before": "'LOCAL_FRESH_BOOTSTRAP_EXACT_SOURCE_MATCH_ORACLE_ONLY'",
+          "count": 1
+        }
+      ],
+      "sha256": "a318436c3393966f10e188546e9d19a336a62f0ca467b302f719728fc8a99990",
+      "source": "candidates/qwen2_fullblock_ci_dut/native_artifact.py"
+    },
+    "runner.py": {
+      "replacements": [
+        {
+          "after": "work/qwen2_official_platform_fullblock_numeric",
+          "before": "work/qwen2_fullblock_ci_dut_numeric",
+          "count": 2
+        },
+        {
+          "after": "from candidates.qwen2_official_platform_fullblock import native_artifact",
+          "before": "from candidates.qwen2_fullblock_ci_dut import native_artifact",
+          "count": 1
+        },
+        {
+          "after": "from candidates.qwen2_live_fullblock_model_m128 import telemetry\nfrom candidates.qwen2_official_platform_fullblock import comparator as compare",
+          "before": "from candidates.qwen2_live_fullblock_model_m128 import telemetry, compare",
+          "count": 1
+        },
+        {
+          "after": "from candidates.qwen2_official_platform_fullblock import gates",
+          "before": "from candidates.qwen2_fullblock_ci_dut import gates",
+          "count": 1
+        },
+        {
+          "after": "        gates.closure.source_manifest(ROOT)\n",
+          "before": "        gates.verify_dependencies()\n",
+          "count": 1
+        },
+        {
+          "after": "source_manifest_sha256=gates.closure.digest(ROOT))",
+          "before": "source_manifest_sha256=gates.manifest(gates.sources()))",
+          "count": 1
+        }
+      ],
+      "sha256": "b759d6c84263b37053b62127df15091ed77e9ae841197f9ba17ad1b289ce85ab",
+      "source": "candidates/qwen2_fullblock_ci_dut/runner.py"
+    }
+  },
+  "schema": 1
+}

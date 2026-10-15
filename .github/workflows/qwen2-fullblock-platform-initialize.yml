@@ -1,5 +1,5 @@
 name: qwen2-fullblock-platform-initialize
-# Explicit short platform initialization only. Never raw/reference/DUT/RTL.
+# Observe current runtime fields after a strict platform-summary mismatch; no model.
 on:
   workflow_dispatch:
   push:
@@ -13,6 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   initialize:
+    if: github.run_attempt == 1
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:

@@ -1,0 +1,13 @@
+*
+!.gitignore
+!acquire.py
+!restore.py
+!materialize.py
+!README.md
+!tests/
+tests/*
+!tests/test_acquire.py
+!tests/test_restore.py
+!tests/test_materialize.py
+!strict_reader.py
+!tests/test_strict_reader.py

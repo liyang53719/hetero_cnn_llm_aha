@@ -4,6 +4,12 @@
 
 完整计划已迁入根目录 `doc/`。旧 `plans/` 路径是兼容符号链接，不再维护第二份计划；计划与清单统一在此维护；历史44个任务和后续新增的U00/U01共46个父任务均保留，验收门禁不因文档更新而放宽。计划中的“待执行”是编制时快照，不用于派工。Windows 未启用符号链接时直接使用 `doc/` 路径；不要把链接文本当作 YAML 解析。
 
+## QK实际Matrix局部RTL更新（2026-10-15）
+
+[真实Matrix局部数值单元](../candidates/qwen2_rectangular_qk_numeric/README.md) `876cf2c9` 的[唯一CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38729837511)已独审通过：实例化八个512MAC端点，每step只启用一个32列slice，89 step共45568实际FMA、704 B ACK，375632个有限值逐位比较和176个NaN分类检查通过。四场景包含符号零、M17尾块和因果非有限隔离。七阶段全部退出0，runner213秒；生成RTL SHA `452f875e1cf28277cd665e4026793c9c36327e480ae52f02a0af5048c14b9a90`。
+
+本批只覆盖实际Matrix partial：B仍是80KiB host测试存储，完整十六stripe、有序Scalar fold、两次BF16、softmax和A/B真实SRAM接线未验。4313局部诊断拍包含测试背压/reset，不是整块性能。下一步优先exact64 Q/K投影、保持原图的QK与共享A驻留、原softmax及实际n1下gate的完整M128模型必要集成；Scalar接口和成本并行审计，暂不扩小单元RTL。原M128四项失败及完整RTL/90%利用率目标保留。
+
 ## 共享A与QK控制RTL更新（2026-10-15）
 
 [共享A缓存接线](../candidates/qwen2_attention_shared_a_integration/README.md) `e471649d` 已完成18项普通/优化冷测试及11项合成M1/M2案例；使用原Dense A Banks，故障排空后仍保留Matrix需复位标志。

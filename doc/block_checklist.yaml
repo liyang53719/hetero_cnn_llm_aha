@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 9d6c881124058d1db2f7503d03cbc9239832842d51cb9ffe019fa24ec02957a8
+计划SHA256: cd9496ff7d16ac6944d9f9e2e41f91bb0f9e56c968dc6c972d7d6302eb2afcc3
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1865,3 +1865,15 @@ Attention供数与完整块账本增量20261015:
   - 接入真实有限A和B端口、仲裁与Scalar有序fold后校验同刺激；不能把合成返回当实际阵列输出。
   - 继续计完整块供数、有效lane、Scalar依赖、最终ACK及排空；控制单测耗时不是硬件周期或MAC利用率。
   验收状态: 原M128四项数值失败、后四block及长prefill状态保持；实际完整RTL数值和90百分比目标未关闭。共享A合成M1与M2不构成完整prefill通过。
+
+QK实际Matrix局部RTL增量20261015:
+  已发布源码: 876cf2c9057b593757261f3281600a3787c5eb89
+  CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38729837511
+  实测范围: 实例化原八个512MAC端点及HardFloat真实MatrixPipeline，接入默认关闭的QK profile；每step仅启用一个32列的512MAC slice，89step共45568个实际FMA。三测试四子场景包含符号零、M17尾块、非因果Inf隔离及因果非有限故障排空。
+  原始计数: 各子场景实际Matrix step为40、40、8、1，B写ACK为320、320、64、0；合计89step及704ACK，375632个有限值逐位比较与176个NaN分类检查通过。
+  生成RTL_SHA256: 452f875e1cf28277cd665e4026793c9c36327e480ae52f02a0af5048c14b9a90
+  主机耗时: Scala编译49.71秒、RTL生成17.79秒、Verilator生成14.55秒、C++编译链接127.37秒、仿真1.79秒；七阶段全部退出0，runner共213秒。
+  资源计数解释: 最大阶段单child RSS为1648836KiB，不是并发进程总RSS；4313是含夹具背压及reset的局部诊断拍，不能作为完整QK或完整block性能。
+  未覆盖: B为80KiB单pending ACK的host测试存储；真实B SRAM、A DMA、完整十六stripe及有序Scalar fold、两次BF16边界与softmax端到端RTL尚未接线验证。
+  下一步: 优先完整M128模型必要集成：exact64 Q/K投影经真实公共Dense及Memory ACK接线，再接保持原图的QK与共享A驻留、原softmax和实际n1下gate误差验证。Scalar真实接口和成本并行审计，暂不扩小单元RTL；不以局部partial通过替代完整block。
+  保留验收: 这是局部真实阵列RTL数值通过；原完整M128四项失败、其他四block和长prefill未获新增通过，完整block固定4096MAC周期利用率与90百分比目标仍open。

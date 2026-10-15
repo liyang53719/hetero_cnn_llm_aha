@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "status": "PREREGISTERED_BEFORE_NUMERICAL_RESULTS",
+  "partials": [2, 4],
+  "cases": [
+    {"id": "REAL_BASELINE", "transform": "IDENTITY", "seed": 0},
+    {"id": "SIGN_FLIP_SEED", "transform": "CHANNEL_SIGN_XOR", "seed": 2135587861},
+    {"id": "CHANNEL_PERMUTE_SEED", "transform": "CHANNEL_FISHER_YATES", "seed": 2654435769}
+  ],
+  "rng": "SPLITMIX64_EXPLICIT_INTEGER",
+  "ordered_graph": {
+    "initial_partial": "POSITIVE_ZERO",
+    "k_order": "K_EQUALS_P_TIMES_T_PLUS_RESIDUE",
+    "fma_operands": "WEIGHT_ACTIVATION_PARTIAL",
+    "p2_tree": "S0_PLUS_S1",
+    "p4_tree": "S0_PLUS_S2_THEN_S1_PLUS_S3_THEN_PAIR_ADD",
+    "tail": "ADD_POSITIVE_ZERO",
+    "bias_and_rope": "UNCHANGED_ORIGINAL_OWNER",
+    "intermediate_bf16": "FORBIDDEN",
+    "window_boundary_clear": "FORBIDDEN"
+  },
+  "boundary_tests": ["ZERO_SIGN", "CANCELLATION", "REFILL_BOUNDARIES", "BIAS_BF16_MIDPOINT"],
+  "reference_geometry": "ORIGINAL_COMPLETE_M128",
+  "gates": "ORIGINAL_UNCHANGED",
+  "probability_coverage_target": "ALL_CAUSAL_OR_EXPLICIT_INCOMPLETE",
+  "selection": "REPORT_ALL_SIX_CASES_WITHOUT_GRAPH_OR_SEED_SELECTION",
+  "limits": {"total_cpu_seconds": 120, "address_space_bytes": 4294967296, "total_output_bytes": 67108864, "external_wall_seconds": 150, "pilot_admission_cpu_seconds": 95}
+}

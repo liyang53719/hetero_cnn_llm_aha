@@ -85,3 +85,17 @@ identity as part of its source/ELF verification.
 - 进行中：独立审查本包固定源码 policy、两次新单用参考证书与 DUT 审批。缓存修正明确比较最终 sealed 物理 KV 与同次 sealed K/V；旧跨官方 exact 结果和旧 FAIL 保留。
 - 待验：同一个新 CI job 再采两份完整参考，通过全部条件后冻结本地绑定，执行一次完整 fresh DUT。原 operator 0.03125/0.005 和 block 0.05/0.01 数值门不变；尚无本包完整 DUT 或 RTL PASS。
 - 固定预算：两个 reference 各 120/122 秒，DUT 3300/3330 秒，单 job 总上限 75 分钟；无自动重试。模型 tick 不作硬件周期或硬件利用率。
+
+## 2026-10-15 精确 stdlib 迁移与短诊断
+
+已发布的首次短诊断停在 ctypes 路径/旧源码 hash 联合门，DUT 未启动。新平台绑定官方 CPython 3.12.14 固定 commit 的完整 ctypes 源码和 setup-python 精确根；旧本地文件含 PyDLL(None) 异常包装补丁，不能当作相同源码。CDLL 三方法 frame/FENV 门保留。官方同 commit 的 shutil 全字节与现有 pin 一致，无需迁移。公开来源见 STDLIB_SOURCE_EVIDENCE.json。
+
+本次新单用授权目录为 qwen2_official_platform_preflight_authorization_v2，保留旧失败与已消费审批。仅复用 15 分钟 pre-DUT 路线，两新参考各 120/122 秒，初始化 probe 90 秒且启动前同时核 job/step 剩余至少 92 秒；无 DUT。路径与源码身份检查分行，继续原固定阶段/模块/行号输出，不新增私有数据输出。
+
+完整冷测命令：
+
+```
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python -B -m unittest $(find candidates/qwen2_official_platform_fullblock -maxdepth 1 -name 'test_*.py' | sort | sed 's|/|.|g;s|.py$||') -q
+```
+
+当前这批新增精确 stdlib 身份回归；冷测不代替真实初始化或数值全链通过。

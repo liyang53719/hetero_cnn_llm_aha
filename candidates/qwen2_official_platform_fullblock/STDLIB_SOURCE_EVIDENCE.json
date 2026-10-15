@@ -1,0 +1,51 @@
+{
+  "ci_installed_source_observed": false,
+  "cpython_commit": "2abcf904b8dac8c999d2b3aac76681abb333798a",
+  "cpython_tag": "v3.12.14",
+  "cpython_tag_object": "4b65faa0b452113bf130086fb1519be6d9cd9b06",
+  "ctypes": {
+    "bytes": 18210,
+    "sha256": "e0db1242e78267cba0124ee9fe5963b72d1c8a1832bb51a88abcf012a9cbce76"
+  },
+  "ctypes_blob": "6cedee74236ea5a3edb908bd8748a818f36e288f",
+  "exact_legacy_to_official_replacement": {
+    "after": "    pythonapi = PyDLL(None)\n",
+    "before": "    try:\n        pythonapi = PyDLL(None)\n    except OSError:\n        pythonapi = None\n",
+    "count": 1
+  },
+  "failed_run_containment_known": false,
+  "historical_failure_upgraded": false,
+  "legacy_ctypes": {
+    "bytes": 18268,
+    "sha256": "e048845f8f5c14a5fc873526a27da4a19d4eed25ab2f2a01fa6e0b79faca78d0"
+  },
+  "license": {
+    "bytes": 13936,
+    "file": "fixtures/CPYTHON_LICENSE.txt",
+    "original_source_header_and_bytes_preserved": true,
+    "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf",
+    "source_url": "https://raw.githubusercontent.com/python/cpython/2abcf904b8dac8c999d2b3aac76681abb333798a/LICENSE"
+  },
+  "schema": 1,
+  "scope": "PUBLIC_STDLIB_SOURCE_POLICY_ONLY",
+  "shutil": {
+    "sha256": "53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8",
+    "source_url": "https://raw.githubusercontent.com/python/cpython/2abcf904b8dac8c999d2b3aac76681abb333798a/Lib/shutil.py",
+    "unchanged_existing_gate": true
+  },
+  "source_url": "https://raw.githubusercontent.com/python/cpython/2abcf904b8dac8c999d2b3aac76681abb333798a/Lib/ctypes/__init__.py",
+  "unchanged_cdll_methods": {
+    "__getattr__": {
+      "ast_sha256": "64d3cd2414b95589ef4511f78a6561fef54922ec4838fc55f60d4adffcc1350b",
+      "line": 389
+    },
+    "__getitem__": {
+      "ast_sha256": "cff0ffe2576bfeaafff1d75686ea2f918897ffa5c2a62ef085e5d3ebf88dd4eb",
+      "line": 396
+    },
+    "__init__": {
+      "ast_sha256": "f8be3218fab58b04a635105aabd5928a2d54eaf186eeb73717f08f9e07783a6d",
+      "line": 343
+    }
+  }
+}

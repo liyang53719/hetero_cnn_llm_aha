@@ -33,7 +33,11 @@ class GatesTests(unittest.TestCase):
         # Only runtime evidence lookups are substituted; construct actual base,
         # Scalar code-frame, ctypes code-frame, cleanup and exact-path gate state.
         with patch.object(g,'verify_dependencies',return_value=cls.pin),patch.object(g.R,'load_pins',return_value=rp), \
-             patch.object(native_artifact,'identity',return_value=cls.artifacts):
+             patch.object(native_artifact,'identity',return_value=cls.artifacts), \
+             patch.object(g,'_ctypes_runtime_source',return_value=(Path(g.ctypes.__file__).resolve(),
+                 Path(g.ctypes.__file__).read_bytes())):
+            # This class tests gate/readset behavior on the local runtime. The
+            # strict official platform/source admission has separate real-file tests.
             cls.template=g.OracleGate(g.DATA,g.OUTPUT_ROOT/'synthetic_cold_only',g.REFERENCE)
 
     def setUp(self):

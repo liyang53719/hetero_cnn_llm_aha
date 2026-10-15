@@ -68,6 +68,21 @@
           "after": "bootstrap_status_preserved=True,policy_conditions_satisfied=True,",
           "before": "bootstrap_status_preserved=True,fixed_expectations_match=True,",
           "count": 1
+        },
+        {
+          "after": "SHUTIL_SOURCE_SHA256 = '53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8'\n# Fixed official CPython source, distinct from the legacy local PyDLL patch.\nCTYPES_PYTHON_HOME = Path('/opt/hostedtoolcache/Python/3.12.14/x64')\nCTYPES_SOURCE = CTYPES_PYTHON_HOME/'lib/python3.12/ctypes/__init__.py'\nCTYPES_SOURCE_SHA256 = 'e0db1242e78267cba0124ee9fe5963b72d1c8a1832bb51a88abcf012a9cbce76'\nCTYPES_SOURCE_BYTES = 18210",
+          "before": "SHUTIL_SOURCE_SHA256 = '53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8'",
+          "count": 1
+        },
+        {
+          "after": "def _ctypes_runtime_source():\n    # Separate exact predicates keep failures localizable without disclosing paths\n    # or observed digests. Never accept the old patched file as an alternative.\n    require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3,12,14),\n            'fixed ctypes Python version')\n    require(Path(sys.base_prefix) == CTYPES_PYTHON_HOME and\n            _canonical(Path(sys.base_prefix)) == CTYPES_PYTHON_HOME,'fixed ctypes Python root')\n    require(sys.modules.get('ctypes') is ctypes and ctypes.__file__ == str(CTYPES_SOURCE) and\n            getattr(ctypes.__spec__,'origin',None) == str(CTYPES_SOURCE) and\n            list(ctypes.__path__) == [str(CTYPES_SOURCE.parent)],'fixed loaded ctypes source path')\n    path=_canonical(Path(ctypes.__file__))\n    require(path == CTYPES_SOURCE and path.is_file(),'canonical exact ctypes source')\n    raw=path.read_bytes()\n    require(len(raw) == CTYPES_SOURCE_BYTES and hashlib.sha256(raw).hexdigest() == CTYPES_SOURCE_SHA256,\n            'official ctypes full source identity')\n    return path,raw\n\n\nclass OracleGate(v2.OracleGate):",
+          "before": "class OracleGate(v2.OracleGate):",
+          "count": 1
+        },
+        {
+          "after": "        self.ctypes_path,ctypes_source=_ctypes_runtime_source()\n        ctypes_code=v2.code_in(compile(ctypes_source,str(self.ctypes_path),'exec',\n            dont_inherit=True,optimize=sys.flags.optimize),'CDLL')",
+          "before": "        self.ctypes_path=_canonical(Path(ctypes.__file__).resolve())\n        require(self.ctypes_path.is_relative_to(Path(sys.base_prefix).resolve()) and\n            sha(self.ctypes_path)==p2['ctypes_runtime']['sha256'],'exact relocated ctypes source')\n        ctypes_code=v2.code_in(compile(self.ctypes_path.read_text(),str(self.ctypes_path),'exec',\n            dont_inherit=True,optimize=sys.flags.optimize),'CDLL')",
+          "count": 1
         }
       ],
       "sha256": "fbbe3997ac9047922434e43ceed067ff8885a55ff7e45e1d2adfac328b983203",

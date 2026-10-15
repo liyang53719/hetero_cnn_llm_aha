@@ -35,6 +35,11 @@ REFERENCES = R.NAMES
 REFERENCE_METADATA = tuple(sorted(R.METADATA_NAMES | {'SEAL.json'}))
 # Exact CPython 3.12 runtime helper used only for fd-relative output cleanup.
 SHUTIL_SOURCE_SHA256 = '53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8'
+# Fixed official CPython source, distinct from the legacy local PyDLL patch.
+CTYPES_PYTHON_HOME = Path('/opt/hostedtoolcache/Python/3.12.14/x64')
+CTYPES_SOURCE = CTYPES_PYTHON_HOME/'lib/python3.12/ctypes/__init__.py'
+CTYPES_SOURCE_SHA256 = 'e0db1242e78267cba0124ee9fe5963b72d1c8a1832bb51a88abcf012a9cbce76'
+CTYPES_SOURCE_BYTES = 18210
 require, sha, manifest = v2.require, v2.sha, v2.manifest
 
 
@@ -331,6 +336,24 @@ def correspondence():
     return v2.correspondence()
 
 
+def _ctypes_runtime_source():
+    # Separate exact predicates keep failures localizable without disclosing paths
+    # or observed digests. Never accept the old patched file as an alternative.
+    require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3,12,14),
+            'fixed ctypes Python version')
+    require(Path(sys.base_prefix) == CTYPES_PYTHON_HOME and
+            _canonical(Path(sys.base_prefix)) == CTYPES_PYTHON_HOME,'fixed ctypes Python root')
+    require(sys.modules.get('ctypes') is ctypes and ctypes.__file__ == str(CTYPES_SOURCE) and
+            getattr(ctypes.__spec__,'origin',None) == str(CTYPES_SOURCE) and
+            list(ctypes.__path__) == [str(CTYPES_SOURCE.parent)],'fixed loaded ctypes source path')
+    path=_canonical(Path(ctypes.__file__))
+    require(path == CTYPES_SOURCE and path.is_file(),'canonical exact ctypes source')
+    raw=path.read_bytes()
+    require(len(raw) == CTYPES_SOURCE_BYTES and hashlib.sha256(raw).hexdigest() == CTYPES_SOURCE_SHA256,
+            'official ctypes full source identity')
+    return path,raw
+
+
 class OracleGate(v2.OracleGate):
     """Preserve exact v2 native/FENV admission, replace extension-based payload rules.
 
@@ -348,10 +371,8 @@ class OracleGate(v2.OracleGate):
             dont_inherit=True,optimize=sys.flags.optimize),'ScalarService')
         self.expected_init=v2.code_in(scalar_code,'__init__')
         self.expected_environment=v2.code_in(scalar_code,'_check_environment')
-        self.ctypes_path=_canonical(Path(ctypes.__file__).resolve())
-        require(self.ctypes_path.is_relative_to(Path(sys.base_prefix).resolve()) and
-            sha(self.ctypes_path)==p2['ctypes_runtime']['sha256'],'exact relocated ctypes source')
-        ctypes_code=v2.code_in(compile(self.ctypes_path.read_text(),str(self.ctypes_path),'exec',
+        self.ctypes_path,ctypes_source=_ctypes_runtime_source()
+        ctypes_code=v2.code_in(compile(ctypes_source,str(self.ctypes_path),'exec',
             dont_inherit=True,optimize=sys.flags.optimize),'CDLL')
         self.expected_ctypes={n:v2.code_in(ctypes_code,n) for n in ('__init__','__getitem__','__getattr__')}
         self.environment_events=[];self.environment_handle=None;self.artifact_reads=[]

@@ -10,7 +10,7 @@ import time
 import traceback
 
 ROOT=Path(__file__).resolve().parents[2]
-AUTH='candidates/qwen2_official_platform_preflight_authorization'
+AUTH='candidates/qwen2_official_platform_preflight_authorization_v2'
 LOGS='work/qwen2_official_platform_preflight_logs'
 PREFIX='HETERO_PREFLIGHT_SAFE '
 PHASES=frozenset(('AUTHORIZE','BIND','BIND_RESULT','PROBE','LAUNCH_ADMISSION','COMPLETE'))

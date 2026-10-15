@@ -71,7 +71,7 @@ def integer(value, maximum=MAX_INTEGER):
 
 
 def number(value):
-    return value if type(value) in (int,float) and math.isfinite(value) and 0 <= value <= MAX_INTEGER else None
+    return value if type(value) in (int,float) and 0 <= value <= MAX_INTEGER and math.isfinite(value) else None
 
 
 def obj(value):
@@ -190,6 +190,253 @@ def _source_records(report):
         re.fullmatch('[0-9a-f]{64}',v) for k,v in before.items()) and same(before,after)
 
 
+# Public diagnostic identities are source constants, never receipt keys or text.
+# The original summarize() acceptance expression below remains the authority.
+# Each direct entry is (group, gate, receipt, fixed path, required value).
+_MISSING = object()
+_SOURCE_DIGEST = object()
+DIRECT_GATES = (
+    ('SCHEMA','REPORT','report',('schema',),1),
+    ('SCHEMA','LAUNCH','launch',('schema',),1),
+    ('LAUNCH','STATUS','launch',('status',),'PASS'),
+    ('LAUNCH','RETURN_CODE','launch',('returncode',),0),
+    ('LAUNCH','CLEANUP_COMPLETE','launch',('cleanup_incomplete',),False),
+    ('LAUNCH','NO_FAILURE_KIND','launch',('failure_kind',),None),
+    ('LAUNCH','ACCEPTANCE_SEALED','launch',('acceptance_sealed',),True),
+    ('LAUNCH','FULLBLOCK_PASS','launch',('fullblock_pass',),True),
+    ('LAUNCH','FINAL_RESULT_ACCEPTED','launch',('accepted_final_launch_result',),True),
+    ('LAUNCH','CHILD_STATUS','launch',('child_status',),PASS),
+    ('LAUNCH','NO_OLD_PASS','launch',('old_pass_inherited',),False),
+    ('LAUNCH','NO_AUTOMATIC_RETRY','launch',('automatic_retry',),False),
+    ('REPORT','STATUS','report',('status',),PASS),
+    ('REPORT','ACCEPTANCE_SEALED','report',('acceptance_sealed',),True),
+    ('REPORT','OBSERVED_NODE_PASS','report',('official_observed_node_pass',),True),
+    ('REPORT','FULLBLOCK_PASS','report',('fullblock_pass',),True),
+    ('REPORT','WHOLE_BLOCK_TERMINAL','report',('whole_block_terminal',),True),
+    ('REPORT','FINALFENCE','report',('finalfence',),True),
+    ('REPORT','OUTPUTS_SEALED','report',('actual_outputs_sealed',),True),
+    ('REPORT','NO_OLD_PASS','report',('old_pass_inherited',),False),
+    ('REPORT','NO_HISTORICAL_APPROVAL','report',('historical_approval_inherited',),False),
+    ('SOURCE','REPORT_MANIFEST','report',('reviewed_source_manifest',),_SOURCE_DIGEST),
+    ('SOURCE','LAUNCH_MANIFEST','launch',('reviewed_source_manifest',),_SOURCE_DIGEST),
+    ('HOST','TERMINAL_STATUS','report',('execution','host','launch_result','status'),None),
+    ('HOST','COMPLETIONS_COUNT','report',('execution','host','launch_result','completed'),21),
+    ('HOST','OWNER_JOBS','report',('execution','host','launch_result','jobs'),17),
+    ('HOST','ACCEPTED_COMPLETIONS','report',('execution','host','accepted','completion_fire'),21),
+    ('HOST','ACCEPTED_REQUESTS','report',('execution','host','accepted','request_fire'),17),
+    ('HOST','ACCEPTED_OWNER_RESULTS','report',('execution','host','accepted','owner_result_fire'),17),
+    ('HOST','ACCEPTED_LAUNCH_RESULTS','report',('execution','host','accepted','result_fire'),1),
+    ('HOST','RESET_CLEAR','report',('execution','host','reset_required'),False),
+    ('HOST','SAME_OWNER_AND_BANKS','report',('execution','host','same_owner_and_banks'),True),
+    ('EXECUTION','STATUS','report',('execution','status'),'PUBLIC21_PC0_20_SOFTWARE_EXECUTED'),
+    ('EXECUTION','SAME_OWNER_AND_BANKS','report',('execution','same_owner_and_banks'),True),
+    ('EXECUTION','SAME_MEMORY_AND_SERVICES','report',('execution','same_physical_memory_and_services'),True),
+    ('EXECUTION','FULL_BLOCK','report',('execution','full_block_executed'),True),
+    ('EXECUTION','SOFTWARE_MODEL','report',('execution','full_block_software_model_executed'),True),
+    ('SCOPE','REPORT_NO_RTL','report',('rtl_executed',),False),
+    ('SCOPE','EXECUTION_NO_RTL','report',('execution','rtl_executed'),False),
+    ('SCOPE','NO_REFERENCE_ARITHMETIC','report',('execution','reference_arithmetic_executed'),False),
+    ('SCOPE','NO_FULL29_ACCEPTANCE','report',('full_29_node_acceptance',),False),
+    ('SCOPE','NO_FULL_OFFICIAL_FORWARD','report',('full_official_forward_executed',),False),
+    ('SCOPE','NO_HARDWARE_CYCLES','report',('hardware_cycles',),None),
+    ('SCOPE','NO_HARDWARE_UTILIZATION','report',('hardware_utilization',),None),
+    ('SCOPE','NO_MODEL_TICKS_AS_CYCLES','report',('model_ticks_are_hardware_cycles',),False),
+    ('MACS','USEFUL','summary',('useful_macs',),6014828544),
+    ('MACS','EXECUTED','summary',('executed_macs',),6598164480),
+    ('COMPARISON','CACHE_CONTRACT','report',('cache_contract',),'sealed-same-live-cold-cache-v1'),
+    ('COMPARISON','REFERENCE_CONTRACT','report',('reference_contract',),'official-ast-ci-aten-avx2-reference-v1'),
+    ('COMPARISON','COPY_SCOPE','report',('same_run_cache_comparison','scope'),'COLD_CACHE_IDENTITY_AND_COPY_ONLY'),
+    ('COMPARISON','SAME_LIVE_EXACT_COPY','report',('same_run_cache_comparison','same_live_exact_copy'),True),
+    ('COMPARISON','NO_COPY_NUMERICAL_CLAIM','report',('same_run_cache_comparison','numerical_acceptance_claimed'),False),
+    ('COMPARISON','NO_COPY_WHOLE_BLOCK_CLAIM','report',('same_run_cache_comparison','whole_block_acceptance_claimed'),False),
+    ('COMPARISON','NO_COPY_HISTORY_UPGRADE','report',('same_run_cache_comparison','historical_run_upgraded'),False),
+)
+# Fixed group/node order is part of the strict projection schema. Raw Q/K/V and
+# softmax_fp32 are diagnostic-only in the original policy, never accepted nodes.
+NODE_SPECS = tuple(
+    ((name.upper() if group=='CACHE' else group+'_'+name.upper()),(field,name),'official_numeric_pass',('metrics',))
+    for group,field,names in (
+        ('PRODUCER','producer_comparisons',('n0','qr','q','kr','k','v')),
+        ('ATTENTION','attention_comparisons',('scores','logits','prob','pv','att')),
+        ('TAIL','tail_comparisons',('o','r','n1','gate','up','silu','act','down','y')),
+        ('CACHE','same_run_cache_original_comparisons',('cache_k','cache_v')))
+    for name in names) + (
+        ('OFFICIAL_KV',('official_kv_comparison',),'official_numeric_pass',('metrics',)),
+        ('SOFTMAX_SUM',('softmax_probability_sum',),'passed',()))
+RESOURCE_GATES = (
+    ('HOST_WALL','host_wall_seconds',3300),
+    ('HOST_CPU','host_cpu_seconds',None),
+    ('SUPERVISOR_WALL','supervisor_wall_seconds',3330),
+    ('PEAK_RSS','peak_rss_bytes',3221225472),
+    ('SAMPLED_GROUP_RSS','sampled_group_rss_bytes',3221225472),
+    ('OUTPUT_BYTES','output_bytes',1073741824),
+    ('LOG_BYTES','log_bytes',16777216))
+DIAGNOSTIC_GROUPS = ('SCHEMA','LAUNCH','REPORT','SOURCE','HOST','LIVE','COMPARISON',
+                     'NUMERIC','EXECUTION','SCOPE','MACS','RESOURCES')
+EXTRA_GATES = {
+    'SOURCE':('UNCHANGED_RECORDS',),
+    'HOST':('COMPLETION_SEQUENCE','EVENT_SEQUENCE'),
+    'LIVE':('IDENTITY_CHAIN','DEBTS_CLEAR'),
+    'COMPARISON':('PRODUCER_STRUCTURE','ATTENTION_STRUCTURE','TAIL_STRUCTURE',
+        'PRODUCER_DIAGNOSTIC_ONLY','ATTENTION_DIAGNOSTIC_ONLY','LEGACY_CACHE_STRUCTURE',
+        'LEGACY_CACHE_ALIAS_TYPES','OFFICIAL_KV_COPY_TYPE','LEGACY_CROSS_ORACLE_FLAG_TYPE',
+        'COPY_STRUCTURE','OFFICIAL_COPY_AGREEMENT','CACHE_NUMERIC_STRUCTURE',
+        *(name+'_'+gate for name in ('CACHE_K','CACHE_V') for gate in
+          ('FINITE','ELEMENT_COUNT','ORIGIN','VERDICT_CONTRACT','LIMITS','VERDICT_AGREEMENT',
+           'METRICS_VALID','POLICY_AGREEMENT'))),
+    'NUMERIC':tuple(spec[0] for spec in NODE_SPECS),
+    'MACS':('OBSERVED_USEFUL','OBSERVED_EXECUTED'),
+    'RESOURCES':tuple(spec[0] for spec in RESOURCE_GATES)}
+DIAGNOSTIC_GATES = {group:tuple(row[1] for row in DIRECT_GATES if row[0]==group)+EXTRA_GATES.get(group,())
+                    for group in DIAGNOSTIC_GROUPS}
+
+
+def _field(value, path):
+    for key in path:
+        if type(value) is not dict or key not in value:
+            return _MISSING
+        value=value[key]
+    return value
+
+
+def _expected(value, expected):
+    # null means missing/invalid evidence; false means a present gate failed.
+    # Explicit-null requirements have no other valid value and do not echo it.
+    if value is _MISSING:
+        return None
+    if expected is None:
+        return value is None
+    if type(value) is not type(expected):
+        return None
+    return value==expected
+
+
+def _boolean(value):
+    return value if type(value) is bool else None
+
+
+def _keys(value, expected):
+    return set(value)==set(expected) if type(value) is dict else None
+
+
+def _all_known(values):
+    values=tuple(values)
+    return False if False in values else None if None in values else True
+
+
+def _diagnostic_empty():
+    return dict(schema=1,
+        gates={group:{gate:None for gate in DIAGNOSTIC_GATES[group]} for group in DIAGNOSTIC_GROUPS},
+        nodes=[dict(stage=spec[0],official_numeric_pass=None,max_abs=None,mean_abs=None) for spec in NODE_SPECS],
+        failure_stages=list(DIAGNOSTIC_GROUPS))
+
+
+def _acceptance_diagnostics(report, launch, summary, source_digest):
+    """Read already-computed receipts; never recompute metrics or set acceptance.
+
+    Every conjunct in summarize.passed has a fixed gate below. Compound private
+    identity/source/debt checks yield only their existing boolean, never records.
+    Resource gates combine the original presence and budget predicates. Node
+    metrics are optional evidence, not additional or replacement acceptance gates.
+    """
+    result=_diagnostic_empty();gates=result['gates']
+    receipts=dict(report=report,launch=launch,summary=summary)
+    for group,gate,receipt,path,expected in DIRECT_GATES:
+        gates[group][gate]=_expected(_field(receipts[receipt],path),
+            source_digest if expected is _SOURCE_DIGEST else expected)
+    gates['SOURCE']['UNCHANGED_RECORDS']=(_source_records(report) if all(k in report for k in
+        ('source_sha256_before','source_sha256_after')) else None)
+    gates['LIVE']['IDENTITY_CHAIN']=(bool(_same_live(report)) if all(k in report for k in
+        ('same_live_identity_initial','same_live_identity_at_pc12','same_live_identity_final')) else None)
+    gates['LIVE']['DEBTS_CLEAR']=_debts(report) if 'backend_debts' in report else None
+    host=obj(obj(report.get('execution')).get('host'));completions=host.get('completions')
+    gates['HOST']['COMPLETION_SEQUENCE']=(len(completions)==21 and all(
+        type(c) is dict and type(c.get('pc')) is int and c['pc']==i and c.get('status','missing') is None
+        for i,c in enumerate(completions)) if type(completions) is list else None)
+    gates['HOST']['EVENT_SEQUENCE']=(same(host['events'],list(range(22))) if 'events' in host else None)
+    comparison=gates['COMPARISON']
+    for group,field,names,diagnostic in (
+        ('PRODUCER','producer_comparisons',('n0','qr','q','kr','k','v'),('qraw','kraw','vraw')),
+        ('ATTENTION','attention_comparisons',('scores','logits','prob','pv','att'),('softmax_fp32',)),
+        ('TAIL','tail_comparisons',('o','r','n1','gate','up','silu','act','down','y'),())):
+        comparison[group+'_STRUCTURE']=_keys(report.get(field),(*names,*diagnostic))
+        if diagnostic:
+            comparison[group+'_DIAGNOSTIC_ONLY']=_all_known(_expected(
+                _field(report,(field,name,'official_numeric_pass')),None) for name in diagnostic)
+    legacy=report.get('cold_cache_comparisons');copy=obj(report.get('same_run_cache_comparison'))
+    numeric=report.get('same_run_cache_original_comparisons')
+    comparison['LEGACY_CACHE_STRUCTURE']=_keys(legacy,('cache_k','cache_v'))
+    comparison['LEGACY_CACHE_ALIAS_TYPES']=_all_known(
+        True if type(_field(legacy,(name,'exact_cold_alias'))) is bool else None for name in ('cache_k','cache_v'))
+    official=_field(report,('official_kv_comparison','official_kv_exact_copy'))
+    comparison['OFFICIAL_KV_COPY_TYPE']=True if type(official) is bool else None
+    comparison['LEGACY_CROSS_ORACLE_FLAG_TYPE']=(True if type(report.get('legacy_cross_oracle_contract_pass')) is bool else None)
+    comparison['COPY_STRUCTURE']=_keys(report.get('same_run_cache_comparison'),
+        ('scope','same_live_exact_copy','official_kv_exact_copy','numerical_acceptance_claimed',
+         'whole_block_acceptance_claimed','historical_run_upgraded'))
+    comparison['OFFICIAL_COPY_AGREEMENT']=(copy.get('official_kv_exact_copy') is official
+        if type(official) is bool and type(copy.get('official_kv_exact_copy')) is bool else None)
+    comparison['CACHE_NUMERIC_STRUCTURE']=_keys(numeric,('cache_k','cache_v'))
+    for name in ('cache_k','cache_v'):
+        row=obj(obj(numeric).get(name));verdict=obj(row.get('verdict'));metrics=obj(row.get('metrics'))
+        prefix=name.upper()+'_'
+        for gate,value,expected in (
+            ('FINITE',_field(row,('finite',)),True),
+            ('ELEMENT_COUNT',_field(row,('observed_elements',)),32768),
+            ('ORIGIN',_field(row,('origin',)),'final sealed physical KV subspan'),
+            ('VERDICT_CONTRACT',_field(verdict,('contract',)),'spec/numerical_contract.md:operator')):
+            comparison[prefix+gate]=_expected(value,expected)
+        comparison[prefix+'LIMITS']=(same(verdict['limits'],dict(max_abs=0.03125,mean_abs=0.005))
+            if 'limits' in verdict else None)
+        official_pass=_boolean(row.get('official_numeric_pass'));verdict_pass=_boolean(verdict.get('passed'))
+        comparison[prefix+'VERDICT_AGREEMENT']=(official_pass is verdict_pass
+            if official_pass is not None and verdict_pass is not None else None)
+        maximum=number(metrics.get('max_abs'));mean=number(metrics.get('mean_abs'))
+        comparison[prefix+'METRICS_VALID']=True if maximum is not None and mean is not None else None
+        # Identical existing receipt-consistency check in _comparison(), not a
+        # new numerical calculation, tolerance, comparator or acceptance source.
+        comparison[prefix+'POLICY_AGREEMENT']=((maximum<=0.03125 and mean<=0.005) is verdict_pass
+            if maximum is not None and mean is not None and verdict_pass is not None else None)
+    for node,(stage,path,flag,metric_path) in zip(result['nodes'],NODE_SPECS):
+        row=_field(report,path);metrics=_field(row,metric_path)
+        node['official_numeric_pass']=_boolean(_field(row,(flag,)))
+        node['max_abs']=number(_field(metrics,('max_abs',)))
+        # The existing softmax sum receipt has no mean; never invent one.
+        node['mean_abs']=None if stage=='SOFTMAX_SUM' else number(_field(metrics,('mean_abs',)))
+        gates['NUMERIC'][stage]=node['official_numeric_pass']
+    for gate,field in (('OBSERVED_USEFUL','useful_macs'),('OBSERVED_EXECUTED','executed_macs')):
+        observed=integer(_field(report,('whole_schedule_prediction_and_observation','actual_'+field)))
+        gates['MACS'][gate]=(observed==summary[field] if observed is not None and summary[field] is not None else None)
+    for gate,field,limit in RESOURCE_GATES:
+        value=summary[field]
+        gates['RESOURCES'][gate]=None if value is None else limit is None or value<=limit
+    result['failure_stages']=[group for group in DIAGNOSTIC_GROUPS if any(
+        value is not True for value in gates[group].values())]
+    return result
+
+
+def _validate_diagnostics(value):
+    need(type(value) is dict and set(value)=={'schema','gates','nodes','failure_stages'}, 'exact diagnostic keys')
+    need(type(value['schema']) is int and value['schema']==1, 'diagnostic schema')
+    gates=value['gates']
+    need(type(gates) is dict and set(gates)==set(DIAGNOSTIC_GROUPS), 'fixed diagnostic groups')
+    for group in DIAGNOSTIC_GROUPS:
+        need(type(gates[group]) is dict and set(gates[group])==set(DIAGNOSTIC_GATES[group]), 'fixed diagnostic gates')
+        need(all(v is None or type(v) is bool for v in gates[group].values()), 'boolean diagnostic gates')
+    nodes=value['nodes']
+    need(type(nodes) is list and len(nodes)==len(NODE_SPECS), 'fixed diagnostic nodes')
+    for node,spec in zip(nodes,NODE_SPECS):
+        need(type(node) is dict and set(node)=={'stage','official_numeric_pass','max_abs','mean_abs'}, 'exact diagnostic node keys')
+        need(type(node['stage']) is str and node['stage']==spec[0], 'fixed diagnostic stage')
+        need(node['official_numeric_pass'] is None or type(node['official_numeric_pass']) is bool, 'boolean node pass')
+        need(node['official_numeric_pass'] is gates['NUMERIC'][spec[0]], 'node gate consistency')
+        for key in ('max_abs','mean_abs'):
+            need(node[key] is None or number(node[key]) is not None, 'finite diagnostic metric')
+        need(spec[0]!='SOFTMAX_SUM' or node['mean_abs'] is None, 'no invented softmax mean')
+    expected=[group for group in DIAGNOSTIC_GROUPS if any(v is not True for v in gates[group].values())]
+    need(same(value['failure_stages'],expected), 'fixed diagnostic failure stages')
+
+
 def _empty(source_digest):
     return dict(schema=1, scope='Qwen2_M128_PUBLIC21_SOFTWARE', status='INCOMPLETE',
         reference_contract='official-ast-ci-aten-avx2-reference-v1',cache_contract='sealed-same-live-cold-cache-v1',
@@ -201,7 +448,8 @@ def _empty(source_digest):
         software_operation_efficiency=None, hardware_cycles=None, hardware_utilization=None,
         hardware_duty=None, reference_arithmetic_executed=None, official_reference_comparison_executed=False,
         dut_software_executed=None, rtl_executed=None, full_29_node_acceptance=False,
-        full_official_forward_executed=False, same_live_guards_passed=False, debt_guards_passed=False)
+        full_official_forward_executed=False, same_live_guards_passed=False, debt_guards_passed=False,
+        acceptance_diagnostics=_diagnostic_empty())
 
 
 def summarize(report, launch, *, source_digest):
@@ -274,6 +522,7 @@ def summarize(report, launch, *, source_digest):
         result['failure_stage']=STAGE_MAP.get(stage,'UNKNOWN') if type(stage) is str else 'UNKNOWN'
         error=report.get('original_error_type')
         result['exception_class']=error if type(error) is str and error in EXCEPTIONS else 'UNKNOWN'
+    result['acceptance_diagnostics']=_acceptance_diagnostics(report,launch,result,source_digest)
     validate_summary(result)
     return result
 
@@ -302,6 +551,7 @@ def validate_summary(value):
                 'same_live_guards_passed','debt_guards_passed'):
         need(type(value[key]) is bool, 'safe guard flag')
     need(value['full_29_node_acceptance'] is False and value['full_official_forward_executed'] is False, 'fixed partial scope')
+    _validate_diagnostics(value['acceptance_diagnostics'])
 
 
 def collect(*, source_digest=None, execute=False):

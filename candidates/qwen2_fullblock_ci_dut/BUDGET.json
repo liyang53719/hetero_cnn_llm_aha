@@ -1,0 +1,13 @@
+{
+  "status": "REVIEWED_FIXED_WHOLE_BLOCK_BUDGET",
+  "inner_wall_seconds": 3300,
+  "outer_wall_seconds": 3330,
+  "rss_bytes": 3221225472,
+  "output_bytes": 1073741824,
+  "file_bytes": 268435456,
+  "log_bytes": 16777216,
+  "poll_seconds": 0.1,
+  "progress_loop_interval": 131072,
+  "automatic_retry": false,
+  "reason": "Parent engineering approval 2026-10-15: conservative whole-block limit; historical approximately 1336-second completion is timing evidence only, never inherited numerical PASS. Fresh closure/input/native/reference independent review is still required."
+}

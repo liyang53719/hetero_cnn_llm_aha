@@ -1,0 +1,15 @@
+{
+  "dut_inner_seconds": 3300,
+  "dut_outer_seconds": 3330,
+  "job_total_minutes": 75,
+  "maximum_invocations": 1,
+  "no_retry": true,
+  "reference_certificate_sha256": "94c194be4290a0e7c4f70ab3f6521e0423736c27d6675dbf091222925687a53d",
+  "reference_inner_seconds": 120,
+  "reference_outer_seconds": 122,
+  "reference_source_closure_sha256": "10133c5fdd94f058f5397d03f2ae6a8dd87e2bdfa8b15a4d436dd87af1b78321",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "schema": 1,
+  "source_closure_sha256": "17743e103a285800b9ad0dbaae22a98b13fc0f004011afaeb2cb817615e5c786",
+  "status": "APPROVED_SINGLE_CI_M128_MODEL"
+}

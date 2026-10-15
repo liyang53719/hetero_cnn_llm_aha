@@ -1,0 +1,65 @@
+name: qwen2-fullblock-ci-dut
+# One reviewed whole-block run, activated only by publishing this exact file.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/qwen2-fullblock-ci-dut.yml
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  fullblock:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      PYTHONNOUSERSITE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      MKL_NUM_THREADS: '4'
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONPATH: '${{ github.workspace }}/work/runtime_recovery/site-packages'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Admit exact independently reviewed source and budget
+        run: |
+          mkdir -p work/ci_dut_logs
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_dut.job admit > work/ci_dut_logs/admit.log 2>&1 || { echo 'Source admission failed.'; exit 1; }
+      - name: Install exact official runtime wheels
+        timeout-minutes: 7
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple --target work/runtime_recovery/site-packages -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt -r candidates/qwen2_fullblock_ci_dut/requirements-extra.txt > work/ci_dut_logs/install.log 2>&1 || { echo 'Runtime installation failed.'; exit 1; }
+      - name: Prepare fixed inputs and current native identities
+        timeout-minutes: 4
+        run: |
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_ci_prepare_diagnostic.diagnostic --execute --download 2> work/ci_dut_logs/prepare-launcher.log
+      - name: Capture official reference and check fixed expectations locally
+        timeout-minutes: 3
+        run: |
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_dut.job capture > work/ci_dut_logs/reference.log 2>&1 || { echo 'Official reference failed.'; exit 1; }
+      - name: Bind fresh oracle then run one supervised complete block
+        id: actual
+        timeout-minutes: 60
+        run: |
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_dut.job actual > work/ci_dut_logs/actual.log 2>&1 || { echo 'Actual full block failed.'; exit 1; }
+      - name: Collect strictly allowlisted result
+        if: always() && (steps.actual.outcome == 'success' || steps.actual.outcome == 'failure')
+        run: |
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_dut.job aggregate > work/ci_dut_logs/aggregate.log 2>&1 || { echo 'Aggregate unavailable.'; exit 1; }
+      - name: Upload only allowlisted aggregate
+        if: always() && (steps.actual.outcome == 'success' || steps.actual.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-m128-fullblock-aggregate-${{ github.sha }}-${{ github.run_id }}
+          path: work/qwen2_fullblock_ci_dut_summary.json
+          if-no-files-found: error
+          retention-days: 7

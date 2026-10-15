@@ -1,0 +1,47 @@
+name: qwen2-linear-backend-probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/qwen2-linear-backend-probe.yml
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-linear-backend-probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Cold boundary tests
+        run: |
+          python -B -m unittest candidates.qwen2_ci_linear_backend_probe.test_parser candidates.qwen2_ci_linear_backend_probe.test_worker candidates.qwen2_ci_linear_backend_probe.test_runner -q
+          python -B -O -m unittest candidates.qwen2_ci_linear_backend_probe.test_parser candidates.qwen2_ci_linear_backend_probe.test_worker candidates.qwen2_ci_linear_backend_probe.test_runner -q
+      - name: Install fixed official wheels
+        timeout-minutes: 7
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes \
+            --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple \
+            --target work/runtime_recovery/site-packages \
+            -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt
+      - name: Observe two isolated synthetic Linear branches
+        timeout-minutes: 2
+        env:
+          PYTHONNOUSERSITE: '1'
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONPATH: '${{ github.workspace }}/work/runtime_recovery/site-packages'
+          MKL_NUM_THREADS: '4'
+          OMP_NUM_THREADS: '4'
+          OPENBLAS_NUM_THREADS: '1'
+          ATEN_CPU_CAPABILITY: avx2
+          QWEN2_CI_RUNTIME_PROFILE: avx2-candidate-v1
+        run: python -B -m candidates.qwen2_ci_linear_backend_probe.runner

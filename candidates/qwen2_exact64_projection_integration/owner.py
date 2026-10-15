@@ -28,10 +28,11 @@ class Exact64ProjectionOwner:
           response=self.result if self.state=='finish' else None,
           reset_required=self.poison,state=self.state)
     def validate(self,j):
+        c=getattr(j,'c',0)  # Original public Dense Job has no third operand.
         need(j.kind=='Dense' and uint(j.tag,32) and type(j.m) is int and 1<=j.m<=self.max_rows and
           type(j.n) is int and j.n in (256,1536) and type(j.k) is int and j.k==1536,'exact Q/K projection geometry')
         need(j.weight_bf16 is True and j.activation_bf16 is False and j.output_bf16 is False and
-          type(j.c) is int and j.c==0,'raw F32 output / BF16 weight public dtype')
+          type(c) is int and c==0,'raw F32 output / BF16 weight public dtype')
         need(type(j.write_bytes) is int and j.write_bytes==j.m*j.n*4,'exact output extent')
         spans=((j.a,j.m*1536*4),(j.b,1536*j.n*2),(j.dst,j.write_bytes))
         need(all(uint(a,64) and a%64==0 and a+n<=LIMIT for a,n in spans),'aligned bounded address spans')

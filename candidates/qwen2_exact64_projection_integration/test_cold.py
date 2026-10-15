@@ -26,6 +26,25 @@ class Cold(unittest.TestCase):
     def test_capacities(self):
         o=self.owner();self.assertEqual(len(o.row),6144);self.assertEqual(len(o.weights),128)
         self.assertEqual(o.report()['payload_capacity']['conservative_total'],23552)
+    def test_real_public_dense_job_without_third_operand(self):
+        from candidates.qwen2_resident_matrix.ffn_group.model import Job as PublicJob,PrefixJob
+        from dataclasses import asdict
+        j=PublicJob('Dense',0x110001,0x100000,0x200000,0x900000,16,1536,1536,98304,weight_bf16=True)
+        self.assertFalse(hasattr(j,'c'));o=self.owner();o.validate(j)
+        self.assertTrue(o.tick(job=j)['job_fire']);self.assertIs(o.job,j)
+        self.assertEqual(o.ports()['memory'].address,j.a)
+        for bad in (1,True,None,'private/path',0.0):
+            with self.assertRaises(ValueError):self.owner().validate(PrefixJob(**asdict(j),c=bad))
+        self.owner().validate(PrefixJob(**asdict(j),c=0))
+    def test_all_direct_job_fields_exist_on_public_job(self):
+        import ast
+        from dataclasses import fields
+        from candidates.qwen2_resident_matrix.ffn_group.model import Job as PublicJob
+        allowed={f.name for f in fields(PublicJob)}
+        for cls in (Exact64ProjectionOwner,Exact64PublicDriver):
+            for node in ast.walk(ast.parse(inspect.getsource(cls))):
+                if isinstance(node,ast.Attribute) and isinstance(node.value,ast.Name) and node.value.id in ('j','job'):
+                    self.assertIn(node.attr,allowed)
     def test_geometry(self):
         o=self.owner();o.validate(job())
         for kw in ({'m':True},{'n':True},{'k':1535},{'m':129},{'a':True},{'a':0x100001},

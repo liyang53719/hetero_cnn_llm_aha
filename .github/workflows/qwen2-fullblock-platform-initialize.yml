@@ -1,0 +1,55 @@
+name: qwen2-fullblock-platform-initialize
+# Explicit short platform initialization only. Never raw/reference/DUT/RTL.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/qwen2-fullblock-platform-initialize.yml
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-fullblock-platform-initialize
+  cancel-in-progress: false
+jobs:
+  initialize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Cold preparation and upload-scope tests
+        run: |
+          python -B -m unittest discover -s candidates/qwen2_fullblock_ci_prepare
+          python -B -O -m unittest discover -s candidates/qwen2_fullblock_ci_prepare
+      - name: Install only exact official runtime wheels
+        timeout-minutes: 7
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes \
+            --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple \
+            --target work/runtime_recovery/site-packages \
+            -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt
+      - name: Verify fixed native bytes and initialize runtime without model
+        timeout-minutes: 2
+        env:
+          PYTHONNOUSERSITE: '1'
+          PYTHONDONTWRITEBYTECODE: '1'
+          MKL_NUM_THREADS: '4'
+          OMP_NUM_THREADS: '4'
+          OPENBLAS_NUM_THREADS: '1'
+          PYTHONPATH: '${{ github.workspace }}/work/runtime_recovery/site-packages'
+        run: |
+          mkdir -p work/ci_platform
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_prepare.initialize_platform --initialize > work/ci_platform/runtime_summary.json
+      - name: Retain only compact allowed runtime identity summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-runtime-initialize-${{ github.sha }}-${{ github.run_id }}
+          path: work/ci_platform/runtime_summary.json
+          if-no-files-found: warn
+          retention-days: 7

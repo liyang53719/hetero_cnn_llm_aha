@@ -1,0 +1,100 @@
+name: qwen2-qk-numeric-unit
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/qwen2-qk-numeric-unit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-qk-numeric-unit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  fixed-real-matrix:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      HARDFLOAT_SOURCE: ${{ github.workspace }}/work/upstream/hardfloat_continuous
+    steps:
+      - uses: actions/checkout@v4
+      - name: Frozen source gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p unit-evidence
+          cmp .github/workflows/qwen2-qk-numeric-unit.yml candidates/qwen2_rectangular_qk_numeric/workflow.yml.in
+          sha256sum -c candidates/qwen2_rectangular_qk_numeric/frozen.sha256
+          printf 'ACTUAL_MATRIX_RTL: fixed partials, not a full QK/dot/softmax/Host or performance pass.\n' > unit-evidence/ci-summary.txt
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Official tool prerequisites
+        timeout-minutes: 3
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          start=$SECONDS
+          ( set -e; sudo apt-get update -qq; sudo apt-get install -y verilator time; python -m pip install numpy==2.2.6 pytest==8.3.5 )
+          rc=$?
+          printf 'setup_seconds=%s setup_exit=%s\n' "$((SECONDS-start))" "$rc" >> unit-evidence/ci-summary.txt
+          if command -v verilator >/dev/null; then verilator --version >> unit-evidence/ci-summary.txt; fi
+          exit "$rc"
+      - name: Six cold fixture/source/runner checks in both interpreter modes
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q candidates/qwen2_rectangular_qk_numeric/test_cold.py --junitxml="$RUNNER_TEMP/qk-cold.xml"
+          python -O -m pytest -q candidates/qwen2_rectangular_qk_numeric/test_cold.py --junitxml="$RUNNER_TEMP/qk-cold-opt.xml"
+          python - <<'PY'
+          import os,xml.etree.ElementTree as E
+          from pathlib import Path
+          for name in ('qk-cold.xml','qk-cold-opt.xml'):
+              suite=E.parse(Path(os.environ['RUNNER_TEMP'])/name).getroot().find('testsuite')
+              if suite is None or int(suite.get('tests',0))!=6 or any(int(suite.get(k,0)) for k in ('failures','errors','skipped')):
+                  raise SystemExit('Missing or nonpassing six-test cold suite: '+name)
+          Path('unit-evidence/ci-summary.txt').open('a').write('COLD: 6+6 PASS; no RTL in cold tests.\n')
+          PY
+      - name: Bounded actual Matrix RTL compilation and fixed numeric execution
+        timeout-minutes: 26
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          start=$SECONDS
+          timeout --signal=TERM --kill-after=10 1530 bash candidates/qwen2_rectangular_qk_numeric/run_numeric.sh "$RUNNER_TEMP/qk-real" > "$RUNNER_TEMP/qk-real-runner.log" 2>&1
+          rc=$?
+          tail -160 "$RUNNER_TEMP/qk-real-runner.log"
+          printf 'real_runner_seconds=%s exit=%s\n' "$((SECONDS-start))" "$rc" >> unit-evidence/ci-summary.txt
+          if [[ "$rc" == 0 ]]; then
+            if [[ ! -s "$RUNNER_TEMP/qk-real/rtl-sha256.txt" ]] || ! grep -q '^PASS_FIXED_QK_PARTIAL_RTL_ONLY;' "$RUNNER_TEMP/qk-real/summary.txt"; then rc=3; fi
+          fi
+          exit "$rc"
+      - name: Collect allowlisted receipts only
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p unit-evidence
+          for name in source-sha256.txt rtl-sha256.txt stages.tsv summary.txt; do
+            if [[ -f "$RUNNER_TEMP/qk-real/$name" ]]; then cp "$RUNNER_TEMP/qk-real/$name" "unit-evidence/$name"; fi
+          done
+          sha256sum -c candidates/qwen2_rectangular_qk_numeric/frozen.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qk-actual-matrix-unit-summary
+          if-no-files-found: error
+          path: |
+            unit-evidence/ci-summary.txt
+            unit-evidence/source-sha256.txt
+            unit-evidence/rtl-sha256.txt
+            unit-evidence/stages.tsv
+            unit-evidence/summary.txt

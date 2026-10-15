@@ -1,0 +1,55 @@
+name: qwen2-fullblock-ci-bootstrap
+# One bounded bootstrap, only when this exact workflow is deliberately published.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/qwen2-fullblock-ci-bootstrap.yml
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  bootstrap:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONNOUSERSITE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      MKL_NUM_THREADS: '4'
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONPATH: '${{ github.workspace }}/work/runtime_recovery/site-packages'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Verify external source certificate and source closure
+        run: |
+          mkdir -p work/ci_bootstrap_logs
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_execution.bootstrap --admit > work/ci_bootstrap_logs/admit.log 2>&1 || { echo 'Bootstrap admission failed; no execution.'; exit 1; }
+      - name: Install exact official runtime wheels
+        timeout-minutes: 7
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple --target work/runtime_recovery/site-packages -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt > work/ci_bootstrap_logs/install.log 2>&1 || { echo 'Runtime installation failed.'; exit 1; }
+      - name: Prepare fixed fresh inputs and native identities
+        timeout-minutes: 5
+        run: |
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_execution.prepare --execute --download > work/ci_bootstrap_logs/prepare.log 2>&1 || { echo 'Input or runtime preparation failed.'; exit 1; }
+      - name: Capture once and verify all outputs locally
+        timeout-minutes: 3
+        run: |
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_execution.bootstrap --capture > work/ci_bootstrap_logs/capture.log 2>&1 || { echo 'Bootstrap capture or local validation failed.'; exit 1; }
+      - name: Upload only fixed aggregate
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-bootstrap-aggregate-${{ github.sha }}-${{ github.run_id }}
+          path: work/qwen2_fullblock_ci_execution/aggregate.json
+          if-no-files-found: error
+          retention-days: 7

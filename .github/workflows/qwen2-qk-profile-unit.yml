@@ -1,0 +1,109 @@
+name: qwen2-qk-profile-unit
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/qwen2-qk-profile-unit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-qk-profile-unit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bounded-unit:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      JVM_OPTS: -Xmx5G -Xss4M -XX:ActiveProcessorCount=4
+      SBT_OPTS: -Dsbt.supershell=false -Dsbt.color=false -Dsbt.task.cpus=4
+      MAKEFLAGS: -j1 VM_PARALLEL_BUILDS=0 VK_PCH_I_FAST= VK_PCH_I_SLOW=
+      HARDFLOAT_SOURCE: ${{ github.workspace }}/work/upstream/hardfloat_continuous
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify frozen sources and initialize allowlisted evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p unit-evidence
+          sha256sum -c candidates/qwen2_rectangular_qk_profile/frozen.sha256
+          { git rev-parse HEAD; cat candidates/qwen2_rectangular_qk_profile/frozen.sha256; } > unit-evidence/source-sha256.txt
+          printf 'stage\tseconds\texit_status\n' > unit-evidence/stages.tsv
+          printf 'CONTROL_ONLY: candidate RTL emission/simulation with synthetic Matrix returns.\nACTUAL_MATRIX_RTL: NOT RUN.\n' > unit-evidence/unit-summary.txt
+          : > unit-evidence/rtl-sha256.txt
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Official pinned toolchain prerequisites
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          start=$SECONDS
+          ( set -e; sudo apt-get update -qq; sudo apt-get install -y verilator; python -m pip install numpy==2.2.6 pytest==8.3.5; bash chisel/continuous_prefill/scripts/prepare_hardfloat.sh )
+          rc=$?
+          if command -v verilator >/dev/null; then verilator --version >> unit-evidence/unit-summary.txt; fi
+          printf 'setup\t%s\t%s\n' "$((SECONDS-start))" "$rc" >> unit-evidence/stages.tsv
+          exit "$rc"
+      - name: Actual native Matrix and frozen payload ACK regression
+        timeout-minutes: 2
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          start=$SECONDS
+          timeout 110 bash candidates/qwen2_rectangular_qk_profile/run_native.sh > "$RUNNER_TEMP/qk-native.log" 2>&1
+          rc=$?
+          cat "$RUNNER_TEMP/qk-native.log"
+          printf 'native\t%s\t%s\n' "$((SECONDS-start))" "$rc" >> unit-evidence/stages.tsv
+          printf 'Native host service (32 legacy + 10 existing rectangular) and frozen payload/ACK (9 + 8): exit=%s\n' "$rc" >> unit-evidence/unit-summary.txt
+          exit "$rc"
+      - name: CONTROL_ONLY Chisel emission and Verilator unit simulation
+        timeout-minutes: 21
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          start=$SECONDS
+          timeout 1200 bash candidates/qwen2_rectangular_qk_profile/run_control.sh > "$RUNNER_TEMP/qk-control.log" 2>&1
+          rc=$?
+          tail -160 "$RUNNER_TEMP/qk-control.log"
+          if [[ "$rc" == 0 ]]; then
+            count=$(grep -cE 'Total number of tests run: 3([^0-9]|$)' "$RUNNER_TEMP/qk-control.log" || true)
+            total=$(grep -c 'Total number of tests run:' "$RUNNER_TEMP/qk-control.log" || true)
+            if [[ "$count" != 1 || "$total" != 1 ]] || ! grep -q 'All tests passed' "$RUNNER_TEMP/qk-control.log"; then rc=3; fi
+            if [[ -d chisel/continuous_prefill/test_run_dir ]]; then
+              find chisel/continuous_prefill/test_run_dir -type f \( -name '*.v' -o -name '*.sv' \) -print0 | sort -z | xargs -0 -r sha256sum > unit-evidence/rtl-sha256.txt
+            fi
+            if [[ ! -s unit-evidence/rtl-sha256.txt ]]; then rc=4; fi
+          fi
+          printf 'control_compile_and_simulate\t%s\t%s\n' "$((SECONDS-start))" "$rc" >> unit-evidence/stages.tsv
+          printf 'CONTROL_ONLY three Scala unit cases: exit=%s (124 means bounded timeout).\n' "$rc" >> unit-evidence/unit-summary.txt
+          grep -E 'Total number of tests run:|Tests: succeeded|All tests passed|TESTS FAILED' "$RUNNER_TEMP/qk-control.log" >> unit-evidence/unit-summary.txt || true
+          exit "$rc"
+      - name: Record exact generated RTL scope and final source identity
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p unit-evidence
+          if [[ -d chisel/continuous_prefill/test_run_dir ]]; then
+            find chisel/continuous_prefill/test_run_dir -type f \( -name '*.v' -o -name '*.sv' \) -print0 | sort -z | xargs -0 -r sha256sum > unit-evidence/rtl-sha256.txt
+          fi
+          sha256sum -c candidates/qwen2_rectangular_qk_profile/frozen.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qk-profile-unit-summary
+          if-no-files-found: error
+          path: |
+            unit-evidence/source-sha256.txt
+            unit-evidence/stages.tsv
+            unit-evidence/unit-summary.txt
+            unit-evidence/rtl-sha256.txt

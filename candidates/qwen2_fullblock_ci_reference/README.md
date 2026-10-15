@@ -128,3 +128,8 @@ that this CI platform has generated raw inputs or executed a reference.
 下一步仅新证书授权的一次 15 分钟以内 prepare→reference 集成诊断，
 不启动 DUT。诊断输出限固定阶段/模块枚举和有界源码行号，详细记录留 CI 本地。
 旧单次证书保持历史原字节；源码更新后旧闭包准入失败，不能自动重跑。
+
+第一次短诊断已实际通过 prepare、fresh bindings、policy expansion，随后在 guard 阶段失败。
+它的 guard 捕获异常后只有本地 JSON，旧 trace 提取无法定位。新增固定异常类别、
+源码模块枚举/行号和固定阶段投影，覆盖 worker 与外层 supervisor，原异常/返回/清理
+及计算均保持。下一次仅新单次证书的短诊断，不沿用前次授权；不上传异常正文。

@@ -1,5 +1,5 @@
 name: qwen2-reference-ci-diagnostic
-# One reviewed reference-only diagnostic, activated only by publishing this exact file.
+# One reviewed reference-only diagnostic with worker/supervisor safe failure telemetry.
 on:
   workflow_dispatch:
   push:

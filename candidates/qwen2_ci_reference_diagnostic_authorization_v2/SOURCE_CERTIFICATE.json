@@ -1,0 +1,74 @@
+{
+  "budgets": {
+    "capture_limits": {
+      "automatic_retry": false,
+      "per_stream_retained_bytes": 65536,
+      "poll_seconds": 0.02,
+      "rss_bytes": 1610612736,
+      "rss_is_os_hard_cap": false,
+      "total_emitted_log_limit_bytes": 16777216,
+      "wall_seconds": 120
+    },
+    "cleanup_grace_seconds": 2,
+    "disk_budget": {
+      "bootstrap_plus_frozen_payload_bytes": 65208320,
+      "export_bytes_per_capture": 32571392,
+      "native_dumps_retained": false,
+      "native_mask_sidecar_bytes": 32768,
+      "payload_bytes_per_capture": 32604160,
+      "peak_rss_estimate": null,
+      "per_capture_cap_bytes": 35651584,
+      "total_cap_bytes": 72351744,
+      "wall_seconds_estimate": null
+    },
+    "outer_watchdog_seconds": 122
+  },
+  "exclusive_numeric_slot": true,
+  "frozen_mode_available": false,
+  "historical_receipts_revalidated": false,
+  "maximum_invocations": 1,
+  "mode": "bootstrap",
+  "no_retry": true,
+  "numeric_executed": false,
+  "numerical_acceptance_allowed": false,
+  "observed_bindings_independently_reviewed": false,
+  "output_scope": "SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED",
+  "policy_sha256": "47d42f80c9e2368eb72a0f0c9bbaff2d06e6a899a2c0e4e4941b29127d2aa1fc",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "run_id": "ci01",
+  "schema": 1,
+  "source_closure_sha256": "96272d1258a39a9dd9af6cba6d3f5db99ecbb25a3e5493ed8fd221fc2c5a5784",
+  "source_manifest": {
+    "bytes": 1804,
+    "sha256": "69aef22cda094a70a6bbfade59da3eb44d0904a8556c369d6c1c04c6abc0821a"
+  },
+  "status": "APPROVED_SOURCE_POLICY_FOR_SINGLE_BOOTSTRAP",
+  "tool_identity": {
+    "dut_execution_authorized": false,
+    "implementation": "cpython",
+    "independent_cold_tests": {
+      "normal": 125,
+      "optimized": 125
+    },
+    "job_total_minutes": 15,
+    "python_executable_identity": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "python_version": [
+      3,
+      12,
+      14
+    ],
+    "review_event": "reference-only-safe-failure-diagnostic-v2-source-review-20261015T0301Z",
+    "reviewed_utc": "2026-10-15T03:01:26.876000+00:00",
+    "source_manifest": {
+      "bytes": 1804,
+      "sha256": "69aef22cda094a70a6bbfade59da3eb44d0904a8556c369d6c1c04c6abc0821a"
+    }
+  }
+}

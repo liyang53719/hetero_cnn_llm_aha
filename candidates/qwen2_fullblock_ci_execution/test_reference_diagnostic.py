@@ -21,7 +21,7 @@ class DiagnosticTests(unittest.TestCase):
     def test_success_exact_call_and_local_output(self):
         def capture():print('private arbitrary output');return 99
         with patch.object(d.B,'capture',side_effect=capture):r=d.run('capture')
-        self.assertEqual(r,dict(schema=1,status='SUCCESS',phase='COMPLETE',module='NONE',line=0))
+        self.assertEqual(r,dict(schema=1,status='SUCCESS',phase='COMPLETE',module='NONE',line=0,guard_failure=None,guard_stage='UNKNOWN'))
         self.assertIn('private arbitrary output',(self.root/'work/ci_reference_diagnostic/capture.log').read_text())
     def test_no_repeat_output(self):
         with patch.object(d.B,'capture'):
@@ -55,6 +55,28 @@ class DiagnosticTests(unittest.TestCase):
         for key,value in [('path','secret'),('line',True),('module','private'),('phase','private')]:
             r=d.run();r[key]=value
             with self.assertRaises(ValueError):d.checked(r)
+    def test_guard_failure_projection_prefers_worker(self):
+        import json
+        sup=d.F.project(ValueError('private'), 'SUPERVISOR', self.root)
+        worker=d.F.project(TypeError('private'), 'WORKER', self.root)
+        p=self.root/d.B.LOGS/'reference_guard.log';p.parent.mkdir(parents=True)
+        p.write_text(json.dumps(sup)+'\n')
+        p=self.root/d.B.WORK/'ci01/bootstrap';p.mkdir(parents=True)
+        (p/'stderr.log').write_text('private non-json\n'+json.dumps(worker)+'\n'+json.dumps({'status':'WORKER_FAILED_UNSEALED','error':'private'})+'\n')
+        (p/'STAGES.jsonl').write_text(json.dumps({'stage':'numeric-import-and-runtime-identity','secret':'private'})+'\n')
+        record,stage=d.guard_observation()
+        self.assertEqual(record,worker);self.assertEqual(stage,'numeric-import-and-runtime-identity')
+        self.assertNotIn('private',str((record,stage)))
+    def test_guard_unknown_records_are_not_forwarded(self):
+        import json
+        p=self.root/d.B.WORK/'ci01/bootstrap';p.mkdir(parents=True)
+        (p/'stderr.log').write_text(json.dumps({'status':'CI_REFERENCE_FAILURE','error':'secret'})+'\n')
+        (p/'STAGES.jsonl').write_text(json.dumps({'stage':'private path'})+'\n')
+        self.assertEqual(d.guard_observation(),(None,'UNKNOWN'))
+    def test_guard_nested_extra_field_refused(self):
+        r=d.run();r['guard_failure']=d.F.project(ValueError(),'WORKER',self.root)
+        r['guard_failure']['path']='secret'
+        with self.assertRaises(ValueError):d.checked(r)
     def test_unknown_cli_text_never_leaves_output(self):
         stream=io.StringIO()
         with contextlib.redirect_stdout(stream):code=d.main(['--private-secret'])

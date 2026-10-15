@@ -1,0 +1,45 @@
+name: qwen2-ci-prepare-diagnostic
+# One prepare-only investigation. No reference capture or DUT entry exists here.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/qwen2-ci-prepare-diagnostic.yml
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      PYTHONNOUSERSITE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      MKL_NUM_THREADS: '4'
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONPATH: '${{ github.workspace }}/work/runtime_recovery/site-packages'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Verify unchanged preparation source and diagnostic source
+        run: |
+          mkdir -p work/ci_diagnostic_logs
+          python -B -c "from candidates.qwen2_fullblock_ci_execution.closure import digest; import sys; sys.exit(0 if digest() == '10133c5fdd94f058f5397d03f2ae6a8dd87e2bdfa8b15a4d436dd87af1b78321' else 2)" > work/ci_diagnostic_logs/admit.log 2>&1 || { echo 'Source admission failed.'; exit 1; }
+          echo '30cf0b2b5b4ecbf687da0cb8e37b022b632a15f0e22dd56d23ef1ec35aea469f  candidates/qwen2_ci_prepare_diagnostic/diagnostic.py' | sha256sum --check --status || { echo 'Diagnostic source admission failed.'; exit 1; }
+      - name: Install exact official runtime wheels
+        timeout-minutes: 7
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple --target work/runtime_recovery/site-packages -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt > work/ci_diagnostic_logs/install.log 2>&1 || { echo 'Runtime installation failed.'; exit 1; }
+      - name: Diagnose preparation only
+        timeout-minutes: 4
+        run: |
+          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_ci_prepare_diagnostic.diagnostic --execute --download 2> work/ci_diagnostic_logs/launcher.log

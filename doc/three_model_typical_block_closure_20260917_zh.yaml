@@ -26,8 +26,73 @@
     边界: 阶段模型预测与局部RTL单独记账；不得以80%阶段目标放宽最终同源完整RTL的90%联合验收。
     固定资源: Matrix4096、各实现实际Vector与Scalar实例库存；不得缩小闲置分母。
     完整周期: launch接受到最终terminal，包含DDR、依赖、供数、writeACK及阶段间隙；互斥等待分类和重叠单报。
-  最新进度20261014:
-    优先级: 本节取代下方历史日期段落中的当前进度描述，保留历史失败、门限和原源码身份。
+  最新进度20261015:
+    优先级: 本节是当前进度入口，取代历史日期段落中的下一步描述；历史运行、失败与原始门限保留，不回写旧回执。
+    主workload: batch1_prefill128
+    当前发布基线: 58034f794df1322d5c4493622411862e2a66c77d
+    源码摘要: 50df1ca46da69da30009b30c6ff69799f9ba2f0cd0cd06300c7873eb116b88d1
+    实际运行:
+      run_id: 38696907327
+      job_id: 116295518943
+      artifact_id: 11956497199
+      链接: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38696907327/job/116295518943
+      状态: FAILED
+    当前结论: 同次fresh完整public21软件链已实际执行并比较官方参考，21个public completion、17个owner job、1个accepted launch result；完整终态与finalfence、same-live身份、退债、cache精确copy、来源、结构和资源门通过。24个数值门中20个true、4个false，M128完整链数值验收仍FAIL。
+    原数值门:
+      operator_max_abs: 0.03125
+      operator_mean_abs: 0.005
+      block_max_abs: 0.05
+      block_mean_abs: 0.01
+      变更: 未放宽
+    失败门:
+    - 节点: scores
+      max_abs: 8.0
+      mean_abs: 0.0005980499031007752
+    - 节点: logits
+      max_abs: 8.0
+      mean_abs: 0.0005980499031007752
+    - 节点: prob
+      max_abs: 0.031494140625
+      mean_abs: 7.151029234076358e-07
+    - 节点: FFN_gate
+      max_abs: 0.041015625
+      mean_abs: 5.037509903494148e-05
+    观察解释: scores与logits共用同一个scores_bf16观察字段，覆盖99072个因果位置；这是两个比较门失败，不是两个独立DUT故障。尚未把局部算术差异和上游传播分离，不能提前定根因。
+    最终输出:
+      y_max_abs: 0.03125
+      y_mean_abs: 4.1511200834065676e-05
+      原block门通过: true
+      完整链通过: false
+    参考合同: official-ast-ci-aten-avx2-reference-v1；同runner两个fresh完整capture字节一致，并核对实际libpython边界；仅当前平台官方AST参考，不把旧参考或失败换名升级。
+    cache合同: sealed-same-live-cold-cache-v1；同链cache copy精确通过，官方cache数值门按原阈值通过，不等于官方cache逐bit相同。
+    软件计数:
+      host_wall_seconds: 2240.388901111
+      useful_macs: 6014828544
+      executed_macs: 6598164480
+      software_operation_efficiency: 0.9115911799761621
+    硬件边界:
+      rtl_executed: false
+      hardware_cycles: null
+      hardware_utilization: null
+      hardware_duty: null
+      说明: 0.911591仅软件操作效率，不是固定资源完整周期MAC利用率；CPU候选未改Chisel源码。非完整官方forward或29节点完整DUT验收。
+    当前进行中:
+    - QK与prob同输入局部算术对照和上游传播隔离的独立复核
+    - FFN gate使用相同n1的局部算术与传播隔离
+    - 独立Q/K归约候选设计与固定4096资源成本核对
+    下一步: 先完成有界小链隔离和独审，确认可审查修复后再决定完整block复验；不盲跑全block，不改原数值门，不从保存中间输出冒充fresh整链。
+    五block顺序:
+    - Qwen2_1p5B完整block
+    - Qwen35_0p8B_L0
+    - Qwen35_0p8B_L3
+    - Qwen35_35B_L0
+    - Qwen35_35B_L3
+    其余目标: 后四block本轮未推进；历史局部门与待办保留，未转为当前完整链或RTL通过。M128仍为主验收，1024或1224的更长长度需澄清，但不阻塞当前128闭环。
+    保留状态: U00.2 ongoing；U01 to do；46个父任务及全部叶项状态不变，五block实际完整RTL与固定资源完整周期联合门仍open。
+    报告: doc/QWEN2_M128_FULLBLOCK_NUMERIC_FAILURE_20261015_CN.md
+    发布边界: 仅运行链接、固定聚合、摘要与源码身份；不新增私有运行目录、逐输出hash/shape/stride或换名的旧拒绝metadata。
+  历史进度20261014:
+    优先级: 本节保留截至2026-10-14的历史快照；当前进度与下一步以最新进度20261015为准，历史失败、门限和原源码身份不变。
     主workload: batch1_prefill128
     当前发布基线: 76eb83ff5a5d27a0c6737ba56aa3fd0bf73b4f99；父提交5a9d2e3ea95ec0580f1b0d20eae47aec6c3fa7ac；前次计划同步995f07b7a53f642d2de5e67d31e8342f6e304cc9。
     当前主线: 5a9d已冻结并独立fresh重现M128全block的29节点official_AST参考，仅reference通过。新bounded_v2的fresh_M128同链pc0至12已完成并seal实际输出，但post_seal官方比较被原runtime读取guard拒绝，原launcher仍FAILED；独立只读posthoc已通过原BF16限定数值门但非全bitexact，最终独审及76eb发布与原payload_CI已闭环。保留7975预算失败及M16原BF16限定门；下一主线为同次fresh全block尾部集成，不以保存pc12输出续跑。实际完整RTL及90%联合门仍open。

@@ -1,13 +1,13 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 0df073b0fde522d8442d70ccfc60d4fd26fa4e8e97ecaa1a853086fc2e89ff44
+计划SHA256: cf18e4ebcba5cfc387fa12f05bf605bd849255088f2c6361d394f274efa8b41e
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
 - ongoing
 - done
-说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。
+说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。
 任务:
 - 编号: C00
   名称: 重建最新源码与证据基线
@@ -1681,6 +1681,7 @@ Qwen2_public21归约控制绑定_20261014:
   报告: doc/QWEN2_PUBLIC21_REDUCTION_BINDING_20261014_CN.md
 
 Qwen2_live_QKV输入及主线就绪_20261014:
+  历史快照: 截至2026-10-14的完成项和当时待办保留；当前进行中与待办以Qwen2_M128完整链数值失败及小链隔离_20261015为准。
   状态: ongoing
   父项: [U00.2, U01]
   当前发布基线: 76eb83ff5a5d27a0c6737ba56aa3fd0bf73b4f99；父提交5a9d2e3ea95ec0580f1b0d20eae47aec6c3fa7ac；前次计划同步995f07b7a53f642d2de5e67d31e8342f6e304cc9。
@@ -1731,3 +1732,80 @@ Qwen2_live_QKV输入及主线就绪_20261014:
   前次状态索引: reports/execution/QWEN2_M128_QKV_ATTENTION_STATUS_20261014.json
   当前资料: [candidates/qwen2_live_attention_model_m16/SUMMARY.json, candidates/qwen2_live_attention_reference_m16/VALIDATION_SUMMARY.json, candidates/qwen2_live_attention_model_m128/SUMMARY.json, candidates/qwen2_live_attention_model_m128/FAILURE.md, candidates/qwen2_live_tail_inputs_m128/VALIDATION_SUMMARY.json, doc/QWEN2_M128_QKV_REVIEW_ADDENDUM_20261014_CN.md, reports/execution/QWEN2_M128_QKV_REVIEW_ADDENDUM_20261014.json, candidates/qwen2_attention_idle_fastpath/SUMMARY.json, candidates/qwen2_attention_idle_fastpath/RESULT_REPORT.md, candidates/qwen2_fullblock_reference_m128_results/SUMMARY.json, candidates/qwen2_fullblock_reference_m128_results/RESULT_REPORT.md, work/qwen2_fullblock_tail_integration_audit_20261014/REPORT.md, work/qwen2_live_attention_numeric_m128_bounded_20261014/m128_pv32_bounded_actual_v2/RESULT.json, work/qwen2_live_attention_numeric_m128_bounded_20261014/posthoc_v2_compare_v1/RESULT.json, work/qwen2_live_attention_numeric_m128_bounded_review_20261014/POSTHOC_RESULT_INDEPENDENT_REVIEW.json, candidates/qwen2_live_attention_model_m128_bounded_results/SUMMARY.json, candidates/qwen2_live_attention_model_m128_bounded_results/RESULT_REPORT.md]
   保留状态: U00.2 ongoing；U01 to do；46父任务数组及原状态不变；五block实际完整RTL与90%联合门open。
+
+Qwen2_M128完整链数值失败及小链隔离_20261015:
+  状态: ongoing
+  父项:
+  - U00.2
+  - U01
+  当前发布基线: 58034f794df1322d5c4493622411862e2a66c77d
+  done:
+  - 同runner两个fresh完整官方AST参考capture字节一致及实际libpython边界复核
+  - 完整M128同次public21软件链实际终态及官方比较完成
+  - 21completion_17owner_jobs_1accepted_launch_result及same_live_退债_cache精确copy_来源_结构_资源门核验
+  - 完整链4项原数值门失败如实登记并独审，不将最终y通过升级完整block
+  ongoing:
+  - QK与prob同输入局部算术对照和上游传播隔离的独立复核
+  - FFN gate使用相同n1的局部算术与传播隔离
+  - 独立Q/K归约候选设计与固定4096资源成本核对
+  todo:
+  - 按隔离结果审查有界修复并保留原数值门
+  - 修复后按冻结来源与预算重新验完整M128数值链
+  - 冻结已通过激励并接入实际完整RTL、全资源库存和完整周期计数
+  - 按Qwen2优先顺序完成其余四block与五block联合验收
+  实际运行:
+    run_id: 38696907327
+    job_id: 116295518943
+    artifact_id: 11956497199
+    链接: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38696907327/job/116295518943
+    状态: FAILED
+  当前结论: 同次fresh完整public21软件链已实际执行并比较官方参考，21个public completion、17个owner job、1个accepted launch result；完整终态与finalfence、same-live身份、退债、cache精确copy、来源、结构和资源门通过。24个数值门中20个true、4个false，M128完整链数值验收仍FAIL。
+  失败门:
+  - 节点: scores
+    max_abs: 8.0
+    mean_abs: 0.0005980499031007752
+  - 节点: logits
+    max_abs: 8.0
+    mean_abs: 0.0005980499031007752
+  - 节点: prob
+    max_abs: 0.031494140625
+    mean_abs: 7.151029234076358e-07
+  - 节点: FFN_gate
+    max_abs: 0.041015625
+    mean_abs: 5.037509903494148e-05
+  原数值门:
+    operator_max_abs: 0.03125
+    operator_mean_abs: 0.005
+    block_max_abs: 0.05
+    block_mean_abs: 0.01
+    变更: 未放宽
+  观察解释: scores与logits共用同一个scores_bf16观察字段，覆盖99072个因果位置；这是两个比较门失败，不是两个独立DUT故障。尚未把局部算术差异和上游传播分离，不能提前定根因。
+  最终输出:
+    y_max_abs: 0.03125
+    y_mean_abs: 4.1511200834065676e-05
+    原block门通过: true
+    完整链通过: false
+  参考合同: official-ast-ci-aten-avx2-reference-v1；同runner两个fresh完整capture字节一致，并核对实际libpython边界；仅当前平台官方AST参考，不把旧参考或失败换名升级。
+  cache合同: sealed-same-live-cold-cache-v1；同链cache copy精确通过，官方cache数值门按原阈值通过，不等于官方cache逐bit相同。
+  软件计数:
+    host_wall_seconds: 2240.388901111
+    useful_macs: 6014828544
+    executed_macs: 6598164480
+    software_operation_efficiency: 0.9115911799761621
+  硬件边界:
+    rtl_executed: false
+    hardware_cycles: null
+    hardware_utilization: null
+    hardware_duty: null
+    说明: 0.911591仅软件操作效率，不是固定资源完整周期MAC利用率；CPU候选未改Chisel源码。非完整官方forward或29节点完整DUT验收。
+  下一步: 先完成有界小链隔离和独审，确认可审查修复后再决定完整block复验；不盲跑全block，不改原数值门，不从保存中间输出冒充fresh整链。
+  五block顺序:
+  - Qwen2_1p5B完整block
+  - Qwen35_0p8B_L0
+  - Qwen35_0p8B_L3
+  - Qwen35_35B_L0
+  - Qwen35_35B_L3
+  其余目标: 后四block本轮未推进；历史局部门与待办保留，未转为当前完整链或RTL通过。M128仍为主验收，1024或1224的更长长度需澄清，但不阻塞当前128闭环。
+  保留状态: U00.2 ongoing；U01 to do；46个父任务及全部叶项状态不变，五block实际完整RTL与固定资源完整周期联合门仍open。
+  报告: doc/QWEN2_M128_FULLBLOCK_NUMERIC_FAILURE_20261015_CN.md
+  发布边界: 仅运行链接、固定聚合、摘要与源码身份；不新增私有运行目录、逐输出hash/shape/stride或换名的旧拒绝metadata。

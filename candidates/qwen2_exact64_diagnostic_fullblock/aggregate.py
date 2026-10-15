@@ -11,7 +11,8 @@ import os
 from pathlib import Path
 import re
 import stat
-from . import closure, accounting, retention
+import signal
+from . import closure, accounting, retention, stage_log
 
 ROOT = Path(__file__).resolve().parents[2]
 CI_ROOT = Path('/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha')
@@ -22,10 +23,12 @@ FAIL = 'FAIL_DIAGNOSTIC_SOFTWARE_OWNER'
 POSTSEAL = 'work/qwen2_exact64_diagnostic_gate_probe/ci01/RESULT.json'
 PROGRESS = 'work/qwen2_exact64_diagnostic_fullblock_numeric/ci01/PROGRESS.jsonl'
 HEARTBEAT = 'work/qwen2_exact64_diagnostic_fullblock_numeric/ci01.HEARTBEAT.json'
+STAGE_LOG = 'work/qwen2_exact64_diagnostic_fullblock_numeric/ci01/STAGES.jsonl'
+TERMINATION_SIGNALS = frozenset(('SIGXCPU','SIGKILL','OTHER_SIGNAL'))
 POSTSEAL_STATUSES = frozenset(('NOT_RUN','INCOMPLETE','FAILED','COMPLETE'))
 FAILURE_KINDS = frozenset(('UNKNOWN','BUDGET_EXCEEDED','EXECUTION_FAILURE','OUTER_WALL_TIMEOUT',
     'SAMPLED_RSS_CAP','SAMPLED_OUTPUT_CAP','SAMPLED_LOG_CAP','SUPERVISOR_EXCEPTION',
-    'PROCESS_GROUP_CLEANUP_INCOMPLETE','AGGREGATION_READ_FAILURE'))
+    'PROCESS_GROUP_CLEANUP_INCOMPLETE','AGGREGATION_READ_FAILURE','CPU_LIMIT','SIGNAL'))
 PROGRESS_COUNTS = dict(public_pc=21,public_completions=21,owner_jobs=17,
     accepted_owner_results=17,accepted_launch_results=1)
 MAX_JSON_BYTES = 256 * 1024 * 1024
@@ -275,9 +278,9 @@ NODE_SPECS = tuple(
         ('OFFICIAL_KV',('official_kv_comparison',),'official_numeric_pass',('metrics',)),
         ('SOFTMAX_SUM',('softmax_probability_sum',),'passed',()))
 RESOURCE_GATES = (
-    ('HOST_WALL','host_wall_seconds',3300),
-    ('HOST_CPU','host_cpu_seconds',None),
-    ('SUPERVISOR_WALL','supervisor_wall_seconds',3330),
+    ('HOST_WALL','host_wall_seconds',5700),
+    ('HOST_CPU','host_cpu_seconds',5400),
+    ('SUPERVISOR_WALL','supervisor_wall_seconds',5760),
     ('PEAK_RSS','peak_rss_bytes',3221225472),
     ('SAMPLED_GROUP_RSS','sampled_group_rss_bytes',3221225472),
     ('OUTPUT_BYTES','output_bytes',1073741824),
@@ -763,7 +766,7 @@ def _progress_summary(report,progress,heartbeat):
         if last.get('stage')==failure_stage and elapsed is not None and result['elapsed_seconds'] is not None and elapsed<=result['elapsed_seconds']:
             result['stage_start_seconds']=elapsed
     for key in ('elapsed_seconds','cpu_seconds','stage_start_seconds','heartbeat_elapsed_seconds'):
-        if result[key] is not None and result[key]>4500:result[key]=None
+        if result[key] is not None and result[key]>7200:result[key]=None
     return result
 
 
@@ -773,7 +776,7 @@ def _validate_progress(value):
     need(type(value['source']) is str and value['source'] in ('UNAVAILABLE','REPORT_FAILURE_SNAPSHOT','PROGRESS','HEARTBEAT') and type(value['stage']) is str and value['stage'] in STAGES,'fixed progress enums')
     for key,limit in PROGRESS_COUNTS.items():need(value[key] is None or integer(value[key],limit) is not None,'bounded progress count')
     for key in ('elapsed_seconds','cpu_seconds','stage_start_seconds','heartbeat_elapsed_seconds'):
-        need(value[key] is None or number(value[key]) is not None and value[key]<=4500,'finite bounded progress time')
+        need(value[key] is None or number(value[key]) is not None and value[key]<=7200,'finite bounded progress time')
     if value['source']=='UNAVAILABLE':need(same(value,_progress_empty()),'no fabricated progress')
     if value['source']=='HEARTBEAT':need(all(value[k] is None for k in (*PROGRESS_COUNTS,'elapsed_seconds','cpu_seconds','stage_start_seconds')),'heartbeat has no model counters')
 
@@ -796,6 +799,38 @@ def _read_progress():
     return record
 
 
+def _stage_empty():
+    return dict(schema=1,scope=stage_log.SCOPE,status='UNAVAILABLE',record=None)
+
+
+def _validate_stage(value):
+    need(type(value) is dict and set(value)==set(_stage_empty()),'fixed durable stage fields')
+    need(type(value['schema']) is int and value['schema']==1 and value['scope']==stage_log.SCOPE,
+        'fixed durable stage schema/scope')
+    need(type(value['status']) is str and value['status'] in ('UNAVAILABLE','OBSERVED'),'fixed durable stage status')
+    if value['status']=='UNAVAILABLE':need(value['record'] is None,'no fabricated durable stage')
+    else:stage_log.validate_record(value['record'])
+
+
+def _stage_summary(value):
+    if value is None:return _stage_empty()
+    try:
+        _validate_stage(value)
+        record=value['record']
+        return dict(schema=1,scope=stage_log.SCOPE,status=value['status'],
+            record=None if record is None else {**record,'counters':dict(record['counters'])})
+    except (ValueError,TypeError,OverflowError):return _stage_empty()
+
+
+def _termination_signal(launch):
+    # Negative subprocess return codes are observed signals. SIGKILL alone
+    # cannot identify CPU, RSS, supervisor cleanup or an external kill.
+    code=launch.get('returncode')
+    if type(launch.get('schema')) is not int or launch['schema']!=1 or type(code) is not int or not -64<=code<0:
+        return None
+    return 'SIGXCPU' if code==-signal.SIGXCPU else 'SIGKILL' if code==-signal.SIGKILL else 'OTHER_SIGNAL'
+
+
 def _empty(source_digest):
     return dict(schema=1, scope='DIAGNOSTIC_SOFTWARE_OWNER',performance='NO_GO',hardware_mapping='NOT_IMPLEMENTED',
         fullblock_pass=False,acceptance_sealed=False,chisel_full_prefill_pass=False,
@@ -803,7 +838,7 @@ def _empty(source_digest):
         diagnostic_acceptance_sealed=False,postseal_valid=False,postseal_status='NOT_RUN', status='INCOMPLETE',
         reference_contract='official-ast-ci-aten-avx2-reference-v1',cache_contract='sealed-same-live-cold-cache-v1',
         source_digest=source_digest, failure_stage='UNKNOWN', exception_class='UNKNOWN',failure_kind='UNKNOWN',
-        failure_progress=_progress_empty(),
+        failure_progress=_progress_empty(),durable_stage_observation=_stage_empty(),termination_signal=None,
         public_completions=None, owner_jobs=None, accepted_launch_results=None,
         host_wall_seconds=None, host_cpu_seconds=None, supervisor_wall_seconds=None,
         peak_rss_bytes=None, sampled_group_rss_bytes=None, output_bytes=None, log_bytes=None,
@@ -815,12 +850,14 @@ def _empty(source_digest):
         acceptance_diagnostics=_diagnostic_empty())
 
 
-def summarize(report, launch, *, source_digest, postseal=None, progress=None, heartbeat=None):
+def summarize(report, launch, *, source_digest, postseal=None, progress=None, heartbeat=None, durable_stage=None):
     """Pure receipt projection; collect() additionally binds current source bytes."""
     need(type(report) is dict and type(launch) is dict, 'receipt objects required')
     need(type(source_digest) is str and re.fullmatch('[0-9a-f]{64}',source_digest), 'source digest required')
     result=_empty(source_digest)
     result['failure_progress']=_progress_summary(report,progress,heartbeat)
+    result['durable_stage_observation']=_stage_summary(durable_stage)
+    result['termination_signal']=_termination_signal(launch)
     execution=obj(report.get('execution'));host=obj(execution.get('host'));terminal=obj(host.get('launch_result'))
     accepted=obj(host.get('accepted'))
     for target,origin in (('public_completions','completed'),('owner_jobs','jobs')):
@@ -871,6 +908,10 @@ def summarize(report, launch, *, source_digest, postseal=None, progress=None, he
             kind=source.get('failure_kind')
             if type(kind) is str and kind in FAILURE_KINDS and kind!='UNKNOWN':
                 result['failure_kind']=kind;break
+        if result['failure_kind']=='UNKNOWN' and result['termination_signal'] is not None:
+            result['failure_kind']='CPU_LIMIT' if result['termination_signal']=='SIGXCPU' else 'SIGNAL'
+            result['status']=FAIL
+            if result['failure_stage']=='UNKNOWN':result['failure_stage']='SUPERVISOR'
         # An observed progress stage is not the cause of a supervisor failure.
         if result['failure_stage']=='UNKNOWN' and type(launch.get('failure_kind')) is str and launch['failure_kind'] in FAILURE_KINDS-{'UNKNOWN'}:
             result['failure_stage']='SUPERVISOR'
@@ -910,6 +951,9 @@ def validate_summary(value):
     need(value['failure_kind'] is None or type(value['failure_kind']) is str and value['failure_kind'] in FAILURE_KINDS,'fixed primary failure kind')
     need(type(value['postseal_status']) is str and value['postseal_status'] in POSTSEAL_STATUSES,'fixed postseal state')
     _validate_progress(value['failure_progress'])
+    _validate_stage(value['durable_stage_observation'])
+    need(value['termination_signal'] is None or type(value['termination_signal']) is str and
+        value['termination_signal'] in TERMINATION_SIGNALS,'fixed termination signal')
     _validate_diagnostics(value['acceptance_diagnostics'],value['postseal_status'])
     gates=value['acceptance_diagnostics']['gates']
     main_pass=all(v is True for group,rows in gates.items() if group!='POSTSEAL' for v in rows.values())
@@ -952,7 +996,8 @@ def collect(*, source_digest=None, execute=False):
         except (OSError,ValueError,UnicodeError):pass
         try:heartbeat=_read(HEARTBEAT)
         except (OSError,ValueError,UnicodeError):pass
-    result=summarize(*records,source_digest=source_digest,postseal=postseal,progress=progress,heartbeat=heartbeat)
+    result=summarize(*records,source_digest=source_digest,postseal=postseal,progress=progress,heartbeat=heartbeat,
+        durable_stage=stage_log.safe_last(ROOT/STAGE_LOG))
     if main_errors and not result['diagnostic_numeric_pass'] and result['failure_kind']=='UNKNOWN' and result['exception_class']=='UNKNOWN':
         result.update(status=FAIL if records[1].get('status') in ('FAILED','PASS') or
                       records[0].get('status') in ('FAILED',FAIL,PASS) else 'INCOMPLETE',

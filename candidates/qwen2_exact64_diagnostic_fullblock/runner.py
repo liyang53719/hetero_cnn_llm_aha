@@ -25,7 +25,8 @@ from candidates.qwen2_live_attention_model_m128 import boundary
 from candidates.qwen2_exact64_diagnostic_fullblock import native_artifact
 from candidates.qwen2_live_fullblock_model_m128 import telemetry
 from candidates.qwen2_exact64_diagnostic_fullblock import comparator as compare
-from candidates.qwen2_exact64_diagnostic_fullblock import accounting, retention
+from candidates.qwen2_exact64_diagnostic_fullblock import accounting, stage_log as stages
+from candidates.qwen2_retention_shape_canonical import retention
 from candidates.qwen2_fullblock_ci_dut import statistics
 # New admission is deliberately not inherited from the consumed official run.
 from candidates.qwen2_exact64_diagnostic_fullblock import gates
@@ -60,6 +61,45 @@ def dependencies():
     return r,dense,native,helper,original,fixtures,public,prefix,scalar,owner_module,binding,profiles,execution,suffix,observation
 
 
+TAIL_STAGE_NAMES=dict(pc12_release='PC12_RELEASE',pc13_Dense='PC13_O',pc14_Add='PC14_RESIDUAL',
+    pc15_Norm='PC15_NORM',pc16_18_resident_ffn='PC16_18_FFN',pc19_down='PC19_DOWN',
+    pc20_residual='PC20_RESIDUAL',launch_result_hold_retire='LAUNCH_RESULT')
+
+
+def stage_counters(context):
+    """Read cumulative native/software counters only at existing boundaries."""
+    values={key:0 for key in stages.COUNTER_LIMITS}
+    x=context.get('x');physical=context.get('physical');service=context.get('service')
+    projection=context.get('projection');shared=context.get('shared');silu=context.get('silu')
+    if x is not None:values.update(completed=x.host.completed,jobs=x.host.jobs,
+        accepted_results=x.counts['result_fire'],host_ticks=x.counts['host_model_ticks'])
+    if physical is not None:values.update(read_bytes=physical.counts['read_bytes'],write_ack_bytes=physical.counts['write_ack_bytes'])
+    if service is not None:values.update(dense_steps=service.counts['dense_steps'],normal_steps=service.counts['normal_steps'],
+        dense_fma=int(service.lib.matrix_dense_fmas()),normal_fma=int(service.lib.matrix_normal_fmas()))
+    if projection is not None:
+        kernel=projection.kernel.report();values.update(exact64_fma=kernel['fmas'],exact64_add=kernel['adds'])
+    if shared is not None:values['scalar_calls']=sum(shared.calls.values())
+    if silu is not None:values['silu_calls']=silu.calls
+    return values
+
+
+def stage_failure(log,context,error):
+    """Do not let a failed counter read or logger mask the original error."""
+    try:
+        kind='TIMEOUT' if telemetry.is_budget(error) else 'RESOURCE' if isinstance(error,MemoryError) else 'INTERNAL'
+        return log.failure(log.active[0],kind,counters=stage_counters(context)) if log.active is not None else False
+    except BaseException:return False
+
+
+class StageCheckedTelemetry(telemetry.SparseTelemetry):
+    def __init__(self,*args,stage_log,**kwargs):
+        self.stage_log=stage_log
+        super().__init__(*args,**kwargs)
+    def emit(self,*args,**kwargs):
+        self.stage_log.check()
+        return super().emit(*args,**kwargs)
+
+
 def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=None):
     gates.require_execution()
     global DATA
@@ -92,9 +132,12 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
     def checkpoint(): save(out/'RESULT.json',report)
     checkpoint()
     gate=OracleGate(DATA,out,REFERENCE)
-    progress=telemetry.SparseTelemetry(out/'PROGRESS.jsonl',started=started,cpu=cpu,budget=limits['inner_wall_seconds'])
+    stage_log=stages.StageLog(out/'STAGES.jsonl',dict(cpu_seconds=limits['cpu_seconds'],
+        wall_seconds=limits['inner_wall_seconds'],address_space_bytes=limits['rss_bytes'],output_bytes=limits['output_bytes']))
+    stage_context={}
+    progress=StageCheckedTelemetry(out/'PROGRESS.jsonl',started=started,cpu=cpu,budget=limits['inner_wall_seconds'],stage_log=stage_log)
     try:
-        progress.start();progress.mark('dependency_setup')
+        progress.start();stage_log.begin('SETUP',counters=stage_counters(stage_context));progress.mark('dependency_setup')
         r,dense,native,helper,original,fixtures,public,prefix,scalar,owner_module,binding,profiles,execution,suffix,observation=dependencies()
         from candidates.qwen2_exact64_diagnostic_fullblock.public_binding import (
             DiagnosticPublicExecution, DiagnosticVReductionDriver, expected_kv_identity)
@@ -159,6 +202,7 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
                     scratch=banked_scratch(owner.a_banks),identity=expected_kv_identity(physical)),
                 matrix_service=service)
             progress.context.update(x=x,physical=physical,service=service,shared=shared,memory=memory)
+            stage_context.update(progress.context,projection=projection,silu=silu)
             ledger=statistics.StageLedger(x,physical,memory,silu)
             report['source_guards']=dict(matrix=service.identity,scalar=shared.identity)
             report['base_commit']=shared.identity['recipe']['git_head']
@@ -171,6 +215,7 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
             for pc,name in enumerate(PRODUCERS):
                 ledger.transition('pc'+str(pc)+'_'+name)
                 progress.mark('prefix_pc'+str(pc)+'_'+name)
+                stage_log.transition(stages.OWNER_STAGES[pc],counters=stage_counters(stage_context))
                 job=x.advance_to_request()['ordinary_request']
                 require(job is not None and job.tag&0xffff==pc and job.dst==f.allocations[name].address,'typed pc/producer binding')
                 if pc in (1,4):
@@ -197,6 +242,7 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
                 checkpoint();print(json.dumps({'producer':name,'pc':pc,'seconds':report['host_wall_seconds']}),flush=True)
             ledger.transition('pc8_retire_pc9_kv_append')
             progress.mark('pc8_hold_and_kv_append')
+            stage_log.transition('PC9_KV_APPEND',counters=stage_counters(stage_context))
             report['pc8_held_before_continuation']=boundary.stable_hold(x,physical,pc=8,completed=8,jobs=9,output='v')
             require(job.kind=='Bias' and job.tag&0xffff==8,'original pc8 Bias job required')
             x.publish_completions((8,));physical.publish(job,x.host)
@@ -230,6 +276,7 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
                 (job.a,job.b,job.c,job.dst)==tuple(f.specs[n][0] for n in ('q','cache_k','cache_v','att')) and
                 (job.m,job.n,job.k,job.write_bytes)==(128,1536,128,786432),'fused Attention original typed binding')
             progress.mark('attention_observer_setup')
+            stage_log.transition('PC10_12_ATTENTION',counters=stage_counters(stage_context))
             x.arm_attention(physical,job)
             capture=ResidentAttentionObservation(x.attention_owner,source_sha256=sources)
             counters_before=Counter(physical.counts);scalar_before=Counter(shared.calls)
@@ -289,8 +336,10 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
             def tail_stage(name):
                 ledger.transition(name)
                 progress.mark(name)
+                stage_log.transition(TAIL_STAGE_NAMES[name],counters=stage_counters(stage_context))
             actual,report['execution']=tail.execute_tail(x,physical,silu,out,memory=memory,
                 attention_job=job,stage=tail_stage)
+            stage_log.transition('FINAL_SEAL',counters=stage_counters(stage_context))
             report['whole_block_terminal']=True
             report['finalfence']=True
             report['finalfence_scope']='public21 last completion + accepted launch result + drained obligations; no RTL fence opcode'
@@ -321,6 +370,7 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
         # No official tensor has been read at any point above this seal.
         require(not gate.reference_reads,'premature oracle reads')
         progress.mark('post_seal_official_comparison')
+        stage_log.transition('POSTSEAL_COMPARISON',counters=stage_counters(stage_context))
         gate.open_after_seal(dict(actual_outputs_sealed=True,public_completions=x.host.completed,
             actual_owner_jobs=x.host.jobs,accepted_launch_results=x.counts['result_fire'],finalfence=True,
             outstanding_debts={**report['backend_debts'],**report['diagnostic_backend_debts']},same_live_identity=report['same_live_identity_initial']==report['same_live_identity_final']))
@@ -356,8 +406,10 @@ def run(out, data, reference, *, reviewed_source_manifest=None, kernel_library=N
         report['acceptance_sealed']=False
         report['fullblock_pass']=False
         report['diagnostic_acceptance_sealed']=bool(report['diagnostic_numeric_pass'])
+        stage_log.finish(counters=stage_counters(stage_context))
         checkpoint();progress.check();progress.stop();return report
     except BaseException as e:
+        stage_failure(stage_log,stage_context,e)
         progress.stop()
         telemetry.attach_failure(report,e,stage=progress.stage,started=started,cpu=cpu,gate=gate,context=progress.context)
         report['scalar_environment_audit']=list(gate.environment_events)
@@ -391,6 +443,7 @@ def main(argv=None):
         require(all(getattr(a,name) is not None for name in ('data','reference','out','reviewed_source_manifest','kernel_library')),
             'actual requires data/reference/output, new reviewed source and exact64 artifact')
         limits=gates.require_budget()
+        resource.setrlimit(resource.RLIMIT_CPU,(limits['cpu_seconds'],limits['cpu_seconds']))
         resource.setrlimit(resource.RLIMIT_AS,(limits['rss_bytes'],limits['rss_bytes']))
         resource.setrlimit(resource.RLIMIT_FSIZE,(limits['file_bytes'],limits['file_bytes']))
         result=run(a.out,a.data,a.reference,reviewed_source_manifest=a.reviewed_source_manifest,kernel_library=a.kernel_library)

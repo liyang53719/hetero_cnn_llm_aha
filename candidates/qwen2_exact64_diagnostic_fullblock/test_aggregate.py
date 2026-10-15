@@ -120,6 +120,68 @@ def incomplete_receipts():
 
 
 class AggregateTests(unittest.TestCase):
+    def test_new_resource_limits_are_exact_not_unbounded_cpu_metadata(self):
+        self.assertEqual(A.RESOURCE_GATES[:3],(('HOST_WALL','host_wall_seconds',5700),
+            ('HOST_CPU','host_cpu_seconds',5400),('SUPERVISOR_WALL','supervisor_wall_seconds',5760)))
+        r,l,p,h=incomplete_receipts();r['host_cpu_seconds']=5400.1;r['host_wall_seconds']=5700.1
+        result=A.summarize(r,l,source_digest=SHA)
+        gates=result['acceptance_diagnostics']['gates']['RESOURCES']
+        self.assertIs(gates['HOST_CPU'],False);self.assertIs(gates['HOST_WALL'],False)
+        self.assertEqual(result['failure_progress']['cpu_seconds'],5400.1)
+
+    def test_signal_facts_do_not_invent_cpu_cause_or_fail_record(self):
+        for code,observed,kind in ((-A.signal.SIGXCPU,'SIGXCPU','CPU_LIMIT'),
+                (-A.signal.SIGKILL,'SIGKILL','SIGNAL'),(-A.signal.SIGTERM,'OTHER_SIGNAL','SIGNAL')):
+            result=A.summarize({},dict(schema=1,status='FAILED',returncode=code),source_digest=SHA)
+            self.assertEqual((result['termination_signal'],result['failure_kind']),(observed,kind))
+            self.assertEqual(result['failure_stage'],'SUPERVISOR')
+            self.assertEqual(result['postseal_status'],'NOT_RUN')
+            self.assertEqual(result['durable_stage_observation']['status'],'UNAVAILABLE')
+            self.assertIsNone(result['public_completions'])
+        for code in (True,0,1,-65,'PRIVATE_SIGNAL',-9.0):
+            result=A.summarize({},dict(schema=1,returncode=code),source_digest=SHA)
+            self.assertIsNone(result['termination_signal'])
+        r,l,_,_=incomplete_receipts();l['returncode']=-A.signal.SIGKILL
+        result=A.summarize(r,l,source_digest=SHA)
+        self.assertEqual(result['failure_kind'],'BUDGET_EXCEEDED');self.assertEqual(result['termination_signal'],'SIGKILL')
+        self.assertEqual(result['exception_class'],'BudgetExceeded')
+
+    def test_durable_stage_projection_fixed_source_cannot_supply_acceptance(self):
+        from .test_stage_log import counts,LIMITS
+        with tempfile.TemporaryDirectory() as directory,patch.object(A,'ROOT',Path(directory)),patch.object(A,'CI_ROOT',Path(directory)):
+            path=Path(directory)/A.STAGE_LOG;path.parent.mkdir(parents=True)
+            log=A.stage_log.StageLog(path,LIMITS);log.begin('PC16_18_FFN',counters=counts(completed=16,jobs=14))
+            with path.open('ab') as stream:stream.write(b'{"private":"TRUNCATED')
+            r,l,p,h=incomplete_receipts()
+            with patch.object(A.closure,'digest',return_value=SHA),patch.object(A,'_read',side_effect=[r,l,h]),                 patch.object(A,'_read_progress',return_value=p):
+                result=A.collect(execute=True,source_digest=SHA)
+            observation=result['durable_stage_observation'];record=observation['record']
+            self.assertEqual((observation['status'],record['event'],record['stage']),('OBSERVED','BEGIN','PC16_18_FFN'))
+            self.assertEqual(record['counters']['completed'],16)
+            self.assertIs(record['snapshot_is_acceptance'],False)
+            self.assertFalse(result['diagnostic_numeric_pass']);self.assertIsNone(result['public_completions'])
+            self.assertEqual(result['failure_kind'],'BUDGET_EXCEEDED')
+            self.assertNotIn('TRUNCATED',json.dumps(result))
+            for mutate in (lambda v:v.update(private='PRIVATE_VALUE'),lambda v:v['record'].update(stage='PRIVATE_VALUE'),
+                    lambda v:v['record']['counters'].update(completed=True),lambda v:v['record'].update(cpu_seconds=7201),
+                    lambda v:v.update(scope='PRIVATE_VALUE')):
+                value=copy.deepcopy(observation);mutate(value)
+                rejected=A.summarize(r,l,source_digest=SHA,durable_stage=value)
+                self.assertEqual(rejected['durable_stage_observation'],A._stage_empty())
+                self.assertNotIn('PRIVATE_VALUE',json.dumps(rejected))
+            result['durable_stage_observation']['record']['private']='PRIVATE_VALUE'
+            with self.assertRaises(ValueError):A.validate_summary(result)
+
+    def test_complete_durable_counts_never_upgrade_missing_terminal(self):
+        from .test_stage_log import counts,LIMITS
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'STAGES.jsonl';log=A.stage_log.StageLog(path,LIMITS)
+            log.begin('FINAL_SEAL',counters=counts(completed=21,jobs=17,accepted_results=1))
+            result=A.summarize({},dict(schema=1,status='FAILED',returncode=-9),source_digest=SHA,
+                durable_stage=A.stage_log.safe_last(path))
+        self.assertFalse(result['diagnostic_numeric_pass']);self.assertIsNone(result['public_completions'])
+        self.assertEqual(result['postseal_status'],'NOT_RUN')
+
     def test_synthetic_only_diagnostic_pass_and_fixed_formal_false(self):
         data=fixtures();snapshot=copy.deepcopy(data);summary=summarize(*data)
         self.assertEqual(summary['status'],A.PASS)
@@ -426,7 +488,7 @@ class AggregateTests(unittest.TestCase):
             result=A.summarize({},l,source_digest=SHA,progress=row)
             self.assertIsNone(result['failure_progress']['public_completions'])
             self.assertNotIn('PRIVATE_VALUE',json.dumps(result))
-        for bad in (True,-1,4501,float('inf'),float('nan'),'PRIVATE_VALUE'):
+        for bad in (True,-1,7201,float('inf'),float('nan'),'PRIVATE_VALUE'):
             row=copy.deepcopy(p);row['elapsed_seconds']=bad
             result=A.summarize({},l,source_digest=SHA,progress=row)
             self.assertIsNone(result['failure_progress']['elapsed_seconds'])

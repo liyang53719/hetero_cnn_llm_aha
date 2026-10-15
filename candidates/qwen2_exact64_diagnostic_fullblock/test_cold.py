@@ -44,6 +44,96 @@ def v_records():
 
 
 class Cold(unittest.TestCase):
+    def test_retention_wrapper_is_explicit_and_old_verifier_unchanged(self):
+        from candidates.qwen2_retention_shape_canonical import retention as canonical
+        self.assertIs(runner.retention,canonical)
+        self.assertIs(runner.retention.verify,R.verify)
+        self.assertIsNot(runner.retention.seal,R.seal)
+
+    def test_original_run_business_math_ast_unchanged_after_stage_instrumentation(self):
+        class StripStages(ast.NodeTransformer):
+            def visit_Assign(self,node):
+                if any(isinstance(t,ast.Name) and t.id in ('stage_log','stage_context') for t in node.targets):return None
+                return self.generic_visit(node)
+            def visit_Expr(self,node):
+                f=node.value.func if isinstance(node.value,ast.Call) else None
+                if (isinstance(f,ast.Attribute) and isinstance(f.value,ast.Name) and f.value.id in ('stage_log','stage_context') or
+                    isinstance(f,ast.Name) and f.id=='stage_failure'):return None
+                return self.generic_visit(node)
+            def visit_Call(self,node):
+                self.generic_visit(node)
+                if isinstance(node.func,ast.Name) and node.func.id=='StageCheckedTelemetry':
+                    node.func=ast.Attribute(value=ast.Name(id='telemetry',ctx=ast.Load()),attr='SparseTelemetry',ctx=ast.Load())
+                    node.keywords=[k for k in node.keywords if k.arg!='stage_log']
+                return node
+        tree=StripStages().visit(function(HERE/'runner.py','run'))
+        # Full run() AST of published 5e14980830b937cb49a681bc9872e36d259c19a1.
+        # Only the enumerated stage plumbing above is removed. No numerical,
+        # handshake, every-edge, output, original guard or comparison is removed.
+        digest=hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest()
+        self.assertEqual(digest,'17e790ecc4136c15b3d858e53677aac60149125d87bf37b21d50eba2615b0f9c')
+
+    def test_cpu_limit_is_exact_approved_budget_after_execution_gate(self):
+        text=(HERE/'runner.py').read_text();body=text[text.index('def main('):]
+        self.assertLess(body.index('gates.require_execution()'),body.index('resource.setrlimit(resource.RLIMIT_CPU'))
+        self.assertIn("resource.setrlimit(resource.RLIMIT_CPU,(limits['cpu_seconds'],limits['cpu_seconds']))",body)
+        self.assertNotIn('SIGPROF',text);self.assertNotIn('ITIMER_PROF',text)
+        self.assertEqual(set(runner.TAIL_STAGE_NAMES.values()),{'PC12_RELEASE','PC13_O','PC14_RESIDUAL',
+            'PC15_NORM','PC16_18_FFN','PC19_DOWN','PC20_RESIDUAL','LAUNCH_RESULT'})
+
+    def test_actual_runner_stage_order_and_complete_tail_callback_mapping(self):
+        tree=function(HERE/'runner.py','run')
+        calls=sorted((n for n in ast.walk(tree) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute)
+            and isinstance(n.func.value,ast.Name) and n.func.value.id=='stage_log'),key=lambda n:(n.lineno,n.col_offset))
+        self.assertEqual([n.func.attr for n in calls],['begin','transition','transition','transition','transition','transition','transition','finish'])
+        self.assertEqual([ast.unparse(n.args[0]) for n in calls[:-1]],
+            ["'SETUP'",'stages.OWNER_STAGES[pc]',"'PC9_KV_APPEND'","'PC10_12_ATTENTION'",
+             'TAIL_STAGE_NAMES[name]',"'FINAL_SEAL'","'POSTSEAL_COMPARISON'"])
+        expected=('PC12_RELEASE','PC13_O','PC14_RESIDUAL','PC15_NORM','PC16_18_FFN','PC19_DOWN',
+            'PC20_RESIDUAL','LAUNCH_RESULT')
+        self.assertEqual(tuple(runner.TAIL_STAGE_NAMES.values()),expected)
+        tail=function(ROOT/'candidates/qwen2_fullblock_ci_dut/tail.py','execute_tail')
+        callbacks=sorted((n for n in ast.walk(tail) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name)
+            and n.func.id=='stage'),key=lambda n:n.lineno)
+        literals=[n.args[0].value for n in callbacks if isinstance(n.args[0],ast.Constant)]
+        self.assertEqual(literals,['pc12_release','pc16_18_resident_ffn','pc19_down','pc20_residual','launch_result_hold_retire'])
+        # The remaining callback is the original pc13/14/15 loop, with no new
+        # subdivision of fused Attention or FFN into fictitious durations.
+        loops=[n for n in ast.walk(tail) if isinstance(n,ast.For) and isinstance(n.target,ast.Tuple)]
+        self.assertEqual(ast.literal_eval(loops[0].iter),((13,'Dense'),(14,'Add'),(15,'Norm')))
+        after_finish=(HERE/'runner.py').read_text().split('stage_log.finish(counters=stage_counters(stage_context))',1)[1]
+        normal=after_finish.split('except BaseException as e:',1)[0]
+        self.assertNotIn('progress.mark',normal);self.assertNotIn('progress.emit',normal)
+
+    def test_stage_snapshot_reads_only_real_cumulative_counters(self):
+        context=dict(x=SimpleNamespace(host=SimpleNamespace(completed=12,jobs=11),
+            counts=dict(result_fire=0,host_model_ticks=100)),
+            physical=SimpleNamespace(counts=dict(read_bytes=64,write_ack_bytes=128)),
+            service=SimpleNamespace(counts=dict(dense_steps=4,normal_steps=5),lib=SimpleNamespace(
+                matrix_dense_fmas=lambda:512,matrix_normal_fmas=lambda:256)),
+            projection=SimpleNamespace(kernel=SimpleNamespace(report=lambda:dict(fmas=96,adds=64))),
+            shared=SimpleNamespace(calls=dict(add=2,multiply=3)),silu=SimpleNamespace(calls=7))
+        self.assertEqual(runner.stage_counters(context),dict(completed=12,jobs=11,accepted_results=0,host_ticks=100,
+            read_bytes=64,write_ack_bytes=128,dense_steps=4,normal_steps=5,dense_fma=512,normal_fma=256,
+            exact64_fma=96,exact64_add=64,scalar_calls=5,silu_calls=7))
+        self.assertEqual(runner.stage_counters({}),dict.fromkeys(runner.stages.COUNTER_LIMITS,0))
+
+    def test_failed_counter_or_logger_never_masks_original_exception(self):
+        original=RuntimeError('PRIVATE_BUSINESS_DETAIL')
+        log=SimpleNamespace(active=('PC19_DOWN',0,0),failure=lambda *a,**k:(_ for _ in ()).throw(OSError('PRIVATE_LOG')))
+        for counters in ({'x':object()},{}):
+            try:
+                try:raise original
+                except BaseException as error:
+                    self.assertFalse(runner.stage_failure(log,counters,error));raise
+            except BaseException as caught:self.assertIs(caught,original)
+
+    def test_sparse_cpu_check_precedes_original_emit_without_model_calls(self):
+        log=SimpleNamespace(check=lambda:(_ for _ in ()).throw(TimeoutError('CPU budget exceeded')))
+        progress=runner.StageCheckedTelemetry(Path('unused'),started=0,cpu=0,budget=5700,stage_log=log)
+        with patch.object(runner.telemetry.SparseTelemetry,'emit',side_effect=AssertionError('must not emit after budget')):
+            with self.assertRaises(TimeoutError):progress.emit('attention_loop')
+
     def test_cold_import_does_not_load_tensor_runtime(self):
         code='from candidates.qwen2_exact64_diagnostic_fullblock import runner; import sys; assert not any(x.split(".")[0] in ("numpy","torch","transformers") for x in sys.modules)'
         p=subprocess.run([sys.executable,'-B','-c',code],cwd=ROOT,capture_output=True,text=True)

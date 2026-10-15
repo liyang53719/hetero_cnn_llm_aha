@@ -8,8 +8,9 @@ import sys
 from unittest.mock import patch
 from . import bootstrap as B
 from candidates.qwen2_fullblock_ci_reference import failure_diagnostic as F
+from candidates.qwen2_fullblock_ci_reference import comparison_diagnostic as CDF
 ROOT=Path(__file__).resolve().parents[2]
-AUTH='candidates/qwen2_ci_reference_avx2_authorization'
+AUTH='candidates/qwen2_ci_reference_avx2_comparison_authorization'
 PHASES={'ADMIT','PRECHECK','BINDINGS','ISSUER','GUARD','AGGREGATE','COMPLETE'}
 FILES={
  'BOOTSTRAP':'candidates/qwen2_fullblock_ci_execution/bootstrap.py',
@@ -32,24 +33,27 @@ LABELS={'fresh_bindings':'BINDINGS','policy_expansion':'ISSUER','reference_guard
 
 
 def checked(v):
-    B.inputs.need(type(v) is dict and set(v)=={'schema','status','phase','module','line','guard_failure','guard_stage'},'diagnostic schema')
+    B.inputs.need(type(v) is dict and set(v)=={'schema','status','phase','module','line','guard_failure','guard_stage','guard_comparison'},'diagnostic schema')
     B.inputs.need(type(v['schema']) is int and v['schema']==1 and v['status'] in ('NOT_EXECUTED','SUCCESS','FAILED'), 'diagnostic state')
     B.inputs.need(v['phase'] in PHASES and v['module'] in set(FILES)|{'NONE','OTHER'},'diagnostic enums')
     B.inputs.need(type(v['line']) is int and 0<=v['line']<=1000000,'diagnostic source line')
     B.inputs.need(v['guard_stage'] in STAGES,'fixed capture stage')
     if v['guard_failure'] is not None:F.checked(v['guard_failure'])
+    if v['guard_comparison'] is not None:CDF.checked(v['guard_comparison'])
     return v
 
 
 def guard_observation():
-    records=[]
+    records=[];comparisons=[]
     for name in (B.LOGS+'/reference_guard.log',B.WORK+'/ci01/bootstrap/stderr.log'):
         path=B.inputs.safe_path(ROOT,name)
         if not path.is_file() or path.stat().st_size>16*(1<<20):continue
         for line in path.read_text(errors='replace').splitlines():
             if len(line)>16384:continue
             try:records.append(F.checked(json.loads(line)))
-            except (ValueError,TypeError,KeyError):continue
+            except (ValueError,TypeError,KeyError):pass
+            try:comparisons.append(CDF.checked(json.loads(line)))
+            except (ValueError,TypeError,KeyError):pass
     worker=[v for v in records if v['origin']=='WORKER']
     selected=(worker or records)[-1] if records else None
     stage='UNKNOWN';path=B.inputs.safe_path(ROOT,B.WORK+'/ci01/bootstrap/STAGES.jsonl')
@@ -60,7 +64,7 @@ def guard_observation():
                 value=json.loads(lines[-1])
                 if type(value) is dict and value.get('stage') in STAGES:stage=value['stage']
             except (ValueError,TypeError):pass
-    return selected,stage
+    return selected,stage,comparisons[-1] if comparisons else None
 
 
 def location(error):
@@ -86,7 +90,7 @@ def log_location(label):
 
 
 def run(action=None):
-    result=dict(schema=1,status='NOT_EXECUTED',phase='PRECHECK',module='NONE',line=0,guard_failure=None,guard_stage='UNKNOWN')
+    result=dict(schema=1,status='NOT_EXECUTED',phase='PRECHECK',module='NONE',line=0,guard_failure=None,guard_stage='UNKNOWN',guard_comparison=None)
     if action is None:return checked(result)
     B.inputs.need(action in ('admit','capture'),'fixed action')
     B.AUTH=AUTH;B.AUTH_CERT=AUTH+'/SOURCE_CERTIFICATE.json';B.AUTH_PINS=AUTH+'/EXTERNAL_PINS.json'
@@ -104,7 +108,7 @@ def run(action=None):
             child_failed=True
             result['module'],result['line']=log_location(label)
             if label=='reference_guard':
-                try:result['guard_failure'],result['guard_stage']=guard_observation()
+                try:result['guard_failure'],result['guard_stage'],result['guard_comparison']=guard_observation()
                 except (OSError,ValueError,TypeError):pass
             raise
     local=B.inputs.safe_path(ROOT,'work/ci_reference_diagnostic/'+action+'.log')
@@ -131,7 +135,7 @@ def main(argv=None):
         result=run(args.action)
     except Exception as error:
         module,line=location(error)
-        result=checked(dict(schema=1,status='FAILED',phase='PRECHECK',module=module,line=line,guard_failure=None,guard_stage='UNKNOWN'))
+        result=checked(dict(schema=1,status='FAILED',phase='PRECHECK',module=module,line=line,guard_failure=None,guard_stage='UNKNOWN',guard_comparison=None))
     print(json.dumps(result,sort_keys=True,allow_nan=False))
     return int(result['status']=='FAILED')
 if __name__=='__main__':raise SystemExit(main())

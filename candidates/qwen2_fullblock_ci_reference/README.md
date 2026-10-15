@@ -141,3 +141,5 @@ that this CI platform has generated raw inputs or executed a reference.
 官方固定 Torch commit 449b1768410104d3ed79d3bcfe4ba1d65c7f22c0 的 DispatchStub.cpp 明确支持 ATEN_CPU_CAPABILITY=avx2，11893字节 SHA256 b77d16444f42d6e0707c581888d5e2069c7958a01ee4cf77a432bd6d13827032。来源：https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/DispatchStub.cpp 。该设置仅限制 ATen dispatch，不证明 MKL/oneDNN 或跨CPU结果等价；必须新一次参考实际比较。
 
 单次参考预算15分钟：安装7分钟、prepare4分钟、capture3分钟，原内部120/122秒不改，无DUT。旧AVX512/旧runner失败记录保留；本候选的独立source授权只能用于本次参考，不能继承或放宽数值门。
+
+AVX2首次实际运行38675911830已完成prepare，在参考capture.py第265行prior18精确一致性门失败，保留失败，不算参考通过。下一次独立授权仅补失败现场的只读固定枚举：节点NODE_00..17、HASH/LAYOUT/DTYPE/SHAPE/STRIDE/BYTES类别及不同字段计数；不输出实际节点名称、hash、shape、stride或tensor。该投影只解释首个失败的比较，不能代表全部18/29节点差异统计。原异常与数值门、原29期待不变；如涉及算术值差异，先重新审查平台/算术顺序，不直接改期待。

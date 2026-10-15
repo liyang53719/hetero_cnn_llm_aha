@@ -7,6 +7,7 @@ sys.dont_write_bytecode = True
 import recipe as R
 import lifecycle as L
 import failure_diagnostic as D
+import comparison_diagnostic as CDF
 G = R.legacy('guard.py')
 R.need(G.R is R and G.L is L,'explicit CI recipe/lifecycle import binding')
 
@@ -15,6 +16,12 @@ def emit_failure(error,origin):
     try:
         print(json.dumps(D.project(error,origin,R.ROOT),sort_keys=True,allow_nan=False),
               file=sys.stderr,flush=True)
+    except BaseException:
+        pass
+    try:
+        comparison = CDF.project(error, R.ROOT) if origin == 'WORKER' else None
+        if comparison is not None:
+            print(json.dumps(comparison, sort_keys=True, allow_nan=False), file=sys.stderr, flush=True)
     except BaseException:
         pass
 

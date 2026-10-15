@@ -9,8 +9,9 @@ from unittest.mock import patch
 from contextlib import redirect_stderr
 from . import test_lifecycle as fixture
 from . import failure_diagnostic as D
+from . import comparison_diagnostic as CDF
 HERE=Path(__file__).resolve().parent
-with patch.dict(sys.modules,{'recipe':fixture.R,'lifecycle':fixture.L,'issuer':fixture.I,'failure_diagnostic':D}):
+with patch.dict(sys.modules,{'recipe':fixture.R,'lifecycle':fixture.L,'issuer':fixture.I,'failure_diagnostic':D,'comparison_diagnostic':CDF}):
     spec=importlib.util.spec_from_file_location('ci_guard_diagnostic_test',HERE/'guard.py')
     G=importlib.util.module_from_spec(spec);spec.loader.exec_module(G)
 
@@ -39,4 +40,22 @@ class GuardDiagnosticTests(unittest.TestCase):
         with patch.object(G,'_original_run',side_effect=error),patch.object(D,'project',side_effect=OSError('disk')):
             with self.assertRaises(ValueError) as caught:G.observed_run()
         self.assertIs(caught.exception,error)
+    def test_worker_emits_comparison_without_changing_failure(self):
+        record=dict(schema=1,status='CI_REFERENCE_COMPARISON',node='NODE_06',categories=['HASH'],mismatch_count=3)
+        stream=io.StringIO()
+        with patch.dict(sys.modules,{'lifecycle':G.L}),patch.object(G.R,'legacy',side_effect=ValueError('private')), \
+             patch.object(CDF,'project',return_value=record),redirect_stderr(stream):
+            self.assertEqual(G.worker('3','bootstrap','unused'),2)
+        records=[json.loads(line) for line in stream.getvalue().splitlines()]
+        self.assertEqual(records[1],CDF.checked(record))
+        self.assertEqual(records[2]['status'],'WORKER_FAILED_UNSEALED')
+
+    def test_comparison_failure_does_not_mask_worker_failure(self):
+        stream=io.StringIO()
+        with patch.dict(sys.modules,{'lifecycle':G.L}),patch.object(G.R,'legacy',side_effect=ValueError('original')), \
+             patch.object(CDF,'project',side_effect=ValueError('projection')),redirect_stderr(stream):
+            self.assertEqual(G.worker('3','bootstrap','unused'),2)
+        self.assertNotIn('projection',stream.getvalue())
+        self.assertIn('WORKER_FAILED_UNSEALED',stream.getvalue())
+
 if __name__=='__main__':unittest.main()

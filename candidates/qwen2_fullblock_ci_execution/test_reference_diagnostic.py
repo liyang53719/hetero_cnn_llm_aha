@@ -21,7 +21,7 @@ class DiagnosticTests(unittest.TestCase):
     def test_success_exact_call_and_local_output(self):
         def capture():print('private arbitrary output');return 99
         with patch.object(d.B,'capture',side_effect=capture):r=d.run('capture')
-        self.assertEqual(r,dict(schema=1,status='SUCCESS',phase='COMPLETE',module='NONE',line=0,guard_failure=None,guard_stage='UNKNOWN'))
+        self.assertEqual(r,dict(schema=1,status='SUCCESS',phase='COMPLETE',module='NONE',line=0,guard_failure=None,guard_stage='UNKNOWN',guard_comparison=None))
         self.assertIn('private arbitrary output',(self.root/'work/ci_reference_diagnostic/capture.log').read_text())
     def test_no_repeat_output(self):
         with patch.object(d.B,'capture'):
@@ -64,7 +64,7 @@ class DiagnosticTests(unittest.TestCase):
         p=self.root/d.B.WORK/'ci01/bootstrap';p.mkdir(parents=True)
         (p/'stderr.log').write_text('private non-json\n'+json.dumps(worker)+'\n'+json.dumps({'status':'WORKER_FAILED_UNSEALED','error':'private'})+'\n')
         (p/'STAGES.jsonl').write_text(json.dumps({'stage':'numeric-import-and-runtime-identity','secret':'private'})+'\n')
-        record,stage=d.guard_observation()
+        record,stage,comparison=d.guard_observation()
         self.assertEqual(record,worker);self.assertEqual(stage,'numeric-import-and-runtime-identity')
         self.assertNotIn('private',str((record,stage)))
     def test_guard_unknown_records_are_not_forwarded(self):
@@ -72,7 +72,7 @@ class DiagnosticTests(unittest.TestCase):
         p=self.root/d.B.WORK/'ci01/bootstrap';p.mkdir(parents=True)
         (p/'stderr.log').write_text(json.dumps({'status':'CI_REFERENCE_FAILURE','error':'secret'})+'\n')
         (p/'STAGES.jsonl').write_text(json.dumps({'stage':'private path'})+'\n')
-        self.assertEqual(d.guard_observation(),(None,'UNKNOWN'))
+        self.assertEqual(d.guard_observation(),(None,'UNKNOWN',None))
     def test_guard_nested_extra_field_refused(self):
         r=d.run();r['guard_failure']=d.F.project(ValueError(),'WORKER',self.root)
         r['guard_failure']['path']='secret'
@@ -86,4 +86,15 @@ class DiagnosticTests(unittest.TestCase):
         with patch.object(d.B,'capture') as c:
             with self.assertRaises(ValueError):d.run('actual')
             c.assert_not_called()
+    def test_comparison_only_fixed_record_forwarded(self):
+        import json
+        comparison=dict(schema=1,status='CI_REFERENCE_COMPARISON',node='NODE_06',categories=['HASH','STRIDE'],mismatch_count=4)
+        p=self.root/d.B.WORK/'ci01/bootstrap';p.mkdir(parents=True)
+        (p/'stderr.log').write_text(json.dumps(comparison)+'\n'+json.dumps({**comparison,'actual_hash':'private'})+'\n')
+        _,_,observed=d.guard_observation()
+        self.assertEqual(observed,comparison)
+        result=d.run();result['guard_comparison']=observed;d.checked(result)
+        result['guard_comparison']['actual_shape']=[1,2]
+        with self.assertRaises(ValueError):d.checked(result)
+
 if __name__=='__main__':unittest.main()

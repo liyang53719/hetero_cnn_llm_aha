@@ -1,8 +1,12 @@
 {
   "files": {
     "README.md": {
-      "bytes": 9642,
-      "sha256": "778ab8fdd9ad52b54ed44f0d55f84c5e8cc4b3cfad802fb1f9ecb9abdb778857"
+      "bytes": 10221,
+      "sha256": "201951c4a2d16b89fe7a1340f526aa028f4f4029a22e2e38532d560759b9b3f6"
+    },
+    "comparison_diagnostic.py": {
+      "bytes": 4731,
+      "sha256": "3011b91e1fcde4a2b8e79f9e01efb615254c3b5b60f21db3c3831e00132eb0da"
     },
     "dependencies.json": {
       "bytes": 1327,
@@ -13,8 +17,8 @@
       "sha256": "6b6f6e62381996a150c691eca4808930a8e8a90970cf387223a3dfa0d44638e5"
     },
     "guard.py": {
-      "bytes": 1529,
-      "sha256": "dcfaddb80d9171da464a61912597651db3c92c473fed96c4c85dab51a2ad66ed"
+      "bytes": 1832,
+      "sha256": "256fef983430394eb63f49bc25da5292226ed8ff534c59fdac58b594705e55a5"
     },
     "issuer.py": {
       "bytes": 8041,
@@ -36,13 +40,17 @@
       "bytes": 7459,
       "sha256": "8d54799dabe9022e6749870803c79741b6aeed3ddda232635685a295531da86f"
     },
+    "test_comparison_diagnostic.py": {
+      "bytes": 5014,
+      "sha256": "954761ce06ebe415a30abb37df0e7c254ccf1c507ec511f1d9fcbd5d22d18d37"
+    },
     "test_failure_diagnostic.py": {
       "bytes": 3631,
       "sha256": "e0dbb3a0ff07b2814cd976fdfd315865c135a1c808e5dc63e05fc74b632b4407"
     },
     "test_guard_diagnostic.py": {
-      "bytes": 2449,
-      "sha256": "4bf58116c11c08bcfefe5062e95aff45a53a29460c3fe6389d3e036451a1dc88"
+      "bytes": 3724,
+      "sha256": "f750c0d7aa1a25ea10765fcac088c24e571c99d551ba04c305671e45d3d1c0d1"
     },
     "test_issuer.py": {
       "bytes": 8067,

@@ -1,0 +1,79 @@
+{
+  "budgets": {
+    "capture_limits": {
+      "automatic_retry": false,
+      "per_stream_retained_bytes": 65536,
+      "poll_seconds": 0.02,
+      "rss_bytes": 1610612736,
+      "rss_is_os_hard_cap": false,
+      "total_emitted_log_limit_bytes": 16777216,
+      "wall_seconds": 120
+    },
+    "cleanup_grace_seconds": 2,
+    "disk_budget": {
+      "bootstrap_plus_frozen_payload_bytes": 65208320,
+      "export_bytes_per_capture": 32571392,
+      "native_dumps_retained": false,
+      "native_mask_sidecar_bytes": 32768,
+      "payload_bytes_per_capture": 32604160,
+      "peak_rss_estimate": null,
+      "per_capture_cap_bytes": 35651584,
+      "total_cap_bytes": 72351744,
+      "wall_seconds_estimate": null
+    },
+    "outer_watchdog_seconds": 122
+  },
+  "exclusive_numeric_slot": true,
+  "frozen_mode_available": false,
+  "historical_receipts_revalidated": false,
+  "maximum_invocations": 1,
+  "mode": "bootstrap",
+  "no_retry": true,
+  "numeric_executed": false,
+  "numerical_acceptance_allowed": false,
+  "observed_bindings_independently_reviewed": false,
+  "output_scope": "SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED",
+  "policy_sha256": "b7408fc34963f03c71f749d3e2fea93d1e656f575da6c942b8dc4ab10aee368b",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "run_id": "ci01",
+  "schema": 1,
+  "source_closure_sha256": "ddc3ad1d6cb1d6cb1c7e4d8c88d57020a4025bb7fc667cc5da068c3a9db929f2",
+  "source_manifest": {
+    "bytes": 2242,
+    "sha256": "d6a63a793e397be446e4d720e22881b5c2892b78593ea7ee2be0f10af46e3d2f"
+  },
+  "status": "APPROVED_SOURCE_POLICY_FOR_SINGLE_BOOTSTRAP",
+  "tool_identity": {
+    "approved_scope": "single AVX2 reference bootstrap with exact first-prior18-comparison-site enum/count projection; original numerical gates unchanged",
+    "aten_cpu_capability": "avx2",
+    "cold_tests_normal": 153,
+    "cold_tests_optimized": 153,
+    "dut_execution_allowed": false,
+    "implementation": "cpython",
+    "job_timeout_minutes": 15,
+    "permitted_comparison_output": "fixed NODE_00..17, fixed category enums, bounded field count only; no actual tensor metadata or values",
+    "python_elf": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "python_version": [
+      3,
+      12,
+      14
+    ],
+    "reference_internal_wall_seconds": 120,
+    "reference_outer_watchdog_seconds": 122,
+    "review_event": "independent-avx2-comparison-source-policy-20261015",
+    "reviewed_at_utc": "2026-10-15T03:28:43.967810+00:00",
+    "runtime_profile": "avx2-candidate-v1",
+    "source_manifest": {
+      "bytes": 2242,
+      "sha256": "d6a63a793e397be446e4d720e22881b5c2892b78593ea7ee2be0f10af46e3d2f"
+    },
+    "zero_field_count_is_not_acceptance": true
+  }
+}

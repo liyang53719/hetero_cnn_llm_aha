@@ -1,0 +1,112 @@
+{
+  "budgets": {
+    "capture_limits": {
+      "automatic_retry": false,
+      "per_stream_retained_bytes": 65536,
+      "poll_seconds": 0.02,
+      "rss_bytes": 1610612736,
+      "rss_is_os_hard_cap": false,
+      "total_emitted_log_limit_bytes": 16777216,
+      "wall_seconds": 120
+    },
+    "cleanup_grace_seconds": 2,
+    "disk_budget": {
+      "bootstrap_plus_frozen_payload_bytes": 65208320,
+      "export_bytes_per_capture": 32571392,
+      "native_dumps_retained": false,
+      "native_mask_sidecar_bytes": 32768,
+      "payload_bytes_per_capture": 32604160,
+      "peak_rss_estimate": null,
+      "per_capture_cap_bytes": 35651584,
+      "total_cap_bytes": 72351744,
+      "wall_seconds_estimate": null
+    },
+    "outer_watchdog_seconds": 122
+  },
+  "exclusive_numeric_slot": true,
+  "frozen_mode_available": false,
+  "historical_receipts_revalidated": false,
+  "maximum_invocations": 1,
+  "mode": "bootstrap",
+  "no_retry": true,
+  "numeric_executed": false,
+  "numerical_acceptance_allowed": false,
+  "observed_bindings_independently_reviewed": false,
+  "output_scope": "SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED",
+  "policy_sha256": "58ef980d179d20f36e68d43180fa236b2592560d5f0575804a315f1bbec5b0dd",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "run_id": "new02",
+  "schema": 1,
+  "source_closure_sha256": "5ed2e6021fa8e8a46edbdd9098a76a3dc67313db0bc8a7366552d5c7ebe5b319",
+  "source_manifest": {
+    "bytes": 1766,
+    "sha256": "93166ffffc385c7bc3cabc38676736253397693f013c66d420a5ad2f7770a496"
+  },
+  "status": "APPROVED_SOURCE_POLICY_FOR_SINGLE_BOOTSTRAP",
+  "tool_identity": {
+    "approved_scope": "one new same-job reference-only pair, two separately certified fresh successful captures, original official AST arithmetic and semantic gates retained, legacy expectations diagnostic only, all resulting evidence pending and unaccepted",
+    "aten_cpu_capability": "avx2",
+    "authorized_pair_slots": [
+      "new01",
+      "new02"
+    ],
+    "authorized_slot": "new02",
+    "business_reference_executed_by_reviewer": false,
+    "cold_tests_normal_passed": 37,
+    "cold_tests_optimized_passed": 37,
+    "combined_output_cap_bytes": 72351744,
+    "complete_original_geometry_finite_alias_mask_and_bf16_semantic_checks_required": true,
+    "dut_executed_by_reviewer": false,
+    "dut_execution_allowed": false,
+    "full_system_dso_closure_claimed": false,
+    "guard_seal_manifest_payload_and_source_boundaries_rechecked_before_after_comparison": true,
+    "implementation": "cpython",
+    "independent_slot_launch_outside_pair_launcher_allowed": false,
+    "install_timeout_minutes": 7,
+    "job_timeout_minutes": 15,
+    "loaded_python_and_libpython_observed_before_after_required": true,
+    "maximum_invocations_in_this_slot": 1,
+    "maximum_planned_captures_in_pair": 2,
+    "metadata_layout_compared": true,
+    "mkldnn_enabled": false,
+    "new_derived_capture_replaces_only_two_legacy_prior18_rejection_gates_with_diagnostics": true,
+    "original_capture_bytes_and_old_expectations_unchanged": true,
+    "original_historical_failures_preserved": true,
+    "original_official_math_ast_unchanged": true,
+    "pair_equality_does_not_establish_reference_acceptance_or_cross_runner_reproducibility": true,
+    "pair_step_timeout_minutes": 5,
+    "permitted_public_output": "fixed pending status and phase enums, checked/equal counts, OUTPUT_00..28 equality booleans, and false approval/acceptance/DUT flags only",
+    "prepare_timeout_minutes": 3,
+    "private_export_bytes_compared_directly": true,
+    "private_metadata_and_payload_upload_allowed": false,
+    "python_elf": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "python_version": [
+      3,
+      12,
+      14
+    ],
+    "reference_freeze_allowed": false,
+    "reference_internal_wall_seconds_per_slot": 120,
+    "reference_outer_watchdog_seconds_per_slot": 122,
+    "required_launcher": "candidates.qwen2_official_cpu_platform_reference.pair",
+    "required_workflow": ".github/workflows/qwen2-official-cpu-platform-pair.yml",
+    "retry_or_third_capture_allowed": false,
+    "review_event": "independent-new-official-cpu-platform-reference-pair-20261015",
+    "reviewed_at_utc": "2026-10-15T05:05:19.284219+00:00",
+    "runtime_profile": "avx2-aten-gemm-v1",
+    "same_size_post_completion_corruption_rejected": true,
+    "second_slot_requires_first_original_supervisor_success_and_complete_validated_seal": true,
+    "shared_raw_native_source_boundary_diff_exclusion": "external_certificate_sha256 only",
+    "source_manifest": {
+      "bytes": 1766,
+      "sha256": "93166ffffc385c7bc3cabc38676736253397693f013c66d420a5ad2f7770a496"
+    }
+  }
+}

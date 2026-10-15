@@ -77,12 +77,18 @@ The numeric run is deliberately single-use at its fixed new private output.
 Use the fixed Python executable from the runtime pins and the original
 relocated PYTHONPATH. Set PYTHONNOUSERSITE=1, PYTHONDONTWRITEBYTECODE=1,
 ATEN_CPU_CAPABILITY=avx2, OMP_NUM_THREADS=4, MKL_NUM_THREADS=4 and
-OPENBLAS_NUM_THREADS=1, then invoke probe.py --execute under timeout 180s.
+OPENBLAS_NUM_THREADS=1, then invoke probe.py --execute under timeout 180s with
+--native-receipt set to the canonical absolute path of an external local native
+compile receipt and --native-receipt-sha256 set to its independently established
+SHA256. The digest must not be read from a field inside that receipt. Both CLI
+arguments are mandatory for execution; the default command remains cold.
 A failed or existing output cannot be overwritten through a CLI argument.
 
-## Observed local result
+## Historical observed local result (pre-portability repair)
 
-The completed same-input sampled comparison reports:
+The preserved pre-repair source at commit eb5f209 produced the following local
+same-input sampled comparison. These are not execution results for the repaired
+source; the repaired source has not been numerically executed:
 
 - Sampled elements: 12,288
 - Different elements: 2
@@ -96,10 +102,41 @@ failure is not resolved by this result. It establishes that the fixed sampled
 columns have much smaller gate-only error when both methods receive exactly
 the same fresh official n1.
 
-All six cold tests pass. Two setup attempts stopped before any official model
+The original six cold tests passed at that revision. Two setup attempts stopped before any official model
 or native FMA: the first correctly rejected a default tempfile write outside
 the private output; the second rejected the AVX512 dispatch metadata hash
 under the explicitly selected AVX2 runtime. Both are retained as failures.
 The completed run uses fixed private temporary/cache paths and the exact AVX2
 metadata projection described above; no numerical threshold or native identity
 gate was removed. No failed attempt is relabeled as passing.
+
+
+## Portability repair, without numerical rerun
+
+The previous numeric entrypoint imported an untracked recovery helper. This
+three-file repair removes that import and source pin; it does not publish the
+helper, a private compile receipt, or CI-only fixed-root bindings. The original
+probe, tests, README and local02 RESULT are preserved byte-for-byte under ignored
+work, and the original local02 files remain unchanged. The repaired source uses
+a new fixed local03 output; it has no new numerical result.
+
+Before reading raw payloads or installing the no-subprocess audit, the entrypoint
+checks the explicitly supplied receipt's independent digest, canonical absolute
+regular-file paths, no symlinks, and the known existing library digest. It then
+calls tracked dense_silu.verify_library, retaining all its schema, policy,
+selected/original ABI, compiler, strict compiler flags, source closure and ELF
+checks. That verifier's g++ --version has its existing 10-second timeout. No
+library is loaded and nothing is compiled during this provenance preparation.
+
+Receipt, ELF, compiler and native sources are rehashed before and after
+verification, immediately before native loading, and after the diagnostic.
+The later checks are read-only and launch no processes; the existing payload
+and subprocess audit is unchanged. No receipt digest is hard-coded in source.
+
+Fourteen cold/synthetic tests cover valid provenance through the actual tracked
+verifier, absent/wrong external receipt hashes, schema/policy/ABI/compiler/flags/
+source/ELF failures, alias rejection and mid-verification or later changes. They
+load no native library or numerical runtime. Clean tracked-source validation
+also runs with the untracked recovery directory absent; raw files and native
+artifacts remain explicit local prerequisites for a future separately authorized
+numerical run.

@@ -14,6 +14,7 @@ import math
 import os
 from pathlib import Path
 import resource
+import stat
 import sys
 import tempfile
 import time
@@ -22,13 +23,14 @@ from types import SimpleNamespace
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
-OUT = ROOT / 'work/qwen2_ffn_gate_diagnostic/local02'
+OUT = ROOT / 'work/qwen2_ffn_gate_diagnostic/local03'
 PREFIX = ROOT / 'work/qwen2_live_qkv_inputs_m128/recovered_20261015_0018/raw'
 TAIL = ROOT / 'work/qwen2_live_tail_segment_recovery_m128/recovered_20261015_0027/raw'
 WINDOWS = (0, 4480, 8928)
 ROWS, K, WIDTH, NCOLS = 128, 1536, 8960, 32
 CPU_SECONDS, AS_BYTES, OUTPUT_BYTES = 120, 4 << 30, 64 << 20
 MODEL = 'config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py'
+KNOWN_LIBRARY_SHA256 = 'a44f4cd7861d1207698bb3dfc89820ded30a44db1cf1c8b9f951019d1edce1fa'
 SOURCE_PINS = {
  'candidates/qwen2_resident_matrix/transposed_down/model.py': '3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412',
  'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp': 'bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1',
@@ -39,7 +41,6 @@ SOURCE_PINS = {
  'candidates/qwen2_resident_matrix/ffn_window/model.py': '1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4',
  'candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py': '33ea0786d537aa7de59b19ff55cb515f2afeaee780f4a9f1faeb42402da19593',
  'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py': 'fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3',
- 'candidates/qwen2_fullblock_recovery/native_artifact.py': 'f70f28413ed48f583fd6df695012d555f96f95cca388d44d6c76a6bc9e60a017',
  'scripts/qwen2_layer0_model_gate.py': '917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85',
 }
 EXPECTED = dict(torch='2.10.0+cpu', commit='449b1768410104d3ed79d3bcfe4ba1d65c7f22c0',
@@ -58,6 +59,67 @@ def sha(path):
         for block in iter(lambda: stream.read(1 << 20), b''):
             h.update(block)
     return h.hexdigest()
+
+
+def file_identity(path):
+    """Canonical regular-file identity; reject aliases and concurrent changes."""
+    path = Path(path)
+    need(path.is_absolute() and str(path) == str(path.resolve(strict=True)), 'canonical absolute file path required')
+    need(not any(p.is_symlink() for p in (path, *path.parents)), 'symlink artifact refused')
+    need(path.is_file(), 'regular artifact required before open')
+    digest = hashlib.sha256()
+    with path.open('rb') as stream:
+        before = os.fstat(stream.fileno())
+        need(stat.S_ISREG(before.st_mode), 'regular artifact required')
+        for block in iter(lambda: stream.read(1 << 20), b''):
+            digest.update(block)
+        after = os.fstat(stream.fileno())
+    keys = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+    need(all(getattr(before, k) == getattr(after, k) == getattr(path.stat(), k) for k in keys),
+         'artifact changed during identity read')
+    return dict(path=str(path), bytes=after.st_size, sha256=digest.hexdigest())
+
+
+def artifact_snapshot(receipt_path, library_path, compiler_path, dense):
+    return dict(receipt=file_identity(receipt_path), library=file_identity(library_path),
+                compiler=file_identity(compiler_path),
+                sources={name: file_identity(ROOT/name) for name in dense.SOURCE_CLOSURE})
+
+
+def prepare_native_artifact(receipt_path, expected_receipt_sha256, dense):
+    """Verify explicitly supplied local provenance before the no-process audit.
+
+    The receipt hash must arrive independently from the CLI/caller. The tracked
+    verifier checks schema, policy, both SiLU ABI names, compiler, strict flags,
+    source closure and ELF. Its fixed g++ --version probe has a 10-second bound.
+    This loads no shared library and performs no numeric or compiler build work.
+    """
+    need(isinstance(expected_receipt_sha256, str) and len(expected_receipt_sha256) == 64 and
+         all(c in '0123456789abcdef' for c in expected_receipt_sha256), 'independent receipt SHA256 required')
+    need(isinstance(receipt_path, (str, Path)), 'explicit native receipt path required')
+    identity = file_identity(receipt_path)
+    need(0 < identity['bytes'] <= 262144 and identity['sha256'] == expected_receipt_sha256,
+         'external native receipt identity mismatch')
+    raw = Path(receipt_path).read_bytes()
+    need(hashlib.sha256(raw).hexdigest() == expected_receipt_sha256, 'receipt changed before parsing')
+    data = json.loads(raw)
+    need(isinstance(data, dict) and isinstance(data.get('compiler'), dict), 'native receipt object required')
+    need(data.get('library_sha256') == KNOWN_LIBRARY_SHA256, 'known original native ELF required')
+    before = artifact_snapshot(receipt_path, data['library'], data['compiler']['path'], dense)
+    need(before['receipt'] == identity and before['library']['sha256'] == KNOWN_LIBRARY_SHA256,
+         'receipt or known ELF changed')
+    verified = dense.verify_library(data)
+    need(verified == data, 'tracked verifier changed receipt')
+    need(artifact_snapshot(receipt_path, data['library'], data['compiler']['path'], dense) == before,
+         'native artifact/source changed during verification')
+    return before
+
+
+def recheck_native_artifact(artifact, dense):
+    """Byte/source checks only; safe after the no-subprocess audit is installed."""
+    need(artifact_snapshot(artifact['receipt']['path'], artifact['library']['path'],
+                          artifact['compiler']['path'], dense) == artifact,
+         'native receipt/ELF/compiler/source changed')
 
 
 def source_check():
@@ -216,9 +278,11 @@ def native_gate(n1_words, weight_words, library, model, dense, np):
     return np.concatenate(results, axis=1), np.concatenate(raw_results, axis=1), packet_hash.hexdigest()
 
 
-def run(*, execute=False):
+def run(*, execute=False, native_receipt=None, native_receipt_sha256=None):
     if not execute:
         return {'status': 'NOT_EXECUTED'}
+    need(native_receipt is not None and native_receipt_sha256 is not None,
+         'execute requires explicit --native-receipt and independent --native-receipt-sha256')
     started, cpu_started = time.monotonic(), time.process_time()
     resource.setrlimit(resource.RLIMIT_CPU, (CPU_SECONDS, CPU_SECONDS))
     resource.setrlimit(resource.RLIMIT_AS, (AS_BYTES, AS_BYTES))
@@ -236,6 +300,9 @@ def run(*, execute=False):
     sources.update({str(p.relative_to(ROOT)): sha(p) for p in HERE.iterdir() if p.suffix == '.py'})
     need(sha(ROOT / MODEL) == pins['sources'][MODEL]['sha256'], 'original model source')
     specs = raw_specs(pins)
+    from candidates.qwen2_resident_matrix.official_bf16 import dense_silu as dense
+    from candidates.qwen2_resident_matrix.transposed_down import model
+    artifact = prepare_native_artifact(native_receipt, native_receipt_sha256, dense)
     OUT.mkdir(parents=True)
     (OUT/'tmp').mkdir()
     tempfile.tempdir = str(OUT/'tmp')
@@ -261,18 +328,7 @@ def run(*, execute=False):
          == pins['runtime_requirements']['torch_build_sha256'], 'original build differs only in explicit dispatch line')
     need(str(Path(torch._C.__file__).resolve()) == native['torch_C']['path'] and
          str(Path(np._core._multiarray_umath.__file__).resolve()) == native['numpy_multiarray']['path'], 'loaded native origins')
-    from candidates.qwen2_fullblock_recovery import native_artifact
-    from candidates.qwen2_resident_matrix.official_bf16 import dense_silu as dense
-    from candidates.qwen2_resident_matrix.transposed_down import model
-    artifact = native_artifact.identity()
-    receipt = json.loads(Path(artifact['receipt']['path']).read_text())
-    need(receipt['status'] == 'PASS' and receipt['returncode'] == 0 and
-         receipt['library_sha256'] == artifact['library']['sha256'] and
-         receipt['library'] == artifact['library']['path'] and
-         receipt['source_sha256'] == {p: sha(ROOT/p) for p in dense.SOURCE_CLOSURE}, 'original native compile provenance')
-    need(sha(receipt['compiler']['path']) == receipt['compiler']['sha256'] and
-         receipt['argv'] == [receipt['compiler']['path'], *dense.STRICT_FLAGS,
-         *(str(ROOT/p) for p in dense.TRANSLATION_UNITS), '-o', artifact['library']['path']], 'original native strict compiler')
+    recheck_native_artifact(artifact, dense)
     library = dense.configure_library(C.CDLL(artifact['library']['path']))
     n1, official, executed = official_to_n1(pins, raw, specs, torch, np)
     n1_words = n1.view(torch.uint16).numpy().reshape(128, 1536).copy()
@@ -316,7 +372,8 @@ def run(*, execute=False):
     raw_actual.astype('<f4').tofile(OUT/'native_accumulator_selected.f32le')
     report['outputs'] = {p.name: dict(bytes=p.stat().st_size, sha256=sha(p)) for p in OUT.rglob('*') if p.is_file()}
     need(runtime.check_native(pins,family='full29') == native and state() == EXPECTED, 'runtime changed')
-    need(native_artifact.identity() == artifact and all(sha(ROOT/p) == h for p,h in sources.items()), 'source/native changed')
+    recheck_native_artifact(artifact, dense)
+    need(all(sha(ROOT/p) == h for p,h in sources.items()), 'source changed')
     need(all(sha(s['resolved']) == s['sha256'] for s in specs.values()), 'raw changed')
     report.update(cpu_seconds=time.process_time()-cpu_started,wall_seconds=time.monotonic()-started,
                   max_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024)
@@ -333,7 +390,12 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--native-receipt', help='Canonical absolute path to an externally supplied local compile receipt')
+    parser.add_argument('--native-receipt-sha256', help='Independently established SHA256 of the exact receipt bytes')
     args = parser.parse_args()
-    result = run(execute=args.execute)
+    if args.execute and not (args.native_receipt and args.native_receipt_sha256):
+        parser.error('--execute requires --native-receipt and independent --native-receipt-sha256')
+    result = run(execute=args.execute, native_receipt=args.native_receipt,
+                 native_receipt_sha256=args.native_receipt_sha256)
     if not args.execute:
         print(json.dumps(result))

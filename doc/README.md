@@ -4,6 +4,12 @@
 
 完整计划已迁入根目录 `doc/`。旧 `plans/` 路径是兼容符号链接，不再维护第二份计划；计划与清单统一在此维护；历史44个任务和后续新增的U00/U01共46个父任务均保留，验收门禁不因文档更新而放宽。计划中的“待执行”是编制时快照，不用于派工。Windows 未启用符号链接时直接使用 `doc/` 路径；不要把链接文本当作 YAML 解析。
 
+## Attention供数更新（2026-10-15）
+
+已发布 [有限KV缓存候选](../candidates/qwen2_attention_resident_candidate/README.md) `8894ee2d`：M1/M2合成输入的输出及十个中间观察字段逐位相同，五正例、九故障注入、13项普通及优化冷测通过；[源码检查CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38719561588)成功。M2外部读取由49152降至16384字节，Matrix/Scalar请求数量不变。本地端口与ACK有成本，完整链A仲裁和Chisel尚未接线，未验证M128缓存prefill。
+
+[raw到Bias有界交接](../candidates/qwen2_raw_bias_handoff/README.md) `4700cf99`与[转置写合并控制](../candidates/qwen2_transposed_exact_scheduler/README.md) `026b6a89`也已独审发布，分别14及15项普通/优化测试通过。当前主瓶颈转向实际PV32 K/V重复访存及有效lane；现行完整块独立带宽容量界约47.80%、Matrix issue容量界约55.39%，均非实测利用率。缓存只改善供数，原M128四项数值失败仍保留。计划与清单新增“Attention供数与完整块账本增量20261015”记录完整80/90预算及下一步，原任务状态不变。
+
 ## 精确树调度更新（2026-10-15）
 
 已发布 `6576194c` 的五context、两A槽精确树行为模型，普通及优化Python各30项合成测试通过；[源码与条件资源账本](../candidates/qwen2_exact_tree_scheduler/README.md)、[源码上传检查CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38712822743)。原M128完整数值验收仍FAILED，P2/P4固定六案例均未形成可接受图，任务状态不变。

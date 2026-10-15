@@ -11,8 +11,9 @@ from . import test_lifecycle as fixture
 from . import failure_diagnostic as D
 from . import comparison_diagnostic as CDF
 from . import all_comparisons as ACD
+from . import backend_policy as BP
 HERE=Path(__file__).resolve().parent
-with patch.dict(sys.modules,{'recipe':fixture.R,'lifecycle':fixture.L,'issuer':fixture.I,'failure_diagnostic':D,'comparison_diagnostic':CDF,'all_comparisons':ACD}):
+with patch.dict(sys.modules,{'recipe':fixture.R,'lifecycle':fixture.L,'issuer':fixture.I,'failure_diagnostic':D,'comparison_diagnostic':CDF,'all_comparisons':ACD,'backend_policy':BP}):
     spec=importlib.util.spec_from_file_location('ci_guard_diagnostic_test',HERE/'guard.py')
     G=importlib.util.module_from_spec(spec);spec.loader.exec_module(G)
 

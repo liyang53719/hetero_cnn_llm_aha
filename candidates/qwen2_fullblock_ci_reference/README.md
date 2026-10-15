@@ -149,3 +149,7 @@ AVX2首次实际运行38675911830已完成prepare，在参考capture.py第265行
 可复核tiny观察测试（不是业务PASS）：PYTHONPATH="$PWD/work/runtime_recovery/site-packages:$PWD" QWEN2_TINY_OBSERVATION_TEST=1 python -B -m unittest candidates.qwen2_fullblock_ci_reference.test_all_comparisons -q。使用本地现存Torch、7424个合成元素，核值/版本/存储地址不变；普通冷测缺runtime时明确跳过该项。
 
 固定官方SoftMaxKernel.cpp显示最后维度FP32 softmax执行max归约、向量exp、sum归约及倒数乘；AVX2/AVX512为8/16通道、Sleef_expf8_u10/Sleef_expf16_u10，不同归约分组不保证逐位相同。仅源码机制证据，不推定本次误差大小或BF16落点。来源：https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/SoftMaxKernel.cpp 和同commit的 aten/src/ATen/cpu/vec/functional_base.h 。
+
+## 显式 ATen GEMM 候选
+
+新增 profile `avx2-aten-gemm-v1`，默认及原 AVX2 候选不设置 mkldnn。此候选保持原 runtime 三字段投影及原29精确期待，在原 `official-holder-construction-and-raw-bindings` 阶段（Torch 已核、算术未开始）显式设置并验证 `torch.backends.mkldnn.enabled=False`；后续 prefix/tail/观察及后验边界复核 False。策略作为本次 source-policy 独立绑定，不假称旧 runtime10字段已记录 backend。原 capture/官方AST无修改，fresh-import门不放松。该设置的根据是固定binary oneDNN false→ATen gemm_stub路径，以及合成探针发现 ATen AVX2 时 oneDNN 实际仍使用 AVX512_CORE_BF16；不先验保证逐位相同。参考仍遇旧期待差异立即FAIL，只观察已有29输出固定分类，不启用DUT或放宽容差。

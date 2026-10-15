@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
-      QWEN2_CI_RUNTIME_PROFILE: 'avx2-candidate-v1'
+      QWEN2_CI_RUNTIME_PROFILE: 'avx2-aten-gemm-v1'
       ATEN_CPU_CAPABILITY: 'avx2'
       PYTHONNOUSERSITE: '1'
       PYTHONDONTWRITEBYTECODE: '1'

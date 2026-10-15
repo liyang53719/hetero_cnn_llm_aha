@@ -11,7 +11,7 @@ from candidates.qwen2_fullblock_ci_reference import failure_diagnostic as F
 from candidates.qwen2_fullblock_ci_reference import comparison_diagnostic as CDF
 from candidates.qwen2_fullblock_ci_reference import all_comparisons as ACD
 ROOT=Path(__file__).resolve().parents[2]
-AUTH='candidates/qwen2_ci_reference_avx2_all_authorization'
+AUTH='candidates/qwen2_ci_reference_aten_gemm_authorization'
 PHASES={'ADMIT','PRECHECK','BINDINGS','ISSUER','GUARD','AGGREGATE','COMPLETE'}
 FILES={
  'BOOTSTRAP':'candidates/qwen2_fullblock_ci_execution/bootstrap.py',

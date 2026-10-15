@@ -3,12 +3,17 @@ from pathlib import Path
 import sys
 import recipe as R
 import issuer as I
+import backend_policy as BP
 B = R.legacy('lifecycle.py')
 WORK = R.WORK
 B.WORK = WORK
 WALL_SECONDS,RSS_BYTES = B.WALL_SECONDS,B.RSS_BYTES
 LOG_RETAIN_BYTES,LOG_EMITTED_LIMIT,POLL_SECONDS = B.LOG_RETAIN_BYTES,B.LOG_EMITTED_LIMIT,B.POLL_SECONDS
-identity,write_new,progress,last_stage = B.identity,B.write_new,B.progress,B.last_stage
+identity,write_new,last_stage = B.identity,B.write_new,B.last_stage
+
+def progress(recipe,out,stage):
+    BP.before_stage(recipe,stage)
+    return B.progress(recipe,out,stage)
 directory_inventory,bytes_under = B.directory_inventory,B.bytes_under
 validate_payload_inventory,verify_parent_entry = B.validate_payload_inventory,B.verify_parent_entry
 

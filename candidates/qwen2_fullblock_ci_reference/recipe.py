@@ -107,6 +107,9 @@ def bootstrap_policy():
         frozen_mode_available=False,numerical_acceptance_allowed=False)
     if original['capture_environment']['ATEN_CPU_CAPABILITY'] is not None:
         result['aten_dispatch_environment'] = original['capture_environment']['ATEN_CPU_CAPABILITY']
+    profile = dependency('candidates/qwen2_fullblock_ci_execution/runtime_profile.py')
+    if profile.mkldnn_enabled() is False:
+        result['cpu_backend_policy'] = dict(profile=profile.profile(),mkldnn_enabled=False,setting_boundary='official-holder-construction-and-raw-bindings')
     return result
 
 def derive_bindings(root=ROOT):

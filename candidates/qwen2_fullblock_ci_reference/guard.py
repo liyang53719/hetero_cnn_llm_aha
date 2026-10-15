@@ -9,6 +9,7 @@ import lifecycle as L
 import failure_diagnostic as D
 import comparison_diagnostic as CDF
 import all_comparisons as ACD
+import backend_policy as BP
 G = R.legacy('guard.py')
 R.need(G.R is R and G.L is L,'explicit CI recipe/lifecycle import binding')
 
@@ -20,6 +21,7 @@ def emit_failure(error,origin,all_expected=None):
     except BaseException:
         pass
     try:
+        if origin == 'WORKER':BP.before_stage(R,'observations29-and-semantic-validation')
         comparison = CDF.project(error, R.ROOT) if origin == 'WORKER' else None
         if comparison is not None:
             print(json.dumps(comparison, sort_keys=True, allow_nan=False), file=sys.stderr, flush=True)
@@ -27,6 +29,7 @@ def emit_failure(error,origin,all_expected=None):
         pass
 
     try:
+        if origin == 'WORKER':BP.before_stage(R,'observations29-and-semantic-validation')
         comparison = ACD.project(error, R.ROOT, all_expected) if origin == 'WORKER' and all_expected is not None else None
         if comparison is not None:
             print(json.dumps(comparison, sort_keys=True, allow_nan=False), file=sys.stderr, flush=True)

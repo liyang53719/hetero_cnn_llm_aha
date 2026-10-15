@@ -1,0 +1,93 @@
+{
+  "budgets": {
+    "capture_limits": {
+      "automatic_retry": false,
+      "per_stream_retained_bytes": 65536,
+      "poll_seconds": 0.02,
+      "rss_bytes": 1610612736,
+      "rss_is_os_hard_cap": false,
+      "total_emitted_log_limit_bytes": 16777216,
+      "wall_seconds": 120
+    },
+    "cleanup_grace_seconds": 2,
+    "disk_budget": {
+      "bootstrap_plus_frozen_payload_bytes": 65208320,
+      "export_bytes_per_capture": 32571392,
+      "native_dumps_retained": false,
+      "native_mask_sidecar_bytes": 32768,
+      "payload_bytes_per_capture": 32604160,
+      "peak_rss_estimate": null,
+      "per_capture_cap_bytes": 35651584,
+      "total_cap_bytes": 72351744,
+      "wall_seconds_estimate": null
+    },
+    "outer_watchdog_seconds": 122
+  },
+  "exclusive_numeric_slot": true,
+  "frozen_mode_available": false,
+  "historical_receipts_revalidated": false,
+  "maximum_invocations": 1,
+  "mode": "bootstrap",
+  "no_retry": true,
+  "numeric_executed": false,
+  "numerical_acceptance_allowed": false,
+  "observed_bindings_independently_reviewed": false,
+  "output_scope": "SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED",
+  "policy_sha256": "e1d860ba9d8dac85a3f8e48d4ab42fa5ea7d0358615481b7059fd5e75576baca",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "run_id": "ci01",
+  "schema": 1,
+  "source_closure_sha256": "31d8eef434c9cb062468d64e36f577a7bb0e1be67030dc470fa203ed64332a54",
+  "source_manifest": {
+    "bytes": 2805,
+    "sha256": "a0a69d0f66bed8dc25db28479bbee2d58d59d544aa1804a615f6da74935c8ba0"
+  },
+  "status": "APPROVED_SOURCE_POLICY_FOR_SINGLE_BOOTSTRAP",
+  "tool_identity": {
+    "all_zero_counts_do_not_replace_boundary_after_seal_or_numerical_acceptance": true,
+    "approved_scope": "one reference-only bootstrap with explicit ATen AVX2 and mkldnn disabled in the fresh capture worker; unchanged official arithmetic and original29 expectations; fixed existing-output diagnostics only after original failure",
+    "aten_cpu_capability": "avx2",
+    "backend_drift_blocks_failure_comparison_projection": true,
+    "backend_rechecked_before_prefix_tail_observations_and_boundary_after": true,
+    "backend_setting_boundary": "official-holder-construction-and-raw-bindings",
+    "business_reference_executed_by_reviewer": false,
+    "cold_tests_normal_explicit_skips": 1,
+    "cold_tests_normal_passed": 173,
+    "cold_tests_optimized_explicit_skips": 1,
+    "cold_tests_optimized_passed": 173,
+    "cross_runner_bitwise_reproducibility_claimed": false,
+    "dut_executed_by_reviewer": false,
+    "dut_execution_allowed": false,
+    "implementation": "cpython",
+    "job_timeout_minutes": 15,
+    "mkldnn_enabled": false,
+    "official_capture_and_frozen_expectation_bytes_unchanged": true,
+    "original_process_audit_hook_source_only_integration_passed": true,
+    "permitted_comparison_output": "fixed NODE_00..17 or OUTPUT_00..28, fixed category enums, bounded field counts only; no actual tensor metadata or values",
+    "python_elf": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "python_version": [
+      3,
+      12,
+      14
+    ],
+    "real_dependency_mock_torch_lifecycle_guard_integration_passed": true,
+    "reference_internal_wall_seconds": 120,
+    "reference_outer_watchdog_seconds": 122,
+    "review_event": "independent-aten-gemm-single-reference-source-policy-20261015",
+    "reviewed_at_utc": "2026-10-15T04:11:31.690960+00:00",
+    "runtime_profile": "avx2-aten-gemm-v1",
+    "second_fresh_capture_allowed": false,
+    "source_manifest": {
+      "bytes": 2805,
+      "sha256": "a0a69d0f66bed8dc25db28479bbee2d58d59d544aa1804a615f6da74935c8ba0"
+    },
+    "undeclared_backend_override_environment_rejected": true
+  }
+}

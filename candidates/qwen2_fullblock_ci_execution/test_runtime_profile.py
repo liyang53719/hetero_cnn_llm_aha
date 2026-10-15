@@ -17,6 +17,51 @@ class RuntimeProfileTests(unittest.TestCase):
     def candidate(self):
         return {p.PROFILE_ENV:p.CANDIDATE,'ATEN_CPU_CAPABILITY':'avx2'}
 
+    def aten_gemm_candidate(self):
+        return {p.PROFILE_ENV:p.ATEN_GEMM_CANDIDATE,'ATEN_CPU_CAPABILITY':'avx2'}
+
+    def test_distinct_explicit_backend_request_default_unchanged(self):
+        self.assertIsNone(p.mkldnn_enabled({}))
+        self.assertIsNone(p.mkldnn_enabled(self.candidate()))
+        self.assertIs(p.mkldnn_enabled(self.aten_gemm_candidate()),False)
+        self.assertIs(p.disable_mkldnn({}),False)
+        self.assertIs(p.disable_mkldnn(self.candidate()),False)
+        self.assertIs(p.disable_mkldnn(self.aten_gemm_candidate()),True)
+        self.assertIs(p.selected(self.aten_gemm_candidate()),True)
+        self.assertEqual(p.profile(self.aten_gemm_candidate()),'avx2-aten-gemm-v1')
+
+    def test_new_backend_profile_same_three_pin_fields_only(self):
+        pins=self.pins();before=copy.deepcopy(pins);env=self.aten_gemm_candidate();env_before=dict(env)
+        result=p.apply(pins,env)
+        self.assertEqual(result,p.apply(pins,self.candidate()))
+        self.assertEqual(pins,before);self.assertEqual(env,env_before)
+        self.assertEqual(set(result),set(pins))
+        self.assertEqual(set(result['capture_environment']),set(pins['capture_environment']))
+        self.assertEqual(set(result['runtime_requirements']),set(pins['runtime_requirements']))
+
+    def test_backend_request_strict_validation_no_auto_selection(self):
+        for env in ({'ATEN_CPU_CAPABILITY':'avx2'},
+                    {p.PROFILE_ENV:p.ATEN_GEMM_CANDIDATE},
+                    {p.PROFILE_ENV:p.ATEN_GEMM_CANDIDATE,'ATEN_CPU_CAPABILITY':'AVX2'},
+                    {p.PROFILE_ENV:'avx2-aten-gemm-v2','ATEN_CPU_CAPABILITY':'avx2'}):
+            with self.subTest(env=env),self.assertRaises(ValueError):p.disable_mkldnn(env)
+
+    def test_new_profile_rejects_all_present_backend_overrides(self):
+        for key in ('ONEDNN_MAX_CPU_ISA','DNNL_MAX_CPU_ISA','MKL_CBWR'):
+            for value in ('',None,'AVX2','AUTO',False):
+                env={**self.aten_gemm_candidate(),key:value}
+                for action in (p.profile,p.selected,p.disable_mkldnn,p.mkldnn_enabled):
+                    with self.subTest(key=key,value=value,action=action.__name__),self.assertRaises(ValueError):
+                        action(env)
+                with self.assertRaises(ValueError):p.apply(self.pins(),env)
+
+    def test_backend_override_rejection_does_not_change_old_profiles(self):
+        for env in ({},self.candidate()):
+            for key in ('ONEDNN_MAX_CPU_ISA','DNNL_MAX_CPU_ISA','MKL_CBWR'):
+                for value in ('',None,'AVX2'):
+                    self.assertEqual(p.apply(self.pins(),{**env,key:value}),p.apply(self.pins(),env))
+                    self.assertIsNone(p.mkldnn_enabled({**env,key:value}))
+
     def test_selected_boolean_and_strict_validation(self):
         self.assertIs(p.selected({}),False)
         self.assertIs(p.selected(self.candidate()),True)
@@ -32,7 +77,7 @@ class RuntimeProfileTests(unittest.TestCase):
         self.assertIsNone(p.profile({}))
 
     def test_deep_copy_default_and_candidate(self):
-        for env in ({},self.candidate()):
+        for env in ({},self.candidate(),self.aten_gemm_candidate()):
             pins=self.pins();before=copy.deepcopy(pins);result=p.apply(pins,environ=env)
             result['runtime_requirements']['nested'][1]['x']=999
             result['other']['sources'].append('new')
@@ -64,7 +109,7 @@ class RuntimeProfileTests(unittest.TestCase):
                 p.apply(self.pins(),environ={p.PROFILE_ENV:value,'ATEN_CPU_CAPABILITY':'avx2'})
 
     def test_reads_current_environment_without_writes(self):
-        for env in ({},self.candidate()):
+        for env in ({},self.candidate(),self.aten_gemm_candidate()):
             with patch.dict(p.os.environ,env,clear=True):
                 before=dict(p.os.environ)
                 self.assertEqual(p.apply(self.pins()),p.apply(self.pins(),environ=env))

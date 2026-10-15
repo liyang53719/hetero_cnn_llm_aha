@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from . import backend_policy as BP
 sys.dont_write_bytecode=True
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location('ci_lifecycle_recipe',HERE/'recipe.py')
@@ -13,7 +14,7 @@ R=importlib.util.module_from_spec(spec);spec.loader.exec_module(R)
 with patch.dict(sys.modules,{'recipe':R}):
     spec=importlib.util.spec_from_file_location('issuer',HERE/'issuer.py')
     I=importlib.util.module_from_spec(spec);spec.loader.exec_module(I)
-with patch.dict(sys.modules,{'recipe':R,'issuer':I}):
+with patch.dict(sys.modules,{'recipe':R,'issuer':I,'backend_policy':BP}):
     spec=importlib.util.spec_from_file_location('ci_lifecycle',HERE/'lifecycle.py')
     L=importlib.util.module_from_spec(spec);spec.loader.exec_module(L)
 

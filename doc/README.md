@@ -4,6 +4,12 @@
 
 完整计划已迁入根目录 `doc/`。旧 `plans/` 路径是兼容符号链接，不再维护第二份计划；计划与清单统一在此维护；历史44个任务和后续新增的U00/U01共46个父任务均保留，验收门禁不因文档更新而放宽。计划中的“待执行”是编制时快照，不用于派工。Windows 未启用符号链接时直接使用 `doc/` 路径；不要把链接文本当作 YAML 解析。
 
+## Exact64完整软件诊断预算终态（2026-10-15）
+
+[唯一完整诊断CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38738164097)已结束失败。M128的Q和K软件owner确实完成352321536次FMA、14680064次Add、3584个tile及917504字节最终ACK；主worker在3300.2795秒wall触及内层预算，监督器3303.9979秒内完成进程组清理。最后算子未知，尚无完整seal或任何官方数值比较，不能用局部完成替代全链通过。
+
+已定位聚合缺陷：未运行postseal的缺收据覆盖了原主失败。下一步修正primary cause与固定安全阶段投影，并在小公共tile上分层计时、验证逐edge等价的模拟器开销优化。本次长链不自动重跑或加时；原M128四项数值失败、五block待验及完整RTL/90%目标保持。新exact64是DIAGNOSTIC_SOFTWARE_OWNER，当前Chisel映射未实现、性能NO_GO。
+
 ## QK实际Matrix局部RTL更新（2026-10-15）
 
 [真实Matrix局部数值单元](../candidates/qwen2_rectangular_qk_numeric/README.md) `876cf2c9` 的[唯一CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38729837511)已独审通过：实例化八个512MAC端点，每step只启用一个32列slice，89 step共45568实际FMA、704 B ACK，375632个有限值逐位比较和176个NaN分类检查通过。四场景包含符号零、M17尾块和因果非有限隔离。七阶段全部退出0，runner213秒；生成RTL SHA `452f875e1cf28277cd665e4026793c9c36327e480ae52f02a0af5048c14b9a90`。

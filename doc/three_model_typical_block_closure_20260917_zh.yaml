@@ -1459,3 +1459,18 @@ QK实际Matrix局部RTL增量20261015:
   未覆盖: B为80KiB单pending ACK的host测试存储；真实B SRAM、A DMA、完整十六stripe及有序Scalar fold、两次BF16边界与softmax端到端RTL尚未接线验证。
   下一步: 优先完整M128模型必要集成：exact64 Q/K投影经真实公共Dense及Memory ACK接线，再接保持原图的QK与共享A驻留、原softmax和实际n1下gate误差验证。Scalar真实接口和成本并行审计，暂不扩小单元RTL；不以局部partial通过替代完整block。
   保留验收: 这是局部真实阵列RTL数值通过；原完整M128四项失败、其他四block和长prefill未获新增通过，完整block固定4096MAC周期利用率与90百分比目标仍open。
+
+Exact64完整诊断预算终态20261015:
+  已发布诊断源码: 5e14980830b937cb49a681bc9872e36d259c19a1
+  CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38738164097
+  状态: FAIL_DIAGNOSTIC_SOFTWARE_OWNER
+  范围: 实际公共Memory与ACK接线的exact64软件Q和K投影，复用原共享A驻留与PV32算术；新投影尚未映射当前Chisel，性能NO_GO，不能作为对应现Chisel的完整prefill通过。
+  已完成局部: M128的pc1 Q及pc4 K均有原Host接受的成功owner终态；共352321536次FMA、14680064次Add、3584个tile、917504字节最终写ACK。原Matrix仅承担reservation，未伪造Matrix算术计数；该局部完成尚无官方数值比较。
+  预算终止: worker主机wall为3300.279500227秒，CPU为3299.860538435秒；监督器wall为3303.997850149秒，小于3330秒外限且进程组清理完成。证据支持内层3300秒预算终止，不能推断CPU限杀或具体最后算子。
+  缺失证据: 完整主链没有seal，24项数值及3项后置gate诊断均无结果；最后stage未保存在公开摘要中。缺少最终same-live及债务证据不等于已经证明破坏，操作系统进程清理不证明模型债务排空。
+  已定位摘要缺陷: 聚合器无条件读取未运行postseal的收据，将原主失败覆盖为AGGREGATION与FileNotFoundError；应保留primary cause并将未seal后的postseal标为NOT_RUN，复用已flush的阶段与heartbeat记录作严格固定字段投影。
+  进行中:
+  - 修复失败摘要并以冷fixture逐项证明主失败、缺失或截断进度及未知字段不会被误报或泄露。
+  - 对实际公共小tile分层计时，定位主机空闲tick等软件开销；优化须保持每模拟edge、端口credit、后台DMA、最终内存及故障轨迹，不改变硬件周期分母。
+  - 不延长预算或重复本次长链；先以有界小刺激验证等价，再评估完整M128必要集成。
+  保留验收: 原完整M128的scores、logits、prob、gate四项数值失败仍未关闭；Qwen3.5-0.8B和35B-A3B各L0及L3无新增通过，1024或1224第二档未定，128仍优先。最终完整RTL数值与90百分比利用率目标保持。

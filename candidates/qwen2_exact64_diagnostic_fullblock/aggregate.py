@@ -20,6 +20,14 @@ LAUNCH = 'work/qwen2_exact64_diagnostic_fullblock_numeric/ci01.LAUNCH.json'
 PASS = 'PASS_DIAGNOSTIC_SOFTWARE_OWNER'
 FAIL = 'FAIL_DIAGNOSTIC_SOFTWARE_OWNER'
 POSTSEAL = 'work/qwen2_exact64_diagnostic_gate_probe/ci01/RESULT.json'
+PROGRESS = 'work/qwen2_exact64_diagnostic_fullblock_numeric/ci01/PROGRESS.jsonl'
+HEARTBEAT = 'work/qwen2_exact64_diagnostic_fullblock_numeric/ci01.HEARTBEAT.json'
+POSTSEAL_STATUSES = frozenset(('NOT_RUN','INCOMPLETE','FAILED','COMPLETE'))
+FAILURE_KINDS = frozenset(('UNKNOWN','BUDGET_EXCEEDED','EXECUTION_FAILURE','OUTER_WALL_TIMEOUT',
+    'SAMPLED_RSS_CAP','SAMPLED_OUTPUT_CAP','SAMPLED_LOG_CAP','SUPERVISOR_EXCEPTION',
+    'PROCESS_GROUP_CLEANUP_INCOMPLETE','AGGREGATION_READ_FAILURE'))
+PROGRESS_COUNTS = dict(public_pc=21,public_completions=21,owner_jobs=17,
+    accepted_owner_results=17,accepted_launch_results=1)
 MAX_JSON_BYTES = 256 * 1024 * 1024
 MAX_INTEGER = 2**53 - 1
 STAGE_MAP = {
@@ -527,7 +535,8 @@ def _extend_diagnostics(summary,report,launch,postseal,source_digest):
         ('DIAGNOSTIC_SCOPE',k) for k in ('REPORT_NUMERIC_PASS','REPORT_SEALED','LAUNCH_NUMERIC_PASS','LAUNCH_SEALED')}
     structural=all(value is True for group,rows in gates.items() if group not in ('NUMERIC','POSTSEAL')
         for gate,value in rows.items() if (group,gate) not in numeric_only)
-    p=obj(postseal);post=gates['POSTSEAL']
+    # No postseal operation is eligible before the actual main output seal.
+    p=obj(postseal) if _main_sealed(report) else {};post=gates['POSTSEAL']
     post['SEALED_MAIN_ELIGIBLE']=structural and _terminal_contract(report,launch) if report and launch else None
     post['RECEIPT_CONTRACT']=_checked(lambda:_postseal_contract(p,report)) if p else None
     for gate,field,expected in (('CONTROL_BIT_EXACT','control_bit_exact',True),
@@ -543,7 +552,8 @@ def _extend_diagnostics(summary,report,launch,postseal,source_digest):
             row=p['comparisons'][node['stage']];metrics=row['metrics']
             node.update(official_numeric_pass=row['official_numeric_pass'],max_abs=number(metrics['max_abs']),
                 mean_abs=number(metrics['mean_abs']))
-    result['failure_stages']=[group for group in DIAGNOSTIC_GROUPS if any(
+    result['failure_stages']=[group for group in DIAGNOSTIC_GROUPS
+        if (group!='POSTSEAL' or _main_sealed(report)) and any(
         value is not True for value in gates[group].values())]
 
 
@@ -672,7 +682,7 @@ def _acceptance_diagnostics(report, launch, summary, source_digest):
     return result
 
 
-def _validate_diagnostics(value):
+def _validate_diagnostics(value, postseal_status):
     need(type(value) is dict and set(value)=={'schema','gates','nodes','postseal_nodes','failure_stages'}, 'exact diagnostic keys')
     need(type(value['schema']) is int and value['schema']==1, 'diagnostic schema')
     gates=value['gates']
@@ -701,17 +711,99 @@ def _validate_diagnostics(value):
         if valid:
             need(type(node['official_numeric_pass']) is bool and all(number(node[k]) is not None for k in ('max_abs','mean_abs')), 'complete valid isolation evidence')
             need((node['max_abs']<=0.03125 and node['mean_abs']<=0.005) is node['official_numeric_pass'], 'native isolation policy consistency')
-    expected=[group for group in DIAGNOSTIC_GROUPS if any(v is not True for v in gates[group].values())]
+    expected=[group for group in DIAGNOSTIC_GROUPS if (group!='POSTSEAL' or postseal_status!='NOT_RUN')
+        and any(v is not True for v in gates[group].values())]
     need(same(value['failure_stages'],expected), 'fixed diagnostic failure stages')
+
+
+def _main_sealed(report):
+    return all(report.get(key) is True for key in ('whole_block_terminal','actual_outputs_sealed','finalfence'))
+
+
+def _progress_empty():
+    return dict(scope='INCOMPLETE_SOFTWARE_PROGRESS_ONLY',snapshot_is_acceptance=False,
+        source='UNAVAILABLE',stage='UNKNOWN',**{key:None for key in PROGRESS_COUNTS},
+        elapsed_seconds=None,cpu_seconds=None,stage_start_seconds=None,heartbeat_elapsed_seconds=None)
+
+
+def _progress_summary(report,progress,heartbeat):
+    """Only fixed stage/count/time fields; never terminal or numerical evidence."""
+    result=_progress_empty()
+    if _main_sealed(report):return result
+    failed=obj(report.get('failure_snapshot'));progress=obj(progress);heartbeat=obj(heartbeat)
+    failure_stage=report.get('failure_stage')
+    snapshot=None
+    if (type(report.get('schema')) is int and report['schema']==1 and report.get('scope')=='DIAGNOSTIC_SOFTWARE_OWNER' and
+        failed.get('snapshot_is_acceptance') is False and failed.get('model_ticks_are_hardware_cycles') is False and
+        type(failure_stage) is str and failure_stage in STAGE_MAP):
+        snapshot=failed;result.update(source='REPORT_FAILURE_SNAPSHOT',stage=STAGE_MAP[failure_stage],
+            elapsed_seconds=number(report.get('host_wall_seconds')),cpu_seconds=number(report.get('host_cpu_seconds')))
+    elif (type(progress.get('schema')) is int and progress['schema']==1 and
+        progress.get('snapshot_is_acceptance') is False and progress.get('model_ticks_are_hardware_cycles') is False and
+        type(progress.get('stage')) is str and progress['stage'] in STAGE_MAP and
+        progress.get('reason') in ('stage','attention_loop')):
+        snapshot=progress;result.update(source='PROGRESS',stage=STAGE_MAP[progress['stage']],
+            elapsed_seconds=number(progress.get('elapsed_seconds')),cpu_seconds=number(progress.get('cpu_seconds')))
+    last=obj(heartbeat.get('last_stage'))
+    if (type(heartbeat.get('schema')) is int and heartbeat['schema']==1 and
+        heartbeat.get('diagnostic_only') is True and heartbeat.get('acceptance') is False and
+        last.get('state')=='OBSERVED' and last.get('snapshot_is_acceptance') is False and
+        type(last.get('stage')) is str and last['stage'] in STAGE_MAP):
+        result['heartbeat_elapsed_seconds']=number(heartbeat.get('elapsed_seconds'))
+        if snapshot is None:result.update(source='HEARTBEAT',stage=STAGE_MAP[last['stage']])
+    if snapshot is not None:
+        public=obj(snapshot.get('public'));accepted=obj(public.get('accepted'))
+        for target,source in (('public_pc','pc'),('public_completions','completed'),('owner_jobs','jobs')):
+            result[target]=integer(public.get(source),PROGRESS_COUNTS[target])
+        for target,source in (('accepted_owner_results','owner_result_fire'),('accepted_launch_results','result_fire')):
+            result[target]=integer(accepted.get(source),PROGRESS_COUNTS[target])
+    history=obj(report.get('telemetry')).get('stage_history')
+    if result['source']=='REPORT_FAILURE_SNAPSHOT' and type(history) is list and history:
+        last=obj(history[-1]);elapsed=number(last.get('elapsed_seconds'))
+        if last.get('stage')==failure_stage and elapsed is not None and result['elapsed_seconds'] is not None and elapsed<=result['elapsed_seconds']:
+            result['stage_start_seconds']=elapsed
+    for key in ('elapsed_seconds','cpu_seconds','stage_start_seconds','heartbeat_elapsed_seconds'):
+        if result[key] is not None and result[key]>4500:result[key]=None
+    return result
+
+
+def _validate_progress(value):
+    need(type(value) is dict and set(value)==set(_progress_empty()),'fixed progress fields')
+    need(value['scope']=='INCOMPLETE_SOFTWARE_PROGRESS_ONLY' and value['snapshot_is_acceptance'] is False,'progress is not acceptance')
+    need(type(value['source']) is str and value['source'] in ('UNAVAILABLE','REPORT_FAILURE_SNAPSHOT','PROGRESS','HEARTBEAT') and type(value['stage']) is str and value['stage'] in STAGES,'fixed progress enums')
+    for key,limit in PROGRESS_COUNTS.items():need(value[key] is None or integer(value[key],limit) is not None,'bounded progress count')
+    for key in ('elapsed_seconds','cpu_seconds','stage_start_seconds','heartbeat_elapsed_seconds'):
+        need(value[key] is None or number(value[key]) is not None and value[key]<=4500,'finite bounded progress time')
+    if value['source']=='UNAVAILABLE':need(same(value,_progress_empty()),'no fabricated progress')
+    if value['source']=='HEARTBEAT':need(all(value[k] is None for k in (*PROGRESS_COUNTS,'elapsed_seconds','cpu_seconds','stage_start_seconds')),'heartbeat has no model counters')
+
+
+def _read_progress():
+    """Read only the last fully flushed JSONL record in a fixed 64 KiB tail."""
+    path=ROOT/PROGRESS
+    need(path.resolve()==path and not any(p.is_symlink() for p in (path,*path.parents)),'progress alias')
+    with path.open('rb') as stream:
+        info=os.fstat(stream.fileno());need(stat.S_ISREG(info.st_mode),'regular progress record required')
+        size=info.st_size
+        start=max(0,size-65536);stream.seek(start);raw=stream.read(size-start)
+    # Drop any head fragment and any incomplete final append. A malformed last
+    # complete record is rejected, never silently replaced by an older success.
+    if start:raw=raw.partition(b'\n')[2]
+    lines=raw.split(b'\n')[:-1]
+    need(bool(lines),'no complete bounded progress record')
+    record=json.loads(lines[-1],object_pairs_hook=_pairs,parse_constant=_constant)
+    need(type(record) is dict,'progress object required')
+    return record
 
 
 def _empty(source_digest):
     return dict(schema=1, scope='DIAGNOSTIC_SOFTWARE_OWNER',performance='NO_GO',hardware_mapping='NOT_IMPLEMENTED',
         fullblock_pass=False,acceptance_sealed=False,chisel_full_prefill_pass=False,
         model_corresponds_to_current_chisel=False,diagnostic_numeric_pass=False,
-        diagnostic_acceptance_sealed=False,postseal_valid=False, status='INCOMPLETE',
+        diagnostic_acceptance_sealed=False,postseal_valid=False,postseal_status='NOT_RUN', status='INCOMPLETE',
         reference_contract='official-ast-ci-aten-avx2-reference-v1',cache_contract='sealed-same-live-cold-cache-v1',
-        source_digest=source_digest, failure_stage='UNKNOWN', exception_class='UNKNOWN',
+        source_digest=source_digest, failure_stage='UNKNOWN', exception_class='UNKNOWN',failure_kind='UNKNOWN',
+        failure_progress=_progress_empty(),
         public_completions=None, owner_jobs=None, accepted_launch_results=None,
         host_wall_seconds=None, host_cpu_seconds=None, supervisor_wall_seconds=None,
         peak_rss_bytes=None, sampled_group_rss_bytes=None, output_bytes=None, log_bytes=None,
@@ -723,11 +815,12 @@ def _empty(source_digest):
         acceptance_diagnostics=_diagnostic_empty())
 
 
-def summarize(report, launch, *, source_digest, postseal=None):
+def summarize(report, launch, *, source_digest, postseal=None, progress=None, heartbeat=None):
     """Pure receipt projection; collect() additionally binds current source bytes."""
     need(type(report) is dict and type(launch) is dict, 'receipt objects required')
     need(type(source_digest) is str and re.fullmatch('[0-9a-f]{64}',source_digest), 'source digest required')
     result=_empty(source_digest)
+    result['failure_progress']=_progress_summary(report,progress,heartbeat)
     execution=obj(report.get('execution'));host=obj(execution.get('host'));terminal=obj(host.get('launch_result'))
     accepted=obj(host.get('accepted'))
     for target,origin in (('public_completions','completed'),('owner_jobs','jobs')):
@@ -761,10 +854,12 @@ def summarize(report, launch, *, source_digest, postseal=None):
                   if group!='POSTSEAL' for v in rows.values())
     result['diagnostic_numeric_pass']=main_pass
     result['postseal_valid']=all(v is True for v in diagnostics['gates']['POSTSEAL'].values())
+    result['postseal_status']=('NOT_RUN' if not _main_sealed(report) else 'COMPLETE' if result['postseal_valid']
+        else 'FAILED' if obj(postseal) else 'INCOMPLETE')
     passed=main_pass
     result['diagnostic_acceptance_sealed']=passed
     if passed:
-        result.update(status=PASS,failure_stage=None,exception_class=None)
+        result.update(status=PASS,failure_stage=None,exception_class=None,failure_kind=None)
     else:
         if launch.get('status') in ('FAILED','PASS') or report.get('status') in ('FAILED',PASS,FAIL):
             result['status']=FAIL
@@ -772,6 +867,13 @@ def summarize(report, launch, *, source_digest, postseal=None):
         result['failure_stage']=STAGE_MAP.get(stage,'UNKNOWN') if type(stage) is str else 'UNKNOWN'
         error=report.get('original_error_type')
         result['exception_class']=error if type(error) is str and error in EXCEPTIONS else 'UNKNOWN'
+        for source in (report,launch):
+            kind=source.get('failure_kind')
+            if type(kind) is str and kind in FAILURE_KINDS and kind!='UNKNOWN':
+                result['failure_kind']=kind;break
+        # An observed progress stage is not the cause of a supervisor failure.
+        if result['failure_stage']=='UNKNOWN' and type(launch.get('failure_kind')) is str and launch['failure_kind'] in FAILURE_KINDS-{'UNKNOWN'}:
+            result['failure_stage']='SUPERVISOR'
     validate_summary(result)
     return result
 
@@ -805,12 +907,21 @@ def validate_summary(value):
         need(value[key] is False, 'no formal or current Chisel acceptance')
     for key in ('diagnostic_numeric_pass','diagnostic_acceptance_sealed','postseal_valid'):
         need(type(value[key]) is bool, 'diagnostic boolean')
-    _validate_diagnostics(value['acceptance_diagnostics'])
+    need(value['failure_kind'] is None or type(value['failure_kind']) is str and value['failure_kind'] in FAILURE_KINDS,'fixed primary failure kind')
+    need(type(value['postseal_status']) is str and value['postseal_status'] in POSTSEAL_STATUSES,'fixed postseal state')
+    _validate_progress(value['failure_progress'])
+    _validate_diagnostics(value['acceptance_diagnostics'],value['postseal_status'])
     gates=value['acceptance_diagnostics']['gates']
     main_pass=all(v is True for group,rows in gates.items() if group!='POSTSEAL' for v in rows.values())
     postseal_valid=all(v is True for v in gates['POSTSEAL'].values())
     need(value['diagnostic_numeric_pass'] is main_pass, 'main diagnostic gate consistency')
     need(value['postseal_valid'] is postseal_valid, 'postseal gate consistency')
+    need((value['postseal_status']=='COMPLETE') is postseal_valid,'postseal state consistency')
+    main_sealed=all(gates['REPORT'][key] is True for key in ('WHOLE_BLOCK_TERMINAL','OUTPUTS_SEALED','FINALFENCE'))
+    need((value['postseal_status']=='NOT_RUN') is (not main_sealed),'postseal eligibility matches original main seal gates')
+    if value['postseal_status']=='NOT_RUN':
+        need(gates['POSTSEAL']['SEALED_MAIN_ELIGIBLE'] is not True and
+            all(v is None for k,v in gates['POSTSEAL'].items() if k!='SEALED_MAIN_ELIGIBLE'),'unrun postseal has no evidence')
     need(value['diagnostic_acceptance_sealed'] is value['diagnostic_numeric_pass'], 'sealed diagnostic consistency')
     need((value['status']==PASS) is value['diagnostic_acceptance_sealed'], 'diagnostic status consistency')
 
@@ -822,17 +933,31 @@ def collect(*, source_digest=None, execute=False):
     need(type(source_digest) is str and re.fullmatch('[0-9a-f]{64}',source_digest), 'externally supplied source digest')
     need(ROOT==CI_ROOT and ROOT.resolve()==ROOT, 'fixed CI aggregate root')
     need(closure.digest(ROOT)==source_digest, 'source closure drift')
-    records=[];errors=[]
-    for relative in (RESULT,LAUNCH,POSTSEAL):
-        try:records.append(_read(relative))
+    records=[];main_errors=[]
+    for relative in (RESULT,LAUNCH):
+        try:
+            record=_read(relative)
+            need(type(record.get('schema')) is int and record['schema']==1,'main receipt schema')
+            records.append(record)
         except (OSError,ValueError,UnicodeError) as error:
-            records.append({});errors.append(type(error).__name__)
-    result=summarize(*records[:2],source_digest=source_digest,postseal=records[2])
-    if errors and not result['diagnostic_numeric_pass']:
+            records.append({});main_errors.append(type(error).__name__)
+    postseal=progress=heartbeat=None
+    if _main_sealed(records[0]):
+        try:postseal=_read(POSTSEAL)
+        except (OSError,ValueError,UnicodeError):pass
+    else:
+        # These already-flushed observations contain no terminal authority.
+        # Their absence/corruption must never replace a primary model failure.
+        try:progress=_read_progress()
+        except (OSError,ValueError,UnicodeError):pass
+        try:heartbeat=_read(HEARTBEAT)
+        except (OSError,ValueError,UnicodeError):pass
+    result=summarize(*records,source_digest=source_digest,postseal=postseal,progress=progress,heartbeat=heartbeat)
+    if main_errors and not result['diagnostic_numeric_pass'] and result['failure_kind']=='UNKNOWN' and result['exception_class']=='UNKNOWN':
         result.update(status=FAIL if records[1].get('status') in ('FAILED','PASS') or
                       records[0].get('status') in ('FAILED',FAIL,PASS) else 'INCOMPLETE',
-                      failure_stage='AGGREGATION',
-                      exception_class=errors[0] if errors[0] in EXCEPTIONS else 'UNKNOWN')
+                      failure_stage='AGGREGATION',failure_kind='AGGREGATION_READ_FAILURE',
+                      exception_class=main_errors[0] if main_errors[0] in EXCEPTIONS else 'UNKNOWN')
     need(closure.digest(ROOT)==source_digest, 'source closure changed during aggregate')
     validate_summary(result)
     return result

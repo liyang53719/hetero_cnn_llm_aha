@@ -101,6 +101,24 @@ def numeric_fail(report,launch,postseal,stage='gate'):
     postseal['original_diagnostic_numeric_pass']=False
 
 
+def incomplete_receipts():
+    # Synthetic control-only receipt. It does not reconstruct the destroyed run.
+    report=dict(schema=1,scope='DIAGNOSTIC_SOFTWARE_OWNER',status='FAILED',
+        whole_block_terminal=False,actual_outputs_sealed=False,finalfence=False,
+        failure_kind='BUDGET_EXCEEDED',failure_stage='attention',original_error_type='BudgetExceeded',
+        host_wall_seconds=3300.25,host_cpu_seconds=3299.75,
+        failure_snapshot=dict(snapshot_is_acceptance=False,model_ticks_are_hardware_cycles=False,
+            public=dict(pc=12,completed=10,jobs=11,accepted=dict(owner_result_fire=10,result_fire=0))),
+        telemetry=dict(stage_history=[dict(stage='attention',elapsed_seconds=3000.)]))
+    launch=dict(schema=1,status='FAILED',failure_kind=None,returncode=1)
+    progress=dict(schema=1,reason='attention_loop',stage='attention',elapsed_seconds=3290.,cpu_seconds=3289.,
+        snapshot_is_acceptance=False,model_ticks_are_hardware_cycles=False,
+        public=dict(pc=12,completed=10,jobs=11,accepted=dict(owner_result_fire=10,result_fire=0)))
+    heartbeat=dict(schema=1,diagnostic_only=True,acceptance=False,elapsed_seconds=3301.,
+        last_stage=dict(state='OBSERVED',stage='attention',snapshot_is_acceptance=False))
+    return report,launch,progress,heartbeat
+
+
 class AggregateTests(unittest.TestCase):
     def test_synthetic_only_diagnostic_pass_and_fixed_formal_false(self):
         data=fixtures();snapshot=copy.deepcopy(data);summary=summarize(*data)
@@ -325,6 +343,116 @@ class AggregateTests(unittest.TestCase):
         with patch.object(A,'ROOT',A.CI_ROOT),patch.object(A.closure,'digest',return_value='b'*64),patch.object(A,'_read',side_effect=AssertionError('must not read')):
             with self.assertRaisesRegex(ValueError,'source closure drift'):A.collect(execute=True,source_digest=SHA)
         with self.assertRaisesRegex(ValueError,'fixed CI'):A.collect(execute=True,source_digest=SHA)
+
+    def test_budget_failure_without_seal_never_reads_postseal_or_masks_primary(self):
+        r,l,p,h=incomplete_receipts()
+        with patch.object(A,'ROOT',A.CI_ROOT),patch.object(A.closure,'digest',return_value=SHA),\
+             patch.object(A,'_read',side_effect=[r,l,h]) as read,patch.object(A,'_read_progress',return_value=p):
+            result=A.collect(execute=True,source_digest=SHA)
+        self.assertEqual([c.args[0] for c in read.call_args_list],[A.RESULT,A.LAUNCH,A.HEARTBEAT])
+        self.assertEqual(result['status'],A.FAIL)
+        self.assertEqual(result['failure_stage'],'ATTENTION_EXECUTION')
+        self.assertEqual(result['exception_class'],'BudgetExceeded')
+        self.assertEqual(result['failure_kind'],'BUDGET_EXCEEDED')
+        self.assertEqual(result['postseal_status'],'NOT_RUN')
+        self.assertFalse(result['postseal_valid'])
+        self.assertNotIn('POSTSEAL',result['acceptance_diagnostics']['failure_stages'])
+        self.assertTrue(all(n['max_abs'] is None for n in result['acceptance_diagnostics']['nodes']))
+        self.assertIsNone(result['public_completions']);self.assertIsNone(result['owner_jobs'])
+        observed=result['failure_progress']
+        self.assertEqual(observed['source'],'REPORT_FAILURE_SNAPSHOT')
+        self.assertEqual((observed['public_pc'],observed['public_completions'],observed['owner_jobs']),(12,10,11))
+        self.assertEqual(observed['stage_start_seconds'],3000.)
+        self.assertEqual(observed['elapsed_seconds'],3300.25)
+        self.assertEqual(observed['heartbeat_elapsed_seconds'],3301.)
+        self.assertIs(observed['snapshot_is_acceptance'],False)
+
+    def test_sealed_numeric_failure_with_missing_postseal_keeps_primary(self):
+        r,l,p=fixtures();numeric_fail(r,l,p)
+        with patch.object(A,'ROOT',A.CI_ROOT),patch.object(A.closure,'digest',return_value=SHA),\
+             patch.object(A,'_read',side_effect=[r,l,FileNotFoundError('/PRIVATE_VALUE')]),\
+             patch.object(A,'_read_progress',side_effect=AssertionError('sealed main needs no progress')):
+            result=A.collect(execute=True,source_digest=SHA)
+        self.assertEqual(result['status'],A.FAIL);self.assertEqual(result['postseal_status'],'INCOMPLETE')
+        self.assertNotEqual(result['failure_stage'],'AGGREGATION')
+        self.assertNotEqual(result['exception_class'],'FileNotFoundError')
+        self.assertIs(result['acceptance_diagnostics']['gates']['NUMERIC']['TAIL_GATE'],False)
+        self.assertIn('POSTSEAL',result['acceptance_diagnostics']['failure_stages'])
+        self.assertNotIn('PRIVATE_VALUE',json.dumps(result))
+
+    def test_missing_main_preserves_flushed_progress_without_terminal_authority(self):
+        r,l,p,h=incomplete_receipts()
+        for missing in (FileNotFoundError('/PRIVATE_VALUE'),dict(schema=True)):
+            with patch.object(A,'ROOT',A.CI_ROOT),patch.object(A.closure,'digest',return_value=SHA),\
+                 patch.object(A,'_read',side_effect=[missing,l,h]),patch.object(A,'_read_progress',return_value=p):
+                result=A.collect(execute=True,source_digest=SHA)
+            self.assertEqual(result['failure_stage'],'AGGREGATION')
+            self.assertEqual(result['failure_kind'],'AGGREGATION_READ_FAILURE')
+            self.assertEqual(result['postseal_status'],'NOT_RUN')
+            self.assertEqual(result['failure_progress']['source'],'PROGRESS')
+            self.assertEqual(result['failure_progress']['public_completions'],10)
+            self.assertIsNone(result['public_completions']);self.assertFalse(result['diagnostic_numeric_pass'])
+            self.assertNotIn('PRIVATE_VALUE',json.dumps(result))
+
+    def test_primary_launch_failure_wins_over_missing_main_receipt(self):
+        r,l,p,h=incomplete_receipts();l['failure_kind']='OUTER_WALL_TIMEOUT'
+        with patch.object(A,'ROOT',A.CI_ROOT),patch.object(A.closure,'digest',return_value=SHA),\
+             patch.object(A,'_read',side_effect=[FileNotFoundError(),l,h]),patch.object(A,'_read_progress',return_value={}):
+            result=A.collect(execute=True,source_digest=SHA)
+        self.assertEqual(result['failure_kind'],'OUTER_WALL_TIMEOUT')
+        self.assertEqual(result['failure_stage'],'SUPERVISOR')
+        self.assertNotEqual(result['exception_class'],'FileNotFoundError')
+        self.assertEqual(result['failure_progress']['source'],'HEARTBEAT')
+        self.assertIsNone(result['failure_progress']['public_completions'])
+
+    def test_progress_last_complete_line_and_bad_records_are_not_replayed(self):
+        r,l,p,h=incomplete_receipts()
+        with tempfile.TemporaryDirectory() as directory,patch.object(A,'ROOT',Path(directory)):
+            path=Path(directory)/A.PROGRESS;path.parent.mkdir(parents=True)
+            raw=json.dumps(p).encode()+b'\n'
+            path.write_bytes(raw+b'{"private":"partial')
+            self.assertEqual(A._read_progress(),p)
+            path.write_bytes(raw+b'{"x":1,"x":2}\n')
+            with self.assertRaises(ValueError):A._read_progress()
+            path.write_bytes(raw+json.dumps(dict(private='PRIVATE_VALUE'*7000)).encode()+b'\n')
+            with self.assertRaises(ValueError):A._read_progress()
+            path.write_bytes(b'{"private":"partial')
+            with self.assertRaises(ValueError):A._read_progress()
+
+    def test_progress_fixed_types_bounds_sources_and_private_fields(self):
+        r,l,p,h=incomplete_receipts()
+        for bad in (True,-1,22,10**100,'PRIVATE_VALUE',[],{}):
+            row=copy.deepcopy(p);row['public']['completed']=bad
+            result=A.summarize({},l,source_digest=SHA,progress=row)
+            self.assertIsNone(result['failure_progress']['public_completions'])
+            self.assertNotIn('PRIVATE_VALUE',json.dumps(result))
+        for bad in (True,-1,4501,float('inf'),float('nan'),'PRIVATE_VALUE'):
+            row=copy.deepcopy(p);row['elapsed_seconds']=bad
+            result=A.summarize({},l,source_digest=SHA,progress=row)
+            self.assertIsNone(result['failure_progress']['elapsed_seconds'])
+        for field,bad in (('stage','PRIVATE_VALUE'),('stage',{}),('schema',True),('reason','PRIVATE_VALUE'),
+                          ('snapshot_is_acceptance',True),('model_ticks_are_hardware_cycles',True)):
+            row=copy.deepcopy(p);row[field]=bad
+            result=A.summarize({},l,source_digest=SHA,progress=row)
+            self.assertEqual(result['failure_progress'],A._progress_empty())
+        for row in (r,p,h):row.update(path='/PRIVATE_VALUE',shape=[99],stride=[99],private_hash='f'*64,error='PRIVATE_VALUE')
+        result=A.summarize(r,l,source_digest=SHA,progress=p,heartbeat=h)
+        for text in ('PRIVATE_VALUE','f'*64,'shape','stride','private_hash'):
+            self.assertNotIn(text,json.dumps(result))
+        result['failure_progress']['private']='PRIVATE_VALUE'
+        with self.assertRaises(ValueError):A.validate_summary(result)
+
+    def test_unknown_heartbeat_or_failed_observation_stays_unavailable(self):
+        r,l,p,h=incomplete_receipts();h['last_stage']['stage']='PRIVATE_VALUE'
+        result=A.summarize({},l,source_digest=SHA,heartbeat=h)
+        self.assertEqual(result['failure_progress'],A._progress_empty())
+        with patch.object(A,'ROOT',A.CI_ROOT),patch.object(A.closure,'digest',return_value=SHA),\
+             patch.object(A,'_read',side_effect=[r,l,ValueError('PRIVATE_VALUE')]),\
+             patch.object(A,'_read_progress',side_effect=ValueError('PRIVATE_VALUE')):
+            result=A.collect(execute=True,source_digest=SHA)
+        self.assertEqual(result['failure_kind'],'BUDGET_EXCEEDED')
+        self.assertEqual(result['exception_class'],'BudgetExceeded')
+        self.assertNotIn('PRIVATE_VALUE',json.dumps(result))
 
     def test_missing_receipts_and_strict_json(self):
         result=A.summarize({}, {}, source_digest=SHA)

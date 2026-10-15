@@ -9,7 +9,7 @@ from unittest.mock import patch
 from . import bootstrap as B
 from candidates.qwen2_fullblock_ci_reference import failure_diagnostic as F
 ROOT=Path(__file__).resolve().parents[2]
-AUTH='candidates/qwen2_ci_reference_diagnostic_authorization_v2'
+AUTH='candidates/qwen2_ci_reference_avx2_authorization'
 PHASES={'ADMIT','PRECHECK','BINDINGS','ISSUER','GUARD','AGGREGATE','COMPLETE'}
 FILES={
  'BOOTSTRAP':'candidates/qwen2_fullblock_ci_execution/bootstrap.py',

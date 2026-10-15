@@ -88,7 +88,7 @@ def observed_python():
 
 def runtime_pins(root=ROOT):
     need(root == CI_ROOT and root == ROOT, 'exact CI checkout root required')
-    pins = O.load_pins(root)
+    pins = dependency('candidates/qwen2_fullblock_ci_execution/runtime_profile.py').apply(O.load_pins(root))
     pins['capture_environment']['PYTHONPATH'] = str(root/'work/runtime_recovery/site-packages')
     pins['runtime_native_files']['python'] = observed_python()
     # The other five native files and all numerical runtime requirements remain exact.
@@ -96,8 +96,8 @@ def runtime_pins(root=ROOT):
 
 def bootstrap_policy():
     """The reviewed procedure, not approval of as-yet-unobserved receipt bytes."""
-    original = O.load_pins(ROOT)
-    return dict(schema=1,kind='SOURCE_POLICY_FOR_ONE_NEW_PLATFORM_BOOTSTRAP',root=str(CI_ROOT),
+    original = dependency('candidates/qwen2_fullblock_ci_execution/runtime_profile.py').apply(O.load_pins(ROOT))
+    result = dict(schema=1,kind='SOURCE_POLICY_FOR_ONE_NEW_PLATFORM_BOOTSTRAP',root=str(CI_ROOT),
         input_paths=INPUT_PATHS,output_namespace=WORK,original_pins_sha256=O.PINS_SHA256,
         python=dict(resolved_path_within=str(PYTHON_PREFIX),version=[3,12,14],**PYTHON_IDENTITY),
         other_native_files={k:v for k,v in original['runtime_native_files'].items() if k!='python'},
@@ -105,6 +105,9 @@ def bootstrap_policy():
         observed_bindings_independently_reviewed=False,
         output_scope='SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED',
         frozen_mode_available=False,numerical_acceptance_allowed=False)
+    if original['capture_environment']['ATEN_CPU_CAPABILITY'] is not None:
+        result['aten_dispatch_environment'] = original['capture_environment']['ATEN_CPU_CAPABILITY']
+    return result
 
 def derive_bindings(root=ROOT):
     """Observe only new metadata. This does not review, approve or authorize it."""
@@ -233,12 +236,29 @@ def metadata_check(root,pins):
     return dict(raw_tensors=13,producer_roles=14,raw_payload_read=False,producer_payload_read=False,
         proof_files=proofs,raw_support_files={},fresh_tail_receipts=14,reused_tail_tensors=0)
 
+def check_contract(pins):
+    profile = dependency('candidates/qwen2_fullblock_ci_execution/runtime_profile.py')
+    if not profile.selected():
+        O.check_contract(pins)
+        return
+    expected = runtime_pins(ROOT)
+    need(same(pins['runtime_requirements'], expected['runtime_requirements']),
+         'exact AVX2 candidate runtime required')
+    need(same(pins['capture_environment'], expected['capture_environment']),
+         'exact AVX2 candidate environment required')
+    # Validate every unchanged numerical contract with the original validator.
+    # This temporary validation projection is never passed to execution/receipt.
+    validation = copy.deepcopy(pins)
+    validation['runtime_requirements']['capability'] = 'AVX512'
+    O.check_contract(validation)
+
+
 def source_check(root,pins):
     require_supported_python()
     source_manifest(root)
     need(root == ROOT and root.resolve() == ROOT and (root/'.git').exists(), 'exact checkout root required')
     need(same(pins,load_pins(root)), 'effective CI binding drift')
-    O.check_contract(pins)
+    check_contract(pins)
     for path,spec in pins['sources'].items():
         checked(root,path,spec)
     model = official_nodes(root,pins['model_ast_nodes'],MODEL_SOURCE,pins['sources'])

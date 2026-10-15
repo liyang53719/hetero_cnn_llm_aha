@@ -133,3 +133,11 @@ that this CI platform has generated raw inputs or executed a reference.
 它的 guard 捕获异常后只有本地 JSON，旧 trace 提取无法定位。新增固定异常类别、
 源码模块枚举/行号和固定阶段投影，覆盖 worker 与外层 supervisor，原异常/返回/清理
 及计算均保持。下一次仅新单次证书的短诊断，不沿用前次授权；不上传异常正文。
+
+### AVX2 独立候选（未获得数值结论）
+
+仅显式 QWEN2_CI_RUNTIME_PROFILE=avx2-candidate-v1 且 ATEN_CPU_CAPABILITY=avx2 启用。默认 AVX512 runtime 契约不改；候选固定新观察 capability/build digest 与原五 native、Python ELF、线程、精度/顺序、原29输出期望。原 guard 的环境重建从候选 capture_environment 重新注入 avx2，所有 fresh worker 重验环境。prepare 先检查 Linux AVX2/FMA，防止官方 override 绕过硬件检测。
+
+官方固定 Torch commit 449b1768410104d3ed79d3bcfe4ba1d65c7f22c0 的 DispatchStub.cpp 明确支持 ATEN_CPU_CAPABILITY=avx2，11893字节 SHA256 b77d16444f42d6e0707c581888d5e2069c7958a01ee4cf77a432bd6d13827032。来源：https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/DispatchStub.cpp 。该设置仅限制 ATen dispatch，不证明 MKL/oneDNN 或跨CPU结果等价；必须新一次参考实际比较。
+
+单次参考预算15分钟：安装7分钟、prepare4分钟、capture3分钟，原内部120/122秒不改，无DUT。旧AVX512/旧runner失败记录保留；本候选的独立source授权只能用于本次参考，不能继承或放宽数值门。

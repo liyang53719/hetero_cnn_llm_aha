@@ -1,5 +1,5 @@
 name: qwen2-reference-ci-diagnostic
-# One reviewed reference-only diagnostic with worker/supervisor safe failure telemetry.
+# One reviewed AVX2 candidate reference; original numerical expectations are unchanged.
 on:
   workflow_dispatch:
   push:
@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
+      QWEN2_CI_RUNTIME_PROFILE: 'avx2-candidate-v1'
+      ATEN_CPU_CAPABILITY: 'avx2'
       PYTHONNOUSERSITE: '1'
       PYTHONDONTWRITEBYTECODE: '1'
       MKL_NUM_THREADS: '4'
@@ -33,7 +35,7 @@ jobs:
       - name: Admit exact independently reviewed source and budget
         run: |
           mkdir -p work/ci_dut_logs
-          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_execution.reference_diagnostic admit 2> work/ci_dut_logs/admit.log || { echo 'Source admission failed.'; exit 1; }
+          python -B -m candidates.qwen2_fullblock_ci_execution.reference_diagnostic admit 2> work/ci_dut_logs/admit.log || { echo 'Source admission failed.'; exit 1; }
       - name: Install exact official runtime wheels
         timeout-minutes: 7
         run: |
@@ -41,8 +43,8 @@ jobs:
       - name: Prepare fixed inputs and current native identities
         timeout-minutes: 4
         run: |
-          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_ci_prepare_diagnostic.diagnostic --execute --download 2> work/ci_dut_logs/prepare-launcher.log
+          python -B -m candidates.qwen2_ci_prepare_diagnostic.diagnostic --execute --download 2> work/ci_dut_logs/prepare-launcher.log
       - name: Capture official reference and check fixed expectations locally
         timeout-minutes: 3
         run: |
-          env -u ATEN_CPU_CAPABILITY python -B -m candidates.qwen2_fullblock_ci_execution.reference_diagnostic capture 2> work/ci_dut_logs/reference.log || { echo 'Official reference failed.'; exit 1; }
+          python -B -m candidates.qwen2_fullblock_ci_execution.reference_diagnostic capture 2> work/ci_dut_logs/reference.log || { echo 'Official reference failed.'; exit 1; }

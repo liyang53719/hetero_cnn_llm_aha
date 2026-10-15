@@ -12,6 +12,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+from . import runtime_profile
 
 ROOT = Path(__file__).resolve().parents[2]
 CI_ROOT = Path('/home/runner/work/hetero_cnn_llm_aha/hetero_cnn_llm_aha')
@@ -69,6 +70,7 @@ def location(root):
 
 
 def _expected(pins):
+    pins = runtime_profile.apply(pins)
     need(set(pins['runtime_native_files']) == NAMES, 'exact six original native identities')
     native = {name: {k: record[k] for k in ('bytes', 'sha256')}
               for name, record in pins['runtime_native_files'].items()}
@@ -103,7 +105,13 @@ def initialize(root=ROOT, *, execute=False):
          CI_ROOT / 'candidates/qwen2_fullblock_ci_prepare/platform_inventory.py',
          'published inventory origin drift')
     need(same(published.inventory.identity(executable), PYTHON_IDENTITY), 'reviewed Python ELF identity required')
-    current = published.initialize()
+    if runtime_profile.selected():
+        from . import platform_avx2
+        need(Path(platform_avx2.__file__).resolve() == CI_ROOT /
+             'candidates/qwen2_fullblock_ci_execution/platform_avx2.py', 'candidate initializer origin drift')
+        current = platform_avx2.initialize()
+    else:
+        current = published.initialize()
     need(same(current, _expected(pins)), 'current CI platform summary drift')
     need(location(root) == executable, 'interpreter path changed during initialization')
     need(same(published.inventory.identity(executable), PYTHON_IDENTITY), 'Python ELF changed during initialization')

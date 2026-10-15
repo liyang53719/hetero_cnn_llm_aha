@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: bca04670079cdbf050392b1f2fbe9818168dd2ff39cdee296c3e3d4c59760d95
+计划SHA256: 9d6c881124058d1db2f7503d03cbc9239832842d51cb9ffe019fa24ec02957a8
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1850,3 +1850,18 @@ Attention供数与完整块账本增量20261015:
   - QK矩形lane映射保留十六stripe有序归约及dot与scale两处BF16边界；PV保留原因果累加与最终BF16边界。旧rectangular参考不能直接代替当前live算术。
   - 为Scalar与SiLU分别保留调用工作量、依赖与真实延迟账；调用数不能当作硬件周期。
   验收状态: 原完整M128的scores、logits、prob、gate四项数值失败保持，其他四block和更长prefill无新增通过；最终完整RTL数值与90百分比利用率目标不变，硬件周期及利用率仍未实测。
+
+共享A与QK控制RTL增量20261015:
+  已发布共享A: e471649dfdb6a096673ba0c4da7d19abdc7f35fa
+  共享A实绩: 普通及优化Python各18冷测试；一次11案例合成M1与M2使用原Dense A Banks，输出及十项中间观察逐位一致，M2背压及六项实际故障排空通过。没有第二份688KiB数据数组。
+  故障恢复边界: A租约释放和Dense入口A门恢复不代表整个后端可继续；六故障均保留Matrix reset_required，下一业务仍需复位。
+  已发布QK控制: 7f9b5cbb317c0caca430773cfe0fb17691b646ec
+  CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38725277907
+  控制RTL实绩: 默认关闭QK profile的三个Chisel单测经Verilator实际通过，生成三份控制testbench RTL、两种源码哈希；工具链20秒、host回归12秒、控制编译及仿真283秒。
+  控制范围: 合成Matrix返回验证默认关闭、五context四十返回、B写ACK及fold释放、错误终态和abort排空；实际4096MAC Matrix阵列未在该RTL测试实例化，未取得端到端算术RTL通过。
+  独立host回归: 32项原Matrix及10项既有矩形profile、9项QK载荷、8项ACK phase测试通过；这些host数值模型证据与控制RTL证据分开记录。
+  下一步:
+  - 先选实际Matrix接线的最小数值case，冻结源与刺激，复用既有官方工具链并限定单独单元预算，避免触发旧长矩阵作业。
+  - 接入真实有限A和B端口、仲裁与Scalar有序fold后校验同刺激；不能把合成返回当实际阵列输出。
+  - 继续计完整块供数、有效lane、Scalar依赖、最终ACK及排空；控制单测耗时不是硬件周期或MAC利用率。
+  验收状态: 原M128四项数值失败、后四block及长prefill状态保持；实际完整RTL数值和90百分比目标未关闭。共享A合成M1与M2不构成完整prefill通过。

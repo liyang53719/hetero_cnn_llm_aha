@@ -4,6 +4,12 @@
 
 完整计划已迁入根目录 `doc/`。旧 `plans/` 路径是兼容符号链接，不再维护第二份计划；计划与清单统一在此维护；历史44个任务和后续新增的U00/U01共46个父任务均保留，验收门禁不因文档更新而放宽。计划中的“待执行”是编制时快照，不用于派工。Windows 未启用符号链接时直接使用 `doc/` 路径；不要把链接文本当作 YAML 解析。
 
+## 共享A与QK控制RTL更新（2026-10-15）
+
+[共享A缓存接线](../candidates/qwen2_attention_shared_a_integration/README.md) `e471649d` 已完成18项普通/优化冷测试及11项合成M1/M2案例；使用原Dense A Banks，故障排空后仍保留Matrix需复位标志。
+
+[默认关闭QK控制profile](../candidates/qwen2_rectangular_qk_profile/README.md) `7f9b5cbb` 的[独立单元CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38725277907)成功：Chisel确实生成控制RTL并经Verilator跑过3项测试，编译/仿真阶段283秒。Matrix返回由测试控制，真实4096MAC阵列RTL未实例化；host42+9+8项数值/ACK回归另行通过。下一步是冻结最小实际Matrix接线数值case及有界单元预算。原完整M128四项失败和五block待验状态保持，完整硬件周期与利用率仍无实测。
+
 ## Attention供数更新（2026-10-15）
 
 已发布 [有限KV缓存候选](../candidates/qwen2_attention_resident_candidate/README.md) `8894ee2d`：M1/M2合成输入的输出及十个中间观察字段逐位相同，五正例、九故障注入、13项普通及优化冷测通过；[源码检查CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38719561588)成功。M2外部读取由49152降至16384字节，Matrix/Scalar请求数量不变。本地端口与ACK有成本，完整链A仲裁和Chisel尚未接线，未验证M128缓存prefill。

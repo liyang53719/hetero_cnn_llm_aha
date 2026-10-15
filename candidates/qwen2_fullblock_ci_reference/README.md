@@ -116,3 +116,15 @@ source provenance remains in the original repository. No old pass is inherited.
 
 The cold tests are source/control-flow and synthetic-input tests, not evidence
 that this CI platform has generated raw inputs or executed a reference.
+
+## 2026-10-15 接线修复与下一步
+
+真实 CI 的输入准备已完成两次；完整 job 在参考步骤提前失败，DUT 未启动。
+静态与冷复现确认：原 reader 漏接原生产者固定保留的 `rope_full.f32le`
+和 `rope_build/`。本版本精确接纳该清单、固定元数据和无别名 stat，
+不在 metadata 阶段读取 operand 或调用编译器；额外项仍拒绝。
+此缺陷与该次失败相容，尚无原详细日志证明它是当次第一错误。
+
+下一步仅新证书授权的一次 15 分钟以内 prepare→reference 集成诊断，
+不启动 DUT。诊断输出限固定阶段/模块枚举和有界源码行号，详细记录留 CI 本地。
+旧单次证书保持历史原字节；源码更新后旧闭包准入失败，不能自动重跑。

@@ -193,7 +193,29 @@ def metadata_check(root,pins):
             need(same(record,spec['record']), 'producer role identity: '+name)
             fields(record,{k:spec[k] for k in ('bytes','sha256')},'producer bytes/hash')
             stat_only(root,spec['path'],spec['bytes'])
-    need({p.name for p in safe_path(root,PREFIX+'/inputs').iterdir()} == {'INPUTS_READY.json'}|{n+'.bin' for n in ready['roles']},'exact prefix typed inventory')
+    directory = safe_path(root,PREFIX+'/inputs')
+    need({p.name for p in directory.iterdir()} ==
+         {'INPUTS_READY.json','rope_full.f32le','rope_build'}|{n+'.bin' for n in ready['roles']},
+         'exact prefix typed inventory')
+    need(same(ready['rope'],{**qp['rope'],'file':'rope_full.f32le'}),'exact RoPE metadata')
+    need(qp['rope']['bytes'] == 328448,'fixed complete RoPE size')
+    stat_only(root,PREFIX+'/inputs/rope_full.f32le',328448)
+    build = safe_path(root,PREFIX+'/inputs/rope_build')
+    need(build.is_dir() and {p.name for p in build.iterdir()} ==
+         {'independent.c','independent.so','build.log'},'exact RoPE build inventory')
+    # Preparation already verifies support bytes and compiler provenance. This
+    # reader checks their fixed metadata and presence only, with no tool calls.
+    record = ready['rope_build']
+    exact_keys(record,{'command','source_sha256','binary_sha256','compiler_sha256',
+                       'compiler','historical_binary_identity_claimed'},'RoPE build')
+    fields(record,dict(command=Q.compile_command(directory),source_sha256=qp['rope_c_source_sha256'],
+        historical_binary_identity_claimed=False),'RoPE build source/flags')
+    for key in ('source_sha256','binary_sha256','compiler_sha256'):Q.digest(record[key],key)
+    need(type(record['compiler']) is str and bool(record['compiler']) and '\n' not in record['compiler'],
+         'compiler version line required')
+    for name in ('independent.c','independent.so','build.log'):
+        path = safe_path(root,PREFIX+'/inputs/rope_build/'+name)
+        need(path.is_file() and (name == 'build.log' or path.stat().st_size > 0),'RoPE support file stat')
     all_tensors = prefix['tensors']+data['tail_raw']['tensors']
     need(len({t['local_name'] for t in all_tensors}) == 13,'unique raw13')
     by_name = {t['local_name']:t for t in all_tensors}

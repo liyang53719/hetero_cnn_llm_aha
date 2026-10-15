@@ -40,10 +40,21 @@ class MetadataTests(unittest.TestCase):
             put(R.PREFIX+'/raw/'+t['local_name']+'.receipt.json',R.encoded(receipt))
             sparse(R.PREFIX+'/raw/'+t['file'],t['bytes'])
         prefix_raw=R.encoded(prefix);put(R.INPUT_PATHS['prefix_raw'],prefix_raw)
+        put(Q.SCALAR_SOURCE,(R.ROOT/Q.SCALAR_SOURCE).read_bytes())
+        support=R.PREFIX+'/inputs/rope_build/'
+        put(support+'independent.c',Q.rope_source(root,qp).encode())
+        put(support+'independent.so',b'synthetic support binary never loaded')
+        put(support+'build.log',b'')
+        sparse(R.PREFIX+'/inputs/rope_full.f32le',328448)
+        build=dict(command=Q.compile_command(root/(R.PREFIX+'/inputs')),
+            source_sha256=qp['rope_c_source_sha256'],
+            binary_sha256=R.sha(b'synthetic support binary never loaded'),
+            compiler_sha256='a'*64,compiler='synthetic cold compiler identity',
+            historical_binary_identity_claimed=False)
         ready=Q.report(R.ROOT,qp,'materialize')
         roles={k:v['record'] for k,v in self.original['producer_roles'].items() if k not in tp['roles']}
         ready.update(status='PINNED_PREFIX_INPUTS_READY_NO_MODEL_EXECUTION',roles=roles,
-            subset=R.PREFIX+'/raw',subset_manifest_sha256=R.sha(prefix_raw),rope={},rope_build={},
+            subset=R.PREFIX+'/raw',subset_manifest_sha256=R.sha(prefix_raw),rope={**qp['rope'],'file':'rope_full.f32le'},rope_build=build,
             python='synthetic',python_executable='synthetic',torch_imported=False,numpy_imported=False)
         put(R.INPUT_PATHS['prefix_ready'],R.encoded(ready))
         for k,v in roles.items():sparse(R.PREFIX+'/inputs/'+k+'.bin',v['bytes'])
@@ -83,12 +94,15 @@ class MetadataTests(unittest.TestCase):
     def check(self,root,pins):
         original=io.open
         def guarded(path,*args,**kwargs):
-            if str(path).endswith('.bin') and Path(path) != root/pins['shard']['header']['path']:
+            if (str(path).endswith('.bin') and Path(path) != root/pins['shard']['header']['path']) or Path(path).name in ('rope_full.f32le','independent.c','independent.so','build.log'):
                 raise AssertionError('oracle metadata opened operand')
             return original(path,*args,**kwargs)
         recipe_identity=self.Q.recipe_identity(R.ROOT)
         with patch.object(R,'load_pins',return_value=pins),patch.object(self.Q,'load_pins',return_value=self.qp), \
              patch.object(self.Q,'recipe_identity',return_value=recipe_identity), \
+             patch.object(self.Q,'compiler_identity',side_effect=AssertionError('compiler invoked')), \
+             patch.object(self.Q,'check_rope_build',side_effect=AssertionError('tool byte reader invoked')), \
+             patch.object(self.Q,'read_inputs',side_effect=AssertionError('full prefix reader called')), \
              patch.object(self.T,'contract',return_value=(self.a,self.n,self.tp)), \
              patch.object(self.a,'snapshot',return_value={}),patch('io.open',side_effect=guarded), \
              patch.object(self.T,'audit_raw',side_effect=AssertionError('full tail audit called')), \
@@ -115,6 +129,54 @@ class MetadataTests(unittest.TestCase):
             root=Path(d);pins=self.fixtures(root)
             (root/(R.PREFIX+'/inputs/extra.bin')).touch()
             with self.assertRaisesRegex(ValueError,'inventory'):self.check(root,pins)
+
+    def test_real_producer_inventory_has_twelve_entries(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);pins=self.fixtures(root)
+            self.assertEqual(len(list((root/R.PREFIX/'inputs').iterdir())),12)
+            self.check(root,pins)
+
+    def test_rope_support_extra_missing_and_alias_rejected(self):
+        for change in ('extra','missing','alias'):
+            for name in ('independent.c','independent.so','build.log'):
+                with self.subTest(change=change,name=name),tempfile.TemporaryDirectory() as d:
+                    root=Path(d);pins=self.fixtures(root)
+                    p=root/R.PREFIX/'inputs/rope_build'/name
+                    if change=='extra':(p.parent/'unexpected').touch()
+                    elif change=='missing':p.unlink()
+                    else:
+                        target=root/'alias-target';target.write_bytes(p.read_bytes())
+                        p.unlink();p.symlink_to(target)
+                    with self.assertRaises(ValueError):self.check(root,pins)
+
+    def test_rope_full_missing_size_and_alias_rejected(self):
+        for change in ('missing','size','alias','build_alias'):
+            with self.subTest(change=change),tempfile.TemporaryDirectory() as d:
+                root=Path(d);pins=self.fixtures(root)
+                p=root/R.PREFIX/'inputs/rope_full.f32le'
+                if change=='missing':p.unlink()
+                elif change=='size':
+                    with p.open('wb') as f:f.truncate(328447)
+                elif change=='alias':
+                    target=root/'alias-target';p.rename(target);p.symlink_to(target)
+                else:
+                    p=p.parent/'rope_build';target=root/'aliased-build';p.rename(target);p.symlink_to(target,target_is_directory=True)
+                with self.assertRaises(ValueError):self.check(root,pins)
+
+    def test_empty_rope_source_and_binary_rejected(self):
+        for name in ('independent.c','independent.so'):
+            with self.subTest(name=name),tempfile.TemporaryDirectory() as d:
+                root=Path(d);pins=self.fixtures(root)
+                (root/R.PREFIX/'inputs/rope_build'/name).write_bytes(b'')
+                with self.assertRaises(ValueError):self.check(root,pins)
+
+    def test_rope_metadata_drift_rejected_even_when_rebound(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);pins=self.fixtures(root)
+            p=root/R.INPUT_PATHS['prefix_ready'];value=R.parse(p.read_bytes())
+            value['rope']['bytes']=328447;p.write_bytes(R.encoded(value))
+            pins['input_metadata']['prefix_ready'].update(R.identity(p))
+            with self.assertRaisesRegex(ValueError,'RoPE metadata'):self.check(root,pins)
 
     def test_missing_tail_receipt_rejected_even_with_rehashed_metadata(self):
         with tempfile.TemporaryDirectory() as d:

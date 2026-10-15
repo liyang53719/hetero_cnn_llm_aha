@@ -9,7 +9,8 @@ WORKFLOW='.github/workflows/qwen2-fullblock-ci-bootstrap.yml'
 
 def source_manifest(root=ROOT):
     root=Path(root)
-    names={WORKFLOW,'candidates/qwen2_fullblock_reference_m128/pins.json',
+    names={WORKFLOW,'.github/workflows/qwen2-reference-ci-diagnostic.yml',
+           'candidates/qwen2_ci_prepare_diagnostic/diagnostic.py','candidates/qwen2_fullblock_reference_m128/pins.json',
            'candidates/qwen2_fullblock_reference_m128/FROZEN_CONTRACT.json'}
     for package in PACKAGES:
         directory=root/'candidates'/package

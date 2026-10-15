@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: cf18e4ebcba5cfc387fa12f05bf605bd849255088f2c6361d394f274efa8b41e
+计划SHA256: 0f247d1a32b0e192a6875617aeb707efa4d80a0d214f1ad004c21f2c07e77e18
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1809,3 +1809,26 @@ Qwen2_M128完整链数值失败及小链隔离_20261015:
   保留状态: U00.2 ongoing；U01 to do；46个父任务及全部叶项状态不变，五block实际完整RTL与固定资源完整周期联合门仍open。
   报告: doc/QWEN2_M128_FULLBLOCK_NUMERIC_FAILURE_20261015_CN.md
   发布边界: 仅运行链接、固定聚合、摘要与源码身份；不新增私有运行目录、逐输出hash/shape/stride或换名的旧拒绝metadata。
+
+精确树调度增量20261015:
+  优先级: 本节更新局部模型及下一步；完整M128验收仍为前述FAILED，原数值门、任务状态和最终RTL目标不变。
+  已发布源码: 6576194c5dc8e050c281dcca8f19c404250741fe
+  源码目录: candidates/qwen2_exact_tree_scheduler
+  冷测试: 普通与优化Python各30项合成测试通过，独立审查通过。
+  CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38712822743
+  已实现模型: 五context加两个16KiB A槽的固定64partial有序树；有限tag、credit、供数ready、hazard、ACK、epoch及abort-drain。FP32算术与事务排程是两项独立验证，尚无带payload的联合流水验证。
+  固定资源: 4096 MAC；五context共80KiB accumulator；两A槽32KiB；不借用有读者的result FIFO。
+  模型周期: M16乘N256串行tile为88448，固定分母有效MAC比约0.017366；这是条件软件调度预测，性能NO_GO。
+  条件上界: 冷B唯一786432字节，以现64字节落地端口至少12288拍，上界0.125。排除填充等成本的0.96仅局部算术上界。
+  未实现硬件: 新FP32跨context Add、FP32读回与restore、A槽直接路由及真实commit接口尚未接入Chisel；hardware_cycles、hardware_utilization、hardware_duty均为空，RTL未执行。
+  少partial结论: 已发布P2与P4六个预声明案例，五个scores门失败、三个prob门失败；仅baseline P2通过，两图整体NO_GO，不继续择优搜索。
+  当前进行中: 新独立transposed M128乘N32有限资源模型；保留原64partial图，先证明供数、树frontier和完整冷启动分母，再判断硬件改造价值。
+  实际RMS边界: n0以FP32容器写DDR共768KiB；Norm全部ACK和publish后Dense重新读取，转换成384KiB BF16驻A。当前只有同一Dense job的N窗口复用，Q与K新job均clear及reload，无已证明的跨stage免费warm。
+  当前入口瓶颈: transposed A入口采用全bank RMW；W入口为单beat单outstanding，双buffer不能消除持续吞吐限制。共享A lease、有限gather或合法预打包、写合并和FP32归约frontier均需明确新增接口及成本。
+  改造顺序:
+  - 保留当前每job冷加载与原树的NO_GO基线，记录逻辑字节和物理bank搬运。
+  - 建模有界转置写合并以减少A RMW，保持原BF16边界及Norm完整ACK；不假设跨stage直通。
+  - 核现DMA可复用能力，明确有限descriptor、mailbox与operand credit及非连续权重地址，不假造连续burst或无限队列。
+  - 证明五context与树frontier生命周期和新FP32 Add/restore端口，再做数值及周期联合模型测试。
+  - 如新增resident lease或跨stage直通，单独证明身份、依赖、credit和abort；所有等待及DDR往返进入完整block分母。
+  验收边界: 子图条件上界不等于完整block利用率；五block与M128完整RTL联合验收仍open，其他四block和更长prefill未取得新增通过。

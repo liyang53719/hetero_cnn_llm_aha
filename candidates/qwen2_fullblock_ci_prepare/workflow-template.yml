@@ -1,0 +1,33 @@
+# Inactive template: review before installing under .github/workflows.
+# Platform bootstrap only, no downloads/native imports/reference/DUT/RTL.
+name: qwen2-fullblock-platform-inventory
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-fullblock-platform-inventory
+  cancel-in-progress: false
+jobs:
+  inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Cold inventory tests
+        run: python -B -m unittest discover -s candidates/qwen2_fullblock_ci_prepare -v
+      - name: Collect untrusted new-platform identity, never admission
+        run: |
+          mkdir -p work/ci_platform
+          python -B candidates/qwen2_fullblock_ci_prepare/platform_inventory.py --inventory > work/ci_platform/platform_inventory.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-platform-inventory-${{ github.sha }}-${{ github.run_id }}
+          path: work/ci_platform/platform_inventory.json
+          if-no-files-found: error
+          retention-days: 7

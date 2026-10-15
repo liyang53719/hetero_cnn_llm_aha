@@ -143,3 +143,9 @@ that this CI platform has generated raw inputs or executed a reference.
 单次参考预算15分钟：安装7分钟、prepare4分钟、capture3分钟，原内部120/122秒不改，无DUT。旧AVX512/旧runner失败记录保留；本候选的独立source授权只能用于本次参考，不能继承或放宽数值门。
 
 AVX2首次实际运行38675911830已完成prepare，在参考capture.py第265行prior18精确一致性门失败，保留失败，不算参考通过。下一次独立授权仅补失败现场的只读固定枚举：节点NODE_00..17、HASH/LAYOUT/DTYPE/SHAPE/STRIDE/BYTES类别及不同字段计数；不输出实际节点名称、hash、shape、stride或tensor。该投影只解释首个失败的比较，不能代表全部18/29节点差异统计。原异常与数值门、原29期待不变；如涉及算术值差异，先重新审查平台/算术顺序，不直接改期待。
+
+全已有输出诊断：38676537747确认首失败OUTPUT前的NODE_15，仅HASH三字段差异（源码映射softmax_fp32），无shape/dtype/stride/layout差异。下一次获独立授权的诊断在原失败catch对已经算出的29个outputs，仅沿原capture观察公式做精确BF16扩展、视图/连续化和本地hash。原计算链不重跑、tensor不写入、原失败状态不变，不seal、不声称通过。预先锁定既有原FROZEN_CONTRACT身份，外部只输出固定OUTPUT_00..28、类别和字段计数；空类别仅表示该既有输出的11字段匹配，不构成数值准入。
+
+可复核tiny观察测试（不是业务PASS）：PYTHONPATH="$PWD/work/runtime_recovery/site-packages:$PWD" QWEN2_TINY_OBSERVATION_TEST=1 python -B -m unittest candidates.qwen2_fullblock_ci_reference.test_all_comparisons -q。使用本地现存Torch、7424个合成元素，核值/版本/存储地址不变；普通冷测缺runtime时明确跳过该项。
+
+固定官方SoftMaxKernel.cpp显示最后维度FP32 softmax执行max归约、向量exp、sum归约及倒数乘；AVX2/AVX512为8/16通道、Sleef_expf8_u10/Sleef_expf16_u10，不同归约分组不保证逐位相同。仅源码机制证据，不推定本次误差大小或BF16落点。来源：https://raw.githubusercontent.com/pytorch/pytorch/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/SoftMaxKernel.cpp 和同commit的 aten/src/ATen/cpu/vec/functional_base.h 。

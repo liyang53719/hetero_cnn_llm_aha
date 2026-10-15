@@ -1,5 +1,5 @@
 name: qwen2-reference-ci-diagnostic
-# One reviewed AVX2 reference failure comparison; preserve every numerical acceptance gate.
+# One reviewed observation of all existing AVX2 outputs after original failure; no new acceptance.
 on:
   workflow_dispatch:
   push:

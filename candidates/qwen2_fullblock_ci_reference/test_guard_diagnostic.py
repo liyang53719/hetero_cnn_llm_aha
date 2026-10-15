@@ -10,8 +10,9 @@ from contextlib import redirect_stderr
 from . import test_lifecycle as fixture
 from . import failure_diagnostic as D
 from . import comparison_diagnostic as CDF
+from . import all_comparisons as ACD
 HERE=Path(__file__).resolve().parent
-with patch.dict(sys.modules,{'recipe':fixture.R,'lifecycle':fixture.L,'issuer':fixture.I,'failure_diagnostic':D,'comparison_diagnostic':CDF}):
+with patch.dict(sys.modules,{'recipe':fixture.R,'lifecycle':fixture.L,'issuer':fixture.I,'failure_diagnostic':D,'comparison_diagnostic':CDF,'all_comparisons':ACD}):
     spec=importlib.util.spec_from_file_location('ci_guard_diagnostic_test',HERE/'guard.py')
     G=importlib.util.module_from_spec(spec);spec.loader.exec_module(G)
 
@@ -57,5 +58,18 @@ class GuardDiagnosticTests(unittest.TestCase):
             self.assertEqual(G.worker('3','bootstrap','unused'),2)
         self.assertNotIn('projection',stream.getvalue())
         self.assertIn('WORKER_FAILED_UNSEALED',stream.getvalue())
+
+    def test_preloaded_expectations_exact_identity(self):
+        actual=G.comparison_expectations()
+        self.assertEqual(set(actual),set(ACD.NAMES))
+        with patch.object(G.R,'sha',return_value='0'*64):
+            with self.assertRaises(ValueError):G.comparison_expectations()
+
+    def test_all_observation_failure_does_not_mask_original(self):
+        error=ValueError('original');stream=io.StringIO()
+        with patch.object(ACD,'project',side_effect=ValueError('diagnostic')),redirect_stderr(stream):
+            G.emit_failure(error,'WORKER',{'unused':True})
+        self.assertNotIn('diagnostic',stream.getvalue())
+        self.assertEqual(D.checked(json.loads(stream.getvalue()))['origin'],'WORKER')
 
 if __name__=='__main__':unittest.main()

@@ -1,8 +1,12 @@
 {
   "files": {
     "README.md": {
-      "bytes": 10221,
-      "sha256": "201951c4a2d16b89fe7a1340f526aa028f4f4029a22e2e38532d560759b9b3f6"
+      "bytes": 11675,
+      "sha256": "2c64a470a01ddaf63e3544d49b03b4aa19beece1615b8cedf428b53e0b0386ea"
+    },
+    "all_comparisons.py": {
+      "bytes": 6151,
+      "sha256": "751f038962df4ad8fd2a77bb10f71509188616a7c20ae1c4116c07818bebba12"
     },
     "comparison_diagnostic.py": {
       "bytes": 4731,
@@ -17,8 +21,8 @@
       "sha256": "6b6f6e62381996a150c691eca4808930a8e8a90970cf387223a3dfa0d44638e5"
     },
     "guard.py": {
-      "bytes": 1832,
-      "sha256": "256fef983430394eb63f49bc25da5292226ed8ff534c59fdac58b594705e55a5"
+      "bytes": 2754,
+      "sha256": "1d341913f4826a9df2977a66a95caa2c2fd8ba1c5101703e92943d6da4f3abb0"
     },
     "issuer.py": {
       "bytes": 8041,
@@ -31,6 +35,10 @@
     "recipe.py": {
       "bytes": 19458,
       "sha256": "85eda71a7f7d57d2e044c60656c68694c0447205ea67db3113e8f9c1ded37949"
+    },
+    "test_all_comparisons.py": {
+      "bytes": 6784,
+      "sha256": "e705fed71d6ef4ec9d6beec7a4f1c89754a5546729aa3afeac56b60f54691738"
     },
     "test_avx2_contract.py": {
       "bytes": 2541,
@@ -49,8 +57,8 @@
       "sha256": "e0dbb3a0ff07b2814cd976fdfd315865c135a1c808e5dc63e05fc74b632b4407"
     },
     "test_guard_diagnostic.py": {
-      "bytes": 3724,
-      "sha256": "f750c0d7aa1a25ea10765fcac088c24e571c99d551ba04c305671e45d3d1c0d1"
+      "bytes": 4502,
+      "sha256": "e69f65b01b1c79410aca927e549d962503bd79ea0bd2dc17eeb146422d314bb0"
     },
     "test_issuer.py": {
       "bytes": 8067,

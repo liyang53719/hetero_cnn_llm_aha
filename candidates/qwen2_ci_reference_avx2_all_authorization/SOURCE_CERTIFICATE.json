@@ -1,0 +1,87 @@
+{
+  "budgets": {
+    "capture_limits": {
+      "automatic_retry": false,
+      "per_stream_retained_bytes": 65536,
+      "poll_seconds": 0.02,
+      "rss_bytes": 1610612736,
+      "rss_is_os_hard_cap": false,
+      "total_emitted_log_limit_bytes": 16777216,
+      "wall_seconds": 120
+    },
+    "cleanup_grace_seconds": 2,
+    "disk_budget": {
+      "bootstrap_plus_frozen_payload_bytes": 65208320,
+      "export_bytes_per_capture": 32571392,
+      "native_dumps_retained": false,
+      "native_mask_sidecar_bytes": 32768,
+      "payload_bytes_per_capture": 32604160,
+      "peak_rss_estimate": null,
+      "per_capture_cap_bytes": 35651584,
+      "total_cap_bytes": 72351744,
+      "wall_seconds_estimate": null
+    },
+    "outer_watchdog_seconds": 122
+  },
+  "exclusive_numeric_slot": true,
+  "frozen_mode_available": false,
+  "historical_receipts_revalidated": false,
+  "maximum_invocations": 1,
+  "mode": "bootstrap",
+  "no_retry": true,
+  "numeric_executed": false,
+  "numerical_acceptance_allowed": false,
+  "observed_bindings_independently_reviewed": false,
+  "output_scope": "SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED",
+  "policy_sha256": "b7408fc34963f03c71f749d3e2fea93d1e656f575da6c942b8dc4ab10aee368b",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "run_id": "ci01",
+  "schema": 1,
+  "source_closure_sha256": "93d8defcea77eb43cc84254c4260678c91285f3f26e45548932c8ff49691f4f9",
+  "source_manifest": {
+    "bytes": 2525,
+    "sha256": "8be8d65f2cb354809447bdc36c4a1e764f8891babce33136f390ee9181dd9d29"
+  },
+  "status": "APPROVED_SOURCE_POLICY_FOR_SINGLE_BOOTSTRAP",
+  "tool_identity": {
+    "all_zero_counts_do_not_replace_boundary_after_seal_or_numerical_acceptance": true,
+    "approved_scope": "single AVX2 reference; after exact original failure, observe already-computed29 outputs without rerunning original arithmetic; original failure and expectations unchanged",
+    "aten_cpu_capability": "avx2",
+    "business_reference_executed_by_reviewer": false,
+    "cold_tests_normal_explicit_skips": 1,
+    "cold_tests_normal_passed": 162,
+    "cold_tests_optimized_explicit_skips": 1,
+    "cold_tests_optimized_passed": 162,
+    "dut_executed_by_reviewer": false,
+    "dut_execution_allowed": false,
+    "implementation": "cpython",
+    "independent_nonzero_noncontiguous_original_ast_observation_match": true,
+    "job_timeout_minutes": 15,
+    "permitted_comparison_output": "fixed OUTPUT_00..28, fixed category enums, bounded field counts only; no actual tensor metadata or values",
+    "python_elf": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "python_version": [
+      3,
+      12,
+      14
+    ],
+    "reference_internal_wall_seconds": 120,
+    "reference_outer_watchdog_seconds": 122,
+    "review_event": "independent-avx2-existing-all29-observation-source-policy-20261015",
+    "reviewed_at_utc": "2026-10-15T03:41:21.816194+00:00",
+    "runtime_profile": "avx2-candidate-v1",
+    "source_manifest": {
+      "bytes": 2525,
+      "sha256": "8be8d65f2cb354809447bdc36c4a1e764f8891babce33136f390ee9181dd9d29"
+    },
+    "synthetic_elements_per_case": 7424,
+    "synthetic_tiny_runtime_tests_passed": 7,
+    "synthetic_values_versions_storage_pointers_unchanged": true
+  }
+}

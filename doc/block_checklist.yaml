@@ -1,7 +1,7 @@
 版本: 1
 仓库: liyang53719/hetero_cnn_llm_aha
 计划: doc/three_model_typical_block_closure_20260917_zh.yaml
-计划SHA256: 6a7cc9de256ef2f350382cde9348f532f2751465850b4cf2b81d2ad677055d6b
+计划SHA256: 0265a890df51496a67d8a3bf0cd83301a9a70d2100fd20924cfbe6b6cd054161
 设计基线: 746ddfb1bd521c9a3a36113fdc2fece4c6f1ed2e
 状态集合:
 - to do
@@ -1892,3 +1892,36 @@ Exact64完整诊断预算终态20261015:
   - 对实际公共小tile分层计时，定位主机空闲tick等软件开销；优化须保持每模拟edge、端口credit、后台DMA、最终内存及故障轨迹，不改变硬件周期分母。
   - 不延长预算或重复本次长链；先以有界小刺激验证等价，再评估完整M128必要集成。
   保留验收: 原完整M128的scores、logits、prob、gate四项数值失败仍未关闭；Qwen3.5-0.8B和35B-A3B各L0及L3无新增通过，1024或1224第二档未定，128仍优先。最终完整RTL数值与90百分比利用率目标保持。
+
+M16阶段成本与独立后置恢复增量20261015:
+  审查状态: 下列实际终态与独立后置恢复证据已独立核验；原运行失败及验收边界保持。
+  唯一模型运行: cost01
+  实际公共终态: 21个public completion、17个owner job、1个accepted launch result已完成。
+  模型主机成本:
+    child_CPU秒: 683.77
+    监督器wall秒: 684.29
+    说明: CPU包含setup和封存失败后的catch计时区间；监督器wall是独立观测，不是硬件周期。
+  原运行失败保留: cost01在FINAL_SEAL因tuple与list表示不一致而FAIL；不得改写原运行、原收据或补称原run已seal通过。
+  独立后置恢复:
+    范围: 单独POSTHOC校验并恢复51个本地实际输出与观察文件的封存证据，随后执行唯一fresh官方M16参考；不是重跑模型或沿用M128参考输出。
+    参考child_CPU秒: 5.55
+    参考监督器wall秒: 5.83
+    数值结果: 22个有原门限的BF16节点比较全部通过，原数值门未放宽；FP32 softmax仅作诊断，不列入这22门。
+    边界: 原进程内源、输入及native后验未到达；当前身份仅经POSTHOC核验，不证明从执行到恢复的连续身份。后置恢复与比较不将原FINAL_SEAL失败追认为成功，也不构成新的完整硬件或平台验收。
+  阶段CPU秒:
+    Q: 147.808
+    K: 25.499
+    Attention_pc10至12融合组: 17.947
+    FFN_pc16至18融合组: 300.360
+    Down: 160.241
+  主机成本解释: FFN与Down合计460.601秒CPU，约占原模型child累计683.77秒CPU的67.36%；两个融合组只各计一次，公开21个完成数不等于21段可相加的独立算子耗时。
+  源码CI:
+  - 提交: fc96c91
+    链接: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38757789302
+    状态: success
+  - 提交: d3b2530e
+    链接: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38758948901
+    状态: success
+  CI范围: 上述源码CI成功与cost01实际模型及独立后置参考观测分列；不能用源码CI替代数值运行证据。
+  下一步: 按线性工作量、因果Attention与固定物理执行成本分别评审新的M128预算；情景推算不是测得上限，不自动加时或重跑旧长链。
+  保留验收: 仅M16的DIAGNOSTIC_SOFTWARE_OWNER诊断，当前Chisel映射与完整RTL未验，性能NO_GO；不推M128、其他四block或更长prefill。原M128四项数值失败及3300秒预算失败保留，完整RTL数值与90百分比目标保持，U00.2 ongoing、U01 to do及全部历史任务状态不变。

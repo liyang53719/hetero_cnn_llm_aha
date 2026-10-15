@@ -4,6 +4,14 @@
 
 完整计划已迁入根目录 `doc/`。旧 `plans/` 路径是兼容符号链接，不再维护第二份计划；计划与清单统一在此维护；历史44个任务和后续新增的U00/U01共46个父任务均保留，验收门禁不因文档更新而放宽。计划中的“待执行”是编制时快照，不用于派工。Windows 未启用符号链接时直接使用 `doc/` 路径；不要把链接文本当作 YAML 解析。
 
+## M16阶段成本与独立后置恢复增量（2026-10-15）
+
+唯一 `cost01` 已完成21个public completion、17个owner job和1个accepted launch result，模型child CPU为683.77秒、监督器wall为684.29秒；随后在 `FINAL_SEAL` 因tuple/list表示不一致而失败，原FAIL与原收据保留。独立POSTHOC校验恢复51个本地实际输出与观察文件的封存证据后，唯一fresh官方M16参考用时5.55秒CPU、5.83秒监督器wall；22个有原门限的BF16节点比较全部通过，FP32 softmax仅作诊断。原进程内源、输入及native后验未到达；当前身份仅经POSTHOC核验，不证明从执行到恢复的连续身份。上述终态与独立后置恢复证据已独立核验。
+
+实测阶段CPU：Q 147.808秒、K 25.499秒、pc10–12 Attention融合组17.947秒、pc16–18 FFN融合组300.360秒、Down 160.241秒。FFN与Down合计460.601秒，占原模型child累计CPU的67.36%；该分母包含setup和封存失败后的catch计时区间。融合组各只计一次，21个公开完成数不代表21段独立可加耗时。
+
+阶段日志源码 `fc96c91` 的[CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38757789302)与M16诊断源码 `d3b2530e` 的[CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38758948901)均成功；源码CI与上述实际数值观测分别记账。后置恢复不改写原run为PASS，M16诊断不推出M128、当前Chisel、完整RTL或性能通过，性能仍NO_GO。下一步按线性工作量、因果Attention和固定物理执行成本分别评审新M128预算，不能把情景推算当测得上限；原四项数值失败、长链预算失败及所有任务状态保持。
+
 ## Exact64完整软件诊断预算终态（2026-10-15）
 
 [唯一完整诊断CI](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38738164097)已结束失败。M128的Q和K软件owner确实完成352321536次FMA、14680064次Add、3584个tile及917504字节最终ACK；主worker在3300.2795秒wall触及内层预算，监督器3303.9979秒内完成进程组清理。最后算子未知，尚无完整seal或任何官方数值比较，不能用局部完成替代全链通过。

@@ -1,0 +1,109 @@
+{
+  "budgets": {
+    "capture_limits": {
+      "automatic_retry": false,
+      "per_stream_retained_bytes": 65536,
+      "poll_seconds": 0.02,
+      "rss_bytes": 1610612736,
+      "rss_is_os_hard_cap": false,
+      "total_emitted_log_limit_bytes": 16777216,
+      "wall_seconds": 120
+    },
+    "cleanup_grace_seconds": 2,
+    "disk_budget": {
+      "bootstrap_plus_frozen_payload_bytes": 65208320,
+      "export_bytes_per_capture": 32571392,
+      "native_dumps_retained": false,
+      "native_mask_sidecar_bytes": 32768,
+      "payload_bytes_per_capture": 32604160,
+      "peak_rss_estimate": null,
+      "per_capture_cap_bytes": 35651584,
+      "total_cap_bytes": 72351744,
+      "wall_seconds_estimate": null
+    },
+    "outer_watchdog_seconds": 122
+  },
+  "exclusive_numeric_slot": true,
+  "frozen_mode_available": false,
+  "historical_receipts_revalidated": false,
+  "maximum_invocations": 1,
+  "mode": "bootstrap",
+  "no_retry": true,
+  "numeric_executed": false,
+  "numerical_acceptance_allowed": false,
+  "observed_bindings_independently_reviewed": false,
+  "output_scope": "SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED",
+  "policy_sha256": "97047f470ce4852580133f7fe87f65336513fe3fa48f86ad119f2f5f3e561599",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "run_id": "ci01",
+  "schema": 1,
+  "source_closure_sha256": "0db87f7069553f1e4ebb868d60d11646a49de5fac3ec53cb0c555b0cfc2e43fd",
+  "source_manifest": {
+    "bytes": 3096,
+    "sha256": "fd57ae246a3cb981a52a3a448c9f738fad1c750c10a85eb62355c4dc54b82038"
+  },
+  "status": "APPROVED_SOURCE_POLICY_FOR_SINGLE_BOOTSTRAP",
+  "tool_identity": {
+    "approved_scope": "one fixed pair workflow using repeat_diagnostic; two sequential separately authorized fresh reference processes, retaining original failure; local native bytes and layout comparison only",
+    "aten_cpu_capability": "avx2",
+    "authorized_pair_slots": [
+      "ci01",
+      "ci02"
+    ],
+    "authorized_slot": "ci01",
+    "business_reference_executed_by_reviewer": false,
+    "cold_tests_normal_explicit_skips": 1,
+    "cold_tests_normal_passed": 196,
+    "cold_tests_optimized_explicit_skips": 1,
+    "cold_tests_optimized_passed": 196,
+    "combined_output_cap_bytes": 72351744,
+    "dut_executed_by_reviewer": false,
+    "dut_execution_allowed": false,
+    "fake_tensor_local_writer_and_real_failure_reader_integration_passed": true,
+    "implementation": "cpython",
+    "independent_slot_launch_outside_pair_launcher_allowed": false,
+    "install_timeout_minutes": 7,
+    "job_timeout_minutes": 15,
+    "maximum_invocations_in_this_slot": 1,
+    "maximum_planned_captures_in_pair": 2,
+    "metadata_layout_compared": true,
+    "mkldnn_enabled": false,
+    "original_capture_and_expectations_unchanged": true,
+    "original_failed_exit_and_no_seal_preserved": true,
+    "original_failure_partial_file_identities_checked_before_and_after_comparison": true,
+    "pair_equality_does_not_establish_reference_acceptance_or_cross_runner_reproducibility": true,
+    "pair_step_timeout_minutes": 5,
+    "permitted_public_pair_output": "fixed OUTPUT_00..28 equality booleans and bounded same/different counts only",
+    "prepare_timeout_minutes": 3,
+    "private_metadata_and_payload_upload_allowed": false,
+    "private_native_bytes_compared_directly": true,
+    "python_elf": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "python_version": [
+      3,
+      12,
+      14
+    ],
+    "reference_internal_wall_seconds_per_slot": 120,
+    "reference_outer_watchdog_seconds_per_slot": 122,
+    "required_launcher": "candidates.qwen2_fullblock_ci_execution.repeat_diagnostic",
+    "required_workflow": ".github/workflows/qwen2-reference-ci-diagnostic.yml",
+    "retry_or_third_capture_allowed": false,
+    "review_event": "independent-same-runner-two-fresh-native-byte-diagnostic-20261015",
+    "reviewed_at_utc": "2026-10-15T04:26:25.779158+00:00",
+    "runtime_profile": "avx2-aten-gemm-v1",
+    "same_size_post_completion_corruption_rejected": true,
+    "second_slot_requires_first_complete_bounded_original_capture_265_failure": true,
+    "shared_raw_native_source_boundary_diff_exclusion": "external_certificate_sha256 only",
+    "source_manifest": {
+      "bytes": 3096,
+      "sha256": "fd57ae246a3cb981a52a3a448c9f738fad1c750c10a85eb62355c4dc54b82038"
+    }
+  }
+}

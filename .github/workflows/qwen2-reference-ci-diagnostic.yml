@@ -35,16 +35,16 @@ jobs:
       - name: Admit exact independently reviewed source and budget
         run: |
           mkdir -p work/ci_dut_logs
-          python -B -m candidates.qwen2_fullblock_ci_execution.reference_diagnostic admit 2> work/ci_dut_logs/admit.log || { echo 'Source admission failed.'; exit 1; }
+          python -B -m candidates.qwen2_fullblock_ci_execution.repeat_diagnostic admit 2> work/ci_dut_logs/admit.log || { echo 'Source admission failed.'; exit 1; }
       - name: Install exact official runtime wheels
         timeout-minutes: 7
         run: |
           python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple --target work/runtime_recovery/site-packages -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt > work/ci_dut_logs/install.log 2>&1 || { echo 'Runtime installation failed.'; exit 1; }
       - name: Prepare fixed inputs and current native identities
-        timeout-minutes: 4
+        timeout-minutes: 3
         run: |
           python -B -m candidates.qwen2_ci_prepare_diagnostic.diagnostic --execute --download 2> work/ci_dut_logs/prepare-launcher.log
       - name: Capture official reference and check fixed expectations locally
-        timeout-minutes: 3
+        timeout-minutes: 5
         run: |
-          python -B -m candidates.qwen2_fullblock_ci_execution.reference_diagnostic capture 2> work/ci_dut_logs/reference.log || { echo 'Official reference failed.'; exit 1; }
+          python -B -m candidates.qwen2_fullblock_ci_execution.repeat_diagnostic capture 2> work/ci_dut_logs/reference.log || { echo 'Official reference failed.'; exit 1; }

@@ -10,10 +10,11 @@ import failure_diagnostic as D
 import comparison_diagnostic as CDF
 import all_comparisons as ACD
 import backend_policy as BP
+import repeat_observation as RO
 G = R.legacy('guard.py')
 R.need(G.R is R and G.L is L,'explicit CI recipe/lifecycle import binding')
 
-def emit_failure(error,origin,all_expected=None):
+def emit_failure(error,origin,all_expected=None,out=None):
     # Failure telemetry must never replace the original exception or cleanup.
     try:
         print(json.dumps(D.project(error,origin,R.ROOT),sort_keys=True,allow_nan=False),
@@ -33,6 +34,14 @@ def emit_failure(error,origin,all_expected=None):
         comparison = ACD.project(error, R.ROOT, all_expected) if origin == 'WORKER' and all_expected is not None else None
         if comparison is not None:
             print(json.dumps(comparison, sort_keys=True, allow_nan=False), file=sys.stderr, flush=True)
+    except BaseException:
+        pass
+
+    try:
+        if origin=='WORKER' and out is not None and R.os.environ.get('QWEN2_REFERENCE_REPEAT_RUN') is not None:
+            R.repeat_run_id()
+            BP.before_stage(R,'observations29-and-semantic-validation')
+            RO.write(error,R.ROOT,Path(out))
     except BaseException:
         pass
 
@@ -63,7 +72,7 @@ def worker(fd,mode,out):
         C.capture(R.ROOT,R.load_pins(),Path(out),stage=mode,recipe=R,capability_fd=int(fd))
         return 0
     except BaseException as error:
-        emit_failure(error,'WORKER',all_expected)
+        emit_failure(error,'WORKER',all_expected,out)
         print(json.dumps(dict(status='WORKER_FAILED_UNSEALED',error_type=type(error).__name__,
             error=str(error)),allow_nan=False),file=sys.stderr,flush=True)
         return 2

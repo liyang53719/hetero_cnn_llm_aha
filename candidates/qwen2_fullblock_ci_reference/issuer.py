@@ -12,7 +12,7 @@ ISSUER='root-source-policy-issuer'
 APPROVAL_BASIS='external_static_source_policy_certificate'
 CERTIFICATE_ENV='QWEN2_BOOTSTRAP_CERTIFICATE_SHA256'
 CLOSURE_ENV='QWEN2_BOOTSTRAP_SOURCE_CLOSURE_SHA256'
-RUN_ID='ci01'
+RUN_ID=R.repeat_run_id()
 
 
 def digest(value):
@@ -97,7 +97,7 @@ def validate_expansion(review,pins):
 
 def issue(path,certificate_sha256,source_closure_sha256,run_id):
     R.need(R.ROOT==R.CI_ROOT,'issuer requires exact CI root')
-    R.need(run_id==RUN_ID,'certificate permits only ci01 bootstrap')
+    R.need(run_id==RUN_ID,'certificate permits only the fixed explicit run namespace')
     R.source_manifest()
     cert,spec=validate_certificate(path,certificate_sha256,source_closure_sha256)
     pins=R.load_pins()
@@ -135,7 +135,7 @@ def main(argv=None):
         R.need(all((x.certificate,x.certificate_sha256,x.source_closure_sha256,x.run_id)),
                'external certificate and both reviewed launch digests required')
         R.need(R.ROOT==R.CI_ROOT,'certificate admission requires exact CI root')
-        R.need(x.run_id==RUN_ID,'certificate permits only ci01 bootstrap')
+        R.need(x.run_id==RUN_ID,'certificate permits only the fixed explicit run namespace')
         if x.validate_only:
             validate_certificate(x.certificate,x.certificate_sha256,x.source_closure_sha256)
             result=dict(status='EXTERNAL_STATIC_SOURCE_POLICY_VALIDATED_ONLY',

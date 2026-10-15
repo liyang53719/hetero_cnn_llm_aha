@@ -7,6 +7,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import os
 from pathlib import Path
 import sys
 sys.dont_write_bytecode = True
@@ -94,6 +95,13 @@ def runtime_pins(root=ROOT):
     # The other five native files and all numerical runtime requirements remain exact.
     return pins
 
+def repeat_run_id():
+    value=os.environ.get('QWEN2_REFERENCE_REPEAT_RUN')
+    if value is None:return 'ci01'
+    profile=dependency('candidates/qwen2_fullblock_ci_execution/runtime_profile.py')
+    need(profile.mkldnn_enabled() is False and value in ('ci01','ci02'),'explicit fixed repeat namespace required')
+    return value
+
 def bootstrap_policy():
     """The reviewed procedure, not approval of as-yet-unobserved receipt bytes."""
     original = dependency('candidates/qwen2_fullblock_ci_execution/runtime_profile.py').apply(O.load_pins(ROOT))
@@ -110,6 +118,9 @@ def bootstrap_policy():
     profile = dependency('candidates/qwen2_fullblock_ci_execution/runtime_profile.py')
     if profile.mkldnn_enabled() is False:
         result['cpu_backend_policy'] = dict(profile=profile.profile(),mkldnn_enabled=False,setting_boundary='official-holder-construction-and-raw-bindings')
+    if os.environ.get('QWEN2_REFERENCE_REPEAT_RUN') is not None:
+        repeat_run_id()
+        result['repeat_observation_policy'] = dict(run_ids=['ci01','ci02'],maximum_invocations_per_run=1,old_failure_preserved=True,numerical_acceptance_allowed=False)
     return result
 
 def derive_bindings(root=ROOT):

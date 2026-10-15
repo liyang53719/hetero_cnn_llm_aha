@@ -153,3 +153,14 @@ AVX2首次实际运行38675911830已完成prepare，在参考capture.py第265行
 ## 显式 ATen GEMM 候选
 
 新增 profile `avx2-aten-gemm-v1`，默认及原 AVX2 候选不设置 mkldnn。此候选保持原 runtime 三字段投影及原29精确期待，在原 `official-holder-construction-and-raw-bindings` 阶段（Torch 已核、算术未开始）显式设置并验证 `torch.backends.mkldnn.enabled=False`；后续 prefix/tail/观察及后验边界复核 False。策略作为本次 source-policy 独立绑定，不假称旧 runtime10字段已记录 backend。原 capture/官方AST无修改，fresh-import门不放松。该设置的根据是固定binary oneDNN false→ATen gemm_stub路径，以及合成探针发现 ATen AVX2 时 oneDNN 实际仍使用 AVX512_CORE_BF16；不先验保证逐位相同。参考仍遇旧期待差异立即FAIL，只观察已有29输出固定分类，不启用DUT或放宽容差。
+
+## 双 fresh 自身复现诊断
+
+仅在单笔15分钟工作内、同固定 disabled+AVX2 profile、同输入及native来源，串行两个fresh进程。ci01/ci02各有新独立单次证书和GO，不复用已消费证书、不删失败记录。第一次须恰在原capture265比较失败且私有29输出观察完整、前后source/raw/native/backend核验合格，第二次才启动。两次各120/122秒，原29期待与原退出2保持；安装7分钟、prepare3分钟、pair5分钟均受总15分钟外限。
+
+失败观察只读取已有tensor，按native bytes写本地并逐文件读回，最后一次snapshot一致才写完成marker。两份共同source/raw/native/inputproof身份必须相同，仅各自certificate SHA不同为预期；每份34MiB、合计69MiB有界。父进程直接比较payload bytes与dtype/shape/原返回布局，公开固定OUTPUT枚举相等bool和same/diff计数。没有tensor/hash/shape值或私有元数据外传，没有SEAL/新正式reference PASS；全相等也仅表示同一runner两fresh复现。
+
+候选算术审计（固定Torch449b176及原native binary）：BF16 Linear转置权重路径的F32 dot经8个8-lane FMA累加器，K1536为64元素×24组，再寄存器及lane按4→2→1树归约。已广播BF16 bias以F32加入后最终一次BF16舍入，不是dot先BF16再加bias。Softmax为F32 max/减法/Sleef exp/树求和/倒数/乘法，再模型独立转BF16。只称“F32 accumulate”不够定义硬件逐bit契约；FTZ/DAZ等浮点环境仍需后续明确。
+- https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/BlasKernel.cpp#L409-L438
+- https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/ReducedPrecisionFloatGemvFastPathKernel.cpp#L289-L303
+- https://github.com/pytorch/pytorch/blob/449b1768410104d3ed79d3bcfe4ba1d65c7f22c0/aten/src/ATen/native/cpu/SoftMaxKernel.cpp#L63-L90

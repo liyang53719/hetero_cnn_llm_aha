@@ -92,3 +92,17 @@ class LifecycleTests(unittest.TestCase):
             L.claim_capability(R,{},R.ROOT/R.WORK/'synthetic01/bootstrap','bootstrap',None)
 
 if __name__=='__main__':unittest.main()
+
+class RepeatNamespaceTests(unittest.TestCase):
+    def test_default_namespace(self):
+        with patch.dict('os.environ',{},clear=True):self.assertEqual(R.repeat_run_id(),'ci01')
+    def test_explicit_second_namespace(self):
+        with patch.dict('os.environ',{'QWEN2_CI_RUNTIME_PROFILE':'avx2-aten-gemm-v1','ATEN_CPU_CAPABILITY':'avx2','QWEN2_REFERENCE_REPEAT_RUN':'ci02'},clear=True):
+            self.assertEqual(R.repeat_run_id(),'ci02')
+            self.assertEqual(R.bootstrap_policy()['repeat_observation_policy']['run_ids'],['ci01','ci02'])
+    def test_other_namespace_rejected(self):
+        with patch.dict('os.environ',{'QWEN2_CI_RUNTIME_PROFILE':'avx2-aten-gemm-v1','ATEN_CPU_CAPABILITY':'avx2','QWEN2_REFERENCE_REPEAT_RUN':'ci03'},clear=True):
+            with self.assertRaises(ValueError):R.repeat_run_id()
+    def test_old_profile_cannot_repeat(self):
+        with patch.dict('os.environ',{'QWEN2_CI_RUNTIME_PROFILE':'avx2-candidate-v1','ATEN_CPU_CAPABILITY':'avx2','QWEN2_REFERENCE_REPEAT_RUN':'ci02'},clear=True):
+            with self.assertRaises(ValueError):R.repeat_run_id()

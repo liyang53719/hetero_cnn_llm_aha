@@ -1,0 +1,154 @@
+{
+  "budgets": {
+    "capture_limits": {
+      "automatic_retry": false,
+      "per_stream_retained_bytes": 65536,
+      "poll_seconds": 0.02,
+      "rss_bytes": 1610612736,
+      "rss_is_os_hard_cap": false,
+      "total_emitted_log_limit_bytes": 16777216,
+      "wall_seconds": 120
+    },
+    "cleanup_grace_seconds": 2,
+    "disk_budget": {
+      "bootstrap_plus_frozen_payload_bytes": 65208320,
+      "export_bytes_per_capture": 32571392,
+      "native_dumps_retained": false,
+      "native_mask_sidecar_bytes": 32768,
+      "payload_bytes_per_capture": 32604160,
+      "peak_rss_estimate": null,
+      "per_capture_cap_bytes": 35651584,
+      "total_cap_bytes": 72351744,
+      "wall_seconds_estimate": null
+    },
+    "outer_watchdog_seconds": 122
+  },
+  "exclusive_numeric_slot": true,
+  "frozen_mode_available": false,
+  "historical_receipts_revalidated": false,
+  "maximum_invocations": 1,
+  "mode": "bootstrap",
+  "no_retry": true,
+  "numeric_executed": false,
+  "numerical_acceptance_allowed": false,
+  "observed_bindings_independently_reviewed": false,
+  "output_scope": "SEALED_BOOTSTRAP_OBSERVATIONS_UNACCEPTED",
+  "policy_sha256": "58ef980d179d20f36e68d43180fa236b2592560d5f0575804a315f1bbec5b0dd",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "run_id": "new01",
+  "schema": 1,
+  "source_closure_sha256": "5ed2e6021fa8e8a46edbdd9098a76a3dc67313db0bc8a7366552d5c7ebe5b319",
+  "source_manifest": {
+    "bytes": 1766,
+    "sha256": "93166ffffc385c7bc3cabc38676736253397693f013c66d420a5ad2f7770a496"
+  },
+  "status": "APPROVED_SOURCE_POLICY_FOR_SINGLE_BOOTSTRAP",
+  "tool_identity": {
+    "actual_step_timeout_minutes": 58,
+    "aggregate_timeout_minutes": 1,
+    "all_previously_consumed_authorizations_excluded": true,
+    "approved_scope": "one NEW 75-minute job after exact-stdlib preflight; two separately certified fresh official captures; conditional local oracle binding only after both complete sealed semantic-valid captures match all29 and all fixed source/raw/native/platform/libpython gates; ONE fresh public21 DUT under same-run sealed physical KV contract",
+    "aten_cpu_capability": "avx2",
+    "authorized_pair_slots": [
+      "new01",
+      "new02"
+    ],
+    "authorized_slot": "new01",
+    "binding_digest_consumed_directly_from_successful_validator_return": true,
+    "business_reference_executed_by_reviewer": false,
+    "cache_contract": "sealed-same-live-cold-cache-v1",
+    "cold_tests_normal_passed": 70,
+    "cold_tests_optimized_passed": 70,
+    "combined_reference_output_cap_bytes": 72351744,
+    "complete_original_geometry_finite_alias_mask_and_bf16_semantic_checks_required": true,
+    "conditional_local_oracle_binding_allowed_only_under_separate_dut_review": true,
+    "dut_executed_by_reviewer": false,
+    "dut_inner_seconds": 3300,
+    "dut_outer_seconds": 3330,
+    "exact_ctypes_platform_root_required": "/opt/hostedtoolcache/Python/3.12.14/x64",
+    "exact_ctypes_source_required": {
+      "bytes": 18210,
+      "sha256": "e0db1242e78267cba0124ee9fe5963b72d1c8a1832bb51a88abcf012a9cbce76"
+    },
+    "final_sealed_physical_kv_must_exactly_equal_same_run_sealed_k_and_v": true,
+    "fresh_raw13_and_typed14_rehashed_before_local_binding": true,
+    "full_job_source_closure_sha256": "8a091d0f82a41aa5335ae5729519972786e296f9ea871e8b2117f98bbb41ba89",
+    "full_job_source_manifest": {
+      "bytes": 2565,
+      "sha256": "70a943acd6d0c59a82862c199dd406802ceab63e5ab9985a30f494e7fed08f02"
+    },
+    "full_system_dso_closure_claimed": false,
+    "future_private_payloads_independently_reviewed": false,
+    "guard_seal_manifest_payload_and_source_boundaries_rechecked_before_after_comparison": true,
+    "implementation": "cpython",
+    "independent_slot_launch_outside_fulljob_launcher_allowed": false,
+    "initialized_control_timeout_seconds": 90,
+    "install_timeout_minutes": 7,
+    "job_timeout_minutes": 75,
+    "legacy_expected_hashes": "DIAGNOSTIC_ONLY",
+    "loaded_python_and_libpython_observed_before_after_required": true,
+    "maximum_invocations_in_this_slot": 1,
+    "maximum_planned_captures_in_pair": 2,
+    "metadata_layout_compared": true,
+    "mkldnn_enabled": false,
+    "original_block_limits": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "original_capture_bytes_and_old_expectations_unchanged": true,
+    "original_cross_oracle_exact_diagnostics_preserved": true,
+    "original_historical_failures_preserved": true,
+    "original_native_fp64_reduction_and_uint32_bit_semantics_required": true,
+    "original_official_math_ast_unchanged": true,
+    "original_operator_limits": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "pair_equality_does_not_establish_cross_runner_reproducibility": true,
+    "pair_step_timeout_minutes": 5,
+    "permitted_public_output": "fixed stage/status and contract enums, allowlisted completion/resource counts, software operation efficiency and guard booleans; hardware cycles/utilization/duty null; no tensor values or per-output identity metadata",
+    "preceding_preflight_evidence": {
+      "commit": "51c0b214dc67fff9ee711b7d90128c3406718c8b",
+      "dut_started": false,
+      "job_id": 116273571074,
+      "run_id": 38690035166,
+      "scope": "frontend compatibility evidence only; no inherited approval, private payloads or numeric acceptance",
+      "status": "PREFLIGHT_READY_NO_DUT"
+    },
+    "prepare_timeout_minutes": 3,
+    "preseal_oracle_payload_reads_allowed": false,
+    "private_export_bytes_compared_directly": true,
+    "private_metadata_and_payload_upload_allowed": false,
+    "process_allowlist_or_os_sandbox_claimed": false,
+    "python_elf": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "python_version": [
+      3,
+      12,
+      14
+    ],
+    "reference_contract": "official-ast-ci-aten-avx2-reference-v1",
+    "reference_internal_wall_seconds_per_slot": 120,
+    "reference_outer_watchdog_seconds_per_slot": 122,
+    "required_dut_review": "candidates/qwen2_official_platform_fullblock_authorization_v2/DUT_REVIEW.json",
+    "required_launcher": "candidates.qwen2_official_platform_fullblock.job",
+    "required_workflow": ".github/workflows/qwen2-official-platform-fullblock.yml",
+    "retry_or_third_capture_allowed": false,
+    "review_event": "independent-same-job-official-platform-fullblock-v2-after-ctypes-preflight-20261015",
+    "reviewed_at_utc": "2026-10-15T06:11:43.650630+00:00",
+    "runtime_profile": "avx2-aten-gemm-v1",
+    "second_slot_requires_first_original_supervisor_success_and_complete_validated_seal": true,
+    "shared_raw_native_source_boundary_diff_exclusion": "external_certificate_sha256 only",
+    "source_manifest": {
+      "bytes": 1766,
+      "sha256": "93166ffffc385c7bc3cabc38676736253397693f013c66d420a5ad2f7770a496"
+    },
+    "source_review_delta": "six files only: fresh fulljob authorization namespace, synchronized diagnostic original-namespace assertion, fulljob workflow comment, README and source manifest"
+  }
+}

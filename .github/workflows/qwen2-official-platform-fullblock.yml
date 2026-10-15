@@ -1,5 +1,5 @@
 name: qwen2-official-platform-fullblock
-# One externally reviewed complete job. No rerun or automatic retry.
+# One new complete job after successful exact-stdlib preflight. No rerun or automatic retry.
 on:
   workflow_dispatch:
   push:

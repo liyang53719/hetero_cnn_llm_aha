@@ -16,7 +16,7 @@ from . import closure
 ROOT=Path(__file__).resolve().parents[2]
 HERE=Path(__file__).resolve().parent
 PACKAGE='candidates/qwen2_official_platform_fullblock'
-AUTH='candidates/qwen2_official_platform_fullblock_authorization'
+AUTH='candidates/qwen2_official_platform_fullblock_authorization_v2'
 WORK='work/qwen2_official_platform_fullblock/ci01'
 FROZEN_BINDING=WORK+'/FROZEN_BINDING.json'
 REFERENCE=P.WORK+'/new01/bootstrap'

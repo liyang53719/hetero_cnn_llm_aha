@@ -99,3 +99,7 @@ PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python -B -m unittest $(find ca
 ```
 
 当前这批新增精确 stdlib 身份回归；冷测不代替真实初始化或数值全链通过。
+
+## 完整链新单次执行
+
+精确官方 ctypes 平台门的短 CI 已完成：两份参考、条件绑定、真实初始化 probe 和 launcher 只读准入均通过，终态 PREFLIGHT_READY_NO_DUT。它未执行 DUT。下一次完整链使用独立 fullblock_authorization_v2 单用审批，保持同数学、同数值门、同缓存比较对象契约及 75 分钟总预算、3300/3330 秒 DUT 上限。既有两个失败和短诊断证据保留；源变更只迁移本次审批身份与触发注释。

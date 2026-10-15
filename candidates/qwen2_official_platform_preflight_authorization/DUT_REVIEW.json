@@ -1,0 +1,26 @@
+{
+  "cache_rule": "SEALED_SAME_RUN_KV_EXACT_COPY_AND_UNCHANGED_OPERATOR_GATES",
+  "contract_id": "official-ast-ci-aten-avx2-reference-v1",
+  "diagnostic_only": true,
+  "dut_inner_seconds": 0,
+  "dut_invocations": 0,
+  "dut_outer_seconds": 0,
+  "freeze_rule": "TWO_FRESH_SEALED_SEMANTIC_VALID_29_BYTE_EQUAL_SAME_SOURCE_RAW_NATIVE_LIBPYTHON",
+  "future_private_bytes_reviewed": false,
+  "job_total_minutes": 15,
+  "legacy_expected_hashes": "DIAGNOSTIC_ONLY",
+  "maximum_invocations": 0,
+  "no_retry": true,
+  "reference_certificates": {
+    "new01": "c255b5b677b9689ff01fb5ebe2c7a44fc35ac13d22dadd68caf310339d033e0a",
+    "new02": "e576938c8124a8dc889c5d9a0b75e4e5ae90319b116d311e16d8a328efc03c86"
+  },
+  "reference_inner_seconds": 120,
+  "reference_invocations": 2,
+  "reference_outer_seconds": 122,
+  "reference_source_closure_sha256": "5ed2e6021fa8e8a46edbdd9098a76a3dc67313db0bc8a7366552d5c7ebe5b319",
+  "reviewer": "/root/review_fresh_reference_launch",
+  "schema": 1,
+  "source_closure_sha256": "34e253694bd75785c63bbbb7c0ed3ac3eb69409725a871faca955e863c782219",
+  "status": "APPROVED_SINGLE_CI_M128_PLATFORM_POLICY"
+}

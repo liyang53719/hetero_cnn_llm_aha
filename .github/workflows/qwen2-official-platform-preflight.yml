@@ -1,0 +1,55 @@
+name: qwen2-official-platform-preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/qwen2-official-platform-preflight.yml
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  preflight:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONNOUSERSITE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      MKL_NUM_THREADS: '4'
+      OMP_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '1'
+      ATEN_CPU_CAPABILITY: avx2
+      QWEN2_CI_RUNTIME_PROFILE: avx2-aten-gemm-v1
+      PYTHONPATH: '${{ github.workspace }}/work/runtime_recovery/site-packages'
+    steps:
+      - name: Establish total job deadline before preparation
+        run: echo "QWEN2_PREFLIGHT_JOB_DEADLINE=$(( $(date +%s) + 900 ))" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Admit exact short no-DUT policy
+        run: |
+          mkdir -p work/official_platform_preflight_step_logs
+          python -B -m candidates.qwen2_official_platform_fullblock.preflight_diagnostic admit > work/official_platform_preflight_step_logs/admit.log 2>&1 || { echo '{"schema":1,"status":"PREFLIGHT_STAGE_FAILED","phase":"ADMIT"}'; exit 1; }
+      - name: Install fixed official runtime
+        timeout-minutes: 5
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: --require-hashes --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple --target work/runtime_recovery/site-packages -r candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt -r candidates/qwen2_fullblock_ci_dut/requirements-extra.txt > work/official_platform_preflight_step_logs/install.log 2>&1 || { echo '{"schema":1,"status":"PREFLIGHT_STAGE_FAILED","phase":"INSTALL"}'; exit 1; }
+      - name: Prepare fixed fresh inputs and native identities
+        timeout-minutes: 3
+        run: |
+          python -B -m candidates.qwen2_ci_prepare_diagnostic.diagnostic --execute --download > work/official_platform_preflight_step_logs/prepare.log 2>&1 || { echo '{"schema":1,"status":"PREFLIGHT_STAGE_FAILED","phase":"PREPARE"}'; exit 1; }
+      - name: Capture two fresh reviewed official references
+        timeout-minutes: 5
+        run: |
+          python -B -m candidates.qwen2_official_platform_fullblock.preflight_diagnostic capture > work/official_platform_preflight_step_logs/reference.log 2>&1 || { echo '{"schema":1,"status":"PREFLIGHT_STAGE_FAILED","phase":"REFERENCE_PAIR"}'; exit 1; }
+      - name: Diagnose binder and initialized control only
+        timeout-minutes: 2
+        run: |
+          python -B -m candidates.qwen2_official_platform_fullblock.preflight_diagnostic preflight 2> work/official_platform_preflight_step_logs/outer.log

@@ -8,6 +8,7 @@ from candidates.qwen2_official_cpu_platform_reference import policy as P, valida
 ROOT=Path(__file__).resolve().parents[2]
 PACKAGE='candidates/qwen2_official_platform_fullblock'
 WORKFLOW='.github/workflows/qwen2-official-platform-fullblock.yml'
+DIAGNOSTIC_WORKFLOW='.github/workflows/qwen2-official-platform-preflight.yml'
 CACHE='candidates/qwen2_cold_cache_contract_candidate'
 CACHE_SHA='5e23f497cab4591df85318535ff6744215e48d80576e5881a80dad06cf845741'
 
@@ -41,6 +42,7 @@ def source_manifest(root=ROOT):
     for name in (*P.FILES,'SOURCE_MANIFEST.json'):_add(result,root,P.PACKAGE+'/'+name)
     _add(result,root,P.PAIR_WORKFLOW)
     _add(result,root,WORKFLOW)
+    _add(result,root,DIAGNOSTIC_WORKFLOW)
     directory=root/PACKAGE
     manifest=json.loads((directory/'SOURCE_MANIFEST.json').read_bytes())
     if set(manifest)!={'schema','files'} or type(manifest['schema']) is not int or manifest['schema']!=1:

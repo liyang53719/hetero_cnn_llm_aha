@@ -1,5 +1,22 @@
 # Same-job official-platform fullblock source candidate
 
+## 当前前置诊断
+
+已发布的首次完整 job 保留 FAILURE：两份完整官方参考成功，actual 步骤失败；
+安全聚合因所需 RESULT/LAUNCH 至少一项缺失而 INCOMPLETE，不能推断已执行数值。
+本地同入口初始化控制通过，尚未确定该 CI 失败原因。
+
+下一笔使用独立 15 分钟、零 DUT 授权和新两份单次参考证书。
+preflight_diagnostic 只执行绑定、原 initialized-control 和监督器首次写入前的
+只读准入条件，绝不启动 DUT。总 deadline 在准备前建立；初始化 90 秒及两秒余量
+必须同时放入剩余总预算和当前 120 秒步骤预算，否则拒绝启动。GitHub 15 分钟总限制继续有效。
+仅固定阶段、源码模块枚举、行号及异常类别公开，详细 traceback 和参考数据留本地。
+该诊断不生成/上传 artifact；旧完整作业的触发文件保持不变。
+正常 75 分钟 job.actual 的固定政策不能接受新的零 DUT 诊断审批。
+
+新增冷测：`python -B -m unittest candidates.qwen2_official_platform_fullblock.test_preflight_diagnostic -q`
+及同命令 `-O`。这些测试不构成业务数值通过。
+
 This new sibling has no default approval and is cold by default. It does not
 change the original official reference package, historical comparator, failure
 records, numerical driver, native arithmetic, statistics or hardware claims.

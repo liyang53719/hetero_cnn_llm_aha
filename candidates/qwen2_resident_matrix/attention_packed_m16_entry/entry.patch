@@ -1,0 +1,264 @@
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
+@@ -20,7 +20,8 @@
+ sys.path.insert(0,str(ROOT))
+ from ..official_bf16 import check_numeric as prior
+ from ..official_bf16 import execution as policy
+-from ..raw_kv_public_fresh import assets as fresh_assets
++from ..attention_packed_m16_entry import admission as fresh_assets
++from ..attention_packed_m16_entry import contract as packed_contract
+ base=prior.base
+ require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha
+ PREFIX='candidates/qwen2_resident_matrix/dense_block_reduce/'
+@@ -113,7 +114,7 @@
+     'scripts/observe_qwen2_attention_model.py',
+     'scripts/qwen2_block_recipe_model.py',
+ )
+-RAW_KV_SOURCE_PROFILE = 'qwen2-v4-public-kv-two-hook-v1'
++RAW_KV_SOURCE_PROFILE = packed_contract.PROFILE
+ 
+ 
+ RAW_KV_COMPOSITION_SHA256 = {'disabled': {'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py': 'fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3',
+@@ -131,10 +132,8 @@
+ 
+ 
+ def _verify_raw_kv_composition(enable_raw_kv):
+-    _raw_kv_mode(enable_raw_kv)
+-    expected=RAW_KV_COMPOSITION_SHA256["enabled" if enable_raw_kv else "disabled"]
+-    require(all(file_sha(ROOT/name)==digest for name,digest in expected.items()),
+-            "raw KV source composition/request mode mismatch")
++    require(enable_raw_kv is True,'linked packed source requires raw KV')
++    packed_contract.snapshot()
+ 
+ 
+ def _raw_kv_mode(enable_raw_kv):
+@@ -155,20 +154,7 @@
+ 
+ 
+ def source_hashes(*,enable_raw_kv=False,fresh_profile=False):
+-    require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+-    _verify_raw_kv_composition(enable_raw_kv)
+-    if fresh_profile:
+-        result=prior.source_hashes(fresh_profile=True,enable_raw_kv=enable_raw_kv)
+-    else:
+-        result=prior.source_hashes()
+-    result.update({PREFIX+p:file_sha(ROOT/PREFIX/p) for p in EXECUTION_FILES})
+-    # Reference packaging is an independent verifier, never an actual producer.
+-    for path in sorted((ROOT/PREFIX/'reference').rglob('*')):
+-        if path.is_file() and path.suffix in ('.py','.inc','.json') and '__pycache__' not in path.parts:
+-            result[str(path.relative_to(ROOT))]=file_sha(path)
+-    if enable_raw_kv:
+-        result.update({name:file_sha(ROOT/name) for name in RAW_KV_SOURCES})
+-    return result
++    return packed_contract.modes(fresh_profile=fresh_profile,enable_raw_kv=enable_raw_kv)
+ 
+ 
+ def runtime(*,enable_raw_kv=False,fresh_profile=False):
+@@ -187,12 +173,13 @@
+ 
+ 
+ def validate_rows(rows):
+-    require(type(rows) is int and rows in (16,128),'cold public21 rows must be exactly 16 or 128')
++    require(type(rows) is int and rows==16,'linked packed public21 rows must be exactly 16')
+     return rows
+ 
+ 
+ def prepare(out,compile_receipt,reference,reference_sha256,rows=16,*,enable_raw_kv=False,
+-            fresh_profile=False,fresh_manifest=None,fresh_manifest_sha256=None):
++            fresh_profile=False,fresh_manifest=None,fresh_manifest_sha256=None,enable_packed=False):
++    packed_contract.modes(fresh_profile=fresh_profile,enable_raw_kv=enable_raw_kv,enable_packed=enable_packed,rows=rows)
+     fresh_assets.fresh_mode(fresh_profile,fresh_manifest,fresh_manifest_sha256,rows=rows)
+     if fresh_profile:
+         require(reference is None and reference_sha256 is None,'fresh and historical reference arguments cannot mix')
+@@ -222,7 +209,7 @@
+         original_snapshot=str(original_path),original_snapshot_sha256=file_sha(original_path),
+         independent_reference=independent,old_pass_inherited=False)
+     if enable_raw_kv:
+-        s.update(enable_raw_kv=True,raw_kv_source_profile=RAW_KV_SOURCE_PROFILE)
++        s.update(enable_raw_kv=True,raw_kv_source_profile=RAW_KV_SOURCE_PROFILE,enable_packed=True)
+     for relative,digest in sources.items():
+         raw=(ROOT/relative).read_bytes();require(sha(raw)==digest,'snapshot source drift')
+         target=out/'frozen_sources'/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+@@ -237,6 +224,7 @@
+     s=json.loads(path.read_text())
+     identity=fresh_assets.snapshot_mode(s,fresh_profile,enable_raw_kv=enable_raw_kv)
+     _snapshot_raw_kv_mode(s,enable_raw_kv)
++    require(s.get('enable_packed') is True,'explicit packed snapshot required')
+     _verify_raw_kv_composition(enable_raw_kv)
+     if fresh_profile:
+         admitted=fresh_assets.verify(identity['manifest'],identity['manifest_sha256'],rows=s['rows'],enable_raw_kv=enable_raw_kv)
+@@ -299,17 +287,19 @@
+         independent_reference=ref,official_target='official_self_cache',
+         independent_self_cache_is_auxiliary=True,old_sequential_producer_is_auxiliary=True,
+         acceptance_requires_all_assigned_official_observed_node_gates=True,
+-        full_29_node_acceptance=False,reference_reuse=('fresh separately sealed same-input sequential/block-pair and official outputs; original gates retained' if
++        full_29_node_acceptance=False,reference_reuse=('fresh same-input sequential/block-pair outputs; explicitly reused verified native M16 outputs; original gates retained' if
+             ref.get('fresh_profile') == fresh_assets.PROFILE else
+             'same frozen raw input; original official archive; new independently executed block/pair arithmetic'))
+     return result
+ 
+ 
+-def run(out,path,digest,*,wall_budget=900,enable_raw_kv=False,fresh_profile=False):
++def run(out,path,digest,*,wall_budget=900,enable_raw_kv=False,fresh_profile=False,enable_packed=False,run_context=None):
++    packed_contract.modes(fresh_profile=fresh_profile,enable_raw_kv=enable_raw_kv,enable_packed=enable_packed,rows=16)
++    packed_contract.authorize_run(run_context)
+     require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+     _raw_kv_mode(enable_raw_kv)
+     out,path=Path(out).resolve(),Path(path).resolve()
+-    require(not out.exists() and 0<wall_budget<=1800,'fresh bounded reduced public21 run required')
++    require(not out.exists() and type(wall_budget) in (int,float) and 0<wall_budget<=900,'fresh bounded packed M16 run required')
+     if enable_raw_kv:
+         require(file_sha(path)==digest,'new snapshot hash differs')
+         pending=json.loads(path.read_text());_snapshot_raw_kv_mode(pending,enable_raw_kv)
+@@ -349,7 +339,10 @@
+                 attention_owner=policy.OfficialAttentionOwner(service,shared_scalar),matrix_service=service)
+             silu=policy.ObservedSiluLibrary(selected,s['rows']);guarded=gate.library(silu)
+             if enable_raw_kv:
+-                capture=observation.ProfiledAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'],enable_raw_kv=True)
++                from ..attention_packed_observation.monitor import PackedAttentionMonitoringObservation
++                capture=PackedAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'])
++                from ..attention_packed_m16.profile import PackedM16PublicProfile
++                packed_profile=PackedM16PublicProfile(s['binaries']['compile_receipt'],s['binaries']['compile_sha256'],s['fresh_assets']['manifest'],s['fresh_assets']['manifest_sha256'])
+             else:
+                 capture=observation.ProfiledAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'])
+             report.update(loaded_inputs=base.identities(inputs),metadata=s['metadata']);save()
+@@ -357,7 +350,7 @@
+             report.update(status='ACTUAL_PREFIX_COMPLETE',prefix_host_wall_seconds=time.monotonic()-started);save()
+             with capture:
+                 if enable_raw_kv:
+-                    actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory,enable_raw_kv=True)
++                    actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory,enable_raw_kv=True,packed_profile=packed_profile)
+                 else:
+                     actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory)
+             report['whole_terminal_host_wall_seconds']=time.monotonic()-started
+--- a/candidates/qwen2_resident_matrix/official_bf16/check_numeric.py
++++ b/candidates/qwen2_resident_matrix/official_bf16/check_numeric.py
+@@ -21,7 +21,8 @@
+ from candidates.qwen2_resident_matrix.ffn_public import check_fullgraph_numeric as old
+ from . import execution as policy
+ from . import reference_layout
+-from ..raw_kv_public_fresh import assets as fresh_assets
++from ..attention_packed_m16_entry import admission as fresh_assets
++from ..attention_packed_m16_entry import contract as packed_contract
+ 
+ base = old.base
+ require, sha, encoded, file_sha = base.require, base.sha, base.encoded, base.file_sha
+@@ -55,13 +56,7 @@
+ 
+ 
+ def source_hashes(*, fresh_profile=False, enable_raw_kv=False):
+-    require(type(fresh_profile) is bool and type(enable_raw_kv) is bool, 'canonical fresh source modes required')
+-    result = old.source_hashes()
+-    result.update({p: file_sha(ROOT / p) for p in NEW_SOURCES})
+-    result.update(fresh_assets.own_sources())
+-    if fresh_profile:
+-        result.update(fresh_assets.source_snapshot(enable_raw_kv=enable_raw_kv))
+-    return result
++    return packed_contract.modes(fresh_profile=fresh_profile,enable_raw_kv=enable_raw_kv)
+ 
+ 
+ def runtime(*, fresh_profile=False, enable_raw_kv=False):
+@@ -156,7 +151,7 @@
+     else:
+         sources, inputs_spec = source_hashes(), old.input_spec()[0]
+         ref = reference_spec(rows)
+-    built = dense.verify_library(compile_receipt)
++    built = fresh_assets.verify_library(compile_receipt,manifest=fresh_assets.read_manifest(fresh_manifest,fresh_manifest_sha256,rows=rows))
+     fixture = fixtures.make_qwen2_21_fixture(rows, epoch)
+     inputs = load_inputs(inputs_spec, rows, ref)
+     require(set(inputs) == {n for n,a in fixture.allocations.items() if a.readonly} and
+@@ -205,7 +200,7 @@
+         require(file_sha(path.parent / 'frozen_sources' / name) == expected, 'frozen source drift: ' + name)
+     b = s['binaries']
+     require(file_sha(b['compile_receipt']) == b['compile_sha256'] and
+-            dense.verify_library(b['compile_receipt'])['library'] == b['library'] and
++            fresh_assets.verify_library(b['compile_receipt'],manifest=fresh_assets.read_manifest(identity['manifest'],identity['manifest_sha256'],rows=s['rows']))['library'] == b['library'] and
+             file_sha(b['library']) == b['library_sha256'], 'official arithmetic build drift')
+     if fresh_profile:
+         require(admitted['reference'] == s['reference'] and admitted['input_spec'] == s['input_spec'] and
+@@ -320,13 +315,13 @@
+         methods=native_results, thresholds=limits, historical_diagnostic_failures=ref['prior_failures'],
+         full_29_node_acceptance=False, missing_nodes=['explicit_mask_tensor'],
+         partially_observed_nodes=['scores','logits','prob','softmax_fp32'],
+-        future_score_materialization=False, new_official_forward_executed=ref.get('fresh_profile') == fresh_assets.PROFILE,
++        future_score_materialization=False, new_official_forward_executed=False, native_execution_reused=True,
+         reference_layout=(dict(qk_storage='token_major', **ref['fresh_provenance']) if
+             ref.get('fresh_profile') == fresh_assets.PROFILE else
+             dict(qk_storage='token_major' if rows==16 else 'head_major',
+                 native_result_sha256=reference_layout.NATIVE_RESULT_SHA256[rows],
+                 producer_sha256=reference_layout.PRODUCER_SHA256)),
+-        reference_reuse=('fresh separately sealed same-input sequential/block-pair and official outputs; original gates retained' if
++        reference_reuse=('fresh same-input sequential/block-pair outputs; explicitly reused verified native M16 outputs; original gates retained' if
+             ref.get('fresh_profile') == fresh_assets.PROFILE else
+             'exact frozen same-raw-input cold references; original FAILs preserved'))
+ 
+--- a/candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py
+@@ -41,21 +41,8 @@
+ 
+ 
+ def source_hashes():
+-    paths = set(base.source_paths())
+-    paths.update('candidates/qwen2_resident_matrix/ffn_public/' + n + '.py' for n in
+-                 ('check_fullgraph_numeric', 'fullgraph_execution', 'fullgraph_memory'))
+-    paths.update('candidates/qwen2_resident_matrix/ffn_attention/' + n + '.py' for n in
+-                 ('matrix_service', 'attention_owner', 'scalar_recipe'))
+-    paths.update(LIBRARY_SOURCES)
+-    # Arithmetic/protocol source identities also cover the endpoint's explicit
+-    # separation of exception flags from accepted command protocol status.
+-    spec = importlib.util.spec_from_file_location('fullgraph_matrix_identity',
+-        ROOT / 'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py')
+-    module = importlib.util.module_from_spec(spec)
+-    sys.modules[spec.name] = module
+-    spec.loader.exec_module(module)
+-    paths.update(module.SOURCE_HASHES)
+-    return {p: file_sha(ROOT / p) for p in sorted(paths)}
++    from ..attention_packed_m16_entry import contract
++    return contract.snapshot()
+ 
+ 
+ def runtime():
+--- a/candidates/qwen2_resident_matrix/attention_packed_m16/profile.py
++++ b/candidates/qwen2_resident_matrix/attention_packed_m16/profile.py
+@@ -10,7 +10,9 @@
+ class PackedM16PublicProfile:
+     compile_receipt: str
+     receipt_sha256: str
+-    version: int = 1
++    manifest: str
++    manifest_sha256: str
++    version: int = 2
+ 
+     def install(self, owner, parent, job, owner_id):
+         from ..official_bf16.owners import OfficialAttentionOwner
+@@ -19,7 +21,7 @@
+         from ..official_bf16.dense_silu import OfficialMatrixService
+         from ..ffn_public.prefix_owners import Job
+         from ..raw_kv_parent.model import ParentLoan
+-        if (type(self) is not PackedM16PublicProfile or type(self.version) is not int or self.version != 1 or
++        if (type(self) is not PackedM16PublicProfile or type(self.version) is not int or self.version != 2 or
+             type(owner) is not OfficialAttentionOwner or type(owner.matrix) is not ProfiledMatrixService or
+             type(parent) is not ParentLoan or type(job) is not Job or
+             type(job.m) is not int or job.m != 16 or job.kind != 'Attention' or
+@@ -34,9 +36,9 @@
+                   (ProfiledMatrixService,'33ea0786d537aa7de59b19ff55cb515f2afeaee780f4a9f1faeb42402da19593'))
+         if any(hashlib.sha256(Path(inspect.getfile(cls)).read_bytes()).hexdigest()!=value for cls,value in expected):
+             raise ValueError('exact reviewed owner/native profile sources required')
+-        from . import prepare
+-        from ..official_bf16.dense_silu import verify_library
+-        prepare.verify_installed()
++        from ..attention_packed_m16_entry import contract, admission
++        contract.snapshot()
++        manifest=admission.read_manifest(self.manifest,self.manifest_sha256,rows=16)
+         if (type(self.compile_receipt) is not str or type(self.receipt_sha256) is not str or
+             len(self.receipt_sha256)!=64 or any(c not in '0123456789abcdef' for c in self.receipt_sha256)):
+             raise ValueError('strict combined compile receipt required')
+@@ -49,7 +51,7 @@
+         data=json.loads(raw)
+         if type(data) is not dict or type(data.get('schema')) is not int or type(data.get('returncode')) is not int:
+             raise ValueError('combined compile receipt canonical fields')
+-        data=verify_library(data)
++        data=admission.verify_library(self.compile_receipt,manifest=manifest)
+         name=getattr(owner.matrix.lib,'_name',None)
+         if type(name) is not str or Path(name).resolve()!=Path(data['library']).resolve():
+             raise ValueError('one verified combined Matrix/SiLU ELF required')

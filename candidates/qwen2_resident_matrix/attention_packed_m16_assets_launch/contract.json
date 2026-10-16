@@ -1,0 +1,45 @@
+{
+  "asset_contract_sha256": "af964fe867b35780fcfb48428c300a1504ec9b098c9fb350e5628033d9c05c8d",
+  "asset_sources": {
+    "README.md": "2b147703d868391681b1651d04df618f5a18f21a6ab59b5b399f1b35739f59ca",
+    "pins.json": "af964fe867b35780fcfb48428c300a1504ec9b098c9fb350e5628033d9c05c8d",
+    "producer.py": "398b8cb73715ad22ffc544aef3fb1f8ce52209928557c8c7500d833eedc4f941",
+    "reuse.py": "800c1ca5bd16fb120501731fd5399be765fd6073517ba6231870c3411919b914",
+    "test_assets.py": "54c9e74b75124f86a09a5e08214a9333f682f37281ce662c2a28588d865b2a2d"
+  },
+  "attempts": 1,
+  "claims": {
+    "actual_chain_executed": false,
+    "backend_order_proven": false,
+    "full_29_node_acceptance": false,
+    "hardware_recipe_acceptance": false,
+    "numerical_acceptance": false,
+    "rtl_execution": false
+  },
+  "cleanup_seconds": 5,
+  "historical_execution_claim": false,
+  "launcher_sources": {
+    "README.md": "0390cc8fafb5dd31ba7cc4a13838aef0182fd0768e2d4fee7bf6d34addec3cb5",
+    "launch.py": "d09c42f042e2654aa1e9959245f43cbf4e9328a8b2c63105ce90a203f9b0a125",
+    "receipt.py": "6837593f0ca308a24baebcf753ee2e9e78eb7ca5e162857f351a9caa3836bd92",
+    "supervisor.py": "b6970ca925bb956bd1494f046ba29079a818b98ab302ab84dab6d40e50253b80",
+    "test_launch.py": "db8b76feca63cf4d65720214bda1726e82d71fb24d8699a790249ab234bab4de"
+  },
+  "origin_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+  "outer_seconds": 126,
+  "profile": "qwen2-packed-m16-reference-launch-portable-v1",
+  "python": {
+    "bytes": 30894944,
+    "implementation": "cpython",
+    "lexical_relative_path": "private/assets/venv/bin/python",
+    "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "version": [
+      3,
+      12,
+      14
+    ]
+  },
+  "schema": 1,
+  "status": "REPRODUCIBLE_PROPOSAL_EXECUTION_UNAUTHORIZED",
+  "work_seconds": 120
+}

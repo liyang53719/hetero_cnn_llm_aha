@@ -1,0 +1,157 @@
+{
+  "actual_chain_executed": false,
+  "artifacts": {
+    "caller_supervisor": {
+      "bytes": 979,
+      "sha256": "a59962347a64c8e17d70d7c9de7fd420c20d3a3256480b11efb35f6d642a412a"
+    },
+    "private_launch_receipt": {
+      "bytes": 2358,
+      "sha256": "c1dccf4e94b6fd802103fb125bd2f12d16e07c9e1f2ec83e7c6b66a15a554288"
+    },
+    "private_reference_receipt": {
+      "bytes": 36688,
+      "sha256": "6d24120e45edad99d3bdf53fa4c09917785ebd7e15a5b3ca3a501e8b8465544f"
+    },
+    "summary": {
+      "bytes": 590,
+      "sha256": "ec9be56bfaf8620d8b3ca42613e88c6d6cfe6d57e7b6f2d5dba2f71e9ecfdd36"
+    }
+  },
+  "backend_order_proven": false,
+  "cleanup_seconds": 5,
+  "current_backend_verified": false,
+  "elapsed_seconds": 16.562324,
+  "executed_asset_contract_sha256": "af964fe867b35780fcfb48428c300a1504ec9b098c9fb350e5628033d9c05c8d",
+  "executed_asset_source_sha256": {
+    "README.md": "2b147703d868391681b1651d04df618f5a18f21a6ab59b5b399f1b35739f59ca",
+    "pins.json": "af964fe867b35780fcfb48428c300a1504ec9b098c9fb350e5628033d9c05c8d",
+    "producer.py": "398b8cb73715ad22ffc544aef3fb1f8ce52209928557c8c7500d833eedc4f941",
+    "reuse.py": "800c1ca5bd16fb120501731fd5399be765fd6073517ba6231870c3411919b914",
+    "test_assets.py": "54c9e74b75124f86a09a5e08214a9333f682f37281ce662c2a28588d865b2a2d"
+  },
+  "executed_launcher_contract_sha256": "de4601884f52edfabd2bf66513d934bc650adc47932f1d5bfd486cf62775a821",
+  "executed_launcher_source_sha256": {
+    "README.md": "fe91f0f7a1d1ef64b58d2be6320015b97f2e5f1930ee637f35abcda67ec1bf50",
+    "launch.py": "f571f0a8e6872e1221926dacfca294e8aa3aee11ed90d4f806a90003c8669167",
+    "receipt.py": "6837593f0ca308a24baebcf753ee2e9e78eb7ca5e162857f351a9caa3836bd92",
+    "supervisor.py": "b6970ca925bb956bd1494f046ba29079a818b98ab302ab84dab6d40e50253b80",
+    "test_launch.py": "2274b548d8aba1c7973dc494d38114159ceb2df86cb7453608a2eff459b8b6ca"
+  },
+  "fresh_artifacts": 85,
+  "full_29_node_acceptance": false,
+  "hardware_recipe_acceptance": false,
+  "numerical_acceptance": false,
+  "observed_outer_exit_code": 0,
+  "origin": {
+    "artifact_records": 151,
+    "native_m16_result_sha256": "a2df84fb8a9530fc205288d1cf6cfc0242c043c46a803779a8bfc2d780385a51",
+    "origin_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+    "origin_manifest_sha256": "50c005dc917f08f56e47b35c45e030446377ce30b2e5f280e5c6f6dbc92e466b",
+    "payload_bytes_hashed": true,
+    "source_files": 285,
+    "source_manifest_sha256": "9d1aa25d2f76aea864c86dbfa7cfc3a724cb2e6bafd2c8f8158d19937f057f33"
+  },
+  "origin_artifacts": 151,
+  "outer_seconds": 126,
+  "packed_source_profile_linked": false,
+  "past_tokens": 0,
+  "producers": {
+    "reduced": {
+      "actual_chain_executed": false,
+      "elapsed_seconds": 4.277520913004992,
+      "empty_cache_bytes": 0,
+      "exported_tensors": 0,
+      "origin_compile_receipt": {
+        "bytes": 38864,
+        "sha256": "45d5c07ef88fb5c68729a215fb2f5b5dd7e79cbb6af706a2d5db0516c450cf42"
+      },
+      "origin_executable": {
+        "bytes": 62344,
+        "sha256": "cf7eedd91913178b93fa61e2f8d96d711b831c5df0978d4005711152b49c8ff1"
+      },
+      "origin_receipts_rewritten": false,
+      "output_files": 22,
+      "output_identity_map_sha256": "3f573eebd07afac5f0d815b7f6b934b774b9c0a2122c7123cd24c607edddec4f",
+      "producer": "original-rms-rope-qkv-block-pair-v1",
+      "requested_timeout_seconds": 30,
+      "returncode": 0,
+      "run_receipt": {
+        "bytes": 5774,
+        "sha256": "c5d615546e2ca51855013fb0a07f5253f4da60fa4dda4a562057720da333d8d0"
+      },
+      "software_ack": {
+        "hardware_ack_verified": false,
+        "phase_receipts_exactly_once_in_order": true,
+        "process_completion_ack": true,
+        "scope": "software file/process contract only"
+      },
+      "status": "FRESH_M16_REFERENCE_ONLY"
+    },
+    "sequential": {
+      "actual_chain_executed": false,
+      "elapsed_seconds": 5.081533839009353,
+      "empty_cache_bytes": 0,
+      "exported_tensors": 29,
+      "origin_compile_receipt": {
+        "bytes": 38866,
+        "sha256": "6dd10c0f02e939d163c93cb261605df3e365bae9ec2442a47cc81f1fdf759cee"
+      },
+      "origin_executable": {
+        "bytes": 62328,
+        "sha256": "4715ebf2180c6ccb08ce69f2434ca02cdd0447845164ce486b4bf069cbbd460e"
+      },
+      "origin_receipts_rewritten": false,
+      "output_files": 22,
+      "output_identity_map_sha256": "7c97cb677d027491014f2732df51a7ce6bc71947ba70e34e9f344e4274f3223a",
+      "producer": "original-rms-rope-sequential-v2",
+      "requested_timeout_seconds": 30,
+      "returncode": 0,
+      "run_receipt": {
+        "bytes": 10286,
+        "sha256": "5cdb1b78149a9f19cc3ff6cd088f2f4d3052808a68796e557553340535a2abd9"
+      },
+      "software_ack": {
+        "hardware_ack_verified": false,
+        "phase_receipts_exactly_once_in_order": true,
+        "process_completion_ack": true,
+        "scope": "software file/process contract only"
+      },
+      "status": "FRESH_M16_REFERENCE_ONLY"
+    }
+  },
+  "profile": "qwen2-packed-m16-reference-preparation-safe-evidence-v1",
+  "readonly": {
+    "arena": {
+      "bytes": 188043264,
+      "sha256": "0a94ea142c28a6c1ce4b8ad928caecee9c5721bb6e4bc0eb097eebd8202aabf8"
+    },
+    "input_x": {
+      "bytes": 98304,
+      "sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c"
+    }
+  },
+  "ready_for_actual": false,
+  "reused_native_m16": {
+    "new_native_inference_executed": false,
+    "producer": "qwen2-native-qkv-qk-pair-generated-v1",
+    "result": {
+      "bytes": 116735,
+      "sha256": "a2df84fb8a9530fc205288d1cf6cfc0242c043c46a803779a8bfc2d780385a51"
+    }
+  },
+  "reused_table": {
+    "bytes": 328448,
+    "sha256": "5edc3314874c1cf4a7dc9cb54f2c824b18272048f70abcf9021f021308589045"
+  },
+  "rows": 16,
+  "rtl_execution": false,
+  "runtime_interpreter": {
+    "bytes": 30894944,
+    "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+  },
+  "schema": 1,
+  "status": "COMPLETE_REFERENCE_PREPARATION_ONLY",
+  "template_bytes_executed": false,
+  "work_seconds": 120
+}

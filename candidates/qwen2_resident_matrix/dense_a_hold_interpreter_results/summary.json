@@ -1,0 +1,114 @@
+{
+  "budget": {
+    "cleanup_reserve_seconds": 30,
+    "download_workers": 4,
+    "java_active_processors": 1,
+    "java_heap_mib": 2048,
+    "java_stack_mib": 4,
+    "max_test_cycles": 20000,
+    "stages_seconds": {
+      "compile": 180,
+      "dependencies": 120,
+      "interpret": 240,
+      "structure": 30
+    },
+    "total_seconds": 600
+  },
+  "chirrtl_generated": true,
+  "emitted_rtl_simulation": false,
+  "full_business_block_acceptance": false,
+  "hardware_timing_or_utilization": false,
+  "interpret_progress": {
+    "case_begin_seen": true,
+    "case_pass_marker_seen": false,
+    "last_reported_cycle": null,
+    "sim_ready_seen": false
+  },
+  "interpreted_hardware_protocol": false,
+  "java_version": "21.0.12.1",
+  "matrix_arithmetic": false,
+  "rtl_generated": false,
+  "scala_compiled": true,
+  "stages": [
+    {
+      "budget_seconds": 120,
+      "exit_code": 0,
+      "name": "dependencies",
+      "seconds": 1.9684118469999987,
+      "status": "PASS"
+    },
+    {
+      "budget_seconds": 180,
+      "exit_code": 0,
+      "name": "compile",
+      "seconds": 15.357302016999995,
+      "status": "PASS"
+    },
+    {
+      "budget_seconds": 30,
+      "exit_code": 0,
+      "name": "structure",
+      "seconds": 3.9276759969999944,
+      "status": "PASS"
+    },
+    {
+      "budget_seconds": 240,
+      "name": "interpret",
+      "seconds": 240.06439832,
+      "status": "TIMEOUT"
+    }
+  ],
+  "status": "FAILED",
+  "structure": {
+    "owner_bytes": 7870104,
+    "owner_sha256": "4b1a008b4c70cf2ee883c10cd12cdccd4a2c421160100c8539067352da8a4872",
+    "probe_bytes": 7871254,
+    "probe_changes_registers": false,
+    "probe_sha256": "aac360aa54be3ebe1dbe6e0a17e6209a0472d96857b9cf4f3dfaf6219618783c",
+    "resources": {
+      "a_banks": 16,
+      "a_depth": 1376,
+      "added_hold_control_bits": 78,
+      "b_banks": 16,
+      "b_depth": 160,
+      "declared_fifo_and_hold_payload_bits": 15125,
+      "hold_payload_bits": 2048,
+      "matrix_or_hardfloat_instantiated": false,
+      "module_names": [
+        "Queue3_MatrixStreamStep",
+        "TransposedDenseDownOwner",
+        "TransposedDownDenseBanks"
+      ],
+      "operand_fifo": {
+        "depth": 3,
+        "element_bits": 4359,
+        "fields": [
+          "a:UInt<16>[16]",
+          "b:UInt<16>[256]",
+          "context:UInt<3>",
+          "clear:UInt<1>",
+          "last:UInt<1>",
+          "finish:UInt<1>",
+          "emit:UInt<1>"
+        ],
+        "kind": "cmem",
+        "memory": "ram",
+        "module": "Queue3_MatrixStreamStep",
+        "ports": [
+          "infer",
+          "infer"
+        ],
+        "type": "MatrixStreamStep"
+      },
+      "physical_area_or_timing_measured": false,
+      "read_ports_per_bank": 1,
+      "sram_memories": 32,
+      "total_memory_declarations": 33,
+      "useful_operand_payload_bytes": 1216,
+      "width": 256,
+      "write_ports_per_bank": 1
+    },
+    "scope": "original CHIRRTL before memory lowering"
+  },
+  "wall_seconds": 262.894258348
+}

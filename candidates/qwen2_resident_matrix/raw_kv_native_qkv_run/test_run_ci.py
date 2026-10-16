@@ -5,6 +5,7 @@ import io
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import signal
 import subprocess
@@ -12,7 +13,7 @@ import sys
 import tempfile
 import time
 import unittest
-from unittest.mock import Mock,patch
+from unittest.mock import Mock,mock_open,patch
 
 from . import run_ci as run
 from . import phase
@@ -87,11 +88,50 @@ def write_native(context,workspace,tokens,*,failed=False):
     return value
 
 
+def cpu_bytes(*records):
+    """Synthetic cpuinfo, deliberately independent of the cold-test host."""
+    return '\n\n'.join(f'processor : {index}\nvendor_id : CONTROL_ONLY\nflags : {" ".join(flags)}'
+        for index,flags in enumerate(records or (run.CPU_FLAGS,))).encode('ascii')
+
+
+def cpu_record(*,eligible=True):
+    raw=cpu_bytes(run.CPU_FLAGS if eligible else run.CPU_FLAGS[1:])
+    return run.cpu_eligibility(raw,system='Linux',machine='x86_64',override_absent=True)
+
+
+def eligible_fixture(summary):
+    summary['phase']='cpu_qualification';summary['cpu_eligibility']=cpu_record()
+    return summary['cpu_eligibility']
+
+
+def placement_fixture(out,*,passed=False):
+    """Metadata-only gate fixture; source and Git admission are explicit mocks."""
+    summary=run.new_summary(time.monotonic_ns())
+    summary.update(status=run.PASS if passed else 'CPU_UNSUITABLE',
+        phase='finalize' if passed else 'cpu_qualification',checkout_commit=COMMIT,
+        contract_sha256=FROZEN['contract_sha256'],cpu_eligibility=cpu_record(eligible=passed))
+    if passed:
+        for name in ('packages_started','compile_started','native_started','postflight_complete','numerical_acceptance'):
+            summary[name]=True
+        context=dict(source_sha256=SOURCES,contract_sha256=FROZEN['contract_sha256'],
+            generated_module_sha256=FROZEN['generated_module_sha256'])
+        first=report(context,16);second=report(context,128,m16_result_sha256=first['result_sha256'])
+        summary['native_results']=dict(native16=first,native128=second)
+    else:summary['diagnostic']=run.diagnostic(run.CpuUnsuitable(),'cpu_qualification',SOURCES)
+    source=dict(schema=1,contract_sha256=FROZEN['contract_sha256'],source_sha256=SOURCES,
+        generated_sha256=FROZEN['generated'],generated_module_sha256=FROZEN['generated_module_sha256'])
+    write_json(out/'source_hashes.json',source);run.publish(out,summary)
+    return summary,source
+
+
 class RunnerControlTests(unittest.TestCase):
     def setUp(self):
         # Any newly added orchestration path must fail closed before compilation.
         self.build_guard=patch.object(phase.kernel,'build',side_effect=AssertionError('cold test reached compiler'))
         self.build_guard.start();self.addCleanup(self.build_guard.stop)
+        self.real_qualify=run.qualify_cpu
+        self.cpu_guard=patch.object(run,'qualify_cpu',side_effect=eligible_fixture)
+        self.cpu_guard.start();self.addCleanup(self.cpu_guard.stop)
 
     def exercise(self,root,*,child=None,check=None):
         launch,context,private,out=fixture(root);calls=[]
@@ -466,14 +506,201 @@ class RunnerControlTests(unittest.TestCase):
             self.assertEqual((workspace/'generated'/run.runtime.GATE).read_bytes(),b'separate gate\n')
             for name,raw in generated.items():self.assertEqual((checkout/name).read_bytes(),raw)
 
-    def test_workflow_single_trigger_fixed_budget_and_exact_safe_artifacts(self):
-        path=run.ROOT/run.runtime.WORKFLOW;raw=path.read_text()
-        self.assertIn('timeout-minutes: 20',raw);self.assertIn('timeout-minutes: 16',raw)
-        self.assertIn('github.run_attempt == 1',raw);self.assertIn('cancel-in-progress: false',raw)
+    def test_cpu_parser_requires_fixed_flags_on_every_processor(self):
+        self.assertEqual(run.CPU_FLAGS,('avx512f','avx512vl','avx512bw','avx512dq','fma'))
+        good=run.cpu_eligibility(cpu_bytes(run.CPU_FLAGS,(*run.CPU_FLAGS,'sse2')),
+            system='Linux',machine='x86_64',override_absent=True)
+        self.assertEqual(good['processor_records'],2)
+        self.assertEqual(good['status'],'ELIGIBLE_FOR_BACKEND_CHECK')
+        self.assertTrue(good['eligibility_only']);self.assertFalse(good['backend_qualified'])
+        self.assertNotIn('CONTROL_ONLY',json.dumps(good))
+        for missing in run.CPU_FLAGS:
+            partial=tuple(flag for flag in run.CPU_FLAGS if flag!=missing)
+            result=run.cpu_eligibility(cpu_bytes(run.CPU_FLAGS,partial),system='Linux',machine='x86_64',override_absent=True)
+            self.assertEqual(result['status'],'CPU_UNSUITABLE');self.assertFalse(result['flags'][missing])
+            self.assertEqual(sum(result['flags'].values()),4)
+
+    def test_cpu_parser_and_receipt_reject_malformed_and_type_aliases(self):
+        good=cpu_bytes();bad=[b'',good.decode(),b'\xff',good+b'\x00',b'x'*(run.CPU_LIMIT+1),
+            good.replace(b'processor : 0',b'processor : 00'),good+b'\nflags : avx512f',
+            good+b'\nprocessor : 0',good+b'\nno colon',good.replace(b'flags :',b'missing :'),
+            good.replace(b'avx512f',b'avx512f avx512f'),good.replace(b'avx512f',b'AVX512F'),
+            good+b'\n\n'+good,cpu_bytes(*([run.CPU_FLAGS]*4097)),
+            cpu_bytes(tuple('flag'+str(i) for i in range(4097)))]
+        for raw in bad:
+            with self.subTest(size=len(raw)),self.assertRaises((ValueError,UnicodeError)):
+                run.cpu_eligibility(raw,system='Linux',machine='x86_64',override_absent=True)
+        for system,machine,override in (('Darwin','x86_64',True),('Linux','aarch64',True),
+                                        ('Linux','x86_64',False),('Linux','x86_64',1)):
+            with self.subTest(platform=(system,machine,override)),self.assertRaises(ValueError):
+                run.cpu_eligibility(good,system=system,machine=machine,override_absent=override)
+        valid=cpu_record()
+        for key,value in (('schema',True),('processor_records',True),('processor_records',0),
+                ('eligibility_only',1),('backend_qualified',0),('status','CPU_UNSUITABLE'),('extra','PRIVATE')):
+            with self.subTest(field=key),self.assertRaises(ValueError):run.validate_cpu_eligibility(dict(valid,**{key:value}))
+        for flag in run.CPU_FLAGS:
+            changed=deepcopy(valid);changed['flags'][flag]=1
+            with self.assertRaises(ValueError):run.validate_cpu_eligibility(changed)
+
+    def test_cpu_bounded_read_override_and_five_second_deadline(self):
+        opened=mock_open(read_data=cpu_bytes());summary={}
+        with patch.object(run,'open',opened,create=True),patch.object(run.platform,'system',return_value='Linux'), \
+                patch.object(run.platform,'machine',return_value='x86_64'),patch.dict(os.environ,{},clear=True):
+            self.real_qualify(summary)
+        opened.assert_called_once_with('/proc/cpuinfo','rb');opened().read.assert_called_once_with(run.CPU_LIMIT+1)
+        with patch.object(run,'open',mock_open(read_data=cpu_bytes()),create=True), \
+                patch.object(run.platform,'system',return_value='Linux'), \
+                patch.object(run.platform,'machine',return_value='x86_64'), \
+                patch.dict(os.environ,{'ATEN_CPU_CAPABILITY':''},clear=True),self.assertRaises(ValueError):
+            self.real_qualify({})
+        for end,error in ((100*10**9,None),(12*10**9,TimeoutError())):
+            budget=Mock(end=end)
+            with patch.object(run.time,'monotonic_ns',return_value=10*10**9), \
+                    patch.object(run,'qualify_cpu',side_effect=error,return_value=cpu_record()):
+                if error:
+                    with self.assertRaises(TimeoutError):run.run_cpu_qualification({},budget)
+                else:self.assertEqual(run.run_cpu_qualification({},budget),cpu_record())
+            self.assertEqual(budget.arm.call_args_list,[unittest.mock.call(min(end,15*10**9)),unittest.mock.call()])
+        # A delayed timer cannot turn an over-budget CPU miss into retry permission.
+        for error in (None,run.CpuUnsuitable()):
+            budget=Mock(end=100*10**9);budget.remaining.side_effect=TimeoutError()
+            with patch.object(run.time,'monotonic_ns',return_value=10*10**9), \
+                    patch.object(run,'qualify_cpu',side_effect=error,return_value=cpu_record()), \
+                    self.assertRaises(TimeoutError):
+                run.run_cpu_qualification({},budget)
+            budget.remaining.assert_called_once_with(15*10**9)
+            self.assertEqual(budget.arm.call_args_list,[unittest.mock.call(15*10**9),unittest.mock.call()])
+
+    def test_cpu_unfit_or_malformed_stops_before_clone_packages_build_and_native(self):
+        for kind in ('unfit','malformed'):
+            def qualify(summary):
+                summary['phase']='cpu_qualification'
+                if kind=='malformed':raise ValueError('PRIVATE malformed cpuinfo')
+                summary['cpu_eligibility']=cpu_record(eligible=False);raise run.CpuUnsuitable()
+            for origin in ('bootstrap','resume'):
+                with self.subTest(kind=kind,origin=origin),tempfile.TemporaryDirectory() as temp, \
+                        patch.object(run,'qualify_cpu',side_effect=qualify):
+                    root=Path(temp)
+                    if origin=='bootstrap':
+                        with patch.object(run.runtime,'snapshot',return_value=FROZEN), \
+                                patch.object(run.prior,'git_identity'),patch.object(run.Budget,'command') as command, \
+                                patch.object(run,'run_kernel') as build:
+                            code,summary=run.bootstrap(root/'private',root/'safe',COMMIT)
+                        command.assert_not_called();build.assert_not_called()
+                    else:
+                        code,summary,calls,*_=self.exercise(root)
+                        self.assertEqual(calls,[])
+                    self.assertEqual((code,summary['status']),(2,'CPU_UNSUITABLE') if kind=='unfit' else (1,'FAILED'))
+                    for key in ('packages_started','compile_started','native_started','postflight_complete','numerical_acceptance'):
+                        self.assertIs(summary[key],False)
+                    self.assertNotIn('native_results',summary)
+                    self.assertNotIn('PRIVATE',json.dumps(summary))
+
+    def test_placement_gate_revalidates_source_identity_and_canonical_receipt(self):
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp);good,source=placement_fixture(out)
+            with patch.object(run.runtime,'snapshot',return_value=FROZEN),patch.object(run.prior,'git_identity') as git:
+                self.assertEqual(run.placement_status(out,COMMIT,'failure'),'CPU_UNSUITABLE')
+                git.assert_called_once_with(COMMIT,FROZEN['git_blobs'],out)
+                for key,bad in (('schema',True),('profile','foreign'),('checkout_commit','b'*40),
+                        ('contract_sha256','0'*64),('phase','native16'),('public_executed',0),('rtl_executed',0),
+                        ('packages_started',True),('compile_started',True),('native_started',True),
+                        ('postflight_complete',True),('numerical_acceptance',True),('native_started',0),
+                        ('cpu_eligibility',cpu_record())):
+                    value=deepcopy(good);value[key]=bad;run.publish(out,value)
+                    with self.subTest(field=key),self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                run.publish(out,good)
+                for outcome in ('success','cancelled','skipped',True):
+                    with self.assertRaises(ValueError):run.placement_status(out,COMMIT,outcome)
+                for key,bad in (('schema',True),('contract_sha256','0'*64),('source_sha256',{}),
+                        ('generated_sha256',{'foreign.py':'0'*64}),('generated_module_sha256','0'*64)):
+                    write_json(out/'source_hashes.json',dict(source,**{key:bad}))
+                    with self.subTest(source_field=key),self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                write_json(out/'source_hashes.json',source)
+            drift=deepcopy(FROZEN);drift['sources'][run.SOURCE]='0'*64
+            with patch.object(run.runtime,'snapshot',return_value=drift),patch.object(run.prior,'git_identity') as git, \
+                    self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+            git.assert_not_called()
+
+    def test_placement_rejects_missing_extra_stale_unsafe_and_contradictory_evidence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp);good,_=placement_fixture(out)
+            with patch.object(run.runtime,'snapshot',return_value=FROZEN),patch.object(run.prior,'git_identity'):
+                for key,bad in (('native_rows',[16.0,128]),('elapsed_seconds',True),('elapsed_seconds',-1),
+                        ('elapsed_seconds',901),('native_results',{}),('extra','PRIVATE'),
+                        ('diagnostic',dict(phase='cpu_qualification',exception='RuntimeError',frames=[])),
+                        ('diagnostic',dict(phase='cpu_qualification',exception='OtherError',frames=[dict(source='foreign.py',line=1)]))):
+                    value=deepcopy(good);value[key]=bad;run.publish(out,value)
+                    with self.subTest(field=key),self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                run.publish(out,good)
+                for name in run.OUTPUTS:
+                    path=out/name;raw=path.read_bytes();path.unlink()
+                    with self.subTest(missing=name),self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                    path.symlink_to('missing')
+                    with self.subTest(symlink=name),self.assertRaises((ValueError,OSError)):run.placement_status(out,COMMIT,'failure')
+                    path.unlink();path.write_bytes(raw)
+                (out/'private.log').write_text('PRIVATE')
+                with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                (out/'private.log').unlink()
+                progress=run.assets.read_json(out/'progress.json');progress['status']='RUNNING'
+                write_json(out/'progress.json',progress)
+                with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                run.publish(out,good)
+                raw=(out/'summary.json').read_bytes();(out/'summary.json').write_bytes(raw+b' '*65536)
+                with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+
+    def test_placement_gate_requires_native_pass_and_never_retries_other_failures(self):
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp);good,_=placement_fixture(out,passed=True)
+            with patch.object(run.runtime,'snapshot',return_value=FROZEN),patch.object(run.prior,'git_identity'):
+                self.assertEqual(run.placement_status(out,COMMIT,'success'),run.PASS)
+                with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                for name in ('native16','native128'):
+                    value=deepcopy(good);value['native_results'][name]['source_manifest_sha256']='0'*64
+                    run.publish(out,value)
+                    with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'success')
+                value=deepcopy(good);value['native_results']['native128']['m16_result_sha256']='0'*64
+                run.publish(out,value)
+                with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'success')
+                for status in ('FAILED','TIMEOUT','INTERRUPTED','NOT_RUN'):
+                    value=deepcopy(good);value.update(status=status,postflight_complete=False,numerical_acceptance=False)
+                    run.publish(out,value)
+                    self.assertEqual(run.placement_status(out,COMMIT,'failure'),'FAILED')
+
+    def test_placement_cli_is_read_only_and_rejects_execution_modes(self):
+        args=['--placement-status','--evidence','/CONTROL_ONLY/safe','--checkout-commit',COMMIT,'--attempt-outcome','failure']
+        with patch.object(run,'placement_status',return_value='CPU_UNSUITABLE') as gate, \
+                patch.object(run,'bootstrap') as boot,patch.object(run,'resume') as resume,redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(run.main(args),0);self.assertEqual(output.getvalue().strip(),'CPU_UNSUITABLE')
+            gate.assert_called_once_with(Path('/CONTROL_ONLY/safe'),COMMIT,'failure');boot.assert_not_called();resume.assert_not_called()
+        for mode in ('--execute','--resume','--internal-compose'):
+            with patch.object(run,'placement_status') as gate,redirect_stdout(io.StringIO()):
+                self.assertEqual(run.main(args+[mode]),1);gate.assert_not_called()
+
+    def test_workflow_two_sequential_placements_fixed_budget_and_safe_artifacts(self):
+        raw=(run.ROOT/run.runtime.WORKFLOW).read_text()
+        self.assertEqual(re.findall(r'^  ([a-z0-9-]+):$',raw.split('jobs:\n',1)[1],re.M),['placement-1','placement-2'])
+        first,second=raw.split('  placement-1:\n',1)[1].split('  placement-2:\n')
+        self.assertIn('    if: github.run_attempt == 1\n',first)
+        self.assertIn("    needs: placement-1\n    if: always() && github.run_attempt == 1 && needs.placement-1.result == 'success' && needs.placement-1.outputs.status == 'CPU_UNSUITABLE'\n",second)
+        self.assertNotIn('matrix:',raw);self.assertIn('cancel-in-progress: false',raw)
         self.assertIn("paths: ['.github/workflows/raw-kv-native-qkv.yml']",raw)
-        self.assertIn("ref: '${{ github.sha }}'",raw);self.assertIn('persist-credentials: false',raw)
-        self.assertEqual([line.strip() for line in raw.split('          path: |\n')[1].splitlines()],
-            ['work/raw-kv-native-qkv-safe/'+name for name in run.OUTPUTS])
+        for index,job in enumerate((first,second),1):
+            self.assertIn('timeout-minutes: 20',job);self.assertIn('timeout-minutes: 16',job)
+            self.assertIn("ref: '${{ github.sha }}'",job);self.assertIn('persist-credentials: false',job)
+            self.assertEqual(job.count(' --execute '),1)
+            self.assertIn('continue-on-error: true',job)
+            self.assertIn("ATTEMPT_OUTCOME: '${{ steps.attempt.outcome }}'",job)
+            self.assertEqual([line.strip() for line in job.split('          path: |\n')[1].splitlines()],
+                ['work/raw-kv-native-qkv-safe/'+name for name in run.OUTPUTS])
+            self.assertIn(f'-placement-{index}',job)
+            gate=job.split('          echo "status=$status" >> "$GITHUB_OUTPUT"\n',1)[1].split('      - name:',1)[0]
+            gate='\n'.join(line.strip() for line in gate.splitlines())
+            expected=('if [ "$status" = "CPU_UNSUITABLE" ]; then exit 0; fi\n' if index==1 else '')+'test "$status" = "PASS_NATIVE_QKV_M16_M128"'
+            self.assertEqual(gate.strip(),expected)
+            for status in ('CPU_UNSUITABLE',run.PASS,'FAILED','TIMEOUT','NOT_RUN'):
+                result=subprocess.run(['sh','-c',gate],env=dict(os.environ,status=status),capture_output=True,timeout=2)
+                self.assertEqual(result.returncode,0 if status==run.PASS or (index==1 and status=='CPU_UNSUITABLE') else 1)
         self.assertEqual(run.TOTAL,900);self.assertEqual(run.LIMITS,run.runtime.PHASE_LIMITS)
         old=run.assets.read_json(run.ROOT/run.runtime.ORIGINAL_CONTRACT)
         original_workflow='.github/workflows/raw-kv-public-m128.yml'

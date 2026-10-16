@@ -1,6 +1,7 @@
 name: raw-kv-native-qkv
-# Revision 2: deterministic low-uptime cold fixture; unchanged native gate and budgets.
-# One 900s attempt including clone, setup, cleanup and safe receipts. No Public run.
+# Revision 3: at most two sequential standard-host placements; one native attempt.
+# Placement two is allowed only after a validated pre-package CPU_UNSUITABLE.
+# Each eligible attempt retains the original900s ceiling; no numerical retries.
 on:
   push:
     branches: [main]
@@ -12,8 +13,10 @@ concurrency:
   group: raw-kv-native-qkv-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  native-qkv:
+  placement-1:
     if: github.run_attempt == 1
+    outputs:
+      status: ${{ steps.verdict.outputs.status }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -29,14 +32,71 @@ jobs:
         run: |
           python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_run_ci -q
           python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_run_ci -q
-      - name: One bounded fresh native validation
+      - name: Qualify CPU before packages and run at most one native attempt
+        id: attempt
+        continue-on-error: true
         timeout-minutes: 16
         run: python -B -m candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.run_ci --execute --checkout-commit '${{ github.sha }}' --private work/raw-kv-native-qkv-private --evidence work/raw-kv-native-qkv-safe
+      - name: Validate exact placement outcome
+        id: verdict
+        if: always()
+        timeout-minutes: 1
+        env:
+          ATTEMPT_OUTCOME: '${{ steps.attempt.outcome }}'
+        run: |
+          status=$(python -B -m candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.run_ci --placement-status --attempt-outcome "$ATTEMPT_OUTCOME" --checkout-commit '${{ github.sha }}' --evidence work/raw-kv-native-qkv-safe)
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" = "CPU_UNSUITABLE" ]; then exit 0; fi
+          test "$status" = "PASS_NATIVE_QKV_M16_M128"
       - name: Preserve only safe fixed-name evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: raw-kv-native-qkv-${{ github.sha }}
+          name: raw-kv-native-qkv-${{ github.sha }}-placement-1
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/raw-kv-native-qkv-safe/summary.json
+            work/raw-kv-native-qkv-safe/progress.json
+            work/raw-kv-native-qkv-safe/source_hashes.json
+  placement-2:
+    needs: placement-1
+    if: always() && github.run_attempt == 1 && needs.placement-1.result == 'success' && needs.placement-1.outputs.status == 'CPU_UNSUITABLE'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Cold native-only validation contracts
+        timeout-minutes: 1
+        run: |
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_run_ci -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_run_ci -q
+      - name: Qualify CPU before packages and run at most one native attempt
+        id: attempt
+        continue-on-error: true
+        timeout-minutes: 16
+        run: python -B -m candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.run_ci --execute --checkout-commit '${{ github.sha }}' --private work/raw-kv-native-qkv-private --evidence work/raw-kv-native-qkv-safe
+      - name: Validate exact placement outcome
+        id: verdict
+        if: always()
+        timeout-minutes: 1
+        env:
+          ATTEMPT_OUTCOME: '${{ steps.attempt.outcome }}'
+        run: |
+          status=$(python -B -m candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.run_ci --placement-status --attempt-outcome "$ATTEMPT_OUTCOME" --checkout-commit '${{ github.sha }}' --evidence work/raw-kv-native-qkv-safe)
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          test "$status" = "PASS_NATIVE_QKV_M16_M128"
+      - name: Preserve only safe fixed-name evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-kv-native-qkv-${{ github.sha }}-placement-2
           retention-days: 14
           if-no-files-found: error
           path: |

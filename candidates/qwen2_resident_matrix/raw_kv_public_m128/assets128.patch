@@ -1,0 +1,340 @@
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
+@@ -1,4 +1,4 @@
+-"""Explicit fresh M16 asset provenance; no archived receipt identities are rewritten.
++"""Explicit fresh M128 asset provenance; no archived receipt identities are rewritten.
+ 
+ Preflight streams hashes only. Numerical reference arrays are decoded solely by
+ post-terminal comparison helpers, under the existing whole-reference gate.
+@@ -7,20 +7,25 @@
+ import hashlib
+ import json
+ import math
++import os
+ from pathlib import Path, PurePosixPath
+ import stat
+ 
++from ..raw_kv_public_m128 import profile as m128_profile
++
+ ROOT = Path(__file__).resolve().parents[3]
+ HERE = Path(__file__).resolve().parent
+-PROFILE = 'qwen2-public-pv16-fresh-assets-v1'
+-STATUS = 'READY_FOR_ACTUAL_M16'
++PROFILE = 'qwen2-public-pv16-fresh-assets-m128-v1'
++STATUS = 'READY_FOR_ACTUAL_M128'
++ROWS = 128
+ MODEL = 'Qwen/Qwen2-1.5B-Instruct'
+ REVISION = 'ba1cf1846d7df0a0591d6c00649f57e798519da8'
+ LEDGER = 'config/payload_pins/qwen2_layer0.json'
+ LEDGER_SHA256 = '190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88'
+ ARENA_BYTES = 188043264
+-ARENA_SHA256 = '0a94ea142c28a6c1ce4b8ad928caecee9c5721bb6e4bc0eb097eebd8202aabf8'
+-INPUT_X_SHA256 = '271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c'
++ARENA_SHA256 = 'e96def26157427fc60a44f1af7a9a8443010eb5327c1ccb9b93c3b0e70fcafe7'
++INPUT_X_SHA256 = 'ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df'
++M16_X_SHA256 = '271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c'
+ M128_X_SHA256 = 'ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df'
+ TABLE_SHA256 = '5edc3314874c1cf4a7dc9cb54f2c824b18272048f70abcf9021f021308589045'
+ HEADER_SHA256 = '79d4b81277f3431d2e89e6807dc2deee425957a5549c7fffa71d8db8cba9af30'
+@@ -122,25 +127,27 @@
+     return actual == expected
+ 
+ 
+-def shapes():
+-    result = {name:[1,16,1536] for name in ('x','n0','qr','att','o','r','n1','down','y')}
+-    result.update({name:[1,16,256] for name in ('kr','v')})
+-    result.update({name:[1,16,8960] for name in ('gate','up','silu','act')})
+-    result.update({name:[1,12,16,16] for name in ('scores','logits','prob','softmax_fp32')})
+-    result.update({name:[1,2,16,128] for name in ('cache_k','cache_v')})
+-    result.update({name:[1,12,16,128] for name in ('repeat_k','repeat_v','q','pv')})
+-    result.update(k=[1,2,16,128], mask=[1,1,16,16], cos=[16,128], sin=[16,128])
++def shapes(rows=ROWS):
++    # M16 is an internal native-prerequisite geometry, never a ready profile.
++    need(type(rows) is int and rows in (16,128), 'canonical native geometry required')
++    result = {name:[1,rows,1536] for name in ('x','n0','qr','att','o','r','n1','down','y')}
++    result.update({name:[1,rows,256] for name in ('kr','v')})
++    result.update({name:[1,rows,8960] for name in ('gate','up','silu','act')})
++    result.update({name:[1,12,rows,rows] for name in ('scores','logits','prob','softmax_fp32')})
++    result.update({name:[1,2,rows,128] for name in ('cache_k','cache_v')})
++    result.update({name:[1,12,rows,128] for name in ('repeat_k','repeat_v','q','pv')})
++    result.update(k=[1,2,rows,128], mask=[1,1,rows,rows], cos=[rows,128], sin=[rows,128])
+     return result
+ 
+ 
+-def export_shapes():
+-    result = shapes()
+-    result.update(q=[1,16,1536], k=[1,16,256])
++def export_shapes(rows=ROWS):
++    result = shapes(rows)
++    result.update(q=[1,rows,1536], k=[1,rows,256])
+     return result
+ 
+ 
+ def output_inventory():
+-    result = {'phase_%d_%s_recipe.f32le'%(i,name):16*width*4 for i,(name,width) in enumerate(STAGES)}
++    result = {'phase_%d_%s_recipe.f32le'%(i,name):ROWS*width*4 for i,(name,width) in enumerate(STAGES)}
+     result.update({name+'.f32le':4*math.prod(shape) for name,shape in shapes().items()
+                    if name in ('cache_k','cache_v','scores','logits','softmax_fp32','prob','silu')})
+     return result
+@@ -160,16 +167,16 @@
+     need(expected is None or value['sha256'] == expected, 'fresh artifact pinned content hash')
+ 
+ 
+-def validate_manifest(value, *, rows=16):
++def validate_manifest(value, *, rows=ROWS):
+     """Pure schema validation. No imports, source reads or referenced file access."""
+-    need(type(rows) is int and rows == 16, 'fresh profile supports canonical M16 only')
++    need(type(rows) is int and rows == ROWS, 'fresh profile supports canonical M128 only')
+     exact(value, ('schema','status','profile','rows','past_tokens','source_sha256',
+-                 'source_manifest_sha256','payload','readonly','sequential','reduced','native','library'),
++                 'source_manifest_sha256','payload','readonly','sequential','reduced','native_m16','native','library'),
+           'exact fresh manifest schema required')
+     need(type(value['schema']) is int and value['schema'] == 1 and value['profile'] == PROFILE and
+-         value['status'] == STATUS and type(value['rows']) is int and value['rows'] == 16 and
++         value['status'] == STATUS and type(value['rows']) is int and value['rows'] == ROWS and
+          type(value['past_tokens']) is int and value['past_tokens'] == 0,
+-         'canonical fresh M16/past-zero profile required')
++         'canonical fresh M128/past-zero profile required')
+     need(type(value['source_sha256']) is dict and value['source_sha256'] and
+          all(type(k) is str and k and '\\' not in k and '\x00' not in k and not PurePosixPath(k).is_absolute() and
+              all(p not in ('', '.', '..') for p in k.split('/')) and digest(v)
+@@ -185,7 +192,7 @@
+     ro = value['readonly']; exact(ro, ('arena','table','input_x','input_x_sha256','intermediate_preloads'), 'readonly schema')
+     record(ro['arena'], size=ARENA_BYTES, expected=ARENA_SHA256)
+     record(ro['table'], size=(192+5*16384)*4, expected=TABLE_SHA256)
+-    record(ro['input_x'], size=16*1536*4, expected=INPUT_X_SHA256)
++    record(ro['input_x'], size=ROWS*1536*4, expected=INPUT_X_SHA256)
+     need(ro['input_x_sha256'] == INPUT_X_SHA256 and type(ro['intermediate_preloads']) is int and
+          ro['intermediate_preloads'] == 0, 'raw input or zero-preload policy drift')
+     for role in ('sequential','reduced'):
+@@ -204,15 +211,18 @@
+             record(producer['export_receipt']); need(producer['export_receipt']['bytes'] <= MAX_METADATA_BYTES, 'export metadata bound')
+             exact(producer['tensors'], shapes(), 'exact twenty-nine sequential exports required')
+             for name,shape in shapes().items(): record(producer['tensors'][name], size=4*math.prod(shape))
+-    native=value['native']; exact(native, ('producer','result','outputs'), 'native producer schema')
+-    need(native['producer'] == NATIVE_PRODUCER, 'original native producer required')
+-    record(native['result']); need(native['result']['bytes'] <= MAX_METADATA_BYTES, 'native metadata bound')
+-    exact(native['outputs'], MODES, 'both native precision modes required')
+-    for mode in MODES:
+-        exact(native['outputs'][mode], METHODS, 'both original reference methods required')
+-        for method in METHODS:
+-            exact(native['outputs'][mode][method], shapes(), 'exact twenty-nine native exports required')
+-            for name,shape in shapes().items(): record(native['outputs'][mode][method][name], size=4*math.prod(shape))
++    for role,native_rows in (('native_m16',16),('native',ROWS)):
++        native=value[role]; exact(native, ('producer','result','outputs'), 'native producer schema')
++        need(native['producer'] == NATIVE_PRODUCER, 'original native producer required')
++        record(native['result']); need(native['result']['bytes'] <= MAX_METADATA_BYTES, 'native metadata bound')
++        exact(native['outputs'], MODES, 'both native precision modes required')
++        for mode in MODES:
++            exact(native['outputs'][mode], METHODS, 'both original reference methods required')
++            for method in METHODS:
++                exact(native['outputs'][mode][method], shapes(native_rows), 'exact twenty-nine native exports required')
++                for name,shape in shapes(native_rows).items():
++                    record(native['outputs'][mode][method][name], size=4*math.prod(shape),
++                           expected=(M16_X_SHA256 if native_rows == 16 else INPUT_X_SHA256) if name == 'x' else None)
+     exact(value['library'], ('receipt','binary'), 'strict official library schema')
+     for item in value['library'].values(): record(item)
+     need(value['library']['receipt']['bytes'] <= MAX_METADATA_BYTES, 'library receipt bound')
+@@ -273,8 +283,8 @@
+     return json_bytes(raw, limit=limit)
+ 
+ 
+-def read_manifest(path, expected_sha256, *, rows=16):
+-    need(type(rows) is int and rows == 16, 'fresh profile supports canonical M16 only')
++def read_manifest(path, expected_sha256, *, rows=ROWS):
++    need(type(rows) is int and rows == ROWS, 'fresh profile supports canonical M128 only')
+     need(digest(expected_sha256), 'fresh manifest digest required')
+     path = safe_path(path)
+     need(path.stat().st_size <= MAX_MANIFEST_BYTES, 'fresh manifest byte bound')
+@@ -307,25 +317,17 @@
+ 
+ 
+ def source_snapshot(*, enable_raw_kv=False):
+-    """Exact selected source composition, including producer and verifier closure."""
++    """Separate pinned M128 composition; published M16 pins remain immutable."""
+     need(type(enable_raw_kv) is bool, 'canonical raw KV source mode required')
+     own_sources()
+-    pins = read_json(HERE / 'pins.json')
+-    mode = 'enabled' if enable_raw_kv else 'disabled'
+-    expected = dict(pins['source_sha256'])
+-    expected.update(pins['generated_sha256'][mode])
+-    need(set(pins['source_paths']) == set(expected) | set(pins['own_sources']),
+-         'fresh source closure scope differs')
+-    for name, value in expected.items():
+-        need(file_sha(safe_path(ROOT / name)) == value, 'fresh source composition drift: ' + name)
+-    return {name:file_sha(safe_path(ROOT / name)) for name in pins['source_paths']}
++    return m128_profile.asset_source_snapshot(enable_raw_kv=enable_raw_kv)
+ 
+ 
+ def fresh_mode(enabled, manifest=None, manifest_sha256=None, *, rows=None):
+     need(type(enabled) is bool, 'canonical fresh profile flag required')
+     if enabled:
+         need(manifest is not None and digest(manifest_sha256), 'fresh manifest path and digest required')
+-        need(rows is None or (type(rows) is int and rows == 16), 'fresh profile supports canonical M16 only')
++        need(rows is None or (type(rows) is int and rows == ROWS), 'fresh profile supports canonical M128 only')
+     else:
+         need(manifest is None and manifest_sha256 is None, 'fresh arguments require explicit fresh profile')
+     return enabled
+@@ -447,12 +449,12 @@
+     need(directory.name == 'raw_stages' and {p.name for p in directory.iterdir()} == set(output_inventory()),
+          'producer raw directory inventory differs')
+     need(run['argv'] == [str(binary),str(resolve_artifact(workspace,manifest['readonly']['arena'])),
+-                        '16',str(directory),'0',str(empty),str(empty)], 'fresh reference cold command differs')
++                        str(ROWS),str(directory),'0',str(empty),str(empty)], 'fresh reference cold command differs')
+     with stdout_path.open('rb') as stream:
+         raw = stream.read(MAX_STDOUT_BYTES + 1)
+     need(len(raw) == run['stdout']['bytes'] and sha(raw) == run['stdout']['sha256'], 'fresh completion stdout drift')
+-    need(rms.software_ack(raw.decode('utf-8'),16,run['returncode']) == run['software_ack'], 'fresh software completion differs')
+-    _finite_seconds(run['elapsed_seconds']); _finite_seconds(run['requested_timeout_seconds'],30)
++    need(rms.software_ack(raw.decode('utf-8'),ROWS,run['returncode']) == run['software_ack'], 'fresh software completion differs')
++    _finite_seconds(run['elapsed_seconds']); _finite_seconds(run['requested_timeout_seconds'],45)
+     need(run['requested_timeout_seconds'] > 0, 'positive reference timeout required')
+     return built, run, directory
+ 
+@@ -470,13 +472,16 @@
+     return exported
+ 
+ 
+-def _verify_native(workspace, manifest, native):
+-    result = metadata(workspace,manifest['native']['result'])
++def _verify_native_record(workspace, manifest, native, *, role, rows, small_gate_sha256):
++    need((role == 'native_m16' and type(rows) is int and rows == 16 and small_gate_sha256 is None) or
++         (role == 'native' and type(rows) is int and rows == ROWS and digest(small_gate_sha256)),
++         'native prerequisite role differs')
++    result = metadata(workspace,manifest[role]['result'])
+     need(type(result.get('schema_version')) is int and result['schema_version'] == 1 and
+          result['status'] == 'PASS_BF16_STAGE_BUDGET' and
+          result['model_id'] == MODEL and type(result['layer']) is int and result['layer'] == 0 and
+-         type(result['tokens']) is int and result['tokens'] == 16 and result['carried'] is False and
+-         result['m16_gate_sha256'] is None and type(result['torch_threads']) is int and result['torch_threads'] == 4 and
++         type(result['tokens']) is int and result['tokens'] == rows and result['carried'] is False and
++         same(result['m16_gate_sha256'],small_gate_sha256) and type(result['torch_threads']) is int and result['torch_threads'] == 4 and
+          result['payload_manifest_sha256'] == manifest['payload']['manifest']['sha256'] and
+          result['official_framework_forward'] is True and result['rtl_execution'] is False and
+          result['hardware_recipe_acceptance'] is False and result['logits'] is False and
+@@ -488,8 +493,10 @@
+     identity = json_bytes(encoded(identity))
+     need(same(result['identity'],identity) and same(result['policy'],native.load_policy(ROOT)),
+          'fresh native runtime/source/threshold identity differs')
++    need(same(result.get('blas_environment'), {key:os.environ.get(key) for key in
++         ('OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','OMP_NUM_THREADS')}), 'fresh native BLAS environment differs')
+     exact(result['modes'],MODES,'fresh native precision modes differ')
+-    root = resolve_artifact(workspace,manifest['native']['result']).parent
++    root = resolve_artifact(workspace,manifest[role]['result']).parent
+     semantics = ('mask_exact','native_fp32_probability_sum_within_2e_5',
+         'independent_fp32_probability_sum_within_2e_5','native_cache_append_k_exact',
+         'native_cache_append_v_exact','independent_cache_append_k_exact','independent_cache_append_v_exact',
+@@ -499,15 +506,15 @@
+         need(type(phases) is list and len(phases) == 1, 'fresh native cold phase count')
+         phase = phases[0]
+         need(type(phase['phase']) is int and phase['phase'] == 0 and type(phase['past_tokens']) is int and
+-             phase['past_tokens'] == 0 and phase['token_ids'] == phase['position_ids'] == list(range(16)) and
++             phase['past_tokens'] == 0 and phase['token_ids'] == phase['position_ids'] == list(range(rows)) and
+              all(type(i) is int for i in phase['token_ids'] + phase['position_ids']), 'fresh native workload identity differs')
+         exact(phase['semantics'],semantics,'fresh native semantic inventory differs')
+         need(all(v is True for v in phase['semantics'].values()) and phase['all_semantics_exact'] is True,
+              'fresh native semantic checks incomplete')
+-        exact(phase['stages'],shapes(),'fresh native stage inventory differs')
++        exact(phase['stages'],shapes(rows),'fresh native stage inventory differs')
+         failures = []
+         for name, item in phase['stages'].items():
+-            need(same(item['shape'],shapes()[name]) and same(item['elements'],math.prod(shapes()[name])) and
++            need(same(item['shape'],shapes(rows)[name]) and same(item['elements'],math.prod(shapes(rows)[name])) and
+                  item['finite'] is True, 'fresh native logical geometry differs')
+             need(type(item['bit_exact']) is bool, 'fresh native bit-exact flag must be boolean')
+             verdict = native.stage_verdict(name,item,mode,result['policy'])
+@@ -515,10 +522,10 @@
+             if item['passed'] is False:
+                 failures.append(name)
+             for method, prefix in zip(METHODS,('native','independent'),strict=True):
+-                record_ = manifest['native']['outputs'][mode][method][name]
++                record_ = manifest[role]['outputs'][mode][method][name]
+                 expected_path = '%s/phase_0/%s_%s.f32le' % (mode,prefix,name)
+                 need(item[prefix+'_file'] == expected_path and
+-                     same(item[prefix+'_export_shape'],export_shapes()[name]) and
++                     same(item[prefix+'_export_shape'],export_shapes(rows)[name]) and
+                      item[prefix+'_file_sha256'] == record_['sha256'] and
+                      resolve_artifact(workspace,record_) == root / expected_path,
+                      'fresh native export path/layout/hash differs')
+@@ -531,6 +538,24 @@
+     return result
+ 
+ 
++
++def _verify_native(workspace, manifest, native):
++    """Bind full sealed M16 evidence to the unchanged native M128 producer.
++
++    The producer itself invokes validate_small_gate before its M128 forward.
++    Admission hashes every prerequisite export and validates metadata without
++    opening numerical arrays before the actual-chain terminal fence.
++    """
++    small = _verify_native_record(workspace,manifest,native,role='native_m16',rows=16,small_gate_sha256=None)
++    result = _verify_native_record(workspace,manifest,native,role='native',rows=ROWS,
++                                  small_gate_sha256=manifest['native_m16']['result']['sha256'])
++    need(same(small['identity'],result['identity']) and same(small['policy'],result['policy']) and
++         same(small['blas_environment'],result['blas_environment']) and
++         small['payload_manifest_sha256'] == result['payload_manifest_sha256'],
++         'fresh native M16 prerequisite identity differs')
++    return result
++
++
+ def _views(workspace, path, expected_sha256, manifest, exported, native_result, directories, *, enable_raw_kv):
+     def absolute(item):
+         return str(resolve_artifact(workspace,item))
+@@ -541,7 +566,8 @@
+         'wu':'mlp.up_proj.weight','wd':'mlp.down_proj.weight'}
+     comparison_records = list(manifest['sequential']['outputs'].values()) + list(manifest['sequential']['tensors'].values())
+     comparison_records += list(manifest['reduced']['outputs'].values()) + list(records(manifest['native']['outputs']))
+-    original_input = dict(token_ids=list(range(16)),positions=list(range(16)),input_x_sha256=INPUT_X_SHA256,
++    comparison_records += list(records(manifest['native_m16']['outputs']))
++    original_input = dict(token_ids=list(range(ROWS)),positions=list(range(ROWS)),input_x_sha256=INPUT_X_SHA256,
+         intermediate_preloads=0,rope_theta=1000000.0,
+         rope_table_recipe='FP32 exponent/powf/reciprocal/phase multiply/sinf/cosf then BF16; positions0..255 only',
+         readonly_bytes=ARENA_BYTES,readonly_sha256=ARENA_SHA256)
+@@ -560,16 +586,17 @@
+     provenance = dict(profile=PROFILE,fresh_assets=identity,new_official_forward_executed=True,
+         historical_receipts_reused=False,actual_chain_executed=False,
+         native_result_sha256=manifest['native']['result']['sha256'],native_status=native_result['status'],
++        native_m16_result_sha256=manifest['native_m16']['result']['sha256'],
+         native_vs_independent_failed_stages=native_result['modes']['bf16']['phases'][0]['failed_stages'],
+         producer_sha256=manifest['source_sha256']['scripts/qwen2_layer0_model_gate.py'],
+         sequential_cpp_sha256=CPP_SHA256['sequential'],reduced_cpp_sha256=CPP_SHA256['reduced'])
+     reference = dict(fresh_profile=PROFILE,workspace=str(workspace),directory=str(resolve_artifact(workspace,manifest['readonly']['table']).parent),
+-        table_path=absolute(manifest['readonly']['table']),fresh_lookup=lookup,inputs=dict(original_input,position_ids=list(range(16))),
++        table_path=absolute(manifest['readonly']['table']),fresh_lookup=lookup,inputs=dict(original_input,position_ids=list(range(ROWS))),
+         threshold_policy=native_result['policy'],official_reference_identity=native_result['identity'],
+         tensors=exported,prior_failures={},
+         fresh_provenance=provenance,artifacts=[dict(item,path=name) for name,item in lookup.items()],
+         native_execution_reused=False,oracle_execution_reused=False,old_pass_inherited=False)
+-    reduced = dict(fresh_profile=PROFILE,workspace=str(workspace),directory=str(directories['reduced'].parent),rows=16,past_tokens=0,
++    reduced = dict(fresh_profile=PROFILE,workspace=str(workspace),directory=str(directories['reduced'].parent),rows=ROWS,past_tokens=0,
+         result_sha256=manifest['reduced']['run']['sha256'],readonly_input=dict(path=absolute(manifest['readonly']['arena']),
+         bytes=ARENA_BYTES,sha256=ARENA_SHA256,input_x_sha256=INPUT_X_SHA256),
+         fresh_lookup={'raw_stages/'+name:item for name,item in manifest['reduced']['outputs'].items()},
+@@ -579,7 +606,7 @@
+                 library_receipt=absolute(manifest['library']['receipt']),library=absolute(manifest['library']['binary']))
+ 
+ 
+-def verify(path, expected_sha256, *, rows=16, enable_raw_kv=False):
++def verify(path, expected_sha256, *, rows=ROWS, enable_raw_kv=False):
+     """Hash-only asset admission before any reference numerical array is loaded."""
+     need(type(enable_raw_kv) is bool, 'canonical raw KV source mode required')
+     manifest = read_manifest(path,expected_sha256,rows=rows)
+@@ -590,7 +617,7 @@
+     for item in records(manifest):
+         checked_artifact(workspace,item)
+     reject_aliases(workspace,{role:list(records(manifest[role])) for role in
+-                             ('payload','readonly','sequential','reduced','native','library')})
++                             ('payload','readonly','sequential','reduced','native_m16','native','library')})
+     _verify_payload(workspace,manifest)
+     from candidates.qwen2_resident_matrix.official_bf16 import dense_silu
+     from scripts import qwen2_rms_rope_prefill_candidate as rms
+@@ -628,7 +655,7 @@
+ 
+ def read_native_reference(reference, raw, *, rows, method, name, shape):
+     """Late original decoder; fresh producer metadata fixes token-major Q/K."""
+-    need(type(rows) is int and rows == 16 and method in METHODS and name in shapes() and
++    need(type(rows) is int and rows == ROWS and method in METHODS and name in shapes() and
+          tuple(shape) == tuple(shapes()[name]), 'fresh reference logical layout differs')
+     item = reference['fresh_lookup']['references/%s/%s.f32le'%(method,name)]
+     need(len(raw) == item['bytes'] and sha(raw) == item['sha256'], 'fresh native comparison bytes differ')

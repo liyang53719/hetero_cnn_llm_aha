@@ -1,0 +1,35 @@
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
+@@ -21,6 +21,7 @@
+ from ..official_bf16 import check_numeric as prior
+ from ..official_bf16 import execution as policy
+ from ..raw_kv_public_fresh import assets as fresh_assets
++from ..raw_kv_public_m128 import profile as m128_profile
+ base=prior.base
+ require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha
+ PREFIX='candidates/qwen2_resident_matrix/dense_block_reduce/'
+@@ -309,12 +310,19 @@
+     require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+     _raw_kv_mode(enable_raw_kv)
+     out,path=Path(out).resolve(),Path(path).resolve()
+-    require(not out.exists() and 0<wall_budget<=1800,'fresh bounded reduced public21 run required')
+-    if enable_raw_kv:
+-        require(file_sha(path)==digest,'new snapshot hash differs')
++    m128_selected=fresh_profile and fresh_assets.PROFILE=='qwen2-public-pv16-fresh-assets-m128-v1'
++    if m128_selected:
++        require(not out.exists() and file_sha(path)==digest,'fresh M128 snapshot/output identity required')
+         pending=json.loads(path.read_text());_snapshot_raw_kv_mode(pending,enable_raw_kv)
+-        require(validate_rows(pending['rows'])==16,
+-                'enabled raw KV execution is limited to M16 pending a reviewed same-source M16 receipt')
++        m128_profile.authorize_run(pending,wall_budget=wall_budget,
++            enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
++    else:
++        require(not out.exists() and 0<wall_budget<=1800,'fresh bounded reduced public21 run required')
++        if enable_raw_kv:
++            require(file_sha(path)==digest,'new snapshot hash differs')
++            pending=json.loads(path.read_text());_snapshot_raw_kv_mode(pending,enable_raw_kv)
++            require(validate_rows(pending['rows'])==16,
++                    'enabled raw KV execution is limited to M16 pending a reviewed same-source M16 receipt')
+     s=verify_snapshot(path,digest,enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     (modules,dense,_,native),new=runtime(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     helper,original,fixtures,public,prefix,_,scalar,suffix,physical_adapter,matrix,_,_=modules

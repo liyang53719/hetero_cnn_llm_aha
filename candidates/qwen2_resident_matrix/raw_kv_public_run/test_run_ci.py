@@ -1,6 +1,8 @@
 """Cold launch tests: mocked originals and tiny cleanup children, no native math."""
 from contextlib import ExitStack,redirect_stdout
+import ast
 import copy
+from dataclasses import asdict
 import io
 import json
 import os
@@ -37,6 +39,48 @@ def actual():
             same_owner_and_banks=True,same_physical_memory_and_services=True,host=host,
             reports=[dict(kind='Attention',pcs=[10,11,12],report=dict(accepted=dict(requests=10,responses=10),
                 final_ack_fence=dict(terminal_strictly_after_final_ack=True,final_ack_tick=5,terminal_tick=6)))]))
+
+
+def original_profile_report():
+    """Original report method/profile over a CONTROL_ONLY inert parent report.
+
+    No Matrix service is constructed and no arithmetic is executed. The real
+    pinned method preserves the profile's nested tuples in the returned dict.
+    """
+    prefix='candidates/qwen2_resident_matrix/dense_block_reduce/'
+    pins=run.assets.read_json(run.ROOT/'candidates/qwen2_resident_matrix/raw_kv_public_fresh/pins.json')
+    for name in ('profile.py','matrix_binding.py'):
+        if run.assets.file_sha(run.ROOT/prefix/name)!=pins['source_sha256'][prefix+name]:
+            raise ValueError('original serialization fixture source drift')
+    profile_path=run.ROOT/prefix/'profile.py'
+    namespace={'__name__':__name__,'__file__':str(profile_path)}
+    exec(compile(ast.parse(profile_path.read_text()),str(profile_path),'exec'),namespace)
+    path=run.ROOT/prefix/'matrix_binding.py'
+    cls=next(node for node in ast.parse(path.read_text()).body
+             if isinstance(node,ast.ClassDef) and node.name=='ProfiledMatrixService')
+    cls=copy.deepcopy(cls)
+    cls.body=[node for node in cls.body if isinstance(node,ast.FunctionDef) and node.name=='report']
+    class ControlOnlyReportBase:
+        def report(self):return {'fixture_kind':'CONTROL_ONLY'}
+    namespace.update(OfficialMatrixService=ControlOnlyReportBase,asdict=asdict)
+    exec(compile(ast.Module(body=[cls],type_ignores=[]),str(path),'exec'),namespace)
+    service=namespace['ProfiledMatrixService']()
+    service.profile=namespace['QWEN2_QKV_PROFILE']
+    return service.report()
+
+
+def original_report_bytes(value):
+    """Execute the pinned original entry chain's JSON encoder, without imports."""
+    name='candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py'
+    pins=run.assets.read_json(run.ROOT/'candidates/qwen2_resident_matrix/raw_kv_public_fresh/pins.json')
+    path=run.ROOT/name
+    if run.assets.file_sha(path)!=pins['source_sha256'][name]:
+        raise ValueError('original report encoder source drift')
+    node=next(node for node in ast.parse(path.read_text()).body
+              if isinstance(node,ast.FunctionDef) and node.name=='encoded')
+    namespace={'json':json}
+    exec(compile(ast.Module(body=[node],type_ignores=[]),str(path),'exec'),namespace)
+    return namespace['encoded'](value)
 
 
 def write_json(path,value):
@@ -201,10 +245,17 @@ class LaunchTests(unittest.TestCase):
             private=Path(tmp);ctx={'deadline_ns':time.monotonic_ns()+10**9,'checkout_commit':COMMIT,'contract_sha256':FROZEN['contract_sha256']}
             identity=types.SimpleNamespace(library_receipt=private/'library.json',manifest=private/'ASSETS.json',manifest_sha256='3'*64,receipt_sha256='4'*64)
             calls=[];value=actual();snapshot={'source_sha256':SOURCES}
+            value['execution']['matrix']=original_profile_report()
+            self.assertEqual(value['execution']['matrix']['qkv_reduction_profile']['ranges'],((0,1024),(1024,1536)))
             def prepare(*args,**kwargs):
                 calls.append(('prepare',args,kwargs));write_json(private/'snapshot/SNAPSHOT.json',snapshot);return private/'snapshot/SNAPSHOT.json',snapshot
             def execute(*args,**kwargs):
-                calls.append(('run',args,kwargs));write_json(private/'actual/summary.json',value);return value
+                calls.append(('run',args,kwargs))
+                target=private/'actual/summary.json';target.parent.mkdir();target.write_bytes(original_report_bytes(value))
+                disk=run.assets.read_json(private/'actual/summary.json')
+                self.assertNotEqual(disk,value)
+                self.assertEqual(disk['execution']['matrix']['qkv_reduction_profile']['ranges'],[[0,1024],[1024,1536]])
+                return value
             entry=types.SimpleNamespace(prepare=prepare,run=execute,source_hashes=lambda **kw:SOURCES)
             with patch.object(run,'expected_entry_sources',return_value=SOURCES),patch.object(run,'check_context',return_value=FROZEN),patch.object(admission,'verify_setup',return_value=identity),patch.object(admission,'revalidate',side_effect=lambda x:calls.append(('revalidate',None,None))),patch.object(run.importlib,'import_module',return_value=entry):
                 result=run.numeric(ctx,private,deadline_ns=ctx['deadline_ns'])
@@ -212,6 +263,133 @@ class LaunchTests(unittest.TestCase):
             self.assertEqual(calls[2][2],dict(wall_budget=900,enable_raw_kv=True,fresh_profile=True))
             self.assertEqual(calls[0][2]['rows'],16);self.assertIsNone(calls[0][1][2]);self.assertIsNone(calls[0][1][3])
             self.assertEqual(result['status'],run.PASS)
+
+    def test_original_nested_tuple_report_matches_its_real_json_serialization(self):
+        value=actual();value['execution']['matrix']=original_profile_report()
+        raw=original_report_bytes(value);disk=run.assets.json_bytes(raw)
+        self.assertNotEqual(disk,value)
+        self.assertEqual(run.canonical_actual(value),disk)
+        self.assertIs(type(value['execution']['matrix']['qkv_reduction_profile']['ranges']),tuple)
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'summary.json';path.write_bytes(raw)
+            self.assertEqual(run.check_actual_json(path,value,SOURCES),run.assets.sha(raw))
+
+    def test_actual_json_equality_rejects_boolean_integer_and_float_aliases(self):
+        for runtime,disk_value in ((True,1),(False,0),(1,1.0)):
+            with self.subTest(runtime=runtime,disk_value=disk_value),tempfile.TemporaryDirectory() as tmp:
+                value=actual();value['serialization_probe']={'nested':(runtime,)}
+                disk=run.assets.json_bytes(original_report_bytes(value))
+                disk['serialization_probe']['nested'][0]=disk_value
+                # Ordinary Python equality would hide this metadata drift.
+                self.assertEqual(disk,run.assets.json_bytes(original_report_bytes(value)))
+                path=Path(tmp)/'summary.json';path.write_bytes(original_report_bytes(disk))
+                with self.assertRaises(ValueError):run.check_actual_json(path,value,SOURCES)
+        for side in ('runtime','disk'):
+            with self.subTest(side=side),tempfile.TemporaryDirectory() as tmp:
+                value=actual();disk=copy.deepcopy(value)
+                (value if side=='runtime' else disk)['enable_raw_kv']=1
+                path=Path(tmp)/'summary.json';path.write_bytes(original_report_bytes(disk))
+                with self.assertRaises(ValueError):run.check_actual_json(path,value,SOURCES)
+
+    def test_canonical_actual_rejects_nonfinite_and_oversized_metadata(self):
+        for item in (float('nan'),float('inf'),-float('inf')):
+            with self.subTest(item=item),self.assertRaises((ValueError,TypeError)):
+                run.canonical_actual({'nested':(item,)})
+        with self.assertRaises(ValueError):run.canonical_actual({'oversized':'x'*(2*1024*1024)})
+
+    def test_actual_json_hash_binds_the_same_bytes_that_were_compared(self):
+        value=actual();value['execution']['matrix']=original_profile_report()
+        raw=original_report_bytes(value)
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'summary.json';path.write_bytes(raw);parse=run.assets.json_bytes
+            def mutate(data,**kwargs):
+                result=parse(data,**kwargs)
+                if data==raw:path.write_bytes(b'{}')
+                return result
+            with patch.object(run.assets,'json_bytes',side_effect=mutate):
+                self.assertEqual(run.check_actual_json(path,value,SOURCES),run.assets.sha(raw))
+            self.assertNotEqual(run.assets.file_sha(path),run.assets.sha(raw))
+
+    def test_late_numeric_failure_preserves_only_validated_actual_checkpoint(self):
+        """CONTROL_ONLY entry fixtures exercise real numeric/resume failure paths."""
+        from . import admission
+        for failure in ('json','admission','source','validation'):
+            def child(private,ctx,kw):
+                write_json(private/'assets/SETUP.json',{'fixture_kind':'CONTROL_ONLY'})
+                identity=types.SimpleNamespace(library_receipt=private/'library.json',manifest=private/'ASSETS.json',
+                    manifest_sha256='3'*64,receipt_sha256=run.assets.file_sha(private/'assets/SETUP.json'))
+                value=actual();value['execution']['matrix']=original_profile_report()
+                value['private_details']='/private/SECRET raw_tensor=[1,2] https://signed'
+                if failure=='validation':value['actual_dataflow_pass']=False
+                snapshot={'source_sha256':SOURCES};revalidations=0;checks=0
+                def prepare(*args,**kwargs):
+                    write_json(private/'snapshot/SNAPSHOT.json',snapshot)
+                    return private/'snapshot/SNAPSHOT.json',snapshot
+                def execute(*args,**kwargs):
+                    disk=copy.deepcopy(value)
+                    if failure=='json':disk['execution']['matrix']['qkv_reduction_profile']['pair_reverse']=1
+                    target=private/'actual/summary.json';target.parent.mkdir();target.write_bytes(original_report_bytes(disk))
+                    return value
+                def revalidate(*args):
+                    nonlocal revalidations
+                    revalidations+=1
+                    if failure=='admission' and revalidations==2:raise ValueError('PRIVATE postflight drift')
+                def check(*args,**kwargs):
+                    nonlocal checks
+                    checks+=1
+                    if failure=='source' and checks==2:raise ValueError('PRIVATE source drift')
+                    return FROZEN
+                entry=types.SimpleNamespace(prepare=prepare,run=execute,source_hashes=lambda **kw:SOURCES)
+                with patch.object(run,'check_context',side_effect=check),patch.object(admission,'verify_setup',return_value=identity),patch.object(admission,'revalidate',side_effect=revalidate),patch.object(run.importlib,'import_module',return_value=entry):
+                    run.numeric(ctx,private,deadline_ns=int(kw['extra_env']['QWEN2_PUBLIC_NUMERIC_DEADLINE_NS']))
+                self.fail('injected failure did not reject the numerical child')
+            with self.subTest(failure=failure),tempfile.TemporaryDirectory() as tmp:
+                code,summary,calls,ctx,private,evidence=self.exercise(Path(tmp),child=child)
+                self.assertEqual((code,summary['status']),(1,'FAILED'))
+                self.assertFalse((private/'numeric.complete.json').exists())
+                self.assertNotIn('actual_dataflow_pass',summary)
+                if failure=='validation':
+                    self.assertNotIn('validated_actual',summary)
+                    self.assertFalse((private/'numeric.validated.json').exists())
+                else:
+                    partial=summary['validated_actual']
+                    self.assertEqual(partial['status'],'VALIDATED_ACTUAL_POSTFLIGHT_INCOMPLETE')
+                    self.assertIs(partial['postflight_complete'],False)
+                    self.assertIs(partial['numerical_acceptance'],False)
+                    self.assertEqual((partial['assigned_official_gates'],partial['observed_fields']),(27,28))
+                    self.assertIs(partial['full_29_node_acceptance'],False)
+                public=json.dumps(summary)+''.join(path.read_text() for path in evidence.iterdir())
+                for text in ('SECRET','PRIVATE','/private/','raw_tensor','https://',tmp,run.PASS):
+                    self.assertNotIn(text,public)
+
+    def test_forged_or_noncanonical_validated_checkpoint_is_not_projected(self):
+        mutations=(('postflight_complete',0),('numerical_acceptance',0),('rows',True),
+            ('status',run.PASS),('launch_contract_sha256','f'*64),('setup_receipt_sha256','f'*64),
+            ('snapshot_sha256','f'*64),('source_manifest_sha256','f'*64),
+            ('actual_source_manifest_sha256','f'*64),('runtime_actual_sha256','not-a-hash'),
+            ('private_payload','/private/SECRET raw_tensor=[1,2]'))
+        for key,bad in mutations:
+            def child(private,ctx,kw):
+                write_json(private/'assets/SETUP.json',{'fixture_kind':'CONTROL_ONLY'})
+                write_json(private/'snapshot/SNAPSHOT.json',{'source_sha256':SOURCES})
+                value=dict(run.validate_actual(actual(),SOURCES),schema=1,
+                    status='VALIDATED_ACTUAL_POSTFLIGHT_INCOMPLETE',rows=16,enable_raw_kv=True,fresh_profile=True,
+                    postflight_complete=False,numerical_acceptance=False,
+                    runtime_actual_sha256=run.assets.sha(run.assets.encoded(actual())),
+                    launch_contract_sha256=ctx['contract_sha256'],
+                    setup_receipt_sha256=run.assets.file_sha(private/'assets/SETUP.json'),
+                    snapshot_sha256=run.assets.file_sha(private/'snapshot/SNAPSHOT.json'),
+                    source_manifest_sha256=run.assets.sha(run.assets.encoded(SOURCES)),
+                    actual_source_manifest_sha256=run.assets.sha(run.assets.encoded(SOURCES)))
+                value[key]=bad;write_json(private/'numeric.validated.json',value)
+                raise RuntimeError('CONTROL_ONLY injected postflight failure')
+            with self.subTest(key=key),tempfile.TemporaryDirectory() as tmp:
+                code,summary,calls,ctx,private,evidence=self.exercise(Path(tmp),child=child)
+                self.assertEqual((code,summary['status']),(1,'FAILED'))
+                self.assertNotIn('validated_actual',summary)
+                self.assertFalse((private/'numeric.complete.json').exists())
+                public=json.dumps(summary)+''.join(path.read_text() for path in evidence.iterdir())
+                for text in ('SECRET','/private/','raw_tensor',run.PASS):self.assertNotIn(text,public)
 
     def test_real_term_resistant_child_is_reaped_inside_same_budget(self):
         with tempfile.TemporaryDirectory() as tmp:

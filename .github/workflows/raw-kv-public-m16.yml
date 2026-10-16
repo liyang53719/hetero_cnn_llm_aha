@@ -1,5 +1,6 @@
 name: raw-kv-public-m16
 # One fresh M16 original Public21 numerical run. No RTL or full29 acceptance.
+# Revision 2: canonical JSON receipt comparison and bounded partial validation evidence; same budgets.
 on:
   push:
     branches: [main]

@@ -38,6 +38,7 @@ RECEIPT=1
 PHASES=('preflight','clone','compose','setup','numeric','finalize')
 OUTPUTS=('summary.json','progress.json','source_hashes.json')
 PASS='PASS_FRESH_PUBLIC_M16_OBSERVED_GATES'
+VALIDATED='VALIDATED_ACTUAL_POSTFLIGHT_INCOMPLETE'
 IMPORTED_SHA256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 BASE_SETUP_SHA256={
  'candidates/qwen2_resident_matrix/raw_kv_public_fresh/'+name:value for name,value in {
@@ -245,6 +246,21 @@ def validate_actual(value,sources):
         native_acceptance='PASS_OBSERVED_ONLY',actual_dataflow_pass=True,fixed_arithmetic_pass=True)
 
 
+def canonical_actual(value):
+    """Match original JSON serialization (including tuples), rejecting nonfinite data."""
+    return assets.json_bytes(assets.encoded(value),limit=2*1024*1024)
+
+
+def check_actual_json(path,actual,sources):
+    """Validate both representations, preserving bool/int/float distinctions."""
+    validate_actual(actual,sources)
+    raw=read_bytes(path,2*1024*1024)
+    saved=assets.json_bytes(raw,limit=2*1024*1024)
+    validate_actual(saved,sources)
+    need(assets.same(saved,canonical_actual(actual)))
+    return assets.sha(raw)
+
+
 def expected_entry_sources(frozen):
     pins=assets.read_json(ROOT/'candidates/qwen2_resident_matrix/raw_kv_public_fresh/pins.json')
     names=pins['source_paths']
@@ -274,17 +290,49 @@ def numeric(context,private,*,deadline_ns=None):
     actual=entry.run(private/'actual',path,assets.file_sha(path),wall_budget=900,enable_raw_kv=True,fresh_profile=True)
     remaining()
     result=validate_actual(actual,snapshot['source_sha256'])
-    need(assets.read_json(private/'actual/summary.json',limit=2*1024*1024)==actual)
+    # Durable diagnostic checkpoint only: runtime gates passed, but saved JSON
+    # consistency, identity revalidation and child completion are still pending.
+    validated=dict(result,schema=1,status=VALIDATED,rows=16,enable_raw_kv=True,fresh_profile=True,
+        postflight_complete=False,numerical_acceptance=False,
+        runtime_actual_sha256=assets.sha(assets.encoded(canonical_actual(actual))),
+        launch_contract_sha256=context['contract_sha256'],setup_receipt_sha256=identity.receipt_sha256,
+        snapshot_sha256=assets.file_sha(path),source_manifest_sha256=assets.sha(assets.encoded(before['sources'])),
+        actual_source_manifest_sha256=assets.sha(assets.encoded(snapshot['source_sha256'])))
+    remaining();setup.atomic_json(private/'numeric.validated.json',validated,8192);remaining()
+    actual_receipt_sha256=check_actual_json(private/'actual/summary.json',actual,snapshot['source_sha256'])
     admission.revalidate(identity);need(check_context(context,private,composed=True)==before)
     result.update(schema=1,status=PASS,rows=16,enable_raw_kv=True,fresh_profile=True,
         launch_contract_sha256=context['contract_sha256'],setup_receipt_sha256=identity.receipt_sha256,
-        actual_receipt_sha256=assets.file_sha(private/'actual/summary.json'),snapshot_sha256=assets.file_sha(path),
+        actual_receipt_sha256=actual_receipt_sha256,snapshot_sha256=assets.file_sha(path),
         source_manifest_sha256=assets.sha(assets.encoded(before['sources'])),
         actual_source_manifest_sha256=assets.sha(assets.encoded(snapshot['source_sha256'])))
     remaining()
     setup.atomic_json(private/'numeric.complete.json',result,8192)
     remaining()
     return result
+
+
+def safe_validated_receipt(private,context,frozen):
+    """Allowlisted runtime-validation evidence; never an execution credential."""
+    value=assets.read_json(private/'numeric.validated.json',limit=8192)
+    fixed=dict(schema=1,status=VALIDATED,rows=16,enable_raw_kv=True,fresh_profile=True,
+        postflight_complete=False,numerical_acceptance=False,assigned_official_gates=27,
+        observed_fields=28,full_29_node_acceptance=False,native_acceptance='PASS_OBSERVED_ONLY',
+        actual_dataflow_pass=True,fixed_arithmetic_pass=True)
+    hashes={'runtime_actual_sha256','launch_contract_sha256','setup_receipt_sha256','snapshot_sha256',
+            'source_manifest_sha256','actual_source_manifest_sha256'}
+    need(type(value) is dict and set(value)==set(fixed)|hashes)
+    need(all(assets.same(value[key],want) for key,want in fixed.items()))
+    need(all(assets.digest(value[key]) for key in hashes))
+    need(value['launch_contract_sha256']==context['contract_sha256'] and
+         value['source_manifest_sha256']==assets.sha(assets.encoded(frozen['sources'])) and
+         value['actual_source_manifest_sha256']==assets.sha(assets.encoded(expected_entry_sources(frozen))) and
+         value['setup_receipt_sha256']==assets.file_sha(private/'assets/SETUP.json'))
+    raw=read_bytes(private/'snapshot/SNAPSHOT.json',2*1024*1024)
+    snapshot=assets.json_bytes(raw,limit=2*1024*1024)
+    need(value['snapshot_sha256']==assets.sha(raw) and
+         assets.same(snapshot['source_sha256'],expected_entry_sources(frozen)))
+    return value
 
 
 def safe_numeric_receipt(private,context,frozen):
@@ -408,6 +456,10 @@ def resume(context,private,evidence):
         return finish(evidence,summary,budget,sources=frozen['sources'],deadline_ns=numeric_end)
     except BaseException as error:
         if summary['phase']=='numeric' and numeric_end is not None and time.monotonic_ns()<numeric_end-RECEIPT*10**9:
+            try:
+                budget.arm(numeric_end-RECEIPT*10**9)
+                summary['validated_actual']=safe_validated_receipt(private,context,frozen)
+            except Exception:pass
             try:
                 budget.arm(numeric_end-RECEIPT*10**9)
                 failure=assets.read_json(private/'numeric.failure.json',limit=2048)

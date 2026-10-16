@@ -2,11 +2,11 @@
 
 ## 中文计划
 
-- 已完成：独立资产验证器与 setup-v1 监督器的冷测试和来源审查；真实生产器尚未执行。
-- 已完成：SETUP/资产双凭据准入、原始 M16 入口连接及 39 个普通 / -O 冷测试。
-- 进行中：独立启动合同、来源组合及工作流的最终审查。
-- 下一步：短测试和独立审查通过后，由一次工作流进行实际重建及 M16 数值运行。
-- 未运行：本批没有安装包、下载权重、运行原生生产器或完整数值链；没有新的数值 PASS。
+- 已完成：SETUP/资产双凭据准入、原始 M16 入口连接及首次真实 CI 尝试。
+- 已确认：运行 38901691296 的设置阶段通过，原始数值入口返回，包装器的原始结果验证通过；随后 JSON 磁盘结果与内存对象比较失败，整个运行仍为 FAILED。
+- 进行中：修复原始报告中 tuple 经 JSON 转为 list 的序列化比较，并补充失败后可保留的有限安全验证证据。
+- 下一步：短测试和独立审查通过后，再由根任务决定是否发布并运行一次修正后的工作流。
+- 尚无本链新 PASS：首次失败的私有详细结果未上传，不能重建丢失的数值凭据或追认整个运行成功。完整 29 节点验收和本链 M128 仍未完成。
 
 ## One existing chain
 
@@ -72,6 +72,27 @@ observed-gates result, with fixed arithmetic success, source/input revalidation,
 whole Host terminal and raw lease retirement. Setup completion alone never yields
 PASS. A failure or timeout remains explicit and retains only safe partial evidence.
 
+## First attempt and serialization correction
+
+Run `38901691296`, job `116975226044`, ended FAILED in the numeric phase
+at 830.432862 seconds. Its retained artifact SHA-256 is
+`bd688b7abc6208d07614e650ffcaece2f29a6c54d809cce497a601d7a2380a39`.
+The diagnostic identifies the disk/runtime receipt equality check, after
+`entry.run` returned and `validate_actual` completed. No private actual receipt
+survives in the three-file artifact, so this is not a retrospective numerical PASS.
+
+The original Host report contains tuple-valued published spans, and the original
+profiled Matrix report contains nested tuple-valued ranges. JSON serializes both
+as arrays. Comparing parsed JSON directly with the returned Python object rejects
+these legitimate reports. The corrected wrapper compares strict JSON-canonical
+representations while retaining boolean/integer distinctions and rejecting
+nonfinite values. Original source, arithmetic and numerical gates are unchanged.
+
+A validated partial result is diagnostic evidence only. Later receipt, source,
+admission or deadline failures still fail the launch; they cannot promote partial
+evidence into the successful completion receipt. The explicit workflow revision
+permits one corrected attempt under the same deadlines, after review.
+
 ## Reproduce the bounded checks
 
 ```sh
@@ -79,7 +100,7 @@ python -m unittest candidates.qwen2_resident_matrix.raw_kv_public_run.test_admis
 python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_run.test_run_ci -q
 ```
 
-These 39 tests use metadata/control fixtures and short local child processes.
+These 45 tests use metadata/control fixtures and short local child processes.
 They do not invoke package installation, native model services or reference
 producers. The new launch contract freezes 193 clean source inputs and the eight
 reviewed generated overlay identities; its own bytes are separately bound to

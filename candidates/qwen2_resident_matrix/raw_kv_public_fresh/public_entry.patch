@@ -1,0 +1,206 @@
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
+@@ -20,6 +20,7 @@
+ sys.path.insert(0,str(ROOT))
+ from ..official_bf16 import check_numeric as prior
+ from ..official_bf16 import execution as policy
++from ..raw_kv_public_fresh import assets as fresh_assets
+ base=prior.base
+ require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha
+ PREFIX='candidates/qwen2_resident_matrix/dense_block_reduce/'
+@@ -153,9 +154,13 @@
+     return selected
+ 
+ 
+-def source_hashes(*,enable_raw_kv=False):
++def source_hashes(*,enable_raw_kv=False,fresh_profile=False):
++    require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+     _verify_raw_kv_composition(enable_raw_kv)
+-    result=prior.source_hashes()
++    if fresh_profile:
++        result=prior.source_hashes(fresh_profile=True,enable_raw_kv=enable_raw_kv)
++    else:
++        result=prior.source_hashes()
+     result.update({PREFIX+p:file_sha(ROOT/PREFIX/p) for p in EXECUTION_FILES})
+     # Reference packaging is an independent verifier, never an actual producer.
+     for path in sorted((ROOT/PREFIX/'reference').rglob('*')):
+@@ -166,14 +171,18 @@
+     return result
+ 
+ 
+-def runtime(*,enable_raw_kv=False):
++def runtime(*,enable_raw_kv=False,fresh_profile=False):
++    require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+     _verify_raw_kv_composition(enable_raw_kv)
+-    old=prior.runtime()
+-    sources=source_hashes(enable_raw_kv=enable_raw_kv)
++    if fresh_profile:
++        old=prior.runtime(fresh_profile=True,enable_raw_kv=enable_raw_kv)
++    else:
++        old=prior.runtime()
++    sources=source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     with base.frozen_exec(sources):
+         modules=tuple(importlib.import_module('candidates.qwen2_resident_matrix.dense_block_reduce.'+p)
+             for p in ('dense_drain','matrix_binding','profile','public_execution','observation','reference.completed'))
+-    require(source_hashes(enable_raw_kv=enable_raw_kv)==sources,'new reduction source changed during import')
++    require(source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)==sources,'new reduction source changed during import')
+     return old,modules
+ 
+ 
+@@ -182,7 +191,12 @@
+     return rows
+ 
+ 
+-def prepare(out,compile_receipt,reference,reference_sha256,rows=16,*,enable_raw_kv=False):
++def prepare(out,compile_receipt,reference,reference_sha256,rows=16,*,enable_raw_kv=False,
++            fresh_profile=False,fresh_manifest=None,fresh_manifest_sha256=None):
++    fresh_assets.fresh_mode(fresh_profile,fresh_manifest,fresh_manifest_sha256,rows=rows)
++    if fresh_profile:
++        require(reference is None and reference_sha256 is None,'fresh and historical reference arguments cannot mix')
++        admitted=fresh_assets.verify(fresh_manifest,fresh_manifest_sha256,rows=rows,enable_raw_kv=enable_raw_kv)
+     _verify_raw_kv_composition(enable_raw_kv)
+     out=Path(out).resolve()
+     validate_rows(rows)
+@@ -190,12 +204,19 @@
+     out.mkdir(parents=True)
+     # Revalidate original source, public metadata, payload, table and native
+     # archives; this performs no arithmetic or actual-chain execution.
+-    original_path,s=prior.prepare(out/'original_policy',compile_receipt,rows)
+-    _,modules=runtime(enable_raw_kv=enable_raw_kv);completed=modules[-1]
+-    independent=completed.reference_spec(reference,reference_sha256)
++    if fresh_profile:
++        original_path,s=prior.prepare(out/'original_policy',compile_receipt,rows,fresh_profile=True,
++            fresh_manifest=fresh_manifest,fresh_manifest_sha256=fresh_manifest_sha256,enable_raw_kv=enable_raw_kv)
++    else:
++        original_path,s=prior.prepare(out/'original_policy',compile_receipt,rows)
++    _,modules=runtime(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile);completed=modules[-1]
++    if fresh_profile:
++        independent=admitted['independent_reference']
++    else:
++        independent=completed.reference_spec(reference,reference_sha256)
+     require(independent['rows']==rows and independent['readonly_input']['input_x_sha256']==
+             s['reference']['inputs']['input_x_sha256'],'independent reference raw input differs')
+-    sources=source_hashes(enable_raw_kv=enable_raw_kv)
++    sources=source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     s=dict(s,status='PREPARED_REDUCED_PUBLIC21_NOT_EXECUTED',reduction_policy=POLICY_ID,
+         source_sha256=sources,source_manifest_sha256=sha(encoded(sources)),
+         original_snapshot=str(original_path),original_snapshot_sha256=file_sha(original_path),
+@@ -205,32 +226,44 @@
+     for relative,digest in sources.items():
+         raw=(ROOT/relative).read_bytes();require(sha(raw)==digest,'snapshot source drift')
+         target=out/'frozen_sources'/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+-    require(source_hashes(enable_raw_kv=enable_raw_kv)==sources,'source drift while sealing snapshot')
++    require(source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)==sources,'source drift while sealing snapshot')
+     path=out/'SNAPSHOT.json';path.write_bytes(encoded(s));return path,s
+ 
+ 
+-def verify_snapshot(path,digest,*,enable_raw_kv=False):
++def verify_snapshot(path,digest,*,enable_raw_kv=False,fresh_profile=False):
++    require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+     _raw_kv_mode(enable_raw_kv)
+     path=Path(path).resolve();require(file_sha(path)==digest,'new snapshot hash differs')
+     s=json.loads(path.read_text())
++    identity=fresh_assets.snapshot_mode(s,fresh_profile,enable_raw_kv=enable_raw_kv)
+     _snapshot_raw_kv_mode(s,enable_raw_kv)
+     _verify_raw_kv_composition(enable_raw_kv)
+-    original=prior.verify_snapshot(s['original_snapshot'],s['original_snapshot_sha256'])
+-    _,modules=runtime(enable_raw_kv=enable_raw_kv)
++    if fresh_profile:
++        admitted=fresh_assets.verify(identity['manifest'],identity['manifest_sha256'],rows=s['rows'],enable_raw_kv=enable_raw_kv)
++        original=prior.verify_snapshot(s['original_snapshot'],s['original_snapshot_sha256'],fresh_profile=True,enable_raw_kv=enable_raw_kv)
++    else:
++        original=prior.verify_snapshot(s['original_snapshot'],s['original_snapshot_sha256'])
++    _,modules=runtime(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     require(s['status']=='PREPARED_REDUCED_PUBLIC21_NOT_EXECUTED' and s['reduction_policy']==POLICY_ID
+-        and validate_rows(s['rows'])==s['rows'] and s['source_sha256']==source_hashes(enable_raw_kv=enable_raw_kv)
++        and validate_rows(s['rows'])==s['rows'] and s['source_sha256']==source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+         and s['source_manifest_sha256']==sha(encoded(s['source_sha256'])),'new source/policy/domain drift')
+     for key in ('rows','epoch','input_spec','loaded_inputs','binaries','metadata','host_tools','reference'):
+         require(s[key]==original[key],'original input/tool/public identity changed: '+key)
+     for relative,expected in s['source_sha256'].items():
+         require(file_sha(path.parent/'frozen_sources'/relative)==expected,'frozen source drift: '+relative)
+     ref=s['independent_reference']
+-    require(modules[-1].reference_spec(ref['directory'],ref['result_sha256'])==ref,'independent reference drift')
++    if fresh_profile:
++        require(admitted['independent_reference']==ref and original['fresh_assets']==s['fresh_assets'],
++                'fresh independent reference/profile drift')
++    else:
++        require(modules[-1].reference_spec(ref['directory'],ref['result_sha256'])==ref,'independent reference drift')
+     return s
+ 
+ 
+ def independent_bytes(ref,name):
+     relative='raw_stages/'+name
++    if ref.get('fresh_profile') == fresh_assets.PROFILE:
++        return fresh_assets.read_reference_bytes(ref,relative)
+     found=[e for e in ref['artifacts'] if e['path']==relative]
+     require(len(found)==1,'independent output missing/duplicate: '+name)
+     raw=(Path(ref['directory'])/relative).read_bytes();record=found[0]
+@@ -266,11 +299,14 @@
+         independent_reference=ref,official_target='official_self_cache',
+         independent_self_cache_is_auxiliary=True,old_sequential_producer_is_auxiliary=True,
+         acceptance_requires_all_assigned_official_observed_node_gates=True,
+-        full_29_node_acceptance=False,reference_reuse='same frozen raw input; original official archive; new independently executed block/pair arithmetic')
++        full_29_node_acceptance=False,reference_reuse=('fresh separately sealed same-input sequential/block-pair and official outputs; original gates retained' if
++            ref.get('fresh_profile') == fresh_assets.PROFILE else
++            'same frozen raw input; original official archive; new independently executed block/pair arithmetic'))
+     return result
+ 
+ 
+-def run(out,path,digest,*,wall_budget=900,enable_raw_kv=False):
++def run(out,path,digest,*,wall_budget=900,enable_raw_kv=False,fresh_profile=False):
++    require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+     _raw_kv_mode(enable_raw_kv)
+     out,path=Path(out).resolve(),Path(path).resolve()
+     require(not out.exists() and 0<wall_budget<=1800,'fresh bounded reduced public21 run required')
+@@ -279,8 +315,8 @@
+         pending=json.loads(path.read_text());_snapshot_raw_kv_mode(pending,enable_raw_kv)
+         require(validate_rows(pending['rows'])==16,
+                 'enabled raw KV execution is limited to M16 pending a reviewed same-source M16 receipt')
+-    s=verify_snapshot(path,digest,enable_raw_kv=enable_raw_kv)
+-    (modules,dense,_,native),new=runtime(enable_raw_kv=enable_raw_kv)
++    s=verify_snapshot(path,digest,enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
++    (modules,dense,_,native),new=runtime(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     helper,original,fixtures,public,prefix,_,scalar,suffix,physical_adapter,matrix,_,_=modules
+     owner_module,binding,profiles,execution,observation,_=new
+     require(helper.host_tool_identity()==s['host_tools'],'execution host tool drift')
+@@ -291,6 +327,8 @@
+         old_pass_inherited=False,native_acceptance='PENDING_OBSERVED_NODE_GATES')
+     if enable_raw_kv:
+         report.update(enable_raw_kv=True,raw_kv_source_profile=RAW_KV_SOURCE_PROFILE)
++    if fresh_profile:
++        report.update(fresh_profile=True,fresh_assets=s['fresh_assets'],fresh_provenance=s['reference']['fresh_provenance'])
+     def save():(out/'summary.json').write_bytes(encoded(report))
+     try:
+         with base.frozen_exec(s['source_sha256']) as observed,policy.reference_gate(s['input_spec']) as gate:
+@@ -341,9 +379,9 @@
+             gate.opened=True
+             report['comparison']=compare(s,actual,inputs,capture,silu_bytes,native)
+             require(report['comparison']['fixed_arithmetic_pass'],'actual chain differs from independent block/pair recipe')
+-            require(source_hashes(enable_raw_kv=enable_raw_kv)==s['source_sha256'] and base.identities(inputs)==s['loaded_inputs'],'post-run source/input drift')
++            require(source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)==s['source_sha256'] and base.identities(inputs)==s['loaded_inputs'],'post-run source/input drift')
+             official=report['comparison']['methods']['official_self_cache']
+-            report.update(status=('PASS_REDUCED_BF16_OBSERVED_OFFICIAL_GATES' if official['numerical_status']=='PASS_OBSERVED_ONLY' else 'FAIL_OFFICIAL_OBSERVED_NODE_GATES'),source_sha256_after=source_hashes(enable_raw_kv=enable_raw_kv),
++            report.update(status=('PASS_REDUCED_BF16_OBSERVED_OFFICIAL_GATES' if official['numerical_status']=='PASS_OBSERVED_ONLY' else 'FAIL_OFFICIAL_OBSERVED_NODE_GATES'),source_sha256_after=source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile),
+                 executed_imports_observed=sorted(observed),native_acceptance=official['numerical_status'],
+                 full_29_node_acceptance=False,actual_dataflow_pass=True,host_wall_seconds=time.monotonic()-started,
+                 host_cpu_seconds=time.process_time()-cpu,host_peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+@@ -363,12 +401,16 @@
+     p.add_argument('--reference',type=Path);p.add_argument('--reference-sha256');p.add_argument('--rows',type=int,choices=(16,128),default=16)
+     p.add_argument('--snapshot',type=Path);p.add_argument('--snapshot-sha256');p.add_argument('--wall-budget',type=int,default=900)
+     p.add_argument('--enable-raw-kv',action='store_true')
++    p.add_argument('--fresh-profile',action='store_true')
++    p.add_argument('--fresh-manifest',type=Path);p.add_argument('--fresh-manifest-sha256')
+     a=p.parse_args()
+     if a.prepare_only:
+-        path,s=prepare(a.out,a.compile_receipt,a.reference,a.reference_sha256,rows=a.rows,enable_raw_kv=a.enable_raw_kv)
++        path,s=prepare(a.out,a.compile_receipt,a.reference,a.reference_sha256,rows=a.rows,enable_raw_kv=a.enable_raw_kv,fresh_profile=a.fresh_profile,
++            fresh_manifest=a.fresh_manifest,fresh_manifest_sha256=a.fresh_manifest_sha256)
+         print(json.dumps(dict(path=str(path),sha256=file_sha(path),status=s['status'])),flush=True)
+     else:
+-        r=run(a.out,a.snapshot,a.snapshot_sha256,wall_budget=a.wall_budget,enable_raw_kv=a.enable_raw_kv)
++        require(a.fresh_manifest is None and a.fresh_manifest_sha256 is None,'run uses only frozen fresh manifest identity')
++        r=run(a.out,a.snapshot,a.snapshot_sha256,wall_budget=a.wall_budget,enable_raw_kv=a.enable_raw_kv,fresh_profile=a.fresh_profile)
+         print(json.dumps({k:r[k] for k in ('status','rows','native_acceptance','host_wall_seconds')}),flush=True)
+         if r['native_acceptance']!='PASS_OBSERVED_ONLY':raise SystemExit(1)
+ 

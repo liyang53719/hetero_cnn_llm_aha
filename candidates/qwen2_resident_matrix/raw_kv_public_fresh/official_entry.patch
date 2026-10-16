@@ -1,0 +1,171 @@
+--- a/candidates/qwen2_resident_matrix/official_bf16/check_numeric.py
++++ b/candidates/qwen2_resident_matrix/official_bf16/check_numeric.py
+@@ -21,6 +21,7 @@
+ from candidates.qwen2_resident_matrix.ffn_public import check_fullgraph_numeric as old
+ from . import execution as policy
+ from . import reference_layout
++from ..raw_kv_public_fresh import assets as fresh_assets
+ 
+ base = old.base
+ require, sha, encoded, file_sha = base.require, base.sha, base.encoded, base.file_sha
+@@ -53,23 +54,28 @@
+ }
+ 
+ 
+-def source_hashes():
++def source_hashes(*, fresh_profile=False, enable_raw_kv=False):
++    require(type(fresh_profile) is bool and type(enable_raw_kv) is bool, 'canonical fresh source modes required')
+     result = old.source_hashes()
+     result.update({p: file_sha(ROOT / p) for p in NEW_SOURCES})
++    result.update(fresh_assets.own_sources())
++    if fresh_profile:
++        result.update(fresh_assets.source_snapshot(enable_raw_kv=enable_raw_kv))
+     return result
+ 
+ 
+-def runtime():
++def runtime(*, fresh_profile=False, enable_raw_kv=False):
++    require(type(fresh_profile) is bool and type(enable_raw_kv) is bool, 'canonical fresh source modes required')
+     require(file_sha(Path(__file__)) == IMPORTED_SOURCE_SHA256 and
+             file_sha(Path(policy.__file__)) == policy.IMPORTED_SOURCE_SHA256,
+             'loaded official runner/dispatch source identity differs from disk')
+     modules = old.runtime()
+-    before = source_hashes()
++    before = source_hashes(fresh_profile=fresh_profile, enable_raw_kv=enable_raw_kv)
+     with base.frozen_exec(before):
+         dense = importlib.import_module('candidates.qwen2_resident_matrix.official_bf16.dense_silu')
+         observer = importlib.import_module('candidates.qwen2_resident_matrix.official_bf16.observation_monitoring')
+         native = importlib.import_module('scripts.qwen2_layer0_model_gate')
+-    require(before == source_hashes(), 'official execution source changed during import')
++    require(before == source_hashes(fresh_profile=fresh_profile, enable_raw_kv=enable_raw_kv), 'official execution source changed during import')
+     return modules, dense, observer, native
+ 
+ 
+@@ -120,7 +126,8 @@
+ def load_inputs(spec, rows, reference):
+     import numpy as np
+     inputs = old.load_inputs(spec, rows)
+-    table = Path(reference['directory']) / 'rope_full.f32le'
++    table = (Path(reference['table_path']) if reference.get('fresh_profile') == fresh_assets.PROFILE else
++             Path(reference['directory']) / 'rope_full.f32le')
+     require(file_sha(table) == TABLE_SHA, 'readonly table changed')
+     raw = np.frombuffer(table.read_bytes(), dtype='<f4')
+     require(raw.size == 192 + 5 * 16384, 'reviewed table layout')
+@@ -132,13 +139,23 @@
+     return inputs
+ 
+ 
+-def prepare(out, compile_receipt, rows=16, epoch=7):
++def prepare(out, compile_receipt, rows=16, epoch=7, *, fresh_profile=False, fresh_manifest=None,
++            fresh_manifest_sha256=None, enable_raw_kv=False):
++    require(type(enable_raw_kv) is bool, 'canonical fresh source modes required')
++    fresh_assets.fresh_mode(fresh_profile, fresh_manifest, fresh_manifest_sha256, rows=rows)
++    if fresh_profile:
++        admitted = fresh_assets.verify(fresh_manifest, fresh_manifest_sha256, rows=rows, enable_raw_kv=enable_raw_kv)
++        require(Path(compile_receipt).resolve() == Path(admitted['library_receipt']), 'fresh strict library receipt differs')
+     out = Path(out).resolve()
+     require(not out.exists(), 'fresh official snapshot required')
+-    modules, dense, _, native = runtime()
++    modules, dense, _, native = runtime(fresh_profile=fresh_profile, enable_raw_kv=enable_raw_kv)
+     helper, _, fixtures, *_ = modules
+-    sources, inputs_spec = source_hashes(), old.input_spec()[0]
+-    ref = reference_spec(rows)
++    if fresh_profile:
++        sources = source_hashes(fresh_profile=True, enable_raw_kv=enable_raw_kv)
++        inputs_spec, ref = admitted['input_spec'], admitted['reference']
++    else:
++        sources, inputs_spec = source_hashes(), old.input_spec()[0]
++        ref = reference_spec(rows)
+     built = dense.verify_library(compile_receipt)
+     fixture = fixtures.make_qwen2_21_fixture(rows, epoch)
+     inputs = load_inputs(inputs_spec, rows, ref)
+@@ -156,7 +173,9 @@
+                       library=str(library), library_sha256=file_sha(library)),
+         metadata=helper.metadata_identity(fixture), host_tools=helper.host_tool_identity(),
+         prelaunch_intermediate_payloads=[], old_pass_inherited=False)
+-    require(source_hashes() == sources, 'official source changed during preparation')
++    if fresh_profile:
++        snapshot.update(fresh_profile=True, fresh_assets=admitted['provenance']['fresh_assets'])
++    require(source_hashes(fresh_profile=fresh_profile, enable_raw_kv=enable_raw_kv) == sources, 'official source changed during preparation')
+     out.mkdir(parents=True)
+     for relative, digest in sources.items():
+         raw = (ROOT / relative).read_bytes()
+@@ -170,13 +189,17 @@
+     return path, snapshot
+ 
+ 
+-def verify_snapshot(path, digest):
++def verify_snapshot(path, digest, *, fresh_profile=False, enable_raw_kv=False):
++    require(type(fresh_profile) is bool and type(enable_raw_kv) is bool, 'canonical fresh source modes required')
+     path = Path(path).resolve()
+     require(file_sha(path) == digest, 'official snapshot hash differs')
+     s = json.loads(path.read_text())
+-    _, dense, _, _ = runtime()
++    identity = fresh_assets.snapshot_mode(s, fresh_profile, enable_raw_kv=enable_raw_kv)
++    if fresh_profile:
++        admitted = fresh_assets.verify(identity['manifest'], identity['manifest_sha256'], rows=s['rows'], enable_raw_kv=enable_raw_kv)
++    _, dense, _, _ = runtime(fresh_profile=fresh_profile, enable_raw_kv=enable_raw_kv)
+     require(s['status'] == 'PREPARED_OFFICIAL_PUBLIC21_NOT_EXECUTED' and s['policy'] == policy.POLICY
+-            and source_hashes() == s['source_sha256'] and
++            and source_hashes(fresh_profile=fresh_profile, enable_raw_kv=enable_raw_kv) == s['source_sha256'] and
+             s['source_manifest_sha256'] == sha(encoded(s['source_sha256'])), 'official source/policy drift')
+     for name, expected in s['source_sha256'].items():
+         require(file_sha(path.parent / 'frozen_sources' / name) == expected, 'frozen source drift: ' + name)
+@@ -184,8 +207,13 @@
+     require(file_sha(b['compile_receipt']) == b['compile_sha256'] and
+             dense.verify_library(b['compile_receipt'])['library'] == b['library'] and
+             file_sha(b['library']) == b['library_sha256'], 'official arithmetic build drift')
+-    require(reference_spec(s['rows']) == s['reference'] and old.input_spec()[0] == s['input_spec'],
+-            'official/reference source or raw input provenance drift')
++    if fresh_profile:
++        require(admitted['reference'] == s['reference'] and admitted['input_spec'] == s['input_spec'] and
++                admitted['library_receipt'] == b['compile_receipt'] and admitted['library'] == b['library'],
++                'fresh official/reference/raw input provenance drift')
++    else:
++        require(reference_spec(s['rows']) == s['reference'] and old.input_spec()[0] == s['input_spec'],
++                'official/reference source or raw input provenance drift')
+     return s
+ 
+ 
+@@ -217,6 +245,8 @@
+ 
+ 
+ def _reference_bytes(ref, relative):
++    if ref.get('fresh_profile') == fresh_assets.PROFILE:
++        return fresh_assets.read_reference_bytes(ref, relative)
+     entries = [e for e in ref['artifacts'] if e['path'] == relative]
+     require(len(entries) == 1, 'reference file missing/duplicate in frozen inventory: ' + relative)
+     entry = entries[0]
+@@ -262,7 +292,10 @@
+         results, failures = {}, []
+         for name, value in fields.items():
+             raw = _reference_bytes(ref, 'references/%s/%s.f32le' % (method,name))
+-            expected = reference_layout.read_native_reference(raw, rows=rows, method=method, name=name, shape=value.shape)
++            if ref.get('fresh_profile') == fresh_assets.PROFILE:
++                expected = fresh_assets.read_native_reference(ref, raw, rows=rows, method=method, name=name, shape=value.shape)
++            else:
++                expected = reference_layout.read_native_reference(raw, rows=rows, method=method, name=name, shape=value.shape)
+             mask = masks.get(name)
+             a, b = (value[mask], expected[mask]) if mask is not None else (value, expected)
+             metrics = native.compare(a, b)
+@@ -287,11 +320,15 @@
+         methods=native_results, thresholds=limits, historical_diagnostic_failures=ref['prior_failures'],
+         full_29_node_acceptance=False, missing_nodes=['explicit_mask_tensor'],
+         partially_observed_nodes=['scores','logits','prob','softmax_fp32'],
+-        future_score_materialization=False, new_official_forward_executed=False,
+-        reference_layout=dict(qk_storage='token_major' if rows==16 else 'head_major',
+-            native_result_sha256=reference_layout.NATIVE_RESULT_SHA256[rows],
+-            producer_sha256=reference_layout.PRODUCER_SHA256),
+-        reference_reuse='exact frozen same-raw-input cold references; original FAILs preserved')
++        future_score_materialization=False, new_official_forward_executed=ref.get('fresh_profile') == fresh_assets.PROFILE,
++        reference_layout=(dict(qk_storage='token_major', **ref['fresh_provenance']) if
++            ref.get('fresh_profile') == fresh_assets.PROFILE else
++            dict(qk_storage='token_major' if rows==16 else 'head_major',
++                native_result_sha256=reference_layout.NATIVE_RESULT_SHA256[rows],
++                producer_sha256=reference_layout.PRODUCER_SHA256)),
++        reference_reuse=('fresh separately sealed same-input sequential/block-pair and official outputs; original gates retained' if
++            ref.get('fresh_profile') == fresh_assets.PROFILE else
++            'exact frozen same-raw-input cold references; original FAILs preserved'))
+ 
+ 
+ def retain_failed_run(out, physical, capture):

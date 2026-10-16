@@ -1,0 +1,23 @@
+{
+  "base_commit": "ba4d56cd5c56acdae70667f40b8e7bbfe17cf17c",
+  "base_profile": "qwen2-public-pv16-fresh-assets-v1",
+  "base_verifier_sha256": {
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/README.md": "faeb63b9b3edfe10f04ad0372cb8ef3653593409be09b32b4a91f5438e8df2bb",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py": "8d88c830d2d4f3de58035566bbb4549905914adb1a9b0f81b8b58362d7eec6d1",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/official_entry.patch": "ce4a7c43de8e4c22375a6f3bb7048d10b3649443c5947c2b105f1c8d9bea3f81",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/pins.json": "5011c92bc395871b2f71822ec8dd0e2cae6d483cc92e75ecd1755b32f4c447fc",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/prepare.py": "42b7b76e0fcadf00351fd3fe521e6130b2a0b11dfe27236f1c700be91c521dce",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/public_entry.patch": "c5b2311767fe5de6f5f345c0964e27f45a82d4b2cc7ba4382ba054a30447ae16",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/test_assets.py": "9abe88ebde0fdddbe97496369aff0ff9b526751b961608cc2a58815107771171"
+  },
+  "past_tokens": 0,
+  "profile": "qwen2-public-fresh-setup-v1",
+  "rows": 16,
+  "schema": 1,
+  "setup_source_sha256": {
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/SETUP_PLAN.md": "d80ee507f0017c4ce0b1c2f6b9e2096913f5b2818693f6c671cde819ed73efc4",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py": "a4c5f24341747f8c89cd3e13d12c51b5fe9ba93973e53eb472d59a31adcfe9e5",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/test_setup.py": "36fc51f3faf6f4875da0ab4ee9500877ba613bf3ce70b066c6c78d5a4c48caec"
+  },
+  "total_budget": 600
+}

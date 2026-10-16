@@ -113,7 +113,7 @@ def publish(evidence,summary):
     progress={k:summary[k] for k in ('schema','status','phase','elapsed_seconds')}
     if progress['status']==PASS:progress['status']='TERMINAL_RECEIPT_PENDING'
     setup.atomic_json(evidence/'progress.json',progress,1024)
-    setup.atomic_json(evidence/'summary.json',summary,8192)
+    setup.atomic_json(evidence/'summary.json',summary,32768)
 
 
 class Budget:
@@ -442,6 +442,23 @@ def project_backend_failure(summary,private,sources):
         pass
 
 
+
+def project_native_failure(summary,private,sources):
+    """Read one bounded private receipt; project fixed numerical diagnostics only."""
+    if summary.get('setup_phase')!='native128':return
+    try:
+        name='scripts/qwen2_layer0_model_gate.py'
+        source=read_bytes(ROOT/name)
+        need(assets.sha(source)==sources.get(name))
+        raw=read_bytes(private/'assets/native/RESULT.json',2*1024*1024)
+        value=assets.json_bytes(raw,limit=2*1024*1024)
+        summary['native128_failure']=launch.project_native_failure(value,
+            result_sha256=assets.sha(raw),source_sha256=assets.sha(source))
+    except Exception:
+        # Fixed unavailable marker preserves failure without leaking exception text.
+        summary['native128_failure']={'status':'DIAGNOSTIC_UNAVAILABLE','numerical_acceptance':False}
+
+
 def resume(context,private,evidence):
     budget=Budget(context['started_ns'],context['deadline_ns']);summary=summary_new(budget.started);frozen={};numeric_end=None
     try:
@@ -455,6 +472,7 @@ def resume(context,private,evidence):
         if code!=0:
             project_setup_failure(summary,setup_summary,frozen['sources'])
             project_backend_failure(summary,private,frozen['sources'])
+            project_native_failure(summary,private,frozen['sources'])
             error=RuntimeError('setup_exit');error.exit_code=code;raise error
         need(setup_summary['status']==setup.SETUP_STATUS)
         need(check_context(context,private,composed=True)==frozen)

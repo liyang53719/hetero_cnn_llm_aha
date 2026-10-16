@@ -6,6 +6,7 @@ from copy import deepcopy
 import difflib
 import importlib.util
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -281,6 +282,228 @@ class LaunchPreparationTests(unittest.TestCase):
         self.assertNotIn('SECRET',json.dumps(diagnostic))
         for index,value in enumerate(cases):
             with self.subTest(case=index),self.assertRaises(ValueError):launch.validate_backend_failure(value,{})
+
+    def native_failure_fixture(self, cause='bf16_budget'):
+        """Original-schema CONTROL_ONLY metadata; no tensor or native execution.
+
+        Extract the original inventories, policy reader, scalar verdict, initial
+        result and phase-status expression. This does not validate any payload.
+        """
+        from . import launch
+        script='scripts/qwen2_layer0_model_gate.py'
+        raw=(ROOT/script).read_bytes();tree=ast.parse(raw)
+        functions={node.name:node for node in tree.body if isinstance(node,ast.FunctionDef)}
+        stages=ast.literal_eval(next(node.value for node in tree.body if isinstance(node,ast.Assign)
+            and any(isinstance(t,ast.Name) and t.id=='REQUIRED_STAGES' for t in node.targets)))
+        semantic=next(node.value for node in ast.walk(functions['run_gate']) if isinstance(node,ast.Assign)
+            and any(isinstance(t,ast.Name) and t.id=='semantic' for t in node.targets))
+        semantics=tuple(ast.literal_eval(key) for key in semantic.keys)
+        namespace={'Path':Path,'sha':lambda path:launch.sha(path.read_bytes())}
+        exec(compile(ast.Module(body=[functions['load_policy'],functions['stage_verdict']],type_ignores=[]),
+            script,'exec'),namespace)
+        policy=namespace['load_policy'](ROOT)
+        sources={script:launch.sha(raw),policy['source']:policy['sha256']}
+        namespace.update(tokens=128,carried=False,threads=4,policy=policy,
+            identity={'runner_sha256':sources[script],'CONTROL_ONLY':'SECRET /private/runtime'},
+            sha=lambda path:'a'*64,small_gate=Path('/CONTROL_ONLY/native_m16/RESULT.json'),
+            payload_dir=Path('/CONTROL_ONLY/payload'),os=types.SimpleNamespace(environ={}))
+        initial=next(node.value for node in functions['run_gate'].body if isinstance(node,ast.Assign)
+            and any(isinstance(t,ast.Name) and t.id=='result' for t in node.targets))
+        result=eval(compile(ast.Expression(initial),script,'eval'),namespace)
+        geometry={'ROWS':128,'need':launch.need}
+        asset_tree=ast.parse(self.bridged[prerequisite.ASSETS])
+        exec(compile(ast.Module(body=[node for node in asset_tree.body if isinstance(node,ast.FunctionDef)
+            and node.name in ('shapes','export_shapes')],type_ignores=[]),'<source-only geometry>','exec'),geometry)
+        shapes=geometry['shapes']();exports=geometry['export_shapes']()
+        self.assertEqual(set(shapes),stages);self.assertEqual(len(stages),29);self.assertEqual(len(semantics),9)
+        phase_node=next(node.args[0] for node in ast.walk(functions['run_gate']) if isinstance(node,ast.Call)
+            and isinstance(node.func,ast.Attribute) and isinstance(node.func.value,ast.Name)
+            and node.func.value.id=='phases' and node.func.attr=='append')
+        for mode in ('bf16','fp32'):
+            metrics={}
+            for name in sorted(stages):
+                item=dict(shape=shapes[name],elements=math.prod(shapes[name]),max_abs=0.0,mean_abs=0.0,
+                    relative_l2=0.0,cosine=1.0,normalized_max_abs=0.0,different_elements=0,
+                    bit_exact=True,first_difference_flat=None,actual_f32_sha256='b'*64,
+                    reference_f32_sha256='b'*64,finite=True,
+                    actual_storage_dtype='torch.bfloat16' if mode=='bf16' else 'torch.float32',
+                    actual_storage_sha256='b'*64)
+                if cause=='bf16_budget' and mode=='bf16' and name=='y':
+                    item.update(max_abs=policy['block']['max_abs']*2,mean_abs=policy['block']['mean_abs']*2,
+                        bit_exact=False,different_elements=1,first_difference_flat=0)
+                item.update(namespace['stage_verdict'](name,item,mode,policy))
+                for prefix in ('native','independent'):
+                    item.update({prefix+'_file':mode+'/phase_0/'+prefix+'_'+name+'.f32le',
+                        prefix+'_export_shape':exports[name],prefix+'_file_sha256':'b'*64})
+                metrics[name]=item
+            checks=dict.fromkeys(semantics,True)
+            if cause==mode+'_semantic':checks['native_future_probability_zero']=False
+            phase=eval(compile(ast.Expression(phase_node),script,'eval'),dict(namespace,mode=mode,
+                phase=0,ids=list(range(128)),stage_results=metrics,semantic=checks,
+                failed=[name for name,value in metrics.items() if value['passed'] is False],
+                time=types.SimpleNamespace(monotonic=lambda:0.1),phase_started=0.0))
+            result['modes'][mode]=dict(phases=[phase],seconds=0.1)
+        result.update(status='FAIL_BF16_STAGE_BUDGET',seconds=0.2,peak_rss_kib=123,
+            CONTROL_ONLY_private='SECRET weights=[1,2,3] /private/checkpoint https://signed.example/')
+        return result,sources
+
+    def project_native_fixture(self,value,sources):
+        from . import launch
+        raw=json.dumps(value,sort_keys=True,allow_nan=False).encode()
+        return launch.project_native_failure(value,result_sha256=launch.sha(raw),
+            source_sha256=sources['scripts/qwen2_layer0_model_gate.py'])
+
+    def test_native_failure_original_schema_and_all_three_failure_classes(self):
+        from . import launch
+        original_import=builtins.__import__
+        def no_numerics(name,*args,**kwargs):
+            if name.split('.')[0] in ('numpy','torch','transformers','ctypes'):
+                raise AssertionError('native diagnostic attempted a numerical import')
+            return original_import(name,*args,**kwargs)
+        for cause in ('bf16_budget','bf16_semantic','fp32_semantic'):
+            with self.subTest(cause=cause),patch('builtins.__import__',side_effect=no_numerics):
+                value,sources=self.native_failure_fixture(cause)
+                projected=self.project_native_fixture(value,sources)
+                self.assertEqual(set(projected['bf16_stages']),set(value['modes']['bf16']['phases'][0]['stages']))
+                self.assertEqual(len(projected['bf16_stages']),29)
+                self.assertEqual(projected['approved_limits'],{k:value['policy'][k] for k in ('operator','block')})
+                self.assertEqual(projected['status'],'NATIVE128_FAILURE_DIAGNOSTIC')
+                self.assertEqual(projected['native_status'],'FAIL_BF16_STAGE_BUDGET')
+                self.assertIs(projected['incomplete'],True)
+                self.assertIs(projected['postflight_complete'],False)
+                self.assertIs(projected['numerical_acceptance'],False)
+                self.assertIs(projected['actual_chain_executed'],False)
+                for mode in ('bf16','fp32'):
+                    original=value['modes'][mode]['phases'][0]
+                    self.assertEqual(projected['modes'][mode],{k:original[k] for k in
+                        ('status','failed_stages','semantics','all_semantics_exact')})
+                self.assertEqual(projected['modes']['bf16']['failed_stages'],['y'] if cause=='bf16_budget' else [])
+                self.assertEqual(projected['modes']['fp32']['status'],
+                    'FAIL_FP32_SEMANTICS' if cause=='fp32_semantic' else 'DIAGNOSTIC_FP32')
+                self.assertIsNone(projected['bf16_stages']['softmax_fp32']['passed'])
+                self.assertIsNone(projected['bf16_stages']['softmax_fp32']['limits'])
+                self.assertIsNone(projected['bf16_stages']['mask']['limits'])
+                self.assertEqual(launch.validate_native_failure(projected),projected)
+                raw=json.dumps(projected,sort_keys=True)
+                self.assertLessEqual(len(raw.encode()),16384)
+                for private in ('SECRET','CONTROL_ONLY','weights=','/private/','https://','native_file',
+                                'export_shape','actual_f32_sha256','identity'):
+                    self.assertNotIn(private,raw)
+
+    def test_native_failure_rejects_canonical_identity_geometry_and_source_drift(self):
+        from . import launch
+        good,sources=self.native_failure_fixture();cases=[]
+        for key,bad in (('schema_version',True),('layer',False),('tokens',128.0),('tokens',16),
+                ('carried',0),('official_framework_forward',1),('rtl_execution',0),
+                ('hardware_recipe_acceptance',0),('status','PASS_BF16_STAGE_BUDGET')):
+            value=deepcopy(good);value[key]=bad;cases.append(value)
+        value=deepcopy(good);value['identity']['runner_sha256']='0'*64;cases.append(value)
+        for key,bad in (('source','/private/policy'),('sha256','0'*64),('operator',{'max_abs':1,'mean_abs':True})):
+            value=deepcopy(good);value['policy'][key]=bad;cases.append(value)
+        for key,bad in (('phase',False),('past_tokens',False),('token_ids',[False]+list(range(1,128))),
+                        ('position_ids',list(range(127,-1,-1)))):
+            value=deepcopy(good);value['modes']['bf16']['phases'][0][key]=bad;cases.append(value)
+        for index,value in enumerate(cases):
+            with self.subTest(case=index),self.assertRaises(ValueError):self.project_native_fixture(value,sources)
+        for result_hash,source_hash in (('bad',sources['scripts/qwen2_layer0_model_gate.py']),('a'*64,'0'*64)):
+            with self.assertRaises(ValueError):launch.project_native_failure(good,
+                result_sha256=result_hash,source_sha256=source_hash)
+        original_read=launch.read_source
+        with patch.object(launch,'read_source',side_effect=lambda name,*a:
+                b'drift' if name=='scripts/qwen2_layer0_model_gate.py' else original_read(name,*a)), \
+                self.assertRaises(ValueError):self.project_native_fixture(good,sources)
+
+    def test_native_failure_rejects_nonfinite_and_bool_int_scalar_aliases(self):
+        from . import launch
+        good,sources=self.native_failure_fixture()
+        for mode in ('bf16','fp32'):
+            for key,bad in (('max_abs',True),('mean_abs',False),('max_abs',float('nan')),
+                    ('mean_abs',float('inf')),('max_abs',-1.0),('finite',1),('bit_exact',0),
+                    ('bit_exact',1),('passed',1),('passed',0),('max_abs','SECRET')):
+                value=deepcopy(good);value['modes'][mode]['phases'][0]['stages']['x'][key]=bad
+                with self.subTest(mode=mode,key=key,bad=repr(bad)),self.assertRaises(ValueError):
+                    launch.project_native_failure(value,result_sha256='a'*64,
+                        source_sha256=sources['scripts/qwen2_layer0_model_gate.py'])
+            for key,bad in (('mask_exact',0),('native_future_probability_zero',1)):
+                value=deepcopy(good);value['modes'][mode]['phases'][0]['semantics'][key]=bad
+                with self.subTest(mode=mode,key=key),self.assertRaises(ValueError):self.project_native_fixture(value,sources)
+            value=deepcopy(good);value['modes'][mode]['phases'][0]['all_semantics_exact']=1
+            with self.assertRaises(ValueError):self.project_native_fixture(value,sources)
+
+    def test_native_failure_rejects_foreign_inventories_and_inconsistent_verdicts(self):
+        good,sources=self.native_failure_fixture();cases=[]
+        for section in ('modes','stages','semantics'):
+            for mutation in ('missing','extra'):
+                value=deepcopy(good)
+                selected=value['modes'] if section=='modes' else value['modes']['bf16']['phases'][0][section]
+                if mutation=='missing':selected.pop(next(iter(selected)))
+                else:selected['SECRET /private/foreign']=next(iter(selected.values()))
+                cases.append(value)
+        for key,bad in (('failed_stages',[]),('failed_stages',['y','y']),('failed_stages',['SECRET']),
+                ('status','PASS_BF16_STAGE_BUDGET'),('all_semantics_exact',False)):
+            value=deepcopy(good);value['modes']['bf16']['phases'][0][key]=bad;cases.append(value)
+        value=deepcopy(good);value['modes']['bf16']['phases']*=2;cases.append(value)
+        for key,bad in (('limits',{'max_abs':0.2,'mean_abs':0.2}),('passed',True),
+                        ('contract','SECRET'),('finite',False)):
+            value=deepcopy(good);value['modes']['bf16']['phases'][0]['stages']['y'][key]=bad;cases.append(value)
+        value=deepcopy(good);value['modes']['fp32']['phases'][0]['stages']['x']['status']='PASS';cases.append(value)
+        value=deepcopy(good);phase=value['modes']['bf16']['phases'][0]
+        phase['semantics']['mask_exact']=False;phase['all_semantics_exact']=False;cases.append(value)
+        value,same_sources=self.native_failure_fixture('all_pass');cases.append(value)
+        self.assertEqual(sources,same_sources)
+        for index,value in enumerate(cases):
+            with self.subTest(case=index),self.assertRaises(ValueError):self.project_native_fixture(value,sources)
+
+    def test_native_failure_safe_schema_rejects_aliases_private_fields_and_oversize(self):
+        from . import launch
+        good,sources=self.native_failure_fixture();safe=self.project_native_fixture(good,sources);cases=[]
+        for key,bad in (('schema',True),('tokens',128.0),('carried',0),('incomplete',1),
+                ('postflight_complete',0),('numerical_acceptance',0),('actual_chain_executed',0),('status','PASS')):
+            value=deepcopy(safe);value[key]=bad;cases.append(value)
+        for where in ('top','stage','mode'):
+            value=deepcopy(safe)
+            selected=value if where=='top' else value['bf16_stages']['y'] if where=='stage' else value['modes']['fp32']
+            selected['SECRET']='private';cases.append(value)
+        value=deepcopy(safe);value['modes']['fp32']['semantics']['mask_exact']=1;cases.append(value)
+        value=deepcopy(safe);value['bf16_stages']['y']['max_abs']=float('inf');cases.append(value)
+        for index,value in enumerate(cases):
+            with self.subTest(case=index),self.assertRaises(ValueError):launch.validate_native_failure(value)
+        # Finite metadata integers can still exceed the public byte bound. Every
+        # stage verdict is kept consistent so rejection reaches the size guard.
+        large=deepcopy(good);phase=large['modes']['bf16']['phases'][0]
+        for name,item in phase['stages'].items():
+            item['max_abs']=item['mean_abs']=10**300
+            if name not in ('mask','softmax_fp32'):item['passed']=False
+        phase['failed_stages']=[name for name in sorted(phase['stages']) if phase['stages'][name]['passed'] is False]
+        with self.assertRaises(ValueError):self.project_native_fixture(large,sources)
+
+    def test_native_failure_real_parent_publish_roundtrip_retains_failed_only(self):
+        from . import launch,run_ci
+        for cause in ('bf16_budget','bf16_semantic','fp32_semantic'):
+            with self.subTest(cause=cause),tempfile.TemporaryDirectory() as temp:
+                private=Path(temp)/'private';path=private/'assets/native/RESULT.json';path.parent.mkdir(parents=True)
+                value,sources=self.native_failure_fixture(cause)
+                raw=(json.dumps(value,sort_keys=True,indent=2,allow_nan=False)+'\n').encode();path.write_bytes(raw)
+                summary=dict(schema=1,status='FAILED',phase='setup',setup_phase='native128',elapsed_seconds=1.0,
+                    rows=128,enable_raw_kv=True,fresh_profile=True,rtl_executed=False,scala_executed=False,
+                    full_29_node_acceptance=False)
+                run_ci.project_native_failure(summary,private,sources)
+                self.assertEqual(summary['native128_failure']['status'],'NATIVE128_FAILURE_DIAGNOSTIC')
+                self.assertEqual(summary['native128_failure']['result_sha256'],launch.sha(raw))
+                out=Path(temp)/'public';out.mkdir();run_ci.publish(out,summary)
+                saved=json.loads((out/'summary.json').read_bytes())
+                self.assertEqual(saved,summary);self.assertEqual(saved['status'],'FAILED')
+                self.assertIs(saved['full_29_node_acceptance'],False)
+                self.assertIs(saved['native128_failure']['numerical_acceptance'],False)
+                self.assertIs(saved['native128_failure']['postflight_complete'],False)
+                self.assertIs(saved['native128_failure']['actual_chain_executed'],False)
+                self.assertLessEqual((out/'summary.json').stat().st_size,32768)
+                self.assertEqual({p.name for p in out.iterdir()},{'summary.json','progress.json'})
+                self.assertEqual(path.read_bytes(),raw)
+                for filename in ('summary.json','progress.json'):
+                    text=(out/filename).read_text()
+                    for forbidden in ('SECRET','CONTROL_ONLY','/private/','https://','weights=',temp):
+                        self.assertNotIn(forbidden,text)
 
     def authorization_fixture(self):
         from . import launch

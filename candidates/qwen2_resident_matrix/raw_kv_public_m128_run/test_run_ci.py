@@ -593,4 +593,49 @@ class BackendProjectionTests(unittest.TestCase):
                 self.assertEqual(summary,{'status':'FAILED','setup_phase':'environment'})
 
 
+
+class NativeProjectionTests(unittest.TestCase):
+    def test_failure_projection_uses_same_receipt_bytes_and_preserves_failed(self):
+        with tempfile.TemporaryDirectory() as d:
+            private=Path(d);(private/'assets/native').mkdir(parents=True)
+            raw=b'{"status":"CONTROL_ONLY"}\n'
+            (private/'assets/native/RESULT.json').write_bytes(raw)
+            name='scripts/qwen2_layer0_model_gate.py';source=run.read_bytes(run.ROOT/name)
+            sources={name:run.assets.sha(source)}
+            safe={'status':'NATIVE_GATE_FAILED','numerical_acceptance':False}
+            summary={'status':'FAILED','setup_phase':'native128'}
+            with patch.object(run.launch,'project_native_failure',return_value=safe) as project:
+                run.project_native_failure(summary,private,sources)
+                project.assert_called_once_with(json.loads(raw),result_sha256=run.assets.sha(raw),source_sha256=sources[name])
+            self.assertEqual(summary,{'status':'FAILED','setup_phase':'native128','native128_failure':safe})
+            with patch.object(run.launch,'project_native_failure') as project:
+                other={'status':'FAILED','setup_phase':'native16'}
+                run.project_native_failure(other,private,sources);project.assert_not_called()
+                self.assertNotIn('native128_failure',other)
+
+    def test_missing_malformed_large_symlink_and_source_drift_fail_closed(self):
+        with tempfile.TemporaryDirectory() as d:
+            private=Path(d);(private/'assets/native').mkdir(parents=True)
+            path=private/'assets/native/RESULT.json'
+            name='scripts/qwen2_layer0_model_gate.py';sources={name:run.assets.sha(run.read_bytes(run.ROOT/name))}
+            for mode in ('missing','malformed','large','symlink','drift','rejected'):
+                with self.subTest(mode=mode):
+                    if path.exists() or path.is_symlink():path.unlink()
+                    if mode=='malformed':path.write_text('PRIVATE_EXCEPTION_DO_NOT_COPY')
+                    elif mode=='large':path.write_bytes(b'x'*(2*1024*1024+1))
+                    elif mode=='symlink':path.symlink_to(private/'missing')
+                    elif mode in ('drift','rejected'):path.write_text('{}')
+                    summary={'status':'FAILED','setup_phase':'native128'}
+                    with patch.object(run.launch,'project_native_failure',side_effect=ValueError('PRIVATE_DO_NOT_COPY')):
+                        run.project_native_failure(summary,private,{} if mode=='drift' else sources)
+                    self.assertEqual(summary,{'status':'FAILED','setup_phase':'native128','native128_failure':{'status':'DIAGNOSTIC_UNAVAILABLE','numerical_acceptance':False}})
+
+    def test_safe_summary_bound_covers_diagnostic_without_extra_artifacts(self):
+        with tempfile.TemporaryDirectory() as d:
+            out=Path(d);summary={'schema':1,'status':'FAILED','phase':'setup','elapsed_seconds':1.0,
+                'native128_failure':{'CONTROL_ONLY':'x'*16384}}
+            run.publish(out,summary)
+            self.assertEqual(json.loads((out/'summary.json').read_text()),summary)
+            self.assertEqual({p.name for p in out.iterdir()},{'summary.json','progress.json'})
+
 if __name__=='__main__':unittest.main()

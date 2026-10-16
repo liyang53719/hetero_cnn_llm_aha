@@ -299,3 +299,125 @@ def backend_preflight(context_path):
             _write_backend_failure(context_path,value,setup_module)
         except BaseException:pass  # Never replace the original gate/import failure.
         raise
+
+
+def _native_failure_spec():
+    stages=tuple(sorted(('x','n0','qr','kr','v','q','k','cache_k','cache_v','repeat_k','repeat_v',
+        'scores','logits','prob','pv','att','o','r','n1','gate','up','silu','act','down','y',
+        'cos','sin','mask','softmax_fp32')))
+    semantics=('mask_exact','native_fp32_probability_sum_within_2e_5',
+        'independent_fp32_probability_sum_within_2e_5','native_cache_append_k_exact',
+        'native_cache_append_v_exact','independent_cache_append_k_exact',
+        'independent_cache_append_v_exact','native_future_probability_zero',
+        'independent_future_probability_zero')
+    return stages,semantics
+
+
+def _native_failure_policy():
+    """Read the frozen original tolerances without importing its numerical code."""
+    import re
+    name='spec/numerical_contract.md';raw=read_source(name)
+    need(sha(raw)=='5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5')
+    result={}
+    for key,title in (('operator','BF16 single operator'),('block','BF16 one Transformer block')):
+        match=re.search(re.escape(title)+r':\s+max_abs <= ([0-9.eE+-]+)\s+mean_abs <= ([0-9.eE+-]+)',raw.decode())
+        need(match is not None)
+        result[key]=dict(max_abs=float(match[1]),mean_abs=float(match[2]))
+    return result,sha(raw)
+
+
+def _native_failure_stage(name,stage,mode,limits,*,original):
+    """Recompute only the original metadata verdict; no arrays or arithmetic runs."""
+    need(type(stage) is dict)
+    for key in ('max_abs','mean_abs'):
+        need(type(stage.get(key)) in (int,float) and math.isfinite(stage[key]) and stage[key]>=0)
+    need(stage.get('finite') is True and type(stage.get('bit_exact')) is bool)
+    if name=='mask':
+        passed=stage['bit_exact'];expected_limits=None;contract='exact_causal_mask'
+    elif mode=='fp32' or name=='softmax_fp32':
+        passed=None;expected_limits=None;contract=None
+        if original:need(stage.get('status')=='DIAGNOSTIC_NO_APPROVED_FP32_TOLERANCE')
+    else:
+        kind='block' if name=='y' else 'operator';expected_limits=limits[kind]
+        passed=stage['max_abs']<=expected_limits['max_abs'] and stage['mean_abs']<=expected_limits['mean_abs']
+        contract='spec/numerical_contract.md:'+kind
+    need(type(stage.get('passed')) is type(passed) and stage['passed']==passed)
+    if original:need(stage.get('contract')==contract)
+    need(prerequisite.same(stage.get('limits'),expected_limits))
+    return dict(max_abs=stage['max_abs'],mean_abs=stage['mean_abs'],limits=expected_limits,
+                passed=passed,finite=True,bit_exact=stage['bit_exact'])
+
+
+def _native_failure_mode(mode,phase,failed,semantics):
+    need(type(phase) is dict and type(phase.get('failed_stages')) is list and
+         phase['failed_stages']==failed and all(type(name) is str for name in phase['failed_stages']))
+    checks=phase.get('semantics')
+    need(type(checks) is dict and set(checks)==set(semantics) and all(type(v) is bool for v in checks.values()))
+    exact=all(checks.values())
+    need(type(phase.get('all_semantics_exact')) is bool and phase['all_semantics_exact']==exact)
+    status=('PASS_BF16_STAGE_BUDGET' if not failed and exact else 'FAIL_BF16_STAGE_BUDGET') if mode=='bf16' else ('DIAGNOSTIC_FP32' if exact else 'FAIL_FP32_SEMANTICS')
+    need(phase.get('status')==status)
+    return dict(status=status,failed_stages=list(failed),semantics=dict(checks),all_semantics_exact=exact)
+
+
+def validate_native_failure(value):
+    """Strict diagnostic-only projection; a passing native receipt is never admitted."""
+    fixed=dict(schema=1,status='NATIVE128_FAILURE_DIAGNOSTIC',tokens=128,carried=False,
+        incomplete=True,postflight_complete=False,numerical_acceptance=False,actual_chain_executed=False,
+        native_status='FAIL_BF16_STAGE_BUDGET')
+    need(type(value) is dict and set(value)==set(fixed)|{'result_sha256','source_sha256','approved_limits','bf16_stages','modes'})
+    need(all(type(value[k]) is type(want) and value[k]==want for k,want in fixed.items()))
+    need(prior.prior.digest(value['result_sha256']) and
+         value['source_sha256']=='917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85')
+    limits,_=_native_failure_policy();need(prerequisite.same(value['approved_limits'],limits))
+    stages,semantics=_native_failure_spec();observed=value['bf16_stages'];modes=value['modes']
+    need(type(observed) is dict and set(observed)==set(stages) and type(modes) is dict and set(modes)=={'bf16','fp32'})
+    for name,stage in observed.items():
+        need(type(stage) is dict and set(stage)=={'max_abs','mean_abs','limits','passed','finite','bit_exact'})
+        need(prerequisite.same(stage,_native_failure_stage(name,stage,'bf16',limits,original=False)))
+    bf16_failed=[name for name in stages if observed[name]['passed'] is False]
+    for mode in ('bf16','fp32'):
+        item=modes[mode]
+        need(type(item) is dict and set(item)=={'status','failed_stages','semantics','all_semantics_exact'})
+        failed=bf16_failed if mode=='bf16' else ([] if item.get('semantics',{}).get('mask_exact') is True else ['mask'])
+        need(prerequisite.same(item,_native_failure_mode(mode,item,failed,semantics)))
+    need(modes['bf16']['semantics']['mask_exact'] is observed['mask']['bit_exact'])
+    need(modes['bf16']['status']=='FAIL_BF16_STAGE_BUDGET' or modes['fp32']['all_semantics_exact'] is False)
+    raw=json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+    need(len(raw)<=16384)
+    return json.loads(raw)
+
+
+def project_native_failure(value,*,result_sha256,source_sha256):
+    """Project a completed failed native128 RESULT, retaining every failure class."""
+    script='scripts/qwen2_layer0_model_gate.py'
+    need(source_sha256=='917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85' and
+         sha(read_source(script))==source_sha256 and prior.prior.digest(result_sha256))
+    fixed=dict(schema_version=1,status='FAIL_BF16_STAGE_BUDGET',tokens=128,carried=False,layer=0,
+               official_framework_forward=True,rtl_execution=False,hardware_recipe_acceptance=False)
+    need(type(value) is dict and all(type(value.get(k)) is type(want) and value[k]==want for k,want in fixed.items()))
+    need(type(value.get('identity')) is dict and value['identity'].get('runner_sha256')==source_sha256)
+    limits,policy_sha=_native_failure_policy();policy=value.get('policy')
+    need(type(policy) is dict and policy.get('source')=='spec/numerical_contract.md' and policy.get('sha256')==policy_sha and
+         all(prerequisite.same(policy.get(k),v) for k,v in limits.items()))
+    stages,semantics=_native_failure_spec();modes=value.get('modes');safe_modes={};bf16={}
+    need(type(modes) is dict and set(modes)=={'bf16','fp32'})
+    for mode in ('bf16','fp32'):
+        item=modes[mode]
+        need(type(item) is dict and type(item.get('phases')) is list and len(item['phases'])==1)
+        phase=item['phases'][0]
+        need(type(phase) is dict and type(phase.get('phase')) is int and phase['phase']==0 and
+             type(phase.get('past_tokens')) is int and phase['past_tokens']==0)
+        for key in ('token_ids','position_ids'):
+            need(type(phase.get(key)) is list and phase[key]==list(range(128)) and all(type(n) is int for n in phase[key]))
+        observed=phase.get('stages');need(type(observed) is dict and set(observed)==set(stages))
+        projected={name:_native_failure_stage(name,observed[name],mode,limits,original=True) for name in stages}
+        failed=[name for name in stages if projected[name]['passed'] is False]
+        safe_modes[mode]=_native_failure_mode(mode,phase,failed,semantics)
+        need(safe_modes[mode]['semantics']['mask_exact'] is projected['mask']['bit_exact'])
+        if mode=='bf16':bf16=projected
+    result=dict(schema=1,status='NATIVE128_FAILURE_DIAGNOSTIC',tokens=128,carried=False,
+        incomplete=True,postflight_complete=False,numerical_acceptance=False,actual_chain_executed=False,
+        native_status='FAIL_BF16_STAGE_BUDGET',result_sha256=result_sha256,source_sha256=source_sha256,
+        approved_limits=limits,bf16_stages=bf16,modes=safe_modes)
+    return validate_native_failure(result)

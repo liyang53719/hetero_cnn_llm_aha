@@ -3,9 +3,9 @@
 ## 中文计划
 
 - 已完成前置条件：真实 M16 Public21 observed-gates PASS；M128 资产与 setup 来源层、native16→128 元数据绑定及来源闭包冷测试。
-- 已完成准备检查：完整 setup/资产双凭据准入、原始入口 snapshot 绑定、监督运行器及独立工作流的68个普通 / -O 冷测试（含诊断修订）；独立审查完成后才可发布启动。
+- 已完成准备检查：完整 setup/资产双凭据准入、原始入口 snapshot 绑定、监督运行器及独立工作流的77个普通 / -O 冷测试（含两轮诊断修订）；独立审查完成后才可发布启动。
 - 首次真实尝试：run38913368057/job117014509569 在 environment 的 backend-preflight 子进程失败，尚未进入数值阶段；两次 pip 安装命令已经返回成功。
-- 进行中：仅增加嵌套 backend-preflight 安全分类诊断；没有放宽包、CPU、MKLDNN、线程或数值门槛。复审后才可启动一次诊断充分的尝试。
+- 进行中：保留 backend-preflight 分类，并增加 native128 失败阶段、标量误差与原门槛的安全诊断；复审后才可启动一次已授权的诊断尝试。
 
 ## 原始链与前置结果
 
@@ -49,3 +49,11 @@ python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_m128_run.te
 诊断修订只包裹原始 backend_preflight 调用，成功路径仍完整执行原验证器；失败继续抛出原异常。安全摘要可加入固定阶段、已加载模块的布尔/unknown检查、允许的异常类和仓库相对帧；不会复制异常文本、包版本字符串、配置转储、命令、路径或权重。原始失败记录不被覆盖。运行预算与三个安全artifact文件保持不变。
 
 诊断检查值只描述失败后已加载模块的状态，不表示每个原始门槛都已执行。早期身份检查失败时，线程设置仍可能为 false；未加载模块或不可读 getter 为 unknown。诊断阶段及原始异常帧用于定位，不能把后续未执行条件当作根因。
+
+## 第二次 M128 设置失败与数值诊断
+
+run38916059325/job117023711110 在 native128 阶段失败，总包装器耗时138.098708秒；ZIP SHA-256为`3e403d2bce37fcee781dcc0332bb1c663163383290625c3c2b66c227f1983383`。环境及 native16 已通过。原始 native128 生产器已返回并写出私有 RESULT.json，生成 setup.py 第596行因其最终 verdict 不是 PASS_BF16_STAGE_BUDGET 而拒绝。该最终 FAIL 可能来自 BF16 数值门槛、BF16 语义或 FP32 语义，现有三个安全artifact没有保留具体失败项。目标 PublicExecution M128 数值阶段尚未开始。第一次环境失败的具体原因仍未知，不能把第二次环境成功归因于诊断代码修复。
+
+本次修订仅在 native128 设置失败后读取现有私有 RESULT.json；一次有界读取的相同字节同时用于解析与摘要。安全投影列出固定29个 BF16 阶段的有限 max_abs/mean_abs、原始 operator/block 门槛、布尔 verdict/finite/bit_exact，以及两个 mode 的固定语义布尔值和失败名称。生产器来源及结果摘要绑定同一份证据；不复制张量、导出路径、输入或包身份。所有最终 FAIL 分支保留，并明确 numerical_acceptance=false、postflight_complete=false。
+
+原始 setup 拒绝、生产器计算、阈值、十个生成源与运行预算均不变。安全 summary 的固定上限由8192调整为32768字节，以容纳不截断的诊断；投影自身有16384字节上限，仍仅上传原有三个安全文件。缺失、过大、符号链接、非有限数值或非规范凭据只能产生 DIAGNOSTIC_UNAVAILABLE，不影响原失败状态。此准备修订没有执行生产器或重试 CI。

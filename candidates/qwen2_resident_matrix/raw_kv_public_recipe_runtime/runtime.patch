@@ -1,0 +1,181 @@
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
+@@ -11,11 +11,11 @@
+ from pathlib import Path, PurePosixPath
+ import stat
+ 
+-from ..raw_kv_public_m128_run import launch as m128_profile
++from ..raw_kv_public_recipe_runtime import runtime as m128_profile
+ 
+ ROOT = Path(__file__).resolve().parents[3]
+ HERE = Path(__file__).resolve().parent
+-PROFILE = 'qwen2-public-pv16-fresh-assets-m128-v1'
++PROFILE = m128_profile.ASSET_PROFILE
+ STATUS = 'READY_FOR_ACTUAL_M128'
+ ROWS = 128
+ MODEL = 'Qwen/Qwen2-1.5B-Instruct'
+@@ -35,7 +35,7 @@
+ }
+ PRODUCERS = {'sequential': 'original-rms-rope-sequential-v2',
+              'reduced': 'original-rms-rope-qkv-block-pair-v1'}
+-NATIVE_PRODUCER = 'scripts.qwen2_layer0_model_gate.run_gate'
++NATIVE_PRODUCER = 'qwen2-native-qkv-qk-pair-generated-v1'
+ METHODS = ('official_self_cache', 'independent_self_cache')
+ MODES = ('bf16', 'fp32')
+ MAX_MANIFEST_BYTES = 262144
+@@ -171,7 +171,7 @@
+     """Pure schema validation. No imports, source reads or referenced file access."""
+     need(type(rows) is int and rows == ROWS, 'fresh profile supports canonical M128 only')
+     exact(value, ('schema','status','profile','rows','past_tokens','source_sha256',
+-                 'source_manifest_sha256','payload','readonly','sequential','reduced','native_m16','native','library'),
++                 'source_manifest_sha256','payload','readonly','sequential','reduced','native_m16','native','library','recipe'),
+           'exact fresh manifest schema required')
+     need(type(value['schema']) is int and value['schema'] == 1 and value['profile'] == PROFILE and
+          value['status'] == STATUS and type(value['rows']) is int and value['rows'] == ROWS and
+@@ -223,6 +223,8 @@
+                 for name,shape in shapes(native_rows).items():
+                     record(native['outputs'][mode][method][name], size=4*math.prod(shape),
+                            expected=(M16_X_SHA256 if native_rows == 16 else INPUT_X_SHA256) if name == 'x' else None)
++    from ..raw_kv_public_recipe_runtime import admission as recipe_admission
++    recipe_admission.validate_manifest_extension(value['recipe'])
+     exact(value['library'], ('receipt','binary'), 'strict official library schema')
+     for item in value['library'].values(): record(item)
+     need(value['library']['receipt']['bytes'] <= MAX_METADATA_BYTES, 'library receipt bound')
+@@ -487,7 +489,8 @@
+          result['hardware_recipe_acceptance'] is False and result['logits'] is False and
+          result['full_model_quality'] is False and result['manifest_whole_checkpoint_hash_verified'] is False,
+          'fresh official producer scope differs')
+-    _, identity = native.runtime_identity(ROOT)
++    from ..raw_kv_public_recipe_runtime import admission as recipe_admission
++    identity = recipe_admission.identity(native,workspace,manifest)
+     # Match the producer's JSON representation (e.g. TorchVersion is a str
+     # subclass), while retaining canonical JSON bool/int distinctions.
+     identity = json_bytes(encoded(identity))
+@@ -588,7 +591,7 @@
+         native_result_sha256=manifest['native']['result']['sha256'],native_status=native_result['status'],
+         native_m16_result_sha256=manifest['native_m16']['result']['sha256'],
+         native_vs_independent_failed_stages=native_result['modes']['bf16']['phases'][0]['failed_stages'],
+-        producer_sha256=manifest['source_sha256']['scripts/qwen2_layer0_model_gate.py'],
++        producer_sha256=manifest['recipe']['generated_module']['sha256'],
+         sequential_cpp_sha256=CPP_SHA256['sequential'],reduced_cpp_sha256=CPP_SHA256['reduced'])
+     reference = dict(fresh_profile=PROFILE,workspace=str(workspace),directory=str(resolve_artifact(workspace,manifest['readonly']['table']).parent),
+         table_path=absolute(manifest['readonly']['table']),fresh_lookup=lookup,inputs=dict(original_input,position_ids=list(range(ROWS))),
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
+@@ -21,7 +21,7 @@
+ from ..official_bf16 import check_numeric as prior
+ from ..official_bf16 import execution as policy
+ from ..raw_kv_public_fresh import assets as fresh_assets
+-from ..raw_kv_public_m128_run import launch as m128_profile
++from ..raw_kv_public_recipe_runtime import runtime as m128_profile
+ base=prior.base
+ require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha
+ PREFIX='candidates/qwen2_resident_matrix/dense_block_reduce/'
+@@ -310,7 +310,7 @@
+     require(type(fresh_profile) is bool,'canonical fresh profile flag required')
+     _raw_kv_mode(enable_raw_kv)
+     out,path=Path(out).resolve(),Path(path).resolve()
+-    m128_selected=fresh_profile and fresh_assets.PROFILE=='qwen2-public-pv16-fresh-assets-m128-v1'
++    m128_selected=fresh_profile and fresh_assets.PROFILE==m128_profile.ASSET_PROFILE
+     if m128_selected:
+         require(not out.exists() and file_sha(path)==digest,'fresh M128 snapshot/output identity required')
+         pending=json.loads(path.read_text());_snapshot_raw_kv_mode(pending,enable_raw_kv)
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
+@@ -21,7 +21,7 @@
+ import traceback
+ 
+ from . import assets
+-from ..raw_kv_public_m128_run import launch as m128_runtime
++from ..raw_kv_public_recipe_runtime import runtime as m128_runtime
+ 
+ ROOT = Path(__file__).resolve().parents[3]
+ HERE = Path(__file__).resolve().parent
+@@ -29,8 +29,7 @@
+ TOTAL_SECONDS = 900
+ CLEANUP_SECONDS = 5
+ RECEIPT_SECONDS = 1
+-PHASE_LIMITS = {'preflight':20, 'environment':120, 'acquisition':420,
+-                'references':140, 'native16':60, 'native128':120, 'library':40, 'seal':30}
++PHASE_LIMITS = dict(m128_runtime.PHASE_LIMITS)
+ PHASES = tuple(PHASE_LIMITS)
+ OUTPUTS = ('progress.json', 'summary.json')
+ MAX_PROGRESS_BYTES = 1024
+@@ -293,10 +292,21 @@
+             remaining=work_end-time.monotonic()
+             if remaining <= 0: raise TimeoutError()
+             timeout=min(PHASE_LIMITS[phase],remaining)
+-            with (workspace/'logs'/(phase+'.log')).open('xb') as log:
+-                rc=run_group(phase_command(phase,workspace),cwd=ROOT,env=env,log=log,
+-                             timeout=timeout,grace=CLEANUP_SECONDS)
+-            arm()
++            if phase=='recipe_kernel':
++                from ..raw_kv_public_recipe_runtime import producer
++                try:
++                    producer.build_libraries(m128_runtime.producer_context(context,workspace),workspace,
++                        min(context['work_deadline_ns'],time.monotonic_ns()+int(timeout*1e9)))
++                finally:
++                    arm()
++                private_json(workspace/(phase+'.complete.json'),dict(schema=1,phase=phase,
++                    status='COMPLETE_SETUP_PHASE',source_manifest_sha256=assets.sha(assets.encoded(sources))))
++                rc=0
++            else:
++                with (workspace/'logs'/(phase+'.log')).open('xb') as log:
++                    rc=run_group(phase_command(phase,workspace),cwd=ROOT,env=env,log=log,
++                                 timeout=timeout,grace=CLEANUP_SECONDS)
++                arm()
+             need(type(rc) is int and -128 <= rc <= 255,'phase_failed')
+             if rc != 0:
+                 error=SetupError('phase_failed')
+@@ -575,26 +585,19 @@
+ 
+ 
+ def _phase_native16(context,workspace):
+-    # A distinct supervised child is required: run_gate sets interop threads.
+-    from scripts import qwen2_layer0_model_gate as native
+-    torch,_=backend_identity()
+-    result=native.run_gate(ROOT,workspace/'payload',workspace/'native_m16',tokens=16,carried=False,threads=4)
+-    backend_threads(torch)
+-    need(result['status']=='PASS_BF16_STAGE_BUDGET','phase_failed')
++    from ..raw_kv_public_recipe_runtime import producer
++    end=min(context['work_deadline_ns'],time.monotonic_ns()+PHASE_LIMITS['native16']*10**9)
++    producer.run_native(m128_runtime.producer_context(context,workspace),workspace,end,tokens=16)
+     remaining(context,1)
+ 
+ 
++
+ def _phase_native128(context,workspace):
+-    from scripts import qwen2_layer0_model_gate as native
+-    torch,_=backend_identity()
+-    # The unchanged producer reopens and fully validates the authentic small gate,
+-    # including both modes' exports, before performing its M128 forward.
+-    small=assets.safe_path(workspace/'native_m16/RESULT.json')
+-    result=native.run_gate(ROOT,workspace/'payload',workspace/'native',tokens=128,carried=False,threads=4,
+-                           small_gate=small)
+-    backend_threads(torch)
+-    need(result['status']=='PASS_BF16_STAGE_BUDGET','phase_failed')
++    from ..raw_kv_public_recipe_runtime import producer
++    end=min(context['work_deadline_ns'],time.monotonic_ns()+PHASE_LIMITS['native128']*10**9)
++    producer.run_native(m128_runtime.producer_context(context,workspace),workspace,end,tokens=128)
+     remaining(context,1)
++
+ 
+ 
+ def _phase_library(context,workspace):
+@@ -624,6 +627,8 @@
+         value[role]=dict(producer=assets.NATIVE_PRODUCER,result=rec(workspace/role/'RESULT.json'),outputs={
+             mode:{method:{name:rec(workspace/role/mode/'phase_0'/(prefix+'_'+name+'.f32le')) for name in assets.shapes(rows)}
+                   for method,prefix in zip(assets.METHODS,('native','independent'),strict=True)} for mode in assets.MODES})
++    from ..raw_kv_public_recipe_runtime import producer
++    value['recipe']=producer.manifest_extension(workspace)
+     assets.validate_manifest(value)
+     candidate=workspace/'ASSETS.candidate.json'
+     private_json(candidate,value)
+@@ -647,6 +652,7 @@
+     try:
+         need(os.environ.get('QWEN2_FRESH_SETUP_CHILD')=='1' and phase in PHASES,'invalid_request')
+         context,workspace=_read_context(context_path)
++        need(phase!='recipe_kernel','invalid_request')
+         result=PRODUCERS[phase](context,workspace)
+         need(source_snapshot(context['enable_raw_kv'])==context['source_sha256'],'source_drift')
+         remaining(context,1)

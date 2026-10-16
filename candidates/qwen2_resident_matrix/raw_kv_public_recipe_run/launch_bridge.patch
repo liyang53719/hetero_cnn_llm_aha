@@ -1,0 +1,81 @@
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
+@@ -11,7 +11,7 @@
+ from pathlib import Path, PurePosixPath
+ import stat
+ 
+-from ..raw_kv_public_recipe_runtime import runtime as m128_profile
++from ..raw_kv_public_recipe_run import launch as m128_profile
+ 
+ ROOT = Path(__file__).resolve().parents[3]
+ HERE = Path(__file__).resolve().parent
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
+@@ -21,7 +21,7 @@
+ from ..official_bf16 import check_numeric as prior
+ from ..official_bf16 import execution as policy
+ from ..raw_kv_public_fresh import assets as fresh_assets
+-from ..raw_kv_public_recipe_runtime import runtime as m128_profile
++from ..raw_kv_public_recipe_run import launch as m128_profile
+ base=prior.base
+ require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha
+ PREFIX='candidates/qwen2_resident_matrix/dense_block_reduce/'
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
+@@ -21,7 +21,7 @@
+ import traceback
+ 
+ from . import assets
+-from ..raw_kv_public_recipe_runtime import runtime as m128_runtime
++from ..raw_kv_public_recipe_run import launch as m128_runtime
+ 
+ ROOT = Path(__file__).resolve().parents[3]
+ HERE = Path(__file__).resolve().parent
+@@ -512,7 +512,7 @@
+     for command in (common+['--index-url','https://download.pytorch.org/whl/cpu','torch==2.10.0'],
+                     common+['--index-url','https://pypi.org/simple','numpy==2.3.5','transformers==4.40.1']):
+         subprocess.run(command,cwd=ROOT,check=True,timeout=remaining(context,120))
+-    code='from pathlib import Path; from '+'candidates.qwen2_resident_matrix.raw_kv_public_m128_run.launch'+' import backend_preflight; backend_preflight(Path('+repr(str(workspace/'context.json'))+'))'
++    code='from pathlib import Path; from '+'candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.launch'+' import backend_preflight; backend_preflight(Path('+repr(str(workspace/'context.json'))+'))'
+     subprocess.run([python,'-B','-c',code],cwd=ROOT,check=True,timeout=remaining(context,30))
+ 
+ 
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_recipe_runtime/producer.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_recipe_runtime/producer.py
+@@ -30,14 +30,14 @@
+ 
+ 
+ def _remaining(context, end_ns, reserve=6):
+-    from . import runtime
++    from ..raw_kv_public_recipe_run import launch as runtime
+     runtime.remaining(context, 1)
+     if min(end_ns, context['work_deadline_ns']) - time.monotonic_ns() <= reserve * 10**9:
+         raise TimeoutError('Public recipe producer deadline')
+ 
+ 
+ def _checked(context, workspace, end_ns, kind):
+-    from . import runtime
++    from ..raw_kv_public_recipe_run import launch as runtime
+     need(type(kind) is int and kind in (16, 128) or type(kind) is str and kind == 'kernel')
+     need(type(end_ns) is int and type(context) is dict and
+          type(context.get('work_deadline_ns')) is int and
+@@ -64,7 +64,7 @@
+ 
+ 
+ def _postflight(context, workspace, sources, end_ns, library, qkv_library):
+-    from . import runtime
++    from ..raw_kv_public_recipe_run import launch as runtime
+     _remaining(context, end_ns)
+     need(phase.same(runtime.source_snapshot(), sources))
+     again, found = runtime.read_context(workspace / 'context.json')
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_recipe_runtime/admission.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_recipe_runtime/admission.py
+@@ -115,7 +115,7 @@
+     The returned dispatch summary remains a numerical prerequisite, not a Public
+     chain verdict or a claim of backend-order equivalence.
+     """
+-    from . import runtime
++    from ..raw_kv_public_recipe_run import launch as runtime
+ 
+     need(type(manifest) is dict, 'fresh recipe manifest required')
+     recipe = validate_manifest_extension(manifest['recipe'])

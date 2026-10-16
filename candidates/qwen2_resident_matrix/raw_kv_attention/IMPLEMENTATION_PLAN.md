@@ -20,3 +20,21 @@
 ## 验收界限
 
 本批六文件是模型/来源/短测计划，不包含 consumer RTL。M128真实执行、原始算术数值验收、端到端吞吐、DDR性能及硬件资源结论仍待后续单独测试。父模块已编译/展开的结果不能代替其尚未完成的 RTL 生命周期验证。
+
+## 原始数值消费者的下一步桥接（准备完成，数值未执行）
+
+新增 numeric_bridge.py 测试适配器，不改 OfficialAttentionOwner 的 tick、_attention、_matrix_step、ScalarService 或 MatrixService。只把原 owner 已接受的 K/V MemoryRequest 接到 KvSupply；Q读与输出写仍走原测试 Bus。接受与返回的身份、64B容器顺序保持不变。供应侧故障通过现有 Python local_reset 进入 owner 的 drain，再消费 held reply；这验证 Python 排空契约，不代表 Chisel 已有该故障侧带。
+
+两组短数值比较只用合成 M1/M2：原 DDR 路径与贷款路径分别运行原始 owner，比较输出逐位值、完整 scalar 操作序列、QK dot/score、接受的 Matrix 请求/FMA计数（不比较因传输停顿而改变的 legacy_model_ticks），并复用原 independent reference_attention。加入背压、故障排空和最后 raw ACK/贷款释放前的终端门控。有效数值测试使用有限输入；NaN/Inf原位传输仍由现有26项纯传输测试覆盖。
+
+numeric_prepare.py 和 test_numeric_prepare.py 是普通发现测试，只验证52项已固定依赖及来源，不导入/执行原算术服务。numeric_pins.json 固定当前033ac109来源。数值入口必须显式选择，要求 MATRIX_SERVICE_LIBRARY 及相邻 compile.json，复用原 verified_library 的来源、编译参数、库散列校验。无库时返回 NOT_RUN 且退出码非零，不能用 skip、stub或临时编译获得 PASS。
+
+当前隔离目录没有该库，也没有真正的 git checkout；原 ScalarService 的 source_identity 要求 git HEAD 中 recipe 原文匹配。后续可在已有标准 Matrix CI 的真实 checkout 与已验证库上下文中单独扩展短测，先审查再运行，不绕过源检查。此批不创建新工作流、不启动编译、不上传合成数据或完整算术轨迹。只允许输出状态和计数摘要；不能据此宣称 M128、公有模型数值验收或硬件时序通过。
+
+## 既有 Matrix CI 的最小数值扩展（已准备，尚未运行）
+
+仅在 .github/workflows/qwen2-matrix-interface-frontend.yml 原有 job 中，普通 contracts 测试之后、长 Scala 检查之前，加一次 run_attempt==1 的 run_numeric_ci 调用。继续复用既有 build_shared_matrix_recipe 产生并通过 GITHUB_ENV 导出的库/回执；wrapper 只调用 from_environment 校验，不调用 build。保持原触发路径、一个 job、20分钟总时限及既有编译步骤。最近已观察到约17分钟的总运行，因此新增 wrapper 的120秒总预算包含最多5秒清理（子进程至多114秒并扣除准备时间，另留1秒回执写入），不延长 job 时限；实际余量仍须以本次日志确认。
+
+新增52输入检查包含严格共享库构建验证器、原始 native 编译闭包及已测试的进程组清理 helper。运行前后冻结原始依赖、adapter/runner、owning workflow、library 和 compile receipt 的散列；发生漂移不能 PASS。复用 start_new_session 及 SIGTERM/TERM/KILL 的全组清理，不重试、不增加 native 编译。
+
+只有 work/raw-kv-attention-numeric/summary.json 与 source_hashes.json 加入原有 artifact 的显式清单。子进程原始输出保留在临时目录，绝不添加到既有递归上传路径或打印到日志。成功必须同时有 M1、M2 及故障排空的固定摘要，缺库、超时、异常、非零返回或摘要不匹配均不是 PASS。输出仅为固定状态/计数与来源散列，不上传数据、权重、完整标量轨迹或绝对本地路径。

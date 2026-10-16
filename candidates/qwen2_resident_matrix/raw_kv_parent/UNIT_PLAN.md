@@ -2,16 +2,16 @@
 
 ## 中文计划
 
-- 已完成：父级 11 项控制测试加 17 项准备检查，普通 Python 与 -O 各通过 28 项；零 fuzz 组合和 13 个固定 Scala 编译单元/原始源码切片校验通过。
+- 已完成：父级 11 项控制测试加 19 项准备检查，普通 Python 与 -O 各通过 30 项；零 fuzz 组合和 13 个固定 Scala 编译单元/原始源码切片校验通过。
 - 已完成：复用的进程组超时/SIGTERM 清理 3 项测试通过。
 - 已完成：首次 CI 的 Scala 编译、两个配置的展开与存储结构检查。RTL 测试阶段在 240 秒后超时，尚无父级场景通过证明。
-- 待办：第二次运行已将超时定位到模拟器启动之前；审核 C++ 分文件并行编译及 -O0 改动，再以相同预算验证，尚未启动第三次运行。
+- 待办：第三次运行仍未进入模拟回调；已准备日志去缓冲、即时分类和失败后取消后续测试，等待审核。没有授权新运行。
 
 The first actual run passed parent Scala compilation, elaboration and both
 structural audits, then timed out in the 240-second RTL test stage. No parent
 scenario completion is established. Diagnostic revision 2 also timed out before the
-simulator callback. Build revision 3 is prepared for a same-budget run;
-publication of the workflow comment activates that run.
+simulator callback. Build revision 3 also failed to reach either simulator callback. The failure
+visibility correction below is prepared only; the workflow is unchanged.
 
 ## Real implementation and dependency closure
 
@@ -130,7 +130,7 @@ The workflow comment activates one reviewed diagnostic run when published;
 no second run has been launched as part of preparing these edits.
 
 
-## C++ build revision 3 (prepared, not run)
+## C++ build revision 3 (historical; executed without a completed simulator build)
 
 Diagnostic run 38871367392 again timed out in the 240-second RTL stage.
 Its receipt has only case_begin(default_off_dense), no simulator-ready or
@@ -157,4 +157,28 @@ output-split override is introduced: the failed build already emitted 47 C++
 files. DUT source, SV generation flags, reset semantics, assertions, all test
 scenarios, stimulus, and stage/overall budgets remain unchanged. This is a
 build-time hypothesis to validate, not a claimed speedup or parent RTL PASS.
-The workflow comment activates one reviewed same-budget run on publication.
+The workflow comment activated run 38874710859; its unsuccessful outcome is
+recorded below. This historical configuration is not a new run request.
+
+
+## Failure visibility correction (prepared, no new run authorized)
+
+Revision-3 run 38874710859 timed out after both case-begin markers but before
+both simulator-ready markers. The raw-off inventory was 46 C++/4 object/0
+executables; raw-on was 43/0/0. This suggests the first setup failed and the
+suite continued into the second build. It is not evidence of a successful
+build or a speedup. Neither case reached its simulation callback.
+
+The documented sbt default buffers test logging until every test in a source
+file finishes ([sbt testing output](https://www.scala-sbt.org/1.x/docs/Testing.html#Output)).
+The generated build now sets Test / logBuffered := false. Each case immediately
+prints fixed, bounded exception classifications and rethrows the original
+Throwable. No arbitrary exception text is emitted by that helper. The existing
+Python diagnostic sanitizer now also selects C/C++ compiler and make errors
+from the local redirected log, within its unchanged 4KiB sanitized limit.
+[ScalaTest 3.2.19 CancelAfterFailure](https://www.scalatest.org/scaladoc/3.2.19/org/scalatest/CancelAfterFailure.html)
+cancels subsequent cases after a genuine failure, avoiding a second build that
+would obscure the first diagnostic. Both cases and all four scenarios are still
+required for success; failure/cancellation markers cannot pass the result gate.
+No toolchain, DUT, stimulus, optimization or time-budget changes are included.
+The workflow is unchanged; no new RTL run is authorized by this preparation.

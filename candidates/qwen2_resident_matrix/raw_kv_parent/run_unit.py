@@ -44,6 +44,7 @@ libraryDependencies ++= Seq("org.chipsalliance" %% "chisel" % "6.7.0", "edu.berk
 addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % "6.7.0" cross CrossVersion.full)
 scalacOptions += "-language:reflectiveCalls"
 Test / parallelExecution := false
+Test / logBuffered := false
 lazy val writeDependencyPaths = taskKey[Unit]("Local dependency audit input, including compiler plugin")
 writeDependencyPaths := {
   val jars = ((Test / externalDependencyClasspath).value.files ++ scalaInstance.value.allJars ++ update.value.allFiles).filter(_.getName.endsWith(".jar")).distinct
@@ -125,6 +126,10 @@ def failure_diagnostics(log_path, *, prefixes=(), stage="runner", error=""):
                     or re.match(r"(?:\[(?:error|info)\]\s+)?(?:[A-Za-z_]\w*\.)*[A-Za-z_]\w*(?:Exception|Error):", clean)
                     or re.match(r"(?:\[(?:error|info)\]\s+)?(?:Assertion failed|assertion failed|.*(?:did not equal|was not equal to|timed out|Timeout))\b", clean)
                     or re.match(r"%Error(?:-[\w]+)?:", clean)
+                    or re.match(r"(?:\[(?:error|info)\]\s+)?(?:.*\.(?:cpp|cc|c|h|hpp):\d+(?::\d+)?:\s+)?(?:fatal error|error):", clean)
+                    or re.match(r"(?:\[(?:error|info)\]\s+)?(?:g\+\+|gcc|clang\+\+|clang|cc1plus):\s+(?:fatal error|error):", clean)
+                    or re.match(r"(?:\[(?:error|info)\]\s+)?make(?:\[\d+\])?:\s+\*\*\*", clean)
+                    or re.fullmatch(r"PARENT_FAILURE (?:default_off_dense|enabled_dense_drain) (?:compiler_killed|missing_file|compiler_error|make_error|subprocess_error|other_exception)", clean)
                 )
                 if selected:
                     sanitized = _diagnostic_text(clean, prefixes)
@@ -288,6 +293,8 @@ def result_audit(log):
     totals = re.findall(r"Total number of tests run:\s*(\d+)\b", log)
     need(totals == ["2"] and log.count("All tests passed") == 1,
          "missing exact two-test ScalaTest result")
+    need(not re.search(r"PARENT_FAILURE|\*\*\* (?:FAILED|CANCELED|ABORTED) \*\*\*|(?:failed|canceled|ignored|pending) [1-9]\d*", log),
+         "failure or canceled required test cannot pass")
     markers = re.findall(r"^\s*PARENT_SCENARIO_PASS\s+(\w+)\s*$", log, re.M)
     need(sorted(markers) == sorted(SCENARIOS), "missing, duplicate or unexpected parent scenario marker")
     return {"scala_tests": 2, "completed_scenarios": list(SCENARIOS)}

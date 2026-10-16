@@ -37,3 +37,20 @@ terminal 是核心完成已可见的通知，不依赖 host result.ready；它�
     python -m candidates.qwen2_resident_matrix.raw_kv_attention.source_contract
 
 M1/M2轨迹分别192/576个核心 KV 请求，32/64个唯一 DDR miss；计数来自接受事件，不将核心请求字节当成 DDR 节省。4096条覆盖是容量传输测试，不是 M128 Attention 执行。无硬件周期、利用率或数值准确率声明。
+
+## 原始数值模型桥接准备
+
+numeric_prepare.py / numeric_pins.json 固定52项原始依赖；test_numeric_prepare.py 供普通测试发现运行。numeric_bridge.py 为单独 opt-in 数值入口，使用原 OfficialAttentionOwner、ScalarService、MatrixService 和原独立参考，只替换 K/V 的供数路径。源码、构建回执和库必须全部验证；缺少 MATRIX_SERVICE_LIBRARY 时以 NOT_RUN 非零退出，不回退到新编译或模拟算术。
+
+本地尚未运行数值桥接：缺少已验证 Matrix 库及真实 git checkout。实际 M1/M2 数值比较、故障消费者排空及其 PASS 均待后续；准备测试不计作数值测试。详见 IMPLEMENTATION_PLAN.md 的桥接章节。
+
+准备验证：8项 preparation 测试在普通 Python 与 -O 均通过（约0.3秒）；包含源码漂移拒绝、缺库 CLI 非成功退出及纯协议 DDR 解码检查。未调用数值入口的执行分支。
+
+    python -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare
+    python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare
+
+后续显式数值入口为 python -m candidates.qwen2_resident_matrix.raw_kv_attention.numeric_bridge；需要已有已验证库。入口设置120秒协作式墙钟检查和每次200000事件上限；已准备在既有 Matrix CI 中显式调用；未增加新工作流或触发范围。
+
+CI扩展已准备、尚未运行：在既有 qwen2-matrix-interface-frontend job 的普通 contracts 后运行一次 opt-in wrapper；继续复用已构建库，120秒总预算含清理，保持20分钟 job 上限。只保存 summary.json/source_hashes.json，不保存原始子进程输出。此准备状态不是数值 PASS。
+
+CI wrapper 的15项冷测试普通/-O通过（每组约1.4秒），含真实短睡眠子进程组清理、严格摘要、输入漂移和缺库路径；与26项传输、8项准备测试合计49项普通/-O通过（每组约3.4秒）。这些测试没有载入 native 数值库。当前 wrapper 冻结58个仓库输入以及库/回执散列，114秒工作预算加5秒清理和1秒回执写入，最终绝对上限120秒。

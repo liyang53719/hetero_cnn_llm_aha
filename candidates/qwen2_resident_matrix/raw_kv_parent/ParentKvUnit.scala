@@ -5,6 +5,7 @@ import chisel3._
 import chiseltest._
 import chiseltest.simulator.{VerilatorBackendAnnotation, VerilatorCFlags}
 import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.CancelAfterFailure
 import _root_.circt.stage.ChiselStage
 import java.nio.file.{Files, Paths}
 import scala.collection.mutable
@@ -30,11 +31,33 @@ object ParentKvElaborate extends App {
   }
 }
 
-class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
+class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester with CancelAfterFailure {
   // Fixed markers contain no addresses, tags, data or internal state.
   private def progress(event: String, scenario: String, cycle: Int = 0): Unit = {
     println(s"PARENT_PROGRESS $event $scenario $cycle")
     Console.out.flush()
+  }
+  // Print classifications immediately, before sbt/ScalaTest can buffer a
+  // failure. Never print arbitrary exception text, payloads, paths or tags.
+  // The original Throwable is rethrown so the original failure stays intact.
+  private def diagnosticCase(scenario: String)(body: => Unit): Unit = {
+    try body catch {
+      case failure: Throwable =>
+        val text = Option(failure.getMessage).getOrElse("")
+        val bounded = (text.take(65536) + text.takeRight(65536)).toLowerCase
+        val codes = Seq(
+          "compiler_killed" -> (bounded.contains("killed signal") || bounded.contains("out of memory") || bounded.contains("cannot allocate memory")),
+          "missing_file" -> bounded.contains("no such file or directory"),
+          "compiler_error" -> (bounded.contains("fatal error:") || bounded.contains("error:")),
+          "make_error" -> (bounded.contains("make") && bounded.contains("***")),
+          "subprocess_error" -> failure.getClass.getName.contains("SubprocessException"))
+        val selected = codes.collect { case (code, true) => code }
+        (if (selected.nonEmpty) selected else Seq("other_exception")).foreach { code =>
+          println(s"PARENT_FAILURE $scenario $code")
+        }
+        Console.out.flush()
+        throw failure
+    }
   }
   private val aBase = BigInt(0x100000)
   private val bBase = BigInt(0x200000)
@@ -586,6 +609,7 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
 
   behavior of "the actual composed TransposedDenseDownOwner raw KV loan"
   it should "complete ordinary Dense with the raw feature absent" in {
+    diagnosticCase("default_off_dense") {
     progress("case_begin", "default_off_dense")
     test(ParentKvHarness.owner(raw = false)).withAnnotations(Seq(VerilatorBackendAnnotation, VerilatorCFlags(Seq("-O0")))) { d =>
       progress("sim_ready", "default_off_dense")
@@ -595,8 +619,10 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
       progress("scenario_done", "default_off_dense")
       println("PARENT_SCENARIO_PASS default_off_dense")
     }
+    }
   }
   it should "retire real parent work before loans and preserve poisoned raw debt" in {
+    diagnosticCase("enabled_dense_drain") {
     progress("case_begin", "enabled_dense_drain")
     test(ParentKvHarness.owner(raw = true)).withAnnotations(Seq(VerilatorBackendAnnotation, VerilatorCFlags(Seq("-O0")))) { d =>
       progress("sim_ready", "enabled_dense_drain")
@@ -612,6 +638,7 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
       rawFaultRetirement(d)
       progress("scenario_done", "raw_fault_retirement")
       println("PARENT_SCENARIO_PASS raw_fault_retirement")
+    }
     }
   }
 }

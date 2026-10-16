@@ -313,6 +313,39 @@ class ParentUnitPrepareTests(unittest.TestCase):
         self.assertNotIn("--x-initial", harness)
         self.assertNotIn("--x-assign", harness)
 
+    def test_compiler_failures_are_selected_sanitized_and_bounded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "unit.log"
+            path.write_text("\n".join([
+                "PARENT_FAILURE default_off_dense compiler_killed",
+                "[info] g++: fatal error: Killed signal terminated program cc1plus",
+                "[info] /private/build/model.cpp:42:3: error: missing header",
+                "make[1]: *** [/private/build/VTop.mk:9: model.o] Error 1",
+                "[info] /private/build/model.cpp:43:3: error: token=private-secret",
+                "[info] /private/build/model.cpp:44:3: error: payload=private-payload",
+                "PARENT_FAILURE private_data unknown_code",
+                "g++ -I/private/build -c private-command.cpp",
+            ]))
+            result = failure_diagnostics(path, error="RTL test failed")
+            for included in ("compiler_killed", "Killed signal", "missing header", "Error 1"):
+                self.assertIn(included, result)
+            for excluded in ("/private/build", "private-secret", "private-payload", "private_data", "private-command"):
+                self.assertNotIn(excluded, result)
+            self.assertLessEqual(len(result.encode()), DIAGNOSTIC_BYTES)
+
+    def test_fail_fast_does_not_relax_required_success(self):
+        self.assertIn("Test / logBuffered := false", run_unit.BUILD_SBT)
+        harness = (run_unit.HERE / "ParentKvUnit.scala").read_text()
+        self.assertIn("with CancelAfterFailure", harness)
+        self.assertIn("throw failure", harness)
+        self.assertEqual(harness.count('diagnosticCase("'), 2)
+        self.assertNotIn('println(failure', harness)
+        good = ("Total number of tests run: 2\nAll tests passed.\n"
+                + "".join("PARENT_SCENARIO_PASS " + s + "\n" for s in SCENARIOS))
+        for bad in ("PARENT_FAILURE default_off_dense compiler_error", "canceled 1", "ignored 1", "*** FAILED ***"):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                result_audit(good + bad)
+
     def test_failed_stage_writes_and_prints_only_sanitized_receipt(self):
         # The process launcher is replaced: no sbt, dependency resolution,
         # compilation, elaboration or simulation can run in this test.

@@ -1,0 +1,40 @@
+# Launch revision 1: actual A-hold owner, Scala/CHIRRTL only.
+name: qwen2-dense-a-hold-frontend
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/qwen2-dense-a-hold-frontend.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-dense-a-hold-frontend-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bounded-frontend:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Compile actual owner and emit four CHIRRTL configurations
+        timeout-minutes: 8
+        run: |
+          python candidates/qwen2_resident_matrix/dense_a_hold_chisel/check_frontend.py --out "$RUNNER_TEMP/dense-a-hold-frontend" --cache "$RUNNER_TEMP/dense-a-hold-jars"
+      - name: Upload compact non-payload frontend evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-dense-a-hold-frontend-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/dense-a-hold-frontend/summary.json
+            ${{ runner.temp }}/dense-a-hold-frontend/source-sha256.json
+            ${{ runner.temp }}/dense-a-hold-frontend/dependency-sha256.json
+            ${{ runner.temp }}/dense-a-hold-frontend/diagnostic.txt

@@ -1,0 +1,209 @@
+{
+  "bounded_timing_projection": {
+    "actual_host_wall_seconds": 2400.2100579410035,
+    "checkout_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+    "completed_pc_count": 16,
+    "completed_pc_first": 0,
+    "completed_pc_last": 15,
+    "completed_pcs_contiguous": true,
+    "context_sha256": "5864b89dd54542f0b64abb15c44df314a78cc1009ac3785d3b8854433f6cf241",
+    "diagnosis": "INNER_PUBLIC_2400S_WALL_BUDGET_EXCEEDED_AT_FFN_HOST_EDGE",
+    "final_host_counts": {
+      "completion_fire": 16,
+      "host_model_ticks": 19929718,
+      "owner_result_fire": 14,
+      "request_fire": 15,
+      "result_fire": 0
+    },
+    "full_29_node_acceptance": false,
+    "hardware_cycles": null,
+    "kind": "BOUNDED_FAILURE_TIMING_PROJECTION_NO_ACCEPTANCE",
+    "last_numeric_progress_sha256": "fe5e1bd204a08356f397d9f1b9eed60899c4caff68a56a15977c74cca711a305",
+    "last_operator": "FFN",
+    "last_ordinal": 16,
+    "last_phase_elapsed_seconds": 2261.354416201,
+    "last_writer_elapsed_seconds": 2273.228089879,
+    "numerical_acceptance": false,
+    "original_budgets_seconds": {
+      "inner_public": 2400,
+      "numeric_envelope": 2430,
+      "setup": 900,
+      "total": 3420
+    },
+    "outer_elapsed_seconds": 2762.816418,
+    "outer_status": "FAILED",
+    "postflight_complete": false,
+    "prefix_host_wall_seconds": 82.37693366200256,
+    "private_actual_report_included": false,
+    "private_actual_summary_bytes": 309466,
+    "private_actual_summary_sha256": "a58d7b3133bfc55012a2cccfba8dbd40a3760b3e11b17833a0ee1636ee8b3b13",
+    "rtl_executed": false,
+    "schema": 1,
+    "setup_elapsed_seconds": 335.069335,
+    "setup_receipt_sha256": "79b4ca389df5f19d52e0a0c8a6040f706df5fa9f4d373c27dbbcd813032ec61a",
+    "source_manifest_sha256": "9d1aa25d2f76aea864c86dbfa7cfc3a724cb2e6bafd2c8f8158d19937f057f33",
+    "source_sha256": {
+      "candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py": "b3204b92334314c2153a33ea4523d2e55e35ea1f1f632d217d0e3530e3934703",
+      "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be",
+      "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "cdf203f9e7113db7fb29dd290ea6355adf3f7df86e145e5828daf13a5ac51b73"
+    },
+    "timing_limits": [
+      "Writer, actual_execute phase, and inner Public clock have different origins.",
+      "A single last-event snapshot is not a heartbeat or exact final halt timestamp.",
+      "No exact Attention-only wall time or exact FFN remaining budget is asserted.",
+      "Host counters are software-model events, not RTL cycles or MAC utilization."
+    ]
+  },
+  "checkout_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+  "checkpoint_kind": "FAILED_ORIGINAL_PUBLIC_M128_INNER_HOST_BUDGET",
+  "control_record_identities": {
+    "observed-progress-2143.json": {
+      "bytes": 1445,
+      "sha256": "6acff923060e8294ce94aff00ecf82ad7b3c6d0d054b6c11ea0910ae68844623"
+    },
+    "observed-terminal.json": {
+      "bytes": 1447,
+      "sha256": "2649973bc3910e3b42c7c01daca8632f680f1415d2b756d890c7beee62f1e6e5"
+    },
+    "session-terminal.json": {
+      "bytes": 674,
+      "sha256": "6d1d185463ab2fa88f31dbfda2aeae6fc3c1b53048c11da9a560f3b54b08c019"
+    },
+    "session.json": {
+      "bytes": 567,
+      "sha256": "60408bc1be8f83698292eedf465ee5e7f7cf3b32458c83917124730451d22a58"
+    },
+    "terminal-record.json": {
+      "bytes": 2101,
+      "sha256": "076bebad9c7e413ea737b4bf2cd7efe9b2dfd27b0e5fe7d1dd743ce9922cdf1a"
+    }
+  },
+  "diagnosis": {
+    "classification": "ORIGINAL_INNER_2400_SECOND_PUBLIC_HOST_WALL_CLOCK_GUARD",
+    "clean_original_guard_line": 103,
+    "clean_original_guard_source_sha256": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "exception": "ValueError",
+    "frames": [
+      {
+        "line": 427,
+        "source": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py"
+      },
+      {
+        "line": 109,
+        "source": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py"
+      },
+      {
+        "line": 39,
+        "source": "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py"
+      }
+    ],
+    "guard_message_from_frozen_source": "public FFN host budget exceeded",
+    "inner_wall_budget_seconds": 2400,
+    "interpretation": "The terminal diagnostic frames resolve to the unchanged host deadline check in the pinned composed source. This identifies the observed guard, not a numerical comparison result.",
+    "numeric_phase_budget_seconds": 2430,
+    "numerical_comparison_completed": false,
+    "numerical_mismatch_reported": false,
+    "outer_timeout_reported": false,
+    "outer_total_budget_seconds": 3420,
+    "runtime_guard_line": 109,
+    "runtime_guard_source_sha256": "cdf203f9e7113db7fb29dd290ea6355adf3f7df86e145e5828daf13a5ac51b73"
+  },
+  "last_valid_numeric_progress": {
+    "capped": false,
+    "context_sha256": "5864b89dd54542f0b64abb15c44df314a78cc1009ac3785d3b8854433f6cf241",
+    "counts": {
+      "completion_fire": 16,
+      "host_model_ticks": 18941741,
+      "owner_result_fire": 14,
+      "request_fire": 15,
+      "result_fire": 0
+    },
+    "elapsed_origin": "NUMERIC_WRITER_START",
+    "elapsed_seconds": 2273.228089879,
+    "event": "REQUEST",
+    "kind": "NUMERIC_PROGRESS_DIAGNOSTIC_ONLY",
+    "numerical_acceptance": false,
+    "operator": "FFN",
+    "ordinal": 16,
+    "phase": "actual_execute",
+    "phase_elapsed_seconds": 2261.354416201,
+    "phase_state": "ENTERED",
+    "postflight_complete": false,
+    "schema": 1,
+    "sequence": 61,
+    "source_manifest_sha256": "9d1aa25d2f76aea864c86dbfa7cfc3a724cb2e6bafd2c8f8158d19937f057f33",
+    "stage": "public_suffix",
+    "writer_sha256": "d20155dd701203c6043adec7572cb224a5b2dceaff260bee29235ea669611e5e"
+  },
+  "limits": {
+    "acceptance": "All Public numerical, postflight and full-29-node acceptance remain false. Source checks, setup progress, historical runs and cold-validator success cannot establish PASS.",
+    "cpu": "ELIGIBLE_FOR_BACKEND_CHECK is CPU eligibility only. Its backend_qualified=false is preserved unchanged and is not a claim that native setup never ran.",
+    "data": "Only three untouched safe JSONs are preserved. Control/context contents, private logs, arrays, weights, native libraries and reference outputs are not included.",
+    "progress": "Sequence 61 is the last valid emitted diagnostic, not an exact terminal program counter or proof of completed FFN arithmetic. Its counters are distinct and must not be conflated.",
+    "provenance": "Session and observation identities are local provenance. Hash checks verify recorded byte identities; they do not independently authenticate a remote CI origin.",
+    "scope": "Evidence-only candidate outside the 285-source closure. No existing repository, workflow, runtime, contract or frozen evidence is changed. No rerun or push."
+  },
+  "recorded_facts": {
+    "clone_started": true,
+    "elapsed_seconds": 2762.816418,
+    "enable_raw_kv": true,
+    "fresh_profile": true,
+    "full_29_node_acceptance": false,
+    "numeric_started": true,
+    "numerical_acceptance": false,
+    "phase": "numeric",
+    "postflight_complete": false,
+    "profile": "qwen2-public-paired-m128-linked-launch-v1",
+    "rows": 128,
+    "rtl_executed": false,
+    "scala_executed": false,
+    "setup_started": true,
+    "status": "FAILED"
+  },
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "safe3": {
+    "progress.json": {
+      "bytes": 79,
+      "sha256": "d48207e852bdac9e6b946329cee952ea2cf3d2569e60d583589c3467255fc951"
+    },
+    "source_hashes.json": {
+      "bytes": 39690,
+      "sha256": "99d4548f9e20edde2f2d42d36848ad25996fa1aae9e44025a403ffd27304ab28"
+    },
+    "summary.json": {
+      "bytes": 1960,
+      "sha256": "0a6764b46df7f5c5e798f3e491bda3d8ad594cf8b17294fdf68ce8bc8af99be8"
+    }
+  },
+  "schema": 1,
+  "session": {
+    "cross_call_proc_identity_available": false,
+    "deadline_ns": 66511060765001,
+    "launcher_pid": 2,
+    "launcher_start_sha256": "fb3044bbd4b5f3c3b1ee125c60ab401e3a3e111653cb2d4378827f04c2b30bc9",
+    "pid_scope": "EXEC_SESSION_LOCAL_PID_NAMESPACE",
+    "process_exit_code": 1,
+    "session_id": 99610,
+    "started_ns": 63091060765001,
+    "started_utc": "2026-10-16T20:58:47Z",
+    "total_budget_seconds": 3420
+  },
+  "source_binding": {
+    "commit_tree": "07cdd8b1bc7508da7b587fc8465d4e8026f67731",
+    "context_sha256": "5864b89dd54542f0b64abb15c44df314a78cc1009ac3785d3b8854433f6cf241",
+    "generated_entries": 12,
+    "launch_contract_sha256": "b4ea311e11a64695fba4ccfc1f512240ddccdbada99710d58a1a36dbe5d1d96b",
+    "original_source_manifest_sha256": "b3f398957ed913b770c0d8686b10923a9cca8479019fe8a58d4e1dced142898f",
+    "runtime_role": "composed_original_checkout_with_12_pinned_overlays",
+    "runtime_source_manifest_sha256": "9d1aa25d2f76aea864c86dbfa7cfc3a724cb2e6bafd2c8f8158d19937f057f33",
+    "source_entries": 285,
+    "source_manifest_member_sha256": "99d4548f9e20edde2f2d42d36848ad25996fa1aae9e44025a403ffd27304ab28",
+    "source_role": "clean_original_checkout",
+    "writer_identity_kind": "RANDOM_PER_RUN_DIAGNOSTIC_WRITER_ID_NOT_SOURCE_HASH",
+    "writer_sha256": "d20155dd701203c6043adec7572cb224a5b2dceaff260bee29235ea669611e5e"
+  },
+  "timing_projection_identity": {
+    "bytes": 2514,
+    "sha256": "3023cfda0e7cc6d01a5d9b6864ad456d0bd2f61184340d5b5e25e493815b6298"
+  }
+}

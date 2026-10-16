@@ -1,0 +1,175 @@
+--- a/candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py
+@@ -200,6 +200,7 @@
+                 type(transport.supply.parent) is ParentLoan and
+                 type(self.owner) is DenseReductionOwner,
+                 'raw KV requires concrete original public owners and transport')
++        transport.check_packed_binding()
+         parent = transport.supply.parent
+         binding = (transport, transport.supply, parent, transport.job,
+                    self.attention_owner, self.matrix_service, self.prefix_owner.scalar)
+--- a/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
+@@ -19,7 +19,7 @@
+ require = execution.require
+ 
+ 
+-def execute_attention_owner(x, physical, job, *, final_ack_stall=5, enable_raw_kv=False):
++def execute_attention_owner(x, physical, job, *, final_ack_stall=5, enable_raw_kv=False, packed_profile=None):
+     """Feed the real Attention owner only accepted, physically addressed beats.
+ 
+     The same public Host receives its actual terminal. The output stays
+@@ -37,11 +37,13 @@
+             x.frontend.port.memory is x.frontend.memory,
+             'Attention metadata and operands require the identical physical map')
+     require(type(enable_raw_kv) is bool, 'canonical raw KV enable')
++    require(packed_profile is None or enable_raw_kv, 'packed profile requires raw bank transport')
+     if enable_raw_kv:
+         from candidates.qwen2_resident_matrix.raw_kv_parent.model import ParentLoan
+         from candidates.qwen2_resident_matrix.raw_kv_public.model import PublicKvTransport
++        options={} if packed_profile is None else dict(packed_profile=packed_profile)
+         x.bind_attention_transport(PublicKvTransport(owner=backend,
+-            parent=ParentLoan(owner=x.owner, enabled=True), job=job))
++            parent=ParentLoan(owner=x.owner, enabled=True), job=job,**options))
+     counts, pending, held = Counter(), None, None
+     remaining, result, final_ack_tick = final_ack_stall, None, None
+     require(x.attention_edge(job=job)['job_fire'], 'public Attention job was not accepted')
+--- a/candidates/qwen2_resident_matrix/raw_kv_attention/model.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_attention/model.py
+@@ -30,9 +30,14 @@
+     error:bool=False
+ 
+ class KvSupply:
+-    def __init__(self,parent=None,*,enabled=False):
++    def __init__(self,parent=None,*,enabled=False,scratch_mux=None):
+         self.parent=parent if parent is not None else ParentLoan(enabled=enabled)
+         if type(enabled) is not bool:raise ValueError('canonical enable')
++        if scratch_mux is not None:
++            from ..attention_packed_public.mux import ScratchMux
++            if type(scratch_mux) is not ScratchMux or scratch_mux.parent is not self.parent:
++                raise ValueError('exact scratch mux on identical parent required')
++        self.scratch_mux=scratch_mux
+         self.enabled=enabled;self.binding=None;self.valid=bytearray(512)
+         self.state='idle';self.current=None;self.raw_key=None;self.serial=0
+         self.poison=False;self.closing=False;self.ddr_pending=False
+@@ -43,7 +48,7 @@
+     @property
+     def reset_required(self):
+         p=self.parent
+-        return self.poison or p.poison or p.raw.poison or p.owner.error is not None or p.owner.tiles.poison or p.owner.drain_poison
++        return self.poison or p.poison or p.raw.poison or p.owner.error is not None or p.owner.tiles.poison or p.owner.drain_poison or (self.scratch_mux is not None and self.scratch_mux.reset_required)
+ 
+     def bind(self,b):
+         if not self.enabled:raise ValueError('disabled: retain original memory route')
+@@ -80,7 +85,7 @@
+         return Key(self.binding.owner,self.serial,self.line(self.current.address),write)
+ 
+     def tick(self,*,request=None,ddr_ready=False,ddr_response=None,response_ready=False,
+-             terminal=False,abort=False,raw_ack_ready=True,**parent_inputs):
++             terminal=False,abort=False,raw_ack_ready=True,scratch_action=None,scratch_response_ready=False,**parent_inputs):
+         if not all(type(v) is bool for v in (ddr_ready,response_ready,terminal,abort,raw_ack_ready)):
+             raise ValueError('canonical handshake flags')
+         if any(k in parent_inputs for k in ('acquire','release','request','ack','abort','soft_reset')):
+@@ -91,6 +96,9 @@
+             advertised=Reply(self.current.tag,held.data)
+         elif state=='error_response':advertised=Reply(self.current.tag,0,True)
+         ready=self.enabled and self.binding is not None and state=='idle' and not self.closing and not terminal and ((not self.reset_required and not abort) or self.bound_requests==0)
++        if self.scratch_mux is not None:ready=ready and self.scratch_mux.idle
++        elif scratch_action is not None or scratch_response_ready:
++            raise ValueError('scratch controls without explicit profile')
+         valid_request=type(request) is Read and uint(request.tag,64) and self.line(request.address) is not None
+         out=dict(request_ready=ready,request_fire=False,ddr_request=self.current if state=='miss_req' else None,
+             ddr_fire=False,ddr_response_fire=False,response=advertised,response_fire=False,
+@@ -161,8 +169,16 @@
+                 if raw.blocked:controls['release']=self.binding.owner
+                 else:self.binding=None;self.valid[:]=bytes(512);out['done_ready']=True
+         if self.enabled and self.reset_required:controls['abort']=True
++        if self.scratch_mux is not None:
++            controls=self.scratch_mux.prepare(controls=controls,state=state,
++                core_pending=self.core_pending,ddr_pending=self.ddr_pending,
++                action=scratch_action,response_ready=scratch_response_ready,
++                abort=abort or self.reset_required,closing=self.closing,raw_ack_ready=raw_ack_ready)
+         edge=self.parent.tick(**controls,**parent_inputs);out['parent']=edge
+         r=edge['raw']
++        if self.scratch_mux is not None:
++            out['scratch']=self.scratch_mux.observe(edge)
++            r=self.scratch_mux.supply_raw(edge)
+         if r['acquired']:self.state='lookup'
+         if state=='miss_wait' and r['accepted']:
+             self.ddr_pending=False;out['ddr_response_fire']=True;self.counts['ddr_responses']+=1;self.state='fill_wait'
+--- a/candidates/qwen2_resident_matrix/raw_kv_public/model.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public/model.py
+@@ -11,24 +11,44 @@
+ 
+ 
+ class PublicKvTransport:
+-    def __init__(self,*,owner,parent,job,owner_id=7):
++    def __init__(self,*,owner,parent,job,owner_id=7,packed_profile=None):
+         require(type(parent) is ParentLoan and parent.enabled,'enabled original parent required')
+         require(parent.raw.banks is parent.owner.a_banks,'one original bank allocation required')
+         require(owner.ports()['job_ready'],'Attention must be ready before binding')
+         self.owner,self.parent,self.job=owner,parent,job
++        self.packed_profile=packed_profile;self.packed_binding=None
+         self.supply=KvSupply(parent=parent,enabled=True)
+         self.supply.bind(Binding(owner_id,job.tag,job.b,job.c,job.m,job.dst,job.write_bytes))
++        if packed_profile is not None:
++            from ..attention_packed_public.profile import PackedPublicProfile
++            require(type(packed_profile) is PackedPublicProfile,'exact explicit packed profile')
++            schedule,mux=packed_profile.install(owner,parent,job,owner_id)
++            self.supply.scratch_mux=mux
++            self.packed_binding=(packed_profile,schedule,mux,parent,parent.raw,parent.owner.a_banks,owner,owner.matrix,owner.scalar)
+         self.kv_request=None;self.kv_admitted=False
+         self.pending=None;self.route=None
+         self.supply_done=False;self.fault_notified=False;self.ticks=0
++
++    def check_packed_binding(self):
++        if self.packed_profile is None:
++            require(self.packed_binding is None and self.supply.scratch_mux is None and getattr(self.owner,'packed_schedule',None) is None,'detached packed profile')
++        else:
++            now=(self.packed_profile,self.owner.packed_schedule,self.supply.scratch_mux,self.parent,
++                 self.parent.raw,self.parent.owner.a_banks,self.owner,self.owner.matrix,self.owner.scalar)
++            require(self.packed_binding is not None and len(now)==len(self.packed_binding) and
++                    all(a is b for a,b in zip(now,self.packed_binding)), 'packed Public identity changed')
++            require(self.owner.packed_schedule.owner is self.owner and self.supply.scratch_mux.parent is self.parent,
++                    'packed schedule or scratch parent changed')
++        return self.packed_profile
+ 
+     def is_kv(self,q):
+         return q is not None and not q.write and any(
+             base<=q.address<base+self.job.m*1024 for base in (self.job.b,self.job.c))
+ 
+     def ports(self):
++        self.check_packed_binding()
+         op=self.owner.ports().copy();q=op['memory'];external=None
+-        if self.pending is None:
++        if self.pending is None and (self.packed_profile is None or self.supply.scratch_mux.idle):
+             if self.supply.state=='miss_req':external=self.kv_request
+             elif self.kv_request is None and not self.is_kv(q):external=q
+         op['memory']=external
+@@ -66,10 +86,11 @@
+         accepted=self.kv_request
+         offered=Read(accepted.tag,accepted.address) if accepted is not None and not self.kv_admitted else None
+         parent_clock=self.parent.owner.clock
++        scratch_controls={} if self.packed_profile is None else dict(scratch_action=op['scratch'],scratch_response_ready=op['scratch_response_ready'])
+         se=self.supply.tick(request=offered,ddr_ready=memory_ready and pending is None,
+             ddr_response=incoming,response_ready=bool(self.kv_admitted and op['memory_response_ready']),
+             raw_ack_ready=raw_ack_ready,terminal=op['response'] is not None,
+-            abort=abort or foreign or self.owner.poison)
++            abort=abort or foreign or self.owner.poison or (self.packed_profile is not None and op['reset_required']),**scratch_controls)
+         require(self.parent.owner.clock==parent_clock+1,'exactly one parent edge required')
+         if se['request_fire']:self.kv_admitted=True
+         if se['done_ready']:self.supply_done=True
+@@ -83,8 +104,12 @@
+         q=op['memory'];kv=self.is_kv(q)
+         core_ready=(self.kv_request is None and se['request_ready']) if kv else (
+             memory_ready and pending is None and advertised['memory'] is q)
++        if self.packed_profile is not None:core_ready=core_ready and self.supply.scratch_mux.idle and not se['scratch']['accepted']
++        scratch_inputs={} if self.packed_profile is None else dict(scratch_ready=se['scratch']['accepted'],scratch_response=se['scratch']['response'])
+         edge=self.owner.tick(job=job,memory_ready=core_ready,memory_response=core_response,
+-            local_reset=notify,response_ready=response_ready and completion_ready,**controls)
++            local_reset=notify,response_ready=response_ready and completion_ready,**controls,**scratch_inputs)
++        if self.packed_profile is not None:
++            require(edge['scratch_fire']==se['scratch']['accepted'] and edge['scratch_response_fire']==se['scratch']['response_fire'], 'scratch owner/parent handshake mismatch')
+         external_response_fire=False
+         if edge['memory_response_fire'] and route=='direct':
+             require(direct_response is not None,'direct reply without matching debt')

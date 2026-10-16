@@ -1,0 +1,49 @@
+{
+  "arithmetic_executed": false,
+  "chirrtl_generated": false,
+  "files_sha256": {
+    ".github/workflows/qwen2-dense-a-hold-frontend.yml": "d7404811de8119cbf721deb627f0a56959a409ce3709396c0ae5e050eb3f7c3b",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/AHoldElaborate.scala": "e72963cc1782dd30688de8c49d2e266565849fde758cd91a2f81c0b1319a99a9",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/AHoldUnit.scala": "3228044e24fbc8151071e60f9f4fd4cd35d3f14412c507f3356787b4cd83431a",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/README_CN.md": "4fa498f5d90742944a0f50cde293e94e48ca3e004d824ad05660fde9056bfd7f",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/a_hold.patch": "4b7412e2c405350aaf5b3f8afaf48002649f78de0503766b05a71630374c1a7a",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/check_frontend.py": "e24ad60bb1d755f95cf4a5165eec27b6779123ff06a8a5b1cb5cc789ddaf0cf6",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/prepare.py": "5844890e380af16d83a9c50bdcf9ec0cc83a17e25ff3e434656e34436d7eed3d",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/source_pins.json": "98ffa9ada1dd5a4d7b2d27c834362b4dff1ae1aaaf51ce0007e0875a4a545972",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/test_frontend.py": "aea9d21034b7f44df957043240fe94af4107a4998f9a6b791620867e09daabdf",
+    "candidates/qwen2_resident_matrix/dense_a_hold_chisel/test_source.py": "988a70dffa09f313d1d0f416014530dad10586a51943446641e19d6cfb6586d0"
+  },
+  "frozen_reference_files_unchanged": 10,
+  "frozen_reference_geometry": {
+    "packets": {
+      "k": 32,
+      "m": 16,
+      "n": 160
+    },
+    "same_edge_dma_fault": {
+      "k": 256,
+      "m": 16,
+      "n": 160,
+      "split_k": 256
+    }
+  },
+  "full_business_block_acceptance": false,
+  "generated_scala_units": 13,
+  "hardware_protocol_executed": false,
+  "rtl_generated": false,
+  "scala_compiled": false,
+  "schema": 1,
+  "source_inputs": 63,
+  "status": "PASS_COLD_SOURCE_AND_MOCKED_RUNNER_ONLY",
+  "tests": {
+    "normal": {
+      "passed": 32,
+      "seconds": 0.88
+    },
+    "python_O": {
+      "passed": 32,
+      "pytest_optimization_warning": true,
+      "seconds": 0.98
+    }
+  }
+}

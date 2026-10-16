@@ -1,0 +1,175 @@
+--- a/TransposedDenseBanks.scala
++++ b/TransposedDenseBanks.scala
+@@ -120,11 +120,13 @@
+   val half=Bool();val depth=UInt(7.W);val group16=UInt(4.W)
+   val pair=Bool();val value=UInt(512.W)
+ }
+-class TransposedDownOperandRead extends Bundle {
++class TransposedDownOperandRead(enableAHold:Boolean=false) extends Bundle {
+   val k=UInt(12.W);val context=UInt(3.W);val half=Bool()
+-}
+-class TransposedDownOperandResponse extends Bundle {
++  val readActivation=if(enableAHold)Some(Bool())else None
++}
++class TransposedDownOperandResponse(enableAHold:Boolean=false) extends Bundle {
+   val activation=Vec(128,UInt(16.W));val weight=Vec(32,UInt(16.W))
++  val activationValid=if(enableAHold)Some(Bool())else None
+ }
+ 
+ /** Alternative ownership of the EXISTING 688-KiB A / 80-KiB B allocation.
+@@ -134,7 +136,7 @@
+   * is the sole FP32-ingress hold. Native BF16 adds one 256-bit upper hold in
+   * the owner, for 512 bits total. There is no 4096-bit response-hold register.
+   */
+-class TransposedDownDenseBanks(enableFfnTiles:Boolean=false,enableMatrixProducerOrder:Boolean=false,enableRawKv:Boolean=false) extends Module {
++class TransposedDownDenseBanks(enableFfnTiles:Boolean=false,enableMatrixProducerOrder:Boolean=false,enableRawKv:Boolean=false,enableAHold:Boolean=false) extends Module {
+   val io=IO(new Bundle {
+     val zero=Flipped(Valid(UInt(11.W)))
+     val rawKv=if(enableRawKv)Some(new RawKvPort)else None
+@@ -143,15 +145,15 @@
+     val activation=Flipped(Decoupled(new TransposedDownActivationLoad))
+     val activationBusy=Output(Bool());val activationWritten=Output(Bool())
+     val weight=Flipped(Valid(new TransposedDownWeightLoad))
+-    val read=Flipped(Decoupled(new TransposedDownOperandRead))
+-    val response=Valid(new TransposedDownOperandResponse)
++    val read=Flipped(Decoupled(new TransposedDownOperandRead(enableAHold)))
++    val response=Valid(new TransposedDownOperandResponse(enableAHold))
+   })
+   val aBanks=Seq.fill(16)(SyncReadMem(1376,UInt(256.W)))
+   val bBanks=Seq.fill(16)(SyncReadMem(160,UInt(256.W)))
+   val rmwPending=RegInit(false.B)
+   val rmw=Reg(new TransposedDownActivationLoad)
+   val readPending=RegInit(false.B)
+-  val selected=Reg(new TransposedDownOperandRead)
++  val selected=Reg(new TransposedDownOperandRead(enableAHold))
+   val tileSignals=if(enableFfnTiles)Some(Wire(new FfnTileBankSignals))else None
+   val kvBlock=WireDefault(false.B)
+   val kvRead=WireDefault(false.B);val kvWrite=WireDefault(false.B)
+@@ -311,6 +313,8 @@
+   io.activationBusy:=rmwPending
+   io.activationWritten:=rmwPending
+   io.response.valid:=readPending
++  if(enableAHold){io.response.bits.activationValid.get:=readPending && selected.readActivation.get}
++  val gatherActivation=readFire && io.read.bits.readActivation.getOrElse(true.B)
+   when(io.zero.valid && !kvBlock){assert(!rmwPending && !loadFire && !readFire);assert(io.zero.bits<1376.U)}
+   when(loadFire){assert(io.activation.bits.kWord<160.U)}
+   when(readFire){assert(io.read.bits.k<2560.U && io.read.bits.context<5.U)}
+@@ -320,7 +324,7 @@
+     val mt=gatherK(3,0)^bank.U(4.W)
+     val gatherAddress=Cat(gatherK(11,4),0.U(3.W))+mt
+     val loadAddress=Cat(io.activation.bits.kWord,0.U(3.W))+io.activation.bits.m(6,4)
+-    val normalRead=if(enableFfnTiles)loadFire || (readFire && mt<8.U) || tileSignals.get.issueRead || tileSignals.get.issueWrite else loadFire || (readFire && mt<8.U)
++    val normalRead=if(enableFfnTiles)loadFire || (gatherActivation && mt<8.U) || tileSignals.get.issueRead || tileSignals.get.issueWrite else loadFire || (gatherActivation && mt<8.U)
+     val normalAddress=if(enableFfnTiles)Mux(tileSignals.get.issueRead || tileSignals.get.issueWrite,tileSignals.get.word,Mux(loadFire,loadAddress,gatherAddress))else Mux(loadFire,loadAddress,gatherAddress)
+     val kvSelected=kvLine(2,0)===(bank/2).U
+     val readEnable=normalRead || (kvRead && kvSelected)
+--- a/TransposedDenseOwner.scala
++++ b/TransposedDenseOwner.scala
+@@ -703,7 +703,7 @@
+ }
+ 
+ /** Selected chunk-major extension; same physical banks, service, and seed leaf. */
+-class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false,enableDenseDrain:Boolean=false,enableRawKv:Boolean=false) extends Module {
++class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false,enableDenseDrain:Boolean=false,enableRawKv:Boolean=false,enableAHold:Boolean=false) extends Module {
+   require(!enableDenseDrain || enableFfnDrain,"Dense tile drain requires the existing drain port")
+   require(!enableKWindow || enableFfnWindow,"K windows require the actual FFN window owner")
+   private val officialBf16=Qwen2NumericPolicy.official(numericPolicy)
+@@ -817,7 +817,7 @@
+     }
+   }
+   when(seed.ack.valid && !seed.ack.ready && seedState=/=seedAck){fail(Status.Protocol.U)}
+-  val banks=Module(new TransposedDownDenseBanks(enableFfnTiles,enableMatrixProducerOrder=enableFfnWindow,enableRawKv=enableRawKv))
++  val banks=Module(new TransposedDownDenseBanks(enableFfnTiles,enableMatrixProducerOrder=enableFfnWindow,enableRawKv=enableRawKv,enableAHold=enableAHold))
+   if(enableFfnTiles){banks.io.tiles.get<>io.tiles.get;banks.io.tileEnable.get:=state===idle}
+   if(enableFfnWindow || enableFfnDrain){
+     val p=banks.io.tiles.get;val external=io.tiles.get
+@@ -896,33 +896,82 @@
+   io.matrix.done.ready:=(state===execute || state===drain) && groupStarted && !groupDone
+   io.matrix.abort:=(state===drain || status=/=0.U) && groupStarted && !groupDone
+ 
+-  val operands=Module(new Queue(new MatrixStreamStep,4,pipe=true))
++  // Default-off reuse exchanges one Queue4 entry for a 256-byte live A hold.
++  // Each queued packet still owns its complete private A copy.
++  private val operandDepth=if(enableAHold)3 else 4
++  val operands=Module(new Queue(new MatrixStreamStep,operandDepth,pipe=true))
+   val pendingK=Reg(UInt(12.W));val pendingContext=Reg(UInt(3.W))
++  val heldA=if(enableAHold)Some(Reg(Vec(128,UInt(16.W))))else None
++  val heldAK=if(enableAHold)Some(Reg(UInt(12.W)))else None
++  val heldAGeneration=if(enableAHold)Some(Reg(UInt(32.W)))else None
++  val pendingAGeneration=if(enableAHold)Some(Reg(UInt(32.W)))else None
++  val heldAValid=if(enableAHold)Some(RegInit(false.B))else None
++  val holdKill=WireDefault(false.B);val holdFault=WireDefault(false.B)
++  val holdAvailable=WireDefault(true.B)
++  val responseA=Wire(Vec(128,UInt(16.W)));responseA:=banks.io.response.bits.activation
++  if(enableAHold){
++    val leaseInvalidate=io.window.map(_.invalidateLease).getOrElse(false.B)
++    // Do not use burstResponse.fire here: A response ready depends on read.valid.
++    // A malformed offered response suppresses new bank work before that edge.
++    val badDmaOffer=io.burstResponse.valid && burstOutstanding && responseBad
++    holdKill:=state=/=execute || !aCommitted || io.resetRequired || leaseInvalidate ||
++      banks.io.zero.valid || banks.io.activation.valid || badDmaOffer
++    val responseCurrent=pendingAGeneration.get===groupSequence
++    val heldCurrent=heldAValid.get && heldAGeneration.get===groupSequence
++    val responseHasA=banks.io.response.bits.activationValid.get
++    holdFault:=banks.io.response.valid && !holdKill &&
++      (!responseCurrent || Mux(pendingContext===0.U,!responseHasA,
++        responseHasA || !heldCurrent || heldAK.get=/=pendingK))
++    // A synchronous context0 response can fill the hold on the SAME edge as
++    // context1's B-only request. Its B response arrives on the following edge.
++    val fillingNow=banks.io.response.valid && pendingContext===0.U &&
++      pendingK===readK && responseCurrent && responseHasA && !holdKill && !holdFault
++    holdAvailable:=readContext===0.U ||
++      (heldCurrent && heldAK.get===readK) || fillingNow
++    responseA:=Mux(pendingContext===0.U,banks.io.response.bits.activation,heldA.get)
++    when(banks.io.read.fire){pendingAGeneration.get:=groupSequence}
++    when(banks.io.response.valid && !holdKill && !holdFault){
++      when(pendingContext===0.U){
++        heldA.get:=banks.io.response.bits.activation
++        heldAK.get:=pendingK;heldAGeneration.get:=pendingAGeneration.get
++        heldAValid.get:=true.B
++      }
++      // Release after PRIVATE packet capture, never at the last request edge.
++      // This priority also makes a one-context group capture-and-release safe.
++      when(pendingContext+1.U===contexts){heldAValid.get:=false.B}
++    }
++    when(holdKill || holdFault){heldAValid.get:=false.B}
++    when(holdFault || (leaseInvalidate && state=/=idle && state=/=finish && state=/=locked)){
++      fail(Status.Protocol.U)
++    }
++  }
+   val eligibleHalf=halfReady(issueHalf) && halfK(issueHalf)===Cat(readK(11,7),0.U(7.W)) && halfN(issueHalf)===nBase
+   banks.io.read.valid:=state===execute && aCommitted && groupStarted && !groupDone && !allRead && seedFinished && status===0.U &&
+-    eligibleHalf && operands.io.count+&banks.io.response.valid.asUInt<4.U
++    eligibleHalf && operands.io.count+&banks.io.response.valid.asUInt<operandDepth.U &&
++    holdAvailable && !holdKill && !holdFault
+   if(enableFfnWindow){when(windowActive.get && writeState=/=writeIdle){banks.io.read.valid:=false.B}}
+   banks.io.read.bits.k:=readK;banks.io.read.bits.context:=readContext;banks.io.read.bits.half:=issueHalf
++  if(enableAHold){banks.io.read.bits.readActivation.get:=readContext===0.U}
+   if(enableKWindow){
+     // readK remains monotonic progress. Pair permutation is only an SRAM address.
+     when(kActive){banks.io.read.bits.k:=executionBegin+((readK-executionBegin)^kPolicy.get.pairReverse.asUInt)}
+   }
+   when(banks.io.read.fire){pendingK:=readK;pendingContext:=readContext}
+-  operands.io.enq.valid:=banks.io.response.valid && status===0.U
++  operands.io.enq.valid:=banks.io.response.valid && status===0.U && !holdKill && !holdFault
+   val step=operands.io.enq.bits
+   step.context:=pendingContext;step.clear:=chunkBase===0.U && pendingK===0.U;step.last:=pendingK+1.U===chunkDepth
+   if(enableKWindow){when(kActive){step.clear:=pendingK===executionBegin;step.last:=pendingK+1.U===executionEnd}}
+   step.finish:=step.last && pendingContext+1.U===contexts;step.emit:=step.last
+   for(n<-0 until 16){step.a(n):=banks.io.response.bits.weight(n)}
+   for(m<-0 until 256){
+-    if(m<128){step.b(m):=Mux(m.U<job.m,banks.io.response.bits.activation(m),0.U)}
++    if(m<128){step.b(m):=Mux(m.U<job.m,responseA(m),0.U)}
+     else if(m<144){step.b(m):=banks.io.response.bits.weight(m-112)}
+     else{step.b(m):=0.U}
+   }
+-  when(banks.io.response.valid && status===0.U){assert(operands.io.enq.ready,"reserved synchronous-read credit lost")}
+-  io.matrix.step.valid:=state===execute && operands.io.deq.valid && status===0.U
++  when(operands.io.enq.valid){assert(operands.io.enq.ready,"reserved synchronous-read credit lost")}
++  io.matrix.step.valid:=state===execute && operands.io.deq.valid && status===0.U && !holdKill && !holdFault
+   io.matrix.step.bits:=operands.io.deq.bits
+-  operands.io.deq.ready:=Mux(status=/=0.U,true.B,state===execute && io.matrix.step.ready)
++  operands.io.deq.ready:=Mux(status=/=0.U,true.B,state===execute && io.matrix.step.ready && !holdKill && !holdFault)
+   when(banks.io.read.fire){
+     when(readContext+1.U===contexts){
+       readContext:=0.U;readK:=readK+1.U

@@ -1,0 +1,51 @@
+name: raw-kv-bank-unit
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/raw-kv-bank-unit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raw-kv-bank-unit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bank-only:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bank-only prerequisites
+        timeout-minutes: 2
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+      - name: Model, composition, bounded bank RTL unit
+        timeout-minutes: 10
+        run: |
+          python -m unittest candidates.qwen2_resident_matrix.raw_kv.test_model -v
+          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv.test_model -v
+          python -m unittest candidates.qwen2_resident_matrix.raw_kv.test_unit_prepare -v
+          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv.test_unit_prepare -v
+          python candidates/qwen2_resident_matrix/raw_kv/check_source.py
+          python candidates/qwen2_resident_matrix/raw_kv/run_unit.py --out "$RUNNER_TEMP/raw-kv-unit"
+      - name: Upload small non-payload evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-kv-bank-unit-summary
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/raw-kv-unit/evidence/summary.json
+            ${{ runner.temp }}/raw-kv-unit/evidence/source-sha256.json
+            ${{ runner.temp }}/raw-kv-unit/evidence/dependency-sha256.json
+            ${{ runner.temp }}/raw-kv-unit/evidence/rtl-sha256.json

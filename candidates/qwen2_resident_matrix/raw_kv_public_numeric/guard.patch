@@ -1,0 +1,247 @@
+--- a/scripts/observe_qwen2_attention_model.py
++++ b/scripts/observe_qwen2_attention_model.py
+@@ -112,8 +112,15 @@
+     return dict(PINS)
+ 
+ 
++RAW_KV_EXECUTION_SOURCE_REPLACEMENTS = {'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py': ['fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3',
++                                                                    'cdf203f9e7113db7fb29dd290ea6355adf3f7df86e145e5828daf13a5ac51b73'],
++ 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py': ['787b8de034428ffab0aec3a462c1a5c1ad9b737fcd1eb495b376189442bfec71',
++                                                                        'bdc4218fcc6136c1c1c2b6d9c15338b539e4b6abe46b96bd6baeb93379a6e9ab']}
++
++
+ def verify_execution_sources(root=ROOT, *, enable_h2048_rms_borrower=False,
+-                             external_elementwise_loan=False):
++                             external_elementwise_loan=False, enable_raw_kv=False):
++    require(type(enable_raw_kv) is bool, 'canonical raw KV source profile required')
+     if enable_h2048_rms_borrower is not False or external_elementwise_loan is not False:
+         raise ValueError('execution inventory requires the original default-disabled borrower/loan profile')
+     root = Path(root).resolve()
+@@ -135,6 +142,17 @@
+         require(relative not in PINS or PINS[relative] == current,
+                 'v4 observation/execution source identity mismatch: ' + relative)
+         sources[relative] = current
++    if enable_raw_kv:
++        require(set(RAW_KV_EXECUTION_SOURCE_REPLACEMENTS) == {
++            'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py',
++            'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py',
++        }, 'raw KV execution-source replacement closure changed')
++        require(not set(RAW_KV_EXECUTION_SOURCE_REPLACEMENTS) & set(EXECUTION_SOURCE_REPLACEMENTS),
++                'raw KV and original v4 replacement closures overlap')
++        for relative, (previous, current) in RAW_KV_EXECUTION_SOURCE_REPLACEMENTS.items():
++            require(sources.get(relative) == previous and previous != current,
++                    'raw KV execution-source replacement origin changed: ' + relative)
++            sources[relative] = current
+     for relative, expected in sources.items():
+         require(sha((root / relative).read_bytes()) == expected,
+                 'v4 execution source drift: ' + relative)
+--- a/candidates/qwen2_resident_matrix/official_bf16/observation.py
++++ b/candidates/qwen2_resident_matrix/official_bf16/observation.py
+@@ -31,6 +31,7 @@
+ SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v4'
+ HELPER_SOURCE_VERSION = 'qwen2-existing-attention-observation-v4'
+ HELPER_SHA256 = '18446e01900f81c6bbf9cf211c1df6b9a86b06013e6d7ef8ae8609eea2309a45'
++RAW_KV_HELPER_SHA256 = '4a4997e880cab3e20f839de4a2b3e811eff73db87bcd5446fdcd78aef6b7aec2'
+ OWNER = 'candidates/qwen2_resident_matrix/official_bf16/owners.py'
+ SERVICE = 'candidates/qwen2_resident_matrix/official_bf16/dense_silu.py'
+ OBSERVER = 'candidates/qwen2_resident_matrix/official_bf16/observation.py'
+@@ -164,14 +165,15 @@
+     return checked
+ 
+ 
+-def verify_source_snapshot(source_sha256):
++def verify_source_snapshot(source_sha256, *, enable_raw_kv=False):
+     """Verify exact v4 execution identities and every caller-frozen extra source."""
++    require(type(enable_raw_kv) is bool, 'canonical raw KV source profile required')
+     require(isinstance(source_sha256, dict), 'frozen source_sha256 mapping required')
+-    require(base.sha((ROOT / HELPER).read_bytes()) == HELPER_SHA256,
++    require(base.sha((ROOT / HELPER).read_bytes()) == (RAW_KV_HELPER_SHA256 if enable_raw_kv else HELPER_SHA256),
+             'read-only observer helper source drift')
+     require(base.SOURCE_VERSION == HELPER_SOURCE_VERSION,
+             'loaded observer helper source version changed')
+-    execution = base.verify_execution_sources()
++    execution = base.verify_execution_sources(enable_raw_kv=enable_raw_kv)
+     require(len(execution) == 75 and
+             all(source_sha256.get(name) == digest for name, digest in execution.items()),
+             'snapshot must retain the exact v4 75-source execution inventory')
+@@ -203,7 +205,7 @@
+ class OfficialAttentionObservation(base.AttentionObservation):
+     """One cold M1..M128 capture; enter while idle, including before suffix pc10."""
+ 
+-    def __init__(self, owner, *, source_sha256):
++    def __init__(self, owner, *, source_sha256, enable_raw_kv=False):
+         from .owners import OfficialAttentionOwner
+         from .dense_silu import OfficialMatrixService
+         from ..ffn_public.prefix_arithmetic import ScalarService
+@@ -213,7 +215,8 @@
+         require(sys.implementation.name == 'cpython' and sys.version_info[:2] == (3, 12)
+                 and not sys.flags.optimize, 'reviewed CPython 3.12 without -O required')
+         self.owner, self.sources = owner, dict(source_sha256)
+-        self.execution_sources = verify_source_snapshot(self.sources)
++        self.enable_raw_kv = enable_raw_kv
++        self.execution_sources = verify_source_snapshot(self.sources, enable_raw_kv=self.enable_raw_kv)
+         self.loaded_functions_checked = verify_loaded_dependencies(owner)
+         self.instrumentation_sha256 = base.sha(Path(__file__).read_bytes())
+         self.services = owner.matrix, owner.scalar
+@@ -255,7 +258,7 @@
+         require(self.owner.state == 'idle' and not self.owner.poison and
+                 self.owner.matrix.owner is None and not self.owner.matrix.reset_required and
+                 self.owner.scalar.client is None, 'observe before an idle owner launch')
+-        verify_source_snapshot(self.sources)
++        verify_source_snapshot(self.sources, enable_raw_kv=self.enable_raw_kv)
+         require(verify_loaded_dependencies(self.owner) == self.loaded_functions_checked,
+                 'loaded dependencies changed before entry')
+         self.active = True
+@@ -274,7 +277,7 @@
+         if kind is not None:
+             self.error = self.error or 'driver exited with an exception'
+         try:
+-            require(verify_source_snapshot(self.sources) == self.execution_sources, 'execution inventory drift')
++            require(verify_source_snapshot(self.sources, enable_raw_kv=self.enable_raw_kv) == self.execution_sources, 'execution inventory drift')
+             require(verify_loaded_dependencies(self.owner) == self.loaded_functions_checked,
+                     'loaded dependency inventory changed')
+         except Exception as failure:
+@@ -372,10 +375,10 @@
+         return dict(schema=SOURCE_VERSION, source_version=SOURCE_VERSION,
+             status='COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED' if complete else 'INCOMPLETE',
+             source_sha256=self.sources, execution_source_sha256=self.execution_sources,
+-            helper_source_sha256={HELPER: HELPER_SHA256}, instrumentation_sha256=self.instrumentation_sha256,
++            helper_source_sha256={HELPER: RAW_KV_HELPER_SHA256 if self.enable_raw_kv else HELPER_SHA256}, instrumentation_sha256=self.instrumentation_sha256,
+             helper_source_version=HELPER_SOURCE_VERSION, prior_observation_results_inherited=False,
+             execution_source_commit=base.SOURCE_COMMIT, execution_source_base_commit=base.SOURCE_BASE_COMMIT,
+-            execution_source_profile='original Qwen2; borrower=false; elementwise loan=false',
++            execution_source_profile=('qwen2-v4-public-kv-two-hook-v1; borrower=false; elementwise loan=false' if self.enable_raw_kv else 'original Qwen2; borrower=false; elementwise loan=false'),
+             historical_fullgraph=dict(commit=base.RECEIPT_COMMIT, path=base.RECEIPT,
+                 sha256=base.RECEIPT_SHA, results_inherited=False),
+             python=sys.version, loaded_python_functions_checked=self.loaded_functions_checked,
+--- a/candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py
++++ b/candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py
+@@ -32,8 +32,8 @@
+ class OfficialAttentionMonitoringObservation(original.OfficialAttentionObservation):
+     """Single-use, thread-bound capture; never replaces a tracer or used ID."""
+ 
+-    def __init__(self, owner, *, source_sha256):
+-        super().__init__(owner, source_sha256=source_sha256)
++    def __init__(self, owner, *, source_sha256, enable_raw_kv=False):
++        super().__init__(owner, source_sha256=source_sha256, enable_raw_kv=enable_raw_kv)
+         self.loaded_functions_checked = verify_monitoring_dependencies(owner, self.sources)
+         self.instrumentation_sha256 = original.base.sha(Path(__file__).read_bytes())
+         self.tool_id = None
+@@ -55,7 +55,7 @@
+         original.require(self.owner.state == 'idle' and not self.owner.poison and
+                          self.owner.matrix.owner is None and not self.owner.matrix.reset_required and
+                          self.owner.scalar.client is None, 'observe before an idle owner launch')
+-        original.verify_source_snapshot(self.sources)
++        original.verify_source_snapshot(self.sources, enable_raw_kv=self.enable_raw_kv)
+         original.require(verify_monitoring_dependencies(self.owner, self.sources) ==
+                          self.loaded_functions_checked, 'loaded dependencies changed before entry')
+         monitor = sys.monitoring
+@@ -204,7 +204,7 @@
+         if sys.gettrace() is not None:
+             self.error = self.error or 'a tracer was installed during monitoring'
+         try:
+-            original.require(original.verify_source_snapshot(self.sources) == self.execution_sources,
++            original.require(original.verify_source_snapshot(self.sources, enable_raw_kv=self.enable_raw_kv) == self.execution_sources,
+                              'execution inventory drift')
+             original.require(verify_monitoring_dependencies(self.owner, self.sources) ==
+                              self.loaded_functions_checked, 'loaded dependency inventory changed')
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/observation.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/observation.py
+@@ -36,12 +36,17 @@
+ CAPTURE_SHA256 = '13ec64d2f8985256d4bdf78595a628eb106a79117e62c728ac3e486d09e4f627'
+ MONITORING_SHA256 = '3c27ce71bd93937707c909ccd7507baff6a401c49b50e6a9753ab224a9d2a3c5'
+ 
+-
+-def verify_constructor_delta():
++RAW_KV_CAPTURE_SHA256 = 'c1964b087909adb99d407d6c9233c8a4d398ba11a56270d0937edc3aa74abdd2'
++RAW_KV_MONITORING_SHA256 = '7019a452719921155f516e4074866ad61b88cf6ec766ed8d967db862ab054958'
++
++
++def verify_constructor_delta(*, enable_raw_kv=False):
+     """Allow only the reviewed imports/service type and one closure check."""
++    require(type(enable_raw_kv) is bool, 'canonical raw KV source profile required')
+     require(original.SOURCE_VERSION == CAPTURE_SOURCE_VERSION,
+             'reviewed observer source version changed')
+-    paths = ((original.OBSERVER, CAPTURE_SHA256), (monitoring.MONITORING, MONITORING_SHA256))
++    paths = ((original.OBSERVER, RAW_KV_CAPTURE_SHA256 if enable_raw_kv else CAPTURE_SHA256),
++             (monitoring.MONITORING, RAW_KV_MONITORING_SHA256 if enable_raw_kv else MONITORING_SHA256))
+     for relative, digest in paths:
+         require(base.sha((ROOT / relative).read_bytes()) == digest,
+                 'reviewed observer constructor source drift: ' + relative)
+@@ -68,21 +73,21 @@
+         elif isinstance(node, ast.Constant) and node.value == 'exact OfficialMatrixService and ScalarService required':
+             node.value = 'exact ProfiledMatrixService and ScalarService required'
+     transport = constructor(monitoring.MONITORING, 'OfficialAttentionMonitoringObservation')
+-    super_call = ast.dump(ast.parse('super().__init__(owner, source_sha256=source_sha256)').body[0], include_attributes=False)
++    super_call = ast.dump(ast.parse('super().__init__(owner, source_sha256=source_sha256, enable_raw_kv=enable_raw_kv)').body[0], include_attributes=False)
+     require(ast.dump(transport.body[0], include_attributes=False) == super_call,
+             'reviewed monitoring constructor super call drift')
+     expected.body.extend(transport.body[1:])
+-    expected.body.extend(ast.parse('self.profiled_loaded_functions_checked = verify_profiled_dependencies(owner, self.sources)').body)
++    expected.body.extend(ast.parse('self.profiled_loaded_functions_checked = verify_profiled_dependencies(owner, self.sources, enable_raw_kv=self.enable_raw_kv)').body)
+     actual = constructor(ADAPTER, 'ProfiledAttentionMonitoringObservation')
+     require(ast.dump(actual, include_attributes=False) == ast.dump(expected, include_attributes=False),
+             'profiled observer constructor exceeded reviewed minimal delta')
+ 
+ 
+-def verify_profiled_dependencies(owner, sources):
++def verify_profiled_dependencies(owner, sources, *, enable_raw_kv=False):
+     # Verify all old helpers/classes/imports/instance methods first; none of
+     # their checks are bypassed by accepting the additional exact service type.
+     count = verify_monitoring_dependencies(owner, sources)
+-    verify_source_snapshot(sources)
++    verify_source_snapshot(sources, enable_raw_kv=enable_raw_kv)
+     require(all(name in sources for name in EXTRA_SOURCES),
+             'snapshot must include profiled observer, Matrix binding and profile')
+     from ..official_bf16.owners import OfficialAttentionOwner
+@@ -99,14 +104,14 @@
+             set(vars(policy)) == set(profile.ReductionProfile.__dataclass_fields__),
+             'exact unpatched immutable ReductionProfile required')
+     policy.validate(1536)
+-    verify_constructor_delta()
++    verify_constructor_delta(enable_raw_kv=enable_raw_kv)
+     return count
+ 
+ 
+ class ProfiledAttentionMonitoringObservation(monitoring.OfficialAttentionMonitoringObservation):
+     """Exact existing capture with an explicitly checked profiled service."""
+ 
+-    def __init__(self, owner, *, source_sha256):
++    def __init__(self, owner, *, source_sha256, enable_raw_kv=False):
+         from ..official_bf16.owners import OfficialAttentionOwner
+         from .matrix_binding import ProfiledMatrixService
+         from ..ffn_public.prefix_arithmetic import ScalarService
+@@ -116,7 +121,8 @@
+         require(sys.implementation.name == 'cpython' and sys.version_info[:2] == (3, 12)
+                 and not sys.flags.optimize, 'reviewed CPython 3.12 without -O required')
+         self.owner, self.sources = owner, dict(source_sha256)
+-        self.execution_sources = verify_source_snapshot(self.sources)
++        self.enable_raw_kv = enable_raw_kv
++        self.execution_sources = verify_source_snapshot(self.sources, enable_raw_kv=self.enable_raw_kv)
+         self.loaded_functions_checked = verify_loaded_dependencies(owner)
+         self.instrumentation_sha256 = base.sha(Path(__file__).read_bytes())
+         self.services = owner.matrix, owner.scalar
+@@ -162,12 +168,12 @@
+             self.codes['_attention']: frozenset(self.points[n] for n in ('score', 'exp', 'store')),
+             self.codes['_matrix_step']: frozenset((self.points['matrix'],)),
+         }
+-        self.profiled_loaded_functions_checked = verify_profiled_dependencies(owner, self.sources)
++        self.profiled_loaded_functions_checked = verify_profiled_dependencies(owner, self.sources, enable_raw_kv=self.enable_raw_kv)
+ 
+     def __enter__(self):
+         require(self.owner.matrix is self.services[0] and self.owner.scalar is self.services[1],
+                 'participating services changed before entry')
+-        require(verify_profiled_dependencies(self.owner, self.sources) ==
++        require(verify_profiled_dependencies(self.owner, self.sources, enable_raw_kv=self.enable_raw_kv) ==
+                 self.profiled_loaded_functions_checked,
+                 'profiled loaded dependencies changed before entry')
+         return super().__enter__()
+@@ -178,7 +184,7 @@
+             return super().__exit__(kind, error, traceback)
+         finally:
+             try:
+-                require(verify_profiled_dependencies(self.owner, self.sources) ==
++                require(verify_profiled_dependencies(self.owner, self.sources, enable_raw_kv=self.enable_raw_kv) ==
+                         self.profiled_loaded_functions_checked,
+                         'profiled loaded dependency inventory changed')
+             except Exception as failure:

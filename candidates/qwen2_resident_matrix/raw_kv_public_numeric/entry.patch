@@ -1,0 +1,288 @@
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
+@@ -30,23 +30,150 @@
+ POLICY_ID='qwen2-public21-official-bf16-v2-qkv-explicit-block-pair-v1'
+ 
+ 
+-def source_hashes():
++RAW_KV_SOURCES = (
++    'candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py',
++    'candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py',
++    'candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py',
++    'candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py',
++    'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py',
++    'candidates/qwen2_resident_matrix/dense_block_reduce/public_execution.py',
++    'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py',
++    'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp',
++    'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py',
++    'candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py',
++    'candidates/qwen2_resident_matrix/ffn_attention/test_scalar_recipe.py',
++    'candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py',
++    'candidates/qwen2_resident_matrix/ffn_drain/model.py',
++    'candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py',
++    'candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py',
++    'candidates/qwen2_resident_matrix/ffn_group/model.py',
++    'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py',
++    'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py',
++    'candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py',
++    'candidates/qwen2_resident_matrix/ffn_public/fullgraph_numerical_receipt.json',
++    'candidates/qwen2_resident_matrix/ffn_public/model.py',
++    'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py',
++    'candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py',
++    'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py',
++    'candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py',
++    'candidates/qwen2_resident_matrix/ffn_tiles/model.py',
++    'candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp',
++    'candidates/qwen2_resident_matrix/ffn_window/check_numeric.py',
++    'candidates/qwen2_resident_matrix/ffn_window/model.py',
++    'candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch',
++    'candidates/qwen2_resident_matrix/official_bf16/dense_silu.py',
++    'candidates/qwen2_resident_matrix/official_bf16/execution.py',
++    'candidates/qwen2_resident_matrix/official_bf16/observation.py',
++    'candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py',
++    'candidates/qwen2_resident_matrix/official_bf16/owners.py',
++    'candidates/qwen2_resident_matrix/official_bf16/test_owners.py',
++    'candidates/qwen2_resident_matrix/raw_kv/check_source.py',
++    'candidates/qwen2_resident_matrix/raw_kv/model.py',
++    'candidates/qwen2_resident_matrix/raw_kv/run_unit.py',
++    'candidates/qwen2_resident_matrix/raw_kv/stimuli.py',
++    'candidates/qwen2_resident_matrix/raw_kv_attention/model.py',
++    'candidates/qwen2_resident_matrix/raw_kv_attention/numeric_bridge.py',
++    'candidates/qwen2_resident_matrix/raw_kv_attention/numeric_pins.json',
++    'candidates/qwen2_resident_matrix/raw_kv_attention/numeric_prepare.py',
++    'candidates/qwen2_resident_matrix/raw_kv_attention/source_contract.py',
++    'candidates/qwen2_resident_matrix/raw_kv_attention/source_pins.json',
++    'candidates/qwen2_resident_matrix/raw_kv_parent/model.py',
++    'candidates/qwen2_resident_matrix/raw_kv_public/README.md',
++    'candidates/qwen2_resident_matrix/raw_kv_public/model.py',
++    'candidates/qwen2_resident_matrix/raw_kv_public/pins.json',
++    'candidates/qwen2_resident_matrix/raw_kv_public/prepare.py',
++    'candidates/qwen2_resident_matrix/raw_kv_public/public_execution.patch',
++    'candidates/qwen2_resident_matrix/raw_kv_public/test_model.py',
++    'candidates/qwen2_resident_matrix/raw_kv_public_numeric/README.md',
++    'candidates/qwen2_resident_matrix/raw_kv_public_numeric/entry.patch',
++    'candidates/qwen2_resident_matrix/raw_kv_public_numeric/guard.patch',
++    'candidates/qwen2_resident_matrix/raw_kv_public_numeric/pins.json',
++    'candidates/qwen2_resident_matrix/raw_kv_public_numeric/prepare.py',
++    'candidates/qwen2_resident_matrix/raw_kv_public_numeric/test_entry.py',
++    'candidates/qwen2_resident_matrix/transposed_down/model.py',
++    'candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala',
++    'chisel/continuous_prefill/tests/qwen2_block.cpp',
++    'integration/gemmini/EmitHeteroFP32Alu.scala',
++    'reports/execution/QWEN2_DENSE_BLOCK_REDUCTION_20261012/M128_RESULT.json',
++    'rtl/integration/qwen2_matrix_command_endpoint.sv',
++    'rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv',
++    'rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv',
++    'rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv',
++    'scripts/build_shared_matrix_recipe.py',
++    'scripts/observe_qwen2_attention_model.py',
++    'scripts/qwen2_block_recipe_model.py',
++)
++RAW_KV_SOURCE_PROFILE = 'qwen2-v4-public-kv-two-hook-v1'
++
++
++RAW_KV_COMPOSITION_SHA256 = {'disabled': {'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py': 'fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3',
++              'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py': '787b8de034428ffab0aec3a462c1a5c1ad9b737fcd1eb495b376189442bfec71',
++              'scripts/observe_qwen2_attention_model.py': '18446e01900f81c6bbf9cf211c1df6b9a86b06013e6d7ef8ae8609eea2309a45',
++              'candidates/qwen2_resident_matrix/official_bf16/observation.py': '13ec64d2f8985256d4bdf78595a628eb106a79117e62c728ac3e486d09e4f627',
++              'candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py': '3c27ce71bd93937707c909ccd7507baff6a401c49b50e6a9753ab224a9d2a3c5',
++              'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py': '881c82ae6628b29ea641b639065f6a527a7802f6a134f5d9807421ebb44335c3'},
++ 'enabled': {'candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py': 'cdf203f9e7113db7fb29dd290ea6355adf3f7df86e145e5828daf13a5ac51b73',
++             'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py': 'bdc4218fcc6136c1c1c2b6d9c15338b539e4b6abe46b96bd6baeb93379a6e9ab',
++             'scripts/observe_qwen2_attention_model.py': '4a4997e880cab3e20f839de4a2b3e811eff73db87bcd5446fdcd78aef6b7aec2',
++             'candidates/qwen2_resident_matrix/official_bf16/observation.py': 'c1964b087909adb99d407d6c9233c8a4d398ba11a56270d0937edc3aa74abdd2',
++             'candidates/qwen2_resident_matrix/official_bf16/observation_monitoring.py': '7019a452719921155f516e4074866ad61b88cf6ec766ed8d967db862ab054958',
++             'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py': 'e08dbe935d76f5bf243830276b43f014be597125f40904bcbedc4f03ab8cb424'}}
++
++
++def _verify_raw_kv_composition(enable_raw_kv):
++    _raw_kv_mode(enable_raw_kv)
++    expected=RAW_KV_COMPOSITION_SHA256["enabled" if enable_raw_kv else "disabled"]
++    require(all(file_sha(ROOT/name)==digest for name,digest in expected.items()),
++            "raw KV source composition/request mode mismatch")
++
++
++def _raw_kv_mode(enable_raw_kv):
++    require(type(enable_raw_kv) is bool,'enable_raw_kv must be a canonical boolean')
++    return enable_raw_kv
++
++
++def _snapshot_raw_kv_mode(snapshot,enable_raw_kv):
++    _raw_kv_mode(enable_raw_kv)
++    selected=snapshot.get('enable_raw_kv',False)
++    _raw_kv_mode(selected)
++    require(selected is enable_raw_kv,'raw KV snapshot/request mode mismatch')
++    require(('enable_raw_kv' not in snapshot) if not selected else
++            snapshot.get('raw_kv_source_profile')==RAW_KV_SOURCE_PROFILE,
++            'raw KV snapshot profile drift')
++    require(selected or 'raw_kv_source_profile' not in snapshot,'disabled snapshot profile drift')
++    return selected
++
++
++def source_hashes(*,enable_raw_kv=False):
++    _verify_raw_kv_composition(enable_raw_kv)
+     result=prior.source_hashes()
+     result.update({PREFIX+p:file_sha(ROOT/PREFIX/p) for p in EXECUTION_FILES})
+     # Reference packaging is an independent verifier, never an actual producer.
+     for path in sorted((ROOT/PREFIX/'reference').rglob('*')):
+         if path.is_file() and path.suffix in ('.py','.inc','.json') and '__pycache__' not in path.parts:
+             result[str(path.relative_to(ROOT))]=file_sha(path)
++    if enable_raw_kv:
++        result.update({name:file_sha(ROOT/name) for name in RAW_KV_SOURCES})
+     return result
+ 
+ 
+-def runtime():
++def runtime(*,enable_raw_kv=False):
++    _verify_raw_kv_composition(enable_raw_kv)
+     old=prior.runtime()
+-    sources=source_hashes()
++    sources=source_hashes(enable_raw_kv=enable_raw_kv)
+     with base.frozen_exec(sources):
+         modules=tuple(importlib.import_module('candidates.qwen2_resident_matrix.dense_block_reduce.'+p)
+             for p in ('dense_drain','matrix_binding','profile','public_execution','observation','reference.completed'))
+-    require(source_hashes()==sources,'new reduction source changed during import')
++    require(source_hashes(enable_raw_kv=enable_raw_kv)==sources,'new reduction source changed during import')
+     return old,modules
+ 
+ 
+@@ -55,7 +182,8 @@
+     return rows
+ 
+ 
+-def prepare(out,compile_receipt,reference,reference_sha256,rows=16):
++def prepare(out,compile_receipt,reference,reference_sha256,rows=16,*,enable_raw_kv=False):
++    _verify_raw_kv_composition(enable_raw_kv)
+     out=Path(out).resolve()
+     validate_rows(rows)
+     require(not out.exists(),'fresh integration snapshot required')
+@@ -63,28 +191,34 @@
+     # Revalidate original source, public metadata, payload, table and native
+     # archives; this performs no arithmetic or actual-chain execution.
+     original_path,s=prior.prepare(out/'original_policy',compile_receipt,rows)
+-    _,modules=runtime();completed=modules[-1]
++    _,modules=runtime(enable_raw_kv=enable_raw_kv);completed=modules[-1]
+     independent=completed.reference_spec(reference,reference_sha256)
+     require(independent['rows']==rows and independent['readonly_input']['input_x_sha256']==
+             s['reference']['inputs']['input_x_sha256'],'independent reference raw input differs')
+-    sources=source_hashes()
++    sources=source_hashes(enable_raw_kv=enable_raw_kv)
+     s=dict(s,status='PREPARED_REDUCED_PUBLIC21_NOT_EXECUTED',reduction_policy=POLICY_ID,
+         source_sha256=sources,source_manifest_sha256=sha(encoded(sources)),
+         original_snapshot=str(original_path),original_snapshot_sha256=file_sha(original_path),
+         independent_reference=independent,old_pass_inherited=False)
++    if enable_raw_kv:
++        s.update(enable_raw_kv=True,raw_kv_source_profile=RAW_KV_SOURCE_PROFILE)
+     for relative,digest in sources.items():
+         raw=(ROOT/relative).read_bytes();require(sha(raw)==digest,'snapshot source drift')
+         target=out/'frozen_sources'/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+-    require(source_hashes()==sources,'source drift while sealing snapshot')
++    require(source_hashes(enable_raw_kv=enable_raw_kv)==sources,'source drift while sealing snapshot')
+     path=out/'SNAPSHOT.json';path.write_bytes(encoded(s));return path,s
+ 
+ 
+-def verify_snapshot(path,digest):
++def verify_snapshot(path,digest,*,enable_raw_kv=False):
++    _raw_kv_mode(enable_raw_kv)
+     path=Path(path).resolve();require(file_sha(path)==digest,'new snapshot hash differs')
+-    s=json.loads(path.read_text());original=prior.verify_snapshot(s['original_snapshot'],s['original_snapshot_sha256'])
+-    _,modules=runtime()
++    s=json.loads(path.read_text())
++    _snapshot_raw_kv_mode(s,enable_raw_kv)
++    _verify_raw_kv_composition(enable_raw_kv)
++    original=prior.verify_snapshot(s['original_snapshot'],s['original_snapshot_sha256'])
++    _,modules=runtime(enable_raw_kv=enable_raw_kv)
+     require(s['status']=='PREPARED_REDUCED_PUBLIC21_NOT_EXECUTED' and s['reduction_policy']==POLICY_ID
+-        and validate_rows(s['rows'])==s['rows'] and s['source_sha256']==source_hashes()
++        and validate_rows(s['rows'])==s['rows'] and s['source_sha256']==source_hashes(enable_raw_kv=enable_raw_kv)
+         and s['source_manifest_sha256']==sha(encoded(s['source_sha256'])),'new source/policy/domain drift')
+     for key in ('rows','epoch','input_spec','loaded_inputs','binaries','metadata','host_tools','reference'):
+         require(s[key]==original[key],'original input/tool/public identity changed: '+key)
+@@ -136,11 +270,17 @@
+     return result
+ 
+ 
+-def run(out,path,digest,*,wall_budget=900):
++def run(out,path,digest,*,wall_budget=900,enable_raw_kv=False):
++    _raw_kv_mode(enable_raw_kv)
+     out,path=Path(out).resolve(),Path(path).resolve()
+     require(not out.exists() and 0<wall_budget<=1800,'fresh bounded reduced public21 run required')
+-    s=verify_snapshot(path,digest)
+-    (modules,dense,_,native),new=runtime()
++    if enable_raw_kv:
++        require(file_sha(path)==digest,'new snapshot hash differs')
++        pending=json.loads(path.read_text());_snapshot_raw_kv_mode(pending,enable_raw_kv)
++        require(validate_rows(pending['rows'])==16,
++                'enabled raw KV execution is limited to M16 pending a reviewed same-source M16 receipt')
++    s=verify_snapshot(path,digest,enable_raw_kv=enable_raw_kv)
++    (modules,dense,_,native),new=runtime(enable_raw_kv=enable_raw_kv)
+     helper,original,fixtures,public,prefix,_,scalar,suffix,physical_adapter,matrix,_,_=modules
+     owner_module,binding,profiles,execution,observation,_=new
+     require(helper.host_tool_identity()==s['host_tools'],'execution host tool drift')
+@@ -149,6 +289,8 @@
+         input_spec=s['input_spec'],binaries=s['binaries'],snapshot=str(path),snapshot_sha256=digest,
+         rtl_executed=False,scala_executed=False,hardware_cycles=None,prelaunch_intermediate_payloads=[],
+         old_pass_inherited=False,native_acceptance='PENDING_OBSERVED_NODE_GATES')
++    if enable_raw_kv:
++        report.update(enable_raw_kv=True,raw_kv_source_profile=RAW_KV_SOURCE_PROFILE)
+     def save():(out/'summary.json').write_bytes(encoded(report))
+     try:
+         with base.frozen_exec(s['source_sha256']) as observed,policy.reference_gate(s['input_spec']) as gate:
+@@ -168,11 +310,18 @@
+                 prefix_owner=policy.OfficialPrefixOwner(shared_scalar),
+                 attention_owner=policy.OfficialAttentionOwner(service,shared_scalar),matrix_service=service)
+             silu=policy.ObservedSiluLibrary(selected,s['rows']);guarded=gate.library(silu)
+-            capture=observation.ProfiledAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'])
++            if enable_raw_kv:
++                capture=observation.ProfiledAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'],enable_raw_kv=True)
++            else:
++                capture=observation.ProfiledAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'])
+             report.update(loaded_inputs=base.identities(inputs),metadata=s['metadata']);save()
+             report['prefix_execution']=execution.execute_public_prefix(x,physical,guarded,out)
+             report.update(status='ACTUAL_PREFIX_COMPLETE',prefix_host_wall_seconds=time.monotonic()-started);save()
+-            with capture:actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory)
++            with capture:
++                if enable_raw_kv:
++                    actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory,enable_raw_kv=True)
++                else:
++                    actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory)
+             report['whole_terminal_host_wall_seconds']=time.monotonic()-started
+             # The unchanged suffix driver carries a historical policy label;
+             # execution itself never evaluates a native numerical contract.
+@@ -192,9 +341,9 @@
+             gate.opened=True
+             report['comparison']=compare(s,actual,inputs,capture,silu_bytes,native)
+             require(report['comparison']['fixed_arithmetic_pass'],'actual chain differs from independent block/pair recipe')
+-            require(source_hashes()==s['source_sha256'] and base.identities(inputs)==s['loaded_inputs'],'post-run source/input drift')
++            require(source_hashes(enable_raw_kv=enable_raw_kv)==s['source_sha256'] and base.identities(inputs)==s['loaded_inputs'],'post-run source/input drift')
+             official=report['comparison']['methods']['official_self_cache']
+-            report.update(status=('PASS_REDUCED_BF16_OBSERVED_OFFICIAL_GATES' if official['numerical_status']=='PASS_OBSERVED_ONLY' else 'FAIL_OFFICIAL_OBSERVED_NODE_GATES'),source_sha256_after=source_hashes(),
++            report.update(status=('PASS_REDUCED_BF16_OBSERVED_OFFICIAL_GATES' if official['numerical_status']=='PASS_OBSERVED_ONLY' else 'FAIL_OFFICIAL_OBSERVED_NODE_GATES'),source_sha256_after=source_hashes(enable_raw_kv=enable_raw_kv),
+                 executed_imports_observed=sorted(observed),native_acceptance=official['numerical_status'],
+                 full_29_node_acceptance=False,actual_dataflow_pass=True,host_wall_seconds=time.monotonic()-started,
+                 host_cpu_seconds=time.process_time()-cpu,host_peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+@@ -213,12 +362,13 @@
+     p.add_argument('--prepare-only',action='store_true');p.add_argument('--compile-receipt',type=Path)
+     p.add_argument('--reference',type=Path);p.add_argument('--reference-sha256');p.add_argument('--rows',type=int,choices=(16,128),default=16)
+     p.add_argument('--snapshot',type=Path);p.add_argument('--snapshot-sha256');p.add_argument('--wall-budget',type=int,default=900)
++    p.add_argument('--enable-raw-kv',action='store_true')
+     a=p.parse_args()
+     if a.prepare_only:
+-        path,s=prepare(a.out,a.compile_receipt,a.reference,a.reference_sha256,rows=a.rows)
++        path,s=prepare(a.out,a.compile_receipt,a.reference,a.reference_sha256,rows=a.rows,enable_raw_kv=a.enable_raw_kv)
+         print(json.dumps(dict(path=str(path),sha256=file_sha(path),status=s['status'])),flush=True)
+     else:
+-        r=run(a.out,a.snapshot,a.snapshot_sha256,wall_budget=a.wall_budget)
++        r=run(a.out,a.snapshot,a.snapshot_sha256,wall_budget=a.wall_budget,enable_raw_kv=a.enable_raw_kv)
+         print(json.dumps({k:r[k] for k in ('status','rows','native_acceptance','host_wall_seconds')}),flush=True)
+         if r['native_acceptance']!='PASS_OBSERVED_ONLY':raise SystemExit(1)
+ 

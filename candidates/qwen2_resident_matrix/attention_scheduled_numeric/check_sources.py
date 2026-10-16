@@ -1,0 +1,28 @@
+"""Freeze the actual callback/controller/oracle closure; source-only gate."""
+import hashlib
+import json
+from pathlib import Path
+HERE=Path(__file__).resolve().parent
+ROOT=HERE.parents[2]
+PREFIX='candidates/qwen2_resident_matrix/attention_scheduled_numeric/'
+SOURCES=('candidates/qwen2_resident_matrix/attention_matrix_batch/README.md', 'candidates/qwen2_resident_matrix/attention_matrix_batch/check_sources.py', 'candidates/qwen2_resident_matrix/attention_matrix_batch/model.py', 'candidates/qwen2_resident_matrix/attention_matrix_batch/pins.json', 'candidates/qwen2_resident_matrix/attention_matrix_batch/schedule.py', 'candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py', 'candidates/qwen2_resident_matrix/attention_matrix_batch/test_schedule.py', 'candidates/qwen2_resident_matrix/attention_scalar_schedule/README.md', 'candidates/qwen2_resident_matrix/attention_scalar_schedule/check_sources.py', 'candidates/qwen2_resident_matrix/attention_scalar_schedule/model.py', 'candidates/qwen2_resident_matrix/attention_scalar_schedule/pins.json', 'candidates/qwen2_resident_matrix/attention_scalar_schedule/test_model.py', 'candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch', 'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py', 'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp', 'candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py', 'candidates/qwen2_resident_matrix/ffn_attention/test_scalar_recipe.py', 'candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py', 'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py', 'candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch', 'candidates/qwen2_resident_matrix/official_bf16/owners.py', 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala', 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala', 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala', 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala', 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala', 'reports/execution/QWEN2_DENSE_BLOCK_REDUCTION_20261012/M128_RESULT.json', 'rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv')
+OWN=tuple(PREFIX+n for n in ('ports.py','controller.py','test_ports.py','test_controller.py','check_sources.py','README.md'))
+
+
+def check():
+    pins=json.loads((HERE/'pins.json').read_bytes())
+    if type(pins) is not dict or set(pins)!={'schema','profile','sources','own'} or type(pins['schema']) is not int or pins['schema']!=1 or pins['profile']!='accepted-packet-m1-m2-selected-numeric-v1':
+        raise ValueError('source contract')
+    if set(pins['sources'])!=set(SOURCES) or set(pins['own'])!=set(OWN):
+        raise ValueError('source inventory')
+    for group in ('sources','own'):
+        for name,digest in pins[group].items():
+            if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=digest:
+                raise ValueError('source drift')
+    helper='candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py'
+    if helper not in SOURCES:
+        raise ValueError('original physical read/write helper missing')
+    return dict(status='PASS_SOURCE_ONLY',sources=len(SOURCES),own=len(OWN),native_execution=False,rtl_execution=False)
+
+
+if __name__=='__main__':print(json.dumps(check(),sort_keys=True))

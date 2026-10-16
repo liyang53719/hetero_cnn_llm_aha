@@ -105,6 +105,25 @@ class ControlTests(unittest.TestCase):
   for key in ('source-root','origin','preparation-workspace','compile-receipt','compile-origin','workspace','python','contract-sha256'):argv.extend(['--'+key,'placeholder'])
   with patch.object(L,'load_contract',return_value=({},{})),patch.object(L,'launch',side_effect=AssertionError('execution')):
    self.assertEqual(L.main(argv),0)
+ def repair_chain(self):
+  base=dict(schema=1,profile='qwen2-public-pv16-packed-m16-linked-v1',execution_scope='ORIGINAL_M16_PUBLIC21',sources={'base.py':'1'*64},own={'own.py':'2'*64},generated={},inputs={'base.py':'1'*64,'own.py':'2'*64},targets=[])
+  repair=dict(schema=1,prior_pins=L.digest(L.encoded(base)),own={L.REPAIR+n:'3'*64 for n in ('prepare.py','test_host_job.py','README.md')},generated={'candidates/qwen2_resident_matrix/attention_packed_m16/profile.py':'4'*64,'candidates/qwen2_resident_matrix/attention_packed_observation/pins.json':'5'*64,L.PREFIX+'pins.json':'6'*64})
+  contract=dict(schema=1,profile=L.PROFILE,status='REVIEWED_SOURCE_EXECUTION_REQUIRES_ROOT_GATE',own_sources={n:'7'*64 for n in ('launch.py','driver.py','terminal_validator.py','test_launch.py','test_terminal_validator.py','README.md')},support_sources={'support.py':'8'*64},entry_pins_sha256=L.digest(L.encoded(base)),repair_pins_sha256=L.digest(L.encoded(repair)),runtime_entry_pins_sha256='6'*64,origin_commit='a'*40,python={},work_seconds=924,cleanup_seconds=5,outer_seconds=930,numeric_seconds=900,claims={k:False for k in L.FLAGS})
+  return contract,base,repair
+ def test_repair_chain_derived_runtime(self):
+  c,b,r=self.repair_chain()
+  with patch.object(L,'bounded_json',side_effect=[(L.encoded(v),v) for v in (c,b,r)]),patch.object(L,'verify_map'):
+   _,actual=L.load_contract(L.digest(L.encoded(c)),Path('/synthetic'))
+  self.assertEqual(set(actual['inputs']),{'base.py','own.py',*r['own']});self.assertEqual(actual['generated'],{k:v for k,v in r['generated'].items() if k!=L.PREFIX+'pins.json'})
+ def test_repair_chain_rejects_wrong_prior(self):
+  c,b,r=self.repair_chain();r['prior_pins']='9'*64;c['repair_pins_sha256']=L.digest(L.encoded(r))
+  with patch.object(L,'bounded_json',side_effect=[(L.encoded(v),v) for v in (c,b,r)]),patch.object(L,'verify_map'),self.assertRaises(ValueError):L.load_contract(L.digest(L.encoded(c)),Path('/synthetic'))
+ def test_repair_chain_rejects_unbound_runtime(self):
+  c,b,r=self.repair_chain();c['runtime_entry_pins_sha256']='9'*64
+  with patch.object(L,'bounded_json',side_effect=[(L.encoded(v),v) for v in (c,b,r)]),patch.object(L,'verify_map'),self.assertRaises(ValueError):L.load_contract(L.digest(L.encoded(c)),Path('/synthetic'))
+ def test_repair_chain_rejects_extra_target(self):
+  c,b,r=self.repair_chain();r['generated']['arbitrary.py']='9'*64;c['repair_pins_sha256']=L.digest(L.encoded(r))
+  with patch.object(L,'bounded_json',side_effect=[(L.encoded(v),v) for v in (c,b,r)]),patch.object(L,'verify_map'),self.assertRaises(ValueError):L.load_contract(L.digest(L.encoded(c)),Path('/synthetic'))
  def test_contract_false_claims(self):
   self.assertEqual(L.FLAGS,('full_29_node_acceptance','rtl_execution','hardware_recipe_acceptance','useful_wall_mac_90_percent'))
 if __name__=='__main__':unittest.main()

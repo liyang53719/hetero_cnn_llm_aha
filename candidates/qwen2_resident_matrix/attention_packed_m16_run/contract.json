@@ -11,11 +11,11 @@
   "origin_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
   "outer_seconds": 930,
   "own_sources": {
-    "README.md": "7a1fafbc7fbfaa872f724f551035d02444daa3f9e4ce524ff000d91f8c1c4ea8",
-    "driver.py": "0d566fc726184be9885f51026456768af05b4d6f7012c7a4c8cb94f6a1601111",
-    "launch.py": "0c9dfedcb4de77a98c47fe2e701c4dd73ae32846e5c6755efdee03940e9d7afc",
+    "README.md": "c0b6e648be650feaf73ef10ef93bd02572ce39a6489b8d3e4284e6d2cc7ebded",
+    "driver.py": "6cb975ddca5edcd3fc9964b3bc29aa90a6188f76f0fb717b7020bd2a44269744",
+    "launch.py": "969f72dfe8d713e3b3e166b343f4be56e0d5662ff448ed030c3fce14fb54ea05",
     "terminal_validator.py": "2fdabe1135b877fa6b78a1cd8f4b51dd14da316773ec79413ff5edd743683347",
-    "test_launch.py": "8d602379145a2b0a53aeda20cd677b45c7a5a48f0df1fc06f5f679390c2a9a8d",
+    "test_launch.py": "7b4dca97cfe4e776857ece44e54409fe8e75b1ec9661d6262e3b62b875a0c89f",
     "test_terminal_validator.py": "5fb8407ca3c6e8b995c235a1a150bc9f53fda2cc120ca1fc5e488416810ee83a"
   },
   "profile": "qwen2-packed-m16-full-run-v1",
@@ -29,6 +29,8 @@
       14
     ]
   },
+  "repair_pins_sha256": "a75d74af5d36774b60f608b24bb62541ff397f701ea509339a9b3b74b3508542",
+  "runtime_entry_pins_sha256": "c5f04317f01efe6a67717e29b7106f9fa33ae6fc9ac1d1cb838c1d3422fd3d41",
   "schema": 1,
   "status": "REVIEWED_SOURCE_EXECUTION_REQUIRES_ROOT_GATE",
   "support_sources": {

@@ -5,6 +5,7 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent
 PREFIX='candidates/qwen2_resident_matrix/attention_packed_m16_entry/'
 PROFILE='qwen2-packed-m16-full-run-v1'
+REPAIR='candidates/qwen2_resident_matrix/attention_packed_m16_host_job/'
 MAX_JSON=2*1024*1024
 PHASES=('preflight','compose','git_clone','reexec','admission','snapshot','numeric','postflight','complete')
 LATER=PHASES
@@ -63,7 +64,7 @@ def verify_map(root,mapping):
 
 def load_contract(expected,source_root):
  raw,value=bounded_json(HERE/'contract.json');need(digest(raw)==expected,'reviewed wrapper contract required')
- need(set(value)=={'schema','profile','status','own_sources','support_sources','entry_pins_sha256','origin_commit','python','work_seconds','cleanup_seconds','outer_seconds','numeric_seconds','claims'},'contract schema')
+ need(set(value)=={'schema','profile','status','own_sources','support_sources','entry_pins_sha256','repair_pins_sha256','runtime_entry_pins_sha256','origin_commit','python','work_seconds','cleanup_seconds','outer_seconds','numeric_seconds','claims'},'contract schema')
  need(type(value['schema']) is int and value['schema']==1 and value['profile']==PROFILE and value['status']=='REVIEWED_SOURCE_EXECUTION_REQUIRES_ROOT_GATE','contract identity')
  need(all(type(value[k]) is int and value[k]==v for k,v in (('work_seconds',924),('cleanup_seconds',5),('outer_seconds',930),('numeric_seconds',900))),'fixed budgets')
  need(same(value['claims'],{k:False for k in FLAGS}),'contract broad claims')
@@ -75,6 +76,15 @@ def load_contract(expected,source_root):
  need(type(pins['schema']) is int and pins['schema']==1 and pins['profile']=='qwen2-public-pv16-packed-m16-linked-v1' and pins['execution_scope']=='ORIGINAL_M16_PUBLIC21','exact linked entry scope')
  need(pins['inputs']==dict(pins['sources'],**pins['own']),'entry input closure')
  verify_map(source_root,pins['inputs'])
+ repair_raw,repair=bounded_json(Path(source_root)/REPAIR/'pins.json')
+ need(digest(repair_raw)==value['repair_pins_sha256'] and set(repair)=={'schema','prior_pins','own','generated'},'exact reviewed repair pins')
+ need(type(repair['schema']) is int and repair['schema']==1 and repair['prior_pins']==value['entry_pins_sha256'],'repair original identity')
+ need(set(repair['own'])=={REPAIR+n for n in ('prepare.py','test_host_job.py','README.md')},'exact repair source closure')
+ need(set(repair['generated'])=={'candidates/qwen2_resident_matrix/attention_packed_m16/profile.py','candidates/qwen2_resident_matrix/attention_packed_observation/pins.json',PREFIX+'pins.json'},'exact repair target closure')
+ need(repair['generated'][PREFIX+'pins.json']==value['runtime_entry_pins_sha256'],'installed repaired entry pin')
+ verify_map(source_root,repair['own'])
+ pins['sources'].update(repair['own']);pins['inputs'].update(repair['own'])
+ pins['generated'].update({n:h for n,h in repair['generated'].items() if n!=PREFIX+'pins.json'})
  return value,pins
 
 def runtime_python(origin,argument,contract):
@@ -156,7 +166,7 @@ def launch(args):
    need(set(done)=={'schema','status','pid','context_sha256','source_manifest_sha256','result_sha256','snapshot_sha256','public'} and type(done['schema']) is int and done['schema']==1 and done['status']=='VALIDATED_M16_CHILD_COMPLETE' and done['pid']==process.pid and done['context_sha256']==context_sha,'completed child identity')
    from . import terminal_validator as terminal
    _,proof=bounded_json(control/'SOURCE_PROOF.json')
-   expected_sources=dict(pins['sources'],**pins['own'],**pins['generated']);expected_sources[PREFIX+'pins.json']=contract['entry_pins_sha256']
+   expected_sources=dict(pins['sources'],**pins['own'],**pins['generated']);expected_sources[PREFIX+'pins.json']=contract['runtime_entry_pins_sha256']
    need(set(proof)=={'schema','pid','context_sha256','work_deadline','git_head','committed_cpp_sha256','runtime_sources','source_manifest_sha256'} and type(proof['schema']) is int and proof['schema']==1 and proof['runtime_sources']==expected_sources,'exact frozen source proof')
    need(proof['source_manifest_sha256']==digest(compact(expected_sources))==done['source_manifest_sha256'],'exact source manifest proof')
    need(proof['git_head']==contract['origin_commit'],'original Git proof')

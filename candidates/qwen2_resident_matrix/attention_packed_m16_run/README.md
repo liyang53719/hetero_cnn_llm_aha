@@ -69,3 +69,14 @@ the run context uses sorted compact JSON plus newline. Both encodings are bound
 to the same complete source map. The validator alone cannot authenticate execution;
 its bounded result explicitly leaves that to the observed child/launcher exits
 and immutable context. Synthetic cold receipts are never numerical evidence.
+
+## Distinct Host-issued job repair
+
+This revision composes the separately reviewed attention_packed_m16_host_job
+layer over the unchanged original10b301 entry. It changes the generated M16
+profile's strict job-class binding to the exact class emitted by the original
+Host. The original failed wrapper contract621158 and its run remain preserved.
+The source input pins, repair pins and generated runtime entry pins are three
+separate identities; the full runtime map includes the repair's source files.
+A new contract and a new fresh output are required. This revision inherits no
+completion or numerical result from the first attempt.

@@ -6,10 +6,10 @@ scheduling decision or public completion/publication edge is changed. Missing
 future-key entries remain missing. Raw PV and BF16 store words are distinct;
 only an accepted successful owner terminal seals the latter as acknowledged.
 
-The caller supplies a frozen source_sha256 mapping containing the exact v3
+The caller supplies a frozen source_sha256 mapping containing the exact v4
 75-source execution inventory and all four observer/helper modules below.
-V3 retains the historical inventory's names and 70 unchanged identities; only
-the helper's five explicit default-profile replacements are admitted. Historical receipts
+V4 retains the historical inventory's names and 69 unchanged identities; only
+the helper's six explicit default-profile replacements are admitted. Historical receipts
 remain unchanged and confer no acceptance on this version. Loaded bytecode is
 also checked. This is software evidence, not native or RTL acceptance.
 """
@@ -28,9 +28,9 @@ from scripts import observe_qwen2_attention_model as base
 
 ROOT = Path(__file__).resolve().parents[3]
 HELPER = 'scripts/observe_qwen2_attention_model.py'
-SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v3'
-HELPER_SOURCE_VERSION = 'qwen2-existing-attention-observation-v3'
-HELPER_SHA256 = 'c061da563c079cd3866c661382df5600980ae11e659909a7f0520ce41878ba9f'
+SOURCE_VERSION = 'qwen2-official-bf16-attention-observation-v4'
+HELPER_SOURCE_VERSION = 'qwen2-existing-attention-observation-v4'
+HELPER_SHA256 = '18446e01900f81c6bbf9cf211c1df6b9a86b06013e6d7ef8ae8609eea2309a45'
 OWNER = 'candidates/qwen2_resident_matrix/official_bf16/owners.py'
 SERVICE = 'candidates/qwen2_resident_matrix/official_bf16/dense_silu.py'
 OBSERVER = 'candidates/qwen2_resident_matrix/official_bf16/observation.py'
@@ -165,7 +165,7 @@ def _verify_module(module, relative):
 
 
 def verify_source_snapshot(source_sha256):
-    """Verify exact v3 execution identities and every caller-frozen extra source."""
+    """Verify exact v4 execution identities and every caller-frozen extra source."""
     require(isinstance(source_sha256, dict), 'frozen source_sha256 mapping required')
     require(base.sha((ROOT / HELPER).read_bytes()) == HELPER_SHA256,
             'read-only observer helper source drift')
@@ -174,7 +174,7 @@ def verify_source_snapshot(source_sha256):
     execution = base.verify_execution_sources()
     require(len(execution) == 75 and
             all(source_sha256.get(name) == digest for name, digest in execution.items()),
-            'snapshot must retain the exact v3 75-source execution inventory')
+            'snapshot must retain the exact v4 75-source execution inventory')
     require(all(name in source_sha256 for name in REQUIRED_SOURCES),
             'snapshot must include all official-BF16 observer dependencies')
     for relative, digest in source_sha256.items():

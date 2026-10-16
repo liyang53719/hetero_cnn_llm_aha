@@ -133,7 +133,7 @@ class OfficialObservationTests(unittest.TestCase):
                 report = capture.report()
                 self.assertEqual(report['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
                 self.assertEqual(report['schema'], o.SOURCE_VERSION)
-                self.assertEqual(report['source_version'], 'qwen2-official-bf16-attention-observation-v3')
+                self.assertEqual(report['source_version'], 'qwen2-official-bf16-attention-observation-v4')
                 self.assertEqual(report['helper_source_version'], o.base.SOURCE_VERSION)
                 self.assertIsNone(report['execution_source_commit'])
                 self.assertEqual(report['execution_source_base_commit'], o.base.SOURCE_BASE_COMMIT)
@@ -273,7 +273,7 @@ class OfficialObservationTests(unittest.TestCase):
         for name in o.base.EXECUTION_SOURCE_REPLACEMENTS:
             changed = dict(original)
             changed[name] = frozen[name]
-            with self.subTest(historical=name), self.assertRaisesRegex(ValueError, 'exact v3 75-source'):
+            with self.subTest(historical=name), self.assertRaisesRegex(ValueError, 'exact v4 75-source'):
                 o.OfficialAttentionObservation(h.owner, source_sha256=changed)
         # Runner-specific supersets are allowed only with every extra identity
         # checked. They do not add entries to the exact 75-source inventory.
@@ -322,7 +322,7 @@ class OfficialObservationTests(unittest.TestCase):
         )
         for target, name, replacement in replacements:
             with self.subTest(name=name), patch.object(target, name, replacement):
-                with self.assertRaisesRegex(ValueError, 'changed|patched|source drift|exact v3 75-source'):
+                with self.assertRaisesRegex(ValueError, 'changed|patched|source drift|exact v4 75-source'):
                     o.OfficialAttentionObservation(h.owner, source_sha256=snapshot())
         with patch.object(owners.OfficialAttentionOwner, '_advance', lambda *args: None, create=True):
             with self.assertRaisesRegex(ValueError, 'inventory changed'):

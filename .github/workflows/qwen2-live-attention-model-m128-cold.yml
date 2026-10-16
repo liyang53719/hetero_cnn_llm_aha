@@ -1,13 +1,19 @@
 name: qwen2-live-attention-model-m128-cold
 
-# Frozen FAILED_BUDGET source snapshot: cold admission/source gates only.
-# No pip, payload acquisition, numeric execution, compilation, RTL, or Host job.
-# The 154 exact dependency paths are derived from this snapshot's pins.json.
+# Historical lane: immutable 55199873 cold suites with stdlib-only -S isolation.
+# Current lane: reviewed source compatibility plus 13 synthetic protocol tests.
+# Current tests import pinned NumPy; no payload, native arithmetic, compiler or RTL.
+# Neither lane inherits historical numerical acceptance or a full-block PASS.
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/qwen2-live-attention-model-m128-cold.yml'
+      - 'scripts/check_attention_cold_compatibility.py'
+      - 'scripts/test_attention_cold_compatibility.py'
+      - 'scripts/check_generated_source_consistency.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/test_memory_debt.py'
+      - 'candidates/qwen2_attention_resident_candidate/**'
       - 'candidates/qwen2_live_attention_model_m128/**'
       - 'candidates/qwen2_live_attention_reference_m128/COLD_TEST_SUMMARY.json'
       - 'candidates/qwen2_live_attention_reference_m128/README.md'
@@ -166,6 +172,11 @@ on:
   pull_request:
     paths:
       - '.github/workflows/qwen2-live-attention-model-m128-cold.yml'
+      - 'scripts/check_attention_cold_compatibility.py'
+      - 'scripts/test_attention_cold_compatibility.py'
+      - 'scripts/check_generated_source_consistency.py'
+      - 'candidates/qwen2_resident_matrix/ffn_attention/test_memory_debt.py'
+      - 'candidates/qwen2_attention_resident_candidate/**'
       - 'candidates/qwen2_live_attention_model_m128/**'
       - 'candidates/qwen2_live_attention_reference_m128/COLD_TEST_SUMMARY.json'
       - 'candidates/qwen2_live_attention_reference_m128/README.md'
@@ -332,10 +343,21 @@ jobs:
   cold:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: historical
     steps:
-      - uses: actions/checkout@v4
+      - name: Historical frozen source checkout
+        uses: actions/checkout@v4
+        with:
+          ref: 55199873c0d5378c53538cc4273b53a3a012915d
+          path: historical
+          persist-credentials: false
+      - name: Current event source checkout
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
+          path: current
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -349,7 +371,7 @@ jobs:
           mkdir -p work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold
           evidence=work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold
           git rev-parse HEAD | tee "$evidence/head.txt"
-          test "$(cat "$evidence/head.txt")" = "$GITHUB_SHA"
+          test "$(cat "$evidence/head.txt")" = "55199873c0d5378c53538cc4273b53a3a012915d"
           python -B -S - <<'PY_TOOL' | tee "$evidence/tool.json"
           import json
           import sys
@@ -539,15 +561,55 @@ jobs:
           python -B -S "$evidence/check_cold.py" default 2>&1 | tee "$evidence/default.json"
           python -B -S "$evidence/check_cold.py" normal 2>&1 | tee "$evidence/normal.log"
           python -B -S -O "$evidence/check_cold.py" optimized 2>&1 | tee "$evidence/optimized.log"
-      - name: Preserve only exact-head cold evidence
+      - name: Preserve historical cold evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: qwen2-live-attention-model-m128-cold-${{ github.sha }}-${{ github.run_attempt }}
+          name: qwen2-live-attention-model-m128-cold-historical-55199873-${{ github.sha }}-${{ github.run_attempt }}
           if-no-files-found: warn
           path: |
-            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/head.txt
-            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/tool.json
-            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/default.json
-            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/normal.log
-            work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/optimized.log
+            historical/work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/head.txt
+            historical/work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/tool.json
+            historical/work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/default.json
+            historical/work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/normal.log
+            historical/work/qwen2_attention_failed_snapshot_ci_20261014/ci-cold/optimized.log
+      - name: Install pinned current protocol test dependency
+        working-directory: current
+        run: python -m pip install numpy==2.3.5
+      - name: Current event compatibility and protocol regressions
+        working-directory: current
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          mkdir -p work/current-cold
+          python -B -S scripts/check_attention_cold_compatibility.py --historical ../historical --package attention128 --event-sha "$GITHUB_SHA" | tee work/current-cold/closure.json
+          python -B -S -m unittest scripts.test_attention_cold_compatibility -v 2>&1 | tee work/current-cold/helper-normal.log
+          python -B -S -O -m unittest scripts.test_attention_cold_compatibility -v 2>&1 | tee work/current-cold/helper-optimized.log
+          for mode in normal optimized; do
+            flags=()
+            if [ "$mode" = optimized ]; then flags=(-O); fi
+            python -B "${flags[@]}" - <<'PY_PROTOCOL' 2>&1 | tee "work/current-cold/protocol-$mode.log"
+          import unittest
+          modules = [
+              'candidates.qwen2_resident_matrix.ffn_attention.test_memory_debt',
+              'candidates.qwen2_attention_resident_candidate.test_scratch_ownership',
+          ]
+          suite = unittest.defaultTestLoader.loadTestsFromNames(modules)
+          if suite.countTestCases() != 13:
+              raise SystemExit('expected exactly 13 current protocol tests')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if (result.testsRun != 13 or not result.wasSuccessful() or result.skipped
+                  or result.expectedFailures or result.unexpectedSuccesses):
+              raise SystemExit('current protocol regressions failed or skipped')
+          print('PASS: 13 current synthetic protocol tests; numerical/fullblock/RTL acceptance=false')
+          PY_PROTOCOL
+          done
+          python -B -S -O scripts/check_attention_cold_compatibility.py --historical ../historical --package attention128 --event-sha "$GITHUB_SHA" | tee work/current-cold/closure-after.json
+      - name: Preserve current compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-live-attention-model-m128-cold-current-compatibility-${{ github.sha }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          path: current/work/current-cold/

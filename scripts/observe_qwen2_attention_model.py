@@ -23,12 +23,12 @@ import types
 
 ROOT = Path(__file__).resolve().parents[1]
 OWNER = 'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py'
-SOURCE_VERSION = 'qwen2-existing-attention-observation-v3'
+SOURCE_VERSION = 'qwen2-existing-attention-observation-v4'
 # Current edited sources have no published commit yet; do not mislabel them as f16.
 SOURCE_COMMIT = None
 SOURCE_BASE_COMMIT = 'f16df50adfb0f1f4bc668c517a2e29accffe6753'
 PINS = {
-    OWNER: '8f954329ef7a4ae472b8247e6e34456affee2e946f1fcfb439b19d89d2b786ec',
+    OWNER: '65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8',
     'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py': '5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880',
     'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py': 'b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27',
     'candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py': 'a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d',
@@ -37,11 +37,16 @@ SENTINEL = 0xa5963cc3
 RECEIPT = 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_numerical_receipt.json'
 RECEIPT_SHA = '3d0f449d3e2a62f87ea915d89930dc5788f0ea835b11ce265a169c1fc4e5570e'
 RECEIPT_COMMIT = '37b7de74431ed79b7e9f3d52d308ed7f46727b7a'
-# V3 retains the exact historical 75-source inventory and 70 unchanged hashes.
+# V4 retains the exact historical 75-source inventory and 69 unchanged hashes.
+# The sixth replacement is AttentionOwner.tick memory-debt control only;
+# Attention arithmetic and historical numeric acceptance are not rebound.
 # The two V2 Matrix replacements remain explicit; the active Matrix/Prefix
 # guards and two f16 Scala files bind only the default-disabled borrower/loan
 # profile. No historical receipt/result is rebound or inherited.
 EXECUTION_SOURCE_REPLACEMENTS = {
+    OWNER: (
+        '8f954329ef7a4ae472b8247e6e34456affee2e946f1fcfb439b19d89d2b786ec',
+        '65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8'),
     'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py': (
         'f8e4c274a5b304b589b7c725d45588c1fd6367efa5987cc004f07e7d4b400345',
         'b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27'),
@@ -117,21 +122,22 @@ def verify_execution_sources(root=ROOT, *, enable_h2048_rms_borrower=False,
     sources = json.loads(raw)['source_sha256']
     require(len(sources) == 75, 'frozen execution-source inventory is incomplete')
     require(set(EXECUTION_SOURCE_REPLACEMENTS) == {
+        OWNER,
         'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py',
         'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp',
         'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py',
         'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala',
         'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala',
-    }, 'v3 execution-source replacement closure changed')
+    }, 'v4 execution-source replacement closure changed')
     for relative, (previous, current) in EXECUTION_SOURCE_REPLACEMENTS.items():
         require(sources.get(relative) == previous and previous != current,
-                'v3 execution-source replacement origin changed: ' + relative)
+                'v4 execution-source replacement origin changed: ' + relative)
         require(relative not in PINS or PINS[relative] == current,
-                'v3 observation/execution source identity mismatch: ' + relative)
+                'v4 observation/execution source identity mismatch: ' + relative)
         sources[relative] = current
     for relative, expected in sources.items():
         require(sha((root / relative).read_bytes()) == expected,
-                'v3 execution source drift: ' + relative)
+                'v4 execution source drift: ' + relative)
     return sources
 
 
@@ -480,7 +486,7 @@ class AttentionObservation:
                 and self._coverage()
                 and all(sum(self.fields[n]['observed']) == count and self.fields[n]['writes'] == writes[n]
                         for n, count in counts.items()))
-        return dict(schema='qwen2-existing-attention-observation-v3',
+        return dict(schema='qwen2-existing-attention-observation-v4',
             status='COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED' if complete else 'INCOMPLETE',
             source_version=SOURCE_VERSION, execution_source_commit=SOURCE_COMMIT,
             execution_source_base_commit=SOURCE_BASE_COMMIT,

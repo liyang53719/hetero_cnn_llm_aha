@@ -121,7 +121,7 @@ class PublicObservationTests(unittest.TestCase):
         if capture:
             r = capture.report()
             self.assertEqual(r['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
-            self.assertEqual(r['source_version'], 'qwen2-existing-attention-observation-v3')
+            self.assertEqual(r['source_version'], 'qwen2-existing-attention-observation-v4')
             self.assertFalse(r['historical_fullgraph']['results_inherited'] or
                              r['prior_observation_results_inherited'])
             self.assertEqual(r['execution_source_sha256'], observation.verify_execution_sources())

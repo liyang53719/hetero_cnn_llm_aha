@@ -448,7 +448,7 @@ def test_historical_failure_is_explicit_global_failure_even_when_active_checks_p
     ('qwen2_current_prefix_source_identity', 'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py'),
     ('qwen2_current_attention_execution_inventory', 'scripts/observe_qwen2_attention_model.py'),
 ])
-def test_v3_default_false_must_not_be_integer_zero(repo, tmp_path, name, relative):
+def test_v4_default_false_must_not_be_integer_zero(repo, tmp_path, name, relative):
     path = repo / relative
     path.write_text(path.read_text().replace('enable_h2048_rms_borrower=False', 'enable_h2048_rms_borrower=0'))
     result, row = run_one(repo, name, tmp_path)
@@ -460,7 +460,7 @@ def test_v3_default_false_must_not_be_integer_zero(repo, tmp_path, name, relativ
     ('qwen2_current_prefix_source_identity', 'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py'),
     ('qwen2_current_attention_execution_inventory', 'scripts/observe_qwen2_attention_model.py'),
 ])
-def test_v3_enabled_only_guard_cannot_accept_nonbool_profiles(repo, tmp_path, name, relative):
+def test_v4_enabled_only_guard_cannot_accept_nonbool_profiles(repo, tmp_path, name, relative):
     path = repo / relative
     path.write_text(path.read_text().replace('enable_h2048_rms_borrower is not False', 'enable_h2048_rms_borrower is True'))
     result, row = run_one(repo, name, tmp_path)
@@ -476,7 +476,7 @@ def test_v3_enabled_only_guard_cannot_accept_nonbool_profiles(repo, tmp_path, na
     ('historical_results_inherited=False', 'historical_results_inherited=True'),
     ('borrower_enabled=False', 'borrower_enabled=True'),
 ])
-def test_v3_current_guards_cannot_claim_commit_or_inherited_execution(repo, tmp_path, name, relative, old, new):
+def test_v4_current_guards_cannot_claim_commit_or_inherited_execution(repo, tmp_path, name, relative, old, new):
     path = repo / relative
     text = path.read_text()
     assert old in text
@@ -486,13 +486,13 @@ def test_v3_current_guards_cannot_claim_commit_or_inherited_execution(repo, tmp_
 
 
 @pytest.mark.parametrize('old,new,expected', [
-    ('SOURCE_COMMIT = None', "SOURCE_COMMIT = 'f16df50adfb0f1f4bc668c517a2e29accffe6753'", 'V3_OBSERVER_CURRENT_SOURCE_METADATA_CHANGED'),
-    ("SOURCE_VERSION = 'qwen2-existing-attention-observation-v3'", "SOURCE_VERSION = 'qwen2-existing-attention-observation-v2'", 'V3_OBSERVER_CURRENT_SOURCE_METADATA_CHANGED'),
+    ('SOURCE_COMMIT = None', "SOURCE_COMMIT = 'f16df50adfb0f1f4bc668c517a2e29accffe6753'", 'V4_OBSERVER_CURRENT_SOURCE_METADATA_CHANGED'),
+    ("SOURCE_VERSION = 'qwen2-existing-attention-observation-v4'", "SOURCE_VERSION = 'qwen2-existing-attention-observation-v2'", 'V4_OBSERVER_CURRENT_SOURCE_METADATA_CHANGED'),
     ('prior_observation_results_inherited=False', 'prior_observation_results_inherited=True', 'V3_METADATA_CHANGED'),
     ('sha256=RECEIPT_SHA, results_inherited=False', 'sha256=RECEIPT_SHA, results_inherited=True', 'V3_METADATA_CHANGED'),
-    ('execution_source_commit=SOURCE_COMMIT', 'execution_source_commit=SOURCE_BASE_COMMIT', 'V3_OBSERVER_METADATA_BINDING_CHANGED'),
+    ('execution_source_commit=SOURCE_COMMIT', 'execution_source_commit=SOURCE_BASE_COMMIT', 'V4_OBSERVER_METADATA_BINDING_CHANGED'),
 ])
-def test_v3_observer_metadata_cannot_inherit_history_or_mislabel_commit(repo, tmp_path, old, new, expected):
+def test_v4_observer_metadata_cannot_inherit_history_or_mislabel_commit(repo, tmp_path, old, new, expected):
     path = repo / 'scripts/observe_qwen2_attention_model.py'
     text = path.read_text()
     assert old in text
@@ -502,7 +502,7 @@ def test_v3_observer_metadata_cannot_inherit_history_or_mislabel_commit(repo, tm
 
 
 @pytest.mark.parametrize('kind', ['remove', 'add', 'historical_hash', 'current_hash'])
-def test_v3_exact_five_replacements_reject_unknown_pairs_and_scope(repo, tmp_path, kind):
+def test_v4_exact_six_replacements_reject_unknown_pairs_and_scope(repo, tmp_path, kind):
     path = repo / 'scripts/observe_qwen2_attention_model.py'
     module = gate.load_module(repo, path.relative_to(repo))
     name = next(iter(module.EXECUTION_SOURCE_REPLACEMENTS))
@@ -521,7 +521,7 @@ def test_v3_exact_five_replacements_reject_unknown_pairs_and_scope(repo, tmp_pat
     assert result.returncode == 1 and row['status'] == 'FAIL'
 
 
-def test_v3_rehashed_historical_receipt_still_rejected(repo, tmp_path):
+def test_v4_rehashed_historical_receipt_still_rejected(repo, tmp_path):
     module = gate.load_module(repo, 'scripts/observe_qwen2_attention_model.py')
     receipt = repo / module.RECEIPT
     receipt.write_text(receipt.read_text() + '\n')
@@ -533,16 +533,16 @@ def test_v3_rehashed_historical_receipt_still_rejected(repo, tmp_path):
     assert before == fingerprint(repo)
 
 
-def test_v3_any_unreviewed_one_of_seventy_source_entries_cannot_drift(repo, tmp_path):
+def test_v4_any_unreviewed_one_of_sixty_nine_source_entries_cannot_drift(repo, tmp_path):
     module = gate.load_module(repo, 'scripts/observe_qwen2_attention_model.py')
     historical = json.loads((repo / module.RECEIPT).read_text())['source_sha256']
-    names = set(historical) - gate.V3_REPLACEMENT_NAMES
-    assert len(names) == 70
+    names = set(historical) - gate.V4_REPLACEMENT_NAMES
+    assert len(names) == 69
     name = next(name for name in sorted(names) if name.endswith('.cpp'))
     path = repo / name
     path.write_text(path.read_text() + '\n// unreviewed inventory change\n')
     result, row = run_one(repo, 'qwen2_current_attention_execution_inventory', tmp_path)
-    assert result.returncode == 1 and 'v3 execution source drift' in row['error']
+    assert result.returncode == 1 and 'v4 execution source drift' in row['error']
 
 
 @pytest.mark.parametrize('relative,constant', [
@@ -550,7 +550,7 @@ def test_v3_any_unreviewed_one_of_seventy_source_entries_cannot_drift(repo, tmp_
     ('candidates/qwen2_resident_matrix/dense_block_reduce/observation.py', 'CAPTURE_SHA256'),
     ('candidates/qwen2_resident_matrix/dense_block_reduce/observation.py', 'MONITORING_SHA256'),
 ])
-def test_v3_active_observation_helper_pins_remain_strict(repo, tmp_path, relative, constant):
+def test_v4_active_observation_helper_pins_remain_strict(repo, tmp_path, relative, constant):
     path = repo / relative
     import re
     text, count = re.subn(r'(' + constant + r" = ')[0-9a-f]{64}(')", r'\g<1>' + '0' * 64 + r'\2', path.read_text())
@@ -560,7 +560,7 @@ def test_v3_active_observation_helper_pins_remain_strict(repo, tmp_path, relativ
     assert result.returncode == 1 and 'source drift' in row['error']
 
 
-def test_v3_profiled_observer_constructor_delta_is_checked_without_instantiation(repo, tmp_path):
+def test_v4_profiled_observer_constructor_delta_is_checked_without_instantiation(repo, tmp_path):
     path = repo / 'candidates/qwen2_resident_matrix/dense_block_reduce/observation.py'
     text = path.read_text()
     marker = 'self.profiled_loaded_functions_checked = verify_profiled_dependencies(owner, self.sources)'
@@ -570,11 +570,43 @@ def test_v3_profiled_observer_constructor_delta_is_checked_without_instantiation
     assert result.returncode == 1 and 'minimal delta' in row['error']
 
 
-def test_v3_receipt_separates_current_inventory_from_unchanged_historical_results(repo, tmp_path):
+def test_v4_receipt_separates_current_inventory_from_unchanged_historical_results(repo, tmp_path):
     result, row = run_one(repo, 'qwen2_current_attention_execution_inventory', tmp_path)
     assert result.returncode == 0
     detail = row['detail']
-    assert (detail['inventory_entries'], detail['reviewed_replacements'], detail['unchanged_historical_entries']) == (75, 5, 70)
+    assert (detail['inventory_entries'], detail['reviewed_replacements'], detail['unchanged_historical_entries']) == (75, 6, 69)
     assert detail['historical_receipt_sha256'] == gate.FROZEN_EXECUTION_RECEIPT_SHA256
     assert detail['source_commit'] is None and detail['source_base_commit'] == gate.V3_BASE_COMMIT
     assert detail['historical_results_inherited'] is False and detail['replay_executed'] is False
+
+
+def test_v4_reviewed_attention_control_identity_is_exact(repo, tmp_path):
+    module = gate.load_module(repo, 'scripts/observe_qwen2_attention_model.py')
+    previous = '8f954329ef7a4ae472b8247e6e34456affee2e946f1fcfb439b19d89d2b786ec'
+    current = '65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8'
+    historical = json.loads((repo / module.RECEIPT).read_text())['source_sha256']
+    assert historical[module.OWNER] == previous
+    assert module.EXECUTION_SOURCE_REPLACEMENTS[module.OWNER] == (previous, current)
+    assert module.PINS[module.OWNER] == gate.sha(repo / module.OWNER) == current
+    assert module.verify_execution_sources(repo)[module.OWNER] == current
+    result, row = run_one(repo, 'qwen2_current_attention_execution_inventory', tmp_path)
+    assert result.returncode == 0
+    assert row['detail']['source_version'] == 'qwen2-existing-attention-observation-v4'
+    assert row['detail']['identity_class'] == 'current_v4_runtime_with_frozen_historical_provenance'
+
+
+@pytest.mark.parametrize('mutation', ['owner_bytes', 'stale_local_pin', 'stale_execution_pin'])
+def test_v4_owner_drift_and_stale_identity_are_rejected(repo, tmp_path, mutation):
+    path = repo / 'scripts/observe_qwen2_attention_model.py'
+    module = gate.load_module(repo, path.relative_to(repo))
+    previous, current = module.EXECUTION_SOURCE_REPLACEMENTS[module.OWNER]
+    if mutation == 'owner_bytes':
+        owner = repo / module.OWNER
+        owner.write_text(owner.read_text() + '\n# unreviewed owner drift\n')
+    elif mutation == 'stale_local_pin':
+        path.write_text(path.read_text() + f'\nPINS[OWNER] = {previous!r}\n')
+    else:
+        path.write_text(path.read_text() +
+                        f'\nEXECUTION_SOURCE_REPLACEMENTS[OWNER] = ({previous!r}, {previous!r})\n')
+    result, row = run_one(repo, 'qwen2_current_attention_execution_inventory', tmp_path)
+    assert result.returncode == 1 and row['status'] == 'FAIL'

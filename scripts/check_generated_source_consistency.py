@@ -278,7 +278,8 @@ def saved_v0_source_review(root):
 
 V3_BASE_COMMIT = 'f16df50adfb0f1f4bc668c517a2e29accffe6753'
 FROZEN_EXECUTION_RECEIPT_SHA256 = '3d0f449d3e2a62f87ea915d89930dc5788f0ea835b11ce265a169c1fc4e5570e'
-V3_REPLACEMENT_NAMES = {
+V4_REPLACEMENT_NAMES = {
+    'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py',
     'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py',
     'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp',
     'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py',
@@ -332,7 +333,7 @@ def verify_current_source_metadata(metadata, version):
 
 
 def current_runtime_source_gate(root, name):
-    """Check current v3 gates while preserving frozen historical provenance."""
+    """Check current Matrix/Prefix v3 and observation v4 gates while preserving frozen historical provenance."""
     if name == 'qwen2_current_matrix_source_identity':
         relative = 'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py'
         module = load_module(root, relative)
@@ -361,9 +362,9 @@ def current_runtime_source_gate(root, name):
         relative = 'scripts/observe_qwen2_attention_model.py'
         module = load_module(root, relative)
         reject_enabled_profiles(module.verify_execution_sources, root)
-        require(module.SOURCE_VERSION == 'qwen2-existing-attention-observation-v3'
+        require(module.SOURCE_VERSION == 'qwen2-existing-attention-observation-v4'
                 and module.SOURCE_COMMIT is None and module.SOURCE_BASE_COMMIT == V3_BASE_COMMIT,
-                'V3_OBSERVER_CURRENT_SOURCE_METADATA_CHANGED')
+                'V4_OBSERVER_CURRENT_SOURCE_METADATA_CHANGED')
         require(module.RECEIPT_SHA == FROZEN_EXECUTION_RECEIPT_SHA256
                 and sha(root / module.RECEIPT) == FROZEN_EXECUTION_RECEIPT_SHA256,
                 'FROZEN_EXECUTION_RECEIPT_CHANGED')
@@ -371,38 +372,40 @@ def current_runtime_source_gate(root, name):
         local = module.verify_sources(root)
         execution = module.verify_execution_sources(root)
         replacements = module.EXECUTION_SOURCE_REPLACEMENTS
-        require(set(replacements) == V3_REPLACEMENT_NAMES, 'V3_REPLACEMENT_SCOPE_CHANGED')
+        require(set(replacements) == V4_REPLACEMENT_NAMES, 'V4_REPLACEMENT_SCOPE_CHANGED')
         require(len(historical) == len(execution) == 75 and set(execution) == set(historical),
-                'V3_EXECUTION_INVENTORY_COVERAGE_CHANGED')
+                'V4_EXECUTION_INVENTORY_COVERAGE_CHANGED')
         for path in historical:
             if path in replacements:
                 previous, current = replacements[path]
                 require(previous == historical[path] and current == execution[path] and previous != current,
-                        'V3_REPLACEMENT_PAIR_CHANGED:' + path)
+                        'V4_REPLACEMENT_PAIR_CHANGED:' + path)
             else:
-                require(historical[path] == execution[path], 'V3_UNREVIEWED_SOURCE_CHANGED:' + path)
+                require(historical[path] == execution[path], 'V4_UNREVIEWED_SOURCE_CHANGED:' + path)
         metadata = function_return_keywords(root / relative, 'report', 'AttentionObservation')
-        require_literal(metadata, 'schema', 'qwen2-existing-attention-observation-v3')
+        require_literal(metadata, 'schema', 'qwen2-existing-attention-observation-v4')
         for field in ('prior_observation_results_inherited', 'matrix_binary_provenance_verified_by_observer',
                       'hardware_simulation', 'full_29_node_gate', 'whole_block_terminal_observed'):
             require_literal(metadata, field, False)
         for field, variable in (('source_version', 'SOURCE_VERSION'), ('execution_source_commit', 'SOURCE_COMMIT'),
                                 ('execution_source_base_commit', 'SOURCE_BASE_COMMIT')):
             require(field in metadata and ast.unparse(metadata[field]) == variable,
-                    'V3_OBSERVER_METADATA_BINDING_CHANGED:' + field)
+                    'V4_OBSERVER_METADATA_BINDING_CHANGED:' + field)
         frozen_metadata = metadata.get('historical_fullgraph')
         require(isinstance(frozen_metadata, ast.Call) and ast.unparse(frozen_metadata.func) == 'dict',
-                'V3_HISTORICAL_METADATA_MISSING')
+                'V4_HISTORICAL_METADATA_MISSING')
         require_literal({kw.arg: kw.value for kw in frozen_metadata.keywords}, 'results_inherited', False)
         pins = {**local, **execution}
         api = 'verify_sources / verify_execution_sources / immutable receipt / report metadata AST'
         details = {'source_version': module.SOURCE_VERSION, 'historical_receipt': module.RECEIPT,
                    'historical_receipt_sha256': FROZEN_EXECUTION_RECEIPT_SHA256,
-                   'inventory_entries': 75, 'reviewed_replacements': 5, 'unchanged_historical_entries': 70,
+                   'inventory_entries': 75, 'reviewed_replacements': 6, 'unchanged_historical_entries': 69,
                    'reviewed_identity_pairs': replacements}
     validate_pin_map(root, pins, 'CURRENT_RUNTIME')
     return {'validator': relative, 'validator_sha256': sha(root / relative), 'api': api,
-            'source_sha256': pins, 'identity_class': 'current_v3_runtime_with_frozen_historical_provenance',
+            'source_sha256': pins, 'identity_class': ('current_v4_runtime_with_frozen_historical_provenance'
+                if name == 'qwen2_current_attention_execution_inventory'
+                else 'current_v3_runtime_with_frozen_historical_provenance'),
             'source_base_commit': V3_BASE_COMMIT, 'source_commit': None,
             'historical_results_inherited': False, 'historical_snapshot_rewritten': False,
             'replay_executed': False, **details}
@@ -418,9 +421,9 @@ def observation_helper_sources(root):
     profiled = importlib.import_module(profiled_name)
     require(Path(official.__file__).resolve().is_relative_to(root)
             and Path(profiled.__file__).resolve().is_relative_to(root), 'OBSERVATION_HELPER_IMPORT_ROOT_DRIFT')
-    require(official.SOURCE_VERSION == 'qwen2-official-bf16-attention-observation-v3'
-            and official.HELPER_SOURCE_VERSION == 'qwen2-existing-attention-observation-v3'
-            and profiled.SOURCE_VERSION == 'qwen2-profiled-attention-observation-v3'
+    require(official.SOURCE_VERSION == 'qwen2-official-bf16-attention-observation-v4'
+            and official.HELPER_SOURCE_VERSION == 'qwen2-existing-attention-observation-v4'
+            and profiled.SOURCE_VERSION == 'qwen2-profiled-attention-observation-v4'
             and profiled.CAPTURE_SOURCE_VERSION == official.SOURCE_VERSION, 'OBSERVATION_HELPER_VERSION_DRIFT')
     execution = official.base.verify_execution_sources(root)
     snapshot = {**execution, **{name: sha(root / name) for name in official.REQUIRED_SOURCES}}
@@ -643,9 +646,9 @@ def main(argv=None):
                          'scala_or_rtl_executed': False, 'remote_ci_invoked': False,
                          'historical_candidate_snapshots_rebased': False},
                'historical_policy': 'Four explicitly named active models, downstream dense-residency source pins, '
-                                    'the exact reviewed saved-v0 compatibility mapping and v3 current-runtime inventory are checked. '
-                                    'The sealed 75-source historical receipt is unchanged, with five explicit runtime '
-                                    'replacements and 70 exact identities; no old result is inherited.',
+                                    'the exact reviewed saved-v0 compatibility mapping, v3 Matrix/Prefix guards and v4 observation inventory are checked. '
+                                    'The sealed 75-source historical receipt is unchanged, with six explicit runtime '
+                                    'replacements and 69 exact identities; no old result is inherited.',
                'full_workflow_executed': False,
                'current_runtime_identity_blockers': [row['check'] for row in rows
                     if (row['check'].startswith('qwen2_current_') or row['check'] == 'qwen2_observation_helper_source_identity')

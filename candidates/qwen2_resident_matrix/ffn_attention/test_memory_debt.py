@@ -2,8 +2,8 @@
 from collections import Counter
 from types import SimpleNamespace
 import unittest
-from .attention_owner import AttentionOwner
-from ..ffn_public.prefix_owners import Job, MemoryRequest, MemoryResponse
+from candidates.qwen2_resident_matrix.ffn_attention.attention_owner import AttentionOwner
+from candidates.qwen2_resident_matrix.ffn_public.prefix_owners import Job, MemoryRequest, MemoryResponse
 from candidates.qwen2_attention_resident_candidate.owner import ResidentPV32AttentionOwner
 from candidates.qwen2_attention_resident_candidate.scratch import SharedAScratch, ReadonlyKVIdentity
 

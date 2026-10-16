@@ -46,3 +46,12 @@ FP32-final FAIL、未批准数值政策和最终硬件验收保持独立，软�
 python -B -m unittest candidates.qwen2_resident_matrix.ffn_attention.test_memory_debt
 python -B -O -m unittest candidates.qwen2_resident_matrix.ffn_attention.test_memory_debt
 ```
+
+### 2026-10-16：冷检查的历史与当前源码分开验证
+
+- 已完成：四个 cold workflow 将原有默认入口、全部冷测试和拒绝测试保留在独立的 `55199873c0d5378c53538cc4273b53a3a012915d` checkout；历史 pins、失败摘要、参考结果均不修改。
+- 进行中：当前事件提交必须通过 `scripts/check_attention_cold_compatibility.py`。136/139/154/177 项依赖中仅允许已审阅的 AttentionOwner 控制修复和三个 observation v4 身份更新；所有其余依赖、冻结包的文件集合与内容必须一致。另单独固定 resident/scratch/PV32 实现及两个回归测试源码，并记录实际事件提交和工具源码身份。
+- 当前协议回归：真实 owner 的 6 项债务测试和 scratch 的 7 项所有权测试，普通与 `-O` 各执行 13 项，禁止跳过、预期失败或缺项。NumPy 2.3.5 仅用于当前测试的模块导入；历史测试继续使用 `-S`。
+- 辅助检查命令：`python -B -S -m unittest scripts.test_attention_cold_compatibility -v`；`python -B -S -O -m unittest scripts.test_attention_cold_compatibility -v`。
+- 当前闭包命令：`python -B -S scripts/check_attention_cold_compatibility.py --historical ../historical --package attention128 --event-sha "$GITHUB_SHA"`（另支持 `qkv16`、`qkv128`、`attention16`）。要求两个实际 Git checkout；缺文件或身份错误必须失败。
+- 待办：合并后检查关联 CI 全部终态。历史测试通过仅说明历史冻结契约仍可复验；当前源码兼容和短协议回归不继承旧数值 PASS，不证明完整模型、fullblock、RTL 或硬件性能。

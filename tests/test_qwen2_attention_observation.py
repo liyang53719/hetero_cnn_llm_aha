@@ -97,7 +97,7 @@ class ObservationTests(unittest.TestCase):
         self.assertEqual(h.bus.raw(job.dst), struct.pack('<3072I', *a.reference_attention(2,*inputs)))
         report = capture.report()
         self.assertEqual(report['status'], 'COMPLETE_OWNER_OBSERVATION_NOT_NATIVE_ACCEPTED')
-        self.assertEqual(report['schema'], 'qwen2-existing-attention-observation-v3')
+        self.assertEqual(report['schema'], 'qwen2-existing-attention-observation-v4')
         self.assertEqual(report['source_version'], o.SOURCE_VERSION)
         self.assertEqual(report['execution_source_commit'], o.SOURCE_COMMIT)
         self.assertIsNone(report['execution_source_commit'])

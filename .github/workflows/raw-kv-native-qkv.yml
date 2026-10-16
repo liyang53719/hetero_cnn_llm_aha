@@ -1,0 +1,45 @@
+name: raw-kv-native-qkv
+# Revision 1: fresh native16 -> native128, explicit independent QKV recipe.
+# One 900s attempt including clone, setup, cleanup and safe receipts. No Public run.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/raw-kv-native-qkv.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raw-kv-native-qkv-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  native-qkv:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Cold native-only validation contracts
+        timeout-minutes: 1
+        run: |
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_run_ci -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_run_ci -q
+      - name: One bounded fresh native validation
+        timeout-minutes: 16
+        run: python -B -m candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.run_ci --execute --checkout-commit '${{ github.sha }}' --private work/raw-kv-native-qkv-private --evidence work/raw-kv-native-qkv-safe
+      - name: Preserve only safe fixed-name evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-kv-native-qkv-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/raw-kv-native-qkv-safe/summary.json
+            work/raw-kv-native-qkv-safe/progress.json
+            work/raw-kv-native-qkv-safe/source_hashes.json

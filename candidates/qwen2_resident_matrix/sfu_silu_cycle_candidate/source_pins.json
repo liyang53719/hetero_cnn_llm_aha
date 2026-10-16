@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "scope": "SEPARATE_SILU_CYCLE_CANDIDATE_FROZEN_DEPENDENCIES",
+  "sources": {
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch": "37a22c30dde207a38e77151a63e66abaeeb2e3261a082f5ef4d4a4c169d981eb",
+    "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699",
+    "candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp": "d319d3431316b4ff0f299beac5931f718a6a3a446e8de06398b172ebb6e0401c",
+    "candidates/qwen2_resident_matrix/sfu_microsequence_audit/DivSqrtRecFN_small.scala": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+    "candidates/qwen2_resident_matrix/sfu_microsequence_audit/common.scala": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+    "candidates/qwen2_resident_matrix/sfu_microsequence_audit/counter.py": "ffc94cb93e46bd9790cfc4e7eeeeb2c14fe73bf4b8db0dbfe8d7a9f5b9a8e78e",
+    "candidates/qwen2_resident_matrix/sfu_microsequence_audit/source_pins.json": "99697165ab05ab6108cc1075133d6e06ccbedca16f7c0fbf148c573d962dd596",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+  }
+}

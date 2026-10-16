@@ -1,0 +1,49 @@
+--- a/candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp
++++ b/candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp
+@@ -188,6 +188,11 @@
+     if((opcode==0x23&&(count!=256||mask!=1))||
+        (opcode==0x24&&(!count||count>256||mask!=255))||
+        (opcode!=0x23&&opcode!=0x24))return fault();
++  }else if(profile==2){
++    // Explicit packed original-Qwen2 profile; default profiles are unchanged.
++    if((opcode==0x23&&(count!=8||mask!=255))||
++       (opcode==0x24&&(!count||count>128||mask!=15))||
++       (opcode!=0x23&&opcode!=0x24))return fault();
+   }else return fault();
+   // Erase the SAME inherited resource; no normal-mode accumulator exists.
+   for(unsigned c=0;c<5;c++)for(unsigned r=0;r<16;r++)
+@@ -200,6 +205,23 @@
+ extern "C" int matrix_normal_step(unsigned index,unsigned context,unsigned clear,unsigned last,
+                                    unsigned finish,unsigned emit,const uint16_t* a,const uint16_t* b,uint32_t* out){
+   if(mode!=2||!groupOpen||poisoned||endIssued||returnCount||replyPending)return -4;
++  if(normalProfile==2){
++    if(!a||!b||!out||context||index!=normalNext||index>=normalCount||
++       clear!=(index==0)||last!=(index+1==normalCount)||finish!=last||emit!=last)return fault();
++    if(last)std::memset(out,0,4096*sizeof(uint32_t));
++    const unsigned columns=normalOpcode==0x23?256:128;
++    // Compute ALL enabled cells. Endpoint flags are not protocol_error;
++    // selected-output finite checking remains the consuming owner's duty.
++    countArithmetic=2;
++    for(unsigned r=0;r<16;r++)for(unsigned col=0;col<columns;col++){
++      float& x=accum[0][r][col];if(clear)x=0.0f;
++      x=matrix_observed_std::fma(fp(uint32_t(a[r])<<16),fp(uint32_t(b[col])<<16),x);
++      if(last)out[r*256+col]=bits(x);
++    }
++    countArithmetic=0;++normalNext;
++    if(last){pushResult(0,1);endIssued=true;return 1;}
++    return 0;
++  }
+   if(normalProfile==1){
+     if(!a||!b||!out||context||index!=normalNext||index>=normalCount||
+        clear!=(index==0)||last!=(index+1==normalCount)||finish!=last||emit!=last)return fault();
+--- a/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py
++++ b/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py
+@@ -342,7 +342,7 @@
+         a, b, output = (C.c_uint16 * 16)(*step.a), (C.c_uint16 * 256)(*step.b), (C.c_uint32 * 4096)()
+         rc = self.lib.matrix_normal_step(step.index, step.context, step.clear, step.last,
+                                         step.finish, step.emit, a, b, output)
+-        require(rc in ((0, 1, -1) if self.group.profile == 1 else (1, -1)),
++        require(rc in ((0, 1, -1) if self.group.profile in (1, 2) else (1, -1)),
+                 'normal accepted step disagrees with ready')
+         self.counts['normal_steps'] += 1
+         if rc == 1:

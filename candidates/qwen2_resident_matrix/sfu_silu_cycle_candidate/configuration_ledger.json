@@ -1,0 +1,127 @@
+{
+  "boundaries": {
+    "accepted_80_percent": false,
+    "accepted_90_percent": false,
+    "actual_chisel_configuration_changed": false,
+    "bank_or_memory_schedule_implemented": false,
+    "divider_datapath_simulated": false,
+    "existing_frozen_files_changed": false,
+    "full_block_utilization_claimed": false,
+    "next_gate": "independent review then explicit RTL implementation/test of selected controller and divider configuration; physical timing and shared-bank arbitration remain separate gates",
+    "physical_timing_verified": false,
+    "rtl_equivalence_proven": false,
+    "rtl_or_native_job_run": false
+  },
+  "configurations": {
+    "legacy_wrapper_options0": {
+      "controller_changed": false,
+      "divider_recurrence_changed": false,
+      "source_normal_divider_spacing": [
+        25,
+        26
+      ],
+      "source_wrapper_fsm": true
+    },
+    "microsequence_options0": {
+      "controller_changed": true,
+      "default_enabled": false,
+      "divider_recurrence_changed": false,
+      "new_feedback_mux_and_controller_sta_required": true,
+      "source_normal_divider_spacing": [
+        25,
+        26
+      ]
+    },
+    "microsequence_options16": {
+      "controller_changed": true,
+      "default_enabled": false,
+      "divider_recurrence_changed": true,
+      "new_divider_trial_subtract_select_logic": true,
+      "new_feedback_mux_and_controller_sta_required": true,
+      "same_physical_cost_claimed": false,
+      "source_normal_divider_spacing": [
+        14
+      ]
+    }
+  },
+  "controller": {
+    "abort_policy": "candidate wrapper only: stop new operations, drain all accepted divider pulses, hold terminal error until ACK; late abort cannot mutate held payload but latches cancellation through ACK and suppresses publication including abort+ACK",
+    "contexts": 1,
+    "early_divider_return_alias": "BlockScalarFloat.out",
+    "global_all_valid_barrier": true,
+    "lanes": 16,
+    "new_payload_queues": 0,
+    "per_lane_early_reuse": false,
+    "same_edge_response_retire_and_request_accept": false,
+    "terminal_payload_alias": "SiluVectorUnit.value",
+    "terminal_response_capacity": 1
+  },
+  "default": {
+    "divider_options": 0,
+    "numerical_profile": "LegacyV0",
+    "schedule": "legacy_wrapper"
+  },
+  "numerical_contract": {
+    "fp32_rounding": "nearest-even after every primitive; no FMA",
+    "internal_exp_flags": "ignored exactly as original ExpNegative; scale runs even when cutoff selects zero",
+    "operation_order": "expScale, expFloor, expFraction, seven separate Horner multiply/add pairs, expFinish; denominator add, reciprocal divide, sign-factor multiply, gate multiply, up multiply",
+    "outer_flags": "invalid/div0/overflow/underflow fatal; inexact alone accepted; nonfinite input/output rejected",
+    "profile_admission": "Model follows Chisel per-phase admission. Public C++ helper eagerly rejects nonfinite gate/up before phase0; equality corpus is finite and that eager timing is not claimed equivalent.",
+    "tininess": "HardFloat after-rounding precision24 before subnormal exponent clamp"
+  },
+  "profiles": {
+    "LegacyV0": {
+      "bf16_phases": [],
+      "default_actual_unpatched_chisel": true,
+      "source": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala"
+    },
+    "Qwen2OfficialBf16V2": {
+      "bf16_phases": [
+        4,
+        5
+      ],
+      "default_actual_unpatched_chisel": false,
+      "phase5_uses_materialized_phase4": true,
+      "public_callback_policy": "official_bf16_dense_silu_v1",
+      "public_entrypoint": "sf_vector_bf16_v1",
+      "source": "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch"
+    }
+  },
+  "resources": {
+    "additional_alu_instances": 0,
+    "additional_divider_instances": 0,
+    "borrowed_vector_alu_ports": 0,
+    "existing_alu_output_ports_per_lane": 1,
+    "existing_block_scalar_float_instances": 16,
+    "existing_dividers": 16,
+    "existing_per_core_payload_words32": 6,
+    "existing_per_core_small_control": [
+      "k:8",
+      "index:3",
+      "op:3",
+      "state",
+      "error",
+      "flags"
+    ],
+    "existing_vector_payload_words32": 64,
+    "observer_trace_and_phase_trace_are_not_scheduler_storage": true,
+    "per_core_payload_mapping": [
+      "a",
+      "b",
+      "out",
+      "frac",
+      "horner",
+      "product"
+    ],
+    "python_lane_dicts_are_alias_views_not_extra_hardware_payload": true,
+    "tag": "model-only owner metadata; physical tag routing/placement not implemented",
+    "vector_payload_mapping": {
+      "input.gate": 16,
+      "input.up": 16,
+      "probability": 16,
+      "value": 16
+    }
+  },
+  "schema": 1,
+  "scope": "SEPARATE_FUNCTIONAL_CYCLE_CANDIDATE_NOT_RTL"
+}

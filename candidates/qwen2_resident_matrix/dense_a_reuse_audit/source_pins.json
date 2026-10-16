@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "scope": "DENSE_A_REUSE_SOURCE_AUDIT",
+  "sources": {
+    "candidates/qwen2_resident_matrix/ffn_group/group.patch": "32551bb06885785fcbc55b7c9c3b7ff04c4f2ab76bb93f2c2c41ff41f312e674",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "178a3509dab18dd5286a6c16c513498bfb540fa6c33d09862210984d2ceeb1f2",
+    "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch": "37a22c30dde207a38e77151a63e66abaeeb2e3261a082f5ef4d4a4c169d981eb",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+    "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "1c08f9f6afd43b60bceec2d78005e455fc82bafcd31b82cd01e2cde2e96f13c8",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "860db7712f315bebffe6ccb40600f02f8504b5eddb3a509f3263eb5492d9bdae",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "d06b43ca48d60285ee12a780cb1c27258c008b5e4255dde8da46b550b5639389",
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala": "b7e424bca21cecc561045a707b62ee24a7cc7a0314cf8d218ce8e64bb24f29ee",
+    "reports/execution/Q1024_DDR_BANDWIDTH_ENVELOPE_RESULT.json": "6b51d9b814bd2429bfd8a43c2ee79b3ccbcd6dd9129e4f123cd2ba8f4d0220dd",
+    "rtl/integration/idma_backend_rw_axi_flat_wrap.sv": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0",
+    "src/heteronpu/weight_packing.py": "55222018b44bf4cd40f771f07918f417236a7d11f4aac0be007c2137b60f6756"
+  }
+}

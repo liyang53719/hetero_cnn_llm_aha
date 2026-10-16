@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "scope": "SOURCE_MICROSEQUENCE_DIVIDER_COUNTER_AUDIT",
+  "sources": {
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+    "candidates/qwen2_resident_matrix/ffn_group/group.patch": "32551bb06885785fcbc55b7c9c3b7ff04c4f2ab76bb93f2c2c41ff41f312e674",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch": "37a22c30dde207a38e77151a63e66abaeeb2e3261a082f5ef4d4a4c169d981eb",
+    "candidates/qwen2_resident_matrix/sfu_microsequence_audit/DivSqrtRecFN_small.scala": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+    "candidates/qwen2_resident_matrix/sfu_microsequence_audit/common.scala": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+  },
+  "upstream": {
+    "git_blob_sha1": "7f65d667a13a0cfb3b2bab15413cb5e71e176f2b",
+    "path": "hardfloat/src/main/scala/DivSqrtRecFN_small.scala",
+    "repository": "ucb-bar/berkeley-hardfloat",
+    "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+    "url": "https://github.com/ucb-bar/berkeley-hardfloat/blob/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/DivSqrtRecFN_small.scala"
+  },
+  "upstream_common": {
+    "git_blob_sha1": "eeddc6e9a7f46a08f615fb2a7c813e25dac950c5",
+    "path": "hardfloat/src/main/scala/common.scala",
+    "repository": "ucb-bar/berkeley-hardfloat",
+    "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+    "url": "https://github.com/ucb-bar/berkeley-hardfloat/blob/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/common.scala"
+  }
+}

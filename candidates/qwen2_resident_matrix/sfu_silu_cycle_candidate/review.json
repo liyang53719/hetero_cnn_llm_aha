@@ -1,0 +1,82 @@
+{
+  "independent_checks": [
+    {
+      "command": "python3 -S -B -m unittest candidates.qwen2_resident_matrix.sfu_silu_cycle_candidate.test_model -q",
+      "passed": true,
+      "seconds": 0.938,
+      "tests": 14
+    },
+    {
+      "command": "python3 -S -B -O -m unittest candidates.qwen2_resident_matrix.sfu_silu_cycle_candidate.test_model -q",
+      "passed": true,
+      "seconds": 0.836,
+      "tests": 14
+    },
+    {
+      "check": "JSON-normalized collect() equals parsed EVIDENCE.json",
+      "passed": true,
+      "transactions": 96
+    }
+  ],
+  "limitations": [
+    "Reference callbacks do not prove divider datapath RTL equivalence.",
+    "No RTL, synthesis, STA, bank or memory scheduling validation.",
+    "No full-block80/90percent utilization acceptance.",
+    "Abort publication sideband is a proposed wrapper contract; original VectorSilu has no abort input."
+  ],
+  "publication_summary_review": {
+    "checks": [
+      {
+        "command": "python3 -S -B -m unittest candidates.qwen2_resident_matrix.sfu_silu_cycle_candidate.test_summary -q",
+        "passed": true,
+        "seconds": 0.663,
+        "tests": 4
+      },
+      {
+        "command": "python3 -S -B -O -m unittest candidates.qwen2_resident_matrix.sfu_silu_cycle_candidate.test_summary -q",
+        "passed": true,
+        "seconds": 0.718,
+        "tests": 4
+      }
+    ],
+    "findings": [
+      "Committed summary exactly reproduces the projection of all96 unchanged result records.",
+      "Only hashes, fixed configuration identities and scheduling counters/edges retained; arithmetic payload arrays excluded.",
+      "Full report export rejects repository paths and existing output files."
+    ],
+    "original_arithmetic_review_preserved": true,
+    "original_results_canonical_sha256": "553f294e20d95907e4de92e73627a51fde6d93f72bc49676ea71199497fc1843",
+    "reviewed_sha256": {
+      "EVIDENCE.json": "731cf390c977da4cee36eae414058016bf1bd23f85f3a80f2e24d0f4770cb2b4",
+      "README_CN.md": "48dae9af50412f76351934b29d90d897b039b8846939fba03dbde3a9f92515f9",
+      "doc/U00_2_SILU_MICROSEQUENCE_CANDIDATE_20261016_CN.md": "507bba3270f29f201e4ebcbc6cbcaa8738c46e632e60314406226a64d6256e84",
+      "run_evidence.py": "319601eebf750a6ecf1ecad6c3794a49b1eab5a8fe26980839bf1053e1315b60",
+      "test_summary.py": "6cfb431c5c5c9ac81a673c792b2bd51bfb31fb9475c96697449510925c586f2a"
+    },
+    "scope": "Publication representation only; previous numerical, control and hardware limitations remain.",
+    "verdict": "GO_PUBLICATION_ONLY_SUMMARY"
+  },
+  "resolved_finding": {
+    "issue": "Abort during held successful response could permit publication.",
+    "resolution": "Held response payload remains stable; cancellation is sticky through retirement and suppresses publish, including simultaneous abort and ACK."
+  },
+  "reviewed_sha256": {
+    "EVIDENCE.json": "b58b8de6ecfc301b9b18f6128ceea4ef9cdbeb5f109714443a23a974107c6ebc",
+    "README_CN.md": "7592c4f2a253bc278f28ccf19b5310f64a3cacefaf80f0102950e036efef0d35",
+    "arithmetic.py": "87e286f7d101c757537ea4e7eafb4921be7d791b2908a17aa9902c2894e3783c",
+    "configuration_ledger.json": "1effd652dd0c93c58f854b7572a788c02cbdcd926bf9b62501943ac6bcf42e42",
+    "model.py": "37f785e47a21e164a0f052053c44cae7da643e4456bde85804fd767fb5d94b28",
+    "run_evidence.py": "cd21602579b344aae635c49406746c97bbcfc333bf74cb4f5e6c8c2013619cbd",
+    "source_pins.json": "88b57c5398442f4991f67e1e13222ccd77fcd71f1b85db828c5d6171d16759d4",
+    "test_model.py": "032c220418900c9f2e669bcbf4f7bb58abe92ac48ba60ba95da6ba3dd6355437"
+  },
+  "schema": 1,
+  "source_review": [
+    "Default legacy wrapper/options0/LegacyV0 retained.",
+    "Six global allValid barriers and per-lane FP32 node order retained.",
+    "Official BF16 rounding occurs only at phases4 and5; phase5 consumes rounded phase4.",
+    "One16-core context, one held result, no same-edge retirement-funded admission.",
+    "Options16 explicitly changes divider recurrence and physical configuration."
+  ],
+  "verdict": "GO_BOUNDED_FUNCTIONAL_CANDIDATE"
+}

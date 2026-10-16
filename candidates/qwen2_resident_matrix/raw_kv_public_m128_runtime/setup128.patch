@@ -1,0 +1,215 @@
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
+@@ -1,6 +1,6 @@
+-"""Opt-in fresh M16 asset setup. No actual Public owner, Scala or RTL execution.
+-
+-Only this supervisor owns the absolute 600-second setup budget. All producer
++"""Opt-in fresh M128 asset setup. No actual Public owner, Scala or RTL execution.
++
++Only this supervisor owns the absolute 900-second setup budget. All producer
+ output, package logs and detailed metadata stay in a separate private workspace.
+ The CLI is inert without --execute-setup; cold tests never invoke producers.
+ """
+@@ -21,35 +21,28 @@
+ import traceback
+ 
+ from . import assets
++from ..raw_kv_public_m128_runtime import runtime as m128_runtime
+ 
+ ROOT = Path(__file__).resolve().parents[3]
+ HERE = Path(__file__).resolve().parent
+ MODULE = 'candidates.qwen2_resident_matrix.raw_kv_public_fresh.setup'
+-TOTAL_SECONDS = 600
++TOTAL_SECONDS = 900
+ CLEANUP_SECONDS = 5
+ RECEIPT_SECONDS = 1
+ PHASE_LIMITS = {'preflight':20, 'environment':120, 'acquisition':420,
+-                'references':100, 'native':60, 'library':40, 'seal':20}
++                'references':140, 'native16':60, 'native128':120, 'library':40, 'seal':30}
+ PHASES = tuple(PHASE_LIMITS)
+ OUTPUTS = ('progress.json', 'summary.json')
+ MAX_PROGRESS_BYTES = 1024
+ MAX_SUMMARY_BYTES = 8192
+ SETUP_SOURCES = tuple('candidates/qwen2_resident_matrix/raw_kv_public_fresh/' + name
+                       for name in ('setup.py','test_setup.py','SETUP_PLAN.md'))
+-PROFILE = 'qwen2-public-fresh-setup-v1'
++PROFILE = m128_runtime.SETUP_PROFILE
+ SETUP_STATUS = 'COMPLETE_FRESH_SETUP'
+-BASE_COMMIT = 'ba4d56cd5c56acdae70667f40b8e7bbfe17cf17c'
+-PROFILE_PATH = 'candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup_profile.json'
++BASE_COMMIT = m128_runtime.BASE_COMMIT
++PROFILE_PATH = m128_runtime.PINS_PATH
+ IMPORTED_SETUP_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+-BASE_VERIFIER_SHA256 = {
+-    'candidates/qwen2_resident_matrix/raw_kv_public_fresh/'+name:identity for name,identity in {
+-    'assets.py':'8d88c830d2d4f3de58035566bbb4549905914adb1a9b0f81b8b58362d7eec6d1',
+-    'official_entry.patch':'ce4a7c43de8e4c22375a6f3bb7048d10b3649443c5947c2b105f1c8d9bea3f81',
+-    'public_entry.patch':'c5b2311767fe5de6f5f345c0964e27f45a82d4b2cc7ba4382ba054a30447ae16',
+-    'prepare.py':'42b7b76e0fcadf00351fd3fe521e6130b2a0b11dfe27236f1c700be91c521dce',
+-    'pins.json':'5011c92bc395871b2f71822ec8dd0e2cae6d483cc92e75ecd1755b32f4c447fc',
+-    'README.md':'faeb63b9b3edfe10f04ad0372cb8ef3653593409be09b32b4a91f5438e8df2bb',
+-    'test_assets.py':'9abe88ebde0fdddbe97496369aff0ff9b526751b961608cc2a58815107771171'}.items()}
++BASE_VERIFIER_SHA256 = m128_runtime.base_verifier_sources()
+ TORCH_COMMIT = '449b1768410104d3ed79d3bcfe4ba1d65c7f22c0'
+ EXCEPTIONS = frozenset(('ValueError','TypeError','KeyError','OSError','FileNotFoundError',
+     'PermissionError','ImportError','ModuleNotFoundError','RuntimeError','TimeoutError',
+@@ -214,38 +207,15 @@
+ 
+ 
+ def source_snapshot(enabled):
+-    """One-way setup profile; the immutable 183-input asset closure stays intact."""
++    """Exact independently reviewed M128 runtime profile, never refreshed M16 pins."""
+     need(type(enabled) is bool, 'invalid_request')
+-    path=ROOT/PROFILE_PATH
+-    need(path.is_file() and not path.is_symlink(), 'source_pin_not_installed')
+-    path=assets.safe_path(path)
+-    need(path.stat().st_size<=16384,'source_pin_not_installed')
+-    with path.open('rb') as stream:profile_raw=stream.read(16385)
+-    profile=assets.json_bytes(profile_raw,limit=16384)
+-    keys={'schema','profile','base_commit','base_profile','base_verifier_sha256',
+-          'setup_source_sha256','rows','past_tokens','total_budget'}
+-    need(type(profile) is dict and set(profile)==keys and
+-         type(profile['schema']) is int and profile['schema']==1 and
+-         profile['profile']==PROFILE and profile['base_commit']==BASE_COMMIT and
+-         profile['base_profile']==assets.PROFILE and
+-         type(profile['rows']) is int and profile['rows']==16 and
+-         type(profile['past_tokens']) is int and profile['past_tokens']==0 and
+-         type(profile['total_budget']) is int and profile['total_budget']==600 and
+-         profile['base_verifier_sha256']==BASE_VERIFIER_SHA256 and
+-         type(profile['setup_source_sha256']) is dict and
+-         set(profile['setup_source_sha256'])==set(SETUP_SOURCES), 'source_pin_not_installed')
+-    sources=assets.source_snapshot(enable_raw_kv=enabled)
+-    need(len(sources)==183 and all(sources.get(name)==value for name,value in BASE_VERIFIER_SHA256.items()),
+-         'source_drift')
+-    need(not (set(SETUP_SOURCES)|{PROFILE_PATH}) & set(sources), 'source_pin_not_installed')
+-    for name,value in profile['setup_source_sha256'].items():
+-        need(assets.digest(value) and digest(assets.safe_path(ROOT/name))==value, 'source_drift')
+-    need(profile['setup_source_sha256'][SETUP_SOURCES[0]]==IMPORTED_SETUP_SHA256, 'source_drift')
+-    return dict(sources, **profile['setup_source_sha256'], **{PROFILE_PATH:assets.sha(profile_raw)})
++    m128_runtime.verify_loaded_setup(IMPORTED_SETUP_SHA256)
++    return m128_runtime.setup_source_snapshot(enabled)
+ 
+ 
+ def asset_sources(sources):
+-    return {name:value for name,value in sources.items() if name not in set(SETUP_SOURCES)|{PROFILE_PATH}}
++    # Both producer and supervisor receipts bind the same closed runtime map.
++    return m128_runtime.asset_sources(sources)
+ 
+ 
+ def phase_command(phase, workspace):
+@@ -406,7 +376,7 @@
+                         source_manifest_sha256=assets.sha(assets.encoded(sources)),
+                         asset_source_manifest_sha256=summary['asset_source_manifest_sha256'],
+                         asset_manifest_sha256=summary['manifest_sha256'],enable_raw_kv=enable_raw_kv,
+-                        rows=16,past_tokens=0,workspace=dict(path=str(workspace),device=info.st_dev,inode=info.st_ino),
++                        rows=128,past_tokens=0,workspace=dict(path=str(workspace),device=info.st_dev,inode=info.st_ino),
+                         checkout_commit=checkout_commit,completed_phases=list(PHASES),source_recheck='UNCHANGED',
+                         deadline_monotonic_ns=int(end*1e9),elapsed_seconds=round(time.monotonic()-started,6),
+                         total_budget_seconds=TOTAL_SECONDS,actual_chain_executed=False,numerical_acceptance=False)
+@@ -486,7 +456,7 @@
+     need(raw==(ROOT/canonical).read_bytes(),'checkout_identity')
+     # New orchestration must also be checked-in exact bytes; approved overlays
+     # remain admitted through their existing source manifests, never a clean-tree shortcut.
+-    for name in (*SETUP_SOURCES,PROFILE_PATH):
++    for name in m128_runtime.setup_git_sources():
+         raw=subprocess.check_output(['git','show','HEAD:'+name],cwd=ROOT,timeout=remaining(context,10))
+         need(assets.sha(raw)==context['source_sha256'][name],'checkout_identity')
+     import shutil
+@@ -572,18 +542,18 @@
+     readonly=workspace/'readonly';readonly.mkdir()
+     table=readonly/'rope_full.f32le';rms.generate_tables(workspace/'sequential/candidate',table)
+     layout=rms.R.make_layout();rms.G.validate_layout(layout)
+-    rms.write_arena(layout,payload,16,0,readonly,table)
++    rms.write_arena(layout,payload,128,0,readonly,table)
+     need(digest(table)==assets.TABLE_SHA256 and digest(readonly/'readonly_arena.f32le')==assets.ARENA_SHA256 and
+          digest(readonly/'input_x.f32le')==assets.INPUT_X_SHA256,'source_drift')
+     rms.runtime_tools(workspace/'sequential/candidate')
+     for role in ('sequential','reduced'):
+         directory=workspace/role;rawdir=directory/'raw_stages';rawdir.mkdir()
+         empty=directory/'empty_cache.bin';empty.write_bytes(b'')
+-        command=[str(directory/'candidate'),str(readonly/'readonly_arena.f32le'),'16',str(rawdir),'0',str(empty),str(empty)]
+-        timeout=remaining(context,30);started=time.monotonic()
++        command=[str(directory/'candidate'),str(readonly/'readonly_arena.f32le'),'128',str(rawdir),'0',str(empty),str(empty)]
++        timeout=remaining(context,45);started=time.monotonic()
+         done=subprocess.run(command,cwd=directory,capture_output=True,timeout=timeout,check=False)
+         (directory/'stdout.log').write_bytes(done.stdout);(directory/'stderr.log').write_bytes(done.stderr)
+-        ack=rms.software_ack(done.stdout.decode('utf-8'),16,done.returncode)
++        ack=rms.software_ack(done.stdout.decode('utf-8'),128,done.returncode)
+         need({p.name for p in rawdir.iterdir()}==set(assets.output_inventory()),'phase_receipt')
+         outputs={}
+         for name,size in assets.output_inventory().items():
+@@ -594,7 +564,7 @@
+             actual_chain_executed=False,stdout=file_record(workspace,directory/'stdout.log'),
+             empty_cache=file_record(workspace,empty),elapsed_seconds=time.monotonic()-started,requested_timeout_seconds=timeout))
+         # Original shape/dtype/cache/semantic verification, no reference reads.
+-        actual=rms.C.load_actual(rawdir,readonly/'readonly_arena.f32le',readonly/'input_x.f32le',layout,16)
++        actual=rms.C.load_actual(rawdir,readonly/'readonly_arena.f32le',readonly/'input_x.f32le',layout,128)
+         for name in ('cache_k','cache_v'):
+             need(actual[name].transpose(0,2,1,3).copy().tobytes()==(rawdir/(name+'.f32le')).read_bytes(),'phase_receipt')
+         need(all(rms.N.audit_semantics(actual,None,rms.G.config_for(layout),'bf16').values()),'phase_receipt')
+@@ -604,10 +574,24 @@
+     remaining(context,1)
+ 
+ 
+-def _phase_native(context,workspace):
++def _phase_native16(context,workspace):
++    # A distinct supervised child is required: run_gate sets interop threads.
+     from scripts import qwen2_layer0_model_gate as native
+     torch,_=backend_identity()
+-    result=native.run_gate(ROOT,workspace/'payload',workspace/'native',tokens=16,carried=False,threads=4)
++    result=native.run_gate(ROOT,workspace/'payload',workspace/'native_m16',tokens=16,carried=False,threads=4)
++    backend_threads(torch)
++    need(result['status']=='PASS_BF16_STAGE_BUDGET','phase_failed')
++    remaining(context,1)
++
++
++def _phase_native128(context,workspace):
++    from scripts import qwen2_layer0_model_gate as native
++    torch,_=backend_identity()
++    # The unchanged producer reopens and fully validates the authentic small gate,
++    # including both modes' exports, before performing its M128 forward.
++    small=assets.safe_path(workspace/'native_m16/RESULT.json')
++    result=native.run_gate(ROOT,workspace/'payload',workspace/'native',tokens=128,carried=False,threads=4,
++                           small_gate=small)
+     backend_threads(torch)
+     need(result['status']=='PASS_BF16_STAGE_BUDGET','phase_failed')
+     remaining(context,1)
+@@ -623,7 +607,7 @@
+ def _phase_seal(context,workspace):
+     rec=lambda p:file_record(workspace,p)
+     ro=workspace/'readonly'
+-    value=dict(schema=1,profile=assets.PROFILE,status=assets.STATUS,rows=16,past_tokens=0,
++    value=dict(schema=1,profile=assets.PROFILE,status=assets.STATUS,rows=128,past_tokens=0,
+         source_sha256=context['asset_source_sha256'],source_manifest_sha256=assets.sha(assets.encoded(context['asset_source_sha256'])),
+         payload=dict(manifest=rec(workspace/'payload/manifest.json'),tensors={name:rec(workspace/'payload'/(name+'.bin')) for name in assets.TENSOR_PINS}),
+         readonly=dict(arena=rec(ro/'readonly_arena.f32le'),table=rec(ro/'rope_full.f32le'),
+@@ -636,14 +620,15 @@
+             outputs={name:rec(d/'raw_stages'/name) for name in assets.output_inventory()})
+     value['sequential'].update(export_receipt=rec(workspace/'sequential/export.json'),
+         tensors={name:rec(workspace/'sequential/tensors'/('candidate_'+name+'.f32le')) for name in assets.shapes()})
+-    value['native']=dict(producer=assets.NATIVE_PRODUCER,result=rec(workspace/'native/RESULT.json'),outputs={
+-        mode:{method:{name:rec(workspace/'native'/mode/'phase_0'/(prefix+'_'+name+'.f32le')) for name in assets.shapes()}
+-              for method,prefix in zip(assets.METHODS,('native','independent'),strict=True)} for mode in assets.MODES})
++    for role,rows in (('native_m16',16),('native',128)):
++        value[role]=dict(producer=assets.NATIVE_PRODUCER,result=rec(workspace/role/'RESULT.json'),outputs={
++            mode:{method:{name:rec(workspace/role/mode/'phase_0'/(prefix+'_'+name+'.f32le')) for name in assets.shapes(rows)}
++                  for method,prefix in zip(assets.METHODS,('native','independent'),strict=True)} for mode in assets.MODES})
+     assets.validate_manifest(value)
+     candidate=workspace/'ASSETS.candidate.json'
+     private_json(candidate,value)
+     identity=digest(candidate)
+-    assets.verify(candidate,identity,rows=16,enable_raw_kv=context['enable_raw_kv'])
++    assets.verify(candidate,identity,rows=128,enable_raw_kv=context['enable_raw_kv'])
+     remaining(context,1)
+     os.replace(candidate,workspace/'ASSETS.json')
+     fd=os.open(workspace,os.O_RDONLY|os.O_DIRECTORY)
+@@ -653,7 +638,8 @@
+ 
+ 
+ PRODUCERS={'preflight':_phase_preflight,'environment':_phase_environment,'acquisition':_phase_acquisition,
+-           'references':_phase_references,'native':_phase_native,'library':_phase_library,'seal':_phase_seal}
++           'references':_phase_references,'native16':_phase_native16,'native128':_phase_native128,
++           'library':_phase_library,'seal':_phase_seal}
+ 
+ 
+ def internal_phase(phase,context_path):

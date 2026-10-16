@@ -1,0 +1,45 @@
+name: raw-kv-public-m128
+# One fresh M128 original Public21 numerical run. No RTL or full29 acceptance.
+# Separate profile: 900s setup, 2400s work, 2430s numeric envelope, 3420s total; no retries.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/raw-kv-public-m128.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raw-kv-public-m128-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  fresh-public-m128:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Cold launch and linked admission contracts
+        timeout-minutes: 1
+        run: |
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_public_m128_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_m128_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_m128_run.test_run_ci -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_m128_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_m128_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_m128_run.test_run_ci -q
+      - name: Single bounded fresh rebuild and original M128 run
+        timeout-minutes: 59
+        run: python -B -m candidates.qwen2_resident_matrix.raw_kv_public_m128_run.run_ci --execute --checkout-commit '${{ github.sha }}' --private work/raw-kv-public-m128-private --evidence work/raw-kv-public-m128-safe
+      - name: Preserve only safe fixed-name evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-kv-public-m128-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/raw-kv-public-m128-safe/summary.json
+            work/raw-kv-public-m128-safe/progress.json
+            work/raw-kv-public-m128-safe/source_hashes.json

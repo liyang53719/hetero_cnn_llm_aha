@@ -1,0 +1,31 @@
+--- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py
+@@ -11,7 +11,7 @@
+ from pathlib import Path, PurePosixPath
+ import stat
+ 
+-from ..raw_kv_public_m128 import profile as m128_profile
++from ..raw_kv_public_m128_runtime import runtime as m128_profile
+ 
+ ROOT = Path(__file__).resolve().parents[3]
+ HERE = Path(__file__).resolve().parent
+@@ -313,7 +313,7 @@
+ 
+ def own_sources():
+     need(file_sha(Path(__file__)) == IMPORTED_SOURCE_SHA256, 'loaded fresh verifier source drift')
+-    return {str((HERE/name).relative_to(ROOT)):file_sha(safe_path(HERE/name)) for name in OWN_INPUTS}
++    return m128_profile.own_asset_sources()
+ 
+ 
+ def source_snapshot(*, enable_raw_kv=False):
+--- a/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
++++ b/candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py
+@@ -21,7 +21,7 @@
+ from ..official_bf16 import check_numeric as prior
+ from ..official_bf16 import execution as policy
+ from ..raw_kv_public_fresh import assets as fresh_assets
+-from ..raw_kv_public_m128 import profile as m128_profile
++from ..raw_kv_public_m128_runtime import runtime as m128_profile
+ base=prior.base
+ require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha
+ PREFIX='candidates/qwen2_resident_matrix/dense_block_reduce/'

@@ -1,0 +1,47 @@
+{
+  "baseline_commit": "938bbdbe",
+  "inputs": {
+    "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "f2e46d6305131c38b8b3a5715619f36d6c309ca0",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "6434599052299aaad3efb9ab9e830f1217d2f212",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "e4a4cf9e0ab583dc5e23721f2c6a50ee1b2b4122",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "3e2c0a38612943a0627bcd82399fed13798b817d",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "48524f25a2e6cbc45b7b356fd4c26f9952270407",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "d7871babc083256e0d17615a79369fe62b87a4a5",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "6d710fe67ecc6da43d860de4d617d858bd35ee09",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "43b8cc9459a2e6fd5723d93414bd0428410c4fc1",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "b4e19f82d5711816a1aaaaf9ded09dd0e24269bf",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "10512012cf57137a5424e368b6d50a8dff326808",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "de0a30abc92fe6bccfdc02dff7f91f7bd2835744",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "a412122b9cf08616dd2f82f53f8737c551cc1bd7",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "c1e8681cdd8c9ead6b0f4d24852597bb7345d842",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "174ed6bc9fbf36973d3a239a70a30aff5895a829",
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala": "28f97281d83173a34f332cfdce19f70affc84a2a",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "90fc12a7f758195d4ec73f9217e9b28b6e51f3e9",
+    "candidates/qwen2_resident_matrix/transposed_seed/owner_prefix.patch": "e0dd26ac222ec1904fe9187deb9bc53d21a611d7",
+    "candidates/qwen2_resident_matrix/ffn_window/window.patch": "292276bedd0c7c2cec2879c549e6d6962742da1c",
+    "candidates/qwen2_resident_matrix/ffn_drain/drain.patch": "0a96a329cbe7a31f57483f967820c042f716035a",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch": "9b8d40d330b6203e2a79c35a942be54e5b167821",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window.patch": "0ccb2630beb671e651cd6bacae1988aaf3569738",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.patch": "fc51c4aaaa89d2005b72ff77db67f35d1950843b",
+    "candidates/qwen2_resident_matrix/transposed_host/host_workspace.patch": "389523d706a6d9077ed257d692a4ed62b57e42c2",
+    "candidates/qwen2_resident_matrix/ffn_group/group.patch": "9bfa5217857faa0a2b80c70dc26d213c4b8a3a59",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch": "f42f0893df2acad56ca31e46e2fbd5ed56d0d9ec",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "d2d39041da648b2fc28ac4df33db45885f67ad47",
+    "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "da0c0ab4aa290a4ce3e89a561b350028536ccef8",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "f389cbba8ff26478f4171c54bce8c346120b3427",
+    "candidates/qwen2_resident_matrix/raw_kv/model.py": "d46fd96eccf955bb091bdf543ed17eaa5ae6305e",
+    "candidates/qwen2_resident_matrix/raw_kv/raw_kv_port.patch": "c92e63d1c5acbe800eac95d63a2683947d29f1d0",
+    "candidates/qwen2_resident_matrix/raw_kv/check_source.py": "3b5605523d9ea51c8ae0d564798d33c56988c697",
+    "candidates/qwen2_resident_matrix/raw_kv/source_pins.json": "968f58cda3f8ba80d73c3df8fa01bba7bc57291c"
+  },
+  "parent_sha256": {
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d",
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala": "d806eb973206b9901fffb65d0cab4a9e7a215bac73920737ac3cfe6d9eecf2d1",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "f402c19b32fb9619b549bdbe4c65c3237d49fcde01210701ed048c24540f9ac6"
+  },
+  "integrated_sha256": {
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "67bd9ed85dd3c74c360911ecb55bde55597a382100641a5bfb0e256a02e412fb",
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala": "b44f8c2d879a3b7fe47db5c1d86b11aa74e96c9528713324f52a97c3a5a04ec7",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "d182831115dc490db9c7735f5dc1736683d3e2ef806352dec676167680b8e04a"
+  }
+}

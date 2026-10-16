@@ -1,0 +1,319 @@
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala
+@@ -134,9 +134,10 @@
+   * is the sole FP32-ingress hold. Native BF16 adds one 256-bit upper hold in
+   * the owner, for 512 bits total. There is no 4096-bit response-hold register.
+   */
+-class TransposedDownDenseBanks(enableFfnTiles:Boolean=false,enableMatrixProducerOrder:Boolean=false) extends Module {
++class TransposedDownDenseBanks(enableFfnTiles:Boolean=false,enableMatrixProducerOrder:Boolean=false,enableRawKv:Boolean=false) extends Module {
+   val io=IO(new Bundle {
+     val zero=Flipped(Valid(UInt(11.W)))
++    val rawKv=if(enableRawKv)Some(new RawKvPort)else None
+     val tiles=if(enableFfnTiles)Some(new FfnTilePort(enableMatrixProducerOrder))else None
+     val tileEnable=if(enableFfnTiles)Some(Input(Bool()))else None
+     val activation=Flipped(Decoupled(new TransposedDownActivationLoad))
+@@ -152,6 +153,53 @@
+   val readPending=RegInit(false.B)
+   val selected=Reg(new TransposedDownOperandRead)
+   val tileSignals=if(enableFfnTiles)Some(Wire(new FfnTileBankSignals))else None
++  val kvBlock=WireDefault(false.B)
++  val kvRead=WireDefault(false.B);val kvWrite=WireDefault(false.B)
++  val kvLine=WireDefault(0.U(13.W));val kvWriteData=WireDefault(0.U(512.W))
++  val kvReadWords=Wire(Vec(16,UInt(256.W)))
++  kvReadWords:=0.U.asTypeOf(kvReadWords)
++  if(enableRawKv){
++    val p=io.rawKv.get
++    val leased=RegInit(false.B);val owner=Reg(UInt(32.W))
++    val poison=RegInit(false.B);val pending=RegInit(false.B)
++    val held=RegInit(false.B);val key=Reg(new RawKvKey)
++    val data=Reg(UInt(512.W))
++    val debt=pending || held
++    val tileQuiet=if(enableFfnTiles) !tileSignals.get.busy && !tileSignals.get.leased &&
++      !io.tiles.get.control.valid && !io.tiles.get.write.valid && !io.tiles.get.read.valid else true.B
++    val localQuiet= !rmwPending && !readPending && tileQuiet &&
++      !io.zero.valid && !io.activation.valid && !io.read.valid && !io.weight.valid
++    val stop=p.abort || p.softReset
++    kvBlock:=leased || poison
++    p.acquire.ready:= !leased && !debt && !poison && !stop && localQuiet && p.parentDrained && !p.release.valid && p.acquire.bits=/=0.U
++    p.release.ready:=leased && !debt && p.release.bits===owner && p.release.bits=/=0.U
++    p.request.ready:=leased && !debt && !poison && !stop && !p.acquire.valid && !p.release.valid &&
++      p.request.bits.key.owner===owner && p.request.bits.key.owner=/=0.U &&
++      p.request.bits.key.tag=/=0.U && p.request.bits.key.line<4096.U
++    p.response.valid:=held;p.response.bits.key:=key;p.response.bits.data:=data
++    p.ack.ready:=held && p.ack.bits.asUInt===key.asUInt && p.ack.bits.owner=/=0.U &&
++      p.ack.bits.tag=/=0.U && p.ack.bits.line<4096.U
++    p.leased:=leased;p.drained:= !debt;p.resetRequired:=poison || stop
++    when(p.acquire.fire){leased:=true.B;owner:=p.acquire.bits}
++    when(p.release.fire){leased:=false.B}
++    pending:=false.B
++    when(p.request.fire){
++      key:=p.request.bits.key;pending:=true.B
++      kvLine:=p.request.bits.key.line;kvWriteData:=p.request.bits.data
++      kvWrite:=p.request.bits.key.write;kvRead:= !p.request.bits.key.write
++    }
++    when(pending){
++      val low=Cat(key.line(2,0),0.U(1.W))
++      data:=Mux(key.write,0.U,Cat(kvReadWords(low+1.U),kvReadWords(low)))
++      held:=true.B
++    }
++    when(p.ack.fire){held:=false.B}
++    // Protocol reset/abort does not erase accepted SRAM or held response debt.
++    // Global module reset is cold reset, requiring system-level quiescence.
++    when(stop && (leased || debt)){poison:=true.B}
++    when(p.softReset && !leased && !debt){poison:=false.B}
++  }
++
+   if(enableFfnTiles){
+     val p=io.tiles.get;val x=tileSignals.get
+     val tags=RegInit(0.U.asTypeOf(Vec(3,new FfnTileState(enableMatrixProducerOrder))))
+@@ -165,7 +213,7 @@
+     val outstanding=pendingWrite || pendingRead || responseValid
+     val quiet= !rmwPending && !readPending && !outstanding && !io.zero.valid &&
+       !io.activation.valid && !io.read.valid
+-    val admit=io.tileEnable.get && quiet && !poison && !p.abort
++    val admit=io.tileEnable.get && quiet && !poison && !p.abort && !kvBlock
+     p.control.ready:=admit
+     p.write.ready:=admit && !p.control.valid
+     p.read.ready:=admit && !p.control.valid && !p.write.valid
+@@ -239,11 +287,11 @@
+     }
+     // Poison does not retract a held response or cancel a reserved RMW edge.
+     when(p.abort){poison:=true.B}
+-    when(io.zero.valid){
++    when(io.zero.valid && !kvBlock){
+       assert(!outstanding,"clear cannot steal an accepted tile transaction")
+       when(occupied && io.zero.bits>=768.U){poison:=true.B}
+     }
+-    when(occupied && ((io.activation.valid && io.activation.bits.kWord>=96.U) ||
++    when(!kvBlock && occupied && ((io.activation.valid && io.activation.bits.kWord>=96.U) ||
+       (io.read.valid && io.read.bits.k>=1536.U))){poison:=true.B}
+   }
+   io.activation.ready:= !rmwPending && !io.zero.valid && !io.read.valid
+@@ -251,6 +299,9 @@
+   if(enableFfnTiles){
+     io.activation.ready:= !rmwPending && !io.zero.valid && !io.read.valid && !tileSignals.get.busy && (!tileSignals.get.leased || io.activation.bits.kWord<96.U)
+     io.read.ready:= !rmwPending && !io.zero.valid && !io.activation.valid && !tileSignals.get.busy && (!tileSignals.get.leased || io.read.bits.k<1536.U)
++  }
++  if(enableRawKv){
++    when(kvBlock){io.activation.ready:=false.B;io.read.ready:=false.B}
+   }
+   val readFire=io.read.fire
+   val loadFire=io.activation.fire
+@@ -260,7 +311,7 @@
+   io.activationBusy:=rmwPending
+   io.activationWritten:=rmwPending
+   io.response.valid:=readPending
+-  when(io.zero.valid){assert(!rmwPending && !loadFire && !readFire);assert(io.zero.bits<1376.U)}
++  when(io.zero.valid && !kvBlock){assert(!rmwPending && !loadFire && !readFire);assert(io.zero.bits<1376.U)}
+   when(loadFire){assert(io.activation.bits.kWord<160.U)}
+   when(readFire){assert(io.read.bits.k<2560.U && io.read.bits.context<5.U)}
+ 
+@@ -269,29 +320,40 @@
+     val mt=gatherK(3,0)^bank.U(4.W)
+     val gatherAddress=Cat(gatherK(11,4),0.U(3.W))+mt
+     val loadAddress=Cat(io.activation.bits.kWord,0.U(3.W))+io.activation.bits.m(6,4)
+-    val readEnable=if(enableFfnTiles)loadFire || (readFire && mt<8.U) || tileSignals.get.issueRead || tileSignals.get.issueWrite else loadFire || (readFire && mt<8.U)
+-    val address=if(enableFfnTiles)Mux(tileSignals.get.issueRead || tileSignals.get.issueWrite,tileSignals.get.word,Mux(loadFire,loadAddress,gatherAddress))else Mux(loadFire,loadAddress,gatherAddress)
++    val normalRead=if(enableFfnTiles)loadFire || (readFire && mt<8.U) || tileSignals.get.issueRead || tileSignals.get.issueWrite else loadFire || (readFire && mt<8.U)
++    val normalAddress=if(enableFfnTiles)Mux(tileSignals.get.issueRead || tileSignals.get.issueWrite,tileSignals.get.word,Mux(loadFire,loadAddress,gatherAddress))else Mux(loadFire,loadAddress,gatherAddress)
++    val kvSelected=kvLine(2,0)===(bank/2).U
++    val readEnable=normalRead || (kvRead && kvSelected)
++    val address=Mux(kvRead && kvSelected,kvLine>>3,normalAddress)
+     val response=aBanks(bank).read(address,readEnable)
++    kvReadWords(bank):=response
+     if(enableFfnTiles){tileSignals.get.readWords(bank):=response}
+     val merged=Wire(Vec(16,UInt(16.W)))
+     merged:=response.asTypeOf(Vec(16,UInt(16.W)))
+     val laneValue=rmw.value.asTypeOf(Vec(16,UInt(16.W)))
+     merged(rmw.m(3,0)):=laneValue(bank.U(4.W)^rmw.m(6,4))
++    val normalWrite=WireDefault(false.B)
++    val normalWriteAddress=WireDefault(0.U(11.W))
++    val normalWriteData=WireDefault(0.U(256.W))
+     if(enableFfnTiles){
+       val x=tileSignals.get
+       val tileMerged=Wire(Vec(8,UInt(32.W)));tileMerged:=response.asTypeOf(Vec(8,UInt(32.W)))
+       tileMerged(x.commitLane):=x.writeValue(bank)
+-      val writeAddress=Mux(x.commit,x.commitWord,Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4)))
+-      val clearLegal=io.zero.valid && !x.busy && (!x.leased || io.zero.bits<768.U)
+-      when(clearLegal || rmwPending || x.commit){
+-        assert(!(x.commit && (io.zero.valid || rmwPending)),"accepted tile RMW owns its next-cycle write edge")
+-        aBanks(bank).write(writeAddress,Mux(x.commit,tileMerged.asUInt,Mux(io.zero.valid,0.U(256.W),merged.asUInt)))
+-      }
++      normalWriteAddress:=Mux(x.commit,x.commitWord,Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4)))
++      val clearLegal=io.zero.valid && !kvBlock && !x.busy && (!x.leased || io.zero.bits<768.U)
++      normalWrite:=clearLegal || rmwPending || x.commit
++      normalWriteData:=Mux(x.commit,tileMerged.asUInt,Mux(io.zero.valid,0.U(256.W),merged.asUInt))
++      when(x.commit){assert(!(io.zero.valid || rmwPending),"accepted tile RMW owns its next-cycle write edge")}
+     }else{
+-      val writeAddress=Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4))
+-      when(io.zero.valid || rmwPending){
+-        aBanks(bank).write(writeAddress,Mux(io.zero.valid,0.U(256.W),merged.asUInt))
+-      }
++      normalWriteAddress:=Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4))
++      normalWrite:= (io.zero.valid && !kvBlock) || rmwPending
++      normalWriteData:=Mux(io.zero.valid,0.U(256.W),merged.asUInt)
++    }
++    val rawWrite=kvWrite && kvSelected
++    when(normalWrite || rawWrite){
++      assert(!(normalWrite && rawWrite),"exclusive raw KV lease")
++      val rawWord=if(bank%2==0)kvWriteData(255,0)else kvWriteData(511,256)
++      aBanks(bank).write(Mux(rawWrite,kvLine>>3,normalWriteAddress),Mux(rawWrite,rawWord,normalWriteData))
+     }
+     response
+   }
+@@ -317,7 +379,7 @@
+     val address=Mux(first,rd0>>4,rd1>>4)
+     val response=bBanks(bank).read(address,readEnable)
+     val writeFirst=wr0(3,0)===bank.U
+-    val writeEnable=io.weight.valid && (writeFirst || (io.weight.bits.pair && wr1(3,0)===bank.U))
++    val writeEnable=io.weight.valid && !kvBlock && (writeFirst || (io.weight.bits.pair && wr1(3,0)===bank.U))
+     val writeAddress=Mux(writeFirst,wr0>>4,wr1>>4)
+     val writeValue=Mux(writeFirst,io.weight.bits.value(255,0),io.weight.bits.value(511,256))
+     when(writeEnable){
+@@ -369,3 +431,34 @@
+   val word=UInt(11.W);val lane=UInt(3.W);val commitWord=UInt(11.W);val commitLane=UInt(3.W)
+   val writeValue=Vec(16,UInt(32.W));val readWords=Vec(16,UInt(256.W))
+ }
++
++
++/** Raw byte transport only: cache validity commits on matching ACK while
++  * resetRequired is false. No numeric interpretation or cache payload SRAM.
++  * Parent must wire parentDrained from real Dense/DMA/matrix/seed/response
++  * obligations; this bank-only candidate does not add an owner/kernel route.
++  */
++class RawKvKey extends Bundle {
++  val owner=UInt(32.W);val tag=UInt(32.W)
++  val line=UInt(13.W) // reject 4096..8191 instead of silently truncating
++  val write=Bool()
++}
++class RawKvRequest extends Bundle {val key=new RawKvKey;val data=UInt(512.W)}
++class RawKvResponse extends Bundle {val key=new RawKvKey;val data=UInt(512.W)}
++class RawKvPort extends Bundle {
++  val acquire=Flipped(Decoupled(UInt(32.W)));val release=Flipped(Decoupled(UInt(32.W)))
++  val request=Flipped(Decoupled(new RawKvRequest))
++  val response=Valid(new RawKvResponse) // held until separately matched ACK
++  val ack=Flipped(Decoupled(new RawKvKey))
++  val parentDrained=Input(Bool());val abort=Input(Bool());val softReset=Input(Bool())
++  val leased=Output(Bool());val drained=Output(Bool());val resetRequired=Output(Bool())
++}
++
++/** Parent-facing loan: drained is derived inside the actual Dense owner. */
++class RawKvOwnerPort extends Bundle {
++  val acquire=Flipped(Decoupled(UInt(32.W)));val release=Flipped(Decoupled(UInt(32.W)))
++  val request=Flipped(Decoupled(new RawKvRequest));val response=Valid(new RawKvResponse)
++  val ack=Flipped(Decoupled(new RawKvKey))
++  val abort=Input(Bool());val softReset=Input(Bool())
++  val leased=Output(Bool());val drained=Output(Bool());val resetRequired=Output(Bool())
++}
+--- a/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
+@@ -8,7 +8,8 @@
+   * anonymous StreamingDenseOwner IO exactly. The candidate patch replaces
+   * only that declaration, so elaboration selects ONE Dense implementation.
+   */
+-class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableKWindow:Boolean=false) extends Bundle {
++class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableKWindow:Boolean=false,enableRawKv:Boolean=false) extends Bundle {
++  val rawKv=if(enableRawKv)Some(new RawKvOwnerPort)else None
+   val drain=if(enableFfnDrain)Some(new FfnDrainPort)else None
+   val window=if(enableFfnWindow)Some(new FfnWindowPort(enableFfnDrain,enableKWindow))else None
+   val tiles=if(enableFfnTiles)Some(new FfnTilePort(enableMatrixProducerOrder=enableFfnWindow))else None
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
+@@ -703,13 +703,14 @@
+ }
+ 
+ /** Selected chunk-major extension; same physical banks, service, and seed leaf. */
+-class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false,enableDenseDrain:Boolean=false) extends Module {
++class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false,enableDenseDrain:Boolean=false,enableRawKv:Boolean=false) extends Module {
+   require(!enableDenseDrain || enableFfnDrain,"Dense tile drain requires the existing drain port")
+   require(!enableKWindow || enableFfnWindow,"K windows require the actual FFN window owner")
+   private val officialBf16=Qwen2NumericPolicy.official(numericPolicy)
+   require(!enableFfnDrain || enableFfnTiles,"act drain requires the shared tile banks")
+   require(!enableFfnWindow || enableFfnTiles,"internal window requires the shared tile banks")
+-  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain,enableKWindow=enableKWindow))
++  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain,enableKWindow=enableKWindow,enableRawKv=enableRawKv))
++  val rawParentReset=WireDefault(false.B)
+   val idle::clearA::aReq::aWait::aFence::setup::execute::drain::finish::locked::Nil=Enum(10)
+   val state=RegInit(idle);val job=Reg(new QwenOwnerJob)
+   val status=RegInit(0.U(8.W));val cycles=RegInit(0.U(64.W));val bytes=RegInit(0.U(64.W))
+@@ -816,7 +817,7 @@
+     }
+   }
+   when(seed.ack.valid && !seed.ack.ready && seedState=/=seedAck){fail(Status.Protocol.U)}
+-  val banks=Module(new TransposedDownDenseBanks(enableFfnTiles,enableMatrixProducerOrder=enableFfnWindow))
++  val banks=Module(new TransposedDownDenseBanks(enableFfnTiles,enableMatrixProducerOrder=enableFfnWindow,enableRawKv=enableRawKv))
+   if(enableFfnTiles){banks.io.tiles.get<>io.tiles.get;banks.io.tileEnable.get:=state===idle}
+   if(enableFfnWindow || enableFfnDrain){
+     val p=banks.io.tiles.get;val external=io.tiles.get
+@@ -887,7 +888,7 @@
+   io.done.valid:=(if(enableFfnDrain)state===finish && !drainActive.get && !windowActive.getOrElse(false.B)else if(enableFfnWindow)state===finish && !windowActive.get else state===finish);io.done.bits.tag:=job.tag;io.done.bits.status:=status
+   io.done.bits.writeBytes:=bytes;io.done.bits.cycles:=cycles;io.done.bits.usefulMacs:=useful
+   io.done.bits.executedMacs:=(io.physicalSteps-physicalBase)*512.U
+-  io.resetRequired:=(if(enableFfnTiles)(status=/=0.U) || banks.io.tiles.get.resetRequired || io.tiles.get.abort else status=/=0.U);io.issueCycles:=issued;io.operandStalls:=starved
++  io.resetRequired:=((if(enableFfnTiles)(status=/=0.U) || banks.io.tiles.get.resetRequired || io.tiles.get.abort else status=/=0.U)) || rawParentReset;io.issueCycles:=issued;io.operandStalls:=starved
+   io.matrix.group.valid:=state===execute && aCommitted && !groupStarted && status===0.U
+   io.matrix.group.bits.opcode:=0x20.U;io.matrix.group.bits.sliceMask:=255.U
+   io.matrix.group.bits.groupSequence.get:=groupSequence
+@@ -1394,7 +1395,7 @@
+     io.job.ready:=state===idle && windowIdle && !active && !d.request.valid && !io.window.map(_.request.valid).getOrElse(false.B) && !p.busy && noExternal && !bad && !idleUnexpected
+     if(enableFfnWindow){io.window.get.request.ready:=state===idle && windowIdle && !active && !p.busy && p.drained && noExternal && !bad && !idleUnexpected}
+     d.busy:=active;d.resetRequired:=io.resetRequired
+-    io.resetRequired:=(status=/=0.U) || p.resetRequired || io.tiles.get.abort || drainPoison.get || d.abort || idleUnexpected || (active && activeUnexpected)
++    io.resetRequired:=((status=/=0.U) || p.resetRequired || io.tiles.get.abort || drainPoison.get || d.abort || idleUnexpected || (active && activeUnexpected)) || rawParentReset
+     d.result.valid:=active && state===finish
+     d.result.bits.tag:=job.tag;d.result.bits.identity:=drainIdentity.get;d.result.bits.ng:=drainNg.get
+     d.result.bits.rows:=job.m;d.result.bits.cols:=drainCols.get;d.result.bits.status:=status
+@@ -1542,4 +1543,53 @@
+     when(d.result.valid){assert(!io.done.valid && !windowActive.getOrElse(false.B));assert(cycleBuckets.reduce(_+&_)===cycles)}
+   }
+   when(io.done.fire){state:=Mux(status===0.U,idle,locked)}
++  // Final-priority admission only; accepted Dense/Tile/DMA work still drains.
++  // No global Matrix idle condition: a future Attention borrower may use it.
++  if(enableRawKv){
++    val p=io.rawKv.get;val b=banks.io.rawKv.get
++    val parentPoison=RegInit(false.B)
++    val ownedGroup=groupStarted && !groupDone
++    val rawReply=io.burstResponse.valid || io.response.valid || io.matrix.result.valid ||
++      io.matrix.done.valid || seed.ack.valid || io.writeResponse.map(_.valid).getOrElse(false.B)
++    val unsolicited=(state===idle || b.leased) && rawReply
++    val tileQuiet=if(enableFfnTiles)banks.io.tiles.get.drained && !banks.io.tiles.get.busy &&
++      !banks.io.tiles.get.leased && !banks.io.tiles.get.resetRequired else true.B
++    val parentFault=status=/=0.U || io.tiles.map(_.abort).getOrElse(false.B) ||
++      banks.io.tiles.map(_.resetRequired).getOrElse(false.B) || drainPoison.getOrElse(false.B) ||
++      io.drain.map(_.abort).getOrElse(false.B)
++    val rawLocalDrained=state===idle && status===0.U && !parentPoison && !unsolicited && !parentFault &&
++      !burstOutstanding && !aHighPending && !banks.io.activationBusy && operandsEmpty &&
++      loadState===loadIdle && !seedOutstanding && seedState===seedIdle && !ownedGroup &&
++      writeState===writeIdle && !windowActive.getOrElse(false.B) && !drainActive.getOrElse(false.B) &&
++      !drainReadPending.getOrElse(false.B) && !aLeaseValid.getOrElse(false.B) &&
++      !drainPoison.getOrElse(false.B) && tileQuiet && !io.done.valid &&
++      !io.tiles.map(_.abort).getOrElse(false.B) && !io.drain.map(_.abort).getOrElse(false.B) &&
++      !io.window.map(_.result.valid).getOrElse(false.B) && !io.drain.map(_.result.valid).getOrElse(false.B)
++    banks.io.rawKv.get.parentDrained:=rawLocalDrained
++    b.acquire<>p.acquire;b.release<>p.release;b.request<>p.request;b.ack<>p.ack
++    p.response:=b.response;p.leased:=b.leased;p.drained:=b.drained
++    b.abort:=p.abort || parentPoison || unsolicited || parentFault
++    b.softReset:=p.softReset
++    p.resetRequired:=b.resetRequired || parentPoison || unsolicited || parentFault
++    val reserve=p.acquire.valid || b.leased || !b.drained || p.resetRequired || p.softReset
++    when(unsolicited){parentPoison:=true.B}
++    // Local protocol reset never repairs a poisoned Dense backend.
++    when(p.softReset && !b.leased && b.drained && state===idle && !rawReply && status===0.U){parentPoison:=false.B}
++    when(reserve){
++      io.job.ready:=false.B
++      io.window.foreach(_.request.ready:=false.B)
++      io.drain.foreach(_.request.ready:=false.B)
++      io.tiles.foreach{t=>t.control.ready:=false.B;t.write.ready:=false.B;t.read.ready:=false.B}
++      // Disable only external tile offers. Internal accepted window/drain work
++      // must retain access while the raw acquire waits for its obligations.
++      when(!windowActive.getOrElse(false.B) && !drainActive.getOrElse(false.B)){
++        banks.io.tiles.foreach{t=>t.control.valid:=false.B;t.write.valid:=false.B;t.read.valid:=false.B}
++      }
++    }
++    // Grant observes the actual local debt check, not an external attestation.
++    b.acquire.valid:=p.acquire.valid && rawLocalDrained
++    p.acquire.ready:=b.acquire.ready && rawLocalDrained
++    rawParentReset:=parentPoison || unsolicited || parentFault || b.resetRequired
++  }
++
+ }

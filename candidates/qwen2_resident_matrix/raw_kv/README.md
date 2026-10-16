@@ -67,10 +67,12 @@ The source gate verifies pinned Git blobs, zero-fuzz composition, unchanged
 SRAM declaration counts and single per-bank read/write call sites. Those are
 text/source checks, not proof of synthesizability or behavioral equivalence.
 
-Scala compilation/elaboration, RTL simulation, full-block tests and EDA were
-NOT run. No hardware cycles, throughput or utilization are claimed. Next step
-is independently reviewed parent-owner wiring and bounded compilation/RTL unit
-tests under the existing task; these stages have not run.
+Bounded Scala compilation, four CHIRRTL configurations and three bank-only
+Verilator ScalaTests passed at commit `938bbdbe` (`PASS_BANK_UNIT_ONLY`).
+See the verified evidence in [UNIT_PLAN.md](UNIT_PLAN.md). Full-block tests,
+owner integration and EDA remain unverified. The frozen 24,640-cycle stimulus
+count is unit-test coverage, not workload latency or throughput. This bank-only
+unit has no MAC; MAC utilization and duty are N/A.
 
 ## 中文范围说明
 
@@ -81,9 +83,12 @@ MAC 或缓存数据副本。新增控制/返回寄存器为 512-bit 数据、78-
 有效位由上层缓存管理，只能在正确 ACK 且没有 abort/reset poison 时发布。
 
 尚未接入真实 Dense/Attention owner 或 kernel；parentDrained 仍需上层根据
-真实 DMA、matrix、seed、response 等未完成事务产生。未运行 Scala 编译、
-Chisel elaboration、RTL 仿真、完整 block、EDA；不能声称硬件编译通过、
-周期数、吞吐或利用率。协议 softReset 保留已接受事务；冷复位不在此保证内。
+真实 DMA、matrix、seed、response 等未完成事务产生。有界 Scala 编译、
+四种 CHIRRTL 配置和三个 Verilator bank-only 用例已通过，范围仅为
+`PASS_BANK_UNIT_ONLY`，证据见 [UNIT_PLAN.md](UNIT_PLAN.md)。完整 block、
+真实 owner 集成和 EDA 尚未验证；24,640 个冻结向量周期不是任务延迟或
+吞吐测量。bank-only 单元不含 MAC，MAC 利用率与 duty 均为 N/A。
+协议 softReset 保留已接受事务；冷复位不在此保证内。
 原有源文件、冻结补丁和收据均未修改。
 
 ## 中文任务清单
@@ -91,6 +96,7 @@ Chisel elaboration、RTL 仿真、完整 block、EDA；不能声称硬件编译�
 - [x] 已完成：默认关闭的 raw64B bank-port 候选补丁和行为模型。
 - [x] 已完成：8 项短模型测试，普通/`-O` 两种模式均通过；两种模式源码组合检查通过。
 - [x] 已完成：4096 行容量映射、原始位保真、背压、ACK、排他、drain、abort/reset 和提前释放检查。
-- [ ] 进行中阶段：准备下一步有界 Chisel 编译方案；编译尚未启动，无编译通过结论。
+- [x] 已完成：有界 Scala 编译、四种 CHIRRTL SRAM 审计和三个 Verilator bank-only 用例通过。
 - [ ] 待办：接入真实 owner/Attention M128 路径，验证真实 parentDrained 和缓存发布边界。
-- [ ] 待办：有界 RTL 单元验证；之后再评估性能，当前没有硬件周期或利用率数据。
+- [x] 已完成：24,640 个冻结模型周期、4096 行容量的 bank-only RTL 对照验证；不是完整 M128 Attention 验收。
+- [ ] 待办：真实 owner 集成后再评估性能；当前 MAC 利用率/duty 为 N/A，无吞吐结论。

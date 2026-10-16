@@ -1,10 +1,25 @@
-# 有界 bank-only 单元验证方案（尚未运行硬件阶段）
+# 有界 bank-only 单元验证（PASS_BANK_UNIT_ONLY）
 
 第一批候选提交：67b01b858724753306d2322504005dd568093f72。
-新增文件准备了可复现 runner；尚未运行 sbt、Chisel elaboration 或 Verilator。
-`.github/workflows/raw-kv-bank-unit.yml` 是待发布的可安装 workflow。
-发布到 main 且该 workflow 文件改变时会触发一次；也支持手动触发。
-当前仅准备完成，尚未启动该 CI 或硬件阶段。
+提交 `938bbdbe` 已完成一次有界 Scala 编译、Chisel elaboration 和 Verilator
+bank-only 单元运行，结论为 `PASS_BANK_UNIT_ONLY`。
+`.github/workflows/raw-kv-bank-unit.yml` 已发布；workflow 文件改变时会触发，
+也支持手动触发。本次结果不代表真实 Dense/Attention owner 或完整 block 验收。
+
+## 已验证运行证据
+
+- [单元运行 38862898598](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38862898598)：三个 ScalaTest 用例全部通过。
+- [文本证据 artifact 12029772172](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38862898598/artifacts/12029772172)：ZIP SHA256 `f29c7512ddfe5521c6fbfd2e41be5425b7268ac6eb189cdc4c666589912941c8`；已核对 API、ZIP 和运行日志。
+- 使用同一冻结模型刺激：24,640 个周期，覆盖 4096 行写入/读回；刺激 SHA256 `61f0b7e2cab8dcc347d1d90753eee058e55eea62d7fb514a56e64023aa734ba9`。该计数表示验证刺激范围，不是模型任务耗时或 M128 Attention 性能。
+- 四种 CHIRRTL 配置（raw=0/1 × tiles=0/1）均保持 32 个 SRAM：16 个 A（depth=1376）、16 个 B（depth=160），width=256，每 bank 一个读端口、一个写端口。
+- 组合后 `TransposedDenseBanks.scala` SHA256：`7cfafc779f15a2e89afd50004bae1d0d30dd6851ab2a4f5a778b1b110e5044c5`；`RawKvUnit.scala` SHA256：`7027b39f2e6b1183501122eaf6695a7e8ef8962ee1f24578c3c2a49730d8e755`。
+- 编译/elaboration/RTL 阶段实际墙钟时间分别为 14.20/7.25/38.44 秒（上限 120/60/240 秒）；不是硬件周期或性能测量。
+- raw 关闭生成 SV SHA256：`e5140dcfd1267ecbca39e2c4941f1489847620de31292e8540a1beab061977ae`。
+- raw 开启生成 SV SHA256：`929ee99d5f7ed70600bec5fde70c5058bc2a88e95e59980a13772dcc3302fcc9`。
+
+这里只验证 bank 端口和现有 FFN typed tile smoke；尚未接入真实 owner、
+parentDrained 或缓存发布链路，未完成 full-block/EDA 验证。该 bank-only
+单元不含 MAC，MAC 利用率和 duty 为 N/A；不据此推导吞吐或加速比。
 
 ## 精确范围
 

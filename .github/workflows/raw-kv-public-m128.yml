@@ -1,5 +1,6 @@
 name: raw-kv-public-m128
 # One fresh M128 original Public21 numerical run. No RTL or full29 acceptance.
+# Revision 2: preserve bounded backend-preflight diagnostics; unchanged numerical gates and budgets.
 # Separate profile: 900s setup, 2400s work, 2430s numeric envelope, 3420s total; no retries.
 on:
   push:

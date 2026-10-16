@@ -31,3 +31,12 @@
  
  ROOT = Path(__file__).resolve().parents[3]
  HERE = Path(__file__).resolve().parent
+@@ -502,7 +502,7 @@
+     for command in (common+['--index-url','https://download.pytorch.org/whl/cpu','torch==2.10.0'],
+                     common+['--index-url','https://pypi.org/simple','numpy==2.3.5','transformers==4.40.1']):
+         subprocess.run(command,cwd=ROOT,check=True,timeout=remaining(context,120))
+-    code='from pathlib import Path; from '+MODULE+' import backend_preflight; backend_preflight(Path('+repr(str(workspace/'context.json'))+'))'
++    code='from pathlib import Path; from '+'candidates.qwen2_resident_matrix.raw_kv_public_m128_run.launch'+' import backend_preflight; backend_preflight(Path('+repr(str(workspace/'context.json'))+'))'
+     subprocess.run([python,'-B','-c',code],cwd=ROOT,check=True,timeout=remaining(context,30))
+ 
+ 

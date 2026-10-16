@@ -559,4 +559,38 @@ class LaunchTests(unittest.TestCase):
         self.assertNotIn('pip install',raw);self.assertNotIn('work/raw-kv-public-m128-private/',raw)
 
 
+class BackendProjectionTests(unittest.TestCase):
+    def test_nested_diagnostic_only_on_environment_failure(self):
+        with tempfile.TemporaryDirectory() as d:
+            private=Path(d);(private/'assets').mkdir()
+            value={'schema':1,'fixed':'CONTROL_ONLY'}
+            (private/'assets/backend.failure.json').write_text(json.dumps(value))
+            summary={'status':'FAILED','setup_phase':'environment'}
+            with patch.object(run.launch,'validate_backend_failure',return_value=value) as check:
+                run.project_backend_failure(summary,private,SOURCES)
+                check.assert_called_once_with(value,SOURCES)
+            self.assertEqual(summary['backend_preflight'],value)
+            self.assertEqual(summary['status'],'FAILED')
+            self.assertEqual(set(summary),{'status','setup_phase','backend_preflight'})
+            with patch.object(run.launch,'validate_backend_failure',side_effect=ValueError('PRIVATE_DO_NOT_COPY')):
+                rejected={'status':'FAILED','setup_phase':'environment'}
+                run.project_backend_failure(rejected,private,SOURCES)
+                self.assertEqual(rejected,{'status':'FAILED','setup_phase':'environment'})
+            with patch.object(run.launch,'validate_backend_failure') as check:
+                other={'status':'FAILED','setup_phase':'references'}
+                run.project_backend_failure(other,private,SOURCES);check.assert_not_called()
+                self.assertNotIn('backend_preflight',other)
+
+    def test_nested_diagnostic_missing_large_or_symlink_does_not_mask_failure(self):
+        with tempfile.TemporaryDirectory() as d:
+            private=Path(d);(private/'assets').mkdir();path=private/'assets/backend.failure.json'
+            for mode in ('missing','large','symlink'):
+                if path.exists() or path.is_symlink():path.unlink()
+                if mode=='large':path.write_text('x'*4097)
+                if mode=='symlink':path.symlink_to(private/'missing')
+                summary={'status':'FAILED','setup_phase':'environment'}
+                run.project_backend_failure(summary,private,SOURCES)
+                self.assertEqual(summary,{'status':'FAILED','setup_phase':'environment'})
+
+
 if __name__=='__main__':unittest.main()

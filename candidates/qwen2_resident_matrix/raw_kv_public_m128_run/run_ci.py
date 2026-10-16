@@ -432,6 +432,16 @@ def project_setup_failure(summary,value,sources):
         summary['diagnostic']=setup.validate_diagnostic(value['diagnostic'],value['phase'],sources)
 
 
+def project_backend_failure(summary,private,sources):
+    """Optional bounded nested diagnostic; never changes failure or grants PASS."""
+    if summary.get('setup_phase')!='environment':return
+    try:
+        value=assets.read_json(private/'assets/backend.failure.json',limit=4096)
+        summary['backend_preflight']=launch.validate_backend_failure(value,sources)
+    except Exception:
+        pass
+
+
 def resume(context,private,evidence):
     budget=Budget(context['started_ns'],context['deadline_ns']);summary=summary_new(budget.started);frozen={};numeric_end=None
     try:
@@ -444,6 +454,7 @@ def resume(context,private,evidence):
         budget.arm()
         if code!=0:
             project_setup_failure(summary,setup_summary,frozen['sources'])
+            project_backend_failure(summary,private,frozen['sources'])
             error=RuntimeError('setup_exit');error.exit_code=code;raise error
         need(setup_summary['status']==setup.SETUP_STATUS)
         need(check_context(context,private,composed=True)==frozen)

@@ -3,8 +3,9 @@
 ## 中文计划
 
 - 已完成前置条件：真实 M16 Public21 observed-gates PASS；M128 资产与 setup 来源层、native16→128 元数据绑定及来源闭包冷测试。
-- 已完成准备检查：完整 setup/资产双凭据准入、原始入口 snapshot 绑定、监督运行器及独立工作流的 61 个普通 / -O 冷测试；独立审查完成后才可发布启动。
-- 待完成：发布方在审查和已有 CI 终态后启动一次真实 M128 重建及数值运行。当前本目录没有数值 PASS，也没有执行下载或生产器。
+- 已完成准备检查：完整 setup/资产双凭据准入、原始入口 snapshot 绑定、监督运行器及独立工作流的68个普通 / -O 冷测试（含诊断修订）；独立审查完成后才可发布启动。
+- 首次真实尝试：run38913368057/job117014509569 在 environment 的 backend-preflight 子进程失败，尚未进入数值阶段；两次 pip 安装命令已经返回成功。
+- 进行中：仅增加嵌套 backend-preflight 安全分类诊断；没有放宽包、CPU、MKLDNN、线程或数值门槛。复审后才可启动一次诊断充分的尝试。
 
 ## 原始链与前置结果
 
@@ -14,7 +15,7 @@
 
 ## 来源与数值准入
 
-本层先执行原封不动的 setup runtime 来源组合，再用仅改 import 的 patch 绑定新的 launch 模块。最终十个生成文件中七个旧输出不变。此前 M16、M128 preparation-only 和 setup-runtime 合同均保持冻结。
+本层先执行原封不动的 setup runtime 来源组合，再用固定 import 替换及 backend-preflight 诊断入口替换的 patch 绑定新的 launch 模块。最终十个生成文件中七个旧输出不变。此前 M16、M128 preparation-only 和 setup-runtime 合同均保持冻结。
 
 全来源清单用于 entry、assets 和 setup；没有旧183/187隐式过滤。原始 entry.prepare 生成 snapshot 后，运行器添加精确 `m128_launch` 身份，绑定 event commit、launch contract、实际 SETUP receipt 和已验证 M16 evidence。原始 run 的新 profile 授权分支重新核验该身份及 fresh setup/资产双凭据，然后才允许原入口继续。裸 READY 资产、旧 M16 setup、错误来源或单独复制的安全摘要不能获得准入。
 
@@ -40,3 +41,11 @@ python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_m128_run.te
 ```
 
 合同冻结220个非自身来源，加合同自身为221个，最终十个overlay。实际组合后的 entry/asset/setup 来源闭包逐项一致；原始 entry/official 哈希函数采用未改写 AST 提取和真实 helper 链进行来源专用检查，阻止数值包和自定义 CDLL。snapshot 来源摘要使用原始 indented JSON encoder，安全投影摘要另用 compact encoder，二者不混用。
+
+## 首次 M128 设置失败证据
+
+运行38913368057的安全结果为 FAILED/SETUP_FAILED/environment，总耗时43.983254秒。ZIP SHA-256为`1b2092d5dba51bf8f1e988ee2b8242160f232ef864e98a3883f4e15502d0a92c`。实际生成 setup.py 的506行运行venv backend_preflight；pip安装位于504行，二者先返回成功。非零退出不能证明具体版本、CPU能力或来源校验是哪一项失败；私有stderr未保留，不能猜测原因。
+
+诊断修订只包裹原始 backend_preflight 调用，成功路径仍完整执行原验证器；失败继续抛出原异常。安全摘要可加入固定阶段、已加载模块的布尔/unknown检查、允许的异常类和仓库相对帧；不会复制异常文本、包版本字符串、配置转储、命令、路径或权重。原始失败记录不被覆盖。运行预算与三个安全artifact文件保持不变。
+
+诊断检查值只描述失败后已加载模块的状态，不表示每个原始门槛都已执行。早期身份检查失败时，线程设置仍可能为 false；未加载模块或不可读 getter 为 unknown。诊断阶段及原始异常帧用于定位，不能把后续未执行条件当作根因。

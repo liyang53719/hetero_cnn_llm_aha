@@ -1,8 +1,9 @@
 """Compose ten exact linked-M128 source overlays without executing them.
 
-The frozen runtime preparer is unchanged. This layer replaces only three alias
-imports with the separately pinned launch authority; it changes no arithmetic,
-comparison, transport, producer, deadline, or publication statements.
+The frozen runtime preparer is unchanged. This layer replaces three alias imports and the
+backend preflight subprocess's diagnostic dispatch target. Original backend
+validation, arithmetic, comparisons, transport and subprocess deadlines stay
+unchanged.
 """
 import ast
 import hashlib
@@ -34,7 +35,7 @@ def read_source(name):
 
 
 def check_bridge_scope(originals, generated):
-    """Whole-AST identity, allowing only one exact alias import per target."""
+    """Whole-AST identity except three imports and one diagnostic dispatch."""
     need(set(originals) == set(generated) == set(BRIDGE_TARGETS), 'exact launch bridge targets required')
     for name in BRIDGE_TARGETS:
         alias = 'm128_runtime' if name == prerequisite.SETUP else 'm128_profile'
@@ -45,7 +46,17 @@ def check_bridge_scope(originals, generated):
         new_matches = [node for node in after.body if ast.dump(node) == ast.dump(new_import)]
         need(len(old_matches) == len(new_matches) == 1, 'exact launch bridge import required')
         after.body[after.body.index(new_matches[0])] = old_import
-        need(ast.dump(before) == ast.dump(after), 'launch bridge exceeds import-only scope')
+        if name == prerequisite.SETUP:
+            old_code = ast.parse("code='from pathlib import Path; from '+MODULE+' import backend_preflight; backend_preflight(Path('+repr(str(workspace/'context.json'))+'))'").body[0]
+            new_code = ast.parse("code='from pathlib import Path; from '+'candidates.qwen2_resident_matrix.raw_kv_public_m128_run.launch'+' import backend_preflight; backend_preflight(Path('+repr(str(workspace/'context.json'))+'))'").body[0]
+            original = [node for node in before.body if isinstance(node, ast.FunctionDef) and node.name == '_phase_environment']
+            updated = [node for node in after.body if isinstance(node, ast.FunctionDef) and node.name == '_phase_environment']
+            need(len(original) == len(updated) == 1, 'exact backend environment function required')
+            old_codes = [node for node in original[0].body if ast.dump(node) == ast.dump(old_code)]
+            new_codes = [node for node in updated[0].body if ast.dump(node) == ast.dump(new_code)]
+            need(len(old_codes) == len(new_codes) == 1, 'exact backend diagnostic dispatch required')
+            updated[0].body[updated[0].body.index(new_codes[0])] = old_codes[0]
+        need(ast.dump(before) == ast.dump(after), 'launch bridge exceeds reviewed import/diagnostic scope')
 
 
 def prepare(out, *, enable_raw_kv=True):

@@ -12,7 +12,7 @@ import sys
 import tempfile
 import types
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from . import prepare
 from ..raw_kv_public_m128 import prerequisite
@@ -53,8 +53,9 @@ class LaunchPreparationTests(unittest.TestCase):
         self.assertEqual([line for line in lines if line.startswith('--- ')],
                          ['--- a/'+name for name in prepare.BRIDGE_TARGETS])
         additions=[line for line in lines if line.startswith('+') and not line.startswith('+++')]
-        self.assertEqual(len(additions),3)
-        self.assertTrue(all(line.startswith('+from ..raw_kv_public_m128_run import launch as ') for line in additions))
+        self.assertEqual(len(additions),4)
+        self.assertEqual(sum(line.startswith('+from ..raw_kv_public_m128_run import launch as ') for line in additions),3)
+        self.assertEqual(sum(line.startswith("+    code='from pathlib import Path; from '") for line in additions),1)
 
     def test_whole_ast_scope_rejects_enabled_only_callback_or_guard_change(self):
         for name in prepare.BRIDGE_TARGETS:
@@ -67,17 +68,45 @@ class LaunchPreparationTests(unittest.TestCase):
                 fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef))
                 fn.body.append(ast.parse('unapproved_callback()').body[0])
             changed[name]=ast.unparse(tree)
-            with self.subTest(name=name),self.assertRaisesRegex(ValueError,'import-only scope'):
+            with self.subTest(name=name),self.assertRaisesRegex(ValueError,'reviewed import/diagnostic scope'):
                 prepare.check_bridge_scope(self.originals,changed)
         changed=dict(self.bridged)
         changed[prerequisite.ASSETS]=changed[prerequisite.ASSETS].replace(
             b'need(file_sha(Path(__file__)) == IMPORTED_SOURCE_SHA256',b'need(True')
-        with self.assertRaisesRegex(ValueError,'import-only scope'):
+        with self.assertRaisesRegex(ValueError,'reviewed import/diagnostic scope'):
             prepare.check_bridge_scope(self.originals,changed)
         for mutation in ('missing','duplicate'):
             changed=dict(self.bridged)
             if mutation=='missing': del changed[prerequisite.SETUP]
             else: changed[prerequisite.SETUP]+=b'\nfrom ..raw_kv_public_m128_run import launch as m128_runtime\n'
+            with self.subTest(mutation=mutation),self.assertRaises(ValueError):
+                prepare.check_bridge_scope(self.originals,changed)
+
+    def test_backend_dispatch_preserves_validator_and_subprocess_deadline_ast(self):
+        functions=lambda raw:{n.name:n for n in ast.parse(raw).body if isinstance(n,ast.FunctionDef)}
+        before=functions(self.originals[prerequisite.SETUP]);after=functions(self.bridged[prerequisite.SETUP])
+        for name in ('backend_identity','backend_threads','backend_preflight'):
+            self.assertEqual(ast.dump(before[name]),ast.dump(after[name]),name)
+        calls=lambda node:[ast.dump(n) for n in ast.walk(node) if isinstance(n,ast.Call)
+            and isinstance(n.func,ast.Attribute) and isinstance(n.func.value,ast.Name)
+            and n.func.value.id=='subprocess']
+        self.assertEqual(calls(before['_phase_environment']),calls(after['_phase_environment']))
+        code=next(n.value for n in after['_phase_environment'].body if isinstance(n,ast.Assign)
+                  and any(isinstance(t,ast.Name) and t.id=='code' for t in n.targets))
+        value=eval(compile(ast.Expression(code),'<diagnostic dispatch>','eval'),{'workspace':Path('/CONTROL_ONLY/setup')})
+        self.assertEqual(value,"from pathlib import Path; from candidates.qwen2_resident_matrix.raw_kv_public_m128_run.launch import backend_preflight; backend_preflight(Path('/CONTROL_ONLY/setup/context.json'))")
+        for mutation in ('dispatch','deadline','validator'):
+            changed=dict(self.bridged)
+            if mutation=='dispatch':
+                changed[prerequisite.SETUP]=changed[prerequisite.SETUP].replace(
+                    b"+'candidates.qwen2_resident_matrix.raw_kv_public_m128_run.launch'+",b'+MODULE+')
+            elif mutation=='deadline':
+                changed[prerequisite.SETUP]=changed[prerequisite.SETUP].replace(
+                    b'timeout=remaining(context,30)',b'timeout=remaining(context,300)')
+            else:
+                tree=ast.parse(changed[prerequisite.SETUP]);fn=next(n for n in tree.body
+                    if isinstance(n,ast.FunctionDef) and n.name=='backend_identity')
+                fn.body.append(ast.Pass());changed[prerequisite.SETUP]=ast.unparse(tree)
             with self.subTest(mutation=mutation),self.assertRaises(ValueError):
                 prepare.check_bridge_scope(self.originals,changed)
 
@@ -135,6 +164,123 @@ class LaunchPreparationTests(unittest.TestCase):
                     patch.object(launch,'contract_snapshot',side_effect=values):
                 with self.assertRaisesRegex(ValueError,'published runtime input drift|source postflight drift'):
                     prepare.prepare(Path(temp)/'out',enable_raw_kv=True)
+
+    def backend_stub_modules(self):
+        """Already-loaded CONTROL_ONLY module metadata, with no native imports."""
+        def module(name,**values):
+            result=types.ModuleType(name);vars(result).update(values);return result
+        def unavailable():raise RuntimeError('SECRET backend detail')
+        return {
+            'numpy':module('numpy',__version__='2.3.5'),
+            'torch':module('torch',__version__='SECRET version',get_num_threads=lambda:4,
+                get_num_interop_threads=lambda:1,are_deterministic_algorithms_enabled=lambda:True),
+            'torch.version':module('torch.version',git_version='449b1768410104d3ed79d3bcfe4ba1d65c7f22c0'),
+            'torch.backends.cpu':module('torch.backends.cpu',get_cpu_capability=unavailable),
+            'torch.backends.mkldnn':module('torch.backends.mkldnn',enabled=True),
+            'torch.__config__':module('torch.__config__',show=lambda:'SECRET 3.7.1 8d263e693366ef8db40acc569cc7d8edf644556d'),
+            'transformers':None}
+
+    def test_backend_wrapper_success_calls_original_once_without_diagnostics(self):
+        from . import launch
+        package=sys.modules['candidates.qwen2_resident_matrix.raw_kv_public_fresh']
+        marker=object();setup=types.SimpleNamespace(backend_preflight=Mock(return_value=marker),atomic_json=Mock())
+        path=Path('/CONTROL_ONLY/context.json')
+        with patch.object(package,'setup',setup),patch.object(launch,'contract_snapshot') as contract, \
+                patch.object(launch,'_backend_checks') as checks:
+            self.assertIs(launch.backend_preflight(path),marker)
+        setup.backend_preflight.assert_called_once_with(path)
+        setup.atomic_json.assert_not_called();contract.assert_not_called();checks.assert_not_called()
+
+    def test_backend_failure_retains_original_exception_and_fixed_safe_checks(self):
+        from . import launch
+        from ..raw_kv_public_fresh import setup as original_setup
+        package=sys.modules['candidates.qwen2_resident_matrix.raw_kv_public_fresh']
+        error=RuntimeError('SECRET raw_tensor=[1,2,3] /private/token https://signed.example/')
+        setup=types.SimpleNamespace(backend_preflight=Mock(side_effect=error),atomic_json=original_setup.atomic_json)
+        original_import=builtins.__import__
+        def no_numerics(name,*args,**kwargs):
+            if name.split('.')[0] in ('numpy','torch','transformers'):
+                raise AssertionError('diagnostic attempted a package import')
+            return original_import(name,*args,**kwargs)
+        with tempfile.TemporaryDirectory() as temp:
+            context=Path(temp)/'context.json';context.write_text('{}')
+            with patch.object(package,'setup',setup),patch.object(launch,'contract_snapshot',return_value={'sources':{}}), \
+                    patch.dict(sys.modules,self.backend_stub_modules()),patch('builtins.__import__',side_effect=no_numerics):
+                with self.assertRaises(RuntimeError) as caught:launch.backend_preflight(context)
+            self.assertIs(caught.exception,error);setup.backend_preflight.assert_called_once_with(context)
+            path=context.with_name('backend.failure.json');raw=path.read_text();value=json.loads(raw)
+            self.assertEqual(set(value),{'schema','stage','diagnostic','checks'})
+            self.assertEqual(value['stage'],'unknown_backend')
+            self.assertEqual(value['diagnostic'],dict(phase='environment',exception='RuntimeError',frames=[]))
+            self.assertEqual(set(value['checks']),set(launch._backend_failure_spec()[1]))
+            self.assertEqual(len(value['checks']),14)
+            self.assertTrue(all(v is None or type(v) is bool for v in value['checks'].values()))
+            self.assertIs(value['checks']['numpy_235'],True)
+            self.assertIs(value['checks']['torch_210_cpu'],False)
+            self.assertIsNone(value['checks']['cpu_avx512'])
+            self.assertIsNone(value['checks']['transformers_4401'])
+            self.assertIs(value['checks']['mkldnn_version'],True)
+            self.assertLessEqual(len(raw.encode()),4096)
+            for secret in ('SECRET','raw_tensor','/private/','https://',temp):self.assertNotIn(secret,raw)
+            checked=launch.validate_backend_failure(value,{})
+            self.assertEqual(checked,value);self.assertIsNot(checked,value)
+
+    def test_backend_import_failure_and_failed_record_write_never_replace_original_error(self):
+        from . import launch
+        package=sys.modules['candidates.qwen2_resident_matrix.raw_kv_public_fresh']
+        original_import=builtins.__import__
+        for mode in ('import','write'):
+            error=ModuleNotFoundError('SECRET missing runtime') if mode=='import' else RuntimeError('SECRET failed validator')
+            def guarded_import(name,globals=None,locals=None,fromlist=(),level=0):
+                if name=='raw_kv_public_fresh' and 'setup' in fromlist and mode=='import':raise error
+                if name.split('.')[0] in ('numpy','torch','transformers'):raise AssertionError('native import')
+                return original_import(name,globals,locals,fromlist,level)
+            setup=types.SimpleNamespace(backend_preflight=Mock(side_effect=error),
+                atomic_json=Mock(side_effect=OSError('SECRET diagnostic write failed')))
+            with self.subTest(mode=mode),tempfile.TemporaryDirectory() as temp:
+                context=Path(temp)/'context.json';context.write_text('{}')
+                with patch.object(package,'setup',setup),patch.object(launch,'contract_snapshot',return_value={'sources':{}}), \
+                        patch.dict(sys.modules,{name:None for name in self.backend_stub_modules()}), \
+                        patch('builtins.__import__',side_effect=guarded_import):
+                    with self.assertRaises(type(error)) as caught:launch.backend_preflight(context)
+                self.assertIs(caught.exception,error)
+                if mode=='import':
+                    setup.backend_preflight.assert_not_called()
+                    value=json.loads(context.with_name('backend.failure.json').read_text())
+                    self.assertEqual(value['stage'],'setup_import')
+                    self.assertEqual(value['diagnostic']['exception'],'ModuleNotFoundError')
+                    self.assertNotIn('SECRET',json.dumps(value))
+                    self.assertEqual({p.name for p in context.parent.iterdir()},{'context.json','backend.failure.json'})
+                else:
+                    setup.backend_preflight.assert_called_once_with(context)
+                    setup.atomic_json.assert_called_once()
+                    self.assertFalse(context.with_name('backend.failure.json').exists())
+
+    def test_backend_diagnostic_schema_rejects_type_aliases_unknown_keys_and_private_text(self):
+        from . import launch
+        good=dict(schema=1,stage='unknown_backend',
+            diagnostic=dict(phase='environment',exception='RuntimeError',frames=[]),
+            checks=dict.fromkeys(launch._backend_failure_spec()[1],None))
+        cases=[]
+        for key,bad in (('schema',True),('schema',1.0),('stage','SECRET private stage')):
+            value=deepcopy(good);value[key]=bad;cases.append(value)
+        for bad in (0,1,'SECRET',[],{}):
+            value=deepcopy(good);value['checks']['python_312']=bad;cases.append(value)
+        for target in ('top','diagnostic','checks'):
+            value=deepcopy(good);(value if target=='top' else value[target])['SECRET']='private';cases.append(value)
+        value=deepcopy(good);value['diagnostic']['exception']='SECRET Error';cases.append(value)
+        for frame in ({'source':'/private/context','line':1},
+                      {'source':prepare.PREFIX+'launch.py','line':True},
+                      {'source':prepare.PREFIX+'launch.py','line':100000}):
+            value=deepcopy(good);value['diagnostic']['frames']=[frame];cases.append(value)
+        self.assertEqual(launch.validate_backend_failure(good,{}),good)
+        private_error=type('SECRET_BACKEND_TYPE',(RuntimeError,),{})('SECRET private detail')
+        stage,diagnostic=launch._backend_diagnostic(private_error,{},setup_loaded=True)
+        self.assertEqual(stage,'unknown_backend')
+        self.assertEqual(diagnostic,dict(phase='environment',exception='OtherError',frames=[]))
+        self.assertNotIn('SECRET',json.dumps(diagnostic))
+        for index,value in enumerate(cases):
+            with self.subTest(case=index),self.assertRaises(ValueError):launch.validate_backend_failure(value,{})
 
     def authorization_fixture(self):
         from . import launch

@@ -160,3 +160,142 @@ def authorize_run(snapshot,*,wall_budget,enable_raw_kv,fresh_profile):
          type(reference.get('past_tokens')) is int and reference['past_tokens']==0)
     admission.revalidate(identity)
     return identity
+
+
+def _backend_failure_spec():
+    stages=('setup_import','context_source','package_import','backend_identity','native_identity',
+            'thread_configuration','thread_checks','evidence_write','unknown_backend')
+    checks=('python_312','python_unoptimized','numpy_235','torch_210_cpu','torch_commit',
+            'cpu_avx512','aten_override_absent','transformers_4401','mkldnn_enabled',
+            'mkldnn_version','mkldnn_commit','intraop_4','interop_1','deterministic')
+    exceptions=('ValueError','TypeError','KeyError','OSError','FileNotFoundError','PermissionError',
+        'ImportError','ModuleNotFoundError','RuntimeError','TimeoutError','TimeoutExpired',
+        'CalledProcessError','InterruptedError','KeyboardInterrupt','SetupError','OtherError')
+    return stages,checks,exceptions
+
+
+def _backend_checks():
+    """Diagnostic getters only; never import/retry a numerical package or forward."""
+    import os
+    import sys
+    result={name:None for name in _backend_failure_spec()[1]}
+    result.update(python_312=sys.version_info[:2]==(3,12),python_unoptimized=sys.flags.optimize==0,
+                  aten_override_absent=os.getenv('ATEN_CPU_CAPABILITY') is None)
+    def sample(name,module,getter):
+        loaded=sys.modules.get(module)
+        if loaded is not None:
+            try:
+                value=getter(loaded)
+                if type(value) is bool:result[name]=value
+            except BaseException:pass
+    sample('numpy_235','numpy',lambda m:vars(m).get('__version__')=='2.3.5')
+    sample('torch_210_cpu','torch',lambda m:vars(m).get('__version__')=='2.10.0+cpu')
+    sample('torch_commit','torch.version',lambda m:vars(m).get('git_version')=='449b1768410104d3ed79d3bcfe4ba1d65c7f22c0')
+    sample('cpu_avx512','torch.backends.cpu',lambda m:vars(m)['get_cpu_capability']()=='AVX512')
+    sample('transformers_4401','transformers',lambda m:vars(m).get('__version__')=='4.40.1')
+    sample('mkldnn_enabled','torch.backends.mkldnn',lambda m:m.enabled is True)
+    sample('mkldnn_version','torch.__config__',lambda m:'3.7.1' in vars(m)['show']())
+    sample('mkldnn_commit','torch.__config__',lambda m:'8d263e693366ef8db40acc569cc7d8edf644556d' in vars(m)['show']())
+    sample('intraop_4','torch',lambda m:vars(m)['get_num_threads']()==4)
+    sample('interop_1','torch',lambda m:vars(m)['get_num_interop_threads']()==1)
+    sample('deterministic','torch',lambda m:vars(m)['are_deterministic_algorithms_enabled']() is True)
+    return result
+
+
+def _backend_diagnostic(error,sources,*,setup_loaded):
+    """Classify verified repository function names, without exception text/locals."""
+    kind=type(error).__name__
+    if kind not in _backend_failure_spec()[2]:kind='OtherError'
+    frames=[];functions=[];checked={};tb=error.__traceback__
+    while tb is not None:
+        try:
+            name=str(Path(tb.tb_frame.f_code.co_filename).resolve().relative_to(ROOT.resolve()))
+            if name in sources:
+                if name not in checked:checked[name]=sha(read_source(name))==sources[name]
+                if checked[name] and type(tb.tb_lineno) is int and 0<tb.tb_lineno<100000:
+                    frames.append(dict(source=name,line=tb.tb_lineno))
+                    functions.append((name,tb.tb_frame.f_code.co_name))
+        except (OSError,ValueError,TypeError):pass
+        tb=tb.tb_next
+    names={function for _,function in functions}
+    if not setup_loaded:stage='setup_import'
+    elif names & {'_read_context','source_snapshot','asset_sources','contract_snapshot','contract_value'}:stage='context_source'
+    elif kind in ('ImportError','ModuleNotFoundError'):stage='package_import'
+    elif 'runtime_identity' in names:stage='native_identity'
+    elif 'backend_threads' in names:stage='thread_checks'
+    elif names & {'private_json','atomic_json'}:stage='evidence_write'
+    elif 'backend_identity' in names:stage='backend_identity'
+    elif (SETUP,'backend_preflight') in functions:stage='thread_configuration'
+    else:stage='unknown_backend'
+    return stage,dict(phase='environment',exception=kind,frames=frames[-3:])
+
+
+def validate_backend_failure(value,sources):
+    """Exact public projection; no commands, exception strings or private paths."""
+    stages,checks,exceptions=_backend_failure_spec()
+    need(type(value) is dict and set(value)=={'schema','stage','diagnostic','checks'})
+    need(type(value['schema']) is int and value['schema']==1 and
+         type(value['stage']) is str and value['stage'] in stages)
+    need(type(value['checks']) is dict and set(value['checks'])==set(checks) and
+         all(item is None or type(item) is bool for item in value['checks'].values()))
+    diagnostic=value['diagnostic']
+    need(type(diagnostic) is dict and set(diagnostic)=={'phase','exception','frames'} and
+         diagnostic['phase']=='environment' and type(diagnostic['exception']) is str and
+         diagnostic['exception'] in exceptions and type(diagnostic['frames']) is list and len(diagnostic['frames'])<=3)
+    for frame in diagnostic['frames']:
+        need(type(frame) is dict and set(frame)=={'source','line'} and type(frame['source']) is str and
+             frame['source'] in set(sources)|set(OWN) and prior.prior.relative_name(frame['source']) and
+             type(frame['line']) is int and 0<frame['line']<100000)
+    raw=json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+    need(len(raw)<=4096)
+    return json.loads(raw)
+
+
+def _write_backend_failure(context_path,value,setup_module):
+    """Known private sibling only; the fallback also handles setup import failure."""
+    import os
+    import stat
+    path=Path(context_path)
+    need(path.is_absolute() and '..' not in path.parts and path.name=='context.json')
+    need(all(not part.is_symlink() for part in (path,*path.parents)) and
+         stat.S_ISREG(path.stat().st_mode) and path.parent.is_dir())
+    target=path.parent/'backend.failure.json'
+    need(not target.exists() and not target.is_symlink())
+    if setup_module is not None:
+        setup_module.atomic_json(target,value,4096)
+        return
+    raw=(json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
+    need(len(raw)<=4096)
+    temporary=target.with_name(target.name+'.pending');created=False
+    try:
+        fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600);created=True
+        with os.fdopen(fd,'wb') as stream:stream.write(raw);stream.flush();os.fsync(stream.fileno())
+        os.replace(temporary,target);created=False
+        fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+        try:os.fsync(fd)
+        finally:os.close(fd)
+    finally:
+        if created:
+            try:temporary.unlink()
+            except OSError:pass
+
+
+def backend_preflight(context_path):
+    """Run the original gate once; retain bounded failure metadata and re-raise."""
+    setup_module=None
+    try:
+        from ..raw_kv_public_fresh import setup as setup_module
+        return setup_module.backend_preflight(context_path)
+    except BaseException as error:
+        try:
+            try:sources=contract_snapshot(composed=True)['sources']
+            except BaseException:
+                sources={}
+                for name in OWN:
+                    try:sources[name]=sha(read_source(name))
+                    except (OSError,ValueError):pass
+            stage,diagnostic=_backend_diagnostic(error,sources,setup_loaded=setup_module is not None)
+            value=validate_backend_failure(dict(schema=1,stage=stage,diagnostic=diagnostic,checks=_backend_checks()),sources)
+            _write_backend_failure(context_path,value,setup_module)
+        except BaseException:pass  # Never replace the original gate/import failure.
+        raise

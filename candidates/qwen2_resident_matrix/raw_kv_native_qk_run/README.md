@@ -6,11 +6,13 @@
 - 已完成：v2 诊断实现及冷控制测试；记录每模式 oneDNN primitive、CPU feature、原始输入/各阶段双方哈希与双库 fenv，只修改观察，不修改算术。
 - 已完成（revision 2）：100项完整冷测试 normal/-O（21.444/20.889秒），252-source/221-setup/10-overlay 真实 Git clone/compose/re-exec 来源证明；全过程阻止 numerical imports、CDLL 和 producer 执行。
 - 已完成：revision 3 精确诊断语法修复与固定 rejection reason 计数，104项冷测试 normal/-O 通过（22.654/21.156秒）。
-- 进行中：revision 3 最终来源冻结和独立审查；尚未执行新 native 数值尝试。
+- 已执行：revision 3 的 run38941569876 native16 原始数值 PASS，9条 matmul 全部识别；仅1条 information_record 未识别，native128 未运行。
 - 已执行：revision 2 的 fresh native16 原始数值 gate PASS，但诊断不完整，native128 未运行。
-- 待执行：revision 3 审查后一次有界 fresh native16→native128 诊断；Public/full-block 仍未进入。
+- 已完成：明确 v3 profile 将纯 informational 未知与数值继续资格分开；116项完整冷测试 normal/-O 通过（25.729/26.101秒），252/221/10 真实 Git 来源证明通过。
+- 进行中：最终独立审查；尚无 v3 新 native 数值结果。
+- 待执行：v3 审查后一次有界 fresh native16→native128；Public/full-block 仍未进入。
 
-## v2 诊断边界
+## 诊断边界（v2 历史、v3 延续）
 
 v2 使用新的明确 source contract，252 个来源（含 contract）、原始221-source setup、10个原有 overlays。冻结的 QKV/QK recipe 文件和原始数值判据保持原字节。额外的零模糊 patch 只给生成 gate 增加严格类型的可选诊断参数，在既有 native_forward 调用周围使用 PyTorch2.10 官方 `mkldnn.verbose(VERBOSE_ON)` 上下文；AST 逆投影检查恢复整个原模块。该 API 只控制日志，不设置 ISA、backend 算术模式或线程选项。
 
@@ -18,7 +20,7 @@ v2 使用新的明确 source contract，252 个来源（含 contract）、原始
 
 原始 RESULT 已有每阶段 actual/reference f32 SHA；验证后投影两模式全部29阶段哈希。13个固定输入 tensor 的 canonical digest map 与可变 HTTP receipt metadata 分开。两库加载前后和 Recipe/gate 前后只读取 x87/SSE rounding、FTZ/DAZ；不调用 setter。额外 host 诊断存储不是硬件 SRAM。所有 safe 字段有固定 schema/数量/类型限制，原始 stdout、CPU model、路径、张量、weights 均不上传。
 
-诊断数值结果与观察完整性分别记录；任何数值失败保持 FAILED，诊断证据不能替代原始29阶段结果或提升 acceptance。库/build/source 哈希、最终 source postflight 与完整诊断同时满足才允许本 profile 终态 PASS。
+诊断数值结果与观察完整性分别记录；任何数值失败保持 FAILED，诊断证据不能替代原始29阶段结果或提升 acceptance。库/build/source 哈希、最终 source postflight 与完整诊断同时满足才允许原完整终态 PASS。v3 的纯 info 未知分支使用下面独立终态，保留不完整标记。
 
 ## 数值与来源边界
 
@@ -59,3 +61,21 @@ run38938744221 的 fresh native16 原始数值判据通过，但 BF16 capture �
 - https://github.com/uxlfoundation/oneDNN/blob/8d263e693366ef8db40acc569cc7d8edf644556d/src/common/verbose.cpp#L788-L804
 
 默认 sum token 只对应 scale=1、zero-point=0、dtype=undef；sum:2、附加未知 post-op 和变体 header 仍拒绝。这里只修复观察语法，不证明原始当前四条未知记录的具体内容，也不更改实际 sum 算术。
+
+## v3 / revision 4：数值继续与纯 info 未知分开
+
+新明确 profile 为 qwen2-fresh-native-qkv-qk-dispatch-m16-m128-v3。原始 native 数值计算、全部判据、两份 recipe、生成 gate、预算和 CPU placement 规则保持不变。
+
+只有标记及版本精确为 onednn_verbose,v1,info 的非空可打印记录，才能进入固定六类未知 info 计数：version、cpu_runtime、cpu_isa、gpu_runtime、graph_backend、other。未知文本不输出。未知版本标记、operation、primitive/graph template、execution 字段、malformed、truncated 均继续阻止后续执行。未知 ISA 仅是未知观察，不会被当作已验证身份；原 Torch backend gate 仍独立执行。
+
+继续 native128 必须同时具备本次原始 native16 数值 PASS、全部 RESULT/export/source/双库 postflight 和绑定、CPU/build/六个 fenv 观察，以及完整9条 BF16 matmul inventory：QKV_KV×2、DENSE_HIDDEN×2、MLP×3；M16 再有 QK/PV 各1，M128 为 ATTENTION_SQUARE×2。所有输入与输出 descriptor 必须 BF16。只有余下缺口全部是上述顶层 info 时可继续；观察状态仍为 INCOMPLETE_DIAGNOSTICS/UNSUPPORTED，backend_order_proven=false。
+
+若两次原始数值 gate 都通过而仍有纯 info 未知，最终明确记录 PASS_NUMERICAL_M16_M128_INCOMPLETE_DIAGNOSTICS；不会写成原 PASS_NATIVE_QKV_QK_M16_M128。任一数值失败仍 FAILED。旧失败运行的收据和结论保持原样。
+
+已审计 pinned oneDNN 全部 common header、CPU ISA、runtime、graph 与设备信息发出路径。新增精确认识的 AMX FP16 描述来自 get_name()；runtime 的官方拼写是 sequential。最高可用 ISA header 不等于每个 primitive 的实现身份。缺失 AMX FP16 描述是当前1条未知信息的候选解释，原始当前行未保存，不能宣称已查明。
+
+- https://github.com/uxlfoundation/oneDNN/blob/8d263e693366ef8db40acc569cc7d8edf644556d/src/cpu/x64/cpu_isa_traits.cpp#L124-L186
+- https://github.com/uxlfoundation/oneDNN/blob/8d263e693366ef8db40acc569cc7d8edf644556d/src/common/dnnl_debug.cpp#L30-L42
+- https://github.com/uxlfoundation/oneDNN/blob/8d263e693366ef8db40acc569cc7d8edf644556d/src/common/verbose.cpp#L88-L163
+
+实验配置、设备描述及其它未审阅 info 继续保留未知；不为使日志“完整”而宽泛接受。这里没有新增数值执行结果。

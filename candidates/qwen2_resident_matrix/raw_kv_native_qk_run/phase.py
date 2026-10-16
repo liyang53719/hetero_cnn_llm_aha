@@ -294,6 +294,42 @@ def _completed_dispatch(observed):
         observed['fp32']['status'] in ('COMPLETE_DIAGNOSTIC','NO_ONEDNN_EXECUTION_OBSERVED'))
 
 
+
+def continuation_eligible(value):
+    """Permit numerical comparison with incomplete info-only observations.
+
+    This is not diagnostic completeness, CPU/ISA identity, or numerical PASS.
+    Callers must independently require the original native acceptance receipt.
+    """
+    from . import dispatch_diagnostic as diagnostic
+    value=validate_diagnostics(value)
+    if not value['postflight_complete'] or value['cpu'] is None or value['backend_build'] is None:
+        return False
+    env=value['fenv'];loads=env['libraries']
+    snapshots=list((loads or {}).values())+[env[k] for k in ('before_recipe','after_recipe','after_gate')]
+    if len(snapshots)!=6 or any(v is None or v['status']!='OBSERVED' for v in snapshots):
+        return False
+    observed=value['capture']
+    if observed is None:return False
+    for mode in ('bf16','fp32'):
+        capture=observed[mode]
+        if capture['status'] not in ('COMPLETE_DIAGNOSTIC','NO_ONEDNN_EXECUTION_OBSERVED') and not diagnostic.has_only_informational_unknowns(capture):
+            return False
+    # Original native_forward: Q/K/V, QK, PV, O, gate/up/down = nine matmuls.
+    bf16=observed['bf16']
+    expected={'QKV_KV':2,'DENSE_HIDDEN':2,'MLP':3}
+    expected.update({'QK':1,'PV':1} if value['tokens']==16 else {'ATTENTION_SQUARE':2})
+    actual={}
+    if bf16['exec_records']!=9:return False
+    for record in bf16['records']:
+        if record['primitive']!='matmul':return False
+        desc=record['descriptors']
+        if any(desc.get(k,{}).get('dtype')!='bf16' for k in ('src','wei','dst')):return False
+        if 'bia' in desc and desc['bia']['dtype'] not in ('bf16','undef'):return False
+        actual[record['role']]=actual.get(record['role'],0)+record['count']
+    return actual==expected
+
+
 def validate_diagnostics(value):
     from . import dispatch_capture as capture_module,dispatch_diagnostic as diagnostic
     fixed=dict(schema=2,diagnostic_only=True,numerical_acceptance=False,backend_order_proven=False,
@@ -433,7 +469,7 @@ def run(name,context_path):
                 prior['source_manifest_sha256']==kernel.sha(kernel.encoded(sources)) and prior['contract_sha256']==context['contract_sha256'])
             prior_diagnostics=validate_diagnostics(kernel.json_bytes(
                 kernel.read(workspace/'phase_native16_diagnostics.json',MAX_DIAGNOSTICS),MAX_DIAGNOSTICS))
-            need(prior_diagnostics['tokens']==16 and prior_diagnostics['status']=='COMPLETE_DIAGNOSTICS' and
+            need(prior_diagnostics['tokens']==16 and continuation_eligible(prior_diagnostics) and
                 prior_diagnostics['postflight_complete'] is True and
                 all(prior_diagnostics[key]==prior[key] for key in ('result_sha256','payload_manifest_sha256',
                     'source_manifest_sha256','contract_sha256','generated_module_sha256','library_sha256','qkv_library_sha256')))
@@ -465,7 +501,7 @@ def run(name,context_path):
         observation=diagnostic_record(context,tokens,library,qkv_library,capture.report(),cpu,backend,environment,validated)
         kernel._atomic(diagnostic_destination,observation)
         _phase_remaining(context,end)
-        return 0 if report['native_acceptance'] and observation['status']=='COMPLETE_DIAGNOSTICS' else 1
+        return 0 if report['native_acceptance'] and continuation_eligible(observation) else 1
 
     except BaseException:
         # Keep available bounded observations on exceptions without hiding the

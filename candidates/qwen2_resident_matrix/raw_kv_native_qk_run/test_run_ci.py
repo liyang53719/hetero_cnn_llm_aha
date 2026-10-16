@@ -83,17 +83,17 @@ def qkv_library_fixture():
 
 
 
-def diagnostics(context,native):
+def diagnostics(context,native,*,info_unknown=False):
     """Schema2 CONTROL_ONLY metadata, without CPU probes or numerical imports."""
     from .test_phase import diagnostics_fixture
-    value=diagnostics_fixture(native['tokens'])
+    value=diagnostics_fixture(native['tokens'],info_unknown=info_unknown)
     for key in ('tokens','source_manifest_sha256','contract_sha256','generated_module_sha256',
                 'library_sha256','qkv_library_sha256','result_sha256','payload_manifest_sha256'):
         value[key]=native[key]
     return phase.validate_diagnostics(value)
 
 
-def write_native(context,workspace,tokens,*,failed=False):
+def write_native(context,workspace,tokens,*,failed=False,info_unknown=False):
     """Tiny metadata file identities only; no native outputs exist."""
     payload=workspace/'payload/manifest.json'
     if not payload.exists():write_json(payload,{'fixture':'CONTROL_ONLY'})
@@ -103,7 +103,7 @@ def write_native(context,workspace,tokens,*,failed=False):
         m16_result_sha256=run.assets.file_sha(workspace/'native16/RESULT.json') if tokens==128 else None)
     value['payload_manifest_sha256']=run.assets.file_sha(payload)
     write_json(workspace/f'phase_native{tokens}.json',value)
-    write_json(workspace/f'phase_native{tokens}_diagnostics.json',diagnostics(context,value))
+    write_json(workspace/f'phase_native{tokens}_diagnostics.json',diagnostics(context,value,info_unknown=info_unknown))
     return value
 
 
@@ -198,6 +198,78 @@ class RunnerControlTests(unittest.TestCase):
                 summary['native_results']['native16']['result_sha256'])
             self.assertEqual(json.loads((out/'summary.json').read_text()),summary)
             self.assertNotEqual(json.loads((out/'progress.json').read_text())['status'],run.PASS)
+
+    def test_info_only_unknowns_continue_original_numerical_gates_with_distinct_status(self):
+        for incomplete in (('native16',),('native128',),('native16','native128')):
+            def child(context,private,kw):
+                if kw['phase'] in ('native16','native128'):
+                    write_native(context,private/'workspace',int(kw['phase'][6:]),
+                        info_unknown=kw['phase'] in incomplete)
+                return 0
+            with self.subTest(incomplete=incomplete),tempfile.TemporaryDirectory() as temp:
+                code,summary,calls,*_=self.exercise(Path(temp),child=child)
+                self.assertEqual((code,summary['status']),(0,run.NUMERICAL_PASS_INCOMPLETE))
+                self.assertEqual(calls[-1][1]['phase'],'native128')
+                self.assertIs(summary['numerical_acceptance'],True)
+                self.assertIs(summary['postflight_complete'],True)
+                self.assertNotEqual(summary['status'],run.PASS)
+                for name,value in summary['native_diagnostics'].items():
+                    self.assertEqual(value['status'],'INCOMPLETE_DIAGNOSTICS' if name in incomplete else 'COMPLETE_DIAGNOSTICS')
+                    self.assertIs(value['numerical_acceptance'],False)
+                    self.assertIs(value['backend_order_proven'],False)
+                    self.assertEqual(summary['native_results'][name]['status'],'COMPLETE_NATIVE_VALIDATION')
+                self.assertNotIn('PRIVATE',json.dumps(summary))
+
+    def test_info_unknowns_cannot_hide_original_numerical_failure_at_either_size(self):
+        for failed in ('native16','native128'):
+            def child(context,private,kw):
+                if kw['phase'] in ('native16','native128'):
+                    write_native(context,private/'workspace',int(kw['phase'][6:]),
+                        failed=kw['phase']==failed,info_unknown=True)
+                return 0
+            with self.subTest(failed=failed),tempfile.TemporaryDirectory() as temp:
+                code,summary,calls,*_=self.exercise(Path(temp),child=child)
+                self.assertEqual((code,summary['status']),(1,'FAILED'))
+                self.assertEqual(calls[-1][1]['phase'],failed)
+                self.assertIs(summary['numerical_acceptance'],False)
+                self.assertIs(summary['postflight_complete'],False)
+                self.assertEqual(summary['native_results'][failed]['status'],'FAIL_NATIVE_VALIDATION')
+                self.assertEqual(summary['native_results'][failed]['modes']['bf16']['failed_stages'],['y'])
+                self.assertEqual(summary['native_diagnostics'][failed]['status'],'INCOMPLETE_DIAGNOSTICS')
+
+    def test_continuation_rejects_missing_metadata_or_noninformational_unknowns(self):
+        for cause in ('cpu','backend','fenv','execution','inventory'):
+            checked=[]
+            def child(context,private,kw):
+                if kw['phase']=='native16':
+                    native=write_native(context,private/'workspace',16,info_unknown=True)
+                    value=diagnostics(context,native,info_unknown=True)
+                    if cause=='cpu':value['cpu']=None
+                    elif cause=='backend':value['backend_build']=None
+                    elif cause=='fenv':
+                        value['fenv']['after_gate']={'status':'UNSUPPORTED'}
+                        value['fenv_changes']=phase.fenv_changes(value['fenv'])
+                    elif cause=='execution':
+                        reasons=value['capture']['bf16']['unsupported_reasons']
+                        reasons['implementation']=reasons['information_record'];reasons['information_record']=0
+                        value['capture']['bf16']['unsupported_info_subtypes']=dict.fromkeys(
+                            value['capture']['bf16']['unsupported_info_subtypes'],0)
+                    else:
+                        observed=value['capture']['bf16']
+                        record=next(item for item in observed['records'] if item['count']>1)
+                        record['count']-=1;observed['exec_records']-=1;observed['lines_observed']-=1
+                    phase.validate_diagnostics(value)
+                    checked.append(value)
+                    write_json(private/'workspace/phase_native16_diagnostics.json',value)
+                return 0
+            with self.subTest(cause=cause),tempfile.TemporaryDirectory() as temp:
+                code,summary,calls,*_=self.exercise(Path(temp),child=child)
+                self.assertEqual(len(checked),1)
+                self.assertIs(phase.continuation_eligible(checked[0]),False)
+                self.assertEqual((code,summary['status']),(1,'FAILED'))
+                self.assertEqual(calls[-1][1]['phase'],'native16')
+                self.assertIs(summary['numerical_acceptance'],False)
+                self.assertEqual(summary['native_results']['native16']['status'],'COMPLETE_NATIVE_VALIDATION')
 
     def test_failed_native16_stops_native128_and_retains_validated_failure(self):
         for kind in ('nonzero','zero_with_failed_report','missing'):
@@ -404,11 +476,12 @@ class RunnerControlTests(unittest.TestCase):
                 records[0]['count']=1000
                 for item in records[1:]:item['count']=100
                 count=sum(item['count'] for item in records)
-                reasons=dict.fromkeys(D.UNSUPPORTED_REASONS,400)
+                reasons=dict.fromkeys(D.UNSUPPORTED_REASONS,300)
                 reasons[D.UNSUPPORTED_REASONS[0]]=1000
                 unsupported=sum(reasons.values())
                 capture.update(records=records,exec_records=count,status='UNSUPPORTED',
                     unsupported_records=unsupported,unsupported_reasons=reasons,
+                    unsupported_info_subtypes={name:300 if name=='other' else 0 for name in D.UNSUPPORTED_INFO_SUBTYPES},
                     lines_observed=D.MAX_LINES,info_records=D.MAX_LINES-count-unsupported)
             observed['status']='INCOMPLETE_DIAGNOSTICS'
             observed['cpu']['processor_records']=4096
@@ -518,25 +591,27 @@ class RunnerControlTests(unittest.TestCase):
             with self.assertRaises(ValueError):run.read_launch(path,'0'*64)
 
     def test_failure_summary_cannot_upgrade_and_does_not_leak_exception_text(self):
-        for error in (RuntimeError('SECRET /private raw_tensor https://signed'),
-                      subprocess.TimeoutExpired(['SECRET'],1),InterruptedError('SECRET')):
+        for status,error in ((status,error) for status in run.SUCCESS_STATUSES for error in
+                (RuntimeError('SECRET /private raw_tensor https://signed'),
+                 subprocess.TimeoutExpired(['SECRET'],1),InterruptedError('SECRET'))):
             with self.subTest(error=type(error).__name__),tempfile.TemporaryDirectory() as temp:
                 out=Path(temp);start=time.monotonic_ns();budget=run.Budget(start,start+900*10**9)
-                summary=run.new_summary(start);summary.update(status=run.PASS,phase='native16',
+                summary=run.new_summary(start);summary.update(status=status,phase='native16',
                     numerical_acceptance=True,postflight_complete=True)
                 code,value=run.finish(out,summary,budget,error,SOURCES)
                 self.assertEqual(code,1);self.assertFalse(value['numerical_acceptance']);self.assertFalse(value['postflight_complete'])
                 self.assertEqual(value['status'],'TIMEOUT' if isinstance(error,subprocess.TimeoutExpired)
                     else 'INTERRUPTED' if isinstance(error,InterruptedError) else 'FAILED')
                 public=(out/'summary.json').read_text()+(out/'progress.json').read_text()
-                for forbidden in ('SECRET','/private','raw_tensor','https://',run.PASS):self.assertNotIn(forbidden,public)
+                for forbidden in ('SECRET','/private','raw_tensor','https://',*run.SUCCESS_STATUSES):self.assertNotIn(forbidden,public)
                 self.assertEqual({p.name for p in out.iterdir()},{'summary.json','progress.json'})
 
     def test_publish_exact_allowlist_and_pending_success_marker(self):
         with tempfile.TemporaryDirectory() as temp:
-            out=Path(temp);summary=run.new_summary(time.monotonic_ns());summary['status']=run.PASS
-            run.publish(out,summary)
-            self.assertEqual(json.loads((out/'progress.json').read_text())['status'],'TERMINAL_RECEIPT_PENDING')
+            out=Path(temp);summary=run.new_summary(time.monotonic_ns())
+            for status in run.SUCCESS_STATUSES:
+                summary['status']=status;run.publish(out,summary)
+                self.assertEqual(json.loads((out/'progress.json').read_text())['status'],'TERMINAL_RECEIPT_PENDING')
             (out/'private.log').write_text('SECRET')
             with self.assertRaises(ValueError):run.publish(out,summary)
 
@@ -959,6 +1034,25 @@ class RunnerControlTests(unittest.TestCase):
                 value=deepcopy(good);del value['native_diagnostics'];run.publish(out,value)
                 with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'success')
 
+    def test_placement_distinguishes_numerical_pass_from_complete_diagnostics(self):
+        for incomplete in (('native16',),('native128',),('native16','native128')):
+            with self.subTest(incomplete=incomplete),tempfile.TemporaryDirectory() as temp:
+                out=Path(temp);good,_=placement_fixture(out,passed=True)
+                context=dict(source_sha256=SOURCES,contract_sha256=FROZEN['contract_sha256'],
+                    generated_module_sha256=FROZEN['generated_module_sha256'])
+                for name in incomplete:
+                    good['native_diagnostics'][name]=diagnostics(context,good['native_results'][name],info_unknown=True)
+                good['status']=run.NUMERICAL_PASS_INCOMPLETE;run.publish(out,good)
+                with patch.object(run.runtime,'snapshot',return_value=FROZEN),patch.object(run.prior,'git_identity'):
+                    self.assertEqual(run.placement_status(out,COMMIT,'success'),run.NUMERICAL_PASS_INCOMPLETE)
+                    with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
+                    run.publish(out,dict(good,status=run.PASS))
+                    with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'success')
+                    for name in incomplete:
+                        good['native_diagnostics'][name]=diagnostics(context,good['native_results'][name])
+                    run.publish(out,good)
+                    with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'success')
+
     def test_placement_cli_is_read_only_and_rejects_execution_modes(self):
         args=['--placement-status','--evidence','/CONTROL_ONLY/safe','--checkout-commit',COMMIT,'--attempt-outcome','failure']
         with patch.object(run,'placement_status',return_value='CPU_UNSUITABLE') as gate, \
@@ -988,11 +1082,11 @@ class RunnerControlTests(unittest.TestCase):
             self.assertIn(f'-placement-{index}',job)
             gate=job.split('          echo "status=$status" >> "$GITHUB_OUTPUT"\n',1)[1].split('      - name:',1)[0]
             gate='\n'.join(line.strip() for line in gate.splitlines())
-            expected=('if [ "$status" = "CPU_UNSUITABLE" ]; then exit 0; fi\n' if index==1 else '')+'test "$status" = "PASS_NATIVE_QKV_QK_M16_M128"'
+            expected=('if [ "$status" = "CPU_UNSUITABLE" ]; then exit 0; fi\n' if index==1 else '')+'test "$status" = "PASS_NATIVE_QKV_QK_M16_M128" || test "$status" = "PASS_NUMERICAL_M16_M128_INCOMPLETE_DIAGNOSTICS"'
             self.assertEqual(gate.strip(),expected)
-            for status in ('CPU_UNSUITABLE',run.PASS,'FAILED','TIMEOUT','NOT_RUN'):
+            for status in ('CPU_UNSUITABLE',*run.SUCCESS_STATUSES,'FAILED','TIMEOUT','NOT_RUN'):
                 result=subprocess.run(['sh','-c',gate],env=dict(os.environ,status=status),capture_output=True,timeout=2)
-                self.assertEqual(result.returncode,0 if status==run.PASS or (index==1 and status=='CPU_UNSUITABLE') else 1)
+                self.assertEqual(result.returncode,0 if status in run.SUCCESS_STATUSES or (index==1 and status=='CPU_UNSUITABLE') else 1)
         self.assertEqual(run.TOTAL,900);self.assertEqual(run.LIMITS,run.runtime.PHASE_LIMITS)
         old=run.assets.read_json(run.ROOT/run.runtime.ORIGINAL_CONTRACT)
         original_workflow='.github/workflows/raw-kv-public-m128.yml'

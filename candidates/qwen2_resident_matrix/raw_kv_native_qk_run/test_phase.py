@@ -60,13 +60,15 @@ def report_fixture(tokens=16,cause=None):
     return phase.project_result(value,**kwargs)
 
 
-def diagnostic_controls():
+def diagnostic_controls(tokens=16,info_unknown=False):
     """Metadata only; no CPU probe, library load, or numerical package import."""
     from . import dispatch_diagnostic as diagnostic
-    line=(b'onednn_verbose,v1,primitive,exec,cpu,matmul,brg_matmul:avx512_core_bf16,undef,'
-        b'src:bf16::blocked:ab::f0 wei:bf16::blocked:ab::f0 dst:bf16::blocked:ab::f0,'
-        b'attr-scratchpad:user,,16x1536:1536x256,0.01\n')
-    verbose=diagnostic.parse_verbose(line)
+    shapes=['%dx1536:1536x256'%tokens]*2+['%dx1536:1536x1536'%tokens]*2+['%dx1536:1536x8960'%tokens]*2+['%dx8960:8960x1536'%tokens]
+    shapes+=['12x%dx128:12x128x%d'%(tokens,tokens),'12x%dx%d:12x%dx128'%(tokens,tokens,tokens)]
+    lines=[('onednn_verbose,v1,primitive,exec,cpu,matmul,brg_matmul:avx512_core_bf16,undef,'
+        'src:bf16::blocked:ab::f0 wei:bf16::blocked:ab::f0 dst:bf16::blocked:ab::f0,'
+        'attr-scratchpad:user,,%s,0.01\n'%shape).encode() for shape in shapes]
+    verbose=diagnostic.parse_verbose(b''.join(lines)+(b'onednn_verbose,v1,info,cpu,isa:UNRECOGNIZED_PRIVATE\n' if info_unknown else b''))
     cpu=diagnostic.cpu_features(('processor : 0\nflags : '+' '.join(diagnostic.FLAGS)+'\n').encode())
     snapshot=dict(status='OBSERVED',x87_round=0,sse_round=0,ftz=False,daz=False)
     environment=dict(libraries={key:dict(snapshot) for key in ('before','after_qkv','after_qk')},
@@ -81,15 +83,54 @@ def diagnostic_controls():
     return dict(bf16=verbose,fp32=copy.deepcopy(verbose)),cpu,environment,backend,manifest
 
 
-def diagnostics_fixture(tokens=16,cause=None):
+def diagnostics_fixture(tokens=16,cause=None,info_unknown=False):
     value,kwargs=fixture(tokens,cause);report=phase.project_result(value,**kwargs)
-    observed,cpu,environment,backend,manifest=diagnostic_controls()
+    observed,cpu,environment,backend,manifest=diagnostic_controls(tokens,info_unknown)
     context={key:kwargs[key] for key in ('source_sha256','contract_sha256','generated_module_sha256')}
     return phase.diagnostic_record(context,tokens,kwargs['library'],kwargs['qkv_library'],observed,
         cpu,phase.backend_build(backend),environment,(value,report,manifest))
 
 
 class ProjectionTests(unittest.TestCase):
+    def test_continuation_requires_nine_recognized_matmuls_but_not_info_identity(self):
+        for tokens in (16,128):
+            for unknown in (False,True):
+                value=diagnostics_fixture(tokens,info_unknown=unknown)
+                self.assertTrue(phase.continuation_eligible(value))
+                self.assertEqual(value['status'],'INCOMPLETE_DIAGNOSTICS' if unknown else 'COMPLETE_DIAGNOSTICS')
+                self.assertFalse(value['backend_order_proven'])
+                self.assertFalse(value['numerical_acceptance'])
+            # Numerical verdict is a separate mandatory caller gate.
+            value=diagnostics_fixture(tokens,cause='budget',info_unknown=True)
+            self.assertTrue(phase.continuation_eligible(value))
+            self.assertFalse(report_fixture(tokens,cause='budget')['native_acceptance'])
+
+    def test_continuation_rejects_bad_execution_inventory_and_missing_postflight(self):
+        from . import dispatch_diagnostic as diagnostic
+        for case in ('missing','extra','wrong_role','wrong_dtype','unknown_op','header','version','malformed','truncated','empty','cpu','backend','fenv','postflight'):
+            value=diagnostics_fixture(info_unknown=True)
+            capture=value['capture']['bf16']
+            if case in ('missing','extra'):
+                delta=-1 if case=='missing' else 1
+                capture['records'][0]['count']+=delta;capture['exec_records']+=delta;capture['lines_observed']+=delta
+            elif case=='wrong_role':capture['records'][0]['role']='OTHER'
+            elif case=='wrong_dtype':capture['records'][0]['descriptors']['src']['dtype']='f32'
+            elif case in ('unknown_op','header','version','malformed','truncated','empty'):
+                raws={'unknown_op':b'onednn_verbose,v1,graph,exec,PRIVATE\n',
+                    'header':b'onednn_verbose,v1,primitive,info,UNKNOWN\n',
+                    'version':b'onednn_verbose,v2,info,cpu,isa:UNKNOWN\n',
+                    'malformed':b'PRIVATE\n','truncated':b'','empty':b''}
+                value['capture']['bf16']=diagnostic.parse_verbose(raws[case],truncated=case=='truncated')
+            elif case=='cpu':value['cpu']=None
+            elif case=='backend':value['backend_build']=None
+            elif case=='fenv':
+                value['fenv']['after_gate']={'status':'UNSUPPORTED'}
+                value['fenv_changes']=phase.fenv_changes(value['fenv'])
+            else:
+                value['postflight_complete']=False
+                for key in ('result_sha256','payload_manifest_sha256','payload_tensor_map_sha256','payload_sha256','stage_sha256'):value[key]=None
+            with self.subTest(case=case):self.assertFalse(phase.continuation_eligible(value))
+
     def test_complete_diagnostics_bind_hashes_without_changing_numeric_report(self):
         for tokens in (16,128):
             for cause in (None,'budget','bf16_semantics','fp32_semantics'):
@@ -296,10 +337,10 @@ class ProjectionTests(unittest.TestCase):
 
 
 class PhaseControlTests(unittest.TestCase):
-    def harness(self,temp,cause=None):
+    def harness(self,temp,cause=None,info_unknown=False):
         import candidates.qwen2_resident_matrix.raw_kv_native_qk_run as package
         import candidates.qwen2_resident_matrix.raw_kv_public_fresh as fresh
-        observed,cpu,environment,backend,manifest=diagnostic_controls()
+        observed,cpu,environment,backend,manifest=diagnostic_controls(16,info_unknown)
         payload_raw=kernel.encoded(manifest)
         root=Path(temp);(root/'payload').mkdir();(root/'payload/manifest.json').write_bytes(payload_raw)
         generated=root/'generated/scripts/qwen2_layer0_model_gate.py';generated.parent.mkdir(parents=True);generated.write_bytes(b'# CONTROL_ONLY')
@@ -316,6 +357,10 @@ class PhaseControlTests(unittest.TestCase):
         def run_gate(repo,payload,out,tokens,*,carried,threads,small_gate,qkv_recipe,diagnostics):
             self.assertEqual((repo,payload,carried,threads,qkv_recipe),(phase.ROOT,root/'payload',False,4,recipe))
             self.assertIs(diagnostics,native.capture)
+            if tokens==128:
+                for capture in native.capture.report.return_value.values():
+                    for record in capture['records']:
+                        if record['role'] in ('QK','PV'):record['role']='ATTENTION_SQUARE'
             value,_=fixture(tokens,cause)
             value['identity']['runner_sha256']=context['generated_module_sha256']
             value['payload_manifest_sha256']=kernel.sha(payload_raw)
@@ -348,6 +393,18 @@ class PhaseControlTests(unittest.TestCase):
             stack.enter_context(patch.object(dispatch_capture,'fenv_snapshot',return_value=native.environment['before_recipe']))
             stack.enter_context(patch.object(phase,'read_cpu_features',return_value=native.cpu))
             return phase.run(name,root/'validation_context.json')
+
+    def test_info_only_unknown_retains_incomplete_but_both_native_comparisons_run(self):
+        with tempfile.TemporaryDirectory() as temp:
+            parts=self.harness(temp,info_unknown=True)
+            self.assertEqual(self.invoke(parts,'native16'),0)
+            self.assertEqual(self.invoke(parts,'native128'),0)
+            self.assertEqual(parts[5].run_gate.call_count,2)
+            for name in ('native16','native128'):
+                value=json.loads((parts[2]/('phase_'+name+'_diagnostics.json')).read_text())
+                self.assertEqual(value['status'],'INCOMPLETE_DIAGNOSTICS')
+                self.assertTrue(phase.continuation_eligible(value))
+                self.assertFalse(value['backend_order_proven'])
 
     def test_separate_native_phases_bind_real_m16_result_and_safe_receipt(self):
         with tempfile.TemporaryDirectory() as temp:

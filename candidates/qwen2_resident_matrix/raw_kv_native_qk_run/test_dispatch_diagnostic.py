@@ -124,6 +124,7 @@ class DiagnosticTests(unittest.TestCase):
             'auxiliary': row().replace(b',,,', b',,PRIVATE,'),
             'information_header': GRAPH_HEADER.replace(b'implementation,', b'PRIVATE,'),
             'information_record': b'onednn_verbose,v1,info,PRIVATE\n',
+            'unknown_operation': b'onednn_verbose,v1,PRIVATE,exec\n',
         }
         self.assertEqual(set(fixtures), set(D.UNSUPPORTED_REASONS))
         for reason, raw in fixtures.items():
@@ -186,6 +187,121 @@ class DiagnosticTests(unittest.TestCase):
         self.assertEqual(value['info_records'], 1)
         self.assertNotIn('Intel', json.dumps(value))
         self.assertEqual(D.parse_verbose(header[:-1] + b',PRIVATE\n' + row())['status'], 'UNSUPPORTED')
+
+    def test_pinned_amx_fp16_isa_and_sequential_runtime_info(self):
+        header = (b'onednn_verbose,v1,info,cpu,isa:Intel AVX-512 with float16, '
+                  b'Intel DL Boost and bfloat16 support and Intel AMX with bfloat16, '
+                  b'float16 and 8-bit integer support\n')
+        sequential = b'onednn_verbose,v1,info,cpu,runtime:sequential,nthr:1\n'
+        value = D.parse_verbose(header + sequential + row())
+        self.assertEqual(value['status'], 'COMPLETE_DIAGNOSTIC')
+        self.assertEqual((value['info_records'], value['exec_records']), (2, 1))
+        self.assertEqual(value['records'][0]['isa'], 'avx512_core_bf16')
+        self.assertNotIn('Intel', json.dumps(value))
+        self.assertNotIn('sequential', json.dumps(value))
+        self.assertFalse(D.has_only_informational_unknowns(value))
+        for changed in (header.replace(b'bfloat16, float16', b'bfloat16, PRIVATE'),
+                        sequential.replace(b'sequential', b'SEQ')):
+            value = D.parse_verbose(changed)
+            self.assertEqual(value['status'], 'UNSUPPORTED')
+            self.assertTrue(D.has_only_informational_unknowns(value))
+            self.assertNotIn('PRIVATE', json.dumps(value))
+
+    def test_informational_unknown_subtypes_are_fixed_and_not_execution_evidence(self):
+        fixtures = {
+            'version': b'oneDNN vPRIVATE (commit PRIVATE)',
+            'cpu_runtime': b'cpu,runtime:PRIVATE,nthr:4',
+            'cpu_isa': b'cpu,isa:PRIVATE, PRIVATE',
+            'gpu_runtime': b'gpu,runtime:PRIVATE',
+            'graph_backend': b'graph,backend,PRIVATE',
+            'other': b'PRIVATE',
+        }
+        self.assertEqual(set(fixtures), set(D.UNSUPPORTED_INFO_SUBTYPES))
+        for subtype, body in fixtures.items():
+            raw = b'onednn_verbose,v1,info,' + body + b'\n'
+            for capture in (raw, raw + row()):
+                with self.subTest(subtype=subtype, execution=bool(capture != raw)):
+                    value = D.parse_verbose(capture)
+                    self.assertEqual(value['status'], 'UNSUPPORTED')
+                    self.assertTrue(D.has_only_informational_unknowns(value))
+                    self.assertEqual(value['unsupported_reasons']['information_record'], 1)
+                    self.assertEqual(value['unsupported_info_subtypes'],
+                        {key: int(key == subtype) for key in D.UNSUPPORTED_INFO_SUBTYPES})
+                    self.assertFalse(value['numerical_acceptance'])
+                    self.assertFalse(value['backend_order_proven'])
+                    self.assertNotIn('PRIVATE', json.dumps(value))
+        value = D.parse_verbose(b''.join(b'onednn_verbose,v1,info,' + body + b'\n'
+            for body in fixtures.values()))
+        self.assertTrue(D.has_only_informational_unknowns(value))
+        self.assertEqual(value['exec_records'], 0)
+        self.assertEqual(value['unsupported_info_subtypes'], dict.fromkeys(D.UNSUPPORTED_INFO_SUBTYPES, 1))
+        self.assertEqual(D.validate_verbose(json.loads(json.dumps(value))), value)
+
+    def test_only_info_helper_rejects_headers_operations_versions_and_execution_unknowns(self):
+        info = b'onednn_verbose,v1,info,cpu,isa:PRIVATE\n'
+        blockers = (
+            GRAPH_HEADER.replace(b'implementation,', b'PRIVATE,'),
+            b'onednn_verbose,v1,primitive,info,PRIVATE\n',
+            b'onednn_verbose,v1,graph,exec,PRIVATE\n',
+            b'onednn_verbose,v1,primitive,create,PRIVATE\n',
+            b'onednn_verbose,v1,common,info,PRIVATE\n',
+            b'onednn_verbose,v1,error,PRIVATE\n',
+            info.replace(b',v1,', b',v2,'),
+            row(impl='PRIVATE'), row(attrs='PRIVATE'),
+            row().replace(b',,,', b',,bia_mask:2,'),
+        )
+        for blocker in blockers:
+            for capture in (blocker, info + blocker, blocker + info):
+                value = D.parse_verbose(row() + capture)
+                self.assertEqual(value['status'], 'UNSUPPORTED')
+                self.assertFalse(D.has_only_informational_unknowns(value))
+                self.assertNotIn('PRIVATE', json.dumps(value))
+        for raw in (b'onednn_verbose,v1,graph,exec,PRIVATE\n',
+                    b'onednn_verbose,v1,primitive,create,PRIVATE\n',
+                    b'onednn_verbose,v1,common,info,PRIVATE\n'):
+            value = D.parse_verbose(raw)
+            self.assertEqual(value['unsupported_reasons']['unknown_operation'], 1)
+            self.assertEqual(value['unsupported_reasons']['information_record'], 0)
+            self.assertEqual(value['unsupported_info_subtypes'], dict.fromkeys(D.UNSUPPORTED_INFO_SUBTYPES, 0))
+        for capture in (b'', row(), GRAPH_HEADER):
+            self.assertFalse(D.has_only_informational_unknowns(D.parse_verbose(capture)))
+
+    def test_info_helper_never_qualifies_malformed_or_truncated_records(self):
+        info = b'onednn_verbose,v1,info,cpu,isa:PRIVATE\n'
+        malformed = (b'onednn_verbose,v1,info,\n', b'onednn_verbose,v1,info, \n',
+                     b'onednn_verbose,v1,info,PRIVATE,\n',
+                     b'onednn_verbose,v1,info,PRIVATE\x00\n',
+                     b'private,v1,info,PRIVATE\n', b'onednn_verbose,v1,info,\xff\n',
+                     row().replace(b'0.0129395', b'NaN'))
+        for raw in malformed:
+            value = D.parse_verbose(info + row() + raw)
+            self.assertEqual(value['status'], 'INCOMPLETE')
+            self.assertGreater(value['malformed_records'], 0)
+            self.assertFalse(D.has_only_informational_unknowns(value))
+        for raw, flag in ((info[:-1], False), (info + row(), True)):
+            value = D.parse_verbose(raw, truncated=flag)
+            self.assertEqual(value['status'], 'INCOMPLETE')
+            self.assertFalse(D.has_only_informational_unknowns(value))
+
+    def test_info_subtype_schema_rejects_aliases_unknown_keys_and_forged_totals(self):
+        baseline = D.parse_verbose(b'onednn_verbose,v1,info,cpu,isa:PRIVATE\n')
+        for mutate in (lambda v: v.pop('unsupported_info_subtypes'),
+                       lambda v: v.update(unsupported_info_subtypes=[]),
+                       lambda v: v['unsupported_info_subtypes'].pop('other'),
+                       lambda v: v['unsupported_info_subtypes'].update(PRIVATE=0),
+                       lambda v: v['unsupported_info_subtypes'].update(cpu_isa=True),
+                       lambda v: v['unsupported_info_subtypes'].update(cpu_isa=1.0),
+                       lambda v: v['unsupported_info_subtypes'].update(cpu_isa=-1),
+                       lambda v: v['unsupported_info_subtypes'].update(cpu_isa=D.MAX_LINES + 1),
+                       lambda v: v['unsupported_info_subtypes'].update(cpu_isa=0),
+                       lambda v: v['unsupported_info_subtypes'].update(other=1),
+                       lambda v: v['unsupported_reasons'].update(information_record=0, unknown_operation=1)):
+            changed = copy.deepcopy(baseline); mutate(changed)
+            with self.assertRaises(ValueError): D.validate_verbose(changed)
+            with self.assertRaises(ValueError): D.has_only_informational_unknowns(changed)
+        projected = D.validate_verbose(baseline)
+        projected['unsupported_info_subtypes']['cpu_isa'] = 0
+        self.assertEqual(baseline['unsupported_info_subtypes']['cpu_isa'], 1)
 
     def test_unknowns_are_explicit_and_never_echoed(self):
         unknown = (

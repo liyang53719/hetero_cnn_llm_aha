@@ -53,7 +53,9 @@ PROPS = ('undef', 'forward', 'forward_training', 'forward_inference')
 HASH_FIELDS = ('actual_f32_sha256', 'reference_f32_sha256')
 UNSUPPORTED_REASONS = ('verbose_version', 'engine', 'primitive', 'implementation',
     'prop_kind', 'memory_descriptor', 'attributes', 'auxiliary',
-    'information_header', 'information_record')
+    'information_header', 'information_record', 'unknown_operation')
+UNSUPPORTED_INFO_SUBTYPES = ('version', 'cpu_runtime', 'cpu_isa', 'gpu_runtime',
+    'graph_backend', 'other')
 
 
 def need(ok):
@@ -178,8 +180,9 @@ def cpu_features(raw):
 
 
 class _Unsupported(Exception):
-    def __init__(self, reason):
+    def __init__(self, reason, info_subtype=None):
         self.reason = reason
+        self.info_subtype = info_subtype
         super().__init__()
 
 
@@ -249,6 +252,17 @@ def _execution(parts):
                 role=_role(primitive, problem), descriptors=desc, count=1)
 
 
+def _info_subtype(body):
+    # These labels describe only validated v1 info records, never executions.
+    if body[0].startswith('oneDNN '): return 'version'
+    if len(body) >= 2:
+        if body[0] == 'cpu' and body[1].startswith('runtime:'): return 'cpu_runtime'
+        if body[0] == 'cpu' and body[1].startswith('isa:'): return 'cpu_isa'
+        if body[0] == 'gpu' and body[1].startswith('runtime:'): return 'gpu_runtime'
+        if body[:2] == ['graph', 'backend']: return 'graph_backend'
+    return 'other'
+
+
 def _information(parts):
     # Headers are recognized, discarded, and never used as execution evidence.
     if parts[2:4] == ['primitive', 'info']:
@@ -262,12 +276,13 @@ def _information(parts):
              'op_names', 'data_formats', 'logical_tensors', 'fpmath_mode', 'implementation',
              'backend', 'exec_time'], 'information_header')
         return
-    _known(parts[2] == 'info', 'information_record')
+    _known(parts[2] == 'info', 'unknown_operation')
     body = parts[3:]
+    need(all(part.strip() and all(' ' <= char <= '~' for char in part) for part in body))
     if len(body) == 1:
         version = re.fullmatch(r'oneDNN v3\.([0-9]{1,2})\.[0-9]+ \(commit [0-9a-f]{7,40}\)', body[0])
         if version and int(version[1]) >= 7: return
-    if len(body) == 3 and body[0] == 'cpu' and body[1] in ('runtime:OpenMP', 'runtime:TBB', 'runtime:SEQ') and re.fullmatch(r'nthr:[1-9][0-9]{0,3}', body[2]): return
+    if len(body) == 3 and body[0] == 'cpu' and body[1] in ('runtime:OpenMP', 'runtime:TBB', 'runtime:sequential') and re.fullmatch(r'nthr:[1-9][0-9]{0,3}', body[2]): return
     if body == ['gpu', 'runtime:none']: return
     if body == ['graph', 'backend', '0:dnnl_backend']: return
     # ISA descriptions may themselves contain commas in the documented CSV.
@@ -277,9 +292,11 @@ def _information(parts):
         'isa:Intel AVX-512 with Intel DL Boost',
         'isa:Intel AVX-512 with Intel DL Boost and bfloat16 support',
         'isa:Intel AVX-512 with float16, Intel DL Boost and bfloat16 support and Intel AMX with bfloat16 and 8-bit integer support',
+        # oneDNN 8d263e693366ef8db40acc569cc7d8edf644556d, cpu_isa_traits.cpp.
+        'isa:Intel AVX-512 with float16, Intel DL Boost and bfloat16 support and Intel AMX with bfloat16, float16 and 8-bit integer support',
         'isa:Intel AVX-512 with Intel DL Boost and bfloat16 support and Intel AMX with bfloat16 and 8-bit integer support',
         'isa:Intel AVX10.1 and Intel AMX with bfloat16 and 8-bit integer support'): return
-    raise _Unsupported('information_record')
+    raise _Unsupported('information_record', _info_subtype(body))
 
 
 def parse_verbose(raw, *, truncated=False):
@@ -288,6 +305,7 @@ def parse_verbose(raw, *, truncated=False):
         numerical_acceptance=False, status='INCOMPLETE', truncated=truncated,
         lines_observed=0, exec_records=0, info_records=0, unsupported_records=0,
         unsupported_reasons={reason: 0 for reason in UNSUPPORTED_REASONS},
+        unsupported_info_subtypes={subtype: 0 for subtype in UNSUPPORTED_INFO_SUBTYPES},
         malformed_records=0, records=[])
     if len(raw) > MAX_LOG_BYTES:
         out['truncated'] = True
@@ -328,6 +346,8 @@ def parse_verbose(raw, *, truncated=False):
             out['unsupported_records'] += 1
             # Count only the first failing check, using fixed labels, never input.
             out['unsupported_reasons'][error.reason] += 1
+            if error.reason == 'information_record':
+                out['unsupported_info_subtypes'][error.info_subtype] += 1
         except (ValueError, UnicodeError, OverflowError):
             out['malformed_records'] += 1
     if not out['truncated'] and not out['malformed_records'] and out['exec_records']:
@@ -340,7 +360,8 @@ def parse_verbose(raw, *, truncated=False):
 def validate_verbose(value):
     _keys(value, ('schema', 'diagnostic_only', 'backend_order_proven', 'numerical_acceptance',
         'status', 'truncated', 'lines_observed', 'exec_records', 'info_records',
-        'unsupported_records', 'unsupported_reasons', 'malformed_records', 'records'))
+        'unsupported_records', 'unsupported_reasons', 'unsupported_info_subtypes',
+        'malformed_records', 'records'))
     need(type(value['schema']) is int and value['schema'] == 1 and value['diagnostic_only'] is True and
          value['backend_order_proven'] is False and value['numerical_acceptance'] is False and type(value['truncated']) is bool)
     for key in ('lines_observed', 'info_records', 'unsupported_records', 'malformed_records'):
@@ -349,6 +370,10 @@ def validate_verbose(value):
     for count in value['unsupported_reasons'].values():
         _int(count, 0, MAX_LINES)
     need(sum(value['unsupported_reasons'].values()) == value['unsupported_records'])
+    _keys(value['unsupported_info_subtypes'], UNSUPPORTED_INFO_SUBTYPES)
+    for count in value['unsupported_info_subtypes'].values():
+        _int(count, 0, MAX_LINES)
+    need(sum(value['unsupported_info_subtypes'].values()) == value['unsupported_reasons']['information_record'])
     _int(value['exec_records'], 0, MAX_RECORDS)
     need(type(value['records']) is list and len(value['records']) <= MAX_GROUPS)
     records = []
@@ -377,4 +402,16 @@ def validate_verbose(value):
         elif value['exec_records']: expected = 'COMPLETE_DIAGNOSTIC'
         else: expected = 'NO_ONEDNN_EXECUTION_OBSERVED'
     need(type(value['status']) is str and value['status'] == expected)
-    return {**value, 'unsupported_reasons': dict(value['unsupported_reasons']), 'records': records}
+    return {**value, 'unsupported_reasons': dict(value['unsupported_reasons']),
+        'unsupported_info_subtypes': dict(value['unsupported_info_subtypes']), 'records': records}
+
+
+def has_only_informational_unknowns(value):
+    """Classify a complete capture's unknowns; do not certify execution coverage.
+
+    The report remains UNSUPPORTED. Header mismatches, unknown operations and
+    execution-format or field failures never qualify as informational unknowns.
+    """
+    value = validate_verbose(value)
+    return (value['status'] == 'UNSUPPORTED' and
+        value['unsupported_records'] == value['unsupported_reasons']['information_record'])

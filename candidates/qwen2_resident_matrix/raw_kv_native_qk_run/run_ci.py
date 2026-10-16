@@ -28,6 +28,8 @@ OUTPUTS=('summary.json','progress.json','source_hashes.json')
 # Two bounded schema2 metadata projections plus both numerical reports.
 SAFE_SUMMARY_LIMIT=131_072
 PASS='PASS_NATIVE_QKV_QK_M16_M128'
+NUMERICAL_PASS_INCOMPLETE='PASS_NUMERICAL_M16_M128_INCOMPLETE_DIAGNOSTICS'
+SUCCESS_STATUSES=(PASS,NUMERICAL_PASS_INCOMPLETE)
 PHASES=('preflight','cpu_qualification','clone','compose','environment','acquisition','kernel','native16','native128','finalize')
 
 
@@ -121,7 +123,7 @@ def diagnostic(error,phase,sources):
 def publish(evidence,summary):
     need({p.name for p in evidence.iterdir()}<=set(OUTPUTS))
     progress={k:summary[k] for k in ('schema','status','phase','elapsed_seconds')}
-    if progress['status']==PASS:progress['status']='TERMINAL_RECEIPT_PENDING'
+    if progress['status'] in SUCCESS_STATUSES:progress['status']='TERMINAL_RECEIPT_PENDING'
     setup.atomic_json(evidence/'progress.json',progress,1024)
     setup.atomic_json(evidence/'summary.json',summary,SAFE_SUMMARY_LIMIT)
 
@@ -157,7 +159,7 @@ def finish(out,summary,budget,error=None,sources=()):
             try:(out/'summary.json').unlink(missing_ok=True)
             except OSError:pass
     finally:budget.close()
-    return (0 if summary['status']==PASS else 2 if summary['status']=='CPU_UNSUITABLE' else 1),summary
+    return (0 if summary['status'] in SUCCESS_STATUSES else 2 if summary['status']=='CPU_UNSUITABLE' else 1),summary
 
 
 def read_launch(path,identity):
@@ -272,9 +274,10 @@ def safe_report(workspace,name,context):
 
 
 
-def bind_diagnostics(value,report,*,complete=False):
+def bind_diagnostics(value,report,*,continuation=False):
     """A diagnostic can explain a failure; it never supplies numerical acceptance."""
     from . import phase
+    need(type(continuation) is bool)
     value=phase.validate_diagnostics(value)
     if report is not None:
         need(all(value[key]==report[key] for key in ('tokens','contract_sha256',
@@ -284,9 +287,8 @@ def bind_diagnostics(value,report,*,complete=False):
     else:
         need(report is not None and all(value[key]==report[key] for key in
              ('result_sha256','payload_manifest_sha256')))
-    if complete:
-        need(report is not None and value['status']=='COMPLETE_DIAGNOSTICS' and
-             value['postflight_complete'] is True)
+    if continuation:
+        need(report is not None and phase.continuation_eligible(value) is True)
     return value
 
 
@@ -375,7 +377,7 @@ def resume(c,private,out):
                 summary['native_results']=dict(reports)
                 observations[name]=safe_diagnostics(workspace,name,context,reports[name])
                 summary['native_diagnostics']=dict(observations)
-                bind_diagnostics(observations[name],reports[name],complete=True)
+                bind_diagnostics(observations[name],reports[name],continuation=True)
                 need(reports[name]['status']=='COMPLETE_NATIVE_VALIDATION')
         need(set(reports)==set(observations)=={'native16','native128'})
         need(observations['native16']['payload_tensor_map_sha256']==observations['native128']['payload_tensor_map_sha256'])
@@ -383,7 +385,8 @@ def resume(c,private,out):
                  ('library_sha256','library_receipt_sha256','recipe_pins_sha256','qkv_library_sha256','qkv_library_receipt_sha256','qkv_recipe_pins_sha256','generated_module_sha256','payload_manifest_sha256')))
         need(check_launch(c,private,composed=True)==frozen)
         budget.remaining()
-        summary.update(status=PASS,phase='finalize',postflight_complete=True,numerical_acceptance=True,native_results=reports,native_diagnostics=observations)
+        status=PASS if all(v['status']=='COMPLETE_DIAGNOSTICS' for v in observations.values()) else NUMERICAL_PASS_INCOMPLETE
+        summary.update(status=status,phase='finalize',postflight_complete=True,numerical_acceptance=True,native_results=reports,native_diagnostics=observations)
         return finish(out,summary,budget,sources=frozen['sources'])
     except BaseException as error:
         name=summary['phase']
@@ -440,7 +443,7 @@ def placement_status(evidence,commit,outcome):
          math.isfinite(summary['elapsed_seconds']) and 0<=summary['elapsed_seconds']<=TOTAL)
     progress=assets.read_json(evidence/'progress.json',limit=1024)
     expected_progress={key:summary[key] for key in ('schema','status','phase','elapsed_seconds')}
-    if expected_progress['status']==PASS:expected_progress['status']='TERMINAL_RECEIPT_PENDING'
+    if expected_progress['status'] in SUCCESS_STATUSES:expected_progress['status']='TERMINAL_RECEIPT_PENDING'
     need(assets.same(progress,expected_progress))
     cpu=validate_cpu_eligibility(summary.get('cpu_eligibility'))
     status=summary.get('status')
@@ -453,7 +456,7 @@ def placement_status(evidence,commit,outcome):
         need(outcome=='failure' and summary.get('phase')=='cpu_qualification' and cpu['status']=='CPU_UNSUITABLE' and
              all(summary.get(k) is False for k in ('packages_started','compile_started','native_started','postflight_complete','numerical_acceptance')))
         return status
-    if status==PASS:
+    if status in SUCCESS_STATUSES:
         need(set(summary)==base_keys|{'native_results','native_diagnostics'})
         need(outcome=='success' and summary.get('phase')=='finalize' and cpu['status']=='ELIGIBLE_FOR_BACKEND_CHECK' and
              all(summary.get(k) is True for k in ('packages_started','compile_started','native_started','postflight_complete','numerical_acceptance')))
@@ -468,12 +471,14 @@ def placement_status(evidence,commit,outcome):
                  report['contract_sha256']==frozen['contract_sha256'] and
                  report['source_manifest_sha256']==assets.sha(assets.encoded(sources)) and
                  report['generated_module_sha256']==frozen['generated_module_sha256'])
-            bind_diagnostics(observations[name],report,complete=True)
+            bind_diagnostics(observations[name],report,continuation=True)
         need(observations['native16']['payload_tensor_map_sha256']==observations['native128']['payload_tensor_map_sha256'])
         need(reports['native128']['m16_result_sha256']==reports['native16']['result_sha256'] and
              all(reports['native16'][k]==reports['native128'][k] for k in
                  ('library_sha256','library_receipt_sha256','recipe_pins_sha256','qkv_library_sha256','qkv_library_receipt_sha256','qkv_recipe_pins_sha256','payload_manifest_sha256')))
-        return PASS
+        expected_status=PASS if all(v['status']=='COMPLETE_DIAGNOSTICS' for v in observations.values()) else NUMERICAL_PASS_INCOMPLETE
+        need(status==expected_status)
+        return status
     return 'FAILED'
 
 

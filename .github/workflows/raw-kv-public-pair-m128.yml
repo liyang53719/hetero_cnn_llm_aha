@@ -1,5 +1,5 @@
 name: raw-kv-public-pair-m128
-# Revision 2: qualify a conservative CPU placement before packages; original numeric/dispatch gates unchanged.
+# Revision 3: qualify a conservative CPU placement before packages; original numeric/dispatch gates unchanged.
 # Placement two is allowed only after a validated pre-package CPU_UNSUITABLE.
 # At most one setup/numeric attempt: 900s setup,2430s numeric,3420s total. No numerical retries.
 on:
@@ -30,8 +30,8 @@ jobs:
       - name: Cold Public linked admission contracts
         timeout-minutes: 2
         run: |
-          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
-          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_numeric_progress -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_numeric_progress -q
       - name: Qualify CPU before packages and run at most one Public attempt
         id: attempt
         continue-on-error: true
@@ -75,8 +75,8 @@ jobs:
       - name: Cold Public linked admission contracts
         timeout-minutes: 2
         run: |
-          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
-          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_numeric_progress -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_numeric_progress -q
       - name: Qualify CPU before packages and run at most one Public attempt
         id: attempt
         continue-on-error: true

@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-16 22:20 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-16 23:25 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -55,15 +55,21 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   [实际Chisel前端](U00_2_DENSE_A_HOLD_FRONTEND_20261016_CN.md)四配置编译/CHIRRTL通过，CI38973350757总24.819秒；
   32个1R1W bank不变，Queue4→3，新增2048bit hold及78bit控制。尚无硬件协议执行、RTL、面积或时序验收。
 
+- **done：完整M16原Public链的27个assigned官方门限。**
+  [原始证据与边界](U00_2_PACKED_M16_ASSIGNED_GATES_20261016_CN.md)：首次Host请求类型错误的失败已独立保留，严格绑定实际PrefixJob后，
+  新运行21个完成、17个owner任务、10字段完整，固定算术逐位通过；总591.280260秒，实际数值569.456837秒，316源postflight。
+  状态严格为PASS_ASSIGNED_OFFICIAL_OBSERVED_GATES_ONLY；全29节点、M128、RTL及90%仍false。
+  M16已执行1,462,272个Dense物理step，不得把总软件耗时简单乘8当M128预测。
+
 ## 下一步，保持默认关闭并逐项验收
 
 1. **done：收齐be00失败结果。** 安全摘要/source身份已归档，数值比较和postflight未完成。新候选独立冻结，不据小切片推定旧运行PASS。
 2. **ongoing：原owner可选packed接入。** 在原OfficialAttentionOwner及原Matrix服务上增加
    明确profile2路径，接真实DDR/共享银行与原输入，保留原算术、默认路径和完整golden；
-   M1/M2的selected-fault围栏、返回/ACK/abort债务已验证；正在补完整M16的10字段观察器、fresh输入/两份参考及严格source准入。单独新编译的Matrix+SiLU库已通过构建校验，尚未运行完整M16。
+   M1/M2的selected-fault围栏、返回/ACK/abort债务已验证；完整M16的27个assigned官方门限已通过，见下方原始证据；全29节点仍未闭合。下一步是真实16-key分块M128的有界M17/M32校验与完整接入，不能以循环M1替代。
 3. **ongoing：A复用最小切片。** 按[源审计](../candidates/qwen2_resident_matrix/dense_a_reuse_audit/README_CN.md)
    保持同K的context-inner顺序；A gather从1,462,272降为298,496只是源级预期。
-   Queue4→3加256 B hold已接实际Chisel并通过前端资源核验，活跃payload1280→1216 B。下一步有界解释执行硬件握手；cache不等于FFN重叠或新增SRAM端口。
+   Queue4→3加256 B hold已接实际Chisel并通过前端资源核验，活跃payload1280→1216 B。有界解释执行在240秒超时，未取得握手通过证据，详见[失败归档](U00_2_A_HOLD_INTERPRETER_FAILURE_20261016_CN.md)；不扩大预算盲目重跑。cache不等于FFN重叠或新增SRAM端口。
 4. **to do：W供数替代方案。** 先保留实际maxBeats16/1KiB配置，比较同K相邻context的
    row coalescing与另行冻结格式的tiled W；更大mailbox/多在途均须独立资源和协议账。
    原逐64B sole-active路径至少2,924,544服务边沿，A复用不会减少93,585,408 B的W。

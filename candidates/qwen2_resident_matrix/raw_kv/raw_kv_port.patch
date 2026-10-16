@@ -1,0 +1,198 @@
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala
+@@ -134,9 +134,10 @@
+   * is the sole FP32-ingress hold. Native BF16 adds one 256-bit upper hold in
+   * the owner, for 512 bits total. There is no 4096-bit response-hold register.
+   */
+-class TransposedDownDenseBanks(enableFfnTiles:Boolean=false) extends Module {
++class TransposedDownDenseBanks(enableFfnTiles:Boolean=false,enableRawKv:Boolean=false) extends Module {
+   val io=IO(new Bundle {
+     val zero=Flipped(Valid(UInt(11.W)))
++    val rawKv=if(enableRawKv)Some(new RawKvPort)else None
+     val tiles=if(enableFfnTiles)Some(new FfnTilePort)else None
+     val tileEnable=if(enableFfnTiles)Some(Input(Bool()))else None
+     val activation=Flipped(Decoupled(new TransposedDownActivationLoad))
+@@ -152,6 +153,53 @@
+   val readPending=RegInit(false.B)
+   val selected=Reg(new TransposedDownOperandRead)
+   val tileSignals=if(enableFfnTiles)Some(Wire(new FfnTileBankSignals))else None
++  val kvBlock=WireDefault(false.B)
++  val kvRead=WireDefault(false.B);val kvWrite=WireDefault(false.B)
++  val kvLine=WireDefault(0.U(13.W));val kvWriteData=WireDefault(0.U(512.W))
++  val kvReadWords=Wire(Vec(16,UInt(256.W)))
++  kvReadWords:=0.U.asTypeOf(kvReadWords)
++  if(enableRawKv){
++    val p=io.rawKv.get
++    val leased=RegInit(false.B);val owner=Reg(UInt(32.W))
++    val poison=RegInit(false.B);val pending=RegInit(false.B)
++    val held=RegInit(false.B);val key=Reg(new RawKvKey)
++    val data=Reg(UInt(512.W))
++    val debt=pending || held
++    val tileQuiet=if(enableFfnTiles) !tileSignals.get.busy && !tileSignals.get.leased &&
++      !io.tiles.get.control.valid && !io.tiles.get.write.valid && !io.tiles.get.read.valid else true.B
++    val localQuiet= !rmwPending && !readPending && tileQuiet &&
++      !io.zero.valid && !io.activation.valid && !io.read.valid && !io.weight.valid
++    val stop=p.abort || p.softReset
++    kvBlock:=leased || poison
++    p.acquire.ready:= !leased && !debt && !poison && !stop && localQuiet && p.parentDrained && !p.release.valid && p.acquire.bits=/=0.U
++    p.release.ready:=leased && !debt && p.release.bits===owner && p.release.bits=/=0.U
++    p.request.ready:=leased && !debt && !poison && !stop && !p.acquire.valid && !p.release.valid &&
++      p.request.bits.key.owner===owner && p.request.bits.key.owner=/=0.U &&
++      p.request.bits.key.tag=/=0.U && p.request.bits.key.line<4096.U
++    p.response.valid:=held;p.response.bits.key:=key;p.response.bits.data:=data
++    p.ack.ready:=held && p.ack.bits.asUInt===key.asUInt && p.ack.bits.owner=/=0.U &&
++      p.ack.bits.tag=/=0.U && p.ack.bits.line<4096.U
++    p.leased:=leased;p.drained:= !debt;p.resetRequired:=poison || stop
++    when(p.acquire.fire){leased:=true.B;owner:=p.acquire.bits}
++    when(p.release.fire){leased:=false.B}
++    pending:=false.B
++    when(p.request.fire){
++      key:=p.request.bits.key;pending:=true.B
++      kvLine:=p.request.bits.key.line;kvWriteData:=p.request.bits.data
++      kvWrite:=p.request.bits.key.write;kvRead:= !p.request.bits.key.write
++    }
++    when(pending){
++      val low=Cat(key.line(2,0),0.U(1.W))
++      data:=Mux(key.write,0.U,Cat(kvReadWords(low+1.U),kvReadWords(low)))
++      held:=true.B
++    }
++    when(p.ack.fire){held:=false.B}
++    // Protocol reset/abort does not erase accepted SRAM or held response debt.
++    // Global module reset is cold reset, requiring system-level quiescence.
++    when(stop && (leased || debt)){poison:=true.B}
++    when(p.softReset && !leased && !debt){poison:=false.B}
++  }
++
+   if(enableFfnTiles){
+     val p=io.tiles.get;val x=tileSignals.get
+     val tags=RegInit(0.U.asTypeOf(Vec(3,new FfnTileState)))
+@@ -165,7 +213,7 @@
+     val outstanding=pendingWrite || pendingRead || responseValid
+     val quiet= !rmwPending && !readPending && !outstanding && !io.zero.valid &&
+       !io.activation.valid && !io.read.valid
+-    val admit=io.tileEnable.get && quiet && !poison && !p.abort
++    val admit=io.tileEnable.get && quiet && !poison && !p.abort && !kvBlock
+     p.control.ready:=admit
+     p.write.ready:=admit && !p.control.valid
+     p.read.ready:=admit && !p.control.valid && !p.write.valid
+@@ -229,11 +277,11 @@
+     }
+     // Poison does not retract a held response or cancel a reserved RMW edge.
+     when(p.abort){poison:=true.B}
+-    when(io.zero.valid){
++    when(io.zero.valid && !kvBlock){
+       assert(!outstanding,"clear cannot steal an accepted tile transaction")
+       when(occupied && io.zero.bits>=768.U){poison:=true.B}
+     }
+-    when(occupied && ((io.activation.valid && io.activation.bits.kWord>=96.U) ||
++    when(!kvBlock && occupied && ((io.activation.valid && io.activation.bits.kWord>=96.U) ||
+       (io.read.valid && io.read.bits.k>=1536.U))){poison:=true.B}
+   }
+   io.activation.ready:= !rmwPending && !io.zero.valid && !io.read.valid
+@@ -241,6 +289,9 @@
+   if(enableFfnTiles){
+     io.activation.ready:= !rmwPending && !io.zero.valid && !io.read.valid && !tileSignals.get.busy && (!tileSignals.get.leased || io.activation.bits.kWord<96.U)
+     io.read.ready:= !rmwPending && !io.zero.valid && !io.activation.valid && !tileSignals.get.busy && (!tileSignals.get.leased || io.read.bits.k<1536.U)
++  }
++  if(enableRawKv){
++    when(kvBlock){io.activation.ready:=false.B;io.read.ready:=false.B}
+   }
+   val readFire=io.read.fire
+   val loadFire=io.activation.fire
+@@ -250,7 +301,7 @@
+   io.activationBusy:=rmwPending
+   io.activationWritten:=rmwPending
+   io.response.valid:=readPending
+-  when(io.zero.valid){assert(!rmwPending && !loadFire && !readFire);assert(io.zero.bits<1376.U)}
++  when(io.zero.valid && !kvBlock){assert(!rmwPending && !loadFire && !readFire);assert(io.zero.bits<1376.U)}
+   when(loadFire){assert(io.activation.bits.kWord<160.U)}
+   when(readFire){assert(io.read.bits.k<2560.U && io.read.bits.context<5.U)}
+ 
+@@ -259,29 +310,40 @@
+     val mt=gatherK(3,0)^bank.U(4.W)
+     val gatherAddress=Cat(gatherK(11,4),0.U(3.W))+mt
+     val loadAddress=Cat(io.activation.bits.kWord,0.U(3.W))+io.activation.bits.m(6,4)
+-    val readEnable=if(enableFfnTiles)loadFire || (readFire && mt<8.U) || tileSignals.get.issueRead || tileSignals.get.issueWrite else loadFire || (readFire && mt<8.U)
+-    val address=if(enableFfnTiles)Mux(tileSignals.get.issueRead || tileSignals.get.issueWrite,tileSignals.get.word,Mux(loadFire,loadAddress,gatherAddress))else Mux(loadFire,loadAddress,gatherAddress)
++    val normalRead=if(enableFfnTiles)loadFire || (readFire && mt<8.U) || tileSignals.get.issueRead || tileSignals.get.issueWrite else loadFire || (readFire && mt<8.U)
++    val normalAddress=if(enableFfnTiles)Mux(tileSignals.get.issueRead || tileSignals.get.issueWrite,tileSignals.get.word,Mux(loadFire,loadAddress,gatherAddress))else Mux(loadFire,loadAddress,gatherAddress)
++    val kvSelected=kvLine(2,0)===(bank/2).U
++    val readEnable=normalRead || (kvRead && kvSelected)
++    val address=Mux(kvRead && kvSelected,kvLine>>3,normalAddress)
+     val response=aBanks(bank).read(address,readEnable)
++    kvReadWords(bank):=response
+     if(enableFfnTiles){tileSignals.get.readWords(bank):=response}
+     val merged=Wire(Vec(16,UInt(16.W)))
+     merged:=response.asTypeOf(Vec(16,UInt(16.W)))
+     val laneValue=rmw.value.asTypeOf(Vec(16,UInt(16.W)))
+     merged(rmw.m(3,0)):=laneValue(bank.U(4.W)^rmw.m(6,4))
++    val normalWrite=WireDefault(false.B)
++    val normalWriteAddress=WireDefault(0.U(11.W))
++    val normalWriteData=WireDefault(0.U(256.W))
+     if(enableFfnTiles){
+       val x=tileSignals.get
+       val tileMerged=Wire(Vec(8,UInt(32.W)));tileMerged:=response.asTypeOf(Vec(8,UInt(32.W)))
+       tileMerged(x.commitLane):=x.writeValue(bank)
+-      val writeAddress=Mux(x.commit,x.commitWord,Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4)))
+-      val clearLegal=io.zero.valid && !x.busy && (!x.leased || io.zero.bits<768.U)
+-      when(clearLegal || rmwPending || x.commit){
+-        assert(!(x.commit && (io.zero.valid || rmwPending)),"accepted tile RMW owns its next-cycle write edge")
+-        aBanks(bank).write(writeAddress,Mux(x.commit,tileMerged.asUInt,Mux(io.zero.valid,0.U(256.W),merged.asUInt)))
+-      }
++      normalWriteAddress:=Mux(x.commit,x.commitWord,Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4)))
++      val clearLegal=io.zero.valid && !kvBlock && !x.busy && (!x.leased || io.zero.bits<768.U)
++      normalWrite:=clearLegal || rmwPending || x.commit
++      normalWriteData:=Mux(x.commit,tileMerged.asUInt,Mux(io.zero.valid,0.U(256.W),merged.asUInt))
++      when(x.commit){assert(!(io.zero.valid || rmwPending),"accepted tile RMW owns its next-cycle write edge")}
+     }else{
+-      val writeAddress=Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4))
+-      when(io.zero.valid || rmwPending){
+-        aBanks(bank).write(writeAddress,Mux(io.zero.valid,0.U(256.W),merged.asUInt))
+-      }
++      normalWriteAddress:=Mux(io.zero.valid,io.zero.bits,Cat(rmw.kWord,0.U(3.W))+rmw.m(6,4))
++      normalWrite:= (io.zero.valid && !kvBlock) || rmwPending
++      normalWriteData:=Mux(io.zero.valid,0.U(256.W),merged.asUInt)
++    }
++    val rawWrite=kvWrite && kvSelected
++    when(normalWrite || rawWrite){
++      assert(!(normalWrite && rawWrite),"exclusive raw KV lease")
++      val rawWord=if(bank%2==0)kvWriteData(255,0)else kvWriteData(511,256)
++      aBanks(bank).write(Mux(rawWrite,kvLine>>3,normalWriteAddress),Mux(rawWrite,rawWord,normalWriteData))
+     }
+     response
+   }
+@@ -307,7 +369,7 @@
+     val address=Mux(first,rd0>>4,rd1>>4)
+     val response=bBanks(bank).read(address,readEnable)
+     val writeFirst=wr0(3,0)===bank.U
+-    val writeEnable=io.weight.valid && (writeFirst || (io.weight.bits.pair && wr1(3,0)===bank.U))
++    val writeEnable=io.weight.valid && !kvBlock && (writeFirst || (io.weight.bits.pair && wr1(3,0)===bank.U))
+     val writeAddress=Mux(writeFirst,wr0>>4,wr1>>4)
+     val writeValue=Mux(writeFirst,io.weight.bits.value(255,0),io.weight.bits.value(511,256))
+     when(writeEnable){
+@@ -357,3 +419,25 @@
+   val word=UInt(11.W);val lane=UInt(3.W);val commitWord=UInt(11.W);val commitLane=UInt(3.W)
+   val writeValue=Vec(16,UInt(32.W));val readWords=Vec(16,UInt(256.W))
+ }
++
++
++/** Raw byte transport only: cache validity commits on matching ACK while
++  * resetRequired is false. No numeric interpretation or cache payload SRAM.
++  * Parent must wire parentDrained from real Dense/DMA/matrix/seed/response
++  * obligations; this bank-only candidate does not add an owner/kernel route.
++  */
++class RawKvKey extends Bundle {
++  val owner=UInt(32.W);val tag=UInt(32.W)
++  val line=UInt(13.W) // reject 4096..8191 instead of silently truncating
++  val write=Bool()
++}
++class RawKvRequest extends Bundle {val key=new RawKvKey;val data=UInt(512.W)}
++class RawKvResponse extends Bundle {val key=new RawKvKey;val data=UInt(512.W)}
++class RawKvPort extends Bundle {
++  val acquire=Flipped(Decoupled(UInt(32.W)));val release=Flipped(Decoupled(UInt(32.W)))
++  val request=Flipped(Decoupled(new RawKvRequest))
++  val response=Valid(new RawKvResponse) // held until separately matched ACK
++  val ack=Flipped(Decoupled(new RawKvKey))
++  val parentDrained=Input(Bool());val abort=Input(Bool());val softReset=Input(Bool())
++  val leased=Output(Bool());val drained=Output(Bool());val resetRequired=Output(Bool())
++}

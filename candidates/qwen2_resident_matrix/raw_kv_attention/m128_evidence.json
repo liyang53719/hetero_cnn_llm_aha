@@ -1,0 +1,46 @@
+{
+  "archive_sha256": "fbcbededfd0cdab1c06d8fe01a145ba0afa211aabb621abfe5e5ab4ca1543102",
+  "artifact_id": 12040601089,
+  "ci_job": 116921584236,
+  "ci_run": 38885333680,
+  "direct_seconds": 303.96570821,
+  "full_block_executed": false,
+  "hardware_simulation": false,
+  "independent_intermediates": "PASS",
+  "inputs_unchanged": true,
+  "kv": {
+    "core_requests": 1585152,
+    "ddr_requests": 4096,
+    "fills": 4096,
+    "hits": 1581056,
+    "releases": 1
+  },
+  "loan_seconds": 802.1001781399999,
+  "matrix_packets_per_pass": 1585152,
+  "native_fmas_per_pass": 811597824,
+  "native_hashes": {
+    "library_sha256": "46b4d7b5987fad2a241c4894e61e15360c40336edb78e037eea314b63da448b1",
+    "receipt_sha256": "c25d0dd0bb13878f5d09f5673ade7474c80b8e569e837d410578b58f7591a6cd"
+  },
+  "native_policy_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+  "output_words": 196608,
+  "output_write_acks": 12288,
+  "peak_rss_kib": 62328,
+  "public_weights_executed": false,
+  "q_reads": 12288,
+  "reference_seconds": 2.4071964259999987,
+  "scalar_operations_per_pass": 55480320,
+  "schema": 1,
+  "scope": "original PV16 synthetic M128 Attention, direct versus shared-A KV loan",
+  "source_count": 71,
+  "source_manifest_sha256": "177388be8fe4ec0e2fbff2323cb0cf354c133c972c2abb7503fe67ca34f2b63a",
+  "status": "PASS_M128_SYNTHETIC_ATTENTION",
+  "stream_digests": {
+    "core": "254f8d636a595dfc7ef846cbe757b54ff753fd5b07ff50691e988b3274bec59f",
+    "matrix": "fec53404134d7a05de03dd3af23a4ccbd95e0d37fcac07678217c8e7e8d9af24",
+    "scalar": "252ce1fe6ab64043fa50307b210c4deb1cd7c2a3471027142c6be7be5387ca06",
+    "writes": "d0b10186e06b1e61c2e7eb3dc1054a5b52f97567558f45f384fa72e0e46045f4"
+  },
+  "tokens": 128,
+  "wall_seconds": 1109.012743
+}

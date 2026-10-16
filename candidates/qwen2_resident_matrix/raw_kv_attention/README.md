@@ -1,5 +1,20 @@
 # 原始 mode-0 Attention 的共享 A KV 供数模型
 
+## 已验证完整 M128 合成 Attention（2026-10-16）
+
+CI38885333680/job116921584236于10:28:09完成，回执PASS_M128_SYNTHETIC_ATTENTION。原始PV16 owner的direct及共享A贷款路径均执行真实m=128作业，独立参考逐项中间检查与完整scalar/Matrix/core/write散列全部一致；71项输入和库/回执前后不变。安全摘要见m128_evidence.json，原artifact12040601089的SHA256为fbcbededfd0cdab1c06d8fe01a145ba0afa211aabb621abfe5e5ab4ca1543102。
+
+总墙钟1109.012743秒：direct303.965708秒，loan802.100178秒，参考2.407196秒；峰值RSS62328KiB。每pass保留55480320个标量操作、1585152个legacy Matrix请求及811597824个native FMA。KV的1585152次核心读取对应4096次DDR miss，Q的12288次读取不变；12288个输出写ACK覆盖196608词，最后line4095已检查。
+
+这些是合成数据的完整Attention主机数值结果。尚未完成Qwen2完整block128、原始projection/MLP策略故障修复、消费端RTL或硬件性能验收。贷款减少KV外存请求，但不减少原Matrix/标量工作；墙钟更慢，不能把软件工作计数或有用/执行FMA比称为硬件利用率。原native_policy_acceptance仍为UNCHANGED_FAIL_POLICY_PENDING。
+
+- 已完成：原始Attention M128数值及传输链验证、安全证据核查。
+- 进行中：核查既有Qwen2完整block入口与projection/MLP数值故障，准备最小模型连接和短测。
+- 待完成：完整block128经审查的实际运行；consumer/parent RTL与性能/资源证据。
+
+## 历史准备记录（保留当时状态；当前结果以上文为准）
+
+
 默认关闭。当前实现为软件传输/数值桥接模型，不修改 Chisel。
 
 ## 已验证的小规模数值结果（2026-10-16）

@@ -238,29 +238,36 @@ class AttentionOwner(PrefixOwner):
             self.counts['write_requests' if self.request.write else 'read_requests'] += 1
             self.memory_pending, self.state = True, 'wait'
         if p['memory_response_ready'] and memory_response is not None:
-            p['memory_response_fire'] = True
             q, r = self.request, memory_response
-            self.memory_pending = False
-            self.counts['memory_responses'] += 1
-            status = 'Protocol' if r.tag != q.tag or r.nbytes != BEAT_BYTES else 'Memory' if r.error else None
-            if status is None and q.write:
-                self.ack_bytes += BEAT_BYTES
-                self.counts['write_acks'] += 1
-            if self.state == 'drain':
-                self.request = None
-            elif status is not None:
-                self._fault(status, 'Attention memory response tag/error/byte count')
-            elif q.write:
-                self._advance()
+            # A foreign response cannot discharge the accepted request. Keep
+            # its memory debt through poison/drain until its own reply arrives.
+            # response_fire counts matched consumption, as in the exact64 owner.
+            if not (type(r) is MemoryResponse and uint(r.tag, 64) and r.tag == q.tag):
+                self.counts['foreign_response_rejected'] += 1
+                self._fault('Protocol', 'foreign Attention response; accepted debt retained')
             else:
-                data = r.data
-                if isinstance(data, bytes) and len(data) == BEAT_BYTES:
-                    data = struct.unpack('<16I', data)
-                if not isinstance(data, tuple) or len(data) != LANES or not all(uint(v, 32) for v in data):
-                    self._fault('Protocol', 'Attention read must be exactly 16 FP32 words')
+                p['memory_response_fire'] = True
+                self.memory_pending = False
+                self.counts['memory_responses'] += 1
+                status = 'Protocol' if r.nbytes != BEAT_BYTES else 'Memory' if r.error else None
+                if status is None and q.write:
+                    self.ack_bytes += BEAT_BYTES
+                    self.counts['write_acks'] += 1
+                if self.state == 'drain':
+                    self.request = None
+                elif status is not None:
+                    self._fault(status, 'Attention memory response tag/error/byte count')
+                elif q.write:
+                    self._advance()
                 else:
-                    self.counts['read_responses'] += 1
-                    self._advance(data)
+                    data = r.data
+                    if isinstance(data, bytes) and len(data) == BEAT_BYTES:
+                        data = struct.unpack('<16I', data)
+                    if not isinstance(data, tuple) or len(data) != LANES or not all(uint(v, 32) for v in data):
+                        self._fault('Protocol', 'Attention read must be exactly 16 FP32 words')
+                    else:
+                        self.counts['read_responses'] += 1
+                        self._advance(data)
         if self.matrix_client is not None and self.state != 'finish':
             draining = self.state == 'drain'
             offered = p['matrix'] if matrix_request_ready and not draining else None

@@ -29,3 +29,20 @@ Add/Mul/Div的fatal underflow策略、ExpNegative内部flags策略和固定舍�
 公开整链入口位于相邻ffn_public/check_fullgraph_numeric.py。原native-v0与
 FP32-final FAIL、未批准数值政策和最终硬件验收保持独立，软件canonical逐位
 一致不能改记官方模型精度通过。
+
+## 已接受内存债务修复（2026-10-16）
+
+- 已完成：Attention 收到异 tag 或非规范 tag（包括 bool/float）响应时进入 Protocol
+  排空，保留原 request 与 memory_pending；只有匹配的响应才能退休该已接受债务。
+  memory_response_fire 表示匹配响应的消费，与 exact64 owner 的语义一致。
+- 已完成：6 项短合成回归覆盖 read/write、正常匹配、匹配错误/长度错误、reset
+  并发、未接受 offer，以及实际 resident PV32 子类的 A 租约保持到终态消费。
+  Matrix/Scalar 使用无算术的空闲服务替身；实际 owner tick/ports/fault/finish 均执行。
+- 待办：本次没有完整数值、native Matrix、Chisel/RTL 或性能通过结论。
+  算术生成器、容量和 bank 布局未改。旧 pins/FREEZE/收据保持不变；未来运行需对
+  新源码单独冻结与核验，不能继承历史结果。
+
+```sh
+python -B -m unittest candidates.qwen2_resident_matrix.ffn_attention.test_memory_debt
+python -B -O -m unittest candidates.qwen2_resident_matrix.ffn_attention.test_memory_debt
+```

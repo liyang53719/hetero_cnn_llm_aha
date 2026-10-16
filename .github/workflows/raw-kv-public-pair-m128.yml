@@ -1,7 +1,7 @@
 name: raw-kv-public-pair-m128
-# One fresh M128 original Public21 numerical run. No RTL or full29 acceptance.
-# Revision 1: fresh dual-recipe native qualification with exact observed AVX512-BF16 dispatch.
-# Separate profile: 900s setup, 2400s work, 2430s numeric envelope, 3420s total; no retries.
+# Revision 2: qualify a conservative CPU placement before packages; original numeric/dispatch gates unchanged.
+# Placement two is allowed only after a validated pre-package CPU_UNSUITABLE.
+# At most one setup/numeric attempt: 900s setup,2430s numeric,3420s total. No numerical retries.
 on:
   push:
     branches: [main]
@@ -13,8 +13,10 @@ concurrency:
   group: raw-kv-public-pair-m128-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  fresh-public-m128:
+  placement-1:
     if: github.run_attempt == 1
+    outputs:
+      status: ${{ steps.verdict.outputs.status }}
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -25,19 +27,76 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - name: Cold launch and linked admission contracts
+      - name: Cold Public linked admission contracts
         timeout-minutes: 2
         run: |
           python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
           python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
-      - name: Single bounded fresh rebuild and original M128 run
+      - name: Qualify CPU before packages and run at most one Public attempt
+        id: attempt
+        continue-on-error: true
         timeout-minutes: 59
         run: python -B -m candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.run_ci --execute --checkout-commit '${{ github.sha }}' --private work/raw-kv-public-pair-m128-private --evidence work/raw-kv-public-pair-m128-safe
+      - name: Validate exact placement outcome
+        id: verdict
+        if: always()
+        timeout-minutes: 1
+        env:
+          ATTEMPT_OUTCOME: '${{ steps.attempt.outcome }}'
+        run: |
+          status=$(python -B -m candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.run_ci --placement-status --attempt-outcome "$ATTEMPT_OUTCOME" --checkout-commit '${{ github.sha }}' --evidence work/raw-kv-public-pair-m128-safe)
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" = "CPU_UNSUITABLE" ]; then exit 0; fi
+          test "$status" = "PASS_FRESH_RECIPE_PUBLIC_M128_OBSERVED_GATES"
       - name: Preserve only safe fixed-name evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: raw-kv-public-pair-m128-${{ github.sha }}
+          name: raw-kv-public-pair-m128-${{ github.sha }}-placement-1
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/raw-kv-public-pair-m128-safe/summary.json
+            work/raw-kv-public-pair-m128-safe/progress.json
+            work/raw-kv-public-pair-m128-safe/source_hashes.json
+  placement-2:
+    needs: placement-1
+    if: always() && github.run_attempt == 1 && needs.placement-1.result == 'success' && needs.placement-1.outputs.status == 'CPU_UNSUITABLE'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ github.sha }}'
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Cold Public linked admission contracts
+        timeout-minutes: 2
+        run: |
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_admission candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_prepare candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.test_run_ci -q
+      - name: Qualify CPU before packages and run at most one Public attempt
+        id: attempt
+        continue-on-error: true
+        timeout-minutes: 59
+        run: python -B -m candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.run_ci --execute --checkout-commit '${{ github.sha }}' --private work/raw-kv-public-pair-m128-private --evidence work/raw-kv-public-pair-m128-safe
+      - name: Validate exact placement outcome
+        id: verdict
+        if: always()
+        timeout-minutes: 1
+        env:
+          ATTEMPT_OUTCOME: '${{ steps.attempt.outcome }}'
+        run: |
+          status=$(python -B -m candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.run_ci --placement-status --attempt-outcome "$ATTEMPT_OUTCOME" --checkout-commit '${{ github.sha }}' --evidence work/raw-kv-public-pair-m128-safe)
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          test "$status" = "PASS_FRESH_RECIPE_PUBLIC_M128_OBSERVED_GATES"
+      - name: Preserve only safe fixed-name evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-kv-public-pair-m128-${{ github.sha }}-placement-2
           retention-days: 14
           if-no-files-found: error
           path: |

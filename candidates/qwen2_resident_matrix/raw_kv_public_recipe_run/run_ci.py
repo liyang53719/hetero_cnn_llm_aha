@@ -10,7 +10,10 @@ import argparse
 import hashlib
 import importlib
 import json
+import math
 import os
+import platform
+import re
 from pathlib import Path
 import signal
 import subprocess
@@ -35,7 +38,7 @@ NUMERIC_BUDGET=2430
 WALL_BUDGET=2400
 GRACE=5
 RECEIPT=1
-PHASES=('preflight','clone','compose','setup','numeric','finalize')
+PHASES=('preflight','cpu_qualification','clone','compose','setup','numeric','finalize')
 OUTPUTS=('summary.json','progress.json','source_hashes.json')
 PASS='PASS_FRESH_RECIPE_PUBLIC_M128_OBSERVED_GATES'
 VALIDATED='VALIDATED_ACTUAL_POSTFLIGHT_INCOMPLETE'
@@ -44,6 +47,78 @@ IMPORTED_SHA256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 def need(ok):
     if not ok:raise ValueError('launch_contract')
+
+
+CPU_FLAGS=('avx512f','avx512vl','avx512bw','avx512dq','fma','avx512_bf16')
+CPU_EXCLUDED=('amx_tile','amx_bf16','amx_int8')
+STARTED=('clone_started','setup_started','numeric_started')
+CPU_LIMIT=2*1024*1024
+CPU_SECONDS=5
+
+
+class CpuUnsuitable(Exception):
+    """Only well-formed pre-package hardware ineligibility permits placement two."""
+
+
+def cpu_eligibility(raw,*,system,machine,override_absent):
+    need(system=='Linux' and machine=='x86_64' and override_absent is True)
+    need(type(raw) is bytes and 0<len(raw)<=CPU_LIMIT)
+    blocks=re.split(r'\n[ \t]*\n(?:[ \t]*\n)*',raw.decode('ascii').strip())
+    need(0<len(blocks)<=4096)
+    seen=set();common=None;observed=set()
+    for block in blocks:
+        fields={}
+        for line in block.splitlines():
+            need(':' in line)
+            key,value=line.split(':',1);key=key.strip();value=value.strip()
+            need(key not in fields);fields[key]=value
+        identifier=fields.get('processor','')
+        need(re.fullmatch(r'0|[1-9][0-9]*',identifier) is not None and identifier not in seen)
+        seen.add(identifier)
+        need('flags' in fields)
+        tokens=fields['flags'].split()
+        need(0<len(tokens)<=4096 and len(tokens)==len(set(tokens)) and
+             all(re.fullmatch(r'[a-z0-9_]{1,64}',token) is not None for token in tokens))
+        flags=set(tokens);common=flags if common is None else common & flags;observed.update(flags)
+    flags={name:name in common for name in CPU_FLAGS}
+    excluded={name:name in observed for name in CPU_EXCLUDED}
+    return dict(schema=1,status='ELIGIBLE_FOR_BACKEND_CHECK' if all(flags.values()) and not any(excluded.values()) else 'CPU_UNSUITABLE',
+                flags=flags,excluded_flags=excluded,processor_records=len(seen),eligibility_only=True,backend_qualified=False)
+
+
+def validate_cpu_eligibility(value):
+    need(type(value) is dict and set(value)=={'schema','status','flags','excluded_flags','processor_records','eligibility_only','backend_qualified'})
+    need(type(value['schema']) is int and value['schema']==1 and value['eligibility_only'] is True and
+         value['backend_qualified'] is False and type(value['processor_records']) is int and 1<=value['processor_records']<=4096)
+    need(type(value['flags']) is dict and set(value['flags'])==set(CPU_FLAGS) and
+         all(type(v) is bool for v in value['flags'].values()))
+    need(type(value['excluded_flags']) is dict and set(value['excluded_flags'])==set(CPU_EXCLUDED) and
+         all(type(v) is bool for v in value['excluded_flags'].values()))
+    need(value['status']==('ELIGIBLE_FOR_BACKEND_CHECK' if all(value['flags'].values()) and
+         not any(value['excluded_flags'].values()) else 'CPU_UNSUITABLE'))
+    return value
+
+
+def qualify_cpu(summary):
+    summary['phase']='cpu_qualification'
+    with open('/proc/cpuinfo','rb') as stream:raw=stream.read(CPU_LIMIT+1)
+    result=cpu_eligibility(raw,system=platform.system(),machine=platform.machine(),
+                           override_absent='ATEN_CPU_CAPABILITY' not in os.environ)
+    summary['cpu_eligibility']=validate_cpu_eligibility(result)
+    if result['status']=='CPU_UNSUITABLE':raise CpuUnsuitable()
+    return result
+
+
+def run_cpu_qualification(summary,budget):
+    end=min(budget.end,time.monotonic_ns()+CPU_SECONDS*10**9)
+    budget.arm(end)
+    try:
+        try:result=qualify_cpu(summary)
+        except CpuUnsuitable:
+            budget.remaining(end);raise
+        budget.remaining(end)
+        return result
+    finally:budget.arm()
 
 
 def read_bytes(path,limit=2*1024*1024):
@@ -155,7 +230,7 @@ def context_read(path,identity):
     raw=read_bytes(path,131072);need(assets.digest(identity) and assets.sha(raw)==identity)
     context=assets.json_bytes(raw,limit=131072)
     need(type(context) is dict and set(context)=={'schema','private','evidence','checkout_commit','started_ns','deadline_ns',
-        'contract_sha256','source_sha256','git_blobs','generated_sha256'})
+        'contract_sha256','source_sha256','git_blobs','generated_sha256','cpu_eligibility'})
     need(type(context['schema']) is int and context['schema']==1)
     private=assets.safe_path(context['private'],directory=True);evidence=assets.safe_path(context['evidence'],directory=True)
     need(assets.safe_path(path)==private/'context.json' and private!=evidence and
@@ -166,6 +241,7 @@ def context_read(path,identity):
     need(setup.canonical_commit(context['checkout_commit']) and type(context['git_blobs']) is dict and
          set(context['git_blobs'])==set(context['source_sha256'])|{CONTRACT} and
          all(setup.canonical_commit(v) for v in context['git_blobs'].values()))
+    need(validate_cpu_eligibility(context['cpu_eligibility'])['status']=='ELIGIBLE_FOR_BACKEND_CHECK')
     return context,private,evidence
 
 
@@ -367,13 +443,16 @@ def safe_numeric_receipt(private,context,frozen):
 
 def summary_new(started):
     return dict(schema=1,status='NOT_RUN',phase='preflight',elapsed_seconds=round((time.monotonic_ns()-started)/1e9,6),
-                rows=128,enable_raw_kv=True,fresh_profile=True,rtl_executed=False,scala_executed=False,full_29_node_acceptance=False)
+                profile=PROFILE,rows=128,enable_raw_kv=True,fresh_profile=True,rtl_executed=False,scala_executed=False,full_29_node_acceptance=False,
+                clone_started=False,setup_started=False,numeric_started=False,postflight_complete=False,numerical_acceptance=False)
 
 
 def finish(evidence,summary,budget,error=None,sources=(),deadline_ns=None):
     if error is not None:
-        summary.update(status='TIMEOUT' if isinstance(error,(TimeoutError,subprocess.TimeoutExpired)) else
-            'INTERRUPTED' if isinstance(error,(InterruptedError,KeyboardInterrupt)) else 'FAILED')
+        summary.update(status='CPU_UNSUITABLE' if isinstance(error,CpuUnsuitable) else
+            'TIMEOUT' if isinstance(error,(TimeoutError,subprocess.TimeoutExpired)) else
+            'INTERRUPTED' if isinstance(error,(InterruptedError,KeyboardInterrupt)) else 'FAILED',
+            postflight_complete=False,numerical_acceptance=False)
         summary.setdefault('diagnostic',diagnostic(error,summary['phase'],sources,getattr(error,'exit_code',None)))
     summary['elapsed_seconds']=round((time.monotonic_ns()-budget.started)/1e9,6)
     try:
@@ -388,7 +467,7 @@ def finish(evidence,summary,budget,error=None,sources=(),deadline_ns=None):
             try:(evidence/'summary.json').unlink(missing_ok=True)
             except OSError:pass
     finally:budget.close()
-    return (0 if summary['status']==PASS else 1),summary
+    return (0 if summary['status']==PASS else 2 if summary['status']=='CPU_UNSUITABLE' else 1),summary
 
 
 def bootstrap(private,evidence,commit):
@@ -402,10 +481,12 @@ def bootstrap(private,evidence,commit):
         context=dict(schema=1,private=str(private),evidence=str(out),checkout_commit=commit,started_ns=started,
             deadline_ns=budget.end,contract_sha256=frozen['contract_sha256'],source_sha256=frozen['original_sources'],
             git_blobs=frozen['git_blobs'],generated_sha256=frozen['generated'])
-        setup.atomic_json(private/'context.json',context,131072)
         setup.atomic_json(out/'source_hashes.json',dict(schema=1,launch_contract_sha256=frozen['contract_sha256'],
             source_sha256=frozen['sources'],generated_sha256=frozen['generated']),131072)
-        summary.update(status='RUNNING',phase='clone');publish(out,summary)
+        summary.update(status='RUNNING',checkout_commit=commit,launch_contract_sha256=frozen['contract_sha256']);publish(out,summary)
+        context['cpu_eligibility']=run_cpu_qualification(summary,budget);publish(out,summary)
+        setup.atomic_json(private/'context.json',context,131072)
+        summary.update(phase='clone',clone_started=True);publish(out,summary)
         budget.command(['git','clone','--no-local','--no-checkout','--',str(ROOT),str(private/'checkout')],
             private=private,cwd=ROOT,phase='clone',cap=45)
         budget.command(['git','-c','core.hooksPath=/dev/null','checkout','--detach',commit],
@@ -505,7 +586,10 @@ def resume(context,private,evidence):
     budget=Budget(context['started_ns'],context['deadline_ns']);summary=summary_new(budget.started);frozen={};numeric_end=None
     try:
         budget.arm();frozen=check_context(context,private,composed=True)
-        summary.update(status='RUNNING',phase='setup',launch_contract_sha256=context['contract_sha256']);publish(evidence,summary)
+        need(validate_cpu_eligibility(context['cpu_eligibility'])['status']=='ELIGIBLE_FOR_BACKEND_CHECK')
+        summary.update(status='RUNNING',phase='setup',checkout_commit=context['checkout_commit'],
+            launch_contract_sha256=context['contract_sha256'],cpu_eligibility=context['cpu_eligibility'],
+            clone_started=True,setup_started=True);publish(evidence,summary)
         # The generated setup rejects inherited timers and cleans every producer itself.
         budget.disarm()
         code,setup_summary=setup.run(private/'assets',private/'setup_evidence',checkout_commit=context['checkout_commit'],
@@ -518,7 +602,7 @@ def resume(context,private,evidence):
             error=RuntimeError('setup_exit');error.exit_code=code;raise error
         need(setup_summary['status']==setup.SETUP_STATUS)
         need(check_context(context,private,composed=True)==frozen)
-        summary['phase']='numeric';publish(evidence,summary)
+        summary.update(phase='numeric',numeric_started=True);publish(evidence,summary)
         numeric_end=min(budget.end,time.monotonic_ns()+NUMERIC_BUDGET*10**9)
         numeric_deadline=numeric_end-(GRACE+RECEIPT)*10**9
         budget.command([str(private/'assets/venv/bin/python'),'-B','-m',MODULE,'--internal-numeric',
@@ -527,7 +611,7 @@ def resume(context,private,evidence):
             extra_env={'QWEN2_PUBLIC_NUMERIC_DEADLINE_NS':str(numeric_deadline)},end_ns=numeric_end)
         result=safe_numeric_receipt(private,context,frozen)
         need(check_context(context,private,composed=True)==frozen)
-        summary.update(result,phase='finalize')
+        summary.update(result,phase='finalize',postflight_complete=True,numerical_acceptance=True)
         return finish(evidence,summary,budget,sources=frozen['sources'],deadline_ns=numeric_end)
     except BaseException as error:
         if summary['phase']=='numeric' and numeric_end is not None and time.monotonic_ns()<numeric_end-RECEIPT*10**9:
@@ -544,14 +628,68 @@ def resume(context,private,evidence):
         return finish(evidence,summary,budget,error,frozen.get('sources',{}),deadline_ns=numeric_end)
 
 
+def placement_status(evidence,commit,outcome):
+    """Only an exact pre-clone CPU miss permits one separate workflow placement."""
+    need(type(outcome) is str and outcome in ('success','failure') and setup.canonical_commit(commit))
+    evidence=assets.safe_path(evidence,directory=True)
+    need({path.name for path in evidence.iterdir()}==set(OUTPUTS))
+    frozen=contract_snapshot()
+    need(frozen['sources'].get(OWN[0])==IMPORTED_SHA256)
+    git_identity(commit,frozen['git_blobs'],evidence)
+    source=assets.json_bytes(read_bytes(evidence/'source_hashes.json',131072),limit=131072)
+    need(assets.same(source,dict(schema=1,launch_contract_sha256=frozen['contract_sha256'],
+        source_sha256=frozen['sources'],generated_sha256=frozen['generated'])))
+    summary=assets.json_bytes(read_bytes(evidence/'summary.json',32768),limit=32768)
+    fixed=dict(schema=1,profile=PROFILE,rows=128,enable_raw_kv=True,fresh_profile=True,
+        rtl_executed=False,scala_executed=False,full_29_node_acceptance=False)
+    need(type(summary) is dict and all(assets.same(summary.get(k),v) for k,v in fixed.items()) and
+         summary.get('checkout_commit')==commit and summary.get('launch_contract_sha256')==frozen['contract_sha256'])
+    need(type(summary.get('elapsed_seconds')) in (int,float) and math.isfinite(summary['elapsed_seconds']) and
+         0<=summary['elapsed_seconds']<=TOTAL)
+    progress=assets.json_bytes(read_bytes(evidence/'progress.json',1024),limit=1024)
+    expected_progress={k:summary[k] for k in ('schema','status','phase','elapsed_seconds')}
+    if expected_progress['status']==PASS:expected_progress['status']='TERMINAL_RECEIPT_PENDING'
+    need(assets.same(progress,expected_progress))
+    status=summary.get('status')
+    if status not in ('CPU_UNSUITABLE',PASS):return 'FAILED'
+    cpu=validate_cpu_eligibility(summary.get('cpu_eligibility'))
+    base=set(summary_new(time.monotonic_ns()))|{'checkout_commit','launch_contract_sha256','cpu_eligibility'}
+    if status=='CPU_UNSUITABLE':
+        need(set(summary)==base|{'diagnostic'})
+        diagnostic=summary['diagnostic']
+        need(type(diagnostic) is dict and set(diagnostic)=={'phase','exception','frames'} and
+             diagnostic['phase']=='cpu_qualification' and diagnostic['exception']=='OtherError')
+        setup.validate_diagnostic(dict(diagnostic,phase='preflight'),'preflight',frozen['sources'])
+        need(outcome=='failure' and summary['phase']=='cpu_qualification' and cpu['status']=='CPU_UNSUITABLE' and
+             all(summary[k] is False for k in STARTED+('postflight_complete','numerical_acceptance')))
+        return status
+    receipt=dict(assigned_official_gates=27,observed_fields=28,full_29_node_acceptance=False,
+        native_acceptance='PASS_OBSERVED_ONLY',actual_dataflow_pass=True,fixed_arithmetic_pass=True)
+    hashes={'setup_receipt_sha256','actual_receipt_sha256','snapshot_sha256','source_manifest_sha256','actual_source_manifest_sha256'}
+    need(set(summary)==base|set(receipt)|hashes and all(assets.same(summary[k],v) for k,v in receipt.items()))
+    need(outcome=='success' and summary['phase']=='finalize' and cpu['status']=='ELIGIBLE_FOR_BACKEND_CHECK' and
+         all(summary[k] is True for k in STARTED+('postflight_complete','numerical_acceptance')) and
+         all(assets.digest(summary[k]) for k in hashes))
+    composed=dict(frozen['sources']);composed.update(frozen['generated'])
+    expected=assets.sha(assets.encoded(composed))
+    need(summary['source_manifest_sha256']==summary['actual_source_manifest_sha256']==expected)
+    return PASS
+
+
 def main(argv=None):
     context={};private=None
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--execute',action='store_true');p.add_argument('--private',type=Path);p.add_argument('--evidence',type=Path)
     p.add_argument('--checkout-commit');p.add_argument('--resume',action='store_true')
     p.add_argument('--internal-compose',action='store_true');p.add_argument('--internal-numeric',action='store_true')
-    p.add_argument('--context',type=Path);p.add_argument('--context-sha256');a=p.parse_args(argv)
+    p.add_argument('--context',type=Path);p.add_argument('--context-sha256')
+    p.add_argument('--placement-status',action='store_true');p.add_argument('--attempt-outcome');a=p.parse_args(argv)
     try:
+        if a.placement_status:
+            need(not any((a.execute,a.resume,a.internal_compose,a.internal_numeric)) and a.evidence is not None and
+                 a.private is None and a.context is None and a.context_sha256 is None)
+            print(placement_status(a.evidence,a.checkout_commit,a.attempt_outcome));return 0
+        need(a.attempt_outcome is None)
         internal=sum((a.resume,a.internal_compose,a.internal_numeric))
         if internal:
             need(internal==1 and not a.execute and os.environ.get('QWEN2_PUBLIC_RUN_CHILD')=='1')

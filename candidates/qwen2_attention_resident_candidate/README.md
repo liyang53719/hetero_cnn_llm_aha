@@ -43,3 +43,20 @@ Detailed artifacts stay in work. Outputs, intermediate words and tensor hashes
 are not publication payloads. All software edges are protocol events, never
 hardware-cycle or utilization estimates. Caching cannot repair prior original
 numerical-gate failures or the one-Matrix issue geometry limitation.
+
+## 空 owner 租约修复与小步验证（2026-10-16）
+
+- 已完成：resident acquire 与 external reserve 在任何状态修改前拒绝 None owner。
+  None 是未占用哨兵；此前允许它会让第二个客户端重复取得同一 A scratch。
+  非 None 的 falsey owner 仍按对象身份正常工作。
+- 已完成：7 项合成回归在普通与 -O 模式均通过，覆盖双入口拒绝且状态不变、
+  客户端互斥、64B fill/ACK/read、held response、撤销后排空与释放后重获。
+- 待办：完整模型、共享 A 集成与 Chisel/RTL 验证未在本轮运行；不继承其通过结论。
+  本次不改变算术、bank 映射、存储容量、吞吐声明或硬件周期口径。
+
+精确命令（仓库根目录）：
+
+```sh
+python -B -m unittest candidates.qwen2_attention_resident_candidate.test_scratch_ownership
+python -B -O -m unittest candidates.qwen2_attention_resident_candidate.test_scratch_ownership
+```

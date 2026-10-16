@@ -61,6 +61,7 @@ class SharedAScratch:
     @staticmethod
     def offset(bank,word):return (bank*DEPTH+word)*WORD_BYTES
     def acquire(self,owner,job,identity):
+        need(owner is not None,'non-null A lease owner required')
         need(type(identity) is ReadonlyKVIdentity,'explicit readonly allocation/generation identity')
         identity.validate()
         need(self.owner is None and self.pending is None and self.held is None,'A lease or local debt busy')
@@ -75,6 +76,7 @@ class SharedAScratch:
         self.binding=(job.tag,job.b,job.c,job.m*256*4,job.m,job.dst,job.write_bytes)
         self.valid[:]=bytes(len(self.valid));self.revoked=False;self.counts=Counter(leases=1);self.last_serial=0
     def reserve_external(self,owner):
+        need(owner is not None,'non-null A lease owner required')
         need(self.owner is None and self.pending is None,'A already leased')
         self.owner=owner;self.binding=None;self.identity=None
     def release_external(self,owner):

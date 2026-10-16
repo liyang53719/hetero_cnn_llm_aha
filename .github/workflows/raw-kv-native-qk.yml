@@ -1,5 +1,5 @@
 name: raw-kv-native-qk
-# Revision 1: combined QKV/QK candidate; at most two sequential standard-host placements; one native attempt.
+# Revision 2: diagnostic-only per-mode dispatch/stage/fenv evidence; unchanged arithmetic and bounded placements.
 # Placement two is allowed only after a validated pre-package CPU_UNSUITABLE.
 # Each eligible attempt retains the original900s ceiling; no numerical retries.
 on:
@@ -28,10 +28,10 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Cold native-only validation contracts
-        timeout-minutes: 1
+        timeout-minutes: 2
         run: |
-          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci -q
-          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci -q
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_capture candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_diagnostic -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_capture candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_diagnostic -q
       - name: Qualify CPU before packages and run at most one native attempt
         id: attempt
         continue-on-error: true
@@ -73,10 +73,10 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Cold native-only validation contracts
-        timeout-minutes: 1
+        timeout-minutes: 2
         run: |
-          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci -q
-          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci -q
+          python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_capture candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_diagnostic -q
+          python -B -O -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_run_ci candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_capture candidates.qwen2_resident_matrix.raw_kv_native_qk_run.test_dispatch_diagnostic -q
       - name: Qualify CPU before packages and run at most one native attempt
         id: attempt
         continue-on-error: true

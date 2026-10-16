@@ -3,20 +3,22 @@
 The original 221-source setup context is separate from this union contract.
 Only source preparation occurs here; no package, payload or native code loads.
 """
+import ast
 import hashlib
 import json
 import math
 import os
 from pathlib import Path, PurePosixPath
 import stat
+import subprocess
 import time
 
 ROOT = Path(__file__).resolve().parents[3]
 PREFIX = 'candidates/qwen2_resident_matrix/raw_kv_native_qk_run/'
 CONTRACT = PREFIX + 'contract.json'
 WORKFLOW = '.github/workflows/raw-kv-native-qk.yml'
-PROFILE = 'qwen2-fresh-native-qkv-qk-m16-m128-v1'
-BASE_COMMIT = '30caacb236dada5edf8353a2904f2cc46f5e0b9b'
+PROFILE = 'qwen2-fresh-native-qkv-qk-dispatch-m16-m128-v2'
+BASE_COMMIT = 'cacc320580ca93dd7d70d4b3129b5522531bb66f'
 TOTAL_SECONDS = 900
 CLEANUP_SECONDS = 5
 RECEIPT_SECONDS = 1
@@ -32,9 +34,13 @@ OLD_SMOKE_EVIDENCE_SHA256 = 'e1a760f571841cd6423102f32a48da1beee5a9e170d9292adf6
 RECIPE_PINS_SHA256 = 'b747f252f6b488622696f3309f5f30fac9d9b3f974a9a986c7e34dd2789096c0'
 SMOKE_EVIDENCE_SHA256 = '2d09797493192786da472fd37f4d8feca51ed13f54ec6df8f597d6f9475a9c52'
 GATE = 'scripts/qwen2_layer0_model_gate.py'
-GENERATED_MODULE_SHA256 = '4cff9eb2a4aac94c3e7fd04a9ac4eac22092ee874a1fa1fbb7d69c63b05d106f'
+INTERMEDIATE_GENERATED_MODULE_SHA256 = '4cff9eb2a4aac94c3e7fd04a9ac4eac22092ee874a1fa1fbb7d69c63b05d106f'
+GENERATED_MODULE_SHA256 = 'd7bd12077675984ed7cc20e57a55729fd62e66b773008fa631673086a5a87a64'
+DISPATCH_PATCH = PREFIX + 'dispatch.patch'
 OWN = tuple(PREFIX + name for name in ('runtime.py', 'phase.py', 'run_ci.py',
-    'test_runtime.py', 'test_phase.py', 'test_run_ci.py', 'README.md')) + (WORKFLOW,)
+    'test_runtime.py', 'test_phase.py', 'test_run_ci.py', 'README.md', 'dispatch.patch',
+    'dispatch_capture.py', 'test_dispatch_capture.py', 'dispatch_diagnostic.py',
+    'test_dispatch_diagnostic.py')) + (WORKFLOW,)
 IMPORTED_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 CONTEXT_KEYS = {'schema', 'profile', 'workspace', 'checkout_commit', 'source_sha256',
     'contract_sha256', 'start_ns', 'deadline_ns', 'generated_module', 'generated_module_sha256'}
@@ -136,7 +142,7 @@ def baseline_contract():
     need(len(original) == 221, 'original setup inventory')
     qkv = recipe.snapshot()
     need(qkv['pins_sha256'] == RECIPE_PINS_SHA256 and
-         qkv['generated_module_sha256'] == GENERATED_MODULE_SHA256, 'recipe contract drift')
+         qkv['generated_module_sha256'] == INTERMEDIATE_GENERATED_MODULE_SHA256, 'recipe contract drift')
     union = dict(original)
     for name, value in qkv['source_sha256'].items():
         need(name not in union or union[name] == value, 'overlapping source identity differs')
@@ -154,13 +160,14 @@ def validate_contract(value):
         phase_limits=PHASE_LIMITS, original_launch_contract_sha256=ORIGINAL_CONTRACT_SHA256,
         recipe_pins_sha256=RECIPE_PINS_SHA256, smoke_evidence_sha256=SMOKE_EVIDENCE_SHA256,
         old_smoke_evidence_sha256=OLD_SMOKE_EVIDENCE_SHA256,
+        intermediate_generated_module_sha256=INTERMEDIATE_GENERATED_MODULE_SHA256,
         generated_module_sha256=GENERATED_MODULE_SHA256)
     need(type(value) is dict and set(value) == set(fixed) | {'source_sha256', 'generated_sha256'},
          'exact native QKV/QK contract fields')
     need(all(same(value[k], v) for k, v in fixed.items()), 'native QKV/QK fixed contract differs')
     original, union, generated = baseline_contract()
     sources = value['source_sha256']
-    need(type(sources) is dict and set(sources) == set(union) | set(OWN) and len(sources) == 246,
+    need(type(sources) is dict and set(sources) == set(union) | set(OWN) and len(sources) == 251,
          'exact native QKV/QK source inventory')
     need(all(relative_name(n) and digest(h) for n, h in sources.items()), 'source identity type')
     need(all(sources[n] == h for n, h in union.items()), 'published source identity changed')
@@ -190,11 +197,67 @@ def snapshot(*, composed=False):
         blobs[CONTRACT] = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
     return dict(profile=PROFILE, contract_sha256=sha(raw), sources=sources, inputs=dict(sources),
         generated=dict(value['generated_sha256']), generated_module_sha256=GENERATED_MODULE_SHA256,
+        intermediate_generated_module_sha256=INTERMEDIATE_GENERATED_MODULE_SHA256,
         original_setup_sources=setup_sources, git_blobs=blobs)
 
 
 def source_snapshot():
     return snapshot(composed=True)['sources']
+
+
+def check_dispatch_scope(original, generated):
+    """Exact inverse of only the keyword, type guard, and native-call context."""
+    before, after = ast.parse(original), ast.parse(generated)
+    old = [n for n in before.body if isinstance(n, ast.FunctionDef) and n.name == 'run_gate']
+    new = [n for n in after.body if isinstance(n, ast.FunctionDef) and n.name == 'run_gate']
+    need(len(old) == len(new) == 1, 'exact dispatch run_gate')
+    old, new = old[0], new[0]
+    need([a.arg for a in old.args.kwonlyargs] == ['qkv_recipe'] and
+         [a.arg for a in new.args.kwonlyargs] == ['qkv_recipe', 'diagnostics'] and
+         ast.dump(new.args.kw_defaults[-1]) == ast.dump(ast.Constant(None)), 'exact diagnostics keyword')
+    new.args.kwonlyargs.pop(); new.args.kw_defaults.pop()
+    guard = ast.parse("""if diagnostics is not None:
+    from candidates.qwen2_resident_matrix.raw_kv_native_qk_run.dispatch_capture import Capture
+    if type(diagnostics) is not Capture:
+        raise ValueError('native dispatch capture identity')
+""").body[0]
+    need(new.body and ast.dump(new.body[0]) == ast.dump(guard), 'exact diagnostics type guard')
+    new.body.pop(0)
+    call = ast.parse('native, native_cache = native_forward(module, layer, xt, mode, native_cache)').body[0]
+    wrapper = ast.parse("""if diagnostics is None:
+    native, native_cache = native_forward(module, layer, xt, mode, native_cache)
+else:
+    with diagnostics.capture(mode):
+        native, native_cache = native_forward(module, layer, xt, mode, native_cache)
+""").body[0]
+    class Restore(ast.NodeTransformer):
+        count = 0
+        def visit_If(self, node):
+            if ast.dump(node) == ast.dump(wrapper):
+                self.count += 1
+                return call
+            return self.generic_visit(node)
+    restore = Restore(); after = restore.visit(after)
+    need(restore.count == 1 and ast.dump(before) == ast.dump(after), 'dispatch patch exceeds exact scope')
+
+
+def apply_dispatch_patch(directory, frozen):
+    """Reject stale intermediate, wrong patch target, or unreviewed final bytes."""
+    directory = Path(directory)
+    target = directory / GATE
+    original = read_bytes(target, 4194304)
+    need(sha(original) == INTERMEDIATE_GENERATED_MODULE_SHA256, 'dispatch intermediate differs')
+    raw = read_source(DISPATCH_PATCH)
+    need(sha(raw) == frozen['sources'][DISPATCH_PATCH], 'dispatch patch identity differs')
+    lines = raw.decode('utf-8').splitlines()
+    need([s for s in lines if s.startswith('--- ')] == ['--- a/' + GATE] and
+         [s for s in lines if s.startswith('+++ ')] == ['+++ b/' + GATE], 'exact dispatch patch target')
+    subprocess.run(['patch', '--batch', '--fuzz=0', '-p1'], cwd=directory, input=raw,
+                   check=True, capture_output=True, timeout=10)
+    generated = read_bytes(target, 4194304)
+    need(sha(generated) == GENERATED_MODULE_SHA256, 'dispatch generated identity differs')
+    check_dispatch_scope(original, generated)
+    return sha(generated)
 
 
 def prepare_outputs(out):
@@ -210,12 +273,14 @@ def prepare_outputs(out):
     need(same(old['inputs'], frozen['original_setup_sources']) and same(old['generated'], frozen['generated']),
          'original preparation identity differs')
     recipe = recipe_prepare.prepare(out / 'generated')
-    need(recipe['generated_module_sha256'] == GENERATED_MODULE_SHA256 and
-         sha(read_bytes(out / 'generated' / GATE, 4194304)) == GENERATED_MODULE_SHA256,
-         'separate generated module differs')
+    need(recipe['generated_module_sha256'] == INTERMEDIATE_GENERATED_MODULE_SHA256 and
+         sha(read_bytes(out / 'generated' / GATE, 4194304)) == INTERMEDIATE_GENERATED_MODULE_SHA256,
+         'separate intermediate module differs')
+    apply_dispatch_patch(out / 'generated', frozen)
     need(same(snapshot(composed=False), frozen), 'preparation source postflight drift')
     return dict(status='PASS_SOURCE_PREPARATION_ONLY', sources=frozen['sources'],
         generated=frozen['generated'], generated_module_sha256=GENERATED_MODULE_SHA256,
+        intermediate_generated_module_sha256=INTERMEDIATE_GENERATED_MODULE_SHA256,
         numerical_execution=False, public_execution=False, rtl_execution=False)
 
 

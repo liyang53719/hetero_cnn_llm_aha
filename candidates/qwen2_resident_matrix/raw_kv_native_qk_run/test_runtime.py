@@ -1,5 +1,7 @@
 """Cold source/control checks; no packages, payloads, compiler or native gate."""
+import ast
 import copy
+import difflib
 import hashlib
 import os
 from pathlib import Path
@@ -23,6 +25,7 @@ def contract_fixture():
         phase_limits=dict(r.PHASE_LIMITS), original_launch_contract_sha256=r.ORIGINAL_CONTRACT_SHA256,
         recipe_pins_sha256=r.RECIPE_PINS_SHA256, smoke_evidence_sha256=r.SMOKE_EVIDENCE_SHA256,
         old_smoke_evidence_sha256=r.OLD_SMOKE_EVIDENCE_SHA256,
+        intermediate_generated_module_sha256=r.INTERMEDIATE_GENERATED_MODULE_SHA256,
         generated_module_sha256=r.GENERATED_MODULE_SHA256,
         source_sha256=sources, generated_sha256=generated)
 
@@ -49,7 +52,8 @@ class SourceContractTests(unittest.TestCase):
         self.assertEqual(len(r.validate_contract(value)), 221)
         for key, replacement in (('schema', True), ('total_budget_seconds', 900.0),
                 ('profile', 'READY_FOR_ACTUAL_M128'), ('base_commit', '0' * 40),
-                ('generated_module_sha256', '0' * 64)):
+                ('generated_module_sha256', '0' * 64),
+                ('intermediate_generated_module_sha256', '0' * 64)):
             changed = copy.deepcopy(value); changed[key] = replacement
             with self.subTest(key=key), self.assertRaises(ValueError):
                 r.validate_contract(changed)
@@ -85,7 +89,7 @@ class SourceContractTests(unittest.TestCase):
 
     def test_real_frozen_sources_and_separate_preparation(self):
         frozen = r.snapshot()
-        self.assertEqual(len(frozen['sources']), 247)
+        self.assertEqual(len(frozen['sources']), 252)
         self.assertEqual(len(frozen['original_setup_sources']), 221)
         self.assertEqual(set(frozen['git_blobs']), set(frozen['sources']))
         original = (r.ROOT / r.GATE).read_bytes()
@@ -96,6 +100,7 @@ class SourceContractTests(unittest.TestCase):
             self.assertIs(result['numerical_execution'], False)
             self.assertIs(result['public_execution'], False)
             self.assertIs(result['rtl_execution'], False)
+            self.assertEqual(result['intermediate_generated_module_sha256'], r.INTERMEDIATE_GENERATED_MODULE_SHA256)
             self.assertEqual(r.sha((out / 'generated' / r.GATE).read_bytes()), r.GENERATED_MODULE_SHA256)
             self.assertFalse((out / 'overlays' / r.GATE).exists())
             files = {str(p.relative_to(out / 'overlays')): r.sha(p.read_bytes())
@@ -128,7 +133,7 @@ sys.addaudithook(audit)
 from candidates.qwen2_resident_matrix.raw_kv_native_qk_run import runtime as r
 from candidates.qwen2_resident_matrix.raw_kv_public_fresh import setup
 workspace=Path(sys.argv[1]);frozen=r.snapshot(composed=True)
-if len(frozen['sources'])!=247 or len(frozen['original_setup_sources'])!=221:raise AssertionError('counts')
+if len(frozen['sources'])!=252 or len(frozen['original_setup_sources'])!=221:raise AssertionError('counts')
 start=time.monotonic_ns()
 context=r.make_context(workspace,'b'*40,start,start+900000000000,frozen)
 (workspace/'validation_context.json').write_bytes(r.encoded(context))
@@ -144,14 +149,101 @@ try:setup._read_context(workspace/'context.json')
 except Exception:pass
 else:raise AssertionError('union admitted as original context')
 if any(n.split('.')[0] in ('torch','numpy') for n in sys.modules):raise AssertionError('native import')
-print('SOURCE_CONTEXT_PASS 247 221')
+print('SOURCE_CONTEXT_PASS 252 221')
 '''
             env = {k: v for k, v in os.environ.items() if k not in ('PYTHONPATH', 'PYTHONHOME', 'PYTHONOPTIMIZE')}
             env['PYTHONDONTWRITEBYTECODE'] = '1'
             result = subprocess.run([sys.executable, '-B', '-c', script, str(workspace)],
                                     cwd=checkout, env=env, text=True, capture_output=True, timeout=20)
             self.assertEqual(result.returncode, 0, result.stderr[-4096:])
-            self.assertEqual(result.stdout.strip(), 'SOURCE_CONTEXT_PASS 247 221')
+            self.assertEqual(result.stdout.strip(), 'SOURCE_CONTEXT_PASS 252 221')
+
+
+class DispatchPatchTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from ..raw_kv_native_qk import prepare as recipe
+        cls.temp = tempfile.TemporaryDirectory(prefix='dispatch-source-only-')
+        cls.addClassCleanup(cls.temp.cleanup)
+        directory = Path(cls.temp.name) / 'intermediate'
+        recipe.prepare(directory)
+        cls.original = (directory / r.GATE).read_bytes()
+        cls.patch = r.read_source(r.DISPATCH_PATCH)
+        cls.frozen = dict(sources={r.DISPATCH_PATCH: r.sha(cls.patch)})
+        r.apply_dispatch_patch(directory, cls.frozen)
+        cls.generated = (directory / r.GATE).read_bytes()
+
+    def write_intermediate(self, root, data=None):
+        directory = Path(root) / 'generated'; target = directory / r.GATE
+        target.parent.mkdir(parents=True); target.write_bytes(self.original if data is None else data)
+        return directory
+
+    def test_third_patch_exact_hash_and_whole_ast_inverse(self):
+        self.assertEqual(r.sha(self.original), r.INTERMEDIATE_GENERATED_MODULE_SHA256)
+        self.assertEqual(r.sha(self.generated), r.GENERATED_MODULE_SHA256)
+        self.assertNotEqual(r.INTERMEDIATE_GENERATED_MODULE_SHA256, r.GENERATED_MODULE_SHA256)
+        r.check_dispatch_scope(self.original, self.generated)
+        before = {n.name: n for n in ast.parse(self.original).body if isinstance(n, ast.FunctionDef)}
+        after = {n.name: n for n in ast.parse(self.generated).body if isinstance(n, ast.FunctionDef)}
+        self.assertEqual(before.keys(), after.keys())
+        for name in before.keys() - {'run_gate'}:
+            self.assertEqual(ast.dump(before[name]), ast.dump(after[name]), name)
+        gate = after['run_gate']
+        self.assertEqual([a.arg for a in gate.args.kwonlyargs], ['qkv_recipe', 'diagnostics'])
+        self.assertIs(ast.literal_eval(gate.args.kw_defaults[-1]), None)
+        self.assertEqual(ast.unparse(gate.body[0].test), 'diagnostics is not None')
+        capture = [n for n in ast.walk(gate) if isinstance(n, ast.With)]
+        self.assertEqual(len(capture), 1)
+        self.assertEqual(ast.unparse(capture[0].items[0].context_expr), 'diagnostics.capture(mode)')
+        self.assertEqual(len(capture[0].body), 1)
+        self.assertEqual(ast.unparse(capture[0].body[0]),
+                         'native, native_cache = native_forward(module, layer, xt, mode, native_cache)')
+
+    def test_scope_rejects_enabled_callback_math_and_guard_changes(self):
+        text = self.generated.decode()
+        mutations = (
+            text.replace('with diagnostics.capture(mode):',
+                         'with diagnostics.capture(mode):\n                    unapproved_callback()'),
+            text.replace('if type(diagnostics) is not Capture:', 'if not isinstance(diagnostics, Capture):'),
+            text.replace('native_forward(module, layer, xt, mode, native_cache)',
+                         'native_forward(module, layer, xt, mode, None)', 1),
+            text.replace('diagnostics.capture(mode)', 'diagnostics.capture("bf16")'),
+            text.replace('math.sqrt(dim)', 'math.sqrt(dim + 1)'),
+            text.replace('diagnostics=None', 'diagnostics=False'),
+        )
+        for index, changed in enumerate(mutations):
+            with self.subTest(index=index), self.assertRaises(ValueError):
+                r.check_dispatch_scope(self.original, changed)
+
+    def test_patch_rejects_intermediate_source_and_target_drift_before_subprocess(self):
+        with tempfile.TemporaryDirectory() as root:
+            directory = self.write_intermediate(root, self.original + b'\n')
+            with mock.patch.object(r.subprocess, 'run', side_effect=AssertionError('patch executed')):
+                with self.assertRaises(ValueError): r.apply_dispatch_patch(directory, self.frozen)
+        bad = self.patch.replace(('a/' + r.GATE).encode(), b'a/scripts/unapproved.py')
+        frozen = dict(sources={r.DISPATCH_PATCH: r.sha(bad)})
+        with tempfile.TemporaryDirectory() as root:
+            directory = self.write_intermediate(root)
+            with mock.patch.object(r, 'read_source', return_value=bad), \
+                    mock.patch.object(r.subprocess, 'run', side_effect=AssertionError('patch executed')):
+                with self.assertRaises(ValueError): r.apply_dispatch_patch(directory, frozen)
+        with tempfile.TemporaryDirectory() as root:
+            directory = self.write_intermediate(root)
+            with mock.patch.object(r.subprocess, 'run', side_effect=AssertionError('patch executed')):
+                with self.assertRaises(ValueError):
+                    r.apply_dispatch_patch(directory, dict(sources={r.DISPATCH_PATCH: '0' * 64}))
+
+    def test_local_patch_hash_refresh_cannot_admit_enabled_mutation(self):
+        changed = self.generated.decode().replace('with diagnostics.capture(mode):',
+            'with diagnostics.capture(mode):\n                    unapproved_callback()')
+        raw = ''.join(difflib.unified_diff(self.original.decode().splitlines(keepends=True),
+            changed.splitlines(keepends=True), fromfile='a/' + r.GATE, tofile='b/' + r.GATE)).encode()
+        frozen = dict(sources={r.DISPATCH_PATCH: r.sha(raw)})
+        with tempfile.TemporaryDirectory() as root:
+            directory = self.write_intermediate(root)
+            with mock.patch.object(r, 'read_source', return_value=raw), self.assertRaisesRegex(
+                    ValueError, 'dispatch generated identity differs'):
+                r.apply_dispatch_patch(directory, frozen)
 
 
 class MetadataTests(unittest.TestCase):

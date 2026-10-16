@@ -60,7 +60,128 @@ def report_fixture(tokens=16,cause=None):
     return phase.project_result(value,**kwargs)
 
 
+def diagnostic_controls():
+    """Metadata only; no CPU probe, library load, or numerical package import."""
+    from . import dispatch_diagnostic as diagnostic
+    line=(b'onednn_verbose,v1,primitive,exec,cpu,matmul,brg_matmul:avx512_core_bf16,undef,'
+        b'src:bf16::blocked:ab::f0 wei:bf16::blocked:ab::f0 dst:bf16::blocked:ab::f0,'
+        b'attr-scratchpad:user,,16x1536:1536x256,0.01\n')
+    verbose=diagnostic.parse_verbose(line)
+    cpu=diagnostic.cpu_features(('processor : 0\nflags : '+' '.join(diagnostic.FLAGS)+'\n').encode())
+    snapshot=dict(status='OBSERVED',x87_round=0,sse_round=0,ftz=False,daz=False)
+    environment=dict(libraries={key:dict(snapshot) for key in ('before','after_qkv','after_qk')},
+        **{key:dict(snapshot) for key in ('before_recipe','after_recipe','after_gate')})
+    tree=ast.parse(kernel.source(kernel.ORIGINAL))
+    sources=ast.literal_eval(next(n.value for n in tree.body if isinstance(n,ast.Assign) and
+        any(isinstance(t,ast.Name) and t.id=='SOURCE_HASHES' for t in n.targets)))
+    backend=dict(torch_build='PRIVATE torch build /token?DO_NOT_LEAK',numpy_build='PRIVATE numpy config',
+        source_sha256=sources,installed_sources_verified_exact=True)
+    manifest={'tensors':[dict(local_name=name,shape=shape,dtype='BF16',sha256='9'*64)
+        for name,shape in diagnostic.PAYLOAD_SHAPES.items()]}
+    return dict(bf16=verbose,fp32=copy.deepcopy(verbose)),cpu,environment,backend,manifest
+
+
+def diagnostics_fixture(tokens=16,cause=None):
+    value,kwargs=fixture(tokens,cause);report=phase.project_result(value,**kwargs)
+    observed,cpu,environment,backend,manifest=diagnostic_controls()
+    context={key:kwargs[key] for key in ('source_sha256','contract_sha256','generated_module_sha256')}
+    return phase.diagnostic_record(context,tokens,kwargs['library'],kwargs['qkv_library'],observed,
+        cpu,phase.backend_build(backend),environment,(value,report,manifest))
+
+
 class ProjectionTests(unittest.TestCase):
+    def test_complete_diagnostics_bind_hashes_without_changing_numeric_report(self):
+        for tokens in (16,128):
+            for cause in (None,'budget','bf16_semantics','fp32_semantics'):
+                with self.subTest(tokens=tokens,cause=cause):
+                    before=report_fixture(tokens,cause)
+                    observed=diagnostics_fixture(tokens,cause)
+                    self.assertEqual(observed['status'],'COMPLETE_DIAGNOSTICS')
+                    self.assertIs(observed['numerical_acceptance'],False)
+                    self.assertIs(observed['postflight_complete'],True)
+                    self.assertEqual(observed['result_sha256'],before['result_sha256'])
+                    self.assertEqual(observed['payload_tensor_map_sha256'],kernel.sha(kernel.encoded(observed['payload_sha256'])))
+                    self.assertEqual(set(observed['payload_sha256']),set(diagnostic_controls()[-1]['tensors'][i]['local_name'] for i in range(13)))
+                    self.assertEqual(len(observed['stage_sha256']['bf16']),29)
+                    self.assertEqual(phase.validate_diagnostics(json.loads(json.dumps(observed))),observed)
+                    self.assertNotIn('PRIVATE',kernel.encoded(observed).decode())
+                    self.assertEqual(before,report_fixture(tokens,cause))
+
+    def test_diagnostic_schema_privacy_type_fenv_and_identity_negatives(self):
+        for case in ('path','backend_text','backend_commit','backend_bool','payload','stage','metric','acceptance','change','fenv_bool','result','capture','postflight','payload_map_hash'):
+            value=diagnostics_fixture()
+            if case=='path':value['private_path']='/private/log'
+            elif case=='backend_text':value['backend_build']['torch_build']='private config'
+            elif case=='backend_commit':value['backend_build']['torch_commit']='0'*40
+            elif case=='backend_bool':value['backend_build']['installed_sources_verified_exact']=1
+            elif case=='payload':value['payload_sha256']['unexpected']='0'*64
+            elif case=='stage':value['stage_sha256']['bf16']['q']['actual_f32_sha256']='private'
+            elif case=='metric':value['stage_sha256']['bf16']['q']['max_abs']=0
+            elif case=='acceptance':value['numerical_acceptance']=True
+            elif case=='change':value['fenv_changes']['qkv_load']=True
+            elif case=='fenv_bool':value['fenv']['before_recipe']['ftz']=0
+            elif case=='result':value['result_sha256']=None
+            elif case=='postflight':value['postflight_complete']=False
+            elif case=='payload_map_hash':value['payload_tensor_map_sha256']='0'*64
+            else:value['capture']['bf16']['error']='secret'
+            with self.subTest(case=case),self.assertRaises(ValueError):phase.validate_diagnostics(value)
+
+    def test_unknown_observations_and_partial_exceptions_never_complete(self):
+        from . import dispatch_diagnostic
+        for missing in ('capture','cpu','fenv','backend'):
+            value=diagnostics_fixture()
+            if missing=='capture':value['capture']['bf16']=dispatch_diagnostic.parse_verbose(b'')
+            elif missing=='cpu':value['cpu']=None
+            elif missing=='fenv':
+                value['fenv']['after_gate']={'status':'UNSUPPORTED'}
+                value['fenv_changes']=phase.fenv_changes(value['fenv'])
+            else:value['backend_build']=None
+            with self.subTest(missing=missing),self.assertRaises(ValueError):phase.validate_diagnostics(value)
+            value['status']='INCOMPLETE_DIAGNOSTICS';phase.validate_diagnostics(value)
+        value,kwargs=fixture();observed,cpu,environment,backend,_=diagnostic_controls()
+        context={key:kwargs[key] for key in ('source_sha256','contract_sha256','generated_module_sha256')}
+        partial=phase.diagnostic_record(context,16,kwargs['library'],kwargs['qkv_library'],observed,cpu,
+            phase.backend_build(backend),environment)
+        self.assertEqual(partial['status'],'INCOMPLETE_DIAGNOSTICS')
+        self.assertIsNone(partial['result_sha256']);self.assertIsNone(partial['payload_sha256'])
+        self.assertIsNone(partial['payload_tensor_map_sha256'])
+        self.assertIs(partial['postflight_complete'],False)
+
+    def test_completed_fp32_absence_is_diagnostic_without_backend_or_acceptance_claim(self):
+        from . import dispatch_diagnostic
+        for tokens in (16,128):
+            for cause in (None,'budget','bf16_semantics','fp32_semantics'):
+                value=diagnostics_fixture(tokens,cause)
+                value['capture']['fp32']=dispatch_diagnostic.parse_verbose(b'')
+                checked=phase.validate_diagnostics(value)
+                self.assertEqual(checked['status'],'COMPLETE_DIAGNOSTICS')
+                self.assertEqual(checked['capture']['fp32']['status'],'NO_ONEDNN_EXECUTION_OBSERVED')
+                self.assertIs(checked['backend_order_proven'],False)
+                self.assertIs(checked['numerical_acceptance'],False)
+                self.assertIs(report_fixture(tokens,cause)['native_acceptance'],cause is None)
+        value,kwargs=fixture();observed,cpu,environment,backend,_=diagnostic_controls()
+        observed['fp32']=dispatch_diagnostic.parse_verbose(b'')
+        context={key:kwargs[key] for key in ('source_sha256','contract_sha256','generated_module_sha256')}
+        partial=phase.diagnostic_record(context,16,kwargs['library'],kwargs['qkv_library'],observed,
+            cpu,phase.backend_build(backend),environment)
+        self.assertEqual(partial['status'],'INCOMPLETE_DIAGNOSTICS')
+        self.assertIs(partial['postflight_complete'],False)
+        self.assertIsNone(partial['result_sha256'])
+
+    def test_absent_bf16_unknown_malformed_or_truncated_capture_cannot_complete(self):
+        from . import dispatch_diagnostic
+        for mode in ('bf16','fp32'):
+            for raw,truncated in ((b'onednn_verbose,v1,info,PRIVATE_UNKNOWN\n',False),
+                                  (b'malformed private text\n',False),(b'',True)):
+                value=diagnostics_fixture()
+                value['capture'][mode]=dispatch_diagnostic.parse_verbose(raw,truncated=truncated)
+                with self.subTest(mode=mode,raw=raw,truncated=truncated),self.assertRaises(ValueError):
+                    phase.validate_diagnostics(value)
+                value['status']='INCOMPLETE_DIAGNOSTICS';phase.validate_diagnostics(value)
+        value=diagnostics_fixture();value['capture']['bf16']=dispatch_diagnostic.parse_verbose(b'')
+        with self.assertRaises(ValueError):phase.validate_diagnostics(value)
+        value['status']='INCOMPLETE_DIAGNOSTICS';phase.validate_diagnostics(value)
+
     def test_combined_identity_matches_frozen_adapter_schema_and_binds_both_receipts(self):
         value,kwargs=fixture();library=kwargs['library'];qkv_library=kwargs['qkv_library']
         source=kernel.source(kernel.PREFIX+'adapter.py')
@@ -178,7 +299,9 @@ class PhaseControlTests(unittest.TestCase):
     def harness(self,temp,cause=None):
         import candidates.qwen2_resident_matrix.raw_kv_native_qk_run as package
         import candidates.qwen2_resident_matrix.raw_kv_public_fresh as fresh
-        root=Path(temp);(root/'payload').mkdir();(root/'payload/manifest.json').write_bytes(b'{}')
+        observed,cpu,environment,backend,manifest=diagnostic_controls()
+        payload_raw=kernel.encoded(manifest)
+        root=Path(temp);(root/'payload').mkdir();(root/'payload/manifest.json').write_bytes(payload_raw)
         generated=root/'generated/scripts/qwen2_layer0_model_gate.py';generated.parent.mkdir(parents=True);generated.write_bytes(b'# CONTROL_ONLY')
         _,kwargs=fixture();sources=kwargs['source_sha256'];library=kwargs['library'];qkv_library=kwargs['qkv_library']
         start=phase.time.monotonic_ns()
@@ -190,21 +313,26 @@ class PhaseControlTests(unittest.TestCase):
         recipe.identity.return_value=identity
         native=types.SimpleNamespace()
         native.runtime_identity=lambda root:(None,{'runner_sha256':context['generated_module_sha256']})
-        def run_gate(repo,payload,out,tokens,*,carried,threads,small_gate,qkv_recipe):
+        def run_gate(repo,payload,out,tokens,*,carried,threads,small_gate,qkv_recipe,diagnostics):
             self.assertEqual((repo,payload,carried,threads,qkv_recipe),(phase.ROOT,root/'payload',False,4,recipe))
+            self.assertIs(diagnostics,native.capture)
             value,_=fixture(tokens,cause)
             value['identity']['runner_sha256']=context['generated_module_sha256']
-            value['payload_manifest_sha256']=kernel.sha(b'{}')
+            value['payload_manifest_sha256']=kernel.sha(payload_raw)
             value['m16_gate_sha256']=kernel.sha(small_gate.read_bytes()) if small_gate else None
             out.mkdir();(out/'RESULT.json').write_bytes(kernel.encoded(value))
             return value
         native.run_gate=Mock(side_effect=run_gate)
-        setup=types.SimpleNamespace(IMPORTED_SETUP_SHA256='a'*64,backend_identity=Mock(return_value=('TORCH_CONTROL_ONLY',{})),backend_threads=Mock())
+        native.capture=Mock();native.capture.report.return_value=observed
+        native.cpu=cpu;native.environment=environment
+        library['library_path']='/CONTROL_ONLY/qk.so';qkv_library['library_path']='/CONTROL_ONLY/qkv.so'
+        setup=types.SimpleNamespace(IMPORTED_SETUP_SHA256='a'*64,backend_identity=Mock(return_value=('TORCH_CONTROL_ONLY',backend)),backend_threads=Mock())
         adapter=types.ModuleType('candidates.qwen2_resident_matrix.raw_kv_native_qk.adapter');adapter.Recipe=Mock(return_value=recipe)
         return package,fresh,root,context,runtime,native,setup,adapter,library,qkv_library
 
     def invoke(self,parts,name,*,qk_verify=None,qkv_verify=None):
         package,fresh,root,context,runtime,native,setup,adapter,library,qkv_library=parts
+        from . import dispatch_capture
         from contextlib import ExitStack
         with ExitStack() as stack:
             stack.enter_context(patch.dict(phase.os.environ,{'QWEN2_NATIVE_QK_PHASE_END_NS':str(context['start_ns']+phase.PHASE_CAPS[name]*10**9)}))
@@ -215,6 +343,10 @@ class PhaseControlTests(unittest.TestCase):
             stack.enter_context(patch.object(kernel,'verify',return_value=library,side_effect=qk_verify))
             stack.enter_context(patch.object(qkv_kernel,'verify',return_value=qkv_library,side_effect=qkv_verify))
             stack.enter_context(patch.object(phase,'verify_exports'))
+            stack.enter_context(patch.object(dispatch_capture,'Capture',return_value=native.capture))
+            stack.enter_context(patch.object(dispatch_capture,'library_fenv',return_value=native.environment['libraries']))
+            stack.enter_context(patch.object(dispatch_capture,'fenv_snapshot',return_value=native.environment['before_recipe']))
+            stack.enter_context(patch.object(phase,'read_cpu_features',return_value=native.cpu))
             return phase.run(name,root/'validation_context.json')
 
     def test_separate_native_phases_bind_real_m16_result_and_safe_receipt(self):
@@ -235,8 +367,63 @@ class PhaseControlTests(unittest.TestCase):
                 self.assertEqual(self.invoke(parts,'native16'),1)
                 value=phase.validate_report(kernel.json_bytes((parts[2]/'phase_native16.json').read_bytes()))
                 self.assertFalse(value['native_acceptance'])
+                observation=phase.validate_diagnostics(kernel.json_bytes((parts[2]/'phase_native16_diagnostics.json').read_bytes()))
+                self.assertEqual(observation['status'],'COMPLETE_DIAGNOSTICS')
                 with self.assertRaises(ValueError):self.invoke(parts,'native128')
                 self.assertEqual(parts[5].run_gate.call_count,1)
+
+    def test_absent_bf16_keeps_genuine_pass_report_but_blocks_phase_and_m128(self):
+        from . import dispatch_diagnostic
+        with tempfile.TemporaryDirectory() as temp:
+            parts=self.harness(temp)
+            parts[5].capture.report.return_value['bf16']=dispatch_diagnostic.parse_verbose(b'')
+            self.assertEqual(self.invoke(parts,'native16'),1)
+            report=phase.validate_report(kernel.json_bytes((parts[2]/'phase_native16.json').read_bytes()))
+            observation=phase.validate_diagnostics(kernel.json_bytes((parts[2]/'phase_native16_diagnostics.json').read_bytes()))
+            self.assertTrue(report['native_acceptance']);self.assertEqual(observation['status'],'INCOMPLETE_DIAGNOSTICS')
+            with self.assertRaises(ValueError):self.invoke(parts,'native128')
+            self.assertEqual(parts[5].run_gate.call_count,1)
+
+    def test_completed_fp32_absence_allows_both_phases_with_no_backend_proof(self):
+        from . import dispatch_diagnostic
+        with tempfile.TemporaryDirectory() as temp:
+            parts=self.harness(temp)
+            parts[5].capture.report.return_value['fp32']=dispatch_diagnostic.parse_verbose(b'')
+            for name in ('native16','native128'):
+                self.assertEqual(self.invoke(parts,name),0)
+                observation=phase.validate_diagnostics(kernel.json_bytes((parts[2]/('phase_'+name+'_diagnostics.json')).read_bytes()))
+                self.assertEqual(observation['status'],'COMPLETE_DIAGNOSTICS')
+                self.assertIs(observation['postflight_complete'],True)
+                self.assertIs(observation['numerical_acceptance'],False)
+                self.assertIs(observation['backend_order_proven'],False)
+
+    def test_native_exception_retains_partial_observations_without_text(self):
+        from . import dispatch_diagnostic
+        with tempfile.TemporaryDirectory() as temp:
+            parts=self.harness(temp);failure=RuntimeError('PRIVATE token /private/path')
+            parts[5].capture.report.return_value['fp32']=dispatch_diagnostic.parse_verbose(b'')
+            parts[5].run_gate.side_effect=failure
+            with self.assertRaises(RuntimeError) as caught:self.invoke(parts,'native16')
+            self.assertIs(caught.exception,failure)
+            path=parts[2]/'phase_native16_diagnostics.json';raw=path.read_bytes()
+            value=phase.validate_diagnostics(kernel.json_bytes(raw))
+            self.assertEqual(value['status'],'INCOMPLETE_DIAGNOSTICS')
+            self.assertFalse(value['postflight_complete']);self.assertIsNone(value['result_sha256'])
+            self.assertNotIn(b'PRIVATE',raw);self.assertNotIn(b'/private',raw)
+            self.assertFalse((parts[2]/'phase_native16.json').exists())
+
+    def test_failed_capture_report_retains_other_bounded_observations(self):
+        with tempfile.TemporaryDirectory() as temp:
+            parts=self.harness(temp);failure=RuntimeError('PRIVATE capture failure')
+            parts[5].capture.report.side_effect=failure
+            with self.assertRaises(RuntimeError) as caught:self.invoke(parts,'native16')
+            self.assertIs(caught.exception,failure)
+            value=phase.validate_diagnostics(kernel.json_bytes((parts[2]/'phase_native16_diagnostics.json').read_bytes()))
+            self.assertEqual(value['status'],'INCOMPLETE_DIAGNOSTICS');self.assertIsNone(value['capture'])
+            self.assertIsNotNone(value['backend_build']);self.assertIsNone(value['result_sha256'])
+            # The genuine numerical verdict was already committed and survives.
+            numerical=phase.validate_report(kernel.json_bytes((parts[2]/'phase_native16.json').read_bytes()))
+            self.assertTrue(numerical['native_acceptance'])
 
     def test_either_library_rejection_or_postflight_drift_blocks_receipt(self):
         for role in ('qk','qkv'):

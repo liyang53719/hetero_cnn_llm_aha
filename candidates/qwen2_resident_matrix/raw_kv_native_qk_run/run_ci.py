@@ -25,6 +25,8 @@ PHASE_MODULE='candidates.qwen2_resident_matrix.raw_kv_native_qk_run.phase'
 TOTAL=900
 LIMITS={'preflight':20,'environment':120,'acquisition':420,'kernel':30,'native16':60,'native128':120}
 OUTPUTS=('summary.json','progress.json','source_hashes.json')
+# Two bounded schema2 metadata projections plus both numerical reports.
+SAFE_SUMMARY_LIMIT=98_304
 PASS='PASS_NATIVE_QKV_QK_M16_M128'
 PHASES=('preflight','cpu_qualification','clone','compose','environment','acquisition','kernel','native16','native128','finalize')
 
@@ -121,7 +123,7 @@ def publish(evidence,summary):
     progress={k:summary[k] for k in ('schema','status','phase','elapsed_seconds')}
     if progress['status']==PASS:progress['status']='TERMINAL_RECEIPT_PENDING'
     setup.atomic_json(evidence/'progress.json',progress,1024)
-    setup.atomic_json(evidence/'summary.json',summary,65536)
+    setup.atomic_json(evidence/'summary.json',summary,SAFE_SUMMARY_LIMIT)
 
 
 def new_summary(start):
@@ -269,6 +271,43 @@ def safe_report(workspace,name,context):
     return value
 
 
+
+def bind_diagnostics(value,report,*,complete=False):
+    """A diagnostic can explain a failure; it never supplies numerical acceptance."""
+    from . import phase
+    value=phase.validate_diagnostics(value)
+    if report is not None:
+        need(all(value[key]==report[key] for key in ('tokens','contract_sha256',
+            'source_manifest_sha256','generated_module_sha256','library_sha256','qkv_library_sha256')))
+    if value['result_sha256'] is None:
+        need(value['postflight_complete'] is False)
+    else:
+        need(report is not None and all(value[key]==report[key] for key in
+             ('result_sha256','payload_manifest_sha256')))
+    if complete:
+        need(report is not None and value['status']=='COMPLETE_DIAGNOSTICS' and
+             value['postflight_complete'] is True)
+    return value
+
+
+def safe_diagnostics(workspace,name,context,report=None):
+    """Read only the fixed diagnostic schema, bound to this context and libraries."""
+    from . import phase
+    from candidates.qwen2_resident_matrix.raw_kv_native_qk import kernel
+    from candidates.qwen2_resident_matrix.raw_kv_native_qkv import kernel as qkv_kernel
+    need(name in ('native16','native128'))
+    raw=prior.read_bytes(workspace/('phase_'+name+'_diagnostics.json'),phase.MAX_DIAGNOSTICS)
+    value=phase.validate_diagnostics(assets.json_bytes(raw,limit=phase.MAX_DIAGNOSTICS))
+    need(value['tokens']==(16 if name=='native16' else 128) and
+         value['contract_sha256']==context['contract_sha256'] and
+         value['source_manifest_sha256']==assets.sha(assets.encoded(context['source_sha256'])) and
+         value['generated_module_sha256']==context['generated_module_sha256'])
+    library=kernel.verify(workspace/'qk_library');qkv_library=qkv_kernel.verify(workspace/'qkv_library')
+    need(value['library_sha256']==library['library_sha256'] and
+         value['qkv_library_sha256']==qkv_library['library_sha256'])
+    return bind_diagnostics(value,report)
+
+
 def run_kernel(workspace,context,budget,phase_end):
     """Sole compiler-group owner: no enclosing child supervisor can kill cleanup."""
     from . import phase
@@ -302,7 +341,7 @@ def run_kernel(workspace,context,budget,phase_end):
 
 
 def resume(c,private,out):
-    budget=Budget(c['start_ns'],c['deadline_ns']);summary=new_summary(budget.started);frozen={};reports={}
+    budget=Budget(c['start_ns'],c['deadline_ns']);summary=new_summary(budget.started);frozen={};reports={};observations={}
     workspace=private/'workspace'
     try:
         budget.arm();frozen=check_launch(c,private,composed=True)
@@ -333,14 +372,18 @@ def resume(c,private,out):
                 setup.phase_receipt(workspace,name,frozen['original_setup_sources'])
             elif name in ('native16','native128'):
                 reports[name]=safe_report(workspace,name,context)
-                need(reports[name]['status']=='COMPLETE_NATIVE_VALIDATION')
                 summary['native_results']=dict(reports)
-        need(set(reports)=={'native16','native128'})
+                observations[name]=safe_diagnostics(workspace,name,context,reports[name])
+                summary['native_diagnostics']=dict(observations)
+                bind_diagnostics(observations[name],reports[name],complete=True)
+                need(reports[name]['status']=='COMPLETE_NATIVE_VALIDATION')
+        need(set(reports)==set(observations)=={'native16','native128'})
+        need(observations['native16']['payload_tensor_map_sha256']==observations['native128']['payload_tensor_map_sha256'])
         need(all(reports['native16'][key]==reports['native128'][key] for key in
                  ('library_sha256','library_receipt_sha256','recipe_pins_sha256','qkv_library_sha256','qkv_library_receipt_sha256','qkv_recipe_pins_sha256','generated_module_sha256','payload_manifest_sha256')))
         need(check_launch(c,private,composed=True)==frozen)
         budget.remaining()
-        summary.update(status=PASS,phase='finalize',postflight_complete=True,numerical_acceptance=True,native_results=reports)
+        summary.update(status=PASS,phase='finalize',postflight_complete=True,numerical_acceptance=True,native_results=reports,native_diagnostics=observations)
         return finish(out,summary,budget,sources=frozen['sources'])
     except BaseException as error:
         name=summary['phase']
@@ -362,6 +405,11 @@ def resume(c,private,out):
                 budget.arm();reports[summary['phase']]=safe_report(workspace,summary['phase'],context)
                 summary['native_results']=dict(reports)
             except Exception:summary['native_diagnostic_status']='UNAVAILABLE'
+            try:
+                budget.arm();name=summary['phase']
+                observations[name]=safe_diagnostics(workspace,name,context,reports.get(name))
+                summary['native_diagnostics']=dict(observations)
+            except Exception:summary['native_diagnostics_status']='UNAVAILABLE'
         if summary['phase']=='environment':
             try:
                 value=assets.read_json(workspace/'backend.failure.json',limit=4096)
@@ -383,7 +431,7 @@ def placement_status(evidence,commit,outcome):
     expected=dict(schema=1,contract_sha256=frozen['contract_sha256'],source_sha256=frozen['sources'],
                   generated_sha256=frozen['generated'],generated_module_sha256=frozen['generated_module_sha256'])
     need(assets.same(source,expected))
-    summary=assets.read_json(evidence/'summary.json',limit=65536)
+    summary=assets.read_json(evidence/'summary.json',limit=SAFE_SUMMARY_LIMIT)
     need(type(summary) is dict and summary.get('schema')==1 and type(summary.get('schema')) is int and
          summary.get('profile')==runtime.PROFILE and summary.get('checkout_commit')==commit and
          summary.get('contract_sha256')==frozen['contract_sha256'] and
@@ -406,11 +454,13 @@ def placement_status(evidence,commit,outcome):
              all(summary.get(k) is False for k in ('packages_started','compile_started','native_started','postflight_complete','numerical_acceptance')))
         return status
     if status==PASS:
-        need(set(summary)==base_keys|{'native_results'})
+        need(set(summary)==base_keys|{'native_results','native_diagnostics'})
         need(outcome=='success' and summary.get('phase')=='finalize' and cpu['status']=='ELIGIBLE_FOR_BACKEND_CHECK' and
              all(summary.get(k) is True for k in ('packages_started','compile_started','native_started','postflight_complete','numerical_acceptance')))
         from . import phase
         reports=summary.get('native_results');need(type(reports) is dict and set(reports)=={'native16','native128'})
+        observations=summary.get('native_diagnostics')
+        need(type(observations) is dict and set(observations)=={'native16','native128'})
         sources=dict(frozen['sources']);sources.update(frozen['generated'])
         for name,tokens in (('native16',16),('native128',128)):
             report=phase.validate_report(reports[name])
@@ -418,6 +468,8 @@ def placement_status(evidence,commit,outcome):
                  report['contract_sha256']==frozen['contract_sha256'] and
                  report['source_manifest_sha256']==assets.sha(assets.encoded(sources)) and
                  report['generated_module_sha256']==frozen['generated_module_sha256'])
+            bind_diagnostics(observations[name],report,complete=True)
+        need(observations['native16']['payload_tensor_map_sha256']==observations['native128']['payload_tensor_map_sha256'])
         need(reports['native128']['m16_result_sha256']==reports['native16']['result_sha256'] and
              all(reports['native16'][k]==reports['native128'][k] for k in
                  ('library_sha256','library_receipt_sha256','recipe_pins_sha256','qkv_library_sha256','qkv_library_receipt_sha256','qkv_recipe_pins_sha256','payload_manifest_sha256')))

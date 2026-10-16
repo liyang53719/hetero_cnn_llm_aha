@@ -1,0 +1,28 @@
+--- a/scripts/qwen2_layer0_model_gate.py
++++ b/scripts/qwen2_layer0_model_gate.py
+@@ -484,7 +484,11 @@
+ 
+ 
+ def run_gate(root: Path, payload_dir: Path, output_dir: Path, tokens: int = 16,
+-             carried: bool = False, threads: int = 4, small_gate: Path | None = None, *, qkv_recipe=None) -> dict:
++             carried: bool = False, threads: int = 4, small_gate: Path | None = None, *, qkv_recipe=None, diagnostics=None) -> dict:
++    if diagnostics is not None:
++        from candidates.qwen2_resident_matrix.raw_kv_native_qk_run.dispatch_capture import Capture
++        if type(diagnostics) is not Capture:
++            raise ValueError('native dispatch capture identity')
+     qkv_identity = None
+     if qkv_recipe is not None:
+         from candidates.qwen2_resident_matrix.raw_kv_native_qk.adapter import validate
+@@ -571,7 +575,11 @@
+             xt = torch.from_numpy(x).to(dtype)
+             previous_native = None if native_cache is None else (native_cache.key_cache[0].clone(), native_cache.value_cache[0].clone())
+             previous_independent = None if independent_cache is None else tuple(value.copy() for value in independent_cache)
+-            native, native_cache = native_forward(module, layer, xt, mode, native_cache)
++            if diagnostics is None:
++                native, native_cache = native_forward(module, layer, xt, mode, native_cache)
++            else:
++                with diagnostics.capture(mode):
++                    native, native_cache = native_forward(module, layer, xt, mode, native_cache)
+             independent, independent_cache = independent_forward(weights, x, config_dict, mode, independent_cache, qkv_recipe=qkv_recipe)
+             stage_results = {}
+             destination = output_dir / mode / ('phase_' + str(phase))

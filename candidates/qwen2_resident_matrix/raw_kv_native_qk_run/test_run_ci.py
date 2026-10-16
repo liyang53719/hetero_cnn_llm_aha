@@ -82,6 +82,17 @@ def qkv_library_fixture():
     return dict(library_sha256='8'*64,receipt_sha256='9'*64,pins_sha256=qk_kernel.OLD_PINS_SHA256)
 
 
+
+def diagnostics(context,native):
+    """Schema2 CONTROL_ONLY metadata, without CPU probes or numerical imports."""
+    from .test_phase import diagnostics_fixture
+    value=diagnostics_fixture(native['tokens'])
+    for key in ('tokens','source_manifest_sha256','contract_sha256','generated_module_sha256',
+                'library_sha256','qkv_library_sha256','result_sha256','payload_manifest_sha256'):
+        value[key]=native[key]
+    return phase.validate_diagnostics(value)
+
+
 def write_native(context,workspace,tokens,*,failed=False):
     """Tiny metadata file identities only; no native outputs exist."""
     payload=workspace/'payload/manifest.json'
@@ -92,6 +103,7 @@ def write_native(context,workspace,tokens,*,failed=False):
         m16_result_sha256=run.assets.file_sha(workspace/'native16/RESULT.json') if tokens==128 else None)
     value['payload_manifest_sha256']=run.assets.file_sha(payload)
     write_json(workspace/f'phase_native{tokens}.json',value)
+    write_json(workspace/f'phase_native{tokens}_diagnostics.json',diagnostics(context,value))
     return value
 
 
@@ -124,6 +136,7 @@ def placement_fixture(out,*,passed=False):
             generated_module_sha256=FROZEN['generated_module_sha256'])
         first=report(context,16);second=report(context,128,m16_result_sha256=first['result_sha256'])
         summary['native_results']=dict(native16=first,native128=second)
+        summary['native_diagnostics']={name:diagnostics(context,value) for name,value in summary['native_results'].items()}
     else:summary['diagnostic']=run.diagnostic(run.CpuUnsuitable(),'cpu_qualification',SOURCES)
     source=dict(schema=1,contract_sha256=FROZEN['contract_sha256'],source_sha256=SOURCES,
         generated_sha256=FROZEN['generated'],generated_module_sha256=FROZEN['generated_module_sha256'])
@@ -177,6 +190,10 @@ class RunnerControlTests(unittest.TestCase):
                     self.assertEqual(argv[0],str(private/'workspace/venv/bin/python'))
             self.assertFalse(summary['public_executed']);self.assertFalse(summary['rtl_executed'])
             self.assertTrue(summary['postflight_complete']);self.assertTrue(summary['numerical_acceptance'])
+            self.assertEqual(set(summary['native_diagnostics']),{'native16','native128'})
+            for name,value in summary['native_diagnostics'].items():
+                self.assertEqual(value['status'],'COMPLETE_DIAGNOSTICS')
+                self.assertEqual(value['result_sha256'],summary['native_results'][name]['result_sha256'])
             self.assertEqual(summary['native_results']['native128']['m16_result_sha256'],
                 summary['native_results']['native16']['result_sha256'])
             self.assertEqual(json.loads((out/'summary.json').read_text()),summary)
@@ -269,6 +286,185 @@ class RunnerControlTests(unittest.TestCase):
                 with self.subTest(file=target.name),patch.object(qk_kernel,'verify',return_value=library_fixture()), \
                         self.assertRaises(ValueError):run.safe_report(workspace,'native128',context)
                 target.write_bytes(raw)
+
+    def test_safe_diagnostics_bind_context_results_and_both_libraries(self):
+        with tempfile.TemporaryDirectory() as temp:
+            _,context,private,_=fixture(Path(temp));workspace=private/'workspace'
+            native=write_native(context,workspace,16)
+            path=workspace/'phase_native16_diagnostics.json';good=json.loads(path.read_text())
+            with patch.object(qk_kernel,'verify',return_value=library_fixture()):
+                self.assertEqual(run.safe_diagnostics(workspace,'native16',context,native),good)
+                for key,bad in (('tokens',128),('contract_sha256','0'*64),
+                    ('source_manifest_sha256','0'*64),('generated_module_sha256','0'*64),
+                    ('library_sha256','0'*64),('qkv_library_sha256','0'*64),
+                    ('result_sha256','0'*64),('payload_manifest_sha256','0'*64),
+                    ('private_log','SECRET /private/raw'),('postflight_complete',1)):
+                    write_json(path,dict(good,**{key:bad}))
+                    with self.subTest(field=key),self.assertRaises(ValueError):
+                        run.safe_diagnostics(workspace,'native16',context,native)
+                write_json(path,good)
+                with self.assertRaises(ValueError):run.safe_diagnostics(workspace,'native16',context)
+                partial=deepcopy(good)
+                partial.update(status='INCOMPLETE_DIAGNOSTICS',postflight_complete=False,
+                    result_sha256=None,payload_manifest_sha256=None,payload_tensor_map_sha256=None,payload_sha256=None,stage_sha256=None)
+                write_json(path,partial)
+                self.assertEqual(run.safe_diagnostics(workspace,'native16',context),partial)
+                partial['postflight_complete']=True;write_json(path,partial)
+                with self.assertRaises(ValueError):run.safe_diagnostics(workspace,'native16',context)
+                write_json(path,good);path.write_bytes(path.read_bytes()+b' '*phase.MAX_DIAGNOSTICS)
+                with self.assertRaises(ValueError):run.safe_diagnostics(workspace,'native16',context,native)
+
+    def test_missing_unknown_truncated_or_unbound_diagnostics_cannot_pass(self):
+        from . import dispatch_diagnostic as D
+        for cause in ('missing','unknown','truncated','identity','oversize'):
+            def child(context,private,kw):
+                if kw['phase']=='native16':
+                    native=write_native(context,private/'workspace',16)
+                    path=private/'workspace/phase_native16_diagnostics.json'
+                    value=diagnostics(context,native)
+                    if cause=='missing':path.unlink()
+                    elif cause=='oversize':path.write_bytes(path.read_bytes()+b' '*phase.MAX_DIAGNOSTICS)
+                    else:
+                        if cause=='identity':value['result_sha256']='0'*64
+                        else:
+                            value['capture']['bf16']=D.parse_verbose(
+                                b'onednn_verbose,v1,info,SECRET /private/raw\n' if cause=='unknown' else b'',
+                                truncated=cause=='truncated')
+                            value['status']='INCOMPLETE_DIAGNOSTICS'
+                        write_json(path,value)
+                return 0
+            with self.subTest(cause=cause),tempfile.TemporaryDirectory() as temp:
+                code,summary,calls,*_=self.exercise(Path(temp),child=child)
+                self.assertEqual((code,summary['status']),(1,'FAILED'))
+                self.assertEqual(calls[-1][1]['phase'],'native16')
+                self.assertFalse(summary['numerical_acceptance'] or summary['postflight_complete'])
+                self.assertEqual(summary['native_results']['native16']['status'],'COMPLETE_NATIVE_VALIDATION')
+                if cause in ('unknown','truncated'):
+                    self.assertEqual(summary['native_diagnostics']['native16']['status'],'INCOMPLETE_DIAGNOSTICS')
+                else:self.assertEqual(summary['native_diagnostics_status'],'UNAVAILABLE')
+                self.assertNotIn('SECRET',json.dumps(summary));self.assertNotIn('/private/raw',json.dumps(summary))
+
+    def test_native_exception_retains_bound_partial_diagnostics_without_result(self):
+        def child(context,private,kw):
+            if kw['phase']=='native16':
+                workspace=private/'workspace';native=write_native(context,workspace,16)
+                (workspace/'phase_native16.json').unlink()
+                value=diagnostics(context,native)
+                value.update(status='INCOMPLETE_DIAGNOSTICS',postflight_complete=False,
+                    result_sha256=None,payload_manifest_sha256=None,payload_tensor_map_sha256=None,payload_sha256=None,stage_sha256=None)
+                write_json(workspace/'phase_native16_diagnostics.json',value)
+                raise RuntimeError('SECRET raw child error')
+            return 0
+        with tempfile.TemporaryDirectory() as temp:
+            code,summary,calls,*_=self.exercise(Path(temp),child=child)
+            self.assertEqual((code,summary['status']),(1,'FAILED'))
+            self.assertNotIn('native_results',summary)
+            value=summary['native_diagnostics']['native16']
+            self.assertEqual(value['status'],'INCOMPLETE_DIAGNOSTICS')
+            self.assertIsNone(value['result_sha256']);self.assertFalse(value['postflight_complete'])
+            self.assertEqual(summary['native_diagnostic_status'],'UNAVAILABLE')
+            self.assertNotIn('SECRET',json.dumps(summary))
+
+    def test_max_schema_metadata_fits_explicit_summary_cap(self):
+        from . import dispatch_diagnostic as D
+        context=dict(source_sha256=SOURCES,contract_sha256=FROZEN['contract_sha256'],
+            generated_module_sha256=FROZEN['generated_module_sha256'])
+        summary=run.new_summary(time.monotonic_ns())
+        summary.update(status='INTERRUPTED',phase='native128',elapsed_seconds=899.999999,
+            checkout_commit=COMMIT,contract_sha256=FROZEN['contract_sha256'],cpu_eligibility=cpu_record(),
+            native_results={},native_diagnostics={},native_diagnostic_status='UNAVAILABLE',
+            native_diagnostics_status='UNAVAILABLE')
+        helpers,stages,policy=phase.helpers()
+        for tokens in (16,128):
+            value=report(context,tokens,m16_result_sha256=None if tokens==16 else '4'*64)
+            # Fill each valid numerical report to its exact admitted byte cap,
+            # with finite large scalar metadata, never tensor payloads.
+            for name,item in value['bf16_stages'].items():
+                item.update(max_abs=int('9'*175),mean_abs=int('9'*175),bit_exact=False)
+                verdict=helpers['stage_verdict'](name,item,'bf16',policy)
+                item.update(limits=verdict.get('limits'),passed=verdict['passed'])
+            mode=value['modes']['bf16'];mode['semantics']['mask_exact']=False
+            mode.update(failed_stages=[name for name in stages if value['bf16_stages'][name]['passed'] is False],
+                all_semantics_exact=False,status='FAIL_BF16_STAGE_BUDGET')
+            value.update(status='FAIL_NATIVE_VALIDATION',native_status='FAIL_BF16_STAGE_BUDGET',native_acceptance=False)
+            spare=phase.MAX_REPORT-len(run.assets.encoded(value))
+            self.assertGreaterEqual(spare,0)
+            value['bf16_stages']['softmax_fp32']['max_abs']=int('9'*(175+spare))
+            value=phase.validate_report(value)
+            self.assertEqual(len(run.assets.encoded(value)),phase.MAX_REPORT)
+            observed=diagnostics(context,value)
+            impl=max(D.IMPL_ISA,key=lambda key:len(key)+len(D.IMPL_ISA[key]))
+            record=dict(primitive='inner_product',implementation=impl,isa=D.IMPL_ISA[impl],
+                role=max(D.ROLES,key=len),count=D.MAX_RECORDS//D.MAX_GROUPS,
+                descriptors={key:dict(dtype=max(D.DTYPES,key=len),layout=max(D.LAYOUTS,key=len))
+                             for key in ('src','wei','bia','dst')})
+            for capture in observed['capture'].values():
+                count=record['count']*D.MAX_GROUPS
+                records=[deepcopy(record) for _ in range(D.MAX_GROUPS)]
+                records[0]['count']=1000
+                for item in records[1:]:item['count']=100
+                count=sum(item['count'] for item in records)
+                capture.update(records=records,exec_records=count,
+                    lines_observed=D.MAX_LINES,info_records=D.MAX_LINES-count)
+            observed['cpu']['processor_records']=4096
+            observed['cpu']['flags']=dict.fromkeys(D.FLAGS,False)
+            observed=phase.validate_diagnostics(observed)
+            summary['native_results']['native'+str(tokens)]=value
+            summary['native_diagnostics']['native'+str(tokens)]=observed
+        contract=json.loads((run.ROOT/run.runtime.CONTRACT).read_text())
+        sources=set(contract['source_sha256'])|set(run.setup.SETUP_SOURCES)
+        longest=max(sources,key=len)
+        error=dict(phase='preflight',exception=max(run.setup.EXCEPTIONS,key=len),exit_code=-128,signal=128,
+            frames=[dict(source=longest,line=99999) for _ in range(3)])
+        run.setup.validate_diagnostic(error,'preflight',sources)
+        for name in ('diagnostic','child_diagnostic'):summary[name]=dict(error,phase='native128')
+        summary['cpu_eligibility']['processor_records']=4096
+        size=len(run.assets.encoded(summary))
+        self.assertGreater(size,65536)
+        self.assertLessEqual(size,run.SAFE_SUMMARY_LIMIT)
+        self.assertEqual(run.SAFE_SUMMARY_LIMIT,98_304)
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp);run.publish(out,summary)
+            self.assertEqual(run.assets.read_json(out/'summary.json',limit=run.SAFE_SUMMARY_LIMIT),summary)
+            (out/'summary.json').write_bytes(b' '* (run.SAFE_SUMMARY_LIMIT+1))
+            with self.assertRaises(ValueError):run.assets.read_json(out/'summary.json',limit=run.SAFE_SUMMARY_LIMIT)
+
+    def test_fp32_clean_zero_dispatch_remains_complete_but_bf16_zero_does_not(self):
+        from . import dispatch_diagnostic as D
+        for mode in ('fp32','bf16'):
+            def child(context,private,kw):
+                if kw['phase'] in ('native16','native128'):
+                    native=write_native(context,private/'workspace',int(kw['phase'][6:]))
+                    value=diagnostics(context,native)
+                    value['capture'][mode]=D.parse_verbose(b'')
+                    if mode=='bf16':value['status']='INCOMPLETE_DIAGNOSTICS'
+                    write_json(private/'workspace'/('phase_'+kw['phase']+'_diagnostics.json'),value)
+                return 0
+            with self.subTest(mode=mode),tempfile.TemporaryDirectory() as temp:
+                code,summary,calls,*_=self.exercise(Path(temp),child=child)
+                self.assertEqual((code,summary['status']),(0,run.PASS) if mode=='fp32' else (1,'FAILED'))
+                value=summary['native_diagnostics']['native16']
+                self.assertEqual(value['capture'][mode]['status'],'NO_ONEDNN_EXECUTION_OBSERVED')
+                self.assertEqual(value['status'],'COMPLETE_DIAGNOSTICS' if mode=='fp32' else 'INCOMPLETE_DIAGNOSTICS')
+                self.assertIs(value['backend_order_proven'],False)
+
+    def test_native_cases_must_share_canonical_raw_tensor_hash_map(self):
+        def child(context,private,kw):
+            if kw['phase'] in ('native16','native128'):
+                native=write_native(context,private/'workspace',int(kw['phase'][6:]))
+                if kw['phase']=='native128':
+                    value=diagnostics(context,native)
+                    value['payload_sha256']['self_attn.q_proj.weight']='0'*64
+                    value['payload_tensor_map_sha256']=qk_kernel.sha(qk_kernel.encoded(value['payload_sha256']))
+                    phase.validate_diagnostics(value)
+                    write_json(private/'workspace/phase_native128_diagnostics.json',value)
+            return 0
+        with tempfile.TemporaryDirectory() as temp:
+            code,summary,*_=self.exercise(Path(temp),child=child)
+            self.assertEqual((code,summary['status']),(1,'FAILED'))
+            values=summary['native_diagnostics']
+            self.assertNotEqual(values['native16']['payload_tensor_map_sha256'],values['native128']['payload_tensor_map_sha256'])
+            self.assertEqual(values['native16']['payload_manifest_sha256'],values['native128']['payload_manifest_sha256'])
 
     def test_missing_opt_in_attempt_two_or_event_commit_mismatch_reject_before_bootstrap(self):
         good=['--execute','--private','/CONTROL_ONLY/private','--evidence','/CONTROL_ONLY/safe','--checkout-commit',COMMIT]
@@ -703,7 +899,7 @@ class RunnerControlTests(unittest.TestCase):
                 write_json(out/'progress.json',progress)
                 with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
                 run.publish(out,good)
-                raw=(out/'summary.json').read_bytes();(out/'summary.json').write_bytes(raw+b' '*65536)
+                raw=(out/'summary.json').read_bytes();(out/'summary.json').write_bytes(raw+b' '*run.SAFE_SUMMARY_LIMIT)
                 with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'failure')
 
     def test_placement_gate_requires_native_pass_and_never_retries_other_failures(self):
@@ -727,6 +923,36 @@ class RunnerControlTests(unittest.TestCase):
                     value=deepcopy(good);value.update(status=status,postflight_complete=False,numerical_acceptance=False)
                     run.publish(out,value)
                     self.assertEqual(run.placement_status(out,COMMIT,'failure'),'FAILED')
+
+    def test_placement_pass_requires_both_complete_bound_diagnostic_records(self):
+        from . import dispatch_diagnostic as D
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp);good,_=placement_fixture(out,passed=True)
+            with patch.object(run.runtime,'snapshot',return_value=FROZEN),patch.object(run.prior,'git_identity'):
+                for name in ('native16','native128'):
+                    for cause in ('missing','result','payload','library','context','unknown','truncated','postflight','tensor_map'):
+                        value=deepcopy(good)
+                        observed=value['native_diagnostics'][name]
+                        if cause=='missing':del value['native_diagnostics'][name]
+                        elif cause=='postflight':
+                            observed.update(postflight_complete=False,status='INCOMPLETE_DIAGNOSTICS')
+                        elif cause=='tensor_map':
+                            observed['payload_sha256']['self_attn.q_proj.weight']='0'*64
+                            observed['payload_tensor_map_sha256']=qk_kernel.sha(qk_kernel.encoded(observed['payload_sha256']))
+                        elif cause in ('unknown','truncated'):
+                            observed['capture']['bf16']=D.parse_verbose(
+                                b'onednn_verbose,v1,info,UNREVIEWED\n' if cause=='unknown' else b'',
+                                truncated=cause=='truncated')
+                            observed['status']='INCOMPLETE_DIAGNOSTICS'
+                        else:
+                            field={'result':'result_sha256','payload':'payload_manifest_sha256',
+                                   'library':'qkv_library_sha256','context':'source_manifest_sha256'}[cause]
+                            observed[field]='0'*64
+                        run.publish(out,value)
+                        with self.subTest(name=name,cause=cause),self.assertRaises(ValueError):
+                            run.placement_status(out,COMMIT,'success')
+                value=deepcopy(good);del value['native_diagnostics'];run.publish(out,value)
+                with self.assertRaises(ValueError):run.placement_status(out,COMMIT,'success')
 
     def test_placement_cli_is_read_only_and_rejects_execution_modes(self):
         args=['--placement-status','--evidence','/CONTROL_ONLY/safe','--checkout-commit',COMMIT,'--attempt-outcome','failure']

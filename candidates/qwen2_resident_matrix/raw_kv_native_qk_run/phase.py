@@ -238,6 +238,136 @@ def _postflight(context,workspace,sources,end,library,qkv_library):
     _phase_remaining(context,end)
 
 
+
+MAX_DIAGNOSTICS=65536
+
+
+def backend_build(identity):
+    """Only validated build hashes and fixed, pinned implementation identities."""
+    raw=kernel.source(kernel.ORIGINAL)
+    need(kernel.sha(raw)==qkv_kernel.FIXED[kernel.ORIGINAL])
+    tree=ast.parse(raw)
+    expected=ast.literal_eval(next(n.value for n in tree.body if isinstance(n,ast.Assign) and
+        any(isinstance(t,ast.Name) and t.id=='SOURCE_HASHES' for t in n.targets)))
+    need(type(identity) is dict and identity.get('installed_sources_verified_exact') is True and
+        same(identity.get('source_sha256'),expected))
+    need(all(type(identity.get(k)) is str and len(identity[k].encode())<=65536 for k in ('torch_build','numpy_build')))
+    return dict(torch_build_sha256=kernel.sha(identity['torch_build'].encode()),
+        numpy_build_sha256=kernel.sha(identity['numpy_build'].encode()),
+        torch_commit='449b1768410104d3ed79d3bcfe4ba1d65c7f22c0',
+        onednn_version='3.7.1',onednn_commit='8d263e693366ef8db40acc569cc7d8edf644556d',
+        installed_sources_verified_exact=True,official_source_sha256=expected)
+
+
+def validate_backend_build(value):
+    raw=kernel.source(kernel.ORIGINAL);need(kernel.sha(raw)==qkv_kernel.FIXED[kernel.ORIGINAL])
+    tree=ast.parse(raw)
+    sources=ast.literal_eval(next(n.value for n in tree.body if isinstance(n,ast.Assign) and
+        any(isinstance(t,ast.Name) and t.id=='SOURCE_HASHES' for t in n.targets)))
+    fixed=dict(torch_commit='449b1768410104d3ed79d3bcfe4ba1d65c7f22c0',onednn_version='3.7.1',
+        onednn_commit='8d263e693366ef8db40acc569cc7d8edf644556d',installed_sources_verified_exact=True,
+        official_source_sha256=sources)
+    need(type(value) is dict and set(value)==set(fixed)|{'torch_build_sha256','numpy_build_sha256'} and
+        all(same(value[k],v) for k,v in fixed.items()) and
+        all(kernel.digest(value[k]) for k in ('torch_build_sha256','numpy_build_sha256')))
+    return canonical(value)
+
+
+def fenv_changes(value):
+    def changed(a,b):
+        if a is None or b is None or a.get('status')!='OBSERVED' or b.get('status')!='OBSERVED':return None
+        return not same(a,b)
+    loads=value['libraries'] or {}
+    return dict(qkv_load=changed(loads.get('before'),loads.get('after_qkv')),
+        qk_load=changed(loads.get('after_qkv'),loads.get('after_qk')),
+        recipe=changed(value['before_recipe'],value['after_recipe']),
+        gate=changed(value['after_recipe'],value['after_gate']))
+
+
+def _completed_dispatch(observed):
+    """FP32 may have no oneDNN event; BF16 requires recognized execution.
+
+    This only admits observations after the caller's independent numerical and
+    source postflight checks. Absence never identifies a backend or its order.
+    """
+    return (observed is not None and observed['bf16']['status']=='COMPLETE_DIAGNOSTIC' and
+        observed['fp32']['status'] in ('COMPLETE_DIAGNOSTIC','NO_ONEDNN_EXECUTION_OBSERVED'))
+
+
+def validate_diagnostics(value):
+    from . import dispatch_capture as capture_module,dispatch_diagnostic as diagnostic
+    fixed=dict(schema=2,diagnostic_only=True,numerical_acceptance=False,backend_order_proven=False,
+        actual_chain_executed=False,rtl_execution=False)
+    hashes={'source_manifest_sha256','contract_sha256','generated_module_sha256','library_sha256','qkv_library_sha256'}
+    fields={'tokens','status','postflight_complete','result_sha256','payload_manifest_sha256','payload_tensor_map_sha256',
+        'capture','cpu','backend_build','fenv','fenv_changes','payload_sha256','stage_sha256'}
+    need(type(value) is dict and set(value)==set(fixed)|hashes|fields and
+        all(type(value[k]) is type(v) and value[k]==v for k,v in fixed.items()))
+    need(all(kernel.digest(value[k]) for k in hashes) and type(value['tokens']) is int and value['tokens'] in (16,128) and
+        type(value['postflight_complete']) is bool and value['status'] in ('COMPLETE_DIAGNOSTICS','INCOMPLETE_DIAGNOSTICS'))
+    need(value['postflight_complete'] is (value['result_sha256'] is not None))
+    if value['result_sha256'] is None:
+        need(all(value[k] is None for k in ('payload_manifest_sha256','payload_tensor_map_sha256','payload_sha256','stage_sha256')))
+    else:
+        need(kernel.digest(value['result_sha256']) and kernel.digest(value['payload_manifest_sha256']))
+        need(same(diagnostic.validate_payload_hashes(value['payload_sha256']),value['payload_sha256']))
+        need(value['payload_tensor_map_sha256']==kernel.sha(kernel.encoded(value['payload_sha256'])))
+        need(same(diagnostic.validate_stage_hashes(value['stage_sha256']),value['stage_sha256']))
+    observed=value['capture']
+    if observed is not None:
+        need(type(observed) is dict and set(observed)=={'bf16','fp32'})
+        need(all(same(diagnostic.validate_verbose(v),v) for v in observed.values()))
+    if value['cpu'] is not None:need(same(diagnostic.validate_cpu_features(value['cpu']),value['cpu']))
+    if value['backend_build'] is not None:validate_backend_build(value['backend_build'])
+    environment=value['fenv']
+    need(type(environment) is dict and set(environment)=={'libraries','before_recipe','after_recipe','after_gate'})
+    loads=environment['libraries']
+    if loads is not None:
+        need(type(loads) is dict and set(loads)=={'before','after_qkv','after_qk'})
+        for item in loads.values():capture_module.validate_fenv(item)
+    for name in ('before_recipe','after_recipe','after_gate'):
+        if environment[name] is not None:capture_module.validate_fenv(environment[name])
+    need(same(value['fenv_changes'],fenv_changes(environment)))
+    snapshots=list((loads or {}).values())+[environment[k] for k in ('before_recipe','after_recipe','after_gate')]
+    complete=(value['postflight_complete'] and value['result_sha256'] is not None and
+        _completed_dispatch(observed) and
+        value['cpu'] is not None and value['backend_build'] is not None and
+        len(snapshots)==6 and all(v is not None and v['status']=='OBSERVED' for v in snapshots))
+    need(value['status']==('COMPLETE_DIAGNOSTICS' if complete else 'INCOMPLETE_DIAGNOSTICS'))
+    need(len(kernel.encoded(value))<=MAX_DIAGNOSTICS)
+    return canonical(value)
+
+
+def diagnostic_record(context,tokens,library,qkv_library,observed,cpu,backend,environment,validated=None):
+    from . import dispatch_diagnostic as diagnostic
+    value=dict(schema=2,diagnostic_only=True,numerical_acceptance=False,backend_order_proven=False,
+        actual_chain_executed=False,rtl_execution=False,tokens=tokens,status='INCOMPLETE_DIAGNOSTICS',
+        postflight_complete=validated is not None,source_manifest_sha256=kernel.sha(kernel.encoded(context['source_sha256'])),
+        contract_sha256=context['contract_sha256'],generated_module_sha256=context['generated_module_sha256'],
+        library_sha256=library['library_sha256'],qkv_library_sha256=qkv_library['library_sha256'],
+        result_sha256=None,payload_manifest_sha256=None,payload_tensor_map_sha256=None,capture=observed,cpu=cpu,backend_build=backend,
+        fenv=environment,fenv_changes=fenv_changes(environment),payload_sha256=None,stage_sha256=None)
+    if validated is not None:
+        disk,report,manifest=validated
+        value.update(result_sha256=report['result_sha256'],payload_manifest_sha256=report['payload_manifest_sha256'],
+            payload_sha256=diagnostic.payload_hashes(manifest),stage_sha256=diagnostic.stage_hashes(disk,tokens=tokens))
+        value['payload_tensor_map_sha256']=kernel.sha(kernel.encoded(value['payload_sha256']))
+    loads=environment['libraries'];snapshots=list((loads or {}).values())+[environment[k] for k in ('before_recipe','after_recipe','after_gate')]
+    if (validated is not None and _completed_dispatch(observed) and
+        cpu is not None and backend is not None and len(snapshots)==6 and
+        all(v is not None and v['status']=='OBSERVED' for v in snapshots)):
+        value['status']='COMPLETE_DIAGNOSTICS'
+    return validate_diagnostics(value)
+
+
+def read_cpu_features():
+    from . import dispatch_diagnostic as diagnostic
+    try:
+        with open('/proc/cpuinfo','rb') as stream:raw=stream.read(diagnostic.CPU_MAX_BYTES+1)
+        return diagnostic.cpu_features(raw)
+    except (OSError,ValueError):return None
+
+
 def run(name,context_path):
     """Called in a separate supervised child for each fixed phase."""
     from . import runtime
@@ -270,47 +400,87 @@ def run(name,context_path):
     native=_generated(context['generated_module'],context['generated_module_sha256'])
     from ..raw_kv_public_fresh import setup
     need(setup.IMPORTED_SETUP_SHA256==sources.get('candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py'))
-    torch,_=setup.backend_identity()  # The original run_gate alone sets interop threads.
-    from ..raw_kv_native_qk.adapter import Recipe
-    recipe=Recipe(workspace/'qkv_library',workspace/'qk_library');recipe_identity=recipe.identity()
-    need(same(recipe_identity,combined_identity(library,qkv_library)))
-    payload_sha=kernel.sha(kernel.read(workspace/'payload/manifest.json',1048576))
-    small=None;small_sha=None
-    if tokens==128:
-        small=workspace/'native16/RESULT.json';small_sha=kernel.sha(kernel.read(small,1048576))
-        prior=validate_report(kernel.json_bytes(kernel.read(workspace/'phase_native16.json',MAX_REPORT),MAX_REPORT))
-        need(prior['tokens']==16 and prior['native_acceptance'] is True and prior['result_sha256']==small_sha and
-            prior['payload_manifest_sha256']==payload_sha and prior['generated_module_sha256']==context['generated_module_sha256'] and
-            prior['library_sha256']==library['library_sha256'] and prior['library_receipt_sha256']==library['receipt_sha256'] and
-            prior['recipe_pins_sha256']==library['pins_sha256'] and
-            prior['qkv_library_sha256']==qkv_library['library_sha256'] and
-            prior['qkv_library_receipt_sha256']==qkv_library['receipt_sha256'] and
-            prior['qkv_recipe_pins_sha256']==qkv_library['pins_sha256'] and
-            prior['source_manifest_sha256']==kernel.sha(kernel.encoded(sources)) and prior['contract_sha256']==context['contract_sha256'])
-    _phase_remaining(context,end)
-    result=native.run_gate(ROOT,workspace/'payload',workspace/name,tokens,
-        carried=False,threads=4,small_gate=small,qkv_recipe=recipe)
-    setup.backend_threads(torch)
-    _phase_remaining(context,end)
-    raw=kernel.read(workspace/name/'RESULT.json',1048576);disk=kernel.json_bytes(raw,1048576)
-    need(same(canonical(result),disk))
-    _,identity=native.runtime_identity(ROOT)
-    identity['independent_qkv_recipe']=recipe_identity
-    need(same(disk.get('identity'),identity))
-    kwargs=dict(tokens=tokens,result_sha256=kernel.sha(raw),source_sha256=sources,
-        contract_sha256=context['contract_sha256'],generated_module_sha256=context['generated_module_sha256'],
-        library=library,qkv_library=qkv_library,payload_manifest_sha256=payload_sha,m16_result_sha256=small_sha)
-    report=project_result(disk,**kwargs)
-    need(same(project_result(canonical(result),**kwargs),report))
-    verify_exports(disk,workspace/name,tokens)
-    recipe.revalidate()
-    need(kernel.sha(kernel.read(workspace/'payload/manifest.json',1048576))==payload_sha)
-    need(kernel.sha(kernel.read(workspace/name/'RESULT.json',1048576))==kernel.sha(raw))
-    if small is not None:need(kernel.sha(kernel.read(small,1048576))==small_sha)
-    _postflight(context,workspace,sources,end,library,qkv_library)
-    kernel._atomic(destination,report)
-    _phase_remaining(context,end)
-    return 0 if report['native_acceptance'] else 1
+    torch,backend_identity=setup.backend_identity()  # The original run_gate alone sets interop threads.
+    from . import dispatch_capture as capture_module
+    capture=capture_module.Capture(workspace/(name+'_dispatch'),torch)
+    diagnostic_destination=workspace/('phase_'+name+'_diagnostics.json')
+    need(not diagnostic_destination.exists() and not diagnostic_destination.is_symlink())
+    environment=dict(libraries=None,before_recipe=None,after_recipe=None,after_gate=None)
+    backend=None;cpu=None;validated=None
+    try:
+        backend=backend_build(backend_identity)
+        cpu=read_cpu_features()
+        environment['libraries']=capture_module.library_fenv(qkv_library['library_path'],library['library_path'])
+        from ..raw_kv_native_qk.adapter import Recipe
+        environment['before_recipe']=capture_module.fenv_snapshot()
+        try:recipe=Recipe(workspace/'qkv_library',workspace/'qk_library')
+        finally:environment['after_recipe']=capture_module.fenv_snapshot()
+        recipe_identity=recipe.identity()
+        need(same(recipe_identity,combined_identity(library,qkv_library)))
+        payload_raw=kernel.read(workspace/'payload/manifest.json',1048576)
+        payload_sha=kernel.sha(payload_raw)
+        small=None;small_sha=None
+        if tokens==128:
+            small=workspace/'native16/RESULT.json';small_sha=kernel.sha(kernel.read(small,1048576))
+            prior=validate_report(kernel.json_bytes(kernel.read(workspace/'phase_native16.json',MAX_REPORT),MAX_REPORT))
+            need(prior['tokens']==16 and prior['native_acceptance'] is True and prior['result_sha256']==small_sha and
+                prior['payload_manifest_sha256']==payload_sha and prior['generated_module_sha256']==context['generated_module_sha256'] and
+                prior['library_sha256']==library['library_sha256'] and prior['library_receipt_sha256']==library['receipt_sha256'] and
+                prior['recipe_pins_sha256']==library['pins_sha256'] and
+                prior['qkv_library_sha256']==qkv_library['library_sha256'] and
+                prior['qkv_library_receipt_sha256']==qkv_library['receipt_sha256'] and
+                prior['qkv_recipe_pins_sha256']==qkv_library['pins_sha256'] and
+                prior['source_manifest_sha256']==kernel.sha(kernel.encoded(sources)) and prior['contract_sha256']==context['contract_sha256'])
+            prior_diagnostics=validate_diagnostics(kernel.json_bytes(
+                kernel.read(workspace/'phase_native16_diagnostics.json',MAX_DIAGNOSTICS),MAX_DIAGNOSTICS))
+            need(prior_diagnostics['tokens']==16 and prior_diagnostics['status']=='COMPLETE_DIAGNOSTICS' and
+                prior_diagnostics['postflight_complete'] is True and
+                all(prior_diagnostics[key]==prior[key] for key in ('result_sha256','payload_manifest_sha256',
+                    'source_manifest_sha256','contract_sha256','generated_module_sha256','library_sha256','qkv_library_sha256')))
+        _phase_remaining(context,end)
+        try:
+            result=native.run_gate(ROOT,workspace/'payload',workspace/name,tokens,
+                carried=False,threads=4,small_gate=small,qkv_recipe=recipe,diagnostics=capture)
+        finally:environment['after_gate']=capture_module.fenv_snapshot()
+        setup.backend_threads(torch)
+        _phase_remaining(context,end)
+        raw=kernel.read(workspace/name/'RESULT.json',1048576);disk=kernel.json_bytes(raw,1048576)
+        need(same(canonical(result),disk))
+        _,identity=native.runtime_identity(ROOT)
+        identity['independent_qkv_recipe']=recipe_identity
+        need(same(disk.get('identity'),identity))
+        kwargs=dict(tokens=tokens,result_sha256=kernel.sha(raw),source_sha256=sources,
+            contract_sha256=context['contract_sha256'],generated_module_sha256=context['generated_module_sha256'],
+            library=library,qkv_library=qkv_library,payload_manifest_sha256=payload_sha,m16_result_sha256=small_sha)
+        report=project_result(disk,**kwargs)
+        need(same(project_result(canonical(result),**kwargs),report))
+        verify_exports(disk,workspace/name,tokens)
+        recipe.revalidate()
+        need(kernel.sha(kernel.read(workspace/'payload/manifest.json',1048576))==payload_sha)
+        need(kernel.sha(kernel.read(workspace/name/'RESULT.json',1048576))==kernel.sha(raw))
+        if small is not None:need(kernel.sha(kernel.read(small,1048576))==small_sha)
+        _postflight(context,workspace,sources,end,library,qkv_library)
+        kernel._atomic(destination,report)
+        validated=(disk,report,kernel.json_bytes(payload_raw,1048576))
+        observation=diagnostic_record(context,tokens,library,qkv_library,capture.report(),cpu,backend,environment,validated)
+        kernel._atomic(diagnostic_destination,observation)
+        _phase_remaining(context,end)
+        return 0 if report['native_acceptance'] and observation['status']=='COMPLETE_DIAGNOSTICS' else 1
+
+    except BaseException:
+        # Keep available bounded observations on exceptions without hiding the
+        # original failure, changing arithmetic, or promoting partial evidence.
+        try:
+            need(time.monotonic_ns()<min(end,context['deadline_ns'])-10**9)
+            if not diagnostic_destination.exists() and not diagnostic_destination.is_symlink():
+                observed=None
+                try:observed=capture.report()
+                except BaseException:pass
+                observation=diagnostic_record(context,tokens,library,qkv_library,
+                    observed,cpu,backend,environment)
+                kernel._atomic(diagnostic_destination,observation)
+        except BaseException:pass
+        raise
 
 
 def main():

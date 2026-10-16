@@ -80,14 +80,17 @@ def source_snapshot():
         relative=PREFIX+name;result[relative]=digest(repository_path(relative))
     return dict(sorted(result.items()))
 
-def run_calibration():
-    """Only M4/M8 can execute; M128 remains a counted, unlaunched profile."""
+def _run_profiles(tokens_cases, *, seconds, snapshot, progress=None):
+    """Shared original execution; public calibration keeps its fixed small scope."""
+    if tokens_cases not in ((4,8),(128,)) or type(seconds) not in (int,float) or not 0 < seconds <= 2400:
+        raise ValueError("bounded profile scope")
+    is_m128 = tokens_cases == (128,)
     import os,time,resource,hashlib,json
     from .numeric_bridge import dependencies,AttentionKvBridge,require
     if not all(os.environ.get(name) for name in ('MATRIX_SERVICE_LIBRARY','MATRIX_SERVICE_COMPILE_RECEIPT')):
         return 2,{'status':'NOT_RUN','reason':'verified_library_required','m128_executed':False}
     # Original verification is retained; there is no build or arithmetic fallback.
-    before=source_snapshot()
+    before=snapshot()
     from .run_numeric_ci import library_snapshot
     native_before=library_snapshot(os.environ)[2]
     d=dependencies();library=d.verified_library()
@@ -95,22 +98,23 @@ def run_calibration():
     from .streaming import make_observers,CoreDigest,MemoryDigest,profile
     from .reference_profile import fixture,reference
     Scalar,Matrix=make_observers(ScalarService,d.MatrixService)
-    deadline=time.monotonic()+120.0
+    deadline=time.monotonic()+seconds
     reports=[]
     def bounded(events,limit):
         if time.monotonic()>=deadline or events>=limit:raise TimeoutError('calibration bound')
     class AddressCount:
-        def __init__(self):self.count=0
+        def __init__(self):self.count=0;self.maximum=-1
         def append(self,address):
             require(type(address) is int and 0<=address<1<<64,'address observer')
-            self.count+=1
+            self.count+=1;self.maximum=max(self.maximum,address)
     class BusTrace:
         def __init__(self):self.core=CoreDigest();self.writes=MemoryDigest()
         def append(self,q):
             self.core.append((q.tag,q.address,q.write))
             if q.write:self.writes.append(q)
-    for tokens in (4,8):
+    for tokens in tokens_cases:
         bounded(0,1)
+        if progress:progress("reference",None,0,0,0,force=True)
         started=time.monotonic();data=fixture(tokens);ref=reference(tokens,*data)
         bounded(0,1)
         reference_seconds=time.monotonic()-started
@@ -130,11 +134,13 @@ def run_calibration():
             h=AttentionKvBridge(owner,bus,j) if loan else d.Harness(owner,bus)
             if loan:h.core_trace=CoreDigest()
             start=time.monotonic();events=1
+            if progress:progress('loan' if loan else 'direct',loan,0,0,0,force=True)
             require(h.tick(job=j)['job_fire'],'calibration admission failed')
             ports=h.ports if loan else owner.ports
             limit=32*(192*tokens*(tokens+1)//2)+10000
             while ports()['response'] is None:
                 bounded(events,limit);h.tick();events+=1
+                if progress:progress('loan' if loan else 'direct',loan,events,check.count,matrix.stream.count)
             result=ports()['response']
             require(result.status is None,'calibration owner error')
             for _ in range(3):
@@ -166,6 +172,7 @@ def run_calibration():
                     'ddr_write_count':bus.writes.count}
             require(bus.reads.count==expected_profile['loan_ddr_reads' if loan else 'q_reads']+(0 if loan else expected_profile['kv_reads']),'DDR read count mismatch')
             require(bus.writes.count==expected_profile['output_writes'],'DDR write count mismatch')
+            if is_m128:require(bus.reads.maximum==j.c+128*1024-64,'M128 final KV line4095 not read')
             require(check.count==6696*tokens*(tokens+1)//2+1548*tokens,'scalar count mismatch')
             require(result.executed_macs==192*tokens*(tokens+1)//2*512,'native FMA count mismatch')
             if loan:
@@ -176,18 +183,25 @@ def run_calibration():
                     require(h.supply.counts[name]==expected,'KV count mismatch: '+name)
                 report['kv']={k:h.supply.counts[k] for k in ('core_requests','ddr_requests','hits','fills','releases')}
             executions.append(report)
+            if progress:progress('loan' if loan else 'direct',loan,events,check.count,matrix.stream.count,force=True)
             # Native accumulator ownership is retired before the next pass.
             del h,owner,scalar,matrix,bus,trace
         for key in ('scalar','matrix','core','writes','accepted_matrix','useful_macs','executed_macs','scalar_checkpoints','ddr_write_count'):
             require(executions[0][key]==executions[1][key],'direct/loan stream mismatch: '+key)
         reports.append({'tokens':tokens,'status':'PASS','reference_seconds':reference_seconds,
                         'reference_bytes':ref.nbytes,'work':expected_profile,'passes':executions})
-    require(source_snapshot()==before and library_snapshot(os.environ)[2]==native_before,'calibration source/library drift')
-    return 0,{'status':'PASS_CALIBRATION_ONLY','profiles':reports,'m128_executed':False,
+    require(snapshot()==before and library_snapshot(os.environ)[2]==native_before,'calibration source/library drift')
+    if progress:progress('complete',True,executions[-1]['events'],executions[-1]['scalar_checkpoints'],executions[-1]['matrix']['count'],force=True)
+    return 0,{'status':'PASS_M128_SYNTHETIC_ATTENTION' if is_m128 else 'PASS_CALIBRATION_ONLY','profiles':reports,'m128_executed':is_m128,
               'hardware_simulation':False,'model_ticks_are_hardware_cycles':False,
               'process_peak_rss_kib':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
               'source_manifest_sha256':hashlib.sha256(json.dumps(before,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
               'native_hashes':native_before,'inputs_unchanged':True}
+
+
+def run_calibration():
+    """Only M4/M8 execute here; retain the original120-second calibration contract."""
+    return _run_profiles((4,8),seconds=120.0,snapshot=source_snapshot)
 
 
 def main(argv=None):

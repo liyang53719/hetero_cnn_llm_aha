@@ -157,8 +157,9 @@ def safe_summary(status='NOT_RUN', reason='prerequisite_missing'):
                 total_budget_seconds=TOTAL_SECONDS, cleanup_grace_seconds=CLEANUP_SECONDS)
 
 
-def save(out, summary, hashes):
-    need({p.name for p in out.iterdir()} <= set(OUTPUTS), 'unexpected_output')
+def save(out, summary, hashes, *, extra_outputs=()):
+    need(extra_outputs in ((), ('progress.json',)), 'unexpected_output')
+    need({p.name for p in out.iterdir()} <= set(OUTPUTS + extra_outputs), 'unexpected_output')
     for name, value in zip(OUTPUTS, (summary, hashes)):
         raw = (json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + '\n').encode()
         need(len(raw) <= MAX_EVIDENCE_BYTES, 'evidence_size')
@@ -168,12 +169,16 @@ def save(out, summary, hashes):
 
 
 def run(out, environ=None, *, child_module=None, child_args=(), validator=None,
-        snapshot=None, total_seconds=None, deadline_ns=None):
+        snapshot=None, total_seconds=None, deadline_ns=None, budget_ceiling=None,
+        pass_statuses=None, evidence_writer=None):
     """Return (nonzero on NOT_RUN/failure, sanitized summary); invoke child once."""
     start = time.monotonic()
     budget = TOTAL_SECONDS if total_seconds is None else total_seconds
+    ceiling = TOTAL_SECONDS if budget_ceiling is None else budget_ceiling
+    need(type(ceiling) in (int, float) and math.isfinite(ceiling) and
+         ceiling in (TOTAL_SECONDS, 2400), 'total_budget')
     need(type(budget) in (int, float) and math.isfinite(budget) and
-         CLEANUP_SECONDS + RECEIPT_SECONDS < budget <= TOTAL_SECONDS, 'total_budget')
+         CLEANUP_SECONDS + RECEIPT_SECONDS < budget <= ceiling, 'total_budget')
     end = start + budget
     if deadline_ns is not None:
         need(type(deadline_ns) is int and 0 < deadline_ns < 1 << 63, 'total_budget')
@@ -183,6 +188,10 @@ def run(out, environ=None, *, child_module=None, child_args=(), validator=None,
     module = CHILD_MODULE if child_module is None else child_module
     validate = validate_child if validator is None else validator
     snapshot = source_snapshot if snapshot is None else snapshot
+    write_evidence = save if evidence_writer is None else evidence_writer
+    statuses = ('PASS_BOUNDED_NUMERIC', 'PASS_CALIBRATION_ONLY') if pass_statuses is None else pass_statuses
+    need(statuses in (('PASS_BOUNDED_NUMERIC', 'PASS_CALIBRATION_ONLY'),
+                      ('PASS_M128_SYNTHETIC_ATTENTION',)), 'child_schema')
     need(type(module) is str and re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*', module)
          and type(child_args) is tuple and all(type(arg) is str for arg in child_args), 'child_schema')
     out = Path(out).resolve()
@@ -253,7 +262,7 @@ def run(out, environ=None, *, child_module=None, child_args=(), validator=None,
             need(rc == 0, 'child_exit_nonzero')
             log.seek(0)
             result = validate(log.read(MAX_CHILD_BYTES + 1))
-            need(result['status'] in ('PASS_BOUNDED_NUMERIC', 'PASS_CALIBRATION_ONLY'), 'child_not_pass')
+            need(result['status'] in statuses, 'child_not_pass')
         need(snapshot() == before and library_snapshot(env)[2] == native_before,
              'input_drift')
         need(recipe.from_environment(ROOT, env) == library, 'library_identity')
@@ -317,7 +326,9 @@ def run(out, environ=None, *, child_module=None, child_args=(), validator=None,
         signal.setitimer(signal.ITIMER_REAL, max(.001, end - time.monotonic()))
         try:
             summary['wall_seconds'] = round(time.monotonic() - start, 6)
-            save(out, summary, hashes)
+            write_evidence(out, summary, hashes)
+            if code == 0 and summary['status'] not in statuses:
+                code = 1
         finally:
             signal.setitimer(signal.ITIMER_REAL, 0)
             signal.signal(signal.SIGALRM, old_alarm)

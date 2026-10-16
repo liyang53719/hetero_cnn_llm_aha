@@ -48,8 +48,8 @@ def _sha(value):
     common.need(type(value) is str and re.fullmatch(r'[0-9a-f]{64}', value) is not None, 'child_schema')
 
 
-def _seconds(value):
-    common.need(type(value) in (int, float) and math.isfinite(value) and 0 <= value <= 120, 'child_counter')
+def _seconds(value, ceiling=120):
+    common.need(type(value) in (int, float) and math.isfinite(value) and 0 <= value <= ceiling, 'child_counter')
 
 
 def _digest(value, kind, count, byte_count, *, writes=False):
@@ -66,13 +66,22 @@ def _digest(value, kind, count, byte_count, *, writes=False):
 
 def validate_child(raw, *, expected_sources, expected_native):
     """Allow only complete M4 then M8 direct/loan equality with safe telemetry."""
+    return _validate_profile_child(raw, expected_sources=expected_sources,
+        expected_native=expected_native, tokens_expected=(4, 8),
+        status='PASS_CALIBRATION_ONLY', m128=False, seconds_ceiling=120)
+
+
+def _validate_profile_child(raw, *, expected_sources, expected_native,
+                            tokens_expected, status, m128, seconds_ceiling):
+    """Shared strict schema; public entrypoints select fixed, separate scopes."""
     common.need(type(raw) is bytes and len(raw) <= common.MAX_CHILD_BYTES, 'child_size')
     value = common.read_json(raw.decode('utf-8'))
     common.exact_keys(value, ('status', 'profiles', 'm128_executed', 'hardware_simulation',
         'model_ticks_are_hardware_cycles', 'process_peak_rss_kib', 'source_manifest_sha256',
         'native_hashes', 'inputs_unchanged'))
-    _same(value['status'], 'PASS_CALIBRATION_ONLY')
-    for name in ('m128_executed', 'hardware_simulation', 'model_ticks_are_hardware_cycles'):
+    _same(value['status'], status)
+    _same(value['m128_executed'], m128)
+    for name in ('hardware_simulation', 'model_ticks_are_hardware_cycles'):
         _same(value[name], False)
     _same(value['inputs_unchanged'], True)
     common.integer(value['process_peak_rss_kib'], 1, 1 << 31)
@@ -81,11 +90,11 @@ def validate_child(raw, *, expected_sources, expected_native):
     common.exact_keys(value['native_hashes'], ('library_sha256', 'receipt_sha256'))
     for name in ('library_sha256', 'receipt_sha256'):
         _sha(value['native_hashes'][name]); _same(value['native_hashes'][name], expected_native[name])
-    common.need(type(value['profiles']) is list and len(value['profiles']) == 2, 'child_cases')
-    for tokens, case in zip((4, 8), value['profiles']):
+    common.need(type(value['profiles']) is list and len(value['profiles']) == len(tokens_expected), 'child_cases')
+    for tokens, case in zip(tokens_expected, value['profiles']):
         common.exact_keys(case, ('tokens', 'status', 'reference_seconds', 'reference_bytes', 'work', 'passes'))
         _same(case['tokens'], tokens); _same(case['status'], 'PASS')
-        _seconds(case['reference_seconds'])
+        _seconds(case['reference_seconds'], seconds_ceiling)
         expected_bytes = 7 * 12 * (tokens * (tokens + 1) // 2) * 4 + 3 * tokens * 12 * 4 + 2 * tokens * 1536 * 4
         _same(case['reference_bytes'], expected_bytes)
         work = profile(tokens)
@@ -95,7 +104,7 @@ def validate_child(raw, *, expected_sources, expected_native):
             common.exact_keys(run, ('loan', 'seconds', 'events', 'scalar', 'matrix', 'core', 'writes',
                 'accepted_matrix', 'useful_macs', 'executed_macs', 'scalar_checkpoints',
                 'ddr_read_count', 'ddr_write_count', *(('kv',) if loan else ())))
-            _same(run['loan'], loan); _seconds(run['seconds'])
+            _same(run['loan'], loan); _seconds(run['seconds'], seconds_ceiling)
             common.integer(run['events'], 1, 32 * work['matrix_packets'] + 10000)
             _digest(run['scalar'], 'scalar', work['scalar_total_no_cutoff'], 14 * work['scalar_total_no_cutoff'])
             _digest(run['matrix'], 'matrix-results', work['matrix_packets'], 16398 * work['matrix_packets'])

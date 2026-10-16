@@ -1,0 +1,46 @@
+name: raw-kv-attention-m128
+# One synthetic full128-token Attention, original PV16 owner and native services.
+# This is host numerical evidence; it does not execute a full block or RTL.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/raw-kv-attention-m128.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raw-kv-attention-m128-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-attention:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Public numerical dependency and cold contracts
+        timeout-minutes: 3
+        run: |
+          python -m pip install --index-url https://pypi.org/simple 'numpy==2.3.5'
+          python -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_streaming candidates.qwen2_resident_matrix.raw_kv_attention.test_reference_profile candidates.qwen2_resident_matrix.raw_kv_attention.test_profile_numeric candidates.qwen2_resident_matrix.raw_kv_attention.test_m128_numeric candidates.qwen2_resident_matrix.raw_kv_attention.test_m128_ci -q
+          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_m128_numeric candidates.qwen2_resident_matrix.raw_kv_attention.test_m128_ci -q
+      - name: Build the existing verified host Matrix and scalar recipe once
+        timeout-minutes: 2
+        run: python scripts/build_shared_matrix_recipe.py --repo . --out work/m128-native-private
+      - name: Single M128 direct and loan numerical comparison
+        timeout-minutes: 41
+        run: python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_m128_ci --out work/raw-kv-attention-m128
+      - name: Preserve only safe M128 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-kv-attention-m128-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            work/raw-kv-attention-m128/summary.json
+            work/raw-kv-attention-m128/source_hashes.json
+            work/raw-kv-attention-m128/progress.json

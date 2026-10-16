@@ -1,0 +1,51 @@
+name: raw-kv-parent-unit
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/raw-kv-parent-unit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raw-kv-parent-unit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  parent-only:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parent-only prerequisites
+        timeout-minutes: 2
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y verilator
+      - name: Model, preparation, bounded parent RTL unit
+        timeout-minutes: 10
+        run: |
+          python -m unittest candidates.qwen2_resident_matrix.raw_kv_parent.test_model candidates.qwen2_resident_matrix.raw_kv_parent.test_unit_prepare -v
+          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_parent.test_model candidates.qwen2_resident_matrix.raw_kv_parent.test_unit_prepare -v
+          python -m unittest candidates.qwen2_resident_matrix.raw_kv.test_unit_prepare -v
+          python -m candidates.qwen2_resident_matrix.raw_kv_parent.compose
+          python -m candidates.qwen2_resident_matrix.raw_kv_parent.prepare_unit
+          python candidates/qwen2_resident_matrix/raw_kv_parent/run_unit.py --out "$RUNNER_TEMP/raw-kv-parent-unit"
+      - name: Upload small non-payload evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-kv-parent-unit-summary
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/raw-kv-parent-unit/evidence/summary.json
+            ${{ runner.temp }}/raw-kv-parent-unit/evidence/source-sha256.json
+            ${{ runner.temp }}/raw-kv-parent-unit/evidence/dependency-sha256.json
+            ${{ runner.temp }}/raw-kv-parent-unit/evidence/rtl-sha256.json

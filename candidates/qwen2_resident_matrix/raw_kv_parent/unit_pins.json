@@ -1,0 +1,39 @@
+{
+  "baseline_commit": "f1f3c9d3e4860161c7d322540c73a50a716c0c7c",
+  "inputs": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "4908d7fe3100042341d45abc0e60eca7b7c16726",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": "3fc287c9e9abd2a034add1f54777304f423b283d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "b29036223d18699e2e76141b577c778265023c11",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "5ece228b5b91d594349b2799adec184e0a01c49f",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "a5c12133cb731e901b67977f7cc3ab8f290f53da",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "021c878dcb1106335d8a0cf768fdb862ab00533c",
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedProtocol.scala": "8473c31bddd79877b7bb3e0ad563573d3107ae5f",
+    "candidates/qwen2_resident_matrix/transposed_route/combined_service.patch": "df13ba743aa7984b0a1f53916fcd715f7ca174e5",
+    "candidates/qwen2_resident_matrix/transposed_seed/service_seed.patch": "cab3732c4305a8302ebb086f42dc5f25942b670d",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch": "9b8d40d330b6203e2a79c35a942be54e5b167821"
+  },
+  "generated_sha256": {
+    "BurstProtocol.scala": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91",
+    "CycleProfile.scala": "6941128e57980ac148b42a5ca87639b7eec0c011b5321060dc550142a35d308d",
+    "DenseOwnerIO.scala": "b44f8c2d879a3b7fe47db5c1d86b11aa74e96c9528713324f52a97c3a5a04ec7",
+    "F32.scala": "6d49ea04653c2ba2a3f153481409d3faa9911f41e642f258b1771afdb3df0763",
+    "MatrixAccumulatorSeedProtocol.scala": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e",
+    "NumericPolicy.scala": "58fd63fd1db2f4a639bf66cd166e158d406084b2d7e48557bd1c419770329b4e",
+    "OwnerJob.scala": "e83a2b8eb982cc465ab805fce2e296414ed95bf1963651c277635d5e7bd2f360",
+    "OwnerKind.scala": "79ea78d260fe1096591418a196645c4dfa43f126b1271f7054512456fab20db4",
+    "OwnerResult.scala": "4c1c1b5fc76546677a465cff764a98d72966dc2309dcd5c054984c6321576782",
+    "Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "Shape.scala": "e646ec51cad714fa86475df97275d2a27d0dde0360762ea786f5fdf116a3b140",
+    "TransposedDenseBanks.scala": "67bd9ed85dd3c74c360911ecb55bde55597a382100641a5bfb0e256a02e412fb",
+    "TransposedDenseOwner.scala": "d182831115dc490db9c7735f5dc1736683d3e2ef806352dec676167680b8e04a"
+  },
+  "slice_sha256": {
+    "NumericPolicy": "d8bb1b1dda08479d509a56a83f418786e4f609a21d7155f2b324da4ddd21febc",
+    "OwnerKind": "3d5e2d1c35415045f9c0e91bb9c5a3af3001e84a0768938819fb3ea7e7c70cd7",
+    "OwnerJob": "ceef72a19f4d010a848e8b400c74b17cf0eeadbfa0264a2c436ff5f173ff1864",
+    "OwnerResult": "b6163c495474aff6481287f87451481c5bf3f8b45e21e3db11fcd3b9d8a65e16",
+    "Shape": "b50d3245199890f7da7a63351d702ce67985ac9040a16cc57319da59141a386f",
+    "CycleProfile": "05eac1f59cde4e8011e0fb527092e00092c8138b33a09d1312de98dd2270ad2d",
+    "F32": "78a18f852d8911ea801bf2250f62afd7b52257c109b6642f8d4511e743f58276"
+  }
+}

@@ -1,4 +1,4 @@
-# Diagnostic revision 2: fixed progress markers and build counts; same unit and time budgets.
+# Build revision 3: two parallel C++ translation units and -O0; same unit and time budgets.
 name: raw-kv-parent-unit
 on:
   push:

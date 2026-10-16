@@ -31,6 +31,7 @@ EVIDENCE_FILES = frozenset({"summary.json", "source-sha256.json",
                           "dependency-sha256.json", "rtl-sha256.json"})
 DIAGNOSTIC_BYTES = 4096
 DIAGNOSTIC_WINDOW_BYTES = 128 * 1024
+CPP_BUILD_MAKEFLAGS = "-j2 VM_PARALLEL_BUILDS=1"
 LOCK_PATH = "chisel/rope_hardware_oracle/maven-lock.json"
 WORKFLOW_PATH = ".github/workflows/raw-kv-parent-unit.yml"
 OWNER = "TransposedDenseDownOwner"
@@ -336,7 +337,8 @@ def run(out):
     start = time.monotonic()
     summary = {"status": "STARTED", "scope": "actual DownOwner and existing banks only; external Matrix/DDR/seed test agents; no Matrix/HardFloat arithmetic",
                "stages": [], "total_budget_seconds": TOTAL_SECONDS,
-               "stage_budgets_seconds": STAGE_SECONDS, "hardware_performance_measured": False}
+               "stage_budgets_seconds": STAGE_SECONDS, "hardware_performance_measured": False,
+               "cpp_build": {"parallel_translation_units": True, "jobs": 2, "optimization": "-O0"}}
     frozen = {}
     dependencies = {}
     original_source_names = set()
@@ -374,7 +376,7 @@ def run(out):
             need(configuration_files() == original_configuration_names, "generated build configuration set changed")
             need((ROOT / WORKFLOW_PATH).exists() == workflow_present, "workflow presence changed")
 
-    env = dict(os.environ, MAKEFLAGS="-j2 VM_PARALLEL_BUILDS=0",
+    env = dict(os.environ, MAKEFLAGS=CPP_BUILD_MAKEFLAGS,
                JVM_OPTS="-Xmx2G -Xss4M -XX:ActiveProcessorCount=2",
                SBT_OPTS="-Dsbt.supershell=false -Dsbt.color=false -Dsbt.task.cpus=2")
 

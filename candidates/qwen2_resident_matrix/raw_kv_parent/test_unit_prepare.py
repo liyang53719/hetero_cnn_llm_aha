@@ -302,6 +302,17 @@ class ParentUnitPrepareTests(unittest.TestCase):
             executable.chmod(0o600)
             self.assertEqual(run_unit.build_inventory(project)["raw_off"]["executable"], 0)
 
+    def test_cpp_build_flags_preserve_budgets_and_both_cases(self):
+        self.assertEqual(run_unit.CPP_BUILD_MAKEFLAGS, "-j2 VM_PARALLEL_BUILDS=1")
+        self.assertEqual(run_unit.STAGE_SECONDS["parent_rtl_unit"], 240)
+        self.assertEqual(run_unit.TOTAL_SECONDS, 600)
+        harness = (run_unit.HERE / "ParentKvUnit.scala").read_text()
+        self.assertEqual(harness.count('VerilatorCFlags(Seq("-O0"))'), 2)
+        self.assertEqual(harness.count('withAnnotations(Seq(VerilatorBackendAnnotation,'), 2)
+        self.assertNotIn("--no-assert", harness)
+        self.assertNotIn("--x-initial", harness)
+        self.assertNotIn("--x-assign", harness)
+
     def test_failed_stage_writes_and_prints_only_sanitized_receipt(self):
         # The process launcher is replaced: no sbt, dependency resolution,
         # compilation, elaboration or simulation can run in this test.

@@ -3,7 +3,7 @@ package heteronpu.continuous
 
 import chisel3._
 import chiseltest._
-import chiseltest.simulator.VerilatorBackendAnnotation
+import chiseltest.simulator.{VerilatorBackendAnnotation, VerilatorCFlags}
 import org.scalatest.flatspec.AnyFlatSpec
 import _root_.circt.stage.ChiselStage
 import java.nio.file.{Files, Paths}
@@ -587,7 +587,7 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "the actual composed TransposedDenseDownOwner raw KV loan"
   it should "complete ordinary Dense with the raw feature absent" in {
     progress("case_begin", "default_off_dense")
-    test(ParentKvHarness.owner(raw = false)).withAnnotations(Seq(VerilatorBackendAnnotation)) { d =>
+    test(ParentKvHarness.owner(raw = false)).withAnnotations(Seq(VerilatorBackendAnnotation, VerilatorCFlags(Seq("-O0")))) { d =>
       progress("sim_ready", "default_off_dense")
       defaults(d); d.clock.setTimeout(100000)
       assert(d.io.rawKv.isEmpty)
@@ -598,7 +598,7 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
   }
   it should "retire real parent work before loans and preserve poisoned raw debt" in {
     progress("case_begin", "enabled_dense_drain")
-    test(ParentKvHarness.owner(raw = true)).withAnnotations(Seq(VerilatorBackendAnnotation)) { d =>
+    test(ParentKvHarness.owner(raw = true)).withAnnotations(Seq(VerilatorBackendAnnotation, VerilatorCFlags(Seq("-O0")))) { d =>
       progress("sim_ready", "enabled_dense_drain")
       defaults(d); d.clock.setTimeout(100000)
       ordinary(d, k = 256, tag = 201, raw = true)

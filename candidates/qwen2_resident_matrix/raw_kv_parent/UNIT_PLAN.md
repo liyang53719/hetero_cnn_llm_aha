@@ -2,15 +2,16 @@
 
 ## 中文计划
 
-- 已完成：父级 11 项控制测试加 16 项准备检查，普通 Python 与 -O 各通过 27 项；零 fuzz 组合和 13 个固定 Scala 编译单元/原始源码切片校验通过。
+- 已完成：父级 11 项控制测试加 17 项准备检查，普通 Python 与 -O 各通过 28 项；零 fuzz 组合和 13 个固定 Scala 编译单元/原始源码切片校验通过。
 - 已完成：复用的进程组超时/SIGTERM 清理 3 项测试通过。
 - 已完成：首次 CI 的 Scala 编译、两个配置的展开与存储结构检查。RTL 测试阶段在 240 秒后超时，尚无父级场景通过证明。
-- 待办：审核新增的无载荷进度标记和构建计数，再以相同预算诊断超时；尚未启动第二次运行。
+- 待办：第二次运行已将超时定位到模拟器启动之前；审核 C++ 分文件并行编译及 -O0 改动，再以相同预算验证，尚未启动第三次运行。
 
 The first actual run passed parent Scala compilation, elaboration and both
 structural audits, then timed out in the 240-second RTL test stage. No parent
-scenario completion is established. Diagnostic revision 2 is prepared for a
-same-budget run; publication of the workflow comment activates that run.
+scenario completion is established. Diagnostic revision 2 also timed out before the
+simulator callback. Build revision 3 is prepared for a same-budget run;
+publication of the workflow comment activates that run.
 
 ## Real implementation and dependency closure
 
@@ -127,3 +128,33 @@ evidence; absent executable counts alone are not proof of a failed build.
 Budgets, toolchain, original DUT, all scenarios and stimuli remain unchanged.
 The workflow comment activates one reviewed diagnostic run when published;
 no second run has been launched as part of preparing these edits.
+
+
+## C++ build revision 3 (prepared, not run)
+
+Diagnostic run 38871367392 again timed out in the 240-second RTL stage.
+Its receipt has only case_begin(default_off_dense), no simulator-ready or
+cycle markers, and raw-off counts of 47 C++ files, 4 object files, 0 simulator
+executables; raw-on counts are zero. The raw-off SV digest is unchanged.
+This locates the incomplete work before the simulator callback, with generated
+C++ compilation in progress; it does not identify which compiler invocation
+consumed the most time.
+
+The prior runner explicitly forced VM_PARALLEL_BUILDS=0. The official
+[Verilator v5.020 makefile](https://raw.githubusercontent.com/verilator/verilator/v5.020/include/verilated.mk.in)
+combines generated code into a single translation unit in that mode. Setting
+it to 1 permits separate compilation of already generated C++ files. The
+[pinned Chiseltest v6.0.0 implementation](https://raw.githubusercontent.com/ucb-bar/chiseltest/v6.0.0/src/main/scala/chiseltest/simulator/VerilatorSimulator.scala)
+invokes make with availableProcessors; the existing JVM processor cap remains
+2. It also appends user VerilatorCFlags after its default C flags, allowing
+-O0 to override its -O1. The Verilator compiler rules append those flags after
+their optimization defaults. Lower C++ optimization trades simulator speed
+for shorter compilation; this unit has a bounded short protocol workload.
+
+Revision 3 therefore uses VM_PARALLEL_BUILDS=1 with the unchanged two-job cap
+and VerilatorCFlags(Seq("-O0")) for both original test cases. No additional
+output-split override is introduced: the failed build already emitted 47 C++
+files. DUT source, SV generation flags, reset semantics, assertions, all test
+scenarios, stimulus, and stage/overall budgets remain unchanged. This is a
+build-time hypothesis to validate, not a claimed speedup or parent RTL PASS.
+The workflow comment activates one reviewed same-budget run on publication.

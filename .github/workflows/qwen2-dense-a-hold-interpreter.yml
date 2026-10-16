@@ -1,0 +1,40 @@
+# Launch revision 1: one bounded actual-owner interpreted protocol case.
+name: qwen2-dense-a-hold-interpreter
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/qwen2-dense-a-hold-interpreter.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qwen2-dense-a-hold-interpreter-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bounded-interpreter:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ github.sha }}'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Interpret one bounded actual-owner protocol case
+        timeout-minutes: 11
+        run: |
+          python candidates/qwen2_resident_matrix/dense_a_hold_interpreter/run.py --out "$RUNNER_TEMP/dense-a-hold-interpreter" --cache "$RUNNER_TEMP/dense-a-hold-jars"
+      - name: Upload compact protocol evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2-dense-a-hold-interpreter-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/dense-a-hold-interpreter/summary.json
+            ${{ runner.temp }}/dense-a-hold-interpreter/source-sha256.json
+            ${{ runner.temp }}/dense-a-hold-interpreter/dependency-sha256.json
+            ${{ runner.temp }}/dense-a-hold-interpreter/diagnostic.txt

@@ -1,0 +1,110 @@
+{
+  "claims": {
+    "actual_chain_executed": false,
+    "backend_order_proven": false,
+    "full_29_node_acceptance": false,
+    "hardware_recipe_acceptance": false,
+    "numerical_acceptance": false,
+    "rtl_execution": false
+  },
+  "execution": {
+    "allowed_by_this_contract": false,
+    "attempts": 1,
+    "cleanup_seconds": 5,
+    "past_tokens": 0,
+    "producer_seconds_each": 30,
+    "proposed_external_seconds": 126,
+    "proposed_work_seconds": 120,
+    "rows": 16
+  },
+  "m16_readonly": {
+    "arena": {
+      "bytes": 188043264,
+      "sha256": "0a94ea142c28a6c1ce4b8ad928caecee9c5721bb6e4bc0eb097eebd8202aabf8"
+    },
+    "input_x": {
+      "bytes": 98304,
+      "sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c"
+    },
+    "table": {
+      "bytes": 328448,
+      "sha256": "5edc3314874c1cf4a7dc9cb54f2c824b18272048f70abcf9021f021308589045"
+    }
+  },
+  "metadata": {
+    "private/assets/ASSETS.json": {
+      "bytes": 91340,
+      "sha256": "50c005dc917f08f56e47b35c45e030446377ce30b2e5f280e5c6f6dbc92e466b"
+    },
+    "private/assets/SETUP.json": {
+      "bytes": 40055,
+      "sha256": "79b4ca389df5f19d52e0a0c8a6040f706df5fa9f4d373c27dbbcd813032ec61a"
+    },
+    "private/assets/backend.json": {
+      "bytes": 4514,
+      "sha256": "b3bc57de57d30eb7767de09a86fcc5faa589b0c0a3abcc52f025bfe4491361ed"
+    },
+    "private/assets/context.json": {
+      "bytes": 76128,
+      "sha256": "f2474f90919bbe241433b7546f85ad1fef06b18ff866f95009b2d19f169afce3"
+    },
+    "private/assets/library/official_bf16_compile.json": {
+      "bytes": 2000,
+      "sha256": "f036483fcc7ddb66fddce088e8eb346945225e4eca162eb43174a53171c2f5eb"
+    },
+    "private/assets/native_m16/RESULT.json": {
+      "bytes": 116735,
+      "sha256": "a2df84fb8a9530fc205288d1cf6cfc0242c043c46a803779a8bfc2d780385a51"
+    },
+    "private/assets/payload/manifest.json": {
+      "bytes": 18512,
+      "sha256": "ae754ab5df4cd8c3e46bd57e4f509ca0c3c60298bdcb763004bb5fb800ea42b7"
+    },
+    "private/assets/phase_native16.json": {
+      "bytes": 6453,
+      "sha256": "d64baad4de991ca66c8fdf871a93efbf75cf28780a2adb2214768e08fad2e041"
+    },
+    "private/assets/phase_native16_diagnostics.json": {
+      "bytes": 17192,
+      "sha256": "581296868c303019b5a786e95d623224e49a191526b3b8b37c5644331301f9c2"
+    },
+    "private/assets/qk_library/qk_pair_compile.json": {
+      "bytes": 3524,
+      "sha256": "f4b25dfdaa886008a3dce869b8060ba0c0a792d8f1a1d61b7814b3f79727165b"
+    },
+    "private/assets/qkv_library/qkv_pair_compile.json": {
+      "bytes": 2480,
+      "sha256": "b3e87af78a48ebada72170cdac14cb40d106c46df85863ccdc1281fb2fa78c3e"
+    },
+    "private/assets/recipe_pair.json": {
+      "bytes": 2404,
+      "sha256": "970ae95a00037141a756c9542a58f4b10ea7907b0180cf4c05d15def37d82e6c"
+    },
+    "private/assets/reduced/compile.json": {
+      "bytes": 38864,
+      "sha256": "45d5c07ef88fb5c68729a215fb2f5b5dd7e79cbb6af706a2d5db0516c450cf42"
+    },
+    "private/assets/sequential/compile.json": {
+      "bytes": 38866,
+      "sha256": "6dd10c0f02e939d163c93cb261605df3e365bae9ec2442a47cc81f1fdf759cee"
+    },
+    "private/context.json": {
+      "bytes": 71246,
+      "sha256": "5864b89dd54542f0b64abb15c44df314a78cc1009ac3785d3b8854433f6cf241"
+    },
+    "private/setup_evidence/summary.json": {
+      "bytes": 904,
+      "sha256": "bd418820674f6ff30ed6018bfc9dba48a55b475f7f07d5a98f343a63595339ca"
+    }
+  },
+  "native_producer": "qwen2-native-qkv-qk-pair-generated-v1",
+  "origin_asset_profile": "qwen2-public-pv16-pair-assets-m128-v1",
+  "origin_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+  "origin_rows": 128,
+  "past_tokens": 0,
+  "profile": "qwen2-public-pv16-packed-m16-reuse-proposal-v1",
+  "rows": 16,
+  "schema": 1,
+  "source_manifest_sha256": "9d1aa25d2f76aea864c86dbfa7cfc3a724cb2e6bafd2c8f8158d19937f057f33",
+  "status": "PREPARATION_ONLY_PENDING_REVIEW"
+}

@@ -1,0 +1,39 @@
+--- a/AHoldUnit.scala
++++ b/AHoldUnit.scala
+@@ -3,6 +3,7 @@
+ 
+ import chisel3._
+ import chiseltest._
++import chiseltest.simulator.TreadleBackendAnnotation
+ import org.scalatest.flatspec.AnyFlatSpec
+ import org.scalatest.CancelAfterFailure
+ import scala.collection.mutable.ArrayBuffer
+@@ -154,16 +155,26 @@
+         d.io.done.ready.poke(true.B);done=true
+       }
+       d.clock.step();cycle+=1
++      if(cycle%1024==0)println(s"AHOLD_CYCLE reuse=$reuse k=$k cycle=$cycle")
+     }
+     assert(done,"bounded owner handshake did not drain")
+     d.io.job.ready.expect(false.B)
++    println(s"AHOLD_CASE_PASS reuse=$reuse k=$k accepted=$accepted returned=$returned gathered=$gathered a_reads=$aReads steps=$steps cycles=$cycle")
+   }
+   for(reuse<-Seq(false,true)){
+     it should s"preserve every packet and private A copy with reuse=$reuse" in {
+-      test(new AHoldProbe(reuse)){d=>exercise(d,reuse,32,false)}
++      println(s"AHOLD_CASE_BEGIN reuse=$reuse k=32")
++      InterpreterOrigins.emit()
++      test(new AHoldProbe(reuse)).withAnnotations(Seq(TreadleBackendAnnotation)){d=>
++        println(s"AHOLD_SIM_READY reuse=$reuse k=32");exercise(d,reuse,32,false)
++      }
+     }
+   }
+   it should "suppress same-edge bank work on an accepted malformed DMA return and drain debt" in {
+-    test(new AHoldProbe(true)){d=>exercise(d,true,256,true)}
++    println("AHOLD_CASE_BEGIN reuse=true k=256")
++    InterpreterOrigins.emit()
++    test(new AHoldProbe(true)).withAnnotations(Seq(TreadleBackendAnnotation)){d=>
++      println("AHOLD_SIM_READY reuse=true k=256");exercise(d,true,256,true)
++    }
+   }
+ }

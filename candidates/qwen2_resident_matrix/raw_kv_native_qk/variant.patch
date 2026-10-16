@@ -1,0 +1,33 @@
+--- a/scripts/qwen2_layer0_model_gate.py
++++ b/scripts/qwen2_layer0_model_gate.py
+@@ -148,7 +148,7 @@
+ 
+     def linear(value, name, bias=False):
+         if mode == 'bf16' and qkv_recipe is not None and name in ('self_attn.q_proj', 'self_attn.k_proj', 'self_attn.v_proj'):
+-            from candidates.qwen2_resident_matrix.raw_kv_native_qkv.adapter import validate
++            from candidates.qwen2_resident_matrix.raw_kv_native_qk.adapter import validate
+             validate(qkv_recipe, tokens=x.shape[1], carried=cache is not None, threads=4)
+             if bias is not True:
+                 raise ValueError('independent QKV bias boundary')
+@@ -181,7 +181,11 @@
+     cache_v = keep('cache_v', vh.copy() if cache is None else np.concatenate((cache[1], vh), axis=-2))
+     repeated_k = keep('repeat_k', np.repeat(cache_k, groups, axis=1))
+     repeated_v = keep('repeat_v', np.repeat(cache_v, groups, axis=1))
+-    scores = keep('scores', round_output(round_output(np.matmul(q, repeated_k.swapaxes(-1, -2), dtype=np.float32)) / math.sqrt(dim)))
++    if mode == 'bf16' and qkv_recipe is not None:
++        qk_dot = qkv_recipe.qk_dot(q, repeated_k)
++    else:
++        qk_dot = np.matmul(q, repeated_k.swapaxes(-1, -2), dtype=np.float32)
++    scores = keep('scores', round_output(round_output(qk_dot) / math.sqrt(dim)))
+     mask = keep('mask', causal_mask(tokens, past, mode))
+     logits = keep('logits', round_output(scores + mask))
+     exp = np.exp(logits - np.max(logits, axis=-1, keepdims=True), dtype=np.float32)
+@@ -483,7 +487,7 @@
+              carried: bool = False, threads: int = 4, small_gate: Path | None = None, *, qkv_recipe=None) -> dict:
+     qkv_identity = None
+     if qkv_recipe is not None:
+-        from candidates.qwen2_resident_matrix.raw_kv_native_qkv.adapter import validate
++        from candidates.qwen2_resident_matrix.raw_kv_native_qk.adapter import validate
+         qkv_identity = validate(qkv_recipe, tokens=tokens, carried=carried, threads=threads)
+     import torch
+     sys.path.insert(0, str(root / 'src'))

@@ -1,0 +1,29 @@
+{
+  "compile_returncode": 0,
+  "cpp_sha256": "8e4b42d95468c7e649da6525cbcf87e71f061bfd5635d33975edd24e3fe177de",
+  "depth": 128,
+  "elapsed_seconds": 0.506026741,
+  "fenv_checks": 1,
+  "fixture_pairs": 49,
+  "full_native_m128": false,
+  "full_native_m16": false,
+  "heads": 12,
+  "kernel_returncode": 0,
+  "library_sha256": "637f217fd039b55454461f7693d0b4130bc226ff2ac8979620b633ac289a326e",
+  "native_calls": 23,
+  "official_framework_acceptance": false,
+  "output_sha256": {
+    "128": "ead661176ccb1b15f905c253014b92ae8f5946af7316a005c27d540b4c9d75a2",
+    "16": "4cc839be2b33fa750f7d13e543f318d0c7994717cfbcd7ddbcbf6aeb308878a9"
+  },
+  "output_words": 199680,
+  "pins_sha256": "b747f252f6b488622696f3309f5f30fac9d9b3f974a9a986c7e34dd2789096c0",
+  "rejected_calls": 21,
+  "rows": [
+    16,
+    128
+  ],
+  "rtl_execution": false,
+  "source_manifest_sha256": "7396e30cf4f7ea5009f764503a52a85df2894750e813c4b004f9bf40c396e440",
+  "status": "PASS_ISOLATED_QK_SYNTHETIC_ONLY"
+}

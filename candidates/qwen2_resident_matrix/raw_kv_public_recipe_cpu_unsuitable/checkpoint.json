@@ -1,0 +1,104 @@
+{
+  "checkout_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+  "checkpoint_kind": "FAILED_CPU_PLACEMENTS_BEFORE_CLONE",
+  "limits": {
+    "data": "Only the original three safe JSON members per placement are preserved. No weights, numerical arrays, private logs, or ZIP archives are included.",
+    "execution": "Neither placement started setup, native backend checks, Public numerical work, or new numeric-progress diagnostics. No numerical acceptance is established.",
+    "provenance": "IDs are supplied provenance. ZIP hashes anchor the connected-GitHub download bytes against supplied SHA256; cold verification is not independent GitHub-origin authentication.",
+    "scope": "This archive is outside the 285-source closure and does not alter workflows, runtime, frozen evidence, or source contracts.",
+    "source_binding": "All 285 source hashes were checked against immutable be00 Git blobs. The 12 generated hashes match contract expectations; the failed placements did not clone or compose."
+  },
+  "placements": {
+    "placement_1": {
+      "archive": {
+        "bytes": 15365,
+        "filename": "public-m128-job117185037810.zip",
+        "sha256": "3b4c54aa75890bb2679df92dc53c8dd3875e993b250a8737c514f5375b34736a"
+      },
+      "artifact_id": "12074126444",
+      "job_id": "117185037810",
+      "members": {
+        "progress.json": {
+          "bytes": 94,
+          "sha256": "3fd0fdf48293b75e260be007319c2a5f90446d59f82156f23c7f376b67eaac63"
+        },
+        "source_hashes.json": {
+          "bytes": 39690,
+          "sha256": "99d4548f9e20edde2f2d42d36848ad25996fa1aae9e44025a403ffd27304ab28"
+        },
+        "summary.json": {
+          "bytes": 1213,
+          "sha256": "0d53a58255e68c41f8bcb5675dd1c04dd459162302d3dade1ee9de3308a65f3c"
+        }
+      }
+    },
+    "placement_2": {
+      "archive": {
+        "bytes": 15364,
+        "filename": "public-m128-job117185359078.zip",
+        "sha256": "ab1e1cbe2c58a58438185d53c34afbe79aafe42fcfeff94b81360abcb373a698"
+      },
+      "artifact_id": "12073288607",
+      "job_id": "117185359078",
+      "members": {
+        "progress.json": {
+          "bytes": 94,
+          "sha256": "e53dd159437c57744c4884b0c36324e0f6dc91b799ea7bc4aad1709b2ea8f68e"
+        },
+        "source_hashes.json": {
+          "bytes": 39690,
+          "sha256": "99d4548f9e20edde2f2d42d36848ad25996fa1aae9e44025a403ffd27304ab28"
+        },
+        "summary.json": {
+          "bytes": 1217,
+          "sha256": "06dc15a9203139fcec6ac28430c35cddb1d2563170f32a7bf99ec3f3c7ce95cb"
+        }
+      }
+    }
+  },
+  "recorded_facts": {
+    "clone_started": false,
+    "cpu_backend_qualified": false,
+    "cpu_eligibility_only": true,
+    "elapsed_seconds": {
+      "placement_1": 0.124065,
+      "placement_2": 0.099335
+    },
+    "full_29_node_acceptance": false,
+    "missing_required_cpu_flags": {
+      "placement_1": [
+        "avx512_bf16"
+      ],
+      "placement_2": [
+        "avx512_bf16",
+        "avx512bw",
+        "avx512dq",
+        "avx512f",
+        "avx512vl"
+      ]
+    },
+    "numeric_started": false,
+    "numerical_acceptance": false,
+    "phase": "cpu_qualification",
+    "placements": 2,
+    "postflight_complete": false,
+    "processor_records_per_placement": 4,
+    "rtl_executed": false,
+    "scala_executed": false,
+    "setup_started": false,
+    "status": "CPU_UNSUITABLE"
+  },
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "run_id": "38963767257",
+  "schema": 1,
+  "source_binding": {
+    "commit_tree": "07cdd8b1bc7508da7b587fc8465d4e8026f67731",
+    "generated_entries": 12,
+    "generated_identities_match_pinned_contract": true,
+    "generated_sources_executed": false,
+    "launch_contract_sha256": "b4ea311e11a64695fba4ccfc1f512240ddccdbada99710d58a1a36dbe5d1d96b",
+    "manifest_member_sha256": "99d4548f9e20edde2f2d42d36848ad25996fa1aae9e44025a403ffd27304ab28",
+    "source_entries": 285,
+    "source_sha256_verified_against_commit_blobs": true
+  }
+}

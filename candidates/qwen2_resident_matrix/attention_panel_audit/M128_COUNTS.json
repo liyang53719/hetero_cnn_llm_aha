@@ -1,0 +1,56 @@
+{
+  "accepted_80": false,
+  "accepted_90": false,
+  "actual_hardware_cycles": null,
+  "alternative_explicit_panel_delta_bits": 3072,
+  "alternative_operand_staging_delta_bits": null,
+  "causal_head_key_pairs": 99072,
+  "head_panels": 6912,
+  "macs_per_cycle": 4096,
+  "matrix_issue_floor": 1534080,
+  "normalized_weight_bank_writes": 0,
+  "panel_payload_bits": 3072,
+  "panel_words": 96,
+  "physical_256bit_bank_reads": 27648,
+  "physical_256bit_bank_writes": 27648,
+  "physical_stage_retention_verified": false,
+  "proposed_reused_words": 256,
+  "proposed_vector_fold_scale_service_edges": 235008,
+  "pv_lower_words": 128,
+  "qk_fold_packets": 110592,
+  "qk_scale_packets": 6912,
+  "rtl_executed": false,
+  "scope": "CONDITIONAL_REGISTER_LOAN_INDEX_ORDER_AND_COUNT_AUDIT",
+  "scratch_bytes": 1769472,
+  "scratch_reads": 13824,
+  "scratch_rmw_reads": 0,
+  "scratch_service_edge_floor": 82944,
+  "scratch_transactions": 27648,
+  "scratch_writes": 13824,
+  "serial_matrix_and_scratch_only": {
+    "conditional_minimum_edges": 1617024,
+    "useful_mac_utilization_ceiling_percent": 90.81275231536452
+  },
+  "serial_plus_silu_excluding_divisions": {
+    "conditional_minimum_edges": 3129728,
+    "useful_mac_utilization_ceiling_percent": 46.919860128420105
+  },
+  "serial_plus_softmax_excluding_division": {
+    "conditional_minimum_edges": 2054528,
+    "useful_mac_utilization_ceiling_percent": 71.47451872157498
+  },
+  "serial_plus_vector_fold_scale": {
+    "conditional_minimum_edges": 1852032,
+    "useful_mac_utilization_ceiling_percent": 79.28934273273896
+  },
+  "silu_service_floor_excluding_division": 1075200,
+  "silu_vectors": 71680,
+  "six_head_panels": 1152,
+  "softmax_all_full_exp_service_excluding_division": 478848,
+  "softmax_reciprocal_packets": 256,
+  "softmax_service_floor_excluding_division": 202496,
+  "softmax_six_head_key_packets": 16512,
+  "tokens": 128,
+  "unused_upper_words": 32,
+  "useful_macs": 6014828544
+}

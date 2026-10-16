@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "scope": "ATTENTION_PANEL_SOURCE_AUDIT",
+  "sources": {
+    "candidates/qwen2_resident_matrix/attention_bank_m128/controller.py": "38685e99458bc934c0f5831a86b4ff97982e72f3e4c65f38010d64cd4d28a0fb",
+    "candidates/qwen2_resident_matrix/attention_bank_m128/storage.py": "3ac229215b772adcfb1d058113cf6ea34f9f5fcc050a3d52873782a8ddc9c232",
+    "candidates/qwen2_resident_matrix/attention_bank_scratch/controller.py": "f9242181603ff779c9074eff40d67395beb45a5573a6f7382ee5df8823bbbdc5",
+    "candidates/qwen2_resident_matrix/attention_bank_scratch/port.py": "5d3f73de17b563fcf6235aea7e862b44c88215487ce9fae79894d5a44e618a4b",
+    "candidates/qwen2_resident_matrix/attention_bank_scratch/storage.py": "901e4f610a1baf052a345e50fdaf8c0739735f9f40484151243e6dc2e0ae29bd",
+    "candidates/qwen2_resident_matrix/attention_resource_audit/constraints.py": "5f23e83651adfdaebc0a0fea5e6aaafed103448ce9a5b112db2dbf8f2e93281f",
+    "candidates/qwen2_resident_matrix/attention_retained_result/controller.py": "78d07a01c7e132faf0676d863a98e3f7e61ccefb3fd69b055c24e46489a3b703",
+    "candidates/qwen2_resident_matrix/attention_scalar_schedule/model.py": "fc975a2d02df0e3ad8f3bd185a1cdb9be21b8b563b587c4e5a3026301ae536f3",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+    "candidates/qwen2_resident_matrix/raw_kv/raw_kv_port.patch": "3284c52a802ed15c66ab0b9ecf624f9bb44a226c988dcb057dc52eb6c8dfa34c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "baseline_commit": "ff986e17eeb734fcebd23dd5d068370a8b2a0713",
+  "inputs": {
+    "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py": "f2e46d6305131c38b8b3a5715619f36d6c309ca0",
+    "candidates/qwen2_resident_matrix/ffn_drain/model.py": "6434599052299aaad3efb9ab9e830f1217d2f212",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "e4a4cf9e0ab583dc5e23721f2c6a50ee1b2b4122",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "3e2c0a38612943a0627bcd82399fed13798b817d",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py": "48524f25a2e6cbc45b7b356fd4c26f9952270407",
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "d7871babc083256e0d17615a79369fe62b87a4a5",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "6d710fe67ecc6da43d860de4d617d858bd35ee09",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "43b8cc9459a2e6fd5723d93414bd0428410c4fc1",
+    "candidates/qwen2_resident_matrix/ffn_tiles/check_numeric.py": "b4e19f82d5711816a1aaaaf9ded09dd0e24269bf",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "10512012cf57137a5424e368b6d50a8dff326808",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "de0a30abc92fe6bccfdc02dff7f91f7bd2835744",
+    "candidates/qwen2_resident_matrix/ffn_window/check_numeric.py": "a412122b9cf08616dd2f82f53f8737c551cc1bd7",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "c1e8681cdd8c9ead6b0f4d24852597bb7345d842",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "174ed6bc9fbf36973d3a239a70a30aff5895a829",
+    "candidates/qwen2_resident_matrix/raw_kv/model.py": "d46fd96eccf955bb091bdf543ed17eaa5ae6305e",
+    "candidates/qwen2_resident_matrix/raw_kv/check_source.py": "3b5605523d9ea51c8ae0d564798d33c56988c697",
+    "candidates/qwen2_resident_matrix/raw_kv_parent/model.py": "5381c45a53c0aeb2a95ee24b4f6f72c5e77393cb",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "7bd1a46cabf9923d47807d61059a8cc0008cc1d2",
+    "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": "54f3133d30a59615bdb02ebc13fb464d6a17af2e",
+    "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch": "9b8d40d330b6203e2a79c35a942be54e5b167821",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "5ece228b5b91d594349b2799adec184e0a01c49f",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "b29036223d18699e2e76141b577c778265023c11",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": "0ad36b0b0e1bad2acc92e4274a361b5c825ab6b0",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "bbda21ea95b12250adc4f058f4c32ce065222acb"
+  },
+  "contracts": {
+    "pv16_method_ast_sha256": "23f5db29699f63461c7c04b1199ebb6d3f7ada460b191398ad38bea2b246169a",
+    "attention_region_sha256": "fcf463a31de114999cea829ab98143a3ec0b6776caedeeb81d439c263d115dc4"
+  }
+}

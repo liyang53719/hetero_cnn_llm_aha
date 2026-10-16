@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-16。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-16 22:20 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -12,7 +12,7 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 
 |目标|状态|当前真实边界与下一门|
 |---|---|---|
-|Qwen2-1.5B典型block，当前L0|ongoing|本轮推进Attention银行模型、packed原生微测及SFU候选；原业务M128仍待完成与postflight，实际RTL/90%未通过。|
+|Qwen2-1.5B典型block，当前L0|ongoing|本轮推进Attention银行模型、packed原生微测及SFU候选；原业务M128在FFN PC16触发内层2400秒预算，数值比较/postflight未完成；实际RTL/90%未通过。|
 |Qwen3.5-0.8B L0，GDN+dense|ongoing，本轮未变|历史真实payload与合成输入cold/carried/decode软件smoke保留；当前完整M128原业务/RTL资格不继承。|
 |Qwen3.5-0.8B L3，Attention+dense|ongoing，本轮未变|历史真实payload、合成M128软件数值及组件工作保留；当前完整原业务/RTL资格不继承。|
 |Qwen3.5-35B-A3B L0，GDN+MoE|to do，当前完整block|保留既有config/header/几何合同；真实payload、route/状态、完整数值与RTL/性能尚待闭合。|
@@ -35,29 +35,35 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   均未完成。测试使用的divider spacing=3是假设，不能带入性能结论。
 - **done：packed profile2微型原生主机模型。** [原始证据](../candidates/qwen2_resident_matrix/attention_packed_native_evidence/README.md)
   为QK8/PV3全启用cell与Fraction比较、PV128边界及协议保持检查；默认profile0/1不变。
-  不是完整Public数值PASS；`full_public_admission=false`、selected-fault发布时间尚未资格化。
+  该微测不是完整Public数值PASS；其`full_public_admission=false`。后续有界owner故障验证见下。
   packed M128全启用FMA预期260,308,992，不能用selected-cell模型25,362,432替代。
 - **done：SFU源审计及单上下文数值/边沿候选。** [审计](../candidates/qwen2_resident_matrix/sfu_microsequence_audit/README_CN.md)、
   [候选与资源账本](../candidates/qwen2_resident_matrix/sfu_silu_cycle_candidate/README_CN.md)：
   原16 divider/options0正常输入最少25拍；71,680个SiLU vector至少1,792,000拍。
   即使其余工作完美重叠，固定useful=6,014,828,544下上限81.9455%，故当前配置90%不可能。
   options16虽为14拍，但新增递推逻辑/时序成本，默认关闭；软件callback并非divider RTL等价。
-- **ongoing：原始业务be00运行。** 来源为
-  `be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5`；本次更新最后已知进度为Attention PC12，
-  结果及postflight待回收。使用[原launcher诊断](../candidates/qwen2_resident_matrix/raw_kv_public_recipe_run/numeric_progress.py)
-  的进度口径；不能把阶段进入/返回、子模型PASS或后续主线CI绿色写成这次业务已通过。
+- **done：原始业务be00失败诊断与归档；完整业务仍未通过。** 原始285源/12生成变体未热替换。
+  原运行总2762.816418秒，实际内层2400.210057941秒，在FFN PC16触发原有deadline。
+  完成PC0–15，Attention已推进；未完成完整数值比较/postflight。
+  [原始安全回执与失败计划](U00_2_PUBLIC_M128_CLOUD_BUDGET_FAILURE_20261016_CN.md)保留原身份；不扩大预算盲目重跑。
+- **done：实际PublicKvTransport的M1/M2有界接入。**
+  [证据](../candidates/qwen2_resident_matrix/attention_packed_public_evidence/README.md)：原owner、K/V和scratch共享一次parent tick，
+  输出与score逐位匹配原Fraction参考；四个故障场景失败并排空。不是完整M16/M128 block。
+- **done：A复用有界控制/算术及Chisel前端资格。**
+  [数值候选](../candidates/qwen2_resident_matrix/dense_a_hold_numeric/README_CN.md)5组开关对比累计6,553,600次C++ FP32 FMA，
+  全输出及4096-cell终态逐位一致；M128项仅K32/N160。
+  [实际Chisel前端](U00_2_DENSE_A_HOLD_FRONTEND_20261016_CN.md)四配置编译/CHIRRTL通过，CI38973350757总24.819秒；
+  32个1R1W bank不变，Queue4→3，新增2048bit hold及78bit控制。尚无硬件协议执行、RTL、面积或时序验收。
 
 ## 下一步，保持默认关闭并逐项验收
 
-1. **ongoing：收齐be00原业务结果。** 保存原数值比较、source身份、postflight与安全摘要；
-   若失败，保留真实失败阶段。新候选不热替换正在运行的冻结源码，不据新切片推定旧运行PASS。
+1. **done：收齐be00失败结果。** 安全摘要/source身份已归档，数值比较和postflight未完成。新候选独立冻结，不据小切片推定旧运行PASS。
 2. **ongoing：原owner可选packed接入。** 在原OfficialAttentionOwner及原Matrix服务上增加
    明确profile2路径，接真实DDR/共享银行与原输入，保留原算术、默认路径和完整golden；
-   先补selected-fault最终发布围栏、返回/ACK/abort债务，再做有界全量比较。
+   M1/M2的selected-fault围栏、返回/ACK/abort债务已验证；正在补完整M16的10字段观察器、fresh输入/两份参考及严格source准入。单独新编译的Matrix+SiLU库已通过构建校验，尚未运行完整M16。
 3. **ongoing：A复用最小切片。** 按[源审计](../candidates/qwen2_resident_matrix/dense_a_reuse_audit/README_CN.md)
    保持同K的context-inner顺序；A gather从1,462,272降为298,496只是源级预期。
-   首选Queue4→3加256 B hold，活跃payload 1280→1216 B；分别验credit、generation、
-   stall/abort及原输出。cache不等于FFN重叠或新增SRAM端口。
+   Queue4→3加256 B hold已接实际Chisel并通过前端资源核验，活跃payload1280→1216 B。下一步有界解释执行硬件握手；cache不等于FFN重叠或新增SRAM端口。
 4. **to do：W供数替代方案。** 先保留实际maxBeats16/1KiB配置，比较同K相邻context的
    row coalescing与另行冻结格式的tiled W；更大mailbox/多在途均须独立资源和协议账。
    原逐64B sole-active路径至少2,924,544服务边沿，A复用不会减少93,585,408 B的W。

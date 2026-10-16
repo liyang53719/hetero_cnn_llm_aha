@@ -1,0 +1,44 @@
+--- a/candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py
++++ b/candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py
+@@ -18,7 +18,7 @@
+         self.serial+=1
+         return ScratchAction(self.serial,op,generation,query,kv_head,line,tuple(words))
+     def run(self,o,j):
+-        if j.m not in (1,2):raise PrefixFault('Bounds','packed preparation supports M1/M2 only')
++        if type(j.m) is not int or j.m not in (1,2,16):raise PrefixFault('Bounds','packed preparation supports canonical M1/M2/M16 only')
+         yield self.scratch('acquire',0,0,0)
+         for token in range(j.m):
+             for kv in range(2):
+--- a/candidates/qwen2_resident_matrix/raw_kv_public/model.py
++++ b/candidates/qwen2_resident_matrix/raw_kv_public/model.py
+@@ -21,7 +21,8 @@
+         self.supply.bind(Binding(owner_id,job.tag,job.b,job.c,job.m,job.dst,job.write_bytes))
+         if packed_profile is not None:
+             from ..attention_packed_public.profile import PackedPublicProfile
+-            require(type(packed_profile) is PackedPublicProfile,'exact explicit packed profile')
++            from ..attention_packed_m16.profile import PackedM16PublicProfile
++            require(type(packed_profile) in (PackedPublicProfile,PackedM16PublicProfile),'exact explicit packed profile')
+             schedule,mux=packed_profile.install(owner,parent,job,owner_id)
+             self.supply.scratch_mux=mux
+             self.packed_binding=(packed_profile,schedule,mux,parent,parent.raw,parent.owner.a_banks,owner,owner.matrix,owner.scalar)
+--- a/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
+@@ -182,7 +182,7 @@
+     physical.check_coexistence(unpublished_pristine=True)
+ 
+ 
+-def execute_public_suffix(x, physical, lib, output, *, memory=None, enable_raw_kv=False):
++def execute_public_suffix(x, physical, lib, output, *, memory=None, enable_raw_kv=False, packed_profile=None):
+     """Continue pc10 through pc20 in the caller's original public21 launch.
+ 
+     Return (actual_outputs, report) only after its whole-launch terminal.
+@@ -202,7 +202,8 @@
+                   id(x.prefix_owner.scalar), id(physical), id(memory.act.data), id(memory.workspace.data))
+     reports = []
+     job = _request(x, 12, 'Attention')
+-    report = execute_attention_owner(x, physical, job, enable_raw_kv=enable_raw_kv)
++    options = {} if packed_profile is None else dict(packed_profile=packed_profile)
++    report = execute_attention_owner(x, physical, job, enable_raw_kv=enable_raw_kv, **options)
+     x.publish_completions((10, 11, 12))
+     physical.publish(job, x.host)
+     reports.append(dict(pcs=[10, 11, 12], kind='Attention', report=report))

@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-16 23:25 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-16 23:38 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -61,12 +61,26 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   状态严格为PASS_ASSIGNED_OFFICIAL_OBSERVED_GATES_ONLY；全29节点、M128、RTL及90%仍false。
   M16已执行1,462,272个Dense物理step，不得把总软件耗时简单乘8当M128预测。
 
+- **done：实际原生算术的分块M17/M32 Public transport组件。**
+  [冻结证据](../candidates/qwen2_resident_matrix/attention_packed_tiled_evidence/README.md)：
+  M17成功、panel abort与DDR错误三项共34.360秒；M32成功60.436秒。
+  所有score/output与独立Fraction参考逐位一致，启用物理FMA分别7,704,576与21,037,056。
+  query16/key16跨tile时保持PV累加器和七条真实raw response ACK停顿边；187源与ELF前后不变。
+  仅组件资格，未运行完整M128程序，软件边沿不能作为RTL周期。
+- **done：分块10字段observer冷资格；ongoing：真实算术捕获。**
+  [独立准备](../candidates/qwen2_resident_matrix/attention_packed_tiled_observation/README.md)31项normal通过；
+  优化模式23项通过、8项明确跳过live monitoring，生产入口拒绝-O。
+  M17/M32原生运行发生在此observer之前，因此不能据其继承实际10字段捕获通过。
+- **done：M16预算依据提取。** [实测与源推导](U00_2_PACKED_M16_BUDGET_BASIS_20261016_CN.md)
+  固定Dense工作量与B流量不随M16到M128增长8倍；A ingress及部分逐行工作增长。
+  未分配的341.233秒不能全部归于Attention或FFN；M128在原2400秒预算内的可行性尚待实测。
+
 ## 下一步，保持默认关闭并逐项验收
 
 1. **done：收齐be00失败结果。** 安全摘要/source身份已归档，数值比较和postflight未完成。新候选独立冻结，不据小切片推定旧运行PASS。
 2. **ongoing：原owner可选packed接入。** 在原OfficialAttentionOwner及原Matrix服务上增加
    明确profile2路径，接真实DDR/共享银行与原输入，保留原算术、默认路径和完整golden；
-   M1/M2的selected-fault围栏、返回/ACK/abort债务已验证；完整M16的27个assigned官方门限已通过，见下方原始证据；全29节点仍未闭合。下一步是真实16-key分块M128的有界M17/M32校验与完整接入，不能以循环M1替代。
+   M1/M2的selected-fault围栏、返回/ACK/abort债务已验证；完整M16的27个assigned官方门限已通过，见下方原始证据；全29节点仍未闭合。真实16-key分块的有界M17/M32校验已通过；下一步为10字段实际跨tile捕获、原M128资产准入及完整21事件接入，不能以循环M1替代。
 3. **ongoing：A复用最小切片。** 按[源审计](../candidates/qwen2_resident_matrix/dense_a_reuse_audit/README_CN.md)
    保持同K的context-inner顺序；A gather从1,462,272降为298,496只是源级预期。
    Queue4→3加256 B hold已接实际Chisel并通过前端资源核验，活跃payload1280→1216 B。有界解释执行在240秒超时，未取得握手通过证据，详见[失败归档](U00_2_A_HOLD_INTERPRETER_FAILURE_20261016_CN.md)；不扩大预算盲目重跑。cache不等于FFN重叠或新增SRAM端口。

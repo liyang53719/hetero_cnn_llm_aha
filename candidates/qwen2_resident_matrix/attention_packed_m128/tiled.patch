@@ -1,0 +1,81 @@
+--- a/candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py
++++ b/candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py
+@@ -18,7 +18,7 @@
+         self.serial+=1
+         return ScratchAction(self.serial,op,generation,query,kv_head,line,tuple(words))
+     def run(self,o,j):
+-        if type(j.m) is not int or j.m not in (1,2,16):raise PrefixFault('Bounds','packed preparation supports canonical M1/M2/M16 only')
++        if type(j.m) is not int or j.m not in (1,2,16,17,32,128):raise PrefixFault('Bounds','packed tiled preparation supports M1/M2/M16/M17/M32/M128 only')
+         yield self.scratch('acquire',0,0,0)
+         for token in range(j.m):
+             for kv in range(2):
+@@ -29,36 +29,44 @@
+                     head=kv*6+h;q=[]
+                     for d in range(0,128,16):q.extend((yield from o._read(j.a+(token*1536+head*128+d)*4)))
+                     o.row_words=128;o.peak_row_words=max(o.peak_row_words,128)
+-                    for d in range(0,128,16):
+-                        b=[0]*256
+-                        for key in range(token+1):
+-                            words=yield from o._read(j.b+(key*256+kv*128+d)*4)
+-                            b[16*key:16*key+16]=[o._op('bf',x)>>16 for x in words]
+-                        final=d==112
+-                        result=yield PackedRequest(0x23,tuple(o._op('bf',x)>>16 for x in q[d:d+16]),tuple(b),d==0,final,8,255,
+-                            tuple((r,16*k+r) for k in range(token+1) for r in range(16)) if final else ())
+-                    lanes=result.selected_words();scores=[]
+-                    for key in range(token+1):
+-                        total=0
+-                        for x in lanes[key*16:(key+1)*16]:total=o._op('add',total,x)
+-                        score=o._op('bf',o._op('mul',o._op('bf',total),0x3db504f3));scores.append(score)
+-                        if o._less(maxima[h],score):maxima[h]=score
+-                    o.useful_macs+=(token+1)*128
+-                    yield self.scratch('write',generation,token,kv,4096+8*h,tuple(scores)+(0,)*(16-len(scores)))
+-                    yield PackedConsumerAck(result.tag)
++                    for first in range(0,token+1,16):
++                        count=min(16,token+1-first)
++                        for d in range(0,128,16):
++                            b=[0]*256
++                            for local in range(count):
++                                key=first+local
++                                words=yield from o._read(j.b+(key*256+kv*128+d)*4)
++                                b[16*local:16*local+16]=[o._op('bf',x)>>16 for x in words]
++                            final=d==112
++                            result=yield PackedRequest(0x23,tuple(o._op('bf',x)>>16 for x in q[d:d+16]),tuple(b),d==0,final,8,255,
++                                tuple((r,16*k+r) for k in range(count) for r in range(16)) if final else ())
++                        lanes=result.selected_words();scores=[]
++                        for local in range(count):
++                            total=0
++                            for x in lanes[local*16:(local+1)*16]:total=o._op('add',total,x)
++                            score=o._op('bf',o._op('mul',o._op('bf',total),0x3db504f3));scores.append(score)
++                            if o._less(maxima[h],score):maxima[h]=score
++                        o.useful_macs+=count*128
++                        yield self.scratch('write',generation,token,kv,4096+8*h+first//16,tuple(scores)+(0,)*(16-count))
++                        yield PackedConsumerAck(result.tag)
+                 inverses=[]
+                 for h in range(6):
+-                    scores=(yield self.scratch('read',generation,token,kv,4096+8*h)).words
+-                    weights=[];total=0
+-                    for score in scores[:token+1]:
+-                        weight=exp_negative(o.scalar,o,o._op('add',score,maxima[h]^0x80000000));o.counts['exp_negative_requests']+=1
+-                        weights.append(weight);total=o._op('add',total,weight)
+-                    yield self.scratch('write',generation,token,kv,4144+8*h,tuple(weights)+(0,)*(16-len(weights)))
++                    total=0
++                    for first in range(0,token+1,16):
++                        count=min(16,token+1-first)
++                        scores=(yield self.scratch('read',generation,token,kv,4096+8*h+first//16)).words
++                        weights=[]
++                        for score in scores[:count]:
++                            weight=exp_negative(o.scalar,o,o._op('add',score,maxima[h]^0x80000000));o.counts['exp_negative_requests']+=1
++                            weights.append(weight);total=o._op('add',total,weight)
++                        yield self.scratch('write',generation,token,kv,4144+8*h+first//16,tuple(weights)+(0,)*(16-count))
+                     inverses.append(o._op('div',0x3f800000,total))
+                 panel=[]
+-                for h in range(6):panel.append((yield self.scratch('read',generation,token,kv,4144+8*h)).words)
+                 for key in range(token+1):
+-                    a=tuple(o._op('bf',o._op('mul',panel[h][key],inverses[h]))>>16 for h in range(6))+(0,)*10
++                    if key%16==0:
++                        panel=[]
++                        for h in range(6):panel.append((yield self.scratch('read',generation,token,kv,4144+8*h+key//16)).words)
++                    a=tuple(o._op('bf',o._op('mul',panel[h][key%16],inverses[h]))>>16 for h in range(6))+(0,)*10
+                     b=[]
+                     for d in range(0,128,16):b.extend((yield from o._read(j.c+(key*256+kv*128+d)*4)))
+                     final=key==token

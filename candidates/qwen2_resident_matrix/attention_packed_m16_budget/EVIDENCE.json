@@ -1,0 +1,128 @@
+{
+  "a_hold_whole_program_integrated": false,
+  "a_hold_whole_program_speedup_measured": false,
+  "budget_increase_recommended": false,
+  "dense_roles": {
+    "down": {
+      "a_read_beats": 8960,
+      "accepted_steps": 430080,
+      "actual_physical_fmas": 1761607680,
+      "k": 8960,
+      "n": 1536
+    },
+    "gate": {
+      "a_read_beats": 1536,
+      "accepted_steps": 430080,
+      "actual_physical_fmas": 1761607680,
+      "k": 1536,
+      "n": 8960
+    },
+    "k": {
+      "a_read_beats": 1536,
+      "accepted_steps": 12288,
+      "actual_physical_fmas": 50331648,
+      "k": 1536,
+      "n": 256
+    },
+    "o": {
+      "a_read_beats": 1536,
+      "accepted_steps": 73728,
+      "actual_physical_fmas": 301989888,
+      "k": 1536,
+      "n": 1536
+    },
+    "q": {
+      "a_read_beats": 1536,
+      "accepted_steps": 73728,
+      "actual_physical_fmas": 301989888,
+      "k": 1536,
+      "n": 1536
+    },
+    "up": {
+      "a_read_beats": 0,
+      "accepted_steps": 430080,
+      "actual_physical_fmas": 1761607680,
+      "k": 1536,
+      "n": 8960
+    },
+    "v": {
+      "a_read_beats": 1536,
+      "accepted_steps": 12288,
+      "actual_physical_fmas": 50331648,
+      "k": 1536,
+      "n": 256
+    }
+  },
+  "derived_unattributed_whole_terminal_seconds": 341.2332579579961,
+  "executed_contract_sha256": "f5e3c0ecc342019923dc8759168e9097c9d0e1ffc1d7eac0a56032569fa33882",
+  "hardware_cycles_measured": false,
+  "individual_wall_seconds_unmeasured": [
+    "attention",
+    "ffn",
+    "add",
+    "norm"
+  ],
+  "m128_budget_feasibility_proven": false,
+  "m128_runtime_measured": false,
+  "measured_attention": {
+    "actual_physical_fmas": 6848512,
+    "matrix_requests": 2032,
+    "matrix_results": 2032,
+    "native_steps": 1808,
+    "transport_model_ticks": 111591,
+    "useful_lane_fmas": 417792
+  },
+  "measured_dense_physical_fmas": 5989466112,
+  "measured_dense_steps": 1462272,
+  "measured_ffn": {
+    "coordinator_model_ticks": 1982670,
+    "silu_model_ticks": 107744,
+    "windows": 56
+  },
+  "measured_seconds": {
+    "dense_down": 173.8961122680048,
+    "dense_o": 21.359935571992537,
+    "launcher": 591.28026,
+    "numeric": 569.456837449994,
+    "prefix": 32.70820174799883,
+    "whole_terminal": 569.1975075459923
+  },
+  "model_ticks_are_hardware_cycles": false,
+  "physical_cells_per_dense_step": 4096,
+  "private_actual_summary_sha256": "39f576bd71441d24997ee460fb61e9264fa429423eb18a366f69daf87b0abf95",
+  "profile": "qwen2-packed-m16-measured-budget-basis-v1",
+  "recommendation": "QUALIFY_M17_M32_PACKED_BOUNDARIES_BEFORE_M128_OR_SEPARATE_A_HOLD_INTEGRATION",
+  "safe_launcher_summary_sha256": "e96e21a1309a900346cca82df475c6eb2f6c7de42b1a73ea5330157b4fae2f8d",
+  "same_n_k_chunk_retention_m128_derivation": {
+    "a_ingress_beats_m128": 133120,
+    "a_ingress_beats_m16": 16640,
+    "a_ingress_bytes_m128": 8519680,
+    "a_ingress_bytes_m16": 1064960,
+    "b_read_beats": 1462272,
+    "b_read_bytes": 93585408,
+    "dense_physical_fmas": 5989466112,
+    "dense_steps": 1462272,
+    "down_prefix_bytes_each_direction": 2359296,
+    "down_prefix_contexts": 144,
+    "down_prefix_read_beats": 36864,
+    "down_prefix_write_beats": 36864,
+    "ffn_elementwise_row_factor": 8,
+    "final_output_row_factor": 8
+  },
+  "schema": 1,
+  "sources": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+    "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1"
+  },
+  "status": "MEASURED_M16_AND_SOURCE_DERIVED_M128_WORK_COUNTS_ONLY",
+  "unattributed_includes": [
+    "attention",
+    "ffn",
+    "add",
+    "norm",
+    "other_suffix_host_work"
+  ]
+}

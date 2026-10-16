@@ -1,0 +1,18 @@
+{
+  "cpp_sha256": "fba6bfc8d3472ed60c3bfc6d80784de8b8938a8ecc9178a3accdf11eb1e4e452",
+  "generated_module_sha256": "439d530fea6d1aa630c8adba4c7aa688ff545bfbf81c11d6b6183ec710f9d1dc",
+  "profile": "qwen2-independent-qkv-block-pair-v1",
+  "schema": 1,
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/dot16.inc": "175a8c3ff32287c6403a9bdf83c91d45249b6824cf4633753fcccb65c48d4ad6",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/reference/profile.json": "07008af966dbe4d64b10f75c37e4d19e17159e3708543982a70c8ec996f1d5a5",
+    "candidates/qwen2_resident_matrix/raw_kv_native_qkv/README.md": "f02fc4f16d87ee22ae99a7cdf9f8b88cbee5e9dfd0542732a23924353350dee3",
+    "candidates/qwen2_resident_matrix/raw_kv_native_qkv/adapter.py": "852e267086908667625e1e23da90f43ec602486ba3c65231e3fd6ae42a554968",
+    "candidates/qwen2_resident_matrix/raw_kv_native_qkv/kernel.py": "7ad23b2989b4c84bc4d8bfd443aaea8161f6e315db72d6d20a0692906b3eb28e",
+    "candidates/qwen2_resident_matrix/raw_kv_native_qkv/prepare.py": "344039da4e39c2a4e4312e661081b733724fad547a3334ac344ddbe5850f6df5",
+    "candidates/qwen2_resident_matrix/raw_kv_native_qkv/test_recipe.py": "9e1c13851c1cfbe34469261a43250d24a782d0f89ea8642391cdf3428bf0f2ac",
+    "candidates/qwen2_resident_matrix/raw_kv_native_qkv/variant.patch": "904d18059338c96f338929ebc9e7d920b4f4bf4982d054f9c5109766a2bc3aae",
+    "scripts/qwen2_layer0_model_gate.py": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85",
+    "spec/numerical_contract.md": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+  }
+}

@@ -1,0 +1,73 @@
+--- a/scripts/qwen2_layer0_model_gate.py
++++ b/scripts/qwen2_layer0_model_gate.py
+@@ -123,7 +123,7 @@
+ 
+ 
+ def independent_forward(weights: dict, x: np.ndarray, config: dict, mode: str,
+-                        cache: tuple[np.ndarray, np.ndarray] | None = None) -> tuple[dict, tuple]:
++                        cache: tuple[np.ndarray, np.ndarray] | None = None, *, qkv_recipe=None) -> tuple[dict, tuple]:
+     """No official helper, torch operation, or native intermediate feeds this path."""
+     if mode not in ('bf16', 'fp32'):
+         raise ValueError('unknown arithmetic mode')
+@@ -147,6 +147,12 @@
+         return round_output(round_output(value * inverse) * weights[name + '.weight'])
+ 
+     def linear(value, name, bias=False):
++        if mode == 'bf16' and qkv_recipe is not None and name in ('self_attn.q_proj', 'self_attn.k_proj', 'self_attn.v_proj'):
++            from candidates.qwen2_resident_matrix.raw_kv_native_qkv.adapter import validate
++            validate(qkv_recipe, tokens=x.shape[1], carried=cache is not None, threads=4)
++            if bias is not True:
++                raise ValueError('independent QKV bias boundary')
++            return qkv_recipe.linear(value, weights[name + '.weight'], weights[name + '.bias'], name)
+         output = np.matmul(value, weights[name + '.weight'].T, dtype=np.float32)
+         if bias:
+             output = output + weights[name + '.bias']
+@@ -474,7 +480,11 @@
+ 
+ 
+ def run_gate(root: Path, payload_dir: Path, output_dir: Path, tokens: int = 16,
+-             carried: bool = False, threads: int = 4, small_gate: Path | None = None) -> dict:
++             carried: bool = False, threads: int = 4, small_gate: Path | None = None, *, qkv_recipe=None) -> dict:
++    qkv_identity = None
++    if qkv_recipe is not None:
++        from candidates.qwen2_resident_matrix.raw_kv_native_qkv.adapter import validate
++        qkv_identity = validate(qkv_recipe, tokens=tokens, carried=carried, threads=threads)
+     import torch
+     sys.path.insert(0, str(root / 'src'))
+     sys.path.insert(0, str(root / 'scripts'))
+@@ -492,6 +502,8 @@
+     torch.backends.cuda.matmul.allow_tf32 = False
+     torch.backends.cudnn.allow_tf32 = False
+     module, identity = runtime_identity(root)
++    if qkv_identity is not None:
++        identity['independent_qkv_recipe'] = qkv_identity
+     config_dict = json.loads((root / SOURCE / 'config.json').read_text())
+     config = module.Qwen2Config(**config_dict)
+     config._attn_implementation = 'eager'
+@@ -537,6 +549,8 @@
+         'modes': {}, 'official_framework_forward': True, 'rtl_execution': False,
+         'hardware_recipe_acceptance': False, 'logits': False, 'full_model_quality': False,
+     }
++    if qkv_identity is not None:
++        result['arithmetic']['independent_qkv'] = qkv_identity
+     started = time.monotonic()
+     for mode, dtype in [('bf16', torch.bfloat16), ('fp32', torch.float32)]:
+         mode_started = time.monotonic()
+@@ -554,7 +568,7 @@
+             previous_native = None if native_cache is None else (native_cache.key_cache[0].clone(), native_cache.value_cache[0].clone())
+             previous_independent = None if independent_cache is None else tuple(value.copy() for value in independent_cache)
+             native, native_cache = native_forward(module, layer, xt, mode, native_cache)
+-            independent, independent_cache = independent_forward(weights, x, config_dict, mode, independent_cache)
++            independent, independent_cache = independent_forward(weights, x, config_dict, mode, independent_cache, qkv_recipe=qkv_recipe)
+             stage_results = {}
+             destination = output_dir / mode / ('phase_' + str(phase))
+             destination.mkdir(parents=True)
+@@ -608,6 +622,8 @@
+     result['status'] = 'PASS_BF16_STAGE_BUDGET' if passed else 'FAIL_BF16_STAGE_BUDGET'
+     result['seconds'] = time.monotonic() - started
+     result['peak_rss_kib'] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
++    if qkv_recipe is not None:
++        qkv_recipe.revalidate()
+     (output_dir / 'RESULT.json').write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + '\n')
+     return result
+ 

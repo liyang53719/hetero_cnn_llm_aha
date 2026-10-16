@@ -1,5 +1,5 @@
 name: raw-kv-native-qk
-# Revision 2: diagnostic-only per-mode dispatch/stage/fenv evidence; unchanged arithmetic and bounded placements.
+# Revision 3: exact oneDNN graph/sum diagnostic grammar repair; unchanged arithmetic and bounded placements.
 # Placement two is allowed only after a validated pre-package CPU_UNSUITABLE.
 # Each eligible attempt retains the original900s ceiling; no numerical retries.
 on:

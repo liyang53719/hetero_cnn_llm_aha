@@ -4,9 +4,11 @@
 - 已完成：QKV-only fresh native16 PASS；native128 只剩 scores/logits 失败，其上游 QKV/q/k/cache/repeat bit-exact。
 - 已完成：QK 候选19项冷测试与真实 C++ 微型合成检查；随后真实 combined native16 PASS、native128 仍失败。run38934796546 的 qr/kr 已出现差异，不能将变化孤立归因于 QK；完整安全证据见 raw_kv_native_qk_results。
 - 已完成：v2 诊断实现及冷控制测试；记录每模式 oneDNN primitive、CPU feature、原始输入/各阶段双方哈希与双库 fenv，只修改观察，不修改算术。
-- 已完成：100项完整冷测试 normal/-O（21.444/20.889秒），252-source/221-setup/10-overlay 真实 Git clone/compose/re-exec 来源证明；全过程阻止 numerical imports、CDLL 和 producer 执行。
-- 进行中：最终独立审查与发布准备。
-- 待执行：审查后一次有界 fresh native16→native128 诊断。当前没有 v2 实际运行结果；Public/full-block 仍未进入。
+- 已完成（revision 2）：100项完整冷测试 normal/-O（21.444/20.889秒），252-source/221-setup/10-overlay 真实 Git clone/compose/re-exec 来源证明；全过程阻止 numerical imports、CDLL 和 producer 执行。
+- 已完成：revision 3 精确诊断语法修复与固定 rejection reason 计数，104项冷测试 normal/-O 通过（22.654/21.156秒）。
+- 进行中：revision 3 最终来源冻结和独立审查；尚未执行新 native 数值尝试。
+- 已执行：revision 2 的 fresh native16 原始数值 gate PASS，但诊断不完整，native128 未运行。
+- 待执行：revision 3 审查后一次有界 fresh native16→native128 诊断；Public/full-block 仍未进入。
 
 ## v2 诊断边界
 
@@ -32,7 +34,7 @@ M16 和 M128 使用同一 combined Recipe identity、两库/source/pins；原始
 
 保留最多两个串行标准 ubuntu-24.04 placement。第二个只在第一个来源绑定的 package前 CPU_UNSUITABLE 收据被验证后启动；解析/来源/安装/backend/编译/数值失败均停止，不进行数值重试。必要 CPU flags 不是 backend 证明，原始 Torch/MKLDNN 严格 gate 继续执行，不设置 ATEN override。两次 CPU不合格必须整体失败。
 
-工作流仅自身路径 push/main 或 manual，run_attempt1，单 job20分钟/执行16分钟，冷测试独立上限2分钟（本地 paired suite42.333秒，避免1分钟上限的 CI 速度波动；数值执行仍900秒）。上传仅每个 placement 的 summary.json、progress.json、source_hashes.json；summary 的固定上限为98,304字节，覆盖两case全部有界诊断；固定有限误差/阈值、布尔语义、哈希与安全错误分类。所有原始张量、weights、完整 RESULT、producer日志和私人路径不上传。没有 Public/full-block/RTL 执行。
+工作流仅自身路径 push/main 或 manual，run_attempt1，单 job20分钟/执行16分钟，冷测试独立上限2分钟（本地 paired suite42.333秒，避免1分钟上限的 CI 速度波动；数值执行仍900秒）。上传仅每个 placement 的 summary.json、progress.json、source_hashes.json；summary 的固定上限为131,072字节，覆盖两case全部有界诊断；固定有限误差/阈值、布尔语义、哈希与安全错误分类。所有原始张量、weights、完整 RESULT、producer日志和私人路径不上传。没有 Public/full-block/RTL 执行。
 
 冷检查：
 
@@ -45,3 +47,15 @@ M16 和 M128 使用同一 combined Recipe identity、两库/source/pins；原始
 - https://uxlfoundation.github.io/oneDNN/v3.7/dev_guide_verbose.html
 
 `verbose` 的进入/退出只调用 verbose 开关；与独立的 backend flags setter 区分。运行时还检查 mkldnn.enabled 未改变；这些 source/control 检查不是新的 numerical PASS。
+
+## 诊断语法修复（revision 3）
+
+run38938744221 的 fresh native16 原始数值判据通过，但 BF16 capture 有4条 unsupported（6条 recognized execution、6条 info、共16行；无 malformed/truncation），因此 native128 未运行。当前可确认识别到的 implementation 是 brg_matmul:avx10_1_512_amx，CPU AMX/BF16 flags 为真，所记录 fenv 控制均未变化；不能据此证明之前两个 host 的 dispatch 差异。
+
+同 oneDNN3.7.1/commit8d263e… 的历史记录以及官方 verbose.cpp（blob0aa7c0f669f5e784221b052427d505a1f0676ed9）确认两处固定合法语法：graph info template（包含 implementation 字段）、attr-post-ops:sum。旧 parser 分别将它们记为 unsupported。三个 QKV sum 加一个 graph template 与4条计数吻合，但当前原始日志未保存，仍是解释假设。修复只接受这两个精确字面值，不扩展任意属性或 descriptor；新增固定 rejection reason 计数，不导出原始未知字符串。summary 上限131,072字节只为这些有限诊断字段预留空间。
+
+官方精确格式来源：
+- https://github.com/uxlfoundation/oneDNN/blob/8d263e693366ef8db40acc569cc7d8edf644556d/src/common/verbose.cpp#L146-L151
+- https://github.com/uxlfoundation/oneDNN/blob/8d263e693366ef8db40acc569cc7d8edf644556d/src/common/verbose.cpp#L788-L804
+
+默认 sum token 只对应 scale=1、zero-point=0、dtype=undef；sum:2、附加未知 post-op 和变体 header 仍拒绝。这里只修复观察语法，不证明原始当前四条未知记录的具体内容，也不更改实际 sum 算术。

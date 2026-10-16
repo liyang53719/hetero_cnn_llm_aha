@@ -10,10 +10,14 @@ from . import dispatch_diagnostic as D
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def row(impl='brg_matmul:avx512_core_bf16', shape='16x1536:1536x256'):
+def row(impl='brg_matmul:avx512_core_bf16', shape='16x1536:1536x256', attrs=''):
     return ('onednn_verbose,v1,primitive,exec,cpu,matmul,' + impl +
         ',undef,src:bf16:a:blocked:ab::f0 wei:bf16:a:blocked:BA16a32b2a::f0 '
-        'dst:bf16:a:blocked:ab::f0,,,' + shape + ',0.0129395\n').encode()
+        'dst:bf16:a:blocked:ab::f0,' + attrs + ',,' + shape + ',0.0129395\n').encode()
+
+
+GRAPH_HEADER = (b'onednn_verbose,v1,graph,info,template:operation,engine,partition_id,'
+    b'partition_kind,op_names,data_formats,logical_tensors,fpmath_mode,implementation,backend,exec_time\n')
 
 
 def manifest():
@@ -66,6 +70,97 @@ class DiagnosticTests(unittest.TestCase):
         report = D.parse_verbose(info + row())
         self.assertEqual((report['info_records'], report['exec_records']), (3, 1))
         self.assertEqual(report['status'], 'COMPLETE_DIAGNOSTIC')
+
+    def test_exact_reviewed_graph_header_is_info_only(self):
+        value = D.parse_verbose(GRAPH_HEADER)
+        self.assertEqual(value['status'], 'NO_ONEDNN_EXECUTION_OBSERVED')
+        self.assertEqual((value['info_records'], value['exec_records'], value['records']), (1, 0, []))
+        value = D.parse_verbose(GRAPH_HEADER + row())
+        self.assertEqual(value['status'], 'COMPLETE_DIAGNOSTIC')
+        self.assertEqual((value['info_records'], value['exec_records']), (1, 1))
+        self.assertNotIn('partition_id', json.dumps(value))
+        for changed in (GRAPH_HEADER.replace(b'implementation,', b''),
+                        GRAPH_HEADER.replace(b'implementation,', b'private_implementation,'),
+                        GRAPH_HEADER.replace(b'exec_time\n', b'exec_time,PRIVATE\n')):
+            value = D.parse_verbose(changed + row())
+            self.assertEqual(value['status'], 'UNSUPPORTED')
+            self.assertEqual(value['unsupported_records'], 1)
+            self.assertEqual(value['unsupported_reasons']['information_header'], 1)
+            self.assertNotIn('PRIVATE', json.dumps(value))
+            self.assertNotIn('private_implementation', json.dumps(value))
+
+    def test_exact_reviewed_sum_attribute_accepts_no_variants(self):
+        for attrs in ('attr-post-ops:sum', 'attr-scratchpad:user attr-post-ops:sum'):
+            value = D.parse_verbose(GRAPH_HEADER + row(attrs=attrs) * 3)
+            self.assertEqual(value['status'], 'COMPLETE_DIAGNOSTIC')
+            self.assertEqual((value['info_records'], value['exec_records']), (1, 3))
+            self.assertEqual(value['unsupported_records'], 0)
+            self.assertEqual(value['unsupported_reasons'], dict.fromkeys(D.UNSUPPORTED_REASONS, 0))
+            self.assertNotIn('attr-post-ops', json.dumps(value))
+            self.assertFalse(value['numerical_acceptance'])
+            self.assertFalse(value['backend_order_proven'])
+        for attrs in ('attr-post-ops:sum:1', 'attr-post-ops:sum_PRIVATE',
+                      'attr-post-ops:sum attr-PRIVATE:secret', 'attr-bia_mask:2'):
+            value = D.parse_verbose(row(attrs=attrs))
+            self.assertEqual(value['status'], 'UNSUPPORTED')
+            self.assertEqual(value['unsupported_reasons']['attributes'], 1)
+            self.assertEqual(value['exec_records'], 0)
+            self.assertNotIn(attrs, json.dumps(value))
+            self.assertNotIn('PRIVATE', json.dumps(value))
+        value = D.parse_verbose(row(attrs='attr-post-ops:sum').replace(b',,16x', b',bia_mask:2,16x'))
+        self.assertEqual(value['status'], 'UNSUPPORTED')
+        self.assertEqual(value['unsupported_reasons']['auxiliary'], 1)
+        self.assertNotIn('bia_mask', json.dumps(value))
+
+    def test_unsupported_reason_counters_are_fixed_and_first_failure_only(self):
+        fixtures = {
+            'verbose_version': row().replace(b',v1,', b',v9,'),
+            'engine': row().replace(b',cpu,', b',PRIVATE,'),
+            'primitive': row().replace(b',matmul,', b',PRIVATE,'),
+            'implementation': row(impl='PRIVATE'),
+            'prop_kind': row().replace(b',undef,', b',PRIVATE,'),
+            'memory_descriptor': row().replace(b'BA16a32b2a', b'PRIVATE'),
+            'attributes': row(attrs='PRIVATE'),
+            'auxiliary': row().replace(b',,,', b',,PRIVATE,'),
+            'information_header': GRAPH_HEADER.replace(b'implementation,', b'PRIVATE,'),
+            'information_record': b'onednn_verbose,v1,info,PRIVATE\n',
+        }
+        self.assertEqual(set(fixtures), set(D.UNSUPPORTED_REASONS))
+        for reason, raw in fixtures.items():
+            with self.subTest(reason=reason):
+                value = D.parse_verbose(raw)
+                self.assertEqual(value['status'], 'UNSUPPORTED')
+                self.assertEqual(value['unsupported_records'], 1)
+                self.assertEqual(value['unsupported_reasons'],
+                    {key: int(key == reason) for key in D.UNSUPPORTED_REASONS})
+                self.assertNotIn('PRIVATE', json.dumps(value))
+        value = D.parse_verbose(b''.join(fixtures.values()))
+        self.assertEqual(value['unsupported_records'], len(fixtures))
+        self.assertEqual(value['unsupported_reasons'], dict.fromkeys(D.UNSUPPORTED_REASONS, 1))
+        self.assertEqual(D.validate_verbose(json.loads(json.dumps(value))), value)
+        value = D.parse_verbose(row(impl='PRIVATE', attrs='PRIVATE').replace(b',cpu,', b',PRIVATE,'))
+        self.assertEqual(value['unsupported_records'], 1)
+        self.assertEqual(value['unsupported_reasons']['engine'], 1)
+        self.assertEqual(value['unsupported_reasons']['implementation'], 0)
+        self.assertEqual(value['unsupported_reasons']['attributes'], 0)
+
+    def test_unsupported_reason_schema_rejects_missing_unknown_and_forged_counts(self):
+        baseline = D.parse_verbose(row(attrs='PRIVATE'))
+        for mutate in (lambda v: v.pop('unsupported_reasons'),
+                       lambda v: v.update(unsupported_reasons=[]),
+                       lambda v: v['unsupported_reasons'].pop('attributes'),
+                       lambda v: v['unsupported_reasons'].update(PRIVATE=0),
+                       lambda v: v['unsupported_reasons'].update(attributes=True),
+                       lambda v: v['unsupported_reasons'].update(attributes=1.0),
+                       lambda v: v['unsupported_reasons'].update(attributes=-1),
+                       lambda v: v['unsupported_reasons'].update(attributes=D.MAX_LINES + 1),
+                       lambda v: v['unsupported_reasons'].update(attributes=0),
+                       lambda v: v['unsupported_reasons'].update(engine=1)):
+            changed = copy.deepcopy(baseline); mutate(changed)
+            with self.assertRaises(ValueError): D.validate_verbose(changed)
+        projected = D.validate_verbose(baseline)
+        projected['unsupported_reasons']['attributes'] = 0
+        self.assertEqual(baseline['unsupported_reasons']['attributes'], 1)
 
     def test_clean_empty_capture_is_only_an_explicit_absence_observation(self):
         value = D.parse_verbose(b'')

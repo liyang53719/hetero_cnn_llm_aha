@@ -404,8 +404,13 @@ class RunnerControlTests(unittest.TestCase):
                 records[0]['count']=1000
                 for item in records[1:]:item['count']=100
                 count=sum(item['count'] for item in records)
-                capture.update(records=records,exec_records=count,
-                    lines_observed=D.MAX_LINES,info_records=D.MAX_LINES-count)
+                reasons=dict.fromkeys(D.UNSUPPORTED_REASONS,400)
+                reasons[D.UNSUPPORTED_REASONS[0]]=1000
+                unsupported=sum(reasons.values())
+                capture.update(records=records,exec_records=count,status='UNSUPPORTED',
+                    unsupported_records=unsupported,unsupported_reasons=reasons,
+                    lines_observed=D.MAX_LINES,info_records=D.MAX_LINES-count-unsupported)
+            observed['status']='INCOMPLETE_DIAGNOSTICS'
             observed['cpu']['processor_records']=4096
             observed['cpu']['flags']=dict.fromkeys(D.FLAGS,False)
             observed=phase.validate_diagnostics(observed)
@@ -422,7 +427,7 @@ class RunnerControlTests(unittest.TestCase):
         size=len(run.assets.encoded(summary))
         self.assertGreater(size,65536)
         self.assertLessEqual(size,run.SAFE_SUMMARY_LIMIT)
-        self.assertEqual(run.SAFE_SUMMARY_LIMIT,98_304)
+        self.assertEqual(run.SAFE_SUMMARY_LIMIT,131_072)
         with tempfile.TemporaryDirectory() as temp:
             out=Path(temp);run.publish(out,summary)
             self.assertEqual(run.assets.read_json(out/'summary.json',limit=run.SAFE_SUMMARY_LIMIT),summary)

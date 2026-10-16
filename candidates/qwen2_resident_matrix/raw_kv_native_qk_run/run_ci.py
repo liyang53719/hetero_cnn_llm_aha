@@ -26,7 +26,7 @@ TOTAL=900
 LIMITS={'preflight':20,'environment':120,'acquisition':420,'kernel':30,'native16':60,'native128':120}
 OUTPUTS=('summary.json','progress.json','source_hashes.json')
 # Two bounded schema2 metadata projections plus both numerical reports.
-SAFE_SUMMARY_LIMIT=98_304
+SAFE_SUMMARY_LIMIT=131_072
 PASS='PASS_NATIVE_QKV_QK_M16_M128'
 PHASES=('preflight','cpu_qualification','clone','compose','environment','acquisition','kernel','native16','native128','finalize')
 

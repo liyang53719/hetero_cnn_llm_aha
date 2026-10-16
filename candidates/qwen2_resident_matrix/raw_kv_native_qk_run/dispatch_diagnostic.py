@@ -48,9 +48,12 @@ LAYOUTS = ('a', 'ab', 'ba', 'abc', 'acb', 'abcd', 'abdc', 'abcde', 'abcdef',
 DTYPES = ('bf16', 'f32', 'f16', 's8', 'u8', 's32', 'undef')
 ROLES = ('QKV_KV', 'DENSE_HIDDEN', 'QK', 'PV', 'ATTENTION_SQUARE', 'MLP', 'OTHER')
 ATTRS = ('attr-scratchpad:user', 'attr-fpmath:strict', 'attr-fpmath:bf16',
-         'attr-fpmath:bf16:true', 'attr-scales:wei:2:f32')
+         'attr-fpmath:bf16:true', 'attr-scales:wei:2:f32', 'attr-post-ops:sum')
 PROPS = ('undef', 'forward', 'forward_training', 'forward_inference')
 HASH_FIELDS = ('actual_f32_sha256', 'reference_f32_sha256')
+UNSUPPORTED_REASONS = ('verbose_version', 'engine', 'primitive', 'implementation',
+    'prop_kind', 'memory_descriptor', 'attributes', 'auxiliary',
+    'information_header', 'information_record')
 
 
 def need(ok):
@@ -175,12 +178,14 @@ def cpu_features(raw):
 
 
 class _Unsupported(Exception):
-    pass
+    def __init__(self, reason):
+        self.reason = reason
+        super().__init__()
 
 
-def _known(ok):
+def _known(ok, reason):
     if not ok:
-        raise _Unsupported()
+        raise _Unsupported(reason)
 
 
 def _shape(text):
@@ -213,9 +218,10 @@ def _descriptor(text):
     need(len(fields) == 7)
     role, dtype, prop, fmt, layout, strides, flags = fields
     _known(role in ('src', 'wei', 'bia', 'dst') and dtype in DTYPES and
-           prop in ('', 'a', 'b', 'ab', 'abc', 'abcd', 'abcde', 'abcdef') and fmt in ('blocked', 'undef', 'any'))
+           prop in ('', 'a', 'b', 'ab', 'abc', 'abcd', 'abcde', 'abcdef') and
+           fmt in ('blocked', 'undef', 'any'), 'memory_descriptor')
     if dtype == 'undef' and layout == '': layout = 'undef'
-    _known(layout in LAYOUTS and flags in ('', 'f0'))
+    _known(layout in LAYOUTS and flags in ('', 'f0'), 'memory_descriptor')
     need(strides == '' or re.fullmatch(r'[0-9]+(?:x[0-9]+){0,5}', strides) is not None)
     return role, dict(dtype=dtype, layout=layout)
 
@@ -223,11 +229,15 @@ def _descriptor(text):
 def _execution(parts):
     need(len(parts) == 13)
     _, _, _, _, engine, primitive, impl, prop, memory, attrs, aux, problem, timing = parts
-    _known(engine == 'cpu' and primitive in ('matmul', 'inner_product', 'reorder') and impl in IMPL_ISA and prop in PROPS)
+    _known(engine == 'cpu', 'engine')
+    _known(primitive in ('matmul', 'inner_product', 'reorder'), 'primitive')
+    _known(impl in IMPL_ISA, 'implementation')
+    _known(prop in PROPS, 'prop_kind')
     need(re.fullmatch(r'[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?', timing) is not None)
     elapsed = float(timing)
     need(math.isfinite(elapsed) and 0 <= elapsed <= 1000000000)
-    _known(all(attr in ATTRS for attr in attrs.split()) and aux == '')
+    _known(all(attr in ATTRS for attr in attrs.split()), 'attributes')
+    _known(aux == '', 'auxiliary')
     desc = {}
     for raw in memory.split():
         key, value = _descriptor(raw)
@@ -243,9 +253,16 @@ def _information(parts):
     # Headers are recognized, discarded, and never used as execution evidence.
     if parts[2:4] == ['primitive', 'info']:
         _known(parts[4:] == ['template:operation', 'engine', 'primitive', 'implementation',
-             'prop_kind', 'memory_descriptors', 'attributes', 'auxiliary', 'problem_desc', 'exec_time'])
+             'prop_kind', 'memory_descriptors', 'attributes', 'auxiliary', 'problem_desc', 'exec_time'],
+             'information_header')
         return
-    _known(parts[2] == 'info')
+    # Exact oneDNN 3.7.1 header observed in the reviewed historical capture.
+    if parts[2:4] == ['graph', 'info']:
+        _known(parts[4:] == ['template:operation', 'engine', 'partition_id', 'partition_kind',
+             'op_names', 'data_formats', 'logical_tensors', 'fpmath_mode', 'implementation',
+             'backend', 'exec_time'], 'information_header')
+        return
+    _known(parts[2] == 'info', 'information_record')
     body = parts[3:]
     if len(body) == 1:
         version = re.fullmatch(r'oneDNN v3\.([0-9]{1,2})\.[0-9]+ \(commit [0-9a-f]{7,40}\)', body[0])
@@ -262,7 +279,7 @@ def _information(parts):
         'isa:Intel AVX-512 with float16, Intel DL Boost and bfloat16 support and Intel AMX with bfloat16 and 8-bit integer support',
         'isa:Intel AVX-512 with Intel DL Boost and bfloat16 support and Intel AMX with bfloat16 and 8-bit integer support',
         'isa:Intel AVX10.1 and Intel AMX with bfloat16 and 8-bit integer support'): return
-    raise _Unsupported()
+    raise _Unsupported('information_record')
 
 
 def parse_verbose(raw, *, truncated=False):
@@ -270,6 +287,7 @@ def parse_verbose(raw, *, truncated=False):
     out = dict(schema=1, diagnostic_only=True, backend_order_proven=False,
         numerical_acceptance=False, status='INCOMPLETE', truncated=truncated,
         lines_observed=0, exec_records=0, info_records=0, unsupported_records=0,
+        unsupported_reasons={reason: 0 for reason in UNSUPPORTED_REASONS},
         malformed_records=0, records=[])
     if len(raw) > MAX_LOG_BYTES:
         out['truncated'] = True
@@ -288,7 +306,7 @@ def parse_verbose(raw, *, truncated=False):
         try:
             parts = line.decode('ascii').split(',')
             need(len(parts) >= 4 and parts[0] == 'onednn_verbose')
-            _known(parts[1] == 'v1')
+            _known(parts[1] == 'v1', 'verbose_version')
             if parts[2:4] == ['primitive', 'exec']:
                 record = _execution(parts)
                 if out['exec_records'] >= MAX_RECORDS:
@@ -306,8 +324,10 @@ def parse_verbose(raw, *, truncated=False):
             else:
                 _information(parts)
                 out['info_records'] += 1
-        except _Unsupported:
+        except _Unsupported as error:
             out['unsupported_records'] += 1
+            # Count only the first failing check, using fixed labels, never input.
+            out['unsupported_reasons'][error.reason] += 1
         except (ValueError, UnicodeError, OverflowError):
             out['malformed_records'] += 1
     if not out['truncated'] and not out['malformed_records'] and out['exec_records']:
@@ -320,11 +340,15 @@ def parse_verbose(raw, *, truncated=False):
 def validate_verbose(value):
     _keys(value, ('schema', 'diagnostic_only', 'backend_order_proven', 'numerical_acceptance',
         'status', 'truncated', 'lines_observed', 'exec_records', 'info_records',
-        'unsupported_records', 'malformed_records', 'records'))
+        'unsupported_records', 'unsupported_reasons', 'malformed_records', 'records'))
     need(type(value['schema']) is int and value['schema'] == 1 and value['diagnostic_only'] is True and
          value['backend_order_proven'] is False and value['numerical_acceptance'] is False and type(value['truncated']) is bool)
     for key in ('lines_observed', 'info_records', 'unsupported_records', 'malformed_records'):
         _int(value[key], 0, MAX_LINES)
+    _keys(value['unsupported_reasons'], UNSUPPORTED_REASONS)
+    for count in value['unsupported_reasons'].values():
+        _int(count, 0, MAX_LINES)
+    need(sum(value['unsupported_reasons'].values()) == value['unsupported_records'])
     _int(value['exec_records'], 0, MAX_RECORDS)
     need(type(value['records']) is list and len(value['records']) <= MAX_GROUPS)
     records = []
@@ -353,4 +377,4 @@ def validate_verbose(value):
         elif value['exec_records']: expected = 'COMPLETE_DIAGNOSTIC'
         else: expected = 'NO_ONEDNN_EXECUTION_OBSERVED'
     need(type(value['status']) is str and value['status'] == expected)
-    return {**value, 'records': records}
+    return {**value, 'unsupported_reasons': dict(value['unsupported_reasons']), 'records': records}

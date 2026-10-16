@@ -2,7 +2,7 @@
 
 ## 中文计划
 - 已完成：原始故障定位为独立 NumPy QKV 与 BF16 block/pair recipe 的差异；发布的微型 C++ 合成验证已通过。
-- 已完成：本目录独立执行层、严格来源绑定，47 项冷测试 normal/-O 通过；真实 Git clone/compose 的 238/221/10 来源与上下文验证通过。
+- 已完成：本目录独立执行层、严格来源绑定，48 项冷测试 normal/-O 通过；真实 Git clone/compose 的 238/221/10 来源与上下文验证通过。
 - 进行中：最终独立审查及发布准备。
 - 待执行：重建官方 13 张量输入，运行 fresh native16，再以同一 recipe/library/runtime identity 的真实 M16 RESULT 为 small_gate 运行 native128。
 - 待验证：完整阶段误差是否通过。下游 NumPy QK/PV/MLP 未被替换；可能仍失败。没有 Public/full-block/RTL 执行结论。
@@ -26,3 +26,7 @@
     python -B -m unittest candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_runtime candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_phase candidates.qwen2_resident_matrix.raw_kv_native_qkv_run.test_run_ci -q
 
 另以 `python -B -O` 重跑。以上是冷控制测试；真实安装、下载、native16/native128 在发布启动前尚未运行。
+
+## 冷测试修订记录
+
+首次工作流 38924938337 在冷测试阶段失败，未进入 native 执行。测试把 runner 的 monotonic uptime 减去 895 秒，在短 uptime 下产生负起点；生产代码正确拒绝。修订只把经过时间场景改为固定正时钟，fresh fixture 使用当前正起点，并覆盖 1ns/1s/10s/894s uptime。生产正起点、绝对 900 秒及清理预留检查不变。

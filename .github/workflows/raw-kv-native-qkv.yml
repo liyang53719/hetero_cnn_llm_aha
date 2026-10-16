@@ -1,5 +1,5 @@
 name: raw-kv-native-qkv
-# Revision 1: fresh native16 -> native128, explicit independent QKV recipe.
+# Revision 2: deterministic low-uptime cold fixture; unchanged native gate and budgets.
 # One 900s attempt including clone, setup, cleanup and safe receipts. No Public run.
 on:
   push:

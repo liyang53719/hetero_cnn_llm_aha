@@ -27,7 +27,7 @@ def contract_fixture():
 
 
 def context_fixture(workspace):
-    start = time.monotonic_ns() - 1000000000
+    start = time.monotonic_ns()
     return dict(schema=1, profile=r.PROFILE, workspace=str(workspace), checkout_commit='b' * 40,
         source_sha256={'control/source.py': 'a' * 64}, contract_sha256='c' * 64,
         start_ns=start, deadline_ns=start + 900000000000,
@@ -210,19 +210,29 @@ class ContextTests(unittest.TestCase):
                     with self.assertRaises(ValueError): r.read_context(path)
 
     def test_absolute_deadline_never_refreshes_and_reserves_cleanup(self):
-        context = context_fixture(Path('/control'))
-        now = time.monotonic_ns()
-        context.update(start_ns=now - 895000000000, deadline_ns=now + 5000000000)
-        with self.assertRaises(ValueError): r.check_context(context)
-        r.check_context(context, check_deadline=False)
-        context.update(start_ns=now - 880000000000, deadline_ns=now + 20000000000)
+        # Elapsed895s is a simulated scenario, not an assumption about host uptime.
+        now = 1000 * 1000000000
         with mock.patch.object(r.time, 'monotonic_ns', return_value=now):
+            context = context_fixture(Path('/control'))
+            context.update(start_ns=now - 895000000000, deadline_ns=now + 5000000000)
+            with self.assertRaises(ValueError): r.check_context(context)
+            r.check_context(context, check_deadline=False)
+            context.update(start_ns=now - 880000000000, deadline_ns=now + 20000000000)
             self.assertEqual(r.remaining(context, 120), 14)
             self.assertEqual(r.remaining(context, 2), 2)
-        for ceiling in (True, 0, -1, float('inf'), 901):
-            with self.subTest(ceiling=ceiling), self.assertRaises(ValueError): r.remaining(context, ceiling)
-        context['deadline_ns'] += 1
-        with self.assertRaises(ValueError): r.check_context(context)
+            for ceiling in (True, 0, -1, float('inf'), 901):
+                with self.subTest(ceiling=ceiling), self.assertRaises(ValueError): r.remaining(context, ceiling)
+            context['deadline_ns'] += 1
+            with self.assertRaises(ValueError): r.check_context(context)
+
+    def test_elapsed_fixture_is_independent_of_low_host_uptime(self):
+        for uptime in (1, 1000000000, 10000000000, 894000000000):
+            with self.subTest(uptime=uptime), mock.patch.object(r.time, 'monotonic_ns', return_value=uptime):
+                self.test_absolute_deadline_never_refreshes_and_reserves_cleanup()
+                fresh = context_fixture(Path('/control'))
+                self.assertEqual(r.check_context(fresh), fresh)
+                invalid = dict(fresh, start_ns=uptime-895000000000, deadline_ns=uptime+5000000000)
+                with self.assertRaises(ValueError): r.check_context(invalid, check_deadline=False)
 
     def test_original_context_has_only_original_221_sources(self):
         original, _, generated = r.baseline_contract(); original.update(generated)

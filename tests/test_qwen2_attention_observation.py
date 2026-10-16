@@ -312,14 +312,14 @@ class ObservationTests(unittest.TestCase):
             sys.settrace(None)
         self.assertEqual(h.owner.state,'idle')
 
-    def test_v3_execution_inventory_replaces_only_five_exact_historical_sources(self):
+    def test_v4_execution_inventory_replaces_only_six_exact_historical_sources(self):
         frozen = json.loads((ROOT / o.RECEIPT).read_bytes())['source_sha256']
         current = o.verify_execution_sources()
         self.assertEqual(set(current), set(frozen))
         self.assertEqual(len(current), 75)
         changed = {name for name in current if current[name] != frozen[name]}
         self.assertEqual(changed, set(o.EXECUTION_SOURCE_REPLACEMENTS))
-        self.assertEqual(len(changed), 5)
+        self.assertEqual(len(changed), 6)
         for name, (previous, successor) in o.EXECUTION_SOURCE_REPLACEMENTS.items():
             self.assertEqual(frozen[name], previous)
             self.assertEqual(current[name], successor)
@@ -332,8 +332,11 @@ class ObservationTests(unittest.TestCase):
         missing = dict(good)
         del missing[next(iter(missing))]
         frozen = json.loads((ROOT / o.RECEIPT).read_bytes())['source_sha256']
+        unreviewed = 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py'
+        self.assertIn(unreviewed, frozen)
+        self.assertNotIn(unreviewed, good)
         for changed in (missing, dict(good, **{'unreviewed.py': ('a'*64, 'b'*64)}),
-                        {**good, o.OWNER: (frozen[o.OWNER], '0'*64)}):
+                        {**good, unreviewed: (frozen[unreviewed], '0'*64)}):
             with self.subTest(keys=tuple(changed)), patch.object(o, 'EXECUTION_SOURCE_REPLACEMENTS', changed):
                 with self.assertRaisesRegex(ValueError, 'replacement closure'):
                     o.verify_execution_sources()
@@ -353,7 +356,7 @@ class ObservationTests(unittest.TestCase):
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 dst.write_bytes((ROOT / name).read_bytes())
             self.assertEqual(o.verify_execution_sources(root), o.verify_execution_sources())
-            # A source outside the five reviewed replacements remains guarded.
+            # A source outside the six reviewed replacements remains guarded.
             name = 'candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py'
             original = (root / name).read_bytes()
             (root / name).write_bytes(original + b'\n# unreviewed drift\n')
@@ -476,9 +479,10 @@ class CurrentRuntimeInventoryReviewTests(unittest.TestCase):
         frozen = json.loads(raw)['source_sha256']
         current = o.verify_execution_sources()
         self.assertEqual(len(current), 75)
-        self.assertEqual(sum(current[p] == frozen[p] for p in current), 70)
+        self.assertEqual(sum(current[p] == frozen[p] for p in current), 69)
         self.assertEqual(set(current), set(frozen))
         self.assertEqual(set(o.EXECUTION_SOURCE_REPLACEMENTS), {
+            'candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py',
             'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py',
             'candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp',
             'candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py',

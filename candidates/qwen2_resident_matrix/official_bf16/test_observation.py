@@ -247,7 +247,7 @@ class OfficialObservationTests(unittest.TestCase):
                 self.assertTrue(capture.disarmed)
                 self.assertIsNone(sys.gettrace())
 
-    def test_snapshot_requires_exact_v3_inventory_and_all_extra_dependencies(self):
+    def test_snapshot_requires_exact_v4_inventory_and_all_extra_dependencies(self):
         h, _, _ = self.make()
         original = snapshot()
         frozen_raw = (o.ROOT / o.base.RECEIPT).read_bytes()
@@ -257,7 +257,7 @@ class OfficialObservationTests(unittest.TestCase):
         self.assertEqual(set(execution), set(frozen))
         self.assertEqual({name for name in execution if execution[name] != frozen[name]},
                          set(o.base.EXECUTION_SOURCE_REPLACEMENTS))
-        self.assertEqual(len(o.base.EXECUTION_SOURCE_REPLACEMENTS), 5)
+        self.assertEqual(len(o.base.EXECUTION_SOURCE_REPLACEMENTS), 6)
         self.assertEqual(hashlib.sha256(frozen_raw).hexdigest(), o.base.RECEIPT_SHA)
         self.assertEqual(set(original) - set(execution), set(o.REQUIRED_SOURCES))
         for name in (*execution, *o.REQUIRED_SOURCES):

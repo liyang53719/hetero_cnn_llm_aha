@@ -20,6 +20,68 @@
  base=prior.base
  require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha
  PREFIX='candidates/qwen2_resident_matrix/dense_block_reduce/'
+@@ -323,6 +323,8 @@
+             pending=json.loads(path.read_text());_snapshot_raw_kv_mode(pending,enable_raw_kv)
+             require(validate_rows(pending['rows'])==16,
+                     'enabled raw KV execution is limited to M16 pending a reviewed same-source M16 receipt')
++    from candidates.qwen2_resident_matrix.raw_kv_public_recipe_run import numeric_progress
++    numeric_progress.stage('run_preflight')
+     s=verify_snapshot(path,digest,enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     (modules,dense,_,native),new=runtime(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)
+     helper,original,fixtures,public,prefix,_,scalar,suffix,physical_adapter,matrix,_,_=modules
+@@ -342,6 +344,7 @@
+         with base.frozen_exec(s['source_sha256']) as observed,policy.reference_gate(s['input_spec']) as gate:
+             f=fixtures.make_qwen2_21_fixture(s['rows'],s['epoch'])
+             require(helper.metadata_identity(f)==s['metadata'],'public metadata changed')
++            numeric_progress.stage('input_load')
+             inputs=prior.load_inputs(s['input_spec'],s['rows'],s['reference'])
+             require(base.identities(inputs)==s['loaded_inputs'],'raw input identity changed')
+             physical=prefix.PhysicalMemory(f,{n:base.bytes_provider(v) for n,v in inputs.items()})
+@@ -355,14 +358,17 @@
+                 fixture=f,host=public.group.HostControl(enabled=True,legacy_prefix=True,legacy_attention=True),
+                 prefix_owner=policy.OfficialPrefixOwner(shared_scalar),
+                 attention_owner=policy.OfficialAttentionOwner(service,shared_scalar),matrix_service=service)
++            numeric_progress.observe_trace(x.trace)
+             silu=policy.ObservedSiluLibrary(selected,s['rows']);guarded=gate.library(silu)
+             if enable_raw_kv:
+                 capture=observation.ProfiledAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'],enable_raw_kv=True)
+             else:
+                 capture=observation.ProfiledAttentionMonitoringObservation(x.attention_owner,source_sha256=s['source_sha256'])
+             report.update(loaded_inputs=base.identities(inputs),metadata=s['metadata']);save()
++            numeric_progress.stage('public_prefix')
+             report['prefix_execution']=execution.execute_public_prefix(x,physical,guarded,out)
+             report.update(status='ACTUAL_PREFIX_COMPLETE',prefix_host_wall_seconds=time.monotonic()-started);save()
++            numeric_progress.stage('public_suffix')
+             with capture:
+                 if enable_raw_kv:
+                     actual,report['execution']=suffix.execute_public_suffix(x,physical,guarded,out,memory=memory,enable_raw_kv=True)
+@@ -375,6 +381,7 @@
+             report['execution']['native_acceptance']='NOT_EVALUATED_BY_EXECUTION_SEE_COMPARISON'
+             require(x.launch_result and x.launch_result['completed']==21 and x.counts['result_fire']==1 and not x.reset_required(),
+                     'whole public terminal missing')
++            numeric_progress.stage('observation_seal')
+             report['observation']=capture.save(out/'attention_observation')
+             require(report['observation']['status'].startswith('COMPLETE_'),'actual Attention observation incomplete')
+             import numpy as np
+@@ -384,15 +391,18 @@
+             report['sealed_actual_outputs']={name:dict(bytes=len(v)*4,sha256=sha(v.tobytes())) for name,v in actual.items()}
+             report['sealed_silu_sha256']=sha(silu_bytes)
+             report['status']='WHOLE_TERMINAL_ACTUAL_OUTPUTS_SEALED';save()
++            numeric_progress.stage('comparison')
+             gate.opened=True
+             report['comparison']=compare(s,actual,inputs,capture,silu_bytes,native)
+             require(report['comparison']['fixed_arithmetic_pass'],'actual chain differs from independent block/pair recipe')
++            numeric_progress.stage('source_recheck')
+             require(source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile)==s['source_sha256'] and base.identities(inputs)==s['loaded_inputs'],'post-run source/input drift')
+             official=report['comparison']['methods']['official_self_cache']
+             report.update(status=('PASS_REDUCED_BF16_OBSERVED_OFFICIAL_GATES' if official['numerical_status']=='PASS_OBSERVED_ONLY' else 'FAIL_OFFICIAL_OBSERVED_NODE_GATES'),source_sha256_after=source_hashes(enable_raw_kv=enable_raw_kv,fresh_profile=fresh_profile),
+                 executed_imports_observed=sorted(observed),native_acceptance=official['numerical_status'],
+                 full_29_node_acceptance=False,actual_dataflow_pass=True,host_wall_seconds=time.monotonic()-started,
+                 host_cpu_seconds=time.process_time()-cpu,host_peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
++            numeric_progress.stage('save_receipt')
+             save();return report
+     except Exception as error:
+         report.update(status='FAILED',error=str(error),host_wall_seconds=time.monotonic()-started)
 --- a/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
 +++ b/candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py
 @@ -21,7 +21,7 @@

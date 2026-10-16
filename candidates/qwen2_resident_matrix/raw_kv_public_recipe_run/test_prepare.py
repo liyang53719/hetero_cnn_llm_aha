@@ -60,6 +60,35 @@ class PreparationTests(unittest.TestCase):
                 changed=dict(after);changed[name]+=b'\ndef unreviewed_callback(): return 1\n'
                 with self.assertRaises(ValueError):prepare.check_bridge_scope(before,changed)
 
+    def test_entry_diagnostics_preserve_original_non_diagnostic_ast(self):
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp)/'base';prepare.previous.prepare(out)
+            name=r.prerequisite.ENTRY;before=(out/name).read_bytes();after=prepare.rewrite(name,before)
+            class Strip(ast.NodeTransformer):
+                def visit_ImportFrom(self,node):
+                    if node.module=='candidates.qwen2_resident_matrix.raw_kv_public_recipe_run':
+                        if ast.dump(node)!=ast.dump(ast.parse('from candidates.qwen2_resident_matrix.raw_kv_public_recipe_run import numeric_progress').body[0]):
+                            raise ValueError('diagnostic import drift')
+                        return None
+                    if node.module=='raw_kv_public_recipe_run':
+                        if node.level!=2 or len(node.names)!=1 or node.names[0].name!='launch' or node.names[0].asname!='m128_profile':
+                            raise ValueError('identity import drift')
+                        node.module='raw_kv_public_recipe_runtime';node.names[0].name='runtime'
+                    return node
+                def visit_Expr(self,node):
+                    call=node.value
+                    if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and isinstance(call.func.value,ast.Name) and call.func.value.id=='numeric_progress':
+                        if call.keywords or len(call.args)!=1:raise ValueError('diagnostic call drift')
+                        if call.func.attr=='stage':
+                            from . import numeric_progress
+                            if not isinstance(call.args[0],ast.Constant) or call.args[0].value not in numeric_progress.STAGES:
+                                raise ValueError('diagnostic stage drift')
+                        elif call.func.attr!='observe_trace' or ast.unparse(call.args[0])!='x.trace':
+                            raise ValueError('diagnostic observer drift')
+                        return None
+                    return node
+            self.assertEqual(ast.dump(Strip().visit(ast.parse(after))),ast.dump(ast.parse(before)))
+
     def test_actual_composed_asset_setup_and_entry_source_closure(self):
         frozen=r.contract_snapshot()
         with tempfile.TemporaryDirectory() as temp:

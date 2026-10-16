@@ -1,0 +1,59 @@
+{
+  "archive": {
+    "bytes": 15278,
+    "filename": "public-m128-numeric-timeout.zip",
+    "sha256": "85b9554eaedf9904760d1da4363470903dbd04e32c72016c131c55e9c89d4855"
+  },
+  "checkpoint_kind": "FAILED_RUN_TIMEOUT",
+  "limits": {
+    "data": "Only the three safe JSON members are preserved; no weights, numerical arrays, or private logs.",
+    "numerical_result": "No numerical acceptance; the numeric phase timed out.",
+    "postflight": "Postflight did not complete; no final acceptance receipt is preserved.",
+    "provenance": "Run, job, and artifact IDs are supplied provenance; SHA256 anchors supplied ZIP bytes.",
+    "setup": "Setup completion is a source-order inference, not a preserved native receipt.",
+    "source_manifest": "Source hashes identify the historical run; no claim that the current tree matches."
+  },
+  "members": {
+    "progress.json": {
+      "bytes": 80,
+      "sha256": "513dcd1280fd8380ec7ddcfa7f8f08b24e0f994a76e0284ddc8d461dfa68cdb0"
+    },
+    "source_hashes.json": {
+      "bytes": 39391,
+      "sha256": "0632730cb3a5fbe10cd713f613e23ed41d91cafc24579481ce87ab71ef1aca26"
+    },
+    "summary.json": {
+      "bytes": 1195,
+      "sha256": "37dec6d87998010ba7726a6ed17853a8216cb0318f0fdba89364187f414f171d"
+    }
+  },
+  "original_run": {
+    "artifact_id": "12071740663",
+    "checkout_commit": "ac3a074cd0e29342447844a7675425af628a39ef",
+    "job_id": "117146548710",
+    "run_id": "38952336951"
+  },
+  "recorded_facts": {
+    "cpu_backend_qualified": false,
+    "cpu_eligibility_only": true,
+    "elapsed_seconds": 2587.336054,
+    "full_29_node_acceptance": false,
+    "generated_entries": 12,
+    "launch_contract_sha256": "3fb70fe4016b226bca41cf82bd8ca4e34845575f1216fe3c45af2d2108cce271",
+    "numeric_started": true,
+    "numerical_acceptance": false,
+    "phase": "numeric",
+    "postflight_complete": false,
+    "rtl_executed": false,
+    "scala_executed": false,
+    "source_entries": 283,
+    "status": "TIMEOUT"
+  },
+  "schema": 1,
+  "setup_completion": {
+    "basis": "The runner enters numeric only after its setup success checks.",
+    "classification": "SOURCE_ORDER_INFERENCE_ONLY",
+    "independent_setup_or_native_verification": false,
+    "native_private_receipt_preserved": false
+  }
+}

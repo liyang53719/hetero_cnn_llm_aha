@@ -22,7 +22,7 @@ import time
 import traceback
 
 from candidates.qwen2_resident_matrix.raw_kv_public_fresh import assets, setup
-from . import launch
+from . import launch, numeric_progress
 
 ROOT=Path(__file__).resolve().parents[3]
 HERE=Path(__file__).resolve().parent
@@ -353,41 +353,51 @@ def numeric(context,private,*,deadline_ns=None):
         if time.monotonic_ns()>=deadline_ns:raise TimeoutError()
     remaining()
     before=check_context(context,private,composed=True)
-    identity=admission.verify_setup(private/'assets',private/'setup_evidence/summary.json',
-        checkout_commit=context['checkout_commit'],enable_raw_kv=True,rows=128)
-    remaining()
-    entry=importlib.import_module('candidates.qwen2_resident_matrix.dense_block_reduce.check_public_numeric')
-    path,snapshot=entry.prepare(private/'snapshot',identity.library_receipt,None,None,rows=128,
-        enable_raw_kv=True,fresh_profile=True,fresh_manifest=identity.manifest,fresh_manifest_sha256=identity.manifest_sha256)
-    remaining()
-    snapshot=launch.bind_snapshot(snapshot,identity,context)
-    validate_snapshot_binding(snapshot,context,identity.receipt_sha256)
-    setup.atomic_json(path,snapshot,2*1024*1024);remaining()
-    admission.revalidate(identity);remaining()
-    need(snapshot['source_sha256']==expected_entry_sources(before)==entry.source_hashes(enable_raw_kv=True,fresh_profile=True))
-    actual=entry.run(private/'actual',path,assets.file_sha(path),wall_budget=WALL_BUDGET,enable_raw_kv=True,fresh_profile=True)
-    remaining()
-    result=validate_actual(actual,snapshot['source_sha256'])
-    # Durable diagnostic checkpoint only: runtime gates passed, but saved JSON
-    # consistency, identity revalidation and child completion are still pending.
-    validated=dict(result,schema=1,status=VALIDATED,rows=128,enable_raw_kv=True,fresh_profile=True,
-        postflight_complete=False,numerical_acceptance=False,
-        runtime_actual_sha256=assets.sha(assets.encoded(canonical_actual(actual))),
-        launch_contract_sha256=context['contract_sha256'],setup_receipt_sha256=identity.receipt_sha256,
-        snapshot_sha256=assets.file_sha(path),source_manifest_sha256=assets.sha(assets.encoded(before['sources'])),
-        actual_source_manifest_sha256=assets.sha(assets.encoded(snapshot['source_sha256'])))
-    remaining();setup.atomic_json(private/'numeric.validated.json',validated,8192);remaining()
-    actual_receipt_sha256=check_actual_json(private/'actual/summary.json',actual,snapshot['source_sha256'])
-    admission.revalidate(identity);need(check_context(context,private,composed=True)==before)
-    result.update(schema=1,status=PASS,rows=128,enable_raw_kv=True,fresh_profile=True,
-        launch_contract_sha256=context['contract_sha256'],setup_receipt_sha256=identity.receipt_sha256,
-        actual_receipt_sha256=actual_receipt_sha256,snapshot_sha256=assets.file_sha(path),
-        source_manifest_sha256=assets.sha(assets.encoded(before['sources'])),
-        actual_source_manifest_sha256=assets.sha(assets.encoded(snapshot['source_sha256'])))
-    remaining()
-    setup.atomic_json(private/'numeric.complete.json',result,8192)
-    remaining()
-    return result
+    with numeric_progress.session(private,context,before['sources']) as progress:
+        with progress.phase('setup_admission'):
+            identity=admission.verify_setup(private/'assets',private/'setup_evidence/summary.json',
+                checkout_commit=context['checkout_commit'],enable_raw_kv=True,rows=128)
+            remaining()
+        with progress.phase('entry_import'):
+            entry=importlib.import_module('candidates.qwen2_resident_matrix.dense_block_reduce.check_public_numeric')
+        with progress.phase('snapshot_prepare'):
+            path,snapshot=entry.prepare(private/'snapshot',identity.library_receipt,None,None,rows=128,
+                enable_raw_kv=True,fresh_profile=True,fresh_manifest=identity.manifest,fresh_manifest_sha256=identity.manifest_sha256)
+            remaining()
+        with progress.phase('snapshot_bind'):
+            snapshot=launch.bind_snapshot(snapshot,identity,context)
+            validate_snapshot_binding(snapshot,context,identity.receipt_sha256)
+            setup.atomic_json(path,snapshot,2*1024*1024);remaining()
+        with progress.phase('setup_revalidation'):
+            admission.revalidate(identity);remaining()
+            need(snapshot['source_sha256']==expected_entry_sources(before)==entry.source_hashes(enable_raw_kv=True,fresh_profile=True))
+        with progress.phase('actual_execute'):
+            actual=entry.run(private/'actual',path,assets.file_sha(path),wall_budget=WALL_BUDGET,enable_raw_kv=True,fresh_profile=True)
+            remaining()
+        with progress.phase('actual_validate'):
+            result=validate_actual(actual,snapshot['source_sha256'])
+            # This existing receipt is independent of progress. Only real validation can create it.
+            validated=dict(result,schema=1,status=VALIDATED,rows=128,enable_raw_kv=True,fresh_profile=True,
+                postflight_complete=False,numerical_acceptance=False,
+                runtime_actual_sha256=assets.sha(assets.encoded(canonical_actual(actual))),
+                launch_contract_sha256=context['contract_sha256'],setup_receipt_sha256=identity.receipt_sha256,
+                snapshot_sha256=assets.file_sha(path),source_manifest_sha256=assets.sha(assets.encoded(before['sources'])),
+                actual_source_manifest_sha256=assets.sha(assets.encoded(snapshot['source_sha256'])))
+            remaining();setup.atomic_json(private/'numeric.validated.json',validated,8192);remaining()
+        with progress.phase('actual_file_check'):
+            actual_receipt_sha256=check_actual_json(private/'actual/summary.json',actual,snapshot['source_sha256'])
+        with progress.phase('postflight_revalidation'):
+            admission.revalidate(identity);need(check_context(context,private,composed=True)==before)
+        with progress.phase('complete_receipt'):
+            result.update(schema=1,status=PASS,rows=128,enable_raw_kv=True,fresh_profile=True,
+                launch_contract_sha256=context['contract_sha256'],setup_receipt_sha256=identity.receipt_sha256,
+                actual_receipt_sha256=actual_receipt_sha256,snapshot_sha256=assets.file_sha(path),
+                source_manifest_sha256=assets.sha(assets.encoded(before['sources'])),
+                actual_source_manifest_sha256=assets.sha(assets.encoded(snapshot['source_sha256'])))
+            remaining()
+            setup.atomic_json(private/'numeric.complete.json',result,8192)
+            remaining()
+        return result
 
 
 def safe_validated_receipt(private,context,frozen):
@@ -614,6 +624,11 @@ def resume(context,private,evidence):
         summary.update(result,phase='finalize',postflight_complete=True,numerical_acceptance=True)
         return finish(evidence,summary,budget,sources=frozen['sources'],deadline_ns=numeric_end)
     except BaseException as error:
+        if summary['phase']=='numeric':
+            # Fixed <=4KiB metadata survives child timeout without actual/postflight receipts.
+            # This projection cannot alter frozen source proof or numerical acceptance.
+            try:summary['numeric_progress']=numeric_progress.read(private,context,frozen['sources'])
+            except Exception:summary['numeric_progress_unavailable']=True
         if summary['phase']=='numeric' and numeric_end is not None and time.monotonic_ns()<numeric_end-RECEIPT*10**9:
             try:
                 budget.arm(numeric_end-RECEIPT*10**9)

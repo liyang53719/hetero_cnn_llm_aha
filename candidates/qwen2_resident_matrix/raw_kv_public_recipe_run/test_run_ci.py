@@ -17,6 +17,8 @@ import types
 import unittest
 from unittest.mock import Mock,mock_open,patch
 from . import run_ci as run
+# Imported by the existing cold workflow test target; no workflow trigger change.
+from .test_numeric_progress import ProgressTests,OriginalTraceRegressionTests
 
 COMMIT='a'*40
 SOURCES={'original.py':'1'*64}
@@ -208,6 +210,39 @@ class LaunchTests(unittest.TestCase):
             self.assertEqual(code,0)
             public=json.dumps(summary)+''.join(p.read_text() for p in evidence.iterdir())
             for forbidden in ('SECRET','raw_tensor','/private/token','https://',tmp):self.assertNotIn(forbidden,public)
+
+    def test_timeout_exports_last_child_phase_without_any_postflight_receipt(self):
+        def child(private,ctx,kw):
+            with run.numeric_progress.session(private,ctx,SOURCES) as writer:
+                with writer.phase('actual_execute'):
+                    run.numeric_progress.stage('public_suffix')
+                    run.numeric_progress.host('REQUEST',12,10,11,10,10,0)
+                    raise subprocess.TimeoutExpired(['PRIVATE_NOT_EXPORTED'],1)
+        with tempfile.TemporaryDirectory() as tmp:
+            code,summary,calls,ctx,private,evidence=self.exercise(Path(tmp),child=child)
+            self.assertEqual((code,summary['status']),(1,'TIMEOUT'))
+            value=summary['numeric_progress']
+            self.assertEqual((value['phase'],value['stage'],value['operator'],value['ordinal']),
+                             ('actual_execute','public_suffix','Attention',12))
+            self.assertEqual(value['phase_state'],'ENTERED')
+            self.assertFalse(value['numerical_acceptance']);self.assertFalse(summary['postflight_complete'])
+            self.assertFalse((private/'numeric.validated.json').exists())
+            self.assertFalse((private/'numeric.complete.json').exists())
+            self.assertEqual(set(path.name for path in evidence.iterdir()),{'summary.json','progress.json'})
+            self.assertNotIn('PRIVATE_NOT_EXPORTED',(evidence/'summary.json').read_text())
+
+    def test_malicious_child_progress_cannot_change_summary_or_source_proof(self):
+        def child(private,ctx,kw):
+            with run.numeric_progress.session(private,ctx,SOURCES) as writer:
+                bad=dict(writer.value,payload='SECRET',status='PASS',numerical_acceptance=True)
+                (private/run.numeric_progress.FILE).write_bytes(run.assets.encoded(bad))
+            raise TimeoutError()
+        with tempfile.TemporaryDirectory() as tmp:
+            code,summary,*_=self.exercise(Path(tmp),child=child)
+            self.assertEqual((code,summary['status']),(1,'TIMEOUT'))
+            self.assertTrue(summary['numeric_progress_unavailable'])
+            self.assertNotIn('numeric_progress',summary);self.assertNotIn('SECRET',json.dumps(summary))
+            self.assertFalse(summary['numerical_acceptance']);self.assertNotIn('source_sha256',summary)
 
     def test_source_drift_after_child_prevents_pass(self):
         calls=0
@@ -581,6 +616,26 @@ class LaunchTests(unittest.TestCase):
             return {node.name:ast.dump(node) for node in tree.body
                     if isinstance(node,(ast.FunctionDef,ast.ClassDef)) and node.name in names}
         self.assertEqual(set(selected(original)),names)
+        # Strip only the exact additive diagnostic context managers. All original
+        # arithmetic calls, checks, receipt writes, ordering and budgets must match.
+        class StripDiagnostics(ast.NodeTransformer):
+            def visit_With(self,node):
+                self.generic_visit(node)
+                if len(node.items)!=1:return node
+                item=node.items[0];call=item.context_expr
+                if not isinstance(call,ast.Call):return node
+                signature=ast.unparse(call)
+                if signature=="numeric_progress.session(private, context, before['sources'])":
+                    self.assert_session=ast.dump(item.optional_vars)==ast.dump(ast.Name(id='progress',ctx=ast.Store()))
+                    if not self.assert_session:raise ValueError('diagnostic binding drift')
+                    return node.body
+                if isinstance(call.func,ast.Attribute) and isinstance(call.func.value,ast.Name) and call.func.value.id=='progress':
+                    if (call.func.attr!='phase' or item.optional_vars is not None or call.keywords or len(call.args)!=1
+                            or not isinstance(call.args[0],ast.Constant) or call.args[0].value not in run.numeric_progress.PHASES):
+                        raise ValueError('diagnostic scope drift')
+                    return node.body
+                return node
+        current=StripDiagnostics().visit(current)
         self.assertEqual(selected(current),selected(original))
 
     def test_safe_receipt_parses_the_exact_actual_and_snapshot_bytes_it_hashes(self):

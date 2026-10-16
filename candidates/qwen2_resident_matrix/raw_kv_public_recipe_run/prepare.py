@@ -1,4 +1,4 @@
-"""Compose the final import-only linked paired-reference source overlay."""
+"""Compose the final identity and metadata-only diagnostic source overlay."""
 import ast
 import hashlib
 from pathlib import Path
@@ -28,7 +28,27 @@ def rewrite(name,raw):
         old_dispatch="'candidates.qwen2_resident_matrix.raw_kv_public_m128_run.launch'"
         need(text.count(old_dispatch)==1)
         text=text.replace(old_dispatch,"'candidates.qwen2_resident_matrix.raw_kv_public_recipe_run.launch'")
-    return text.encode()
+    return diagnostic_hooks(name,text).encode()
+
+def diagnostic_hooks(name,text):
+    def replace(old,new):
+        nonlocal text
+        need(text.count(old)==1);text=text.replace(old,new)
+    if name==launch.prerequisite.ENTRY:
+        replace('    s=verify_snapshot(path,digest',
+                "    from candidates.qwen2_resident_matrix.raw_kv_public_recipe_run import numeric_progress\n    numeric_progress.stage('run_preflight')\n    s=verify_snapshot(path,digest")
+        for marker,stage in (
+            ("            inputs=prior.load_inputs(", 'input_load'),
+            ("            report['prefix_execution']=", 'public_prefix'),
+            ("            with capture:\n", 'public_suffix'),
+            ("            report['observation']=capture.save(", 'observation_seal'),
+            ("            gate.opened=True", 'comparison'),
+            ("            require(source_hashes(", 'source_recheck'),
+            ("            save();return report", 'save_receipt')):
+            replace(marker,"            numeric_progress.stage('"+stage+"')\n"+marker)
+        replace("            silu=policy.ObservedSiluLibrary(",
+                "            numeric_progress.observe_trace(x.trace)\n            silu=policy.ObservedSiluLibrary(")
+    return text
 
 def check_bridge_scope(originals,generated):
     need(set(originals)==set(generated)==set(launch.TARGETS))

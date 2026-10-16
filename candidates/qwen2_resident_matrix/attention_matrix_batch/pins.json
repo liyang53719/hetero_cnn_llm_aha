@@ -1,0 +1,26 @@
+{
+  "native_execution": false,
+  "own": {
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/README.md": "68b1d691486c4d5f0319ce25cfa46868a8e584ca5393a7f237e8d206af78cc6b",
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/check_sources.py": "789232ef0fe81e1522e699c768dc14135894e19ec4ca83f4334f43e1f3ec45f4",
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/model.py": "f82699680b2b0f0569f7b1b71eaee5fdd2fa31c64ef08b0b5a89d35793bc01d3",
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/schedule.py": "b8dd19d2d1c1573033a6a6cc083a70d5f831f393741896d9e57d9c3006566694",
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a",
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/test_schedule.py": "4a945e220b66d037d651931e9a65734c6e4878f4b0b4585f9a553a9f88bccd37"
+  },
+  "profile": "attention-fixed-matrix-selected-projection-v1",
+  "rtl_execution": false,
+  "schema": 1,
+  "sources": {
+    "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+    "candidates/qwen2_resident_matrix/ffn_attention/test_scalar_recipe.py": "7f472363432d37b17f3c504fe1a32443d53fec81c23c1bf445b414a3c5dbca30",
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e"
+  }
+}

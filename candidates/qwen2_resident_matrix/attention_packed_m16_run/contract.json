@@ -1,0 +1,41 @@
+{
+  "claims": {
+    "full_29_node_acceptance": false,
+    "hardware_recipe_acceptance": false,
+    "rtl_execution": false,
+    "useful_wall_mac_90_percent": false
+  },
+  "cleanup_seconds": 5,
+  "entry_pins_sha256": "10b301c3897430c7aebd2cd1ee245d5143e1886432a5544bf8f3656d3c85c5d5",
+  "numeric_seconds": 900,
+  "origin_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+  "outer_seconds": 930,
+  "own_sources": {
+    "README.md": "7a1fafbc7fbfaa872f724f551035d02444daa3f9e4ce524ff000d91f8c1c4ea8",
+    "driver.py": "0d566fc726184be9885f51026456768af05b4d6f7012c7a4c8cb94f6a1601111",
+    "launch.py": "0c9dfedcb4de77a98c47fe2e701c4dd73ae32846e5c6755efdee03940e9d7afc",
+    "terminal_validator.py": "2fdabe1135b877fa6b78a1cd8f4b51dd14da316773ec79413ff5edd743683347",
+    "test_launch.py": "8d602379145a2b0a53aeda20cd677b45c7a5a48f0df1fc06f5f679390c2a9a8d",
+    "test_terminal_validator.py": "5fb8407ca3c6e8b995c235a1a150bc9f53fda2cc120ca1fc5e488416810ee83a"
+  },
+  "profile": "qwen2-packed-m16-full-run-v1",
+  "python": {
+    "bytes": 30894944,
+    "implementation": "CPython",
+    "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "version": [
+      3,
+      12,
+      14
+    ]
+  },
+  "schema": 1,
+  "status": "REVIEWED_SOURCE_EXECUTION_REQUIRES_ROOT_GATE",
+  "support_sources": {
+    "candidates/qwen2_resident_matrix/attention_packed_m16_assets/pins.json": "af964fe867b35780fcfb48428c300a1504ec9b098c9fb350e5628033d9c05c8d",
+    "candidates/qwen2_resident_matrix/attention_packed_m16_assets/producer.py": "398b8cb73715ad22ffc544aef3fb1f8ce52209928557c8c7500d833eedc4f941",
+    "candidates/qwen2_resident_matrix/attention_packed_m16_assets/reuse.py": "800c1ca5bd16fb120501731fd5399be765fd6073517ba6231870c3411919b914",
+    "candidates/qwen2_resident_matrix/attention_packed_m16_assets_launch/supervisor.py": "b6970ca925bb956bd1494f046ba29079a818b98ab302ab84dab6d40e50253b80"
+  },
+  "work_seconds": 924
+}

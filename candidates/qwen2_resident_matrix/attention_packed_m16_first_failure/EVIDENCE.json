@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "private_actual_summary": {
+      "bytes": 261525,
+      "sha256": "c267139607497e8fa6ce3bc46885deb6ee436faef1729b8e317af545f3f7f8b4"
+    },
+    "private_context": {
+      "bytes": 945,
+      "sha256": "fb5000d3967c044d6b44dc8c1799b711356fb096ca39951818a81746fac2782f"
+    },
+    "private_source_proof": {
+      "bytes": 44334,
+      "sha256": "646b603b6c87171906b11b4feb4fbbe1ea88751d871f723ff767cd718ecb7511"
+    },
+    "private_stderr": {
+      "bytes": 2735,
+      "sha256": "895ba2962a93066f811fae25c246e7cc807555bca73ae7ea5c0a99d1649193da"
+    },
+    "safe_caller_supervisor": {
+      "bytes": 1900,
+      "sha256": "65e4e8272e1829b920351331161277da8a3d539d76f399bc97e27aa8ea645418"
+    },
+    "safe_last_progress": {
+      "bytes": 188,
+      "sha256": "a61f3b9595db68f59875819ee5a885aa8d349d3e5b888eb821306562659988d7"
+    },
+    "safe_launcher_summary": {
+      "bytes": 568,
+      "sha256": "1d57aed4e6fdc495d64c57d950e88b7feacc04781181cc2d23f741e4e5be9caf"
+    }
+  },
+  "attention_job_started": false,
+  "attention_terminal_present": false,
+  "child_exit_code": 1,
+  "cleanup_complete": true,
+  "cleanup_seconds": 5,
+  "completed_public_events": 10,
+  "contract_sha256": "6211582598199f558d3fcbd1be79eed653e98b37f7bb804b93449262bfec0d22",
+  "elapsed_seconds": 50.526777,
+  "entry_pins_sha256": "10b301c3897430c7aebd2cd1ee245d5143e1886432a5544bf8f3656d3c85c5d5",
+  "full_29_node_acceptance": false,
+  "hardware_recipe_acceptance": false,
+  "numeric_budget_seconds": 900,
+  "numeric_host_wall_seconds": 32.6709069449862,
+  "numeric_started": true,
+  "numerical_acceptance": false,
+  "numerical_comparison_started": false,
+  "observed_failure": "EXACT_IDLE_ORIGINAL_M16_PUBLIC_PACKED_PROFILE_REQUIRED",
+  "observed_failure_site": "attention_packed_m16/profile.py:install:30",
+  "outer_exit_code": 1,
+  "outer_seconds": 930,
+  "prefix_host_wall_seconds": 32.397360980990925,
+  "profile": "qwen2-packed-m16-first-full-attempt-failure-v1",
+  "retry_performed": false,
+  "rtl_execution": false,
+  "schema": 1,
+  "status": "FAILED_AT_PACKED_PROFILE_INSTALL",
+  "timeout": false,
+  "useful_wall_mac_90_percent": false,
+  "work_seconds": 924,
+  "wrapper_publication_filemap_sha256": "752654d131b4b2b15cc48b682364a0afe7a771aabb2247fdcb360a112cb9fb56",
+  "wrapper_source_manifest_sha256": "b92e361ca642caf58fb60677f8abed311a0f1d4e1544afde2bf8a2421b1c1da5"
+}

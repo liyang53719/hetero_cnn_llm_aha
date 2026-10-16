@@ -1,0 +1,167 @@
+--- a/candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py
+@@ -83,6 +83,9 @@
+         self.attention_jobs = self.attention_results = 0
+         self.ordinary_history = []
+         self.window_matrix_bridge = None
++        # Default-off transport only; the official arithmetic owner is unchanged.
++        self.attention_transport = None
++        self.attention_transport_binding = None
+ 
+     def reset_required(self):
+         reset = self.owner.ports().get('reset_required', False)
+@@ -94,6 +97,9 @@
+             reset = reset or self.attention_owner.ports()['reset_required']
+         if self.matrix_service is not None:
+             reset = reset or self.matrix_service.reset_required
++        transport = self._checked_attention_transport()
++        if transport is not None:
++            reset = reset or transport.supply.reset_required
+         return bool(reset)
+ 
+     def ports(self):
+@@ -180,6 +186,64 @@
+         self.down_job = self.down_terminal = None
+         self.down_start_tick = self.down_terminal_tick = None
+ 
++    def _checked_attention_transport(self):
++        transport = self.attention_transport
++        if transport is None:
++            require(self.attention_transport_binding is None, 'detached Attention transport')
++            return None
++        from candidates.qwen2_resident_matrix.raw_kv_public.model import PublicKvTransport
++        from candidates.qwen2_resident_matrix.raw_kv_parent.model import ParentLoan
++        from candidates.qwen2_resident_matrix.dense_block_reduce.dense_drain import DenseReductionOwner
++        from candidates.qwen2_resident_matrix.official_bf16.owners import OfficialAttentionOwner
++        require(type(transport) is PublicKvTransport and
++                type(transport.owner) is OfficialAttentionOwner and
++                type(transport.supply.parent) is ParentLoan and
++                type(self.owner) is DenseReductionOwner,
++                'raw KV requires concrete original public owners and transport')
++        parent = transport.supply.parent
++        binding = (transport, transport.supply, parent, transport.job,
++                   self.attention_owner, self.matrix_service, self.prefix_owner.scalar)
++        require(self.attention_transport_binding is not None and
++                all(a is b for a, b in zip(binding, self.attention_transport_binding)) and
++                len(binding) == len(self.attention_transport_binding),
++                'public Attention transport identity changed')
++        require(transport.owner is self.attention_owner and transport.parent is parent and parent.owner is self.owner and
++                parent.raw.banks is self.owner.a_banks and self.owner.tiles.banks is self.owner.a_banks and
++                self.bank_ids == (id(self.owner), id(self.owner.a_banks),
++                                  id(self.owner.b_banks), id(self.owner.tiles.banks)) and
++                transport.owner.matrix is self.matrix_service and
++                transport.owner.scalar is self.prefix_owner.scalar and
++                parent.enabled is True and parent.raw.enabled is True and transport.supply.enabled is True,
++                'public Attention transport replaced owner, banks or services')
++        return transport
++
++    def bind_attention_transport(self, transport):
++        """Bind after original Host/policy dispatch; never replace arithmetic."""
++        from candidates.qwen2_resident_matrix.raw_kv_public.model import PublicKvTransport
++        require(self.attention_transport is None and self.attention_transport_binding is None and
++                type(transport) is PublicKvTransport, 'one concrete Attention transport binding')
++        hp = self.ports()
++        require(hp['ordinary_request'] is transport.job and hp['group_request'] is None and
++                transport.job.kind == 'Attention' and self.attention_owner.ports()['job_ready'] and
++                self.owner.state == self.prefix_owner.state == 'idle' and
++                self.owner.lease is None and self.owner.tiles.idle and not self.owner.tiles.leased,
++                'raw KV binding must follow this original public Attention dispatch')
++        if hasattr(self, 'policy_jobs'):
++            require(self.policy_jobs.get(transport.job.tag & 0xffff) == asdict(transport.job),
++                    'raw KV binding precedes original official role validation')
++        parent = transport.supply.parent
++        require(not any(parent.debts().values()) and parent.raw.drained and
++                not parent.raw.blocked and not transport.supply.reset_required,
++                'raw KV binding requires fully retired healthy Dense ownership')
++        self.attention_transport = transport
++        self.attention_transport_binding = (transport, transport.supply, parent, transport.job,
++            self.attention_owner, self.matrix_service, self.prefix_owner.scalar)
++        try:
++            self._checked_attention_transport()
++        except Exception:
++            self.attention_transport = self.attention_transport_binding = None
++            raise
++
+     def attention_edge(self, **inputs):
+         """Couple the real legacy Attention backend to this same public launch.
+ 
+@@ -192,7 +256,8 @@
+         require(self.owner.state == 'idle' and self.owner.lease is None and self.owner.tiles.idle
+                 and self.owner.ports()['response'] is None and self.prefix_owner.state == 'idle',
+                 'Attention conflicts with retained Dense/prefix obligations')
+-        hp, pp = self.ports(), backend.ports()
++        transport = self._checked_attention_transport()
++        hp, pp = self.ports(), (transport.ports() if transport is not None else backend.ports())
+         before_reset = self.reset_required()
+         if 'job' in inputs:
+             decoded = hp['ordinary_request']
+@@ -201,8 +266,17 @@
+                     'Attention must accept this original fused public owner job')
+         require('response_ready' not in inputs, 'Attention result readiness belongs to Host')
+         inputs['response_ready'] = hp['owner_result_ready']
+-        edge = backend.tick(**inputs)
+-        self.owner.tick()
++        if transport is None:
++            edge = backend.tick(**inputs)
++            self.owner.tick()
++        else:
++            before_clock = self.owner.clock
++            edge = transport.tick(**inputs)
++            require(self.owner.clock == before_clock + 1,
++                    'raw KV transport must tick the identical Dense owner exactly once')
++            require(not edge.get('response_fire') or pp['response'] is not None,
++                    'raw KV transport retired a hidden Attention terminal')
++            self.counts['raw_kv_parent_edges'] += 1
+         accepted = bool(edge.get('job_fire'))
+         terminal = pp['response'] if edge.get('response_fire') else None
+         self.attention_jobs += accepted
+--- a/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
+@@ -19,7 +19,7 @@
+ require = execution.require
+ 
+ 
+-def execute_attention_owner(x, physical, job, *, final_ack_stall=5):
++def execute_attention_owner(x, physical, job, *, final_ack_stall=5, enable_raw_kv=False):
+     """Feed the real Attention owner only accepted, physically addressed beats.
+ 
+     The same public Host receives its actual terminal. The output stays
+@@ -36,6 +36,12 @@
+     require(getattr(x.frontend.memory, 'physical_memory', None) is physical and
+             x.frontend.port.memory is x.frontend.memory,
+             'Attention metadata and operands require the identical physical map')
++    require(type(enable_raw_kv) is bool, 'canonical raw KV enable')
++    if enable_raw_kv:
++        from candidates.qwen2_resident_matrix.raw_kv_parent.model import ParentLoan
++        from candidates.qwen2_resident_matrix.raw_kv_public.model import PublicKvTransport
++        x.bind_attention_transport(PublicKvTransport(owner=backend,
++            parent=ParentLoan(owner=x.owner, enabled=True), job=job))
+     counts, pending, held = Counter(), None, None
+     remaining, result, final_ack_tick = final_ack_stall, None, None
+     require(x.attention_edge(job=job)['job_fire'], 'public Attention job was not accepted')
+@@ -174,7 +180,7 @@
+     physical.check_coexistence(unpublished_pristine=True)
+ 
+ 
+-def execute_public_suffix(x, physical, lib, output, *, memory=None):
++def execute_public_suffix(x, physical, lib, output, *, memory=None, enable_raw_kv=False):
+     """Continue pc10 through pc20 in the caller's original public21 launch.
+ 
+     Return (actual_outputs, report) only after its whole-launch terminal.
+@@ -182,6 +188,7 @@
+     virtual DDR or feed a later owner. All subsequent operand reads go through
+     the same addressed PhysicalMemory, including acknowledged act and Down.
+     """
++    require(type(enable_raw_kv) is bool, 'canonical raw KV enable')
+     # Check the launch before allocating the optional names-only adapter.
+     require(len(x.host.program) == 21 and x.host.pc == x.host.completed == x.host.jobs == 10,
+             'fullgraph continuation requires ten actual public prefix completions at pc10')
+@@ -193,7 +200,7 @@
+                   id(x.prefix_owner.scalar), id(physical), id(memory.act.data), id(memory.workspace.data))
+     reports = []
+     job = _request(x, 12, 'Attention')
+-    report = execute_attention_owner(x, physical, job)
++    report = execute_attention_owner(x, physical, job, enable_raw_kv=enable_raw_kv)
+     x.publish_completions((10, 11, 12))
+     physical.publish(job, x.host)
+     reports.append(dict(pcs=[10, 11, 12], kind='Attention', report=report))

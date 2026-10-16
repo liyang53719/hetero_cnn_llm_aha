@@ -1,0 +1,32 @@
+{
+  "generated_sha256": {
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "cdf203f9e7113db7fb29dd290ea6355adf3f7df86e145e5828daf13a5ac51b73",
+    "candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py": "bdc4218fcc6136c1c1c2b6d9c15338b539e4b6abe46b96bd6baeb93379a6e9ab"
+  },
+  "inputs": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py": "6ebcf1e50cb454ea1a5c4c01c2322608fb349b04",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py": "f8287c3cfabb6c1221cc14fb51a44ce0b45319dc",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/public_execution.py": "76f27ea304e1c08670dc70d2823340b90292f364",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "43b8cc9459a2e6fd5723d93414bd0428410c4fc1",
+    "candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py": "8d6f8823d434d81c441c0b2f903b8728746695a4",
+    "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py": "97acf34ea583bc3c636cf9e2741a147b00b29bf9",
+    "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py": "b8a8fb7fd272ccf570a94d4c95052e1920ac4a6c",
+    "candidates/qwen2_resident_matrix/official_bf16/execution.py": "b574c71463427fad4a1eb855fca2aaf052a1046e",
+    "candidates/qwen2_resident_matrix/raw_kv_attention/numeric_pins.json": "6d48433a76eec901ae71482b96504f7d12374159",
+    "candidates/qwen2_resident_matrix/raw_kv_attention/numeric_prepare.py": "f5e28045b34a230ccd7bc788f0132afa968c7e7d",
+    "reports/execution/QWEN2_DENSE_BLOCK_REDUCTION_20261012/M128_RESULT.json": "c28522da9cb0bcae46fe36c8a5fa1eb373fc6b7d"
+  },
+  "lineage": {
+    "executed_path": "check_public_numeric.run -> ReducedPublicExecution -> OfficialPublicExecution -> PublicExecution -> execute_public_suffix",
+    "historical_official_failed_stages": [],
+    "historical_receipt_applies_to_this_extension": false,
+    "historical_receipt_git_blob": "c28522da9cb0bcae46fe36c8a5fa1eb373fc6b7d",
+    "historical_receipt_path": "reports/execution/QWEN2_DENSE_BLOCK_REDUCTION_20261012/M128_RESULT.json",
+    "historical_receipt_publication_commit": "45d3b7764e337bbffbb44d3c49e995079d46a9bb",
+    "historical_source_commit": "38b943cdf6a0e2d642a1aef07b30e6d23e3ceed8",
+    "historical_status": "PASS_REDUCED_BF16_OBSERVED_OFFICIAL_GATES",
+    "prepared_pv32_selected": false
+  },
+  "patch_sha256": "05f01263d35da0a92a43aca8561f3df44564f87fdc510996851c650cb895bffd",
+  "schema": 1
+}

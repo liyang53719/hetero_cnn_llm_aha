@@ -1,0 +1,32 @@
+{
+  "compile_receipt_sha256": "f036483fcc7ddb66fddce088e8eb346945225e4eca162eb43174a53171c2f5eb",
+  "compiled_sources": {
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp": "d319d3431316b4ff0f299beac5931f718a6a3a446e8de06398b172ebb6e0401c",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1"
+  },
+  "library_sha256": "a44f4cd7861d1207698bb3dfc89820ded30a44db1cf1c8b9f951019d1edce1fa",
+  "sources": {
+    "candidates/qwen2_resident_matrix/dense_a_hold_candidate/COLD_RESULT.json": "6c8e4ba70caea91349246d27c97a5e58a81dbf3bcb63b817e9247565e8cb931d",
+    "candidates/qwen2_resident_matrix/dense_a_hold_candidate/README_CN.md": "274a1b8e1d653715b108195b5e5131c38535f4c76fd2e37c1d196284ee276bfc",
+    "candidates/qwen2_resident_matrix/dense_a_hold_candidate/model.py": "3c465fb97c9e3ff25fdca1f9844b2e57517b10e60d292d103d6601cd3d15ea83",
+    "candidates/qwen2_resident_matrix/dense_a_hold_candidate/source_pins.json": "85e9195a9fe0f6dbdead89802effa88d620fbfa3f37e0900d60d73ebf35a515b",
+    "candidates/qwen2_resident_matrix/dense_a_hold_candidate/test_model.py": "c421b2c76f7fe0362bc33226df5825d4b345c2233b47568ce4f1c93a812824c9",
+    "candidates/qwen2_resident_matrix/dense_a_reuse_audit/README_CN.md": "620d851db700277ff0495afc63cd99cbca9ce764e1c1fa9654223a302f47e68a",
+    "candidates/qwen2_resident_matrix/dense_a_reuse_audit/constraints.py": "042d26f7432073df8dd88b00b9a72bfb3d39cc903ac5fb7f3a10cb1f64e8f57b",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+    "candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp": "d319d3431316b4ff0f299beac5931f718a6a3a446e8de06398b172ebb6e0401c",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+    "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "860db7712f315bebffe6ccb40600f02f8504b5eddb3a509f3263eb5492d9bdae",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "d06b43ca48d60285ee12a780cb1c27258c008b5e4255dde8da46b550b5639389"
+  }
+}

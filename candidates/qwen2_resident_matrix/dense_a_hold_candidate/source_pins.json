@@ -1,0 +1,14 @@
+{
+  "sources": {
+    "candidates/qwen2_resident_matrix/dense_a_reuse_audit/README_CN.md": "620d851db700277ff0495afc63cd99cbca9ce764e1c1fa9654223a302f47e68a",
+    "candidates/qwen2_resident_matrix/dense_a_reuse_audit/constraints.py": "042d26f7432073df8dd88b00b9a72bfb3d39cc903ac5fb7f3a10cb1f64e8f57b",
+    "candidates/qwen2_resident_matrix/ffn_tiles/model.py": "f7bb9b370a240baae98cf16490a7d86301c7ac8dffea96a5adb5e3bed34ce7ed",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/ffn_window/model.py": "1c9f69beed57b96f6003c199fd02a9d362c16b6fff71ba93a18fb1f10f5eaae4",
+    "candidates/qwen2_resident_matrix/ffn_window/window.patch": "abb60f375acb1761f5eb36ecff603c6524a35fb2a6713b86ff191c6d8e174b59",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen2_resident_matrix/transposed_down/owner_down.patch": "db15b8dc91abacd21e84d46ade6234d3b4dcc66816b634418e0b9056d2db3bbb",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": "860db7712f315bebffe6ccb40600f02f8504b5eddb3a509f3263eb5492d9bdae",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "d06b43ca48d60285ee12a780cb1c27258c008b5e4255dde8da46b550b5639389"
+  }
+}

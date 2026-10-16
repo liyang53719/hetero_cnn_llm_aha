@@ -1,0 +1,29 @@
+{
+  "a_gathers_after": 64,
+  "a_gathers_before": 256,
+  "accepted_packets": 256,
+  "accepted_packets_equal": true,
+  "accepted_packets_sha256": "c84a0181e295790ebd532c877dbd5ebd14bd56c78744efc1d3b3c33d340d897b",
+  "active_fifo_payload_before_bytes": 1280,
+  "active_fifo_plus_hold_payload_after_bytes": 1216,
+  "arithmetic_execution": false,
+  "b_only_gathers": 192,
+  "candidate_queue_slots": 3,
+  "default_queue_slots": 4,
+  "dma_commands_equal": true,
+  "dma_commands_sha256": "477bb66c34d8467dfd44af381a8b6e71297cdf9bd9e7268a44b25658b4c6d304",
+  "kind": "synthetic_cold_transport_and_order_only",
+  "max_reserved": 3,
+  "proposed_explicit_metadata_bits": 112,
+  "rtl_execution": false,
+  "shape": {
+    "k": 32,
+    "m": 16,
+    "n": 256
+  },
+  "timing_or_utilization_claim": false,
+  "unchanged_a_sram_bytes": 704512,
+  "unchanged_b_sram_bytes": 81920,
+  "writes_equal": true,
+  "writes_sha256": "fc168876fd34653f8a029a70b75641501951e9872572d3e6aea39a5ce8f24947"
+}

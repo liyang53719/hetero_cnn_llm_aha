@@ -1,0 +1,145 @@
+--- a/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py
++++ b/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py
+@@ -18,6 +18,7 @@
+     MemoryRequest, MemoryResponse, OwnerResult, PrefixFault, PrefixOwner, uint)
+ from .matrix_service import LegacyMatrixClient, LegacyRequest, MatrixProtocolError
+ from .scalar_recipe import exp_negative
++from ..attention_packed_owner import hooks as packed
+ 
+ 
+ class AttentionOwner(PrefixOwner):
+@@ -31,9 +32,10 @@
+     """
+     KINDS = ('Attention',)
+ 
+-    def __init__(self, matrix, scalar=None, *, max_tokens=1024):
++    def __init__(self, matrix, scalar=None, *, max_tokens=1024, packed_schedule=None):
+         if not uint(max_tokens, 16) or not 0 < max_tokens <= 1024:
+             raise ValueError('Attention source supports at most 1024 tokens')
++        packed.install(self, packed_schedule)
+         super().__init__(scalar, max_tokens=max_tokens)
+         self.matrix, self.matrix_client = matrix, None
+         self.matrix_request = None
+@@ -47,12 +49,12 @@
+     def ports(self):
+         ready = (self.state == 'idle' and not self.poison and self.scalar.client is None
+                  and self.matrix.owner is None and not self.matrix.reset_required)
+-        return dict(job_ready=ready, memory=self.request if self.state == 'issue' else None,
++        return packed.ports(self, dict(job_ready=ready, memory=self.request if self.state == 'issue' else None,
+                     memory_response_ready=self.memory_pending,
+                     response_ready=self.memory_pending,
+                     matrix=self.matrix_request if self.state == 'matrix_issue' else None,
+                     response=self.result if self.state == 'finish' else None,
+-                    reset_required=self.poison or self.matrix.reset_required, state=self.state)
++                    reset_required=self.poison or self.matrix.reset_required, state=self.state))
+ 
+     def _validate(self, j):
+         if j.kind != 'Attention' or any(getattr(j, name, False) for name in
+@@ -159,13 +161,16 @@
+         if not self.memory_pending:
+             self.request = None
+         self.state = 'drain'
++        packed.fault(self)
+         self.abort_pending = self.matrix_client is not None
+-        if self.matrix_client is None and not self.memory_pending:
++        if self.matrix_client is None and not self.memory_pending and not self.scratch_pending and not self.scratch_leased:
+             self._finish(status, detail)
+ 
+     def _advance(self, response=None):
+         try:
+             action = self.program.send(response)
++            if packed.action(self, action):
++                return
+             if isinstance(action, LegacyRequest):
+                 self.matrix_request, self.state = action, 'matrix_issue'
+                 return
+@@ -177,7 +182,9 @@
+             self.serial += 1
+             self.state = 'issue'
+         except StopIteration:
+-            if self.ack_bytes != self.job.write_bytes:
++            if self.scratch_pending or self.scratch_request is not None or self.scratch_leased:
++                self._fault('Protocol', 'packed scratch debt at terminal')
++            elif self.ack_bytes != self.job.write_bytes:
+                 self._fault('Protocol', 'Attention terminal before exact write ACK fence')
+             elif self.matrix_client is None or not self.matrix_client.ports()['drained']:
+                 self._fault('Protocol', 'Attention terminal before Matrix obligations retire')
+@@ -191,7 +198,8 @@
+     def tick(self, *, job=None, memory_ready=False, memory_response=None,
+              response_ready=False, local_reset=False, reset=False,
+              matrix_request_ready=True, matrix_result_ready=True,
+-             service_result_ready=True, service_done_ready=True, done_override=None):
++             service_result_ready=True, service_done_ready=True, done_override=None,
++             scratch_ready=False, scratch_response=None):
+         p = self.ports()
+         p.update(job_fire=False, memory_fire=False, memory_response_fire=False,
+                  matrix_request_fire=False, matrix_result_fire=False, response_fire=False)
+@@ -199,7 +207,7 @@
+         if reset and self.state in ('idle', 'locked'):
+             # Do not reset someone else's shared service. The coordinated
+             # caller resets MatrixService, which remains poisoned until then.
+-            self.__init__(self.matrix, self.scalar, max_tokens=self.max_tokens)
++            self.__init__(self.matrix, self.scalar, max_tokens=self.max_tokens, packed_schedule=self.packed_schedule)
+             p['job_ready'] = False
+             return p
+         matrix_poison = (self.matrix.owner is self and self.matrix.reset_required
+@@ -228,7 +236,8 @@
+                     raise PrefixFault('Protocol', 'shared scalar admission mismatch')
+                 if not self.matrix.acquire(self, 'normal', job.tag):
+                     raise PrefixFault('Protocol', 'shared Matrix admission mismatch')
+-                self.matrix_client = LegacyMatrixClient(self.matrix, self)
++                self.matrix_client = (LegacyMatrixClient(self.matrix, self) if self.packed_schedule is None
++                                      else packed.client(self))
+                 self.program = self._attention(job)
+                 self._advance()
+             except PrefixFault as error:
+@@ -236,6 +245,7 @@
+         if p['memory'] is not None and memory_ready:
+             p['memory_fire'] = True
+             self.counts['write_requests' if self.request.write else 'read_requests'] += 1
++            packed.memory_accept(self, self.request)
+             self.memory_pending, self.state = True, 'wait'
+         if p['memory_response_ready'] and memory_response is not None:
+             q, r = self.request, memory_response
+@@ -246,6 +256,7 @@
+                 self.counts['foreign_response_rejected'] += 1
+                 self._fault('Protocol', 'foreign Attention response; accepted debt retained')
+             else:
++                packed.memory_ack(self, q, r)
+                 p['memory_response_fire'] = True
+                 self.memory_pending = False
+                 self.counts['memory_responses'] += 1
+@@ -268,6 +279,7 @@
+                     else:
+                         self.counts['read_responses'] += 1
+                         self._advance(data)
++        packed.edge(self, p, scratch_ready, scratch_response)
+         if self.matrix_client is not None and self.state != 'finish':
+             draining = self.state == 'drain'
+             offered = p['matrix'] if matrix_request_ready and not draining else None
+@@ -283,11 +295,11 @@
+                     self.state = 'matrix_wait'
+                 if mp['result_fire']:
+                     p['matrix_result_fire'] = True
+-                    self.counts['matrix_results'] += 1
++                    packed.record_result(self, mp['result'])
+                     self.matrix_request = None
+                     if not draining:
+                         self._advance(mp['result'])
+-                if self.state == 'drain' and not self.memory_pending and self.matrix_client.ports()['drained']:
++                if self.state == 'drain' and not self.memory_pending and not self.scratch_pending and not self.scratch_leased and self.matrix_client.ports()['drained']:
+                     self._finish(self.status, self.detail)
+             except MatrixProtocolError as error:
+                 self._fault('Protocol', str(error))
+--- a/candidates/qwen2_resident_matrix/official_bf16/owners.py
++++ b/candidates/qwen2_resident_matrix/official_bf16/owners.py
+@@ -116,6 +116,9 @@
+     """Existing causal AttentionOwner with completed-output BF16 boundaries."""
+ 
+     def _attention(self, j):
++        if self.packed_schedule is not None:
++            yield from self.packed_schedule.run(self,j)
++            return
+         for token in range(j.m):
+             for head in range(12):
+                 kv_head = head // 6

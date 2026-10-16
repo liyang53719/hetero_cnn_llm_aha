@@ -20,6 +20,8 @@ DELIVERY_PROBE = '          git cat-file -e c554e502dfe462d5a0acb7030eff4bb51570
 PUBLIC_DISPATCH_TEST = "          python -m unittest discover -s candidates/qwen2_resident_matrix/public_dispatch -p 'test_*.py' -v"
 PUBLIC_DISPATCH_OPTIMIZED_TEST = "          python -O -m unittest discover -s candidates/qwen2_resident_matrix/public_dispatch -p 'test_*.py' -v"
 
+NUMERIC_STEP = '      - name: Bounded original PV16 KV numeric bridge\n        if: github.run_attempt == 1\n        run: |\n          python -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci -q\n          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci -q\n          python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_numeric_ci --out work/raw-kv-attention-numeric'
+NUMERIC_ARTIFACTS = '            work/raw-kv-attention-numeric/summary.json\n            work/raw-kv-attention-numeric/source_hashes.json'
 
 def validate_frontend_extension(current):
     """Retain the frozen body; admit only the exact reviewed CI additions."""
@@ -45,7 +47,19 @@ def validate_frontend_extension(current):
     if not (dispatch > 0 and lines[dispatch - 1:dispatch + 3] ==
             [before_dispatch, *dispatch_lines, after_dispatch]):
         raise ValueError('frozen frontend public dispatch order changed')
-    body = '\n'.join(line for line in lines if line not in fetch_lines + dispatch_lines)
+    # 472 adds one exact bounded numeric step and two explicit safe receipts.
+    # Remove only reviewed contiguous blocks at their exact original sites.
+    text = '\n'.join(lines)
+    before_numeric = "          python -m unittest candidates.qwen2_resident_matrix.official_bf16.test_chisel_policy candidates.qwen2_resident_matrix.official_bf16.test_frontend candidates.qwen2_resident_matrix.official_bf16.test_workflow -v 2>&1 | tee work/matrix-interface-tests/official-bf16-source-tests.log"
+    after_numeric = '      - name: Compile real source and check CHIRRTL structure'
+    if text.count(NUMERIC_STEP) != 1 or (before_numeric + '\n' + NUMERIC_STEP + '\n' + after_numeric) not in text:
+        raise ValueError('frozen frontend numeric step identity, count or placement changed')
+    if (text.count(NUMERIC_ARTIFACTS) != 1 or
+            not text.endswith('            work/matrix-interface-tests/**/*.log\n' + NUMERIC_ARTIFACTS)):
+        raise ValueError('frozen frontend numeric artifact identity, count or placement changed')
+    text = text.replace(NUMERIC_STEP + '\n', '', 1)
+    text = text.removesuffix('\n' + NUMERIC_ARTIFACTS)
+    body = '\n'.join(line for line in text.splitlines() if line not in fetch_lines + dispatch_lines)
     if hashlib.sha256(body.encode()).hexdigest() != FRONTEND_BASELINE_SHA256:
         raise ValueError('frozen frontend budget or existing checks changed')
     return FRONTEND_BASELINE_SHA256
@@ -112,6 +126,27 @@ class ModelWorkflowGuards(unittest.TestCase):
                         current.replace(pair + '\n', '')):
             with self.subTest(mutation='order, placement or missing pair'), self.assertRaisesRegex(ValueError, 'frozen frontend public dispatch'):
                 validate_frontend_extension(changed)
+
+    def test_frontend_numeric_extension_is_exact_and_cannot_hide_old_drift(self):
+        current = (runner.ROOT / '.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        self.assertEqual(validate_frontend_extension(current), FRONTEND_BASELINE_SHA256)
+        for block in (NUMERIC_STEP, NUMERIC_ARTIFACTS):
+            mutations = [current.replace(block + '\n', ''),
+                         current.replace(block, block + '\n' + block),
+                         block + '\n' + current.replace(block + '\n', '')]
+            mutations += [current.replace(line, line + ' unreviewed')
+                          for line in block.splitlines()]
+            for changed in mutations:
+                with self.subTest(block=block.splitlines()[0]), self.assertRaisesRegex(ValueError, 'frozen frontend'):
+                    validate_frontend_extension(changed)
+        for old, new in [('timeout-minutes: 20', 'timeout-minutes: 21'),
+                         ('if: github.run_attempt == 1', 'if: always()'),
+                         ('contents: read', 'contents: write'),
+                         ('branches: [main]', 'branches: [other]'),
+                         ('python scripts/check_matrix_interface_candidate.py', 'true #')]:
+            self.assertIn(old, current)
+            with self.subTest(old=old), self.assertRaisesRegex(ValueError, 'frozen frontend'):
+                validate_frontend_extension(current.replace(old, new))
 
     def test_exact_model_baselines_and_failure_artifacts(self):
         # Reuse the frontend's immutable-fetch validator, but only require the

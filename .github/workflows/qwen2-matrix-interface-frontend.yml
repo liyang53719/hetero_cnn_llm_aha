@@ -28,7 +28,7 @@ jobs:
   source-frontend:
     runs-on: ubuntu-24.04
     # a2e4: setup/tests ~169s + all frontend stages ~747s; retain upload margin.
-    # Includes one bounded synthetic M1/M2 host numeric bridge; no RTL/full-profile replay.
+    # Includes M1/M2 host numeric checks and M4/M8 cost calibration in one shared budget.
     # Latest observed job ~17 min; retain 20 min overall, numeric wrapper <=120s including cleanup.
     timeout-minutes: 20
     steps:
@@ -92,9 +92,11 @@ jobs:
       - name: Bounded original PV16 KV numeric bridge
         if: github.run_attempt == 1
         run: |
-          python -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci -q
-          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci -q
-          python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_numeric_ci --out work/raw-kv-attention-numeric
+          deadline=$(python -c 'import time; print(time.monotonic_ns() + 120_000_000_000)')
+          python -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci candidates.qwen2_resident_matrix.raw_kv_attention.test_streaming candidates.qwen2_resident_matrix.raw_kv_attention.test_reference_profile candidates.qwen2_resident_matrix.raw_kv_attention.test_profile_numeric candidates.qwen2_resident_matrix.raw_kv_attention.test_calibration_ci -q
+          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci candidates.qwen2_resident_matrix.raw_kv_attention.test_streaming candidates.qwen2_resident_matrix.raw_kv_attention.test_reference_profile candidates.qwen2_resident_matrix.raw_kv_attention.test_profile_numeric candidates.qwen2_resident_matrix.raw_kv_attention.test_calibration_ci -q
+          python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_numeric_ci --deadline-ns "$deadline" --out work/raw-kv-attention-numeric
+          python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_calibration_ci --deadline-ns "$deadline" --out work/raw-kv-attention-calibration
       - name: Compile real source and check CHIRRTL structure
         run: |
           test ! -e work/matrix-interface-frontend
@@ -127,3 +129,5 @@ jobs:
             work/matrix-interface-tests/**/*.log
             work/raw-kv-attention-numeric/summary.json
             work/raw-kv-attention-numeric/source_hashes.json
+            work/raw-kv-attention-calibration/summary.json
+            work/raw-kv-attention-calibration/source_hashes.json

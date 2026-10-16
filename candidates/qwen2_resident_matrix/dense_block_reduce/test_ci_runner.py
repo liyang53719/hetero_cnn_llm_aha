@@ -22,6 +22,8 @@ PUBLIC_DISPATCH_OPTIMIZED_TEST = "          python -O -m unittest discover -s ca
 
 NUMERIC_STEP = '      - name: Bounded original PV16 KV numeric bridge\n        if: github.run_attempt == 1\n        run: |\n          python -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci -q\n          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci -q\n          python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_numeric_ci --out work/raw-kv-attention-numeric'
 NUMERIC_ARTIFACTS = '            work/raw-kv-attention-numeric/summary.json\n            work/raw-kv-attention-numeric/source_hashes.json'
+CALIBRATION_STEP = '      - name: Bounded original PV16 KV numeric bridge\n        if: github.run_attempt == 1\n        run: |\n          deadline=$(python -c \'import time; print(time.monotonic_ns() + 120_000_000_000)\')\n          python -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci candidates.qwen2_resident_matrix.raw_kv_attention.test_streaming candidates.qwen2_resident_matrix.raw_kv_attention.test_reference_profile candidates.qwen2_resident_matrix.raw_kv_attention.test_profile_numeric candidates.qwen2_resident_matrix.raw_kv_attention.test_calibration_ci -q\n          python -O -m unittest candidates.qwen2_resident_matrix.raw_kv_attention.test_model candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_prepare candidates.qwen2_resident_matrix.raw_kv_attention.test_numeric_ci candidates.qwen2_resident_matrix.raw_kv_attention.test_streaming candidates.qwen2_resident_matrix.raw_kv_attention.test_reference_profile candidates.qwen2_resident_matrix.raw_kv_attention.test_profile_numeric candidates.qwen2_resident_matrix.raw_kv_attention.test_calibration_ci -q\n          python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_numeric_ci --deadline-ns "$deadline" --out work/raw-kv-attention-numeric\n          python -m candidates.qwen2_resident_matrix.raw_kv_attention.run_calibration_ci --deadline-ns "$deadline" --out work/raw-kv-attention-calibration'
+CALIBRATION_ARTIFACTS = '            work/raw-kv-attention-calibration/summary.json\n            work/raw-kv-attention-calibration/source_hashes.json'
 
 def validate_frontend_extension(current):
     """Retain the frozen body; admit only the exact reviewed CI additions."""
@@ -47,6 +49,17 @@ def validate_frontend_extension(current):
     if not (dispatch > 0 and lines[dispatch - 1:dispatch + 3] ==
             [before_dispatch, *dispatch_lines, after_dispatch]):
         raise ValueError('frozen frontend public dispatch order changed')
+    # Normalize the exact shared-budget calibration extension back to the
+    # previously reviewed M1/M2 block; preserve both older guards unchanged.
+    extended = '\n'.join(lines)
+    if extended.count(CALIBRATION_STEP) != 1:
+        raise ValueError('frozen frontend calibration step identity or count changed')
+    if (extended.count(CALIBRATION_ARTIFACTS) != 1 or
+            not extended.endswith(NUMERIC_ARTIFACTS + '\n' + CALIBRATION_ARTIFACTS)):
+        raise ValueError('frozen frontend calibration artifacts changed')
+    extended = extended.replace(CALIBRATION_STEP, NUMERIC_STEP, 1)
+    extended = extended.removesuffix('\n' + CALIBRATION_ARTIFACTS)
+    lines = extended.splitlines()
     # 472 adds one exact bounded numeric step and two explicit safe receipts.
     # Remove only reviewed contiguous blocks at their exact original sites.
     text = '\n'.join(lines)
@@ -130,7 +143,7 @@ class ModelWorkflowGuards(unittest.TestCase):
     def test_frontend_numeric_extension_is_exact_and_cannot_hide_old_drift(self):
         current = (runner.ROOT / '.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
         self.assertEqual(validate_frontend_extension(current), FRONTEND_BASELINE_SHA256)
-        for block in (NUMERIC_STEP, NUMERIC_ARTIFACTS):
+        for block in (CALIBRATION_STEP, NUMERIC_ARTIFACTS, CALIBRATION_ARTIFACTS):
             mutations = [current.replace(block + '\n', ''),
                          current.replace(block, block + '\n' + block),
                          block + '\n' + current.replace(block + '\n', '')]
@@ -147,6 +160,27 @@ class ModelWorkflowGuards(unittest.TestCase):
             self.assertIn(old, current)
             with self.subTest(old=old), self.assertRaisesRegex(ValueError, 'frozen frontend'):
                 validate_frontend_extension(current.replace(old, new))
+
+    def test_calibration_shares_exact_deadline_and_preserves_old_numeric_body(self):
+        current = (runner.ROOT / '.github/workflows/qwen2-matrix-interface-frontend.yml').read_text()
+        self.assertEqual(validate_frontend_extension(current), FRONTEND_BASELINE_SHA256)
+        deadline = "          deadline=$(python -c 'import time; print(time.monotonic_ns() + 120_000_000_000)')"
+        self.assertEqual(current.count(deadline), 1)
+        self.assertEqual(CALIBRATION_STEP.count('--deadline-ns "$deadline"'), 2)
+        changed = [current.replace('120_000_000_000', '240_000_000_000'),
+                   current.replace(deadline, deadline + '\n' + deadline),
+                   current.replace(CALIBRATION_STEP, NUMERIC_STEP),
+                   current.replace('--deadline-ns "$deadline"', '', 1),
+                   current.replace('work/raw-kv-attention-calibration/source_hashes.json',
+                                   'work/raw-kv-attention-calibration/**'),
+                   current.replace('jobs:\n  source-frontend:', 'jobs:\n  altered:')]
+        commands = [line for line in CALIBRATION_STEP.splitlines() if 'python ' in line]
+        changed += [current.replace(a + '\n' + b, b + '\n' + a)
+                    for a, b in zip(commands, commands[1:])]
+        for mutation in changed:
+            self.assertNotEqual(mutation, current)
+            with self.assertRaisesRegex(ValueError, 'frozen frontend'):
+                validate_frontend_extension(mutation)
 
     def test_exact_model_baselines_and_failure_artifacts(self):
         # Reuse the frontend's immutable-fetch validator, but only require the

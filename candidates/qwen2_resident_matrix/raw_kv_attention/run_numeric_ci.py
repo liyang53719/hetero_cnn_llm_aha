@@ -8,6 +8,7 @@ transient /tmp storage and is never copied into CI output or artifact roots.
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -166,21 +167,37 @@ def save(out, summary, hashes):
         target.write_bytes(raw)
 
 
-def run(out, environ=None):
+def run(out, environ=None, *, child_module=None, child_args=(), validator=None,
+        snapshot=None, total_seconds=None, deadline_ns=None):
     """Return (nonzero on NOT_RUN/failure, sanitized summary); invoke child once."""
     start = time.monotonic()
+    budget = TOTAL_SECONDS if total_seconds is None else total_seconds
+    need(type(budget) in (int, float) and math.isfinite(budget) and
+         CLEANUP_SECONDS + RECEIPT_SECONDS < budget <= TOTAL_SECONDS, 'total_budget')
+    end = start + budget
+    if deadline_ns is not None:
+        need(type(deadline_ns) is int and 0 < deadline_ns < 1 << 63, 'total_budget')
+        end = min(end, deadline_ns / 1_000_000_000)
+        budget = end - start
+        need(budget > CLEANUP_SECONDS + RECEIPT_SECONDS, 'total_budget')
+    module = CHILD_MODULE if child_module is None else child_module
+    validate = validate_child if validator is None else validator
+    snapshot = source_snapshot if snapshot is None else snapshot
+    need(type(module) is str and re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*', module)
+         and type(child_args) is tuple and all(type(arg) is str for arg in child_args), 'child_schema')
     out = Path(out).resolve()
     need(not out.exists(), 'fresh_output_required')
     out.mkdir(parents=True)
     env = dict(os.environ if environ is None else environ)
     summary = safe_summary()
+    summary['total_budget_seconds'] = budget
     hashes = {'schema': 1, 'sources': {}, 'inputs_unchanged': False}
     code = 2
     before = native_before = None
     # Only one deadline owner is active at a time. SIGALRM bounds Python-only
     # pre/postflight; run_group owns the child wait AND its uninterrupted
     # TERM-to-KILL grace. An outer alarm must never interrupt that cleanup.
-    work_deadline = start + TOTAL_SECONDS - CLEANUP_SECONDS - RECEIPT_SECONDS
+    work_deadline = end - CLEANUP_SECONDS - RECEIPT_SECONDS
     old_alarm = signal.getsignal(signal.SIGALRM)
     old_term = signal.getsignal(signal.SIGTERM)
     old_timer = signal.getitimer(signal.ITIMER_REAL)
@@ -198,14 +215,14 @@ def run(out, environ=None):
         if not all(Path(env[name]).expanduser().is_file() for name in
                    ('MATRIX_SERVICE_LIBRARY', 'MATRIX_SERVICE_COMPILE_RECEIPT')):
             return code, summary
-        before = source_snapshot()
+        before = snapshot()
         hashes['sources'] = before
         numeric_prepare.check()
         library, receipt, native_before = library_snapshot(env)
         hashes.update(native_before)
         validated = recipe.from_environment(ROOT, env)
         need(validated == library, 'library_identity')
-        need(source_snapshot() == before and library_snapshot(env)[2] == native_before,
+        need(snapshot() == before and library_snapshot(env)[2] == native_before,
              'input_drift')
         # Do not inherit PYTHONPATH/PYTHONHOME or optimization that could select
         # a different module tree or disable original owner assertion guards.
@@ -222,7 +239,7 @@ def run(out, environ=None):
             if remaining <= 0:
                 raise TimeoutError('total_budget')
             try:
-                rc = run_group([sys.executable, '-m', CHILD_MODULE], cwd=ROOT,
+                rc = run_group([sys.executable, '-m', module, *child_args], cwd=ROOT,
                                env=child_env, log=log, timeout=remaining, grace=CLEANUP_SECONDS)
             finally:
                 # run_group returns/raises only after its process-group cleanup.
@@ -235,12 +252,13 @@ def run(out, environ=None):
             summary['child_exit_code'] = rc
             need(rc == 0, 'child_exit_nonzero')
             log.seek(0)
-            result = validate_child(log.read(MAX_CHILD_BYTES + 1))
-        need(source_snapshot() == before and library_snapshot(env)[2] == native_before,
+            result = validate(log.read(MAX_CHILD_BYTES + 1))
+            need(result['status'] in ('PASS_BOUNDED_NUMERIC', 'PASS_CALIBRATION_ONLY'), 'child_not_pass')
+        need(snapshot() == before and library_snapshot(env)[2] == native_before,
              'input_drift')
         need(recipe.from_environment(ROOT, env) == library, 'library_identity')
         hashes['inputs_unchanged'] = True
-        summary.update(status='PASS_BOUNDED_NUMERIC', reason='complete_numeric_receipt', result=result)
+        summary.update(status=result['status'], reason='complete_numeric_receipt', result=result)
         code = 0
     except (TimeoutError, subprocess.TimeoutExpired):
         summary.update(status='TIMEOUT', reason='total_budget')
@@ -266,12 +284,12 @@ def run(out, environ=None):
         # cleanup/receipt reserve rehashing potentially slow files.
         try:
             if before is not None:
-                if time.monotonic() - start >= TOTAL_SECONDS - CLEANUP_SECONDS - RECEIPT_SECONDS:
+                if time.monotonic() >= work_deadline:
                     hashes['inputs_unchanged'] = False
                     summary.update(status='TIMEOUT', reason='total_budget')
                     code = 1
                 else:
-                    unchanged = source_snapshot() == before
+                    unchanged = snapshot() == before
                     if native_before is not None:
                         unchanged = unchanged and library_snapshot(env)[2] == native_before
                     hashes['inputs_unchanged'] = unchanged
@@ -296,7 +314,7 @@ def run(out, environ=None):
             summary.pop('result', None)
         # Bound receipt I/O too. All child-group cleanup has finished before
         # this final deadline is armed, so it cannot interrupt that cleanup.
-        signal.setitimer(signal.ITIMER_REAL, max(.001, TOTAL_SECONDS - (time.monotonic() - start)))
+        signal.setitimer(signal.ITIMER_REAL, max(.001, end - time.monotonic()))
         try:
             summary['wall_seconds'] = round(time.monotonic() - start, 6)
             save(out, summary, hashes)
@@ -310,11 +328,16 @@ def run(out, environ=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--deadline-ns', type=int)
     args = parser.parse_args(argv)
     try:
-        code, summary = run(args.out)
+        options = {} if args.deadline_ns is None else {'deadline_ns': args.deadline_ns}
+        code, summary = run(args.out, **options)
     except BaseException:
         code, summary = 1, safe_summary('FAIL', 'runner_setup_or_receipt_failed')
+        if type(args.deadline_ns) is int and 0 < args.deadline_ns < 1 << 63:
+            summary['total_budget_seconds'] = max(0., min(TOTAL_SECONDS,
+                (args.deadline_ns - time.monotonic_ns()) / 1_000_000_000))
     print(json.dumps(summary, sort_keys=True, allow_nan=False))
     return code
 

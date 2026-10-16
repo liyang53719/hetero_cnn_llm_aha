@@ -1,6 +1,23 @@
 # 原始 mode-0 Attention 的共享 A KV 供数模型
 
-默认关闭。此批次只实现软件传输模型和源代码约束，不修改 Chisel。
+默认关闭。当前实现为软件传输/数值桥接模型，不修改 Chisel。
+
+## 已验证的小规模数值结果（2026-10-16）
+
+Matrix CI 38876783404，job116893624170，commit472bd304，已完成 SUCCESS。08:56:50 的 wrapper 回执为 PASS_BOUNDED_NUMERIC，墙钟1.157524秒：
+
+- M1：192个 KV请求，32个 DDR miss，160个命中，1536个输出词，8244个标量操作。
+- M2：576个 KV请求，64个 DDR miss，512个命中，3072个输出词，23184个标量操作。
+- 故障案例 PASS：撤销 held 回复后新增算术操作0，输出未发布。
+
+这是原 OfficialAttentionOwner、原 native Matrix/Scalar 和独立参考的小规模合成数值验证，不是 M128、完整 block、消费端 RTL 或硬件吞吐结果。原始 M1/M2 runner 默认行为、阈值与历史回执保持不变。
+
+## M128 下一步
+
+- 已完成：核查原 PV16 owner 支持 M128，原始调度工作量见 IMPLEMENTATION_PLAN.md。
+- 进行中：有界流式观测/完整中间事件散列、受严格网格证明约束的独立参考，以及 M4/M8 原生开销标定准备。
+- 待完成：先审查/执行 M4/M8 标定再选择独立 M128 预算；实际完整128-token Attention、M128数值验收及 consumer RTL 尚未运行。
+
 
 ## 计划与状态
 
@@ -42,7 +59,7 @@ M1/M2轨迹分别192/576个核心 KV 请求，32/64个唯一 DDR miss；计数�
 
 numeric_prepare.py / numeric_pins.json 固定52项原始依赖；test_numeric_prepare.py 供普通测试发现运行。numeric_bridge.py 为单独 opt-in 数值入口，使用原 OfficialAttentionOwner、ScalarService、MatrixService 和原独立参考，只替换 K/V 的供数路径。源码、构建回执和库必须全部验证；缺少 MATRIX_SERVICE_LIBRARY 时以 NOT_RUN 非零退出，不回退到新编译或模拟算术。
 
-本地尚未运行数值桥接：缺少已验证 Matrix 库及真实 git checkout。实际 M1/M2 数值比较、故障消费者排空及其 PASS 均待后续；准备测试不计作数值测试。详见 IMPLEMENTATION_PLAN.md 的桥接章节。
+此隔离目录未运行数值桥接；后续 CI 已完成 M1/M2 比较与故障排空，结果见本页开头。准备测试本身不计作数值测试。详见 IMPLEMENTATION_PLAN.md 的桥接章节。
 
 准备验证：8项 preparation 测试在普通 Python 与 -O 均通过（约0.3秒）；包含源码漂移拒绝、缺库 CLI 非成功退出及纯协议 DDR 解码检查。未调用数值入口的执行分支。
 
@@ -51,6 +68,12 @@ numeric_prepare.py / numeric_pins.json 固定52项原始依赖；test_numeric_pr
 
 后续显式数值入口为 python -m candidates.qwen2_resident_matrix.raw_kv_attention.numeric_bridge；需要已有已验证库。入口设置120秒协作式墙钟检查和每次200000事件上限；已准备在既有 Matrix CI 中显式调用；未增加新工作流或触发范围。
 
-CI扩展已准备、尚未运行：在既有 qwen2-matrix-interface-frontend job 的普通 contracts 后运行一次 opt-in wrapper；继续复用已构建库，120秒总预算含清理，保持20分钟 job 上限。只保存 summary.json/source_hashes.json，不保存原始子进程输出。此准备状态不是数值 PASS。
+CI扩展已执行并通过上述小规模案例：在既有 qwen2-matrix-interface-frontend job 的普通 contracts 后运行一次 opt-in wrapper；继续复用已构建库，120秒总预算含清理，保持20分钟 job 上限。只保存 summary.json/source_hashes.json，不保存原始子进程输出。数值 PASS 范围仅为上述 M1/M2 与故障案例。
 
 CI wrapper 的15项冷测试普通/-O通过（每组约1.4秒），含真实短睡眠子进程组清理、严格摘要、输入漂移和缺库路径；与26项传输、8项准备测试合计49项普通/-O通过（每组约3.4秒）。这些测试没有载入 native 数值库。当前 wrapper 冻结58个仓库输入以及库/回执散列，114秒工作预算加5秒清理和1秒回执写入，最终绝对上限120秒。
+
+M128准备的首批实现：streaming.py 仅观察原服务并输出完整有序 scalar/Matrix/core/write 散列，已删除未使用的大型 collector；原 Bus 的 trace/reads/writes 测试历史改为有界散列/计数，不改其请求/ACK行为。reference_profile.py 的整数网格证明和 M1/M2/M4 Fraction逐位交叉检查已通过。profile_numeric.py 只开放显式 --calibrate 的 M4/M8；M128仍仅做计数核查，不可由该入口执行。
+
+新增18项准备测试普通/-O均通过（约0.7秒）。新文件及原依赖共64个来源项、已有库及回执在候选执行前后冻结/比较。M4/M8原生分支尚未运行。外部硬时限wrapper与既有CI扩展已准备并待审查：冷测、原M1/M2和M4/M8共用120秒绝对deadline；旧M1/M2回执单独保存，新增标定仅上传两份安全JSON。wrapper冻结66项源输入，并保留5秒进程组清理，不增加既有20分钟job预算。
+
+标定wrapper准备验证：8项新增冷测及原15项wrapper测均通过，包含真实短睡眠进程组TERM/KILL清理、过期deadline拒绝、严格计数/类型/散列/字节上限、无额外编译与双JSON白名单。与现有传输/数值准备/流式参考检查合计75项普通/-O通过（各约5秒）；另4项workflow精确范围guard普通/-O通过，保留原898e1ced基线散列。这些不是原生M4/M8执行结果。

@@ -19,9 +19,9 @@
 
 ## 验收界限
 
-本批六文件是模型/来源/短测计划，不包含 consumer RTL。M128真实执行、原始算术数值验收、端到端吞吐、DDR性能及硬件资源结论仍待后续单独测试。父模块已编译/展开的结果不能代替其尚未完成的 RTL 生命周期验证。
+首批六文件是模型/来源/短测计划，不包含 consumer RTL。后续 M1/M2 原始算术数值结果见下文；M128真实执行、端到端吞吐、DDR性能及硬件资源结论仍待后续单独测试。父模块已编译/展开的结果不能代替其尚未完成的 RTL 生命周期验证。
 
-## 原始数值消费者的下一步桥接（准备完成，数值未执行）
+## 原始数值消费者的小规模桥接（M1/M2已执行，历史设计）
 
 新增 numeric_bridge.py 测试适配器，不改 OfficialAttentionOwner 的 tick、_attention、_matrix_step、ScalarService 或 MatrixService。只把原 owner 已接受的 K/V MemoryRequest 接到 KvSupply；Q读与输出写仍走原测试 Bus。接受与返回的身份、64B容器顺序保持不变。供应侧故障通过现有 Python local_reset 进入 owner 的 drain，再消费 held reply；这验证 Python 排空契约，不代表 Chisel 已有该故障侧带。
 
@@ -31,10 +31,31 @@ numeric_prepare.py 和 test_numeric_prepare.py 是普通发现测试，只验证
 
 当前隔离目录没有该库，也没有真正的 git checkout；原 ScalarService 的 source_identity 要求 git HEAD 中 recipe 原文匹配。后续可在已有标准 Matrix CI 的真实 checkout 与已验证库上下文中单独扩展短测，先审查再运行，不绕过源检查。此批不创建新工作流、不启动编译、不上传合成数据或完整算术轨迹。只允许输出状态和计数摘要；不能据此宣称 M128、公有模型数值验收或硬件时序通过。
 
-## 既有 Matrix CI 的最小数值扩展（已准备，尚未运行）
+## 既有 Matrix CI 的最小数值扩展（M1/M2已执行，历史设计）
 
 仅在 .github/workflows/qwen2-matrix-interface-frontend.yml 原有 job 中，普通 contracts 测试之后、长 Scala 检查之前，加一次 run_attempt==1 的 run_numeric_ci 调用。继续复用既有 build_shared_matrix_recipe 产生并通过 GITHUB_ENV 导出的库/回执；wrapper 只调用 from_environment 校验，不调用 build。保持原触发路径、一个 job、20分钟总时限及既有编译步骤。最近已观察到约17分钟的总运行，因此新增 wrapper 的120秒总预算包含最多5秒清理（子进程至多114秒并扣除准备时间，另留1秒回执写入），不延长 job 时限；实际余量仍须以本次日志确认。
 
 新增52输入检查包含严格共享库构建验证器、原始 native 编译闭包及已测试的进程组清理 helper。运行前后冻结原始依赖、adapter/runner、owning workflow、library 和 compile receipt 的散列；发生漂移不能 PASS。复用 start_new_session 及 SIGTERM/TERM/KILL 的全组清理，不重试、不增加 native 编译。
 
 只有 work/raw-kv-attention-numeric/summary.json 与 source_hashes.json 加入原有 artifact 的显式清单。子进程原始输出保留在临时目录，绝不添加到既有递归上传路径或打印到日志。成功必须同时有 M1、M2 及故障排空的固定摘要，缺库、超时、异常、非零返回或摘要不匹配均不是 PASS。输出仅为固定状态/计数与来源散列，不上传数据、权重、完整标量轨迹或绝对本地路径。
+
+
+## M128 独立阶段：源码工作量与当前状态
+
+原小规模桥接 CI38876783404/job116893624170 在472bd304完成 SUCCESS；PASS_BOUNDED_NUMERIC wall1.157524秒，M1/M2及故障案例已验证。旧回执保留，原 runner 默认行为不改写。
+
+完整 M128 Attention 的原调度每次执行有8256个因果 token/key组合、99072个 head/key组合、1585152个 KV读/legacy Matrix请求、12288个 Q读、12288个输出写、4096个唯一 KV行及196608个输出词。原 profile0 每请求512个 native FMA，总811597824个；每请求返回完整16KiB矩阵快照，约24.2GiB累计临时返回字节。原 lazy MatrixValue 已避免4096个 Python整型逐次展开，必须继续保留全部原返回/债务事件，不能换成 profile1 或 final-only。
+
+受控输入下标量调用55480320次；原 RecordingScalar 全量tuple历史和原200000事件上限不适合 M128。只改变测试观测存储：流式记录操作、操作数、结果、策略及顺序的完整散列，保留有界参考中间量与逐项比较；不得改变原 owner/Scalar/Matrix 的算术节点。以上都是软件工作计数，不是硬件周期。
+
+独立参考仅接受证明范围内的合成 BF16输入，保留 QK16stripe累积及顺序fold、原softmax每节点FP32舍入、PV按key累加和BF16输出。vectorize仅沿独立head/key/column，禁止用np.sum/dot/exp替换原顺序。每次FMA必须验证乘积/累加器的共同二进制网格和≤53有效位界限，才能用float64精确乘加后一次FP32舍入；不宣称任意FP32输入都满足。M1/M2/M4与原Fraction参考逐位交叉验证后再接受该参考。
+
+M4/M8原生开销标定为独立小阶段，复用已有验证库，不增加编译；先审查后运行。根据实际标量、Matrix、传输和参考耗时选择 M128 独立预算，不把120秒小规模 runner 或20分钟既有整体CI直接加大。M128尚未执行，消费者RTL也尚未开始。
+
+首批代码已准备：streaming.py/test_streaming.py（7项冷测）、reference_profile.py/test_reference_profile.py（6项小规模独立参考测）、profile_numeric.py/test_profile_numeric.py（5项来源/调度测）。合计18项普通/-O通过。引用原 ScalarService/MatrixService 后只增加观察回调，完整运算和完整16KiB返回仍执行；native direct/loan 串行运行，绝不同时占用一个累加器。旧 M1/M2入口和历史回执不改写。
+
+M4/M8候选将逐项检查原标量运算/策略调度、原始及BF16点积、score、exp权重、每个softmax前缀和、inverse、原始及BF16概率、原始PV和最终输出；同时比较所有scalar操作数/结果、所有完整Matrix返回、全部核心请求及输出写的有序散列。精确检查Matrix包/组/结果/完成/owner释放数量、KV miss/hit/fill/release、Q读和输出ACK。终端还保持三拍检查稳定性。报告各pass软件事件/墙钟、峰值进程RSS、参考字节和来源散列，不报告硬件周期。
+
+已准备在既有 Matrix workflow 的同一步中扩展 M4/M8：先建立单一120秒绝对deadline，完成冷测及原M1/M2后，仅把剩余时间交给标定wrapper。保留5秒进程组清理和1秒回执预算，不增加job/触发范围/20分钟总上限。新执行源冻结64项，外部wrapper再固定自身及测试共66项；新增artifact仅标定summary.json/source_hashes.json。缺少剩余预算返回非成功NOT_RUN。该扩展尚待最终审查和真实运行。M128最终预算须以真实M4/M8标定结果选定，不能按简单线性估算宣称已经可运行或通过。
+
+标定wrapper准备验证：8项新增冷测及原15项wrapper测均通过，包含真实短睡眠进程组TERM/KILL清理、过期deadline拒绝、严格计数/类型/散列/字节上限、无额外编译与双JSON白名单。与现有传输/数值准备/流式参考检查合计75项普通/-O通过（各约5秒）；另4项workflow精确范围guard普通/-O通过，保留原898e1ced基线散列。这些不是原生M4/M8执行结果。

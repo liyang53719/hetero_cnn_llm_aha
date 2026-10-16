@@ -187,6 +187,20 @@ class NumericCI(unittest.TestCase):
         self.assertNotIn('/private', data); self.assertNotIn('secret', data)
         self.assertEqual(json.loads(data)['status'], 'FAIL')
 
+    def test_optional_cli_deadline_preserves_default_and_refuses_expiry(self):
+        deadline = time.monotonic_ns() + 20_000_000_000
+        output = io.StringIO()
+        with patch.object(runner, 'run', return_value=(2, runner.safe_summary())) as run, redirect_stdout(output):
+            runner.main(['--out', '/unused'])
+            run.assert_called_once_with(Path('/unused'))
+        with patch.object(runner, 'run', return_value=(2, runner.safe_summary())) as run, redirect_stdout(output):
+            runner.main(['--out', '/unused', '--deadline-ns', str(deadline)])
+            run.assert_called_once_with(Path('/unused'), deadline_ns=deadline)
+        with tempfile.TemporaryDirectory() as tmp, patch.object(runner, 'run_group') as child, redirect_stdout(output):
+            out = Path(tmp) / 'expired'
+            self.assertEqual(runner.main(['--out', str(out), '--deadline-ns', str(time.monotonic_ns() - 1)]), 1)
+            self.assertFalse(out.exists()); child.assert_not_called()
+
     def test_child_timeout_and_sigterm_restore_handlers(self):
         old_alarm = signal.getsignal(signal.SIGALRM)
         old_term = signal.getsignal(signal.SIGTERM)
@@ -294,10 +308,16 @@ class NumericCI(unittest.TestCase):
             pid = int(pidfile.read_text())
             # A killed orphan may briefly be a zombie until the system reaps it.
             stat = Path('/proc') / str(pid) / 'stat'
+            def gone_or_zombie():
+                try:
+                    return stat.read_text().split()[2] == 'Z'
+                except (FileNotFoundError, ProcessLookupError):
+                    # /proc can disappear during the read as the orphan is reaped.
+                    return True
             deadline = time.monotonic() + 1
-            while stat.exists() and stat.read_text().split()[2] != 'Z' and time.monotonic() < deadline:
+            while not gone_or_zombie() and time.monotonic() < deadline:
                 time.sleep(.01)
-            self.assertTrue(not stat.exists() or stat.read_text().split()[2] == 'Z')
+            self.assertTrue(gone_or_zombie())
 
     def test_real_closure_snapshot_is_repo_relative_hash_only(self):
         values = runner.source_snapshot()

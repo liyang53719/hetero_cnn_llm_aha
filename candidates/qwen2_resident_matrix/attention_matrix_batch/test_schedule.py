@@ -6,8 +6,28 @@ class ScheduleTests(unittest.TestCase):
     def test_frozen_sources_and_resource_structure(self):
         from .check_sources import check
         result=check()
-        self.assertEqual((result['sources'],result['own']),(10,6))
+        self.assertEqual((result['sources'],result['own']),(11,6))
         self.assertFalse(result['native_execution'])
+
+    def test_actual_prefix_owner_helper_drift_rejected(self):
+        import shutil
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from . import check_sources as c
+        helper='candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py'
+        self.assertIn(helper,c.SOURCES)
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            for name in (*c.SOURCES,*c.OWN,c.PREFIX+'pins.json'):
+                target=root/name;target.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copyfile(c.ROOT/name,target)
+            with patch.object(c,'ROOT',root),patch.object(c,'HERE',root/c.PREFIX):
+                self.assertEqual(c.check()['sources'],11)
+                target=root/helper;text=target.read_text()
+                self.assertIn('def _read(',text)
+                target.write_text(text.replace('def _read(', 'def _changed_read(',1))
+                with self.assertRaisesRegex(ValueError,'source drift'):c.check()
 
     def test_joined_wide_result_holds_and_blocks_done_until_ack(self):
         for mask in (15,255):

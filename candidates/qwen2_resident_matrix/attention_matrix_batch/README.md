@@ -35,3 +35,7 @@ M128仅完成全部128个causal长度的packing/count枚举，不是M128数值�
     python3 -S -B -m unittest candidates.qwen2_resident_matrix.attention_matrix_batch.test_model candidates.qwen2_resident_matrix.attention_matrix_batch.test_schedule -q
     python3 -S -B -O -m unittest candidates.qwen2_resident_matrix.attention_matrix_batch.test_model candidates.qwen2_resident_matrix.attention_matrix_batch.test_schedule -q
     python3 -S -B -m candidates.qwen2_resident_matrix.attention_matrix_batch.check_sources
+
+## 源闭包修正（062568 发表后）
+
+原测试实际通过AST读取 `ffn_public/prefix_owners.py` 的 `_read/_write`，但原10源清单漏列该文件。此次只补充该实际执行辅助源的SHA256，新增临时副本修改真实 `_read` 定义即失败的回归；源清单变为11项。数值模型、原owner和全部原算术保持原字节。此前19项通过是当时本地测试结果，不补称旧清单已覆盖该辅助源。修正后20项 normal/-O通过（2.750/2.835秒），11源+6本目录文件身份检查通过。

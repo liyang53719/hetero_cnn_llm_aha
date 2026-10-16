@@ -1,0 +1,26 @@
+{
+  "own": {
+    "candidates/qwen2_resident_matrix/attention_resource_audit/README_CN.md": "91251f6b594c982c3f0777ee3ce724ec5af9e1ccdea4f2d8036086658937c056",
+    "candidates/qwen2_resident_matrix/attention_resource_audit/constraints.py": "5f23e83651adfdaebc0a0fea5e6aaafed103448ce9a5b112db2dbf8f2e93281f",
+    "candidates/qwen2_resident_matrix/attention_resource_audit/test_constraints.py": "0b06f8cbb1218a14e163d23094045c050f6d93b17b96b27e05317e8aa33e6eaf"
+  },
+  "schema": 1,
+  "scope": "READ_ONLY_SOURCE_RESOURCE_AUDIT",
+  "sources": {
+    "candidates/qwen2_attention_resident_candidate/scratch.py": "a0ff924f054bb67cd9c1c1285cc293e17b01e1241aba1d3bcac0062c28b3d4cf",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch": "a4bcb681f961e0015ad09e06ceb52f7faa0c4c0a6b1ce22d43ff81e0fa0b9b2f",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/official_bf16/execution.py": "e3b5906d7589885e5aade7344d8c7d7497b61aa967b2034dbba4e1e0ebeb25d0",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": "d06b43ca48d60285ee12a780cb1c27258c008b5e4255dde8da46b550b5639389",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+    "reports/execution/QWEN2_DENSE_BLOCK_REDUCTION_20261012/M128_RESULT.json": "f9c36e08b0623892f5affbf9613feb623835cf6879ccbb00a0ccffc0ae4a08a2",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e"
+  }
+}

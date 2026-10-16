@@ -1,0 +1,66 @@
+{
+  "accepted_80": false,
+  "accepted_90": false,
+  "actual_hardware_cycles": null,
+  "causal_pairs": 99072,
+  "dense_issue_count": 1462272,
+  "extra_mac_units": 0,
+  "fold_adds": 1585152,
+  "full_exp_minimum_request_spacing": 20,
+  "guaranteed_full_exp_rows": 1536,
+  "hypothetical_vector_fold_and_scale_only": {
+    "minimum_cycles": 1651584,
+    "utilization_ceiling_percent": 88.91246221808882
+  },
+  "hypothetical_vector_fold_only": {
+    "minimum_cycles": 1644672,
+    "utilization_ceiling_percent": 89.28613121643707
+  },
+  "ideal_useful_cycles": 1468464,
+  "implemented_overlap": false,
+  "matrix_issue_floor": 1534080,
+  "omitted": [
+    "matrix_latency_and_group_bubbles",
+    "operand_feed",
+    "DDR_ACKs",
+    "division",
+    "other_block_operations",
+    "new_mux_timing",
+    "backpressure"
+  ],
+  "overhead_budget_80": 301500,
+  "overhead_budget_90_exact": "292640/3",
+  "packed_attention_issue_count": 71808,
+  "peak_mac_per_cycle": 4096,
+  "qk_groups": 6912,
+  "raw_k_line_reads_if_six_heads_share_each_read": 132096,
+  "raw_k_line_reads_without_head_reuse": 792576,
+  "raw_k_same_stripe_distinct_bank_pairs": 1,
+  "rtl_executed": false,
+  "scalar_add_minimum_request_spacing": 3,
+  "scalar_fold_perfect_overlap_unimplementable": {
+    "minimum_cycles": 4755456,
+    "utilization_ceiling_percent": 30.87956233850129
+  },
+  "scalar_softmax_exp_subtract_sum_minimum": 917760,
+  "scalar_softmax_subtract_and_sum_minimum": 594432,
+  "schema": 1,
+  "scope": "SOURCE_DERIVED_NECESSARY_BOUNDS_NOT_RTL_PREDICTION",
+  "serial_fold_service_only": {
+    "minimum_cycles": 6289536,
+    "utilization_ceiling_percent": 23.347731851761402
+  },
+  "serial_original_owner_fold_only": {
+    "minimum_cycles": 9459840,
+    "utilization_ceiling_percent": 15.523137812056017
+  },
+  "serial_vector_fold_scale_existing_softmax": {
+    "minimum_cycles": 2569344,
+    "utilization_ceiling_percent": 57.153265580630695
+  },
+  "silu_all_full_exp_service_excluding_division": 2293760,
+  "silu_service_minimum_excluding_division": 1075200,
+  "silu_vectors": 71680,
+  "tokens": 128,
+  "useful_macs": 6014828544
+}

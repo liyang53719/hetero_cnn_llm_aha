@@ -1,0 +1,19 @@
+{
+  "own": {
+    "candidates/qwen2_resident_matrix/attention_scalar_schedule/README.md": "48cfca11d3dfdb020c99b3dc75dc5d69f5181bcab14b473e04a7663cd8aed303",
+    "candidates/qwen2_resident_matrix/attention_scalar_schedule/check_sources.py": "bf78b7fe4fdb011d2a014dea2636fdcd4bc4a3af66eb079612727a3a4ba4adc9",
+    "candidates/qwen2_resident_matrix/attention_scalar_schedule/model.py": "fc975a2d02df0e3ad8f3bd185a1cdb9be21b8b563b587c4e5a3026301ae536f3",
+    "candidates/qwen2_resident_matrix/attention_scalar_schedule/test_model.py": "a485e15cbb7d913956d56ca1e89e261c62e6d3014ed6f5f55665f00bb8ce76ad"
+  },
+  "profile": "exclusive-existing-alu-sfu-metadata-schedule-v1",
+  "schema": 1,
+  "sources": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch": "a4bcb681f961e0015ad09e06ceb52f7faa0c4c0a6b1ce22d43ff81e0fa0b9b2f",
+    "candidates/qwen2_resident_matrix/ffn_tiles/tile_ports.patch": "ccff715bce87ec9356dc85d4846b03b02b207b008420dfc2c642ed19eeb9c246",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9"
+  }
+}

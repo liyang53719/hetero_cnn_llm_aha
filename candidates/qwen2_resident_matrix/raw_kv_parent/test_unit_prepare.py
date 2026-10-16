@@ -237,6 +237,71 @@ class ParentUnitPrepareTests(unittest.TestCase):
         self.assertNotIn("two words", result)
         self.assertIn("REDACTED", result)
 
+    def test_progress_receipt_strict_fixed_markers_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "unit.log"
+            path.write_text("\n".join([
+                "PARENT_PROGRESS case_begin default_off_dense 0",
+                "[info] PARENT_PROGRESS sim_ready default_off_dense 0",
+                "PARENT_PROGRESS cycle default_off_dense 1024",
+                "PARENT_PROGRESS cycle default_off_dense 2048",
+                "PARENT_PROGRESS cycle default_off_dense 1024",
+                "PARENT_PROGRESS cycle default_off_dense 30001",
+                "PARENT_PROGRESS cycle default_off_dense 23",
+                "PARENT_PROGRESS case_begin default_off_dense 1",
+                "PARENT_PROGRESS scenario_done private_payload 0",
+                "PARENT_PROGRESS scenario_done default_off_dense 0 payload=secret",
+                "[error] /private/source: secret",
+                "PARENT_PROGRESS scenario_done default_off_dense 0",
+            ]))
+            receipt = run_unit.progress_receipt(path)
+            self.assertEqual(receipt["last_cycle"], {"default_off_dense": 2048})
+            self.assertEqual(receipt["events"], [
+                {"event": e, "scenario": "default_off_dense"}
+                for e in ("case_begin", "sim_ready", "scenario_done")])
+            self.assertNotIn("private", json.dumps(receipt))
+            self.assertNotIn("secret", json.dumps(receipt))
+
+    def test_progress_receipt_bounded_windows_and_missing_log(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "unit.log"
+            self.assertEqual(run_unit.progress_receipt(path)["events"], [])
+            path.write_bytes(b"PARENT_PROGRESS case_begin default_off_dense 0\n"
+                             + b"ordinary log line\n" * 30000
+                             + b"PARENT_PROGRESS sim_ready default_off_dense 0\n"
+                             + b"PARENT_PROGRESS cycle default_off_dense 2048\n")
+            receipt = run_unit.progress_receipt(path)
+            self.assertEqual(len(receipt["events"]), 2)
+            self.assertEqual(receipt["last_cycle"], {"default_off_dense": 2048})
+            self.assertLess(len(json.dumps(receipt)), 1024)
+
+    def test_build_inventory_missing_and_known_case_allowlist(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp)
+            empty = run_unit.build_inventory(project)
+            self.assertEqual(set(empty), {"raw_off", "raw_on"})
+            self.assertTrue(all(v == {"cpp": 0, "object": 0, "executable": 0} for v in empty.values()))
+            root = project / "test_run_dir/the_actual_composed_TransposedDenseDownOwner_raw_KV_loan_should_complete_ordinary_Dense_with_the_raw_feature_absent"
+            root.mkdir(parents=True)
+            (root / "unit.cpp").write_text("fixture")
+            (root / "unit.o").write_text("fixture")
+            executable = root / "VTransposedDenseDownOwner"
+            executable.write_text("fixture")
+            executable.chmod(0o700)
+            (root / "directory.cpp").mkdir()
+            (root / "link.o").symlink_to(root / "unit.o")
+            (root / "private-name.txt").write_text("private payload")
+            other = project / "test_run_dir/unknown_case"
+            other.mkdir()
+            (other / "extra.cpp").write_text("fixture")
+            (root / "linked_dir").symlink_to(other, target_is_directory=True)
+            receipt = run_unit.build_inventory(project)
+            self.assertEqual(receipt["raw_off"], {"cpp": 1, "object": 1, "executable": 1})
+            self.assertEqual(receipt["raw_on"], empty["raw_on"])
+            self.assertNotIn("private", json.dumps(receipt))
+            executable.chmod(0o600)
+            self.assertEqual(run_unit.build_inventory(project)["raw_off"]["executable"], 0)
+
     def test_failed_stage_writes_and_prints_only_sanitized_receipt(self):
         # The process launcher is replaced: no sbt, dependency resolution,
         # compilation, elaboration or simulation can run in this test.

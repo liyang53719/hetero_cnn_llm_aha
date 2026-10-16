@@ -2,14 +2,15 @@
 
 ## 中文计划
 
-- 已完成：父级 11 项控制测试加 13 项准备检查，普通 Python 与 -O 各通过 24 项；零 fuzz 组合和 13 个固定 Scala 编译单元/原始源码切片校验通过。
+- 已完成：父级 11 项控制测试加 16 项准备检查，普通 Python 与 -O 各通过 27 项；零 fuzz 组合和 13 个固定 Scala 编译单元/原始源码切片校验通过。
 - 已完成：复用的进程组超时/SIGTERM 清理 3 项测试通过。
-- 进行中：父级单元测试源码、执行器和工作流的运行前审核。
-- 待办：一次有界父级编译/展开/RTL 单元测试；通过后再连接原始 mode-0 Attention 的 K/V 消费路径。
+- 已完成：首次 CI 的 Scala 编译、两个配置的展开与存储结构检查。RTL 测试阶段在 240 秒后超时，尚无父级场景通过证明。
+- 待办：审核新增的无载荷进度标记和构建计数，再以相同预算诊断超时；尚未启动第二次运行。
 
-This batch is prepared/installable. Parent Scala compilation, elaboration and
-RTL execution have NOT RUN. Previous bank-only success is not parent success.
-The workflow below will run actual generated parent RTL when published on main.
+The first actual run passed parent Scala compilation, elaboration and both
+structural audits, then timed out in the 240-second RTL test stage. No parent
+scenario completion is established. Diagnostic revision 2 is prepared for a
+same-budget run; publication of the workflow comment activates that run.
 
 ## Real implementation and dependency closure
 
@@ -102,3 +103,27 @@ Explicit execution (compiles and runs RTL):
 ```
 python candidates/qwen2_resident_matrix/raw_kv_parent/run_unit.py --out /tmp/raw-kv-parent-unit
 ```
+
+
+## First actual parent run and diagnostic revision
+
+Run 38869042244 compiled the exact closure (26.71 s) and elaborated both
+raw-off/raw-on parent configurations (9.09 s). Both existing-memory audits
+passed. The parent RTL stage timed out at its unchanged 240 s limit; total
+runner time was 303.21 s. Only raw-off test SystemVerilog was captured
+(SHA256 69e1ad91a476df33a308c1aba3570dcd207c786868067dedc5579936b0606111).
+This does not establish simulator startup or a completed parent scenario.
+The prior failure receipt had no selected error lines and could not separate
+C++ compilation from clock-driving runtime.
+
+Diagnostic revision 2 adds fixed case-start, simulator-ready, scenario and
+1024-cycle markers; the summary accepts only known marker names and bounded
+integer counters from bounded log windows. It also records counts of C++
+files, object files and the known simulator executable in the two known test
+case directories. No build contents, arbitrary paths or payloads are retained.
+A case-start without simulator-ready means lowering/build/startup, not proof
+that C++ compilation itself is the bottleneck. Counts provide further bounded
+evidence; absent executable counts alone are not proof of a failed build.
+Budgets, toolchain, original DUT, all scenarios and stimuli remain unchanged.
+The workflow comment activates one reviewed diagnostic run when published;
+no second run has been launched as part of preparing these edits.

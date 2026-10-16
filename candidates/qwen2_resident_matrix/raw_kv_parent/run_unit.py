@@ -136,6 +136,74 @@ def failure_diagnostics(log_path, *, prefixes=(), stage="runner", error=""):
     return result.encode("utf-8")[:DIAGNOSTIC_BYTES].decode("utf-8", errors="ignore")
 
 
+def progress_receipt(log_path):
+    """Fixed markers only; no arbitrary log text, payloads or paths escape.
+
+    A case_begin without sim_ready locates a timeout before the test callback
+    (lowering, C++ build or simulator startup); it does not prove C++ was slow.
+    Bounded head/tail sampling is disclosed, so absence is not proof of failure.
+    """
+    receipt = {"sampling": "first_last_128KiB", "events": [], "last_cycle": {}}
+    path = Path(log_path)
+    if not path.is_file():
+        return receipt
+    with path.open("rb") as stream:
+        size = stream.seek(0, os.SEEK_END)
+        stream.seek(0)
+        windows = [stream.read(DIAGNOSTIC_WINDOW_BYTES)]
+        if size > DIAGNOSTIC_WINDOW_BYTES:
+            windows[0] = windows[0].rsplit(b"\n", 1)[0]
+            stream.seek(max(DIAGNOSTIC_WINDOW_BYTES, size - DIAGNOSTIC_WINDOW_BYTES))
+            windows.append(stream.read(DIAGNOSTIC_WINDOW_BYTES).split(b"\n", 1)[-1])
+    for window in windows:
+        for line in window.splitlines():
+            if len(line) > 160:
+                continue
+            match = re.fullmatch(rb"(?:\[info\] )?PARENT_PROGRESS (case_begin|sim_ready|scenario_begin|scenario_done|cycle) ([a-z_]+) ([0-9]{1,5})", line)
+            if not match:
+                continue
+            event, scenario, cycle = (part.decode("ascii") for part in match.groups())
+            if scenario not in SCENARIOS or int(cycle) > 30000:
+                continue
+            if event == "cycle":
+                if int(cycle) % 1024 == 0:
+                    receipt["last_cycle"][scenario] = max(int(cycle), receipt["last_cycle"].get(scenario, 0))
+            elif int(cycle) == 0:
+                item = {"event": event, "scenario": scenario}
+                if item not in receipt["events"]:
+                    receipt["events"].append(item)
+    return receipt
+
+
+def build_inventory(project):
+    """Counts only within the two known test directories; never read contents."""
+    cases = {
+        "raw_off": "the_actual_composed_TransposedDenseDownOwner_raw_KV_loan_should_complete_ordinary_Dense_with_the_raw_feature_absent",
+        "raw_on": "the_actual_composed_TransposedDenseDownOwner_raw_KV_loan_should_retire_real_parent_work_before_loans_and_preserve_poisoned_raw_debt",
+    }
+    result = {}
+    base = Path(project) / "test_run_dir"
+    for label, directory in cases.items():
+        root = base / directory
+        counts = {"cpp": 0, "object": 0, "executable": 0}
+        result[label] = counts
+        if base.is_symlink() or root.is_symlink() or not root.is_dir():
+            continue
+        for current, dirs, names in os.walk(root, followlinks=False):
+            dirs[:] = [name for name in dirs if not (Path(current) / name).is_symlink()]
+            for name in names:
+                path = Path(current) / name
+                if path.is_symlink() or not path.is_file():
+                    continue
+                if name.endswith(".cpp"):
+                    counts["cpp"] += 1
+                elif name.endswith(".o"):
+                    counts["object"] += 1
+                elif name == "VTransposedDenseDownOwner" and path.stat().st_mode & 0o111:
+                    counts["executable"] += 1
+    return result
+
+
 def _modules(text):
     headers = list(re.finditer(r"^\s*(?:(?:public|private)\s+)?(module|extmodule|intmodule)\s+(\w+)\s*:", text, re.M))
     need(headers, "no CHIRRTL module declarations")
@@ -433,6 +501,8 @@ def run(out):
         error._parent_unit_diagnostic_reported = True
         raise
     finally:
+        summary["progress"] = progress_receipt(out / "parent_rtl_unit.log")
+        summary["build_inventory"] = build_inventory(project)
         rtl_evidence()
         summary["wall_seconds"] = time.monotonic() - start
         save()

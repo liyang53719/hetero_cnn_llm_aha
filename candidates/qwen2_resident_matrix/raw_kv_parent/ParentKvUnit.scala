@@ -31,6 +31,11 @@ object ParentKvElaborate extends App {
 }
 
 class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
+  // Fixed markers contain no addresses, tags, data or internal state.
+  private def progress(event: String, scenario: String, cycle: Int = 0): Unit = {
+    println(s"PARENT_PROGRESS $event $scenario $cycle")
+    Console.out.flush()
+  }
   private val aBase = BigInt(0x100000)
   private val bBase = BigInt(0x200000)
   private val dstBase = BigInt(0x300000)
@@ -131,6 +136,8 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
     private var resultDue = Int.MaxValue
     private var doneDue = Int.MaxValue
     private var physical = number(d.io.physicalSteps).toInt
+    private val scenario = if (window) "retained_a_window"
+      else if (d.io.rawKv.isDefined) "enabled_dense_drain" else "default_off_dense"
     var cycle = 0
     var readsAccepted = 0; var readsReturned = 0
     var groups = 0; var results = 0; var matrixDones = 0; var steps = 0
@@ -177,6 +184,7 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
       for (i <- Seq(16, 127, 144, 255)) s.b(i).expect(0.U)
     }
     def tick(denyAcquire: Boolean = false): Unit = {
+      if (cycle % 1024 == 0) progress("cycle", scenario, cycle)
       assert(cycle < 30000, "bounded parent protocol simulation timed out")
       val m = d.io.matrix
       val s = m.seed.get
@@ -578,21 +586,31 @@ class ParentKvUnit extends AnyFlatSpec with ChiselScalatestTester {
 
   behavior of "the actual composed TransposedDenseDownOwner raw KV loan"
   it should "complete ordinary Dense with the raw feature absent" in {
+    progress("case_begin", "default_off_dense")
     test(ParentKvHarness.owner(raw = false)).withAnnotations(Seq(VerilatorBackendAnnotation)) { d =>
+      progress("sim_ready", "default_off_dense")
       defaults(d); d.clock.setTimeout(100000)
       assert(d.io.rawKv.isEmpty)
       ordinary(d, k = 32, tag = 101, raw = false)
+      progress("scenario_done", "default_off_dense")
       println("PARENT_SCENARIO_PASS default_off_dense")
     }
   }
   it should "retire real parent work before loans and preserve poisoned raw debt" in {
+    progress("case_begin", "enabled_dense_drain")
     test(ParentKvHarness.owner(raw = true)).withAnnotations(Seq(VerilatorBackendAnnotation)) { d =>
+      progress("sim_ready", "enabled_dense_drain")
       defaults(d); d.clock.setTimeout(100000)
       ordinary(d, k = 256, tag = 201, raw = true)
+      progress("scenario_done", "enabled_dense_drain")
       println("PARENT_SCENARIO_PASS enabled_dense_drain")
+      progress("scenario_begin", "retained_a_window")
       successfulWindow(d)
+      progress("scenario_done", "retained_a_window")
       println("PARENT_SCENARIO_PASS retained_a_window")
+      progress("scenario_begin", "raw_fault_retirement")
       rawFaultRetirement(d)
+      progress("scenario_done", "raw_fault_retirement")
       println("PARENT_SCENARIO_PASS raw_fault_retirement")
     }
   }

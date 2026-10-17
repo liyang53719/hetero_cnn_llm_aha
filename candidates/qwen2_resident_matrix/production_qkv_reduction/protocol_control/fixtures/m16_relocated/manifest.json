@@ -1,0 +1,1210 @@
+{
+  "schema": "qwen2-current-public21-dispatch-control-v1",
+  "scope": "METADATA_ONLY_CURRENT19_CONTROL",
+  "rows": 16,
+  "epoch": 9,
+  "shape": {
+    "hidden": 1536,
+    "ffn": 8960,
+    "heads": 12,
+    "kvHeads": 2,
+    "headDim": 128,
+    "maxTokens": 1024
+  },
+  "tables": {
+    "command": {
+      "base": 4503603922337792,
+      "limit": 4503603922338176,
+      "count": 21,
+      "file": "command.bin",
+      "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4",
+      "bytes": 384
+    },
+    "descriptor": {
+      "base": 4503603922341888,
+      "limit": 4503603922345344,
+      "count": 215,
+      "file": "descriptor.bin",
+      "sha256": "e21e46a4b608b424ff301f6ffbc554eaf445cdecd494a42e7099fa43e2e9bb29",
+      "bytes": 3456
+    }
+  },
+  "regions": [
+    {
+      "base": 4503603922403328,
+      "limit": 4503604110218176,
+      "read": true,
+      "write": false
+    },
+    {
+      "base": 4503604110218176,
+      "limit": 4503604113062208,
+      "read": true,
+      "write": true
+    },
+    {
+      "base": 4503603922337792,
+      "limit": 4503603922403328,
+      "read": true,
+      "write": false
+    },
+    {
+      "base": 4503604113062208,
+      "limit": 4503604113848640,
+      "read": true,
+      "write": true
+    }
+  ],
+  "accepted_jobs": [
+    {
+      "pc": 0,
+      "public_pcs": [
+        0
+      ],
+      "kind": "Norm",
+      "kind_id": 0,
+      "role": "norm",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110119808,
+      "b": 4503604109574656,
+      "c": 0,
+      "dst": 4503604110218240,
+      "tag": 589824,
+      "writeBytes": 98304,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 1,
+      "public_pcs": [
+        1
+      ],
+      "kind": "Dense",
+      "kind_id": 1,
+      "role": "q_raw",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110218240,
+      "b": 4503603922403392,
+      "c": 0,
+      "dst": 4503604110316608,
+      "tag": 589825,
+      "writeBytes": 98304,
+      "weightBf16": true,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 2,
+      "public_pcs": [
+        2
+      ],
+      "kind": "Bias",
+      "kind_id": 2,
+      "role": "bias",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110316608,
+      "b": 4503604109587072,
+      "c": 0,
+      "dst": 4503604110414976,
+      "tag": 589826,
+      "writeBytes": 98304,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 3,
+      "public_pcs": [
+        3
+      ],
+      "kind": "Rope",
+      "kind_id": 3,
+      "role": "rope",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110414976,
+      "b": 4503604109595456,
+      "c": 4503604109857600,
+      "dst": 4503604110513344,
+      "tag": 589827,
+      "writeBytes": 98304,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 4,
+      "public_pcs": [
+        4
+      ],
+      "kind": "Dense",
+      "kind_id": 1,
+      "role": "k_raw",
+      "m": 16,
+      "n": 256,
+      "k": 1536,
+      "a": 4503604110218240,
+      "b": 4503603931840640,
+      "c": 0,
+      "dst": 4503604110611712,
+      "tag": 589828,
+      "writeBytes": 16384,
+      "weightBf16": true,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 5,
+      "public_pcs": [
+        5
+      ],
+      "kind": "Bias",
+      "kind_id": 2,
+      "role": "bias",
+      "m": 16,
+      "n": 256,
+      "k": 256,
+      "a": 4503604110611712,
+      "b": 4503604109593280,
+      "c": 0,
+      "dst": 4503604110628160,
+      "tag": 589829,
+      "writeBytes": 16384,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 6,
+      "public_pcs": [
+        6
+      ],
+      "kind": "Rope",
+      "kind_id": 3,
+      "role": "rope",
+      "m": 16,
+      "n": 256,
+      "k": 256,
+      "a": 4503604110628160,
+      "b": 4503604109595456,
+      "c": 4503604109857600,
+      "dst": 4503604110644608,
+      "tag": 589830,
+      "writeBytes": 16384,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 7,
+      "public_pcs": [
+        7
+      ],
+      "kind": "Dense",
+      "kind_id": 1,
+      "role": "v_raw",
+      "m": 16,
+      "n": 256,
+      "k": 1536,
+      "a": 4503604110218240,
+      "b": 4503603933413568,
+      "c": 0,
+      "dst": 4503604110661056,
+      "tag": 589831,
+      "writeBytes": 16384,
+      "weightBf16": true,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 8,
+      "public_pcs": [
+        8
+      ],
+      "kind": "Bias",
+      "kind_id": 2,
+      "role": "bias",
+      "m": 16,
+      "n": 256,
+      "k": 256,
+      "a": 4503604110661056,
+      "b": 4503604109594368,
+      "c": 0,
+      "dst": 4503604110677504,
+      "tag": 589832,
+      "writeBytes": 16384,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 9,
+      "public_pcs": [
+        9
+      ],
+      "kind": "KvAppend",
+      "kind_id": 7,
+      "role": "kvappend",
+      "m": 16,
+      "n": 256,
+      "k": 256,
+      "a": 4503604110644608,
+      "b": 4503604110677504,
+      "c": 0,
+      "dst": 4503604110693952,
+      "tag": 589833,
+      "writeBytes": 32768,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 12,
+      "public_pcs": [
+        10,
+        11,
+        12
+      ],
+      "kind": "Attention",
+      "kind_id": 4,
+      "role": "attention",
+      "m": 16,
+      "n": 1536,
+      "k": 128,
+      "a": 4503604110513344,
+      "b": 4503604110693952,
+      "c": 4503604110710336,
+      "dst": 4503604110751488,
+      "tag": 589836,
+      "writeBytes": 98304,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 13,
+      "public_pcs": [
+        13
+      ],
+      "kind": "Dense",
+      "kind_id": 1,
+      "role": "o",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110751488,
+      "b": 4503603934986496,
+      "c": 0,
+      "dst": 4503604110849856,
+      "tag": 589837,
+      "writeBytes": 98304,
+      "weightBf16": true,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 14,
+      "public_pcs": [
+        14
+      ],
+      "kind": "Add",
+      "kind_id": 5,
+      "role": "add",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110119808,
+      "b": 4503604110849856,
+      "c": 0,
+      "dst": 4503604110948224,
+      "tag": 589838,
+      "writeBytes": 98304,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 15,
+      "public_pcs": [
+        15
+      ],
+      "kind": "Norm",
+      "kind_id": 0,
+      "role": "norm",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110948224,
+      "b": 4503604109580864,
+      "c": 0,
+      "dst": 4503604111046592,
+      "tag": 589839,
+      "writeBytes": 98304,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 16,
+      "public_pcs": [
+        16
+      ],
+      "kind": "Dense",
+      "kind_id": 1,
+      "role": "gate",
+      "m": 16,
+      "n": 8960,
+      "k": 1536,
+      "a": 4503604111046592,
+      "b": 4503603944423744,
+      "c": 0,
+      "dst": 4503604111144960,
+      "tag": 589840,
+      "writeBytes": 573440,
+      "weightBf16": true,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 17,
+      "public_pcs": [
+        17
+      ],
+      "kind": "Dense",
+      "kind_id": 1,
+      "role": "up",
+      "m": 16,
+      "n": 8960,
+      "k": 1536,
+      "a": 4503604111046592,
+      "b": 4503603999474048,
+      "c": 0,
+      "dst": 4503604111718464,
+      "tag": 589841,
+      "writeBytes": 573440,
+      "weightBf16": true,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 18,
+      "public_pcs": [
+        18
+      ],
+      "kind": "Activation",
+      "kind_id": 6,
+      "role": "activation",
+      "m": 16,
+      "n": 8960,
+      "k": 8960,
+      "a": 4503604111144960,
+      "b": 4503604111718464,
+      "c": 0,
+      "dst": 4503604112291968,
+      "tag": 589842,
+      "writeBytes": 573440,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 19,
+      "public_pcs": [
+        19
+      ],
+      "kind": "Dense",
+      "kind_id": 1,
+      "role": "down",
+      "m": 16,
+      "n": 1536,
+      "k": 8960,
+      "a": 4503604112291968,
+      "b": 4503604054524352,
+      "c": 0,
+      "dst": 4503604112865472,
+      "tag": 589843,
+      "writeBytes": 98304,
+      "weightBf16": true,
+      "activationBf16": false,
+      "outputBf16": false
+    },
+    {
+      "pc": 20,
+      "public_pcs": [
+        20
+      ],
+      "kind": "Add",
+      "kind_id": 5,
+      "role": "add",
+      "m": 16,
+      "n": 1536,
+      "k": 1536,
+      "a": 4503604110948224,
+      "b": 4503604112865472,
+      "c": 0,
+      "dst": 4503604112963840,
+      "tag": 589844,
+      "writeBytes": 98304,
+      "weightBf16": false,
+      "activationBf16": false,
+      "outputBf16": false
+    }
+  ],
+  "expected_completions": [
+    {
+      "pc": 0,
+      "engine": 3,
+      "signal": 1,
+      "status": 0,
+      "owner_index": 0,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 1,
+      "engine": 2,
+      "signal": 2,
+      "status": 0,
+      "owner_index": 1,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 2,
+      "engine": 3,
+      "signal": 3,
+      "status": 0,
+      "owner_index": 2,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 3,
+      "engine": 3,
+      "signal": 4,
+      "status": 0,
+      "owner_index": 3,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 4,
+      "engine": 2,
+      "signal": 5,
+      "status": 0,
+      "owner_index": 4,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 5,
+      "engine": 3,
+      "signal": 6,
+      "status": 0,
+      "owner_index": 5,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 6,
+      "engine": 3,
+      "signal": 7,
+      "status": 0,
+      "owner_index": 6,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 7,
+      "engine": 2,
+      "signal": 8,
+      "status": 0,
+      "owner_index": 7,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 8,
+      "engine": 3,
+      "signal": 9,
+      "status": 0,
+      "owner_index": 8,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 9,
+      "engine": 4,
+      "signal": 10,
+      "status": 0,
+      "owner_index": 9,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 10,
+      "engine": 2,
+      "signal": 11,
+      "status": 0,
+      "owner_index": 10,
+      "publication_after_this_completion": false
+    },
+    {
+      "pc": 11,
+      "engine": 3,
+      "signal": 12,
+      "status": 0,
+      "owner_index": 10,
+      "publication_after_this_completion": false
+    },
+    {
+      "pc": 12,
+      "engine": 2,
+      "signal": 13,
+      "status": 0,
+      "owner_index": 10,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 13,
+      "engine": 2,
+      "signal": 14,
+      "status": 0,
+      "owner_index": 11,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 14,
+      "engine": 3,
+      "signal": 15,
+      "status": 0,
+      "owner_index": 12,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 15,
+      "engine": 3,
+      "signal": 16,
+      "status": 0,
+      "owner_index": 13,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 16,
+      "engine": 2,
+      "signal": 17,
+      "status": 0,
+      "owner_index": 14,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 17,
+      "engine": 2,
+      "signal": 18,
+      "status": 0,
+      "owner_index": 15,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 18,
+      "engine": 3,
+      "signal": 19,
+      "status": 0,
+      "owner_index": 16,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 19,
+      "engine": 2,
+      "signal": 20,
+      "status": 0,
+      "owner_index": 17,
+      "publication_after_this_completion": true
+    },
+    {
+      "pc": 20,
+      "engine": 3,
+      "signal": 21,
+      "status": 0,
+      "owner_index": 18,
+      "publication_after_this_completion": true
+    }
+  ],
+  "controlled_model_result": {
+    "status": null,
+    "completed": 21,
+    "jobs": 19,
+    "useful_macs": 0,
+    "executed_macs": 0,
+    "write_bytes": 2818048
+  },
+  "historical_candidate17": {
+    "scope": "DISTINCT_RESIDENT_CONTROL_MODEL_ONLY",
+    "accepted_jobs": [
+      {
+        "pc": 0,
+        "public_pcs": [
+          0
+        ],
+        "kind": "Norm",
+        "kind_id": 0,
+        "role": "norm",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110119808,
+        "b": 4503604109574656,
+        "c": 0,
+        "dst": 4503604110218240,
+        "tag": 589824,
+        "writeBytes": 98304,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 1,
+        "public_pcs": [
+          1
+        ],
+        "kind": "Dense",
+        "kind_id": 1,
+        "role": "q_raw",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110218240,
+        "b": 4503603922403392,
+        "c": 0,
+        "dst": 4503604110316608,
+        "tag": 589825,
+        "writeBytes": 98304,
+        "weightBf16": true,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 2,
+        "public_pcs": [
+          2
+        ],
+        "kind": "Bias",
+        "kind_id": 2,
+        "role": "bias",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110316608,
+        "b": 4503604109587072,
+        "c": 0,
+        "dst": 4503604110414976,
+        "tag": 589826,
+        "writeBytes": 98304,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 3,
+        "public_pcs": [
+          3
+        ],
+        "kind": "Rope",
+        "kind_id": 3,
+        "role": "rope",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110414976,
+        "b": 4503604109595456,
+        "c": 4503604109857600,
+        "dst": 4503604110513344,
+        "tag": 589827,
+        "writeBytes": 98304,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 4,
+        "public_pcs": [
+          4
+        ],
+        "kind": "Dense",
+        "kind_id": 1,
+        "role": "k_raw",
+        "m": 16,
+        "n": 256,
+        "k": 1536,
+        "a": 4503604110218240,
+        "b": 4503603931840640,
+        "c": 0,
+        "dst": 4503604110611712,
+        "tag": 589828,
+        "writeBytes": 16384,
+        "weightBf16": true,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 5,
+        "public_pcs": [
+          5
+        ],
+        "kind": "Bias",
+        "kind_id": 2,
+        "role": "bias",
+        "m": 16,
+        "n": 256,
+        "k": 256,
+        "a": 4503604110611712,
+        "b": 4503604109593280,
+        "c": 0,
+        "dst": 4503604110628160,
+        "tag": 589829,
+        "writeBytes": 16384,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 6,
+        "public_pcs": [
+          6
+        ],
+        "kind": "Rope",
+        "kind_id": 3,
+        "role": "rope",
+        "m": 16,
+        "n": 256,
+        "k": 256,
+        "a": 4503604110628160,
+        "b": 4503604109595456,
+        "c": 4503604109857600,
+        "dst": 4503604110644608,
+        "tag": 589830,
+        "writeBytes": 16384,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 7,
+        "public_pcs": [
+          7
+        ],
+        "kind": "Dense",
+        "kind_id": 1,
+        "role": "v_raw",
+        "m": 16,
+        "n": 256,
+        "k": 1536,
+        "a": 4503604110218240,
+        "b": 4503603933413568,
+        "c": 0,
+        "dst": 4503604110661056,
+        "tag": 589831,
+        "writeBytes": 16384,
+        "weightBf16": true,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 8,
+        "public_pcs": [
+          8
+        ],
+        "kind": "Bias",
+        "kind_id": 2,
+        "role": "bias",
+        "m": 16,
+        "n": 256,
+        "k": 256,
+        "a": 4503604110661056,
+        "b": 4503604109594368,
+        "c": 0,
+        "dst": 4503604110677504,
+        "tag": 589832,
+        "writeBytes": 16384,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 9,
+        "public_pcs": [
+          9
+        ],
+        "kind": "KvAppend",
+        "kind_id": 7,
+        "role": "kvappend",
+        "m": 16,
+        "n": 256,
+        "k": 256,
+        "a": 4503604110644608,
+        "b": 4503604110677504,
+        "c": 0,
+        "dst": 4503604110693952,
+        "tag": 589833,
+        "writeBytes": 32768,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 12,
+        "public_pcs": [
+          10,
+          11,
+          12
+        ],
+        "kind": "Attention",
+        "kind_id": 4,
+        "role": "attention",
+        "m": 16,
+        "n": 1536,
+        "k": 128,
+        "a": 4503604110513344,
+        "b": 4503604110693952,
+        "c": 4503604110710336,
+        "dst": 4503604110751488,
+        "tag": 589836,
+        "writeBytes": 98304,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 13,
+        "public_pcs": [
+          13
+        ],
+        "kind": "Dense",
+        "kind_id": 1,
+        "role": "o",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110751488,
+        "b": 4503603934986496,
+        "c": 0,
+        "dst": 4503604110849856,
+        "tag": 589837,
+        "writeBytes": 98304,
+        "weightBf16": true,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 14,
+        "public_pcs": [
+          14
+        ],
+        "kind": "Add",
+        "kind_id": 5,
+        "role": "add",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110119808,
+        "b": 4503604110849856,
+        "c": 0,
+        "dst": 4503604110948224,
+        "tag": 589838,
+        "writeBytes": 98304,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 15,
+        "public_pcs": [
+          15
+        ],
+        "kind": "Norm",
+        "kind_id": 0,
+        "role": "norm",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110948224,
+        "b": 4503604109580864,
+        "c": 0,
+        "dst": 4503604111046592,
+        "tag": 589839,
+        "writeBytes": 98304,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 18,
+        "public_pcs": [
+          16,
+          17,
+          18
+        ],
+        "kind": "Activation",
+        "kind_id": 6,
+        "role": "activation",
+        "m": 16,
+        "n": 8960,
+        "k": 8960,
+        "a": 4503604111144960,
+        "b": 4503604111718464,
+        "c": 0,
+        "dst": 4503604112291968,
+        "tag": 589842,
+        "writeBytes": 573440,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 19,
+        "public_pcs": [
+          19
+        ],
+        "kind": "Dense",
+        "kind_id": 1,
+        "role": "down",
+        "m": 16,
+        "n": 1536,
+        "k": 8960,
+        "a": 4503604112291968,
+        "b": 4503604054524352,
+        "c": 0,
+        "dst": 4503604112865472,
+        "tag": 589843,
+        "writeBytes": 98304,
+        "weightBf16": true,
+        "activationBf16": false,
+        "outputBf16": false
+      },
+      {
+        "pc": 20,
+        "public_pcs": [
+          20
+        ],
+        "kind": "Add",
+        "kind_id": 5,
+        "role": "add",
+        "m": 16,
+        "n": 1536,
+        "k": 1536,
+        "a": 4503604110948224,
+        "b": 4503604112865472,
+        "c": 0,
+        "dst": 4503604112963840,
+        "tag": 589844,
+        "writeBytes": 98304,
+        "weightBf16": false,
+        "activationBf16": false,
+        "outputBf16": false
+      }
+    ],
+    "expected_completions": [
+      {
+        "pc": 0,
+        "engine": 3,
+        "signal": 1,
+        "status": 0,
+        "owner_index": 0,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 1,
+        "engine": 2,
+        "signal": 2,
+        "status": 0,
+        "owner_index": 1,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 2,
+        "engine": 3,
+        "signal": 3,
+        "status": 0,
+        "owner_index": 2,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 3,
+        "engine": 3,
+        "signal": 4,
+        "status": 0,
+        "owner_index": 3,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 4,
+        "engine": 2,
+        "signal": 5,
+        "status": 0,
+        "owner_index": 4,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 5,
+        "engine": 3,
+        "signal": 6,
+        "status": 0,
+        "owner_index": 5,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 6,
+        "engine": 3,
+        "signal": 7,
+        "status": 0,
+        "owner_index": 6,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 7,
+        "engine": 2,
+        "signal": 8,
+        "status": 0,
+        "owner_index": 7,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 8,
+        "engine": 3,
+        "signal": 9,
+        "status": 0,
+        "owner_index": 8,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 9,
+        "engine": 4,
+        "signal": 10,
+        "status": 0,
+        "owner_index": 9,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 10,
+        "engine": 2,
+        "signal": 11,
+        "status": 0,
+        "owner_index": 10,
+        "publication_after_this_completion": false
+      },
+      {
+        "pc": 11,
+        "engine": 3,
+        "signal": 12,
+        "status": 0,
+        "owner_index": 10,
+        "publication_after_this_completion": false
+      },
+      {
+        "pc": 12,
+        "engine": 2,
+        "signal": 13,
+        "status": 0,
+        "owner_index": 10,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 13,
+        "engine": 2,
+        "signal": 14,
+        "status": 0,
+        "owner_index": 11,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 14,
+        "engine": 3,
+        "signal": 15,
+        "status": 0,
+        "owner_index": 12,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 15,
+        "engine": 3,
+        "signal": 16,
+        "status": 0,
+        "owner_index": 13,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 16,
+        "engine": 2,
+        "signal": 17,
+        "status": 0,
+        "owner_index": 14,
+        "publication_after_this_completion": false
+      },
+      {
+        "pc": 17,
+        "engine": 2,
+        "signal": 18,
+        "status": 0,
+        "owner_index": 14,
+        "publication_after_this_completion": false
+      },
+      {
+        "pc": 18,
+        "engine": 3,
+        "signal": 19,
+        "status": 0,
+        "owner_index": 14,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 19,
+        "engine": 2,
+        "signal": 20,
+        "status": 0,
+        "owner_index": 15,
+        "publication_after_this_completion": true
+      },
+      {
+        "pc": 20,
+        "engine": 3,
+        "signal": 21,
+        "status": 0,
+        "owner_index": 16,
+        "publication_after_this_completion": true
+      }
+    ],
+    "result": {
+      "status": null,
+      "completed": 21,
+      "jobs": 17,
+      "useful_macs": 0,
+      "executed_macs": 0,
+      "write_bytes": 1671168
+    }
+  },
+  "numeric_validator_source": {
+    "bytes": 8995,
+    "sha256": "e3b5906d7589885e5aade7344d8c7d7497b61aa967b2034dbba4e1e0ebeb25d0"
+  },
+  "arithmetic_executed": false,
+  "weights_materialized": false,
+  "full_block_numerical_pass": false,
+  "metadata_provenance": {
+    "source_commit": "8212a32f43338163baee4126e522dcacede0fa23",
+    "source_sha256": [
+      [
+        "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+        "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154"
+      ],
+      [
+        "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+        "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692"
+      ]
+    ],
+    "max_tokens": 1024,
+    "original_descriptor_sha256": "1c286240af500de3d611833708863cef7a390d11dbed188bbc7e14bfc864b1e5",
+    "command_sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4",
+    "descriptor_sha256": "e21e46a4b608b424ff301f6ffbc554eaf445cdecd494a42e7099fa43e2e9bb29",
+    "tensor_payloads_materialized": false,
+    "official_weights": false,
+    "full_block_numeric_proof": false
+  }
+}

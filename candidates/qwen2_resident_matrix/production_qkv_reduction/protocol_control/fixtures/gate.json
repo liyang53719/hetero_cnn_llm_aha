@@ -1,0 +1,50 @@
+{
+  "schema": "qwen2-public21-control-gate-v1",
+  "fixtures": [
+    {
+      "directory": "m16",
+      "manifest_sha256": "d603c0a96766dc13bcfa6223bc030a0f8fe6d96a0f1f09cfd60e8b6e968fe781"
+    },
+    {
+      "directory": "m128",
+      "manifest_sha256": "e54f888c56c54675a01e8259931537504de618dd89366af347dd2b5dc10b0c17"
+    },
+    {
+      "directory": "m16_relocated",
+      "manifest_sha256": "d6ee217e06448e4bfb4592fff93492d5164dbb6f0c3927eeff7ef9b881e56429"
+    }
+  ],
+  "source_sha256": {
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004",
+    "candidates/qwen2_resident_matrix/ffn_public/fixture.py": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+    "candidates/qwen2_resident_matrix/official_bf16/execution.py": "e3b5906d7589885e5aade7344d8c7d7497b61aa967b2034dbba4e1e0ebeb25d0",
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692",
+    "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py": "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d",
+    "src/heteronpu/__init__.py": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be",
+    "src/heteronpu/abi_validation.py": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590",
+    "src/heteronpu/cgra_sfu.py": "5879bbf756c08f2befa3bfe17fcd4d71a74b75c76ee808c816d83af03a4da854",
+    "src/heteronpu/command.py": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b",
+    "src/heteronpu/config.py": "55397dad1d93f9896afe10eab2e6ffa9f01b694aa5848ade3808292f57bb7fb4",
+    "src/heteronpu/descriptor_chain.py": "bedf5d138e0fdf26fb5b2a09421172a261d5f029911166bc97f8e0b8c229da89",
+    "src/heteronpu/dtypes.py": "b60bc8851c3cf6cc201417be69a96203b45641e7df4b051a003db1e349ef6e34",
+    "src/heteronpu/gemmini_descriptor_v2.py": "6802790c4aa91406a289f3da2990b35acba25f2a3a096ccb071ece12fbd0ac60",
+    "src/heteronpu/gemmini_rocc_lowering.py": "842aaa8ef916a993d6b58f82529bbc9ef57221c47cd4e8d659d27141d28cc485",
+    "src/heteronpu/kv_engine.py": "f2e2807760ff50a9eb125e2f3be795f4dc9cddc696a7e2f3db895c64c8ffba9a",
+    "src/heteronpu/l9_transport_contract.py": "d672178bd13511e6f3bbed821fef570f79c83e7c314e4040903d98e5d8729a4c",
+    "src/heteronpu/matrix_engine.py": "a13c981d497cd84c12b4f14d6304ead682d6042936e96265d28e4fb5459b24a8",
+    "src/heteronpu/scheduler.py": "601376bc1629b6e67d5f933881ff83b5cbf967a1f6db1969b20fc95b3bbccb55",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "candidates/qwen2_resident_matrix/public_dispatch/source_pins.json": "f10e031df69fe056a1a212fc72c677c8c7d68a205c4b4567f3700f8a158a0b39",
+    "candidates/qwen2_resident_matrix/public_dispatch/generate_contract.py": "c3d8c96106c8ca5dfe0f2ef64ec805d4f77628cc9ece937cedcb0b14d259b5ce"
+  },
+  "scope": "METADATA_CONTROL_ONLY",
+  "arithmetic_executed": false,
+  "current_owner_count": 19,
+  "candidate_owner_count": 17
+}

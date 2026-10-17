@@ -1,0 +1,360 @@
+{
+  "v7": {
+    "arithmetic_executed": false,
+    "callback_entered": false,
+    "class_compile_pass": true,
+    "class_count": 555,
+    "evidence_kind": "sanitized_projection_not_original_receipt",
+    "exact_cycle_count_unknown": true,
+    "largest_reported_cycle": null,
+    "low_firrtl_bytes": [
+      2097152
+    ],
+    "original_interpret_log_sha256": "c8d9893f3475e5cf46693cdc77ec83ffc65b280407c4c2234416f506bae29972",
+    "original_receipt_sha256": "7c93bd0b37594d9fe6a04e52d436be369aa3c3cd73cd1b675bb3164ef7c44aa4",
+    "production_kernel_protocol_pass": false,
+    "reason": "2MiB file cap truncated lower FIRRTL before callback",
+    "rtl_generated": false,
+    "scenario_pass_count": 0,
+    "selected_markers": [
+      "QKV_PROTOCOL_CASE_BEGIN arithmetic=false production_kernel=false"
+    ],
+    "source_count": 94,
+    "stages": [
+      {
+        "cleanup": {
+          "direct_exit_code": 0,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.021309102012310177,
+          "completed_at": 0.021581552005955018,
+          "reap_started_at": 0.021475923000252806,
+          "reaped_at": 0.021544115006690845,
+          "signal_at": 0.0003825550084002316
+        },
+        "elapsed_seconds": 35.94266324600903,
+        "error": null,
+        "exit_code": 0,
+        "name": "compile"
+      },
+      {
+        "cleanup": {
+          "direct_exit_code": 0,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.022502988009364344,
+          "completed_at": 0.0229580419982085,
+          "reap_started_at": 0.02267051000671927,
+          "reaped_at": 0.02291950400103815,
+          "signal_at": 0.0011314620060147718
+        },
+        "elapsed_seconds": 2.149396565000643,
+        "error": null,
+        "exit_code": 0,
+        "name": "structure"
+      },
+      {
+        "cleanup": {
+          "direct_exit_code": 1,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.0212377620046027,
+          "completed_at": 0.02151245500135701,
+          "reap_started_at": 0.021440256998175755,
+          "reaped_at": 0.021476530993822962,
+          "signal_at": 0.00029130799521226436
+        },
+        "elapsed_seconds": 3.628456828999333,
+        "error": null,
+        "exit_code": 1,
+        "name": "interpret"
+      }
+    ],
+    "status": "FAIL",
+    "structure": {
+      "arithmetic": false,
+      "bytes": 2047981,
+      "external_modules": 0,
+      "memory_declarations": 0,
+      "modules": [
+        "Record128Reader",
+        "TypedTensorReader",
+        "HostBlockCommands",
+        "DenseTileSumBridge",
+        "DenseBlockReductionCoordinator",
+        "Public21QkvReductionRouter",
+        "ProductionQkvProtocolHarness"
+      ],
+      "sha256": "fb0c7b9333b3cf0696d683781e5d172769d5339477de59430997c4b422962457"
+    }
+  },
+  "v8": {
+    "arithmetic_executed": false,
+    "callback_entered": true,
+    "class_compile_pass": true,
+    "class_count": 555,
+    "evidence_kind": "sanitized_projection_not_original_receipt",
+    "exact_cycle_count_unknown": true,
+    "largest_reported_cycle": null,
+    "low_firrtl_bytes": [
+      3907694
+    ],
+    "original_interpret_log_sha256": "2d162c964559f6d9573cf83bad93368d5c24b9a77af03b7a5a7ee96c323b32e6",
+    "original_receipt_sha256": "3282e90dd6b7f0160c6e0843c86f4d6d2b3e46ee5d08c107f3e47a9c19a1588b",
+    "production_kernel_protocol_pass": false,
+    "reason": "callback work deadline; no scenario completed",
+    "rtl_generated": false,
+    "scenario_pass_count": 0,
+    "selected_markers": [
+      "QKV_PROTOCOL_CASE_BEGIN arithmetic=false production_kernel=false",
+      "QKV_PROTOCOL_SIM_READY"
+    ],
+    "source_count": 94,
+    "stages": [
+      {
+        "cleanup": {
+          "direct_exit_code": 0,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.0213681750028627,
+          "completed_at": 0.021630810006172396,
+          "reap_started_at": 0.021557580010266975,
+          "reaped_at": 0.021597890998236835,
+          "signal_at": 0.00042708200635388494
+        },
+        "elapsed_seconds": 35.59532595500059,
+        "error": null,
+        "exit_code": 0,
+        "name": "compile"
+      },
+      {
+        "cleanup": {
+          "direct_exit_code": 0,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.02169602399226278,
+          "completed_at": 0.022074123000493273,
+          "reap_started_at": 0.02198245500039775,
+          "reaped_at": 0.022030136999092065,
+          "signal_at": 0.00038270599907264113
+        },
+        "elapsed_seconds": 2.1620358690124704,
+        "error": null,
+        "exit_code": 0,
+        "name": "structure"
+      },
+      {
+        "cleanup": {
+          "direct_exit_code": -9,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.042128836998017505,
+          "completed_at": 0.042377341000246815,
+          "reap_started_at": 0.04227639899181668,
+          "reaped_at": 0.04233682999620214,
+          "signal_at": 0.0005762869986938313
+        },
+        "elapsed_seconds": 68.42558312199253,
+        "error": "InterruptedError",
+        "exit_code": null,
+        "name": "interpret"
+      }
+    ],
+    "status": "FAIL",
+    "structure": {
+      "arithmetic": false,
+      "bytes": 2047981,
+      "external_modules": 0,
+      "memory_declarations": 0,
+      "modules": [
+        "Record128Reader",
+        "TypedTensorReader",
+        "HostBlockCommands",
+        "DenseTileSumBridge",
+        "DenseBlockReductionCoordinator",
+        "Public21QkvReductionRouter",
+        "ProductionQkvProtocolHarness"
+      ],
+      "sha256": "fb0c7b9333b3cf0696d683781e5d172769d5339477de59430997c4b422962457"
+    }
+  },
+  "v9": {
+    "arithmetic_executed": false,
+    "callback_entered": true,
+    "class_compile_pass": true,
+    "class_count": 555,
+    "evidence_kind": "sanitized_projection_not_original_receipt",
+    "exact_cycle_count_unknown": true,
+    "largest_reported_cycle": 64,
+    "low_firrtl_bytes": [
+      3907694
+    ],
+    "original_interpret_log_sha256": "f7db88d10e68e513ae81b70b519783f996ad06da084a9547dceb6c38861594ad",
+    "original_receipt_sha256": "6eb956b3d9de0fa263c26cc6151753ab365659e14bdca5d599e400d8b0c22b51",
+    "production_kernel_protocol_pass": false,
+    "reason": "callback work deadline; no scenario completed",
+    "rtl_generated": false,
+    "scenario_pass_count": 0,
+    "selected_markers": [
+      "QKV_PROTOCOL_CASE_BEGIN arithmetic=false production_kernel=false",
+      "QKV_PROTOCOL_SIM_READY",
+      "QKV_DIAGNOSTIC_INIT begin",
+      "QKV_DIAGNOSTIC_INIT memory_return_done",
+      "QKV_DIAGNOSTIC_INIT ordinary_resident_done",
+      "QKV_DIAGNOSTIC_INIT window_drain_done",
+      "QKV_DIAGNOSTIC_INIT tiles_done",
+      "QKV_DIAGNOSTIC_INIT vector_done",
+      "QKV_DIAGNOSTIC_INIT control_flags_done",
+      "QKV_DIAGNOSTIC_INIT launch_fields_begin",
+      "QKV_DIAGNOSTIC_INIT all_done",
+      "QKV_DIAGNOSTIC_FIRST_READY before",
+      "QKV_DIAGNOSTIC_FIRST_READY after",
+      "QKV_DIAGNOSTIC_FIRST_STEP monitor_begin",
+      "QKV_DIAGNOSTIC_FIRST_STEP monitor_done_clock_before",
+      "QKV_DIAGNOSTIC_FIRST_STEP clock_after",
+      "QKV_DIAGNOSTIC_CYCLE cycle=1",
+      "QKV_DIAGNOSTIC_CYCLE cycle=8",
+      "QKV_DIAGNOSTIC_CYCLE cycle=64"
+    ],
+    "source_count": 94,
+    "stages": [
+      {
+        "cleanup": {
+          "direct_exit_code": 0,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.02134001899685245,
+          "completed_at": 0.021607079994282685,
+          "reap_started_at": 0.021531516991672106,
+          "reaped_at": 0.021571706995018758,
+          "signal_at": 0.00041795900324359536
+        },
+        "elapsed_seconds": 36.355708524002694,
+        "error": null,
+        "exit_code": 0,
+        "name": "compile"
+      },
+      {
+        "cleanup": {
+          "direct_exit_code": 0,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.02129418899130542,
+          "completed_at": 0.021549723998759873,
+          "reap_started_at": 0.021470043997396715,
+          "reaped_at": 0.021509743994101882,
+          "signal_at": 0.0003669119905680418
+        },
+        "elapsed_seconds": 2.1248955089977244,
+        "error": null,
+        "exit_code": 0,
+        "name": "structure"
+      },
+      {
+        "cleanup": {
+          "direct_exit_code": -9,
+          "direct_leader_reaped": true,
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "no_post_reap_signals": true,
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP"
+        },
+        "cleanup_complete": true,
+        "cleanup_relative_seconds": {
+          "barrier_at": 0.042364991997601464,
+          "completed_at": 0.04259653999179136,
+          "reap_started_at": 0.04251765199296642,
+          "reaped_at": 0.04255699100031052,
+          "signal_at": 0.0007516599871451035
+        },
+        "elapsed_seconds": 68.45029490100569,
+        "error": "InterruptedError",
+        "exit_code": null,
+        "name": "interpret"
+      }
+    ],
+    "status": "FAIL",
+    "structure": {
+      "arithmetic": false,
+      "bytes": 2047981,
+      "external_modules": 0,
+      "memory_declarations": 0,
+      "modules": [
+        "Record128Reader",
+        "TypedTensorReader",
+        "HostBlockCommands",
+        "DenseTileSumBridge",
+        "DenseBlockReductionCoordinator",
+        "Public21QkvReductionRouter",
+        "ProductionQkvProtocolHarness"
+      ],
+      "sha256": "fb0c7b9333b3cf0696d683781e5d172769d5339477de59430997c4b422962457"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 09:32 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 09:51 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -245,3 +245,11 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 旧离线checker把raw matrix_numeric.cpp哈希作为实际generated编译源码预期，单字段拒绝SCHEMA_VALUE；严格追溯冻结tiny.generated及两份composed图得到正确0e298008编译源图，修复checker并增加raw-map拒绝回归。原ZIP、数值源码、参考和运行未改，无重跑；corrected checker author102+102/independent122+122冷验证，实际原ZIP normal/-O通过。
 - **done：控制harness源码/编译/CHIRRTL结构；未通过协议。** v7/v8/v9真实94源编译与7模块结构通过，CHIRRTL2,047,981B、0memory/extmodule/FPU。v7统一2MiB文件限额截断正常lowered FIRRTL，未callback；v8仅修生成物8MiB/log2MiB后进入callback但原60秒预算超时；v9只增marker，确认初始化/首expect/首clock均完成、最后报告cycle64，仍无scenario PASS。三版失败及strictcleanup如实归档，不将最后marker当总执行拍数。
 - 停止全Host Treadle盲重试。下一门拟相同控制harness/fixture/断言的Verilator编译后端，将生成控制SystemVerilog；不是完整block RTL。固定官方工具/单CPU/native-j1/每native AS2GiB与250秒阶段预算已完成源码审查并于09:33UTC启动一次有界验证；本次停在Scala compile60秒超时，日志为空/class0、strict cleanup完成，尚未进入结构/RTL生成。原因待诊断，不扩预算重跑。Java heap1GiB不是整树硬限。完整90%目标及原Attention/SFU架构上界限制不变。
+
+## 2026-10-17 09:51 UTC：持久身份核验工具与纯源码控制失败记录
+
+- **done：实际同刺激身份10文件持久归档。** ca5ca9a已远端核对476文件闭包并通过载荷保护CI。原8JSON按字节保留，不含张量/权重；旧GitHub ZIP容器只保留hash及来源，不宣称到期后能恢复相同ZIP字节。
+- **done：便携离线checker。** tools/offline_replay_verifier从固定8ba input-contract及checkout重建465-source view；原ZIP入口保持原digest，独立archive-body入口固定ca5ca9a/tree/member hashes并核相同identity/receipt，明确ZIP recovery=false。root/作者/独立156+156冷测通过，两条实际路线也通过；无生产数值再跑或改门限。
+- **done：v7/v8/v9失败控制门纯源码复现。** 28个UTF8文件保存固定源/失败安全摘要/真实metadata generator；不提交6个可再生command/descriptor二进制表，也不文本编码替代。generator按源码生成后核原10文件hash；三版重放和6+6冷测通过。不是协议PASS。
+- 后继v11固定CPU编译60秒超时，0class/0RTL；严格复用已核545生产classes的v12增量编译3测试源通过14.655秒，随后wrapper stdout marker污染Verilator版本查询，未callback。v13改独立sidecar后真实生成1,560,217B控制SystemVerilog和C++，但PCH文件触发8MiB上限，未callback。均失败并清理；不是完整block RTL数值通过。
+- 下一候选使用固定Verilator已有VM_PARALLEL_BUILDS=0单TU无PCH构建选项，预算/内存/单CPU/-j1不增；待审后一次有界验证，不手改DUT或生成RTL。完整五blockM128指定27门仍1/5、完整RTL0/5、90%未通过。

@@ -1,0 +1,324 @@
+// SPDX-License-Identifier: Apache-2.0
+package heteronpu.continuous
+import chisel3._
+import chiseltest._
+import chiseltest.simulator.TreadleBackendAnnotation
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import java.nio.file.{Files,Path,Paths}
+import java.security.MessageDigest
+
+/** Actual production Command128/descriptor decoder. Only metadata enters its
+  * memory port; owner return values are controlled protocol stimuli. This gate
+  * establishes dispatch contracts and event lifetime, not arithmetic or timing.
+  */
+class ProductionQkvProtocolSpec extends AnyFlatSpec with ChiselScalatestTester with Matchers {
+  def sha(b:Array[Byte]):String=MessageDigest.getInstance("SHA-256").digest(b).map(x=>f"${x&255}%02x").mkString
+  // ujson stores JSON numbers as Double. Quote integer tokens before decoding
+  // so 64-bit addresses and counts never pass through a floating-point value.
+  def exactJson(raw:String):ujson.Value={
+    val out=new StringBuilder;var i=0;var quoted=false;var escaped=false
+    while(i<raw.length){val c=raw(i)
+      if(quoted){out.append(c);if(escaped)escaped=false else if(c=='\\')escaped=true else if(c=='"')quoted=false;i+=1}
+      else if(c=='"'){quoted=true;out.append(c);i+=1}
+      else if(c.isDigit || c=='-'){val start=i;i+=1;while(i<raw.length && raw(i).isDigit)i+=1
+        require(i==raw.length || !".eE+".contains(raw(i)),"integer-only fixture numbers")
+        out.append('"').append(raw.substring(start,i)).append('"')}
+      else {out.append(c);i+=1}}
+    ujson.read(out.toString)
+  }
+  def num(x:ujson.Value):BigInt=BigInt(x.str)
+  case class Fixture(path:Path,pin:String){
+    val raw=Files.readAllBytes(path.resolve("manifest.json"));require(sha(raw)==pin,"explicit fixture manifest pin")
+    val m=exactJson(new String(raw,java.nio.charset.StandardCharsets.UTF_8))
+    def n(k:String):BigInt=num(m(k))
+    def table(k:String):ujson.Value=m("tables")(k)
+    def bytes(k:String):Array[Byte]={val t=table(k);val p=path.resolve(t("file").str).normalize
+      require(p.startsWith(path),"fixture path escape");val b=Files.readAllBytes(p)
+      require(sha(b)==t("sha256").str && BigInt(b.length)==((num(t("count"))*16+63)/64)*64,"metadata file identity");b}
+    val commandBytes=bytes("command");val descriptorBytes=bytes("descriptor")
+    val jobs=m("accepted_jobs").arr.toVector
+    val completions=m("expected_completions").arr.toVector
+    require(jobs.size==19 && completions.size==21,"current production public21 profile")
+    require(n("rows")==16 || n("rows")==128,"supported full prefill rows")
+    require(m("regions").arr.size==4,"four physical regions")
+  }
+  val root=Paths.get(sys.env.getOrElse("HETERO_PUBLIC21_FIXTURE_ROOT",throw new IllegalArgumentException("HETERO_PUBLIC21_FIXTURE_ROOT required"))).toAbsolutePath.normalize
+  val gateBytes=Files.readAllBytes(root.resolve("gate.json"))
+  val gatePin=sys.env.getOrElse("HETERO_PUBLIC21_GATE_SHA256",throw new IllegalArgumentException("independently pinned gate SHA required"))
+  require(gatePin.matches("[0-9a-f]{64}") && sha(gateBytes)==gatePin,"fixture gate identity")
+  val gate=exactJson(new String(gateBytes,java.nio.charset.StandardCharsets.UTF_8))
+  val fixtures=gate("fixtures").arr.map(v=>Fixture(root.resolve(v("directory").str).normalize,v("manifest_sha256").str)).toVector
+  require(fixtures.map(_.n("rows"))==Vector(BigInt(16),BigInt(128),BigInt(16)),"M16/M128/relocated M16")
+  def zero(x:Data):Unit=x match {case b:Bool=>b.poke(false.B);case u:UInt=>u.poke(0.U);case v:Vec[_]=>v.foreach(zero);case r:Record=>r.elements.values.foreach(zero);case _=>fail("unreviewed input type")}
+  def initialize(d:ProductionQkvProtocolHarness,f:Fixture):Unit={
+    d.io.launch.valid.poke(false.B);d.io.result.ready.poke(false.B);d.io.completion.ready.poke(false.B)
+    d.io.memory.ready.poke(false.B);d.io.response.valid.poke(false.B);zero(d.io.response.bits)
+    d.io.ordinaryJob.ready.poke(false.B);d.io.ordinaryDone.valid.poke(false.B);zero(d.io.ordinaryDone.bits)
+    d.io.resident.request.ready.poke(false.B);d.io.resident.result.valid.poke(false.B);zero(d.io.resident.result.bits)
+    d.io.resident.busy.poke(false.B);d.io.resident.resetRequired.poke(false.B)
+    d.io.window.request.ready.poke(false.B);d.io.window.result.valid.poke(false.B);zero(d.io.window.result.bits)
+    d.io.window.busy.poke(false.B);d.io.window.leaseValid.poke(false.B);d.io.window.resetRequired.poke(false.B)
+    d.io.drain.request.ready.poke(false.B);d.io.drain.result.valid.poke(false.B);zero(d.io.drain.result.bits)
+    d.io.drain.busy.poke(false.B);d.io.drain.resetRequired.poke(false.B)
+    d.io.tiles.control.ready.poke(false.B);d.io.tiles.read.ready.poke(false.B);d.io.tiles.write.ready.poke(false.B)
+    d.io.tiles.response.valid.poke(false.B);zero(d.io.tiles.response.bits);zero(d.io.tiles.state)
+    d.io.tiles.busy.poke(false.B);d.io.tiles.leased.poke(false.B);d.io.tiles.drained.poke(true.B);d.io.tiles.resetRequired.poke(false.B)
+    d.io.vector.request.ready.poke(false.B);d.io.vector.result.valid.poke(false.B);zero(d.io.vector.result.bits)
+    d.io.vector.busy.poke(false.B);d.io.vector.drained.poke(true.B);d.io.vector.resetRequired.poke(false.B)
+    d.io.matrixDrained.poke(true.B);d.io.dmaDrained.poke(true.B);d.io.backendReset.poke(false.B);d.io.abort.poke(false.B);d.io.reductionResultHeld.poke(false.B)
+    val l=d.io.launch.bits;val c=f.table("command");val t=f.table("descriptor")
+    l.commandBase.poke(num(c("base")).U);l.commandLimit.poke(num(c("limit")).U);l.commands.poke(num(c("count")).U)
+    l.descriptorBase.poke(num(t("base")).U);l.descriptorLimit.poke(num(t("limit")).U);l.descriptors.poke(num(t("count")).U);l.epoch.poke(f.n("epoch").U)
+    for((r,i)<-f.m("regions").arr.zipWithIndex){l.regions(i).base.poke(num(r("base")).U);l.regions(i).limit.poke(num(r("limit")).U);l.regions(i).read.poke(r("read").bool.B);l.regions(i).write.poke(r("write").bool.B)}
+  }
+  def expectJob(job:QwenOwnerJob,e:ujson.Value):Unit={
+    for(k<-Seq("m","n","k","a","b","c","dst","tag","writeBytes"))job.elements(k).asInstanceOf[UInt].expect(num(e(k)).U)
+    job.kind.expect(num(e("kind_id")).U)
+    for(k<-Seq("weightBf16","activationBf16","outputBf16"))job.elements(k).asInstanceOf[Bool].expect(e(k).bool.B)
+    job.materializeDenseOutput.expect(Set(13,16,17,19).contains(num(e("pc")).toInt).B)
+  }
+  def run(d:ProductionQkvProtocolHarness,f:Fixture,fault:String=""):Unit={
+    val expected=f.m("historical_candidate17")("accepted_jobs").arr.toVector
+    val commandBytes=f.commandBytes.clone
+    if(fault=="future_score" || fault=="future_probability"){
+      val producer=if(fault=="future_score")10 else 11
+      val span=(BigInt(1,commandBytes.slice(producer*16,producer*16+16).reverse)>>104)&0xffffff
+      val shift=if(fault=="future_score")56 else 80
+      val original=BigInt(1,commandBytes.slice(20*16,21*16).reverse)
+      val changed=(original&~(BigInt(0xffffff)<<shift))|(span<<shift)
+      for(i<-0 until 16)commandBytes(20*16+i)=((changed>>(8*i))&255).toByte
+    }
+    var accepted=0;var complete=0;var cycles=0;var reads=0;var windows=0;var drains=0;var vectors=0;var reductions=0;var returns=0;var ordinary=0;var resident=0
+    var currentReduction:ujson.Value=ujson.Null;var lease=false;var faultInjected=false;var faultEvents=0;var acceptedAtFault= -1
+    case class Tile(var live:Boolean=false,var sealedTile:Boolean=false,var id:BigInt=0,var ng:Int=0,var rows:Int=0,var cols:Int=0,var produced:Int=0,var consumed:Int=0,var matrix:Boolean=false)
+    val tiles=Array.fill(3)(Tile())
+    def driveTiles():Unit={
+      for((s,i)<-tiles.zipWithIndex){val t=d.io.tiles.state(i);t.live.poke(s.live.B);t.sealedTile.poke(s.sealedTile.B);t.identity.poke(s.id.U);t.ng.poke(s.ng.U);t.rows.poke(s.rows.U);t.cols.poke(s.cols.U);t.expected.poke(((s.rows/16)*s.cols).U);t.produced.poke(s.produced.U);t.consumed.poke(s.consumed.U);t.matrixProducerOrder.get.poke(s.matrix.B)}
+      d.io.tiles.leased.poke(tiles.exists(_.live).B);d.io.window.leaseValid.poke(lease.B)
+    }
+    // Independent test accounting for scripted Decoupled services only.
+    val acceptedServices=scala.collection.mutable.Map("window"->0,"drain"->0,"tile"->0,"vector"->0)
+    val returnedServices=scala.collection.mutable.Map("window"->0,"drain"->0,"tile"->0,"vector"->0)
+    var cancelSeen=false
+    def fire(x:chisel3.util.ReadyValidIO[_]):Boolean=x.valid.peek().litToBoolean && x.ready.peek().litToBoolean
+    def step(n:Int=1):Unit=for(_<-0 until n){
+      val immediateCancel=d.io.abort.peek().litToBoolean || d.io.backendReset.peek().litToBoolean
+      if(cancelSeen || immediateCancel){
+        for(p<-Seq(d.io.window.request,d.io.drain.request,d.io.tiles.control,d.io.tiles.read,d.io.tiles.write,d.io.vector.request))
+          fire(p) shouldBe false
+        d.io.handoff.valid.expect(false.B)
+      }
+      val services=Seq(("window",fire(d.io.window.request),fire(d.io.window.result)),
+        ("drain",fire(d.io.drain.request),fire(d.io.drain.result)),
+        ("tile",fire(d.io.tiles.read),fire(d.io.tiles.response)),
+        ("vector",fire(d.io.vector.request),fire(d.io.vector.result)))
+      for((name,request,response)<-services){
+        // No response to a request first accepted on this same edge.
+        if(response)returnedServices(name) should be < acceptedServices(name)
+        if(request)acceptedServices(name)+=1
+        if(response)returnedServices(name)+=1
+        acceptedServices(name)-returnedServices(name) should be <= 1
+      }
+      val errorAccepted=(fault=="window_tag" && faultInjected && fire(d.io.window.result)) ||
+        (fault=="drain_short" && faultInjected && fire(d.io.drain.result))
+      val cancelAfterEdge=immediateCancel || errorAccepted || d.io.resetRequired.peek().litToBoolean
+
+      if(d.io.reductionAccepted.valid.peek().litToBoolean){
+        accepted should be < expected.size;val e=expected(accepted);Set(1,4,7) should contain(num(e("pc")).toInt)
+        expectJob(d.io.reductionAccepted.bits,e)
+        currentReduction=e;accepted+=1;reductions+=1
+      }
+      if(d.io.reductionReturned.valid.peek().litToBoolean){returns+=1;d.io.reductionReturned.bits.tag.expect(num(currentReduction("tag")).U)}
+      d.clock.step();cycles+=1;cancelSeen=cancelSeen || cancelAfterEdge
+      require(cycles<=100000,"bounded protocol cycle budget")
+      if(cycles%1024==0)println(s"QKV_PROTOCOL_CYCLE fault=$fault cycle=$cycles")
+      if(d.io.window.invalidateLease.peek().litToBoolean){lease=false;driveTiles()}
+    }
+    def injectCancel():Unit={
+      faultInjected=true;acceptedAtFault=accepted;d.io.abort.poke(true.B)
+      d.io.ordinaryJob.valid.expect(false.B);d.io.resident.request.valid.expect(false.B);d.io.reductionAccepted.valid.expect(false.B)
+    }
+    def noPublish(n:Int):Unit=for(_<-0 until n){d.io.completion.valid.expect(false.B);d.io.result.valid.expect(false.B);step()}
+    def done(result:QwenOwnerResult,e:ujson.Value):Unit={zero(result);result.tag.poke(num(e("tag")).U);result.writeBytes.poke(num(e("writeBytes")).U)}
+    def acceptedOrdinary(job:QwenOwnerJob,e:ujson.Value):Unit={expectJob(job,e);val saved=job.peek().litValue;for(_<-0 until 3){job.peek().litValue shouldBe saved;noPublish(1)}}
+    d.io.reductionResultHeld.poke((Set("held_reset","held_abort").contains(fault)).B)
+    d.io.launch.ready.expect(true.B);d.io.launch.valid.poke(true.B);step();d.io.launch.valid.poke(false.B)
+    while(!d.io.result.valid.peek().litToBoolean && cycles<100000){
+      if(d.io.memory.valid.peek().litToBoolean){
+        val a=d.io.memory.bits.address.peek().litValue;val tag=d.io.memory.bits.tag.peek().litValue
+        d.io.memory.bits.write.expect(false.B)
+        val choices=Seq((f.table("command"),commandBytes),(f.table("descriptor"),f.descriptorBytes)).filter{case(t,_)=>a>=num(t("base")) && a<num(t("limit"))}
+        choices.size shouldBe 1;val (t,bytes)=choices.head;val off=(a-num(t("base"))).toInt;off%64 shouldBe 0
+        val data=BigInt(1,Array.tabulate[Byte](64)(i=>if(off+i<bytes.length)bytes(off+i)else 0.toByte).reverse)
+        noPublish(2);d.io.memory.ready.poke(true.B);step();d.io.memory.ready.poke(false.B)
+        val cancelRead= !faultInjected && ((fault=="abort_fetch" && reads==0) ||
+          (fault=="abort_typed" && a>=num(f.table("descriptor")("base")) && d.io.pc.peek().litValue==0) ||
+          (fault=="abort_scan" && d.io.pc.peek().litValue==12 && a==num(f.table("command")("base"))))
+        if(cancelRead){injectCancel();noPublish(9)}
+        d.io.response.bits.data.poke(data.U);d.io.response.bits.tag.poke(tag.U);d.io.response.valid.poke(true.B);d.io.response.ready.expect(true.B);step();d.io.response.valid.poke(false.B);reads+=1
+      }else if(d.io.ordinaryJob.valid.peek().litToBoolean){
+        val e=expected(accepted);Set(1,4,7,18) should not contain(num(e("pc")).toInt);acceptedOrdinary(d.io.ordinaryJob.bits,e)
+        if(fault=="abort_ordinary_issue" && !faultInjected){injectCancel();step()}
+        else {
+          d.io.ordinaryJob.ready.poke(true.B);step();d.io.ordinaryJob.ready.poke(false.B);accepted+=1;ordinary+=1;noPublish(7)
+          done(d.io.ordinaryDone.bits,e);d.io.ordinaryDone.valid.poke(true.B);d.io.ordinaryDone.ready.expect(true.B);step();d.io.ordinaryDone.valid.poke(false.B)
+        }
+      }else if(d.io.resident.request.valid.peek().litToBoolean){
+        val e=expected(accepted);num(e("pc")) shouldBe 18;val q=d.io.resident.request.bits
+        Seq(q.gate,q.up,q.act).zip(Seq(16,17,18)).foreach{case(j,pc)=>expectJob(j,f.jobs.find(v=>num(v("pc"))==pc).get)}
+        q.identity.expect(((f.n("epoch")<<16)+17).U);noPublish(5)
+        if(fault=="abort_resident_issue" && !faultInjected){injectCancel();step()}
+        else {
+          d.io.resident.request.ready.poke(true.B);step();d.io.resident.request.ready.poke(false.B);accepted+=1;resident+=1
+          d.io.resident.busy.poke(true.B);noPublish(13);done(d.io.resident.result.bits,e)
+          d.io.resident.result.valid.poke(true.B);d.io.resident.result.ready.expect(true.B);step();d.io.resident.result.valid.poke(false.B);d.io.resident.busy.poke(false.B)
+        }
+      }else if(d.io.window.request.valid.peek().litToBoolean){
+        val q=d.io.window.request.bits;expectJob(q.job,currentReduction)
+        val id=q.identity.peek().litValue;val ng=q.ng.peek().litValue.toInt;val cols=q.cols.peek().litValue.toInt;val slot=q.slot.peek().litValue.toInt
+        val kp=q.kWindow.get;val begin=kp.begin.peek().litValue;val end=kp.end.peek().litValue;val block=kp.blockId.peek().litValue
+        kp.enabled.expect(true.B);kp.pairReverse.expect(true.B);begin shouldBe (if(slot==0)BigInt(0)else BigInt(1024));end shouldBe (if(slot==0)BigInt(1024)else BigInt(1536));block shouldBe slot+1
+        noPublish(2);d.io.window.request.ready.poke(true.B);step();d.io.window.request.ready.poke(false.B);windows+=1
+        d.io.window.busy.poke(true.B);d.io.matrixDrained.poke(false.B);lease=true;driveTiles();noPublish(3)
+        if(fault=="stray_resident_during_reduction" && !faultInjected){
+          d.io.resident.result.valid.poke(true.B);d.io.resident.result.ready.expect(false.B)
+          d.io.resetRequired.expect(true.B);faultInjected=true;noPublish(1);d.io.resident.result.valid.poke(false.B)
+          noPublish(9);d.io.reductionOffered.valid.expect(false.B)
+        }
+        if(fault=="abort_pending" && !faultInjected){d.io.abort.poke(true.B);faultInjected=true;noPublish(9);d.io.reductionOffered.valid.expect(false.B)}
+        val rows=f.n("rows").toInt;tiles(slot)=Tile(true,true,id,ng,rows,cols,rows/16*cols,0,true);driveTiles()
+        val r=d.io.window.result.bits;zero(r);r.tag.poke((if(fault=="window_tag" && !faultInjected)num(currentReduction("tag"))^1 else num(currentReduction("tag"))).U)
+        if(fault=="window_tag" && !faultInjected)faultInjected=true
+        r.identity.poke(id.U);r.ng.poke(ng.U);r.cols.poke(cols.U);r.slot.poke(slot.U);r.rows.poke(rows.U);r.committed.poke(true.B);r.producedBeats.poke((rows/16*cols).U)
+        r.kWindow.get.enabled.poke(true.B);r.kWindow.get.begin.poke(begin.U);r.kWindow.get.end.poke(end.U);r.kWindow.get.blockId.poke(block.U);r.kWindow.get.pairReverse.poke(true.B)
+        d.io.window.result.valid.poke(true.B);d.io.window.result.ready.expect(true.B);step();d.io.window.result.valid.poke(false.B)
+        noPublish(7);d.io.window.busy.poke(false.B)
+        // Independent Matrix fence after service busy is already low.
+        for(_<-0 until 17){
+          d.io.tiles.control.valid.expect(false.B);d.io.tiles.read.valid.expect(false.B)
+          d.io.vector.request.valid.expect(false.B);d.io.reductionOffered.valid.expect(false.B);noPublish(1)
+        }
+        d.io.matrixDrained.poke(true.B)
+      }else if(d.io.tiles.control.valid.peek().litToBoolean){
+        d.io.matrixDrained.expect(true.B);d.io.dmaDrained.expect(true.B)
+        val c=d.io.tiles.control.bits;val slot=c.slot.peek().litValue.toInt;val op=c.op.peek().litValue.toInt;val rows=c.rows.peek().litValue.toInt;val cols=c.cols.peek().litValue.toInt
+        val id=c.identity.peek().litValue;val ng=c.ng.peek().litValue.toInt
+        d.io.tiles.control.ready.poke(true.B);step();d.io.tiles.control.ready.poke(false.B)
+        if(op==0){tiles(slot).live shouldBe false;tiles(slot)=Tile(true,false,id,ng,rows,cols,0,0,false)}
+        else if(op==1){tiles(slot).produced shouldBe rows/16*cols;tiles(slot).sealedTile=true}
+        else{op shouldBe 2;tiles(slot).consumed shouldBe rows/16*cols;tiles(slot).live=false}
+        driveTiles()
+      }else if(d.io.tiles.read.valid.peek().litToBoolean){
+        d.io.matrixDrained.expect(true.B);d.io.dmaDrained.expect(true.B);val q=d.io.tiles.read.bits;val slot=q.slot.peek().litValue.toInt
+        val id=q.identity.peek().litValue;val ng=q.ng.peek().litValue;val index=q.index.peek().litValue
+        val t=tiles(slot);t.live shouldBe true;t.sealedTile shouldBe true;id shouldBe t.id;ng shouldBe t.ng;index shouldBe t.consumed
+        d.io.tiles.read.ready.poke(true.B);step();d.io.tiles.read.ready.poke(false.B);d.io.tiles.drained.poke(false.B)
+        zero(d.io.tiles.response.bits);val r=d.io.tiles.response.bits.key;r.slot.poke(slot.U);r.identity.poke(id.U);r.ng.poke(ng.U);r.index.poke(index.U)
+        // Different finite IEEE bit-pattern sentinels, never an arithmetic oracle.
+        def sentinel(which:Int,lane:Int):BigInt=BigInt("3f800000",16)+which*BigInt("00800000",16)+lane
+        for(i<-0 until 16)d.io.tiles.response.bits.value(i).poke(sentinel(slot,i).U)
+        d.io.tiles.response.valid.poke(true.B)
+        if(slot==1){
+          def operands():Unit={
+            d.io.vector.request.valid.expect(true.B);d.io.vector.request.bits.binaryAdd.get.expect(true.B)
+            for(i<-0 until 16){d.io.vector.request.bits.gate(i).expect(sentinel(0,i).U);d.io.vector.request.bits.up(i).expect(sentinel(1,i).U)}
+          }
+          // First vector of every N window: both operands and the 64B lhs hold
+          // must survive real request backpressure without a response handshake.
+          if(index==0)for(_<-0 until 13){operands();d.io.tiles.response.ready.expect(false.B);noPublish(1)}
+          d.io.vector.request.ready.poke(true.B);operands()
+        }
+        d.io.tiles.response.ready.expect(true.B);step();d.io.tiles.response.valid.poke(false.B);d.io.tiles.drained.poke(true.B);t.consumed+=1;driveTiles()
+        if(slot==1){vectors+=1;d.io.vector.request.ready.poke(false.B);d.io.vector.busy.poke(true.B);d.io.vector.drained.poke(false.B)
+          zero(d.io.vector.result.bits)
+          for(i<-0 until 16)d.io.vector.result.bits.value(i).poke((BigInt("40400000",16)+i).U)
+          d.io.vector.result.valid.poke(true.B)
+          if(index==0)for(_<-0 until 11){
+            d.io.tiles.write.valid.expect(true.B);d.io.vector.result.ready.expect(false.B)
+            for(i<-0 until 16)d.io.tiles.write.bits.value(i).expect((BigInt("40400000",16)+i).U)
+            noPublish(1)
+          }
+          d.io.tiles.write.ready.poke(true.B)
+          d.io.tiles.write.valid.expect(true.B);d.io.tiles.write.bits.key.slot.expect(2.U);d.io.tiles.write.bits.key.index.expect(index.U);d.io.tiles.write.bits.key.identity.expect(id.U)
+          d.io.vector.result.ready.expect(true.B);step();d.io.vector.result.valid.poke(false.B);d.io.tiles.write.ready.poke(false.B)
+          d.io.vector.busy.poke(false.B);d.io.vector.drained.poke(true.B);tiles(2).produced+=1;driveTiles()}
+      }else if(d.io.drain.request.valid.peek().litToBoolean){
+        val q=d.io.drain.request.bits;expectJob(q.job,currentReduction);val id=q.identity.peek().litValue;val ng=q.ng.peek().litValue;val cols=q.cols.peek().litValue.toInt;val rows=f.n("rows").toInt
+        tiles(2).live shouldBe true;tiles(2).sealedTile shouldBe true;tiles(2).produced shouldBe rows/16*cols
+        d.io.drain.request.ready.poke(true.B);step();d.io.drain.request.ready.poke(false.B);drains+=1
+        d.io.drain.busy.poke(true.B);d.io.dmaDrained.poke(false.B);noPublish(127);d.io.reductionOffered.valid.expect(false.B)
+        tiles.foreach(_.live=false);driveTiles();val r=d.io.drain.result.bits;zero(r)
+        r.tag.poke(num(currentReduction("tag")).U);r.identity.poke(id.U);r.ng.poke(ng.U);r.rows.poke(rows.U);r.cols.poke(cols.U)
+        r.committed.poke(true.B);r.consumedBeats.poke((rows/16*cols).U)
+        r.ddrWriteBytes.poke((rows*cols*4-(if(fault=="drain_short" && !faultInjected)64 else 0)).U)
+        if(fault=="drain_short" && !faultInjected)faultInjected=true
+        d.io.drain.result.valid.poke(true.B);d.io.drain.result.ready.expect(true.B);step();d.io.drain.result.valid.poke(false.B)
+        noPublish(5);d.io.drain.busy.poke(false.B)
+        // Independent DMA fence after ACK and busy fall. No new service is
+        // accepted (request.ready remains false); offered requests may wait.
+        for(_<-0 until 19){
+          d.io.tiles.control.valid.expect(false.B);d.io.tiles.read.valid.expect(false.B)
+          d.io.vector.request.valid.expect(false.B);d.io.reductionOffered.valid.expect(false.B);noPublish(1)
+        }
+        d.io.dmaDrained.poke(true.B)
+      }else if(d.io.reductionOffered.valid.peek().litToBoolean && Set("held_reset","held_abort").contains(fault) && !faultInjected){
+        val held=d.io.reductionOffered.bits.peek().litValue;noPublish(4);if(fault=="held_abort")d.io.abort.poke(true.B) else d.io.backendReset.poke(true.B);faultInjected=true
+        for(_<-0 until 7){d.io.reductionOffered.bits.peek().litValue shouldBe held;noPublish(1)}
+        d.io.reductionResultHeld.poke(false.B)
+      }else if(d.io.completion.valid.peek().litToBoolean){
+        val c=d.io.completion.bits.peek().litValue;val status=((c>>32)&255).toInt
+        if(status==0){(c&((BigInt(1)<<29)-1)).toInt shouldBe complete;((c>>40)&65535).toInt shouldBe complete+1;complete+=1}
+        else {fault should not be "";faultEvents+=1}
+        for(_<-0 until 3){d.io.completion.bits.expect(c.U);step()}
+        d.io.completion.ready.poke(true.B);step();d.io.completion.ready.poke(false.B)
+      }else step()
+    }
+    d.io.result.valid.expect(true.B);d.io.result.bits.completed.expect(complete.U);d.io.result.bits.epoch.expect(f.n("epoch").U)
+    if(fault==""){d.io.result.bits.status.expect(0.U);accepted shouldBe 17;ordinary shouldBe 13;resident shouldBe 1;reductions shouldBe 3;returns shouldBe 3;complete shouldBe 21;windows shouldBe 28;drains shouldBe 14;vectors shouldBe f.n("rows").toInt/16*2048;reads shouldBe 650
+      println(s"PUBLIC21_REDUCTION_DISPATCH_CONTROL_PASS rows=${f.n("rows")} epoch=${f.n("epoch")} jobs=$accepted ordinary=$ordinary resident=$resident reductions=$reductions windows=$windows drains=$drains vector_mock_returns=$vectors completions=$complete metadata_reads=$reads controlled_cycles=$cycles arithmetic=false backend_responses_mock=true")}
+    else{d.io.result.bits.status.peek().litValue should not be BigInt(0)
+      if(Set("held_reset","held_abort").contains(fault)){d.io.result.bits.status.expect(Status.Protocol.U);d.io.result.bits.failedPc.expect(1.U)}
+      if(fault.startsWith("future_")){complete shouldBe 10;accepted shouldBe 10;ordinary shouldBe 7;resident shouldBe 0;reductions shouldBe 3;returns shouldBe 3;d.io.result.bits.failedPc.expect(12.U)}
+      else if(Set("abort_fetch","abort_typed","abort_ordinary_issue").contains(fault)){
+        faultInjected shouldBe true;complete shouldBe 0;accepted shouldBe 0;d.io.result.bits.failedPc.expect(0.U)
+      } else if(fault=="abort_scan"){
+        faultInjected shouldBe true;complete shouldBe 10;accepted shouldBe 10;d.io.result.bits.failedPc.expect(12.U)
+      } else if(fault=="abort_resident_issue"){
+        faultInjected shouldBe true;complete shouldBe 16;accepted shouldBe 14;d.io.result.bits.failedPc.expect(18.U)
+      } else {complete shouldBe 1;accepted shouldBe 2}
+      if(acceptedAtFault>=0)accepted shouldBe acceptedAtFault
+      faultEvents shouldBe 1
+      d.io.resetRequired.expect(true.B)
+      println(s"PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=$fault jobs=$accepted completions=$complete scripted_service_retired=true production_kernel_debt_tested=false arithmetic=false")}
+    for(name<-acceptedServices.keys)returnedServices(name) shouldBe acceptedServices(name)
+    val held=d.io.result.bits.peek().litValue;for(_<-0 until 5){d.io.result.bits.peek().litValue shouldBe held;step()}
+    d.io.result.ready.poke(true.B);step();d.io.result.ready.poke(false.B)
+    if(fault!=""){d.io.launch.valid.poke(true.B);step(5);d.io.launch.ready.expect(false.B);d.io.launch.valid.poke(false.B)}
+  }
+  def rejectIdleStray(d:ProductionQkvProtocolHarness,f:Fixture,resident:Boolean):Unit={
+    initialize(d,f);d.io.launch.valid.poke(true.B)
+    if(resident)d.io.resident.result.valid.poke(true.B) else d.io.ordinaryDone.valid.poke(true.B)
+    d.io.launch.ready.expect(false.B);d.io.resetRequired.expect(true.B)
+    d.io.ordinaryJob.valid.expect(false.B);d.io.resident.request.valid.expect(false.B);d.io.reductionAccepted.valid.expect(false.B)
+    d.clock.step();d.io.launch.valid.poke(false.B);d.io.resident.result.valid.poke(false.B);d.io.ordinaryDone.valid.poke(false.B)
+    d.clock.step(5);d.io.launch.ready.expect(false.B);d.io.issuedJobs.expect(0.U)
+    d.io.result.valid.expect(false.B);d.io.completion.valid.expect(false.B)
+    println(s"PUBLIC21_REDUCTION_DISPATCH_REJECT_PASS fault=idle_${if(resident)"resident"else"ordinary"}_stray no_launch_accepted=true arithmetic=false")
+  }
+  "Production QKV router and actual Host parser" should "retire bounded scripted services and late faults" in {
+    println("QKV_PROTOCOL_CASE_BEGIN arithmetic=false production_kernel=false")
+    test(new ProductionQkvProtocolHarness).withAnnotations(Seq(TreadleBackendAnnotation)){d=>
+      println("QKV_PROTOCOL_SIM_READY")
+      val f=fixtures.head
+      initialize(d,f);run(d,f)
+      for(fault<-Seq("held_reset","held_abort","abort_pending","window_tag","drain_short")){
+        d.reset.poke(true.B);d.clock.step(2);d.reset.poke(false.B);initialize(d,f);run(d,f,fault)
+      }
+      for(r<-Seq(false,true)){
+        d.reset.poke(true.B);d.clock.step(2);d.reset.poke(false.B);rejectIdleStray(d,f,r)
+      }
+      println("QKV_PROTOCOL_CASE_PASS arithmetic=false production_kernel=false")
+    }
+  }
+}

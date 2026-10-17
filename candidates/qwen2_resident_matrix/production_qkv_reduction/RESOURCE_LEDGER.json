@@ -1,0 +1,55 @@
+{
+  "scope": "source-declared conditional-register delta versus composed official resident baseline; not elaborated or synthesized",
+  "router": {
+    "state": 2,
+    "fault": 1
+  },
+  "kernel": {
+    "matrixDebt": 1,
+    "readDebt": 1,
+    "writeDebt": 1,
+    "memoryDebt": 1,
+    "seedDebt": 1,
+    "registeredBackendFault": 1
+  },
+  "coordinator": {
+    "state": 4,
+    "call": 1023,
+    "ng": 16,
+    "block": 1,
+    "poison": 1,
+    "status": 8,
+    "bytes": 64,
+    "useful": 64,
+    "executed": 64,
+    "cycles": 64,
+    "windowPending": 1,
+    "drainPending": 1,
+    "sumPending": 1
+  },
+  "sum_bridge": {
+    "state": 4,
+    "call": 70,
+    "index": 11,
+    "lhs": 512,
+    "poison": 1,
+    "inflight": 1
+  },
+  "existing_dense_new_enabled_fields": {
+    "kPolicy": 66
+  },
+  "existing_sfu_new_enabled_fields": {
+    "input.binaryAdd": 1
+  },
+  "new_sram_bytes": 0,
+  "new_payload_fifos": 0,
+  "new_arithmetic_units": 0,
+  "new_dma_instances": 0,
+  "payload_delta_bits": 512,
+  "payload_lifetime": "lhs response is consumed and retained while the same bank read port obtains rhs; lhs must survive until binaryAdd request is accepted under SFU backpressure. Original bank storage alone does not provide two simultaneous operand responses. One existing bridge, no duplicate lhs buffer.",
+  "QwenOwnerJob_bits": 926,
+  "matrix_macs_per_cycle": 4096,
+  "capacity_score_probability_bytes": 8192,
+  "total_declared_register_delta_bits": 1987,
+  "metadata_control_delta_bits": 1475
+}

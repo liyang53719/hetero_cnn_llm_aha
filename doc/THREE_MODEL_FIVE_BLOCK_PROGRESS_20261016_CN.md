@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 08:26 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 08:44 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -228,3 +228,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 后继实际运行须在完整Git内容闭包校验后启动一次同host新M16→M128验证。原2e591b6指定27门禁PASS保留，历史逐阶段内容hash不能从旧摘要恢复。新元数据失败会保留实际数值回执，并令freeze readiness失败；不放宽deadline。
 - **done：原完整Host路径九文件固定main源码审计；ongoing：生产kernel QKV reduction窄接线。** official BF16政策尚未将QKV split-K/reverse-pair coordinator接入生产kernel。第一片默认关闭，复用原Dense银行、Matrix、SFU16、iDMA；补binaryAdd透传，resident显式false，事务归属不复用会锁死window准入的ordinary active。
 - 原Attention可作为功能数值基线候选，但固定4096 MAC/fullblock分母理想上界约48.187%，不满足80/90目标。packed Attention与SFU/调度优化仍必需；上述上界不是周期预测或RTL实测。当前完整RTL仍0/5。
+
+## 2026-10-17 08:44 UTC：生产QKV reduction候选类编译完成
+
+- **done：默认关闭生产kernel接线v2的源码冷资格及Scala class编译。** [便携候选](../candidates/qwen2_resident_matrix/production_qkv_reduction/README_CN.md)保留原Host、单Dense/Matrix4096/SFU16/iDMA。root/作者/独立13+13冷测及77文件重放通过；独立108组边沿、120种债务退休顺序仅为源码控制模型。
+- v1 held success遇晚abort同时屏蔽valid/ready会锁死Host waitDone，已保留失败身份。v2保持terminal payload与握手，由原Host同拍resetRequired转Protocol；故障sticky禁止再次准入。尚未实际硬件协议签收。
+- 单次真实91 Scala源码（71候选+20 HardFloat）、87固定jar，545 classes，exit0，总34.469秒；88秒绝对预算内strict scoped cleanup及源码/依赖/JDK前后核验通过。仅class compile，未elaboration/生成RTL/数值。
+- 声明级新增1987bits：512bits=64B bridge lhs保持，另1475bits控制/metadata。无新SRAM或算术单元；面积/频率未实测。旧34项控制测试normal通过，旧-O18 errors为assert副作用依赖，明确未通过、不改历史源。
+- 下一门：真实HostBlockCommands+router/coordinator的无SRAM/FPU小控制harness，外部服务脚本响应只验证控制，生产kernel真实债务全网仍须另验。当前仅准备，尚未运行。
+- 同刺激身份冻结8ba333c run39017864296仍待终态；没有因本候选再触发数值作业。完整模型指定27门仍1/5，完整RTL0/5、90%未通过。

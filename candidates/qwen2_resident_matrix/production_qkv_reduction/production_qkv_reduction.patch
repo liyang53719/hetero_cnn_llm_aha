@@ -1,0 +1,663 @@
+--- /dev/null
++++ b/candidates/qwen2_resident_matrix/production_qkv_reduction/Public21QkvReductionRouter.scala
+@@ -0,0 +1,144 @@
++// SPDX-License-Identifier: Apache-2.0
++package heteronpu.continuous
++import chisel3._
++import chisel3.util._
++
++/** Internal exclusive ownership only. No payload FIFO, FPU, bank or DMA.
++  * Original Host parser supplies validated public21 jobs. Ordinary arithmetic
++  * and resident FFN remain in the original production kernel. Selection is
++  * retained until the selected terminal handshake, including abort/drain.
++  */
++class Public21QkvReductionRouter extends Module {
++  val io=IO(new Bundle {
++    val job=Flipped(Decoupled(new QwenOwnerJob));val done=Decoupled(new QwenOwnerResult)
++    val ordinaryJob=Decoupled(new QwenOwnerJob);val ordinaryDone=Flipped(Decoupled(new QwenOwnerResult))
++    val residentHost=new FfnResidentPort;val resident=Flipped(new FfnResidentPort)
++    val residentWindow=new FfnWindowPort(enableCounters=true)
++    val residentDrain=new FfnDrainPort
++    val residentTiles=new FfnTilePort(enableMatrixProducerOrder=true)
++    val residentVector=new FfnSiluLoanPort
++    val window=Flipped(new FfnWindowPort(enableCounters=true,enableKWindow=true))
++    val drain=Flipped(new FfnDrainPort)
++    val tiles=Flipped(new FfnTilePort(enableMatrixProducerOrder=true))
++    val vector=Flipped(new FfnSiluLoanPort(enableBinaryAdd=true))
++    val residentHandoff=Input(Valid(new QwenOwnerJob));val handoff=Output(Valid(new QwenOwnerJob))
++    val matrixDrained=Input(Bool());val dmaDrained=Input(Bool())
++    val backendReset=Input(Bool());val resetRequired=Output(Bool());val backendAbort=Output(Bool())
++    val reductionOwns=Output(Bool())
++  })
++  val idle::ordinary::reducing::residentRun::Nil=Enum(4)
++  val state=RegInit(idle);val fault=RegInit(false.B)
++  val reduction=Module(new DenseBlockReductionCoordinator)
++  val j=io.job.bits
++  val role=j.tag(15,0)===1.U || j.tag(15,0)===4.U || j.tag(15,0)===7.U
++  val shape=j.kind===QwenOwnerKind.Dense.U && j.k===1536.U &&
++    (j.n===1536.U || j.n===256.U) && (j.m===16.U || j.m===128.U) &&
++    j.weightBf16 && !j.activationBf16 && !j.outputBf16 && !j.materializeDenseOutput &&
++    j.writeBytes===j.m.pad(64)*j.n*4.U && j.c===0.U
++  val malformed=io.job.valid && role && !shape
++  val stray=(io.ordinaryDone.valid && state=/=ordinary) ||
++    (io.resident.result.valid && state=/=residentRun) ||
++    (reduction.io.dense.result.valid && state=/=reducing)
++  val bad=fault || io.backendReset || io.residentHost.abort || malformed || stray ||
++    reduction.io.dense.resetRequired || io.resident.resetRequired
++  when(bad){fault:=true.B}
++  val canStart=state===idle && !bad && io.matrixDrained && io.dmaDrained &&
++    io.tiles.drained && !io.tiles.leased && io.vector.drained && !io.window.busy && !io.drain.busy
++  // Resident gets deterministic priority if both entrypoints are offered.
++  val jobAllowed=canStart && !io.residentHost.request.valid
++  io.ordinaryJob.valid:=io.job.valid && !role && jobAllowed
++  io.ordinaryJob.bits:=j
++  reduction.io.dense.request.valid:=io.job.valid && role && shape && jobAllowed
++  reduction.io.dense.request.bits.job:=j
++  reduction.io.dense.request.bits.identity:=j.tag+1.U
++  reduction.io.dense.request.bits.kRanges(0).begin:=0.U
++  reduction.io.dense.request.bits.kRanges(0).end:=1024.U
++  reduction.io.dense.request.bits.kRanges(1).begin:=1024.U
++  reduction.io.dense.request.bits.kRanges(1).end:=1536.U
++  reduction.io.dense.request.bits.pairReverse:=true.B
++  io.job.ready:=jobAllowed && Mux(role,reduction.io.dense.request.ready,io.ordinaryJob.ready)
++  io.resident.request.valid:=io.residentHost.request.valid && canStart
++  io.resident.request.bits:=io.residentHost.request.bits
++  io.residentHost.request.ready:=canStart && io.resident.request.ready
++  when(io.job.fire){state:=Mux(role,reducing,ordinary)}
++  when(io.residentHost.request.fire){state:=residentRun}
++  io.done.bits:=Mux(state===reducing,reduction.io.dense.result.bits,io.ordinaryDone.bits)
++  // A terminal already offered by the selected owner must still retire after
++  // a late fault. Keep its payload stable; the original Host parser consumes
++  // resetRequired on this same handshake and converts success to Protocol.
++  // Suppressing valid/ready here would strand Host waitDone indefinitely.
++  io.done.valid:=Mux(state===reducing,reduction.io.dense.result.valid,
++    state===ordinary && io.ordinaryDone.valid)
++  io.ordinaryDone.ready:=state===ordinary && io.done.ready
++  reduction.io.dense.result.ready:=state===reducing && io.done.ready
++  io.residentHost.result.bits:=io.resident.result.bits
++  val residentReturn=state===residentRun
++  io.residentHost.result.valid:=residentReturn && io.resident.result.valid
++  io.resident.result.ready:=residentReturn && io.residentHost.result.ready
++  when(io.done.fire || io.residentHost.result.fire){state:=idle}
++  io.residentHost.busy:=state=/=idle || io.resident.busy
++  io.residentHost.resetRequired:=bad;io.resetRequired:=bad
++  // Never feed the combinational aggregate back into abort. Sticky fault is
++  // registered; external abort/backendReset are independent inputs.
++  val cancel=fault || io.residentHost.abort || io.backendReset
++  io.resident.abort:=cancel
++  reduction.io.dense.abort:=cancel
++  reduction.io.backendReset:=io.backendReset
++  reduction.io.matrixDrained:=io.matrixDrained;reduction.io.dmaDrained:=io.dmaDrained
++  io.backendAbort:=reduction.io.backendAbort
++  val q=state===reducing;val r=state===residentRun
++  io.reductionOwns:=q
++  io.handoff.valid:=(q && reduction.io.handoff.valid) || (r && io.residentHandoff.valid)
++  io.handoff.bits:=Mux(q,reduction.io.handoff.bits,io.residentHandoff.bits)
++
++  // Shared services: response ownership stays selected through every stall.
++  val w=io.window;val rw=io.residentWindow;val qw=reduction.io.window
++  val residentRequest=WireDefault(0.U.asTypeOf(new FfnWindowRequest(enableKWindow=true)))
++  for((name,field)<-rw.request.bits.elements){residentRequest.elements(name):=field}
++  residentRequest.kWindow.get.enabled:=false.B
++  w.request.valid:=Mux(q,qw.request.valid,r && rw.request.valid)
++  w.request.bits:=Mux(q,qw.request.bits,residentRequest)
++  qw.request.ready:=q && w.request.ready;rw.request.ready:=r && w.request.ready
++  qw.result.valid:=q && w.result.valid;qw.result.bits:=w.result.bits
++  rw.result.valid:=r && w.result.valid
++  for((name,field)<-rw.result.bits.elements){field:=w.result.bits.elements(name)}
++  w.result.ready:=Mux(q,qw.result.ready,r && rw.result.ready)
++  w.invalidateLease:=Mux(q,qw.invalidateLease,r && rw.invalidateLease) || cancel
++  for(p<-Seq(qw,rw)){p.busy:=w.busy;p.leaseValid:=w.leaseValid;p.resetRequired:=w.resetRequired}
++
++  val d=io.drain;val rd=io.residentDrain;val qd=reduction.io.drain
++  d.request.valid:=Mux(q,qd.request.valid,r && rd.request.valid)
++  d.request.bits:=Mux(q,qd.request.bits,rd.request.bits)
++  qd.request.ready:=q && d.request.ready;rd.request.ready:=r && d.request.ready
++  qd.result.valid:=q && d.result.valid;rd.result.valid:=r && d.result.valid
++  qd.result.bits:=d.result.bits;rd.result.bits:=d.result.bits
++  d.result.ready:=Mux(q,qd.result.ready,r && rd.result.ready)
++  d.abort:=Mux(q,qd.abort,r && rd.abort) || cancel
++  for(p<-Seq(qd,rd)){p.busy:=d.busy;p.resetRequired:=d.resetRequired}
++
++  val t=io.tiles;val rt=io.residentTiles;val qt=reduction.io.tiles
++  def requests[T<:Data](out:DecoupledIO[T],left:DecoupledIO[T],right:DecoupledIO[T]):Unit={
++    out.valid:=Mux(q,left.valid,r && right.valid);out.bits:=Mux(q,left.bits,right.bits)
++    left.ready:=q && out.ready;right.ready:=r && out.ready
++  }
++  requests(t.control,qt.control,rt.control);requests(t.write,qt.write,rt.write);requests(t.read,qt.read,rt.read)
++  qt.response.valid:=q && t.response.valid;rt.response.valid:=r && t.response.valid
++  qt.response.bits:=t.response.bits;rt.response.bits:=t.response.bits
++  t.response.ready:=Mux(q,qt.response.ready,r && rt.response.ready)
++  t.abort:=Mux(q,qt.abort,r && rt.abort) || cancel
++  for(p<-Seq(qt,rt)){p.busy:=t.busy;p.leased:=t.leased;p.drained:=t.drained;p.resetRequired:=t.resetRequired;p.state:=t.state}
++
++  val v=io.vector;val rv=io.residentVector;val qv=reduction.io.vector
++  v.request.valid:=Mux(q,qv.request.valid,r && rv.request.valid)
++  v.request.bits.gate:=Mux(q,qv.request.bits.gate,rv.request.bits.gate)
++  v.request.bits.up:=Mux(q,qv.request.bits.up,rv.request.bits.up)
++  v.request.bits.binaryAdd.get:=Mux(q,qv.request.bits.binaryAdd.get,false.B)
++  qv.request.ready:=q && v.request.ready;rv.request.ready:=r && v.request.ready
++  qv.result.valid:=q && v.result.valid;rv.result.valid:=r && v.result.valid
++  qv.result.bits:=v.result.bits;rv.result.bits:=v.result.bits
++  v.result.ready:=Mux(q,qv.result.ready,r && rv.result.ready)
++  v.abort:=Mux(q,qv.abort,r && rv.abort) || cancel
++  for(p<-Seq(qv,rv)){p.busy:=v.busy;p.drained:=v.drained;p.resetRequired:=v.resetRequired}
++  assert(!(io.job.fire && io.residentHost.request.fire))
++  assert(!(q && r))
++}
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
+@@ -10,7 +10,8 @@
+   * payload injection, or second iDMA exists. Metadata and owner traffic share
+   * the same arbiter, mailbox adapter, original upstream backend and AXI port.
+   */
+-class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++  require(!enablePublic21QkvReduction || (pipelined && enableResidentFfn && enableTransposedDown && Qwen2NumericPolicy.official(numericPolicy)),"public21 reduction requires the official resident profile")
+   Qwen2NumericPolicy.checkShape(numericPolicy,s)
+   require(!Qwen2NumericPolicy.official(numericPolicy) || (enableResidentFfn && pipelined && !bf16V && !bf16Qkv && !bf16Gdn && !bf16QkNormRope && !bf16AttentionCore),
+     "official BF16 numerical policy requires the validated public21 Qwen2 chain")
+@@ -45,9 +46,10 @@
+     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
+   })
+   dontTouch(io)
+-  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy))
++  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy))
+   val hub=Module(new SharedMemoryArbiter(2))
+   val dmaPoison=Wire(Bool())
++  if(enablePublic21QkvReduction){owner.io.public21BackendReset.get:=hub.io.resetRequired || dmaPoison}
+   if(enableTransposedDown){
+     // Both handshake sides see the same poison fence. Accepted traffic keeps
+     // draining through the original owner/hub/iDMA response and ACK paths.
+@@ -107,8 +109,8 @@
+   io.pipelineIssues:=owner.io.pipelineIssues;io.pipelineStalls:=owner.io.pipelineStalls
+   io.memoryAccepted:=hub.io.accepted;io.memoryReturned:=hub.io.returned
+ }
+-class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
+-  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDown,enableResidentFfn,numericPolicy=numericPolicy));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
++class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDown,enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
+   val pre=Module(new HeteroBF16FmaPre);val a=IO(chiselTypeOf(pre.io));a<>pre.io;dontTouch(a)
+   val mul=Module(new HeteroBF16FmaMul);val b=IO(chiselTypeOf(mul.io));b<>mul.io;dontTouch(b)
+   val post=Module(new HeteroBF16FmaPost);val c=IO(chiselTypeOf(post.io));c<>post.io;dontTouch(c)
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala
+@@ -3,8 +3,8 @@
+ import chisel3._
+ import chisel3.util._
+ 
+-class SiluOwnerPort(enableTileLoan:Boolean=false) extends Bundle {
+-  val loan=if(enableTileLoan)Some(new FfnSiluLoanPort)else None
++class SiluOwnerPort(enableTileLoan:Boolean=false,enableBinaryAdd:Boolean=false) extends Bundle {
++  val loan=if(enableTileLoan)Some(new FfnSiluLoanPort(enableBinaryAdd))else None
+   val job=Flipped(Decoupled(new QwenOwnerJob));val done=Decoupled(new QwenOwnerResult)
+   val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
+   val resetRequired=Output(Bool())
+@@ -107,9 +107,10 @@
+ }
+ 
+ /** Elaboration-time selection: exactly one arithmetic owner is instantiated. */
+-class ScheduledSiluOwner(overlap:Boolean=false,enableTileLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class ScheduledSiluOwner(overlap:Boolean=false,enableTileLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableBinaryAdd:Boolean=false) extends Module {
+   require(!enableTileLoan || !overlap,"the bounded tile loan profile uses the existing non-overlapped owner")
+-  val io=IO(new SiluOwnerPort(enableTileLoan))
++  require(!enableBinaryAdd || (enableTileLoan && !overlap),"binary Add requires the single serial tile-loan SFU")
++  val io=IO(new SiluOwnerPort(enableTileLoan,enableBinaryAdd))
+   if(overlap){val dut=Module(new OverlappedSiluOwner(numericPolicy=numericPolicy));io<>dut.io}
+-  else{val dut=Module(new VectorSiluOwner(enableTileLoan,numericPolicy=numericPolicy));io<>dut.io}
++  else{val dut=Module(new VectorSiluOwner(enableTileLoan,numericPolicy=numericPolicy,enableBinaryAdd=enableBinaryAdd));io<>dut.io}
+ }
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+@@ -52,9 +52,11 @@
+ /** No block launch is exposed. One decoded owner operation per transaction;
+   * the arithmetic implementation must return instead of advancing to a phase.
+   */
+-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
+   require(!enableH2048RmsBorrower || (pipelined && (bf16GdnBlock || bf16AttentionBlock) && s.maxTokens<=128),
+     "H2048 RMS borrower requires a pipelined BF16 block profile with at most 128 tokens")
++  require(!enablePublic21QkvReduction || (pipelined && enableResidentFfn && enableTransposedDown && !overlapSilu && !enableH2048RmsBorrower && Qwen2NumericPolicy.official(numericPolicy)),
++    "public21 QKV reduction requires the original official resident chain")
+   Qwen2NumericPolicy.checkShape(numericPolicy,s)
+   require(!Qwen2NumericPolicy.official(numericPolicy) || (enableResidentFfn && !bf16Gdn && !bf16QkNormRope && !bf16AttentionCore),
+     "official policy requires the public21 resident Qwen2 chain")
+@@ -75,6 +77,7 @@
+   require(!burstWrites || pipelined)
+   require(!overlapSilu || pipelined, "overlapped SiLU requires the pipelined owner path")
+   val io=IO(new Bundle {
++    val public21BackendReset=if(enablePublic21QkvReduction)Some(Input(Bool()))else None
+     val resident=if(enableResidentFfn)Some(new FfnResidentPort)else None
+     val residentHandoff=if(enableResidentFfn)Some(Output(Valid(new QwenOwnerJob)))else None
+     val drain=if(enableFfnDrain && !enableResidentFfn)Some(new FfnDrainPort)else None
+@@ -94,21 +97,33 @@
+     val pipelineIssues=Output(UInt(64.W));val pipelineStalls=Output(UInt(64.W))
+   })
+   val resident=if(enableResidentFfn)Some(Module(new FfnResidentCoordinator))else None
+-  val ffnWindow=if(enableResidentFfn)Some(resident.get.io.window)else io.window
+-  val ffnTiles=if(enableResidentFfn)Some(resident.get.io.tiles)else io.tiles
+-  val ffnTileSilu=if(enableResidentFfn)Some(resident.get.io.silu)else io.tileSilu
+-  val ffnDrain=if(enableResidentFfn)Some(resident.get.io.drain)else io.drain
+-  if(enableResidentFfn){resident.get.io.group<>io.resident.get;io.residentHandoff.get:=resident.get.io.handoff}
++  val qkvRouter=if(enablePublic21QkvReduction)Some(Module(new Public21QkvReductionRouter))else None
++  val ordinaryJob=if(enablePublic21QkvReduction)qkvRouter.get.io.ordinaryJob else io.job
++  val ordinaryDone=if(enablePublic21QkvReduction)qkvRouter.get.io.ordinaryDone else io.done
++  val residentInput=if(enablePublic21QkvReduction)Some(qkvRouter.get.io.resident)else io.resident
++  val ffnWindow=if(enablePublic21QkvReduction)Some(qkvRouter.get.io.window)else if(enableResidentFfn)Some(resident.get.io.window)else io.window
++  val ffnTiles=if(enablePublic21QkvReduction)Some(qkvRouter.get.io.tiles)else if(enableResidentFfn)Some(resident.get.io.tiles)else io.tiles
++  val ffnTileSilu=if(enablePublic21QkvReduction)Some(qkvRouter.get.io.vector)else if(enableResidentFfn)Some(resident.get.io.silu)else io.tileSilu
++  val ffnDrain=if(enablePublic21QkvReduction)Some(qkvRouter.get.io.drain)else if(enableResidentFfn)Some(resident.get.io.drain)else io.drain
++  if(enableResidentFfn){resident.get.io.group<>residentInput.get;
++    io.residentHandoff.get:=resident.get.io.handoff}
++  if(enablePublic21QkvReduction){
++    val r=qkvRouter.get
++    r.io.job<>io.job;io.done<>r.io.done;r.io.residentHost<>io.resident.get
++    r.io.residentWindow<>resident.get.io.window;r.io.residentDrain<>resident.get.io.drain
++    r.io.residentTiles<>resident.get.io.tiles;r.io.residentVector<>resident.get.io.silu
++    r.io.residentHandoff:=resident.get.io.handoff;io.residentHandoff.get:=r.io.handoff
++  }
+   if(!pipelined){
+   val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,numericPolicy=numericPolicy))
+   core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+-  core.io.ownerJob.get<>io.job
+-  val tag=Reg(UInt(32.W));when(io.job.fire){tag:=io.job.bits.tag}
+-  io.done.valid:=core.io.result.valid;core.io.result.ready:=io.done.ready
+-  io.done.bits.tag:=tag;io.done.bits.status:=core.io.result.bits.status
+-  io.done.bits.writeBytes:=core.io.acknowledgedWriteBytes
+-  io.done.bits.cycles:=core.io.result.bits.cycles
+-  io.done.bits.usefulMacs:=core.io.result.bits.macs;io.done.bits.executedMacs:=core.io.result.bits.executedMacs
++  core.io.ownerJob.get<>ordinaryJob
++  val tag=Reg(UInt(32.W));when(ordinaryJob.fire){tag:=ordinaryJob.bits.tag}
++  ordinaryDone.valid:=core.io.result.valid;core.io.result.ready:=ordinaryDone.ready
++  ordinaryDone.bits.tag:=tag;ordinaryDone.bits.status:=core.io.result.bits.status
++  ordinaryDone.bits.writeBytes:=core.io.acknowledgedWriteBytes
++  ordinaryDone.bits.cycles:=core.io.result.bits.cycles
++  ordinaryDone.bits.usefulMacs:=core.io.result.bits.macs;ordinaryDone.bits.executedMacs:=core.io.result.bits.executedMacs
+   io.memory<>core.io.memory;core.io.response<>io.response;io.resetRequired:=core.io.resetRequired
+     io.pipelineIssues:=0.U;io.pipelineStalls:=0.U
+   }else{
+@@ -117,7 +132,7 @@
+     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+     // Elaborate one owner and one bank allocation; the common IO is storage-free.
+     val dense:DenseOwnerIO=if(enableTransposedDown)
+-      Module(new TransposedDenseDownOwner(burstWrites=burstWrites,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain,numericPolicy=numericPolicy)).io
++      Module(new TransposedDenseDownOwner(burstWrites=burstWrites,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain,numericPolicy=numericPolicy,enableKWindow=enablePublic21QkvReduction,enableDenseDrain=enablePublic21QkvReduction)).io
+     else if(enableTransposedSeed)
+       Module(new TransposedDenseSeedOwner(burstWrites=burstWrites)).io
+     else if(enableTransposedDense)
+@@ -125,7 +140,7 @@
+     else Module(new StreamingDenseOwner(s.maxRow,burstWrites=burstWrites)).io
+     // The core-only GDN command profile never accepts legacy Activation jobs.
+     // Do not elaborate the otherwise unused sixteen-lane legacy SFU here.
+-    val silu=if(bf16GdnCore||bf16QkNormRope)None else Some(Module(new ScheduledSiluOwner(overlapSilu,enableTileLoan=enableFfnTiles,numericPolicy=numericPolicy)))
++    val silu=if(bf16GdnCore||bf16QkNormRope)None else Some(Module(new ScheduledSiluOwner(overlapSilu,enableTileLoan=enableFfnTiles,numericPolicy=numericPolicy,enableBinaryAdd=enablePublic21QkvReduction)))
+     if(enableFfnTiles){dense.tiles.get<>ffnTiles.get;silu.get.io.loan.get<>ffnTileSilu.get}
+     val matrix=Module(new MatrixPipelineService(enableTransposedDense=enableTransposedDense,enableAccumulatorSeed=enableTransposedSeed))
+     if(enableTransposedSeed){dense.prefixWorkspace.get:=io.prefixWorkspace.get}
+@@ -151,29 +166,29 @@
+     val gqaPhysicalBase=Reg(UInt(64.W));val gqaLogicalMacs=Reg(UInt(64.W))
+     val active=RegInit(false.B);val mode=Reg(UInt(4.W));val tag=Reg(UInt(32.W));val rejected=RegInit(false.B)
+     val gdnExpected=Reg(UInt(32.W));val gdnCurrent=Reg(UInt(32.W))
+-    val chooseCore=Mux(bf16Gdn.B && io.job.bits.kind===QwenOwnerKind.GdnConv.U,3.U,
+-      Mux(bf16GdnCore.B && io.job.bits.kind===QwenOwnerKind.GdnInputPrep.U,4.U,
+-        Mux(bf16GdnCore.B && io.job.bits.kind===QwenOwnerKind.GdnRecurrent.U,5.U,
+-          Mux(bf16GdnCore.B && io.job.bits.kind===QwenOwnerKind.GdnGatedNorm.U,6.U,
+-            Mux(io.job.bits.kind>QwenOwnerKind.KvAppend.U,7.U,
+-              Mux(io.job.bits.kind===QwenOwnerKind.Dense.U,1.U,Mux((bf16GdnCore||bf16QkNormRope).B,7.U,Mux(io.job.bits.kind===QwenOwnerKind.Activation.U,2.U,0.U))))))))
+-    val rmsTyped=io.job.bits.activationBf16 && io.job.bits.weightBf16 && io.job.bits.outputBf16 &&
+-      io.job.bits.n===2048.U && io.job.bits.k===2048.U &&
+-      io.job.bits.writeBytes===(io.job.bits.m.pad(64)<<12)(63,0)
++    val chooseCore=Mux(bf16Gdn.B && ordinaryJob.bits.kind===QwenOwnerKind.GdnConv.U,3.U,
++      Mux(bf16GdnCore.B && ordinaryJob.bits.kind===QwenOwnerKind.GdnInputPrep.U,4.U,
++        Mux(bf16GdnCore.B && ordinaryJob.bits.kind===QwenOwnerKind.GdnRecurrent.U,5.U,
++          Mux(bf16GdnCore.B && ordinaryJob.bits.kind===QwenOwnerKind.GdnGatedNorm.U,6.U,
++            Mux(ordinaryJob.bits.kind>QwenOwnerKind.KvAppend.U,7.U,
++              Mux(ordinaryJob.bits.kind===QwenOwnerKind.Dense.U,1.U,Mux((bf16GdnCore||bf16QkNormRope).B,7.U,Mux(ordinaryJob.bits.kind===QwenOwnerKind.Activation.U,2.U,0.U))))))))
++    val rmsTyped=ordinaryJob.bits.activationBf16 && ordinaryJob.bits.weightBf16 && ordinaryJob.bits.outputBf16 &&
++      ordinaryJob.bits.n===2048.U && ordinaryJob.bits.k===2048.U &&
++      ordinaryJob.bits.writeBytes===(ordinaryJob.bits.m.pad(64)<<12)(63,0)
+     val rmsMode=if(enableH2048RmsBorrower)Mux(rmsTyped,8.U,7.U)else 8.U
+-    val chooseBase=Mux((bf16GdnBlock||bf16AttentionBlock).B && io.job.bits.kind===QwenOwnerKind.GdnRmsNorm.U,rmsMode,
+-      Mux((bf16GdnBlock||bf16AttentionBlock).B && io.job.bits.kind===QwenOwnerKind.GdnElementwise.U,9.U,chooseCore))
+-    val chooseQk=Mux(bf16QkNormRope.B && io.job.bits.kind===QwenOwnerKind.QkNorm256.U,10.U,
+-      Mux(bf16QkNormRope.B && io.job.bits.kind===QwenOwnerKind.PartialRope64.U,11.U,chooseBase))
+-    val attentionTyped=io.job.bits.activationBf16 && io.job.bits.weightBf16 && io.job.bits.outputBf16 &&
+-      io.job.bits.cacheCapacity>0.U && io.job.bits.cacheCapacity<=256.U
+-    val choose=if(enableFfnTiles)Mux(ffnTiles.get.leased && io.job.bits.kind=/=QwenOwnerKind.Dense.U,7.U,Mux(bf16AttentionCore.B && io.job.bits.kind===QwenOwnerKind.KvAppend.U,
+-      Mux(attentionTyped && io.job.bits.n===512.U,12.U,7.U),
+-      Mux(bf16AttentionCore.B && io.job.bits.kind===QwenOwnerKind.Attention.U,
+-        Mux(attentionTyped && io.job.bits.n===2048.U,13.U,7.U),chooseQk)))else Mux(bf16AttentionCore.B && io.job.bits.kind===QwenOwnerKind.KvAppend.U,
+-      Mux(attentionTyped && io.job.bits.n===512.U,12.U,7.U),
+-      Mux(bf16AttentionCore.B && io.job.bits.kind===QwenOwnerKind.Attention.U,
+-        Mux(attentionTyped && io.job.bits.n===2048.U,13.U,7.U),chooseQk))
++    val chooseBase=Mux((bf16GdnBlock||bf16AttentionBlock).B && ordinaryJob.bits.kind===QwenOwnerKind.GdnRmsNorm.U,rmsMode,
++      Mux((bf16GdnBlock||bf16AttentionBlock).B && ordinaryJob.bits.kind===QwenOwnerKind.GdnElementwise.U,9.U,chooseCore))
++    val chooseQk=Mux(bf16QkNormRope.B && ordinaryJob.bits.kind===QwenOwnerKind.QkNorm256.U,10.U,
++      Mux(bf16QkNormRope.B && ordinaryJob.bits.kind===QwenOwnerKind.PartialRope64.U,11.U,chooseBase))
++    val attentionTyped=ordinaryJob.bits.activationBf16 && ordinaryJob.bits.weightBf16 && ordinaryJob.bits.outputBf16 &&
++      ordinaryJob.bits.cacheCapacity>0.U && ordinaryJob.bits.cacheCapacity<=256.U
++    val choose=if(enableFfnTiles)Mux(ffnTiles.get.leased && ordinaryJob.bits.kind=/=QwenOwnerKind.Dense.U,7.U,Mux(bf16AttentionCore.B && ordinaryJob.bits.kind===QwenOwnerKind.KvAppend.U,
++      Mux(attentionTyped && ordinaryJob.bits.n===512.U,12.U,7.U),
++      Mux(bf16AttentionCore.B && ordinaryJob.bits.kind===QwenOwnerKind.Attention.U,
++        Mux(attentionTyped && ordinaryJob.bits.n===2048.U,13.U,7.U),chooseQk)))else Mux(bf16AttentionCore.B && ordinaryJob.bits.kind===QwenOwnerKind.KvAppend.U,
++      Mux(attentionTyped && ordinaryJob.bits.n===512.U,12.U,7.U),
++      Mux(bf16AttentionCore.B && ordinaryJob.bits.kind===QwenOwnerKind.Attention.U,
++        Mux(attentionTyped && ordinaryJob.bits.n===2048.U,13.U,7.U),chooseQk))
+     val gdnReady=gdn.map(_.io.job.ready).getOrElse(false.B)
+     val gdnPoison=(gdn.toSeq.map(_.io.resetRequired)++prep.toSeq.map(_.io.resetRequired)++recurrent.toSeq.map(_.io.resetRequired)++gatedNorm.toSeq.map(_.io.resetRequired)++rmsNorm.map(_.resetRequired)++elementwise.toSeq.map(_.io.resetRequired)++qkNorm.toSeq.map(_.io.resetRequired)++partialRope.toSeq.map(_.io.resetRequired)++kvAppend.toSeq.map(_.io.resetRequired)++gqa.toSeq.map(_.io.resetRequired)).foldLeft(false.B)(_||_)
+     val sharedPoison=core.io.resetRequired||dense.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
+@@ -199,7 +214,7 @@
+     }
+     val canStart= !active && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope||enableTransposedDense).B && sharedPoison) && !rmsBorrowerUnavailable
+     if(enableResidentFfn){
+-      val g=resident.get.io.group;val host=io.resident.get
++      val g=resident.get.io.group;val host=residentInput.get
+       val available= !active && !rejected && !gdnPoison && !sharedPoison
+       g.request.valid:=host.request.valid && available;host.request.ready:=g.request.ready && available
+       // Register aggregate service failure before feeding an abort back into
+@@ -220,7 +235,7 @@
+     val tileBusy=if(enableFfnTiles)ffnTiles.get.busy || ffnTileSilu.get.busy || ffnTiles.get.control.valid || ffnTiles.get.write.valid || ffnTiles.get.read.valid || ffnTileSilu.get.request.valid || ffnTiles.get.abort || ffnTileSilu.get.abort else false.B
+     if(enableFfnWindow){
+       dense.window.get<>ffnWindow.get
+-      dense.window.get.invalidateLease:=ffnWindow.get.invalidateLease || io.job.fire
++      dense.window.get.invalidateLease:=ffnWindow.get.invalidateLease || ordinaryJob.fire
+       val available=if(enableFfnDrain)!active && !sharedPoison && !rejected && !tileBusy && !dense.drain.get.busy else !active && !sharedPoison && !rejected && !tileBusy
+       dense.window.get.request.valid:=ffnWindow.get.request.valid && available
+       ffnWindow.get.request.ready:=dense.window.get.request.ready && available
+@@ -239,157 +254,157 @@
+     }
+     val drainBusy=if(enableFfnDrain)dense.drain.get.busy || ffnDrain.get.request.valid else false.B
+     val windowBusy=if(enableFfnWindow)dense.window.get.busy || ffnWindow.get.request.valid else false.B
+-    val canStartWithTiles=if(enableResidentFfn)canStart && !tileBusy && !windowBusy && !drainBusy && !resident.get.io.group.busy && !io.resident.get.request.valid
++    val canStartWithTiles=if(enableResidentFfn)canStart && !tileBusy && !windowBusy && !drainBusy && !resident.get.io.group.busy && !residentInput.get.request.valid
+     else if(enableFfnDrain)canStart && !tileBusy && !windowBusy && !drainBusy else if(enableFfnWindow)canStart && !tileBusy && !windowBusy else if(enableFfnTiles)canStart && !tileBusy else canStart
+-    io.job.ready:=canStartWithTiles && MuxLookup(choose,false.B)(Seq(0.U->core.io.ownerJob.get.ready,1.U->dense.job.ready,2.U->silu.map(_.io.job.ready).getOrElse(false.B),3.U->gdnReady,
++    ordinaryJob.ready:=canStartWithTiles && MuxLookup(choose,false.B)(Seq(0.U->core.io.ownerJob.get.ready,1.U->dense.job.ready,2.U->silu.map(_.io.job.ready).getOrElse(false.B),3.U->gdnReady,
+       4.U->prep.map(_.io.job.ready).getOrElse(false.B),5.U->recurrent.map(_.io.job.ready).getOrElse(false.B),6.U->gatedNorm.map(_.io.job.ready).getOrElse(false.B),7.U->true.B,8.U->rmsNorm.headOption.map(_.job.ready).getOrElse(false.B),9.U->elementwise.map(_.io.job.ready).getOrElse(false.B),10.U->qkNorm.map(_.io.job.ready).getOrElse(false.B),11.U->partialRope.map(_.io.job.ready).getOrElse(false.B),12.U->kvAppend.map(_.io.job.ready).getOrElse(false.B),13.U->gqa.map(_.io.job.ready).getOrElse(false.B)))
+-    core.io.ownerJob.get.valid:=io.job.valid && canStartWithTiles && choose===0.U;core.io.ownerJob.get.bits:=io.job.bits
+-    dense.job.valid:=io.job.valid && canStartWithTiles && choose===1.U;dense.job.bits:=io.job.bits
+-    silu.foreach{a=>a.io.job.valid:=io.job.valid && canStartWithTiles && choose===2.U;a.io.job.bits:=io.job.bits}
+-    when(io.job.fire){active:=true.B;mode:=choose;tag:=io.job.bits.tag
+-      when(choose===3.U || choose===5.U || choose===12.U){gdnExpected:=io.job.bits.expectedGeneration;gdnCurrent:=io.job.bits.currentGeneration}
+-      when(choose===12.U){kvRoot:=io.job.bits.dst;kvCapacity:=io.job.bits.cacheCapacity;kvLength:=io.job.bits.cacheLength+io.job.bits.m}
+-      when(choose===13.U){gqaPhysicalBase:=matrix.io.acceptedSteps;gqaLogicalMacs:=(io.job.bits.m.pad(64)*io.job.bits.cacheLength.pad(64))<<12}
++    core.io.ownerJob.get.valid:=ordinaryJob.valid && canStartWithTiles && choose===0.U;core.io.ownerJob.get.bits:=ordinaryJob.bits
++    dense.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===1.U;dense.job.bits:=ordinaryJob.bits
++    silu.foreach{a=>a.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===2.U;a.io.job.bits:=ordinaryJob.bits}
++    when(ordinaryJob.fire){active:=true.B;mode:=choose;tag:=ordinaryJob.bits.tag
++      when(choose===3.U || choose===5.U || choose===12.U){gdnExpected:=ordinaryJob.bits.expectedGeneration;gdnCurrent:=ordinaryJob.bits.currentGeneration}
++      when(choose===12.U){kvRoot:=ordinaryJob.bits.dst;kvCapacity:=ordinaryJob.bits.cacheCapacity;kvLength:=ordinaryJob.bits.cacheLength+ordinaryJob.bits.m}
++      when(choose===13.U){gqaPhysicalBase:=matrix.io.acceptedSteps;gqaLogicalMacs:=(ordinaryJob.bits.m.pad(64)*ordinaryJob.bits.cacheLength.pad(64))<<12}
+       when(choose===7.U){rejected:=true.B}
+     }
+     val gdnDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val gdnValid=WireDefault(false.B)
+     gdn.foreach{gd=>
+-      gd.io.job.valid:=io.job.valid && canStartWithTiles && choose===3.U
+-      gd.io.job.bits.tokens:=io.job.bits.m;gd.io.job.bits.channels:=io.job.bits.n
+-      gd.io.job.bits.input:=io.job.bits.a;gd.io.job.bits.weight:=io.job.bits.b
+-      gd.io.job.bits.historyIn:=io.job.bits.c;gd.io.job.bits.historyOut:=io.job.bits.historyOut
+-      gd.io.job.bits.output:=io.job.bits.dst;gd.io.job.bits.cold:=io.job.bits.cold
+-      gd.io.job.bits.expectedGeneration:=io.job.bits.expectedGeneration;gd.io.job.bits.tag:=io.job.bits.tag
+-      gd.io.currentGeneration:=Mux(active,gdnCurrent,io.job.bits.currentGeneration)
++      gd.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===3.U
++      gd.io.job.bits.tokens:=ordinaryJob.bits.m;gd.io.job.bits.channels:=ordinaryJob.bits.n
++      gd.io.job.bits.input:=ordinaryJob.bits.a;gd.io.job.bits.weight:=ordinaryJob.bits.b
++      gd.io.job.bits.historyIn:=ordinaryJob.bits.c;gd.io.job.bits.historyOut:=ordinaryJob.bits.historyOut
++      gd.io.job.bits.output:=ordinaryJob.bits.dst;gd.io.job.bits.cold:=ordinaryJob.bits.cold
++      gd.io.job.bits.expectedGeneration:=ordinaryJob.bits.expectedGeneration;gd.io.job.bits.tag:=ordinaryJob.bits.tag
++      gd.io.currentGeneration:=Mux(active,gdnCurrent,ordinaryJob.bits.currentGeneration)
+       gdnValid:=gd.io.done.valid;gdnDone.tag:=gd.io.done.bits.tag
+       val invalidCommit=gd.io.done.bits.status===0.U &&
+         (!gd.io.done.bits.historyCommitted || gd.io.done.bits.generation=/=gdnExpected+1.U)
+       gdnDone.status:=Mux(invalidCommit,Status.Protocol.U,gd.io.done.bits.status)
+       gdnDone.writeBytes:=gd.io.done.bits.writeBytes;gdnDone.cycles:=gd.io.done.bits.cycles
+-      gd.io.done.ready:=active && mode===3.U && io.done.ready
++      gd.io.done.ready:=active && mode===3.U && ordinaryDone.ready
+       when(gd.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val prepDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val prepValid=WireDefault(false.B)
+     prep.foreach{p=>
+-      p.io.job.valid:=io.job.valid && canStartWithTiles && choose===4.U
+-      p.io.job.bits.tokens:=io.job.bits.m;p.io.job.bits.heads:=io.job.bits.n
+-      p.io.job.bits.queryIn:=io.job.bits.a;p.io.job.bits.keyIn:=io.job.bits.a+4096.U;p.io.job.bits.valueIn:=io.job.bits.a+8192.U
+-      p.io.job.bits.ab:=io.job.bits.b;p.io.job.bits.aLog:=io.job.bits.gdnALog;p.io.job.bits.dtBias:=io.job.bits.gdnDtBias
+-      p.io.job.bits.query:=io.job.bits.dst;p.io.job.bits.key:=io.job.bits.dst+8192.U;p.io.job.bits.value:=io.job.bits.dst+16384.U;p.io.job.bits.gates:=io.job.bits.dst+24576.U
+-      p.io.job.bits.recurrentMode:=io.job.bits.gdnRecurrentMode;p.io.job.bits.tag:=io.job.bits.tag
++      p.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===4.U
++      p.io.job.bits.tokens:=ordinaryJob.bits.m;p.io.job.bits.heads:=ordinaryJob.bits.n
++      p.io.job.bits.queryIn:=ordinaryJob.bits.a;p.io.job.bits.keyIn:=ordinaryJob.bits.a+4096.U;p.io.job.bits.valueIn:=ordinaryJob.bits.a+8192.U
++      p.io.job.bits.ab:=ordinaryJob.bits.b;p.io.job.bits.aLog:=ordinaryJob.bits.gdnALog;p.io.job.bits.dtBias:=ordinaryJob.bits.gdnDtBias
++      p.io.job.bits.query:=ordinaryJob.bits.dst;p.io.job.bits.key:=ordinaryJob.bits.dst+8192.U;p.io.job.bits.value:=ordinaryJob.bits.dst+16384.U;p.io.job.bits.gates:=ordinaryJob.bits.dst+24576.U
++      p.io.job.bits.recurrentMode:=ordinaryJob.bits.gdnRecurrentMode;p.io.job.bits.tag:=ordinaryJob.bits.tag
+       prepValid:=p.io.done.valid;prepDone.tag:=p.io.done.bits.tag
+       val invalidCommit=p.io.done.bits.status===0.U && !p.io.done.bits.outputCommitted
+       prepDone.status:=Mux(invalidCommit,Status.Protocol.U,p.io.done.bits.status)
+       prepDone.writeBytes:=p.io.done.bits.writeBytes;prepDone.cycles:=p.io.done.bits.cycles
+-      p.io.done.ready:=active && mode===4.U && io.done.ready
++      p.io.done.ready:=active && mode===4.U && ordinaryDone.ready
+       when(p.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val recurrentDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val recurrentValid=WireDefault(false.B)
+     recurrent.foreach{r=>
+-      r.io.job.valid:=io.job.valid && canStartWithTiles && choose===5.U
+-      r.io.job.bits.tokens:=io.job.bits.m;r.io.job.bits.heads:=io.job.bits.n;r.io.job.bits.keyDim:=io.job.bits.k;r.io.job.bits.valueDim:=io.job.bits.k
+-      r.io.job.bits.query:=io.job.bits.a;r.io.job.bits.key:=io.job.bits.a+8192.U;r.io.job.bits.value:=io.job.bits.a+16384.U;r.io.job.bits.gates:=io.job.bits.a+24576.U
+-      r.io.job.bits.stateIn:=io.job.bits.b;r.io.job.bits.stateOut:=io.job.bits.gdnStateOut;r.io.job.bits.output:=io.job.bits.dst
+-      r.io.job.bits.cold:=io.job.bits.cold;r.io.job.bits.expectedGeneration:=io.job.bits.expectedGeneration;r.io.job.bits.tag:=io.job.bits.tag
+-      r.io.currentGeneration:=Mux(active,gdnCurrent,io.job.bits.currentGeneration)
++      r.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===5.U
++      r.io.job.bits.tokens:=ordinaryJob.bits.m;r.io.job.bits.heads:=ordinaryJob.bits.n;r.io.job.bits.keyDim:=ordinaryJob.bits.k;r.io.job.bits.valueDim:=ordinaryJob.bits.k
++      r.io.job.bits.query:=ordinaryJob.bits.a;r.io.job.bits.key:=ordinaryJob.bits.a+8192.U;r.io.job.bits.value:=ordinaryJob.bits.a+16384.U;r.io.job.bits.gates:=ordinaryJob.bits.a+24576.U
++      r.io.job.bits.stateIn:=ordinaryJob.bits.b;r.io.job.bits.stateOut:=ordinaryJob.bits.gdnStateOut;r.io.job.bits.output:=ordinaryJob.bits.dst
++      r.io.job.bits.cold:=ordinaryJob.bits.cold;r.io.job.bits.expectedGeneration:=ordinaryJob.bits.expectedGeneration;r.io.job.bits.tag:=ordinaryJob.bits.tag
++      r.io.currentGeneration:=Mux(active,gdnCurrent,ordinaryJob.bits.currentGeneration)
+       recurrentValid:=r.io.done.valid;recurrentDone.tag:=r.io.done.bits.tag
+       val invalidCommit=r.io.done.bits.status===0.U && (!r.io.done.bits.stateCommitted || r.io.done.bits.generation=/=gdnExpected+1.U)
+       recurrentDone.status:=Mux(invalidCommit,Status.Protocol.U,r.io.done.bits.status)
+       recurrentDone.writeBytes:=r.io.done.bits.writeBytes;recurrentDone.cycles:=r.io.done.bits.cycles
+-      r.io.done.ready:=active && mode===5.U && io.done.ready
++      r.io.done.ready:=active && mode===5.U && ordinaryDone.ready
+       when(r.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val gatedDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val gatedValid=WireDefault(false.B)
+     gatedNorm.foreach{n=>
+-      n.io.job.valid:=io.job.valid && canStartWithTiles && choose===6.U
+-      n.io.job.bits.tokens:=io.job.bits.m;n.io.job.bits.heads:=io.job.bits.n
+-      n.io.job.bits.core:=io.job.bits.a;n.io.job.bits.gate:=io.job.bits.b;n.io.job.bits.weight:=io.job.bits.c;n.io.job.bits.output:=io.job.bits.dst;n.io.job.bits.tag:=io.job.bits.tag
++      n.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===6.U
++      n.io.job.bits.tokens:=ordinaryJob.bits.m;n.io.job.bits.heads:=ordinaryJob.bits.n
++      n.io.job.bits.core:=ordinaryJob.bits.a;n.io.job.bits.gate:=ordinaryJob.bits.b;n.io.job.bits.weight:=ordinaryJob.bits.c;n.io.job.bits.output:=ordinaryJob.bits.dst;n.io.job.bits.tag:=ordinaryJob.bits.tag
+       gatedValid:=n.io.done.valid;gatedDone.tag:=n.io.done.bits.tag
+       val invalidCommit=n.io.done.bits.status===0.U && !n.io.done.bits.outputCommitted
+       gatedDone.status:=Mux(invalidCommit,Status.Protocol.U,n.io.done.bits.status)
+       gatedDone.writeBytes:=n.io.done.bits.writeBytes;gatedDone.cycles:=n.io.done.bits.cycles
+-      n.io.done.ready:=active && mode===6.U && io.done.ready
++      n.io.done.ready:=active && mode===6.U && ordinaryDone.ready
+       when(n.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val rmsDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val rmsValid=WireDefault(false.B)
+     rmsNorm.foreach{n=>
+-      n.job.valid:=io.job.valid && canStartWithTiles && choose===8.U
+-      n.job.bits.tokens:=io.job.bits.m;n.job.bits.hiddenWidth:=io.job.bits.n
+-      n.job.bits.input:=io.job.bits.a;n.job.bits.weight:=io.job.bits.b;n.job.bits.output:=io.job.bits.dst;n.job.bits.tag:=io.job.bits.tag
++      n.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===8.U
++      n.job.bits.tokens:=ordinaryJob.bits.m;n.job.bits.hiddenWidth:=ordinaryJob.bits.n
++      n.job.bits.input:=ordinaryJob.bits.a;n.job.bits.weight:=ordinaryJob.bits.b;n.job.bits.output:=ordinaryJob.bits.dst;n.job.bits.tag:=ordinaryJob.bits.tag
+       rmsValid:=n.done.valid;rmsDone.tag:=n.done.bits.tag
+       val invalidCommit=n.done.bits.status===0.U && !n.done.bits.outputCommitted
+       rmsDone.status:=Mux(invalidCommit,Status.Protocol.U,n.done.bits.status)
+       rmsDone.writeBytes:=n.done.bits.writeBytes;rmsDone.cycles:=n.done.bits.cycles
+-      n.done.ready:=active && mode===8.U && io.done.ready
++      n.done.ready:=active && mode===8.U && ordinaryDone.ready
+       when(n.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val elementDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val elementValid=WireDefault(false.B)
+     elementwise.foreach{e=>
+-      e.io.job.valid:=io.job.valid && canStartWithTiles && choose===9.U
+-      e.io.job.bits.op:=io.job.bits.gdnElementwiseOp;e.io.job.bits.tokens:=io.job.bits.m;e.io.job.bits.rowWidth:=io.job.bits.n
+-      e.io.job.bits.a:=io.job.bits.a;e.io.job.bits.b:=io.job.bits.b;e.io.job.bits.output:=io.job.bits.dst;e.io.job.bits.tag:=io.job.bits.tag
++      e.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===9.U
++      e.io.job.bits.op:=ordinaryJob.bits.gdnElementwiseOp;e.io.job.bits.tokens:=ordinaryJob.bits.m;e.io.job.bits.rowWidth:=ordinaryJob.bits.n
++      e.io.job.bits.a:=ordinaryJob.bits.a;e.io.job.bits.b:=ordinaryJob.bits.b;e.io.job.bits.output:=ordinaryJob.bits.dst;e.io.job.bits.tag:=ordinaryJob.bits.tag
+       elementValid:=e.io.done.valid;elementDone.tag:=e.io.done.bits.tag
+       val invalidCommit=e.io.done.bits.status===0.U && !e.io.done.bits.outputCommitted
+       elementDone.status:=Mux(invalidCommit,Status.Protocol.U,e.io.done.bits.status)
+       elementDone.writeBytes:=e.io.done.bits.writeBytes;elementDone.cycles:=e.io.done.bits.cycles
+-      e.io.done.ready:=active && mode===9.U && io.done.ready
++      e.io.done.ready:=active && mode===9.U && ordinaryDone.ready
+       when(e.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val qkNormDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val qkNormValid=WireDefault(false.B)
+     qkNorm.foreach{n=>
+-      n.io.job.valid:=io.job.valid && canStartWithTiles && choose===10.U
+-      n.io.job.bits.tokens:=io.job.bits.m;n.io.job.bits.role:=io.job.bits.qkRole
+-      n.io.job.bits.headDim:=io.job.bits.k;n.io.job.bits.policy:="hc1".U;n.io.job.bits.epsilon:="h358637bd".U
+-      n.io.job.bits.input:=io.job.bits.a;n.io.job.bits.weight:=io.job.bits.b
+-      n.io.job.bits.output:=io.job.bits.dst;n.io.job.bits.gateOutput:=io.job.bits.c;n.io.job.bits.tag:=io.job.bits.tag
++      n.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===10.U
++      n.io.job.bits.tokens:=ordinaryJob.bits.m;n.io.job.bits.role:=ordinaryJob.bits.qkRole
++      n.io.job.bits.headDim:=ordinaryJob.bits.k;n.io.job.bits.policy:="hc1".U;n.io.job.bits.epsilon:="h358637bd".U
++      n.io.job.bits.input:=ordinaryJob.bits.a;n.io.job.bits.weight:=ordinaryJob.bits.b
++      n.io.job.bits.output:=ordinaryJob.bits.dst;n.io.job.bits.gateOutput:=ordinaryJob.bits.c;n.io.job.bits.tag:=ordinaryJob.bits.tag
+       n.io.scalarFlags:=core.io.scalarPrimitiveFlags.get;n.io.scalarFlagsValid:=core.io.scalarPrimitiveFlagsValid.get
+       qkNormValid:=n.io.done.valid;qkNormDone.tag:=n.io.done.bits.tag
+       val invalidCommit=n.io.done.bits.status===0.U && !n.io.done.bits.outputCommitted
+       qkNormDone.status:=Mux(invalidCommit,Status.Protocol.U,n.io.done.bits.status)
+       qkNormDone.writeBytes:=n.io.done.bits.writeBytes;qkNormDone.cycles:=n.io.done.bits.cycles
+-      n.io.done.ready:=active && mode===10.U && io.done.ready
++      n.io.done.ready:=active && mode===10.U && ordinaryDone.ready
+       when(n.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val partialRopeDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val partialRopeValid=WireDefault(false.B)
+     partialRope.foreach{r=>
+-      r.io.job.valid:=io.job.valid && canStartWithTiles && choose===11.U
+-      r.io.job.bits.tokens:=io.job.bits.m;r.io.job.bits.heads:=io.job.bits.n
+-      r.io.job.bits.headDim:=io.job.bits.k;r.io.job.bits.rotaryDim:=64.U;r.io.job.bits.policy:="hb1".U
+-      r.io.job.bits.input:=io.job.bits.a;r.io.job.bits.trig:=io.job.bits.b;r.io.job.bits.output:=io.job.bits.dst
+-      r.io.job.bits.positionBase:=io.job.bits.qkPositionBase;r.io.job.bits.trigTokens:=io.job.bits.qkTrigTokens;r.io.job.bits.tag:=io.job.bits.tag
++      r.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===11.U
++      r.io.job.bits.tokens:=ordinaryJob.bits.m;r.io.job.bits.heads:=ordinaryJob.bits.n
++      r.io.job.bits.headDim:=ordinaryJob.bits.k;r.io.job.bits.rotaryDim:=64.U;r.io.job.bits.policy:="hb1".U
++      r.io.job.bits.input:=ordinaryJob.bits.a;r.io.job.bits.trig:=ordinaryJob.bits.b;r.io.job.bits.output:=ordinaryJob.bits.dst
++      r.io.job.bits.positionBase:=ordinaryJob.bits.qkPositionBase;r.io.job.bits.trigTokens:=ordinaryJob.bits.qkTrigTokens;r.io.job.bits.tag:=ordinaryJob.bits.tag
+       r.io.scalarFlags:=core.io.scalarPrimitiveFlags.get;r.io.scalarFlagsValid:=core.io.scalarPrimitiveFlagsValid.get
+       partialRopeValid:=r.io.done.valid;partialRopeDone.tag:=r.io.done.bits.tag
+       val invalidCommit=r.io.done.bits.status===0.U && !r.io.done.bits.outputCommitted
+       partialRopeDone.status:=Mux(invalidCommit,Status.Protocol.U,r.io.done.bits.status)
+       partialRopeDone.writeBytes:=r.io.done.bits.writeBytes;partialRopeDone.cycles:=r.io.done.bits.cycles
+-      r.io.done.ready:=active && mode===11.U && io.done.ready
++      r.io.done.ready:=active && mode===11.U && ordinaryDone.ready
+       when(r.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     val kvAppendDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val kvAppendValid=WireDefault(false.B)
+     kvAppend.foreach{kv=>
+-      kv.io.job.valid:=io.job.valid && canStartWithTiles && choose===12.U
+-      kv.io.job.bits.tokens:=io.job.bits.m;kv.io.job.bits.kvHeads:=2.U;kv.io.job.bits.headDim:=io.job.bits.k
+-      kv.io.job.bits.keyInput:=io.job.bits.a;kv.io.job.bits.valueInput:=io.job.bits.b;kv.io.job.bits.cacheBase:=io.job.bits.dst
+-      kv.io.job.bits.capacityTokens:=io.job.bits.cacheCapacity;kv.io.job.bits.appendStart:=io.job.bits.queryStart
+-      kv.io.job.bits.currentLength:=io.job.bits.cacheLength;kv.io.job.bits.expectedLength:=io.job.bits.expectedCacheLength
+-      kv.io.job.bits.currentGeneration:=io.job.bits.currentGeneration;kv.io.job.bits.expectedGeneration:=io.job.bits.expectedGeneration
+-      kv.io.job.bits.cold:=io.job.bits.cold;kv.io.job.bits.tag:=io.job.bits.tag
++      kv.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===12.U
++      kv.io.job.bits.tokens:=ordinaryJob.bits.m;kv.io.job.bits.kvHeads:=2.U;kv.io.job.bits.headDim:=ordinaryJob.bits.k
++      kv.io.job.bits.keyInput:=ordinaryJob.bits.a;kv.io.job.bits.valueInput:=ordinaryJob.bits.b;kv.io.job.bits.cacheBase:=ordinaryJob.bits.dst
++      kv.io.job.bits.capacityTokens:=ordinaryJob.bits.cacheCapacity;kv.io.job.bits.appendStart:=ordinaryJob.bits.queryStart
++      kv.io.job.bits.currentLength:=ordinaryJob.bits.cacheLength;kv.io.job.bits.expectedLength:=ordinaryJob.bits.expectedCacheLength
++      kv.io.job.bits.currentGeneration:=ordinaryJob.bits.currentGeneration;kv.io.job.bits.expectedGeneration:=ordinaryJob.bits.expectedGeneration
++      kv.io.job.bits.cold:=ordinaryJob.bits.cold;kv.io.job.bits.tag:=ordinaryJob.bits.tag
+       kvAppendValid:=kv.io.done.valid;kvAppendDone.tag:=kv.io.done.bits.tag
+       val invalidProposal=kv.io.done.bits.status===0.U && (!kv.io.done.bits.proposalValid ||
+         kv.io.done.bits.cacheBase=/=kvRoot || kv.io.done.bits.capacityTokens=/=kvCapacity ||
+         kv.io.done.bits.proposedLength=/=kvLength || kv.io.done.bits.proposedGeneration=/=gdnExpected+1.U)
+       kvAppendDone.status:=Mux(invalidProposal,Status.Protocol.U,kv.io.done.bits.status)
+       kvAppendDone.writeBytes:=kv.io.done.bits.writeBytes;kvAppendDone.cycles:=kv.io.done.bits.cycles
+-      kv.io.done.ready:=active && mode===12.U && io.done.ready
++      kv.io.done.ready:=active && mode===12.U && ordinaryDone.ready
+       when(kv.io.done.fire && invalidProposal){rejected:=true.B}
+     }
+     val gqaDone=WireDefault(0.U.asTypeOf(new QwenOwnerResult));val gqaValid=WireDefault(false.B)
+     gqa.foreach{a=>
+-      a.io.job.valid:=io.job.valid && canStartWithTiles && choose===13.U
+-      a.io.job.bits.tokens:=io.job.bits.m;a.io.job.bits.queryHeads:=8.U;a.io.job.bits.kvHeads:=2.U;a.io.job.bits.headDim:=io.job.bits.k
+-      a.io.job.bits.queryInput:=io.job.bits.a;a.io.job.bits.cacheBase:=io.job.bits.b;a.io.job.bits.output:=io.job.bits.dst
+-      a.io.job.bits.queryStart:=io.job.bits.queryStart;a.io.job.bits.cacheLength:=io.job.bits.cacheLength
+-      a.io.job.bits.capacityTokens:=io.job.bits.cacheCapacity;a.io.job.bits.tag:=io.job.bits.tag
++      a.io.job.valid:=ordinaryJob.valid && canStartWithTiles && choose===13.U
++      a.io.job.bits.tokens:=ordinaryJob.bits.m;a.io.job.bits.queryHeads:=8.U;a.io.job.bits.kvHeads:=2.U;a.io.job.bits.headDim:=ordinaryJob.bits.k
++      a.io.job.bits.queryInput:=ordinaryJob.bits.a;a.io.job.bits.cacheBase:=ordinaryJob.bits.b;a.io.job.bits.output:=ordinaryJob.bits.dst
++      a.io.job.bits.queryStart:=ordinaryJob.bits.queryStart;a.io.job.bits.cacheLength:=ordinaryJob.bits.cacheLength
++      a.io.job.bits.capacityTokens:=ordinaryJob.bits.cacheCapacity;a.io.job.bits.tag:=ordinaryJob.bits.tag
+       gqaValid:=a.io.done.valid;gqaDone.tag:=a.io.done.bits.tag
+       val invalidCommit=a.io.done.bits.status===0.U && !a.io.done.bits.outputCommitted
+       gqaDone.status:=Mux(invalidCommit,Status.Protocol.U,a.io.done.bits.status)
+@@ -398,7 +413,7 @@
+       // Failed jobs do not claim completed useful products.
+       gqaDone.usefulMacs:=Mux(gqaDone.status===0.U,gqaLogicalMacs,0.U)
+       gqaDone.executedMacs:=(matrix.io.acceptedSteps-gqaPhysicalBase)*512.U
+-      a.io.done.ready:=active && mode===13.U && io.done.ready
++      a.io.done.ready:=active && mode===13.U && ordinaryDone.ready
+       when(a.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+     // The accepted owner retains exclusive scalar ownership until done.
+@@ -421,11 +436,11 @@
+     val oldDone=Wire(new QwenOwnerResult)
+     oldDone.tag:=tag;oldDone.status:=core.io.result.bits.status;oldDone.cycles:=core.io.result.bits.cycles
+     oldDone.writeBytes:=core.io.acknowledgedWriteBytes;oldDone.usefulMacs:=core.io.result.bits.macs;oldDone.executedMacs:=core.io.result.bits.executedMacs
+-    io.done.valid:=active && MuxLookup(mode,false.B)(Seq(0.U->core.io.result.valid,1.U->dense.done.valid,2.U->silu.map(_.io.done.valid).getOrElse(false.B),3.U->gdnValid,4.U->prepValid,5.U->recurrentValid,6.U->gatedValid,7.U->true.B,8.U->rmsValid,9.U->elementValid,10.U->qkNormValid,11.U->partialRopeValid,12.U->kvAppendValid,13.U->gqaValid))
+-    io.done.bits:=MuxLookup(mode,rejectedDone)(Seq(0.U->oldDone,1.U->dense.done.bits,2.U->silu.map(_.io.done.bits).getOrElse(rejectedDone),3.U->gdnDone,4.U->prepDone,5.U->recurrentDone,6.U->gatedDone,8.U->rmsDone,9.U->elementDone,10.U->qkNormDone,11.U->partialRopeDone,12.U->kvAppendDone,13.U->gqaDone))
+-    core.io.result.ready:=active&&mode===0.U&&io.done.ready
+-    dense.done.ready:=active&&mode===1.U&&io.done.ready;silu.foreach{a=>a.io.done.ready:=active&&mode===2.U&&io.done.ready}
+-    when(io.done.fire){active:=false.B}
++    ordinaryDone.valid:=active && MuxLookup(mode,false.B)(Seq(0.U->core.io.result.valid,1.U->dense.done.valid,2.U->silu.map(_.io.done.valid).getOrElse(false.B),3.U->gdnValid,4.U->prepValid,5.U->recurrentValid,6.U->gatedValid,7.U->true.B,8.U->rmsValid,9.U->elementValid,10.U->qkNormValid,11.U->partialRopeValid,12.U->kvAppendValid,13.U->gqaValid))
++    ordinaryDone.bits:=MuxLookup(mode,rejectedDone)(Seq(0.U->oldDone,1.U->dense.done.bits,2.U->silu.map(_.io.done.bits).getOrElse(rejectedDone),3.U->gdnDone,4.U->prepDone,5.U->recurrentDone,6.U->gatedDone,8.U->rmsDone,9.U->elementDone,10.U->qkNormDone,11.U->partialRopeDone,12.U->kvAppendDone,13.U->gqaDone))
++    core.io.result.ready:=active&&mode===0.U&&ordinaryDone.ready
++    dense.done.ready:=active&&mode===1.U&&ordinaryDone.ready;silu.foreach{a=>a.io.done.ready:=active&&mode===2.U&&ordinaryDone.ready}
++    when(ordinaryDone.fire){active:=false.B}
+     // Explicit mode keys keep GDN slots stable when legacy Activation is absent.
+     val memories=Seq(0->core.io.memory,1->dense.memory)++silu.toSeq.map(x=>2->x.io.memory)++gdn.toSeq.map(x=>3->x.io.memory)++prep.toSeq.map(x=>4->x.io.memory)++recurrent.toSeq.map(x=>5->x.io.memory)++gatedNorm.toSeq.map(x=>6->x.io.memory)++rmsNorm.map(x=>8->x.memory)++elementwise.toSeq.map(x=>9->x.io.memory)++qkNorm.toSeq.map(x=>10->x.io.memory)++partialRope.toSeq.map(x=>11->x.io.memory)++kvAppend.toSeq.map(x=>12->x.io.memory)++gqa.toSeq.map(x=>13->x.io.memory)
+     val responses=Seq(0->core.io.response,1->dense.response)++silu.toSeq.map(x=>2->x.io.response)++gdn.toSeq.map(x=>3->x.io.response)++prep.toSeq.map(x=>4->x.io.response)++recurrent.toSeq.map(x=>5->x.io.response)++gatedNorm.toSeq.map(x=>6->x.io.response)++rmsNorm.map(x=>8->x.response)++elementwise.toSeq.map(x=>9->x.io.response)++qkNorm.toSeq.map(x=>10->x.io.response)++partialRope.toSeq.map(x=>11->x.io.response)++kvAppend.toSeq.map(x=>12->x.io.response)++gqa.toSeq.map(x=>13->x.io.response)
+@@ -466,7 +481,8 @@
+       matrix.io.port.done.ready:=MuxLookup(selectedMode,false.B)(clients.map{case(i,c)=>i.U->c.done.ready})
+       matrix.io.port.abort:=MuxLookup(selectedMode,false.B)(clients.map{case(i,c)=>i.U->c.abort})
+     }else{
+-    val useDense=if(enableFfnDrain)(active&&mode===1.U) || dense.window.map(_.busy).getOrElse(false.B) || dense.drain.get.busy else if(enableFfnWindow)(active&&mode===1.U) || dense.window.get.busy else active&&mode===1.U
++    val reductionOwns=qkvRouter.map(_.io.reductionOwns).getOrElse(false.B)
++    val useDense=if(enablePublic21QkvReduction)reductionOwns || (active&&mode===1.U) || dense.window.get.busy || dense.drain.get.busy else if(enableFfnDrain)(active&&mode===1.U) || dense.window.map(_.busy).getOrElse(false.B) || dense.drain.get.busy else if(enableFfnWindow)(active&&mode===1.U) || dense.window.get.busy else active&&mode===1.U
+     for((client,index)<-Seq(legacy.io.port,dense.matrix).zipWithIndex){
+       val selected=if(index==1)useDense else !useDense
+       client.group.ready:=selected&&matrix.io.port.group.ready
+@@ -497,8 +513,34 @@
+     matrix.io.port.done.ready:=Mux(useDense,dense.matrix.done.ready,legacy.io.port.done.ready)
+     matrix.io.port.abort:=Mux(useDense,dense.matrix.abort,legacy.io.port.abort)
+     }
++    if(enablePublic21QkvReduction){
++      val r=qkvRouter.get
++      // Physical retirement, never reset/abort shortcuts. The Matrix service
++      // accepts one group until its terminal result queue and Done retire.
++      val matrixDebt=RegInit(false.B);val readDebt=RegInit(false.B)
++      val writeDebt=RegInit(false.B);val memoryDebt=RegInit(false.B)
++      val seedDebt=RegInit(false.B)
++      when(matrix.io.port.group.fire){assert(!matrixDebt);matrixDebt:=true.B}
++      when(matrix.io.port.done.fire){assert(matrixDebt);matrixDebt:=false.B}
++      when(dense.burst.fire){assert(!readDebt && dense.burst.bits.beats===1.U);readDebt:=true.B}
++      when(dense.burstResponse.fire){assert(readDebt);readDebt:=false.B}
++      when(io.memory.fire){assert(!memoryDebt);memoryDebt:=true.B}
++      when(io.response.fire){assert(memoryDebt);memoryDebt:=false.B}
++      if(burstWrites){
++        when(dense.writeRequest.get.fire){assert(!writeDebt);writeDebt:=true.B}
++        when(dense.writeResponse.get.fire){assert(writeDebt);writeDebt:=false.B}
++      }
++      when(matrix.io.port.seed.get.begin.fire){assert(!seedDebt);seedDebt:=true.B}
++      when(matrix.io.port.seed.get.ack.fire){assert(seedDebt);seedDebt:=false.B}
++      r.io.matrixDrained:= !matrixDebt && !seedDebt && !matrix.io.port.result.valid && !matrix.io.port.done.valid
++      r.io.dmaDrained:= !readDebt && !writeDebt && !memoryDebt
++      // Break reflected owner.abort -> resetRequired feedback with a register.
++      r.io.backendReset:=io.public21BackendReset.get || RegNext(sharedPoison || gdnPoison,false.B)
++      when(r.io.reductionOwns){matrix.io.port.abort:=dense.matrix.abort || r.io.backendAbort}
++    }
+     io.pipelineIssues:=matrix.io.wideSteps;io.pipelineStalls:=matrix.io.stallCycles
+     io.resetRequired:=rejected||gdnPoison||core.io.resetRequired||dense.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
+     if(enableResidentFfn){when(resident.get.io.group.resetRequired){io.resetRequired:=true.B}}
++    if(enablePublic21QkvReduction){when(qkvRouter.get.io.resetRequired){io.resetRequired:=true.B}}
+   }
+ }

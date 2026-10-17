@@ -1,0 +1,35 @@
+{
+  "scope": "SOURCE_AND_INDEPENDENT_CONTROL_CONTRACT_ONLY",
+  "new_cold_tests": {
+    "normal": {
+      "tests": 13,
+      "passed": true
+    },
+    "optimized": {
+      "tests": 13,
+      "passed": true
+    },
+    "mandatory_wiring_mutations": 35
+  },
+  "existing_control_models": {
+    "normal": {
+      "tests": 34,
+      "passed": true
+    },
+    "optimized": {
+      "tests": 34,
+      "errors": 18,
+      "passed": false,
+      "cause": "Existing test helpers invoke o.tick within assert; -O removes necessary state transitions. Verified test_k_window.py consume:172-173 and ffn_drain/test_model.py produce_act:35,41,42. Not changed."
+    }
+  },
+  "replay_passed": true,
+  "compiled": false,
+  "elaborated": false,
+  "rtl_generated": false,
+  "hardware_arithmetic_executed": false,
+  "full_numerical": false,
+  "physical_acceptance": false,
+  "v1_review_finding": "P1 late-fault held-success terminal deadlock",
+  "v2_fix": "Retire selected terminal unchanged; existing HostBlockCommands resetRequired sideband converts it to Protocol failure on same handshake."
+}

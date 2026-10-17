@@ -1,0 +1,34 @@
+{
+  "actual_partial": {
+    "bytes": 297936,
+    "sha256": "e642d97b3621f80666696a6c56e7ef01051aa735436843bd83b2176021066b1f",
+    "status": "ACTUAL_PREFIX_COMPLETE"
+  },
+  "claim_scope": "PASSIVE_FILE_OBSERVATION_ONLY_NO_PROCESS_STATE_PROOF",
+  "cleanup_verified": null,
+  "context_sha256": "99bd12bf22817d5d83e76fba9c63833362fda82652a712b88b361993b3f301d1",
+  "contract_sha256": "cf20ec20ed2f023bf1d9b2b2f10ecd4d7963699cebab5f984e3a429e8f3ed9eb",
+  "deadline_passage_establishes_exit_or_cleanup": false,
+  "full_29_node_acceptance": false,
+  "numerical_acceptance": false,
+  "numerical_outcome": "UNVERIFIED",
+  "observed_monotonic": 77088.571597581,
+  "observed_utc": "2026-10-17T00:52:04.967766+00:00",
+  "original_deadline_passed_at_observation": true,
+  "original_outer_deadline_monotonic": 77060.445410078,
+  "original_session_recoverable": false,
+  "original_source_manifest_sha256": "4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8",
+  "process_exit_code": null,
+  "process_liveness": "UNVERIFIED",
+  "public_m128_acceptance": false,
+  "rtl_execution": false,
+  "schema": 1,
+  "status": "INCOMPLETE_EXECUTION_CONTINUITY_UNVERIFIED",
+  "terminal_paths_present_at_observation": {
+    "PRIVATE_LAUNCH_RECEIPT.json": false,
+    "SUPERVISOR.json": false,
+    "control/CHILD_COMPLETE.json": false,
+    "summary.json": false
+  },
+  "useful_wall_mac_90_percent": false
+}

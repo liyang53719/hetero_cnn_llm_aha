@@ -1,0 +1,178 @@
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala
+@@ -134,10 +134,11 @@
+   * is the sole FP32-ingress hold. Native BF16 adds one 256-bit upper hold in
+   * the owner, for 512 bits total. There is no 4096-bit response-hold register.
+   */
+-class TransposedDownDenseBanks(enableFfnTiles:Boolean=false,enableMatrixProducerOrder:Boolean=false,enableRawKv:Boolean=false) extends Module {
++class TransposedDownDenseBanks(enableFfnTiles:Boolean=false,enableMatrixProducerOrder:Boolean=false,enableRawKv:Boolean=false,enableAttentionScratch:Boolean=false) extends Module {
++  require(!enableAttentionScratch || enableRawKv,"scratch requires raw lease")
+   val io=IO(new Bundle {
+     val zero=Flipped(Valid(UInt(11.W)))
+-    val rawKv=if(enableRawKv)Some(new RawKvPort)else None
++    val rawKv=if(enableRawKv)Some(new RawKvPort(enableAttentionScratch))else None
+     val tiles=if(enableFfnTiles)Some(new FfnTilePort(enableMatrixProducerOrder))else None
+     val tileEnable=if(enableFfnTiles)Some(Input(Bool()))else None
+     val activation=Flipped(Decoupled(new TransposedDownActivationLoad))
+@@ -162,26 +163,59 @@
+     val p=io.rawKv.get
+     val leased=RegInit(false.B);val owner=Reg(UInt(32.W))
+     val poison=RegInit(false.B);val pending=RegInit(false.B)
+-    val held=RegInit(false.B);val key=Reg(new RawKvKey)
++    val held=RegInit(false.B);val key=Reg(new RawKvKey(enableAttentionScratch))
+     val data=Reg(UInt(512.W))
+     val debt=pending || held
++    // Scratch metadata is separate from all K/V cache-valid metadata.
++    val scratchGeneration=if(enableAttentionScratch)Some(RegInit(0.U(32.W)))else None
++    val scratchQuery=if(enableAttentionScratch)Some(Reg(UInt(7.W)))else None
++    val scratchHead=if(enableAttentionScratch)Some(Reg(UInt(1.W)))else None
++    val scratchActive=if(enableAttentionScratch)Some(RegInit(false.B))else None
++    val scratchWritten=if(enableAttentionScratch)Some(RegInit(0.U(96.W)))else None
++    def canonical(k:RawKvKey,forAck:Boolean=false):Bool={
++      if(enableAttentionScratch){
++        val raw=k.line<4096.U && k.generation.get===0.U && k.query.get===0.U && k.kvHead.get===0.U
++        val scratch=k.line>=4096.U && k.line<4192.U && (scratchActive.get || forAck.B) &&
++          k.generation.get===scratchGeneration.get && k.query.get===scratchQuery.get && k.kvHead.get===scratchHead.get
++        raw||scratch
++      }else{k.line<4096.U}
++    }
++    val scratchOffer=if(enableAttentionScratch)p.scratchBegin.get.valid else false.B
++    val readable=if(enableAttentionScratch)p.request.bits.key.line<4096.U || p.request.bits.key.write ||
++      scratchWritten.get((p.request.bits.key.line-4096.U)(6,0)) else true.B
+     val tileQuiet=if(enableFfnTiles) !tileSignals.get.busy && !tileSignals.get.leased &&
+       !io.tiles.get.control.valid && !io.tiles.get.write.valid && !io.tiles.get.read.valid else true.B
+     val localQuiet= !rmwPending && !readPending && tileQuiet &&
+       !io.zero.valid && !io.activation.valid && !io.read.valid && !io.weight.valid
+     val stop=p.abort || p.softReset
+     kvBlock:=leased || poison
+-    p.acquire.ready:= !leased && !debt && !poison && !stop && localQuiet && p.parentDrained && !p.release.valid && p.acquire.bits=/=0.U
+-    p.release.ready:=leased && !debt && p.release.bits===owner && p.release.bits=/=0.U
+-    p.request.ready:=leased && !debt && !poison && !stop && !p.acquire.valid && !p.release.valid &&
++    p.acquire.ready:= !leased && !debt && !poison && !stop && localQuiet && p.parentDrained && !p.release.valid && !scratchOffer && p.acquire.bits=/=0.U
++    p.release.ready:=leased && !debt && !scratchOffer && p.release.bits===owner && p.release.bits=/=0.U
++    p.request.ready:=leased && !debt && !poison && !stop && !p.acquire.valid && !p.release.valid && !scratchOffer &&
+       p.request.bits.key.owner===owner && p.request.bits.key.owner=/=0.U &&
+-      p.request.bits.key.tag=/=0.U && p.request.bits.key.line<4096.U
++      p.request.bits.key.tag=/=0.U && canonical(p.request.bits.key) && readable
+     p.response.valid:=held;p.response.bits.key:=key;p.response.bits.data:=data
+     p.ack.ready:=held && p.ack.bits.asUInt===key.asUInt && p.ack.bits.owner=/=0.U &&
+-      p.ack.bits.tag=/=0.U && p.ack.bits.line<4096.U
++      p.ack.bits.tag=/=0.U && canonical(p.ack.bits,forAck=true)
+     p.leased:=leased;p.drained:= !debt;p.resetRequired:=poison || stop
+     when(p.acquire.fire){leased:=true.B;owner:=p.acquire.bits}
+     when(p.release.fire){leased:=false.B}
++    if(enableAttentionScratch){
++      val begin=p.scratchBegin.get
++      begin.ready:=leased && !debt && !poison && !stop && !p.acquire.valid && !p.release.valid && !p.request.valid &&
++        begin.bits.owner===owner && begin.bits.owner=/=0.U && begin.bits.generation>scratchGeneration.get
++      when(begin.fire){
++        scratchGeneration.get:=begin.bits.generation;scratchQuery.get:=begin.bits.query
++        scratchHead.get:=begin.bits.kvHead;scratchActive.get:=true.B;scratchWritten.get:=0.U
++      }
++      // Accepted SRAM writes are not rolled back; only clean ACK publishes validity.
++      when(p.ack.fire && key.line>=4096.U && key.write && !poison && !stop){
++        scratchWritten.get:=scratchWritten.get|UIntToOH((key.line-4096.U)(6,0),96)
++      }
++      when(p.acquire.fire || p.release.fire || stop){scratchActive.get:=false.B;scratchWritten.get:=0.U}
++      // Generation is never reused on local reset or lease release; cold reset
++      // requires system quiescence and invalidation of all producer identities.
++    }
+     pending:=false.B
+     when(p.request.fire){
+       key:=p.request.bits.key;pending:=true.B
+@@ -438,27 +472,36 @@
+   * Parent must wire parentDrained from real Dense/DMA/matrix/seed/response
+   * obligations; this bank-only candidate does not add an owner/kernel route.
+   */
+-class RawKvKey extends Bundle {
++class RawKvKey(enableAttentionScratch:Boolean=false) extends Bundle {
++  val generation=if(enableAttentionScratch)Some(UInt(32.W))else None
++  val query=if(enableAttentionScratch)Some(UInt(7.W))else None
++  val kvHead=if(enableAttentionScratch)Some(UInt(1.W))else None
+   val owner=UInt(32.W);val tag=UInt(32.W)
+   val line=UInt(13.W) // reject 4096..8191 instead of silently truncating
+   val write=Bool()
+ }
+-class RawKvRequest extends Bundle {val key=new RawKvKey;val data=UInt(512.W)}
+-class RawKvResponse extends Bundle {val key=new RawKvKey;val data=UInt(512.W)}
+-class RawKvPort extends Bundle {
++class RawKvRequest(enableAttentionScratch:Boolean=false) extends Bundle {val key=new RawKvKey(enableAttentionScratch);val data=UInt(512.W)}
++class RawKvResponse(enableAttentionScratch:Boolean=false) extends Bundle {val key=new RawKvKey(enableAttentionScratch);val data=UInt(512.W)}
++class RawKvPort(enableAttentionScratch:Boolean=false) extends Bundle {
++  val scratchBegin=if(enableAttentionScratch)Some(Flipped(Decoupled(new AttentionScratchContext)))else None
+   val acquire=Flipped(Decoupled(UInt(32.W)));val release=Flipped(Decoupled(UInt(32.W)))
+-  val request=Flipped(Decoupled(new RawKvRequest))
+-  val response=Valid(new RawKvResponse) // held until separately matched ACK
+-  val ack=Flipped(Decoupled(new RawKvKey))
++  val request=Flipped(Decoupled(new RawKvRequest(enableAttentionScratch)))
++  val response=Valid(new RawKvResponse(enableAttentionScratch)) // held until separately matched ACK
++  val ack=Flipped(Decoupled(new RawKvKey(enableAttentionScratch)))
+   val parentDrained=Input(Bool());val abort=Input(Bool());val softReset=Input(Bool())
+   val leased=Output(Bool());val drained=Output(Bool());val resetRequired=Output(Bool())
+ }
+ 
+ /** Parent-facing loan: drained is derived inside the actual Dense owner. */
+-class RawKvOwnerPort extends Bundle {
++class RawKvOwnerPort(enableAttentionScratch:Boolean=false) extends Bundle {
++  val scratchBegin=if(enableAttentionScratch)Some(Flipped(Decoupled(new AttentionScratchContext)))else None
+   val acquire=Flipped(Decoupled(UInt(32.W)));val release=Flipped(Decoupled(UInt(32.W)))
+-  val request=Flipped(Decoupled(new RawKvRequest));val response=Valid(new RawKvResponse)
+-  val ack=Flipped(Decoupled(new RawKvKey))
++  val request=Flipped(Decoupled(new RawKvRequest(enableAttentionScratch)));val response=Valid(new RawKvResponse(enableAttentionScratch))
++  val ack=Flipped(Decoupled(new RawKvKey(enableAttentionScratch)))
+   val abort=Input(Bool());val softReset=Input(Bool())
+   val leased=Output(Bool());val drained=Output(Bool());val resetRequired=Output(Bool())
+ }
++
++class AttentionScratchContext extends Bundle {
++  val owner=UInt(32.W);val generation=UInt(32.W);val query=UInt(7.W);val kvHead=UInt(1.W)
++}
+--- a/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala
+@@ -8,8 +8,8 @@
+   * anonymous StreamingDenseOwner IO exactly. The candidate patch replaces
+   * only that declaration, so elaboration selects ONE Dense implementation.
+   */
+-class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableKWindow:Boolean=false,enableRawKv:Boolean=false) extends Bundle {
+-  val rawKv=if(enableRawKv)Some(new RawKvOwnerPort)else None
++class DenseOwnerIO(burstWrites:Boolean,transposed:Boolean=false,enableAccumulatorSeed:Boolean=false,downChunks:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableKWindow:Boolean=false,enableRawKv:Boolean=false,enableAttentionScratch:Boolean=false) extends Bundle {
++  val rawKv=if(enableRawKv)Some(new RawKvOwnerPort(enableAttentionScratch))else None
+   val drain=if(enableFfnDrain)Some(new FfnDrainPort)else None
+   val window=if(enableFfnWindow)Some(new FfnWindowPort(enableFfnDrain,enableKWindow))else None
+   val tiles=if(enableFfnTiles)Some(new FfnTilePort(enableMatrixProducerOrder=enableFfnWindow))else None
+--- a/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
++++ b/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala
+@@ -703,13 +703,14 @@
+ }
+ 
+ /** Selected chunk-major extension; same physical banks, service, and seed leaf. */
+-class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false,enableDenseDrain:Boolean=false,enableRawKv:Boolean=false) extends Module {
++class TransposedDenseDownOwner(burstWrites:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableKWindow:Boolean=false,enableDenseDrain:Boolean=false,enableRawKv:Boolean=false,enableAttentionScratch:Boolean=false) extends Module {
++  require(!enableAttentionScratch || enableRawKv,"scratch requires raw lease")
+   require(!enableDenseDrain || enableFfnDrain,"Dense tile drain requires the existing drain port")
+   require(!enableKWindow || enableFfnWindow,"K windows require the actual FFN window owner")
+   private val officialBf16=Qwen2NumericPolicy.official(numericPolicy)
+   require(!enableFfnDrain || enableFfnTiles,"act drain requires the shared tile banks")
+   require(!enableFfnWindow || enableFfnTiles,"internal window requires the shared tile banks")
+-  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain,enableKWindow=enableKWindow,enableRawKv=enableRawKv))
++  val io=IO(new DenseOwnerIO(burstWrites,transposed=true,enableAccumulatorSeed=true,downChunks=true,enableFfnTiles=enableFfnTiles,enableFfnWindow=enableFfnWindow,enableFfnDrain=enableFfnDrain,enableKWindow=enableKWindow,enableRawKv=enableRawKv,enableAttentionScratch=enableAttentionScratch))
+   val rawParentReset=WireDefault(false.B)
+   val idle::clearA::aReq::aWait::aFence::setup::execute::drain::finish::locked::Nil=Enum(10)
+   val state=RegInit(idle);val job=Reg(new QwenOwnerJob)
+@@ -817,7 +818,7 @@
+     }
+   }
+   when(seed.ack.valid && !seed.ack.ready && seedState=/=seedAck){fail(Status.Protocol.U)}
+-  val banks=Module(new TransposedDownDenseBanks(enableFfnTiles,enableMatrixProducerOrder=enableFfnWindow,enableRawKv=enableRawKv))
++  val banks=Module(new TransposedDownDenseBanks(enableFfnTiles,enableMatrixProducerOrder=enableFfnWindow,enableRawKv=enableRawKv,enableAttentionScratch=enableAttentionScratch))
+   if(enableFfnTiles){banks.io.tiles.get<>io.tiles.get;banks.io.tileEnable.get:=state===idle}
+   if(enableFfnWindow || enableFfnDrain){
+     val p=banks.io.tiles.get;val external=io.tiles.get
+@@ -1566,6 +1567,7 @@
+       !io.tiles.map(_.abort).getOrElse(false.B) && !io.drain.map(_.abort).getOrElse(false.B) &&
+       !io.window.map(_.result.valid).getOrElse(false.B) && !io.drain.map(_.result.valid).getOrElse(false.B)
+     banks.io.rawKv.get.parentDrained:=rawLocalDrained
++    if(enableAttentionScratch){b.scratchBegin.get<>p.scratchBegin.get}
+     b.acquire<>p.acquire;b.release<>p.release;b.request<>p.request;b.ack<>p.ack
+     p.response:=b.response;p.leased:=b.leased;p.drained:=b.drained
+     b.abort:=p.abort || parentPoison || unsolicited || parentFault

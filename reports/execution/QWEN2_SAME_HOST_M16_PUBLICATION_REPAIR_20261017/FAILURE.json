@@ -1,0 +1,29 @@
+{
+  "actual_prework_stage": "run.load_pins -> launcher.safe",
+  "artifact_absence_reason": "Source preflight failed before the private output/evidence directory was created.",
+  "artifact_uploaded": false,
+  "claim_basis": "Verified error location is before the call to the producer supervisor; preserved source order and checkout commit bind the inference.",
+  "claims": {
+    "fresh_tiny_started": false,
+    "full_m128_executed": false,
+    "full_m16_executed": false,
+    "native_numerical_execution": false,
+    "producer_executed": false,
+    "production_dependency_install_started": false
+  },
+  "commit": "96b0548f7241b4a4c98c44601ccdcc62fe9e9989",
+  "error_class": "FileNotFoundError",
+  "failure_timestamp": "2026-10-17T03:05:50.2230040Z",
+  "job_id": "117293011043",
+  "job_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38997454218/job/117293011043",
+  "launch_step_exit_code": 1,
+  "missing_path": "candidates/qwen2_resident_matrix/portable_official_producer/gate.py",
+  "original_failure_preserved": true,
+  "original_job_log_sha256": "7dee7d2bbb4052a144efc92a116fc610fd70d1c3ac38a87d910d19c320898695",
+  "run_attempt": "1",
+  "run_id": "38997454218",
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38997454218",
+  "safe_excerpt": "FileNotFoundError: [Errno 2] No such file or directory: 'candidates/qwen2_resident_matrix/portable_official_producer/gate.py'",
+  "schema": 1,
+  "status": "FAILED_BEFORE_PRODUCER_SETUP"
+}

@@ -1,5 +1,5 @@
 name: portable-same-host-m16-launch-r1
-# Launch revision 2: include the reviewed producer gate in the published source closure.
+# Launch revision 3: retain bounded sanitized producer failure observations.
 # SOURCE PROPOSAL ONLY. Publishing this exact path to main is a launch action.
 # The combined source closure, caller, budgets and safe evidence need review first.
 on:

@@ -152,7 +152,7 @@ def load_contract(root):
     need(all(name in value['sources'] for name in value['packages'].values()),'package source closure')
     minimum=dict(cpu_affinity=4,available_memory_bytes=6*1024**3,available_disk_bytes=4*1024**3)
     need(encoded(value['minimum_resources'])==encoded(minimum),'fixed minimum resources')
-    for name in ('launch.py','package_validation.py','installed_inventory.py','verify_producer.py'):
+    for name in ('launch.py','package_validation.py','installed_inventory.py','verify_producer.py','failure_diagnostic.py'):
         need(value['sources'].get(OWN+name)==sha(safe(HERE/name)), 'loaded launcher source: '+name)
     for name in ('driver.py','owned_commands.py','source-lock.json','gate.py'):
         need(PRODUCER+name in value['sources'],'producer source required')
@@ -322,6 +322,73 @@ def validate_verifier(value,producer,manifest_sha,context_sha,nonce,ci):
     return value
 
 
+
+def diagnostic_log(path):
+    """Read at most 64 KiB, including a concurrent-growth failure case."""
+    path=Path(path).absolute()
+    need(all(not p.is_symlink() for p in (path,*path.parents)),'diagnostic symlink')
+    before=path.stat()
+    need(stat.S_ISREG(before.st_mode) and before.st_nlink==1 and before.st_size<=65536,'diagnostic log type/size/alias')
+    with path.open('rb') as stream:
+        opened=os.fstat(stream.fileno())
+        need((opened.st_dev,opened.st_ino)==(before.st_dev,before.st_ino),'diagnostic log open race')
+        raw=stream.read(65536)
+        after=os.fstat(stream.fileno())
+    fields=lambda x:(x.st_dev,x.st_ino,x.st_size,x.st_mtime_ns,x.st_ctime_ns)
+    need(fields(before)==fields(after) and len(raw)==before.st_size,'diagnostic log drift')
+    return raw
+
+
+def producer_failure_diagnostic(root,out,contract,journal,*,deadline=None):
+    """Sanitized log observation only; never an acceptance or cause authority.
+
+    The fixed log belongs to this fresh output and its already-cleaned child.
+    No log-controlled path, message, source line, local, URL or tensor is copied.
+    Diagnostic errors never replace the original producer exit failure.
+    """
+    result=dict(schema=1,profile='qwen2-producer-failure-observation-v1',
+        diagnostic_only=True,origin_authenticated=False,phase='fresh_producer',
+        child_pid=None,observed_exit_code=None,status='UNAVAILABLE',
+        reason='OWNERSHIP_NOT_ESTABLISHED',observation=None)
+    entries=[x for x in journal if x.get('phase')=='fresh_producer']
+    if len(entries)!=1: return result
+    event=entries[0]
+    if not (type(event.get('pid')) is int and event['pid']>0 and
+            type(event.get('observed_exit_code')) is int and event['observed_exit_code']>0 and
+            type(event.get('final_exit_code')) is int and event['final_exit_code']==event['observed_exit_code'] and
+            event.get('owned_group_cleanup_complete') is True and event.get('status')=='FAILED'):
+        return result
+    result.update(child_pid=event['pid'],observed_exit_code=event['observed_exit_code'])
+    started=time.monotonic();stop=started+1.0 if deadline is None else min(started+1.0,deadline)
+    if stop-started<0.05:
+        result['reason']='DIAGNOSTIC_BUDGET';return result
+    try:
+        raw=diagnostic_log(Path(out)/'producer.log')
+    except Exception:
+        result['reason']='LOG_UNAVAILABLE';return result
+    try:
+        path=Path(root)/OWN/'failure_diagnostic.py'
+        parser=load_checked('fresh_producer_failure_observer',path,contract['sources'][OWN+'failure_diagnostic.py'])
+        metadata={}
+        sources=contract['sources']
+        need(type(sources) is dict and len(sources)<=512,'bounded diagnostic source map')
+        for name,expected in sources.items():
+            if not name.endswith('.py'): continue
+            if time.monotonic()>=stop:
+                result['reason']='DIAGNOSTIC_BUDGET';return result
+            source=Path(root)/name;data=safe(source,8*1024*1024)
+            need(sha(data)==expected,'diagnostic source identity')
+            metadata[str(source)]=dict(path=name,sha256=expected,lines=len(data.splitlines()))
+        observation=parser.extract(raw,metadata)
+        need(len(encoded(observation))<=8192,'bounded diagnostic output')
+        result.update(status='OBSERVED' if observation['status']=='OBSERVED' else 'UNAVAILABLE',
+            reason='SANITIZED_TRACEBACK_OBSERVATION' if observation['status']=='OBSERVED' else 'TRACEBACK_UNAVAILABLE',
+            observation=observation)
+    except Exception:
+        result['reason']='SOURCE_OR_PARSER_UNAVAILABLE'
+    return result
+
+
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,required=True)
@@ -344,7 +411,7 @@ def main(argv=None):
     out.mkdir(mode=0o700)  # Exclusive ownership: nothing below runs for a replay.
     nonce=secrets.token_hex(32)
     failure=None;phase='provision';producer_started=False;terminal=None;journal=[]
-    package_reports={}
+    package_reports={};producer_diagnostic=None
     try:
         arm(work_stop)
         (out/'evidence').mkdir()
@@ -419,6 +486,11 @@ def main(argv=None):
         try:
             control.arm_receipt_deadline(receipt_stop)
             remaining(receipt_stop)
+            if failure is not None and phase=='producer':
+                now=time.monotonic()
+                diagnostic_stop=min(now+1.0,receipt_stop-1.0) if receipt_stop-now>=2.0 else 0.0
+                producer_diagnostic=producer_failure_diagnostic(root,out,contract,journal,deadline=diagnostic_stop)
+                remaining(receipt_stop)  # Diagnostics cannot extend or swallow the final deadline.
             elapsed=time.monotonic()-started
             if failure is None:
                 terminal['elapsed_seconds']=elapsed
@@ -427,7 +499,7 @@ def main(argv=None):
                 status='PASS_FRESH_M16_PRODUCER' if failure is None else 'FAILED_PREPARATION',phase=phase,
                 producer_started=producer_started,observed_complete=terminal is not None and failure is None,
                 stages=journal,package_report_sha256=package_reports,
-                failure_kind=None if failure is None else type(failure).__name__,
+                failure_kind=None if failure is None else type(failure).__name__,producer_failure_diagnostic=producer_diagnostic,
                 owned_groups_cleanup_complete=any(x['pid'] is not None for x in journal) and all(x['owned_group_cleanup_complete'] for x in journal if x['pid'] is not None),
                 attempt_nonce=nonce,ci=ci,elapsed_seconds=elapsed,resources=resources,claims=CLAIMS))
         except BaseException as receipt_error:

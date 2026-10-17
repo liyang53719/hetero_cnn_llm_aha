@@ -215,6 +215,7 @@ class Controls(unittest.TestCase):
             self.assertTrue(receipt['owned_groups_cleanup_complete'])
             self.assertFalse(receipt['producer_started']);self.assertFalse(receipt['observed_complete'])
             self.assertFalse((out/'QUALIFICATION.json').exists())
+            self.assertIsNone(receipt['producer_failure_diagnostic'])
 
     def test_owned_verifier_exact_binding(self):
         producer=dict(source_manifest_sha256='a'*64,runtime_identity={'r':1},host={'h':1})
@@ -393,6 +394,165 @@ class Controls(unittest.TestCase):
             unrelated.kill();unrelated.wait(timeout=5)
             control.protect_cleanup()
             for signum,handler in old.items(): signal.signal(signum,handler)
+
+
+class FailureDiagnostics(unittest.TestCase):
+    def event(self,**changes):
+        return dict(dict(phase='fresh_producer',pid=123,observed_exit_code=1,final_exit_code=1,
+            owned_group_cleanup_complete=True,status='FAILED'),**changes)
+
+    def source_fixture(self,base):
+        root=base/'source';root.mkdir();out=base/'private';out.mkdir()
+        source=root/'failing.py';source.write_text('raise ValueError("PRIVATE_MESSAGE_SENTINEL")\n')
+        parser=root/L.OWN/'failure_diagnostic.py';parser.parent.mkdir(parents=True)
+        parser.write_bytes((HERE/'failure_diagnostic.py').read_bytes())
+        sources={p.relative_to(root).as_posix():L.sha(p.read_bytes()) for p in (source,parser)}
+        return root,out,source,{'sources':sources}
+
+    def test_real_failed_child_retains_only_safe_locations(self):
+        control=Controls()._helper();old={s:signal.getsignal(s) for s in L.SIGNALS}
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                root,out,source,contract=self.source_fixture(Path(tmp));start=time.monotonic();journal=[]
+                with self.assertRaisesRegex(ValueError,'nonzero'):
+                    L.stage(control,[sys.executable,'-I','-B',source],cwd=root,env={'PATH':'/usr/bin:/bin'},
+                        log=out/'producer.log',cap=2,work_stop=start+3,cleanup_stop=start+4,
+                        journal=journal,name='fresh_producer')
+                observed=L.producer_failure_diagnostic(root,out,contract,journal)
+                self.assertEqual(observed['status'],'OBSERVED')
+                self.assertEqual(observed['child_pid'],journal[0]['pid'])
+                self.assertEqual(observed['observed_exit_code'],1)
+                self.assertTrue(observed['diagnostic_only']);self.assertFalse(observed['origin_authenticated'])
+                self.assertEqual(observed['observation']['exception_class'],'ValueError')
+                self.assertEqual(observed['observation']['frames'],[dict(path='failing.py',sha256=contract['sources']['failing.py'],line=1)])
+                self.assertNotIn('PRIVATE_MESSAGE_SENTINEL',L.encoded(observed).decode())
+                self.assertNotIn(str(root),L.encoded(observed).decode())
+                self.assertFalse((out/'QUALIFICATION.json').exists())
+                self.assertTrue(journal[0]['owned_group_cleanup_complete'])
+        finally:
+            control.protect_cleanup()
+            for signum,handler in old.items():signal.signal(signum,handler)
+
+    def test_no_log_reads_without_one_retained_clean_failed_child(self):
+        events=[[],[self.event(),self.event()], [self.event(pid=None)], [self.event(pid=True)],
+            [self.event(observed_exit_code=0,final_exit_code=0)], [self.event(observed_exit_code=True)],
+            [self.event(final_exit_code=2)], [self.event(owned_group_cleanup_complete=False)],
+            [self.event(status='TIMEOUT')], [self.event(phase='original_native_verification')]]
+        with mock.patch.object(L,'diagnostic_log') as read:
+            for journal in events:
+                result=L.producer_failure_diagnostic('/unread/source','/unread/private',{},journal)
+                self.assertEqual(result['reason'],'OWNERSHIP_NOT_ESTABLISHED')
+                self.assertIsNone(result['observation'])
+            read.assert_not_called()
+
+    def test_missing_oversize_alias_log_unavailable(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root,out,source,contract=self.source_fixture(Path(tmp));log=out/'producer.log'
+            for kind in ('missing','oversize','symlink','hardlink'):
+                with self.subTest(kind=kind):
+                    if log.exists() or log.is_symlink():log.unlink()
+                    if kind=='oversize':log.write_bytes(b'x'*65537)
+                    if kind=='symlink':log.symlink_to(source)
+                    if kind=='hardlink':os.link(source,log)
+                    result=L.producer_failure_diagnostic(root,out,contract,[self.event()])
+                    self.assertEqual(result['reason'],'LOG_UNAVAILABLE')
+                    self.assertIsNone(result['observation'])
+
+    def test_source_drift_and_parser_error_cannot_replace_original_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root,out,source,contract=self.source_fixture(Path(tmp));(out/'producer.log').write_bytes(b'not a traceback\n')
+            source.write_bytes(b'# changed\n')
+            result=L.producer_failure_diagnostic(root,out,contract,[self.event()])
+            self.assertEqual(result['reason'],'SOURCE_OR_PARSER_UNAVAILABLE')
+            contract['sources']['failing.py']=L.sha(source.read_bytes())
+            parser=SimpleNamespace(extract=mock.Mock(side_effect=ValueError('PRIVATE_EXCEPTION_SENTINEL')))
+            with mock.patch.object(L,'load_checked',return_value=parser):
+                result=L.producer_failure_diagnostic(root,out,contract,[self.event()])
+            self.assertEqual(result['reason'],'SOURCE_OR_PARSER_UNAVAILABLE')
+            self.assertNotIn('PRIVATE_EXCEPTION_SENTINEL',L.encoded(result).decode())
+            self.assertEqual(result['observed_exit_code'],1)
+
+    def test_diagnostic_work_is_bounded_and_errors_do_not_replace_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root,out,source,contract=self.source_fixture(Path(tmp));(out/'producer.log').write_bytes(b'no traceback\n')
+            with mock.patch.object(L.time,'monotonic',side_effect=[1.0,3.0]):
+                result=L.producer_failure_diagnostic(root,out,contract,[self.event()])
+            self.assertEqual(result['reason'],'DIAGNOSTIC_BUDGET')
+            with mock.patch.object(L,'diagnostic_log',side_effect=TimeoutError('local read timeout')):
+                result=L.producer_failure_diagnostic(root,out,contract,[self.event()])
+            self.assertEqual(result['reason'],'LOG_UNAVAILABLE')
+            with mock.patch.object(L,'diagnostic_log') as read:
+                result=L.producer_failure_diagnostic(root,out,contract,[self.event()],deadline=0.0)
+            self.assertEqual(result['reason'],'DIAGNOSTIC_BUDGET');read.assert_not_called()
+
+
+    def test_diagnostic_failure_or_late_budget_preserves_original_summary(self):
+        for mode in ('parser_error','near_deadline'):
+            with self.subTest(mode=mode),tempfile.TemporaryDirectory() as tmp:
+                root,out,source,diag_contract=self.source_fixture(Path(tmp));out.rmdir()
+                clock=[0.0];flags=SimpleNamespace(optimize=0,isolated=1)
+                contract=dict(minimum_resources={'cpu_affinity':1,'available_memory_bytes':1,'available_disk_bytes':1},
+                    sources={L.PRODUCER+'driver.py':'a'*64,L.PRODUCER+'source-lock.json':'b'*64},
+                    packages={'bootstrap':'bootstrap.lock','runtime':'runtime.lock'})
+                c=SimpleNamespace(admit=lambda env,out:'a'*40,loader=lambda env,exe:{},
+                    validate=lambda root,here:{},result=lambda *a:{})
+                control=SimpleNamespace(c=c,clean_environment=lambda out,loader:{},
+                    protect_cleanup=lambda:None,arm_receipt_deadline=lambda deadline:None)
+                validator=SimpleNamespace(validate_report=lambda *a:None,validate_inventory=lambda *a:None)
+                def stage(control,argv,**kw):
+                    name=kw['name'];entry=dict(phase=name,pid=123,observed_exit_code=0,final_exit_code=0,
+                        owned_group_cleanup_complete=True,status='PASS');kw['journal'].append(entry)
+                    if name=='checkout_identity':Path(kw['log']).write_text('a'*40+'\n')
+                    if name in ('pip_bootstrap','pip_runtime'):
+                        (out/('pip-'+name.removeprefix('pip_')+'-report.json')).write_bytes(b'{}\n')
+                    if name=='installed_inventory':(out/'installed.json').write_bytes(b'{}\n')
+                    if name=='fresh_fixed_cases':(out/'tiny/result.json').write_bytes(b'{}\n')
+                    if name=='fresh_producer':
+                        (out/'producer.log').write_bytes(b'private original log\n')
+                        entry.update(observed_exit_code=1,final_exit_code=1,status='FAILED')
+                        if mode=='near_deadline':clock[0]=899.0
+                        raise ValueError('ORIGINAL_PRODUCER_EXIT_FAILURE')
+                    return dict(pid=123,exit_code=0,owned_group_cleanup_complete=True)
+                original=L.producer_failure_diagnostic
+                def diagnose(root,out,unused,journal,**kw):
+                    return original(root,out,diag_contract,journal,**kw)
+                bad_parser=SimpleNamespace(extract=mock.Mock(side_effect=ValueError('PRIVATE_PARSER_MESSAGE')))
+                with mock.patch.object(L.sys,'version_info',(3,12,15)),mock.patch.object(L.sys,'flags',flags), \
+                     mock.patch.object(L,'load_contract',return_value=contract),mock.patch.object(L,'helper',return_value=control), \
+                     mock.patch.object(L,'packages',return_value=(validator,None)),mock.patch.object(L,'arm'), \
+                     mock.patch.object(L,'stage',side_effect=stage),mock.patch.object(L,'load_checked',return_value=bad_parser), \
+                     mock.patch.object(L,'producer_failure_diagnostic',side_effect=diagnose), \
+                     mock.patch.object(L.time,'monotonic',side_effect=lambda:clock[0]), \
+                     mock.patch.dict(os.environ,{'GITHUB_RUN_ID':'123','GITHUB_RUN_ATTEMPT':'1'},clear=True):
+                    with self.assertRaisesRegex(ValueError,'ORIGINAL_PRODUCER_EXIT_FAILURE'):
+                        L.main(['--root',str(root),'--out',str(out)])
+                summary=L.strict((out/'evidence/summary.json').read_bytes())
+                self.assertEqual(summary['status'],'FAILED_PREPARATION');self.assertEqual(summary['failure_kind'],'ValueError')
+                self.assertEqual(summary['phase'],'producer');self.assertFalse(summary['observed_complete'])
+                expected='DIAGNOSTIC_BUDGET' if mode=='near_deadline' else 'SOURCE_OR_PARSER_UNAVAILABLE'
+                self.assertEqual(summary['producer_failure_diagnostic']['reason'],expected)
+                self.assertNotIn('PRIVATE_PARSER_MESSAGE',L.encoded(summary).decode())
+                self.assertFalse((out/'QUALIFICATION.json').exists())
+                if mode=='near_deadline':bad_parser.extract.assert_not_called()
+
+
+    def test_diagnostic_reader_never_reads_beyond_64k_on_growth(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'producer.log';path.write_bytes(b'x'*65536)
+            original=Path.open;reads=[]
+            class Reader:
+                def __init__(self,stream):self.stream=stream
+                def __enter__(self):self.stream.__enter__();return self
+                def __exit__(self,*a):return self.stream.__exit__(*a)
+                def fileno(self):return self.stream.fileno()
+                def read(self,n):
+                    reads.append(n)
+                    with original(path,'ab') as growing:growing.write(b'y')
+                    return self.stream.read(n)
+            def opened(target,*a,**kw):return Reader(original(target,*a,**kw))
+            with mock.patch.object(Path,'open',opened),self.assertRaisesRegex(ValueError,'drift'):
+                L.diagnostic_log(path)
+            self.assertEqual(reads,[65536])
 
 
 if __name__=='__main__': unittest.main()

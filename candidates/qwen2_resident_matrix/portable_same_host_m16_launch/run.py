@@ -29,8 +29,8 @@ PREPARE_SECONDS=120
 FULL_WORK_SECONDS=924
 FULL_CLEANUP_SECONDS=929
 FULL_OUTER_SECONDS=930
-LAUNCH_SHA='e44dbb82ac86f91c504ad057352c10cc07976e817878a43c4fcf0028a25249b9'
-CONTRACT_SHA='4c30540fbc168f479686a0fdcf4bee490149af0104b3e87fce0525b23cbcfe68'
+LAUNCH_SHA='59dd972bd6e5ccc4871ae06bfc8d46adb07bfe642ae80a536b51843b2946b2d7'
+CONTRACT_SHA='e5df73e5f66404d8afe2b22ebea6e47d538a1cd8243b3eb70392428b1aa126a0'
 CLAIMS=dict(full_29_node_acceptance=False,full_m128_acceptance=False,rtl_execution=False,
             hardware_recipe_acceptance=False,old_pass_inherited=False)
 

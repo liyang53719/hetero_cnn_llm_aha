@@ -1,0 +1,36 @@
+{
+  "artifact_id": "12088595400",
+  "artifact_sha256": "494dade0e23ea6cbe7cc93eacdf8a2c9fb018c20c659e024d6aa1c7c17514ccd",
+  "ci": {
+    "commit": "902680a0b042ec9b99a7a845c8716662e30503aa",
+    "run_attempt": "1",
+    "run_id": "38998662188"
+  },
+  "cold_diagnosis": "Direct isolated driver CLI/context checks pass; traced source checks reach the first payload request boundary and stop before network. Local Python3.12.14 differs from hosted3.12.15. These checks do not prove how far the actual failed child progressed.",
+  "elapsed_seconds": 55.409526132,
+  "exact_child_failure_cause_known": false,
+  "failed_parent_observed_stage": {
+    "final_exit_code": 1,
+    "observed_exit_code": 1,
+    "owned_group_cleanup_complete": true,
+    "phase": "fresh_producer",
+    "pid": 2231,
+    "status": "FAILED"
+  },
+  "full_m128_executed": false,
+  "full_m16_executed": false,
+  "job_id": "117296723295",
+  "producer_qualified": false,
+  "reason_cause_unavailable": "The uploaded evidence retained the parent nonzero-exit assertion but no producer-internal traceback.",
+  "retained_safe_json_sha256": {
+    "producer_summary.json": "4a25f005bec6c83fce567a8753f9b369c81a742d21298614dbda02b94d0dc415",
+    "source_hashes.json": "b15ad9d75b4178c2ed71edd142aaa0730fe1755e129c8119b0dcfb6c252ae34d",
+    "stage_exits.json": "2fbc98702dcf1fde08070223bcb51023c204b23c6e507a2d93df22753489a01f",
+    "summary.json": "8e139cc2ec666ca9e761a674d66c0203e3b3f8dc0adbe2f4a0ab031f3dad9df4"
+  },
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38998662188",
+  "schema": 1,
+  "setup_and_fixed_cases_passed": true,
+  "status": "FAILED_PRODUCER_CHILD_CAUSE_UNDETERMINED",
+  "successor_scope": "Bounded parent-only sanitized traceback observation, diagnostic only; no change to producer, arithmetic, ownership, invocation or acceptance."
+}

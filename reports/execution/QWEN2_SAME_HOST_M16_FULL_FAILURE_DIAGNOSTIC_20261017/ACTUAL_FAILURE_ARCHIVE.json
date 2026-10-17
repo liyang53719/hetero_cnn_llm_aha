@@ -1,0 +1,64 @@
+{
+  "artifact_id": "12088928570",
+  "artifact_sha256": "aefc23d3fa9f4cd766f60f156140a0b10d8685a9cc815cc49599ad3b075ee3f4",
+  "commit": "4f9986188bbc7c0eed8b52432be577493e3a7a45",
+  "elapsed_time_is_not_timeout_proof": true,
+  "files": {
+    "producer_summary.json": {
+      "bytes": 2157,
+      "sha256": "eb2ae2eac9ba40a37c1b6aded1e41b7465b785fa1fbdc68152d17a672f578235"
+    },
+    "source_hashes.json": {
+      "bytes": 100042,
+      "sha256": "c78306dc27575b191c8aaecf37675182a8832052634c9e8e73c7f3d134d3879b"
+    },
+    "stage_exits.json": {
+      "bytes": 1772,
+      "sha256": "423c53ff6ae5a3ebe6fd9dea89befb4cf198952a862649f9a9041172e046fb9b"
+    },
+    "summary.json": {
+      "bytes": 770,
+      "sha256": "4d2f889cccf52bf13c99b957fbe0a37e4c2c78d5362d8eb23af62b4c67963067"
+    }
+  },
+  "internal_failure_cause": "UNKNOWN",
+  "job_id": "117304228583",
+  "job_log_sha256": "b89466a4820ccbf06c006601662e90dcfb6421945fc1fa5ce4c2c8c3b2ea9182",
+  "observed": {
+    "ci": {
+      "commit": "4f9986188bbc7c0eed8b52432be577493e3a7a45",
+      "run_attempt": "1",
+      "run_id": "39001176206"
+    },
+    "claims": {
+      "full_29_node_acceptance": false,
+      "full_m128_acceptance": false,
+      "hardware_recipe_acceptance": false,
+      "old_pass_inherited": false,
+      "rtl_execution": false
+    },
+    "elapsed_seconds": 1004.0579385350001,
+    "failure_kind": "ValueError",
+    "full_m16_assigned27_pass": false,
+    "owned_groups_cleanup_complete": true,
+    "phase": "full_m16",
+    "producer_qualified": true,
+    "profile": "qwen2-fresh-same-host-m16-combined-v1",
+    "resources_after_setup": {
+      "available_disk_bytes": 89115750400,
+      "available_memory_bytes": 15566970880,
+      "cpu_affinity": 4
+    },
+    "resources_before_setup": {
+      "available_disk_bytes": 91342327808,
+      "available_memory_bytes": 15084929024,
+      "cpu_affinity": 4
+    },
+    "schema": 1,
+    "status": "FAILED_SAME_HOST_M16_ATTEMPT"
+  },
+  "private_actual_summary_available": false,
+  "private_full_child_log_available": false,
+  "run_id": "39001176206",
+  "schema": 1
+}

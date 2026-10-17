@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 03:58 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 04:40 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -149,6 +149,11 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - **done：诊断尝试定位参考命令边界和修复目录契约。** run39000095742在af3d9d3上74.110056秒失败且清理完成。安全诊断观察到driver.py:557→425及owned_commands.py:101的ValueError，定位到C++参考owned调用；没有nested stderr，不把观察当认证根因，也不从调用栈推定前序生产资格。
   [源证明与安全回执](../reports/execution/QWEN2_SAME_HOST_M16_REFERENCE_DIRECTORY_FIX_20261017/README.md)核对原builder.py:223明确要求预建raw_stages，原RMS/ROPE wrapper也在启动前创建；新driver遗漏。两套原生成C++打开首个输出文件失败时exit1，不会自行创建目录。
   唯一生产逻辑修改为每个reference角色在不变命令之前exclusive raw.mkdir(mode=0o700)，原数值来源/算术/预算/接受门限不变；测试覆盖两角色及目录/文件/符号链接冲突。root和独立166+166冷测、三隔离入口与357源worktree验证通过。新381项实际候选Git闭包PASS后触发一次修复尝试，旧实际失败保留，完整M16/M128/RTL仍未通过。
+
+- **done：新host M16参考生产实际资格；blocked：完整M16子进程失败点缺失。** [四项原始安全JSON与hash](../reports/execution/QWEN2_SAME_HOST_M16_FULL_FAILURE_DIAGNOSTIC_20261017/README.md)保留run39001176206/artifact12088928570、ZIP aefc23d3fa9f4cd766f60f156140a0b10d8685a9cc815cc49599ad3b075ee3f4。
+  producer_summary为PASS_FRESH_M16_PRODUCER，76.564196秒，8个setup/producer/独立native验证阶段均exit0清理完成；worktree/compose/seal也完成。随后full_m16子进程exit1，整体1004.057939秒，所有已拥有进程组清理完成。新完整M16/全29/M128/RTL均未通过。无full_m16_summary产物，不能据耗时认定超时或数值差异。
+  后继只在失败且已观察退出/清理后，读取原有私有actual/summary及控制元数据和受限源码栈，投影固定status/有界completedPC计数/elapsed等，不导出原异常消息、地址、张量或数组，也不改原算术循环/门限/预算。诊断在旧绝对终态计时内合作限1秒、保留回执余量；缺失/异常则UNKNOWN且所有acceptancefalse。
+  root200+200与独立冷测试/隐私检查通过。5个runtime后继文件和6个安全归档文件独立冻结，新383项实际Git闭包PASS后再触发一次带失败进度的数值尝试；原M128失联状态不变。真正128-token组件源级冷资格在并行准备，整体M128尚未运行。
 
 ## 下一步，保持默认关闭并逐项验收
 

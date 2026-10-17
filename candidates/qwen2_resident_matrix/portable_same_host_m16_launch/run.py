@@ -186,6 +186,24 @@ def terminal_postflight(L,pins,out,sources,qualified,qualified_sha,full_context,
         elapsed_seconds=time.monotonic()-full_context['started'],validation=validation,claims=CLAIMS)
 
 
+
+def full_failure_observation(L,pins,root,out,journal,*,sources,run_context,run_context_sha256,receipt_stop):
+    """Best-effort failure projection with an untouched one-second receipt reserve."""
+    stop=min(receipt_stop,run_context['outer_deadline'])
+    if stop-time.monotonic()<2:
+        return dict(status='DIAGNOSTIC_ONLY',diagnostic_only=True,acceptance=False,
+                    origin_authenticated=False,reason='RECEIPT_RESERVE',traceback=None,progress=None)
+    try:
+        name=OWN+'full_failure_diagnostic.py'
+        D=cold_load('same_host_full_failure_observer',root/name,pins['inputs'][name])
+        return D.observe(L,pins,root,out,journal,sources=sources,run_context=run_context,
+            run_context_sha256=run_context_sha256,deadline=min(time.monotonic()+1,stop-1))
+    except TimeoutError:raise
+    except Exception:
+        return dict(status='DIAGNOSTIC_ONLY',diagnostic_only=True,acceptance=False,
+                    origin_authenticated=False,reason='DIAGNOSTIC_UNAVAILABLE',traceback=None,progress=None)
+
+
 def resource_reserves(L,out):
     value=L.resource_observation(out)
     minimum=dict(cpu_affinity=4,available_memory_bytes=8*1024**3,available_disk_bytes=8*1024**3)
@@ -228,6 +246,7 @@ def main(argv=None):
     resources=resource_reserves(L,out);resources_after=None
     out.mkdir(mode=0o700);(out/'evidence').mkdir()
     failure=None;phase='fresh_producer';journal=[];producer_success=False;full_success=False;full_receipt=None
+    sources=full_context=full_sha=None;full_failure_diagnostic=None
     try:
         L.write_new(out/'evidence/source_hashes.json',dict(schema=1,profile=PROFILE,ci=ci,inputs=pins['inputs'],
             composed_sources_template=pins['composed_sources'],dynamic_source_contract=True,claims=CLAIMS))
@@ -288,6 +307,10 @@ def main(argv=None):
         control.protect_cleanup()
         try:
             control.arm_receipt_deadline(total_stop);L.remaining(total_stop)
+            if failure is not None and phase=='full_m16' and full_context is not None and sources is not None and full_sha is not None:
+                full_failure_diagnostic=full_failure_observation(L,pins,root,out,journal,sources=sources,
+                    run_context=full_context,run_context_sha256=full_sha,receipt_stop=total_stop)
+                L.remaining(total_stop)
             if not (out/'evidence/producer_summary.json').exists() and (out/'setup/evidence/summary.json').is_file():
                 summary=L.strict(L.safe(out/'setup/evidence/summary.json'));L.write_new(out/'evidence/producer_summary.json',summary)
                 if not journal: journal.extend(summary['stages'])
@@ -296,6 +319,7 @@ def main(argv=None):
                 status='PASS_FRESH_SAME_HOST_M16_ASSIGNED27' if full_success and failure is None else 'FAILED_SAME_HOST_M16_ATTEMPT',
                 phase=phase,ci=ci,producer_qualified=producer_success,full_m16_assigned27_pass=full_success and failure is None,
                 failure_kind=None if failure is None else type(failure).__name__,elapsed_seconds=time.monotonic()-started,
+                full_m16_failure_diagnostic=full_failure_diagnostic,
                 resources_before_setup=resources,resources_after_setup=resources_after,
                 owned_groups_cleanup_complete=bool(journal) and all(x['owned_group_cleanup_complete'] for x in journal),claims=CLAIMS))
         except BaseException as error:

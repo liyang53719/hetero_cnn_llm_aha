@@ -1,0 +1,13 @@
+# seed 与 DMA provider 检查点
+
+完整4096 Bench仍未通过lint，不能进入本包所无的RTL数值结论。安全历史保留五次真实资格：原AS4G bad_alloc；修过iDMA的AS6G bad_alloc/seed BEGIN结构SCC；BEGIN单provider512-lane组件PASS；noinline完整门180s超时并报beat/commit与DMA两SCC；合并reserved-ready/DMA split/noinline/nodfg在54.17s再次AS6G bad_alloc。最后日志零warning不说明相关检查完成。原receipt全部保持FAIL或原组件PASS，SAFE_HISTORY为投影而非原字节。
+
+源包包含两个按序最小patch、精确baseline源、DMA两split、组件历史runner与最新完整profile。BEGIN改ready对已接受流水保留fullquiet fault；reserved补丁仅两ready使用同retainedquiet，65536二态边界等价。busy持valid仍原poison，模型不证明X/Z/全FSM。DMA只是原6hint后加两个内部packed字段split，冻结provider字节不改。没有新增寄存器/算术bank、没有缩4096。
+
+便携冷重放：python -B verify_package.py；python -O -B verify_package.py。该入口核全部冻结文件hash，直接运行两个纯Python边界枚举，验证完整单source按序delta。无Java/EDA/子进程。原test_cold的部分preflight依赖完整历史布局，保留用于有对应固定资产的重放，不冒称任意目录可跑全部历史测试。
+
+便携源码再建：python -B reproduce_provider.py --out "$FRESH_ROOT"。只从包内固定baseline按两个patch精确重建最终一个provider；写新目录，原树不改。包内源来自已发布QKV候选，可用baseline hash核对公共源，不能用旧未seed端口版本替代。
+
+公共完整重建链沿相邻collection_provider_qualification README生成共同namespace SV，再按iDMA官方export锁物化provider与原Matrix12/tc_clk，按本包新provider替换一次；最新full_profile保存307顺序和全部input/tool pins。工具取已发布fma_components公开固定下载recipe。原历史runner workspace-relative输入身份固定，重新生成的receipt不同须独立新候选核验，不声称安装即能重放历史receipt，也不依赖私有cache作为唯一源码来源。禁止再自动重跑monolithic profile；后续hierarchical方案须新审查和授权。
+
+新profile参数为noinline/nodfg合并，不能对单项作性能归因。AS6G/CPU1/210总180工具、21精确WIDTH/8hints保持；generated_file_limit旧AS4G receipt元数据曾写128M但实际native limit16M，此处以实际native_limits投影为准。未上传IR/SV生成物/classes/jars/rawlogs/原宿主proof。发布状态以实际提交为准。

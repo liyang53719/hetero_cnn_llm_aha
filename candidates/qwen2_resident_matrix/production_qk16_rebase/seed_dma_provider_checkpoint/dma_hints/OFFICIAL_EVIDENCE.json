@@ -1,0 +1,23 @@
+{
+  "sources": [
+    {
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3SplitVar.cpp",
+      "git_blob_sha1": "26b2cd20817d0f87ebf43c7b1f4de815e108abbb"
+    },
+    {
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/Verilator.cpp",
+      "git_blob_sha1": "002994745f5137352d978edf7c9a2daa29101c8d"
+    }
+  ],
+  "scope": "official_v5.032_source_readonly; package binary remains existing fixed SHA; no source build",
+  "claims": [
+    "V3SplitVar.cpp line182 isSigPublic rejection",
+    "V3SplitVar.cpp lines1166-1170 preserve IO and connectPortAndVar",
+    "Verilator.cpp line253 splitVariable before line298 inlineAll"
+  ],
+  "remaining_uncertainty": "later alias/optimization may remerge; actual hints unsupported or remaining warning stays fatal",
+  "local_snapshot_sha256": {
+    "idma_wrapper_unoptflat_diagnosis_v1_20261017/V3SplitVar_v5.032.cpp": "7e7fd1380d66d41bbb07f4f44b4585b8159ca2a038623bd6828d1a9fe43d4457",
+    "idma_wrapper_unoptflat_diagnosis_v1_20261017/Verilator_v5.032.cpp": "9538577e9781319228e3280e3a31a1c8b8fa1ba7bef4da96ad203659707a3afe"
+  }
+}

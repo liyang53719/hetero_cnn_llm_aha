@@ -1,0 +1,12 @@
+{
+  "scope": "BOOLEAN_BOUNDARY_ENUMERATION_NOT_FULL_FSM",
+  "controller_combinations": 256,
+  "standalone_endpoint_boolean_combinations": 1024,
+  "includes_invalid_state_encoding_7": true,
+  "two_leaf_mask_combinations": 3072,
+  "unique_fixedpoint": true,
+  "accepted_and_issue_preserved": true,
+  "ready_may_change_when_no_offer": true,
+  "interlock_removed_fixedpoints": 2,
+  "eight_leaf_generalization": "offer=>work0; !offer=>all begin valid0, hence readiness feedback independent in either branch"
+}

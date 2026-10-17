@@ -1,0 +1,10 @@
+`verilator_config
+// Proposal only. Fixed original wrapper/top/provider hashes; no warning suppression.
+isolate_assignments -module "cc_passthrough_stream_fifo" -var "valid_o"
+isolate_assignments -module "idma_axi_write" -var "first_w"
+isolate_assignments -module "idma_axi_write" -var "last_w"
+isolate_assignments -module "idma_channel_coupler" -var "aw_sent"
+isolate_assignments -module "cc_passthrough_stream_fifo" -var "ready_o"
+split_var -module "idma_axi_write" -var "write_req_o"
+split_var -module "idma_axi_read" -var "read_req_o"
+split_var -module "idma_axi_read" -var "read_rsp_i"

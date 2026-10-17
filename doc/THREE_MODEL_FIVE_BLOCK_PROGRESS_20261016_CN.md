@@ -355,3 +355,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - root按公共README复核collection的19+19/8+8及wrapper恢复布局后的15+15冷测通过。structure原冷fixture依赖历史大IR，只保留原测试源码及边界，不冒称无IR环境重放全部结构测试。原阶段PLAN是冻结历史，当前实际结果以SAFE_HISTORY/ATTEMPT安全投影为准；这些投影不是原receipt或完整机器cleanup proof，也不声称全局absence或全进程树真实峰值。
 - 公共重建链和精确源/工具/依赖/生成物hash保持，历史大IR/SV不存在时不能假称复核其原字节；新输出或receipt必须另行受审绑定。本批不带69MB SV/39MB IR、33MB iDMA物化源树、class/JAR/工具二进制、原日志或机器身份proof；不执行打包内runner。新增50个collection文件＋24个wrapper文件＋本plan追加，原465模型运行源和整个.github保持不变，不重复触发source-export或昂贵运行。
 - 模型限定M128 1/5、指定27门禁和内容身份不变，full RTL 0/5。完整原Bench/Host链接、动态供数、RTL数值、全29/全张量覆盖与性能目标仍待后续闭合；此批不继承正在准备的新门结果。
+
+
+## 2026-10-17 14:35 UTC：seed/DMA 最小修复与完整 profile 失败检查点
+
+- **done：原 BEGIN provider 组件 lint 通过。** [57 文件源码/安全历史包](../candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/README_CN.md)固定原 front-control baseline、按序 BEGIN 与 reserved-ready 两个最小补丁、DMA两项结构提示及历史runner。BEGIN将ready拆出可独立准入条件，已接受流水仍保留fullquiet fault；原512-lane组件真实工具门PASS，总41.499秒。此组件结果只覆盖BEGIN版本，不传递为后续reserved修复或4096整体通过。
+- **done仅限源码/布尔模型：reserved-ready修复。** 两个ready使用同一retainedquiet，65536个二态边界组合输出/ready/fire等价，非法提前beat/commit仍拒绝，busy持valid仍原poison；不新增状态位、端口或算术bank、不缩4096。该证据不证明完整动态FSM、X/Z或RTL数值；没有冒用BEGIN版本的组件PASS。DMA在原6个官方提示后仅新增内部read_req_o/read_rsp_i两精确split，provider原字节不改，不靠关闭UNOPTFLAT。
+- **完整原4096资格仍全部FAIL。** 原AS4GiB bad_alloc与481warning保留；修过iDMA的AS6GiB完整门仍bad_alloc并报seed BEGIN结构SCC；BEGIN后的noinline完整门180秒工具预算耗尽，并暴露beat/commit与DMA两SCC；合并reserved-ready、DMA split、noinline/nodfg的最新完整门约54.17秒工具阶段再次AS6GiB bad_alloc（总56.317秒）。最后日志零warning不表示相关检查已完成，不能升级为PASS。所有原receipt状态、log hash及失败历史保持。
+- 源码与工具优化profile分开：noinline/nodfg改变工具优化路径，未跳过设计子树/黑盒化/缩阵列；合并多项变化不能归因单项性能改善。原CPU1、AS6GiB、210总/180工具、10cleanup、16MiB文件、2MiB日志、64MiB树软限和21精准WIDTH规则保留。旧AS4G receipt误写128MiB与实际native16MiB的差别按实际native_limits披露，不修改旧证据。
+- **停止monolithic盲调。** 不再自动重跑或盲目增加AS/时限、放宽warning。下一步仅准备官方 hierarchical 真实库生成的最小微资格，尚未执行；必须观察真实子库生成/构建和链接边界，不能以--lint-only冒充已分层、不能以原单组件或工具配置代替实际库结果。后续执行需要独立受审候选与一次明确授权，本批不承诺或报告新结果。
+- root与独审按verify_package正常/-O复核通过：只核冻结hash、两套纯Python边界枚举及单source按序delta，不启动Java/EDA/子进程。原历史test_cold部分需要完整固定布局，保留范围，不冒称任意目录已重放全部历史工具门。full_profile的“待独审及授权”是原候选历史README；当前实际失败以主README与SAFE_HISTORY为准。
+- 本包含三个小型手写baseline/修复provider源码快照及patch，不包含大生成SV/IR、classes/JAR、完整上游源树、工具二进制、原日志或私有机器proof。公共重建链、源/工具/input pins和历史输出hash保留；重建生成新receipt需重新资格，安全投影不是原receipt/cleanup proof，也不声称全局absence或进程树峰值。57个add-only交付文件＋本plan追加，原465模型运行源和整个.github字节不变，不重复触发source-export或昂贵运行。
+- 模型限定M128 1/5、指定27门禁和内容身份不变，full RTL 0/5。完整4096/Host链接、动态供数、RTL数值、全29/全张量及性能目标仍未完成。

@@ -1,0 +1,226 @@
+{
+  "log_sha256": "c37b9fe7e23b35f966d5e9bf97353b2a2634e21554aed66ead22029f715afd6a",
+  "counts": {
+    "PINMISSING": 1,
+    "WIDTHEXPAND": 19,
+    "WIDTHTRUNC": 4
+  },
+  "warnings": [
+    {
+      "rule": "PINMISSING",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/axi_stream/src/axi_stream_cut.sv",
+      "line": 41,
+      "column": 5,
+      "message": "Cell has missing pin: 'clr_i'",
+      "instance": null,
+      "source_sha256": "e1b797a1f0a34a02580ac5adf5c56f78e5278d7dbc5a4c05ec8cd8fdf6051788"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 8283,
+      "column": 28,
+      "message": "Operator VAR 'BurstLen' expects 32 bits on the Initial value, but Initial value's CONST '4'h8' generates 4 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+      "line": 81,
+      "column": 50,
+      "message": "Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 2 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.i_idma_transport_layer.i_dataflow_element.gen_fifo_buffer[63].i_passthrough_stream_fifo",
+      "source_sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+      "line": 100,
+      "column": 51,
+      "message": "Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 2 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.i_idma_transport_layer.i_dataflow_element.gen_fifo_buffer[63].i_passthrough_stream_fifo",
+      "source_sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_write.sv",
+      "line": 125,
+      "column": 44,
+      "message": "Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 6 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_write",
+      "source_sha256": "4398ff0995e11515fd1340ea079aa45ff7b9790f16f3900603423f8bdef831c0"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_read.sv",
+      "line": 101,
+      "column": 44,
+      "message": "Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 6 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.i_idma_transport_layer.i_idma_axi_read",
+      "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 34,
+      "column": 29,
+      "message": "Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's VARREF 'OffsetWidth' generates 32 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_write_page_splitter",
+      "source_sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 38,
+      "column": 59,
+      "message": "Operator COND expects 32 bits on the Conditional True, but Conditional True's VARREF 'max_llen_i' generates 3 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_write_page_splitter",
+      "source_sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 38,
+      "column": 29,
+      "message": "Operator ASSIGN expects 4 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_write_page_splitter",
+      "source_sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 54,
+      "column": 46,
+      "message": "Operator GT expects 32 bits on the LHS, but LHS's VARREF 'page_addr_width' generates 4 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer.i_write_page_splitter",
+      "source_sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4111,
+      "column": 43,
+      "message": "Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'r_num_bytes_possible' generates 13 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4113,
+      "column": 39,
+      "message": "Operator ADD expects 64 bits on the RHS, but RHS's VARREF 'r_num_bytes' generates 13 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4130,
+      "column": 43,
+      "message": "Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'w_num_bytes_possible' generates 13 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4132,
+      "column": 39,
+      "message": "Operator ADD expects 64 bits on the RHS, but RHS's VARREF 'w_num_bytes' generates 13 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4241,
+      "column": 32,
+      "message": "Operator ADD expects 32 or 13 bits on the RHS, but RHS's VARREF 'r_addr_offset' generates 6 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4241,
+      "column": 13,
+      "message": "Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's SHIFTR generates 32 or 13 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4261,
+      "column": 35,
+      "message": "Operator LTE expects 32 bits on the LHS, but LHS's VARREF 'r_num_bytes' generates 13 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4269,
+      "column": 32,
+      "message": "Operator ADD expects 32 or 13 bits on the RHS, but RHS's VARREF 'w_addr_offset' generates 6 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4269,
+      "column": 13,
+      "message": "Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's SHIFTR generates 32 or 13 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4380,
+      "column": 387,
+      "message": "Operator DIV expects 65 bits on the LHS, but LHS's EXTEND generates 64 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4380,
+      "column": 387,
+      "message": "Operator DIV expects 65 bits on the RHS, but RHS's EXTEND generates 64 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend.gen_hw_legalizer.i_idma_legalizer",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/axi/src/axi_pkg.sv",
+      "line": 203,
+      "column": 77,
+      "message": "Operator DIV expects 144 bits on the LHS, but LHS's VARREF '_addr' generates 128 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend",
+      "source_sha256": "244bd5cb3c5bc58d786f2ed2f5eeefd910c4fe03a175f4a2888c6a2ea1c430dc"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/axi/src/axi_pkg.sv",
+      "line": 203,
+      "column": 77,
+      "message": "Operator DIV expects 144 bits on the RHS, but RHS's CASTWRAP generates 128 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend",
+      "source_sha256": "244bd5cb3c5bc58d786f2ed2f5eeefd910c4fe03a175f4a2888c6a2ea1c430dc"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 8762,
+      "column": 35,
+      "message": "Operator ASSIGNW expects 68 bits on the Assign RHS, but Assign RHS's CONST '1'h0' generates 1 bits.",
+      "instance": "ProductionQk16KernelBench.dma.backend.u_backend",
+      "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    }
+  ]
+}

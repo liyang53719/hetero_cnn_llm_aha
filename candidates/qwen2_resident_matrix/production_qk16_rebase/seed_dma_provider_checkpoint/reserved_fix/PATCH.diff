@@ -1,0 +1,13 @@
+--- a/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv
++++ b/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv
+@@ -104,8 +104,8 @@
+     // successful, genuinely quiescent reservation holds the datapath/FIFOs.
+     assign seed_hold_o=reserved_q||ack_valid_q;
+     assign seed_begin_ready_o=!reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&begin_quiescent;
+-    assign seed_beat_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
+-    assign seed_commit_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
++    assign seed_beat_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&begin_quiescent;
++    assign seed_commit_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&begin_quiescent;
+     assign begin_fire=seed_begin_valid_i&&seed_begin_ready_o;
+     assign beat_fire=seed_beat_valid_i&&seed_beat_ready_o;
+     assign commit_fire=seed_commit_valid_i&&seed_commit_ready_o;

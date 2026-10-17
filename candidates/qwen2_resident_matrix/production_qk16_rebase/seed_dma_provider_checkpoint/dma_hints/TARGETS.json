@@ -1,0 +1,66 @@
+[
+  {
+    "rule": "isolate_assignments",
+    "module": "cc_passthrough_stream_fifo",
+    "variable": "valid_o",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+    "declaration_regex": "output\\s+logic\\s+valid_o\\s*,",
+    "sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+  },
+  {
+    "rule": "isolate_assignments",
+    "module": "idma_axi_write",
+    "variable": "first_w",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_write.sv",
+    "declaration_regex": "logic\\s+first_w\\s*;",
+    "sha256": "4398ff0995e11515fd1340ea079aa45ff7b9790f16f3900603423f8bdef831c0"
+  },
+  {
+    "rule": "isolate_assignments",
+    "module": "idma_axi_write",
+    "variable": "last_w",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_write.sv",
+    "declaration_regex": "logic\\s+last_w\\s*;",
+    "sha256": "4398ff0995e11515fd1340ea079aa45ff7b9790f16f3900603423f8bdef831c0"
+  },
+  {
+    "rule": "isolate_assignments",
+    "module": "idma_channel_coupler",
+    "variable": "aw_sent",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_channel_coupler.sv",
+    "declaration_regex": "logic\\s+aw_sent\\s*;",
+    "sha256": "07c0a0d7cefaed0bd4d501bd02166149d1af9b3861777e8103870692a31c7738"
+  },
+  {
+    "rule": "isolate_assignments",
+    "module": "cc_passthrough_stream_fifo",
+    "variable": "ready_o",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+    "declaration_regex": "output\\s+logic\\s+ready_o\\s*,",
+    "sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+  },
+  {
+    "rule": "split_var",
+    "module": "idma_axi_write",
+    "variable": "write_req_o",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_write.sv",
+    "declaration_regex": "output\\s+write_req_t\\s+write_req_o\\s*,",
+    "sha256": "4398ff0995e11515fd1340ea079aa45ff7b9790f16f3900603423f8bdef831c0"
+  },
+  {
+    "rule": "split_var",
+    "module": "idma_axi_read",
+    "variable": "read_req_o",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_read.sv",
+    "declaration_regex": "output\\s+read_req_t\\s+read_req_o\\s*,",
+    "sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+  },
+  {
+    "rule": "split_var",
+    "module": "idma_axi_read",
+    "variable": "read_rsp_i",
+    "path": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_read.sv",
+    "declaration_regex": "input\\s+read_rsp_t\\s+read_rsp_i\\s*,",
+    "sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+  }
+]

@@ -1,0 +1,27 @@
+--- a/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv
++++ b/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv
+@@ -82,10 +82,14 @@
+     logic [2:0] context_q;
+     logic [5:0] beat_count_q;
+     logic reserved_q,ack_valid_q,ack_error_q,poison_q;
+-    logic quiescent,identity_matches,finite_data,begin_fire,beat_fire,commit_fire;
++    logic quiescent,begin_quiescent,identity_matches,finite_data,begin_fire,beat_fire,commit_fire;
+     logic legal_begin,legal_beat,legal_commit,fault;
+     assign quiescent=(busy_o==5'b0)&&!out_valid_o&&!array_out_valid&&
+       !input_write_o&&!pre_write_o&&!mul_write_o&&!post_write_o&&!output_write_o;
++    // BEGIN valid already blocks this cycle's arithmetic issue in the scheduler.
++    // Readiness observes retained work only; full quiescent still guards faults.
++    assign begin_quiescent=(busy_o==5'b0)&&!out_valid_o&&!array_out_valid&&
++      !pre_write_o&&!mul_write_o&&!post_write_o&&!output_write_o;
+     assign identity_matches=seed_context_i==context_q&&seed_group_tag_i==group_tag_q&&
+       seed_group_sequence_i==group_sequence_q&&seed_source_generation_i==source_generation_q;
+     always_comb begin
+@@ -99,7 +103,7 @@
+     // Admission blocking must not freeze an already accepted FMA. Only a
+     // successful, genuinely quiescent reservation holds the datapath/FIFOs.
+     assign seed_hold_o=reserved_q||ack_valid_q;
+-    assign seed_begin_ready_o=!reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
++    assign seed_begin_ready_o=!reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&begin_quiescent;
+     assign seed_beat_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
+     assign seed_commit_ready_o=reserved_q&&!ack_valid_q&&!poison_q&&!seed_abort_i&&quiescent;
+     assign begin_fire=seed_begin_valid_i&&seed_begin_ready_o;

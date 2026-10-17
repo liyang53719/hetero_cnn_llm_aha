@@ -36,50 +36,82 @@ def tree_usage(root,deadline=None):
     total+=st.st_size
  return {'bytes':total,'entries':count,'symlinks':links}
 def tree_bytes(root,deadline=None):return tree_usage(root,deadline)['bytes']
-def execute(argv,*,cwd,env,out,err,root,absolute_stop,stage_stop,stdout_limit=FILE_LIMIT,tree_limit=TREE_LIMIT):
+def _execute(argv,*,cwd,env,out,err,root,absolute_stop,stage_stop,so,se,stdout_limit=FILE_LIMIT,tree_limit=TREE_LIMIT):
  strict=helper(Path(__file__).with_name('strict_cleanup.py'));owner=None;proof=None;error=None;code=None;peak=0
  work_stop=min(stage_stop,absolute_stop-10);signals={signal.SIGTERM,signal.SIGINT,signal.SIGALRM};old={s:signal.getsignal(s) for s in signals}
- if signal.getitimer(signal.ITIMER_REAL)!=(0.0,0.0):raise ValueError('existing alarm')
  def interrupted(sig,frame):raise InterruptedError('stage interrupted '+str(sig))
  # Acquire files before mutating signal state: xb failure must leave caller intact.
- with open(out,'xb') as so,open(err,'xb') as se:
-  mask=signal.pthread_sigmask(signal.SIG_BLOCK,signals)
-  try:
-   for s in signals:signal.signal(s,interrupted)
+ mask=signal.pthread_sigmask(signal.SIG_BLOCK,signals)
+ try:
+  for s in signals:signal.signal(s,interrupted)
+  if time.monotonic()>=work_stop:raise TimeoutError('original work deadline')
+  signal.setitimer(signal.ITIMER_REAL,work_stop-time.monotonic())
+  p=subprocess.Popen([sys.executable,'-I','-B','-c',CHILD]+argv,cwd=cwd,env=env,stdout=so,stderr=se,start_new_session=True)
+  owner={'process':p,'identity':None};signal.pthread_sigmask(signal.SIG_SETMASK,mask)
+  while True:
+   size=tree_bytes(root,work_stop);peak=max(peak,size)
+   if size>tree_limit:raise ValueError('aggregate tree sampled limit exceeded')
+   if os.fstat(so.fileno()).st_size>stdout_limit or os.fstat(se.fileno()).st_size>2*1024*1024:raise ValueError('stage log cap')
    if time.monotonic()>=work_stop:raise TimeoutError('original work deadline')
-   signal.setitimer(signal.ITIMER_REAL,work_stop-time.monotonic())
-   p=subprocess.Popen([sys.executable,'-I','-B','-c',CHILD]+argv,cwd=cwd,env=env,stdout=so,stderr=se,start_new_session=True)
-   owner={'process':p,'identity':None};signal.pthread_sigmask(signal.SIG_SETMASK,mask)
-   while True:
-    size=tree_bytes(root,work_stop);peak=max(peak,size)
-    if size>tree_limit:raise ValueError('aggregate tree sampled limit exceeded')
-    if os.fstat(so.fileno()).st_size>stdout_limit or os.fstat(se.fileno()).st_size>2*1024*1024:raise ValueError('stage log cap')
-    if time.monotonic()>=work_stop:raise TimeoutError('original work deadline')
-    r=os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
-    if r is not None:
-     code=r.si_status if r.si_code==os.CLD_EXITED else -r.si_status;break
-    time.sleep(.05)
-  except BaseException as e:error=repr(e)
+   r=os.waitid(os.P_PID,p.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
+   if r is not None:
+    code=r.si_status if r.si_code==os.CLD_EXITED else -r.si_status;break
+   time.sleep(.05)
+ except BaseException as e:error=repr(e)
+ finally:
+  signal.pthread_sigmask(signal.SIG_BLOCK,signals);signal.setitimer(signal.ITIMER_REAL,0)
+  for s in signals:
+   if s in signal.sigpending():signal.sigtimedwait({s},0)
+  try:
+   if owner is not None:
+    proof=strict.cleanup_owned(owner,absolute_stop)
+    strict.validate_cleanup_proof(proof,owner=owner,stop=absolute_stop)
+   # The original absolute deadline also protects all post-absence scans.
+   if time.monotonic()>=absolute_stop:raise TimeoutError('post-cleanup deadline')
+   signal.setitimer(signal.ITIMER_REAL,absolute_stop-time.monotonic())
+   signal.pthread_sigmask(signal.SIG_SETMASK,mask)
+   try:
+    usage=tree_usage(root,absolute_stop);size=usage['bytes'];peak=max(peak,size)
+    if size>tree_limit or os.fstat(so.fileno()).st_size>stdout_limit or os.fstat(se.fileno()).st_size>2*1024*1024:error='post-cleanup output limit exceeded'
+   except BaseException as post_error:error=repr(post_error)
   finally:
    signal.pthread_sigmask(signal.SIG_BLOCK,signals);signal.setitimer(signal.ITIMER_REAL,0)
    for s in signals:
     if s in signal.sigpending():signal.sigtimedwait({s},0)
-   try:
-    if owner is not None:
-     proof=strict.cleanup_owned(owner,absolute_stop)
-     strict.validate_cleanup_proof(proof,owner=owner,stop=absolute_stop)
-    # The original absolute deadline also protects all post-absence scans.
-    if time.monotonic()>=absolute_stop:raise TimeoutError('post-cleanup deadline')
-    signal.setitimer(signal.ITIMER_REAL,absolute_stop-time.monotonic())
-    signal.pthread_sigmask(signal.SIG_SETMASK,mask)
-    try:
-     usage=tree_usage(root,absolute_stop);size=usage['bytes'];peak=max(peak,size)
-     if size>tree_limit or os.fstat(so.fileno()).st_size>stdout_limit or os.fstat(se.fileno()).st_size>2*1024*1024:error='post-cleanup output limit exceeded'
-    except BaseException as post_error:error=repr(post_error)
-   finally:
-    signal.pthread_sigmask(signal.SIG_BLOCK,signals);signal.setitimer(signal.ITIMER_REAL,0)
-    for s in signals:
-     if s in signal.sigpending():signal.sigtimedwait({s},0)
-    for s,h in old.items():signal.signal(s,h)
-    signal.pthread_sigmask(signal.SIG_SETMASK,mask)
+   for s,h in old.items():signal.signal(s,h)
+   signal.setitimer(signal.ITIMER_REAL,max(.001,absolute_stop-time.monotonic()))
+   signal.pthread_sigmask(signal.SIG_SETMASK,mask)
  return {'argv':argv,'cwd':str(cwd),'exit':code,'error':error,'cleanup_complete':proof is not None,'cleanup_proof':proof,'cleanup_scope':strict.SCOPE,'working_tree_symlinks':usage['symlinks'] if 'usage' in locals() else None,'peak_sampled_tree_bytes':peak,'tree_limit_bytes':tree_limit,'tree_limit_kind':'sampled_soft_limit_not_quota','file_hard_limit_bytes':FILE_LIMIT,'stdout_bytes':Path(out).stat().st_size,'stderr_bytes':Path(err).stat().st_size}
+
+def execute(argv,*,cwd,env,out,err,root,absolute_stop,stage_stop,stdout_limit=FILE_LIMIT,tree_limit=TREE_LIMIT):
+ # Original-stop protection includes helper load and both xb opens. Only the
+ # inner spawn/ownership and cleanup proof sections block signals.
+ if signal.getitimer(signal.ITIMER_REAL)!=(0.0,0.0):raise ValueError('existing alarm')
+ signals={signal.SIGINT,signal.SIGTERM,signal.SIGALRM}
+ old={s:signal.getsignal(s) for s in signals}
+ mask=signal.pthread_sigmask(signal.SIG_BLOCK,set())
+ def deadline(sig,frame):raise TimeoutError('original stage ownership deadline')
+ try:
+  signal.signal(signal.SIGALRM,deadline)
+  signal.setitimer(signal.ITIMER_REAL,max(.001,absolute_stop-time.monotonic()))
+  signal.pthread_sigmask(signal.SIG_UNBLOCK,{signal.SIGALRM})
+  so=None;se=None
+  try:
+   so=open(out,'xb');se=open(err,'xb')
+   return _execute(argv,cwd=cwd,env=env,out=out,err=err,root=root,absolute_stop=absolute_stop,stage_stop=stage_stop,so=so,se=se,stdout_limit=stdout_limit,tree_limit=tree_limit)
+  finally:
+   # Even cleanup proof exceptions must re-arm before file-resource close.
+   signal.signal(signal.SIGALRM,deadline)
+   signal.setitimer(signal.ITIMER_REAL,max(.001,absolute_stop-time.monotonic()))
+   signal.pthread_sigmask(signal.SIG_UNBLOCK,{signal.SIGALRM})
+   try:
+    if se is not None:se.close()
+   finally:
+    if so is not None:so.close()
+ finally:
+  signal.pthread_sigmask(signal.SIG_BLOCK,signals)
+  signal.setitimer(signal.ITIMER_REAL,0)
+  for sig in signals:
+   if sig in signal.sigpending():signal.sigtimedwait({sig},0)
+  for sig,handler in old.items():signal.signal(sig,handler)
+  signal.pthread_sigmask(signal.SIG_SETMASK,mask)

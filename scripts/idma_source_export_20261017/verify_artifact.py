@@ -5,7 +5,7 @@ Publish only an explicit metadata whitelist, never raw process identity proofs.
 import argparse,json,os,signal,time
 from pathlib import Path
 import export_source
-TOP_KEYS=('status','scope','eda_executed','idma_pin','python_sha256','python_version','bender_sha256','uv_sha256','files_verified','manifest_sha256')
+TOP_KEYS=('status','scope','eda_executed','preprocessor_requested','hardware_compilation_executed','idma_pin','python_sha256','python_version','bender_sha256','uv_sha256','verilator_sha256','files_verified','manifest_sha256')
 STAGE_KEYS=('exit','error','cleanup_complete','cleanup_scope','working_tree_symlinks','peak_sampled_tree_bytes','tree_limit_bytes','tree_limit_kind','file_hard_limit_bytes','stdout_bytes','stderr_bytes')
 def projection(receipt,tools,total):
  return {'receipt':{**{k:receipt[k] for k in TOP_KEYS},'stages':[{k:s.get(k) for k in STAGE_KEYS} for s in receipt['stages']],'source_artifact_bytes':total},'tools':{k:{field:v[field] for field in ('sha256','archive_sha256','url')} for k,v in tools.items()}}

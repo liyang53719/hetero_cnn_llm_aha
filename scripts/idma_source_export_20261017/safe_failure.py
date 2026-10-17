@@ -18,7 +18,7 @@ WALL_SECONDS = 5
 SCOPE = 'ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY'
 CATEGORIES = frozenset(('timeout', 'interrupted', 'resource_limit', 'command_failed',
                         'validation_failed', 'cleanup_failed', 'internal_error'))
-HASH_KEYS = ('python_sha256', 'bender_sha256', 'uv_sha256', 'manifest_sha256')
+HASH_KEYS = ('python_sha256', 'bender_sha256', 'uv_sha256', 'verilator_sha256', 'manifest_sha256')
 STATUSES = frozenset(('IN_PROGRESS', 'FAILED', 'PASS_SOURCE_EXPORT_ONLY'))
 
 
@@ -63,6 +63,9 @@ def project(receipt):
         for key in ('stdout_sha256', 'stderr_sha256'):
             if valid_hash(stage.get(key)):
                 row[key] = stage[key]
+        for key in ('stdout_bytes','stderr_bytes','peak_sampled_tree_bytes','tree_limit_bytes','file_hard_limit_bytes'):
+            value=stage.get(key)
+            if type(value) is int and 0<=value<=2**40:row[key]=value
         result['stages'].append(row)
     return result
 

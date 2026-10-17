@@ -26,10 +26,12 @@ jobs:
           python3 -O test_bounds.py
           python3 test_postprocess.py
           python3 -O test_postprocess.py
-          python3 test_conditionals.py
-          python3 -O test_conditionals.py
           python3 test_failure_summary.py
           python3 -O test_failure_summary.py
+          python3 test_bootstrap.py
+          python3 -O test_bootstrap.py
+          python3 test_preprocess.py
+          python3 -O test_preprocess.py
       - name: Fixed source generation helpers
         run: |
           python3 scripts/idma_source_export_20261017/bootstrap_tools.py "$RUNNER_TEMP/idma-source-tools"
@@ -43,7 +45,8 @@ jobs:
           subprocess.run(['python3','scripts/idma_source_export_20261017/export_source.py',
             '--out',str(root/'idma-source-rebuild-20261017'),
             '--bender',t['bender']['path'],'--bender-sha256',t['bender']['sha256'],
-            '--uv',t['uv']['path'],'--uv-sha256',t['uv']['sha256'],'--execute'],check=True)
+            '--uv',t['uv']['path'],'--uv-sha256',t['uv']['sha256'],
+            '--verilator',t['verilator']['path'],'--execute'],check=True)
           PY
       - name: Verify artifact scope under original deadline
         run: |

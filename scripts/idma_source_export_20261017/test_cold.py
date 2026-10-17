@@ -1,4 +1,4 @@
-import hashlib,io,json,tempfile,tarfile,unittest
+import hashlib,io,json,tempfile,tarfile,unittest,ast
 from pathlib import Path
 import export_source as e
 class Cold(unittest.TestCase):
@@ -35,4 +35,15 @@ class Cold(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    p=Path(d);(p/'COMMITS.json').write_text('{}');(p/'SHA256SUMS.json').write_text('{}')
    with self.assertRaises(ValueError):e.verify_export(p)
+ def test_command_preparation_precedes_alarm_handoff(self):
+  source=Path(e.__file__).read_text();tree=ast.parse(source)
+  cmd=next(n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef) and n.name=='cmd')
+  body=ast.get_source_segment(source,cmd)
+  self.assertLess(body.index('shutil.which'),body.index('signal.setitimer(signal.ITIMER_REAL,0)'))
+  self.assertLess(body.index('signal.setitimer(signal.ITIMER_REAL,0)'),body.index('bounded_run.execute'))
+  self.assertIn('finally:arm()',body)
+ def test_preprocessor_flag_is_request_not_execution_claim(self):
+  source=Path(e.__file__).read_text()
+  self.assertIn("'preprocessor_requested':False",source)
+  self.assertNotIn('preprocessor_executed',source)
 if __name__=='__main__':unittest.main()

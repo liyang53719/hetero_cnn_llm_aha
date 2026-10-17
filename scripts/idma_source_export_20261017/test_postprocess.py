@@ -1,6 +1,7 @@
 import hashlib,io,json,tarfile,tempfile,unittest
 from pathlib import Path
 import export_source as e
+import preprocess_closure as pc
 HERE=Path(__file__).parent
 class Postprocess(unittest.TestCase):
  def test_complete_synthetic_export(self):
@@ -20,7 +21,9 @@ class Postprocess(unittest.TestCase):
    e.merge_generated(source,export/'idma/target/rtl',root)
    clock=export/'deps/tech_cells_generic/src/rtl/tc_clk.sv';clock.parent.mkdir(parents=True);clock.write_bytes((HERE/'fixtures/tc_clk.sv').read_bytes())
    (export/'idma.f.in').write_text('+define+TARGET_SYNTHESIS\n+incdir+@ROOT@/idma/target/rtl/include\n@ROOT@/idma/target/rtl/idma_generated.sv\n')
-   closure=e.check_filelist(export/'idma.f.in',export);self.assertEqual(closure['source_and_transitive_include_files'],3)
+   sources,includes,_=pc.parse_filelist(export/'idma.f.in',export);self.assertEqual(len(pc.admission(sources,includes,export)[0]),3)
+   sources,includes,defines=pc.parse_filelist(export/'idma.f.in',export);allowed,missing=pc.admission(sources,includes,export)
+   closure={'schema':2,'scope':'FIXED_TRUSTED_SOURCES_NOT_FILESYSTEM_SANDBOX','profile':pc.PROFILE,'tool_sha256':pc.TOOL_SHA,'initial_filelist_defines':defines,'unresolved_lexical_includes':missing,'admitted_input_hashes':{str(p.relative_to(export)):h for p,h in allowed.items()},'actual_dependency_hashes':{str(p.relative_to(export)):h for p,h in allowed.items()},'source_files':len(sources),'include_directories':len(includes),'excluded_links_unreferenced':True,'preprocessed_stdout_bytes':0,'preprocessed_stdout_sha256':'0'*64,'private_dependency_file_sha256':'0'*64}
    (export/'SOURCE_CLOSURE.json').write_text(json.dumps(closure));(export/'SOURCE_EXPORT_POLICY.json').write_text(json.dumps({'schema':1,'excluded_idma_symlinks':e.EXCLUDED_SYMLINKS}))
    (export/'COMMITS.json').write_text(json.dumps({'idma':e.PIN,**e.DEPS}))
    manifest={str(p.relative_to(export)):e.sha(p) for p in export.rglob('*') if p.is_file()};(export/'SHA256SUMS.json').write_text(json.dumps(manifest))
@@ -41,8 +44,8 @@ class Postprocess(unittest.TestCase):
   examples=['module x; `include "missing.svh"\nendmodule','`include `MACRO\n','`include \\\n "name.svh"\n','`include "name.svh" trailing;\n']
   for source in examples:
    with self.subTest(source=source):
-    with self.assertRaises(ValueError):e.include_literals(source)
+    with self.assertRaises(ValueError):pc.literal_includes(source)
  def test_comments_and_strings_are_not_directives(self):
   s='// `include "absent1"\n/* `include "absent2" */\ninitial $display("`include \\\"absent3\\\"");\n`include "real.svh" // real\n'
-  self.assertEqual(e.include_literals(s),['real.svh'])
+  self.assertEqual(pc.literal_includes(s),['real.svh'])
 if __name__=='__main__':unittest.main()

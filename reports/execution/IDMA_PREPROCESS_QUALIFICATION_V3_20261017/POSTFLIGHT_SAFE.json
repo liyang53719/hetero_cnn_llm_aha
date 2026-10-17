@@ -1,0 +1,75 @@
+{
+  "tool_sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+  "tool_postflight_matches": true,
+  "fixture_manifest_sha256": "e670805b21d096cd0cfc66860e59f868e6867ee6d0a3a3ea1b316edac6b062e1",
+  "original_fixture_count": 13,
+  "all_original_and_copied_inputs_postflight_match": true,
+  "cases": [
+    {
+      "case": "uvm_off",
+      "input_hashes": {
+        "base.sv": "f1fe011b300de81ca00835e12b60136a54aff3092e3630143bba027da8e0dd40"
+      },
+      "dependencies": [
+        "@CASE@/base.sv",
+        "@TOOL@/verilator_bin"
+      ]
+    },
+    {
+      "case": "uvm_on_missing",
+      "input_hashes": {
+        "base.sv": "f1fe011b300de81ca00835e12b60136a54aff3092e3630143bba027da8e0dd40"
+      },
+      "dependencies": []
+    },
+    {
+      "case": "uvm_on_present",
+      "input_hashes": {
+        "base.sv": "f1fe011b300de81ca00835e12b60136a54aff3092e3630143bba027da8e0dd40",
+        "uvm_macros.svh": "b9d40fe0ab008784b781c59289137692dbc58e92d3170e5aef0c23eff94737fc"
+      },
+      "dependencies": [
+        "@CASE@/base.sv",
+        "@CASE@/uvm_macros.svh",
+        "@TOOL@/verilator_bin"
+      ]
+    },
+    {
+      "case": "missing",
+      "input_hashes": {
+        "missing.sv": "30ff6ec5a1c7c554c54068e3538c5193fbe897977f30f58af72caba0f8f9573e"
+      },
+      "dependencies": []
+    },
+    {
+      "case": "profile",
+      "input_hashes": {
+        "profile.sv": "26eb8415cae5b437535ebf4744f63679ef280ddc8a04d4e8229a375ef34f23af"
+      },
+      "dependencies": [
+        "@CASE@/profile.sv",
+        "@TOOL@/verilator_bin"
+      ]
+    },
+    {
+      "case": "official_headers",
+      "input_hashes": {
+        "official_headers.sv": "b0bc92425e7bdd517fe7528fdd3b8c4f57f2179ac4ea71bb602b6c1585db9b29",
+        "common_cells/registers.svh": "cd2133df2638447e7d55e4b3b16e4e856cb21d53bea03b35985f31abfecaa868",
+        "axi/typedef.svh": "63f095042c9183f977e95307df14ce0baa06b71121491a380af289f8b309482c",
+        "axi/port.svh": "3fa0ccc81d775c439e47d2c01dd62be79a9cfd8f2f84a05a1ef90b9cf3fb43d1",
+        "axi/assign.svh": "8d6aa6ecc736515db75bb691e377b64753310c442e107757b99caabdf043b6cd",
+        "common_cells/deprecated/registers.svh": "5b95018dd45ed472e78ea192039c332574bbc10cc53ccbb4221f14f77bb0c0d7"
+      },
+      "dependencies": [
+        "@CASE@/axi/assign.svh",
+        "@CASE@/axi/port.svh",
+        "@CASE@/axi/typedef.svh",
+        "@CASE@/common_cells/deprecated/registers.svh",
+        "@CASE@/common_cells/registers.svh",
+        "@CASE@/official_headers.sv",
+        "@TOOL@/verilator_bin"
+      ]
+    }
+  ]
+}

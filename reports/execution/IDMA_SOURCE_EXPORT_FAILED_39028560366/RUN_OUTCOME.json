@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "head_sha": "23f9a441d85433782108b6d0ad60eb967fbf801a",
+  "run_id": 39028560366,
+  "job_id": 117384281352,
+  "run_attempt": 1,
+  "conclusion": "failure",
+  "error_summary": "unsupported bare backtick",
+  "failure_stage": "SOURCE_CLOSURE generation",
+  "source_artifact_count": 0,
+  "safe_artifact_id": 12099063911,
+  "safe_artifact_zip_sha256": "4514fe13d17257ab43a6bf8cffdef48744d9841afcc8443cc5dc84ee87abb350",
+  "safe_outcome_sha256": "5db024629ada4be89848da78f7f5f0988daab4a431eb2f887a180434325de34a",
+  "decoded_original_job_log_sha256": "21a05c7cd8ae6bbedeea1dac6d2987477f61226d7b0f0608472923c5be3a7c91",
+  "recorded_successful_command_stages": 57,
+  "independent_global_cleanup_terminal_proof": false,
+  "earlier_run_39026847303": "failure unchanged",
+  "retried": false,
+  "diagnostic_scope": "fixed upstream tracked-header reproduction; original failed runtime filelist not uploaded",
+  "fixed_header_count_audited": 17,
+  "excluded_from_corpus": "generated compute.svh and generated idma_generated.sv unavailable as artifacts",
+  "reason_categories": [
+    "legitimate paired-backtick comment construction misclassified as bare backtick",
+    "legitimate identifier paste misclassified as dynamic macro name"
+  ]
+}

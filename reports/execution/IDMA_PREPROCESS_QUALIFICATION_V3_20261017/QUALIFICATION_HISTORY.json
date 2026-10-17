@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "v2_status": "FAILED_QUALIFICATION_FIXTURE_INCOMPLETE",
+  "v2_private_receipt_sha256": "358f1350b0c64acfa2cba1264b812a7f60bc422c2ad17340aa1de431c9a7577c",
+  "v2_actual_case_exits": [
+    0,
+    1,
+    0,
+    1,
+    0,
+    1
+  ],
+  "v2_negative_preflight": "not_reached",
+  "v2_retried": false,
+  "v3_status": "PASS_MICROFIXTURE_ONLY",
+  "v3_private_receipt_sha256": "af62f92109abd430ab98d36fa3620cf489cc462e5ac12514fd877cb6a8c5cb8e",
+  "v3_case_exits": [
+    0,
+    1,
+    0,
+    1,
+    0,
+    0
+  ],
+  "v3_preflight_rejected": 3,
+  "v3_candidate_manifest_sha256": "52dc855aaf83b2bfdc5bf204dcbdee3800cdae31bb13d19f1489a1e61393dbd2",
+  "production_export_executed": false,
+  "fixed_tool_sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+  "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+  "raw_proof_uploaded": false
+}

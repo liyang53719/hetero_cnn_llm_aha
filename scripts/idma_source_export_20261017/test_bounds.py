@@ -2,6 +2,7 @@ import json,os,sys,tempfile,time,unittest,signal,io,tarfile
 import verify_artifact as va
 from pathlib import Path
 import bounded_run as b,export_source as e
+import preprocess_closure as pc
 class Bounds(unittest.TestCase):
  def run_child(self,code,limit=1024,seconds=2):
   with tempfile.TemporaryDirectory() as d:
@@ -13,10 +14,10 @@ class Bounds(unittest.TestCase):
  def test_helper_pin(self):self.assertEqual(b.helper(Path(b.__file__).with_name('strict_cleanup.py')).SOURCE_SHA256,b.HELPER_SHA)
  def test_filelist(self):
   with tempfile.TemporaryDirectory() as d:
-   p=Path(d);(p/'x.sv').write_text('module x;endmodule');(p/'inc').mkdir();f=p/'list';f.write_text('+define+X\n+incdir+@ROOT@/inc\n@ROOT@/x.sv\n');e.check_filelist(f,p)
+   p=Path(d);(p/'x.sv').write_text('module x;endmodule');(p/'inc').mkdir();f=p/'list';f.write_text('+define+X\n+incdir+@ROOT@/inc\n@ROOT@/x.sv\n');pc.parse_filelist(f,p)
    for bad in ['@ROOT@/missing.sv','/tmp/out.sv','@ROOT@/../escape.sv','+incdir+@ROOT@/missing']:
     f.write_text(bad)
-    with self.assertRaises(ValueError):e.check_filelist(f,p)
+    with self.assertRaises(ValueError):pc.parse_filelist(f,p)
  def test_export_symlink_reject(self):
   with tempfile.TemporaryDirectory() as d:
    p=Path(d);(p/'COMMITS.json').write_text(json.dumps({'idma':e.PIN,**e.DEPS}));(p/'SHA256SUMS.json').write_text('{}');(p/'link').symlink_to('/tmp',target_is_directory=True)
@@ -67,7 +68,7 @@ class Bounds(unittest.TestCase):
  def test_include_closure(self):
   with tempfile.TemporaryDirectory() as d:
    root=Path(d);(root/'top.sv').write_text('`include "a.svh"\n');(root/'a.svh').write_text('`include "b.svh"\n');(root/'b.svh').write_text('// leaf\n')
-   self.assertEqual(e.verify_include_closure([root/'top.sv'],[],root),3)
+   self.assertEqual(len(pc.admission([root/'top.sv'],[],root)[0]),3)
    (root/'b.svh').write_text('`include "missing.svh"\n')
-   with self.assertRaises(ValueError):e.verify_include_closure([root/'top.sv'],[],root)
+   self.assertEqual(pc.admission([root/'top.sv'],[],root)[1],['missing.svh'])
 if __name__=='__main__':unittest.main()

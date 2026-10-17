@@ -1,0 +1,27 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+@@ -29,13 +29,14 @@
+   * Partial sums may be discarded; final values are credit-buffered. No step
+   * waits for its own result when a different legal context can issue.
+   */
+-class MatrixPipelineService(returnTagBits:Int=0,enableTransposedDense:Boolean=false,enableAccumulatorSeed:Boolean=false) extends Module {
++class MatrixPipelineService(returnTagBits:Int=0,enableTransposedDense:Boolean=false,enableAccumulatorSeed:Boolean=false,enablePackedDrainStatus:Boolean=false) extends Module {
+   val io=IO(new Bundle {
+     val port=Flipped(new MatrixStreamPort(returnTagBits,enableTransposedDense,enableAccumulatorSeed))
+     val acceptedSteps=Output(UInt(64.W)) // physical 512-MAC slice issues
+     val wideSteps=Output(UInt(64.W))
+     val stallCycles=Output(UInt(64.W))
+     val resetRequired=Output(Bool())
++    val packedStepsDrained=if(enablePackedDrainStatus)Some(Output(Bool()))else None
+   })
+   val idle :: command :: running :: ending :: finish :: draining :: locked :: Nil=Enum(7)
+   val state=RegInit(idle)
+@@ -77,6 +78,8 @@
+   val legalContext=x.context<5.U
+   val legalStep=if(enableAccumulatorSeed){legalContext && x.clear=== !(seen|seeded.getOrElse(0.U(5.W)))(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|seeded.getOrElse(0.U(5.W))|UIntToOH(x.context,5)))))}else{legalContext && x.clear=== !seen(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|UIntToOH(x.context,5)))))}
+   val work=if(enableAccumulatorSeed){state===running && !endIssued && !io.port.abort && !seedBlocks && !seedPoison}else{state===running && !endIssued && !io.port.abort}
++  // Existing metadata owns retirement; no new debt counter or payload.
++  if(enablePackedDrainStatus){io.packedStepsDrained.get:=work && !tags.io.deq.valid && !io.port.step.valid && !poison}
+   val consumeOutput=(state===running||state===ending||state===draining) && tags.io.deq.valid && allOutValid &&
+     (state===draining|| !tags.io.deq.bits.emit||values.io.enq.ready)
+   val outputBad=(0 until 8).map(i=>selected(i)&&

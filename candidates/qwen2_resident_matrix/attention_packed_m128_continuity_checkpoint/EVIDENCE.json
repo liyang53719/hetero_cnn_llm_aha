@@ -1,0 +1,238 @@
+{
+  "cold_checks": {
+    "normal_tests": 20,
+    "numerical_acceptance": false,
+    "optimized_tests": 20,
+    "status": "COLD_CHECKS_OK"
+  },
+  "context_omitted_path_fields": [
+    "compile_origin",
+    "compile_receipt",
+    "m16_prerequisite",
+    "origin",
+    "python",
+    "source_root",
+    "workspace"
+  ],
+  "context_selected": {
+    "contract_sha256": "cf20ec20ed2f023bf1d9b2b2f10ecd4d7963699cebab5f984e3a429e8f3ed9eb",
+    "outer_deadline": 77060.445410078,
+    "parent_pid": 5,
+    "profile": "qwen2-packed-m128-full-run-v1",
+    "schema": 1,
+    "started": 74630.445410078,
+    "work_deadline": 77054.445410078
+  },
+  "contract_reference": {
+    "artifact_root": "packed-m128-run-gate-proposal-20261017",
+    "bytes": 2573,
+    "contract_republished": false,
+    "relative_path": "candidates/qwen2_resident_matrix/attention_packed_m128_run/contract.json",
+    "sha256": "cf20ec20ed2f023bf1d9b2b2f10ecd4d7963699cebab5f984e3a429e8f3ed9eb"
+  },
+  "log_observations": {
+    "control/stderr.log": {
+      "bytes": 0,
+      "copied": false,
+      "observed_utc": "2026-10-17T00:32:18Z"
+    },
+    "control/stdout.log": {
+      "bytes": 0,
+      "copied": false,
+      "observed_utc": "2026-10-17T00:32:18Z"
+    }
+  },
+  "original_artifacts": {
+    "ATTEMPT_LOCK": {
+      "bytes": 165,
+      "sha256": "422e9869e68ab607af8dca8a0e466579d5f9793b22aca7224dcff1eb15fd0726"
+    },
+    "CALLER_PREFIX.json": {
+      "bytes": 1147,
+      "sha256": "c8c387b7912dfe29afb3e1f1825cc592c99b4ec5a05df1fc1a2c1da3cedebcda"
+    },
+    "CALLER_START.json": {
+      "bytes": 664,
+      "sha256": "e16751e1bb77792c891369f08fb2d3e7b0d8f299b6f790e9db0e61d13a135674"
+    },
+    "INPUTS.json": {
+      "bytes": 48399,
+      "sha256": "93cacf49089eb14dd930620ad7d32a4dd518476b2b13d0fa122af572113a32da"
+    },
+    "actual/summary.json": {
+      "bytes": 297936,
+      "sha256": "e642d97b3621f80666696a6c56e7ef01051aa735436843bd83b2176021066b1f"
+    },
+    "control/CONTEXT.json": {
+      "bytes": 942,
+      "sha256": "99bd12bf22817d5d83e76fba9c63833362fda82652a712b88b361993b3f301d1"
+    },
+    "control/SOURCE_PROOF.json": {
+      "bytes": 49884,
+      "sha256": "2df1d5b7e2f7169357710dd9152763b32ae247c6ba88c95e9b11e2d60a2fb91e"
+    },
+    "control/progress.json": {
+      "bytes": 188,
+      "sha256": "3b326fa4bcb96a810bf76fa44fe135a8a824d30fd5c635ac4789d8c456e6f0b1"
+    },
+    "snapshot/SNAPSHOT.json": {
+      "bytes": 447057,
+      "sha256": "0b92832323093a5337fa6f5fb711bf8b016396a8d2557410e0ba1d69e25b90a3"
+    }
+  },
+  "privacy": {
+    "context_paths_omitted": true,
+    "exact_copies": [
+      "CALLER_PREFIX.json",
+      "PROGRESS.json"
+    ],
+    "no_weights_tensors_logs_or_absolute_private_paths": true,
+    "originals_modified": false,
+    "private_artifacts_retained_by_hash_only": true,
+    "publication_performed": false
+  },
+  "schema": 1,
+  "source_map_reference": {
+    "all_installed_hashes_match": true,
+    "artifact_root": "packed-m128-run-gate-proposal-20261017",
+    "bytes": 48758,
+    "compact_sha256": "4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8",
+    "count": 350,
+    "installed_files_independently_hashed": 350,
+    "relative_path": "RUNTIME_SOURCE_MAP.json",
+    "sha256": "3fc86df23e050110039e2e1de8cef877f0ecba10908fefff86d8ffe66e41e536",
+    "source_map_republished": false
+  },
+  "source_proof_selected": {
+    "committed_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "context_sha256": "99bd12bf22817d5d83e76fba9c63833362fda82652a712b88b361993b3f301d1",
+    "git_head": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+    "pid": 6,
+    "schema": 1,
+    "source_manifest_sha256": "4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8",
+    "work_deadline": 77054.445410078
+  },
+  "state": {
+    "acceptance": {
+      "full_29_node_acceptance": false,
+      "hardware_recipe_acceptance": false,
+      "native_acceptance": false,
+      "numerical_acceptance": false,
+      "old_pass_inherited": false,
+      "public_m128_acceptance": false,
+      "rtl_acceptance": false,
+      "useful_wall_mac_90_percent": false
+    },
+    "attempt": {
+      "exec_cell_id": 376,
+      "host_pid_starttime_proof_available": false,
+      "namespace_child_pid": 6,
+      "namespace_parent_pid": 5,
+      "numerical_run_started": true,
+      "outer_deadline_monotonic": 77060.445410078,
+      "outer_deadline_utc_approximate": "2026-10-17T00:51:36Z",
+      "started_utc_observed": "2026-10-17T00:11:06Z",
+      "tool_continuity": "UNAVAILABLE_AS_REPORTED_BY_PARENT",
+      "tool_continuity_report": "Unknown process id 94904; old exec cell 376 unavailable after wait aborted",
+      "tool_observation_source": "parent task handoff; not independently replayed by checkpoint builder",
+      "tool_session_id": 94904
+    },
+    "completion_artifacts": {
+      "PRIVATE_LAUNCH_RECEIPT.json": {
+        "observed_utc": "2026-10-17T00:32:18Z",
+        "present": false
+      },
+      "SUPERVISOR.json": {
+        "observed_utc": "2026-10-17T00:32:18Z",
+        "present": false
+      },
+      "control/CHILD_COMPLETE.json": {
+        "observed_utc": "2026-10-17T00:32:18Z",
+        "present": false
+      },
+      "summary.json": {
+        "observed_utc": "2026-10-17T00:32:18Z",
+        "present": false
+      }
+    },
+    "frozen_wrapper": "packed-m128-run-gate-proposal-20261017",
+    "identities": {
+      "actual_summary_sha256": "e642d97b3621f80666696a6c56e7ef01051aa735436843bd83b2176021066b1f",
+      "context_sha256": "99bd12bf22817d5d83e76fba9c63833362fda82652a712b88b361993b3f301d1",
+      "contract_sha256": "cf20ec20ed2f023bf1d9b2b2f10ecd4d7963699cebab5f984e3a429e8f3ed9eb",
+      "runtime_source_map_compact_sha256": "4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8"
+    },
+    "interpretation": "Prefix completion only. Execution continuity, exits, cleanup, terminal completion, numerical outcome and deadline expiration are unknown. Absence is an observation at the recorded time. No timeout or numerical failure is inferred; no PASS is inherited. No kill, restart or numerical work was performed for this checkpoint.",
+    "observation_utc": "2026-10-17T00:32:18Z",
+    "observed_prefix": {
+      "actual_summary_bytes": 297936,
+      "operations": [
+        {
+          "kind": "Norm",
+          "pc": 0
+        },
+        {
+          "kind": "Dense",
+          "pc": 1
+        },
+        {
+          "kind": "Bias",
+          "pc": 2
+        },
+        {
+          "kind": "Rope",
+          "pc": 3
+        },
+        {
+          "kind": "Dense",
+          "pc": 4
+        },
+        {
+          "kind": "Bias",
+          "pc": 5
+        },
+        {
+          "kind": "Rope",
+          "pc": 6
+        },
+        {
+          "kind": "Dense",
+          "pc": 7
+        },
+        {
+          "kind": "Bias",
+          "pc": 8
+        },
+        {
+          "kind": "KvAppend",
+          "pc": 9
+        }
+      ],
+      "prefix_completions": 10,
+      "prefix_host_wall_seconds": 79.21691106600338,
+      "rows": 128,
+      "status": "ACTUAL_PREFIX_COMPLETE"
+    },
+    "original_workspace": "packed_m128_run_gate_20261017",
+    "schema": 1,
+    "source_verification": {
+      "actual_report_map_equals_frozen_map": true,
+      "input_map_equals_frozen_map": true,
+      "installed_files_checked": 350,
+      "matching_files": 350,
+      "mismatch_count": 0,
+      "missing_count": 0,
+      "proof_map_equals_frozen_map": true
+    },
+    "status": "INCOMPLETE_EXECUTION_CONTINUITY_UNVERIFIED",
+    "unknown": {
+      "actual_chain_complete": null,
+      "child_exit_code": null,
+      "deadline_expiration_observed": null,
+      "launcher_exit_code": null,
+      "numerical_outcome": null,
+      "process_cleanup_complete": null,
+      "process_running": null
+    }
+  }
+}

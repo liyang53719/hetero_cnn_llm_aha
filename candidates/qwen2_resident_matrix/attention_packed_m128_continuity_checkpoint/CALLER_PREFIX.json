@@ -1,0 +1,59 @@
+{
+  "actual_summary_bytes": 297936,
+  "actual_summary_sha256": "e642d97b3621f80666696a6c56e7ef01051aa735436843bd83b2176021066b1f",
+  "context_sha256": "99bd12bf22817d5d83e76fba9c63833362fda82652a712b88b361993b3f301d1",
+  "full_29_node_gate": false,
+  "numerical_acceptance": false,
+  "phase": "numeric",
+  "prefix_completions": 10,
+  "prefix_execution_present": true,
+  "prefix_host_wall_seconds": 79.21691106600338,
+  "prefix_operations": [
+    {
+      "kind": "Norm",
+      "pc": 0
+    },
+    {
+      "kind": "Dense",
+      "pc": 1
+    },
+    {
+      "kind": "Bias",
+      "pc": 2
+    },
+    {
+      "kind": "Rope",
+      "pc": 3
+    },
+    {
+      "kind": "Dense",
+      "pc": 4
+    },
+    {
+      "kind": "Bias",
+      "pc": 5
+    },
+    {
+      "kind": "Rope",
+      "pc": 6
+    },
+    {
+      "kind": "Dense",
+      "pc": 7
+    },
+    {
+      "kind": "Bias",
+      "pc": 8
+    },
+    {
+      "kind": "KvAppend",
+      "pc": 9
+    }
+  ],
+  "rows": 128,
+  "rtl": false,
+  "schema": 1,
+  "session_id": 94904,
+  "source_manifest_sha256": "4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8",
+  "status": "ACTUAL_PREFIX_COMPLETE"
+}

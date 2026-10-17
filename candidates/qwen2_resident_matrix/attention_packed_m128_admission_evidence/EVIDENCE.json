@@ -1,0 +1,108 @@
+{
+  "elapsed_seconds": 24.208482025002013,
+  "full_29_node_acceptance": false,
+  "full_public_run": false,
+  "native_forward_executed": false,
+  "negatives": {
+    "cases": [
+      {
+        "case": "row_16",
+        "error_class": "ValueError",
+        "reason": "linked packed public21 rows must be exactly 128",
+        "runtime_calls": 0
+      },
+      {
+        "case": "row_True",
+        "error_class": "ValueError",
+        "reason": "linked packed public21 rows must be exactly 128",
+        "runtime_calls": 0
+      },
+      {
+        "case": "row_128.0",
+        "error_class": "ValueError",
+        "reason": "linked packed public21 rows must be exactly 128",
+        "runtime_calls": 0
+      },
+      {
+        "case": "raw_off",
+        "error_class": "ValueError",
+        "reason": "explicit fresh/raw profile",
+        "runtime_calls": 0
+      },
+      {
+        "case": "raw_integer",
+        "error_class": "ValueError",
+        "reason": "explicit fresh/raw profile",
+        "runtime_calls": 0
+      },
+      {
+        "case": "packed_off",
+        "error_class": "ValueError",
+        "reason": "explicit packed profile",
+        "runtime_calls": 0
+      },
+      {
+        "case": "fresh_off",
+        "error_class": "ValueError",
+        "reason": "explicit fresh/raw profile",
+        "runtime_calls": 0
+      },
+      {
+        "case": "wrong_profile",
+        "error_class": "ValueError",
+        "reason": "M128 snapshot profile",
+        "runtime_calls": 0
+      },
+      {
+        "case": "missing_m16",
+        "error_class": "FileNotFoundError",
+        "reason": "missing_path",
+        "runtime_calls": 0
+      },
+      {
+        "case": "missing_origin",
+        "error_class": "FileNotFoundError",
+        "reason": "missing_path",
+        "runtime_calls": 0
+      },
+      {
+        "case": "reference_digest",
+        "error_class": "ValueError",
+        "reason": "fresh independent reference/profile drift",
+        "runtime_calls": 1
+      },
+      {
+        "case": "reference_identity",
+        "error_class": "ValueError",
+        "reason": "original input/tool/public identity changed: reference",
+        "runtime_calls": 1
+      },
+      {
+        "case": "source_drift",
+        "error_class": "ValueError",
+        "reason": "linked source drift:",
+        "runtime_calls": 0
+      }
+    ],
+    "numerical_work_started": false,
+    "status": "PASS_ACTUAL_RUN_REJECTION_CASES"
+  },
+  "numerical_jobs": 0,
+  "original_probe_bytes": 52331,
+  "original_probe_sha256": "af7c8b8d41190ceb809ca2a02d79161490d3480c9ac48999410e82df9694435f",
+  "rtl_executed": false,
+  "schema": 1,
+  "snapshot_sha256": "800783231d315af67d929a3733ef07a0a7c0a04cdb85ac289a1569439a719985",
+  "source_count": 350,
+  "source_manifest_sha256": "4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8",
+  "status": "PASS_RUN_ADMISSION_AND_NEGATIVES_ONLY",
+  "success": {
+    "numerical_work_started": false,
+    "output_directory_created": false,
+    "real_snapshot_verified": true,
+    "runtime_calls": 2,
+    "snapshot_sha256": "800783231d315af67d929a3733ef07a0a7c0a04cdb85ac289a1569439a719985",
+    "source_count": 350,
+    "status": "PASS_ACTUAL_RUN_ADMISSION_ONLY"
+  }
+}

@@ -160,6 +160,11 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   [原始安全回执与修复依据](../reports/execution/QWEN2_SAME_HOST_M16_WRITER_CONTRACT_FIX_20261017/README.md)保留artifact12090039191与ZIP962e63e2cf700414149441a172334c606e21e2df04195389ba6df04c5193b0cc。源码确认validated_policy_jobs使用整数PC键；JSON读取后变成字符串，入口再次sort_keys编码令2/10排序改变，导致返回值与磁盘误判。窄修复保留有界严格JSON读取，改按原original.encoded写入器逐字节核对；原数值、terminal、postflight与900/930秒预算不变。
   仅四个runtime文件变化：entry、回归测试、输入hash与workflow修订注释。root252+252冷测、独立52+52入口及原terminal回归、357源真实worktree组合通过。新383项实际Git闭包须通过后才触发一次新运行。较早4f失败仍为原因未知；M128同类入口修复单独冻结，a959未发布候选禁止推进main。五block完整M128与RTL仍0/5，80%/90%利用率无新增实测。
 
+
+- **done：6cc 新尝试真实超时证据；ongoing：模型执行开销定位。** run39005243171/job117316258340在6cc2003上失败，artifact12090687791，ZIP37a514320a3337673406b2c4feac667a1815b8373cf626689d090659798e57b8。fresh producer84.792876秒资格通过，整体1011.004021秒，所有已拥有进程组清理完成。数值900.232086秒，完成PC0–18、PC19已派发但尚未退休；原execute_numeric.py:109累计900秒deadline在Down触发，写入比较和终态门禁尚未到达。不能记录完整M16通过。
+  [精确四JSON及源码证明](../reports/execution/QWEN2_SAME_HOST_M16_PC19_TIMEOUT_20261017/README.md)保留旧证据；执行356静态源与8个栈帧逐项匹配。与46f相比仅entry/test改变，热点源码相同；前缀36.98→57.50秒，速度波动原因未知，CPU affinity不能证明CPU型号、争用或限频。暂不加预算、不盲目重跑，先做纯控制开销的等价性和局部测量。
+- **done：M128 源码检查点；to do：实际M128运行。** 保存修正后的22个入口/35个支持/7个producer文件与7个parent文件；root490+490冷测、独立238+238及隔离边界/420源worktree组合通过。当前检查点明确不发布新的M128 workflow，已有M16 YAML原样不变，不触发额外数值CI。对应454项实际发布源闭包须核验；此前含workflow的209603d候选保持未发布。未来运行必须同一job重新生成参考并通过完整M16原terminal及same-ELF先决，再执行真实M128，不能拿本次源码门禁或旧诊断PASS替代。完整五block M128/RTL仍0/5。
+
 ## 下一步，保持默认关闭并逐项验收
 
 1. **done：收齐be00失败结果。** 安全摘要/source身份已归档，数值比较和postflight未完成。新候选独立冻结，不据小切片推定旧运行PASS。

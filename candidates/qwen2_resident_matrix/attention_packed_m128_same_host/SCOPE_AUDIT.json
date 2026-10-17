@@ -1,0 +1,36 @@
+{
+  "claims": {
+    "full29": false,
+    "full_m128_pass": false,
+    "hardware": false,
+    "native_compiled": false,
+    "numeric_executed": false,
+    "packages_installed": false,
+    "rtl": false
+  },
+  "complete_frozen_m16_source_count": 356,
+  "dynamic_actual_commit_contract_additional": true,
+  "identical_compile_receipt_and_elf_required": true,
+  "m16_terminal_baseline_sha256": "caf027af5688acbe8c29efb38ddba09a88a3223d0749572f6a002c42806aae20",
+  "native29_and116_separate_from_public27_and28": true,
+  "original24_source_compatibility_required": true,
+  "original_two_scalar22_output_and12_semantic_checks_required": true,
+  "reversible_changes": [
+    "source/admission/profile import identity",
+    "fresh reference provenance",
+    "new official forward metadata"
+  ],
+  "same_job_full_m16_required": true,
+  "schema": 1,
+  "status": "SOURCE_COLD_ONLY",
+  "terminal_baseline_sha256": "f8ecc30ce4cff0a8ccafec86fe0e408ba71729f135a7622609782e019e86c2ad",
+  "unchanged": [
+    "native arithmetic",
+    "original two C++ references",
+    "original full128 tiled schedule",
+    "original full21/17 execution",
+    "original thresholds and metrics",
+    "original10 observer fields",
+    "original ACK/release/cleanup gates"
+  ]
+}

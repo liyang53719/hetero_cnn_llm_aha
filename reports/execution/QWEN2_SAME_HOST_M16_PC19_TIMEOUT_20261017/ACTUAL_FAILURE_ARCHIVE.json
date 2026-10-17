@@ -1,0 +1,159 @@
+{
+  "actual_observation": {
+    "combined_elapsed_seconds": 1011.0040205629999,
+    "completed_public_pcs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "host_counters": {
+      "completion_backpressure_edges": 57,
+      "completion_fire": 19,
+      "host_model_ticks": 3498637,
+      "idle_owner_edges": 217,
+      "ordinary_owner_edges": 1015170,
+      "owner_result_fire": 15,
+      "raw_kv_parent_edges": 111592,
+      "request_fire": 16,
+      "result_fire": 0
+    },
+    "numeric_elapsed_seconds": 900.232086109,
+    "observed_child_exit": 1,
+    "owned_cleanup_complete": true,
+    "prefix_elapsed_seconds": 57.501868376999994,
+    "producer_elapsed_seconds": 84.792875729,
+    "producer_status": "PASS_FRESH_M16_PRODUCER",
+    "reset_required": false,
+    "validated_dispatch_pcs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ]
+  },
+  "artifact_archive_bytes": 38492,
+  "artifact_archive_sha256": "37a514320a3337673406b2c4feac667a1815b8373cf626689d090659798e57b8",
+  "artifact_created_at": "2026-10-17T05:26:54Z",
+  "artifact_id": "12090687791",
+  "ci": {
+    "commit": "6cc2003d8f85d881d7cbb5f6263da06ec3a05f39",
+    "run_attempt": "1",
+    "run_id": "39005243171"
+  },
+  "comparison_to_46f": {
+    "completed_public_pcs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "earlier_failure": "writer-byte comparison before terminal validation",
+    "numeric_elapsed_seconds": 643.242547571,
+    "performance_variance_cause": "UNKNOWN; no CPU model, contention or per-phase CPU attribution is established by the retained safe evidence",
+    "prefix_elapsed_seconds": 36.979842685999984,
+    "run_id": "39003509172"
+  },
+  "exact_safe_artifact_members": {
+    "producer_summary.json": {
+      "bytes": 2157,
+      "sha256": "4ea5c7a7ac5da9a81ad50013cd8919ca530989a4540a2fe0d8c7a35bc3935130"
+    },
+    "source_hashes.json": {
+      "bytes": 100365,
+      "sha256": "25af7ce7330177275cbbff4d1ce7344b54923deab9e48ec0b5e3148b6876a8ac"
+    },
+    "stage_exits.json": {
+      "bytes": 1772,
+      "sha256": "a18a0d9a1543d2c4c6f4f5c1ea88dc28f607581281b1d9ebd8d784a40a4aa710"
+    },
+    "summary.json": {
+      "bytes": 3661,
+      "sha256": "4c3eb023cb1b6e3a8f260ab61f8bf872b9e8e81c5a1ccc8272be524635c7b797"
+    }
+  },
+  "job_id": "117316258340",
+  "limits": {
+    "diagnostic_acceptance": false,
+    "diagnostic_origin_authenticated": false,
+    "full_29_node_acceptance": false,
+    "full_m128_started": false,
+    "full_m16_terminal_qualified": false,
+    "hardware_recipe_acceptance": false,
+    "old_pass_inherited": false,
+    "prior_4f_inner_failure_reclassified": false,
+    "rtl_execution": false,
+    "timing_budget_increased": false
+  },
+  "privacy": "Only exact previously allowlisted JSON metadata is preserved; no tensor payloads, raw logs, exception messages or local variables.",
+  "run_completed_at": "2026-10-17T05:26:59Z",
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/39005243171",
+  "schema": 1,
+  "source_proof": {
+    "active_phase": "Down",
+    "active_public_pc": 19,
+    "actual_composed_static_files_matched": 356,
+    "actual_input_pins_matched": 382,
+    "all_other_354_composed_static_files_identical": true,
+    "deadline_guard": {
+      "line": 109,
+      "path": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py",
+      "sha256": "d794c0b60b764e378c03fd74436d74e654964a4984efd1f2cedb5f3187724886"
+    },
+    "deadline_seconds": 900,
+    "executed_numerical_sources_imported_by_this_check": false,
+    "returned_disk_writer_boundary_reached": false,
+    "source_delta_from_46f": [
+      "candidates/qwen2_resident_matrix/attention_packed_m16_same_host/entry.py",
+      "candidates/qwen2_resident_matrix/attention_packed_m16_same_host/test_entry.py"
+    ],
+    "whole_terminal_validator_reached": false
+  },
+  "status": "SOURCE_CONFIRMED_INNER_DEADLINE_FAILURE"
+}

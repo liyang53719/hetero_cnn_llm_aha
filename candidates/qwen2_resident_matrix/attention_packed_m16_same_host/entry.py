@@ -46,8 +46,8 @@ def run(workspace, *, manifest, manifest_sha256, run_context):
     from . import terminal_validator
     summary = workspace/'actual/summary.json'
     raw = summary.read_bytes()
-    C.need(C.encoded(result) == C.encoded(C.read_json(summary, C.sha(raw), limit=4*1024*1024)),
-           'returned/disk full-M16 result differs')
+    C.read_json(summary, C.sha(raw), limit=4*1024*1024)
+    C.need(raw == original.encoded(result), 'returned/disk full-M16 writer bytes differ')
     validation = terminal_validator.validate_terminal(summary, C.sha(raw), sources,
                                                       snapshot_path, snapshot_sha256)
     C.need(C.snapshot() == sources and C.sha(snapshot_path.read_bytes()) == snapshot_sha256,

@@ -1,0 +1,147 @@
+{
+  "actual_m128_execution": false,
+  "archive_bytes_verified": true,
+  "artifact_id": "12090039191",
+  "artifact_sha256": "962e63e2cf700414149441a172334c606e21e2df04195389ba6df04c5193b0cc",
+  "commit": "46f57663bda24176c496c2c45440d230d9501362",
+  "diagnostic_only": true,
+  "elapsed_seconds": 744.0201000669999,
+  "files": {
+    "producer_summary.json": {
+      "bytes": 2162,
+      "sha256": "ecf531e094768f288476fa40c7c43f1756476eb3f700b38f2f5be5c50ec2824c"
+    },
+    "source_hashes.json": {
+      "bytes": 100365,
+      "sha256": "69642550a122a81f5fdd8e783c625d915e6606048a9088ba758cbe218a0cc4fd"
+    },
+    "stage_exits.json": {
+      "bytes": 1772,
+      "sha256": "72558d9f803720ee8725a2a0221dc91be3484bd08ec12cca683ae08420a2fbe5"
+    },
+    "summary.json": {
+      "bytes": 3292,
+      "sha256": "48ce61739d7680447249c4e83f05fcb7ee38ceeb5800dc7c26d5c9e86ea6c820"
+    }
+  },
+  "full_child_exit_code": 1,
+  "full_m16_terminal_accepted": false,
+  "m128_entry_same_defect": true,
+  "observed_status": "FAILED_SAME_HOST_M16_ATTEMPT",
+  "owned_groups_cleanup_complete": true,
+  "previous_run_39001176206_inner_cause": "UNKNOWN",
+  "private_full_summary_or_payload_published": false,
+  "producer_qualified": true,
+  "proposed_repair": "Keep strict hash-bound bounded JSON read; compare raw bytes to the original source-pinned writer encoder; retain all terminal and postflight checks",
+  "reported_progress": {
+    "completed_public_pcs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "host_counters": {
+      "completion_backpressure_edges": 63,
+      "completion_fire": 21,
+      "host_model_ticks": 3818002,
+      "idle_owner_edges": 231,
+      "ordinary_owner_edges": 1322993,
+      "owner_result_fire": 17,
+      "raw_kv_parent_edges": 111592,
+      "request_fire": 17,
+      "result_backpressure_edges": 3,
+      "result_fire": 1
+    },
+    "numeric_elapsed_seconds": 643.242547571,
+    "prefix_elapsed_seconds": 36.979842685999984,
+    "reported_launch_completed": 21,
+    "reported_launch_jobs": 17,
+    "reported_launch_status": null,
+    "reported_prefix_complete": true,
+    "reported_status": "PASS_REDUCED_BF16_OBSERVED_OFFICIAL_GATES",
+    "reset_required": false,
+    "snapshot_sha256": "b44e753acf9854547dc75032bf229bd7a863824018722f4951d83bf85285a435",
+    "status": "OBSERVED",
+    "summary_sha256": "456b83181e6c2491ca91bfec384a295d0030c36d6ee9480ea8c6b4e4f35abdc6",
+    "terminal_elapsed_seconds": 642.910258392,
+    "validated_dispatch_pcs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ]
+  },
+  "run_id": "39003509172",
+  "schema": 1,
+  "source_proven_defect": "JSON round-trip converts integer PC keys to strings; canonical sort order differs despite exact original writer bytes",
+  "traceback": {
+    "diagnostic_only": true,
+    "error_code": "PYTHON_VALUE_ERROR",
+    "exception_class": "ValueError",
+    "frames": [
+      {
+        "line": 321,
+        "path": "candidates/qwen2_resident_matrix/portable_same_host_m16_launch/worker.py",
+        "sha256": "fd6cadc32079676d64b236a968cbb397bc16c6c4a2f6f2b0b2eaf3989395dabd"
+      },
+      {
+        "line": 316,
+        "path": "candidates/qwen2_resident_matrix/portable_same_host_m16_launch/worker.py",
+        "sha256": "fd6cadc32079676d64b236a968cbb397bc16c6c4a2f6f2b0b2eaf3989395dabd"
+      },
+      {
+        "line": 291,
+        "path": "candidates/qwen2_resident_matrix/portable_same_host_m16_launch/worker.py",
+        "sha256": "fd6cadc32079676d64b236a968cbb397bc16c6c4a2f6f2b0b2eaf3989395dabd"
+      },
+      {
+        "line": 49,
+        "path": "candidates/qwen2_resident_matrix/attention_packed_m16_same_host/entry.py",
+        "sha256": "b3f2f6f6816869cfee91cb99ff2be96824cc6303a87312b53112091efa350060"
+      },
+      {
+        "line": 23,
+        "path": "candidates/qwen2_resident_matrix/attention_packed_m16_same_host/contract.py",
+        "sha256": "fbc0549500cdcebcc84ea05d97dc74c0878a8ecd1fce3e00883cc0f4e88ac9ad"
+      }
+    ],
+    "known_frames_omitted": 0,
+    "origin_authenticated": false,
+    "reason": "COMPLETE_SINGLE_TRACEBACK",
+    "schema": 1,
+    "status": "OBSERVED",
+    "unknown_frames_omitted": 0
+  }
+}

@@ -1,6 +1,8 @@
 """Cold, synthetic metadata and source tests. Never producer/ELF/numeric runs."""
 import ast
 import copy
+from contextlib import ExitStack
+from dataclasses import asdict, make_dataclass
 import json
 import os
 from pathlib import Path
@@ -83,6 +85,312 @@ def synthetic_tiny_binding(directory):
     package = types.ModuleType('candidates.qwen2_resident_matrix.portable_consumer_qualification')
     package.contract = contract
     return manifest,qualified,producer,dict(library_sha256='3'*64),inputs,result,contract,package
+
+
+# These are immutable numerical source files, not freshly invented encoder
+# doubles. AST extraction below executes only the named metadata functions.
+WRITER_SOURCES = {
+    'dense_block_reduce/check_public_numeric.py':
+        '1b5466572150afc9c47ba9ee847957f24da2819f7b83c4a7fc7be930da2c2c6b',
+    'official_bf16/check_numeric.py':
+        'efa2d88c698536332646fe3528f0943adf3cd79544f47f160a991a415d581e93',
+    'ffn_public/check_fullgraph_numeric.py':
+        '198e2b7b87c6fbf7a317174d7653ea2d4da912c7eabda09b8addfd9bc2752992',
+    'ffn_public/check_prefix_numeric.py':
+        'edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699',
+    'official_bf16/execution.py':
+        'e3b5906d7589885e5aade7344d8c7d7497b61aa967b2034dbba4e1e0ebeb25d0',
+}
+
+
+def source_writer_contract():
+    """Extract the pinned writer, save body, and policy-report metadata path.
+
+    Never import the original numerical modules. The original validated job
+    binding and report methods run over synthetic metadata and a synthetic
+    parent; no transaction driver, native library, tensor, or producer runs.
+    """
+    trees = {}
+    for relative, expected in WRITER_SOURCES.items():
+        path = P.ROOT/'candidates/qwen2_resident_matrix'/relative
+        raw = path.read_bytes()
+        C.need(C.sha(raw) == expected, 'cold writer source pin differs: '+relative)
+        trees[relative] = ast.parse(raw, filename=str(path))
+    aliases = {
+        'dense_block_reduce/check_public_numeric.py': (
+            'from ..official_bf16 import check_numeric as prior',
+            'require,sha,encoded,file_sha=prior.require,prior.sha,prior.encoded,prior.file_sha'),
+        'official_bf16/check_numeric.py': (
+            'from candidates.qwen2_resident_matrix.ffn_public import check_fullgraph_numeric as old',
+            'base=old.base',
+            'require,sha,encoded,file_sha=base.require,base.sha,base.encoded,base.file_sha'),
+        'ffn_public/check_fullgraph_numeric.py': (
+            'from candidates.qwen2_resident_matrix.ffn_public import check_prefix_numeric as base',
+            'require,sha,encoded,file_sha=base.require,base.sha,base.encoded,base.file_sha'),
+    }
+    for relative, statements in aliases.items():
+        actual = {ast.dump(n, include_attributes=False) for n in trees[relative].body}
+        for statement in statements:
+            C.need(ast.dump(ast.parse(statement).body[0], include_attributes=False) in actual,
+                   'original writer alias chain differs')
+    def function(tree, name):
+        return next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == name)
+    encoder_node = function(trees['ffn_public/check_prefix_numeric.py'], 'encoded')
+    namespace = {'json':json}
+    exec(compile(ast.Module(body=[encoder_node], type_ignores=[]), '<pinned-writer-encoder>', 'exec'), namespace)
+    encoder = namespace['encoded']
+    run_node = function(trees['dense_block_reduce/check_public_numeric.py'], 'run')
+    save_node = function(run_node, 'save')
+    C.need(any(isinstance(n, ast.Return) and isinstance(n.value, ast.Name) and n.value.id == 'report'
+               for n in ast.walk(run_node)), 'original runner must return its saved report')
+    def save(out, report):
+        scope = dict(out=Path(out), report=report, encoded=encoder)
+        exec(compile(ast.Module(body=[save_node], type_ignores=[]), '<pinned-summary-save>', 'exec'), scope)
+        scope['save']()
+    policy_tree = trees['official_bf16/execution.py']
+    selected = [n for n in policy_tree.body if isinstance(n, ast.Assign) and
+                any(isinstance(t, ast.Name) and t.id in ('JOBS','DENSE_ROLES','POLICY_ID') for t in n.targets)]
+    selected.append(function(policy_tree, 'validate_job'))
+    cls = copy.deepcopy(next(n for n in policy_tree.body if isinstance(n, ast.ClassDef) and
+                             n.name == 'OfficialPublicExecution'))
+    cls.body = [n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name in ('advance_to_request','report')]
+    selected.append(cls)
+    class SyntheticParent:
+        def advance_to_request(self, limit=4096):
+            return dict(group_request=None, ordinary_request=self.synthetic_job)
+        def report(self):
+            return {}
+    scope = dict(PublicExecution=SyntheticParent, require=C.need, asdict=asdict)
+    exec(compile(ast.Module(body=selected, type_ignores=[]), '<pinned-policy-metadata>', 'exec'), scope)
+    return types.SimpleNamespace(encoded=encoder, save=save, policy=scope)
+
+
+def source_integer_policy_report(writer):
+    """Real pinned validation/store/report bodies, synthetic metadata only."""
+    policy = writer.policy
+    Job = make_dataclass('SyntheticJob', [(n,object) for n in
+        ('tag','kind','a','b','dst','m','n','k','write_bytes','weight_bf16','activation_bf16','output_bf16','c')])
+    names = sorted({name for _,a,b,dst in policy['JOBS'].values() for name in (a,b,dst)} | {'cache_v'})
+    specs = {name:(4096*(i+1),(16,32)) for i,name in enumerate(names)}
+    fixture = types.SimpleNamespace(config=types.SimpleNamespace(epoch=7), specs=specs,
+        allocations={name:types.SimpleNamespace(storage_bytes=16*32*4) for name in names})
+    execution = policy['OfficialPublicExecution']()
+    execution.policy_fixture = fixture
+    execution.policy_jobs = {}
+    execution.matrix_service = types.SimpleNamespace(bind_dense_job=lambda job,role:None)
+    for pc,(kind,a,b,dst) in policy['JOBS'].items():
+        c = specs['rope'][0]+1024*64*4 if kind=='Rope' else specs['cache_v'][0] if kind=='Attention' else 0
+        execution.synthetic_job = Job((7<<16)|pc,kind,specs[a][0],specs[b][0],specs[dst][0],16,
+            256 if pc==9 else 32,128 if pc==12 else 32,16*32*4,kind=='Dense',False,False,c)
+        execution.advance_to_request()
+    report = execution.report()
+    C.need(report['validated_policy_jobs'] is execution.policy_jobs, 'policy report changed mapping identity')
+    return report
+
+
+class EntryWriterContractTests(unittest.TestCase):
+    """Actual entry.run + strict reader + real terminal validator, cold only."""
+    @classmethod
+    def setUpClass(cls):
+        cls.writer = source_writer_contract()
+
+    def setUp(self):
+        from . import entry, terminal_validator
+        from .test_terminal_validator import fixture
+        self.entry, self.terminal = entry, terminal_validator
+        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
+        root = Path(self.tmp.name)
+        self.workspace = root/'full'
+        self.snapshot_path = self.workspace/'snapshot/SNAPSHOT.json'
+        self.summary_path = self.workspace/'actual/summary.json'
+        self.report,self.snapshot,self.sources = fixture(self.snapshot_path)
+        self.report['execution']['host'].update(source_integer_policy_report(self.writer))
+        self.producer = root/'producer.json'
+        self.producer.write_bytes(C.encoded(dict(attempt_nonce='a'*64)))
+        self.manifest_path = root/'manifest.json'
+        self.manifest = dict(producer_receipt=dict(sha256='b'*64),
+            producer_manifest=dict(path=str(self.producer),sha256=C.sha(self.producer.read_bytes())),
+            library=dict(receipt=dict(path=str(root/'synthetic-receipt.json'))))
+        self.context = dict(attempt_nonce='a'*64,producer_receipt_sha256='b'*64,work_deadline=1924)
+        self.return_change = self.disk_change = self.read_change = self.after_terminal = None
+        self.post_sources = self.sources
+        self.clock_values = [1000,1000]
+
+    def invoke(self, *, post_verify_error=False):
+        def prepare(out, receipt, reference, reference_sha256, **kwargs):
+            self.assertEqual(Path(out),self.snapshot_path.parent)
+            self.assertEqual(kwargs,dict(rows=16,enable_raw_kv=True,fresh_profile=True,
+                fresh_manifest=str(self.manifest_path),fresh_manifest_sha256='c'*64,enable_packed=True))
+            Path(out).mkdir()
+            self.snapshot_path.write_bytes(self.writer.encoded(self.snapshot))
+            self.report.update(snapshot=str(self.snapshot_path),snapshot_sha256=C.sha(self.snapshot_path.read_bytes()))
+            return self.snapshot_path,self.snapshot
+        def run(out, path, digest, **kwargs):
+            self.assertEqual((Path(out),path,digest),(self.summary_path.parent,self.snapshot_path,
+                C.sha(self.snapshot_path.read_bytes())))
+            self.assertEqual(kwargs,dict(wall_budget=C.NUMERIC_SECONDS,enable_raw_kv=True,
+                fresh_profile=True,enable_packed=True,run_context=self.context))
+            Path(out).mkdir()
+            # Execute the exact extracted original save(), using its actual
+            # original encoder, then return the same in-memory report.
+            self.writer.save(out,self.report)
+            if self.disk_change:
+                self.summary_path.write_bytes(self.disk_change(self.summary_path.read_bytes()))
+            if self.return_change:
+                self.return_change(self.report)
+            return self.report
+        module_name = 'candidates.qwen2_resident_matrix.dense_block_reduce.check_public_numeric'
+        original = types.ModuleType(module_name)
+        original.prepare,original.run,original.encoded = prepare,run,self.writer.encoded
+        package = types.ModuleType(module_name.rsplit('.',1)[0])
+        package.__path__ = []
+        package.check_public_numeric = original
+        read_json = C.read_json
+        def strict_read(path, expected=None, **kwargs):
+            if Path(path) == self.summary_path and self.read_change:
+                self.read_change(self.summary_path)
+            return read_json(path,expected,**kwargs)
+        validate_terminal = self.terminal.validate_terminal
+        def validate(*args):
+            value = validate_terminal(*args)
+            if self.after_terminal:
+                self.after_terminal()
+            return value
+        with ExitStack() as stack:
+            stack.enter_context(patch.dict(sys.modules,{module_name:original,package.__name__:package}))
+            stack.enter_context(patch.object(C,'authorize_run',return_value=self.sources))
+            stack.enter_context(patch.object(A,'read_manifest',return_value=self.manifest))
+            self.verify = stack.enter_context(patch.object(A,'verify',side_effect=
+                [None,ValueError('synthetic postflight admission failure')] if post_verify_error else None))
+            stack.enter_context(patch.object(C,'snapshot',return_value=self.post_sources))
+            stack.enter_context(patch.object(self.entry.time,'monotonic',side_effect=self.clock_values))
+            self.reader = stack.enter_context(patch.object(C,'read_json',side_effect=strict_read))
+            self.validator = stack.enter_context(patch.object(self.terminal,'validate_terminal',side_effect=validate))
+            return self.entry.run(self.workspace,manifest=self.manifest_path,
+                manifest_sha256='c'*64,run_context=self.context)
+
+    def assert_no_child_result(self):
+        self.assertFalse((self.workspace/'CHILD_RESULT.json').exists())
+
+    def test_original_integer_pc_writer_reproduces_old_false_mismatch(self):
+        report = source_integer_policy_report(self.writer)
+        jobs = report['validated_policy_jobs']
+        self.assertEqual(set(jobs),set(self.writer.policy['JOBS']))
+        self.assertTrue(all(type(pc) is int for pc in jobs))
+        raw = self.writer.encoded(report)
+        parsed = json.loads(raw)
+        self.assertEqual(parsed['validated_policy_jobs']['2'],jobs[2])
+        self.assertEqual(parsed['validated_policy_jobs']['12'],jobs[12])
+        self.assertNotEqual(C.encoded(report),C.encoded(parsed))
+        self.assertNotEqual(self.writer.encoded(report),self.writer.encoded(parsed))
+        self.assertLess(raw.index(b'"2":'),raw.index(b'"12":'))
+        self.assertLess(self.writer.encoded(parsed).index(b'"12":'),self.writer.encoded(parsed).index(b'"2":'))
+
+    def test_real_entry_accepts_original_writer_integer_keys_and_real_terminal(self):
+        output = self.invoke()
+        raw = self.summary_path.read_bytes()
+        self.assertEqual(raw,self.writer.encoded(self.report))
+        self.assertNotEqual(C.encoded(self.report),C.encoded(C.read_json(self.summary_path)))
+        self.reader.assert_any_call(self.summary_path,C.sha(raw),limit=4*1024*1024)
+        self.validator.assert_called_once_with(self.summary_path,C.sha(raw),self.sources,
+            self.snapshot_path,C.sha(self.snapshot_path.read_bytes()))
+        self.assertEqual(self.verify.call_count,2)
+        self.assertEqual(output['validation']['assigned_official_gates'],27)
+        self.assertEqual(output['validation']['public_completions'],21)
+        self.assertEqual(output['summary_sha256'],C.sha(raw))
+        self.assertFalse(output['full_29_node_acceptance'])
+        self.assertEqual(C.read_json(self.workspace/'CHILD_RESULT.json'),output)
+
+    def test_returned_numeric_type_changes_keep_distinct_writer_bytes(self):
+        cases = (('rows',16.0),('host_peak_rss_kib',True),('host_wall_seconds',3.0))
+        for i,(field,value) in enumerate(cases):
+            with self.subTest(field=field,value=value):
+                self.workspace = Path(self.tmp.name)/('numeric-type-'+str(i))
+                self.snapshot_path = self.workspace/'snapshot/SNAPSHOT.json'
+                self.summary_path = self.workspace/'actual/summary.json'
+                # Isolate each returned-object change after saving valid bytes.
+                original = self.report[field]
+                self.return_change = lambda report,field=field,value=value:report.update({field:value})
+                with self.assertRaisesRegex(ValueError,'writer bytes differ'):self.invoke()
+                self.validator.assert_not_called(); self.assert_no_child_result()
+                self.report[field] = original
+
+    def test_writer_equivalent_tuple_list_conversion_is_allowed(self):
+        self.report['metadata']['synthetic_writer_conversion'] = [1,2]
+        self.snapshot['metadata']['synthetic_writer_conversion'] = [1,2]
+        self.return_change = lambda report:report['metadata'].update(synthetic_writer_conversion=(1,2))
+        output = self.invoke()
+        self.assertEqual(output['validation']['assigned_official_gates'],27)
+        self.assertEqual(self.summary_path.read_bytes(),self.writer.encoded(self.report))
+        self.validator.assert_called_once()
+
+    def test_returned_nonfinite_values_fail_original_writer(self):
+        self.return_change = lambda report:report.update(host_wall_seconds=float('nan'))
+        with self.assertRaises(ValueError):self.invoke()
+        self.validator.assert_not_called(); self.assert_no_child_result()
+
+    def test_changed_writer_whitespace_is_not_semantically_normalized(self):
+        self.disk_change = lambda raw:raw+b'\n'
+        with self.assertRaisesRegex(ValueError,'writer bytes differ'):self.invoke()
+        self.validator.assert_not_called(); self.assert_no_child_result()
+
+    def test_changed_disk_metadata_rejected_before_terminal(self):
+        self.disk_change = lambda raw:raw.replace(b'"rows": 16',b'"rows": 128',1)
+        with self.assertRaisesRegex(ValueError,'writer bytes differ'):self.invoke()
+        self.validator.assert_not_called(); self.assert_no_child_result()
+
+    def test_changed_returned_metadata_rejected_before_terminal(self):
+        self.return_change = lambda report:report.update(rows=128)
+        with self.assertRaisesRegex(ValueError,'writer bytes differ'):self.invoke()
+        self.validator.assert_not_called(); self.assert_no_child_result()
+
+    def test_strict_reader_rejects_duplicates_nonfinite_and_size_before_terminal(self):
+        cases = (b'{"x":1,"x":2}',b'{"x":NaN}',b'{"x":Infinity}',b'{"x":1e999}',
+                 b' '*(4*1024*1024+1))
+        for i,raw in enumerate(cases):
+            with self.subTest(case=i):
+                self.workspace = Path(self.tmp.name)/('strict-'+str(i))
+                self.snapshot_path = self.workspace/'snapshot/SNAPSHOT.json'
+                self.summary_path = self.workspace/'actual/summary.json'
+                self.disk_change = lambda original,raw=raw:raw
+                with self.assertRaises(ValueError):self.invoke()
+                self.validator.assert_not_called(); self.assert_no_child_result()
+
+    def test_strict_reader_binds_hash_of_first_read(self):
+        self.read_change = lambda path:path.write_bytes(path.read_bytes()+b'\n')
+        with self.assertRaisesRegex(ValueError,'metadata hash differs'):self.invoke()
+        self.validator.assert_not_called(); self.assert_no_child_result()
+
+    def test_writer_match_does_not_bypass_terminal_metadata_rejection(self):
+        self.report['rows'] = 128
+        with self.assertRaisesRegex(self.terminal.InvalidReceipt,'SUMMARY_STATUS'):self.invoke()
+        self.validator.assert_called_once(); self.assert_no_child_result()
+
+    def test_writer_match_does_not_bypass_terminal_official_gate(self):
+        stage = self.report['comparison']['methods']['official_self_cache']['stages']['y']
+        stage['verdict']['passed'] = False
+        with self.assertRaises(self.terminal.InvalidReceipt):self.invoke()
+        self.validator.assert_called_once(); self.assert_no_child_result()
+
+    def test_postflight_source_drift_still_rejected(self):
+        self.post_sources = dict(self.sources,extra='d'*64)
+        with self.assertRaisesRegex(ValueError,'postflight source/snapshot drift'):self.invoke()
+        self.validator.assert_called_once(); self.assert_no_child_result()
+
+    def test_postflight_snapshot_drift_still_rejected(self):
+        self.after_terminal = lambda:self.snapshot_path.write_bytes(self.snapshot_path.read_bytes()+b'\n')
+        with self.assertRaisesRegex(ValueError,'postflight source/snapshot drift'):self.invoke()
+        self.validator.assert_called_once(); self.assert_no_child_result()
+
+    def test_postflight_admission_still_required(self):
+        with self.assertRaisesRegex(ValueError,'postflight admission failure'):self.invoke(post_verify_error=True)
+        self.assertEqual(self.verify.call_count,2)
+        self.validator.assert_called_once(); self.assert_no_child_result()
+
+    def test_postflight_deadline_still_required(self):
+        self.clock_values = [1000,1924]
+        with self.assertRaisesRegex(ValueError,'postflight missed deadline'):self.invoke()
+        self.validator.assert_called_once(); self.assert_no_child_result()
 
 
 class EntryTests(unittest.TestCase):

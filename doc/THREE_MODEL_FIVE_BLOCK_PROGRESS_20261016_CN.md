@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 08:02 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 08:26 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -220,3 +220,11 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 
 本文件仅整理已有回执/源码和当前运行状态，没有启动新的数值、native或RTL任务。
 发布保留复现脚本、pins、hash与摘要，不附权重、输入/输出tensor或完整phase数组。
+
+## 2026-10-17 08:26 UTC：同刺激身份补齐与原kernel接线
+
+- **done：同刺激身份输出源码与冷验证；ongoing：实际冻结验证。** 新增标准库元数据输出器，绑定两档M16/M128的输入、参数、两类独立参考、实际19输出/SiLU/10字段观测及编译环境身份；明确13个loaded provider仅为终态认证metadata。仅输出逻辑名称、形状、编码、政策和hash，不上传张量/权重。
+- 原423静态数值源码、算术、终态门禁、绝对预算保持不变；六个raw文件变化包含parent/emitter/tests/input contract/精确新增第八个artifact路径。root独立707+707冷测试通过，424文件组合、465原始源码前后不变。冷测未执行生产数值、native编译或RTL。
+- 后继实际运行须在完整Git内容闭包校验后启动一次同host新M16→M128验证。原2e591b6指定27门禁PASS保留，历史逐阶段内容hash不能从旧摘要恢复。新元数据失败会保留实际数值回执，并令freeze readiness失败；不放宽deadline。
+- **done：原完整Host路径九文件固定main源码审计；ongoing：生产kernel QKV reduction窄接线。** official BF16政策尚未将QKV split-K/reverse-pair coordinator接入生产kernel。第一片默认关闭，复用原Dense银行、Matrix、SFU16、iDMA；补binaryAdd透传，resident显式false，事务归属不复用会锁死window准入的ordinary active。
+- 原Attention可作为功能数值基线候选，但固定4096 MAC/fullblock分母理想上界约48.187%，不满足80/90目标。packed Attention与SFU/调度优化仍必需；上述上界不是周期预测或RTL实测。当前完整RTL仍0/5。

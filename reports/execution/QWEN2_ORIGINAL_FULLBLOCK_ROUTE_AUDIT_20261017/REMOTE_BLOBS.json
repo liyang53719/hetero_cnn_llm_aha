@@ -1,0 +1,114 @@
+{
+  "commit": "c70315949dbc3c129b9690ced83f9228a98dd3fe",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "verification": "Authenticated GitHub fetch_file at fixed commit, returned blob SHA; compare local full bytes below.",
+  "files": [
+    {
+      "path": "candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch",
+      "encoding": "utf-8",
+      "sha": "9b8d40d330b6203e2a79c35a942be54e5b167821",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch",
+      "display_title": "chisel_policy.patch",
+      "local_path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch",
+      "sha256": "37a22c30dde207a38e77151a63e66abaeeb2e3261a082f5ef4d4a4c169d981eb",
+      "local_blob": "9b8d40d330b6203e2a79c35a942be54e5b167821",
+      "matches_current_main": true
+    },
+    {
+      "path": "candidates/qwen2_public21_binding/Public21DispatchHarness.scala",
+      "encoding": "utf-8",
+      "sha": "459452494b0f978dafb59d23da112aa6e01d5b0f",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/candidates/qwen2_public21_binding/Public21DispatchHarness.scala",
+      "display_title": "Public21DispatchHarness.scala",
+      "isError": false,
+      "local_path": "packed_m128_linked_git_cold_20261016/candidates/qwen2_public21_binding/Public21DispatchHarness.scala",
+      "sha256": "7d954937af0affaee373374ed9bb258ba492c6178fe8513134059629e52b9a11",
+      "local_blob": "459452494b0f978dafb59d23da112aa6e01d5b0f",
+      "matches_current_main": true
+    },
+    {
+      "path": "candidates/qwen2_public21_binding/source_audit.py",
+      "encoding": "utf-8",
+      "sha": "0a8bdd59c733574aac7ca8bad288225298f93795",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/candidates/qwen2_public21_binding/source_audit.py",
+      "display_title": "source_audit.py",
+      "isError": false,
+      "local_path": "packed_m128_linked_git_cold_20261016/candidates/qwen2_public21_binding/source_audit.py",
+      "sha256": "cec04fbc11bd40fa99fb11be06d4d0260ec1eb020a417043be9e077037da7b31",
+      "local_blob": "0a8bdd59c733574aac7ca8bad288225298f93795",
+      "matches_current_main": true
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/dense_block_reduce/profile.py",
+      "encoding": "utf-8",
+      "sha": "b33828bde0a21cc318358d3edb8516c0686e21a7",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/candidates/qwen2_resident_matrix/dense_block_reduce/profile.py",
+      "display_title": "profile.py",
+      "isError": false,
+      "local_path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/dense_block_reduce/profile.py",
+      "sha256": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2",
+      "local_blob": "b33828bde0a21cc318358d3edb8516c0686e21a7",
+      "matches_current_main": true
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py",
+      "encoding": "utf-8",
+      "sha": "f8287c3cfabb6c1221cc14fb51a44ce0b45319dc",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py",
+      "display_title": "matrix_binding.py",
+      "isError": false,
+      "local_path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py",
+      "sha256": "33ea0786d537aa7de59b19ff55cb515f2afeaee780f4a9f1faeb42402da19593",
+      "local_blob": "f8287c3cfabb6c1221cc14fb51a44ce0b45319dc",
+      "matches_current_main": true
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "encoding": "utf-8",
+      "sha": "5ece228b5b91d594349b2799adec184e0a01c49f",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "display_title": "Qwen2Block.scala",
+      "isError": false,
+      "local_path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+      "local_blob": "5ece228b5b91d594349b2799adec184e0a01c49f",
+      "matches_current_main": true
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "encoding": "utf-8",
+      "sha": "021c878dcb1106335d8a0cf768fdb862ab00533c",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "display_title": "BlockFloat.scala",
+      "isError": false,
+      "local_path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "local_blob": "021c878dcb1106335d8a0cf768fdb862ab00533c",
+      "matches_current_main": true
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala",
+      "encoding": "utf-8",
+      "sha": "f1be640f2267b6dd31e1f74e6171cf48401d4242",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala",
+      "display_title": "VectorSilu.scala",
+      "isError": false,
+      "local_path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala",
+      "sha256": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9",
+      "local_blob": "f1be640f2267b6dd31e1f74e6171cf48401d4242",
+      "matches_current_main": true
+    },
+    {
+      "path": "chisel/continuous_prefill/tests/host_block_commands.cpp",
+      "encoding": "utf-8",
+      "sha": "a76da2b85150dc59dc5a09e2bb0d4e6fcff38982",
+      "display_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/blob/c70315949dbc3c129b9690ced83f9228a98dd3fe/chisel/continuous_prefill/tests/host_block_commands.cpp",
+      "display_title": "host_block_commands.cpp",
+      "isError": false,
+      "local_path": "packed_m128_linked_git_cold_20261016/chisel/continuous_prefill/tests/host_block_commands.cpp",
+      "sha256": "40d2f1c450f3b2bd72a6feaac120bc697fa0c2aa98e746030cbf4b92b28510d6",
+      "local_blob": "a76da2b85150dc59dc5a09e2bb0d4e6fcff38982",
+      "matches_current_main": true
+    }
+  ]
+}

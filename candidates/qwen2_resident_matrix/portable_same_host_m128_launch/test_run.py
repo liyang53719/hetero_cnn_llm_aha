@@ -701,6 +701,119 @@ class TerminalPostflight(unittest.TestCase):
             with self.subTest(relative=relative),self.assertRaisesRegex(ValueError,'metadata drift'):self.check(a)
 
 
+class ReplayIdentityBoundary(unittest.TestCase):
+    def fixture(self):
+        directory=tempfile.TemporaryDirectory();self.addCleanup(directory.cleanup)
+        out=Path(directory.name);(out/'evidence').mkdir()
+        L=launcher();L.remaining=mock.Mock(return_value=1)
+        pins={'inputs':{R.OWN+'replay_identity.py':'a'*64}}
+        return SimpleNamespace(L=L,out=out,pins=pins)
+
+    def test_failure_projection_is_closed_and_never_stringifies_error(self):
+        class PrivateError(Exception):
+            def __str__(self):raise AssertionError('must not stringify')
+        error=PrivateError('/private/payload')
+        for value,wanted in (('FILE_HASH','FILE_HASH'),('UNKNOWN','UNKNOWN'),('/private/payload','UNKNOWN'),
+                             ('UNDECLARED','UNKNOWN'),(None,'UNKNOWN'),(True,'UNKNOWN'),(['FILE_HASH'],'UNKNOWN')):
+            state={};module=SimpleNamespace(ERROR_CODES=('FILE_HASH',),error_code=mock.Mock(return_value=value))
+            R.record_replay_failure(module,error,state)
+            self.assertEqual(state,{'code':wanted});module.error_code.assert_called_once_with(error)
+        R.record_replay_failure(None,error,None)
+
+    def test_failed_projection_cannot_replace_primary_error(self):
+        a=self.fixture();error=ValueError('/private/data');state={}
+        module=SimpleNamespace(prepare=mock.Mock(side_effect=error),error_code=mock.Mock(side_effect=RuntimeError('projection')),
+                               ERROR_CODES=('FILE_HASH',))
+        with mock.patch.object(R,'load_replay_identity',return_value=module),self.assertRaises(ValueError) as caught:
+            R.prepare_replay_identity(a.L,a.pins,ROOT,a.out,'b'*64,'c'*64,'d'*64,999,failure_state=state)
+        self.assertIs(caught.exception,error);self.assertEqual(state,{'code':'UNKNOWN'})
+
+    def test_prepare_and_finalize_preserve_exact_error_and_fixed_code(self):
+        for phase in ('prepare','finalize'):
+            a=self.fixture();error=ValueError('/private/data');state={}
+            module=SimpleNamespace(ERROR_CODES=('FILE_HASH',),error_code=mock.Mock(return_value='FILE_HASH'),
+                prepare=mock.Mock(side_effect=error),finalize=mock.Mock(side_effect=error))
+            with mock.patch.object(R,'load_replay_identity',return_value=module),self.assertRaises(ValueError) as caught:
+                if phase=='prepare':
+                    R.prepare_replay_identity(a.L,a.pins,ROOT,a.out,'b'*64,'c'*64,'d'*64,999,failure_state=state)
+                else:R.finalize_replay_identity(a.L,a.out,(module,object()),'b'*64,{},999,failure_state=state)
+            self.assertIs(caught.exception,error);self.assertEqual(state,{'code':'FILE_HASH'})
+            self.assertNotIn('/private',R.encoded(state).decode())
+
+    def test_late_expiry_is_unknown_code_and_cannot_be_misreported_as_identity_error(self):
+        a=self.fixture();error=TimeoutError('private deadline text');a.L.remaining.side_effect=[1,1,error];state={}
+        manifest={'fixture':True};module=SimpleNamespace(ERROR_CODES=('FILE_HASH',),error_code=mock.Mock(return_value='UNKNOWN'),
+            finalize=mock.Mock(return_value=(manifest,R.sha(R.encoded(manifest)))))
+        with self.assertRaises(TimeoutError) as caught:
+            R.finalize_replay_identity(a.L,a.out,(module,object()),'b'*64,{},999,failure_state=state)
+        self.assertIs(caught.exception,error);self.assertEqual(state,{'code':'UNKNOWN'})
+        self.assertTrue((a.out/'evidence/replay_identity.json').exists())
+
+    def test_checked_module_required_and_exact_pin_used(self):
+        with mock.patch.object(R,'cold_load') as load:
+            with self.assertRaisesRegex(ValueError,'source required'):
+                R.load_replay_identity(ROOT,{'inputs':{}})
+            load.assert_not_called()
+        with mock.patch.object(R,'cold_load',return_value='checked') as load:
+            self.assertEqual(R.load_replay_identity(ROOT,{'inputs':{R.OWN+'replay_identity.py':'a'*64}}),'checked')
+            load.assert_called_once_with('fresh_m128_replay_identity',ROOT/R.OWN/'replay_identity.py','a'*64)
+
+    def test_prepare_api_uses_exact_private_bindings_and_unchanged_deadline(self):
+        a=self.fixture();module=SimpleNamespace(prepare=mock.Mock(return_value=object()))
+        with mock.patch.object(R,'load_replay_identity',return_value=module) as load:
+            result=R.prepare_replay_identity(a.L,a.pins,ROOT,a.out,'b'*64,'c'*64,'d'*64,1234.5)
+        self.assertIs(result[0],module);self.assertIs(result[1],module.prepare.return_value)
+        load.assert_called_once_with(ROOT,a.pins)
+        module.prepare.assert_called_once_with(root=ROOT,out=a.out,source_pins=a.pins['inputs'],
+            qualification_sha256='b'*64,m16_prerequisite_sha256='c'*64,context_sha256='d'*64,deadline=1234.5)
+        self.assertEqual(a.L.remaining.call_args_list,[mock.call(1234.5),mock.call(1234.5)])
+
+    def test_prepare_expiry_before_load_or_after_projection_never_returns_state(self):
+        for observations in ((TimeoutError('fixture'),),(1,TimeoutError('fixture'))):
+            a=self.fixture();a.L.remaining.side_effect=observations
+            module=SimpleNamespace(prepare=mock.Mock(return_value=object()))
+            with mock.patch.object(R,'load_replay_identity',return_value=module) as load,self.assertRaises(TimeoutError):
+                R.prepare_replay_identity(a.L,a.pins,ROOT,a.out,'b'*64,'c'*64,'d'*64,1234.5)
+            self.assertEqual(load.call_count,0 if len(observations)==1 else 1)
+            self.assertFalse((a.out/'evidence/replay_identity.json').exists())
+
+    def test_finalize_hash_checked_before_fixed_allowlisted_write(self):
+        a=self.fixture();manifest={'schema':1,'fixture':'synthetic-only'};expected=R.sha(R.encoded(manifest))
+        module=SimpleNamespace(finalize=mock.Mock(return_value=(manifest,expected)));prepared=object();sources={'fixture.py':'a'*64}
+        actual=R.finalize_replay_identity(a.L,a.out,(module,prepared),'b'*64,sources,999)
+        self.assertEqual(actual,expected)
+        module.finalize.assert_called_once_with(prepared=prepared,full_receipt_sha256='b'*64,sources=sources,deadline=999)
+        self.assertEqual(safe(a.out/'evidence/replay_identity.json'),R.encoded(manifest))
+        self.assertEqual(a.L.remaining.call_args_list,[mock.call(999)]*3)
+        self.assertEqual([p.name for p in (a.out/'evidence').iterdir()],['replay_identity.json'])
+
+    def test_finalize_bad_canonical_or_nonfinite_manifest_cannot_emit(self):
+        for manifest,expected in (({},'0'*64),({},False),({'x':float('nan')},'a'*64)):
+            a=self.fixture();module=SimpleNamespace(finalize=mock.Mock(return_value=(manifest,expected)))
+            with self.subTest(manifest=manifest,expected=expected),self.assertRaises(ValueError):
+                R.finalize_replay_identity(a.L,a.out,(module,object()),'b'*64,{},999)
+            self.assertFalse((a.out/'evidence/replay_identity.json').exists())
+
+    def test_finalize_expiry_never_returns_authority_even_if_file_written(self):
+        for observations in ((TimeoutError('fixture'),),(1,TimeoutError('fixture')),(1,1,TimeoutError('fixture'))):
+            a=self.fixture();a.L.remaining.side_effect=observations
+            manifest={'fixture':True};module=SimpleNamespace(finalize=mock.Mock(return_value=(manifest,R.sha(R.encoded(manifest)))))
+            with self.subTest(boundary=len(observations)),self.assertRaises(TimeoutError):
+                R.finalize_replay_identity(a.L,a.out,(module,object()),'b'*64,{},999)
+            self.assertEqual((a.out/'evidence/replay_identity.json').exists(),len(observations)==3)
+            self.assertEqual(module.finalize.call_count,0 if len(observations)==1 else 1)
+
+    def test_failed_write_binding_or_existing_output_is_not_freeze_acceptance(self):
+        a=self.fixture();manifest={'fixture':True};module=SimpleNamespace(finalize=mock.Mock(return_value=(manifest,R.sha(R.encoded(manifest)))))
+        a.L.write_new=mock.Mock(return_value='0'*64)
+        with self.assertRaisesRegex(ValueError,'write binding'):
+            R.finalize_replay_identity(a.L,a.out,(module,object()),'b'*64,{},999)
+        a=self.fixture();write(a.out/'evidence/replay_identity.json',{'preexisting':True})
+        with self.assertRaises(FileExistsError):
+            R.finalize_replay_identity(a.L,a.out,(module,object()),'b'*64,{},999)
+        self.assertEqual(strict(safe(a.out/'evidence/replay_identity.json')),{'preexisting':True})
+
+
 class SyntheticOrchestration(unittest.TestCase):
     """All execution hooks are stdlib fixtures; real parent main is exercised."""
     def simulate(self,fail=None,*,forged_report=False,m16_code=0):
@@ -769,12 +882,32 @@ class SyntheticOrchestration(unittest.TestCase):
         def composed(*args):checkpoint('composition');return source_map
         def independent(*args):checkpoint('identity');return identity
         def terminal(*args):checkpoint('terminal_postflight');return {'status':'SYNTHETIC_COLD_ONLY','claims':R.CLAIMS}
+        def replay_prepare(_L,_pins,_root,_out,q_sha,m16_sha,context_sha,stop,*,failure_state=None):
+            self.assertEqual(state['armed'],'receipt')
+            self.assertEqual(stop,1300)
+            self.assertTrue((_out/'evidence/producer_summary.json').is_file())
+            self.assertNotIn('full_m128',calls)
+            checkpoint('replay_identity_prepare')
+            return ('SYNTHETIC_ONLY',q_sha,m16_sha,context_sha)
+        def replay_finalize(_L,_out,replay,receipt_sha,sources,stop,*,failure_state=None):
+            self.assertEqual(state['armed'],'receipt')
+            self.assertEqual(stop,3430)
+            self.assertEqual(receipt_sha,R.sha(safe(_out/'evidence/full_m128_summary.json')))
+            self.assertEqual(sources,source_map)
+            self.assertEqual(replay[0],'SYNTHETIC_ONLY')
+            self.assertEqual([e['phase'] for e in owned_calls[-1][2]['journal']][-1],'full_m128')
+            checkpoint('replay_identity_finalize')
+            written=write(_out/'evidence/replay_identity.json',dict(status='SYNTHETIC_METADATA_ONLY',requires_successful_parent_receipt=True))
+            if fail=='replay_identity_written_deadline':raise TimeoutError('fixture final identity deadline')
+            return written
         fake_sys=SimpleNamespace(version_info=(3,12,15),flags=SimpleNamespace(isolated=1,optimize=0),dont_write_bytecode=True,executable=sys.executable)
         patches=(mock.patch.object(R,'sys',fake_sys),mock.patch.object(R,'time',clock),
             mock.patch.object(R,'source_preflight',return_value=(pins,L,control,old)),mock.patch.object(R,'resource_reserves',side_effect=reserve),
             mock.patch.object(R,'seal_m16_prerequisite',side_effect=seal),mock.patch.object(R,'qualify_m128',side_effect=qualify),
             mock.patch.object(R,'validate_composition',side_effect=composed),mock.patch.object(R,'independent_identity',side_effect=independent),
             mock.patch.object(R,'load_pins',side_effect=lambda *args:checkpoint('reload_pins') or pins),
+            mock.patch.object(R,'prepare_replay_identity',side_effect=replay_prepare),
+            mock.patch.object(R,'finalize_replay_identity',side_effect=replay_finalize),
             mock.patch.object(R,'terminal_postflight',side_effect=terminal),mock.patch.dict(os.environ,GITHUB_RUN_ID=CI['run_id'],GITHUB_RUN_ATTEMPT='1'))
         error=None;code=None
         with ExitStack() as stack:
@@ -786,13 +919,16 @@ class SyntheticOrchestration(unittest.TestCase):
 
     def test_one_same_process_m16_then_producer_verify_compose_seal_full(self):
         a=self.simulate();self.assertIsNone(a.error,repr(a.error));self.assertEqual(a.code,0)
-        expected=['m16_main','seal_m16','fresh_producer','independent_m128_verifier','qualification','m128_git_worktree',
-            'm128_compose','m128_seal','composition','identity','reload_pins','full_m128','terminal_postflight']
+        expected=['m16_main','seal_m16','fresh_producer','independent_m128_verifier','qualification','replay_identity_prepare','m128_git_worktree',
+            'm128_compose','m128_seal','composition','identity','reload_pins','full_m128','terminal_postflight','replay_identity_finalize']
         self.assertEqual([n for n in a.calls if n in expected],expected)
         self.assertEqual([item[0] for item in a.owned],['fresh_producer','independent_m128_verifier','m128_git_worktree','m128_compose','m128_seal','full_m128'])
         self.assertEqual(a.summary['status'],'PASS_FRESH_SAME_HOST_M128_ASSIGNED27')
         self.assertIs(a.summary['full_m16_prerequisite_pass'],True);self.assertIs(a.summary['producer128_qualified'],True)
         self.assertIs(a.summary['full_m128_assigned27_pass'],True);self.assertFalse(any(a.summary['claims'].values()))
+        self.assertIs(a.summary['replay_identity_ready'],True)
+        self.assertIsNone(a.summary['replay_identity_failure'])
+        self.assertEqual(a.summary['replay_identity_sha256'],R.sha(safe(a.out/'evidence/replay_identity.json')))
         self.assertEqual(a.resources,[False,True,True]);self.assertEqual(a.calls.count('m16_main'),1)
         self.assertTrue((a.out/'evidence/m16_attempt_summary.json').is_file());self.assertTrue((a.out/'evidence/producer_summary.json').is_file())
         self.assertEqual(a.stages['m16_stage_exits_sha256'],R.sha(safe(a.out/'m16/evidence/stage_exits.json')))
@@ -816,7 +952,7 @@ class SyntheticOrchestration(unittest.TestCase):
         self.assertNotIn('cold-source-check',' '.join(v for _,argv,_ in a.owned for v in argv))
 
     def test_each_failure_stops_without_retry_and_preserves_receipts(self):
-        order=['m16_main','seal_m16','fresh_producer','independent_m128_verifier','qualification','m128_git_worktree',
+        order=['m16_main','seal_m16','fresh_producer','independent_m128_verifier','qualification','replay_identity_prepare','m128_git_worktree',
             'm128_compose','m128_seal','composition','identity','reload_pins','full_m128','terminal_postflight']
         for failing in order:
             with self.subTest(failing=failing):
@@ -824,12 +960,48 @@ class SyntheticOrchestration(unittest.TestCase):
                 self.assertIsInstance(a.error,ValueError);self.assertIn(failing,str(a.error))
                 self.assertEqual([n for n in a.calls if n in order],order[:order.index(failing)+1])
                 self.assertEqual(a.summary['status'],'FAILED_SAME_HOST_M128_ATTEMPT');self.assertFalse(a.summary['full_m128_assigned27_pass'])
+                self.assertIs(a.summary['replay_identity_ready'],False);self.assertIsNone(a.summary['replay_identity_sha256'])
+                if failing=='replay_identity_prepare':
+                    self.assertEqual(a.summary['replay_identity_failure'],dict(phase=failing,error_class='ValueError',code='UNKNOWN'))
+                else:self.assertIsNone(a.summary['replay_identity_failure'])
                 self.assertEqual(a.calls.count('m16_main'),1);self.assertFalse((a.out/'evidence/full_m128_summary.json').exists())
                 self.assertTrue((a.out/'m16/evidence/summary.json').exists());self.assertTrue((a.out/'evidence/m16_attempt_summary.json').exists())
                 if order.index(failing)>order.index('qualification'):self.assertTrue((a.out/'evidence/producer_summary.json').exists())
                 if failing=='fresh_producer':
                     a.L.producer_failure_diagnostic.assert_called_once();self.assertFalse(a.summary['producer_failure_observation']['acceptance'])
                 else:a.L.producer_failure_diagnostic.assert_not_called()
+
+    def test_metadata_failure_preserves_durable_numerical_receipt_without_freeze_acceptance(self):
+        a=self.simulate('replay_identity_finalize')
+        self.assertIsInstance(a.error,ValueError)
+        self.assertIn('replay_identity_finalize',str(a.error))
+        self.assertEqual(a.summary['phase'],'replay_identity_finalize')
+        self.assertEqual(a.summary['replay_identity_failure'],dict(phase='replay_identity_finalize',error_class='ValueError',code='UNKNOWN'))
+        self.assertEqual(a.summary['status'],'FAILED_SAME_HOST_M128_ATTEMPT')
+        self.assertIs(a.summary['full_m128_assigned27_pass'],True)
+        self.assertIs(a.summary['full_m16_prerequisite_pass'],True)
+        self.assertIs(a.summary['producer128_qualified'],True)
+        self.assertIs(a.summary['replay_identity_ready'],False)
+        self.assertIsNone(a.summary['replay_identity_sha256'])
+        self.assertTrue((a.out/'evidence/full_m128_summary.json').is_file())
+        self.assertFalse((a.out/'evidence/replay_identity.json').exists())
+        self.assertEqual(a.calls.count('full_m128'),1)
+        self.assertIsNone(a.summary['full_m128_failure_diagnostic'])
+
+    def test_written_identity_cannot_grant_readiness_after_final_deadline_failure(self):
+        a=self.simulate('replay_identity_written_deadline')
+        self.assertIsInstance(a.error,TimeoutError)
+        self.assertEqual(a.summary['status'],'FAILED_SAME_HOST_M128_ATTEMPT')
+        self.assertEqual(a.summary['phase'],'replay_identity_finalize')
+        self.assertEqual(a.summary['failure_kind'],'TimeoutError')
+        self.assertEqual(a.summary['replay_identity_failure'],dict(phase='replay_identity_finalize',error_class='TimeoutError',code='UNKNOWN'))
+        self.assertIs(a.summary['full_m128_assigned27_pass'],True)
+        self.assertIs(a.summary['replay_identity_ready'],False)
+        self.assertIsNone(a.summary['replay_identity_sha256'])
+        self.assertTrue((a.out/'evidence/full_m128_summary.json').is_file())
+        self.assertTrue((a.out/'evidence/replay_identity.json').is_file())
+        self.assertTrue(strict(safe(a.out/'evidence/replay_identity.json'))['requires_successful_parent_receipt'])
+        self.assertEqual(a.calls.count('full_m128'),1)
 
     def test_m16_return_code_typed_zero_cannot_be_forged_by_json(self):
         for bad in (False,1,None):

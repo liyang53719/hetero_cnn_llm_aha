@@ -1,0 +1,1682 @@
+{
+  "component_hashes": {
+    "emitter.py": "f3f842ccc8e68bb34778303c110a6c92d053c0adac37dbc1bcf6dc8a2c9fe84a",
+    "test_replay_identity.py": "d7ac0adb510aad39b626e91701da885e68196b9051275f7d9aa5f49e4fb11182"
+  },
+  "limits": {
+    "CHUNK": 1048576,
+    "MAX_CAPTURE": 33554432,
+    "MAX_FILE": 188043264,
+    "MAX_JSON": 16777216,
+    "MAX_RECORDS": 4096,
+    "MAX_TOTAL": 8589934592
+  },
+  "rows": {
+    "128": {
+      "attention_capture": {
+        "dot_bf16": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        },
+        "dot_parts": {
+          "frequency_bytes": 6291456,
+          "presence_bytes": 3145728,
+          "raw_bytes": 12582912,
+          "shape": [
+            12,
+            128,
+            128,
+            16
+          ]
+        },
+        "normalizer": {
+          "frequency_bytes": 9216,
+          "presence_bytes": 4608,
+          "raw_bytes": 18432,
+          "shape": [
+            12,
+            128,
+            3
+          ]
+        },
+        "prob_bf16": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        },
+        "pv_bf16": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        },
+        "pv_raw": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        },
+        "scores_bf16": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        },
+        "softmax_exp": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        },
+        "softmax_fp32": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        },
+        "unrounded_dot_sum": {
+          "frequency_bytes": 393216,
+          "presence_bytes": 196608,
+          "raw_bytes": 786432,
+          "shape": [
+            12,
+            128,
+            128
+          ]
+        }
+      },
+      "gate_scope": {
+        "assigned": 27,
+        "causal_logical_per_stage": 196608,
+        "causal_observed_per_stage": 99072,
+        "diagnostic": [
+          "softmax_fp32"
+        ],
+        "missing": [
+          "explicit_mask_tensor"
+        ],
+        "observed": 28
+      },
+      "loaded_providers": {
+        "count": 14,
+        "direct_whole_file": [
+          "x"
+        ],
+        "qualified_metadata_only": [
+          "bk",
+          "bq",
+          "bv",
+          "gamma0",
+          "gamma1",
+          "rope",
+          "wd",
+          "wg",
+          "wk",
+          "wo",
+          "wq",
+          "wu",
+          "wv"
+        ]
+      },
+      "native": {
+        "count": 116,
+        "methods": [
+          "official_self_cache",
+          "independent_self_cache"
+        ],
+        "modes": [
+          "bf16",
+          "fp32"
+        ],
+        "stages": {
+          "act": {
+            "bytes": 4587520,
+            "logical_shape": [
+              1,
+              128,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              128,
+              8960
+            ]
+          },
+          "att": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "cache_k": {
+            "bytes": 131072,
+            "logical_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              2,
+              128,
+              128
+            ]
+          },
+          "cache_v": {
+            "bytes": 131072,
+            "logical_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              2,
+              128,
+              128
+            ]
+          },
+          "cos": {
+            "bytes": 65536,
+            "logical_shape": [
+              128,
+              128
+            ],
+            "stored_shape": [
+              128,
+              128
+            ]
+          },
+          "down": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "gate": {
+            "bytes": 4587520,
+            "logical_shape": [
+              1,
+              128,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              128,
+              8960
+            ]
+          },
+          "k": {
+            "bytes": 131072,
+            "logical_shape": [
+              1,
+              2,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              128,
+              256
+            ]
+          },
+          "kr": {
+            "bytes": 131072,
+            "logical_shape": [
+              1,
+              128,
+              256
+            ],
+            "stored_shape": [
+              1,
+              128,
+              256
+            ]
+          },
+          "logits": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              128,
+              128
+            ]
+          },
+          "mask": {
+            "bytes": 65536,
+            "logical_shape": [
+              1,
+              1,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              1,
+              128,
+              128
+            ]
+          },
+          "n0": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "n1": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "o": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "prob": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              128,
+              128
+            ]
+          },
+          "pv": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              128,
+              128
+            ]
+          },
+          "q": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "qr": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "r": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "repeat_k": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              128,
+              128
+            ]
+          },
+          "repeat_v": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              128,
+              128
+            ]
+          },
+          "scores": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              128,
+              128
+            ]
+          },
+          "silu": {
+            "bytes": 4587520,
+            "logical_shape": [
+              1,
+              128,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              128,
+              8960
+            ]
+          },
+          "sin": {
+            "bytes": 65536,
+            "logical_shape": [
+              128,
+              128
+            ],
+            "stored_shape": [
+              128,
+              128
+            ]
+          },
+          "softmax_fp32": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              12,
+              128,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              128,
+              128
+            ]
+          },
+          "up": {
+            "bytes": 4587520,
+            "logical_shape": [
+              1,
+              128,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              128,
+              8960
+            ]
+          },
+          "v": {
+            "bytes": 131072,
+            "logical_shape": [
+              1,
+              128,
+              256
+            ],
+            "stored_shape": [
+              1,
+              128,
+              256
+            ]
+          },
+          "x": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          },
+          "y": {
+            "bytes": 786432,
+            "logical_shape": [
+              1,
+              128,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              128,
+              1536
+            ]
+          }
+        }
+      },
+      "persisted_actual": {
+        "act": {
+          "bytes": 4587520,
+          "logical_shape": [
+            1,
+            128,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            128,
+            8960
+          ]
+        },
+        "att": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "down": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "gate": {
+          "bytes": 4587520,
+          "logical_shape": [
+            1,
+            128,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            128,
+            8960
+          ]
+        },
+        "k": {
+          "bytes": 131072,
+          "logical_shape": [
+            1,
+            2,
+            128,
+            128
+          ],
+          "stored_shape": [
+            1,
+            128,
+            256
+          ]
+        },
+        "kr": {
+          "bytes": 131072,
+          "logical_shape": [
+            1,
+            128,
+            256
+          ],
+          "stored_shape": [
+            1,
+            128,
+            256
+          ]
+        },
+        "kraw": {
+          "bytes": 131072,
+          "logical_shape": [
+            1,
+            128,
+            256
+          ],
+          "stored_shape": [
+            1,
+            128,
+            256
+          ]
+        },
+        "kv": {
+          "bytes": 262144,
+          "logical_shape": [
+            2,
+            128,
+            2,
+            128
+          ],
+          "stored_shape": [
+            2,
+            128,
+            2,
+            128
+          ]
+        },
+        "n0": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "n1": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "o": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "q": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            12,
+            128,
+            128
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "qr": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "qraw": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "r": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        },
+        "silu": {
+          "bytes": 4587520,
+          "logical_shape": [
+            1,
+            128,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            128,
+            8960
+          ]
+        },
+        "up": {
+          "bytes": 4587520,
+          "logical_shape": [
+            1,
+            128,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            128,
+            8960
+          ]
+        },
+        "v": {
+          "bytes": 131072,
+          "logical_shape": [
+            1,
+            128,
+            256
+          ],
+          "stored_shape": [
+            1,
+            128,
+            256
+          ]
+        },
+        "vraw": {
+          "bytes": 131072,
+          "logical_shape": [
+            1,
+            128,
+            256
+          ],
+          "stored_shape": [
+            1,
+            128,
+            256
+          ]
+        },
+        "y": {
+          "bytes": 786432,
+          "logical_shape": [
+            1,
+            128,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            128,
+            1536
+          ]
+        }
+      },
+      "scalar_raw": {
+        "cache_stored_shape": [
+          1,
+          128,
+          2,
+          128
+        ],
+        "count_per_role": 22,
+        "roles": [
+          "sequential",
+          "reduced"
+        ]
+      },
+      "sequential_exports": {
+        "count": 29,
+        "same_export_geometry_as_native": true
+      }
+    },
+    "16": {
+      "attention_capture": {
+        "dot_bf16": {
+          "frequency_bytes": 6144,
+          "presence_bytes": 3072,
+          "raw_bytes": 12288,
+          "shape": [
+            12,
+            16,
+            16
+          ]
+        },
+        "dot_parts": {
+          "frequency_bytes": 98304,
+          "presence_bytes": 49152,
+          "raw_bytes": 196608,
+          "shape": [
+            12,
+            16,
+            16,
+            16
+          ]
+        },
+        "normalizer": {
+          "frequency_bytes": 1152,
+          "presence_bytes": 576,
+          "raw_bytes": 2304,
+          "shape": [
+            12,
+            16,
+            3
+          ]
+        },
+        "prob_bf16": {
+          "frequency_bytes": 6144,
+          "presence_bytes": 3072,
+          "raw_bytes": 12288,
+          "shape": [
+            12,
+            16,
+            16
+          ]
+        },
+        "pv_bf16": {
+          "frequency_bytes": 49152,
+          "presence_bytes": 24576,
+          "raw_bytes": 98304,
+          "shape": [
+            12,
+            16,
+            128
+          ]
+        },
+        "pv_raw": {
+          "frequency_bytes": 49152,
+          "presence_bytes": 24576,
+          "raw_bytes": 98304,
+          "shape": [
+            12,
+            16,
+            128
+          ]
+        },
+        "scores_bf16": {
+          "frequency_bytes": 6144,
+          "presence_bytes": 3072,
+          "raw_bytes": 12288,
+          "shape": [
+            12,
+            16,
+            16
+          ]
+        },
+        "softmax_exp": {
+          "frequency_bytes": 6144,
+          "presence_bytes": 3072,
+          "raw_bytes": 12288,
+          "shape": [
+            12,
+            16,
+            16
+          ]
+        },
+        "softmax_fp32": {
+          "frequency_bytes": 6144,
+          "presence_bytes": 3072,
+          "raw_bytes": 12288,
+          "shape": [
+            12,
+            16,
+            16
+          ]
+        },
+        "unrounded_dot_sum": {
+          "frequency_bytes": 6144,
+          "presence_bytes": 3072,
+          "raw_bytes": 12288,
+          "shape": [
+            12,
+            16,
+            16
+          ]
+        }
+      },
+      "gate_scope": {
+        "assigned": 27,
+        "causal_logical_per_stage": 3072,
+        "causal_observed_per_stage": 1632,
+        "diagnostic": [
+          "softmax_fp32"
+        ],
+        "missing": [
+          "explicit_mask_tensor"
+        ],
+        "observed": 28
+      },
+      "loaded_providers": {
+        "count": 14,
+        "direct_whole_file": [
+          "x"
+        ],
+        "qualified_metadata_only": [
+          "bk",
+          "bq",
+          "bv",
+          "gamma0",
+          "gamma1",
+          "rope",
+          "wd",
+          "wg",
+          "wk",
+          "wo",
+          "wq",
+          "wu",
+          "wv"
+        ]
+      },
+      "native": {
+        "count": 116,
+        "methods": [
+          "official_self_cache",
+          "independent_self_cache"
+        ],
+        "modes": [
+          "bf16",
+          "fp32"
+        ],
+        "stages": {
+          "act": {
+            "bytes": 573440,
+            "logical_shape": [
+              1,
+              16,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              16,
+              8960
+            ]
+          },
+          "att": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "cache_k": {
+            "bytes": 16384,
+            "logical_shape": [
+              1,
+              2,
+              16,
+              128
+            ],
+            "stored_shape": [
+              1,
+              2,
+              16,
+              128
+            ]
+          },
+          "cache_v": {
+            "bytes": 16384,
+            "logical_shape": [
+              1,
+              2,
+              16,
+              128
+            ],
+            "stored_shape": [
+              1,
+              2,
+              16,
+              128
+            ]
+          },
+          "cos": {
+            "bytes": 8192,
+            "logical_shape": [
+              16,
+              128
+            ],
+            "stored_shape": [
+              16,
+              128
+            ]
+          },
+          "down": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "gate": {
+            "bytes": 573440,
+            "logical_shape": [
+              1,
+              16,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              16,
+              8960
+            ]
+          },
+          "k": {
+            "bytes": 16384,
+            "logical_shape": [
+              1,
+              2,
+              16,
+              128
+            ],
+            "stored_shape": [
+              1,
+              16,
+              256
+            ]
+          },
+          "kr": {
+            "bytes": 16384,
+            "logical_shape": [
+              1,
+              16,
+              256
+            ],
+            "stored_shape": [
+              1,
+              16,
+              256
+            ]
+          },
+          "logits": {
+            "bytes": 12288,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              16
+            ],
+            "stored_shape": [
+              1,
+              12,
+              16,
+              16
+            ]
+          },
+          "mask": {
+            "bytes": 1024,
+            "logical_shape": [
+              1,
+              1,
+              16,
+              16
+            ],
+            "stored_shape": [
+              1,
+              1,
+              16,
+              16
+            ]
+          },
+          "n0": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "n1": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "o": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "prob": {
+            "bytes": 12288,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              16
+            ],
+            "stored_shape": [
+              1,
+              12,
+              16,
+              16
+            ]
+          },
+          "pv": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              16,
+              128
+            ]
+          },
+          "q": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              128
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "qr": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "r": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "repeat_k": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              16,
+              128
+            ]
+          },
+          "repeat_v": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              128
+            ],
+            "stored_shape": [
+              1,
+              12,
+              16,
+              128
+            ]
+          },
+          "scores": {
+            "bytes": 12288,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              16
+            ],
+            "stored_shape": [
+              1,
+              12,
+              16,
+              16
+            ]
+          },
+          "silu": {
+            "bytes": 573440,
+            "logical_shape": [
+              1,
+              16,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              16,
+              8960
+            ]
+          },
+          "sin": {
+            "bytes": 8192,
+            "logical_shape": [
+              16,
+              128
+            ],
+            "stored_shape": [
+              16,
+              128
+            ]
+          },
+          "softmax_fp32": {
+            "bytes": 12288,
+            "logical_shape": [
+              1,
+              12,
+              16,
+              16
+            ],
+            "stored_shape": [
+              1,
+              12,
+              16,
+              16
+            ]
+          },
+          "up": {
+            "bytes": 573440,
+            "logical_shape": [
+              1,
+              16,
+              8960
+            ],
+            "stored_shape": [
+              1,
+              16,
+              8960
+            ]
+          },
+          "v": {
+            "bytes": 16384,
+            "logical_shape": [
+              1,
+              16,
+              256
+            ],
+            "stored_shape": [
+              1,
+              16,
+              256
+            ]
+          },
+          "x": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          },
+          "y": {
+            "bytes": 98304,
+            "logical_shape": [
+              1,
+              16,
+              1536
+            ],
+            "stored_shape": [
+              1,
+              16,
+              1536
+            ]
+          }
+        }
+      },
+      "persisted_actual": {
+        "act": {
+          "bytes": 573440,
+          "logical_shape": [
+            1,
+            16,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            16,
+            8960
+          ]
+        },
+        "att": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "down": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "gate": {
+          "bytes": 573440,
+          "logical_shape": [
+            1,
+            16,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            16,
+            8960
+          ]
+        },
+        "k": {
+          "bytes": 16384,
+          "logical_shape": [
+            1,
+            2,
+            16,
+            128
+          ],
+          "stored_shape": [
+            1,
+            16,
+            256
+          ]
+        },
+        "kr": {
+          "bytes": 16384,
+          "logical_shape": [
+            1,
+            16,
+            256
+          ],
+          "stored_shape": [
+            1,
+            16,
+            256
+          ]
+        },
+        "kraw": {
+          "bytes": 16384,
+          "logical_shape": [
+            1,
+            16,
+            256
+          ],
+          "stored_shape": [
+            1,
+            16,
+            256
+          ]
+        },
+        "kv": {
+          "bytes": 32768,
+          "logical_shape": [
+            2,
+            16,
+            2,
+            128
+          ],
+          "stored_shape": [
+            2,
+            16,
+            2,
+            128
+          ]
+        },
+        "n0": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "n1": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "o": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "q": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            12,
+            16,
+            128
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "qr": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "qraw": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "r": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        },
+        "silu": {
+          "bytes": 573440,
+          "logical_shape": [
+            1,
+            16,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            16,
+            8960
+          ]
+        },
+        "up": {
+          "bytes": 573440,
+          "logical_shape": [
+            1,
+            16,
+            8960
+          ],
+          "stored_shape": [
+            1,
+            16,
+            8960
+          ]
+        },
+        "v": {
+          "bytes": 16384,
+          "logical_shape": [
+            1,
+            16,
+            256
+          ],
+          "stored_shape": [
+            1,
+            16,
+            256
+          ]
+        },
+        "vraw": {
+          "bytes": 16384,
+          "logical_shape": [
+            1,
+            16,
+            256
+          ],
+          "stored_shape": [
+            1,
+            16,
+            256
+          ]
+        },
+        "y": {
+          "bytes": 98304,
+          "logical_shape": [
+            1,
+            16,
+            1536
+          ],
+          "stored_shape": [
+            1,
+            16,
+            1536
+          ]
+        }
+      },
+      "scalar_raw": {
+        "cache_stored_shape": [
+          1,
+          16,
+          2,
+          128
+        ],
+        "count_per_role": 22,
+        "roles": [
+          "sequential",
+          "reduced"
+        ]
+      },
+      "sequential_exports": {
+        "count": 29,
+        "same_export_geometry_as_native": true
+      }
+    }
+  },
+  "schema": 1,
+  "scope": "SOURCE_ONLY_STATIC_GEOMETRY_NOT_OBSERVED_RUNTIME_IDENTITY",
+  "source_inventory_sha256": "64930957516de33e09201df8cea87fda94ebe9fa08331b68e56b5b9c185016a9",
+  "tests": {
+    "normal": 56,
+    "numerical_or_native_execution": false,
+    "optimized": 56
+  }
+}

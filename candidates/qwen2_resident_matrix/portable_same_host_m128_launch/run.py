@@ -146,6 +146,12 @@ def prerequisite_module(L,pins,root):
     return package.prerequisite
 
 
+def load_replay_identity(root,pins):
+    relative=OWN+'replay_identity.py'
+    need(relative in pins['inputs'],'reviewed replay identity source required')
+    return cold_load('fresh_m128_replay_identity',Path(root)/relative,pins['inputs'][relative])
+
+
 def source_preflight(root):
     pins=load_pins(root);R=load_m16(root,pins)
     old_pins,L,control=R.source_preflight(root)
@@ -153,6 +159,7 @@ def source_preflight(root):
     P=prerequisite_module(L,pins,root)
     driver=cold_load('fresh_m128_parent_driver',Path(root)/PRODUCER/'driver.py',pins['inputs'][PRODUCER+'driver.py'])
     driver.verify_sources(root)
+    load_replay_identity(root,pins)
     return pins,L,control,R
 
 
@@ -292,6 +299,52 @@ def terminal_postflight(L,pins,root,out,sources,qualified,q_sha,m16,m16_sha,prod
         elapsed_seconds=time.monotonic()-context['started'],validation=validation,claims=CLAIMS)
 
 
+def record_replay_failure(module,error,state):
+    """Closed diagnostic code only; never stringify or replace the first error."""
+    if state is None:return
+    code='UNKNOWN'
+    try:
+        projected=module.error_code(error)
+        if type(projected) is str and (projected=='UNKNOWN' or projected in module.ERROR_CODES):code=projected
+    except BaseException:pass
+    state['code']=code
+
+
+def prepare_replay_identity(L,pins,root,out,qualification_sha,m16_sha,context_sha,stop,*,failure_state=None):
+    """Metadata-only freeze preparation after both owned reference children."""
+    module=None
+    try:
+        L.remaining(stop)
+        module=load_replay_identity(root,pins)
+        prepared=module.prepare(root=root,out=out,source_pins=pins['inputs'],
+            qualification_sha256=qualification_sha,m16_prerequisite_sha256=m16_sha,
+            context_sha256=context_sha,deadline=stop)
+        L.remaining(stop)
+        return module,prepared
+    except BaseException as error:
+        record_replay_failure(module,error,failure_state)
+        raise
+
+
+def finalize_replay_identity(L,out,replay,full_receipt_sha,sources,stop,*,failure_state=None):
+    """No new envelope; numerical terminal receipt is already durable."""
+    module=None
+    try:
+        L.remaining(stop)
+        module,prepared=replay
+        manifest,expected=module.finalize(prepared=prepared,full_receipt_sha256=full_receipt_sha,
+            sources=sources,deadline=stop)
+        need(digest(expected) and sha(encoded(manifest))==expected,'canonical replay identity bytes')
+        L.remaining(stop)
+        observed=L.write_new(out/'evidence/replay_identity.json',manifest)
+        need(observed==expected,'safe replay identity write binding')
+        L.remaining(stop)
+        return observed
+    except BaseException as error:
+        record_replay_failure(module,error,failure_state)
+        raise
+
+
 def full_failure_observation(L,pins,root,out,journal,*,sources,run_context,run_context_sha256,receipt_stop):
     """Best-effort failure projection with an untouched one-second receipt reserve."""
     stop=min(receipt_stop,run_context['outer_deadline'])
@@ -330,6 +383,7 @@ def main(argv=None):
     resources=resource_reserves(R,L,out);out.mkdir(mode=0o700);(out/'evidence').mkdir()
     failure=None;phase='fresh_m16';journal=[];m16_success=False;producer_success=False;full_success=False;diagnostic=None
     sources=full_context=full_sha=None;full_failure_diagnostic=None
+    replay=None;replay_sha=None;replay_ready=False;replay_failure_state={}
     try:
         L.write_new(out/'evidence/source_hashes.json',dict(schema=1,profile=PROFILE,ci=ci,inputs=pins['inputs'],
             composed_sources_template=pins['composed_sources'],dynamic_source_contract=True,claims=CLAIMS))
@@ -363,6 +417,8 @@ def main(argv=None):
             attempt_nonce=qualified['attempt_nonce'],producer_manifest_sha256=qualified['producer_manifest_sha256'],
             producer_qualification_sha256=q_sha,verifier_receipt_sha256=qualified['verifier_receipt_sha256'],
             m16_prerequisite_sha256=m16_sha,owned_groups_cleanup_complete=True,stages=journal,claims=CLAIMS))
+        phase='replay_identity_prepare'
+        replay=prepare_replay_identity(L,pins,root,out,q_sha,m16_sha,context_sha,context['receipt_deadline_ns']/1e9,failure_state=replay_failure_state)
         phase='source_and_admission';prep_stop,prep_work,prep_cleanup=begin_prepare(L,total_work)
         resource_reserves(R,L,out)
         common=dict(schema=1,parent_pid=os.getpid(),origin=str(root),out=str(out),ci=ci,host=L.host(),
@@ -394,7 +450,11 @@ def main(argv=None):
         control.arm_receipt_deadline(full_start+2430)
         receipt=terminal_postflight(L,pins,root,out,sources,qualified,q_sha,m16,m16_sha,producer,full_context,full_child,identity)
         need(sha(L.safe(full_path))==full_sha,'full M128 context drift')
-        L.write_new(out/'evidence/full_m128_summary.json',receipt);L.remaining(full_start+2430);full_success=True;phase='complete'
+        full_receipt_sha=L.write_new(out/'evidence/full_m128_summary.json',receipt)
+        L.remaining(full_start+2430);full_success=True
+        phase='replay_identity_finalize'
+        replay_sha=finalize_replay_identity(L,out,replay,full_receipt_sha,sources,full_start+2430,failure_state=replay_failure_state)
+        replay_ready=True;phase='complete'
     except BaseException as error: failure=error
     finally:
         control.protect_cleanup()
@@ -413,9 +473,12 @@ def main(argv=None):
             L.write_new(out/'evidence/stage_exits.json',dict(schema=1,profile=PROFILE,ci=ci,stages=journal,
                 m16_stage_exits_sha256=sha(L.safe(out/'m16/evidence/stage_exits.json')) if (out/'m16/evidence/stage_exits.json').is_file() else None))
             L.write_new(out/'evidence/summary.json',dict(schema=1,profile=PROFILE,ci=ci,
-                status='PASS_FRESH_SAME_HOST_M128_ASSIGNED27' if full_success and failure is None else 'FAILED_SAME_HOST_M128_ATTEMPT',
+                status='PASS_FRESH_SAME_HOST_M128_ASSIGNED27' if full_success and replay_ready and failure is None else 'FAILED_SAME_HOST_M128_ATTEMPT',
                 phase=phase,full_m16_prerequisite_pass=m16_success,producer128_qualified=producer_success,
-                full_m128_assigned27_pass=full_success and failure is None,
+                full_m128_assigned27_pass=full_success,replay_identity_ready=replay_ready,
+                replay_identity_sha256=replay_sha,
+                replay_identity_failure=dict(phase=phase,error_class=type(failure).__name__,code=replay_failure_state.get('code','UNKNOWN'))
+                    if failure is not None and phase in ('replay_identity_prepare','replay_identity_finalize') else None,
                 failure_kind=None if failure is None else type(failure).__name__,elapsed_seconds=time.monotonic()-started,
                 resources_before_setup=resources,owned_groups_cleanup_complete=bool(journal) and all(x['owned_group_cleanup_complete'] for x in journal),
                 producer_failure_observation=diagnostic,full_m128_failure_diagnostic=full_failure_diagnostic,claims=CLAIMS))
@@ -423,7 +486,7 @@ def main(argv=None):
             if failure is None: failure=error
         finally: control.protect_cleanup()
     if failure is not None: raise failure
-    need(full_success,'full same-host M128 incomplete');return 0
+    need(full_success and replay_ready,'full same-host M128 replay freeze incomplete');return 0
 
 
 if __name__=='__main__':raise SystemExit(main())

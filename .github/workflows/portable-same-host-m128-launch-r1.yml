@@ -6,6 +6,7 @@ name: portable-same-host-m128-launch-r1
 # M128 prepare 120s, full outer 2430s (numerical 2400s), M16 transition 30s.
 # Stage envelopes total 4830s; 80s shared reserve + TERM4910/KILL+10 = 4920s.
 # Nested M16 failure observations remain in sanitized m16_attempt_summary.json.
+# Successor records path-free replay identities only after qualified numerical postflight.
 # Cold shape checks authorize no launch, package installation, numerical work or compilation.
 on:
   push:
@@ -81,3 +82,4 @@ jobs:
             ${{ runner.temp }}/portable-same-host-m128-r1-private/evidence/producer_summary.json
             ${{ runner.temp }}/portable-same-host-m128-r1-private/evidence/full_m128_summary.json
             ${{ runner.temp }}/portable-same-host-m128-r1-private/evidence/stage_exits.json
+            ${{ runner.temp }}/portable-same-host-m128-r1-private/evidence/replay_identity.json

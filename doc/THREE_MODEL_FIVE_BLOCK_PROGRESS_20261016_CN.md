@@ -171,6 +171,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   父级仅在owned phase边界采样wall和RUSAGE_CHILDREN，退出/清理后才输出有界诊断；沿原绝对cleanup deadline重新启用alarm，失败保留UNKNOWN/UNAVAILABLE，去掉可选CPU型号读取。它记录已回收子进程CPU，不等于独占CPU时间或限频证明，不改原900数值/930外层预算。
   10个runtime/source后继与3个安全证据独立冻结，386项实际Git发布闭包须PASS后才触发一次新M16尝试。M128已保存检查点引用旧M16源，必须另行重绑定并完成同job先决后才可启动；本提交不发布M128 workflow。完整M128/RTL及90%利用率仍未通过。
 
+
+- **done：bf29 新host完整M16指定27数值门禁实际通过；限定清理保证待修复。** run39008436816/job117325592334于2026-10-17 06:11:41 UTC成功；artifact12091514715，ZIP5169209a5f580e51f0785ef81e6a25577dca47dd7318d17b0e6dd60675741969。总534.732416秒，完整M16阶段466.928041秒；原terminal报告27个assigned门禁、28个observed stage、21次completion、17个owner作业与固定算术通过。直接子进程exit0，实际359源manifest与385raw/358静态映射和当前commit逐项一致。
+  [五份原始安全JSON及限定归档](../reports/execution/QWEN2_SAME_HOST_M16_ASSIGNED27_PASS_20261017/README.md)保留原字节；原产物中的cleanup=true只是当时helper报告的清理完成，不能证明所有后代均已退出。独立离线检查核对回执/源码/nonce/CHILD_RESULT摘要，不重放私有数组。原27数值证据保留，完整29/M128/RTL验收仍false；本次耗时改善不全归因于单行优化。
+- **blocked：严格进程组清理确认；ongoing：生产helper修复。** 新有身份记录的生命周期测试发现，同一后代在helper返回后仍处于R调度状态，约21ms后消失；R不证明SIGKILL后继续执行应用指令，但明确说明当时尚未观察到全组退出。较早只记录PID存在的失败原因仍UNKNOWN，不能用本次结果追溯填造。
+  源码确认旧cleanup_owned只发SIGKILL并等待直接leader，finish_owned立即返回True，后续caller可能据此读写产物/发布成功。测试侧增加等待不能修复生产保证。启动M128暂缓：需在原绝对stop内、保持leader未reap以固定group身份，完成全部同组非leader退出确认后才reap并发布成功；扫描不完整/身份不明/超时必须fail-closed，禁止下一阶段，不能在reap后向裸PGID发信号。现有数值预算不扩大，不将清理问题表述为用户取消。
+
 ## 下一步，保持默认关闭并逐项验收
 
 1. **done：收齐be00失败结果。** 安全摘要/source身份已归档，数值比较和postflight未完成。新候选独立冻结，不据小切片推定旧运行PASS。

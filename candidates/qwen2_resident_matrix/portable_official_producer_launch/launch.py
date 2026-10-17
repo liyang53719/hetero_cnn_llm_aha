@@ -7,6 +7,7 @@ and KILL ten seconds later. All payload and detailed logs remain private.
 import argparse
 import hashlib
 import importlib.util
+import importlib.machinery
 import json
 import os
 from pathlib import Path, PurePosixPath

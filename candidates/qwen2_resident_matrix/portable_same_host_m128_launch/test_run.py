@@ -105,12 +105,27 @@ print('PASS_STDLIB_PARENT_PREFLIGHT')
 
     def test_complete_input_contract_and_immutable_m16(self):
         pins=R.load_pins(ROOT);old=R.load_m16(ROOT,pins);old_pins=old.load_pins(ROOT)
-        self.assertEqual(R.M16_RUN_SHA,'9b997dcdfd1bca66af6451f0be0dbd6d9c2bf0712426200b00645f07ac3bd8fd')
+        self.assertEqual(R.M16_RUN_SHA,'42cd3bc33a46d04024e1214005f11ff6db45e303d945bd665b124409c7c3bdc7')
         self.assertTrue(all(pins['inputs'].get(k)==v for k,v in old_pins['inputs'].items()))
         self.assertEqual(pins['inputs'][R.M16+'run.py'],R.M16_RUN_SHA)
         self.assertNotIn(R.SOURCE_CONTRACT,pins['composed_sources'])
         self.assertEqual(pins['workflow'],'.github/workflows/portable-same-host-m128-launch-r1.yml')
         self.assertGreater(len(pins['inputs']),len(old_pins['inputs']))
+
+    def test_updated_m16_control_and_timing_authority(self):
+        pins=R.load_pins(ROOT);m16=R.load_m16(ROOT,pins);m16_pins=m16.load_pins(ROOT)
+        target='candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py'
+        expected='cf65f59f2af70a2b7b360bf2271bacbdbaeeb3f91c65fcb2c2faf427158ff9d7'
+        self.assertEqual(m16_pins['composed_sources'][target],expected)
+        self.assertEqual(pins['composed_sources'][target],expected)
+        self.assertEqual(len(m16_pins['inputs']),390)
+        self.assertEqual(len(m16_pins['composed_sources']),360)
+        self.assertIn('phase_snapshot',m16.owned_phase.__code__.co_names)
+        self.assertIn('phase_timing',m16.owned_phase.__code__.co_names)
+        self.assertIn('arm_receipt_deadline',m16.owned_phase.__code__.co_names)
+        for name in ('control_ports.py','test_control_ports.py'):
+            key='candidates/qwen2_resident_matrix/attention_packed_m16_same_host/'+name
+            self.assertEqual(pins['composed_sources'][key],m16_pins['composed_sources'][key])
 
     def test_exact_budget_contract(self):
         expected=dict(total=4920,outer_term=4910,m16_routine=1950,m16_transition=30,

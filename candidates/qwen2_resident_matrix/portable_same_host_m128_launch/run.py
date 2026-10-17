@@ -27,9 +27,9 @@ ENTRY=BASE+'attention_packed_m128_same_host/'
 SOURCE_CONTRACT=ENTRY+'SOURCE_CONTRACT.json'
 PROFILE='qwen2-fresh-same-host-m128-combined-v1'
 ENTRY_PROFILE='qwen2-public-pv16-packed-m128-same-host-v1'
-M16_RUN_SHA='9b997dcdfd1bca66af6451f0be0dbd6d9c2bf0712426200b00645f07ac3bd8fd'
-LAUNCH_SHA='59dd972bd6e5ccc4871ae06bfc8d46adb07bfe642ae80a536b51843b2946b2d7'
-CONTRACT_SHA='427386e6585ce663c69f0c49a64e25d9b1296d5c986c4044290315d262b1c926'
+M16_RUN_SHA = '42cd3bc33a46d04024e1214005f11ff6db45e303d945bd665b124409c7c3bdc7'
+LAUNCH_SHA = 'd7ac40bba0fc21b03b19dcdcd886cfffe04d94c04bf8a8d37efc77067c1d5b42'
+CONTRACT_SHA = '00bb4ed7c6264d7245ad6b5715b35ece73f62490c6dc40d37826b7860504c628'
 BUDGETS=dict(total=4920,outer_term=4910,m16_routine=1950,m16_transition=30,
     producer=260,reference_work=290,reference_cleanup=299,reference_outer=300,
     prepare=120,full_work=2424,full_cleanup=2429,full_outer=2430,numeric=2400)

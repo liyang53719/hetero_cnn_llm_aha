@@ -93,6 +93,8 @@ class Controls(unittest.TestCase):
 
     def _helper(self):
         hashes={L.CONSUMER+n:L.sha(L.safe(ROOT/L.CONSUMER/n)) for n in ('run_ci.py','contract.py')}
+        strict='candidates/qwen2_resident_matrix/portable_owned_cleanup/strict_cleanup.py'
+        hashes[strict]=L.sha(L.safe(ROOT/strict))
         return L.helper(ROOT,{'sources':hashes})
 
     def test_owned_actual_exec_preserves_pid_and_unmasks(self):
@@ -102,11 +104,18 @@ class Controls(unittest.TestCase):
             with tempfile.TemporaryDirectory() as tmp:
                 out=Path(tmp);log=out/'actual.log';start=time.monotonic()
                 code='import os,signal;print(os.getpid());print(len(signal.pthread_sigmask(signal.SIG_BLOCK,set()) & {signal.SIGALRM,signal.SIGTERM,signal.SIGINT}))'
-                result=L.stage(control,[sys.executable,'-I','-B','-c',code],cwd=out,env={'PATH':'/usr/bin:/bin'},
-                    log=log,cap=2,work_stop=start+3,cleanup_stop=start+4)
-                self.assertEqual(log.read_text().splitlines(),[str(result['pid']),'0'])
-                self.assertEqual(result['exit_code'],0);self.assertIs(result['owned_group_cleanup_complete'],True)
-                with self.assertRaises(ChildProcessError): os.waitid(os.P_PID,result['pid'],os.WEXITED|os.WNOHANG|os.WNOWAIT)
+                events=[]
+                # The child bootstrap must unblock inherited masks. The deliberately
+                # blocked parent cannot admit proof replay, even after strict reap.
+                with self.assertRaisesRegex(ValueError,'blocked cleanup proof alarm'):
+                    L.stage(control,[sys.executable,'-I','-B','-c',code],cwd=out,env={'PATH':'/usr/bin:/bin'},
+                        log=log,cap=2,work_stop=start+3,cleanup_stop=start+4,journal=events)
+                event=events[0]
+                self.assertEqual(log.read_text().splitlines(),[str(event['pid']),'0'])
+                self.assertEqual(event['observed_exit_code'],0);self.assertEqual(event['final_exit_code'],0)
+                self.assertIs(event['owned_group_cleanup_complete'],False)
+                self.assertEqual(event['status'],'CLEANUP_FAILED')
+                with self.assertRaises(ChildProcessError): os.waitid(os.P_PID,event['pid'],os.WEXITED|os.WNOHANG|os.WNOWAIT)
         finally:
             control.protect_cleanup()
             for s,h in old.items(): signal.signal(s,h)
@@ -176,12 +185,12 @@ class Controls(unittest.TestCase):
 
     def test_cleanup_failure_retained_even_with_zero_exit(self):
         control=self._helper();old={s:signal.getsignal(s) for s in L.SIGNALS};events=[]
-        original=control.cleanup_owned
+        original=control.strict_cleanup.cleanup_owned
         def cleanup(owner,stop):
             original(owner,stop)
             raise RuntimeError('cold post-cleanup verification failure')
         try:
-            with tempfile.TemporaryDirectory() as tmp,mock.patch.object(control,'cleanup_owned',side_effect=cleanup):
+            with tempfile.TemporaryDirectory() as tmp,mock.patch.object(control.strict_cleanup,'cleanup_owned',side_effect=cleanup):
                 start=time.monotonic()
                 with self.assertRaises(RuntimeError):
                     L.stage(control,[sys.executable,'-I','-B','-c','pass'],cwd=tmp,env={'PATH':'/usr/bin:/bin'},

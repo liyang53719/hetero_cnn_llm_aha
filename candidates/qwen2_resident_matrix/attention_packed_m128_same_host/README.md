@@ -9,7 +9,7 @@ Physical key tiles and wire beats remain 16; rows are exactly 128, past is zero.
 Before any M128 execution the owning parent must authenticate fresh producer M16
 and full M16 completion in the same job, then the independently array-verified
 native128 and both scalar128 references. The full M16 source map is frozen at
-356 static files plus a canonical actual-commit source contract. Its original
+358 static files plus a canonical actual-commit source contract. Its original
 validator is byte-preserved and replayed. All 24 original compatible arithmetic,
 owner, service, and storage files must match, and full M128 must use the identical
 full-M16 combined compile receipt and ELF. Historical results never authorize.
@@ -26,3 +26,12 @@ No module import or source composition installs packages, loads weights, builds
 native code, launches a producer or runs numeric dataflow. Cold synthetic tests
 are evidence of source/control checks only, never fresh execution qualification.
 All output roots and sources must be disjoint and current-job exact paths.
+
+The complete M16 prerequisite map is repinned to the reviewed conditional-ports
+composition. The same `ffn_public/execute_numeric.py` propagates unchanged into
+M128: its sole runtime delta skips one unused pure ports observation on ordinary
+non-admission edges. The original admission lookup order, owner/host ticks, reset
+guards, arithmetic, ACK/release/cleanup checks and deadline sites are preserved.
+No additional M128 executable transform is applied. The exact original 24-source
+compatibility map and both original terminal verifier files are byte-unchanged.
+The previous 356-static M16 closure cannot authorize this successor.

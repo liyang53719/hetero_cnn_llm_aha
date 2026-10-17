@@ -170,12 +170,13 @@ def load_contract(root):
     return value
 
 
-def load_checked(name,path,expected):
+def load_checked(name,path,expected,*,bind_source=False):
     """Execute the checked source buffer, never a timestamp-valid .pyc cache."""
     raw=safe(path,8*1024*1024)
     need(sha(raw)==expected,'imported source identity')
     spec=importlib.util.spec_from_file_location(name,path)
     module=importlib.util.module_from_spec(spec)
+    if bind_source: module.__dict__['_ADMITTED_SOURCE_SHA256']=expected
     exec(compile(raw,str(path),'exec'),module.__dict__)
     return module
 
@@ -198,6 +199,11 @@ def helper(root,contract):
     sys.modules['contract']=checked
     module=load_checked('fresh_owned_control',directory/'run_ci.py',contract['sources'][CONSUMER+'run_ci.py'])
     need(module.c is checked and Path(module.c.__file__).resolve()==directory/'contract.py','loaded helper contract')
+    strict_path='candidates/qwen2_resident_matrix/portable_owned_cleanup/strict_cleanup.py'
+    expected=contract['sources'][strict_path]
+    strict=load_checked('fresh_strict_owned_cleanup',Path(root)/strict_path,expected,bind_source=True)
+    need(strict.SOURCE_SHA256==expected,'strict cleanup admitted source identity')
+    module.strict_cleanup=strict
     return module
 
 
@@ -220,18 +226,49 @@ def finish_owned(control,owner,stop,*,cancel):
     """Give the producer time to reap any independently owned compiler child."""
     control.protect_cleanup()
     if owner['process'] is None: return False
+    failure=None
     if cancel:
-        process=owner['process']
-        os.waitid(os.P_PID,process.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
-        current=control.process_identity(process.pid)
-        if owner['identity'] is None: owner['identity']=current
-        need(current==owner['identity'] and current['ppid']==os.getpid()
-             and current['group']==process.pid!=os.getpgrp(),'owned cancellation group')
-        try: os.killpg(process.pid,signal.SIGTERM)
-        except ProcessLookupError: pass
-        try: control.observe_exit(process.pid,max(time.monotonic(),stop-2))
-        except TimeoutError: pass
-    control.cleanup_owned(owner,stop)
+        try:
+            # Preliminary TERM lets independently owned compiler groups clean up.
+            # Identity reads and signals share the original absolute cleanup stop.
+            remaining(stop)
+            need(signal.SIGALRM not in signal.pthread_sigmask(signal.SIG_BLOCK,set()),'blocked cleanup cancellation alarm')
+            control.arm_receipt_deadline(stop)
+            remaining(stop)
+            process=owner['process']
+            os.waitid(os.P_PID,process.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
+            current=control.process_identity(process.pid)
+            if owner['identity'] is None: owner['identity']=current
+            need(current==owner['identity'] and current['ppid']==os.getpid()
+                 and current['group']==process.pid!=os.getpgrp(),'owned cancellation group')
+            remaining(stop)
+            try: os.killpg(process.pid,signal.SIGTERM)
+            except ProcessLookupError: pass
+            if time.monotonic()<stop-2:
+                try: control.observe_exit(process.pid,stop-2)
+                except TimeoutError: pass
+        except BaseException as error:
+            failure=error
+        finally:
+            try: control.protect_cleanup()
+            except BaseException as error:
+                if failure is None: failure=error
+    try:
+        proof=control.strict_cleanup.cleanup_owned(owner,stop)
+        remaining(stop)
+        need(signal.SIGALRM not in signal.pthread_sigmask(signal.SIG_BLOCK,set()),'blocked cleanup proof alarm')
+        control.arm_receipt_deadline(stop)
+        remaining(stop)
+        control.strict_cleanup.validate_cleanup_proof(proof,owner=owner,stop=stop)
+        remaining(stop)
+    except BaseException as error:
+        if failure is None: failure=error
+    finally:
+        try: control.protect_cleanup()
+        except BaseException as error:
+            if failure is None: failure=error
+    if failure is not None: raise failure
+    remaining(stop)
     return True
 
 

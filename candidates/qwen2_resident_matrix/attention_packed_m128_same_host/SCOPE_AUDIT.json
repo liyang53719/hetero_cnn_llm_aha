@@ -8,7 +8,22 @@
     "packages_installed": false,
     "rtl": false
   },
-  "complete_frozen_m16_source_count": 356,
+  "complete_frozen_m16_map_sha256": "c0aec77c83743f0ac95c881064081e098dca0f05850745dc5aeb1fd98887dcbd",
+  "complete_frozen_m16_source_count": 358,
+  "control_observation_optimization": {
+    "additional_m128_runtime_transform": false,
+    "admission_getter_order_preserved": true,
+    "all_owner_and_host_ticks_preserved": true,
+    "baseline_sha256": "d794c0b60b764e378c03fd74436d74e654964a4984efd1f2cedb5f3187724886",
+    "candidate_sha256": "cf65f59f2af70a2b7b360bf2271bacbdbaeeb3f91c65fcb2c2faf427158ff9d7",
+    "deadline_sites_and_budgets_preserved": true,
+    "full_run_speedup_claim": false,
+    "inherited_from_reviewed_m16_composition": true,
+    "pre_and_post_owner_reset_preserved": true,
+    "sole_runtime_change": "Skip the unused pure ports observation only on non-admission ordinary edges",
+    "stateful_arithmetic_calls_preserved": true,
+    "target": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py"
+  },
   "dynamic_actual_commit_contract_additional": true,
   "identical_compile_receipt_and_elf_required": true,
   "m16_terminal_baseline_sha256": "caf027af5688acbe8c29efb38ddba09a88a3223d0749572f6a002c42806aae20",

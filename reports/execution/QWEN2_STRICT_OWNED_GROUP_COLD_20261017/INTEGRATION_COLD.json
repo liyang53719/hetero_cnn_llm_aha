@@ -1,0 +1,472 @@
+{
+  "actual_workflow_launch_requires_separate_root_gate": true,
+  "all_nonleader_identities_absent_before_direct_leader_reap": true,
+  "caller_source_sha256": {
+    "candidates/qwen2_resident_matrix/portable_official_producer/owned_commands.py": "c89ea10cf44f92a54c4386907d7c51d3f01e22af750a2d2b1d50df93418f0a4a",
+    "candidates/qwen2_resident_matrix/portable_official_producer_launch/launch.py": "d7ac40bba0fc21b03b19dcdcd886cfffe04d94c04bf8a8d37efc77067c1d5b42"
+  },
+  "combined_outer_kill_seconds": 4920,
+  "combined_outer_term_seconds": 4910,
+  "dead_and_defunct_identities_must_disappear": true,
+  "explicit_owned_boundaries_only": true,
+  "extra_grace_seconds": 0,
+  "full_source_sha256": "e83fb26b290eb6f8cb5da31243422e0775708a37b5388ad7d71c66f705ff76df",
+  "genuine_worktree_result_sha256": "8b585a7beae1bf538008c7e4ed5ac63c655d0a6004350db2ccacfc9bbd0b2956",
+  "helper_source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+  "historical_helper_preserved": true,
+  "historical_m16_numerical_pass_not_reinterpreted": true,
+  "internal_inherited_subprocess_reuse_remains_trusted_synchronous": true,
+  "isolated_boundaries_result_sha256": "7eec65d1deb90ff281336e7e0800563c50883abe28519bb510ea3a19d980cd57",
+  "m128_composed_sources": 424,
+  "m128_numeric_seconds": 2400,
+  "m128_outer_seconds": 2430,
+  "m128_static_sources": 423,
+  "m16_composed_sources": 361,
+  "m16_numeric_seconds": 900,
+  "m16_outer_seconds": 930,
+  "m16_static_sources": 360,
+  "m16_yaml_unchanged": true,
+  "new_numerical_qualification": false,
+  "no_post_reap_group_signals": true,
+  "normal_tests": 638,
+  "numerical_execution": false,
+  "optimized_tests": 638,
+  "original_absolute_stops_unchanged": true,
+  "parent_commit": "22a5503bbd44d42a2a9eef70a4aecff0163315b8",
+  "preserved_cold_failures": [
+    {
+      "affected_calls_started_owned_child": false,
+      "cause": "Test helper fixture admitted only legacy run_ci.py and contract.py; revised load helper requires the strict_cleanup.py source pin.",
+      "errors": 8,
+      "failure_class": "KeyError",
+      "log_sha256": "573e64d3edff23aa6964c8606e123dbfae789821f3a44beadb3cc4d8fa91c5f8",
+      "numerical_execution": false,
+      "old_logs_unchanged": true,
+      "original_full_map_sha256": "1828562eb7cead15191dd95e750cace05c94c15fa1aab0b00e9b113f85082469",
+      "repair": "Add exact strict source digest to the test fixture admission map. Production source closure already contained the strict module.",
+      "schema": 1,
+      "scope": "COLD_TEST_FIXTURE_ADMISSION_ONLY",
+      "status": "PRESERVED_SUPERSEDED_FAILURE",
+      "suite": "setup_launcher",
+      "tests": 41
+    },
+    {
+      "cause": "Test deliberately blocks parent SIGALRM and expected old successful completion. New caller proof admission correctly rejects a blocked alarm after strict cleanup.",
+      "errors": 1,
+      "failure_class": "ValueError",
+      "log_sha256": "cea61380d11bf14559e0beaf4671a8f84c69fb95ebdb07332b63bd6595c9144e",
+      "numerical_execution": false,
+      "old_logs_unchanged": true,
+      "original_full_map_sha256": "cd2ed18839fba2b974f8d91ca3c7f15fb8bea6702c735ad4b32263d7d13fdec5",
+      "repair": "Keep real child PID and unmasked-signal checks; require parent CLEANUP_FAILED, cleanup false, observed zero exit, and direct leader reaped under deliberately blocked parent mask.",
+      "runtime_source_unchanged_by_repair": true,
+      "schema": 1,
+      "status": "PRESERVED_SUPERSEDED_TEST_EXPECTATION_FAILURE",
+      "suite": "setup_launcher",
+      "test": "test_owned_actual_exec_preserves_pid_and_unmasks",
+      "tests": 41
+    },
+    {
+      "cause": "Current-source test expected the historical owned_commands source hash despite the updated dependency lock.",
+      "failure_class": "AssertionError",
+      "failures": 1,
+      "first_post_return_scan_empty": true,
+      "log_sha256": "51b7083cfaafb6843f510acf8246437c288940cf37cb8357ecf51a89b21094a2",
+      "numerical_execution": false,
+      "real_lifecycle_fixture_status": "PASS_BOUNDED_IDENTITY_DISAPPEARANCE",
+      "repair": "Rebind the explicit current-source test hash; preserve all intentional old-source rejection fixtures.",
+      "runtime_control_bytes_changed": false,
+      "schema": 1,
+      "status": "PRESERVED_SUPERSEDED_GOLDEN_PIN_FAILURE",
+      "suite": "m128_producer",
+      "tests": 28
+    }
+  ],
+  "schema": 1,
+  "source_copy_unchanged": true,
+  "source_files": 463,
+  "status": "PASS_SOURCE_ONLY_STRICT_OWNERSHIP_INTEGRATION",
+  "strict_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+  "suites": [
+    {
+      "elapsed_seconds": 0.11507805000292137,
+      "exit_code": 0,
+      "expected_tests": 5,
+      "log_sha256": "99c9426d36ea78b6c4f89316c89a86ce12d678282744632c4b1ea95facbc190e",
+      "optimized": false,
+      "suite": "matrix_copy_guard",
+      "tests": 5
+    },
+    {
+      "elapsed_seconds": 0.16454833999159746,
+      "exit_code": 0,
+      "expected_tests": 43,
+      "log_sha256": "7b4d5982fc6d9a23d95449756bd3205a3f8bea24713f9575a4e14ddfd47e344a",
+      "optimized": false,
+      "suite": "strict_cleanup",
+      "tests": 43
+    },
+    {
+      "elapsed_seconds": 0.16470566700445488,
+      "exit_code": 0,
+      "expected_tests": 27,
+      "log_sha256": "1e13b0c54e4b51af25b82b7295e09204cfd0c8d5b6e60c059cd7260a825d5e73",
+      "optimized": false,
+      "suite": "strict_callers",
+      "tests": 27
+    },
+    {
+      "elapsed_seconds": 0.3649428859935142,
+      "exit_code": 0,
+      "expected_tests": 34,
+      "log_sha256": "7fc67143421c4a7176a0d90f3d261ba82884f5e5d067e36f19eb8ba5658b4c30",
+      "optimized": false,
+      "suite": "m16_full_failure",
+      "tests": 34
+    },
+    {
+      "elapsed_seconds": 0.3150625470007071,
+      "exit_code": 0,
+      "expected_tests": 15,
+      "log_sha256": "ac341e791997f206e689807e9a00d348a70aeb88e69ff81f154abe9f51c399ce",
+      "optimized": false,
+      "suite": "producer_failure",
+      "tests": 15
+    },
+    {
+      "elapsed_seconds": 1.2680098889977671,
+      "exit_code": 0,
+      "expected_tests": 41,
+      "log_sha256": "71d7e9e3f0b6d5b0677105cf17a74f123824ed3ba21b85a56153abdb97451f82",
+      "optimized": false,
+      "suite": "setup_launcher",
+      "tests": 41
+    },
+    {
+      "elapsed_seconds": 0.1145072199869901,
+      "exit_code": 0,
+      "expected_tests": 10,
+      "log_sha256": "8c4b1532288f3c2237a75b4778a19116380135ed2658033225c3d1a1a8446867",
+      "optimized": false,
+      "suite": "packages",
+      "tests": 10
+    },
+    {
+      "elapsed_seconds": 2.320860700987396,
+      "exit_code": 0,
+      "expected_tests": 45,
+      "log_sha256": "3148f8dce6d9e2d2c917587d63edd4e48bdf82cc0b9874ce5189aa1d83414667",
+      "optimized": false,
+      "suite": "m16_parent",
+      "tests": 45
+    },
+    {
+      "elapsed_seconds": 0.16441737799323164,
+      "exit_code": 0,
+      "expected_tests": 22,
+      "log_sha256": "33d804975826acb596d01f677318f6986c401cb5d6da0ef130b6c27a6a46a736",
+      "optimized": false,
+      "suite": "m16_worker",
+      "tests": 22
+    },
+    {
+      "elapsed_seconds": 1.2684895800048253,
+      "exit_code": 0,
+      "expected_tests": 23,
+      "log_sha256": "41c1348e94c72b8b59559cac36c1ca348a4a7fd5b1ab3a4a9368322e440d6b7c",
+      "optimized": false,
+      "suite": "m16_producer",
+      "tests": 23
+    },
+    {
+      "elapsed_seconds": 1.6186501420015702,
+      "exit_code": 0,
+      "expected_tests": 26,
+      "log_sha256": "bd25ce0f14c00abb57bb6a81a8389c9c10e9d0c7609f5652505fbfc69e137e70",
+      "optimized": false,
+      "suite": "m16_phase_timing",
+      "tests": 26
+    },
+    {
+      "elapsed_seconds": 8.242627113999333,
+      "exit_code": 0,
+      "expected_tests": 23,
+      "log_sha256": "9cc1e4f843076fb0b2ecde20505a0e354ad996fb76e17d651224b0ca20b1a979",
+      "optimized": false,
+      "suite": "m16_control_ports",
+      "tests": 23
+    },
+    {
+      "elapsed_seconds": 1.568857486010529,
+      "exit_code": 0,
+      "expected_tests": 28,
+      "log_sha256": "c48ec33d1d52b807289b78e07f2b7ce086266d6933e69a7300d46f3444c86b04",
+      "optimized": false,
+      "suite": "m128_producer",
+      "tests": 28
+    },
+    {
+      "elapsed_seconds": 1.2673215380054899,
+      "exit_code": 0,
+      "expected_tests": 13,
+      "log_sha256": "ff2e820b207caf7b1038581b95b7c4f80072063861492f1b1d41fd048c80ad25",
+      "optimized": false,
+      "suite": "m128_verifier",
+      "tests": 13
+    },
+    {
+      "elapsed_seconds": 8.242158335997374,
+      "exit_code": 0,
+      "expected_tests": 59,
+      "log_sha256": "b8101f31340f52452f1a3e78c5d7a5d4f10d50e21b2a8d19160067645d42bddc",
+      "optimized": false,
+      "suite": "m128_parent",
+      "tests": 59
+    },
+    {
+      "elapsed_seconds": 0.5155573269876186,
+      "exit_code": 0,
+      "expected_tests": 32,
+      "log_sha256": "6771884d7166ac0cd76c1695d1f3f398550934f743c6f319e06b24fcab505288",
+      "optimized": false,
+      "suite": "m128_worker",
+      "tests": 32
+    },
+    {
+      "elapsed_seconds": 0.36501165700610727,
+      "exit_code": 0,
+      "expected_tests": 42,
+      "log_sha256": "abc2113d2a3b846c443d652b2a42229d9bbadf6a6f880cf36d4922429d18aa39",
+      "optimized": false,
+      "suite": "m128_full_failure",
+      "tests": 42
+    },
+    {
+      "elapsed_seconds": 62.85244684400095,
+      "exit_code": 0,
+      "expected_tests": 71,
+      "log_sha256": "b9b86c419c6b22b297bc10086d3a6a6288a7a9c6c14936c5d28e7aff4a3db87e",
+      "optimized": false,
+      "suite": "m128_entry",
+      "tests": 71
+    },
+    {
+      "elapsed_seconds": 6.680363664985634,
+      "exit_code": 0,
+      "expected_tests": 52,
+      "log_sha256": "68f430a32abda0e9e84262809710d4fd67536de5211dc607c9816ad8cb275008",
+      "optimized": false,
+      "suite": "m16_entry",
+      "tests": 52
+    },
+    {
+      "elapsed_seconds": 0.16434452899557073,
+      "exit_code": 0,
+      "expected_tests": 10,
+      "log_sha256": "8e8c40f14485e374a450c9c5f2dd65b58e8b74300fa0563f8ed8dfc1b535ec9d",
+      "optimized": false,
+      "suite": "m16_workflow",
+      "tests": 10
+    },
+    {
+      "elapsed_seconds": 0.21461564498895314,
+      "exit_code": 0,
+      "expected_tests": 17,
+      "log_sha256": "758d4e0cce2ea5961bdfae2572df678ebf3b2fd01bf5c734c1b09641c4820828",
+      "optimized": false,
+      "suite": "m128_workflow",
+      "tests": 17
+    },
+    {
+      "elapsed_seconds": 0.21456478399340995,
+      "exit_code": 0,
+      "expected_tests": 5,
+      "log_sha256": "99c9426d36ea78b6c4f89316c89a86ce12d678282744632c4b1ea95facbc190e",
+      "optimized": true,
+      "suite": "matrix_copy_guard",
+      "tests": 5
+    },
+    {
+      "elapsed_seconds": 0.36482952199003194,
+      "exit_code": 0,
+      "expected_tests": 43,
+      "log_sha256": "7b4d5982fc6d9a23d95449756bd3205a3f8bea24713f9575a4e14ddfd47e344a",
+      "optimized": true,
+      "suite": "strict_cleanup",
+      "tests": 43
+    },
+    {
+      "elapsed_seconds": 0.31484941400412936,
+      "exit_code": 0,
+      "expected_tests": 27,
+      "log_sha256": "ed33b29d60b4e1f94e132aef51f57c5da59be36701efed8565854de6c47aca2b",
+      "optimized": true,
+      "suite": "strict_callers",
+      "tests": 27
+    },
+    {
+      "elapsed_seconds": 0.5654525230056606,
+      "exit_code": 0,
+      "expected_tests": 34,
+      "log_sha256": "603c06b7ec704a716ba2843f6c40e2bfd66e3d2380439afc1bc3d41cc7a01fe3",
+      "optimized": true,
+      "suite": "m16_full_failure",
+      "tests": 34
+    },
+    {
+      "elapsed_seconds": 0.46520202500687446,
+      "exit_code": 0,
+      "expected_tests": 15,
+      "log_sha256": "97b94dc8f16eb4053b91ff30d03e8f17e5a98c017c21740c02594cdf23dfac51",
+      "optimized": true,
+      "suite": "producer_failure",
+      "tests": 15
+    },
+    {
+      "elapsed_seconds": 1.4180378909950377,
+      "exit_code": 0,
+      "expected_tests": 41,
+      "log_sha256": "e3233810428967c1179db51179a9dadb488ed9da5ae0ce8a007549b541de5dca",
+      "optimized": true,
+      "suite": "setup_launcher",
+      "tests": 41
+    },
+    {
+      "elapsed_seconds": 0.2667178549891105,
+      "exit_code": 0,
+      "expected_tests": 10,
+      "log_sha256": "1a902fd4c537c33c9c15041b84a9ad5661cfe31a3f4d21f81c9f7ae7a631eec6",
+      "optimized": true,
+      "suite": "packages",
+      "tests": 10
+    },
+    {
+      "elapsed_seconds": 2.4722285869938787,
+      "exit_code": 0,
+      "expected_tests": 45,
+      "log_sha256": "06a3fb51fb42276b28f131832311dc29f8b7f3e09ffc10d65263e75300c2b9de",
+      "optimized": true,
+      "suite": "m16_parent",
+      "tests": 45
+    },
+    {
+      "elapsed_seconds": 0.41530130499450024,
+      "exit_code": 0,
+      "expected_tests": 22,
+      "log_sha256": "33d804975826acb596d01f677318f6986c401cb5d6da0ef130b6c27a6a46a736",
+      "optimized": true,
+      "suite": "m16_worker",
+      "tests": 22
+    },
+    {
+      "elapsed_seconds": 1.6180119390046457,
+      "exit_code": 0,
+      "expected_tests": 23,
+      "log_sha256": "374e79fb683613220a7434be529727134e1972d02e2932b6725c50ba5403a9f2",
+      "optimized": true,
+      "suite": "m16_producer",
+      "tests": 23
+    },
+    {
+      "elapsed_seconds": 2.018981662011356,
+      "exit_code": 0,
+      "expected_tests": 26,
+      "log_sha256": "4df893cab032dd5f71fac89fb41f3114337f7c9e608e345a4f76689ea419a111",
+      "optimized": true,
+      "suite": "m16_phase_timing",
+      "tests": 26
+    },
+    {
+      "elapsed_seconds": 8.787800197998877,
+      "exit_code": 0,
+      "expected_tests": 23,
+      "log_sha256": "4745b128638879e396a73900d6c5c8c9fb82be71867ba372162c0238308bc9b2",
+      "optimized": true,
+      "suite": "m16_control_ports",
+      "tests": 23
+    },
+    {
+      "elapsed_seconds": 1.8184442880010465,
+      "exit_code": 0,
+      "expected_tests": 28,
+      "log_sha256": "ef121b4ee7280591fbb4ce17772ef196dc0fb49afce53358689c608a4fb45091",
+      "optimized": true,
+      "suite": "m128_producer",
+      "tests": 28
+    },
+    {
+      "elapsed_seconds": 1.216981042001862,
+      "exit_code": 0,
+      "expected_tests": 13,
+      "log_sha256": "8387653fa7d6918e83614a5f479256e068a5f5f76fce5d9840c022868df1df39",
+      "optimized": true,
+      "suite": "m128_verifier",
+      "tests": 13
+    },
+    {
+      "elapsed_seconds": 8.085359478005557,
+      "exit_code": 0,
+      "expected_tests": 59,
+      "log_sha256": "19cf9e40e26be8878aa17823464c33b17c4d30fe036b9728623a42ee9469f5c6",
+      "optimized": true,
+      "suite": "m128_parent",
+      "tests": 59
+    },
+    {
+      "elapsed_seconds": 0.7161735459958436,
+      "exit_code": 0,
+      "expected_tests": 32,
+      "log_sha256": "d1fa8841d4e7cfd3a51f091e01216b05379c262389f3fbd92dc3118cba8b1932",
+      "optimized": true,
+      "suite": "m128_worker",
+      "tests": 32
+    },
+    {
+      "elapsed_seconds": 0.6154159419966163,
+      "exit_code": 0,
+      "expected_tests": 42,
+      "log_sha256": "6a3978a910289d676257beab0eb7a0a52784674c635d36a4a99bf7f6d2eeb7af",
+      "optimized": true,
+      "suite": "m128_full_failure",
+      "tests": 42
+    },
+    {
+      "elapsed_seconds": 64.30370139700244,
+      "exit_code": 0,
+      "expected_tests": 71,
+      "log_sha256": "4195f34f67ef8d6c0e42c476584b47da00591d53b4fded3a9e273b76e75facb9",
+      "optimized": true,
+      "suite": "m128_entry",
+      "tests": 71
+    },
+    {
+      "elapsed_seconds": 7.033360033994541,
+      "exit_code": 0,
+      "expected_tests": 52,
+      "log_sha256": "38e5eed11040afa4c1986379b70c13a5c678dfad4de8b67cb0bca235ac833e26",
+      "optimized": true,
+      "suite": "m16_entry",
+      "tests": 52
+    },
+    {
+      "elapsed_seconds": 0.3648304820089834,
+      "exit_code": 0,
+      "expected_tests": 10,
+      "log_sha256": "946495322545006089048dc3a353ccb0ef62af74ecb07c7c9fa74395459fb2d3",
+      "optimized": true,
+      "suite": "m16_workflow",
+      "tests": 10
+    },
+    {
+      "elapsed_seconds": 0.41537183900072705,
+      "exit_code": 0,
+      "expected_tests": 17,
+      "log_sha256": "e9f7e37c2e702f5ef2c2fb3d354e6c4a70789f5c866db3ab8574fa89541c4ac1",
+      "optimized": true,
+      "suite": "m128_workflow",
+      "tests": 17
+    }
+  ],
+  "test_command_map_sha256": "982b871ea9b434726b7c64ac10027bd979f1bfc6be059254f1944c8884e6ecad",
+  "test_copy_restored": true
+}

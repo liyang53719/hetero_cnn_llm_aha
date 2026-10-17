@@ -53,6 +53,41 @@ class CompositionTests(unittest.TestCase):
         schedule=(self.out/'candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py').read_text()
         self.assertIn('range(0,token+1,16)',schedule.replace(' ',''))
 
+    def test_inherited_control_ports_delta_is_exact_and_inverse_ast_identical(self):
+        from ..attention_packed_m16_same_host import control_ports
+        before=(self.old/control_ports.TARGET).read_bytes()
+        after=(self.out/control_ports.TARGET).read_bytes()
+        self.assertEqual(hashlib.sha256(before).hexdigest(),control_ports.BASELINE_SHA256)
+        self.assertEqual(hashlib.sha256(after).hexdigest(),control_ports.CANDIDATE_SHA256)
+        self.assertEqual(after,control_ports.transform(before))
+        text=after.decode();self.assertEqual(text.count(control_ports.NEW),1)
+        reversed_text=text.replace(control_ports.NEW,control_ports.OLD)
+        self.assertEqual(reversed_text.encode(),before)
+        self.assertEqual(ast.dump(ast.parse(reversed_text)),ast.dump(ast.parse(before)))
+        self.assertEqual(self.result['source_sha256'][control_ports.TARGET],control_ports.CANDIDATE_SHA256)
+        for prefix in ('attention_packed_observation','attention_packed_tiled_observation'):
+            observer=json.loads((self.out/P.BASE/prefix/'pins.json').read_bytes())
+            self.assertEqual(observer['runtime'][control_ports.TARGET],control_ports.CANDIDATE_SHA256)
+
+    def test_terminal_numeric_resource_and_compatible_contracts_unchanged(self):
+        self.assertTrue(P.check_terminal_scope())
+        expected={
+            'contract.py':'b11fc14f8128562c6d1f9bef4693e70c4dc57b36a6b72131881223754e5427a1',
+            'compatible-sources.json':'72aedeb06e3ad9123b717a2d29e1c0427789884860dd451d94e7b43cde2e387e',
+            'RESOURCE_PLAN.json':'44ac713f2d3a5ec50ee433e36bf0c0a87a97b3073fa59b2d9ba3d2c87f9aee26',
+            'terminal_m16.py':'caf027af5688acbe8c29efb38ddba09a88a3223d0749572f6a002c42806aae20',
+            'terminal_original.py':'f8ecc30ce4cff0a8ccafec86fe0e408ba71729f135a7622609782e019e86c2ad',
+            'terminal_transform.py':'15ecb07061004462b31c558688f90aa02a94daca1a36a655e402a6ad0779137a',
+            'terminal_validator.py':'ac569e60ee2d3422d1e8634867d51fbcce344978a098098cfa491e53290d507b',
+        }
+        for name,digest in expected.items():
+            self.assertEqual(hashlib.sha256((self.out/C.PREFIX/name).read_bytes()).hexdigest(),digest,name)
+        self.assertEqual((C.NUMERIC_SECONDS,C.WORK_SECONDS,C.CLEANUP_SECONDS,C.OUTER_SECONDS),(2400,2424,2429,2430))
+        plan=C.read_json(C.HERE/'RESOURCE_PLAN.json')
+        self.assertEqual((plan['rows'],plan['past_tokens'],plan['key_tile'],plan['word_beat']),(128,0,16,16))
+        self.assertEqual((plan['public_completions'],plan['owner_jobs'],plan['assigned_gates'],plan['observed_stages']),(21,17,27,28))
+        self.assertEqual(plan['terminal_json_max_bytes'],16*1024*1024)
+
     def test_isolated_fresh_contract_entry_terminal_startup_without_test_imports(self):
         code='''import sys
 if not sys.flags.isolated or not sys.dont_write_bytecode:raise RuntimeError('isolated-B missing')

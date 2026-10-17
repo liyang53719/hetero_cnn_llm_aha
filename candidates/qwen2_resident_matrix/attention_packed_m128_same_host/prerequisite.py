@@ -49,7 +49,7 @@ def _load(m16_root):
     values = {name:C.read_json(item['path'],item['sha256'],limit=4*1024*1024)
               for name,item in records.items()}
     frozen_raw = C.safe(C.HERE/'m16-composed-sources.json').read_bytes()
-    C.need(C.sha(frozen_raw) == 'f99de4cb9b330e557b066e675342ef93e63143174ba54a520579f78e657334ff', 'frozen complete M16 source closure')
+    C.need(C.sha(frozen_raw) == 'ec01d6c7c35e49d8cbe8213b86be51ed15c7c2cf06e0cc5a55d4e5799823bf6c', 'frozen complete M16 source closure')
     frozen = C.read_json(C.HERE/'m16-composed-sources.json')
     name = 'candidates/qwen2_resident_matrix/attention_packed_m16_same_host/SOURCE_CONTRACT.json'
     source_contract = C.safe(root/'source'/name).read_bytes()

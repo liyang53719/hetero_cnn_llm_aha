@@ -177,6 +177,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - **blocked：严格进程组清理确认；ongoing：生产helper修复。** 新有身份记录的生命周期测试发现，同一后代在helper返回后仍处于R调度状态，约21ms后消失；R不证明SIGKILL后继续执行应用指令，但明确说明当时尚未观察到全组退出。较早只记录PID存在的失败原因仍UNKNOWN，不能用本次结果追溯填造。
   源码确认旧cleanup_owned只发SIGKILL并等待直接leader，finish_owned立即返回True，后续caller可能据此读写产物/发布成功。测试侧增加等待不能修复生产保证。启动M128暂缓：需在原绝对stop内、保持leader未reap以固定group身份，完成全部同组非leader退出确认后才reap并发布成功；扫描不完整/身份不明/超时必须fail-closed，禁止下一阶段，不能在reap后向裸PGID发信号。现有数值预算不扩大，不将清理问题表述为用户取消。
 
+
+- **done：严格进程组清理源码与真实生命周期资格；ongoing：首个完整M16→M128同job验收。** 新source-bound strict helper在保持直接leader未reap和身份匹配时发送SIGKILL，在原绝对stop内完成两次有界全组扫描，所有非leader身份（含Z/X）均不存在后才reap leader并签发父级proof。扫描不完整、身份异常或预算到期均fail-closed；失败保留cleanup=false并禁止下一阶段。可在原剩余时间内或非阻塞方式回收直接handle，但显式记录authority释放，禁止reap后的裸PGID信号。
+  两个活跃调用边界launch.finish_owned/owned_commands都要求同一owner/stop/source的严格proof才允许cleanup=true。覆盖显式owned组及外层handoff；同组内部普通同步subprocess仍按原工具契约执行，不宣称每个内部阶段均有全组退出屏障。原独立tiny历史入口不改变，当前tiny worker由外层严格stage覆盖。
+  [有界源码/生命周期证据](../reports/execution/QWEN2_STRICT_OWNED_GROUP_COLD_20261017/README.md)：独立43+43 helper测试及root一次normal/-O共6个真实zero/nonzero/timeout生命周期通过；原首轮捕获R状态后等待空扫描再reap，返回后扫描为空。root与作者完整638+638冷矩阵通过，463源无漂移，真实424源worktree组合通过。旧golden-pin冷测失败和历史清理缺陷均保留，不用后续PASS改写旧结果。
+  26个非workflow源文件＋仅新M128 workflow＋3安全证据独立冻结；463输入及安全证据须在实际候选Git闭包核验。原M16 YAML字节不变，避免单独重复M16作业。新job重新生产参考、完整M16原27门禁/终态/strict cleanup通过后才进入真实M128；同ELF和当前job来源绑定不放松。预算仍M16数值900/外层930，M128数值2400/外层2430，组合外部TERM4910/KILL+10。发布触发一次独立尝试，不承诺运行通过；完整M128、全29、RTL与80%/90%实测目标继续保留。
+
 ## 下一步，保持默认关闭并逐项验收
 
 1. **done：收齐be00失败结果。** 安全摘要/source身份已归档，数值比较和postflight未完成。新候选独立冻结，不据小切片推定旧运行PASS。

@@ -54,8 +54,8 @@ print('PASS_FRESH_WORKER_SOURCE_BOUNDARY')
         self.assertEqual(result.returncode,0,result.stderr);self.assertEqual(result.stdout.strip(),'PASS_FRESH_WORKER_SOURCE_BOUNDARY')
     def test_complete_input_contract(self):
         pins=R.load_pins(ROOT)
-        self.assertGreaterEqual(len(pins['inputs']),375)
-        self.assertEqual(len(pins['composed_sources']),358)
+        self.assertEqual(len(pins['inputs']),390)
+        self.assertEqual(len(pins['composed_sources']),360)
         self.assertNotIn(R.SOURCE_CONTRACT,pins['composed_sources'])
     def test_frozen_setup_identity(self):
         pins=R.load_pins(ROOT)

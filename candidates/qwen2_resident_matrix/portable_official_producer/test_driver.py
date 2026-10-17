@@ -63,7 +63,7 @@ print('PASS_COLD_DRIVER_IMPORT')'''
             with self.subTest(raw=raw),self.assertRaises(ValueError):d.strict(raw)
     def test_03_source_lock_is_complete_and_exact(self):
         sources,lock=d.verify_sources(ROOT)
-        self.assertEqual(len(sources),66)
+        self.assertEqual(len(sources),67)
         for name in ('cgra_sfu','command','config','kv_engine','matrix_engine','scheduler','dtypes','abi_validation'):
             self.assertIn('src/heteronpu/'+name+'.py',sources)
         self.assertEqual(lock,d.IMPORTED_LOCK_SHA)

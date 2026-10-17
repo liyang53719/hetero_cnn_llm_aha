@@ -5,9 +5,38 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 from . import contract as C, prerequisite as P
 from ..attention_packed_m16_same_host import prepare as old_prepare
 from ..attention_packed_m16_same_host import test_terminal_validator as fixture_module
+
+
+def previous_cleanup_static_map():
+    """Reconstruct the exact rejected pre-strict-cleanup M16 source fixture."""
+    sources=C.read_json(C.HERE/'m16-composed-sources.json')
+    del sources['candidates/qwen2_resident_matrix/portable_official_producer/test_owned_cleanup.py']
+    del sources['candidates/qwen2_resident_matrix/portable_owned_cleanup/strict_cleanup.py']
+    sources['candidates/qwen2_resident_matrix/portable_official_producer/owned_commands.py']='23170d4f016900c074a3a446fe4529f7465060c039cdf2aad27bce6a009c6c49'
+    sources['candidates/qwen2_resident_matrix/portable_official_producer/source-lock.json']='ee789b80a90df66952d822dfac0f5831f5c433fa092b3e0771567db251ba2cdb'
+    sources['candidates/qwen2_resident_matrix/portable_official_producer/test_driver.py']='2926d7c8f3739b6b51f4815a0368888f56e9c3eda5445133ac8d24c684613f48'
+    return sources
+
+
+def previous_static_map():
+    """Reconstruct the exact rejected pre-control-optimization source fixture."""
+    sources=previous_cleanup_static_map()
+    prefix='candidates/qwen2_resident_matrix/'
+    for name in ('control_ports.py','test_control_ports.py'):
+        del sources[prefix+'attention_packed_m16_same_host/'+name]
+    previous={
+        'attention_packed_m16_same_host/README.md':'c7a2401c0331fab26c79f8bb4dacefabf5e4931c3467de82feb2939b31f0a899',
+        'attention_packed_m16_same_host/SCOPE_AUDIT.json':'6d21db2976a4d67ad2cce3e06613577449d3916552fa8f4da94cd893c95d8b6b',
+        'attention_packed_m16_same_host/prepare.py':'45ab4da740285497b4cb3b1aa58fc3aef1b7d5bab3e22a9f7b5541f428da1024',
+        'attention_packed_observation/pins.json':'a257e3a412fad1066a05c4c794d42c4b349422d8723dae6a6a5e02c691980ef2',
+        'ffn_public/execute_numeric.py':'d794c0b60b764e378c03fd74436d74e654964a4984efd1f2cedb5f3187724886',
+    }
+    sources.update({prefix+name:digest for name,digest in previous.items()})
+    return sources
 
 
 class PrerequisiteTests(unittest.TestCase):
@@ -77,9 +106,85 @@ class PrerequisiteTests(unittest.TestCase):
 
     def test_complete_current_chain_replays_original_and_same_elf(self):
         path,sha,value=self.seal();self.assertEqual(self.verify(path,sha,library=value['library']),value)
-        self.assertEqual(len(value['source_sha256']),357);self.assertEqual(value['validation']['assigned_official_gates'],27)
+        self.assertEqual(len(value['source_sha256']),361);self.assertEqual(value['validation']['assigned_official_gates'],27)
         self.assertEqual(value['validation']['official_observed_stages'],28)
         self.assertFalse(value['old_pass_inherited']);self.assertFalse(value['m128_verdict_inherited'])
+
+    def test_complete360_static_map_and361_actual_commit_map(self):
+        raw=(C.HERE/'m16-composed-sources.json').read_bytes();static=json.loads(raw)
+        self.assertEqual(C.sha(raw),'ec01d6c7c35e49d8cbe8213b86be51ed15c7c2cf06e0cc5a55d4e5799823bf6c')
+        self.assertEqual(len(static),360)
+        name='candidates/qwen2_resident_matrix/attention_packed_m16_same_host/SOURCE_CONTRACT.json'
+        self.assertEqual(set(self.sources)-set(static),{name})
+        self.assertEqual({n:h for n,h in self.sources.items() if n!=name},static)
+        expected=C.encoded(dict(schema=1,profile=P.M16_PROFILE,git_head=self.ci['commit'],
+            sources=static,scope='FRESH_M16_ASSIGNED27_ONLY'))
+        self.assertEqual((self.root/'source'/name).read_bytes(),expected)
+        self.assertEqual(self.sources[name],C.sha(expected))
+        runner='candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py'
+        self.assertEqual(static[runner],'cf65f59f2af70a2b7b360bf2271bacbdbaeeb3f91c65fcb2c2faf427158ff9d7')
+
+    def test_previous358_pre_cleanup_static_lock_rejected(self):
+        previous=previous_cleanup_static_map();raw=C.encoded(previous)
+        self.assertEqual(len(previous),358)
+        self.assertEqual(C.sha(raw),'c0aec77c83743f0ac95c881064081e098dca0f05850745dc5aeb1fd98887dcbd')
+        with tempfile.TemporaryDirectory() as temp:
+            here=Path(temp);(here/'m16-composed-sources.json').write_bytes(raw)
+            with mock.patch.object(C,'HERE',here),self.assertRaisesRegex(ValueError,'frozen complete M16 source closure'):
+                self.seal()
+
+    def test_previous359_pre_cleanup_actual_commit_contract_rejected(self):
+        name='candidates/qwen2_resident_matrix/attention_packed_m16_same_host/SOURCE_CONTRACT.json'
+        path=self.root/'source'/name;raw=path.read_bytes()
+        old_contract=C.encoded(dict(schema=1,profile=P.M16_PROFILE,git_head=self.ci['commit'],
+            sources=previous_cleanup_static_map(),scope='FRESH_M16_ASSIGNED27_ONLY'))
+        path.write_bytes(old_contract)
+        try:
+            with self.assertRaisesRegex(ValueError,'actual-commit complete M16 source contract'):self.seal()
+        finally:path.write_bytes(raw)
+
+    def test_previous359_pre_cleanup_terminal_source_map_rejected(self):
+        previous=previous_cleanup_static_map()
+        name='candidates/qwen2_resident_matrix/attention_packed_m16_same_host/SOURCE_CONTRACT.json'
+        previous[name]=C.sha(C.encoded(dict(schema=1,profile=P.M16_PROFILE,git_head=self.ci['commit'],
+            sources=previous,scope='FRESH_M16_ASSIGNED27_ONLY')))
+        self.assertEqual(len(previous),359)
+        path=self.root/P.FILES['actual'];raw=path.read_bytes();value=json.loads(raw)
+        value['source_sha256']=previous;path.write_bytes(C.encoded(value))
+        try:
+            with self.assertRaisesRegex(ValueError,'complete frozen M16 composition map'):self.seal()
+        finally:path.write_bytes(raw)
+
+    def test_previous356_static_lock_replacement_rejected(self):
+        previous=previous_static_map();raw=C.encoded(previous)
+        self.assertEqual(len(previous),356)
+        self.assertEqual(C.sha(raw),'f99de4cb9b330e557b066e675342ef93e63143174ba54a520579f78e657334ff')
+        with tempfile.TemporaryDirectory() as temp:
+            here=Path(temp);(here/'m16-composed-sources.json').write_bytes(raw)
+            with mock.patch.object(C,'HERE',here),self.assertRaisesRegex(ValueError,'frozen complete M16 source closure'):
+                self.seal()
+
+    def test_previous357_actual_commit_contract_rejected(self):
+        name='candidates/qwen2_resident_matrix/attention_packed_m16_same_host/SOURCE_CONTRACT.json'
+        path=self.root/'source'/name;raw=path.read_bytes()
+        old_contract=C.encoded(dict(schema=1,profile=P.M16_PROFILE,git_head=self.ci['commit'],
+            sources=previous_static_map(),scope='FRESH_M16_ASSIGNED27_ONLY'))
+        path.write_bytes(old_contract)
+        try:
+            with self.assertRaisesRegex(ValueError,'actual-commit complete M16 source contract'):self.seal()
+        finally:path.write_bytes(raw)
+
+    def test_previous357_terminal_source_map_rejected_even_with_current_contract(self):
+        previous=previous_static_map()
+        name='candidates/qwen2_resident_matrix/attention_packed_m16_same_host/SOURCE_CONTRACT.json'
+        previous[name]=C.sha(C.encoded(dict(schema=1,profile=P.M16_PROFILE,git_head=self.ci['commit'],
+            sources=previous,scope='FRESH_M16_ASSIGNED27_ONLY')))
+        self.assertEqual(len(previous),357)
+        path=self.root/P.FILES['actual'];raw=path.read_bytes();value=json.loads(raw)
+        value['source_sha256']=previous;path.write_bytes(C.encoded(value))
+        try:
+            with self.assertRaisesRegex(ValueError,'complete frozen M16 composition map'):self.seal()
+        finally:path.write_bytes(raw)
 
     def test_current_parent_ci_nonce_host_runtime_cannot_be_inherited(self):
         path,sha,_=self.seal()

@@ -1,0 +1,37 @@
+[
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+    "sha256": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558"
+  },
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+    "sha256": "b3dad7ae7a23c96ac720cd9920ff3595d1d83f77a2664ed73526e71e5b49a3ae"
+  },
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+    "sha256": "8a2c2d41e68719fb2714e3658b45ec0cd8bbe9f9173dbd9c9a91e7344f16e995"
+  },
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+    "sha256": "59c041ac92a4a0105ddf0bc5ad521e59b0ebb7d76c30bdeb4eb009943bb19545"
+  },
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala",
+    "sha256": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91"
+  },
+  {
+    "root": "qk16_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+    "sha256": "4375ccf715cf408975c3e45ae595955767b824404ef8337bb260ed807527dc1e"
+  },
+  {
+    "root": "qk16_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala",
+    "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+  }
+]

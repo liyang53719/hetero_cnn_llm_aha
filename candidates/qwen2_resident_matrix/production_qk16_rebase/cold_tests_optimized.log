@@ -1,0 +1,18 @@
+test_default_off_and_no_new_payload_arrays (__main__.Tests.test_default_off_and_no_new_payload_arrays) ... ok
+test_default_off_state_codes_and_status_projection (__main__.Tests.test_default_off_state_codes_and_status_projection) ... ok
+test_exact_postimages (__main__.Tests.test_exact_postimages) ... ok
+test_existing_output_not_overwritten (__main__.Tests.test_existing_output_not_overwritten) ... ok
+test_full_policy_and_capacity_preserved (__main__.Tests.test_full_policy_and_capacity_preserved) ... ok
+test_full_production_resident_and_router_preserved (__main__.Tests.test_full_production_resident_and_router_preserved) ... ok
+test_guard_before_begin_without_truncation (__main__.Tests.test_guard_before_begin_without_truncation) ... ok
+test_one_client_and_existing_status_logic (__main__.Tests.test_one_client_and_existing_status_logic) ... ok
+test_patch_zero_fuzz_same_postimages (__main__.Tests.test_patch_zero_fuzz_same_postimages) ... ok
+test_seed_and_group_fields_are_explicit (__main__.Tests.test_seed_and_group_fields_are_explicit) ... ok
+test_softmax_pv_and_head_order_byte_unchanged (__main__.Tests.test_softmax_pv_and_head_order_byte_unchanged) ... ok
+test_stale_legacy_error_cannot_poison_packed (__main__.Tests.test_stale_legacy_error_cannot_poison_packed) ... ok
+test_use_dense_lexical_scope_counterexample (__main__.Tests.test_use_dense_lexical_scope_counterexample) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.007s
+
+OK

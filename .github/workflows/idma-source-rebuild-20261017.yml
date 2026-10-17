@@ -26,6 +26,10 @@ jobs:
           python3 -O test_bounds.py
           python3 test_postprocess.py
           python3 -O test_postprocess.py
+          python3 test_conditionals.py
+          python3 -O test_conditionals.py
+          python3 test_failure_summary.py
+          python3 -O test_failure_summary.py
       - name: Fixed source generation helpers
         run: |
           python3 scripts/idma_source_export_20261017/bootstrap_tools.py "$RUNNER_TEMP/idma-source-tools"
@@ -54,3 +58,14 @@ jobs:
           path: |
             ${{ runner.temp }}/idma-source-rebuild-20261017/idma_export/
             ${{ runner.temp }}/idma-source-rebuild-20261017/SAFE_IDENTITY.json
+      - name: Safe outcome summary only
+        if: always()
+        run: |
+          python3 scripts/idma_source_export_20261017/safe_failure.py "$RUNNER_TEMP/idma-source-rebuild-20261017/receipt.json" "$RUNNER_TEMP/IDMA_SAFE_OUTCOME.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: idma-safe-outcome-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 30
+          if-no-files-found: error
+          path: ${{ runner.temp }}/IDMA_SAFE_OUTCOME.json

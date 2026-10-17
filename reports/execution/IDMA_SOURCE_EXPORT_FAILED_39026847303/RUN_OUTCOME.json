@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "head_sha": "95db862b5b79a86dca7fac98343441d53f7f7bee",
+  "run_id": 39026847303,
+  "job_id": 117379407493,
+  "run_attempt": 1,
+  "conclusion": "failure",
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/39026847303",
+  "failed_step": "Export pinned sources, no EDA",
+  "cold_tests": {
+    "normal": 28,
+    "optimized": 28,
+    "passed": true
+  },
+  "fixed_tool_bootstrap": "success",
+  "export_closure": "failed",
+  "artifact_verification": "skipped",
+  "source_upload": "skipped",
+  "artifact_count": 0,
+  "failure_category": "conditional_include_scanner_rejected_unresolved_header",
+  "error_summary": "unresolved/escaped include uvm_macros.svh",
+  "failure_source_location": "scripts/idma_source_export_20261017/export_source.py:216",
+  "fixed_source_candidate": {
+    "repository": "pulp-platform/common_cells",
+    "commit": "63b7c50d43e462b59506f69d341ff1e40202866d",
+    "path": "src/assert_rpt_pkg.sv",
+    "blob_sha1": "da53c8f5448b39b91118469e5d3aba659f8cba24",
+    "include_line": 10,
+    "guard": "ifdef UVM; entire package guarded",
+    "runtime_filelist_retrieved": false,
+    "identification_scope": "fixed-source diagnosis; original log did not identify include-origin path"
+  },
+  "evidence": {
+    "decoded_original_job_log_sha256": "b09fe2425f2593e60a392de32fe3cadafb10b091fbb1d10ff3a8cc651befbdb2",
+    "raw_log_included": false,
+    "private_receipt_retrieved": false,
+    "independent_failure_cleanup_terminal_proof": false
+  },
+  "provider_artifact_available": false,
+  "rtl_or_numerical_acceptance": false,
+  "successor": {
+    "version": "v6",
+    "manifest_sha256": "3414bbb849521460aed4b3b8f09160ff55e7409a0e50097c075430ff2b50c88a",
+    "candidate_files": 17,
+    "cold_normal": 64,
+    "cold_optimized": 64,
+    "independent_source_review": "GO",
+    "executed": false,
+    "published": false
+  }
+}

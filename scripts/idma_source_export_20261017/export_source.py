@@ -5,6 +5,7 @@ No EDA invocation. No global installation. No branch/push/workflow changes.
 import argparse, hashlib, io, json, os, re, signal, subprocess, tarfile, time
 from pathlib import Path
 import bounded_run,shutil,shlex,stat,sys
+import conditional_closure
 PIN='2e0b0fe53b6f8823319e2428e2e9abc2db149b7d'
 LOCK_SHA='9e6c33f898dad20fd1b29cf8b07647b7d55fe8b42c36bd5cd72586fc2606557e'
 CLOCK_SHA='93e9747504fa1da6473560341febbfae6c5e917768633a84fc9ef12299293207'
@@ -59,12 +60,19 @@ def verify_export(root):
  need(json.loads((root/'SOURCE_CLOSURE.json').read_text())==check_filelist(root/'idma.f.in',root),'filelist/include closure receipt mismatch')
  return len(manifest)
 def check_filelist(path,root):
- root=Path(root).resolve();count=0;sources=[];includes=[]
+ root=Path(root).resolve();count=0;sources=[];includes=[];defines={}
  for raw in Path(path).read_text().splitlines():
   line=raw.strip()
   if not line or line.startswith('//'):continue
   for word in shlex.split(line):
-   if word.startswith('+define+'):continue
+   if word.startswith('+define+'):
+    for definition in word[len('+define+'):].split('+'):
+     name,sep,value=definition.partition('=')
+     need(re.fullmatch(conditional_closure.IDENT,name) is not None,'unsupported filelist define')
+     need('`' not in value and '\\' not in value,'unsafe filelist define value')
+     need(name not in defines or defines[name]==value,'conflicting filelist define')
+     defines[name]=value
+    continue
    include=word.startswith('+incdir+')
    names=word[len('+incdir+'):].split('+') if include else [word]
    for name in names:
@@ -74,8 +82,8 @@ def check_filelist(path,root):
     need(q.is_dir() if include else q.is_file(),'missing filelist source/include '+name);count+=1
     (includes if include else sources).append(q)
  need(count>0,'empty filelist')
- closure_count=verify_include_closure(sources,includes,root)
- return {'source_files':len(set(sources)),'include_directories':len(set(includes)),'source_and_transitive_include_files':closure_count,'excluded_links_unreferenced':True}
+ closure_count=verify_include_closure(sources,includes,root,defines)
+ return {'initial_defines':dict(sorted(defines.items())),'preprocessor_scope':'ordered_single_compilation_unit','source_files':len(set(sources)),'include_directories':len(set(includes)),'source_and_transitive_include_files':closure_count,'excluded_links_unreferenced':True}
 
 def include_literals(text):
  # Preserve strings while blanking comments; never find directives inside strings.
@@ -118,21 +126,8 @@ def merge_generated(source,dest,root):
    need((p.is_dir() and q.is_dir()) or (p.is_file() and q.is_file() and sha(p)==sha(q)),'generated merge conflict')
  shutil.copytree(source,dest,dirs_exist_ok=True)
 
-def verify_include_closure(sources,include_dirs,root):
- queue=list(sources);seen=set()
- excluded={root/'idma'/p for p in EXCLUDED_SYMLINKS}
- while queue:
-  p=queue.pop()
-  if p in seen:continue
-  need(len(seen)<100000,'include closure entry cap');seen.add(p)
-  need(p.is_relative_to(root) and p not in excluded and p.is_file() and not p.is_symlink(),'invalid include/source closure path')
-  for rel in include_literals(p.read_text()):
-   need(not Path(rel).is_absolute(),'absolute include forbidden')
-   candidates=[(base/rel).resolve() for base in [p.parent,*include_dirs]]
-   resolved=next((q for q in candidates if q.is_file()),None)
-   need(resolved is not None and resolved.is_relative_to(root) and resolved not in excluded,'unresolved/escaped include '+rel)
-   queue.append(resolved)
- return len(seen)
+def verify_include_closure(sources,include_dirs,root,defines=None):
+ return conditional_closure.walk(sources,include_dirs,root,defines)
 
 def remove_temporary(root,stop):
  # Only self-created fixed children. No removal if process absence was unverified.
@@ -168,7 +163,7 @@ def run_inner(a,stop):
   index=len(receipt['stages']);output=out/f'{index:02d}.stdout.log';error=out/f'{index:02d}.stderr.log'
   clean=False
   result=bounded_run.execute(argv,cwd=cwd,env=env,out=output,err=error,root=out,absolute_stop=work_stop,stage_stop=min(time.monotonic()+180,work_stop-10),stdout_limit=64*1024*1024 if argv[1:2]==['archive'] else 2*1024*1024)
-  clean=result['cleanup_complete'];arm();receipt['stages'].append(result);save()
+  clean=result['cleanup_complete'];arm();result.update(stdout_sha256=sha(output),stderr_sha256=sha(error));receipt['stages'].append(result);save()
   need(clean and result['error'] is None and result['exit']==0,'source stage failed')
   return output.read_bytes()
 
@@ -221,7 +216,7 @@ def run_inner(a,stop):
   need(bounded_run.tree_bytes(out)<=bounded_run.TREE_LIMIT,'final aggregate tree sampled limit')
   receipt.update(status='PASS_SOURCE_EXPORT_ONLY',files_verified=verify_export(export),manifest_sha256=sha(export/'SHA256SUMS.json'))
  except BaseException as e:
-  receipt.update(status='FAILED',error=repr(e));signal.setitimer(signal.ITIMER_REAL,0)
+  receipt.update(status='FAILED',error=repr(e),error_category=('timeout' if isinstance(e,TimeoutError) else 'interrupted' if isinstance(e,KeyboardInterrupt) else 'validation_failed' if isinstance(e,ValueError) else 'internal_error'));signal.setitimer(signal.ITIMER_REAL,0)
   if hasattr(e,'evidence'):receipt['cleanup_failure_evidence']=e.evidence
   try:
    if clean:

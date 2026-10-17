@@ -1,0 +1,449 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -51,7 +51,8 @@
+   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
+   * Each successor starts only after the previous stage's final write ACK.
+   */
+-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
++  require(!enableProductionPackedQk16 || (ownerDriven && externalMatrix && Qwen2NumericPolicy.official(numericPolicy)), "production QK16 requires the official external-Matrix owner; capacity stays 1024")
+   require(!externalElementwiseLoan || (ownerDriven && externalScalar), "elementwise loan requires owner serialization and the shared Scalar")
+   Qwen2NumericPolicy.checkShape(numericPolicy,s)
+   private val officialBf16=Qwen2NumericPolicy.official(numericPolicy)
+@@ -73,6 +74,9 @@
+     val matrixRequest=if(externalMatrix)Some(Decoupled(new WideMatrixStep(256)))else None
+     val matrixResult=if(externalMatrix)Some(Flipped(Decoupled(new WideMatrixResult(256))))else None
+     val matrixAcceptedSteps=if(externalMatrix)Some(Input(UInt(64.W)))else None
++    val packedQk=if(enableProductionPackedQk16)Some(new MatrixStreamPort)else None
++    val packedQkActive=if(enableProductionPackedQk16)Some(Output(Bool()))else None
++    val packedQkStepsDrained=if(enableProductionPackedQk16)Some(Input(Bool()))else None
+     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
+     val scalarService=if(externalScalar)Some(Flipped(new GdnScalarClient))else None
+     val elementwiseLoan=if(externalElementwiseLoan)Some(new ElementwiseLoanPort)else None
+@@ -85,7 +89,7 @@
+     val acknowledgedWriteBytes=Output(UInt(64.W))
+   })
+   dontTouch(io) // Public ABI retained under the joint HardFloat elaboration.
+-  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseWeightHi","denseWeightReady","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked","biasRead","biasOperand","biasSum","biasWritten","normRetain","normOfficialRead","normOfficialSquare","normOfficialAdd","normOfficialTerm","normOfficialBlock","normOfficialResidue","normOfficialLane")
++  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseWeightHi","denseWeightReady","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked","biasRead","biasOperand","biasSum","biasWritten","normRetain","normOfficialRead","normOfficialSquare","normOfficialAdd","normOfficialTerm","normOfficialBlock","normOfficialResidue","normOfficialLane","attPackedIssue","attPackedSelect")
+   private val codes=names.zipWithIndex.toMap;def st(n:String):UInt=codes(n).U(7.W)
+   val state=RegInit(st("idle"));val resume=Reg(UInt(7.W));val scalarResume=Reg(UInt(7.W));val localResume=Reg(UInt(7.W))
+   val owner=Reg(new QwenOwnerJob)
+@@ -133,6 +137,21 @@
+   val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)
+   vectorA:=av;vectorB:=bv
+   val vout=VecInit((0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a.io.out})
++  // New control only; existing acc[16] holds selected words, never a tile copy.
++  val packedQk=if(enableProductionPackedQk16)Some(Module(new PackedAttentionStreamClient(true)))else None
++  val packedOwned=if(enableProductionPackedQk16)Some(RegInit(false.B))else None
++  val packedFinalIssued=if(enableProductionPackedQk16)Some(RegInit(false.B))else None
++  val packedCommitted=if(enableProductionPackedQk16)Some(RegInit(false.B))else None
++  val packedTag=if(enableProductionPackedQk16)Some(RegInit(1.U(32.W)))else None
++  val packedBusy=packedOwned.getOrElse(false.B)
++  val packedMemDebt=if(enableProductionPackedQk16)Some(RegInit(false.B))else None
++  val packedLocalDebt=if(enableProductionPackedQk16)Some(RegInit(false.B))else None
++  val packedScalarDebt=if(enableProductionPackedQk16)Some(RegInit(false.B))else None
++  val packedFeedDebt=packedMemDebt.getOrElse(false.B)||packedLocalDebt.getOrElse(false.B)||packedScalarDebt.getOrElse(false.B)
++  val packedGather=if(enableProductionPackedQk16)Some(RegInit(0.U(4.W)))else None
++  val packedSelected=if(enableProductionPackedQk16)Some(RegInit(0.U(4.W)))else None
++  val packedKeys=Mux(token-key>=15.U,16.U(5.W),(token-key+1.U)(4,0))
++  val packedSelectedFault=WireDefault(false.B)
+   val fmA=Wire(Vec(16,UInt(32.W)));val fmB=Wire(Vec(16,UInt(32.W)));fmA:=av;fmB:=bv
+   val fmC=Wire(Vec(16,UInt(32.W)));fmC:=acc
+   if(!s.retainedMatrix){when(state===st("denseCompute")){fmC:=denseAcc(denseRow(3,0))}}
+@@ -157,9 +176,9 @@
+     physicalSteps:=acceptedSteps
+     when(start){physicalBase:=acceptedSteps}
+     val isDense=state===st("denseCompute")
+-    val dot=state===st("attDot");val pv=state===st("attPVCompute")
++    val dot=state===(if(enableProductionPackedQk16)st("attPackedIssue")else st("attDot"));val pv=state===st("attPVCompute")
+     val computing=isDense||dot||pv
+-    matrixRequest.valid:=computing && !pending
++    matrixRequest.valid:=computing && !pending && !(enableProductionPackedQk16.B && dot)
+     for(i<-0 until 16){
+       matrixRequest.bits.a(i):=TensorMath.bf16Rne(Mux(isDense,
+         Mux(i.U<denseRows,denseWindow(i)(depth(3,0)),0.U),
+@@ -179,8 +198,33 @@
+     when(matrixResult.fire){pending:=false.B}
+     for(i<-0 until 16){fmOut(i):=Mux(dot,matrixResult.bits.value(i)(i),matrixResult.bits.value(0)(i))}
+     fmDone:=matrixResult.fire
+-    matrixFault:=fmDone && matrixResult.bits.error
++    matrixFault:=matrixResult.fire && matrixResult.bits.error
+     when(isDense&&fmDone){denseAcc:=matrixResult.bits.value}
++    packedQk.foreach{c=>
++      io.packedQk.get<>c.io.port
++      io.packedQkActive.get:=packedBusy
++      c.io.stepsDrained:=io.packedQkStepsDrained.get;c.io.pause:=false.B
++      c.io.abort:=poisoned
++      c.io.start.valid:=state===st("attKey") && !packedBusy && !poisoned && packedTag.get=/=0.U
++      c.io.start.bits.tag:=packedTag.get;c.io.start.bits.pv:=false.B;c.io.start.bits.count:=packedKeys
++      c.io.operands.valid:=dot && packedBusy && !packedFinalIssued.get && !poisoned
++      c.io.operands.bits.index:=(depth>>4)(7,0)
++      c.io.operands.bits.a:=matrixRequest.bits.a
++      // Existing 256-word Dense operand register is exclusively leased to this group.
++      // Every active word is ACK-gathered before issue; tail words bypass stale registers.
++      for(i<-0 until 256)c.io.operands.bits.b(i):=Mux((i/16).U<packedKeys,TensorMath.bf16Rne(denseWeights(i)),0.U)
++      c.io.result.ready:=packedCommitted.get && !poisoned
++      c.io.completion.ready:=packedBusy && (packedCommitted.get || poisoned || c.io.resetRequired)
++      when(c.io.start.fire){packedOwned.get:=true.B;packedFinalIssued.get:=false.B;packedCommitted.get:=false.B;packedTag.get:=packedTag.get+1.U;packedGather.get:=0.U;packedSelected.get:=0.U}
++      when(c.io.operands.fire && depth===112.U){packedFinalIssued.get:=true.B}
++      when(c.io.completion.fire){packedOwned.get:=false.B}
++      when(dot){
++        // Nonfinal acceptance advances DDR/local feed without demanding a result.
++        fmDone:=Mux(depth===112.U,c.io.result.valid,c.io.operands.fire)
++        for(i<-0 until 16){fmOut(i):=c.io.result.bits.value(i)((packedSelected.get<<4)+i.U)}
++        packedSelectedFault:=depth===112.U && c.io.result.valid && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)
++      }
++    }
+ 
+   }else{
+     fmOut:=VecInit((0 until 16).map{i=>val a=Module(new HeteroBF16FmaLane);a.io.a:=TensorMath.bf16Rne(fmA(i));a.io.b:=TensorMath.bf16Rne(fmB(i));a.io.c:=fmC(i);a.io.out})
+@@ -227,7 +271,7 @@
+   io.response.ready:=Mux(resActive,elem.io.response.ready,state===st("memRsp"))
+   io.launch.ready:=(if(ownerDriven)false.B else state===st("idle")&& !poisoned)
+   if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !scalarExternalExclusive && !elementwiseExternalExclusive}
+-  io.result.valid:=state===st("finish");io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
++  io.result.valid:=state===st("finish") && !packedBusy && !packedFeedDebt;io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
+   io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired;io.readBytes:=reads;io.writeBytes:=writes
+   // Count memory visibility acknowledgements, not issued stores. The fence
+   // observes both the block engine and the shared residual elementwise engine.
+@@ -298,6 +342,7 @@
+       seq:=0.U;status:=0.U;cycles:=0.U;macs:=0.U;reads:=0.U;writes:=0.U
+       when(s.nativeProfile.B || j.kind>QwenOwnerKind.KvAppend.U || j.activationBf16 || j.outputBf16 || j.weightBf16){fail(Status.Unsupported.U)}
+       .elsewhen(j.m===0.U||j.m>s.maxTokens.U||j.n===0.U||j.n>s.maxRow.U||j.n(3,0)=/=0.U||j.writeBytes===0.U){fail(Status.Bounds.U)}
++      .elsewhen(enableProductionPackedQk16.B && j.kind===QwenOwnerKind.Attention.U && j.m>128.U){fail(Status.Bounds.U)}
+         .otherwise{state:=st("begin")}
+     }
+   }else{
+@@ -513,14 +558,62 @@
+   when(state===st("attQLoad")){read(ptr("q",rowOffset(s.hidden.U)+head*s.headDim.U+depth),"attQGot")}
+   when(state===st("attQGot")){localWrite(depth>>4,packet,"attQStored")}
+   when(state===st("attQStored")){when(depth+16.U<s.headDim.U){depth:=depth+16.U;state:=st("attQLoad")}.otherwise{key:=0.U;maxScore:="hff800000".U;state:=st("attKey")}}
+-  when(state===st("attKey")){depth:=0.U;clearAcc();localRead(0.U,"attLocal")}
++  when(state===st("attKey") && (!enableProductionPackedQk16.B || packedQk.map(_.io.start.fire).getOrElse(false.B))){depth:=0.U;clearAcc();localRead(0.U,"attLocal")}
++  if(!enableProductionPackedQk16){
+   when(state===st("attLocal")){read(ptr("k",key.pad(32)*s.kv.U+kvHead*s.headDim.U+depth),"attDot")}
+-  when(state===st("attDot")){fmB:=packet.asTypeOf(fmB);when(fmDone){acc:=fmOut;macs:=macs+16.U
++  when(state===st("attDot")){fmB:=packet.asTypeOf(fmB);when(fmDone){when(!enableProductionPackedQk16.B || depth===112.U){acc:=fmOut};macs:=macs+16.U
+     when(depth+16.U<s.headDim.U){depth:=depth+16.U;localRead((depth+16.U)>>4,"attLocal")}.otherwise{lane:=0.U;sum:=0.U;state:=st("attReduce")}}}
++  }else{
++    when(state===st("attLocal") && !poisoned && !packedQk.get.io.resetRequired){
++      packedGather.get:=0.U
++      read(ptr("k",key.pad(32)*s.kv.U+kvHead*s.headDim.U+depth),"attDot")
++    }
++    when(state===st("attDot") && !poisoned && !packedQk.get.io.resetRequired){
++      // packet is visible only after the matching successful DDR response.
++      for(i<-0 until 16)denseWeights((packedGather.get<<4)+i.U):=packet(32*i+31,32*i)
++      when(packedGather.get+&1.U<packedKeys){
++        packedGather.get:=packedGather.get+1.U
++        read(ptr("k",(key.pad(32)+packedGather.get+1.U)*s.kv.U+kvHead*s.headDim.U+depth),"attDot")
++      }.otherwise{state:=st("attPackedIssue")}
++    }
++    when(state===st("attPackedIssue") && fmDone){
++      macs:=macs+(packedKeys<<4)
++      when(depth===112.U){acc:=fmOut;lane:=0.U;sum:=0.U;state:=st("attReduce")}
++      .otherwise{depth:=depth+16.U;localRead((depth+16.U)>>4,"attLocal")}
++    }
++    when(state===st("attPackedSelect") && !poisoned && !packedQk.get.io.resetRequired){
++      // Select from the live FIFO head, never copy a full result tile.
++      val selected=VecInit((0 until 16).map(i=>packedQk.get.io.result.bits.value(i)((packedSelected.get<<4)+i.U)))
++      when(packedQk.get.io.result.valid){
++        when(selected.map(x=> !TensorMath.finite(x)).reduce(_||_)){packedSelectedFault:=true.B}
++        .otherwise{acc:=selected;lane:=0.U;sum:=0.U;state:=st("attReduce")}
++      }
++    }
++    when(packedBusy){assert(state=/=st("denseWindowGot"),"Dense operand clear excluded for entire QK group")}
++  }
+   when(state===st("attReduce")){calc(ScalarOp.Add,sum,acc(lane),"attReduceDone")}
+-  when(state===st("attReduceDone")){sum:=scalarValue;when(lane===15.U){calc(ScalarOp.Mul,materialize(scalarValue),F32.lit(1/math.sqrt(s.headDim.toDouble)),"attScore")}.otherwise{lane:=lane+1.U;state:=st("attReduce")}}
+-  when(state===st("attScore")){val score=materialize(scalarValue);scores.write(key,score);when(F32.less(maxScore,score)){maxScore:=score};state:=st("attNextKey")}
+-  when(state===st("attNextKey")){when(key<token){key:=key+1.U;state:=st("attKey")}.otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}}
++  when(state===st("attReduceDone")){sum:=scalarValue;when(lane===15.U){
++    val dotValue=materialize(scalarValue)
++    when(enableProductionPackedQk16.B && !TensorMath.finite(dotValue)){packedSelectedFault:=true.B}
++      .otherwise{calc(ScalarOp.Mul,dotValue,F32.lit(1/math.sqrt(s.headDim.toDouble)),"attScore")}
++  }.otherwise{lane:=lane+1.U;state:=st("attReduce")}}
++  when(state===st("attScore") && (!enableProductionPackedQk16.B || (!poisoned && !packedQk.map(_.io.resetRequired).getOrElse(false.B) && !packedQk.map(_.io.port.done.valid).getOrElse(false.B)))){
++    val score=materialize(scalarValue)
++    when(enableProductionPackedQk16.B && !TensorMath.finite(score)){packedSelectedFault:=true.B}
++    .otherwise{if(enableProductionPackedQk16){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),score);when(F32.less(maxScore,score)){maxScore:=score};state:=st("attNextKey")}
++  }
++  if(!enableProductionPackedQk16){
++  when(state===st("attNextKey") && !packedBusy){when(key<token){key:=key+1.U;state:=st("attKey")}.otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}}
++  }else{
++    when(state===st("attNextKey") && !poisoned && !packedQk.get.io.resetRequired){
++      when(packedSelected.get+&1.U<packedKeys){
++        packedSelected.get:=packedSelected.get+1.U;state:=st("attPackedSelect")
++      }.elsewhen(!packedBusy){
++        when(key+packedKeys<=token){key:=key+packedKeys;state:=st("attKey")}
++        .otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}
++      }
++    }
++  }
+   when(state===st("attExpRead")){state:=st("attExpWait")}
+   when(state===st("attExpWait")){calc(ScalarOp.Add,scoreOut,F32.neg(maxScore),"attExpDiff")}
+   when(state===st("attExpDiff")){calc(ScalarOp.ExpNegative,scalarValue,0.U,"attExpResult")}
+@@ -565,6 +658,27 @@
+   }
+   // Last-connect safety checks override a compute transition, before a request.
+   when(matrixFault){fail(Status.Protocol.U)}
+-  when((state===st("denseCompute")||state===st("attDot")||state===st("attPVCompute")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}
++  when((state===st("denseCompute")||(state===(if(enableProductionPackedQk16)st("attPackedIssue")else st("attDot")) && (!enableProductionPackedQk16.B || depth===112.U))||state===st("attPVCompute")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}
+   when(f.address_error_o.orR && state=/=st("finish")&&state=/=st("locked")){fail(Status.Bounds.U)}
++  packedQk.foreach{c=>
++    // Track accepted work, including an acceptance concurrent with a fault.
++    when(packedBusy && io.memory.fire){packedMemDebt.get:=true.B}
++    when(packedMemDebt.get && io.response.fire && io.response.bits.tag===request.tag){packedMemDebt.get:=false.B}
++    when(packedBusy && f.rd_valid_i(0) && f.rd_ready_o(0)){packedLocalDebt.get:=true.B}
++    when(packedLocalDebt.get && f.rd_resp_valid_o(0) && f.rd_resp_ready_i(0)){packedLocalDebt.get:=false.B}
++    when(packedBusy && scalar.io.request.fire){packedScalarDebt.get:=true.B}
++    when(packedScalarDebt.get && scalar.io.result.fire){packedScalarDebt.get:=false.B}
++    // Current poison suppresses new offers; already accepted work drains below.
++    when(packedBusy && (c.io.resetRequired || poisoned)){
++      io.memory.valid:=false.B;f.rd_valid_i:=0.U;scalar.io.request.valid:=false.B
++    }
++    when(state===st("finish") && poisoned){
++      io.response.ready:=packedMemDebt.get && io.response.bits.tag===request.tag
++      f.rd_resp_ready_i:=Mux(packedLocalDebt.get,1.U,0.U)
++      scalar.io.result.ready:=packedScalarDebt.get
++    }
++    when((c.io.resetRequired || (c.io.completion.fire && c.io.completion.bits.error)) && state=/=st("finish") && state=/=st("locked")) {fail(Status.Protocol.U)}
++    when(packedSelectedFault){fail(Status.Numerical.U)}
++    when(state===st("attKey") && !packedBusy && packedTag.get===0.U){fail(Status.Protocol.U)}
++  }
+ }
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+@@ -52,7 +52,8 @@
+ /** No block launch is exposed. One decoded owner operation per transaction;
+   * the arithmetic implementation must return instead of advancing to a phase.
+   */
+-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
++  require(!enableProductionPackedQk16 || (pipelined && Qwen2NumericPolicy.official(numericPolicy) && !bf16Gdn && !bf16QkNormRope && !bf16AttentionCore && !enableH2048RmsBorrower), "production QK16 keeps the official Qwen2 owner profile")
+   require(!enableH2048RmsBorrower || (pipelined && (bf16GdnBlock || bf16AttentionBlock) && s.maxTokens<=128),
+     "H2048 RMS borrower requires a pipelined BF16 block profile with at most 128 tokens")
+   require(!enablePublic21QkvReduction || (pipelined && enableResidentFfn && enableTransposedDown && !overlapSilu && !enableH2048RmsBorrower && Qwen2NumericPolicy.official(numericPolicy)),
+@@ -128,7 +129,7 @@
+     io.pipelineIssues:=0.U;io.pipelineStalls:=0.U
+   }else{
+     require(s.matrixColumns==256 && s.retainedMatrix)
+-    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy))
++    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16))
+     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+     // Elaborate one owner and one bank allocation; the common IO is storage-free.
+     val dense:DenseOwnerIO=if(enableTransposedDown)
+@@ -142,7 +143,7 @@
+     // Do not elaborate the otherwise unused sixteen-lane legacy SFU here.
+     val silu=if(bf16GdnCore||bf16QkNormRope)None else Some(Module(new ScheduledSiluOwner(overlapSilu,enableTileLoan=enableFfnTiles,numericPolicy=numericPolicy,enableBinaryAdd=enablePublic21QkvReduction)))
+     if(enableFfnTiles){dense.tiles.get<>ffnTiles.get;silu.get.io.loan.get<>ffnTileSilu.get}
+-    val matrix=Module(new MatrixPipelineService(enableTransposedDense=enableTransposedDense,enableAccumulatorSeed=enableTransposedSeed))
++    val matrix=Module(new MatrixPipelineService(enableTransposedDense=enableTransposedDense,enableAccumulatorSeed=enableTransposedSeed,enablePackedDrainStatus=enableProductionPackedQk16))
+     if(enableTransposedSeed){dense.prefixWorkspace.get:=io.prefixWorkspace.get}
+     val legacy=Module(new LegacyMatrixStreamClient)
+     val gdn=if(bf16Gdn)Some(Module(new GdnConv4Owner(channels=6144,maxTokens=s.maxTokens)))else None
+@@ -512,6 +513,35 @@
+     matrix.io.port.result.ready:=Mux(useDense,dense.matrix.result.ready,legacy.io.port.result.ready)
+     matrix.io.port.done.ready:=Mux(useDense,dense.matrix.done.ready,legacy.io.port.done.ready)
+     matrix.io.port.abort:=Mux(useDense,dense.matrix.abort,legacy.io.port.abort)
++    if(enableProductionPackedQk16){
++      val p=core.io.packedQk.get;val select=core.io.packedQkActive.get
++      core.io.packedQkStepsDrained.get:=matrix.io.packedStepsDrained.get
++      p.group.ready:=select && matrix.io.port.group.ready;p.step.ready:=select && matrix.io.port.step.ready
++      p.result.valid:=select && matrix.io.port.result.valid;p.result.bits:=matrix.io.port.result.bits
++      p.done.valid:=select && matrix.io.port.done.valid;p.done.bits:=matrix.io.port.done.bits
++      when(select){
++        assert(active && mode===0.U && !useDense,"packed QK lease belongs only to the original core")
++        legacy.io.port.group.ready:=false.B;legacy.io.port.step.ready:=false.B
++        legacy.io.port.result.valid:=false.B;legacy.io.port.done.valid:=false.B
++        dense.matrix.group.ready:=false.B;dense.matrix.step.ready:=false.B
++        dense.matrix.result.valid:=false.B;dense.matrix.done.valid:=false.B
++        matrix.io.port.group.valid:=p.group.valid
++        matrix.io.port.group.bits.opcode:=p.group.bits.opcode
++        matrix.io.port.group.bits.sliceMask:=p.group.bits.sliceMask
++        matrix.io.port.group.bits.tag:=p.group.bits.tag
++        matrix.io.port.group.bits.transposedDense.foreach(_:=false.B)
++        matrix.io.port.group.bits.groupSequence.foreach(_:=0.U)
++        matrix.io.port.step.valid:=p.step.valid;matrix.io.port.step.bits:=p.step.bits
++        matrix.io.port.result.ready:=p.result.ready;matrix.io.port.done.ready:=p.done.ready
++        matrix.io.port.abort:=p.abort
++        if(enableTransposedSeed){
++          matrix.io.port.seed.get.begin.valid:=false.B;matrix.io.port.seed.get.beat.valid:=false.B
++          matrix.io.port.seed.get.ack.ready:=false.B
++          dense.matrix.seed.get.begin.ready:=false.B;dense.matrix.seed.get.beat.ready:=false.B
++          dense.matrix.seed.get.ack.valid:=false.B
++        }
++      }
++    }
+     }
+     if(enablePublic21QkvReduction){
+       val r=qkvRouter.get
+@@ -536,7 +566,10 @@
+       r.io.dmaDrained:= !readDebt && !writeDebt && !memoryDebt
+       // Break reflected owner.abort -> resetRequired feedback with a register.
+       r.io.backendReset:=io.public21BackendReset.get || RegNext(sharedPoison || gdnPoison,false.B)
+-      when(r.io.reductionOwns){matrix.io.port.abort:=dense.matrix.abort || r.io.backendAbort}
++      when(r.io.reductionOwns){
++        if(enableProductionPackedQk16){assert(!core.io.packedQkActive.get,"QKV reduction and packed QK cannot share the Matrix lease")}
++        matrix.io.port.abort:=dense.matrix.abort || r.io.backendAbort
++      }
+     }
+     io.pipelineIssues:=matrix.io.wideSteps;io.pipelineStalls:=matrix.io.stallCycles
+     io.resetRequired:=rejected||gdnPoison||core.io.resetRequired||dense.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala
+@@ -29,13 +29,14 @@
+   * Partial sums may be discarded; final values are credit-buffered. No step
+   * waits for its own result when a different legal context can issue.
+   */
+-class MatrixPipelineService(returnTagBits:Int=0,enableTransposedDense:Boolean=false,enableAccumulatorSeed:Boolean=false) extends Module {
++class MatrixPipelineService(returnTagBits:Int=0,enableTransposedDense:Boolean=false,enableAccumulatorSeed:Boolean=false,enablePackedDrainStatus:Boolean=false) extends Module {
+   val io=IO(new Bundle {
+     val port=Flipped(new MatrixStreamPort(returnTagBits,enableTransposedDense,enableAccumulatorSeed))
+     val acceptedSteps=Output(UInt(64.W)) // physical 512-MAC slice issues
+     val wideSteps=Output(UInt(64.W))
+     val stallCycles=Output(UInt(64.W))
+     val resetRequired=Output(Bool())
++    val packedStepsDrained=if(enablePackedDrainStatus)Some(Output(Bool()))else None
+   })
+   val idle :: command :: running :: ending :: finish :: draining :: locked :: Nil=Enum(7)
+   val state=RegInit(idle)
+@@ -77,6 +78,8 @@
+   val legalContext=x.context<5.U
+   val legalStep=if(enableAccumulatorSeed){legalContext && x.clear=== !(seen|seeded.getOrElse(0.U(5.W)))(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|seeded.getOrElse(0.U(5.W))|UIntToOH(x.context,5)))))}else{legalContext && x.clear=== !seen(x.context) && !closed(x.context) && (!x.finish||(x.last && ((closed|UIntToOH(x.context,5))===(seen|UIntToOH(x.context,5)))))}
+   val work=if(enableAccumulatorSeed){state===running && !endIssued && !io.port.abort && !seedBlocks && !seedPoison}else{state===running && !endIssued && !io.port.abort}
++  // Existing metadata owns retirement; no new debt counter or payload.
++  if(enablePackedDrainStatus){io.packedStepsDrained.get:=work && !tags.io.deq.valid && !io.port.step.valid && !poison}
+   val consumeOutput=(state===running||state===ending||state===draining) && tags.io.deq.valid && allOutValid &&
+     (state===draining|| !tags.io.deq.bits.emit||values.io.enq.ready)
+   val outputBad=(0 until 8).map(i=>selected(i)&&
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
+@@ -10,7 +10,7 @@
+   * payload injection, or second iDMA exists. Metadata and owner traffic share
+   * the same arbiter, mailbox adapter, original upstream backend and AXI port.
+   */
+-class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
++class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
+   require(!enablePublic21QkvReduction || (pipelined && enableResidentFfn && enableTransposedDown && Qwen2NumericPolicy.official(numericPolicy)),"public21 reduction requires the official resident profile")
+   Qwen2NumericPolicy.checkShape(numericPolicy,s)
+   require(!Qwen2NumericPolicy.official(numericPolicy) || (enableResidentFfn && pipelined && !bf16V && !bf16Qkv && !bf16Gdn && !bf16QkNormRope && !bf16AttentionCore),
+@@ -46,7 +46,7 @@
+     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
+   })
+   dontTouch(io)
+-  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy))
++  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16))
+   val hub=Module(new SharedMemoryArbiter(2))
+   val dmaPoison=Wire(Bool())
+   if(enablePublic21QkvReduction){owner.io.public21BackendReset.get:=hub.io.resetRequired || dmaPoison}
+@@ -109,8 +109,8 @@
+   io.pipelineIssues:=owner.io.pipelineIssues;io.pipelineStalls:=owner.io.pipelineStalls
+   io.memoryAccepted:=hub.io.accepted;io.memoryReturned:=hub.io.returned
+ }
+-class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0) extends Module {
+-  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDown,enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
++class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
++  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDown,enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
+   val pre=Module(new HeteroBF16FmaPre);val a=IO(chiselTypeOf(pre.io));a<>pre.io;dontTouch(a)
+   val mul=Module(new HeteroBF16FmaMul);val b=IO(chiselTypeOf(mul.io));b<>mul.io;dontTouch(b)
+   val post=Module(new HeteroBF16FmaPost);val c=IO(chiselTypeOf(post.io));c<>post.io;dontTouch(c)
+--- /dev/null
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala
+@@ -0,0 +1,96 @@
++// SPDX-License-Identifier: Apache-2.0
++package heteronpu.continuous
++import chisel3._
++import chisel3.util._
++
++class PackedAttentionGroup extends Bundle {
++  val tag=UInt(32.W);val pv=Bool();val count=UInt(8.W)
++}
++class PackedAttentionOperands extends Bundle {
++  val index=UInt(8.W);val a=Vec(16,UInt(16.W));val b=Vec(256,UInt(16.W))
++}
++/** Proposed default-off control only: no arithmetic, operands or tile registers.
++  * Consumer must check selected arithmetic and commit writes before result.ready.
++  * stepsDrained MUST connect to the matching service's optional status output.
++  * Operational abort drains accepted work; reset is a global recovery action.
++  */
++class PackedAttentionStreamClient(enabled:Boolean=false) extends Module {
++  val io=IO(new Bundle {
++    val start=Flipped(Decoupled(new PackedAttentionGroup))
++    val operands=Flipped(Decoupled(new PackedAttentionOperands))
++    val result=Decoupled(new MatrixStreamResult)
++    val completion=Decoupled(new MatrixStreamDone)
++    val port=new MatrixStreamPort
++    val pause=Input(Bool());val stepsDrained=Input(Bool());val pauseGranted=Output(Bool())
++    val abort=Input(Bool());val resetRequired=Output(Bool())
++    val successAccepted=Output(Bool())
++  })
++  io.start.ready:=false.B;io.operands.ready:=false.B
++  io.result.valid:=false.B;io.result.bits:=io.port.result.bits
++  io.completion.valid:=false.B;io.completion.bits:=0.U.asTypeOf(new MatrixStreamDone)
++  io.port.group.valid:=false.B;io.port.group.bits:=0.U.asTypeOf(new MatrixStreamGroup)
++  io.port.step.valid:=false.B;io.port.step.bits:=0.U.asTypeOf(new MatrixStreamStep)
++  io.port.result.ready:=false.B;io.port.done.ready:=false.B;io.port.abort:=false.B
++  io.pauseGranted:=false.B;io.resetRequired:=false.B
++  io.successAccepted:=false.B
++  if(enabled){
++    val idle::opening::issuing::awaitResult::awaitDone::draining::reply::locked::Nil=Enum(8)
++    val state=RegInit(idle)
++    val descriptor=Reg(new PackedAttentionGroup) // 41 control bits
++    val index=RegInit(0.U(8.W));val poison=RegInit(false.B)
++    val finalIndex=Mux(descriptor.pv,descriptor.count-1.U,7.U)
++    val active=state===issuing||state===awaitResult||state===awaitDone||state===draining
++    val badResult=io.port.result.bits.context=/=0.U|| !io.port.result.bits.last||io.port.result.bits.error
++    val matchingDone=io.port.done.bits.tag===descriptor.tag
++    io.resetRequired:=poison
++    io.successAccepted:=io.completion.fire && !io.completion.bits.error
++    io.start.ready:=state===idle && !io.abort
++    io.port.group.valid:=state===opening && !io.abort
++    io.port.group.bits.tag:=descriptor.tag
++    io.port.group.bits.opcode:=Mux(descriptor.pv,0x24.U,0x23.U)
++    io.port.group.bits.sliceMask:=Mux(descriptor.pv,0x0f.U,0xff.U)
++    val canOffer=state===issuing && !io.pause && !io.abort && !poison && !io.port.result.valid && !io.port.done.valid
++    val legalIndex=io.operands.bits.index===index
++    io.port.step.valid:=canOffer && io.operands.valid && legalIndex
++    io.port.step.bits.a:=io.operands.bits.a;io.port.step.bits.b:=io.operands.bits.b
++    io.port.step.bits.context:=0.U;io.port.step.bits.clear:=index===0.U
++    io.port.step.bits.last:=index===finalIndex;io.port.step.bits.finish:=index===finalIndex
++    io.port.step.bits.emit:=index===finalIndex
++    io.operands.ready:=canOffer && Mux(legalIndex,io.port.step.ready,true.B)
++    io.pauseGranted:=state===issuing && io.pause && io.stepsDrained && !io.abort && !poison && !io.port.result.valid && !io.port.done.valid
++    // No copy: consumer sees the physical FIFO head for its complete lifetime.
++    io.result.valid:=state===awaitResult && io.port.result.valid && !badResult && !io.abort && !poison
++    io.port.result.ready:=state===draining || (state===awaitResult && (badResult||io.result.ready) && !io.abort)
++    io.port.done.ready:=(state===awaitDone||state===draining) && matchingDone
++    io.port.abort:=state===draining || (active && io.abort)
++    io.completion.valid:=state===reply;io.completion.bits.tag:=descriptor.tag;io.completion.bits.error:=poison||io.abort
++    when(io.start.fire){
++      descriptor:=io.start.bits;index:=0.U
++      val legal=io.start.bits.tag=/=0.U && io.start.bits.count=/=0.U &&
++        Mux(io.start.bits.pv,io.start.bits.count<=128.U,io.start.bits.count<=16.U)
++      when(legal){state:=opening}.otherwise{poison:=true.B;state:=reply}
++    }
++    when(io.port.group.fire){state:=issuing}
++    when(io.operands.fire){
++      when(!legalIndex){poison:=true.B;state:=draining}
++      .elsewhen(index===finalIndex){state:=awaitResult}
++      .otherwise{index:=index+1.U}
++    }
++    when(io.port.result.fire && state===awaitResult){
++      when(badResult){poison:=true.B;state:=draining}.otherwise{state:=awaitDone}
++    }
++    when(io.port.done.fire){
++      when(io.port.done.bits.error){poison:=true.B}
++      state:=reply
++    }
++    when(io.completion.fire){state:=Mux(poison||io.abort,locked,idle)}
++    // Decoupled completion is cancellable until ACK; abort upgrades error.
++    when(state===reply && io.abort){poison:=true.B}
++    // Unexpected/foreign terminal signals never retire an unrelated tag.
++    when(active && ((io.port.result.valid && state=/=awaitResult && state=/=draining) ||
++      (io.port.done.valid && (!matchingDone || (state=/=awaitDone && state=/=draining))))){poison:=true.B;state:=Mux(io.port.done.fire,reply,draining)}
++    when(io.abort && state=/=idle && state=/=reply && state=/=locked){
++      poison:=true.B;state:=Mux(state===opening||io.port.done.fire,reply,draining)
++    }
++  }
++}

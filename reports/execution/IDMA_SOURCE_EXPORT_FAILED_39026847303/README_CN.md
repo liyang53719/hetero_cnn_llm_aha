@@ -1,0 +1,13 @@
+# 首次固定 iDMA source-only 导出失败证据
+
+Run 39026847303 / job 117379407493 / attempt 1，提交95db862b5b79a86dca7fac98343441d53f7f7bee。终态failure，artifact数量0，没有可复用provider包或生成RTL哈希。
+
+28+28冷测及固定工具bootstrap成功。导出在生成 SOURCE_CLOSURE.json 时拒绝未解析的 uvm_macros.svh，后续artifact验证与上传跳过。由报错位置与已发布脚本控制流可知，前置make两目标、Bender文件表、生成后依赖检查、git archive和generated merge已经返回成功；没有逐stage私有receipt可供独立验签，不应称完整source闭包通过。
+
+固定common_cells/src/assert_rpt_pkg.sv第10行包含该header，整个package在ifdef UVM分支内。iDMA及七依赖固定Bender.yml没有UVM/defines配置，发布命令没有-D，支持扫描器错误遍历inactive分支的诊断。实际运行filelist没有上传，原错误没有报告include来源文件，因此此处明确保留来源唯一性和实际define集合的证据边界，不虚构运行产物。
+
+日志摘要及原解码日志SHA256在RUN_OUTCOME.json。此提交包不包含原日志、runner路径、主机或进程身份、private receipt/proof或源码半成品。失败后文件cleanup终态没有独立证据；Runner通用cleanup提示不能替代原absence proof。
+
+v6修复候选采用实际filelist宏集合与有界条件include遍历，并追加always安全白名单摘要；17文件哈希封存，64+64冷测及独审SOURCE-ONLY GO。此记录时v6尚未发布或运行，不能把候选通过说成真实source export/RTL验收通过。原run没有重跑。
+
+官方source/tool pins完整列在SOURCE_PINS.json。版本及官方锁保持，不采用旧contract lock内不一致AXI/common_cells版本。新的CI执行仍须明确授权。

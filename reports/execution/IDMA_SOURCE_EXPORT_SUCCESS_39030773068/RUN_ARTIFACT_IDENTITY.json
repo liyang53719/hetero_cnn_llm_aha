@@ -1,0 +1,126 @@
+{
+  "run_id": 39030773068,
+  "head_sha": "0077355800e3040dfdd6d79def697f3ff6456c2c",
+  "jobs": {
+    "jobs": [
+      {
+        "id": 117390605122,
+        "name": "source-export",
+        "status": "completed",
+        "conclusion": "success",
+        "run_id": 39030773068,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Cold validation only",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Fixed source generation helpers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Export pinned sources, no EDA",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Verify artifact scope under original deadline",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Safe outcome summary only",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          }
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "artifacts": [
+      {
+        "id": 12100621065,
+        "name": "idma-safe-outcome-0077355800e3040dfdd6d79def697f3ff6456c2c-1",
+        "size_in_bytes": 3021,
+        "url": "https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha/actions/artifacts/12100621065",
+        "archive_download_url": "https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha/actions/artifacts/12100621065/zip",
+        "expired": false,
+        "created_at": "2026-10-17T12:00:18Z",
+        "expires_at": "2026-11-16T12:00:17Z",
+        "updated_at": "2026-10-17T12:00:18Z",
+        "digest": "sha256:63d63333002a2eba08a11c9f7601325c1768ad9dc722c8b36d47837907c97f93",
+        "workflow_run": {
+          "id": 39030773068,
+          "repository_id": 1345575853,
+          "head_repository_id": 1345575853,
+          "head_branch": "main",
+          "head_sha": "0077355800e3040dfdd6d79def697f3ff6456c2c"
+        }
+      },
+      {
+        "id": 12099239717,
+        "name": "idma-pinned-source-rebuild-0077355800e3040dfdd6d79def697f3ff6456c2c-1",
+        "size_in_bytes": 9926876,
+        "url": "https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha/actions/artifacts/12099239717",
+        "archive_download_url": "https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha/actions/artifacts/12099239717/zip",
+        "expired": false,
+        "created_at": "2026-10-17T12:00:17Z",
+        "expires_at": "2026-11-16T12:00:15Z",
+        "updated_at": "2026-10-17T12:00:17Z",
+        "digest": "sha256:a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce",
+        "workflow_run": {
+          "id": 39030773068,
+          "repository_id": 1345575853,
+          "head_repository_id": 1345575853,
+          "head_branch": "main",
+          "head_sha": "0077355800e3040dfdd6d79def697f3ff6456c2c"
+        }
+      }
+    ]
+  }
+}

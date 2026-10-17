@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "excluded_idma_symlinks": {
+    "target/sim/vcs/jobs": {
+      "mode": "120000",
+      "blob_sha1": "cbe7c334ae570ba7cb8529f09c572e4a8eff81df",
+      "target": "../../../jobs",
+      "target_sha256": "0622eec76eb89432908d18c9d711c5eb05703e83cc2d77c7f0b90c1c8acd1d9d",
+      "reason": "non-RTL simulator jobs convenience link; excluded from zero-symlink source-only export"
+    },
+    "target/sim/vsim/jobs": {
+      "mode": "120000",
+      "blob_sha1": "cbe7c334ae570ba7cb8529f09c572e4a8eff81df",
+      "target": "../../../jobs",
+      "target_sha256": "0622eec76eb89432908d18c9d711c5eb05703e83cc2d77c7f0b90c1c8acd1d9d",
+      "reason": "non-RTL simulator jobs convenience link; excluded from zero-symlink source-only export"
+    }
+  }
+}

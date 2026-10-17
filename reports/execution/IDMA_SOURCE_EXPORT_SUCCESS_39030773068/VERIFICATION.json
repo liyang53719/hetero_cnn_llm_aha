@@ -1,0 +1,58 @@
+{
+  "status": "PASS_SOURCE_EXPORT_AND_HASH_VERIFICATION_ONLY",
+  "run_id": 39030773068,
+  "job_id": 117390605122,
+  "head_sha": "0077355800e3040dfdd6d79def697f3ff6456c2c",
+  "files_verified": 927,
+  "export_bytes": 33744483,
+  "metadata_hashes": {
+    "SHA256SUMS.json": "a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19",
+    "COMMITS.json": "41b092ed490aca4bedfd4602fc93e7f6890d25aa918df4fa0e0721fe1f0c7d6e",
+    "SOURCE_CLOSURE.json": "a3161f06be82894bbab48e3efae325e868385ea204d5f2aab47978ce9bd10aa1",
+    "SOURCE_EXPORT_POLICY.json": "f36cf6ed5868f9d50dd3a74253415cc6d99d22e2db2f240c32c61c0fa593ab95"
+  },
+  "generated_hashes": {
+    "idma/target/rtl/idma_generated.sv": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2",
+    "idma/target/rtl/include/idma/compute.svh": "079a48cf969b4bf005672753cf7690252761f4396f0b25c2828a3254645f8373",
+    "deps/tech_cells_generic/src/rtl/tc_clk.sv": "93e9747504fa1da6473560341febbfae6c5e917768633a84fc9ef12299293207",
+    "idma/Bender.lock": "9e6c33f898dad20fd1b29cf8b07647b7d55fe8b42c36bd5cd72586fc2606557e"
+  },
+  "profile": {
+    "builtin_list_scope": "verified_known_macros_not_exhaustive",
+    "engine": "Verilator",
+    "version": "5.032",
+    "builtin_macros_retained": [
+      "VERILATOR",
+      "verilator",
+      "verilator3"
+    ],
+    "options": [
+      "-E",
+      "--no-std",
+      "--relative-includes",
+      "--MMD"
+    ],
+    "single_compilation_unit": true
+  },
+  "initial_filelist_defines": {
+    "TARGET_ASIC": "",
+    "TARGET_RTL": "",
+    "TARGET_SYNTHESIS": "",
+    "TARGET_VERILATOR": ""
+  },
+  "source_files": 294,
+  "include_directories": 8,
+  "admitted_inputs": 312,
+  "actual_dependencies": 309,
+  "preprocessor_stdout_bytes": 6288028,
+  "preprocessor_stdout_sha256": "19eb58b48f9605c62446bbc28bbbb3f65bb7d497f8ca2fc336e63ecc7f0911e1",
+  "dependency_file_sha256": "b15489eb7da1668e5493286a35dd673a7411e8d826d772b0dae32de60dc5daf9",
+  "stages": 58,
+  "all_recorded_stage_cleanup_verified": true,
+  "cleanup_scope": "recorded_stages_only_not_global_absence",
+  "global_cleanup_verified": false,
+  "zero_export_symlinks": true,
+  "safe_metadata_scan_pass": true,
+  "preprocessed_output_retained_in_artifact": false,
+  "hardware_elaboration_or_numeric_validation": false
+}

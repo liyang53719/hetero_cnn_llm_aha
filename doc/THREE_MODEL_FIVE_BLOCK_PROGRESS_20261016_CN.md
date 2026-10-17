@@ -311,3 +311,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 信任边界明确为固定可信源码 pins、严格 filelist 参数/直接 include 路径预检、输入与工具前后 hash、事后 .d 未知依赖拒绝；不是 OS sandbox、syscall 读取审计或任意恶意宏防护。使用工具已知内建宏，不继承 v6“无隐式宏”的口径；未来 RTL 必须使用同一 profile 或重新验证。未知动态 include/不支持语法应停下逐项审查，不宽放。手写 conditional_closure.py 和 test_conditionals.py 本批显式删除，旧 Git 历史可恢复。
 - 20 分钟 job、900 秒源导出＋终验、180 秒单 stage 与原 stop 内严格 absence barrier 保持；新增 -E stdout 专用32MiB采样/末检限，单文件64MiB硬限、4GiB AS、1CPU、源树1GiB采样 soft cap。soft cap 不是硬磁盘配额，不自动扩大预算或重试。成功源树仅 success() 上传，always 白名单安全摘要不替代最终 job 或全局 cleanup 证明。
 - 本批只发布上述源/安全摘要与本进度更新，不等待或并入正在独立推进的 FMA 结果。同一 source-only YAML 修复发布只授权一次新尝试，原其他 workflow、465 个模型运行源字节不变。模型限定 M128 1/5、指定27门禁与已有内容身份保持；full RTL 0/5、全29/全张量覆盖、真实供数与80%/90%实测验收仍待闭合。
+
+
+## 2026-10-17 12:07 UTC：固定 iDMA 源导出成功与四个既有 FMA 组件接口门
+
+- **done：固定 iDMA source-export v8 实际成功。** [8 文件安全证据](../reports/execution/IDMA_SOURCE_EXPORT_SUCCESS_39030773068/README_CN.md)绑定 commit0077355800e3040dfdd6d79def697f3ff6456c2c、run39030773068/job117390605122、attempt1。实际源 artifact12099239717 已下载并独立逐文件核验，927 manifest 条目通过，另 manifest 自身共928文件、33,744,483字节；源 ZIP SHA a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce。此小包仅保留安全身份与复核摘要，不包含该33MB物化源树。
+- 实际294个 source、8个 include目录、312个准入输入与309个记录依赖；固定 Verilator5.032 的 -E --no-std --relative-includes --MMD 单 compilation-unit profile 通过。初始宏为 TARGET_ASIC/TARGET_RTL/TARGET_SYNTHESIS/TARGET_VERILATOR，已知工具内建宏保留，UVM 不在初始集合。预处理 stdout6,288,028B、stderr0B；未来消费者改变 profile 必须重验。此门证明固定源生成、物化、预处理闭包与hash一致性，不代表 Host 编译、综合、动态协议或数值验收，也不是 OS sandbox/任意恶意宏防护。
+- 58个记录 stage 均 exit0/cleanup verified，范围仅原锚定组与已观察身份；global_cleanup_verified=false。原 stdout/.d/私有 proof 未随 artifact 保留，安全摘要不能重新认证原进程身份或全局 absence。原两次 source-export 失败39026847303/39028560366和微资格v2失败均保留，微资格v3仍单独限定。原900秒总/180秒stage/32MiB stdout采样末检与1GiB树soft cap不变。
+- 源 artifact 为30天保留，官方到期记录为2026-11-16；不把它当永久源归档。已发布18文件脚本、官方 source/tool pins、锁和实际内容hash用于后续经授权的独立重建；新输出/工具记录/ZIP封装或路径依赖可能不同，不重跑旧run、不自动继承PASS或静默接受内容漂移。本批不修改任何 workflow，因此不会再次触发 source-export。
+- **done：既有四段 FMA 组件 SV 发射与接口核验。** [22 文件可移植 recipe/安全投影](../candidates/qwen2_resident_matrix/production_qkv_reduction/fma_components/README_CN.md)记录单次v2成功：93源，原550类逐hash复用，独立App3类，8.617秒；HeteroBF16FmaPre/Mul/Post/Round四份SystemVerilog共8个模块定义，端口与固定 seed-enabled Matrix lane 四段绑定/位宽匹配。root及独审12+12冷测通过；原计划/未执行v1历史与实际v2结果分开，安全投影不是原receipt字节。
+- 该门仅四组件SV与interface-only；没有算术测试、完整Host链接、动态债务、性能或完整block RTL通过。此包没有生成SV/IR/classes/JAR/原日志/宿主身份，保留重建脚本与pins；独立上游120秒类编译和本组件90秒总预算不可混同。本批没有再运行Java/firtool或短Kernelbench，短Kernelbench仍未执行。
+- 本批30个add-only源/安全证据文件＋本plan更新；原465模型运行源和整个.github字节保持不变。模型限定M128 1/5、指定27门禁及已有内容身份保留，full RTL 0/5，全29/全张量覆盖、端到端真实供数和80%/90%实测目标仍未完成。

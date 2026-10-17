@@ -1,0 +1,1023 @@
+{
+  "receipt": {
+    "status": "PASS_SOURCE_EXPORT_ONLY",
+    "scope": "SOURCE_EXPORT_ONLY",
+    "eda_executed": false,
+    "preprocessor_requested": true,
+    "hardware_compilation_executed": false,
+    "idma_pin": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+    "python_sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+    "python_version": "3.12.3",
+    "bender_sha256": "2d047dcd8682fb53dec17a341bd30e0116246301b2db9296e7c322415f28925f",
+    "uv_sha256": "a0be2873b1bcbdb4b4bea06943924e3c94828e010a0b6e3cb35c6327130427d1",
+    "verilator_sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+    "files_verified": 927,
+    "manifest_sha256": "a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19",
+    "stages": [
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 0,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 669,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 14,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 0,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 2868,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 10,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 0,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 32950,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 100,
+        "stderr_bytes": 586
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 0,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 35222,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 0,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 6185938,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 119
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 32581008,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 38
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 32583270,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56266542,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 42348,
+        "stderr_bytes": 799
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56311205,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 101,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56313452,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56315665,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56317978,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 101,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56320227,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56322441,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56324765,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 108,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56327021,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56329240,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56331573,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 110,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56333829,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56336049,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56338391,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 117,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56340656,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56342879,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56345212,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 101,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56347461,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56349675,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56352008,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 116,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56354273,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 2,
+          "external": 0,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 56356502,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197770469,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 19207,
+        "stderr_bytes": 315
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197816634,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 43800,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197818914,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197821131,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197823301,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197825518,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197827733,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197829993,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197832206,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197834465,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197836687,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197838953,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197841177,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197843445,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197845677,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197847952,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197850168,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197852428,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 41,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 197854654,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 224501367,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 26644480,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 224503691,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 147,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 250998544,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 133120,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 255012668,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 3911680,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 259013548,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 215040,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 260407402,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 1228800,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 261487571,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 61440,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 261745366,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 215040,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 262048379,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 122880,
+        "stderr_bytes": 0
+      },
+      {
+        "exit": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "working_tree_symlinks": {
+          "internal": 45,
+          "external": 1,
+          "dangling": 0
+        },
+        "peak_sampled_tree_bytes": 270384561,
+        "tree_limit_bytes": 1073741824,
+        "tree_limit_kind": "sampled_soft_limit_not_quota",
+        "file_hard_limit_bytes": 67108864,
+        "stdout_bytes": 6288028,
+        "stderr_bytes": 0
+      }
+    ],
+    "source_artifact_bytes": 33744483
+  },
+  "tools": {
+    "bender": {
+      "sha256": "2d047dcd8682fb53dec17a341bd30e0116246301b2db9296e7c322415f28925f",
+      "archive_sha256": "05c2c9c82ddc0b3f45141a1e30dbcfba3b9a98a7d2ad0f9003651c0655c7a2fe",
+      "url": "https://github.com/pulp-platform/bender/releases/download/v0.32.0/bender-x86_64-unknown-linux-gnu.tar.xz"
+    },
+    "uv": {
+      "sha256": "a0be2873b1bcbdb4b4bea06943924e3c94828e010a0b6e3cb35c6327130427d1",
+      "archive_sha256": "920cbcaad514cc185634f6f0dcd71df5e8f4ee4456d440a22e0f8c0f142a8203",
+      "url": "https://github.com/astral-sh/uv/releases/download/0.8.17/uv-x86_64-unknown-linux-gnu.tar.gz"
+    },
+    "verilator": {
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+      "archive_sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2",
+      "url": "https://deb.debian.org/debian/pool/main/v/verilator/verilator_5.032-1+b2_amd64.deb"
+    }
+  }
+}

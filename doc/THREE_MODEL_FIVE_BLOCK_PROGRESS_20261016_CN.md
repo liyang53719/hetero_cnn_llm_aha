@@ -392,3 +392,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - todo：同一官方M128冻结输入/参考下的完整Host/block RTL数值验收，及固定资源完整周期利用率实测；完整block RTL保持0/5，90%目标不降低。
 
 只提交项目源码/项目源SHA和说明，不含权重、原始输入参考、生成模型、class/JAR/JDK、系统工具链/头文件/库环境清单或原始进程日志。此前环境清单公开许可问题保持独立待确认。新提交远端与CI仍按其SHA独立核验，不继承旧提交检查。
+
+
+## 2026-10-17 23:01 UTC：SiLU 观察器纯源码保存与实际 Host RTL 进度
+
+- done：保存六文件源码小片 development_snapshots/canonical_host_silu_observer_source_20261017；两项原源码逐字保留，其余为明确标记的便携测试、逻辑信号投影与中文说明。独立目录 normal/-O 各 28 项通过；仅 Python 合同/源码检查，没有编译 C++ 或执行 RTL。
+- done：95 源新编译 569 class 后，真实 tapped Host CHIRRTL 已生成。原结构检查 FAIL 保留；同 IR 窄 offline 复核通过，差异仅两 mport 自动名与一 assertion 源位置，未重发 IR。
+- done：firtool 生成 76,366,612 B Host 共同命名空间 SV；59 模块、83 Host 叶/833 payload、9 逻辑 tap 2604 bit 有限库存独核通过。外层错误执行说明文字导致 exit127，独立 Python exit 未记录；firtool exit0 和持久产物检查分开保留，不能追认整个 wrapper 成功。
+- done：实际 SV SiLU 来源索引 468 pre/13 post，467 pre 直名与1现存 wire 别名；尚无生成 C++ 绑定。六文件仅发布逻辑 module.signal/width 派生投影，不上传原 SV、宿主路径或工具链库存。
+- ongoing：首次 Host hierarchy 规划因不可达 cut 缺 clr_i 和真实 DMA BurstLen 字面量宽度警告失败；独立源码审证明精确双删与 4'd8→32'd8 同值替换。后继实际捕获已在首 MAKE 前按预期77停止，外层exit0；实际独审进行中，未 make/child codegen/link/sim。
+- todo：生成真实 Host/endpoint C++、实现 GeneratedBinding 与 PhysicalObserver、27节点实际捕获和固定 M128 全 block 回放。四入口仍 Incomplete；source 索引、库存或规划不得替代运行数值证据。
+- 五 block：Qwen2 M128 已有27项限定模型门禁通过；其他四个未新增完整 M128。完整 block RTL 0/5，1024/1224未启动。固定4096 MAC全 block 周期口径下无RTL利用率实测，80%/90%目标未验收。
+- 本批不含权重、local.npz/remote.npz、生成物、系统工具链/头文件/库路径版本清单；相关待批准内容不因本批而获准上传。

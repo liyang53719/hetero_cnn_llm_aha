@@ -1,0 +1,290 @@
+{
+  "scope": "DERIVED_LOGICAL_BINDING_REQUIREMENTS_NOT_ORIGINAL_BYTES_NOT_RUNTIME_BINDING",
+  "generated_binding_complete": false,
+  "host_abi_changed": false,
+  "new_rtl_taps": 0,
+  "requires_actual_profile": [
+    "official numeric policy",
+    "pipelined",
+    "enableResidentFfn",
+    "enablePublic21QkvReduction",
+    "enableTransposedDown",
+    "overlapSilu=false",
+    "16 lanes"
+  ],
+  "groups": [
+    {
+      "name": "clock_reset",
+      "source_semantic_leaves": [
+        "clock",
+        "reset"
+      ],
+      "widths": {
+        "clock": 1,
+        "reset": 1
+      },
+      "semantics": "Same actual model instance; low before rising, high after settled eval. Observer records once per rising edge, never per eval.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "HostBlockTop"
+      ]
+    },
+    {
+      "name": "router_selection",
+      "source_semantic_leaves": [
+        "state",
+        "fault",
+        "bad",
+        "io.backendReset",
+        "io.residentHost.abort",
+        "io.residentHost.resetRequired"
+      ],
+      "widths": {
+        "state": 2,
+        "booleans": 1
+      },
+      "semantics": "ResidentRun=3 from Enum(idle,ordinary,reducing,residentRun). Do not infer resident selection from !reductionOwns.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "Public21QkvReductionRouter"
+      ]
+    },
+    {
+      "name": "resident_group_accept",
+      "source_semantic_leaves": [
+        "io.residentHost.request.valid/ready/bits",
+        "io.resident.request.valid/ready/bits"
+      ],
+      "widths": {
+        "identity": 32,
+        "gate.tag": 32,
+        "up.tag": 32,
+        "act.tag": 32,
+        "gate.m/up.m/act.m": 16
+      },
+      "semantics": "Read identity,gate.tag,up.tag,act.tag,gate.m,up.m,act.m on both actual handshakes. identity17 differs from actual act owner18.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "Public21QkvReductionRouter"
+      ]
+    },
+    {
+      "name": "resident_group_terminal",
+      "source_semantic_leaves": [
+        "io.residentHost.result.valid/ready/bits.tag/status"
+      ],
+      "widths": {
+        "tag": 32,
+        "status": 8
+      },
+      "semantics": "Actual routed result fire; successful group terminal alone is not B retirement or Host terminal.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "Public21QkvReductionRouter"
+      ]
+    },
+    {
+      "name": "resident_abort",
+      "source_semantic_leaves": [
+        "io.group.abort",
+        "io.group.resetRequired"
+      ],
+      "widths": {
+        "booleans": 1
+      },
+      "semantics": "Observe each edge including after earlier provisional capture; any abort is fatal.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "FfnResidentCoordinator"
+      ]
+    },
+    {
+      "name": "bridge_call",
+      "source_semantic_leaves": [
+        "io.start.valid/ready/bits",
+        "call",
+        "state",
+        "bad",
+        "io.abort",
+        "poison",
+        "io.complete"
+      ],
+      "widths": {
+        "identity": 32,
+        "ng": 16,
+        "rows": 8,
+        "cols": 8,
+        "state": 4
+      },
+      "semantics": "Latch coordinates only from actual accepted call, enforce128x160 and ng multiples160; state ordinals fixed by source Enum.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "FfnTileSiluBridge"
+      ]
+    },
+    {
+      "name": "bridge_tile_state",
+      "source_semantic_leaves": [
+        "io.tiles.state[0..2].live/sealedTile/identity/ng/rows/cols/expected/produced/consumed",
+        "io.tiles.drained",
+        "io.silu.drained"
+      ],
+      "widths": {
+        "booleans": 1,
+        "identity": 32,
+        "ng": 16,
+        "rows": 8,
+        "cols": 8,
+        "expected/produced/consumed": 11
+      },
+      "semantics": "Read real slot tags and counters; response consumes at edge so pre-edge consumed==index. No inferred bank validity.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "FfnTileSiluBridge"
+      ]
+    },
+    {
+      "name": "bridge_tile_io",
+      "source_semantic_leaves": [
+        "io.tiles.read.valid/ready/bits",
+        "io.tiles.response.valid/ready/bits.key/value/error",
+        "io.tiles.write.valid/ready/bits.key/value"
+      ],
+      "widths": {
+        "identity": 32,
+        "ng": 16,
+        "index": 11,
+        "slot": 2,
+        "value": 512,
+        "booleans": 1
+      },
+      "semantics": "Match response only to prior accepted read. Gate slot0 then up slot1; output slot2 is act product, never SiLU intermediate.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "FfnTileSiluBridge"
+      ]
+    },
+    {
+      "name": "bridge_loan_io",
+      "source_semantic_leaves": [
+        "io.silu.request.valid/ready/bits.gate/up",
+        "io.silu.result.valid/ready/bits.value/error"
+      ],
+      "widths": {
+        "gate/up/value": "16x32",
+        "booleans": 1
+      },
+      "semantics": "The resident port has NO binaryAdd field. Match exact gate hold and same-edge up response to actual bridge loan request.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "FfnTileSiluBridge"
+      ]
+    },
+    {
+      "name": "router_loan_io",
+      "source_semantic_leaves": [
+        "io.residentVector.request/result",
+        "io.vector.request/result"
+      ],
+      "widths": {
+        "gate/up/value": "16x32",
+        "io.vector.request.bits.binaryAdd": 1
+      },
+      "semantics": "Read both request/result valid+ready and payloads. Only shared io.vector has binaryAdd, selected resident forces false; retain actual r selection.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "Public21QkvReductionRouter"
+      ]
+    },
+    {
+      "name": "owner_loan_io",
+      "source_semantic_leaves": [
+        "VectorSiluOwner.io.loan.request/result",
+        "VectorSiluOwner.canonicalLoanContextTap.active/poison/abort"
+      ],
+      "widths": {
+        "gate/up/value": "16x32",
+        "binaryAdd": 1,
+        "active/poison/abort": 1
+      },
+      "semantics": "Active follows actual owner loan acceptance and clears on real vector result.fire. Never infer from raw tap valid.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "VectorSiluOwner"
+      ]
+    },
+    {
+      "name": "vector_loan_io",
+      "source_semantic_leaves": [
+        "SiluVectorUnit.io.request.valid/ready/bits",
+        "SiluVectorUnit.io.result.valid/ready/bits",
+        "input.gate/up/binaryAdd"
+      ],
+      "widths": {
+        "gate/up/value": "16x32",
+        "binaryAdd/error": 1
+      },
+      "semantics": "Compare every original payload along five request/result interfaces, and retain exact latched operands during active loan.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "SiluVectorUnit"
+      ]
+    },
+    {
+      "name": "vector_phase_and_raw_tap",
+      "source_semantic_leaves": [
+        "SiluVectorUnit.state/phase/allReady/error/value",
+        "SiluVectorUnit.canonicalSiluTap.valid/value"
+      ],
+      "widths": {
+        "state": 2,
+        "phase": 3,
+        "allReady/error/valid": 1,
+        "value": "16x32"
+      },
+      "semantics": "raw event is issue phase5 of existing phase4 materialized register. Capture unchanged lane bits only after actual edge, matching live resident loan. Reject binaryAdd or phase5 product.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "SiluVectorUnit"
+      ]
+    },
+    {
+      "name": "host_failure_sideband",
+      "source_semantic_leaves": [
+        "io.resetRequired"
+      ],
+      "widths": {
+        "resetRequired": 1
+      },
+      "semantics": "Host aggregate poison participates in current and post-edge rejection; no new external Host ABI.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "HostBlockTop"
+      ]
+    },
+    {
+      "name": "profile_and_hierarchy",
+      "source_semantic_leaves": [
+        "HostBlockCollection.top.owner.qkvRouter",
+        "HostBlockCollection.top.owner.resident.bridge",
+        "HostBlockCollection.top.owner.silu.dut.vector"
+      ],
+      "widths": {},
+      "semantics": "Source-level logical routes only, NOT generated C++ names. Validate actual source/elaboration profile and each symbol+width after generation. Missing fields remain INCOMPLETE. ScheduledSiluOwner selects VectorSiluOwner with overlap=false.",
+      "generated_cpp_symbol": null,
+      "source_modules": [
+        "HostBlockCollection",
+        "HostBlockTop",
+        "QwenOwnerKernel",
+        "Public21QkvReductionRouter",
+        "FfnResidentCoordinator",
+        "FfnTileSiluBridge",
+        "VectorSiluOwner",
+        "SiluVectorUnit"
+      ]
+    }
+  ],
+  "sampling": "One settled low-clock snapshot, then actual model rising edge and settled high snapshot. pre events determine fires; post controls validate transitions. No post payload used to replace pre capture.",
+  "required_later": "Resolve every leaf in actual generated hierarchy or fail/incomplete; type/signal mapping must receive separate source and runtime review.",
+  "derivation": "Retains logical contract fields; replaces source-location strings with logical module names. No environment or generated runtime symbol metadata."
+}

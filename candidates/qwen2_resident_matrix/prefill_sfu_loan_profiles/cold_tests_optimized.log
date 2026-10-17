@@ -1,0 +1,18 @@
+test_abort_ready_same_edge_never_exposes_success (test_loan.Tests.test_abort_ready_same_edge_never_exposes_success) ... ok
+test_abort_rejects_new_request_atomically (test_loan.Tests.test_abort_rejects_new_request_atomically) ... ok
+test_binary_add_uses_existing_true_profile_no_division (test_loan.Tests.test_binary_add_uses_existing_true_profile_no_division) ... ok
+test_early_error_without_division_still_retires_and_poisons (test_loan.Tests.test_early_error_without_division_still_retires_and_poisons) ... ok
+test_explicit_profiles_and_no_primitive_interface (test_loan.Tests.test_explicit_profiles_and_no_primitive_interface) ... ok
+test_mode_requires_canonical_string_atomically (test_loan.Tests.test_mode_requires_canonical_string_atomically) ... ok
+test_no_default_ready_or_supply (test_loan.Tests.test_no_default_ready_or_supply) ... ok
+test_poison_blocks_future_request_and_profiles_do_not_mix (test_loan.Tests.test_poison_blocks_future_request_and_profiles_do_not_mix) ... ok
+test_production_abort_waits_and_privately_drains (test_loan.Tests.test_production_abort_waits_and_privately_drains) ... ok
+test_production_held_result_abort_private_without_external_ack (test_loan.Tests.test_production_held_result_abort_private_without_external_ack) ... ok
+test_pulses_reserved_and_cannot_drop_or_duplicate (test_loan.Tests.test_pulses_reserved_and_cannot_drop_or_duplicate) ... ok
+test_result_held_identity_stable_and_no_same_edge_reaccept (test_loan.Tests.test_result_held_identity_stable_and_no_same_edge_reaccept) ... ok
+test_true_vs_false_same_abort_result_signals (test_loan.Tests.test_true_vs_false_same_abort_result_signals) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.001s
+
+OK

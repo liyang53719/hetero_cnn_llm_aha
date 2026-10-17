@@ -1,0 +1,52 @@
+[
+  {
+    "root": "qk16_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+    "sha256": "4375ccf715cf408975c3e45ae595955767b824404ef8337bb260ed807527dc1e"
+  },
+  {
+    "root": "qk16_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala",
+    "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+  },
+  {
+    "root": "qk16_source",
+    "path": "chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala",
+    "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5"
+  },
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+    "sha256": "8a2c2d41e68719fb2714e3658b45ec0cd8bbe9f9173dbd9c9a91e7344f16e995"
+  },
+  {
+    "root": "production_source",
+    "path": "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala",
+    "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d"
+  },
+  {
+    "root": "candidate_tree",
+    "path": "attention_raw_scratch/scratch.patch",
+    "sha256": "73e915e84a2bd3db520f401163f61a52f5e9f124e9c04c3176179086dafe695c"
+  },
+  {
+    "root": "budget_package",
+    "path": "evidence_sources/packed_m128_schedule.py.txt",
+    "sha256": "a65dca9d24862c2b552117ce2c9cfdb270215b12881490fc50b5545b938b6086"
+  },
+  {
+    "root": "candidate_tree",
+    "path": "raw_kv/raw_kv_port.patch",
+    "sha256": "3284c52a802ed15c66ab0b9ecf624f9bb44a226c988dcb057dc52eb6c8dfa34c"
+  },
+  {
+    "root": "bf16_delivery",
+    "path": "candidates/qwen2_resident_matrix/attention_qk16_bf16_materialize/qk_materialize.patch",
+    "sha256": "c4f826e2ba76848f80dd7f631fc20501b88ef3a591549ab002bc0b140d103775"
+  },
+  {
+    "root": "host_selection_delivery",
+    "path": "candidates/qwen2_resident_matrix/attention_qk16_host_selection/selection.patch",
+    "sha256": "383f9c4a60cf7d72271a7c69578c4ffdfb071dacb212282308a0c632ae720c28"
+  }
+]

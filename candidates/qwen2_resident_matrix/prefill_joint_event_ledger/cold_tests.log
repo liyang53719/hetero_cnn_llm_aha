@@ -1,0 +1,29 @@
+test_abort_ack_both_orders_never_publish (test_model.Tests.test_abort_ack_both_orders_never_publish) ... ok
+test_abort_and_new_accept_are_rejected_in_both_orders (test_model.Tests.test_abort_and_new_accept_are_rejected_in_both_orders) ... ok
+test_abort_clears_scratch_written_and_active (test_model.Tests.test_abort_clears_scratch_written_and_active) ... ok
+test_abort_does_not_cancel_physical_rmw (test_model.Tests.test_abort_does_not_cancel_physical_rmw) ... ok
+test_alu_held_and_abort_after_ack_same_edge (test_model.Tests.test_alu_held_and_abort_after_ack_same_edge) ... ok
+test_bank_conflicts_and_distinct_ports (test_model.Tests.test_bank_conflicts_and_distinct_ports) ... ok
+test_empty_matrix_abort_does_not_finish_same_edge (test_model.Tests.test_empty_matrix_abort_does_not_finish_same_edge) ... ok
+test_lease_release_edge_and_acquire_after_dense_forbidden (test_model.Tests.test_lease_release_edge_and_acquire_after_dense_forbidden) ... ok
+test_matrix_abort_before_last_discards_new_returns (test_model.Tests.test_matrix_abort_before_last_discards_new_returns) ... ok
+test_matrix_abort_retains_preexisting_result_debt (test_model.Tests.test_matrix_abort_retains_preexisting_result_debt) ... ok
+test_matrix_eight_metadata_credits (test_model.Tests.test_matrix_eight_metadata_credits) ... ok
+test_matrix_first_abort_edge_uses_preedge_credit_and_enqueues (test_model.Tests.test_matrix_first_abort_edge_uses_preedge_credit_and_enqueues) ... ok
+test_matrix_group_command_not_free (test_model.Tests.test_matrix_group_command_not_free) ... ok
+test_matrix_single_port_fires (test_model.Tests.test_matrix_single_port_fires) ... ok
+test_matrix_two_result_slots_completion_and_hold (test_model.Tests.test_matrix_two_result_slots_completion_and_hold) ... ok
+test_no_ack_edge_bank_or_lease_reuse (test_model.Tests.test_no_ack_edge_bank_or_lease_reuse) ... ok
+test_parent_tick_once_and_monotonic_edges (test_model.Tests.test_parent_tick_once_and_monotonic_edges) ... ok
+test_raw_lease_blocks_dense_tile_and_same_edge_begin (test_model.Tests.test_raw_lease_blocks_dense_tile_and_same_edge_begin) ... ok
+test_raw_write_not_rmw_and_clean_ack_publication (test_model.Tests.test_raw_write_not_rmw_and_clean_ack_publication) ... ok
+test_rmw_next_write_no_fictitious_response_ack (test_model.Tests.test_rmw_next_write_no_fictitious_response_ack) ... ok
+test_sfu_abort_drains_and_primitive_label_is_proposed (test_model.Tests.test_sfu_abort_drains_and_primitive_label_is_proposed) ... ok
+test_sfu_shared_pool_and_pulse_reservation (test_model.Tests.test_sfu_shared_pool_and_pulse_reservation) ... ok
+test_tile_service_blocks_dense_even_on_other_port_address (test_model.Tests.test_tile_service_blocks_dense_even_on_other_port_address) ... ok
+test_unmapped_staging_never_supplies_and_no_cycle_claim (test_model.Tests.test_unmapped_staging_never_supplies_and_no_cycle_claim) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.001s
+
+OK

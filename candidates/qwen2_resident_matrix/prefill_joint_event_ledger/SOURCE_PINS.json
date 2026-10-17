@@ -1,0 +1,37 @@
+[
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+    "sha256": "8a2c2d41e68719fb2714e3658b45ec0cd8bbe9f9173dbd9c9a91e7344f16e995"
+  },
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+    "sha256": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558"
+  },
+  {
+    "root": "production_source",
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala",
+    "sha256": "07d728d510ffd8b4f02c1b02476c2236fe594a18f70248c5a2f2c4ecbc361ae8"
+  },
+  {
+    "root": "production_source",
+    "path": "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala",
+    "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d"
+  },
+  {
+    "root": "candidate_tree",
+    "path": "attention_raw_scratch/scratch.patch",
+    "sha256": "73e915e84a2bd3db520f401163f61a52f5e9f124e9c04c3176179086dafe695c"
+  },
+  {
+    "root": "candidate_tree",
+    "path": "raw_kv/raw_kv_port.patch",
+    "sha256": "3284c52a802ed15c66ab0b9ecf624f9bb44a226c988dcb057dc52eb6c8dfa34c"
+  },
+  {
+    "root": "candidate_tree",
+    "path": "attention_packed_owner/schedule.py",
+    "sha256": "ddd2c2b2d7a60bbcae27013f1f38e17bdc514cffe15572124c9bdfabff2c81bd"
+  }
+]

@@ -1,0 +1,56 @@
+name: idma-source-rebuild-20261017
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/idma-source-rebuild-20261017.yml']
+permissions:
+  contents: read
+concurrency:
+  group: idma-source-rebuild-20261017
+  cancel-in-progress: false
+jobs:
+  source-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Cold validation only
+        run: |
+          cd scripts/idma_source_export_20261017
+          python3 test_cold.py
+          python3 -O test_cold.py
+          python3 test_bounds.py
+          python3 -O test_bounds.py
+          python3 test_postprocess.py
+          python3 -O test_postprocess.py
+      - name: Fixed source generation helpers
+        run: |
+          python3 scripts/idma_source_export_20261017/bootstrap_tools.py "$RUNNER_TEMP/idma-source-tools"
+      - name: Export pinned sources, no EDA
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])
+          t=json.loads((root/'idma-source-tools/TOOLS.json').read_text())
+          subprocess.run(['python3','scripts/idma_source_export_20261017/export_source.py',
+            '--out',str(root/'idma-source-rebuild-20261017'),
+            '--bender',t['bender']['path'],'--bender-sha256',t['bender']['sha256'],
+            '--uv',t['uv']['path'],'--uv-sha256',t['uv']['sha256'],'--execute'],check=True)
+          PY
+      - name: Verify artifact scope under original deadline
+        run: |
+          python3 scripts/idma_source_export_20261017/verify_artifact.py "$RUNNER_TEMP/idma-source-rebuild-20261017" "$RUNNER_TEMP/idma-source-tools/TOOLS.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: idma-pinned-source-rebuild-${{ github.sha }}-${{ github.run_attempt }}
+          retention-days: 30
+          if-no-files-found: error
+          include-hidden-files: true
+          path: |
+            ${{ runner.temp }}/idma-source-rebuild-20261017/idma_export/
+            ${{ runner.temp }}/idma-source-rebuild-20261017/SAFE_IDENTITY.json

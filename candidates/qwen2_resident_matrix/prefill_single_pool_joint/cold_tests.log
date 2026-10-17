@@ -1,0 +1,18 @@
+test_abort_input_and_nested_abort_rejected_atomically (test_joint.Tests.test_abort_input_and_nested_abort_rejected_atomically) ... ok
+test_abort_preserves_internal_division_debt_then_private_drain (test_joint.Tests.test_abort_preserves_internal_division_debt_then_private_drain) ... ok
+test_abort_result_same_edge_and_no_reaccept (test_joint.Tests.test_abort_result_same_edge_and_no_reaccept) ... ok
+test_bank_valid_loan_invalid_rolls_back_both (test_joint.Tests.test_bank_valid_loan_invalid_rolls_back_both) ... ok
+test_duplicate_tick_atomic (test_joint.Tests.test_duplicate_tick_atomic) ... ok
+test_error_poison_propagates_to_ledger_atomically (test_joint.Tests.test_error_poison_propagates_to_ledger_atomically) ... ok
+test_identity_collision_rolls_back (test_joint.Tests.test_identity_collision_rolls_back) ... ok
+test_late_batch_failure_rolls_back_prior_events (test_joint.Tests.test_late_batch_failure_rolls_back_prior_events) ... ok
+test_legacy_and_alu_and_parent_entrypoints_rejected (test_joint.Tests.test_legacy_and_alu_and_parent_entrypoints_rejected) ... ok
+test_loan_valid_bank_invalid_rolls_back_both (test_joint.Tests.test_loan_valid_bank_invalid_rolls_back_both) ... ok
+test_noncanonical_return_identities_rejected_atomically (test_joint.Tests.test_noncanonical_return_identities_rejected_atomically) ... ok
+test_report_boundaries_and_snapshot_isolation (test_joint.Tests.test_report_boundaries_and_snapshot_isolation) ... ok
+test_single_pool_and_no_supply (test_joint.Tests.test_single_pool_and_no_supply) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.007s
+
+OK

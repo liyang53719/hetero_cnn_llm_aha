@@ -278,3 +278,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 唯一原Dense/bank、Matrix服务及8个16×32端点、SFU bank16scalar与iDMA结构存在；全top共17scalar包含原单Scalar。4096是接口/参数配置依据，不是综合物理资源签收。capacity1024的scores/probs共8192B未偷减为M128容量。
 - [安全源码复现包](../candidates/qwen2_resident_matrix/production_qkv_reduction/host_structure/README_CN.md)仅源码/pin/实际结果安全投影，原39.6MB IR、classes/jars及宿主回执不提交；root与独立6+6结构冷测、4+4便携冷测通过。v3/v4失败原样保留。
 - 本次无新SystemVerilog、无作业/动态协议/数值/利用率执行；5条既有索引width警告保留。17ext仅三类defname（8seed-enabled matrix endpoint、8tc_clk_gating、1iDMA wrapper），provider完整闭包正在核对。冻结6SV仅增量，不能直接混旧无seed array；官方iDMA固定依赖锁与历史报告差异需按真实导出COMMITS/SHA256SUMS解决，不能将结构PASS称外部RTL链接PASS。
+
+
+## 2026-10-17 10:50 UTC：固定 iDMA 源导出候选与单池 prefill 元数据片
+
+- **done：source-export v5 源码/冷资格；pending：真实源导出。** 本批只保留已审 11 个明确清单文件，冷测试 28+28 通过；没有运行真实 fetch、Bender、uv/make 源生成，也没有 Verilator、firtool、仿真或综合结果。新 [iDMA source-export workflow](../.github/workflows/idma-source-rebuild-20261017.yml) 仅在 main 上自身 YAML 路径变化时触发；本批发布允许一次 source-only 尝试，之后再修改该 YAML 仍会再次触发，不能宣称技术上永不重跑。其他原 workflow 与 465 个模型运行源字节不变。
+- 源生成保持固定上游、lock、依赖 commit 与工具身份；Bender 的 script verilator 只输出文本 filelist，不执行 Verilator。上游 .python-version 偏好 3.11，但 pyproject 允许 >=3.11；候选按已审决定使用 CI 现有 3.12，并记录实际解释器版本/hash，显式 UV_PYTHON、禁止自动下载 Python，保留 --locked。不把该偏好差异写成已实际验证；资格失败时不自动换版本或放宽锁。
+- 生成总预算 900 秒、单命令最多 180 秒，沿原绝对 stop 使用严格 owned-group 清理。工作树总量 1 GiB 是采样 soft cap，不是硬磁盘 quota，采样间可暂时超量；单文件 64 MiB 硬限及归档展开/复制前检查不能替代该说明。成功后 artifact 仅限核验的公开源树 idma_export 与 SAFE_IDENTITY，包含所需隐藏源文件；不上传工具、缓存、pycache、凭据、权重或数值数组。当前 source-export 实际结果仍 pending。
+- **done：四个 source-only/metadata 小片的独立冷审查；ongoing：真实 owner 供数接线。** [联合事件账本](../candidates/qwen2_resident_matrix/prefill_joint_event_ledger/README_CN.md) 8 文件、[SFU loan 双 profile](../candidates/qwen2_resident_matrix/prefill_sfu_loan_profiles/README_CN.md) 8 文件、[单一生产 SFU16 池联合模型](../candidates/qwen2_resident_matrix/prefill_single_pool_joint/README_CN.md) 10 文件，以及 [operand/address 映射](../candidates/qwen2_resident_matrix/prefill_operand_mapping/REPORT_CN.md) 7 文件只约束身份、债务、原子边沿与整数索引。外部 ready/return/accepted 事件不是自证可执行调度；can_supply 仍 False，没有数值、RTL、完整 prefill 或 80%/90% 实测通过，也没有新增第二个 SFU 池或免费 SRAM/寄存器/端口。
+- **done：width5 合法事务范围源码审计 3+3。** 该结论只覆盖所审合法事务范围，不作任意故障安全结论；本批不附该报告，保留到后续小批，不扩大本次 45 文件清单。
+- 既有 Qwen2 完整 M128 模型限定指定 27 门禁及同刺激内容身份结果保留，五 block 进度仍为模型限定 M128 1/5、full RTL 0/5；全 29 节点及完整张量覆盖缺口不因本批 metadata 或 source-export 候选而关闭。

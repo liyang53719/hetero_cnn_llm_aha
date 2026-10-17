@@ -421,6 +421,7 @@ def build_scalar_references(root,workspace,rows,end_ns):
     for role in ('sequential','reduced'):
         out=workspace/role;empty=out/'empty_cache.f32le';empty.write_bytes(b'')
         raw=out/'raw_stages'
+        raw.mkdir(mode=0o700)
         argv=[str(out/'candidate'),str(ro/'readonly_arena.f32le'),'16',str(raw),'0',str(empty),str(empty)]
         done=m['owner'].run(root,argv,cwd=out,log=out/'stdout.log',end_ns=phase_end(end_ns,30))
         stdout=(out/'stdout.log').read_bytes();need(len(stdout)<=16384,'software stdout bound')

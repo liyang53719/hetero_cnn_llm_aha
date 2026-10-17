@@ -1,0 +1,94 @@
+{
+  "actual_json": {
+    "producer_summary.json": {
+      "bytes": 3351,
+      "sha256": "85c02da5b0f0fe3095136ddbfc83d5a4b4c60bf8f0172ebad94aaa8e098f03be"
+    },
+    "source_hashes.json": {
+      "bytes": 100042,
+      "sha256": "d21190ea5d25c8799ccc75bc0ee9904875d9867fafb9544a2dbedda3cea233a1"
+    },
+    "stage_exits.json": {
+      "bytes": 1112,
+      "sha256": "cb23f78d2893daefa723db051a8599a16392814eec1d4768b3001b06b23c5c33"
+    },
+    "summary.json": {
+      "bytes": 685,
+      "sha256": "19bd8b51f1b2c7303ba7b2034c27f0c49be10423ea019ee15c498920174da044"
+    }
+  },
+  "actual_parent_observed_stage": {
+    "final_exit_code": 1,
+    "observed_exit_code": 1,
+    "owned_group_cleanup_complete": true,
+    "phase": "fresh_producer",
+    "pid": 2482,
+    "status": "FAILED"
+  },
+  "artifact_id": "12089160752",
+  "artifact_sha256": "ec80587c40c77acc9e34794e75ebb347da08b82524f7cf86c8dc6bef5a3631f9",
+  "ci": {
+    "commit": "af3d9d3b49d9680988cec859f4768e6a974f2538",
+    "run_attempt": "1",
+    "run_id": "39000095742"
+  },
+  "elapsed_seconds": 74.110056551,
+  "full_m128_executed": false,
+  "full_m16_executed": false,
+  "nested_child_exit_cause_directly_observed": false,
+  "proposed_control_fix": "Exclusively create raw_stages with mode0700 immediately before the unchanged scalar reference command for each role.",
+  "qualified_producer": false,
+  "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/39000095742",
+  "sanitized_traceback_observation": {
+    "child_pid": 2482,
+    "diagnostic_only": true,
+    "observation": {
+      "diagnostic_only": true,
+      "error_code": "PYTHON_VALUE_ERROR",
+      "exception_class": "ValueError",
+      "frames": [
+        {
+          "line": 597,
+          "path": "candidates/qwen2_resident_matrix/portable_official_producer/driver.py",
+          "sha256": "1673c4a1447c42968b7dacc6a3e5486bdddb1b2318f9501f471a97f150c00d62"
+        },
+        {
+          "line": 591,
+          "path": "candidates/qwen2_resident_matrix/portable_official_producer/driver.py",
+          "sha256": "1673c4a1447c42968b7dacc6a3e5486bdddb1b2318f9501f471a97f150c00d62"
+        },
+        {
+          "line": 557,
+          "path": "candidates/qwen2_resident_matrix/portable_official_producer/driver.py",
+          "sha256": "1673c4a1447c42968b7dacc6a3e5486bdddb1b2318f9501f471a97f150c00d62"
+        },
+        {
+          "line": 425,
+          "path": "candidates/qwen2_resident_matrix/portable_official_producer/driver.py",
+          "sha256": "1673c4a1447c42968b7dacc6a3e5486bdddb1b2318f9501f471a97f150c00d62"
+        },
+        {
+          "line": 101,
+          "path": "candidates/qwen2_resident_matrix/portable_official_producer/owned_commands.py",
+          "sha256": "23170d4f016900c074a3a446fe4529f7465060c039cdf2aad27bce6a009c6c49"
+        }
+      ],
+      "known_frames_omitted": 0,
+      "origin_authenticated": false,
+      "reason": "COMPLETE_SINGLE_TRACEBACK",
+      "schema": 1,
+      "status": "OBSERVED",
+      "unknown_frames_omitted": 0
+    },
+    "observed_exit_code": 1,
+    "origin_authenticated": false,
+    "phase": "fresh_producer",
+    "profile": "qwen2-producer-failure-observation-v1",
+    "reason": "SANITIZED_TRACEBACK_OBSERVATION",
+    "schema": 1,
+    "status": "OBSERVED"
+  },
+  "schema": 1,
+  "scope_limit": "The trace is a diagnostic observation. Returned earlier producer functions do not establish qualification without their receipts. The original nested child stderr and exit detail remain unavailable.",
+  "source_defect": "The scalar-reference candidate requires its output directory before launch; the producer did not create raw_stages before invoking either role."
+}

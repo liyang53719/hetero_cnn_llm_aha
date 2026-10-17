@@ -194,4 +194,87 @@ print('PASS_COLD_DRIVER_IMPORT')'''
         with patch.object(Path,'exists',exists),self.assertRaisesRegex(ValueError,'unpinned package initializer'):
             d.modules(ROOT)
 
+
+    def scalar_entry_boundary(self,workspace,observe):
+        """Execute the actual per-role prelaunch prefix, never the numerical phase.
+
+        The AST is copied directly from build_scalar_references through its
+        owned-command call. Only that owner is substituted with an observer;
+        no candidate binary, payload, compiler or model operation is invoked.
+        This is an entry-boundary test, not a full producer/numerical test.
+        """
+        tree=ast.parse((HERE/'driver.py').read_bytes())
+        function=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='build_scalar_references')
+        loops=[n for n in function.body if isinstance(n,ast.For) and
+               isinstance(n.target,ast.Name) and n.target.id=='role' and
+               ast.literal_eval(n.iter)==('sequential','reduced')]
+        self.assertEqual(len(loops),1)
+        loop=copy.deepcopy(loops[0])
+        calls=[i for i,n in enumerate(loop.body) if isinstance(n,ast.Assign) and
+               isinstance(n.value,ast.Call) and ast.unparse(n.value.func)=="m['owner'].run"]
+        self.assertEqual(len(calls),1)
+        loop.body=loop.body[:calls[0]+1]
+        loop.orelse=[]
+        prefix=ast.Module(body=[loop],type_ignores=[])
+        namespace=dict(workspace=workspace,ro=workspace/'readonly',root=ROOT,
+            m={'owner':types.SimpleNamespace(run=observe)},phase_end=d.phase_end,
+            end_ns=time.monotonic_ns()+60*10**9)
+        exec(compile(ast.fix_missing_locations(prefix),str(HERE/'driver.py'),'exec'),namespace)
+
+    def test_22_scalar_prelaunch_creates_fresh_private_directories(self):
+        workspace=self.out/'scalar_boundary';workspace.mkdir()
+        for role in ('sequential','reduced'):(workspace/role).mkdir()
+        (workspace/'readonly').mkdir()
+        seen=[]
+        def observe(root,argv,*,cwd,log,end_ns):
+            role=('sequential','reduced')[len(seen)]
+            out=workspace/role;raw=out/'raw_stages';empty=out/'empty_cache.f32le'
+            self.assertEqual(root,ROOT)
+            self.assertEqual(argv,[str(out/'candidate'),str(workspace/'readonly/readonly_arena.f32le'),
+                                  '16',str(raw),'0',str(empty),str(empty)])
+            self.assertEqual(cwd,out);self.assertEqual(log,out/'stdout.log')
+            self.assertIs(type(end_ns),int)
+            self.assertTrue(raw.is_dir());self.assertFalse(raw.is_symlink())
+            self.assertEqual(list(raw.iterdir()),[])
+            self.assertEqual(raw.stat().st_mode&0o777,0o700)
+            self.assertEqual(empty.read_bytes(),b'')
+            self.assertFalse((out/'candidate').exists())
+            seen.append(role)
+            return {'control_only_observation':True}
+        old_mask=os.umask(0o022)
+        try:self.scalar_entry_boundary(workspace,observe)
+        finally:os.umask(old_mask)
+        self.assertEqual(seen,['sequential','reduced'])
+        self.assertNotEqual((workspace/'sequential/raw_stages').stat().st_ino,
+                            (workspace/'reduced/raw_stages').stat().st_ino)
+
+    def test_23_scalar_prelaunch_rejects_existing_directory_file_symlink(self):
+        for role in ('sequential','reduced'):
+            for kind in ('directory','file','symlink'):
+                with self.subTest(role=role,kind=kind):
+                    workspace=self.out/(role+'_'+kind);workspace.mkdir()
+                    for name in ('sequential','reduced'):(workspace/name).mkdir()
+                    (workspace/'readonly').mkdir()
+                    raw=workspace/role/'raw_stages'
+                    if kind=='directory':raw.mkdir()
+                    elif kind=='file':raw.write_bytes(b'existing-control-sentinel')
+                    else:
+                        target=workspace/'external_target';target.mkdir()
+                        (target/'sentinel').write_bytes(b'do-not-follow')
+                        raw.symlink_to(target,target_is_directory=True)
+                    before=raw.lstat();seen=[]
+                    def observe(root,argv,*,cwd,log,end_ns):
+                        seen.append(cwd.name)
+                        return {'control_only_observation':True}
+                    with self.assertRaises(FileExistsError):self.scalar_entry_boundary(workspace,observe)
+                    self.assertEqual(seen,[] if role=='sequential' else ['sequential'])
+                    after=raw.lstat()
+                    self.assertEqual((before.st_dev,before.st_ino,before.st_mode),
+                                     (after.st_dev,after.st_ino,after.st_mode))
+                    if kind=='directory':self.assertEqual(list(raw.iterdir()),[])
+                    elif kind=='file':self.assertEqual(raw.read_bytes(),b'existing-control-sentinel')
+                    else:
+                        self.assertTrue(raw.is_symlink())
+                        self.assertEqual((target/'sentinel').read_bytes(),b'do-not-follow')
+
 if __name__=='__main__':unittest.main(verbosity=2)

@@ -1,0 +1,37 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -51,7 +51,10 @@
+   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
+   * Each successor starts only after the previous stage's final write ACK.
+   */
+-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,enablePackedQk16Keys:Boolean=false) extends Module {
++class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,enablePackedQk16Keys:Boolean=false,enablePackedQk16OfficialBf16:Boolean=false) extends Module {
++  // QK-only rebase of official_bf16 materialize hooks; not the full-block policy.
++  require(!enablePackedQk16OfficialBf16 || enablePackedQk16Keys,"QK BF16 materialization requires the packed sixteen-key route")
++  private def materializePackedQk(x:UInt):UInt=if(enablePackedQk16OfficialBf16)F32.bf(x)else x
+   require(!enablePackedQk16Keys || (ownerDriven && externalMatrix && s.hidden==1536 && s.heads==12 && s.kvHeads==2 && s.headDim==128 && !s.nativeProfile && s.maxTokens<=128), "packed QK sixteen-key requires the original H1536 owner profile")
+   require(!externalElementwiseLoan || (ownerDriven && externalScalar), "elementwise loan requires owner serialization and the shared Scalar")
+   require(!enableGdnSoftplus || (externalScalar && s.qwen35GdnOnly), "Softplus requires the explicit GDN scalar service")
+@@ -542,8 +545,20 @@
+     when(packedBusy){assert(state=/=st("denseWindowGot"),"Dense operand clear excluded for entire QK group")}
+   }
+   when(state===st("attReduce")){calc(ScalarOp.Add,sum,acc(lane),"attReduceDone")}
+-  when(state===st("attReduceDone")){sum:=scalarValue;when(lane===15.U){calc(ScalarOp.Mul,scalarValue,F32.lit(1/math.sqrt(s.headDim.toDouble)),"attScore")}.otherwise{lane:=lane+1.U;state:=st("attReduce")}}
+-  when(state===st("attScore") && (!enablePackedQk16Keys.B || (!poisoned && !packedQk.map(_.io.resetRequired).getOrElse(false.B) && !packedQk.map(_.io.port.done.valid).getOrElse(false.B)))){if(enablePackedQk16Keys){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),scalarValue);when(F32.less(maxScore,scalarValue)){maxScore:=scalarValue};state:=st("attNextKey")}
++  when(state===st("attReduceDone")){sum:=scalarValue;when(lane===15.U){
++    val dot=materializePackedQk(scalarValue)
++    if(enablePackedQk16OfficialBf16){
++      when(!TensorMath.finite(dot)){packedSelectedFault:=true.B}
++        .otherwise{calc(ScalarOp.Mul,dot,F32.lit(1/math.sqrt(s.headDim.toDouble)),"attScore")}
++    }else{calc(ScalarOp.Mul,scalarValue,F32.lit(1/math.sqrt(s.headDim.toDouble)),"attScore")}
++  }.otherwise{lane:=lane+1.U;state:=st("attReduce")}}
++  when(state===st("attScore") && (!enablePackedQk16Keys.B || (!poisoned && !packedQk.map(_.io.resetRequired).getOrElse(false.B) && !packedQk.map(_.io.port.done.valid).getOrElse(false.B)))){
++    val score=materializePackedQk(scalarValue)
++    def commitScore():Unit={if(enablePackedQk16Keys){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),score);when(F32.less(maxScore,score)){maxScore:=score};state:=st("attNextKey")}
++    if(enablePackedQk16OfficialBf16){
++      when(!TensorMath.finite(score)){packedSelectedFault:=true.B}.otherwise{commitScore()}
++    }else{commitScore()}
++  }
+   if(!enablePackedQk16Keys){
+   when(state===st("attNextKey") && !packedBusy){when(key<token){key:=key+1.U;state:=st("attKey")}.otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}}
+   }else{

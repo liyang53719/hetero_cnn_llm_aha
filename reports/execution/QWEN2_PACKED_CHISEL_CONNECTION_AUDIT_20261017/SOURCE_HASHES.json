@@ -1,0 +1,116 @@
+{
+  "main_ref": "2e591b6df29fc08504dca264264b149c27e2cf95",
+  "scope": "Read-only source audit; no numerical, compile, elaboration or EDA execution",
+  "files": [
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+      "git_blob_sha1": "5ece228b5b91d594349b2799adec184e0a01c49f"
+    },
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "sha256": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d",
+      "git_blob_sha1": "b29036223d18699e2e76141b577c778265023c11"
+    },
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+      "sha256": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d",
+      "git_blob_sha1": "0ad36b0b0e1bad2acc92e4274a361b5c825ab6b0"
+    },
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala",
+      "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757",
+      "git_blob_sha1": "bbda21ea95b12250adc4f058f4c32ce065222acb"
+    },
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala",
+      "sha256": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789",
+      "git_blob_sha1": "a5c12133cb731e901b67977f7cc3ab8f290f53da"
+    },
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob_sha1": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+    },
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "git_blob_sha1": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+    },
+    {
+      "path": "hetero_kv_port_20261016/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "sha256": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d",
+      "git_blob_sha1": "39655eba85228f7e37fba6c0fc2ee908c627bb10"
+    },
+    {
+      "path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/attention_qk16_owner_route/owner.patch",
+      "sha256": "6701c30cf01bb953d1b4c56f080e841a80697a5e6cc35b782e8210c81f57d8d1",
+      "git_blob_sha1": "e3f7ea52923a05555571082cf0ee3f9317274c68"
+    },
+    {
+      "path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/attention_qk16_owner_route/pins.json",
+      "sha256": "702b95fe59e84daf11ae39e5c8175e32421d38a4b4b337a78177bf1364dac78e",
+      "git_blob_sha1": "c68084d21ad3a7430a93bdf0346e33a6daab3701"
+    },
+    {
+      "path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/attention_qk16_compile_evidence/EVIDENCE.json",
+      "sha256": "09466c2934016f9634b5ed72027d68d4339c2c3e0f4710d6f26e3b7bf583ec8f",
+      "git_blob_sha1": "de384e3ef8451ea4faae326c0f1f87068984667c"
+    },
+    {
+      "path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/attention_raw_scratch/scratch.patch",
+      "sha256": "73e915e84a2bd3db520f401163f61a52f5e9f124e9c04c3176179086dafe695c",
+      "git_blob_sha1": "ce990b43e9850bc86b492e4b0378122f7321739d"
+    },
+    {
+      "path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/attention_packed_stream/PackedAttentionStreamClient.scala",
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0",
+      "git_blob_sha1": "2bc8190779eb409a7c9a48f56e4f91eee042c884"
+    },
+    {
+      "path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/attention_bank_panel/README.md",
+      "sha256": "6b636eba6ca72f60c0c7cba95c5de7da9934b28b9f2f5ac4ef42834a675dd303",
+      "git_blob_sha1": "74e26d5a0da0fa64a5d5ad1240b1540deb7639da"
+    },
+    {
+      "path": "hetero_kv_port_20261016/candidates/qwen2_resident_matrix/attention_scalar_schedule/README.md",
+      "sha256": "48cfca11d3dfdb020c99b3dc75dc5d69f5181bcab14b473e04a7663cd8aed303",
+      "git_blob_sha1": "df444f8903caaa1b4dff21b303489e5b3b1b62f1"
+    },
+    {
+      "path": "same_host_m128_strict_cleanup_20261017_freeze_e83fb26b/source/candidates/qwen2_resident_matrix/official_bf16/chisel_policy.patch",
+      "sha256": "37a22c30dde207a38e77151a63e66abaeeb2e3261a082f5ef4d4a4c169d981eb",
+      "git_blob_sha1": "9b8d40d330b6203e2a79c35a942be54e5b167821"
+    },
+    {
+      "path": "same_host_m128_strict_cleanup_20261017_freeze_e83fb26b/source/candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py",
+      "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880",
+      "git_blob_sha1": "54bbabadf47190d9b1dde1139202e365a9556353"
+    },
+    {
+      "path": "same_host_m128_strict_cleanup_20261017_freeze_e83fb26b/source/candidates/qwen2_resident_matrix/official_bf16/owners.py",
+      "sha256": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+      "git_blob_sha1": "7bd1a46cabf9923d47807d61059a8cc0008cc1d2"
+    },
+    {
+      "path": "same_host_m128_strict_cleanup_20261017_freeze_e83fb26b/source/candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py",
+      "sha256": "ddd2c2b2d7a60bbcae27013f1f38e17bdc514cffe15572124c9bdfabff2c81bd",
+      "git_blob_sha1": "088cb7ba9168c9f2437de8eac30687d286e7e89e"
+    },
+    {
+      "path": "same_host_m128_strict_cleanup_20261017_freeze_e83fb26b/source/candidates/qwen2_resident_matrix/attention_packed_m128/tiled.patch",
+      "sha256": "c29860c602bb2733ab6d3d5f95fcc9156879c0acaeceecfa861af1b12809830b",
+      "git_blob_sha1": "375210db904f3d182098d4f9f12cedebbf75a251"
+    },
+    {
+      "path": "same_host_m128_strict_cleanup_20261017_freeze_e83fb26b/source/candidates/qwen2_resident_matrix/attention_packed_m128_entry/composition.py",
+      "sha256": "a874c0462c1f76e8ad1f2b2f1e9dfeb8b6bb88fded2b0bda084d631b5c49c14c",
+      "git_blob_sha1": "704ad8b9d692654be38722aa7853d65ac5fbdd3f"
+    },
+    {
+      "path": "packed_qk16_owner_compile_plan_20261017/scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "4375ccf715cf408975c3e45ae595955767b824404ef8337bb260ed807527dc1e",
+      "git_blob_sha1": "fa58ddf17ccc8db36efaf779e318d01c839d8f09"
+    }
+  ]
+}

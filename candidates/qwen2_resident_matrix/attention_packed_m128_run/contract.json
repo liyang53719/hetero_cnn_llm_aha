@@ -12,13 +12,15 @@
   "origin_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
   "outer_seconds": 2430,
   "own_sources": {
-    "README.md": "8388ae00d265b87d69afc429d77b972ffb4fb47130b63ff170262661a6b77799",
-    "driver.py": "43676afc908239512cc9c874bcaea81a9da59afb3610ec17140736648df5d5fc",
-    "launch.py": "b9c25a8cd951e4457ed9a698e88d5a316d75a843ddbfde83d12578a4ece0d217",
+    "README.md": "f6fcd3486cd9158a55fb7ffe1a8b4bf9f0fba772a66a6db3c177e9c85b39677a",
+    "driver.py": "320bc4c8ed20af671a71ae27a764f55bc41ef278d5425e19fb5ce6f4fd578a48",
+    "launch.py": "98ec030198414a6e61d7645b5add11e9c75aa85d8ab4a48b9d3b37b9f1d7e073",
     "terminal_validator.py": "f8ecc30ce4cff0a8ccafec86fe0e408ba71729f135a7622609782e019e86c2ad",
-    "test_launch.py": "952ba12dc4e8aa69a851000bec9b5c0fb7fccf7af4311b61ba83dfaec0274319",
+    "test_launch.py": "10c37ea5194a0d68927812ec8732bb8dedb008abede46994a1e2ad8b3c488ef2",
     "test_terminal_validator.py": "48a996727a885f1899b5876faf0738b97c216ff2069c3739fbb6dd079bb22893"
   },
+  "prior_runtime_source_manifest_sha256": "f5e1dcdecc406750cd6409e45a97184294ba94d4e61cb9ef67d53641fd912104",
+  "prior_wrapper_contract_sha256": "582833958e1dda4772f3e23c02f2ec0a17be9d6d7e5e3e5fba36618fb4ca8f30",
   "profile": "qwen2-packed-m128-full-run-v1",
   "python": {
     "bytes": 30894944,
@@ -30,8 +32,10 @@
       14
     ]
   },
-  "runtime_source_count": 346,
-  "runtime_source_manifest_sha256": "f5e1dcdecc406750cd6409e45a97184294ba94d4e61cb9ef67d53641fd912104",
+  "repair_pins_sha256": "d70d697718948d67eb1a498a5cd7c262b46a6111f9af3eb598afc24fc6365f55",
+  "runtime_entry_pins_sha256": "e3354f7bc162650fe6ea1bc5c3c990cd660ac4d2016987730a017eca4330ec14",
+  "runtime_source_count": 350,
+  "runtime_source_manifest_sha256": "4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8",
   "schema": 1,
   "status": "PREPARED_SOURCE_EXECUTION_REQUIRES_ROOT_GATE",
   "support_sources": {

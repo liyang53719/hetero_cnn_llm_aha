@@ -39,14 +39,14 @@ def prepare(context,context_path,context_sha):
  L.runtime_python(Path(context['origin']),sys.executable,contract)
  progress(context,context_sha,'compose')
  sys.path.insert(0,str(source))
- prep=importlib.import_module('candidates.qwen2_resident_matrix.attention_packed_m128_entry.prepare')
- L.need(Path(prep.__file__).resolve()==source/(L.PREFIX+'prepare.py'),'exact preparation import')
+ prep=importlib.import_module('candidates.qwen2_resident_matrix.attention_packed_m128_run_gate.prepare')
+ L.need(Path(prep.__file__).resolve()==source/(L.REPAIR+'prepare.py'),'exact preparation import')
  overlay=prep.compose(work/'overlay')
  runtime_sources=dict(pins['sources'],**pins['own'],**pins['generated'])
- runtime_sources[L.PREFIX+'pins.json']=contract['entry_pins_sha256']
+ runtime_sources[L.PREFIX+'pins.json']=contract['runtime_entry_pins_sha256']
  L.verify_map(overlay,runtime_sources)
  entry_raw,installed=L.bounded_json(overlay/(L.PREFIX+'pins.json'))
- L.need(L.digest(entry_raw)==contract['entry_pins_sha256'],'installed M128 entry identity')
+ L.need(L.digest(entry_raw)==contract['runtime_entry_pins_sha256'],'installed M128 entry identity')
  installed_map=dict(installed['sources'],**installed['own'],**installed['generated']);installed_map[L.PREFIX+'pins.json']=L.digest(entry_raw)
  L.need(L.same(installed_map,runtime_sources),'generated entry map differs from independently pinned M128 contract')
  files={str(p.relative_to(overlay)) for p in overlay.rglob('*') if p.is_file()}

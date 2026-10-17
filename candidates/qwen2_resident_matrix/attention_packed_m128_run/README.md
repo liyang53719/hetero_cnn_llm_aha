@@ -7,11 +7,11 @@ production, or CI is implicit. Nothing in the M16 wrapper or origin is edited.
 
 ## Exact execution identity
 
-This separate wrapper composes attention_packed_m128_entry from its frozen
+This successor composes attention_packed_m128_run_gate over immutable base entry
 ce0b54f6c73eec52736feb22e89b72ef388427b8abce04865a135dff76790a42
-pins. Its 344 source inputs and 346 final runtime files are distinct, verified
+pins. Its 348 source inputs and 350 final runtime files are distinct, verified
 closures. Final source-map SHA256 (sorted compact JSON plus newline):
-f5e1dcdecc406750cd6409e45a97184294ba94d4e61cb9ef67d53641fd912104.
+4e0f86922cdc268f245aa0105e03fbae617add5da8b3609e3799b12ca72943b8.
 The original clean be00 Git repository is cloned locally with --no-hardlinks,
 without a checkout first, and GIT_NO_LAZY_FETCH=1. Only exact composed files
 are overlaid. Committed qwen2_block.cpp arithmetic and Git HEAD are verified.
@@ -100,3 +100,26 @@ They cover >4 MiB reports, 16/2 MiB boundaries, strict canonical type equality,
 exact source maps and budgets, one call/child, origin-only admission keywords,
 cleanup receipt reserve, replay ownership, cancellation and safe failure scope.
 Synthetic receipts and source checks are never numerical evidence.
+
+## Distinct run-admission repair lineage
+
+The immutable predecessor wrapper contract
+582833958e1dda4772f3e23c02f2ec0a17be9d6d7e5e3e5fba36618fb4ca8f30
+failed at a residual reduced-entry raw-KV rows==16 admission guard before the
+runtime/output directory was created. That failure remains preserved, including
+its nonzero launcher/child exits and completed cleanup. It is not a numerical
+mismatch and supplies no M128 PASS.
+
+This separately reviewed successor pins repair contract
+d70d697718948d67eb1a498a5cd7c262b46a6111f9af3eb598afc24fc6365f55
+outside the runtime closure. It independently derives the frozen predecessor's
+346-file map, adds exactly four repair source files, and permits exactly three
+replacements: reduced entry, tiled-observer pins and canonical M128 entry pins.
+The installed canonical entry pin is
+e3354f7bc162650fe6ea1bc5c3c990cd660ac4d2016987730a017eca4330ec14.
+The final independently derived 350-file map must match both composed bytes and
+the installed canonical entry contract. The preparer only fixes the exact stale
+admission guard; original arithmetic, references, thresholds, PROFILE, API and
+2400/2424/2430 budgets remain unchanged. The previous entry and wrapper are not
+rewritten. A fresh output, proposed as packed_m128_run_gate_20261017, plus a new
+contract review and root gate are required. No retry or launch is implicit.

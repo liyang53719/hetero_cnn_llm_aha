@@ -1,0 +1,16 @@
+{
+  "generated": {
+    "candidates/qwen2_resident_matrix/attention_packed_m128_entry/pins.json": "e3354f7bc162650fe6ea1bc5c3c990cd660ac4d2016987730a017eca4330ec14",
+    "candidates/qwen2_resident_matrix/attention_packed_tiled_observation/pins.json": "841d16b3b3002fb232d725d88a281988133852610fcdac994126d58b18a071d8",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py": "c213e8ce4799caf475d7cf410d9573ae8eb8dc56d52590d550732bdec30cfe18"
+  },
+  "own": {
+    "candidates/qwen2_resident_matrix/attention_packed_m128_run_gate/README.md": "022327d407fa4a5102774034b6ef0312e0d6f4fbd9cd2a920514ce6737f32e42",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_run_gate/prepare.py": "630a4eceadd471000a2239ca3042e772a10566e57787581339dfc1effdad73b8",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_run_gate/probe.py": "14e00c356bc12ccb9cfa061b39514a49f4663c06133f05a051560969fa8cb743",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_run_gate/test_gate.py": "0d1b8e66cacb51174f743bc0cdc0351e661edfdd57f3961c7bde23e7ce47d6f3"
+  },
+  "prior_pins": "ce0b54f6c73eec52736feb22e89b72ef388427b8abce04865a135dff76790a42",
+  "profile": "packed-m128-run-gate-repair-v1",
+  "schema": 1
+}

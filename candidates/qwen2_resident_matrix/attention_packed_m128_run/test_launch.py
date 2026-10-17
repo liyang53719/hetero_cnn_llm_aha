@@ -109,34 +109,61 @@ class ControlTests(unittest.TestCase):
   with patch.object(L,'load_contract',return_value=({},{})),patch.object(L,'launch',side_effect=AssertionError('execution')):
    self.assertEqual(L.main(argv),0)
  def entry_chain(self):
-  sources={f'file{i}.py':'1'*64 for i in range(344)}
+  sources={f'file{i}.py':'1'*64 for i in range(342)}
   asset='candidates/qwen2_resident_matrix/attention_packed_m128_assets/pins.json';sources[asset]='2'*64
+  targets=('candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py','candidates/qwen2_resident_matrix/attention_packed_tiled_observation/pins.json')
+  sources.update({n:'3'*64 for n in targets})
   base=dict(schema=1,profile='qwen2-public-pv16-packed-m128-linked-v1',execution_scope='ORIGINAL_M128_PUBLIC21',sources=sources,own={},generated={},inputs=dict(sources),targets=[])
-  entry=L.digest(L.encoded(base));runtime=dict(sources);runtime[L.PREFIX+'pins.json']=entry
-  contract=dict(schema=1,profile=L.PROFILE,status='PREPARED_SOURCE_EXECUTION_REQUIRES_ROOT_GATE',own_sources={n:'7'*64 for n in ('launch.py','driver.py','terminal_validator.py','test_launch.py','test_terminal_validator.py','README.md')},support_sources={'support.py':'8'*64},entry_pins_sha256=entry,assets_pins_sha256='2'*64,runtime_source_count=346,runtime_source_manifest_sha256=L.digest(L.compact(runtime)),origin_commit='a'*40,python={},work_seconds=2424,cleanup_seconds=5,outer_seconds=2430,numeric_seconds=2400,claims={k:False for k in L.FLAGS})
-  return contract,base
- def load_fixture(self,c,b):
-  with patch.object(L,'bounded_json',side_effect=[(L.encoded(v),v) for v in (c,b)]),patch.object(L,'verify_map'):
+  entry=L.digest(L.encoded(base));prior=dict(sources);prior[L.PREFIX+'pins.json']=entry
+  repair=dict(schema=1,profile='packed-m128-run-gate-repair-v1',prior_pins=entry,own={L.REPAIR+n:'4'*64 for n in ('prepare.py','probe.py','test_gate.py','README.md')},generated={**{n:'5'*64 for n in targets},L.PREFIX+'pins.json':'6'*64})
+  runtime={**prior,**repair['own'],**repair['generated']}
+  contract=dict(schema=1,profile=L.PROFILE,status='PREPARED_SOURCE_EXECUTION_REQUIRES_ROOT_GATE',own_sources={n:'7'*64 for n in ('launch.py','driver.py','terminal_validator.py','test_launch.py','test_terminal_validator.py','README.md')},support_sources={'support.py':'8'*64},entry_pins_sha256=entry,repair_pins_sha256=L.digest(L.encoded(repair)),runtime_entry_pins_sha256='6'*64,prior_wrapper_contract_sha256='582833958e1dda4772f3e23c02f2ec0a17be9d6d7e5e3e5fba36618fb4ca8f30',prior_runtime_source_manifest_sha256=L.digest(L.compact(prior)),assets_pins_sha256='2'*64,runtime_source_count=350,runtime_source_manifest_sha256=L.digest(L.compact(runtime)),origin_commit='a'*40,python={},work_seconds=2424,cleanup_seconds=5,outer_seconds=2430,numeric_seconds=2400,claims={k:False for k in L.FLAGS})
+  return contract,base,repair
+ def load_fixture(self,c,b,r):
+  with patch.object(L,'bounded_json',side_effect=[(L.encoded(v),v) for v in (c,b,r)]),patch.object(L,'verify_map'):
    return L.load_contract(L.digest(L.encoded(c)),Path('/synthetic'))
  def test_full_m128_chain(self):
-  c,b=self.entry_chain();self.assertEqual(self.load_fixture(c,b),(c,b))
+  c,b,r=self.entry_chain();_,actual=self.load_fixture(c,b,r)
+  self.assertTrue(all(actual['sources'][n]==h for n,h in r['own'].items()))
+  self.assertEqual(actual['generated'],{n:h for n,h in r['generated'].items() if n!=L.PREFIX+'pins.json'})
  def test_origin_assets_bound(self):
-  c,b=self.entry_chain();c['assets_pins_sha256']='3'*64
-  with self.assertRaises(ValueError):self.load_fixture(c,b)
+  c,b,r=self.entry_chain();c['assets_pins_sha256']='3'*64
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
  def test_runtime_count_strict(self):
-  for count in (345,347,True,346.0):
-   c,b=self.entry_chain();c['runtime_source_count']=count
-   with self.subTest(count=count),self.assertRaises(ValueError):self.load_fixture(c,b)
+  for count in (346,349,351,True,350.0):
+   c,b,r=self.entry_chain();c['runtime_source_count']=count
+   with self.subTest(count=count),self.assertRaises(ValueError):self.load_fixture(c,b,r)
  def test_runtime_manifest_bound(self):
-  c,b=self.entry_chain();c['runtime_source_manifest_sha256']='3'*64
-  with self.assertRaises(ValueError):self.load_fixture(c,b)
+  c,b,r=self.entry_chain();c['runtime_source_manifest_sha256']='3'*64
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
  def test_no_m16_profile_alias(self):
-  c,b=self.entry_chain();b['profile']='qwen2-public-pv16-packed-m16-linked-v1';c['entry_pins_sha256']=L.digest(L.encoded(b))
-  with self.assertRaises(ValueError):self.load_fixture(c,b)
+  c,b,r=self.entry_chain();b['profile']='qwen2-public-pv16-packed-m16-linked-v1';c['entry_pins_sha256']=L.digest(L.encoded(b))
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
  def test_budget_alias_rejected(self):
   for key,value in (('numeric_seconds',900),('work_seconds',2424.0),('cleanup_seconds',True),('outer_seconds',2431)):
-   c,b=self.entry_chain();c[key]=value
-   with self.subTest(key=key),self.assertRaises(ValueError):self.load_fixture(c,b)
+   c,b,r=self.entry_chain();c[key]=value
+   with self.subTest(key=key),self.assertRaises(ValueError):self.load_fixture(c,b,r)
+ def test_repair_prior_pins_rejected(self):
+  c,b,r=self.entry_chain();r['prior_pins']='9'*64;c['repair_pins_sha256']=L.digest(L.encoded(r))
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
+ def test_repair_unknown_target_rejected(self):
+  c,b,r=self.entry_chain();r['generated']['arbitrary.py']='9'*64;c['repair_pins_sha256']=L.digest(L.encoded(r))
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
+ def test_repair_unknown_source_rejected(self):
+  c,b,r=self.entry_chain();r['own'][L.REPAIR+'extra.py']='9'*64;c['repair_pins_sha256']=L.digest(L.encoded(r))
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
+ def test_repair_installed_entry_unbound_rejected(self):
+  c,b,r=self.entry_chain();c['runtime_entry_pins_sha256']='9'*64
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
+ def test_repair_contract_hash_drift_rejected(self):
+  c,b,r=self.entry_chain();c['repair_pins_sha256']='9'*64
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
+ def test_predecessor_runtime_manifest_bound(self):
+  c,b,r=self.entry_chain();c['prior_runtime_source_manifest_sha256']='9'*64
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
+ def test_predecessor_wrapper_identity_bound(self):
+  c,b,r=self.entry_chain();c['prior_wrapper_contract_sha256']='9'*64
+  with self.assertRaises(ValueError):self.load_fixture(c,b,r)
  def test_large_report_control_remains_small(self):
   value={str(i):'x'*4096 for i in range(1300)}
   raw=L.encoded(value);self.assertGreater(len(raw),4*1024*1024)

@@ -332,3 +332,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 公共重建链从已发布 classcompile/README_PORTABLE_CN.md 的生产/QK donor/HardFloat20源恢复原92源，再应用固定单表达式修复；可选两个已pin bench源码形成94源。原 compile_only.py 会拒绝修改后的源pins，不能绕过；新A/后续B1需要各自经审runner、精确闭包和预算。新A已获授权并正在独立执行，但本批不收录或声称其结果；没有新 CHIRRTL/SV 无环、完整Host、数值或性能通过声明。
 - SAFE_RESULT仅白名单投影，保留原receipt hash、阶段统计及cleanup相对时差，不是原receipt字节；本包不含classes、IR、生成SV、JAR、权重、原日志或机器PID/boot/group身份。没有历史class字节时可重建源/跑冷模型，但不能宣称重放历史字节码证据。
 - 本批19个add-only文件加本plan追加，原465模型运行源与整个.github字节不变，不重复触发iDMA source-export。模型限定M128 1/5、指定27门禁及内容身份不变，full RTL 0/5；全29/全张量、端到端真实供数、短Kernelbench和性能目标仍未完成。此源码检查点不继承正在运行的任何新结果。
+
+
+## 2026-10-17 13:22 UTC：修复后真实 Kernel SV 与同输出离线库存门
+
+- **done：修复后真实 Kernel 完整 SV 生成。** [26 文件源码/安全历史包](../candidates/qwen2_resident_matrix/production_qk16_rebase/silu_feedback_sv_qualification/README_CN.md)记录固定 firtool 对修复后原生产 Kernel 的实际生成：exit0、96.221966秒，69,464,271B SV，SHA256 93fe8475e21fe1efefc99efac1ab13bf670a48a3cd239351c4efa5b14e815451。真实组合环检查已完成通过；该进展替代此前“尚未验证修复后无环”的待办，但不抹去原 B1 的组合环 FAIL。
+- **原运行和后续复核分开。** 128MiB 写出上限的原 v7 整体仍为 NOT_COMPLETED：工具完整生成 SV 后，原库存 checker 将同名类型/实例名称误算两次而拒绝。独立修复仅跳过已完整解析的 instance span；同一实际 SV 的只读离线复核 PASS，root/独审8+8冷测通过。没有重跑工具或将原 receipt 改写为 PASS。
+- 后验覆盖49个定义、目标原 Bench 子树的8个 endpoint、8个 clock gate、1个 iDMA的受限直接实例库存与 named-port；完整 provider link/B2、动态协议和数值尚未通过。完整 full block RTL、利用率与端到端供数也没有因此取得通过资格。
+- 原历史保留：原组合环exit1；两次60秒 timeout，其中诊断确认环检查 Done 于43.284秒；48MiB文件写出失败；128MiB完整写出后库存误拒；以及独立同SV离线 PASS。安全投影保留 receipt/log/output hash、相对cleanup与明确标为 direct-leader sample 的统计，不是原receipt/proof字节，不声称进程树峰值或重新认证机器身份。
+- 仍有两个共同命名空间阻点：RoundRawFNToRecFN_e8_s24 与 RoundAnyRawFNToRecFN_ie8_is26_oe8_os24 在独立FMA provider与本SV中同名但接口/内容不同，不能任选覆盖或手改生成SV。当前方案是在同一 Chisel 命名空间共同发射原 Bench 与四FMA；collection仅发射容器，目标top仍原 Bench。新共同发射A正在另行授权执行，本批不纳入其结果；后续动态必须消费同一合格资产，不能用独立再发射替代闭包。
+- 公共链保留原92源重建、相邻单表达式修复/bench94源、本包独立emitter形成95源；generation_v7/PLAN_CN.md的“尚未执行”标题仅为当时冻结的历史计划，当前实际生成结果以SAFE_HISTORY为准；历史 generation_v7 原checker及输入/工具/IR/receipt pins保持，完整重建产生新receipt须另建受审闭包，不修改冻结身份。没有历史同hash SV时只能运行冷测，不能宣称离线复核了该69MB实际输出。
+- 本批仅26个add-only UTF-8源码/安全元数据和本plan追加，不上传69MB SV、39MB IR、classes、JAR、权重、机器PID/boot/session/group或原日志。原465模型运行源与整个.github字节保持不变，不重复触发 source-export/昂贵运行。模型限定 M128 1/5、指定27门禁及已保留内容身份不变，full RTL 0/5；全29/全张量覆盖、真实供数和性能目标仍待完成。

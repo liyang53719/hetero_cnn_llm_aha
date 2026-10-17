@@ -1,0 +1,158 @@
+{
+  "scope": "actual tool success and separate offline inventory; not linked/numerical",
+  "projection_not_original_receipt_bytes": true,
+  "A": {
+    "status": "PASS_KERNEL_TEST_SHELL_CHIRRTL_STRUCTURE_ONLY",
+    "receipt_sha256": "5063e0d94770407972b0831cf1aa60fc9f2610a5bf2d603234486d4858c860ef",
+    "ir_sha256": "e68656f20d3e7057e789bfaaffe7305be0ba5f0b507f6cc1741e5b59a5a47e21",
+    "ir_bytes": 39208432,
+    "sources": 95,
+    "classes": 560,
+    "definition_count": 687,
+    "warning_count": 1,
+    "warning": "TransposedDenseOwner.scala966 dynamic index width12 for Vec256"
+  },
+  "B1_history": [
+    {
+      "scope": "original_actual_combinational_cycle",
+      "original_run_status": "NOT_COMPLETED",
+      "receipt_sha256": "81ddd87f0009fed6d62268f0ba469b96fe019c26f644f79e1db63f4257bd0860",
+      "log_sha256": "f9b75b51922eadd26117395d822b1468989dc46da2fad56f4c0e95480ae2c197",
+      "tool_exit_code": 1,
+      "tool_error": null,
+      "elapsed_stage_seconds": 51.65031674700731,
+      "cleanup_complete": true,
+      "absence_barrier_before_reap": true,
+      "cleanup_relative_seconds": {
+        "signal_at": 0.0003412829973967746,
+        "barrier_at": 0.021085715998196974,
+        "reap_started_at": 0.021263443006318994,
+        "reaped_at": 0.021307870003511198,
+        "completed_at": 0.02133520100323949
+      }
+    },
+    {
+      "scope": "fixed_IR_60s_timeout_no_progress",
+      "original_run_status": "NOT_COMPLETED",
+      "receipt_sha256": "33b1a691bb79df1a0dbe153c200449af9308a96ca3da3b40f4aa32f1c357b4a9",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tool_exit_code": null,
+      "tool_error": "InterruptedError",
+      "elapsed_stage_seconds": 60.047050795998075,
+      "cleanup_complete": true,
+      "absence_barrier_before_reap": true,
+      "cleanup_relative_seconds": {
+        "signal_at": 0.0027816439978778362,
+        "barrier_at": 0.04465982300462201,
+        "reap_started_at": 0.046530937004718,
+        "reaped_at": 0.04657917999429628,
+        "completed_at": 0.046625368995592
+      }
+    },
+    {
+      "scope": "60s_timeout_comb_loop_pass_completed",
+      "original_run_status": "NOT_COMPLETED",
+      "receipt_sha256": "6a4aa1ddb947899266f3f21e2d5a0a8ab724a060b78100f231d9ddee9bd77f95",
+      "log_sha256": "48c81a79394eec57ce6b8645099fa7d77758b65f782f4140f57809524cb8271f",
+      "tool_exit_code": null,
+      "tool_error": "InterruptedError",
+      "elapsed_stage_seconds": 60.04262961799395,
+      "cleanup_complete": true,
+      "absence_barrier_before_reap": true,
+      "cleanup_relative_seconds": {
+        "signal_at": 0.00041897999471984804,
+        "barrier_at": 0.041998139990027994,
+        "reap_started_at": 0.042181545999483205,
+        "reaped_at": 0.042229999002302065,
+        "completed_at": 0.04227149199869018
+      },
+      "leader_stats": {
+        "scope": "DIRECT_LEADER_SAMPLED_NOT_TREE_PEAK",
+        "ticks_per_second": 100,
+        "samples": 590,
+        "last_sample_elapsed_seconds": 59.99893961199268,
+        "last_user_seconds": 59.51,
+        "last_system_seconds": 0.46,
+        "max_observed_VmRSS_bytes": 817618944,
+        "max_observed_VmHWM_bytes": 817618944
+      }
+    },
+    {
+      "scope": "export_write_48MiB_limit",
+      "original_run_status": "NOT_COMPLETED",
+      "receipt_sha256": "3e688d581e39556efe94effe09ab506877e3ebef9a83d44ed71d223d37720c5d",
+      "log_sha256": "6e99c135fcaa003d8457cdfa937d31a23fac2138d3b20e3e217f1107455d2361",
+      "tool_exit_code": 1,
+      "tool_error": null,
+      "elapsed_stage_seconds": 96.04530974599766,
+      "cleanup_complete": true,
+      "absence_barrier_before_reap": true,
+      "cleanup_relative_seconds": {
+        "signal_at": 0.0002607329952297732,
+        "barrier_at": 0.021223520001512952,
+        "reap_started_at": 0.021396299998741597,
+        "reaped_at": 0.021482629992533475,
+        "completed_at": 0.021524212992517278
+      },
+      "leader_stats": {
+        "scope": "DIRECT_LEADER_SAMPLED_NOT_TREE_PEAK",
+        "ticks_per_second": 100,
+        "samples": 943,
+        "last_sample_elapsed_seconds": 96.02306278698961,
+        "last_user_seconds": 94.41,
+        "last_system_seconds": 1.56,
+        "max_observed_VmRSS_bytes": 1079853056,
+        "max_observed_VmHWM_bytes": 1079853056
+      }
+    },
+    {
+      "scope": "tool_exit0_complete_SV_postchecker_false_rejection",
+      "original_run_status": "NOT_COMPLETED",
+      "receipt_sha256": "2cc3c66bb96478bc49e09b275d310839deefd8b511e2175ab71e439532996360",
+      "log_sha256": "08da0b08878f26fff590e542605f6fe8360264a4662c817d6d0f39a5a3e34844",
+      "tool_exit_code": 0,
+      "tool_error": null,
+      "elapsed_stage_seconds": 96.22196618000453,
+      "cleanup_complete": true,
+      "absence_barrier_before_reap": true,
+      "cleanup_relative_seconds": {
+        "signal_at": 0.0003038480062969029,
+        "barrier_at": 0.021360019003623165,
+        "reap_started_at": 0.021576665007160045,
+        "reaped_at": 0.02163776599627454,
+        "completed_at": 0.02167823699710425
+      },
+      "leader_stats": {
+        "scope": "DIRECT_LEADER_SAMPLED_NOT_TREE_PEAK",
+        "ticks_per_second": 100,
+        "samples": 944,
+        "last_sample_elapsed_seconds": 96.11843009899894,
+        "last_user_seconds": 95.46,
+        "last_system_seconds": 0.62,
+        "max_observed_VmRSS_bytes": 1084235776,
+        "max_observed_VmHWM_bytes": 1084235776
+      }
+    }
+  ],
+  "offline": {
+    "manifest_sha256": "a9c28db2d9bf403f4415ec51adb02e2c158328c586f1dfb0ce21ace3e60a7967",
+    "result_sha256": "b311e86e7d23d7388a341bb7f636671e190fb1f213afa1f4ce9c8478b9731f4a",
+    "pass": true,
+    "sv_sha256": "93fe8475e21fe1efefc99efac1ab13bf670a48a3cd239351c4efa5b14e815451",
+    "sv_bytes": 69464271,
+    "definition_count": 49,
+    "external_counts": {
+      "qwen2_matrix_command_endpoint": 8,
+      "tc_clk_gating": 8,
+      "idma_backend_rw_axi_flat_wrap": 1
+    },
+    "cold_normal": 8,
+    "cold_optimized": 8,
+    "B2_linked": false,
+    "numerical": false
+  },
+  "remaining_provider_collision": [
+    "RoundRawFNToRecFN_e8_s24",
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24"
+  ]
+}

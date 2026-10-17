@@ -1,0 +1,278 @@
+{
+  "qwen2_matrix_command_endpoint": {
+    "ports": {
+      "clk_i": [
+        "input",
+        1
+      ],
+      "rst_ni": [
+        "input",
+        1
+      ],
+      "cmd_valid_i": [
+        "input",
+        1
+      ],
+      "cmd_ready_o": [
+        "output",
+        1
+      ],
+      "cmd_i": [
+        "input",
+        128
+      ],
+      "step_valid_i": [
+        "input",
+        1
+      ],
+      "step_ready_o": [
+        "output",
+        1
+      ],
+      "step_context_i": [
+        "input",
+        3
+      ],
+      "step_clear_i": [
+        "input",
+        1
+      ],
+      "step_last_i": [
+        "input",
+        1
+      ],
+      "command_last_tile_i": [
+        "input",
+        1
+      ],
+      "step_a_i": [
+        "input",
+        256
+      ],
+      "step_b_i": [
+        "input",
+        512
+      ],
+      "out_valid_o": [
+        "output",
+        1
+      ],
+      "out_ready_i": [
+        "input",
+        1
+      ],
+      "out_context_o": [
+        "output",
+        3
+      ],
+      "out_last_o": [
+        "output",
+        1
+      ],
+      "out_acc_o": [
+        "output",
+        16384
+      ],
+      "completion_valid_o": [
+        "output",
+        1
+      ],
+      "completion_ready_i": [
+        "input",
+        1
+      ],
+      "completion_data_o": [
+        "output",
+        56
+      ],
+      "protocol_error_o": [
+        "output",
+        1
+      ],
+      "seed_begin_valid_i": [
+        "input",
+        1
+      ],
+      "seed_begin_ready_o": [
+        "output",
+        1
+      ],
+      "seed_context_i": [
+        "input",
+        3
+      ],
+      "seed_group_tag_i": [
+        "input",
+        32
+      ],
+      "seed_group_sequence_i": [
+        "input",
+        32
+      ],
+      "seed_source_generation_i": [
+        "input",
+        32
+      ],
+      "seed_beat_valid_i": [
+        "input",
+        1
+      ],
+      "seed_beat_ready_o": [
+        "output",
+        1
+      ],
+      "seed_cluster_i": [
+        "input",
+        5
+      ],
+      "seed_data_i": [
+        "input",
+        512
+      ],
+      "seed_commit_valid_i": [
+        "input",
+        1
+      ],
+      "seed_commit_ready_o": [
+        "output",
+        1
+      ],
+      "seed_abort_i": [
+        "input",
+        1
+      ],
+      "seed_ack_valid_o": [
+        "output",
+        1
+      ],
+      "seed_ack_ready_i": [
+        "input",
+        1
+      ],
+      "seed_ack_context_o": [
+        "output",
+        3
+      ],
+      "seed_ack_group_tag_o": [
+        "output",
+        32
+      ],
+      "seed_ack_group_sequence_o": [
+        "output",
+        32
+      ],
+      "seed_ack_source_generation_o": [
+        "output",
+        32
+      ],
+      "seed_ack_error_o": [
+        "output",
+        1
+      ],
+      "seed_reset_required_o": [
+        "output",
+        1
+      ],
+      "arithmetic_busy_o": [
+        "output",
+        5
+      ],
+      "arithmetic_out_valid_o": [
+        "output",
+        1
+      ]
+    },
+    "parameters": {
+      "ENABLE_ACCUMULATOR_SEED": "1"
+    },
+    "instance_count": 8
+  },
+  "tc_clk_gating": {
+    "ports": {
+      "clk_i": [
+        "input",
+        1
+      ],
+      "en_i": [
+        "input",
+        1
+      ],
+      "test_en_i": [
+        "input",
+        1
+      ],
+      "clk_o": [
+        "output",
+        1
+      ]
+    },
+    "parameters": {},
+    "instance_count": 8
+  },
+  "idma_backend_rw_axi_flat_wrap": {
+    "ports": {
+      "clk_i": [
+        "input",
+        1
+      ],
+      "rst_ni": [
+        "input",
+        1
+      ],
+      "req_valid_i": [
+        "input",
+        1
+      ],
+      "req_ready_o": [
+        "output",
+        1
+      ],
+      "src_addr_i": [
+        "input",
+        64
+      ],
+      "dst_addr_i": [
+        "input",
+        64
+      ],
+      "length_i": [
+        "input",
+        32
+      ],
+      "rsp_valid_o": [
+        "output",
+        1
+      ],
+      "rsp_ready_i": [
+        "input",
+        1
+      ],
+      "rsp_error_o": [
+        "output",
+        1
+      ],
+      "axi_read_req_o": [
+        "output",
+        785
+      ],
+      "axi_read_rsp_i": [
+        "input",
+        532
+      ],
+      "axi_write_req_o": [
+        "output",
+        785
+      ],
+      "axi_write_rsp_i": [
+        "input",
+        532
+      ],
+      "busy_o": [
+        "output",
+        8
+      ]
+    },
+    "parameters": {},
+    "instance_count": 1
+  }
+}

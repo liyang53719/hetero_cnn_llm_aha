@@ -322,3 +322,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - **done：既有四段 FMA 组件 SV 发射与接口核验。** [22 文件可移植 recipe/安全投影](../candidates/qwen2_resident_matrix/production_qkv_reduction/fma_components/README_CN.md)记录单次v2成功：93源，原550类逐hash复用，独立App3类，8.617秒；HeteroBF16FmaPre/Mul/Post/Round四份SystemVerilog共8个模块定义，端口与固定 seed-enabled Matrix lane 四段绑定/位宽匹配。root及独审12+12冷测通过；原计划/未执行v1历史与实际v2结果分开，安全投影不是原receipt字节。
 - 该门仅四组件SV与interface-only；没有算术测试、完整Host链接、动态债务、性能或完整block RTL通过。此包没有生成SV/IR/classes/JAR/原日志/宿主身份，保留重建脚本与pins；独立上游120秒类编译和本组件90秒总预算不可混同。本批没有再运行Java/firtool或短Kernelbench，短Kernelbench仍未执行。
 - 本批30个add-only源/安全证据文件＋本plan更新；原465模型运行源和整个.github字节保持不变。模型限定M128 1/5、指定27门禁及已有内容身份保留，full RTL 0/5，全29/全张量覆盖、端到端真实供数和80%/90%实测目标仍未完成。
+
+
+## 2026-10-17 12:48 UTC：原生产 SFU 反馈最小源码修复检查点
+
+- **done：19 文件可移植源码/安全证据检查点。** [SFU feedback 修复](../candidates/qwen2_resident_matrix/production_qk16_rebase/silu_feedback_fix/README_CN.md)保留原生产 FfnTileSiluBridge，仅将 SFU abort 从 bad 改为外部 io.abort || 现有 poison；tiles.abort 仍立即使用 bad。当拍 bad 仍阻写/新请求，错误结果当拍消费并登记 poison，外部 abort 不延迟。新增寄存器、存储与算术资源均为0；固定原 top 和资源配置未改变。
+- **原失败完整保留。** 原 B1 实际 firtool 在51.650秒发现 resident/router/真实 VectorSilu loan 组合环并 exit1，没有完成SV。修复后的单源增量编译器 exit0，但严格 ABI 完全相等后验因新增 public reflection helper72 而 FAIL，该次实际运行仍为 NOT_COMPLETED。随后独立精确离线字节码兼容复核 PASS，不重跑Java，不把离线兼容改写成原严格门通过。
+- 离线证据约束原实际557类及修复后557类；553类逐hash不变，4类归属同源。72个反射目标序列、Code hash及实际调用点固定，所有非Bridge类没有相应外部helper引用。新增helper不是任意忽略项；结构ABI边界不含所有annotation或方法体等价。root与独审17+17冷测通过，包括12握手/错误路径及5可移植重建/兼容边界；这些冷测不证明完整电路动态行为。
+- 公共重建链从已发布 classcompile/README_PORTABLE_CN.md 的生产/QK donor/HardFloat20源恢复原92源，再应用固定单表达式修复；可选两个已pin bench源码形成94源。原 compile_only.py 会拒绝修改后的源pins，不能绕过；新A/后续B1需要各自经审runner、精确闭包和预算。新A已获授权并正在独立执行，但本批不收录或声称其结果；没有新 CHIRRTL/SV 无环、完整Host、数值或性能通过声明。
+- SAFE_RESULT仅白名单投影，保留原receipt hash、阶段统计及cleanup相对时差，不是原receipt字节；本包不含classes、IR、生成SV、JAR、权重、原日志或机器PID/boot/group身份。没有历史class字节时可重建源/跑冷模型，但不能宣称重放历史字节码证据。
+- 本批19个add-only文件加本plan追加，原465模型运行源与整个.github字节不变，不重复触发iDMA source-export。模型限定M128 1/5、指定27门禁及内容身份不变，full RTL 0/5；全29/全张量、端到端真实供数、短Kernelbench和性能目标仍未完成。此源码检查点不继承正在运行的任何新结果。

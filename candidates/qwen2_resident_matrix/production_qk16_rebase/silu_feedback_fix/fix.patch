@@ -1,0 +1,11 @@
+--- a/candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala
++++ b/candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala
+@@ -27,7 +27,7 @@
+   val count=(call.rows>>4)*call.cols
+   io.start.ready:=state===idle && !bad
+   io.busy:=state=/=idle && state=/=locked;io.complete:=false.B;io.resetRequired:=poison || bad
+-  io.tiles.abort:=bad;io.silu.abort:=bad
++  io.tiles.abort:=bad;io.silu.abort:=io.abort || poison
+   io.tiles.control.valid:= !bad && (state===begin || state===seal || state===releaseGate || state===releaseUp)
+   io.tiles.control.bits.op:=Mux(state===begin,0.U,Mux(state===seal,1.U,2.U))
+   io.tiles.control.bits.slot:=Mux(state===releaseGate,0.U,Mux(state===releaseUp,1.U,2.U))

@@ -1,0 +1,44 @@
+{
+  "scope": "source single-expression repair; strict class attempt FAIL; separate exact offline compatibility PASS; no new CHIRRTL/SV",
+  "production_added_register_bits": 0,
+  "original_B1": {
+    "receipt_sha256": "81ddd87f0009fed6d62268f0ba469b96fe019c26f644f79e1db63f4257bd0860",
+    "tool_exit_code": 1,
+    "elapsed_seconds": 51.650316747,
+    "reason": "firtool detected real resident/router/VectorSilu combinational cycle",
+    "completed_SV": false
+  },
+  "strict_class_attempt": {
+    "receipt_sha256": "29a285ff8fd7f28c38efee10a74d961c67bb96e8d53add731f48ad5eaea97cef",
+    "status": "NOT_COMPLETED",
+    "compiler_exit_code": 0,
+    "elapsed_stage_seconds": 8.703109662994393,
+    "failure": "strict ABI equality rejects added public static reflection helper72",
+    "cleanup_complete": true,
+    "cleanup_relative_seconds": {
+      "signal_at": 0.0002970060013467446,
+      "barrier_at": 0.02137057000072673,
+      "reap_started_at": 0.021532462997129187,
+      "reaped_at": 0.02157127200916875,
+      "completed_at": 0.021603670000331476
+    },
+    "absence_barrier_before_reap": true
+  },
+  "offline_compatibility": {
+    "result_sha256": "9b2b95fce520bb1f0c9afe45f540218a2a0d41960d7b9c8240a388b055d24fe6",
+    "manifest_sha256": "ceb5d661a3ac9980caa1984d3a426b6a724a3a93ffe4e9a89890843bd0bd3077",
+    "pass": true,
+    "source_count": 94,
+    "class_count": 557,
+    "retained_exact_classes": 553,
+    "reflection_helpers": 72,
+    "external_helper_references": 0,
+    "cold_tests_normal": 5,
+    "cold_tests_optimized": 5
+  },
+  "cold_edge_tests": {
+    "normal": 12,
+    "optimized": 12
+  },
+  "projection_not_original_receipt_bytes": true
+}

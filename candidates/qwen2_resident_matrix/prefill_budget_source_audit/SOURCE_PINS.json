@@ -1,0 +1,104 @@
+{
+  "scope": "local immutable candidate bytes; not current main equivalence",
+  "frozen_base": "c70315949dbc3c129b9690ced83f9228a98dd3fe",
+  "published_model_identity_parent_supplied": "ca5ca9a",
+  "current_main_parent_supplied": "50a849",
+  "files": [
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "root": "production_source"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala",
+      "sha256": "07d728d510ffd8b4f02c1b02476c2236fe594a18f70248c5a2f2c4ecbc361ae8",
+      "root": "production_source"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558",
+      "root": "production_source"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "sha256": "b3dad7ae7a23c96ac720cd9920ff3595d1d83f77a2664ed73526e71e5b49a3ae",
+      "root": "production_source"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala",
+      "sha256": "94e6198a060044ae58a90328394ec8d11fe3311647fef62c1a1b975f2504ff4a",
+      "root": "production_source"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+      "sha256": "59c041ac92a4a0105ddf0bc5ad521e59b0ebb7d76c30bdeb4eb009943bb19545",
+      "root": "production_source"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala",
+      "sha256": "63e3c41a4459a898db7d19a692bfd60c08c5a1b94b4596c0b45ada10378108f1",
+      "root": "production_source"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/ffn_group/FfnResidentCoordinator.scala",
+      "sha256": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db",
+      "root": "production_source"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala",
+      "sha256": "bb9869995a5b3c22fd5cf4bf23cd98f8af6df3faeafe9a4d6953c11771dbe7e1",
+      "root": "production_source"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala",
+      "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d",
+      "root": "production_source"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala",
+      "sha256": "f402c19b32fb9619b549bdbe4c65c3237d49fcde01210701ed048c24540f9ac6",
+      "root": "production_source"
+    },
+    {
+      "path": "attention_packed_m128/tiled.patch",
+      "sha256": "c29860c602bb2733ab6d3d5f95fcc9156879c0acaeceecfa861af1b12809830b",
+      "root": "candidate_tree"
+    },
+    {
+      "path": "attention_packed_owner/schedule.py",
+      "sha256": "ddd2c2b2d7a60bbcae27013f1f38e17bdc514cffe15572124c9bdfabff2c81bd",
+      "root": "candidate_tree"
+    },
+    {
+      "path": "attention_scalar_schedule/model.py",
+      "sha256": "fc975a2d02df0e3ad8f3bd185a1cdb9be21b8b563b587c4e5a3026301ae536f3",
+      "root": "candidate_tree"
+    },
+    {
+      "path": "sfu_silu_cycle_candidate/model.py",
+      "sha256": "37f785e47a21e164a0f052053c44cae7da643e4456bde85804fd767fb5d94b28",
+      "root": "candidate_tree"
+    },
+    {
+      "path": "sfu_microsequence_audit/DivSqrtRecFN_small.scala",
+      "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+      "root": "candidate_tree"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "4375ccf715cf408975c3e45ae595955767b824404ef8337bb260ed807527dc1e",
+      "root": "qk16_source"
+    },
+    {
+      "root": "bundle",
+      "path": "evidence_sources/packed_m128_schedule.py.txt",
+      "sha256": "a65dca9d24862c2b552117ce2c9cfdb270215b12881490fc50b5545b938b6086"
+    }
+  ],
+  "root_contracts": {
+    "production_source": "Composed production v2 source root containing chisel/ and candidates/. Supply exact reconstructed candidate bytes, not plain main checkout.",
+    "candidate_tree": "qwen2_resident_matrix candidate root containing attention_packed_m128/, sfu_silu_cycle_candidate/, etc.",
+    "qk16_source": "Composed QK16 source root containing chisel/. Exact pinned compiled candidate, not packedPV.",
+    "bundle": "This portable package directory; exact source-only composed M128 schedule snapshot."
+  }
+}

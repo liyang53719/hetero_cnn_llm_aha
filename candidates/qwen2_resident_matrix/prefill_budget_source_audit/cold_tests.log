@@ -1,0 +1,21 @@
+test_barriers (test_budget.BudgetTests.test_barriers) ... ok
+test_branch_counts_and_threshold_sides (test_budget.BudgetTests.test_branch_counts_and_threshold_sides) ... ok
+test_dense_dimensions (test_budget.BudgetTests.test_dense_dimensions) ... ok
+test_fixed_identity (test_budget.BudgetTests.test_fixed_identity) ... ok
+test_full_exp_is_conditional (test_budget.BudgetTests.test_full_exp_is_conditional) ... ok
+test_gates_are_exact_and_floor (test_budget.BudgetTests.test_gates_are_exact_and_floor) ... ok
+test_invalid_profile_and_gate (test_budget.BudgetTests.test_invalid_profile_and_gate) ... ok
+test_missing_source_is_rejected (test_budget.BudgetTests.test_missing_source_is_rejected) ... ok
+test_portable_cli_does_not_infer_roots (test_budget.BudgetTests.test_portable_cli_does_not_infer_roots) ... ok
+test_profiles_never_share_pv_work_by_accident (test_budget.BudgetTests.test_profiles_never_share_pv_work_by_accident) ... ok
+test_reject_measurement_upgrades (test_budget.BudgetTests.test_reject_measurement_upgrades) ... ok
+test_report_never_certifies (test_budget.BudgetTests.test_report_never_certifies) ... ok
+test_roots_are_explicit_and_complete (test_budget.BudgetTests.test_roots_are_explicit_and_complete) ... ok
+test_scalar_work (test_budget.BudgetTests.test_scalar_work) ... ok
+test_source_control_edge_traces (test_budget.BudgetTests.test_source_control_edge_traces) ... ok
+test_source_pin_tamper (test_budget.BudgetTests.test_source_pin_tamper) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.061s
+
+OK

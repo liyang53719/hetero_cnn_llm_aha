@@ -1,0 +1,197 @@
+{
+  "useful_macs": 6014828544,
+  "fixed_macs_per_cycle": 4096,
+  "ideal_cycles": 1468464,
+  "cycle_gates": {
+    "80": {
+      "numerator": 1835580,
+      "denominator": 1,
+      "max_integer_cycles": 1835580
+    },
+    "90": {
+      "numerator": 4894880,
+      "denominator": 3,
+      "max_integer_cycles": 1631626
+    }
+  },
+  "profiles": [
+    {
+      "profile": "raw_scalar",
+      "counts": {
+        "pairs": 99072,
+        "rows": 1536,
+        "fold_add": 1585152,
+        "score_scale": 99072,
+        "subtract": 99072,
+        "ordered_sum": 99072,
+        "normalize": 792576,
+        "exp": 99072,
+        "reciprocal": 1536,
+        "qk_issues": 792576,
+        "pv_issues": 792576,
+        "dense_issues": 1462272
+      },
+      "full_exp_count": 1536,
+      "full_exp_condition": "at_least_one_per_row",
+      "scalar_interacceptance_slot_sum": 8391168,
+      "scalar_service_lower_bound": 8391167,
+      "serial_matrix_issue_lower_bound": 3047424,
+      "serial_wall_lower_bound": 11438591,
+      "upper_useful_utilization": {
+        "numerator": 1468464,
+        "denominator": 11438591
+      },
+      "conditions": [
+        "finite successful attention",
+        "original one Scalar options0",
+        "no overlap between scalar service and Matrix/Dense issues",
+        "algorithm-specific normalization count",
+        "each Matrix issue at least one cycle"
+      ],
+      "omitted_costs": [
+        "DMA and stalls",
+        "bank service and conflicts",
+        "max/BF16/controller overhead",
+        "FFN SiLU",
+        "final ACK tail"
+      ],
+      "evidence_kind": "source_necessary_lower_bound",
+      "rtl_measured": false,
+      "accepted_80": false,
+      "accepted_90": false
+    },
+    {
+      "profile": "qk16_only",
+      "counts": {
+        "pairs": 99072,
+        "rows": 1536,
+        "fold_add": 1585152,
+        "score_scale": 99072,
+        "subtract": 99072,
+        "ordered_sum": 99072,
+        "normalize": 792576,
+        "exp": 99072,
+        "reciprocal": 1536,
+        "qk_issues": 55296,
+        "pv_issues": 792576,
+        "dense_issues": 1462272
+      },
+      "full_exp_count": 1536,
+      "full_exp_condition": "at_least_one_per_row",
+      "scalar_interacceptance_slot_sum": 8391168,
+      "scalar_service_lower_bound": 8391167,
+      "serial_matrix_issue_lower_bound": 2310144,
+      "serial_wall_lower_bound": 10701311,
+      "upper_useful_utilization": {
+        "numerator": 1468464,
+        "denominator": 10701311
+      },
+      "conditions": [
+        "finite successful attention",
+        "original one Scalar options0",
+        "no overlap between scalar service and Matrix/Dense issues",
+        "algorithm-specific normalization count",
+        "each Matrix issue at least one cycle"
+      ],
+      "omitted_costs": [
+        "DMA and stalls",
+        "bank service and conflicts",
+        "max/BF16/controller overhead",
+        "FFN SiLU",
+        "final ACK tail"
+      ],
+      "evidence_kind": "source_necessary_lower_bound",
+      "rtl_measured": false,
+      "accepted_80": false,
+      "accepted_90": false
+    },
+    {
+      "profile": "packed_qk_pv",
+      "counts": {
+        "pairs": 99072,
+        "rows": 1536,
+        "fold_add": 1585152,
+        "score_scale": 99072,
+        "subtract": 99072,
+        "ordered_sum": 99072,
+        "normalize": 99072,
+        "exp": 99072,
+        "reciprocal": 1536,
+        "qk_issues": 55296,
+        "pv_issues": 16512,
+        "dense_issues": 1462272
+      },
+      "full_exp_count": 1536,
+      "full_exp_condition": "at_least_one_per_row",
+      "scalar_interacceptance_slot_sum": 6310656,
+      "scalar_service_lower_bound": 6310655,
+      "serial_matrix_issue_lower_bound": 1534080,
+      "serial_wall_lower_bound": 7844735,
+      "upper_useful_utilization": {
+        "numerator": 1468464,
+        "denominator": 7844735
+      },
+      "conditions": [
+        "finite successful attention",
+        "original one Scalar options0",
+        "no overlap between scalar service and Matrix/Dense issues",
+        "algorithm-specific normalization count",
+        "each Matrix issue at least one cycle"
+      ],
+      "omitted_costs": [
+        "DMA and stalls",
+        "bank service and conflicts",
+        "max/BF16/controller overhead",
+        "FFN SiLU",
+        "final ACK tail"
+      ],
+      "evidence_kind": "source_necessary_lower_bound",
+      "rtl_measured": false,
+      "accepted_80": false,
+      "accepted_90": false
+    }
+  ],
+  "silu_unconditional": {
+    "vectors": 71680,
+    "options0_divider_only": 1792000,
+    "options16_divider_only": 1003520,
+    "front_matrix_barrier": 243840,
+    "down_matrix_barrier": 430080,
+    "conditions": [
+      "complete successful SiLU without early error exit",
+      "each vector executes normal finite nonzero-denominator division",
+      "16 dividers, unchanged numerical recipe",
+      "options16 is unverified datapath/STA configuration",
+      "barriers apply only while full front and Down barriers remain"
+    ],
+    "rtl_measured": false,
+    "options0_with_front_down_lower_bound": 2465920
+  },
+  "silu_all_full_CONDITIONAL": {
+    "vectors": 71680,
+    "options0_divider_only": 1792000,
+    "options16_divider_only": 1003520,
+    "front_matrix_barrier": 243840,
+    "down_matrix_barrier": 430080,
+    "conditions": [
+      "complete successful SiLU without early error exit",
+      "each vector executes normal finite nonzero-denominator division",
+      "16 dividers, unchanged numerical recipe",
+      "options16 is unverified datapath/STA configuration",
+      "barriers apply only while full front and Down barriers remain",
+      "explicit full-exp VECTOR count; retained non-overlapped floor service state"
+    ],
+    "rtl_measured": false,
+    "options0_with_front_down_lower_bound": 2465920,
+    "full_exp_vectors": 71680,
+    "nondivision_state_slots": 1576960,
+    "conditional_front_sfu_down_lower_bound": 2250880
+  },
+  "measurement_boundary": "complete block launch through final completion ACK; DMA/stalls included",
+  "packed_algorithm_evidence": "exact source-only composed M128 schedule pinned in bundle; not executed",
+  "rtl_measured": false,
+  "accepted_80": false,
+  "accepted_90": false,
+  "source_pins_verified_count": 18,
+  "source_pins_manifest_sha256": "ee7139326054daa1dd848bf901b341319cea4464ea5acb5a2fdb0d94cf31fb89"
+}

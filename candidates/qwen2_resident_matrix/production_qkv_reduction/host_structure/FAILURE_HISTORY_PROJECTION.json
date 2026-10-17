@@ -1,0 +1,144 @@
+[
+  {
+    "version": 3,
+    "original_receipt_sha256": "2d269c3456d4495768a6ff764a51db9f57927cca10ceee06b4bf8a8afa8c7542",
+    "scope": "ORIGINAL_HOST_CHIRRTL_ONLY",
+    "status": "NOT_COMPLETED",
+    "stages": [
+      {
+        "name": "compile_emitter",
+        "log_bytes": 0,
+        "log_limit_bytes": 2097152,
+        "generated_file_limit_bytes": 33554432,
+        "exit_code": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "elapsed_seconds": 4.256284524992225,
+        "cleanup_projection": {
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "direct_leader_reaped": true,
+          "direct_exit_code": 0,
+          "no_post_reap_signals": true,
+          "grandchildren_reaped_by_this_helper": false,
+          "relative_seconds": {
+            "signal_at": 0.00042064300214406103,
+            "barrier_at": 0.02145891700638458,
+            "reap_started_at": 0.02165999900898896,
+            "reaped_at": 0.021705648003262468,
+            "completed_at": 0.0217403499991633
+          }
+        }
+      },
+      {
+        "name": "emit_chirrtl",
+        "log_bytes": 2895,
+        "log_limit_bytes": 2097152,
+        "generated_file_limit_bytes": 33554432,
+        "exit_code": 1,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "elapsed_seconds": 11.614623318993836,
+        "cleanup_projection": {
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "direct_leader_reaped": true,
+          "direct_exit_code": 1,
+          "no_post_reap_signals": true,
+          "grandchildren_reaped_by_this_helper": false,
+          "relative_seconds": {
+            "signal_at": 0.00028051200206391513,
+            "barrier_at": 0.021050329989520833,
+            "reap_started_at": 0.021198823989834636,
+            "reaped_at": 0.021237922992440872,
+            "completed_at": 0.02126492299430538
+          }
+        }
+      }
+    ],
+    "failure": "CHIRRTL exceeded 32MiB; rejected before writing; no structural PASS",
+    "diagnosis_sha256": "da085251387745387fa87c1ae8c818adec75b3c787d63533702d69e336861d3d"
+  },
+  {
+    "version": 4,
+    "original_receipt_sha256": "7d968873f0e31d62d6b9285907069eb1b4ce9786d6e3844ca141ed378c51e8b4",
+    "scope": "ORIGINAL_HOST_CHIRRTL_ONLY",
+    "status": "NOT_COMPLETED",
+    "stages": [
+      {
+        "name": "compile_emitter",
+        "log_bytes": 0,
+        "log_limit_bytes": 2097152,
+        "generated_file_limit_bytes": 33554432,
+        "exit_code": 0,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "elapsed_seconds": 4.540867077987059,
+        "cleanup_projection": {
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "direct_leader_reaped": true,
+          "direct_exit_code": 0,
+          "no_post_reap_signals": true,
+          "grandchildren_reaped_by_this_helper": false,
+          "relative_seconds": {
+            "signal_at": 0.0003113779966952279,
+            "barrier_at": 0.021176233000005595,
+            "reap_started_at": 0.02133148598659318,
+            "reaped_at": 0.0213785569940228,
+            "completed_at": 0.02141102599853184
+          }
+        }
+      },
+      {
+        "name": "emit_chirrtl",
+        "log_bytes": 2982,
+        "log_limit_bytes": 2097152,
+        "generated_file_limit_bytes": 33554432,
+        "exit_code": 1,
+        "error": null,
+        "cleanup_complete": true,
+        "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+        "elapsed_seconds": 12.054542596000829,
+        "cleanup_projection": {
+          "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+          "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+          "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+          "empty_complete_scans": 2,
+          "no_nonleader_identities_at_barrier": true,
+          "direct_leader_reaped": true,
+          "direct_exit_code": 1,
+          "no_post_reap_signals": true,
+          "grandchildren_reaped_by_this_helper": false,
+          "relative_seconds": {
+            "signal_at": 0.00030825400608591735,
+            "barrier_at": 0.021163084005820565,
+            "reap_started_at": 0.02132406701275613,
+            "reaped_at": 0.021360682003432885,
+            "completed_at": 0.021394643001258373
+          }
+        }
+      }
+    ],
+    "failure": "CHIRRTL exceeded 32MiB; rejected before writing; no structural PASS",
+    "diagnosis_sha256": "cf46912bffee06afd732eed6cb951306e1a260e2521577ff574c80138a56b915",
+    "diagnostic": {
+      "bytes": 39580497,
+      "modules": 672,
+      "extmodules": 17,
+      "top": "HostBlockTop"
+    }
+  }
+]

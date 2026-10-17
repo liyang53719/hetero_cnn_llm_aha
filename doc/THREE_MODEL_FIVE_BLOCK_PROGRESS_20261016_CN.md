@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 10:02 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 10:24 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -262,3 +262,19 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 晚held reset/abort、abort_pending、window_tag、drain_short、idle ordinary/resident stray均通过；受控服务接受/回包账本排空。实际argv固定单CPU/Verilator threads1/make-j1、native每进程AS2GiB，Javaheap1GiB，不宣称整树内存硬限或硬件周期利用率。
 - [纯源码复现与安全证据](../candidates/qwen2_resident_matrix/production_qkv_reduction/compiled_control/README_CN.md)提供固定工具/HardFloat/JDK依赖、生产classes重建与metadata fixture生成，包不携带classes/jars/RTL/原日志/宿主身份/权重。root/作者/独立8+8冷测与真实metadata再生通过，独立实际回执和全部源/产物身份复核通过。
 - 后继原Host official/resident/QKV完整CHIRRTL结构门正在准备，固定4096资源与burstWrites/capacity1024，尚未运行。真实生产五债务、packedQK/PV/scratch/panel接入和SFU吞吐仍未闭合；不会在48.2%理想上界的串行Attention路径直接启动长M128 RTL数值。模型指定27门仍1/5，完整RTL数值0/5，80/90目标未验收。
+
+## 2026-10-17 10:18 UTC：固定资源源码预算检查器
+
+- **done：必要预算计数代码与独立审核。** [预算检查器](../candidates/qwen2_resident_matrix/prefill_budget_source_audit/README_PORTABLE.md)用整数/Fraction，区分raw Scalar、仅QK16未packedPV、packedQK/PV模型三配置；root/作者/独立16+16冷测、18源pins通过。source-only原链重建包含M16中间片，最终schedule SHA a65dca9d24862c2b552117ce2c9cfdb270215b12881490fc50b5545b938b6086，未执行浮点数值/RTL/EDA。
+- 固定useful6,014,828,544及4096MAC/cycle，80%整块wall门为<=1,835,580 cycles，90%为<=1,631,626。保持原单Scalar服务映射，三配置Scalar接受到最后ACK必要下界依次8,391,167、8,391,167、6,310,655，单项已排除80/90，不依赖Matrix相加。只对保留原串行phase/no-overlap映射才可加成11,438,591、10,701,311、7,844,735；不得外推未来borrower或跨token流水。
+- 服务间隔源码边沿Add/Mul/cutoffExp3、fullExp20、正常Div28/29；有限成功softmax每row至少一次exp(0)，全fullExp仅条件输出。最后ACK相对下次接受差一拍已保守扣除。此前81.9455%是divider单项理想上界，不代表完整调度可达。
+- 最小性能路线需要现有16lane Add/Mul与SFU16的有序borrower、合法有限context/SiLU微序列、真实bank与阶段流水；现6row scratch不能免费按16row满供数。下一片仅metadata资源事件约束设计，所有未知物理映射/时序输出unresolved，不生成周期预测或80/90验收。
+- 原Host完整结构v3/v4在32MiB上限失败并清理，v4测得CHIRRTL39,580,497B、672module+17extmodule定义、topHostBlockTop；未写IR，未得唯一资源/五债务结构PASS。依据实测的48MiB/768定义后继保持原90s/heap1GiB/单CPU，正在审核，未降低资源或启动长完整RTL数值。
+
+## 2026-10-17 10:24 UTC：原Host完整CHIRRTL结构门通过
+
+- **done：原HostBlockTop official/resident/QKV/burstWrites配置结构。** 依据v4实测仅将IR上限32→48MiB、定义门512→768，原90秒/heap1GiB/单CPU/资源及debt语义检查保持；v5真实18.499秒通过，compile4.674/emit12.754均exit0且strict scoped cleanup完成。
+- CHIRRTL39,580,497B，SHA e52a110c7c7ca7446b4dad3793a7ce3f6019ebd2ecf221fe0e6220ebd246ad80，689定义/连接实例、17外部模块、68存储声明。独立递归统计及五debt的10个ready AND valid更新guard、Drained负极性依赖再次核对通过。92完整源、原545类不变+3emitter=548逐hash绑定。
+- 唯一原Dense/bank、Matrix服务及8个16×32端点、SFU bank16scalar与iDMA结构存在；全top共17scalar包含原单Scalar。4096是接口/参数配置依据，不是综合物理资源签收。capacity1024的scores/probs共8192B未偷减为M128容量。
+- [安全源码复现包](../candidates/qwen2_resident_matrix/production_qkv_reduction/host_structure/README_CN.md)仅源码/pin/实际结果安全投影，原39.6MB IR、classes/jars及宿主回执不提交；root与独立6+6结构冷测、4+4便携冷测通过。v3/v4失败原样保留。
+- 本次无新SystemVerilog、无作业/动态协议/数值/利用率执行；5条既有索引width警告保留。17ext仅三类defname（8seed-enabled matrix endpoint、8tc_clk_gating、1iDMA wrapper），provider完整闭包正在核对。冻结6SV仅增量，不能直接混旧无seed array；官方iDMA固定依赖锁与历史报告差异需按真实导出COMMITS/SHA256SUMS解决，不能将结构PASS称外部RTL链接PASS。

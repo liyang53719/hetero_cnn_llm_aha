@@ -1,0 +1,7 @@
+# v5 受实测约束的输出门限调整
+
+v4原receipt SHA 7d968873f0e31d62d6b9285907069eb1b4ce9786d6e3844ca141ed378c51e8b4，DIAGNOSIS SHA cf46912bffee06afd732eed6cb951306e1a260e2521577ff574c80138a56b915。实际39580497字节、672 module+17extmodule=689定义、top HostBlockTop，在32MiB require拒写，未获结构PASS。
+
+v5唯一运行行为变化：child每生成文件FSIZE上限和emitter/parser IR上限变为48MiB；parser module+extmodule定义门变为768。同步emitter单源pin。
+
+没有删除模块、减bank容量、改DUT或放宽唯一资源/真实五债务表达式证明。总90秒/heap1GiB/实际单CPU、20compile/60emit、log2MiB、输出树64MiB采样软限、strictcleanup全部保持。预期只输出CHIRRTL，不生成SV/作业；独立审核后方可运行。

@@ -1,0 +1,123 @@
+"""One compile-only attempt, invoked by the required external supervisor:
+/usr/bin/timeout --signal=TERM --kill-after=10s 50s PYTHON launch.py --execute
+The caller records the timeout wrapper exit. This bounds preamble plus work and
+cleanup to 60 seconds; internal absolute deadlines remain stricter as applicable.
+No elaboration, simulator or top entrypoint is invoked.
+"""
+import hashlib,json,os,signal,subprocess,time,sys,importlib
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parent
+REPO=ROOT/'hetero_kv_port_20261016';CACHE=ROOT/'packed_compile_dependency_cache'
+JAVA=Path('/usr/lib/jvm/java-21-openjdk-amd64/bin/java')
+PLUGIN='org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar'
+PINS={'PLAN.json':'c5130aefc8ac73e2688a4d840ae073f282a25f36e8bafa94ae26c691a349d37b',
+ 'dependencies':'0f92152943e377c90f9bfd490016c4e6bf9a7dcb591e65129c81d404326eda2f',
+ 'classpath':'31e6c6c84370f9c314b73ad36d1e25e1d535ea6f6e5a2c1e3418327e48c0fe2d',
+ 'java':'6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba',
+ 'java_release':'36b8804939e4f135ac0f7a291fa7b4e8d99fd18dd08d05c9b869463c670cdd37'}
+def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def need(ok,why):
+ if not ok:raise ValueError(why)
+def read(p,h):
+ b=p.read_bytes();need(hashlib.sha256(b).hexdigest()==h,'input identity');return json.loads(b)
+def preflight():
+ manifest=json.loads((HERE/'FILEMAP.json').read_bytes())
+ for n,h in manifest.items():need(digest(HERE/n)==h,'launch closure drift')
+ plan=read(HERE/'PLAN.json',PINS['PLAN.json']);deps=read(ROOT/'packed_compile_dependencies.json',PINS['dependencies'])
+ need(digest(JAVA)==PINS['java'] and digest(JAVA.parent.parent/'release')==PINS['java_release'],'Java identity')
+ need(digest(ROOT/'packed_compile_classpath.txt')==PINS['classpath'],'classpath bytes')
+ cp=':'.join(str(CACHE/n) for n in sorted(deps['jars']))
+ need((ROOT/'packed_compile_classpath.txt').read_text()==cp+'\n','classpath inventory')
+ need(len(deps['jars'])==87 and PLUGIN in deps['jars'],'dependency inventory')
+ for n,h in deps['jars'].items():need(digest(CACHE/n)==h,'dependency drift')
+ need({p.name:digest(p) for p in (HERE/'scala').glob('*.scala')}==plan['scala'],'Scala source drift')
+ need(digest(ROOT/plan['controller_origin']['path'])==plan['controller_origin']['sha256'],'seed controller source drift')
+ for n,h in plan['unit_inputs'].items():need(digest(REPO/n)==h,'original unit source drift')
+ for name,key in [('attention_packed_stream','stream_pins'),('attention_raw_scratch','scratch_pins')]:
+  d=REPO/'candidates/qwen2_resident_matrix'/name;need(digest(d/'pins.json')==plan[key],'candidate pin drift')
+  pins=json.loads((d/'pins.json').read_bytes())
+  for field in ('sources','own'):
+   for n,h in pins[field].items():need(digest(REPO/n)==h,'candidate source drift')
+ return plan,cp
+def command(cp,classes):
+ return [str(JAVA),'-Xmx1024m','-XX:ActiveProcessorCount=1','-cp',cp,'scala.tools.nsc.Main','-classpath',cp,
+  '-Xplugin:'+str(CACHE/PLUGIN),'-language:reflectiveCalls','-d',str(classes)]+[str(p) for p in sorted((HERE/'scala').glob('*.scala'))]
+HELPERS={
+ 'candidates/qwen2_resident_matrix/attention_packed_m16_assets_launch/supervisor.py':'b6970ca925bb956bd1494f046ba29079a818b98ab302ab84dab6d40e50253b80',
+ 'candidates/qwen2_resident_matrix/attention_packed_m16_assets/producer.py':'398b8cb73715ad22ffc544aef3fb1f8ce52209928557c8c7500d833eedc4f941',
+ 'candidates/qwen2_resident_matrix/attention_packed_m16_assets/reuse.py':'800c1ca5bd16fb120501731fd5399be765fd6073517ba6231870c3411919b914'}
+CHILD="import os,signal,sys; signal.pthread_sigmask(signal.SIG_UNBLOCK,{signal.SIGALRM,signal.SIGTERM,signal.SIGINT}); os.execve(sys.argv[1],sys.argv[1:],dict(os.environ))"
+def helpers():
+ for n,h in HELPERS.items():need(digest(REPO/n)==h,'supervisor source drift')
+ sys.path.insert(0,str(REPO))
+ S=importlib.import_module('candidates.qwen2_resident_matrix.attention_packed_m16_assets_launch.supervisor')
+ P=importlib.import_module('candidates.qwen2_resident_matrix.attention_packed_m16_assets.producer')
+ for module in (S,P,P.R):
+  path=Path(module.__file__).resolve();name=str(path.relative_to(REPO));need(name in HELPERS and digest(path)==HELPERS[name],'loaded helper identity')
+ return S,P
+
+def environment(out):
+ return {'PATH':'/usr/bin:/bin','LANG':'C.UTF-8','LC_ALL':'C.UTF-8','HOME':str(out),'TMPDIR':str(out)}
+
+def spawn_owned(S,argv,env,log,holder):
+ blocked=signal.pthread_sigmask(signal.SIG_BLOCK,{signal.SIGALRM,signal.SIGTERM,signal.SIGINT})
+ try:
+  process=subprocess.Popen([sys.executable,'-I','-B','-c',CHILD]+argv,cwd=HERE,env=env,
+   stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+  child=S.Child(process);holder['child']=child
+ finally:signal.pthread_sigmask(signal.SIG_SETMASK,blocked)
+ return child
+
+def final_receipt(path,report,end):
+ left=end-time.monotonic();need(left>0,'final receipt deadline')
+ previous=signal.getsignal(signal.SIGALRM)
+ def expired(*_):raise TimeoutError('absolute finalization deadline')
+ signal.signal(signal.SIGALRM,expired);signal.setitimer(signal.ITIMER_REAL,left)
+ try:
+  report['elapsed_seconds']=60-left
+  temp=path.with_suffix('.tmp');temp.write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
+  need(time.monotonic()<end,'receipt publication deadline');temp.replace(path)
+  need(time.monotonic()<end,'receipt completion deadline')
+ except BaseException:
+  path.unlink(missing_ok=True);raise
+ finally:
+  signal.setitimer(signal.ITIMER_REAL,0);signal.signal(signal.SIGALRM,previous)
+
+def run():
+ start=time.monotonic();end=start+60;child=None;holder={};libc=None;success=False;clean=True;code=None
+ out=HERE/'attempt';out.mkdir(exist_ok=False);classes=out/'classes';classes.mkdir()
+ report=dict(status='FAILED_INCOMPLETE',scala_compiled=False,elaboration=False,rtl=False,numerical=False)
+ (out/'ATTEMPT.json').write_text(json.dumps(report,sort_keys=True)+'\n')
+ S,P=helpers()
+ with P.deadline(50) as work_end:
+  work_end=min(work_end,start+50);signal.setitimer(signal.ITIMER_REAL,max(0.001,work_end-time.monotonic()))
+  try:
+   plan,cp=preflight();argv=command(cp,classes);libc=S.enable_subreaper()
+   with (out/'compiler.log').open('wb') as log:
+    child=spawn_owned(S,argv,environment(out),log,holder);code=child.wait(min(work_end,end-10))
+   need(code==0,'compiler exit');need(child.clean_exit(),'compiler descendants remain')
+   preflight();helpers()
+   outputs={str(f.relative_to(classes)):digest(f) for f in classes.rglob('*') if f.is_file()}
+   need(outputs and all(n.endswith('.class') for n in outputs),'class-only output')
+   for n in ('PackedAttentionStreamClient','TransposedDenseDownOwner','TransposedDownDenseBanks','MatrixPipelineService','RawKvKey','AttentionScratchContext'):
+    need('heteronpu/continuous/'+n+'.class' in outputs,'expected class')
+   need(time.monotonic()<work_end,'work postflight deadline')
+   S.restore_subreaper(libc);libc=None
+   report.update(status='PASS_SCALA_CLASS_COMPILE_ONLY',scala_compiled=True,exit_code=code,classes=outputs,source_sha256=plan['scala'],work_budget_seconds=50)
+   success=True
+  except BaseException as e:
+   child=holder.get('child',child)
+   report['failure_class']=type(e).__name__ if type(e).__name__ in ('ValueError','TimeoutError','TimeoutExpired','OSError','InterruptedError','KeyboardInterrupt') else 'OTHER'
+   with P.protected_cleanup():
+    if child is not None:
+     try:clean=child.terminate(end-2)
+     except BaseException:clean=False
+    if libc is not None and clean:
+     try:S.restore_subreaper(libc);libc=None
+     except BaseException:clean=False
+ report.update(cleanup_complete=clean,exit_code=code)
+ final_receipt(out/'summary.json',report,end)
+ return 0 if success and clean else 1
+if __name__=='__main__':
+ if sys.argv[1:]!=['--execute']:raise SystemExit('explicit --execute required')
+ raise SystemExit(run())

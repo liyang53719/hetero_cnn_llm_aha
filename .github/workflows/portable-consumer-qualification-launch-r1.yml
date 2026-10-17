@@ -1,0 +1,54 @@
+name: portable-consumer-qualification-launch-r1
+# INERT PROPOSAL: copy to this exact repository path only after root/reviewer approval.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/portable-consumer-qualification-launch-r1.yml'
+permissions:
+  contents: read
+concurrency:
+  group: portable-consumer-qualification-launch-r1-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  fixed-cases:
+    if: github.event_name == 'push' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONNOUSERSITE: '1'
+      GIT_NO_LAZY_FETCH: '1'
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        timeout-minutes: 2
+        with:
+          ref: '${{ github.sha }}'
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        timeout-minutes: 1
+        with:
+          python-version: '3.12'
+      - name: Install bounded NumPy dependency
+        timeout-minutes: 1
+        run: timeout --signal=TERM --kill-after=5s 50s python -m pip install --disable-pip-version-check --no-cache-dir --only-binary=:all: --retries 0 --timeout 20 --index-url https://pypi.org/simple 'numpy==2.3.5'
+      - name: Source contract and cold negative tests
+        timeout-minutes: 1
+        run: python -I -B -m unittest discover -s candidates/qwen2_resident_matrix/portable_consumer_qualification -p test_contract.py -q
+      - name: One bounded fresh combined build and fixed actual cases
+        timeout-minutes: 3
+        run: timeout --signal=TERM --kill-after=10s 150s python -I -B candidates/qwen2_resident_matrix/portable_consumer_qualification/run_ci.py --origin "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/portable-consumer-qualification-r1"
+      - name: Preserve fixed-name sanitized qualification evidence
+        if: always() && github.run_attempt == 1
+        timeout-minutes: 1
+        uses: actions/upload-artifact@v4
+        with:
+          name: portable-consumer-qualification-r1-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/portable-consumer-qualification-r1/evidence/summary.json
+            ${{ runner.temp }}/portable-consumer-qualification-r1/evidence/identities.json
+            ${{ runner.temp }}/portable-consumer-qualification-r1/evidence/source_hashes.json

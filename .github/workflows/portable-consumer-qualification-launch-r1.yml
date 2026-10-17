@@ -33,7 +33,8 @@ jobs:
           python-version: '3.12'
       - name: Install bounded NumPy dependency
         timeout-minutes: 1
-        run: timeout --signal=TERM --kill-after=5s 50s python -m pip install --disable-pip-version-check --no-cache-dir --only-binary=:all: --retries 0 --timeout 20 --index-url https://pypi.org/simple 'numpy==2.3.5'
+        run: |
+          timeout --signal=TERM --kill-after=5s 50s python -m pip install --disable-pip-version-check --no-cache-dir --only-binary=:all: --retries 0 --timeout 20 --index-url https://pypi.org/simple 'numpy==2.3.5'
       - name: Source contract and cold negative tests
         timeout-minutes: 1
         run: python -I -B -m unittest discover -s candidates/qwen2_resident_matrix/portable_consumer_qualification -p test_contract.py -q

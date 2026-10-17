@@ -1,0 +1,192 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -51,7 +51,8 @@
+   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
+   * Each successor starts only after the previous stage's final write ACK.
+   */
+-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false) extends Module {
++class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,enablePackedQkSingleKey:Boolean=false) extends Module {
++  require(!enablePackedQkSingleKey || (ownerDriven && externalMatrix && s.hidden==1536 && s.heads==12 && s.kvHeads==2 && s.headDim==128 && !s.nativeProfile && s.maxTokens<=128), "packed QK single-key requires the original H1536 owner profile")
+   require(!externalElementwiseLoan || (ownerDriven && externalScalar), "elementwise loan requires owner serialization and the shared Scalar")
+   require(!enableGdnSoftplus || (externalScalar && s.qwen35GdnOnly), "Softplus requires the explicit GDN scalar service")
+   require(!externalMatrix || (s.retainedMatrix && s.matrixColumns==256))
+@@ -67,6 +68,9 @@
+     val launch=Flipped(Decoupled(new BlockLaunch));val result=Decoupled(new BlockResult)
+     val matrixRequest=if(externalMatrix)Some(Decoupled(new WideMatrixStep(256)))else None
+     val matrixResult=if(externalMatrix)Some(Flipped(Decoupled(new WideMatrixResult(256))))else None
++    val packedQk=if(enablePackedQkSingleKey)Some(new MatrixStreamPort)else None
++    val packedQkActive=if(enablePackedQkSingleKey)Some(Output(Bool()))else None
++    val packedQkStepsDrained=if(enablePackedQkSingleKey)Some(Input(Bool()))else None
+     val matrixAcceptedSteps=if(externalMatrix)Some(Input(UInt(64.W)))else None
+     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
+     val scalarService=if(externalScalar)Some(Flipped(new GdnScalarClient))else None
+@@ -128,6 +132,18 @@
+   val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)
+   vectorA:=av;vectorB:=bv
+   val vout=VecInit((0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a.io.out})
++  // New control only; existing acc[16] holds selected words, never a tile copy.
++  val packedQk=if(enablePackedQkSingleKey)Some(Module(new PackedAttentionStreamClient(true)))else None
++  val packedOwned=if(enablePackedQkSingleKey)Some(RegInit(false.B))else None
++  val packedFinalIssued=if(enablePackedQkSingleKey)Some(RegInit(false.B))else None
++  val packedCommitted=if(enablePackedQkSingleKey)Some(RegInit(false.B))else None
++  val packedTag=if(enablePackedQkSingleKey)Some(RegInit(1.U(32.W)))else None
++  val packedBusy=packedOwned.getOrElse(false.B)
++  val packedMemDebt=if(enablePackedQkSingleKey)Some(RegInit(false.B))else None
++  val packedLocalDebt=if(enablePackedQkSingleKey)Some(RegInit(false.B))else None
++  val packedScalarDebt=if(enablePackedQkSingleKey)Some(RegInit(false.B))else None
++  val packedFeedDebt=packedMemDebt.getOrElse(false.B)||packedLocalDebt.getOrElse(false.B)||packedScalarDebt.getOrElse(false.B)
++  val packedSelectedFault=WireDefault(false.B)
+   val fmA=Wire(Vec(16,UInt(32.W)));val fmB=Wire(Vec(16,UInt(32.W)));fmA:=av;fmB:=bv
+   val fmC=Wire(Vec(16,UInt(32.W)));fmC:=acc
+   if(!s.retainedMatrix){when(state===st("denseCompute")){fmC:=denseAcc(denseRow(3,0))}}
+@@ -154,7 +170,7 @@
+     val isDense=state===st("denseCompute")
+     val dot=state===st("attDot");val pv=state===st("attPVCompute")
+     val computing=isDense||dot||pv
+-    matrixRequest.valid:=computing && !pending
++    matrixRequest.valid:=computing && !pending && !(enablePackedQkSingleKey.B && dot)
+     for(i<-0 until 16){
+       matrixRequest.bits.a(i):=TensorMath.bf16Rne(Mux(isDense,
+         Mux(i.U<denseRows,denseWindow(i)(depth(3,0)),0.U),
+@@ -174,8 +190,30 @@
+     when(matrixResult.fire){pending:=false.B}
+     for(i<-0 until 16){fmOut(i):=Mux(dot,matrixResult.bits.value(i)(i),matrixResult.bits.value(0)(i))}
+     fmDone:=matrixResult.fire
+-    matrixFault:=fmDone && matrixResult.bits.error
++    matrixFault:=matrixResult.fire && matrixResult.bits.error
+     when(isDense&&fmDone){denseAcc:=matrixResult.bits.value}
++    packedQk.foreach{c=>
++      io.packedQk.get<>c.io.port
++      io.packedQkActive.get:=packedBusy
++      c.io.stepsDrained:=io.packedQkStepsDrained.get;c.io.pause:=false.B
++      c.io.abort:=poisoned
++      c.io.start.valid:=state===st("attKey") && !packedBusy && !poisoned && packedTag.get=/=0.U
++      c.io.start.bits.tag:=packedTag.get;c.io.start.bits.pv:=false.B;c.io.start.bits.count:=1.U
++      c.io.operands.valid:=dot && packedBusy && !packedFinalIssued.get && !poisoned
++      c.io.operands.bits.index:=(depth>>4)(7,0)
++      c.io.operands.bits.a:=matrixRequest.bits.a;c.io.operands.bits.b:=matrixRequest.bits.b
++      c.io.result.ready:=packedCommitted.get && !poisoned
++      c.io.completion.ready:=packedBusy && (packedCommitted.get || poisoned || c.io.resetRequired)
++      when(c.io.start.fire){packedOwned.get:=true.B;packedFinalIssued.get:=false.B;packedCommitted.get:=false.B;packedTag.get:=packedTag.get+1.U}
++      when(c.io.operands.fire && depth===112.U){packedFinalIssued.get:=true.B}
++      when(c.io.completion.fire){packedOwned.get:=false.B}
++      when(dot){
++        // Nonfinal acceptance advances DDR/local feed without demanding a result.
++        fmDone:=Mux(depth===112.U,c.io.result.valid,c.io.operands.fire)
++        for(i<-0 until 16){fmOut(i):=c.io.result.bits.value(i)(i)}
++        packedSelectedFault:=depth===112.U && c.io.result.valid && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)
++      }
++    }
+ 
+   }else{
+     fmOut:=VecInit((0 until 16).map{i=>val a=Module(new HeteroBF16FmaLane);a.io.a:=TensorMath.bf16Rne(fmA(i));a.io.b:=TensorMath.bf16Rne(fmB(i));a.io.c:=fmC(i);a.io.out})
+@@ -222,7 +260,7 @@
+   io.response.ready:=Mux(resActive,elem.io.response.ready,state===st("memRsp"))
+   io.launch.ready:=(if(ownerDriven)false.B else state===st("idle")&& !poisoned)
+   if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !scalarExternalExclusive && !elementwiseExternalExclusive}
+-  io.result.valid:=state===st("finish");io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
++  io.result.valid:=state===st("finish") && !packedBusy && !packedFeedDebt;io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
+   io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired;io.readBytes:=reads;io.writeBytes:=writes
+   // Count memory visibility acknowledgements, not issued stores. The fence
+   // observes both the block engine and the shared residual elementwise engine.
+@@ -464,14 +502,14 @@
+   when(state===st("attQLoad")){read(ptr("q",rowOffset(s.hidden.U)+head*s.headDim.U+depth),"attQGot")}
+   when(state===st("attQGot")){localWrite(depth>>4,packet,"attQStored")}
+   when(state===st("attQStored")){when(depth+16.U<s.headDim.U){depth:=depth+16.U;state:=st("attQLoad")}.otherwise{key:=0.U;maxScore:="hff800000".U;state:=st("attKey")}}
+-  when(state===st("attKey")){depth:=0.U;clearAcc();localRead(0.U,"attLocal")}
++  when(state===st("attKey") && (!enablePackedQkSingleKey.B || packedQk.map(_.io.start.fire).getOrElse(false.B))){depth:=0.U;clearAcc();localRead(0.U,"attLocal")}
+   when(state===st("attLocal")){read(ptr("k",key.pad(32)*s.kv.U+kvHead*s.headDim.U+depth),"attDot")}
+-  when(state===st("attDot")){fmB:=packet.asTypeOf(fmB);when(fmDone){acc:=fmOut;macs:=macs+16.U
++  when(state===st("attDot")){fmB:=packet.asTypeOf(fmB);when(fmDone){when(!enablePackedQkSingleKey.B || depth===112.U){acc:=fmOut};macs:=macs+16.U
+     when(depth+16.U<s.headDim.U){depth:=depth+16.U;localRead((depth+16.U)>>4,"attLocal")}.otherwise{lane:=0.U;sum:=0.U;state:=st("attReduce")}}}
+   when(state===st("attReduce")){calc(ScalarOp.Add,sum,acc(lane),"attReduceDone")}
+   when(state===st("attReduceDone")){sum:=scalarValue;when(lane===15.U){calc(ScalarOp.Mul,scalarValue,F32.lit(1/math.sqrt(s.headDim.toDouble)),"attScore")}.otherwise{lane:=lane+1.U;state:=st("attReduce")}}
+-  when(state===st("attScore")){scores.write(key,scalarValue);when(F32.less(maxScore,scalarValue)){maxScore:=scalarValue};state:=st("attNextKey")}
+-  when(state===st("attNextKey")){when(key<token){key:=key+1.U;state:=st("attKey")}.otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}}
++  when(state===st("attScore") && (!enablePackedQkSingleKey.B || (!poisoned && !packedQk.map(_.io.resetRequired).getOrElse(false.B) && !packedQk.map(_.io.port.done.valid).getOrElse(false.B)))){if(enablePackedQkSingleKey){packedCommitted.get:=true.B};scores.write(key,scalarValue);when(F32.less(maxScore,scalarValue)){maxScore:=scalarValue};state:=st("attNextKey")}
++  when(state===st("attNextKey") && !packedBusy){when(key<token){key:=key+1.U;state:=st("attKey")}.otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}}
+   when(state===st("attExpRead")){state:=st("attExpWait")}
+   when(state===st("attExpWait")){calc(ScalarOp.Add,scoreOut,F32.neg(maxScore),"attExpDiff")}
+   when(state===st("attExpDiff")){calc(ScalarOp.ExpNegative,scalarValue,0.U,"attExpResult")}
+@@ -516,6 +554,27 @@
+   }
+   // Last-connect safety checks override a compute transition, before a request.
+   when(matrixFault){fail(Status.Protocol.U)}
+-  when((state===st("denseCompute")||state===st("attDot")||state===st("attPVCompute")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}
++  when((state===st("denseCompute")||(state===st("attDot") && (!enablePackedQkSingleKey.B || depth===112.U))||state===st("attPVCompute")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}
+   when(f.address_error_o.orR && state=/=st("finish")&&state=/=st("locked")){fail(Status.Bounds.U)}
++  packedQk.foreach{c=>
++    // Track accepted work, including an acceptance concurrent with a fault.
++    when(packedBusy && io.memory.fire){packedMemDebt.get:=true.B}
++    when(packedMemDebt.get && io.response.fire && io.response.bits.tag===request.tag){packedMemDebt.get:=false.B}
++    when(packedBusy && f.rd_valid_i(0) && f.rd_ready_o(0)){packedLocalDebt.get:=true.B}
++    when(packedLocalDebt.get && f.rd_resp_valid_o(0) && f.rd_resp_ready_i(0)){packedLocalDebt.get:=false.B}
++    when(packedBusy && scalar.io.request.fire){packedScalarDebt.get:=true.B}
++    when(packedScalarDebt.get && scalar.io.result.fire){packedScalarDebt.get:=false.B}
++    // Current poison suppresses new offers; already accepted work drains below.
++    when(packedBusy && (c.io.resetRequired || poisoned)){
++      io.memory.valid:=false.B;f.rd_valid_i:=0.U;scalar.io.request.valid:=false.B
++    }
++    when(state===st("finish") && poisoned){
++      io.response.ready:=packedMemDebt.get && io.response.bits.tag===request.tag
++      f.rd_resp_ready_i:=Mux(packedLocalDebt.get,1.U,0.U)
++      scalar.io.result.ready:=packedScalarDebt.get
++    }
++    when((c.io.resetRequired || (c.io.completion.fire && c.io.completion.bits.error)) && state=/=st("finish") && state=/=st("locked")) {fail(Status.Protocol.U)}
++    when(packedSelectedFault){fail(Status.Numerical.U)}
++    when(state===st("attKey") && !packedBusy && packedTag.get===0.U){fail(Status.Protocol.U)}
++  }
+ }
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+@@ -35,7 +35,8 @@
+ /** No block launch is exposed. One decoded owner operation per transaction;
+   * the arithmetic implementation must return instead of advancing to a phase.
+   */
+-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false) extends Module {
++class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enablePackedQkSingleKey:Boolean=false) extends Module {
++  require(!enablePackedQkSingleKey || (pipelined && !bf16AttentionCore && !bf16Gdn && !bf16QkNormRope && !enableH2048RmsBorrower && s.hidden==1536 && s.heads==12 && s.kvHeads==2 && s.headDim==128 && !s.nativeProfile && s.maxTokens<=128), "exclusive original packed QK route")
+   require(!enableH2048RmsBorrower || (pipelined && (bf16GdnBlock || bf16AttentionBlock) && s.maxTokens<=128),
+     "H2048 RMS borrower requires a pipelined BF16 block profile with at most 128 tokens")
+   require(!bf16AttentionBlock || bf16AttentionCore,"Attention block requires the explicit core profile")
+@@ -72,13 +73,13 @@
+     io.pipelineIssues:=0.U;io.pipelineStalls:=0.U
+   }else{
+     require(s.matrixColumns==256 && s.retainedMatrix)
+-    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower))
++    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,enablePackedQkSingleKey=enablePackedQkSingleKey))
+     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+     val dense=Module(new StreamingDenseOwner(s.maxRow,burstWrites=burstWrites))
+     // The core-only GDN command profile never accepts legacy Activation jobs.
+     // Do not elaborate the otherwise unused sixteen-lane legacy SFU here.
+     val silu=if(bf16GdnCore||bf16QkNormRope)None else Some(Module(new ScheduledSiluOwner(overlapSilu)))
+-    val matrix=Module(new MatrixPipelineService)
++    val matrix=Module(new MatrixPipelineService(enablePackedDrainStatus=enablePackedQkSingleKey))
+     val legacy=Module(new LegacyMatrixStreamClient)
+     val gdn=if(bf16Gdn)Some(Module(new GdnConv4Owner(channels=6144,maxTokens=s.maxTokens)))else None
+     val prep=if(bf16GdnCore)Some(Module(new GdnInputPrepOwner(heads=16)))else None
+@@ -379,6 +380,24 @@
+     matrix.io.port.done.ready:=Mux(useDense,dense.io.matrix.done.ready,legacy.io.port.done.ready)
+     matrix.io.port.abort:=Mux(useDense,dense.io.matrix.abort,legacy.io.port.abort)
+     }
++    if(enablePackedQkSingleKey){
++      val p=core.io.packedQk.get;val select=core.io.packedQkActive.get
++      core.io.packedQkStepsDrained.get:=matrix.io.packedStepsDrained.get
++      p.group.ready:=select && matrix.io.port.group.ready;p.step.ready:=select && matrix.io.port.step.ready
++      p.result.valid:=select && matrix.io.port.result.valid;p.result.bits:=matrix.io.port.result.bits
++      p.done.valid:=select && matrix.io.port.done.valid;p.done.bits:=matrix.io.port.done.bits
++      when(select){
++        assert(active && mode===0.U,"packed lease is held by original core owner")
++        legacy.io.port.group.ready:=false.B;legacy.io.port.step.ready:=false.B
++        legacy.io.port.result.valid:=false.B;legacy.io.port.done.valid:=false.B
++        dense.io.matrix.group.ready:=false.B;dense.io.matrix.step.ready:=false.B
++        dense.io.matrix.result.valid:=false.B;dense.io.matrix.done.valid:=false.B
++        matrix.io.port.group.valid:=p.group.valid;matrix.io.port.group.bits:=p.group.bits
++        matrix.io.port.step.valid:=p.step.valid;matrix.io.port.step.bits:=p.step.bits
++        matrix.io.port.result.ready:=p.result.ready;matrix.io.port.done.ready:=p.done.ready
++        matrix.io.port.abort:=p.abort
++      }
++    }
+     io.pipelineIssues:=matrix.io.wideSteps;io.pipelineStalls:=matrix.io.stallCycles
+     io.resetRequired:=rejected||gdnPoison||core.io.resetRequired||dense.io.resetRequired||silu.map(_.io.resetRequired).getOrElse(false.B)||matrix.io.resetRequired||legacy.io.resetRequired
+   }

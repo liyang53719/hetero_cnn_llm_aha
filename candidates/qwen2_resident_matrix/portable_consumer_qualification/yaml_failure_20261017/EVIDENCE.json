@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "FAILED_BEFORE_ANY_JOB",
+  "run": {
+    "id": 38990565055,
+    "name": ".github/workflows/portable-consumer-qualification-launch-r1.yml",
+    "event": "push",
+    "head_sha": "6f1245704eb4e492799e49b52e095dae564441a2",
+    "path": ".github/workflows/portable-consumer-qualification-launch-r1.yml",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-10-17T01:22:19Z",
+    "updated_at": "2026-10-17T01:22:19Z",
+    "html_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/38990565055"
+  },
+  "jobs": {
+    "total_count": 0,
+    "jobs": []
+  },
+  "published_workflow_sha256": "6ca2109c52fc9e8c8cdba920b6c66ec43afeeb9786f62902a509eb6d6f80265b",
+  "published_input_contract_sha256": "91c6a1ab6a793a5a46e9ae7def7654aa95ee2eef0b8f210c0f299ea5654774b8",
+  "diagnosis": {
+    "evidence": "LOCAL_YAML_PARSER_REPRODUCTION",
+    "parser": "PyYAML",
+    "version": "6.0.3",
+    "exception": "ScannerError",
+    "line": 36,
+    "column": 139,
+    "problem": "mapping values are not allowed here",
+    "trigger": "--only-binary=:all: followed by a space in an unquoted plain scalar",
+    "server_annotation_observed": false
+  },
+  "qualification_executed": false,
+  "numerical_acceptance": false,
+  "producer_qualified": false,
+  "public_m16": false,
+  "full_m128": false,
+  "rtl": false,
+  "ninety_percent": false
+}

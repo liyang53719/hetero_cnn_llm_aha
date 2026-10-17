@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 07:55 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 08:02 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -194,6 +194,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   root与独立审查复验7原始JSON、463源/462raw pins、真实commit动态361/424源manifest、两份可重建CHILD_RESULT摘要、共享nonce及M16 prerequisite/producer资格指针一致；归档24+24拒绝测试通过。严格清理由已绑定源码强制执行，但原始扫描proof未上传，不能把离线回执核验说成再次运行私有数组或清理实验。
   同刺激回放的内容身份仍有具体缺口：公开源码可恢复Qwen2-1.5B-Instruct revision ba1cf1846d7df0a0591d6c00649f57e798519da8、token/position0..127、past0及input FP32 SHA ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df；13个BF16参数/22ranges也有pins。但实际各阶段reference/actual内容hash及观察到的runtime/ELF身份藏在未保留的私有manifest/snapshot中，只有不透明文件SHA不足以验证将来重建字节等于本次数据。
   因此当前结果是完整M128模型限定门禁通过，不标记same-stimulus RTL replay ready。下一补丁仅输出路径无关logical-ID/shape/dtype/layout/bytecount/contentSHA及必要runtime/source pins的安全身份清单，绑定终态回执；不上传数组/权重，不改数值/门限/预算。完成新的内容身份固化验收后再作同刺激RTL回放。其余四block尚无同级M128结果，1024/1224未启动。
+
+
+- **done：QK-only策略默认关闭的原Host/kernel选择透传。** [可移植候选](../candidates/qwen2_resident_matrix/attention_qk16_host_selection/README.md)从正确的83源QK16已组合closure出发，保持原kernel全部packed client/mux/stepsDrained/result/done/abort与债务接线，沿原HostBlockCollection→HostBlockTop→QwenOwnerKernel→Qwen2ContinuousBlock追加默认false参数，不替换顶层/命令ABI/物理端口，不改变既有emitters。初稿错误采用raw kernel已在编译前被审查拦截并废弃。
+  新BF16形状限制仅作用于新BF16 opt-in；旧packed=true/BF16=false的既有非8960 FFN形状不收紧。原Qwen3.5 M1 profile限制保留。实际源变化仅2个owner/top文件＋字节不变的既有BF16 core片段，不新增Reg/Mem/IO/Module或改变Matrix几何。
+  root/独立11+11源码回归通过；单次复制closure的Scala类编译83源/474类，exit0，29.4739秒，87 jars/Java/源postflight核验及有界严格清理proof通过。独立零退出/非零/TERM和deadline负例覆盖编译管理。没有elaboration/RTL/协议或完整block硬件通过。
+  目前只具备从原顶层构造选择QK片段的能力；完整official policy、scratch acquire/ACK/release、六head/panel/PV及真实Host完成围栏仍未执行验证。M128模型指定27门禁与此硬件候选为不同证据层，不能互相替代。
 
 ## 下一步，保持默认关闭并逐项验收
 

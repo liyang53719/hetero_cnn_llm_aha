@@ -1,0 +1,30 @@
+{
+  "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": [
+    [
+      "class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enablePackedQk16Keys:Boolean=false) extends Module {",
+      "class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enablePackedQk16Keys:Boolean=false,enablePackedQk16OfficialBf16:Boolean=false) extends Module {\n  // QK-only partial policy. No full official-BF16 or packed-PV claim.\n  require(!enablePackedQk16OfficialBf16 || enablePackedQk16Keys,\"QK BF16 requires explicit packed QK16 selection\")\n  require(!enablePackedQk16OfficialBf16 || (pipelined && s.retainedMatrix && s.matrixColumns==256 && s.hidden==1536 && s.ffn==8960 && s.heads==12 && s.kvHeads==2 && s.headDim==128 && !s.nativeProfile && s.maxTokens>0 && s.maxTokens<=128),\n    \"packed QK16 requires the original Qwen2 pipelined external-Matrix owner with at most 128 tokens\")"
+    ],
+    [
+      "enablePackedQk16Keys=enablePackedQk16Keys))",
+      "enablePackedQk16Keys=enablePackedQk16Keys,enablePackedQk16OfficialBf16=enablePackedQk16OfficialBf16))"
+    ]
+  ],
+  "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": [
+    [
+      "class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {",
+      "class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enablePackedQk16Keys:Boolean=false,enablePackedQk16OfficialBf16:Boolean=false) extends Module {\n  // QK-only partial policy. No full official-BF16 or packed-PV claim.\n  require(!enablePackedQk16OfficialBf16 || enablePackedQk16Keys,\"QK BF16 requires explicit packed QK16 selection\")\n  require(!enablePackedQk16OfficialBf16 || (pipelined && s.retainedMatrix && s.matrixColumns==256 && s.hidden==1536 && s.ffn==8960 && s.heads==12 && s.kvHeads==2 && s.headDim==128 && !s.nativeProfile && s.maxTokens>0 && s.maxTokens<=128),\n    \"packed QK16 requires the original Qwen2 pipelined external-Matrix owner with at most 128 tokens\")"
+    ],
+    [
+      "class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false) extends Module {",
+      "class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enablePackedQk16Keys:Boolean=false,enablePackedQk16OfficialBf16:Boolean=false) extends Module {"
+    ],
+    [
+      "new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock))",
+      "new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enablePackedQk16Keys=enablePackedQk16Keys,enablePackedQk16OfficialBf16=enablePackedQk16OfficialBf16))"
+    ],
+    [
+      "new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock))",
+      "new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enablePackedQk16Keys=enablePackedQk16Keys,enablePackedQk16OfficialBf16=enablePackedQk16OfficialBf16))"
+    ]
+  ]
+}

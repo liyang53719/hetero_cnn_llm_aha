@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "status": "PASS_SOURCE_ONLY_COLD_PENDING_REVIEW",
+  "tests": [
+    {
+      "mode": "normal",
+      "tests": 14,
+      "exit_code": 0,
+      "result": "PASS_SOURCE_ONLY_COLD"
+    },
+    {
+      "mode": "optimized",
+      "tests": 14,
+      "exit_code": 0,
+      "result": "PASS_SOURCE_ONLY_COLD"
+    }
+  ],
+  "isolated_copy": true,
+  "test_inputs": "FOUR_ALLOWLISTED_CANDIDATE_FILES_ONLY",
+  "original_project_sources_copied_unchanged": true,
+  "cpp_compiled": false,
+  "cpp_executed": false,
+  "compiler_or_eda_executed": false,
+  "full_block_model_executed": false,
+  "rtl_executed": false,
+  "actual_hardware_binding": false,
+  "full_block_rtl_passed": 0,
+  "full_block_rtl_total": 5,
+  "source_only_is_not_runtime_pass": true,
+  "uploaded": false,
+  "pushed": false
+}

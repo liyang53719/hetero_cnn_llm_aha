@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_CANDIDATE_PENDING_INDEPENDENT_REVIEW",
+  "distinct_reduced_scope": true,
+  "scope": "UNCHANGED_PROJECT_AXI_LEDGER_AND_SYNTHETIC_HOLD_CONTRACT_ONLY",
+  "source_file_count": 3,
+  "file_count_including_manifest": 8,
+  "full_block_rtl": "0/5",
+  "entries": {
+    "axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "hold_contract_cold.py": {
+      "bytes": 1479,
+      "sha256": "7af15f866146af5b5808bb2382595e153dc961e429f1793d64164a188de01f67"
+    },
+    "test_source_only_cold.py": {
+      "bytes": 5971,
+      "sha256": "6e0de7edee4761eae3ec717996d28196f39c55ea251395594ecbc8409ee038ea"
+    },
+    "README_CN.md": {
+      "bytes": 2945,
+      "sha256": "4ba8a9db01c75103be718858b60a1a8779239dcea0f6874ba8e1837b98da16e4"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 732,
+      "sha256": "9368f6d7e46632a6cf7f7259ec13f8829c27527227b6785f3d0dafa30b9df58d"
+    },
+    "INSTALL_MAP.json": {
+      "bytes": 1645,
+      "sha256": "b14daaee8fc39599f72994c60091319d81d6df224ac2e4101be65a480e1dd571"
+    },
+    "VALIDATION_SOURCE_ONLY.json": {
+      "bytes": 790,
+      "sha256": "d217c3d7d02dea61882cd7fcb428ea887749632aa8d82a313c5836283c8534b5"
+    }
+  }
+}

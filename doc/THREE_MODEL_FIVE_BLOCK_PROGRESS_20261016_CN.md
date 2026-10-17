@@ -367,3 +367,16 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - root与独审按verify_package正常/-O复核通过：只核冻结hash、两套纯Python边界枚举及单source按序delta，不启动Java/EDA/子进程。原历史test_cold部分需要完整固定布局，保留范围，不冒称任意目录已重放全部历史工具门。full_profile的“待独审及授权”是原候选历史README；当前实际失败以主README与SAFE_HISTORY为准。
 - 本包含三个小型手写baseline/修复provider源码快照及patch，不包含大生成SV/IR、classes/JAR、完整上游源树、工具二进制、原日志或私有机器proof。公共重建链、源/工具/input pins和历史输出hash保留；重建生成新receipt需重新资格，安全投影不是原receipt/cleanup proof，也不声称全局absence或进程树峰值。57个add-only交付文件＋本plan追加，原465模型运行源和整个.github字节不变，不重复触发source-export或昂贵运行。
 - 模型限定M128 1/5、指定27门禁和内容身份不变，full RTL 0/5。完整4096/Host链接、动态供数、RTL数值、全29/全张量及性能目标仍未完成。
+
+
+## 2026-10-17 20:01 UTC：独立小批源码检查点
+
+本次仅新增 development_snapshots/canonical_host_source_only_20261017/ 的独立源码快照：手写 AXI 收支账本、Python 完成保持合同、最小冷测试及中文边界。两份项目源码逐字保留，正常与 -O 的隔离冷测各 14 项通过；不包含系统工具链、头文件或库的环境清单，不改变此前较大证据包的未发布状态。
+
+- done：上述小批源码与合成合同冷验证。C++ 未编译，不能据此声称该片段真实硬件绑定或完整驱动通过。
+- done（另有本地实际证据，未由本小包重新验证）：原 Kernel 合成 M1、一次 M17 跨 tile 任务完成实际 RTL 数值比较及 AXI/完成保持检查。此为 Attention 短链，不能替代完整 Host/block/M128。
+- ongoing：复用原 HostBlockTop、官方冻结 M128 输入与参考，继续 canonical 装载、真实观察器、27 节点观察和 Host 回放接线。原 Host QKV/resident/metadata/prefix 接线已存在；当前新增适配仍按源码、class、RTL、实际运行分层验收。
+- todo：Qwen2 完整 M128 同刺激 Host RTL 数值验收，然后按既定顺序推进另外四个 block；完整 block RTL 仍 0/5。1024/1224 未开始。
+- todo：固定 4096 MAC 和完整 block launch 至最终 ACK 周期分母的实际利用率验收，80% 下限及 90% 目标保持；当前没有完整 block RTL 利用率达标结论。
+
+本小快照的发布不包含权重、npz、canonical raw/reference 数组、生成模型或二进制。Git 远端和相关 CI 需按最终提交 SHA 单独核验，源码冷测不代表 CI 或 RTL 通过。

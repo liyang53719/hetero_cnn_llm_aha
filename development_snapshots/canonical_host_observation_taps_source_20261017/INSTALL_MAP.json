@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "status": "CANDIDATE_INSTALLATION_MAP",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "base_commit_expected": "3d6c2701c6317041af83afc77dce2a4ecfed6001",
+  "publication_evidence": "Actual installation/publication state must be verified using the repository Git commit and remote.",
+  "entries": [
+    {
+      "candidate_file": "INSTALL_MAP.json",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/INSTALL_MAP.json"
+    },
+    {
+      "candidate_file": "MANIFEST.json",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/MANIFEST.json"
+    },
+    {
+      "candidate_file": "PROJECT_SOURCE_HASHES.json",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/PROJECT_SOURCE_HASHES.json"
+    },
+    {
+      "candidate_file": "README_CN.md",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/README_CN.md"
+    },
+    {
+      "candidate_file": "VALIDATION_SOURCE_ONLY.json",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/VALIDATION_SOURCE_ONLY.json"
+    },
+    {
+      "candidate_file": "baseline/FfnTileSiluBridge.scala",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/baseline/FfnTileSiluBridge.scala"
+    },
+    {
+      "candidate_file": "baseline/Qwen2Block.scala",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/baseline/Qwen2Block.scala"
+    },
+    {
+      "candidate_file": "baseline/VectorSilu.scala",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/baseline/VectorSilu.scala"
+    },
+    {
+      "candidate_file": "candidate/FfnTileSiluBridge.scala",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/candidate/FfnTileSiluBridge.scala"
+    },
+    {
+      "candidate_file": "candidate/Qwen2Block.scala",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/candidate/Qwen2Block.scala"
+    },
+    {
+      "candidate_file": "candidate/VectorSilu.scala",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/candidate/VectorSilu.scala"
+    },
+    {
+      "candidate_file": "patches/FfnTileSiluBridge.scala.patch",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/patches/FfnTileSiluBridge.scala.patch"
+    },
+    {
+      "candidate_file": "patches/Qwen2Block.scala.patch",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/patches/Qwen2Block.scala.patch"
+    },
+    {
+      "candidate_file": "patches/VectorSilu.scala.patch",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/patches/VectorSilu.scala.patch"
+    },
+    {
+      "candidate_file": "test_projection_cold.py",
+      "repository_path": "development_snapshots/canonical_host_observation_taps_source_20261017/test_projection_cold.py"
+    }
+  ]
+}

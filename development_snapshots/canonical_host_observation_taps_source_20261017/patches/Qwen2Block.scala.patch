@@ -1,0 +1,90 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -133,6 +133,43 @@
+   val f=fabric.io;f.rd_valid_i:=0.U;f.rd_addr_i:=0.U;f.rd_resp_ready_i:=0.U;f.wr_valid_i:=false.B;f.wr_addr_i:=0.U;f.wr_data_i:=0.U;f.wr_be_i:=0.U
+   val localIndex=Reg(UInt(15.W));val localData=Reg(UInt(512.W))
+   val scores=SyncReadMem(s.maxTokens,UInt(32.W));val probs=SyncReadMem(s.maxTokens,UInt(32.W))
++  // CANONICAL_SCORE_TAP_BEGIN: observation only; no consumer may drive this wire.
++  val canonicalScoreTap = if(ownerDriven && officialBf16 && enableProductionPackedQk16) Some(Wire(new Bundle {
++    val valid=Bool();val ownerTag=UInt(32.W);val head=UInt(16.W);val token=UInt(16.W)
++    val keyBase=UInt(16.W);val packedSelected=UInt(4.W);val value=UInt(32.W)
++  })) else None
++  canonicalScoreTap.foreach { tap =>
++    tap := 0.U.asTypeOf(tap)
++    dontTouch(tap)
++  }
++  // CANONICAL_SCORE_TAP_END
++  // CANONICAL_OBSERVATION_TAPS_BEGIN: combinational observations only.
++  val canonicalProbTap = if(ownerDriven && officialBf16 && enableProductionPackedQk16) Some(Wire(new Bundle {
++    val valid=Bool();val ownerTag=UInt(32.W);val head=UInt(16.W);val token=UInt(16.W)
++    val key=UInt(16.W);val col=UInt(16.W);val value=UInt(16.W)
++  })) else None
++  val canonicalCosTap = if(ownerDriven && officialBf16 && enableProductionPackedQk16) Some(Wire(new Bundle {
++    val valid=Bool();val ownerTag=UInt(32.W);val head=UInt(16.W);val token=UInt(16.W)
++    val col=UInt(16.W);val value=UInt(512.W)
++  })) else None
++  val canonicalSinTap = if(ownerDriven && officialBf16 && enableProductionPackedQk16) Some(Wire(new Bundle {
++    val valid=Bool();val ownerTag=UInt(32.W);val head=UInt(16.W);val token=UInt(16.W)
++    val col=UInt(16.W);val value=UInt(512.W)
++  })) else None
++  // Payload/address/mask/tag already exist on the original dontTouch(core.io).
++  // Sample them on this request marker; ACK still requires the real B ledger.
++  val canonicalPvRequestTap = if(ownerDriven && officialBf16 && enableProductionPackedQk16) Some(Wire(new Bundle {
++    val valid=Bool();val ownerTag=UInt(32.W);val head=UInt(16.W);val token=UInt(16.W);val col=UInt(16.W)
++  })) else None
++  val canonicalPvAckTap = if(ownerDriven && officialBf16 && enableProductionPackedQk16) Some(Wire(new Bundle {
++    val valid=Bool()
++  })) else None
++  canonicalProbTap.foreach { tap => tap:=0.U.asTypeOf(tap);dontTouch(tap) }
++  canonicalCosTap.foreach { tap => tap:=0.U.asTypeOf(tap);dontTouch(tap) }
++  canonicalSinTap.foreach { tap => tap:=0.U.asTypeOf(tap);dontTouch(tap) }
++  canonicalPvRequestTap.foreach { tap => tap:=0.U.asTypeOf(tap);dontTouch(tap) }
++  canonicalPvAckTap.foreach { tap => tap:=0.U.asTypeOf(tap);dontTouch(tap) }
++  // CANONICAL_OBSERVATION_TAPS_END
+   val scoreOut=scores.read(key,state===st("attExpRead"));val probOut=probs.read(key,state===st("attProbRead"))
+   val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)
+   vectorA:=av;vectorB:=bv
+@@ -199,6 +236,12 @@
+     for(i<-0 until 16){fmOut(i):=Mux(dot,matrixResult.bits.value(i)(i),matrixResult.bits.value(0)(i))}
+     fmDone:=matrixResult.fire
+     matrixFault:=matrixResult.fire && matrixResult.bits.error
++    canonicalProbTap.foreach { tap =>
++      when(matrixRequest.fire && state===st("attPVCompute")) {
++        tap.valid:=true.B;tap.ownerTag:=owner.tag;tap.head:=head;tap.token:=token
++        tap.key:=key;tap.col:=col;tap.value:=matrixRequest.bits.a(0)
++      }
++    }
+     when(isDense&&fmDone){denseAcc:=matrixResult.bits.value}
+     packedQk.foreach{c=>
+       io.packedQk.get<>c.io.port
+@@ -325,8 +368,8 @@
+   val ropeInput=if(ownerDriven)owner.a else Mux(phase===4.U,layout("qr").U,layout("kr").U)
+   val ropeOutput=if(ownerDriven)owner.dst else Mux(phase===4.U,layout("q").U,layout("k").U)
+   val ropeIndex=token.pad(32)*ropeWidth+head*s.headDim.U+col;val kvHead=head/(s.heads/s.kvHeads).U
+-  when(state===st("memReq")&&io.memory.fire){state:=st("memRsp")}
+-  when(state===st("memRsp")&&io.response.fire){when(io.response.bits.tag=/=request.tag){fail(Status.Protocol.U)}.elsewhen(io.response.bits.error){fail(Status.Memory.U)}.otherwise{packet:=io.response.bits.data;state:=resume}}
++  when(state===st("memReq")&&io.memory.fire){canonicalPvRequestTap.foreach { tap => when(io.memory.bits.write && resume===st("attPVWritten")){tap.valid:=true.B;tap.ownerTag:=owner.tag;tap.head:=head;tap.token:=token;tap.col:=col} };state:=st("memRsp")}
++  when(state===st("memRsp")&&io.response.fire){when(io.response.bits.tag=/=request.tag){fail(Status.Protocol.U)}.elsewhen(io.response.bits.error){fail(Status.Memory.U)}.otherwise{canonicalPvAckTap.foreach { tap => when(request.write && resume===st("attPVWritten")){tap.valid:=true.B} };packet:=io.response.bits.data;state:=resume}}
+   when(state===st("localReq")){f.rd_valid_i:=1.U;f.rd_addr_i:=localIndex;when(f.rd_ready_o(0)){state:=st("localRsp")}}
+   when(state===st("localRsp")){f.rd_resp_ready_i:=1.U;when(f.rd_resp_valid_o(0)){av:=f.rd_data_o(511,0).asTypeOf(av);state:=localResume}}
+   when(state===st("localWrite")){f.wr_valid_i:=true.B;f.wr_addr_i:=localIndex;f.wr_data_i:=localData;f.wr_be_i:=Fill(64,1.U(1.W));when(f.wr_ready_o){state:=localResume}}
+@@ -546,8 +589,8 @@
+   when(state===st("ropeEven")){av:=packet.asTypeOf(av);read(base+ropeInput+((ropeIndex+(s.headDim/2).U).pad(64)<<2),"ropeOdd")}
+   when(state===st("ropeOdd")){bv:=packet.asTypeOf(bv);read(ptr("cos",token.pad(32)*(s.headDim/2).U+col),"ropeCos")}
+   when(state===st("ropeCos")){cv:=VecInit(packet.asTypeOf(cv).map(materialize));read(ptr("sin",token.pad(32)*(s.headDim/2).U+col),"ropeSin")}
+-  when(state===st("ropeSin")){dv:=VecInit(packet.asTypeOf(dv).map(materialize));state:=st("ropeMul0")}
+-  when(state===st("ropeMul0")){vectorMul:=true.B;vectorB:=cv;tmp:=VecInit(vout.map(materialize));state:=st("ropeMul1")}
++  when(state===st("ropeSin")){canonicalCosTap.foreach { tap => tap.valid:=true.B;tap.ownerTag:=owner.tag;tap.head:=head;tap.token:=token;tap.col:=col;tap.value:=cv.asUInt };dv:=VecInit(packet.asTypeOf(dv).map(materialize));state:=st("ropeMul0")}
++  when(state===st("ropeMul0")){canonicalSinTap.foreach { tap => tap.valid:=true.B;tap.ownerTag:=owner.tag;tap.head:=head;tap.token:=token;tap.col:=col;tap.value:=dv.asUInt };vectorMul:=true.B;vectorB:=cv;tmp:=VecInit(vout.map(materialize));state:=st("ropeMul1")}
+   when(state===st("ropeMul1")){vectorMul:=true.B;vectorA:=bv;vectorB:=dv;tmp2:=VecInit(vout.map(materialize));state:=st("ropeAdd0")}
+   when(state===st("ropeAdd0")){vectorA:=tmp;vectorB:=VecInit(tmp2.map(F32.neg));acc:=VecInit(vout.map(materialize));state:=st("ropeAdd1")}
+   when(state===st("ropeAdd1")){vectorMul:=true.B;vectorB:=dv;tmp:=VecInit(vout.map(materialize));state:=st("ropeWrite0")}
+@@ -600,7 +643,7 @@
+   when(state===st("attScore") && (!enableProductionPackedQk16.B || (!poisoned && !packedQk.map(_.io.resetRequired).getOrElse(false.B) && !packedQk.map(_.io.port.done.valid).getOrElse(false.B)))){
+     val score=materialize(scalarValue)
+     when(enableProductionPackedQk16.B && !TensorMath.finite(score)){packedSelectedFault:=true.B}
+-    .otherwise{if(enableProductionPackedQk16){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),score);when(F32.less(maxScore,score)){maxScore:=score};state:=st("attNextKey")}
++    .otherwise{if(enableProductionPackedQk16){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),score);canonicalScoreTap.foreach { tap => tap.valid:=true.B;tap.ownerTag:=owner.tag;tap.head:=head;tap.token:=token;tap.keyBase:=key;tap.packedSelected:=packedSelected.get;tap.value:=score };when(F32.less(maxScore,score)){maxScore:=score};state:=st("attNextKey")}
+   }
+   if(!enableProductionPackedQk16){
+   when(state===st("attNextKey") && !packedBusy){when(key<token){key:=key+1.U;state:=st("attKey")}.otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}}

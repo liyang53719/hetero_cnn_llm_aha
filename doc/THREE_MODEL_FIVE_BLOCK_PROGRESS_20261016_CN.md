@@ -380,3 +380,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - todo：固定 4096 MAC 和完整 block launch 至最终 ACK 周期分母的实际利用率验收，80% 下限及 90% 目标保持；当前没有完整 block RTL 利用率达标结论。
 
 本小快照的发布不包含权重、npz、canonical raw/reference 数组、生成模型或二进制。Git 远端和相关 CI 需按最终提交 SHA 单独核验，源码冷测不代表 CI 或 RTL 通过。
+
+
+## 2026-10-17 21:18 UTC：三源只读观察源码检查点
+
+- done：新增 development_snapshots/canonical_host_observation_taps_source_20261017/ 独立项目源码快照，包含三份候选 Scala、三份原 baseline、原补丁、自包含反投影冷测与中文证据边界。三源正向重放与删除观察插入后的反投影均逐字一致，正常/-O 各12项冷测通过。
+- done（独立实际 class 层证据）：同一组三源在完整95源 fresh编译中通过，实际569类、9个观察Bundle；该次编译约69.98秒。当前小快照不构成完整编译工程，也不携带编译器或环境清单。
+- 资源口径：仅新增9束、2604位命名组合观察，源码无新增寄存器/队列/算术/MAC/Host外部端口；这不是物理网表面积或时序证明。固定4096 MAC及完整block周期分母保持，不以观察线或局部活跃lane改变分母。
+- ongoing：新tap闭包的Host IR/SV检查、实际层次绑定、B退休与resident/loan身份关联、27节点完整覆盖。prob须取真实PV请求归一化BF16值，不能以exp SRAM冒充；SiLU raw valid须联合resident及loan/abort/poison资格。尚无新tap运行通过结论。
+- done（另有本地实际记录，非此小包复跑）：完整14 provider和2份metadata经C++加载并封存RAM，16区域回读SHA相等；这是loader/RAM资格，不是Host执行。
+- todo：同一官方M128冻结输入/参考下的完整Host/block RTL数值验收，及固定资源完整周期利用率实测；完整block RTL保持0/5，90%目标不降低。
+
+只提交项目源码/项目源SHA和说明，不含权重、原始输入参考、生成模型、class/JAR/JDK、系统工具链/头文件/库环境清单或原始进程日志。此前环境清单公开许可问题保持独立待确认。新提交远端与CI仍按其SHA独立核验，不继承旧提交检查。

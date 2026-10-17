@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "scope": "PROJECT_SOURCE_PATCH_AND_TEXT_TEST_ONLY",
+  "files": {
+    "baseline/FfnTileSiluBridge.scala": {
+      "bytes": 5032,
+      "sha256": "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b"
+    },
+    "baseline/Qwen2Block.scala": {
+      "bytes": 52708,
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68"
+    },
+    "baseline/VectorSilu.scala": {
+      "bytes": 10634,
+      "sha256": "07d728d510ffd8b4f02c1b02476c2236fe594a18f70248c5a2f2c4ecbc361ae8"
+    },
+    "candidate/FfnTileSiluBridge.scala": {
+      "bytes": 6138,
+      "sha256": "b7e0075c12357b4d7bf81ea175087c6fda3a63c3693f26e58770e082af52c1b6"
+    },
+    "candidate/Qwen2Block.scala": {
+      "bytes": 56051,
+      "sha256": "a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491"
+    },
+    "candidate/VectorSilu.scala": {
+      "bytes": 11873,
+      "sha256": "26fc929be7d68fe0bb3e8396ddcdd79114279745fc18ad14643b6b662f708c26"
+    },
+    "patches/FfnTileSiluBridge.scala.patch": {
+      "bytes": 1647,
+      "sha256": "8b093ab9d1db6c82266031e686c287347572cc4cba21ed02a87f894e067d2a47"
+    },
+    "patches/Qwen2Block.scala.patch": {
+      "bytes": 8070,
+      "sha256": "f2aa598697d0c006d14504d5854886f061e26064bf665393928b81c0b74e97fa"
+    },
+    "patches/VectorSilu.scala.patch": {
+      "bytes": 2159,
+      "sha256": "7200c42208b3af1766f5d95ba2fc8a157ef95fbd45a7ccb64d11c90af6ea2119"
+    },
+    "test_projection_cold.py": {
+      "bytes": 9959,
+      "sha256": "b7c63044d64a210db623de96eba5f6c44f874a1dabf9d5fcb39dfaa1100884cc"
+    }
+  }
+}

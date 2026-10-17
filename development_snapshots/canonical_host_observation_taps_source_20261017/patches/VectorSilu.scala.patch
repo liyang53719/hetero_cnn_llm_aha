@@ -1,0 +1,41 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala
+@@ -36,6 +36,19 @@
+   val cores = Seq.fill(lanes)(Module(new BlockScalarFloat))
+   val allReady = cores.map(_.io.request.ready).reduce(_ && _)
+   val allValid = cores.map(_.io.result.valid).reduce(_ && _)
++  // BEGIN_CANONICAL_SILU_PHASE4_TAP_V1
++  // Read the already-materialized phase4 register at the real phase5 issue.
++  // The resident loan identity, abort and poison are external qualifications.
++  if(Qwen2NumericPolicy.official(numericPolicy) && enableBinaryAdd && lanes==16){
++    val canonicalSiluTap=Wire(new Bundle {
++      val valid=Bool();val value=Vec(16,UInt(32.W))
++    })
++    canonicalSiluTap:=0.U.asTypeOf(canonicalSiluTap)
++    canonicalSiluTap.valid:=state===issue && phase===5.U && allReady && !error && !input.binaryAdd.get
++    when(canonicalSiluTap.valid){canonicalSiluTap.value:=value}
++    dontTouch(canonicalSiluTap)
++  }
++  // END_CANONICAL_SILU_PHASE4_TAP_V1
+   io.request.ready := state === idle
+   io.result.valid := state === reply
+   io.result.bits.value := value
+@@ -165,6 +178,18 @@
+   if(enableTileLoan){
+     val p=io.loan.get
+     val loanActive=RegInit(false.B);val loanPoison=RegInit(false.B)
++    // BEGIN_CANONICAL_SILU_LOAN_CONTEXT_TAP_V1
++    // This is qualification only, not a claim of resident coordinates or B retirement.
++    if(Qwen2NumericPolicy.official(numericPolicy) && enableBinaryAdd){
++      val canonicalLoanContextTap=Wire(new Bundle {
++        val active=Bool();val poison=Bool();val abort=Bool()
++      })
++      canonicalLoanContextTap.active:=loanActive
++      canonicalLoanContextTap.poison:=loanPoison
++      canonicalLoanContextTap.abort:=p.abort
++      dontTouch(canonicalLoanContextTap)
++    }
++    // END_CANONICAL_SILU_LOAN_CONTEXT_TAP_V1
+     val borrow=state===idle && !loanActive && !loanPoison && !p.abort
+     p.request.ready:=borrow && vector.io.request.ready
+     p.result.valid:=(if(enableBinaryAdd)loanActive && vector.io.result.valid && !loanPoison && !p.abort else loanActive && vector.io.result.valid)

@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "status": "PASS_TEXT_ONLY_COLD",
+  "isolated_allowlist_file_count": 11,
+  "runs": [
+    {
+      "mode": "normal",
+      "tests": 12,
+      "exit_code": 0,
+      "status": "PASS_TEXT_ONLY_COLD"
+    },
+    {
+      "mode": "optimized",
+      "tests": 12,
+      "exit_code": 0,
+      "status": "PASS_TEXT_ONLY_COLD"
+    }
+  ],
+  "exact_source_pairs": 3,
+  "exact_project_patches": 3,
+  "baseline_forward_replay_matches_candidate": true,
+  "deletion_only_backprojection_matches_baseline": true,
+  "declared_observation_bundle_count": 9,
+  "declared_observation_bits": 2604,
+  "source_register_state_mac_additions": 0,
+  "resource_evidence_level": "SOURCE_DECLARATIONS_ONLY",
+  "this_checkpoint_independently_compiled": false,
+  "model_executed": false,
+  "compiler_or_eda_executed": false,
+  "IR_SV_generated": false,
+  "rtl_executed": false,
+  "actual_27_capture_coverage": "NOT_ESTABLISHED",
+  "full_block_rtl": "0/5"
+}

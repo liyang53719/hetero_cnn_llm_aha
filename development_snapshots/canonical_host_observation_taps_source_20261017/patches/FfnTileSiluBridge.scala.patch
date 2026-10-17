@@ -1,0 +1,31 @@
+--- a/candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala
++++ b/candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala
+@@ -25,6 +25,28 @@
+     (io.tiles.response.valid && io.tiles.response.bits.error) ||
+     (io.silu.result.valid && io.silu.result.bits.error)
+   val count=(call.rows>>4)*call.cols
++  // BEGIN_CANONICAL_TILE_RESPONSE_TAP_V1
++  // Observation only: the selected official resident/public21 instance is
++  // qualified externally. Producer order is not a numeric-policy proof.
++  if(enableMatrixProducerOrder){
++    val canonicalTileTap=Wire(new Bundle {
++      val valid=Bool();val slot=UInt(2.W);val identity=UInt(32.W)
++      val ng=UInt(16.W);val index=UInt(11.W);val rows=UInt(8.W);val cols=UInt(8.W)
++      val value=Vec(16,UInt(32.W))
++    })
++    canonicalTileTap:=0.U.asTypeOf(canonicalTileTap)
++    canonicalTileTap.valid:=io.tiles.response.fire && !bad && (state===gateWait || state===upWait)
++    when(canonicalTileTap.valid){
++      canonicalTileTap.slot:=io.tiles.response.bits.key.slot
++      canonicalTileTap.identity:=io.tiles.response.bits.key.identity
++      canonicalTileTap.ng:=io.tiles.response.bits.key.ng
++      canonicalTileTap.index:=io.tiles.response.bits.key.index
++      canonicalTileTap.rows:=call.rows;canonicalTileTap.cols:=call.cols
++      canonicalTileTap.value:=io.tiles.response.bits.value
++    }
++    dontTouch(canonicalTileTap)
++  }
++  // END_CANONICAL_TILE_RESPONSE_TAP_V1
+   io.start.ready:=state===idle && !bad
+   io.busy:=state=/=idle && state=/=locked;io.complete:=false.B;io.resetRequired:=poison || bad
+   io.tiles.abort:=bad;io.silu.abort:=io.abort || poison

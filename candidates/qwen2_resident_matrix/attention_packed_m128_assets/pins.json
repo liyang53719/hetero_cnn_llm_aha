@@ -1,0 +1,21 @@
+{
+  "execution_authorized": false,
+  "profile": "qwen2-public-pv16-packed-m128-linked-v1",
+  "schema": 1,
+  "sources": {
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/README.md": "80a805bca43da5d45723090a18744fed7a9c424a0ac2004134d4b2f2a0b25682",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/admission.py": "217d461ae5cecab0f5b1d61b3b6d98c4e3453707c50dc777eb2bf1361b901e2f",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/origin.py": "16aba815a3f668566b7b6bef22a1fd0bcd6a2a1ed0c2a01ce4a69c6665cae4bc",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/prerequisite.py": "966c41b6b1ef6a4839ab044971af8b7e8381a39ebfaedf777a3b6dee44d843a3",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/provenance.json": "10082cdedd92040e85da2a6d2b5485ef93e9261e54cca3d291314a0dc2fbb2e6",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/test_admission.py": "9fedf9cf522c0c444913275ce62f1f3de8af34c07e9926398e6b64fab1e14cb8",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/test_boundaries.py": "5e4652445422f46475f1eb1d9a2879217bb0644c42952da124757882496baddb",
+    "candidates/qwen2_resident_matrix/attention_packed_m128_assets/views.py": "5a2d9e28ebbfe997052abc954a30c815a2377087c97196be7f85758cf97db976",
+    "candidates/qwen2_resident_matrix/attention_packed_m16_assets/reuse.py": "800c1ca5bd16fb120501731fd5399be765fd6073517ba6231870c3411919b914",
+    "candidates/qwen2_resident_matrix/attention_packed_m16_entry/library_origin.py": "ad86e80b53c9cac7c2178962ce1a498cbff8de91c78c23500a01e0c8678fff37",
+    "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699",
+    "candidates/qwen2_resident_matrix/official_bf16/reference_layout.py": "70b6a3678d5cf2fa14ab7aae61f1f97fffdbf5dac1f17fb0fa6aa4a822fe7170",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/assets.py": "8d88c830d2d4f3de58035566bbb4549905914adb1a9b0f81b8b58362d7eec6d1",
+    "candidates/qwen2_resident_matrix/raw_kv_public_fresh/setup.py": "a4c5f24341747f8c89cd3e13d12c51b5fe9ba93973e53eb472d59a31adcfe9e5"
+  }
+}

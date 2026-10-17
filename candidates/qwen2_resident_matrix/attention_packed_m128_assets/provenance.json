@@ -1,0 +1,161 @@
+{
+  "claims": {
+    "actual_chain_executed": false,
+    "execution_authorized": false,
+    "full_29_node_acceptance": false,
+    "hardware_recipe_acceptance": false,
+    "old_pass_inherited": false,
+    "rtl_execution": false
+  },
+  "library": {
+    "receipt_sha256": "76ca454ca9433859b2cd517908759b26a5f311319efad9e780592c86a7d093ae",
+    "sha256": "a31f0cd5fd8184543ff489cc1cb2978d6f049c09eaa3edb24698e765360d4ff8"
+  },
+  "m16_prerequisite": {
+    "compatible_source_sha256": {
+      "candidates/qwen2_resident_matrix/attention_bank_m128/controller.py": "38685e99458bc934c0f5831a86b4ff97982e72f3e4c65f38010d64cd4d28a0fb",
+      "candidates/qwen2_resident_matrix/attention_bank_m128/storage.py": "3ac229215b772adcfb1d058113cf6ea34f9f5fcc050a3d52873782a8ddc9c232",
+      "candidates/qwen2_resident_matrix/attention_bank_panel/controller.py": "12403f85c7333160fe2a73f46fc5a9ee6b930a500ef889ed8da8771eb0749305",
+      "candidates/qwen2_resident_matrix/attention_bank_panel/storage.py": "14d0a46197ca7ecf5bc8fae2fe42a514ee274e5cfe84adacbaa0b2047b44ef5b",
+      "candidates/qwen2_resident_matrix/attention_bank_scratch/controller.py": "f9242181603ff779c9074eff40d67395beb45a5573a6f7382ee5df8823bbbdc5",
+      "candidates/qwen2_resident_matrix/attention_bank_scratch/port.py": "5d3f73de17b563fcf6235aea7e862b44c88215487ce9fae79894d5a44e618a4b",
+      "candidates/qwen2_resident_matrix/attention_bank_scratch/storage.py": "901e4f610a1baf052a345e50fdaf8c0739735f9f40484151243e6dc2e0ae29bd",
+      "candidates/qwen2_resident_matrix/attention_packed_owner/bridge.py": "2b32ddcb1c0456e01f1b87401cb6f342f0119604d0b4fd71ba4fea88c5de90f9",
+      "candidates/qwen2_resident_matrix/attention_packed_owner/client.py": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1",
+      "candidates/qwen2_resident_matrix/attention_packed_owner/hooks.py": "127f26fb04f2efc02bc8920d263cdbd14bda6a498315b2a2a9aad8fb99f23c7d",
+      "candidates/qwen2_resident_matrix/attention_packed_owner/protocol.py": "d153de82a85efb87e0f359ad84a8744e9c1a5d28ba12a8f689fa179a9eea63f3",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+      "candidates/qwen2_resident_matrix/dense_block_reduce/public_execution.py": "30bcb5a59e67d3502f7bd57d20590c8d9d5209ef357cafd9a78721c10c0e6e67",
+      "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": "ae5fcc65b0d238e8b3697d563ad5fc309ee17e72a078f39cfd841838c96bf929",
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "1ddf017ffda70af19a70385cfffe1d5a405113f27d73378410a7fa2575bcfa25",
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+      "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+      "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+      "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699",
+      "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0c87797587281b4e7f23663242e947ffe4157db9a644e788d67eb5c9045c50c1",
+      "candidates/qwen2_resident_matrix/official_bf16/reference_layout.py": "70b6a3678d5cf2fa14ab7aae61f1f97fffdbf5dac1f17fb0fa6aa4a822fe7170",
+      "candidates/qwen2_resident_matrix/official_bf16/silu_recipe.cpp": "d319d3431316b4ff0f299beac5931f718a6a3a446e8de06398b172ebb6e0401c",
+      "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1",
+      "chisel/continuous_prefill/tests/qwen2_block.cpp": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5"
+    },
+    "contract_sha256": "f5e3c0ecc342019923dc8759168e9097c9d0e1ffc1d7eac0a56032569fa33882",
+    "metadata": {
+      "SUPERVISOR.json": {
+        "bytes": 1979,
+        "sha256": "7d981ee875cbf86f0fa963c4dca4cc34d8e185814f4f3af3b348d7cf568294d6"
+      },
+      "actual/summary.json": {
+        "bytes": 977559,
+        "sha256": "39f576bd71441d24997ee460fb61e9264fa429423eb18a366f69daf87b0abf95"
+      },
+      "snapshot/SNAPSHOT.json": {
+        "bytes": 215425,
+        "sha256": "c41fd3d95067456c59bccb945b0f9a793f7517f68476c38df11b374947b5fc5b"
+      },
+      "summary.json": {
+        "bytes": 1773,
+        "sha256": "e96e21a1309a900346cca82df475c6eb2f6c7de42b1a73ea5330157b4fae2f8d"
+      }
+    },
+    "source_manifest_sha256": "c27020ddcc0965e18026063640e54d2daa2e00ec7f17fbbb82730bd9c233bfdf"
+  },
+  "metadata": {
+    "evidence/summary.json": {
+      "bytes": 1960,
+      "sha256": "0a6764b46df7f5c5e798f3e491bda3d8ad594cf8b17294fdf68ce8bc8af99be8"
+    },
+    "private/actual/summary.json": {
+      "bytes": 309466,
+      "sha256": "a58d7b3133bfc55012a2cccfba8dbd40a3760b3e11b17833a0ee1636ee8b3b13"
+    },
+    "private/assets/ASSETS.json": {
+      "bytes": 91340,
+      "sha256": "50c005dc917f08f56e47b35c45e030446377ce30b2e5f280e5c6f6dbc92e466b"
+    },
+    "private/assets/SETUP.json": {
+      "bytes": 40055,
+      "sha256": "79b4ca389df5f19d52e0a0c8a6040f706df5fa9f4d373c27dbbcd813032ec61a"
+    },
+    "private/assets/backend.json": {
+      "bytes": 4514,
+      "sha256": "b3bc57de57d30eb7767de09a86fcc5faa589b0c0a3abcc52f025bfe4491361ed"
+    },
+    "private/assets/context.json": {
+      "bytes": 76128,
+      "sha256": "f2474f90919bbe241433b7546f85ad1fef06b18ff866f95009b2d19f169afce3"
+    },
+    "private/assets/library/official_bf16_compile.json": {
+      "bytes": 2000,
+      "sha256": "f036483fcc7ddb66fddce088e8eb346945225e4eca162eb43174a53171c2f5eb"
+    },
+    "private/assets/native/RESULT.json": {
+      "bytes": 124335,
+      "sha256": "d2766a40113de2cb07c1b477e1ba17a624022f574f99b7cfa46b41210e4bb155"
+    },
+    "private/assets/native_m16/RESULT.json": {
+      "bytes": 116735,
+      "sha256": "a2df84fb8a9530fc205288d1cf6cfc0242c043c46a803779a8bfc2d780385a51"
+    },
+    "private/assets/payload/manifest.json": {
+      "bytes": 18512,
+      "sha256": "ae754ab5df4cd8c3e46bd57e4f509ca0c3c60298bdcb763004bb5fb800ea42b7"
+    },
+    "private/assets/phase_native128.json": {
+      "bytes": 6505,
+      "sha256": "8ed1613eb929c8ed977c9e824439c04f7b909d7b38c2bbecdd748ced142e4877"
+    },
+    "private/assets/phase_native128_diagnostics.json": {
+      "bytes": 17221,
+      "sha256": "ae67a2836d635c3e2334296a98ad06e5d839f7ef9e820379e1cdc90e78a847c1"
+    },
+    "private/assets/phase_native16.json": {
+      "bytes": 6453,
+      "sha256": "d64baad4de991ca66c8fdf871a93efbf75cf28780a2adb2214768e08fad2e041"
+    },
+    "private/assets/phase_native16_diagnostics.json": {
+      "bytes": 17192,
+      "sha256": "581296868c303019b5a786e95d623224e49a191526b3b8b37c5644331301f9c2"
+    },
+    "private/assets/qk_library/qk_pair_compile.json": {
+      "bytes": 3524,
+      "sha256": "f4b25dfdaa886008a3dce869b8060ba0c0a792d8f1a1d61b7814b3f79727165b"
+    },
+    "private/assets/qkv_library/qkv_pair_compile.json": {
+      "bytes": 2480,
+      "sha256": "b3e87af78a48ebada72170cdac14cb40d106c46df85863ccdc1281fb2fa78c3e"
+    },
+    "private/assets/recipe_pair.json": {
+      "bytes": 2404,
+      "sha256": "970ae95a00037141a756c9542a58f4b10ea7907b0180cf4c05d15def37d82e6c"
+    },
+    "private/assets/reduced/compile.json": {
+      "bytes": 38864,
+      "sha256": "45d5c07ef88fb5c68729a215fb2f5b5dd7e79cbb6af706a2d5db0516c450cf42"
+    },
+    "private/assets/reduced/run.json": {
+      "bytes": 3436,
+      "sha256": "ec01cb28d7f508a13a261f2fe2cccc7a4890df6b4b48f33d754540bc2a5ab59f"
+    },
+    "private/assets/sequential/compile.json": {
+      "bytes": 38866,
+      "sha256": "6dd10c0f02e939d163c93cb261605df3e365bae9ec2442a47cc81f1fdf759cee"
+    },
+    "private/assets/sequential/export.json": {
+      "bytes": 4959,
+      "sha256": "7cc86987db179a7f8e8a30daf6bc9a1e24fe916b5b7b06eb197bf73226f9e38f"
+    },
+    "private/assets/sequential/run.json": {
+      "bytes": 3448,
+      "sha256": "2d3a1ae4c378b0b19f10724c68b42fc7d429b4fe686a4ade641596770da9f947"
+    },
+    "private/setup_evidence/summary.json": {
+      "bytes": 904,
+      "sha256": "bd418820674f6ff30ed6018bfc9dba48a55b475f7f07d5a98f343a63595339ca"
+    }
+  },
+  "origin_asset_profile": "qwen2-public-pv16-pair-assets-m128-v1",
+  "origin_commit": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+  "origin_source_manifest_sha256": "9d1aa25d2f76aea864c86dbfa7cfc3a724cb2e6bafd2c8f8158d19937f057f33",
+  "profile": "qwen2-public-pv16-packed-m128-linked-v1",
+  "schema": 1
+}

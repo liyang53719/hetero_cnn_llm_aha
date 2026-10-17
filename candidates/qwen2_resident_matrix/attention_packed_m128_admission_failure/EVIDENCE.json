@@ -1,0 +1,187 @@
+{
+  "acceptance": {
+    "assigned_official_observed_gates_passed": false,
+    "full_29_node_acceptance": false,
+    "hardware_recipe_acceptance": false,
+    "m17_observer_capture_pass_inherited": false,
+    "numerical_acceptance": false,
+    "previous_attempt_pass_inherited": false,
+    "rtl_execution": false,
+    "useful_wall_mac_90_percent": false
+  },
+  "artifacts": {
+    "private_caller_start": {
+      "bytes": 673,
+      "sha256": "14b4ce8c831458967a08563bbb8f79e8e7fac676ce15aac57e88245c3fe79cd5"
+    },
+    "private_context": {
+      "bytes": 942,
+      "sha256": "c12c481e8409d89a10c80e0c9c4ce95d72406fd9cc3565e64f1a7ba35b1004ee"
+    },
+    "private_input_manifest": {
+      "bytes": 47824,
+      "sha256": "af600c65a41cd9da6081f7d010ce89a936e7d17ea4387aa91937260779e851f2"
+    },
+    "private_snapshot": {
+      "bytes": 446458,
+      "sha256": "fbaadabc6649c084ae1f7c982b77ee1dadd40c3e421d26611e57abe1b045c44c"
+    },
+    "private_source_proof": {
+      "bytes": 49285,
+      "sha256": "0c219515d4ebe6032747c0d120645d8467ab1172d8ddd235e06818f103bd0a55"
+    },
+    "private_stderr": {
+      "bytes": 1517,
+      "sha256": "edeee6799acdb0e719fd18f97e03c29e7629b21d0a3be53afc510f0952a62dda"
+    },
+    "safe_caller_supervisor": {
+      "bytes": 659,
+      "sha256": "e5b5d9dc1d0a3f6d04b4ae02ccd0f95255f9c315738ca427c7e60ea9ee972609"
+    },
+    "safe_last_progress": {
+      "bytes": 188,
+      "sha256": "b90fec98c24ddfcf75985d2000782e7ed49f9509c11d24d0c2e14e1c91fc3d32"
+    },
+    "safe_launcher_summary": {
+      "bytes": 569,
+      "sha256": "9c3bf942839a5563b3cba2df86bf2ec5c020fe3e99b123f25c8c38bc7f10d1fc"
+    },
+    "wrapper_contract": {
+      "bytes": 2169,
+      "sha256": "582833958e1dda4772f3e23c02f2ec0a17be9d6d7e5e3e5fba36618fb4ca8f30"
+    },
+    "wrapper_filemap": {
+      "bytes": 129745,
+      "sha256": "841b029a6f6ad15b37cdea45ef03831fc79df24cf49c1f72939f4dad9dff485c"
+    },
+    "wrapper_freeze": {
+      "bytes": 1578,
+      "sha256": "412a5dbcfdce21df4448e1b22adac79ba74949d9c1a5cff3eabf4eda8615db02"
+    },
+    "wrapper_manifest": {
+      "bytes": 1851,
+      "sha256": "1200810b5a1849b08af38cd8f348e254e5adcae1d9c6d61f81bb16ea1bb78ce5"
+    },
+    "wrapper_runtime_source_map": {
+      "bytes": 48167,
+      "sha256": "436843531fa67cae86c301beaccf475c8472d5d0bc30fdffa3574cc04c5557ca"
+    }
+  },
+  "attempt": 1,
+  "budgets": {
+    "cleanup_seconds": 5,
+    "numeric_seconds": 2400,
+    "outer_seconds": 2430,
+    "work_seconds": 2424
+  },
+  "caller": {
+    "child_exit_code": 1,
+    "cleanup_complete": true,
+    "context_sha256": "c12c481e8409d89a10c80e0c9c4ce95d72406fd9cc3565e64f1a7ba35b1004ee",
+    "elapsed_seconds": 31.690888,
+    "numeric_entry_elapsed_seconds": 31.028968,
+    "numeric_entry_ordinal": 6,
+    "numeric_entry_pid": 6,
+    "outer_exit_code": 1,
+    "outer_exit_evidence": "safe_caller_supervisor.launcher_exit_code",
+    "same_pid_source_proof": true,
+    "terminal_chunk": "503263",
+    "tool_session_id": 55239
+  },
+  "contract_sha256": "582833958e1dda4772f3e23c02f2ec0a17be9d6d7e5e3e5fba36618fb4ca8f30",
+  "entry_pins_sha256": "ce0b54f6c73eec52736feb22e89b72ef388427b8abce04865a135dff76790a42",
+  "execution": {
+    "actual_chain_completion_verified": false,
+    "actual_output_directory_present": false,
+    "actual_summary_present": false,
+    "build_run_by_archiver": false,
+    "child_complete_receipt_present": false,
+    "numeric_run_by_archiver": false,
+    "numerical_comparison_started": false,
+    "numerical_entry_called": true,
+    "numerical_run_started": true,
+    "owner_job_started": false,
+    "producer_run_by_archiver": false,
+    "public_run_loop_entered": false,
+    "retry_performed": false,
+    "timeout": false
+  },
+  "failure": {
+    "classification": "integration admission rejection before public execution; no observed numerical mismatch",
+    "entry_source_path": "candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py",
+    "entry_source_sha256": "0d59e94cd9838b5fa73c67c3e75e02eea8645796b40f4a4da667b7f06eb123ba",
+    "exception": "ValueError: enabled raw KV execution is limited to M16 pending a reviewed same-source M16 receipt",
+    "not_reached_source_lines": {
+      "actual_report_construct": 314,
+      "output_directory_create": 313,
+      "runtime": 309,
+      "verify_snapshot": 308
+    },
+    "passed_source_lines": [
+      297,
+      298,
+      304,
+      305
+    ],
+    "rejecting_source_line": 306,
+    "traceback_frames": [
+      {
+        "function": "<module>",
+        "line": 123,
+        "path": "candidates/qwen2_resident_matrix/attention_packed_m128_run/driver.py",
+        "source_sha256": "43676afc908239512cc9c874bcaea81a9da59afb3610ec17140736648df5d5fc"
+      },
+      {
+        "function": "main",
+        "line": 122,
+        "path": "candidates/qwen2_resident_matrix/attention_packed_m128_run/driver.py",
+        "source_sha256": "43676afc908239512cc9c874bcaea81a9da59afb3610ec17140736648df5d5fc"
+      },
+      {
+        "function": "run",
+        "line": 104,
+        "path": "candidates/qwen2_resident_matrix/attention_packed_m128_run/driver.py",
+        "source_sha256": "43676afc908239512cc9c874bcaea81a9da59afb3610ec17140736648df5d5fc"
+      },
+      {
+        "function": "run",
+        "line": 306,
+        "path": "candidates/qwen2_resident_matrix/dense_block_reduce/check_public_numeric.py",
+        "source_sha256": "0d59e94cd9838b5fa73c67c3e75e02eea8645796b40f4a4da667b7f06eb123ba"
+      },
+      {
+        "function": "require",
+        "line": 67,
+        "path": "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py",
+        "source_sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
+      }
+    ]
+  },
+  "publication": {
+    "arrays_included": false,
+    "exact_original_safe_copies": [
+      "summary.json",
+      "progress.json",
+      "SUPERVISOR.json"
+    ],
+    "private_artifacts": "identity only; original bytes remain private",
+    "private_logs_included": false,
+    "private_paths_included": false,
+    "weights_included": false
+  },
+  "rows": 128,
+  "schema": "qwen2-packed-m128-first-attempt-admission-failure-v1",
+  "source": {
+    "committed_cpp_sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5",
+    "count": 346,
+    "git_head": "be00eb8e4bc75e2e41f2a434d05d4c901ed3faa5",
+    "installed_files_verified": 346,
+    "manifest_encoding": "sorted compact JSON plus newline",
+    "original_sources_modified": false,
+    "overlay_files_verified": 346,
+    "source_manifest_sha256": "f5e1dcdecc406750cd6409e45a97184294ba94d4e61cb9ef67d53641fd912104",
+    "source_mismatches": 0,
+    "verification": "read-only SHA256 of every original installed and overlay source; genuine Git HEAD and committed arithmetic checked"
+  },
+  "status": "FAILED_RESIDUAL_M16_RAW_KV_ADMISSION"
+}

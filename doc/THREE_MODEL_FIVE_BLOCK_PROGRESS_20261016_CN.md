@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 08:44 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 09:32 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -12,7 +12,7 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 
 |目标|状态|当前真实边界与下一门|
 |---|---|---|
-|Qwen2-1.5B典型block，当前L0|ongoing；M128模型指定门禁done|2e591b6同host完整M128的27项assigned官方门禁与固定算术通过，21 completion/17 owner作业；全29节点、逐阶段参考内容身份固化、完整Chisel/RTL与90%仍待完成。旧超时/失联历史保留。|
+|Qwen2-1.5B典型block，当前L0|ongoing；M128模型指定门禁done|2e591b6同host完整M128的27项assigned官方门禁与固定算术通过，21 completion/17 owner作业；8ba333c已进一步通过同刺激身份冻结；全29节点、完整Chisel/RTL与90%仍待完成。旧超时/失联历史保留。|
 |Qwen3.5-0.8B L0，GDN+dense|ongoing，本轮未变|历史真实payload与合成输入cold/carried/decode软件smoke保留；当前完整M128原业务/RTL资格不继承。|
 |Qwen3.5-0.8B L3，Attention+dense|ongoing，本轮未变|历史真实payload、合成M128软件数值及组件工作保留；当前完整原业务/RTL资格不继承。|
 |Qwen3.5-35B-A3B L0，GDN+MoE|to do，当前完整block|保留既有config/header/几何合同；真实payload、route/状态、完整数值与RTL/性能尚待闭合。|
@@ -237,3 +237,11 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 声明级新增1987bits：512bits=64B bridge lhs保持，另1475bits控制/metadata。无新SRAM或算术单元；面积/频率未实测。旧34项控制测试normal通过，旧-O18 errors为assert副作用依赖，明确未通过、不改历史源。
 - 下一门：真实HostBlockCommands+router/coordinator的无SRAM/FPU小控制harness，外部服务脚本响应只验证控制，生产kernel真实债务全网仍须另验。当前仅准备，尚未运行。
 - 同刺激身份冻结8ba333c run39017864296仍待终态；没有因本候选再触发数值作业。完整模型指定27门仍1/5，完整RTL0/5、90%未通过。
+
+## 2026-10-17 09:32 UTC：M128实际同刺激身份冻结通过及控制解释器失败归档
+
+- **done：新同host M16→M128实际数值与身份记录。** 8ba333c/run39017864296/job117353555753于09:09:38UTC成功；M16阶段477.007743秒，M1281499.562064秒，总2102.773260秒。仍为指定27官方门禁、28观察/10捕获、21completion/17owner作业；全29/hardware/RTL明确false。
+- 实际8JSON artifact12095858179原ZIP SHA256 0c25aa1453f5b9f099fdc470933e3074462bd2f92ca08c191a1cfb9adf22b21a。replay_identity.json SHA256 84c4f626331bb68ec6fda0ae53485714c516f6a590a9b6e48a3fcfd41ea5e7fb，稳定identity 7fa82000bb935e651f517f77f50c3c37b9be457a81749129500b6e93e71b6562。root与独立checker复核通过；13个loaded providers明确仅终态认证metadata，其他持久参考/实际字节由运行内直接hash。因果观测范围、未观察sentinel和softmax FP32无额外官方tol界限保留。
+- 旧离线checker把raw matrix_numeric.cpp哈希作为实际generated编译源码预期，单字段拒绝SCHEMA_VALUE；严格追溯冻结tiny.generated及两份composed图得到正确0e298008编译源图，修复checker并增加raw-map拒绝回归。原ZIP、数值源码、参考和运行未改，无重跑；corrected checker author102+102/independent122+122冷验证，实际原ZIP normal/-O通过。
+- **done：控制harness源码/编译/CHIRRTL结构；未通过协议。** v7/v8/v9真实94源编译与7模块结构通过，CHIRRTL2,047,981B、0memory/extmodule/FPU。v7统一2MiB文件限额截断正常lowered FIRRTL，未callback；v8仅修生成物8MiB/log2MiB后进入callback但原60秒预算超时；v9只增marker，确认初始化/首expect/首clock均完成、最后报告cycle64，仍无scenario PASS。三版失败及strictcleanup如实归档，不将最后marker当总执行拍数。
+- 停止全Host Treadle盲重试。下一门拟相同控制harness/fixture/断言的Verilator编译后端，将生成控制SystemVerilog；不是完整block RTL。固定官方工具/单CPU/native-j1/每native AS2GiB与250秒阶段预算已完成源码审查并于09:33UTC启动一次有界验证；本次停在Scala compile60秒超时，日志为空/class0、strict cleanup完成，尚未进入结构/RTL生成。原因待诊断，不扩预算重跑。Java heap1GiB不是整树硬限。完整90%目标及原Attention/SFU架构上界限制不变。

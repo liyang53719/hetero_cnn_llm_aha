@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 04:40 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 07:55 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -12,13 +12,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 
 |目标|状态|当前真实边界与下一门|
 |---|---|---|
-|Qwen2-1.5B典型block，当前L0|ongoing|本轮推进Attention银行模型、packed原生微测及SFU候选；原业务M128在FFN PC16触发内层2400秒预算，数值比较/postflight未完成；实际RTL/90%未通过。|
+|Qwen2-1.5B典型block，当前L0|ongoing；M128模型指定门禁done|2e591b6同host完整M128的27项assigned官方门禁与固定算术通过，21 completion/17 owner作业；全29节点、逐阶段参考内容身份固化、完整Chisel/RTL与90%仍待完成。旧超时/失联历史保留。|
 |Qwen3.5-0.8B L0，GDN+dense|ongoing，本轮未变|历史真实payload与合成输入cold/carried/decode软件smoke保留；当前完整M128原业务/RTL资格不继承。|
 |Qwen3.5-0.8B L3，Attention+dense|ongoing，本轮未变|历史真实payload、合成M128软件数值及组件工作保留；当前完整原业务/RTL资格不继承。|
 |Qwen3.5-35B-A3B L0，GDN+MoE|to do，当前完整block|保留既有config/header/几何合同；真实payload、route/状态、完整数值与RTL/性能尚待闭合。|
 |Qwen3.5-35B-A3B L3，Attention+MoE|to do，当前完整block|同上；必须使用真实路由与tile映射，不把Qwen2或0.8B结果迁移为PASS。|
 
-五类均非done。范围来自[统一目标计划](three_model_typical_block_closure_20260917_zh.yaml)；
+按完整block M128模型指定27门禁口径为1/5；全29节点、完整RTL与利用率最终验收仍未完成，五类最终目标均非done。范围来自[统一目标计划](three_model_typical_block_closure_20260917_zh.yaml)；
 0.8B历史边界见[层0 GDN软件smoke](U00_2_GDN_PAYLOAD_NUMERICAL_20261006_CN.md)、
 [层3软件smoke](U00_2_LAYER3_PAYLOAD_NUMERICAL_20261006_CN.md)。
 
@@ -188,6 +188,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   真实已编译QK16候选缺少模型要求的completed-dot及scaled-score BF16-RNE物化；完整official_bf16 policy又有maxTokens==1024及RMS/owner ABI变更，不能直接与packed<=128叠加。[新增默认关闭QK片段](../candidates/qwen2_resident_matrix/attention_qk16_bf16_materialize/README.md)复用F32.bf，仅在最终16-lane fold和scaled-score两个边界物化，score SRAM与max共同消费rounded值；非有限结果走原poison/drain。不增加状态/寄存器/存储/端口，默认路径保留。
   可移植源码/数学参考11+11测试通过（含195840个midpoint邻域），独立复核通过；同一候选83源Scala class编译exit0、474类、29.4417秒。没有elaboration/CHIRRTL/RTL/硬件协议/完整block数值通过。原编译清理观测仅killpg(pid,0)得ESRCH，不是全后代消失证明。
   此片段仍为core-only，尚未Host/kernel透传；raw scratch、六head控制、384B panel、PV供数/暂停保持及最终债务fence仍须集成，Scalar underflow与NaN异常策略未整体对齐。当前新文件与运行中的463输入集合无交集，M128 workflow字节不变，运行39012470402继续沿原commit进行；不得把并行源码修复当作该运行已通过或RTL等价。
+
+
+- **done：Qwen2 L0完整M128模型指定27门禁实际通过；ongoing：同刺激RTL所需内容身份固化。** [七份原始安全JSON与证据](../reports/execution/QWEN2_SAME_HOST_M128_ASSIGNED27_PASS_20261017/README.md)绑定commit2e591b6df29fc08504dca264264b149c27e2cf95、run39012470402/job117337723540、artifact12093963949，ZIPf106bdb2820da5f850a17288496613b6bea3b96b414576d36e03a681b529eb62。job于07:44:30 UTC成功；同job先通过M16，484.610557秒，随后M128阶段1570.271008秒，整个流程2191.158995秒。M128 rows128、27assigned/28observed、21completion、17ownerjobs、fixed arithmetic通过；直接child exit0，各暴露阶段strict-cleanup成功回执成立，全29/hardware/RTL仍false。
+  root与独立审查复验7原始JSON、463源/462raw pins、真实commit动态361/424源manifest、两份可重建CHILD_RESULT摘要、共享nonce及M16 prerequisite/producer资格指针一致；归档24+24拒绝测试通过。严格清理由已绑定源码强制执行，但原始扫描proof未上传，不能把离线回执核验说成再次运行私有数组或清理实验。
+  同刺激回放的内容身份仍有具体缺口：公开源码可恢复Qwen2-1.5B-Instruct revision ba1cf1846d7df0a0591d6c00649f57e798519da8、token/position0..127、past0及input FP32 SHA ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df；13个BF16参数/22ranges也有pins。但实际各阶段reference/actual内容hash及观察到的runtime/ELF身份藏在未保留的私有manifest/snapshot中，只有不透明文件SHA不足以验证将来重建字节等于本次数据。
+  因此当前结果是完整M128模型限定门禁通过，不标记same-stimulus RTL replay ready。下一补丁仅输出路径无关logical-ID/shape/dtype/layout/bytecount/contentSHA及必要runtime/source pins的安全身份清单，绑定终态回执；不上传数组/权重，不改数值/门限/预算。完成新的内容身份固化验收后再作同刺激RTL回放。其余四block尚无同级M128结果，1024/1224未启动。
 
 ## 下一步，保持默认关闭并逐项验收
 

@@ -1,0 +1,28 @@
+{
+  "allowed_identity_changes": [
+    "profile",
+    "fresh official forward true",
+    "native execution reused false",
+    "reference metadata wording",
+    "validated result status"
+  ],
+  "assigned_official_gates": 27,
+  "baseline_terminal_sha256": "2fdabe1135b877fa6b78a1cd8f4b51dd14da316773ec79413ff5edd743683347",
+  "fresh_terminal_sha256": "caf027af5688acbe8c29efb38ddba09a88a3223d0749572f6a002c42806aae20",
+  "numeric_control_validation_preserved": true,
+  "schema": 1,
+  "status": "SOURCE_ONLY_NO_NUMERICAL_EXECUTION",
+  "wholephase_preserved": [
+    "21 completions",
+    "17 owner jobs",
+    "ACK/publication",
+    "whole terminal",
+    "retirement",
+    "10 capture fields",
+    "exact fixed arithmetic",
+    "unchanged operator and block thresholds",
+    "27 assigned official observed gates",
+    "FP32 diagnostic only",
+    "no full29/RTL/hardware claims"
+  ]
+}

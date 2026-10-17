@@ -1,0 +1,72 @@
+{
+  "attempts": 1,
+  "ci_run_attempt": "1",
+  "full_m16_envelope": {
+    "cleanup_seconds": 5,
+    "external_process_group_watchdog_required": true,
+    "numeric_seconds": 900,
+    "outer_seconds": 930,
+    "preflight_and_postflight_allowance_seconds": 24,
+    "work_seconds": 924
+  },
+  "historical_measurement": {
+    "cpu_seconds": 569.994456347,
+    "numeric_wall_seconds": 569.456837449994,
+    "peak_rss_kib": 648392,
+    "portable_runtime_equivalence_proven": false,
+    "profile": "original historical packed M16 host-job",
+    "total_wall_seconds": 591.28026
+  },
+  "known_private_tensor_bytes": {
+    "input_x": 98304,
+    "native_exports": 14880768,
+    "official_payload": 94382080,
+    "readonly_arena": 188043264,
+    "scalar_raw_outputs_both": 6619136,
+    "sequential_exports": 3720192,
+    "table": 328448,
+    "total": 308072192
+  },
+  "minimum_reserves": {
+    "free_disk_gib_after_environment": 8,
+    "logical_cpus": 4,
+    "memory_gib": 8,
+    "workspace_gib": 2
+  },
+  "past_tokens": 0,
+  "proposed_separate_ci_phase_budgets": {
+    "artifact_sealing_seconds": 120,
+    "fresh_reference_setup_cleanup_deadline_seconds": 899,
+    "fresh_reference_setup_includes": [
+      "environment and pinned package installation",
+      "fresh tiny consumer qualification",
+      "fresh official/scalar M16 producer",
+      "independent original-array verification",
+      "parent qualification receipt"
+    ],
+    "fresh_reference_setup_total_seconds": 900,
+    "fresh_reference_setup_work_seconds": 890,
+    "full_m16_seconds": 930,
+    "total_seconds": 1950,
+    "workflow_timeout_minutes": 40
+  },
+  "risks": [
+    "Historical 591.28 seconds is not a portable timing promise.",
+    "Actual full consumer is predominantly serial Python/scalar work; four Torch threads do not imply fourfold speedup.",
+    "Default hosted runner resources must be measured rather than inferred from runner label.",
+    "Admission repeatedly hashes approximately 308 MB and verifies producer/current runtime; prepare and seal before starting the 930-second full execution envelope where supported.",
+    "If fresh hosted execution exceeds 900 seconds, preserve FAIL/TIMEOUT. Review a separately versioned resource envelope rather than silently retrying or weakening numerical gates.",
+    "Torch/Transformers environment and package-cache disk use is outside tensor byte total.",
+    "Fresh-reference setup is one shared 900-second outer envelope; per-stage caps are not additive allocations. Installation, tiny checks, producer and independent verification must all fit without retry or deadline extension."
+  ],
+  "rows": 16,
+  "schema": 1,
+  "scope": {
+    "ci_dispatched": false,
+    "full_numeric_executed": false,
+    "old_pass_inherited": false,
+    "producer_executed": false,
+    "weights_downloaded": false
+  },
+  "status": "PLAN_ONLY_UNMEASURED_ON_FRESH_HOST"
+}

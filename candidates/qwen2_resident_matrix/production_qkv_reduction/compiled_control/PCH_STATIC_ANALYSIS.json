@@ -1,0 +1,15 @@
+{
+  "makefile_sha256": "74121398e5be12bf03721f1f0f5ce75e7c703635ec7e50920d43f9c4e31fcc0c",
+  "documentation_sha256": "1b3aadf5787fb55f680f9a84552dfdfa776a3184953181fd7fe19bbcd37577fb",
+  "supported_configuration": "make VM_PARALLEL_BUILDS=0",
+  "evidence": [
+    "verilated.mk:208-223 chooses __ALL.o instead of VK_OBJS_FAST/SLOW",
+    "verilated.mk:271 generic %.o:%.cpp rule has no PCH prerequisite",
+    "verilated.mk:274,277 PCH prerequisite only on fast/slow split objects",
+    "simulating.html:223 documents single compilation unit when VM_PARALLEL_BUILDS is not 1"
+  ],
+  "generated_cpp_count": 9,
+  "generated_cpp_total_bytes": 2345670,
+  "risks": "Single compilation unit may increase compilation time or peak native memory; existing 2GiB AS and 8MiB file limit remain; successful build not established",
+  "executed": false
+}

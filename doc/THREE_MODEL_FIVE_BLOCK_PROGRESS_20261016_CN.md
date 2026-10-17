@@ -1,6 +1,6 @@
 # 三模型五类block：本轮计划与检查表
 
-更新：2026-10-17 09:51 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
+更新：2026-10-17 10:02 UTC。只新增状态快照，不覆盖冻结计划、源码或历史回执。
 最终目标仍为同一固定配置/输入的完整实际RTL数值与状态PASS，以及
 useful MAC / (4096 MAC每拍 × 完整block wall cycles) ≥90%；固定资源不能
 按活跃lane缩小，DMA、stall、阶段间隙及最终写ACK均计入wall。
@@ -253,3 +253,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - **done：v7/v8/v9失败控制门纯源码复现。** 28个UTF8文件保存固定源/失败安全摘要/真实metadata generator；不提交6个可再生command/descriptor二进制表，也不文本编码替代。generator按源码生成后核原10文件hash；三版重放和6+6冷测通过。不是协议PASS。
 - 后继v11固定CPU编译60秒超时，0class/0RTL；严格复用已核545生产classes的v12增量编译3测试源通过14.655秒，随后wrapper stdout marker污染Verilator版本查询，未callback。v13改独立sidecar后真实生成1,560,217B控制SystemVerilog和C++，但PCH文件触发8MiB上限，未callback。均失败并清理；不是完整block RTL数值通过。
 - 下一候选使用固定Verilator已有VM_PARALLEL_BUILDS=0单TU无PCH构建选项，预算/内存/单CPU/-j1不增；待审后一次有界验证，不手改DUT或生成RTL。完整五blockM128指定27门仍1/5、完整RTL0/5、90%未通过。
+
+## 2026-10-17 10:02 UTC：实际编译控制RTL门通过
+
+- **done：原Host parser+QKV router/coordinator控制RTL脚本服务门。** v15实际PASS_CONTROL_ONLY，原源/fixture/断言不变，官方VM_PARALLEL_BUILDS=0无PCH单TU构建。总47.577秒；增量编译14.502、结构4.503、compiled backend27.565，各exit0且strict scoped cleanup完成。
+- 94-source view完整，复用固定原545生产classes（91源），只编3测试源，新10/最终555，原545逐hash不变。原87jar→106jar转换明确81共同/6移除/25新增；没有把依赖全称相同。
+- 实际生成控制SystemVerilog1,560,217B，与v13失败尝试的SV字节hash相同；本次0.gch。原Host+router+coordinator/bridge等7模块、无memory/extmodule/FPU。实际1normal+7fault通过，正常M16控制脚本18,457cycles、21completion/17jobs（13ordinary/1resident/3reduction），不含真实Dense/Matrix/SFU/iDMA算术或生产kernel五物理债务。
+- 晚held reset/abort、abort_pending、window_tag、drain_short、idle ordinary/resident stray均通过；受控服务接受/回包账本排空。实际argv固定单CPU/Verilator threads1/make-j1、native每进程AS2GiB，Javaheap1GiB，不宣称整树内存硬限或硬件周期利用率。
+- [纯源码复现与安全证据](../candidates/qwen2_resident_matrix/production_qkv_reduction/compiled_control/README_CN.md)提供固定工具/HardFloat/JDK依赖、生产classes重建与metadata fixture生成，包不携带classes/jars/RTL/原日志/宿主身份/权重。root/作者/独立8+8冷测与真实metadata再生通过，独立实际回执和全部源/产物身份复核通过。
+- 后继原Host official/resident/QKV完整CHIRRTL结构门正在准备，固定4096资源与burstWrites/capacity1024，尚未运行。真实生产五债务、packedQK/PV/scratch/panel接入和SFU吞吐仍未闭合；不会在48.2%理想上界的串行Attention路径直接启动长M128 RTL数值。模型指定27门仍1/5，完整RTL数值0/5，80/90目标未验收。

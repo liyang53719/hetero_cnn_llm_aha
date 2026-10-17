@@ -1,0 +1,156 @@
+{
+  "tool_sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+  "wrapper": {
+    "path": "hetero_cnn_llm_aha/rtl/integration/idma_backend_rw_axi_flat_wrap.sv",
+    "sha256": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0"
+  },
+  "input_pins_sha256": "307c81182418b00ae28101edb9e2afc715276f2974d6fe2b9e1fc58b29b799ef",
+  "source_plan_sha256": "d1c270c69766eb419f99e13e7e255e38ddbfd5d6662954d8d3523bf4dedc8638",
+  "runner_manifest_sha256": "84a65268045536a93113ff3cef502f0dc4360c2fa628c75b8d7ac87458c707d6",
+  "source_count": 293,
+  "input_pin_count": 1039,
+  "initial_defines": {
+    "TARGET_ASIC": "",
+    "TARGET_RTL": "",
+    "TARGET_SYNTHESIS": "",
+    "TARGET_VERILATOR": ""
+  },
+  "width_waivers": [
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/axi/src/axi_pkg.sv",
+      "line": 203,
+      "sha256": "244bd5cb3c5bc58d786f2ed2f5eeefd910c4fe03a175f4a2888c6a2ea1c430dc"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+      "line": 81,
+      "sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+      "line": 100,
+      "sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_read.sv",
+      "line": 101,
+      "sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_axi_write.sv",
+      "line": 125,
+      "sha256": "4398ff0995e11515fd1340ea079aa45ff7b9790f16f3900603423f8bdef831c0"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 34,
+      "sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 38,
+      "sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 38,
+      "sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv",
+      "line": 54,
+      "sha256": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4111,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4113,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4130,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4132,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4241,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4241,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4261,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4269,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHTRUNC",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4269,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 4380,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 8283,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "file": "idma_source_export_attempt_v8_20261017/source/idma_export/idma/target/rtl/idma_generated.sv",
+      "line": 8762,
+      "sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+    }
+  ],
+  "excluded_library_candidates_lexical_only": [
+    {
+      "path": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/axi_stream/src/axi_stream_cut.sv",
+      "sha256": "e1b797a1f0a34a02580ac5adf5c56f78e5278d7dbc5a4c05ec8cd8fdf6051788"
+    },
+    {
+      "path": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/axi_stream/src/axi_stream_multicut.sv",
+      "sha256": "def42c19dd7330289ab0355835f8409280ba7c67474d92ef99697809225b7f06"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "receipt_sha256": "6a4aa1ddb947899266f3f21e2d5a0a8ab724a060b78100f231d9ddee9bd77f95",
+  "log_sha256": "48c81a79394eec57ce6b8645099fa7d77758b65f782f4140f57809524cb8271f",
+  "whole_stage_status": "NOT_COMPLETED",
+  "tool_elapsed_seconds": 60.04262961799395,
+  "comb_loop_pass_completed_seconds": 43.284,
+  "last_started_not_completed": "symbol-dce",
+  "leader_stats": {
+    "scope": "DIRECT_LEADER_SAMPLED_NOT_TREE_PEAK",
+    "ticks_per_second": 100,
+    "samples": 590,
+    "last_sample_elapsed_seconds": 59.99893961199268,
+    "last_user_seconds": 59.51,
+    "last_system_seconds": 0.46,
+    "max_observed_VmRSS_bytes": 817618944,
+    "max_observed_VmHWM_bytes": 817618944
+  },
+  "completed_sv": false
+}

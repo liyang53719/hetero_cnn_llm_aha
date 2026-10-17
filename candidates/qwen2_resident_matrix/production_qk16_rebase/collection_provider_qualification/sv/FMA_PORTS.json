@@ -1,0 +1,86 @@
+{
+  "HeteroBF16FmaPre": {
+    "io_a": [
+      "input",
+      16
+    ],
+    "io_b": [
+      "input",
+      16
+    ],
+    "io_c": [
+      "input",
+      32
+    ],
+    "io_mulAddA": [
+      "output",
+      24
+    ],
+    "io_mulAddB": [
+      "output",
+      24
+    ],
+    "io_mulAddC": [
+      "output",
+      48
+    ],
+    "io_meta": [
+      "output",
+      54
+    ]
+  },
+  "HeteroBF16FmaMul": {
+    "io_mulAddA": [
+      "input",
+      24
+    ],
+    "io_mulAddB": [
+      "input",
+      24
+    ],
+    "io_mulAddC": [
+      "input",
+      48
+    ],
+    "io_mulAddResult": [
+      "output",
+      49
+    ]
+  },
+  "HeteroBF16FmaPost": {
+    "io_meta": [
+      "input",
+      54
+    ],
+    "io_mulAddResult": [
+      "input",
+      49
+    ],
+    "io_raw": [
+      "output",
+      41
+    ],
+    "io_invalid": [
+      "output",
+      1
+    ]
+  },
+  "HeteroBF16FmaRound": {
+    "io_raw": [
+      "input",
+      41
+    ],
+    "io_invalid": [
+      "input",
+      1
+    ],
+    "io_out": [
+      "output",
+      32
+    ],
+    "io_exceptionFlags": [
+      "output",
+      5
+    ]
+  }
+}

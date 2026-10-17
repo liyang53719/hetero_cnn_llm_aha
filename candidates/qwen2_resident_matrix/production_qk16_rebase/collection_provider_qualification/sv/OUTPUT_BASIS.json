@@ -1,0 +1,20 @@
+{
+  "receipt_sha256": "3e688d581e39556efe94effe09ab506877e3ebef9a83d44ed71d223d37720c5d",
+  "log_sha256": "6e99c135fcaa003d8457cdfa937d31a23fac2138d3b20e3e217f1107455d2361",
+  "status": "NOT_COMPLETED",
+  "exit_code": 1,
+  "elapsed_seconds": 96.04530974599766,
+  "failure": "export-verilog write: File too large",
+  "original_file_limit_bytes": 50331648,
+  "final_sv_size_unknown": true,
+  "leader_stats": {
+    "scope": "DIRECT_LEADER_SAMPLED_NOT_TREE_PEAK",
+    "ticks_per_second": 100,
+    "samples": 943,
+    "last_sample_elapsed_seconds": 96.02306278698961,
+    "last_user_seconds": 94.41,
+    "last_system_seconds": 1.56,
+    "max_observed_VmRSS_bytes": 1079853056,
+    "max_observed_VmHWM_bytes": 1079853056
+  }
+}

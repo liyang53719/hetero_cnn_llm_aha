@@ -1,0 +1,168 @@
+{
+  "scope": "ONE_ORIGINAL_512LANE_SEED_ENDPOINT_COMPONENT_NOT_FULL_BENCH",
+  "original_composition_sha256": "9b1b3bbd84628d4d2566052d0149a34906820c9128b3ae37173f8bf268363b90",
+  "sources_ordered": [
+    {
+      "path": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+      "sha256": "93e9747504fa1da6473560341febbfae6c5e917768633a84fc9ef12299293207"
+    },
+    {
+      "path": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/integration/qwen2_matrix_command_endpoint.sv",
+      "sha256": "ea16cf4221b52412a5ba1f3f23efeb198077790e271a6f6a1a51a43e82fad4ac"
+    },
+    {
+      "path": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "sha256": "33cf6bbd37ef1d2b537e948a29cf642f51ce4d8b34fa2483294c4f604b925ac0"
+    },
+    {
+      "path": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "sha256": "6d276382a0e3e1b7145b381c700e895806e6f382bcb044d53c2279c98757d19c"
+    },
+    {
+      "path": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "sha256": "41d801167ff90547cde5d2a1784f964920873d5f3ba0d1c9654b79eebc2c6a27"
+    },
+    {
+      "path": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "sha256": "a37dd8069258614d620031c03733016aa69c496c7bfb0b8a8fbcc8f1721f63c4"
+    },
+    {
+      "path": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "sha256": "c7fd146302112613515e6fa86af152496cb8d753ef9a425eb0cdbe0252ef073e"
+    },
+    {
+      "path": "hetero_cnn_llm_aha/rtl/matrix/bf16_outer_product_array_glue512.sv",
+      "sha256": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9"
+    },
+    {
+      "path": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv",
+      "sha256": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471"
+    },
+    {
+      "path": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+      "sha256": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2"
+    },
+    {
+      "path": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+      "sha256": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0"
+    },
+    {
+      "path": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+      "sha256": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f"
+    },
+    {
+      "path": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+      "sha256": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b"
+    },
+    {
+      "path": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+      "sha256": "53f4f4cb503fc9fd9e7bf72d8e52a6ffc842d70959f847098ea817df11ba933f"
+    }
+  ],
+  "excluded_exact_standalone_fma": [
+    {
+      "path": "production_fma_components_attempt_v2_20261017/components/HeteroBF16FmaPre.sv",
+      "sha256": "eb0746fe9e942edb71708b1f74424149d6e81d8e713763b3770f5c594faa6216"
+    },
+    {
+      "path": "production_fma_components_attempt_v2_20261017/components/HeteroBF16FmaMul.sv",
+      "sha256": "483b074b99abc41582952d043ffcdc39b9b9ad3174e14881c68dc01bd68040be"
+    },
+    {
+      "path": "production_fma_components_attempt_v2_20261017/components/HeteroBF16FmaPost.sv",
+      "sha256": "c928c878169b800d6c2e35cdee6883bc97b82f5982b833f8d0cb5ba8e6714548"
+    },
+    {
+      "path": "production_fma_components_attempt_v2_20261017/components/HeteroBF16FmaRound.sv",
+      "sha256": "091edd06b12ae8b903e5f608725d8a155648c9e0ba44de5fd1a29c84ef1fd29a"
+    }
+  ],
+  "definitions": {
+    "tc_clk_and2": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "tc_clk_buffer": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "tc_clk_gating": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "tc_clk_inverter": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "tc_clk_mux2": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "tc_clk_xor2": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "tc_clk_or2": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "tc_clk_delay": "idma_source_export_attempt_v8_20261017/source/idma_export/deps/tech_cells_generic/src/rtl/tc_clk.sv",
+    "qwen2_matrix_command_endpoint": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/integration/qwen2_matrix_command_endpoint.sv",
+    "bf16_context_scheduler5_rev8b_b_candidate": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "bf16_context_fma_pipeline_lane5_rev8b_b_candidate": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "bf16_outer_product_context_array_rev8b_b_candidate": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+    "bf16_context_front_control5_rev8b_b_candidate": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+    "bf16_context_lane_cluster16_rev8b_b_candidate": "production_qkv_reduction_patch_v2_20261017_freeze_d2772173/source/rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+    "bf16_outer_product_array_glue512": "hetero_cnn_llm_aha/rtl/matrix/bf16_outer_product_array_glue512.sv",
+    "bf16_operand_distribution512_rev8b_a_candidate": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv",
+    "bf16_outer_product_array_control5_rev8b_b_candidate": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+    "bf16_context_tag_pipeline5_rev8b_b_candidate": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+    "bf16_cluster_flags_glue32_rev8b_b_candidate": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+    "bf16_front_to_cluster_broadcast32_rev8b_b_candidate": "hetero_cnn_llm_aha/rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+    "FfnTileSiluBridge": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "FfnResidentCoordinator": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "DenseTileSumBridge": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "DenseBlockReductionCoordinator": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "Public21QkvReductionRouter": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "AddRawFN": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "RoundRawFNToRecFN_e8_s24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "AddRecFN": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MulFullRawFN": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MulRawFN": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MulRecFN": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "HeteroFP32Alu": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "DivSqrtRawFN_small_e8_s24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "DivSqrtRecFMToRaw_small_e8_s24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "DivSqrtRecFM_small_e8_s24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "RecFNToIN_e8_s24_i32": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "RoundAnyRawFNToRecFN_ie6_is32_oe8_os24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "INToRecFN_i32_e8_s24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "BlockScalarFloat": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "banks_bank_2240x128": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "SharedL2Fabric": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "PackedAttentionStreamClient": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "banks_bank_48x128": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "SharedL2Fabric_1": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "ElementwiseMemoryEngine": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "BlockWritebackFence": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "mem_1024x32": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "Qwen2ContinuousBlock": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "aBanks_1376x256": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "bBanks_160x256": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "TransposedDownDenseBanks": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "ram_4x4359": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "Queue4_MatrixStreamStep": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "TransposedDenseDownOwner": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "SiluVectorUnit": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "VectorSiluOwner": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "ScheduledSiluOwner": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "ram_8x6": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "Queue8_Meta": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MatrixResultFifo": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MatrixAccumulatorSeedController": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MatrixPipelineService": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "LegacyMatrixStreamClient": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "QwenOwnerKernel": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "RRArbiter": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "SharedMemoryArbiter": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "RetainedIdmaWeightBurstAdapter": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "ProductionQk16KernelBench": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MulAddRecFNToRaw_preMul_e8_s24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "HeteroBF16FmaPre": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "HeteroBF16FmaMul": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "MulAddRecFNToRaw_postMul_e8_s24": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "HeteroBF16FmaPost": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "HeteroBF16FmaRound": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv",
+    "ProductionQk16KernelCollection": "production_qk16_kernel_collection_sv_attempt_v2_20261017/ProductionQk16KernelCollection.sv"
+  },
+  "definition_count": 76,
+  "source_count": 14,
+  "top": "qwen2_matrix_command_endpoint",
+  "initial_defines": {
+    "TARGET_ASIC": "",
+    "TARGET_RTL": "",
+    "TARGET_SYNTHESIS": "",
+    "TARGET_VERILATOR": ""
+  },
+  "include_directories_ordered": []
+}

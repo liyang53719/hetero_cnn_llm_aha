@@ -1,0 +1,45 @@
+{
+  "status": "FAIL_ORIGINAL_IDMA_WRAPPER_LINT",
+  "scope": "ORIGINAL_IDMA_WRAPPER_LINT_ONLY",
+  "top": "idma_backend_rw_axi_flat_wrap",
+  "source_count": 293,
+  "waiver_rules": 21,
+  "whole_bench": false,
+  "simulation": false,
+  "numerical": false,
+  "postflight_complete": true,
+  "native_limits": {
+    "as_limit": [
+      4294967296,
+      4294967296
+    ],
+    "file_limit": [
+      16777216,
+      16777216
+    ],
+    "affinity_count": 1
+  },
+  "elapsed_seconds": 1.4575177539954893,
+  "stage": {
+    "exit_code": 1,
+    "error": null,
+    "cleanup_complete": true,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "elapsed_seconds": 1.2315775230090367,
+    "log_bytes": 17959,
+    "leader_stats": {
+      "scope": "DIRECT_LEADER_SAMPLED_NOT_TREE_PEAK",
+      "ticks_per_second": 100,
+      "samples": 12,
+      "last_sample_elapsed_seconds": 1.1271885850001127,
+      "last_user_seconds": 1.03,
+      "last_system_seconds": 0.07,
+      "max_observed_VmRSS_bytes": 135946240,
+      "max_observed_VmHWM_bytes": 135946240
+    }
+  },
+  "private_receipt_sha256": "3adc79cb14ba0760418256978d6a0f3c023f1d806d0138876a039d09c392189b",
+  "private_log_sha256": "c40f20c2641c199be821ec42dd231ce9921d8ae77289320d875dad056450f960",
+  "cleanup_proof_uploaded": false,
+  "global_absence_claimed": false
+}

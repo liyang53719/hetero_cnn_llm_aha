@@ -343,3 +343,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 仍有两个共同命名空间阻点：RoundRawFNToRecFN_e8_s24 与 RoundAnyRawFNToRecFN_ie8_is26_oe8_os24 在独立FMA provider与本SV中同名但接口/内容不同，不能任选覆盖或手改生成SV。当前方案是在同一 Chisel 命名空间共同发射原 Bench 与四FMA；collection仅发射容器，目标top仍原 Bench。新共同发射A正在另行授权执行，本批不纳入其结果；后续动态必须消费同一合格资产，不能用独立再发射替代闭包。
 - 公共链保留原92源重建、相邻单表达式修复/bench94源、本包独立emitter形成95源；generation_v7/PLAN_CN.md的“尚未执行”标题仅为当时冻结的历史计划，当前实际生成结果以SAFE_HISTORY为准；历史 generation_v7 原checker及输入/工具/IR/receipt pins保持，完整重建产生新receipt须另建受审闭包，不修改冻结身份。没有历史同hash SV时只能运行冷测，不能宣称离线复核了该69MB实际输出。
 - 本批仅26个add-only UTF-8源码/安全元数据和本plan追加，不上传69MB SV、39MB IR、classes、JAR、权重、机器PID/boot/session/group或原日志。原465模型运行源与整个.github字节保持不变，不重复触发 source-export/昂贵运行。模型限定 M128 1/5、指定27门禁及已保留内容身份不变，full RTL 0/5；全29/全张量覆盖、真实供数和性能目标仍待完成。
+
+
+## 2026-10-17 14:00 UTC：共同命名空间与两个原 provider 分层 lint 门
+
+- **done：共同命名空间 A/B1 实际通过。** [50 文件共同发射/endpoint检查点](../candidates/qwen2_resident_matrix/production_qk16_rebase/collection_provider_qualification/README_CN.md)保留原95源、557类复用＋4个新emitter类；共同 CHIRRTL 39,466,374B，共同 SV 69,711,072B，SHA256 53f4f4cb503fc9fd9e7bf72d8e52a6ffc842d70959f847098ea817df11ba933f。56唯一定义、原Bench76端口、四FMA端口及Bench内8endpoint/8clock/1iDMA库存通过；同名不同义的两helper不再由分别生成文件任意覆盖。collection仅生成容器，资格top仍原Bench或明确的分层endpoint，不替换原目标。
+- **完整4096 Bench仍未通过。** 真实provider整链lint在AS4GiB下std::bad_alloc，481个warning保留，原FAIL不改写；stage元数据128MiB文件上限误写与实际native16MiB差别亦保留。新的AS6GiB/full4096门目前只准备，不在本批报告执行或结果；分层门不能冒充整链、动态、数值或full block RTL资格。
+- **done：原512 endpoint分层lint。** 原32cluster×16lane=512、seed1及共同FMA在14文件闭包下真实lint exit0、零warning，stage41.671秒/总42.026秒；原v1无尺寸-G参数产生唯一WIDTHTRUNC的FAIL保留，v2只把参数token明确为1'b1，未屏蔽warning。工具内部116个C++文件统计不代表实际写出或build，目录未生成相应构建物。
+- **done：原iDMA flat wrapper固定参数lint。** [24 文件安全证据/原runner](../reports/execution/IDMA_WRAPPER_LINT_V3_20261017/README_CN.md)记录原top idma_backend_rw_axi_flat_wrap的v3 PASS，固定512-bit数据/64-bit地址、BufferDepth3、HardwareLegalizer1、RejectZeroTransfers1、EnableCompute0；293顺序输入及1039 source/tool pins前后核验通过，source/ABI不改。stage1.210810088秒、总1.553870136秒，实际零warning、exit0，没有C++build/仿真/数值。
+- 原23 WIDTH诊断在固定参数与有效非零事务范围内审计，落实21个精确file/rule/line/hash waiver；无效周期不继承该值域结论，其余warning仍fatal，未豁免PINMISSING或UNOPTFLAT。6个官方结构提示隔离FIFO valid/ready、write first/last、coupler aw_sent及内部write_req_o；top public split已移除。工具无独立hint-hit telemetry，结论限该完整固定lint，不能推广任意top/宏/参数或动态功能。v1的4个UNOPTFLAT失败、v2的public SPLITVAR误用及剩余2个UNOPTFLAT失败完整保留。
+- root按公共README复核collection的19+19/8+8及wrapper恢复布局后的15+15冷测通过。structure原冷fixture依赖历史大IR，只保留原测试源码及边界，不冒称无IR环境重放全部结构测试。原阶段PLAN是冻结历史，当前实际结果以SAFE_HISTORY/ATTEMPT安全投影为准；这些投影不是原receipt或完整机器cleanup proof，也不声称全局absence或全进程树真实峰值。
+- 公共重建链和精确源/工具/依赖/生成物hash保持，历史大IR/SV不存在时不能假称复核其原字节；新输出或receipt必须另行受审绑定。本批不带69MB SV/39MB IR、33MB iDMA物化源树、class/JAR/工具二进制、原日志或机器身份proof；不执行打包内runner。新增50个collection文件＋24个wrapper文件＋本plan追加，原465模型运行源和整个.github保持不变，不重复触发source-export或昂贵运行。
+- 模型限定M128 1/5、指定27门禁和内容身份不变，full RTL 0/5。完整原Bench/Host链接、动态供数、RTL数值、全29/全张量覆盖与性能目标仍待后续闭合；此批不继承正在准备的新门结果。

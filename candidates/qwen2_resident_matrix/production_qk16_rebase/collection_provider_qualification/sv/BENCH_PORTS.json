@@ -1,0 +1,309 @@
+{
+  "source_sv_sha256": "93fe8475e21fe1efefc99efac1ab13bf670a48a3cd239351c4efa5b14e815451",
+  "ports": {
+    "clock": [
+      "input",
+      1
+    ],
+    "reset": [
+      "input",
+      1
+    ],
+    "io_job_ready": [
+      "output",
+      1
+    ],
+    "io_job_valid": [
+      "input",
+      1
+    ],
+    "io_job_bits_kind": [
+      "input",
+      4
+    ],
+    "io_job_bits_m": [
+      "input",
+      16
+    ],
+    "io_job_bits_n": [
+      "input",
+      16
+    ],
+    "io_job_bits_k": [
+      "input",
+      16
+    ],
+    "io_job_bits_a": [
+      "input",
+      64
+    ],
+    "io_job_bits_b": [
+      "input",
+      64
+    ],
+    "io_job_bits_c": [
+      "input",
+      64
+    ],
+    "io_job_bits_dst": [
+      "input",
+      64
+    ],
+    "io_job_bits_weightBf16": [
+      "input",
+      1
+    ],
+    "io_job_bits_activationBf16": [
+      "input",
+      1
+    ],
+    "io_job_bits_materializeDenseOutput": [
+      "input",
+      1
+    ],
+    "io_job_bits_outputBf16": [
+      "input",
+      1
+    ],
+    "io_job_bits_writeBytes": [
+      "input",
+      64
+    ],
+    "io_job_bits_tag": [
+      "input",
+      32
+    ],
+    "io_job_bits_historyOut": [
+      "input",
+      64
+    ],
+    "io_job_bits_expectedGeneration": [
+      "input",
+      32
+    ],
+    "io_job_bits_currentGeneration": [
+      "input",
+      32
+    ],
+    "io_job_bits_cold": [
+      "input",
+      1
+    ],
+    "io_job_bits_cacheCapacity": [
+      "input",
+      32
+    ],
+    "io_job_bits_cacheLength": [
+      "input",
+      32
+    ],
+    "io_job_bits_expectedCacheLength": [
+      "input",
+      32
+    ],
+    "io_job_bits_queryStart": [
+      "input",
+      32
+    ],
+    "io_job_bits_qkRole": [
+      "input",
+      2
+    ],
+    "io_job_bits_qkPositionBase": [
+      "input",
+      32
+    ],
+    "io_job_bits_qkTrigTokens": [
+      "input",
+      32
+    ],
+    "io_job_bits_gdnALog": [
+      "input",
+      64
+    ],
+    "io_job_bits_gdnDtBias": [
+      "input",
+      64
+    ],
+    "io_job_bits_gdnStateOut": [
+      "input",
+      64
+    ],
+    "io_job_bits_gdnRecurrentMode": [
+      "input",
+      1
+    ],
+    "io_job_bits_gdnElementwiseOp": [
+      "input",
+      2
+    ],
+    "io_done_ready": [
+      "input",
+      1
+    ],
+    "io_done_valid": [
+      "output",
+      1
+    ],
+    "io_done_bits_tag": [
+      "output",
+      32
+    ],
+    "io_done_bits_status": [
+      "output",
+      8
+    ],
+    "io_done_bits_writeBytes": [
+      "output",
+      64
+    ],
+    "io_done_bits_cycles": [
+      "output",
+      64
+    ],
+    "io_done_bits_usefulMacs": [
+      "output",
+      64
+    ],
+    "io_done_bits_executedMacs": [
+      "output",
+      64
+    ],
+    "io_axi_aw_ready": [
+      "input",
+      1
+    ],
+    "io_axi_aw_valid": [
+      "output",
+      1
+    ],
+    "io_axi_aw_bits_addr": [
+      "output",
+      64
+    ],
+    "io_axi_aw_bits_id": [
+      "output",
+      8
+    ],
+    "io_axi_aw_bits_len": [
+      "output",
+      8
+    ],
+    "io_axi_aw_bits_size": [
+      "output",
+      3
+    ],
+    "io_axi_aw_bits_burst": [
+      "output",
+      2
+    ],
+    "io_axi_w_ready": [
+      "input",
+      1
+    ],
+    "io_axi_w_valid": [
+      "output",
+      1
+    ],
+    "io_axi_w_bits_data": [
+      "output",
+      512
+    ],
+    "io_axi_w_bits_strb": [
+      "output",
+      64
+    ],
+    "io_axi_w_bits_last": [
+      "output",
+      1
+    ],
+    "io_axi_b_ready": [
+      "output",
+      1
+    ],
+    "io_axi_b_valid": [
+      "input",
+      1
+    ],
+    "io_axi_b_bits_id": [
+      "input",
+      8
+    ],
+    "io_axi_b_bits_resp": [
+      "input",
+      2
+    ],
+    "io_axi_ar_ready": [
+      "input",
+      1
+    ],
+    "io_axi_ar_valid": [
+      "output",
+      1
+    ],
+    "io_axi_ar_bits_addr": [
+      "output",
+      64
+    ],
+    "io_axi_ar_bits_id": [
+      "output",
+      8
+    ],
+    "io_axi_ar_bits_len": [
+      "output",
+      8
+    ],
+    "io_axi_ar_bits_size": [
+      "output",
+      3
+    ],
+    "io_axi_ar_bits_burst": [
+      "output",
+      2
+    ],
+    "io_axi_r_ready": [
+      "output",
+      1
+    ],
+    "io_axi_r_valid": [
+      "input",
+      1
+    ],
+    "io_axi_r_bits_id": [
+      "input",
+      8
+    ],
+    "io_axi_r_bits_data": [
+      "input",
+      512
+    ],
+    "io_axi_r_bits_resp": [
+      "input",
+      2
+    ],
+    "io_axi_r_bits_last": [
+      "input",
+      1
+    ],
+    "io_resetRequired": [
+      "output",
+      1
+    ],
+    "io_accepted_0": [
+      "output",
+      64
+    ],
+    "io_accepted_1": [
+      "output",
+      64
+    ],
+    "io_returned_0": [
+      "output",
+      64
+    ],
+    "io_returned_1": [
+      "output",
+      64
+    ]
+  }
+}

@@ -1,0 +1,1204 @@
+{
+  "build": {
+    "combined_elf": {
+      "bytes": 27584,
+      "name": "official_bf16_matrix_silu.so",
+      "sha256": "d059c8d9bc04d964b15790fdcfc411f23303dd25b0e6294ff38b688f1cd86624"
+    },
+    "committed_head": "4538a108904789de619a7a3bdb0b741fb8fc28c0",
+    "compiler": {
+      "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769",
+      "version": "x86_64-linux-gnu-g++-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "compiler_name": "x86_64-linux-gnu-g++-13",
+    "cpu_flags_common": [
+      "3dnowprefetch",
+      "abm",
+      "adx",
+      "aes",
+      "aperfmperf",
+      "apic",
+      "arat",
+      "avx",
+      "avx2",
+      "bmi1",
+      "bmi2",
+      "clflush",
+      "clflushopt",
+      "clwb",
+      "clzero",
+      "cmov",
+      "cmp_legacy",
+      "constant_tsc",
+      "cpuid",
+      "cr8_legacy",
+      "cx16",
+      "cx8",
+      "de",
+      "decodeassists",
+      "erms",
+      "extd_apicid",
+      "f16c",
+      "flushbyasid",
+      "fma",
+      "fpu",
+      "fsgsbase",
+      "fsrm",
+      "fxsr",
+      "fxsr_opt",
+      "ht",
+      "hypervisor",
+      "invpcid",
+      "lahf_lm",
+      "lm",
+      "mca",
+      "mce",
+      "misalignsse",
+      "mmx",
+      "mmxext",
+      "movbe",
+      "msr",
+      "mtrr",
+      "nonstop_tsc",
+      "nopl",
+      "npt",
+      "nrip_save",
+      "nx",
+      "osvw",
+      "pae",
+      "pat",
+      "pausefilter",
+      "pcid",
+      "pclmulqdq",
+      "pdpe1gb",
+      "pfthreshold",
+      "pge",
+      "pni",
+      "popcnt",
+      "pse",
+      "pse36",
+      "rdpid",
+      "rdpru",
+      "rdrand",
+      "rdseed",
+      "rdtscp",
+      "rep_good",
+      "sep",
+      "sha_ni",
+      "smap",
+      "smep",
+      "sse",
+      "sse2",
+      "sse4_1",
+      "sse4_2",
+      "sse4a",
+      "ssse3",
+      "svm",
+      "syscall",
+      "topoext",
+      "tsc",
+      "tsc_known_freq",
+      "tsc_reliable",
+      "tsc_scale",
+      "umip",
+      "user_shstk",
+      "v_vmsave_vmload",
+      "vaes",
+      "vmcb_clean",
+      "vme",
+      "vmmcall",
+      "vpclmulqdq",
+      "xgetbv1",
+      "xsave",
+      "xsavec",
+      "xsaveerptr",
+      "xsaveopt",
+      "xsaves"
+    ],
+    "interpreter": {
+      "bytes": 17752,
+      "name": "python3.12",
+      "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+    },
+    "kernel": "6.17.0-1022-azure",
+    "libm": {
+      "bytes": 952616,
+      "name": "libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "loaded_elfs": [
+      {
+        "bytes": 299776,
+        "name": "_blake2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "6745c768acb20488083d4ed521259bd41f6678c67de2c235c3c921de991fb1cf"
+      },
+      {
+        "bytes": 104552,
+        "name": "_bz2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a628e71c359006d65d58b988e82ab686f07c23a78d7dd5bb63a3efa584f4ac5d"
+      },
+      {
+        "bytes": 25832,
+        "name": "_contextvars.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "fc8ef497a56ce290230f43419182ddbc6e3e5d1046946886cab3073fe65be27e"
+      },
+      {
+        "bytes": 858840,
+        "name": "_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "672f11fa2652a247354739280e88201bed9a34182c7d4bafda58667a88deed12"
+      },
+      {
+        "bytes": 779464,
+        "name": "_datetime.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "589743cf282b0bfe958e8bebee2c41978629fc9fe0b74ca3ef29f132a28475e2"
+      },
+      {
+        "bytes": 209560,
+        "name": "_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "1bb098ac25d38c813b516cc7e322d37e768f44f23da067a67c601b28308bfdac"
+      },
+      {
+        "bytes": 306696,
+        "name": "_json.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "5ff47d06d591f625a019461f37574be8027bfade33dc0ebfca9a35b995adadb9"
+      },
+      {
+        "bytes": 171440,
+        "name": "_lzma.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "737adad154e85d70e656f84455da42b42590d6283683c26d2fdde2ee98f59f5b"
+      },
+      {
+        "bytes": 10808937,
+        "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      },
+      {
+        "bytes": 29568,
+        "name": "_opcode.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "52947161a51df81dd70a682218b4c57f020920f055076812494586be56d93854"
+      },
+      {
+        "bytes": 730056,
+        "name": "_pickle.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "8e8d573df4b42fc3b4660459c019ce666b1d68444ab6fefd05a208e9cdd52d6b"
+      },
+      {
+        "bytes": 175224,
+        "name": "_posixsubprocess.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "3f85a9e9fcf0729ac0c8ddb64e53ee2274cd07b0bdfc37c0d92a6276e250dd03"
+      },
+      {
+        "bytes": 235256,
+        "name": "_struct.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "457b6f0460e98cbe100a0138f6600ce5c9a4c1ca0c4c542bff905f465b05a9a2"
+      },
+      {
+        "bytes": 231833,
+        "name": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845"
+      },
+      {
+        "bytes": 52744,
+        "name": "fcntl.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a5745b7e269256baaa6c30c90c2a40812bf8f28b4ad76429a675d5e97166a4a4"
+      },
+      {
+        "bytes": 236616,
+        "name": "ld-linux-x86-64.so.2",
+        "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+      },
+      {
+        "bytes": 78944,
+        "name": "libbz2.so.1.0.4",
+        "sha256": "cc08c9f50a8009ffd6391e0116a100369b11ca9238fa52392c019e6645b122a1"
+      },
+      {
+        "bytes": 2129424,
+        "name": "libc.so.6",
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      {
+        "bytes": 5309400,
+        "name": "libcrypto.so.3",
+        "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a"
+      },
+      {
+        "bytes": 47672,
+        "name": "libffi.so.8.1.4",
+        "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+      },
+      {
+        "bytes": 183024,
+        "name": "libgcc_s.so.1",
+        "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+      },
+      {
+        "bytes": 2833617,
+        "name": "libgfortran-040039e1-0352e75f.so.5.0.0",
+        "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980"
+      },
+      {
+        "bytes": 202904,
+        "name": "liblzma.so.5.4.5",
+        "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+      },
+      {
+        "bytes": 952616,
+        "name": "libm.so.6",
+        "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+      },
+      {
+        "bytes": 14408,
+        "name": "libpthread.so.0",
+        "sha256": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd"
+      },
+      {
+        "bytes": 29843656,
+        "name": "libpython3.12.so.1.0",
+        "sha256": "c7c1a2206db0fa089f8a252d1652d5ccb82669774dbb599427082ffc9eaaae85"
+      },
+      {
+        "bytes": 250985,
+        "name": "libquadmath-96973f99-934c22de.so.0.0.0",
+        "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6"
+      },
+      {
+        "bytes": 25034001,
+        "name": "libscipy_openblas64_-fdde5778.so",
+        "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12"
+      },
+      {
+        "bytes": 2592224,
+        "name": "libstdc++.so.6.0.33",
+        "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+      },
+      {
+        "bytes": 113000,
+        "name": "libz.so.1.3",
+        "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+      },
+      {
+        "bytes": 420752,
+        "name": "math.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ad1c821cfd82fd4a662f755e553f8315083f457739823bfd3c5e83234cf26c21"
+      },
+      {
+        "bytes": 27584,
+        "name": "official_bf16_matrix_silu.so",
+        "sha256": "d059c8d9bc04d964b15790fdcfc411f23303dd25b0e6294ff38b688f1cd86624"
+      },
+      {
+        "bytes": 17752,
+        "name": "python3.12",
+        "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+      },
+      {
+        "bytes": 107392,
+        "name": "select.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "e8a8a5828baa8f0b96a51933dc268f124876703dea201979ec6e72422876fe70"
+      },
+      {
+        "bytes": 163816,
+        "name": "zlib.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "f42d25a1ff3271d581c15f7fd9870415535806b66d738717d7d1212123c19cac"
+      }
+    ],
+    "loader": {
+      "libpython": {
+        "bytes": 29843656,
+        "name": "libpython3.12.so.1.0",
+        "sha256": "c7c1a2206db0fa089f8a252d1652d5ccb82669774dbb599427082ffc9eaaae85"
+      },
+      "policy": "setup-python-single-lib",
+      "toolcache_relative": "Python/3.12.15/x64"
+    },
+    "machine": "x86_64",
+    "numpy_extension": {
+      "bytes": 10808937,
+      "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+    },
+    "numpy_version": "2.3.5",
+    "python_sources": [
+      {
+        "module": "__main__",
+        "path": "candidates/qwen2_resident_matrix/portable_consumer_qualification/worker.py",
+        "sha256": "94e56aecd0a25487420dab6200e947ffec76f5ecc03e2c58ea7080dd7143f8bc",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.ffn_attention.matrix_service",
+        "path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+        "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.official_bf16.dense_silu",
+        "path": "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py",
+        "sha256": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.transposed_down.model",
+        "path": "candidates/qwen2_resident_matrix/transposed_down/model.py",
+        "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+        "tree": "generated"
+      },
+      {
+        "module": "contract",
+        "path": "candidates/qwen2_resident_matrix/portable_consumer_qualification/contract.py",
+        "sha256": "23ea59a4a398555a0f025e3ac9e67cd6188dc093839ef954117f4485e090c818",
+        "tree": "origin"
+      }
+    ],
+    "python_version": "3.12.15",
+    "runner": {
+      "arch": "X64",
+      "environment": "github-hosted",
+      "image_os": "ubuntu24",
+      "image_version": "20261012.334.1",
+      "os": "Linux"
+    },
+    "system": "Linux"
+  },
+  "profile2": {
+    "combined_elf": {
+      "bytes": 27584,
+      "name": "official_bf16_matrix_silu.so",
+      "sha256": "d059c8d9bc04d964b15790fdcfc411f23303dd25b0e6294ff38b688f1cd86624"
+    },
+    "committed_head": "4538a108904789de619a7a3bdb0b741fb8fc28c0",
+    "compiler": {
+      "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769",
+      "version": "x86_64-linux-gnu-g++-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "compiler_name": "x86_64-linux-gnu-g++-13",
+    "cpu_flags_common": [
+      "3dnowprefetch",
+      "abm",
+      "adx",
+      "aes",
+      "aperfmperf",
+      "apic",
+      "arat",
+      "avx",
+      "avx2",
+      "bmi1",
+      "bmi2",
+      "clflush",
+      "clflushopt",
+      "clwb",
+      "clzero",
+      "cmov",
+      "cmp_legacy",
+      "constant_tsc",
+      "cpuid",
+      "cr8_legacy",
+      "cx16",
+      "cx8",
+      "de",
+      "decodeassists",
+      "erms",
+      "extd_apicid",
+      "f16c",
+      "flushbyasid",
+      "fma",
+      "fpu",
+      "fsgsbase",
+      "fsrm",
+      "fxsr",
+      "fxsr_opt",
+      "ht",
+      "hypervisor",
+      "invpcid",
+      "lahf_lm",
+      "lm",
+      "mca",
+      "mce",
+      "misalignsse",
+      "mmx",
+      "mmxext",
+      "movbe",
+      "msr",
+      "mtrr",
+      "nonstop_tsc",
+      "nopl",
+      "npt",
+      "nrip_save",
+      "nx",
+      "osvw",
+      "pae",
+      "pat",
+      "pausefilter",
+      "pcid",
+      "pclmulqdq",
+      "pdpe1gb",
+      "pfthreshold",
+      "pge",
+      "pni",
+      "popcnt",
+      "pse",
+      "pse36",
+      "rdpid",
+      "rdpru",
+      "rdrand",
+      "rdseed",
+      "rdtscp",
+      "rep_good",
+      "sep",
+      "sha_ni",
+      "smap",
+      "smep",
+      "sse",
+      "sse2",
+      "sse4_1",
+      "sse4_2",
+      "sse4a",
+      "ssse3",
+      "svm",
+      "syscall",
+      "topoext",
+      "tsc",
+      "tsc_known_freq",
+      "tsc_reliable",
+      "tsc_scale",
+      "umip",
+      "user_shstk",
+      "v_vmsave_vmload",
+      "vaes",
+      "vmcb_clean",
+      "vme",
+      "vmmcall",
+      "vpclmulqdq",
+      "xgetbv1",
+      "xsave",
+      "xsavec",
+      "xsaveerptr",
+      "xsaveopt",
+      "xsaves"
+    ],
+    "interpreter": {
+      "bytes": 17752,
+      "name": "python3.12",
+      "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+    },
+    "kernel": "6.17.0-1022-azure",
+    "libm": {
+      "bytes": 952616,
+      "name": "libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "loaded_elfs": [
+      {
+        "bytes": 97448,
+        "name": "_bisect.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "c2d55b658ee80dfbf36db3ec80a34ce3d8fb6c9cd81cb9a779424027245516ed"
+      },
+      {
+        "bytes": 299776,
+        "name": "_blake2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "6745c768acb20488083d4ed521259bd41f6678c67de2c235c3c921de991fb1cf"
+      },
+      {
+        "bytes": 104552,
+        "name": "_bz2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a628e71c359006d65d58b988e82ab686f07c23a78d7dd5bb63a3efa584f4ac5d"
+      },
+      {
+        "bytes": 25832,
+        "name": "_contextvars.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "fc8ef497a56ce290230f43419182ddbc6e3e5d1046946886cab3073fe65be27e"
+      },
+      {
+        "bytes": 858840,
+        "name": "_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "672f11fa2652a247354739280e88201bed9a34182c7d4bafda58667a88deed12"
+      },
+      {
+        "bytes": 779464,
+        "name": "_datetime.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "589743cf282b0bfe958e8bebee2c41978629fc9fe0b74ca3ef29f132a28475e2"
+      },
+      {
+        "bytes": 1737072,
+        "name": "_decimal.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "284c5ae349e3d2744617928d4f3a37614683bf0613cadf99ae4c344542a281bd"
+      },
+      {
+        "bytes": 209560,
+        "name": "_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "1bb098ac25d38c813b516cc7e322d37e768f44f23da067a67c601b28308bfdac"
+      },
+      {
+        "bytes": 122448,
+        "name": "_heapq.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "5e7a8b9fd298bab06adaf1ad8daa6e06aa249ac962966398fa9ebfa13ef16174"
+      },
+      {
+        "bytes": 306696,
+        "name": "_json.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "5ff47d06d591f625a019461f37574be8027bfade33dc0ebfca9a35b995adadb9"
+      },
+      {
+        "bytes": 171440,
+        "name": "_lzma.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "737adad154e85d70e656f84455da42b42590d6283683c26d2fdde2ee98f59f5b"
+      },
+      {
+        "bytes": 10808937,
+        "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      },
+      {
+        "bytes": 29568,
+        "name": "_opcode.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "52947161a51df81dd70a682218b4c57f020920f055076812494586be56d93854"
+      },
+      {
+        "bytes": 730056,
+        "name": "_pickle.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "8e8d573df4b42fc3b4660459c019ce666b1d68444ab6fefd05a208e9cdd52d6b"
+      },
+      {
+        "bytes": 175224,
+        "name": "_posixsubprocess.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "3f85a9e9fcf0729ac0c8ddb64e53ee2274cd07b0bdfc37c0d92a6276e250dd03"
+      },
+      {
+        "bytes": 59632,
+        "name": "_random.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "48748384fdb545103bd5e58e6004fd8a3136b83ed5b088cb4375eec56300440a"
+      },
+      {
+        "bytes": 1488128,
+        "name": "_sha2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a6122a22f46d6165d58039d859b1434d2895d9fe8b40f2236c260f5558993082"
+      },
+      {
+        "bytes": 235256,
+        "name": "_struct.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "457b6f0460e98cbe100a0138f6600ce5c9a4c1ca0c4c542bff905f465b05a9a2"
+      },
+      {
+        "bytes": 231833,
+        "name": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845"
+      },
+      {
+        "bytes": 52744,
+        "name": "fcntl.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a5745b7e269256baaa6c30c90c2a40812bf8f28b4ad76429a675d5e97166a4a4"
+      },
+      {
+        "bytes": 236616,
+        "name": "ld-linux-x86-64.so.2",
+        "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+      },
+      {
+        "bytes": 78944,
+        "name": "libbz2.so.1.0.4",
+        "sha256": "cc08c9f50a8009ffd6391e0116a100369b11ca9238fa52392c019e6645b122a1"
+      },
+      {
+        "bytes": 2129424,
+        "name": "libc.so.6",
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      {
+        "bytes": 5309400,
+        "name": "libcrypto.so.3",
+        "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a"
+      },
+      {
+        "bytes": 47672,
+        "name": "libffi.so.8.1.4",
+        "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+      },
+      {
+        "bytes": 183024,
+        "name": "libgcc_s.so.1",
+        "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+      },
+      {
+        "bytes": 2833617,
+        "name": "libgfortran-040039e1-0352e75f.so.5.0.0",
+        "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980"
+      },
+      {
+        "bytes": 202904,
+        "name": "liblzma.so.5.4.5",
+        "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+      },
+      {
+        "bytes": 952616,
+        "name": "libm.so.6",
+        "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+      },
+      {
+        "bytes": 14408,
+        "name": "libpthread.so.0",
+        "sha256": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd"
+      },
+      {
+        "bytes": 29843656,
+        "name": "libpython3.12.so.1.0",
+        "sha256": "c7c1a2206db0fa089f8a252d1652d5ccb82669774dbb599427082ffc9eaaae85"
+      },
+      {
+        "bytes": 250985,
+        "name": "libquadmath-96973f99-934c22de.so.0.0.0",
+        "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6"
+      },
+      {
+        "bytes": 25034001,
+        "name": "libscipy_openblas64_-fdde5778.so",
+        "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12"
+      },
+      {
+        "bytes": 2592224,
+        "name": "libstdc++.so.6.0.33",
+        "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+      },
+      {
+        "bytes": 113000,
+        "name": "libz.so.1.3",
+        "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+      },
+      {
+        "bytes": 420752,
+        "name": "math.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ad1c821cfd82fd4a662f755e553f8315083f457739823bfd3c5e83234cf26c21"
+      },
+      {
+        "bytes": 27584,
+        "name": "official_bf16_matrix_silu.so",
+        "sha256": "d059c8d9bc04d964b15790fdcfc411f23303dd25b0e6294ff38b688f1cd86624"
+      },
+      {
+        "bytes": 17752,
+        "name": "python3.12",
+        "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+      },
+      {
+        "bytes": 107392,
+        "name": "select.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "e8a8a5828baa8f0b96a51933dc268f124876703dea201979ec6e72422876fe70"
+      },
+      {
+        "bytes": 163816,
+        "name": "zlib.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "f42d25a1ff3271d581c15f7fd9870415535806b66d738717d7d1212123c19cac"
+      }
+    ],
+    "loader": {
+      "libpython": {
+        "bytes": 29843656,
+        "name": "libpython3.12.so.1.0",
+        "sha256": "c7c1a2206db0fa089f8a252d1652d5ccb82669774dbb599427082ffc9eaaae85"
+      },
+      "policy": "setup-python-single-lib",
+      "toolcache_relative": "Python/3.12.15/x64"
+    },
+    "machine": "x86_64",
+    "numpy_extension": {
+      "bytes": 10808937,
+      "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+    },
+    "numpy_version": "2.3.5",
+    "python_sources": [
+      {
+        "module": "__main__",
+        "path": "candidates/qwen2_resident_matrix/portable_consumer_qualification/worker.py",
+        "sha256": "94e56aecd0a25487420dab6200e947ffec76f5ecc03e2c58ea7080dd7143f8bc",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.attention_bank_m128.check_sources",
+        "path": "candidates/qwen2_resident_matrix/attention_bank_m128/check_sources.py",
+        "sha256": "9e1f76224b3b7a325a473cf0bbb14290f875ef95d11eaa6bb82135c939ee00ab",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.attention_bank_multirow.check_sources",
+        "path": "candidates/qwen2_resident_matrix/attention_bank_multirow/check_sources.py",
+        "sha256": "be5db9e05fe2e9bac56277b4a932dc6d9baffa97d03bbfad88999a6eb0c59421",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.attention_bank_scratch.check_sources",
+        "path": "candidates/qwen2_resident_matrix/attention_bank_scratch/check_sources.py",
+        "sha256": "14c82f96d79401ec7ebb5e8cac8592ca9b60209ff509971bf14471f06dd46de2",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.attention_matrix_batch.model",
+        "path": "candidates/qwen2_resident_matrix/attention_matrix_batch/model.py",
+        "sha256": "f82699680b2b0f0569f7b1b71eaee5fdd2fa31c64ef08b0b5a89d35793bc01d3",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.attention_matrix_batch.test_model",
+        "path": "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py",
+        "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.attention_packed_native.check_native",
+        "path": "candidates/qwen2_resident_matrix/attention_packed_native/check_native.py",
+        "sha256": "e9eaa0ca9955bbe7162e936df660c4ec17c96eb2b2eadad7fab7698182327626",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.attention_packed_native.prepare",
+        "path": "candidates/qwen2_resident_matrix/attention_packed_native/prepare.py",
+        "sha256": "e61cd11673005d801a94fba3da66a5f2d2872d120cf691fe528e19c246db30cd",
+        "tree": "origin"
+      },
+      {
+        "module": "contract",
+        "path": "candidates/qwen2_resident_matrix/portable_consumer_qualification/contract.py",
+        "sha256": "23ea59a4a398555a0f025e3ac9e67cd6188dc093839ef954117f4485e090c818",
+        "tree": "origin"
+      },
+      {
+        "module": "packed_matrix_service_under_test",
+        "path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+        "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+        "tree": "generated"
+      }
+    ],
+    "python_version": "3.12.15",
+    "runner": {
+      "arch": "X64",
+      "environment": "github-hosted",
+      "image_os": "ubuntu24",
+      "image_version": "20261012.334.1",
+      "os": "Linux"
+    },
+    "system": "Linux"
+  },
+  "scalar_silu": {
+    "combined_elf": {
+      "bytes": 27584,
+      "name": "official_bf16_matrix_silu.so",
+      "sha256": "d059c8d9bc04d964b15790fdcfc411f23303dd25b0e6294ff38b688f1cd86624"
+    },
+    "committed_head": "4538a108904789de619a7a3bdb0b741fb8fc28c0",
+    "compiler": {
+      "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769",
+      "version": "x86_64-linux-gnu-g++-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "compiler_name": "x86_64-linux-gnu-g++-13",
+    "cpu_flags_common": [
+      "3dnowprefetch",
+      "abm",
+      "adx",
+      "aes",
+      "aperfmperf",
+      "apic",
+      "arat",
+      "avx",
+      "avx2",
+      "bmi1",
+      "bmi2",
+      "clflush",
+      "clflushopt",
+      "clwb",
+      "clzero",
+      "cmov",
+      "cmp_legacy",
+      "constant_tsc",
+      "cpuid",
+      "cr8_legacy",
+      "cx16",
+      "cx8",
+      "de",
+      "decodeassists",
+      "erms",
+      "extd_apicid",
+      "f16c",
+      "flushbyasid",
+      "fma",
+      "fpu",
+      "fsgsbase",
+      "fsrm",
+      "fxsr",
+      "fxsr_opt",
+      "ht",
+      "hypervisor",
+      "invpcid",
+      "lahf_lm",
+      "lm",
+      "mca",
+      "mce",
+      "misalignsse",
+      "mmx",
+      "mmxext",
+      "movbe",
+      "msr",
+      "mtrr",
+      "nonstop_tsc",
+      "nopl",
+      "npt",
+      "nrip_save",
+      "nx",
+      "osvw",
+      "pae",
+      "pat",
+      "pausefilter",
+      "pcid",
+      "pclmulqdq",
+      "pdpe1gb",
+      "pfthreshold",
+      "pge",
+      "pni",
+      "popcnt",
+      "pse",
+      "pse36",
+      "rdpid",
+      "rdpru",
+      "rdrand",
+      "rdseed",
+      "rdtscp",
+      "rep_good",
+      "sep",
+      "sha_ni",
+      "smap",
+      "smep",
+      "sse",
+      "sse2",
+      "sse4_1",
+      "sse4_2",
+      "sse4a",
+      "ssse3",
+      "svm",
+      "syscall",
+      "topoext",
+      "tsc",
+      "tsc_known_freq",
+      "tsc_reliable",
+      "tsc_scale",
+      "umip",
+      "user_shstk",
+      "v_vmsave_vmload",
+      "vaes",
+      "vmcb_clean",
+      "vme",
+      "vmmcall",
+      "vpclmulqdq",
+      "xgetbv1",
+      "xsave",
+      "xsavec",
+      "xsaveerptr",
+      "xsaveopt",
+      "xsaves"
+    ],
+    "interpreter": {
+      "bytes": 17752,
+      "name": "python3.12",
+      "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+    },
+    "kernel": "6.17.0-1022-azure",
+    "libm": {
+      "bytes": 952616,
+      "name": "libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "loaded_elfs": [
+      {
+        "bytes": 97448,
+        "name": "_bisect.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "c2d55b658ee80dfbf36db3ec80a34ce3d8fb6c9cd81cb9a779424027245516ed"
+      },
+      {
+        "bytes": 299776,
+        "name": "_blake2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "6745c768acb20488083d4ed521259bd41f6678c67de2c235c3c921de991fb1cf"
+      },
+      {
+        "bytes": 104552,
+        "name": "_bz2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a628e71c359006d65d58b988e82ab686f07c23a78d7dd5bb63a3efa584f4ac5d"
+      },
+      {
+        "bytes": 25832,
+        "name": "_contextvars.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "fc8ef497a56ce290230f43419182ddbc6e3e5d1046946886cab3073fe65be27e"
+      },
+      {
+        "bytes": 858840,
+        "name": "_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "672f11fa2652a247354739280e88201bed9a34182c7d4bafda58667a88deed12"
+      },
+      {
+        "bytes": 779464,
+        "name": "_datetime.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "589743cf282b0bfe958e8bebee2c41978629fc9fe0b74ca3ef29f132a28475e2"
+      },
+      {
+        "bytes": 1737072,
+        "name": "_decimal.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "284c5ae349e3d2744617928d4f3a37614683bf0613cadf99ae4c344542a281bd"
+      },
+      {
+        "bytes": 209560,
+        "name": "_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "1bb098ac25d38c813b516cc7e322d37e768f44f23da067a67c601b28308bfdac"
+      },
+      {
+        "bytes": 122448,
+        "name": "_heapq.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "5e7a8b9fd298bab06adaf1ad8daa6e06aa249ac962966398fa9ebfa13ef16174"
+      },
+      {
+        "bytes": 306696,
+        "name": "_json.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "5ff47d06d591f625a019461f37574be8027bfade33dc0ebfca9a35b995adadb9"
+      },
+      {
+        "bytes": 171440,
+        "name": "_lzma.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "737adad154e85d70e656f84455da42b42590d6283683c26d2fdde2ee98f59f5b"
+      },
+      {
+        "bytes": 10808937,
+        "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      },
+      {
+        "bytes": 29568,
+        "name": "_opcode.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "52947161a51df81dd70a682218b4c57f020920f055076812494586be56d93854"
+      },
+      {
+        "bytes": 730056,
+        "name": "_pickle.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "8e8d573df4b42fc3b4660459c019ce666b1d68444ab6fefd05a208e9cdd52d6b"
+      },
+      {
+        "bytes": 175224,
+        "name": "_posixsubprocess.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "3f85a9e9fcf0729ac0c8ddb64e53ee2274cd07b0bdfc37c0d92a6276e250dd03"
+      },
+      {
+        "bytes": 59632,
+        "name": "_random.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "48748384fdb545103bd5e58e6004fd8a3136b83ed5b088cb4375eec56300440a"
+      },
+      {
+        "bytes": 1488128,
+        "name": "_sha2.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a6122a22f46d6165d58039d859b1434d2895d9fe8b40f2236c260f5558993082"
+      },
+      {
+        "bytes": 235256,
+        "name": "_struct.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "457b6f0460e98cbe100a0138f6600ce5c9a4c1ca0c4c542bff905f465b05a9a2"
+      },
+      {
+        "bytes": 231833,
+        "name": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845"
+      },
+      {
+        "bytes": 52744,
+        "name": "fcntl.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "a5745b7e269256baaa6c30c90c2a40812bf8f28b4ad76429a675d5e97166a4a4"
+      },
+      {
+        "bytes": 236616,
+        "name": "ld-linux-x86-64.so.2",
+        "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+      },
+      {
+        "bytes": 78944,
+        "name": "libbz2.so.1.0.4",
+        "sha256": "cc08c9f50a8009ffd6391e0116a100369b11ca9238fa52392c019e6645b122a1"
+      },
+      {
+        "bytes": 2129424,
+        "name": "libc.so.6",
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      {
+        "bytes": 5309400,
+        "name": "libcrypto.so.3",
+        "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a"
+      },
+      {
+        "bytes": 47672,
+        "name": "libffi.so.8.1.4",
+        "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+      },
+      {
+        "bytes": 183024,
+        "name": "libgcc_s.so.1",
+        "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+      },
+      {
+        "bytes": 2833617,
+        "name": "libgfortran-040039e1-0352e75f.so.5.0.0",
+        "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980"
+      },
+      {
+        "bytes": 202904,
+        "name": "liblzma.so.5.4.5",
+        "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+      },
+      {
+        "bytes": 952616,
+        "name": "libm.so.6",
+        "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+      },
+      {
+        "bytes": 14408,
+        "name": "libpthread.so.0",
+        "sha256": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd"
+      },
+      {
+        "bytes": 29843656,
+        "name": "libpython3.12.so.1.0",
+        "sha256": "c7c1a2206db0fa089f8a252d1652d5ccb82669774dbb599427082ffc9eaaae85"
+      },
+      {
+        "bytes": 250985,
+        "name": "libquadmath-96973f99-934c22de.so.0.0.0",
+        "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6"
+      },
+      {
+        "bytes": 25034001,
+        "name": "libscipy_openblas64_-fdde5778.so",
+        "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12"
+      },
+      {
+        "bytes": 2592224,
+        "name": "libstdc++.so.6.0.33",
+        "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+      },
+      {
+        "bytes": 113000,
+        "name": "libz.so.1.3",
+        "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+      },
+      {
+        "bytes": 420752,
+        "name": "math.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "ad1c821cfd82fd4a662f755e553f8315083f457739823bfd3c5e83234cf26c21"
+      },
+      {
+        "bytes": 27584,
+        "name": "official_bf16_matrix_silu.so",
+        "sha256": "d059c8d9bc04d964b15790fdcfc411f23303dd25b0e6294ff38b688f1cd86624"
+      },
+      {
+        "bytes": 17752,
+        "name": "python3.12",
+        "sha256": "53dab24bf9e0e9c490088a53d71770b6f027b057678b313648e75f7fc87a675e"
+      },
+      {
+        "bytes": 107392,
+        "name": "select.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "e8a8a5828baa8f0b96a51933dc268f124876703dea201979ec6e72422876fe70"
+      },
+      {
+        "bytes": 163816,
+        "name": "zlib.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "f42d25a1ff3271d581c15f7fd9870415535806b66d738717d7d1212123c19cac"
+      }
+    ],
+    "loader": {
+      "libpython": {
+        "bytes": 29843656,
+        "name": "libpython3.12.so.1.0",
+        "sha256": "c7c1a2206db0fa089f8a252d1652d5ccb82669774dbb599427082ffc9eaaae85"
+      },
+      "policy": "setup-python-single-lib",
+      "toolcache_relative": "Python/3.12.15/x64"
+    },
+    "machine": "x86_64",
+    "numpy_extension": {
+      "bytes": 10808937,
+      "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+    },
+    "numpy_version": "2.3.5",
+    "python_sources": [
+      {
+        "module": "__main__",
+        "path": "candidates/qwen2_resident_matrix/portable_consumer_qualification/worker.py",
+        "sha256": "94e56aecd0a25487420dab6200e947ffec76f5ecc03e2c58ea7080dd7143f8bc",
+        "tree": "origin"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.ffn_attention.matrix_service",
+        "path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+        "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.ffn_attention.scalar_recipe",
+        "path": "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+        "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.ffn_attention.test_scalar_recipe",
+        "path": "candidates/qwen2_resident_matrix/ffn_attention/test_scalar_recipe.py",
+        "sha256": "7f472363432d37b17f3c504fe1a32443d53fec81c23c1bf445b414a3c5dbca30",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.ffn_public.prefix_arithmetic",
+        "path": "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py",
+        "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.ffn_public.prefix_owners",
+        "path": "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+        "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.ffn_public.test_prefix_owners",
+        "path": "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py",
+        "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.official_bf16.dense_silu",
+        "path": "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py",
+        "sha256": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699",
+        "tree": "generated"
+      },
+      {
+        "module": "candidates.qwen2_resident_matrix.transposed_down.model",
+        "path": "candidates/qwen2_resident_matrix/transposed_down/model.py",
+        "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+        "tree": "generated"
+      },
+      {
+        "module": "contract",
+        "path": "candidates/qwen2_resident_matrix/portable_consumer_qualification/contract.py",
+        "sha256": "23ea59a4a398555a0f025e3ac9e67cd6188dc093839ef954117f4485e090c818",
+        "tree": "origin"
+      },
+      {
+        "module": "scripts.qwen2_block_recipe_model",
+        "path": "scripts/qwen2_block_recipe_model.py",
+        "sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6",
+        "tree": "generated"
+      }
+    ],
+    "python_version": "3.12.15",
+    "runner": {
+      "arch": "X64",
+      "environment": "github-hosted",
+      "image_os": "ubuntu24",
+      "image_version": "20261012.334.1",
+      "os": "Linux"
+    },
+    "system": "Linux"
+  }
+}

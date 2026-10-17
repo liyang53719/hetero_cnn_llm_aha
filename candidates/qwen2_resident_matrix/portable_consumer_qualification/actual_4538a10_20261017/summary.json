@@ -1,0 +1,76 @@
+{
+  "checks": {
+    "profile2_original_suite": true,
+    "scalar_original_tests": 7,
+    "silu_fault_vectors": 3,
+    "silu_success_vectors": 2
+  },
+  "claims": {
+    "full_m128": false,
+    "ninety_percent": false,
+    "producer_qualified": false,
+    "public_m16": false,
+    "rtl": false,
+    "selected_fault_timing_qualified": false
+  },
+  "contract_sha256": "287565c9af2ad155fb14a066fc007229b47be0296e73e743dfc479286f894ebf",
+  "elapsed_seconds": 6.229,
+  "launch_commit": "4538a108904789de619a7a3bdb0b741fb8fc28c0",
+  "library_sha256": "d059c8d9bc04d964b15790fdcfc411f23303dd25b0e6294ff38b688f1cd86624",
+  "observations": {
+    "profile2_cases": [
+      {
+        "case": "qk",
+        "fmas": 32768,
+        "output_sha256": "11e1cf7839cad52a5b64905e6ce442c3fb121f3b5a6b614b4d65038409034104",
+        "profile": 2,
+        "steps": 8
+      },
+      {
+        "case": "pv",
+        "fmas": 6144,
+        "output_sha256": "ebfa7f066aae1bf87967df06bff25793e31d4080edd75386e3c99d11f1708d6e",
+        "profile": 2,
+        "steps": 3
+      },
+      {
+        "case": "pv128_boundary",
+        "fmas": 262144,
+        "profile": 2,
+        "steps": 128
+      },
+      {
+        "case": "pv",
+        "fmas": 12288,
+        "output_sha256": "18aff8a0b62d5de473f690bfaad2463a6524ca477291461a15d1a129528d4d7d",
+        "profile": 1,
+        "steps": 3
+      },
+      {
+        "case": "legacy_default",
+        "fmas": 4096,
+        "steps": 8
+      },
+      {
+        "case": "nonselected_nonfinite",
+        "protocol_error": false,
+        "selected_fault_timing_qualified": false
+      },
+      {
+        "case": "selected_nonfinite",
+        "protocol_error": false,
+        "selected_fault_timing_qualified": false
+      }
+    ],
+    "silu_phase_sha256": [
+      "3cd3828f534ced0db9d62027df5542c639b8e7d2c68da0db7aaaaf460600bb81",
+      "8001b12c347afdb690972946218f50f13042fdf4341108ff3077c4e4653ea208"
+    ]
+  },
+  "phase": "complete",
+  "profile": "hosted-generic-consumer-fixed-cases-v1",
+  "run_attempt": 1,
+  "run_id": "38991969943",
+  "schema": 1,
+  "status": "PASS_FIXED_ACTUAL_CASES"
+}

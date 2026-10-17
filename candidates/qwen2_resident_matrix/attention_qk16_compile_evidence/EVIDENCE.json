@@ -1,0 +1,63 @@
+{
+  "base_evidence_sha256": "3dcdde7461bf63ae0ab9dffb6601066dc190190733ba92358ac662707bd2668c",
+  "base_pins_sha256": "6825e337a7bcbfde40a99287d5fba173007185bcaa83b0267bf85dbfbf1d28d4",
+  "caller": {
+    "compiler_only": true,
+    "elaboration": false,
+    "external_kill_grace_seconds": 10,
+    "external_term_seconds": 90,
+    "filemap_sha256": "fc901beaa83599432ca1890de057ce558434e1a53e631c0eeb7e20b274977ec1",
+    "launch_sha256": "e89a2e6e44e9f59414077cee065c63da1348599ff685ab95b7ee8ae326ebbe05",
+    "numerical": false,
+    "observed_terminal_utc": "2026-10-17T01:58:14Z",
+    "outer_exit_code": 0,
+    "rtl": false,
+    "schema": "packed-qk16-compile-caller-v1",
+    "session_id": 22610,
+    "summary_sha256": "b4c4c8d9a34530baf0ccf1f0fc3559e6dbc664dbf82f68f114f161c57f392014"
+  },
+  "caller_sha256": "09128e7e0fccd7175103d1d0f344f5b14bc6da1bdbcf6e72fa687784cf6a6d5d",
+  "class_count": 474,
+  "class_sha256_delta": {
+    "heteronpu/continuous/Qwen2ContinuousBlock$$anon$1.class": "c8b4fc6beccccfbd3809f4a53bf64003c8f3b321e366c14330457bd21427a989",
+    "heteronpu/continuous/Qwen2ContinuousBlock.class": "551824a5d02e5544a37debd34f735f5c680f98777cd19a0f5fec04a5f714ebbf",
+    "heteronpu/continuous/QwenOwnerKernel.class": "1b561c6a9b893dcfaacc21009c232ca737da78a507aae800ed2aa278cddfafc0"
+  },
+  "compiler_log_bytes": 0,
+  "compiler_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "elaboration": false,
+  "executed_route_pins_sha256": "702b95fe59e84daf11ae39e5c8175e32421d38a4b4b337a78177bf1364dac78e",
+  "filemap": {
+    "PLAN.json": "9721ef7bb9bae85e4370b3bf03316567892081b9fbbbe9e4b5423b64f6b13f65",
+    "README.md": "bca9aed0d4510ab979e34b03754959045d58bc1264f14787ac41af70c0f26ca0",
+    "launch.py": "e89a2e6e44e9f59414077cee065c63da1348599ff685ab95b7ee8ae326ebbe05",
+    "prepare.py": "0a9cb12f486053a0c342ff003d048e1ab22329430d50fd5864cd204b277606ea",
+    "test_plan.py": "ccc6787d012accdb0b6e4eed9132d14a52714e25c32ddaca46ac9c51449c7af9"
+  },
+  "filemap_sha256": "fc901beaa83599432ca1890de057ce558434e1a53e631c0eeb7e20b274977ec1",
+  "launcher_sha256": "e89a2e6e44e9f59414077cee065c63da1348599ff685ab95b7ee8ae326ebbe05",
+  "numerical": false,
+  "overlay_sha256_delta": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "4375ccf715cf408975c3e45ae595955767b824404ef8337bb260ed807527dc1e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "a92189fb27f4251ea1087985011a7bac904b0c51c19d8f79eea0cb77b95176d6"
+  },
+  "performance_claim": false,
+  "plan_field_delta": {
+    "prior_observed_83_source_compile_seconds": 28.262121791995014,
+    "route_pins_sha256": "702b95fe59e84daf11ae39e5c8175e32421d38a4b4b337a78177bf1364dac78e",
+    "schema": "packed-qk16-owner-full-source-compile-proposal-v1"
+  },
+  "plan_sha256": "9721ef7bb9bae85e4370b3bf03316567892081b9fbbbe9e4b5423b64f6b13f65",
+  "rtl": false,
+  "schema": "qk16-owner-compile-delta-evidence-v1",
+  "source_count": 83,
+  "source_sha256_delta": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "4375ccf715cf408975c3e45ae595955767b824404ef8337bb260ed807527dc1e",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": "a92189fb27f4251ea1087985011a7bac904b0c51c19d8f79eea0cb77b95176d6"
+  },
+  "summary_bytes": 69217,
+  "summary_delta": {
+    "elapsed_seconds": 29.23455079300038
+  },
+  "summary_sha256": "b4c4c8d9a34530baf0ccf1f0fc3559e6dbc664dbf82f68f114f161c57f392014"
+}

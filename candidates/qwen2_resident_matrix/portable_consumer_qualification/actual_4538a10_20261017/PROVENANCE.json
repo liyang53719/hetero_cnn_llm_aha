@@ -1,0 +1,53 @@
+{
+  "artifact": {
+    "archive_in_publication": false,
+    "bytes": 12008,
+    "id": "12084699511",
+    "members": [
+      "identities.json",
+      "source_hashes.json",
+      "summary.json"
+    ],
+    "sha256": "11269eb83d8bd34ccca1584e36bbf38f81cd37370fcc24d8428962929b482b75",
+    "zip_digest_and_exact_members_verified_locally": true
+  },
+  "claims": {
+    "full_m128": false,
+    "ninety_percent": false,
+    "producer_qualified": false,
+    "public_m16": false,
+    "rtl": false,
+    "selected_fault_timing_qualified": false
+  },
+  "closure": {
+    "cold_check_scope": "Reads and hashes reviewed source bytes; does not execute arithmetic.",
+    "cold_source_preflight": "PASS_FROZEN_SOURCE_BYTES_AND_MAPS",
+    "generated_targets": 2,
+    "input_sources": 114,
+    "payload_sources": 5
+  },
+  "preparation": {
+    "builds": 0,
+    "ci_launches": 0,
+    "installs": 0,
+    "native_runs": 0,
+    "producer_runs": 0,
+    "pushes": 0,
+    "uploaded_weights_tensors_npz_logs": false
+  },
+  "preservation": {
+    "mode": "EXACT_ORIGINAL_JSON_BYTES",
+    "original_files_modified": false,
+    "original_json_bytes": 57230
+  },
+  "run": {
+    "attempt": 1,
+    "conclusion_source": "Parent verified hosted run and job; not queried by this offline checkpoint.",
+    "id": "38991969943",
+    "job_id": "117276108074",
+    "launch_commit": "4538a108904789de619a7a3bdb0b741fb8fc28c0",
+    "reported_conclusion": "success"
+  },
+  "schema": 1,
+  "status": "PRESERVED_ACTUAL_FIXED_CASES"
+}

@@ -12,6 +12,7 @@ import json
 import math
 import os
 from pathlib import Path
+import resource
 import signal
 import sys
 import time
@@ -129,13 +130,60 @@ def read_context(L,path,expected):
     return value
 
 
+def timing_seconds(value):
+    # Serialization ceiling only; never a work budget or acceptance threshold.
+    return type(value) in (int,float) and 0<=value<=2**53 and math.isfinite(value)
+
+
+def phase_snapshot():
+    """Parent-only seconds; RUSAGE_CHILDREN accounts for already reaped children.
+
+    Descendants are included only to the extent their usage is propagated by
+    waited-for children. This is not per-process or per-edge attribution.
+    """
+    try:
+        wall=time.monotonic();usage=resource.getrusage(resource.RUSAGE_CHILDREN)
+        values=(wall,usage.ru_utime,usage.ru_stime)
+        return tuple(float(v) for v in values) if all(timing_seconds(v) for v in values) else None
+    except TimeoutError: raise
+    except Exception: return None
+
+
+def unavailable_phase_timing(reason):
+    return dict(schema=1,diagnostic_only=True,acceptance=False,scope='PARENT_RUSAGE_CHILDREN_DELTA',
+        status='UNAVAILABLE',reason=reason,wall_seconds=None,
+        reaped_children_user_cpu_seconds=None,reaped_children_system_cpu_seconds=None)
+
+
+def phase_timing(before,event):
+    # Do not measure an unobserved or incompletely cleaned ownership boundary.
+    if type(event['observed_exit_code']) is not int:
+        return unavailable_phase_timing('EXIT_UNOBSERVED')
+    if event['owned_group_cleanup_complete'] is not True:
+        return unavailable_phase_timing('CLEANUP_INCOMPLETE')
+    if type(before) is not tuple or len(before)!=3 or not all(timing_seconds(v) for v in before):
+        return unavailable_phase_timing('SNAPSHOT_UNAVAILABLE')
+    after=phase_snapshot()
+    if type(after) is not tuple or len(after)!=3 or not all(timing_seconds(v) for v in after):
+        return unavailable_phase_timing('SNAPSHOT_UNAVAILABLE')
+    delta=tuple(end-start for start,end in zip(before,after))
+    if not all(timing_seconds(v) for v in delta):
+        return unavailable_phase_timing('INVALID_DELTA')
+    result=unavailable_phase_timing(None)
+    result.update(status='AVAILABLE',wall_seconds=delta[0],
+        reaped_children_user_cpu_seconds=delta[1],reaped_children_system_cpu_seconds=delta[2])
+    return result
+
+
 def owned_phase(L,control,argv,*,cwd,env,log,work_deadline,cleanup_deadline,journal,phase):
     """Reviewed helper ownership, with one absolute phase and no timer restart."""
     owner={'process':None,'identity':None};failure=None;code=None;cleaned=False;cleanup_failed=False
+    before=None
     event=dict(phase=phase,pid=None,observed_exit_code=None,final_exit_code=None,owned_group_cleanup_complete=False,status='NOT_STARTED')
     journal.append(event)
     try:
         L.arm(work_deadline)
+        before=phase_snapshot()
         with Path(log).open('xb') as stream:
             control.spawn_owned(owner,['-I','-B','-c',L.EXEC,*map(str,argv)],cwd=cwd,stdout=stream,env=env)
             event.update(pid=owner['process'].pid,status='RUNNING')
@@ -152,6 +200,23 @@ def owned_phase(L,control,argv,*,cwd,env,log,work_deadline,cleanup_deadline,jour
             event['pid']=process.pid
             if type(process.returncode) is int: event['final_exit_code']=process.returncode if process.returncode>=0 else 128-process.returncode
         event['owned_group_cleanup_complete']=cleaned
+        try:
+            if before is not None and type(event['observed_exit_code']) is int and cleaned is True:
+                if time.monotonic()>=cleanup_deadline:
+                    event['timing_diagnostic']=unavailable_phase_timing('DEADLINE_EXPIRED')
+                    if failure is None: failure=TimeoutError('absolute phase measurement deadline')
+                else:
+                    # finish_owned disabled the work alarm for cleanup. Reuse only
+                    # the same absolute cleanup boundary for this added read.
+                    control.arm_receipt_deadline(cleanup_deadline);L.remaining(cleanup_deadline)
+                    event['timing_diagnostic']=phase_timing(before,event)
+                    L.remaining(cleanup_deadline)
+            else: event['timing_diagnostic']=phase_timing(before,event)
+        except TimeoutError as error:
+            event['timing_diagnostic']=unavailable_phase_timing('INTERRUPTED')
+            if failure is None: failure=error
+        except Exception:
+            event['timing_diagnostic']=unavailable_phase_timing('MEASUREMENT_UNAVAILABLE')
         event['status']='CLEANUP_FAILED' if cleanup_failed else 'TIMEOUT' if isinstance(failure,TimeoutError) else 'FAILED' if failure else 'PASS'
     if failure is not None: raise failure
     need(cleaned,'owned phase cleanup')

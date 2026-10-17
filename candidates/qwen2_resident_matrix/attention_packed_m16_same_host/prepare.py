@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from ..attention_packed_m16_host_job import prepare as prior
 from . import contract as C
+from . import control_ports
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
@@ -18,7 +19,8 @@ OBSERVER = 'candidates/qwen2_resident_matrix/attention_packed_observation/pins.j
 OLD_REFERENCE = 'fresh same-input sequential/block-pair outputs; explicitly reused verified native M16 outputs; original gates retained'
 FRESH_REFERENCE = 'fresh same-host sequential/block-pair and newly executed official M16 outputs; original gates retained'
 OWN = ('contract.py','admission.py','views.py','prepare.py','entry.py','terminal_validator.py','terminal_original.py',
-       'test_entry.py','test_terminal_validator.py','README.md','RESOURCE_PLAN.json','SCOPE_AUDIT.json')
+       'test_entry.py','test_terminal_validator.py','control_ports.py','test_control_ports.py',
+       'README.md','RESOURCE_PLAN.json','SCOPE_AUDIT.json')
 
 
 def check_terminal_scope():
@@ -107,6 +109,8 @@ def compose(destination, *, git_head, producer_package, support_roots=()):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(source.read_bytes())
         C.need(sha(target) == expected, 'producer source conflicts with full-M16 composition: '+name)
+    control_target = destination/control_ports.TARGET
+    control_target.write_bytes(control_ports.transform(control_target.read_bytes()))
     observer = json.loads((destination/OBSERVER).read_bytes())
     observer['runtime'] = {name:sha(destination/name) for name in observer['runtime']}
     (destination/OBSERVER).write_text(json.dumps(observer, sort_keys=True, indent=2)+'\n')

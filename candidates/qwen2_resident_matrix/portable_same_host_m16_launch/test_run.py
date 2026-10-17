@@ -55,7 +55,7 @@ print('PASS_FRESH_WORKER_SOURCE_BOUNDARY')
     def test_complete_input_contract(self):
         pins=R.load_pins(ROOT)
         self.assertGreaterEqual(len(pins['inputs']),375)
-        self.assertEqual(len(pins['composed_sources']),356)
+        self.assertEqual(len(pins['composed_sources']),358)
         self.assertNotIn(R.SOURCE_CONTRACT,pins['composed_sources'])
     def test_frozen_setup_identity(self):
         pins=R.load_pins(ROOT)
@@ -196,14 +196,17 @@ class OwnedProcesses(unittest.TestCase):
         event,journal=self.run_child('pass')
         self.assertIsInstance(event,dict);self.assertEqual(event['observed_exit_code'],0);self.assertEqual(event['final_exit_code'],0)
         self.assertTrue(event['owned_group_cleanup_complete']);self.assertEqual(event['status'],'PASS');self.assertGreater(event['pid'],1)
+        self.assertEqual(event['timing_diagnostic']['status'],'AVAILABLE');self.assertIs(event['timing_diagnostic']['acceptance'],False)
     def test_owned_nonzero_preserved(self):
         error,journal=self.run_child('raise SystemExit(7)');self.assertIsInstance(error,ValueError)
         self.assertEqual(journal[0]['observed_exit_code'],7);self.assertEqual(journal[0]['final_exit_code'],7)
         self.assertTrue(journal[0]['owned_group_cleanup_complete']);self.assertEqual(journal[0]['status'],'FAILED')
+        self.assertEqual(journal[0]['timing_diagnostic']['status'],'AVAILABLE')
     def test_owned_timeout_cleanup(self):
         error,journal=self.run_child('import time; time.sleep(10)',.15)
         self.assertIsInstance(error,TimeoutError);self.assertIsNone(journal[0]['observed_exit_code'])
         self.assertTrue(journal[0]['owned_group_cleanup_complete']);self.assertEqual(journal[0]['status'],'TIMEOUT')
+        self.assertEqual(journal[0]['timing_diagnostic']['reason'],'EXIT_UNOBSERVED')
     def test_cleanup_failure_never_pass(self):
         control=SimpleNamespace()
         process=SimpleNamespace(pid=123,returncode=None)
@@ -288,6 +291,9 @@ class TerminalPostflight(unittest.TestCase):
     def test_zero_exit_and_cleanup_are_required(self):
         for key,bad in (('observed_exit_code',1),('observed_exit_code',False),('final_exit_code',1),('final_exit_code',False),('pid',True),('owned_group_cleanup_complete',False)):
             args=self.fixture();args[-1][key]=bad
+            args[-1]['timing_diagnostic']=dict(schema=1,status='AVAILABLE',diagnostic_only=True,acceptance=False,
+                scope='PARENT_RUSAGE_CHILDREN_DELTA',reason=None,wall_seconds=1.0,
+                reaped_children_user_cpu_seconds=1.0,reaped_children_system_cpu_seconds=0.0)
             with self.subTest(key=key,bad=bad),self.assertRaises(ValueError):self.check(args)
     def test_child_result_cannot_substitute_admission(self):
         args=self.fixture();path=args[0]/'full_m16/CHILD_RESULT.json';value=L.strict(L.safe(path));value['producer_receipt_sha256']='f'*64;path.write_bytes(R.encoded(value))

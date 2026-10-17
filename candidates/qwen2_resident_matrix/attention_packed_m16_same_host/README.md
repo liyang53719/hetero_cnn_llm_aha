@@ -3,13 +3,21 @@
 This is a distinct admission profile: `qwen2-public-pv16-packed-m16-same-host-v1`.
 It consumes freshly generated same-host official/native and sequential/reduced M16
 references. It never relabels the historical AVX512 producer or imports the old
-M16 PASS. This candidate has not run a producer, full numeric workload, or CI job.
+M16 PASS. This control-optimization successor has not run a full numeric workload or CI job.
+Its predecessor on commit 6cc2003 passed the fresh producer and failed at the
+unchanged 900-second guard during PC19 Down; the safe evidence is archived under
+`reports/execution/QWEN2_SAME_HOST_M16_PC19_TIMEOUT_20261017`.
 
 ## Preserved numerical and transaction contract
 
 The source composer starts with the exact reviewed `attention_packed_m16_host_job`
-composition. It changes only four entry/identity imports and truthful reference
-metadata. The Public21 physical prefix/suffix execution, same owner/services,
+composition. It keeps the four entry/identity import changes and truthful
+reference metadata, then applies one exact-hash-guarded control optimization:
+`ordinary_edge` obtains `self.ports()` only for job admission, where the value is
+used. The immediately following pre-owner reset inspection and post-owner live
+reset inspection remain. The full concrete getter closure is observationally
+pure; no owner or Host edge, deadline site, numerical call or traffic fence is
+removed. The Public21 physical prefix/suffix execution, same owner/services,
 ACK/publication and whole-terminal checks, whole-reference fence, exact fixed
 arithmetic comparisons, 27 assigned official observed-node gates, and original
 operator/block thresholds stay unchanged. The explicit mask remains unobserved;
@@ -92,3 +100,12 @@ tiny checks, the producer, independent original-array verification and the paren
 qualification receipt. The separate full-M16 930-second envelope is unchanged.
 Per-stage setup caps are ceilings within the shared deadline, not additive
 allocations or permission to extend it.
+
+## Control-only evidence limit
+
+`test_control_ports.py` compares the original and candidate wrapper control traces,
+including admission ordering, poison, abort, stalls, ACK and completion fences,
+and checks the composed runner/observer/source hashes. Synthetic wrapper and
+original-driver control profiling do not establish full-run speedup or guarantee
+completion inside 900 seconds. Parent phase wall and aggregate reaped-descendant
+CPU timings are diagnostic metadata and cannot grant numerical acceptance.

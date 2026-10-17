@@ -165,6 +165,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
   [精确四JSON及源码证明](../reports/execution/QWEN2_SAME_HOST_M16_PC19_TIMEOUT_20261017/README.md)保留旧证据；执行356静态源与8个栈帧逐项匹配。与46f相比仅entry/test改变，热点源码相同；前缀36.98→57.50秒，速度波动原因未知，CPU affinity不能证明CPU型号、争用或限频。暂不加预算、不盲目重跑，先做纯控制开销的等价性和局部测量。
 - **done：M128 源码检查点；to do：实际M128运行。** 保存修正后的22个入口/35个支持/7个producer文件与7个parent文件；root490+490冷测、独立238+238及隔离边界/420源worktree组合通过。当前检查点明确不发布新的M128 workflow，已有M16 YAML原样不变，不触发额外数值CI。对应454项实际发布源闭包须核验；此前含workflow的209603d候选保持未发布。未来运行必须同一job重新生成参考并通过完整M16原terminal及same-ELF先决，再执行真实M128，不能拿本次源码门禁或旧诊断PASS替代。完整五block M128/RTL仍0/5。
 
+
+- **done：纯控制重复读取优化及父级耗时观测；ongoing：同预算完整M16实跑复验。** 保留原历史源码，通过精确hash守卫在composition末端应用一行变换：ordinary_edge仅在job admission读取此前非admission也无条件读取的ports。每个owner/Host tick、pre/post reset、deadline、计数、握手、ACK、数值运算与terminal保持不变；原entry写入比较修复继续保留。
+  [源级/局部控制证据](../reports/execution/QWEN2_M16_CONTROL_PORTS_TIMING_20261017/README.md)中22+22差分用例、完整301+301冷测、3隔离边界和359源真实worktree组合通过。root对严格源码缓冲加载的真实Down控制路径执行4对AB/BA有界样本，使用明确无算术功能的Python ABI；3421条边沿、packet/traffic、ACK与terminal相同，wall中位0.251672→0.215704秒，配对比0.85342，CPU配对比0.85312。此局部结果不能证明完整M16速度、900秒余量或硬件利用率。
+  父级仅在owned phase边界采样wall和RUSAGE_CHILDREN，退出/清理后才输出有界诊断；沿原绝对cleanup deadline重新启用alarm，失败保留UNKNOWN/UNAVAILABLE，去掉可选CPU型号读取。它记录已回收子进程CPU，不等于独占CPU时间或限频证明，不改原900数值/930外层预算。
+  10个runtime/source后继与3个安全证据独立冻结，386项实际Git发布闭包须PASS后才触发一次新M16尝试。M128已保存检查点引用旧M16源，必须另行重绑定并完成同job先决后才可启动；本提交不发布M128 workflow。完整M128/RTL及90%利用率仍未通过。
+
 ## 下一步，保持默认关闭并逐项验收
 
 1. **done：收齐be00失败结果。** 安全摘要/source身份已归档，数值比较和postflight未完成。新候选独立冻结，不据小切片推定旧运行PASS。

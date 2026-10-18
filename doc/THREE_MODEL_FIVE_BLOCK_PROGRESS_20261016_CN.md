@@ -428,3 +428,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - ongoing：完整block观察源码PC0–15已分域有限SOURCE审查；resident16–18窄修在审、Down19 prefix和末Add20仍待闭合。27数组导出、ActualCoverageVerifier及独立参考集成不完整，SOURCE不得冒实际通过。
 - 五block不新增验收：Qwen2 M128保持27项限定模型门禁；其它四个未新增完整M128，完整block RTL0/5、更长序列未开始。固定4096MAC/完整block分母的80%/90%仍无RTL实测。
 - 原Top codegen FAIL、Os编译超时、缺hier.mk等历史不改；后续各独立对象/归档/链接/启动资格按真实范围记录。环境清单公开许可仍待答，本次无此类内容。
+
+
+## 2026-10-18 08:00 UTC：断连后的固定源码恢复与可重组装小闭环
+
+- ongoing（原运行终态未知）：约07:44 UTC执行环境连接中断，原N0会话74562随后不可查询。最后已读取的真实进度为row28、cycle646947、B2688及ACK172032B；这是最后观测，不是断连时的精确最终状态。没有取得该次ACK0、完整N0数组或数值比较终态，不能追认PASS，也不能把连接故障称作模型数值失败。
+- done（恢复后新核验）：从远端固定9b2ea5490c5d01870d1b8d953f3dad83cd245c9e恢复项目源码，五组已发布snapshot共55文件逐Git blob核验一致，normal/-O重新实跑各115项SOURCE冷测。旧执行资产及未发布full27实现未随恢复工作区保留；历史审阅记录不能代替当前缺失文件或运行资格。
+- done（新的纯源码复现片）：新增development_snapshots/canonical_host_source_recovery_20261018/，保存22份已发布原字节源码及有限标准库恢复/校验脚本、中文步骤和仅项目source hash。可从固定仓库重新组装，startup和PC0同名ledger分开保留。当前包及fresh重组装normal/-O各19项通过；冷模块采用同bytes先hash再compile/exec，合法污染pyc负例不会执行缓存代码。首版pyc入口HOLD保持历史，不追认。
+- ongoing：37条literal quoted include中20条在新源码组合内解析，17次引用仍缺9个名字：3份项目实现、4个生成模型头和2个外部runtime头。当前不能独立编译Host，不能用stub、旧自造权重oracle或额外eval的测试台补成canonical闭包。恢复脚本、hash和合成hold测试不证明C++/RTL行为或full27数值。
+- todo：先逐小片补齐有明确来源的项目端口、同RAM/SSA与加载契约；对找不到原件的实现作为新代码重新审查并及时保存。真实生成模型/工具链及新编译/链接/运行需要各自独立有界门；本批没有启动大EDA或模型运行。原进程不能从row28续跑。
+- 五block仍不新增验收：完整block RTL保持0/5，17owner/21completion/27capture的实际完整证据和固定4096MAC全block周期口径下80%/90%利用率均未完成。本次仅项目源码及说明，不含权重、原输入/参考、生成模型、二进制、原进程日志或系统工具链环境清单。

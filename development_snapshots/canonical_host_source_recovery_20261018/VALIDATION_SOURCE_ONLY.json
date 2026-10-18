@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "status": "PASS_FINITE_SOURCE_AND_SYNTHETIC_COLD_ONLY",
+  "independent_review": "PENDING",
+  "fixed_repository_revision": {
+    "commit": "9b2ea5490c5d01870d1b8d953f3dad83cd245c9e",
+    "tree": "ca48664f17b4df0024e8e688dd2a4c0168f0cb9f"
+  },
+  "exact_copied_project_sources": 22,
+  "copied_source_bytes": 361697,
+  "hashed_project_sources_including_new_scripts": 24,
+  "source_assembly_from_fixed_repository": "PASS",
+  "bundled_source_tests": {
+    "normal": 19,
+    "optimized": 19
+  },
+  "freshly_reassembled_source_tests": {
+    "normal": 19,
+    "optimized": 19
+  },
+  "quoted_include_edges": {
+    "total": 37,
+    "recovered_project": 20,
+    "unresolved_uses": 17,
+    "unresolved_project_names": 3,
+    "generated_model_names_not_included": 4,
+    "external_runtime_names_not_included": 2
+  },
+  "repository_modified": false,
+  "old_snapshots_modified": false,
+  "compiled_or_native_executed": false,
+  "models_or_weights_loaded": false,
+  "system_or_toolchain_inventory": false,
+  "git_commit_push_or_upload": false,
+  "full_host_ready": false,
+  "full_block_rtl": "0/5",
+  "historical_n0_session": {
+    "last_observed_row": 28,
+    "last_observed_cycle": 646947,
+    "terminal_status": "UNKNOWN_AFTER_DISCONNECT",
+    "unpublished_full27_and_actual_artifacts": "ABSENT_FROM_RESTORED_ENVIRONMENT",
+    "published_source_artifacts": "INTACT",
+    "new_cold_does_not_inherit_old_actual_evidence": true
+  },
+  "candidate_version": 2,
+  "predecessor_status": "V1_HOLD_PYC_EXECUTION_BEFORE_SOURCE_VERIFICATION_PRESERVED_UNCHANGED",
+  "minimal_fix": "Test loader reads project source once, verifies the same bytes against PROJECT_SOURCE_HASHES, then compile/exec; no project cache lookup.",
+  "v1_inventory_unchanged": true,
+  "recover_script_and_22_original_sources_unchanged": true,
+  "temporary_pyc_regression": {
+    "normal": "PASS",
+    "optimized": "PASS",
+    "sources": [
+      "recover.py",
+      "source/hold_contract_cold.py"
+    ],
+    "cache_validity_control": "Current-interpreter timestamp/size-matched caches accepted by temporary legacy loader; benign module-attribute marker observed only in that positive control.",
+    "verified_bytes_loader": "No injected marker executed; source bytes unchanged.",
+    "changed_source_before_exec": "REJECTED",
+    "fixture_scope": "TEMPORARY_COPIES_ONLY_NO_CACHES_IN_PAYLOAD"
+  }
+}

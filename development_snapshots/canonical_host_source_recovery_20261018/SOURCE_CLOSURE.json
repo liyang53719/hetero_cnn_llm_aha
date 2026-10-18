@@ -1,0 +1,222 @@
+{
+  "edges": [
+    {
+      "header": "host_memory.hpp",
+      "source": "include/axi_service.hpp",
+      "status": "PROJECT_SOURCE_MISSING"
+    },
+    {
+      "header": "silu_observer.hpp",
+      "source": "include/generated_binding.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/silu_observer.hpp"
+    },
+    {
+      "header": "VHostBlockTop.h",
+      "source": "include/generated_binding.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "VHostBlockTop___024root.h",
+      "source": "include/generated_binding.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "VHostBlockTop__Syms.h",
+      "source": "include/generated_binding.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "verilated_sym_props.h",
+      "source": "include/generated_binding.hpp",
+      "status": "EXTERNAL_RUNTIME_NOT_INCLUDED"
+    },
+    {
+      "header": "generated_binding.hpp",
+      "source": "include/host_fields.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/generated_binding.hpp"
+    },
+    {
+      "header": "host_ports.hpp",
+      "source": "include/host_fields.hpp",
+      "status": "PROJECT_SOURCE_MISSING"
+    },
+    {
+      "header": "host_fields.hpp",
+      "source": "include/n0_fields.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/host_fields.hpp"
+    },
+    {
+      "header": "n0_fields.hpp",
+      "source": "include/n0_physical_memory.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/n0_fields.hpp"
+    },
+    {
+      "header": "axi_service.hpp",
+      "source": "include/n0_physical_memory.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/axi_service.hpp"
+    },
+    {
+      "header": "sink_stream_bridge.hpp",
+      "source": "include/n0_physical_memory.hpp",
+      "status": "PROJECT_SOURCE_MISSING"
+    },
+    {
+      "header": "resident_evidence.hpp",
+      "source": "include/physical_observer_bridge.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/resident_evidence.hpp"
+    },
+    {
+      "header": "host_memory.hpp",
+      "source": "include/physical_observer_bridge.hpp",
+      "status": "PROJECT_SOURCE_MISSING"
+    },
+    {
+      "header": "host_fields.hpp",
+      "source": "include/resident_evidence.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/host_fields.hpp"
+    },
+    {
+      "header": "host_fields.hpp",
+      "source": "include/silu_edge_runtime.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/host_fields.hpp"
+    },
+    {
+      "header": "startup_ledger.hpp",
+      "source": "pc0/dpi_forwarders.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "pc0/startup_ledger.hpp"
+    },
+    {
+      "header": "VHostBlockTop__Dpi.h",
+      "source": "pc0/dpi_forwarders.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "n0_fields.hpp",
+      "source": "pc0/n0_participant.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/n0_fields.hpp"
+    },
+    {
+      "header": "axi_service.hpp",
+      "source": "pc0/n0_participant.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/axi_service.hpp"
+    },
+    {
+      "header": "sink_stream_bridge.hpp",
+      "source": "pc0/n0_participant.hpp",
+      "status": "PROJECT_SOURCE_MISSING"
+    },
+    {
+      "header": "dpi_forwarders.hpp",
+      "source": "pc0/pc0_main.cpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "pc0/dpi_forwarders.hpp"
+    },
+    {
+      "header": "shared_edge_runtime.hpp",
+      "source": "pc0/pc0_main.cpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "pc0/shared_edge_runtime.hpp"
+    },
+    {
+      "header": "host_fields.hpp",
+      "source": "pc0/resident_participant.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "include/host_fields.hpp"
+    },
+    {
+      "header": "n0_participant.hpp",
+      "source": "pc0/shared_edge_runtime.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "pc0/n0_participant.hpp"
+    },
+    {
+      "header": "resident_participant.hpp",
+      "source": "pc0/shared_edge_runtime.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "pc0/resident_participant.hpp"
+    },
+    {
+      "header": "VHostBlockTop.h",
+      "source": "pc0/startup_inputs.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "VHostBlockTop___024root.h",
+      "source": "pc0/startup_inputs.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "startup_inputs.hpp",
+      "source": "pc0/startup_ledger.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "pc0/startup_inputs.hpp"
+    },
+    {
+      "header": "svdpi.h",
+      "source": "pc0/startup_ledger.hpp",
+      "status": "EXTERNAL_RUNTIME_NOT_INCLUDED"
+    },
+    {
+      "header": "startup_ledger.hpp",
+      "source": "startup/dpi_forwarders.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "startup/startup_ledger.hpp"
+    },
+    {
+      "header": "VHostBlockTop__Dpi.h",
+      "source": "startup/dpi_forwarders.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "VHostBlockTop.h",
+      "source": "startup/startup_inputs.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "VHostBlockTop___024root.h",
+      "source": "startup/startup_inputs.hpp",
+      "status": "GENERATED_MODEL_NOT_INCLUDED"
+    },
+    {
+      "header": "startup_inputs.hpp",
+      "source": "startup/startup_ledger.hpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "startup/startup_inputs.hpp"
+    },
+    {
+      "header": "svdpi.h",
+      "source": "startup/startup_ledger.hpp",
+      "status": "EXTERNAL_RUNTIME_NOT_INCLUDED"
+    },
+    {
+      "header": "dpi_forwarders.hpp",
+      "source": "startup/startup_main.cpp",
+      "status": "RECOVERED_PROJECT_SOURCE",
+      "target": "startup/dpi_forwarders.hpp"
+    }
+  ],
+  "full_host_ready": false,
+  "missing": {
+    "VHostBlockTop.h": "GENERATED_MODEL_NOT_INCLUDED",
+    "VHostBlockTop__Dpi.h": "GENERATED_MODEL_NOT_INCLUDED",
+    "VHostBlockTop__Syms.h": "GENERATED_MODEL_NOT_INCLUDED",
+    "VHostBlockTop___024root.h": "GENERATED_MODEL_NOT_INCLUDED",
+    "host_memory.hpp": "PROJECT_SOURCE_MISSING",
+    "host_ports.hpp": "PROJECT_SOURCE_MISSING",
+    "sink_stream_bridge.hpp": "PROJECT_SOURCE_MISSING",
+    "svdpi.h": "EXTERNAL_RUNTIME_NOT_INCLUDED",
+    "verilated_sym_props.h": "EXTERNAL_RUNTIME_NOT_INCLUDED"
+  },
+  "scope": "LITERAL_QUOTED_INCLUDE_SOURCE_AUDIT_ONLY"
+}

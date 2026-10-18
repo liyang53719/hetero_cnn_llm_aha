@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "scope": "PROJECT_SOURCE_SUBSET_ONLY",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "commit": "9b2ea5490c5d01870d1b8d953f3dad83cd245c9e",
+  "tree": "ca48664f17b4df0024e8e688dd2a4c0168f0cb9f",
+  "identity_scope": "Revision observed at recovery; assembler verifies the selected source bytes, not the entire Git tree. Hashes are not signatures.",
+  "audited_packages": [
+    "development_snapshots/canonical_host_bridge_source_20261018",
+    "development_snapshots/canonical_host_observation_taps_source_20261017",
+    "development_snapshots/canonical_host_pc0_startup_source_20261018",
+    "development_snapshots/canonical_host_silu_observer_source_20261017",
+    "development_snapshots/canonical_host_source_only_20261017"
+  ],
+  "copied_sources": [
+    {
+      "repository_path": "development_snapshots/canonical_host_source_only_20261017/hold_contract_cold.py",
+      "assembled_path": "hold_contract_cold.py",
+      "bytes": 1479,
+      "sha256": "7af15f866146af5b5808bb2382595e153dc961e429f1793d64164a188de01f67",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_source_only_20261017/axi_protocol.hpp",
+      "assembled_path": "include/axi_protocol.hpp",
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/axi_service.hpp",
+      "assembled_path": "include/axi_service.hpp",
+      "bytes": 7980,
+      "sha256": "fa909275e0e11b1ffd09d15fcbdb7800bd7db8d450c5ab95d5603118447c236e",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/generated_binding.hpp",
+      "assembled_path": "include/generated_binding.hpp",
+      "bytes": 164037,
+      "sha256": "84b1e85078f9864610a1dbee1c68a7ff40e4ba847dd239f54fd079151e066afe",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/host_fields.hpp",
+      "assembled_path": "include/host_fields.hpp",
+      "bytes": 15153,
+      "sha256": "5c084cf3ec72100ff13c45623dba94e8d73ca3ca74d5a4d8fc8c8b1bc6614b97",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/n0_fields.hpp",
+      "assembled_path": "include/n0_fields.hpp",
+      "bytes": 9848,
+      "sha256": "62d991f0d09da96ac9af406c3469113a64384aa2e426234658467439499a40c7",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/n0_physical_memory.hpp",
+      "assembled_path": "include/n0_physical_memory.hpp",
+      "bytes": 17849,
+      "sha256": "8c7a81b716b188a53d1da0baad0a84b4d3ad11e6c0a3035711142e7cf89550eb",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/physical_observer_bridge.hpp",
+      "assembled_path": "include/physical_observer_bridge.hpp",
+      "bytes": 4441,
+      "sha256": "88fe664debcc78a9ea35ce784daebefb6e46628f34b5a5dd03e726b793293150",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/resident_evidence.hpp",
+      "assembled_path": "include/resident_evidence.hpp",
+      "bytes": 9534,
+      "sha256": "8c7d1215d8fe54d03258da03495568733b3259a8067b761e52c3f8cbd2a260e2",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_bridge_source_20261018/silu_edge_runtime.hpp",
+      "assembled_path": "include/silu_edge_runtime.hpp",
+      "bytes": 3342,
+      "sha256": "3ddd01472f839538c8b6ae2d2ddbfcdf67c722280cd4621fc271975c3c1a554b",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_silu_observer_source_20261017/silu_observer.hpp",
+      "assembled_path": "include/silu_observer.hpp",
+      "bytes": 19085,
+      "sha256": "4517356fae02531b1eab19d825423440c197bfeb0f5269475dda501da1225245",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/dpi_forwarders.hpp",
+      "assembled_path": "pc0/dpi_forwarders.hpp",
+      "bytes": 10536,
+      "sha256": "26cdffd5c206337d0970aa772ff666e9fc9569d600ce42e5e4478072fd4b37f6",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/n0_participant.hpp",
+      "assembled_path": "pc0/n0_participant.hpp",
+      "bytes": 18855,
+      "sha256": "bfa982b3e404960d6c85f433131350fa5d32c60a040da31cc36334720faf5b5f",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/pc0_main.cpp",
+      "assembled_path": "pc0/pc0_main.cpp",
+      "bytes": 9813,
+      "sha256": "af85c334db985bb9bb4c4c9d24961772b3c2240996560253ebd06be9d8e29323",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/resident_participant.hpp",
+      "assembled_path": "pc0/resident_participant.hpp",
+      "bytes": 9464,
+      "sha256": "95945ff9e344bd11d86cc2a46af6e4af1630d36ff88a211169057752b00f2ca7",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/shared_edge_runtime.hpp",
+      "assembled_path": "pc0/shared_edge_runtime.hpp",
+      "bytes": 4996,
+      "sha256": "6c906bff9c327abd873218a6f81499a29723209a85b53c1baf31857deb7b8a7d",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/startup_inputs.hpp",
+      "assembled_path": "pc0/startup_inputs.hpp",
+      "bytes": 4810,
+      "sha256": "8ac9cc45e53730423a5ea02e1db5192d7243605d590c211fb721424c10af82bb",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/startup_ledger.hpp",
+      "assembled_path": "pc0/startup_ledger.hpp",
+      "bytes": 15802,
+      "sha256": "7e12150fabd9f611137165cd2ba3ee4f2274184b48283dff46e101271070983b",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/startup/dpi_forwarders.hpp",
+      "assembled_path": "startup/dpi_forwarders.hpp",
+      "bytes": 10536,
+      "sha256": "26cdffd5c206337d0970aa772ff666e9fc9569d600ce42e5e4478072fd4b37f6",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/startup/startup_inputs.hpp",
+      "assembled_path": "startup/startup_inputs.hpp",
+      "bytes": 4810,
+      "sha256": "8ac9cc45e53730423a5ea02e1db5192d7243605d590c211fb721424c10af82bb",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/startup/startup_ledger.hpp",
+      "assembled_path": "startup/startup_ledger.hpp",
+      "bytes": 10337,
+      "sha256": "5bd16ec45d9d8295e381412db0e43a56f9d17bc46e8c1c134845692334b0367d",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    },
+    {
+      "repository_path": "development_snapshots/canonical_host_pc0_startup_source_20261018/startup/startup_main.cpp",
+      "assembled_path": "startup/startup_main.cpp",
+      "bytes": 2421,
+      "sha256": "ae01ddc1fa47f4c4fecd7e93acea1b1f1d1a86cdaaa2b2a1eacbd4ac86c4e038",
+      "copy_mode": "EXACT_PUBLISHED_BYTES"
+    }
+  ]
+}

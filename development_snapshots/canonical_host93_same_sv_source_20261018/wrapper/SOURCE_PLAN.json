@@ -1,0 +1,80 @@
+{
+  "DPI_provider_linkage_and_full_metadata_reverse_projection": "PENDING",
+  "ancestor_v2_cold_entry_delta": "Production wrapper/checker bytes unchanged. Only checker cold loader isolated flags and exact same-buffer source pin added; wrapper metadata/argv points at immutable checker v2.",
+  "api": "check_bytes(raw), one fixed original SV raw buffer",
+  "budgets": {
+    "SV_acceptance_max_bytes": 134217728,
+    "address_space_bytes_hard": 1073741824,
+    "check_latest_offset_seconds": 80,
+    "check_max_seconds": 70,
+    "cpu_count": 1,
+    "cpu_seconds_hard": 80,
+    "definitions_acceptance_max": 768,
+    "entry_total_seconds": 90,
+    "expanded_paths_acceptance_max": 20000,
+    "per_report_bytes_soft_and_FSIZE_hard": 2097152,
+    "postflight_latest_offset_seconds": 90,
+    "preflight_seconds": 10
+  },
+  "checker_bytes": 31470,
+  "checker_manifest_sha256": "48d661a55a724719dc1fcd309e49cbe814d2e2a17be8c5500806f1b0cf6146e3",
+  "checker_scope": "83 Host ports, actual SV hierarchy and external named boundaries, unchanged 75 primary leaves in nine canonical tap bundles; exactly 28 fixed-module/name/width auxiliary wires and their ordered binary-identifier concatenations plus two fixed 512-bit aggregation roots. No driver uniqueness, numerical, full metadata or DPI linkage proof",
+  "checker_sha256": "33820c6f28dbc1e90185bbe8cdb3911acb41934a01ec4adc0c933901a2fdf676",
+  "children": 0,
+  "count_scopes": [
+    "SV definition count in actual namespace, not FIR count",
+    "HostBlockTop expanded subtree instance count",
+    "HostBlockCollection expanded instance count"
+  ],
+  "current_wrapper_delta": "Only CHECKER_BYTES and CHECKER_SHA change in production source; corresponding cold source pin and LOCAL exact successor paths/output are updated.",
+  "failure_contract": "INCOMPLETE, retain original SV; no retry, regeneration or native tools; hard CPU/AS/OS failure may prevent best-effort report.",
+  "generation_actual_review_manifest_sha256": "b170f06c47d83c3dfd75e5f83962168aad16765305e2292f54ae9d30a0a5cc46",
+  "generation_actual_review_summary_sha256": "57f29c7a629fcc6836ee90bf8c3310156ce660de79701220e8531a5edd293870",
+  "latest_actual_incomplete_fact": "Original attempt2 outer exit1/7.352s at exact canonical tap inventory. Failure record and original SV retained. Previous control-flow checks are not a complete same-SV qualification.",
+  "latest_actual_incomplete_review_manifest_sha256": "4c1dc41a93784e0c6849545ef3e94ff748d37679e3fa741cac913b46600652bb",
+  "latest_actual_incomplete_review_summary_sha256": "4ea999247148cb059e8a4f9d70c425eb25383168cad5ab799b1284c35279027d",
+  "local_paths": "Caller supplies checker, preserved exact SV, and fresh report directory; no machine or attempt paths are embedded here.",
+  "new_framework": false,
+  "original_wrapper_bytes": 7972,
+  "original_wrapper_sha256": "0484d8824ddc9c45aab727ea0a54f6248450c70c28eb9adb3a845af47832b510",
+  "prior_actual_incomplete_review_manifest_sha256": "52a864b1461afc2f2179051d2903b135c78627f0ace5da0defb0fcd212d51551",
+  "prior_actual_incomplete_review_summary_sha256": "2f3ef743c8decada5f7e97d1bb5dfcba63b6469e5967010c5d8df0a785c73d3d",
+  "prior_source_review_manifest_sha256": "982adca74e09766bec87e07f231e5bbc14891fc239e84ef246995fb15dcc885f",
+  "prior_source_review_summary_sha256": "795f0487fb1ab423b1590a5d124a0174e59da93d01ac3483797660f7cde461cc",
+  "prior_wrapper_source_review_manifest_sha256": "018d373abe83035ccbf1b2409af150ca4d59c8105a7142d68da572b7aaff04b0",
+  "publication_projection": "Production wrapper and cold test bytes unchanged. Original fixed SV/checker identities, budgets and refusal behavior retained.",
+  "qualified_scope": "SAME_SV_FIXED_INTERFACE_EXTERNAL_BOUNDARY_TAP_STATIC_ONLY",
+  "readonly_tap_diagnostic_manifest_sha256": "990a0067487915b5f638038faa1ca012c115e67444893902be86407c829b3900",
+  "same_buffer_contract": "checker exact raw bytes/SHA compile/exec; fixed SV raw bytes/SHA checked before check_bytes(raw); original SV metadata and streaming SHA plus checker source SHA rechecked afterward",
+  "same_sv": {
+    "bytes": 76366612,
+    "sha256": "2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61"
+  },
+  "status": "SOURCE_ONLY_SAME_SV_FINITE_STATIC_GATE",
+  "success_contract": "Non-terminal evidence only; owner original outer exit0 and actual elapsed<=90 plus independent actual finite-static review required.",
+  "v3_checker_delta": "Only noncanonical initialized wire declarations in the nine observed Host modules accept seventeen observed two-packed constant-dimension combinations; original tap shape contract unchanged.",
+  "v4_checker_delta": "Use existing statement delimiter stack to reject top-level comma in wire/reg declarations, preserving nested commas and opaque assign statements. Closes two tiny-reproduced hidden extra-tap declarators; no expression evaluation.",
+  "v5_checker_delta": "Classify exactly 28 observed Cos/Sin packing helper wires separately from the unchanged 75 primary leaves; check fixed module/name/width and ordered two-identifier concat expressions for those 28 and two 512-bit roots. Reject missing/extra/wrong-width/wrong-module/changed-order or expression forms. No broad prefix/suffix exclusion.",
+  "v5_source_hold_findings": [
+    "F01 string token erasure bypasses literal concat contract",
+    "F02 underscore-prefixed concat root also admitted as ANSI port"
+  ],
+  "v5_source_hold_review_manifest_sha256": "172e3edf5b7ee2205b5cc8b699f4cfe48a55d63979ba422f3f6ab23297a7c99d",
+  "v5_source_hold_review_summary_sha256": "d46f9906c7dd29cceb41e62f4627a87a37e5a51bff752836825cf73e19105a04",
+  "v6_checker_delta": "F01: string tokens retain a fixed nonidentifier nonempty sentinel and newline count instead of disappearing into whitespace. F02: existing ANSI-port reserved-name rejection additionally covers the fixed 30 concat declarations, newly covering the two underscore-prefixed roots. No driver/always/assign analysis added.",
+  "v6_source_review": {
+    "pins": {
+      "MANIFEST.json": {
+        "bytes": 1874,
+        "sha256": "ac1113fa7b40cc6752f777ef7fffeac7f9e5d22bbe877b093a14982daa44c1d0"
+      },
+      "SUMMARY.json": {
+        "bytes": 2451,
+        "sha256": "72243eae08121493967867887dc99f6b71ae2d2a08054bfcfbbf1423b5b238eb"
+      }
+    },
+    "scope": "Two finite source defects closed; this source review alone grants no new actual SV qualification.",
+    "status": "GO_LIMITED_SOURCE"
+  },
+  "wrapper_delta": "Only fixed FIR-to-SV asset names/identity, checker pins, generation review pin and explicit narrow qualification fields; resource limits, timers, immutable same-buffer handoff, failure retention, posthash and nonterminal-evidence contract unchanged."
+}

@@ -1,0 +1,1085 @@
+{
+  "AUX_TAPS": {
+    "canonicalCosTap_value_hi": [
+      256,
+      [
+        "canonicalCosTap_value_hi_hi",
+        "canonicalCosTap_value_hi_lo"
+      ]
+    ],
+    "canonicalCosTap_value_hi_hi": [
+      128,
+      [
+        "canonicalCosTap_value_hi_hi_hi",
+        "canonicalCosTap_value_hi_hi_lo"
+      ]
+    ],
+    "canonicalCosTap_value_hi_hi_hi": [
+      64,
+      [
+        "cv_15",
+        "cv_14"
+      ]
+    ],
+    "canonicalCosTap_value_hi_hi_lo": [
+      64,
+      [
+        "cv_13",
+        "cv_12"
+      ]
+    ],
+    "canonicalCosTap_value_hi_lo": [
+      128,
+      [
+        "canonicalCosTap_value_hi_lo_hi",
+        "canonicalCosTap_value_hi_lo_lo"
+      ]
+    ],
+    "canonicalCosTap_value_hi_lo_hi": [
+      64,
+      [
+        "cv_11",
+        "cv_10"
+      ]
+    ],
+    "canonicalCosTap_value_hi_lo_lo": [
+      64,
+      [
+        "cv_9",
+        "cv_8"
+      ]
+    ],
+    "canonicalCosTap_value_lo": [
+      256,
+      [
+        "canonicalCosTap_value_lo_hi",
+        "canonicalCosTap_value_lo_lo"
+      ]
+    ],
+    "canonicalCosTap_value_lo_hi": [
+      128,
+      [
+        "canonicalCosTap_value_lo_hi_hi",
+        "canonicalCosTap_value_lo_hi_lo"
+      ]
+    ],
+    "canonicalCosTap_value_lo_hi_hi": [
+      64,
+      [
+        "cv_7",
+        "cv_6"
+      ]
+    ],
+    "canonicalCosTap_value_lo_hi_lo": [
+      64,
+      [
+        "cv_5",
+        "cv_4"
+      ]
+    ],
+    "canonicalCosTap_value_lo_lo": [
+      128,
+      [
+        "canonicalCosTap_value_lo_lo_hi",
+        "canonicalCosTap_value_lo_lo_lo"
+      ]
+    ],
+    "canonicalCosTap_value_lo_lo_hi": [
+      64,
+      [
+        "cv_3",
+        "cv_2"
+      ]
+    ],
+    "canonicalCosTap_value_lo_lo_lo": [
+      64,
+      [
+        "cv_1",
+        "cv_0"
+      ]
+    ],
+    "canonicalSinTap_value_hi": [
+      256,
+      [
+        "canonicalSinTap_value_hi_hi",
+        "canonicalSinTap_value_hi_lo"
+      ]
+    ],
+    "canonicalSinTap_value_hi_hi": [
+      128,
+      [
+        "canonicalSinTap_value_hi_hi_hi",
+        "canonicalSinTap_value_hi_hi_lo"
+      ]
+    ],
+    "canonicalSinTap_value_hi_hi_hi": [
+      64,
+      [
+        "dv_15",
+        "dv_14"
+      ]
+    ],
+    "canonicalSinTap_value_hi_hi_lo": [
+      64,
+      [
+        "dv_13",
+        "dv_12"
+      ]
+    ],
+    "canonicalSinTap_value_hi_lo": [
+      128,
+      [
+        "canonicalSinTap_value_hi_lo_hi",
+        "canonicalSinTap_value_hi_lo_lo"
+      ]
+    ],
+    "canonicalSinTap_value_hi_lo_hi": [
+      64,
+      [
+        "dv_11",
+        "dv_10"
+      ]
+    ],
+    "canonicalSinTap_value_hi_lo_lo": [
+      64,
+      [
+        "dv_9",
+        "dv_8"
+      ]
+    ],
+    "canonicalSinTap_value_lo": [
+      256,
+      [
+        "canonicalSinTap_value_lo_hi",
+        "canonicalSinTap_value_lo_lo"
+      ]
+    ],
+    "canonicalSinTap_value_lo_hi": [
+      128,
+      [
+        "canonicalSinTap_value_lo_hi_hi",
+        "canonicalSinTap_value_lo_hi_lo"
+      ]
+    ],
+    "canonicalSinTap_value_lo_hi_hi": [
+      64,
+      [
+        "dv_7",
+        "dv_6"
+      ]
+    ],
+    "canonicalSinTap_value_lo_hi_lo": [
+      64,
+      [
+        "dv_5",
+        "dv_4"
+      ]
+    ],
+    "canonicalSinTap_value_lo_lo": [
+      128,
+      [
+        "canonicalSinTap_value_lo_lo_hi",
+        "canonicalSinTap_value_lo_lo_lo"
+      ]
+    ],
+    "canonicalSinTap_value_lo_lo_hi": [
+      64,
+      [
+        "dv_3",
+        "dv_2"
+      ]
+    ],
+    "canonicalSinTap_value_lo_lo_lo": [
+      64,
+      [
+        "dv_1",
+        "dv_0"
+      ]
+    ]
+  },
+  "EXPECTED_MODULES": [
+    "Record128Reader",
+    "TypedTensorReader",
+    "HostBlockCommands",
+    "FfnTileSiluBridge",
+    "FfnResidentCoordinator",
+    "DenseTileSumBridge",
+    "DenseBlockReductionCoordinator",
+    "Public21QkvReductionRouter",
+    "AddRawFN",
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24",
+    "RoundRawFNToRecFN_e8_s24",
+    "AddRecFN",
+    "MulFullRawFN",
+    "MulRawFN",
+    "MulRecFN",
+    "HeteroFP32Alu",
+    "DivSqrtRawFN_small_e8_s24",
+    "DivSqrtRecFMToRaw_small_e8_s24",
+    "DivSqrtRecFM_small_e8_s24",
+    "RecFNToIN_e8_s24_i32",
+    "RoundAnyRawFNToRecFN_ie6_is32_oe8_os24",
+    "INToRecFN_i32_e8_s24",
+    "BlockScalarFloat",
+    "banks_bank_2240x128",
+    "SharedL2Fabric",
+    "PackedAttentionStreamClient",
+    "banks_bank_48x128",
+    "SharedL2Fabric_1",
+    "ElementwiseMemoryEngine",
+    "BlockWritebackFence",
+    "mem_1024x32",
+    "Qwen2ContinuousBlock",
+    "aBanks_1376x256",
+    "bBanks_160x256",
+    "TransposedDownDenseBanks",
+    "ram_4x4359",
+    "Queue4_MatrixStreamStep",
+    "TransposedDenseDownOwner",
+    "SiluVectorUnit",
+    "VectorSiluOwner",
+    "ScheduledSiluOwner",
+    "ram_8x6",
+    "Queue8_Meta",
+    "MatrixResultFifo",
+    "MatrixAccumulatorSeedController",
+    "MatrixPipelineService",
+    "LegacyMatrixStreamClient",
+    "QwenOwnerKernel",
+    "RRArbiter",
+    "SharedMemoryArbiter",
+    "RetainedIdmaWeightBurstAdapter",
+    "HostBlockTop",
+    "MulAddRecFNToRaw_preMul_e8_s24",
+    "HeteroBF16FmaPre",
+    "HeteroBF16FmaMul",
+    "MulAddRecFNToRaw_postMul_e8_s24",
+    "HeteroBF16FmaPost",
+    "HeteroBF16FmaRound",
+    "HostBlockCollection"
+  ],
+  "EXPECTED_PATHS": {
+    "cmd": "HostBlockCommands",
+    "cmd.reader": "Record128Reader",
+    "cmd.tensor": "TypedTensorReader",
+    "dma": "RetainedIdmaWeightBurstAdapter",
+    "dma.backend": "idma_backend_rw_axi_flat_wrap",
+    "hub": "SharedMemoryArbiter",
+    "owner": "QwenOwnerKernel",
+    "owner.core": "Qwen2ContinuousBlock",
+    "owner.matrix": "MatrixPipelineService",
+    "owner.qkvRouter": "Public21QkvReductionRouter",
+    "owner.resident": "FfnResidentCoordinator",
+    "owner.resident.bridge": "FfnTileSiluBridge",
+    "owner.silu": "ScheduledSiluOwner",
+    "owner.silu.dut": "VectorSiluOwner",
+    "owner.silu.dut.vector": "SiluVectorUnit"
+  },
+  "EXTERNAL": {
+    "idma_backend_rw_axi_flat_wrap": {
+      "instance_count": 1,
+      "parameters": {},
+      "ports": {
+        "axi_read_req_o": [
+          "output",
+          785
+        ],
+        "axi_read_rsp_i": [
+          "input",
+          532
+        ],
+        "axi_write_req_o": [
+          "output",
+          785
+        ],
+        "axi_write_rsp_i": [
+          "input",
+          532
+        ],
+        "busy_o": [
+          "output",
+          8
+        ],
+        "clk_i": [
+          "input",
+          1
+        ],
+        "dst_addr_i": [
+          "input",
+          64
+        ],
+        "length_i": [
+          "input",
+          32
+        ],
+        "req_ready_o": [
+          "output",
+          1
+        ],
+        "req_valid_i": [
+          "input",
+          1
+        ],
+        "rsp_error_o": [
+          "output",
+          1
+        ],
+        "rsp_ready_i": [
+          "input",
+          1
+        ],
+        "rsp_valid_o": [
+          "output",
+          1
+        ],
+        "rst_ni": [
+          "input",
+          1
+        ],
+        "src_addr_i": [
+          "input",
+          64
+        ]
+      }
+    },
+    "qwen2_matrix_command_endpoint": {
+      "instance_count": 8,
+      "parameters": {
+        "ENABLE_ACCUMULATOR_SEED": "1"
+      },
+      "ports": {
+        "arithmetic_busy_o": [
+          "output",
+          5
+        ],
+        "arithmetic_out_valid_o": [
+          "output",
+          1
+        ],
+        "clk_i": [
+          "input",
+          1
+        ],
+        "cmd_i": [
+          "input",
+          128
+        ],
+        "cmd_ready_o": [
+          "output",
+          1
+        ],
+        "cmd_valid_i": [
+          "input",
+          1
+        ],
+        "command_last_tile_i": [
+          "input",
+          1
+        ],
+        "completion_data_o": [
+          "output",
+          56
+        ],
+        "completion_ready_i": [
+          "input",
+          1
+        ],
+        "completion_valid_o": [
+          "output",
+          1
+        ],
+        "out_acc_o": [
+          "output",
+          16384
+        ],
+        "out_context_o": [
+          "output",
+          3
+        ],
+        "out_last_o": [
+          "output",
+          1
+        ],
+        "out_ready_i": [
+          "input",
+          1
+        ],
+        "out_valid_o": [
+          "output",
+          1
+        ],
+        "protocol_error_o": [
+          "output",
+          1
+        ],
+        "rst_ni": [
+          "input",
+          1
+        ],
+        "seed_abort_i": [
+          "input",
+          1
+        ],
+        "seed_ack_context_o": [
+          "output",
+          3
+        ],
+        "seed_ack_error_o": [
+          "output",
+          1
+        ],
+        "seed_ack_group_sequence_o": [
+          "output",
+          32
+        ],
+        "seed_ack_group_tag_o": [
+          "output",
+          32
+        ],
+        "seed_ack_ready_i": [
+          "input",
+          1
+        ],
+        "seed_ack_source_generation_o": [
+          "output",
+          32
+        ],
+        "seed_ack_valid_o": [
+          "output",
+          1
+        ],
+        "seed_beat_ready_o": [
+          "output",
+          1
+        ],
+        "seed_beat_valid_i": [
+          "input",
+          1
+        ],
+        "seed_begin_ready_o": [
+          "output",
+          1
+        ],
+        "seed_begin_valid_i": [
+          "input",
+          1
+        ],
+        "seed_cluster_i": [
+          "input",
+          5
+        ],
+        "seed_commit_ready_o": [
+          "output",
+          1
+        ],
+        "seed_commit_valid_i": [
+          "input",
+          1
+        ],
+        "seed_context_i": [
+          "input",
+          3
+        ],
+        "seed_data_i": [
+          "input",
+          512
+        ],
+        "seed_group_sequence_i": [
+          "input",
+          32
+        ],
+        "seed_group_tag_i": [
+          "input",
+          32
+        ],
+        "seed_reset_required_o": [
+          "output",
+          1
+        ],
+        "seed_source_generation_i": [
+          "input",
+          32
+        ],
+        "step_a_i": [
+          "input",
+          256
+        ],
+        "step_b_i": [
+          "input",
+          512
+        ],
+        "step_clear_i": [
+          "input",
+          1
+        ],
+        "step_context_i": [
+          "input",
+          3
+        ],
+        "step_last_i": [
+          "input",
+          1
+        ],
+        "step_ready_o": [
+          "output",
+          1
+        ],
+        "step_valid_i": [
+          "input",
+          1
+        ]
+      }
+    },
+    "tc_clk_gating": {
+      "instance_count": 8,
+      "parameters": {},
+      "ports": {
+        "clk_i": [
+          "input",
+          1
+        ],
+        "clk_o": [
+          "output",
+          1
+        ],
+        "en_i": [
+          "input",
+          1
+        ],
+        "test_en_i": [
+          "input",
+          1
+        ]
+      }
+    }
+  },
+  "FMA_PORTS": {
+    "HeteroBF16FmaMul": {
+      "io_mulAddA": [
+        "input",
+        24
+      ],
+      "io_mulAddB": [
+        "input",
+        24
+      ],
+      "io_mulAddC": [
+        "input",
+        48
+      ],
+      "io_mulAddResult": [
+        "output",
+        49
+      ]
+    },
+    "HeteroBF16FmaPost": {
+      "io_invalid": [
+        "output",
+        1
+      ],
+      "io_meta": [
+        "input",
+        54
+      ],
+      "io_mulAddResult": [
+        "input",
+        49
+      ],
+      "io_raw": [
+        "output",
+        41
+      ]
+    },
+    "HeteroBF16FmaPre": {
+      "io_a": [
+        "input",
+        16
+      ],
+      "io_b": [
+        "input",
+        16
+      ],
+      "io_c": [
+        "input",
+        32
+      ],
+      "io_meta": [
+        "output",
+        54
+      ],
+      "io_mulAddA": [
+        "output",
+        24
+      ],
+      "io_mulAddB": [
+        "output",
+        24
+      ],
+      "io_mulAddC": [
+        "output",
+        48
+      ]
+    },
+    "HeteroBF16FmaRound": {
+      "io_exceptionFlags": [
+        "output",
+        5
+      ],
+      "io_invalid": [
+        "input",
+        1
+      ],
+      "io_out": [
+        "output",
+        32
+      ],
+      "io_raw": [
+        "input",
+        41
+      ]
+    }
+  },
+  "HOST_PORTS": {
+    "clock": [
+      "input",
+      1
+    ],
+    "io_axi_ar_bits_addr": [
+      "output",
+      64
+    ],
+    "io_axi_ar_bits_burst": [
+      "output",
+      2
+    ],
+    "io_axi_ar_bits_id": [
+      "output",
+      8
+    ],
+    "io_axi_ar_bits_len": [
+      "output",
+      8
+    ],
+    "io_axi_ar_bits_size": [
+      "output",
+      3
+    ],
+    "io_axi_ar_ready": [
+      "input",
+      1
+    ],
+    "io_axi_ar_valid": [
+      "output",
+      1
+    ],
+    "io_axi_aw_bits_addr": [
+      "output",
+      64
+    ],
+    "io_axi_aw_bits_burst": [
+      "output",
+      2
+    ],
+    "io_axi_aw_bits_id": [
+      "output",
+      8
+    ],
+    "io_axi_aw_bits_len": [
+      "output",
+      8
+    ],
+    "io_axi_aw_bits_size": [
+      "output",
+      3
+    ],
+    "io_axi_aw_ready": [
+      "input",
+      1
+    ],
+    "io_axi_aw_valid": [
+      "output",
+      1
+    ],
+    "io_axi_b_bits_id": [
+      "input",
+      8
+    ],
+    "io_axi_b_bits_resp": [
+      "input",
+      2
+    ],
+    "io_axi_b_ready": [
+      "output",
+      1
+    ],
+    "io_axi_b_valid": [
+      "input",
+      1
+    ],
+    "io_axi_r_bits_data": [
+      "input",
+      512
+    ],
+    "io_axi_r_bits_id": [
+      "input",
+      8
+    ],
+    "io_axi_r_bits_last": [
+      "input",
+      1
+    ],
+    "io_axi_r_bits_resp": [
+      "input",
+      2
+    ],
+    "io_axi_r_ready": [
+      "output",
+      1
+    ],
+    "io_axi_r_valid": [
+      "input",
+      1
+    ],
+    "io_axi_w_bits_data": [
+      "output",
+      512
+    ],
+    "io_axi_w_bits_last": [
+      "output",
+      1
+    ],
+    "io_axi_w_bits_strb": [
+      "output",
+      64
+    ],
+    "io_axi_w_ready": [
+      "input",
+      1
+    ],
+    "io_axi_w_valid": [
+      "output",
+      1
+    ],
+    "io_completion_bits": [
+      "output",
+      56
+    ],
+    "io_completion_ready": [
+      "input",
+      1
+    ],
+    "io_completion_valid": [
+      "output",
+      1
+    ],
+    "io_executedMacs": [
+      "output",
+      64
+    ],
+    "io_idmaCacheHits": [
+      "output",
+      64
+    ],
+    "io_idmaReadBeats": [
+      "output",
+      64
+    ],
+    "io_idmaReadBursts": [
+      "output",
+      64
+    ],
+    "io_idmaStreamedBeats": [
+      "output",
+      64
+    ],
+    "io_idmaStreamedWriteBeats": [
+      "output",
+      64
+    ],
+    "io_idmaTransfers": [
+      "output",
+      64
+    ],
+    "io_issuedJobs": [
+      "output",
+      16
+    ],
+    "io_launch_bits_commandBase": [
+      "input",
+      64
+    ],
+    "io_launch_bits_commandLimit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_commands": [
+      "input",
+      16
+    ],
+    "io_launch_bits_descriptorBase": [
+      "input",
+      64
+    ],
+    "io_launch_bits_descriptorLimit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_descriptors": [
+      "input",
+      25
+    ],
+    "io_launch_bits_epoch": [
+      "input",
+      16
+    ],
+    "io_launch_bits_regions_0_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_0_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_0_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_0_write": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_1_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_1_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_1_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_1_write": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_2_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_2_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_2_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_2_write": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_3_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_3_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_3_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_3_write": [
+      "input",
+      1
+    ],
+    "io_launch_ready": [
+      "output",
+      1
+    ],
+    "io_launch_valid": [
+      "input",
+      1
+    ],
+    "io_memoryAccepted_0": [
+      "output",
+      64
+    ],
+    "io_memoryAccepted_1": [
+      "output",
+      64
+    ],
+    "io_memoryReturned_0": [
+      "output",
+      64
+    ],
+    "io_memoryReturned_1": [
+      "output",
+      64
+    ],
+    "io_pc": [
+      "output",
+      16
+    ],
+    "io_pipelineIssues": [
+      "output",
+      64
+    ],
+    "io_pipelineStalls": [
+      "output",
+      64
+    ],
+    "io_resetRequired": [
+      "output",
+      1
+    ],
+    "io_result_bits_completed": [
+      "output",
+      16
+    ],
+    "io_result_bits_epoch": [
+      "output",
+      16
+    ],
+    "io_result_bits_failedPc": [
+      "output",
+      16
+    ],
+    "io_result_bits_status": [
+      "output",
+      8
+    ],
+    "io_result_ready": [
+      "input",
+      1
+    ],
+    "io_result_valid": [
+      "output",
+      1
+    ],
+    "io_usefulMacs": [
+      "output",
+      64
+    ],
+    "io_writeBytes": [
+      "output",
+      64
+    ],
+    "reset": [
+      "input",
+      1
+    ]
+  },
+  "SIBLINGS": {
+    "mul": "HeteroBF16FmaMul",
+    "post": "HeteroBF16FmaPost",
+    "pre": "HeteroBF16FmaPre",
+    "round": "HeteroBF16FmaRound",
+    "top": "HostBlockTop"
+  },
+  "TAPS": {
+    "FfnTileSiluBridge": {
+      "canonicalTileTap_cols": 8,
+      "canonicalTileTap_identity": 32,
+      "canonicalTileTap_index": 11,
+      "canonicalTileTap_ng": 16,
+      "canonicalTileTap_rows": 8,
+      "canonicalTileTap_slot": 2,
+      "canonicalTileTap_valid": 1,
+      "canonicalTileTap_value_0": 32,
+      "canonicalTileTap_value_1": 32,
+      "canonicalTileTap_value_10": 32,
+      "canonicalTileTap_value_11": 32,
+      "canonicalTileTap_value_12": 32,
+      "canonicalTileTap_value_13": 32,
+      "canonicalTileTap_value_14": 32,
+      "canonicalTileTap_value_15": 32,
+      "canonicalTileTap_value_2": 32,
+      "canonicalTileTap_value_3": 32,
+      "canonicalTileTap_value_4": 32,
+      "canonicalTileTap_value_5": 32,
+      "canonicalTileTap_value_6": 32,
+      "canonicalTileTap_value_7": 32,
+      "canonicalTileTap_value_8": 32,
+      "canonicalTileTap_value_9": 32
+    },
+    "Qwen2ContinuousBlock": {
+      "canonicalCosTap_col": 16,
+      "canonicalCosTap_head": 16,
+      "canonicalCosTap_ownerTag": 32,
+      "canonicalCosTap_token": 16,
+      "canonicalCosTap_valid": 1,
+      "canonicalCosTap_value": 512,
+      "canonicalProbTap_col": 16,
+      "canonicalProbTap_head": 16,
+      "canonicalProbTap_key": 16,
+      "canonicalProbTap_ownerTag": 32,
+      "canonicalProbTap_token": 16,
+      "canonicalProbTap_valid": 1,
+      "canonicalProbTap_value": 16,
+      "canonicalPvAckTap_valid": 1,
+      "canonicalPvRequestTap_col": 16,
+      "canonicalPvRequestTap_head": 16,
+      "canonicalPvRequestTap_ownerTag": 32,
+      "canonicalPvRequestTap_token": 16,
+      "canonicalPvRequestTap_valid": 1,
+      "canonicalScoreTap_head": 16,
+      "canonicalScoreTap_keyBase": 16,
+      "canonicalScoreTap_ownerTag": 32,
+      "canonicalScoreTap_packedSelected": 4,
+      "canonicalScoreTap_token": 16,
+      "canonicalScoreTap_valid": 1,
+      "canonicalScoreTap_value": 32,
+      "canonicalSinTap_col": 16,
+      "canonicalSinTap_head": 16,
+      "canonicalSinTap_ownerTag": 32,
+      "canonicalSinTap_token": 16,
+      "canonicalSinTap_valid": 1,
+      "canonicalSinTap_value": 512
+    },
+    "SiluVectorUnit": {
+      "canonicalSiluTap_valid": 1,
+      "canonicalSiluTap_value_0": 32,
+      "canonicalSiluTap_value_1": 32,
+      "canonicalSiluTap_value_10": 32,
+      "canonicalSiluTap_value_11": 32,
+      "canonicalSiluTap_value_12": 32,
+      "canonicalSiluTap_value_13": 32,
+      "canonicalSiluTap_value_14": 32,
+      "canonicalSiluTap_value_15": 32,
+      "canonicalSiluTap_value_2": 32,
+      "canonicalSiluTap_value_3": 32,
+      "canonicalSiluTap_value_4": 32,
+      "canonicalSiluTap_value_5": 32,
+      "canonicalSiluTap_value_6": 32,
+      "canonicalSiluTap_value_7": 32,
+      "canonicalSiluTap_value_8": 32,
+      "canonicalSiluTap_value_9": 32
+    },
+    "VectorSiluOwner": {
+      "canonicalLoanContextTap_abort": 1,
+      "canonicalLoanContextTap_active": 1,
+      "canonicalLoanContextTap_poison": 1
+    }
+  },
+  "TAP_CONCAT_MODULE": "Qwen2ContinuousBlock",
+  "TAP_CONCAT_ROOTS": {
+    "_canonicalCosTap_value_T": [
+      512,
+      [
+        "canonicalCosTap_value_hi",
+        "canonicalCosTap_value_lo"
+      ]
+    ],
+    "_canonicalSinTap_value_T": [
+      512,
+      [
+        "canonicalSinTap_value_hi",
+        "canonicalSinTap_value_lo"
+      ]
+    ]
+  }
+}

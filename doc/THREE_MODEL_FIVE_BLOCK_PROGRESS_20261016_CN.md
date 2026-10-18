@@ -626,3 +626,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：持久化 10 件纯源码、测试及安全摘要，模板未绑定时在输出前拒绝；冻结摘要中的 actual 审 PENDING 保留，本条另记后续审结。不提交 SV、FIR、binary、完整日志或机器环境库存。
 - ongoing：在同一实际 SV 上核 83 口、8 endpoint、DPI 与观察信号；方向/位宽续行按真实语法最窄支持，尚未取得 SV 结构资格，不重复转换。
 - todo：生成 C++、真实 Host 接口与数值回放仍缺，Verilator/iDMA 仅准备最小恢复计划，未启动长 RTL。旧 N0 终态未知、完整 block 0/5 保持。
+
+### 2026-10-18 21:09 UTC：同一实际 SV 有限静态审闭合，保存两次检查失败
+
+- done：首轮同 SV 检查遇双 packed 非 tap 声明形状，原 exit 1/5.436 秒；第二轮在主 tap 精确清单断言失败，原 exit 1/7.352 秒。两次均为有限 checker 不支持/分类问题，未据此认定 RTL 非法，原失败完整保留。
+- done：按实际声明最窄支持固定双 packed wire，并拒顶层逗号隐藏声明；原 75 主 tap 合同不变，精确独立记录 28 个 Cos/Sin 拼接辅助 wire 和 2 个末级 root，核 30 个有序二元文本拼接。字符串吞除和保留根 ANSI 同名两项审计反例在 v6 关闭。
+- done：v6 SOURCE 独审 `ac1113fa…`、checker 30+30 与包装 14+14 冷测通过后，唯一第三轮只读检查原会话 exit 0/2.879 秒，SV 原 SHA256 `2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61` 不变。
+- done：actual 独审 `651f2c3474e197b85432c544d5e0bff6cc94145df37d3c9e456a3bf6c60c7708` 核对 654 项/103 输入；唯一静态证据 38,724 B，原生成 10 件、两次同 SV 失败及首次 150 秒 firtool 失败均未变。
+- done：限定静态报告分别记录 59 个 SV 定义、Host 子图 758 实例和 collection 767 实例（含生成 memory）；83 个 Host 口、8 endpoint/8 gate/1 backend、9 bundle/75 主叶/2604 bit。28 辅助声明总 3072 bit 单列，不重复计入主观察位数。
+- done：持久化 15 件纯源码/测试/安全摘要，其中 3 份人工 tiny 反例由固定空模块图和常量连接合成，没有复制真实 SV 或张量；四 Python 执行/测试原字节，重定位 30+30/14+14 通过。冻结安全史的 actual 审 PENDING 保留，本条另记审结。
+- ongoing：恢复固定官方 Verilator 层级替换修复源码及最小工具依赖，重新证明 micro 的 hierarchy/DPI/多 handle；旧 5.032 deb 和已丢失的局部补丁不能继承正确性。
+- todo：完整 metadata 反投影、外部端口宽度、tap 驱动/事件语义、生成 C++ 与 DPI 链接、真实 Host 运行/数值仍待独立证据。旧 N0 终态未知，完整 block 0/5 保持；本批不提交真实 SV、工具 binary、张量、完整日志或机器环境库存。

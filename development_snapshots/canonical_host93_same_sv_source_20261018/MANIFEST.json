@@ -1,0 +1,88 @@
+{
+  "actual_review_at_freeze": "PENDING",
+  "checker_origin_manifest_sha256": "48d661a55a724719dc1fcd309e49cbe814d2e2a17be8c5500806f1b0cf6146e3",
+  "execution_and_cold_python_files_original_bytes": true,
+  "files": {
+    "INSTALL_MAP.json": {
+      "bytes": 1384,
+      "sha256": "c007fc072f911ddcbe0f6564eb05b108570e15b0b47412624a8e9bc11263c36a"
+    },
+    "README.md": {
+      "bytes": 4819,
+      "sha256": "d7e93f7cf2e1f229b9c599caea0a48e3b401ddcae194b41f1988c46e953d922e"
+    },
+    "SAFE_HISTORY.json": {
+      "bytes": 4745,
+      "sha256": "083ad09352dba41834c80620f0fa2ddb959949770885e700c61d36580e5b5066"
+    },
+    "checker/AUX_RELATIONS.json": {
+      "bytes": 8136,
+      "sha256": "c0230929c81025fc587d5ab6caf5ffbae3ed432f3e2d641414ff0e937bc7fcbe"
+    },
+    "checker/CONTRACT.json": {
+      "bytes": 20536,
+      "sha256": "c3ec7c4753df9100a90bc3963843b23c153c2335be06035a5cac4f6f27018d0d"
+    },
+    "checker/ROOT_PORT_DUPLICATE_REPRO.sv": {
+      "bytes": 28298,
+      "sha256": "d478ea1f6dd64e05bae203baa90d5af238e419ab0c547f97e4a1bb3160fda6f0"
+    },
+    "checker/ROOT_PORT_WRONG_WIDTH_REPRO.sv": {
+      "bytes": 28290,
+      "sha256": "d7229378e52614a1848100707281f1d388be28b87ba0b2babdaf9dac8c189c79"
+    },
+    "checker/SOURCE_PROVENANCE.json": {
+      "bytes": 6240,
+      "sha256": "e87fa8d6840d28040f64077ebc53b0aa180c305ff456b12a0a7e14066646a046"
+    },
+    "checker/STRING_ERASURE_REPRO.sv": {
+      "bytes": 28238,
+      "sha256": "1c54c37a095c3f4bb063fc92961c4c75e28fddad5eaf73be4e47212a2633872b"
+    },
+    "checker/check_host_sv.py": {
+      "bytes": 31470,
+      "sha256": "33820c6f28dbc1e90185bbe8cdb3911acb41934a01ec4adc0c933901a2fdf676"
+    },
+    "checker/test_cold.py": {
+      "bytes": 21112,
+      "sha256": "437a355c5a6b9b48215c20d772102ac51ac43c60637594ee7e099be7b65be8a4"
+    },
+    "wrapper/SOURCE_PLAN.json": {
+      "bytes": 6692,
+      "sha256": "643e05afe31a54bd860ecd58a9afabe8b7b15e78ae758c85b6f016e24dd57bd4"
+    },
+    "wrapper/run_structure_gate.py": {
+      "bytes": 8157,
+      "sha256": "c692e9d28446e178b958d05bafe75bd36398150cc6e56f2456758f6dae3c88c8"
+    },
+    "wrapper/test_structure_gate_cold.py": {
+      "bytes": 7361,
+      "sha256": "fcab1497822ec0cb5014076a27189f0f5feafcd2b5eb503e3c9acc7a081f3215"
+    }
+  },
+  "original_byte_files": [
+    "checker/AUX_RELATIONS.json",
+    "checker/CONTRACT.json",
+    "checker/ROOT_PORT_DUPLICATE_REPRO.sv",
+    "checker/ROOT_PORT_WRONG_WIDTH_REPRO.sv",
+    "checker/STRING_ERASURE_REPRO.sv",
+    "checker/check_host_sv.py",
+    "checker/test_cold.py",
+    "wrapper/run_structure_gate.py",
+    "wrapper/test_structure_gate_cold.py"
+  ],
+  "relocated_cold_checks": {
+    "all_exit_zero": true,
+    "checker_normal": 30,
+    "checker_optimized": 30,
+    "large_sv_checker_run": false,
+    "wrapper_normal": 14,
+    "wrapper_optimized": 14
+  },
+  "runtime_dependencies": "Python standard library; external exact SV supplied only by separately authorized caller.",
+  "source_review_manifest_sha256": "ac1113fa7b40cc6752f777ef7fffeac7f9e5d22bbe877b093a14982daa44c1d0",
+  "source_review_summary_sha256": "72243eae08121493967867887dc99f6b71ae2d2a08054bfcfbbf1423b5b238eb",
+  "source_scope": "Self-contained finite same-SV checker/wrapper, synthetic positive/negative tests and project-source pins; generated actual SV, raw logs, local argv and machine inventories excluded.",
+  "status": "FROZEN_PROJECT_SOURCE_PUBLICATION_CANDIDATE",
+  "wrapper_origin_manifest_sha256": "17cd59686a4ff47178e004c82ac78427abbfb015a176c72189cb4b68a1d0cffd"
+}

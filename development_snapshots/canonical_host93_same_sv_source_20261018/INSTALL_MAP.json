@@ -1,0 +1,30 @@
+{
+  "caller_supplied_files": [
+    "Exact generated HostBlockCollection.sv fixed in wrapper/checker; not included in SOURCE publication"
+  ],
+  "cold_files": [
+    "checker/test_cold.py",
+    "wrapper/test_structure_gate_cold.py"
+  ],
+  "cold_fixture_files": [
+    "checker/ROOT_PORT_DUPLICATE_REPRO.sv",
+    "checker/ROOT_PORT_WRONG_WIDTH_REPRO.sv",
+    "checker/STRING_ERASURE_REPRO.sv"
+  ],
+  "cold_fixture_kind": "Three artificial finite negative source fixtures generated from fixed contract dictionaries; no actual generated SV body copied.",
+  "execution_files": [
+    "checker/check_host_sv.py",
+    "wrapper/run_structure_gate.py"
+  ],
+  "existing_repository_dependencies": [],
+  "no_runtime_import_of_project_pyc": true,
+  "omitted": [
+    "SV/FIR/classes/binaries",
+    "Local execution argv and machine paths",
+    "Raw attempt logs and cold logs",
+    "System or runtime inventory"
+  ],
+  "repository_relative_directory": "development_snapshots/canonical_host93_same_sv_source_20261018",
+  "runtime_contract": "Direct isolated source-only/cold entry; actual read-only execution requires fixed wrapper raw-buffer loader, new local exact paths, fresh output, existing reviewed input evidence and separate authorization. No download/native child.",
+  "runtime_python_dependencies": "Python standard library only; this package includes its full checker and wrapper source"
+}

@@ -1,0 +1,113 @@
+{
+  "boundaries": {
+    "DPI_provider_linkage": "PENDING",
+    "counts_reused_from_chirrtl": false,
+    "external_binding_widths_proved": false,
+    "full_metadata_reverse_projection": "PENDING",
+    "generated_cpp_binding_verified": false,
+    "helper_declared_bits_are_additional_primary_observation_bits": false,
+    "host_executed": false,
+    "later_actual_review_requires_separate_binding_no_hot_edit": true,
+    "numerical_qualification": false,
+    "old_failures_rewritten": false,
+    "sv_syntax_elaborated": false,
+    "synthetic_fixtures_are_actual_generated_sv": false,
+    "tap_complete_driver_or_value_proof": false
+  },
+  "latest_observation": {
+    "accepted_actual_qualification": "PENDING_ACTUAL_REVIEW",
+    "checker_result_status": "PASS",
+    "counts": {
+      "auxiliary_tap_declaration_count": 28,
+      "auxiliary_tap_declared_bits": 3072,
+      "collection_instance_count_including_generated_memories": 767,
+      "definition_count": 59,
+      "external_counts": {
+        "idma_backend_rw_axi_flat_wrap": 1,
+        "qwen2_matrix_command_endpoint": 8,
+        "tc_clk_gating": 8
+      },
+      "host_input_count": 39,
+      "host_instance_count_including_generated_memories": 758,
+      "host_output_count": 44,
+      "host_port_count": 83,
+      "observation_bits": 2604,
+      "observation_bundles": 9,
+      "observation_leaf_count": 75,
+      "tap_concat_terminal_count": 2
+    },
+    "entry_to_postflight_seconds": 2.845882786999937,
+    "evidence": {
+      "bytes": 38724,
+      "sha256": "1269fda37de231817d6a12b24bf612e9885380e73ebc5ec1c5d9ed3fbc3984c9"
+    },
+    "independent_actual_review": "PENDING_AT_FREEZE",
+    "ordinal": 3,
+    "original_sv_unchanged_rechecked": true,
+    "outer_exit": 0,
+    "outer_seconds": 2.879,
+    "outer_witness": {
+      "bytes": 2573,
+      "sha256": "1236fb7f636d1bdf5541032008e5014d3f87458ffbc7e1d5bc9aa94f37d9eda0"
+    },
+    "receipt_status": "STATIC_STRUCTURE_EVIDENCE_PENDING_OUTER_EXIT0",
+    "receipt_terminal_success": false,
+    "whole_python_process_usage": {
+      "maxrss_is_whole_process_peak_not_difference": true,
+      "maxrss_kib": 244780,
+      "scope": "dedicated Python checker process including preflight, parser and postflight; no child",
+      "system_cpu_seconds": 0.113373,
+      "user_cpu_seconds": 2.746555
+    }
+  },
+  "preserved_source_hold": {
+    "actual_execution_of_held_version5": false,
+    "findings": [
+      "String token erasure disguised malformed concat",
+      "Two underscore-prefixed concat roots escaped ANSI reserved-name rejection"
+    ],
+    "isolated_source_version6_fixed_exact_two_guards": true,
+    "manifest_sha256": "172e3edf5b7ee2205b5cc8b699f4cfe48a55d63979ba422f3f6ab23297a7c99d",
+    "version": 5
+  },
+  "prior_actuals": [
+    {
+      "actual_review_manifest_sha256": "52a864b1461afc2f2179051d2903b135c78627f0ace5da0defb0fcd212d51551",
+      "actual_review_summary_sha256": "2f3ef743c8decada5f7e97d1bb5dfcba63b6469e5967010c5d8df0a785c73d3d",
+      "diagnosis_backfilled_into_original_failure": false,
+      "later_readonly_diagnosis": "Observed initialized two-packed wire syntax was outside the then-checker grammar.",
+      "ordinal": 1,
+      "outer_exit": 1,
+      "outer_seconds": 5.436,
+      "qualify_entered": false,
+      "saved_error": "unknown wire/reg declaration shape",
+      "saved_original_sv_unchanged_recheck": true,
+      "status": "INCOMPLETE_STATIC_STRUCTURE"
+    },
+    {
+      "actual_review_manifest_sha256": "4c1dc41a93784e0c6849545ef3e94ff748d37679e3fa741cac913b46600652bb",
+      "actual_review_summary_sha256": "4ea999247148cb059e8a4f9d70c425eb25383168cad5ab799b1284c35279027d",
+      "diagnosis_backfilled_into_original_failure": false,
+      "later_readonly_diagnosis": "All75 primary leaves matched;28 additional Cos/Sin packing helpers required a separate exact inventory.",
+      "ordinal": 2,
+      "outer_exit": 1,
+      "outer_seconds": 7.352,
+      "preceding_assertions_are_only_control_flow_evidence": true,
+      "qualify_entered": true,
+      "saved_error": "exact canonical tap leaf names/widths/modules",
+      "saved_original_sv_unchanged_recheck": true,
+      "status": "INCOMPLETE_STATIC_STRUCTURE"
+    }
+  ],
+  "same_sv": {
+    "bytes": 76366612,
+    "sha256": "2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61"
+  },
+  "scope": "New Host93 preserved SV finite lexical structure evidence only; no inheritance of lost historical Host/95 source identity.",
+  "source_review": {
+    "manifest_sha256": "ac1113fa7b40cc6752f777ef7fffeac7f9e5d22bbe877b093a14982daa44c1d0",
+    "status": "GO_LIMITED_SOURCE",
+    "summary_sha256": "72243eae08121493967867887dc99f6b71ae2d2a08054bfcfbbf1423b5b238eb"
+  },
+  "status": "SAFE_FROZEN_HISTORY_ACTUAL_REVIEW_PENDING"
+}

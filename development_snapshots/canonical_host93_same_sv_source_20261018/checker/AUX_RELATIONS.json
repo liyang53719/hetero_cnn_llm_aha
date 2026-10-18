@@ -1,0 +1,323 @@
+{
+  "full_statement_or_driver_analysis": false,
+  "helpers": {
+    "canonicalCosTap_value_hi": {
+      "concat_operands": [
+        "canonicalCosTap_value_hi_hi",
+        "canonicalCosTap_value_hi_lo"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146033,
+      "sv_start_line": 146032,
+      "width": 256
+    },
+    "canonicalCosTap_value_hi_hi": {
+      "concat_operands": [
+        "canonicalCosTap_value_hi_hi_hi",
+        "canonicalCosTap_value_hi_hi_lo"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146031,
+      "sv_start_line": 146030,
+      "width": 128
+    },
+    "canonicalCosTap_value_hi_hi_hi": {
+      "concat_operands": [
+        "cv_15",
+        "cv_14"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146029,
+      "sv_start_line": 146029,
+      "width": 64
+    },
+    "canonicalCosTap_value_hi_hi_lo": {
+      "concat_operands": [
+        "cv_13",
+        "cv_12"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146028,
+      "sv_start_line": 146028,
+      "width": 64
+    },
+    "canonicalCosTap_value_hi_lo": {
+      "concat_operands": [
+        "canonicalCosTap_value_hi_lo_hi",
+        "canonicalCosTap_value_hi_lo_lo"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146027,
+      "sv_start_line": 146026,
+      "width": 128
+    },
+    "canonicalCosTap_value_hi_lo_hi": {
+      "concat_operands": [
+        "cv_11",
+        "cv_10"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146025,
+      "sv_start_line": 146025,
+      "width": 64
+    },
+    "canonicalCosTap_value_hi_lo_lo": {
+      "concat_operands": [
+        "cv_9",
+        "cv_8"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146024,
+      "sv_start_line": 146024,
+      "width": 64
+    },
+    "canonicalCosTap_value_lo": {
+      "concat_operands": [
+        "canonicalCosTap_value_lo_hi",
+        "canonicalCosTap_value_lo_lo"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146023,
+      "sv_start_line": 146022,
+      "width": 256
+    },
+    "canonicalCosTap_value_lo_hi": {
+      "concat_operands": [
+        "canonicalCosTap_value_lo_hi_hi",
+        "canonicalCosTap_value_lo_hi_lo"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146021,
+      "sv_start_line": 146020,
+      "width": 128
+    },
+    "canonicalCosTap_value_lo_hi_hi": {
+      "concat_operands": [
+        "cv_7",
+        "cv_6"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146019,
+      "sv_start_line": 146019,
+      "width": 64
+    },
+    "canonicalCosTap_value_lo_hi_lo": {
+      "concat_operands": [
+        "cv_5",
+        "cv_4"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146018,
+      "sv_start_line": 146018,
+      "width": 64
+    },
+    "canonicalCosTap_value_lo_lo": {
+      "concat_operands": [
+        "canonicalCosTap_value_lo_lo_hi",
+        "canonicalCosTap_value_lo_lo_lo"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146017,
+      "sv_start_line": 146016,
+      "width": 128
+    },
+    "canonicalCosTap_value_lo_lo_hi": {
+      "concat_operands": [
+        "cv_3",
+        "cv_2"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146015,
+      "sv_start_line": 146015,
+      "width": 64
+    },
+    "canonicalCosTap_value_lo_lo_lo": {
+      "concat_operands": [
+        "cv_1",
+        "cv_0"
+      ],
+      "source": "Qwen2Block.scala:592:165",
+      "sv_end_line": 146014,
+      "sv_start_line": 146014,
+      "width": 64
+    },
+    "canonicalSinTap_value_hi": {
+      "concat_operands": [
+        "canonicalSinTap_value_hi_hi",
+        "canonicalSinTap_value_hi_lo"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146126,
+      "sv_start_line": 146125,
+      "width": 256
+    },
+    "canonicalSinTap_value_hi_hi": {
+      "concat_operands": [
+        "canonicalSinTap_value_hi_hi_hi",
+        "canonicalSinTap_value_hi_hi_lo"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146124,
+      "sv_start_line": 146123,
+      "width": 128
+    },
+    "canonicalSinTap_value_hi_hi_hi": {
+      "concat_operands": [
+        "dv_15",
+        "dv_14"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146122,
+      "sv_start_line": 146122,
+      "width": 64
+    },
+    "canonicalSinTap_value_hi_hi_lo": {
+      "concat_operands": [
+        "dv_13",
+        "dv_12"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146121,
+      "sv_start_line": 146121,
+      "width": 64
+    },
+    "canonicalSinTap_value_hi_lo": {
+      "concat_operands": [
+        "canonicalSinTap_value_hi_lo_hi",
+        "canonicalSinTap_value_hi_lo_lo"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146120,
+      "sv_start_line": 146119,
+      "width": 128
+    },
+    "canonicalSinTap_value_hi_lo_hi": {
+      "concat_operands": [
+        "dv_11",
+        "dv_10"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146118,
+      "sv_start_line": 146118,
+      "width": 64
+    },
+    "canonicalSinTap_value_hi_lo_lo": {
+      "concat_operands": [
+        "dv_9",
+        "dv_8"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146117,
+      "sv_start_line": 146117,
+      "width": 64
+    },
+    "canonicalSinTap_value_lo": {
+      "concat_operands": [
+        "canonicalSinTap_value_lo_hi",
+        "canonicalSinTap_value_lo_lo"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146116,
+      "sv_start_line": 146115,
+      "width": 256
+    },
+    "canonicalSinTap_value_lo_hi": {
+      "concat_operands": [
+        "canonicalSinTap_value_lo_hi_hi",
+        "canonicalSinTap_value_lo_hi_lo"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146114,
+      "sv_start_line": 146113,
+      "width": 128
+    },
+    "canonicalSinTap_value_lo_hi_hi": {
+      "concat_operands": [
+        "dv_7",
+        "dv_6"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146112,
+      "sv_start_line": 146112,
+      "width": 64
+    },
+    "canonicalSinTap_value_lo_hi_lo": {
+      "concat_operands": [
+        "dv_5",
+        "dv_4"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146111,
+      "sv_start_line": 146111,
+      "width": 64
+    },
+    "canonicalSinTap_value_lo_lo": {
+      "concat_operands": [
+        "canonicalSinTap_value_lo_lo_hi",
+        "canonicalSinTap_value_lo_lo_lo"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146110,
+      "sv_start_line": 146109,
+      "width": 128
+    },
+    "canonicalSinTap_value_lo_lo_hi": {
+      "concat_operands": [
+        "dv_3",
+        "dv_2"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146108,
+      "sv_start_line": 146108,
+      "width": 64
+    },
+    "canonicalSinTap_value_lo_lo_lo": {
+      "concat_operands": [
+        "dv_1",
+        "dv_0"
+      ],
+      "source": "Qwen2Block.scala:593:166",
+      "sv_end_line": 146107,
+      "sv_start_line": 146107,
+      "width": 64
+    }
+  },
+  "module": "Qwen2ContinuousBlock",
+  "status": "READ_ONLY_LITERAL_CONCAT_RELATION_EVIDENCE_NOT_DRIVER_OR_VALUE_PROOF",
+  "terminal_source_evidence": {
+    "cos": {
+      "aggregate": "_canonicalCosTap_value_T",
+      "concat_lines": [
+        146034,
+        146035
+      ],
+      "concat_operands": [
+        "canonicalCosTap_value_hi",
+        "canonicalCosTap_value_lo"
+      ],
+      "primary": "canonicalCosTap_value",
+      "primary_lines": [
+        146036,
+        146037
+      ],
+      "width": 512
+    },
+    "sin": {
+      "aggregate": "_canonicalSinTap_value_T",
+      "concat_lines": [
+        146127,
+        146128
+      ],
+      "concat_operands": [
+        "canonicalSinTap_value_hi",
+        "canonicalSinTap_value_lo"
+      ],
+      "primary": "canonicalSinTap_value",
+      "primary_lines": [
+        146129,
+        146130
+      ],
+      "width": 512
+    }
+  }
+}

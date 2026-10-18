@@ -1,0 +1,139 @@
+{
+  "all_contract_json_bytes_identical_to_v5": true,
+  "all_original_26_test_methods_source_identical": true,
+  "attempt2_failure_preserved": {
+    "bytes": 624,
+    "sha256": "d6da51d71272afeb1d90ffff4555553e1bad87f1a3e30b4d61085d446efe7706"
+  },
+  "cold_delta": "Update fixed production-source raw SHA/size pin; preserve isolated/no_site/no_pyc flags and same-buffer compile(dont_inherit=True). Add four methods, including fixed-SHA copies of three independent reviewer tiny source reproductions. No audit executable import or run.",
+  "diagnostic_manifest": {
+    "bytes": 776,
+    "sha256": "990a0067487915b5f638038faa1ca012c115e67444893902be86407c829b3900"
+  },
+  "diagnostic_relation_evidence": {
+    "bytes": 8136,
+    "sha256": "c0230929c81025fc587d5ab6caf5ffbae3ed432f3e2d641414ff0e937bc7fcbe"
+  },
+  "fixed_project_source": {
+    "bytes": 56051,
+    "project_relative_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+    "sha256": "a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491",
+    "source_presence_requirement": "provenance only; checker embeds fixed literal expectations and has no runtime dependency on Scala source",
+    "source_relation": "cv/dv Vec16 x UInt32; Cos/Sin value512; lines592/593 tap.value := cv.asUInt / dv.asUInt"
+  },
+  "independent_audit_source_read_only_not_executed": {
+    "bytes": 11465,
+    "sha256": "25be7f39f75d12535700d3c39e2f2a51f0f26c0e0d11665c2e16baa1bfe88205"
+  },
+  "independent_reproduction_copies": {
+    "ROOT_PORT_DUPLICATE_REPRO.sv": {
+      "bytes": 28298,
+      "sha256": "d478ea1f6dd64e05bae203baa90d5af238e419ab0c547f97e4a1bb3160fda6f0"
+    },
+    "ROOT_PORT_WRONG_WIDTH_REPRO.sv": {
+      "bytes": 28290,
+      "sha256": "d7229378e52614a1848100707281f1d388be28b87ba0b2babdaf9dac8c189c79"
+    },
+    "STRING_ERASURE_REPRO.sv": {
+      "bytes": 28238,
+      "sha256": "1c54c37a095c3f4bb063fc92961c4c75e28fddad5eaf73be4e47212a2633872b"
+    }
+  },
+  "independent_tiny_audit_manifest": {
+    "bytes": 2291,
+    "sha256": "7376a8fdb5c16efca198cb357fc422f08f0b0a1ff187da6d733fb92611610a28"
+  },
+  "no_actual_sv_checker_execution": true,
+  "no_actual_sv_scan_during_v6_implementation": true,
+  "no_native_or_emit_run": true,
+  "old_frozen_files_modified": false,
+  "predecessor_checker": {
+    "bytes": 31392,
+    "sha256": "678bf91b44426638005fa0ae87555f2b69cc0337f3d37069af603d7089fe25c3"
+  },
+  "predecessor_cold_entry": {
+    "bytes": 17338,
+    "sha256": "4ee6299117f0e852a666ab729590535f3147890c476ffd3fd415f1f77596a0f0"
+  },
+  "predecessor_integrity": [
+    {
+      "all_listed_files_match": true,
+      "listed_files_count": 8,
+      "manifest": {
+        "bytes": 1160,
+        "sha256": "7eaf16971d6d75c908c93b920850aefce0387acbdfa587e1723d6c63ac571e58"
+      }
+    },
+    {
+      "all_listed_files_match": true,
+      "listed_files_count": 8,
+      "manifest": {
+        "bytes": 1424,
+        "sha256": "9529cec949d07efaa5e15281b6621c927ebb67aca9f953521c2c4f623b63fdd8"
+      }
+    },
+    {
+      "all_listed_files_match": true,
+      "listed_files_count": 10,
+      "manifest": {
+        "bytes": 1555,
+        "sha256": "9472541e6da9a12551f31fda38adae2700000d37caad1ce030d524efff5ecd2f"
+      }
+    },
+    {
+      "all_listed_files_match": true,
+      "listed_files_count": 11,
+      "manifest": {
+        "bytes": 1701,
+        "sha256": "7a640a2c59776222ed8bf4e964a6994c24219197d3530a5b8045f8d0d542cfef"
+      }
+    },
+    {
+      "all_listed_files_match": true,
+      "listed_files_count": 14,
+      "manifest": {
+        "bytes": 2230,
+        "sha256": "3de23a26a913acf6815791dd03f2208cf4601aead48a72a4fbc99039f973436f"
+      }
+    }
+  ],
+  "predecessor_manifest": {
+    "bytes": 2230,
+    "sha256": "3de23a26a913acf6815791dd03f2208cf4601aead48a72a4fbc99039f973436f"
+  },
+  "production_deltas": [
+    "F01: Existing cleaned string-token branch emits nonempty nonidentifier @ sentinel with whitespace, retaining exactly the original newline count. Line/block comments retain old whitespace-only replacement.",
+    "F02: Existing ANSI canonical-tap port rejection also rejects the exact TAP_CONCAT_DECLARATIONS names. Existing prefix gate already rejected 28 helpers; this adds the two underscore-prefixed terminal roots."
+  ],
+  "production_modified_statements": 2,
+  "publication_projection": "Four execution and cold Python files are byte-identical; local candidate, audit and attempt directory names omitted from this metadata.",
+  "source_origin_manifest": {
+    "bytes": 2967,
+    "sha256": "48d661a55a724719dc1fcd309e49cbe814d2e2a17be8c5500806f1b0cf6146e3"
+  },
+  "status": "ISOLATED_V6_TWO_FINITE_REVIEW_FINDING_FIXES_SOURCE_ONLY",
+  "synthetic_fixture_provenance": {
+    "actual_generated_sv_included": false,
+    "expected_v6_outcome": "All three fixed-size/SHA fixtures must raise the specific ValueError asserted in test_cold.py; they are negative lexical fixtures, not compilable production RTL.",
+    "generator_source_identity": {
+      "bytes": 11465,
+      "sha256": "25be7f39f75d12535700d3c39e2f2a51f0f26c0e0d11665c2e16baa1bfe88205"
+    },
+    "runtime_generator_dependency": false,
+    "source_construction": "Independent tiny audit fixture reconstructs an artificial module/port/instance envelope from the frozen v4 constant dictionaries, uses constant 1'b0 named bindings and independently recursive helper trees, then injects a string token or duplicate/wrong-width root ANSI port. It neither reads nor copies actual generated SV."
+  },
+  "unchanged": [
+    "Original 75 primary TAPS/9 bundles/2604 bits; 28 AUX declarations/3072 declared bits and two 512-bit roots with fixed ordered references.",
+    "All budgets, MAX bounds, input SHA/size, check_bytes API, fixed 59 definitions, Host83, 8 endpoint/8 gate/1 backend, graph/port inventories.",
+    "Assignment/procedural opacity and no driver/value/event/numerical/DPI qualification.",
+    "No general SV grammar or generic expression interpretation added."
+  ],
+  "v5_source_review_manifest": {
+    "bytes": 3092,
+    "sha256": "172e3edf5b7ee2205b5cc8b699f4cfe48a55d63979ba422f3f6ab23297a7c99d"
+  },
+  "v5_source_review_summary": {
+    "bytes": 3358,
+    "sha256": "d46f9906c7dd29cceb41e62f4627a87a37e5a51bff752836825cf73e19105a04"
+  }
+}

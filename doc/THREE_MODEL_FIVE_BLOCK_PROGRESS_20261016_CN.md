@@ -416,3 +416,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - todo：余Top对象、全child/runtime、精确对象依赖复用、链接、真实读值与reset/settle验证、全部17owner/21completion/27capture、同冻结M128完整RTL数值与周期回放。
 - 五block不新增验收：Qwen2 M128为27项限定模型门禁；其余四个无新增完整M128；完整block RTL仍0/5，更长序列未开始，固定4096 MAC完整block分母的80%/90%仍无RTL实测。
 - 系统工具链/头文件/库路径版本hash清单公开许可仍独立待答，本批不含该类内容，不改变许可状态。
+
+
+## 2026-10-18 06:00 UTC：真实启动与首个M128业务诊断的源码保存
+
+- done：14文件纯项目SOURCE小片 development_snapshots/canonical_host_pc0_startup_source_20261018。11源码中5逐字、6仅9行include逻辑重定位；隔离30+30检查通过。controls不发布；无系统路径/工具链清单/原receipt/rawlog/真实handle地址/权重/生成物。不是独立构建闭包。
+- done：全部192对象（Top56 O0、child133和runtime3原flags）独立核验，三库192成员字节/顺序/索引实际归档通过。新startup TU编译链接通过，固定nojob20eval真实执行通过：8不同handle、各combo12/seq4/ignored4/final1、reset三子计数各1、总DPI184。只该启动窗口，不代表业务数值或普遍settle。
+- ongoing：原M128完整14+2输入已实际加载并核16RAM哈希，PC0真实执行触300秒工作上限，原NOT_COMPLETED保留。末保存采样598016完整周期，无保存ACK0/输出数组/数值结果；非准确最终周期。write_bytes=0为owner结果完成累计，不是实时B/store统计，不能推断无写。
+- done：源码与实际生成物独核归约下界2428928拍（较弱2018304亦成立），原2M诊断cap不足以完成正常128行N0，单加wall无效。该事实不证明原现场无停滞/OOM，也不能把模拟器wall当硬件性能。
+- ongoing：最小进度探针仅读取既有29状态、8真实pre握手、4高沿状态变化，不加eval/改RTL。60秒含加载/最多200k完整周期，仅诊断窗口；新trace TU已编译链接，actual独审进行中，未执行trace。
+- ongoing：完整block观察源码PC0–15已分域有限SOURCE审查；resident16–18窄修在审、Down19 prefix和末Add20仍待闭合。27数组导出、ActualCoverageVerifier及独立参考集成不完整，SOURCE不得冒实际通过。
+- 五block不新增验收：Qwen2 M128保持27项限定模型门禁；其它四个未新增完整M128，完整block RTL0/5、更长序列未开始。固定4096MAC/完整block分母的80%/90%仍无RTL实测。
+- 原Top codegen FAIL、Os编译超时、缺hier.mk等历史不改；后续各独立对象/归档/链接/启动资格按真实范围记录。环境清单公开许可仍待答，本次无此类内容。

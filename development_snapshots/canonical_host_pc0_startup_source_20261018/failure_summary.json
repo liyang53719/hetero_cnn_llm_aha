@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "kind": "CURATED_SOURCE_CHECKPOINT_FAILURE_SUMMARY_NOT_RUNTIME_RECEIPT",
+  "status": "NOT_COMPLETED",
+  "observed_prior_attempt": {
+    "work_budget_seconds": 300,
+    "terminated_at_work_budget_boundary": true,
+    "last_saved_completed_cycles": 598016,
+    "last_saved_cycle_is_exact_final": false,
+    "last_saved_pc": 0,
+    "last_saved_issued_jobs": 1,
+    "last_saved_owner_result_write_bytes": 0,
+    "write_bytes_semantics": "SUM_OF_COMPLETED_OWNER_RESULT_BYTES_NOT_PER_B_TRANSACTION_COUNT",
+    "actual_B_count_known": false,
+    "internal_final_state_known": false,
+    "actual_n0_output_available": false,
+    "numerical_comparison_available": false,
+    "continuation_checkpoint_available": false
+  },
+  "read_only_source_analysis": {
+    "rows": 128,
+    "terms_per_row": 1536,
+    "mul_calls_per_row": 1536,
+    "add_calls_per_row": 1672,
+    "local_read_call_resume_cycles": 3,
+    "normal_scalar_call_resume_cycles": 4,
+    "non_call_control_cycles_per_row": 1536,
+    "normal_successful_row_reduction_lower_bound": 18976,
+    "M128_reduction_only_lower_bound": 2428928,
+    "weaker_independent_M128_lower_bound": 2018304,
+    "source_cycle_cap": 2000000,
+    "source_cycle_cap_insufficient_for_normal_successful_M128": true,
+    "excludes": ["input_transport", "gamma", "writeback", "division_square_root", "host_overhead"],
+    "is_actual_measurement_or_upper_bound": false,
+    "determines_state_at_last_saved_sample": false
+  },
+  "candidate_work": {
+    "original_assets_modified": false,
+    "cycle_cap_or_budget_changed": false,
+    "native_model_eda_or_cpp_executed": false,
+    "full_block_pass": false,
+    "independently_compilable_model": false,
+    "new_run_requires_separate_review_and_authorization": true
+  }
+}

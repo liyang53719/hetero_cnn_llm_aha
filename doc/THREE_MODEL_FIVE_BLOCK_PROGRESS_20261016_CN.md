@@ -637,3 +637,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：持久化 15 件纯源码/测试/安全摘要，其中 3 份人工 tiny 反例由固定空模块图和常量连接合成，没有复制真实 SV 或张量；四 Python 执行/测试原字节，重定位 30+30/14+14 通过。冻结安全史的 actual 审 PENDING 保留，本条另记审结。
 - ongoing：恢复固定官方 Verilator 层级替换修复源码及最小工具依赖，重新证明 micro 的 hierarchy/DPI/多 handle；旧 5.032 deb 和已丢失的局部补丁不能继承正确性。
 - todo：完整 metadata 反投影、外部端口宽度、tap 驱动/事件语义、生成 C++ 与 DPI 链接、真实 Host 运行/数值仍待独立证据。旧 N0 终态未知，完整 block 0/5 保持；本批不提交真实 SV、工具 binary、张量、完整日志或机器环境库存。
+
+### 2026-10-18 21:37 UTC：固定官方工具依赖五包获取验收，尚未安装或执行
+
+- done：固定官方 autoconf、m4、flex、libfl-dev、bison 五个包的 URL、长度与 SHA256；同默认平台路径、socket30/no retry、180 秒总/160 秒工作窗进行唯一有界获取。
+- done：原会话外层 exit 0/17.480 秒，5 包共 2,466,616 B；保锚清理闭合。actual 独审 `352b1d020121f1530a0fbafd6af72b60eef0fed77b24cb6761e6825b36c1284a` 核对 315 项/58 输入及完整 13 文件/2,504,946 B，仅授固定 opaque bytes。
+- done：确认旧 worker 冷入口用 assert 核身份在 -O 下会删除；生产显式 hash 链与已独审实际包字节不受影响。旧审不热改，补充审 `eb9950de…` 限定旧优化冷入口身份资格。
+- done：发布 15 件纯源码/公开固定 pins/安全摘要；portable 冷入口改为同 buffer 显式拒绝和调用者 --repo，补坏长度/同长错 SHA/flags 反例，worker 21+21、外层14+14及独立7+7通过。
+- done：内容独审 `6312cb1fbc2841a4b1edd7c35d290ddb5596cf5f2dc2876eff63d958612cf865` 核对原生产字节、三个项目依赖、无包体/完整日志/当前机器库存；冻结摘要 actual 审 PENDING 保留，本条另记实际审结。
+- ongoing：同资产只读布局已确认标准 ar 与 control/data.tar.xz；下一步仅提取固定 67 regular 文件并生成有明确原件 hash 关系的 staged 配置，之后做 --version 与宏/skeleton 小资格，不泛化安装器。
+- ongoing：固定官方 Verilator 修复源码首次下载 child 已完成，父后验因 SOURCE.json 0644 与 0600 要求不符保留失败；将同资产只读复核再资格，不重复下载，不修改原记录。
+- todo：工具构建、层级/DPI/多 handle micro 与真实 Host 仿真仍待执行证据。五包尚未解包安装或运行；旧 N0 终态未知、完整 block 0/5 保持。

@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "production_execution_bytes": "unchanged",
+  "original_outer_manifest_sha256": "4467a9f7192102f41167c8ea11d1d32235b8be927de06e4003d1e9f6a217cf28",
+  "original_worker_manifest_sha256": "7ffe02d25a620315bba275c0d17771485a70d3a10ccf8e0b5647c1c9fd05535c",
+  "cold_only_changes": [
+    "--repo replaces local absolute REPO",
+    "isolated/no-site/no-pyc-write guard before loading project code",
+    "five bare asserts become explicit failures, including size/SHA and fake HTTP assertions",
+    "three finite regressions: short source and equal-size wrong SHA reject beforecompile; exact samebuffer synthetic marker positive control"
+  ],
+  "documentation_changes": [
+    "worker provenance local repository path replaced by caller argument",
+    "publication README/INSTALL_MAP/safe history"
+  ],
+  "excluded": [
+    "package bytes",
+    "actual logs",
+    "LOCAL argv",
+    "machine tool inventory",
+    "local review paths"
+  ],
+  "no_retroactive_mutation": true
+}

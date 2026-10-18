@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "scope": "fixed five official opaque package byte acquisition only",
+  "source_review": {
+    "manifest_sha256": "f40c018362ad86bb9401f4a03a66ad33142ab5808472303b8a576879586cb0d5",
+    "summary_sha256": "c4a7379b038281aa6a1ca7927226781d905a8e4bec6c8c77d79ae17e68496999"
+  },
+  "observed_actual": {
+    "original_outer_exit": 0,
+    "outer_seconds": 17.48,
+    "supervised_child_seconds": 17.431714,
+    "gate_postflight_seconds": 17.442789,
+    "artifact_count": 5,
+    "artifact_bytes": 2466616,
+    "log_bytes": 1919,
+    "cleanup_confirmed": true,
+    "packages_extracted": false,
+    "packages_installed": false,
+    "packages_executed": false,
+    "source_built": false,
+    "host_executed": false,
+    "result_status": "EVIDENCE_PENDING_OUTER_EXIT0",
+    "terminal_success": false,
+    "actual_review_at_freeze": "PENDING_AT_FREEZE"
+  },
+  "subsequently_found_cold_entry_gap": "Original worker cold entry used assert for source pin and flags, so -O removed those guards. Production worker/outer explicitly enforce their pins. Portable cold-only successor uses explicit guards and beforecompile negative regressions; original source/actual records are preserved.",
+  "qualification_not_granted": [
+    "tool startup",
+    "dependency extraction",
+    "native build",
+    "Verilator hierarchy/DPI/multi-handle micro",
+    "Host ABI",
+    "numerical replay"
+  ]
+}

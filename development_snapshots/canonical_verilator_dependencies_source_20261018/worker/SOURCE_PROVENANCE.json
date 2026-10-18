@@ -1,0 +1,30 @@
+{
+  "metadata_origin": "Parent-provided fixed official Debian trixie package download pins; no network metadata retrieval performed by this worker.",
+  "not_performed": [
+    "actual download",
+    "unpack",
+    "install",
+    "package binary execution",
+    "native build",
+    "union or merge",
+    "full environment scan"
+  ],
+  "original_acquirer": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py",
+  "original_pin": {
+    "bytes": 19263,
+    "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+  },
+  "package_metadata_urls": [
+    "https://packages.debian.org/trixie/all/autoconf/download",
+    "https://packages.debian.org/trixie/amd64/m4/download",
+    "https://packages.debian.org/trixie/amd64/flex/download",
+    "https://packages.debian.org/trixie/amd64/libfl-dev/download",
+    "https://packages.debian.org/trixie/amd64/bison/download"
+  ],
+  "plan_pin": {
+    "bytes": 2594,
+    "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+  },
+  "repository_argument": "caller-supplied explicit --repo",
+  "schema": 1
+}

@@ -1,0 +1,41 @@
+{
+  "base": "development_snapshots/canonical_host93_firtool_acquisition_source_20261018/run_acquisition_gate.py",
+  "base_pin": {
+    "bytes": 14006,
+    "sha256": "09938994ab8537cefa8e4ae5a5a660cffaa07079c40b10b508af832236fc6383"
+  },
+  "preserved": "same exact published five-function WNOWAIT supervisor projection; no cleanup/reap lifecycle changes",
+  "projection_changes": [
+    "default platform env=None instead of explicit minimal PATH/LC_ALL",
+    "one inherited allowed CPU via sched_getaffinity/sched_setaffinity after CORE0",
+    "cancel outer real timer before bounded original anchored cleanup; restore original total timer afterward"
+  ],
+  "fsize": "retain original4MiB, omit firtool-specific64MiB projection",
+  "new_finite_adapter": "three source snapshots; fixed five-package worker argv; exact output inventory/order/URL/size/SHA/mode receipt and byte postflight; original sources posthash",
+  "budget": {
+    "child_affinity_count": 1,
+    "child_as_bytes": 536870912,
+    "child_cpu_seconds": 160,
+    "child_fsize_bytes": 4194304,
+    "cleanup_seconds": 5,
+    "fixed_success_transfer_bytes": 2466616,
+    "log_soft_acceptance_bytes": 65536,
+    "postflight_deadline_seconds": 180,
+    "preflight_latest_seconds": 10,
+    "shared_transfer_bytes_ceiling": 4194304,
+    "single_package_bytes_ceiling": 2097152,
+    "socket_seconds": 30,
+    "total_seconds": 180,
+    "work_latest_seconds": 170,
+    "work_max_seconds": 160
+  },
+  "final_record": "nonterminal evidence; original outer exit0+elapsed and independent actual review required",
+  "not_added": [
+    "generic runner framework",
+    "package extraction",
+    "installation",
+    "binary execution",
+    "network fallback",
+    "retry"
+  ]
+}

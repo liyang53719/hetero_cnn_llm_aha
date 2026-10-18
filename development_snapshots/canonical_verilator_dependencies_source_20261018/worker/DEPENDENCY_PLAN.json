@@ -1,0 +1,63 @@
+{
+  "artifact_count": 5,
+  "artifacts": [
+    {
+      "architecture": "all",
+      "known_size_bytes": 494288,
+      "max_transfer_bytes": 494289,
+      "official_metadata_url": "https://packages.debian.org/trixie/all/autoconf/download",
+      "package": "autoconf",
+      "relative_destination": "autoconf_2.72-3.1_all.deb",
+      "sha256": "0de76b647b0afb6c7934999aaefeb463656c147672464a367df1019969e77af3",
+      "url": "https://deb.debian.org/debian/pool/main/a/autoconf/autoconf_2.72-3.1_all.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 293956,
+      "max_transfer_bytes": 293957,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/m4/download",
+      "package": "m4",
+      "relative_destination": "m4_1.4.19-8_amd64.deb",
+      "sha256": "221b3e224708c1da2a1a88b6824380593579b2254ae7d914afa14cbd5d343334",
+      "url": "https://deb.debian.org/debian/pool/main/m/m4/m4_1.4.19-8_amd64.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 423136,
+      "max_transfer_bytes": 423137,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/flex/download",
+      "package": "flex",
+      "relative_destination": "flex_2.6.4-8.2+b4_amd64.deb",
+      "sha256": "75f963765232c356d0a2fb70e780dfa9de2425aca036ec60eefb7fc98a2c905b",
+      "url": "https://deb.debian.org/debian/pool/main/f/flex/flex_2.6.4-8.2+b4_amd64.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 85600,
+      "max_transfer_bytes": 85601,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/libfl-dev/download",
+      "package": "libfl-dev",
+      "relative_destination": "libfl-dev_2.6.4-8.2+b4_amd64.deb",
+      "sha256": "1b40033660656acd5c2f85d2c45a4e02bf57a0facc5e0623327474cb911b3136",
+      "url": "https://deb.debian.org/debian/pool/main/f/flex/libfl-dev_2.6.4-8.2+b4_amd64.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 1169636,
+      "max_transfer_bytes": 1169637,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/bison/download",
+      "package": "bison",
+      "relative_destination": "bison_3.8.2+dfsg-1+b2_amd64.deb",
+      "sha256": "ce6eb1f7aad18850e32d223a68f54bcbe756d74f138c8ec5460ad9d220f4d335",
+      "url": "https://deb.debian.org/debian/pool/main/b/bison/bison_3.8.2+dfsg-1+b2_amd64.deb"
+    }
+  ],
+  "group": "debian-build-dependencies5",
+  "limits": {
+    "elapsed_check_seconds": 160,
+    "socket_timeout_seconds": 30,
+    "total_transfer_bytes": 4194304
+  },
+  "schema": 1,
+  "transport": "https-no-redirect"
+}

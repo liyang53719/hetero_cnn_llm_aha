@@ -1,0 +1,51 @@
+{
+  "acquirer_repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py",
+  "budget": {
+    "child_affinity_count": 1,
+    "child_as_bytes": 536870912,
+    "child_cpu_seconds": 160,
+    "child_fsize_bytes": 4194304,
+    "cleanup_seconds": 5,
+    "fixed_success_transfer_bytes": 2466616,
+    "log_soft_acceptance_bytes": 65536,
+    "postflight_deadline_seconds": 180,
+    "preflight_latest_seconds": 10,
+    "shared_transfer_bytes_ceiling": 4194304,
+    "single_package_bytes_ceiling": 2097152,
+    "socket_seconds": 30,
+    "total_seconds": 180,
+    "work_latest_seconds": 170,
+    "work_max_seconds": 160
+  },
+  "extraction_installation_execution": false,
+  "identity": "each fixed official URL, byte size and SHA256; observed receipts are not terminal success",
+  "platform": "default inherited platform path; no credentials/config/proxy edits, no fallback or retry",
+  "schema": 1,
+  "scope": "fixed five official opaque Debian packages only",
+  "supervisor_source": {
+    "pin": {
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    },
+    "repository_path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py"
+  },
+  "terminal_contract": "EVIDENCE_PENDING_OUTER_EXIT0 plus original outer exit0 within180, cleanup and independent actual review; any failure remains incomplete",
+  "worker_files": {
+    "DEPENDENCY_PLAN.json": {
+      "bytes": 2594,
+      "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+    },
+    "acquire_dependencies.py": {
+      "bytes": 9150,
+      "sha256": "f43ee638df95dfa23955aaaa53581655efbc8eba330bf98ef4d02448fab00009"
+    },
+    "published_acquire.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    }
+  },
+  "worker_manifest": {
+    "bytes": 1725,
+    "sha256": "7ffe02d25a620315bba275c0d17771485a70d3a10ccf8e0b5647c1c9fd05535c"
+  }
+}

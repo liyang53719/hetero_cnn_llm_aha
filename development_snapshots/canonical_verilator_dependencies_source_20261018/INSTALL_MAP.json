@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "destination": "development_snapshots/canonical_verilator_dependencies_source_20261018",
+  "self_contained_worker_files": [
+    "worker/acquire_dependencies.py",
+    "worker/DEPENDENCY_PLAN.json",
+    "worker/published_acquire.py",
+    "worker/test_dependency_cold.py"
+  ],
+  "existing_repository_dependencies": [
+    {
+      "path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2",
+      "purpose": "five exact published WNOWAIT function projection"
+    },
+    {
+      "path": "development_snapshots/canonical_runtime_ram_source_20261018/test_runner_cold.py",
+      "bytes": 18004,
+      "sha256": "fc88db7e72d64fca1603de193940e7b95e9030f90dc3eb0e574cec9d5b40ff46",
+      "purpose": "cold-only FakeOS AST projection"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py",
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69",
+      "purpose": "original acquirer identity cross-check"
+    }
+  ],
+  "external_packages": "not shipped; official plan permits acquisition only after reviewed owner execution",
+  "local_inputs": "explicit --repo and --worker-source; new fresh --output for actual only",
+  "system_inventory_shipped": false
+}

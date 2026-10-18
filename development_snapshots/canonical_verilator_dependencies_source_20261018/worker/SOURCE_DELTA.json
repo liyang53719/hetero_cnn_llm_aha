@@ -1,0 +1,137 @@
+{
+  "narrow_changes": [
+    "Budget deadline min with outer absolute WORK_DEADLINE",
+    "acquire stream and sink closing preserve original exception",
+    "write_json handle closing preserves original exception",
+    "budget check before artifact link and before success receipt",
+    "receipt terminal_success false plus outer acceptance requirements"
+  ],
+  "new_adapter_only": [
+    "fixed five-package plan pin",
+    "same-buffer source and plan integrity checks",
+    "shared absolute timer admission",
+    "no supervisor or subprocess",
+    "source-only default and explicit execution accident guard"
+  ],
+  "projection": {
+    "changes": [
+      {
+        "after": {
+          "bytes": 604,
+          "sha256": "515e0ad11fa6f6d110f8f5d8b00bd741cf2c6e2ace816a6ee0f88976528c211b"
+        },
+        "before": {
+          "bytes": 584,
+          "sha256": "d1ca0d75f3c9c2077ae38110cc0dcbf4f18b9a90dbeac37027c0d6de866f674b"
+        },
+        "name": "Budget"
+      },
+      {
+        "after": {
+          "bytes": 1092,
+          "sha256": "0ee446fcc4bcb33d88fc3b739485a58f528016aa8d0ad13a341414025db66011"
+        },
+        "before": {
+          "bytes": 1078,
+          "sha256": "f38d130dad1bd8dc7ccdd1e5d651a56f355a91c6caf4a18e2f25d161f5bd08b7"
+        },
+        "name": "write_json"
+      },
+      {
+        "after": {
+          "bytes": 4774,
+          "sha256": "89e1ed85e0b82853363b27cb44019560eaceded9917e57c3d1970ec7c2ffa1b3"
+        },
+        "before": {
+          "bytes": 4554,
+          "sha256": "43527c79613c77871e080542d4130d64edc812c2d7c05811848da8c55ee908e1"
+        },
+        "name": "acquire"
+      }
+    ],
+    "projection": {
+      "bytes": 14496,
+      "sha256": "3c6e6827df55ca5e2ca5565fa71dd5d3aaafc0760825fdac88cad21b82697415"
+    }
+  },
+  "published_source": {
+    "bytes": 19263,
+    "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+  },
+  "repository_source": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py",
+  "schema": 1,
+  "selected_source_functions": {
+    "AcquisitionError": {
+      "bytes": 108,
+      "sha256": "bee3269dd685c033fd3eea461a1227afcecfa0ceb65d439f2a9d4f2009da21cf"
+    },
+    "Budget": {
+      "bytes": 584,
+      "sha256": "d1ca0d75f3c9c2077ae38110cc0dcbf4f18b9a90dbeac37027c0d6de866f674b"
+    },
+    "NoRedirect": {
+      "bytes": 194,
+      "sha256": "a69c06e9feb634e1f9f1c17fab03f9f987da56af33c38578eb347f22381fdd88"
+    },
+    "acquire": {
+      "bytes": 4554,
+      "sha256": "43527c79613c77871e080542d4130d64edc812c2d7c05811848da8c55ee908e1"
+    },
+    "check_response": {
+      "bytes": 796,
+      "sha256": "9ccf44ef0ec9e0a7fdfbaada7cdd4959c7fb592208211b07598c1f80c5b7493e"
+    },
+    "checked_output_root": {
+      "bytes": 880,
+      "sha256": "68ed2ca158ad922b2f215d809ddb83cb4f6a4e649854627cbcc6328ddb5716af"
+    },
+    "copy_verified": {
+      "bytes": 1563,
+      "sha256": "546048acef3162f06031e33c5ad3322ff1daca78f49e921334268783ab1d5153"
+    },
+    "default_opener": {
+      "bytes": 311,
+      "sha256": "ebdb65f512d42171e90852db62a9d055ff2611a35ca22c302cedbe8726d3ca2e"
+    },
+    "no_symlink_path": {
+      "bytes": 295,
+      "sha256": "b3d962eed389843e387295aff83fcc7ffe76e6b8ad9a5445b18e2f4d1e721e11"
+    },
+    "open_regular": {
+      "bytes": 327,
+      "sha256": "af020489e8d284b82710586d7c8d9838a0380465e334f155210df36b98033658"
+    },
+    "positive_integer": {
+      "bytes": 73,
+      "sha256": "43e38b0a03f49131cf7238bd44f420f426c87f4b46db420f6bb19d707077a12c"
+    },
+    "relative_path": {
+      "bytes": 399,
+      "sha256": "95187da92d4646e8ab0a493bc320e8216a4f27e0edfbbf7a7125b6d3fba4852b"
+    },
+    "require": {
+      "bytes": 95,
+      "sha256": "eb69e8ff5b28001ea8dbd6f06d1933f3d047c03a304dabf4467ecffbfdb99aba"
+    },
+    "validate_plan": {
+      "bytes": 2400,
+      "sha256": "379509254e8c939c694a3a2976f7f01e5fe360b96103231f2f068012d080b0c9"
+    },
+    "verify": {
+      "bytes": 554,
+      "sha256": "7ae77d26020f1343016c22e512b6f4288301bfd765c1141e90ab8ab2dbf22a34"
+    },
+    "write_json": {
+      "bytes": 1078,
+      "sha256": "f38d130dad1bd8dc7ccdd1e5d651a56f355a91c6caf4a18e2f25d161f5bd08b7"
+    }
+  },
+  "source_only": true,
+  "unchanged_core": [
+    "bounded reads and received-bytes-before-deadline accounting",
+    "platform default HTTPS and proxy inheritance",
+    "redirect refusal and no retry",
+    "atomic exclusive cache hard-links",
+    "single terminal receipt commit and cleanup warning semantics"
+  ]
+}

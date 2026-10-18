@@ -1,0 +1,84 @@
+{
+  "actual_artifact_bytes_shipped": false,
+  "cold_tests": {
+    "outer_normal": 14,
+    "outer_optimized": 14,
+    "worker_normal": 21,
+    "worker_optimized": 21
+  },
+  "files": [
+    {
+      "bytes": 1985,
+      "path": "GATE_PLAN.json",
+      "sha256": "579b2f3020afd5b8a7325150edf6f5ef52698b63c49667c02bdd11ef2c612e68"
+    },
+    {
+      "bytes": 1397,
+      "path": "INSTALL_MAP.json",
+      "sha256": "bd163e6d920d0828a87c6a2b5f96851b2abc3052b3e3b2109ee10f18e854fdfe"
+    },
+    {
+      "bytes": 982,
+      "path": "PROJECTION_DELTA.json",
+      "sha256": "530180dd0dea11ec9ee8e2a3abb431a63c1ad1cbe4345170ce3e6ddfbb9235a2"
+    },
+    {
+      "bytes": 3486,
+      "path": "README.md",
+      "sha256": "8fabe8146f850d79662f7e7f7d29410d3fb428a8644cfd7c9cb0af526f876b6b"
+    },
+    {
+      "bytes": 1386,
+      "path": "SAFE_HISTORY.json",
+      "sha256": "2bc5db5090231d41b85ac3a561c749288f271f46ef29165e0314cb79a0c0adcf"
+    },
+    {
+      "bytes": 1721,
+      "path": "SOURCE_DELTA.json",
+      "sha256": "0c11b6d620ed9638ddb2c7b5b54f33be8e27bdc7f1cec5608929371cafb84f2b"
+    },
+    {
+      "bytes": 12174,
+      "path": "run_gate.py",
+      "sha256": "4d58ac5b632a62a8d0506d03ecd6fdb8b7d621b80c552128dd0f6bc8c4858d5f"
+    },
+    {
+      "bytes": 10772,
+      "path": "test_gate_cold.py",
+      "sha256": "1f52e388e40a58cd360da83c163f95692ddcdcd89ad35030728feb4672e5f734"
+    },
+    {
+      "bytes": 2594,
+      "path": "worker/DEPENDENCY_PLAN.json",
+      "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+    },
+    {
+      "bytes": 4489,
+      "path": "worker/SOURCE_DELTA.json",
+      "sha256": "4c9a4ca8c33581a1ca7ff3c65fbf59700c9d14e0dc1b4a6d50558b370631bafa"
+    },
+    {
+      "bytes": 1107,
+      "path": "worker/SOURCE_PROVENANCE.json",
+      "sha256": "b15319df11633a8ca5207c9e82a81dea2abfcff972f82bceccf1496a358d5104"
+    },
+    {
+      "bytes": 9150,
+      "path": "worker/acquire_dependencies.py",
+      "sha256": "f43ee638df95dfa23955aaaa53581655efbc8eba330bf98ef4d02448fab00009"
+    },
+    {
+      "bytes": 19263,
+      "path": "worker/published_acquire.py",
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    {
+      "bytes": 15705,
+      "path": "worker/test_dependency_cold.py",
+      "sha256": "226da5e52152a5e9d5df52d80304eddc61af8c99fd614607faed86e0d8dbff51"
+    }
+  ],
+  "schema": 1,
+  "scope": "portable project-source-only dependency acquisition with cold-entry narrow successor",
+  "status": "FROZEN_CONTENT_CANDIDATE_PENDING_INDEPENDENT_CONTENT_REVIEW"
+}

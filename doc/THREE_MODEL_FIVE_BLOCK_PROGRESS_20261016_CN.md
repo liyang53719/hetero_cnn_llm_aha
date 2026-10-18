@@ -494,3 +494,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 容量：完整四区单数组213,473,600字节，payload与初始化mask两数组426,947,200字节；16输入总计94,920,448字节，其余118,553,152字节不属于初始化白名单。未调用factory或进行大RAM分配。
 - ongoing：恢复真实payload的按需获取与精确hash验证方案；未来实际大输入另核AS1GiB及全部运行开销，禁止沿用合成小测试256MiB预算。
 - todo：本片只固定SOURCE绑定，未建立HostMemory输出/DDR权限、B退休或launch准入；真实canonical加载/数值/完整Host27仍待验证。旧N0终态未知，完整block RTL仍为0/5。
+
+
+### 2026-10-18 10:16 UTC：原始 BF16 切片恢复与下载复现源码
+
+- done：经默认平台运输通路，从官方 Qwen/Qwen2-1.5B-Instruct 固定 revision ba1cf1846d7df0a0591d6c00649f57e798519da8 获取所需13份BF16切片，共94,382,080字节；仅embedding前256行和layer0相关张量，没有获取整模型。
+- done：22段与13完整文件共35份实际SHA/长度全部匹配冻结身份，13次拼接逐字节一致，22份精确206/Range回执独立核验通过。真实payload只留本地；发布仅下载源码、固定范围/project pins、冷测与必要安全计数摘要。
+- done：默认平台代理委托保持，无直接连接fallback、应用凭据设置或代理值记录；23项原检查加运输边界测试普通/-O各24项通过。900秒共享/socket90秒/缓存256MiB限额和失败保全源码保留。
+- 历史：首次显式无代理尝试以URLError失败，具体reason未保存；后继默认平台小API与raw获取成功不能反推原错误原因。被拒的双路诊断无原终态报告，未知保持，不追认。
+- ongoing：从已核raw13按原公式生成14个provider并逐项匹配旧SHA，尤其BF16转置、FP32位扩展与RoPE libm结果；expected不变，实际转换仍待源码审及首次预算执行。
+- todo：本次只恢复原始输入，没有执行canonical loader、Host或RTL；完整Host27与旧N0终态未知边界保持，完整block RTL仍为0/5。

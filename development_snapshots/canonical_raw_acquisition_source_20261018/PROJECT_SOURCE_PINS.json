@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "scope": "fixed published project-relative source files; SHA256 and Git blob computed from the same bytes before AST helper selection",
+  "source_commit": "9f1ca820c6d2ca241eea9bbd38457f60849994b2",
+  "sources": [
+    {
+      "bytes": 11221,
+      "git_blob": "841e9877577c15959f52cde584b63481cf32c562",
+      "path": "config/payload_pins/qwen2_layer0.json",
+      "sha256": "190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88"
+    },
+    {
+      "bytes": 5109,
+      "git_blob": "5f0236a242438d37d51e1d84a630a74a90c492bc",
+      "path": "config/upstream/weight_headers/qwen2_1p5b/manifest.json",
+      "sha256": "46818a6fde79b4bff4615abc38cca7d8cb9386cdd0298bc07c403cb3d2ceab25"
+    },
+    {
+      "bytes": 11555,
+      "git_blob": "1905761c3cc4c46d44c143751bc09861799f2fc6",
+      "path": "scripts/qwen2_layer0_payload.py",
+      "sha256": "202b73649dfceed5e0d8ec73fd0b1e9f0de96d936141e3d9808d5e10d5c1beb9"
+    },
+    {
+      "bytes": 7517,
+      "git_blob": "1ecfbbcee837efd30eb6748ecd18d849cf7e86d1",
+      "path": "src/heteronpu/pinned_block_payload.py",
+      "sha256": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30"
+    },
+    {
+      "bytes": 6626,
+      "git_blob": "1b412a21f95c6ec9200aa5cf2313881181bea6e1",
+      "path": "src/heteronpu/pinned_gdn_payload.py",
+      "sha256": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b"
+    }
+  ]
+}

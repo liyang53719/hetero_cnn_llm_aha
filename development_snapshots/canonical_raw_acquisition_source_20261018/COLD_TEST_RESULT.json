@@ -1,0 +1,25 @@
+{
+  "acquirer_sha256": "4cff91b1a5e76a6a1701426fd1e6cb1f8db32ee8b7e762bb17575364b12d932a",
+  "code_delta_from_executed_v3": "Only PLAN_BYTES and PLAN_SHA256 constants for sanitized evidence projection; all other source AST identical.",
+  "full_logs_included": false,
+  "maximum_synthetic_payload_bytes": 5,
+  "native_runs": 0,
+  "raw_network_requests": 0,
+  "results": [
+    {
+      "exit_code": 0,
+      "mode": "normal",
+      "status": "PASS",
+      "tests": 24
+    },
+    {
+      "exit_code": 0,
+      "mode": "optimized",
+      "status": "PASS",
+      "tests": 24
+    }
+  ],
+  "schema": 1,
+  "scope": "OFFLINE_SYNTHETIC_ONLY",
+  "test_source_identical_to_reviewed_v3": true
+}

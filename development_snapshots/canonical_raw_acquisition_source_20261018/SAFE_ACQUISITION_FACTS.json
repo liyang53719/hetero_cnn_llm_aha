@@ -1,0 +1,30 @@
+{
+  "boundaries": {
+    "canonical_loader_executed": false,
+    "payload_included_in_this_package": false,
+    "providers_generated": false,
+    "rtl_executed": false,
+    "whole_checkpoint_sha256_verified": false
+  },
+  "counts": {
+    "payload_bytes": 94382080,
+    "segments": 22,
+    "tensors": 13
+  },
+  "evidence_limit": "Only safe counts/scope and hash identities are included. The independently reviewed raw artifacts themselves are deliberately absent; provider conversion and canonical loading are not established.",
+  "independent_actual_review": {
+    "manifest_sha256": "39579e636d26643dd26a51444969db829bcb731223918efc59d646a570fa1542",
+    "status": "PASS"
+  },
+  "ranges": "Only the fixed 13 tensor / 22 segment ranges in ACQUISITION_PLAN.json; not the whole checkpoint.",
+  "schema": 1,
+  "scope": "RAW_ACQUISITION_ONLY",
+  "source_identity": {
+    "acquired_manifest_bytes": 4335,
+    "acquired_manifest_sha256": "557f2c0ac34ee0b7a1b63ebc8940e9e849f32fb11cfd02b607ff08a9b6abc14d",
+    "executed_acquirer_sha256": "89bef4d32fe70c3198bcab8ef02b9ea471bb038dc285980c8c9a38cfe25edb7e",
+    "executed_plan_sha256": "b8635eaf0b5ef3be739b04b3d422996c34093c74d487691003b46d7c439d802a",
+    "project_source_commit": "9f1ca820c6d2ca241eea9bbd38457f60849994b2"
+  },
+  "status_from_acquisition_manifest": "ACQUIRED_FIXED_RAW13_ONLY"
+}

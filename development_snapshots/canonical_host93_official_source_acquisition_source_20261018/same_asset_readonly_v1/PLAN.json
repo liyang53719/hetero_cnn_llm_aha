@@ -1,0 +1,76 @@
+{
+  "archive": {
+    "bytes": 7403238,
+    "sha256": "aa176f629286df54177eea267363c564a0de15f5f90bf4245d00c92953ce94d3"
+  },
+  "budget": {
+    "affinity_count": 1,
+    "as_bytes": 536870912,
+    "cpu_seconds": 20,
+    "fsize_bytes": 524288,
+    "report_aggregate_bytes": 524288,
+    "total_seconds": 30
+  },
+  "failed_actual_review": {
+    "manifest": {
+      "bytes": 1306,
+      "sha256": "44fcf6302d334490007674caf663eb04c11ac6ec14c5d587fc88cd064c4e9a13"
+    },
+    "summary": {
+      "bytes": 1206,
+      "sha256": "1715ce70426e4dfc05cb2bd09b432804a9a4a3bdb9b58a3c72e7898acfb2c37a"
+    }
+  },
+  "gate_source": {
+    "bytes": 15002,
+    "sha256": "d1dbf8cee2f6ae0428c265bc1fda1c7c93a2c8ba5e5b5ae3f5727b9934de412e"
+  },
+  "gate_source_review_manifest_sha256": "55c93050e6641a8302161c696e78a0fbc157eb6c8a5b5a2feaed55525655e561",
+  "no_network_or_modification_or_execution": true,
+  "only_mode_exception": "exact pinned SOURCE.json may remain0644 as data; archive and all473 selected sources require0600",
+  "original_evidence": {
+    "FAILURE.json": {
+      "bytes": 129,
+      "sha256": "03481d63bcce86718c17cec5890d232af0ab1c4d09d8a32704e00d71079ab19a"
+    },
+    "GATE_PLAN_RECEIPT.json": {
+      "bytes": 1584,
+      "sha256": "44794298c500117bdebe85d79a896c3a3743b70415542246f8331caf1f800d1f"
+    },
+    "acquire.json": {
+      "bytes": 1424,
+      "sha256": "7730666ad45213550e3b84ca4fe879d33d0094a4b0ecf61fa2ce1795c35e30d0"
+    },
+    "artifacts/SOURCE.json": {
+      "bytes": 144253,
+      "sha256": "fb7274905c053a102f0d4652fb87b57bc1cd00fb63524f085f5b81225c36366f"
+    },
+    "source/FIXED_CORE_MEMBERS.json": {
+      "bytes": 75898,
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    "source/SOURCE_PLAN.json": {
+      "bytes": 2983,
+      "sha256": "c57d32c37413d3aaf252c674cfd5c51fda338b68a0823a264f220aaf3cdc336f"
+    },
+    "source/acquire_base.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    "source/acquire_official_source.py": {
+      "bytes": 24283,
+      "sha256": "1395add8592dbc8a7380cf826aea9369afedcc9b0527e43fdc1c3953dc59cfd4"
+    }
+  },
+  "scope": "same original quarantined archive and473 source members; original acquisition FAIL remains",
+  "worker_inputs": {
+    "FIXED_CORE_MEMBERS.json": {
+      "bytes": 75898,
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    "SOURCE_PLAN.json": {
+      "bytes": 2983,
+      "sha256": "c57d32c37413d3aaf252c674cfd5c51fda338b68a0823a264f220aaf3cdc336f"
+    }
+  }
+}

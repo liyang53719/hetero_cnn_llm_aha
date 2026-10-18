@@ -1,0 +1,240 @@
+{
+  "dependency_edges": [
+    {
+      "entry": "worker_v1/acquire_official_source.py",
+      "loads_project_code": "only SHA-bound base from the same raw buffer",
+      "reads": [
+        "worker_v1/acquire_base.py",
+        "worker_v1/SOURCE_PLAN.json",
+        "worker_v1/FIXED_CORE_MEMBERS.json"
+      ]
+    },
+    {
+      "entry": "worker_v1/test_source_cold.py",
+      "reads": [
+        "worker_v1/acquire_official_source.py"
+      ],
+      "transitive": "worker_v1 fixed three sibling inputs"
+    },
+    {
+      "entry": "receipt600_future_v3/acquire_official_source.py",
+      "loads_project_code": "only SHA-bound base from the same raw buffer; no current outer is bound to this worker",
+      "reads": [
+        "receipt600_future_v3/acquire_base.py",
+        "receipt600_future_v3/SOURCE_PLAN.json",
+        "receipt600_future_v3/FIXED_CORE_MEMBERS.json"
+      ]
+    },
+    {
+      "entry": "receipt600_future_v3/test_source_cold.py",
+      "reads": [
+        "receipt600_future_v3/acquire_official_source.py"
+      ],
+      "transitive": "receipt600_future_v3 fixed three sibling inputs"
+    },
+    {
+      "entry": "outer_v1/run_gate.py",
+      "reads": [
+        "outer_v1/GATE_PLAN.json",
+        "worker_v1/acquire_official_source.py",
+        "worker_v1/acquire_base.py",
+        "worker_v1/SOURCE_PLAN.json",
+        "worker_v1/FIXED_CORE_MEMBERS.json"
+      ],
+      "repository_dependencies": [
+        "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+        "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py"
+      ],
+      "worker_source_argument": "worker_v1 only; receipt600_future_v3 mismatches the immutable worker pin"
+    },
+    {
+      "entry": "outer_v1/test_gate_cold.py",
+      "reads": [
+        "outer_v1/run_gate.py"
+      ],
+      "repository_dependencies": [
+        "development_snapshots/canonical_runtime_ram_source_20261018/test_runner_cold.py"
+      ],
+      "transitive": "outer_v1 preflight dependencies"
+    },
+    {
+      "entry": "same_asset_readonly_v1/run_readonly.py",
+      "loads_project_code": "full pinned outer definitions then sole reversible postflight receipt-mode expression projection; outer main is not executed",
+      "not_read_by_readonly_config": [
+        "outer_v1/GATE_PLAN.json",
+        "worker_v1/acquire_official_source.py",
+        "worker_v1/acquire_base.py"
+      ],
+      "reads": [
+        "same_asset_readonly_v1/PLAN.json",
+        "outer_v1/run_gate.py",
+        "worker_v1/SOURCE_PLAN.json",
+        "worker_v1/FIXED_CORE_MEMBERS.json"
+      ]
+    },
+    {
+      "entry": "same_asset_readonly_v1/test_cold.py",
+      "fixture_projection": "SHA-bound raw AST Cold.fixture_artifacts only; outer cold module is not executed, so FakeOS and its repository file are not extra readonly-cold execution dependencies",
+      "reads": [
+        "same_asset_readonly_v1/run_readonly.py",
+        "outer_v1/test_gate_cold.py"
+      ],
+      "transitive": "same_asset_readonly_v1 config dependencies"
+    }
+  ],
+  "existing_repository_dependencies": [
+    {
+      "already_in_repository": true,
+      "bytes": 16693,
+      "copied_into_bundle": false,
+      "repository_relative_path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2",
+      "use": "outer_v1 runtime: SHA-bound raw AST projection of require/save/group_state/observe_exit/bounded only; full runner main is not executed"
+    },
+    {
+      "already_in_repository": true,
+      "bytes": 18004,
+      "copied_into_bundle": false,
+      "repository_relative_path": "development_snapshots/canonical_runtime_ram_source_20261018/test_runner_cold.py",
+      "sha256": "fc88db7e72d64fca1603de193940e7b95e9030f90dc3eb0e574cec9d5b40ff46",
+      "use": "outer_v1 cold only: SHA-bound raw AST projection of FakeOS class only; module top-level is not executed"
+    },
+    {
+      "already_in_repository": true,
+      "bytes": 19263,
+      "copied_into_bundle": false,
+      "repository_relative_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py",
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69",
+      "use": "outer_v1 runtime/preflight/posthash: byte-for-byte comparison to worker_v1/acquire_base.py"
+    }
+  ],
+  "existing_repository_dependency_bytes": 53960,
+  "external_actual_inputs_not_shipped": {
+    "arguments": [
+      "--original-attempt",
+      "--failed-actual-review",
+      "--output"
+    ],
+    "binding": "same_asset_readonly_v1/PLAN.json contains original-evidence and failed-review hashes. Caller supplies separate original assets and failed review; code checks them. Their absence prevents actual requalification but does not prevent SOURCE-only config or tiny cold checks.",
+    "excluded": [
+      "quarantine archive",
+      "473 source bodies",
+      "original attempt receipts/logs",
+      "INPUT_INVENTORY.json",
+      "actual review reports"
+    ]
+  },
+  "historical_cold_entry_policy": "worker_v1/test_source_cold.py preserves original bytes and effective size/SHA checks. Its flags check is late, so only use an explicit-I-S-B command or separately reviewed safe same-raw envelope. It must not be described as a missing-SHA or bare-load bypass. The future_v3 cold moves only that flags check before projectload.",
+  "non_dependencies_not_copied": [
+    "Old worker MANIFEST.json: informational pin in GATE_PLAN, never opened by run_gate",
+    "Original acquirer plans/*.json: its legacy load_plan/main are never called by these workers",
+    "Canonical PROJECT_SOURCE_HASHES.json: test_runner_cold module is not executed, only FakeOS AST is projected",
+    "LOCAL_EXECUTION_ARGV.json and COLD_ARGV.json: local launch helpers, not runtime file reads by preserved code",
+    "Author README/log/validation/delta and review reports: not runtime dependencies"
+  ],
+  "original_byte_file_count": 16,
+  "original_byte_files": [
+    {
+      "bytes": 24283,
+      "path": "worker_v1/acquire_official_source.py",
+      "sha256": "1395add8592dbc8a7380cf826aea9369afedcc9b0527e43fdc1c3953dc59cfd4"
+    },
+    {
+      "bytes": 19263,
+      "path": "worker_v1/acquire_base.py",
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    {
+      "bytes": 2983,
+      "path": "worker_v1/SOURCE_PLAN.json",
+      "sha256": "c57d32c37413d3aaf252c674cfd5c51fda338b68a0823a264f220aaf3cdc336f"
+    },
+    {
+      "bytes": 75898,
+      "path": "worker_v1/FIXED_CORE_MEMBERS.json",
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    {
+      "bytes": 21136,
+      "path": "worker_v1/test_source_cold.py",
+      "sha256": "67c71f31c22639ccb5edd9a3fc2dbf2e15977bcadd90722ca1d0dc5b7696a87f"
+    },
+    {
+      "bytes": 24791,
+      "path": "receipt600_future_v3/acquire_official_source.py",
+      "sha256": "61c756233830e1f6bf0862052c4c72035e60409179c07fa57be050064dc3fedc"
+    },
+    {
+      "bytes": 19263,
+      "path": "receipt600_future_v3/acquire_base.py",
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    {
+      "bytes": 2983,
+      "path": "receipt600_future_v3/SOURCE_PLAN.json",
+      "sha256": "c57d32c37413d3aaf252c674cfd5c51fda338b68a0823a264f220aaf3cdc336f"
+    },
+    {
+      "bytes": 75898,
+      "path": "receipt600_future_v3/FIXED_CORE_MEMBERS.json",
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    {
+      "bytes": 25503,
+      "path": "receipt600_future_v3/test_source_cold.py",
+      "sha256": "cf7338a9c8cc7d21e465706e6e69bffe41f706aa98af0898d5bde56dafd15085"
+    },
+    {
+      "bytes": 15002,
+      "path": "outer_v1/run_gate.py",
+      "sha256": "d1dbf8cee2f6ae0428c265bc1fda1c7c93a2c8ba5e5b5ae3f5727b9934de412e"
+    },
+    {
+      "bytes": 3075,
+      "path": "outer_v1/GATE_PLAN.json",
+      "sha256": "0364eca36b872927d3032223d968699af5e73c4e316a161b031e3d5d5999545f"
+    },
+    {
+      "bytes": 13485,
+      "path": "outer_v1/test_gate_cold.py",
+      "sha256": "61fb192cc413c68871903652b0f6cdf74f5d5100de50425431e3c96965ddc834"
+    },
+    {
+      "bytes": 9344,
+      "path": "same_asset_readonly_v1/run_readonly.py",
+      "sha256": "7897dbfc109754b4492543898671b4d121611dcd8844098c37798abe6a60b3cb"
+    },
+    {
+      "bytes": 2595,
+      "path": "same_asset_readonly_v1/PLAN.json",
+      "sha256": "f3362745687824b352e0014ada80ac69c55d6b5f758b3bc46d29cc5008e353bc"
+    },
+    {
+      "bytes": 8035,
+      "path": "same_asset_readonly_v1/test_cold.py",
+      "sha256": "e9692b56665607eb2c33981adc8fd0d0e68bf130f20dda71f31c39b8fb2e6055"
+    }
+  ],
+  "original_byte_total": 343537,
+  "path_scan": {
+    "absolute_actual_paths": "none; caller-supplied CLI arguments only",
+    "portable_nonlocal_absolute_literals": [
+      "POSIX / separator",
+      "/usr/bin:/bin inside original supervisor projection anchor",
+      "/dev/null symlink-negative cold fixture",
+      "/unused mock-only receipt target",
+      "/outside and traversal strings in negative tar fixtures"
+    ],
+    "workspace_home_tmp_local_candidate_contamination_in_16_original_files": false
+  },
+  "projection_preparation_checks": "Static byte-copy and dependency/path/pin validation only; the publication projection itself was not executed. Separate future_v3 author cold48+48 results remain distinct from publication review.",
+  "proposed_repository_root": "development_snapshots/canonical_host93_official_source_acquisition_source_20261018",
+  "schema": "fixed-official-source-publication-scope-v1",
+  "status": "PURE_SOURCE_LAYOUT_ONLY_NO_EXECUTION",
+  "three_shared_inputs_duplicated_intentionally": "Both worker versions pin sibling filenames with HERE. Duplicate unchanged base/plan/member table to retain exact source bytes and self-contained cold layout; no new generic assembler or loader.",
+  "unchanged_contracts": [
+    "original outer keeps v1 worker pin and its strict receipt0600 postflight",
+    "same-asset readonly keeps exact existing SOURCE.json0644 exception and original evidence hashes",
+    "future receipt600 worker is preserved source only; no outer-v2 binding or new acquisition is created"
+  ]
+}

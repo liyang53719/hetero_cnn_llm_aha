@@ -1,0 +1,2848 @@
+{
+  "status": "PROPOSED_CORE_NOT_PROVEN_BUILD_CLOSURE",
+  "revision": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "tree_sha": "3300b1cc13a3903fe3113ae65087ae75b2cdb2df",
+  "count": 473,
+  "blob_bytes": 11747893,
+  "members": [
+    {
+      "path": ".bake.toml",
+      "mode": "100644",
+      "git_blob_sha": "04f57d3d267fec65ae698f6c3072c4d704c09542",
+      "bytes": 680
+    },
+    {
+      "path": ".clang-format",
+      "mode": "100644",
+      "git_blob_sha": "8178613b646fa1bc3ad7739772cd8d22a6456997",
+      "bytes": 3733
+    },
+    {
+      "path": ".clang-tidy",
+      "mode": "100644",
+      "git_blob_sha": "f55313643455e7a8d4a0b0f6e4c7b7dc29f6cb74",
+      "bytes": 1652
+    },
+    {
+      "path": ".codacy.yml",
+      "mode": "100644",
+      "git_blob_sha": "f062ac57bba85daf4bc03a0ca62cdd66b03ef7de",
+      "bytes": 124
+    },
+    {
+      "path": ".codecov.yml",
+      "mode": "100644",
+      "git_blob_sha": "6ea5b4f2ff59574257abac506b016d9d9615325f",
+      "bytes": 557
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "git_blob_sha": "d1eb3d5f44280a20e5a96cbcefae8ab8e57f3d3c",
+      "bytes": 186
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob_sha": "dbf90629577dfa8c580775083d401590f8984f9c",
+      "bytes": 607
+    },
+    {
+      "path": ".pre-commit-hooks.yaml",
+      "mode": "100644",
+      "git_blob_sha": "9722691b38eb7e50fdb9ddc2be496afdef92571d",
+      "bytes": 240
+    },
+    {
+      "path": ".style.yapf",
+      "mode": "100644",
+      "git_blob_sha": "4f7cc6964304d46fb2c5a1a6a65aa962f620c9fd",
+      "bytes": 87
+    },
+    {
+      "path": "AGENTS.md",
+      "mode": "100644",
+      "git_blob_sha": "3a2a6726316fcc70eca7da9abb687277ee25e61f",
+      "bytes": 7724
+    },
+    {
+      "path": "CITATION.cff",
+      "mode": "100644",
+      "git_blob_sha": "a3e43ff86d6e07f07cfd6149901ab211c71d0866",
+      "bytes": 849
+    },
+    {
+      "path": "CMakeLists.txt",
+      "mode": "100644",
+      "git_blob_sha": "2933ee202ac3f81bbedfe36be5145ba0d34ddc49",
+      "bytes": 6333
+    },
+    {
+      "path": "CPPLINT.cfg",
+      "mode": "100644",
+      "git_blob_sha": "3b872606e465e7038b3f77bb71e6de1627983434",
+      "bytes": 435
+    },
+    {
+      "path": "Changes",
+      "mode": "100644",
+      "git_blob_sha": "b4813dbcf34982bc7e2bbc8070357d136b42ef9d",
+      "bytes": 315038
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob_sha": "513d1c01fe5b5b9724e999d8eb041ff17d444eaa",
+      "bytes": 42098
+    },
+    {
+      "path": "LICENSES/Apache-2.0.txt",
+      "mode": "100644",
+      "git_blob_sha": "137069b823873b8bcf42979bcf8e9371052d26a2",
+      "bytes": 10280
+    },
+    {
+      "path": "LICENSES/Artistic-2.0.txt",
+      "mode": "100644",
+      "git_blob_sha": "eb2e968edaac949fe90813c9ce3ee57c02dd401c",
+      "bytes": 8764
+    },
+    {
+      "path": "LICENSES/BSD-3-Clause.txt",
+      "mode": "100644",
+      "git_blob_sha": "086d3992cb3a8f7000127bda96d6cbe673c8e788",
+      "bytes": 1459
+    },
+    {
+      "path": "LICENSES/CC0-1.0.txt",
+      "mode": "100644",
+      "git_blob_sha": "0e259d42c996742e9e3cba14c677129b2c1b6311",
+      "bytes": 7048
+    },
+    {
+      "path": "LICENSES/ISC.txt",
+      "mode": "100644",
+      "git_blob_sha": "b9c199c98f9bec183a195a9c0afc0a2e4fcc7654",
+      "bytes": 823
+    },
+    {
+      "path": "LICENSES/LGPL-3.0-only.txt",
+      "mode": "100644",
+      "git_blob_sha": "513d1c01fe5b5b9724e999d8eb041ff17d444eaa",
+      "bytes": 42098
+    },
+    {
+      "path": "LICENSES/LicenseRef-Altera-No-Warranty.txt",
+      "mode": "100644",
+      "git_blob_sha": "10b18667868b38bd6c8e93e72a1a24e2b8a97bc1",
+      "bytes": 441
+    },
+    {
+      "path": "LICENSES/LicenseRef-IEEE-1800.txt",
+      "mode": "100644",
+      "git_blob_sha": "d3302aee00f57864b75f73c7d0a4cf9aef8405b3",
+      "bytes": 1083
+    },
+    {
+      "path": "LICENSES/MIT.txt",
+      "mode": "100644",
+      "git_blob_sha": "d817195dad53ec992418c28ffca5fbd1cd86502a",
+      "bytes": 1078
+    },
+    {
+      "path": "LICENSES/Unlicense.txt",
+      "mode": "100644",
+      "git_blob_sha": "cde4ac6981861bbb9025ce5e77a4a0e232fe6329",
+      "bytes": 1211
+    },
+    {
+      "path": "Makefile.in",
+      "mode": "100644",
+      "git_blob_sha": "9f904c2ac97e328df0c19c6485e85a17c1438683",
+      "bytes": 30400
+    },
+    {
+      "path": "README.rst",
+      "mode": "100644",
+      "git_blob_sha": "6dd983c0de33c98e7c9f543c472833baa7589380",
+      "bytes": 7483
+    },
+    {
+      "path": "REUSE.toml",
+      "mode": "100644",
+      "git_blob_sha": "429c7fc4b8c65ab35e8511a5e4898af7b76100a1",
+      "bytes": 1547
+    },
+    {
+      "path": "bin/redirect",
+      "mode": "100644",
+      "git_blob_sha": "e9411316d6a96c359ed7dc5b1eb25412aa5a8623",
+      "bytes": 728
+    },
+    {
+      "path": "bin/verilator",
+      "mode": "100755",
+      "git_blob_sha": "bc76fe86b8a623606c08abb55c9d53e1fcfee18a",
+      "bytes": 32346
+    },
+    {
+      "path": "bin/verilator_ccache_report",
+      "mode": "100755",
+      "git_blob_sha": "b6dc728a327ab830d4871e7639051ffbf49d4bf2",
+      "bytes": 3306
+    },
+    {
+      "path": "bin/verilator_coverage",
+      "mode": "100755",
+      "git_blob_sha": "4854f5117cec4c153ae411c15043cd73f0656e01",
+      "bytes": 7617
+    },
+    {
+      "path": "bin/verilator_difftree",
+      "mode": "100755",
+      "git_blob_sha": "96dbbe9d77f97d2d2bc16d7cf6dfc7833c229f8c",
+      "bytes": 4456
+    },
+    {
+      "path": "bin/verilator_gantt",
+      "mode": "100755",
+      "git_blob_sha": "e01a434ff2ad0a83a8b196cc30459879a704d2ec",
+      "bytes": 25787
+    },
+    {
+      "path": "bin/verilator_includer",
+      "mode": "100755",
+      "git_blob_sha": "40ca418abbe5f03400e8871dd341583ecd72b678",
+      "bytes": 1000
+    },
+    {
+      "path": "bin/verilator_profcfunc",
+      "mode": "100755",
+      "git_blob_sha": "75dc60a319d3a262a70c5daf59e07160f9589766",
+      "bytes": 7899
+    },
+    {
+      "path": "configure.ac",
+      "mode": "100644",
+      "git_blob_sha": "ddfbb92d84be4bece7e187a98a74bd99ce82d93b",
+      "bytes": 33835
+    },
+    {
+      "path": "include/.gitignore",
+      "mode": "100644",
+      "git_blob_sha": "b9d2981cbbf12e03665e9a7a66db483ea29b657c",
+      "bytes": 32
+    },
+    {
+      "path": "include/AGENTS.md",
+      "mode": "100644",
+      "git_blob_sha": "0ac1fcbfe17a9faf4fd6a69767f75515af35181b",
+      "bytes": 3362
+    },
+    {
+      "path": "include/fstcpp/.clang-format",
+      "mode": "100644",
+      "git_blob_sha": "85adf0428611666897bdf8ca22705ef4141b60bc",
+      "bytes": 532
+    },
+    {
+      "path": "include/fstcpp/fstcpp.h",
+      "mode": "100644",
+      "git_blob_sha": "d8d5a9b6e23683e249263279f018049036f99a21",
+      "bytes": 5948
+    },
+    {
+      "path": "include/fstcpp/fstcpp_assertion.h",
+      "mode": "100644",
+      "git_blob_sha": "8a4d549ad6760baf7f9d9ebe429cbec1f5f67a55",
+      "bytes": 4196
+    },
+    {
+      "path": "include/fstcpp/fstcpp_file.h",
+      "mode": "100644",
+      "git_blob_sha": "a65a68d87f5cec2cde9bbb775d2ff6f11d01caa1",
+      "bytes": 3157
+    },
+    {
+      "path": "include/fstcpp/fstcpp_stream_write_helper.h",
+      "mode": "100644",
+      "git_blob_sha": "ad2999962bab4272cba4bb11212d0e43a205a647",
+      "bytes": 11355
+    },
+    {
+      "path": "include/fstcpp/fstcpp_variable_info.cpp",
+      "mode": "100644",
+      "git_blob_sha": "c085d87194dcd41922c38d7af8df4061977e4865",
+      "bytes": 1141
+    },
+    {
+      "path": "include/fstcpp/fstcpp_variable_info.h",
+      "mode": "100644",
+      "git_blob_sha": "c5b4a4f5f691e4bbabde88ce3b8dd2b60b3428b5",
+      "bytes": 28806
+    },
+    {
+      "path": "include/fstcpp/fstcpp_writer.cpp",
+      "mode": "100644",
+      "git_blob_sha": "4a31c3af2ffa39937d67a828bcf879a031a6038b",
+      "bytes": 28785
+    },
+    {
+      "path": "include/fstcpp/fstcpp_writer.h",
+      "mode": "100644",
+      "git_blob_sha": "532fdff93f458e1971c07958ae845b4216d78098",
+      "bytes": 8883
+    },
+    {
+      "path": "include/verilated.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f1f7af607cb68a50c548c5489a6cecabc68a2857",
+      "bytes": 186133
+    },
+    {
+      "path": "include/verilated.h",
+      "mode": "100644",
+      "git_blob_sha": "7c311b52c8ba53b5d55d519ce18c4aeda540839f",
+      "bytes": 62071
+    },
+    {
+      "path": "include/verilated.mk.in",
+      "mode": "100644",
+      "git_blob_sha": "0c6dbb33db8e4337e3680f739a8c5c33a1e2ed09",
+      "bytes": 13590
+    },
+    {
+      "path": "include/verilated.v",
+      "mode": "100644",
+      "git_blob_sha": "7d6780d86afd870ae1da94339b476df18e567029",
+      "bytes": 875
+    },
+    {
+      "path": "include/verilated_config.h.in",
+      "mode": "100644",
+      "git_blob_sha": "96161600536f67d8cc7b43e4939028905abe2202",
+      "bytes": 1240
+    },
+    {
+      "path": "include/verilated_cov.cpp",
+      "mode": "100644",
+      "git_blob_sha": "1370c38ecfa21595a6a95914fd84728ab323bbe0",
+      "bytes": 23459
+    },
+    {
+      "path": "include/verilated_cov.h",
+      "mode": "100644",
+      "git_blob_sha": "f47289f74b4c267513cb909ecded57f827b512bb",
+      "bytes": 10712
+    },
+    {
+      "path": "include/verilated_cov_key.h",
+      "mode": "100644",
+      "git_blob_sha": "a2af2b8d386c44fa8578ca22d0ed201cfe92180e",
+      "bytes": 5990
+    },
+    {
+      "path": "include/verilated_cov_model.h",
+      "mode": "100644",
+      "git_blob_sha": "2b502ebda185be09ee2797bb51c23df193c7af0f",
+      "bytes": 3331
+    },
+    {
+      "path": "include/verilated_covergroup.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8809ad083e690713e9c6248a3a0a700726d77b75",
+      "bytes": 89001
+    },
+    {
+      "path": "include/verilated_covergroup.h",
+      "mode": "100644",
+      "git_blob_sha": "09bdcb98c3d7a545c0b297e3b132ada31d7fc4fa",
+      "bytes": 38702
+    },
+    {
+      "path": "include/verilated_dpi.cpp",
+      "mode": "100644",
+      "git_blob_sha": "23abb45946543374a36a9e1b02038e5fe96311cf",
+      "bytes": 33553
+    },
+    {
+      "path": "include/verilated_dpi.h",
+      "mode": "100644",
+      "git_blob_sha": "93fb876536b54ea26be6d877af0161d1184da6a5",
+      "bytes": 4383
+    },
+    {
+      "path": "include/verilated_force.h",
+      "mode": "100644",
+      "git_blob_sha": "d790d91092ee2f96902828d043a6eac126d5cef0",
+      "bytes": 14765
+    },
+    {
+      "path": "include/verilated_fst_c.cpp",
+      "mode": "100644",
+      "git_blob_sha": "de54d9e8ecc2fe43ed6950aec0b29a6d55047e5d",
+      "bytes": 19813
+    },
+    {
+      "path": "include/verilated_fst_c.h",
+      "mode": "100644",
+      "git_blob_sha": "de1b0eecae533b9e58a88d777e537b93aef1503b",
+      "bytes": 13984
+    },
+    {
+      "path": "include/verilated_fst_sc.cpp",
+      "mode": "100644",
+      "git_blob_sha": "e19a491f189de02079d13ba3f0428b280927ef73",
+      "bytes": 981
+    },
+    {
+      "path": "include/verilated_fst_sc.h",
+      "mode": "100644",
+      "git_blob_sha": "fe554add466d6651b3ec13f6f274d550c28da5cf",
+      "bytes": 2003
+    },
+    {
+      "path": "include/verilated_funcs.h",
+      "mode": "100644",
+      "git_blob_sha": "7478cdf9b2bd7a82a6c27d193b860dd9ba211945",
+      "bytes": 161483
+    },
+    {
+      "path": "include/verilated_imp.h",
+      "mode": "100644",
+      "git_blob_sha": "bdfe29c0c81908974b877c5261a0e84ea471001b",
+      "bytes": 25304
+    },
+    {
+      "path": "include/verilated_intrinsics.h",
+      "mode": "100644",
+      "git_blob_sha": "6e6f568f3194ff644da4ec2f854bfd46dfcc74b3",
+      "bytes": 1569
+    },
+    {
+      "path": "include/verilated_probdist.cpp",
+      "mode": "100644",
+      "git_blob_sha": "082017ecb4a77221fc84f7907ab688cd2fb4504b",
+      "bytes": 6925
+    },
+    {
+      "path": "include/verilated_profiler.cpp",
+      "mode": "100644",
+      "git_blob_sha": "609e66324efabbef6c0b45bff7e5a50e7d489522",
+      "bytes": 8956
+    },
+    {
+      "path": "include/verilated_profiler.h",
+      "mode": "100644",
+      "git_blob_sha": "b9be9432c950a205df4b0968d41c280780594ba5",
+      "bytes": 12164
+    },
+    {
+      "path": "include/verilated_random.cpp",
+      "mode": "100644",
+      "git_blob_sha": "7679020f6ef1db57b09ec19cb016d494c8479cd9",
+      "bytes": 73141
+    },
+    {
+      "path": "include/verilated_random.h",
+      "mode": "100644",
+      "git_blob_sha": "b216960e1b5cb376b821345a2f0f8aaccb4c9203",
+      "bytes": 49050
+    },
+    {
+      "path": "include/verilated_saif_c.cpp",
+      "mode": "100644",
+      "git_blob_sha": "18f579ec2c1f7fddf841486cbce9c38cf201a90c",
+      "bytes": 25876
+    },
+    {
+      "path": "include/verilated_saif_c.h",
+      "mode": "100644",
+      "git_blob_sha": "63cc717c0b3661d946592c708455dc061ebf5a9f",
+      "bytes": 14096
+    },
+    {
+      "path": "include/verilated_saif_sc.h",
+      "mode": "100644",
+      "git_blob_sha": "e0c5a50fad6277a80ac732ea2d59347f035f034a",
+      "bytes": 2018
+    },
+    {
+      "path": "include/verilated_save.cpp",
+      "mode": "100644",
+      "git_blob_sha": "9b1c848b8cee26074d82587521bcb8933a02de1b",
+      "bytes": 9666
+    },
+    {
+      "path": "include/verilated_save.h",
+      "mode": "100644",
+      "git_blob_sha": "18ee06d33b6a3d8e5b50219a7ed64983207eff1a",
+      "bytes": 12343
+    },
+    {
+      "path": "include/verilated_sc.h",
+      "mode": "100644",
+      "git_blob_sha": "d59a9f5c92a5e9357083dddd8e426cb4a19fae57",
+      "bytes": 2145
+    },
+    {
+      "path": "include/verilated_sc_trace.h",
+      "mode": "100644",
+      "git_blob_sha": "5f53b103cec3157c2f2d443b3c38aa1fe3506e93",
+      "bytes": 9543
+    },
+    {
+      "path": "include/verilated_std.sv",
+      "mode": "100644",
+      "git_blob_sha": "88122610b1799c47752618610468dbb879e40de7",
+      "bytes": 8375
+    },
+    {
+      "path": "include/verilated_std_waiver.vlt",
+      "mode": "100644",
+      "git_blob_sha": "4a112d5de9bd67168e646f499876526e2dfb3447",
+      "bytes": 3224
+    },
+    {
+      "path": "include/verilated_sym_props.h",
+      "mode": "100644",
+      "git_blob_sha": "562d7604e3418dbf5787513f1524c904631af109",
+      "bytes": 14657
+    },
+    {
+      "path": "include/verilated_syms.h",
+      "mode": "100644",
+      "git_blob_sha": "e40187e2fd7108703acdd145bcdde1db3c32f5f4",
+      "bytes": 3125
+    },
+    {
+      "path": "include/verilated_threads.cpp",
+      "mode": "100644",
+      "git_blob_sha": "62ee200be390aac32b35e8d572859e943fe0d4fd",
+      "bytes": 11082
+    },
+    {
+      "path": "include/verilated_threads.h",
+      "mode": "100644",
+      "git_blob_sha": "95a61db0f71d55f01e9148d884abf01c5004c4a2",
+      "bytes": 9050
+    },
+    {
+      "path": "include/verilated_timing.cpp",
+      "mode": "100644",
+      "git_blob_sha": "dfaa2eb8b612d611d8767d98f14a5d3b0219bd23",
+      "bytes": 11730
+    },
+    {
+      "path": "include/verilated_timing.h",
+      "mode": "100644",
+      "git_blob_sha": "b7d586cb8ef4afa54d85a20f18a6b2333a38abe1",
+      "bytes": 21796
+    },
+    {
+      "path": "include/verilated_trace.h",
+      "mode": "100644",
+      "git_blob_sha": "354cd37b4f49dcc1b73744e4cad0100d53485281",
+      "bytes": 17466
+    },
+    {
+      "path": "include/verilated_trace_imp.h",
+      "mode": "100644",
+      "git_blob_sha": "e2d740d4a6e97b8bbdb77804e22d80db1fbee4fd",
+      "bytes": 24311
+    },
+    {
+      "path": "include/verilated_types.h",
+      "mode": "100644",
+      "git_blob_sha": "93271d924ed16394b98959c64f5eee031fe57840",
+      "bytes": 90766
+    },
+    {
+      "path": "include/verilated_vcd_c.cpp",
+      "mode": "100644",
+      "git_blob_sha": "c0ca9281b79218038da412fe8a9cd4a4f9bbd705",
+      "bytes": 25285
+    },
+    {
+      "path": "include/verilated_vcd_c.h",
+      "mode": "100644",
+      "git_blob_sha": "931035bedec494fb047582976d9d3b06165192d8",
+      "bytes": 15755
+    },
+    {
+      "path": "include/verilated_vcd_sc.cpp",
+      "mode": "100644",
+      "git_blob_sha": "e367eabc59e0245a1911e9ce39f0944ad60cbe11",
+      "bytes": 986
+    },
+    {
+      "path": "include/verilated_vcd_sc.h",
+      "mode": "100644",
+      "git_blob_sha": "36e4e80edff2bee5f36fc2fcf2408bd5e931a54e",
+      "bytes": 2059
+    },
+    {
+      "path": "include/verilated_vpi.cpp",
+      "mode": "100644",
+      "git_blob_sha": "acd9cadbdf251c42dbe07757bcb6086d290461f8",
+      "bytes": 211029
+    },
+    {
+      "path": "include/verilated_vpi.h",
+      "mode": "100644",
+      "git_blob_sha": "14ac9bff04654bafb96924df37477b117c096326",
+      "bytes": 2692
+    },
+    {
+      "path": "include/verilatedos.h",
+      "mode": "100644",
+      "git_blob_sha": "e9d7615e17a42d535b3e428c7639755e7706cb34",
+      "bytes": 30602
+    },
+    {
+      "path": "include/verilatedos_c.h",
+      "mode": "100644",
+      "git_blob_sha": "6a900b5a945b032b94ac56581b646d8a1333b0c4",
+      "bytes": 7757
+    },
+    {
+      "path": "include/vltstd/sv_vpi_user.h",
+      "mode": "100644",
+      "git_blob_sha": "a52f5ebdad552bda5e9b21d80c5725abcefa0c2a",
+      "bytes": 23877
+    },
+    {
+      "path": "include/vltstd/svdpi.h",
+      "mode": "100644",
+      "git_blob_sha": "fd92115389a335efbdd7f0f7789a7287c0501487",
+      "bytes": 20201
+    },
+    {
+      "path": "include/vltstd/veriuser.h",
+      "mode": "100644",
+      "git_blob_sha": "29839002baa4152a1809eadbfb59b42304177489",
+      "bytes": 1227
+    },
+    {
+      "path": "include/vltstd/vpi_user.h",
+      "mode": "100644",
+      "git_blob_sha": "eceff1f2613bc98a368a19f3abb9581dc4aab787",
+      "bytes": 46080
+    },
+    {
+      "path": "install-sh",
+      "mode": "100644",
+      "git_blob_sha": "15d5073232803e7b45e5ff1dbffa8d4bc0c69104",
+      "bytes": 5577
+    },
+    {
+      "path": "python-dev-requirements.txt",
+      "mode": "100644",
+      "git_blob_sha": "e90349d2cc3085788f53a8bb6c98ad85f5630d30",
+      "bytes": 1109
+    },
+    {
+      "path": "src/.gdbinit",
+      "mode": "100644",
+      "git_blob_sha": "c351a4c2ebeb39fdd5fae3dd2e58239262163dbc",
+      "bytes": 1452
+    },
+    {
+      "path": "src/.gdbinit.py",
+      "mode": "100644",
+      "git_blob_sha": "296573445a8eb262a65ad9ff3253a7062881fee8",
+      "bytes": 3272
+    },
+    {
+      "path": "src/.gitignore",
+      "mode": "100644",
+      "git_blob_sha": "0cfb6eb3669b4de623d670ecc18658b06bc04c99",
+      "bytes": 78
+    },
+    {
+      "path": "src/AGENTS.md",
+      "mode": "100644",
+      "git_blob_sha": "cb53dc31ce423ffc8489f56ae4a273a65eed75e9",
+      "bytes": 13688
+    },
+    {
+      "path": "src/CMakeLists.txt",
+      "mode": "100644",
+      "git_blob_sha": "798bfbac1af8226acd319d3691320ea0c911b65e",
+      "bytes": 15300
+    },
+    {
+      "path": "src/Makefile.in",
+      "mode": "100644",
+      "git_blob_sha": "d793fb69829f5665eef0e44c8cdbc1024dd2916c",
+      "bytes": 3585
+    },
+    {
+      "path": "src/Makefile_obj.in",
+      "mode": "100644",
+      "git_blob_sha": "76eae223008065cf1b2ae066368afbaa9fc120d1",
+      "bytes": 12820
+    },
+    {
+      "path": "src/V3Active.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8da88b5bb3616dae8701af826666d5867963651a",
+      "bytes": 32998
+    },
+    {
+      "path": "src/V3Active.h",
+      "mode": "100644",
+      "git_blob_sha": "0e2558c8477c85315016779c86ca45282bcb6e53",
+      "bytes": 1035
+    },
+    {
+      "path": "src/V3ActiveTop.cpp",
+      "mode": "100644",
+      "git_blob_sha": "4729d1501481fefb9e947e22ff82a0eea794dfd5",
+      "bytes": 6379
+    },
+    {
+      "path": "src/V3ActiveTop.h",
+      "mode": "100644",
+      "git_blob_sha": "a94f6c238fd41c034a3e9f28f504468c12f5d325",
+      "bytes": 1047
+    },
+    {
+      "path": "src/V3Assert.cpp",
+      "mode": "100644",
+      "git_blob_sha": "9dc01cbc9a2298479545c7b6147bbb280cd876e7",
+      "bytes": 67484
+    },
+    {
+      "path": "src/V3Assert.h",
+      "mode": "100644",
+      "git_blob_sha": "81a9e88774943c4902b86b8d4d71f7a60e62e0d5",
+      "bytes": 1356
+    },
+    {
+      "path": "src/V3AssertNfa.cpp",
+      "mode": "100644",
+      "git_blob_sha": "1bfe2427cb74ad32f1706d080ac4a058249f5c57",
+      "bytes": 192004
+    },
+    {
+      "path": "src/V3AssertNfa.h",
+      "mode": "100644",
+      "git_blob_sha": "3b5660f962ea379041ee71f73c6f6b2663a4d8eb",
+      "bytes": 1050
+    },
+    {
+      "path": "src/V3AssertPre.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8fe9fb5c52eca4dd6e6573add99e16dd698a2305",
+      "bytes": 88159
+    },
+    {
+      "path": "src/V3AssertPre.h",
+      "mode": "100644",
+      "git_blob_sha": "da98013a6fdd8e323497713c5d2aea27b2b59b41",
+      "bytes": 1027
+    },
+    {
+      "path": "src/V3Ast.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8cdb0c2a8a37eb7c4941423c961810858720d776",
+      "bytes": 80620
+    },
+    {
+      "path": "src/V3Ast.h",
+      "mode": "100644",
+      "git_blob_sha": "93551305169c06012ea38f06409cbca5877d3f9d",
+      "bytes": 79460
+    },
+    {
+      "path": "src/V3AstAttr.h",
+      "mode": "100644",
+      "git_blob_sha": "5cbb38956b4d2ad1d697514b39b2e7c5472374d2",
+      "bytes": 103549
+    },
+    {
+      "path": "src/V3AstInlines.h",
+      "mode": "100644",
+      "git_blob_sha": "7cfd397acc664e3f46e5ddc7e5072d91a8d6d9a1",
+      "bytes": 9348
+    },
+    {
+      "path": "src/V3AstNodeDType.h",
+      "mode": "100644",
+      "git_blob_sha": "a31d982fb88df4aeea68c785caa1d7468286e747",
+      "bytes": 80017
+    },
+    {
+      "path": "src/V3AstNodeExpr.h",
+      "mode": "100644",
+      "git_blob_sha": "a7b781a8f0226d9f5328e7b7d079c8d6f5052b78",
+      "bytes": 290888
+    },
+    {
+      "path": "src/V3AstNodeOther.h",
+      "mode": "100644",
+      "git_blob_sha": "1e2e07b20a37d6596a3e063504370b4e72ea9a9c",
+      "bytes": 162763
+    },
+    {
+      "path": "src/V3AstNodeStmt.h",
+      "mode": "100644",
+      "git_blob_sha": "220ffd83d69710b6ed913c56e3eceac7238cbb9c",
+      "bytes": 76707
+    },
+    {
+      "path": "src/V3AstNodes.cpp",
+      "mode": "100644",
+      "git_blob_sha": "49a2dece1c4690bae00624aaec459df8913c8938",
+      "bytes": 173893
+    },
+    {
+      "path": "src/V3AstPatterns.h",
+      "mode": "100644",
+      "git_blob_sha": "451a518d460f537bd429d0a7ab53592599f45bcb",
+      "bytes": 1206
+    },
+    {
+      "path": "src/V3AstUserAllocator.h",
+      "mode": "100644",
+      "git_blob_sha": "a9c988fce2f91a225eb2c045385d6d6748b94557",
+      "bytes": 4330
+    },
+    {
+      "path": "src/V3Begin.cpp",
+      "mode": "100644",
+      "git_blob_sha": "e43711ad202fc4f39290df560f161ae8a2c37475",
+      "bytes": 31302
+    },
+    {
+      "path": "src/V3Begin.h",
+      "mode": "100644",
+      "git_blob_sha": "adc75197d3e0907da41052949b1099b5401f35a8",
+      "bytes": 1122
+    },
+    {
+      "path": "src/V3Branch.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8702dfe8eca9989e9699e81b0a6c71bbac167ec5",
+      "bytes": 2801
+    },
+    {
+      "path": "src/V3Branch.h",
+      "mode": "100644",
+      "git_blob_sha": "97314a3a69a84958aa16f2a96a6db5ce086043e7",
+      "bytes": 1029
+    },
+    {
+      "path": "src/V3Broken.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8a11037df0020a51d395dc8ddc53cf436b7ba6f9",
+      "bytes": 18982
+    },
+    {
+      "path": "src/V3Broken.h",
+      "mode": "100644",
+      "git_blob_sha": "b40906f0fbe248790934d7c02b60f378e45179ff",
+      "bytes": 1432
+    },
+    {
+      "path": "src/V3CCtors.cpp",
+      "mode": "100644",
+      "git_blob_sha": "98f9d2edd758a44727f20a56eed3184dc63938a0",
+      "bytes": 12105
+    },
+    {
+      "path": "src/V3CCtors.h",
+      "mode": "100644",
+      "git_blob_sha": "ca8028848f5d6b678063fc7ad2333e6a4163b428",
+      "bytes": 1065
+    },
+    {
+      "path": "src/V3CUse.cpp",
+      "mode": "100644",
+      "git_blob_sha": "2921980eb84266fd1a86d429bf9c98ee9f64dab7",
+      "bytes": 5009
+    },
+    {
+      "path": "src/V3CUse.h",
+      "mode": "100644",
+      "git_blob_sha": "d6b78cb9c1f616c98ff561590854893f8485d840",
+      "bytes": 972
+    },
+    {
+      "path": "src/V3Case.cpp",
+      "mode": "100644",
+      "git_blob_sha": "26a40cd58d200393627590f2b7400416934f57fa",
+      "bytes": 58719
+    },
+    {
+      "path": "src/V3Case.h",
+      "mode": "100644",
+      "git_blob_sha": "9744e96d3f25e71b83f0d0c2a46d1d4b1af2bf7b",
+      "bytes": 1110
+    },
+    {
+      "path": "src/V3Cast.cpp",
+      "mode": "100644",
+      "git_blob_sha": "dac40a86f94c0ae128924a6553e6dad3d6d11008",
+      "bytes": 10273
+    },
+    {
+      "path": "src/V3Cast.h",
+      "mode": "100644",
+      "git_blob_sha": "387238ae99874ef2dfde8c20ba29c389afd88ef7",
+      "bytes": 1028
+    },
+    {
+      "path": "src/V3Cfg.cpp",
+      "mode": "100644",
+      "git_blob_sha": "954ab4d03a3f76e97be3a56aa57b90e48caebf6e",
+      "bytes": 12371
+    },
+    {
+      "path": "src/V3Cfg.h",
+      "mode": "100644",
+      "git_blob_sha": "f367a8366e40ff907fcecdb62660c2859eb383d6",
+      "bytes": 22013
+    },
+    {
+      "path": "src/V3CfgBuilder.cpp",
+      "mode": "100644",
+      "git_blob_sha": "5545dcf160dbbb55c7082c3a150d054edd5bfff9",
+      "bytes": 9255
+    },
+    {
+      "path": "src/V3CfgLiveVariables.cpp",
+      "mode": "100644",
+      "git_blob_sha": "162e0837d58afd4da9c76004b37463f76583131f",
+      "bytes": 8311
+    },
+    {
+      "path": "src/V3Class.cpp",
+      "mode": "100644",
+      "git_blob_sha": "2ccc1044bdd648a8897dc2bc8c6a4ff6e45e5322",
+      "bytes": 12320
+    },
+    {
+      "path": "src/V3Class.h",
+      "mode": "100644",
+      "git_blob_sha": "d16d5a49d95563265873f34068e6c7c664271476",
+      "bytes": 1012
+    },
+    {
+      "path": "src/V3ClassGraph.cpp",
+      "mode": "100644",
+      "git_blob_sha": "45d7267412410682a0f219acc28971387cca30b5",
+      "bytes": 9875
+    },
+    {
+      "path": "src/V3ClassGraph.h",
+      "mode": "100644",
+      "git_blob_sha": "528a8d552d6b9249e99b54e736a1adaa9ae3dabc",
+      "bytes": 2187
+    },
+    {
+      "path": "src/V3Clean.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d6423b447d167759d66090a16507eff3fa06ecbb",
+      "bytes": 13255
+    },
+    {
+      "path": "src/V3Clean.h",
+      "mode": "100644",
+      "git_blob_sha": "155066e9d55746c2624203e6ca38b676c624b39e",
+      "bytes": 1012
+    },
+    {
+      "path": "src/V3Clock.cpp",
+      "mode": "100644",
+      "git_blob_sha": "10a9f28742d7612bfd3b78ae0173ac08f5fbea3a",
+      "bytes": 5383
+    },
+    {
+      "path": "src/V3Clock.h",
+      "mode": "100644",
+      "git_blob_sha": "d177074b03855bdf69fd3ab329fb3a0a49ee1e7a",
+      "bytes": 1018
+    },
+    {
+      "path": "src/V3Combine.cpp",
+      "mode": "100644",
+      "git_blob_sha": "14f178142e2e06f0ceffaefe2eee9f2d92f7ef69",
+      "bytes": 9325
+    },
+    {
+      "path": "src/V3Combine.h",
+      "mode": "100644",
+      "git_blob_sha": "e2985fc9bbf5f5d6f30cf945e3ad8e5cbb379435",
+      "bytes": 1030
+    },
+    {
+      "path": "src/V3Common.cpp",
+      "mode": "100644",
+      "git_blob_sha": "549a8ba23fea86ec01551764bdedc19a19ae434c",
+      "bytes": 15024
+    },
+    {
+      "path": "src/V3Common.h",
+      "mode": "100644",
+      "git_blob_sha": "4e1e0842d51345522e776819188c7be119bfab5e",
+      "bytes": 1088
+    },
+    {
+      "path": "src/V3Const.cpp",
+      "mode": "100644",
+      "git_blob_sha": "99c95e3aed1a65775e44a63e0237c0724e383b2b",
+      "bytes": 250746
+    },
+    {
+      "path": "src/V3Const.h",
+      "mode": "100644",
+      "git_blob_sha": "ef6be2ef70167fdf7867c7b8900d7f3ab0827548",
+      "bytes": 2401
+    },
+    {
+      "path": "src/V3ConstPool.cpp",
+      "mode": "100644",
+      "git_blob_sha": "b4b220c259a6b908ca6f2b457d6530e3dccf723c",
+      "bytes": 10026
+    },
+    {
+      "path": "src/V3ConstPool.h",
+      "mode": "100644",
+      "git_blob_sha": "d997ddb028bf19c4fc8bb67b1ff3155cc20d5052",
+      "bytes": 7699
+    },
+    {
+      "path": "src/V3Container.h",
+      "mode": "100644",
+      "git_blob_sha": "9a7071fa81114e374ac10aabb1da29750848f66e",
+      "bytes": 2897
+    },
+    {
+      "path": "src/V3Control.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3c66b2b78c5b3679f9e2b860bf9126388ecbdc4b",
+      "bytes": 48551
+    },
+    {
+      "path": "src/V3Control.h",
+      "mode": "100644",
+      "git_blob_sha": "c555ea188399e8dcf843e3ad50a3ccb0a2734d53",
+      "bytes": 4174
+    },
+    {
+      "path": "src/V3Coverage.cpp",
+      "mode": "100644",
+      "git_blob_sha": "ce20099ed8ddd6ac77337b6a4af626c5f0fd04cd",
+      "bytes": 51415
+    },
+    {
+      "path": "src/V3Coverage.h",
+      "mode": "100644",
+      "git_blob_sha": "97a7ad486b365a2689fb011aec6eb9ead6429781",
+      "bytes": 1050
+    },
+    {
+      "path": "src/V3CoverageJoin.cpp",
+      "mode": "100644",
+      "git_blob_sha": "e27c5ed9e4b9b89ace521fdffec4a7f5b9ae4fe8",
+      "bytes": 5149
+    },
+    {
+      "path": "src/V3CoverageJoin.h",
+      "mode": "100644",
+      "git_blob_sha": "9a676e9fe908ba422b86c1610f7c14f54a173b11",
+      "bytes": 1066
+    },
+    {
+      "path": "src/V3Covergroup.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3356cee88647a0da90c138af4e5c14bd92b11cc8",
+      "bytes": 235711
+    },
+    {
+      "path": "src/V3Covergroup.h",
+      "mode": "100644",
+      "git_blob_sha": "949b1484b614f6a27028669af5a0bcf931832d9c",
+      "bytes": 985
+    },
+    {
+      "path": "src/V3Dead.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3f27ae66afdca035c7fab605d96169ab84783e83",
+      "bytes": 36848
+    },
+    {
+      "path": "src/V3Dead.h",
+      "mode": "100644",
+      "git_blob_sha": "40a059915bdc87d8922eb0d06a6f622f8d3f7e1a",
+      "bytes": 1372
+    },
+    {
+      "path": "src/V3DebugBisect.h",
+      "mode": "100644",
+      "git_blob_sha": "70d9ddbc6d4f313e60e05932194c006afdcd0036",
+      "bytes": 1792
+    },
+    {
+      "path": "src/V3Delayed.cpp",
+      "mode": "100644",
+      "git_blob_sha": "5b75e11116a9704ce3c0ebe1f52f914c70b01759",
+      "bytes": 71788
+    },
+    {
+      "path": "src/V3Delayed.h",
+      "mode": "100644",
+      "git_blob_sha": "582d17d4738f782abd0785e15b58a312dd6855b9",
+      "bytes": 1020
+    },
+    {
+      "path": "src/V3Depth.cpp",
+      "mode": "100644",
+      "git_blob_sha": "b3b2c140d8c109e2d88ca1a09a46692bb8670b39",
+      "bytes": 5702
+    },
+    {
+      "path": "src/V3Depth.h",
+      "mode": "100644",
+      "git_blob_sha": "6e6e49798e69d131535d514548f6e6c7e91e4a4c",
+      "bytes": 1017
+    },
+    {
+      "path": "src/V3DepthBlock.cpp",
+      "mode": "100644",
+      "git_blob_sha": "cf9ad4b7cc42d2d8d4d09e0de5ae6d19d9fa9990",
+      "bytes": 4421
+    },
+    {
+      "path": "src/V3DepthBlock.h",
+      "mode": "100644",
+      "git_blob_sha": "214c5ba48a4d729483927ee7044d466ffb29d930",
+      "bytes": 1037
+    },
+    {
+      "path": "src/V3Descope.cpp",
+      "mode": "100644",
+      "git_blob_sha": "7d4b4c4824437ad1ace9c436a3b90cb95499b0bb",
+      "bytes": 13613
+    },
+    {
+      "path": "src/V3Descope.h",
+      "mode": "100644",
+      "git_blob_sha": "2faaccced33671a84d6ae39bd277bb531f8e4371",
+      "bytes": 1046
+    },
+    {
+      "path": "src/V3Dfg.cpp",
+      "mode": "100644",
+      "git_blob_sha": "378c5417041da70934208bb805a8fb36cc16a985",
+      "bytes": 38868
+    },
+    {
+      "path": "src/V3Dfg.h",
+      "mode": "100644",
+      "git_blob_sha": "ea63ebb367a9fd39618c1cb188ae5e28d8368591",
+      "bytes": 38619
+    },
+    {
+      "path": "src/V3DfgAstToDfg.cpp",
+      "mode": "100644",
+      "git_blob_sha": "14a6444ca8ad9cd680e4c80b8df0689cf3c80f15",
+      "bytes": 12942
+    },
+    {
+      "path": "src/V3DfgBreakCycles.cpp",
+      "mode": "100644",
+      "git_blob_sha": "64f9c1d0d8e56fe4065bb5b37900c2ffabea92f8",
+      "bytes": 75501
+    },
+    {
+      "path": "src/V3DfgCache.h",
+      "mode": "100644",
+      "git_blob_sha": "b0c7302aae17492d74b39f1dd50fcfd40bbfa974",
+      "bytes": 14000
+    },
+    {
+      "path": "src/V3DfgColorSCCs.cpp",
+      "mode": "100644",
+      "git_blob_sha": "1986a87756d0446969c52574cd5988e36ef7205e",
+      "bytes": 6813
+    },
+    {
+      "path": "src/V3DfgContext.h",
+      "mode": "100644",
+      "git_blob_sha": "04a7d8e28e64a54ec4d87f9c7c9be7951b9c92ed",
+      "bytes": 18447
+    },
+    {
+      "path": "src/V3DfgCse.cpp",
+      "mode": "100644",
+      "git_blob_sha": "bfdc5b8862fb24af5dc9a5edde3cb6a4d01404ca",
+      "bytes": 14076
+    },
+    {
+      "path": "src/V3DfgDataType.cpp",
+      "mode": "100644",
+      "git_blob_sha": "55150fc457e48733696da34dac16e6367e43c235",
+      "bytes": 1306
+    },
+    {
+      "path": "src/V3DfgDataType.h",
+      "mode": "100644",
+      "git_blob_sha": "3011d254f60dd253e7fdaac61748b292c16b03eb",
+      "bytes": 9552
+    },
+    {
+      "path": "src/V3DfgDecomposition.cpp",
+      "mode": "100644",
+      "git_blob_sha": "6d695970df3bdbe68733ea95ebcbee6f981e97b1",
+      "bytes": 16194
+    },
+    {
+      "path": "src/V3DfgDfgToAst.cpp",
+      "mode": "100644",
+      "git_blob_sha": "64528cdd70b29fd1a7dc35de9a8608592c3c28a6",
+      "bytes": 14848
+    },
+    {
+      "path": "src/V3DfgOptimizer.cpp",
+      "mode": "100644",
+      "git_blob_sha": "2457cac2f389ed221d20e067883f8e8a62524ec3",
+      "bytes": 9448
+    },
+    {
+      "path": "src/V3DfgOptimizer.h",
+      "mode": "100644",
+      "git_blob_sha": "0af073074a23e4b82d586818b912ece9836e0d59",
+      "bytes": 1084
+    },
+    {
+      "path": "src/V3DfgPasses.cpp",
+      "mode": "100644",
+      "git_blob_sha": "ddef7f314dd2432200abc69b020a8ea109ce2e51",
+      "bytes": 21830
+    },
+    {
+      "path": "src/V3DfgPasses.h",
+      "mode": "100644",
+      "git_blob_sha": "798a3df90eaad40b643831e773089e60e3a0dee6",
+      "bytes": 4374
+    },
+    {
+      "path": "src/V3DfgPeephole.cpp",
+      "mode": "100644",
+      "git_blob_sha": "b9d28fd95c7f1eaa11445a3a9e701acafad672e8",
+      "bytes": 142200
+    },
+    {
+      "path": "src/V3DfgPeepholePatterns.h",
+      "mode": "100644",
+      "git_blob_sha": "f9062b72858219009736cba0e4bb9d944210d3b3",
+      "bytes": 14374
+    },
+    {
+      "path": "src/V3DfgPushDownSels.cpp",
+      "mode": "100644",
+      "git_blob_sha": "71b2bfacabb368300c5193fd32eeafaa79e4a78e",
+      "bytes": 16305
+    },
+    {
+      "path": "src/V3DfgRegularize.cpp",
+      "mode": "100644",
+      "git_blob_sha": "27ea7da2dae3ecd96cda078f08a7ad41a1019051",
+      "bytes": 9982
+    },
+    {
+      "path": "src/V3DfgSynthesize.cpp",
+      "mode": "100644",
+      "git_blob_sha": "6773bafb0d400c8fa959bc25aebd7097ce2d3f23",
+      "bytes": 92174
+    },
+    {
+      "path": "src/V3DfgVertices.h",
+      "mode": "100644",
+      "git_blob_sha": "f260afd5ebb3a777b9e1fbc330286072232a4073",
+      "bytes": 26342
+    },
+    {
+      "path": "src/V3DiagSarif.cpp",
+      "mode": "100644",
+      "git_blob_sha": "81307a5f638fb98151e01a8893da1641b57aba20",
+      "bytes": 7114
+    },
+    {
+      "path": "src/V3DiagSarif.h",
+      "mode": "100644",
+      "git_blob_sha": "a57e8e7f17adedd1d9c455b3d4943b7110c2b4af",
+      "bytes": 1088
+    },
+    {
+      "path": "src/V3DupFinder.cpp",
+      "mode": "100644",
+      "git_blob_sha": "68a07be8f5d89bbfdc9f544dc2fa463ebdbc8373",
+      "bytes": 3285
+    },
+    {
+      "path": "src/V3DupFinder.h",
+      "mode": "100644",
+      "git_blob_sha": "a278369f10f321ceac54efae5822a47f55f88eca",
+      "bytes": 2932
+    },
+    {
+      "path": "src/V3EmitC.h",
+      "mode": "100644",
+      "git_blob_sha": "922f0f8c16009e3eb3e48f4b401fd6932ac30248",
+      "bytes": 1309
+    },
+    {
+      "path": "src/V3EmitCBase.cpp",
+      "mode": "100644",
+      "git_blob_sha": "cdd283a44927add0e628f213223016396e16a871",
+      "bytes": 13448
+    },
+    {
+      "path": "src/V3EmitCBase.h",
+      "mode": "100644",
+      "git_blob_sha": "cbdcdc1d5b685a6670047354a85b7db42626af87",
+      "bytes": 9557
+    },
+    {
+      "path": "src/V3EmitCConstInit.h",
+      "mode": "100644",
+      "git_blob_sha": "b517bc1e6f691a0a14873cd0096591247adc141c",
+      "bytes": 6056
+    },
+    {
+      "path": "src/V3EmitCConstPool.cpp",
+      "mode": "100644",
+      "git_blob_sha": "26b30c13ebda6e06d171fbb8d4c73373634e29f1",
+      "bytes": 4400
+    },
+    {
+      "path": "src/V3EmitCFunc.cpp",
+      "mode": "100644",
+      "git_blob_sha": "cf936bf8e6bd14f32293a0527c32d8a4adfff2c9",
+      "bytes": 29532
+    },
+    {
+      "path": "src/V3EmitCFunc.h",
+      "mode": "100644",
+      "git_blob_sha": "d1ce24ef447b2d9878c96d7039573f39556db0e3",
+      "bytes": 83035
+    },
+    {
+      "path": "src/V3EmitCHeaders.cpp",
+      "mode": "100644",
+      "git_blob_sha": "1f992565d5cea5fd9fea87636dd101e01faf969f",
+      "bytes": 35360
+    },
+    {
+      "path": "src/V3EmitCImp.cpp",
+      "mode": "100644",
+      "git_blob_sha": "2435df49920f1d2beee2692ef35c07f74f0d23a6",
+      "bytes": 40873
+    },
+    {
+      "path": "src/V3EmitCInlines.cpp",
+      "mode": "100644",
+      "git_blob_sha": "303b28c5a9f13247e6165975760e59faef9847c4",
+      "bytes": 2014
+    },
+    {
+      "path": "src/V3EmitCMain.cpp",
+      "mode": "100644",
+      "git_blob_sha": "0d3fd0b6d310b1efc61cf7bae359052df57bf760",
+      "bytes": 7435
+    },
+    {
+      "path": "src/V3EmitCMain.h",
+      "mode": "100644",
+      "git_blob_sha": "1bee13b15c193c618af1d8616f86ec1a54a154e3",
+      "bytes": 973
+    },
+    {
+      "path": "src/V3EmitCModel.cpp",
+      "mode": "100644",
+      "git_blob_sha": "69dc6f46a7d690b00980a4bbb3b29d44c19a9a4a",
+      "bytes": 34707
+    },
+    {
+      "path": "src/V3EmitCPch.cpp",
+      "mode": "100644",
+      "git_blob_sha": "16b6776c2213a7db170265487c1e9c21c48a4265",
+      "bytes": 2657
+    },
+    {
+      "path": "src/V3EmitCSyms.cpp",
+      "mode": "100644",
+      "git_blob_sha": "275fa059118e4746f7d2ec855041835c3183a365",
+      "bytes": 80745
+    },
+    {
+      "path": "src/V3EmitMk.cpp",
+      "mode": "100644",
+      "git_blob_sha": "32e3b9b11f467c6e1f47f21f61816da952653717",
+      "bytes": 45339
+    },
+    {
+      "path": "src/V3EmitMk.h",
+      "mode": "100644",
+      "git_blob_sha": "51c8308c78762b37e4a6008421fc409133e958b3",
+      "bytes": 1190
+    },
+    {
+      "path": "src/V3EmitMkJson.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8993eaea436bf48af6f6a0b19d53a00be8e9c7ba",
+      "bytes": 7844
+    },
+    {
+      "path": "src/V3EmitMkJson.h",
+      "mode": "100644",
+      "git_blob_sha": "bfb8bb01d17acf187b7f833fa36c0ee7b2dfab8e",
+      "bytes": 986
+    },
+    {
+      "path": "src/V3EmitV.cpp",
+      "mode": "100644",
+      "git_blob_sha": "fdf4a2c3389b835876db43dbd0c86d67d316751e",
+      "bytes": 52781
+    },
+    {
+      "path": "src/V3EmitV.h",
+      "mode": "100644",
+      "git_blob_sha": "5211d92b7ffa7d17c5b0d9fea68d3ff61f80bc3d",
+      "bytes": 1285
+    },
+    {
+      "path": "src/V3Error.cpp",
+      "mode": "100644",
+      "git_blob_sha": "572d97bd2d98e5382dc602b206d6af286c0fc15f",
+      "bytes": 15286
+    },
+    {
+      "path": "src/V3Error.h",
+      "mode": "100644",
+      "git_blob_sha": "35f19c04685a59b799e2aa1db5b190087c33f3eb",
+      "bytes": 41562
+    },
+    {
+      "path": "src/V3ExecGraph.cpp",
+      "mode": "100644",
+      "git_blob_sha": "1378c43404d8d6c4dda350bb66997058cd4a12e9",
+      "bytes": 56398
+    },
+    {
+      "path": "src/V3ExecGraph.h",
+      "mode": "100644",
+      "git_blob_sha": "906d744c0cdda54a6173a3aff8e8d4cf7d0bf742",
+      "bytes": 3167
+    },
+    {
+      "path": "src/V3Expand.cpp",
+      "mode": "100644",
+      "git_blob_sha": "194f306e7cd586587a321131fba3fd439c03226b",
+      "bytes": 63108
+    },
+    {
+      "path": "src/V3Expand.h",
+      "mode": "100644",
+      "git_blob_sha": "69ce46732166d5bc8acd4392d8299eacaf665c7a",
+      "bytes": 1040
+    },
+    {
+      "path": "src/V3File.cpp",
+      "mode": "100644",
+      "git_blob_sha": "bba4c0ba39c2d9453a4ff3424186232ac1f61900",
+      "bytes": 42142
+    },
+    {
+      "path": "src/V3File.h",
+      "mode": "100644",
+      "git_blob_sha": "adb6aeb75ced087d9ec674c1ff25baab040ec77e",
+      "bytes": 16534
+    },
+    {
+      "path": "src/V3FileLine.cpp",
+      "mode": "100644",
+      "git_blob_sha": "df0d580ade4a4741da98a02c939256d786ce9369",
+      "bytes": 21216
+    },
+    {
+      "path": "src/V3FileLine.h",
+      "mode": "100644",
+      "git_blob_sha": "7c5a020badf6be4319bbe2aef660c79ab24f3c5c",
+      "bytes": 21177
+    },
+    {
+      "path": "src/V3Force.cpp",
+      "mode": "100644",
+      "git_blob_sha": "0a70aefee8fb2bf10dd64439e146c7209f7a13c9",
+      "bytes": 78839
+    },
+    {
+      "path": "src/V3Force.h",
+      "mode": "100644",
+      "git_blob_sha": "8c7480e969ebb6436b8b65a5be76b4063c7963f2",
+      "bytes": 1019
+    },
+    {
+      "path": "src/V3Fork.cpp",
+      "mode": "100644",
+      "git_blob_sha": "68c5b5acd87bcf3759fb6072be13667be8e5c66c",
+      "bytes": 34259
+    },
+    {
+      "path": "src/V3Fork.h",
+      "mode": "100644",
+      "git_blob_sha": "a00b01a8fb1560106ccac0c8b44d599946e9f072",
+      "bytes": 1457
+    },
+    {
+      "path": "src/V3FsmDetect.cpp",
+      "mode": "100644",
+      "git_blob_sha": "89f02791469632602666aa95fdf66ca8f39dbac3",
+      "bytes": 115235
+    },
+    {
+      "path": "src/V3FsmDetect.h",
+      "mode": "100644",
+      "git_blob_sha": "878efe5be8c97978371cf2860ba7522ba589beb7",
+      "bytes": 1145
+    },
+    {
+      "path": "src/V3FuncOpt.cpp",
+      "mode": "100644",
+      "git_blob_sha": "787827ef3eacf0212c6f4eb1d1b5cc632406fb27",
+      "bytes": 16774
+    },
+    {
+      "path": "src/V3FuncOpt.h",
+      "mode": "100644",
+      "git_blob_sha": "20bbea48cac581f9e42a359d203670297eea17f5",
+      "bytes": 1026
+    },
+    {
+      "path": "src/V3FunctionTraits.h",
+      "mode": "100644",
+      "git_blob_sha": "804734a19a479c2881ba774d78d298401bb26478",
+      "bytes": 1983
+    },
+    {
+      "path": "src/V3Gate.cpp",
+      "mode": "100644",
+      "git_blob_sha": "beec484e0689d8f5443669df3bbbc7c4e6f97dd4",
+      "bytes": 56115
+    },
+    {
+      "path": "src/V3Gate.h",
+      "mode": "100644",
+      "git_blob_sha": "9d5c4313d930a9447aacbba24edd45794601c58d",
+      "bytes": 1027
+    },
+    {
+      "path": "src/V3Global.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d67add4f65619e77f7b6785221494ff2ead11a6d",
+      "bytes": 9769
+    },
+    {
+      "path": "src/V3Global.h",
+      "mode": "100644",
+      "git_blob_sha": "332075bdc8b498d11c756d27819e3b50f5debe80",
+      "bytes": 13682
+    },
+    {
+      "path": "src/V3Graph.cpp",
+      "mode": "100644",
+      "git_blob_sha": "79e7898ee900dce4493d7959ebfb5dd0dd5090d5",
+      "bytes": 13582
+    },
+    {
+      "path": "src/V3Graph.h",
+      "mode": "100644",
+      "git_blob_sha": "cc78995c2f26fa163cc848319e1eef5adb6ba880",
+      "bytes": 19677
+    },
+    {
+      "path": "src/V3GraphAcyc.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f65a87cecb86aa2efe97a9afe7943d5ac03bc450",
+      "bytes": 24100
+    },
+    {
+      "path": "src/V3GraphAlg.cpp",
+      "mode": "100644",
+      "git_blob_sha": "ed99d0b28f8d7d2decf7256bef533aa5b8127c7a",
+      "bytes": 23660
+    },
+    {
+      "path": "src/V3GraphAlg.h",
+      "mode": "100644",
+      "git_blob_sha": "a2ab590b83704dafca0b1ac3644a6c25fab78112",
+      "bytes": 1653
+    },
+    {
+      "path": "src/V3GraphPathChecker.cpp",
+      "mode": "100644",
+      "git_blob_sha": "a3d9c5c226a0f609a93585217d9d845fbff3813c",
+      "bytes": 5680
+    },
+    {
+      "path": "src/V3GraphPathChecker.h",
+      "mode": "100644",
+      "git_blob_sha": "a8a0ab64f105b79ed0e49a088b7dec5567941a86",
+      "bytes": 2573
+    },
+    {
+      "path": "src/V3GraphStream.h",
+      "mode": "100644",
+      "git_blob_sha": "99ace269185d89355077ba100b1588427f41f8fc",
+      "bytes": 11749
+    },
+    {
+      "path": "src/V3GraphTest.cpp",
+      "mode": "100644",
+      "git_blob_sha": "28c8c0d0f3e21b8883c3084c14121c85d019da77",
+      "bytes": 11534
+    },
+    {
+      "path": "src/V3Hash.cpp",
+      "mode": "100644",
+      "git_blob_sha": "cfd38bc4e1ead6109c399687f652de672e49f8cb",
+      "bytes": 1177
+    },
+    {
+      "path": "src/V3Hash.h",
+      "mode": "100644",
+      "git_blob_sha": "a28d596187d8952986092a43dce1388a9864f82e",
+      "bytes": 2776
+    },
+    {
+      "path": "src/V3HashTable.cpp",
+      "mode": "100644",
+      "git_blob_sha": "669243ca2d1c224f3e1dad687e39e832019a1ca4",
+      "bytes": 53068
+    },
+    {
+      "path": "src/V3HashTable.h",
+      "mode": "100644",
+      "git_blob_sha": "35b641bf4ab801654ebd32b706e9cfc8cfe67992",
+      "bytes": 21496
+    },
+    {
+      "path": "src/V3Hasher.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f010f221fa040e5253261c238cba7a779645cc05",
+      "bytes": 24524
+    },
+    {
+      "path": "src/V3Hasher.h",
+      "mode": "100644",
+      "git_blob_sha": "7e980565d4cbd954ea957e13f5babd0fb07278c9",
+      "bytes": 1741
+    },
+    {
+      "path": "src/V3HierBlock.cpp",
+      "mode": "100644",
+      "git_blob_sha": "fbcc6ae1b615f1718876c202e73c2838e73232a0",
+      "bytes": 21414
+    },
+    {
+      "path": "src/V3HierBlock.h",
+      "mode": "100644",
+      "git_blob_sha": "48f081dbcf588dccb074ebcf2aa7ce95d21215e5",
+      "bytes": 4582
+    },
+    {
+      "path": "src/V3Inline.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8757e644076f28f0599f7b8ef014a72c5ac58453",
+      "bytes": 34551
+    },
+    {
+      "path": "src/V3Inline.h",
+      "mode": "100644",
+      "git_blob_sha": "7c26496f53680883111eb9aaabdb76aa42bf3d26",
+      "bytes": 1011
+    },
+    {
+      "path": "src/V3InlineCFuncs.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8f1ec7ad64592c37b9b32c802fa9a0b84c6eb0cd",
+      "bytes": 21192
+    },
+    {
+      "path": "src/V3InlineCFuncs.h",
+      "mode": "100644",
+      "git_blob_sha": "c365e61dbc94a7b577a67d458b8dfa46cbad1fef",
+      "bytes": 968
+    },
+    {
+      "path": "src/V3Inst.cpp",
+      "mode": "100644",
+      "git_blob_sha": "c6ccb8ce3208989b7c2a9eda3e1db9868bd99709",
+      "bytes": 16948
+    },
+    {
+      "path": "src/V3Inst.h",
+      "mode": "100644",
+      "git_blob_sha": "576b80001b484a80209a05fde94018ed568953e4",
+      "bytes": 1315
+    },
+    {
+      "path": "src/V3InstrCount.cpp",
+      "mode": "100644",
+      "git_blob_sha": "87010e009b2e199db00d142fefa2699f4403d79a",
+      "bytes": 13784
+    },
+    {
+      "path": "src/V3InstrCount.h",
+      "mode": "100644",
+      "git_blob_sha": "c55ad432be5e07f1a97f8160b8e476cec33d517f",
+      "bytes": 1726
+    },
+    {
+      "path": "src/V3Interface.cpp",
+      "mode": "100644",
+      "git_blob_sha": "044fe58d0a5566b4d99deba78989907d0ca17c4c",
+      "bytes": 3758
+    },
+    {
+      "path": "src/V3Interface.h",
+      "mode": "100644",
+      "git_blob_sha": "735591c1f0918915b4cfafc72641acd05b38594d",
+      "bytes": 1044
+    },
+    {
+      "path": "src/V3LangCode.h",
+      "mode": "100644",
+      "git_blob_sha": "ad12809e528401ed3bbd2742546483dd97400a37",
+      "bytes": 2462
+    },
+    {
+      "path": "src/V3LanguageWords.h",
+      "mode": "100644",
+      "git_blob_sha": "f1a8fb52781e9df16217a3c762d62c8dff815505",
+      "bytes": 13464
+    },
+    {
+      "path": "src/V3LibMap.cpp",
+      "mode": "100644",
+      "git_blob_sha": "61907355175b1372499628de74acc19182d1a26a",
+      "bytes": 3961
+    },
+    {
+      "path": "src/V3LibMap.h",
+      "mode": "100644",
+      "git_blob_sha": "4de0f69e38d33050443086f8dd11de01b4efde1d",
+      "bytes": 2359
+    },
+    {
+      "path": "src/V3Life.cpp",
+      "mode": "100644",
+      "git_blob_sha": "22b1960d64da1452c402e5d5555077b4209a9633",
+      "bytes": 20574
+    },
+    {
+      "path": "src/V3Life.h",
+      "mode": "100644",
+      "git_blob_sha": "7c1035ac55d2587e231874354ba0497ee34d1ddc",
+      "bytes": 1006
+    },
+    {
+      "path": "src/V3LifePost.cpp",
+      "mode": "100644",
+      "git_blob_sha": "40aae8f7b4bfc18a2bb52d805919af37677ece72",
+      "bytes": 15859
+    },
+    {
+      "path": "src/V3LifePost.h",
+      "mode": "100644",
+      "git_blob_sha": "386d425fc66c51e3f0ededacb08ea72c7bc1a76d",
+      "bytes": 1026
+    },
+    {
+      "path": "src/V3LiftExpr.cpp",
+      "mode": "100644",
+      "git_blob_sha": "96075e8a018c2765f08156d1c10fc0b7ce65d506",
+      "bytes": 22035
+    },
+    {
+      "path": "src/V3LiftExpr.h",
+      "mode": "100644",
+      "git_blob_sha": "250a39e688f8e5ef4c745e09785281a2aeb14746",
+      "bytes": 1034
+    },
+    {
+      "path": "src/V3LinkCells.cpp",
+      "mode": "100644",
+      "git_blob_sha": "84b7839cbf0a83528d6fe0f9a897fb544c63bfe2",
+      "bytes": 45006
+    },
+    {
+      "path": "src/V3LinkCells.h",
+      "mode": "100644",
+      "git_blob_sha": "e6cdfb87719e973d85e668ae9a3127181a1eda8f",
+      "bytes": 1080
+    },
+    {
+      "path": "src/V3LinkDot.cpp",
+      "mode": "100644",
+      "git_blob_sha": "6411925abc6d5c7285364643681738ae03d6f69a",
+      "bytes": 343288
+    },
+    {
+      "path": "src/V3LinkDot.h",
+      "mode": "100644",
+      "git_blob_sha": "040913daceeb17c65eb0c808efd064879c39575c",
+      "bytes": 1406
+    },
+    {
+      "path": "src/V3LinkDotIfaceCapture.cpp",
+      "mode": "100644",
+      "git_blob_sha": "cde4975f9fdf9bbd2cd9f81ca275a12cd96f88eb",
+      "bytes": 25805
+    },
+    {
+      "path": "src/V3LinkDotIfaceCapture.h",
+      "mode": "100644",
+      "git_blob_sha": "7313bf799095a6729002dd9f2fe906a2300ca53d",
+      "bytes": 4803
+    },
+    {
+      "path": "src/V3LinkInc.cpp",
+      "mode": "100644",
+      "git_blob_sha": "48ce78a5654474b650fc571d36e564006088eb19",
+      "bytes": 22683
+    },
+    {
+      "path": "src/V3LinkInc.h",
+      "mode": "100644",
+      "git_blob_sha": "2ff490c4a3a8621b9a693ae7f7834817c878af1d",
+      "bytes": 1048
+    },
+    {
+      "path": "src/V3LinkJump.cpp",
+      "mode": "100644",
+      "git_blob_sha": "a6ce1d3a2ee26348206be808dbb25ce0ef4100ee",
+      "bytes": 31337
+    },
+    {
+      "path": "src/V3LinkJump.h",
+      "mode": "100644",
+      "git_blob_sha": "8473020b8579e401d03c76e34cf6ba3893d30452",
+      "bytes": 1031
+    },
+    {
+      "path": "src/V3LinkLValue.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d33f6e11d9a43c2a2dfe9dfc9d1d5a586d9e3687",
+      "bytes": 16550
+    },
+    {
+      "path": "src/V3LinkLValue.h",
+      "mode": "100644",
+      "git_blob_sha": "0691bccde1e6b303e207dc9ad7733b460a79c3fe",
+      "bytes": 1130
+    },
+    {
+      "path": "src/V3LinkLevel.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3d3f068e613335908cad0271e622bd210e619eeb",
+      "bytes": 17582
+    },
+    {
+      "path": "src/V3LinkLevel.h",
+      "mode": "100644",
+      "git_blob_sha": "6ced1358bb1a48e8557e02b12410879957250c5c",
+      "bytes": 1424
+    },
+    {
+      "path": "src/V3LinkParse.cpp",
+      "mode": "100644",
+      "git_blob_sha": "c9ac9760018b9b4c87879a04b84dc221bfabb345",
+      "bytes": 75944
+    },
+    {
+      "path": "src/V3LinkParse.h",
+      "mode": "100644",
+      "git_blob_sha": "3282720023850fc30b7ae9b54ea73fc2bd305368",
+      "bytes": 1030
+    },
+    {
+      "path": "src/V3LinkResolve.cpp",
+      "mode": "100644",
+      "git_blob_sha": "636965aa950c17e0cc7f053982a0fe6a2da8150d",
+      "bytes": 21653
+    },
+    {
+      "path": "src/V3LinkResolve.h",
+      "mode": "100644",
+      "git_blob_sha": "893aaf770c29f9540eed57c7835d09d4b9d738a0",
+      "bytes": 1038
+    },
+    {
+      "path": "src/V3LinkWith.cpp",
+      "mode": "100644",
+      "git_blob_sha": "cd5a7ebca9674f0ba50d40c2ca4d81b6f871af36",
+      "bytes": 5913
+    },
+    {
+      "path": "src/V3LinkWith.h",
+      "mode": "100644",
+      "git_blob_sha": "3315e8614cbc69f5dd584330a4d2d7f88f6032d4",
+      "bytes": 1026
+    },
+    {
+      "path": "src/V3List.h",
+      "mode": "100644",
+      "git_blob_sha": "ba54d2365f5497172db4f327fa1a39b1e3e695bb",
+      "bytes": 14260
+    },
+    {
+      "path": "src/V3Localize.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d0a3f48f3f70b4c7ba6d89cc892642f68087e0cf",
+      "bytes": 10788
+    },
+    {
+      "path": "src/V3Localize.h",
+      "mode": "100644",
+      "git_blob_sha": "4dda2faf1a2cca55f09f484d0c8e76f57d4bc975",
+      "bytes": 1037
+    },
+    {
+      "path": "src/V3MemberMap.h",
+      "mode": "100644",
+      "git_blob_sha": "396f78a0642115649f9441041cd28f57625a3b6e",
+      "bytes": 4649
+    },
+    {
+      "path": "src/V3MergeCond.cpp",
+      "mode": "100644",
+      "git_blob_sha": "6cddb01e735612e29a1d728f91fbe75f4657b8f6",
+      "bytes": 44748
+    },
+    {
+      "path": "src/V3MergeCond.h",
+      "mode": "100644",
+      "git_blob_sha": "218a2fbe3cad9d67d6f2f1cc522971c75b9ffd57",
+      "bytes": 1034
+    },
+    {
+      "path": "src/V3Mutex.h",
+      "mode": "100644",
+      "git_blob_sha": "2c17e6c59b8b9b241e5f81dcb8b8fb7d446568ee",
+      "bytes": 5322
+    },
+    {
+      "path": "src/V3Name.cpp",
+      "mode": "100644",
+      "git_blob_sha": "4220c2028203d111ec59bd37cef276a4898e3091",
+      "bytes": 6712
+    },
+    {
+      "path": "src/V3Name.h",
+      "mode": "100644",
+      "git_blob_sha": "466ce6c4a0eb9786014af3e874083dffec2defe9",
+      "bytes": 1009
+    },
+    {
+      "path": "src/V3Number.cpp",
+      "mode": "100644",
+      "git_blob_sha": "59da11b40152b60e800e7ac85473f4e044f0295d",
+      "bytes": 106578
+    },
+    {
+      "path": "src/V3Number.h",
+      "mode": "100644",
+      "git_blob_sha": "54e116e76e8ff15c862744ab356865c071769fe5",
+      "bytes": 35638
+    },
+    {
+      "path": "src/V3OptionParser.cpp",
+      "mode": "100644",
+      "git_blob_sha": "77ee3415baa2b062944727d51db17cb03222a43c",
+      "bytes": 12667
+    },
+    {
+      "path": "src/V3OptionParser.h",
+      "mode": "100644",
+      "git_blob_sha": "e3241d9e18b8ef9e1e78f29d6663e66369d5bff0",
+      "bytes": 7242
+    },
+    {
+      "path": "src/V3Options.cpp",
+      "mode": "100644",
+      "git_blob_sha": "1d009b12258f295fa31e90f9c9c29add714181e5",
+      "bytes": 99474
+    },
+    {
+      "path": "src/V3Options.h",
+      "mode": "100644",
+      "git_blob_sha": "6e5517463f0dc54cec853176d6ae943c6bca6b3f",
+      "bytes": 45854
+    },
+    {
+      "path": "src/V3Order.cpp",
+      "mode": "100644",
+      "git_blob_sha": "35c518395e3da8df1be2431fe5fcc034ebe5d046",
+      "bytes": 7029
+    },
+    {
+      "path": "src/V3Order.h",
+      "mode": "100644",
+      "git_blob_sha": "e7c7ef000b19e246a98e9863bc68169deb66b21f",
+      "bytes": 1918
+    },
+    {
+      "path": "src/V3OrderCFuncEmitter.h",
+      "mode": "100644",
+      "git_blob_sha": "e3727fdded88f49ae4c7b5f76d9690877d7d6f1c",
+      "bytes": 8199
+    },
+    {
+      "path": "src/V3OrderGraph.h",
+      "mode": "100644",
+      "git_blob_sha": "7359680ea857c14a2f63152f22915c9f9909f74f",
+      "bytes": 13393
+    },
+    {
+      "path": "src/V3OrderGraphBuilder.cpp",
+      "mode": "100644",
+      "git_blob_sha": "c92088100d513c97d0d291a5a08cfd2bf0a54249",
+      "bytes": 22249
+    },
+    {
+      "path": "src/V3OrderInternal.h",
+      "mode": "100644",
+      "git_blob_sha": "732ba224d0b7467193c48186d463ea11589aae19",
+      "bytes": 2078
+    },
+    {
+      "path": "src/V3OrderMTaskContraction.cpp",
+      "mode": "100644",
+      "git_blob_sha": "4a128865861f6a66f824b183809f2003a09107c3",
+      "bytes": 29327
+    },
+    {
+      "path": "src/V3OrderMTaskFixHazards.cpp",
+      "mode": "100644",
+      "git_blob_sha": "29852931782fa8b6689d69595428f580b8ffc8d5",
+      "bytes": 16868
+    },
+    {
+      "path": "src/V3OrderMTaskGraph.cpp",
+      "mode": "100644",
+      "git_blob_sha": "b2cca479a219318fa795c937d430111ce157671f",
+      "bytes": 24654
+    },
+    {
+      "path": "src/V3OrderMTaskGraph.h",
+      "mode": "100644",
+      "git_blob_sha": "9995cfd064409991028389c67f95ce24ba557126",
+      "bytes": 16900
+    },
+    {
+      "path": "src/V3OrderMoveGraph.cpp",
+      "mode": "100644",
+      "git_blob_sha": "e69a790b866857ad24b7424cc1477ca9e430c0b7",
+      "bytes": 10178
+    },
+    {
+      "path": "src/V3OrderMoveGraph.h",
+      "mode": "100644",
+      "git_blob_sha": "01e0904a6717bd46eac388fef950093a32c6f6d0",
+      "bytes": 10406
+    },
+    {
+      "path": "src/V3OrderParallel.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3bc200cd82da7ff7cf9acef3fc5743754dd1f793",
+      "bytes": 15366
+    },
+    {
+      "path": "src/V3OrderProcessDomains.cpp",
+      "mode": "100644",
+      "git_blob_sha": "951f5214ab8bebc9e12d13d5ae78a79a541aa78f",
+      "bytes": 11459
+    },
+    {
+      "path": "src/V3OrderSerial.cpp",
+      "mode": "100644",
+      "git_blob_sha": "abdcd97bec39c90558e3a0f553c692f6eff06b98",
+      "bytes": 2597
+    },
+    {
+      "path": "src/V3Os.cpp",
+      "mode": "100644",
+      "git_blob_sha": "e5a2bdf5714c5909823db05a5b9979f711f93387",
+      "bytes": 19736
+    },
+    {
+      "path": "src/V3Os.h",
+      "mode": "100644",
+      "git_blob_sha": "d37caeb1860b580c975b5a7a4db92e7f3ee776d3",
+      "bytes": 3774
+    },
+    {
+      "path": "src/V3PairingHeap.h",
+      "mode": "100644",
+      "git_blob_sha": "7beb1ee416110fc11cb636a796eb27efe0760ffc",
+      "bytes": 12070
+    },
+    {
+      "path": "src/V3Param.cpp",
+      "mode": "100644",
+      "git_blob_sha": "17363bc1089c129d29415e1996e37973d062e322",
+      "bytes": 205226
+    },
+    {
+      "path": "src/V3Param.h",
+      "mode": "100644",
+      "git_blob_sha": "e4248dcd2fd3bd77fa680739b3657dcc8e8b6741",
+      "bytes": 1089
+    },
+    {
+      "path": "src/V3Parse.h",
+      "mode": "100644",
+      "git_blob_sha": "0dd2e2946b865f56f6c01fa31c20b1c553b24dda",
+      "bytes": 1828
+    },
+    {
+      "path": "src/V3ParseGrammar.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d0c5ac659a1faf72d7e40a8dc59f7e7677673a8b",
+      "bytes": 12345
+    },
+    {
+      "path": "src/V3ParseGrammar.h",
+      "mode": "100644",
+      "git_blob_sha": "9df0b6f426ec3d2e0868ab4c3289d6acb17d1bbe",
+      "bytes": 15251
+    },
+    {
+      "path": "src/V3ParseImp.cpp",
+      "mode": "100644",
+      "git_blob_sha": "905c1ed43d5d2abbbfd2cdff30a87a07603ddda7",
+      "bytes": 37946
+    },
+    {
+      "path": "src/V3ParseImp.h",
+      "mode": "100644",
+      "git_blob_sha": "48bde448a116701c632194d8449ed584c37a8c5e",
+      "bytes": 14424
+    },
+    {
+      "path": "src/V3ParseLex.cpp",
+      "mode": "100644",
+      "git_blob_sha": "a655dd2941a0aac756e02fa07dcbf985cd95ae39",
+      "bytes": 2353
+    },
+    {
+      "path": "src/V3PatternStats.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8d4d5a63df1a0650f6932f6d5f9bb1081b517e0a",
+      "bytes": 4935
+    },
+    {
+      "path": "src/V3PchAstMT.h",
+      "mode": "100644",
+      "git_blob_sha": "751afd41dbaf8ade5d506067361eaa6bafff2260",
+      "bytes": 1241
+    },
+    {
+      "path": "src/V3PchAstNoMT.h",
+      "mode": "100644",
+      "git_blob_sha": "e52164a8c321a51f469989242bf9e9a9aa10677c",
+      "bytes": 1346
+    },
+    {
+      "path": "src/V3PoolAllocator.h",
+      "mode": "100644",
+      "git_blob_sha": "436ffa3080058aae4eb71dd5402d249f1473da30",
+      "bytes": 3072
+    },
+    {
+      "path": "src/V3PreExpr.h",
+      "mode": "100644",
+      "git_blob_sha": "9be6b1863ccf12a05028899b731edf502dbefacf",
+      "bytes": 10862
+    },
+    {
+      "path": "src/V3PreLex.h",
+      "mode": "100644",
+      "git_blob_sha": "e7fcaebcdc434703af6e9507660b5a21d65e5d4e",
+      "bytes": 8868
+    },
+    {
+      "path": "src/V3PreLex.l",
+      "mode": "100644",
+      "git_blob_sha": "16b3a8dc84a19557e9174f915cca576da4ae1555",
+      "bytes": 39874
+    },
+    {
+      "path": "src/V3PreProc.cpp",
+      "mode": "100644",
+      "git_blob_sha": "0395a61f6e187f52a45ff92329f5b697743147b9",
+      "bytes": 78241
+    },
+    {
+      "path": "src/V3PreProc.h",
+      "mode": "100644",
+      "git_blob_sha": "d968eac5d8bac02503469b3fc7b4c26e620b798b",
+      "bytes": 4017
+    },
+    {
+      "path": "src/V3PreShell.cpp",
+      "mode": "100644",
+      "git_blob_sha": "fca3a1684ff30ffe537d9725c5d418b59e75dd05",
+      "bytes": 7618
+    },
+    {
+      "path": "src/V3PreShell.h",
+      "mode": "100644",
+      "git_blob_sha": "73c79b01370b5ecd54321e057fd75a7b8621fe82",
+      "bytes": 1744
+    },
+    {
+      "path": "src/V3Premit.cpp",
+      "mode": "100644",
+      "git_blob_sha": "02f06579469c46f104c3b7f4d2f4307f656ee61d",
+      "bytes": 21449
+    },
+    {
+      "path": "src/V3Premit.h",
+      "mode": "100644",
+      "git_blob_sha": "fa55117fc1d798c697c2a811d46bfc4c978a62e9",
+      "bytes": 1016
+    },
+    {
+      "path": "src/V3ProtectLib.cpp",
+      "mode": "100644",
+      "git_blob_sha": "49aa38f56e2daccba2e5340be6c836404655d4a1",
+      "bytes": 22417
+    },
+    {
+      "path": "src/V3ProtectLib.h",
+      "mode": "100644",
+      "git_blob_sha": "ce34dc160a66bf1df9cdf13b07d38e1d0cfe7d3c",
+      "bytes": 996
+    },
+    {
+      "path": "src/V3RandSequence.cpp",
+      "mode": "100644",
+      "git_blob_sha": "b56215bac3f87ec373e66301399de7c04fe8a988",
+      "bytes": 31569
+    },
+    {
+      "path": "src/V3RandSequence.h",
+      "mode": "100644",
+      "git_blob_sha": "ab9bafcb63b008775f33e8308c899c56154dcc36",
+      "bytes": 973
+    },
+    {
+      "path": "src/V3Randomize.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f14cb35e4b0692af515f366aeaf7015e7c27e7b6",
+      "bytes": 352785
+    },
+    {
+      "path": "src/V3Randomize.h",
+      "mode": "100644",
+      "git_blob_sha": "0b21a72bb9c1ae94cb7cdcfd5581b3bd687fc5ad",
+      "bytes": 1575
+    },
+    {
+      "path": "src/V3Reloop.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8870e2ab6eaaccbbcc738da1baa4bd5ad77a32bb",
+      "bytes": 11403
+    },
+    {
+      "path": "src/V3Reloop.h",
+      "mode": "100644",
+      "git_blob_sha": "37bb1dd6cd0dea1683995ddc241f72653c123e8d",
+      "bytes": 1026
+    },
+    {
+      "path": "src/V3Reorder.cpp",
+      "mode": "100644",
+      "git_blob_sha": "463e43773bd3d8d941e36833b5f16479a942fab7",
+      "bytes": 20856
+    },
+    {
+      "path": "src/V3Reorder.h",
+      "mode": "100644",
+      "git_blob_sha": "8583fc6e606a3581b1dbc7ea09357e06ec1dcda9",
+      "bytes": 1035
+    },
+    {
+      "path": "src/V3Rtti.h",
+      "mode": "100644",
+      "git_blob_sha": "4f8e3391fde8edb97a421dca4112eee2a1df2f0c",
+      "bytes": 3989
+    },
+    {
+      "path": "src/V3Sampled.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3ea717f76447723f68fc2e2c8461f47a15e879ce",
+      "bytes": 5560
+    },
+    {
+      "path": "src/V3Sampled.h",
+      "mode": "100644",
+      "git_blob_sha": "0affe682ce6aaf5478ccf86351d44f7790e54086",
+      "bytes": 1014
+    },
+    {
+      "path": "src/V3Sched.cpp",
+      "mode": "100644",
+      "git_blob_sha": "fb655e6929c6a4fd0152c58dbd7e8781ab9eb3a8",
+      "bytes": 55631
+    },
+    {
+      "path": "src/V3Sched.h",
+      "mode": "100644",
+      "git_blob_sha": "41d8b13db447eedcdac4442d65ba92caf51a26a9",
+      "bytes": 24825
+    },
+    {
+      "path": "src/V3SchedAcyclic.cpp",
+      "mode": "100644",
+      "git_blob_sha": "ad8ba454e8397740c221e23dcf34460d55fd9651",
+      "bytes": 22376
+    },
+    {
+      "path": "src/V3SchedCovergroup.cpp",
+      "mode": "100644",
+      "git_blob_sha": "14c6465c880e294984e6b73923b03d6843111c35",
+      "bytes": 8499
+    },
+    {
+      "path": "src/V3SchedPartition.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d27e9ee9b74f7aa3ad1c19ac13af6ffb1b3e559c",
+      "bytes": 18013
+    },
+    {
+      "path": "src/V3SchedReplicate.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3aa404018a61f1b7bfcc984137a9a8ec9ea2bbf7",
+      "bytes": 13489
+    },
+    {
+      "path": "src/V3SchedTiming.cpp",
+      "mode": "100644",
+      "git_blob_sha": "e5078ad77469b1a09903f45c4c17b00da520d7dc",
+      "bytes": 26412
+    },
+    {
+      "path": "src/V3SchedTrigger.cpp",
+      "mode": "100644",
+      "git_blob_sha": "eeccaf40f6518a0b4fe67001e0ee34911de16414",
+      "bytes": 52125
+    },
+    {
+      "path": "src/V3SchedUtil.cpp",
+      "mode": "100644",
+      "git_blob_sha": "ba726664a10a2666ef73beed7dad3601f818831a",
+      "bytes": 10791
+    },
+    {
+      "path": "src/V3SchedVirtIface.cpp",
+      "mode": "100644",
+      "git_blob_sha": "41684cd2bfcf270b46b0048969239a68ff1bb8e7",
+      "bytes": 7966
+    },
+    {
+      "path": "src/V3Scope.cpp",
+      "mode": "100644",
+      "git_blob_sha": "44d799e71c578f5c0bb429ba7b3a5372d35a5a2d",
+      "bytes": 17619
+    },
+    {
+      "path": "src/V3Scope.h",
+      "mode": "100644",
+      "git_blob_sha": "825edcfe81a23aca356131bd788c79b418f40649",
+      "bytes": 1031
+    },
+    {
+      "path": "src/V3SenExprBuilder.h",
+      "mode": "100644",
+      "git_blob_sha": "a0271fcfd1b67e034fc1a7e870f28bd9dfc9cb6a",
+      "bytes": 16707
+    },
+    {
+      "path": "src/V3SenTree.h",
+      "mode": "100644",
+      "git_blob_sha": "6568a9385dd5b5c42077d6fd92294788e1940c59",
+      "bytes": 3668
+    },
+    {
+      "path": "src/V3Simulate.h",
+      "mode": "100644",
+      "git_blob_sha": "da07e9f1ab0ad871bbc8ced3a4554e8b78961d82",
+      "bytes": 60713
+    },
+    {
+      "path": "src/V3Slice.cpp",
+      "mode": "100644",
+      "git_blob_sha": "6fa14c65085f86c412a6eafa588318e1fa8bc700",
+      "bytes": 20320
+    },
+    {
+      "path": "src/V3Slice.h",
+      "mode": "100644",
+      "git_blob_sha": "16f17f9aa2045ffa4bdd8ef115b4caf437849c08",
+      "bytes": 1017
+    },
+    {
+      "path": "src/V3Split.cpp",
+      "mode": "100644",
+      "git_blob_sha": "371bdfc363ad29c33fe27dddca32a5372fa8ff6f",
+      "bytes": 19764
+    },
+    {
+      "path": "src/V3Split.h",
+      "mode": "100644",
+      "git_blob_sha": "6212d8c552f2b1a6481014ca4e28ea3cc146935d",
+      "bytes": 1041
+    },
+    {
+      "path": "src/V3SplitVar.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d270ce815d3e36b6357aefa8b0c4b14304c7fe2a",
+      "bytes": 63382
+    },
+    {
+      "path": "src/V3SplitVar.h",
+      "mode": "100644",
+      "git_blob_sha": "81b59f3373dd74c11b749c49ec3121205bc569a4",
+      "bytes": 1250
+    },
+    {
+      "path": "src/V3StackCount.cpp",
+      "mode": "100644",
+      "git_blob_sha": "7c17b7d32c6ea6919e8eb84cb6fdeacf77a54d33",
+      "bytes": 7140
+    },
+    {
+      "path": "src/V3StackCount.h",
+      "mode": "100644",
+      "git_blob_sha": "2c67ab9f498aafee990ea3b28455064bf7d8a725",
+      "bytes": 1300
+    },
+    {
+      "path": "src/V3Stats.cpp",
+      "mode": "100644",
+      "git_blob_sha": "fd445e4690074634a4d0184e1410fbb9be6c6d9f",
+      "bytes": 7557
+    },
+    {
+      "path": "src/V3Stats.h",
+      "mode": "100644",
+      "git_blob_sha": "84d0232967c34cbbd34b43310aff738b3aeb4665",
+      "bytes": 6241
+    },
+    {
+      "path": "src/V3StatsReport.cpp",
+      "mode": "100644",
+      "git_blob_sha": "1bf7c512de4637610622905ac35f1f8a19f2bf61",
+      "bytes": 10655
+    },
+    {
+      "path": "src/V3StdFuture.h",
+      "mode": "100644",
+      "git_blob_sha": "6729d7131470780c83606538d27033bfce54f7b8",
+      "bytes": 1351
+    },
+    {
+      "path": "src/V3String.cpp",
+      "mode": "100644",
+      "git_blob_sha": "2f811e93347b6cbf8552d39d61c639e7f438d1fb",
+      "bytes": 35813
+    },
+    {
+      "path": "src/V3String.h",
+      "mode": "100644",
+      "git_blob_sha": "5371acad70fd3b5ee5a9bc755a212ff1c14c3dc1",
+      "bytes": 11742
+    },
+    {
+      "path": "src/V3Subst.cpp",
+      "mode": "100644",
+      "git_blob_sha": "50af3f8d56f628c871d667ad93699749c4596999",
+      "bytes": 18589
+    },
+    {
+      "path": "src/V3Subst.h",
+      "mode": "100644",
+      "git_blob_sha": "a58f929b82467e98c06f71f482d2041079a44077",
+      "bytes": 1044
+    },
+    {
+      "path": "src/V3SymTable.h",
+      "mode": "100644",
+      "git_blob_sha": "f000a6a018d96c0f87ced8fa8fbfc5af32ebf5b9",
+      "bytes": 17918
+    },
+    {
+      "path": "src/V3Table.cpp",
+      "mode": "100644",
+      "git_blob_sha": "17b147a6d8b6270374f3a204bbe611dc36933e00",
+      "bytes": 18786
+    },
+    {
+      "path": "src/V3Table.h",
+      "mode": "100644",
+      "git_blob_sha": "af2acd6ba4c591dce8c59376711626fa363f78f3",
+      "bytes": 1006
+    },
+    {
+      "path": "src/V3Task.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f08c29a53eb6cec2bafd4f97619c68177bdc2b8a",
+      "bytes": 115324
+    },
+    {
+      "path": "src/V3Task.h",
+      "mode": "100644",
+      "git_blob_sha": "95739c7ca7e29773dd9f351b67c051b5e0543b5b",
+      "bytes": 3151
+    },
+    {
+      "path": "src/V3ThreadPool.cpp",
+      "mode": "100644",
+      "git_blob_sha": "8b0739f0eaad7ea98fe460aad05b3910e56bae00",
+      "bytes": 5526
+    },
+    {
+      "path": "src/V3ThreadPool.h",
+      "mode": "100644",
+      "git_blob_sha": "c22984a37c94d731bbaded0499ff6c288ded1c95",
+      "bytes": 3492
+    },
+    {
+      "path": "src/V3Timing.cpp",
+      "mode": "100644",
+      "git_blob_sha": "9b1accf118441e9b7e0821c80bc5a0255d133f97",
+      "bytes": 79413
+    },
+    {
+      "path": "src/V3Timing.h",
+      "mode": "100644",
+      "git_blob_sha": "94ac15602fe3f8ba11d31860e2164e1cb96f142d",
+      "bytes": 1008
+    },
+    {
+      "path": "src/V3Trace.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d977e532d93d46a0dce7bf03de991c9e4d718d44",
+      "bytes": 62716
+    },
+    {
+      "path": "src/V3Trace.h",
+      "mode": "100644",
+      "git_blob_sha": "84d395f98e4c07be71205eca1ede610ea58cbdf7",
+      "bytes": 1001
+    },
+    {
+      "path": "src/V3TraceDecl.cpp",
+      "mode": "100644",
+      "git_blob_sha": "dc1fe5d227f4bc62b70ed224508b0e90e570ee11",
+      "bytes": 47545
+    },
+    {
+      "path": "src/V3TraceDecl.h",
+      "mode": "100644",
+      "git_blob_sha": "8a6189f07d9298004de29fc7f37f7addf500e19b",
+      "bytes": 1017
+    },
+    {
+      "path": "src/V3Tristate.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f89599c26ce7e91e53220ec1b7b814a164703552",
+      "bytes": 129102
+    },
+    {
+      "path": "src/V3Tristate.h",
+      "mode": "100644",
+      "git_blob_sha": "74b6b7ce7c9cb6066b13756cc6ce1e4ded85f155",
+      "bytes": 1019
+    },
+    {
+      "path": "src/V3Udp.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f5d5e77f977f0664a13af78088ab72f2b56ebcc0",
+      "bytes": 11032
+    },
+    {
+      "path": "src/V3Udp.h",
+      "mode": "100644",
+      "git_blob_sha": "d379f9c0860e53b6eefaa267c1c780e610481408",
+      "bytes": 1025
+    },
+    {
+      "path": "src/V3Undriven.cpp",
+      "mode": "100644",
+      "git_blob_sha": "bc795ab04a79cc2ff795ed464b522368823f98ce",
+      "bytes": 47566
+    },
+    {
+      "path": "src/V3Undriven.h",
+      "mode": "100644",
+      "git_blob_sha": "8db29dc4da15238dfab8df939633613c0dec947d",
+      "bytes": 1033
+    },
+    {
+      "path": "src/V3UndrivenCapture.cpp",
+      "mode": "100644",
+      "git_blob_sha": "4d310cda27d22f398ce3803d03192e65deb13d98",
+      "bytes": 7272
+    },
+    {
+      "path": "src/V3UndrivenCapture.h",
+      "mode": "100644",
+      "git_blob_sha": "2e6b4e07ee30cc9bf434eadd5f533914a4a72f09",
+      "bytes": 4866
+    },
+    {
+      "path": "src/V3UniqueNames.h",
+      "mode": "100644",
+      "git_blob_sha": "25f05410e190556e269e58902af3bb3fe92c48e7",
+      "bytes": 2817
+    },
+    {
+      "path": "src/V3Unknown.cpp",
+      "mode": "100644",
+      "git_blob_sha": "99d6d7288ae5d71b296ec66c20cb87a9e4bc9725",
+      "bytes": 27023
+    },
+    {
+      "path": "src/V3Unknown.h",
+      "mode": "100644",
+      "git_blob_sha": "5face0519be081999d8c99944877893f8536c32e",
+      "bytes": 1015
+    },
+    {
+      "path": "src/V3Unroll.cpp",
+      "mode": "100644",
+      "git_blob_sha": "5af72ed8ce964c4dcf962293e2abd1c1f2792449",
+      "bytes": 28689
+    },
+    {
+      "path": "src/V3Unroll.h",
+      "mode": "100644",
+      "git_blob_sha": "3fbd94c32ac50c475a703b6209e419b74a201428",
+      "bytes": 1506
+    },
+    {
+      "path": "src/V3UnrollGen.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3d2684150a46c86488e7db376d5df2b353c8a9a5",
+      "bytes": 13626
+    },
+    {
+      "path": "src/V3VariableOrder.cpp",
+      "mode": "100644",
+      "git_blob_sha": "42dab5bb1048947357b2fa4408e6b38f61f333e0",
+      "bytes": 11077
+    },
+    {
+      "path": "src/V3VariableOrder.h",
+      "mode": "100644",
+      "git_blob_sha": "749377a33b5f1db7ff9f8a1fbd81e6f154b3c435",
+      "bytes": 1008
+    },
+    {
+      "path": "src/V3Waiver.cpp",
+      "mode": "100644",
+      "git_blob_sha": "d81cf3194b4f4aae75192a6da5bdb00bf48a903a",
+      "bytes": 3530
+    },
+    {
+      "path": "src/V3Waiver.h",
+      "mode": "100644",
+      "git_blob_sha": "93eba3036432925ef2ee156e6b1a3ed42246a822",
+      "bytes": 1257
+    },
+    {
+      "path": "src/V3Width.cpp",
+      "mode": "100644",
+      "git_blob_sha": "f7aee492079cda1d98d89ecda0a7008f4af0eb72",
+      "bytes": 587142
+    },
+    {
+      "path": "src/V3Width.h",
+      "mode": "100644",
+      "git_blob_sha": "5bd305936d237a2fff2cc725377a60dda1736774",
+      "bytes": 1625
+    },
+    {
+      "path": "src/V3WidthCommit.cpp",
+      "mode": "100644",
+      "git_blob_sha": "cc511a757ea8c465e4e18f8a856bf305a529f6f6",
+      "bytes": 28096
+    },
+    {
+      "path": "src/V3WidthCommit.h",
+      "mode": "100644",
+      "git_blob_sha": "03b18d23db8829ba0331068831d1305098c4e263",
+      "bytes": 1744
+    },
+    {
+      "path": "src/V3WidthRemove.h",
+      "mode": "100644",
+      "git_blob_sha": "0b553a5d9cbf5339b27e02d74821bf9b5051272d",
+      "bytes": 2057
+    },
+    {
+      "path": "src/V3WidthSel.cpp",
+      "mode": "100644",
+      "git_blob_sha": "05575584227b1dc261cb3b41850505d583938f6f",
+      "bytes": 33586
+    },
+    {
+      "path": "src/Verilator.cpp",
+      "mode": "100644",
+      "git_blob_sha": "4f821dc911615e1eab3f5733cb13e3cbe57fa81a",
+      "bytes": 36731
+    },
+    {
+      "path": "src/VlcBucket.h",
+      "mode": "100644",
+      "git_blob_sha": "1c5039cea2cc71db2a69351698640c62c6421a25",
+      "bytes": 4302
+    },
+    {
+      "path": "src/VlcMain.cpp",
+      "mode": "100644",
+      "git_blob_sha": "3f4b1b2a9ed43524731fc25d16369376e9f5d063",
+      "bytes": 6641
+    },
+    {
+      "path": "src/VlcOptions.h",
+      "mode": "100644",
+      "git_blob_sha": "8011e6e902b4a665c7985895ee4c25db93cbddf2",
+      "bytes": 3737
+    },
+    {
+      "path": "src/VlcPoint.h",
+      "mode": "100644",
+      "git_blob_sha": "bd7b9f30d7e1f06984dec5be93cd86411f093a8c",
+      "bytes": 8185
+    },
+    {
+      "path": "src/VlcSource.h",
+      "mode": "100644",
+      "git_blob_sha": "5a3270501f5000bb6a1dd831dd1578026026e8a1",
+      "bytes": 3881
+    },
+    {
+      "path": "src/VlcTest.h",
+      "mode": "100644",
+      "git_blob_sha": "024d2b9b35bcf118cfda07e4f54ca988cab3c921",
+      "bytes": 4514
+    },
+    {
+      "path": "src/VlcTop.cpp",
+      "mode": "100644",
+      "git_blob_sha": "a1933fdc7c07e7c5d891c091520c707a9866cbe2",
+      "bytes": 33029
+    },
+    {
+      "path": "src/VlcTop.h",
+      "mode": "100644",
+      "git_blob_sha": "e64f1feda36d2f0ff26bef517b737fa8226f9fd3",
+      "bytes": 2059
+    },
+    {
+      "path": "src/astgen",
+      "mode": "100755",
+      "git_blob_sha": "b41cc6534586dbfba4b94e981827c3c1b21f9aab",
+      "bytes": 60844
+    },
+    {
+      "path": "src/bisonpre",
+      "mode": "100755",
+      "git_blob_sha": "5db061a5a80d2445fa23adf10e57d35a0a69a0b9",
+      "bytes": 20091
+    },
+    {
+      "path": "src/config_build.h",
+      "mode": "100644",
+      "git_blob_sha": "e2230f078d98077ae3ef50d649709691b11406b5",
+      "bytes": 2321
+    },
+    {
+      "path": "src/config_package.h.in",
+      "mode": "100644",
+      "git_blob_sha": "150a668fdb5dda4306b2077b9030ec282ee9e400",
+      "bytes": 1819
+    },
+    {
+      "path": "src/config_rev",
+      "mode": "100755",
+      "git_blob_sha": "432179abdaea4fef83b17a923e9246e53207e546",
+      "bytes": 2151
+    },
+    {
+      "path": "src/cppcheck-suppressions.txt",
+      "mode": "100644",
+      "git_blob_sha": "6d9ab321d44c4fce36407f10076401994342a1de",
+      "bytes": 5682
+    },
+    {
+      "path": "src/flexfix",
+      "mode": "100755",
+      "git_blob_sha": "24b52514c643fe5cbe001e9786bd7e74ace0c581",
+      "bytes": 2590
+    },
+    {
+      "path": "src/mkinstalldirs",
+      "mode": "100644",
+      "git_blob_sha": "9fe43ecf9cefdfd70d45f9f9504cd1033538c14b",
+      "bytes": 780
+    },
+    {
+      "path": "src/verilog.l",
+      "mode": "100644",
+      "git_blob_sha": "4ad99b0217aebc178ea6a4a15f1522f8688f90e9",
+      "bytes": 65790
+    },
+    {
+      "path": "src/verilog.y",
+      "mode": "100644",
+      "git_blob_sha": "fec50542c522b1e59399e1588a7216330d319d40",
+      "bytes": 506844
+    },
+    {
+      "path": "src/vlcovgen",
+      "mode": "100755",
+      "git_blob_sha": "3e156603de941f4fccc85171c4599f99261f0df0",
+      "bytes": 3576
+    },
+    {
+      "path": "verilator-config-version.cmake.in",
+      "mode": "100644",
+      "git_blob_sha": "f4d8e66b3ae22cb3ec8868ec4e3352d5a6c2f798",
+      "bytes": 954
+    },
+    {
+      "path": "verilator-config.cmake.in",
+      "mode": "100644",
+      "git_blob_sha": "a12b7aa0263625530bd1be303359ae76cc532514",
+      "bytes": 31826
+    },
+    {
+      "path": "verilator.pc.in",
+      "mode": "100644",
+      "git_blob_sha": "ed8b58d3acccce0a1daec53737c621ccf0ce50bd",
+      "bytes": 298
+    }
+  ]
+}
+

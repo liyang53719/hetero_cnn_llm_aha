@@ -1,0 +1,82 @@
+{
+  "acquirer_repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py",
+  "budget": {
+    "archive_transfer_bytes_ceiling": 67108864,
+    "child_affinity_count": 1,
+    "child_as_bytes": 536870912,
+    "child_cpu_seconds": 400,
+    "child_fsize_bytes": 67108864,
+    "cleanup_seconds": 5,
+    "expanded_bytes_ceiling": 134217728,
+    "log_soft_acceptance_bytes": 131072,
+    "postflight_deadline_seconds": 420,
+    "preflight_latest_seconds": 10,
+    "selected_member_bytes_ceiling": 1048576,
+    "selected_member_count": 473,
+    "selected_total_bytes": 11747893,
+    "socket_seconds": 30,
+    "tar_entry_ceiling": 12000,
+    "total_seconds": 420,
+    "tree_soft_acceptance_bytes": 83886080,
+    "work_latest_seconds": 410,
+    "work_max_seconds": 400,
+    "worker_receipt_bytes_ceiling": 262144
+  },
+  "commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "identity": "pre-fixed473 Git tree path/mode/size/blob; archive SHA256 only observation after quarantine",
+  "platform": "default inherited platform HTTPS; fixed API then at most one exact302 codeload samecommit hop; no credential/config/proxy edit/direct fallback/retry",
+  "schema": 1,
+  "scope": "fixed official Verilator commit473 selected Git blobs, quarantine archive observation only",
+  "source_or_native_execution": false,
+  "supervisor_source": {
+    "pin": {
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    },
+    "repository_path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py"
+  },
+  "terminal_contract": "nonterminal evidence plus original outer exit0 within420, cleanup and independent selected-source actual review",
+  "tree": "3300b1cc13a3903fe3113ae65087ae75b2cdb2df",
+  "worker_files": {
+    "FIXED_CORE_MEMBERS.json": {
+      "bytes": 75898,
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    "SOURCE_PLAN.json": {
+      "bytes": 2983,
+      "sha256": "c57d32c37413d3aaf252c674cfd5c51fda338b68a0823a264f220aaf3cdc336f"
+    },
+    "acquire_base.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    "acquire_official_source.py": {
+      "bytes": 24283,
+      "sha256": "1395add8592dbc8a7380cf826aea9369afedcc9b0527e43fdc1c3953dc59cfd4"
+    }
+  },
+  "worker_limits": {
+    "address_space_bytes": 536870912,
+    "cleanup_seconds": 5,
+    "cpu_affinity_count": 1,
+    "cpu_seconds": 400,
+    "expanded_bytes": 134217728,
+    "fsize_bytes": 67108864,
+    "latest_work_offset": 410,
+    "log_soft_cap_bytes": 131072,
+    "member_bytes": 1048576,
+    "output_tree_soft_cap_bytes": 83886080,
+    "postflight_deadline_offset": 420,
+    "preflight_seconds": 10,
+    "retries": 0,
+    "socket_seconds": 30,
+    "tar_headers": 12000,
+    "total_outer_seconds": 420,
+    "transfer_bytes": 67108864,
+    "work_seconds_max": 400
+  },
+  "worker_manifest": {
+    "bytes": 2074,
+    "sha256": "e2d1f276aa1688cf7b578f303ba673e3661f22dfd5ed93420a1d7da1525933d2"
+  }
+}

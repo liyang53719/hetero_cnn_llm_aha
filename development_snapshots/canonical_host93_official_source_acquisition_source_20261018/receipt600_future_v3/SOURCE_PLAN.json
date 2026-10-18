@@ -1,0 +1,54 @@
+{
+  "allowed_redirect_url": "https://codeload.github.com/verilator/verilator/legacy.tar.gz/4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "archive_api_url": "https://api.github.com/repos/verilator/verilator/tarball/4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "archive_sha256_before_fetch": null,
+  "archive_sha256_contract": "Observe quarantine SHA256 for replay only; independently pre-fixed member Git blob identities bind selected content.",
+  "commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "documentation_boundary": "Official docs establish API 302 Location flow and archive stability limits; they do not establish this commit\u2019s exact Location or root.",
+  "exact_prefix": "verilator-verilator-4e194cc",
+  "failure_policy": "Preserve partial/full archive and already verified members. One terminal SOURCE.json or FAILED.json. Cleanup errors separate; never mask primary error.",
+  "git_mode_mapping": {
+    "100644": [
+      420,
+      436
+    ],
+    "100755": [
+      493,
+      509
+    ]
+  },
+  "git_mode_mapping_basis": "Git executable-bit identity mapped conservatively to tar 0644/0664 or 0755/0775; all other modes fail closed. No tar mode is restored.",
+  "limits": {
+    "address_space_bytes": 536870912,
+    "cleanup_seconds": 5,
+    "cpu_affinity_count": 1,
+    "cpu_seconds": 400,
+    "expanded_bytes": 134217728,
+    "fsize_bytes": 67108864,
+    "latest_work_offset": 410,
+    "log_soft_cap_bytes": 131072,
+    "member_bytes": 1048576,
+    "output_tree_soft_cap_bytes": 83886080,
+    "postflight_deadline_offset": 420,
+    "preflight_seconds": 10,
+    "retries": 0,
+    "socket_seconds": 30,
+    "tar_headers": 12000,
+    "total_outer_seconds": 420,
+    "transfer_bytes": 67108864,
+    "work_seconds_max": 400
+  },
+  "official_api_documentation": "https://docs.github.com/en/rest/repos/contents#download-a-repository-archive-tar",
+  "official_stability_documentation": "https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#stability-of-source-code-archives",
+  "outer_requirements": "Parent supplies established WNOWAIT supervisor, hard limits and shared absolute deadline, validates independent exit0/elapsed/tree/log/receipts. Worker is not supervisor.",
+  "permissions": "all selected regular files 0600 data; upstream 100644/100755 recorded only; no chmod/build/install/source execution",
+  "prefix_status": "EXACT_UNTESTED_HYPOTHESIS",
+  "redirect_status": "EXACT_UNTESTED_HYPOTHESIS",
+  "schema": "host93-fixed-official-source-acquisition-plan-v1",
+  "selected_bytes": 11747893,
+  "selected_count": 473,
+  "status": "SOURCE_CANDIDATE_ONLY_NO_REAL_ACQUISITION",
+  "transport_reviewed": true,
+  "transport_reviewed_meaning": "Parent approved this exact proposed allowlist contract, not a claim that the Location or prefix was observed. Actual mismatch fails closed and retains the same quarantine asset; no automatic retry or broadened root.",
+  "tree": "3300b1cc13a3903fe3113ae65087ae75b2cdb2df"
+}

@@ -648,3 +648,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - ongoing：同资产只读布局已确认标准 ar 与 control/data.tar.xz；下一步仅提取固定 67 regular 文件并生成有明确原件 hash 关系的 staged 配置，之后做 --version 与宏/skeleton 小资格，不泛化安装器。
 - ongoing：固定官方 Verilator 修复源码首次下载 child 已完成，父后验因 SOURCE.json 0644 与 0600 要求不符保留失败；将同资产只读复核再资格，不重复下载，不修改原记录。
 - todo：工具构建、层级/DPI/多 handle micro 与真实 Host 仿真仍待执行证据。五包尚未解包安装或运行；旧 N0 终态未知、完整 block 0/5 保持。
+
+### 2026-10-18 22:00 UTC：官方工具源码获取失败保留与同资产内容重新核验
+
+- done：固定官方 Verilator commit `4e194cc3ec8e27b18e17f80d7f99c15f984bbdae` 的 473 个选定源文件（11,747,893 B）已按官方 Git tree 的逐文件 blob 身份核验。归档 SHA 仅作为本次观察后的固定身份，不代替官方来源证明。
+- done：原获取 child exit 0，但 SOURCE.json 实际 0644 与外层 0600 合同不符，原 outer exit 1/FAIL 原样保留；原成功后验未执行，不倒填成功。
+- done：新同资产只读核验 outer exit 0/0.185 s；旧 483 个文件的内容和记录身份未变，精确固定的 SOURCE.json 0644 例外未扩张。独立实际审 `09bb63269e80967dedf42f43a9fab9b20081f1cdc2ec0b2e163388736996268b` 只授选定官方源码内容资格。
+- done：后继 producer 源码仅在原收据创建处临时使用 umask 077 并恢复，冷入口隔离 flags 前移；48+48 小型测试及独审通过。原外层仍绑定旧 worker，此后继尚未绑定新的下载执行门。
+- done：本批保存 20 件纯源码、固定来源表和安全历史说明；不提交官方源正文、归档、实际收据/日志、机器路径或环境库存。
+- ongoing：依赖最小提取、真实版本与资源微例，随后在固定官方源码上有界单核构建；这些资格分别验收，不由源码获取或提取自动继承。
+- todo：工具层级/DPI/多 handle 微例、真实生成模型与 Host 同 RAM 输入接线、有限 N0 回放及完整 block 数值核验。
+- 边界：本轮没有新增真实 Host/RTL 数值 PASS；原丢失 N0 session74562 终态未知和完整 block 0/5 保持。

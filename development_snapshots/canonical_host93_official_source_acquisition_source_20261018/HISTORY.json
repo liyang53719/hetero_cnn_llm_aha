@@ -1,0 +1,70 @@
+{
+  "archive_observation": {
+    "bytes": 7403238,
+    "sha256": "aa176f629286df54177eea267363c564a0de15f5f90bf4245d00c92953ce94d3"
+  },
+  "archive_sha256_is_independent_provenance": false,
+  "records": [
+    {
+      "child_cleanup_confirmed": true,
+      "child_exit": 0,
+      "outer_exit": 1,
+      "outer_seconds": 9.061,
+      "overall_acquisition_pass": false,
+      "reason": "SOURCE.json was0644; original outer requires0600 for every artifact. Original acquisition remains FAIL_PRESERVED_NO_RETRY.",
+      "review_pins": {
+        "MANIFEST.json": {
+          "bytes": 1306,
+          "sha256": "44fcf6302d334490007674caf663eb04c11ac6ec14c5d587fc88cd064c4e9a13"
+        },
+        "SUMMARY.json": {
+          "bytes": 1206,
+          "sha256": "1715ce70426e4dfc05cb2bd09b432804a9a4a3bdb9b58a3c72e7898acfb2c37a"
+        }
+      },
+      "selected_bytes": 11747893,
+      "selected_files_matching_fixed_git_blobs": 473,
+      "stage": "original_acquisition_v1",
+      "verdict": "CONFIRMED_ACTUAL_FAIL_PRESERVED_RECEIPT_MODE_CONTRACT"
+    },
+    {
+      "old_tree_equals_prior_baseline": true,
+      "original_acquisition_fail_preserved": true,
+      "outer_exit": 0,
+      "outer_seconds": 0.185,
+      "resource_evidence": "fixed reviewed configuration; no independent actual CPU/RSS/affinity/rlimit telemetry",
+      "review_pins": {
+        "MANIFEST.json": {
+          "bytes": 1605,
+          "sha256": "09bb63269e80967dedf42f43a9fab9b20081f1cdc2ec0b2e163388736996268b"
+        },
+        "SUMMARY.json": {
+          "bytes": 1147,
+          "sha256": "446c522731edde388f4a199127b5cc4d6872ba8c3fa362013c79a9fb701b6da2"
+        }
+      },
+      "scope": "New read-only content qualification of the same473 source members and unchanged original assets only. It does not reverse the acquisition failure.",
+      "selected_bytes": 11747893,
+      "selected_count": 473,
+      "stage": "new_same_asset_readonly_content_qualification",
+      "verdict": "PASS_NEW_READONLY_FIXED473_CONTENT_QUALIFICATION"
+    },
+    {
+      "change": "Single-process temporary umask077 around the original unique terminal writer; restore caller umask; preserve original exceptions.",
+      "cold_only_delta": "Move existing-I-S-B check before first projectload; production worker unchanged from receipt600v2 and explicit size/SHA checks retained.",
+      "cold_source_sha256": "cf7338a9c8cc7d21e465706e6e69bffe41f706aa98af0898d5bde56dafd15085",
+      "execution_of_future_worker_authorized_by_this_bundle": false,
+      "stage": "future_receipt600_producer_source_v3",
+      "status": "ISOLATED_SOURCE_FIX_ONLY_NOT_BOUND_TO_CURRENT_OUTER",
+      "worker_sha256": "61c756233830e1f6bf0862052c4c72035e60409179c07fa57be050064dc3fedc"
+    }
+  ],
+  "schema": "fixed-official-source-history-v1",
+  "scope_limits": [
+    "No archive or source member body is included",
+    "Publication projection was not executed. Separate author cold tests for the future_v3 flag-order delta used tiny mocks only; no real acquisition, requalification, package or native execution occurred.",
+    "No configure/build/hierarchy/DPI/Host/numerical qualification",
+    "No review report copied; only verified review SHA/size and bounded safety history retained"
+  ],
+  "status": "BOUNDED_HISTORICAL_SUMMARY_ONLY_NOT_REEXECUTION"
+}

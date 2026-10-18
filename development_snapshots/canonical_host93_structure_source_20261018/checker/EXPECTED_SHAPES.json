@@ -1,0 +1,470 @@
+{
+  "scope": "SOURCE_DERIVED_EXPECTATIONS_ONLY",
+  "host_paths": {
+    "cmd": "HostBlockCommands",
+    "cmd.reader": "Record128Reader",
+    "cmd.tensor": "TypedTensorReader",
+    "owner": "QwenOwnerKernel",
+    "owner.core": "Qwen2ContinuousBlock",
+    "owner.qkvRouter": "Public21QkvReductionRouter",
+    "owner.resident": "FfnResidentCoordinator",
+    "owner.resident.bridge": "FfnTileSiluBridge",
+    "owner.silu": "ScheduledSiluOwner",
+    "owner.silu.dut": "VectorSiluOwner",
+    "owner.silu.dut.vector": "SiluVectorUnit",
+    "hub": "SharedMemoryArbiter",
+    "dma": "RetainedIdmaWeightBurstAdapter",
+    "dma.backend": "idma_backend_rw_axi_flat_wrap"
+  },
+  "taps": [
+    {
+      "path": "HostBlockTop.owner.core",
+      "module": "Qwen2ContinuousBlock",
+      "wire": "canonicalScoreTap",
+      "bits": 117,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "ownerTag": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "head": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "token": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "keyBase": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "packedSelected": {
+          "flip": false,
+          "type": "UInt",
+          "width": 4
+        },
+        "value": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.core",
+      "module": "Qwen2ContinuousBlock",
+      "wire": "canonicalProbTap",
+      "bits": 113,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "ownerTag": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "head": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "token": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "key": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "col": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "value": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.core",
+      "module": "Qwen2ContinuousBlock",
+      "wire": "canonicalCosTap",
+      "bits": 593,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "ownerTag": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "head": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "token": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "col": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "value": {
+          "flip": false,
+          "type": "UInt",
+          "width": 512
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.core",
+      "module": "Qwen2ContinuousBlock",
+      "wire": "canonicalSinTap",
+      "bits": 593,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "ownerTag": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "head": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "token": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "col": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "value": {
+          "flip": false,
+          "type": "UInt",
+          "width": 512
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.core",
+      "module": "Qwen2ContinuousBlock",
+      "wire": "canonicalPvRequestTap",
+      "bits": 81,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "ownerTag": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "head": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "token": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "col": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.core",
+      "module": "Qwen2ContinuousBlock",
+      "wire": "canonicalPvAckTap",
+      "bits": 1,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.resident.bridge",
+      "module": "FfnTileSiluBridge",
+      "wire": "canonicalTileTap",
+      "bits": 590,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "slot": {
+          "flip": false,
+          "type": "UInt",
+          "width": 2
+        },
+        "identity": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "ng": {
+          "flip": false,
+          "type": "UInt",
+          "width": 16
+        },
+        "index": {
+          "flip": false,
+          "type": "UInt",
+          "width": 11
+        },
+        "rows": {
+          "flip": false,
+          "type": "UInt",
+          "width": 8
+        },
+        "cols": {
+          "flip": false,
+          "type": "UInt",
+          "width": 8
+        },
+        "value[0]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[1]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[2]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[3]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[4]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[5]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[6]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[7]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[8]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[9]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[10]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[11]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[12]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[13]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[14]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[15]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.silu.dut",
+      "module": "VectorSiluOwner",
+      "wire": "canonicalLoanContextTap",
+      "bits": 3,
+      "leaves": {
+        "active": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "poison": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "abort": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        }
+      }
+    },
+    {
+      "path": "HostBlockTop.owner.silu.dut.vector",
+      "module": "SiluVectorUnit",
+      "wire": "canonicalSiluTap",
+      "bits": 513,
+      "leaves": {
+        "valid": {
+          "flip": false,
+          "type": "UInt",
+          "width": 1
+        },
+        "value[0]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[1]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[2]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[3]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[4]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[5]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[6]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[7]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[8]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[9]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[10]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[11]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[12]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[13]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[14]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        },
+        "value[15]": {
+          "flip": false,
+          "type": "UInt",
+          "width": 32
+        }
+      }
+    }
+  ],
+  "bundles": 9,
+  "bits": 2604
+}

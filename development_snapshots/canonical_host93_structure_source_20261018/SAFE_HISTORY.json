@@ -1,0 +1,69 @@
+{
+  "attempts": [
+    {
+      "actual_review_manifest_sha256": "035178531961eb950f1867058cdbf3a15d62ddc51a847675591c1f01583c5583",
+      "actual_review_summary_sha256": "8383a745927c229c65678ebfeb76cdd280a9a64ca4a87585350e613ba5988cbe",
+      "attempt": 1,
+      "fir_unchanged": true,
+      "outer_elapsed_seconds": 2.443,
+      "outer_exit_code": 1,
+      "reason": "Legal add.io.subOp instance reference collided with primitive-name target guard. Later lexical fix distinguishes call/literal syntax from ordinary references.",
+      "status": "INCOMPLETE_STATIC_STRUCTURE"
+    },
+    {
+      "actual_review_manifest_sha256": "d77cc91fb0cd37a95e9f85b4569cbedd6b6e2706376c91fd4824a042ad9888dc",
+      "actual_review_summary_sha256": "d9f18fd22f8cabeb78d8ead0086251fb77ceefa70fbc666fe62385487f920bd0",
+      "attempt": 2,
+      "fir_unchanged": true,
+      "outer_elapsed_seconds": 22.021,
+      "outer_exit_code": 1,
+      "reason": "The checker did not project the flipped ready leaf from the RHS of the observed aggregate connection. Later fix projects only requested metadata leaves through equal typed aggregates.",
+      "status": "INCOMPLETE_STATIC_STRUCTURE"
+    },
+    {
+      "actual_review_manifest_sha256": null,
+      "actual_review_status": "PENDING",
+      "actual_review_summary_sha256": null,
+      "attempt": 3,
+      "fir_unchanged": true,
+      "observed_counts": {
+        "collection_definitions": 699,
+        "collection_instances_including_root": 699,
+        "host_clock_gates": 8,
+        "host_idma_backends": 1,
+        "host_inputs": 39,
+        "host_instances_including_root": 690,
+        "host_matrix_endpoints": 8,
+        "host_outputs": 44,
+        "host_ports": 83,
+        "metadata_request_response_routes": 8,
+        "observation_bits": 2604,
+        "observation_bundles": 9,
+        "observation_source_files": 3
+      },
+      "outer_elapsed_seconds": 8.833,
+      "outer_exit_code": 0,
+      "outer_status_source": "owner-observed original execution",
+      "saved_evidence_sha256": "54582f87b8bc973aa4437a8983009ae4e8663a7bd641ceb067c567689e352734",
+      "saved_evidence_terminal_success": false,
+      "status": "OBSERVED_STATIC_STRUCTURE_PASS_PENDING_INDEPENDENT_ACTUAL_REVIEW"
+    }
+  ],
+  "fixed_fir": {
+    "bytes": 42417256,
+    "payload_included": false,
+    "sha256": "264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a"
+  },
+  "qualifications_not_granted": [
+    "metadata protocol behavior",
+    "arithmetic or numerical equivalence",
+    "tap event semantics",
+    "generated C++ binding or tap survival",
+    "combinational acyclicity",
+    "RTL conversion or validation",
+    "Host execution",
+    "full-block qualification",
+    "historical 95-source/generated identity"
+  ],
+  "scope": "HOST93_COLLECTION_CHIRRTL_STATIC_STRUCTURE_ONLY"
+}

@@ -584,3 +584,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：保存9件纯发射源码/冷测/项目class相对名大小哈希/安全说明，无class、JAR、FIR内容或机器库存。包内安全历史保留冻结时实际审PENDING，不热改原件；当前实际审结论在本计划追加记录。
 - ongoing：同一FIR的83口/8endpoint/metadata/九tap结构资格仍未闭合；初版checker遗漏invalidate覆写的反例已确认，隔离窄修后再只读核，不修改或重新发射FIR。
 - todo：结构闭合后才进入独立firtool/SV门、真实ABI与Host执行；本次未运行firtool/Verilator/Host，旧N0终态未知，完整block仍0/5。
+
+### 2026-10-18 14:36 UTC：同一 Host93 CHIRRTL 有限静态结构闭合
+
+- done：保留原 42,417,256 B FIR（SHA-256 `264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a`），未重发射。前两次只读检查分别因 checker 的 primitive 同名引用和 aggregate flip 投影缺口返回 INCOMPLETE，原失败记录保持。
+- done：最终 checker 仅按固定 metadata 类型展开所查叶，正/反向 ready/valid、schema/flip、覆盖与 invalidate 负例均核；22+22 checker 冷测及 14+14 包装冷测通过，SOURCE 独审 `018d373a…`。
+- done：第三次原会话实际 exit 0、外层 8.833 秒；限定 actual 独审 `9364010b3d9008065a85ba7ed77c1f5a31cc86f8b471f687a7b2c9530a47cd1e`。原 657 件生成库存和两次失败未变。
+- done：静态报告为 Host 子树 690 个实例、共同 collection 699 个实例及 699 个定义（均含各自根，口径分列）；83 口（39 入/44 出）、8 endpoint、8 clock gate、1 iDMA backend、8 条 metadata 请求/响应静态直连、9 个 tap bundle 共 2604 bit。
+- done：持久化 12 件纯源码/正负测试/安全摘要；不含 FIR、class、JAR、ELF、完整日志或机器环境库存。包中历史摘要的第三次 actual 审 PENDING 是冻结时状态，本条记录后续独审结论。
+- ongoing：按固定官方 firtool 1.62.1 准备必要包获取与同 FIR 的 SV 转换门，先核 archive/member 原 SHA；未执行 firtool，未重建 Verilator。
+- todo：后续 SV/生成 C++、真实接口绑定、Host 执行与数值验收仍须各自实际证据。此静态结构审不证明协议行为、算术、tap 事件语义或无组合环；07:44 丢失的旧 N0 会话终态仍未知，完整 block 保持 0/5。

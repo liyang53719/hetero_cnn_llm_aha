@@ -1,0 +1,40 @@
+{
+  "api": "original check_bytes(raw), unchanged source",
+  "budgets": {
+    "FIR_acceptance_max_bytes": 50331648,
+    "address_space_bytes_hard": 1073741824,
+    "check_latest_offset_seconds": 80,
+    "check_max_seconds": 70,
+    "cpu_count": 1,
+    "cpu_seconds_hard": 80,
+    "definitions_acceptance_max": 768,
+    "entry_total_seconds": 90,
+    "expanded_paths_acceptance_max": 20000,
+    "per_report_bytes_soft_and_FSIZE_hard": 2097152,
+    "postflight_latest_offset_seconds": 90,
+    "preflight_seconds": 10
+  },
+  "checker_bytes": 34444,
+  "checker_delta": "Only parse_ir RHS dynamic-reference marker preservation and require_direct fixed requested metadata leaf projection through equal typed aggregates. Ground connects do not reverse; related dynamic aliases, type/flip mismatch, duplicate/conditional/invalidate overrides reject. Reader.expr and resolve_signal are unchanged.",
+  "checker_manifest_sha256": "1da55bf5c3be668f0ddbbbc382c93b308799778dbd1863e6afbcf9f9458b8ad9",
+  "checker_sha256": "b3301dd40718e4b05fe7f233747235bff1ae3b142c38a2221a481310431bd2a0",
+  "children": 0,
+  "count_scopes": [
+    "definition count in common namespace",
+    "HostBlockTop expanded subtree instance count",
+    "HostBlockCollection expanded instance count"
+  ],
+  "failure_contract": "INCOMPLETE, retain original FIR, no retry, no regeneration; best-effort record within90 seconds; hard OS termination may preclude report",
+  "generation_actual_review_manifest_sha256": "f671e391849974cef7a63bba79c9b170c3e8f5630087966ff1c0ba78a32f8c04",
+  "generation_actual_review_summary_sha256": "c7740220ca3f0e7360a224415ba3d61e9a5d688011290c574035999531d5ac23",
+  "new_framework": false,
+  "prior_actual_incomplete_failure_sha256": "3248a47fe8390bd163a96f7a87159dd3028aa7c7ae663321ced77fe56b749094",
+  "prior_actual_incomplete_reason": "Original attempt_v2 did not account for flipped ready leaf driven from RHS of connect hub.io.requests[0], cmd.io.memory. Both earlier attempts remain INCOMPLETE; same FIR unchanged.",
+  "prior_actual_incomplete_review_manifest_sha256": "d77cc91fb0cd37a95e9f85b4569cbedd6b6e2706376c91fd4824a042ad9888dc",
+  "prior_actual_incomplete_review_summary_sha256": "d9f18fd22f8cabeb78d8ead0086251fb77ceefa70fbc666fe62385487f920bd0",
+  "prior_hold_review_manifest_sha256": "841c62fe88433e1054919a5d4f9bbb99b5fa7e7a4198586f39a72c02fd8b814c",
+  "prior_source_go_manifest_sha256": "2e4088f2c613876849df39447725c558cad33e7ced02364314b4d99d2f8911d6",
+  "same_buffer_contract": "checker raw SHA verified before compile/exec; FIR exact bytes/SHA verified before original check_bytes(raw); original FIR metadata+streamed SHA and checker SHA rechecked afterward",
+  "status": "SOURCE_ONLY_STATIC_STRUCTURE_GATE",
+  "success_contract": "non-terminal evidence only, owner original exit0 and actual elapsed<=90 plus independent actual static-structure review required"
+}

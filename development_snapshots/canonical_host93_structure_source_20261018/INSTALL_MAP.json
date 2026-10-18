@@ -1,0 +1,24 @@
+{
+  "actual_command_template": "python -I -S -B wrapper/run_structure_gate.py --checker checker/check_host_chirrtl.py --fir <fixed-FIR-path> --output <fresh-report-directory> --execute-reviewed-readonly",
+  "actual_execution_contract": "Requires source review, fixed FIR and generation review identity, explicit single-run budget approval, fresh output, original outer exit0 and independent actual review. No automatic actual execution or retry.",
+  "cold_commands": [
+    "python -I -S -B checker/test_cold.py",
+    "python -I -S -B -O checker/test_cold.py",
+    "python -I -S -B wrapper/test_structure_gate_cold.py --checker checker/check_host_chirrtl.py",
+    "python -I -S -B -O wrapper/test_structure_gate_cold.py --checker checker/check_host_chirrtl.py"
+  ],
+  "destination": "development_snapshots/canonical_host93_structure_source_20261018",
+  "existing_repository_dependencies": [],
+  "reference_contract": "EXPECTED_SOURCE_EVIDENCE.json records project-relative oracle paths and hashes; no reference file is loaded by checker or cold tests. ABI oracle is not a generated-model qualification.",
+  "reference_only_repository_paths": [
+    "reports/execution/COALESCED_REAL2_9b09f201842b/numerical/generated/HostBlockTop.sv",
+    "development_snapshots/canonical_host_bridge_source_20261018/host_fields.hpp",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous",
+    "development_snapshots/canonical_host_observation_taps_source_20261017",
+    "development_snapshots/canonical_host_silu_observer_source_20261017"
+  ],
+  "runtime_dependencies": [
+    "Python standard library"
+  ],
+  "source_preflight_command": "python -I -S -B wrapper/run_structure_gate.py --checker checker/check_host_chirrtl.py"
+}

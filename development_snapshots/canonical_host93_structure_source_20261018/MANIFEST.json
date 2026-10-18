@@ -1,0 +1,52 @@
+{
+  "actual_review_status_at_freeze": "PENDING",
+  "files": {
+    "INSTALL_MAP.json": {
+      "bytes": 1723,
+      "sha256": "35f27bf93f4f9bbcdc08cfcc9861d7058ae3949bec6ce2719ba62c8afa9f5736"
+    },
+    "README.md": {
+      "bytes": 4718,
+      "sha256": "9eddf311d19f29a14ae246b345b1612d20026d0980408cc316cccdfcec187b6d"
+    },
+    "SAFE_HISTORY.json": {
+      "bytes": 2815,
+      "sha256": "4bb394f88de087e28166821d549735ff3ecd9b64cad65b78b343862c9a150e18"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 2204,
+      "sha256": "0dc51f94c88cc67f91c7b23bf1941172e2e0a24bc34cad109f316ac9642b8184"
+    },
+    "checker/EXPECTED_SHAPES.json": {
+      "bytes": 10109,
+      "sha256": "47be326c0bb745dac72f9097aeda1780a884a3a69efa7aa0a2823bd1c81e64b1"
+    },
+    "checker/EXPECTED_SOURCE_EVIDENCE.json": {
+      "bytes": 9023,
+      "sha256": "4f5dd8544ebedb2e642fc627f059a2cc53a4ae4e8af77d7770e6c388425fa8b3"
+    },
+    "checker/check_host_chirrtl.py": {
+      "bytes": 34444,
+      "sha256": "b3301dd40718e4b05fe7f233747235bff1ae3b142c38a2221a481310431bd2a0"
+    },
+    "checker/test_cold.py": {
+      "bytes": 24402,
+      "sha256": "57503e4e902b4d3a3d402375e83053a828fe754150d2bf4337a7be8eb5f9da2a"
+    },
+    "wrapper/SOURCE_PLAN.json": {
+      "bytes": 2874,
+      "sha256": "395d51b57bb2ce1cc6b6c840eadf87502091fc6b977454f0aa8ddb3727c9c74b"
+    },
+    "wrapper/run_structure_gate.py": {
+      "bytes": 7972,
+      "sha256": "0484d8824ddc9c45aab727ea0a54f6248450c70c28eb9adb3a845af47832b510"
+    },
+    "wrapper/test_structure_gate_cold.py": {
+      "bytes": 7384,
+      "sha256": "7e4091a7cd4ffa33afa3be7027edb915644adeffe4064619bc67c26a4b20d1fd"
+    }
+  },
+  "published": false,
+  "runtime_source_changed": false,
+  "status": "SOURCE_ONLY_PUBLICATION_PROJECTION"
+}

@@ -1,0 +1,55 @@
+{
+  "checker_source_manifest_sha256": "1da55bf5c3be668f0ddbbbc382c93b308799778dbd1863e6afbcf9f9458b8ad9",
+  "cold_evidence": {
+    "checker_groups_per_mode": 22,
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "projection_tests_run": false,
+    "scope": "synthetic and mocks only; original reviewed candidates",
+    "wrapper_tests_per_mode": 14
+  },
+  "files": {
+    "checker/EXPECTED_SHAPES.json": {
+      "bytes": 10109,
+      "projection": "exact source bytes, unchanged",
+      "sha256": "47be326c0bb745dac72f9097aeda1780a884a3a69efa7aa0a2823bd1c81e64b1"
+    },
+    "checker/EXPECTED_SOURCE_EVIDENCE.json": {
+      "bytes": 9023,
+      "projection": "exact source bytes, unchanged",
+      "sha256": "4f5dd8544ebedb2e642fc627f059a2cc53a4ae4e8af77d7770e6c388425fa8b3"
+    },
+    "checker/check_host_chirrtl.py": {
+      "bytes": 34444,
+      "projection": "exact source bytes, unchanged",
+      "sha256": "b3301dd40718e4b05fe7f233747235bff1ae3b142c38a2221a481310431bd2a0"
+    },
+    "checker/test_cold.py": {
+      "bytes": 24402,
+      "projection": "exact source bytes, unchanged",
+      "sha256": "57503e4e902b4d3a3d402375e83053a828fe754150d2bf4337a7be8eb5f9da2a"
+    },
+    "wrapper/SOURCE_PLAN.json": {
+      "bytes": 2874,
+      "projection": "exact source bytes, unchanged",
+      "sha256": "395d51b57bb2ce1cc6b6c840eadf87502091fc6b977454f0aa8ddb3727c9c74b"
+    },
+    "wrapper/run_structure_gate.py": {
+      "bytes": 7972,
+      "projection": "exact source bytes, unchanged",
+      "sha256": "0484d8824ddc9c45aab727ea0a54f6248450c70c28eb9adb3a845af47832b510"
+    },
+    "wrapper/test_structure_gate_cold.py": {
+      "bytes": 7384,
+      "projection": "exact source bytes, unchanged",
+      "sha256": "7e4091a7cd4ffa33afa3be7027edb915644adeffe4064619bc67c26a4b20d1fd"
+    }
+  },
+  "historical_generated_identity_inherited": false,
+  "source_review_manifest_sha256": "018d373abe83035ccbf1b2409af150ca4d59c8105a7142d68da572b7aaff04b0",
+  "source_review_summary_sha256": "cd76172fa3d01c538cb1469100d7254a02e24149c52cf4e25c09290331b0948c",
+  "status": "SOURCE_REPRODUCTION_ONLY",
+  "wrapper_source_manifest_sha256": "8b1783f08455423c684f2407355397620e39532dd53e01a05aeb2ed5d2c59a50"
+}

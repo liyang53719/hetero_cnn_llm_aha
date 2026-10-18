@@ -1,0 +1,410 @@
+{
+  "scope": "STATIC_EXPECTATIONS_ONLY_NO_HISTORICAL_QUALIFICATION_INHERITED",
+  "host83_source": "reports/execution/COALESCED_REAL2_9b09f201842b/numerical/generated/HostBlockTop.sv",
+  "cross_check_names": "development_snapshots/canonical_host_bridge_source_20261018/host_fields.hpp",
+  "host83": {
+    "clock": [
+      "input",
+      1
+    ],
+    "reset": [
+      "input",
+      1
+    ],
+    "io_launch_ready": [
+      "output",
+      1
+    ],
+    "io_launch_valid": [
+      "input",
+      1
+    ],
+    "io_launch_bits_commandBase": [
+      "input",
+      64
+    ],
+    "io_launch_bits_commandLimit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_commands": [
+      "input",
+      16
+    ],
+    "io_launch_bits_descriptorBase": [
+      "input",
+      64
+    ],
+    "io_launch_bits_descriptorLimit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_descriptors": [
+      "input",
+      25
+    ],
+    "io_launch_bits_epoch": [
+      "input",
+      16
+    ],
+    "io_launch_bits_regions_0_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_0_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_0_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_0_write": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_1_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_1_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_1_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_1_write": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_2_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_2_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_2_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_2_write": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_3_base": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_3_limit": [
+      "input",
+      64
+    ],
+    "io_launch_bits_regions_3_read": [
+      "input",
+      1
+    ],
+    "io_launch_bits_regions_3_write": [
+      "input",
+      1
+    ],
+    "io_result_ready": [
+      "input",
+      1
+    ],
+    "io_result_valid": [
+      "output",
+      1
+    ],
+    "io_result_bits_status": [
+      "output",
+      8
+    ],
+    "io_result_bits_completed": [
+      "output",
+      16
+    ],
+    "io_result_bits_failedPc": [
+      "output",
+      16
+    ],
+    "io_result_bits_epoch": [
+      "output",
+      16
+    ],
+    "io_completion_ready": [
+      "input",
+      1
+    ],
+    "io_completion_valid": [
+      "output",
+      1
+    ],
+    "io_completion_bits": [
+      "output",
+      56
+    ],
+    "io_axi_aw_ready": [
+      "input",
+      1
+    ],
+    "io_axi_aw_valid": [
+      "output",
+      1
+    ],
+    "io_axi_aw_bits_addr": [
+      "output",
+      64
+    ],
+    "io_axi_aw_bits_id": [
+      "output",
+      8
+    ],
+    "io_axi_aw_bits_len": [
+      "output",
+      8
+    ],
+    "io_axi_aw_bits_size": [
+      "output",
+      3
+    ],
+    "io_axi_aw_bits_burst": [
+      "output",
+      2
+    ],
+    "io_axi_w_ready": [
+      "input",
+      1
+    ],
+    "io_axi_w_valid": [
+      "output",
+      1
+    ],
+    "io_axi_w_bits_data": [
+      "output",
+      512
+    ],
+    "io_axi_w_bits_strb": [
+      "output",
+      64
+    ],
+    "io_axi_w_bits_last": [
+      "output",
+      1
+    ],
+    "io_axi_b_ready": [
+      "output",
+      1
+    ],
+    "io_axi_b_valid": [
+      "input",
+      1
+    ],
+    "io_axi_b_bits_id": [
+      "input",
+      8
+    ],
+    "io_axi_b_bits_resp": [
+      "input",
+      2
+    ],
+    "io_axi_ar_ready": [
+      "input",
+      1
+    ],
+    "io_axi_ar_valid": [
+      "output",
+      1
+    ],
+    "io_axi_ar_bits_addr": [
+      "output",
+      64
+    ],
+    "io_axi_ar_bits_id": [
+      "output",
+      8
+    ],
+    "io_axi_ar_bits_len": [
+      "output",
+      8
+    ],
+    "io_axi_ar_bits_size": [
+      "output",
+      3
+    ],
+    "io_axi_ar_bits_burst": [
+      "output",
+      2
+    ],
+    "io_axi_r_ready": [
+      "output",
+      1
+    ],
+    "io_axi_r_valid": [
+      "input",
+      1
+    ],
+    "io_axi_r_bits_id": [
+      "input",
+      8
+    ],
+    "io_axi_r_bits_data": [
+      "input",
+      512
+    ],
+    "io_axi_r_bits_resp": [
+      "input",
+      2
+    ],
+    "io_axi_r_bits_last": [
+      "input",
+      1
+    ],
+    "io_resetRequired": [
+      "output",
+      1
+    ],
+    "io_idmaTransfers": [
+      "output",
+      64
+    ],
+    "io_idmaStreamedWriteBeats": [
+      "output",
+      64
+    ],
+    "io_idmaStreamedBeats": [
+      "output",
+      64
+    ],
+    "io_pipelineIssues": [
+      "output",
+      64
+    ],
+    "io_pipelineStalls": [
+      "output",
+      64
+    ],
+    "io_idmaReadBursts": [
+      "output",
+      64
+    ],
+    "io_idmaReadBeats": [
+      "output",
+      64
+    ],
+    "io_idmaCacheHits": [
+      "output",
+      64
+    ],
+    "io_pc": [
+      "output",
+      16
+    ],
+    "io_issuedJobs": [
+      "output",
+      16
+    ],
+    "io_usefulMacs": [
+      "output",
+      64
+    ],
+    "io_executedMacs": [
+      "output",
+      64
+    ],
+    "io_writeBytes": [
+      "output",
+      64
+    ],
+    "io_memoryAccepted_0": [
+      "output",
+      64
+    ],
+    "io_memoryAccepted_1": [
+      "output",
+      64
+    ],
+    "io_memoryReturned_0": [
+      "output",
+      64
+    ],
+    "io_memoryReturned_1": [
+      "output",
+      64
+    ]
+  },
+  "sources": {
+    "reports/execution/COALESCED_REAL2_9b09f201842b/numerical/generated/HostBlockTop.sv": {
+      "bytes": 55517387,
+      "sha256": "49d6625a2fa7a78d195c3742111d518eb788b454e86190ff2ad72b38b5d7fba1"
+    },
+    "development_snapshots/canonical_host_bridge_source_20261018/host_fields.hpp": {
+      "bytes": 15153,
+      "sha256": "5c084cf3ec72100ff13c45623dba94e8d73ca3ca74d5a4d8fc8c8b1bc6614b97"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "bytes": 20853,
+      "sha256": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala": {
+      "bytes": 10393,
+      "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": {
+      "bytes": 4004,
+      "sha256": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+      "bytes": 88647,
+      "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala": {
+      "bytes": 4229,
+      "sha256": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": {
+      "bytes": 4968,
+      "sha256": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c"
+    },
+    "development_snapshots/canonical_host_silu_observer_source_20261017/BINDING_REQUIREMENTS.json": {
+      "bytes": 9332,
+      "sha256": "e0c4ebaea92f38799c8c4ed27da943afc4114490add4695cb72d28d2c6eb400c"
+    },
+    "development_snapshots/canonical_host_observation_taps_source_20261017/candidate/Qwen2Block.scala": {
+      "bytes": 56051,
+      "sha256": "a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491"
+    },
+    "development_snapshots/canonical_host_observation_taps_source_20261017/candidate/VectorSilu.scala": {
+      "bytes": 11873,
+      "sha256": "26fc929be7d68fe0bb3e8396ddcdd79114279745fc18ad14643b6b662f708c26"
+    },
+    "development_snapshots/canonical_host_observation_taps_source_20261017/candidate/FfnTileSiluBridge.scala": {
+      "bytes": 6138,
+      "sha256": "b7e0075c12357b4d7bf81ea175087c6fda3a63c3693f26e58770e082af52c1b6"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+      "bytes": 32821,
+      "sha256": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": {
+      "bytes": 5773,
+      "sha256": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": {
+      "bytes": 20407,
+      "sha256": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": {
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    }
+  },
+  "limitations": [
+    "Historical SV is an ABI oracle only; no historical model identity or qualification is inherited.",
+    "Source expected paths are checked against actual parsed instance paths; no generated C++ names are guessed.",
+    "Three observation source files define nine bundles, not three signals."
+  ]
+}

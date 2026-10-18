@@ -447,3 +447,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - ongoing：从原 fixture/编码器源码恢复 metadata-only 可复放入口；布局证据仍不构成 resident Gate/Up DDR 写权限，旧输入流 framing 尚未恢复。
 - todo：补齐真实 launch、RAM/B 退休/SSA 以及完整加载封存语义，再建立真实生成模型依赖。当前片尚未实例化 C++ 模板或验证生成端口 ABI，不能编译/运行完整 Host。
 - 边界：旧 session 74562 终态未知和未发布 full27 丢失事实不变；完整 block RTL 仍为 0/5，不提升数值或利用率结论。
+
+
+### 2026-10-18 08:30 UTC：原 M128 metadata-only 可复放源码
+
+- done：调用 8 个已固定原项目模块，以同一源码 bytes 校验后执行；真实 sys.path 不变，不加载 NumPy/Torch。独立正常与 -O 各 11 项冷测通过。
+- done：fresh 重放生成 21 条命令和 215 个描述符，两表分别 384/3456 字节；35 个 reservation、2 个 KV 子视图、4 个 region 与固定源码布局逐项吻合。
+- done：发布仅 10 件可再生源码与项目身份摘要，不含四件生成物；测试在没有 generated 目录时临时生成并核对原大小/SHA。
+- ongoing：恢复实际 same-RAM 初始化、封存与后续加载连接。94,920,448 字节仅为 14 个只读tensor及两表的布局和，不是已生成、读取或验证的 tensor payload。
+- todo：真实加载协议、数据来源验证及B退休/SSA仍待实现；旧 wire framing、launch、resident DDR 权限、完整 Host 与27数值资格均未恢复。旧 N0 会话终态未知和完整 block RTL 0/5 保持。

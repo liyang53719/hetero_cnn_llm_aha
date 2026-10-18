@@ -1,0 +1,110 @@
+{
+  "derived_from_manifest_sha256": "19a5d92bb013857c9862fe6e39752cae8b9661daad327ee3b3440b47a45306eb",
+  "facts": {
+    "global_sys_path_unchanged": true,
+    "identical_hashed_compiled_buffer_object_checked": true,
+    "normal_optimized_artifact_hashes_equal": true,
+    "pack_words_calls_profiled": 0,
+    "project_pyc_opens_during_poisoned_replay": 0,
+    "source_repository_git_status_clean": true,
+    "tensor_payload_bytes_materialized": 0
+  },
+  "fresh_cli": {
+    "command": "python -I -S -B replay_metadata.py --repository <caller_repository> --output <fresh_temporary_output>",
+    "exit_code": 0,
+    "expected_layout_fields_match": true,
+    "generated_artifact_digests": {
+      "host_commands.bin": {
+        "bytes": 384,
+        "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4"
+      },
+      "host_descriptors.bin": {
+        "bytes": 3456,
+        "sha256": "1e4d35da18b21a4d9de05d2f3129e5bd9717cd923837c83c8d5eb320bfcddb02"
+      },
+      "metadata.json": {
+        "bytes": 18629,
+        "sha256": "463500e31e4f1f3a0cd97b987d8c607cb4e057500ad037a02df941bd33f9ac76"
+      },
+      "metadata_layout.hpp": {
+        "bytes": 2962,
+        "sha256": "1778f7c08ce5a062d9e2bf3dd6454ba1cbe386262dd37d017cfe70371e0a3b83"
+      }
+    },
+    "original_reviewed_artifact_sizes_and_hashes_match": true,
+    "temporary_output_removed": true
+  },
+  "negative_controls": {
+    "changed_executed_sources_per_run": 8,
+    "changed_reference_sources_per_run": 5,
+    "numeric_imports_rejected": [
+      "numpy",
+      "numpy.linalg",
+      "torch",
+      "torch.nn"
+    ],
+    "preloaded_numeric_libraries_rejected": [
+      "numpy",
+      "torch"
+    ],
+    "valid_poisoned_project_pyc_positive_controls_per_run": 8
+  },
+  "not_claimed": [
+    "historical stream framing",
+    "native compilation",
+    "EDA execution",
+    "resident DDR authorization",
+    "full block numeric acceptance",
+    "all27 output correctness",
+    "cycle or QoR evidence"
+  ],
+  "python": "3.12.14",
+  "runs": [
+    {
+      "command": "python -I -S -B test_replay.py --repository <caller_repository>",
+      "exit_code": 0,
+      "log": "normal.log",
+      "log_digest": {
+        "bytes": 1536,
+        "sha256": "a539cfcf65f5540a6d0c6abbbe5c4e1616726131275587f8bf80fd3e25dc6db7"
+      },
+      "tests_passed": 11
+    },
+    {
+      "command": "python -I -S -B -O test_replay.py --repository <caller_repository>",
+      "exit_code": 0,
+      "log": "optimized.log",
+      "log_digest": {
+        "bytes": 1536,
+        "sha256": "e5ef666377c1452f63b792cc24102a66b685b9438509cae262e7adbc5d922c0f"
+      },
+      "tests_passed": 11
+    }
+  ],
+  "schema": 1,
+  "source_commit": "6bde92d43d2ea9a78e951c0062e133aecf8b091e",
+  "source_only": {
+    "binary_tables_encoded_as_text": false,
+    "distributed_files": 10,
+    "generated_artifacts_distributed": 0,
+    "generated_directory_distributed": false,
+    "original_14_file_candidate_unchanged": true,
+    "unchanged_source_files": {
+      "EXPECTED_LAYOUT.json": {
+        "bytes": 15795,
+        "sha256": "4ededb349c9206841e464f786c8b64d8744de60d789150ce533e17fe544bc7a7"
+      },
+      "SOURCE_PIN.json": {
+        "bytes": 3008,
+        "sha256": "2a40768093f4529fe9a4ad69363178bcf3ef817ca53ebb5694f8e82b03427758"
+      },
+      "replay_metadata.py": {
+        "bytes": 11370,
+        "sha256": "dbfa667b87aa1c44813d041d0053c9afa7b804ea7dc3b907b285a76171b53bfe"
+      }
+    }
+  },
+  "source_tree": "9f743cd7ff48b820ac65ce2bb15024864b37d4e9",
+  "status": "PASS_SOURCE_ONLY_METADATA_COLD_TESTS_NOT_NATIVE_OR_FULLBLOCK_QUALIFICATION",
+  "tested_at_utc": "2026-10-18T08:28:52.285393+00:00"
+}

@@ -1,0 +1,16 @@
+test_01_exact_package_source_receipt (__main__.MetadataCold.test_01_exact_package_source_receipt) ... ok
+test_02_real_replay_exact_output_and_no_global_path_change (__main__.MetadataCold.test_02_real_replay_exact_output_and_no_global_path_change) ... ok
+test_03_numeric_pack_words_never_called (__main__.MetadataCold.test_03_numeric_pack_words_never_called) ... ok
+test_04_valid_polluted_cache_on_all_eight_sources_is_ignored (__main__.MetadataCold.test_04_valid_polluted_cache_on_all_eight_sources_is_ignored) ... ok
+test_05_bad_executed_or_reference_source_rejected (__main__.MetadataCold.test_05_bad_executed_or_reference_source_rejected) ... ok
+test_06_numpy_torch_import_and_preloaded_modules_rejected (__main__.MetadataCold.test_06_numpy_torch_import_and_preloaded_modules_rejected) ... ok
+test_07_only_exact_known_path_requests_suppressed (__main__.MetadataCold.test_07_only_exact_known_path_requests_suppressed) ... ok
+test_08_identical_read_buffer_is_compiled_once (__main__.MetadataCold.test_08_identical_read_buffer_is_compiled_once) ... ok
+test_09_wrong_hash_never_creates_or_executes_module (__main__.MetadataCold.test_09_wrong_hash_never_creates_or_executes_module) ... ok
+test_10_unsafe_relative_names_rejected (__main__.MetadataCold.test_10_unsafe_relative_names_rejected) ... ok
+test_11_fresh_normal_and_optimized_cli_are_byte_stable (__main__.MetadataCold.test_11_fresh_normal_and_optimized_cli_are_byte_stable) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 2.035s
+
+OK

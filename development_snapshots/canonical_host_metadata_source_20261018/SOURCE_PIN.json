@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "repository_commit": "6bde92d43d2ea9a78e951c0062e133aecf8b091e",
+  "repository_tree": "9f743cd7ff48b820ac65ce2bb15024864b37d4e9",
+  "runtime_root": "caller supplied; no absolute repository path retained",
+  "executed_modules": [
+    {
+      "module": "heteronpu.abi_validation",
+      "path": "src/heteronpu/abi_validation.py",
+      "bytes": 1941,
+      "sha256": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590"
+    },
+    {
+      "module": "heteronpu.command",
+      "path": "src/heteronpu/command.py",
+      "bytes": 5667,
+      "sha256": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b"
+    },
+    {
+      "module": "heteronpu.descriptor_chain",
+      "path": "src/heteronpu/descriptor_chain.py",
+      "bytes": 14352,
+      "sha256": "bedf5d138e0fdf26fb5b2a09421172a261d5f029911166bc97f8e0b8c229da89"
+    },
+    {
+      "module": "heteronpu.gemmini_rocc_lowering",
+      "path": "src/heteronpu/gemmini_rocc_lowering.py",
+      "bytes": 23050,
+      "sha256": "842aaa8ef916a993d6b58f82529bbc9ef57221c47cd4e8d659d27141d28cc485"
+    },
+    {
+      "module": "heteronpu.gemmini_descriptor_v2",
+      "path": "src/heteronpu/gemmini_descriptor_v2.py",
+      "bytes": 13907,
+      "sha256": "6802790c4aa91406a289f3da2990b35acba25f2a3a096ccb071ece12fbd0ac60"
+    },
+    {
+      "module": "heteronpu.l9_transport_contract",
+      "path": "src/heteronpu/l9_transport_contract.py",
+      "bytes": 11707,
+      "sha256": "d672178bd13511e6f3bbed821fef570f79c83e7c314e4040903d98e5d8729a4c"
+    },
+    {
+      "module": "metadata_original_packer",
+      "path": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "bytes": 8316,
+      "sha256": "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154"
+    },
+    {
+      "module": "metadata_original_converter",
+      "path": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "bytes": 5759,
+      "sha256": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692"
+    }
+  ],
+  "reference_only_sources": {
+    "candidates/qwen2_resident_matrix/ffn_public/fixture.py": {
+      "bytes": 15492,
+      "sha256": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208"
+    },
+    "src/heteronpu/__init__.py": {
+      "bytes": 611,
+      "sha256": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be"
+    },
+    "development_snapshots/canonical_host_source_recovery_20261018/test_recovery.py": {
+      "bytes": 12429,
+      "sha256": "9eac1aab6183a6a4c3ae742d3ef3fdaab3801166135602e4a4a25de014e76572"
+    },
+    "development_snapshots/canonical_host_source_recovery_20261018/source/include/silu_observer.hpp": {
+      "bytes": 19085,
+      "sha256": "4517356fae02531b1eab19d825423440c197bfeb0f5269475dda501da1225245"
+    },
+    "development_snapshots/canonical_host_source_recovery_20261018/source/pc0/pc0_main.cpp": {
+      "bytes": 9813,
+      "sha256": "af85c334db985bb9bb4c4c9d24961772b3c2240996560253ebd06be9d8e29323"
+    }
+  }
+}

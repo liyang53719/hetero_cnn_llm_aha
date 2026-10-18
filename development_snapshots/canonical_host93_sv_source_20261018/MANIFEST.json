@@ -1,0 +1,45 @@
+{
+  "actual_review_status_at_freeze": "PENDING_FAILURE_REVIEW",
+  "cold_logic_changed": false,
+  "files": {
+    "BINDING_REQUIREMENTS.json": {
+      "bytes": 1373,
+      "sha256": "a503bd9f1210a31c949136f3bd5705912caafe7046133bbe3b58fb983e3c3f06"
+    },
+    "INSTALL_MAP.json": {
+      "bytes": 2013,
+      "sha256": "b58eb0547d465796a3c7643b3947a7bb2bb89e9becf822a74c2149dfe0b48022"
+    },
+    "README.md": {
+      "bytes": 4055,
+      "sha256": "8bf43c18fbcfade129a7839aff4658a36cde478bbaa1c921715e65bec3d223f8"
+    },
+    "SAFE_HISTORY.json": {
+      "bytes": 3159,
+      "sha256": "76a5b5c4aab4345ed7b18ed52e181ff3ec3839b7d4bbf4286ea73cb7a346813d"
+    },
+    "SOURCE_DELTA.json": {
+      "bytes": 4538,
+      "sha256": "25a09a50e2d83f5cce875b76e4602737c271cb94da5cfe7a4605d36ea882d121"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 1553,
+      "sha256": "c271e166c2cc23e1afa867baefc20aab6af6882eb84fbd8b8aee8aaa0324fcab"
+    },
+    "SV_PLAN.json": {
+      "bytes": 3135,
+      "sha256": "c8da8a818821ece4d276f1c2ba64f1e14c511487dfbaa304a5255d3e03d02d34"
+    },
+    "run_sv_gate.py": {
+      "bytes": 18507,
+      "sha256": "0c6bfa402588dcdad6c492a8fa2f295f2f63670f305a738e92e621ee7cbfe3f1"
+    },
+    "test_sv_gate_cold.py": {
+      "bytes": 15542,
+      "sha256": "44d6878c4900d3571fbadfcd2f0313b846198dbc11554f58910a5873a5dd7237"
+    }
+  },
+  "published": false,
+  "runtime_logic_changed": false,
+  "status": "SOURCE_ONLY_UNBOUND_PUBLICATION_PROJECTION"
+}

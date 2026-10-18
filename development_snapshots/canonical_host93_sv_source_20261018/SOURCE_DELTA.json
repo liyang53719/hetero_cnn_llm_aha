@@ -1,0 +1,78 @@
+{
+  "actual_native_execution": false,
+  "base_chirrtl_gate": {
+    "bytes": 12335,
+    "path": "development_snapshots/canonical_host93_chirrtl_source_20261018/run_chirrtl_gate.py",
+    "sha256": "2d07c07fa03595dceeaf024df31650ff9e22547b9f5e5c6ad829549256dc8ff5"
+  },
+  "base_supervisor_projection_sha256": "091e5d8e5588ee40576de366998e06be4357a2714a23d6be247015f79ddbf9e1",
+  "binding_successor": {
+    "budget_flags_lifecycle_changed": false,
+    "cold_change": "Only gate-source pin and test_01 explicit deepcopy(plan) PENDING mock changed. Other tests unchanged.",
+    "exact_changed_plan_leaf_paths": [
+      "firtool.actual_review_state",
+      "firtool.attempt_files.RESULT.json.bytes",
+      "firtool.attempt_files.RESULT.json.sha256",
+      "firtool.attempt_files.artifacts/ACQUISITION.json.bytes",
+      "firtool.attempt_files.artifacts/ACQUISITION.json.sha256",
+      "firtool.attempt_files.artifacts/MEMBER.json.bytes",
+      "firtool.attempt_files.artifacts/MEMBER.json.sha256",
+      "firtool.attempt_path",
+      "firtool.bytes",
+      "firtool.review_files.MANIFEST.json.bytes",
+      "firtool.review_files.MANIFEST.json.sha256",
+      "firtool.review_files.SUMMARY.json.bytes",
+      "firtool.review_files.SUMMARY.json.sha256",
+      "firtool.review_path",
+      "firtool.review_summary_claims"
+    ],
+    "execution_source_change": "Only PLAN_SHA literal changed; reverse substitution equals predecessor entire source bytes.",
+    "plan_change": "Only formerly PENDING firtool fields replaced by actual acquisition and review identity.",
+    "predecessor_all_11_files_unchanged_verified": true,
+    "predecessor_manifest": {
+      "bytes": 1862,
+      "sha256": "6ac5a3762d448908c245d1d94149041379964b01fd83a4335887362d76861f43"
+    },
+    "source_code_reverse_identity_verified": true
+  },
+  "calibration_source": {
+    "bytes": 17327,
+    "path": "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+    "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a"
+  },
+  "exact_lifecycle_delta": "One reviewed projected bounded RLIMIT_FSIZE expression: (48 * 1024 * 1024, 48 * 1024 * 1024) to (128 * 1024 * 1024, 128 * 1024 * 1024); reversible byte replacement; all other five-function bytes unchanged.",
+  "historical_outputs_inherited": false,
+  "native_namespace_delta": "Explicit AS_LIMIT=2*1024*1024*1024; original calibration sampler and sample state unchanged. No native JVM namespace is used.",
+  "native_supervisor_projection_sha256": "01f139b746155b307a094fba8e8faa6dc66c0fb8a93184525ac2836f2413fffe",
+  "orchestration_delta": [
+    "CLASS/JAR input closure replaced by fixed same-FIR + newly acquired firtool member actual/review receipt closure.",
+    "Native argv exactly same reviewed old SV flags; HostBlockCollection single output.",
+    "FIR and binary fresh private snapshots, originals and snapshots rehashed before and after; original binary remains0600, only new snapshot becomes0700.",
+    "t0 total180, pre10, child<=150 at latest t0+160, original cleanup5, postflight beforet0+180.",
+    "Finite inventory limits64entries/32files; exact dirs and allowlist; hashes streamed; unknown output retained and attempt fails.",
+    "No large checker import/execute, no semantic pass; SV Host83/resource8/tap review explicitly INCOMPLETE.",
+    "Nonterminal evidence plus real outer exit0 contract; post-save exact inventory and same-stop check."
+  ],
+  "preserved_lifecycle_functions": [
+    "require",
+    "save",
+    "group_state",
+    "observe_exit",
+    "bounded"
+  ],
+  "publication_template_delta": {
+    "actual_execution": "Template cannot execute before new local actual binding, source freeze and review.",
+    "bound_source_manifest_sha256": "1059e31b33d6ed273ff19f422020512559c73ca2fffda4c928ca02475f97c6a0",
+    "cold_source": "Only matching raw execution-source SHA changed; all cold test logic is unchanged.",
+    "execution_source": "Only PLAN_SHA literal changed; reverse replacement restores complete reviewed source.",
+    "plan": "Machine paths and new firtool actual receipt/review slots replaced by explicit PENDING. Same FIR/official tool identity and member size, original structure-review identity and all budgets/flags are preserved.",
+    "source_review_manifest_sha256": "301a4e84b704153b4728db987ba8f915ffcb1483c4724138403e40b313cba979"
+  },
+  "schema": "host93-sv-source-projection-v1",
+  "source_original_modified": false,
+  "unchanged_chirrtl_function_text": [
+    "require",
+    "digest",
+    "clean"
+  ]
+}

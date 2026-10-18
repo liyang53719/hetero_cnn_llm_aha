@@ -604,3 +604,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：持久化 10 件获取/单成员校验纯源码、测试、计划与安全摘要；无实际 archive、binary、完整日志或当前机器库存。包内 actual 审 PENDING 为原冻结事实，本条另记后续审结。
 - ongoing：同一已审 Host93 FIR 的有界 SV 转换门正绑定新工具实际身份；首次预算 180 秒总/150 秒工具、单核/AS 2 GiB/FSIZE 128 MiB，未执行前不授 SV 产物资格。
 - todo：SV 结构、生成 C++、真实 Host 接口与数值回放均待后续实际证据；不提前重建 Verilator 或 iDMA。旧 N0 终态未知与完整 block 0/5 保持。
+
+### 2026-10-18 15:13 UTC：首轮同 FIR SV 转换超时，保留失败并冻结复现源码
+
+- done：固定 Host93 FIR `264f8b3a…` 与官方 firtool 1.62.1 成员 `7f52d2a3…`，经实际绑定 SOURCE 独审 `301a4e84…` 后进行唯一首轮转换，未关闭任何检查。
+- done：原会话外层 exit 1、150.983 秒；工具工作窗明确触发 `TimeoutError: SV firtool_work150s deadline`，保锚清理后 reap -9/group absent，不能将清理退出码称为自然工具退出。
+- done：保存 147 条同 PID/starttime 的逐秒 leader 样本，末累计 CPU 147.80 秒；回收 child CPU 144.053441+4.533091 秒、绝对峰值 725172 KiB。原 VmHWM 有一次 48 KiB 下降，保留原值且原因未知。
+- done：verbose 最后开始 `firrtl-check-comb-loops` 而未报告该 pass 完成；SV 文件 0 B，无 annotation/成功 RESULT，不能据此推断存在组合环或 OOM。原成功后验路径未执行。
+- done：失败 actual 独审 `80f63b2bcad35941eadd57c781ca19628e86c20871ce84e8472fd616f582a828` 核对 9 件/67,494,439 B；当前原 657 件生成及 11 件获取库存与 FIR/tool 重 hash 相符，明确属于独立现时核验。
+- done：持久化 10 件未绑定纯源码/测试/安全失败摘要；计划去除本机绝对路径，PENDING 在输出前拒绝，后续真实绑定必须另行冻结审查。无 FIR/SV/binary、完整日志或机器库存；摘要 actual 审 PENDING 为冻结事实，本条另记后续审结。
+- ongoing：根据本次持续 CPU/稳定 RSS 准备单次 390 秒总/360 秒工具、CPU360 与每秒 400 条上限的有观测校准；原 AS2GiB/FSIZE128MiB/flags 不变，SOURCE 闭合前不执行，不跳过 comb-loop。
+- todo：历史 95.9095 秒来自不同 Bench FIR `db430673…`，不能保证当前 Host 耗时；若再次超时先定位该 pass 源码复杂度，不继续盲目加时。SV/Host/数值资格均未取得，完整 block 保持 0/5。

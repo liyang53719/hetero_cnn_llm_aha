@@ -466,3 +466,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：发布生产头、明确标注的 v1 回归正控、真实测试 TU 和可搬迁复现脚本；无 ELF、系统身份库存或完整运行日志。执行时仍动态计算 compiler 身份，留在调用者本地结果。可搬迁脚本 10+10 mock 通过，其本身未重复 native。
 - ongoing：按已发布原始模型/provider 身份恢复 same-buffer 加载连接；真实 payload 仍需按需获取/验证，不猜旧 framing。
 - todo：canonical digest/EOF/receipt、真实 HostMemory/B 退休/SSA/prefix 和完整 27 采集仍待新证据。旧 session 74562 终态未知、完整 block RTL 0/5 保持。
+
+
+### 2026-10-18 09:14 UTC：固定原始输入与 provider 预期身份恢复
+
+- done：从 7 个已发布来源固定 13 份 raw BF16 输入与 14 个 M128 provider 的名称、形状、大小、转换后 SHA-256，以及两张 metadata 表的预期身份；只读校验不导入 producer 或数值库。
+- done：14 provider 名称/大小与恢复布局逐项一致，合计 94,916,608 字节；加两表 3,840 字节为 94,920,448 字节。正常与 -O 各 11 项冷测及 verify 双模式通过。
+- 边界：这些是已发布历史输入身份，不是当前 payload 重新读取或数值验收。当前缺失 13 raw tensor；原 producer 依赖的 work 元数据未恢复。不得从旧 stream SHA 或长度反推 framing。
+- ongoing：新逐输入流接口将实际写入同 RAM，固定 expected 摘要先校验，再封存与同 RAM 重算；仅固定交接边界哈希，正常只读访问不全量重算。
+- todo：取得并验证真实原始 payload 后才能授予 canonical 加载身份；launch、完整 Host/27 数值和旧 N0 终态未知边界保持，完整 block RTL 仍为 0/5。

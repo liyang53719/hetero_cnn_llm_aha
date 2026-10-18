@@ -1,0 +1,33 @@
+{
+  "all27_or_rtl_acceptance": false,
+  "files": {
+    "INPUT_IDENTITY.json": {
+      "bytes": 14530,
+      "sha256": "f5fd835b06cf76b28c9dcc22db6eb2f919de1315420fc54ff23033c2b3fe1d98"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 585,
+      "sha256": "8e97c73616214a7b44528c59ea1151cdfa4a0a4272178184871160a00c305d66"
+    },
+    "README_CN.md": {
+      "bytes": 3454,
+      "sha256": "56553ecc61f084c537e6392280a95a3b783f15d786721da705e9a32dd1b53cc4"
+    },
+    "TEST_RESULTS.json": {
+      "bytes": 2338,
+      "sha256": "151cecc900560f7ac785d19a03e97a997ffda2812c25d256bf6c6a04b58b7880"
+    },
+    "test_identity.py": {
+      "bytes": 6163,
+      "sha256": "9f25e96a89e3451b27a7570cf478213ebeb50ac8207b256bfe8a4d351391ca11"
+    },
+    "verify_identity.py": {
+      "bytes": 8963,
+      "sha256": "f51a84fcdb0d42b9e0f5dc099cd6d79f7639dccafb4fb36e3ed7fe1ac76dfc10"
+    }
+  },
+  "payloads_included": false,
+  "schema": 1,
+  "source_repository_commit": "b8ca25fa71e5b68cddbf0dd8eabf3dc787688f65",
+  "status": "SOURCE_INPUT_IDENTITY_CANDIDATE_V1"
+}

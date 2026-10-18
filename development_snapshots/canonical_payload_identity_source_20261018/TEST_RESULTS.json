@@ -1,0 +1,37 @@
+{
+  "git_write": false,
+  "legacy_framing_recovered": false,
+  "normal_tests": 11,
+  "numerical_execution": false,
+  "optimized_tests": 11,
+  "producer_executed": false,
+  "runs": [
+    {
+      "command": "python3 -I -S -B verify_identity.py --repo REPO",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"historical_stream_framing_recovered\": false, \"identity_sha256\": \"f5fd835b06cf76b28c9dcc22db6eb2f919de1315420fc54ff23033c2b3fe1d98\", \"launch_admission\": false, \"payload_bytes_read\": 0, \"payload_with_tables_bytes\": 94920448, \"producer_executed\": false, \"project_sources_imported\": false, \"provider_identities\": 14, \"provider_payload_bytes\": 94916608, \"raw_tensor_identities\": 13, \"reference_payloads_read\": 0, \"schema\": 1, \"source_buffers_hashed_and_parsed_same\": true, \"source_files_checked\": 7, \"status\": \"PASS_SOURCE_INPUT_IDENTITIES_ONLY\", \"whole_repository_identity_verified\": false}\n"
+    },
+    {
+      "command": "python3 -I -S -B -O verify_identity.py --repo REPO",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"historical_stream_framing_recovered\": false, \"identity_sha256\": \"f5fd835b06cf76b28c9dcc22db6eb2f919de1315420fc54ff23033c2b3fe1d98\", \"launch_admission\": false, \"payload_bytes_read\": 0, \"payload_with_tables_bytes\": 94920448, \"producer_executed\": false, \"project_sources_imported\": false, \"provider_identities\": 14, \"provider_payload_bytes\": 94916608, \"raw_tensor_identities\": 13, \"reference_payloads_read\": 0, \"schema\": 1, \"source_buffers_hashed_and_parsed_same\": true, \"source_files_checked\": 7, \"status\": \"PASS_SOURCE_INPUT_IDENTITIES_ONLY\", \"whole_repository_identity_verified\": false}\n"
+    },
+    {
+      "command": "python3 -I -S -B test_identity.py --repo REPO",
+      "returncode": 0,
+      "stderr": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.032s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "command": "python3 -I -S -B -O test_identity.py --repo REPO",
+      "returncode": 0,
+      "stderr": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.026s\n\nOK\n",
+      "stdout": ""
+    }
+  ],
+  "schema": 1,
+  "status": "PASS_SOURCE_IDENTITY_COLD_ONLY",
+  "tensor_payload_bytes_read": 0
+}

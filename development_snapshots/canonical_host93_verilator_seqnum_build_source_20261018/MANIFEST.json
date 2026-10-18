@@ -1,0 +1,51 @@
+{
+  "schema": "DERIVED_SEQNUM_PORTABLE_SOURCE_MANIFEST_V1",
+  "status": "PURE_SOURCE_UNBOUND_ACTUALS_PENDING",
+  "source_file_count_including_manifest": 9,
+  "production_function_count": 20,
+  "production_functions_byte_identical_to_predecessor": true,
+  "native_execution": false,
+  "actual_tree_copied": false,
+  "files": [
+    {
+      "path": "DERIVED_V3ProtectLib.cpp",
+      "bytes": 22430,
+      "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+    },
+    {
+      "path": "ORIGINAL_V3ProtectLib.cpp",
+      "bytes": 22417,
+      "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+    },
+    {
+      "path": "PATCH.json",
+      "bytes": 1619,
+      "sha256": "784e777dbf4cfdef53788ff1c3d69a31c5e416a7d10c2d5a387b795b42cb1fe2"
+    },
+    {
+      "path": "PLAN.json",
+      "bytes": 14930,
+      "sha256": "dd6a89e327105be61837538cf68bdbdb854ba4239de84ff9aace806e9898c6b8"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5957,
+      "sha256": "0d5a018a19c40640ea12285837759073b985625e89146a993274623c4849ac71"
+    },
+    {
+      "path": "load_seqnum_rebuild.py",
+      "bytes": 2089,
+      "sha256": "07f7215d8aae4c11c3df398dae45ef1fe32df1318e178847d6ed9b49e43ecb55"
+    },
+    {
+      "path": "run_seqnum_rebuild.py",
+      "bytes": 24603,
+      "sha256": "a5df00c76cd5482dc758ed637c3dbb886e44b86de5ede5143c6e36f88a0478ef"
+    },
+    {
+      "path": "test_seqnum_rebuild_cold.py",
+      "bytes": 13094,
+      "sha256": "3dfc3b8e044aad3da0c90d07b31d7c13b6f0db1b2a614e26ee5c5a574ce246aa"
+    }
+  ]
+}

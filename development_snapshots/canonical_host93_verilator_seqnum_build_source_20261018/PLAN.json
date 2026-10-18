@@ -1,0 +1,386 @@
+{
+  "schema": "DERIVED_SEQNUM_INCREMENTAL_PUBLIC_SOURCE_PLAN_V1",
+  "status": "PURE_SOURCE_UNBOUND_ACTUAL_ACCEPTANCE_PENDING",
+  "parent_only_actual": true,
+  "review_required": true,
+  "expected_source_review_verdict": "SOURCE_GO_DERIVED_SEQNUM_INCREMENTAL_ONLY",
+  "base_root": "/UNBOUND/original_build",
+  "build_root": "/UNBOUND/derived_build",
+  "support_pin": {
+    "path": "/UNBOUND/repo/development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py",
+    "bytes": 28551,
+    "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+  },
+  "base_tree": {
+    "path": "/UNBOUND/base_tree/BUILD_TREE.json",
+    "bytes": 0,
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "base_build_review": null,
+  "observed_failure_review": null,
+  "observed_generated_wrapper": {
+    "path": "/UNBOUND/observed_generated_wrapper/generated_wrapper.cpp",
+    "bytes": 0,
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "original_build_plan": {
+    "path": "/UNBOUND/original_build_plan/GATE_PLAN.json",
+    "bytes": 0,
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "original_source": {
+    "path": "/UNBOUND/publication/ORIGINAL_V3ProtectLib.cpp",
+    "bytes": 22417,
+    "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+  },
+  "derived_source": {
+    "path": "/UNBOUND/publication/DERIVED_V3ProtectLib.cpp",
+    "bytes": 22430,
+    "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+  },
+  "patch_record": {
+    "path": "/UNBOUND/publication/PATCH.json",
+    "bytes": 1619,
+    "sha256": "784e777dbf4cfdef53788ff1c3d69a31c5e416a7d10c2d5a387b795b42cb1fe2"
+  },
+  "patch_member": "verilator/src/V3ProtectLib.cpp",
+  "skip_copy": [
+    "verilator/src/obj_opt/V3ProtectLib.o",
+    "verilator/src/obj_opt/V3ProtectLib.d",
+    "verilator/bin/verilator_bin"
+  ],
+  "original_environment": {
+    "AC_MACRODIR": "/UNBOUND/dependency_stage/usr/share/autoconf",
+    "AR": "/usr/bin/ar",
+    "AUTOM4TE": "/UNBOUND/original_build/tools/usr/bin/autom4te",
+    "AUTOM4TE_CFG": "/UNBOUND/dependency_stage/relocation/autom4te.cfg",
+    "BISON_PKGDATADIR": "/UNBOUND/dependency_stage/usr/share/bison",
+    "CC": "/usr/bin/gcc",
+    "CONFIG_SHELL": "/bin/sh",
+    "CONFIG_SITE": "/dev/null",
+    "CXX": "/usr/bin/g++",
+    "HOME": "/UNBOUND/original_build/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "LEX": "/UNBOUND/original_build/tools/usr/bin/flex",
+    "M4": "/UNBOUND/original_build/tools/usr/bin/m4",
+    "MAKE": "/usr/bin/make",
+    "PATH": "/UNBOUND/original_build/tools/usr/bin:/usr/bin:/bin",
+    "PERL": "/usr/bin/perl",
+    "PYTHON3": "/usr/bin/python3",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "SHELL": "/bin/sh",
+    "TMPDIR": "/UNBOUND/original_build/tmp",
+    "TZ": "UTC",
+    "VERILATOR_ROOT": "/UNBOUND/original_build/verilator",
+    "VERILATOR_SRC_VERSION": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+    "YACC": "/UNBOUND/original_build/tools/usr/bin/bison",
+    "autom4te_perllibdir": "/UNBOUND/dependency_stage/usr/share/autoconf",
+    "trailer_m4": "/UNBOUND/dependency_stage/usr/share/autoconf/autoconf/trailer.m4"
+  },
+  "environment": {
+    "AC_MACRODIR": "/UNBOUND/dependency_stage/usr/share/autoconf",
+    "AR": "/usr/bin/ar",
+    "AUTOM4TE": "/UNBOUND/original_build/tools/usr/bin/autom4te",
+    "AUTOM4TE_CFG": "/UNBOUND/dependency_stage/relocation/autom4te.cfg",
+    "BISON_PKGDATADIR": "/UNBOUND/dependency_stage/usr/share/bison",
+    "CC": "/usr/bin/gcc",
+    "CONFIG_SHELL": "/bin/sh",
+    "CONFIG_SITE": "/dev/null",
+    "CXX": "/usr/bin/g++",
+    "HOME": "/UNBOUND/derived_build/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "LEX": "/UNBOUND/original_build/tools/usr/bin/flex",
+    "M4": "/UNBOUND/original_build/tools/usr/bin/m4",
+    "MAKE": "/usr/bin/make",
+    "PATH": "/UNBOUND/original_build/tools/usr/bin:/usr/bin:/bin",
+    "PERL": "/usr/bin/perl",
+    "PYTHON3": "/usr/bin/python3",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "SHELL": "/bin/sh",
+    "TMPDIR": "/UNBOUND/derived_build/tmp",
+    "TZ": "UTC",
+    "VERILATOR_ROOT": "/UNBOUND/derived_build/verilator",
+    "VERILATOR_SRC_VERSION": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+    "YACC": "/UNBOUND/original_build/tools/usr/bin/bison",
+    "autom4te_perllibdir": "/UNBOUND/dependency_stage/usr/share/autoconf",
+    "trailer_m4": "/UNBOUND/dependency_stage/usr/share/autoconf/autoconf/trailer.m4"
+  },
+  "published_sources": {
+    "supervisor": {
+      "path": "/UNBOUND/repo/development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2",
+      "functions": {
+        "require": {
+          "bytes": 67,
+          "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+        },
+        "save": {
+          "bytes": 179,
+          "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+        },
+        "group_state": {
+          "bytes": 190,
+          "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+        },
+        "observe_exit": {
+          "bytes": 719,
+          "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+        },
+        "bounded": {
+          "bytes": 5637,
+          "sha256": "890949ee8fcab68757fd0a1f703b34375aa672ad1be22ff5f062b6f2d1ccbe4a"
+        }
+      },
+      "repo_relative": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py"
+    },
+    "observation": {
+      "path": "/UNBOUND/repo/development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+      "bytes": 17327,
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a",
+      "functions": {
+        "proc_bytes": {
+          "bytes": 271,
+          "sha256": "ca5673af73568126a80bcf18fc97f6618fdea31d1f894dae66f3d3ba989ce4f1"
+        },
+        "proc_stat": {
+          "bytes": 483,
+          "sha256": "07b6cbe0ec743b6c5b7fc20d973ab3d7b3a85a256a4afb72db95b8859cc3d74f"
+        },
+        "sample_leader": {
+          "bytes": 1925,
+          "sha256": "eb36de77ffed0351e7193d9ad7400d5ad9c20386e420e5af7b4adbcaaf21efe8"
+        },
+        "usage": {
+          "bytes": 327,
+          "sha256": "d94e3e79ac4bac806f2c9ead6411abf9b88db58b72cc0c228bd73144270d0573"
+        }
+      },
+      "repo_relative": "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py"
+    }
+  },
+  "phases": {
+    "derived_incremental": {
+      "argv": [
+        "/usr/bin/make",
+        "-C",
+        "/UNBOUND/derived_build/verilator/src",
+        "-j1",
+        "opt",
+        "SHELL=/bin/sh",
+        "MAKE=/usr/bin/make",
+        "BEAR=",
+        "BEAR_OBJ_OPT=",
+        "OBJCACHE=",
+        "VERILATOR_NO_OPT_BUILD=0",
+        "VL_NOOPT=0",
+        "VL_DEBUG=",
+        "VL_VLCOV="
+      ],
+      "cwd": "/UNBOUND/derived_build/verilator",
+      "evidence_root": "/UNBOUND/derived_evidence",
+      "total_seconds": 900,
+      "preflight_seconds": 180,
+      "work_max_seconds": 600,
+      "work_latest_offset_seconds": 780,
+      "cleanup_seconds": 5,
+      "postflight_reserved_seconds": 115,
+      "cpu_seconds": 600,
+      "as_bytes": 4294967296,
+      "fsize_bytes": 1073741824,
+      "tree_bytes": 805306368,
+      "log_bytes": 1048576,
+      "sample_rows": 902,
+      "file_count": 1024,
+      "entry_count": 2048
+    }
+  },
+  "host_programs": null,
+  "projection_pins": {
+    "supervisor": {
+      "bytes": 7106,
+      "sha256": "a1f8e3531fec23e86ec771b5a61815633f7fd757ec2af777c7cf130962dbd706"
+    },
+    "observation": {
+      "bytes": 3013,
+      "sha256": "0b60b5e242187f985e94ed5966cbecb85c6a6161403dd6c39e19c14db37449ad"
+    }
+  },
+  "publication": {
+    "scope": "SOURCE_ONLY_PORTABLE_UNBOUND_NO_NATIVE_OR_COPY",
+    "destination_directory": "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018",
+    "files": [
+      "PLAN.json",
+      "PATCH.json",
+      "ORIGINAL_V3ProtectLib.cpp",
+      "DERIVED_V3ProtectLib.cpp",
+      "run_seqnum_rebuild.py",
+      "load_seqnum_rebuild.py",
+      "test_seqnum_rebuild_cold.py",
+      "README.md",
+      "MANIFEST.json"
+    ],
+    "source_file_count_including_manifest": 9,
+    "file_mode": "0600",
+    "directory_mode": "0700",
+    "support_repo_relative": "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py",
+    "support_plan": {
+      "repo_relative": "development_snapshots/canonical_host93_fixed_core_build_source_20261018/GATE_PLAN.json",
+      "bytes": 160737,
+      "sha256": "cd489d6530321fa95b79fc1d0e82d5599d358a1cb882165e44805dcafb98bd42"
+    },
+    "official_source": {
+      "url": "https://github.com/verilator/verilator/blob/4e194cc3ec8e27b18e17f80d7f99c15f984bbdae/src/V3ProtectLib.cpp#L338-L340",
+      "commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+      "bytes": 22417,
+      "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+    },
+    "derived_source": {
+      "bytes": 22430,
+      "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb",
+      "classification": "NEW_DERIVED_PATCH_NOT_HISTORICAL_RECOVERY",
+      "changed_line": 340,
+      "byte_delta": 13
+    },
+    "predecessor_runner": {
+      "bytes": 24844,
+      "sha256": "70300a3a4d6633b53c22fa9ab8f7bede144c3e7cc1e22e7494adde0e9e095580"
+    },
+    "predecessor_function_pins": {
+      "require": {
+        "bytes": 67,
+        "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+      },
+      "digest": {
+        "bytes": 60,
+        "sha256": "884bb01e185f2d9d9430301d9fae0ad420aa9c9ab5ec6be9c82587a6bf0ed525"
+      },
+      "initial_read": {
+        "bytes": 1429,
+        "sha256": "2dfdb4b87e4b599878c615f856b5f94e9ac0bfabe633d535710ec15810f09b26"
+      },
+      "support_module": {
+        "bytes": 270,
+        "sha256": "18acb536f54e8fdc752f71659d98cf49a71472822277a955b9e652c5f3fd64a6"
+      },
+      "load_plan": {
+        "bytes": 127,
+        "sha256": "6f6e856ab6683e34bc4aef38716826ce57aef91d3a4ffee1ec1d93d01fdbd193"
+      },
+      "validate_contract": {
+        "bytes": 1347,
+        "sha256": "5f3a7810bf4c7b3d0d352284b6997d745b984c6cb1acfcbda13a0d255467e5dc"
+      },
+      "pending_gate": {
+        "bytes": 281,
+        "sha256": "94c1dc93d3eb683a5f87bfff90d34f4187ef613c2cd2c6d8a8323a7d09af2a28"
+      },
+      "verify_source_review": {
+        "bytes": 1873,
+        "sha256": "8045eb7fe892856599d72b3a23baa8ee102bdfdf8f358bdba5f3428cbd89314c"
+      },
+      "checked_patch": {
+        "bytes": 749,
+        "sha256": "5676c928942ccb95a81d9c70143b8a2b9c2904d1d974a8fe23048ba16947f26f"
+      },
+      "verify_inputs": {
+        "bytes": 1964,
+        "sha256": "24718402b9b43ed97f4dcdcddb49895b055eab839dd6a0c5960f5369bc6a0e25"
+      },
+      "copy_preserved_member": {
+        "bytes": 2197,
+        "sha256": "9f1e8a122e55b3de64695ba3283cdc26c0e66212e1e6e224eb3539eedd1e635f"
+      },
+      "materialize": {
+        "bytes": 2065,
+        "sha256": "d16f777fb753cfdbf5793cb6cba72dff2b44f147304ed836f66a1aa3d23af915"
+      },
+      "expected_copied_tree": {
+        "bytes": 444,
+        "sha256": "1c111c6ff8a7b7ec8fa1c500be855b7191c76f46a81950f46bc05b811445c1ce"
+      },
+      "projected_runner": {
+        "bytes": 1003,
+        "sha256": "47d027a18a0327e0a056e3986ff840d4db3fba804c928482857ce72fbea345f3"
+      },
+      "compilation_report": {
+        "bytes": 736,
+        "sha256": "995dcc3eeb5b0d3a06c89942aa4a36247fa2bde901b782ced133fa8ec44c9ab7"
+      },
+      "final_delta": {
+        "bytes": 608,
+        "sha256": "0bd34590cb0daaa8c291f7be1756e55decf0d012aa47733a5ea86f3670579ce9"
+      },
+      "arm": {
+        "bytes": 226,
+        "sha256": "b814c6f41590e2b3b3a4496526bc215eb793368dec2672ce23866dbcf687a6ed"
+      },
+      "expired": {
+        "bytes": 77,
+        "sha256": "57cc41acf279e0ef11f1aeb02bbfb2a1f0abd7fc967d8369102d5dcd429db6aa"
+      },
+      "execute": {
+        "bytes": 6485,
+        "sha256": "64aed439fe547a8f5cfb1e6d387539a3ea2768cb80928c1131272917827c9718"
+      },
+      "main": {
+        "bytes": 1347,
+        "sha256": "df1db89f5ef36d682a8cb14426885c79145f757422fd9181e3b7de46e974a999"
+      }
+    },
+    "production_functions_byte_identical_to_predecessor": true,
+    "top_level_projection_only": [
+      "ORIGINAL",
+      "FRESH",
+      "EVIDENCE",
+      "SUPPORT_PIN",
+      "PLAN_BYTES",
+      "PLAN_SHA"
+    ],
+    "future_binding_required": [
+      "Exact official baseline original929 files/494646584 bytes and independently accepted inventory/root.",
+      "Original build-review manifest/summary, original bound build plan and fixed dependency stage.",
+      "Reviewed observed generation failure and exact original generated risk wrapper identity.",
+      "Fresh independent source review binding of this source MANIFEST and the exact required verdict.",
+      "Explicit source/derived/evidence roots and all original/new environment path substitutions, preserving the same phase contract.",
+      "Fresh current direct host program path/bytes/SHA/mode identities for make, g++, gcc, ar, perl, python3 and sh.",
+      "Fixed original/derived/PATCH source paths and raw pins for the future installed package.",
+      "Propagate changed PLAN/runner/loader/cold raw pins and obtain independent source review; no publication metadata authorizes native work."
+    ],
+    "safe_history": {
+      "historical_only_not_actual_binding": true,
+      "original_official_m_seqnum_uninitialized_risk_preserved": true,
+      "original_generate_postflight_failure": {
+        "status": "CONFIRMED_ACTUAL_GENERATE_POSTFLIGHT_FAILURE",
+        "outer_exit": 1,
+        "native_exit": 0,
+        "review_manifest": {
+          "bytes": 1780,
+          "sha256": "129bd4776e0b54ae49b827b0d733912fc913dce3d140f5000a12d8eac4f6da97"
+        },
+        "review_summary": {
+          "bytes": 6382,
+          "sha256": "eff504995e9ef318c23f0c68dfda55e4a4ac5530e9f46c132b9f3c8b89acd456"
+        },
+        "scope": "Known original emitted wrapper had no seqnum initialization; original failure is not replaced by a later result."
+      },
+      "derived_build": "PENDING_AT_FREEZE",
+      "derived_backend_version": "PENDING_AT_FREEZE",
+      "derived_micro_generate_compile_run": "PENDING_AT_FREEZE",
+      "host93_qualified": false
+    },
+    "excluded": [
+      "actual build tree and old/new native binary/object/PCH artifacts",
+      "current OS tool identity inventory",
+      "machine-local absolute paths and local execution argv/logs",
+      "actual review folders",
+      "generated wrapper file bytes",
+      "downloads and network execution"
+    ],
+    "no_binding_script_added": true
+  }
+}

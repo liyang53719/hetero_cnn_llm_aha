@@ -1,0 +1,39 @@
+{
+  "schema": "NEW_DERIVED_SEQNUM_INITIALIZATION_PATCH_V1",
+  "classification": "NEW_EXPLICITLY_AUTHORIZED_DERIVED_TOOL_SOURCE_NOT_HISTORICAL_RECOVERY",
+  "official_commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "official_source": "src/V3ProtectLib.cpp",
+  "official_line": 340,
+  "official_original": {
+    "bytes": 22417,
+    "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+  },
+  "derived": {
+    "bytes": 22430,
+    "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+  },
+  "old_exact_utf8": "        txtp->add(m_topName + \"(scopep__V) {}\\n\");",
+  "new_exact_utf8": "        txtp->add(m_topName + \"(scopep__V), m_seqnum{0} {}\\n\");",
+  "replacement_count": 1,
+  "scope": "Initialize generated protected-library container m_seqnum to zero in its constructor. No other source changes; no guarantee of broader correctness.",
+  "original_failure_preserved": true,
+  "generated_risk_evidence": {
+    "bytes": 2819,
+    "sha256": "b36ecd4a846244790d934ea67be835a065fe4f879e07cef1a8194d6ffc5fbdb6",
+    "field_constructor_lines": [
+      14,
+      17
+    ],
+    "postincrement_lines": [
+      50,
+      63
+    ]
+  },
+  "original_build_read_only": true,
+  "skip_copy": [
+    "verilator/src/obj_opt/V3ProtectLib.o",
+    "verilator/src/obj_opt/V3ProtectLib.d",
+    "verilator/bin/verilator_bin"
+  ],
+  "mtime_policy": "Preserve current original mtime on every unchanged copied regular file for incremental reuse; normal write mtime for the derived source, never a forged future time. Missing .o/.d/backend target forces one translation unit and linking."
+}

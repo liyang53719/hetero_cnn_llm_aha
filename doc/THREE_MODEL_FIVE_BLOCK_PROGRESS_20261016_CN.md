@@ -681,3 +681,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 边界：一秒 leader 采样只观察原 make 进程，不能代表 compiler 子树；终态 RUSAGE_CHILDREN 单独记录。3600 秒总预算为最大额，本次实际耗时按原终态报告。
 - todo：固定新 binary 实际审后，先做版本、参数化层级、DPI 与两个独立 handle 微例；官方 m_seqnum 未初始化源码风险继续保留，单次微例通过不能证明该风险消失。
 - todo：通过小资格后恢复真实 Host 模型构建与数值回放。无真实 Host/RTL 数值新增 PASS，完整 block 0/5；无工具二进制、生成物、完整日志或机器库存进入本批。
+
+### 2026-10-18 23:29 UTC：生成构造初始化的新派生工具源码与有界增量构建
+
+- done：固定官方优化后端构建已独审 `33c4e8ced5c6eeb866fefab35ef23347596bee97d0ac52f4e8003ec19360f354`；新工具版本启动 outer exit 0/0.120 s。该版本资格不外推层级、DPI 或 Host 行为。
+- done：原人工 tiny 生成 native exit 0，但后验未识别合法 STEP token `'sh3`，原 outer exit 1/0.252 s 完整保留。后续同资产只读核验 outer exit 0/0.129 s，独审 `230cc4cc633114d3b59c96af42c529a0ab3b086fc495305ae47fceed76a0684b` 仅授生成静态证据；原 38 文件没有 `.a`/`.o`，child archive 只是未来路径。
+- done：原官方 `V3ProtectLib.cpp` 与本次生成的同类构造均确认 `m_seqnum` 未初始化而后递增。停止在该已知风险工具上继续 compile/run，不把静态核验或未来单次微例成功当作风险消失。
+- done：新派生补丁只在官方 commit `4e194cc3ec8e27b18e17f80d7f99c15f984bbdae` 的第 340 行构造 initializer 增加 `m_seqnum{0}`；原源码 22,417 B/SHA256 `bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1`，派生源码 22,430 B/SHA256 `380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb`。这是新派生，不冒称已丢失旧补丁恢复；版权许可头原样保留。
+- done：增量门 SOURCE 独审 `6d1109aed1e5bdf59213ae8503302c11517e9c046a6520830a37c6a9f0e69b0b` 闭合。新独立树复用原 929 文件身份，只不复制目标 `.o`、`.d` 与旧 backend，原件不热改；实际日志必须给出目标编译和链接，意外重建保存失败。
+- ongoing：唯一派生构建已观察原 outer exit 0/5.442 s，日志记录仅 `V3ProtectLib.cpp` 编译与一次链接；新 backend 19,076,520 B/SHA256 `75dd308bde0b9cb1e64b36a03ba8be38c64c2b59087dd52300fa8b43a107aeb2`。完整实际独审进行中，尚不授新工具执行、micro 或 Host 资格。
+- done：本批保存九件纯源码未绑定模板；内容独审 `28b52e1f053e3f5bbe925ab681a49e720048f002ab13a08c4cc7dacf49e70844`，20 个生产函数原字节，19+19 冷测和重定位核验通过。包内 actual 历史保持 `PENDING_AT_FREEZE`，本条只追加后来观察，不热填冻结包。
+- 边界：总 900 s、前验 180 s、工具/CPU 600 s、绝对工作最晚 780 s、清理 5 s、总后验至 900 s；CPU1/AS4GiB/FSIZE1GiB，树 768MiB 与日志 1MiB 为软验收界，采样只针对原 leader。最大预算不保证完成。
+- todo：派生实际独审后，分别绑定新版本和同 fixture/fresh root 的重新生成；目标类构造唯一 `m_seqnum{0}` 须定域验证，随后才做层级库编译、DPI 与双 handle 隔离微例。无新真实 Host/RTL 数值 PASS，完整 block 0/5；本批不含对象/PCH/二进制、大树、生成 wrapper、日志或机器库存。

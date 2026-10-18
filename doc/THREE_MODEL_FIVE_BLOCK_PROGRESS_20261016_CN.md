@@ -504,3 +504,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 历史：首次显式无代理尝试以URLError失败，具体reason未保存；后继默认平台小API与raw获取成功不能反推原错误原因。被拒的双路诊断无原终态报告，未知保持，不追认。
 - ongoing：从已核raw13按原公式生成14个provider并逐项匹配旧SHA，尤其BF16转置、FP32位扩展与RoPE libm结果；expected不变，实际转换仍待源码审及首次预算执行。
 - todo：本次只恢复原始输入，没有执行canonical loader、Host或RTL；完整Host27与旧N0终态未知边界保持，完整block RTL仍为0/5。
+
+
+### 2026-10-18 10:31 UTC：14 provider 实际字节身份重建
+
+- done：从已验证raw13生成14个provider，共94,916,608字节，全部匹配冻结旧SHA；7矩阵保持BF16转置，norm/bias/x按原位映射扩展FP32LE，RoPE按原double公式与1024容量padding生成，旧expected未修改。
+- done：同一已hash raw私有buffer供转换；每项临时文件写完后完整SHA和回读通过才无覆盖提交，14项全过才发布PROVIDERS完成报告。实际进程原session40791终态exit0，未使用reference payload、网络或native模型。
+- done：普通/-O各18项小测试与SOURCE独审通过；发布仅转换源码、固定原公式/身份规格、project pins和安全计数摘要，真实14个provider文件只留本地，不提交或编码入源码。
+- ongoing：把原两张metadata表与14个真实provider按canonical16原顺序送入C++同RAM加载器，核stream/封存/token/view四遍实际摘要；首次完整RAM加载门待SOURCE审，尚未执行。
+- todo：provider字节身份不授予HostMemory输出权限、launch、完整Host27或RTL数值资格；旧N0终态未知保持，完整block RTL仍为0/5。

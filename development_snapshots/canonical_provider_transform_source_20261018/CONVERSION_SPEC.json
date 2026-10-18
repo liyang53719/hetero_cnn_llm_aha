@@ -1,0 +1,643 @@
+{
+  "epoch": 7,
+  "fp32_contract": {
+    "embedding_finiteness_scope": "all 256x1536 raw values, matching original fp32_from_bf16 call before selection",
+    "mapping": "little-endian uint16 word -> uint32(word << 16), serialized little-endian",
+    "nan_and_infinity": "reject BF16 exponent bits 0x7f80 before conversion",
+    "signed_zero_and_subnormal_bits": "preserved exactly; no floating arithmetic",
+    "token_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ]
+  },
+  "identity_relative_path": "development_snapshots/canonical_payload_identity_source_20261018/INPUT_IDENTITY.json",
+  "layer_id": 0,
+  "limits": {
+    "address_space_bytes": 268435456,
+    "chunk_bytes": 65536,
+    "cpu_seconds": 60,
+    "metadata_reserve_bytes": 1048576,
+    "minimum_free_disk_bytes": 268435456,
+    "output_disk_bytes": 134217728,
+    "raw_buffer_max_bytes": 27525120,
+    "wall_seconds": 120
+  },
+  "model_id": "Qwen/Qwen2-1.5B-Instruct",
+  "original_function_pins": [
+    {
+      "bytes": 228,
+      "first_line": 324,
+      "function": "fp32_from_bf16",
+      "last_line": 328,
+      "sha256": "c67cca287c02d0e760b4ea59f13c9830b6b8de056a1672e1da640b5d93ca67a3",
+      "source": "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py"
+    },
+    {
+      "bytes": 222,
+      "first_line": 331,
+      "function": "transpose_bf16",
+      "last_line": 334,
+      "sha256": "c3838be0c1029d7d17168573f01ffaeabb7b1bee9c895367e31abc4bf2465474",
+      "source": "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py"
+    },
+    {
+      "bytes": 423,
+      "first_line": 337,
+      "function": "rope_bytes",
+      "last_line": 345,
+      "sha256": "bb4b2cb16c58fc50b3b014f9475f0e6e457fd34fca9b39151575f08187b8bada",
+      "source": "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py"
+    },
+    {
+      "bytes": 1145,
+      "first_line": 348,
+      "function": "load_inputs",
+      "last_line": 366,
+      "sha256": "e472d1d5c4e81457f032a5141832a1fa05732e0488bbc4ddf8beb1eab8575810",
+      "source": "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py"
+    },
+    {
+      "bytes": 281,
+      "first_line": 97,
+      "function": "load_inputs",
+      "last_line": 102,
+      "sha256": "df21ce8ef1339463a3aa60f67b8b5af0abe4941afc5d4fdc422298d8993a6c59",
+      "source": "candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py"
+    },
+    {
+      "bytes": 2554,
+      "first_line": 244,
+      "function": "pack_readonly",
+      "last_line": 281,
+      "sha256": "ae561d7efc20e2e8c971767ed1fffa3efaa2813b4b0a9ff838930a314f9701e5",
+      "source": "scripts/qwen2_block_recipe_model.py"
+    }
+  ],
+  "provider_count": 14,
+  "provider_order": [
+    "wq",
+    "wk",
+    "wv",
+    "wo",
+    "wg",
+    "wu",
+    "wd",
+    "gamma0",
+    "gamma1",
+    "bq",
+    "bk",
+    "bv",
+    "rope",
+    "x"
+  ],
+  "provider_payload_bytes": 94916608,
+  "providers": [
+    {
+      "base": 4295032896,
+      "canonical16_index": 2,
+      "descriptor_dtype": 5,
+      "expected_output_sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72",
+      "name": "wq",
+      "output_bytes": 4718592,
+      "output_filename": "wq.bin",
+      "output_shape": [
+        1536,
+        1536
+      ],
+      "provider_index": 0,
+      "raw_relative_path": "tensors/self_attn.q_proj.weight.bin",
+      "raw_tensor": {
+        "bytes": 4718592,
+        "dtype": "BF16",
+        "local_name": "self_attn.q_proj.weight",
+        "name": "model.layers.0.self_attn.q_proj.weight",
+        "sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4",
+        "shape": [
+          1536,
+          1536
+        ]
+      },
+      "transform": "transpose_bf16le_words_without_numeric_conversion"
+    },
+    {
+      "base": 4304470144,
+      "canonical16_index": 3,
+      "descriptor_dtype": 5,
+      "expected_output_sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344",
+      "name": "wk",
+      "output_bytes": 786432,
+      "output_filename": "wk.bin",
+      "output_shape": [
+        1536,
+        256
+      ],
+      "provider_index": 1,
+      "raw_relative_path": "tensors/self_attn.k_proj.weight.bin",
+      "raw_tensor": {
+        "bytes": 786432,
+        "dtype": "BF16",
+        "local_name": "self_attn.k_proj.weight",
+        "name": "model.layers.0.self_attn.k_proj.weight",
+        "sha256": "addac2eb287cc8d8caa24178c94156c67bab35bc6a9f76927f50a4f0be0ade47",
+        "shape": [
+          256,
+          1536
+        ]
+      },
+      "transform": "transpose_bf16le_words_without_numeric_conversion"
+    },
+    {
+      "base": 4306043072,
+      "canonical16_index": 4,
+      "descriptor_dtype": 5,
+      "expected_output_sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a",
+      "name": "wv",
+      "output_bytes": 786432,
+      "output_filename": "wv.bin",
+      "output_shape": [
+        1536,
+        256
+      ],
+      "provider_index": 2,
+      "raw_relative_path": "tensors/self_attn.v_proj.weight.bin",
+      "raw_tensor": {
+        "bytes": 786432,
+        "dtype": "BF16",
+        "local_name": "self_attn.v_proj.weight",
+        "name": "model.layers.0.self_attn.v_proj.weight",
+        "sha256": "e99b01559f13e11a0c96309f5b4e11664223aa31a2f318e49597ad8e66b0ea32",
+        "shape": [
+          256,
+          1536
+        ]
+      },
+      "transform": "transpose_bf16le_words_without_numeric_conversion"
+    },
+    {
+      "base": 4307616000,
+      "canonical16_index": 5,
+      "descriptor_dtype": 5,
+      "expected_output_sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c",
+      "name": "wo",
+      "output_bytes": 4718592,
+      "output_filename": "wo.bin",
+      "output_shape": [
+        1536,
+        1536
+      ],
+      "provider_index": 3,
+      "raw_relative_path": "tensors/self_attn.o_proj.weight.bin",
+      "raw_tensor": {
+        "bytes": 4718592,
+        "dtype": "BF16",
+        "local_name": "self_attn.o_proj.weight",
+        "name": "model.layers.0.self_attn.o_proj.weight",
+        "sha256": "7613bde8e47278a40bbf05222cd0799ed873194e56a96f2f6167d4580bb1a735",
+        "shape": [
+          1536,
+          1536
+        ]
+      },
+      "transform": "transpose_bf16le_words_without_numeric_conversion"
+    },
+    {
+      "base": 4317053248,
+      "canonical16_index": 6,
+      "descriptor_dtype": 5,
+      "expected_output_sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f",
+      "name": "wg",
+      "output_bytes": 27525120,
+      "output_filename": "wg.bin",
+      "output_shape": [
+        1536,
+        8960
+      ],
+      "provider_index": 4,
+      "raw_relative_path": "tensors/mlp.gate_proj.weight.bin",
+      "raw_tensor": {
+        "bytes": 27525120,
+        "dtype": "BF16",
+        "local_name": "mlp.gate_proj.weight",
+        "name": "model.layers.0.mlp.gate_proj.weight",
+        "sha256": "0219acbf1f5bc38fc55ee56fa6b55c82150a1a4279915090e857beb382cc0d7e",
+        "shape": [
+          8960,
+          1536
+        ]
+      },
+      "transform": "transpose_bf16le_words_without_numeric_conversion"
+    },
+    {
+      "base": 4372103552,
+      "canonical16_index": 7,
+      "descriptor_dtype": 5,
+      "expected_output_sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040",
+      "name": "wu",
+      "output_bytes": 27525120,
+      "output_filename": "wu.bin",
+      "output_shape": [
+        1536,
+        8960
+      ],
+      "provider_index": 5,
+      "raw_relative_path": "tensors/mlp.up_proj.weight.bin",
+      "raw_tensor": {
+        "bytes": 27525120,
+        "dtype": "BF16",
+        "local_name": "mlp.up_proj.weight",
+        "name": "model.layers.0.mlp.up_proj.weight",
+        "sha256": "a403942b0dc208a543e8434d091564cfd4b7a091c291d02d7a62ae46884e61ed",
+        "shape": [
+          8960,
+          1536
+        ]
+      },
+      "transform": "transpose_bf16le_words_without_numeric_conversion"
+    },
+    {
+      "base": 4427153856,
+      "canonical16_index": 8,
+      "descriptor_dtype": 5,
+      "expected_output_sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec",
+      "name": "wd",
+      "output_bytes": 27525120,
+      "output_filename": "wd.bin",
+      "output_shape": [
+        8960,
+        1536
+      ],
+      "provider_index": 6,
+      "raw_relative_path": "tensors/mlp.down_proj.weight.bin",
+      "raw_tensor": {
+        "bytes": 27525120,
+        "dtype": "BF16",
+        "local_name": "mlp.down_proj.weight",
+        "name": "model.layers.0.mlp.down_proj.weight",
+        "sha256": "8a9657234cffb29cec816483e03454846d80d3a1f4171e6bc40479f3ba73ce5a",
+        "shape": [
+          1536,
+          8960
+        ]
+      },
+      "transform": "transpose_bf16le_words_without_numeric_conversion"
+    },
+    {
+      "base": 4482204160,
+      "canonical16_index": 9,
+      "descriptor_dtype": 7,
+      "expected_output_sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+      "name": "gamma0",
+      "output_bytes": 6144,
+      "output_filename": "gamma0.bin",
+      "output_shape": [
+        1,
+        1536
+      ],
+      "provider_index": 7,
+      "raw_relative_path": "tensors/input_layernorm.weight.bin",
+      "raw_tensor": {
+        "bytes": 3072,
+        "dtype": "BF16",
+        "local_name": "input_layernorm.weight",
+        "name": "model.layers.0.input_layernorm.weight",
+        "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e",
+        "shape": [
+          1536
+        ]
+      },
+      "transform": "expand_finite_bf16_bits_to_fp32le"
+    },
+    {
+      "base": 4482210368,
+      "canonical16_index": 10,
+      "descriptor_dtype": 7,
+      "expected_output_sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+      "name": "gamma1",
+      "output_bytes": 6144,
+      "output_filename": "gamma1.bin",
+      "output_shape": [
+        1,
+        1536
+      ],
+      "provider_index": 8,
+      "raw_relative_path": "tensors/post_attention_layernorm.weight.bin",
+      "raw_tensor": {
+        "bytes": 3072,
+        "dtype": "BF16",
+        "local_name": "post_attention_layernorm.weight",
+        "name": "model.layers.0.post_attention_layernorm.weight",
+        "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a",
+        "shape": [
+          1536
+        ]
+      },
+      "transform": "expand_finite_bf16_bits_to_fp32le"
+    },
+    {
+      "base": 4482216576,
+      "canonical16_index": 11,
+      "descriptor_dtype": 7,
+      "expected_output_sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d",
+      "name": "bq",
+      "output_bytes": 6144,
+      "output_filename": "bq.bin",
+      "output_shape": [
+        1,
+        1536
+      ],
+      "provider_index": 9,
+      "raw_relative_path": "tensors/self_attn.q_proj.bias.bin",
+      "raw_tensor": {
+        "bytes": 3072,
+        "dtype": "BF16",
+        "local_name": "self_attn.q_proj.bias",
+        "name": "model.layers.0.self_attn.q_proj.bias",
+        "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+        "shape": [
+          1536
+        ]
+      },
+      "transform": "expand_finite_bf16_bits_to_fp32le"
+    },
+    {
+      "base": 4482222784,
+      "canonical16_index": 12,
+      "descriptor_dtype": 7,
+      "expected_output_sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d",
+      "name": "bk",
+      "output_bytes": 1024,
+      "output_filename": "bk.bin",
+      "output_shape": [
+        1,
+        256
+      ],
+      "provider_index": 10,
+      "raw_relative_path": "tensors/self_attn.k_proj.bias.bin",
+      "raw_tensor": {
+        "bytes": 512,
+        "dtype": "BF16",
+        "local_name": "self_attn.k_proj.bias",
+        "name": "model.layers.0.self_attn.k_proj.bias",
+        "sha256": "56a716f9fd535d659a918afc9b7d25ad1d159dc0e9bd6da68549a155bb62ada0",
+        "shape": [
+          256
+        ]
+      },
+      "transform": "expand_finite_bf16_bits_to_fp32le"
+    },
+    {
+      "base": 4482223872,
+      "canonical16_index": 13,
+      "descriptor_dtype": 7,
+      "expected_output_sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70",
+      "name": "bv",
+      "output_bytes": 1024,
+      "output_filename": "bv.bin",
+      "output_shape": [
+        1,
+        256
+      ],
+      "provider_index": 11,
+      "raw_relative_path": "tensors/self_attn.v_proj.bias.bin",
+      "raw_tensor": {
+        "bytes": 512,
+        "dtype": "BF16",
+        "local_name": "self_attn.v_proj.bias",
+        "name": "model.layers.0.self_attn.v_proj.bias",
+        "sha256": "4ed960cd1895ac1bcc5012a0948f9b73e50b411b9b8015e9941d28e8d45fd29d",
+        "shape": [
+          256
+        ]
+      },
+      "transform": "expand_finite_bf16_bits_to_fp32le"
+    },
+    {
+      "base": 4482224960,
+      "canonical16_index": 14,
+      "descriptor_dtype": 7,
+      "expected_output_sha256": "c4dd66159d1868988937a2c15bf45609a09ec1dd40e47b63b708c6c9c1a0a7d1",
+      "name": "rope",
+      "output_bytes": 524288,
+      "output_filename": "rope.bin",
+      "output_shape": [
+        2,
+        1024,
+        64
+      ],
+      "provider_index": 12,
+      "raw_tensor": null,
+      "transform": "fixed_original_rope_double_libm_to_fp32le_plus_positive_zero_padding"
+    },
+    {
+      "base": 4482749312,
+      "canonical16_index": 15,
+      "descriptor_dtype": 7,
+      "expected_output_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+      "name": "x",
+      "output_bytes": 786432,
+      "output_filename": "x.bin",
+      "output_shape": [
+        128,
+        1536
+      ],
+      "provider_index": 13,
+      "raw_relative_path": "tensors/embed_tokens.rows_0_255.bin",
+      "raw_tensor": {
+        "bytes": 786432,
+        "dtype": "BF16",
+        "local_name": "embed_tokens.rows_0_255",
+        "name": "model.embed_tokens.weight",
+        "sha256": "3cdd8eecf1d0948c6ebf40ca947875b7b706521733fa3107e934d3815e45c014",
+        "shape": [
+          256,
+          1536
+        ]
+      },
+      "transform": "verify_all_256_embedding_rows_finite_then_select_token_ids_0_through_127_and_expand_bf16_bits_to_fp32le"
+    }
+  ],
+  "raw_payload_bytes": 94382080,
+  "raw_receipt": {
+    "bytes": 4335,
+    "filename": "ACQUIRED.json",
+    "plan_sha256": "b8635eaf0b5ef3be739b04b3d422996c34093c74d487691003b46d7c439d802a",
+    "sha256": "557f2c0ac34ee0b7a1b63ebc8940e9e849f32fb11cfd02b607ff08a9b6abc14d",
+    "status": "ACQUIRED_FIXED_RAW13_ONLY"
+  },
+  "raw_tensor_count": 13,
+  "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+  "rows": 128,
+  "schema": 1,
+  "source_commit": "6437fe0c5595ce42a695c79a9ce86d925dbcf007",
+  "source_files": [
+    {
+      "bytes": 14530,
+      "git_blob": "79830251dfcffdd26741d62cda494b64584ad8c5",
+      "path": "development_snapshots/canonical_payload_identity_source_20261018/INPUT_IDENTITY.json",
+      "sha256": "f5fd835b06cf76b28c9dcc22db6eb2f919de1315420fc54ff23033c2b3fe1d98"
+    },
+    {
+      "bytes": 4913,
+      "git_blob": "d87a0c752f1be541f0bab8213f47db85ac8d640d",
+      "path": "development_snapshots/canonical16_binding_source_20261018/canonical16_binding.hpp",
+      "sha256": "5b090ba3ee4b6e90d0010030a9593149a5c054310d6548c7fe7497da7c58c35d"
+    },
+    {
+      "bytes": 15795,
+      "git_blob": "d56f9994384b661f3fda3a68e623c987d5e2b40e",
+      "path": "development_snapshots/canonical_host_metadata_source_20261018/EXPECTED_LAYOUT.json",
+      "sha256": "4ededb349c9206841e464f786c8b64d8744de60d789150ce533e17fe544bc7a7"
+    },
+    {
+      "bytes": 42761,
+      "git_blob": "532ee60c91a3817bfc8812103f368352e6ccc5eb",
+      "path": "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py",
+      "sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
+    },
+    {
+      "bytes": 22992,
+      "git_blob": "bde8d1c44c553593aed6b87d38a167130f5999ba",
+      "path": "candidates/qwen2_resident_matrix/ffn_public/check_fullgraph_numeric.py",
+      "sha256": "198e2b7b87c6fbf7a317174d7653ea2d4da912c7eabda09b8addfd9bc2752992"
+    },
+    {
+      "bytes": 39490,
+      "git_blob": "c02c745de840849687658dd2238ea82c4bd974aa",
+      "path": "scripts/qwen2_block_recipe_model.py",
+      "sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6"
+    },
+    {
+      "bytes": 23995,
+      "git_blob": "e40538df77611f10e39e70d5520397886a5607c8",
+      "path": "chisel/continuous_prefill/tests/qwen2_block.cpp",
+      "sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5"
+    }
+  ],
+  "status": "FIXED_PROVIDER14_CONVERSION_SPEC_SOURCE_ONLY"
+}

@@ -1,0 +1,31 @@
+{
+  "actual_conversion_rerun_in_publication_candidate": false,
+  "boundaries": {
+    "canonical_loader_executed": false,
+    "full_host_ready": false,
+    "launch_ready": false,
+    "network_or_native_executed": false,
+    "reference_payload_used": false
+  },
+  "counts": {
+    "provider_bytes": 94916608,
+    "providers": 14,
+    "raw_bytes": 94382080,
+    "raw_tensors": 13
+  },
+  "evidence_scope": "Original source cold report covers 18 unittest methods in normal mode and the same 18 in -O; no new cold or actual run was performed for this byte-identical source projection.",
+  "fixed_expected_comparison": "All 14 ordered name/byte/SHA fields in the small actual receipt equal the frozen pre-existing CONVERSION_SPEC expectations; this packaging step did not read provider payloads.",
+  "identities": {
+    "conversion_spec_sha256": "423fa7e23c1adfd12977b37c1a8d73e7ca9d812ba4876eeb5e9c28363333589d",
+    "converter_sha256": "104234daaec9bb37a1cdaefe428dd13abab4906bbc5fdf58a331c5520e632d57",
+    "project_source_commit": "6437fe0c5595ce42a695c79a9ce86d925dbcf007",
+    "provider_receipt_bytes": 2775,
+    "provider_receipt_sha256": "6175d87d5913f9370d3723ccb6d6282cc24e9b0653c0963a7ccbdcb4697c3202",
+    "raw_acquired_receipt_sha256": "557f2c0ac34ee0b7a1b63ebc8940e9e849f32fb11cfd02b607ff08a9b6abc14d",
+    "source_manifest_sha256": "be90f9ca254e7786ff27d0a463d2013feb685a569d557893075ced75b0875538"
+  },
+  "payload_files_included": false,
+  "schema": 1,
+  "scope": "FIXED_RAW13_TO_PROVIDER14_BYTES_ONLY",
+  "status_from_actual_receipt": "FIXED_PROVIDER14_BYTES_VERIFIED"
+}

@@ -1,0 +1,44 @@
+{
+  "actual_provider14_conversion_executed": false,
+  "canonical_loader_executed": false,
+  "canonical_m128_rope_executed": false,
+  "full_host_ready": false,
+  "launch_ready": false,
+  "native_or_network_executed": false,
+  "note": "18 unittest methods per mode, not 36 independent cases; no actual fixed provider identity claimed.",
+  "real_raw_tensor_files_read": 0,
+  "runs": [
+    {
+      "command": "python -I -S -B test_cold.py --repo REPO",
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "mode": "normal",
+      "reported_seconds": 0.218,
+      "tests": 18
+    },
+    {
+      "command": "python -I -S -B -O test_cold.py --repo REPO",
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "mode": "optimized",
+      "reported_seconds": 0.275,
+      "tests": 18
+    }
+  ],
+  "schema": 1,
+  "source_only_entry_status": "SOURCE_CHECK_ONLY",
+  "status": "TINY_SYNTHETIC_TESTS_PASS_SOURCE_ONLY",
+  "synthetic_rope_rows": 16,
+  "tested_source": {
+    "convert_providers.py": {
+      "bytes": 17116,
+      "sha256": "104234daaec9bb37a1cdaefe428dd13abab4906bbc5fdf58a331c5520e632d57"
+    },
+    "test_cold.py": {
+      "bytes": 10842,
+      "sha256": "f97e209f222f885a65a3a1f70198993ccbc0f288364f00446979f510a8ed5a53"
+    }
+  }
+}

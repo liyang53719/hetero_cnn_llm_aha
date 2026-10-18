@@ -1,0 +1,43 @@
+{
+  "actual_conversion_executed_in_this_candidate": false,
+  "byte_identical_original_files": [
+    "convert_providers.py",
+    "test_cold.py",
+    "CONVERSION_SPEC.json",
+    "PROJECT_SOURCE_HASHES.json",
+    "COLD_TEST_RESULTS.json"
+  ],
+  "files": {
+    "COLD_TEST_RESULTS.json": {
+      "bytes": 1264,
+      "sha256": "8d696eb2ef7c39eecf9773e0cad285bc19482e0ea5689ddcf0baeca3fd171818"
+    },
+    "CONVERSION_SPEC.json": {
+      "bytes": 17884,
+      "sha256": "423fa7e23c1adfd12977b37c1a8d73e7ca9d812ba4876eeb5e9c28363333589d"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 311,
+      "sha256": "4f02919e23de992a2e10887e77df48fa081274a1d1bae848ebab907eb85c8898"
+    },
+    "README_CN.md": {
+      "bytes": 3153,
+      "sha256": "63465e428ec8ea15688234e3d28b150a3b9930e2479b6d6956b0f9426b9775a1"
+    },
+    "SAFE_ACTUAL_FACTS.json": {
+      "bytes": 1580,
+      "sha256": "430a627f4175c7c6c0aa8849eece40b3d728d63ef1fa87254121e5666333846a"
+    },
+    "convert_providers.py": {
+      "bytes": 17116,
+      "sha256": "104234daaec9bb37a1cdaefe428dd13abab4906bbc5fdf58a331c5520e632d57"
+    },
+    "test_cold.py": {
+      "bytes": 10842,
+      "sha256": "f97e209f222f885a65a3a1f70198993ccbc0f288364f00446979f510a8ed5a53"
+    }
+  },
+  "network_or_native_executed_for_packaging": false,
+  "schema": 1,
+  "status": "SOURCE_ONLY_PUBLICATION_CANDIDATE_PENDING_CONTENT_REVIEW"
+}

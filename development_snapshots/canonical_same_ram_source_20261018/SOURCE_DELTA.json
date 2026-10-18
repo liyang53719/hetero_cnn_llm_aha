@@ -1,0 +1,131 @@
+{
+  "files": [
+    {
+      "bytes": 8805,
+      "destination": "initialization_ram.hpp",
+      "mode": "BYTE_FOR_BYTE_COPY",
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e",
+      "source": "production_host_same_ram_storage_v2_20261018/initialization_ram.hpp"
+    },
+    {
+      "bytes": 8359,
+      "destination": "v1_initialization_ram.hpp",
+      "mode": "BYTE_FOR_BYTE_COPY",
+      "sha256": "8629e458a5b138d66cde61807870dbf987d06a9db051a21ee2add1680b613de9",
+      "source": "production_host_same_ram_storage_v1_20261018/initialization_ram.hpp"
+    },
+    {
+      "bytes": 13264,
+      "destination": "test_initialization_ram.cpp",
+      "mode": "BYTE_FOR_BYTE_COPY",
+      "sha256": "6605e1423c990db5fc26bdc62f0134c2b74bdf1274ddadb555de9e7e1b9bb920",
+      "source": "production_host_same_ram_behavior_test_v4_20261018/test_initialization_ram.cpp"
+    },
+    {
+      "destination": "run_behavior.py",
+      "destination_digest": {
+        "bytes": 12388,
+        "sha256": "6416de6a306fb1f12e20fca22d77ff0270203b2e1b7e31e4e38e8276c636490f"
+      },
+      "edits": [
+        {
+          "new": "import signal\nimport shutil\n",
+          "old": "import signal\n"
+        },
+        {
+          "new": "",
+          "old": "COMPILER = Path('/usr/bin/c++')\n"
+        },
+        {
+          "new": "    parser.add_argument('--compiler', default='c++', help='existing compiler name or path; never installs software')\n",
+          "old": "    parser.add_argument('--workspace', required=True, type=Path)\n"
+        },
+        {
+          "new": "    root = HERE\n",
+          "old": "    root = args.workspace.resolve(strict=True)\n"
+        },
+        {
+          "new": "        selected = shutil.which(args.compiler)\n        require(selected is not None, 'existing requested compiler not found')\n        compiler = Path(selected).resolve(strict=True)\n",
+          "old": "        compiler = COMPILER.resolve(strict=True)\n"
+        },
+        {
+          "new": "        report['compiler'] = dict(requested=args.compiler, resolved=str(compiler),\n                                  **digest(compiler.read_bytes()))\n",
+          "old": "        report['compiler'] = dict(requested=str(COMPILER), resolved=str(compiler),\n                                  **digest(compiler.read_bytes()))\n"
+        }
+      ],
+      "mode": "FINITE_TEXT_PROJECTION",
+      "source": "production_host_same_ram_behavior_test_v4_20261018/run_behavior.py",
+      "source_digest": {
+        "bytes": 12253,
+        "sha256": "b5774e941656f8a3ce82bf069e2f9236f1a95cd02b634cc1c7c7822f31040e20"
+      }
+    },
+    {
+      "added_method": {
+        "body": "    def test_10_same_directory_pins_relocate_and_reject_drift(self):\n        copied, verified = runner.prepare_inputs(HERE)\n        self.assertEqual(set(copied), {'initialization_ram.hpp', 'v1_initialization_ram.hpp',\n                                      'test_initialization_ram.cpp'})\n        self.assertEqual(len(verified), 3)\n        with tempfile.TemporaryDirectory() as temporary:\n            detached = Path(temporary)\n            for name, raw in copied.items():\n                (detached / name).write_bytes(raw)\n            (detached / 'BUILD_INPUT_PINS.json').write_bytes((HERE / 'BUILD_INPUT_PINS.json').read_bytes())\n            with mock.patch.object(runner, 'HERE', detached):\n                self.assertEqual(runner.prepare_inputs(detached), (copied, verified))\n                (detached / 'initialization_ram.hpp').write_bytes(b'changed')\n                with self.assertRaisesRegex(ValueError, 'source input drift'):\n                    runner.prepare_inputs(detached)\n\n",
+        "name": "test_10_same_directory_pins_relocate_and_reject_drift"
+      },
+      "destination": "test_runner_cold.py",
+      "destination_digest": {
+        "bytes": 9817,
+        "sha256": "4989bd9bed4406db2fb5a3b439cafb9b268cd2f29325f91b56e32c7176f7b070"
+      },
+      "edits": [
+        {
+          "new": "types.ModuleType('same_ram_portable_runner_v2')",
+          "old": "types.ModuleType('same_ram_bounded_runner_v4')"
+        },
+        {
+          "new": "mock.patch.object(runner.shutil, 'which', return_value=str(compiler))",
+          "old": "mock.patch.object(runner, 'COMPILER', compiler)"
+        },
+        {
+          "new": "['mock', '--compiler', str(compiler), '--output', str(output)]",
+          "old": "['mock', '--workspace', str(root), '--output', str(output)]"
+        },
+        {
+          "new": "            self.assertEqual(result['status'], 'FAIL')\n            self.assertEqual(result['compiler']['bytes'], len(compiler.read_bytes()))\n            self.assertEqual(result['compiler']['sha256'], hashlib.sha256(compiler.read_bytes()).hexdigest())\n",
+          "old": "            self.assertEqual(result['status'], 'FAIL')\n"
+        }
+      ],
+      "mode": "FINITE_TEXT_PROJECTION",
+      "source": "production_host_same_ram_behavior_test_v4_20261018/test_runner_cold.py",
+      "source_digest": {
+        "bytes": 8606,
+        "sha256": "cf32d54b2103af0e88134ad1e30229c8baefa49d70b84e017e11ca783a8c4e91"
+      }
+    }
+  ],
+  "runner_functions_byte_identical": {
+    "bounded": {
+      "bytes": 5482,
+      "sha256": "dce06cfa44a7d2f62715902434229980e0439bddc5dc55b1b1057c8d4db0c28e"
+    },
+    "digest": {
+      "bytes": 89,
+      "sha256": "cb81e355742a1f3808c6e68220f2566b029ef1477846e79959c360e65788b58c"
+    },
+    "group_state": {
+      "bytes": 190,
+      "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+    },
+    "observe_exit": {
+      "bytes": 719,
+      "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+    },
+    "prepare_inputs": {
+      "bytes": 1110,
+      "sha256": "596c53d921d97d974e73ce0b04bcdf498cba861b2fe016cefd52ffcd0e0fa6e3"
+    },
+    "require": {
+      "bytes": 67,
+      "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+    },
+    "save": {
+      "bytes": 179,
+      "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+    }
+  },
+  "schema": 1,
+  "scope": "portable source-only projection; no new native run"
+}

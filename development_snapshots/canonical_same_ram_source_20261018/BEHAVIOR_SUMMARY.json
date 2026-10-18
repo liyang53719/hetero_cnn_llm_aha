@@ -1,0 +1,34 @@
+{
+  "all_started_process_groups_confirmed_absent": true,
+  "canonical_input_authentication": false,
+  "checks": 190,
+  "compile_exit_code": 0,
+  "cpp_source_hashes": {
+    "initialization_ram.hpp": {
+      "bytes": 8805,
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "test_initialization_ram.cpp": {
+      "bytes": 13264,
+      "sha256": "6605e1423c990db5fc26bdc62f0134c2b74bdf1274ddadb555de9e7e1b9bb920"
+    },
+    "v1_initialization_ram.hpp": {
+      "bytes": 8359,
+      "sha256": "8629e458a5b138d66cde61807870dbf987d06a9db051a21ee2add1680b613de9"
+    }
+  },
+  "eda_executed": false,
+  "full_host_ready": false,
+  "max_instantiated_ram_bytes": 64,
+  "portable_native_rerun_performed": false,
+  "prior_result_sha256": "e0defb8f0a08b2f521138b57df3bad503ab1a9ebdb11d5d183b446f64009522d",
+  "run_exit_code": 0,
+  "same_buffer_bytes": 24,
+  "schema": 1,
+  "scope": "same exact three C++ source files; portable wrapper itself not native-executed",
+  "status": "PRIOR_NATIVE_SYNTHETIC_SOURCE_TEST_PASS",
+  "synthetic_sha256": "f9919dde286ccd8649e31e2b2ebf19856e7de7725605d83d134180ca144a5392",
+  "tensor_payload_loaded": false,
+  "toolchain_description": "GCC 14.2.0, hosted C++17, Linux",
+  "v1_known_alias_bug_reproduced": true
+}

@@ -1,0 +1,23 @@
+{
+  "files": {
+    "initialization_ram.hpp": {
+      "build_name": "initialization_ram.hpp",
+      "bytes": 8805,
+      "role": "production_v2",
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "test_initialization_ram.cpp": {
+      "build_name": "test_initialization_ram.cpp",
+      "bytes": 13264,
+      "role": "synthetic_single_tu_test",
+      "sha256": "6605e1423c990db5fc26bdc62f0134c2b74bdf1274ddadb555de9e7e1b9bb920"
+    },
+    "v1_initialization_ram.hpp": {
+      "build_name": "v1_initialization_ram.hpp",
+      "bytes": 8359,
+      "role": "known_v1_bug_regression_only_not_production",
+      "sha256": "8629e458a5b138d66cde61807870dbf987d06a9db051a21ee2add1680b613de9"
+    }
+  },
+  "schema": 1
+}

@@ -456,3 +456,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：发布仅 10 件可再生源码与项目身份摘要，不含四件生成物；测试在没有 generated 目录时临时生成并核对原大小/SHA。
 - ongoing：恢复实际 same-RAM 初始化、封存与后续加载连接。94,920,448 字节仅为 14 个只读tensor及两表的布局和，不是已生成、读取或验证的 tensor payload。
 - todo：真实加载协议、数据来源验证及B退休/SSA仍待实现；旧 wire framing、launch、resident DDR 权限、完整 Host 与27数值资格均未恢复。旧 N0 会话终态未知和完整 block RTL 0/5 保持。
+
+
+### 2026-10-18 09:04 UTC：真实 C++ 小 RAM 行为恢复
+
+- done：独立连续 RAM primitive 实现输入白名单、初始化掩码、整块预检、覆盖封存、只读视图和永久 poison；v2 深拷贝元数据，修复 caller 保留 vector 元素别名可缩小覆盖要求的问题。
+- done：真实单 TU 合成行为测试完成 190 个断言（51 个 check、139 个 rejected，不是 190 个独立 case），包含旧 v1 无 UB 漏洞正控及 v2 拒绝、长字符串/元素引用修改与销毁、越界/重复/欠初始化/部分失败原子性/封存后写。
+- done：同一实际 allocation 的只读视图读回 24 字节合成数据，Python SHA-256 与独立固定向量吻合。该 hash 不是 canonical 输入身份，测试未执行模型或 RTL。
+- done：发布生产头、明确标注的 v1 回归正控、真实测试 TU 和可搬迁复现脚本；无 ELF、系统身份库存或完整运行日志。执行时仍动态计算 compiler 身份，留在调用者本地结果。可搬迁脚本 10+10 mock 通过，其本身未重复 native。
+- ongoing：按已发布原始模型/provider 身份恢复 same-buffer 加载连接；真实 payload 仍需按需获取/验证，不猜旧 framing。
+- todo：canonical digest/EOF/receipt、真实 HostMemory/B 退休/SSA/prefix 和完整 27 采集仍待新证据。旧 session 74562 终态未知、完整 block RTL 0/5 保持。

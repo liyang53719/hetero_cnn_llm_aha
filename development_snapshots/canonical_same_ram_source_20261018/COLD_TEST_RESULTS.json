@@ -1,0 +1,23 @@
+{
+  "compiler_started": false,
+  "dynamic_mock_compiler_bytes_and_sha_recording_verified": true,
+  "native_rerun_performed": false,
+  "real_signal_sent": false,
+  "relocated_same_directory_source_pins_verified": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "log_sha256": "1bb4aa17c0cce85ebb1283edf3f49c354883f24521c02df8cf5167403f2292be",
+      "mode": "normal",
+      "tests": 10
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "301a64267ef492558022872d09c796626887bf366fcd90ef7ac7a44bc73776a5",
+      "mode": "optimized",
+      "tests": 10
+    }
+  ],
+  "schema": 1,
+  "status": "PORTABLE_MOCK_AND_RELOCATION_COLD_PASS_ONLY"
+}

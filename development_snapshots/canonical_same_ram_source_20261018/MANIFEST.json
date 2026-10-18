@@ -1,0 +1,58 @@
+{
+  "contains_executable": false,
+  "contains_full_environment_logs": false,
+  "contains_user_tensor_payload": false,
+  "cpp_files_byte_identical_to_prior_native_run": true,
+  "current_system_compiler_sha_embedded": false,
+  "dynamic_compiler_identity_recording_preserved": true,
+  "files": {
+    "BEHAVIOR_SUMMARY.json": {
+      "bytes": 1276,
+      "sha256": "6b2667c8bb3a8865015656173e35d5a7ff4c4853dd6becbcda0d4da89b242351"
+    },
+    "BUILD_INPUT_PINS.json": {
+      "bytes": 753,
+      "sha256": "7027058e7895e2679cebaf3f1cfc60f8ca5ba99e7bae060ac9876c10a7f0ae08"
+    },
+    "COLD_TEST_RESULTS.json": {
+      "bytes": 642,
+      "sha256": "06ea050d93f107ef4c65c309fe3a42ff738bf708cbf367c97b99f39963e79d5d"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 1301,
+      "sha256": "4d25ebd8436f1a2f643dc4ac55aab13195573d2ce46561875ba08407f899e38c"
+    },
+    "README.md": {
+      "bytes": 5700,
+      "sha256": "e0af2e8f1023d39dc8ca0be2d3c0100409da7fb8225251f3590ab2fc364c69db"
+    },
+    "SOURCE_DELTA.json": {
+      "bytes": 6174,
+      "sha256": "6ea40ffc092218f3493545841fe831998f7b4d72396b984db7f2c0357ec11fdb"
+    },
+    "initialization_ram.hpp": {
+      "bytes": 8805,
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "run_behavior.py": {
+      "bytes": 12388,
+      "sha256": "6416de6a306fb1f12e20fca22d77ff0270203b2e1b7e31e4e38e8276c636490f"
+    },
+    "test_initialization_ram.cpp": {
+      "bytes": 13264,
+      "sha256": "6605e1423c990db5fc26bdc62f0134c2b74bdf1274ddadb555de9e7e1b9bb920"
+    },
+    "test_runner_cold.py": {
+      "bytes": 9817,
+      "sha256": "4989bd9bed4406db2fb5a3b439cafb9b268cd2f29325f91b56e32c7176f7b070"
+    },
+    "v1_initialization_ram.hpp": {
+      "bytes": 8359,
+      "sha256": "8629e458a5b138d66cde61807870dbf987d06a9db051a21ee2add1680b613de9"
+    }
+  },
+  "historical_audit_manifest_runtime_dependencies": false,
+  "portable_wrapper_native_rerun_performed": false,
+  "schema": 1,
+  "status": "PORTABLE_SOURCE_PROJECTION_V2_REVIEW_PENDING"
+}

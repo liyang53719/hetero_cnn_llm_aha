@@ -1,0 +1,445 @@
+{
+  "cold_scope": "Only cold initialization temporarily replaces actual-review method. ExitStack restores it before tests; production configure, SOURCE CLI and execute reject PENDING separately before output/native work. Deeper probe pending guard is exercised with a cold-only configure stub.",
+  "compile_policy": "Run all cold entry scripts via an external same-buffer size/SHA loader under -I -S -B (and separately -O). New direct source imports are not introduced. No bare assert or project bytecode.",
+  "derived_compile_provenance": {
+    "FakeOS": "Full test_runner_cold.py raw length/SHA checked before AST extraction; exactly one FakeOS class selected and its original AST compiled. Existing reviewed logic is unchanged.",
+    "supervisor": "Full run_behavior.py raw length/SHA checked before AST extraction; exactly five fixed functions, three exact unique edits and exact reverse projection retained byte-for-byte. The derived bytes returned by project are the same bytes compiled."
+  },
+  "files": [
+    {
+      "candidate_identity": {
+        "bytes": 20634,
+        "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 19,
+            "sha256": "44bcf83c0a23f0df0354d03ae6b309b4573c1fa423563681c15667caa9eab12f"
+          },
+          "before_fragment": {
+            "bytes": 19,
+            "sha256": "2d6415daf0b941f61ad19ac273d381237ef1c6183a7fbe284cf7ed244e1ab1cc"
+          },
+          "description": "projected PINS byte pin"
+        },
+        {
+          "after_fragment": {
+            "bytes": 80,
+            "sha256": "2708a295b86de21b4e847c8bf56e65d65b277c8b28b3a768b28a3495041bb489"
+          },
+          "before_fragment": {
+            "bytes": 80,
+            "sha256": "afe1fddcc2e8d386e14e4cfb2fd884ecc62477b9e73646fa615f3bbe2c3e3f43"
+          },
+          "description": "projected PINS SHA pin"
+        },
+        {
+          "after_fragment": {
+            "bytes": 97,
+            "sha256": "417bf7836a71cb8d4b8b19794070efcf9a4ea1fe07040777965030a6f0790da5"
+          },
+          "before_fragment": {
+            "bytes": 215,
+            "sha256": "3f3d13d4df03ca8c687126b53952399d8554d6c9ca21076f0e96a8c75c8b9271"
+          },
+          "description": "replace machine roots with explicit unbound sentinels"
+        },
+        {
+          "after_fragment": {
+            "bytes": 24,
+            "sha256": "82e246d6a48f5d8a6ee9d4a49d09ac51e73b12f4a1f72b6c941092c5fe577e25"
+          },
+          "before_fragment": {
+            "bytes": 24,
+            "sha256": "ec3e56e1764dd28e15911716bcbea28e438b672994f386e3c3b017b5829fe41a"
+          },
+          "description": "derived bytes await explicit path binding"
+        },
+        {
+          "after_fragment": {
+            "bytes": 22,
+            "sha256": "aa510debaed75601f06e2285f1d13585153f547c19186bbb66b808f92f390e30"
+          },
+          "before_fragment": {
+            "bytes": 84,
+            "sha256": "fc12df9c573197463e6fd2d97c0f86d35034194e924b06e3ca631a1d8056a9fd"
+          },
+          "description": "derived SHA awaits explicit path binding"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "worker/stage_dependencies.py",
+      "source_identity": {
+        "bytes": 20814,
+        "sha256": "532d8a2ca44e1471d1a8473c2fb79ee2e615f28a0a3aa15531bcbd4547425200"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 205675,
+        "sha256": "abc9e5f55b045b6402cc5c13e4d4c4263eb6a7403e84b01a165a12b5d5d20cd0"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 30,
+            "sha256": "7361489dc9308d04231091d0803104eeabce9f37c706ca11ee08737e3737dbe7"
+          },
+          "before_fragment": {
+            "bytes": 249,
+            "sha256": "8ad97075f5d02c18991efc94888a7ff0e8f44318d1cbc8684e2dff3adc29eaac"
+          },
+          "description": "unbound actual_identity_review"
+        },
+        {
+          "after_fragment": {
+            "bytes": 58,
+            "sha256": "9d2a6d90280db6c5974f3289d3a797a060bc308aadabe59c4b3d1bd90120f938"
+          },
+          "before_fragment": {
+            "bytes": 120,
+            "sha256": "8f90776b8190b020d82b1727b230c82c0c417fcb683dc71c1906ee35e9d1ac1c"
+          },
+          "description": "unbound derived_cfg"
+        },
+        {
+          "after_fragment": {
+            "bytes": 48,
+            "sha256": "d38d52ab58ef83495ed2b8786273b7ba31e10e3674b34c061abf8012c4020cc7"
+          },
+          "before_fragment": {
+            "bytes": 119,
+            "sha256": "31316552eaaf309d1661515d467f03107274caf572803c5b54230e56e8c8203d"
+          },
+          "description": "unbound input_root"
+        },
+        {
+          "after_fragment": {
+            "bytes": 50,
+            "sha256": "d20f6160737b391cbb776b780287a90e73c7eb765e69c7ecbc79c78f58a54194"
+          },
+          "before_fragment": {
+            "bytes": 104,
+            "sha256": "842ba0147fb44e425f0749943054a29585f54b5a25d84438d1ffcc146766270b"
+          },
+          "description": "unbound output_root"
+        },
+        {
+          "after_fragment": {
+            "bytes": 21,
+            "sha256": "cea0242c5e85997b4313c11c588945f049c0306880e9af342f3c24766e869d4e"
+          },
+          "before_fragment": {
+            "bytes": 1980,
+            "sha256": "63b69bb682b9926e4870cd1a6192bd39e536998c261377f35997ec33995a47b1"
+          },
+          "description": "unbound source_inputs"
+        },
+        {
+          "after_fragment": {
+            "bytes": 59,
+            "sha256": "1ae35e66233783ba0730519a3ac7ef300db15dba3bf8b1b36c5b873f13a8dac1"
+          },
+          "before_fragment": {
+            "bytes": 69,
+            "sha256": "ec31a91a41bd01818f938d96e0b2499fe3b5e887b534fe19b6d60cd2cbdd5f22"
+          },
+          "description": "unbound status"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "worker/PINS.json",
+      "source_identity": {
+        "bytes": 208050,
+        "sha256": "81bcba49a453c6219d0eb47ecec0cfd6ae5925263a70282a607ec8ea8400883e"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 19360,
+        "sha256": "19da45c0acb31527c2d4971f480abaa5e8e7900bdbc186972a9379b51bff12a4"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 107,
+            "sha256": "83278852bc23d265345562bd66d7e3a99fb68f50d3ecf1dff8d7933ad8beb763"
+          },
+          "before_fragment": {
+            "bytes": 107,
+            "sha256": "7fbd5c423e0cb055dae80d6bd71ee197771c2130ea0670de0686a91050819fda"
+          },
+          "description": "projected worker same-buffer pin"
+        },
+        {
+          "after_fragment": {
+            "bytes": 896,
+            "sha256": "f330f1f262bb824baafd264a285a2ec7bbc9477eee6facb3f58afa509b8be03b"
+          },
+          "before_fragment": {
+            "bytes": 44,
+            "sha256": "08fbd51a23bd97c7da72879a0f4fe7b3ed5f2f7db7eaaa2a15ef2d0bdd9f9ca1"
+          },
+          "description": "cold pending metadata and no-I/O production-stage rejection"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "worker/test_staging_cold.py",
+      "source_identity": {
+        "bytes": 18508,
+        "sha256": "33c186687d64469d8a3daa1378b0210e28bc8933a85743d2096c9f1230ad9baf"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 8657,
+        "sha256": "e0c6e0b4e31834880fbabca809fea4e4b7de48c612bf75cb6705b1094762f07e"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 101,
+            "sha256": "2cc5778210032e6cb7b5d951a2d2ade2921ce17f739fdd55ace577751c9cc07c"
+          },
+          "before_fragment": {
+            "bytes": 98,
+            "sha256": "51b92a8f8d44caf3837522fdb12ef626d2822fbdf0f5bdf1559eb90f233d2169"
+          },
+          "description": "projected worker pin"
+        },
+        {
+          "after_fragment": {
+            "bytes": 100,
+            "sha256": "7dbbd94b4c629a181f1692bccf1633f2c3789d3375c6b9dc06ede4646a1811ef"
+          },
+          "before_fragment": {
+            "bytes": 97,
+            "sha256": "edbea90218b22aebd345b9be9e9c0abe3130c0388aab3cde800c273fd49dee5d"
+          },
+          "description": "projected metadata pin"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "staging/run_stage.py",
+      "source_identity": {
+        "bytes": 8651,
+        "sha256": "f633a3630e94fb37cd89fb18f10eb166d81726cf43b6fc51c7f2887ae0f04d38"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 9089,
+        "sha256": "56f7835cc6c4f7e650de34c6f864b2edbd4462ddd651fe42b902e209c5b86d8c"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 161,
+            "sha256": "6cd23aa9d475b9cedd6e5b231c76a7050a99e023e982b24d01750c7b6ec931df"
+          },
+          "before_fragment": {
+            "bytes": 161,
+            "sha256": "1232d0fe61d653eb88296d7b277bdb3b2204de887d8aeade4f82984e897ad530"
+          },
+          "description": "projected wrapper same-buffer pin"
+        },
+        {
+          "after_fragment": {
+            "bytes": 112,
+            "sha256": "ac33d95941ff58948dbb261644bcb2605f44fad0535b860eeceae5113af0f05b"
+          },
+          "before_fragment": {
+            "bytes": 117,
+            "sha256": "129a2afcb72f4003e7bb63d14e40e3c9c5a6dc4794cb815d925ab39df17301dc"
+          },
+          "description": "production preflight rejects unbound identity"
+        },
+        {
+          "after_fragment": {
+            "bytes": 332,
+            "sha256": "3d8f112cec80de12b04dc29e986b959ecfbd63f34841bb839616a1d0dc344b79"
+          },
+          "before_fragment": {
+            "bytes": 320,
+            "sha256": "9f59c3359545e1ec22c8e785e2fa5e98058bdf736ff5499b71ba69a2decdc518"
+          },
+          "description": "production source CLI rejection without output"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "staging/test_cold.py",
+      "source_identity": {
+        "bytes": 9082,
+        "sha256": "8b92d4d78155a541e88aacfd2ad04cb884b4e006f356494d27bf058dfd5dd3af"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 14750,
+        "sha256": "3c160adc2b51b27ffe151c524929ebbbcb7b6ec49f923afdfd8afd6d88613a26"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 75,
+            "sha256": "7c7740f08141f2b41127786297966ff4eff3920df74c0db991757f313b431bdc"
+          },
+          "before_fragment": {
+            "bytes": 75,
+            "sha256": "eb5e56bbd4407bc99ddde53ae0a9445c1c654f2e96a4ebaf89d904b84a91a663"
+          },
+          "description": "projected plan SHA"
+        },
+        {
+          "after_fragment": {
+            "bytes": 102,
+            "sha256": "82f81f2238c4aaf015719f4200c43e0cead94723aef7e5ed353d245310a59cf5"
+          },
+          "before_fragment": {
+            "bytes": 99,
+            "sha256": "339b04d275c472137ca988b7dbfed83104cf1081a283bbaf6f3cb97565b0a8fc"
+          },
+          "description": "projected staging wrapper pin"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "probe/run_probe.py",
+      "source_identity": {
+        "bytes": 14747,
+        "sha256": "74ecef52605835ea8c3093f9d1c04521f5e4ebf57c32af3a3fc4baee22ec44d1"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 2271,
+        "sha256": "066eccb969acb634215179e3235c52f16141d2b5fc7320b0304b7b20747bf223"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 131,
+            "sha256": "d9a76ceb879891c69cbf8410caac61f047f9a2a079f3a12ea51365cd5d52f288"
+          },
+          "before_fragment": {
+            "bytes": 131,
+            "sha256": "34f65281e677cab871e8209a93db9ba14c5c0d836d7ff7251801da878816fee3"
+          },
+          "description": "projected staging_worker_source pin"
+        },
+        {
+          "after_fragment": {
+            "bytes": 131,
+            "sha256": "ae18cb8074853e6efca53741ea9481f38d25d7fa8740bdc3dd45ec897c3dc046"
+          },
+          "before_fragment": {
+            "bytes": 131,
+            "sha256": "f0afcc6ab3bd694a3527c5de6828092f5bee3e0a4475b720786d76a0ffa03611"
+          },
+          "description": "projected staging_wrapper_source pin"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "probe/PROBE_PLAN.json",
+      "source_identity": {
+        "bytes": 2271,
+        "sha256": "45e76be65e4e9b792f9ac09ff99399e6a9924ab7d70345b8b92c945a6d68d8e2"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 3946,
+        "sha256": "41f1a55af603d55d78b3a2804beb9a282b189ac27ecb927cb82fe89e29b22ac9"
+      },
+      "changes": [],
+      "exact_inverse_verified": true,
+      "file": "probe/MODE_DEFINITIONS.json",
+      "source_identity": {
+        "bytes": 3946,
+        "sha256": "41f1a55af603d55d78b3a2804beb9a282b189ac27ecb927cb82fe89e29b22ac9"
+      }
+    },
+    {
+      "candidate_identity": {
+        "bytes": 14825,
+        "sha256": "89e1e75fd9976e0aabfa1da5f728813b385e1e4a3c648c283f71b55b70a0383a"
+      },
+      "changes": [
+        {
+          "after_fragment": {
+            "bytes": 174,
+            "sha256": "e372e259ea2ee03ac121d925d35c7ee2eb0874739ce88605242180d2aaaf6532"
+          },
+          "before_fragment": {
+            "bytes": 174,
+            "sha256": "0c0f3ef3723e32e38379c3b8384310a6cc305f7ab211b410f680df239efea3aa"
+          },
+          "description": "projected probe same-buffer pin"
+        },
+        {
+          "after_fragment": {
+            "bytes": 923,
+            "sha256": "9383fd7cb3ae326c46c40f1b8b4d27c7890799c242d466dd445422b15b127083"
+          },
+          "before_fragment": {
+            "bytes": 101,
+            "sha256": "23148c2e5244ba28dadd6819c4d684b0e2b5ed8cf3c21b7a1453dac9ca6b2b06"
+          },
+          "description": "cold-only scoped actual-review substitution for pure source initialization"
+        },
+        {
+          "after_fragment": {
+            "bytes": 448,
+            "sha256": "14b881688c6fdc95c989b7193d74f5aa7c32de71150666605d0c2ddef19686dc"
+          },
+          "before_fragment": {
+            "bytes": 420,
+            "sha256": "e61c5db5e6d0dab814bb47c2bd2638476f5375c50de389bef1a17b2344b29d57"
+          },
+          "description": "production default rejects unbound acquisition identity without effects"
+        },
+        {
+          "after_fragment": {
+            "bytes": 336,
+            "sha256": "2c87ff3f01ed003a2670a54fc59d4632a5fb23140ffc367d7c07e614a0015353"
+          },
+          "before_fragment": {
+            "bytes": 269,
+            "sha256": "c7e7a83df4bb18d84ad4402125d825178ee078479ff4dba057fe8ff1aa69a7cc"
+          },
+          "description": "mock only prior barrier to exercise separate staging-review pending guard"
+        },
+        {
+          "after_fragment": {
+            "bytes": 1434,
+            "sha256": "0cb41567a3138aaf4dccdc21eb9a9f5404ca10863748b3ac1ad1591b8ddeb993"
+          },
+          "before_fragment": {
+            "bytes": 48,
+            "sha256": "10fa6b512996aac050014823c0fd301c57d8f71561663ace529448b7fda5d9ae"
+          },
+          "description": "cold mock restoration plus production configure and execute rejections"
+        }
+      ],
+      "exact_inverse_verified": true,
+      "file": "probe/test_cold.py",
+      "source_identity": {
+        "bytes": 12522,
+        "sha256": "064171569e7289fa65a2fbcc865456c538be648cb166a10c5319a851c86fd389"
+      }
+    }
+  ],
+  "package_metadata_json_value_identity": {
+    "bytes": 191992,
+    "sha256": "e1131a4dd839503e8403c7d6ff5b25ff145547ea23e589a805314d4bd5b89949"
+  },
+  "portable_native_execution": "NOT_RUN",
+  "reverse_projection": "All nine source/data/cold files were exactly reversed to their original frozen byte sizes and SHA256. Public fragment hashes avoid republishing machine paths; reviewers compare with the frozen original source identities.",
+  "schema": "DEPENDENCY_SOURCE_EXACT_PROJECTION_MAP_V1",
+  "scope": "Only explicit root/identity constant projection and associated raw pins; cold-only pending-template adaptation. Production algorithms unchanged.",
+  "unchanged_production_regions": [
+    "worker: from SELECTED_COUNT through all parser, writer, actual-review, stage bodies, except CFG_DERIVED_BYTES/SHA constants",
+    "staging: every byte after SOURCE_NAMES declaration",
+    "probe: every byte after GATE_PIN declaration"
+  ]
+}

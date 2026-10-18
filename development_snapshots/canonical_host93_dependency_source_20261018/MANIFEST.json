@@ -1,0 +1,80 @@
+{
+  "actual_probe_executed": false,
+  "actual_staging_executed": false,
+  "cold_verification": {
+    "all_nine_exact_inverse_to_frozen_originals": true,
+    "fresh_relocated_source_copy_same_counts": true,
+    "normal": {
+      "probe": 19,
+      "staging": 14,
+      "worker": 33
+    },
+    "optimized": {
+      "probe": 19,
+      "staging": 14,
+      "worker": 33
+    },
+    "production_definitions_byte_identical": true,
+    "production_source_cli_pending_rejections": 2,
+    "short_and_equal_size_bad_hash_before_compile": true
+  },
+  "native_executed": false,
+  "payload_files": {
+    "INSTALL_MAP.json": {
+      "bytes": 3269,
+      "sha256": "764e2ece7db7dc941d8af4233b68f98fd5bd89a2b90f3c4d1dd142cf8b0bb3e7"
+    },
+    "PROJECTION_MAP.json": {
+      "bytes": 16486,
+      "sha256": "9daaa54b775a71d0a0fd1267f646b2a3ad781ba4b94ef18513b9d82ffb2f128c"
+    },
+    "README.md": {
+      "bytes": 4802,
+      "sha256": "ae8c90fb8c7832ddece090ca2f7a9f7e76695ab925d632a6acee539b1591339a"
+    },
+    "SAFE_HISTORY.json": {
+      "bytes": 3567,
+      "sha256": "5592d9bfa283d25adbacd5bf17b1ae4b1944cce6fc7f4d0c851c36d1ef5fa6bd"
+    },
+    "probe/MODE_DEFINITIONS.json": {
+      "bytes": 3946,
+      "sha256": "41f1a55af603d55d78b3a2804beb9a282b189ac27ecb927cb82fe89e29b22ac9"
+    },
+    "probe/PROBE_PLAN.json": {
+      "bytes": 2271,
+      "sha256": "066eccb969acb634215179e3235c52f16141d2b5fc7320b0304b7b20747bf223"
+    },
+    "probe/run_probe.py": {
+      "bytes": 14750,
+      "sha256": "3c160adc2b51b27ffe151c524929ebbbcb7b6ec49f923afdfd8afd6d88613a26"
+    },
+    "probe/test_cold.py": {
+      "bytes": 14825,
+      "sha256": "89e1e75fd9976e0aabfa1da5f728813b385e1e4a3c648c283f71b55b70a0383a"
+    },
+    "staging/run_stage.py": {
+      "bytes": 8657,
+      "sha256": "e0c6e0b4e31834880fbabca809fea4e4b7de48c612bf75cb6705b1094762f07e"
+    },
+    "staging/test_cold.py": {
+      "bytes": 9089,
+      "sha256": "56f7835cc6c4f7e650de34c6f864b2edbd4462ddd651fe42b902e209c5b86d8c"
+    },
+    "worker/PINS.json": {
+      "bytes": 205675,
+      "sha256": "abc9e5f55b045b6402cc5c13e4d4c4263eb6a7403e84b01a165a12b5d5d20cd0"
+    },
+    "worker/stage_dependencies.py": {
+      "bytes": 20634,
+      "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+    },
+    "worker/test_staging_cold.py": {
+      "bytes": 19360,
+      "sha256": "19da45c0acb31527c2d4971f480abaa5e8e7900bdbc186972a9379b51bff12a4"
+    }
+  },
+  "repository_modified": false,
+  "schema": "FIXED67_TEN_PROBE_PORTABLE_SOURCE_MANIFEST_V1",
+  "status": "SOURCE_TEMPLATE_COLD_PASS_ACTUAL_BINDING_PENDING",
+  "total_files_including_manifest": 14
+}

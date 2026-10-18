@@ -1,0 +1,107 @@
+{
+  "historical_acquisition_identity_review": {
+    "bytes": 1447,
+    "sha256": "352b1d020121f1530a0fbafd6af72b60eef0fed77b24cb6761e6825b36c1284a"
+  },
+  "historical_machine_bound_cfg_identity_only": {
+    "bytes": 5491,
+    "sha256": "f26d301ce4c054f41865047228ea505bbdd79ffe8f7cd04c07b72175057bc2a0"
+  },
+  "historical_source_inputs": {
+    "acquisition": {
+      "bytes": 2594,
+      "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+    },
+    "actual_review_manifest": {
+      "bytes": 1447,
+      "sha256": "352b1d020121f1530a0fbafd6af72b60eef0fed77b24cb6761e6825b36c1284a"
+    },
+    "actual_review_summary": {
+      "bytes": 1350,
+      "sha256": "ea26246bb2311c583aa4f4b5edbc22e8bcbf7290ada80496b49ec2d84d13ea66"
+    },
+    "cfg_derivation": {
+      "bytes": 999,
+      "sha256": "0a93d20cb6a6cb459b3c86de3240114a99c589e9e866f08f7843894bee5c5bd2"
+    },
+    "control_hashes": {
+      "bytes": 2202,
+      "sha256": "c051d35020c8be4a514625dceba285fc5933e5da23f3f79273bf8407b992d396"
+    },
+    "framing": {
+      "bytes": 4512,
+      "sha256": "f9597b6fa2ab93cf074d6573e3eeda06017994d01dd1d6106c1b294573aaf21a"
+    },
+    "gnu_suffix": {
+      "bytes": 1646,
+      "sha256": "0d839c65ed1c6048791ffe668a0861831487b9c0932076ea8ae5fd14b3bad066"
+    },
+    "inventory": {
+      "bytes": 186340,
+      "sha256": "3aad73dd710b486d663a0c20715ea559009a24b734b32e960bd563c4e3decd4b"
+    },
+    "selected": {
+      "bytes": 29552,
+      "sha256": "dff557577874fd3a1c39c83cf435f8e07a781d677e6fb45cc6da378797fd46c8"
+    }
+  },
+  "not_proven": [
+    "Internal M4/Perl/ELF transitive consumer closure",
+    "Native Verilator production build",
+    "Hierarchy, DPI, multihandle or full-block RTL correctness"
+  ],
+  "portable_template": {
+    "actual_probe_executed": false,
+    "actual_staging_executed": false,
+    "binding_status": "PENDING",
+    "native_executed": false,
+    "new_cfg_derived_identity": null
+  },
+  "probes": {
+    "accepted_modes": 10,
+    "generated_script_or_C_executed": false,
+    "original_outer_exit_for_each": 0,
+    "original_stage69_unchanged": true,
+    "outer_seconds_max": 0.251,
+    "outer_seconds_min": 0.139,
+    "output_bytes": 36631595,
+    "output_files": 755,
+    "production_source_compiled": false,
+    "review_manifest": {
+      "bytes": 1481,
+      "sha256": "bb0c21890f927b719e93f7721c12bf636d266ebb033e4a0313e833696f872edb"
+    },
+    "review_summary": {
+      "bytes": 2035,
+      "sha256": "158249fa802df79a91b0fe9d045047eceb4316d5021270e068faa13afd78f1ad"
+    },
+    "tiny_generation_probes": 5,
+    "verdict": "PASS_ACTUAL_FIVE_VERSIONS_AND_FIVE_TINY_TEXT_GENERATORS",
+    "version_probes": 5
+  },
+  "schema": "DEPENDENCY_SOURCE_SAFE_HISTORY_V1",
+  "scope": "Historical execution on the original bound sources only; no qualification of this portable template.",
+  "staging": {
+    "all_files_mode": "0600",
+    "directories_mode": "0700",
+    "four_cfg_replacements": true,
+    "native_child_started": false,
+    "original_outer_exit": 0,
+    "original_outer_seconds": 0.265,
+    "original_packages_unchanged": true,
+    "package_tools_executed": false,
+    "review_manifest": {
+      "bytes": 1337,
+      "sha256": "2e7883e3172f2b957c18d03a37ce1478fcb0f0c2b2889cbfb82de2d5e72357ce"
+    },
+    "review_summary": {
+      "bytes": 2019,
+      "sha256": "1fd7eb48afe90fa6e99df6b5642e2aede89fe194f7b0fba03bc41d5d778769be"
+    },
+    "selected_bytes": 3598623,
+    "selected_count": 67,
+    "staged_bytes": 3626135,
+    "staged_count": 69,
+    "verdict": "PASS_ACTUAL_FIXED67_STAGED_DATA_ONLY"
+  }
+}

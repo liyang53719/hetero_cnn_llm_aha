@@ -1,0 +1,49 @@
+{
+  "actual_staging": null,
+  "actual_status": "PENDING_REJECT_BEFORE_OUTPUT_OR_NATIVE",
+  "budget": {
+    "child_affinity_count": 1,
+    "child_as_bytes": 536870912,
+    "child_cpu_seconds": 10,
+    "child_per_file_fsize_bytes": 4194304,
+    "cleanup_seconds": 5,
+    "latest_work_seconds": 14,
+    "log_soft_limit_bytes": 65536,
+    "max_directories": 64,
+    "max_files": 200,
+    "post_deadline_seconds": 20,
+    "pre_seconds": 4,
+    "report_limit_bytes": 524288,
+    "total_seconds": 20,
+    "tree_soft_limit_bytes": 8388608,
+    "work_seconds": 10
+  },
+  "copy_contract": "68 exact fixed data files, five usr/bin tool copies0700, other files0600; original staged assets remain0600",
+  "generated_data_contract": "complete bounded fresh output inventory excluding only inventory file itself; generated executable mode may be set by official autoconf but never execute generated files",
+  "mode_definitions": {
+    "bytes": 3946,
+    "sha256": "41f1a55af603d55d78b3a2804beb9a282b189ac27ecb927cb82fe89e29b22ac9"
+  },
+  "rusage_origin": "development_snapshots/canonical_host93_observation_source_20261018/startup/run_startup_probe.py:usage",
+  "schema": "FIXED_FIVE_TOOLS_TEN_INDEPENDENT_TINY_PROBES_V1",
+  "source_scope": "five fixed official tools version and synthetic macro/skeleton generation only, no generated script/C execution, no production compile",
+  "staging_worker_source": {
+    "bytes": 20634,
+    "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+  },
+  "staging_wrapper_source": {
+    "bytes": 8657,
+    "sha256": "e0c6e0b4e31834880fbabca809fea4e4b7de48c612bf75cb6705b1094762f07e"
+  },
+  "supervisor_origin": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+  "supervisor_projection_changes": [
+    "explicit fixed allowlist child environment instead of fixed minimal PATH",
+    "one inherited allowed CPU affinity in child preexec",
+    "disable work alarm only at original cleanup entry, original five-second group cleanup retained"
+  ],
+  "unknowns": [
+    "internal M4 consumer and ELF/Perl transitive closure not traced",
+    "success proves only fixed explicit environment and synthetic fixture observed output",
+    "native build and hierarchy/DPI/multihandle remain unqualified"
+  ]
+}

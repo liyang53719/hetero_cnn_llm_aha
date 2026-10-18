@@ -1,0 +1,97 @@
+{
+  "binding_requirements": [
+    "Create a separate candidate; do not mutate this frozen SOURCE template.",
+    "Select explicit safe roots and recompute the four-line cfg derived bytes/SHA from the exactly pinned original cfg.",
+    "Bind actual acquisition review and later independent staging review explicitly; refresh every dependent source/data/cold pin.",
+    "Independent review and separately authorized bounded execution remain required. Existing strict guards are unchanged."
+  ],
+  "excluded": [
+    "LOCAL_EXECUTION_ARGV",
+    "cold logs",
+    "actual binaries or archives",
+    "generated configure or C",
+    "actual staged data",
+    "system inventory",
+    "local audit paths",
+    "machine-bound plan files"
+  ],
+  "external_published_dependencies": {
+    "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py": {
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    },
+    "development_snapshots/canonical_runtime_ram_source_20261018/test_runner_cold.py": {
+      "bytes": 18004,
+      "sha256": "fc88db7e72d64fca1603de193940e7b95e9030f90dc3eb0e574cec9d5b40ff46"
+    }
+  },
+  "files": [
+    "probe/MODE_DEFINITIONS.json",
+    "probe/PROBE_PLAN.json",
+    "probe/run_probe.py",
+    "probe/test_cold.py",
+    "staging/run_stage.py",
+    "staging/test_cold.py",
+    "worker/PINS.json",
+    "worker/stage_dependencies.py",
+    "worker/test_staging_cold.py"
+  ],
+  "fixed_contract": {
+    "cfg_exact_replacement_lines": [
+      118,
+      145,
+      159,
+      171
+    ],
+    "cfg_source_bytes": 5143,
+    "cfg_source_sha256": "a72748b80a0aa61a968f662fc07fedf2002ff5fd325692f882070c564a351662",
+    "data_tar_members": 747,
+    "official_packages": 5,
+    "package_bytes": 2466616,
+    "probe_modes": 10,
+    "selected_original_bytes": 3598623,
+    "selected_regular_originals": 67,
+    "stage_report_files": 1,
+    "staged_data_files": 68,
+    "unmaterialized_links": 6
+  },
+  "install_action": "Copy this exact source-only directory to the repository-relative destination after independent SOURCE acceptance. This map performs no action.",
+  "pending_bindings": {
+    "acquisition_identity_review": null,
+    "actual_staging": null,
+    "derived_cfg": {
+      "bytes": null,
+      "sha256": null
+    },
+    "input_root": "/UNBOUND_HOST93_DEPENDENCY_INPUT",
+    "output_root": "/UNBOUND_HOST93_DEPENDENCY_OUTPUT"
+  },
+  "probe_limits": {
+    "child_affinity_count": 1,
+    "child_as_bytes": 536870912,
+    "child_cpu_seconds": 10,
+    "child_per_file_fsize_bytes": 4194304,
+    "cleanup_seconds": 5,
+    "latest_work_seconds": 14,
+    "log_soft_limit_bytes": 65536,
+    "max_directories": 64,
+    "max_files": 200,
+    "post_deadline_seconds": 20,
+    "pre_seconds": 4,
+    "report_limit_bytes": 524288,
+    "total_seconds": 20,
+    "tree_soft_limit_bytes": 8388608,
+    "work_seconds": 10
+  },
+  "schema": "FIXED67_TEN_PROBES_SOURCE_INSTALL_MAP_V1",
+  "stage_limits": {
+    "address_space_bytes": 536870912,
+    "affinity_count": 1,
+    "cpu_seconds": 40,
+    "evidence_bytes": 524288,
+    "file_size_bytes": 4194304,
+    "output_bytes": 8388608,
+    "total_seconds": 60
+  },
+  "suggested_destination": "development_snapshots/canonical_host93_dependency_source_20261018"
+}

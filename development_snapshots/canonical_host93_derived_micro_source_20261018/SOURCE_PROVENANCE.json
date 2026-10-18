@@ -1,0 +1,105 @@
+{
+  "schema": "host93-derived-tiny-public-source-provenance-v1",
+  "scope": "Handwritten tiny fixtures and bounded SOURCE gate. Official Verilator sources are not bundled.",
+  "official_repository": "https://github.com/verilator/verilator",
+  "official_commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "official_tree": "3300b1cc13a3903fe3113ae65087ae75b2cdb2df",
+  "official_evidence_files": [
+    {
+      "path": "src/V3HierBlock.cpp",
+      "bytes": 21414,
+      "sha256": "6a8becc6033a0b24e5acaacdaa5e244a47cebaf17b42225c382263492b746ae5"
+    },
+    {
+      "path": "src/V3ProtectLib.cpp",
+      "bytes": 22417,
+      "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+    },
+    {
+      "path": "src/V3EmitMk.cpp",
+      "bytes": 45339,
+      "sha256": "02b6251c9c99543ba3990e08008329a568013d2ccfe40aa189702253731059fa"
+    },
+    {
+      "path": "src/V3Task.cpp",
+      "bytes": 115324,
+      "sha256": "83a39b48002fd0641645110b5aa409ac482688c7aa2c13792a15f03d2c498122"
+    },
+    {
+      "path": "src/Verilator.cpp",
+      "bytes": 36731,
+      "sha256": "b62696625680e5d50180137cfe2c6d558d36c95d30a3b296146f84c57f2ae440"
+    },
+    {
+      "path": "src/V3Options.cpp",
+      "bytes": 99474,
+      "sha256": "bdedcf7a422beb95ae8033f899fbd89c9e895147ec4aff67f5843a67988d3924"
+    },
+    {
+      "path": "src/V3Scope.cpp",
+      "bytes": 17619,
+      "sha256": "b7f422612147a55b10c5b9d76d48f82d0a98af9f3bc2219e0833716eda619228"
+    },
+    {
+      "path": "src/V3AstNodes.cpp",
+      "bytes": 173893,
+      "sha256": "e3c0b5f55cdd38735bda45c13b396b077c94b2041e8ae97358a2cd15667bfbac"
+    },
+    {
+      "path": "src/V3LinkLevel.cpp",
+      "bytes": 17582,
+      "sha256": "435aab22aef5632eaa58079eadc3ee906c5b010a23d770ed65d2fe3d19d8be5c"
+    },
+    {
+      "path": "src/V3EmitCSyms.cpp",
+      "bytes": 80745,
+      "sha256": "30928cc48b07bdfe6cfce7bb143704198af9508b2440a479fa101956a83563ec"
+    },
+    {
+      "path": "include/verilated_dpi.cpp",
+      "bytes": 33553,
+      "sha256": "0d153d1640985d6488b12c516b8a96939b46ddcc080d8efaf12faafe3d26791a"
+    },
+    {
+      "path": "include/verilated.cpp",
+      "bytes": 186133,
+      "sha256": "679b42955a06946273bbcc2ca14d16885739d223ced98ab8fe581a6b0f131d93"
+    },
+    {
+      "path": "include/verilated.h",
+      "bytes": 62071,
+      "sha256": "9ffa8ea44968c2b7767bd1fb0b7965f492e4d943014c4228601e4e91f4c426a7"
+    },
+    {
+      "path": "include/verilated.mk.in",
+      "bytes": 13590,
+      "sha256": "10fbdd26e5996d4f5713848b4accbfa0c7506a988aa403446adcba6eb181f347"
+    },
+    {
+      "path": "bin/verilator",
+      "bytes": 32346,
+      "sha256": "95ce5c7369201fce1bed21601a87d4ffc780761992b494a38579470e181525ef"
+    }
+  ],
+  "derived_source_expected": {
+    "bytes": 22430,
+    "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+  },
+  "reviewed_source_baseline": {
+    "manifest": {
+      "bytes": 3593,
+      "sha256": "7aa2a8002b043d9e8013a74209a08beaa4d34963c5dff55d9d623b7fa36e8a77"
+    },
+    "review_manifest": {
+      "bytes": 1003,
+      "sha256": "b550aea214533532d2826fa74a90c7000c2db1fc220c764999cf1f68fb255236"
+    },
+    "review_summary": {
+      "bytes": 1427,
+      "sha256": "55cb36c70b20cd14df3d7cb781b56c4d51799b77b1c937f3504a54e40ad4783a"
+    },
+    "scope": "Finite derived tiny SOURCE only; no actual identity copied into this portable template."
+  },
+  "production_function_projection": "All functions from reviewed v2 remain byte-identical. Only module constants and PLAN/raw identity pins are projected.",
+  "test_projection": "The real old generated C++ local negative is replaced only in portable tests by explicitly handwritten minimal same-shape negative text. This is synthetic evidence, not generated output."
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "host93-derived-micro-portable-source-manifest-v1",
+  "status": "FROZEN_SOURCE_ONLY_ALL_ACTUAL_BINDINGS_PENDING_AT_FREEZE",
+  "file_count_including_manifest": 14,
+  "files": {
+    "INSTALL_MAP.json": {
+      "bytes": 3488,
+      "sha256": "ef7fa59b2da86459420d8074d6db89ed9e6e260d820c46cec3a2199852841829"
+    },
+    "PLAN.json": {
+      "bytes": 19051,
+      "sha256": "c0a1f057217fb499bc44a1b6c1a79d5b3f6af056105d0e6f4d763d3f788688f2"
+    },
+    "README.md": {
+      "bytes": 4704,
+      "sha256": "d09618d753486bc3f623024aca6eb712ad5caef5b847675269d74ccae4f307d8"
+    },
+    "SAFE_HISTORY.json": {
+      "bytes": 3199,
+      "sha256": "a0a9e4976e3cc9ee32de6cf1c63c376ed816e772434ee4525bd39c7239d371e4"
+    },
+    "SOURCE_INPUT_MANIFEST.json": {
+      "bytes": 786,
+      "sha256": "c49eea1de31ac85fb108e59e21e6b913b32ba58e86d059446f1e4414b8855e1b"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 3768,
+      "sha256": "38312f77315673329af416be2c98f37b5193839a47587320ee74a4094b306edb"
+    },
+    "fixtures/main.cpp": {
+      "bytes": 4269,
+      "sha256": "774064865f2e1d224363b6c63ae75dac3abe5f0afe6c05105920724fe4e161c0"
+    },
+    "fixtures/tiny.sv": {
+      "bytes": 938,
+      "sha256": "339baf2e67c47d6f00597f6daee72f2e7b5c47ae8803dac54ff30911bcba7a85"
+    },
+    "init_contract.py": {
+      "bytes": 5127,
+      "sha256": "d070d9a0841ea034dd684fad3ca9fd4fa32a1ed1afa1417bf4f4a88625996365"
+    },
+    "load_micro_gate.py": {
+      "bytes": 2041,
+      "sha256": "35790783cc549eb1b4c60f81ed2fb71ef565e318a42dadf6326306a262b62666"
+    },
+    "run_micro_gate.py": {
+      "bytes": 27056,
+      "sha256": "2e2fd07edd71aef9d5abaa446f9d77c89a0c32060006dd699b4f0bc612e0c062"
+    },
+    "test_init_contract.py": {
+      "bytes": 7183,
+      "sha256": "7e56a261b10b90465cabeb602dd679f85a3ce24556a22158358bdc0d87ab33a1"
+    },
+    "test_micro_gate_cold.py": {
+      "bytes": 15679,
+      "sha256": "bd65fd2408e28cef974880dd15ed3514b270c2eb85be2f3bca1570e50e75b858"
+    }
+  },
+  "production_function_count": 21,
+  "production_functions_byte_identical_to_reviewed_v2": true,
+  "initializer_contract_byte_identical": true,
+  "published_support_functions_byte_identical": true,
+  "cold_normal": {
+    "micro": 62,
+    "finite_initializer": 29
+  },
+  "cold_optimized": {
+    "micro": 62,
+    "finite_initializer": 29
+  },
+  "negative_source_precompile_checks": 4,
+  "pending_entry_refusals": 8,
+  "relative_repo_early_refusals": 2,
+  "runtime_or_tool_binaries_included": false,
+  "actual_generated_cpp_included": false,
+  "host_inventory_or_logs_included": false,
+  "native_executed_for_projection": false,
+  "release_authorization": "PENDING_SEPARATE_DECISION",
+  "independent_projection_acceptance": "PENDING"
+}

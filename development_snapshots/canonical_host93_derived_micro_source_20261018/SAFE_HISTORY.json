@@ -1,0 +1,67 @@
+{
+  "schema": "host93-derived-tiny-safety-history-v1",
+  "status": "SOURCE_ONLY_PORTABLE_BINDINGS_PENDING_AT_FREEZE",
+  "original_official_source": {
+    "commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+    "member": "V3ProtectLib-generated protected container m_seqnum",
+    "finding": "Original member had no initializer and the generated user constructor body was empty; postincrements read uninitialized state.",
+    "original_generated_cpp": {
+      "bytes": 2819,
+      "sha256": "b36ecd4a846244790d934ea67be835a065fe4f879e07cef1a8194d6ffc5fbdb6",
+      "distribution": "not included; historical local evidence only"
+    },
+    "old_generated_compile_or_runtime_authorized": false
+  },
+  "original_generation": {
+    "native_exit": 0,
+    "outer_exit": 1,
+    "postflight_failure": "Validator rejected the valid unsized signed hexadecimal STEP literal despite value 3. Original failure and generated assets were preserved.",
+    "failure_review": {
+      "manifest": {
+        "bytes": 1780,
+        "sha256": "129bd4776e0b54ae49b827b0d733912fc913dce3d140f5000a12d8eac4f6da97"
+      },
+      "summary": {
+        "bytes": 6382,
+        "sha256": "eff504995e9ef318c23f0c68dfda55e4a4ac5530e9f46c132b9f3c8b89acd456"
+      },
+      "verdict": "CONFIRMED_ACTUAL_GENERATE_POSTFLIGHT_FAILURE"
+    }
+  },
+  "readonly_comparison": {
+    "verdict": "PASS_ACTUAL_READONLY_STATIC_COMPARISON_ONLY",
+    "original_outer_exit": 1,
+    "original_native_exit": 0,
+    "readonly_outer_exit": 0,
+    "readonly_wall_seconds": 0.129,
+    "preserved_work_files": 38,
+    "preserved_work_bytes": 128645,
+    "compiled_child_archive_observed": false,
+    "object_files_observed": false,
+    "child_archive_field": "Future archive path named by generated make graph, not evidence of a compiled archive.",
+    "initialization_risk_preserved": true,
+    "review_manifest": {
+      "bytes": 603,
+      "sha256": "230cc4cc633114d3b59c96af42c529a0ab3b086fc495305ae47fceed76a0684b"
+    },
+    "review_summary": {
+      "bytes": 2822,
+      "sha256": "0ff0976cd7bdeafd9822f1de254baa5586fd3fe563f21add6c8b9d1d0957d956"
+    }
+  },
+  "derived_scope": {
+    "patch": "One constructor initializer m_seqnum{0}; separate derived source and tool identities required.",
+    "generated_validation": "Exactly one target container, member, constructor and zero initializer in the same finite class body; unrelated literals/comments/other classes cannot compensate.",
+    "new_generated_wrapper_must_be_verified": true,
+    "not_general_cpp_parser": true,
+    "not_general_undefined_behavior_clearance": true,
+    "all_portable_actual_bindings": "PENDING_AT_FREEZE"
+  },
+  "portable_negative": {
+    "provenance": "Handwritten minimal same-shape container literal inside test_init_contract.py. Never read or copied from actual generated C++ in this package.",
+    "bytes": 281,
+    "sha256": "3ffe9eb65c69c990d3f6fa050910a37aa514629db53df937c6fee4fa070baacc",
+    "role": "Synthetic finite-contract negative only."
+  },
+  "source_dependency_delta": "Reviewed local v2 removes only old generated negative reading from production verify_inputs; local v1 was a valid bounded SOURCE gate with an explicit local historical dependency."
+}

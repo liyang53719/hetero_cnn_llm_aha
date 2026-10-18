@@ -1,0 +1,92 @@
+{
+  "schema": "host93-derived-tiny-portable-install-map-v1",
+  "suggested_repo_directory": "development_snapshots/canonical_host93_derived_micro_source_20261018",
+  "scope": "SOURCE snapshot; placement is not execution authorization.",
+  "required_existing_repo_files": {
+    "support": {
+      "repo_relative": "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py",
+      "bytes": 28551,
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    },
+    "supervisor": {
+      "repo_relative": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    },
+    "observation": {
+      "repo_relative": "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+      "bytes": 17327,
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a"
+    }
+  },
+  "necessary_plans": {
+    "micro_plan": "PLAN.json bundled and pinned by runner",
+    "support_plan": "No separate core-build GATE_PLAN is loaded by this micro gate. Its imported support functions receive the micro PLAN explicitly."
+  },
+  "cold_entrypoints": [
+    {
+      "file": "test_micro_gate_cold.py",
+      "argv": [
+        "python3",
+        "-I",
+        "-S",
+        "-B",
+        "test_micro_gate_cold.py",
+        "--repo",
+        "ABSOLUTE_REPOSITORY_ROOT"
+      ],
+      "also_repeat_with": "-O"
+    },
+    {
+      "file": "test_init_contract.py",
+      "argv": [
+        "python3",
+        "-I",
+        "-S",
+        "-B",
+        "test_init_contract.py"
+      ],
+      "also_repeat_with": "-O"
+    }
+  ],
+  "cold_resolution": "Only the three exact published source files and packaged initializer contract are resolved for source/synthetic tests. Actual bindings, source roots, build/work/evidence roots and commands remain unbound.",
+  "future_identity_successor": {
+    "required": true,
+    "review_required": true,
+    "constant_and_plan_projection": [
+      "ROOT/B/W/F and package/support paths",
+      "source_qualification manifest and summary for exact original473 contents",
+      "source_gate_review",
+      "derived_backend_build_review",
+      "derived_patch_identity with exact original/derived source and patch record",
+      "new_backend_binary",
+      "configured_runtime_inputs include inventory and wrappers",
+      "host_program_identities",
+      "previous_actual for each accepted prior phase",
+      "raw size/SHA pins propagated through PLAN, runner, loader, tests and outer launcher"
+    ],
+    "unbound_prefix": "/UNBOUND",
+    "actual_entry_enabled": false,
+    "stage_bindings": "PENDING_AT_FREEZE"
+  },
+  "exclusions": [
+    "machine paths and host inventories",
+    "LOCAL execution argv and logs",
+    "actual generated C++ or other generated assets",
+    "native binaries and object/archive files",
+    "tool vendor sources"
+  ],
+  "package_source_mapping": {
+    "runner_and_loader": [
+      "run_micro_gate.py",
+      "load_micro_gate.py"
+    ],
+    "initializer_contract": "init_contract.py",
+    "fixture_sources": [
+      "fixtures/tiny.sv",
+      "fixtures/main.cpp"
+    ],
+    "fixed_input_manifest": "SOURCE_INPUT_MANIFEST.json",
+    "note": "A reviewed local identity successor binds F/fixture paths and contract/manifest paths to these installed files without changing fixture or production-function bytes."
+  }
+}

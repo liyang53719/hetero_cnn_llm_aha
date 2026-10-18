@@ -1,0 +1,22 @@
+{
+  "schema": "host93-derived-tiny-independent-source-inputs-v1",
+  "files": {
+    "init_contract.py": {
+      "bytes": 5127,
+      "sha256": "d070d9a0841ea034dd684fad3ca9fd4fa32a1ed1afa1417bf4f4a88625996365"
+    },
+    "fixtures/tiny.sv": {
+      "bytes": 938,
+      "sha256": "339baf2e67c47d6f00597f6daee72f2e7b5c47ae8803dac54ff30911bcba7a85"
+    },
+    "fixtures/main.cpp": {
+      "bytes": 4269,
+      "sha256": "774064865f2e1d224363b6c63ae75dac3abe5f0afe6c05105920724fe4e161c0"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 3768,
+      "sha256": "38312f77315673329af416be2c98f37b5193839a47587320ee74a4094b306edb"
+    }
+  },
+  "cycle_boundary": "Contains only fixed files that do not reference PLAN or runner. PLAN pins this file; final MANIFEST covers the full package."
+}

@@ -1,0 +1,438 @@
+{
+  "schema": "host93-derived-seqnum-micro-portable-plan-v1",
+  "status": "PORTABLE_SOURCE_ONLY_ALL_LOCAL_BINDINGS_PENDING",
+  "actual_entry_enabled": false,
+  "parent_only_actual": true,
+  "native_executor": "reviewed local operator",
+  "independent_reviewer": "independent reviewer",
+  "scope": "Fresh explicitly derived seqnum-initialized backend and same tiny fixtures only. Original official/failure/UB assets preserved. No Host93 large input.",
+  "official_commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "official_tree": "3300b1cc13a3903fe3113ae65087ae75b2cdb2df",
+  "source_root": "/UNBOUND/official_verilator",
+  "source_qualification": {
+    "manifest": null,
+    "summary": null,
+    "verdict": null
+  },
+  "source_evidence_files": [
+    {
+      "path": "src/V3HierBlock.cpp",
+      "bytes": 21414,
+      "sha256": "6a8becc6033a0b24e5acaacdaa5e244a47cebaf17b42225c382263492b746ae5"
+    },
+    {
+      "path": "src/V3ProtectLib.cpp",
+      "bytes": 22417,
+      "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+    },
+    {
+      "path": "src/V3EmitMk.cpp",
+      "bytes": 45339,
+      "sha256": "02b6251c9c99543ba3990e08008329a568013d2ccfe40aa189702253731059fa"
+    },
+    {
+      "path": "src/V3Task.cpp",
+      "bytes": 115324,
+      "sha256": "83a39b48002fd0641645110b5aa409ac482688c7aa2c13792a15f03d2c498122"
+    },
+    {
+      "path": "src/Verilator.cpp",
+      "bytes": 36731,
+      "sha256": "b62696625680e5d50180137cfe2c6d558d36c95d30a3b296146f84c57f2ae440"
+    },
+    {
+      "path": "src/V3Options.cpp",
+      "bytes": 99474,
+      "sha256": "bdedcf7a422beb95ae8033f899fbd89c9e895147ec4aff67f5843a67988d3924"
+    },
+    {
+      "path": "src/V3Scope.cpp",
+      "bytes": 17619,
+      "sha256": "b7f422612147a55b10c5b9d76d48f82d0a98af9f3bc2219e0833716eda619228"
+    },
+    {
+      "path": "src/V3AstNodes.cpp",
+      "bytes": 173893,
+      "sha256": "e3c0b5f55cdd38735bda45c13b396b077c94b2041e8ae97358a2cd15667bfbac"
+    },
+    {
+      "path": "src/V3LinkLevel.cpp",
+      "bytes": 17582,
+      "sha256": "435aab22aef5632eaa58079eadc3ee906c5b010a23d770ed65d2fe3d19d8be5c"
+    },
+    {
+      "path": "src/V3EmitCSyms.cpp",
+      "bytes": 80745,
+      "sha256": "30928cc48b07bdfe6cfce7bb143704198af9508b2440a479fa101956a83563ec"
+    },
+    {
+      "path": "include/verilated_dpi.cpp",
+      "bytes": 33553,
+      "sha256": "0d153d1640985d6488b12c516b8a96939b46ddcc080d8efaf12faafe3d26791a"
+    },
+    {
+      "path": "include/verilated.cpp",
+      "bytes": 186133,
+      "sha256": "679b42955a06946273bbcc2ca14d16885739d223ced98ab8fe581a6b0f131d93"
+    },
+    {
+      "path": "include/verilated.h",
+      "bytes": 62071,
+      "sha256": "9ffa8ea44968c2b7767bd1fb0b7965f492e4d943014c4228601e4e91f4c426a7"
+    },
+    {
+      "path": "include/verilated.mk.in",
+      "bytes": 13590,
+      "sha256": "10fbdd26e5996d4f5713848b4accbfa0c7506a988aa403446adcba6eb181f347"
+    },
+    {
+      "path": "bin/verilator",
+      "bytes": 32346,
+      "sha256": "95ce5c7369201fce1bed21601a87d4ffc780761992b494a38579470e181525ef"
+    }
+  ],
+  "build_root": "/UNBOUND/host93_verilator_seqnum_derived_build_attempt_v1_20261018/verilator",
+  "work_root": "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018",
+  "fixtures": [
+    {
+      "path": "/UNBOUND/candidate_host93_verilator_micro_source_v1_20261018T2232/fixtures/tiny.sv",
+      "bytes": 938,
+      "sha256": "339baf2e67c47d6f00597f6daee72f2e7b5c47ae8803dac54ff30911bcba7a85"
+    },
+    {
+      "path": "/UNBOUND/candidate_host93_verilator_micro_source_v1_20261018T2232/fixtures/main.cpp",
+      "bytes": 4269,
+      "sha256": "774064865f2e1d224363b6c63ae75dac3abe5f0afe6c05105920724fe4e161c0"
+    }
+  ],
+  "published_sources": {
+    "supervisor": {
+      "path": "/UNBOUND/repo/development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2",
+      "functions": {
+        "require": {
+          "bytes": 67,
+          "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+        },
+        "save": {
+          "bytes": 179,
+          "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+        },
+        "group_state": {
+          "bytes": 190,
+          "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+        },
+        "observe_exit": {
+          "bytes": 719,
+          "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+        },
+        "bounded": {
+          "bytes": 5637,
+          "sha256": "890949ee8fcab68757fd0a1f703b34375aa672ad1be22ff5f062b6f2d1ccbe4a"
+        }
+      },
+      "repo_relative": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py"
+    },
+    "observation": {
+      "path": "/UNBOUND/repo/development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+      "bytes": 17327,
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a",
+      "functions": {
+        "proc_bytes": {
+          "bytes": 271,
+          "sha256": "ca5673af73568126a80bcf18fc97f6618fdea31d1f894dae66f3d3ba989ce4f1"
+        },
+        "proc_stat": {
+          "bytes": 483,
+          "sha256": "07b6cbe0ec743b6c5b7fc20d973ab3d7b3a85a256a4afb72db95b8859cc3d74f"
+        },
+        "sample_leader": {
+          "bytes": 1925,
+          "sha256": "eb36de77ffed0351e7193d9ad7400d5ad9c20386e420e5af7b4adbcaaf21efe8"
+        },
+        "usage": {
+          "bytes": 327,
+          "sha256": "d94e3e79ac4bac806f2c9ead6411abf9b88db58b72cc0c228bd73144270d0573"
+        }
+      },
+      "repo_relative": "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py"
+    }
+  },
+  "reused_support_candidate": {
+    "path": "/UNBOUND/repo/development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py",
+    "bytes": 28551,
+    "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+  },
+  "required_actual": {
+    "source_gate_review": null,
+    "derived_backend_build_review": null,
+    "new_backend_binary": null,
+    "derived_patch_identity": null,
+    "configured_runtime_inputs": null,
+    "host_program_identities": null
+  },
+  "previous_actual": {
+    "version": null,
+    "generate": null,
+    "compile": null,
+    "run": null
+  },
+  "phases": {
+    "version": {
+      "argv": [
+        "/UNBOUND/host93_verilator_seqnum_derived_build_attempt_v1_20261018/verilator/bin/verilator_bin",
+        "--version"
+      ],
+      "cwd": "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018",
+      "evidence_root": "/UNBOUND/host93_verilator_seqnum_micro_version_attempt_v1_20261018",
+      "total_seconds": 30,
+      "preflight_seconds": 10,
+      "work_max_seconds": 10,
+      "work_stop_absolute_offset_seconds": 20,
+      "cleanup_seconds": 5,
+      "postflight_reserved_seconds": 5,
+      "cpu_seconds": 10,
+      "as_bytes": 536870912,
+      "fsize_bytes": 4194304,
+      "tree_bytes": 1048576,
+      "log_bytes": 1048576,
+      "sample_rows": 32,
+      "file_count": 512,
+      "entry_count": 1024,
+      "expected_wall_seconds": 1,
+      "expected_peak_rss_mib": 64
+    },
+    "generate": {
+      "argv": [
+        "/UNBOUND/host93_verilator_seqnum_derived_build_attempt_v1_20261018/verilator/bin/verilator_bin",
+        "--cc",
+        "--hierarchical",
+        "--exe",
+        "--threads",
+        "1",
+        "--build-jobs",
+        "1",
+        "--verilate-jobs",
+        "1",
+        "--top-module",
+        "micro_top",
+        "--prefix",
+        "Vmicro_top",
+        "--Mdir",
+        "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018/obj",
+        "/UNBOUND/candidate_host93_verilator_micro_source_v1_20261018T2232/fixtures/tiny.sv",
+        "/UNBOUND/candidate_host93_verilator_micro_source_v1_20261018T2232/fixtures/main.cpp"
+      ],
+      "cwd": "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018",
+      "evidence_root": "/UNBOUND/host93_verilator_seqnum_micro_generate_attempt_v1_20261018",
+      "total_seconds": 120,
+      "preflight_seconds": 20,
+      "work_max_seconds": 90,
+      "work_stop_absolute_offset_seconds": 110,
+      "cleanup_seconds": 5,
+      "postflight_reserved_seconds": 5,
+      "cpu_seconds": 90,
+      "as_bytes": 1073741824,
+      "fsize_bytes": 8388608,
+      "tree_bytes": 16777216,
+      "log_bytes": 1048576,
+      "sample_rows": 122,
+      "file_count": 512,
+      "entry_count": 1024,
+      "expected_wall_seconds": 10,
+      "expected_peak_rss_mib": 256
+    },
+    "compile": {
+      "argv": [
+        "/usr/bin/make",
+        "-C",
+        "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018/obj",
+        "-f",
+        "Vmicro_top.mk",
+        "-j1",
+        "OPT_FAST=-O0",
+        "OPT_SLOW=-O0",
+        "OPT_GLOBAL=-O0",
+        "Vmicro_top"
+      ],
+      "cwd": "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018",
+      "evidence_root": "/UNBOUND/host93_verilator_seqnum_micro_compile_attempt_v1_20261018",
+      "total_seconds": 300,
+      "preflight_seconds": 40,
+      "work_max_seconds": 240,
+      "work_stop_absolute_offset_seconds": 280,
+      "cleanup_seconds": 5,
+      "postflight_reserved_seconds": 15,
+      "cpu_seconds": 240,
+      "as_bytes": 2147483648,
+      "fsize_bytes": 33554432,
+      "tree_bytes": 100663296,
+      "log_bytes": 1048576,
+      "sample_rows": 302,
+      "file_count": 512,
+      "entry_count": 1024,
+      "expected_wall_seconds": 60,
+      "expected_peak_rss_mib": 768
+    },
+    "run": {
+      "argv": [
+        "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018/obj/Vmicro_top"
+      ],
+      "cwd": "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018",
+      "evidence_root": "/UNBOUND/host93_verilator_seqnum_micro_run_attempt_v1_20261018",
+      "total_seconds": 30,
+      "preflight_seconds": 10,
+      "work_max_seconds": 10,
+      "work_stop_absolute_offset_seconds": 20,
+      "cleanup_seconds": 5,
+      "postflight_reserved_seconds": 5,
+      "cpu_seconds": 10,
+      "as_bytes": 536870912,
+      "fsize_bytes": 4194304,
+      "tree_bytes": 100663296,
+      "log_bytes": 1048576,
+      "sample_rows": 32,
+      "file_count": 512,
+      "entry_count": 1024,
+      "expected_wall_seconds": 1,
+      "expected_peak_rss_mib": 128
+    }
+  },
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C",
+    "LANG": "C",
+    "TZ": "UTC",
+    "HOME": "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018/home",
+    "TMPDIR": "/UNBOUND/host93_verilator_seqnum_micro_work_attempt_v1_20261018/tmp",
+    "SHELL": "/bin/sh",
+    "VERILATOR_ROOT": "/UNBOUND/host93_verilator_seqnum_derived_build_attempt_v1_20261018/verilator",
+    "VERILATOR_BIN": "verilator_bin",
+    "MAKE": "/usr/bin/make",
+    "CXX": "/usr/bin/g++",
+    "AR": "/usr/bin/ar",
+    "PERL": "/usr/bin/perl",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "OBJCACHE": ""
+  },
+  "timing_contract": [
+    "All offsets are measured from one stage outer entry before Python loads and preflight.",
+    "Admit no later than preflight_seconds; run for at most work_max_seconds and never beyond work_stop_absolute_offset_seconds.",
+    "The absolute work-stop offsets are not latest-spawn offsets. There is no new full work allowance after those offsets.",
+    "Retain the original bounded WNOWAIT leader anchor, owned group termination and reap, then group-absent verification; cleanup budget remains five seconds.",
+    "compile retains 15 seconds after cleanup to write/validate evidence; others reserve five seconds.",
+    "The outer wrapper must provide terminal exit and total wall receipts. A clean inner receipt without matching outer exit and elapsed bound is not acceptance."
+  ],
+  "resource_contract": [
+    "One inherited CPU selected by the already-reviewed supervisor projection; make and Verilator jobs each fixed at one.",
+    "AS, CPU and FSIZE are per process/file hard limits inherited through the owned process group, not aggregate subtree limits.",
+    "Generation deliberately includes native make hier_verilation, sibling Perl wrapper and child Verilator processes in the same owned group; it must not invoke a C++ compiler.",
+    "Aggregate output tree/log ceilings are postflight acceptance soft limits; no hard aggregate tree-space claim.",
+    "Runtime has a 96MiB retained work-tree cap inherited from compile; its 1MiB new-output/log allowance is not a 1MiB cap on the compiled tree.",
+    "Leader /proc samples identify one PID/starttime only; they do not measure child compilers' CPU/RSS.",
+    "RUSAGE_CHILDREN is read after cleanup in a dedicated stage process; maxrss is cumulative peak, not a difference or a sampled subtree peak.",
+    "Run tree inventory may retain pre-existing compile files up to32MiB; its inherited FSIZE4MiB hard limit still applies only to newly written files, and run must leave the prior work-tree inventory identical."
+  ],
+  "hierarchy_required_evidence": [
+    "Exactly one specialized micro_leaf block in child __hierMkArgs.f: original name micro_leaf, --lib-create specialized_name, --hierarchical-child 1, and decoded -GSTEP=3. Record actual specialized name rather than assuming mangling.",
+    "Vmicro_top_hier.mk exists with nonempty VM_HIER_LIBS naming a separately generated V<specialized_name>/lib<specialized_name>.a; top Vmicro_top.mk includes it.",
+    "The top args file loads the generated leaf wrapper before the original tiny.sv and identifies the specialization via --hierarchical-block.",
+    "Generated leaf .sv is a protected-library wrapper with chandle handle__V and actual create/combo_update/seq_update/final DPI calls; the top generated C++ invokes those wrapper imports.",
+    "Independent leaf generated C++ contains the sequential state transition; the top generated C++ retains boundary calls, not an inlined substitute for the leaf body.",
+    "After compile, the separate child archive exists with nonzero bytes and SHA-256. Actual log shows child compilation and top executable link. The fixed @-silent archive rule and VM_HIER_LIBS dependency explain its inclusion; absence of an echoed archiver command is not itself failure.",
+    "Snapshot size/SHA/mode of every generated artifact, selected boundary text and exact build/link log. Merely passing --hierarchical or producing correct numbers is insufficient."
+  ],
+  "dpi_and_isolation_evidence": [
+    "Explicit top-level SV exports hm_read_count, hm_read_delta, hm_set_delta have generated DPI declarations, C entrypoints, export registration and scope dispatch; record them separately from protectedlib boundary DPI.",
+    "The two Vmicro_top objects use distinct VerilatedContext objects and identical model name dual; exact top scope dual.micro_top must exist in each context and resolve to distinct pointers.",
+    "Every C++ call explicitly selects its context and DPI scope; writes alter only that top's delta, and reads agree with its public count and independent expected state.",
+    "Interleaving: A delta5 ticks17 including unsigned wrap case; B delta11 ticks32. Required checkpoint counts A137/B455. Reset A alone to7 preserves B455; destroying A must leave B readable and able to tick to469.",
+    "This tests TOP export routing plus actual leaf state reached through ordinary ports and protectedlib handles. It does not claim a direct exported function inside the leaf or arbitrary hierarchical memory DPI access."
+  ],
+  "expected_run_stdout": [
+    "HOST93_MICRO_SCOPE_OK same_name=dual.micro_top distinct_context=1 distinct_model=1 distinct_scope=1",
+    "HOST93_MICRO_DPI_OK writes=3 export_reads_checked=1",
+    "HOST93_MICRO_STATE_OK steps_a=17 steps_b=32 count_a=137 count_b=455",
+    "HOST93_MICRO_LIFETIME_OK reset_a=7 preserved_b=455 closed_a=1 continued_b=469",
+    "HOST93_MICRO_PASS"
+  ],
+  "failure_policy": [
+    "Any missing specialized block, inlined-only output, missing wrapper/archive/link, unresolved scope, runtime mismatch or unexpected output fails the corresponding phase; do not bless it as partial hierarchical success.",
+    "Keep original official tree unchanged, including V3ProtectLib.cpp's currently uninitialized m_seqnum member. Observe first result; preserve failure before any separately approved diagnosis/fix.",
+    "All new actual fields are null. A later narrow executable gate must reject those fields before source enumeration, output creation, process launch or touching any Host93 input.",
+    "Source preparation has run neither native phase nor parser/compiler syntax check; no runtime or correctness pass is claimed."
+  ],
+  "frozen_fixture_manifest": {
+    "path": "/UNBOUND/package/SOURCE_INPUT_MANIFEST.json",
+    "bytes": 786,
+    "sha256": "c49eea1de31ac85fb108e59e21e6b913b32ba58e86d059446f1e4414b8855e1b"
+  },
+  "projection_pins": {
+    "compile": {
+      "observation": {
+        "bytes": 3013,
+        "sha256": "808aed74f4293849d82258b4fe8be9c5a545ec30926ae266d8a9189f38da1531"
+      },
+      "supervisor": {
+        "bytes": 7102,
+        "sha256": "83dc93da4509d0c150ca2cf9a2ea81f80bae871d275111e3d6e2c50c32f13bf3"
+      }
+    },
+    "generate": {
+      "observation": {
+        "bytes": 3013,
+        "sha256": "1b5fa57d3789c9a5635423735d99027f0c431d80c7d2cd831509dea530b510a6"
+      },
+      "supervisor": {
+        "bytes": 7100,
+        "sha256": "8317d5b5b2db411c4e7912b6e3db3c08ff2ddaf68728782e325bd3c8f8a697e5"
+      }
+    },
+    "run": {
+      "observation": {
+        "bytes": 3012,
+        "sha256": "8dfff2f84a39e1468ac9e2e81aeddda661367a830ff2cb6c7326e414ae895d52"
+      },
+      "supervisor": {
+        "bytes": 7100,
+        "sha256": "25b0c5f1be68e945368900becc53cf4119867f959ac54f047cb7496d39580e04"
+      }
+    },
+    "version": {
+      "observation": {
+        "bytes": 3012,
+        "sha256": "8dfff2f84a39e1468ac9e2e81aeddda661367a830ff2cb6c7326e414ae895d52"
+      },
+      "supervisor": {
+        "bytes": 7100,
+        "sha256": "25b0c5f1be68e945368900becc53cf4119867f959ac54f047cb7496d39580e04"
+      }
+    }
+  },
+  "initializer_contract": {
+    "path": "/UNBOUND/package/init_contract.py",
+    "bytes": 5127,
+    "sha256": "d070d9a0841ea034dd684fad3ca9fd4fa32a1ed1afa1417bf4f4a88625996365"
+  },
+  "initializer_contract_manifest": {
+    "path": "/UNBOUND/package/SOURCE_INPUT_MANIFEST.json",
+    "bytes": 786,
+    "sha256": "c49eea1de31ac85fb108e59e21e6b913b32ba58e86d059446f1e4414b8855e1b"
+  },
+  "derived_source_expected": {
+    "bytes": 22430,
+    "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+  },
+  "original_generated_negative": {
+    "status": "LOCAL_HISTORY_ONLY_NOT_A_PRODUCTION_DEPENDENCY",
+    "bytes": 2819,
+    "sha256": "b36ecd4a846244790d934ea67be835a065fe4f879e07cef1a8194d6ffc5fbdb6"
+  },
+  "derived_build_actual_schema": {
+    "phase": "derived_incremental",
+    "verdict": "PASS_ACTUAL_DERIVED_SEQNUM_INCREMENTAL_BUILD_ONLY",
+    "actual_identity": "PENDING"
+  }
+}

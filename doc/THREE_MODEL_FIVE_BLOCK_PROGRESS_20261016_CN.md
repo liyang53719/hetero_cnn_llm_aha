@@ -693,3 +693,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：本批保存九件纯源码未绑定模板；内容独审 `28b52e1f053e3f5bbe925ab681a49e720048f002ab13a08c4cc7dacf49e70844`，20 个生产函数原字节，19+19 冷测和重定位核验通过。包内 actual 历史保持 `PENDING_AT_FREEZE`，本条只追加后来观察，不热填冻结包。
 - 边界：总 900 s、前验 180 s、工具/CPU 600 s、绝对工作最晚 780 s、清理 5 s、总后验至 900 s；CPU1/AS4GiB/FSIZE1GiB，树 768MiB 与日志 1MiB 为软验收界，采样只针对原 leader。最大预算不保证完成。
 - todo：派生实际独审后，分别绑定新版本和同 fixture/fresh root 的重新生成；目标类构造唯一 `m_seqnum{0}` 须定域验证，随后才做层级库编译、DPI 与双 handle 隔离微例。无新真实 Host/RTL 数值 PASS，完整 block 0/5；本批不含对象/PCH/二进制、大树、生成 wrapper、日志或机器库存。
+
+### 2026-10-18 23:47 UTC：派生工具构建和版本独审闭合，保存人工层级/DPI 微例源码
+
+- done：唯一构造初始化派生工具实际 outer exit 0/5.442 s，日志确认只重编 `V3ProtectLib.cpp` 与一次链接；完整实际独审 `61a4f6b18e782f8562d76b1fc77cedb22a86a0c225f900633002931b36b6a818` 核原树、fresh 复制、精确单行 patch、输出与保锚清理。新 backend 19,076,520 B/SHA256 `75dd308bde0b9cb1e64b36a03ba8be38c64c2b59087dd52300fa8b43a107aeb2`，仅授派生构建资格。
+- done：新派生 backend 的唯一版本启动 outer exit 0/0.123 s；独审 `60fcf5826de40e78db516916616926da77b2ad8b249478fd381000afbf7da022` 只授版本启动。banner 仍是官方 revision 字符串，派生身份以新 binary 与 patch 的固定 hash 区分。
+- done：本批保存 14 件纯源码、人工 fixture 和有限构造检查，内容独审 `cdd4d317bf1e5ed4d62c0c6565037ecd1db47710a48e7d529f73e7c6b45738fe` 核 329 项/27 输入；21 个生产函数、初始化合同和两份人工 fixture 原字节，三个已发布支持源按精确相对路径与 hash 引用。
+- done：微例冷测 62+62、定域合同 29+29 通过。公开负例为明确人工合成的 281 B 同形 class 文本，不携带真实生成 C++；固定 buffer 身份、隔离 flags、实际 PENDING 前拒和调用者 --repo 边界保持。
+- ongoing：新派生工具的唯一生成已观察 outer exit 0/0.241 s，在 fresh work root、同 fixture SHA 下通过真实目标 container 的定域构造初始化 `m_seqnum{0}` 检查；完整实际独审进行中，尚不授编译、运行或 Host 资格。生成、编译、运行仍逐阶段分别绑定，不能用别处字符串或初始化补偿目标构造。
+- todo：生成审闭后再确认参数特化、独立叶状态与层级库编译/实际链接，最后执行 DPI scope 与两个独立 handle 的交错状态、单侧 reset 和独立销毁微例。源码中的期望结果不是实际运行证据。
+- 边界：四阶段总窗 30/120/300/30 s、工作上限 10/90/240/10 s，原单核资源和保锚清理不变；默认模板仍 UNBOUND，全部实际槽与冻结安全史保持 `PENDING_AT_FREEZE`，本条仅追加已审构建和版本事实。
+- 边界：原官方生成失败、同资产只读静态资格及未初始化风险历史完整保留；新补丁不冒称旧补丁恢复。此批不含工具 binary、对象/归档、实际生成 C++、日志或机器库存；无真实 Host/RTL 数值新增 PASS，完整 block 0/5。

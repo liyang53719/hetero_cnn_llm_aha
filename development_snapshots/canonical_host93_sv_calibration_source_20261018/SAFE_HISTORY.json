@@ -1,0 +1,127 @@
+{
+  "actual_native_execution_by_publication_projection": false,
+  "calibration": {
+    "actual_review_manifest_sha256": null,
+    "actual_review_state": "PENDING",
+    "actual_review_summary_sha256": null,
+    "annotation": null,
+    "child_rusage": {
+      "involuntary_context_switches": 2254,
+      "major_faults": 3,
+      "maxrss_kib": 1106840,
+      "minor_faults": 300510,
+      "system_cpu_seconds": 5.708136,
+      "user_cpu_seconds": 261.502381,
+      "voluntary_context_switches": 222
+    },
+    "child_rusage_scope": "one reaped native child including preexec; not pass-specific",
+    "cleanup": {
+      "anchor_confirmed": true,
+      "cleanup_confirmed": true,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_result": "signal_sent_before_reap",
+      "reaped": true
+    },
+    "entry_to_postflight_seconds": 269.76691679099895,
+    "evidence_identity": {
+      "CHILD_USAGE.json": {
+        "bytes": 734,
+        "sha256": "e640ac3040773c21d0c513fadd4739ff38f8f554acf10419d2b95fd9a48bd073"
+      },
+      "OUTPUT_INVENTORY.json": {
+        "bytes": 1058,
+        "sha256": "af673e859320037f59bc5f70b6bb937f843b2c0357ccd2497840cfd0bf093463"
+      },
+      "RESULT.json": {
+        "bytes": 1321,
+        "sha256": "68c63799b6decb23194974be93616acef16caad1e075717ebcd7ea44be1c7278"
+      },
+      "firtool.json": {
+        "bytes": 1389,
+        "sha256": "b2ca167a3237ff6b7c73ffacdede56d1e361899352f1c7dc6569fce8805c190d"
+      },
+      "firtool.log": {
+        "bytes": 8263,
+        "sha256": "0b5ac2055259af6b0f81531fdefaad00b8ba51b555f48b09facba87ff97e6c3b"
+      }
+    },
+    "generation_independently_qualified": false,
+    "leader_sample_count": 265,
+    "log": {
+      "bytes": 8263,
+      "comb_loop_check_completion_observed": true,
+      "comb_loop_check_logged_seconds": 143.182,
+      "timing_scope": "firtool pass log elapsed; not a CHILD_USAGE allocation or independent pass timer"
+    },
+    "native_stage_seconds": 267.963335,
+    "original_outer_witness_sha256": "c84f53bbc27dfcd130b59eb1867a3f7f135274885f034750f8bf2c6fb73b1608",
+    "outer_elapsed_seconds": 269.915,
+    "outer_exit_code": 0,
+    "outer_status_source": "parent-saved original process observation",
+    "reported_final_exact_path_count": 10,
+    "result_status": "SV_EVIDENCE_PENDING_OUTER_EXIT0",
+    "result_terminal_success": false,
+    "same_sv": {
+      "bytes": 76366612,
+      "sha256": "2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61"
+    },
+    "status": "OBSERVED_OUTER_EXIT0_GENERATION_EVIDENCE_ACTUAL_REVIEW_PENDING",
+    "successful_postflight_reported": true,
+    "timed_out": false,
+    "tool_exit_code": 0
+  },
+  "calibration_budget": "One authorized observed attempt: total390/work360/latest370, CPU360, one-second no-catchup sampling capped400; AS2GiB/FSIZE128MiB/affinity1; checks and original flags retained.",
+  "calibration_source_review": {
+    "manifest_sha256": "7f212c43ee43729ab04798c8048cfbeb113ff55ae52f576e0c4a8036c93be508",
+    "summary_sha256": "eb4ae05e103c049e4da6fead7b0712d4516b9d9b6a1c61ea56c8115ae1837a29"
+  },
+  "claim_boundary": "Observed generation evidence pending independent actual review. Static same-SV structure, functional behavior and numerical qualifications remain separate.",
+  "first_attempt": {
+    "actual_review_manifest_sha256": "80f63b2bcad35941eadd57c781ca19628e86c20871ce84e8472fd616f582a828",
+    "actual_review_state": "CLOSED_FAILURE_ONLY",
+    "actual_review_summary_sha256": "9ecea09fed8d362f1af726f8b4c2f044be0f5bbbe71ac3c429e79d37953729e1",
+    "annotation_exists": false,
+    "child_reaped_exit_code": -9,
+    "child_rusage": {
+      "involuntary_context_switches": 1164,
+      "major_faults": 0,
+      "maxrss_kib": 725172,
+      "minor_faults": 188948,
+      "system_cpu_seconds": 4.533091,
+      "user_cpu_seconds": 144.053441,
+      "voluntary_context_switches": 90
+    },
+    "cleanup_confirmed": true,
+    "error_type": "TimeoutError",
+    "last_pass_completion_observed": false,
+    "last_started_pass": "firrtl-check-comb-loops",
+    "native_stage_seconds": 150.068681,
+    "outer_elapsed_seconds": 150.983,
+    "outer_exit_code": 1,
+    "review_time_original_inventory_match_not_original_postflight": true,
+    "sample_hwm_observation": "Sample53 to54 decreases from725220 to725172 KiB; reason unknown; retained as observed.",
+    "stage_deadline_message": "SV firtool_work150s deadline",
+    "status": "FAILED_SV_ATTEMPT",
+    "success_RESULT_exists": false,
+    "successful_postflight_executed": false,
+    "sv_bytes": 0,
+    "timed_out": true
+  },
+  "firtool_member": {
+    "bytes": 25009456,
+    "sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+    "version": "1.62.1"
+  },
+  "historical95_identity_inherited": false,
+  "historical_budget_basis_limit": "The95.9095s old success was a different39,466,374-byte Bench FIR db430673..., not this42,417,256-byte Host FIR; no same-input performance guarantee.",
+  "host_executed": false,
+  "numerical_qualification": false,
+  "same_fir": {
+    "bytes": 42417256,
+    "sha256": "264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a"
+  },
+  "scope": "FIRST_FAILED_HOST_SV_ATTEMPT_AND_ONE_OBSERVED_CALIBRATION_GENERATION_ONLY",
+  "source_history_frozen_actual_review_pending": true,
+  "sv_static_structure_qualification": "INCOMPLETE"
+}

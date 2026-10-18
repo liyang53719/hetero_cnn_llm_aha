@@ -1,0 +1,117 @@
+{
+  "actual_large_binary_or_FIR_read": false,
+  "actual_native_execution": false,
+  "added_top_level_functions": [
+    "calibrated_sampler"
+  ],
+  "changed_top_level_functions": [
+    "load_gate",
+    "native_supervisor",
+    "execute"
+  ],
+  "existing_plan_fields_changed_only": {
+    "entry_total_seconds": {
+      "after": 390,
+      "before": 180
+    },
+    "postflight_deadline_offset_seconds": {
+      "after": 390,
+      "before": 180
+    },
+    "work_latest_offset_seconds": {
+      "after": 370,
+      "before": 160
+    },
+    "work_max_seconds": {
+      "after": 360,
+      "before": 150
+    }
+  },
+  "native_AS_unchanged_bytes": 2147483648,
+  "native_CPU_hard_delta_seconds": [
+    150,
+    360
+  ],
+  "native_FSIZE_unchanged_bytes": 134217728,
+  "native_affinity_unchanged_count": 1,
+  "native_lifecycle_functions_unchanged": [
+    "require",
+    "save",
+    "group_state",
+    "observe_exit",
+    "bounded"
+  ],
+  "native_supervisor_projection_sha256": "01f139b746155b307a094fba8e8faa6dc66c0fb8a93184525ac2836f2413fffe",
+  "new_plan_metadata": "calibration: one attempt; CPU360; sampler400; precise prior reviews; no native retry/budget expansion after another timeout",
+  "old_failed_actual_modified": false,
+  "predecessor": {
+    "all_13_files_unchanged_verified": true,
+    "manifest": {
+      "bytes": 2338,
+      "sha256": "1059e31b33d6ed273ff19f422020512559c73ca2fffda4c928ca02475f97c6a0"
+    }
+  },
+  "prior_bound_source_review": {
+    "files": {
+      "MANIFEST.json": {
+        "bytes": 1277,
+        "sha256": "301a4e84b704153b4728db987ba8f915ffcb1483c4724138403e40b313cba979"
+      },
+      "SUMMARY.json": {
+        "bytes": 1480,
+        "sha256": "8be17418fc5741b98f6e6c968df7462a37d68942321cb7d66387d89917306e65"
+      }
+    }
+  },
+  "prior_failed_actual_review": {
+    "files": {
+      "MANIFEST.json": {
+        "bytes": 1322,
+        "sha256": "80f63b2bcad35941eadd57c781ca19628e86c20871ce84e8472fd616f582a828"
+      },
+      "SUMMARY.json": {
+        "bytes": 2004,
+        "sha256": "9ecea09fed8d362f1af726f8b4c2f044be0f5bbbe71ac3c429e79d37953729e1"
+      }
+    }
+  },
+  "publication_template_delta": {
+    "cold_entrypoint": "Only matching raw execution-source SHA changed; all 29 cold test logic unchanged.",
+    "new_local_binding_requires_source_review": true,
+    "plan": "Machine paths and new actual tool receipts/claims are PENDING. Same-FIR identity, official tool identity, fixed structure-review provenance, calibration budget/sampler boundaries and prior review hashes remain.",
+    "source_execution": "Only PLAN_SHA literal changed; reverse replacement restores complete reviewed source.",
+    "unbound_template_cannot_execute": true
+  },
+  "sampler_projection": {
+    "catchup": false,
+    "interval_seconds": 1,
+    "jsonl_flush_unchanged": true,
+    "native_execution": false,
+    "origin_function_bytes": 1925,
+    "origin_function_sha256": "eb36de77ffed0351e7193d9ad7400d5ad9c20386e420e5af7b4adbcaaf21efe8",
+    "origin_module_bytes": 17327,
+    "origin_module_sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a",
+    "pid_and_starttime_checks_unchanged": true,
+    "proc_helpers_unchanged": true,
+    "projected_function_bytes": 1925,
+    "projected_function_sha256": "8bd920b14de23636677f62682ad708a2f1750cad5baf1dd3a87a146f25eb4be5",
+    "replacement": {
+      "state['count']<340": "state['count']<400"
+    },
+    "reverse_projection_verified": true,
+    "scope": "SAMPLER_ONLY_SOURCE_PROJECTION",
+    "source_buffer_reused": true,
+    "source_bytecode_not_loaded": true,
+    "strict_hwm_monotonicity_required": false
+  },
+  "schema": "host93-single-observed-sv-calibration-source-delta-v1",
+  "source_delta_boundaries": [
+    "Import ast; add fixed original sample function SHA constant.",
+    "load_gate retains the exact already-verified calibration raw bytes for projection; no second read or bytecode load.",
+    "calibrated_sampler extracts only the unique sample_leader source span, verifies bytes/SHA, performs one reversible count340-to400 substitution and compiles with copied existing globals.",
+    "native_supervisor changes only sampler callback binding and comments; lifecycle projection bytes, sample state and native AS stay unchanged.",
+    "execute changes only t0 total/latest, tool wall and CPU360, phase labels and acceptance total390.",
+    "PLAN_SHA reflects four budget edits and calibration prerequisite/policy metadata.",
+    "Cold source pin and original budget expectations updated; six pure/mock sampler tests appended."
+  ]
+}

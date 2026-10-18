@@ -1,0 +1,50 @@
+{
+  "cold_logic_unchanged": true,
+  "execution_logic_unchanged": true,
+  "original_bound_gate": {
+    "bytes": 19685,
+    "sha256": "548d015e79d99b828521d2c24e5f1eea1f8326d03b56664e46edf60ac0fa8316"
+  },
+  "original_bound_manifest_sha256": "95600ad1ae0ab60a3fb8bcbce0386f65a8df8cdc43542043eeb5795fb9199911",
+  "original_plan_sha256": "8ab3465d1a99a5d25921c92c712b25f9e488858cdb89faa986220fac3d9bae7e",
+  "projection_cold": {
+    "logs_included": false,
+    "native_or_network_started": false,
+    "normal_log_sha256": "4dfa36bf77d5ffcbb5a749bfcb638c31331ccb47c2c630bcb8cdaf79dc8e6a0a",
+    "normal_tests": 29,
+    "optimized_log_sha256": "98bdbb7b36c8cb74c0e5686fed4881962847eb32729443482585e4a39e8b9d06",
+    "optimized_tests": 29,
+    "state": "PASS_TINY_AND_MOCK_ONLY"
+  },
+  "sampler_projection": {
+    "catchup": false,
+    "interval_seconds": 1,
+    "jsonl_flush_unchanged": true,
+    "native_execution": false,
+    "origin_function_bytes": 1925,
+    "origin_function_sha256": "eb36de77ffed0351e7193d9ad7400d5ad9c20386e420e5af7b4adbcaaf21efe8",
+    "origin_module_bytes": 17327,
+    "origin_module_sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a",
+    "pid_and_starttime_checks_unchanged": true,
+    "proc_helpers_unchanged": true,
+    "projected_function_bytes": 1925,
+    "projected_function_sha256": "8bd920b14de23636677f62682ad708a2f1750cad5baf1dd3a87a146f25eb4be5",
+    "replacement": {
+      "state['count']<340": "state['count']<400"
+    },
+    "reverse_projection_verified": true,
+    "scope": "SAMPLER_ONLY_SOURCE_PROJECTION",
+    "source_buffer_reused": true,
+    "source_bytecode_not_loaded": true,
+    "strict_hwm_monotonicity_required": false
+  },
+  "source_review_manifest_sha256": "7f212c43ee43729ab04798c8048cfbeb113ff55ae52f576e0c4a8036c93be508",
+  "source_review_summary_sha256": "eb4ae05e103c049e4da6fead7b0712d4516b9d9b6a1c61ea56c8115ae1837a29",
+  "status": "UNBOUND_SOURCE_REPRODUCTION_TEMPLATE",
+  "supervisor_projection_sha256": "01f139b746155b307a094fba8e8faa6dc66c0fb8a93184525ac2836f2413fffe",
+  "template_gate": {
+    "bytes": 19685,
+    "sha256": "b74720390872c6d42502a7f5d2f4d4978e00c8f3f37d14bed80951cdbad5cbc0"
+  },
+  "template_plan_sha256": "524da4e6b0d0e69d1ee31e9ceb1218925bd991b3c323e3c73cf3b39f307606ad"
+}

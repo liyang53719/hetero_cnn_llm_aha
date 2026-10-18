@@ -1,0 +1,27 @@
+{
+  "actual_contract": "First create a separate locally bound plan/source successor, recompute raw pins, cold-test and obtain independent SOURCE review. This unbound template refuses before actual output creation.",
+  "actual_template_command": "python -I -S -B run_sv_gate.py --repo <repository> --fir <fixed-FIR> --firtool-attempt <new-acquisition> --firtool-review <new-tool-review> --structure-review <same-FIR-review> --output <fresh-SV-output> --execute-reviewed-sv",
+  "actual_template_executable_now": false,
+  "cold_commands": [
+    "python -I -S -B test_sv_gate_cold.py --repo <repository>",
+    "python -I -S -B -O test_sv_gate_cold.py --repo <repository>"
+  ],
+  "dependency_files": [
+    "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+    "development_snapshots/canonical_host93_observation_source_20261018/calibration/CLASS_GATE_PLAN.json",
+    "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+    "candidates/qwen2_resident_matrix/host93_source_recovery/SOURCE_REPLAY_PLAN.json",
+    "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/jar87.json",
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/compile_only.py",
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/dependency_pins.json"
+  ],
+  "dependency_scope": "Only pinned Python source and project identity descriptors are read. No JARs, classes, Java or old generated model is loaded.",
+  "destination": "development_snapshots/canonical_host93_sv_calibration_source_20261018",
+  "existing_repository_dependencies": [
+    "development_snapshots/canonical_host93_observation_source_20261018/calibration",
+    "development_snapshots/canonical_runtime_ram_source_20261018",
+    "candidates/qwen2_resident_matrix/host93_source_recovery",
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile"
+  ],
+  "source_preflight_command": "python -I -S -B run_sv_gate.py --repo <repository>"
+}

@@ -1,0 +1,22 @@
+{
+  "SV_structure_runtime_and_numeric_qualification_are_separate": true,
+  "budget_or_flags_change_requires_separate_approval": true,
+  "calibration_attempt_limit": 1,
+  "must_bind": [
+    "The exact same-FIR local path matching preserved bytes/SHA.",
+    "New local acquisition and independent actual-review paths for the fixed official member.",
+    "New RESULT.json, artifacts/MEMBER.json and artifacts/ACQUISITION.json exact bytes/SHA.",
+    "New tool actual MANIFEST.json/SUMMARY.json exact bytes/SHA and acceptance claims.",
+    "Set firtool.actual_review_state to CLOSED_FIXED_FIRTOOL_MEMBER_ONLY only after that real actual review.",
+    "Local path containing the pinned same-FIR structure review; if it must be regenerated, independently review that same-FIR result and bind new exact review file pins in a separately reviewed source successor.",
+    "The prior failed-actual and bound-SOURCE review paths are historical provenance slots only. Do not treat preserved hashes or this template as permission for a new local native attempt; obtain separate authorization and reviewed local binding.",
+    "Recompute SV_PLAN SHA and only corresponding execution PLAN_SHA/cold source pin; freeze successor and review delta.",
+    "Use a fresh private output and preserve original outer exit, elapsed, cleanup and complete inventory for independent generation-only actual review."
+  ],
+  "new_private_snapshot_mode_octal": "0700",
+  "on_another_timeout": "STOP_NATIVE_RETRIES_AND_BUDGET_EXTENSION; inspect pass source complexity read-only",
+  "original_binary_mode_octal": "0600",
+  "same_FIR_and_official_tool_identity_must_not_be_relaxed": true,
+  "status": "UNBOUND_TEMPLATE_DO_NOT_EXECUTE",
+  "unrelated_old_same_sha_binary_is_not_new_actual_evidence": true
+}

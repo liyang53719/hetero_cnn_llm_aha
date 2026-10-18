@@ -1,0 +1,137 @@
+{
+  "budgets": {
+    "address_space_bytes": 2147483648,
+    "annotation_acceptance_soft_cap_bytes": 33554432,
+    "cleanup_seconds": 5,
+    "cpu_count": 1,
+    "entry_total_seconds": 390,
+    "inventory_entry_count_cap": 64,
+    "inventory_file_count_cap": 32,
+    "log_acceptance_soft_cap_bytes": 2097152,
+    "per_file_hard_cap_bytes": 134217728,
+    "postflight_deadline_offset_seconds": 390,
+    "preflight_seconds": 10,
+    "tree_acceptance_soft_cap_bytes": 268435456,
+    "work_latest_offset_seconds": 370,
+    "work_max_seconds": 360
+  },
+  "calibration": {
+    "hwm_strict_monotonicity_not_required": true,
+    "leader_sample_interval_seconds": 1,
+    "leader_sample_max_rows": 400,
+    "leader_sample_schedule": "no catchup; next=observed_now+1",
+    "native_cpu_hard_seconds": 360,
+    "on_another_timeout": "STOP_NATIVE_RETRIES_AND_BUDGET_EXTENSION; inspect pass source complexity read-only",
+    "previous_bound_source_review": {
+      "files": {
+        "MANIFEST.json": {
+          "bytes": 1277,
+          "sha256": "301a4e84b704153b4728db987ba8f915ffcb1483c4724138403e40b313cba979"
+        },
+        "SUMMARY.json": {
+          "bytes": 1480,
+          "sha256": "8be17418fc5741b98f6e6c968df7462a37d68942321cb7d66387d89917306e65"
+        }
+      },
+      "path": "PENDING"
+    },
+    "previous_failure_review": {
+      "files": {
+        "MANIFEST.json": {
+          "bytes": 1322,
+          "sha256": "80f63b2bcad35941eadd57c781ca19628e86c20871ce84e8472fd616f582a828"
+        },
+        "SUMMARY.json": {
+          "bytes": 2004,
+          "sha256": "9ecea09fed8d362f1af726f8b4c2f044be0f5bbbe71ac3c429e79d37953729e1"
+        }
+      },
+      "path": "PENDING"
+    },
+    "single_new_actual_attempt_limit": 1
+  },
+  "fir": {
+    "bytes": 42417256,
+    "origin_path": "PENDING",
+    "sha256": "264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a"
+  },
+  "firtool": {
+    "actual_review_state": "PENDING",
+    "archive_sha256": "63acdcb58ed12d4c1aa0ecdedc6e2425a252e94eefb75df9253c118d7d222039",
+    "attempt_files": {
+      "RESULT.json": {
+        "bytes": "PENDING",
+        "sha256": "PENDING"
+      },
+      "artifacts/ACQUISITION.json": {
+        "bytes": "PENDING",
+        "sha256": "PENDING"
+      },
+      "artifacts/MEMBER.json": {
+        "bytes": "PENDING",
+        "sha256": "PENDING"
+      }
+    },
+    "attempt_path": "PENDING",
+    "bytes": 25009456,
+    "member_name": "org.chipsalliance/llvm-firtool/linux-x64/bin/firtool",
+    "original_mode_octal": "0600",
+    "relative_binary": "artifacts/firtool",
+    "review_files": {
+      "MANIFEST.json": {
+        "bytes": "PENDING",
+        "sha256": "PENDING"
+      },
+      "SUMMARY.json": {
+        "bytes": "PENDING",
+        "sha256": "PENDING"
+      }
+    },
+    "review_path": "PENDING",
+    "review_summary_claims": "PENDING",
+    "sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+    "snapshot_execute_mode_octal": "0700",
+    "version": "1.62.1"
+  },
+  "flags": [
+    "-format=fir",
+    "-o",
+    "-warn-on-unprocessed-annotations",
+    "-output-annotation-file",
+    "--preserve-values=all",
+    "-disable-all-randomization",
+    "--verbose-pass-executions"
+  ],
+  "output_shape": {
+    "maximum_annotation_files": 1,
+    "optional": "rtl/circt.anno.json",
+    "required": "rtl/HostBlockCollection.sv"
+  },
+  "retry": false,
+  "schema": "host93-single-sv-generation-source-v1",
+  "scope": "RTL_GENERATION_AND_COMPLETE_FINITE_INVENTORY_ONLY",
+  "stage_claims": {
+    "historical95_identity_inherited": false,
+    "host_executed": false,
+    "numerical_qualification": false,
+    "sv_static_structure_qualification": "INCOMPLETE_REQUIRES_SAME_SV_HOST83_RESOURCE8_TAP_REVIEW"
+  },
+  "structure_review": {
+    "files": {
+      "FIR_CURRENT_IDENTITY.json": {
+        "bytes": 493,
+        "sha256": "0298df476f8b48f096416e7cd691639865aea760941afac52d36bc47724853e2"
+      },
+      "MANIFEST.json": {
+        "bytes": 1775,
+        "sha256": "9364010b3d9008065a85ba7ed77c1f5a31cc86f8b471f687a7b2c9530a47cd1e"
+      },
+      "SUMMARY.json": {
+        "bytes": 2439,
+        "sha256": "a6a0c9abc763d77f6934e62c08669f92db65b5c9d7b182ca9e495f28e24f49b4"
+      }
+    },
+    "path": "PENDING",
+    "state": "CLOSED_CHIRRTL_STATIC_STRUCTURE_ONLY"
+  }
+}

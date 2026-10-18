@@ -1,0 +1,54 @@
+{
+  "files": {
+    "HISTORICAL_SAFE_SUMMARY.json": {
+      "bytes": 2063,
+      "sha256": "5c19e6388c4dbb92a1dafa4a1121206785c2de49c2aeaf45e11fd2be16030528"
+    },
+    "INSTALL_MAP.json": {
+      "bytes": 2181,
+      "sha256": "bcafe8af913e3ff31fba79e122e0eddc6ed928fdef71284fba9932336db2c0de"
+    },
+    "README.md": {
+      "bytes": 4727,
+      "sha256": "d11818271ff04c4851d5d421e1ccca24e10c60ff1f0bdc7b566eab31e8aab9af"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 2455,
+      "sha256": "54f12b5449ab96f6a29d75f4d90e2509d6502a8fbd8716cdcefd10fc26aa29b2"
+    },
+    "calibration/CLASS_GATE_PLAN.json": {
+      "bytes": 2097,
+      "sha256": "04392af34006c55a086cd0da3f550a956db81e0483943be959d9458de1675fe7"
+    },
+    "calibration/OFFICIAL_SOURCE_PINS.json": {
+      "bytes": 3457,
+      "sha256": "cd228c84876ef2fcb1ed2710a97c61e3dc1d5399954a873dc9e02f50ae174889"
+    },
+    "calibration/SUPERVISOR_DELTA.json": {
+      "bytes": 1739,
+      "sha256": "58150182e6e1de5a656c8a92b3ca4a2090c3595fcb6352f056645faceda1ae33"
+    },
+    "calibration/VERBOSE_EVIDENCE.md": {
+      "bytes": 3483,
+      "sha256": "306f671c77ba1114cd546b3e82bf0bc862edf3a927970f29284d657499a47553"
+    },
+    "calibration/run_class_gate.py": {
+      "bytes": 17327,
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a"
+    },
+    "calibration/test_class_gate_cold.py": {
+      "bytes": 16337,
+      "sha256": "73538fc8b64cfc98e4c180fe870780000992e6f7a1ff41fa9699f067bc179769"
+    },
+    "startup/run_startup_probe.py": {
+      "bytes": 6281,
+      "sha256": "7f7bdac94d7970c55a9fb81e29d372f8b3421931bd980e633f69c9e52d93603a"
+    },
+    "startup/test_startup_cold.py": {
+      "bytes": 5693,
+      "sha256": "2d42a13779c8628f58930b78454ac971d7b79ebc56febd86b1d5af5ae1d56f60"
+    }
+  },
+  "schema": 1,
+  "scope": "PURE_PROJECT_SOURCE_PROJECTION_STARTUP_AND_CALIBRATION"
+}

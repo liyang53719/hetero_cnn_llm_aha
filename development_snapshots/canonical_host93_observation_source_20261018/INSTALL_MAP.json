@@ -1,0 +1,25 @@
+{
+  "external_project_source_directories": [
+    "development_snapshots/canonical_host93_execution_source_20261018/class_compile",
+    "development_snapshots/canonical_runtime_ram_source_20261018",
+    "candidates/qwen2_resident_matrix/host93_source_recovery",
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile"
+  ],
+  "files": {
+    "HISTORICAL_SAFE_SUMMARY.json": "development_snapshots/canonical_host93_observation_source_20261018/HISTORICAL_SAFE_SUMMARY.json",
+    "INSTALL_MAP.json": "development_snapshots/canonical_host93_observation_source_20261018/INSTALL_MAP.json",
+    "MANIFEST.json": "development_snapshots/canonical_host93_observation_source_20261018/MANIFEST.json",
+    "README.md": "development_snapshots/canonical_host93_observation_source_20261018/README.md",
+    "SOURCE_PROVENANCE.json": "development_snapshots/canonical_host93_observation_source_20261018/SOURCE_PROVENANCE.json",
+    "calibration/CLASS_GATE_PLAN.json": "development_snapshots/canonical_host93_observation_source_20261018/calibration/CLASS_GATE_PLAN.json",
+    "calibration/OFFICIAL_SOURCE_PINS.json": "development_snapshots/canonical_host93_observation_source_20261018/calibration/OFFICIAL_SOURCE_PINS.json",
+    "calibration/SUPERVISOR_DELTA.json": "development_snapshots/canonical_host93_observation_source_20261018/calibration/SUPERVISOR_DELTA.json",
+    "calibration/VERBOSE_EVIDENCE.md": "development_snapshots/canonical_host93_observation_source_20261018/calibration/VERBOSE_EVIDENCE.md",
+    "calibration/run_class_gate.py": "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+    "calibration/test_class_gate_cold.py": "development_snapshots/canonical_host93_observation_source_20261018/calibration/test_class_gate_cold.py",
+    "startup/run_startup_probe.py": "development_snapshots/canonical_host93_observation_source_20261018/startup/run_startup_probe.py",
+    "startup/test_startup_cold.py": "development_snapshots/canonical_host93_observation_source_20261018/startup/test_startup_cold.py"
+  },
+  "repository_destination": "development_snapshots/canonical_host93_observation_source_20261018",
+  "schema": 1
+}

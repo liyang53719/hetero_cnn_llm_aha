@@ -1,0 +1,52 @@
+{
+  "actual_stage_qualification": "PENDING_PARENT_EXECUTION_AND_REVIEW",
+  "child_rusage_on_failure": true,
+  "class_tree_acceptance_soft_cap_bytes": 67108864,
+  "cleanup_seconds": 5,
+  "compile_max_seconds": 300,
+  "cpu_count": 1,
+  "emitter_execution": false,
+  "entry_total_seconds": 330,
+  "jvm_address_space_bytes": 4294967296,
+  "jvm_heap_bytes": 1073741824,
+  "leader_sample_interval_seconds": 1,
+  "leader_sample_line_max_bytes": 2048,
+  "leader_sample_max_rows": 340,
+  "log_acceptance_soft_cap_bytes": 2097152,
+  "per_file_hard_cap_bytes": 50331648,
+  "phase_complete_trace_guaranteed": false,
+  "postflight_deadline_offset_seconds": 330,
+  "preflight_deadline_offset_seconds": 20,
+  "project_files": {
+    "command_provenance": {
+      "bytes": 5903,
+      "repository_path": "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/compile_only.py",
+      "sha256": "4d3e306a867c34a876bfa35e7dc1c465722b8f9f45ce46f59fad151c18cebb7c"
+    },
+    "dependency_pins": {
+      "bytes": 12370,
+      "repository_path": "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/dependency_pins.json",
+      "sha256": "cb1b5f534bacd4ed929d11d95e1ae5894296181a2c3cab4efc950533e36da01b"
+    },
+    "jar_plan": {
+      "bytes": 37188,
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/jar87.json",
+      "sha256": "8d571b869c4ade3e2bc252c9d694dab0e61029cb611bce8cbfcd317584e08b5e"
+    },
+    "source_plan": {
+      "bytes": 118060,
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/SOURCE_REPLAY_PLAN.json",
+      "sha256": "963b338d5ba80aaf6e16f05c697fd62a448ab2a9dbcc96d36d49c4b83b26c2e2"
+    },
+    "supervisor": {
+      "bytes": 16693,
+      "repository_path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    }
+  },
+  "retry": false,
+  "schema": 1,
+  "scope": "NEW_HOST93_CLASS_CALIBRATION_SOURCE_CANDIDATE",
+  "verbose": true,
+  "work_deadline_offset_seconds": 320
+}

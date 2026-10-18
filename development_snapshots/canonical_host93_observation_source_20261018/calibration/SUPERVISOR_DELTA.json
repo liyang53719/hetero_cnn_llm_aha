@@ -1,0 +1,35 @@
+{
+  "bounded_only_delta": "TimeoutError included in timed_out classification; entire cleanup body identical",
+  "function_hashes": {
+    "bounded": {
+      "new_sha256": "3e867465d9d8cd6850915353f65c5259b5acd26d134288fa9e4be724448f4567",
+      "prior_sha256": "a81ba27bc1fd12179299611d1e387fdb946e844e074320f70afc2faab954d713"
+    },
+    "group_state": {
+      "new_sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0",
+      "prior_sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+    },
+    "observe_exit": {
+      "new_sha256": "0361df3be4a9d296327f4b11038c624fefdd7345ede97eacd1d6b12361f12d7d",
+      "prior_sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+    },
+    "require": {
+      "new_sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6",
+      "prior_sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+    },
+    "save": {
+      "new_sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5",
+      "prior_sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+    }
+  },
+  "new_projection_sha256": "091e5d8e5588ee40576de366998e06be4357a2714a23d6be247015f79ddbf9e1",
+  "observe_exit_only_delta": "original WNOWAIT event PID check then one rate-limited leader sampler call",
+  "original_CLASS_projection_sha256": "bec911354938d955cf16fa808ec346a9f38604e149f00eaa9efa594468d0840f",
+  "unchanged_functions": [
+    "require",
+    "save",
+    "group_state"
+  ],
+  "usage_function_exact_reuse_sha256": "d94e3e79ac4bac806f2c9ead6411abf9b88db58b72cc0c228bd73144270d0573",
+  "usage_source_file_sha256": "7f7bdac94d7970c55a9fb81e29d372f8b3421931bd980e633f69c9e52d93603a"
+}

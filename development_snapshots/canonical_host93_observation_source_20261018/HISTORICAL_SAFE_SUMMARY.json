@@ -1,0 +1,50 @@
+{
+  "calibration": {
+    "actual_result": null,
+    "actual_state": "PENDING_ACTUAL_TERMINAL_AND_INDEPENDENT_REVIEW",
+    "all_phase_trace_guaranteed": false,
+    "class_qualification": false,
+    "failure_rusage_unconditional_guarantee": false,
+    "host_qualification": false,
+    "rtl_qualification": false,
+    "source_cold_checks_normal": 23,
+    "source_cold_checks_optimized": 23,
+    "source_review_manifest_sha256": "cad7a21722161154e6c94cb2549b73e139d22d23c6089c7eeb06957a20b8ff03",
+    "source_review_verdict": "GO_LIMITED_ONE_OBSERVED_CLASS_CALIBRATION_SOURCE",
+    "verbose_log_fits_2MiB_proved": false
+  },
+  "historical95_identity_inherited": false,
+  "original_120_second_class_failure_remains_failed": true,
+  "schema": 1,
+  "startup": {
+    "independent_input_reverification_performed": true,
+    "modes": {
+      "java-version": {
+        "child_peak_rss_kib": 28612,
+        "child_seconds_including_cleanup": 0.167657,
+        "child_system_cpu_seconds": 0.099344,
+        "child_user_cpu_seconds": 0.043504,
+        "cleanup_confirmed": true,
+        "outer_exit": 0,
+        "outer_seconds": 0.323,
+        "qualification": "PASS_ACTUAL_FIXED_VERSION_STARTUP_ONLY"
+      },
+      "scala-version": {
+        "child_peak_rss_kib": 90604,
+        "child_seconds_including_cleanup": 1.770542,
+        "child_system_cpu_seconds": 0.41237199999999996,
+        "child_user_cpu_seconds": 1.347912,
+        "cleanup_confirmed": true,
+        "outer_exit": 0,
+        "outer_seconds": 2.433,
+        "qualification": "PASS_ACTUAL_FIXED_VERSION_STARTUP_ONLY"
+      }
+    },
+    "qualification": "PASS_ACTUAL_TWO_FIXED_VERSION_STARTUPS_ONLY",
+    "review_manifest_sha256": "6ed2b4db87b684d429daffc4c8c57240a107c5d45bb917538b27c1524af7e267",
+    "runtime_input_postflight_executed_by_probe": false,
+    "rusage_scope": "one dedicated process and one reaped child, including preexec; absolute Linux maxRSS, not a delta",
+    "startup_does_not_identify_prior_compile_phase": true
+  },
+  "status": "SOURCE_ONLY_REPRODUCTION_WITH_SAFE_HISTORICAL_SUMMARY"
+}

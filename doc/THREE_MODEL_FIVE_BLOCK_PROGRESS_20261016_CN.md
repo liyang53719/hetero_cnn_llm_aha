@@ -563,3 +563,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：保存23件纯复现源码/测试/安全摘要，三个执行入口代码不改；portable纯mock普通/优化各34项通过。排除本地路径绑定、机器身份清单、日志、JAR、class和生成源码树。原失败现场保留，无自动重试。
 - ongoing：先以同Java/AS/heap/CPU的两个极小版本启动探针补真实CPU/RSS与启动证据，各子工作不超过10秒；未据此授CLASS或RTL资格。
 - todo：须先诊断并另核有界CLASS后继，随后才是CHIRRTL/SV/真实ABI/Host运行；旧N0会话终态未知、完整27尚缺、完整block仍0/5。
+
+
+### 2026-10-18 13:22 UTC：启动实际核验与可观测CLASS校准源码持久化
+
+- done：同Java/heap1GiB/AS4GiB/单CPU的Java与Scala版本入口分别outer退出0、0.323秒/2.433秒，固定版本21.0.12.1/2.13.16与87项classpath身份、原锚清理独审通过。
+- done：两个专用child全生命周期实际user/system CPU分别0.043504/0.099344秒与1.347912/0.412372秒，绝对峰值RSS为28,612/90,604KiB，含preexec；这些观测不回填旧CLASS编译阶段或峰值。
+- done：保存13件纯源码与冷测/公开官方来源依据，8件执行相关原件逐字继承。startup安全摘要已有实际审；校准摘要保留冻结时PENDING/null，不热改历史候选。
+- done：新校准门只增无去优化作用的-verbose、每秒原leader身份核验CPU/RSS/HWM日志及终态getrusage；原WNOWAIT清理保持。330秒总窗/最多300秒compile、heap1GiB/AS4GiB/单CPU，普通/优化各23项纯mock通过。
+- ongoing：一次新校准已保存outer退出0、279.264秒和562个class/9,653,495B，当前交独立实际库存与资源审；此处先记录原执行观察，尚不以源码包或孤立RESULT授CLASS资格。
+- todo：独审后再规划CHIRRTL、SV和真实Host接口恢复；verbose仅保证已发进度逐行flush，不保证每phase或日志必在2MiB内。旧120秒FAIL保留，07:44丢失前N0终态未知，完整block仍0/5。

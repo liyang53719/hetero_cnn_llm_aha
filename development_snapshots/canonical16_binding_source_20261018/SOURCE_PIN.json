@@ -1,0 +1,47 @@
+{
+  "dependency_repository_commit": "bc36afdfe4fcb7b6f85da33ef49aaff93932a628",
+  "dependency_repository_tree": "9547e4e3bac678822a37e701d459a65526a82f4d",
+  "repository_commit": "9f1ca820c6d2ca241eea9bbd38457f60849994b2",
+  "repository_source_files": [
+    {
+      "bytes": 14530,
+      "git_blob": "79830251dfcffdd26741d62cda494b64584ad8c5",
+      "path": "development_snapshots/canonical_payload_identity_source_20261018/INPUT_IDENTITY.json",
+      "sha256": "f5fd835b06cf76b28c9dcc22db6eb2f919de1315420fc54ff23033c2b3fe1d98"
+    },
+    {
+      "bytes": 15795,
+      "git_blob": "d56f9994384b661f3fda3a68e623c987d5e2b40e",
+      "path": "development_snapshots/canonical_host_metadata_source_20261018/EXPECTED_LAYOUT.json",
+      "sha256": "4ededb349c9206841e464f786c8b64d8744de60d789150ce533e17fe544bc7a7"
+    },
+    {
+      "bytes": 8805,
+      "git_blob": "69e868efcbe5579b711b831fafa0d0528dbe3658",
+      "path": "development_snapshots/canonical_same_ram_source_20261018/initialization_ram.hpp",
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    }
+  ],
+  "repository_tree": "ec9c2637d5e675fff57693d3b2fe71eee46323b1",
+  "schema": 1,
+  "unchanged_dependencies": {
+    "initialization_ram.hpp": {
+      "bytes": 8805,
+      "git_blob": "69e868efcbe5579b711b831fafa0d0528dbe3658",
+      "published_origin_path": "development_snapshots/canonical_same_buffer_loader_source_20261018/initialization_ram.hpp",
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "same_buffer_loader.hpp": {
+      "bytes": 7998,
+      "git_blob": "49f2a1278c26bb99c6edaa5421dbf94d18c96b8f",
+      "published_origin_path": "development_snapshots/canonical_same_buffer_loader_source_20261018/same_buffer_loader.hpp",
+      "sha256": "309cb1be6f126c1d32eae855da4bedacfb1a5ef45ca6ab0f7f29bfa7c81fc88a"
+    },
+    "sha256.hpp": {
+      "bytes": 4541,
+      "git_blob": "9b0832a61695ec6fa0f69918636f544703167774",
+      "published_origin_path": "development_snapshots/canonical_same_buffer_loader_source_20261018/sha256.hpp",
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    }
+  }
+}

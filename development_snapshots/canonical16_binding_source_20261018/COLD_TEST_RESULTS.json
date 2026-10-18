@@ -1,0 +1,36 @@
+{
+  "canonical_payload_loaded": false,
+  "ddr_permissions_established": false,
+  "factory_called": false,
+  "native_executed": false,
+  "normal_tests": 10,
+  "optimized_tests": 10,
+  "runs": [
+    {
+      "command": "python3 -I -S -B verify_binding.py --repo REPO",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"backing_arrays_bytes\": 426947200, \"binding_sha256\": \"5b090ba3ee4b6e90d0010030a9593149a5c054310d6548c7fe7497da7c58c35d\", \"canonical_payload_loaded\": false, \"ddr_permissions_established\": false, \"factory_called\": false, \"inputs\": 16, \"launch_admission\": false, \"native_executed\": false, \"payload_bytes\": 94920448, \"ram_bytes\": 213473600, \"reference_payloads_read\": false, \"regions\": 4, \"reservations\": 35, \"source_buffers_hashed_and_parsed_same\": true, \"status\": \"PASS_SOURCE_ONLY_CANONICAL16_BINDING\", \"whole_repository_identity_verified\": false}\n"
+    },
+    {
+      "command": "python3 -I -S -B -O verify_binding.py --repo REPO",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"backing_arrays_bytes\": 426947200, \"binding_sha256\": \"5b090ba3ee4b6e90d0010030a9593149a5c054310d6548c7fe7497da7c58c35d\", \"canonical_payload_loaded\": false, \"ddr_permissions_established\": false, \"factory_called\": false, \"inputs\": 16, \"launch_admission\": false, \"native_executed\": false, \"payload_bytes\": 94920448, \"ram_bytes\": 213473600, \"reference_payloads_read\": false, \"regions\": 4, \"reservations\": 35, \"source_buffers_hashed_and_parsed_same\": true, \"status\": \"PASS_SOURCE_ONLY_CANONICAL16_BINDING\", \"whole_repository_identity_verified\": false}\n"
+    },
+    {
+      "command": "python3 -I -S -B test_cold.py --repo REPO",
+      "returncode": 0,
+      "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.026s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "command": "python3 -I -S -B -O test_cold.py --repo REPO",
+      "returncode": 0,
+      "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.013s\n\nOK\n",
+      "stdout": ""
+    }
+  ],
+  "schema": 1,
+  "status": "PASS_SOURCE_ONLY_CANONICAL16_BINDING_COLD"
+}

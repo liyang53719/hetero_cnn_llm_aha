@@ -485,3 +485,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 发布范围：仅生产头、测试、复现脚本、项目 pins 与必要数值摘要；不包含 ELF、当前编译器路径或二进制身份清单、完整运行日志。保留未来执行时写入本地 receipt 的动态 compiler SHA 功能。
 - ongoing：按真实 metadata allocation 顺序绑定 14 provider 与两表；保持原地址需约 188.6 MB 连续 RAM，完整四区约 213.5 MB，初始化 mask 另占同等容量，不能把 94,920,448 字节 payload 合计当作分配量。
 - todo：真实 raw payload 获取/逐 hash 校验与 canonical 加载仍待单独授权和预算；历史 framing、生产 HostMemory/launch/27 数值均未恢复。旧 N0 终态未知，完整 block RTL 仍为 0/5。
+
+
+### 2026-10-18 09:38 UTC：canonical16 固定同 RAM 输入绑定源码
+
+- done：新增无参数 make_canonical16_loader() 固定 factory，明确 commands/descriptors 后按原 metadata readonly allocation 顺序放置14个 provider；gamma0=index9、x=index15。逐项固定原地址、长度和SHA，禁止 caller 覆盖 expected/地址/预算。
+- done：两路源码独核16项与35reservation/四region及真实已发布commit/blob相符；普通/-O各10项冷测与verify双模式通过，三个依赖头原样保留。
+- 容量：完整四区单数组213,473,600字节，payload与初始化mask两数组426,947,200字节；16输入总计94,920,448字节，其余118,553,152字节不属于初始化白名单。未调用factory或进行大RAM分配。
+- ongoing：恢复真实payload的按需获取与精确hash验证方案；未来实际大输入另核AS1GiB及全部运行开销，禁止沿用合成小测试256MiB预算。
+- todo：本片只固定SOURCE绑定，未建立HostMemory输出/DDR权限、B退休或launch准入；真实canonical加载/数值/完整Host27仍待验证。旧N0终态未知，完整block RTL仍为0/5。

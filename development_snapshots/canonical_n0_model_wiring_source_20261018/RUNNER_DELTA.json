@@ -1,0 +1,45 @@
+{
+  "base_runner": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+  "base_runner_identity": {
+    "bytes": 16693,
+    "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+  },
+  "delta": [
+    "exact fifteen pinned build inputs",
+    "one O0 compile and one run; no version/O2/negative subprocess",
+    "strict fixture-only false-claim result schema",
+    "dynamic compiler file identity retained"
+  ],
+  "retained_function_bytes": {
+    "bounded": {
+      "bytes": 5637,
+      "sha256": "890949ee8fcab68757fd0a1f703b34375aa672ad1be22ff5f062b6f2d1ccbe4a"
+    },
+    "digest": {
+      "bytes": 89,
+      "sha256": "cb81e355742a1f3808c6e68220f2566b029ef1477846e79959c360e65788b58c"
+    },
+    "group_state": {
+      "bytes": 190,
+      "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+    },
+    "observe_exit": {
+      "bytes": 719,
+      "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+    },
+    "require": {
+      "bytes": 67,
+      "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+    },
+    "save": {
+      "bytes": 179,
+      "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+    },
+    "strict_json": {
+      "bytes": 390,
+      "sha256": "9681c9f6471cfcc1031b66a70317bee9a03e4ea64745203de564bb38b5b5d28d"
+    }
+  },
+  "schema": 1,
+  "supervision_changed": false
+}

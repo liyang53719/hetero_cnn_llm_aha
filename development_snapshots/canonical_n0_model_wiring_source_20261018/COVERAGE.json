@@ -1,0 +1,31 @@
+{
+  "actual_n0_execution": false,
+  "adapter_runtime_bound": false,
+  "checks_are_independent_case_count": false,
+  "coverage": {
+    "AW_ID": "direct private accepted scalar/DMA events first create unbound ID; actual scheduler edges 5 stalled AW,6 accepted AW ID37,7 W,8 held B; saved ID locked on first fire, payload/mask unchanged before B; wrong held-B ID38 rejects via private capture_low",
+    "accepted_launch_identity": "real scheduler offer_launch, settle_low and rise_and_observe retain sampled epoch 7 only on high; disabled launch epoch then changed to 6; saved epoch remains 7",
+    "accepted_owner_identity": "offered job existing field names go through real scheduler low/precheck and high consume_internal; scripted high output retains original job; later unaccepted bound tag change does not change saved tag",
+    "completion_rawbits": "real scheduler completion path rejects wrong PC,owner,status,signal,width on otherwise retired synthetic state; decoder original full-bit tests retained",
+    "completion_read": "real scheduler B edge9 commits to same tiny owner allocation; public read before completion rejects; explicit private response/done gates then raw completion edge10 publishes; public actual_byte/read_beat verify actual bytes and same allocation",
+    "explicit_test_injections": [
+      "tiny private 1024-byte policy, one64-byte input and one64-byte N0 allocation",
+      "scripted existing-field output changes at accepted job and completion ACK, not model computation",
+      "direct private accept_model_request/dma_accept and dma_return/writeback_ack/owner_done; actual model production of these events is not tested"
+    ],
+    "launch_payload": "unchanged original 23 field assignments/control sentinels and bitwise raw decoder tests",
+    "not_tested": [
+      "real VHostBlockTop/generated ABI or independent Getter registry",
+      "resident-before-N0 scheduler/reset/profile/single-instance admission",
+      "actual N0 math/core-to-hub/DMA field event chain and counters",
+      "canonical 95MB inputs, original 786432-byte N0 or fullHost/EDA",
+      "missing generated-contract probe or production negative_model_access compile"
+    ],
+    "wrong_epoch": "wrong offered launch epoch; changed input between low/high; wrong private owner epoch; wrong original request epoch each reject at exact named gate"
+  },
+  "expected_actual_checks": null,
+  "historical_actual_checks": 436,
+  "modelbinding": false,
+  "schema": 1,
+  "status": "TEST_SOURCE_WITH_HISTORICAL_NATIVE_GATE_PASS"
+}

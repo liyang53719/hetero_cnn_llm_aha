@@ -1,0 +1,74 @@
+{
+  "actual_generated_contract": "PENDING_MISSING_REAL_GENERATED_HEADERS",
+  "native_executed": false,
+  "native_executed_field_scope": "this source preparation did not execute native; historical byte-identical gate result is summarized separately",
+  "old_native_result_inherited": false,
+  "original_source_artifact": "production_host_n0_model_wiring_source_v1_20261018",
+  "original_source_manifest": {
+    "bytes": 3386,
+    "sha256": "a8cb75840def35d5cfa3129d2808ffb1dd2a294ba3574ceceb0b3ff37a7eda33"
+  },
+  "original_test_TU": {
+    "bytes": 7598,
+    "sha256": "a86891092aeabfd4226eff68afa9963b04d44ea3b28e6277fb2d135593aca59d"
+  },
+  "production_changes": false,
+  "production_negative_probe": "PENDING_NOT_EXECUTED",
+  "schema": 1,
+  "test_only_delta": [
+    "TU defines CANONICAL_RUNTIME_UNIT_TEST before real headers; integrates private fixture and new strict result",
+    "83 public aliases + 78 scalar root fields + 3 arrays projected to explicit test-only storage",
+    "scripted output transitions for accepted job and completion ACK; no actual RTL or generated types",
+    "private real scheduler saves accepted launch identity and observes real C++ AW/W/B/commit/completion gates"
+  ],
+  "unchanged_production_files": {
+    "axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "canonical16_identities.hpp": {
+      "bytes": 3844,
+      "sha256": "0f46d5f389af952a793ac38812009d3da081a858b2fd1f650f8feda513cfd499"
+    },
+    "canonical16_runtime_binding.hpp": {
+      "bytes": 239,
+      "sha256": "b11ae185e601adca958097383256989dcc78faf739862e4f8473f4e32564653c"
+    },
+    "canonical_launch.hpp": {
+      "bytes": 2065,
+      "sha256": "7b4a6bf463335d7984fbc803ccb4cca275b54344fa883d82403fa55de4f0a7bc"
+    },
+    "completion_payload.hpp": {
+      "bytes": 1971,
+      "sha256": "aa31a256347d3938edc5b9e84b332d90b98a8947383b4cfe02b520e0eb23c697"
+    },
+    "host_memory.hpp": {
+      "bytes": 192,
+      "sha256": "fe0b34b5a75cc8bc4ba6b06f147f4f71a1451d9428e8c3c200c1b4aa6121dbb4"
+    },
+    "n0_model_fields.hpp": {
+      "bytes": 21376,
+      "sha256": "e2f738c40edbf7586eb2998b89ddc8481db93ab6de38cd860e3400e4b3f8c77d"
+    },
+    "n0_model_scheduler.inc": {
+      "bytes": 18592,
+      "sha256": "7db955f91063d592757249d6adbf050dd55fe546d5dfd2ed6c789f0c89f5c922"
+    },
+    "n0_retirement_adapter.hpp": {
+      "bytes": 195,
+      "sha256": "3c88fbcff551c5dc95b003cb0a80a7fd2801d7e5651727723d495d4ff477f80a"
+    },
+    "runtime_policy.hpp": {
+      "bytes": 4425,
+      "sha256": "1d8a87ec0c09371d55f886099b86b2dc656ab7f3929add99c514c6cef2e08b24"
+    },
+    "runtime_ram.hpp": {
+      "bytes": 27285,
+      "sha256": "4e19aceeda60c96e8d8c9362588273c9987f784b7a63e9bcc5b82900057969d0"
+    },
+    "sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    }
+  }
+}

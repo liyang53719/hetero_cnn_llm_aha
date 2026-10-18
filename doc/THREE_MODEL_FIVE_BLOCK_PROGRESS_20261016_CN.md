@@ -532,3 +532,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：保存 22 件纯源码、复现 runner/冷测和安全摘要，未来运行时编译器 SHA 记录能力保留；不提交 ELF、当前系统身份、完整日志或 payload。旧 source v2 汇总字节误差只在新投影中更正，未改旧资产。
 - ongoing：补固定 launch_payload 与唯一 scheduler 下 N0 retirement 真实字段接线，仍保持 adapter_runtime_bound=false；并行只读盘点生成接口/工具闭包，重建须另门。
 - todo：新版 runtime 尚未进行真实 canonical 大输入/Host 验证；07:44 丢失前 N0 会话 74562 终态未知、完整 27 采集未恢复，完整 block 验收仍 0/5。
+
+
+### 2026-10-18 12:00 UTC：固定 launch 与 N0 字段接线小测试复现源码
+
+- done：新增固定 launch 23 字段、真实 56-bit completion 位域解码，以及 81 个读取/83 个来源别名的字段接线源码。epoch 来自已接受 launch，owner tag 来自已接受 job；AXI ID 只在实际 AW fire 路径首次锁定，不杜撰缺失端口。
+- done：单 O0 tiny C++ fixture 真实执行 436 次断言（218 payload、218 私有调度 fixture），覆盖 launch 身份保存、AW 停顿/首次 ID、B 原子提交、错误 completion 及同 RAM 发布后读取；编译/运行均退出 0，原清理证据完整。
+- done：其中 core/hub/DMA/响应/done 事件由明确 test-only fixture 注入；该测试不证明实际生成模型产生这些事件。modelbinding、actual_n0_execution、adapter_runtime_bound、canonical_input_sha_verified、full_host_ready、launch_ready、eda_executed 七项均 false。
+- done：保存 29 件纯源码/测试/复现脚本/安全摘要，未来运行时 compiler SHA 核验保留；不提交 ELF、机器身份清单、完整日志、生成 metadata 或 tensor。两个缺生成头的探针未执行，仍为 PENDING。
+- ongoing：按生产 92 源加新共同 Host emitter 形成新 93 源闭包；87 JAR 锁集与20 HardFloat的获取/源重放脚本正在有限审，尚未下载/编译，旧95身份不继承。
+- todo：真实 generated ABI、reset、唯一实例、resident-before-N0 准入与完整27采集仍缺；07:44 丢失前旧 N0 会话74562终态未知，完整 block 验收仍0/5。

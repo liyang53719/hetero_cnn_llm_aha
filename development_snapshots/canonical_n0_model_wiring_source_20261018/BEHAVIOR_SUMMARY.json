@@ -1,0 +1,79 @@
+{
+  "behavior": {
+    "actual_n0_execution": false,
+    "adapter_runtime_bound": false,
+    "canonical_input_sha_verified": false,
+    "checks": 436,
+    "eda_executed": false,
+    "full_host_ready": false,
+    "launch_ready": false,
+    "max_synthetic_arena_bytes": 1024,
+    "modelbinding": false,
+    "status": "N0_WIRING_FIXTURE_BEHAVIOR_PASS"
+  },
+  "checks_are_independent_case_count": false,
+  "configurations": 1,
+  "excluded": [
+    "compiler resolved path/binary identity/version inventory",
+    "ELF and build tree",
+    "full child logs and receipts",
+    "payloads or generated model/data"
+  ],
+  "independent_actual_review": "PENDING_AT_SUMMARY_CREATION",
+  "native_rerun_during_portable_preparation": false,
+  "not_verified": [
+    "real VHostBlockTop/generated ABI or independent Getter registry",
+    "resident-before-N0 scheduler/reset/profile/single-instance admission",
+    "actual N0 math/core-to-hub/DMA field event chain and counters",
+    "canonical 95MB inputs, original 786432-byte N0 or fullHost/EDA",
+    "missing generated-contract probe or production negative_model_access compile"
+  ],
+  "observed_behavior": [
+    "scripted-field private scheduler retained accepted launch epoch and job identity",
+    "first AW fire locked ID37; accepted AW/W and held B did not mutate RAM; B committed actual tiny owner allocation",
+    "wrong epoch, owner, PC, status, signal, width and held-B ID rejected in their tested contexts",
+    "read before completion rejected; raw completion ACK published same-allocation byte/beat reads"
+  ],
+  "optimization": "O0",
+  "original_gate_manifest": {
+    "bytes": 3914,
+    "sha256": "e9cc2d39096dd212cd48d110f8d54dc9ce3fcdf45bdaf37635a629d9cc4e63fb"
+  },
+  "original_result": {
+    "bytes": 5873,
+    "sha256": "535ac8f22a57f40a7385938c7bec69e743db122faf954f3f8342e60940e87d5c"
+  },
+  "schema": 1,
+  "source_derived_check_decomposition": {
+    "basis": "source counting only; actual executable reports combined 436, not separate category counters",
+    "original_payload_rawbits": 218,
+    "private_fixture": 218
+  },
+  "stage_elapsed_times_include_supervision": true,
+  "stages": {
+    "compile_O0": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 0,
+      "seconds": 3.990129,
+      "status": "PASS",
+      "wall_limit_seconds": 30
+    },
+    "run_O0": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 5,
+      "exit_code": 0,
+      "seconds": 0.023365,
+      "status": "PASS",
+      "wall_limit_seconds": 10
+    }
+  },
+  "status": "BOUNDED_TINY_N0_WIRING_FIXTURE_PASS",
+  "test_only_injections": [
+    "tiny private 1024-byte policy, one64-byte input and one64-byte N0 allocation",
+    "scripted existing-field output changes at accepted job and completion ACK, not model computation",
+    "direct private accept_model_request/dma_accept and dma_return/writeback_ack/owner_done; actual model production of these events is not tested"
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "actual_n0_execution": false,
+  "adapter_runtime_bound": false,
+  "canonical_input_sha_verified": false,
+  "eda_executed": false,
+  "file_count_including_manifest": 29,
+  "files": {
+    "BEHAVIOR_SUMMARY.json": {
+      "bytes": 3045,
+      "sha256": "97665c5abeedc4a3da5e28a923d3082a9cc676e2652984dcd4af31aab09036bd"
+    },
+    "BUILD_INPUT_PINS.json": {
+      "bytes": 2476,
+      "sha256": "d906d5e44dc3509047f3dc2ca293e7108efab35744607f2fcaa4f94dcc73f770"
+    },
+    "COLD_TEST_RESULTS.json": {
+      "bytes": 820,
+      "sha256": "03976676be6231a10112de0c8fde4cb80c2db65db889075f787b3d064a9108cf"
+    },
+    "COVERAGE.json": {
+      "bytes": 2527,
+      "sha256": "6e7455ebdb83024c9242b3f173d47488cae730abee9bb39a74c4ff0fd15a6a7c"
+    },
+    "EXECUTION_PLAN.json": {
+      "bytes": 1476,
+      "sha256": "e9e3fa8ef73b0e9c73ccddd56a822d2144194c05366b8783d40baaf58db19cb2"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 2432,
+      "sha256": "04f38cd2709d68d3748eca26d80dd8f28961911dc442cfe8c619e8132c704b08"
+    },
+    "README_CN.md": {
+      "bytes": 4068,
+      "sha256": "030ac75d358733cd1f152f5773e0cbdf214a6546ba5865bac7078d363a968eb9"
+    },
+    "RUNNER_DELTA.json": {
+      "bytes": 1439,
+      "sha256": "1e62d10e5080e96311f2589170150f319c7f39341efdccea34018eac88141f4d"
+    },
+    "SOURCE_DELTA.json": {
+      "bytes": 2933,
+      "sha256": "e2c63b959e42091be71cd15591b8abd830c216f931c636542e3ad357b66c0caa"
+    },
+    "SOURCE_PIN.json": {
+      "bytes": 539,
+      "sha256": "54c2f09d8247895ac6132cdea34ae190eb3a7d7ca9942bcbacc7e04dfd8c55ad"
+    },
+    "SOURCE_PROJECTION.json": {
+      "bytes": 3532,
+      "sha256": "ef63b4d6eefb4bfb1e843bb07ab4c86370c8193c5a8a6c6985b8361ff209b12d"
+    },
+    "axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "canonical16_identities.hpp": {
+      "bytes": 3844,
+      "sha256": "0f46d5f389af952a793ac38812009d3da081a858b2fd1f650f8feda513cfd499"
+    },
+    "canonical16_runtime_binding.hpp": {
+      "bytes": 239,
+      "sha256": "b11ae185e601adca958097383256989dcc78faf739862e4f8473f4e32564653c"
+    },
+    "canonical_launch.hpp": {
+      "bytes": 2065,
+      "sha256": "7b4a6bf463335d7984fbc803ccb4cca275b54344fa883d82403fa55de4f0a7bc"
+    },
+    "completion_payload.hpp": {
+      "bytes": 1971,
+      "sha256": "aa31a256347d3938edc5b9e84b332d90b98a8947383b4cfe02b520e0eb23c697"
+    },
+    "fixture_model.hpp": {
+      "bytes": 11175,
+      "sha256": "9f78e6e98205209308481b1fa8ea3a47a66701566810cf838bc933005341b104"
+    },
+    "host_memory.hpp": {
+      "bytes": 192,
+      "sha256": "fe0b34b5a75cc8bc4ba6b06f147f4f71a1451d9428e8c3c200c1b4aa6121dbb4"
+    },
+    "n0_model_fields.hpp": {
+      "bytes": 21376,
+      "sha256": "e2f738c40edbf7586eb2998b89ddc8481db93ab6de38cd860e3400e4b3f8c77d"
+    },
+    "n0_model_scheduler.inc": {
+      "bytes": 18592,
+      "sha256": "7db955f91063d592757249d6adbf050dd55fe546d5dfd2ed6c789f0c89f5c922"
+    },
+    "n0_retirement_adapter.hpp": {
+      "bytes": 195,
+      "sha256": "3c88fbcff551c5dc95b003cb0a80a7fd2801d7e5651727723d495d4ff477f80a"
+    },
+    "run_behavior.py": {
+      "bytes": 13022,
+      "sha256": "05c871ca327c68ab86a6dc71f0cf7a52b1797442401bb5c1cce6dc3996c283c4"
+    },
+    "runtime_policy.hpp": {
+      "bytes": 4425,
+      "sha256": "1d8a87ec0c09371d55f886099b86b2dc656ab7f3929add99c514c6cef2e08b24"
+    },
+    "runtime_ram.hpp": {
+      "bytes": 27285,
+      "sha256": "4e19aceeda60c96e8d8c9362588273c9987f784b7a63e9bcc5b82900057969d0"
+    },
+    "sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "test_launch_payload.cpp": {
+      "bytes": 7601,
+      "sha256": "0c6cd322cceefa5cec13a98d8af9d75d0d69e8a75c8ab2797f852943008f3707"
+    },
+    "test_private_wiring.inc": {
+      "bytes": 11211,
+      "sha256": "7adf60be5f37fe45588816c4949302229850379f8ed673f61add390758f6bbad"
+    },
+    "test_runner_cold.py": {
+      "bytes": 14876,
+      "sha256": "cd31ca89b5fd757b85eef935c9516a5659680428e3e526d5feb96087834f6034"
+    }
+  },
+  "full_host_ready": false,
+  "historical_one_O0_gate_pass": true,
+  "launch_ready": false,
+  "modelbinding": false,
+  "native_rerun": false,
+  "schema": 1,
+  "status": "PORTABLE_SOURCE_CANDIDATE_PENDING_CONTENT_REVIEW",
+  "total_bytes_excluding_manifest": 174466
+}

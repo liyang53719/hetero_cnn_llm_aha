@@ -1,0 +1,38 @@
+{
+  "actual_n0_execution": false,
+  "adapter_runtime_bound": false,
+  "checks_are_independent_case_count": false,
+  "commands": [
+    {
+      "argv": [
+        "python",
+        "-I",
+        "-S",
+        "-B",
+        "test_runner_cold.py"
+      ],
+      "exit_code": 0,
+      "tests": 17
+    },
+    {
+      "argv": [
+        "python",
+        "-O",
+        "-I",
+        "-S",
+        "-B",
+        "test_runner_cold.py"
+      ],
+      "exit_code": 0,
+      "tests": 17
+    }
+  ],
+  "modelbinding": false,
+  "native_executed": false,
+  "native_rerun": false,
+  "original_two_payload_test_bodies_byte_identical": true,
+  "portable_projection_cold_rerun": true,
+  "retained_supervision_functions_byte_identical_to_base": true,
+  "schema": 1,
+  "scope": "Python mock-only; no compiler/ELF/RTL/model/payload execution"
+}

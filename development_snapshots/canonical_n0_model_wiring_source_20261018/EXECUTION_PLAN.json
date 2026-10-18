@@ -1,0 +1,51 @@
+{
+  "actual_model_contract": "PENDING",
+  "actual_n0_execution": false,
+  "adapter_runtime_bound": false,
+  "address_space_limit_bytes": 268435456,
+  "automatic_retries": 0,
+  "checks_are_independent_case_count": false,
+  "cleanup_budget_seconds_per_stage": 5,
+  "command": [
+    "python",
+    "-I",
+    "-S",
+    "-B",
+    "run_behavior.py",
+    "--compiler",
+    "c++",
+    "--output",
+    "/absolute/fresh-attempt"
+  ],
+  "compiler_identity": "resolved existing compiler path + binary bytes/SHA computed dynamically for this future run; no version child",
+  "core_dump_bytes": 0,
+  "expected_checks": null,
+  "failure_artifacts_retained": true,
+  "max_accepted_log_bytes_per_stage": 65536,
+  "max_synthetic_arena_bytes": 1024,
+  "modelbinding": false,
+  "native_executed": false,
+  "native_executed_field_scope": "no native rerun during portable preparation",
+  "per_child_file_limit_bytes": 4194304,
+  "schema": 1,
+  "serial": true,
+  "source_binding_manifest_sha256": "a8cb75840def35d5cfa3129d2808ffb1dd2a294ba3574ceceb0b3ff37a7eda33",
+  "stage_cpu_seconds_sum": 35,
+  "stage_wall_seconds_sum": 40,
+  "stages": [
+    {
+      "cpu_seconds": 30,
+      "expected_exit": 0,
+      "name": "compile_O0",
+      "wall_seconds": 30
+    },
+    {
+      "cpu_seconds": 5,
+      "expected_exit": 0,
+      "name": "run_O0",
+      "wall_seconds": 10
+    }
+  ],
+  "status": "PORTABLE_REPRODUCTION_SOURCE_FUTURE_EXECUTION_REQUIRES_AUTHORIZATION",
+  "sum_is_parent_hard_deadline": false
+}

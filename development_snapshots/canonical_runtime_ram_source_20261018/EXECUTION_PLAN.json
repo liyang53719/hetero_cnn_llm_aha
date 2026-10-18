@@ -1,0 +1,94 @@
+{
+  "adapter_runtime_bound": false,
+  "address_space_limit_bytes": 268435456,
+  "automatic_retries": 0,
+  "canonical_input_sha_verified": false,
+  "checks_are_independent_case_count": false,
+  "cleanup_budget_seconds_per_stage": 5,
+  "command": [
+    "python",
+    "-I",
+    "-S",
+    "-B",
+    "run_behavior.py",
+    "--compiler",
+    "c++",
+    "--output",
+    "/absolute/fresh-attempt"
+  ],
+  "core_dump_bytes": 0,
+  "eda_executed": false,
+  "expected_checks": null,
+  "failure_artifacts_retained": true,
+  "full_host_ready": false,
+  "launch_ready": false,
+  "max_accepted_log_bytes_per_stage": 65536,
+  "max_synthetic_arena_bytes": 1024,
+  "native_executed": false,
+  "negative_diagnostics": "exactly one matching private access error from fixed negative TU; recognized error/fatal/resource/driver text rejects; unclassified non-error context lines may be ignored",
+  "note": "No native rerun in this portable directory; original observed execution summarized separately. Fresh execution requires its own authorization.",
+  "per_child_file_limit_bytes": 4194304,
+  "schema": 1,
+  "serial": true,
+  "source_binding_manifest_sha256": "a3d130cb7aa1b0e47e8abe5b7731f88ff81af4ab144bcc2a11bf5782cb4d2f20",
+  "stage_cpu_seconds_sum": 192,
+  "stage_wall_seconds_sum": 205,
+  "stages": [
+    {
+      "cpu_seconds": 2,
+      "expected_exit": 0,
+      "name": "compiler_version",
+      "wall_seconds": 5
+    },
+    {
+      "cpu_seconds": 30,
+      "expected_exit": 0,
+      "name": "compile_O0",
+      "wall_seconds": 30
+    },
+    {
+      "cpu_seconds": 5,
+      "expected_exit": 0,
+      "name": "run_O0",
+      "wall_seconds": 10
+    },
+    {
+      "cpu_seconds": 30,
+      "expected_exit": 0,
+      "name": "compile_O2",
+      "wall_seconds": 30
+    },
+    {
+      "cpu_seconds": 5,
+      "expected_exit": 0,
+      "name": "run_O2",
+      "wall_seconds": 10
+    },
+    {
+      "cpu_seconds": 30,
+      "expected_exit": 1,
+      "name": "negative_1",
+      "wall_seconds": 30
+    },
+    {
+      "cpu_seconds": 30,
+      "expected_exit": 1,
+      "name": "negative_2",
+      "wall_seconds": 30
+    },
+    {
+      "cpu_seconds": 30,
+      "expected_exit": 1,
+      "name": "negative_3",
+      "wall_seconds": 30
+    },
+    {
+      "cpu_seconds": 30,
+      "expected_exit": 1,
+      "name": "negative_4",
+      "wall_seconds": 30
+    }
+  ],
+  "status": "PORTABLE_REPRODUCTION_PLAN_ORIGINAL_ACTUAL_COMPLETED",
+  "sum_is_parent_hard_deadline": false
+}

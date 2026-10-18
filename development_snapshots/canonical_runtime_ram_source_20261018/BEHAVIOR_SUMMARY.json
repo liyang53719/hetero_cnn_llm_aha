@@ -1,0 +1,100 @@
+{
+  "actual_model": false,
+  "actual_review_not_claimed_by_this_summary": true,
+  "adapter_runtime_bound": false,
+  "canonical_input_sha_verified": false,
+  "checks_are_independent_test_cases": false,
+  "checks_per_configuration": {
+    "O0": 186,
+    "O2_NDEBUG": 186
+  },
+  "cleanup_confirmed_count": 9,
+  "configurations_equal": true,
+  "coverage_limit": "prefix/generation compound negative test rejects at workspace allocation; independent permit-guard coverage not claimed",
+  "eda_executed": false,
+  "full_host_ready": false,
+  "launch_ready": false,
+  "max_synthetic_arena_bytes": 1024,
+  "native_reexecuted_for_portable_package": false,
+  "negative_private_compiles_rejected": 4,
+  "note": "186 executed checks under each of two configurations; not 372 independent cases.",
+  "omitted": "compiler executable path/SHA/version, ELF, full logs/receipts, generated data, tensor payloads",
+  "original_result_sha256": "670216c3288b0ef352b4a35dd0c9ef044617b709a8740774ecb36111199ed631",
+  "schema": 1,
+  "stage_count": 9,
+  "stages": {
+    "compile_O0": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 0,
+      "seconds": 6.47707,
+      "wall_limit_seconds": 30
+    },
+    "compile_O2": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 0,
+      "seconds": 6.500716,
+      "wall_limit_seconds": 30
+    },
+    "compiler_version": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 2,
+      "exit_code": 0,
+      "seconds": 0.025359,
+      "wall_limit_seconds": 5
+    },
+    "negative_1": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 1,
+      "seconds": 1.057439,
+      "wall_limit_seconds": 30
+    },
+    "negative_2": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 1,
+      "seconds": 0.974987,
+      "wall_limit_seconds": 30
+    },
+    "negative_3": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 1,
+      "seconds": 1.97875,
+      "wall_limit_seconds": 30
+    },
+    "negative_4": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 1,
+      "seconds": 0.930893,
+      "wall_limit_seconds": 30
+    },
+    "run_O0": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 5,
+      "exit_code": 0,
+      "seconds": 0.026509,
+      "wall_limit_seconds": 10
+    },
+    "run_O2": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 5,
+      "exit_code": 0,
+      "seconds": 0.023198,
+      "wall_limit_seconds": 10
+    }
+  },
+  "status": "BOUNDED_TINY_RUNTIME_RAM_BEHAVIOR_PASS"
+}

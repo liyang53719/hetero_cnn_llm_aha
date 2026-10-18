@@ -522,3 +522,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：保存 21 件纯源码、项目相对身份、18+18 冷测摘要及安全实际数值摘要；不提交 ELF、权重、生成 metadata、完整日志或系统身份库存。实际 payload 仍按需在本地/CI 生成。
 - ongoing：恢复 HostMemory 的同 allocation runtime 能力、业务可写区域、成功 B 响应后的原子写入和初始化 mask 接线；现有 RO 输入 view 不授写权限或 launch。
 - todo：原生成 RTL/工具链需独立重建，Host/AXI/DPI/完整 27 数值尚未恢复；07:44 丢失前 N0 会话 74562 的终态仍未知，完整 block 验收仍为 0/5。
+
+
+### 2026-10-18 11:26 UTC：隔离 runtime RAM 小闭环源码与真实合成测试
+
+- done：新隔离 runtime kernel 使用同一 payload allocation 与初始化 mask，固定四区/具体 allocation 权限，首片只接受 N0 写路径；RO 输入、guard、保留尾及未授权区域拒绝写入。旧真实 canonical16 consumer 原件保留。
+- done：私有退休 adapter 将 AW/W 暂存与成功 B 提交分开；全事务检查后再无异常修改 payload+mask，completion 发布前继续拒绝输出读取。生产模型/scheduler 尚未绑定，不把测试授权等同实际 owner 事件。
+- done：真实 C++ O0/O2 两配置各 186 check 调用结果相同，4 个 private API 负编译均实际退出 1 并命中对应诊断；不是 372 个独立案例。9 stage 依原预算串行完成并保存清理证明。最大合成 arena 1024 B。
+- done：保存 22 件纯源码、复现 runner/冷测和安全摘要，未来运行时编译器 SHA 记录能力保留；不提交 ELF、当前系统身份、完整日志或 payload。旧 source v2 汇总字节误差只在新投影中更正，未改旧资产。
+- ongoing：补固定 launch_payload 与唯一 scheduler 下 N0 retirement 真实字段接线，仍保持 adapter_runtime_bound=false；并行只读盘点生成接口/工具闭包，重建须另门。
+- todo：新版 runtime 尚未进行真实 canonical 大输入/Host 验证；07:44 丢失前 N0 会话 74562 终态未知、完整 27 采集未恢复，完整 block 验收仍 0/5。

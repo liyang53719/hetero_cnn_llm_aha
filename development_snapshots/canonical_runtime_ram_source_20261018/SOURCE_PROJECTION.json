@@ -1,0 +1,130 @@
+{
+  "changed_metadata_files": {
+    "COLD_TEST_RESULTS.json": {
+      "new": {
+        "bytes": 588,
+        "sha256": "04b58c16c41804e752e71cad60a783fd82cd82c7f8f8e006849b94902f02012f"
+      },
+      "old": {
+        "bytes": 519,
+        "sha256": "cc2acdc7d2461b44444ef8066384736dbae56cefe2b67ef46c0c07f2556e7ac8"
+      }
+    },
+    "EXECUTION_PLAN.json": {
+      "new": {
+        "bytes": 2444,
+        "sha256": "7c404b5b27baf8c6f72219cc4d41a06af85995e35219c77c0ca2bb7d28077d85"
+      },
+      "old": {
+        "bytes": 2282,
+        "sha256": "fb7d86bf292459be2ad724d4f092f514bc49252ca1cf3666e5d67ca7426a18b4"
+      }
+    },
+    "README_CN.md": {
+      "new": {
+        "bytes": 4464,
+        "sha256": "f59345c674bc030c69415d205b94162bebf4f6e850f6abdd48b320008d9c4c19"
+      },
+      "old": {
+        "bytes": 5164,
+        "sha256": "25e59933b1c4e895b3ee31e9d9a2227273e3de1e7b2dc617447db5cd6b975428"
+      }
+    },
+    "RUNNER_DELTA.json": {
+      "new": {
+        "bytes": 1439,
+        "sha256": "243bc69e91538c0f1206c29e2b053ac7875e823f50f3a46692ea5250b9f20059"
+      },
+      "old": {
+        "bytes": 1340,
+        "sha256": "c45b0d63b02cc7c590e31164c3ab86efcb3010eb906c24ec33b69eff02cc9ca9"
+      }
+    }
+  },
+  "native_reexecuted": false,
+  "new_files": [
+    "BEHAVIOR_SUMMARY.json",
+    "SOURCE_PIN.json",
+    "SOURCE_PROJECTION.json",
+    "MANIFEST.json"
+  ],
+  "original_gate_manifest": {
+    "bytes": 2936,
+    "sha256": "09b13c3c120659bcc4157667e756fd4d34d453dc1c9c87a15d987c6216ffabce"
+  },
+  "original_source_manifest": {
+    "bytes": 3047,
+    "sha256": "a3d130cb7aa1b0e47e8abe5b7731f88ff81af4ab144bcc2a11bf5782cb4d2f20"
+  },
+  "original_source_total_correction": {
+    "actual_member_sum": 86657,
+    "correction_scope": "documented projection; this package separately computes its actual member total",
+    "field": "total_bytes_excluding_manifest",
+    "original_asset_modified": false,
+    "recorded": 86061
+  },
+  "published": false,
+  "removed_local_evidence_metadata": [
+    "GATE_V2_DELTA.json"
+  ],
+  "runtime_and_cpp_logic_changed": false,
+  "schema": 1,
+  "unchanged_files": {
+    "BUILD_INPUT_PINS.json": {
+      "bytes": 1645,
+      "sha256": "7d5d4c502c6ba718ec2433d26aaeffbc5aadad5fc4e14803e0525b8986d3b7ad"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 1723,
+      "sha256": "d0adbc89ee6fd85fcb3a886ce720a1697c82290c0b7ec4eaf0f27bb28722588f"
+    },
+    "axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "canonical16_identities.hpp": {
+      "bytes": 3844,
+      "sha256": "0f46d5f389af952a793ac38812009d3da081a858b2fd1f650f8feda513cfd499"
+    },
+    "canonical16_runtime_binding.hpp": {
+      "bytes": 239,
+      "sha256": "b11ae185e601adca958097383256989dcc78faf739862e4f8473f4e32564653c"
+    },
+    "host_memory.hpp": {
+      "bytes": 192,
+      "sha256": "fe0b34b5a75cc8bc4ba6b06f147f4f71a1451d9428e8c3c200c1b4aa6121dbb4"
+    },
+    "n0_retirement_adapter.hpp": {
+      "bytes": 195,
+      "sha256": "3c88fbcff551c5dc95b003cb0a80a7fd2801d7e5651727723d495d4ff477f80a"
+    },
+    "negative_public_access.cpp": {
+      "bytes": 735,
+      "sha256": "3ced098f42f6d97065f662cd6867c2bd9811c4a3a26d3c419aa7cf467b4f5af5"
+    },
+    "run_behavior.py": {
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    },
+    "runtime_policy.hpp": {
+      "bytes": 4425,
+      "sha256": "1d8a87ec0c09371d55f886099b86b2dc656ab7f3929add99c514c6cef2e08b24"
+    },
+    "runtime_ram.hpp": {
+      "bytes": 26239,
+      "sha256": "310af316108ae3cabc09b5257831b7a38aa9ec61bea1c2e7d35481f7d4987a3b"
+    },
+    "sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "test_runner_cold.py": {
+      "bytes": 18004,
+      "sha256": "fc88db7e72d64fca1603de193940e7b95e9030f90dc3eb0e574cec9d5b40ff46"
+    },
+    "test_runtime_ram.cpp": {
+      "bytes": 13960,
+      "sha256": "450d6beaab8a9eb9b344e73984e362441fcdcf57761dd46074d9dc425ab091bf"
+    }
+  }
+}

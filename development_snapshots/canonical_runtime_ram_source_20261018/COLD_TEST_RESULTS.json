@@ -1,0 +1,26 @@
+{
+  "adapter_runtime_bound": false,
+  "canonical_input_sha_verified": false,
+  "compiler_executed": false,
+  "constructed_mixed_diagnostic_rejections": 8,
+  "launch_ready": false,
+  "native_executed": false,
+  "native_reexecuted": false,
+  "observed_real_compiler_mispass": false,
+  "portable_directory_retested": true,
+  "real_process_signals_sent": false,
+  "runs": [
+    {
+      "exit_code": 0,
+      "mode": "normal",
+      "tests": 19
+    },
+    {
+      "exit_code": 0,
+      "mode": "optimized",
+      "tests": 19
+    }
+  ],
+  "schema": 1,
+  "status": "MOCK_ONLY_COLD_TESTS_PASS"
+}

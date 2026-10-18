@@ -1,0 +1,59 @@
+{
+  "files": {
+    "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py": {
+      "bytes": 22905,
+      "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+      "bytes": 88647,
+      "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+    },
+    "development_snapshots/canonical16_binding_source_20261018/PROJECT_SOURCE_HASHES.json": {
+      "bytes": 1137,
+      "sha256": "1c04031db19e1360ab19ba4fe4c26f460408746d44ce531cb8a5daf28deeaa09"
+    },
+    "development_snapshots/canonical16_binding_source_20261018/SOURCE_PIN.json": {
+      "bytes": 2174,
+      "sha256": "07cd317377766e169c992fdc8003753d18d83477a1dfc93ac71a2f84dbd20b56"
+    },
+    "development_snapshots/canonical16_binding_source_20261018/canonical16_binding.hpp": {
+      "bytes": 4913,
+      "sha256": "5b090ba3ee4b6e90d0010030a9593149a5c054310d6548c7fe7497da7c58c35d"
+    },
+    "development_snapshots/canonical16_binding_source_20261018/initialization_ram.hpp": {
+      "bytes": 8805,
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "development_snapshots/canonical16_binding_source_20261018/same_buffer_loader.hpp": {
+      "bytes": 7998,
+      "sha256": "309cb1be6f126c1d32eae855da4bedacfb1a5ef45ca6ab0f7f29bfa7c81fc88a"
+    },
+    "development_snapshots/canonical16_binding_source_20261018/sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "development_snapshots/canonical_host_bridge_source_20261018/axi_service.hpp": {
+      "bytes": 7980,
+      "sha256": "fa909275e0e11b1ffd09d15fcbdb7800bd7db8d450c5ab95d5603118447c236e"
+    },
+    "development_snapshots/canonical_host_metadata_source_20261018/EXPECTED_LAYOUT.json": {
+      "bytes": 15795,
+      "sha256": "4ededb349c9206841e464f786c8b64d8744de60d789150ce533e17fe544bc7a7"
+    },
+    "development_snapshots/canonical_host_pc0_startup_source_20261018/pc0/n0_participant.hpp": {
+      "bytes": 18855,
+      "sha256": "bfa982b3e404960d6c85f433131350fa5d32c60a040da31cc36334720faf5b5f"
+    },
+    "development_snapshots/canonical_host_source_recovery_20261018/source/include/axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "development_snapshots/canonical_payload_identity_source_20261018/INPUT_IDENTITY.json": {
+      "bytes": 14530,
+      "sha256": "f5fd835b06cf76b28c9dcc22db6eb2f919de1315420fc54ff23033c2b3fe1d98"
+    }
+  },
+  "path_base": "repository root",
+  "role": "project provenance only; runtime build requires only the ten local pinned C++ files",
+  "schema": 1
+}

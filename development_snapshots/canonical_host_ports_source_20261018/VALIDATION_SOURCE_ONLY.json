@@ -1,0 +1,56 @@
+{
+  "schema": 2,
+  "status": "SOURCE_CONTRACT_CHECKS_COMPLETED",
+  "scope": "STATIC_PARTIAL_HOSTPINS_SOURCE_ONLY",
+  "runs": [
+    {
+      "mode": "normal",
+      "flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "returncode": 0,
+      "log": "COLD_TEST_NORMAL.txt",
+      "log_sha256": "b5367ba62aae74771b46ed6668f22ac8865bae063f31921514c1a9bd9f3f186e"
+    },
+    {
+      "mode": "optimized",
+      "flags": [
+        "-I",
+        "-S",
+        "-B",
+        "-O"
+      ],
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "returncode": 0,
+      "log": "COLD_TEST_OPTIMIZED.txt",
+      "log_sha256": "bb044f8fa9d6ba251c514dfd24eaa3aea0a77a90108054e90f355d0362cdb447"
+    }
+  ],
+  "v1_preserved": true,
+  "header_byte_identical_to_v1": true,
+  "upstream_byte_hashes_unchanged": true,
+  "source_commit_and_tree_verified": true,
+  "source_commit": "6bde92d43d2ea9a78e951c0062e133aecf8b091e",
+  "source_tree": "9f743cd7ff48b820ac65ce2bb15024864b37d4e9",
+  "same_buffer_hash_compile_exec": true,
+  "project_bytecode_loader_used": false,
+  "poisoned_timestamp_pyc_ignored": true,
+  "changed_checker_source_rejected": true,
+  "native_compiled": false,
+  "template_instantiated": false,
+  "actual_generated_port_abi_verified": false,
+  "model_executed": false,
+  "eda_executed": false,
+  "full_block_pass": false,
+  "launch_implemented": false,
+  "ram_implemented": false,
+  "loader_implemented": false,
+  "metadata_replay_qualified": false
+}

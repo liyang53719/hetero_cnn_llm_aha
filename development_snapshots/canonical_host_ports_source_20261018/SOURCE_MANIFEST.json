@@ -1,0 +1,63 @@
+{
+  "schema": 2,
+  "status": "FROZEN_FOR_INDEPENDENT_SOURCE_REVIEW_NOT_PUBLISHED",
+  "scope": "NEW_PARTIAL_HOSTPINS_SOURCE_DERIVED_IMPLEMENTATION",
+  "source_commit": "6bde92d43d2ea9a78e951c0062e133aecf8b091e",
+  "source_tree": "9f743cd7ff48b820ac65ce2bb15024864b37d4e9",
+  "files": {
+    "COLD_TEST_NORMAL.txt": {
+      "bytes": 1629,
+      "sha256": "b5367ba62aae74771b46ed6668f22ac8865bae063f31921514c1a9bd9f3f186e"
+    },
+    "COLD_TEST_OPTIMIZED.txt": {
+      "bytes": 1629,
+      "sha256": "bb044f8fa9d6ba251c514dfd24eaa3aea0a77a90108054e90f355d0362cdb447"
+    },
+    "METADATA_SOURCE_EVIDENCE.json": {
+      "bytes": 18126,
+      "sha256": "9b39296e2b8f9275b4ea9c084da27cce523e3aa23ea4c1e4970f918669f1686f"
+    },
+    "README.md": {
+      "bytes": 2141,
+      "sha256": "b12ffcedd74da75ebbb619b5aed2a376099fbe54cd21307b8e902748d36579ab"
+    },
+    "SOURCE_PIN.json": {
+      "bytes": 2399,
+      "sha256": "d445034ad13869f7671906ac36c5374be346d775c6b9e3150e04b019b0d31e30"
+    },
+    "VALIDATION_SOURCE_ONLY.json": {
+      "bytes": 1528,
+      "sha256": "ba2ce95a35fb735c8b60ff18f0c48ef99f9349336a01bf554a53180211212751"
+    },
+    "cold_check.py": {
+      "bytes": 5008,
+      "sha256": "0edeacc9ae2651d97f8e06a20c86696be064b99c367f365edcebf8bc3dcd6a40"
+    },
+    "host_ports.hpp": {
+      "bytes": 3123,
+      "sha256": "374845951e3fad70448b52bfa33418d19a08c9cf58200526adf20fb9b78486de"
+    },
+    "test_host_ports_source.py": {
+      "bytes": 4905,
+      "sha256": "94995ee082774e988763ea1af95c0124093d153d8624397b27134c9426839f59"
+    }
+  },
+  "implementation": [
+    "host_ports.hpp"
+  ],
+  "changes_from_v1": [
+    "Same-buffer fixed-hash checker loading",
+    "Explicit --repo with relative source paths",
+    "Correct published commit/tree/blob provenance",
+    "Changed checker and valid-timestamp poisoned-pyc tests"
+  ],
+  "cpp_header_sha256": "374845951e3fad70448b52bfa33418d19a08c9cf58200526adf20fb9b78486de",
+  "v1_preserved": true,
+  "upstream_byte_hashes_unchanged": true,
+  "repository_modified": false,
+  "commit_created": false,
+  "pushed": false,
+  "uploaded": false,
+  "native_compiled": false,
+  "eda_executed": false
+}

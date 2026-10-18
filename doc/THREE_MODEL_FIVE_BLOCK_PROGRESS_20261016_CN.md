@@ -438,3 +438,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - ongoing：37条literal quoted include中20条在新源码组合内解析，17次引用仍缺9个名字：3份项目实现、4个生成模型头和2个外部runtime头。当前不能独立编译Host，不能用stub、旧自造权重oracle或额外eval的测试台补成canonical闭包。恢复脚本、hash和合成hold测试不证明C++/RTL行为或full27数值。
 - todo：先逐小片补齐有明确来源的项目端口、同RAM/SSA与加载契约；对找不到原件的实现作为新代码重新审查并及时保存。真实生成模型/工具链及新编译/链接/运行需要各自独立有界门；本批没有启动大EDA或模型运行。原进程不能从row28续跑。
 - 五block仍不新增验收：完整block RTL保持0/5，17owner/21completion/27capture的实际完整证据和固定4096MAC全block周期口径下80%/90%利用率均未完成。本次仅项目源码及说明，不含权重、原输入/参考、生成模型、二进制、原进程日志或系统工具链环境清单。
+
+
+### 2026-10-18 08:20 UTC：恢复后首个实际项目接口源码片
+
+- done：新增独立 HostPins 源码，复用已发布的 54 个输入清零赋值，并读取 4 个 result 字段和 4 个 hub 计数；源码与原 Scala/已发布调用字段对应。
+- done：最小同字节 SHA-256 校验后 compile/exec 冷入口，拒绝改源并忽略合法 timestamp 污染 pyc；正常与 -O 各 15 项通过，独立审查关闭入口和来源身份问题。
+- ongoing：从原 fixture/编码器源码恢复 metadata-only 可复放入口；布局证据仍不构成 resident Gate/Up DDR 写权限，旧输入流 framing 尚未恢复。
+- todo：补齐真实 launch、RAM/B 退休/SSA 以及完整加载封存语义，再建立真实生成模型依赖。当前片尚未实例化 C++ 模板或验证生成端口 ABI，不能编译/运行完整 Host。
+- 边界：旧 session 74562 终态未知和未发布 full27 丢失事实不变；完整 block RTL 仍为 0/5，不提升数值或利用率结论。

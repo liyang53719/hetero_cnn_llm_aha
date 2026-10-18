@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "source_commit": "6bde92d43d2ea9a78e951c0062e133aecf8b091e",
+  "implementation_mode": "NEW_SOURCE_DERIVED_PARTIAL_ADAPTER",
+  "upstream": {
+    "development_snapshots/canonical_host_source_recovery_20261018/source/startup/startup_inputs.hpp": {
+      "bytes": 4810,
+      "sha256": "8ac9cc45e53730423a5ea02e1db5192d7243605d590c211fb721424c10af82bb",
+      "git_blob": "c72e1b2601d09961efc9f40e3ee4f5b2d0e042f6",
+      "git_mode": "100644"
+    },
+    "development_snapshots/canonical_host_source_recovery_20261018/source/include/host_fields.hpp": {
+      "bytes": 15153,
+      "sha256": "5c084cf3ec72100ff13c45623dba94e8d73ca3ca74d5a4d8fc8c8b1bc6614b97",
+      "git_blob": "06d7a33388f44a24c30366ab3414013b1eaa8816",
+      "git_mode": "100644"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala": {
+      "bytes": 10393,
+      "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+      "git_blob": "8f1847b04d77c319bea7f9b8f83b603090acc7b9",
+      "git_mode": "100644"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "bytes": 20853,
+      "sha256": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d",
+      "git_blob": "0ad36b0b0e1bad2acc92e4274a361b5c825ab6b0",
+      "git_mode": "100644"
+    },
+    "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py": {
+      "bytes": 8316,
+      "sha256": "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154",
+      "git_blob": "0080dc8a4883f7e8d1d7cc56ee1c61797d610828",
+      "git_mode": "100644"
+    },
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py": {
+      "bytes": 5759,
+      "sha256": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692",
+      "git_blob": "457dd88371bd0d2ec02ec928e00c60f3e4738f30",
+      "git_mode": "100644"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/fixture.py": {
+      "bytes": 15492,
+      "sha256": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208",
+      "git_blob": "d84e1cd835c599189d644d1c8f27212049ee39f8",
+      "git_mode": "100644"
+    }
+  },
+  "source_tree": "9f743cd7ff48b820ac65ce2bb15024864b37d4e9",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "source_root_selection": "Caller-supplied --repo directory; every listed source byte hash remains mandatory."
+}

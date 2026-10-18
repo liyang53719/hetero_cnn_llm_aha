@@ -1,0 +1,929 @@
+{
+  "schema": 1,
+  "status": "SOURCE_DERIVED_METADATA_DESIGN_ONLY",
+  "source_commit": "6bde92d43d2ea9a78e951c0062e133aecf8b091e",
+  "rows": 128,
+  "epoch": 7,
+  "epoch_source": "recovered include/silu_observer.hpp:99,146-147; original fixture accepts epoch parameter",
+  "relocate": 0,
+  "shape": {
+    "H": 1536,
+    "F": 8960,
+    "HEADS": 12,
+    "KVHEADS": 2,
+    "HD": 128,
+    "MAX_TOKENS": 1024
+  },
+  "tables": {
+    "commands": {
+      "base": 4294967296,
+      "limit": 4294967680,
+      "bytes": 384,
+      "count": 21,
+      "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4"
+    },
+    "descriptors": {
+      "base": 4294971392,
+      "limit": 4294974848,
+      "bytes": 3456,
+      "count": 215,
+      "sha256": "1e4d35da18b21a4d9de05d2f3129e5bd9717cd923837c83c8d5eb320bfcddb02"
+    }
+  },
+  "regions": [
+    {
+      "base": 4295032832,
+      "limit": 4483535808,
+      "read": true,
+      "write": false
+    },
+    {
+      "base": 4483535808,
+      "limit": 4507654464,
+      "read": true,
+      "write": true
+    },
+    {
+      "base": 4294967296,
+      "limit": 4295032832,
+      "read": true,
+      "write": false
+    },
+    {
+      "base": 4507654464,
+      "limit": 4508440896,
+      "read": true,
+      "write": true
+    }
+  ],
+  "allocations": [
+    {
+      "name": "wq",
+      "base": 4295032896,
+      "bytes": 4718592,
+      "reserved_bytes": 9437184,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1536,
+        1536
+      ],
+      "descriptor_dtype": 5,
+      "expected_payload_sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72"
+    },
+    {
+      "name": "wk",
+      "base": 4304470144,
+      "bytes": 786432,
+      "reserved_bytes": 1572864,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1536,
+        256
+      ],
+      "descriptor_dtype": 5,
+      "expected_payload_sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344"
+    },
+    {
+      "name": "wv",
+      "base": 4306043072,
+      "bytes": 786432,
+      "reserved_bytes": 1572864,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1536,
+        256
+      ],
+      "descriptor_dtype": 5,
+      "expected_payload_sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a"
+    },
+    {
+      "name": "wo",
+      "base": 4307616000,
+      "bytes": 4718592,
+      "reserved_bytes": 9437184,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1536,
+        1536
+      ],
+      "descriptor_dtype": 5,
+      "expected_payload_sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c"
+    },
+    {
+      "name": "wg",
+      "base": 4317053248,
+      "bytes": 27525120,
+      "reserved_bytes": 55050240,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1536,
+        8960
+      ],
+      "descriptor_dtype": 5,
+      "expected_payload_sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f"
+    },
+    {
+      "name": "wu",
+      "base": 4372103552,
+      "bytes": 27525120,
+      "reserved_bytes": 55050240,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1536,
+        8960
+      ],
+      "descriptor_dtype": 5,
+      "expected_payload_sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040"
+    },
+    {
+      "name": "wd",
+      "base": 4427153856,
+      "bytes": 27525120,
+      "reserved_bytes": 55050240,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        8960,
+        1536
+      ],
+      "descriptor_dtype": 5,
+      "expected_payload_sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec"
+    },
+    {
+      "name": "gamma0",
+      "base": 4482204160,
+      "bytes": 6144,
+      "reserved_bytes": 6144,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1,
+        1536
+      ],
+      "descriptor_dtype": 7,
+      "expected_payload_sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180"
+    },
+    {
+      "name": "gamma1",
+      "base": 4482210368,
+      "bytes": 6144,
+      "reserved_bytes": 6144,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1,
+        1536
+      ],
+      "descriptor_dtype": 7,
+      "expected_payload_sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a"
+    },
+    {
+      "name": "bq",
+      "base": 4482216576,
+      "bytes": 6144,
+      "reserved_bytes": 6144,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1,
+        1536
+      ],
+      "descriptor_dtype": 7,
+      "expected_payload_sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d"
+    },
+    {
+      "name": "bk",
+      "base": 4482222784,
+      "bytes": 1024,
+      "reserved_bytes": 1024,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1,
+        256
+      ],
+      "descriptor_dtype": 7,
+      "expected_payload_sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d"
+    },
+    {
+      "name": "bv",
+      "base": 4482223872,
+      "bytes": 1024,
+      "reserved_bytes": 1024,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        1,
+        256
+      ],
+      "descriptor_dtype": 7,
+      "expected_payload_sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70"
+    },
+    {
+      "name": "rope",
+      "base": 4482224960,
+      "bytes": 524288,
+      "reserved_bytes": 524288,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        2,
+        1024,
+        64
+      ],
+      "descriptor_dtype": 7,
+      "expected_payload_sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af"
+    },
+    {
+      "name": "x",
+      "base": 4482749312,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": true,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7,
+      "expected_payload_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+    },
+    {
+      "name": "n0",
+      "base": 4483535872,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "qraw",
+      "base": 4484322368,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "qr",
+      "base": 4485108864,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "q",
+      "base": 4485895360,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "kraw",
+      "base": 4486681856,
+      "bytes": 131072,
+      "reserved_bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        256
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "kr",
+      "base": 4486812992,
+      "bytes": 131072,
+      "reserved_bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        256
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "k",
+      "base": 4486944128,
+      "bytes": 131072,
+      "reserved_bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        256
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "vraw",
+      "base": 4487075264,
+      "bytes": 131072,
+      "reserved_bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        256
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "v",
+      "base": 4487206400,
+      "bytes": 131072,
+      "reserved_bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        256
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "kv",
+      "base": 4487337536,
+      "bytes": 262144,
+      "reserved_bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        2,
+        128,
+        256
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "scores",
+      "base": 4487599744,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": true,
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "probabilities",
+      "base": 4488386240,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": true,
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "att",
+      "base": 4489172736,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "o",
+      "base": 4489959232,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "r",
+      "base": 4490745728,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "n1",
+      "base": 4491532224,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "gate",
+      "base": 4492318720,
+      "bytes": 4587520,
+      "reserved_bytes": 4587520,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        8960
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "up",
+      "base": 4496906304,
+      "bytes": 4587520,
+      "reserved_bytes": 4587520,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        8960
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "act",
+      "base": 4501493888,
+      "bytes": 4587520,
+      "reserved_bytes": 4587520,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        8960
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "down",
+      "base": 4506081472,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    },
+    {
+      "name": "y",
+      "base": 4506867968,
+      "bytes": 786432,
+      "reserved_bytes": 786432,
+      "readonly": false,
+      "virtual": false,
+      "shape": [
+        128,
+        1536
+      ],
+      "descriptor_dtype": 7
+    }
+  ],
+  "views": {
+    "cache_k": {
+      "address": 4487337536,
+      "dims": [
+        128,
+        256
+      ],
+      "words": 32768,
+      "readonly": false,
+      "virtual": false
+    },
+    "cache_v": {
+      "address": 4487468608,
+      "dims": [
+        128,
+        256
+      ],
+      "words": 32768,
+      "readonly": false,
+      "virtual": false
+    }
+  },
+  "schedule": [
+    {
+      "pc": 0,
+      "operation": "l0.input_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        0,
+        4,
+        7
+      ],
+      "a": "x",
+      "b": "gamma0",
+      "dst": "n0",
+      "outputs": [
+        "n0"
+      ]
+    },
+    {
+      "pc": 1,
+      "operation": "l0.q",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        10,
+        15,
+        18
+      ],
+      "a": "n0",
+      "b": "wq",
+      "dst": "qraw",
+      "outputs": [
+        "qraw"
+      ]
+    },
+    {
+      "pc": 2,
+      "operation": "l0.q_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        21,
+        25,
+        28
+      ],
+      "a": "qraw",
+      "b": "bq",
+      "dst": "qr",
+      "outputs": [
+        "qr"
+      ]
+    },
+    {
+      "pc": 3,
+      "operation": "l0.q_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        31,
+        35,
+        38
+      ],
+      "a": "qr",
+      "b": "rope",
+      "dst": "q",
+      "outputs": [
+        "q"
+      ]
+    },
+    {
+      "pc": 4,
+      "operation": "l0.k",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        41,
+        46,
+        49
+      ],
+      "a": "n0",
+      "b": "wk",
+      "dst": "kraw",
+      "outputs": [
+        "kraw"
+      ]
+    },
+    {
+      "pc": 5,
+      "operation": "l0.k_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        52,
+        56,
+        59
+      ],
+      "a": "kraw",
+      "b": "bk",
+      "dst": "kr",
+      "outputs": [
+        "kr"
+      ]
+    },
+    {
+      "pc": 6,
+      "operation": "l0.k_rope",
+      "opcode": "SFU_ROPE",
+      "owner": "SFU_CGRA",
+      "roots": [
+        62,
+        66,
+        69
+      ],
+      "a": "kr",
+      "b": "rope",
+      "dst": "k",
+      "outputs": [
+        "k"
+      ]
+    },
+    {
+      "pc": 7,
+      "operation": "l0.v",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        72,
+        77,
+        80
+      ],
+      "a": "n0",
+      "b": "wv",
+      "dst": "vraw",
+      "outputs": [
+        "vraw"
+      ]
+    },
+    {
+      "pc": 8,
+      "operation": "l0.v_bias",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        83,
+        87,
+        90
+      ],
+      "a": "vraw",
+      "b": "bv",
+      "dst": "v",
+      "outputs": [
+        "v"
+      ]
+    },
+    {
+      "pc": 9,
+      "operation": "l0.kv_append",
+      "opcode": "KV_APPEND",
+      "owner": "KV",
+      "roots": [
+        93,
+        96,
+        99
+      ],
+      "a": "k",
+      "b": "v",
+      "dst": "kv",
+      "outputs": [
+        "cache_k",
+        "cache_v"
+      ]
+    },
+    {
+      "pc": 10,
+      "operation": "l0.qk",
+      "opcode": "MATRIX_QK",
+      "owner": "MATRIX",
+      "roots": [
+        102,
+        107,
+        110
+      ],
+      "a": "q",
+      "b": "cache_k",
+      "dst": "scores",
+      "outputs": []
+    },
+    {
+      "pc": 11,
+      "operation": "l0.softmax",
+      "opcode": "SFU_SOFTMAX",
+      "owner": "SFU_CGRA",
+      "roots": [
+        113,
+        16777215,
+        117
+      ],
+      "a": "scores",
+      "b": null,
+      "dst": "probabilities",
+      "outputs": []
+    },
+    {
+      "pc": 12,
+      "operation": "l0.pv",
+      "opcode": "MATRIX_PV",
+      "owner": "MATRIX",
+      "roots": [
+        120,
+        125,
+        128
+      ],
+      "a": "probabilities",
+      "b": "cache_v",
+      "dst": "att",
+      "outputs": [
+        "att"
+      ]
+    },
+    {
+      "pc": 13,
+      "operation": "l0.oproj",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        131,
+        136,
+        139
+      ],
+      "a": "att",
+      "b": "wo",
+      "dst": "o",
+      "outputs": [
+        "o"
+      ]
+    },
+    {
+      "pc": 14,
+      "operation": "l0.attn_residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        142,
+        146,
+        149
+      ],
+      "a": "x",
+      "b": "o",
+      "dst": "r",
+      "outputs": [
+        "r"
+      ]
+    },
+    {
+      "pc": 15,
+      "operation": "l0.post_norm",
+      "opcode": "SFU_RMSNORM",
+      "owner": "SFU_CGRA",
+      "roots": [
+        152,
+        156,
+        159
+      ],
+      "a": "r",
+      "b": "gamma1",
+      "dst": "n1",
+      "outputs": [
+        "n1"
+      ]
+    },
+    {
+      "pc": 16,
+      "operation": "l0.gate",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        162,
+        167,
+        170
+      ],
+      "a": "n1",
+      "b": "wg",
+      "dst": "gate",
+      "outputs": [
+        "gate"
+      ]
+    },
+    {
+      "pc": 17,
+      "operation": "l0.up",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        173,
+        178,
+        181
+      ],
+      "a": "n1",
+      "b": "wu",
+      "dst": "up",
+      "outputs": [
+        "up"
+      ]
+    },
+    {
+      "pc": 18,
+      "operation": "l0.silu_mul",
+      "opcode": "SFU_ACTIVATION",
+      "owner": "SFU_CGRA",
+      "roots": [
+        184,
+        188,
+        191
+      ],
+      "a": "gate",
+      "b": "up",
+      "dst": "act",
+      "outputs": [
+        "act"
+      ]
+    },
+    {
+      "pc": 19,
+      "operation": "l0.down",
+      "opcode": "MATRIX_GEMM",
+      "owner": "MATRIX",
+      "roots": [
+        194,
+        199,
+        202
+      ],
+      "a": "act",
+      "b": "wd",
+      "dst": "down",
+      "outputs": [
+        "down"
+      ]
+    },
+    {
+      "pc": 20,
+      "operation": "l0.residual",
+      "opcode": "SFU_VECTOR",
+      "owner": "SFU_CGRA",
+      "roots": [
+        205,
+        209,
+        212
+      ],
+      "a": "r",
+      "b": "down",
+      "dst": "y",
+      "outputs": [
+        "y"
+      ]
+    }
+  ],
+  "payload_bytes": 94920448,
+  "historical_stream": {
+    "bytes": 94921526,
+    "sha256": "fb078e0219e876a8e8fe10212113f7d7c2341a5ce916810c2101e3af410761c7",
+    "source": "recovered source/pc0/pc0_main.cpp",
+    "grammar_recovered": false
+  },
+  "boundaries": {
+    "numeric_payloads_loaded": false,
+    "native_compilation": false,
+    "eda": false,
+    "host_headers_implemented": false,
+    "original_missing_source_recovered": false,
+    "full_block_qualified": false
+  },
+  "source_tree": "9f743cd7ff48b820ac65ce2bb15024864b37d4e9",
+  "source_identity_note": "Published recovery-path identity corrected in v2; metadata values unchanged. Original builders and published source bytes are pinned separately."
+}

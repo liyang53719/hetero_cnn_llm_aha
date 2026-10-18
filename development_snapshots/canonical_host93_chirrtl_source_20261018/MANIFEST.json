@@ -1,0 +1,44 @@
+{
+  "files": {
+    "ELABORATION_WARNINGS.md": {
+      "bytes": 3086,
+      "sha256": "43c0f910092bc3ff6fc533b707261ed29e5f91df6a7e5709ab3128d5eed8103a"
+    },
+    "EMIT_PLAN.json": {
+      "bytes": 94138,
+      "sha256": "e6f0245132f9bd292ccd4bc60789db9d205f9aab4f29a1c7f234869285d03a21"
+    },
+    "INSTALL_MAP.json": {
+      "bytes": 763,
+      "sha256": "104d52e90811bc97d1ed6752bbef86510003fdd9f47dd58396a07c47983ef67e"
+    },
+    "README.md": {
+      "bytes": 2429,
+      "sha256": "d108f9e72f502a14d3734ac2bc999d0d4c53f28c59b6819bca777d8b2f8c21b3"
+    },
+    "SAFE_HISTORY.json": {
+      "bytes": 916,
+      "sha256": "a9109a7a72145984e7ea6aea80fc349fcdaaf2f974e41a962826ddaca3eca706"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 1464,
+      "sha256": "76095a87d323af9024d79cb41ef6a98ba96e865fe4c2cacd2a18874daadd0efb"
+    },
+    "run_chirrtl_gate.py": {
+      "bytes": 12335,
+      "sha256": "2d07c07fa03595dceeaf024df31650ff9e22547b9f5e5c6ad829549256dc8ff5"
+    },
+    "test_chirrtl_gate_cold.py": {
+      "bytes": 11166,
+      "sha256": "7a0672e0368d65f10cb0b67d557d0202506278c2d09e360fbd44da5c3957ee79"
+    }
+  },
+  "original_source_manifest_sha256": "6e6b57e338c85b01b36a899516ab2c3769d146b194099f0ad3e701ca2c54bdeb",
+  "status": "SOURCE_PUBLICATION_PROJECTION_ONLY",
+  "unchanged_execution_plan_provenance": [
+    "run_chirrtl_gate.py",
+    "test_chirrtl_gate_cold.py",
+    "EMIT_PLAN.json",
+    "SOURCE_PROVENANCE.json"
+  ]
+}

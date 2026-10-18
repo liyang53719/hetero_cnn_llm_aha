@@ -1,0 +1,12 @@
+{
+  "actual_execution": "Requires local class-attempt, java and fresh output paths plus explicit --execute-reviewed-chirrtl after source/actual/budget approval. No actual local path is distributed.",
+  "cold": "python -I -S -B test_chirrtl_gate_cold.py --repo <repository>",
+  "destination": "development_snapshots/canonical_host93_chirrtl_source_20261018",
+  "existing_repository_dependencies": [
+    "development_snapshots/canonical_host93_observation_source_20261018/calibration",
+    "development_snapshots/canonical_runtime_ram_source_20261018",
+    "candidates/qwen2_resident_matrix/host93_source_recovery",
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile"
+  ],
+  "run": "python -I -S -B run_chirrtl_gate.py --repo <repository>"
+}

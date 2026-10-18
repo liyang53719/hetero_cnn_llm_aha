@@ -573,3 +573,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：新校准门只增无去优化作用的-verbose、每秒原leader身份核验CPU/RSS/HWM日志及终态getrusage；原WNOWAIT清理保持。330秒总窗/最多300秒compile、heap1GiB/AS4GiB/单CPU，普通/优化各23项纯mock通过。
 - ongoing：一次新校准已保存outer退出0、279.264秒和562个class/9,653,495B，当前交独立实际库存与资源审；此处先记录原执行观察，尚不以源码包或孤立RESULT授CLASS资格。
 - todo：独审后再规划CHIRRTL、SV和真实Host接口恢复；verbose仅保证已发进度逐行flush，不保证每phase或日志必在2MiB内。旧120秒FAIL保留，07:44丢失前N0终态未知，完整block仍0/5。
+
+
+### 2026-10-18 13:55 UTC：新Host93 CLASS与CHIRRTL实际库存闭合
+
+- done：有观测CLASS单次校准outer退出0、279.264秒，固定93源/87JAR生成562类、9,653,495B，完整748文件及输入后验独审通过；保留原120秒FAIL。
+- done：实际child全生命周期CPU269.037274+7.914993秒，绝对峰值RSS946,504KiB；274条leader采样原值保留，包括一次VmHWM小幅下降，不宣称采样序列严格单调或倒填旧失败原因。
+- done：同一新共同Host emitter实际生成HostBlockCollection.fir，42,417,256B、SHA256为264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a；outer退出0、47.114秒，完整657文件/246目录/114,100,740B独审通过。仅CHIRRTL生成库存资格。
+- done：发射实际child CPU40.13349+4.498979秒，绝对峰值RSS621,448KiB；保锚清理与原562类/87JAR后验闭合。实际5条索引宽度warning原文保存，有限源行解释不能证明全过程索引安全。
+- done：保存9件纯发射源码/冷测/项目class相对名大小哈希/安全说明，无class、JAR、FIR内容或机器库存。包内安全历史保留冻结时实际审PENDING，不热改原件；当前实际审结论在本计划追加记录。
+- ongoing：同一FIR的83口/8endpoint/metadata/九tap结构资格仍未闭合；初版checker遗漏invalidate覆写的反例已确认，隔离窄修后再只读核，不修改或重新发射FIR。
+- todo：结构闭合后才进入独立firtool/SV门、真实ABI与Host执行；本次未运行firtool/Verilator/Host，旧N0终态未知，完整block仍0/5。

@@ -1,0 +1,27 @@
+{
+  "class_actual_review_manifest_sha256": "95fba4715ea61110a00ea660a5fb2df1d2538555e34db0980dcb898ba8f263b7",
+  "excluded": [
+    "local execution argv",
+    "local tool inventory",
+    "class bytes",
+    "JAR bytes",
+    "FIR bytes",
+    "actual logs",
+    "author cold logs",
+    "audit directories"
+  ],
+  "generation_actual_review": "PENDING",
+  "generation_actual_review_manifest_sha256": null,
+  "historical95_identity_inherited": false,
+  "host_runtime_qualification": false,
+  "new_source_identity": "Host93: 92 production sources and one common Host collection emitter",
+  "rtl_qualification": false,
+  "scope": "SOURCE_SAFE_SUMMARY_ONLY",
+  "source_gate_cold_tests": {
+    "kind": "tiny files and mocks only",
+    "normal": 17,
+    "optimized": 17
+  },
+  "source_gate_review_manifest_sha256": "f2fae18d42a5d359670aaa46b82429f68aed4da94ebfcad81b9ac4fc79965c16",
+  "structure_qualification": "INCOMPLETE"
+}

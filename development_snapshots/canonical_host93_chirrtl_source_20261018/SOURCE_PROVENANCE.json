@@ -1,0 +1,17 @@
+{
+  "calibration_gate_sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a",
+  "class_actual_review_manifest_sha256": "95fba4715ea61110a00ea660a5fb2df1d2538555e34db0980dcb898ba8f263b7",
+  "class_actual_review_summary_sha256": "057a269c87a8691fe26b431580b3499a1b65c8c4d895011e4da7510484f3ef83",
+  "emitter_entry": "heteronpu.continuous.EmitCanonicalHost93",
+  "emitter_source_sha256": "ebc35a597dc3be2374efa7408ea152ff954f37483132b1d03e0d8c902628705d",
+  "historical95_identity_inherited": false,
+  "iDMA_status": "RetainedIdmaBackend is a bare BlackBox desiredName idma_backend_rw_axi_flat_wrap without external source/resource loading; only a CHIRRTL extmodule declaration is emitted.",
+  "official_chisel_chirrtl_source": {
+    "git_blob_sha1": "b7a28998f175e39789371a9fdbd282daaed702c1",
+    "read_only_finding": "transform returns annotations for CIRCTTarget.CHIRRTL at lines128-135 before firtool resolution at lines204 onward; no firtool is needed by emitCHIRRTL.",
+    "url": "https://github.com/chipsalliance/chisel/blob/v6.7.0/src/main/scala/circt/stage/phases/CIRCT.scala"
+  },
+  "source_status": "NEW_CHIRRTL_GENERATION_GATE_ONLY",
+  "supervisor_change": "No edits; use the exact reviewed five-function WNOWAIT projection, resource caps and original leader sampler. Only new entrypoint/stage bookkeeping and fixed input maps.",
+  "supervisor_projection_sha256": "091e5d8e5588ee40576de366998e06be4357a2714a23d6be247015f79ddbf9e1"
+}

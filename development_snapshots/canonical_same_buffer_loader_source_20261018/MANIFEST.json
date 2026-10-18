@@ -1,0 +1,69 @@
+{
+  "canonical_identity_bound": false,
+  "contains_executable": false,
+  "contains_full_environment_logs": false,
+  "contains_generated_data": false,
+  "contains_user_tensor_payload": false,
+  "current_compiler_binary_path_or_sha_embedded": false,
+  "dynamic_compiler_identity_recording_preserved": true,
+  "eda_executed": false,
+  "files": {
+    "BEHAVIOR_SUMMARY.json": {
+      "bytes": 2152,
+      "sha256": "b6934486ed03aca5be4395883083f1b12e82754e0639eb0e4bec49ff50b45851"
+    },
+    "BUILD_INPUT_PINS.json": {
+      "bytes": 955,
+      "sha256": "17a4dbb06fe6d03072b0187465bdc7e2d93e12e421adc9d6ed45db1d7f4be580"
+    },
+    "COLD_TEST_RESULTS.json": {
+      "bytes": 808,
+      "sha256": "9dff80f92c5893b29771d09b037926bdd90487fa6fe89e52d0bec513e4aa71b6"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 879,
+      "sha256": "573874c4bfb38b84c592c1cc7a5769a97f55687ec3176d43d1e96be2a35b4945"
+    },
+    "README_CN.md": {
+      "bytes": 4845,
+      "sha256": "efaf5d91721cf263bf24b4c07be098161a0e5d97a2125dc4b55f9b20039a7bff"
+    },
+    "RUNNER_DELTA.json": {
+      "bytes": 1458,
+      "sha256": "96c4e4ba990a1fc1e9dcbb519b32c790301b59fa26d0b77da1f8f1ddc404d403"
+    },
+    "initialization_ram.hpp": {
+      "bytes": 8805,
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "run_behavior.py": {
+      "bytes": 12608,
+      "sha256": "d96ef50772d9b3ab4f641aa3bfdb1a50e443cc7d52a25945af4ef2efd15361e0"
+    },
+    "same_buffer_loader.hpp": {
+      "bytes": 7998,
+      "sha256": "309cb1be6f126c1d32eae855da4bedacfb1a5ef45ca6ab0f7f29bfa7c81fc88a"
+    },
+    "sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "test_runner_cold.py": {
+      "bytes": 14995,
+      "sha256": "05e8c5373f5aaad4a0b26be7e3b084cdfc99d4299f12e4adf2e5a973567c1450"
+    },
+    "test_same_buffer_loader.cpp": {
+      "bytes": 18768,
+      "sha256": "40a7727a54bbb3d08df5617c03b3c868d5756f012e02c2fa87c2eaa0890881fb"
+    }
+  },
+  "four_cpp_inputs_byte_identical_to_prior_native_run": true,
+  "full_host_ready": false,
+  "launch_ready": false,
+  "package_location_native_rerun_performed": false,
+  "published": false,
+  "runner_and_cold_byte_identical_to_executed_gate": true,
+  "runtime_dependency_on_prior_directories": false,
+  "schema": 1,
+  "status": "PORTABLE_SAME_BUFFER_LOADER_SOURCE_V1_REVIEW_PENDING"
+}

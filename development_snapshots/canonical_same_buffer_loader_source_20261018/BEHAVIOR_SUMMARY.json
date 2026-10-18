@@ -1,0 +1,68 @@
+{
+  "all_started_test_process_groups_cleanup_confirmed": true,
+  "canonical_identity_bound": false,
+  "canonical_input_sha_verified": false,
+  "canonical_payload_loaded": false,
+  "checks": 421,
+  "checks_are_independent_test_cases": false,
+  "checks_meaning": "number of check() calls including loop iterations and helper checks",
+  "compiler_family": "GCC",
+  "compiler_version": "14.2.0",
+  "current_compiler_binary_path_or_sha_included": false,
+  "declared_max_synthetic_ram_payload_bytes": 65537,
+  "eda_executed": false,
+  "full_environment_logs_included": false,
+  "full_host_ready": false,
+  "language_standard": "C++17",
+  "launch_ready": false,
+  "mask_bytes_at_declared_max": 65537,
+  "old_wire_framing_recovered": false,
+  "package_location_native_rerun_performed": false,
+  "process_peak_memory_measured": false,
+  "rtl_acceptance": false,
+  "schema": 1,
+  "scope": "synthetic per-input same-RAM loader only",
+  "source_input_hashes": {
+    "initialization_ram.hpp": {
+      "bytes": 8805,
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "same_buffer_loader.hpp": {
+      "bytes": 7998,
+      "sha256": "309cb1be6f126c1d32eae855da4bedacfb1a5ef45ca6ab0f7f29bfa7c81fc88a"
+    },
+    "sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "test_same_buffer_loader.cpp": {
+      "bytes": 18768,
+      "sha256": "40a7727a54bbb3d08df5617c03b3c868d5756f012e02c2fa87c2eaa0890881fb"
+    }
+  },
+  "stages": {
+    "compile": {
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "reaped": true,
+      "wall_seconds": 1.393817
+    },
+    "compiler_version": {
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "reaped": true,
+      "wall_seconds": 0.023344
+    },
+    "run": {
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_absent": true,
+      "reaped": true,
+      "wall_seconds": 0.127493
+    }
+  },
+  "status": "PRIOR_BOUNDED_SYNTHETIC_CPP_RUN_PASSED_WITH_IDENTICAL_SOURCE_BYTES",
+  "timings_are_performance_benchmark": false
+}

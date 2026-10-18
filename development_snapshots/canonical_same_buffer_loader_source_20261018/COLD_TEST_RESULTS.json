@@ -1,0 +1,39 @@
+{
+  "native_rerun_in_packaging": false,
+  "real_compiler_started_in_packaging": false,
+  "real_signals_sent_in_cold_tests": false,
+  "runs": [
+    {
+      "argv": [
+        "python",
+        "-I",
+        "-S",
+        "-B",
+        "test_runner_cold.py"
+      ],
+      "exit_code": 0,
+      "result": "OK",
+      "tests_run": 15
+    },
+    {
+      "argv": [
+        "python",
+        "-I",
+        "-S",
+        "-B",
+        "-O",
+        "test_runner_cold.py"
+      ],
+      "exit_code": 0,
+      "result": "OK",
+      "tests_run": 15
+    }
+  ],
+  "schema": 1,
+  "source_files_unchanged_from_successful_gate": true,
+  "status": "RELOCATED_PACKAGE_MOCK_COLD_PASS",
+  "tested_project_source_hashes": {
+    "bytes": 879,
+    "sha256": "573874c4bfb38b84c592c1cc7a5769a97f55687ec3176d43d1e96be2a35b4945"
+  }
+}

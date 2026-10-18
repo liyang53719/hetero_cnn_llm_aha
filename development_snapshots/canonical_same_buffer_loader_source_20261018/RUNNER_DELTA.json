@@ -1,0 +1,46 @@
+{
+  "base_runner": {
+    "bytes": 12388,
+    "sha256": "6416de6a306fb1f12e20fca22d77ff0270203b2e1b7e31e4e38e8276c636490f"
+  },
+  "base_runner_repository_path": "development_snapshots/canonical_same_ram_source_20261018/run_behavior.py",
+  "dynamic_compiler_identity_recording_preserved": true,
+  "package_relocation_only": true,
+  "retained_function_bytes": {
+    "bounded": {
+      "bytes": 5482,
+      "sha256": "dce06cfa44a7d2f62715902434229980e0439bddc5dc55b1b1057c8d4db0c28e"
+    },
+    "digest": {
+      "bytes": 89,
+      "sha256": "cb81e355742a1f3808c6e68220f2566b029ef1477846e79959c360e65788b58c"
+    },
+    "group_state": {
+      "bytes": 190,
+      "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+    },
+    "observe_exit": {
+      "bytes": 719,
+      "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+    },
+    "require": {
+      "bytes": 67,
+      "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+    },
+    "save": {
+      "bytes": 179,
+      "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+    }
+  },
+  "runtime_dependency_on_prior_directories": false,
+  "schema": 1,
+  "source_files_byte_identical_to_executed_gate": [
+    "initialization_ram.hpp",
+    "sha256.hpp",
+    "same_buffer_loader.hpp",
+    "test_same_buffer_loader.cpp",
+    "run_behavior.py",
+    "test_runner_cold.py"
+  ],
+  "supervision_framework_changed": false
+}

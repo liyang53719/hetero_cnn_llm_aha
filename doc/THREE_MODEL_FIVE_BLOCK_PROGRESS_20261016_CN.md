@@ -475,3 +475,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 边界：这些是已发布历史输入身份，不是当前 payload 重新读取或数值验收。当前缺失 13 raw tensor；原 producer 依赖的 work 元数据未恢复。不得从旧 stream SHA 或长度反推 framing。
 - ongoing：新逐输入流接口将实际写入同 RAM，固定 expected 摘要先校验，再封存与同 RAM 重算；仅固定交接边界哈希，正常只读访问不全量重算。
 - todo：取得并验证真实原始 payload 后才能授予 canonical 加载身份；launch、完整 Host/27 数值和旧 N0 终态未知边界保持，完整 block RTL 仍为 0/5。
+
+
+### 2026-10-18 09:29 UTC：逐输入同 RAM 加载器真实合成行为闭环
+
+- done：新增标准 SHA-256 与逐输入 C++17 loader，固定名称/顺序/长度/摘要、64 KiB 分块和严格 EOF；可信 expected 元数据深拷贝，异常粘性 poison。
+- done：同一实际 RAM 在封存和一次性 token 兑换前分别复核 SHA；只读 view 显式 reverify，正常读取不逐 beat 全量哈希。未知 allocator 测试形态在读取探针前安全拒绝。
+- done：真实单 TU 编译 1.393817 秒、测试 0.127493 秒，421 次 check 调用通过（不是 421 个独立 case）；最大声明合成 RAM payload 为 65,537 字节，并有等长初始化 mask。三个受监督阶段均退出 0 且保存锚定清理证据。复现脚本普通/-O 各 15 项 mock 冷测通过。
+- 发布范围：仅生产头、测试、复现脚本、项目 pins 与必要数值摘要；不包含 ELF、当前编译器路径或二进制身份清单、完整运行日志。保留未来执行时写入本地 receipt 的动态 compiler SHA 功能。
+- ongoing：按真实 metadata allocation 顺序绑定 14 provider 与两表；保持原地址需约 188.6 MB 连续 RAM，完整四区约 213.5 MB，初始化 mask 另占同等容量，不能把 94,920,448 字节 payload 合计当作分配量。
+- todo：真实 raw payload 获取/逐 hash 校验与 canonical 加载仍待单独授权和预算；历史 framing、生产 HostMemory/launch/27 数值均未恢复。旧 N0 终态未知，完整 block RTL 仍为 0/5。

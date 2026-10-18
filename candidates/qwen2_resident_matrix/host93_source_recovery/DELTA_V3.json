@@ -1,0 +1,43 @@
+{
+  "changes": {
+    "README_CN.md": {
+      "after_sha256": "f39b448e10cc5aaeb68320bcd8699aed076ba6780856c49b63b8527c3dbdd6de",
+      "before_sha256": "1999ee5d3c2ccd85ae40c4fa239e583deb8f61bde03ba9dfe9f7457df0e27f5d"
+    },
+    "acquisition/README.md": {
+      "after_sha256": "1f276f619be4aba4e8a4949d26eb6a98f11dbaa09c31ba6aa4ee59d8d89e8d6d",
+      "before_sha256": "e05a17d8064a6c4ca065134573a6dadee3be711b458eedc80deab60a5f1cb7ac"
+    },
+    "acquisition/acquire.py": {
+      "after_sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69",
+      "before_sha256": "da7fdf90b2a18b6915f31c832d9a7463d75367f1f4977d9b29df0eabccc599a8"
+    },
+    "acquisition/tests/test_acquire.py": {
+      "after_sha256": "0d14d3070928f1b96c9d9d6cb6a330c319545139d54605c28d377321651dd046",
+      "before_sha256": "ad56b69dd7e30a31452f2e40882c34e586da0ffc04cad14405d977593a80dc92"
+    }
+  },
+  "cold_only": true,
+  "counterexamples": [
+    "receipt cleanup unlink failure cannot create conflicting success/failure terminal records",
+    "artifact cleanup unlink failure cannot mask original SHA error or suppress failure-record attempt",
+    "received read bytes are counted before elapsed-deadline rejection"
+  ],
+  "old_candidate_retained_unchanged": true,
+  "predecessor_manifest_sha256": "4f77f4ef02548f134bb8f258c5173ac2f33b7d7ad57cf2b90804b2ca6068278c",
+  "real_acquisition_performed": false,
+  "schema": 1,
+  "scope": "V3_THREE_FINITE_ACQUISITION_FAILURE_FIXES",
+  "unchanged_required": {
+    "SOURCE_REPLAY_PLAN.json": "963b338d5ba80aaf6e16f05c697fd62a448ab2a9dbcc96d36d49c4b83b26c2e2",
+    "acquisition/PLAN_LOCK.json": "e9d77570cc679b0f65845f693b98b3b7a905d27905cb5a45c373b42efd8627a3",
+    "acquisition/plans/firtool.json": "249e9ad75a8049934b61e980bbcc61068bb1286b5dfdf69975cb803c9f4dea6a",
+    "acquisition/plans/hardfloat20.json": "3afa358e7e1ab0f58a5b8b140c707063aeb619ec475f438ccd1724b3532b7c73",
+    "acquisition/plans/idma.json": "10e063b860f0b5f28b028c3b4502dd7e3099212f5db34b7ac0c03dbef157ad9f",
+    "acquisition/plans/jar87.json": "8d571b869c4ade3e2bc252c9d694dab0e61029cb611bce8cbfcd317584e08b5e",
+    "acquisition/plans/verilator.json": "dce545ae9c24a9c05d138edc113c9d72694d62152f8486c9dea6daab33958e6e",
+    "assemble_host93.py": "75a2145eea0de83ad1bbe3a7a64e1a5f14f20f9f1381f65e619fb5bd3d427641",
+    "source/EmitCanonicalHost93.scala": "ebc35a597dc3be2374efa7408ea152ff954f37483132b1d03e0d8c902628705d",
+    "test_source_cold.py": "bade59347c129e9879c447df1c33a61b9f9bc0492470ef3724bcad08c9c4bbad"
+  }
+}

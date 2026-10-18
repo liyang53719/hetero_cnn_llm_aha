@@ -1,0 +1,212 @@
+{
+  "artifact_count": 20,
+  "artifacts": [
+    {
+      "git_blob_sha1": "e906f95940664ef10cf9d209484f710c48410a78",
+      "known_size_bytes": 8776,
+      "max_transfer_bytes": 8777,
+      "relative_destination": "hardfloat/src/main/scala/AddRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/AddRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "246c3680f76a15eed1786bbe743368bfda6424a9",
+      "known_size_bytes": 3476,
+      "max_transfer_bytes": 3477,
+      "relative_destination": "hardfloat/src/main/scala/CompareRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/CompareRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "30a06eeb2aaae7a5f9d9ba4589ca295d59d166c8",
+      "known_size_bytes": 4428,
+      "max_transfer_bytes": 4429,
+      "relative_destination": "hardfloat/src/main/scala/DivSqrtRecF64.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/DivSqrtRecF64.scala"
+    },
+    {
+      "git_blob_sha1": "391914c872eb8c69321c15a3526e145f70caba49",
+      "known_size_bytes": 33929,
+      "max_transfer_bytes": 33930,
+      "relative_destination": "hardfloat/src/main/scala/DivSqrtRecF64_mulAddZ31.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/DivSqrtRecF64_mulAddZ31.scala"
+    },
+    {
+      "git_blob_sha1": "7f65d667a13a0cfb3b2bab15413cb5e71e176f2b",
+      "known_size_bytes": 20235,
+      "max_transfer_bytes": 20236,
+      "relative_destination": "hardfloat/src/main/scala/DivSqrtRecFN_small.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/DivSqrtRecFN_small.scala"
+    },
+    {
+      "git_blob_sha1": "d45aa9fb25867e64f37863d25b4b6fb38df40738",
+      "known_size_bytes": 3417,
+      "max_transfer_bytes": 3418,
+      "relative_destination": "hardfloat/src/main/scala/INToRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/INToRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "27996b8bb53ad3177b57269795814cdfbd5c9b45",
+      "known_size_bytes": 15353,
+      "max_transfer_bytes": 15354,
+      "relative_destination": "hardfloat/src/main/scala/MulAddRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/MulAddRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "ca5fdc6322b080089f411e2d90f63e5c331bb5cc",
+      "known_size_bytes": 5706,
+      "max_transfer_bytes": 5707,
+      "relative_destination": "hardfloat/src/main/scala/MulRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/MulRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "ea86ccfda4967eb3a2735ede00bda959ee0c7aaa",
+      "known_size_bytes": 6827,
+      "max_transfer_bytes": 6828,
+      "relative_destination": "hardfloat/src/main/scala/RecFNToIN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/RecFNToIN.scala"
+    },
+    {
+      "git_blob_sha1": "8eb625afa47d6369e70167f767d8911f6cb9ecd8",
+      "known_size_bytes": 3958,
+      "max_transfer_bytes": 3959,
+      "relative_destination": "hardfloat/src/main/scala/RecFNToRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/RecFNToRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "34ecf320a4d1372b030a631c6138fa26c141a905",
+      "known_size_bytes": 13901,
+      "max_transfer_bytes": 13902,
+      "relative_destination": "hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "cf7acfee627dd10595c5300381491798e7e46fce",
+      "known_size_bytes": 2880,
+      "max_transfer_bytes": 2881,
+      "relative_destination": "hardfloat/src/main/scala/classifyRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/classifyRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "eeddc6e9a7f46a08f615fb2a7c813e25dac950c5",
+      "known_size_bytes": 3925,
+      "max_transfer_bytes": 3926,
+      "relative_destination": "hardfloat/src/main/scala/common.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/common.scala"
+    },
+    {
+      "git_blob_sha1": "d5917244009b5ff506ded63b54d5c9f3b1c49008",
+      "known_size_bytes": 2853,
+      "max_transfer_bytes": 2854,
+      "relative_destination": "hardfloat/src/main/scala/fNFromRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/fNFromRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "7f5d1a332b22806864d73bd18a75f679b0779f22",
+      "known_size_bytes": 5105,
+      "max_transfer_bytes": 5106,
+      "relative_destination": "hardfloat/src/main/scala/primitives.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/primitives.scala"
+    },
+    {
+      "git_blob_sha1": "e6135fc0143d0f9099a15f04c4c1e38bafa1b7ef",
+      "known_size_bytes": 3037,
+      "max_transfer_bytes": 3038,
+      "relative_destination": "hardfloat/src/main/scala/rawFloatFromFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/rawFloatFromFN.scala"
+    },
+    {
+      "git_blob_sha1": "d1132c7c94335d395ca27078877769610a6c59ca",
+      "known_size_bytes": 2885,
+      "max_transfer_bytes": 2886,
+      "relative_destination": "hardfloat/src/main/scala/rawFloatFromIN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/rawFloatFromIN.scala"
+    },
+    {
+      "git_blob_sha1": "d11e43f1467d667be51cd65bbc441f1c9e631da1",
+      "known_size_bytes": 2877,
+      "max_transfer_bytes": 2878,
+      "relative_destination": "hardfloat/src/main/scala/rawFloatFromRecFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/rawFloatFromRecFN.scala"
+    },
+    {
+      "git_blob_sha1": "a10132fcccf3564a155bfe1783f897a7d453a1b2",
+      "known_size_bytes": 2352,
+      "max_transfer_bytes": 2353,
+      "relative_destination": "hardfloat/src/main/scala/recFNFromFN.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/recFNFromFN.scala"
+    },
+    {
+      "git_blob_sha1": "423beb47e7f88633985a93842566e42998966917",
+      "known_size_bytes": 3237,
+      "max_transfer_bytes": 3238,
+      "relative_destination": "hardfloat/src/main/scala/resizeRawFloat.scala",
+      "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+      "sha256": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561",
+      "url": "https://raw.githubusercontent.com/ucb-bar/berkeley-hardfloat/c1105e6ac6a0dd90fc80893efc4830ab609005d3/hardfloat/src/main/scala/resizeRawFloat.scala"
+    }
+  ],
+  "group": "hardfloat20",
+  "known_payload_bytes": 149157,
+  "limits": {
+    "approval_status": "PROPOSED_FINITE_LIMITS_NOT_EXECUTION_AUTHORITY",
+    "byte_cap_semantics": "Read at most these bytes. Reaching an artifact transfer cap without EOF fails closed; max verified payload is cap minus one.",
+    "elapsed_check_seconds": 300,
+    "socket_timeout_seconds": 30,
+    "time_cap_semantics": "Elapsed budget checked between operations; socket timeout bounds blocking I/O, not a whole-process hard deadline.",
+    "total_transfer_bytes": 149177
+  },
+  "policy": {
+    "authorization": "Plans and command-line switches are not authorization. Obtain explicit acquisition approval before using fetch.",
+    "execute_or_extract": false,
+    "network_route": "Default platform HTTPS/TLS and inherited proxy configuration; no credential handling, route override, redirect or fallback",
+    "output": "New isolated directory outside the repository; acquired-byte inventory stays there"
+  },
+  "provenance": {
+    "repository_commit": "fbb62b88bac2f0a066d2cc4f64b81e8f77c245ef",
+    "source_audit_basename": "SOURCE_ACQUISITION_PLAN.json",
+    "source_audit_sha256": "abc83971eae5b8f82921df2f03294c0ba965e41d7e3c630d1386fcdbe32ecacd"
+  },
+  "revision": "c1105e6ac6a0dd90fc80893efc4830ab609005d3",
+  "schema": 1,
+  "scope_note": "Exactly 20 pinned Scala files; no repository clone or source assembly.",
+  "source_closure": "Host93 = published production92 + one new Host-only common-namespace emitter; no Bench/Spec additions",
+  "status": "SOURCE_ONLY_CANDIDATE_NOT_ACQUIRED",
+  "transport": "https-no-redirect"
+}

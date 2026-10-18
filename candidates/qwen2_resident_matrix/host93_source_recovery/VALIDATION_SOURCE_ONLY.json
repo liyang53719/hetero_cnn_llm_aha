@@ -1,0 +1,65 @@
+{
+  "acquisition_plans_validated": [
+    "jar87",
+    "hardfloat20",
+    "firtool",
+    "verilator",
+    "idma"
+  ],
+  "acquisition_tests": {
+    "invocations": [
+      "python -I -S -B acquisition/tests/test_acquire.py -v",
+      "python -I -S -O -B acquisition/tests/test_acquire.py -v"
+    ],
+    "optimized": 34,
+    "optimized_pass": true,
+    "ordinary": 34,
+    "ordinary_pass": true
+  },
+  "archive_extraction_executed": false,
+  "finite_failure_corrections": {
+    "normal_pass": true,
+    "optimized_pass": true,
+    "source": "independent audit three exact synthetic counterexamples"
+  },
+  "full_block_rtl_passes": 0,
+  "hardware_elaborated": false,
+  "historical_95_identity_inherited": false,
+  "network_metadata_requests": 0,
+  "pyc_controls": {
+    "cache_files_in_identity": false,
+    "modified_execution_bytes_refused": true,
+    "new_loaders_ignore_marker": true,
+    "optimized_positive_control_executes_marker": true,
+    "ordinary_positive_control_executes_marker": true,
+    "real_rebase_helper_loaded": false
+  },
+  "real_artifacts_downloaded": 0,
+  "real_host_bound": false,
+  "rtl_generated": false,
+  "scala_compiler_started": false,
+  "schema": 1,
+  "source_assembly_executed": false,
+  "source_tests": {
+    "invocations": [
+      "python -I -S -B test_source_cold.py --repo ABSOLUTE_REPOSITORY",
+      "python -I -S -O -B test_source_cold.py --repo ABSOLUTE_REPOSITORY"
+    ],
+    "optimized": 17,
+    "optimized_pass": true,
+    "ordinary": 17,
+    "ordinary_pass": true
+  },
+  "static_preflight": {
+    "external_recipe_loaded": false,
+    "input_count": 111,
+    "pass": true,
+    "planned_source_count": 93,
+    "replay_plan_sha256": "963b338d5ba80aaf6e16f05c697fd62a448ab2a9dbcc96d36d49c4b83b26c2e2",
+    "tap_forward_and_backprojection": true
+  },
+  "status": "PASS_COLD_SOURCE_CANDIDATE_ONLY",
+  "tested_at_utc": "2026-10-18T12:00:00Z",
+  "tool_execution_executed": false,
+  "version": "v3"
+}

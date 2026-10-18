@@ -1,0 +1,109 @@
+{
+  "artifact_count": 1,
+  "artifacts": [
+    {
+      "known_size_bytes": 9926876,
+      "max_transfer_bytes": 9926877,
+      "relative_destination": "idma-pinned-source-rebuild-0077355800e3040dfdd6d79def697f3ff6456c2c-1.zip",
+      "sha256": "a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce",
+      "url": "https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha/actions/artifacts/12099239717/zip",
+      "version": "0077355800e3040dfdd6d79def697f3ff6456c2c"
+    }
+  ],
+  "existing_artifact": {
+    "actual_archive_bytes_reverified": false,
+    "archive_url": "https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha/actions/artifacts/12099239717/zip",
+    "artifact_id": 12099239717,
+    "availability_boundary": "Metadata confirmed only. Future authorized download must authenticate returned archive and safe extraction; expiry is not download success.",
+    "download_performed": false,
+    "expired_at_metadata_check": false,
+    "expires_at_utc": "2026-11-16T12:00:15Z",
+    "known_size_bytes": 9926876,
+    "manifest_sha256": "a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19",
+    "metadata_checked_at_utc": "2026-10-18T11:29:48Z",
+    "metadata_url": "https://api.github.com/repos/liyang53719/hetero_cnn_llm_aha/actions/artifacts/12099239717",
+    "name": "idma-pinned-source-rebuild-0077355800e3040dfdd6d79def697f3ff6456c2c-1",
+    "published_expanded_bytes": 33744483,
+    "published_expanded_file_count": 928,
+    "repo_full_name": "liyang53719/hetero_cnn_llm_aha",
+    "run_id": 39030773068,
+    "run_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/39030773068",
+    "sha256": "a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce",
+    "source_commit": "0077355800e3040dfdd6d79def697f3ff6456c2c"
+  },
+  "group": "idma",
+  "limits": {
+    "approval_status": "PROPOSED_FINITE_LIMITS_NOT_EXECUTION_AUTHORITY",
+    "byte_cap_semantics": "Read at most these bytes. Reaching an artifact transfer cap without EOF fails closed; max verified payload is cap minus one.",
+    "elapsed_check_seconds": 120,
+    "socket_timeout_seconds": 30,
+    "time_cap_semantics": "Elapsed budget checked between operations; socket timeout bounds blocking I/O, not a whole-process hard deadline.",
+    "total_transfer_bytes": 9926877
+  },
+  "policy": {
+    "authorization": "Plans and command-line switches are not authorization. Obtain explicit acquisition approval before using fetch.",
+    "execute_or_extract": false,
+    "network_route": "Default platform HTTPS/TLS and inherited proxy configuration; no credential handling, route override, redirect or fallback",
+    "output": "New isolated directory outside the repository; acquired-byte inventory stays there"
+  },
+  "provenance": {
+    "repository_commit": "fbb62b88bac2f0a066d2cc4f64b81e8f77c245ef",
+    "source_audit_basename": "SOURCE_ACQUISITION_PLAN.json",
+    "source_audit_sha256": "abc83971eae5b8f82921df2f03294c0ba965e41d7e3c630d1386fcdbe32ecacd"
+  },
+  "schema": 1,
+  "scope_note": "Prefer the existing pinned artifact. A separately authorized connector must materialize it first. This script never calls GitHub artifact APIs, reads credentials, reruns export, extracts, or falls back. Metadata availability is historical; byte validity is proved only after local digest and exact-size verification.",
+  "source_closure": "Host93 = published production92 + one new Host-only common-namespace emitter; no Bench/Spec additions",
+  "status": "SOURCE_ONLY_CANDIDATE_NOT_ACQUIRED",
+  "transport": "connector-materialized-only",
+  "upstream_revisions": [
+    {
+      "name": "idma",
+      "repository": "pulp-platform/iDMA",
+      "revision": "2e0b0fe53b6f8823319e2428e2e9abc2db149b7d",
+      "tree_url": "https://github.com/pulp-platform/iDMA/tree/2e0b0fe53b6f8823319e2428e2e9abc2db149b7d"
+    },
+    {
+      "name": "apb",
+      "repository": "pulp-platform/apb",
+      "revision": "6ae8bf8d5eab5dc70d032231c01ab95e1c5774b9",
+      "tree_url": "https://github.com/pulp-platform/apb/tree/6ae8bf8d5eab5dc70d032231c01ab95e1c5774b9"
+    },
+    {
+      "name": "axi",
+      "repository": "pulp-platform/axi",
+      "revision": "0ccc838fe06aeeb857eb83c6be9a915c4bf99566",
+      "tree_url": "https://github.com/pulp-platform/axi/tree/0ccc838fe06aeeb857eb83c6be9a915c4bf99566"
+    },
+    {
+      "name": "axi_stream",
+      "repository": "pulp-platform/axi_stream",
+      "revision": "ce1547861f99ab3d8834d04aa36d2d4184a28df7",
+      "tree_url": "https://github.com/pulp-platform/axi_stream/tree/ce1547861f99ab3d8834d04aa36d2d4184a28df7"
+    },
+    {
+      "name": "common_cells",
+      "repository": "pulp-platform/common_cells",
+      "revision": "63b7c50d43e462b59506f69d341ff1e40202866d",
+      "tree_url": "https://github.com/pulp-platform/common_cells/tree/63b7c50d43e462b59506f69d341ff1e40202866d"
+    },
+    {
+      "name": "common_verification",
+      "repository": "pulp-platform/common_verification",
+      "revision": "fb1885f48ea46164a10568aeff51884389f67ae3",
+      "tree_url": "https://github.com/pulp-platform/common_verification/tree/fb1885f48ea46164a10568aeff51884389f67ae3"
+    },
+    {
+      "name": "obi",
+      "repository": "pulp-platform/obi",
+      "revision": "b69af4aa00630efd14b1c5cbf9bac977f23ce840",
+      "tree_url": "https://github.com/pulp-platform/obi/tree/b69af4aa00630efd14b1c5cbf9bac977f23ce840"
+    },
+    {
+      "name": "tech_cells_generic",
+      "repository": "pulp-platform/tech_cells_generic",
+      "revision": "3a3de73632a06826b1bd9c65a0a2e92b32016845",
+      "tree_url": "https://github.com/pulp-platform/tech_cells_generic/tree/3a3de73632a06826b1bd9c65a0a2e92b32016845"
+    }
+  ]
+}

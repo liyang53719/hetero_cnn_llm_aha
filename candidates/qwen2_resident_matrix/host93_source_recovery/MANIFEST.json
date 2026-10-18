@@ -1,0 +1,96 @@
+{
+  "bench_spec_sources_included": false,
+  "derived93_hash_map_sha256": "807038ede34c39bf0ce9503b70c4bcccd0bdfe320fdf4b711ee082b8d3bf8eb2",
+  "files": {
+    "DELTA_V2.json": {
+      "bytes": 2858,
+      "sha256": "538bb86ac45cbfdf27275087c9f15e0cacdf8035bda3d3c119959e9ea72a0bfa"
+    },
+    "DELTA_V3.json": {
+      "bytes": 2535,
+      "sha256": "0a5b0ed5020a249fd1e494aad88e1acaf344b728dda639999949b31caa5908aa"
+    },
+    "INSTALL_MAP.json": {
+      "bytes": 3480,
+      "sha256": "782332efbb748ff470b5aefcb80bf6c72e49e171e01f43d9b82bb04c2cb0ae5d"
+    },
+    "README_CN.md": {
+      "bytes": 6189,
+      "sha256": "f39b448e10cc5aaeb68320bcd8699aed076ba6780856c49b63b8527c3dbdd6de"
+    },
+    "SOURCE_REPLAY_PLAN.json": {
+      "bytes": 118060,
+      "sha256": "963b338d5ba80aaf6e16f05c697fd62a448ab2a9dbcc96d36d49c4b83b26c2e2"
+    },
+    "VALIDATION_SOURCE_ONLY.json": {
+      "bytes": 1931,
+      "sha256": "1312e669a6b9d293c5e2ad52dd0c46514cfd6a8aa184999184d562a3921f5e3e"
+    },
+    "acquisition/PLAN_LOCK.json": {
+      "bytes": 752,
+      "sha256": "e9d77570cc679b0f65845f693b98b3b7a905d27905cb5a45c373b42efd8627a3"
+    },
+    "acquisition/README.md": {
+      "bytes": 8305,
+      "sha256": "b6e537be2fc7c96beb7e54c60ab4a03f8bfbcc49e21c0ce7b18d391be767c3c3"
+    },
+    "acquisition/acquire.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    "acquisition/plans/firtool.json": {
+      "bytes": 2433,
+      "sha256": "249e9ad75a8049934b61e980bbcc61068bb1286b5dfdf69975cb803c9f4dea6a"
+    },
+    "acquisition/plans/hardfloat20.json": {
+      "bytes": 12288,
+      "sha256": "3afa358e7e1ab0f58a5b8b140c707063aeb619ec475f438ccd1724b3532b7c73"
+    },
+    "acquisition/plans/idma.json": {
+      "bytes": 5650,
+      "sha256": "10e063b860f0b5f28b028c3b4502dd7e3099212f5db34b7ac0c03dbef157ad9f"
+    },
+    "acquisition/plans/jar87.json": {
+      "bytes": 37188,
+      "sha256": "8d571b869c4ade3e2bc252c9d694dab0e61029cb611bce8cbfcd317584e08b5e"
+    },
+    "acquisition/plans/verilator.json": {
+      "bytes": 2636,
+      "sha256": "dce545ae9c24a9c05d138edc113c9d72694d62152f8486c9dea6daab33958e6e"
+    },
+    "acquisition/tests/test_acquire.py": {
+      "bytes": 23095,
+      "sha256": "0d14d3070928f1b96c9d9d6cb6a330c319545139d54605c28d377321651dd046"
+    },
+    "assemble_host93.py": {
+      "bytes": 15592,
+      "sha256": "75a2145eea0de83ad1bbe3a7a64e1a5f14f20f9f1381f65e619fb5bd3d427641"
+    },
+    "source/EmitCanonicalHost93.scala": {
+      "bytes": 2262,
+      "sha256": "ebc35a597dc3be2374efa7408ea152ff954f37483132b1d03e0d8c902628705d"
+    },
+    "test_source_cold.py": {
+      "bytes": 11295,
+      "sha256": "bade59347c129e9879c447df1c33a61b9f9bc0492470ef3724bcad08c9c4bbad"
+    }
+  },
+  "historical95_identity_inherited": false,
+  "local_environment_inventory_included": false,
+  "new_host_emitter_sha256": "ebc35a597dc3be2374efa7408ea152ff954f37483132b1d03e0d8c902628705d",
+  "production92_pins_role": "published source provenance checkpoints only",
+  "publication_projection_from_manifest_sha256": "9156e21a59ba9f5c353e2b7644ac0458943c3ebd7700871b775c6452d64679ee",
+  "publication_state": "candidate_only_not_installed_or_published",
+  "schema": "host93-source-candidate-manifest-v1",
+  "scope": "NEW_DERIVED_HOST_ONLY93_SOURCE_AND_ACQUISITION_CANDIDATES",
+  "source_count_planned": 93,
+  "stage_execution": {
+    "class_compile": false,
+    "ir_or_sv": false,
+    "native_codegen_or_execution": false,
+    "real_acquisition": false,
+    "source_assembly": false
+  },
+  "supersedes_manifest_sha256": "4f77f4ef02548f134bb8f258c5173ac2f33b7d7ad57cf2b90804b2ca6068278c",
+  "version": "v3"
+}

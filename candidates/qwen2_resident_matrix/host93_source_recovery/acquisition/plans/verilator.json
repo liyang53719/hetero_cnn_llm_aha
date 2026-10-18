@@ -1,0 +1,49 @@
+{
+  "artifact_count": 1,
+  "artifacts": [
+    {
+      "known_size_bytes": null,
+      "max_transfer_bytes": 67108864,
+      "relative_destination": "verilator_5.032-1+b2_amd64.deb",
+      "sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2",
+      "url": "https://deb.debian.org/debian/pool/main/v/verilator/verilator_5.032-1+b2_amd64.deb",
+      "version": "5.032-1+b2 amd64"
+    }
+  ],
+  "future_extraction_review_only": {
+    "backend_sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703",
+    "execute_after_acquisition": false,
+    "install_system_package": false,
+    "note": "The source-export bootstrap extracts only verilator_bin, insufficient for Host codegen/build. Preserve full official package component identity, then review runtime-layout symlinks separately.",
+    "required_components": [
+      "usr/bin/verilator",
+      "usr/bin/verilator_bin",
+      "usr/share/verilator including include/vltstd and C++ runtime sources"
+    ]
+  },
+  "group": "verilator",
+  "limits": {
+    "approval_status": "PROPOSED_FINITE_LIMITS_NOT_EXECUTION_AUTHORITY",
+    "byte_cap_semantics": "Read at most these bytes. Reaching an artifact transfer cap without EOF fails closed; max verified payload is cap minus one.",
+    "elapsed_check_seconds": 180,
+    "socket_timeout_seconds": 30,
+    "time_cap_semantics": "Elapsed budget checked between operations; socket timeout bounds blocking I/O, not a whole-process hard deadline.",
+    "total_transfer_bytes": 67108864
+  },
+  "policy": {
+    "authorization": "Plans and command-line switches are not authorization. Obtain explicit acquisition approval before using fetch.",
+    "execute_or_extract": false,
+    "network_route": "Default platform HTTPS/TLS and inherited proxy configuration; no credential handling, route override, redirect or fallback",
+    "output": "New isolated directory outside the repository; acquired-byte inventory stays there"
+  },
+  "provenance": {
+    "repository_commit": "fbb62b88bac2f0a066d2cc4f64b81e8f77c245ef",
+    "source_audit_basename": "SOURCE_ACQUISITION_PLAN.json",
+    "source_audit_sha256": "abc83971eae5b8f82921df2f03294c0ba965e41d7e3c630d1386fcdbe32ecacd"
+  },
+  "schema": 1,
+  "scope_note": "Opaque archive acquisition only. No extraction, installation, chmod, binary execution, or runtime layout construction. Unknown size remains null; the finite byte ceiling is a policy proposal.",
+  "source_closure": "Host93 = published production92 + one new Host-only common-namespace emitter; no Bench/Spec additions",
+  "status": "SOURCE_ONLY_CANDIDATE_NOT_ACQUIRED",
+  "transport": "https-no-redirect"
+}

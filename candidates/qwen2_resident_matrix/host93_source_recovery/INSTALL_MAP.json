@@ -1,0 +1,84 @@
+{
+  "destination_prefix": "candidates/qwen2_resident_matrix/host93_source_recovery",
+  "entries": [
+    {
+      "candidate_file": "DELTA_V2.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/DELTA_V2.json"
+    },
+    {
+      "candidate_file": "DELTA_V3.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/DELTA_V3.json"
+    },
+    {
+      "candidate_file": "INSTALL_MAP.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/INSTALL_MAP.json"
+    },
+    {
+      "candidate_file": "MANIFEST.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/MANIFEST.json"
+    },
+    {
+      "candidate_file": "README_CN.md",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/README_CN.md"
+    },
+    {
+      "candidate_file": "SOURCE_REPLAY_PLAN.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/SOURCE_REPLAY_PLAN.json"
+    },
+    {
+      "candidate_file": "VALIDATION_SOURCE_ONLY.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/VALIDATION_SOURCE_ONLY.json"
+    },
+    {
+      "candidate_file": "acquisition/PLAN_LOCK.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/PLAN_LOCK.json"
+    },
+    {
+      "candidate_file": "acquisition/README.md",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/README.md"
+    },
+    {
+      "candidate_file": "acquisition/acquire.py",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py"
+    },
+    {
+      "candidate_file": "acquisition/plans/firtool.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/firtool.json"
+    },
+    {
+      "candidate_file": "acquisition/plans/hardfloat20.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/hardfloat20.json"
+    },
+    {
+      "candidate_file": "acquisition/plans/idma.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/idma.json"
+    },
+    {
+      "candidate_file": "acquisition/plans/jar87.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/jar87.json"
+    },
+    {
+      "candidate_file": "acquisition/plans/verilator.json",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/verilator.json"
+    },
+    {
+      "candidate_file": "acquisition/tests/test_acquire.py",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/tests/test_acquire.py"
+    },
+    {
+      "candidate_file": "assemble_host93.py",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/assemble_host93.py"
+    },
+    {
+      "candidate_file": "source/EmitCanonicalHost93.scala",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/source/EmitCanonicalHost93.scala"
+    },
+    {
+      "candidate_file": "test_source_cold.py",
+      "repository_path": "candidates/qwen2_resident_matrix/host93_source_recovery/test_source_cold.py"
+    }
+  ],
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "schema": 1,
+  "status": "UNPUBLISHED_SOURCE_CANDIDATE_MAPPING_ONLY"
+}

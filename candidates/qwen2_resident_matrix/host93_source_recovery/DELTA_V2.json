@@ -1,0 +1,44 @@
+{
+  "changes": {
+    "README_CN.md": {
+      "after_sha256": "1999ee5d3c2ccd85ae40c4fa239e583deb8f61bde03ba9dfe9f7457df0e27f5d",
+      "before_sha256": "69c6de1fed28a8a5a5128127108b3cadb2b906cb8be3d0a875bb589f33607ee0"
+    },
+    "acquisition/README.md": {
+      "after_sha256": "e05a17d8064a6c4ca065134573a6dadee3be711b458eedc80deab60a5f1cb7ac",
+      "before_sha256": "7d4dfb1bf7080e13d4ba7009f49ff78d717b88523cca304ce6ebb0944de7d0e9"
+    },
+    "acquisition/tests/test_acquire.py": {
+      "after_sha256": "ad56b69dd7e30a31452f2e40882c34e586da0ffc04cad14405d977593a80dc92",
+      "before_sha256": "36cf9e30f819c46a2f41622c4717042c7e5fce3d9ea87c7af7cb280b269df058"
+    },
+    "assemble_host93.py": {
+      "after_sha256": "75a2145eea0de83ad1bbe3a7a64e1a5f14f20f9f1381f65e619fb5bd3d427641",
+      "before_sha256": "3fce968d24dcbfa95c08c60abc923ac593b87712f3bd3e30f6c701356c730a23"
+    },
+    "test_source_cold.py": {
+      "after_sha256": "bade59347c129e9879c447df1c33a61b9f9bc0492470ef3724bcad08c9c4bbad",
+      "before_sha256": "79133eaa1af33da33bce341f602c4bb8e4f0628e0dc45b200bad6aba2ece4e24"
+    }
+  },
+  "helper_provenance_sha256_unchanged": "39df2db7cf36f43ba3c23ec7f4206c5608b873c4382a1f0ac69885abb44fdac0",
+  "new_loaders_do_not_execute_pyc_marker": true,
+  "normal_and_optimized_polluted_pyc_positive_controls": true,
+  "old_candidate_retained_unchanged": true,
+  "real_rebase_helper_loaded_in_cold_tests": false,
+  "runtime_semantics_change": "Three project loader points verify the exact raw bytes before compile/exec instead of SourceFileLoader/pyc; acquisition test invocation is a direct isolated script. No downloader, plan, Scala emitter, source transformation or dependency pin change.",
+  "schema": 1,
+  "scope": "V2_PROJECT_PYC_LOADING_ONLY",
+  "supersedes_for_loader_identity_only_manifest_sha256": "0b866ed5124ed364b2d79a46415a77566e2992714e78ce0401687ccf45b65355",
+  "unchanged_required": {
+    "SOURCE_REPLAY_PLAN.json": "963b338d5ba80aaf6e16f05c697fd62a448ab2a9dbcc96d36d49c4b83b26c2e2",
+    "acquisition/PLAN_LOCK.json": "e9d77570cc679b0f65845f693b98b3b7a905d27905cb5a45c373b42efd8627a3",
+    "acquisition/acquire.py": "da7fdf90b2a18b6915f31c832d9a7463d75367f1f4977d9b29df0eabccc599a8",
+    "acquisition/plans/firtool.json": "249e9ad75a8049934b61e980bbcc61068bb1286b5dfdf69975cb803c9f4dea6a",
+    "acquisition/plans/hardfloat20.json": "3afa358e7e1ab0f58a5b8b140c707063aeb619ec475f438ccd1724b3532b7c73",
+    "acquisition/plans/idma.json": "10e063b860f0b5f28b028c3b4502dd7e3099212f5db34b7ac0c03dbef157ad9f",
+    "acquisition/plans/jar87.json": "8d571b869c4ade3e2bc252c9d694dab0e61029cb611bce8cbfcd317584e08b5e",
+    "acquisition/plans/verilator.json": "dce545ae9c24a9c05d138edc113c9d72694d62152f8486c9dea6daab33958e6e",
+    "source/EmitCanonicalHost93.scala": "ebc35a597dc3be2374efa7408ea152ff954f37483132b1d03e0d8c902628705d"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "accepted_log_bytes_per_stage": 65536,
+  "budget_is_unmeasured_first_attempt_hard_limit": false,
+  "cleanup_seconds_per_stage": 5,
+  "declared_input_bytes": 94920448,
+  "eda_executed": false,
+  "full_arena_bytes": 213473600,
+  "full_host_ready": false,
+  "launch_ready": false,
+  "limits_unchanged_after_one_observed_pass": true,
+  "per_child_file_limit_bytes": 4194304,
+  "ram_backing_array_bytes": 426947200,
+  "schema": 1,
+  "sha256_passes": 4,
+  "sha256_total_bytes": 379681792,
+  "stages": [
+    {
+      "as_bytes": 268435456,
+      "cpu_seconds": 2,
+      "name": "compiler_version",
+      "wall_seconds": 5
+    },
+    {
+      "as_bytes": 268435456,
+      "cpu_seconds": 30,
+      "name": "compile",
+      "wall_seconds": 30
+    },
+    {
+      "as_bytes": 268435456,
+      "cpu_seconds": 5,
+      "name": "metadata",
+      "wall_seconds": 10
+    },
+    {
+      "as_bytes": 1073741824,
+      "cpu_seconds": 120,
+      "name": "run",
+      "wall_seconds": 120
+    }
+  ],
+  "status": "PORTABLE_FIXED_REPRODUCTION_LIMITS"
+}

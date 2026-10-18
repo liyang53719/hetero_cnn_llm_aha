@@ -1,0 +1,107 @@
+{
+  "changed_files": {
+    "COLD_TEST_RESULTS.json": {
+      "new": {
+        "bytes": 824,
+        "sha256": "ffd98e53914ab0e3b435bc954f2de26f351547049408c22b547da5d1e608fc8a"
+      },
+      "old": {
+        "bytes": 691,
+        "sha256": "bbe1fa0de320f9842ee06d9d3142cb9209f38e24a216cd2b1abe4be1c03a7300"
+      }
+    },
+    "EXECUTION_PLAN.json": {
+      "new": {
+        "bytes": 1030,
+        "sha256": "a92f94ea7dc26a50fe12904127f81e6257215d6c032c6276f103b89d22e95680"
+      },
+      "old": {
+        "bytes": 967,
+        "sha256": "3e05a7ac54b8ff40d2c36761fabf65cce300a70bc3e047d123ebaa9969ff358d"
+      }
+    },
+    "README_CN.md": {
+      "new": {
+        "bytes": 6323,
+        "sha256": "49995c47ea6cc97ee34a25792028fbe2e3a0670e1a9a7c2cca2b699a82af3fb9"
+      },
+      "old": {
+        "bytes": 5189,
+        "sha256": "e8f2803daf89853bc9bee781fbd9272437782dacb61b57ecfd63263b87aab0d5"
+      }
+    }
+  },
+  "changes_limited_to": "README observed scope; execution-plan status; portable cold numerical results; safe behavior summary; this projection; fresh manifest",
+  "native_reexecuted": false,
+  "new_files": [
+    "BEHAVIOR_SUMMARY.json",
+    "SOURCE_PROJECTION.json",
+    "MANIFEST.json"
+  ],
+  "original_source_manifest_sha256": "f5b36f62d7e4d10ba6c1af94109b95cf87202ee81d415212cadf8124d075f95e",
+  "published": false,
+  "runtime_and_build_input_bytes_changed": false,
+  "schema": 1,
+  "unchanged_files": {
+    "BUILD_INPUT_PINS.json": {
+      "bytes": 1294,
+      "sha256": "19d86dfb2cdc696fa74ea713ade1571a3d959b07b7cc4eb5f7c99e18fb4ce272"
+    },
+    "EXPECTED_LAYOUT.json": {
+      "bytes": 15795,
+      "sha256": "4ededb349c9206841e464f786c8b64d8744de60d789150ce533e17fe544bc7a7"
+    },
+    "INPUT_SPEC.json": {
+      "bytes": 3014,
+      "sha256": "9697d07144fb3c841c1abd6798894526f168bf5cea46ffc80dfd6dc04a856b4f"
+    },
+    "ORIGINAL_SOURCE_PINS.json": {
+      "bytes": 1828,
+      "sha256": "50c39f35192430166ba1b78252feb01ab59380ffb41a183fc51d78b53f9fca6e"
+    },
+    "PROJECT_SOURCE_HASHES.json": {
+      "bytes": 306,
+      "sha256": "67606401f3af38be32119c9ff04e4085b811377624d9a22897a985f5278e9f29"
+    },
+    "RUNNER_DELTA.json": {
+      "bytes": 1151,
+      "sha256": "5410919a52c668c98381bd4c891f4c5b16931d1757cf039add8cf736ca47aa2d"
+    },
+    "SOURCE_PIN.json": {
+      "bytes": 3008,
+      "sha256": "2a40768093f4529fe9a4ad69363178bcf3ef817ca53ebb5694f8e82b03427758"
+    },
+    "canonical16_binding.hpp": {
+      "bytes": 4913,
+      "sha256": "5b090ba3ee4b6e90d0010030a9593149a5c054310d6548c7fe7497da7c58c35d"
+    },
+    "consume_canonical16.cpp": {
+      "bytes": 4473,
+      "sha256": "5e0d8eab493ccc57181a63a648e62d128b7b5b5c5466ba0a31469f629baf67a1"
+    },
+    "initialization_ram.hpp": {
+      "bytes": 8805,
+      "sha256": "fd2dfaf3f860e33d8bc97e851222f11da3de240c61fac911c38253860b5ddb9e"
+    },
+    "replay_metadata.py": {
+      "bytes": 11370,
+      "sha256": "dbfa667b87aa1c44813d041d0053c9afa7b804ea7dc3b907b285a76171b53bfe"
+    },
+    "run_behavior.py": {
+      "bytes": 16298,
+      "sha256": "9d5d7eb22276537d87be56367e72edde0bd74435c163428ac68aed4196136f75"
+    },
+    "same_buffer_loader.hpp": {
+      "bytes": 7998,
+      "sha256": "309cb1be6f126c1d32eae855da4bedacfb1a5ef45ca6ab0f7f29bfa7c81fc88a"
+    },
+    "sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "test_cold.py": {
+      "bytes": 15247,
+      "sha256": "e3cf7cd2aa40329633339363b2e11038959831b0dbc36522340bf98bc034d9f5"
+    }
+  }
+}

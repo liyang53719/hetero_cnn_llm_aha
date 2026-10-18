@@ -1,0 +1,112 @@
+{
+  "coverage_bytes": 94920448,
+  "full_host_ready": false,
+  "inputs": [
+    {
+      "base": 4294967296,
+      "bytes": 384,
+      "name": "commands",
+      "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4"
+    },
+    {
+      "base": 4294971392,
+      "bytes": 3456,
+      "name": "descriptors",
+      "sha256": "1e4d35da18b21a4d9de05d2f3129e5bd9717cd923837c83c8d5eb320bfcddb02"
+    },
+    {
+      "base": 4295032896,
+      "bytes": 4718592,
+      "name": "wq",
+      "sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72"
+    },
+    {
+      "base": 4304470144,
+      "bytes": 786432,
+      "name": "wk",
+      "sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344"
+    },
+    {
+      "base": 4306043072,
+      "bytes": 786432,
+      "name": "wv",
+      "sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a"
+    },
+    {
+      "base": 4307616000,
+      "bytes": 4718592,
+      "name": "wo",
+      "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c"
+    },
+    {
+      "base": 4317053248,
+      "bytes": 27525120,
+      "name": "wg",
+      "sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f"
+    },
+    {
+      "base": 4372103552,
+      "bytes": 27525120,
+      "name": "wu",
+      "sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040"
+    },
+    {
+      "base": 4427153856,
+      "bytes": 27525120,
+      "name": "wd",
+      "sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec"
+    },
+    {
+      "base": 4482204160,
+      "bytes": 6144,
+      "name": "gamma0",
+      "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180"
+    },
+    {
+      "base": 4482210368,
+      "bytes": 6144,
+      "name": "gamma1",
+      "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a"
+    },
+    {
+      "base": 4482216576,
+      "bytes": 6144,
+      "name": "bq",
+      "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d"
+    },
+    {
+      "base": 4482222784,
+      "bytes": 1024,
+      "name": "bk",
+      "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d"
+    },
+    {
+      "base": 4482223872,
+      "bytes": 1024,
+      "name": "bv",
+      "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70"
+    },
+    {
+      "base": 4482224960,
+      "bytes": 524288,
+      "name": "rope",
+      "sha256": "c4dd66159d1868988937a2c15bf45609a09ec1dd40e47b63b708c6c9c1a0a7d1"
+    },
+    {
+      "base": 4482749312,
+      "bytes": 786432,
+      "name": "x",
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+    }
+  ],
+  "launch_ready": false,
+  "provider_receipt": {
+    "bytes": 2775,
+    "sha256": "6175d87d5913f9370d3723ccb6d6282cc24e9b0653c0963a7ccbdcb4697c3202"
+  },
+  "ram_base": 4294967296,
+  "ram_bytes": 213473600,
+  "schema": 1,
+  "sha256_passes": 4,
+  "sha256_total_bytes": 379681792
+}

@@ -1,0 +1,39 @@
+{
+  "baseline_runner": {
+    "bytes": 12608,
+    "sha256": "d96ef50772d9b3ab4f641aa3bfdb1a50e443cc7d52a25945af4ef2efd15361e0"
+  },
+  "bounded_changes": [
+    "optional as_limit parameter with former default",
+    "RLIMIT_AS uses selected argument",
+    "receipt records selected argument"
+  ],
+  "cleanup_body_changed": false,
+  "original_bounded_bytes": {
+    "bytes": 5482,
+    "sha256": "dce06cfa44a7d2f62715902434229980e0439bddc5dc55b1b1057c8d4db0c28e"
+  },
+  "retained_function_bytes": {
+    "digest": {
+      "bytes": 89,
+      "sha256": "cb81e355742a1f3808c6e68220f2566b029ef1477846e79959c360e65788b58c"
+    },
+    "group_state": {
+      "bytes": 190,
+      "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+    },
+    "observe_exit": {
+      "bytes": 719,
+      "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+    },
+    "require": {
+      "bytes": 67,
+      "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+    },
+    "save": {
+      "bytes": 179,
+      "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+    }
+  },
+  "schema": 1
+}

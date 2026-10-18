@@ -1,0 +1,30 @@
+{
+  "actual_metadata_replay_executed": false,
+  "default_status": "SOURCE_CHECK_ONLY",
+  "native_compiled": false,
+  "native_executed": false,
+  "note": "18 methods per mode; mock success does not establish actual canonical16 initialization.",
+  "real_canonical_ram_allocated": false,
+  "real_provider_files_read": 0,
+  "runs": [
+    {
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "mode": "normal",
+      "reported_seconds": 0.071,
+      "tests": 18
+    },
+    {
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "mode": "optimized",
+      "reported_seconds": 0.075,
+      "tests": 18
+    }
+  ],
+  "schema": 1,
+  "scope": "portable candidate cold checks only; original native result is separately projected in BEHAVIOR_SUMMARY.json",
+  "status": "PORTABLE_MOCK_AND_TINY_COLD_PASS"
+}

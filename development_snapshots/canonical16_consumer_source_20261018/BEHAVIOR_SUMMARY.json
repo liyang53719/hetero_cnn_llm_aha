@@ -1,0 +1,71 @@
+{
+  "backing_array_bytes": 426947200,
+  "coverage_sealed": true,
+  "declared_coverage_bytes": 94920448,
+  "eda_executed": false,
+  "evidence_level": "numeric_projection_of_fixed_local_result",
+  "fixed_identity_all_matched": true,
+  "full_host_ready": false,
+  "full_logs_included": false,
+  "independent_actual_review_claimed": false,
+  "input_spans_verified": 16,
+  "launch_ready": false,
+  "native_reexecuted_during_projection": false,
+  "original_result_sha256": "009ff148bbe5bcfb2bd1355f1782c3731afe8d95e1fd96fea479b1caea35450d",
+  "original_source_manifest_sha256": "f5b36f62d7e4d10ba6c1af94109b95cf87202ee81d415212cadf8124d075f95e",
+  "ram_bytes": 213473600,
+  "raw_or_provider_payload_copied": false,
+  "same_ram_offsets_verified": true,
+  "schema": 1,
+  "sha256_passes": 4,
+  "sha256_total_bytes": 379681792,
+  "stages": {
+    "compile": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 30,
+      "exit_code": 0,
+      "group_state": "absent",
+      "reaped": true,
+      "seconds": 2.361855,
+      "status": "PASS",
+      "wall_limit_seconds": 30
+    },
+    "compiler_version": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 2,
+      "exit_code": 0,
+      "group_state": "absent",
+      "reaped": true,
+      "seconds": 0.02294,
+      "status": "PASS",
+      "wall_limit_seconds": 5
+    },
+    "metadata": {
+      "address_space_limit_bytes": 268435456,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 5,
+      "exit_code": 0,
+      "group_state": "absent",
+      "reaped": true,
+      "seconds": 0.187312,
+      "status": "PASS",
+      "wall_limit_seconds": 10
+    },
+    "run": {
+      "address_space_limit_bytes": 1073741824,
+      "cleanup_confirmed": true,
+      "cpu_limit_seconds": 120,
+      "exit_code": 0,
+      "group_state": "absent",
+      "reaped": true,
+      "seconds": 14.692706,
+      "status": "PASS",
+      "wall_limit_seconds": 120
+    }
+  },
+  "status": "OBSERVED_SINGLE_BOUNDED_CANONICAL16_PASS",
+  "system_or_compiler_inventory_included": false,
+  "token_redeemed_once": true
+}

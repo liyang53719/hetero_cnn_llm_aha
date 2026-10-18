@@ -513,3 +513,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：普通/-O各18项小测试与SOURCE独审通过；发布仅转换源码、固定原公式/身份规格、project pins和安全计数摘要，真实14个provider文件只留本地，不提交或编码入源码。
 - ongoing：把原两张metadata表与14个真实provider按canonical16原顺序送入C++同RAM加载器，核stream/封存/token/view四遍实际摘要；首次完整RAM加载门待SOURCE审，尚未执行。
 - todo：provider字节身份不授予HostMemory输出权限、launch、完整Host27或RTL数值资格；旧N0终态未知保持，完整block RTL仍为0/5。
+
+
+### 2026-10-18 10:45 UTC：真实 canonical16 同 RAM 输入加载复现源码
+
+- done：14 个真实 provider 加两份固定 metadata 表共 16 输入，94,920,448 B，已在同一 213,473,600 B RAM arena 按原白名单加载；严格 EOF、覆盖封存、一次 token 兑换及实际 const span SHA 全部匹配固定身份。
+- done：本次单 TU 编译、metadata 重放、加载均退出 0；加载阶段记录 14.692706 秒（含监督收尾，不作为纯性能或峰值内存测量）。四遍 SHA 共 379,681,792 B；该结果仅授输入加载。
+- done：保存 21 件纯源码、项目相对身份、18+18 冷测摘要及安全实际数值摘要；不提交 ELF、权重、生成 metadata、完整日志或系统身份库存。实际 payload 仍按需在本地/CI 生成。
+- ongoing：恢复 HostMemory 的同 allocation runtime 能力、业务可写区域、成功 B 响应后的原子写入和初始化 mask 接线；现有 RO 输入 view 不授写权限或 launch。
+- todo：原生成 RTL/工具链需独立重建，Host/AXI/DPI/完整 27 数值尚未恢复；07:44 丢失前 N0 会话 74562 的终态仍未知，完整 block 验收仍为 0/5。

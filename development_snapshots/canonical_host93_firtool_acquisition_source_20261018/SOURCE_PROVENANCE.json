@@ -1,0 +1,36 @@
+{
+  "cold_evidence": {
+    "independent_member_boundary_tests_per_mode": 16,
+    "projection_tests_run": false,
+    "scope": "tiny synthetic ZIP bytes and mocks only; no network or native process",
+    "source_candidate_normal_tests": 24,
+    "source_candidate_optimized_tests": 24
+  },
+  "execution_sources_changed": false,
+  "files_copied_byte_for_byte": {
+    "GATE_PLAN.json": {
+      "bytes": 2397,
+      "sha256": "d3f217a299840117e3758058271f500d1f25e986ac078ae64bc39d61d047d8f1"
+    },
+    "SUPERVISOR_PROJECTION.json": {
+      "bytes": 1091,
+      "sha256": "898c5b86da43f73d167301ea1c96dc3a05696e0127a3c55278c10d3f5cb19d71"
+    },
+    "acquire_firtool_member.py": {
+      "bytes": 6038,
+      "sha256": "c677bd0129be21cfc26e4e3adfd550861b9ee75f7066547874ca0fd44cf719b2"
+    },
+    "run_acquisition_gate.py": {
+      "bytes": 14006,
+      "sha256": "09938994ab8537cefa8e4ae5a5a660cffaa07079c40b10b508af832236fc6383"
+    },
+    "test_gate_cold.py": {
+      "bytes": 16495,
+      "sha256": "5b6cbf539286ee04355411b306f990f3142e8c56bde5dde0518f13ffb71a3004"
+    }
+  },
+  "source_candidate_manifest_sha256": "d98f550d981ea968ffbfc8fe177e39ffba7cbfe647fd4b0d181055f500a1952c",
+  "source_review_manifest_sha256": "48e43cd69ceef42f9f0aa9bf0b9c1e96ee40e65fcd2fd85b6bfe22260ef6bc4c",
+  "source_review_summary_sha256": "7b6a116ce8acdd2eac5462c103dadb20ecd00b7da64a5f1af2fea59d551227fb",
+  "status": "SOURCE_REPRODUCTION_ONLY"
+}

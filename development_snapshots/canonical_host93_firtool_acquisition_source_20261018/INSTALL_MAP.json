@@ -1,0 +1,21 @@
+{
+  "actual_command_template": "python -I -S -B run_acquisition_gate.py --repo <repository> --acquisition-source <repository>/candidates/qwen2_resident_matrix/host93_source_recovery/acquisition --group firtool --output <fresh-absolute-output> --execute-reviewed-acquisition",
+  "actual_contract": "Single actual attempt only after independent SOURCE review and explicit approval. Keep output outside repository and source projection. Preserve original outer exit/elapsed evidence; no binary execution.",
+  "cold_commands": [
+    "python -I -S -B test_gate_cold.py --repo <repository> --acquisition-source <repository>/candidates/qwen2_resident_matrix/host93_source_recovery/acquisition",
+    "python -I -S -B -O test_gate_cold.py --repo <repository> --acquisition-source <repository>/candidates/qwen2_resident_matrix/host93_source_recovery/acquisition"
+  ],
+  "dependency_files": [
+    "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/acquire.py",
+    "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/firtool.json",
+    "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+    "development_snapshots/canonical_runtime_ram_source_20261018/test_runner_cold.py"
+  ],
+  "destination": "development_snapshots/canonical_host93_firtool_acquisition_source_20261018",
+  "existing_repository_dependencies": [
+    "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition",
+    "development_snapshots/canonical_runtime_ram_source_20261018"
+  ],
+  "runtime": "Python standard library; exact project sources SHA-pinned and loaded from the same raw buffer or exact fixed AST slice",
+  "source_preflight_command": "python -I -S -B run_acquisition_gate.py --repo <repository> --acquisition-source <repository>/candidates/qwen2_resident_matrix/host93_source_recovery/acquisition --group firtool"
+}

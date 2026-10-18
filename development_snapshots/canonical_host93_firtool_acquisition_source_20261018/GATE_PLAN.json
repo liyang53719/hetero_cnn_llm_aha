@@ -1,0 +1,55 @@
+{
+  "acquired_packages_executed": false,
+  "acquisition_files": {
+    "acquire.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    "plans/firtool.json": {
+      "bytes": 2433,
+      "sha256": "249e9ad75a8049934b61e980bbcc61068bb1286b5dfdf69975cb803c9f4dea6a"
+    }
+  },
+  "child_address_space_bytes": 536870912,
+  "child_cpu_affinity_count": 1,
+  "environment": "inherit default platform environment without inspection, credentials changes, dump, or routing fallback",
+  "groups": {
+    "firtool": {
+      "byte_cap": 67108864,
+      "cleanup_seconds": 5,
+      "cpu_seconds": 170,
+      "postflight_reserve_seconds": 5,
+      "total_wall_seconds": 180,
+      "work_deadline_offset_seconds": 170
+    }
+  },
+  "log_acceptance_cap_bytes": 65536,
+  "log_limit_boundary": "64KiB is an acceptance check after cleanup, not a realtime hard log bound; RLIMIT_FSIZE applies 64MiB per file including log.",
+  "member_helper": {
+    "bytes": 6038,
+    "sha256": "c677bd0129be21cfc26e4e3adfd550861b9ee75f7066547874ca0fd44cf719b2"
+  },
+  "member_policy": {
+    "allowlist_member": "org.chipsalliance/llvm-firtool/linux-x64/bin/firtool",
+    "archive_sha256": "63acdcb58ed12d4c1aa0ecdedc6e2425a252e94eefb75df9253c118d7d222039",
+    "archive_transfer_cap_bytes": 67108864,
+    "binary_executed": false,
+    "binary_mode_octal": "0600",
+    "binary_sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+    "entry_cap": 4096,
+    "member_cap_bytes": 33554432
+  },
+  "parent_approval_reported": "Parent relayed explicit CPU1 AS512MiB FSIZE64MiB shared180 approval; SOURCE review and parent one-shot GO still required.",
+  "per_file_os_hard_cap_bytes": 67108864,
+  "real_execution": false,
+  "retry": false,
+  "schema": "host93-firtool-acquisition-single-member-gate-v1",
+  "scope": "SOURCE_CANDIDATE_PARENT_ONLY_AFTER_REVIEW",
+  "socket_timeout_seconds": 30,
+  "supervisor_source": {
+    "bytes": 16693,
+    "repository_path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+    "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+  },
+  "total_budget_semantics": "Entry preflight and freezing, child download and extraction share work deadline t0+170; original cleanup <=5 seconds; all postflight and final receipt stay before t0+180. No extraction extension."
+}

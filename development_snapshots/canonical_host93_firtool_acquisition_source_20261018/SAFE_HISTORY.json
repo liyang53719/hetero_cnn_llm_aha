@@ -1,0 +1,45 @@
+{
+  "actual_review_manifest_sha256": null,
+  "actual_review_state": "PENDING",
+  "actual_review_summary_sha256": null,
+  "archive": {
+    "bytes": 8763451,
+    "sha256": "63acdcb58ed12d4c1aa0ecdedc6e2425a252e94eefb75df9253c118d7d222039",
+    "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/llvm-firtool/1.62.1/llvm-firtool-1.62.1-linux-x64.jar"
+  },
+  "archive_and_member_bytes_included": false,
+  "binary_executed": false,
+  "child_cleanup_confirmed": true,
+  "complete_actual_file_count_reported": 11,
+  "host_executed": false,
+  "installed": false,
+  "member": {
+    "archive_name": "org.chipsalliance/llvm-firtool/linux-x64/bin/firtool",
+    "bytes": 25009456,
+    "count": 1,
+    "mode_octal": "0600",
+    "sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee"
+  },
+  "numerical_qualification": false,
+  "original_success_evidence_terminal_success": false,
+  "outer_elapsed_seconds": 5.827,
+  "outer_exit_code": 0,
+  "outer_status_source": "owner-observed original process",
+  "receipt_identity": {
+    "archive": {
+      "bytes": 755,
+      "sha256": "e836d5143ff18185a8568b356940a24dbbd5f8675ae7eedd407537873a144554"
+    },
+    "member": {
+      "bytes": 901,
+      "sha256": "eb6330dfdf803d99658fbbde0144f56fba5932dc071722ea1fa98cd9048383a9"
+    },
+    "result": {
+      "bytes": 1437,
+      "sha256": "729c86316591dcb8ae9ed265502f62d8ceb736082ed57258277aead3bad8f3fb"
+    }
+  },
+  "rtl_generated": false,
+  "scope": "FIXED_OFFICIAL_ARCHIVE_AND_ONE_NONEXECUTABLE_MEMBER_ONLY",
+  "status": "OBSERVED_ACQUISITION_EXIT0_PENDING_INDEPENDENT_ACTUAL_REVIEW"
+}

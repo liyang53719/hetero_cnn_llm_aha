@@ -594,3 +594,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - done：持久化 12 件纯源码/正负测试/安全摘要；不含 FIR、class、JAR、ELF、完整日志或机器环境库存。包中历史摘要的第三次 actual 审 PENDING 是冻结时状态，本条记录后续独审结论。
 - ongoing：按固定官方 firtool 1.62.1 准备必要包获取与同 FIR 的 SV 转换门，先核 archive/member 原 SHA；未执行 firtool，未重建 Verilator。
 - todo：后续 SV/生成 C++、真实接口绑定、Host 执行与数值验收仍须各自实际证据。此静态结构审不证明协议行为、算术、tap 事件语义或无组合环；07:44 丢失的旧 N0 会话终态仍未知，完整 block 保持 0/5。
+
+### 2026-10-18 14:58 UTC：固定官方 firtool 包及唯一成员恢复
+
+- done：沿官方 Maven 默认平台通路取得固定 llvm-firtool 1.62.1 linux-x64 包，archive 为 8,763,451 B，SHA-256 `63acdcb58ed12d4c1aa0ecdedc6e2425a252e94eefb75df9253c118d7d222039`；无自动重试。
+- done：同一已核 archive buffer 内仅提取 allowlist 的 firtool 成员，25,009,456 B，SHA-256 `7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee`，保存权限 0600，未执行该二进制。
+- done：SOURCE 独审 `48e43cd6…`，24+24 tiny/mock 通过；原单次外层 exit 0、5.827 秒，在 180 秒共享上限内。保存原锚定清理、独立退出与失败保全合同，不以孤立非终态 receipt 认定成功。
+- done：限定 actual 审 `2fc8626ab6bf2b86d2243f5a207984456935cdf7b579b6053e4f8e0663fba8ae` 核对 11 件/33,807,081 B 库存、原输入、archive/member 实际 SHA 与 ZIP 唯一路径，结论仅固定工具字节身份。
+- done：持久化 10 件获取/单成员校验纯源码、测试、计划与安全摘要；无实际 archive、binary、完整日志或当前机器库存。包内 actual 审 PENDING 为原冻结事实，本条另记后续审结。
+- ongoing：同一已审 Host93 FIR 的有界 SV 转换门正绑定新工具实际身份；首次预算 180 秒总/150 秒工具、单核/AS 2 GiB/FSIZE 128 MiB，未执行前不授 SV 产物资格。
+- todo：SV 结构、生成 C++、真实 Host 接口与数值回放均待后续实际证据；不提前重建 Verilator 或 iDMA。旧 N0 终态未知与完整 block 0/5 保持。

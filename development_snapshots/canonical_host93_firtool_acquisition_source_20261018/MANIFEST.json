@@ -1,0 +1,44 @@
+{
+  "actual_review_status_at_freeze": "PENDING",
+  "files": {
+    "GATE_PLAN.json": {
+      "bytes": 2397,
+      "sha256": "d3f217a299840117e3758058271f500d1f25e986ac078ae64bc39d61d047d8f1"
+    },
+    "INSTALL_MAP.json": {
+      "bytes": 1864,
+      "sha256": "4967f9e0281c5861372cc372d935d0b4c2f80b01afa1d7832da608d7edda3ead"
+    },
+    "README.md": {
+      "bytes": 4242,
+      "sha256": "bdaca60ac0bb6351103c1d20660a28863231a45a97bd611e54dab371fa9ab2cc"
+    },
+    "SAFE_HISTORY.json": {
+      "bytes": 1599,
+      "sha256": "0312f9124f726580fef563da724eae20d0b442884ff82b1352059f3e9505c215"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 1427,
+      "sha256": "d4908da8b72854f9779b6c76dfd5ce12b531e2ef5c3ee1e30837fbd9721c94cb"
+    },
+    "SUPERVISOR_PROJECTION.json": {
+      "bytes": 1091,
+      "sha256": "898c5b86da43f73d167301ea1c96dc3a05696e0127a3c55278c10d3f5cb19d71"
+    },
+    "acquire_firtool_member.py": {
+      "bytes": 6038,
+      "sha256": "c677bd0129be21cfc26e4e3adfd550861b9ee75f7066547874ca0fd44cf719b2"
+    },
+    "run_acquisition_gate.py": {
+      "bytes": 14006,
+      "sha256": "09938994ab8537cefa8e4ae5a5a660cffaa07079c40b10b508af832236fc6383"
+    },
+    "test_gate_cold.py": {
+      "bytes": 16495,
+      "sha256": "5b6cbf539286ee04355411b306f990f3142e8c56bde5dde0518f13ffb71a3004"
+    }
+  },
+  "published": false,
+  "source_files_changed": false,
+  "status": "SOURCE_ONLY_PUBLICATION_PROJECTION"
+}

@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "scope": "SOURCE_ONLY_LOCAL_CANDIDATE",
+  "independent_compile_closure": false,
+  "cpp_compiled_or_executed": false,
+  "host_or_rtl_executed": false,
+  "full_canonical_domain_methods_closed": 0,
+  "publication_performed": false,
+  "source_headers": 8,
+  "raw_identical_headers": 1,
+  "include_only_derived_headers": 7,
+  "include_relocations": 10,
+  "files": {
+    "README_CN.md": {
+      "bytes": 4573,
+      "sha256": "dab57a2c23ec24015ada6a752f8e3fb9545a3bab742844d7ec56221d9109507d"
+    },
+    "SOURCE_MAP.json": {
+      "bytes": 7524,
+      "sha256": "90a0006c71b384f90f2040f7f27d7169fa8c17195bf0fb61478e2efc5990ecd3"
+    },
+    "axi_service.hpp": {
+      "bytes": 7980,
+      "sha256": "fa909275e0e11b1ffd09d15fcbdb7800bd7db8d450c5ab95d5603118447c236e"
+    },
+    "generated_binding.hpp": {
+      "bytes": 164037,
+      "sha256": "84b1e85078f9864610a1dbee1c68a7ff40e4ba847dd239f54fd079151e066afe"
+    },
+    "host_fields.hpp": {
+      "bytes": 15153,
+      "sha256": "5c084cf3ec72100ff13c45623dba94e8d73ca3ca74d5a4d8fc8c8b1bc6614b97"
+    },
+    "n0_fields.hpp": {
+      "bytes": 9848,
+      "sha256": "62d991f0d09da96ac9af406c3469113a64384aa2e426234658467439499a40c7"
+    },
+    "n0_physical_memory.hpp": {
+      "bytes": 17849,
+      "sha256": "8c7a81b716b188a53d1da0baad0a84b4d3ad11e6c0a3035711142e7cf89550eb"
+    },
+    "physical_observer_bridge.hpp": {
+      "bytes": 4441,
+      "sha256": "88fe664debcc78a9ea35ce784daebefb6e46628f34b5a5dd03e726b793293150"
+    },
+    "resident_evidence.hpp": {
+      "bytes": 9534,
+      "sha256": "8c7d1215d8fe54d03258da03495568733b3259a8067b761e52c3f8cbd2a260e2"
+    },
+    "silu_edge_runtime.hpp": {
+      "bytes": 3342,
+      "sha256": "3ddd01472f839538c8b6ae2d2ddbfcdf67c722280cd4621fc271975c3c1a554b"
+    },
+    "test_source_only.py": {
+      "bytes": 14240,
+      "sha256": "1de451cbf85ecca23a2d495cc32870e8b05121872853f382de0e3995e2b6007a"
+    }
+  }
+}

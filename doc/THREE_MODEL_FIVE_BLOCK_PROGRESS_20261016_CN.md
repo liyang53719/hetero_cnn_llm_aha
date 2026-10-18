@@ -404,3 +404,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - todo：生成真实 Host/endpoint C++、实现 GeneratedBinding 与 PhysicalObserver、27节点实际捕获和固定 M128 全 block 回放。四入口仍 Incomplete；source 索引、库存或规划不得替代运行数值证据。
 - 五 block：Qwen2 M128 已有27项限定模型门禁通过；其他四个未新增完整 M128。完整 block RTL 0/5，1024/1224未启动。固定4096 MAC全 block 周期口径下无RTL利用率实测，80%/90%目标未验收。
 - 本批不含权重、local.npz/remote.npz、生成物、系统工具链/头文件/库路径版本清单；相关待批准内容不因本批而获准上传。
+
+
+## 2026-10-18 02:50 UTC：保存真实绑定与 resident/N0 源码
+
+- done：十二文件纯项目源码小片 development_snapshots/canonical_host_bridge_source_20261018；8头中1项逐字、7项仅10行include逻辑重定位，包内反投影保持原SHA，隔离31+31源码冷检查通过。外部模型/库/工具头未附，不是独立可编译闭包。无环境路径、工具链清单、生成物或权重。
+- done：真实GeneratedBinding v2单probe编译2.512s通过；N0/resident双头probe编译3.732s通过，后者实际独审已确认。函数未运行，旧probe不包含新shared-edge头。
+- done：同一最大Host TU从-Os120s中断改独立-O0 profile后7.355s实际完成。Top56对象中截至本快照33项已完成独审；batch5新增8项实际完成待审，累计保存41/56。原Top整体codegen FAIL和缺hier.mk仍保留，显式逐TU编译不冒原make工程通过。
+- done：三个child代表TU和一个verilated runtime TU原flags实际编译通过并独审。只是对象资格，不是库、链接或模型运行。
+- ongoing：N0真实B退休→同一HostMemory SSA→回复fence→completion0 ACK源码已审；resident/loan子域已审。shared-edge一个low/high eval源码已审，尚未编译新头。PC1真实QKV reduction采用DenseDownOwner burstWrites经DMA streamWrite，不能套N0 MemoryHub写回链；正在实现独立观察。完整PhysicalObserver11总方法仍未闭合。
+- todo：余Top对象、全child/runtime、精确对象依赖复用、链接、真实读值与reset/settle验证、全部17owner/21completion/27capture、同冻结M128完整RTL数值与周期回放。
+- 五block不新增验收：Qwen2 M128为27项限定模型门禁；其余四个无新增完整M128；完整block RTL仍0/5，更长序列未开始，固定4096 MAC完整block分母的80%/90%仍无RTL实测。
+- 系统工具链/头文件/库路径版本hash清单公开许可仍独立待答，本批不含该类内容，不改变许可状态。

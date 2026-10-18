@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "scope": "PROJECT_ADAPTER_SOURCE_ONLY",
+  "originals": [
+    {
+      "id": "binding",
+      "source_snapshot": "production_canonical_host_generated_binding_source_v2_20261018",
+      "source_manifest_sha256": "998567e95ce45cb4a8dc88ff9ce6b69b0017b3a683315616f576ce1a7e770417",
+      "review_manifest_sha256": "9235e15bebb481ab370f6fef6dde2a5701a1bd30b5cc9d22a2c6d9848e4a6663"
+    },
+    {
+      "id": "resident",
+      "source_snapshot": "production_canonical_host_resident_physical_bridge_source_v1_20261018",
+      "source_manifest_sha256": "88bc653199fcf67cb0dd7f097f0d5907d0dc8e6cd748ca28f0c5e7f677e76590",
+      "review_manifest_sha256": "54b7b61cd7fe9ae38da007756db72303a07e1840f63d602847127ba1f3b559cc"
+    },
+    {
+      "id": "n0",
+      "source_snapshot": "production_canonical_host_n0_b_ssa_source_v2_20261018",
+      "source_manifest_sha256": "9e725e906ea731780696823f2ece4c663de0873e0a1ae0b68a8d9b01ba4aa0e6",
+      "review_manifest_sha256": "5f215e893f788081bcffc384a4725444394f8970116665b00aa1130c535efa40"
+    }
+  ],
+  "entries": [
+    {
+      "file": "generated_binding.hpp",
+      "origin": "binding",
+      "original_file": "generated_binding.hpp",
+      "original_sha256": "848f35444e3e28c61393c764176d48269f229a7b48d52d003d83bdc9e173036c",
+      "original_bytes": 164309,
+      "payload_sha256": "84b1e85078f9864610a1dbee1c68a7ff40e4ba847dd239f54fd079151e066afe",
+      "payload_bytes": 164037,
+      "mode": "DERIVED_INCLUDE_RELOCATION_ONLY",
+      "include_relocations": [
+        {
+          "line": 3,
+          "original": "#include \"../production_canonical_host_silu_observer_source_v2_20261017/silu_observer.hpp\"",
+          "portable": "#include \"silu_observer.hpp\""
+        },
+        {
+          "line": 4,
+          "original": "#include \"../production_canonical_host_taps_top_codegen_attempt_v2_20261018/obj/VHostBlockTop.h\"",
+          "portable": "#include \"VHostBlockTop.h\""
+        },
+        {
+          "line": 5,
+          "original": "#include \"../production_canonical_host_taps_top_codegen_attempt_v2_20261018/obj/VHostBlockTop___024root.h\"",
+          "portable": "#include \"VHostBlockTop___024root.h\""
+        },
+        {
+          "line": 6,
+          "original": "#include \"../production_canonical_host_taps_top_codegen_attempt_v2_20261018/obj/VHostBlockTop__Syms.h\"",
+          "portable": "#include \"VHostBlockTop__Syms.h\""
+        }
+      ]
+    },
+    {
+      "file": "host_fields.hpp",
+      "origin": "binding",
+      "original_file": "host_fields.hpp",
+      "original_sha256": "b1fcae4eea1b6aea0fd23ea66ee4fabd7356e0b643164dabc1ddd959e778fffd",
+      "original_bytes": 15207,
+      "payload_sha256": "5c084cf3ec72100ff13c45623dba94e8d73ca3ca74d5a4d8fc8c8b1bc6614b97",
+      "payload_bytes": 15153,
+      "mode": "DERIVED_INCLUDE_RELOCATION_ONLY",
+      "include_relocations": [
+        {
+          "line": 4,
+          "original": "#include \"../production_canonical_host_cpp_skeleton_v2_20261017/host_ports.hpp\"",
+          "portable": "#include \"host_ports.hpp\""
+        }
+      ]
+    },
+    {
+      "file": "silu_edge_runtime.hpp",
+      "origin": "binding",
+      "original_file": "silu_edge_runtime.hpp",
+      "original_sha256": "3ddd01472f839538c8b6ae2d2ddbfcdf67c722280cd4621fc271975c3c1a554b",
+      "original_bytes": 3342,
+      "payload_sha256": "3ddd01472f839538c8b6ae2d2ddbfcdf67c722280cd4621fc271975c3c1a554b",
+      "payload_bytes": 3342,
+      "mode": "RAW_IDENTICAL",
+      "include_relocations": []
+    },
+    {
+      "file": "resident_evidence.hpp",
+      "origin": "resident",
+      "original_file": "resident_evidence.hpp",
+      "original_sha256": "b42d0c455768ad4f7cbbfb8cdb992037fa2edd54ad604b07b425e53f5eb2edf0",
+      "original_bytes": 9600,
+      "payload_sha256": "8c7d1215d8fe54d03258da03495568733b3259a8067b761e52c3f8cbd2a260e2",
+      "payload_bytes": 9534,
+      "mode": "DERIVED_INCLUDE_RELOCATION_ONLY",
+      "include_relocations": [
+        {
+          "line": 3,
+          "original": "#include \"../production_canonical_host_generated_binding_source_v2_20261018/host_fields.hpp\"",
+          "portable": "#include \"host_fields.hpp\""
+        }
+      ]
+    },
+    {
+      "file": "physical_observer_bridge.hpp",
+      "origin": "resident",
+      "original_file": "physical_observer_bridge.hpp",
+      "original_sha256": "f3558c5a46d45dfcb8cfb369f9b7c2c458588e7f06cc3704dac5427253092cbe",
+      "original_bytes": 4510,
+      "payload_sha256": "88fe664debcc78a9ea35ce784daebefb6e46628f34b5a5dd03e726b793293150",
+      "payload_bytes": 4441,
+      "mode": "DERIVED_INCLUDE_RELOCATION_ONLY",
+      "include_relocations": [
+        {
+          "line": 5,
+          "original": "#include \"../production_canonical_host_loader_span_readback_source_v1_20261017/host_memory.hpp\"",
+          "portable": "#include \"host_memory.hpp\""
+        }
+      ]
+    },
+    {
+      "file": "n0_fields.hpp",
+      "origin": "n0",
+      "original_file": "n0_fields.hpp",
+      "original_sha256": "778dee074a4b9ad78064e2494312efc704aa0d60d5f3266193622198b94872d8",
+      "original_bytes": 9914,
+      "payload_sha256": "62d991f0d09da96ac9af406c3469113a64384aa2e426234658467439499a40c7",
+      "payload_bytes": 9848,
+      "mode": "DERIVED_INCLUDE_RELOCATION_ONLY",
+      "include_relocations": [
+        {
+          "line": 3,
+          "original": "#include \"../production_canonical_host_generated_binding_source_v2_20261018/host_fields.hpp\"",
+          "portable": "#include \"host_fields.hpp\""
+        }
+      ]
+    },
+    {
+      "file": "n0_physical_memory.hpp",
+      "origin": "n0",
+      "original_file": "n0_physical_memory.hpp",
+      "original_sha256": "1cb86b1bd004564fff22eb60a8e16aa8e778364260b157fbbc6910a56a83a095",
+      "original_bytes": 17918,
+      "payload_sha256": "8c7a81b716b188a53d1da0baad0a84b4d3ad11e6c0a3035711142e7cf89550eb",
+      "payload_bytes": 17849,
+      "mode": "DERIVED_INCLUDE_RELOCATION_ONLY",
+      "include_relocations": [
+        {
+          "line": 5,
+          "original": "#include \"../production_canonical_host_loader_span_readback_source_v1_20261017/sink_stream_bridge.hpp\"",
+          "portable": "#include \"sink_stream_bridge.hpp\""
+        }
+      ]
+    },
+    {
+      "file": "axi_service.hpp",
+      "origin": "n0",
+      "original_file": "axi_service.hpp",
+      "original_sha256": "2b5dad26cde3a462550241018a5f0afb435778a6db0209cce5c4ffee12db007e",
+      "original_bytes": 8049,
+      "payload_sha256": "fa909275e0e11b1ffd09d15fcbdb7800bd7db8d450c5ab95d5603118447c236e",
+      "payload_bytes": 7980,
+      "mode": "DERIVED_INCLUDE_RELOCATION_ONLY",
+      "include_relocations": [
+        {
+          "line": 3,
+          "original": "#include \"../production_canonical_host_loader_span_readback_source_v1_20261017/host_memory.hpp\"",
+          "portable": "#include \"host_memory.hpp\""
+        }
+      ]
+    }
+  ],
+  "mapping_rule": "Only listed include lines change. Reverse the listed lines, preserving every other byte, then verify original_sha256. Review identities refer to original source reviews, not a review of this new package.",
+  "external_direct_quoted_headers_not_included": [
+    "silu_observer.hpp",
+    "VHostBlockTop.h",
+    "VHostBlockTop___024root.h",
+    "VHostBlockTop__Syms.h",
+    "verilated_sym_props.h",
+    "host_ports.hpp",
+    "host_memory.hpp",
+    "sink_stream_bridge.hpp"
+  ],
+  "dependency_inventory_scope": "Direct quoted includes only. This is not a transitive, version-qualified, or build-ready dependency closure."
+}

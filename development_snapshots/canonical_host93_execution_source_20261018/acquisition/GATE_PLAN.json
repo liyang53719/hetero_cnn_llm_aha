@@ -1,0 +1,51 @@
+{
+  "acquired_packages_executed": false,
+  "acquisition_files": {
+    "acquire.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    "plans/hardfloat20.json": {
+      "bytes": 12288,
+      "sha256": "3afa358e7e1ab0f58a5b8b140c707063aeb619ec475f438ccd1724b3532b7c73"
+    },
+    "plans/jar87.json": {
+      "bytes": 37188,
+      "sha256": "8d571b869c4ade3e2bc252c9d694dab0e61029cb611bce8cbfcd317584e08b5e"
+    }
+  },
+  "child_address_space_bytes": 536870912,
+  "child_cpu_affinity_count": 1,
+  "environment": "inherit default platform environment without inspection, credentials changes, dump, or routing fallback",
+  "groups": {
+    "hardfloat20": {
+      "byte_cap": 149177,
+      "cleanup_seconds": 5,
+      "cpu_seconds": 290,
+      "postflight_reserve_seconds": 5,
+      "total_wall_seconds": 300,
+      "work_deadline_offset_seconds": 290
+    },
+    "jar87": {
+      "byte_cap": 536870912,
+      "cleanup_seconds": 5,
+      "cpu_seconds": 1190,
+      "postflight_reserve_seconds": 5,
+      "total_wall_seconds": 1200,
+      "work_deadline_offset_seconds": 1190
+    }
+  },
+  "log_acceptance_cap_bytes": 65536,
+  "log_limit_boundary": "64KiB is an acceptance check after cleanup, not a realtime hard log bound; RLIMIT_FSIZE applies 64MiB per file including log.",
+  "per_file_os_hard_cap_bytes": 67108864,
+  "real_execution": false,
+  "retry": false,
+  "schema": "host93-bounded-acquisition-gate-v1",
+  "scope": "SOURCE_CANDIDATE_ONLY_PARENT_EXECUTES_AFTER_REVIEW",
+  "socket_timeout_seconds": 30,
+  "supervisor_source": {
+    "bytes": 16693,
+    "repository_path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+    "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+  }
+}

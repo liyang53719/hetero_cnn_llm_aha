@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "acquisition/DELTA_V2.json",
+      "sha256": "a60625a78e25bcde6ba23ce27f15ffbde6249986e8d56be140ba379550b189de",
+      "bytes": 2357,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "acquisition/GATE_PLAN.json",
+      "sha256": "37d65e25894b510afa21c009df65e88cdc9f6b190a2d10b45dcfe9c76161857b",
+      "bytes": 1803,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "acquisition/MANIFEST.json",
+      "sha256": "e924b7e28b1dbfec2bda22bbe4500c659d229e3443a81094781390964969693a",
+      "bytes": 1403,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "acquisition/README_CN.md",
+      "sha256": "d6ec2aa1b8e4a4a206a1098f74ddd75b5a83e9769921f84d7fa688a2d1a55761",
+      "bytes": 5121,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "acquisition/SUPERVISOR_PROJECTION.json",
+      "sha256": "898c5b86da43f73d167301ea1c96dc3a05696e0127a3c55278c10d3f5cb19d71",
+      "bytes": 1091,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "acquisition/VALIDATION_SOURCE_ONLY.json",
+      "sha256": "b00f0c5751b7b63fc2480fd5204770249b629ea9a5f5bbc0abd54da70e33b02f",
+      "bytes": 432,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "acquisition/run_acquisition_gate.py",
+      "sha256": "875719997b99a88d9aeea82588f62ceef3424c7301f3eaaa4fcb2f5b239b0120",
+      "bytes": 11419,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "acquisition/test_gate_cold.py",
+      "sha256": "6d91f01c62e05716903d01867f7627dfc0c444d42d1b6dd8e4c6a84da463594b",
+      "bytes": 14229,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "assembly/MANIFEST.json",
+      "sha256": "2b979eb731e5870957cf0330d5750b8665592dd2651ce36433944d465bec634a",
+      "bytes": 887,
+      "projection": "manifest omits local binding"
+    },
+    {
+      "path": "assembly/README_CN.md",
+      "sha256": "0774baf7ba93f000842dbedebf636d267f42a2b93912a804c8ad41e108935807",
+      "bytes": 2313,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "assembly/run_source_assembly.py",
+      "sha256": "fe3631b570cb1f20a09e2215820a9946abfba0d726efc67846391f5b5ff00b93",
+      "bytes": 4504,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "assembly/test_source_wrapper_cold.py",
+      "sha256": "2f20684eefdadd388b96d2ae265f0891c9331eafe76ef86b85b1a3a48aee17e3",
+      "bytes": 4598,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "class_compile/CLASS_GATE_PLAN.json",
+      "sha256": "3673beb1187d1830c1a43e00e27816e97aff129d571767f3e3ac7f6f9c65c3a9",
+      "bytes": 1880,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "class_compile/MANIFEST.json",
+      "sha256": "9d69e8596320e887d5cce7be7c3e88914ac7072fc46f6961c04638581536d3f6",
+      "bytes": 999,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "class_compile/README_CN.md",
+      "sha256": "7f2df2262f063388e54b27857909ff3fc77f113783661f73f160613a27997220",
+      "bytes": 4010,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "class_compile/SUPERVISOR_PROJECTION.json",
+      "sha256": "644b18d16b88ff8a662e3147076efb7e41d7df63a14ab321ba57b51e8a0db69d",
+      "bytes": 600,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "class_compile/VALIDATION_SOURCE_ONLY.json",
+      "sha256": "b40ca93195a892d4e444bd30cf2a94483ea39ec9d75bbdb05000a66fb76e0d1c",
+      "bytes": 364,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "class_compile/run_class_gate.py",
+      "sha256": "dddc212e4acf5d7fe3851f57a12c41b31d82a84e4a05cb45a61ef4dc7218c3f3",
+      "bytes": 12457,
+      "projection": "byte-identical reviewed source"
+    },
+    {
+      "path": "class_compile/test_class_gate_cold.py",
+      "sha256": "07a9f3168d31d365e4caaa5c1a2ed4cdbab1d6d64364a9e13b91a08e0fdca5f1",
+      "bytes": 10494,
+      "projection": "byte-identical reviewed source"
+    }
+  ],
+  "excluded": [
+    "assembly/LOCAL_ACTUAL_INPUT_BINDING.json"
+  ],
+  "runtime_code_changed": false,
+  "current_machine_inventory_included": false
+}

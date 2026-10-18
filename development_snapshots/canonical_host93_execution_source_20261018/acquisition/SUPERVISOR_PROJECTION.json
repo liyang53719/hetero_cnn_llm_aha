@@ -1,0 +1,33 @@
+{
+  "exact_reverse_projection_checked": true,
+  "projected_functions": {
+    "bounded": {
+      "bytes": 5808,
+      "sha256": "c9447b1c3330b4c79369b645e50600018f61b74e3eb5e6e517e0f889d08ad82c"
+    },
+    "group_state": {
+      "bytes": 190,
+      "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+    },
+    "observe_exit": {
+      "bytes": 719,
+      "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+    },
+    "require": {
+      "bytes": 67,
+      "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+    },
+    "save": {
+      "bytes": 179,
+      "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+    }
+  },
+  "projected_source_sha256": "19c45dc725927643b7df0b88cbeb7e38a25a70b706558ec438b6823198761244",
+  "real_supervision_executed": false,
+  "schema": 1,
+  "source": {
+    "bytes": 16693,
+    "repository_path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+    "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+  }
+}

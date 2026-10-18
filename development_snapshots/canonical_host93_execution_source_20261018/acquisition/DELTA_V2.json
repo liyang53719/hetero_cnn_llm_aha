@@ -1,0 +1,67 @@
+{
+  "acquirer_plan_resource_and_wnowait_projection_unchanged": true,
+  "changes": {
+    "README_CN.md": {
+      "after": {
+        "bytes": 5121,
+        "sha256": "d6ec2aa1b8e4a4a206a1098f74ddd75b5a83e9769921f84d7fa688a2d1a55761"
+      },
+      "before": {
+        "bytes": 4216,
+        "sha256": "6dbde820b328d79ac7ba1b139dce0c0d7dcd294dc4598110ba987337634b832c"
+      }
+    },
+    "VALIDATION_SOURCE_ONLY.json": {
+      "after": {
+        "bytes": 432,
+        "sha256": "b00f0c5751b7b63fc2480fd5204770249b629ea9a5f5bbc0abd54da70e33b02f"
+      },
+      "before": {
+        "bytes": 336,
+        "sha256": "f252c7a35ff14844cd33aa81432c8e3ca75a83e37d5ea039f7585c1ad874a5ec"
+      }
+    },
+    "run_acquisition_gate.py": {
+      "after": {
+        "bytes": 11419,
+        "sha256": "875719997b99a88d9aeea82588f62ceef3424c7301f3eaaa4fcb2f5b239b0120"
+      },
+      "before": {
+        "bytes": 11192,
+        "sha256": "c9d002bc48e455bbe5869e40482e6edc9e2c67f0fdfdf20fc7f9419ca6133457"
+      }
+    },
+    "test_gate_cold.py": {
+      "after": {
+        "bytes": 14229,
+        "sha256": "6d91f01c62e05716903d01867f7627dfc0c444d42d1b6dd8e4c6a84da463594b"
+      },
+      "before": {
+        "bytes": 11656,
+        "sha256": "5fdc102790f90fc9f06742754e67d15c559e02944ba81adbb0eb33cd2232b272"
+      }
+    }
+  },
+  "independent_v1_hold_manifest_sha256": "de1969a694b754483d4cfc96be5f43e22e57202adca1ece286235bd6297445cf",
+  "predecessor_manifest_sha256": "8c29a7a96bd7ef10d068bb4efd4b3a17e671cc0408b3d3f71810640427313367",
+  "real_child_or_network": false,
+  "regressions": [
+    "final save crosses same absolute stop",
+    "TimeoutError after final evidence file replace"
+  ],
+  "schema": 1,
+  "scope": "V2_FINAL_COMMIT_ONLY",
+  "source_review_commit": "47c757f4",
+  "terminal_consumption_contract": "Final saved/stdout record is never success; independent actual outer exit0 plus elapsed within shared group budget and receipt/cleanup review required. Nonzero, timeout or unknown exit forbids acceptance.",
+  "unchanged_required": {
+    "GATE_PLAN.json": {
+      "bytes": 1803,
+      "sha256": "37d65e25894b510afa21c009df65e88cdc9f6b190a2d10b45dcfe9c76161857b"
+    },
+    "SUPERVISOR_PROJECTION.json": {
+      "bytes": 1091,
+      "sha256": "898c5b86da43f73d167301ea1c96dc3a05696e0127a3c55278c10d3f5cb19d71"
+    }
+  },
+  "v1_retained_byte_identical": true
+}

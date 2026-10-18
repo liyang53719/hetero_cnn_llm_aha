@@ -1,0 +1,32 @@
+{
+  "files": {
+    "CLASS_GATE_PLAN.json": {
+      "bytes": 1880,
+      "sha256": "3673beb1187d1830c1a43e00e27816e97aff129d571767f3e3ac7f6f9c65c3a9"
+    },
+    "README_CN.md": {
+      "bytes": 4010,
+      "sha256": "7f2df2262f063388e54b27857909ff3fc77f113783661f73f160613a27997220"
+    },
+    "SUPERVISOR_PROJECTION.json": {
+      "bytes": 600,
+      "sha256": "644b18d16b88ff8a662e3147076efb7e41d7df63a14ab321ba57b51e8a0db69d"
+    },
+    "VALIDATION_SOURCE_ONLY.json": {
+      "bytes": 364,
+      "sha256": "b40ca93195a892d4e444bd30cf2a94483ea39ec9d75bbdb05000a66fb76e0d1c"
+    },
+    "run_class_gate.py": {
+      "bytes": 12457,
+      "sha256": "dddc212e4acf5d7fe3851f57a12c41b31d82a84e4a05cb45a61ef4dc7218c3f3"
+    },
+    "test_class_gate_cold.py": {
+      "bytes": 10494,
+      "sha256": "07a9f3168d31d365e4caaa5c1a2ed4cdbab1d6d64364a9e13b91a08e0fdca5f1"
+    }
+  },
+  "schema": 1,
+  "scope": "NEW_HOST93_CLASS_GATE_SOURCE_ONLY",
+  "source_only_not_published": true,
+  "stage_execution": false
+}

@@ -1,0 +1,21 @@
+{
+  "changes": [
+    "FSIZE4MiB_to48MiB",
+    "single_inherited_allowed_CPU",
+    "cancel_work_alarm_at_existing_cleanup",
+    "log_acceptance64KiB_to2MiB"
+  ],
+  "child_AS_bytes": 4294967296,
+  "exact_reverse_projection_checked": true,
+  "native_child_started": false,
+  "projected_source_bytes": 7018,
+  "projected_source_sha256": "bec911354938d955cf16fa808ec346a9f38604e149f00eaa9efa594468d0840f",
+  "selected_functions": [
+    "require",
+    "save",
+    "group_state",
+    "observe_exit",
+    "bounded"
+  ],
+  "source_sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+}

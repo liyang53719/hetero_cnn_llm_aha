@@ -1,0 +1,26 @@
+{
+  "cold_tests": {
+    "normal": 8,
+    "optimized": 8,
+    "pass": true
+  },
+  "files": {
+    "README_CN.md": {
+      "bytes": 2313,
+      "sha256": "0774baf7ba93f000842dbedebf636d267f42a2b93912a804c8ad41e108935807"
+    },
+    "run_source_assembly.py": {
+      "bytes": 4504,
+      "sha256": "fe3631b570cb1f20a09e2215820a9946abfba0d726efc67846391f5b5ff00b93"
+    },
+    "test_source_wrapper_cold.py": {
+      "bytes": 4598,
+      "sha256": "2f20684eefdadd388b96d2ae265f0891c9331eafe76ef86b85b1a3a48aee17e3"
+    }
+  },
+  "projection_note": "Local execution-path binding omitted; executable source bytes unchanged. Actual results are separately summarized at package root.",
+  "real_assembly_or_java": false,
+  "schema": 1,
+  "scope": "FIXED_HOST93_ASSEMBLY_IN_PROCESS_BOUND_SOURCE_ONLY",
+  "source_assembler_sha256": "75a2145eea0de83ad1bbe3a7a64e1a5f14f20f9f1381f65e619fb5bd3d427641"
+}

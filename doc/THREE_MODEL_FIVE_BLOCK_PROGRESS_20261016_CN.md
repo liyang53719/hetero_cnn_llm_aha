@@ -552,3 +552,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - ongoing：JAR87与HardFloat20的外层有界获取门另审；两组分别最多1200秒/300秒，单CPU、AS512MiB、单文件64MiB，默认平台环境不变。此处仅复现方案，尚未取得依赖或完成源组装/编译。
 - todo：获取后需核实际逐件身份，再进行fresh Host93源组装与有界class编译；firtool、Verilator、iDMA及生成接口按对应阶段独立核验，不能凭来源计划授执行或模型资格。
 - todo：真实Host ABI/reset/唯一实例/resident准入与完整27仍缺；07:44丢失前旧N0会话74562终态未知，完整block仍0/5。
+
+
+### 2026-10-18 12:53 UTC：固定依赖与新93实际恢复、首次CLASS工作窗失败
+
+- done：87个固定官方JAR逐SHA取得61,870,159B，20个HardFloat源码取得149,157B；两次串行实际outer分别退出0、316.976秒/88.025秒，原锚清理与完整库存独审通过。未执行下载JAR、未提交依赖数据。
+- done：fresh新93源实际组装为1,002,844B，outer退出0、1.809秒，三tap/新共同Host emitter和111项目来源/HF20精确身份独审通过；旧95资格不继承。
+- done：首次CLASS按单CPU/heap1GiB/AS4GiB、150秒总窗/120秒工作窗执行，约120秒compile_stop触发TimeoutError；outer121.697秒退出1，0B编译日志、0class。清理使用原锚后SIGKILL/reap -9，不是Java自然退出。
+- done：原handler文案absolute150s和timed_out=false均不改变实际工作窗超时事实；成功postflight未运行，独立现时93/87输入重核通过不倒填原后验。没有CPU/RSS采样，不能由空日志推断OOM或具体编译阶段。
+- done：保存23件纯复现源码/测试/安全摘要，三个执行入口代码不改；portable纯mock普通/优化各34项通过。排除本地路径绑定、机器身份清单、日志、JAR、class和生成源码树。原失败现场保留，无自动重试。
+- ongoing：先以同Java/AS/heap/CPU的两个极小版本启动探针补真实CPU/RSS与启动证据，各子工作不超过10秒；未据此授CLASS或RTL资格。
+- todo：须先诊断并另核有界CLASS后继，随后才是CHIRRTL/SV/真实ABI/Host运行；旧N0会话终态未知、完整27尚缺、完整block仍0/5。

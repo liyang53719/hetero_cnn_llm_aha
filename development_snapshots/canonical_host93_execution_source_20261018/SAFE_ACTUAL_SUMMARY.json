@@ -1,0 +1,69 @@
+{
+  "claims": {
+    "full_block_pass_count": 0,
+    "host_executed": false,
+    "previous_lost_n0_terminal": "UNKNOWN",
+    "rtl_generated": false,
+    "scala_class_success": false
+  },
+  "class_first_attempt": {
+    "automatic_retry_performed": false,
+    "class_count": 0,
+    "cleanup_anchor_confirmed": true,
+    "cleanup_group_absent": true,
+    "cleanup_kill_before_reap": true,
+    "cleanup_reap_exit_code": -9,
+    "compiler_log_bytes": 0,
+    "cpu_or_rss_measurements_available": false,
+    "error_type": "TimeoutError",
+    "helper_field_boundary": "Only subprocess.TimeoutExpired sets that flag; it does not negate this TimeoutError",
+    "helper_timed_out_field": false,
+    "independent_current_input_rehash_passed": true,
+    "natural_java_exit_proven": false,
+    "oom_or_compiler_phase_proven": false,
+    "outer_elapsed_seconds": 121.697,
+    "outer_exit_code": 1,
+    "status": "FAIL_COMPILE_WORK_WINDOW_TIMEOUT",
+    "successful_runner_postflight_executed": false,
+    "supervised_compile_seconds": 120.063285,
+    "trigger": "compile_stop about120s; original handler string absolute150s is not the elapsed deadline"
+  },
+  "hardfloat20": {
+    "entry_to_postflight_seconds": 87.93562,
+    "opaque_bytes_only": true,
+    "outer_elapsed_seconds": 88.025,
+    "outer_exit_code": 0,
+    "verified_bytes": 149157,
+    "verified_files": 20
+  },
+  "jar87": {
+    "entry_to_postflight_seconds": 316.773096,
+    "opaque_bytes_only": true,
+    "outer_elapsed_seconds": 316.976,
+    "outer_exit_code": 0,
+    "packages_executed": false,
+    "verified_bytes": 61870159,
+    "verified_files": 87
+  },
+  "new_source93": {
+    "historical95_identity_inherited": false,
+    "outer_elapsed_seconds": 1.809,
+    "outer_exit_code": 0,
+    "source_bytes": 1002844,
+    "source_count": 93
+  },
+  "reproduction_source_cold": {
+    "actual_network_or_java_in_cold_tests": false,
+    "all_exit_code": 0,
+    "components": [
+      13,
+      8,
+      13
+    ],
+    "normal_tests": 34,
+    "optimized_tests": 34
+  },
+  "schema": 1,
+  "scope": "SAFE_HISTORICAL_EXECUTION_SUMMARY_NO_PAYLOAD",
+  "timing_boundary": "Observed saved stage/outer timings; not compiler throughput or peak memory benchmarks."
+}

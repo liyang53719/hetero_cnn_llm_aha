@@ -1,0 +1,39 @@
+{
+  "actual_download_authority": "parent only after source review and budget approval",
+  "files": {
+    "DELTA_V2.json": {
+      "bytes": 2357,
+      "sha256": "a60625a78e25bcde6ba23ce27f15ffbde6249986e8d56be140ba379550b189de"
+    },
+    "GATE_PLAN.json": {
+      "bytes": 1803,
+      "sha256": "37d65e25894b510afa21c009df65e88cdc9f6b190a2d10b45dcfe9c76161857b"
+    },
+    "README_CN.md": {
+      "bytes": 5121,
+      "sha256": "d6ec2aa1b8e4a4a206a1098f74ddd75b5a83e9769921f84d7fa688a2d1a55761"
+    },
+    "SUPERVISOR_PROJECTION.json": {
+      "bytes": 1091,
+      "sha256": "898c5b86da43f73d167301ea1c96dc3a05696e0127a3c55278c10d3f5cb19d71"
+    },
+    "VALIDATION_SOURCE_ONLY.json": {
+      "bytes": 432,
+      "sha256": "b00f0c5751b7b63fc2480fd5204770249b629ea9a5f5bbc0abd54da70e33b02f"
+    },
+    "run_acquisition_gate.py": {
+      "bytes": 11419,
+      "sha256": "875719997b99a88d9aeea82588f62ceef3424c7301f3eaaa4fcb2f5b239b0120"
+    },
+    "test_gate_cold.py": {
+      "bytes": 14229,
+      "sha256": "6d91f01c62e05716903d01867f7627dfc0c444d42d1b6dd8e4c6a84da463594b"
+    }
+  },
+  "local_environment_inventory_included": false,
+  "predecessor_manifest_sha256": "8c29a7a96bd7ef10d068bb4efd4b3a17e671cc0408b3d3f71810640427313367",
+  "schema": "host93-acquisition-outer-gate-source-v1",
+  "status": "SOURCE_CANDIDATE_NOT_EXECUTED",
+  "terminal_file_alone_is_never_success": true,
+  "version": "v2"
+}

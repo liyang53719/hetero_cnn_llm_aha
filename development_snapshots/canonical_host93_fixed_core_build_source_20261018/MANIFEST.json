@@ -1,0 +1,49 @@
+{
+  "schema": "fixed-core-build-public-source-manifest-v1",
+  "status": "PURE_SOURCE_UNBOUND_ACTUALS_PENDING",
+  "native_execution": false,
+  "repository_modified": false,
+  "production_functions_byte_identical_to_reviewed_predecessor": true,
+  "files": [
+    {
+      "path": "GATE_PLAN.json",
+      "bytes": 160737,
+      "sha256": "cd489d6530321fa95b79fc1d0e82d5599d358a1cb882165e44805dcafb98bd42"
+    },
+    {
+      "path": "INSTALL_MAP.json",
+      "bytes": 1988,
+      "sha256": "31285a8645718e5a17751d1f41255ce767594c371bb9c81f6c59e905b01c1ff9"
+    },
+    {
+      "path": "PROJECTIONS.json",
+      "bytes": 8239,
+      "sha256": "c89522ef780a7fcc7eaa90b155d8ac4e87427ad2dd42b2333f1a319336bb11f5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4262,
+      "sha256": "4e78f42a033e38d3aca34ed35bd9a39715e73e97d145ec20cea190749b4aab10"
+    },
+    {
+      "path": "SAFE_HISTORY.json",
+      "bytes": 1831,
+      "sha256": "9f6db71808a7bf4ca0ab992f429b6157878cd855a930f57c3aba453eedf40d8c"
+    },
+    {
+      "path": "load_build_gate.py",
+      "bytes": 2059,
+      "sha256": "5d5bfeae1ef084d09898e66685fc99621c7fa717cd90d75f4f991cb4bc38ddc6"
+    },
+    {
+      "path": "run_build_gate.py",
+      "bytes": 28551,
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    },
+    {
+      "path": "test_build_gate_cold.py",
+      "bytes": 29832,
+      "sha256": "bd42e27a09cd03645d91e693e7b716fd3864b24620514711c4a471979b73f572"
+    }
+  ]
+}

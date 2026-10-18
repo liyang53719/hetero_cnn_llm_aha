@@ -1,0 +1,224 @@
+{
+  "scope": "PUBLIC_SOURCE_RAW_FUNCTION_AND_REVERSE_PROJECTION_PINS_NO_ACTUAL_BINDING",
+  "published_sources": {
+    "supervisor": {
+      "path": "/UNBOUND/repo/development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2",
+      "functions": {
+        "require": {
+          "bytes": 67,
+          "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+        },
+        "save": {
+          "bytes": 179,
+          "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+        },
+        "group_state": {
+          "bytes": 190,
+          "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+        },
+        "observe_exit": {
+          "bytes": 719,
+          "sha256": "76915cb89d89e54d596af27a9966fb10b9e2a91c58e8c84396a4e139eb136cbe"
+        },
+        "bounded": {
+          "bytes": 5637,
+          "sha256": "890949ee8fcab68757fd0a1f703b34375aa672ad1be22ff5f062b6f2d1ccbe4a"
+        }
+      },
+      "repo_relative": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py"
+    },
+    "observation": {
+      "path": "/UNBOUND/repo/development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+      "bytes": 17327,
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a",
+      "functions": {
+        "proc_bytes": {
+          "bytes": 271,
+          "sha256": "ca5673af73568126a80bcf18fc97f6618fdea31d1f894dae66f3d3ba989ce4f1"
+        },
+        "proc_stat": {
+          "bytes": 483,
+          "sha256": "07b6cbe0ec743b6c5b7fc20d973ab3d7b3a85a256a4afb72db95b8859cc3d74f"
+        },
+        "sample_leader": {
+          "bytes": 1925,
+          "sha256": "eb36de77ffed0351e7193d9ad7400d5ad9c20386e420e5af7b4adbcaaf21efe8"
+        },
+        "usage": {
+          "bytes": 327,
+          "sha256": "d94e3e79ac4bac806f2c9ead6411abf9b88db58b72cc0c228bd73144270d0573"
+        }
+      },
+      "repo_relative": "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py"
+    }
+  },
+  "reference_sampler": null,
+  "phases": {
+    "autoconf": {
+      "supervisor": {
+        "bytes": 7101,
+        "sha256": "0da5bd2c872bf612971dd1a6a2987d09af004628c59776c435d904777e662cff",
+        "functions": {
+          "require": {
+            "bytes": 67,
+            "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+          },
+          "save": {
+            "bytes": 179,
+            "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+          },
+          "group_state": {
+            "bytes": 190,
+            "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+          },
+          "observe_exit": {
+            "bytes": 842,
+            "sha256": "0361df3be4a9d296327f4b11038c624fefdd7345ede97eacd1d6b12361f12d7d"
+          },
+          "bounded": {
+            "bytes": 5814,
+            "sha256": "1723a60e6f9815a11e98ba474498c3cb2cd4bed56af0bbbda0e1c2b7e146d3db"
+          }
+        }
+      },
+      "observation": {
+        "bytes": 3013,
+        "sha256": "8807c1a4234f37795086068f17a62d72ea1493e1917d6552f1d14cbbcb17f941",
+        "functions": {
+          "proc_bytes": {
+            "bytes": 271,
+            "sha256": "ca5673af73568126a80bcf18fc97f6618fdea31d1f894dae66f3d3ba989ce4f1"
+          },
+          "proc_stat": {
+            "bytes": 483,
+            "sha256": "07b6cbe0ec743b6c5b7fc20d973ab3d7b3a85a256a4afb72db95b8859cc3d74f"
+          },
+          "sample_leader": {
+            "bytes": 1925,
+            "sha256": "cb65b2979c121cc751dec28cc4a7b65069351f093fc2b328482dc324b6758791"
+          },
+          "usage": {
+            "bytes": 327,
+            "sha256": "d94e3e79ac4bac806f2c9ead6411abf9b88db58b72cc0c228bd73144270d0573"
+          }
+        }
+      }
+    },
+    "configure": {
+      "supervisor": {
+        "bytes": 7101,
+        "sha256": "0da5bd2c872bf612971dd1a6a2987d09af004628c59776c435d904777e662cff",
+        "functions": {
+          "require": {
+            "bytes": 67,
+            "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+          },
+          "save": {
+            "bytes": 179,
+            "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+          },
+          "group_state": {
+            "bytes": 190,
+            "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+          },
+          "observe_exit": {
+            "bytes": 842,
+            "sha256": "0361df3be4a9d296327f4b11038c624fefdd7345ede97eacd1d6b12361f12d7d"
+          },
+          "bounded": {
+            "bytes": 5814,
+            "sha256": "1723a60e6f9815a11e98ba474498c3cb2cd4bed56af0bbbda0e1c2b7e146d3db"
+          }
+        }
+      },
+      "observation": {
+        "bytes": 3013,
+        "sha256": "8807c1a4234f37795086068f17a62d72ea1493e1917d6552f1d14cbbcb17f941",
+        "functions": {
+          "proc_bytes": {
+            "bytes": 271,
+            "sha256": "ca5673af73568126a80bcf18fc97f6618fdea31d1f894dae66f3d3ba989ce4f1"
+          },
+          "proc_stat": {
+            "bytes": 483,
+            "sha256": "07b6cbe0ec743b6c5b7fc20d973ab3d7b3a85a256a4afb72db95b8859cc3d74f"
+          },
+          "sample_leader": {
+            "bytes": 1925,
+            "sha256": "cb65b2979c121cc751dec28cc4a7b65069351f093fc2b328482dc324b6758791"
+          },
+          "usage": {
+            "bytes": 327,
+            "sha256": "d94e3e79ac4bac806f2c9ead6411abf9b88db58b72cc0c228bd73144270d0573"
+          }
+        }
+      }
+    },
+    "optimized_backend": {
+      "supervisor": {
+        "bytes": 7106,
+        "sha256": "a1f8e3531fec23e86ec771b5a61815633f7fd757ec2af777c7cf130962dbd706",
+        "functions": {
+          "require": {
+            "bytes": 67,
+            "sha256": "397e23dec09e10d6468ef3993329594059b7d203015d58b8c494871e03af21d6"
+          },
+          "save": {
+            "bytes": 179,
+            "sha256": "1cc8ac0ecce96dbb033dad15693b33c5d55507dae95041e6b6f8cc9d19be3ff5"
+          },
+          "group_state": {
+            "bytes": 190,
+            "sha256": "be30152eef8ebc407cb7dd2e59484248adbc46edc55cdc332d2e24d4c7663ca0"
+          },
+          "observe_exit": {
+            "bytes": 842,
+            "sha256": "0361df3be4a9d296327f4b11038c624fefdd7345ede97eacd1d6b12361f12d7d"
+          },
+          "bounded": {
+            "bytes": 5819,
+            "sha256": "dbb12a4133fb13eec454b0dedb94236898096888dcfc321ac1ed851641db07e4"
+          }
+        }
+      },
+      "observation": {
+        "bytes": 3014,
+        "sha256": "152c3ce11e5af3572a6715f380c4b0870f49e4717ddaa65b298bcc694975f1db",
+        "functions": {
+          "proc_bytes": {
+            "bytes": 271,
+            "sha256": "ca5673af73568126a80bcf18fc97f6618fdea31d1f894dae66f3d3ba989ce4f1"
+          },
+          "proc_stat": {
+            "bytes": 483,
+            "sha256": "07b6cbe0ec743b6c5b7fc20d973ab3d7b3a85a256a4afb72db95b8859cc3d74f"
+          },
+          "sample_leader": {
+            "bytes": 1926,
+            "sha256": "10f8e18fbff16d07528097227a5e90dbf08975810b28925138764c68bafc67a3"
+          },
+          "usage": {
+            "bytes": 327,
+            "sha256": "d94e3e79ac4bac806f2c9ead6411abf9b88db58b72cc0c228bd73144270d0573"
+          }
+        }
+      }
+    }
+  },
+  "edits": {
+    "bounded": [
+      "FSIZE4MiB -> phase64MiB/1GiB",
+      "one CPU affinity insertion identical to prior reviewed projection",
+      "fixed original environment -> fixed BUILD_ENV",
+      "disable work alarm before existing5s cleanup",
+      "postflight log64KiB -> phase256KiB/1MiB",
+      "TimeoutError joins timeout classification"
+    ],
+    "observe_exit": "same prior original-PID WNOWAIT anchor and sample call insertion",
+    "sample_leader": "only literal row cap340 ->200 or3700, exact inverse checked; original PID/starttime,1s no-catchup,<=2048B row and flush remain unchanged",
+    "require_save_group_state_proc_bytes_proc_stat_usage": "byte-identical original function fragments"
+  },
+  "native_execution": false
+}

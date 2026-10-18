@@ -670,3 +670,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - ongoing：固定官方 Verilator 源上的 autoconf/configure/单核优化后端构建，逐阶段保存实际终态、输入和输出身份；构建资源预算为最大额，不保证完成。
 - todo：新工具参数化层级、DPI、双 handle 微例，随后恢复真实 Host 回放与数值比较。
 - 边界：不提交工具包、生成源码/二进制、完整日志或机器库存；真实 Host/RTL 数值仍无新增 PASS，完整 block 保持 0/5。
+
+### 2026-10-18 22:48 UTC：固定官方工具三阶段构建复现源码
+
+- done：固定官方 473 源文件与已核依赖的 autoconf 实际 outer exit 0/0.736 s，生成 configure 394,180 B；独立实际审 `364e920bb2af6addc7d43c36ef22ebd15425e50b207f5a2f5e551d3a1cb14fe6` 仅授该阶段生成资格。
+- done：configure 实际 outer exit 0/5.035 s，557 文件/16,835,102 B，原 545 件完整保留；独立实际审 `611c15baffdff410d9fcbf42e7bf5953b957698906ee70590cfef49ad04c68d6` 仅授该阶段生成资格。
+- ongoing：单核 make 优化后端已观察原 session66277 exit 0/429.473 s，生成 verilator_bin 19,076,520 B，SHA256 `cff217bcf9fa4183c68a0f96cf292728ca11ee7ff1e078904ebaa33529a9d2fc`；完整实际产物独审进行中，不预授工具行为或 Host 资格。
+- done：本批保存九件纯源码未绑定模板，执行逻辑保持已审版本，真实执行须填实际身份；公开模板的默认 SOURCE inspection 路径仍未绑定，不把其失败误写可运行资格。
+- done：冻结包的 make 历史为 RUNNING/PENDING_AT_FREEZE，保持原文；本计划仅追加上述后来观察，不热改已冻结摘要。39+39 冷测为人工/模拟测试。
+- 边界：一秒 leader 采样只观察原 make 进程，不能代表 compiler 子树；终态 RUSAGE_CHILDREN 单独记录。3600 秒总预算为最大额，本次实际耗时按原终态报告。
+- todo：固定新 binary 实际审后，先做版本、参数化层级、DPI 与两个独立 handle 微例；官方 m_seqnum 未初始化源码风险继续保留，单次微例通过不能证明该风险消失。
+- todo：通过小资格后恢复真实 Host 模型构建与数值回放。无真实 Host/RTL 数值新增 PASS，完整 block 0/5；无工具二进制、生成物、完整日志或机器库存进入本批。

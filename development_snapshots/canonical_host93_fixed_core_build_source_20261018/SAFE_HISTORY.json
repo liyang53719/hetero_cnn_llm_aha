@@ -1,0 +1,40 @@
+{
+  "schema": "fixed-core-build-safe-history-v1",
+  "historical_only_not_production_binding": true,
+  "official_source_commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "source_qualified_count": 473,
+  "source_qualified_bytes": 11747893,
+  "original_source_acquisition_fail_preserved": true,
+  "fixed_dependency_original_members": 67,
+  "copies_in_each_actual_phase_tools_layout": 68,
+  "historical_derived_cfg": {
+    "bytes": 5491,
+    "sha256": "f26d301ce4c054f41865047228ea505bbdd79ffe8f7cd04c07b72175057bc2a0",
+    "official_original": false,
+    "reusable_binding": false,
+    "new_stage_requires": "rederive the four resource-path lines and independently hash/review the resulting cfg and stage"
+  },
+  "autoconf": {
+    "status": "ACCEPTED_GENERATION_ONLY",
+    "outer_exit": 0,
+    "outer_seconds": 0.736,
+    "review_manifest_sha256": "364e920bb2af6addc7d43c36ef22ebd15425e50b207f5a2f5e551d3a1cb14fe6",
+    "configure_generated_bytes": 394180,
+    "configure_generated_sha256": "669765d6caaf3c789a95dacb5734559d4869cfa7fde00e0b9d86bf15f19e5c9b"
+  },
+  "configure": {
+    "status": "ACCEPTED_GENERATION_ONLY",
+    "outer_exit": 0,
+    "outer_seconds": 5.035,
+    "review_manifest_sha256": "611c15baffdff410d9fcbf42e7bf5953b957698906ee70590cfef49ad04c68d6",
+    "required_outputs": 11
+  },
+  "make": {
+    "status": "RUNNING_PENDING_AT_FREEZE",
+    "source_review_manifest_sha256": "c84a0be085fbe0a8aaeb425a446714f4a0fbcdb18e83bd943146c8d44013d3c4",
+    "outcome": "PENDING_AT_FREEZE",
+    "observation": "Parent reported a single authorized actual started; this publication did not poll or infer its outcome."
+  },
+  "backend_version_micro_model_host_qualification": "UNPROVEN_BY_THIS_SOURCE_PUBLICATION",
+  "runtime_functions_predecessor_sha256": "87231b91bc0b6b12ed4ea4e16a9b733e76a6c459aae76a94ff176428242fe1bf"
+}

@@ -1,0 +1,40 @@
+{
+  "actual_executed": false,
+  "fixes": {
+    "E01": "Catch timer and signal restoration failures separately; preserve first failure and attempt both restores",
+    "E02": "Recheck full phase window after preflight and binary identity, before original run_phase",
+    "E03": "Rehash binary after micro/full stage and preflight"
+  },
+  "prior_public_manifest": {
+    "bytes": 2907,
+    "sha256": "25f3d8f2a165201907d5014c2f795407442a3d9b764a6d78df0bb84068603ff4"
+  },
+  "private_path_delta": "Only execution bundle dependency-catalog location and fresh work name; original inputs/receipts/core source unchanged",
+  "review_manifest": {
+    "bytes": 895,
+    "sha256": "afef2ce4b157d7a414bdb30e409cde8151c11b82585f5f1262f6a9c4a735e3e2"
+  },
+  "review_summary": {
+    "bytes": 3543,
+    "sha256": "324ac11798b368361040923c1c3949830c3b94f0df46ce6ce7f93d5d71ff2265"
+  },
+  "schema": 1,
+  "tests_each": 46,
+  "unchanged": {
+    "budgets": true,
+    "dependency_catalog": {
+      "bytes": 17181,
+      "sha256": "eb96b59bacab297190a7cf84157f26612d91d8e8c85b333707122a037a32a18d"
+    },
+    "dependency_gate.py": {
+      "bytes": 5104,
+      "sha256": "57207b29c56024c2288afe9faffbc81bd2bd921868dc44badc428fd03673554c"
+    },
+    "dependency_observation": {
+      "bytes": 11717,
+      "sha256": "e81692ec50232b82353831b198c06cf793b8581b4a154c9c2092ff474c76b586"
+    },
+    "original_models": true,
+    "original_supervisor": true
+  }
+}

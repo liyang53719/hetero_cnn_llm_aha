@@ -1,0 +1,47 @@
+{
+  "inherited_sources": {
+    "ELF_SOURCE": {
+      "bytes": 53278,
+      "sha256": "235a619fc7d304578ff78a958c173a33cb50d1a860dbf56fe2051fd4396ba3b8"
+    },
+    "SUPPORT_PINS.json": {
+      "bytes": 806,
+      "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"
+    },
+    "binding_observer.py": {
+      "bytes": 11781,
+      "sha256": "62a7f5b4f9250f66e5c62ed9d8b6a486642e135e5e934fc505ae2dfadc850904"
+    },
+    "bootstrap.py": {
+      "bytes": 25509,
+      "sha256": "c2a7ca58d8fba3df8b76071e25ad740386ab5113a59897181b39b4d303e50ea8"
+    },
+    "ci_support_v3.py": {
+      "bytes": 16348,
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+    },
+    "local_mount_profile.py": {
+      "bytes": 7087,
+      "sha256": "cdbe1030e3bf2a9b2222836f7f594b4800c4315dfb31a4438a8b76c07cd18c8f"
+    },
+    "prepare_reference.py": {
+      "bytes": 8378,
+      "sha256": "3a52a7ec16680ea6b9e0553563ab51d1415ae0f703cb1916abbe0748bd495167"
+    }
+  },
+  "production": {
+    "dependency_gate.py": {
+      "bytes": 5104,
+      "sha256": "57207b29c56024c2288afe9faffbc81bd2bd921868dc44badc428fd03673554c"
+    },
+    "launch.py": {
+      "bytes": 651,
+      "sha256": "8c92219fc50c95f5b7c9c55b0314e654c1dd2392f58c4aff49da756852324e21"
+    },
+    "run_reference.py": {
+      "bytes": 14870,
+      "sha256": "a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684"
+    }
+  },
+  "schema": 1
+}

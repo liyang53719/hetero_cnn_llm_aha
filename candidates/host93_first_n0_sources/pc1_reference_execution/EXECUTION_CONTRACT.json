@@ -1,0 +1,124 @@
+{
+  "application_accuracy_pass": null,
+  "child_common_limits": {
+    "as_bytes": 536870912,
+    "cpu_affinity_count": 1,
+    "fsize_bytes": 16777216,
+    "log_bytes": 65536
+  },
+  "compile_argv": [
+    "<original_bound_gplusplus>",
+    "-B",
+    "<fresh_work>/compiler-search/",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-ffp-contract=off",
+    "-fno-fast-math",
+    "-frounding-math",
+    "<fresh_work>/model/source/pc1_reference_main.cpp",
+    "-o",
+    "<fresh_work>/model/pc1_reference",
+    "-lm"
+  ],
+  "compiler_search_delta": "Only add -B four-fixed-symlink directory; PATH fixed to same directory; original core flags unchanged",
+  "core_review": {
+    "manifest": {
+      "bytes": 550,
+      "sha256": "161b9e043efcbcc89ec4c85ccf637559c62e0315578c417356752ffafdb7cdd2"
+    },
+    "summary": {
+      "bytes": 3927,
+      "sha256": "a880263eae21d76de8293d7d084238f9ba7675f0e22189e101a8e1d2e2d09a0d"
+    },
+    "verdict": "ACCEPT_PC1_TWO_REFERENCE_MODELS_SOURCE_ONLY"
+  },
+  "dependency_catalog": {
+    "bytes": 17181,
+    "sha256": "eb96b59bacab297190a7cf84157f26612d91d8e8c85b333707122a037a32a18d"
+  },
+  "dependency_file_count": 36,
+  "dependency_total_bytes": 58139729,
+  "elf_projection": {
+    "file_bytes_cap": [
+      33554432,
+      67108864
+    ],
+    "inverse_exact": true,
+    "source": "candidates/host93_micro_diagnostics/run.py",
+    "string_table_bytes_cap": [
+      1048576,
+      2097152
+    ]
+  },
+  "entry": "launch.py",
+  "finite_sonames": 16,
+  "full_argv": [
+    "<fresh_work>/model/pc1_reference",
+    "--full",
+    "<fresh_work>/model/inputs",
+    "<fresh_work>/model/outputs"
+  ],
+  "full_models_executed": false,
+  "launch_argv": [
+    "<bound_python>",
+    "-I",
+    "-S",
+    "-B",
+    "<public_source>/launch.py",
+    "--private-config",
+    "<private_binding>",
+    "--execute-reviewed-models"
+  ],
+  "micro_argv": [
+    "<fresh_work>/model/pc1_reference",
+    "--micro"
+  ],
+  "model_source_manifest": {
+    "bytes": 3693,
+    "sha256": "8036848dcfe00eff172977cfa4a181b78d7aa02916ef8a175e003901029d93fe"
+  },
+  "native_executed": false,
+  "official_raw_numeric_pass": null,
+  "outer_total_seconds_cap": 210,
+  "parent_hard_limits": {
+    "as_bytes": 536870912,
+    "cpu_seconds": 210,
+    "fsize_bytes": 16777216
+  },
+  "phase_budgets": {
+    "compile": {
+      "cpu": 30,
+      "total": 45,
+      "work": 30
+    },
+    "full_models": {
+      "cpu": 100,
+      "total": 120,
+      "work": 105
+    },
+    "micro": {
+      "cpu": 3,
+      "total": 20,
+      "work": 5
+    }
+  },
+  "private_binding": {
+    "bytes": 2633,
+    "sha256": "4187aaa36b89a2acd1a6bfb355ec48cc29afe9942d645885fe6e2aa2eb446985"
+  },
+  "revision": "V2_E01_E02_E03_ONLY",
+  "rss_gate": {
+    "kind": "postflight acceptance gate, not instantaneous aggregate hard limit",
+    "limit_kib": 393216,
+    "source": "maxrss_kib_cumulative_parent_children"
+  },
+  "rtl_executed": false,
+  "schema": 1,
+  "scope": "Fixed two PC1 models only; no RTL, no N0 regeneration, no Torch/NumPy",
+  "shared_total_seconds": 210,
+  "status": "SOURCE_ONLY_ACTUAL_NOT_EXECUTED",
+  "tail_reserved_seconds": 25
+}

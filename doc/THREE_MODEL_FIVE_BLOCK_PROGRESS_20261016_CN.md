@@ -1201,3 +1201,13 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 作者纯冷42普通+42优化+42搬迁普通+42搬迁优化，以及same-buffer入口9普通+9优化，共186项通过。独审另作42+42及入口9+9；测试消费固定size/SHA的同buffer源码，覆盖全qraw抽象账本、权限/退休/ACK与入口同长替换、长短、遍历和symlink拒例。Python抽象ledger与静态源码检查均不代替C++接口、RTL或数值资格。
 - 根 SOURCE manifest 6527 B/SHA256 f8f0ab2c27c677dd01f8e294856b855f8cc6133b472816c0c504a76cdff9829d；生产manifest4472 B/40ebb6c1957941b90906c4dc5c0d561816fa413aa5a4431a1bd2d191f39dc5b1；COLD_RESULT2195 B/0015d0f71e667d1ec6508c012a28f5543bc8131f88ed46a3dcc35f4e09147eb1。正式独审 ACCEPT_FINITE_PC01_BRIDGE_SOURCE_ONLY：review_pc01_bridge_source_20261019T1849，MANIFEST827 B/f2272142b2c50cf8c1bc41606d2f7194e546013b5ff041c20e8edc634b5e4725，SUMMARY.json4749 B/5d39ff86087bb3dec29855f453cfe38997d30a5db8dcbf9162bacefcd9e52f3e。原README待审文字由独立STATUS提供最终身份，不热改冻结件。
 - 本次仅安全源码/冷测与元数据，不公开私有relink绑定、机器路径、数组、实际receipt、原日志或搬迁fixture，不改workflow。计划按父bc0a78b042b253668c2ed79ac6a6bbe0e88c4dcf的232260 B精确前缀加本纯尾，一次完整替换；禁止追加全文。full_block_pass=false、baseline_adopted=false。
+
+
+### 2026-10-19 PC1 两参考模型三阶段监督入口（TEMP_SOURCE 独立小批）
+
+- 本节只持久化执行入口的 SOURCE 资格，沿用已审独立数学与 DUT-order 两模型；本批冻结时 native/full 为 NOT_EXECUTED，后续 actual 证据与结论另批记录。本批没有采用任何模型结果为新基线，不改变原 N0 PASS 或阈值，不触发新的 Host/RTL/native 作业；workflow 文件不变，普通 push 的轻量 guard 另记。
+- 总墙时 210 秒，compile/micro/full 阶段 total 为 45/20/120 秒，work 为 30/5/105 秒，CPU 为 30/3/100 秒；尾部保留 25 秒。父实际调用还须绑定包含 launcher 与有界收尾的 ≤210 秒外层总界。每个 native child 复用原 fixed_support/run_phase，原 owner deadline、natural exit、WNOWAIT/reap、group cleanup、首错与预算不改。
+- 固定依赖门为此次命令的 36 文件、44 alias、16 soname、23 ELF 静态资格；既有 g++ realpath 与原 mount/binding 保留。ELF reader 仅 32→64 MiB 文件 cap 与 1→2 MiB DT_STRSZ cap 投影，并逐字节逆还原；编译 argv 仅额外 -B 到四个固定工具 symlink 目录，PATH/库目录固定。机器路径、私有 binding/命令/依赖清单与原日志不公开；未声称通用系统闭包或实际工具查找已观测。
+- v1 有限独审发现 E01/E02/E03，v2 分别补齐恢复动作保首错、所有前门后重核完整阶段窗口、micro/full 后重核 binary。作者 46 例纯 mock 在普通/-O/搬迁普通/搬迁-O 四模式通过；独审普通/-O 各 46 例及原三反例两模闭合。
+- SOURCE verdict 为 ACCEPT_PC1_REFERENCE_THREE_STAGE_EXECUTION_SOURCE_ONLY。源 manifest 3049 B / 3b203a08d08b600b98330cd6a70ce6cc290c8bf20089dd0c99a7ccd0f9d76b2d；独审 manifest 887 B / 1e8361e6974bc6d19b169806bf891b62e2e8801b94af1433c4bf19d74c6a50dc；summary 3480 B / fdf44a67eded8289a8e074ff802ab4c21dc7b2b301dbee13ec8526a2f30c5a2e。仅公开 8 个必要原件和安全 README/STATUS；生产与冷测冻结字节不改。
+- 该 SOURCE 资格不证明完整 196608 值的实际误差、官方 raw 无 bias payload PASS 或 RTL bit-exact；official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl 均仍为 null。数学独立性、无 bias/无 BF16 输出舍入、输入 SHA 与 typed 顺序各自保持原已审合同。

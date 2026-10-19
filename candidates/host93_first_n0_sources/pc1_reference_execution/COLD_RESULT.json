@@ -1,0 +1,54 @@
+{
+  "full_arrays_read": false,
+  "modes": {
+    "normal": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4440,
+        "sha256": "0293f4c925008231dbf01bbb175ed5c3dad4a16a7febd5a19e154119106a7a7a"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "optimized": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4440,
+        "sha256": "a5cbf96a920d47574ca971d5da15997df5ce5684bdadfe531120ef4e6128cf10"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "relocated": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4440,
+        "sha256": "c6615150aa59dd20866264ddc766b042e52c9412ca7b15813c591af64d14d22e"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "relocated_optimized": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4440,
+        "sha256": "438470076d844be7be8187f4b03672685efae40232e79dbaac98f1e87e58ff37"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "native_executed": false,
+  "production_source_identical_after_relocation": true,
+  "schema": 1,
+  "status": "PASS_PURE_MOCK_COLD_ONLY",
+  "tests_each": 46
+}

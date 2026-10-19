@@ -1,0 +1,134 @@
+{
+  "actual_compile_or_link_attempted": false,
+  "cold_sources": {
+    "RELINK_CONTRACT.json": {
+      "bytes": 3446,
+      "sha256": "6e35a033308211c65da7f8d0c647e287338599362dc85851c961f8b522de82b7"
+    },
+    "dependency_gate.py": {
+      "bytes": 5122,
+      "sha256": "49281296cb6daa034c6e7f2f741ff6d7af9b0e61abdd96d77c1856349e8597c7"
+    },
+    "launch.py": {
+      "bytes": 2045,
+      "sha256": "22b45762f255279d78b4ae0ef89bc20f862806cadda602291cea0af659dd8413"
+    },
+    "reference_helpers.py": {
+      "bytes": 14870,
+      "sha256": "a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684"
+    },
+    "run_cold.py": {
+      "bytes": 718,
+      "sha256": "a9ffd29cc560a130cd59b18266969b38ab667e1e34d9b815a804e854c60bfaae"
+    },
+    "run_relink.py": {
+      "bytes": 19837,
+      "sha256": "d80f19af41760b96f8a8a60d2a45faab21b2addea39bf5e805fe2a2a338e798d"
+    },
+    "test_relink_cold.py": {
+      "bytes": 47283,
+      "sha256": "28d99de70a2c892377b65b1492cd414c9e2b848507b2a7de9f2053437d6e5336"
+    }
+  },
+  "coverage": [
+    "exact fixed compile/link argv and -B search",
+    "fixed environment without inherited CXX/PATH/LD_PRELOAD/CPATH",
+    "28 source + 19 cache rows and 44 upstream source identities",
+    "ordinary ar and thin/nonarchive rejection",
+    "same verified buffers staged with exclusive writes",
+    "source/cache/receipt/module/descriptor drift rejection",
+    "39-row fixed compiler catalog and dependency gate negatives",
+    "two phases, shared owner/deadline, tail windows and finite RSS/resource limits",
+    "compile failure prevents link and no binary invocation",
+    "first failure retained over receipt and timer restoration failures",
+    "source-entry same-size/short/long/symlink mutation rejected before compile",
+    "ordinary, -O and relocated source modes"
+  ],
+  "distinct_tests": 97,
+  "limits": "Abstract/mock caller contract coverage only; no actual toolchain or produced-binary qualification.",
+  "native_tools_invoked": false,
+  "network_used": false,
+  "outer_entry_checked_before_compile": true,
+  "outer_entry_identity": {
+    "bytes": 718,
+    "sha256": "a9ffd29cc560a130cd59b18266969b38ab667e1e34d9b815a804e854c60bfaae"
+  },
+  "pc01_executable_invoked": false,
+  "production_source_freeze": {
+    "dependency_gate.py": {
+      "bytes": 5122,
+      "sha256": "49281296cb6daa034c6e7f2f741ff6d7af9b0e61abdd96d77c1856349e8597c7"
+    },
+    "launch.py": {
+      "bytes": 2045,
+      "sha256": "22b45762f255279d78b4ae0ef89bc20f862806cadda602291cea0af659dd8413"
+    },
+    "run_relink.py": {
+      "bytes": 19837,
+      "sha256": "d80f19af41760b96f8a8a60d2a45faab21b2addea39bf5e805fe2a2a338e798d"
+    }
+  },
+  "rtl_executed": false,
+  "schema": "PC01_RELINK_PURE_MOCK_COLD_V1",
+  "status": "PASS_SOURCE_ONLY_PURE_MOCK",
+  "subprocess_api_used": false,
+  "test_executions": 388,
+  "variants": [
+    {
+      "exit_code": 0,
+      "mode": "normal",
+      "seconds": 0.628,
+      "stderr": {
+        "bytes": 10655,
+        "sha256": "4be27fcda6f435e8ca022725ea9635828d80bd6ba71cb7d74d6e0556e9cadd94"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 97
+    },
+    {
+      "exit_code": 0,
+      "mode": "optimized",
+      "seconds": 0.512,
+      "stderr": {
+        "bytes": 10655,
+        "sha256": "2164cc75449e7da749a831beb6f27c910052bc622ce72a6ed4842d8b8f3b32be"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 97
+    },
+    {
+      "exit_code": 0,
+      "mode": "relocated",
+      "seconds": 0.475,
+      "stderr": {
+        "bytes": 10655,
+        "sha256": "f5c4049ef45623bb4f76fcd417caca653f40889297b7ca220469691e5a884454"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 97
+    },
+    {
+      "exit_code": 0,
+      "mode": "relocated_optimized",
+      "seconds": 0.506,
+      "stderr": {
+        "bytes": 10655,
+        "sha256": "ae3c2887a148684549d9442bcfe5670f04531595a7a244955be6800f9e068348"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests_run": 97
+    }
+  ]
+}

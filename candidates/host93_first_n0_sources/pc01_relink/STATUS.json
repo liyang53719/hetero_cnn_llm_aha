@@ -1,0 +1,45 @@
+{
+  "author_cold": {
+    "normal": 97,
+    "optimized": 97,
+    "relocated_normal": 97,
+    "relocated_optimized": 97
+  },
+  "baseline_adopted": false,
+  "combined_authorized_ceiling_seconds": 10800,
+  "frozen_public_files": 13,
+  "frozen_readme_pending_note_superseded_by_status": true,
+  "frozen_source_manifest": {
+    "bytes": 3265,
+    "sha256": "6619ecc47b717b153d540eae6e8f0dc8c9834b63a575bfc7914367f99917ce40"
+  },
+  "full_block_pass": false,
+  "independent_execution_result": "NOT_INCLUDED_OR_INFERRED_BY_THIS_SOURCE_PUBLICATION",
+  "independent_review_cold": {
+    "relocated_normal": 97,
+    "relocated_optimized": 97
+  },
+  "inter_step_wait_is_not_native_wall": true,
+  "long_execution_included": false,
+  "long_execution_separate_budget_seconds": 10620,
+  "machine_binding_published": false,
+  "relink_native_stages": 2,
+  "relink_total_seconds_including_preflight_and_evidence": 180,
+  "review": {
+    "MANIFEST.json": {
+      "bytes": 842,
+      "sha256": "dd3cc28794623ce26a1c62c11202a0b21f06f978149dc2108e8004a3b544833e"
+    },
+    "SUMMARY.json": {
+      "bytes": 4019,
+      "sha256": "d92812b4e48c3e3132a7b753fbe3fd77535afdd2231d5628b398da507c9fa854"
+    }
+  },
+  "review_verdict": "ACCEPT_PC01_DRIVER_COMPILE_LINK_SOURCE_AND_180_SECOND_INVOCATION_ONLY",
+  "source_preparation_scope": {
+    "cpp_compiled": false,
+    "native_executed": false,
+    "rtl_executed": false
+  },
+  "status": "SOURCE_ONLY_REVIEWED"
+}

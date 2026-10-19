@@ -1222,3 +1222,16 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 正式 verdict：ACCEPT_ACTUAL_PC1_TWO_REFERENCE_MODELS_COMPLETE_DIAGNOSTIC_ONLY。actual 原证据 manifest 1138 B / 84d4670ef0413a3afcf9476dcf96b82714e31d6811cf1b3eedafe4f587f0220f；独审 manifest 381 B / b8598654be706a69c38eba26e1913aee52f21b29c76b680ad66c0ad0caf7251c；summary 10373 B / 468969f36d80fe77c8ab778b7a6366932489da2e08d6d455e13a0b96684fa261。只公开白名单数字、公开源码/产物 hash 与安全解释，数组、私有路径、启动参数、原收据、raw log 不发布。
 - 允许保留三输出身份作同一 stimulus 的分轨诊断参考：数学 FP32 SHA256 42604d286bb7f237c4dc982b4a65065ea74edec82714a4e0f0ad07fcd6172851；数学 FP64 ef5d02aa4b9ad77afdb61eb2842786780d218978bc1dac4641068ec4856710e8；typed FP32 346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1。后续必须先核输入/来源 SHA、新鲜 PC0 实际 N0 identity、ACK1/B retire 与完整 196608 qraw，再分别比较 typed 与独立数学轨。
 - official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl 保持 null，rtl_executed=false，baseline_adopted=false，full_block_pass=false。原 N0 PASS 保留，本批不把模型诊断提升为官方 qraw、应用精度或 RTL 等价结论；workflow 文件不变，普通 push 的轻量 guard 另记。
+
+
+## 2026-10-19：PC01 既有普通 archive 的有限 driver 重链 SOURCE 已独审
+
+本次发布 `candidates/host93_first_n0_sources/pc01_relink/` 的 13 件冻结公开原件与 STATUS，只准备既有 PC01 driver 的 compile/link 调用方；未改 RTL 算术、未重新生成模型或构建 backend。来源为已核普通 archive 与 19 件精确依赖，28 件桥生产源码和 44 项原来源继续逐项 pin。私有路径、绑定、库属性观察、机器命令、日志、权重和运行数组均不公开。
+
+SOURCE 独审结论为 `ACCEPT_PC01_DRIVER_COMPILE_LINK_SOURCE_AND_180_SECOND_INVOCATION_ONLY`。独审 MANIFEST 为 842 B / dd3cc28794623ce26a1c62c11202a0b21f06f978149dc2108e8004a3b544833e；SUMMARY 为 4019 B / d92812b4e48c3e3132a7b753fbe3fd77535afdd2231d5628b398da507c9fa854。作者同 buffer 冷入口在普通、优化、搬迁普通、搬迁优化四模式各 97 项通过；独审搬迁普通与优化各 97 项通过。全部为纯 mock，不调用编译器或模型。
+
+重链固定只有 compile 与 link 两个原监督 native phase；输入、源码、原件与副本、对象、ELF、39 项固定系统依赖及 argv/env 均有前后复核。固定 g++、单核、AS 6 GiB、MemAvailable ≥8 GiB 与磁盘 ≥3 GiB 保留。仅新增固定 libatomic 允许项以及该库和两个原 pthread archive 身份；ELF parser、只读 mount 信任边界和原监督逻辑不改。首失败停，原异常优先，未知安全码为 null。
+
+重链单次总墙钟上界 180 秒，含初始 pin/准入、95 秒 compile phase、25 秒 link phase及 30 秒落证；外层 TERM 170 秒、KILL 5 秒、尾 shell 5 秒仍在 180 秒内。该入口仅验证产生 ELF 的静态身份，不执行 PC01 ELF。SOURCE 准备本身未 C++ 编译、未 native、未 RTL；独立实际结果另依冻结收据审定，本发布不推断其结果。
+
+后续单次 fresh PC0→ACK0→PC1→ACK1 执行另设自己的 t0，预算最多 10620 秒，和独立重链 180 秒合计上界 10800 秒；两步等待不计仿真 wall，不冒充同一 t0。8,000,000 主周期是总 cap，不能保证完成。原 N0 2,956,951 周期的协调墙钟 2904.533148 秒与 native 墙钟 2904.369166 秒分列；按原速度推算仅是预算参考，不能替代未知 PC1 吞吐实测。长执行合同与三轨比较另审，SOURCE 结论不授予长 RTL 或数值通过。

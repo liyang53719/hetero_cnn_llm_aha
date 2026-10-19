@@ -1,0 +1,35 @@
+{
+  "compiler_native_phase_order": [
+    "compile",
+    "link"
+  ],
+  "dependency_gate": {
+    "derived": {
+      "bytes": 5122,
+      "sha256": "49281296cb6daa034c6e7f2f741ff6d7af9b0e61abdd96d77c1856349e8597c7"
+    },
+    "elf_parser_rewritten": false,
+    "exact_forward_and_inverse": true,
+    "original": {
+      "bytes": 5104,
+      "sha256": "57207b29c56024c2288afe9faffbc81bd2bd921868dc44badc428fd03673554c"
+    },
+    "single_change": "Append fixed libatomic.so.1 to allowed dynamic soname tuple only"
+  },
+  "original_supervisor_unchanged": true,
+  "produced_executable_invoked": false,
+  "reused_helper": {
+    "bytes": 14870,
+    "functions": [
+      "need",
+      "read",
+      "module",
+      "save_preserving_failure",
+      "restore_preserving_failure"
+    ],
+    "native_reference_sequence_called": false,
+    "path": "candidates/host93_first_n0_sources/pc1_reference_execution/run_reference.py",
+    "sha256": "a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684"
+  },
+  "schema": "PC01_RELINK_FINITE_PROJECTION_V1"
+}

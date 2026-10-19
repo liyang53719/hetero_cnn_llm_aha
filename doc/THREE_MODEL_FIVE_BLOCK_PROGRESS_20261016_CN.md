@@ -1362,3 +1362,19 @@ capture仍空，counts/N0/qraw数组未写；PC1输出不完整，三轨比较NO
 安全3路径只公开聚合标量/身份，不含raw日志、私有路径、数组或二进制；不重native或测试，不改原FAIL/参考。本批不触发新的Host/RTL/native作业；workflow不变，普通push轻量guard另记。
 
 独审终止后核7证据/11工作树、18源manifest成员、同一ELF/object/archive、29桥源/48 staged/44上游及16输入94920448 B；不冒成功postflight，本次未重hash39系统依赖或重算参考数组。N0/Wq read_bytes为已受理AR请求的完整burst跨度，不代表R beats全退休；251772是entry起已处理周期，不是完整accepted→ACK1分母。ACK0摘要不证明N0随后至失败始终不变，成功后hash gate未到，该项仍UNKNOWN。
+
+## 2026-10-19：原owner合法局部刺激核心SOURCE独审闭合，实际尚未执行
+
+在原PC01 resetRequired失败与更上游UNKNOWN保持不变的前提下，准备独立owner微刺激源码。直接以冻结76366612 B / 2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61 SV中的QwenOwnerKernel为新top：它是Host实际实例化的同一个无参数已特化module，保真实Router→Coordinator→Dense/Banks→ScheduledSiluOwner→Matrix/FMA。无需Scala/firtool重生成，但仍须新Verilator/C++生成和构建；旧Host archive不能仅重链替代。
+
+固定M128/N1536/K1536、mask255、原tag458753，完整N0 FP32786432/3c25077e…与Wq BF164718592/ad7ce2da…同buffer供数。prefixWorkspace固定原base4507654464、extent786432、generation8，原SV内部splitK=2560，不能误改为partial的1024。partial范围仍由原router给[0,1024)、[1024,1536)，pairReverse=true；不强设内部ng/block/lease，不重算N0、不抽样、不人工回Matrix终端。
+
+外存用单一全局typed事务RAM。固定单64B读只访问原N0/Wq payload，tag/LAST/背压/完整数据保持；写先收descriptor与全部data，再给typed响应。普通memory通道若意外出现即失败，不能零值或伪ACK补齐。它隔离原owner/Dense/Bank/Matrix边界，未包含Host历史与原iDMA/AXI，不把typed响应称ACK1或AXI B。
+
+目标只到ng160 partial1实际首issue：四个精确window请求、前三个partial真实终端/物理issue/done，以及ng0真实求和和128个typed写响应/81920B drain退休全部先成立；wide12801/slice102408只作旁证。请求到达/partial0退休/partial1接收分别记账，不能由12800静态issue前缀替代。首次真实错误即保存有界标量；当前high后RTL与前沿软件退休分列。到目标时job仍可能live，job_completed=false，没有全job终端或完整PC1数值通过。
+
+26成员/17来源及7生产原件已独审。v1唯一F01是终端report二次异常覆盖原exit，v2只固定原exit并保其余6生产逐byte不变；作者显式-I-S-B普通/-O/搬迁四模式每套74主+8loader纯合成通过，独立74+74通过。这些不执行C++，更不是RTL重现。SOURCE身份：review_owner_micro_core_v2_20261019T2306，MANIFEST752 B / 483a3b9cea73de582cb72ba7bb26848d9a4d50b202a3501066270a29ad257d00，SUMMARY1679 B / 09504038c750d4fb6a50263a0647a7c48b219cb8cd61136a9659303b3fdac01d；verdict GO_OWNER_MICRO_CORE_F01_CLOSED_SOURCE_ONLY。生产manifest1019 B / ad587ca4d0ee05953202c5378442bf11e936b2205632a3e2e124a4bbab722475。
+
+未来caller须在实际生成后核196端口与95观察成员的精确名字/位宽，以及原工具/层级/依赖资格；本批尚无这些新生成证据。已定总窗1320秒为生成360、单任务编译600、运行300、落证60，AS6GiB、单CPU，500000局部周期上限；预算是硬上限，不能承诺到目标，首错/超限保INCOMPLETE且不自动加窗。当前生成/编译/native/RTL仍NOT_EXECUTED，official_raw/application/typed-to-RTL均null，full_block=false，五block0/5。
+
+本批只发布核心安全源码/冷测元数据与中文计划完整replacement，不含输入内容、数组、二进制或私有绝对机器路径。不触发新的Host/RTL/native作业；workflow文件不变，普通push轻量guard另记。

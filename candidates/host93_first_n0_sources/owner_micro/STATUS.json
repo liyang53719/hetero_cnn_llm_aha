@@ -1,0 +1,60 @@
+{
+  "schema": "OWNER_MICRO_PUBLIC_SOURCE_STATUS_V1",
+  "scope": "ORIGINAL_OWNER_TYPED_RAM_MICRO_SOURCE_ONLY",
+  "source_review": {
+    "directory": "review_owner_micro_core_v2_20261019T2306",
+    "manifest": {
+      "bytes": 752,
+      "sha256": "483a3b9cea73de582cb72ba7bb26848d9a4d50b202a3501066270a29ad257d00"
+    },
+    "summary": {
+      "file": "SUMMARY.md",
+      "bytes": 1679,
+      "sha256": "09504038c750d4fb6a50263a0647a7c48b219cb8cd61136a9659303b3fdac01d"
+    },
+    "verdict": "GO_OWNER_MICRO_CORE_F01_CLOSED_SOURCE_ONLY"
+  },
+  "source_candidate_manifest": {
+    "bytes": 3913,
+    "sha256": "bb8ff9d8691ad2c8ba16d26607499231a91c4c1fe38fa13ea71b5c5df505eb64"
+  },
+  "production_manifest": {
+    "bytes": 1019,
+    "sha256": "ad587ca4d0ee05953202c5378442bf11e936b2205632a3e2e124a4bbab722475"
+  },
+  "author_cold": {
+    "modes": 4,
+    "main_per_mode": 74,
+    "loader_per_mode": 8,
+    "scope": "PURE_MOCK_SOURCE_AND_LOADER_ONLY"
+  },
+  "independent_cold": {
+    "ordinary": 74,
+    "optimized": 74,
+    "scope": "PURE_MOCK_SOURCE_ONLY"
+  },
+  "actual": "NOT_EXECUTED",
+  "new_top_abi_verified": null,
+  "generated_observation_members_verified": null,
+  "rtl_boundary_reproduced": null,
+  "fixed_profile": {
+    "m": 128,
+    "n": 1536,
+    "k": 1536,
+    "workspace_base": 4507654464,
+    "workspace_extent": 786432,
+    "workspace_generation": 8,
+    "splitK_internal": 2560
+  },
+  "external_memory_qualification": "TYPED_TRANSACTION_RAM_ONLY_NO_HOST_IDMA_AXI",
+  "upstream_failure_cause": "UNKNOWN",
+  "official_raw_numeric_pass": null,
+  "application_accuracy_pass": null,
+  "typed_recipe_bit_exact_to_rtl": null,
+  "full_block_pass": false,
+  "source_or_cold_changed_for_publication": false,
+  "arrays_included": false,
+  "private_absolute_paths_included": false,
+  "binary_included": false,
+  "workflow_changed": false
+}

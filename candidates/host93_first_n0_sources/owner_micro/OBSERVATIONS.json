@@ -1,0 +1,762 @@
+[
+  {
+    "name": "owner_sharedPoison",
+    "module": "QwenOwnerKernel",
+    "path": "",
+    "variable": "sharedPoison",
+    "member": "QwenOwnerKernel__DOT__sharedPoison",
+    "width": 1
+  },
+  {
+    "name": "owner_matrixDebt",
+    "module": "QwenOwnerKernel",
+    "path": "",
+    "variable": "matrixDebt",
+    "member": "QwenOwnerKernel__DOT__matrixDebt",
+    "width": 1
+  },
+  {
+    "name": "owner_readDebt",
+    "module": "QwenOwnerKernel",
+    "path": "",
+    "variable": "readDebt",
+    "member": "QwenOwnerKernel__DOT__readDebt",
+    "width": 1
+  },
+  {
+    "name": "owner_writeDebt",
+    "module": "QwenOwnerKernel",
+    "path": "",
+    "variable": "writeDebt",
+    "member": "QwenOwnerKernel__DOT__writeDebt",
+    "width": 1
+  },
+  {
+    "name": "owner_memoryDebt",
+    "module": "QwenOwnerKernel",
+    "path": "",
+    "variable": "memoryDebt",
+    "member": "QwenOwnerKernel__DOT__memoryDebt",
+    "width": 1
+  },
+  {
+    "name": "owner_seedDebt",
+    "module": "QwenOwnerKernel",
+    "path": "",
+    "variable": "seedDebt",
+    "member": "QwenOwnerKernel__DOT__seedDebt",
+    "width": 1
+  },
+  {
+    "name": "router_state",
+    "module": "Public21QkvReductionRouter",
+    "path": "qkvRouter",
+    "variable": "state",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__state",
+    "width": 2
+  },
+  {
+    "name": "router_fault",
+    "module": "Public21QkvReductionRouter",
+    "path": "qkvRouter",
+    "variable": "fault",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__fault",
+    "width": 1
+  },
+  {
+    "name": "router_bad",
+    "module": "Public21QkvReductionRouter",
+    "path": "qkvRouter",
+    "variable": "bad",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__bad",
+    "width": 1
+  },
+  {
+    "name": "router_malformed",
+    "module": "Public21QkvReductionRouter",
+    "path": "qkvRouter",
+    "variable": "malformed",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__malformed",
+    "width": 1
+  },
+  {
+    "name": "router_stray",
+    "module": "Public21QkvReductionRouter",
+    "path": "qkvRouter",
+    "variable": "stray",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__stray",
+    "width": 1
+  },
+  {
+    "name": "coor_state",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "state",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__state",
+    "width": 4
+  },
+  {
+    "name": "coor_ng",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "ng",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__ng",
+    "width": 16
+  },
+  {
+    "name": "coor_block",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "block",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__block",
+    "width": 1
+  },
+  {
+    "name": "coor_poison",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "poison",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__poison",
+    "width": 1
+  },
+  {
+    "name": "coor_status",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "status",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__status",
+    "width": 8
+  },
+  {
+    "name": "coor_serviceError",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "serviceError",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__serviceError",
+    "width": 1
+  },
+  {
+    "name": "coor_bad",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "bad",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__bad",
+    "width": 1
+  },
+  {
+    "name": "coor_windowPending",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "windowPending",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__windowPending",
+    "width": 1
+  },
+  {
+    "name": "coor_drainPending",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "drainPending",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__drainPending",
+    "width": 1
+  },
+  {
+    "name": "coor_sumPending",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "sumPending",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__sumPending",
+    "width": 1
+  },
+  {
+    "name": "coor_ownerRetired",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "ownerRetired",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__ownerRetired",
+    "width": 1
+  },
+  {
+    "name": "coor_retired",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "retired",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__retired",
+    "width": 1
+  },
+  {
+    "name": "win_request_valid",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_valid",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_valid",
+    "width": 1
+  },
+  {
+    "name": "win_request_ready",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_ready",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_ready",
+    "width": 1
+  },
+  {
+    "name": "win_request_bits_identity",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_identity",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_identity",
+    "width": 32
+  },
+  {
+    "name": "win_request_bits_ng",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_ng",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_ng",
+    "width": 16
+  },
+  {
+    "name": "win_request_bits_cols",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_cols",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_cols",
+    "width": 8
+  },
+  {
+    "name": "win_request_bits_slot",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_slot",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_slot",
+    "width": 2
+  },
+  {
+    "name": "win_request_bits_reuseA",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_reuseA",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_reuseA",
+    "width": 1
+  },
+  {
+    "name": "win_request_bits_kWindow_enabled",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_kWindow_enabled",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_kWindow_enabled",
+    "width": 1
+  },
+  {
+    "name": "win_request_bits_kWindow_begin",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_kWindow_begin",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_kWindow_begin",
+    "width": 16
+  },
+  {
+    "name": "win_request_bits_kWindow_end",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_kWindow_end",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_kWindow_end",
+    "width": 16
+  },
+  {
+    "name": "win_request_bits_kWindow_blockId",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_kWindow_blockId",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_kWindow_blockId",
+    "width": 32
+  },
+  {
+    "name": "win_request_bits_kWindow_pairReverse",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_request_bits_kWindow_pairReverse",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_request_bits_kWindow_pairReverse",
+    "width": 1
+  },
+  {
+    "name": "win_result_valid",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_valid",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_valid",
+    "width": 1
+  },
+  {
+    "name": "win_result_ready",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_ready",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_ready",
+    "width": 1
+  },
+  {
+    "name": "win_result_bits_tag",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_tag",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_tag",
+    "width": 32
+  },
+  {
+    "name": "win_result_bits_identity",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_identity",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_identity",
+    "width": 32
+  },
+  {
+    "name": "win_result_bits_ng",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_ng",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_ng",
+    "width": 16
+  },
+  {
+    "name": "win_result_bits_rows",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_rows",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_rows",
+    "width": 8
+  },
+  {
+    "name": "win_result_bits_cols",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_cols",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_cols",
+    "width": 8
+  },
+  {
+    "name": "win_result_bits_slot",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_slot",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_slot",
+    "width": 2
+  },
+  {
+    "name": "win_result_bits_status",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_status",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_status",
+    "width": 8
+  },
+  {
+    "name": "win_result_bits_committed",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_committed",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_committed",
+    "width": 1
+  },
+  {
+    "name": "win_result_bits_producedBeats",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_producedBeats",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_producedBeats",
+    "width": 11
+  },
+  {
+    "name": "win_result_bits_ddrWriteBytes",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_ddrWriteBytes",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_ddrWriteBytes",
+    "width": 64
+  },
+  {
+    "name": "win_result_bits_kWindow_enabled",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_kWindow_enabled",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_kWindow_enabled",
+    "width": 1
+  },
+  {
+    "name": "win_result_bits_kWindow_begin",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_kWindow_begin",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_kWindow_begin",
+    "width": 16
+  },
+  {
+    "name": "win_result_bits_kWindow_end",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_kWindow_end",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_kWindow_end",
+    "width": 16
+  },
+  {
+    "name": "win_result_bits_kWindow_blockId",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_kWindow_blockId",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_kWindow_blockId",
+    "width": 32
+  },
+  {
+    "name": "win_result_bits_kWindow_pairReverse",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_result_bits_kWindow_pairReverse",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_result_bits_kWindow_pairReverse",
+    "width": 1
+  },
+  {
+    "name": "win_leaseValid",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_leaseValid",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_leaseValid",
+    "width": 1
+  },
+  {
+    "name": "win_busy",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_busy",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_busy",
+    "width": 1
+  },
+  {
+    "name": "win_resetRequired",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_window_resetRequired",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_window_resetRequired",
+    "width": 1
+  },
+  {
+    "name": "drain_request_valid",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_request_valid",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_request_valid",
+    "width": 1
+  },
+  {
+    "name": "drain_request_ready",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_request_ready",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_request_ready",
+    "width": 1
+  },
+  {
+    "name": "drain_request_bits_ng",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_request_bits_ng",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_request_bits_ng",
+    "width": 16
+  },
+  {
+    "name": "drain_request_bits_cols",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_request_bits_cols",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_request_bits_cols",
+    "width": 8
+  },
+  {
+    "name": "drain_request_bits_identity",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_request_bits_identity",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_request_bits_identity",
+    "width": 32
+  },
+  {
+    "name": "drain_result_valid",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_valid",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_valid",
+    "width": 1
+  },
+  {
+    "name": "drain_result_ready",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_ready",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_ready",
+    "width": 1
+  },
+  {
+    "name": "drain_result_bits_tag",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_tag",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_tag",
+    "width": 32
+  },
+  {
+    "name": "drain_result_bits_identity",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_identity",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_identity",
+    "width": 32
+  },
+  {
+    "name": "drain_result_bits_ng",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_ng",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_ng",
+    "width": 16
+  },
+  {
+    "name": "drain_result_bits_rows",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_rows",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_rows",
+    "width": 8
+  },
+  {
+    "name": "drain_result_bits_cols",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_cols",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_cols",
+    "width": 8
+  },
+  {
+    "name": "drain_result_bits_status",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_status",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_status",
+    "width": 8
+  },
+  {
+    "name": "drain_result_bits_committed",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_committed",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_committed",
+    "width": 1
+  },
+  {
+    "name": "drain_result_bits_consumedBeats",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_consumedBeats",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_consumedBeats",
+    "width": 11
+  },
+  {
+    "name": "drain_result_bits_ddrWriteBytes",
+    "module": "DenseBlockReductionCoordinator",
+    "path": "qkvRouter__DOT__reduction",
+    "variable": "io_drain_result_bits_ddrWriteBytes",
+    "member": "QwenOwnerKernel__DOT__qkvRouter__DOT__reduction__DOT__io_drain_result_bits_ddrWriteBytes",
+    "width": 64
+  },
+  {
+    "name": "dense_state",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "state",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__state",
+    "width": 4
+  },
+  {
+    "name": "dense_status",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "status",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__status",
+    "width": 8
+  },
+  {
+    "name": "dense_windowActive",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "windowActive",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowActive",
+    "width": 1
+  },
+  {
+    "name": "dense_windowPhase",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "windowPhase",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowPhase",
+    "width": 3
+  },
+  {
+    "name": "dense_windowBegun",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "windowBegun",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowBegun",
+    "width": 1
+  },
+  {
+    "name": "dense_windowCommitted",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "windowCommitted",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowCommitted",
+    "width": 1
+  },
+  {
+    "name": "dense_aLeaseValid",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "aLeaseValid",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__aLeaseValid",
+    "width": 1
+  },
+  {
+    "name": "dense_groupStarted",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "groupStarted",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__groupStarted",
+    "width": 1
+  },
+  {
+    "name": "dense_groupDone",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "groupDone",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__groupDone",
+    "width": 1
+  },
+  {
+    "name": "dense_pendingContext",
+    "module": "TransposedDenseDownOwner",
+    "path": "TransposedDenseDownOwner",
+    "variable": "pendingContext",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__pendingContext",
+    "width": 3
+  },
+  {
+    "name": "banks_poison",
+    "module": "TransposedDownDenseBanks",
+    "path": "TransposedDenseDownOwner__DOT__banks",
+    "variable": "poison",
+    "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__poison",
+    "width": 1
+  },
+  {
+    "name": "matrix_state",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "state",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__state",
+    "width": 3
+  },
+  {
+    "name": "matrix_poison",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "poison",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__poison",
+    "width": 1
+  },
+  {
+    "name": "matrix_group_sliceMask",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "group_sliceMask",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__group_sliceMask",
+    "width": 8
+  },
+  {
+    "name": "matrix_wideSteps",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "wideSteps",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__wideSteps",
+    "width": 64
+  },
+  {
+    "name": "matrix_steps",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "steps",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__steps",
+    "width": 64
+  },
+  {
+    "name": "matrix_stalls",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "stalls",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__stalls",
+    "width": 64
+  },
+  {
+    "name": "matrix_legalStep",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "legalStep",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__legalStep",
+    "width": 1
+  },
+  {
+    "name": "matrix_io_port_group_valid",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "io_port_group_valid",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__io_port_group_valid",
+    "width": 1
+  },
+  {
+    "name": "matrix_io_port_group_ready",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "io_port_group_ready",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__io_port_group_ready",
+    "width": 1
+  },
+  {
+    "name": "matrix_io_port_step_valid",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "io_port_step_valid",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__io_port_step_valid",
+    "width": 1
+  },
+  {
+    "name": "matrix_io_port_step_ready",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "io_port_step_ready",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__io_port_step_ready",
+    "width": 1
+  },
+  {
+    "name": "matrix_io_port_done_valid",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "io_port_done_valid",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__io_port_done_valid",
+    "width": 1
+  },
+  {
+    "name": "matrix_io_port_done_ready",
+    "module": "MatrixPipelineService",
+    "path": "matrix",
+    "variable": "io_port_done_ready",
+    "member": "QwenOwnerKernel__DOT__matrix__DOT__io_port_done_ready",
+    "width": 1
+  }
+]

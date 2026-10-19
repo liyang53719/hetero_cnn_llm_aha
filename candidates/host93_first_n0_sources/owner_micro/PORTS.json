@@ -1,0 +1,982 @@
+[
+  {
+    "name": "clock",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "reset",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_public21BackendReset",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_ready",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_valid",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_gate_kind",
+    "direction": "input",
+    "width": 4
+  },
+  {
+    "name": "io_resident_request_bits_gate_m",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_gate_n",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_gate_k",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_gate_a",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_b",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_c",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_dst",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_weightBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_gate_activationBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_gate_materializeDenseOutput",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_gate_outputBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_gate_writeBytes",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_tag",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_historyOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_expectedGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_currentGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_cold",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_gate_cacheCapacity",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_cacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_expectedCacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_queryStart",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_qkRole",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_resident_request_bits_gate_qkPositionBase",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_qkTrigTokens",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_gate_gdnALog",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_gdnDtBias",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_gdnStateOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_gate_gdnRecurrentMode",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_gate_gdnElementwiseOp",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_resident_request_bits_up_kind",
+    "direction": "input",
+    "width": 4
+  },
+  {
+    "name": "io_resident_request_bits_up_m",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_up_n",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_up_k",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_up_a",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_b",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_c",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_dst",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_weightBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_up_activationBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_up_materializeDenseOutput",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_up_outputBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_up_writeBytes",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_tag",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_historyOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_expectedGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_currentGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_cold",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_up_cacheCapacity",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_cacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_expectedCacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_queryStart",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_qkRole",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_resident_request_bits_up_qkPositionBase",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_qkTrigTokens",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_up_gdnALog",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_gdnDtBias",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_gdnStateOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_up_gdnRecurrentMode",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_up_gdnElementwiseOp",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_resident_request_bits_act_kind",
+    "direction": "input",
+    "width": 4
+  },
+  {
+    "name": "io_resident_request_bits_act_m",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_act_n",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_act_k",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_resident_request_bits_act_a",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_b",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_c",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_dst",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_weightBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_act_activationBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_act_materializeDenseOutput",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_act_outputBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_act_writeBytes",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_tag",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_historyOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_expectedGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_currentGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_cold",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_act_cacheCapacity",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_cacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_expectedCacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_queryStart",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_qkRole",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_resident_request_bits_act_qkPositionBase",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_qkTrigTokens",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_request_bits_act_gdnALog",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_gdnDtBias",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_gdnStateOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_resident_request_bits_act_gdnRecurrentMode",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_request_bits_act_gdnElementwiseOp",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_resident_request_bits_identity",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_resident_result_ready",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_result_valid",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_resident_result_bits_tag",
+    "direction": "output",
+    "width": 32
+  },
+  {
+    "name": "io_resident_result_bits_status",
+    "direction": "output",
+    "width": 8
+  },
+  {
+    "name": "io_resident_result_bits_writeBytes",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_resident_result_bits_cycles",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_resident_result_bits_usefulMacs",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_resident_result_bits_executedMacs",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_resident_abort",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resident_busy",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_resident_resetRequired",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_residentHandoff_valid",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_residentHandoff_bits_kind",
+    "direction": "output",
+    "width": 4
+  },
+  {
+    "name": "io_residentHandoff_bits_n",
+    "direction": "output",
+    "width": 16
+  },
+  {
+    "name": "io_residentHandoff_bits_k",
+    "direction": "output",
+    "width": 16
+  },
+  {
+    "name": "io_residentHandoff_bits_b",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_residentHandoff_bits_weightBf16",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_job_ready",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_job_valid",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_job_bits_kind",
+    "direction": "input",
+    "width": 4
+  },
+  {
+    "name": "io_job_bits_m",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_job_bits_n",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_job_bits_k",
+    "direction": "input",
+    "width": 16
+  },
+  {
+    "name": "io_job_bits_a",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_b",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_c",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_dst",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_weightBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_job_bits_activationBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_job_bits_materializeDenseOutput",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_job_bits_outputBf16",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_job_bits_writeBytes",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_tag",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_historyOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_expectedGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_currentGeneration",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_cold",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_job_bits_cacheCapacity",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_cacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_expectedCacheLength",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_queryStart",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_qkRole",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_job_bits_qkPositionBase",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_qkTrigTokens",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_job_bits_gdnALog",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_gdnDtBias",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_gdnStateOut",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_job_bits_gdnRecurrentMode",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_job_bits_gdnElementwiseOp",
+    "direction": "input",
+    "width": 2
+  },
+  {
+    "name": "io_done_ready",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_done_valid",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_done_bits_tag",
+    "direction": "output",
+    "width": 32
+  },
+  {
+    "name": "io_done_bits_status",
+    "direction": "output",
+    "width": 8
+  },
+  {
+    "name": "io_done_bits_writeBytes",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_done_bits_cycles",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_done_bits_usefulMacs",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_done_bits_executedMacs",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_memory_ready",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_memory_valid",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_memory_bits_write",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_memory_bits_address",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_memory_bits_data",
+    "direction": "output",
+    "width": 512
+  },
+  {
+    "name": "io_memory_bits_mask",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_memory_bits_tag",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_response_ready",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_response_valid",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_response_bits_data",
+    "direction": "input",
+    "width": 512
+  },
+  {
+    "name": "io_response_bits_tag",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_response_bits_error",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_resetRequired",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_burst_ready",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_burst_valid",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_burst_bits_address",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_burst_bits_tag",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_burstResponse_ready",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_burstResponse_valid",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_burstResponse_bits_data",
+    "direction": "input",
+    "width": 512
+  },
+  {
+    "name": "io_burstResponse_bits_tag",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_burstResponse_bits_last",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_burstResponse_bits_error",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_writeRequest_ready",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_writeRequest_valid",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_writeRequest_bits_address",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_writeRequest_bits_beats",
+    "direction": "output",
+    "width": 5
+  },
+  {
+    "name": "io_writeRequest_bits_tag",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_writeData_ready",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_writeData_valid",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_writeData_bits_data",
+    "direction": "output",
+    "width": 512
+  },
+  {
+    "name": "io_writeData_bits_last",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_writeResponse_ready",
+    "direction": "output",
+    "width": 1
+  },
+  {
+    "name": "io_writeResponse_valid",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_writeResponse_bits_data",
+    "direction": "input",
+    "width": 512
+  },
+  {
+    "name": "io_writeResponse_bits_tag",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_writeResponse_bits_error",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_prefixWorkspace_valid",
+    "direction": "input",
+    "width": 1
+  },
+  {
+    "name": "io_prefixWorkspace_base",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_prefixWorkspace_extent",
+    "direction": "input",
+    "width": 64
+  },
+  {
+    "name": "io_prefixWorkspace_generation",
+    "direction": "input",
+    "width": 32
+  },
+  {
+    "name": "io_pipelineIssues",
+    "direction": "output",
+    "width": 64
+  },
+  {
+    "name": "io_pipelineStalls",
+    "direction": "output",
+    "width": 64
+  }
+]

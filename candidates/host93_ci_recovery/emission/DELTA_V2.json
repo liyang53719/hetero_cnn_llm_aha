@@ -1,0 +1,16 @@
+{
+  "changes": [
+    "Explicit bootstrap rejection instead of asserts",
+    "Early Python -I -S -B guards",
+    "Descriptor-relative no-follow source read; pre/post/current stat identity; hash and compile identical byte buffer",
+    "jar87 AS512MiB, assembly CPU40, work<=total-15",
+    "Actual bootstrap marker fixtures under normal and -O Python"
+  ],
+  "checks": 42,
+  "previous_module": {
+    "bytes": 24014,
+    "sha256": "33c575a44ce6206d0aea5307d607f86c6e7ac463260433d96c94bfe39d3c23e9"
+  },
+  "previous_package_untouched": true,
+  "production_execution": false
+}

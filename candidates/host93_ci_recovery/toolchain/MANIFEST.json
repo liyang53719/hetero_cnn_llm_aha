@@ -1,0 +1,46 @@
+{
+  "files": {
+    "COLD_DELTA.json": {
+      "bytes": 354,
+      "sha256": "64b72fcb4fce434c47926635bf862e96a7f592f0bc63b85998b3851b82c41e4d"
+    },
+    "COLD_RESULT.json": {
+      "bytes": 1568,
+      "sha256": "1b9b219cdec85808be4c67f6e959855930418f5a136fa93f69771b2bfcf73daa"
+    },
+    "DELTA_TRANSPORT.json": {
+      "bytes": 494,
+      "sha256": "4ac68c9c95c088dbae856f458ab5792401860401108e3d61a2ce7dfc2ece90a6"
+    },
+    "PLAN.json": {
+      "bytes": 1186,
+      "sha256": "5bb5c59985fe850176cf5d91a8d8e5b5d1a52bef2fb940a586e5c7435ba52944"
+    },
+    "README.md": {
+      "bytes": 5853,
+      "sha256": "b0b995780d16dbad31d6ac43981fecf4dd1a8ca0011234604fcfdd2b23517ff8"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 2791,
+      "sha256": "cc070fce2a6f1ef8cbba5a78cfca8937e21d6e2233d1e0aa9288dd50ee266538"
+    },
+    "ci_toolchain.py": {
+      "bytes": 32522,
+      "sha256": "b1f993b9ca05cb2a26ca76ca302e74016d773a001f0954338e1951dc194a1be5"
+    },
+    "test_toolchain_cold.py": {
+      "bytes": 20443,
+      "sha256": "0278fd1b8973d47cb9d6d22a6c3cde74b30aec8d6742cb292519d0e5cb55756d"
+    },
+    "test_transport_cold.py": {
+      "bytes": 2944,
+      "sha256": "559fc3a67b3efc2c703aae5907a43a3c8ac6fc77d07dd6ca8648375feb91a4b3"
+    }
+  },
+  "production_changes": [
+    "acquisition-only existing proxy/CA allowlist passthrough without persistence"
+  ],
+  "raw_logs_or_generated_rtl_included": false,
+  "schema": 1,
+  "status": "TEMP_SOURCE_PENDING_DELTA_REVIEW"
+}

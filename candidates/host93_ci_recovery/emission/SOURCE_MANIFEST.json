@@ -1,0 +1,59 @@
+{
+  "files": {
+    "COLD_DELTA.json": {
+      "bytes": 466,
+      "sha256": "cf9413aac48683a1771e8a86bf738f45279b2dfe3bbac8cf33a516fb13539258"
+    },
+    "COLD_TESTS.json": {
+      "bytes": 1602,
+      "sha256": "577374e2ade1ddbc338903fcd6d8edbc8dbfdca1a60e113966c8c6e35d640206"
+    },
+    "DELTA_TRANSPORT.json": {
+      "bytes": 548,
+      "sha256": "adf5dbd75619f1c575db2591e0312cde375b33b6bdc370838189ca81cbfee264"
+    },
+    "DELTA_V2.json": {
+      "bytes": 571,
+      "sha256": "933c0139ccb13bc3e40124bdb2d86c3194461725d39f533b1f8b3780bceb6897"
+    },
+    "ENTRY.json": {
+      "bytes": 1420,
+      "sha256": "0deef8999aec0d0b1ac32ff54b778e928416d4c2bcab2071aaeaa60b13604c59"
+    },
+    "README.md": {
+      "bytes": 4587,
+      "sha256": "2f3a56aea72f1c35212f1689419e3d1d909afe23fed5cb86dcfb6965ee32eaec"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 24660,
+      "sha256": "45831ad171ce04c62d746325b3afb90abb4e2e7467e0e8510034529917603f8e"
+    },
+    "STATIC_CHECK.json": {
+      "bytes": 217,
+      "sha256": "e20da67c49f7b4a90a666761245af909da3a7e90beb6aa7a590df6db0e6ec3b3"
+    },
+    "host_emission.py": {
+      "bytes": 26517,
+      "sha256": "f1cb8595247b2c991c77e4fa7404fc1cd618bb28f9e173eb43d7e00a58c49b50"
+    },
+    "test_finalization_cold.py": {
+      "bytes": 8858,
+      "sha256": "68518ff0c735acf6c0b85c0bafa0ab1fa84c8e4b64be43b2f5c10b66742dc6eb"
+    },
+    "test_tiny.py": {
+      "bytes": 8464,
+      "sha256": "fea12735ff28130b6ec80b30d262d3f39c8fbe7ac4be00f90dd5c2824ebf9364"
+    },
+    "test_transport_cold.py": {
+      "bytes": 2945,
+      "sha256": "78c68795d6723907c5d3ead56e9ea7eacf85b1d18f8274e9a8b4fae7f0c42d03"
+    }
+  },
+  "production_changes": [
+    "acquisition-only existing proxy/CA allowlist passthrough without persistence",
+    "exception receipt status always INCOMPLETE"
+  ],
+  "raw_logs_or_generated_rtl_included": false,
+  "schema": 1,
+  "status": "TEMP_SOURCE_PENDING_DELTA_REVIEW"
+}

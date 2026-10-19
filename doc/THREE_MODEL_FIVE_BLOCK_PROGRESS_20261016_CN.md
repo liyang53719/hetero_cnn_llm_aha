@@ -738,3 +738,12 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 本片持久化固定 610 项 public_flat_rd 字段选择、唯一 endpoint 层级边界、21 条来源行号精确 WIDTH 规则和 8 条原 DMA hints，状态 TEMP_SOURCE。来源为已发布项目 pins，610字段的正负微型检查17项在普通、优化及重定位两模式均通过。有限 SOURCE 审05bb9ff2/fe2b71c9闭合；实际配置、Verilator grammar 接受、新 ABI、8 handles 与 Host runtime 尚待本次CI，未从原本机产物继承资格。
 
 所有6件代码/数据/文档按原字节复制；不包括SV、日志、机器库存或binary。isolate_assignments的无作用说明是来源级说明，当前官方grammar原文未恢复，不授实际优化效果。
+
+
+### 2026-10-19 CI 恢复：工具 v2 与 Host93 发射 v3 SOURCE 临时组件
+
+本片持久化两个可重定位 CI 模块，状态 TEMP_SOURCE，尚无本次 native/下载/实际生成资格。官方工具模块固定 473 源逐 Git blob 核验，先用已发布唯一 m_seqnum 初始化补丁再一次 fresh 构建；现场5version/5tiny、派生工具4阶段微例均由本job新终态和内容hash衔接。十现场probe采用本CI明确30秒总/10秒工作窗口。发射模块固定121项目来源，再按87JAR/20HardFloat→新93→CLASS→CHIRRTL→固定firtool→同SV的顺序复现。
+
+两模块的获取阶段只透传既有平台proxy/CA固定白名单原值，不保存/输出值、不建新代理或凭据、无direct fallback；native仍用clean环境。发射v3在最终保存等异常时重置INCOMPLETE，不让失败报告沿用先前PASS。独审增量fd9d6714/2716b381闭合；工具40+40和7+7运输冷、发射42+42和7+7运输及3+3全mock终态例均通过。所有这些是SOURCE/tiny证据，未执行真实工具或Host。
+
+全部payload原字节；不带源码归档、生成RTL、ELF、原日志、机器库存、权重或张量。整run及Host短launch仍待完整SOURCE审；同一job6600秒总墙不能因各阶段上界之和延长。

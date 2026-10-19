@@ -1,0 +1,44 @@
+{
+  "call": "run(repo: pathlib.Path, work: pathlib.Path, call_phase)",
+  "delta": "Explicit non-assert bootstrap; early isolated/no-site/no-bytecode guards; descriptor-relative same-buffer read; original jar AS512MiB and assembly CPU40.",
+  "module": "host_emission.py",
+  "module_pin": {
+    "bytes": 26517,
+    "sha256": "f1cb8595247b2c991c77e4fa7404fc1cd618bb28f9e173eb43d7e00a58c49b50"
+  },
+  "phases": [
+    "host93_java_version",
+    "host93_acquire_jar87",
+    "host93_acquire_hardfloat20",
+    "host93_assemble",
+    "host93_class",
+    "host93_chirrtl",
+    "host93_acquire_firtool",
+    "host93_sv"
+  ],
+  "qualification": {
+    "firtool_run": false,
+    "full_block_rtl_passes": 0,
+    "java_run": false,
+    "network_acquisition_run": false,
+    "new_rtl_emitted": false
+  },
+  "requires": "Python -I -S -B; explicit authorized caller; fresh work outside repo; installed Java 21; shared caller deadline6600; CPU1",
+  "result_aliases": {
+    "fir": {
+      "bytes": "measured integer",
+      "mode": "actual octal string",
+      "path": "absolute runtime path",
+      "sha256": "measured SHA-256"
+    },
+    "firtool": "same fields as fir",
+    "sv": "same fields as fir"
+  },
+  "schema": "host93-portable-ci-entry-v2",
+  "source_only_default": true,
+  "source_pins": {
+    "bytes": 24660,
+    "path": "SOURCE_PINS.json",
+    "sha256": "45831ad171ce04c62d746325b3afb90abb4e2e7467e0e8510034529917603f8e"
+  }
+}

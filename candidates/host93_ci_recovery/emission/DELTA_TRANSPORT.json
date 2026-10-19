@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "previous_source_directory": "candidate_ci_host_emission_source_v2_20261019T0100",
+  "production_delta": [
+    "acquisition-only existing proxy/CA allowlist passthrough without persistence",
+    "exception receipt status always INCOMPLETE"
+  ],
+  "old_code": {
+    "bytes": 25575,
+    "sha256": "806c82efcb91f1bae038cb0cd3826cf6e98128d5578b038171ff9ae8ce3835cc"
+  },
+  "new_code": {
+    "bytes": 26517,
+    "sha256": "f1cb8595247b2c991c77e4fa7404fc1cd618bb28f9e173eb43d7e00a58c49b50"
+  },
+  "native_or_network_executed": false
+}

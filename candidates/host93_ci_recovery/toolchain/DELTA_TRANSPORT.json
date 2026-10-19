@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "previous_source_directory": "candidate_ci_toolchain_source_v1_20261019T0048",
+  "production_delta": [
+    "acquisition-only existing proxy/CA allowlist passthrough without persistence"
+  ],
+  "old_code": {
+    "bytes": 31678,
+    "sha256": "7ac318bc1905daa19ffe641d240620562a4c1101976af114aa30baa476070f86"
+  },
+  "new_code": {
+    "bytes": 32522,
+    "sha256": "b1f993b9ca05cb2a26ca76ca302e74016d773a001f0954338e1951dc194a1be5"
+  },
+  "native_or_network_executed": false
+}

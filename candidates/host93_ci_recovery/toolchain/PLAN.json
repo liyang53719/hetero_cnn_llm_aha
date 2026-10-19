@@ -1,0 +1,55 @@
+{
+  "component_max_phase_totals_seconds": 5160,
+  "cpu_affinity_count": 1,
+  "fixed_source_input_count": 13,
+  "historical_review_or_actual_inheritance": false,
+  "host_tool_path": "/usr/bin:/bin",
+  "no_package_install_or_fallback": true,
+  "output": "same-job private backend/root/runtime identity and tiny result; no full-host claim",
+  "phases": {
+    "derived_tiny_compile": [
+      300,
+      240
+    ],
+    "derived_tiny_generate": [
+      120,
+      90
+    ],
+    "derived_tiny_run": [
+      30,
+      10
+    ],
+    "derived_tiny_version": [
+      30,
+      10
+    ],
+    "fresh_autoconf": [
+      180,
+      160
+    ],
+    "fresh_configure": [
+      180,
+      160
+    ],
+    "fresh_make": [
+      3600,
+      3570
+    ],
+    "official_source473": [
+      420,
+      400
+    ]
+  },
+  "prepared_without_native_or_network": true,
+  "reuse_original_objects": false,
+  "schema": "CI_FRESH_TOOLCHAIN_SOURCE_PLAN_V1",
+  "shared_job_wall_seconds": 6600,
+  "source_baseline": "18e757084e4812fe2496ba8321438a468e17b646",
+  "status": "SOURCE_AND_COLD_MOCK_ONLY",
+  "tool_probes": {
+    "each_total_seconds": 30,
+    "each_work_and_cpu_seconds": 10,
+    "tiny": 5,
+    "version": 5
+  }
+}

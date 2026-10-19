@@ -1,0 +1,21 @@
+{
+  "author_cold_result": {
+    "bytes": 3248,
+    "sha256": "f38709e38893f9730713408b483959624e8abe534bc7fcf97aa4107df50eabb6"
+  },
+  "candidate_manifest": {
+    "bytes": 5007,
+    "sha256": "9eec9f916df7e60d2a33b00799ef1c70d71ff5085d57859f532e6ed2fdc3b86a"
+  },
+  "independent_scope": "Source, private launcher and bindings; 54+54 relocated pure cold plus actual configure same-buffer witness data checks; no native/network or actual cache copy",
+  "manifest": {
+    "bytes": 1273,
+    "sha256": "446f788841d55a12be02fb160e1e252879eda3142cc6fa94f19039cf2e336f8f"
+  },
+  "schema": 1,
+  "summary": {
+    "bytes": 5176,
+    "sha256": "d55027265fb80dff88f46a11119d0c65491c65c759f151cd0dc59afba48adac5"
+  },
+  "verdict": "SOURCE_GO_SINGLE_BOUNDED_OBJCACHE_CACHE_CONTINUATION"
+}

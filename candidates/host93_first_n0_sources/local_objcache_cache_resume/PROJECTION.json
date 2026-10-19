@@ -1,0 +1,72 @@
+{
+  "actual_executed_here": false,
+  "changes": [
+    "exact full688-byte Autoconf2.72 block normalization into original witness with inverse and actual block pin",
+    "cached original473 parent same-buffer data copy; original postflight/patch; remove native acquisition only",
+    "two allowlisted original safe_contract fields",
+    "same-buffer entry pins/load of resume helper"
+  ],
+  "continuation_changed_functions": [
+    "run"
+  ],
+  "entry_changed_functions": [
+    "main"
+  ],
+  "inherited_cold": {
+    "cold_result": {
+      "bytes": 3390,
+      "sha256": "e5aace394aab388307c4ae58032db836bbf36dfd9869777cf785af479c8d4dca"
+    },
+    "rerun_here": false,
+    "source_manifest": {
+      "bytes": 4086,
+      "sha256": "1b68db3a757c4733cc396a7b8dfac7636e834a14f9a68e962912676684b9a2e7"
+    },
+    "tests": 540
+  },
+  "new_production": {
+    "accepted_toolchain.py": {
+      "bytes": 4312,
+      "sha256": "8719c513afec5bf48565bdb1dc27e70bdf150560828de7fc08936bc33c550dcd"
+    },
+    "cached_flex_header.py": {
+      "bytes": 3269,
+      "sha256": "afaf98d6137562790b0664293acf465859288549e30d87f197879cb334979403"
+    },
+    "continuation_entry.py": {
+      "bytes": 17732,
+      "sha256": "b0f344600b9ab86d5fa53ac4b3fec1e33db416438f49014786a53a490deeca14"
+    },
+    "resume_toolchain.py": {
+      "bytes": 8626,
+      "sha256": "e0e0c10015ed96f36bbf63c1bff7454c59a63468aa243b84a0024bedd03a0d7a"
+    },
+    "source_entry.py": {
+      "bytes": 8588,
+      "sha256": "512bac7105e1977100107d252e74dd11546ccc9a59d699958d18a2b84cd82f65"
+    }
+  },
+  "predecessor": {
+    "accepted_toolchain.py": {
+      "bytes": 4312,
+      "sha256": "8719c513afec5bf48565bdb1dc27e70bdf150560828de7fc08936bc33c550dcd"
+    },
+    "cached_flex_header.py": {
+      "bytes": 3269,
+      "sha256": "afaf98d6137562790b0664293acf465859288549e30d87f197879cb334979403"
+    },
+    "continuation_entry.py": {
+      "bytes": 17111,
+      "sha256": "e8b45d2563b6079058663f98f22275d093ca808e0187f55476f16d224ab54675"
+    },
+    "source_entry.py": {
+      "bytes": 8437,
+      "sha256": "be54ecc74488a2dce76318d2a86b73f52427a9a8364480662c800fe40b22c6dc"
+    }
+  },
+  "schema": "LOCAL_OBJCACHE_CACHE_RESUME_FINITE_SOURCE_DELTA_V1",
+  "unchanged_production": [
+    "accepted_toolchain.py",
+    "cached_flex_header.py"
+  ]
+}

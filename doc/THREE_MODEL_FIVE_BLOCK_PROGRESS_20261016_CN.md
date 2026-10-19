@@ -1154,3 +1154,16 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 本次未 configure/make、未 Host 生成/编译/运行、未 N0 比较，不是数值 FAIL。外层 19.522997 秒与协调器 19.469299 秒分列；没有自动重试。父 16 输入/94,920,448 B 只是数据复制，既有 FIFO/SV/参考不计本次新资格。
 - 原七件证据 MANIFEST 1005 B / SHA256 1df2aeb35058396f0ae93e3808f3fd7f7a6bd6f7b97f35ebfe363b35991cfe26；RESULT 13281 B / SHA256 aa84b58cb1e2a7e7f612c7369ec4a1b0dd25f8df9cb213e57ae611430c397d2a。本批只公开安全 summary/README/本尾，排除私有路径、库存、日志、配置生成物与数组；无 workflow 或执行源码变动。计划以父 222028 B 精确前缀加本尾一次完整替换，禁止追加全文。
 - 正式 actual 审查 review_local_continuation_actual_20261019T1700：MANIFEST.json 601 B / SHA256 31b293e9394fe8a25b88c341e5a43816500ea1b6534bced6db41197081507f16；SUMMARY.md 4807 B / SHA256 7a9d23fbacc4c3be6d0467e7624d18638a3f35d9aad331ba8c383ebd8a275894。结论 ACCEPT_ACTUAL_LOCAL_CONTINUATION_AUTOCONF_WITNESS_FAILURE_ONLY，接受原失败证据与有限执行边界，不授后续构建或数值资格。
+
+
+## 2026-10-19 17:11 UTC：OBJCACHE 精确文本门修复与原473缓存续接 SOURCE 已独审
+
+- 上次唯一有限执行在 `fresh_autoconf` 后父后验首停：外层 1，19.523 秒；前四 native 均自然退出 0 且 cleanup=true，但这不构成 backend/Host/N0 成功。旧输出保持原样。
+- 原 gate 只接受 `else $as_nop`。本片仅新增固定官方 Autoconf 2.72 的完整 688 字节 case-e block，SHA256 `f735474b483bdc4f30f18a57d97f3d0c527d692e6434f388dc2bf3befa777722`；单次内存归一、逆变换逐字节一致后调用原 witness。set-empty 缓存命中条件、cached 打印、空赋值和非空 version guard 未变。返回 actual block 的 size/SHA；未知模式仍拒绝，配置后空 OBJCACHE 判据及 make 参数保留。
+- 已在场原473完整缓存只读复核为 473 文件、11,747,893 字节。新父数据阶段最多 60 秒，使用原 checked_read/copy_member 同 buffer 写 fresh 树，固定原 receipt 另同 buffer 写入，前后与新旧双树继续原 postflight；不复制 archive、派生对象，不重复网络获取，也不把旧 cleanup 当新 native 资格。
+- 此次合同是 2 个父数据阶段与 16 个 native 阶段；fresh header 数据/真实 g++ probe/autoconf 仍需在新路径产生当前收据。唯一 seqnum 补丁、make -j1、tiny、319 双拆块、Host 真实 ABI/链接与单 RAM N0 判据继续原实现。
+- RESULT 新增两项安全合同字段：只消费原精确 ContractFailure 类型及原 boundary/code 词表，未知 null，不带任意异常文本。原首错误优先和 restore 规则保持。
+- 原唯一 t0 总 6600 秒、前置截止 2880 秒、完整 N0 3600 秒和最多 120 秒落证保持；原单核、AS/CPU/FSIZE、四处 8 GiB RAM/3 GiB disk 门不变。launcher 仅更新命令身份字面量，首行 t0 和外层 TERM6590/KILL5 保持。
+- 新定向冷测 normal/-O/搬迁 normal/搬迁 -O 各 54 项，共 216 项，全部 exit0/stderr0；独审另作空 cwd 搬迁 54+54 与保留 actual configure 文本正负检查。旧 540 项是继承证据，本片没有重跑或包装成新结果。
+- 独审结论 `SOURCE_GO_SINGLE_BOUNDED_OBJCACHE_CACHE_CONTINUATION`；review manifest 1273 字节 / `446f788841d55a12be02fb160e1e252879eda3142cc6fa94f19039cf2e336f8f`，summary 5176 字节 / `d55027265fb80dff88f46a11119d0c65491c65c759f151cd0dc59afba48adac5`。公开仅 `local_objcache_cache_resume/` 下 12 件冻结安全原件和 2 件审状态文本；private binding/launcher、原日志与实际资源路径留本地。
+- 这是 SOURCE 与只读旧 bytes 的结论；未因此宣称后续构建或数值通过，`full_block_pass=false`、`baseline_adopted=false`。正式实际仍仅按独审完整合同、现场准入与父唯一受监督调用执行一次。

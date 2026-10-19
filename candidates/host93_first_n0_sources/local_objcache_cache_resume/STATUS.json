@@ -1,0 +1,35 @@
+{
+  "actual_cache_copy_here": false,
+  "actual_invocation_scope": "One independently reviewed finite parent invocation with original live admissions",
+  "author_targeted_cold_tests": 216,
+  "backend_host_n0_result": "NOT_RUN_BY_THIS_SOURCE_PREPARATION",
+  "baseline_adopted": false,
+  "contract_review_pending_field": "FROZEN_PRE_REVIEW_METADATA_SUPERSEDED_BY_THIS_STATUS",
+  "full_block_pass": false,
+  "independent_relocated_cold_tests": {
+    "normal": 54,
+    "optimized": 54
+  },
+  "native_execution_here": false,
+  "network_execution_here": false,
+  "prior_540_tests": "INHERITED_NOT_RERUN",
+  "private_binding_and_launcher_published": false,
+  "production_and_original_contract_bytes_frozen": true,
+  "schema": "LOCAL_OBJCACHE_CACHE_CONTINUATION_STATUS_V1",
+  "source_candidate_manifest": {
+    "bytes": 5007,
+    "sha256": "9eec9f916df7e60d2a33b00799ef1c70d71ff5085d57859f532e6ed2fdc3b86a"
+  },
+  "source_review": {
+    "manifest": {
+      "bytes": 1273,
+      "sha256": "446f788841d55a12be02fb160e1e252879eda3142cc6fa94f19039cf2e336f8f"
+    },
+    "summary": {
+      "bytes": 5176,
+      "sha256": "d55027265fb80dff88f46a11119d0c65491c65c759f151cd0dc59afba48adac5"
+    },
+    "verdict": "SOURCE_GO_SINGLE_BOUNDED_OBJCACHE_CACHE_CONTINUATION"
+  },
+  "source_verdict": "SOURCE_GO_SINGLE_BOUNDED_OBJCACHE_CACHE_CONTINUATION"
+}

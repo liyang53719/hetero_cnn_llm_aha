@@ -869,3 +869,10 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - 固定endpoint层级参数与wrapper只发hash和有限结构计数，叶wrapper/iDMA聚合只是候选；5条isolate_assignments在5.053无效，不能称隔离生效。本轮不加-Wno-fatal、不改算术/架构。
 - 冷测最终136+136、23+23、36+36通过；初始mock注入遗漏与执行测试漏--repo均如实保留。其余未改测试仅继承，不称重测。SOURCE有限独审GO，actual NOT_EXECUTED；父发布后唯一有界诊断job。
 - SOURCE GO: review_ci_generation_diagnostics_source_v2_20261019T0513; MANIFEST 1420 bytes / 08dea7a19aa456b4e8fff4c874749143529354e5c4e3941ccc05719f8c50c2dd; SUMMARY 4242 bytes / c25b7abd069253901f6edadc663bbf932c1783384cb0e1c1e32e843bff7b0ce3. Scope: SOURCE_GO_BOUNDED_GENERATION_CENSUS_ONLY_NO_CPP_OR_RUNTIME. Actual NOT_EXECUTED.
+
+## 2026-10-19 05:38 UTC：完整告警类别普查已得，生成仍 FAIL
+
+- 单次 Actions 39204020851 / 59953231 保 warning-fatal，31 native 成功后 Host C++ 生成自然 exit 2（166.252153 秒），总 830.576913 秒；未超时、清理确认，未编译/运行 Host。
+- 完整 77,661 B 日志扫描得到 35 个 UNOPTFLAT header（32 固定 Host SV 坐标、3 固定 iDMA 坐标）、2 个无规则 ERROR header、1 个 fatal 摘要，0 未解析/0 记录省略。全 stage 数量匹配不代表进程归属已证明。
+- Example 路径 358 条仅保存 16、省略 342，明确 partial；wrapper 摘要 22 输入/21 输出/6 DPI/2 always_comb，依赖结论仍未建立。不得把类别完整升级成全部组合环已排除。
+- 本次原三份安全 JSON 与范围说明小批保存，无 workflow 变更、不重复触发。下一步同 hash SV/iDMA 分组核结构，再决定最小修复；原七次失败证据保留。

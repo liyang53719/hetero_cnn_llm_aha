@@ -1033,3 +1033,12 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 原 reference/PINS、官方算术、自然能力准入、4/1 线程、双 SHA、43 阶段、6600 总墙与各段预算均原样；独立候选 receipt 不参与。本次实际 NOT_EXECUTED；未来仅获准一次原流程，再次 DISPATCH 拒绝即停并报告资源缺口，不自动重抽。
 - 冷测主协调器 187+187、适配器 58+58 真实通过；82 来源 source-only 通过。原 recover 独立冷片以全 mock 验原唯一门，AVX512 在线程前哨点停止，不冒实际调度或 forward。SOURCE 审核 SOURCE_GO_ORIGINAL_N0_REFERENCE_FAILED_CAPABILITY_PROJECTION_ONLY; review_n0_reference_capability_projection_source_20261019T1249, MANIFEST.json 1435 B / 842a968e480266e931b6e8b6dcd78502214adea4b191303f58b6bdaed26de6ef; SUMMARY.json 3698 B / e847d25a491b6e0a59d83e1947639fafc3987810526ee66b5c835c5deada954f。
 - 本计划提供完整文档替换，并校验既有前缀及纯追加尾；不得把完整文档再次 append。原历史证据保持其原源码身份。
+
+## 2026-10-19 原首 N0 严格前门实际 AVX2 拒绝并停止（39255764538）
+
+- 原 run 39255764538 / job 118070526536 / attempt1 / head6322568f426af70115a313d5f5bf708df4c648ea 已 completed/failure；仅保存原三安全 JSON 与准确 README。Actual 独审 ACCEPT_ACTUAL_FIRST_N0_ORIGINAL_AVX512_GATE_AVX2_OBSERVED_FAILURE_ONLY；review_first_n0_actual_39255764538_20261019T1259，MANIFEST.json 1016 B / 0cb4e1ae4c14938cfc572d246e8bd80af54e6d763cc8fa5a32dfe808a18dc042；SUMMARY.json 7125 B / e04273ae5fff00333a07786543cd058a2ef542a4c5b0391bc377004c542d29f4。
+- 前四阶段自然0且 clean；n0_reference 自然1、3.628454秒，无 timeout、cleanuptrue。19.598964秒是协调器用时，不含 checkout/setup/upload。
+- 本次固定安全观察 AVAILABLE：expected=AVX512、observed=AVX2，尾为 NOT_COMPLETED:DISPATCH；严格原门因此拒绝。原顶层 UNREPORTED/UNMAPPED_CONTRACT 保持，私有 receipt 未上传或独立复读。
+- 原参考线程 set4/1、build equality、官方类编译/forward、双 SHA 输出验收未到达；工具、Host、DUT、捕获和数值比较均未到，全部 scopefalse。canonical16准备不代表权重加载到RTL，本次不是 N0 数值 FAIL。
+- 按授权边界停止，不自动重抽、不重跑43阶段、不降低原profile/双SHA；后续缺口为满足原冻结AVX512 profile的可用执行资源。39252523415独立候选自然AVX512/双SHA事实保留且未采纳，较旧未知ISA仍未知。
+- 本批仅安全五路径，无workflow或执行源码变化，不触发新的Host/native作业；普通文档push仍可触发guard。计划按验证前缀的完整文档替换，禁止append整份全文。

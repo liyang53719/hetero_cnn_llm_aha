@@ -1378,3 +1378,15 @@ capture仍空，counts/N0/qraw数组未写；PC1输出不完整，三轨比较NO
 未来caller须在实际生成后核196端口与95观察成员的精确名字/位宽，以及原工具/层级/依赖资格；本批尚无这些新生成证据。已定总窗1320秒为生成360、单任务编译600、运行300、落证60，AS6GiB、单CPU，500000局部周期上限；预算是硬上限，不能承诺到目标，首错/超限保INCOMPLETE且不自动加窗。当前生成/编译/native/RTL仍NOT_EXECUTED，official_raw/application/typed-to-RTL均null，full_block=false，五block0/5。
 
 本批只发布核心安全源码/冷测元数据与中文计划完整replacement，不含输入内容、数组、二进制或私有绝对机器路径。不触发新的Host/RTL/native作业；workflow文件不变，普通push轻量guard另记。
+
+### Owner 局部合法刺激的唯一有界监督接线（TEMP SOURCE，2026-10-19）
+
+继 owner 局部 driver 七件修后源码包，本批固定一次 fresh QwenOwnerKernel 顶层 generation → build → run 接线；完整 source/私有命令独审身份在本批 STATUS.json 留档。此处仅 SOURCE 与低资源纯冷测，尚无新生成 ABI、编译成功、真实 owner 目标或历史 Host 故障复现结论。
+
+1. 复用已资格官方固定473 backend、原seqnum补丁与tiny receipt、原SV及319 iDMA/13 retained输入；新job保持307编译源、8 include、4 define及原4 VLT，单独追加已固定owner只读VLT。不重做backend或五工具资格，不把旧Host archive当新owner archive。
+2. 原generation命令仅改明确top/prefix/driver/fresh Mdir和追加VLT；原make保持单核-j1、原-O0、固定编译器及空OBJCACHE。原generation census三处、cluster witness四处字面投影都有精确锚和逆变换；原ci_support_v3无源码更改。95新root标量名/类型/位宽和196端口必须在本次生成后实际逐项核，不预先宣称通过。
+3. 一次总1320秒从父最早T0开始，环境固定键只传同一原点给私有launcher和同buffer入口。generation360、build600、run300各含原15秒监督余量，尾证据60；全部AS6GiB单CPU，原8GiB可用内存/3GiB磁盘准入。每阶段前后前验均须剩余完整该阶段窗口和尾储备，否则INCOMPLETE首停。父1310TERM+5KILL+5落证将全部加载/hash与执行包在同一上限；未知性能不承诺目标会达到。
+4. 原异常优先，完整native.log以原identity作大小/SHA后验、不截tail或解析布尔授成功。native非自然0、cleanup/资源/后验失败即停止。即使保存时已有完成字段，也必须合并outer/native原退出与清理审读，不能只看RESULT status。driver诊断自然0仍须独立实际审读末行；full job/full block=false，历史故障重现及三条精度资格null。
+5. 36监督+31caller/入口共67项，在普通、-O、搬迁、搬迁-O四模式合计268次通过，0失败/错误/跳过；每进程AS512MiB、CPU30秒、单CPU。未调用生产run/main或原run_phase，未执行编译器/RTL/网络。这些测试只证明函数级有限接线和失败保全，不作为端到端实际结果。
+
+本批公开12份原字节安全payload、STATUS与本计划完整后继。私有绑定、profile、COMMAND、outer、现物路径和日志只保本地。原Host两次失败与其上游未明边界不变；此局部场景不具有原Host N0前缀或可恢复checkpoint资格。

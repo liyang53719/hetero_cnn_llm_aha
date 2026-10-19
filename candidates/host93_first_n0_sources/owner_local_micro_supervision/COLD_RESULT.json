@@ -1,0 +1,123 @@
+{
+  "compiler_rtl_or_network_executed": false,
+  "log_manifest_identity": {
+    "bytes": 7030,
+    "sha256": "44346f51967116a2c85d8dba82d3409b647fc716f6f1eed63f27c4c55b1eae80"
+  },
+  "modes": [
+    "normal",
+    "optimized",
+    "relocated",
+    "relocated_optimized"
+  ],
+  "original_supervisor_run_phase_executed": false,
+  "owner_abi_actual_generated": false,
+  "production_run_main_executed": false,
+  "runs": [
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "normal",
+      "result_identity": {
+        "bytes": 451,
+        "sha256": "35d0c5581c7ac801a19988673bdaf77abafa5970683db82fd3bd135f311afd6d"
+      },
+      "skipped": 0,
+      "suite": "supervision_micro",
+      "tests": 36
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "normal",
+      "result_identity": {
+        "bytes": 727,
+        "sha256": "c5bc3f4fe60f39957c704f75a0778efe6a68ab8341d82c8a7a95ae95561ec1ee"
+      },
+      "skipped": 0,
+      "suite": "caller_micro",
+      "tests": 31
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "optimized",
+      "result_identity": {
+        "bytes": 454,
+        "sha256": "14127147583ef9191729638b05a2dde6fe38e952b4e3142bb4292b1cd684f1bd"
+      },
+      "skipped": 0,
+      "suite": "supervision_micro",
+      "tests": 36
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "optimized",
+      "result_identity": {
+        "bytes": 730,
+        "sha256": "42d8e5f4b93035d91c18aed4796bb58388af2ee1ec14430fe3c5a4f28a4c9557"
+      },
+      "skipped": 0,
+      "suite": "caller_micro",
+      "tests": 31
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "relocated",
+      "result_identity": {
+        "bytes": 454,
+        "sha256": "19b8a82876a4cbe93f7ff650ab118e906ebd18bcb4458ac7114b2f3d1a9b6ff1"
+      },
+      "skipped": 0,
+      "suite": "supervision_micro",
+      "tests": 36
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "relocated",
+      "result_identity": {
+        "bytes": 730,
+        "sha256": "164f26cbaed2e780d3bbc710cb34bd95979238f37d49e467340f2c2172163966"
+      },
+      "skipped": 0,
+      "suite": "caller_micro",
+      "tests": 31
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "relocated_optimized",
+      "result_identity": {
+        "bytes": 464,
+        "sha256": "cd52888bbd08a89d304f48bedc903881623b7c33496ff54257ddd800216adca9"
+      },
+      "skipped": 0,
+      "suite": "supervision_micro",
+      "tests": 36
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "mode": "relocated_optimized",
+      "result_identity": {
+        "bytes": 740,
+        "sha256": "dd4ec4aa7f7c9978ee5fb6915a054aa17e759cc93cb2b51316ef9c9aa14fee0a"
+      },
+      "skipped": 0,
+      "suite": "caller_micro",
+      "tests": 31
+    }
+  ],
+  "schema": "OWNER_LOCAL_MICRO_PUBLIC_COLD_RESULT_V1",
+  "scope": "PURE_MOCK_SEQUENCE_AND_FIXED_HELPER_ENTRY_FUNCTIONS_ONLY",
+  "status": "PASS",
+  "test_driver_result_identity": {
+    "bytes": 535,
+    "sha256": "978d16917fa07d42944406856080fcf52eff229bfe311bf70aa56da6b23b7b7a"
+  },
+  "tests_per_mode": 67,
+  "total_tests": 268
+}

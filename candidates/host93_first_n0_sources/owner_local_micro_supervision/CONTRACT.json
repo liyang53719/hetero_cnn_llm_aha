@@ -1,0 +1,63 @@
+{
+  "actual": "NOT_EXECUTED",
+  "admission": {
+    "MemAvailable_bytes_min": 8589934592,
+    "disk_bytes_min": 3221225472
+  },
+  "as_bytes_all_phases": 6442450944,
+  "cpu_affinity_count": 1,
+  "first_error_precedes_observe_save_and_restore_errors": true,
+  "fresh_generation_root": true,
+  "full_current_phase_window_and_tail_checked_before_and_after_preflight": true,
+  "insufficient_window": "INCOMPLETE_STOP_NO_NEXT_PHASE",
+  "native_execution_performed_during_source_preparation": false,
+  "no_backend_build_or_tool_qualification": true,
+  "one_total_origin": true,
+  "original_supervisor_bytes_unchanged": true,
+  "outer": {
+    "kill_grace_seconds": 5,
+    "receipt_reserved_seconds": 5,
+    "term_seconds": 1310
+  },
+  "phase_order": [
+    "generate",
+    "build",
+    "run"
+  ],
+  "phase_seconds": {
+    "build": 600,
+    "generate": 360,
+    "run": 300
+  },
+  "qualification": {
+    "application_accuracy_pass": null,
+    "full_block_pass": false,
+    "full_job_completed": false,
+    "historical_host_failure_reproduced": null,
+    "official_accuracy_pass": null,
+    "typed_reference_rtl_pass": null
+  },
+  "raw_run_log": {
+    "cap_bytes": 1048576,
+    "independent_actual_audit_required": true,
+    "parsed_by_caller": false,
+    "whole_file_size_sha_observed": true
+  },
+  "reuse_backend_only": true,
+  "schema": "OWNER_MICRO_SUPERVISION_SOURCE_CONTRACT_V1",
+  "shared_seconds": 1320,
+  "source_shape": {
+    "compile_sources": 307,
+    "defines": 4,
+    "existing_idma_members": 319,
+    "extra_fixed_owner_vlt": 1,
+    "include_dirs": 8,
+    "original_vlt": 4,
+    "owner_ports": 196,
+    "retained_members": 13,
+    "root_scalar_observations": 95
+  },
+  "supervisor_cleanup_and_postflight_seconds_within_each_phase": 15,
+  "tail_seconds": 60,
+  "warnings": "UNCHANGED_ORIGINAL_FINITE_WAIVERS_AND_STRICT_ZERO_DIAGNOSTIC_POSTFLIGHT"
+}

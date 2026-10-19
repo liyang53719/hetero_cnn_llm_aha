@@ -1,0 +1,63 @@
+{
+  "census": {
+    "derived": {
+      "bytes": 51852,
+      "sha256": "d9024c6ffeb4b0c1e528474c66fdd1277349fee1826d9e9eab847f66f7773062"
+    },
+    "inverse_exact": true,
+    "original": {
+      "bytes": 51843,
+      "sha256": "fb1b7bf9a747d02827233a820975231c151788f6aff2b54c8f7a7e589e5c0bf7"
+    },
+    "replacements": [
+      {
+        "count": 1,
+        "new": "QwenOwnerKernel__DOT__matrix",
+        "old": "HostBlockTop__DOT__owner__DOT__matrix"
+      },
+      {
+        "count": 5,
+        "new": "VQwenOwnerKernel",
+        "old": "VHostBlockTop"
+      },
+      {
+        "count": 1,
+        "new": "VERILATED_VQWENOWNERKERNEL",
+        "old": "VERILATED_VHOSTBLOCKTOP"
+      }
+    ]
+  },
+  "witness": {
+    "derived": {
+      "bytes": 5677,
+      "sha256": "9205ab6f422099ba265dca6dff496736d43b80b2ff7e55b3191bbb51119dc8f6"
+    },
+    "inverse_exact": true,
+    "original": {
+      "bytes": 5644,
+      "sha256": "3af9bd09df98d6ae1157d2c977d7945c199147174e5b7a23d0401ece4eda85b8"
+    },
+    "replacements": [
+      {
+        "count": 8,
+        "new": "VQwenOwnerKernel",
+        "old": "VHostBlockTop"
+      },
+      {
+        "count": 1,
+        "new": "len(ports) == 196",
+        "old": "len(ports) == 83"
+      },
+      {
+        "count": 1,
+        "new": "'owner_ports': 196",
+        "old": "'host_ports': 83"
+      },
+      {
+        "count": 1,
+        "new": "FINITE_CLUSTER_OWNER_MICRO_SOURCE_WITNESS",
+        "old": "FINITE_CLUSTER_RESET_LAUNCH_WITNESS"
+      }
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "actual": "NOT_EXECUTED",
+  "cold": {
+    "errors": 0,
+    "failures": 0,
+    "native_executed": false,
+    "scope": "FUNCTION_LEVEL_AND_SEQUENCE_PURE_MOCK",
+    "skipped": 0,
+    "tests": 268
+  },
+  "frozen_candidate_manifest": {
+    "bytes": 6471,
+    "sha256": "53b692d265b79e4dfe283a33d4c7463dedcf4e51bf9b10de2cbd811d011ead3d"
+  },
+  "limits": {
+    "MemAvailable_floor_gib": 8,
+    "as_gib": 6,
+    "build_seconds": 600,
+    "cpus": 1,
+    "disk_floor_gib": 3,
+    "generate_seconds": 360,
+    "run_seconds": 300,
+    "shared_wall_seconds": 1320,
+    "tail_seconds": 60
+  },
+  "private_paths_bindings_profiles_commands_outers_logs_arrays_published": false,
+  "production": {
+    "launch.py": {
+      "bytes": 2050,
+      "sha256": "d094bedceb61d37e97154289a7efd55d6e55904546751c982439dd86e2bd38bc"
+    },
+    "run_owner_micro.py": {
+      "bytes": 25935,
+      "sha256": "9eaf9a3029e905e1eaaaf1cdd7d72778b5a7556a96435513c95ef92be5372144"
+    },
+    "supervision.py": {
+      "bytes": 4394,
+      "sha256": "0147d6132bdfa6dccecce28eb6bb31f27ec3876d0345cad4d9e4e70002d106f2"
+    }
+  },
+  "publication_label": "TEMP",
+  "qualification": {
+    "application_accuracy_pass": null,
+    "full_block_pass": false,
+    "full_job_completed": false,
+    "historical_host_failure_reproduced": null,
+    "official_accuracy_pass": null,
+    "owner_generated_abi_verified": null,
+    "owner_target_boundary_observed": null,
+    "typed_reference_rtl_pass": null
+  },
+  "schema": "OWNER_LOCAL_MICRO_SUPERVISION_TEMP_SOURCE_STATUS_V1",
+  "scope": "SINGLE_FIXED_OWNER_LOCAL_DIAGNOSTIC_SOURCE_ONLY",
+  "source_review": {
+    "actual_executed": false,
+    "independent_cold": {
+      "errors": 0,
+      "failures": 0,
+      "normal": 67,
+      "optimized": 67,
+      "skipped": 0
+    },
+    "manifest": {
+      "bytes": 2573,
+      "sha256": "2fb43083fbbc85a10649fa0d59bb191a966f0fe25db06ba557fbc07ee378bc67"
+    },
+    "summary": {
+      "bytes": 5475,
+      "sha256": "c22704dee1fd273b6d79b1b2a25dc6132e7fc8a97b02a9309ee0cbef7fe7939c"
+    },
+    "verdict": "GO_OWNER_LOCAL_MICRO_SUPERVISION_SOURCE_AND_EXACT_1320_COMMAND_ONLY"
+  }
+}

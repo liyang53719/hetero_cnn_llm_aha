@@ -1,0 +1,103 @@
+{
+  "backend": {
+    "bytes": 19076520,
+    "sha256": "75dd308bde0b9cb1e64b36a03ba8be38c64c2b59087dd52300fa8b43a107aeb2"
+  },
+  "backend_members": 473,
+  "backend_revision": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+  "driver_manifest": {
+    "bytes": 1019,
+    "sha256": "ad587ca4d0ee05953202c5378442bf11e936b2205632a3e2e124a4bbab722475"
+  },
+  "repo": {
+    "candidates/host93_ci_recovery/SUPPORT_PINS.json": {
+      "bytes": 806,
+      "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"
+    },
+    "candidates/host93_ci_recovery/ci_support_v3.py": {
+      "bytes": 16348,
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+    },
+    "candidates/host93_ci_recovery/execution/SOURCE_PINS.json": {
+      "bytes": 1155,
+      "sha256": "777cbe5288224509388e10eeb613db4c61d90caeb815cf81b35cbd4e7bd40f5e"
+    },
+    "candidates/host93_ci_recovery/execution/generation_diagnostics.py": {
+      "bytes": 51843,
+      "sha256": "fb1b7bf9a747d02827233a820975231c151788f6aff2b54c8f7a7e589e5c0bf7"
+    },
+    "candidates/host93_ci_recovery/execution/host_execution.py": {
+      "bytes": 52525,
+      "sha256": "b3470853d6b2a74b0ce75028cde553344cf3a76a12eddcb3fb8f2e169b229a1a"
+    },
+    "candidates/host93_ci_recovery/retained13/SOURCE_PLAN.json": {
+      "bytes": 26494,
+      "sha256": "f4418409f1a460428926529df23f2a6c48b1e3af5d8d7818604264d2e98ed89e"
+    },
+    "candidates/host93_ci_recovery/safe_build_diagnostics.py": {
+      "bytes": 11942,
+      "sha256": "97ab72651c9acadf1e4d242225bdfc21dea3807aa911e448ce7330b762fa4a60"
+    },
+    "candidates/host93_first_n0_sources/local_binding_observer/binding_observer.py": {
+      "bytes": 11781,
+      "sha256": "62a7f5b4f9250f66e5c62ed9d8b6a486642e135e5e934fc505ae2dfadc850904"
+    },
+    "candidates/host93_first_n0_sources/local_binding_observer/local_mount_profile.py": {
+      "bytes": 7087,
+      "sha256": "cdbe1030e3bf2a9b2222836f7f594b4800c4315dfb31a4438a8b76c07cd18c8f"
+    },
+    "candidates/host93_first_n0_sources/local_dependency_bootstrap/bootstrap.py": {
+      "bytes": 25509,
+      "sha256": "c2a7ca58d8fba3df8b76071e25ad740386ab5113a59897181b39b4d303e50ea8"
+    },
+    "candidates/host93_first_n0_sources/pc01_relink/dependency_gate.py": {
+      "bytes": 5122,
+      "sha256": "49281296cb6daa034c6e7f2f741ff6d7af9b0e61abdd96d77c1856349e8597c7"
+    },
+    "candidates/host93_first_n0_sources/pc01_relink/run_relink.py": {
+      "bytes": 19837,
+      "sha256": "d80f19af41760b96f8a8a60d2a45faab21b2addea39bf5e805fe2a2a338e798d"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_execution/run_reference.py": {
+      "bytes": 14870,
+      "sha256": "a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684"
+    },
+    "candidates/host93_micro_diagnostics/run.py": {
+      "bytes": 53278,
+      "sha256": "235a619fc7d304578ff78a958c173a33cb50d1a860dbf56fe2051fd4396ba3b8"
+    },
+    "development_snapshots/canonical_host93_derived_micro_source_20261018/init_contract.py": {
+      "bytes": 5127,
+      "sha256": "d070d9a0841ea034dd684fad3ca9fd4fa32a1ed1afa1417bf4f4a88625996365"
+    },
+    "development_snapshots/canonical_host93_fixed_core_build_source_20261018/GATE_PLAN.json": {
+      "bytes": 160737,
+      "sha256": "cd489d6530321fa95b79fc1d0e82d5599d358a1cb882165e44805dcafb98bd42"
+    },
+    "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py": {
+      "bytes": 28551,
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    },
+    "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py": {
+      "bytes": 17327,
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a"
+    },
+    "development_snapshots/canonical_host93_same_sv_source_20261018/checker/CONTRACT.json": {
+      "bytes": 20536,
+      "sha256": "c3ec7c4753df9100a90bc3963843b23c153c2335be06035a5cac4f6f27018d0d"
+    },
+    "development_snapshots/canonical_n0_model_wiring_source_20261018/canonical_launch.hpp": {
+      "bytes": 2065,
+      "sha256": "7b4a6bf463335d7984fbc803ccb4cca275b54344fa883d82403fa55de4f0a7bc"
+    },
+    "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py": {
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    }
+  },
+  "same_existing_sv": {
+    "bytes": 76366612,
+    "sha256": "2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61"
+  },
+  "schema": "OWNER_MICRO_FIXED_SOURCE_PINS_V1"
+}

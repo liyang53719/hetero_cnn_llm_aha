@@ -1,0 +1,26 @@
+{
+  "actual": "NOT_EXECUTED",
+  "baseline_adopted": false,
+  "classification": "TEMP_SOURCE",
+  "dut_executed": false,
+  "expected_parent_commit": "a5ae0c0594b1c13632e160576a7f167bad6d43e1",
+  "fullblock_executed": false,
+  "reference_accepted": false,
+  "safe_tail_seconds": 120,
+  "schema": 1,
+  "scope": "INDEPENDENT_N0_NATURAL_DISPATCH_DIAGNOSTIC_ONLY",
+  "source_review": {
+    "directory": "review_n0_dispatch_coordinator_20261019T1221",
+    "manifest": {
+      "bytes": 1189,
+      "sha256": "6362d7dd7060e9a8b9fc5216ee4a9355569929f10654b63426b9c818bbc2f339"
+    },
+    "summary": {
+      "bytes": 5432,
+      "sha256": "602e9cbb587b9ac52c4d9a564c3d31b88181a7d9ecc2db53c431723ea3b3ce84"
+    },
+    "verdict": "SOURCE_GO_INDEPENDENT_N0_DISPATCH_FOUR_STAGE_DIAGNOSTIC_ONLY"
+  },
+  "stages": 4,
+  "work_deadline_seconds": 600
+}

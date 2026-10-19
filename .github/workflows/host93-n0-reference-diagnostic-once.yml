@@ -1,0 +1,97 @@
+name: host93-n0-reference-diagnostic-once
+# TEMP_SOURCE: natural-dispatch reference candidate only; original baseline and DUT remain unaccepted.
+# TEMP SOURCE: publish this exact workflow only after whole-job SOURCE review.
+# One self-path push launches four bounded diagnostic phases, never a Host job or retry.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/host93-n0-reference-diagnostic-once.yml']
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  reference-diagnostic:
+    if: github.event_name == 'push' && github.run_attempt == 1 && github.repository == 'liyang53719/hetero_cnn_llm_aha' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      HOST93_PRIVATE_ROOT: /tmp/host93-n0-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONNOUSERSITE: '1'
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - name: Establish shared 600 work plus 120 safe-evidence seconds
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I -S -B -c 'import os,time; f=open(os.environ["GITHUB_ENV"],"a"); t=time.monotonic(); f.write("HOST93_JOB_DEADLINE="+str(t+720)+"\nHOST93_WORK_DEADLINE="+str(t+600)+"\n"); f.close()'
+      - name: Check out exact reviewed push
+        timeout-minutes: 2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: '${{ github.sha }}'
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Bind checkout and first attempt
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_ACTIONS" = true
+          test "$GITHUB_EVENT_NAME" = push
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          [[ "$GITHUB_RUN_ID" =~ ^[0-9]+$ ]]
+          test "$HOST93_PRIVATE_ROOT" = "/tmp/host93-n0-diagnostic-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test "$GITHUB_REPOSITORY" = liyang53719/hetero_cnn_llm_aha
+          test "$GITHUB_REF" = refs/heads/main
+          [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(timeout --signal=TERM --kill-after=2s 5s git rev-parse HEAD)" = "$GITHUB_SHA"
+      - name: Set up fixed reference Python within shared deadline
+        timeout-minutes: 5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12.14'
+          check-latest: false
+      - name: Verify fixed Python and remaining shared work time
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I -S -B -c 'import os,sys,time; sys.exit(0 if sys.version_info[:3] == (3,12,14) and time.monotonic() < float(os.environ["HOST93_WORK_DEADLINE"])-10 else 1)'
+      - name: Observe natural dispatch and compare one original N0 candidate
+        id: actual
+        timeout-minutes: 11
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          remaining=$(python3 -I -S -B -c 'import os,time,sys; x=int(float(os.environ["HOST93_WORK_DEADLINE"])-time.monotonic()-10); sys.exit(1) if x<=0 else print(x)')
+          timeout --signal=TERM --kill-after=10s "${remaining}s" python3 -I -S -B candidates/host93_first_n0_sources/dispatch_diagnostic/run.py --repo "$GITHUB_WORKSPACE" --out "$HOST93_PRIVATE_ROOT" --deadline "$HOST93_WORK_DEADLINE" --execute
+      - name: Validate only sanitized evidence
+        id: safe
+        if: always() && (steps.actual.outcome == 'success' || steps.actual.outcome == 'failure')
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          remaining=$(python3 -I -S -B -c 'import os,time,sys; x=min(30,int(float(os.environ["HOST93_JOB_DEADLINE"])-time.monotonic()-60)); sys.exit(1) if x<=0 else print(x)')
+          timeout --signal=TERM --kill-after=2s "${remaining}s" python3 -I -S -B candidates/host93_first_n0_sources/dispatch_diagnostic/run.py --repo "$GITHUB_WORKSPACE" --verify-evidence --out "$HOST93_PRIVATE_ROOT"
+      - name: Upload only three validated safe JSON files
+        if: always() && steps.safe.outcome == 'success'
+        timeout-minutes: 1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: host93-n0-diagnostic-safe-${{ github.sha }}-${{ github.run_id }}
+          retention-days: 14
+          if-no-files-found: error
+          include-hidden-files: false
+          overwrite: false
+          path: |
+            ${{ env.HOST93_PRIVATE_ROOT }}/evidence/summary.json
+            ${{ env.HOST93_PRIVATE_ROOT }}/evidence/source_hashes.json
+            ${{ env.HOST93_PRIVATE_ROOT }}/evidence/stage_exits.json

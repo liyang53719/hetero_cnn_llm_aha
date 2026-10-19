@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "original_bytes": 13753,
+  "original_sha256": "d26bd286857a6bff8217472733658cbdcb1e6590fa095e0d0589bc1be81b8fc4",
+  "substitutions": [
+    {
+      "old": "\"\"\"N0-only official-AST recovery worker. Cold imports; externally supervised.\n\nNo process creation/download/model construction occurs on import or without --execute.\nThe existing CI supervisor owns process-tree RSS, wall, logs and cleanup.\nThis worker preserves the original AVX512 arithmetic/runtime/output pins.\n\"\"\"",
+      "new": "\"\"\"Independent N0 dispatch diagnostic candidate. Source-only unless --execute.\n\nThe original frozen AVX512 reference worker/PINS/PASS gate remain unchanged.\nObserve natural dispatch before thread setters; never set an ISA override or\nload a profile. Only two fixed observed-capability/build pairs permit forward.\nDual frozen output identities are hard gates, but never reference acceptance.\nThe external supervisor owns process-tree RSS, wall, logs and cleanup.\n\"\"\""
+    },
+    {
+      "old": "def recover(args, pins):\n",
+      "new": "CAPABILITIES = ('DEFAULT', 'AVX2', 'AVX512', 'OTHER')\nKNOWN_BUILDS = {\n    'AVX512': '4f3cd65dc58472ed223329fa5ab743d0a360e777accb4001b511fc418c78128b',\n    'AVX2': '4096ae2ff210db4a4da17fe7e5ef17c7715c4e4dc5d4175a9357b83bf820075a',\n}\nGATES = ('source','raw2','native','environment','import','version','capability',\n         'thread','build','forward','postflight')\nSTAGES = ('SOURCE','RAW2','RUNTIME_IDENTITY','ENVIRONMENT','RUNTIME_IMPORT',\n          'VERSION','CAPABILITY','THREAD','BUILD','OFFICIAL_N0','POSTFLIGHT','COMPLETE')\nSTATUSES = ('NOT_COMPLETED','CANDIDATE_HASH_MISMATCH','CANDIDATE_EXACT_MATCH')\nSAFE_MARKERS = frozenset(('N0_DISPATCH_CANDIDATE_NOT_EXECUTED','CANDIDATE_EXACT_MATCH',\n                         'CANDIDATE_HASH_MISMATCH:HASH_MISMATCH')) | frozenset(\n                         'NOT_COMPLETED:' + code for code in CODES if code != 'HASH_MISMATCH')\nPUBLIC_KEYS = ('schema','scope','status','code','stage','expected_capability',\n               'observed_capability','capability_observed','gates_reached','gates_passed',\n               'full_shape_verified','hashes_checked','bf16_sha_exact','f32_sha_exact',\n               'dual_sha_exact','reference_accepted','baseline_adopted','dut_executed','rtl_executed','fullblock_executed')\n\ndef finite_capability(value):\n    \"\"\"Never stringify or retain arbitrary observed runtime values.\"\"\"\n    return value if type(value) is str and value in CAPABILITIES[:3] else 'OTHER'\n\ndef allowed_build(capability):\n    \"\"\"Explicit diagnostic allowlist; no pins mutation or environment profile.\"\"\"\n    need(type(capability) is str and capability in KNOWN_BUILDS, 'DISPATCH')\n    return KNOWN_BUILDS[capability]\n\ndef new_report():\n    return dict(schema=1,scope='INDEPENDENT_N0_DISPATCH_CANDIDATE',\n        status='NOT_COMPLETED',code='UNEXPECTED',stage='SOURCE',\n        expected_capability='AVX512',observed_capability='OTHER',capability_observed=False,\n        gates_reached=dict.fromkeys(GATES,False),gates_passed=dict.fromkeys(GATES,False),\n        full_shape_verified=False,hashes_checked=False,bf16_sha_exact=False,\n        f32_sha_exact=False,dual_sha_exact=False,reference_accepted=False,\n        baseline_adopted=False,dut_executed=False,rtl_executed=False,fullblock_executed=False)\n\ndef enter_gate(report, gate, stage):\n    report['stage'] = stage\n    report['gates_reached'][gate] = True\n\ndef pass_gate(report, gate):\n    report['gates_passed'][gate] = True\n\ndef public_projection(report):\n    \"\"\"Exact finite schema only. Reject incoherent claims before serialization.\"\"\"\n    need(type(report) is dict and set(PUBLIC_KEYS) <= report.keys(), 'OUTPUT')\n    result = {key:report[key] for key in PUBLIC_KEYS}\n    need(type(result['schema']) is int and result['schema'] == 1 and\n         type(result['scope']) is str and result['scope'] == 'INDEPENDENT_N0_DISPATCH_CANDIDATE' and\n         type(result['status']) is str and result['status'] in STATUSES and\n         (result['code'] is None or (type(result['code']) is str and result['code'] in CODES)) and\n         type(result['stage']) is str and result['stage'] in STAGES and\n         type(result['expected_capability']) is str and result['expected_capability'] == 'AVX512' and\n         type(result['observed_capability']) is str and result['observed_capability'] in CAPABILITIES,\n         'OUTPUT')\n    for key in ('capability_observed','full_shape_verified','hashes_checked',\n                'bf16_sha_exact','f32_sha_exact','dual_sha_exact','reference_accepted',\n                'baseline_adopted','dut_executed','rtl_executed','fullblock_executed'):\n        need(type(result[key]) is bool, 'OUTPUT')\n    need(not result['baseline_adopted'] and not result['dut_executed'] and\n         not result['reference_accepted'] and not result['rtl_executed'] and\n         not result['fullblock_executed'], 'OUTPUT')\n    for key in ('gates_reached','gates_passed'):\n        gates = result[key]\n        need(type(gates) is dict and set(gates) == set(GATES) and\n             all(type(gates[g]) is bool for g in GATES), 'OUTPUT')\n        result[key] = dict(gates)\n    reached, passed = result['gates_reached'],result['gates_passed']\n    for index, gate in enumerate(GATES):\n        need(not passed[gate] or reached[gate], 'OUTPUT')\n        need(not reached[gate] or all(passed[prior] for prior in GATES[:index]), 'OUTPUT')\n    need(reached['source'], 'OUTPUT')\n    if result['status'] != 'CANDIDATE_EXACT_MATCH':\n        last_reached = max(index for index, gate in enumerate(GATES) if reached[gate])\n        need(result['stage'] == STAGES[last_reached], 'OUTPUT')\n    need(not result['capability_observed'] or reached['capability'], 'OUTPUT')\n    need(result['capability_observed'] or result['observed_capability'] == 'OTHER', 'OUTPUT')\n    need(not passed['capability'] or (result['capability_observed'] and\n         result['observed_capability'] in KNOWN_BUILDS), 'OUTPUT')\n    need(not result['full_shape_verified'] or reached['forward'], 'OUTPUT')\n    need(not result['hashes_checked'] or (result['full_shape_verified'] and reached['forward']), 'OUTPUT')\n    need(not passed['forward'] or result['hashes_checked'], 'OUTPUT')\n    need(result['hashes_checked'] or not (result['bf16_sha_exact'] or result['f32_sha_exact']), 'OUTPUT')\n    need(result['dual_sha_exact'] == (result['hashes_checked'] and\n         result['bf16_sha_exact'] and result['f32_sha_exact']), 'OUTPUT')\n    if result['status'] == 'CANDIDATE_EXACT_MATCH':\n        need(all(passed.values()) and result['dual_sha_exact'] and result['code'] is None and\n             result['stage'] == 'COMPLETE', 'OUTPUT')\n    elif result['status'] == 'CANDIDATE_HASH_MISMATCH':\n        need(all(passed.values()) and result['hashes_checked'] and not result['dual_sha_exact'] and\n             result['code'] == 'HASH_MISMATCH' and result['stage'] == 'POSTFLIGHT', 'OUTPUT')\n    else:\n        need(result['code'] in CODES and result['code'] != 'HASH_MISMATCH' and\n             result['stage'] != 'COMPLETE', 'OUTPUT')\n    return result\n\ndef validate_public_observation(value):\n    \"\"\"Validate an untrusted published projection; return a fresh finite copy.\"\"\"\n    need(type(value) is dict and set(value) == set(PUBLIC_KEYS), 'OUTPUT')\n    return public_projection(value)\n\ndef recover(args, pins):\n"
+    },
+    {
+      "old": "    report = dict(schema=1,status='NOT_COMPLETED',code='UNEXPECTED',stage='SOURCE',\n                  scope='FROZEN_M128_N0_REFERENCE_ONLY',rtl_executed=False,\n                  fullblock_executed=False,reference_accepted=False)\n    try:\n        buffers = source_buffers(repo,pins)",
+      "new": "    report = new_report()\n    try:\n        enter_gate(report,'source','SOURCE')\n        buffers = source_buffers(repo,pins)"
+    },
+    {
+      "old": "        report['stage'] = 'RAW2'",
+      "new": "        pass_gate(report,'source')\n        enter_gate(report,'raw2','RAW2')"
+    },
+    {
+      "old": "        profile = pins['python_profiles'][args.python_profile]\n        report['stage'] = 'RUNTIME_IDENTITY'",
+      "new": "        pass_gate(report,'raw2')\n        need(args.python_profile == 'ci31214', 'FLAGS')\n        profile = pins['python_profiles']['ci31214']\n        enter_gate(report,'native','RUNTIME_IDENTITY')"
+    },
+    {
+      "old": "        # Exactly the original arithmetic environment, with an explicit new root binding.",
+      "new": "        pass_gate(report,'native')\n        enter_gate(report,'environment','ENVIRONMENT')\n        # Preserve every original required value and forbidden override."
+    },
+    {
+      "old": "        sys.addaudithook(no_external_actions)",
+      "new": "        pass_gate(report,'environment')\n        sys.addaudithook(no_external_actions)"
+    },
+    {
+      "old": "        report['stage'] = 'RUNTIME_IMPORT'",
+      "new": "        enter_gate(report,'import','RUNTIME_IMPORT')"
+    },
+    {
+      "old": "        expected = pins['runtime_requirements']",
+      "new": "        pass_gate(report,'import')\n        enter_gate(report,'version','VERSION')\n        expected = pins['runtime_requirements']"
+    },
+    {
+      "old": "        report['observed_runtime'] = dict(torch=str(torch.__version__),numpy=np.__version__,\n            torch_commit=torch.version.git_version,capability=torch.backends.cpu.get_cpu_capability(),\n            torch_build_sha256=sha(torch.__config__.show().encode()))\n        need(report['observed_runtime']['capability'] == expected['capability'], 'DISPATCH')",
+      "new": "        pass_gate(report,'version')\n        enter_gate(report,'capability','CAPABILITY')\n        report['observed_capability'] = finite_capability(torch.backends.cpu.get_cpu_capability())\n        report['capability_observed'] = True\n        candidate_build = allowed_build(report['observed_capability'])\n        pass_gate(report,'capability')\n        enter_gate(report,'thread','THREAD')"
+    },
+    {
+      "old": "        need(sha(torch.__config__.show().encode()) == expected['torch_build_sha256'], 'RUNTIME')",
+      "new": "        need(torch.get_num_threads() == 4 and torch.get_num_interop_threads() == 1 and\n             torch.are_deterministic_algorithms_enabled(), 'RUNTIME')\n        pass_gate(report,'thread')\n        enter_gate(report,'build','BUILD')\n        need(sha(torch.__config__.show().encode()) == candidate_build, 'RUNTIME')"
+    },
+    {
+      "old": "        report['stage'] = 'OFFICIAL_N0'",
+      "new": "        pass_gate(report,'build')\n        enter_gate(report,'forward','OFFICIAL_N0')"
+    },
+    {
+      "old": "        data = n0.float().contiguous().numpy().astype('<f4',copy=False).tobytes()",
+      "new": "        report['full_shape_verified'] = True\n        data = n0.float().contiguous().numpy().astype('<f4',copy=False).tobytes()"
+    },
+    {
+      "old": "        # Preserve failed observations privately. Never issue canonical filename on mismatch.",
+      "new": "        report.update(hashes_checked=True,bf16_sha_exact=report['output']['native_exact'],\n                      f32_sha_exact=report['output']['fp32le_exact'],\n                      dual_sha_exact=report['output']['accepted'])\n        pass_gate(report,'forward')\n        # Every tensor file stays private and explicitly candidate-named."
+    },
+    {
+      "old": "write_new(out,'n0.observed.f32le',data)",
+      "new": "write_new(out,'candidate.observed.n0.f32le',data)"
+    },
+    {
+      "old": "write_new(out,'n0.observed.bf16le',native)",
+      "new": "write_new(out,'candidate.observed.n0.bf16le',native)"
+    },
+    {
+      "old": "        report['stage'] = 'POSTFLIGHT'",
+      "new": "        enter_gate(report,'postflight','POSTFLIGHT')"
+    },
+    {
+      "old": "        need(report['output']['accepted'], 'HASH_MISMATCH')",
+      "new": "        pass_gate(report,'postflight')\n        need(report['output']['accepted'], 'HASH_MISMATCH')"
+    },
+    {
+      "old": "        write_new(out,'n0.f32le',data)\n        read_checked(out/'n0.f32le',{'bytes':F32_BYTES,'sha256':F32_SHA256},retain=False)\n        report.update(status='PASS_FROZEN_N0_EXACT',code=None,stage='COMPLETE',reference_accepted=True)",
+      "new": "        write_new(out,'candidate.exact.n0.f32le',data)\n        write_new(out,'candidate.exact.n0.bf16le',native)\n        read_checked(out/'candidate.exact.n0.f32le',{'bytes':F32_BYTES,'sha256':F32_SHA256},retain=False)\n        read_checked(out/'candidate.exact.n0.bf16le',{'bytes':BF16_BYTES,'sha256':BF16_SHA256},retain=False)\n        report.update(status='CANDIDATE_EXACT_MATCH',code=None,stage='COMPLETE',reference_accepted=False)"
+    },
+    {
+      "old": "status='REFERENCE_MISMATCH' if error.code == 'HASH_MISMATCH' else 'NOT_COMPLETED'",
+      "new": "status='CANDIDATE_HASH_MISMATCH' if error.code == 'HASH_MISMATCH' else 'NOT_COMPLETED'"
+    },
+    {
+      "old": "        write_new(out,'RECEIPT.json',(json.dumps(report,sort_keys=True,indent=2)+'\\n').encode())",
+      "new": "        projection = public_projection(report)\n        write_new(out,'RECEIPT.json',(json.dumps(report,sort_keys=True,indent=2)+'\\n').encode())\n        write_new(out,'PUBLIC_OBSERVATION.json',(json.dumps(projection,sort_keys=True,indent=2)+'\\n').encode())"
+    },
+    {
+      "old": "choices=('historical','ci31214')",
+      "new": "choices=('ci31214',)"
+    },
+    {
+      "old": "print('N0_REFERENCE_NOT_EXECUTED')",
+      "new": "print('N0_DISPATCH_CANDIDATE_NOT_EXECUTED')"
+    },
+    {
+      "old": "return 0 if report['reference_accepted'] else 1",
+      "new": "return 0 if report['status'] == 'CANDIDATE_EXACT_MATCH' else 1"
+    },
+    {
+      "old": "                         'NOT_COMPLETED:' + code for code in CODES if code != 'HASH_MISMATCH')",
+      "new": "                         'NOT_COMPLETED:' + code for code in CODES)"
+    },
+    {
+      "old": "    report['stage'] = stage\n    report['gates_reached'][gate] = True",
+      "new": "    report.update(stage=stage, gates_reached={**report['gates_reached'], gate:True})"
+    },
+    {
+      "old": "        report['observed_capability'] = finite_capability(torch.backends.cpu.get_cpu_capability())\n        report['capability_observed'] = True",
+      "new": "        report.update(observed_capability=finite_capability(torch.backends.cpu.get_cpu_capability()),\n                      capability_observed=True)"
+    },
+    {
+      "old": "def recover(args, pins):\n",
+      "new": "def receipt_projection(report):\n    \"\"\"A secondary projection error cannot replace the recorded primary code.\"\"\"\n    try:\n        return public_projection(report)\n    except Exception:\n        code = report.get('code')\n        if type(code) is str and code in CODES:\n            raise Rejected(code) from None\n        raise\n\ndef recover(args, pins):\n"
+    },
+    {
+      "old": "        projection = public_projection(report)\n",
+      "new": "        projection = receipt_projection(report)\n"
+    }
+  ]
+}

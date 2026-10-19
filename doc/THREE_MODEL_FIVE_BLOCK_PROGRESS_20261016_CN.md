@@ -1006,3 +1006,13 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 唯一安全 marker NOT_COMPLETED:DISPATCH 定位到已绑定 n0_reference.py:190 的 capability equality 门；PINS 固定要求 AVX512，实际 capability 字符串未出现在这三份安全 JSON 中，本批不猜测具体值。依源码控制流，先前固定来源/官方类、raw2、ci31214 Python profile/解释器、五份 native library 和 runtime source 身份、4/4/1 环境门与 NumPy/PyTorch 版本/torch commit 门已通过。
 - torch.set_num_threads(4)、torch.set_num_interop_threads(1)、deterministic 设置、build-SHA equality、模块路径检查、官方 forward 与后续 postflight 都在失败门之后，尚未到达。runtime_ready=true 不授冻结参考完整运行时或数值资格。inputs_ready=true 经固定16 receipt 检查仅代表输入已准备，不表示加载到 RTL；reference_ready=false，capture/comparison NOT_COLLECTED，全部 Host/数值 scope=false；COLLECTING 是遗留状态，不代表作业仍运行。
 - 原 summary.contract_failure=UNREPORTED/UNMAPPED_CONTRACT 与 reference 阶段 NATIVE_SUPERVISION/CHILD_EXIT_NONZERO 原样保留，不用源码解释覆盖原报告。原三份 JSON 和中文说明目标为 development_snapshots/host93_first_n0_dispatch_failure_39248526073；82 个 project_sources 的 size/SHA256 与父提交 c4ecd4a4b77e85137eba5746f0c77f72b9e0e452 相符。Actual 独立审核已接受有限失败证据（review_first_n0_actual_39248526073_20261019T1203；MANIFEST.json 1852 B / 8f297a1e9891d999f2f01a80ad002701acde345638ab09a9538293588f0f49b2；SUMMARY.json 9361 B / 059b5eda5f5837ae6ae4bc060cc018b60d2e436b84787202a2aa2bd5fa82afeb；ACCEPT_ACTUAL_FIRST_N0_REFERENCE_DISPATCH_PREFLIGHT_FAILURE_ONLY）；本 v2 只补审核元数据，形成安全失败摘要和本次纯尾追加，不含 workflow/源码、权重/张量/二进制/完整日志/系统清单，不授 Host、N0 数值或全块资格，也不重跑。
+
+
+### 2026-10-19 独立自然 dispatch N0 诊断源码（TEMP_SOURCE）
+- 原 39248526073 的固定 reference 能力门拒绝已另行保存；该原 FAIL、未导出的实际能力枚举和主基线均不改写。此批仅新增独立四阶段入口与独立 self-path workflow，原 43-stage Host workflow 不变。
+- 固定流程：11 wheels 获取与离线安装共 300 秒子窗口；只取原两项 Range 共 789,504 字节、180 秒；自然 capability 候选 120 秒。共享 600 秒 work 从 checkout/setup 前开始，另留 120 秒安全落证；所有子阶段按剩余时间裁剪。
+- 原 Python/native/source/raw2 哈希、Torch/NumPy 版本、4/1 线程、确定性与官方类一次 forward 保留。只允许自然 AVX2/AVX512 对应原已冻结 build digest；DEFAULT/OTHER 在 forward 前停止，禁止强设 ISA。
+- 原 BF16 与 FP32LE 两个 SHA 强比；即使两者相等，也仅记录独立候选事实，reference_accepted、baseline_adopted、DUT/fullblock 全为 false。不同哈希保留自然 exit 1；资源/准入/后验失败为 INCOMPLETE，不把它当数字不匹配。
+- 只上传三份严格安全 JSON：固定能力枚举、到达/通过门、形状/双 SHA 布尔、有限原生终态、soft sampled leader RSS。失败日志仅取至多四条固定状态标识；无张量、私有全文日志、系统清单或任意路径。
+- coordinator 19+19、搬迁 19+19；raw2 53+53；candidate 18+18、搬迁 18+18，均为纯源码/stdlib/mock。没有实际获取、数值 import/forward 或 DUT 执行。原 D01/D02 HOLD 保留，新后继只补可信测试入口及成对观察字段原子提交/原失败码优先。
+- SOURCE 独审身份：review_n0_dispatch_coordinator_20261019T1221: MANIFEST.json 1189 bytes / 6362d7dd7060e9a8b9fc5216ee4a9355569929f10654b63426b9c818bbc2f339; SUMMARY.json 5432 bytes / 602e9cbb587b9ac52c4d9a564c3d31b88181a7d9ecc2db53c431723ea3b3ce84; verdict SOURCE_GO_INDEPENDENT_N0_DISPATCH_FOUR_STAGE_DIAGNOSTIC_ONLY；本批实际状态 NOT_EXECUTED。后续唯一实际由父按已授权四阶段执行，独立结果须审后报告，不能自动接回 DUT。

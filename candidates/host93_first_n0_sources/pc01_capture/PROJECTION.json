@@ -1,0 +1,23 @@
+{
+  "elf_reader_inherited_relink_gate_without_changes": true,
+  "exact_replacements": [
+    {
+      "new": "SHARED_SECONDS = 10620\n",
+      "occurrences": 1,
+      "old": "SHARED_SECONDS = 6600\n"
+    }
+  ],
+  "inverse_exact": true,
+  "reason": "Independent fresh execution process has a separately authorized 10620-second timer; original phase budget upper bound must admit the single 10410-second capture phase.",
+  "reference_helper_original_bytes": true,
+  "relink_code_called_readonly_helpers_only": true,
+  "supervisor_derived": {
+    "bytes": 16349,
+    "sha256": "9eae42e6787d710d7e31f94e1453255e40affe94f63dc8d3f7c11b542dce0834"
+  },
+  "supervisor_functions_and_cleanup_logic_changed": false,
+  "supervisor_original": {
+    "bytes": 16348,
+    "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+  }
+}

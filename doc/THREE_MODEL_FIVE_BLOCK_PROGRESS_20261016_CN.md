@@ -1257,3 +1257,20 @@ SOURCE 独审结论为 `ACCEPT_PC01_DRIVER_COMPILE_LINK_SOURCE_AND_180_SECOND_IN
 三个参考输出身份独立固定为typed FP32 346b2974…、数学RN-FP32 42604d28…、数学RN-FP64 ef5d02aa…，原RESULT.json1249 B / ae61290bf5ba0d5ff2f21920c8913a15736c788e3093a06ff2c9e0ba89b586f6另核；收据自述不能设定期望。typed全量逐bit/mismatch/hash独立列，数学两轨分别给整数绝对误差总量、近似均值/最大值、完整ULP分桶和相对误差；它们相对RN导出值，不冒充未舍入实数点积全量精确误差。位差仍保留完整诊断。所有七文件同buffer消费且前后重核。
 
 本片SOURCE_ONLY，实际capture比较未执行。official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl均null，full_block_pass=false，无新增容差。caller须真实关联固定native源、退出0与cleanup及同RAM来源，方可分别汇总typed匹配和数学诊断。函数只读、无child/无timer，≤60秒合作检查使用min(start+60,shared_stop)，不能延长caller硬截止。独立重链180秒和后续长窗口10620秒合计最多10800秒；比较完全在后一个原窗口内，长入口另审。
+
+
+## 2026-10-19：单次 fresh PC0→ACK0→PC1→ACK1 有界调用方 SOURCE
+
+本批发布 `candidates/host93_first_n0_sources/pc01_capture/` 的11件公开文本与真实SOURCE审状态。调用方读取既有实际独审接受的 PC01 ELF（13,537,744 B，SHA256 cb64b5cf1d5e9c226b9768fb3fdcbb3305bee894b6d904cb4cf29633d10fe5b1），不重复重链、backend或RTL生成。原重链两阶段收据、三阶段数学模型收据与各自身份保持固定；私有路径、精确机器命令、输入和结果数组均不公开。
+
+授权分两步：独立重链最多180秒，本次新t0最多10620秒，合计上界10800秒。两步间等待不算native仿真wall，不冒充同一t0。本次outer首行采t0，早于解释器/命令/SOURCE身份读取；初始检查最多30秒，单native phase10410秒（工作10395、cleanup5、postflight10），三轨比较最多60秒，末尾120秒落证。前验前后均要求完整10410秒phase窗口；不足则在native前首停。报告截止为min(总stop,报告起点+120)。外层TERM10610+KILL5+shell5均在总10620秒内，属于尾储备。原监督仅精确常量6600→10620且逆向复原，未改WNOWAIT、退出、清理、采样和原失败优先逻辑。
+
+固定单核、AS6GiB、MemAvailable≥8GiB与磁盘≥3GiB，native前立即重核。39项系统依赖、28桥生产源码/44原来源、19 archive物件、47重链副本和16项canonical输入在前后重核；16输入共94,920,448字节，无数值转换。新的单一进程从fresh reset真正重跑PC0，保持一个Host/context/Syms/RAM继续PC1，再到ACK1并停止eval；不恢复已退出进程、不加载离线N0替代。8,000,000主周期是全程cap，未知PC1吞吐下不能保证完成。447232固定源粗下界与旧N0速度只供预算分析，不是实际周期或ETA。
+
+监督自然退出0/cleanup、固定argv/cwd与ELF前后身份闭合后，完整比较freshPC0的196608个N0值与原3c25077e…SHA，并核ACK1 qraw完整退休及786432字节/196608值。固定预期wide73728、slice589824、qraw B2048/W12288；B到完整AXI burst映射由既有IdmaWeightBurst源码与有限计数审绑定。ACK0内部writeback与ACK1 payload依赖原固定driver成功路径强门，没有新增内部探针，不凭counts成功布尔授native资格。
+
+PC1有效MAC301989888，分母严格为4096×(ACK1边沿−PC1接受边沿+1)，覆盖整个PC1主周期窗口；whole-block利用率单独保留null。typed参考全196608项逐bit及hash比较；数学FP32与FP64分别输出全量误差/ULP诊断，不新增容差。typed不匹配先保完整数学观察，再首停失败。只有结合真实native资格才可授typed与RTL逐bit一致；official_raw_numeric_pass、application_accuracy_pass仍null，full_block_pass=false。
+
+作者84项纯mock在普通、优化、搬迁普通、搬迁优化四模式全过，另有6项入口负控及同已校验buffer落盘突变后的84项正控。覆盖完整run闭包、前后窗口拒绝、首失败停、typed mismatch保诊断和保存/恢复双故障原异常优先。SOURCE准备未执行PC01；任何后续真实结果另据独立实际收据审定，本批不推断长RTL或数值已通过。
+
+本批SOURCE正式独审结论为 `ACCEPT_SINGLE_FRESH_PC01_CAPTURE_SOURCE_AND_10620_SECOND_INVOCATION_ONLY`；MANIFEST 507 B / c667beeb71a6e9ee7505aa04f8b3dc1d69aca05714ad5993d9d43be9efc66f88，SUMMARY 5741 B / a074cfdf30db32a4bbc2628ac215a02b7b4089c89ef0226417e3069991d3d454。独审搬迁普通84项与优化84项全部通过，精确私有outer与单一10620秒截止已核；SOURCE授权不等同真实运行结果。

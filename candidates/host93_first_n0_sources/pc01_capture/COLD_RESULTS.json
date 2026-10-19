@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "status": "PASS_PURE_MOCK_COLD_ONLY",
+  "source_files": {
+    "run_capture.py": {
+      "bytes": 23328,
+      "sha256": "919395b434c82f4130385152c6e1a04f73feee1a71af76e0dfde8461a20d4640"
+    },
+    "launch.py": {
+      "bytes": 2047,
+      "sha256": "d73e3a84efee9ebe64e5e03ab44f05d77649a95efbd313255347c327c6baf978"
+    },
+    "test_capture_cold.py": {
+      "bytes": 62433,
+      "sha256": "938a0a5009a9357b58223841d845db995b98078a0b937a5fc4357747bd188dd6"
+    },
+    "run_cold.py": {
+      "bytes": 722,
+      "sha256": "ee17d5a01d5c3c9d58174c9e7493c6fd22fc36aba96e8eeb5ad75355b89a2018"
+    }
+  },
+  "modes": [
+    {
+      "mode": "normal",
+      "tests": 84,
+      "status": "PASS",
+      "elapsed_seconds": 0.121,
+      "log": "cold-normal.log",
+      "log_identity": {
+        "bytes": 11969,
+        "sha256": "0d075439ce3a479f3f32e4a45ac09cd9a40d945515da60e72c815f4faccd1f29"
+      }
+    },
+    {
+      "mode": "optimized",
+      "tests": 84,
+      "status": "PASS",
+      "elapsed_seconds": 0.139,
+      "log": "cold-optimized.log",
+      "log_identity": {
+        "bytes": 11969,
+        "sha256": "f3682e83412f051039e2186be70b3aefeeb586a5a41be25a40bad9a1fd53d588"
+      }
+    },
+    {
+      "mode": "relocated-normal",
+      "tests": 84,
+      "status": "PASS",
+      "elapsed_seconds": 0.129,
+      "log": "cold-relocated-normal.log",
+      "log_identity": {
+        "bytes": 11969,
+        "sha256": "1e63e29dec263e7d87b6cc7e6dc4acf44a1588644c9c7596417139033c82e62f"
+      }
+    },
+    {
+      "mode": "relocated-optimized",
+      "tests": 84,
+      "status": "PASS",
+      "elapsed_seconds": 0.132,
+      "log": "cold-relocated-optimized.log",
+      "log_identity": {
+        "bytes": 11969,
+        "sha256": "883bbea2ab2f664e22071947c048012c547da06d3943a5e179ad21ac5044a446"
+      }
+    }
+  ],
+  "entry_checks": {
+    "schema": 1,
+    "scope": "PURE_MOCK_COLD_ENTRY",
+    "native_executed": false,
+    "real_long_arrays_loaded": false,
+    "cases": [
+      {
+        "case": "short",
+        "status": "REJECTED_BEFORE_COMPILE",
+        "expected": "COLD_TEST_SOURCE_IDENTITY"
+      },
+      {
+        "case": "long",
+        "status": "REJECTED_BEFORE_COMPILE",
+        "expected": "COLD_TEST_SOURCE_IDENTITY"
+      },
+      {
+        "case": "same_size_sha",
+        "status": "REJECTED_BEFORE_COMPILE",
+        "expected": "COLD_TEST_SOURCE_IDENTITY"
+      },
+      {
+        "case": "missing_isolated",
+        "status": "REJECTED_BEFORE_READ"
+      },
+      {
+        "case": "missing_no_site",
+        "status": "REJECTED_BEFORE_READ"
+      },
+      {
+        "case": "missing_dont_write_bytecode",
+        "status": "REJECTED_BEFORE_READ"
+      },
+      {
+        "case": "same_checked_buffer_after_disk_mutation",
+        "status": "PASS",
+        "tests_passed": 84
+      }
+    ]
+  },
+  "coverage": [
+    "single phase natural exit0 cleanup without timeout",
+    "two full 10410-second admission windows",
+    "preflight and resource admission ordering",
+    "actual argv cwd and cumulative RSS",
+    "first failure stops comparison",
+    "complete typed mismatch observation retained",
+    "120-second tail and original error priority",
+    "fixed supervisor projection 6600 to 10620 exact inverse",
+    "fixed receipt scope stage ordering actual argv and identities",
+    "canonical16 exact entries and hash checks using tiny fixtures",
+    "full run closure positive control with all external modules and resource signal actions mocked",
+    "unknown failure code stays null",
+    "isolated exact CLI and same-buffer fixed size/SHA entry",
+    "ordinary optimized and independently relocated execution"
+  ],
+  "limitations": [
+    "No compiler or PC01 native child was started.",
+    "No actual long numeric arrays were loaded or compared.",
+    "Full-run external helper modules are mocks; failure-preserving helper implementation remains covered by its previously qualified independent suite.",
+    "This cold test result does not establish RTL execution, numeric accuracy, or a full-block pass."
+  ],
+  "production_files_modified": false,
+  "repository_or_old_work_modified": false
+}

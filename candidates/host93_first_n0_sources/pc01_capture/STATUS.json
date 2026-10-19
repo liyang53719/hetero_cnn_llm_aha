@@ -1,0 +1,49 @@
+{
+  "application_accuracy_pass": null,
+  "author_cold": {
+    "entry_negative_cases": 6,
+    "normal": 84,
+    "optimized": 84,
+    "relocated_normal": 84,
+    "relocated_optimized": 84,
+    "samebuffer_mutation_positive_replay_tests": 84
+  },
+  "baseline_adopted": false,
+  "combined_authorized_ceiling_seconds": 10800,
+  "completion_guaranteed": false,
+  "distinct_t0_per_invocation": true,
+  "frozen_pending_review_text_superseded_by_status": true,
+  "frozen_source_manifest": {
+    "bytes": 2647,
+    "sha256": "01becd849887feb504efdbb717be56e77e346364fa00617f54ee187f8cb5e205"
+  },
+  "full_block_pass": false,
+  "independent_capture_execution_result_included": false,
+  "independent_cold": {
+    "relocated_normal": 84,
+    "relocated_optimized": 84
+  },
+  "main_cycle_cap": 8000000,
+  "official_raw_numeric_pass": null,
+  "prior_independent_relink_ceiling_seconds": 180,
+  "private_binding_published": false,
+  "production_files": 2,
+  "public_files": 11,
+  "reused_elf_prior_actual_qualified": true,
+  "review_verdict": "ACCEPT_SINGLE_FRESH_PC01_CAPTURE_SOURCE_AND_10620_SECOND_INVOCATION_ONLY",
+  "single_fresh_native_phase_count": 1,
+  "source_review": {
+    "MANIFEST.json": {
+      "bytes": 507,
+      "sha256": "c667beeb71a6e9ee7505aa04f8b3dc1d69aca05714ad5993d9d43be9efc66f88"
+    },
+    "SUMMARY.json": {
+      "bytes": 5741,
+      "sha256": "a074cfdf30db32a4bbc2628ac215a02b7b4089c89ef0226417e3069991d3d454"
+    }
+  },
+  "status": "SOURCE_ONLY_REVIEWED",
+  "this_invocation_total_seconds": 10620,
+  "this_source_preparation_new_native_executed": false,
+  "this_source_preparation_pc01_executed": false
+}

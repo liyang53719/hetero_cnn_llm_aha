@@ -1,0 +1,38 @@
+{
+  "authority_boundaries": {
+    "abi_or_eight_handles_or_runtime_qualified": false,
+    "actual_config_generated": false,
+    "large_sv_full_checker_executed": false,
+    "native_executed": false,
+    "production_chain_modified": false
+  },
+  "base_repository_commit": "18e757084e4812fe2496ba8321438a468e17b646",
+  "entry": "ENTRY.json",
+  "files": {
+    "COLD_TESTS.json": {
+      "bytes": 801,
+      "sha256": "62843ae7402ae4525bc3aa58b85bf362a45ff3630ba7b70afc86a386f131736b"
+    },
+    "ENTRY.json": {
+      "bytes": 2296,
+      "sha256": "4f442b428c43a05f083e61eed37a86081496d7085d1658b6b205b507f18c3726"
+    },
+    "README.md": {
+      "bytes": 5149,
+      "sha256": "a4e62d6fcce8671b4b7ae35d11ce287867f152da6887a8f6a1e7b771300ec9b7"
+    },
+    "generate_4vlt.py": {
+      "bytes": 21954,
+      "sha256": "b29a17b9cc39e5a93473df922ed4c87489e1e346fafb830c1fbb721e1931b81f"
+    },
+    "test_tiny.py": {
+      "bytes": 11279,
+      "sha256": "3dc998834e6388003fd4c07ac47548e9953fcbf3506a0ec29b5ac0e77f598adb"
+    }
+  },
+  "identity": "ci_host_4vlt_source_v1_20261019T0048",
+  "prior_review_inherited": false,
+  "schema": 1,
+  "status": "TEMP_SOURCE_NEW_IDENTITY_PENDING_INDEPENDENT_COLD_REVIEW",
+  "tests": "COLD_TESTS.json"
+}

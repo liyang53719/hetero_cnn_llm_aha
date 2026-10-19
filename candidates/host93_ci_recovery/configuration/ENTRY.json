@@ -1,0 +1,28 @@
+{
+  "append_required_arguments": [
+    "--repo",
+    "ABSOLUTE_REPO",
+    "--sv",
+    "ABSOLUTE_FRESH_SAME_SV",
+    "--idma-root",
+    "ABSOLUTE_IDMA_EXPORT_ROOT",
+    "--out",
+    "ABSOLUTE_NONEXISTENT_OUTPUT_ROOT"
+  ],
+  "argv_prefix": [
+    "python3",
+    "-I",
+    "-S",
+    "-B",
+    "-c",
+    "import sys, os, stat, hashlib\nif not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode):\n    raise SystemExit(\"Python -I -S -B required\")\np = sys.argv[1]\nif not p.startswith(\"/\") or any(x in (\"\", \".\", \"..\") for x in p[1:].split(\"/\")):\n    raise SystemExit(\"absolute clean source path required\")\nparts = p[1:].split(\"/\")\nparent = os.open(\"/\", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)\nfor part in parts[:-1]:\n    next_fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)\n    os.close(parent)\n    parent = next_fd\nfd = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW, dir_fd=parent)\nbefore = os.fstat(fd)\nidentity = lambda x: tuple(getattr(x, \"st_\" + k) for k in (\"dev\", \"ino\", \"mode\", \"size\", \"mtime_ns\", \"ctime_ns\"))\nif not stat.S_ISREG(before.st_mode) or before.st_size != 21954:\n    raise SystemExit(\"source type/size mismatch before compile\")\nwith os.fdopen(fd, \"rb\") as stream:\n    raw = stream.read(21954 + 1)\n    after = os.fstat(stream.fileno())\ncurrent = os.stat(parts[-1], dir_fd=parent, follow_symlinks=False)\nos.close(parent)\nif len(raw) != 21954 or hashlib.sha256(raw).hexdigest() != \"b29a17b9cc39e5a93473df922ed4c87489e1e346fafb830c1fbb721e1931b81f\" or identity(before) != identity(after) or identity(before) != identity(current):\n    raise SystemExit(\"source identity mismatch before compile\")\nns = {\"__name__\": \"verified_4vlt_entry\", \"__file__\": p, \"__verified_source_pin__\": {\"bytes\": 21954, \"sha256\": \"b29a17b9cc39e5a93473df922ed4c87489e1e346fafb830c1fbb721e1931b81f\"}}\nexec(compile(raw, p, \"exec\", dont_inherit=True), ns)\nraise SystemExit(ns[\"main\"](sys.argv[2:]))\n",
+    "ABSOLUTE_GENERATOR_SOURCE_PATH"
+  ],
+  "schema": 1,
+  "source": {
+    "bytes": 21954,
+    "name": "generate_4vlt.py",
+    "sha256": "b29a17b9cc39e5a93473df922ed4c87489e1e346fafb830c1fbb721e1931b81f"
+  },
+  "status": "TEMP_SOURCE_NOT_ACTUAL_GENERATION_AUTHORITY"
+}

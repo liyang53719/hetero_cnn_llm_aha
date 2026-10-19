@@ -1,0 +1,32 @@
+{
+  "actual_configuration_generation": false,
+  "large_sv_full_checker_executed": false,
+  "native_executed": false,
+  "normal": {
+    "exit_code": 0,
+    "tests": 17
+  },
+  "old_sv_read_only_declaration_shape_inspection": {
+    "bytes": 76366612,
+    "purpose": "Hash-verified buffer inspection solely to identify emitted declaration formatting.",
+    "sha256": "2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61"
+  },
+  "optimized": {
+    "exit_code": 0,
+    "tests": 17
+  },
+  "relocated_normal": {
+    "exit_code": 0,
+    "tests": 17
+  },
+  "relocated_optimized": {
+    "exit_code": 0,
+    "tests": 17
+  },
+  "same_buffer_entry": {
+    "help_exit": 0,
+    "same_size_mutation_rejected_before_compile": true,
+    "source_symlink_rejected": true
+  },
+  "status": "SOURCE_TINY_ONLY"
+}

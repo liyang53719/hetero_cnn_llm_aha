@@ -731,3 +731,10 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 本批仅持久化新 CI 的三项可重定位源码组件，状态为 TEMP_SOURCE；完整 run、工作流触发及实际 CI 尚未验收。iDMA 提取器只接受固定官方 ZIP 的 319 项精确子集；retained13 按 96 项已发布输入回放生产后像及 front 两补丁；监督薄适配器复用已发布 WNOWAIT 与观测函数。生产执行代码及冷入口保持原字节。仅去除本机 checkout/boot/审查 argv 信息，保留可再生代码、项目来源 pins 和安全冷测摘要。
 
 新 SOURCE 审查：319 6810afd6；retained13 e2bfa648；监督 b98d6462。冷测分别 17+17、7 个入口/信号用例、17+17；没有真实 ZIP 提取、retained13 组装、native 或完整 CI 执行。本批不带源归档、生成 RTL、二进制、原日志或系统库存。下一步仍需完整调用方固定阶段/argv/安全上传 schema 的独立 SOURCE 审。
+
+
+### 2026-10-19 CI 恢复：4VLT 精确配置 SOURCE 临时组件
+
+本片持久化固定 610 项 public_flat_rd 字段选择、唯一 endpoint 层级边界、21 条来源行号精确 WIDTH 规则和 8 条原 DMA hints，状态 TEMP_SOURCE。来源为已发布项目 pins，610字段的正负微型检查17项在普通、优化及重定位两模式均通过。有限 SOURCE 审05bb9ff2/fe2b71c9闭合；实际配置、Verilator grammar 接受、新 ABI、8 handles 与 Host runtime 尚待本次CI，未从原本机产物继承资格。
+
+所有6件代码/数据/文档按原字节复制；不包括SV、日志、机器库存或binary。isolate_assignments的无作用说明是来源级说明，当前官方grammar原文未恢复，不授实际优化效果。

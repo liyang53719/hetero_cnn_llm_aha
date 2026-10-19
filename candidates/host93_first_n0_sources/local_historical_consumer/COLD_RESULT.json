@@ -1,0 +1,51 @@
+{
+  "all_27_pipeline_function_and_class_asts_unchanged": true,
+  "original_source_files_reverified": 13,
+  "parent_context_commit": "bfce2d5907d85df6cc156e9fafa87cd830f5f47b",
+  "private_binding_excluded_from_public_payload": true,
+  "private_machine_path_scan_matches": 0,
+  "run_numeric_unchanged": true,
+  "schema": 1,
+  "scope": {
+    "actual_consumer_preflight": false,
+    "actual_fp32_payload_read_or_compared": false,
+    "baseline_adopted": false,
+    "download_or_install": false,
+    "frontdoor_stages_fabricated": false,
+    "host_or_tools_started": false,
+    "numeric_runtime_import": false,
+    "original_reference_receipt_modified": false,
+    "production_files_modified": false,
+    "reference_forward": false,
+    "runtime_native_hashing": false
+  },
+  "source_commit": "2b0f065831d670869753ba06ae7212919002f8e8",
+  "status": "SOURCE_AND_PURE_MOCK_ONLY",
+  "tests": {
+    "consumer.normal": {
+      "exit": 0,
+      "status": "PASS",
+      "tests": 17
+    },
+    "consumer.optimized": {
+      "exit": 0,
+      "status": "PASS",
+      "tests": 17
+    },
+    "inherited.normal": {
+      "exit": 0,
+      "status": "PASS",
+      "tests": 21
+    },
+    "inherited.optimized": {
+      "exit": 0,
+      "status": "PASS",
+      "tests": 21
+    }
+  },
+  "v1_all_manifest_members_unchanged": true,
+  "v1_frozen_manifest": {
+    "bytes": 2982,
+    "sha256": "25bc7aa468510bfd60808f59bf921775f2e95b8147d00af68bab8b80290e1276"
+  }
+}

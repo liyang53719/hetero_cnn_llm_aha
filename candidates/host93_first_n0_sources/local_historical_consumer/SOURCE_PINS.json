@@ -1,0 +1,63 @@
+{
+  "observed_ci_entry": {
+    "bytes": 5627,
+    "path": "candidates/host93_ci_recovery/first_n0/stage_entry.py",
+    "sha256": "a3fad553a94bb07b210b32b947cbeaf15dc2fa6b4c314317d99132d6458bedd5"
+  },
+  "required_sources": {
+    "candidates/host93_ci_recovery/first_n0/pipeline.py": {
+      "bytes": 31285,
+      "sha256": "fa1f359f3e7145cabdeed32898799ac5f72c8fa5fcccd29a0dd21c8970385e12"
+    },
+    "candidates/host93_first_n0_sources/historical_comparison/n0_compare.py": {
+      "bytes": 21000,
+      "sha256": "e2d1a644e369147772ccd3e6b074559a9b29e9230ace172a3f4bcb4594794800"
+    },
+    "candidates/host93_first_n0_sources/inputs/CONVERSION_SPEC.json": {
+      "bytes": 17884,
+      "sha256": "ab1fabb72d69f0f196dafd19fe7324a1413b000952e0ee04baa3cbaaff4a14ac"
+    },
+    "candidates/host93_first_n0_sources/reference/PINS.json": {
+      "bytes": 6364,
+      "sha256": "ecea4b9b9137c06ae3c3f37bf9710f40f12a4556d1ae2c9aa77b84a857548db8"
+    },
+    "candidates/host93_first_n0_sources/reference/n0_reference.py": {
+      "bytes": 13753,
+      "sha256": "d26bd286857a6bff8217472733658cbdcb1e6590fa095e0d0589bc1be81b8fc4"
+    },
+    "candidates/qwen2_fullblock_ci_execution/platform.py": {
+      "bytes": 6165,
+      "sha256": "d644fbf000f5237d6b1e46cd8564d80d0cb5c737f431e21e674cdf98fa128cd8"
+    },
+    "candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt": {
+      "bytes": 1217,
+      "sha256": "9bd334944d52ae82a86ca89ac44612920270c028f29c15fde93ba4d656535a83"
+    },
+    "candidates/qwen2_fullblock_reference_m128/FROZEN_CONTRACT.json": {
+      "bytes": 19978,
+      "sha256": "64835641b2c0c16d83beb75fbcd9d1c83ade8676fbd825f5e6ab646167af723f"
+    },
+    "candidates/qwen2_fullblock_reference_m128/capture.py": {
+      "bytes": 20084,
+      "sha256": "7bbee0a7edc6d36fb4996657ecea75c5181d292c9761bbb18ca4b12fc2486a86"
+    },
+    "candidates/qwen2_fullblock_reference_m128/pins.json": {
+      "bytes": 154690,
+      "sha256": "48e20d380cfc6ac0ab5b9e1690bb507e37cf99468b0df8e79a1d37da0f16110f"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py": {
+      "bytes": 63883,
+      "sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad"
+    },
+    "scripts/qwen2_layer0_model_gate.py": {
+      "bytes": 37776,
+      "sha256": "917d56f038c646606e9dc67d1d36752f70097adec9748db55b2a915af8147c85"
+    },
+    "spec/numerical_contract.md": {
+      "bytes": 2256,
+      "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+    }
+  },
+  "schema": 1,
+  "source_commit": "2b0f065831d670869753ba06ae7212919002f8e8"
+}

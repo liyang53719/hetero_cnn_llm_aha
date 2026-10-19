@@ -1,0 +1,67 @@
+{
+  "call_phase_return_required": [
+    "evidence_root"
+  ],
+  "call_phase_signature": [
+    "name",
+    "argv",
+    "work",
+    "env",
+    "limits"
+  ],
+  "caller_must_not_fabricate_frontdoor_stages": true,
+  "deadline": {
+    "consumer_offset_seconds": 105,
+    "full_n0_seconds": 3600,
+    "insufficient": "INCOMPLETE_N0_WINDOW",
+    "maximum_pre_n0_seconds": 2880,
+    "original_pipeline_offset_seconds": 15,
+    "required_remaining_seconds": 3720,
+    "tail_seconds": 120,
+    "total_seconds": 6600
+  },
+  "entry": {
+    "bytes": 10384,
+    "file": "consumer.py",
+    "sha256": "9c484ba21665fc0f0a92845d579e8566d3e538f776bcb9bc027e8904a5258129"
+  },
+  "no_path_defaults_or_environment_fallback": true,
+  "path_binding_source": "Separate private launch binding; excluded from public payload",
+  "prepare_keyword_only": [
+    "runtime_root",
+    "reference_file",
+    "reference_receipt"
+  ],
+  "prepare_positional": [
+    "repo",
+    "inputs",
+    "caller_pins",
+    "original_shared_stop"
+  ],
+  "projected_pipeline": {
+    "bytes": 31296,
+    "file": "pipeline_historical.py",
+    "sha256": "c3885d039b97861b17a29d74e6bf58448873d1ae476dbffa806a22a199b581cd"
+  },
+  "python": "Current canonical sys.executable; leaf python3.12; original historical profile exact size/SHA in unchanged helper",
+  "required_source_pins": 13,
+  "returns": [
+    "original_run_numeric",
+    "front_exactly_inputs_runtime_reference",
+    "separate_static_preflight_observation"
+  ],
+  "run_numeric_arguments": [
+    "repo",
+    "fresh_numeric_work",
+    "unchanged_caller_pins",
+    "original_supervisor_call_phase",
+    "require_numeric_window(original_shared_stop)",
+    "front",
+    "execution",
+    "observation",
+    "completed",
+    "stages"
+  ],
+  "schema": 1,
+  "scope": "PUBLIC_SOURCE_CONTRACT_ONLY"
+}

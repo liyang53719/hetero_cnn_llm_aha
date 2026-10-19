@@ -1,0 +1,56 @@
+{
+  "actual_array_comparison": false,
+  "actual_preflight_executed": false,
+  "baseline_adopted": false,
+  "cold": {
+    "author_consumer_normal": 17,
+    "author_consumer_optimized": 17,
+    "author_inherited_numeric_receipt_normal": 21,
+    "author_inherited_numeric_receipt_optimized": 21,
+    "independent_review_counts": {
+      "all_exit_zero": true,
+      "consumer_normal": 17,
+      "consumer_optimized": 17,
+      "inherited_numeric_receipt_normal": 21,
+      "inherited_numeric_receipt_optimized": 21,
+      "relocated": true
+    }
+  },
+  "frontdoor_stages_fabricated": false,
+  "native_or_host_executed": false,
+  "numerical_runtime_imported": false,
+  "original_ci_pipeline_modified": false,
+  "original_reference_receipt_modified": false,
+  "private_binding_published": false,
+  "production": {
+    "consumer": {
+      "bytes": 10384,
+      "sha256": "9c484ba21665fc0f0a92845d579e8566d3e538f776bcb9bc027e8904a5258129"
+    },
+    "pipeline": {
+      "bytes": 31296,
+      "sha256": "c3885d039b97861b17a29d74e6bf58448873d1ae476dbffa806a22a199b581cd"
+    }
+  },
+  "reference_regenerated": false,
+  "schema": 1,
+  "source_manifest": {
+    "bytes": 3289,
+    "sha256": "1f82e98fcc762433fecf2415f779ec4b0cf7f6ca7d4109b3079a6fcd0c41086b"
+  },
+  "source_review": {
+    "directory": "review_local_historical_consumer_source_20261019T1645",
+    "manifest": {
+      "bytes": 1426,
+      "sha256": "8029333009722a4307cd7c01fecbaef68fcaecddbdf92ff3283bc84a4e3c2877"
+    },
+    "status": "SOURCE_GO_LOCAL_HISTORICAL_CONSUMER_ONLY",
+    "summary": {
+      "bytes": 2392,
+      "sha256": "215b64c34796a8875e126226b674ca9a8495fcf8d2cdf42dfb2d87d9c5da1a9a"
+    }
+  },
+  "source_scope": "EXPLICIT_LOCAL_HISTORICAL_REFERENCE_AND_RUNTIME_CONSUMER_ONLY",
+  "status": "TEMP_SOURCE",
+  "workflow_changed": false
+}

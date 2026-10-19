@@ -1126,3 +1126,15 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 本次通过仅授固定五工具的有限版本/生成事实；未执行生成 C/C++，backend、Host 与 N0 数值仍未开始。原八件证据清单 MANIFEST 1019 B / SHA256 b92989398267369d36f66cdc37c76751ed6a82591c13a410608948dfb7a11de3；原 RESULT 75078 B / SHA256 c4f9e7242b3762b72055c4a87f388286c2b84df0aea3a462b4f637e1004d4cd9。
 - 本批只公开安全 summary/README 与本尾，不上传私有路径、binding/profile、库存、日志、生成代码或依赖数据；无 workflow 变更。本计划以父提交的 214641 B 精确前缀加本尾一次完整替换，禁止将完整文档追加。
 - 正式 actual 审查 review_local_tool_qualification_actual_20261019T1624：MANIFEST 595 B / SHA256 71668ec6424b76fcd7483a688c4879d620721eefd83947b3286e9f7f63b583c9；SUMMARY 3567 B / SHA256 8cc44a685098d90074096609df24cee51974d690de43a27db3ea216b873837b2。独立两树 273 entries/217 普通文件/10,305,771 B 与固定探针输出、只读 binder 后验通过；没有再执行工具。结论仅 ACCEPT_ACTUAL_LOCAL_FIXED_FIVE_TOOL_VERSION_AND_GENERATION_ONLY，不扩为通用 ABI、头编译、backend 或 N0 资格。
+
+
+## 2026-10-19 16:42 UTC：显式 historical runtime/reference consumer 的 TEMP_SOURCE
+
+- 本批只保存独立 local_historical_consumer 源片及冷测合同。原CI pipeline、ci31214 frontdoor、reference helper/PINS与历史私有receipt不改；不重跑参考、工具、backend或Host。正式独立SOURCE审结论为SOURCE_GO_LOCAL_HISTORICAL_CONSUMER_ONLY，不把作者或独审mock当实际资格。
+- 派生pipeline只将COMPARISON常量选到已发表historical_comparison；31296 B / SHA256 c3885d039b97861b17a29d74e6bf58448873d1ae476dbffa806a22a199b581cd，逆替换恢复原31285 B；27个原函数/类AST一致，run_numeric逐字不变。consumer 10384 B / SHA256 9c484ba21665fc0f0a92845d579e8566d3e538f776bcb9bc027e8904a5258129。
+- 总入口须由原historical Python运行；私有runtime/reference/receipt路径三个显式参数受固定leaf、同父、canonical/无symlink和原内容hash门约束，无路径搜索或fallback。真实调用时原helper重hash解释器与五native/四源码；原4466 B私有receipt与完整786432 B FP32参考再验，既有双SHA资格不改写。当前AVX512/build/threads仍由原comparator实际import/postflight验证，不由旧receipt替代。
+- 返回front只含inputs/runtime/reference三键，preflight observation独立标记已有reference消费，不填造原五个frontdoor阶段或其completed旗标。原B退休/ACK0、196608全值、shape/finite、0.03125/0.005容差及bit_exact/hash_exact分列保留。
+- 全链仍唯一6600秒，120秒尾储备；N0开始须余完整3600秒，前置最多2880秒。prepare前后及调用前余量不足3720则INCOMPLETE；返回原stop-105交原函数再扣15，硬界恰为原stop-120，不重置deadline，原30秒比较预算不变。
+- 作者consumer17+17与原numeric/receipt21+21均纯mock；13原件重核，private路径扫描零命中。来源public MANIFEST3289 B / SHA256 1f82e98fcc762433fecf2415f779ec4b0cf7f6ca7d4109b3079a6fcd0c41086b。没有真实runtime preflight、数值import、FP32读取/比较、reference forward或native启动。
+- 仅发布12件安全源码/测试/说明及本纯尾，不含私有launch binding、原receipt本体、runtime/wheels、机器库存或日志；无workflow变化。本计划以父bfce2d5907d85df6cc156e9fafa87cd830f5f47b的216652 B精确前缀加此尾作完整替换一次，禁止追加整篇全文。
+- 独审SOURCE身份：review_local_historical_consumer_source_20261019T1645，MANIFEST 1426 B / SHA256 8029333009722a4307cd7c01fecbaef68fcaecddbdf92ff3283bc84a4e3c2877；SUMMARY 2392 B / SHA256 215b64c34796a8875e126226b674ca9a8495fcf8d2cdf42dfb2d87d9c5da1a9a。独立搬迁consumer17+17及原Numeric/ReceiptLabels21+21通过，23成员和13原依赖同pin；仅SOURCE通过，整链actual准入仍单独审。

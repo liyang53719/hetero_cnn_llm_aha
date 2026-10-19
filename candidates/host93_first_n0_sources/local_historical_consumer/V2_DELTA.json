@@ -1,0 +1,18 @@
+{
+  "changes": [
+    "Explicit keyword-only runtime_root/reference_file/reference_receipt; strict fixed leaf and same-reference-parent gates.",
+    "Current canonical sys.executable must be CPython3.12 named python3.12; unchanged original historical size/SHA gate remains in runtime_before.",
+    "All actual machine paths are in a separate private launch binding, not this public source payload."
+  ],
+  "original_source_or_receipt_modified": false,
+  "pipeline_or_comparison_changed_from_v1": false,
+  "schema": 1,
+  "v1_consumer": {
+    "bytes": 10414,
+    "sha256": "361aa31f330d4943a867714b9aaf93ca90fd03f25a117529a021c386aa641288"
+  },
+  "v2_consumer": {
+    "bytes": 10384,
+    "sha256": "9c484ba21665fc0f0a92845d579e8566d3e538f776bcb9bc027e8904a5258129"
+  }
+}

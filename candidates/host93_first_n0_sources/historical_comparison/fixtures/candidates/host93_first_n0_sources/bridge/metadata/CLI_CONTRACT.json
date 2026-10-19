@@ -1,0 +1,101 @@
+{
+  "argv": [
+    "absolute INPUT_ROOT",
+    "absolute previously nonexistent OUTPUT_ROOT"
+  ],
+  "metadata": [
+    "host_commands.bin",
+    "host_descriptors.bin"
+  ],
+  "providers": [
+    "wq.bin",
+    "wk.bin",
+    "wv.bin",
+    "wo.bin",
+    "wg.bin",
+    "wu.bin",
+    "wd.bin",
+    "gamma0.bin",
+    "gamma1.bin",
+    "bq.bin",
+    "bk.bin",
+    "bv.bin",
+    "rope.bin",
+    "x.bin"
+  ],
+  "outputs": {
+    "counts.json": "fixed finite status/numeric counts; no hashes or samples",
+    "actual_n0.f32le": "only after ACK0; exactly786432 bytes"
+  },
+  "exit": {
+    "0": "ACK0_ACTUAL_CAPTURED",
+    "1": "CONTRACT_ERROR",
+    "2": [
+      "INCOMPLETE_CYCLE_BUDGET",
+      "INCOMPLETE_RESOURCE",
+      "INCOMPLETE_OUTPUT_IO"
+    ],
+    "64": "CLI_ERROR"
+  },
+  "count_keys": [
+    "scope",
+    "status",
+    "numeric_comparison",
+    "phase",
+    "code",
+    "full_block_pass",
+    "root256_handles",
+    "cycle_budget",
+    "reduction_only_source_floor",
+    "unproven_overhead_allowance",
+    "cycles",
+    "launches",
+    "jobs",
+    "owner_dones",
+    "completion_acks",
+    "core_read_requests",
+    "core_write_requests",
+    "core_responses",
+    "committed_bytes",
+    "successful_b",
+    "writeback_bytes",
+    "post_pc",
+    "post_issued_jobs",
+    "further_eval_calls",
+    "input_ar",
+    "input_read_bytes",
+    "core_state_cycles",
+    "hub_accepted",
+    "hub_returned",
+    "idma_transfers",
+    "idma_read_bursts",
+    "idma_read_beats",
+    "idma_cache_hits",
+    "axi",
+    "actual_values",
+    "actual_bytes"
+  ],
+  "arrays": {
+    "input_ar": 16,
+    "input_read_bytes": 16,
+    "core_state_cycles": 128,
+    "hub_accepted": 2,
+    "hub_returned": 2
+  },
+  "normal_and_optimized_source_checks": 21,
+  "phases": [
+    "INPUT_LOAD",
+    "READY",
+    "MODEL_ADMISSION",
+    "RTL_N0",
+    "OUTPUT"
+  ],
+  "codes_file": "DIAGNOSTIC_MAP.json",
+  "terminal_fields": [
+    "scope",
+    "status",
+    "phase",
+    "code",
+    "numeric_comparison"
+  ]
+}

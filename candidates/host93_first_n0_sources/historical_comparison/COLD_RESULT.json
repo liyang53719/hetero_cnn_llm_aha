@@ -1,0 +1,119 @@
+{
+  "loader_initial_test_failure": {
+    "cause": "Test spy selected later stdlib __future__ compile, not target compile.",
+    "fix": "Select unique fixed target compile filename and assert identical verified bytes object.",
+    "optimized_only": true,
+    "original_failure_log_retained": "loader.optimized.initial.err",
+    "worker_changed": false
+  },
+  "observed_checkout_head_after": "b2cd89ec66ccc212c0c75c4e12b92dfc875ca7b6",
+  "original_source_files_reverified": 8,
+  "portable": {
+    "cwd_tmp": true,
+    "external_checkout_needed_for_cold_tests": false,
+    "separate_tmp_root": true,
+    "source_environment_poisoned_then_bound_to_fixed_local_fixtures": true
+  },
+  "schema": 1,
+  "scope": {
+    "actual_arrays_compared": false,
+    "baseline_adopted": false,
+    "downloaded_or_installed": false,
+    "full_block_pass": false,
+    "host_executed": false,
+    "numpy_imported": false,
+    "production_modified_by_this_candidate": false,
+    "reference_executed": false,
+    "torch_imported": false
+  },
+  "source_commit": "a8de294523a9cc23d370d325cadd5d6bb9c2c713",
+  "status": "PASS_SOURCE_AND_PURE_MOCK_ONLY",
+  "test_interpreter": {
+    "implementation": "cpython",
+    "version": "3.12.14"
+  },
+  "tests": {
+    "cold.normal": {
+      "actual_arrays_compared": false,
+      "baseline_adopted": false,
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "fixed_inputs_verified": 11,
+      "native_model_executed": false,
+      "numerical_runtime_imported": false,
+      "optimized": false,
+      "prohibited_runtime_attempts": 0,
+      "skipped": 0,
+      "status": "PASS",
+      "tests_run": 49
+    },
+    "cold.optimized": {
+      "actual_arrays_compared": false,
+      "baseline_adopted": false,
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "fixed_inputs_verified": 11,
+      "native_model_executed": false,
+      "numerical_runtime_imported": false,
+      "optimized": true,
+      "prohibited_runtime_attempts": 0,
+      "skipped": 0,
+      "status": "PASS",
+      "tests_run": 49
+    },
+    "launch.normal": {
+      "executed": false,
+      "exit_code": 0,
+      "stderr_bytes": 0,
+      "stdout": "N0_COMPARISON_NOT_EXECUTED"
+    },
+    "launch.optimized": {
+      "executed": false,
+      "exit_code": 0,
+      "stderr_bytes": 0,
+      "stdout": "N0_COMPARISON_NOT_EXECUTED"
+    },
+    "loader.normal": {
+      "exit_code": 0,
+      "status": "PASS",
+      "tests_run": 6
+    },
+    "loader.optimized": {
+      "exit_code": 0,
+      "status": "PASS",
+      "tests_run": 6
+    },
+    "relocated.normal": {
+      "actual_arrays_compared": false,
+      "baseline_adopted": false,
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "fixed_inputs_verified": 11,
+      "native_model_executed": false,
+      "numerical_runtime_imported": false,
+      "optimized": false,
+      "prohibited_runtime_attempts": 0,
+      "skipped": 0,
+      "status": "PASS",
+      "tests_run": 49
+    },
+    "relocated.optimized": {
+      "actual_arrays_compared": false,
+      "baseline_adopted": false,
+      "errors": 0,
+      "exit_code": 0,
+      "failures": 0,
+      "fixed_inputs_verified": 11,
+      "native_model_executed": false,
+      "numerical_runtime_imported": false,
+      "optimized": true,
+      "prohibited_runtime_attempts": 0,
+      "skipped": 0,
+      "status": "PASS",
+      "tests_run": 49
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "actual_bindings_supplied": false,
+  "original_document_identity": {
+    "bytes": 3826,
+    "sha256": "0686edde0006e3aba01f507826ccc360a7f79f05d7678e92e524d5c58e028ddf"
+  },
+  "requirements": [
+    {
+      "required": "Fixed revision and exact size/SHA buffers; a new local entry with explicit pins and no stale acceptance receipt.",
+      "subject": "Repository/source"
+    },
+    {
+      "required": "Fresh normalized roots outside checkout, no symlink descriptor walk, private modes, distinct source inodes and explicit package/stage/tool/build/evidence/home/temp roots. Actual root values are not public and remain unbound.",
+      "subject": "Private roots"
+    },
+    {
+      "required": "Real invocation and resolved identities; exact 67 original data hashes; four-line autom4te.cfg relocation with new identity and reverse proof. Recheck immutable tools/data at boundaries.",
+      "subject": "Staged five tools"
+    },
+    {
+      "required": "Explicit fixed private tool and data roots for autom4te, m4, flex, bison and their data/config search variables; clean fresh home/temp, disabled external config and empty object cache. No path alias impersonation.",
+      "subject": "Environment"
+    },
+    {
+      "required": "Bind actual local shell, compiler, make, ar, Perl and Python; inspect fixed package ELF/script requirements and actual loader/library/Perl resources. Five packages do not prove the transitive runtime closure. No silent alternate package or compatibility claim.",
+      "subject": "System closure"
+    },
+    {
+      "required": "Only original proxy/CA allowlist during explicitly named acquisition phases, values private; fixed official HTTPS contracts and exact identities, no credentials/fallback/retry expansion.",
+      "subject": "Transport"
+    },
+    {
+      "required": "Original 8 GiB Host admission and disk/CPU/AS/time/log/tree limits; bootstrap consumes the original shared budget. Reobserve actual boundaries. This plan provides no execution or relocation permission.",
+      "subject": "Resources"
+    },
+    {
+      "required": "Fresh same-job backend/runtime/wrapper identities with truthful invocation keys and immutable source/input pins. Historical N0 reference exact success grants no toolchain, resource, Host or DUT qualification.",
+      "subject": "Downstream Host"
+    }
+  ],
+  "schema": "LOCAL_BINDING_REQUIREMENTS_SAFE_PROJECTION_V1",
+  "state": "UNBOUND_SOURCE_PLAN_ONLY"
+}

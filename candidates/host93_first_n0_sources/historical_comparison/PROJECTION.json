@@ -1,0 +1,73 @@
+{
+  "changed_top_level_definitions": [
+    "run"
+  ],
+  "comparison_functions_unchanged": [
+    "sha",
+    "digest_array",
+    "compare",
+    "load_policy",
+    "stage_verdict"
+  ],
+  "inverse_byte_equality": true,
+  "production_binding_files_unchanged": {
+    "launch.py": {
+      "candidate": {
+        "bytes": 1984,
+        "sha256": "0c0f313d288419fadff3254f4dfb04d7a45a6042e39ea271ffc7323aa7effbee"
+      },
+      "inverse_byte_equality": true,
+      "original": {
+        "bytes": 1984,
+        "sha256": "6e8dcfaa20d2c6811b92b91d596e8ebb9e27123fcf641f19b9b02e12cd6286b4"
+      }
+    },
+    "test_cold.py": {
+      "candidate": {
+        "bytes": 20332,
+        "sha256": "ce2bf7b04305ab2c4a90ae5a00cdce7cea86548bbfc858494a32a2eee6b63460"
+      },
+      "inverse_byte_equality": true,
+      "original": {
+        "bytes": 20332,
+        "sha256": "c99124649ff999e4dc7e756c0c8670c8aacfce66b0ae493f09607218d1dd40de"
+      }
+    }
+  },
+  "schema": 1,
+  "source_commit": "a8de294523a9cc23d370d325cadd5d6bb9c2c713",
+  "unchanged_top_level_definitions": [
+    "Rejected",
+    "need",
+    "digest",
+    "checked_buffer",
+    "safe_path",
+    "read_fixed",
+    "read_pin",
+    "isolated",
+    "load_reference_helper",
+    "original_namespace",
+    "BufferContract",
+    "BufferRoot",
+    "original_policy",
+    "unique_object",
+    "nonnegative_int",
+    "capture_gate",
+    "checked_arrays",
+    "evaluate",
+    "runtime_import",
+    "new_report",
+    "report_bytes",
+    "write_receipt",
+    "FixedArgumentParser",
+    "main"
+  ],
+  "worker_candidate": {
+    "bytes": 21000,
+    "sha256": "e2d1a644e369147772ccd3e6b074559a9b29e9230ace172a3f4bcb4594794800"
+  },
+  "worker_original": {
+    "bytes": 20997,
+    "sha256": "66e0c2e92790f46efbf1833a0aa2d8a30bc0e8b80b4f03b4e62da74ca402a8c3"
+  }
+}

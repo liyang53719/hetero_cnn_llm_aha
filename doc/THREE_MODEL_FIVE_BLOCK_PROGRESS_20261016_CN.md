@@ -1067,3 +1067,12 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 13:36:49Z MemAvailable7998820 KiB低于原8388608 KiB门，差389788 KiB；cgroup限额不可见，不授硬内存保证。原8GiB内存/3GiB磁盘门不放宽；runtime与wheel的tmpfs迁移/删除仅proposal，等待用户明确答复，未动现物。
 - 历史39232100796 make451.755421+gen123.743956+compile56.433910=631.933287秒；37阶段858.346829/协调870.427722仅参照，非当前ETA。累计RUSAGE_CHILDREN RSS不作阶段实测峰值。成本只读审PENDING。
 - 本批仅固定来源/必要变更/资源缺口说明与计划完整replacement；没有新增测试、下载/安装/搬迁/Host执行，没有workflow变更，不触发新的Host/native作业。普通guard可运行。
+
+## 2026-10-19 13:49 UTC：固定工具计划与 historical 比较器纯 SOURCE 小批
+- 本批仅保存两个独立来源片：固定 Verilator/五包续接计划，以及显式 historical profile 比较器候选；不改 workflow，不启动新的 Host/native 作业，不搬迁或删除 runtime/wheels。
+- 工具计划沿原 revision 4e194cc3ec8e27b18e17f80d7f99c15f984bbdae、473 原文件、唯一 seqnum +13 B 补丁、五固定包与 67 原始 data 文件。真实本地 roots/四行 cfg/调用路径/ELF-Perl-编译器闭包和新 receipts 仍 UNBOUND；新 bootstrap 尚未由本批实现或授予实际资格。
+- 原 8 GiB 资源门、Host AS 6 GiB、单核与共享 6600 秒不变。工具的 205 项是作者保存的既有 SOURCE/mock 记录，独审核来源与输出但未重跑；本地 runpy harness、机器库存、原日志和临时夹具不发布，也不称可搬迁 same-buffer 新入口。
+- 工具计划有限审 ACCEPT_LOCAL_FIXED_VERILATOR_SOURCE_PLAN_AND_RECORDED_COLD_ONLY：MANIFEST 168 B / 4069ef8f2229492de1763becf3f3e92f96188437cf32dec5cb4aac3caec18e46；SUMMARY 2363 B / 75a9d15cf4177849cdaf81ebd84831f388a55df8b30c9feda0641467531034a0。
+- 比较 worker 唯一将 ci31214 选择改为既有 historical；launch/test 只联动原件 size/SHA。原五比较函数、FP32→FP64 NumPy 归约、196608 值/B 退休/ACK0/完整 capture 门、max_abs≤0.03125 与 mean_abs≤0.005 均不改；numeric_pass 与 bit_exact/hash_exact 分列。comparator 直接校验 FP32 参考，上游原 reference 的双 SHA 资格不被冒称为新双文件比较。
+- 比较器有限审 SOURCE_GO_ISOLATED_HISTORICAL_N0_COMPARATOR_BINDING_ONLY：MANIFEST 3086 B / 7ce32313dffbfef61cef408f528a88af9888e8c049fff0b05d163c8f6247a8e2；SUMMARY 2697 B / fff46429a3bfcc51cb58e74eb4201472ad1469337ac95d244fe858132417bc6b。独立搬迁普通/-O 各 49 项、loader 各 6 项及默认 launch 两模式均通过；只有 stdlib/mock，没有实际数组比较。
+- 两片仅 TEMP_SOURCE；现有原 CI comparison/reference/PINS 与主作业未替换，historical 本地参考资格仍不能替代工具、资源或 DUT 数值资格。本批计划按已核父文档完整前缀加此纯尾整体替换，绝不追加完整旧文档。

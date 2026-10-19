@@ -1,0 +1,74 @@
+{
+  "independent_rerun_in_source_review": false,
+  "initial_test_harness_rejection": "An initial temporary-fixture placement was rejected; the author reran with fixtures redirected into the isolated candidate. The original source bytes stayed fixed. Local harness and raw logs are intentionally excluded from this publication.",
+  "native_execution": false,
+  "network": false,
+  "new_local_adapter_qualification": false,
+  "package_body_read": false,
+  "portable_same_buffer_public_test_entry_provided": false,
+  "schema": "RECORDED_EXISTING_SOURCE_MOCK_SUMMARY_V1",
+  "scope": "Recorded existing source/mock observations with source-pin and saved-output review only. No new local adapter, native ABI, backend, Host or numerical qualification.",
+  "source_review": {
+    "directory": "review_local_verilator_source_plan_20261019T1345",
+    "manifest": {
+      "bytes": 168,
+      "sha256": "4069ef8f2229492de1763becf3f3e92f96188437cf32dec5cb4aac3caec18e46"
+    },
+    "summary": {
+      "bytes": 2363,
+      "sha256": "75a9d15cf4177849cdaf81ebd84831f388a55df8b30c9feda0641467531034a0"
+    },
+    "verdict": "ACCEPT_LOCAL_FIXED_VERILATOR_SOURCE_PLAN_AND_RECORDED_COLD_ONLY"
+  },
+  "status": "AUTHOR_RECORDED_205_SOURCE_MOCK_CHECKS_ONLY",
+  "suites": [
+    {
+      "exit_code": 0,
+      "source": "candidates/host93_ci_recovery/toolchain/test_toolchain_cold.py",
+      "source_bytes": 30537,
+      "source_sha256": "e59f98de77152a80bbf816c344888a73715aca0297f216e6fdd85259d3c6bd67",
+      "suite": "toolchain"
+    },
+    {
+      "exit_code": 0,
+      "source": "candidates/host93_ci_recovery/toolchain/test_flex_header_cold.py",
+      "source_bytes": 17106,
+      "source_sha256": "2366f6d8ef005ffc0c310375d236c3f607b82cbc0db76375dadbe2ef4dc5085c",
+      "suite": "flex_header"
+    },
+    {
+      "exit_code": 0,
+      "source": "candidates/host93_ci_recovery/toolchain/test_transport_cold.py",
+      "source_bytes": 2966,
+      "source_sha256": "b2d8386eb6aa8a932e2a73898360a3c7880dc4f03bd54767d6b9ea6b4c44cd11",
+      "suite": "transport"
+    },
+    {
+      "exit_code": 0,
+      "source": "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/test_dependency_cold.py",
+      "source_bytes": 15705,
+      "source_sha256": "226da5e52152a5e9d5df52d80304eddc61af8c99fd614607faed86e0d8dbff51",
+      "suite": "five_package_acquisition"
+    },
+    {
+      "exit_code": 0,
+      "source": "development_snapshots/canonical_host93_dependency_source_20261018/worker/test_staging_cold.py",
+      "source_bytes": 19360,
+      "source_sha256": "19da45c0acb31527c2d4971f480abaa5e8e7900bdbc186972a9379b51bff12a4",
+      "suite": "five_package_staging"
+    }
+  ],
+  "test_counts": {
+    "five_package_acquisition": 21,
+    "five_package_staging": 33,
+    "flex_header": 26,
+    "toolchain": 118,
+    "transport": 7
+  },
+  "test_record_origin": {
+    "bytes": 2618,
+    "sha256": "42c0caf41f40023ffc9f2d79ff6c005845f0085c5a9d00707ba51e8d722ba576"
+  },
+  "tests_run_during_publication_projection": false,
+  "total_checks_or_tests": 205
+}

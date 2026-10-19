@@ -1,0 +1,138 @@
+{
+  "files": {
+    "candidates/host93_ci_recovery/SUPPORT_PINS.json": {
+      "bytes": 806,
+      "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"
+    },
+    "candidates/host93_ci_recovery/ci_support_v3.py": {
+      "bytes": 16348,
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+    },
+    "candidates/host93_ci_recovery/execution/host_execution.py": {
+      "bytes": 52525,
+      "sha256": "b3470853d6b2a74b0ce75028cde553344cf3a76a12eddcb3fb8f2e169b229a1a"
+    },
+    "candidates/host93_ci_recovery/run.py": {
+      "bytes": 77532,
+      "sha256": "bb9775cc22b305e392c67934aa7b081319f7dd7350da50098fe10b647c68982d"
+    },
+    "candidates/host93_ci_recovery/toolchain/SOURCE_PINS.json": {
+      "bytes": 3575,
+      "sha256": "42e1b206dcf89a886c74eec321823bb23e72422dcc856041bb83a339697d87fa"
+    },
+    "candidates/host93_ci_recovery/toolchain/ci_toolchain.py": {
+      "bytes": 46208,
+      "sha256": "5b0923a5f72dd9ecb34380aac176c86d5bf99010938cb6e6cb97a11299fe9a0a"
+    },
+    "candidates/host93_ci_recovery/toolchain/flex_header.py": {
+      "bytes": 13781,
+      "sha256": "66bad0a2aa866d8df0d6380d15620e095afcc2819d014e01c202e18f017dfce6"
+    },
+    "candidates/host93_ci_recovery/toolchain/test_flex_header_cold.py": {
+      "bytes": 17106,
+      "sha256": "2366f6d8ef005ffc0c310375d236c3f607b82cbc0db76375dadbe2ef4dc5085c"
+    },
+    "candidates/host93_ci_recovery/toolchain/test_toolchain_cold.py": {
+      "bytes": 30537,
+      "sha256": "e59f98de77152a80bbf816c344888a73715aca0297f216e6fdd85259d3c6bd67"
+    },
+    "candidates/host93_ci_recovery/toolchain/test_transport_cold.py": {
+      "bytes": 2966,
+      "sha256": "b2d8386eb6aa8a932e2a73898360a3c7880dc4f03bd54767d6b9ea6b4c44cd11"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/probe/MODE_DEFINITIONS.json": {
+      "bytes": 3946,
+      "sha256": "41f1a55af603d55d78b3a2804beb9a282b189ac27ecb927cb82fe89e29b22ac9"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/probe/run_probe.py": {
+      "bytes": 14750,
+      "sha256": "3c160adc2b51b27ffe151c524929ebbbcb7b6ec49f923afdfd8afd6d88613a26"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/staging/run_stage.py": {
+      "bytes": 8657,
+      "sha256": "e0c6e0b4e31834880fbabca809fea4e4b7de48c612bf75cb6705b1094762f07e"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/worker/PINS.json": {
+      "bytes": 205675,
+      "sha256": "abc9e5f55b045b6402cc5c13e4d4c4263eb6a7403e84b01a165a12b5d5d20cd0"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/worker/stage_dependencies.py": {
+      "bytes": 20634,
+      "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/worker/test_staging_cold.py": {
+      "bytes": 19360,
+      "sha256": "19da45c0acb31527c2d4971f480abaa5e8e7900bdbc186972a9379b51bff12a4"
+    },
+    "development_snapshots/canonical_host93_derived_micro_source_20261018/fixtures/main.cpp": {
+      "bytes": 4269,
+      "sha256": "774064865f2e1d224363b6c63ae75dac3abe5f0afe6c05105920724fe4e161c0"
+    },
+    "development_snapshots/canonical_host93_derived_micro_source_20261018/fixtures/tiny.sv": {
+      "bytes": 938,
+      "sha256": "339baf2e67c47d6f00597f6daee72f2e7b5c47ae8803dac54ff30911bcba7a85"
+    },
+    "development_snapshots/canonical_host93_derived_micro_source_20261018/init_contract.py": {
+      "bytes": 5127,
+      "sha256": "d070d9a0841ea034dd684fad3ca9fd4fa32a1ed1afa1417bf4f4a88625996365"
+    },
+    "development_snapshots/canonical_host93_derived_micro_source_20261018/run_micro_gate.py": {
+      "bytes": 27056,
+      "sha256": "2e2fd07edd71aef9d5abaa446f9d77c89a0c32060006dd699b4f0bc612e0c062"
+    },
+    "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py": {
+      "bytes": 28551,
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    },
+    "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/FIXED_CORE_MEMBERS.json": {
+      "bytes": 75898,
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/SOURCE_PLAN.json": {
+      "bytes": 2983,
+      "sha256": "c57d32c37413d3aaf252c674cfd5c51fda338b68a0823a264f220aaf3cdc336f"
+    },
+    "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/acquire_base.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/acquire_official_source.py": {
+      "bytes": 24791,
+      "sha256": "61c756233830e1f6bf0862052c4c72035e60409179c07fa57be050064dc3fedc"
+    },
+    "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018/DERIVED_V3ProtectLib.cpp": {
+      "bytes": 22430,
+      "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+    },
+    "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018/ORIGINAL_V3ProtectLib.cpp": {
+      "bytes": 22417,
+      "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+    },
+    "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018/PATCH.json": {
+      "bytes": 1619,
+      "sha256": "784e777dbf4cfdef53788ff1c3d69a31c5e416a7d10c2d5a387b795b42cb1fe2"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/GATE_PLAN.json": {
+      "bytes": 1985,
+      "sha256": "579b2f3020afd5b8a7325150edf6f5ef52698b63c49667c02bdd11ef2c612e68"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/DEPENDENCY_PLAN.json": {
+      "bytes": 2594,
+      "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/acquire_dependencies.py": {
+      "bytes": 9150,
+      "sha256": "f43ee638df95dfa23955aaaa53581655efbc8eba330bf98ef4d02448fab00009"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/published_acquire.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/test_dependency_cold.py": {
+      "bytes": 15705,
+      "sha256": "226da5e52152a5e9d5df52d80304eddc61af8c99fd614607faed86e0d8dbff51"
+    }
+  },
+  "repository_revision": "a8de294523a9cc23d370d325cadd5d6bb9c2c713",
+  "schema": "LOCAL_TOOLCHAIN_REUSE_SOURCE_PINS_V1"
+}

@@ -1,0 +1,192 @@
+{
+  "actual_execution_authorized": false,
+  "dependency_stage": {
+    "expected_versions": {
+      "autoconf": "2.72",
+      "autom4te": "2.72",
+      "bison": "3.8.2",
+      "flex": "2.6.4",
+      "m4": "1.4.19"
+    },
+    "five_executable_names": [
+      "autoconf",
+      "autom4te",
+      "m4",
+      "flex",
+      "bison"
+    ],
+    "libfl_dev_scope": "Only usr/include/FlexLexer.h is selected. No libfl shared/static library or new system library is installed.",
+    "relocated_config_additional_members": 1,
+    "report_additional_members": 1,
+    "selected_original_bytes": 3598623,
+    "selected_regular_members": 67,
+    "unbound_original_actual_review": null,
+    "unbound_original_config_pin": {
+      "bytes": null,
+      "sha256": null
+    }
+  },
+  "exclusions": [
+    "No download, package-body read, tool execution, configure, make, install, Host, push or production source modification in this task.",
+    "N0 reference exact PASS is a separate historical reference result; it does not validate or supply a Verilator backend, runtime include tree, full 473 source, Host execution or numerical agreement.",
+    "No native ABI/Perl/module/library closure proof is supplied by these mock tests."
+  ],
+  "finite_future_local_delta": [
+    {
+      "change": "Reuse exact acquire_dependencies.py namespace/preflight/plan and validate_package(), with existing supervisor. Do not invoke old staging/probe/build actual CLIs: original roots, actual reviews and relocated config pins remain unbound. Create new local receipts/acceptance bindings; never insert historical acceptance or a permissive boolean.",
+      "id": "D1",
+      "subject": "Fixed five-package acquisition/staging before local toolchain"
+    },
+    {
+      "change": "Bind fresh private package, staging, tool-copy, source, build, HOME/TMPDIR and evidence roots. Stage 67 exact regular members as 0600, derive autom4te.cfg at exactly lines 118/145/159/171 with forward/reverse identity, then copy 68 members with only the five fixed usr/bin tools executable0700. Recompute only path-dependent derived config identity after the local root is fixed.",
+      "id": "D2",
+      "subject": "Explicit local data-root and five tool-copy binding"
+    },
+    {
+      "change": "In a same-buffer-pinned local copy, bind host_identities/unchanged_tools, environment(), qualify_tools(), build_commands() and run() flex lookup to the five actual private invocation paths. Keep /usr/bin/{gcc,g++,make,ar,perl,python3} and /bin/sh system paths. Preserve true invocation keys in host_programs; mapping nonexistent /usr/bin tools to private binaries would violate downstream verify_tools(). No environment monkeypatch, PATH-only alias or runtime bypass.",
+      "id": "D3",
+      "subject": "Finite CI-source path projection only"
+    },
+    {
+      "change": "Keep original CI FlexLexer.h acquisition and exact compile/dependency witness unchanged for minimum behavioral delta; this means a second bounded fetch of the same 85,600-byte libfl-dev package after fixed five-package bootstrap. Eliminating that duplicate requires an explicit reviewed same-byte staging/receipt source delta, not a callback that pretends network ran. Keep all original 473 checks, fresh inodes, original unique seqnum patch, ccache-empty contract, make -j1 opt, backend/runtime identity and tiny stages.",
+      "id": "D4",
+      "subject": "Retain header lane and all source/build/tiny predicates"
+    },
+    {
+      "change": "Use existing pinned WNOWAIT/four-observer support, single inherited allowed CPU, original phase limits and absolute deadline. Add only finite dependency acquisition/staging phase labels to an independent local entry; do not reuse the CI coordinator by falsifying Actions/runner identity. Missing source, identity, resource or ABI prerequisites remain fail-closed.",
+      "id": "D5",
+      "subject": "Local supervisor/source allowlist binding"
+    }
+  ],
+  "fixed_dependency_plan": {
+    "artifact_count": 5,
+    "artifacts": [
+      {
+        "architecture": "all",
+        "known_size_bytes": 494288,
+        "max_transfer_bytes": 494289,
+        "official_metadata_url": "https://packages.debian.org/trixie/all/autoconf/download",
+        "package": "autoconf",
+        "relative_destination": "autoconf_2.72-3.1_all.deb",
+        "sha256": "0de76b647b0afb6c7934999aaefeb463656c147672464a367df1019969e77af3",
+        "url": "https://deb.debian.org/debian/pool/main/a/autoconf/autoconf_2.72-3.1_all.deb"
+      },
+      {
+        "architecture": "amd64",
+        "known_size_bytes": 293956,
+        "max_transfer_bytes": 293957,
+        "official_metadata_url": "https://packages.debian.org/trixie/amd64/m4/download",
+        "package": "m4",
+        "relative_destination": "m4_1.4.19-8_amd64.deb",
+        "sha256": "221b3e224708c1da2a1a88b6824380593579b2254ae7d914afa14cbd5d343334",
+        "url": "https://deb.debian.org/debian/pool/main/m/m4/m4_1.4.19-8_amd64.deb"
+      },
+      {
+        "architecture": "amd64",
+        "known_size_bytes": 423136,
+        "max_transfer_bytes": 423137,
+        "official_metadata_url": "https://packages.debian.org/trixie/amd64/flex/download",
+        "package": "flex",
+        "relative_destination": "flex_2.6.4-8.2+b4_amd64.deb",
+        "sha256": "75f963765232c356d0a2fb70e780dfa9de2425aca036ec60eefb7fc98a2c905b",
+        "url": "https://deb.debian.org/debian/pool/main/f/flex/flex_2.6.4-8.2+b4_amd64.deb"
+      },
+      {
+        "architecture": "amd64",
+        "known_size_bytes": 85600,
+        "max_transfer_bytes": 85601,
+        "official_metadata_url": "https://packages.debian.org/trixie/amd64/libfl-dev/download",
+        "package": "libfl-dev",
+        "relative_destination": "libfl-dev_2.6.4-8.2+b4_amd64.deb",
+        "sha256": "1b40033660656acd5c2f85d2c45a4e02bf57a0facc5e0623327474cb911b3136",
+        "url": "https://deb.debian.org/debian/pool/main/f/flex/libfl-dev_2.6.4-8.2+b4_amd64.deb"
+      },
+      {
+        "architecture": "amd64",
+        "known_size_bytes": 1169636,
+        "max_transfer_bytes": 1169637,
+        "official_metadata_url": "https://packages.debian.org/trixie/amd64/bison/download",
+        "package": "bison",
+        "relative_destination": "bison_3.8.2+dfsg-1+b2_amd64.deb",
+        "sha256": "ce6eb1f7aad18850e32d223a68f54bcbe756d74f138c8ec5460ad9d220f4d335",
+        "url": "https://deb.debian.org/debian/pool/main/b/bison/bison_3.8.2+dfsg-1+b2_amd64.deb"
+      }
+    ],
+    "group": "debian-build-dependencies5",
+    "limits": {
+      "elapsed_check_seconds": 160,
+      "socket_timeout_seconds": 30,
+      "total_transfer_bytes": 4194304
+    },
+    "schema": 1,
+    "transport": "https-no-redirect"
+  },
+  "fixed_official_source": {
+    "api": "https://api.github.com/repos/verilator/verilator/tarball/4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+    "archive_sha256_before_fetch": null,
+    "content_binding": "Fixed member Git blob identities, sizes, modes and exact set. Historical acquisition status is not new observation.",
+    "exact_prefix": "verilator-verilator-4e194cc",
+    "member_table": {
+      "bytes": 75898,
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    "only_allowed_redirect": "https://codeload.github.com/verilator/verilator/legacy.tar.gz/4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+    "revision": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+    "selected_bytes": 11747893,
+    "selected_count": 473
+  },
+  "local_adapter_implemented": false,
+  "new_runtime_framework": false,
+  "primary_reuse_entry": "candidates/host93_ci_recovery/toolchain/ci_toolchain.py::run(repo, work, call_phase, stop_after_build=False)",
+  "production_delta": [],
+  "repository_revision": "a8de294523a9cc23d370d325cadd5d6bb9c2c713",
+  "resource_contract": {
+    "build_phases_total_work_seconds": {
+      "autoconf": [
+        180,
+        160
+      ],
+      "configure": [
+        180,
+        160
+      ],
+      "make": [
+        3600,
+        3570
+      ]
+    },
+    "dependency_acquire_seconds": 180,
+    "dependency_stage_seconds": 60,
+    "floor_applies_before_host_cpp_generate_and_compile": true,
+    "host_compile_address_space_bytes": 6442450944,
+    "host_generate_address_space_bytes": 6442450944,
+    "local_plan_does_not_grant_any_acquisition_or_native_phase": true,
+    "make_address_space_bytes": 4294967296,
+    "make_jobs": 1,
+    "original_free_disk_floor_bytes": 3221225472,
+    "original_memory_floor_bytes": 8589934592,
+    "shared_job_wall_seconds": 6600,
+    "single_cpu_affinity_count": 1,
+    "unchanged_deadline": "Any dependency bootstrap consumes the same original shared budget; no restart, extension or implicit resource increase."
+  },
+  "schema": "LOCAL_FIXED_VERILATOR_CONTINUATION_PLAN_ONLY_V1",
+  "sole_tool_source_patch": {
+    "derived": {
+      "bytes": 22430,
+      "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+    },
+    "new": "        txtp->add(m_topName + \"(scopep__V), m_seqnum{0} {}\\n\");",
+    "old": "        txtp->add(m_topName + \"(scopep__V) {}\\n\");",
+    "original": {
+      "bytes": 22417,
+      "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+    },
+    "path": "src/V3ProtectLib.cpp",
+    "replacement_count": 1,
+    "reused_objects": false,
+    "tree_after_bytes": 11747906,
+    "warning": "Ignore PATCH.json historical incremental-object/mtime policy; current CI materialize_patched() copies the fresh 473 tree and builds anew."
+  },
+  "status": "SOURCE_PLAN_AND_PURE_MOCK_ONLY_NOT_AN_ACTUAL_ENTRY",
+  "why_direct_reuse_is_blocked": "run() snapshots /usr/bin host tools before output/acquisition; local missing five tools cannot be repaired by PATH alone or callback rewriting."
+}

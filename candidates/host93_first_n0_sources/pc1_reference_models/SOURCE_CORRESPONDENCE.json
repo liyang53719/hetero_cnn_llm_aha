@@ -1,0 +1,107 @@
+{
+  "links": [
+    {
+      "evidence": "enablePublic21QkvReduction=true; the existing emission SOURCE_PINS fixes the patch chain.",
+      "source": "candidates/host93_ci_recovery/emission/EmitCanonicalHost93Diagnostic.scala"
+    },
+    {
+      "evidence": "Exact [0,1024),[1024,1536) K ranges and pairReverse=true.",
+      "lines": [
+        57,
+        61
+      ],
+      "source": "candidates/qwen2_resident_matrix/production_qkv_reduction/production_qkv_reduction.patch"
+    },
+    {
+      "evidence": "Accepted read index executionBegin+((readK-executionBegin)^pairReverse); no global dot reassociation.",
+      "lines": [
+        96,
+        101
+      ],
+      "source": "candidates/qwen2_resident_matrix/dense_block_reduce/k_window.patch"
+    },
+    {
+      "evidence": "Distinct slot/block IDs preserve independent partial contexts; lhsSlot0,rhsSlot1,outputSlot2.",
+      "lines": [
+        95,
+        108
+      ],
+      "source": "candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala"
+    },
+    {
+      "evidence": "Clear injects +0, otherwise same-bank accumulator. HardFloat Pre/Mul/Post/Round chain rounds once per FMA.",
+      "lines": [
+        32,
+        40
+      ],
+      "source": "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv"
+    },
+    {
+      "evidence": "Seed overlay changes bank reservation/read/write; existing FMA Pre/Mul/Post/Round instances are retained.",
+      "lines": [
+        3231,
+        3292
+      ],
+      "source": "candidates/qwen2_resident_matrix/production_qkv_reduction/provenance/current_overlay.patch"
+    },
+    {
+      "evidence": "BF16 inputs widened by concatenating16 zero bits; exact integer multiply-add; final FP32 RoundRawFNToRecFN, round_near_even and tininess_afterRounding.",
+      "lines": [
+        31,
+        97
+      ],
+      "source": "integration/gemmini/EmitHeteroBF16Fma.scala"
+    },
+    {
+      "evidence": "Binary add loan receives gate=lhs slot0,up=rhs slot1; no BF16 output conversion.",
+      "lines": [
+        55,
+        61
+      ],
+      "source": "candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala"
+    },
+    {
+      "evidence": "binaryAdd forces ScalarOp.Add with gate/up and directly replies, no SiLU or BF16 materialization.",
+      "lines": [
+        44,
+        61
+      ],
+      "source": "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add.patch"
+    },
+    {
+      "evidence": "Scalar add uses HeteroFP32Alu.",
+      "lines": [
+        48,
+        51
+      ],
+      "source": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala"
+    },
+    {
+      "evidence": "AddRecFN(8,24), subOp=false, round_near_even, tininess_afterRounding.",
+      "lines": [
+        11,
+        17
+      ],
+      "source": "integration/gemmini/EmitHeteroFP32Alu.scala"
+    },
+    {
+      "evidence": "Copied exactly. Two independent FP32 +0 partials; k=begin+(issue^1); std::fma; final add(current partial,retained partial).",
+      "lines": [
+        1,
+        26
+      ],
+      "source": "candidates/qwen2_resident_matrix/dense_block_reduce/reference/dot16.inc"
+    }
+  ],
+  "math_reference_independent_of_order": true,
+  "official_raw_numeric_pass": null,
+  "operand_order_note": "DUT vector loan names slot0 as lhs and slot1 as rhs; original recipe writes second+first. Binary addition is commutative for the admitted finite RN-even domain including signed zeros. This is one final add, not associativity or an observed runtime-order claim.",
+  "schema": 1,
+  "shape": [
+    128,
+    1536,
+    1536
+  ],
+  "status": "FIXED_SOURCE_CORRESPONDENCE_NOT_RTL_EXECUTION",
+  "underflow_note": "Model requires gradual underflow with FTZ/DAZ disabled, matching pinned HardFloat source semantics. It does not claim universal VDPBF16PS or oneDNN raw equivalence. BF16 underflow microexample is explicitly domain-qualified."
+}

@@ -1,0 +1,106 @@
+{
+  "approved_scope": "Only two full self-built PC1 reference models after SOURCE and exact command review; no RTL, no reference n0 regeneration, no Torch/NumPy, no uploads.",
+  "budget_note": "No benchmark has run. Full computation is two O(301989888) native passes with 9-limb sparse integer additions and original scalar FP32 FMA; no Python per-MAC loop. Timeout means INCOMPLETE, not automatic budget extension.",
+  "compile_argv": [
+    "<bound_gplusplus_realpath>",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-ffp-contract=off",
+    "-fno-fast-math",
+    "-frounding-math",
+    "<fresh_work>/source/pc1_reference_main.cpp",
+    "-o",
+    "<fresh_work>/pc1_reference",
+    "-lm"
+  ],
+  "compiler_parallelism": 1,
+  "cpu_affinity_count": 1,
+  "final_receipt_reserve_seconds": 25,
+  "fixed_shape": {
+    "K": 1536,
+    "M": 128,
+    "N": 1536,
+    "logical_macs_per_model": 301989888,
+    "outputs": 196608
+  },
+  "full_argv": [
+    "<fresh_work>/pc1_reference",
+    "--full",
+    "<fresh_work>/inputs",
+    "<fresh_work>/outputs"
+  ],
+  "interpretation": {
+    "analytic_bound": "gamma1537*sum(abs(a*b)) + 1537*2^-150/(1-1537*2^-24), outward FP64 bound compared against exact integer error; fixed before any DUT qraw",
+    "application_accuracy_pass": null,
+    "math_track": "Self-built independent exact real dot product, not official payload",
+    "rtl": false,
+    "typed_recipe_bit_exact_to_rtl": null,
+    "typed_track": "DUT-order conditional implementation model, not independent mathematical accuracy by itself"
+  },
+  "micro_argv": [
+    "<fresh_work>/pc1_reference",
+    "--micro"
+  ],
+  "official_raw_numeric_pass": null,
+  "phase_limits": {
+    "compile": {
+      "as_bytes": 536870912,
+      "cpu_seconds": 30,
+      "file_bytes": 16777216,
+      "rss_bytes": 402653184,
+      "total_seconds": 45,
+      "work_seconds": 30
+    },
+    "full_models": {
+      "as_bytes": 536870912,
+      "cpu_seconds": 100,
+      "file_bytes": 16777216,
+      "rss_bytes": 402653184,
+      "total_seconds": 120,
+      "work_seconds": 105
+    },
+    "micro": {
+      "as_bytes": 536870912,
+      "cpu_seconds": 3,
+      "file_bytes": 16777216,
+      "rss_bytes": 402653184,
+      "total_seconds": 20,
+      "work_seconds": 5
+    }
+  },
+  "postflight_requirements": [
+    "All 196608 outputs and three full output hashes",
+    "Native runtime/tool/source/input identities unchanged",
+    "Finite/shape/full histogram checks and exact error numerator metadata",
+    "Original supervisor natural exit zero and cleanup confirmed",
+    "Complete receipts only after output close; failure/incomplete never becomes PASS"
+  ],
+  "preflight_requirements": [
+    "SOURCE manifest and same-buffer Python loader pins accepted",
+    "Original repository source identities and unchanged copied dot16/SHA header",
+    "Each full input exact size/hash; accepted actual n0 never used as numerical input",
+    "Native input byte hashes repeated inside program; finite BF16 representation",
+    "Single CPU, FE_TONEAREST, FTZ/DAZ disabled; no fast-math and no reassociation",
+    "Exact native microexamples must finish before full models"
+  ],
+  "private_binding_required": [
+    "Previously fixed realpath g++ and existing binding/profile validation",
+    "Individually pinned cc1plus, collect2, as, ld, libstdc++, compiler runtime/native dependencies accepted before dispatch",
+    "Input independent historical n0; prior accepted same-RAM actual_n0 identity-only gate; current canonical wq",
+    "Fresh private work directory; no public machine paths"
+  ],
+  "schema": 1,
+  "shared_total_seconds": 210,
+  "status": "SOURCE_ONLY_EXECUTION_REQUIRES_INDEPENDENT_REVIEW",
+  "supervisor": {
+    "bytes": 16348,
+    "contract": "Original fixed_support and run_phase; preserve owner timer/deadline, first failure, WNOWAIT/reap/group cleanup/RSS. Do not call compiler or models outside this supervisor.",
+    "path": "candidates/host93_ci_recovery/ci_support_v3.py",
+    "pins_bytes": 806,
+    "pins_sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2",
+    "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+  }
+}

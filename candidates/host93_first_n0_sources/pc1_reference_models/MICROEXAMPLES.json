@@ -1,0 +1,244 @@
+{
+  "scope": "Synthetic examples only. No real inputs, repository, compiler, Torch, NumPy, Host or RTL execution.",
+  "reference": {
+    "K": 1536,
+    "input": "BF16 expanded exactly to FP32",
+    "partials": [
+      [
+        0,
+        1024
+      ],
+      [
+        1024,
+        1536
+      ]
+    ],
+    "within_pair": "high index then low index",
+    "mac": "FP32 fused FMA; round-to-nearest ties-to-even",
+    "final": "FP32 add(second_partial, first_partial)",
+    "underflow": "IEEE gradual underflow; no FTZ/DAZ",
+    "limits": "Finite operands only; exact zero canonicalized to +0; no full NaN/Inf semantics."
+  },
+  "generic_fp32_fma": {
+    "a": {
+      "bits": "0x3f800001",
+      "exact_value": "8388609/8388608"
+    },
+    "b": {
+      "bits": "0x3f7ffffe",
+      "exact_value": "8388607/8388608"
+    },
+    "c": {
+      "bits": "0xbf800000",
+      "exact_value": "-1"
+    },
+    "exact_product": "70368744177663/70368744177664",
+    "rounded_product": {
+      "bits": "0x3f800000",
+      "exact_value": "1"
+    },
+    "fused": {
+      "bits": "0xa8800000",
+      "exact_value": "-1/70368744177664"
+    },
+    "separate": {
+      "bits": "0x00000000",
+      "exact_value": "0"
+    },
+    "explanation": "(1+2^-23)(1-2^-23)=1-2^-46. Separate product rounds to 1; fused retains -2^-46 after cancellation.",
+    "restriction": "a and b are not BF16. When the exact BF16 product is representable in FP32, multiply rounding is inert and this cannot discriminate fused from separate MAC."
+  },
+  "partial_partition": {
+    "nonzero_terms": [
+      {
+        "k": 1,
+        "x_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      },
+      {
+        "k": 1024,
+        "x_bf16": {
+          "bits": "0xcb80",
+          "exact_value": "-16777216"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      },
+      {
+        "k": 1025,
+        "x_bf16": {
+          "bits": "0x4b80",
+          "exact_value": "16777216"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      }
+    ],
+    "two_partials": {
+      "bits": "0x3f800000",
+      "exact_value": "1"
+    },
+    "one_partial": {
+      "bits": "0x00000000",
+      "exact_value": "0"
+    },
+    "two_partial_details": {
+      "p0": {
+        "bits": "0x3f800000",
+        "exact_value": "1"
+      },
+      "p1": {
+        "bits": "0x00000000",
+        "exact_value": "0"
+      }
+    },
+    "explanation": "Two partials: p0=1; p1=2^24-2^24=0; p1+p0=1. One partial: RNE(1+2^24)=2^24 (midpoint, ties even), then subtract 2^24 gives 0."
+  },
+  "within_pair_order": {
+    "nonzero_terms": [
+      {
+        "k": 1,
+        "x_bf16": {
+          "bits": "0x4b80",
+          "exact_value": "16777216"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      },
+      {
+        "k": 2,
+        "x_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      },
+      {
+        "k": 3,
+        "x_bf16": {
+          "bits": "0xcb80",
+          "exact_value": "-16777216"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      }
+    ],
+    "high_first": {
+      "bits": "0x3f800000",
+      "exact_value": "1"
+    },
+    "low_first": {
+      "bits": "0x00000000",
+      "exact_value": "0"
+    },
+    "explanation": "High-first nonzero order: 2^24,-2^24,1 -> 1. Low-first: 2^24,1,-2^24 -> 0 because 2^24+1 rounds to 2^24."
+  },
+  "qraw_contamination": {
+    "nonzero_terms": [
+      {
+        "k": 0,
+        "x_bf16": {
+          "bits": "0x3b80",
+          "exact_value": "1/256"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      },
+      {
+        "k": 1,
+        "x_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        },
+        "w_bf16": {
+          "bits": "0x3f80",
+          "exact_value": "1"
+        }
+      }
+    ],
+    "qraw_fp32": {
+      "bits": "0x3f808000",
+      "exact_value": "257/256"
+    },
+    "bias_fp32": {
+      "bits": "0x3c000000",
+      "exact_value": "1/128"
+    },
+    "post_bias_fp32": {
+      "bits": "0x3f818000",
+      "exact_value": "259/256"
+    },
+    "qraw_rounded_to_bf16": {
+      "bits": "0x3f80",
+      "exact_value": "1"
+    },
+    "qraw_bf16_expanded_fp32": {
+      "bits": "0x3f800000",
+      "exact_value": "1"
+    },
+    "post_bias_bf16": {
+      "bits": "0x3f82",
+      "exact_value": "65/64"
+    },
+    "post_bias_bf16_expanded_fp32": {
+      "bits": "0x3f820000",
+      "exact_value": "65/64"
+    },
+    "explanation": "qraw=257/256. BF16 midpoint rounds to 1 (even low endpoint). Bias=1/128 changes FP32 to 259/256; BF16 midpoint rounds to 65/64 (even high endpoint). Compare raw only before both steps."
+  },
+  "optional_bf16_fma_underflow": {
+    "nonzero_terms": [
+      {
+        "k": 0,
+        "x_bf16": {
+          "bits": "0x0080",
+          "exact_value": "1/85070591730234615865843651857942052864"
+        },
+        "w_bf16": {
+          "bits": "0x3380",
+          "exact_value": "1/16777216"
+        }
+      },
+      {
+        "k": 1,
+        "x_bf16": {
+          "bits": "0x0080",
+          "exact_value": "1/85070591730234615865843651857942052864"
+        },
+        "w_bf16": {
+          "bits": "0x3400",
+          "exact_value": "1/8388608"
+        }
+      }
+    ],
+    "fused": {
+      "bits": "0x00000002",
+      "exact_value": "1/356811923176489970264571492362373784095686656"
+    },
+    "separate": {
+      "bits": "0x00000001",
+      "exact_value": "1/713623846352979940529142984724747568191373312"
+    },
+    "explanation": "First term sets acc=2^-149. Second exact product=2^-150. Fused rounds 3*2^-150 to 2^-148 (even significand 2); separate multiplication rounds 2^-150 to zero, retaining 2^-149.",
+    "restriction": "All input BF16 operands are normal, but FP32 products are subnormal. Use only with gradual underflow; FTZ/DAZ and target arithmetic policy must be checked independently."
+  }
+}

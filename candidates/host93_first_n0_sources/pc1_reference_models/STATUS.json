@@ -1,0 +1,39 @@
+{
+  "application_accuracy_pass": null,
+  "author_cold": [
+    29,
+    29,
+    29,
+    29
+  ],
+  "execution_status": "NOT_EXECUTED",
+  "full_models_executed": false,
+  "independent_cold": [
+    29,
+    29
+  ],
+  "native_compiled": false,
+  "native_micro_executed": false,
+  "official_raw_numeric_pass": null,
+  "private_paths_or_arrays_included": false,
+  "rtl_executed": false,
+  "schema": 1,
+  "source_manifest": {
+    "bytes": 3693,
+    "sha256": "8036848dcfe00eff172977cfa4a181b78d7aa02916ef8a175e003901029d93fe"
+  },
+  "source_review": {
+    "directory": "review_pc1_reference_core_20261019T1844",
+    "manifest": {
+      "bytes": 550,
+      "sha256": "161b9e043efcbcc89ec4c85ccf637559c62e0315578c417356752ffafdb7cdd2"
+    },
+    "summary": {
+      "bytes": 3927,
+      "sha256": "a880263eae21d76de8293d7d084238f9ba7675f0e22189e101a8e1d2e2d09a0d"
+    },
+    "verdict": "ACCEPT_PC1_TWO_REFERENCE_MODELS_SOURCE_ONLY"
+  },
+  "status": "TEMP_SOURCE",
+  "typed_recipe_bit_exact_to_rtl": null
+}

@@ -1,0 +1,29 @@
+{
+  "bias_or_bf16_output_rounding": false,
+  "cases_per_mode": {
+    "normal": 29,
+    "optimized": 29,
+    "relocated_normal": 29,
+    "relocated_optimized": 29
+  },
+  "full_model_executed": false,
+  "input_shape": [
+    128,
+    1536,
+    1536
+  ],
+  "math_exact_width_bits": 576,
+  "native_compiled": false,
+  "native_micro_executed": false,
+  "official_raw_numeric_pass": null,
+  "original_repository_sources_verified": 21,
+  "real_inputs_read": false,
+  "schema": 1,
+  "source_drift": false,
+  "source_status": "TEMP_SOURCE_NOT_EXECUTED",
+  "status": "PASS_SOURCE_PURE_INTEGER_AND_MOCK_ONLY",
+  "unchanged_original_copies": [
+    "dot16.inc",
+    "sha256.hpp"
+  ]
+}

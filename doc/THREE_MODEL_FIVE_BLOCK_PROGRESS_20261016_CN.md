@@ -1177,3 +1177,15 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 原七件证据 MANIFEST 1005 B / 02be7877f6a10dbb08ebd5e6e2d565366278db9642aacb3f5d24240595e18ad8，RESULT 37258 B / 3b41e48ddcc58f109c0bf8b58cdd9777a0573c47617d462e0e49d4957e56c13d。本批只安全 summary/README/计划，无 workflow；排除私有路径、数组、库存、raw logs、生成源码与 ELF。计划以父 226603 B 原字节前缀加本尾一次完整替换，禁止追加完整文档。
 - 正式 actual 独审 review_local_objcache_resume_actual_20261019T1818：MANIFEST 613 B / fa5e5b952a92fb1fe6604237c04221279c26a76990e8c5bc0153b59e434a8b22；SUMMARY 20581 B / af34169bb8291ee49510be82ea6332d9aed928a707f010b0fc990a2ba1ee0fe7。完整 196,608 FP32 字只读逐位一致、零非有限/低16非零/尾随字节；上16小端反投影 BF16 393,216 B / bd41672e6ea7d12746b41e56d21b3309369ecfd87cc26319ae6adbf0874e5cf2，与原 native 参考身份相同，没有新 forward 或模型回放。
 - 周期单位为每次 scheduler 主高沿 observe_counts，含工作 edge0 空闲、edge1 launch 至 ACK0，排除 4+4 reset 高沿；128 项 core-state 和为 2,956,951。AXI stall 按通道 pre-edge valid&&!ready 计数且可重叠，不相加作额外周期；useful-MAC 分子未建立，不报利用率。此前 session8356 原失败保留，首 N0 之外资格不扩大。
+
+
+## 2026-10-19 18:47 UTC：PC1 无 bias qraw 双轨参考核心 SOURCE
+
+- 本批公开独立pc1_reference_models核心源码/合成冷测与安全说明；PC1定义为M128×N1536×K1536的n0×wq，无bias、无BF16输出舍入。已有27-stage仅冻结带bias/BF16的qr，不能替代qraw或由qr减bias构造。official_raw_numeric_pass、application_accuracy_pass与typed_recipe_bit_exact_to_rtl均为null。
+- 独立数学轨用9×uint64正/负superaccumulator，逐项精确BF16乘积按2^-266单位累加，末尾相减，再直接RN-even投影FP32与FP64；1536项/抵消及196608误差总和均有576bit容量证明，不用Python逐MAC或FP64近似累加。此为自建数学oracle，不称官方已冻结无bias payload。
+- typed轨逐byte消费原dot16.inc，固定K[0,1024)+[1024,1536)、pair高先低、逐项FP32 fused FMA、独立partial合并。对应router/k-window/slot/HardFloat/独立FP32 add原源；无bias、无BF16输出物化。两个轨道分别保留，typed匹配不能单独代替数学精度。
+- 固定独立n0 786432 B/SHA256 3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f；wq 4718592 B/SHA256 ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72。既有同RAM实际N0只作身份相等门，不喂入参考、不恢复旧进程或改写旧收据。
+- 合成例覆盖一般FP32融合差异、合法BF16渐进下溢融合差异、1024/512 partial、pair顺序、bias/BF16污染、正负零/次正规/RN-even/overflow。后继完整196608输出将报告精确绝对误差整数、bit-equal、ULP全桶、相对误差向外区间；解析gamma1537+underflow界预冻结且只作诊断，不继承N0容差或按DUT结果调阈值。
+- 来源MANIFEST 3693 B/SHA256 8036848dcfe00eff172977cfa4a181b78d7aa02916ef8a175e003901029d93fe；25成员70770 B、21原源码同pin，原dot16/SHA头不改。作者普通/-O/搬迁两模各29，独审普通/-O各29通过，均纯整数/Fraction与mock，无实际数组读取、native编译/运行、Torch/NumPy或RTL。
+- 独审结论ACCEPT_PC1_TWO_REFERENCE_MODELS_SOURCE_ONLY：review_pc1_reference_core_20261019T1844，MANIFEST 550 B/SHA256 161b9e043efcbcc89ec4c85ccf637559c62e0315578c417356752ffafdb7cdd2；SUMMARY 3927 B/SHA256 a880263eae21d76de8293d7d084238f9ba7675f0e22189e101a8e1d2e2d09a0d。当前TEMP_SOURCE/NOT_EXECUTED；三阶段210秒/单CPU/512MiB预算仍须固定依赖和最薄监督入口/精确命令独审后实施，长RTL未授权。
+- 本批不含私有binding、runtime、原receipt、实际数组或原日志，不改旧N0 PASS、生产或workflow。中文计划以父343ff1b3f8516ebb0ce7c8e8762e44506fb76ab7的229542 B精确前缀加本纯尾作完整替换一次，禁止追加整篇全文。

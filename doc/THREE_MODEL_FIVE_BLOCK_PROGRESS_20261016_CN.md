@@ -817,3 +817,17 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 本 SOURCE 冻结 manifest 为 6046 字节 / 8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b；独立审查已 GO，新 actual 仍未执行。
 
 SOURCE 审结论 SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY；审查 manifest 1999 字节 / 44303c275d27457eff82fd5f99191553d54aadcb3cd528355d17f22ad0dd8476，SUMMARY 5092 字节 / 87ddb3dfc2e5e39f3eb645639a4e6470c67ee5754e3dc193e3d0d87f23b8d42e。仅为 SOURCE 接受，实际仍为 NOT_EXECUTED，不赋新 actual PASS。
+
+## CPPFLAGS 后验最窄修与安全拒绝码 SOURCE
+
+39193914902 保留为 INCOMPLETE：15 个 native 阶段均退出 0 且清理确认，固定头获取、真实头编译、autoconf/configure 已过；make 未启动，具体私有后验门 UNKNOWN。不得把后续合成反例倒填成本次实际根因。
+
+固定官方 configure.ac 的 CPPFLAGS 尾空格及 Linux 下所选 flex 旁置 include 分支已用原模板小 fixture 证实会被旧逐字比较误拒。最窄修仅按 ASCII 空格/tab 检查 CPPFLAGS += 的已知 token 形态：staged -I 唯一且在前，最多跟随从已验证 flex realpath 推得的一个旁置 -I；额外 flags、目录换序/重复及未批准 MSYSTEM 形态仍拒绝，不新增 make-n 阶段。
+
+summary-v3 增加严格固定 boundary/code，覆盖各 build 前后与 configure 后验合同，保留 native0 事实；不上传任意异常文本或路径，未覆盖旧合同明确 UNREPORTED/UNMAPPED。full34/build-only16、共享6600秒、所有资源/监督/头probe/Host短启动范围均不扩大。
+
+normal/-O 冷测均过：协调90、工具链118、header26、transport7、support41、regression7、diagnostics463+727 每模式。独立 SOURCE 审查已 GO，仅限固定 CPPFLAGS 与安全合同标签；新 actual 未执行，父唯一发布/触发。
+
+本 SOURCE manifest 为6029字节 / d8695b6bc1cd54c724fb3f589e7cc068b0c787c3c1efe490bfee4f0c8a8a48e3；独立审查已 GO，最新实际的具体后验门仍 UNKNOWN，新 actual 未执行。
+
+SOURCE 审结论 SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY；审查 manifest 2096字节 / 07d6a2539856f5a1d037d2bec4751d9714b2b44ad51acb1372fe94d326f2c633，SUMMARY 3108字节 / cbdc2da60afb685bcb201e9a123a6a020c68335ac0dbe08a5768f27e4579063c。新 actual 仍 NOT_EXECUTED，不赋真实 build/Host PASS；上一 actual 具体门仍 UNKNOWN。

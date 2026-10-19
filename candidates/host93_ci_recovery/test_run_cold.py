@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=43611
-SHA='23fcbb7789bc4489d83c99f4a760a60d6add8340e54b32386cf68812c333a8f9'
+SIZE=46252
+SHA='7b51f9ab8cf6f7fd8c8c8ed3abe9d6f939df14cac4a88f3ceb86c76bdf6d43a1'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -25,6 +25,8 @@ G=load(RAW)
 PINS=G.decode(G.exact(HERE/'RUN_PINS.json',G.PINS_SIZE,G.PINS_SHA))['files']
 CPIN=PINS['candidates/host93_ci_recovery/safe_build_diagnostics.py']
 CONTEXT=G.load(HERE/'safe_build_diagnostics.py',CPIN['bytes'],CPIN['sha256'],'cold_context_same_buffer')
+TPIN=PINS['candidates/host93_ci_recovery/toolchain/ci_toolchain.py']
+TOOLCHAIN=G.load(HERE/'toolchain/ci_toolchain.py',TPIN['bytes'],TPIN['sha256'],'cold_toolchain_contracts')
 
 
 def defaults():
@@ -45,8 +47,8 @@ def fixture(ready=False, mode='host-reset-launch'):
     generated={'derived_backend':{'bytes':1,'sha256':'1'*64}} if ready else {}
     if ready and not build:
         generated.update({'host_elf':{'bytes':1,'sha256':'1'*64},'host93_fir':{'bytes':42417256,'sha256':'264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a'},'host93_sv':{'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'}})
-    return {'summary.json':{'schema':'host93-ci-summary-v2','mode':mode,'status':'READY_REQUIRES_ACTIONS_EXIT0' if ready else 'INCOMPLETE',
-             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','completed_components':(['toolchain_build'] if build else list(G.COMPONENTS)) if ready else [],
+    return {'summary.json':{'schema':'host93-ci-summary-v3','mode':mode,'status':'READY_REQUIRES_ACTIONS_EXIT0' if ready else 'INCOMPLETE',
+             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','contract_failure':{'boundary':'NONE' if ready else 'UNREPORTED','code':'NONE' if ready else 'UNMAPPED_CONTRACT'},'completed_components':(['toolchain_build'] if build else list(G.COMPONENTS)) if ready else [],
              'scope':{x:ready and (x=='toolchain_build' if build else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0},
             'source_hashes.json':{'schema':'host93-ci-source-hashes-v2','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
               'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
@@ -216,7 +218,7 @@ class Cold(unittest.TestCase):
             with self.assertRaises(ValueError):G.exact(Path('/tmp/not-read'),0,'PENDING')
             comp.assert_not_called()
 
-    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None):
+    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False):
         with tempfile.TemporaryDirectory() as t:
             base=Path(t);repo=base/'repo';repo.mkdir();out=base/'out';archive=base/'idma.zip'
             fixed={'bytes':1,'sha256':'1'*64,'path':str(base/'observed')}
@@ -225,7 +227,13 @@ class Cold(unittest.TestCase):
             def group(names,result):
                 def run(repo,work,call,*args,**kwargs):
                     selected=names[:16] if kwargs.get("stop_after_build") else names
-                    for name in selected:call(name,['/fixed/fixture'],base,{},cfg(name))
+                    for name in selected:
+                        call(name,['/fixed/fixture'],base,{},cfg(name))
+                        if contract_postflight and name == 'fresh_configure':
+                            error=ValueError('private fixture text must not publish')
+                            error.safe_contract_boundary='BUILD_CONFIGURE_CPPFLAGS_AFTER'
+                            error.safe_contract_code='CPPFLAGS_VALUE'
+                            raise error
                     return result
                 return types.SimpleNamespace(run=run)
             tools=group(G.STAGES[:20],{'backend':fixed})
@@ -261,6 +269,34 @@ class Cold(unittest.TestCase):
             summary=G.decode((out/'evidence/summary.json').read_bytes())
             stages=G.decode((out/'evidence/stage_exits.json').read_bytes())['stages']
             return code,summary,stages
+    def test_postconfigure_safe_contract_retains_native_success(self):
+        code,summary,stages=self.mock_whole_job(contract_postflight=True)
+        self.assertEqual(code,1);self.assertEqual(len(stages),15)
+        self.assertTrue(all(row['status']=='EXIT0_CLEANED' and row['exit_code']==0 for row in stages))
+        self.assertEqual(summary['contract_failure'],{'boundary':'BUILD_CONFIGURE_CPPFLAGS_AFTER','code':'CPPFLAGS_VALUE'})
+        self.assertNotIn('private fixture',json.dumps(summary))
+    def test_contract_enum_matches_pinned_toolchain(self):
+        self.assertEqual(G.CONTRACT_CODES,TOOLCHAIN.CONTRACT_CODES)
+        self.assertEqual(G.CONTRACT_BOUNDARIES,TOOLCHAIN.CONTRACT_BOUNDARIES)
+    def test_unknown_contract_message_not_public(self):
+        self.assertEqual(G.contract_failure_observation(ValueError('/private/path password=fixture')),
+                         {'boundary':'UNREPORTED','code':'UNMAPPED_CONTRACT'})
+    def test_forged_contract_labels_cannot_publish_text(self):
+        error=ValueError('fixture');error.safe_contract_boundary='/private';error.safe_contract_code='token=secret'
+        self.assertEqual(G.contract_failure_observation(error),{'boundary':'UNREPORTED','code':'UNMAPPED_CONTRACT'})
+    def test_contract_schema_rejects_free_text(self):
+        for field in ('boundary','code'):
+            x=fixture();x['summary.json']['contract_failure'][field]='private arbitrary text'
+            with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_success_contract_detail_must_be_none(self):
+        x=fixture(True);x['summary.json']['contract_failure']={'boundary':'BUILD_CONFIGURE_CPPFLAGS_AFTER','code':'CPPFLAGS_VALUE'}
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_failed_contract_detail_cannot_be_none(self):
+        x=fixture();x['summary.json']['contract_failure']={'boundary':'NONE','code':'NONE'}
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_contract_extra_detail_key_rejected(self):
+        x=fixture();x['summary.json']['contract_failure']['message']='private arbitrary text'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
     def test_whole_job_mock_all_finite_stages(self):
         code,summary,stages=self.mock_whole_job()
         self.assertEqual(code,0)

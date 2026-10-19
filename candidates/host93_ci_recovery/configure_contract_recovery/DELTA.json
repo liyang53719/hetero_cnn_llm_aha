@@ -1,0 +1,63 @@
+{
+  "changed_paths_relative_to_ci_candidate": [
+    "run.py",
+    "RUN_PINS.json",
+    "toolchain/ci_toolchain.py",
+    "test_run_cold.py",
+    "toolchain/test_toolchain_cold.py",
+    "toolchain/test_transport_cold.py"
+  ],
+  "changes": [
+    "tokenize only fixed CPPFLAGS assignment and accept official ASCII-whitespace/known Linux optional include shape",
+    "keep staged include first and unique",
+    "constant ContractFailure carrier and fixed reason mapping around build boundaries",
+    "strict summary-v3 contract_failure object without arbitrary text",
+    "raw pin updates and narrow positive/refusal/mock tests"
+  ],
+  "latest_actual_gate_unknown": true,
+  "parent_commit": "89f8a9aa9378d341242dc0b0a03750070fba756f",
+  "preserved_actual_runs": [
+    39185138343,
+    39187570266,
+    39191780530,
+    39193914902
+  ],
+  "prior_frozen_source": {
+    "directory": "candidate_ci_flex_header_source_v1_20261019T0300",
+    "manifest": {
+      "bytes": 6046,
+      "sha256": "8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b"
+    }
+  },
+  "schema": "HOST93_CPPFLAGS_CONTRACT_DELTA_V1",
+  "source_bug_proven_separately": "Official configure.ac adds trailing whitespace; old exact-line witness rejects a correct include. Official Linux optional selected-flex include also rejected. Both are synthetic substitution SOURCE proofs, not recovered actual configuration.",
+  "source_manifest": {
+    "directory": "candidate_ci_configure_contract_source_v1_20261019T0320",
+    "manifest": {
+      "bytes": 6029,
+      "sha256": "d8695b6bc1cd54c724fb3f589e7cc068b0c787c3c1efe490bfee4f0c8a8a48e3"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_configure_contract_source_20261019T0328",
+    "manifest": {
+      "bytes": 2096,
+      "sha256": "07d6a2539856f5a1d037d2bec4751d9714b2b44ad51acb1372fe94d326f2c633"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3108,
+      "sha256": "cbdc2da60afb685bcb201e9a123a6a020c68335ac0dbe08a5768f27e4579063c"
+    },
+    "verdict": "SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY"
+  },
+  "unchanged": [
+    "all 34/16 native stages",
+    "all process/resource/deadline/cleanup contracts",
+    "one fixed header acquisition and real C++ compile probe",
+    "same-buffer source pins",
+    "old failures and unestablished causes",
+    "full Host short reset-launch scope",
+    "numeric and weights_loaded claims remain false"
+  ]
+}

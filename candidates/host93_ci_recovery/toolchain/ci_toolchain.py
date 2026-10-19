@@ -52,9 +52,92 @@ EXPECTED_RUN = [
 ]
 
 
+CONTRACT_CODES = ('NONE', 'UNMAPPED_CONTRACT', 'MISSING_FIXED_FIELD',
+    'HEADER_IDENTITY', 'INPUT_SIZE', 'INPUT_SHA', 'INPUT_CHANGED', 'INPUT_REGULAR',
+    'INPUT_IDENTITY_CAP', 'INPUT_GREW', 'INPUT_IDENTITY_CHANGED', 'INPUT_ENCODING', 'INPUT_JSON', 'SOURCE_CHANGED',
+    'BUILD_CONFIGURATION', 'HOME_CONFIGURATION', 'CCACHE_BINDING', 'TOOL_IDENTITY',
+    'PHASE_RESULT', 'PHASE_LOG_BOUND', 'TREE_ROOT_MODE', 'TREE_ENTRY_CAP',
+    'TREE_SYMLINK', 'TREE_DIRECTORY_MODE', 'TREE_SPECIAL_FILE', 'TREE_FILE_CAP',
+    'TREE_BYTE_CAP', 'BUILD_OUTPUT_MISSING', 'CPPFLAGS_TEMPLATE', 'CPPFLAGS_VALUE',
+    'OBJCACHE_BRANCH', 'OBJCACHE_BLOCK', 'OBJCACHE_GUARD', 'OBJCACHE_OFFICIAL',
+    'OBJCACHE_TEMPLATE', 'OBJCACHE_OUTPUT', 'OBJCACHE_WITNESS', 'RECEIPT_CAP',
+    'RECEIPT_WRITE', 'HEADER_PACKAGE_COUNT', 'HEADER_ARGUMENT_BOUND', 'HEADER_OUTPUT_SET',
+    'HEADER_RECEIPT', 'HEADER_PROBE_OUTPUT_SET', 'HEADER_PROBE_SOURCE',
+    'HEADER_PROBE_OBJECT', 'HEADER_PROBE_DEPENDENCY')
+CONTRACT_BOUNDARIES = ('NONE', 'UNREPORTED', 'HEADER_QUALIFICATION') + tuple(
+    'BUILD_' + phase + '_' + check
+    for phase in ('AUTOCONF', 'CONFIGURE', 'MAKE')
+    for check in ('HEADER_BEFORE', 'SOURCE_BEFORE', 'CONFIGURATION_BEFORE',
+                  'HOME_BEFORE', 'CCACHE_BINDING_BEFORE', 'OBJCACHE_BEFORE',
+                  'PHASE_AND_TREE', 'HEADER_AFTER', 'SOURCE_AFTER', 'OUTPUTS_AFTER',
+                  'CPPFLAGS_AFTER', 'OBJCACHE_AFTER', 'RECEIPT_AFTER'))
+
+
 def require(ok, reason):
     if not ok:
         raise ValueError(reason)
+
+
+CONTRACT_REASONS = {
+    'one fixed libfl-dev package': 'HEADER_PACKAGE_COUNT',
+    'bounded header acquisition argument': 'HEADER_ARGUMENT_BOUND',
+    'single header and private receipt only': 'HEADER_OUTPUT_SET',
+    'exact header source receipt': 'HEADER_RECEIPT',
+    'finite header compilation outputs': 'HEADER_PROBE_OUTPUT_SET',
+    'unchanged header compile fixture': 'HEADER_PROBE_SOURCE',
+    'nonempty compiled header object': 'HEADER_PROBE_OBJECT',
+    'compiler used exact staged header': 'HEADER_PROBE_DEPENDENCY',
+    'fixed private FlexLexer header': 'HEADER_IDENTITY',
+    'fixed input size': 'INPUT_SIZE', 'fixed input SHA': 'INPUT_SHA',
+    'input changed during read': 'INPUT_CHANGED', 'regular file required': 'INPUT_REGULAR',
+    'file identity byte cap': 'INPUT_IDENTITY_CAP', 'file grew during hash': 'INPUT_GREW',
+    'file changed during hash': 'INPUT_IDENTITY_CHANGED',
+    'opened file identity mismatch': 'INPUT_IDENTITY_CHANGED',
+    'derived input changed during build': 'SOURCE_CHANGED',
+    'unapproved build configuration': 'BUILD_CONFIGURATION',
+    'unapproved HOME configuration': 'HOME_CONFIGURATION',
+    'explicit empty ccache cache binding': 'CCACHE_BINDING',
+    'in-job tool identity or resolution changed': 'TOOL_IDENTITY',
+    'supervised phase did not succeed': 'PHASE_RESULT', 'bounded private phase log': 'PHASE_LOG_BOUND',
+    'private tree root mode': 'TREE_ROOT_MODE', 'tree entry cap': 'TREE_ENTRY_CAP',
+    'tree symlink refused': 'TREE_SYMLINK', 'private tree directory mode': 'TREE_DIRECTORY_MODE',
+    'tree special file refused': 'TREE_SPECIAL_FILE', 'tree regular-file cap': 'TREE_FILE_CAP',
+    'tree aggregate acceptance byte cap': 'TREE_BYTE_CAP',
+    'required fresh build output missing': 'BUILD_OUTPUT_MISSING',
+    'finite official CPPFLAGS substitution': 'CPPFLAGS_TEMPLATE',
+    'configured Makefile lost exact header include': 'CPPFLAGS_VALUE',
+    'finite OBJCACHE cache branch': 'OBJCACHE_BRANCH', 'bounded sole OBJCACHE cache block': 'OBJCACHE_BLOCK',
+    'ccache version call retains official nonempty guard': 'OBJCACHE_GUARD',
+    'official OBJCACHE check and nonempty invocation guard': 'OBJCACHE_OFFICIAL',
+    'finite official OBJCACHE substitution assignment': 'OBJCACHE_TEMPLATE',
+    'configured OBJCACHE must be exactly empty': 'OBJCACHE_OUTPUT',
+    'configured OBJCACHE assignment witness missing': 'OBJCACHE_WITNESS',
+    'private receipt cap': 'RECEIPT_CAP', 'complete receipt write': 'RECEIPT_WRITE',
+}
+
+
+class ContractFailure(ValueError):
+    def __init__(self, boundary, code):
+        # This type carries only allowlisted constants, never exception text.
+        if boundary not in CONTRACT_BOUNDARIES or code not in CONTRACT_CODES:
+            raise ValueError('invalid fixed contract label')
+        self.safe_contract_boundary = boundary
+        self.safe_contract_code = code
+        super().__init__('fixed contract rejection')
+
+
+def contract(boundary, function, *args, **kwargs):
+    require(boundary in CONTRACT_BOUNDARIES, 'fixed contract boundary')
+    try:
+        return function(*args, **kwargs)
+    except ContractFailure:
+        raise
+    except (ValueError, KeyError) as error:
+        code = ('INPUT_JSON' if isinstance(error, json.JSONDecodeError) else
+                'INPUT_ENCODING' if isinstance(error, UnicodeError) else
+                'MISSING_FIXED_FIELD' if isinstance(error, KeyError) else
+                CONTRACT_REASONS.get(str(error), 'UNMAPPED_CONTRACT'))
+        raise ContractFailure(boundary, code) from error
 
 
 def sha(raw):
@@ -445,21 +528,31 @@ def build_commands(root, work, include):
     }
 
 
-def header_include_witness(template, configured, include):
-    expected = 'CPPFLAGS += -I' + str(include)
-    require(template.decode('utf-8').splitlines().count('CPPFLAGS += @CPPFLAGS@') == 1,
+def header_include_witness(template, configured, include, flex_include=Path('/usr/include')):
+    # Official configure.ac adds whitespace and may append the selected flex's
+    # sibling include directory. Native environment deliberately has no MSYSTEM.
+    # Inspect only fixed CPPFLAGS += tokens, never evaluate shell/Make expansion.
+    template_lines = [line for line in template.decode('utf-8').split('\n') if '@CPPFLAGS@' in line]
+    require(len(template_lines) == 1 and template_lines[0].strip(' \t') == 'CPPFLAGS += @CPPFLAGS@',
             'finite official CPPFLAGS substitution')
-    require(configured.decode('utf-8').splitlines().count(expected) == 1,
+    token = '-I' + str(include)
+    assignments = [re.split(r'[ \t]+', line.strip(' \t'))
+                   for line in configured.decode('utf-8').split('\n')
+                   if re.match(r'^[ \t]*CPPFLAGS[ \t]+\+=[ \t]', line)]
+    matching = [parts for parts in assignments if token in parts[2:]]
+    expected = ['CPPFLAGS', '+=', token]
+    require(len(matching) == 1 and matching[0].count(token) == 1 and matching[0] in
+            (expected, expected + ['-I' + str(flex_include)]),
             'configured Makefile lost exact header include')
-    return {'configured_cppflags': expected, 'substitution_count': 1}
+    return {'configured_cppflags': ' '.join(matching[0]), 'substitution_count': 1}
 
 
-def verify_header_include(support, root, include):
+def verify_header_include(support, root, include, flex_program):
     data = []
     for name in ('src/Makefile_obj.in', 'src/Makefile_obj'):
         pin = support.identity(root / name, 4 * 1024**2)
         data.append(support.checked_read(root / name, pin['bytes'], pin['sha256']))
-    return header_include_witness(*data, include)
+    return header_include_witness(*data, include, Path(flex_program).parent.parent / 'include')
 
 
 def objcache_configure_witness(raw):
@@ -647,7 +740,7 @@ def run(repo: Path, work: Path, call_phase, stop_after_build=False):
         save_private(work / 'derived473_tree.json', derived)
         qualification = qualify_tools(support, tools, buffers, work, call_phase, env)
         save_private(work / 'tool_qualification.json', qualification)
-        header = qualify_flex_header(support, tools, buffers, repo, work, call_phase, env)
+        header = contract('HEADER_QUALIFICATION', qualify_flex_header, support, tools, buffers, repo, work, call_phase, env)
         save_private(work / 'flex_header_qualification.json', header)
         include = work / 'flex-header/include'
         env = environment(work, root)
@@ -660,27 +753,28 @@ def run(repo: Path, work: Path, call_phase, stop_after_build=False):
             'make': ('bin/verilator_bin', 'src/config_rev.h'),
         }
         for phase in ('autoconf', 'configure', 'make'):
-            checked_header(support, include)
-            immutable_sources(support, root, derived)
+            boundary = 'BUILD_' + phase.upper() + '_'
+            contract(boundary + 'HEADER_BEFORE', checked_header, support, include)
+            contract(boundary + 'SOURCE_BEFORE', immutable_sources, support, root, derived)
             for relative in ('.autom4te.cfg', 'aclocal.m4', '.git'):
-                require(not os.path.lexists(root / relative), 'unapproved build configuration')
-            require(not os.path.lexists(work / 'home/.autom4te.cfg'), 'unapproved HOME configuration')
+                contract(boundary + 'CONFIGURATION_BEFORE', require, not os.path.lexists(root / relative), 'unapproved build configuration')
+            contract(boundary + 'HOME_BEFORE', require, not os.path.lexists(work / 'home/.autom4te.cfg'), 'unapproved HOME configuration')
             if phase == 'configure':
-                require(env['ac_cv_prog_OBJCACHE'] == env['OBJCACHE'] == '', 'explicit empty ccache cache binding')
-                verify_objcache_disabled(support, root)
-            result, tree = checked_phase(call_phase, support, tools, 'fresh_' + phase,
-                                        commands[phase], root, env, BUILD_LIMITS[phase], root)
-            checked_header(support, include)
-            immutable_sources(support, root, derived)
-            require(all(tree['entries'].get(n, {}).get('bytes', 0) > 0 for n in required[phase]),
+                contract(boundary + 'CCACHE_BINDING_BEFORE', require, env['ac_cv_prog_OBJCACHE'] == env['OBJCACHE'] == '', 'explicit empty ccache cache binding')
+                contract(boundary + 'OBJCACHE_BEFORE', verify_objcache_disabled, support, root)
+            result, tree = contract(boundary + 'PHASE_AND_TREE', checked_phase, call_phase, support, tools, 'fresh_' + phase,
+                                    commands[phase], root, env, BUILD_LIMITS[phase], root)
+            contract(boundary + 'HEADER_AFTER', checked_header, support, include)
+            contract(boundary + 'SOURCE_AFTER', immutable_sources, support, root, derived)
+            contract(boundary + 'OUTPUTS_AFTER', require, all(tree['entries'].get(n, {}).get('bytes', 0) > 0 for n in required[phase]),
                     'required fresh build output missing')
             builds[phase] = {'exit_code': 0, 'cleanup_confirmed': True,
                              'log_sha256': sha(result['raw_log']), 'usage': result['usage']}
             if phase == 'configure':
-                builds[phase]['header_include'] = verify_header_include(support, root, include)
+                builds[phase]['header_include'] = contract(boundary + 'CPPFLAGS_AFTER', verify_header_include, support, root, include, tools['/usr/bin/flex']['path'])
             if phase in ('autoconf', 'configure'):
-                builds[phase]['objcache_disabled'] = verify_objcache_disabled(support, root, phase == 'configure')
-            save_private(work / ('build_' + phase + '_tree.json'), tree)
+                builds[phase]['objcache_disabled'] = contract(boundary + 'OBJCACHE_AFTER', verify_objcache_disabled, support, root, phase == 'configure')
+            contract(boundary + 'RECEIPT_AFTER', save_private, work / ('build_' + phase + '_tree.json'), tree)
         backend = {'path': str(root / 'bin/verilator_bin'),
                    **support.identity(root / 'bin/verilator_bin', 64 * 1024**2)}
         require(int(backend['mode'], 8) & 0o111 and backend['bytes'] > 0, 'new backend executable')

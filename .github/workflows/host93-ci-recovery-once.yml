@@ -1,5 +1,5 @@
 name: host93-ci-recovery-once
-# Fixed FlexLexer header and real compile probe before same-job toolchain and Host recovery.
+# Fixed FlexLexer header, canonical CPPFLAGS whitespace, and safe postflight failure codes.
 # TEMP SOURCE: publish this exact workflow only after whole-job SOURCE review.
 # A push touching only this path launches one new Host job, never a retry.
 on:

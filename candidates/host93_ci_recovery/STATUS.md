@@ -110,3 +110,17 @@ Cold reruns passed in normal and -O: coordinator 82+82, toolchain 58+58, header 
 Frozen SOURCE manifest: 6046 bytes / 8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b. SOURCE review GO; actual NOT_EXECUTED.
 
 SOURCE review: SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY; review manifest 1999 bytes / 44303c275d27457eff82fd5f99191553d54aadcb3cd528355d17f22ad0dd8476; summary 5092 bytes / 87ddb3dfc2e5e39f3eb645639a4e6470c67ee5754e3dc193e3d0d87f23b8d42e. This is SOURCE acceptance only; new actual remains NOT_EXECUTED.
+
+# CPPFLAGS contract recovery checkpoint
+
+SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY. Parent commit: 89f8a9aa9378d341242dc0b0a03750070fba756f. New actual: NOT_EXECUTED.
+
+39193914902 remains INCOMPLETE after 15 successful native stages through configure and before make. Its precise private contract failure is UNKNOWN. A separate fixed-source synthetic proof establishes that the old exact CPPFLAGS witness rejects official trailing whitespace and the known Linux optional selected-flex include. This does not retroactively identify that actual exception.
+
+The narrow source accepts those fixed token shapes with the staged include first and unique. summary-v3 adds fixed safe contract boundary/code labels while retaining native exit facts. No stage, phase cap, shared 6600-second deadline, header acquisition/probe, supervisor, sanitizer, or Host scope changes.
+
+Cold reruns pass normal/-O: coordinator 90+90, toolchain 118+118, header 26+26, transport 7+7, support 41+41, regressions 7+7, diagnostics 463+727 per mode. Independent SOURCE review: GO within this fixed CPPFLAGS and safe-label scope.
+
+Frozen SOURCE manifest: 6029 bytes / d8695b6bc1cd54c724fb3f589e7cc068b0c787c3c1efe490bfee4f0c8a8a48e3. SOURCE review GO; new actual NOT_EXECUTED.
+
+SOURCE review: SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY. Review manifest: 2096 bytes / 07d6a2539856f5a1d037d2bec4751d9714b2b44ad51acb1372fe94d326f2c633; summary: 3108 bytes / cbdc2da60afb685bcb201e9a123a6a020c68335ac0dbe08a5768f27e4579063c. New actual remains NOT_EXECUTED; the prior actual precise gate remains UNKNOWN.

@@ -1,0 +1,148 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "budgets_changed": false,
+  "cppflags_rule": {
+    "allowed_value_shapes": [
+      "staged -I only",
+      "staged -I first, then one -I for the sibling include directory derived from the already verified selected flex realpath"
+    ],
+    "configured": "ASCII spaces/tabs tokenization on CPPFLAGS += assignments; exactly one assignment contains the exact staged -I token exactly once",
+    "generic_make_parser": false,
+    "native_MSystem_variable_forwarded": false,
+    "rejected": [
+      "unknown extra flags",
+      "foreign optional include",
+      "optional directory before staged directory",
+      "duplicate staged token or matching assignment",
+      "unsupported MSYSTEM -idirafter branch",
+      "controls or arbitrary shell/Make expansion"
+    ],
+    "template": "one literal CPPFLAGS += @CPPFLAGS@ substitution in the pinned official Makefile_obj.in"
+  },
+  "expected_parent_commit": "89f8a9aa9378d341242dc0b0a03750070fba756f",
+  "full_same_job_continuation_changed": false,
+  "header_compile_probe_changed": false,
+  "historical_summary_v2_evidence_preserved_with_its_original_source_validator": true,
+  "latest_actual": {
+    "all_native_exits_zero_and_cleanup_confirmed": true,
+    "failure_category": "INPUT_OR_CONTRACT",
+    "fresh_make_started": false,
+    "last_native_stage": "fresh_configure",
+    "native_stage_count": 15,
+    "precise_contract_gate": "UNKNOWN",
+    "review": {
+      "directory": "review_host93_ci_flex_header_actual_39193914902_20261019T0319",
+      "manifest": {
+        "bytes": 677,
+        "sha256": "e94528e5b74df10fe901a1f0a90713b18b911dd20768c8160d532e111c2de5a5"
+      },
+      "summary": {
+        "bytes": 4789,
+        "sha256": "d0c41d822b0605d6d5f9858f499c299501fa042142622003000cd1097ba4cd10"
+      }
+    },
+    "run_id": 39193914902,
+    "status": "INCOMPLETE"
+  },
+  "modes": {
+    "build-diagnostic": 16,
+    "default": "host-reset-launch",
+    "host-reset-launch": 34
+  },
+  "new_native_stages": 0,
+  "package_or_header_pins_changed": false,
+  "prior_header_source": {
+    "directory": "candidate_ci_flex_header_source_v1_20261019T0300",
+    "manifest": {
+      "bytes": 6046,
+      "sha256": "8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b"
+    }
+  },
+  "publishable_actual_files": [
+    "summary.json",
+    "source_hashes.json",
+    "stage_exits.json"
+  ],
+  "safe_failure_contract": {
+    "coverage": [
+      "new header qualification",
+      "each build header/source/configuration/HOME/ccache precheck",
+      "supervised build phase postflight including tools/log/tree",
+      "header/source/output checks after build",
+      "configure CPPFLAGS witness",
+      "objcache witness",
+      "private build-tree receipt contract"
+    ],
+    "exact_keys": [
+      "boundary",
+      "code"
+    ],
+    "field": "contract_failure",
+    "native_stage_exit_truth_preserved": true,
+    "private_exception_trace_remains_private": true,
+    "summary_schema": "host93-ci-summary-v3",
+    "unknown_older_contract": "UNREPORTED / UNMAPPED_CONTRACT, explicitly unknown",
+    "values": "fixed allowlisted constants only; no arbitrary error message, source path, exception args, or traceback"
+  },
+  "schema": "HOST93_CPPFLAGS_CONTRACT_SOURCE_PLAN_V1",
+  "scope": "Narrow fixed CPPFLAGS substitution whitespace/known Linux branch correction plus safe fixed build-boundary contract labels. No new stage or budget.",
+  "shared_wall_seconds": 6600,
+  "source_counterexample": {
+    "directory": "review_cppflags_whitespace_counterexample_20261019T0319",
+    "manifest": {
+      "bytes": 821,
+      "sha256": "ba5cace86242f74a530c74e3ace831460b0b2dc765a6e269f189ac0621a1e4dd"
+    },
+    "script": {
+      "bytes": 7443,
+      "sha256": "26c284c10f9c77f4b622f4c88441ecfcf2f4cefddef1e9d9a652e63331722704"
+    }
+  },
+  "source_manifest": {
+    "directory": "candidate_ci_configure_contract_source_v1_20261019T0320",
+    "manifest": {
+      "bytes": 6029,
+      "sha256": "d8695b6bc1cd54c724fb3f589e7cc068b0c787c3c1efe490bfee4f0c8a8a48e3"
+    }
+  },
+  "source_proof": {
+    "actual_configured_makefile_available": false,
+    "configure_ac_bytes": 33835,
+    "configure_ac_lines": [
+      227,
+      228,
+      229,
+      230,
+      231,
+      275,
+      276,
+      281,
+      282,
+      283,
+      285,
+      287,
+      288,
+      289
+    ],
+    "configure_ac_sha256": "e9c0af2019ff3e2786596fccf4ed5b90048cead25c5ee385d033285a5d330e88",
+    "makefile_obj_bytes": 12820,
+    "makefile_obj_sha256": "2520c3cb545e3b2ebdcee4602ed4fa17219b9c131d600281ee99037fe2c5dfb0",
+    "source_bug_does_not_prove_actual_exception": true,
+    "variable_flow": "CPPFLAGS -> CPPFLAGSPARSER -> parser compile recipes (420/423/426/429)"
+  },
+  "source_review": {
+    "directory": "review_ci_configure_contract_source_20261019T0328",
+    "manifest": {
+      "bytes": 2096,
+      "sha256": "07d6a2539856f5a1d037d2bec4751d9714b2b44ad51acb1372fe94d326f2c633"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3108,
+      "sha256": "cbdc2da60afb685bcb201e9a123a6a020c68335ac0dbe08a5768f27e4579063c"
+    },
+    "verdict": "SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY"
+  },
+  "status": "SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY",
+  "supervisor_or_sanitizer_changed": false
+}

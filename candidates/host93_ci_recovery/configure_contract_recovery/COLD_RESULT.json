@@ -1,0 +1,52 @@
+{
+  "actual_39193914902_exception_identified": false,
+  "actual_status": "NOT_EXECUTED",
+  "all_14_final_suite_invocations_exit_code": 0,
+  "modes": [
+    "normal",
+    "optimized"
+  ],
+  "native_tools_executed": false,
+  "network_executed": false,
+  "official_template_proof": {
+    "bytes": 1013,
+    "classification": "FIXED_OFFICIAL_SOURCE_WITH_SYNTHETIC_SUBSTITUTION_ONLY",
+    "sha256": "45acd0980d58e81686d79c7a52e4e833491982c30b6dce6caca6b59d948ac532"
+  },
+  "proof_uses_real_fixed_template_with_synthetic_substitution": true,
+  "raw_logs_private_not_for_publication": true,
+  "reported_suite_counts_per_mode": {
+    "coordinator": 90,
+    "diagnostics": {
+      "context_checks": 727,
+      "structured_checks": 463
+    },
+    "header": 26,
+    "support": 41,
+    "support_regressions": 7,
+    "toolchain": 118,
+    "transport": 7
+  },
+  "schema": "HOST93_CPPFLAGS_CONTRACT_COLD_RESULT_V1",
+  "source_manifest": {
+    "directory": "candidate_ci_configure_contract_source_v1_20261019T0320",
+    "manifest": {
+      "bytes": 6029,
+      "sha256": "d8695b6bc1cd54c724fb3f589e7cc068b0c787c3c1efe490bfee4f0c8a8a48e3"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_configure_contract_source_20261019T0328",
+    "manifest": {
+      "bytes": 2096,
+      "sha256": "07d6a2539856f5a1d037d2bec4751d9714b2b44ad51acb1372fe94d326f2c633"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3108,
+      "sha256": "cbdc2da60afb685bcb201e9a123a6a020c68335ac0dbe08a5768f27e4579063c"
+    },
+    "verdict": "SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY"
+  },
+  "status": "PASS_SOURCE_AND_SYNTHETIC_ONLY"
+}

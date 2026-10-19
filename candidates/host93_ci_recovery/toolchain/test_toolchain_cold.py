@@ -19,8 +19,8 @@ parser.add_argument('--repo', required=True, type=Path)
 args = parser.parse_args()
 HERE = Path(__file__).absolute().parent
 RAW = (HERE / 'ci_toolchain.py').read_bytes()
-EXPECTED_BYTES = 39767
-EXPECTED_SHA = '1364bd565d24b94e066d64a76c3730e18b9c4f99c4030f0c3a236083e6efef95'
+EXPECTED_BYTES = 46208
+EXPECTED_SHA = '5b0923a5f72dd9ecb34380aac176c86d5bf99010938cb6e6cb97a11299fe9a0a'
 if len(RAW) != EXPECTED_BYTES or hashlib.sha256(RAW).hexdigest() != EXPECTED_SHA:
     raise ValueError('cold component pin mismatch')
 g = types.ModuleType('fixed_ci_toolchain_cold')
@@ -39,7 +39,8 @@ def rejects(fn, part):
     try:
         fn()
     except (ValueError, KeyError, OSError, SystemExit) as error:
-        g.require(part in str(error), 'wrong rejection: ' + str(error))
+        detail = error.__cause__ if isinstance(error, g.ContractFailure) else error
+        g.require(part in str(detail), 'wrong rejection: ' + str(detail))
         return
     raise ValueError('expected rejection: ' + part)
 
@@ -88,6 +89,61 @@ test('foreign_configured_header_include_refused', lambda: rejects(lambda: g.head
     b'CPPFLAGS += @CPPFLAGS@\n', b'CPPFLAGS += -I/foreign/include\n', Path('/synthetic/include')), 'lost exact header include'))
 test('changed_cppflags_substitution_refused', lambda: rejects(lambda: g.header_include_witness(
     b'CPPFLAGS = @CPPFLAGS@\n', b'CPPFLAGS += -I/synthetic/include\n', Path('/synthetic/include')), 'finite official CPPFLAGS'))
+for text in (b'CPPFLAGS += -I/synthetic/include \n', b' \tCPPFLAGS \t+=\t-I/synthetic/include\t  \n'):
+    test('cppflags_whitespace_accepted_' + str(len(text)), lambda text=text: g.header_include_witness(
+        b'CPPFLAGS += @CPPFLAGS@\n', text, Path('/synthetic/include')))
+test('cppflags_optional_selected_flex_include_accepted', lambda: g.header_include_witness(
+    b'CPPFLAGS += @CPPFLAGS@\n', b'CPPFLAGS += -I/synthetic/include  -I/usr/include\n', Path('/synthetic/include')))
+test('cppflags_intrinsic_relative_include_line_ignored', lambda: g.header_include_witness(
+    b'CPPFLAGS += @CPPFLAGS@\nCPPFLAGS += -I. -I$(srcdir)\n',
+    b'CPPFLAGS += -I/synthetic/include \nCPPFLAGS += -I. -I$(srcdir)\n', Path('/synthetic/include')))
+for name, value in (
+    ('duplicate_line', 'CPPFLAGS += -I/synthetic/include\nCPPFLAGS += -I/synthetic/include\n'),
+    ('duplicate_token', 'CPPFLAGS += -I/synthetic/include -I/synthetic/include\n'),
+    ('foreign_flag', 'CPPFLAGS += -I/synthetic/include -DFOREIGN\n'),
+    ('foreign_include', 'CPPFLAGS += -I/synthetic/include -I/foreign/include\n'),
+    ('reordered_optional', 'CPPFLAGS += -I/usr/include -I/synthetic/include\n'),
+    ('unsupported_msystem', 'CPPFLAGS += -I/synthetic/include -idirafter /usr/include\n'),
+    ('control', 'CPPFLAGS += -I/synthetic/include\v\n')):
+    test('cppflags_' + name + '_refused', lambda value=value: rejects(lambda: g.header_include_witness(
+        b'CPPFLAGS += @CPPFLAGS@\n', value.encode(), Path('/synthetic/include')), 'lost exact header include'))
+
+
+def contract_labels(reason, code):
+    try:
+        g.contract('BUILD_CONFIGURE_CPPFLAGS_AFTER', g.require, False, reason)
+    except g.ContractFailure as error:
+        g.require(error.safe_contract_boundary == 'BUILD_CONFIGURE_CPPFLAGS_AFTER' and error.safe_contract_code == code,
+                  'fixed contract observation')
+        g.require(str(error) == 'fixed contract rejection', 'no arbitrary exception text in safe carrier')
+    else:
+        raise ValueError('missing contract rejection')
+for reason, code in g.CONTRACT_REASONS.items():
+    test('fixed_contract_code_' + code + '_' + str(len(tests)), lambda reason=reason, code=code: contract_labels(reason,code))
+test('unknown_contract_text_not_forwarded', lambda: contract_labels('/private/secret token=synthetic-value', 'UNMAPPED_CONTRACT'))
+
+
+def typed_contract(error, expected):
+    def fail(): raise error
+    try:
+        g.contract('BUILD_CONFIGURE_OUTPUTS_AFTER', fail)
+    except g.ContractFailure as actual:
+        g.require(actual.safe_contract_code == expected, 'typed fixed failure code')
+    else: raise ValueError('missing typed contract failure')
+test('missing_key_value_not_forwarded', lambda: typed_contract(KeyError('/private/key'), 'MISSING_FIXED_FIELD'))
+test('unicode_error_text_not_forwarded', lambda: typed_contract(UnicodeDecodeError('utf-8', b'\xff', 0, 1, 'private'), 'INPUT_ENCODING'))
+test('json_error_text_not_forwarded', lambda: typed_contract(json.JSONDecodeError('private', 'secret', 0), 'INPUT_JSON'))
+
+
+def selected_flex_include_path():
+    with tempfile.TemporaryDirectory() as t:
+        root=Path(t);(root/'src').mkdir()
+        (root/'src/Makefile_obj.in').write_bytes(b'CPPFLAGS += @CPPFLAGS@\n')
+        (root/'src/Makefile_obj').write_bytes(b'CPPFLAGS += -I/synthetic/include  -I/opt/selected/include\n')
+        value=g.verify_header_include(support,root,Path('/synthetic/include'),'/opt/selected/bin/flex')
+        g.require(value['configured_cppflags'].endswith('-I/opt/selected/include'), 'derive sibling include from verified selected flex')
+test('selected_flex_realpath_derives_optional_include', selected_flex_include_path)
+
 test('header_same_buffer_embedded_not_path_import', lambda: g.require(
     repr(buffers[g.HEADER_MODULE]) in g.header_acquisition_argv(args.repo, Path('/synthetic/output'), buffers)[-1] and
     repr(buffers[g.HEADER_INPUTS + 'stage_dependencies.py']) in g.header_acquisition_argv(args.repo, Path('/synthetic/output'), buffers)[-1],
@@ -247,7 +303,7 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
     calls = []
     synthetic_header = b'// SYNTHETIC header; never compiled or represented as real header.\n'
     g.HEADER_SIZE, g.HEADER_SHA = len(synthetic_header), g.sha(synthetic_header)
-    g.host_identities = lambda support: {}
+    g.host_identities = lambda support: {'/usr/bin/flex': {'path': '/usr/bin/flex'}}
     g.verify_official473 = lambda *a: ({'members': []}, {'root': 'SYNTHETIC', 'files': 0, 'bytes': 0, 'entries': {}})
     def materialize(s, source, root, table, original, buf):
         support.fresh_directory(root)
@@ -260,7 +316,11 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
     g.materialize_patched = materialize
     g.immutable_sources = lambda *a: None
     g.verify_objcache_disabled = lambda *a: {'SYNTHETIC_ONLY': True}
-    g.verify_header_include = lambda *a: {'SYNTHETIC_ONLY': True}
+    def include_witness(*a):
+        if header_fault == 'include_witness':
+            raise ValueError('configured Makefile lost exact header include')
+        return {'SYNTHETIC_ONLY': True}
+    g.verify_header_include = include_witness
     try:
         with tempfile.TemporaryDirectory() as temporary:
             work = Path(temporary) / 'work'
@@ -346,9 +406,10 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
             elif header_fault:
                 parts = {'missing': 'single header', 'wrong_hash': 'fixed input SHA',
                          'empty_object': 'nonempty compiled header object', 'wrong_dependency': 'compiler used exact staged header',
-                         'compile_mutation': 'fixed input SHA', 'make_mutation': 'fixed input SHA'}
+                         'compile_mutation': 'fixed input SHA', 'make_mutation': 'fixed input SHA',
+                         'include_witness': 'configured Makefile lost exact header include'}
                 rejects(lambda: g.run(args.repo, work, callback), parts[header_fault])
-                last = 'fresh_make' if header_fault == 'make_mutation' else ('flex_header_acquire' if header_fault in ('missing','wrong_hash') else 'flex_header_compile')
+                last = 'fresh_configure' if header_fault == 'include_witness' else 'fresh_make' if header_fault == 'make_mutation' else ('flex_header_acquire' if header_fault in ('missing','wrong_hash') else 'flex_header_compile')
                 g.require(calls[-1] == last and not any(n.startswith('derived_tiny') for n in calls), 'header failure blocks later stages')
             elif stop_after_build:
                 result = g.run(args.repo, work, callback, stop_after_build=True)
@@ -385,7 +446,7 @@ test('build_only_sixteen_phase_synthetic_orchestration', lambda: run_synthetic(s
 for phase in ('official_source473', 'host_autoconf-version', 'host_bison-micro',
               'flex_header_acquire', 'flex_header_compile', 'fresh_autoconf', 'fresh_configure', 'fresh_make', 'derived_tiny_compile'):
     test('stop_without_retry_' + phase, lambda phase=phase: run_synthetic(fail_at=phase))
-for fault in ('missing', 'wrong_hash', 'empty_object', 'wrong_dependency', 'compile_mutation', 'make_mutation'):
+for fault in ('missing', 'wrong_hash', 'empty_object', 'wrong_dependency', 'compile_mutation', 'make_mutation', 'include_witness'):
     test('header_' + fault + '_refused', lambda fault=fault: run_synthetic(header_fault=fault))
 test('configured_runtime_drift_refused', lambda: run_synthetic(corrupt_runtime=True))
 test('uninitialized_generated_target_refused', lambda: run_synthetic(corrupt_initializer=True))

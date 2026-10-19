@@ -1167,3 +1167,13 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 新定向冷测 normal/-O/搬迁 normal/搬迁 -O 各 54 项，共 216 项，全部 exit0/stderr0；独审另作空 cwd 搬迁 54+54 与保留 actual configure 文本正负检查。旧 540 项是继承证据，本片没有重跑或包装成新结果。
 - 独审结论 `SOURCE_GO_SINGLE_BOUNDED_OBJCACHE_CACHE_CONTINUATION`；review manifest 1273 字节 / `446f788841d55a12be02fb160e1e252879eda3142cc6fa94f19039cf2e336f8f`，summary 5176 字节 / `d55027265fb80dff88f46a11119d0c65491c65c759f151cd0dc59afba48adac5`。公开仅 `local_objcache_cache_resume/` 下 12 件冻结安全原件和 2 件审状态文本；private binding/launcher、原日志与实际资源路径留本地。
 - 这是 SOURCE 与只读旧 bytes 的结论；未因此宣称后续构建或数值通过，`full_block_pass=false`、`baseline_adopted=false`。正式实际仍仅按独审完整合同、现场准入与父唯一受监督调用执行一次。
+
+## 2026-10-19 18:24 UTC：本地首个 M128 N0 完整数值通过（actual 独审已接受）
+
+- 原单次执行源提交 7cc11def3e4e1bb2d6bf6ff15bc1506c607cad6c，outer=0，16 native 自然 0/未超时/cleanup=true，完成 fresh backend/tiny、Host 生成/编译、首 N0 捕获与比较；原 RESULT 为 PASS_FIRST_N0_LIMITED_TOLERANCE_ONLY，独立 actual 审查已接受首 N0 限定容差通过及本次 exact 捕获。
+- 单 RTL/单 RAM 桥 2,956,951 cycles，1 launch、12,288 成功 B 退休、ACK0=1 后不再 eval，完整写回/读回 786,432 B、196,608 值，[1,128,1536]；原 8M 探索帽未耗尽，2,428,928 只保归约下界。原 max_abs≤0.03125/mean_abs≤0.005 容差不变，本次有限值 max/mean=0、different_elements=0；bit/hash exact 单列 true，实际与原 FP32 参考 SHA256 同为 3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f。
+- 生成完整 2,285 B 日志零 warning/error/unparsed；wrapper 18 入/2 出、单 library target。root header 5,296,945 B 重读成功但仍 UNRECOGNIZED_SYNTAX，256 handle UNKNOWN 不倒填。FIFO 4/5,180 仅继承 39232100796 同源前提，本地 NOT_RUN；既有 historical 参考未重新 forward，固定 SV 未重新发射，原参考能力槽仍 NOT_COLLECTED/UNKNOWN。
+- 外层 3,697.674051 秒、协调 3,697.613124 秒；N0 native 2,904.533148 秒、比较 8.378398 秒为嵌套阶段计时。16 输入 94,920,448 B、473 源码 11,747,893 B 为父数据复制/重验，不授新的网络获取或 frontdoor。只首 N0 限定数值 PASS；full_block_pass=false、baseline_adopted=false，后续数值阶段和完整 block 未通过。
+- 原七件证据 MANIFEST 1005 B / 02be7877f6a10dbb08ebd5e6e2d565366278db9642aacb3f5d24240595e18ad8，RESULT 37258 B / 3b41e48ddcc58f109c0bf8b58cdd9777a0573c47617d462e0e49d4957e56c13d。本批只安全 summary/README/计划，无 workflow；排除私有路径、数组、库存、raw logs、生成源码与 ELF。计划以父 226603 B 原字节前缀加本尾一次完整替换，禁止追加完整文档。
+- 正式 actual 独审 review_local_objcache_resume_actual_20261019T1818：MANIFEST 613 B / fa5e5b952a92fb1fe6604237c04221279c26a76990e8c5bc0153b59e434a8b22；SUMMARY 20581 B / af34169bb8291ee49510be82ea6332d9aed928a707f010b0fc990a2ba1ee0fe7。完整 196,608 FP32 字只读逐位一致、零非有限/低16非零/尾随字节；上16小端反投影 BF16 393,216 B / bd41672e6ea7d12746b41e56d21b3309369ecfd87cc26319ae6adbf0874e5cf2，与原 native 参考身份相同，没有新 forward 或模型回放。
+- 周期单位为每次 scheduler 主高沿 observe_counts，含工作 edge0 空闲、edge1 launch 至 ACK0，排除 4+4 reset 高沿；128 项 core-state 和为 2,956,951。AXI stall 按通道 pre-edge valid&&!ready 计数且可重叠，不相加作额外周期；useful-MAC 分子未建立，不报利用率。此前 session8356 原失败保留，首 N0 之外资格不扩大。

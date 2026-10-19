@@ -412,7 +412,7 @@ def opaque_observation(raw,row):
     for start,end in zip(warnings,warnings[1:]+summaries):
         block=lines[start:end]
         combo=any(re.search(r'leaf_opaque_model\.sv:(?:30|31):[1-9][0-9]*: +Example path: ALWAYS$',x) for x in block)
-        handshake=any(re.search(r'host_handshake_micro\.sv:(?:16|18|23|24|25|26|36|37|38|39):[1-9][0-9]*: +Example path: host_handshake_micro\.(?:cmd_valid|step_valid|out_ready|completion_ready|all_command_ready|all_step_ready|all_out_valid|all_completion)$',x) for x in block)
+        handshake=any(re.search(r'host_handshake_micro\.sv:(?:16|18|23|24|25|26|36|37|38|39):[1-9][0-9]*: +Example path: (?:host_handshake_micro\.)?(?:cmd_valid|step_valid|out_ready|completion_ready|all_command_ready|all_step_ready|all_out_valid|all_completion)$',x) for x in block)
         mechanism=mechanism or (combo and handshake)
     require(mechanism,'fixed opaque combo and atomic handshake path')
     return count

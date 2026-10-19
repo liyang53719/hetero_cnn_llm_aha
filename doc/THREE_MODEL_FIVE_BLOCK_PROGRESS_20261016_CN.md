@@ -898,3 +898,12 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - 新后继仍原25阶段、原6600/6480共享时限和首失败停；不改FIFO算术、原子握手、warningfatal或工具构建资源。v2本轮runner冷测40+40通过，v1的35+35及静读9+9保留继承，旧取得/portable/probe套件仅继承；SOURCE已有限GO；ACTUAL_NOT_EXECUTED，不授完整FIFO/生产Host资格。
 - 原 SOURCE v1 HOLD 的 PC01/PC02 仅证据消费关联缺口；v2 保留错误stage-count的INCOMPLETE三JSON，并拒3个已证标签/阶段矛盾。原执行门、成功资格、词法修复及资源不改。
 - 独立SOURCE审 review_micro_postflight_source_v2_20261019T0652：MANIFEST eb1f34bbeba3d44986cdc58a913609b269cddb97f4e9e998c7733db68729f4a6，SUMMARY d1ab76eb6fe8f33cda59d5d66b0fd3057b01a1a577286e8b11ecca35b5d57efe。原CI后验门仍UNKNOWN，新实际仍NOT_EXECUTED。
+
+## 2026-10-19：micro 原证据有限复核与观察器格式窄修
+
+- 原唯一 run 39213008977 保持 INCOMPLETE / OPAQUE_OBSERVATION；24 个 native 阶段成功后 opaque 自然 exit 1，未超时且 cleanup=true。原三 JSON 不改。
+- FIFO 真实四 case / 5180 比较限抽取组合四态与手动状态步进；20 工具阶段和 transparent 生成成功。Host 配对为 12 输入/4 输出手写 MODEL，不升级为生产 22/21 wrapper 或完整事务等价。
+- summary 的 opaque 已接受计数为 0；原 AVAILABLE 且未截断的 60 行安全尾另有 4 条 UNOPTFLAT 与一条 4-warning fatal。固定输入只读复核支持 MODEL 依赖聚合；[PATH] 无法恢复原私有文件归属，不声称 raw observer 已重新通过。
+- SOURCE 补片仅 +5 字节，允许既有有限信号名前的固定 top 前缀可选；原文件后缀/坐标、同 warning block、自然退出/cleanup、错误与 fatal 计数门不变。新合成测试不反构造私有路径。
+- 原 40+40 冷测通过；新 8+8 通过。可搬迁测试后继只重跑 8+8，40+40 按原字节继承。生产可见性方案只提出具体边界选择及风险，不改 RTL、allReady、算术或单 combo 调用。
+- SOURCE 有限审 GO：review_micro_observer_source_20261019T0719，MANIFEST 1753 B / e4705aba0fc221aaedc50755a9165319eb0b48a9bde254698abc8b3da8280a00，SUMMARY 3449 B / 0ebfdfc599d55a85a0374d7e7cdc0fd0f62369ec633c250501e226eb493970b9；verdict SOURCE_GO_FINITE_OPTIONAL_TOP_PREFIX_OBSERVER_ONLY。独立复核 40+40、8+8。本批不改 workflow、不触发重编或新 job，生产方案仍只读提案。

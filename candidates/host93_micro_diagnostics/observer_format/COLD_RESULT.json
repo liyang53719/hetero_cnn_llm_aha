@@ -1,0 +1,33 @@
+{
+  "actual_raw_observer_requalified": false,
+  "native_execution": false,
+  "production_host_qualified": false,
+  "safe_reassessment": "NORMAL_AND_OPTIMIZED_IDENTICAL",
+  "schema": "MICRO_OBSERVER_COLD_RESULT",
+  "source_review": {
+    "directory": "review_micro_observer_source_20261019T0719",
+    "manifest": {
+      "bytes": 1753,
+      "sha256": "e4705aba0fc221aaedc50755a9165319eb0b48a9bde254698abc8b3da8280a00"
+    },
+    "summary": {
+      "bytes": 3449,
+      "sha256": "0ebfdfc599d55a85a0374d7e7cdc0fd0f62369ec633c250501e226eb493970b9"
+    },
+    "verdict": "SOURCE_GO_FINITE_OPTIONAL_TOP_PREFIX_OBSERVER_ONLY"
+  },
+  "status": "PASS",
+  "v1_observer_suite": {
+    "normal": 8,
+    "optimized": 8
+  },
+  "v1_original_suite": {
+    "normal": 40,
+    "optimized": 40
+  },
+  "v2_original_suite": "INHERITED_BYTE_IDENTICAL_40_PLUS_40",
+  "v2_portable_observer_rerun": {
+    "normal": 8,
+    "optimized": 8
+  }
+}

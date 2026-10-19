@@ -1,0 +1,5 @@
+%Warning-UNOPTFLAT: /synthetic/host_handshake_micro.sv:18:15: Signal unoptimizable: Circular combinational logic: 'all_command_ready'
+  /synthetic/host_handshake_micro.sv:18:15:      Example path: all_command_ready
+  /synthetic/leaf_opaque_model.sv:30:3:      Example path: ALWAYS
+  /synthetic/host_handshake_micro.sv:17:21:      Example path: cmd_ready
+%Error: Exiting due to 1 warning(s)

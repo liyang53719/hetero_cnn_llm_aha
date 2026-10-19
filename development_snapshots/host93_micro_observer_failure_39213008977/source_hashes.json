@@ -1,0 +1,184 @@
+{
+  "project_sources": [
+    {
+      "bytes": 806,
+      "path": "candidates/host93_ci_recovery/SUPPORT_PINS.json",
+      "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"
+    },
+    {
+      "bytes": 16348,
+      "path": "candidates/host93_ci_recovery/ci_support_v3.py",
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+    },
+    {
+      "bytes": 11942,
+      "path": "candidates/host93_ci_recovery/safe_build_diagnostics.py",
+      "sha256": "97ab72651c9acadf1e4d242225bdfc21dea3807aa911e448ce7330b762fa4a60"
+    },
+    {
+      "bytes": 3575,
+      "path": "candidates/host93_ci_recovery/toolchain/SOURCE_PINS.json",
+      "sha256": "42e1b206dcf89a886c74eec321823bb23e72422dcc856041bb83a339697d87fa"
+    },
+    {
+      "bytes": 46208,
+      "path": "candidates/host93_ci_recovery/toolchain/ci_toolchain.py",
+      "sha256": "5b0923a5f72dd9ecb34380aac176c86d5bf99010938cb6e6cb97a11299fe9a0a"
+    },
+    {
+      "bytes": 13781,
+      "path": "candidates/host93_ci_recovery/toolchain/flex_header.py",
+      "sha256": "66bad0a2aa866d8df0d6380d15620e095afcc2819d014e01c202e18f017dfce6"
+    },
+    {
+      "bytes": 6377,
+      "path": "candidates/host93_micro_diagnostics/SOURCE_PINS.json",
+      "sha256": "78961148de42d4bb1d377a6433915e818fd0e84ad39f2ae5717ae5d08bb2bac1"
+    },
+    {
+      "bytes": 11336,
+      "path": "candidates/host93_micro_diagnostics/fixtures/fifo_valid_split_cases.sv",
+      "sha256": "90ec11c7a463bfebff87c2e026204cc84de37bd19b6ed5013eb817d1e7abb4e1"
+    },
+    {
+      "bytes": 5866,
+      "path": "candidates/host93_micro_diagnostics/fixtures/fifo_valid_split_miter.sv",
+      "sha256": "c479cc3aac15fbe7934e892e26a78df998d0dcbc041b5c1429a4a72d160299bb"
+    },
+    {
+      "bytes": 4013,
+      "path": "candidates/host93_micro_diagnostics/fixtures/host_handshake_micro.sv",
+      "sha256": "e0ca2f98440dc1fac351fe462f6f6e8dfaabde238aa3c80e20023d6de91187b3"
+    },
+    {
+      "bytes": 2295,
+      "path": "candidates/host93_micro_diagnostics/fixtures/leaf_opaque_model.sv",
+      "sha256": "4f90ead01458375d28082195a617ce4621abaabfdb05ee3244f57388a98ee410"
+    },
+    {
+      "bytes": 1751,
+      "path": "candidates/host93_micro_diagnostics/fixtures/leaf_transparent.sv",
+      "sha256": "bcdadb31cc372a23e9fba2e309abc08c6a8382be05f5397ae13059a12be9db19"
+    },
+    {
+      "bytes": 39139,
+      "path": "candidates/host93_micro_diagnostics/icarus_stage.py",
+      "sha256": "907dd10148db6d3de4e614453fb130638d2149ee523b16b4aa97246d04c29554"
+    },
+    {
+      "bytes": 53273,
+      "path": "candidates/host93_micro_diagnostics/run.py",
+      "sha256": "7dffb2a2fbb108b2bf01926e00372346e5c85e9ef7cef7bbfa03b3b1b45577b0"
+    },
+    {
+      "bytes": 3946,
+      "path": "development_snapshots/canonical_host93_dependency_source_20261018/probe/MODE_DEFINITIONS.json",
+      "sha256": "41f1a55af603d55d78b3a2804beb9a282b189ac27ecb927cb82fe89e29b22ac9"
+    },
+    {
+      "bytes": 205675,
+      "path": "development_snapshots/canonical_host93_dependency_source_20261018/worker/PINS.json",
+      "sha256": "abc9e5f55b045b6402cc5c13e4d4c4263eb6a7403e84b01a165a12b5d5d20cd0"
+    },
+    {
+      "bytes": 20634,
+      "path": "development_snapshots/canonical_host93_dependency_source_20261018/worker/stage_dependencies.py",
+      "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+    },
+    {
+      "bytes": 4269,
+      "path": "development_snapshots/canonical_host93_derived_micro_source_20261018/fixtures/main.cpp",
+      "sha256": "774064865f2e1d224363b6c63ae75dac3abe5f0afe6c05105920724fe4e161c0"
+    },
+    {
+      "bytes": 938,
+      "path": "development_snapshots/canonical_host93_derived_micro_source_20261018/fixtures/tiny.sv",
+      "sha256": "339baf2e67c47d6f00597f6daee72f2e7b5c47ae8803dac54ff30911bcba7a85"
+    },
+    {
+      "bytes": 5127,
+      "path": "development_snapshots/canonical_host93_derived_micro_source_20261018/init_contract.py",
+      "sha256": "d070d9a0841ea034dd684fad3ca9fd4fa32a1ed1afa1417bf4f4a88625996365"
+    },
+    {
+      "bytes": 27056,
+      "path": "development_snapshots/canonical_host93_derived_micro_source_20261018/run_micro_gate.py",
+      "sha256": "2e2fd07edd71aef9d5abaa446f9d77c89a0c32060006dd699b4f0bc612e0c062"
+    },
+    {
+      "bytes": 160737,
+      "path": "development_snapshots/canonical_host93_fixed_core_build_source_20261018/GATE_PLAN.json",
+      "sha256": "cd489d6530321fa95b79fc1d0e82d5599d358a1cb882165e44805dcafb98bd42"
+    },
+    {
+      "bytes": 28551,
+      "path": "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py",
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    },
+    {
+      "bytes": 17327,
+      "path": "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a"
+    },
+    {
+      "bytes": 75898,
+      "path": "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/FIXED_CORE_MEMBERS.json",
+      "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+    },
+    {
+      "bytes": 2983,
+      "path": "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/SOURCE_PLAN.json",
+      "sha256": "c57d32c37413d3aaf252c674cfd5c51fda338b68a0823a264f220aaf3cdc336f"
+    },
+    {
+      "bytes": 19263,
+      "path": "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/acquire_base.py",
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    },
+    {
+      "bytes": 24791,
+      "path": "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/acquire_official_source.py",
+      "sha256": "61c756233830e1f6bf0862052c4c72035e60409179c07fa57be050064dc3fedc"
+    },
+    {
+      "bytes": 22430,
+      "path": "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018/DERIVED_V3ProtectLib.cpp",
+      "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+    },
+    {
+      "bytes": 22417,
+      "path": "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018/ORIGINAL_V3ProtectLib.cpp",
+      "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+    },
+    {
+      "bytes": 1619,
+      "path": "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018/PATCH.json",
+      "sha256": "784e777dbf4cfdef53788ff1c3d69a31c5e416a7d10c2d5a387b795b42cb1fe2"
+    },
+    {
+      "bytes": 16693,
+      "path": "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    },
+    {
+      "bytes": 2594,
+      "path": "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/DEPENDENCY_PLAN.json",
+      "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+    }
+  ],
+  "schema": "host93-micro-source-hashes-v1",
+  "tools": {
+    "derived_backend": {
+      "bytes": 18958256,
+      "sha256": "7455322f967191c426ae0f4103327490ac39661000b4f6566716c08128dcdb3d"
+    },
+    "icarus": {
+      "bytes": 51640,
+      "sha256": "a6071e4b4a68feafca0c8ee0e6aa275eee9a43a108c62801cfd1eca6eab6d8a3"
+    },
+    "vvp": {
+      "bytes": 1354376,
+      "sha256": "a10bd7d4a0850308ac8c2c98115b6a3084f9be978307610f2a521190c28f4023"
+    }
+  }
+}

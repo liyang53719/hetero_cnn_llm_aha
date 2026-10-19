@@ -1,0 +1,50 @@
+{
+  "clean_native_prefix": 24,
+  "fifo_cases": 4,
+  "fifo_comparisons": 5180,
+  "fifo_scope": "EXTRACTED_COMBINATIONAL_FOUR_STATE_AND_MANUAL_STATE_TRACES_ONLY",
+  "inputs": {
+    "source_hashes.json": {
+      "bytes": 7600,
+      "sha256": "84b8b93de5688502846f5a08cfb801036a5337eb3c4a7faead625feb3277713f"
+    },
+    "stage_exits.json": {
+      "bytes": 24222,
+      "sha256": "8477ee89b95ea4eaee1685f9a6918dc471137735e7facd5e99ac71ed9e939ce5"
+    },
+    "summary.json": {
+      "bytes": 477,
+      "sha256": "cdc65bcd68d56567fda0538be488bf9c6746243b1116df7ad4d2d7f48df8916c"
+    }
+  },
+  "model_scope": "HAND_WRITTEN_12_INPUT_4_OUTPUT_OPAQUE_VERSUS_TRANSPARENT",
+  "native_stage_count": 25,
+  "native_work_performed": false,
+  "opaque_cleanup_confirmed": true,
+  "opaque_native_exit": 1,
+  "opaque_timeout": false,
+  "original_contract_boundary": "OPAQUE_OBSERVATION",
+  "original_evidence_unmodified": true,
+  "original_schema_validation": "PASS",
+  "original_status": "INCOMPLETE",
+  "original_warning_observation_accepted": false,
+  "private_source_file_mapping": "NOT_RECOVERABLE_FROM_REDACTED_PATHS",
+  "production_22_input_21_output_wrapper_equivalence": "NOT_ESTABLISHED",
+  "production_host_qualified": false,
+  "raw_log_replayed": false,
+  "raw_observer_requalified": false,
+  "retained_fatal_warning_count": 4,
+  "retained_rules": [
+    "UNOPTFLAT"
+  ],
+  "retained_safe_lines": 60,
+  "retained_warning_count": 4,
+  "run_id": 39213008977,
+  "safe_context_truncated": false,
+  "same_block_redacted_model_witnesses": 4,
+  "schema": "host93-fixed-safe-context-reassessment-v1",
+  "source_identity_rows": 33,
+  "status": "SAFE_CONTEXT_SUPPORTS_MODELED_DEPENDENCY_OVERAGGREGATION",
+  "toolchain_twenty_stages_clean": true,
+  "transparent_native_exit": 0
+}

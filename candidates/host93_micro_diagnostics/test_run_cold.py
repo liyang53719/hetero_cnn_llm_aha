@@ -18,8 +18,8 @@ import types
 import unittest
 
 HERE=Path(__file__).absolute().parent
-RUN_BYTES=53273
-RUN_SHA='7dffb2a2fbb108b2bf01926e00372346e5c85e9ef7cef7bbfa03b3b1b45577b0'
+RUN_BYTES=53278
+RUN_SHA='235a619fc7d304578ff78a958c173a33cb50d1a860dbf56fe2051fd4396ba3b8'
 
 def load():
     raw=(HERE/'run.py').read_bytes()

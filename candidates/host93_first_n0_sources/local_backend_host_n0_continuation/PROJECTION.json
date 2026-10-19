@@ -1,0 +1,55 @@
+{
+  "accepted_toolchain_and_cached_header_identical": true,
+  "continuation_AST_outside_run_finally_identical": true,
+  "native_phase_order_argv_limits_unchanged": true,
+  "original": {
+    "accepted_toolchain.py": {
+      "bytes": 4312,
+      "sha256": "8719c513afec5bf48565bdb1dc27e70bdf150560828de7fc08936bc33c550dcd"
+    },
+    "cached_flex_header.py": {
+      "bytes": 3269,
+      "sha256": "afaf98d6137562790b0664293acf465859288549e30d87f197879cb334979403"
+    },
+    "continuation_entry.py": {
+      "bytes": 16568,
+      "sha256": "842aa24206fc1a5911d6a39b05299d9b85fb7920763e2b4cd764060a7a608ca3"
+    },
+    "source_entry.py": {
+      "bytes": 8437,
+      "sha256": "9f4c299ccebb4535c1b170454bd123c12d7c978e978c0319dbe769adfe4e2681"
+    }
+  },
+  "projected": {
+    "accepted_toolchain.py": {
+      "bytes": 4312,
+      "sha256": "8719c513afec5bf48565bdb1dc27e70bdf150560828de7fc08936bc33c550dcd"
+    },
+    "cached_flex_header.py": {
+      "bytes": 3269,
+      "sha256": "afaf98d6137562790b0664293acf465859288549e30d87f197879cb334979403"
+    },
+    "continuation_entry.py": {
+      "bytes": 17111,
+      "sha256": "e8b45d2563b6079058663f98f22275d093ca808e0187f55476f16d224ab54675"
+    },
+    "source_entry.py": {
+      "bytes": 8437,
+      "sha256": "be54ecc74488a2dce76318d2a86b73f52427a9a8364480662c800fe40b22c6dc"
+    }
+  },
+  "schema": 1,
+  "scope": "ONLY_F01_REPORT_AND_RESTORATION_EXCEPTION_PRIORITY_WITH_120_SECOND_TAIL_TIGHTENING",
+  "source_entry_only_updated_continuation_pin": true,
+  "v1_review": {
+    "manifest": {
+      "bytes": 1360,
+      "sha256": "1ce617eee00eab7cdc66bb614b502a00c296f9a1680b1c354dd2ad59d1925488"
+    },
+    "summary": {
+      "bytes": 3814,
+      "sha256": "c00c381a6a0ea03056a21bb3a62881ae7af759d1719862d3fd1bf19118399271"
+    }
+  },
+  "v2_review": "PENDING"
+}

@@ -1,0 +1,43 @@
+{
+  "Host_executed_here": false,
+  "N0_numeric_complete_here": false,
+  "author_pure_mock_groups": 540,
+  "backend_qualified_here": false,
+  "baseline_adopted": false,
+  "frozen_docs_note": "Original README/CONTRACT/PROJECTION retain their drafting PENDING label; this separate reviewed STATUS records final SOURCE review without mutating frozen originals.",
+  "full_block_pass": false,
+  "independent_pure_mock_counts": {
+    "exits": [
+      0,
+      0
+    ],
+    "fresh_relocated_empty_cwd_normal": 135,
+    "fresh_relocated_empty_cwd_optimized": 135,
+    "native": false,
+    "network": false,
+    "new_error_tail_regressions_per_mode": 17
+  },
+  "native_execution_here": "NOT_RUN",
+  "native_phase_count_if_invoked": 17,
+  "new_metadata_files": 2,
+  "parent_data_stage_count_if_invoked": 1,
+  "public_original_files": 17,
+  "schema": 1,
+  "source_manifest": {
+    "bytes": 4086,
+    "sha256": "1b68db3a757c4733cc396a7b8dfac7636e834a14f9a68e962912676684b9a2e7"
+  },
+  "source_review": {
+    "manifest": {
+      "bytes": 798,
+      "sha256": "93030e61dae1c6c9d92a06b25866abe4f4ecc59979721bee315d1e0598b8dbb6"
+    },
+    "summary": {
+      "bytes": 3891,
+      "sha256": "cb4cce9f49ec298c45e299d0415b6c1cf6bf736281052bdc749d06e2b41cdc7f"
+    },
+    "verdict": "SOURCE_GO_SINGLE_BOUNDED_LOCAL_BACKEND_HOST_N0_CONTINUATION"
+  },
+  "status": "SOURCE_GO_SINGLE_BOUNDED_LOCAL_BACKEND_HOST_N0_CONTINUATION",
+  "supersedes_v1_HOLD": "F01 only; first failure priority and bounded report tail fixed; v1 evidence unchanged"
+}

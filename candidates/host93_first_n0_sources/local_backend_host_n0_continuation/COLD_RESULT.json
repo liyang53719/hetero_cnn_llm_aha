@@ -1,0 +1,108 @@
+{
+  "counterexample_history": {
+    "v1_f01_double_fault_confirmed": true,
+    "v1_manifest": {
+      "bytes": 4403,
+      "sha256": "cd1a4dbaea7f7d66b55be917574c7cb6461feb75ca8dbf540dd5429a18ac30c2"
+    },
+    "v2_fault_test": {
+      "bytes": 5788,
+      "sha256": "7621afbdc3d344438f0d826f4c7820b75b6d7f0655ce068e431a3bfa28652f59"
+    }
+  },
+  "f01_closed_in_cold": true,
+  "groups_per_run": 135,
+  "inherited_read_only_real_check": {
+    "accepted_and_header_source_bytes_identical_in_v2": true,
+    "performed_on_v1_sources": true,
+    "scope": "read-only accepted existing tool/profile and exact historical FIFO source evidence consumer; no native",
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 4175,
+      "sha256": "e5b27529ec635b1301760657f76d466a4f369d5220c4f629cf5f5db8df7e88cf"
+    },
+    "v2_continuation_AST_outside_finally_identical": true
+  },
+  "known_blockers_in_this_test_scope": [],
+  "limits_of_claim": "Mocks prove finite source ordering and rejection behavior, not backend/Host/N0 numerical success. Independent v2 SOURCE review remains separate.",
+  "module_counts": {
+    "cached_header": 16,
+    "canonical_copy": 8,
+    "continuation": 41,
+    "entry": 20,
+    "fault_priority_and_tail": 17,
+    "qualification_acceptance": 33
+  },
+  "native_started": false,
+  "network_started": false,
+  "runs": {
+    "cold_normal": {
+      "optimized": 0,
+      "status": "PASS_FINITE_BACKEND_HOST_N0_COLD_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 15366,
+        "sha256": "d6abc7d68566f9063b36ba167e13487a83cfec5bc26d81cccfd2811f0a63e781"
+      },
+      "tests": 135
+    },
+    "cold_optimized": {
+      "optimized": 1,
+      "status": "PASS_FINITE_BACKEND_HOST_N0_COLD_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 15366,
+        "sha256": "3e572e9567c13f15d204704a6f7875441fd6cc63b8ff9df2673352fe848c637e"
+      },
+      "tests": 135
+    },
+    "relocated_normal": {
+      "optimized": 0,
+      "status": "PASS_FINITE_BACKEND_HOST_N0_COLD_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 15366,
+        "sha256": "d6abc7d68566f9063b36ba167e13487a83cfec5bc26d81cccfd2811f0a63e781"
+      },
+      "tests": 135
+    },
+    "relocated_optimized": {
+      "optimized": 1,
+      "status": "PASS_FINITE_BACKEND_HOST_N0_COLD_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 15366,
+        "sha256": "3e572e9567c13f15d204704a6f7875441fd6cc63b8ff9df2673352fe848c637e"
+      },
+      "tests": 135
+    }
+  },
+  "schema": 2,
+  "source_check": {
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 1990,
+      "sha256": "532cb7a387c01e07d0ddcbbb0bafe369053c2ffb9f427f449e04fa2a7b4cac50"
+    }
+  },
+  "status": "PASS_FINITE_SOURCE_COLD_ONLY",
+  "total_groups": 540
+}

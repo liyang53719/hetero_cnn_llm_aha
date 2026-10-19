@@ -1,0 +1,47 @@
+{
+  "actual_gate": "One approved bounded local continuation still requires exact private binding, original live admission and original supervisory evidence. SOURCE GO is not a native or numerical result.",
+  "author_cold": {
+    "normal": 135,
+    "optimized": 135,
+    "relocated_normal": 135,
+    "relocated_optimized": 135,
+    "sum": 540
+  },
+  "closed_findings": [
+    {
+      "boundary": "fixed report and restoration errors never replace earlier failure; min(total stop,now+120) report bound",
+      "id": "F01",
+      "status": "CLOSED"
+    }
+  ],
+  "independent_tests": {
+    "exits": [
+      0,
+      0
+    ],
+    "fresh_relocated_empty_cwd_normal": 135,
+    "fresh_relocated_empty_cwd_optimized": 135,
+    "native": false,
+    "network": false,
+    "new_error_tail_regressions_per_mode": 17
+  },
+  "private_material_excluded": true,
+  "review": {
+    "manifest": {
+      "bytes": 798,
+      "sha256": "93030e61dae1c6c9d92a06b25866abe4f4ecc59979721bee315d1e0598b8dbb6"
+    },
+    "summary": {
+      "bytes": 3891,
+      "sha256": "cb4cce9f49ec298c45e299d0415b6c1cf6bf736281052bdc749d06e2b41cdc7f"
+    },
+    "verdict": "SOURCE_GO_SINGLE_BOUNDED_LOCAL_BACKEND_HOST_N0_CONTINUATION"
+  },
+  "schema": 1,
+  "scope": "SAFE_SOURCE_REVIEW_METADATA_ONLY",
+  "source_manifest": {
+    "bytes": 4086,
+    "sha256": "1b68db3a757c4733cc396a7b8dfac7636e834a14f9a68e962912676684b9a2e7"
+  },
+  "success_requires": "Original process exit0 and RESULT limited PASS and cleaned phase evidence together; pre-restoration RESULT alone cannot qualify success."
+}

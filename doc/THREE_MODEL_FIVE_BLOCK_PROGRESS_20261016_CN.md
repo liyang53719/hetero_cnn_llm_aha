@@ -1189,3 +1189,15 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 来源MANIFEST 3693 B/SHA256 8036848dcfe00eff172977cfa4a181b78d7aa02916ef8a175e003901029d93fe；25成员70770 B、21原源码同pin，原dot16/SHA头不改。作者普通/-O/搬迁两模各29，独审普通/-O各29通过，均纯整数/Fraction与mock，无实际数组读取、native编译/运行、Torch/NumPy或RTL。
 - 独审结论ACCEPT_PC1_TWO_REFERENCE_MODELS_SOURCE_ONLY：review_pc1_reference_core_20261019T1844，MANIFEST 550 B/SHA256 161b9e043efcbcc89ec4c85ccf637559c62e0315578c417356752ffafdb7cdd2；SUMMARY 3927 B/SHA256 a880263eae21d76de8293d7d084238f9ba7675f0e22189e101a8e1d2e2d09a0d。当前TEMP_SOURCE/NOT_EXECUTED；三阶段210秒/单CPU/512MiB预算仍须固定依赖和最薄监督入口/精确命令独审后实施，长RTL未授权。
 - 本批不含私有binding、runtime、原receipt、实际数组或原日志，不改旧N0 PASS、生产或workflow。中文计划以父343ff1b3f8516ebb0ce7c8e8762e44506fb76ab7的229542 B精确前缀加本纯尾作完整替换一次，禁止追加整篇全文。
+
+
+## 2026-10-19 18:51 UTC：最小 PC0→ACK0→PC1→ACK1 桥接 SOURCE 独审闭合
+
+- 新增隔离 pc01_bridge：39 件原字节安全 public 文件、28 件生产源码、44 项原来源 pins，加独立最终 STATUS。原 N0/RTL/普通 archive 与已退出实际进程均未改动；本片未 C++ 编译、未运行 native 或 RTL、未获得 qraw 数值结果。已有 N0 actual PASS 保持原范围，不转移成 PC1 通过。
+- 新入口从 fresh reset 开始，在同一个 Host/context/root/Syms 和同一 RAM 中完成 PC0、真实 ACK0，再继续 PC1。原 N0 scheduler/adapter 保持存活；PC1 私有固定 permit/generation、接受的 Dense job、qraw AW/W/B 账本和全覆盖共同授写。qraw 的 786432 B/196608 FP32 字只有完整退休和 ACK1 后发布；post_pc=2/jobs=2，终 ACK1 后零次 eval，无 PC2、bias 或 BF16 输出转换。
+- 读权限只消费实际 command/descriptor、Wq 与同 RAM 已发布 N0。模型/AXI/Matrix/共享 vector 检查在 B mutation 前完成，随后仅 noexcept 退休。现有注册边界能观察公共 job/done、共享服务、Matrix 与 AXI；未新增 RTL tap，也不声称直接观察所有内部 reduction tile/window。内部资源退休依赖固定原 RTL 语义与外部无债终态，独立数学和 typed 两轨结果仍由各自模型批提供。
+- 修正后的 transposed issue 为每次128×32、sliceMask=255；160列对应5个 context，末96列对应3个，wideSteps=(9×5+3)×1536=73728，sliceSteps=589824，executed/useful MAC=301989888，binary-add vectors=12288。8×16-row 是输出遍历，不是额外 issue 组。PC1 分母固定4096×(ACK1高沿−PC1接受高沿+1)，涵盖完整加载/计算/合并/写回/stall/退休；whole-PC01 总周期另列，不能称 whole-block 利用率。
+- 全 PC01 8M 主周期探索帽包含重新执行 PC0，不保证 PC1 完成；不足则 INCOMPLETE、不写部分 qraw。普通 archive 加三个 runtime object 和固定 header 共19项现物仅只读复核；预备命令只在 fresh 目录编译一个 driver 并链接，不调用旧 Makefile、不重新生成 RTL。建议编译链接120秒/单CPU、8GiB RAM与3GiB磁盘门及6GiB地址空间仅是待绑定计划；完整执行监督入口、墙钟及参考比较仍未获此 SOURCE 结论授予。
+- 作者纯冷42普通+42优化+42搬迁普通+42搬迁优化，以及same-buffer入口9普通+9优化，共186项通过。独审另作42+42及入口9+9；测试消费固定size/SHA的同buffer源码，覆盖全qraw抽象账本、权限/退休/ACK与入口同长替换、长短、遍历和symlink拒例。Python抽象ledger与静态源码检查均不代替C++接口、RTL或数值资格。
+- 根 SOURCE manifest 6527 B/SHA256 f8f0ab2c27c677dd01f8e294856b855f8cc6133b472816c0c504a76cdff9829d；生产manifest4472 B/40ebb6c1957941b90906c4dc5c0d561816fa413aa5a4431a1bd2d191f39dc5b1；COLD_RESULT2195 B/0015d0f71e667d1ec6508c012a28f5543bc8131f88ed46a3dcc35f4e09147eb1。正式独审 ACCEPT_FINITE_PC01_BRIDGE_SOURCE_ONLY：review_pc01_bridge_source_20261019T1849，MANIFEST827 B/f2272142b2c50cf8c1bc41606d2f7194e546013b5ff041c20e8edc634b5e4725，SUMMARY.json4749 B/5d39ff86087bb3dec29855f453cfe38997d30a5db8dcbf9162bacefcd9e52f3e。原README待审文字由独立STATUS提供最终身份，不热改冻结件。
+- 本次仅安全源码/冷测与元数据，不公开私有relink绑定、机器路径、数组、实际receipt、原日志或搬迁fixture，不改workflow。计划按父bc0a78b042b253668c2ed79ac6a6bbe0e88c4dcf的232260 B精确前缀加本纯尾，一次完整替换；禁止追加全文。full_block_pass=false、baseline_adopted=false。

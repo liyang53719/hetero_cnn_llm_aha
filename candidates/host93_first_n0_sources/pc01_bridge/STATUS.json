@@ -1,0 +1,51 @@
+{
+  "author_cold": {
+    "entry_normal": 9,
+    "entry_optimized": 9,
+    "relocated_normal": 42,
+    "relocated_optimized": 42,
+    "scope": "STATIC_SOURCE_AND_INDEPENDENT_ABSTRACT_LEDGER_ONLY",
+    "source_normal": 42,
+    "source_optimized": 42,
+    "total": 186
+  },
+  "baseline_adopted": false,
+  "cpp_compiled": false,
+  "existing_relink_items_read_only_checked": 19,
+  "frozen_public_files": 39,
+  "frozen_readme_pending_review_note_superseded_by_this_status": true,
+  "full_block_pass": false,
+  "independent_review_cold": {
+    "entry_normal": 9,
+    "entry_optimized": 9,
+    "source_normal": 42,
+    "source_optimized": 42
+  },
+  "machine_binding_published": false,
+  "new_native_executed": false,
+  "original_source_pins": 44,
+  "production_files": 28,
+  "qraw_numeric_verified": false,
+  "retained_minor_documentation_note": "Inherited runtime_policy comment still says N0-only; the reviewed behavior admits qraw only after ACK1 publication. No frozen source byte was changed.",
+  "rtl_executed": false,
+  "schema": "PC01_BRIDGE_SOURCE_STATUS_V1",
+  "source_manifest": {
+    "bytes": 6527,
+    "sha256": "f8f0ab2c27c677dd01f8e294856b855f8cc6133b472816c0c504a76cdff9829d"
+  },
+  "source_review": {
+    "directory": "review_pc01_bridge_source_20261019T1849",
+    "manifest": {
+      "bytes": 827,
+      "sha256": "f2272142b2c50cf8c1bc41606d2f7194e546013b5ff041c20e8edc634b5e4725"
+    },
+    "summary": {
+      "bytes": 4749,
+      "file": "SUMMARY.json",
+      "sha256": "5d39ff86087bb3dec29855f453cfe38997d30a5db8dcbf9162bacefcd9e52f3e"
+    },
+    "verdict": "ACCEPT_FINITE_PC01_BRIDGE_SOURCE_ONLY"
+  },
+  "status": "TEMP_SOURCE_SOURCE_REVIEW_ACCEPTED",
+  "workflow_changed": false
+}

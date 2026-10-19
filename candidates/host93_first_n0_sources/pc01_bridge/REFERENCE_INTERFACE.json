@@ -1,0 +1,36 @@
+{
+  "ack1_required": {
+    "issued_jobs": 2,
+    "owner": 2,
+    "pc": 1,
+    "post_pc": 2,
+    "signal": 2,
+    "status": 0
+  },
+  "actual_n0": {
+    "bytes": 786432,
+    "dtype": "FP32_LE",
+    "leaf": "actual_n0.f32le",
+    "provenance": "same fresh Host ACK0 RAM",
+    "shape": [
+      128,
+      1536
+    ]
+  },
+  "actual_qraw": {
+    "bytes": 786432,
+    "dtype": "FP32_LE",
+    "leaf": "actual_qraw.f32le",
+    "provenance": "same Host ACK1 same RAM; no bias and no BF16 output rounding",
+    "shape": [
+      128,
+      1536
+    ]
+  },
+  "driver_inputs": "unchanged fixed canonical16 only; no offline N0/reference allowed",
+  "driver_numeric_computation": false,
+  "implementation_model": "separate DUT-order model; expected output identity still unbound",
+  "mathematical_reference": "independent frozen input/reference author; expected output identity still unbound",
+  "official_raw_numeric_pass": null,
+  "schema": "PC01_OUTPUT_REFERENCE_INTERFACE_V1"
+}

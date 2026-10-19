@@ -1,0 +1,77 @@
+{
+  "arithmetic_reference_computed": false,
+  "claim_limit": "Static source checks and independent Python ledger model do not establish C++ compilation, generated binding runtime, RTL completion, or numeric correctness.",
+  "cpp_compiled": false,
+  "native_model_or_tool_started": false,
+  "network_used": false,
+  "production_manifest_identity": {
+    "bytes": 4472,
+    "sha256": "40ebb6c1957941b90906c4dc5c0d561816fa413aa5a4431a1bd2d191f39dc5b1"
+  },
+  "results": [
+    {
+      "case": "entry.normal",
+      "log_identity": {
+        "bytes": 826,
+        "sha256": "6ef487b60210f5083a8912cdb89b2dc0815efb5f890722c9a6a8795d54536ba2"
+      },
+      "status": "PASS",
+      "tests": 9,
+      "unittest_seconds": 0.002
+    },
+    {
+      "case": "entry.optimized",
+      "log_identity": {
+        "bytes": 826,
+        "sha256": "6ef487b60210f5083a8912cdb89b2dc0815efb5f890722c9a6a8795d54536ba2"
+      },
+      "status": "PASS",
+      "tests": 9,
+      "unittest_seconds": 0.002
+    },
+    {
+      "case": "relocated.normal",
+      "log_identity": {
+        "bytes": 4751,
+        "sha256": "52de7e0bc2c84131c89c2fcc7a173a85e6b106e72a5b044302839acbe13eb1d7"
+      },
+      "status": "PASS",
+      "tests": 42,
+      "unittest_seconds": 0.066
+    },
+    {
+      "case": "relocated.optimized",
+      "log_identity": {
+        "bytes": 4751,
+        "sha256": "8593a86f599c44c536820e07d557b34f36760d7a1117127335da88f5cdf27ecc"
+      },
+      "status": "PASS",
+      "tests": 42,
+      "unittest_seconds": 0.073
+    },
+    {
+      "case": "source.normal",
+      "log_identity": {
+        "bytes": 4751,
+        "sha256": "6ef8a2006d6bbbc124df3783de371aa9f0f7e9693a0c0cbcc14c3470cfcaaab6"
+      },
+      "status": "PASS",
+      "tests": 42,
+      "unittest_seconds": 0.085
+    },
+    {
+      "case": "source.optimized",
+      "log_identity": {
+        "bytes": 4751,
+        "sha256": "5a9184ec78e53b988185b2277c3620146d5f809e8ea39ec3a28529b4e93bfb29"
+      },
+      "status": "PASS",
+      "tests": 42,
+      "unittest_seconds": 0.065
+    }
+  ],
+  "rtl_executed": false,
+  "schema": "PC01_PURE_COLD_RESULT_V1",
+  "status": "PASS_SOURCE_STATIC_ABSTRACT_LEDGER_AND_ENTRY_ONLY",
+  "tests_total": 186
+}

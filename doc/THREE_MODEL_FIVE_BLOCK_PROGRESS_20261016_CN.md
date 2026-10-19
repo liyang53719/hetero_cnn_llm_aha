@@ -716,3 +716,11 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 边界：原官方生成 native 0/outer 1 的失败、只读静态资格和未初始化风险历史完整保留；旧生成物不因新 tiny 成功而获准 compile/run。新目标构造初始化与一次有限运行不能证明普遍无 UB、任意生命周期模式或全部 DPI 内存路由；本例观察 TOP 导出和经普通端口到达的 leaf count，不是 leaf 私有内存 DPI 资格。
 - 边界：四阶段原总窗 30/120/300/30 s、工作上限 10/90/240/10 s 未增；绝对 work-stop 不是可最迟 spawn 后再给整段工作时间。leader 采样不代表 compiler 子树，累计 RUSAGE_CHILDREN maxrss 不当作阶段 RSS。此微例不授 Host ABI、真实 Host 回放或完整 block 数值资格，完整 block 计数保持既有 0/5。
 - todo：在独立 SOURCE/身份门与有限预算下继续真实 Host 生成模型、RAM/DPI 接线和数值回放；真实 Host 输入、执行和完整 block PASS 仍需各自证据，不能由本微例自动继承。
+
+### 2026-10-19 00:46 UTC：回退后转单 CI job，先持久化 TEMP_SOURCE
+
+- FAIL/恢复边界：00:38 UTC 实查环境再次回到旧快照，未发布的319提取/13组装/Host配置/生成入口及新工具实际产物缺失；远端 main `18e757084e4812fe2496ba8321438a468e17b646` 与对应 CI success 已重新在线确认。历史 actual PASS 不能代替当前缺失文件。
+- TEMP_SOURCE：先提交固定 iDMA artifact `12099239717` 的最小获取脚本与十项人工测试；normal/-O 各10项通过，只核源码/合成HTTP，尚无该下载片真实 CI 网络执行。固定 ZIP 9,926,876B/SHA `a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce`，不解包或执行。
+- ongoing：恢复流程转为同一有界 GitHub job，固定官方源→唯一初始化补丁→一次工具构建/微例→同 Host 生成及短 reset/launch。源码检查/阶段hash/资源/终态在job内交接，不依赖已丢失的本地人工审包路径；本批没有触发 workflow。
+- 边界：job共享6600秒，Host生成600/540、Host首编译1800/1740、短reset/launch30/10；现场资源前验，超时保失败、不自动重试。本阶段不加载权重/张量，不上传二进制或机器库存，完整block仍0/5。
+- 用户长期要求：代码小批及时push，明确PASS范围或临时待验证/FAIL；每小时检查临时清单，每日仅以普通删除提交清理已确定不再需要且可Git恢复的tracked临时数据，保复现source/pin/hash/安全摘要。不删未tracked唯一资产、运行中产物或唯一证据；本批未删除数据。

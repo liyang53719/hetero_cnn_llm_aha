@@ -1091,3 +1091,11 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 15:49:40 UTC 的 MemAvailable=8,907,320 KiB达到原8 GiB门8,388,608 KiB；这是时点快照，后续阶段须重新验原门。没有Host运行，实际N0尚未完成，不授数值/full-block PASS。
 - 原证据MANIFEST932 B / aa06b04084c7ed459cf9240075037faecc5e21ac88c111c9a3fc144029e427f2；独审ACCEPT_AUTHORIZED_LOCAL_RUNTIME_WHEELS_MIGRATION_ONLY已闭：MANIFEST569 B / 6c9608f773de977627d3295d16ea2d20b71d9a39757017ba5c59c7eb7865d040；SUMMARY3094 B / 7182ad672508917a1670e6b8432abd67ead8224b96f970edf6d49ece6c318d6c。当前磁盘副本全量hash/结构/mode、旧树缺席、保留六子树/raw2/FP32均独核；迁移前观察及引用扫描仍归父保存记录。仅发布最小safe summary、README和本计划，不发布绝对机器路径、逐文件库存、数组/依赖/log内容，不改workflow。
 - 本投影只读保存记录，未触碰两私有树。完整计划按父207063 B精确前缀加此纯尾替换，禁止追加完整旧文档；本后继仅填正式审身份，原迁移证据不改。
+
+## 2026-10-19 16:02 UTC：显式本地 binding observer 与只读 profile 的 TEMP_SOURCE
+- 本批独立保存10件安全源码/测试/说明：只读构造真实非null binding，沿固定七个系统程序、五个已pin官方包及原67-member parser；不下载/安装、不创建work/stage/tools、不运行包工具/Host，不改workflow。
+- 必须显式选择 original-ci-uid0 或 local-readonly-mount，无自动fallback。原CI UID0分支保持；独立本地profile以精确namespace映射、固定有限目标、同fd只读flag、最长覆盖mount及前后inode/bytes/mode核验提供有限证据，不把UID65534推成宿主UID0，不授系统镜像供应链或ABI/symbol-version资格。
+- SOURCE_GO_EXPLICIT_LOCAL_BINDING_OBSERVER_AND_READONLY_PROFILE_ONLY：审MANIFEST4029 B / b6783d0893b0aee06a0143d7e39eaafcff977d4ed347c9a209ce88f0ebd64db4；SUMMARY4121 B / ce464f7444822fe6e31644ae84cc3a6ffeaec750324356d3e44a5e3044a92dda。绑定最终8124 B / 5479837da040462ce5be566dcc4ebeaa74536dbb733fab439663a9181ecb7534来源manifest，早期预读身份不当最终证据。
+- 独立搬迁9+9与入口9+9通过，另对10个真实profile目标文件两模式只读静态验证及目标mount/namespace/inode漂移拒例；无关mountinfo变化不导致误拒。作者54组记录另列不混计，原COLD冻结PENDING标签由README说明其后审结果。
+- 私有binding/profile/实际JSON、机器路径与逐文件库存、原日志及搬迁副本不公开；只保源码固定合同/公开来源pins和有限结果。后续caller与原生有限probe仍另审，原473源/seqnum补丁/make-j1、单核、8GiB/3GiB门、AS和6600s共享预算不变，N0实际尚未完成。
+- 本计划按父208712 B精确前缀加本纯尾完整替换一次，禁止追加完整旧文档；本批未启动任何新的Host/native作业。

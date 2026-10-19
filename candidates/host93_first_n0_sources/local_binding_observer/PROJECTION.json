@@ -1,0 +1,32 @@
+{
+  "ELF_parser_edits": 0,
+  "actual_authorization": false,
+  "cross_process_profile_identity": "target_files_and_longest_covering_mount_records; unrelated_mountinfo_raw_hash_evidence_only",
+  "elf_reader": {
+    "bytes": 2314,
+    "sha256": "6054c4f415c1c87c1ca01d534e09b8c2d8f93eed1cbc9991b7dfd4252786d261"
+  },
+  "native_API_added": false,
+  "native_preflight": {
+    "inverse_exact": true,
+    "original": {
+      "bytes": 2901,
+      "sha256": "a446d94000375fdae61d0eb4d0de2cee8f2616f37eb88512f4bd58e91343415e"
+    },
+    "owner_substitutions": 1,
+    "projected": {
+      "bytes": 2913,
+      "sha256": "cfc3aaf480c09c153f139f08b31f4dff7c4f82dff5c151e1fa10edfaf64e6888"
+    },
+    "stage_input_mode": "FIVE_EXACT_PACKAGE_BUFFERS"
+  },
+  "original_bootstrap": {
+    "bytes": 25509,
+    "sha256": "c2a7ca58d8fba3df8b76071e25ad740386ab5113a59897181b39b4d303e50ea8"
+  },
+  "original_ci_uid0_branch_changed": false,
+  "owner_anchor_after": "local_owner(before,resolved)",
+  "owner_anchor_before": "before.st_uid==0",
+  "package_parser_edits": 0,
+  "schema": "LOCAL_BINDING_FINITE_PROJECTION_V1"
+}

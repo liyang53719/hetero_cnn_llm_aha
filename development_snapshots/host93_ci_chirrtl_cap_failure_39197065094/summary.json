@@ -1,0 +1,24 @@
+{
+  "completed_components": [
+    "toolchain"
+  ],
+  "contract_failure": {
+    "boundary": "UNREPORTED",
+    "code": "UNMAPPED_CONTRACT"
+  },
+  "failure_category": "INPUT_OR_CONTRACT",
+  "mode": "host-reset-launch",
+  "schema": "host93-ci-summary-v3",
+  "scope": {
+    "cpp_compiled": false,
+    "cpp_generated": false,
+    "fresh_host_sv": false,
+    "n0_numeric": false,
+    "reset_launch": false,
+    "toolchain_build": true,
+    "toolchain_tiny": true,
+    "weights_loaded": false
+  },
+  "seconds": 524.434364,
+  "status": "INCOMPLETE"
+}

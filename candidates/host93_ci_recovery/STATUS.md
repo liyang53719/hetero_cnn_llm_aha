@@ -132,3 +132,17 @@ Independent SOURCE review is GO for this finite context-only delta; new actual N
 The narrow delta covers every failed supervised child uniformly and advances stage-exits to v4. Commands, JVM/resources, supervisor and sanitizer remain unchanged. Final normal/-O cold counts: 101 coordinator; 118 toolchain; 26 header; 7 transport; 41 support; 7 regressions; 463 + 727 sanitizer checks. These are source/synthetic tests.
 
 Frozen SOURCE manifest: 7100 B / 564f7f266fe454aa0d78ae2720c733d1170147b09efbbf16a64f8cbf9ea9af92. Independent SOURCE GO: review_ci_all_stage_context_source_20261019T0353; MANIFEST 1119 B / 828226c4965ec6032700cca6104b7d5109c829ca94afd9b6f3ef5dc53e54f0ca; SUMMARY 3054 B / 517b26c29bf5d0a1ee4a6e8b0d9a87e946fef724d6ddd58413461330f85478e7. Verdict: SOURCE_GO_UNIFORM_BOUNDED_FAILED_STAGE_CONTEXT_ONLY.
+
+## Frontloaded CHIRRTL recovery SOURCE
+
+SOURCE review GO. New actual: NOT_EXECUTED. Current historical actual 39197065094 is FAIL after successful toolchain build/tiny and a native CHIRRTL 48 MiB pre-write cap rejection; exact failed IR size is unknown.
+
+The new mode runs six early phases, then continues the same job only on the original exact FIR size/SHA and original structure assertions. All Host/SV/number/weight qualifications stay false until their original evidence gates pass. Different FIR stops before Verilator build, retaining finite numeric metrics and dynamic identity. Compile-time project.root is fixed to the actual derived parent of scala; no path strings are uploaded. Original source93/FIR/SV pins remain historical, with a single explicit derived emitter and 92 unchanged arithmetic sources. Only new diagnostic cap/FSIZE becomes 96 MiB; AS/CPU/shared wall are unchanged.
+
+V2 cold reruns: coordinator122 in each Python mode. Inherited v1 unchanged suites in each mode: diagnostic17, emission tiny42/finalization3/transport7, toolchain118, transport7, header26, support41/regressions7, structured463/context727. The two v2 reruns and inherited20 invocations exited0; no Scala/Java/native/network. Source pin checks158. Mechanism independent review MANIFEST68850816620d74dba5c1468e553e0f0225c8ae74da2838a2b5efb0b520959543, SUMMARY9e7d9c6f49e5090aaf7c95b554c41a3f28c2096fc61443716327f970dd77d927. Static57,389,476-byte estimate is not an actual.
+
+V2 strict schema correction: AVAILABLE/completed diagnostic requires all six frontloaded rows EXIT0_CLEANED; the first FAILED row is terminal in every mode. Original execution code is unchanged. The frozen v1 predecessor remains preserved.
+
+Frozen SOURCE MANIFEST 8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094; SOURCE review GO; actual NOT_EXECUTED.
+
+SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4eaa8fe194a228b4dbda03b5c7276c59744ce1eb3f65738de143d1218fd; SUMMARY edf619617fe69086c238742f74010daa94cd0bd53d310bfec7e18aab8e08e7c3. Actual remains NOT_EXECUTED.

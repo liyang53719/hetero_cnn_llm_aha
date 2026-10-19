@@ -1,0 +1,80 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "all_final_suite_invocations_exit0": true,
+  "counts_are_not_actual_native_passes": true,
+  "draft_history": "v1 final22 suite calls all exited0. Independent review found two synthetic schema acceptance gaps. v2 changes only strict validator and tiny tests; both coordinator reruns pass122. All other20 unchanged suite outcomes are inherited, not rerun.",
+  "final_suite_invocations": 2,
+  "inherited_unchanged_suite_invocations": 20,
+  "native_or_network_started": false,
+  "normal": {
+    "context_checks": 727,
+    "coordinator_tests": 122,
+    "diagnostic_component_tests": 17,
+    "emission_finalization_cases": 3,
+    "emission_tiny_checks": 42,
+    "emission_transport_tests": 7,
+    "header_tests": 26,
+    "structured_diagnostic_checks": 463,
+    "support_regression_tests": 7,
+    "support_tests": 41,
+    "toolchain_tests": 118,
+    "transport_tests": 7
+  },
+  "optimized": {
+    "context_checks": 727,
+    "coordinator_tests": 122,
+    "diagnostic_component_tests": 17,
+    "emission_finalization_cases": 3,
+    "emission_tiny_checks": 42,
+    "emission_transport_tests": 7,
+    "header_tests": 26,
+    "structured_diagnostic_checks": 463,
+    "support_regression_tests": 7,
+    "support_tests": 41,
+    "toolchain_tests": 118,
+    "transport_tests": 7
+  },
+  "pin_rows_verified": 158,
+  "predecessor": {
+    "cold_result": {
+      "bytes": 1407,
+      "sha256": "f2b0115fd965d54c9d290b071f4e59f9418b5de00f8df6b6954321fe03125a77"
+    },
+    "directory": "candidate_ci_chirrtl_frontload_source_v1_20261019T0411",
+    "manifest": {
+      "bytes": 8587,
+      "sha256": "43c65e23325ef1a50673367ca1f0c7cc2e3381ddf531bd2ce7919f4c5b7951c6"
+    },
+    "reason": "Only evidence validator and coordinator tests changed; component, Scala, RUN_PINS and all supporting source bytes unchanged."
+  },
+  "publication_status": "SOURCE_GO_ACTUAL_NOT_EXECUTED",
+  "scala_or_java_executed": false,
+  "schema": "HOST93_CHIRRTL_FRONTLOAD_COLD_RESULT_V2",
+  "source_manifest": {
+    "directory": "candidate_ci_chirrtl_frontload_source_v2_20261019T0427",
+    "manifest": {
+      "bytes": 9580,
+      "sha256": "8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_chirrtl_frontload_source_v2_20261019T0429",
+    "manifest": {
+      "bytes": 717,
+      "sha256": "c440e4eaa8fe194a228b4dbda03b5c7276c59744ce1eb3f65738de143d1218fd"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3759,
+      "sha256": "edf619617fe69086c238742f74010daa94cd0bd53d310bfec7e18aab8e08e7c3"
+    },
+    "verdict": "SOURCE_GO_FRONTLOADED_CHIRRTL_DIAGNOSTIC_AND_CONDITIONAL_SAME_JOB_ONLY"
+  },
+  "static_unchanged_support_file_count": 18,
+  "status": "PASS_COLD_SOURCE_AND_SYNTHETIC_ONLY",
+  "v2_rerun_invocations": 2,
+  "v2_rerun_suites": [
+    "coordinator normal",
+    "coordinator optimized"
+  ]
+}

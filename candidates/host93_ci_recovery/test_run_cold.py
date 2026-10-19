@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=46602
-SHA='a073c617020ee50b78b8fd46362705a69668ce6e008f3a3e5b21ac1735536233'
+SIZE=53459
+SHA='1d2184337d0c1049687a62fd0b7447465eadfd0a1386656d6a56bb76c2e71495'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -27,6 +27,8 @@ CPIN=PINS['candidates/host93_ci_recovery/safe_build_diagnostics.py']
 CONTEXT=G.load(HERE/'safe_build_diagnostics.py',CPIN['bytes'],CPIN['sha256'],'cold_context_same_buffer')
 TPIN=PINS['candidates/host93_ci_recovery/toolchain/ci_toolchain.py']
 TOOLCHAIN=G.load(HERE/'toolchain/ci_toolchain.py',TPIN['bytes'],TPIN['sha256'],'cold_toolchain_contracts')
+DPIN=PINS.get('candidates/host93_ci_recovery/emission/chirrtl_diagnostic.py')
+DIAGNOSTIC=G.load(HERE/'emission/chirrtl_diagnostic.py',DPIN['bytes'],DPIN['sha256'],'cold_chirrtl_contracts') if DPIN else None
 
 
 def defaults():
@@ -43,16 +45,18 @@ def clean_observation():
 def fixture(ready=False, mode='host-reset-launch'):
     build=mode=='build-diagnostic'
     stages=[{'name':n,'status':'EXIT0_CLEANED','seconds':0.1,'diagnostics':G.empty_diagnostics(),
-             **clean_observation()} for n in (G.BUILD_STAGES if build else G.STAGES)] if ready else []
+             **clean_observation()} for n in G.mode_stages(mode)] if ready else []
     generated={'derived_backend':{'bytes':1,'sha256':'1'*64}} if ready else {}
     if ready and not build:
         generated.update({'host_elf':{'bytes':1,'sha256':'1'*64},'host93_fir':{'bytes':42417256,'sha256':'264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a'},'host93_sv':{'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'}})
-    return {'summary.json':{'schema':'host93-ci-summary-v3','mode':mode,'status':'READY_REQUIRES_ACTIONS_EXIT0' if ready else 'INCOMPLETE',
-             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','contract_failure':{'boundary':'NONE' if ready else 'UNREPORTED','code':'NONE' if ready else 'UNMAPPED_CONTRACT'},'completed_components':(['toolchain_build'] if build else list(G.COMPONENTS)) if ready else [],
-             'scope':{x:ready and (x=='toolchain_build' if build else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0},
-            'source_hashes.json':{'schema':'host93-ci-source-hashes-v2','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
+    if ready and mode=='host-chirrtl-diagnostic':generated['diagnostic_fir']=dict(G.HISTORICAL_FIR)
+    observation={'state':'AVAILABLE','utf8_bytes':G.HISTORICAL_FIR['bytes'],'line_count':293837,'module_count':682,'extmodule_count':17,'source_info_count':254482,'source_info_utf8_bytes':1000000,'project_source_info_count':249537,'library_source_info_count':4945,'other_source_info_count':0,'historical_fir_equal':True} if ready and mode=='host-chirrtl-diagnostic' else G.empty_chirrtl_observation()
+    return {'summary.json':{'schema':'host93-ci-summary-v4','mode':mode,'status':'READY_REQUIRES_ACTIONS_EXIT0' if ready else 'INCOMPLETE',
+             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','contract_failure':{'boundary':'NONE' if ready else 'UNREPORTED','code':'NONE' if ready else 'UNMAPPED_CONTRACT'},'completed_components':(['toolchain_build'] if build else ['chirrtl_diagnostic']+list(G.COMPONENTS) if mode=='host-chirrtl-diagnostic' else list(G.COMPONENTS)) if ready else [],
+             'scope':{x:ready and (x=='toolchain_build' if build else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0,'chirrtl_observation':observation},
+            'source_hashes.json':{'schema':'host93-ci-source-hashes-v3','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
               'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
-            'stage_exits.json':{'schema':'host93-ci-stage-exits-v4','stages':stages}}
+            'stage_exits.json':{'schema':'host93-ci-stage-exits-v5','stages':stages}}
 
 
 class Cold(unittest.TestCase):
@@ -130,7 +134,7 @@ class Cold(unittest.TestCase):
     def test_summary_wall(self):
         x=fixture();x['summary.json']['seconds']=6601
         with self.assertRaises(ValueError):G.validate_evidence(x)
-    def test_phase_all_names_have_bounds(self):self.assertEqual(set(G.STAGES),set(G.PHASE_CAPS))
+    def test_phase_all_names_have_bounds(self):self.assertEqual(set(G.STAGES)|set(G.FRONTLOAD_STAGES),set(G.PHASE_CAPS))
     def test_header_phase_order_and_counts(self):
         self.assertEqual(len(G.STAGES),34);self.assertEqual(len(G.BUILD_STAGES),16)
         self.assertEqual(G.STAGES[11:16],('flex_header_acquire','flex_header_compile','fresh_autoconf','fresh_configure','fresh_make'))
@@ -218,7 +222,7 @@ class Cold(unittest.TestCase):
             with self.assertRaises(ValueError):G.exact(Path('/tmp/not-read'),0,'PENDING')
             comp.assert_not_called()
 
-    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False):
+    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False, diagnostic_match=True):
         with tempfile.TemporaryDirectory() as t:
             base=Path(t);repo=base/'repo';repo.mkdir();out=base/'out';archive=base/'idma.zip'
             fixed={'bytes':1,'sha256':'1'*64,'path':str(base/'observed')}
@@ -239,7 +243,15 @@ class Cold(unittest.TestCase):
             tools=group(G.STAGES[:20],{'backend':fixed})
             emission=group(G.STAGES[20:28],{'fir':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_fir']},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}})
             execution=group(G.STAGES[-3:],{'elf':fixed})
-            modules={'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT}
+            diagnostic_pin=G.HISTORICAL_FIR if diagnostic_match else {'bytes':100,'sha256':'1'*64}
+            diagnostic_observation={'utf8_bytes':diagnostic_pin['bytes'],'line_count':10,'module_count':5,'extmodule_count':0,'source_info_count':8,'source_info_utf8_bytes':50,'project_source_info_count':6,'library_source_info_count':2,'other_source_info_count':0,'historical_fir_equal':diagnostic_match}
+            diagnostic=group(G.CHIRRTL_STAGES,{'fir':{'path':fixed['path'],**diagnostic_pin},'observation':diagnostic_observation,'resume_context':{'fixed':'same-root-fixture'},'structural_assertions_passed':True})
+            def resume(repo,work,call,base,context):
+                self.assertEqual(context,{'fixed':'same-root-fixture'})
+                return group(G.STAGES[26:28],{'fir':{'path':fixed['path'],**G.HISTORICAL_FIR},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}}).run(repo,work,call)
+            diagnostic.resume_sv=resume
+            diagnostic.parse_observation=DIAGNOSTIC.parse_observation if DIAGNOSTIC else None
+            modules={'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT}
             def native(*args,**kwargs):
                 name=args[2]
                 kwargs['diagnostics'].update(clean_observation())
@@ -255,7 +267,7 @@ class Cold(unittest.TestCase):
                 return {'exit_code':0,'cleanup_confirmed':True},b'private synthetic',{'child_user_cpu_seconds':0.1,'child_system_cpu_seconds':0.01}
             support=types.SimpleNamespace(deadline_ready=lambda:None,fixed_support=lambda repo:(None,None,None),run_phase=native,diagnostic_defaults=defaults)
             prefix='candidates/host93_ci_recovery/'
-            buffers={prefix+'idma319/ENTRY.json':b'{"bootstrap":"pinned synthetic"}',prefix+'configuration/ENTRY.json':b'{"argv_prefix":["python3","-I","-S","-B","-c","pinned synthetic"]}'}
+            buffers={prefix+'emission/EmitCanonicalHost93Diagnostic.scala':b'synthetic fixed emitter',prefix+'idma319/ENTRY.json':b'{"bootstrap":"pinned synthetic"}',prefix+'configuration/ENTRY.json':b'{"argv_prefix":["python3","-I","-S","-B","-c","pinned synthetic"]}'}
             with mock.patch.dict(G.os.environ,{'GITHUB_ACTIONS':'true'},clear=True), \
                  mock.patch.object(G,'load',return_value=support), \
                  mock.patch.object(G,'project_pin_map',return_value=(PINS,buffers)), \
@@ -276,8 +288,9 @@ class Cold(unittest.TestCase):
         self.assertEqual(summary['contract_failure'],{'boundary':'BUILD_CONFIGURE_CPPFLAGS_AFTER','code':'CPPFLAGS_VALUE'})
         self.assertNotIn('private fixture',json.dumps(summary))
     def test_contract_enum_matches_pinned_toolchain(self):
-        self.assertEqual(G.CONTRACT_CODES,TOOLCHAIN.CONTRACT_CODES)
-        self.assertEqual(G.CONTRACT_BOUNDARIES,TOOLCHAIN.CONTRACT_BOUNDARIES)
+        self.assertTrue(set(TOOLCHAIN.CONTRACT_CODES)<=set(G.CONTRACT_CODES))
+        self.assertEqual(set(G.CONTRACT_CODES)-set(TOOLCHAIN.CONTRACT_CODES),{'CHIRRTL_FIR_IDENTITY_MISMATCH','DIAGNOSTIC_CONTRACT','DIAGNOSTIC_EMITTER','DIAGNOSTIC_DERIVATION','DIAGNOSTIC_STATS','DIAGNOSTIC_FIR_OUTPUT','DIAGNOSTIC_RESUME_IDENTITY'})
+        self.assertEqual(set(G.CONTRACT_BOUNDARIES)-set(TOOLCHAIN.CONTRACT_BOUNDARIES),{'CHIRRTL_DIAGNOSTIC'})
     def test_unknown_contract_message_not_public(self):
         self.assertEqual(G.contract_failure_observation(ValueError('/private/path password=fixture')),
                          {'boundary':'UNREPORTED','code':'UNMAPPED_CONTRACT'})
@@ -331,6 +344,112 @@ class Cold(unittest.TestCase):
         x=fixture(True);x['source_hashes.json']['generated']['derived_backend']['bytes']=0
         with self.assertRaises(ValueError):G.validate_evidence(x)
 
+
+    def test_diagnostic_shared_contract_matches_pinned_component(self):
+        self.assertIsNotNone(DIAGNOSTIC)
+        self.assertEqual(G.CHIRRTL_NUMERIC,DIAGNOSTIC.METRICS)
+        self.assertTrue(set(DIAGNOSTIC.SAFE_CONTRACT_CODES)<=set(G.CONTRACT_CODES))
+        self.assertEqual(G.HISTORICAL_FIR,DIAGNOSTIC.HISTORICAL_FIR_PIN)
+        G.phase_limits('host93_chirrtl_diagnostic',DIAGNOSTIC.DIAGNOSTIC_LIMITS)
+    def test_frontload_path_count_partition_rejected(self):
+        x=fixture(True,'host-chirrtl-diagnostic');x['summary.json']['chirrtl_observation']['other_source_info_count']=1
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def diagnostic_completed_fixture(self):
+        x=fixture(True,'host-chirrtl-diagnostic')
+        x['summary.json'].update(status='INCOMPLETE',failure_category='INPUT_OR_CONTRACT',
+            contract_failure={'boundary':'CHIRRTL_DIAGNOSTIC','code':'CHIRRTL_FIR_IDENTITY_MISMATCH'},
+            completed_components=['chirrtl_diagnostic'],scope={key:False for key in G.SCOPES})
+        x['source_hashes.json']['generated']={'diagnostic_fir':dict(G.HISTORICAL_FIR)}
+        x['stage_exits.json']['stages']=x['stage_exits.json']['stages'][:6]
+        return x
+    def test_available_diagnostic_requires_all_six_native_rows(self):
+        for count in range(6):
+            x=self.diagnostic_completed_fixture();x['stage_exits.json']['stages']=x['stage_exits.json']['stages'][:count]
+            with self.subTest(count=count),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_available_diagnostic_rejects_failed_sixth_stage(self):
+        x=self.diagnostic_completed_fixture();row=x['stage_exits.json']['stages'][-1]
+        row.update(status='FAILED',**defaults());row['diagnostics']=G.empty_diagnostics('READ_ERROR')
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_all_modes_reject_rows_after_first_failure(self):
+        for mode in G.MODES:
+            x=fixture(True,mode);x['summary.json'].update(status='INCOMPLETE',failure_category='UNEXPECTED')
+            row=x['stage_exits.json']['stages'][0]
+            row.update(status='FAILED',**defaults());row['diagnostics']=G.empty_diagnostics('READ_ERROR')
+            with self.subTest(mode=mode),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_available_diagnostic_six_clean_rows_accept(self):
+        self.assertTrue(G.validate_evidence(self.diagnostic_completed_fixture()))
+
+    def test_frontload_full_continuation_once_after_exact_fir(self):
+        code,summary,stages=self.mock_whole_job(mode='host-chirrtl-diagnostic')
+        self.assertEqual(code,0);self.assertEqual([x['name'] for x in stages],list(G.FRONTLOAD_STAGES))
+        self.assertEqual(len(stages),34);self.assertEqual(len({x['name'] for x in stages}),34)
+        self.assertEqual(summary['completed_components'],['chirrtl_diagnostic']+list(G.COMPONENTS))
+        self.assertTrue(summary['chirrtl_observation']['historical_fir_equal'])
+        self.assertEqual(summary['chirrtl_observation']['state'],'AVAILABLE')
+        self.assertTrue(summary['scope']['reset_launch']);self.assertFalse(summary['scope']['n0_numeric'])
+    def test_frontload_mismatch_stops_before_expensive_toolchain(self):
+        code,summary,stages=self.mock_whole_job(mode='host-chirrtl-diagnostic',diagnostic_match=False)
+        self.assertEqual(code,1);self.assertEqual([x['name'] for x in stages],list(G.CHIRRTL_STAGES))
+        self.assertTrue(all(x['status']=='EXIT0_CLEANED' for x in stages))
+        self.assertEqual(summary['completed_components'],['chirrtl_diagnostic'])
+        self.assertFalse(any(summary['scope'].values()))
+        self.assertEqual(summary['chirrtl_observation']['state'],'AVAILABLE')
+        self.assertFalse(summary['chirrtl_observation']['historical_fir_equal'])
+        self.assertEqual(summary['contract_failure'],{'boundary':'CHIRRTL_DIAGNOSTIC','code':'CHIRRTL_FIR_IDENTITY_MISMATCH'})
+    def test_frontload_diagnostic_failure_retains_context_and_no_toolchain(self):
+        code,summary,stages=self.mock_whole_job('host93_chirrtl_diagnostic','host-chirrtl-diagnostic',True,b'utf8_bytes=57389476\n')
+        self.assertEqual(code,1);self.assertEqual(len(stages),6)
+        self.assertEqual(summary['chirrtl_observation'],G.empty_chirrtl_observation())
+        self.assertFalse(any(summary['scope'].values()))
+        self.assertEqual(stages[-1]['diagnostics']['merged_log_tail'],'utf8_bytes=57389476')
+    def test_frontload_overcap_numeric_report_survives_failed_child(self):
+        values={'utf8_bytes':96*G.MIB+1,'line_count':293837,'module_count':682,'extmodule_count':17,'source_info_count':254482,'source_info_utf8_bytes':1000000,'project_source_info_count':249537,'library_source_info_count':4945,'other_source_info_count':0}
+        log=DIAGNOSTIC.MARKER+b' '.join(k.encode()+b'='+str(values[k]).encode() for k in G.CHIRRTL_NUMERIC)+b'\nException: cap\n'
+        code,summary,stages=self.mock_whole_job('host93_chirrtl_diagnostic','host-chirrtl-diagnostic',True,log)
+        self.assertEqual(code,1);self.assertEqual(len(stages),6);self.assertFalse(any(summary['scope'].values()))
+        self.assertEqual(summary['chirrtl_observation'],{'state':'REPORTED',**values,'historical_fir_equal':None})
+        self.assertEqual(stages[-1]['diagnostics']['context_state'],'AVAILABLE')
+    def test_frontload_reported_cannot_claim_historical_identity(self):
+        x=fixture(True,'host-chirrtl-diagnostic');x['summary.json']['chirrtl_observation']['state']='REPORTED'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_frontload_resume_failure_keeps_tool_and_fir_observation(self):
+        code,summary,stages=self.mock_whole_job('host93_sv','host-chirrtl-diagnostic',True,b'firtool failure\n')
+        self.assertEqual(code,1);self.assertEqual(len(stages),28)
+        self.assertTrue(summary['scope']['toolchain_build']);self.assertTrue(summary['scope']['toolchain_tiny'])
+        self.assertFalse(summary['scope']['fresh_host_sv'])
+        self.assertTrue(summary['chirrtl_observation']['historical_fir_equal'])
+    def test_frontload_caps_only_new_fsize_differs(self):
+        self.assertEqual(G.PHASE_CAPS['host93_chirrtl_diagnostic'],(90,60,60,4*G.GIB,96*G.MIB,2*G.MIB))
+        self.assertEqual(G.PHASE_CAPS['host93_chirrtl'],(90,60,60,4*G.GIB,48*G.MIB,2*G.MIB))
+        self.assertEqual(G.FRONTLOAD_STAGES,G.CHIRRTL_STAGES+G.STAGES[:20]+G.STAGES[26:])
+    def test_frontload_ready_fixture(self):self.assertTrue(G.validate_evidence(fixture(True,'host-chirrtl-diagnostic')))
+    def test_frontload_observation_forbidden_in_old_modes(self):
+        for mode in ('host-reset-launch','build-diagnostic'):
+            x=fixture(True,mode);x['summary.json']['chirrtl_observation']=fixture(True,'host-chirrtl-diagnostic')['summary.json']['chirrtl_observation']
+            with self.subTest(mode=mode),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_frontload_rejects_unknown_or_unbounded_numeric_fields(self):
+        for key in G.CHIRRTL_NUMERIC:
+            for bad in ('private',True,-1,96*G.MIB+1,None):
+                x=fixture(True,'host-chirrtl-diagnostic');x['summary.json']['chirrtl_observation'][key]=bad
+                with self.subTest(key=key,bad=bad),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_frontload_rejects_false_identity_comparison(self):
+        for key,bad in (('bytes',42417257),('sha256','1'*64)):
+            x=fixture(True,'host-chirrtl-diagnostic');x['source_hashes.json']['generated']['diagnostic_fir'][key]=bad
+            with self.subTest(key=key),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_frontload_rejects_stage_reordering(self):
+        x=fixture(True,'host-chirrtl-diagnostic');rows=x['stage_exits.json']['stages'];rows[0],rows[6]=rows[6],rows[0]
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_frontload_does_not_qualify_changed_fir(self):
+        x=fixture(True,'host-chirrtl-diagnostic');x['source_hashes.json']['generated']['diagnostic_fir']['sha256']='1'*64
+        x['summary.json']['chirrtl_observation']['historical_fir_equal']=False
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_frontload_empty_observation_has_no_numeric_claim(self):
+        x=fixture();x['summary.json']['chirrtl_observation']['utf8_bytes']=1
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_old_three_schemas_not_reinterpreted(self):
+        for name,schema in (('summary.json','host93-ci-summary-v3'),('source_hashes.json','host93-ci-source-hashes-v2'),('stage_exits.json','host93-ci-stage-exits-v4')):
+            x=fixture();x[name]['schema']=schema
+            with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
 
     def test_build_mode_ready(self):
         self.assertTrue(G.validate_evidence(fixture(True,'build-diagnostic')))
@@ -450,7 +569,7 @@ class Cold(unittest.TestCase):
                 failure_code='CHILD_EXIT_NONZERO',failure_boundary='NATIVE_SUPERVISION')
             with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
     def test_all_native_failures_collect_context_in_both_modes(self):
-        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES)):
+        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES),('host-chirrtl-diagnostic',G.FRONTLOAD_STAGES)):
             for name in names:
                 with self.subTest(mode=mode,name=name),mock.patch.object(G,'collect_build_diagnostics',wraps=G.collect_build_diagnostics) as collector:
                     code,summary,stages=self.mock_whole_job(name,mode,True,b'fixed native failure context\n')

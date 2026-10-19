@@ -1,0 +1,105 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "control_flow": "One new mode with six early stages and conditional same-job continuation; original mode order and budgets unchanged.",
+  "derivation": "Single emitter diagnostics/cap; original expected93 and FIR/SV pins untouched.",
+  "expected_parent_commit": "43372bebcca86984be80029f8c13c05741ec7eb2",
+  "owned_production_files": {
+    "RUN_PINS.json": {
+      "bytes": 3585,
+      "sha256": "88512f0d4a666890aa7b8e4d93b74de0d7ce9ebc9126d08f290535f85dded649"
+    },
+    "emission/EmitCanonicalHost93Diagnostic.scala": {
+      "bytes": 3520,
+      "sha256": "f4fb8ca9666fc97e4d2bcc9f883d8e1c066d1ec80fc7c13c1a91d388f253bc2f"
+    },
+    "emission/chirrtl_diagnostic.py": {
+      "bytes": 30065,
+      "sha256": "337f08fc4917c0229f58d2fb168ceae6797dc3232d4baa8c3b1b762ed60c968d"
+    },
+    "emission/test_chirrtl_diagnostic_cold.py": {
+      "bytes": 21318,
+      "sha256": "aa5deda59069828680e745c1773cf6b7cc277f6572ece33de58470f37069b99a"
+    },
+    "run.py": {
+      "bytes": 53459,
+      "sha256": "1d2184337d0c1049687a62fd0b7447465eadfd0a1386656d6a56bb76c2e71495"
+    },
+    "test_run_cold.py": {
+      "bytes": 50875,
+      "sha256": "b0e51a6a0e9e8f03ef337ac8ebd590161d3b51e0beed6d8a90382b2b56cb4bea"
+    }
+  },
+  "predecessor": {
+    "cold_result": {
+      "bytes": 1407,
+      "sha256": "f2b0115fd965d54c9d290b071f4e59f9418b5de00f8df6b6954321fe03125a77"
+    },
+    "directory": "candidate_ci_chirrtl_frontload_source_v1_20261019T0411",
+    "manifest": {
+      "bytes": 8587,
+      "sha256": "43c65e23325ef1a50673367ca1f0c7cc2e3381ddf531bd2ce7919f4c5b7951c6"
+    },
+    "reason": "Only evidence validator and coordinator tests changed; component, Scala, RUN_PINS and all supporting source bytes unchanged."
+  },
+  "predecessor_review": {
+    "directory": "review_ci_chirrtl_frontload_source_20261019T0426",
+    "findings": "Two finite synthetic evidence-schema acceptance gaps; normal execution bypass not demonstrated.",
+    "manifest": {
+      "bytes": 1427,
+      "sha256": "1314813bd289a43863d979e027d93a69f2fc07b219e92c39f31af73394f24c2a"
+    },
+    "status": "HOLD",
+    "summary": {
+      "bytes": 2040,
+      "sha256": "6e54464f9b445f728e239ed5d5e50a6d2f6a21de56d7f581315e91d1735a2edc"
+    }
+  },
+  "public_evidence": "Strict new schema with bounded numeric observations and measured diagnostic FIR pin; no raw source annotation path output.",
+  "publication_status": "SOURCE_GO_ACTUAL_NOT_EXECUTED",
+  "schema": "HOST93_CHIRRTL_FRONTLOAD_DELTA_V2",
+  "schema_review_fixes": [
+    "A completed diagnostic/AVAILABLE observation requires six clean frontloaded native rows.",
+    "Any FAILED native row must be terminal in all modes."
+  ],
+  "source_manifest": {
+    "directory": "candidate_ci_chirrtl_frontload_source_v2_20261019T0427",
+    "manifest": {
+      "bytes": 9580,
+      "sha256": "8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_chirrtl_frontload_source_v2_20261019T0429",
+    "manifest": {
+      "bytes": 717,
+      "sha256": "c440e4eaa8fe194a228b4dbda03b5c7276c59744ce1eb3f65738de143d1218fd"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3759,
+      "sha256": "edf619617fe69086c238742f74010daa94cd0bd53d310bfec7e18aab8e08e7c3"
+    },
+    "verdict": "SOURCE_GO_FRONTLOADED_CHIRRTL_DIAGNOSTIC_AND_CONDITIONAL_SAME_JOB_ONLY"
+  },
+  "sourceinfo_change": "Compile-time project.root only, preserves phase cwd; literal fixed JAR mechanism proof is finite and equality remains an actual gate.",
+  "unchanged_support_files": [
+    "ci_support_v3.py",
+    "test_support_v3_cold.py",
+    "test_support_regressions_cold.py",
+    "run_diagnostics_cold.py",
+    "test_safe_build_diagnostics.py",
+    "safe_build_diagnostics.py",
+    "SUPPORT_PINS.json",
+    "emission/test_tiny.py",
+    "emission/SOURCE_PINS.json",
+    "emission/host_emission.py",
+    "emission/test_transport_cold.py",
+    "emission/test_finalization_cold.py",
+    "toolchain/flex_header.py",
+    "toolchain/ci_toolchain.py",
+    "toolchain/test_toolchain_cold.py",
+    "toolchain/SOURCE_PINS.json",
+    "toolchain/test_flex_header_cold.py",
+    "toolchain/test_transport_cold.py"
+  ]
+}

@@ -841,3 +841,16 @@ SOURCE 审结论 SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY；审查
 - stage-exits 升 v4；summary v3/source-hashes v2、命令、JVM/AS、资源、监督器及共享 6600 秒不变。旧 v3 实际仍由旧固定 validator 验证。
 - normal/-O 各 101/118/26/7/41/7 及去敏 463+727 通过；仅 SOURCE/微例，新 actual NOT_EXECUTED，独审与发布由父统一接续。
 - 冻结 SOURCE manifest：7100 B / 564f7f266fe454aa0d78ae2720c733d1170147b09efbbf16a64f8cbf9ea9af92；独立 SOURCE GO（review_ci_all_stage_context_source_20261019T0353），审 manifest 1119 B / 828226c4965ec6032700cca6104b7d5109c829ca94afd9b6f3ef5dc53e54f0ca；审 SUMMARY 3054 B / 517b26c29bf5d0a1ee4a6e8b0d9a87e946fef724d6ddd58413461330f85478e7。新 actual NOT_EXECUTED，原失败根因 UNKNOWN。
+
+### Host93 CHIRRTL 前置与固定源码定位根（SOURCE，实际尚未执行）
+- 本轮旧 run 39197065094 保持整体 FAIL；工具链 build/tiny 已真实成功，CHIRRTL 有限尾确证 48 MiB 写盘前上限拒绝，确切长度未知。早前无诊断失败不倒填原因。
+- 新显式模式先完成 Java、87 JAR、HardFloat20、93 源组装、class、CHIRRTL 六阶段。只有新 FIR 精确恢复历史 42,417,256 字节/SHA264f8b3a…且原结构断言成功，才同 job 衔接原20工具阶段、2发射阶段、6 Host阶段；复用已得classes/JAR/FIR，不重跑六阶段。不同则保数字与新hash并早停INCOMPLETE。
+- 编译期加入唯一固定 project.root，精确指向派生 scala 的父目录，phase cwd不变。固定Chisel字节码及历史注解支持路径机制；57,389,476字节只是静态估算，尚非新实测或恢复保证。
+- 原93表、旧emitter和FIR/SV预期身份不改；单项派生emitter保前25行和原结构断言，92算术源原字节。真实UTF8字节/行/module/extmodule/注解数量与字节/scala、src、other分类计数可上传，动态路径不上传。
+- 新发射输出上限/FSIZE同步96MiB，AS4GiB、CPU/work60秒、阶段90秒及共享6600秒不增。原默认34阶段及build-only16阶段保持。
+- v2 normal与-O各122协调器；继承v1各17组件、42发射微例、3终态、7发射transport及原支持套件均过；v2两次及继承20次全部exit0，158行pin匹配，仅SOURCE/mock，无Java/Scala/native/network。SOURCE审GO，actual为NOT_EXECUTED；无数值/权重资格。
+- v2仅补严格schema：完成诊断/AVAILABLE必须绑定六项EXIT0_CLEANED，所有模式第一FAILED只能终末；原正常执行逻辑不动，v1保留。
+
+SOURCE MANIFEST 8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094；SOURCE审GO，实际NOT_EXECUTED。
+
+SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4eaa8fe194a228b4dbda03b5c7276c59744ce1eb3f65738de143d1218fd; SUMMARY edf619617fe69086c238742f74010daa94cd0bd53d310bfec7e18aab8e08e7c3. Actual remains NOT_EXECUTED.

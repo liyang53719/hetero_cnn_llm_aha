@@ -1,0 +1,193 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "changed_source_files": [
+    "run.py",
+    "RUN_PINS.json",
+    "test_run_cold.py",
+    "emission/chirrtl_diagnostic.py",
+    "emission/EmitCanonicalHost93Diagnostic.scala",
+    "emission/test_chirrtl_diagnostic_cold.py"
+  ],
+  "compiler_argv_delta": "Insert exactly -Dchisel.project.root=<derived source.parent> before Scala Main; source.parent is parent of scala directory, phase cwd unchanged. Runtime CHIRRTL argv unchanged.",
+  "default_mode_unchanged": "host-reset-launch",
+  "diagnostic_limits": {
+    "as_bytes": 4294967296,
+    "cpu_seconds": 60,
+    "fsize_bytes": 100663296,
+    "log_bytes": 2097152,
+    "total_seconds": 90,
+    "work_seconds": 60
+  },
+  "emitter_derivation": {
+    "delta": "After original UTF-8 conversion, print/flush fixed nine-number marker, then 96 MiB guard; original structural assertions and write remain. Native failure can retain numeric REPORTED observation without generated hash.",
+    "derived": {
+      "bytes": 3520,
+      "sha256": "f4fb8ca9666fc97e4d2bcc9f883d8e1c066d1ec80fc7c13c1a91d388f253bc2f"
+    },
+    "original": {
+      "bytes": 2262,
+      "sha256": "ebc35a597dc3be2374efa7408ea152ff954f37483132b1d03e0d8c902628705d"
+    },
+    "original93_recipe_unchanged": true,
+    "unchanged_arithmetic_source_count": 92,
+    "unchanged_first_lines": 25
+  },
+  "evidence_schemas": {
+    "source_hashes": "host93-ci-source-hashes-v3",
+    "stage_exits": "host93-ci-stage-exits-v5",
+    "summary": "host93-ci-summary-v4"
+  },
+  "expected_parent_commit": "43372bebcca86984be80029f8c13c05741ec7eb2",
+  "historical_counts": {
+    "extmodule_count": 17,
+    "library_source_info_count": 4945,
+    "line_count": 293837,
+    "module_count": 682,
+    "other_source_info_count": 0,
+    "project_source_info_count": 249537,
+    "source_info_count": 254482
+  },
+  "historical_fir": {
+    "bytes": 42417256,
+    "sha256": "264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a"
+  },
+  "latest_actual": {
+    "chirrtl_exit_code": 1,
+    "cleanup_confirmed": true,
+    "exact_bytes": null,
+    "new_path_cause_confirmed_by_actual": false,
+    "observed_contract": "48 MiB CHIRRTL cap",
+    "run_id": 39197065094,
+    "seconds": 524.434364,
+    "status": "FAIL",
+    "timed_out": false,
+    "toolchain_build": true,
+    "toolchain_tiny": true,
+    "utf8_bytes_lower_bound_exclusive": 50331648
+  },
+  "mismatch": "INCOMPLETE with numeric observation and measured dynamic FIR identity, no toolchain start",
+  "mode": "host-chirrtl-diagnostic",
+  "network_or_native_execution_by_author": false,
+  "new_stage_sequence": "6 early Java/acquisition/assembly/class/CHIRRTL; only exact historical FIR plus original structural assertions permits original 20 toolchain/tiny + 2 firtool/SV + 6 Host phases; no repeated early stages",
+  "observation": {
+    "fields": [
+      "utf8_bytes",
+      "line_count",
+      "module_count",
+      "extmodule_count",
+      "source_info_count",
+      "source_info_utf8_bytes",
+      "project_source_info_count",
+      "library_source_info_count",
+      "other_source_info_count"
+    ],
+    "historical_fir_equal": "Boolean only after successful file measurement; null for failed-child marker",
+    "path_categories": [
+      "scala",
+      "src",
+      "other"
+    ],
+    "path_values_published": false,
+    "states": [
+      "NOT_COLLECTED",
+      "REPORTED",
+      "AVAILABLE"
+    ]
+  },
+  "old_actual_evidence_reinterpreted": false,
+  "path_mechanism_review": {
+    "directory": "review_chirrtl_path_mechanism_independent_20261019T0419",
+    "manifest": {
+      "bytes": 953,
+      "sha256": "68850816620d74dba5c1468e553e0f0225c8ae74da2838a2b5efb0b520959543"
+    },
+    "summary": {
+      "bytes": 1503,
+      "sha256": "9e7d9c6f49e5090aaf7c95b554c41a3f28c2096fc61443716327f970dd77d927"
+    }
+  },
+  "predecessor": {
+    "cold_result": {
+      "bytes": 1407,
+      "sha256": "f2b0115fd965d54c9d290b071f4e59f9418b5de00f8df6b6954321fe03125a77"
+    },
+    "directory": "candidate_ci_chirrtl_frontload_source_v1_20261019T0411",
+    "manifest": {
+      "bytes": 8587,
+      "sha256": "43c65e23325ef1a50673367ca1f0c7cc2e3381ddf531bd2ce7919f4c5b7951c6"
+    },
+    "reason": "Only evidence validator and coordinator tests changed; component, Scala, RUN_PINS and all supporting source bytes unchanged."
+  },
+  "predecessor_review": {
+    "directory": "review_ci_chirrtl_frontload_source_20261019T0426",
+    "findings": "Two finite synthetic evidence-schema acceptance gaps; normal execution bypass not demonstrated.",
+    "manifest": {
+      "bytes": 1427,
+      "sha256": "1314813bd289a43863d979e027d93a69f2fc07b219e92c39f31af73394f24c2a"
+    },
+    "status": "HOLD",
+    "summary": {
+      "bytes": 2040,
+      "sha256": "6e54464f9b445f728e239ed5d5e50a6d2f6a21de56d7f581315e91d1735a2edc"
+    }
+  },
+  "projection_is_actual_measurement": false,
+  "property_scope_scan": {
+    "both_in_identical_SourceInfoFileResolver_class": true,
+    "decompressed_bytes": 146802381,
+    "jar_count": 87,
+    "literal_occurrences": 2,
+    "manifest_sha256": "1bacd154d0e584bc556ad32af96b51708f88d5e6539c517ca2a86f745d18135c",
+    "no_general_indirect_access_or_output_equivalence_claim": true,
+    "skipped_members": 0,
+    "source_count": 93,
+    "zip_members": 26998
+  },
+  "publication_status": "SOURCE_GO_ACTUAL_NOT_EXECUTED",
+  "schema": "HOST93_CHIRRTL_FRONTLOAD_SOURCE_PLAN_V2",
+  "schema_review_fixes": [
+    "A completed diagnostic/AVAILABLE observation requires six clean frontloaded native rows.",
+    "Any FAILED native row must be terminal in all modes."
+  ],
+  "shared_wall_seconds": 6600,
+  "source_manifest": {
+    "directory": "candidate_ci_chirrtl_frontload_source_v2_20261019T0427",
+    "manifest": {
+      "bytes": 9580,
+      "sha256": "8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_chirrtl_frontload_source_v2_20261019T0429",
+    "manifest": {
+      "bytes": 717,
+      "sha256": "c440e4eaa8fe194a228b4dbda03b5c7276c59744ce1eb3f65738de143d1218fd"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3759,
+      "sha256": "edf619617fe69086c238742f74010daa94cd0bd53d310bfec7e18aab8e08e7c3"
+    },
+    "verdict": "SOURCE_GO_FRONTLOADED_CHIRRTL_DIAGNOSTIC_AND_CONDITIONAL_SAME_JOB_ONLY"
+  },
+  "static_path_projection_bytes": 57389476,
+  "status": "SOURCE_GO_ACTUAL_NOT_EXECUTED",
+  "supervisor_or_sanitizer_changed": false,
+  "unchanged_existing_stage_counts": {
+    "build-diagnostic": 16,
+    "host-reset-launch": 34
+  },
+  "workflow": {
+    "build_only_workflow_changed": false,
+    "delta": [
+      "comment",
+      "actual step title",
+      "actual command --mode host-chirrtl-diagnostic"
+    ],
+    "identity": {
+      "bytes": 4586,
+      "sha256": "bdaf1aa11c7357133c9b031dd1e4f9cdd41f6b8af80154d69d9a4ab157e7eb03"
+    },
+    "target": ".github/workflows/host93-ci-recovery-once.yml"
+  }
+}

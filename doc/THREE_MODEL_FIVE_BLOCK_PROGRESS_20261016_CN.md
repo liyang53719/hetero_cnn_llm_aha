@@ -936,3 +936,12 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - 四态资格限抽取组合方程与手动状态矩阵/背压轨迹，不授FF/reset/delta周期或生产数值等价；旧5180不能替代新派生实际。
 - root_header仅加固定读失败码与实际字节长；首4MiB读仅SIZE_LIMIT且size≤16MiB才条件重读，稳定性合同/解析器保持，超过16MiB仍未知。
 - 当前仅SOURCE/mock；新actual NOT_EXECUTED，独立总SOURCE审GO (review_fifo_ready_whole_source_20261019T0847; manifest b8980bdc7114e4848d11092757aac00d04b5d57641cc55b8832e3578e3a42e69; summary b6a1b784b5301dc410478ecc07077e2c3432452047f0b4f451873d096571d61e)。生成仍warning-fatal，禁止Host C++compile/run、权重与长数值；仅三安全JSON可上传。
+
+### 2026-10-19：新FIFO双拆块+cluster生成有限实际通过（39226255480）
+
+- 原attempt1 Actions success，源码4f915090；三JSON原字节保留于development_snapshots/host93_fifo_ready_generation_success_39226255480。总839.870341秒，35native全部自然0/cleanuptrue/无timeout。
+- 新派生真实Icarus4cases/5180通过；资格限抽取组合/手动状态与背压轨迹，不授FF/reset/delta或生产数值等价。原工具build/tiny、历史FIR/SV精确身份均通过。
+- 生成127.233662秒自然0，完整1874B日志0warning/0error/0unparsed、零遗漏，fatal策略未关闭。单cluster wrapper18入2出、1静态combo点、1匹配archive规则；不当成已编译库或动态次数证据。
+- root header5296945B首次SIZE_LIMIT、16MiB条件重读OK，后验仍UNRECOGNIZED_SYNTAX；256handles未知/null，expected_structure=false，不推定未知语法原因。
+- 原summary保持DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0；Host C++compile/reset-launch、数值与权重scope仍false。下一compile+短刺激须独立SOURCE续跑接口审核，本小批不改workflow、不触发。
+- 独立actual审身份GO（review_fifo_ready_generation_actual_39226255480_20261019T0913；MANIFEST 5391de4dac6d078be67847c4aa341542733784256b329b6815dce1c7c1b7cbb0；SUMMARY 43c8f1b3d2d1a09f6f07c988e9f5052286f99d145ddb4db96e234f886945c772；仅四态抽取组合与Host生成有限资格）；原失败历史均保留，不用本轮成功倒填此前失败原因。

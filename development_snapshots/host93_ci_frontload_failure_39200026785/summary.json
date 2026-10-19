@@ -1,0 +1,42 @@
+{
+  "chirrtl_observation": {
+    "extmodule_count": 17,
+    "historical_fir_equal": true,
+    "library_source_info_count": 4945,
+    "line_count": 293837,
+    "module_count": 682,
+    "other_source_info_count": 0,
+    "project_source_info_count": 249537,
+    "source_info_count": 254482,
+    "source_info_utf8_bytes": 22570940,
+    "state": "AVAILABLE",
+    "utf8_bytes": 42417256
+  },
+  "completed_components": [
+    "chirrtl_diagnostic",
+    "toolchain",
+    "host_emission",
+    "idma319",
+    "retained13",
+    "configuration"
+  ],
+  "contract_failure": {
+    "boundary": "UNREPORTED",
+    "code": "UNMAPPED_CONTRACT"
+  },
+  "failure_category": "INPUT_OR_CONTRACT",
+  "mode": "host-chirrtl-diagnostic",
+  "schema": "host93-ci-summary-v4",
+  "scope": {
+    "cpp_compiled": false,
+    "cpp_generated": false,
+    "fresh_host_sv": true,
+    "n0_numeric": false,
+    "reset_launch": false,
+    "toolchain_build": true,
+    "toolchain_tiny": true,
+    "weights_loaded": false
+  },
+  "seconds": 831.028087,
+  "status": "INCOMPLETE"
+}

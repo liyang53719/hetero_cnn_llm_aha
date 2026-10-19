@@ -854,3 +854,10 @@ SOURCE 审结论 SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY；审查
 SOURCE MANIFEST 8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094；SOURCE审GO，实际NOT_EXECUTED。
 
 SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4eaa8fe194a228b4dbda03b5c7276c59744ce1eb3f65738de143d1218fd; SUMMARY edf619617fe69086c238742f74010daa94cd0bd53d310bfec7e18aab8e08e7c3. Actual remains NOT_EXECUTED.
+
+## 2026-10-19 04:51 UTC：部分 PASS / 整体 FAIL，FIR 与 SV 精确恢复
+
+- 已发布 b0a7a47d 的单次 Actions 39200026785 attempt 1：先六阶段归一化 source-info，实际 FIR 42,417,256 B / 264f8b3a… 恢复固定历史身份；293,837 行、682 module + 17 extmodule，项目/库/其他源标签 249,537 / 4,945 / 0。
+- 同 job 按原门继续工具构建、固定双 handle 微例及 SV，SV 76,366,612 B / 2fcc1ba7… 精确恢复。三项工具/发射 scope 为 true，其他 Host C++/reset/数值/权重资格仍 false。
+- 31 项 native 成功后，Host C++ 生成自然 exit 2，150.280978 秒、未超时、已确认清理；总 831.028087 秒。去敏尾保留“35 warning(s)”致命退出与部分 UNOPTFLAT，尾被截断，未认定全部告警类别或真实组合环。
+- 本小批仅持久化原三份安全 JSON 与范围说明，不改 workflow、不重复触发。下一步只读核告警策略与模块结构，再作有证据的最小修复。原六次失败证据及未知根因边界保留。

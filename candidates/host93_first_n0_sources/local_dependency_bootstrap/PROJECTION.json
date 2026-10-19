@@ -1,0 +1,119 @@
+{
+  "actual_authorization": false,
+  "elf_function": {
+    "name": "elf_dependencies",
+    "projection": {
+      "bytes": 2314,
+      "sha256": "6054c4f415c1c87c1ca01d534e09b8c2d8f93eed1cbc9991b7dfd4252786d261"
+    },
+    "source": "candidates/host93_micro_diagnostics/run.py",
+    "source_logic_edits": 0
+  },
+  "existing_473_patch_make_and_resources_changed": false,
+  "new_code_scope": [
+    "bounded source/binding reads",
+    "five-package/stage receipt coupling",
+    "finite private path/environment map",
+    "read-only fixed ELF/library profile checks",
+    "nonterminal copied-tool identity projection"
+  ],
+  "parser_logic_edits": 0,
+  "production_repo_changes": [],
+  "receipt_function": {
+    "all_other_original_predicates_unchanged": true,
+    "exact_anchor_after": "receipt=json.loads(VERIFIED_RECEIPT_RAW)",
+    "exact_anchor_before": "receipt=json.loads(receipt_path.read_bytes())",
+    "inverse_recovers_original": true,
+    "name": "postflight",
+    "original": {
+      "bytes": 2133,
+      "sha256": "35eeaf26b485ef4dbc4a4532bc98fdb6ccccbc17da6b99e0b965f0ecfefde28d"
+    },
+    "projected": {
+      "bytes": 2128,
+      "sha256": "ad07d17878355ba597514402199cdd589486f10429a1595ebecdbd59446bdacc"
+    },
+    "receipt_original_pin_rechecked_after": true,
+    "same_verified_buffer_consumed": true,
+    "shared_module_namespace_mutated": false,
+    "source": "development_snapshots/canonical_verilator_dependencies_source_20261018/run_gate.py",
+    "substitutions": 1
+  },
+  "relocation_bound_globals": [
+    "OUTPUT_ROOT",
+    "CFG_NEW",
+    "CFG_DERIVED_BYTES",
+    "CFG_DERIVED_SHA"
+  ],
+  "relocation_logic_edits": 0,
+  "reused_interfaces": {
+    "acquisition": [
+      "absolute_deadline",
+      "namespace",
+      "validate_plan",
+      "checked_output_root",
+      "acquire"
+    ],
+    "filesystem": [
+      "identity",
+      "fresh_directory",
+      "copy_member",
+      "tree_inventory"
+    ],
+    "postflight": [
+      "postflight"
+    ],
+    "stage": [
+      "validate_package",
+      "relocate_cfg",
+      "FreshWriter"
+    ]
+  },
+  "schema": "LOCAL_DEPENDENCY_FINITE_COMPOSITION_V2",
+  "source_files": {
+    "candidates/host93_micro_diagnostics/run.py": {
+      "bytes": 53278,
+      "sha256": "235a619fc7d304578ff78a958c173a33cb50d1a860dbf56fe2051fd4396ba3b8"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/worker/PINS.json": {
+      "bytes": 205675,
+      "sha256": "abc9e5f55b045b6402cc5c13e4d4c4263eb6a7403e84b01a165a12b5d5d20cd0"
+    },
+    "development_snapshots/canonical_host93_dependency_source_20261018/worker/stage_dependencies.py": {
+      "bytes": 20634,
+      "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+    },
+    "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py": {
+      "bytes": 28551,
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/run_gate.py": {
+      "bytes": 12174,
+      "sha256": "4d58ac5b632a62a8d0506d03ecd6fdb8b7d621b80c552128dd0f6bc8c4858d5f"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/DEPENDENCY_PLAN.json": {
+      "bytes": 2594,
+      "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/acquire_dependencies.py": {
+      "bytes": 9150,
+      "sha256": "f43ee638df95dfa23955aaaa53581655efbc8eba330bf98ef4d02448fab00009"
+    },
+    "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/published_acquire.py": {
+      "bytes": 19263,
+      "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+    }
+  },
+  "v1_delta": {
+    "ELF_parser_edits": 0,
+    "cfg_relocation_logic_edits": 0,
+    "closed_findings": [
+      "F01_FIXED_FILE_PLUS_LEAVES",
+      "F02_SAME_BUFFER_RECEIPT"
+    ],
+    "fixed_file_leaf_only_plus_support": true,
+    "package_parser_edits": 0,
+    "resource_or_authorization_changes": false,
+    "strict_private_root_grammar_changed": false
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "actual_authorization": false,
+  "binding": "UNBOUND",
+  "bootstrap": {
+    "bytes": 25509,
+    "sha256": "c2a7ca58d8fba3df8b76071e25ad740386ab5113a59897181b39b4d303e50ea8"
+  },
+  "host_executed": false,
+  "installed": false,
+  "local_only": [
+    "stdout_stderr_logs",
+    "relocated_source_copies",
+    "candidate_manifest"
+  ],
+  "native_child_started": false,
+  "network_started": false,
+  "new_test_groups": [
+    "eight_fixed_plus_file_leaves_and_private_root_rejections",
+    "bound_system_gxx_exact_checked_buffer",
+    "bound_libstdcxx_static_mock_exact_checked_buffer",
+    "original_postflight_positive_A_to_B_rejected_ABA_consumes_pinned_A",
+    "single_anchor_inverse_private_namespace_and_original_receipt_predicates"
+  ],
+  "original_full_package_parser_tests_inherited_not_rerun_with_real_packages": true,
+  "real_package_acquired_or_read": false,
+  "real_tools_copied_or_executed": false,
+  "runs": [
+    {
+      "exit_code": 0,
+      "name": "cold_normal",
+      "optimized": 0,
+      "result": "PASS_LOCAL_BOOTSTRAP_SOURCE_AND_SYNTHETIC_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 1534,
+        "sha256": "8fbf35fe9d034b2bf2a16a8b608003e66915dc689f102d7bbd98b7e7f8078326"
+      },
+      "tests": 25
+    },
+    {
+      "exit_code": 0,
+      "name": "cold_optimized",
+      "optimized": 1,
+      "result": "PASS_LOCAL_BOOTSTRAP_SOURCE_AND_SYNTHETIC_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 1534,
+        "sha256": "0427a7eee483e3b71e849764d1dd9ee27b93452538f4b25af16aacbe543b8c66"
+      },
+      "tests": 25
+    },
+    {
+      "exit_code": 0,
+      "name": "entry_normal",
+      "optimized": 0,
+      "result": "PASS_PINNED_ENTRY_COLD_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 333,
+        "sha256": "8d1fcd531cdb0f2324cf4e8e26d89c589c38a59302e6c293cb20e686eb5aec50"
+      },
+      "tests": 6
+    },
+    {
+      "exit_code": 0,
+      "name": "entry_optimized",
+      "optimized": 1,
+      "result": "PASS_PINNED_ENTRY_COLD_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 333,
+        "sha256": "720d495f418928524b738199e735c1e6209ad2a8733aa55235c5f5341e6cd3b8"
+      },
+      "tests": 6
+    },
+    {
+      "exit_code": 0,
+      "name": "relocated_normal",
+      "optimized": 0,
+      "result": "PASS_LOCAL_BOOTSTRAP_SOURCE_AND_SYNTHETIC_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 1534,
+        "sha256": "8fbf35fe9d034b2bf2a16a8b608003e66915dc689f102d7bbd98b7e7f8078326"
+      },
+      "tests": 25
+    },
+    {
+      "exit_code": 0,
+      "name": "relocated_optimized",
+      "optimized": 1,
+      "result": "PASS_LOCAL_BOOTSTRAP_SOURCE_AND_SYNTHETIC_ONLY",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 1534,
+        "sha256": "0427a7eee483e3b71e849764d1dd9ee27b93452538f4b25af16aacbe543b8c66"
+      },
+      "tests": 25
+    }
+  ],
+  "safe_publication_files": [
+    "bootstrap.py",
+    "source_entry.py",
+    "run_cold.py",
+    "test_bootstrap_cold.py",
+    "test_entry_cold.py",
+    "BINDING_TEMPLATE.json",
+    "SOURCE_PINS.json",
+    "PROJECTION.json",
+    "COLD_RESULT.json",
+    "README_CN.md"
+  ],
+  "schema": "LOCAL_DEPENDENCY_SOURCE_COLD_V2",
+  "source_files_unchanged": {
+    "files": {
+      "candidates/host93_micro_diagnostics/run.py": {
+        "bytes": 53278,
+        "sha256": "235a619fc7d304578ff78a958c173a33cb50d1a860dbf56fe2051fd4396ba3b8"
+      },
+      "development_snapshots/canonical_host93_dependency_source_20261018/worker/PINS.json": {
+        "bytes": 205675,
+        "sha256": "abc9e5f55b045b6402cc5c13e4d4c4263eb6a7403e84b01a165a12b5d5d20cd0"
+      },
+      "development_snapshots/canonical_host93_dependency_source_20261018/worker/stage_dependencies.py": {
+        "bytes": 20634,
+        "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+      },
+      "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py": {
+        "bytes": 28551,
+        "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+      },
+      "development_snapshots/canonical_verilator_dependencies_source_20261018/run_gate.py": {
+        "bytes": 12174,
+        "sha256": "4d58ac5b632a62a8d0506d03ecd6fdb8b7d621b80c552128dd0f6bc8c4858d5f"
+      },
+      "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/DEPENDENCY_PLAN.json": {
+        "bytes": 2594,
+        "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+      },
+      "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/acquire_dependencies.py": {
+        "bytes": 9150,
+        "sha256": "f43ee638df95dfa23955aaaa53581655efbc8eba330bf98ef4d02448fab00009"
+      },
+      "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/published_acquire.py": {
+        "bytes": 19263,
+        "sha256": "4807fc702edfeb98d7eab9b86e727fe6d0d116ae7230200be7babb5a2c5b9b69"
+      }
+    },
+    "schema": 1
+  },
+  "status": "PASS_SOURCE_AND_SYNTHETIC_ONLY_PENDING_FINAL_INDEPENDENT_REVIEW",
+  "synthetic_package_names_and_selected_plus_members_match_fixed_catalog": true,
+  "tests_total": 112,
+  "v1_formal_hold_findings": [
+    "F01_FIXED_FILE_PLUS_LEAVES",
+    "F02_RECEIPT_SECOND_READ"
+  ],
+  "v2_scope": "ONLY_F01_F02_NARROW_FIX"
+}

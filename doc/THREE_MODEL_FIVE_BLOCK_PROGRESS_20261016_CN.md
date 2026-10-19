@@ -1076,3 +1076,11 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 比较 worker 唯一将 ci31214 选择改为既有 historical；launch/test 只联动原件 size/SHA。原五比较函数、FP32→FP64 NumPy 归约、196608 值/B 退休/ACK0/完整 capture 门、max_abs≤0.03125 与 mean_abs≤0.005 均不改；numeric_pass 与 bit_exact/hash_exact 分列。comparator 直接校验 FP32 参考，上游原 reference 的双 SHA 资格不被冒称为新双文件比较。
 - 比较器有限审 SOURCE_GO_ISOLATED_HISTORICAL_N0_COMPARATOR_BINDING_ONLY：MANIFEST 3086 B / 7ce32313dffbfef61cef408f528a88af9888e8c049fff0b05d163c8f6247a8e2；SUMMARY 2697 B / fff46429a3bfcc51cb58e74eb4201472ad1469337ac95d244fe858132417bc6b。独立搬迁普通/-O 各 49 项、loader 各 6 项及默认 launch 两模式均通过；只有 stdlib/mock，没有实际数组比较。
 - 两片仅 TEMP_SOURCE；现有原 CI comparison/reference/PINS 与主作业未替换，historical 本地参考资格仍不能替代工具、资源或 DUT 数值资格。本批计划按已核父文档完整前缀加此纯尾整体替换，绝不追加完整旧文档。
+
+## 2026-10-19 14:14 UTC：固定五包本地 bootstrap v2 的纯 SOURCE 小批
+- 本批仅持久化独立 bootstrap 的10件安全源码/说明及本计划纯尾，不修改 workflow，不启动新的 Host/native 作业，不获取或读取真实包，不安装、迁移或删除 runtime/wheels。
+- 原 v1 两项 HOLD 保留：F01 固定合法文件名加号被误拒；F02 acquisition receipt 验后另读导致消费 buffer 脱节。v2 仅限固定 catalog/绑定身份的 leaf 支持加号，parent/work/repo 词法保持严格；原 postflight 单读取锚改用已验 bytes，其他谓词原样，结束仍复核 receipt 原 pin。
+- SOURCE_GO_LOCAL_DEPENDENCY_BOOTSTRAP_FIXED_COMPOSITION_ONLY：MANIFEST 1887 B / 1be3fceced5a6743c146f6d91f89d49b5a332d9088d6984f11eab60624f3ba01；SUMMARY 3700 B / 97056a036e0f4d33f782d79b39a5f4bcb2bb508eee81e695966a11c014562652。原反例双模式闭合，独立搬迁25+25通过；作者原目录/搬迁25×4与入口6×2共112组记录保留，入口6×2未由独审重跑。
+- 八份 repo-relative 底层来源、五固定官方包、67原data与四行cfg relocation保持。work_root/system_programs/native_profile三项为null，schema固定；真实工具/系统库绑定、native probe及same-job backend/Host尚未取得资格。COLD原PENDING标签是作者冻结时记录，README另列后续独审身份。
+- 原473源、seqnum唯一补丁、make -j1、8 GiB Host准入、3 GiB磁盘门、原AS/单核/共享6600秒均未改，未来bootstrap只能消耗原预算。SOURCE检查、argv构造、静态profile或可执行副本不等于实际授权或兼容性PASS。
+- 只发布最小10件安全文本；不复制底层八来源，不上传本地日志、反例输出、机器库存或搬迁测试副本。完整计划按父205211 B精确前缀加此纯尾整体替换，禁止重复追加全文。

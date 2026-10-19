@@ -1,0 +1,293 @@
+{
+  "attempt": {
+    "coordinator_seconds": 4.901873234994127,
+    "finished_utc": "2026-10-19T21:21:20.005324+00:00",
+    "outer_exit_code": 0,
+    "outer_exit_is_not_child_exit": true,
+    "outer_seconds": 4.92517532799684,
+    "session": 55280,
+    "shared_seconds_cap": 180,
+    "started_utc": "2026-10-19T21:21:15.084481+00:00",
+    "tail_reserved_seconds": 30
+  },
+  "captured_work_tree_snapshot": {
+    "assembled_candidate_bridge_files": 29,
+    "directories": 17,
+    "entries": 81,
+    "fixed_tool_search_symlinks": 4,
+    "regular_file_bytes": 40983550,
+    "regular_files": 60,
+    "reused_cache_files": 19,
+    "staged_files": 48
+  },
+  "elf_static_observation": {
+    "needed_sonames": [
+      "ld-linux-x86-64.so.2",
+      "libc.so.6",
+      "libgcc_s.so.1",
+      "libm.so.6",
+      "libstdc++.so.6"
+    ],
+    "projection": {
+      "cap_only_substitutions": 2,
+      "inverse_exact": true,
+      "original": {
+        "bytes": 2314,
+        "sha256": "6054c4f415c1c87c1ca01d534e09b8c2d8f93eed1cbc9991b7dfd4252786d261"
+      },
+      "projected": {
+        "bytes": 2316,
+        "sha256": "e6ccec5d7b3351da53bdeb257f6e6910a45ff86760231124fb8c7c04a0cd3707"
+      }
+    },
+    "scope": "Static ELF identity/dependency check; generated PC01 ELF was not invoked"
+  },
+  "evidence_identities": {
+    "attempt_manifest": {
+      "bytes": 882,
+      "sha256": "80dfbdf526509434586725c6b8c1a367c6905b13e48c378f79a392183a250714"
+    },
+    "compiler_catalog": {
+      "bytes": 18466,
+      "sha256": "3882312fb75efa443fbe65af05cf882cea420a9af5be9a4ca69e4b0b2773e1e1"
+    },
+    "execution_result": {
+      "bytes": 16702,
+      "sha256": "643258fd6a0255aa068446acdd15dbc2d63f20e3927cc458f264a4cf7c0af513"
+    },
+    "outer_result": {
+      "bytes": 132,
+      "sha256": "fdb535380c67dd22c257c55e702acb29ce29877bd6d048aeb77b7a5fcf048a7f"
+    },
+    "reuse_receipt": {
+      "bytes": 3849,
+      "sha256": "dcadbcf1d8220a3bfe259409cfbdf835a1e01d22863dccd895d72362e3ab1958"
+    },
+    "source_manifest": {
+      "bytes": 9105,
+      "sha256": "0ed658647a5cd1c50829e01195229791eb67e0c07e7bb88aebf69676164bc753"
+    },
+    "source_review_manifest": {
+      "bytes": 867,
+      "sha256": "8c277daab23a327e7855836efec358dad77f8b71589ec950ee426fc4e2e6c615"
+    },
+    "source_review_summary": {
+      "bytes": 3506,
+      "sha256": "e74c8bd61f1f9575fdbfbae4d65fdf8119b3e8d730de135f1b70c5b25c61c4f6"
+    },
+    "work_tree": {
+      "bytes": 13181,
+      "sha256": "74bf880a02b494b6eb4c00efd5c4ec2a2e8a8d4994cd7648054f9a0bb6c3a2ad"
+    }
+  },
+  "independent_actual_review": {
+    "byte_identity_checks": {
+      "assembled_bridge_sources": 29,
+      "fixed_system_files": 39,
+      "reused_cache_files": 19,
+      "staged_files": 48,
+      "upstream_sources": 44,
+      "work_tree_entries": 81
+    },
+    "directory": "review_pc01_capsule_relink_actual_20261019T2122",
+    "execution_start_source_state": {
+      "capsule_core_published_commit": "ef59eb4c52e8b814509fc087def732474ebc223d",
+      "exact_relink_source_and_180_second_contract_accepted": true,
+      "later_publication_parent_is_not_execution_origin": true,
+      "relink_safe_publication_at_execution_start": "PENDING"
+    },
+    "long_execution_admission": false,
+    "manifest": {
+      "bytes": 568,
+      "sha256": "13a5456589eaed0e6dfe17cf7652b13d4061a3414a8a35b2d554d3b75c37224b"
+    },
+    "reviewer_native_or_compiler_run": false,
+    "static_dependency_check": {
+      "cached_header_dependencies": 15,
+      "delta_only_added_capsule_header": true,
+      "dependency_tokens": 45,
+      "elf64_little_endian_x86_64_pie": true,
+      "fixed_source_dependencies": 27,
+      "needed_sonames_count": 5,
+      "rpath_or_runpath": false,
+      "system_headers_excluded_by_mmd": true,
+      "unique_dependencies": 42
+    },
+    "status": "ACCEPTED_COMPILE_LINK_ONLY",
+    "summary": {
+      "bytes": 9281,
+      "sha256": "52f77ba0baff3d7c00ee614334733c216126c6513c81d0fb3f818e6be3a73f3b"
+    },
+    "verdict": "ACCEPT_ACTUAL_PC01_CAPSULE_DRIVER_COMPILE_LINK_ONLY"
+  },
+  "limitations": {
+    "actual_capsule_observed": false,
+    "fix_of_original_pc1_022_proven": false,
+    "full_system_header_closure_claimed": false,
+    "mmd_dependency_file_excludes_system_headers": true,
+    "native_compiler_and_linker_ran": true,
+    "pc01_executable_invoked": false,
+    "reference_model_rerun": false,
+    "rtl_executed": false,
+    "three_reference_comparison": "NOT_RUN"
+  },
+  "preserved_prior_failure": {
+    "actual_review_manifest": {
+      "bytes": 380,
+      "sha256": "63fcbb1ec1dfe3ac1ab10ab0a8eb17913b1cf37b27bc23da5e123da37de12e70"
+    },
+    "concrete_failing_predicate": "UNKNOWN",
+    "diagnostic_code": "PC1_022",
+    "failing_callsite_or_edge": "UNKNOWN",
+    "native_exit_code": 1,
+    "original_failure_modified": false,
+    "original_session": 38263,
+    "root_cause": "UNKNOWN"
+  },
+  "produced_artifacts": {
+    "dependency_file": {
+      "bytes": 5669,
+      "sha256": "5d35cb044c3425ac789caf8fd84485078f21b8daf063684f48c999f0825cd565"
+    },
+    "driver_object": {
+      "bytes": 1346576,
+      "sha256": "402893a5f11b1bb28b1d3d21545326e2320374715676598b7db7bcd65f3d5c91"
+    },
+    "elf": {
+      "bytes": 13547616,
+      "sha256": "73a13d020b99fa78087c639629dcbb8984d3dfbf028baf3adb69b60b51774617"
+    }
+  },
+  "publication": {
+    "arrays_included": false,
+    "binary_files_included": false,
+    "new_execution_or_tests_by_summary": false,
+    "original_evidence_modified": false,
+    "private_paths_included": false,
+    "raw_logs_included": false
+  },
+  "qualification": {
+    "application_accuracy_pass": null,
+    "baseline_adopted": false,
+    "completed_blocks": 0,
+    "driver_compile_link_success": true,
+    "full_block_pass": false,
+    "official_raw_numeric_pass": null,
+    "target_blocks": 5,
+    "typed_recipe_bit_exact_to_rtl": null
+  },
+  "resource_contract": {
+    "as_limit_bytes": 6442450944,
+    "compile_phase_seconds_cap": 95,
+    "compile_work_cpu_seconds_cap": 80,
+    "cpu_affinity_count": 1,
+    "link_phase_seconds_cap": 25,
+    "link_work_cpu_seconds_cap": 10,
+    "maxrss_interpretation": "Cumulative coordinator child-process maxrss; not separately isolated compile/link peaks or aggregate instantaneous memory.",
+    "tail_seconds_reserved": 30,
+    "total_seconds_cap": 180
+  },
+  "reused_artifacts": {
+    "backend_rebuilt": false,
+    "original_host_archive": {
+      "bytes": 17631506,
+      "sha256": "dafcc125c4a4463b9ff454fda6b7a4031bfa17fd98cde1e8386ff058ce245b2f"
+    },
+    "rtl_regenerated": false
+  },
+  "schema": 1,
+  "scope": "ACTUAL_PC01_CAPSULE_DRIVER_COMPILE_LINK_ONLY",
+  "source_composition": {
+    "assembled_candidate_bridge_files": 29,
+    "capsule_replaced_bridge_files": 4,
+    "new_capsule_header_files": 1,
+    "original_rtl_and_archive_unchanged": true,
+    "unchanged_original_bridge_files": 24,
+    "upstream_fixed_source_pins": 44
+  },
+  "stages": [
+    {
+      "exit_observation": {
+        "cleanup_kill_attempted": true,
+        "cleanup_kill_result": "signal_sent_before_reap",
+        "interpretation": "CLD_EXITED with status 0; natural success before cleanup signal",
+        "waitid_code": 1,
+        "waitid_status": 0
+      },
+      "name": "compile",
+      "native": {
+        "address_space_limit_bytes": 6442450944,
+        "anchor_confirmed": true,
+        "cleanup_confirmed": true,
+        "cpu_limit_seconds": 80,
+        "exit_code": 0,
+        "expected_exit": 0,
+        "group_state": "absent",
+        "parent_exception": null,
+        "reaped": true,
+        "seconds": 2.990941,
+        "spawn_handle_acquired": true,
+        "status": "PASS",
+        "timed_out": false,
+        "wall_limit_seconds": 79.99086750199785
+      },
+      "native_receipt_identity": {
+        "bytes": 2338,
+        "sha256": "e797dc77315c15dc8187bce5c7f1885bd614aa8f3dd7bc4dba86bdbb9b468b9e"
+      },
+      "usage": {
+        "child_system_cpu_seconds": 0.19996999999999998,
+        "child_user_cpu_seconds": 2.767732,
+        "maxrss_kib_cumulative_parent_children": 337904,
+        "scope": "child processes of this coordinator; cumulative maxrss, not phase-specific",
+        "seconds": 3.0011486200091895
+      },
+      "usage_receipt_identity": {
+        "bytes": 501,
+        "sha256": "62b60b17ab0eaa6928b7d7d04cb8b078bc1e4d9b141927278ab01383ae1e0379"
+      }
+    },
+    {
+      "exit_observation": {
+        "cleanup_kill_attempted": true,
+        "cleanup_kill_result": "signal_sent_before_reap",
+        "interpretation": "CLD_EXITED with status 0; natural success before cleanup signal",
+        "waitid_code": 1,
+        "waitid_status": 0
+      },
+      "name": "link",
+      "native": {
+        "address_space_limit_bytes": 6442450944,
+        "anchor_confirmed": true,
+        "cleanup_confirmed": true,
+        "cpu_limit_seconds": 10,
+        "exit_code": 0,
+        "expected_exit": 0,
+        "group_state": "absent",
+        "parent_exception": null,
+        "reaped": true,
+        "seconds": 0.144842,
+        "spawn_handle_acquired": true,
+        "status": "PASS",
+        "timed_out": false,
+        "wall_limit_seconds": 9.992292565002572
+      },
+      "native_receipt_identity": {
+        "bytes": 1653,
+        "sha256": "4dbefceb77d48a28f979c60345567dc4b4229e41ee027627f46c2a7e2f8b1a34"
+      },
+      "usage": {
+        "child_system_cpu_seconds": 0.04822600000000002,
+        "child_user_cpu_seconds": 0.07993499999999987,
+        "maxrss_kib_cumulative_parent_children": 337904,
+        "scope": "child processes of this coordinator; cumulative maxrss, not phase-specific",
+        "seconds": 0.15335882498766296
+      },
+      "usage_receipt_identity": {
+        "bytes": 510,
+        "sha256": "fb0812345525eacbd4da595019af3a28f98f244d5293d61114d9ed0ed191d4a5"
+      }
+    }
+  ],
+  "status": "COMPLETE_DRIVER_COMPILE_LINK_ONLY"
+}

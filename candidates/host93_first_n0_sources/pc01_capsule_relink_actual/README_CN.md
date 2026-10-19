@@ -1,0 +1,27 @@
+# PC01 identity capsule 驱动：实际编译与链接成功
+
+独立实际审查正式结论为ACCEPT_ACTUAL_PC01_CAPSULE_DRIVER_COMPILE_LINK_ONLY；review_pc01_capsule_relink_actual_20261019T2122 的MANIFEST568字节 / 13a5456589eaed0e6dfe17cf7652b13d4061a3414a8a35b2d554d3b75c37224b，SUMMARY9281字节 / 52f77ba0baff3d7c00ee614334733c216126c6513c81d0fb3f818e6be3a73f3b。
+
+本摘要只记录已完成的最小driver重链，原PC01失败证据保留；没有调用新PC01可执行文件。
+
+## 实际结果
+
+本轮于2026-10-19 21:21:15.084481 UTC开始、21:21:20.005324 UTC结束；outer自然退出0，墙钟4.92517532799684秒，协调器4.901873234994127秒。compile native 2.990941秒，link native 0.144842秒，两者均自然退出0、未超时、cleanup/reap确认，进程组已清理。WNOWAIT均为CLD_EXITED/status0，后续cleanup signal不改变原自然退出观测。
+
+新ELF为13547616字节 / 73a13d020b99fa78087c639629dcbb8984d3dfbf028baf3adb69b60b51774617；新driver object为1346576字节 / 402893a5f11b1bb28b1d3d21545326e2320374715676598b7db7bcd65f3d5c91。仍链接原普通Host archive 17631506字节 / dafcc125c4a4463b9ff454fda6b7a4031bfa17fd98cde1e8386ff058ce245b2f，没有重建backend或生成RTL。
+
+工作树快照81项：60普通文件、17目录、4个固定工具搜索链接，普通文件共40983550字节；48项staged由29桥原件和19缓存原件组成。29桥原件为24原件不变、4处capsule替换与1个新增header，不是29处功能修改；44上游来源pin保持。原件、原参考和数组没有删除或替换。
+
+## 资格边界
+
+结果为COMPLETE_DRIVER_COMPILE_LINK_ONLY。新ELF未调用，capsule尚无真实运行输出，不能据编译成功宣布原PC1_022已修复或具体谓词已确定。原session38263的自然退出1、PC1_022、具体谓词/调用点/边沿与根因UNKNOWN均保留，三轨比较仍NOT_RUN。official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl均null，full_block_pass=false，五block仍0/5。
+
+单核、AS6GiB、180秒总界和30秒尾储备保持；compile phase95/work及CPU80秒，link phase25/work及CPU10秒。两个usage记录的337904KiB都是协调器累计子进程maxrss，不是分离phase峰值。-MMD产物不含系统头，不将其称为完整系统header闭包；ELF只作静态身份/依赖核验，不能充当运行资格。
+
+原7件证据MANIFEST为882字节 / 80dfbdf526509434586725c6b8c1a367c6905b13e48c378f79a392183a250714。公开只含安全数字、size/SHA与资格边界，不发布机器路径、命令、raw日志、数组或二进制。本次汇总没有重跑native或测试，后续fresh PC0→ACK0→PC1调用另凭新ELF/receipt及独立入口资格，不恢复旧失败进程。
+
+## 正式独审与实际来源时序
+
+独审核81项现物、48 staged、29桥源/19 cache、44上游与39系统依赖；ELF为x86-64 PIE、原5个NEEDED、无RPATH/RUNPATH。独立.d核45 tokens/42 unique（27源+15 cache），相对原版只新增capsule header依赖；仍不覆盖系统头或所有动态文件访问。
+
+实际开始时capsule core ef59eb4c52e8b814509fc087def732474ebc223d已发布，精确重链SOURCE与180秒合同已获审；重链安全公开内容当时尚在等待发布。此次记录的发布父641e6976不能写成该实际的执行来源。独审允许准确新ELF/receipt作为后续另审fresh入口的输入，不新增长执行资格，也不要求重复编译链接。原失败、缺失数组与UNKNOWN边界不变。

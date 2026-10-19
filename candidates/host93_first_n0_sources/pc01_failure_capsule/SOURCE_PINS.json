@@ -1,0 +1,135 @@
+{
+  "changed_original_members": 4,
+  "future_assembled_members": 29,
+  "new_overlay_members": 5,
+  "original_bridge_members": 28,
+  "qualification": "SOURCE_BYTES_ONLY_NO_NATIVE_OR_REPLAY_AUTHORITY",
+  "schema": "PC01_IDENTITY_CAPSULE_ORIGINAL_SOURCE_PINS_V1",
+  "sources": {
+    "candidates/host93_first_n0_sources/pc01_bridge/PROJECTION.json": {
+      "bytes": 11034,
+      "sha256": "b0b737e65170c9754997b9ab7053792c2f6b98c3de5e778d73c7f40dc48d8723"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/RELINK_CONTRACT.json": {
+      "bytes": 3446,
+      "sha256": "6e35a033308211c65da7f8d0c647e287338599362dc85851c961f8b522de82b7"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/SOURCE_PINS.json": {
+      "bytes": 8657,
+      "sha256": "f6257e57710d16c93ee3edd406814e6b1aa4e5004f5258eac73173e20c34f7e4"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/canonical16_identities.hpp": {
+      "bytes": 3844,
+      "sha256": "0f46d5f389af952a793ac38812009d3da081a858b2fd1f650f8feda513cfd499"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/canonical_launch.hpp": {
+      "bytes": 2065,
+      "sha256": "7b4a6bf463335d7984fbc803ccb4cca275b54344fa883d82403fa55de4f0a7bc"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/completion_payload.hpp": {
+      "bytes": 2268,
+      "sha256": "1dbab0fec1057e55ccc931588fa7f58a5598ce272e4542edda49c80eb03ee3ef"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/first_n0_diagnostic_codes.inc": {
+      "bytes": 38917,
+      "sha256": "ed087651b2e699086e85a83aa5794c7d4bcca068967b5edae3fd796ea69959cf"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/first_n0_diagnostics.hpp": {
+      "bytes": 2262,
+      "sha256": "bcd8a80d1402a77f4285a5233db21dbbd2d99667594d4046a4a0e11a335725f7"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/first_n0_driver.hpp": {
+      "bytes": 4887,
+      "sha256": "d313b1bbefc44418d1822290fd9f90ae46ba9122481523cc732fc5e787cd97d3"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/first_n0_inputs.hpp": {
+      "bytes": 1695,
+      "sha256": "d6ef16b6ba0148b59fb4aad84244906425783606f5daec98bd9d92c56958fe82"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/first_n0_limits.hpp": {
+      "bytes": 720,
+      "sha256": "52dd7b039421de27da6e02352247f3236b80114d6e046c46c7e1eeb3589f7c00"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/first_n0_result.hpp": {
+      "bytes": 1232,
+      "sha256": "ca0ddcce83c84691afd48f17ba6cd893936979daa8128c1625ac6614b2083754"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/fixed_file_io.hpp": {
+      "bytes": 2337,
+      "sha256": "ca890f5e09cf79c8c3f838b85ef4521a2e71c6b00af67c8d8ac298a42a41d579"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/generated_binding.hpp": {
+      "bytes": 164037,
+      "sha256": "84b1e85078f9864610a1dbee1c68a7ff40e4ba847dd239f54fd079151e066afe"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/host_ports.hpp": {
+      "bytes": 3123,
+      "sha256": "374845951e3fad70448b52bfa33418d19a08c9cf58200526adf20fb9b78486de"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/n0_field_registry.inc": {
+      "bytes": 12696,
+      "sha256": "af5130f58aa27e39859fd9efdc19b3bd8c8536c3bfc4d9b3853740d3bc8eb0f2"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/n0_model_fields.hpp": {
+      "bytes": 21381,
+      "sha256": "33dd661d89ef01c57f4fe1573779904ed52fd25c335f4041fc8b64c318e51c69"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/n0_model_scheduler.inc": {
+      "bytes": 20875,
+      "sha256": "0c31771cd3d7a12044710467d85a87f2a6a53e7b6c881344db87af62f54f87f6"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/n0_production_guard.hpp": {
+      "bytes": 5395,
+      "sha256": "462fe82cdc24ea9fb9e15000fecee3bb6559f6f4d59dac4c7c95e99216537a3a"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc01_driver.hpp": {
+      "bytes": 7854,
+      "sha256": "03d943d1210abb180747d8a6ea0bd80a465c938162494c30142d499697d41d58"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc01_result.hpp": {
+      "bytes": 1215,
+      "sha256": "04de9a667ecc52e66b2c2a24440bf09e19738c41ad9892a67e60f60b9e2b781d"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc1_model_scheduler.inc": {
+      "bytes": 13247,
+      "sha256": "6cdc1abc8c8229a883a67ea398ef714fdef5ea7f5d8f4518a9492e0aa69bdd0f"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc1_production_guard.hpp": {
+      "bytes": 10672,
+      "sha256": "fea46eecd53f1f5b65d1a4919ea5d198a1b441bc421abc516ed1a764e73450f4"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc1_retirement_adapter.inc": {
+      "bytes": 5367,
+      "sha256": "d732d88dedbde541c1bcb37ec66b0c905b7f14042d1fed06fa07dd689cab25d9"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/runtime_policy.hpp": {
+      "bytes": 4429,
+      "sha256": "88157f9014ee02b7573c2d8116193ce1c7b223f1bb51d85d2aca0156e0a0c0bd"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/runtime_ram.hpp": {
+      "bytes": 30120,
+      "sha256": "0feccb73809ca33682bf7c594f38784fa356dd1d7ce89b162505fe4c71b63fd5"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/silu_observer.hpp": {
+      "bytes": 19085,
+      "sha256": "4517356fae02531b1eab19d825423440c197bfeb0f5269475dda501da1225245"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/source/first_n0_main.cpp": {
+      "bytes": 6812,
+      "sha256": "d569ddacaa2ec3260fbbc975c0da631a842d34f9344ebd10ea53db0e31ed8a15"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/source/pc01_main.cpp": {
+      "bytes": 7450,
+      "sha256": "1188e3be3f486f4a4492b187f5208a773e38a39d46d887fef104fa40e39e8d26"
+    }
+  },
+  "unchanged_original_members": 24
+}

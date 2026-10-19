@@ -1,0 +1,84 @@
+{
+  "added": [
+    "bridge/include/pc01_failure_capsule.hpp"
+  ],
+  "hunks": [
+    {
+      "after": "#include \"pc01_result.hpp\"\n#include \"pc01_failure_capsule.hpp\"",
+      "before": "#include \"pc01_result.hpp\"",
+      "path": "include/runtime_ram.hpp"
+    },
+    {
+      "after": "Pc01Result run_pc01(RunPhase& diagnostic_phase,Pc01FailureCapsule& diagnostic);",
+      "before": "Pc01Result run_pc01(RunPhase& diagnostic_phase);",
+      "path": "include/runtime_ram.hpp"
+    },
+    {
+      "after": "RuntimeOwner::run_pc01(RunPhase& diagnostic_phase,Pc01FailureCapsule& diagnostic)",
+      "before": "RuntimeOwner::run_pc01(RunPhase& diagnostic_phase)",
+      "path": "include/pc01_driver.hpp"
+    },
+    {
+      "after": "        result.status=FirstN0Result::Status::Ack0ActualCaptured;\n        // Pre-PC1 provenance only; survives unwinding without retaining the tensor.\n        diagnostic.ack0s=result.counts.completion_acks;diagnostic.n0_cycles=result.counts.cycles;\n        diagnostic.n0_jobs=result.counts.jobs;diagnostic.n0_dones=result.counts.owner_dones;\n        diagnostic.n0_committed=result.committed_bytes;diagnostic.n0_b=result.successful_b;\n        diagnostic.n0_sha256=result.actual_sha256;diagnostic.ack0_valid=true;",
+      "before": "        result.status=FirstN0Result::Status::Ack0ActualCaptured;",
+      "path": "include/pc01_driver.hpp"
+    },
+    {
+      "after": "Pc1ModelScheduler pc1(*this,model,result.counts.cycles,diagnostic);",
+      "before": "Pc1ModelScheduler pc1(*this,model,result.counts.cycles);",
+      "path": "include/pc01_driver.hpp"
+    },
+    {
+      "after": "        RuntimeOwner& owner_;VHostBlockTop& model_;\n        Pc01FailureCapsule& diagnostic_;\n        const VHostBlockTop___024root* const diagnostic_root_;\n        const VerilatedContext* const diagnostic_context_;",
+      "before": "        RuntimeOwner& owner_;VHostBlockTop& model_;",
+      "path": "include/pc1_model_scheduler.inc"
+    },
+    {
+      "after": "        explicit Pc1ModelScheduler(RuntimeOwner& owner,VHostBlockTop& model,std::uint64_t first_edge,Pc01FailureCapsule& diagnostic)\n            :owner_(owner),model_(model),diagnostic_(diagnostic),diagnostic_root_(model.rootp),\n             diagnostic_context_(model.contextp()),fields_(model),adapter_(owner),guard_(model),entry_edge_(first_edge) {",
+      "before": "        explicit Pc1ModelScheduler(RuntimeOwner& owner,VHostBlockTop& model,std::uint64_t first_edge)\n            :owner_(owner),model_(model),fields_(model),adapter_(owner),guard_(model),entry_edge_(first_edge) {",
+      "path": "include/pc1_model_scheduler.inc"
+    },
+    {
+      "after": "        void freeze_identity(const Pc01IdentitySample& sample,Pc01IdentitySite site,std::uint64_t edge)const noexcept {\n            if(diagnostic_.present)return; // immutable first-failure snapshot, before checked() poisons\n            auto& d=diagnostic_;d.predicates=sample;d.site=site;d.edge=edge;\n            d.owner_phase=static_cast<std::uint64_t>(owner_.phase_);\n            d.root_valid=diagnostic_root_&&model_.rootp==diagnostic_root_;\n            d.context_valid=diagnostic_context_&&model_.contextp()==diagnostic_context_;\n            d.entry_edge=entry_edge_;d.accept_edge=accept_edge_;d.ack_edge=ack_edge_;d.pc1_cycles=cycles_;\n            d.pc1_jobs=jobs_;d.pc1_dones=dones_;d.pc1_acks=acks_;\n            d.qraw_b=adapter_.b_count_;d.qraw_committed=adapter_.committed_;\n            d.n0_read_bytes=n0_read_bytes_;d.wq_read_bytes=wq_read_bytes_;\n            // No Frame/profile/observer call here: those can throw and replace the first failure.\n            // These exact scalar fields were already registered by the unchanged guard.\n            if(d.root_valid) {\n                const auto& r=*diagnostic_root_;\n                d.clock=model_.clock;d.reset=model_.reset;d.reset_required=model_.io_resetRequired;\n                d.pc=model_.io_pc;d.issued_jobs=model_.io_issuedJobs;d.write_bytes=model_.io_writeBytes;\n                d.useful_macs=model_.io_usefulMacs;d.executed_macs=model_.io_executedMacs;\n                d.owner_rejected=r.HostBlockTop__DOT__owner__DOT__rejected;\n                d.owner_poison=r.HostBlockTop__DOT__owner__DOT__sharedPoison;\n                d.router_state=r.HostBlockTop__DOT__owner__DOT__qkvRouter__DOT__state;\n                d.router_bad=r.HostBlockTop__DOT__owner__DOT__qkvRouter__DOT__bad;\n                d.router_fault=r.HostBlockTop__DOT__owner__DOT__qkvRouter__DOT__fault;\n                d.backend_reset=r.HostBlockTop__DOT__owner__DOT__qkvRouter__DOT__io_backendReset;\n                d.host_abort=r.HostBlockTop__DOT__owner__DOT__qkvRouter__DOT__io_residentHost_abort;\n                d.group_reset_required=r.HostBlockTop__DOT__owner__DOT__resident__DOT__io_group_resetRequired;\n                d.core_state=r.HostBlockTop__DOT__owner__DOT__core__DOT__state;\n                d.core_poison=r.HostBlockTop__DOT__owner__DOT__core__DOT__poisoned;\n                d.core_status=r.HostBlockTop__DOT__owner__DOT__core__DOT__status;\n                d.hub_poison=r.HostBlockTop__DOT__hub__DOT__poison;\n                d.dma_poison=r.HostBlockTop__DOT__dma__DOT__poison;\n                d.writeback_error=r.HostBlockTop__DOT__owner__DOT__core__DOT__writeback__DOT__error;\n                d.matrix_steps=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__steps;\n                d.matrix_wide_steps=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__wideSteps;\n                d.matrix_stalls=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__stalls;\n                d.matrix_state=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__state;\n                d.matrix_mask=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__group_sliceMask;\n                d.matrix_valid=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__io_port_step_valid;\n                d.matrix_ready=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__io_port_step_ready;\n                d.matrix_legal=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__legalStep;\n                d.matrix_poison=r.HostBlockTop__DOT__owner__DOT__matrix__DOT__poison;\n            }\n            // Context is never dereferenced by the snapshot. Unevaluated predicates stay unknown.\n            d.present=true;\n        }\n        void identity(Pc01IdentitySite site,std::uint64_t edge)const {\n            Pc01IdentitySample sample{};\n            const bool ok=sample.probe(0,owner_.phase_==Phase::Runtime)&&sample.probe(1,owner_.published_)&&\n                    sample.probe(2,!owner_.qraw_published_)&&sample.probe(3,model_.rootp)&&\n                    sample.probe(4,!model_.reset)&&sample.probe(5,!model_.io_resetRequired)&&\n                    sample.probe(6,!model_.contextp()->gotError())&&sample.probe(7,!model_.contextp()->gotFinish());\n            if(!ok)freeze_identity(sample,site,edge);\n            require(ok,\"PC1 actual identity or stopped\");\n        }",
+      "before": "        void identity()const {\n            require(owner_.phase_==Phase::Runtime&&owner_.published_&&!owner_.qraw_published_&&\n                    model_.rootp&&!model_.reset&&!model_.io_resetRequired&&\n                    !model_.contextp()->gotError()&&!model_.contextp()->gotFinish(),\"PC1 actual identity or stopped\");\n        }",
+      "path": "include/pc1_model_scheduler.inc"
+    },
+    {
+      "after": "owner_.checked([&]{identity(Pc01IdentitySite::SettleEntry,edge);require(!pending_",
+      "before": "owner_.checked([&]{identity();require(!pending_",
+      "path": "include/pc1_model_scheduler.inc"
+    },
+    {
+      "after": "model_.clock=0;model_.eval();identity(Pc01IdentitySite::LowEvalPost,edge);pre_=",
+      "before": "model_.clock=0;model_.eval();identity();pre_=",
+      "path": "include/pc1_model_scheduler.inc"
+    },
+    {
+      "after": "owner_.checked([&]{identity(Pc01IdentitySite::RiseEntry,edge);require(pending_",
+      "before": "owner_.checked([&]{identity();require(pending_",
+      "path": "include/pc1_model_scheduler.inc"
+    },
+    {
+      "after": "model_.clock=1;model_.eval();identity(Pc01IdentitySite::HighEvalPost,edge);unchanged_inputs(true);",
+      "before": "model_.clock=1;model_.eval();identity();unchanged_inputs(true);",
+      "path": "include/pc1_model_scheduler.inc"
+    },
+    {
+      "after": "    int output_fd=-1;\n    Pc01FailureCapsule diagnostic; // outlives RuntimeOwner, model and checked() unwind",
+      "before": "    int output_fd=-1;",
+      "path": "source/pc01_main.cpp"
+    },
+    {
+      "after": "std::cout.write(text.data(),size);std::cout.flush();\n        // Supplementary bounded line only; never changes the original terminal code/exit.\n        diagnostic.emit_noexcept(stdout);return exit_code;",
+      "before": "std::cout.write(text.data(),size);std::cout.flush();return exit_code;",
+      "path": "source/pc01_main.cpp"
+    },
+    {
+      "after": "owner.run_pc01(phase,diagnostic);",
+      "before": "owner.run_pc01(phase);",
+      "path": "source/pc01_main.cpp"
+    }
+  ],
+  "original_root": "candidates/host93_first_n0_sources/pc01_bridge/bridge",
+  "schema": "PC01_IDENTITY_CAPSULE_FINITE_REPLACEMENTS_V1"
+}

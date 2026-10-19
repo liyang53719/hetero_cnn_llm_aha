@@ -1287,3 +1287,18 @@ PC1_022为8谓词合并identity失败；原诊断未记录逐谓词、周期或�
 原证据7成员MANIFEST882 B / 9476ed1280b0048f6cbb8261f9ee4b16dcd90b58c30152749a3a2b6370b28db9保留。安全三路径只聚合数字/公开来源身份，不上传原日志、私有路径、数组或二进制，不改原N0/参考PASS。本批不触发新的Host/RTL/native作业；workflow文件不变，普通push轻量guard另记。
 
 独审终止后只读核原7件证据、11项工作树、同一已接受ELF/object/archive、47副本、28桥源、44上游与16输入94920448字节；输入hash已核，数值未重算。这不冒充native失败时未执行的协调器成功postflight或比较。本轮输出仍缺失，PC1_022的8谓词/4调用点仍UNKNOWN。
+
+
+## 2026-10-19 PC01 identity 首失败固定标量补证 SOURCE 已独审
+
+新增 candidates/host93_first_n0_sources/pc01_failure_capsule/ 的13件冻结公开文本及安全STATUS。只有5件生产文本：新增固定POD/header，窄改runtime声明、driver、PC1 scheduler和main；4件均可逐项逆投影回原件。原8个identity谓词、短路顺序、PC1_022、resetRequired guard、RTL算术、时钟/握手/退休及原资源不变。原实际FAIL保留，具体失败谓词、边沿和根因仍UNKNOWN，数值比较仍NOT_RUN。
+
+新胶囊在原identity require之前冻结，先于RuntimeOwner::checked和adapter析构置Poisoned；四个调用点各有固定site与当前edge。实际求值位由known_mask/true_mask标记，后位为null；独立scalar值不代表对应predicate已执行。root/context有效标志分开，快照不解引用context；root无效时对应模型标量为null。仅取既有注册的owner/router/core/hub/DMA/writeback聚合、matrix计数及已完成的软件jobs/dones/acks/B/committed。HIGH_EVAL_POST端口属于当前已eval高沿，而软件ledger尚未处理该沿，不能混淆两者。聚合状态不自动授予上游首因。
+
+ACK0原强门和已有N0内存hash完成后，仅保计数和32-byte hash；没有额外数组、数值比较或离线N0装载。首失败后原终态JSON仍先输出，随后最多一行固定标量胶囊；固定8192-byte格式缓冲，POD编译期上限1024 bytes。格式截断、短写和flush返回错误只丢补证，原code/exit保留；不把noexcept冒充任意外来异常恢复。成功无胶囊行，root_cause=null。
+
+冻结SOURCE MANIFEST2373 B / 256008b9238d30cba4737079ae2ccdc895b435b9ec85caab25e79384aed3584f。作者49例普通、优化、搬迁普通、搬迁优化全部通过；32个谓词×site组合、31原源同buffer pin、4原件逆投影以及23既有registered字段/8公开字段均核。独审搬迁49+49全部通过。纯Python模型/静态检查不能证明C++编译、真实stdio、RTL根因或数值结果。
+
+正式结论 ACCEPT_PC01_IDENTITY_FAILURE_CAPSULE_SOURCE_ONLY；独审MANIFEST867 B / d881b6b79f5d6b12a6cb3edfe2dfc0b614b410e6f8830338b1663a9c54b6dd54，SUMMARY3638 B / 98eaadea34139d4b584644479fc44cab33dc122b7d4cfbb7dd9955a13bf0c9e1。原28源未来需明确组合24原件+4替换+1新增header共29源；原28-source重链入口不能直接冒用。重链接线另片独审，不以本批SOURCE授C++或actual。
+
+原失败进程已退出，没有checkpoint。任何后续实际须新driver/ELF/receipt闭合并fresh reset重新PC0→ACK0→PC1，不能恢复旧进程或绕过N0成本。本批未编译、重链或长RTL，也不触发新Host/native作业；不发布私有路径、数组、二进制或原始日志；workflow不变，普通push轻量guard另记。full_block_pass=false，五block仍0/5。

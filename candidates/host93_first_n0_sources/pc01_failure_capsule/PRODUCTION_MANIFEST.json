@@ -1,0 +1,26 @@
+{
+  "qualification": "SOURCE_ONLY_NOT_COMPILED_OR_EXECUTED",
+  "schema": "PC01_IDENTITY_FAILURE_CAPSULE_PRODUCTION_V1",
+  "sources": {
+    "bridge/include/pc01_driver.hpp": {
+      "bytes": 8342,
+      "sha256": "17b33ae6c97780bf57aaf5cacff72eea8b91db6d69da317935aae5bf02042e27"
+    },
+    "bridge/include/pc01_failure_capsule.hpp": {
+      "bytes": 7260,
+      "sha256": "e21a64c914669154f4e13cc1943ce266993155b7350d801a55c5574613710629"
+    },
+    "bridge/include/pc1_model_scheduler.inc": {
+      "bytes": 17583,
+      "sha256": "f89620782efcdf6c9e8fa7605a41a0172c13dee4a932c208e47d15bae5b6ec0d"
+    },
+    "bridge/include/runtime_ram.hpp": {
+      "bytes": 30187,
+      "sha256": "e43c3c391e722153c56c171ee94de433dca799e581a7d9d7028c9b6aa7a60620"
+    },
+    "bridge/source/pc01_main.cpp": {
+      "bytes": 7682,
+      "sha256": "3dc999c597d3c3aea682a4fb95a3abdb09af2678c8b62a3839132c71bfbf0ead"
+    }
+  }
+}

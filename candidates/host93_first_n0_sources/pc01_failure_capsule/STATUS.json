@@ -1,0 +1,51 @@
+{
+  "author_cold": {
+    "errors": 0,
+    "failures": 0,
+    "modes": 4,
+    "tests": 49
+  },
+  "checkpoint_available": false,
+  "full_block_pass": false,
+  "future_assembled_members": 29,
+  "independent_cold": {
+    "errors": 0,
+    "failures": 0,
+    "modes": 2,
+    "tests": 49
+  },
+  "native_execution_by_this_publication": false,
+  "new_RTL_probe_or_arithmetic_change": false,
+  "numeric_comparison": "NOT_RUN",
+  "preserves_eight_original_predicates_and_short_circuit_order": true,
+  "prior_actual_PC1_022_specific_predicate": "UNKNOWN",
+  "prior_actual_failure_preserved": true,
+  "private_paths_arrays_binaries_or_raw_logs_published": false,
+  "production_manifest": {
+    "bytes": 911,
+    "sha256": "e49b1959b50097320daebf2ecbd16eeed3d3e21ebff8d8b3a34346384ce0ff8c"
+  },
+  "qualification": "SOURCE_ONLY_NOT_CPP_COMPILED_NOT_RELINKED_NOT_RTL_EXECUTED",
+  "replay_authority_by_this_publication": false,
+  "root_cause": null,
+  "scalar_snapshots_do_not_imply_predicate_evaluation": true,
+  "scope": "PC01_IDENTITY_FAILURE_SCALAR_DIAGNOSTIC_SOURCE_ONLY",
+  "source_manifest": {
+    "bytes": 2373,
+    "sha256": "256008b9238d30cba4737079ae2ccdc895b435b9ec85caab25e79384aed3584f"
+  },
+  "source_overlay_members": 5,
+  "source_review": {
+    "MANIFEST.json": {
+      "bytes": 867,
+      "sha256": "d881b6b79f5d6b12a6cb3edfe2dfc0b614b410e6f8830338b1663a9c54b6dd54"
+    },
+    "SUMMARY.json": {
+      "bytes": 3638,
+      "sha256": "98eaadea34139d4b584644479fc44cab33dc122b7d4cfbb7dd9955a13bf0c9e1"
+    },
+    "verdict": "ACCEPT_PC01_IDENTITY_FAILURE_CAPSULE_SOURCE_ONLY"
+  },
+  "unevaluated_predicates": "null",
+  "workflow_changed": false
+}

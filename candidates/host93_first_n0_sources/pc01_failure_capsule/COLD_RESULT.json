@@ -1,0 +1,80 @@
+{
+  "cold_entry": {
+    "bytes": 2137,
+    "sha256": "acf49d098ba56464df1c81b3445bc7a42034d711d64d0ead607d8b243af3ec71"
+  },
+  "coverage": {
+    "ack0_hash_observed_only": true,
+    "emit_capacity": 8192,
+    "existing_public_fields": 8,
+    "existing_registered_internal_fields": 23,
+    "first_snapshot_immutable": true,
+    "format_zero_save_false_short_write_flush_failure_preserve_code_exit": true,
+    "freeze_before_poison": true,
+    "invalid_root_not_dereferenced_by_snapshot": true,
+    "metadata_files_samebuffer_pinned": 3,
+    "modeled_worst_format_bytes": 2330,
+    "new_internal_fields": 0,
+    "original_files_inverse_projected_and_roundtripped": 4,
+    "predicate_site_cases": 32,
+    "production_files_samebuffer_pinned": 5,
+    "repository_files_samebuffer_pinned": 31,
+    "required_buffer_including_nul": 2331,
+    "root_context_validity_cross_product": true,
+    "success_emits_no_capsule": true,
+    "unevaluated_predicates_null": true
+  },
+  "limits": [
+    "Python model plus pinned source static checks; no C++ compiler, ABI, real stdio, RTL or numerical proof.",
+    "Original eight expressions and short-circuit order preserved; no new context-null recovery qualification.",
+    "Failure sinks model return values, not arbitrary foreign C++ exceptions.",
+    "Runner is the receipt-pinned trust root; exact test bytes are checked then compiled/executed as Python."
+  ],
+  "modes": [
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "mode": "original_normal",
+      "seconds": 0.057,
+      "tests": 49
+    },
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "mode": "original_optimized",
+      "seconds": 0.051,
+      "tests": 49
+    },
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "mode": "relocated_normal",
+      "seconds": 0.052,
+      "tests": 49
+    },
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "mode": "relocated_optimized",
+      "seconds": 0.05,
+      "tests": 49
+    }
+  ],
+  "network_or_native_tool_or_compiler_or_RTL_executed_by_tests": false,
+  "production_manifest": {
+    "bytes": 911,
+    "sha256": "e49b1959b50097320daebf2ecbd16eeed3d3e21ebff8d8b3a34346384ce0ff8c"
+  },
+  "qualification": "PYTHON_MOCK_AND_PINNED_STATIC_ONLY_CPP_NOT_COMPILED_OR_EXECUTED",
+  "repo_or_frozen_production_modified": false,
+  "status": "PASS",
+  "test_source": {
+    "bytes": 29959,
+    "sha256": "eb07b1ae2870ec3e91eb612a818838cb2de8862aed789bf0aa10fbfcbdd8a959"
+  },
+  "tests_per_mode": 49
+}

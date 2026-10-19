@@ -1,0 +1,63 @@
+{
+  "captures_only": "PC1_022_at_four_existing_identity_calls",
+  "code": "PC1_022",
+  "cold_cannot_prove": [
+    "C++_compiles",
+    "RTL_root_cause",
+    "actual_throughput",
+    "actual_failure_predicate"
+  ],
+  "cold_proof_scope": [
+    "finite_source_inverse_projection",
+    "same_order_mock_8_predicates_x_4_sites",
+    "first_failure_retention",
+    "null_unknown_semantics",
+    "bounded_safe_fields"
+  ],
+  "context_reads": "original_evaluated_predicates_only_snapshot_never_dereferences_context",
+  "counts_timing": "completed_software_accounting_before_current_high_verification_when_HIGH_EVAL_POST",
+  "first_snapshot_immutable": true,
+  "fixed_scope": "PC01_IDENTITY_FAILURE_CAPSULE_V1",
+  "format_or_io_failure": "best_effort_only_original_status_code_exit_retained",
+  "freeze_before": [
+    "original_identity_require",
+    "RuntimeOwner_checked_Poisoned",
+    "adapter_destructor_Poisoned"
+  ],
+  "future_assembly": {
+    "assembled_members": 29,
+    "new_header": 1,
+    "original_tree_members": 28,
+    "replacements": 4,
+    "requires_new_explicit_source_ELF_receipt_binding": true,
+    "unchanged_original_members": 24
+  },
+  "max_POD_bytes_compile_time": 1024,
+  "max_formatter_buffer_bytes": 8192,
+  "model_reads": "existing_registered_scalar_fields_only_if_same_nonnull_root",
+  "n0_hash": "existing_ACK0_in_memory_hash_not_reference_comparison",
+  "native_execution_authorized_by_this_contract": false,
+  "no_checkpoint": true,
+  "numeric_comparison": "NOT_RUN",
+  "output": "original_terminal_line_then_optional_fixed_stdout_json_line",
+  "owner_phase_encoding": {
+    "Filling": 0,
+    "InputView": 2,
+    "Poisoned": 4,
+    "Runtime": 3,
+    "TokenIssued": 1
+  },
+  "preserves_original_predicates": true,
+  "preserves_short_circuit_order": true,
+  "qualification": "SOURCE_ONLY_NOT_CPP_COMPILED_NOT_RELINKED_NOT_RTL_EXECUTED",
+  "replay_authorized_by_this_contract": false,
+  "root_cause": null,
+  "schema": "PC01_IDENTITY_FAILURE_CAPSULE_CONTRACT_V1",
+  "sites": [
+    "SETTLE_ENTRY",
+    "LOW_EVAL_POST",
+    "RISE_ENTRY",
+    "HIGH_EVAL_POST"
+  ],
+  "unevaluated_predicates": "null"
+}

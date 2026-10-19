@@ -3,7 +3,7 @@ import argparse, ast, contextlib, copy, hashlib, io, json, os, stat, sys, tempfi
 from pathlib import Path
 from unittest import mock
 
-PINS = {'pipeline.py': (28972, 'ccb2a03c1fa3211de3e8467a020107c693a591c8b94ff6dba0653191bb9bbc7f'), 'stage_entry.py': (5627, 'a3fad553a94bb07b210b32b947cbeaf15dc2fa6b4c314317d99132d6458bedd5')}
+PINS = {'pipeline.py': (31285, 'fa1f359f3e7145cabdeed32898799ac5f72c8fa5fcccd29a0dd21c8970385e12'), 'stage_entry.py': (5627, 'a3fad553a94bb07b210b32b947cbeaf15dc2fa6b4c314317d99132d6458bedd5')}
 DEFAULT = str(Path(__file__).resolve().parent)
 ap = argparse.ArgumentParser(allow_abbrev=False); ap.add_argument('--source', type=Path, default=Path(DEFAULT)); args, rest = ap.parse_known_args()
 if not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode):
@@ -124,6 +124,53 @@ class Frontdoor(Fixture):
         error=RuntimeError(SECRET)
         with self.assertRaises(RuntimeError) as c:self.frontdoor(phase=mock.Mock(side_effect=error))
         self.assertIs(c.exception,error);self.assertEqual(self.completed,[])
+
+class ReferenceCapability(Fixture):
+    def setUp(self):
+        super().setUp()
+        self.reference=types.SimpleNamespace(CODES={'DISPATCH','RESOURCE','HASH_MISMATCH'})
+        self.load.side_effect=lambda r,p,n:self.reference if n.endswith('n0_reference.py') else self.runtime if n.endswith('runtime_wheel_gate.py') else self.comparator
+        self.failed=dict(schema=1,scope='FROZEN_M128_N0_REFERENCE_ONLY',status='NOT_COMPLETED',reference_accepted=False,rtl_executed=False,fullblock_executed=False,code='DISPATCH',stage='RUNTIME_IMPORT',observed_runtime={'capability':'AVX2','private_extra':SECRET})
+    def project(self):
+        self.ref_receipt=self.failed
+        return A.failed_reference_capability(self.repo,self.pins,self.work/'reference'/'RECEIPT.json')
+    def test_known_enums(self):
+        for value in ('DEFAULT','AVX2','AVX512'):
+            self.failed['observed_runtime']['capability']=value
+            self.assertEqual(self.project(),dict(state='AVAILABLE',expected='AVX512',observed=value))
+    def test_arbitrary_values_are_other_not_free_text(self):
+        for value in (SECRET,None,False,123,{},['AVX512']):
+            self.failed['observed_runtime']['capability']=value;result=self.project()
+            self.assertEqual(result['observed'],'OTHER');self.assertNotIn(SECRET,json.dumps(result))
+    def test_missing_observation_is_unknown(self):
+        for value in (None,{}):
+            self.failed['observed_runtime']=value;self.assertEqual(self.project(),dict(state='AVAILABLE',expected='AVX512',observed='UNKNOWN'))
+    def test_receipt_read_failure(self):
+        self.reader.side_effect=OSError(SECRET);self.assertEqual(self.project(),dict(state='READ_ERROR',expected='AVX512',observed='UNKNOWN'))
+    def test_bad_json_and_shape(self):
+        for raw in (b'{',b'[]',b'{"schema":1,"schema":1}',b'{"schema":NaN}'):
+            self.reader.side_effect=None;self.reader.return_value=raw;self.assertEqual(self.project()['state'],'SANITIZER_ERROR')
+    def test_wrong_failed_receipt_contract(self):
+        for key,value in [('schema',True),('scope',SECRET),('status','PASS_FROZEN_N0_EXACT'),('reference_accepted',True),('rtl_executed',True),('fullblock_executed',True),('code',SECRET),('stage',SECRET),('observed_runtime',SECRET)]:
+            original=copy.deepcopy(self.failed);self.failed[key]=value
+            self.assertEqual(self.project()['state'],'SANITIZER_ERROR');self.failed=original
+    def test_exact_read_cap(self):
+        self.project();self.reader.assert_called_once_with(self.work/'reference'/'RECEIPT.json',65536)
+    def test_source_loading_error_is_sanitizer_error(self):
+        self.load.side_effect=ValueError(SECRET);self.assertEqual(self.project()['state'],'SANITIZER_ERROR')
+    def test_success_does_not_collect_failed_receipt(self):
+        with mock.patch.object(A,'failed_reference_capability') as collector:self.frontdoor();collector.assert_not_called()
+        self.assertEqual(self.obs['reference_capability'],A.empty_reference_capability())
+    def test_first_phase_failure_does_not_collect(self):
+        with mock.patch.object(A,'failed_reference_capability') as collector,self.assertRaises(RuntimeError):self.frontdoor(phase=mock.Mock(side_effect=RuntimeError(SECRET)))
+        collector.assert_not_called();self.assertEqual(self.obs['reference_capability'],A.empty_reference_capability())
+
+class BoundedReferenceRead(unittest.TestCase):
+    def test_real_reader_rejects_oversize_missing_and_symlink(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);large=root/'large';large.write_bytes(b'x'*65537);link=root/'link';link.symlink_to(large)
+            for path in (large,link,root/'missing'):
+                with self.subTest(path=path.name):self.assertEqual(A.failed_reference_capability(root,{},path)['state'],'READ_ERROR')
 
 class Numeric(Fixture):
     def test_success_real_validator_and_order(self):

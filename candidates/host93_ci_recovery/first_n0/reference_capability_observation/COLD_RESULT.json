@@ -1,0 +1,58 @@
+{
+  "actual": "NOT_EXECUTED",
+  "draft_notes": [
+    "Discarded pipeline-level catch before freeze; final main handler sees started failed row.",
+    "Stale catalog constant and schema fixture missing source identities caused draft harness failures; final reruns passed."
+  ],
+  "final_runs": [
+    {
+      "exit_codes": [
+        0,
+        0
+      ],
+      "normal_tests": 187,
+      "optimized_tests": 187,
+      "suite": "main"
+    },
+    {
+      "exit_codes": [
+        0,
+        0
+      ],
+      "normal_tests": 58,
+      "optimized_tests": 58,
+      "suite": "pipeline"
+    }
+  ],
+  "native_runs": 0,
+  "network_requests": 0,
+  "original_gate_result": "normal/optimized and portable cwd passed with fake runtime; no native dispatch or forward",
+  "original_gate_review": {
+    "directory": "review_n0_original_dispatch_gate_cold_20261019T1245",
+    "manifest": {
+      "bytes": 435,
+      "sha256": "316c7a73d4d82a486561aab0613959fa356c8255c8456b72a68c736700909eef"
+    },
+    "summary": {
+      "bytes": 1377,
+      "sha256": "5ab19583ddd2c0c90a823b1d639c63a1b4acd94ddc9b75ab048a6a151503cbbd"
+    }
+  },
+  "scope": "STDLIB_MOCK_SOURCE_ONLY",
+  "source_only": {
+    "exit_code": 0,
+    "fixed_files": 82
+  },
+  "source_review": {
+    "directory": "review_n0_reference_capability_projection_source_20261019T1249",
+    "manifest": {
+      "bytes": 1435,
+      "sha256": "842a968e480266e931b6e8b6dcd78502214adea4b191303f58b6bdaed26de6ef"
+    },
+    "summary": {
+      "bytes": 3698,
+      "sha256": "e847d25a491b6e0a59d83e1947639fafc3987810526ee66b5c835c5deada954f"
+    },
+    "verdict": "SOURCE_GO_ORIGINAL_N0_REFERENCE_FAILED_CAPABILITY_PROJECTION_ONLY"
+  }
+}

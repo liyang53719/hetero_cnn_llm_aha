@@ -24,7 +24,7 @@ import types
 HERE = Path(__file__).absolute().parent
 SUPPORT = ('ci_support_v3.py', 16348, '653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1')
 PINS_SIZE = 14979
-PINS_SHA = '48eeb7ab6075326158f1577019727a669e0c9cead5e60467ea33e160c60da8c0'
+PINS_SHA = '0f37b29343210e20febba4fb364291e1a0e8b1938395f8719dde43839b3f90af'
 MIB = 1024**2
 GIB = 1024**3
 EVIDENCE = ('summary.json', 'source_hashes.json', 'stage_exits.json')
@@ -851,6 +851,9 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             except BaseException:
                 row.update(observation)
                 row['diagnostics']=pipeline.private_diagnostics(repo,pins,name,evidence/'native.log') if mode==N0_MODE and name in pipeline.PRIVATE_STAGES else collect_build_diagnostics(repo,pins,evidence/'native.log',str(out/'toolchain'/'verilator'))
+                if mode==N0_MODE and name=='n0_reference':
+                    try:n0_observation['reference_capability']=pipeline.failed_reference_capability(repo,pins,out/'n0_frontdoor'/'reference'/'RECEIPT.json')
+                    except BaseException:pass  # Keep the original native exception and receipt.
                 if name=='host93_chirrtl_diagnostic' and row['diagnostics']['context_state']=='AVAILABLE':
                     try:
                         reported=diagnostic.parse_observation(row['diagnostics']['merged_log_tail'].encode('ascii'))

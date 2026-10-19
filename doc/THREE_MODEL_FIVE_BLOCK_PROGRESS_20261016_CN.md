@@ -1024,3 +1024,12 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 原摘要 CANDIDATE_EXACT_MATCH_ONLY / AVAILABLE；reference_accepted、baseline_adopted、DUT/RTL/fullblock 均 false。它仅是独立参考候选事实，不授 Host N0 容差数值 PASS、AXI/单 RAM 退休、RTL 读回或 wholeblock 资格。
 - 采样 leader RSS 308,408 KiB 是有限软观测，不是硬限或整树峰值；私有张量/receipt/成功日志未上传，本地未对其重新读回哈希。前次 39248526073 实际 capability 枚举仍未知，不能用本次 AVX512 倒填，亦不保证下次硬件能力。
 - 实际独审身份：review_n0_dispatch_actual_39252523415_20261019T1236；MANIFEST.json 1032 B / f4adc0bb88800054fbf9aac77c9d84c8cd87009034aadb4e0009d2c76882bc38；SUMMARY.json 7225 B / 889efb81b48c3b7a50fbec0495511f912bac6dedb9b426324bc127f6a6e62ae6；ACCEPT_ACTUAL_INDEPENDENT_N0_NATURAL_AVX512_DUAL_SHA_EXACT_CANDIDATE_ONLY。本次安全五路径不改 workflow/源码、不触发新的 Host/native 作业；文档 push 仍可能运行 guard。计划发布必须验证当前全文前缀，再完整替换一次，严禁把完整文档再次 append。
+
+## 2026-10-19 原首 N0 严格参考失败的有限能力观察补片（TEMP_SOURCE）
+
+- 已保存独立候选 39252523415 的自然 AVX512 与原双 SHA 一致事实；该候选不接入 DUT，不替代原参考 receipt，前次能力未知不倒填。
+- 本次仅在原 43 阶段第 5 个 n0_reference 原 native 失败处理器读取同一私有 RECEIPT.json，最多 65536 字节；公开 expected=AVX512 与 DEFAULT/AVX2/AVX512/OTHER/UNKNOWN 固定枚举及 NOT_COLLECTED/AVAILABLE/READ_ERROR/SANITIZER_ERROR 状态，不公开任意文本或机器清单。
+- 消费端绑定前四阶段 clean 成功、运行库/输入准备完成及第 5 阶段 FAILED；能力观察不授 reference_ready 或数值资格。收集错误保留原异常/退出/清理，启动前 deadline 拒绝不误记已收集。
+- 原 reference/PINS、官方算术、自然能力准入、4/1 线程、双 SHA、43 阶段、6600 总墙与各段预算均原样；独立候选 receipt 不参与。本次实际 NOT_EXECUTED；未来仅获准一次原流程，再次 DISPATCH 拒绝即停并报告资源缺口，不自动重抽。
+- 冷测主协调器 187+187、适配器 58+58 真实通过；82 来源 source-only 通过。原 recover 独立冷片以全 mock 验原唯一门，AVX512 在线程前哨点停止，不冒实际调度或 forward。SOURCE 审核 SOURCE_GO_ORIGINAL_N0_REFERENCE_FAILED_CAPABILITY_PROJECTION_ONLY; review_n0_reference_capability_projection_source_20261019T1249, MANIFEST.json 1435 B / 842a968e480266e931b6e8b6dcd78502214adea4b191303f58b6bdaed26de6ef; SUMMARY.json 3698 B / e847d25a491b6e0a59d83e1947639fafc3987810526ee66b5c835c5deada954f。
+- 本计划提供完整文档替换，并校验既有前缀及纯追加尾；不得把完整文档再次 append。原历史证据保持其原源码身份。

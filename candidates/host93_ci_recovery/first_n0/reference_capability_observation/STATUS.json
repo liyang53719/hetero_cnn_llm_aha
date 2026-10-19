@@ -1,0 +1,22 @@
+{
+  "actual": "NOT_EXECUTED",
+  "automatic_retry": false,
+  "candidate_receipt_adopted": false,
+  "classification": "TEMP_SOURCE",
+  "new_execution_stages": 0,
+  "parent": "e8dbdb2da892cdd43089f75269b18a85f0144c1b",
+  "reference_admission_changed": false,
+  "scope": "ORIGINAL_REFERENCE_FAILED_NATIVE_CAPABILITY_OBSERVATION_ONLY",
+  "source_review": {
+    "directory": "review_n0_reference_capability_projection_source_20261019T1249",
+    "manifest": {
+      "bytes": 1435,
+      "sha256": "842a968e480266e931b6e8b6dcd78502214adea4b191303f58b6bdaed26de6ef"
+    },
+    "summary": {
+      "bytes": 3698,
+      "sha256": "e847d25a491b6e0a59d83e1947639fafc3987810526ee66b5c835c5deada954f"
+    },
+    "verdict": "SOURCE_GO_ORIGINAL_N0_REFERENCE_FAILED_CAPABILITY_PROJECTION_ONLY"
+  }
+}

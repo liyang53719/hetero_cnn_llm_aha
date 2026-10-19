@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=77219
-SHA='853d7d53c2b85376b643a90ae1421d9d9766c5ad6d415e8e5ddf1570ab0aa79c'
+SIZE=77532
+SHA='bb9775cc22b305e392c67934aa7b081319f7dd7350da50098fe10b647c68982d'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -318,7 +318,7 @@ class Cold(unittest.TestCase):
             with self.assertRaises(ValueError):G.exact(Path('/tmp/not-read'),0,'PENDING')
             comp.assert_not_called()
 
-    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False, diagnostic_match=True, fifo_contract=None, phase_deadline=False):
+    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False, diagnostic_match=True, fifo_contract=None, phase_deadline=False, capability_collector=None, native_error=None):
         with tempfile.TemporaryDirectory() as t:
             base=Path(t);repo=base/'repo';repo.mkdir();out=base/'out';archive=base/'idma.zip'
             fixed={'bytes':1,'sha256':'1'*64,'path':str(base/'observed')}
@@ -380,7 +380,7 @@ class Cold(unittest.TestCase):
                     observation['comparison_state']='READ_ERROR'
                     call('host93_n0_compare',['/fixed/fixture'],base,{},cfg('host93_n0_compare'))
                     observation.update(comparison_state='AVAILABLE',comparison=n0_comparison(),comparison_rss=copy.deepcopy(RSS),state='COMPLETE');completed.append('n0_comparison');return True
-                modules['verified_n0_pipeline']=types.SimpleNamespace(run_frontdoor=front,run_numeric=numeric,empty_observation=PIPELINE.empty_observation,PRIVATE_STAGES=PIPELINE.PRIVATE_STAGES,private_diagnostics=lambda *args:G.empty_diagnostics('READ_ERROR'),need=PIPELINE.need)
+                modules['verified_n0_pipeline']=types.SimpleNamespace(run_frontdoor=front,run_numeric=numeric,empty_observation=PIPELINE.empty_observation,PRIVATE_STAGES=PIPELINE.PRIVATE_STAGES,private_diagnostics=lambda *args:G.empty_diagnostics('READ_ERROR'),need=PIPELINE.need,failed_reference_capability=capability_collector or PIPELINE.failed_reference_capability)
             def native(*args,**kwargs):
                 name=args[2]
                 if name=='idma319_extract':
@@ -396,7 +396,7 @@ class Cold(unittest.TestCase):
                         receipt_timed_out=not nonzero,waitid_status=2 if nonzero else None,waitid_code=1 if nonzero else None,
                         native_record_status='FAIL',failure_code='CHILD_EXIT_NONZERO' if nonzero else 'SUPERVISOR_TIMEOUT_CLASSIFICATION',
                         failure_boundary='NATIVE_SUPERVISION')
-                    raise ValueError('synthetic child exit') if nonzero else TimeoutError('synthetic boundary')
+                    raise native_error if native_error is not None else ValueError('synthetic child exit') if nonzero else TimeoutError('synthetic boundary')
                 if mode in G.CLUSTER_MODES and name=='host93_cpp_generate':
                     args[5].mkdir(parents=True,exist_ok=True);(args[5]/'native.log').write_bytes(b'')
                 return {'exit_code':0,'cleanup_confirmed':True},b'private synthetic',{'child_user_cpu_seconds':0.1,'child_system_cpu_seconds':0.01}
@@ -412,12 +412,14 @@ class Cold(unittest.TestCase):
                  mock.patch.object(G,'n0_comparison_module',return_value=COMPARATOR), \
                  mock.patch.object(G,'module_from',side_effect=lambda repo,pins,relative,name:modules[name]), \
                  mock.patch.object(G,'exact',return_value=b''), \
+                 mock.patch.object(G,'contract_failure_observation',wraps=G.contract_failure_observation) as failure_projection, \
                  mock.patch.object(G,'memory_disk_gate'), \
                  mock.patch.object(G.signal,'signal'), mock.patch.object(G.signal,'setitimer'), \
                  mock.patch('builtins.print'):
                 code=G.execute(repo,out,None if mode=='build-diagnostic' else archive,G.time.monotonic()+1000.,mode)
             with mock.patch.object(G,'n0_schema_module',return_value=PIPELINE),mock.patch.object(G,'n0_comparison_module',return_value=COMPARATOR):
                 self.assertEqual(G.verify_evidence(out),0)
+            if native_error is not None:self.assertIs(failure_projection.call_args.args[0],native_error)
             summary=G.decode((out/'evidence/summary.json').read_bytes())
             stages=G.decode((out/'evidence/stage_exits.json').read_bytes())['stages']
             return code,summary,stages
@@ -1003,6 +1005,60 @@ def n0_fixture(passed=True,exact=False):
 class N0Cold(unittest.TestCase):
     def validate(self,x):
         with mock.patch.object(G,'n0_schema_module',return_value=PIPELINE),mock.patch.object(G,'n0_comparison_module',return_value=COMPARATOR):return G.validate_evidence(x)
+    def reference_failure_fixture(self):
+        x=fixture(False,G.N0_MODE);s=x['summary.json'];s.update(schema='host93-ci-summary-v7',completed_components=['n0_runtime','n0_inputs'])
+        x['source_hashes.json']['project_sources']=[{'path':name,**pin} for name,pin in sorted(PINS.items())]
+        s['n0_observation']=PIPELINE.empty_observation();s['n0_observation'].update(state='COLLECTING',runtime_ready=True,inputs_ready=True,reference_capability={'state':'AVAILABLE','expected':'AVX512','observed':'AVX2'})
+        x['stage_exits.json']['stages']=[{'name':n,'status':'EXIT0_CLEANED','seconds':.1,'diagnostics':G.empty_diagnostics(),**clean_observation()} for n in G.N0_FRONT_STAGES]
+        x['stage_exits.json']['stages'][-1].update(status='FAILED',exit_code=1,waitid_status=1,native_record_status='FAIL',failure_boundary='NATIVE_SUPERVISION',failure_code='CHILD_EXIT_NONZERO',diagnostics=G.empty_diagnostics('READ_ERROR'))
+        return x
+    def test_real_main_failure_hook_preserves_original_exception(self):
+        error=ValueError('synthetic original');collector=mock.Mock(return_value={'state':'AVAILABLE','expected':'AVX512','observed':'AVX2'})
+        code,s,rows=Cold().mock_whole_job('n0_reference',G.N0_MODE,True,capability_collector=collector,native_error=error)
+        self.assertEqual(code,1);self.assertEqual(len(rows),5);self.assertEqual(s['n0_observation']['reference_capability']['observed'],'AVX2');self.assertFalse(s['n0_observation']['reference_ready']);collector.assert_called_once()
+    def test_real_main_secondary_collector_error_preserves_original(self):
+        error=ValueError('synthetic original');collector=mock.Mock(side_effect=KeyboardInterrupt)
+        code,s,rows=Cold().mock_whole_job('n0_reference',G.N0_MODE,True,capability_collector=collector,native_error=error)
+        self.assertEqual(code,1);self.assertEqual(s['n0_observation']['reference_capability'],PIPELINE.empty_reference_capability())
+    def test_real_main_no_collection_on_success_prior_failure_or_predeadline(self):
+        for failure,deadline in [(None,False),('n0_raw_acquire',False),(None,True)]:
+            collector=mock.Mock(side_effect=AssertionError('must not collect'))
+            code,s,rows=Cold().mock_whole_job(failure,G.N0_MODE,True,phase_deadline=deadline,capability_collector=collector)
+            collector.assert_not_called();self.assertEqual(s['n0_observation']['reference_capability'],PIPELINE.empty_reference_capability())
+    def test_failed_reference_capability_finite_states(self):
+        for state,observed in [('AVAILABLE','AVX2'),('AVAILABLE','DEFAULT'),('AVAILABLE','AVX512'),('AVAILABLE','OTHER'),('AVAILABLE','UNKNOWN'),('READ_ERROR','UNKNOWN'),('SANITIZER_ERROR','UNKNOWN'),('NOT_COLLECTED','UNKNOWN')]:
+            x=self.reference_failure_fixture();x['summary.json']['n0_observation']['reference_capability'].update(state=state,observed=observed)
+            with self.subTest(state=state,observed=observed):self.assertTrue(self.validate(x))
+    def test_reference_capability_strict_keys_values(self):
+        for key,value in [('state','private'),('expected','AVX2'),('observed','private-secret'),('private_path','/private')]:
+            x=self.reference_failure_fixture();x['summary.json']['n0_observation']['reference_capability'][key]=value
+            with self.subTest(key=key),self.assertRaises(ValueError):self.validate(x)
+    def test_reference_capability_nonavailable_cannot_claim_enum(self):
+        for state in ('NOT_COLLECTED','READ_ERROR','SANITIZER_ERROR'):
+            x=self.reference_failure_fixture();x['summary.json']['n0_observation']['reference_capability']['state']=state
+            with self.subTest(state=state),self.assertRaises(ValueError):self.validate(x)
+    def test_reference_capability_fifth_failed_prefix_only(self):
+        for kind in ('no_rows','four_rows','six_rows','success','prior_failed','prior_signal','prior_cleanup','missing_runtime','missing_inputs'):
+            x=self.reference_failure_fixture();rows=x['stage_exits.json']['stages'];o=x['summary.json']['n0_observation']
+            if kind=='no_rows':rows.clear()
+            elif kind=='four_rows':rows.pop()
+            elif kind=='six_rows':rows.append(copy.deepcopy(rows[-1]))
+            elif kind=='success':rows[-1].update(status='EXIT0_CLEANED',**clean_observation())
+            elif kind=='prior_failed':rows[0]['status']='FAILED'
+            elif kind=='prior_signal':rows[0]['waitid_code']=2
+            elif kind=='prior_cleanup':rows[0]['cleanup_confirmed']=False
+            else:
+                field='runtime_ready' if kind=='missing_runtime' else 'inputs_ready';component='n0_runtime' if kind=='missing_runtime' else 'n0_inputs';o[field]=False;x['summary.json']['completed_components'].remove(component)
+            with self.subTest(kind=kind),self.assertRaises(ValueError):self.validate(x)
+    def test_reference_capability_cannot_grant_reference_or_numeric(self):
+        for key in ('reference_ready','scope_numeric'):
+            x=self.reference_failure_fixture()
+            if key=='reference_ready':x['summary.json']['n0_observation']['reference_ready']=True;x['summary.json']['completed_components'].append('n0_reference')
+            else:x['summary.json']['scope']['n0_numeric']=True
+            with self.subTest(key=key),self.assertRaises(ValueError):self.validate(x)
+    def test_reference_capability_not_claimed_on_success(self):
+        x=n0_fixture();x['summary.json']['n0_observation']['reference_capability'].update(state='AVAILABLE',observed='AVX512')
+        with self.assertRaises(ValueError):self.validate(x)
     def cycle_fixture(self):
         x=n0_fixture();s=x['summary.json'];s.update(status='INCOMPLETE',failure_category='UNEXPECTED',completed_components=list(G.mode_components(G.N0_MODE)[:-2]));s['scope'].update(n0_numeric=False,weights_loaded=False)
         c=n0_counts();c.update(status='INCOMPLETE_CYCLE_BUDGET',phase='RTL_N0',code='CYCLE_BUDGET',cycles=8000000,completion_acks=0,actual_values=0,actual_bytes=0);c['axi'].update(ar_stall=500,aw_stall=400,w_stall=300,r_stall=200,b_stall=100)

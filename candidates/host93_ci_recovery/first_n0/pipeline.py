@@ -94,8 +94,27 @@ def rss_observation(evidence):
  need(bool(values) and max(values)<=1572864,'N0_REFERENCE_RSS','N0_RSS')
  return {'sampled_leader_max_kib':max(values),'limit_kib':1572864,'os_hard_limit':False,'includes_descendants':False}
 
+def empty_reference_capability():
+ return {'state':'NOT_COLLECTED','expected':'AVX512','observed':'UNKNOWN'}
+
+def failed_reference_capability(repo,pins,path):
+ """Finite private failed-receipt projection; never exposes free-form values."""
+ result={'state':'READ_ERROR','expected':'AVX512','observed':'UNKNOWN'}
+ try:raw=read(path,65536)
+ except BaseException:return result
+ try:
+  result['state']='SANITIZER_ERROR';report=decode(raw);reference=load(repo,pins,REFERENCE+'n0_reference.py')
+  need(type(report) is dict and type(report.get('schema')) is int and report['schema']==1 and report.get('scope')=='FROZEN_M128_N0_REFERENCE_ONLY' and report.get('status') in ('NOT_COMPLETED','REFERENCE_MISMATCH') and report.get('reference_accepted') is False and report.get('rtl_executed') is False and report.get('fullblock_executed') is False and report.get('code') in reference.CODES and report.get('stage') in ('SOURCE','RAW2','RUNTIME_IDENTITY','RUNTIME_IMPORT','OFFICIAL_N0','POSTFLIGHT'),'N0_SOURCE','N0_OUTPUT')
+  runtime=report.get('observed_runtime');observed='UNKNOWN'
+  if runtime is not None:
+   need(type(runtime) is dict,'N0_SOURCE','N0_OUTPUT')
+   if 'capability' in runtime:
+    value=runtime['capability'];observed=value if type(value) is str and value in ('DEFAULT','AVX2','AVX512') else 'OTHER'
+  return {'state':'AVAILABLE','expected':'AVX512','observed':observed}
+ except BaseException:return result
+
 def empty_observation():
- return {'state':'NOT_COLLECTED','runtime_ready':False,'inputs_ready':False,'reference_ready':False,'capture_state':'NOT_COLLECTED','capture':None,'comparison_state':'NOT_COLLECTED','comparison':None,'reference_rss':None,'comparison_rss':None,'numeric_window_seconds':3600,'cycle_cap':8000000,'source_reduction_lower_bound':2428928}
+ return {'state':'NOT_COLLECTED','runtime_ready':False,'inputs_ready':False,'reference_ready':False,'capture_state':'NOT_COLLECTED','capture':None,'comparison_state':'NOT_COLLECTED','comparison':None,'reference_rss':None,'comparison_rss':None,'reference_capability':empty_reference_capability(),'numeric_window_seconds':3600,'cycle_cap':8000000,'source_reduction_lower_bound':2428928}
 
 def run_frontdoor(repo,work,pins,call_phase,shared_stop,observation,completed):
  """Five fixed native phases; all successful postflights precede next phase."""
@@ -276,6 +295,12 @@ def validate_public(observation,completed,stages,scope,comparator):
  for key,component in (('runtime_ready','n0_runtime'),('inputs_ready','n0_inputs'),('reference_ready','n0_reference')):
   need(type(observation[key]) is bool and observation[key]==(component in completed),'N0_SOURCE','N0_OUTPUT')
  need(observation['state']!='NOT_COLLECTED' or observation==empty_observation(),'N0_SOURCE','N0_OUTPUT')
+ dispatch=observation['reference_capability']
+ need(type(dispatch) is dict and set(dispatch)=={'state','expected','observed'} and dispatch['state'] in ('NOT_COLLECTED','AVAILABLE','READ_ERROR','SANITIZER_ERROR') and dispatch['expected']=='AVX512' and dispatch['observed'] in ('DEFAULT','AVX2','AVX512','OTHER','UNKNOWN'),'N0_SOURCE','N0_OUTPUT')
+ need(dispatch['state']=='AVAILABLE' or dispatch['observed']=='UNKNOWN','N0_SOURCE','N0_OUTPUT')
+ if dispatch['state']!='NOT_COLLECTED':
+  need(len(stages)==5 and [row['name'] for row in stages]==list(FRONT_STAGES) and all(row['status']=='EXIT0_CLEANED' and natural_exit(row,0) for row in stages[:4]) and stages[-1]['status']=='FAILED' and observation['runtime_ready'] and observation['inputs_ready'] and not observation['reference_ready'] and 'n0_reference' not in completed,'N0_SOURCE','N0_OUTPUT')
+
  for key,component in (('reference_rss','n0_reference'),('comparison_rss','n0_comparison')):
   value=observation[key]
   if component not in completed:need(value is None,'N0_SOURCE','N0_OUTPUT')

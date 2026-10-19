@@ -1,0 +1,315 @@
+{
+  "ack0_memory_observation": {
+    "ack0_valid": true,
+    "committed_bytes": 786432,
+    "completion_acks": 1,
+    "cycles": 2956951,
+    "exported_n0_array_present": false,
+    "fixed_prior_n0_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+    "fresh_n0_exported_array_numeric_pass": null,
+    "hash_scope": "Existing fixed-driver SHA over the complete 786432-byte same-RAM N0 at ACK0, copied into the bounded scalar capsule",
+    "in_memory_n0_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+    "independent_full_exported_array_rehash_or_value_comparison": false,
+    "jobs": 1,
+    "new_hash_performed_by_capsule": false,
+    "owner_dones": 1,
+    "recorded_digest_equals_fixed_prior_digest": true,
+    "successful_b_response_count": 12288
+  },
+  "attempt": {
+    "finished_utc": "2026-10-19T22:27:29.420448+00:00",
+    "native_seconds": 3082.526103,
+    "outer_exit_code": 1,
+    "outer_exit_is_not_child_exit": true,
+    "outer_seconds": 3083.745330591002,
+    "phase_accounting_seconds": 3082.5353027340025,
+    "published_source_commit_from_context": "6781846865e9aa046000dd526d909a45fae4920e",
+    "session": 4766,
+    "started_utc": "2026-10-19T21:36:05.679607+00:00"
+  },
+  "capsule_observation": {
+    "code": "PC1_022",
+    "context_error_and_finish_predicates_evaluated": false,
+    "context_valid": true,
+    "edge": 3208723,
+    "first_false_index": 5,
+    "first_false_predicate": "reset_required_clear",
+    "first_five_predicates_evaluated_true": true,
+    "known_mask": 63,
+    "predicates": {
+      "context_error_clear": null,
+      "context_finish_clear": null,
+      "n0_published": true,
+      "phase_runtime": true,
+      "qraw_unpublished": true,
+      "reset_clear": true,
+      "reset_required_clear": false,
+      "root_nonnull": true
+    },
+    "root_cause_from_capsule": null,
+    "root_valid": true,
+    "sample_time": "BEFORE_IDENTITY_REQUIRE_AND_CHECKED_POISON",
+    "scope": "PC01_IDENTITY_FAILURE_CAPSULE_V1",
+    "site": "HIGH_EVAL_POST",
+    "software_owner_phase": 3,
+    "static_causality_backfilled": false,
+    "true_mask": 31,
+    "upstream_root_cause": "UNKNOWN"
+  },
+  "capture_and_numeric": {
+    "capture_directory_exists": true,
+    "capture_files": [],
+    "complete_qraw_capture": false,
+    "counts_written": false,
+    "full_block_utilization": null,
+    "full_qraw_target_bytes": 786432,
+    "full_qraw_target_values": 196608,
+    "mathematical_fp32_diagnostics": null,
+    "mathematical_fp64_diagnostics": null,
+    "n0_array_written": false,
+    "numeric_mismatch_proven": false,
+    "pc1_complete_window_cycles": null,
+    "pc1_utilization": null,
+    "qraw_array_written": false,
+    "three_reference_comparison": "NOT_RUN",
+    "typed_bit_comparison": null
+  },
+  "complete_log_retention": {
+    "caller_capsule_interpreted": false,
+    "caller_complete_file_hashed": true,
+    "caller_content_parsed": false,
+    "first_line_original_diagnostic_preserved": true,
+    "identity": {
+      "bytes": 1558,
+      "sha256": "aaa3df169f16d8f6dc7d7f150ccbea193bec309266cad8288a9be3b0b2a27f84"
+    },
+    "json_lines": 2,
+    "raw_log_published": false,
+    "second_line_bounded_capsule": true,
+    "summary_interpretation_scope": "Posttermination reading of the original complete file; not a caller runtime interpretation or a new simulation"
+  },
+  "evidence_identities": {
+    "attempt_manifest": {
+      "bytes": 882,
+      "sha256": "0be987ee2a080aadc67839abc7123dfe34d0ed313f7cdeef8c82d4328d0556bc"
+    },
+    "execution_result": {
+      "bytes": 2497,
+      "sha256": "3eb6788f671b365351e670a1a481956b4a15eed773bf378516b6a55226aa9184"
+    },
+    "native_receipt": {
+      "bytes": 1082,
+      "sha256": "3ccc13bef549ba4a258f2f400bf7d3d3e43051b052215a939486ccc50b50c552"
+    },
+    "outer_result": {
+      "bytes": 133,
+      "sha256": "671e13d882b2195af7b3561f6f01fd87152fcbfa7552c69cf3bd69d41830172d"
+    },
+    "source_manifest": {
+      "bytes": 3125,
+      "sha256": "a9bc98c45d7c2f41a733e4ae7d0186061971f0fb347216290b26c0a035cb2331"
+    },
+    "source_review_manifest": {
+      "bytes": 1200,
+      "sha256": "d721c347563f238f7bcd86d03669e936019e3e689c2828815daf68f14c637616"
+    },
+    "source_review_summary": {
+      "bytes": 4414,
+      "sha256": "814a71629f3fbc404352c8435547f12fea7f1e40bd59fc015c0ab6ec4f2dca5f"
+    },
+    "usage_receipt": {
+      "bytes": 486,
+      "sha256": "1d3bc82aaa99c527499eec5686c8d4373af42a217ad136f65ef439cefacda312"
+    },
+    "work_tree": {
+      "bytes": 1255,
+      "sha256": "85fda5c96fe00cb3ce97df3d405aa9709c9b19b79133ab44e350278375ae6731"
+    }
+  },
+  "failure_layers": {
+    "coordinator_failure_code": null,
+    "coordinator_failure_type": "ValueError",
+    "coordinator_status": "INCOMPLETE",
+    "original_driver_safe_diagnostic": {
+      "code": "PC1_022",
+      "numeric_comparison": "NOT_RUN",
+      "phase": "RTL_PC1",
+      "scope": "PC0_ACK0_PC1_ACK1_M128_ONLY",
+      "status": "CONTRACT_ERROR"
+    },
+    "returned_stage_record": null,
+    "returned_stage_usage": null,
+    "supervision_boundary": "NATIVE_SUPERVISION",
+    "supervision_code": "CHILD_EXIT_NONZERO"
+  },
+  "independent_actual_review": {
+    "current_byte_checks": {
+      "evidence_members": 7,
+      "input_and_elf_rehashed": true,
+      "input_bytes": 94920448,
+      "input_files": 16,
+      "linked_bridge_sources": 29,
+      "source_manifest_members": 18,
+      "staged_source_cache_members": 48,
+      "system_dependencies_39_rehashed_in_this_review": false,
+      "upstream_sources": 44,
+      "work_entries": 11
+    },
+    "current_rehash_scope": "Reviewer posttermination current-byte checks; native failure bypassed coordinator success-only postflight and comparison",
+    "directory": "review_pc01_capsule_capture_actual_20261019T2233",
+    "linked_elf": {
+      "bytes": 13547616,
+      "sha256": "73a13d020b99fa78087c639629dcbb8984d3dfbf028baf3adb69b60b51774617"
+    },
+    "manifest": {
+      "bytes": 559,
+      "sha256": "b313ffb6a85497530c70b0dd8512de661cbf380b945b41ee20c94ffb718f53cf"
+    },
+    "n0_unchanged_through_pc1_failure": "UNKNOWN; successful post-PC1 hash gate was not reached",
+    "reference_arrays_recomputed": false,
+    "reviewer_native_or_model_rerun": false,
+    "status": "ACCEPTED_FINITE_FAILURE_AND_CAPSULE_EVIDENCE_ONLY",
+    "summary": {
+      "bytes": 12193,
+      "sha256": "f0a69134b4afdb0dc90065e05fc1bdc579f62bbf3f16e0816bf7eba4cba01092"
+    },
+    "verdict": "ACCEPT_ACTUAL_PC01_RESET_REQUIRED_IDENTITY_FAILURE_WITH_BOUNDED_CAPSULE_ONLY"
+  },
+  "native_exit_observation": {
+    "cleanup_kill_attempted": true,
+    "cleanup_kill_result": "signal_sent_before_reap",
+    "interpretation": "Natural CLD_EXITED status 1, not a timeout or signal-caused failure",
+    "waitid_code": 1,
+    "waitid_status": 1
+  },
+  "native_terminal": {
+    "cleanup_confirmed": true,
+    "exit_code": 1,
+    "expected_exit": 0,
+    "group_state": "absent",
+    "parent_exception": null,
+    "reaped": true,
+    "status": "FAIL",
+    "timed_out": false
+  },
+  "pc1_software_retirement_snapshot": {
+    "accepted_edge": 2957107,
+    "accepted_edge_valid_because_jobs_nonzero": true,
+    "ack_edge_raw": 0,
+    "ack_edge_valid": false,
+    "completion_acks": 0,
+    "current_edge_ack1_handshake_inferred_from_software_counters": false,
+    "cycles": 251772,
+    "entry_edge": 2956951,
+    "jobs": 1,
+    "n0_read_bytes": 786432,
+    "owner_dones": 0,
+    "qraw_committed_bytes": 81920,
+    "qraw_complete_software_retirement": false,
+    "qraw_successful_b_response_count": 128,
+    "read_byte_counter_scope": "n0_read_bytes and wq_read_bytes add the complete AR burst span when an AR request is accepted; they do not prove all corresponding R beats retired.",
+    "temporal_scope": "Completed software bookkeeping before the failing HIGH_EVAL_POST edge; current high edge is not yet validated/accounted/committed",
+    "wq_read_bytes": 819200
+  },
+  "prior_attempt_preserved": {
+    "new_snapshot_backfilled_into_prior_attempt": false,
+    "original_callsite_or_edge": "UNKNOWN",
+    "original_failure_modified": false,
+    "original_pc1_022_specific_predicate": "UNKNOWN",
+    "session": 38263
+  },
+  "publication": {
+    "arrays_included": false,
+    "binary_files_included": false,
+    "new_native_or_tests_executed_by_summary": false,
+    "original_evidence_modified": false,
+    "private_paths_included": false,
+    "raw_logs_included": false
+  },
+  "qualification": {
+    "application_accuracy_pass": null,
+    "baseline_adopted": false,
+    "completed_blocks": 0,
+    "full_block_pass": false,
+    "official_raw_numeric_pass": null,
+    "original_reference_passes_changed": false,
+    "target_blocks": 5,
+    "typed_recipe_bit_exact_to_rtl": null
+  },
+  "resources": {
+    "as_limit_bytes": 6442450944,
+    "child_maxrss_kib_cumulative": 435152,
+    "child_system_cpu_seconds": 2.473439,
+    "child_user_cpu_seconds": 3069.368239,
+    "combined_authorized_ceiling_seconds": 10800,
+    "current_edge_is_not_a_complete_cycle_window": true,
+    "global_main_cycle_cap": 8000000,
+    "independent_prior_relink_seconds_cap": 180,
+    "maxrss_scope": "Cumulative coordinator child-process maxrss, not an isolated instantaneous phase peak",
+    "native_cpu_seconds_cap": 10395,
+    "native_wall_seconds_limit": 10394.991883465991,
+    "single_attempt_seconds_cap": 10620
+  },
+  "rtl_high_post_snapshot": {
+    "aggregate_flags_do_not_identify_upstream_first_cause": true,
+    "field_source_mapping": {
+      "owner_poison": {
+        "does_not_select_ffn_or_other_upstream_origin": true,
+        "kind": "combinational OR aggregate, not an independent owner sticky latch",
+        "producer_field": "owner.sharedPoison",
+        "sources": {
+          "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/n0_model_fields.hpp": {
+            "bytes": 21381,
+            "line": 211,
+            "sha256": "33dd661d89ef01c57f4fe1573779904ed52fd25c335f4041fc8b64c318e51c69"
+          },
+          "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+            "bytes": 32821,
+            "line": 126,
+            "sha256": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d"
+          }
+        }
+      }
+    },
+    "matrix": {
+      "matrix_legal": 0,
+      "matrix_mask": 255,
+      "matrix_poison": 0,
+      "matrix_ready": 0,
+      "matrix_stalls": 0,
+      "matrix_state": 2,
+      "matrix_steps": 102400,
+      "matrix_valid": 0,
+      "matrix_wide_steps": 12800
+    },
+    "ports": {
+      "backend_reset": 0,
+      "clock": 1,
+      "core_poison": 0,
+      "core_state": 0,
+      "core_status": 0,
+      "dma_poison": 0,
+      "executed_macs": 0,
+      "group_reset_required": 1,
+      "host_abort": 0,
+      "hub_poison": 0,
+      "issued_jobs": 2,
+      "owner_poison": 1,
+      "owner_rejected": 0,
+      "pc": 1,
+      "reset": 0,
+      "reset_required": 1,
+      "router_bad": 1,
+      "router_fault": 0,
+      "router_state": 2,
+      "useful_macs": 0,
+      "write_bytes": 786432,
+      "writeback_error": 0
+    },
+    "temporal_scope": "Current high edge after model.eval, before software retirement of this edge",
+    "useful_executed_counters_not_a_completed_pc1_result": true
+  },
+  "schema": 1,
+  "scope": "ACTUAL_PC01_IDENTITY_FAILURE_WITH_BOUNDED_SCALAR_CAPSULE_ONLY",
+  "status": "INCOMPLETE"
+}

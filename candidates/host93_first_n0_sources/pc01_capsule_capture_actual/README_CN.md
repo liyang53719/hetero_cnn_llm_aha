@@ -1,0 +1,31 @@
+# PC01 胶囊实际失败：首个false已定位，上游根因未知
+
+独立实际审查正式结论为ACCEPT_ACTUAL_PC01_RESET_REQUIRED_IDENTITY_FAILURE_WITH_BOUNDED_CAPSULE_ONLY；review_pc01_capsule_capture_actual_20261019T2233 的MANIFEST559字节 / b313ffb6a85497530c70b0dd8512de661cbf380b945b41ee20c94ffb718f53cf，SUMMARY12193字节 / f0a69134b4afdb0dc90065e05fc1bdc579f62bbf3f16e0816bf7eba4cba01092。
+
+本摘要只聚合原终态与固定标量补证，没有新执行或静态因果归属。
+
+## 原实际终态
+
+本轮于2026-10-19 21:36:05.679607 UTC开始，原outer于22:27:29.420448 UTC结束；outer退出1、3083.745330591002秒，native自然退出1、3082.526103秒。native未超时，cleanup/reap确认。原WNOWAIT为CLD_EXITED/status1；后续cleanup signal不改写退出原因。协调器INCOMPLETE、首异常ValueError/failure_code=null，监督层CHILD_EXIT_NONZERO。
+
+完整1558字节日志保留两行：原RTL_PC1/CONTRACT_ERROR/PC1_022/NOT_RUN终态，以及固定PC01_IDENTITY_FAILURE_CAPSULE_V1标量补证。原调用方只核完整文件身份，没有解释capsule；下述是终止后对原完整文件的解读。capture目录为空，counts与两份数组都未写。
+
+## 本轮新增的确定观测
+
+失败点为HIGH_EVAL_POST、edge3208723。known_mask=63、true_mask=31、first_false=5，前五项实际求值为true，第六项reset_required_clear为false；context_error_clear/context_finish_clear未执行，仍为null，不能因context_valid=true推断两项为true。快照在原identity require和checked置Poisoned之前冻结；原字段owner_poison对应owner.sharedPoison组合OR聚合，不是独立owner sticky；值1不能选定FFN或其他上游首因，也不能与异常清理后的软件owner phase混淆。
+
+当前RTL高沿可见reset=0、reset_required=1、router_bad=1、owner_poison=1、group_reset_required=1，PC=1/issued_jobs=2。Matrix wide_steps=12800、steps=102400，其他有限标量分列于SUMMARY。聚合信号只支持当前identity失败定位，不能独自确定上游首因；本轮上游root_cause仍UNKNOWN/null，不混入后续静态假说。
+
+软件退休账本尚未处理本次高沿：entry_edge2956951、已接受edge2957107、此前完成251772个软件周期，jobs1/dones0/acks0。qraw B为128个成功B响应，committed为81920字节，两个数单位不同；N0/Wq已受理AR请求覆盖的字节跨度分别786432/819200，在AR fire时按完整burst长度累加，不代表对应R beats全部退休。ack_edge原值0因acks0无有效ACK1含义，不能当完成边沿。当前RTL端口不能与此前软件账本拼成同一退休时刻，也不能据局部计数计算完整PC1窗口利用率或完成MAC。
+
+ACK0标量记录为cycles2956951、jobs1/dones1/acks1、committed786432字节、B12288；已有完整内存N0 SHA为3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f，与固定原参考摘要相同。这个hash由固定driver在ACK0读满同RAM N0后已有计算，capsule只复制摘要；没有导出N0数组，没有独立导出数组重hash或逐值复核，不扩大为本轮完整数值比较PASS。
+
+## 仍未闭合
+
+qraw软件退休只有81920字节，未形成完整786432字节/196608值capture，三轨比较NOT_RUN。official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl均null，full_block_pass=false，五block0/5。原session38263只有聚合PC1_022，其具体谓词/边沿仍UNKNOWN；不得用本轮新快照回填前轮。
+
+本轮10620秒上限与独立重链180秒合计10800秒，未发生墙钟超时。8000000主周期仍是cap，失败edge不是完整执行窗口。435152KiB为协调器累计子进程maxrss，不能冒充隔离phase瞬时峰值。原证据7成员MANIFEST882字节 / 0be987ee2a080aadc67839abc7123dfe34d0ed313f7cdeef8c82d4328d0556bc；原完整日志1558字节 / aaa3df169f16d8f6dc7d7f150ccbea193bec309266cad8288a9be3b0b2a27f84。这里只公开安全聚合标量和身份，不公开raw日志、私有路径、数组或二进制，全部原证据保留。
+
+## 独审现物范围
+
+终止后独立核7证据、11工作树、18源manifest成员、同一ELF/object/archive、29桥源/48 staged/44上游与16输入94920448字节。该复核不冒充native失败时未执行的成功postflight/比较；本次没有重新hash39系统依赖，也没有重算参考数组。N0摘要仅证明ACK0时完整内存观测，N0在后续PC1直至失败是否始终不变仍UNKNOWN，因为成功后的N0 hash gate未到。软件251772是entry起已处理周期，不是完整accepted→ACK1分母。原runtime数字未变，仅把AR请求跨度与R退休语义分清。

@@ -1,0 +1,20 @@
+{
+  "modes": [
+    "-I -S -B",
+    "-I -S -B -O"
+  ],
+  "native_tools_executed": false,
+  "network_executed": false,
+  "real_build_executed": false,
+  "status": "PASS_PURE_SOURCE_AND_MOCK_ONLY",
+  "unchanged_v1_test_evidence_per_mode": {
+    "sanitizer_checks": 463,
+    "toolchain": 41,
+    "transport": 7
+  },
+  "v2_test_counts_per_mode": {
+    "coordinator": 63,
+    "support_original": 41,
+    "support_review_regressions": 7
+  }
+}

@@ -4,9 +4,9 @@
       "bytes": 806,
       "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"
     },
-    "candidates/host93_ci_recovery/ci_support_v2.py": {
-      "bytes": 9154,
-      "sha256": "931c8d8e4b42c125617ca1058dac809723f8371ffe90205da6b0c64b0aea1a26"
+    "candidates/host93_ci_recovery/ci_support_v3.py": {
+      "bytes": 16348,
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
     },
     "candidates/host93_ci_recovery/configuration/ENTRY.json": {
       "bytes": 2296,
@@ -56,13 +56,17 @@
       "bytes": 1713,
       "sha256": "fc7129f0200148ead007dd9e5b3b6ecd77a378432084dea101e51f82b831c0a0"
     },
+    "candidates/host93_ci_recovery/safe_build_diagnostics.py": {
+      "bytes": 6486,
+      "sha256": "7e73383cacf3d14992a6b9be083f7db4311ee5996a8b1cd54dbb11b2061176a1"
+    },
     "candidates/host93_ci_recovery/toolchain/SOURCE_PINS.json": {
       "bytes": 2791,
       "sha256": "cc070fce2a6f1ef8cbba5a78cfca8937e21d6e2233d1e0aa9288dd50ee266538"
     },
     "candidates/host93_ci_recovery/toolchain/ci_toolchain.py": {
-      "bytes": 32522,
-      "sha256": "b1f993b9ca05cb2a26ca76ca302e74016d773a001f0954338e1951dc194a1be5"
+      "bytes": 32715,
+      "sha256": "fcec5c2d6917cdfe460ff01d8a922500497971459d4269aabdbf3610e43f9b2d"
     }
   },
   "schema": 1

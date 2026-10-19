@@ -501,13 +501,14 @@ def run_micro(support, tools, buffers, repo, work, root, call_phase, backend, ru
             'does_not_claim_production_host_or_full_system_rtl': True}
 
 
-def run(repo: Path, work: Path, call_phase):
+def run(repo: Path, work: Path, call_phase, stop_after_build=False):
     """One fresh run; no retries, package installs, old objects, or old reviews.
 
     call_phase(name, argv, cwd, environment, limits) returns record/raw_log/usage;
     raw bytes stay private. It owns the shared 6600-second wall and 1-CPU limit.
     This function returns JSON-friendly private in-job identities to its caller.
     """
+    require(type(stop_after_build) is bool, 'explicit build-only mode')
     repo, work = Path(repo), Path(work)
     require(repo.is_absolute() and work.is_absolute() and '..' not in repo.parts and
             '..' not in work.parts and repo != work and repo not in work.parents and
@@ -576,11 +577,11 @@ def run(repo: Path, work: Path, call_phase):
                        **support.identity(root / 'bin' / name, 4 * 1024**2)}
                        for name in ('verilator', 'verilator_includer')}}
         runtime_pin = save_private(work / 'configured_runtime.json', runtime)
-        tiny = run_micro(support, tools, buffers, repo, work, root, call_phase, backend, runtime)
+        tiny = None if stop_after_build else run_micro(support, tools, buffers, repo, work, root, call_phase, backend, runtime)
         immutable_sources(support, root, derived)
         unchanged_tools(support, tools)
         result = {'schema': 'CI_FRESH_PATCHED_VERILATOR473_AND_TINY_V1',
-                  'status': 'PASS_FRESH_DERIVED_TOOLCHAIN_AND_TINY_ONLY',
+                  'status': ('PASS_FRESH_DERIVED_BACKEND_BUILD_ONLY' if stop_after_build else 'PASS_FRESH_DERIVED_TOOLCHAIN_AND_TINY_ONLY'),
                   'backend': backend, 'verilator_root': str(root), 'host_programs': tools,
                   'source_commit': COMMIT, 'source_members': 473, 'source_original_bytes': 11747893,
                   'source_receipt': receipt_pin, 'source_phase_usage': acquired['usage'],

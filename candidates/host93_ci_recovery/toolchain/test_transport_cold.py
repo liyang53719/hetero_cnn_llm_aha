@@ -9,7 +9,7 @@ from unittest import mock
 HERE=Path(__file__).absolute().parent
 SOURCE=HERE/'ci_toolchain.py'
 RAW=SOURCE.read_bytes()
-if len(RAW)!=32522 or hashlib.sha256(RAW).hexdigest()!='b1f993b9ca05cb2a26ca76ca302e74016d773a001f0954338e1951dc194a1be5':
+if len(RAW)!=32715 or hashlib.sha256(RAW).hexdigest()!='fcec5c2d6917cdfe460ff01d8a922500497971459d4269aabdbf3610e43f9b2d':
     raise ValueError('fixed module identity before compile')
 g=types.ModuleType('verified_transport_only');g.__file__=str(SOURCE)
 exec(compile(RAW,str(SOURCE),'exec',dont_inherit=True),g.__dict__)

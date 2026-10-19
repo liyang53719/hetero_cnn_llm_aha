@@ -764,3 +764,14 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 提交 `7e0ac9fd` 的 run 39185138343 / attempt1 终态 FAIL，payload guard 39185138377 单独成功。原安全3JSON记录主序列63.518112秒，13阶段 EXIT0_CLEANED 后 fresh_make 在47.995942秒 FAILED；Host生成/编译/reset/launch尚未开始。原失败行的退出/CPU为空且cleanup=false来自异常路径默认值，不能推断实际清理失败或OOM。已定位收据投影缺口，原编译根因仍未知。
 
 本批只保存原3安全JSON与解释说明；不提交ZIP、API原文、原日志、系统库存或产物。后继修复失败也保真实退出/信号/timeout/rusage/已确认cleanup，未知为null，并加入固定去敏截断诊断；只做构建诊断资格，保原失败，不自动重试整Host。
+
+
+## 2026-10-19 CI 构建诊断源码后继（SOURCE 独审通过，actual 未执行）
+
+- 原 Actions 39185138343 保持 FAIL：前 13 个阶段 EXIT0_CLEANED，fresh_make 在 47.995942 秒抛错。原安全摘要未携带私有 native 收据，退出码、信号、timeout、CPU/RSS 和 cleanup 事实未知；初始化 false 不作为 cleanup 失败证据。原失败审 3bdbfc5c / a5729490 已保存，不能倒填根因。
+- 本后继仅增加固定失败收据数值投影、有限去敏合并编译日志和显式 build-diagnostic 分支。保原 WNOWAIT / 采样函数、官方 473 源与单行初始化 patch。stop_after_build 默认 false；独立诊断只运行 14 阶段，在 backend 内容身份与原后验后停止，不执行新 backend / 模型微例 / Host。
+- 公共三 JSON 严格 v2 schema；未知值为 null。receipt_timed_out 只是原监督分类，最终 reap 负值、原 WNOWAIT 事件和 cleanup kill 分列，不推自然退出原因。编译诊断仅固定 473 公开路径/行列/五类固定文案，merged_log_tail 不称独立 stderr；私有日志、路径、库存和凭据不上传。
+- 原 6600 秒 job / 6480 秒工作截止与 make 3600/3570、单核、AS 4 GiB、FSIZE 1 GiB不变；实际 make log 验收 1 MiB，主表允许上限 4 MiB。新 workflow 只由自身路径首次 push 触发，原 Host workflow 不动，不自动重试。
+- 作者纯冷测：主 63+63、支持 41+41 与新回归 7+7、工具 41+41、运输 7+7、去敏检查 463+463。独立整链 SOURCE 已闭合：SOURCE_GO_SINGLE_BOUNDED_CI_BUILD_DIAGNOSTIC_ONLY，审 manifest `55cca6e9bc7a56e28b017d152188a8ba983de30dfad2e2b087d0acb3209fbe37` / summary `cc00d4be3e225a45e951c6ff50217731128c3a519da46d6c18d16f1e36843245`；独审新增反例 7+7、支持 41+41、主 63+63 均过，F01/F02闭合。作者测试不代独审。新 actual 尚未执行。只提交再生源码、pin、摘要与计划，不提交任何新生成物。
+
+- 原 v1 HOLD 留存，新 v2 仅禁止准备拒绝后读取旧收据，并使诊断投影受原 phase 截止约束；原异常始终优先。最终内容 17 件源码/metadata/STATUS，加中文计划纯尾与独立新 workflow，共 19 paths；parent 固定 cf0eaa059b029b303d402c983addb0f973b55e0f。首次诊断实际待唯一普通发布触发，结果不预填。

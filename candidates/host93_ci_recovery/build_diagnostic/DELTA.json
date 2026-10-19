@@ -1,0 +1,24 @@
+{
+  "from_diagnostic_v1": {
+    "coordinator_changes": "support raw pin and immediate pin map only",
+    "edits": [
+      "native-call boundary guard before receipt recovery",
+      "diagnostic exception preserves first failure and cannot imply success",
+      "same phase deadline rechecked after diagnostics"
+    ],
+    "existing_production_function_changed": "run_phase",
+    "other_production_bytes_unchanged": true
+  },
+  "original_failure_not_reclassified": true,
+  "support_changed_existing_functions": [
+    "run_phase"
+  ],
+  "support_new_functions": [
+    "diagnostic_defaults",
+    "terminal_observation"
+  ],
+  "toolchain_changed_existing_functions": [
+    "run"
+  ],
+  "wnowait_and_observer_source_pins_unchanged": true
+}

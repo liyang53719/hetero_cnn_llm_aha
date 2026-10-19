@@ -19,8 +19,8 @@ parser.add_argument('--repo', required=True, type=Path)
 args = parser.parse_args()
 HERE = Path(__file__).absolute().parent
 RAW = (HERE / 'ci_toolchain.py').read_bytes()
-EXPECTED_BYTES = 32522
-EXPECTED_SHA = 'b1f993b9ca05cb2a26ca76ca302e74016d773a001f0954338e1951dc194a1be5'
+EXPECTED_BYTES = 32715
+EXPECTED_SHA = 'fcec5c2d6917cdfe460ff01d8a922500497971459d4269aabdbf3610e43f9b2d'
 if len(RAW) != EXPECTED_BYTES or hashlib.sha256(RAW).hexdigest() != EXPECTED_SHA:
     raise ValueError('cold component pin mismatch')
 g = types.ModuleType('fixed_ci_toolchain_cold')
@@ -216,7 +216,7 @@ def mock_write(path, raw=b'SYNTHETIC ONLY\n', executable=False):
     path.chmod(0o700 if executable else 0o600)
 
 
-def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False):
+def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False, stop_after_build=False):
     """Exercise complete run orchestration with explicit fake process outputs."""
     saved = {name: getattr(g, name) for name in ('host_identities', 'verify_official473',
                                                'materialize_patched', 'immutable_sources', 'verify_objcache_disabled')}
@@ -295,6 +295,11 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
             if fail_at is not None:
                 rejects(lambda: g.run(args.repo, work, callback), 'synthetic requested stop')
                 g.require(calls[-1] == fail_at and calls.count(fail_at) == 1, 'no retry/fallback after failure')
+            elif stop_after_build:
+                result = g.run(args.repo, work, callback, stop_after_build=True)
+                g.require(result['status']=='PASS_FRESH_DERIVED_BACKEND_BUILD_ONLY' and result['tiny'] is None, 'build-only scope')
+                g.require(len(calls)==14 and calls[-1]=='fresh_make' and result['backend']['bytes']>0, 'exact14 and backend postflight')
+                g.require(not (work/'micro').exists(), 'no new backend or tiny execution')
             elif corrupt_runtime:
                 rejects(lambda: g.run(args.repo, work, callback), 'include closure drift')
                 g.require(calls[-1] == 'derived_tiny_version', 'runtime drift before further native phase')
@@ -321,6 +326,7 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
 
 
 test('full_eighteen_phase_synthetic_orchestration', run_synthetic)
+test('build_only_fourteen_phase_synthetic_orchestration', lambda: run_synthetic(stop_after_build=True))
 for phase in ('official_source473', 'host_autoconf-version', 'host_bison-micro',
               'fresh_autoconf', 'fresh_configure', 'fresh_make', 'derived_tiny_compile'):
     test('stop_without_retry_' + phase, lambda phase=phase: run_synthetic(fail_at=phase))

@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=24501
-SHA='3895215ac36cacdc88745588f6bc90a8ab4f28985f864abe428cbf444e38f47a'
+SIZE=42466
+SHA='ef3116b0eef292e43e96937432a834be25c81fce92f50124959296878d058799'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -25,17 +25,30 @@ G=load(RAW)
 PINS=G.decode(G.exact(HERE/'RUN_PINS.json',G.PINS_SIZE,G.PINS_SHA))['files']
 
 
-def fixture(ready=False):
-    stages=[]
-    if ready:
-        stages=[{'name':n,'status':'EXIT0_CLEANED','exit_code':0,'cleanup_confirmed':True,'seconds':0.1,
-                 'child_user_cpu_seconds':0.05,'child_system_cpu_seconds':0.01} for n in G.STAGES]
-    return {'summary.json':{'schema':'host93-ci-summary-v1','status':'READY_REQUIRES_ACTIONS_EXIT0' if ready else 'INCOMPLETE',
-             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','completed_components':list(G.COMPONENTS) if ready else [],
-             'scope':{x:ready and x not in ('n0_numeric','weights_loaded') for x in G.SCOPES},'seconds':1.0},
-            'source_hashes.json':{'schema':'host93-ci-source-hashes-v1','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
-              'fixed_inputs':{'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':({'derived_backend':{'bytes':1,'sha256':'1'*64},'host_elf':{'bytes':1,'sha256':'1'*64},'host93_fir':{'bytes':42417256,'sha256':'264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a'},'host93_sv':{'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'}} if ready else {})},
-            'stage_exits.json':{'schema':'host93-ci-stage-exits-v1','stages':stages}}
+def defaults():
+    return dict(zip(G.OBSERVATION_KEYS,(None,None,None,None,None,None,None,'UNKNOWN','UNKNOWN','UNKNOWN','UNKNOWN',None,None,None)))
+
+
+def clean_observation():
+    return {**defaults(), 'exit_code':0,'cleanup_confirmed':True,'receipt_timed_out':False,
+            'waitid_code':1,'waitid_status':0,'kill_attempted':True,'kill_result':'SIGNAL_SENT_BEFORE_REAP',
+            'native_record_status':'PASS','failure_code':'NONE','failure_boundary':'NONE',
+            'child_user_cpu_seconds':0.05,'child_system_cpu_seconds':0.01,'child_maxrss_kib_cumulative':1234}
+
+
+def fixture(ready=False, mode='host-reset-launch'):
+    build=mode=='build-diagnostic'
+    stages=[{'name':n,'status':'EXIT0_CLEANED','seconds':0.1,'diagnostics':G.empty_diagnostics(),
+             **clean_observation()} for n in (G.BUILD_STAGES if build else G.STAGES)] if ready else []
+    generated={'derived_backend':{'bytes':1,'sha256':'1'*64}} if ready else {}
+    if ready and not build:
+        generated.update({'host_elf':{'bytes':1,'sha256':'1'*64},'host93_fir':{'bytes':42417256,'sha256':'264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a'},'host93_sv':{'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'}})
+    return {'summary.json':{'schema':'host93-ci-summary-v2','mode':mode,'status':'READY_REQUIRES_ACTIONS_EXIT0' if ready else 'INCOMPLETE',
+             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','completed_components':(['toolchain_build'] if build else list(G.COMPONENTS)) if ready else [],
+             'scope':{x:ready and (x=='toolchain_build' if build else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0},
+            'source_hashes.json':{'schema':'host93-ci-source-hashes-v2','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
+              'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
+            'stage_exits.json':{'schema':'host93-ci-stage-exits-v2','stages':stages}}
 
 
 class Cold(unittest.TestCase):
@@ -182,26 +195,33 @@ class Cold(unittest.TestCase):
             with self.assertRaises(ValueError):G.exact(Path('/tmp/not-read'),0,'PENDING')
             comp.assert_not_called()
 
-    def mock_whole_job(self, fail_name=None):
+    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False):
         with tempfile.TemporaryDirectory() as t:
             base=Path(t);repo=base/'repo';repo.mkdir();out=base/'out';archive=base/'idma.zip'
             fixed={'bytes':1,'sha256':'1'*64,'path':str(base/'observed')}
             def cfg(name):
                 x=dict(zip(('total_seconds','work_seconds','cpu_seconds','as_bytes','fsize_bytes','log_bytes'),G.PHASE_CAPS[name]));x['sample_rows']=x['total_seconds']+2;return x
             def group(names,result):
-                def run(repo,work,call,*args):
-                    for name in names:call(name,['/fixed/fixture'],base,{},cfg(name))
+                def run(repo,work,call,*args,**kwargs):
+                    selected=names[:14] if kwargs.get("stop_after_build") else names
+                    for name in selected:call(name,['/fixed/fixture'],base,{},cfg(name))
                     return result
                 return types.SimpleNamespace(run=run)
             tools=group(G.STAGES[:18],{'backend':fixed})
             emission=group(G.STAGES[18:26],{'fir':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_fir']},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}})
             execution=group(G.STAGES[-3:],{'elf':fixed})
             modules={'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution}
-            def native(*args):
+            def native(*args,**kwargs):
                 name=args[2]
-                if name==fail_name:raise TimeoutError('synthetic boundary')
+                kwargs['diagnostics'].update(clean_observation())
+                if name==fail_name:
+                    kwargs['diagnostics'].update(exit_code=2 if nonzero else -9, final_reap_signal=None if nonzero else 9,
+                        receipt_timed_out=not nonzero,waitid_status=2 if nonzero else None,waitid_code=1 if nonzero else None,
+                        native_record_status='FAIL',failure_code='CHILD_EXIT_NONZERO' if nonzero else 'SUPERVISOR_TIMEOUT_CLASSIFICATION',
+                        failure_boundary='NATIVE_SUPERVISION')
+                    raise ValueError('synthetic child exit') if nonzero else TimeoutError('synthetic boundary')
                 return {'exit_code':0,'cleanup_confirmed':True},b'private synthetic',{'child_user_cpu_seconds':0.1,'child_system_cpu_seconds':0.01}
-            support=types.SimpleNamespace(deadline_ready=lambda:None,fixed_support=lambda repo:(None,None,None),run_phase=native)
+            support=types.SimpleNamespace(deadline_ready=lambda:None,fixed_support=lambda repo:(None,None,None),run_phase=native,diagnostic_defaults=defaults)
             prefix='candidates/host93_ci_recovery/'
             buffers={prefix+'idma319/ENTRY.json':b'{"bootstrap":"pinned synthetic"}',prefix+'configuration/ENTRY.json':b'{"argv_prefix":["python3","-I","-S","-B","-c","pinned synthetic"]}'}
             with mock.patch.dict(G.os.environ,{'GITHUB_ACTIONS':'true'},clear=True), \
@@ -212,7 +232,7 @@ class Cold(unittest.TestCase):
                  mock.patch.object(G,'memory_disk_gate'), \
                  mock.patch.object(G.signal,'signal'), mock.patch.object(G.signal,'setitimer'), \
                  mock.patch('builtins.print'):
-                code=G.execute(repo,out,archive,G.time.monotonic()+1000.)
+                code=G.execute(repo,out,None if mode=='build-diagnostic' else archive,G.time.monotonic()+1000.,mode)
             self.assertEqual(G.verify_evidence(out),0)
             summary=G.decode((out/'evidence/summary.json').read_bytes())
             stages=G.decode((out/'evidence/stage_exits.json').read_bytes())['stages']
@@ -230,7 +250,10 @@ class Cold(unittest.TestCase):
         self.assertFalse(summary['scope']['reset_launch'])
         self.assertEqual(stages[-1]['name'],'host93_cpp_compile')
         self.assertEqual(stages[-1]['status'],'FAILED')
-        self.assertIsNone(stages[-1]['exit_code'])
+        self.assertEqual(stages[-1]['exit_code'],-9)
+        self.assertTrue(stages[-1]['receipt_timed_out'])
+        self.assertIsNone(stages[-1]['waitid_code'])
+        self.assertTrue(stages[-1]['kill_attempted'])
 
     def test_ready_missing_project_identities(self):
         x=fixture(True);x['source_hashes.json']['project_sources']=[]
@@ -247,6 +270,67 @@ class Cold(unittest.TestCase):
     def test_empty_generated_identity(self):
         x=fixture(True);x['source_hashes.json']['generated']['derived_backend']['bytes']=0
         with self.assertRaises(ValueError):G.validate_evidence(x)
+
+
+    def test_build_mode_ready(self):
+        self.assertTrue(G.validate_evidence(fixture(True,'build-diagnostic')))
+    def test_build_mode_only14_mock(self):
+        code,summary,stages=self.mock_whole_job(mode='build-diagnostic')
+        self.assertEqual(code,0);self.assertEqual([x['name'] for x in stages],list(G.BUILD_STAGES))
+        self.assertEqual(summary['completed_components'],['toolchain_build'])
+        self.assertFalse(summary['scope']['toolchain_tiny'])
+    def test_build_nonzero_real_observation_survives(self):
+        code,summary,stages=self.mock_whole_job('fresh_make','build-diagnostic',True)
+        self.assertEqual(code,1);row=stages[-1]
+        self.assertEqual(row['exit_code'],2);self.assertTrue(row['cleanup_confirmed'])
+        self.assertEqual(row['failure_code'],'CHILD_EXIT_NONZERO')
+        self.assertEqual(row['waitid_status'],2);self.assertIsNone(row['final_reap_signal'])
+        self.assertEqual(row['child_user_cpu_seconds'],.05)
+        self.assertFalse(summary['scope']['toolchain_build'])
+    def test_build_scope_tiny_forbidden(self):
+        x=fixture(True,'build-diagnostic');x['summary.json']['scope']['toolchain_tiny']=True
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_build_archive_forbidden_before_output(self):
+        with mock.patch.dict(G.os.environ,{'GITHUB_ACTIONS':'true'},clear=True),mock.patch.object(G,'load') as load:
+            with self.assertRaises(ValueError):G.execute(Path('/tmp/repo'),Path('/tmp/out'),Path('/tmp/a.zip'),G.time.monotonic()+60.,'build-diagnostic')
+            load.assert_not_called()
+    def test_build_stage_extra_backend_forbidden(self):
+        x=fixture(True,'build-diagnostic');x['stage_exits.json']['stages'][-1]['name']='derived_tiny_version'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_unknown_cleanup_remains_null(self):
+        x=fixture(True,'build-diagnostic');x['summary.json'].update(status='INCOMPLETE',failure_category='UNEXPECTED')
+        row=x['stage_exits.json']['stages'][-1];row.update(status='FAILED',**defaults())
+        self.assertTrue(G.validate_evidence(x));self.assertIsNone(row['cleanup_confirmed'])
+    def test_final_signal_mismatch_rejected(self):
+        x=fixture(True);x['stage_exits.json']['stages'][0]['final_reap_signal']=9
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_success_unknown_observation_rejected(self):
+        x=fixture(True);x['stage_exits.json']['stages'][0]['native_record_status']='UNKNOWN'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_malicious_diagnostic_tail_rejected(self):
+        for text in ('/private/token','https://example.com?secret','arbitrary compiler text'):
+            x=fixture(True);x['stage_exits.json']['stages'][0]['diagnostics']['merged_log_tail']=text
+            with self.subTest(text=text),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_fixed_diagnostic_accepted(self):
+        msg=G.DIAGNOSTIC_MESSAGES['syntax_error_reported']
+        row={'path':'src/V3Error.cpp','line':4,'column':2,'category':'syntax_error_reported','message':msg}
+        d={'observations':[row],'merged_log_tail':'src/V3Error.cpp:4:2: syntax_error_reported: '+msg,'truncated':True}
+        G.validate_diagnostics(d)
+        for value in ('/private/V3Error.cpp','src/not_in_fixed_tree.cpp'):
+            d['observations'][0]['path']=value
+            with self.assertRaises(ValueError):G.validate_diagnostics(d)
+    def test_diagnostic_extra_keys_rejected(self):
+        d=G.empty_diagnostics();d['raw']='private'
+        with self.assertRaises(ValueError):G.validate_diagnostics(d)
+    def test_log_tail_fixed_partial_line_removed(self):
+        with tempfile.TemporaryDirectory() as t:
+            p=Path(t)/'native.log';p.write_bytes(b'x'*(G.MIB+10)+b'\n../V3Error.cpp:1: error: expected token\n')
+            raw,truncated=G.compiler_log_tail(p)
+            self.assertTrue(truncated);self.assertEqual(raw,b'../V3Error.cpp:1: error: expected token\n')
+    def test_log_tail_small_exact(self):
+        with tempfile.TemporaryDirectory() as t:
+            p=Path(t)/'native.log';p.write_bytes(b'fixture\n')
+            self.assertEqual(G.compiler_log_tail(p),(b'fixture\n',False))
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

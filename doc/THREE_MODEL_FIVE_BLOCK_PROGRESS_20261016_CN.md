@@ -1274,3 +1274,16 @@ PC1有效MAC301989888，分母严格为4096×(ACK1边沿−PC1接受边沿+1)，
 作者84项纯mock在普通、优化、搬迁普通、搬迁优化四模式全过，另有6项入口负控及同已校验buffer落盘突变后的84项正控。覆盖完整run闭包、前后窗口拒绝、首失败停、typed mismatch保诊断和保存/恢复双故障原异常优先。SOURCE准备未执行PC01；任何后续真实结果另据独立实际收据审定，本批不推断长RTL或数值已通过。
 
 本批SOURCE正式独审结论为 `ACCEPT_SINGLE_FRESH_PC01_CAPTURE_SOURCE_AND_10620_SECOND_INVOCATION_ONLY`；MANIFEST 507 B / c667beeb71a6e9ee7505aa04f8b3dc1d69aca05714ad5993d9d43be9efc66f88，SUMMARY 5741 B / a074cfdf30db32a4bbc2628ac215a02b7b4089c89ef0226417e3069991d3d454。独审搬迁普通84项与优化84项全部通过，精确私有outer与单一10620秒截止已核；SOURCE授权不等同真实运行结果。
+
+
+## 2026-10-19 单次 fresh PC01 实际终止：PC1_022，数值比较未运行
+
+本轮原outer于19:52:21.295524 UTC开始、20:46:40.793025 UTC结束，退出1/3259.5155213670078秒；native自然退出1/3258.247189秒，非超时且cleanup/reap确认。WNOWAIT为CLD_EXITED/status1，后续清理signal不能倒写退出原因。协调器INCOMPLETE、首异常ValueError/failure_code=null，监督层CHILD_EXIT_NONZERO；132字节原安全诊断为RTL_PC1/CONTRACT_ERROR/PC1_022、numeric NOT_RUN。正式独审ACCEPT_ACTUAL_PC01_CONTRACT_FAILURE_PC1_022_ONLY；MANIFEST380 B / 63fcbb1ec1dfe3ac1ab10ab0a8eb17913b1cf37b27bc23da5e123da37de12e70，SUMMARY9383 B / e53a59e4f085a3616a97ffbfc78bfe5f8354e77994af0a4dccc2473569310824。
+
+capture目录为空，counts.json、actual_n0.f32le、actual_qraw.f32le均未写。固定源在RTL_PC1之前已设完整ACK0退休门（单launch/job/done/ACK、post-PC1、committed/writeback各786432字节、N0 B12288），随后在内存复制N0并计算SHA；这只是固定源及安全诊断支持的控制流推断，没有本轮导出N0 SHA或计数，不能授与原3c25077e…参考一致，也不搬用旧N0周期/PASS。本轮PC1接受、退休进度、ACK1、主周期与利用率都未观测。
+
+PC1_022为8谓词合并identity失败；原诊断未记录逐谓词、周期或调用点。具体失败项与根因UNKNOWN，不把后续静态假说倒填成实际。三轨比较均NOT_RUN，不能称数值不匹配。official_raw_numeric_pass/application_accuracy_pass/typed_recipe_bit_exact_to_rtl均null，full_block_pass=false，五block仍0/5。10620秒本轮与180秒独立重链合计10800秒上界不变；8000000主周期仅cap，未获实际周期，不能声称周期cap已耗尽。
+
+原证据7成员MANIFEST882 B / 9476ed1280b0048f6cbb8261f9ee4b16dcd90b58c30152749a3a2b6370b28db9保留。安全三路径只聚合数字/公开来源身份，不上传原日志、私有路径、数组或二进制，不改原N0/参考PASS。本批不触发新的Host/RTL/native作业；workflow文件不变，普通push轻量guard另记。
+
+独审终止后只读核原7件证据、11项工作树、同一已接受ELF/object/archive、47副本、28桥源、44上游与16输入94920448字节；输入hash已核，数值未重算。这不冒充native失败时未执行的协调器成功postflight或比较。本轮输出仍缺失，PC1_022的8谓词/4调用点仍UNKNOWN。

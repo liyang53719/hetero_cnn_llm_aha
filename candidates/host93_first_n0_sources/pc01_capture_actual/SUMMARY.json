@@ -1,0 +1,277 @@
+{
+  "attempt": {
+    "finish_timestamp_source": "original_outer_receipt_not_later_terminal_poll",
+    "finished_utc": "2026-10-19T20:46:40.793025+00:00",
+    "outer_exit_code": 1,
+    "outer_exit_is_not_child_exit": true,
+    "outer_seconds": 3259.5155213670078,
+    "session": 38263,
+    "started_utc": "2026-10-19T19:52:21.295524+00:00"
+  },
+  "capture": {
+    "actual_n0_written": false,
+    "actual_qraw_written": false,
+    "complete_196608_capture_observed": false,
+    "counts_written": false,
+    "directory_exists": true,
+    "files": [],
+    "n0_match_to_prior_fixed_reference": null,
+    "n0_output_sha256_observed": null,
+    "qraw_output_sha256_observed": null
+  },
+  "control_flow_evidence": {
+    "ack0_full_retirement_gate_passed_before_rtl_pc1": true,
+    "ack0_gate_expected_values_not_observed_receipt": {
+      "committed_bytes": 786432,
+      "completion_acks": 1,
+      "jobs": 1,
+      "launches": 1,
+      "owner_dones": 1,
+      "post_issued_jobs": 1,
+      "post_pc": 1,
+      "successful_b": 12288,
+      "writeback_bytes": 786432
+    },
+    "ack1_observed": null,
+    "classification": "inference from fixed reviewed source and exact safe diagnostic, not independently printed counters",
+    "completion_payload_independently_observed": false,
+    "n0_hash_computed_in_memory_before_pc1": true,
+    "n0_hash_value_exported_or_matched": false,
+    "pc1_accepted": null,
+    "pc1_complete": null,
+    "pc1_progress_counters_observed": false,
+    "pc1_utilization_observed": null,
+    "pc1_window_cycles_observed": null,
+    "total_main_cycles_observed": null
+  },
+  "evidence_identities": {
+    "attempt_manifest": {
+      "bytes": 882,
+      "sha256": "9476ed1280b0048f6cbb8261f9ee4b16dcd90b58c30152749a3a2b6370b28db9"
+    },
+    "executed_source_manifest": {
+      "bytes": 2647,
+      "sha256": "01becd849887feb504efdbb717be56e77e346364fa00617f54ee187f8cb5e205"
+    },
+    "execution_result": {
+      "bytes": 2029,
+      "sha256": "32366274a204f8333af32ffd70156ac801f0e349c5aed14d497ebcfef4253807"
+    },
+    "native_receipt": {
+      "bytes": 1057,
+      "sha256": "80f15f6f71a47f7592230fe1a0c7edb556ceff027a4e9aab7e6334949ad7ce7a"
+    },
+    "native_safe_diagnostic": {
+      "bytes": 132,
+      "sha256": "380d0c248ae2b53474aa4cace2dea84003ca07e8c1b46f15855092174005c814"
+    },
+    "outer_result": {
+      "bytes": 134,
+      "sha256": "c278b24eeca4029e9a08b798dce0f4fee69216a3b7e59e34d6c6f09295801c99"
+    },
+    "source_review_manifest": {
+      "bytes": 507,
+      "sha256": "c667beeb71a6e9ee7505aa04f8b3dc1d69aca05714ad5993d9d43be9efc66f88"
+    },
+    "source_review_summary": {
+      "bytes": 5741,
+      "sha256": "a074cfdf30db32a4bbc2628ac215a02b7b4089c89ef0226417e3069991d3d454"
+    },
+    "usage_receipt": {
+      "bytes": 486,
+      "sha256": "d2dc04066b405e1d15a2e7f537e150ba7209292ad562d5913676b53d359b83d6"
+    },
+    "work_tree": {
+      "bytes": 1254,
+      "sha256": "162218f7880b0eb500cbb7f6b95b6bac6117e3ea2a2c098a5c0e341fe775dca8"
+    }
+  },
+  "failure_layers": {
+    "coordinator_failure_code": null,
+    "coordinator_failure_type": "ValueError",
+    "coordinator_status": "INCOMPLETE",
+    "driver_safe_diagnostic": {
+      "code": "PC1_022",
+      "numeric_comparison": "NOT_RUN",
+      "phase": "RTL_PC1",
+      "scope": "PC0_ACK0_PC1_ACK1_M128_ONLY",
+      "status": "CONTRACT_ERROR"
+    },
+    "returned_stage_record": null,
+    "returned_stage_usage": null,
+    "supervision_boundary": "NATIVE_SUPERVISION",
+    "supervision_code": "CHILD_EXIT_NONZERO"
+  },
+  "independent_actual_review": {
+    "current_byte_identity_checks": {
+      "attempt_evidence_members": 7,
+      "fixed_input_bytes": 94920448,
+      "fixed_inputs": 16,
+      "linked_bridge_sources": 28,
+      "same_accepted_elf": {
+        "bytes": 13537744,
+        "sha256": "cb64b5cf1d5e9c226b9768fb3fdcbb3305bee894b6d904cb4cf29633d10fe5b1"
+      },
+      "same_driver_object": {
+        "bytes": 1327264,
+        "sha256": "10fbc760637ab4d8f0be22119da9fe60a9e493ed4efe8ee683b42e067095c304"
+      },
+      "same_old_host_archive": {
+        "bytes": 17631506,
+        "sha256": "dafcc125c4a4463b9ff454fda6b7a4031bfa17fd98cde1e8386ff058ce245b2f"
+      },
+      "source_manifest_files": 14,
+      "staged_bridge_cache_files": 47,
+      "upstream_sources": 44,
+      "work_entries": 11
+    },
+    "directory": "review_pc01_capture_failure_actual_20261019T2053",
+    "identity_check_scope": "Posttermination independent read-only checks establish current file bytes. They do not claim coordinator success postflight or comparison ran.",
+    "input_numerical_recomputation": false,
+    "manifest": {
+      "bytes": 380,
+      "sha256": "63fcbb1ec1dfe3ac1ab10ab0a8eb17913b1cf37b27bc23da5e123da37de12e70"
+    },
+    "reference_arrays_read": false,
+    "status": "ACCEPTED_FINITE_FAILURE_EVIDENCE_ONLY",
+    "summary": {
+      "bytes": 9383,
+      "sha256": "e53a59e4f085a3616a97ffbfc78bfe5f8354e77994af0a4dccc2473569310824"
+    },
+    "verdict": "ACCEPT_ACTUAL_PC01_CONTRACT_FAILURE_PC1_022_ONLY"
+  },
+  "limits_not_observed_progress": {
+    "combined_authorized_ceiling_seconds": 10800,
+    "cycle_cap_exhausted": null,
+    "fixed_mac_lanes": 4096,
+    "fresh_capture_total_seconds_cap": 10620,
+    "global_main_cycle_cap": 8000000,
+    "prior_independent_relink_seconds_cap": 180,
+    "target_pc1_useful_macs": 301989888
+  },
+  "native": {
+    "address_space_limit_bytes": 6442450944,
+    "anchor_confirmed": true,
+    "cleanup_confirmed": true,
+    "cpu_limit_seconds": 10395,
+    "exit_code": 1,
+    "expected_exit": 0,
+    "group_state": "absent",
+    "parent_exception": null,
+    "reaped": true,
+    "seconds": 3258.247189,
+    "spawn_handle_acquired": true,
+    "status": "FAIL",
+    "timed_out": false,
+    "wall_limit_seconds": 10394.992196117004
+  },
+  "native_exit_observation": {
+    "cleanup_is_not_native_failure_cause_proof": true,
+    "cleanup_kill_attempted": true,
+    "cleanup_kill_result": "signal_sent_before_reap",
+    "interpretation": "CLD_EXITED with status 1; natural nonzero exit, not a timeout termination",
+    "waitid_code": 1,
+    "waitid_status": 1
+  },
+  "numeric": {
+    "mathematical_fp32_diagnostics": null,
+    "mathematical_fp64_diagnostics": null,
+    "numeric_failure_or_mismatch_inferred": false,
+    "status": "NOT_RUN",
+    "typed_bit_comparison": null
+  },
+  "pc1_022": {
+    "cycle_or_callsite_recorded": false,
+    "individual_failing_predicate": "UNKNOWN",
+    "message_mapping": "PC1 actual identity or stopped",
+    "predicate_count": 8,
+    "predicate_values_recorded": false,
+    "predicates_from_fixed_source": [
+      {
+        "observed_value": null,
+        "predicate": "owner phase is Runtime"
+      },
+      {
+        "observed_value": null,
+        "predicate": "N0 published flag is true"
+      },
+      {
+        "observed_value": null,
+        "predicate": "qraw published flag is false"
+      },
+      {
+        "observed_value": null,
+        "predicate": "model root pointer is non-null"
+      },
+      {
+        "observed_value": null,
+        "predicate": "model reset is false"
+      },
+      {
+        "observed_value": null,
+        "predicate": "model resetRequired is false"
+      },
+      {
+        "observed_value": null,
+        "predicate": "context gotError is false"
+      },
+      {
+        "observed_value": null,
+        "predicate": "context gotFinish is false"
+      }
+    ],
+    "root_cause": "UNKNOWN_AGGREGATED_GUARD_NO_PREDICATE_SNAPSHOT",
+    "static_hypothesis_backfilled_as_actual": false
+  },
+  "public_source_identities": {
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/first_n0_diagnostic_codes.inc": {
+      "bytes": 38917,
+      "sha256": "ed087651b2e699086e85a83aa5794c7d4bcca068967b5edae3fd796ea69959cf"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc01_driver.hpp": {
+      "bytes": 7854,
+      "sha256": "03d943d1210abb180747d8a6ea0bd80a465c938162494c30142d499697d41d58"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc1_model_scheduler.inc": {
+      "bytes": 13247,
+      "sha256": "6cdc1abc8c8229a883a67ea398ef714fdef5ea7f5d8f4518a9492e0aa69bdd0f"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/source/pc01_main.cpp": {
+      "bytes": 7450,
+      "sha256": "1188e3be3f486f4a4492b187f5208a773e38a39d46d887fef104fa40e39e8d26"
+    },
+    "candidates/host93_first_n0_sources/pc01_capture/run_capture.py": {
+      "bytes": 23328,
+      "sha256": "919395b434c82f4130385152c6e1a04f73feee1a71af76e0dfde8461a20d4640"
+    }
+  },
+  "publication": {
+    "arrays_included": false,
+    "cleanup_or_deletion_performed_by_summary": false,
+    "new_native_execution": false,
+    "private_paths_included": false,
+    "raw_logs_included": false,
+    "reference_model_rerun": false
+  },
+  "qualification": {
+    "application_accuracy_pass": null,
+    "baseline_adopted": false,
+    "completed_blocks": 0,
+    "full_block_pass": false,
+    "official_raw_numeric_pass": null,
+    "original_n0_and_reference_passes_changed": false,
+    "target_blocks": 5,
+    "typed_recipe_bit_exact_to_rtl": null,
+    "whole_block_utilization": null
+  },
+  "resource_observation": {
+    "child_maxrss_kib_cumulative": 435208,
+    "child_system_cpu_seconds": 2.720812,
+    "child_user_cpu_seconds": 3242.865532,
+    "maxrss_scope": "cumulative coordinator child-process maxrss, not isolated per-phase RSS",
+    "phase_accounting_seconds": 3258.2562951930013
+  },
+  "schema": 1,
+  "scope": "ACTUAL_PC01_ATTEMPT_TERMINATED_BEFORE_CAPTURE_AND_NUMERIC_COMPARISON",
+  "status": "INCOMPLETE"
+}

@@ -1,0 +1,100 @@
+{
+  "native_started": false,
+  "network_started": false,
+  "real_tools_copied": false,
+  "runs": [
+    {
+      "checks": 7,
+      "exit_code": 0,
+      "name": "cold_final_normal",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 621,
+        "sha256": "6e1d3d2cf8d406e38a3b8b1d18c1582b4e0f693f1aabc76d6329a704606085a8"
+      }
+    },
+    {
+      "checks": 7,
+      "exit_code": 0,
+      "name": "cold_final_optimized",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 621,
+        "sha256": "14423cf80680c97fba9b59c14362b3163b7588c2d4835380ba8b4d90704f7364"
+      }
+    },
+    {
+      "checks": 7,
+      "exit_code": 0,
+      "name": "relocated_normal",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 621,
+        "sha256": "6e1d3d2cf8d406e38a3b8b1d18c1582b4e0f693f1aabc76d6329a704606085a8"
+      }
+    },
+    {
+      "checks": 7,
+      "exit_code": 0,
+      "name": "relocated_optimized",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 621,
+        "sha256": "14423cf80680c97fba9b59c14362b3163b7588c2d4835380ba8b4d90704f7364"
+      }
+    },
+    {
+      "checks": 5,
+      "exit_code": 0,
+      "name": "entry_normal",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 372,
+        "sha256": "98b3da982d45418939add9181d153088cb86943cabee54d2040bd11bd36f8f08"
+      }
+    },
+    {
+      "checks": 5,
+      "exit_code": 0,
+      "name": "entry_optimized",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 372,
+        "sha256": "6c368a7aee15daf8c593ae15544080b523998601f7a85c44cf80924fc467ffa5"
+      }
+    }
+  ],
+  "safe_publication_files": [
+    "local_toolchain_adapter.py",
+    "source_entry.py",
+    "run_cold.py",
+    "test_adapter_cold.py",
+    "test_entry_cold.py",
+    "SOURCE_PINS.json",
+    "PROJECTION.json",
+    "COLD_RESULT.json",
+    "README_CN.md"
+  ],
+  "schema": "LOCAL_CALLER_COLD_V1",
+  "status": "PASS_SYNTHETIC_SOURCE_ONLY_PENDING_INDEPENDENT_REVIEW",
+  "ten_original_tool_probes_simulated_per_main_run": true,
+  "total_checks": 38
+}

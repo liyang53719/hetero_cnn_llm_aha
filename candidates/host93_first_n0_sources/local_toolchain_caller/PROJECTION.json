@@ -1,0 +1,43 @@
+{
+  "ci_source": {
+    "bytes": 46208,
+    "sha256": "5b0923a5f72dd9ecb34380aac176c86d5bf99010938cb6e6cb97a11299fe9a0a"
+  },
+  "functions": {
+    "qualify_tools": {
+      "inverse_exact": true,
+      "original": {
+        "bytes": 2260,
+        "sha256": "92311308e4a1255dedd7a66c328c25d11733a3223cf49fc4568443cb6632e79e"
+      },
+      "projected": {
+        "bytes": 2287,
+        "sha256": "e3b1947f8cc3227e0201dbe68525a0c757213b6fec1e022cba957732156ec5aa"
+      },
+      "substitutions": 2
+    },
+    "run": {
+      "inverse_exact": true,
+      "original": {
+        "bytes": 7336,
+        "sha256": "9ea837e405057b46a21b0152b25d360c213685875b7762a51df8d591ca98ed16"
+      },
+      "projected": {
+        "bytes": 7340,
+        "sha256": "9725b581ec0b43cf1f08ab0eebd80a07a119ee6d3d4e425f113633899afc3c16"
+      },
+      "substitutions": 1
+    }
+  },
+  "native_started": false,
+  "original_resources_changed": false,
+  "prepare_tools_logic_edits": 0,
+  "private_instance_adapters": [
+    "host_identities",
+    "environment",
+    "build_commands",
+    "checked_phase",
+    "disjoint_run_root"
+  ],
+  "schema": "LOCAL_CALLER_FINITE_PROJECTION_V1"
+}

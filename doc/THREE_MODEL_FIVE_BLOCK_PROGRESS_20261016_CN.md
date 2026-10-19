@@ -1099,3 +1099,12 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 独立搬迁9+9与入口9+9通过，另对10个真实profile目标文件两模式只读静态验证及目标mount/namespace/inode漂移拒例；无关mountinfo变化不导致误拒。作者54组记录另列不混计，原COLD冻结PENDING标签由README说明其后审结果。
 - 私有binding/profile/实际JSON、机器路径与逐文件库存、原日志及搬迁副本不公开；只保源码固定合同/公开来源pins和有限结果。后续caller与原生有限probe仍另审，原473源/seqnum补丁/make-j1、单核、8GiB/3GiB门、AS和6600s共享预算不变，N0实际尚未完成。
 - 本计划按父208712 B精确前缀加本纯尾完整替换一次，禁止追加完整旧文档；本批未启动任何新的Host/native作业。
+
+## 2026-10-19 16:08 UTC：本地固定五工具 caller 接合 SOURCE（独审通过，实际未执行）
+
+- 在已发布的本地显式只读 binding/profile 与 bootstrap 之上，保存独立 local_toolchain_caller 源片。原 adapter 8776 B / SHA256 5b21cf3d8969873b3d751f52d64dc7e9528edc0a7d68ce3b91d88f65c8ca3896；固定源清单 MANIFEST 5223 B / SHA256 3bda09357935defbded3c6b3cf3a226739fd92fda7a05251f38f7f4ba5ee175c。
+- 有限接合只涉及私有五工具真实 invocation key、环境、命令首项和每阶段前后身份核验；不以 /usr/bin 五工具别名冒充，也不回退系统五工具。prepare_tools 原函数逻辑不改，仅接已审 local profile 的 native checker；真实复制或执行另行授权。
+- 原 473 源树、seqnum 单项补丁、固定包及头来源、6600 秒共享墙钟、单核与原 8 GiB/3 GiB 准入保持。调用方 bind 后的 run 仍须经原监督 callback；本片不创建实际 stage、不构建或运行 Host。
+- 作者 38 项均为合成 mock（主冷测 7×4、入口 5×2）；独立搬迁主冷测 7+7 与入口 5+5 另列，不重复合计。每个主冷测运行中的原十个工具探针由合成 callback 驱动，不能当真实工具资格。原 COLD_RESULT 的 PENDING 保留为形成时状态。
+- 本片只保存九份安全源码/说明，不含实际 binding/profile、私有调用路径、机器库存、日志或依赖数据。native 与 N0 数值仍 NOT_EXECUTED；无 workflow 变更。全文按父提交 c1dfb4e01870e206d1dc9f5b3e02c7c123aed6cb 的 210548 B 精确前缀加本尾一次替换，禁止把全文再追加。
+- 正式 SOURCE 审查 review_local_toolchain_caller_source_20261019T1606：MANIFEST 2890 B / SHA256 d97924a79077d65691e90f0530e908e5e1925d1c395479e06d39e88e40acde6f；SUMMARY 3685 B / SHA256 66f7c95408030ed958b189f81a4c00281a1c0211ac9559da1bbfe4a1df3b033a。结论 SOURCE_GO_FINITE_PRIVATE_TOOLCHAIN_CALLER_ADAPTER_ONLY；未来缓存接收、真实 stage 与资格化监督入口须另审，本轮实际仍未执行。

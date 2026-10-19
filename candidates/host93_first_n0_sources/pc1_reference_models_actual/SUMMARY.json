@@ -1,0 +1,387 @@
+{
+  "algorithm": {
+    "K": 1536,
+    "M": 128,
+    "N": 1536,
+    "logical_macs_per_model": 301989888,
+    "math": "Exact signed dyadic integer sum in 2^-266 units with 576-bit capacity; independent ascending-k order; final RN-even FP32/FP64 diagnostic exports",
+    "operation": "n0[M,K] times wq[K,N], no bias and no BF16 output rounding",
+    "outputs_each": 196608,
+    "typed": "Two FP32 partials K[0,1024) and K[1024,1536); +0 seeds; adjacent pairs high before low; fused FP32 multiply-add; final FP32 second+first add"
+  },
+  "binary_identity": {
+    "bytes": 58232,
+    "sha256": "f008b7ffb8c9f987dd112ad813bd0d0bf43d5d6598055988a9d8abb4a0c1aabe"
+  },
+  "evidence_identities": {
+    "EXECUTION_RESULT.json": {
+      "bytes": 17596,
+      "sha256": "c7367d084b11ecf6a895bd165dd5e3d51dfa3ddbfdb439dce24a4b183659e2e7"
+    },
+    "MANIFEST.json": {
+      "bytes": 1138,
+      "sha256": "84d4670ef0413a3afcf9476dcf96b82714e31d6811cf1b3eedafe4f587f0220f"
+    },
+    "MODEL_RESULT.json": {
+      "bytes": 1249,
+      "sha256": "ae61290bf5ba0d5ff2f21920c8913a15736c788e3093a06ff2c9e0ba89b586f6"
+    },
+    "OUTER_RESULT.json": {
+      "bytes": 133,
+      "sha256": "88e9c30e6b969bed6e267c9c724be5f60747de2d3ff26e727e6a18c8f94d699a"
+    }
+  },
+  "execution": {
+    "cpu_affinity_count": 1,
+    "rss_gate_scope": "cumulative parent children maxrss postflight, not per-phase or instantaneous aggregate hard cap",
+    "rss_kib_gate": 393216,
+    "seconds": 9.72983493799984,
+    "shared_seconds_cap": 210,
+    "stages": [
+      {
+        "name": "compile",
+        "natural_exit_observed_before_reap": {
+          "code": 1,
+          "status": 0
+        },
+        "record": {
+          "address_space_limit_bytes": 536870912,
+          "anchor_confirmed": true,
+          "cleanup_budget_seconds": 5,
+          "cleanup_confirmed": true,
+          "cpu_limit_seconds": 30,
+          "exit_code": 0,
+          "expected_exit": 0,
+          "group_before_reap": "present",
+          "group_state": "absent",
+          "kill_attempted": true,
+          "kill_result": "signal_sent_before_reap",
+          "log_bytes": 0,
+          "parent_exception": null,
+          "reaped": true,
+          "seconds": 1.48136,
+          "spawn_handle_acquired": true,
+          "status": "PASS",
+          "timed_out": false,
+          "wall_limit_seconds": 29.991086392008583
+        },
+        "usage": {
+          "child_system_cpu_seconds": 0.067372,
+          "child_user_cpu_seconds": 1.397608,
+          "maxrss_kib_cumulative_parent_children": 145440,
+          "phase": "pc1_reference_compile",
+          "projection_hashes": {
+            "observation": "a5f7b101b8945fd4e4dd411734a5220717237d2c39d02c2c9d1833d646215614",
+            "supervisor": "f1bd886ff797d039c9843f57931d0a63abe5d8a5392535a4803c91601cda015e"
+          },
+          "scope": "child processes of this coordinator; cumulative maxrss, not phase-specific",
+          "seconds": 1.4914276519994019
+        }
+      },
+      {
+        "name": "micro",
+        "natural_exit_observed_before_reap": {
+          "code": 1,
+          "status": 0
+        },
+        "record": {
+          "address_space_limit_bytes": 536870912,
+          "anchor_confirmed": true,
+          "cleanup_budget_seconds": 5,
+          "cleanup_confirmed": true,
+          "cpu_limit_seconds": 3,
+          "exit_code": 0,
+          "expected_exit": 0,
+          "group_before_reap": "present",
+          "group_state": "absent",
+          "kill_attempted": true,
+          "kill_result": "signal_sent_before_reap",
+          "log_bytes": 89,
+          "parent_exception": null,
+          "reaped": true,
+          "seconds": 0.022183,
+          "spawn_handle_acquired": true,
+          "status": "PASS",
+          "timed_out": false,
+          "wall_limit_seconds": 4.993716080993181
+        },
+        "usage": {
+          "child_system_cpu_seconds": 0.0,
+          "child_user_cpu_seconds": 0.0027520000000000877,
+          "maxrss_kib_cumulative_parent_children": 145440,
+          "phase": "pc1_reference_micro",
+          "projection_hashes": {
+            "observation": "8cf51a98cfe62f89fb0559aec40c83e1b874ffd565ee761dd6991966d2ff23b3",
+            "supervisor": "f1bd886ff797d039c9843f57931d0a63abe5d8a5392535a4803c91601cda015e"
+          },
+          "scope": "child processes of this coordinator; cumulative maxrss, not phase-specific",
+          "seconds": 0.029610785000841133
+        }
+      },
+      {
+        "name": "full_models",
+        "natural_exit_observed_before_reap": {
+          "code": 1,
+          "status": 0
+        },
+        "record": {
+          "address_space_limit_bytes": 536870912,
+          "anchor_confirmed": true,
+          "cleanup_budget_seconds": 5,
+          "cleanup_confirmed": true,
+          "cpu_limit_seconds": 100,
+          "exit_code": 0,
+          "expected_exit": 0,
+          "group_before_reap": "present",
+          "group_state": "absent",
+          "kill_attempted": true,
+          "kill_result": "signal_sent_before_reap",
+          "log_bytes": 61,
+          "parent_exception": null,
+          "reaped": true,
+          "seconds": 6.316384,
+          "spawn_handle_acquired": true,
+          "status": "PASS",
+          "timed_out": false,
+          "wall_limit_seconds": 104.9922752029961
+        },
+        "usage": {
+          "child_system_cpu_seconds": 0.02026199999999999,
+          "child_user_cpu_seconds": 6.259678,
+          "maxrss_kib_cumulative_parent_children": 145440,
+          "phase": "pc1_reference_full_models",
+          "projection_hashes": {
+            "observation": "1b5fa57d3789c9a5635423735d99027f0c431d80c7d2cd831509dea530b510a6",
+            "supervisor": "f1bd886ff797d039c9843f57931d0a63abe5d8a5392535a4803c91601cda015e"
+          },
+          "scope": "child processes of this coordinator; cumulative maxrss, not phase-specific",
+          "seconds": 6.325239272002364
+        }
+      }
+    ],
+    "status": "COMPLETE_SUPERVISED_TWO_REFERENCE_MODELS",
+    "tail_reserved_seconds": 25
+  },
+  "formal_review": {
+    "manifest": {
+      "bytes": 381,
+      "sha256": "b8598654be706a69c38eba26e1913aee52f21b29c76b680ad66c0ad0caf7251c"
+    },
+    "summary": {
+      "bytes": 10373,
+      "sha256": "468969f36d80fe77c8ab778b7a6366932489da2e08d6d455e13a0b96684fa261"
+    },
+    "verdict": "ACCEPT_ACTUAL_PC1_TWO_REFERENCE_MODELS_COMPLETE_DIAGNOSTIC_ONLY"
+  },
+  "future_diagnostic_reference_use": {
+    "accepted": true,
+    "application_accuracy_pass": null,
+    "baseline_adopted": false,
+    "full_block_pass": false,
+    "new_threshold": null,
+    "official_raw_numeric_pass": null,
+    "rtl_executed": false,
+    "scope": "Preserve the three exact output identities as separately labeled diagnostic references for the same fixed no-bias M128PC1 stimulus. Future RTL comparison must verify original input/source pins, freshPC0 actualN0 identity, completeACK1 and retirement/full196608qraw before comparison. Compare full qraw against typed and independent math separately; do not use a typed match alone as mathematical accuracy.",
+    "typed_recipe_bit_exact_to_rtl": null
+  },
+  "independent_output_review": {
+    "exact_selected_points": [
+      {
+        "absolute_error": 2.265855437144637e-05,
+        "col_0based": 447,
+        "col_1based": 448,
+        "condition_sum_abs_over_abs_exact": 1.6570819563651984,
+        "exact_abs_error_fraction": "389271/17179869184",
+        "exact_error_units_hex": "5f0970000000000000000000000000000000000000000000000000000000000",
+        "exact_truth_fraction": "-1089529966743/17179869184",
+        "index_0based": 20415,
+        "is_max_abs_error": true,
+        "is_max_relative_error": false,
+        "is_max_ulp": false,
+        "math_fp32": -63.41899108886719,
+        "math_fp32_bits": "c27dad0c",
+        "math_fp64_bits": "c04fb5a17e12e000",
+        "math_fp64_exact_at_this_point": -63.418990859237965,
+        "relative_error": 3.5728342669056835e-07,
+        "relative_error_exact_fraction": "129757/363176655581",
+        "row_0based": 13,
+        "row_1based": 14,
+        "sum_abs_products": 105.09046544373268,
+        "sum_negative_magnitudes": 84.25472815148532,
+        "sum_positive_products": 20.83573729224736,
+        "truth_exactly_representable_fp64": true,
+        "typed_fp32": -63.418968200683594,
+        "typed_fp32_bits": "c27dad06",
+        "ulp_distance": 6
+      },
+      {
+        "absolute_error": 1.7671845853328705e-07,
+        "col_0based": 748,
+        "col_1based": 749,
+        "condition_sum_abs_over_abs_exact": 277714.18349559064,
+        "exact_abs_error_fraction": "759/4294967296",
+        "exact_error_units_hex": "bdc0000000000000000000000000000000000000000000000000000000000",
+        "exact_truth_fraction": "146167/4294967296",
+        "index_0based": 146668,
+        "is_max_abs_error": false,
+        "is_max_relative_error": true,
+        "is_max_ulp": true,
+        "math_fp32": 3.403215669095516e-05,
+        "math_fp32_bits": "380ebdc0",
+        "math_fp64_bits": "3f01d7b800000000",
+        "math_fp64_exact_at_this_point": 3.403215669095516e-05,
+        "relative_error": 0.0051926905525871096,
+        "relative_error_exact_fraction": "759/146167",
+        "row_0based": 95,
+        "row_1based": 96,
+        "sum_abs_products": 9.451212608022615,
+        "sum_negative_magnitudes": 4.725589287932962,
+        "sum_positive_products": 4.725623320089653,
+        "truth_exactly_representable_fp64": true,
+        "typed_fp32": 3.3855438232421875e-05,
+        "typed_fp32_bits": "380e0000",
+        "ulp_distance": 48576
+      }
+    ],
+    "fp64_mean_precision": {
+      "difference_within_fp64_rounding_bound": true,
+      "exact_aggregate_independently_recomputed": false,
+      "mean_against_rounded_exported_math_fp64": 1.7047476303466687e-07,
+      "per_element_difference": 4.235164736271502e-21,
+      "reported_exact_accumulator_mean_approx_f64": 1.7047476303466264e-07
+    },
+    "numeric_review_identities": {
+      "manifest": {
+        "bytes": 556,
+        "sha256": "94a78748c701b77b2781e55deef988b25827849c604050eb42b0d291b8f7255d"
+      },
+      "report": {
+        "bytes": 4616,
+        "sha256": "43bce61cea4d40a35f29905776ecaab2779c03d2332ee058af3d3c131c4cf515"
+      },
+      "result": {
+        "bytes": 5688,
+        "sha256": "2bfe08fa36f9f740fefbbb57e09bf13607dbb31ec8ac892b350fe68638a244a5"
+      }
+    },
+    "reported_relative_interval_contains_exact_worst_point": true,
+    "scope": "All three full outputs scanned/rehashed; finite/bit-equality/ULP histogram reproduced. Only two selected exact 1536-product dots independently recomputed; no repeated full 301989888-MAC exact computation.",
+    "worst_points_separated_from_others_using_fp64_rounding_bounds": true
+  },
+  "inputs": {
+    "accepted_actual_n0_identity_only": true,
+    "independent_n0": {
+      "bytes": 786432,
+      "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+    },
+    "wq_bf16": {
+      "bytes": 4718592,
+      "sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72"
+    }
+  },
+  "interpretation": {
+    "analytic_bound": "All values satisfy fixed floating-point rounding bound; this is not an application accuracy gate",
+    "application_accuracy_pass": null,
+    "arrays_or_private_bindings_published": false,
+    "baseline_adopted": false,
+    "error_nonzero": true,
+    "official_raw_numeric_pass": null,
+    "old_ram_resumed": false,
+    "rtl_executed": false,
+    "typed_recipe_bit_exact_to_rtl": null
+  },
+  "model_metrics": {
+    "analytic_bound_all_satisfied": true,
+    "application_accuracy_pass": null,
+    "bit_equal_to_math_fp32": 28700,
+    "elements": 196608,
+    "logical_macs": 301989888,
+    "math_fp32_sha256": "42604d286bb7f237c4dc982b4a65065ea74edec82714a4e0f0ad07fcd6172851",
+    "math_fp64_sha256": "ef5d02aa4b9ad77afdb61eb2842786780d218978bc1dac4641068ec4856710e8",
+    "max_abs_error_exact_units_2pow_minus266_hex": "5f0970000000000000000000000000000000000000000000000000000000000",
+    "max_abs_error_index": 20415,
+    "max_abs_error_rn_f64": 2.265855437144637e-05,
+    "max_analytic_bound": 0.010516118362868908,
+    "max_relative_error_lower": 0.005192690552587107,
+    "max_relative_error_upper": 0.005192690552587112,
+    "max_ulp_to_math_fp32": 48576,
+    "mean_abs_error_approx_f64": 1.7047476303466264e-07,
+    "nonfinite_count": 0,
+    "official_raw_numeric_pass": null,
+    "rtl_executed": false,
+    "schema": 1,
+    "status": "COMPLETE_TWO_MODEL_DIAGNOSTIC",
+    "sum_abs_error_exact_units_2pow_minus266_hex": "225233cf7590700000000000000000000000000000000000000000000000000000",
+    "typed_fp32_sha256": "346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1",
+    "typed_recipe_bit_exact_to_rtl": null,
+    "ulp_histogram_0_1_2to3_4to7_8to15_16to255_over255": [
+      28700,
+      50109,
+      58853,
+      35138,
+      13250,
+      9932,
+      626
+    ],
+    "zero_math_reference_count": 0,
+    "zero_reference_nonzero_error_count": 0
+  },
+  "outer": {
+    "exit_code": 0,
+    "exit_is_outer_not_native": true,
+    "finished_utc": "2026-10-19T19:12:54.685841+00:00",
+    "seconds": 9.802904926007614,
+    "total_seconds_cap": 210
+  },
+  "outputs": {
+    "qraw.math.f32le": {
+      "bytes": 786432,
+      "sha256": "42604d286bb7f237c4dc982b4a65065ea74edec82714a4e0f0ad07fcd6172851"
+    },
+    "qraw.math.f64le": {
+      "bytes": 1572864,
+      "sha256": "ef5d02aa4b9ad77afdb61eb2842786780d218978bc1dac4641068ec4856710e8"
+    },
+    "qraw.typed.f32le": {
+      "bytes": 786432,
+      "sha256": "346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1"
+    }
+  },
+  "public_sources": {
+    "candidates/host93_first_n0_sources/pc1_reference_execution/dependency_gate.py": {
+      "bytes": 5104,
+      "sha256": "57207b29c56024c2288afe9faffbc81bd2bd921868dc44badc428fd03673554c"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_execution/launch.py": {
+      "bytes": 651,
+      "sha256": "8c92219fc50c95f5b7c9c55b0314e654c1dd2392f58c4aff49da756852324e21"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_execution/run_reference.py": {
+      "bytes": 14870,
+      "sha256": "a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_models/dot16.inc": {
+      "bytes": 1078,
+      "sha256": "175a8c3ff32287c6403a9bdf83c91d45249b6824cf4633753fcccb65c48d4ad6"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_models/exact_math.hpp": {
+      "bytes": 5383,
+      "sha256": "dcb9d9cde6ec30dc2a336748dd9b22a49b78955feced976213b7f64ff97c7d0b"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_models/pc1_reference_main.cpp": {
+      "bytes": 11125,
+      "sha256": "6c286c0ed94e077405057b9ac4b135acd7a48f946f59afba7050b05199893433"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_models/prepare_reference.py": {
+      "bytes": 8378,
+      "sha256": "3a52a7ec16680ea6b9e0553563ab51d1415ae0f703cb1916abbe0748bd495167"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_models/sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    }
+  },
+  "schema": 1,
+  "scope": "Self-built independent exact real qraw and fixed DUT-order model; no official raw payload or RTL qualification",
+  "status": "ACCEPTED_ACTUAL_TWO_REFERENCE_MODELS_DIAGNOSTIC_ONLY"
+}

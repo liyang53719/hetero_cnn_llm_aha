@@ -1211,3 +1211,14 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - v1 有限独审发现 E01/E02/E03，v2 分别补齐恢复动作保首错、所有前门后重核完整阶段窗口、micro/full 后重核 binary。作者 46 例纯 mock 在普通/-O/搬迁普通/搬迁-O 四模式通过；独审普通/-O 各 46 例及原三反例两模闭合。
 - SOURCE verdict 为 ACCEPT_PC1_REFERENCE_THREE_STAGE_EXECUTION_SOURCE_ONLY。源 manifest 3049 B / 3b203a08d08b600b98330cd6a70ce6cc290c8bf20089dd0c99a7ccd0f9d76b2d；独审 manifest 887 B / 1e8361e6974bc6d19b169806bf891b62e2e8801b94af1433c4bf19d74c6a50dc；summary 3480 B / fdf44a67eded8289a8e074ff802ab4c21dc7b2b301dbee13ec8526a2f30c5a2e。仅公开 8 个必要原件和安全 README/STATUS；生产与冷测冻结字节不改。
 - 该 SOURCE 资格不证明完整 196608 值的实际误差、官方 raw 无 bias payload PASS 或 RTL bit-exact；official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl 均仍为 null。数学独立性、无 bias/无 BF16 输出舍入、输入 SHA 与 typed 顺序各自保持原已审合同。
+
+
+### 2026-10-19 PC1 两参考模型完整 actual（仅诊断资格，RTL 尚未完成）
+
+- 在前批已审三阶段入口、固定编译依赖与 ≤210 秒外层限制下，compile、micro、full_models 三个 native 阶段自然退出均为 0，WNOWAIT/reap 与 group cleanup 确认；外层退出 0，耗时 9.802904926 秒，内部协调 9.729834938 秒。三 child native wall 约 1.481360/0.022183/6.316384 秒；145440 KiB 为累计已回收 children maxrss，不能冒充某阶段瞬时树峰值。没有运行 RTL，也未重生 N0 或恢复旧 RAM。
+- 对同一固定独立 N0 与原 Wq，完成无 bias、无 BF16 输出舍入的 M128×K1536×N1536 qraw，两轨各 301989888 次逻辑 MAC。独立精确数学轨和 DUT-order 两 partial/pair 高先低/FP32 FMA/second+first 轨分列，三份输出均完整 196608 值且有限；typed 与数学 RN-FP32 完全相同 28700 个值，误差非零。
+- 相对精确数学点积，最大绝对误差 2.2658554371446371e-5，平均绝对误差 FP64 近似值 1.7047476303466264e-7。最大 ULP 48576 与最大相对误差约 0.5192690553% 位于零基 row95/col748：精确值 146167/2^32、绝对误差 759/2^32，正负项抵消成近零结果；该点不等于最大绝对误差点。最大绝对误差在 row13/col447，精确误差 389271/2^34、距离 6 ULP。解析舍入界全部满足仅是预定浮点诊断条件，不是应用准确率阈值。
+- 独审全扫描三输出的 hash/finite/bit equality/ULP 分桶，并对两点各重算 1536 个精确 BF16 乘积；未独立重复整轨 301989888-MAC。相对已舍入 FP64 导出值扫描得到均值 1.7047476303466687e-7，与精确 accumulator 近似均值差 4.2351647363e-21/元素，在 FP64 舍入界内，两个口径不混用。
+- 正式 verdict：ACCEPT_ACTUAL_PC1_TWO_REFERENCE_MODELS_COMPLETE_DIAGNOSTIC_ONLY。actual 原证据 manifest 1138 B / 84d4670ef0413a3afcf9476dcf96b82714e31d6811cf1b3eedafe4f587f0220f；独审 manifest 381 B / b8598654be706a69c38eba26e1913aee52f21b29c76b680ad66c0ad0caf7251c；summary 10373 B / 468969f36d80fe77c8ab778b7a6366932489da2e08d6d455e13a0b96684fa261。只公开白名单数字、公开源码/产物 hash 与安全解释，数组、私有路径、启动参数、原收据、raw log 不发布。
+- 允许保留三输出身份作同一 stimulus 的分轨诊断参考：数学 FP32 SHA256 42604d286bb7f237c4dc982b4a65065ea74edec82714a4e0f0ad07fcd6172851；数学 FP64 ef5d02aa4b9ad77afdb61eb2842786780d218978bc1dac4641068ec4856710e8；typed FP32 346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1。后续必须先核输入/来源 SHA、新鲜 PC0 实际 N0 identity、ACK1/B retire 与完整 196608 qraw，再分别比较 typed 与独立数学轨。
+- official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl 保持 null，rtl_executed=false，baseline_adopted=false，full_block_pass=false。原 N0 PASS 保留，本批不把模型诊断提升为官方 qraw、应用精度或 RTL 等价结论；workflow 文件不变，普通 push 的轻量 guard 另记。

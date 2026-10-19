@@ -1,0 +1,178 @@
+{
+  "actual_review": {
+    "directory": "review_owner_micro_generation_actual_20261019T2322",
+    "manifest": {
+      "bytes": 282,
+      "sha256": "d8a40602b4d5a500801f374ec93efc5be7b455fd87ae2a12ab07b01a205c6828"
+    },
+    "summary": {
+      "bytes": 4666,
+      "file": "SUMMARY.md",
+      "sha256": "c2816c97363998f17e782f19245051cf507f45a8b98543302998cea2438e33ee"
+    },
+    "verdict": "ACCEPT_ACTUAL_OWNER_GENERATION_NATURAL_ZERO_POSTFLIGHT_HEADER_BOUND_FAILURE_ONLY"
+  },
+  "application_accuracy_pass": null,
+  "backend_rebuilt": false,
+  "build": {
+    "started": false,
+    "status": "NOT_STARTED"
+  },
+  "census_limits": {
+    "cluster_dependency_conclusion": "NOT_ESTABLISHED",
+    "cluster_expected_structure_observed": false,
+    "meaning": "The census bounded reread is separate from the later generated_text/small_read rejection; it does not qualify the new owner ABI, hierarchy, or execution.",
+    "root_header_bounded_retry": "SUCCEEDED",
+    "root_header_initial_read": "SIZE_LIMIT",
+    "root_header_state": "UNRECOGNIZED_SYNTAX"
+  },
+  "completed_blocks": 0,
+  "cpu_affinity_count": 1,
+  "driver_production_manifest": {
+    "bytes": 1019,
+    "sha256": "ad587ca4d0ee05953202c5378442bf11e936b2205632a3e2e124a4bbab722475"
+  },
+  "evidence_identities": {
+    "EXECUTION_RESULT.json": {
+      "bytes": 191163,
+      "sha256": "b0211d4e00b3d8cf5b9829d3e4be54d840348a92cadce7e777287f58db6e15bf"
+    },
+    "OUTER_RESULT.json": {
+      "bytes": 134,
+      "sha256": "6361928484c5d7eb7e18e43dcc8280c51d8df2375a7d9eb771860efdc1845051"
+    },
+    "START.json": {
+      "bytes": 258,
+      "sha256": "b3e22694bb18782f4a7cb282d4a570ed8c573f897b65f2854245b6ffbd8ef018"
+    },
+    "WORK_TREE.json": {
+      "bytes": 121623,
+      "sha256": "627b9e8d809da06a00a54d55dae065abf9fa777535570ba3ab0c8124cd238cfa"
+    }
+  },
+  "evidence_manifest": {
+    "bytes": 959,
+    "sha256": "cecf9a7c0da9c2674198ae18992855afa660d546dc0ec24a7542552d7838a5da"
+  },
+  "evidence_member_count": 7,
+  "executed_source_publication_commit": "8b963f58f86d156d4587654b199054f5e09e4fec",
+  "full_block_pass": false,
+  "full_job_completed": false,
+  "generation": {
+    "census_scan_complete": true,
+    "cleanup_confirmed": true,
+    "error_headers": 0,
+    "log_identity": {
+      "bytes": 2121,
+      "mode": "0o600",
+      "sha256": "817f61e2abcc56482bedf8bea023f2fec080e0dc1f05ecac94ad2a3e6acf36d3"
+    },
+    "natural_exit_code": 0,
+    "phase_address_space_limit_bytes": 6442450944,
+    "phase_cpu_limit_seconds": 345,
+    "receipt_status": "PASS",
+    "seconds": 153.944213,
+    "started": true,
+    "timed_out": false,
+    "unparsed_headers": 0,
+    "warning_headers": 0
+  },
+  "historical_host_failure_reproduced": null,
+  "host_archive_reused": false,
+  "independent_current_closure_review": {
+    "all_current_tree_identity_matches_frozen_inventory": true,
+    "cache_provenance": "Finite original generator/inputs/fixtures/tree linkage only; relocatability, buildability, ABI and runtime qualification not granted.",
+    "compiler_or_backend_requalification": false,
+    "evidence_members": 7,
+    "generated_obj_entries": 518,
+    "original_source_input_bytes": 79657058,
+    "original_source_input_files": 338,
+    "resource_admission_repeated": false,
+    "source_candidate_manifest_members": 39,
+    "staged_owner_fixtures": 7
+  },
+  "new_owner_runtime_fault_evidence": false,
+  "official_accuracy_pass": null,
+  "original_evidence_unchanged": true,
+  "original_host_failures_preserved": true,
+  "outer": {
+    "exit_code": 1,
+    "finished_utc": "2026-10-19T23:18:43.475718+00:00",
+    "not_child_exit": true,
+    "seconds": 155.54876243299805
+  },
+  "overall_status": "INCOMPLETE",
+  "owner_native_run": {
+    "started": false,
+    "status": "NOT_STARTED"
+  },
+  "owner_target_boundary_observed": null,
+  "postflight": {
+    "caller_cap_bytes": 16777216,
+    "cluster_witness": "NOT_REACHED",
+    "exception_message": "small read bound",
+    "exception_type": "ValueError",
+    "generated_closure_not_committed_to_result": true,
+    "original_failure_boundary": null,
+    "original_failure_code": null,
+    "owner_196_port_witness": "NOT_REACHED",
+    "owner_observation_95_field_check": "NOT_COMPLETED",
+    "reached": "generated_text for owner root header before observation_declarations",
+    "root_header": {
+      "bytes": 4630258,
+      "sha256": "a9371ed20684a6b5635de6203918cd33b910d856bd83618cf4a33c9dda398aaf"
+    },
+    "small_read_internal_cap_bytes": 4194304,
+    "status": "FAILED"
+  },
+  "publication": {
+    "arrays_included": false,
+    "binaries_included": false,
+    "git_write_performed": false,
+    "new_execution_or_test_performed_for_summary": false,
+    "private_absolute_paths_included": false,
+    "raw_logs_included": false,
+    "workflow_files_changed": false
+  },
+  "required_blocks": 5,
+  "schema": "OWNER_MICRO_GENERATION_POSTFLIGHT_FAILURE_SAFE_SUMMARY_V1",
+  "scope": "ACTUAL_GENERATION_PROCESS_SUCCESS_POSTFLIGHT_READ_BOUND_FAILURE_ONLY",
+  "shared_seconds_cap": 1320,
+  "source_counts": {
+    "compiled_sv_sources": 307,
+    "defines": 4,
+    "include_directories": 8
+  },
+  "source_localization": [
+    {
+      "bytes": 52525,
+      "locations": "small_read line 66; generated_text lines 380-383",
+      "repository_path": "candidates/host93_ci_recovery/execution/host_execution.py",
+      "sha256": "b3470853d6b2a74b0ce75028cde553344cf3a76a12eddcb3fb8f2e169b229a1a"
+    },
+    {
+      "bytes": 25935,
+      "locations": "after_phase line 310",
+      "repository_path": "candidates/host93_first_n0_sources/owner_local_micro_supervision/run_owner_micro.py",
+      "sha256": "9eaf9a3029e905e1eaaaf1cdd7d72778b5a7556a96435513c95ef92be5372144"
+    }
+  ],
+  "start_utc": "2026-10-19T23:16:07.930993+00:00",
+  "supervision_source_manifest": {
+    "bytes": 6471,
+    "sha256": "53b692d265b79e4dfe283a33d4c7463dedcf4e51bf9b10de2cbd811d011ead3d"
+  },
+  "supervision_source_review_manifest": {
+    "bytes": 2573,
+    "sha256": "2fb43083fbbc85a10649fa0d59bb191a966f0fe25db06ba557fbc07ee378bc67"
+  },
+  "tail_reserved_seconds": 60,
+  "typed_reference_rtl_pass": null,
+  "work_inventory": {
+    "directories": 8,
+    "entries": 536,
+    "regular_file_bytes": 80670440,
+    "regular_files": 528,
+    "scope": "Independent actual review rehashed all current entries against the frozen inventory: exact path/type/mode/full SHA."
+  }
+}

@@ -1390,3 +1390,13 @@ capture仍空，counts/N0/qraw数组未写；PC1输出不完整，三轨比较NO
 5. 36监督+31caller/入口共67项，在普通、-O、搬迁、搬迁-O四模式合计268次通过，0失败/错误/跳过；每进程AS512MiB、CPU30秒、单CPU。未调用生产run/main或原run_phase，未执行编译器/RTL/网络。这些测试只证明函数级有限接线和失败保全，不作为端到端实际结果。
 
 本批公开12份原字节安全payload、STATUS与本计划完整后继。私有绑定、profile、COMMAND、outer、现物路径和日志只保本地。原Host两次失败与其上游未明边界不变；此局部场景不具有原Host N0前缀或可恢复checkpoint资格。
+
+### Owner 局部首次实际：生成自然成功，后验读取上限失败（2026-10-19）
+
+已发布来源 8b963f58f86d156d4587654b199054f5e09e4fec 的原 session 42131 结束：generation 自然 exit 0，153.944213 秒，cleanup 确认、未超时；完整生成日志 census 的 warning/error/unparsed header 为 0。随后 Python 后验失败，outer exit 1、155.54876243299805 秒，原执行记录 INCOMPLETE。不能把 generation 进程成功或零警告升级成 owner 局部测试通过。
+
+实际 VQwenOwnerKernel___024root.h 为 4,630,258 字节 / a9371ed20684a6b5635de6203918cd33b910d856bd83618cf4a33c9dda398aaf。调用方给 generated_text 的 16 MiB cap 未传入内部 small_read 固定 4 MiB 门，因此原 traceback 停在 ValueError: small read bound。保持原 failure_code/failure_boundary 为 null。census 另一 reader 的 bounded retry 成功，但其 cluster 结构结论仍未建立，不能替代失败的后验；95 观察字段检查未完成，196 端口/cluster witness 未进入。compile、owner native run 均 NOT_STARTED。
+
+原七件证据 manifest 959 B / cecf9a7c0da9c2674198ae18992855afa660d546dc0ec24a7542552d7838a5da；冻结 work inventory 536 项、528 普通文件、8 目录、80,670,440 字节。正式 actual 独审已接受此有限范围：review_owner_micro_generation_actual_20261019T2322，MANIFEST 282 B / d8a40602b4d5a500801f374ec93efc5be7b455fd87ae2a12ab07b01a205c6828；SUMMARY.md 4666 B / c2816c97363998f17e782f19245051cf507f45a8b98543302998cea2438e33ee；verdict ACCEPT_ACTUAL_OWNER_GENERATION_NATURAL_ZERO_POSTFLIGHT_HEADER_BOUND_FAILURE_ONLY。 独审逐项重核 7 件原证据、536 项当前树、39 件源码包成员、7 件 staged owner 原件及 338 件原始源输入（79,657,058 字节）。现物闭合只授有限生成缓存来源资格，不授可搬迁、可编译、ABI 或 runtime 成功；工具/系统依赖与资源准入仍由后继实际入口独立把关。没有 owner job/partial/window/目标 issue 的运行观测，不授原 Host 故障复现资格；原两轮 Host 失败与 UNKNOWN 上游边界不变。official/application/typed-to-RTL 及历史故障重现均 null，full_job/full_block=false，五 block 0/5。
+
+本批只发布 SUMMARY/README 安全聚合及本计划完整 replacement，不带原日志、私有机器路径、数组或 binary，不重跑任何 native/测试，不改原 FAIL；后继 cache/read-bound 修复另审。不触发新的 Host/RTL/native 作业；workflow 文件不变，普通 push 的轻量 guard 另记。

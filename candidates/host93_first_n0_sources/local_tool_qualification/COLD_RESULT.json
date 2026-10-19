@@ -1,0 +1,131 @@
+{
+  "actual_qualification": "NOT_RUN",
+  "cpu_affinity_count": 1,
+  "exact_phases": 13,
+  "native_started": false,
+  "network_started": false,
+  "real_packages_copied": false,
+  "runs": [
+    {
+      "checks": 3,
+      "exit_code": 0,
+      "name": "cold_normal",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 362,
+        "sha256": "08ee5e0128ba04d68737b20c0e11d7d886a0a1f00ff32f6b627756e7372e53a5"
+      }
+    },
+    {
+      "checks": 3,
+      "exit_code": 0,
+      "name": "cold_optimized",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 362,
+        "sha256": "b25e954992f0635d4f1a62d6264622c053bb5d00b83d82069e383d572a7114ba"
+      }
+    },
+    {
+      "checks": 6,
+      "exit_code": 0,
+      "name": "coordinate_final_normal",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 506,
+        "sha256": "889f619692aa598f0ac1d33fee03cc3d0270825ddc6f5b3d7e37c1c0b4866742"
+      }
+    },
+    {
+      "checks": 6,
+      "exit_code": 0,
+      "name": "coordinate_optimized",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 506,
+        "sha256": "15f6887bbaf0416a2a04c00fd7b00786003357f2d536f17b5545ca0ef138143f"
+      }
+    },
+    {
+      "checks": 5,
+      "exit_code": 0,
+      "name": "entry_normal",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 286,
+        "sha256": "bada7bf27a0f7574b7e0575306463473c665aa51f3f22e8b7f626f0b431f4b47"
+      }
+    },
+    {
+      "checks": 5,
+      "exit_code": 0,
+      "name": "entry_optimized",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 286,
+        "sha256": "69ef01bd8bbca024239864f3f9c0f59ef3879f23992a24eeb3952e7a62ef0776"
+      }
+    },
+    {
+      "checks": 3,
+      "exit_code": 0,
+      "name": "relocated_preset",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 362,
+        "sha256": "08ee5e0128ba04d68737b20c0e11d7d886a0a1f00ff32f6b627756e7372e53a5"
+      }
+    },
+    {
+      "checks": 6,
+      "exit_code": 0,
+      "name": "relocated_coordinate",
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 506,
+        "sha256": "15f6887bbaf0416a2a04c00fd7b00786003357f2d536f17b5545ca0ef138143f"
+      }
+    }
+  ],
+  "safe_publication_files": [
+    "preset_package_stage.py",
+    "qualification_entry.py",
+    "run_entry.py",
+    "run_cold.py",
+    "run_coordinate_cold.py",
+    "test_preset_cold.py",
+    "test_coordinate_cold.py",
+    "test_entry_cold.py",
+    "QUALIFICATION_PLAN.json",
+    "COLD_RESULT.json",
+    "README_CN.md"
+  ],
+  "schema": "LOCAL_QUALIFICATION_CONTRACT_COLD_V1",
+  "shared_wall_seconds": 480,
+  "status": "PASS_SOURCE_MOCK_ONLY_PENDING_INDEPENDENT_REVIEW",
+  "total_checks": 37
+}

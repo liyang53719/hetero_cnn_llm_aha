@@ -1,0 +1,133 @@
+{
+  "actual_execution_by_parent_only": true,
+  "bootstrap_source": {
+    "bytes": 25509,
+    "sha256": "c2a7ca58d8fba3df8b76071e25ad740386ab5113a59897181b39b4d303e50ea8"
+  },
+  "caller_source": {
+    "bytes": 8776,
+    "sha256": "5b21cf3d8969873b3d751f52d64dc7e9528edc0a7d68ce3b91d88f65c8ca3896"
+  },
+  "cpu_affinity_count": 1,
+  "fixed_packages": [
+    {
+      "architecture": "all",
+      "known_size_bytes": 494288,
+      "max_transfer_bytes": 494289,
+      "official_metadata_url": "https://packages.debian.org/trixie/all/autoconf/download",
+      "package": "autoconf",
+      "relative_destination": "autoconf_2.72-3.1_all.deb",
+      "sha256": "0de76b647b0afb6c7934999aaefeb463656c147672464a367df1019969e77af3",
+      "url": "https://deb.debian.org/debian/pool/main/a/autoconf/autoconf_2.72-3.1_all.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 293956,
+      "max_transfer_bytes": 293957,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/m4/download",
+      "package": "m4",
+      "relative_destination": "m4_1.4.19-8_amd64.deb",
+      "sha256": "221b3e224708c1da2a1a88b6824380593579b2254ae7d914afa14cbd5d343334",
+      "url": "https://deb.debian.org/debian/pool/main/m/m4/m4_1.4.19-8_amd64.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 423136,
+      "max_transfer_bytes": 423137,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/flex/download",
+      "package": "flex",
+      "relative_destination": "flex_2.6.4-8.2+b4_amd64.deb",
+      "sha256": "75f963765232c356d0a2fb70e780dfa9de2425aca036ec60eefb7fc98a2c905b",
+      "url": "https://deb.debian.org/debian/pool/main/f/flex/flex_2.6.4-8.2+b4_amd64.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 85600,
+      "max_transfer_bytes": 85601,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/libfl-dev/download",
+      "package": "libfl-dev",
+      "relative_destination": "libfl-dev_2.6.4-8.2+b4_amd64.deb",
+      "sha256": "1b40033660656acd5c2f85d2c45a4e02bf57a0facc5e0623327474cb911b3136",
+      "url": "https://deb.debian.org/debian/pool/main/f/flex/libfl-dev_2.6.4-8.2+b4_amd64.deb"
+    },
+    {
+      "architecture": "amd64",
+      "known_size_bytes": 1169636,
+      "max_transfer_bytes": 1169637,
+      "official_metadata_url": "https://packages.debian.org/trixie/amd64/bison/download",
+      "package": "bison",
+      "relative_destination": "bison_3.8.2+dfsg-1+b2_amd64.deb",
+      "sha256": "ce6eb1f7aad18850e32d223a68f54bcbe756d74f138c8ec5460ad9d220f4d335",
+      "url": "https://deb.debian.org/debian/pool/main/b/bison/bison_3.8.2+dfsg-1+b2_amd64.deb"
+    }
+  ],
+  "fixed_plan": {
+    "bytes": 2594,
+    "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
+  },
+  "host_or_verilator_build_allowed": false,
+  "input_binding": "explicit canonical original binding bytes/pin, observed before creating work root",
+  "input_profile": "explicit canonical LOCAL_READONLY_MOUNT_PROFILE bytes/pin; before/after recheck",
+  "minimum_evidence": [
+    "all13 actual phase records with integer exit0 and cleanup true",
+    "private exact raw logs and usage",
+    "staging report pin and outer phase exit",
+    "prepare return pin and outer phase exit",
+    "five version strings plus five generation result contracts",
+    "fixed source/binding/profile/package pins before and after",
+    "no Host/runtime qualification claim"
+  ],
+  "native_generation_code_executed": false,
+  "network_allowed": false,
+  "one_attempt": true,
+  "preset_source_receipt": {
+    "bytes": 2151,
+    "sha256": "20fbc58f77aa477b7f54c827859b81b089414fb0b93a6df6daf33e9af6fa26a6"
+  },
+  "preset_source_receipt_is_download_cleanup_evidence": false,
+  "schema": "LOCAL_FIXED_TEN_TOOL_QUALIFICATION_CONTRACT_V1",
+  "scope": "PRESET_ACCEPTANCE_STAGE_PRIVATE_COPY_FIVE_VERSION_FIVE_GENERATION_ONLY",
+  "sequence": [
+    {
+      "function": "preset_package_stage.accept",
+      "limits": "original bootstrap.STAGE_LIMITS 60wall/40work/40CPU/512MiBAS",
+      "name": "local_dependencies_accept_cached",
+      "result": "fresh exit0/cleanup from this acceptance phase; copied six raw data files only"
+    },
+    {
+      "function": "preset_package_stage.stage",
+      "limits": "original bootstrap.STAGE_LIMITS 60wall/40work/40CPU/512MiBAS",
+      "name": "local_dependencies_stage_preset",
+      "result": "original stage_data67+cfg+report; admission checks this acceptance phase, not prior download"
+    },
+    {
+      "function": "local_toolchain_adapter.prepare",
+      "limits": "original bootstrap.STAGE_LIMITS 60wall/40work/40CPU/512MiBAS",
+      "name": "local_dependencies_prepare_private",
+      "result": "68 fixed copies, five0700; stage result requires preceding actual exit0/cleanup"
+    },
+    {
+      "count": 10,
+      "function": "bound_component.qualify_tools",
+      "limits": "original ci_toolchain.PROBE_LIMITS per phase30wall/10work/10CPU/512MiBAS",
+      "name": "host_TOOL-version_then_host_TOOL-micro",
+      "result": "original exact versions/generation files and logs; no generated C/C++ executed",
+      "tools": [
+        "autoconf",
+        "autom4te",
+        "m4",
+        "flex",
+        "bison"
+      ]
+    }
+  ],
+  "shared_deadline_rule": "min(existing_same_job_deadline, qualification_started+480); never reset or extend original6600",
+  "shared_wall_cap_seconds": 480,
+  "supervisor": {
+    "bytes": 16348,
+    "function": "run_phase",
+    "original_WNOWAIT_and_four_observer_required": true,
+    "path": "candidates/host93_ci_recovery/ci_support_v3.py",
+    "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+  }
+}

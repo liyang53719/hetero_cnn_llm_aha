@@ -1108,3 +1108,12 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 作者 38 项均为合成 mock（主冷测 7×4、入口 5×2）；独立搬迁主冷测 7+7 与入口 5+5 另列，不重复合计。每个主冷测运行中的原十个工具探针由合成 callback 驱动，不能当真实工具资格。原 COLD_RESULT 的 PENDING 保留为形成时状态。
 - 本片只保存九份安全源码/说明，不含实际 binding/profile、私有调用路径、机器库存、日志或依赖数据。native 与 N0 数值仍 NOT_EXECUTED；无 workflow 变更。全文按父提交 c1dfb4e01870e206d1dc9f5b3e02c7c123aed6cb 的 210548 B 精确前缀加本尾一次替换，禁止把全文再追加。
 - 正式 SOURCE 审查 review_local_toolchain_caller_source_20261019T1606：MANIFEST 2890 B / SHA256 d97924a79077d65691e90f0530e908e5e1925d1c395479e06d39e88e40acde6f；SUMMARY 3685 B / SHA256 66f7c95408030ed958b189f81a4c00281a1c0211ac9559da1bbfe4a1df3b033a。结论 SOURCE_GO_FINITE_PRIVATE_TOOLCHAIN_CALLER_ADAPTER_ONLY；未来缓存接收、真实 stage 与资格化监督入口须另审，本轮实际仍未执行。
+
+## 2026-10-19 16:20 UTC：固定五工具低资源资格化 SOURCE（独审通过，实际未执行）
+
+- 新 local_tool_qualification 源片连接已审 bootstrap、显式只读 profile 和私有五工具 caller；只接收已取得的固定五包，不联网或扩大来源。固定源 MANIFEST 6277 B / SHA256 823a6d241672f5eeb266da31700292db1190f3c6ab5c04ae608351182f91cb43。
+- 同一次执行合同固定 13 阶段：新缓存字节接收、原 stage_data、原 prepare_tools 三个数据阶段，然后原五 version 与五 generation。前序真实退出/cleanup、same-buffer结果与本次父进程 pin 绑定；旧下载 receipt 仅作固定字节来源，不冒作本次下载或 WNOWAIT cleanup。
+- 共用截止为已有截止与开始后 480 秒的较早者；沿用原监督器、单核及各阶段限制。三数据阶段各 60 秒墙钟/40 秒 work 与 CPU/AS512MiB；十探针各 30 秒墙钟/10 秒 work 与 CPU/AS512MiB。首失败停止，无自动重试；原 Host 8GiB/3GiB 准入不变。
+- 作者 37 项均为合成 mock/入口守门，实际包未复制、native 未启动。独立另核 28 项（接收 3+3、协调 6+6、入口 5+5），与作者计数分列；原 COLD_RESULT 的 PENDING 保留为形成时状态。未来真实 PASS 只限固定工具探针，不授 backend、Host 或 N0 数值。
+- 公开十一份安全源码/说明，排除私有命令、binding/profile、实际路径参数、机器库存、原始日志；不改 workflow。本计划以父 1208dd2071628d7ab0ae1f6ed4faf4101070af72 的 212582 B 精确前缀加本尾作一次完整替换，禁止追加整篇全文。
+- 正式 SOURCE 审查 review_local_tool_qualification_source_20261019T1618：MANIFEST 3003 B / SHA256 23a85dfef016c6ce0e62ca5a41d0733416eaf2973310755436a0b6a04bccd5cc；SUMMARY 4040 B / SHA256 ffb6f9ed4e130d3b9201081d459c3bc9f0e100917887f44c76077d56e1dc655a。结论 SOURCE_GO_SINGLE_BOUNDED_PRESET_AND_FIVE_TOOL_QUALIFICATION_ONLY；原 13 阶段/480 秒/单核与入口 argv 已核，实际执行及终态证据仍待父独立准入。

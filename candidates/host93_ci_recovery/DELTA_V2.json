@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "previous_manifest_sha256": "4750f00bf0c301869e342e6b3782db7e049fe83c175171f09177f21ba4726fa8",
+  "production_delta": [
+    "Only validate_evidence: require exact fixed source-map digest and generated identities consistent with scope, including fixed FIR/SV pins"
+  ],
+  "run_and_phase_execution_logic_unchanged": true,
+  "support_v2_unchanged": true,
+  "extra_pure_negative_cases": 5,
+  "native_or_network": false
+}

@@ -747,3 +747,13 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 两模块的获取阶段只透传既有平台proxy/CA固定白名单原值，不保存/输出值、不建新代理或凭据、无direct fallback；native仍用clean环境。发射v3在最终保存等异常时重置INCOMPLETE，不让失败报告沿用先前PASS。独审增量fd9d6714/2716b381闭合；工具40+40和7+7运输冷、发射42+42和7+7运输及3+3全mock终态例均通过。所有这些是SOURCE/tiny证据，未执行真实工具或Host。
 
 全部payload原字节；不带源码归档、生成RTL、ELF、原日志、机器库存、权重或张量。整run及Host短launch仍待完整SOURCE审；同一job6600秒总墙不能因各阶段上界之和延长。
+
+
+### 2026-10-19 单 job Host93 源闭包：完整 SOURCE 已审，首次 actual 待 CI
+
+- 本批以 `b9346e81fd635132a59550a0a50177f4d9624fdb` 为父提交，只加入 composer v3 十二件、Host execution 八件及状态更新；20 件执行/冷测/源 pin/元数据均保冻结原字节，共 128993 字节。工作流由父任务另核后同次发布，首次路径触发才开始实际工作。
+- 32 个固定子阶段通过同 job 实际 hash、终态与有界库存传递资格，不依赖丢失的本地审包路径。完整 run 采用 6600 秒共享 job 墙，start+6480 截止内完成工作，末 120 秒留安全验证/上传；逐阶段上限不延长总墙。
+- composer v3 作者纯 tiny/mock 为普通/优化各49项，support v2 各21项；Host execution 原组件普通/优化各14项及重定位各14项。源码冷测通过不能替代新 CI 实际资格。
+- 最窄路径补丁仅在 `plain_path` 完整路径读取前要求 ASCII `[A-Za-z0-9_/.-]+`，关闭 make 消费 tab、美元符、反引号、分号等路径的整合缺口；原 WNOWAIT 清理与资源/阶段逻辑保持。
+- 只准备真实 Host reset 后首次 launch 握手即停，不加载权重、不回放 RAM、不宣称 N0 数值、8 个活句柄或整块数值通过。仅3个严格 schema 安全 JSON允许上传，失败 step/job 不能被摘要覆盖。
+- 完整 SOURCE 独审结论为 `SOURCE_GO_SINGLE_BOUNDED_CI_HOST_RESET_LAUNCH_ONLY`，manifest SHA256 `e5e7c995825cb34aceee1f5c67e4d10d43177b286519651a344b9418e82cbc84`，summary SHA256 `6f9aaba2f134dea2833c612b6bb6bd2c5345578407040c64b48eff484e814b58`。对应 run `3895215a…`、support `931c8d8e…`、Host 源 manifest `08ccafe4…` 和父提供的精确工作流。原候选中的 PENDING 是冻结历史，不热改。本批冻结时首次 CI actual 为 PENDING。

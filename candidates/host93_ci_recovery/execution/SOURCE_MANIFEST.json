@@ -1,0 +1,48 @@
+{
+  "boundaries": {
+    "actual_host_compiled": false,
+    "actual_host_generated": false,
+    "actual_reset_launch_run": false,
+    "eight_runtime_handles_verified": false,
+    "fullblock_or_n0_numeric_claim": false,
+    "native_executed": false,
+    "network_used": false,
+    "source_and_tiny_mocks_only": true
+  },
+  "files": {
+    "COLD_RESULT.json": {
+      "bytes": 570,
+      "sha256": "07e10359a164c73980bdfd9092fbc3f03d3ffd05d95beb033379adffca39708f"
+    },
+    "ENTRY.json": {
+      "bytes": 2111,
+      "sha256": "487f267a8394d8dd2aedb25a9cf567cadda4067f6d5939aa89ce4b5d38b5d88e"
+    },
+    "README.md": {
+      "bytes": 6290,
+      "sha256": "2ec63e551be487d85e3d9f140aa4ae2d39f6ad29fc68bf4c8983085b7b930260"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 1155,
+      "sha256": "777cbe5288224509388e10eeb613db4c61d90caeb815cf81b35cbd4e7bd40f5e"
+    },
+    "host_execution.py": {
+      "bytes": 28183,
+      "sha256": "93c2305bd0fddc22a6a7113c5e1e7d6617152e13ec30f7a2a9bdb02cd4f38c88"
+    },
+    "short_launch.cpp": {
+      "bytes": 3890,
+      "sha256": "9947385aab851df5de2be79e44f1f42a627857c4e463fcba13064c2973396b66"
+    },
+    "test_cold.py": {
+      "bytes": 11367,
+      "sha256": "8c3805078aceeb7f6f17e9c48033eac1de4cc2ca6b825f31452e75830767194f"
+    }
+  },
+  "frozen_4vlt_modified": false,
+  "identity": "ci_host_execution_source_v1_20261019T0059",
+  "prior_review_or_abi_inherited": false,
+  "repository_context": "843410d1",
+  "schema": 1,
+  "status": "TEMP_SOURCE_PENDING_INDEPENDENT_COLD_REVIEW"
+}

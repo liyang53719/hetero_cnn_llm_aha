@@ -1,0 +1,40 @@
+{
+  "component_module_pins": {
+    "candidates/host93_ci_recovery/ci_support_v2.py": {
+      "bytes": 9154,
+      "sha256": "931c8d8e4b42c125617ca1058dac809723f8371ffe90205da6b0c64b0aea1a26"
+    },
+    "candidates/host93_ci_recovery/configuration/generate_4vlt.py": {
+      "bytes": 21954,
+      "sha256": "b29a17b9cc39e5a93473df922ed4c87489e1e346fafb830c1fbb721e1931b81f"
+    },
+    "candidates/host93_ci_recovery/emission/host_emission.py": {
+      "bytes": 26517,
+      "sha256": "f1cb8595247b2c991c77e4fa7404fc1cd618bb28f9e173eb43d7e00a58c49b50"
+    },
+    "candidates/host93_ci_recovery/execution/host_execution.py": {
+      "bytes": 28183,
+      "sha256": "93c2305bd0fddc22a6a7113c5e1e7d6617152e13ec30f7a2a9bdb02cd4f38c88"
+    },
+    "candidates/host93_ci_recovery/idma319/extract_idma.py": {
+      "bytes": 18268,
+      "sha256": "c9367ce7401e0d6909ebb10f16222813a2436e71dece956772f013fd226a0b84"
+    },
+    "candidates/host93_ci_recovery/retained13/assemble_retained13.py": {
+      "bytes": 13594,
+      "sha256": "9fe24041b1d60da848494586e54b75d1e3f830058a9b565f2d80b125db99cb31"
+    },
+    "candidates/host93_ci_recovery/retained13/run_retained13.py": {
+      "bytes": 1713,
+      "sha256": "fc7129f0200148ead007dd9e5b3b6ecd77a378432084dea101e51f82b831c0a0"
+    },
+    "candidates/host93_ci_recovery/toolchain/ci_toolchain.py": {
+      "bytes": 32522,
+      "sha256": "b1f993b9ca05cb2a26ca76ca302e74016d773a001f0954338e1951dc194a1be5"
+    }
+  },
+  "old_local_actual_review_paths_used": false,
+  "same_job_actual_required": true,
+  "schema": 1,
+  "scope": "fixed project source files only"
+}

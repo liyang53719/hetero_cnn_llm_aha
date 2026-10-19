@@ -1,0 +1,102 @@
+{
+  "actual_retained13_assembly_executed": false,
+  "native_or_download_executed": false,
+  "old_review_or_GO_inherited": false,
+  "production_stages_replayed": false,
+  "repo_files_written": false,
+  "runs": [
+    {
+      "exit_code": 0,
+      "name": "blocked_normal",
+      "result": {
+        "blocked_mask_still_blocked": true,
+        "case": "blocked",
+        "mask_preserved": true,
+        "occupied_timer_still_running": false,
+        "optimize": 0,
+        "production_events": [],
+        "source_assembled": false,
+        "status": "PASS_TINY_SIGNAL_REJECTION"
+      }
+    },
+    {
+      "exit_code": 0,
+      "name": "blocked_optimized",
+      "result": {
+        "blocked_mask_still_blocked": true,
+        "case": "blocked",
+        "mask_preserved": true,
+        "occupied_timer_still_running": false,
+        "optimize": 1,
+        "production_events": [],
+        "source_assembled": false,
+        "status": "PASS_TINY_SIGNAL_REJECTION"
+      }
+    },
+    {
+      "exit_code": 0,
+      "name": "cold_normal",
+      "result": {
+        "negative_cases": 5,
+        "optimize": 0,
+        "positive_cases": 3,
+        "real_production_replayed": false,
+        "source_assembled": false,
+        "status": "PASS_TINY_COLD_ONLY"
+      }
+    },
+    {
+      "exit_code": 0,
+      "name": "cold_optimized",
+      "result": {
+        "negative_cases": 5,
+        "optimize": 1,
+        "positive_cases": 3,
+        "real_production_replayed": false,
+        "source_assembled": false,
+        "status": "PASS_TINY_COLD_ONLY"
+      }
+    },
+    {
+      "exit_code": 0,
+      "name": "source_only",
+      "result": {
+        "input_count": 96,
+        "project_helper_executed": false,
+        "real_production_replayed": false,
+        "source_assembled": false,
+        "status": "PASS_STATIC_PLAN_ONLY"
+      }
+    },
+    {
+      "exit_code": 0,
+      "name": "timer_normal",
+      "result": {
+        "blocked_mask_still_blocked": false,
+        "case": "timer",
+        "mask_preserved": true,
+        "occupied_timer_still_running": true,
+        "optimize": 0,
+        "production_events": [],
+        "source_assembled": false,
+        "status": "PASS_TINY_SIGNAL_REJECTION"
+      }
+    },
+    {
+      "exit_code": 0,
+      "name": "timer_optimized",
+      "result": {
+        "blocked_mask_still_blocked": false,
+        "case": "timer",
+        "mask_preserved": true,
+        "occupied_timer_still_running": true,
+        "optimize": 1,
+        "production_events": [],
+        "source_assembled": false,
+        "status": "PASS_TINY_SIGNAL_REJECTION"
+      }
+    }
+  ],
+  "schema": "ci-retained13-source-only-validation-v1",
+  "source_commit": "18e757084e4812fe2496ba8321438a468e17b646"
+}

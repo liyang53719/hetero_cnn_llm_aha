@@ -1,0 +1,39 @@
+{
+  "evidence": [
+    {
+      "bytes": 5650,
+      "relative_path": "candidates/qwen2_resident_matrix/host93_source_recovery/acquisition/plans/idma.json",
+      "sha256": "10e063b860f0b5f28b028c3b4502dd7e3099212f5db34b7ac0c03dbef157ad9f"
+    },
+    {
+      "bytes": 2273,
+      "relative_path": "reports/execution/IDMA_SOURCE_EXPORT_SUCCESS_39030773068/VERIFICATION.json",
+      "sha256": "0dbfcb07954f2de8e33e4d9c56c94e22a4a6489a6b3186146d525eba72883ce6"
+    },
+    {
+      "bytes": 8115,
+      "relative_path": "scripts/idma_source_export_20261017/preprocess_closure.py",
+      "sha256": "87de11cdd050f6228e19155715fc902c98df9373b8ce045f20016ea642acde8f"
+    },
+    {
+      "bytes": 14295,
+      "relative_path": "scripts/idma_source_export_20261017/export_source.py",
+      "sha256": "973567ae2b74562399fee9a64595f07ecf3eb728e180082cfd51838c720f701b"
+    }
+  ],
+  "new_contract_sizes_from_parent_handoff": {
+    "archive_entries": 929,
+    "closure": 73326,
+    "manifest": 104165,
+    "max_selected_bytes": 907909,
+    "safe_identity": 32889,
+    "selected_bytes": 3072200,
+    "selected_files": 319,
+    "zip_uncompressed_total": 33777372
+  },
+  "old_candidate_approval_inherited": false,
+  "old_selected_plan_required": false,
+  "real_archive_observed_here": false,
+  "repo_head_observed": "18e757084e4812fe2496ba8321438a468e17b646",
+  "schema": 1
+}

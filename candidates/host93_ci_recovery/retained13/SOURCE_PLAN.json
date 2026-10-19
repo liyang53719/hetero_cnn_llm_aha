@@ -1,0 +1,468 @@
+{
+  "expected13": {
+    "rtl/integration/idma_backend_rw_axi_flat_wrap.sv": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0",
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "ea16cf4221b52412a5ba1f3f23efeb198077790e271a6f6a1a51a43e82fad4ac",
+    "rtl/matrix/bf16_outer_product_array_glue512.sv": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+    "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "6d276382a0e3e1b7145b381c700e895806e6f382bcb044d53c2279c98757d19c",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "588fb2e649265f04373fce72c3e697444c0e39565c3dbae879382f05c0fe83c4",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "c7fd146302112613515e6fa86af152496cb8d753ef9a425eb0cdbe0252ef073e",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "33cf6bbd37ef1d2b537e948a29cf642f51ce4d8b34fa2483294c4f604b925ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "41d801167ff90547cde5d2a1784f964920873d5f3ba0d1c9654b79eebc2c6a27"
+  },
+  "front": "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+  "front_baseline": "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/baseline/front_control.sv",
+  "front_fixes": [
+    {
+      "name": "BEGIN_READY",
+      "patch": "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/begin_fix/PATCH.diff",
+      "reference": "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/begin_fix/source/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv"
+    },
+    {
+      "name": "RESERVED_READY",
+      "patch": "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/reserved_fix/PATCH.diff",
+      "reference": "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/reserved_fix/source/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv"
+    }
+  ],
+  "helper": "candidates/qwen2_resident_matrix/host93_source_recovery/assemble_host93.py",
+  "input_pins": {
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedController.scala": {
+      "bytes": 7538,
+      "sha256": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3"
+    },
+    "candidates/qwen2_resident_matrix/MatrixAccumulatorSeedProtocol.scala": {
+      "bytes": 1851,
+      "sha256": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e"
+    },
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala": {
+      "bytes": 11773,
+      "sha256": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01"
+    },
+    "candidates/qwen2_resident_matrix/dense_block_reduce/DenseTileSumBridge.scala": {
+      "bytes": 6362,
+      "sha256": "2551ab7858fbb583f24e3709110a1180f3156b7861f9a775211ec88773ba516d"
+    },
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentCoordinator.scala": {
+      "bytes": 8141,
+      "sha256": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db"
+    },
+    "candidates/qwen2_resident_matrix/ffn_group/FfnResidentProfile.scala": {
+      "bytes": 1685,
+      "sha256": "1ff2df076371ad9947f9018c02f1e8d00f888613b5d7ca6411954617ef1ea2a6"
+    },
+    "candidates/qwen2_resident_matrix/ffn_group/FfnTileSiluBridge.scala": {
+      "bytes": 5017,
+      "sha256": "bb9869995a5b3c22fd5cf4bf23cd98f8af6df3faeafe9a4d6953c11771dbe7e1"
+    },
+    "candidates/qwen2_resident_matrix/host93_source_recovery/SOURCE_REPLAY_PLAN.json": {
+      "bytes": 118060,
+      "sha256": "963b338d5ba80aaf6e16f05c697fd62a448ab2a9dbcc96d36d49c4b83b26c2e2"
+    },
+    "candidates/qwen2_resident_matrix/host93_source_recovery/assemble_host93.py": {
+      "bytes": 15592,
+      "sha256": "75a2145eea0de83ad1bbe3a7a64e1a5f14f20f9f1381f65e619fb5bd3d427641"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/baseline/front_control.sv": {
+      "bytes": 9088,
+      "sha256": "a37dd8069258614d620031c03733016aa69c496c7bfb0b8a8fbcc8f1721f63c4"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/begin_fix/PATCH.diff": {
+      "bytes": 1881,
+      "sha256": "93b4dce96d28c92fbe4d983346f778e89dbe94adbecefab504ad9b4397f20e2e"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/begin_fix/source/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": {
+      "bytes": 9416,
+      "sha256": "0c9857bf13d6f6fdfd421ea190bf7608ab387746e9e638c55dc763ad8b1984bc"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/full_profile/LINT_PLAN_REDUCED.json": {
+      "bytes": 67675,
+      "sha256": "c4f2a09444fd0ee501fc009172ab2fd11099553869d942badaefc59c3f19dd36"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/reserved_fix/PATCH.diff": {
+      "bytes": 995,
+      "sha256": "989a4d0509a83404a839e16ce55a5831c03bda4d91f96832984cc32a51a820cb"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/reserved_fix/source/rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": {
+      "bytes": 9428,
+      "sha256": "588fb2e649265f04373fce72c3e697444c0e39565c3dbae879382f05c0fe83c4"
+    },
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/production_qkv_reduction.patch": {
+      "bytes": 60944,
+      "sha256": "d277217369cd80bd0f2e5b8b7f9740e29802de0d4981ca5d9c3636cf9c2a03cf"
+    },
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/provenance/attention_preflight.patch": {
+      "bytes": 3478,
+      "sha256": "0959ac40cfe1bee5e9c6cce95c89b21485aa4bfd1c3ed448371a3b4160706000"
+    },
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/provenance/current_overlay.patch": {
+      "bytes": 256840,
+      "sha256": "2774aacc19b2877dc77dae5d145b628aee2e4eb2589c98f917904669b56715ad"
+    },
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/provenance/dispatch_abort.patch": {
+      "bytes": 839,
+      "sha256": "1db072de18a925d18802ec591136e8cb914e28b982de27c288d66b243da4429e"
+    },
+    "candidates/qwen2_resident_matrix/transposed_owner/DenseOwnerIO.scala": {
+      "bytes": 1281,
+      "sha256": "901579a5c302c09dd1020592b186a83a1a167701d80b09596bc5e819e5915a6d"
+    },
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": {
+      "bytes": 4954,
+      "sha256": "860db7712f315bebffe6ccb40600f02f8504b5eddb3a509f3263eb5492d9bdae"
+    },
+    "candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": {
+      "bytes": 19259,
+      "sha256": "d06b43ca48d60285ee12a780cb1c27258c008b5e4255dde8da46b550b5639389"
+    },
+    "chisel/continuous_prefill/scripts/retained_sources.sh": {
+      "bytes": 1564,
+      "sha256": "e40b8ed1f781710398cff40f6eef6a05f2afbfee8ae5d13dd1fba2b5c222f5f8"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala": {
+      "bytes": 20617,
+      "sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16KvAppendOwner.scala": {
+      "bytes": 7844,
+      "sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": {
+      "bytes": 4004,
+      "sha256": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala": {
+      "bytes": 2436,
+      "sha256": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": {
+      "bytes": 2207,
+      "sha256": "0f2720e741af302952854b7787f63b4df55b9437048f818319f2cecf16034aac"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseReadPlanner.scala": {
+      "bytes": 3017,
+      "sha256": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/DenseTileCursor.scala": {
+      "bytes": 4482,
+      "sha256": "dbcbd0187801b134f68ae2c18328bedd28790118bddf2e635c829faa906ceb9d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": {
+      "bytes": 10756,
+      "sha256": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala": {
+      "bytes": 6408,
+      "sha256": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitContinuous.scala": {
+      "bytes": 1266,
+      "sha256": "a6455cef5248584db72c0775e4d7d11753b1e1d560d1e7b10145ca3b7cd330c7"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitProductionGate.scala": {
+      "bytes": 2902,
+      "sha256": "a2836bb63f8f62398f72548703faedba1e81dba36857c583ba42959bb52c6a32"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenBlock.scala": {
+      "bytes": 2458,
+      "sha256": "28550bdc66e46d7c11468593227c684fc7af1bfd9d1c43517e8ba419c758b37e"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitQwenStack.scala": {
+      "bytes": 1711,
+      "sha256": "e79f272374a809ceef56497848ca74a53c67635c0cf591940912626ea8fa4582"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitRecord128Reader.scala": {
+      "bytes": 547,
+      "sha256": "5819004d106352f1d0ee7d03b52b93ef7b97a51798647669ac39c74006ed923e"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/EmitSharedProductionGate.scala": {
+      "bytes": 2661,
+      "sha256": "da73407e6f9a5b16f55834c0e53c836d989a5b5752cc731d324135ce99970bc0"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnConv4Owner.scala": {
+      "bytes": 10423,
+      "sha256": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala": {
+      "bytes": 9614,
+      "sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnGatedNormOwner.scala": {
+      "bytes": 10791,
+      "sha256": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": {
+      "bytes": 13048,
+      "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala": {
+      "bytes": 1854,
+      "sha256": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": {
+      "bytes": 13275,
+      "sha256": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala": {
+      "bytes": 1760,
+      "sha256": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormFixedBankOwner.scala": {
+      "bytes": 29993,
+      "sha256": "46d7622f7c20416bc86cd7786cfd27ab8fe809911aeda1b3f097fb4c9a8ac915"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRmsNormOwner.scala": {
+      "bytes": 9456,
+      "sha256": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+      "bytes": 88647,
+      "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "bytes": 20853,
+      "sha256": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala": {
+      "bytes": 10393,
+      "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": {
+      "bytes": 20407,
+      "sha256": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/LayerChain.scala": {
+      "bytes": 9242,
+      "sha256": "86cb6ed7309504fde0300b144fa304a8a7c161310aaa874082762bb73cfc41b9"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala": {
+      "bytes": 10062,
+      "sha256": "dd1f3859ac65fa4d4839105cf166cb5d3a1f4d2d786991eb0f22749ad4ceca3d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MemoryToAxi.scala": {
+      "bytes": 3753,
+      "sha256": "4449366177ddd07fb793b9b8204f5be06214574ab708ab7ed47537ccbc52e374"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/OverlappedSilu.scala": {
+      "bytes": 5773,
+      "sha256": "d15173c8105c6d9139623c890a4b6488edac3027e06cef61ca6af06440684dea"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala": {
+      "bytes": 10567,
+      "sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": {
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QkNorm256Owner.scala": {
+      "bytes": 16520,
+      "sha256": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": {
+      "bytes": 41013,
+      "sha256": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2LayerStack.scala": {
+      "bytes": 9082,
+      "sha256": "c8a9ba1839ca928ba536b3c72f0181cfd4cd5af9a8f1c23993a0935a38938ff9"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+      "bytes": 32821,
+      "sha256": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Record128Reader.scala": {
+      "bytes": 4229,
+      "sha256": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala": {
+      "bytes": 9243,
+      "sha256": "b7e424bca21cecc561045a707b62ee24a7cc7a0314cf8d218ce8e64bb24f29ee"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala": {
+      "bytes": 9675,
+      "sha256": "80dc285af2208b3f3aa3d811a561cfe729e2c764b45c1da62de360f9578321bb"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedMemoryArbiter.scala": {
+      "bytes": 3104,
+      "sha256": "6814e2f80890dbd5f5e8711eade58857deb690ab3c4c0fe9d5ea4ee8291ed6c6"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedProductionTop.scala": {
+      "bytes": 4882,
+      "sha256": "f2acf62311b02a8a09ebf67b6d84a9f2c4887abce027db203ca8df7fc2c904bf"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/StreamingDense.scala": {
+      "bytes": 20759,
+      "sha256": "18d99633b57e5f394f99c242231a5ee009dcf125c03c8940674a01a7965ee789"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala": {
+      "bytes": 6094,
+      "sha256": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala": {
+      "bytes": 4968,
+      "sha256": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/VectorSilu.scala": {
+      "bytes": 6471,
+      "sha256": "758f48c6f945fe78fafeb9d4086c43d4041ece5ead9a90b947379f7f522c32f9"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/WideMatrix.scala": {
+      "bytes": 5838,
+      "sha256": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/AbiWrappers.scala": {
+      "bytes": 17987,
+      "sha256": "d0ee8b92d8d7c98c58ccb5f58e95176cc8bd9015951eee983a4441ba0858f835"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/EmitP0Safety.scala": {
+      "bytes": 1055,
+      "sha256": "07b6a35ba42d8902adf6624224bd398129e10f9ff1c3085ebe1c7d340ba7179c"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Integration.scala": {
+      "bytes": 9401,
+      "sha256": "89924aef165b5206d86c6fec5171d03e16f0719d7fcf7b00e00f8eb16ad7cdf0"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/Group8Scheduler.scala": {
+      "bytes": 9589,
+      "sha256": "dd2387d41c8585a7c86759187fb1f0471ce0a43b15283e3c056e2aa2979751f3"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala": {
+      "bytes": 583,
+      "sha256": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/MatrixTilePayload.scala": {
+      "bytes": 6305,
+      "sha256": "511f6c1ec603b2c87721803f7f2cc941022a8073f7d619979450232b571717ba"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/NormTileLoader.scala": {
+      "bytes": 3586,
+      "sha256": "3d0a14a87fe8715da55b002537dee1a5e2204aaaa534abecf28a14cca4010035"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala": {
+      "bytes": 4816,
+      "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5"
+    },
+    "chisel/p0_safety/src/main/scala/heteronpu/p0/TileTranspose.scala": {
+      "bytes": 4014,
+      "sha256": "e8a0c965dfadfa833bcca892a4ab56c9323397475e5c28e531257691e3393b95"
+    },
+    "integration/gemmini/EmitHeteroBF16Fma.scala": {
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"
+    },
+    "integration/gemmini/EmitHeteroFP32Alu.scala": {
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+    },
+    "rtl/integration/idma_backend_rw_axi_flat_wrap.sv": {
+      "bytes": 4625,
+      "sha256": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0"
+    },
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": {
+      "bytes": 2131,
+      "sha256": "057ce15d3b9fd5153c8873498f9cf1b3f17d7eea64e8928c1208496b3d0bd53a"
+    },
+    "rtl/matrix/bf16_outer_product_array_glue512.sv": {
+      "bytes": 503,
+      "sha256": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9"
+    },
+    "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": {
+      "bytes": 1900,
+      "sha256": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": {
+      "bytes": 323,
+      "sha256": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": {
+      "bytes": 3311,
+      "sha256": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": {
+      "bytes": 2783,
+      "sha256": "0d3bbeee52db023598ebc457420cd2ed8063051363b5c89699730b7f0cbfe6bc"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": {
+      "bytes": 2213,
+      "sha256": "be5c10cfe04fe053620883f5bf84646afc990f8c363e1d280ef2dc6b1341148b"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": {
+      "bytes": 3078,
+      "sha256": "a4c37b485f1e7eeed3012372024e8e7207bc33af6ff97bc307a5572aced6890e"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": {
+      "bytes": 981,
+      "sha256": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": {
+      "bytes": 1006,
+      "sha256": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": {
+      "bytes": 1662,
+      "sha256": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": {
+      "bytes": 4583,
+      "sha256": "541d4a717df08ef65e0ac047c1f83e06b1e3e1bead6553bd97ada24a32a30d59"
+    }
+  },
+  "lint_plan": "candidates/qwen2_resident_matrix/production_qk16_rebase/seed_dma_provider_checkpoint/full_profile/LINT_PLAN_REDUCED.json",
+  "old_candidate_review_inherited": false,
+  "original_plan": "candidates/qwen2_resident_matrix/host93_source_recovery/SOURCE_REPLAY_PLAN.json",
+  "production_six": {
+    "rtl/integration/qwen2_matrix_command_endpoint.sv": "ea16cf4221b52412a5ba1f3f23efeb198077790e271a6f6a1a51a43e82fad4ac",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": "6d276382a0e3e1b7145b381c700e895806e6f382bcb044d53c2279c98757d19c",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv": "a37dd8069258614d620031c03733016aa69c496c7bfb0b8a8fbcc8f1721f63c4",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv": "c7fd146302112613515e6fa86af152496cb8d753ef9a425eb0cdbe0252ef073e",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv": "33cf6bbd37ef1d2b537e948a29cf642f51ce4d8b34fa2483294c4f604b925ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv": "41d801167ff90547cde5d2a1784f964920873d5f3ba0d1c9654b79eebc2c6a27"
+  },
+  "production_stage_counts": [
+    76,
+    76,
+    76,
+    77
+  ],
+  "production_stages": [
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/provenance/current_overlay.patch",
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/provenance/attention_preflight.patch",
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/provenance/dispatch_abort.patch",
+    "candidates/qwen2_resident_matrix/production_qkv_reduction/production_qkv_reduction.patch"
+  ],
+  "retained_list": "chisel/continuous_prefill/scripts/retained_sources.sh",
+  "schema": "ci-retained13-source-v1",
+  "source_commit": "18e757084e4812fe2496ba8321438a468e17b646",
+  "source_order": [
+    "rtl/integration/qwen2_matrix_command_endpoint.sv",
+    "rtl/matrix/bf16_outer_product_array_glue512.sv",
+    "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_front_control5_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+    "rtl/integration/idma_backend_rw_axi_flat_wrap.sv"
+  ],
+  "unchanged_seven": {
+    "rtl/integration/idma_backend_rw_axi_flat_wrap.sv": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0",
+    "rtl/matrix/bf16_outer_product_array_glue512.sv": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+    "rtl/matrix/candidates/rev8b_a/bf16_operand_distribution512_rev8b_a_candidate.sv": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+    "rtl/matrix/candidates/rev8b_b/bf16_cluster_flags_glue32_rev8b_b_candidate.sv": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+    "rtl/matrix/candidates/rev8b_b/bf16_context_tag_pipeline5_rev8b_b_candidate.sv": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+    "rtl/matrix/candidates/rev8b_b/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+    "rtl/matrix/candidates/rev8b_b/bf16_outer_product_array_control5_rev8b_b_candidate.sv": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2"
+  }
+}

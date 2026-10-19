@@ -1,0 +1,174 @@
+{
+  "limits": {
+    "address_space_bytes": 8589934592,
+    "cleanup_postflight_reserve_seconds": 15,
+    "cpu_seconds": 90,
+    "interop_threads": 1,
+    "private_log_bytes": 65536,
+    "private_output_bytes": 4194304,
+    "supervisor_sampled_rss_bytes": 1610612736,
+    "threads": 4,
+    "wall_seconds": 120
+  },
+  "official_class": {
+    "ast_sha256": "af69b413179ffd44d8dbfa6a0573075c2ed72b6d3a137cf9b290aca3081a59ef",
+    "label": "existing_attention",
+    "line_end": 90,
+    "line_start": 76,
+    "node_type": "ClassDef",
+    "path": "config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py",
+    "source": "class Qwen2RMSNorm(nn.Module):\n    def __init__(self, hidden_size, eps=1e-6):\n        \"\"\"\n        Qwen2RMSNorm is equivalent to T5LayerNorm\n        \"\"\"\n        super().__init__()\n        self.weight = nn.Parameter(torch.ones(hidden_size))\n        self.variance_epsilon = eps\n\n    def forward(self, hidden_states):\n        input_dtype = hidden_states.dtype\n        hidden_states = hidden_states.to(torch.float32)\n        variance = hidden_states.pow(2).mean(-1, keepdim=True)\n        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)\n        return self.weight * hidden_states.to(input_dtype)",
+    "source_sha256": "aa3ab02a1c962fe69a38879727e14296bdde68f562f42a383bf0296719d72d9b"
+  },
+  "output": {
+    "bytes": 786432,
+    "export_dtype": "FP32 exact BF16 widening",
+    "file": "n0.f32le",
+    "is_contiguous": true,
+    "native_bytes": 393216,
+    "native_dtype": "torch.bfloat16",
+    "native_sha256": "bd41672e6ea7d12746b41e56d21b3309369ecfd87cc26319ae6adbf0874e5cf2",
+    "native_stride": [
+      196608,
+      1536,
+      1
+    ],
+    "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+    "shape": [
+      1,
+      128,
+      1536
+    ],
+    "storage_offset": 0,
+    "token_major_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+  },
+  "python_profiles": {
+    "ci31214": {
+      "bytes": 17752,
+      "sha256": "bef88f140b625959f8af25c7b75cce2cd5d4b29cc2f2b079befd7f68eda4dba0",
+      "version": [
+        3,
+        12,
+        14
+      ]
+    },
+    "historical": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "version": [
+        3,
+        12
+      ]
+    }
+  },
+  "raw2": {
+    "embedding": {
+      "bytes": 786432,
+      "sha256": "3cdd8eecf1d0948c6ebf40ca947875b7b706521733fa3107e934d3815e45c014",
+      "shape": [
+        256,
+        1536
+      ]
+    },
+    "gamma": {
+      "bytes": 3072,
+      "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e",
+      "shape": [
+        1536
+      ]
+    }
+  },
+  "runtime_native_files": {
+    "libc10.so": {
+      "bytes": 1403600,
+      "path": "work/runtime_recovery/site-packages/torch/lib/libc10.so",
+      "sha256": "7dc289cfb287f751eb8586c275022dba56979dd9e769cd01b73b2993f3442c84"
+    },
+    "libtorch_cpu.so": {
+      "bytes": 443509856,
+      "path": "work/runtime_recovery/site-packages/torch/lib/libtorch_cpu.so",
+      "sha256": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f"
+    },
+    "libtorch_python.so": {
+      "bytes": 30844552,
+      "path": "work/runtime_recovery/site-packages/torch/lib/libtorch_python.so",
+      "sha256": "3c30b9ce8bc80e1a58f6c2288309439831b319d5af074bcbdb7c6c9f9d4e0c44"
+    },
+    "numpy_multiarray": {
+      "bytes": 10808937,
+      "path": "work/runtime_recovery/site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+    },
+    "python": {
+      "bytes": 30894944,
+      "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "torch_C": {
+      "bytes": 25137,
+      "path": "work/runtime_recovery/site-packages/torch/_C.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8"
+    }
+  },
+  "runtime_requirements": {
+    "capability": "AVX512",
+    "deterministic_algorithms": true,
+    "implementation": "cpython",
+    "interop_threads": 1,
+    "numpy": "2.3.5",
+    "python_major_minor": [
+      3,
+      12
+    ],
+    "threads": 4,
+    "torch": "2.10.0+cpu",
+    "torch_build_sha256": "4f3cd65dc58472ed223329fa5ab743d0a360e777accb4001b511fc418c78128b",
+    "torch_commit": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0"
+  },
+  "runtime_sources": {
+    "torch/nn/functional.py": {
+      "bytes": 258350,
+      "sha256": "f6335e443ce93ddf21ecf9d94bbb4d4a4d92e128c5bfb59826f35495c9c28703"
+    },
+    "torch/nn/modules/activation.py": {
+      "bytes": 61690,
+      "sha256": "d2929845da0371704b4fa75d9ef487ac3842525e6a979c526016a740926aa900"
+    },
+    "torch/nn/modules/linear.py": {
+      "bytes": 12326,
+      "sha256": "c71e0b482f21432c6353351e6220956dbee2b8eb11f6e9646b7a8ee17b6a82af"
+    },
+    "torch/nn/modules/module.py": {
+      "bytes": 127468,
+      "sha256": "34c99682b7832a5110dfd85bd886f542fa62aff35ddf3f1473ea86a8abd4adeb"
+    }
+  },
+  "schema": 1,
+  "scope": "Recovery of frozen canonical M128 N0 bytes only; no RTL/fullblock claim",
+  "sources": {
+    "candidates/qwen2_fullblock_ci_execution/platform.py": {
+      "bytes": 6165,
+      "sha256": "d644fbf000f5237d6b1e46cd8564d80d0cb5c737f431e21e674cdf98fa128cd8"
+    },
+    "candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt": {
+      "bytes": 1217,
+      "sha256": "9bd334944d52ae82a86ca89ac44612920270c028f29c15fde93ba4d656535a83"
+    },
+    "candidates/qwen2_fullblock_reference_m128/FROZEN_CONTRACT.json": {
+      "bytes": 19978,
+      "sha256": "64835641b2c0c16d83beb75fbcd9d1c83ade8676fbd825f5e6ab646167af723f"
+    },
+    "candidates/qwen2_fullblock_reference_m128/capture.py": {
+      "bytes": 20084,
+      "sha256": "7bbee0a7edc6d36fb4996657ecea75c5181d292c9761bbb18ca4b12fc2486a86"
+    },
+    "candidates/qwen2_fullblock_reference_m128/pins.json": {
+      "bytes": 154690,
+      "sha256": "48e20d380cfc6ac0ab5b9e1690bb507e37cf99468b0df8e79a1d37da0f16110f"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py": {
+      "bytes": 63883,
+      "sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad"
+    }
+  }
+}

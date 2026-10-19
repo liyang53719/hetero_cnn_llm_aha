@@ -1,0 +1,146 @@
+{
+  "acquisition_budget": {
+    "combined_private_disk_bytes": 1879048192,
+    "compressed_wheel_bytes": 268435456,
+    "installed_tree_bytes": 1610612736,
+    "no_model_assets": true,
+    "no_retries": true,
+    "no_sdist_or_build": true,
+    "no_transitive_unpinned_resolution": true,
+    "wall_seconds": 300
+  },
+  "existing_torch_wheel_metadata_source": {
+    "bytes": 68921,
+    "path": "candidates/qwen2_resident_matrix/portable_official_producer_launch/wheel-lock.json",
+    "sha256": "92e02a64b81a3433206ce85bfe1d65593088f0c4a40dbb0db3c3dd45d5ce0889"
+  },
+  "numeric_execution": false,
+  "package_count": 11,
+  "packages": [
+    {
+      "bytes": 135032,
+      "filename": "filelock-4.2.0-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "5e2ac1e8fdc96f6d29f640dcf971484be743a55d4ad0afddb12b584a5f67c3df",
+      "metadata_source": "https://pypi.org/pypi/filelock/4.2.0/json",
+      "name": "filelock",
+      "sha256": "2ff5690882e8cdb00ef31fb3d01a3094c29f30985426c59495afb1733f3b7238",
+      "url": "https://files.pythonhosted.org/packages/8e/a3/9bc26acff301fe1aaea1cc3d82a1d57e0a34df3e1cadbfa91ac2dbcdde5c/filelock-4.2.0-py3-none-any.whl",
+      "version": "4.2.0"
+    },
+    {
+      "bytes": 221738,
+      "filename": "fsspec-2026.9.0-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "4a93a853911936a59262f3ccc1a36a42cfbff106beec53d6e247d00f7a3aa1e9",
+      "metadata_source": "https://pypi.org/pypi/fsspec/2026.9.0/json",
+      "name": "fsspec",
+      "sha256": "8dd6e646e99ea382bd85f97a45e6b526a442d79423a7dc673f1e2756d05fcb5f",
+      "url": "https://files.pythonhosted.org/packages/6c/c0/a98505f18594f1bce828bb159cec0fcf9860562f1a2c85913409fc8f3d9e/fsspec-2026.9.0-py3-none-any.whl",
+      "version": "2026.9.0"
+    },
+    {
+      "bytes": 134899,
+      "filename": "jinja2-3.1.6-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "1bc757d7065f3e67d3a49e72ebc731d0774055575732592eede9820c136329cc",
+      "metadata_source": "https://pypi.org/pypi/jinja2/3.1.6/json",
+      "name": "jinja2",
+      "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67",
+      "url": "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl",
+      "version": "3.1.6"
+    },
+    {
+      "bytes": 22985,
+      "filename": "markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "85cd5bce3f85e67ab0b921be9c9ba144a7cc01a2d02b85ad65b1f8dabeac4c57",
+      "metadata_source": "https://pypi.org/pypi/markupsafe/3.0.4/json",
+      "name": "markupsafe",
+      "sha256": "8e124f974786f831d6043728e38296969d3579db8896fe004682f5758e613581",
+      "url": "https://files.pythonhosted.org/packages/4f/a7/aeedb5140afa41fc74c225e9184ab96723a6e873b6ee1c9fede7283456d8/markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "3.0.4"
+    },
+    {
+      "bytes": 536198,
+      "filename": "mpmath-1.3.0-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "87119e683fa33e0fcbca594469c138ecd42294fa5194f525c86787eefdfb77aa",
+      "metadata_source": "https://pypi.org/pypi/mpmath/1.3.0/json",
+      "name": "mpmath",
+      "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c",
+      "url": "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl",
+      "version": "1.3.0"
+    },
+    {
+      "bytes": 2142205,
+      "filename": "networkx-3.7-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "7f1ed131b5a2e9e53bd980cfce44f80960241c76ea494935c3ec798bed686442",
+      "metadata_source": "https://pypi.org/pypi/networkx/3.7/json",
+      "name": "networkx",
+      "sha256": "e3fd2c13a7814cee3746340d8d7f8598a67f16a58bf47fb7f8793fab6efca1b0",
+      "url": "https://files.pythonhosted.org/packages/7e/cd/fe58041e9011f307c490e3e17dd48cc516448f7c698a3f2d9d9d65d7e6a8/networkx-3.7-py3-none-any.whl",
+      "version": "3.7"
+    },
+    {
+      "bytes": 16606086,
+      "filename": "numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "b152ed47e23df7c54138ba3f4841ce36f7c607def65185e80de0367ad51f0c84",
+      "metadata_source": "https://pypi.org/pypi/numpy/2.3.5/json",
+      "name": "numpy",
+      "sha256": "0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28",
+      "url": "https://files.pythonhosted.org/packages/b6/23/2a1b231b8ff672b4c450dac27164a8b2ca7d9b7144f9c02d2396518352eb/numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "2.3.5"
+    },
+    {
+      "bytes": 818216,
+      "filename": "setuptools-84.0.0-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "24d07932459261bbf9e66e5cfdebfeba23a977234ab24bf9c3a1df053c53ba21",
+      "metadata_source": "https://pypi.org/pypi/setuptools/84.0.0/json",
+      "name": "setuptools",
+      "sha256": "51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670",
+      "url": "https://files.pythonhosted.org/packages/95/9c/c510029fc6ef33a6275cd2c5d3cecd6613dfd6aa401d57c54f1c18852ccf/setuptools-84.0.0-py3-none-any.whl",
+      "version": "84.0.0"
+    },
+    {
+      "bytes": 6299353,
+      "filename": "sympy-1.14.0-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "7f17c97b2d9ccec17969f30bd7e43c58db3de1145cd1cf00773e48991048d176",
+      "metadata_source": "https://pypi.org/pypi/sympy/1.14.0/json",
+      "name": "sympy",
+      "sha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5",
+      "url": "https://files.pythonhosted.org/packages/a2/09/77d55d46fd61b4a135c444fc97158ef34a095e5681d0a6c10b75bf356191/sympy-1.14.0-py3-none-any.whl",
+      "version": "1.14.0"
+    },
+    {
+      "bytes": 188943803,
+      "filename": "torch-2.10.0+cpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+      "metadata_evidence": "existing pinned wheel-lock.json; body not fetched",
+      "metadata_source": "https://download-r2.pytorch.org/whl/cpu/torch-2.10.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl.metadata",
+      "name": "torch",
+      "sha256": "ee40b8a4b4b2cf0670c6fd4f35a7ef23871af956fecb238fbf5da15a72650b1d",
+      "url": "https://download-r2.pytorch.org/whl/cpu/torch-2.10.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+      "version": "2.10.0+cpu"
+    },
+    {
+      "bytes": 45571,
+      "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+      "metadata_evidence": "official version metadata only; body not fetched",
+      "metadata_json_sha256": "2140da00d62dde967f52d0be0ae28444f1d6a3fe603f52c83c23988c32122d5a",
+      "metadata_source": "https://pypi.org/pypi/typing_extensions/4.16.0/json",
+      "name": "typing_extensions",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+      "version": "4.16.0"
+    }
+  ],
+  "schema": 1,
+  "source_requirements_sha256": "9bd334944d52ae82a86ca89ac44612920270c028f29c15fde93ba4d656535a83",
+  "status": "METADATA_IDENTIFIED_NOT_ACQUIRED_OR_INSTALLED",
+  "wheel_bodies_read": false,
+  "wheel_bytes": 215906086
+}

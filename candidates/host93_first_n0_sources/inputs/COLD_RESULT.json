@@ -1,0 +1,30 @@
+{
+  "execution_scope": "stdlib synthetic metadata and fixed public sources only",
+  "initial_harness_failure": "new test looked for nonexistent collect/acquire name; corrected to actual collect_fixed; no production change",
+  "logs": {
+    "provider.normal.log": {
+      "bytes": 1905,
+      "sha256": "24a0a8052d747c565fde10ed6378ad16e2680535621b67d99555afc40e80e64d"
+    },
+    "provider.optimized.log": {
+      "bytes": 1905,
+      "sha256": "ef26e7acec59935ed32be5dd6bddcd7ff412aa2dc513a23004dceadd4bc492fb"
+    },
+    "receipt.normal.log": {
+      "bytes": 910,
+      "sha256": "4a59527b583326b78ad812d73480ab6e267ab994270ac21d9125e923ca2b39c0"
+    },
+    "receipt.optimized.log": {
+      "bytes": 910,
+      "sha256": "b154a2c594893f843d91c5f5998d10ca5512b0a982a7985ffcb1e6ba772628c7"
+    }
+  },
+  "native_or_rtl": false,
+  "network": false,
+  "provider_methods_normal": 18,
+  "provider_methods_optimized": 18,
+  "raw_tensor_read": false,
+  "receipt_methods_normal": 8,
+  "receipt_methods_optimized": 8,
+  "status": "PASS_SOURCE_COLD_ONLY"
+}

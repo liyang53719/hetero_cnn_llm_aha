@@ -1,0 +1,23 @@
+{
+  "ci_started": false,
+  "delta": "Cold test loader only: require -I/-S/-B, fixed worker length/SHA before compile of the same buffer. Four new loader tests; production/PINS/WHEELS/locks/README byte-identical.",
+  "model_executed": false,
+  "native_tools_executed": false,
+  "normal_failures": 0,
+  "normal_tests": 24,
+  "numeric_executed": false,
+  "numpy_imported": false,
+  "official_package_metadata_read": true,
+  "optimized_failures": 0,
+  "optimized_tests": 24,
+  "prior_v1_tests": "20 normal only; no -O claim",
+  "published": false,
+  "repository_modified": false,
+  "rtl_executed": false,
+  "schema": 1,
+  "status": "PASS_COLD_SOURCE_IDENTITY_AND_SYNTHETIC_GATES_ONLY",
+  "torch_imported": false,
+  "unittest_failures": 0,
+  "wheel_bodies_downloaded": false,
+  "wheel_projection_check": "PASS_11_EXACT_EXISTING_REQUIREMENTS_215906086_BYTES"
+}

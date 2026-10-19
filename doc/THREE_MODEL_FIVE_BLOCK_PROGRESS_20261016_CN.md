@@ -967,3 +967,12 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - cpp_generated/cpp_compiled/reset_launch首次在本路线实际为true；AXI输入仍全0，无RAM响应/权重/N0数值/fullblock，相关未授范围不因Actions成功扩大。FIFO5180也不授FF/reset/delta等价。
 - root header5296945B有界读取OK但语法仍UNRECOGNIZED，256handles仍null/UNKNOWN；不扩parser、不伪填。独立actual审已接受有限范围：review_cluster_reset_actual_39232100796_20261019T1006；MANIFEST 1066 B / fa51d430f3851a556b7c6f2472e1ddb3f6e475c43abeabcdde86958801f5b22f；SUMMARY 11813 B / 120ffd07a662deb267be143b1c890c87d787637e2ac8d50da91c79a8963edbb3；verdict PASS_ACTUAL_CLUSTER_HOST_COMPILE_AND_BOUNDED_RESET_LAUNCH_ONLY。
 - 本次仅安全五路径持久化，不改workflow、不触发新的 Host/native 作业；下一首数值阶段先只读核已有冻结输入/参考/驱动和最小缺口，尚未运行。
+
+## 2026-10-19 首个 M128 N0 前门有限源码持久化
+- 本批 TEMP_SOURCE / NOT_EXECUTED：固定官方 Qwen2RMSNorm 单次参考恢复与 raw13→provider14 当前收据来源绑定；无 workflow 修改，不触发新的 Host/native 作业。
+- 原13 raw /14 provider 全部负载身份不变；收据只绑定当前固定获取计划，期望4335 B/0b319b9d…属于 SOURCE 推导，不伪造历史实际。
+- 参考保持196608值、原双SHA、原五native SHA、AVX512与4intra/1interop，不自动换AVX2或放宽hash。
+- 后续已批前门1440秒：wheel300/raw900/provider120/reference120；setup与所有阶段同扣6600总墙，最后120秒安全落证。参考AS8GiB/CPU90，RSS1.5GiB仅采样软限，安装树边界是观察/验收上限。
+- N0仅计划8M探索帽、wall3600/CPU3540/Host单核AS6GiB，受共享余量；2428928计算下界不是完工上界，预算耗尽INCOMPLETE。单RTL/单RAM的真实B→ACK0→全值读回桥尚未完成，不在本批授予数值资格。
+- 当前cluster身份不能继承旧8endpoint门；root256仍UNKNOWN。无权重/张量/二进制/完整日志上传，无后续block或fullblock资格。
+- 参考 SOURCE 审 review_frozen_n0_reference_source_20261019T1036：MANIFEST 1227 B / 6ea5150332941dbacc9ec5304887c2ac2e0ffa3e4706ac5f1202f95f39a0b4fd；SUMMARY 4492 B / 91e8dbf66951f56916fac12b48ea9bf9f9e6c77498b776155620e294e12797ad。收据 SOURCE 审 review_n0_receipt_binding_independent_20261019T1036：MANIFEST 1013 B / 02e7a4e205b8ae11eecef952fd7bb1c37a67bb70eb4174befe7a0fb183d15933；SUMMARY 4598 B / b27b3431547e14ae991a7b03c492fb00032553b05c1483c9541bd3114525e23a。独立参考24+24、收据14+14通过；均仅SOURCE，实际NOT_EXECUTED。

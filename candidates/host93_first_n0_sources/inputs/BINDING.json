@@ -1,0 +1,53 @@
+{
+  "base_conversion_spec": {
+    "bytes": 17884,
+    "path": "development_snapshots/canonical_provider_transform_source_20261018/CONVERSION_SPEC.json",
+    "sha256": "423fa7e23c1adfd12977b37c1a8d73e7ca9d812ba4876eeb5e9c28363333589d"
+  },
+  "base_converter": {
+    "bytes": 17116,
+    "path": "development_snapshots/canonical_provider_transform_source_20261018/convert_providers.py",
+    "sha256": "104234daaec9bb37a1cdaefe428dd13abab4906bbc5fdf58a331c5520e632d57"
+  },
+  "current_acquirer": {
+    "bytes": 17991,
+    "path": "development_snapshots/canonical_raw_acquisition_source_20261018/acquire_raw.py",
+    "sha256": "4cff91b1a5e76a6a1701426fd1e6cb1f8db32ee8b7e762bb17575364b12d932a"
+  },
+  "current_acquisition_plan": {
+    "bytes": 14096,
+    "path": "development_snapshots/canonical_raw_acquisition_source_20261018/ACQUISITION_PLAN.json",
+    "sha256": "7af00f7b0ebe36a2d31cd18de72ff9da487197eb91ab671cb60a53b2c076d220"
+  },
+  "current_expected_receipt": {
+    "bytes": 4335,
+    "filename": "ACQUIRED.json",
+    "plan_sha256": "7af00f7b0ebe36a2d31cd18de72ff9da487197eb91ab671cb60a53b2c076d220",
+    "scope": "Expected serialization of successful current pinned acquirer; no raw acquisition run or actual receipt created",
+    "sha256": "0b319b9dc84a4c3942f3068b397e01f0e3493515b542ddf726d7d0677e01b6fa",
+    "status": "ACQUIRED_FIXED_RAW13_ONLY"
+  },
+  "delta": [
+    "Only raw_receipt bytes/SHA/plan SHA in spec; payload identities and transforms unchanged",
+    "Only converter PLAN_BYTES and PLAN_SHA256 constants; all functions byte-identical",
+    "Original cold test receipt expected digest follows derived fixed source; additional current/old receipt tests separate"
+  ],
+  "derived_conversion_spec": {
+    "bytes": 17884,
+    "sha256": "ab1fabb72d69f0f196dafd19fe7324a1413b000952e0ee04baa3cbaaff4a14ac"
+  },
+  "derived_converter": {
+    "bytes": 17116,
+    "sha256": "abcf7854796e6e90350ac832b53b070326f810d3a16bf1127919d59049768ee6"
+  },
+  "historical_receipt": {
+    "bytes": 4335,
+    "filename": "ACQUIRED.json",
+    "plan_sha256": "b8635eaf0b5ef3be739b04b3d422996c34093c74d487691003b46d7c439d802a",
+    "sha256": "557f2c0ac34ee0b7a1b63ebc8940e9e849f32fb11cfd02b607ff08a9b6abc14d",
+    "status": "ACQUIRED_FIXED_RAW13_ONLY"
+  },
+  "no_network_or_raw_payload_read": true,
+  "schema": 1,
+  "status": "SOURCE_ONLY_DETERMINISTIC_RECEIPT_BINDING_NOT_ACTUAL"
+}

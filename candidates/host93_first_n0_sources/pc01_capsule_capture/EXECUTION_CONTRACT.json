@@ -1,0 +1,124 @@
+{
+  "budget": {
+    "capture_full_window_check": "Before and after full preflight, now+10410 <= t0+10620-120-60",
+    "capture_phase_cleanup_seconds": 5,
+    "capture_phase_postflight_seconds": 10,
+    "capture_phase_total_seconds": 10410,
+    "capture_phase_work_seconds": 10395,
+    "combined_authorized_ceiling_seconds": 10800,
+    "comparison_at_most_seconds": 60,
+    "initial_checks_latest_seconds_from_this_t0": 30,
+    "inter_step_wait_counted_as_native_time": false,
+    "outer_kill_after_term_seconds": 5,
+    "outer_reserves_are_inside_tail": true,
+    "outer_shell_reserve_seconds": 5,
+    "outer_term_seconds": 10610,
+    "prior_independent_relink_ceiling_seconds": 180,
+    "report_deadline": "min(t0+10620, report_start+120)",
+    "tail_reserve_seconds": 120,
+    "this_independent_t0_total_seconds": 10620
+  },
+  "comparison": {
+    "application_accuracy_pass": null,
+    "fixed_api": "compare(capture_root, reference_root, reference_receipt, *, shared_stop)",
+    "fresh_pc0_n0_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+    "full_block_pass": false,
+    "mathematical_fp32_and_fp64": "full error diagnostics, independent tracks, no new acceptance tolerance",
+    "official_raw_numeric_pass": null,
+    "passed_deadline": "t0+10620-120",
+    "typed_all_bits_must_match": true,
+    "typed_mismatch_preserves_complete_math_observation": true
+  },
+  "control_flow": {
+    "cap_guarantees_completion": false,
+    "eval_after_terminal_ack1": 0,
+    "expected_pc1_slice_steps": 589824,
+    "expected_pc1_wide_steps": 73728,
+    "expected_qraw_b_retired": 2048,
+    "expected_qraw_bytes": 786432,
+    "expected_qraw_values": 196608,
+    "expected_qraw_write_beats": 12288,
+    "fresh_reset": true,
+    "main_cycle_cap": 8000000,
+    "native_runs_maximum": 1,
+    "offline_n0_loaded": false,
+    "old_exited_process_resumed": false,
+    "one_host_context_syms_ram": true,
+    "pc0_executed_again": true,
+    "pc1_denominator": "4096 * (ack1_edge-pc1_accept_edge+1)",
+    "pc1_fixed_lanes": 4096,
+    "pc1_useful_macs": 301989888,
+    "whole_block_utilization": null
+  },
+  "execution_in_source_preparation": false,
+  "failure_policy": {
+    "first_exception_preserved_over_evidence_and_restore_errors": true,
+    "first_failure_stops": true,
+    "full_native_log": {
+      "actual_two_line_capsule_semantics": "must_be_audited_from_original_complete_log_after_actual_not_inferred_from_hash",
+      "byte_cap": 1048576,
+      "no_new_report_window": true,
+      "no_tail_no_parse_no_rewrite": true,
+      "observe_and_save_within_same_report_stop": true,
+      "reader": "original_fixed_support.identity",
+      "relative_path": "phases/capture/native.log",
+      "retain_full_file_in_place": true,
+      "secondary_identity_error_does_not_replace_first_failure": true
+    },
+    "no_retry_or_resume": true,
+    "terminal_status_is_not_sufficient_for_actual": "A later log-observation/save/restore failure may retain completed status or comparison fields; require outer exit 0 plus native, cleanup, evidence and before/after identities.",
+    "unknown_failure_code": null
+  },
+  "identities": {
+    "bridge_production_sources": 29,
+    "bridge_upstream_sources": 44,
+    "canonical_input_bytes": 94920448,
+    "canonical_inputs": 16,
+    "checks": "samebuffer pin before compile/consume, source/profile/dependency/input/receipt/ELF before and after native and comparison",
+    "prior_actual_model_native_phases": 3,
+    "prior_actual_relink_native_phases": 2,
+    "qualified_relink_copies": 48,
+    "reused_archive_items": 19,
+    "system_catalog_files": 39
+  },
+  "native_argv": [
+    "QUALIFIED_PC01_ELF",
+    "FIXED_CANONICAL16_ROOT",
+    "FRESH_WORK/capture"
+  ],
+  "native_cwd": "FRESH_WORK",
+  "native_executable": "PREVIOUSLY_QUALIFIED_PC01_ELF",
+  "native_output_files": [
+    "counts.json",
+    "actual_n0.f32le",
+    "actual_qraw.f32le"
+  ],
+  "native_phase_count": 1,
+  "resources": {
+    "child_cpu_seconds": 10395,
+    "cpu_affinity_count": 1,
+    "fsize_bytes": 16777216,
+    "minimum_disk_available_bytes": 3221225472,
+    "minimum_mem_available_bytes": 8589934592,
+    "parent_and_child_address_space_bytes": 6442450944,
+    "parent_cpu_seconds": 10620,
+    "phase_entry_count": 128,
+    "phase_file_count": 64,
+    "phase_log_bytes": 1048576,
+    "phase_sample_rows": 10412,
+    "phase_tree_bytes": 67108864,
+    "resource_gate_positions": [
+      "before fresh directory",
+      "immediately after pre-native preflight"
+    ],
+    "rss_gate": "original cumulative parent-children maxrss <=6GiB; not a phase-specific peak"
+  },
+  "schema": "PC01_CAPSULE_SINGLE_FRESH_CAPTURE_CONTRACT_V1",
+  "sequence": [
+    "fixed_source_and_actual_receipt_and_qualified_elf_preflight",
+    "single_native_fresh_reset_PC0_ACK0_PC1_ACK1",
+    "full_capture_and_three_reference_readonly_comparison",
+    "bounded_private_receipt_and_timer_restore"
+  ],
+  "status": "SOURCE_ONLY_PENDING_INDEPENDENT_REVIEW"
+}

@@ -1,0 +1,108 @@
+{
+  "fixed_external_source_roles": {
+    "compare.py": {
+      "bytes": 15167,
+      "sha256": "c8e8026838bc955364ae1c171e9775d7138acff20074fb168dfe3000b2fc4820"
+    },
+    "dependency_gate.py": {
+      "bytes": 5122,
+      "sha256": "49281296cb6daa034c6e7f2f741ff6d7af9b0e61abdd96d77c1856349e8597c7"
+    },
+    "run_relink.py": {
+      "bytes": 19837,
+      "sha256": "008e432e35b9b4d3c92f95a37f5eda52ad39d76f8cb7905f9855e7068306f802"
+    }
+  },
+  "machine_paths_published": false,
+  "private_binding_identity": {
+    "bytes": 1587,
+    "sha256": "6e0417a3224aabea8d6f3a512ce3013cbe3ccd27cc9a2f2605baf12bc631efc6"
+  },
+  "qualified_elf": {
+    "bytes": 13547616,
+    "sha256": "73a13d020b99fa78087c639629dcbb8984d3dfbf028baf3adb69b60b51774617"
+  },
+  "qualified_model_execution_receipt": {
+    "bytes": 17596,
+    "sha256": "c7367d084b11ecf6a895bd165dd5e3d51dfa3ddbfdb439dce24a4b183659e2e7"
+  },
+  "qualified_relink_actual_review": {
+    "MANIFEST.json": {
+      "bytes": 568,
+      "sha256": "13a5456589eaed0e6dfe17cf7652b13d4061a3414a8a35b2d554d3b75c37224b"
+    },
+    "SUMMARY.json": {
+      "bytes": 9281,
+      "sha256": "52f77ba0baff3d7c00ee614334733c216126c6513c81d0fb3f818e6be3a73f3b"
+    }
+  },
+  "qualified_relink_receipt": {
+    "bytes": 16702,
+    "sha256": "643258fd6a0255aa068446acdd15dbc2d63f20e3927cc458f264a4cf7c0af513"
+  },
+  "reference_outputs": {
+    "RESULT.json": {
+      "bytes": 1249,
+      "sha256": "ae61290bf5ba0d5ff2f21920c8913a15736c788e3093a06ff2c9e0ba89b586f6"
+    },
+    "qraw.math.f32le": {
+      "bytes": 786432,
+      "sha256": "42604d286bb7f237c4dc982b4a65065ea74edec82714a4e0f0ad07fcd6172851"
+    },
+    "qraw.math.f64le": {
+      "bytes": 1572864,
+      "sha256": "ef5d02aa4b9ad77afdb61eb2842786780d218978bc1dac4641068ec4856710e8"
+    },
+    "qraw.typed.f32le": {
+      "bytes": 786432,
+      "sha256": "346b2974824f3e2849206d5ea72f7a066c328439c4faa088bf2a13d742b713f1"
+    }
+  },
+  "repository_files": {
+    "candidates/host93_ci_recovery/ci_support_v3.py": {
+      "bytes": 16348,
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+    },
+    "candidates/host93_first_n0_sources/inputs/CONVERSION_SPEC.json": {
+      "bytes": 17884,
+      "sha256": "ab1fabb72d69f0f196dafd19fe7324a1413b000952e0ee04baa3cbaaff4a14ac"
+    },
+    "candidates/host93_first_n0_sources/local_binding_observer/binding_observer.py": {
+      "bytes": 11781,
+      "sha256": "62a7f5b4f9250f66e5c62ed9d8b6a486642e135e5e934fc505ae2dfadc850904"
+    },
+    "candidates/host93_first_n0_sources/local_binding_observer/local_mount_profile.py": {
+      "bytes": 7087,
+      "sha256": "cdbe1030e3bf2a9b2222836f7f594b4800c4315dfb31a4438a8b76c07cd18c8f"
+    },
+    "candidates/host93_first_n0_sources/local_dependency_bootstrap/bootstrap.py": {
+      "bytes": 25509,
+      "sha256": "c2a7ca58d8fba3df8b76071e25ad740386ab5113a59897181b39b4d303e50ea8"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/RELINK_CONTRACT.json": {
+      "bytes": 3446,
+      "sha256": "6e35a033308211c65da7f8d0c647e287338599362dc85851c961f8b522de82b7"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/SOURCE_PINS.json": {
+      "bytes": 8657,
+      "sha256": "f6257e57710d16c93ee3edd406814e6b1aa4e5004f5258eac73173e20c34f7e4"
+    },
+    "candidates/host93_first_n0_sources/pc01_capsule_relink/ASSEMBLED_PRODUCTION_MANIFEST.json": {
+      "bytes": 4632,
+      "sha256": "0e6dcab21cec61004b35d6b657456ace9817f7a6be382077e6c2c80bb433ba4a"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_execution/dependency_gate.py": {
+      "bytes": 5104,
+      "sha256": "57207b29c56024c2288afe9faffbc81bd2bd921868dc44badc428fd03673554c"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_execution/run_reference.py": {
+      "bytes": 14870,
+      "sha256": "a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684"
+    },
+    "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py": {
+      "bytes": 28551,
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    }
+  },
+  "schema": "PC01_CAPSULE_CAPTURE_SOURCES_V1"
+}

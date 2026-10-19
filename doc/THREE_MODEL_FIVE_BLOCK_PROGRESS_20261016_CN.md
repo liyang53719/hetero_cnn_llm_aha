@@ -1330,3 +1330,20 @@ ACK0原强门和已有N0内存hash完成后，仅保计数和32-byte hash；没�
 原7件证据MANIFEST882 B / 80dfbdf526509434586725c6b8c1a367c6905b13e48c378f79a392183a250714完整保留。安全3路径只公开聚合数字/身份，不含私有路径、raw日志、数组或二进制；本次汇总不重跑native/测试，不改原FAIL。本批不触发新的Host/RTL/native作业，workflow文件不变，普通push轻量guard另记。后继fresh调用另审新ELF/receipt与入口资格，不复活旧进程。
 
 独审另核39系统依赖及ELF x86-64 PIE/原5 NEEDED/无RPATH；.d 45 tokens/42 unique=27源+15 cache，只新增capsule header依赖，仍不含系统头。实际开始时core ef59eb4已发布、精确SOURCE/180秒合同已审，而重链安全发布尚pending；不得称从后来的641e6976提交执行。准确新ELF/receipt可供另审fresh入口绑定，本actual不授长执行资格。
+
+
+## 2026-10-19 PC01 胶囊诊断重放接线 SOURCE 与固定调用合同已独审
+
+新增 candidates/host93_first_n0_sources/pc01_capsule_capture/ 的11件冻结公开文本及安全STATUS；本批只补公开元数据，冻结生产和测试原字节不改。绑定此前已通过实际编译/链接审查的胶囊ELF：13547616 B / 73a13d020b99fa78087c639629dcbb8984d3dfbf028baf3adb69b60b51774617。此资格仅为编译/链接；本批源码准备及出版未调用该ELF。新绑定沿29源、19复用archive材料、48 staged、44上游源码及39系统文件，16输入与三轨参考保持固定。
+
+唯一有限生产增量是新ELF/receipt/config/helper身份绑定，以及在原落证尾窗中观察完整 phases/capture/native.log 的身份。直接复用已固定的support.identity：原1 MiB上限、同fd稳定性和路径前后复核，完整文件保留原位，不取tail、不解析、不复制、不改写、不从hash推断胶囊内容。原132-byte安全首行和可能新增的至多8192-byte胶囊行均属于同一完整原日志；实际是否输出、字段和短路null语义必须在终态后独立读取原日志审计，源码不能先授结果。
+
+日志观察错误只投影固定错误类型，不输出任意异常文本；已有native/父后验首异常保持优先。没有旧异常时，观察失败导致整体失败。观察完成后重核同一report_stop，只给原剩余时间，保存RESULT不另起120秒。完成阶段或比较字段可能在后续观察/保存/restore失败时仍保留；必须结合outer exit、native自然退出、cleanup、完整证据及前后身份，不得单凭RESULT.status授actual。
+
+原10620秒合同、8M主周期上限、单CPU、AS6 GiB、MemAvailable至少8 GiB及磁盘至少3 GiB准入均不变。capture总窗10410秒含work10395、cleanup5、postflight10；比较最多60秒、落证预留120秒。父outer最早计时覆盖命令和源码读取，TERM在10610秒，KILL再5秒，外层落证5秒均在10620内。先前独立重链上限180秒与本片10620秒合计授权上界10800秒，二者各有起点，步间等待不记仿真时间。8M上限不保证PC1完成。
+
+冻结SOURCE MANIFEST3125 B / a9bc98c45d7c2f41a733e4ae7d0186061971f0fb347216290b26c0a035cb2331。作者109例普通、优化、搬迁普通、搬迁优化全部通过；独审搬迁109+109全部通过。包含84例继承纯mock和25例完整日志、合成文件、首错及期限测试；132+8190字节完整日志与相同tail不同prefix反例、1 MiB边界、文件漂移及错误保存路径均核。没有native、编译器、模型运行、网络或真实数组测试。
+
+正式结论 ACCEPT_PC01_CAPSULE_CAPTURE_SOURCE_AND_FIXED_10620_SECOND_INVOCATION_CONTRACT_ONLY；独审MANIFEST1200 B / d721c347563f238f7bcd86d03669e936019e3e689c2828815daf68f14c637616，SUMMARY4414 B / 814a71629f3fbc404352c8435547f12fea7f1e40bd59fc015c0ab6ec4f2dca5f。全部18个候选成员、生产与两层launcher逆投影、精确命令及新实际receipt/ELF前门已核。原件内冻结于审前的pending标签保留，后继STATUS记录正式审结，不热改来源。
+
+后续已授权的单次诊断重放仍须入口资源重核并fresh reset重新PC0→ACK0→PC1→ACK1；已退出进程无checkpoint，不能恢复旧状态或加载离线N0替代。原FAIL保留，PC1_022具体谓词、边沿和根因仍UNKNOWN。本批不包含新capture实际结果，不公开私有路径、命令绑定、数组、二进制或原始日志，workflow不变。full_block_pass=false，五block仍0/5。

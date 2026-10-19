@@ -1,0 +1,81 @@
+{
+  "cold_entry": {
+    "bytes": 722,
+    "sha256": "d173e820a8ca1135c7ea0c1fdcc0dd031afcbdd2e24e23c19d25c30a716513c3"
+  },
+  "first_failure_preserved": true,
+  "first_line_bytes": 132,
+  "fixed_reference_pins_unchanged": true,
+  "full_log_test_bytes": 8322,
+  "inherited_tests": 84,
+  "logs_published": false,
+  "native_compiler_rtl_network_executed": false,
+  "new_targeted_tests": 25,
+  "original_phase_log_cap_bytes": 1048576,
+  "original_support_ast_functions_pinned_samebuffer": 6,
+  "production_manifest": {
+    "bytes": 386,
+    "sha256": "1c6d5cbf1572edecc7fce9462b6a66e543963c7d445aa13ef7c47ccb527575fd"
+  },
+  "qualification": "PURE_PYTHON_MOCK_AND_BOUNDED_SYNTHETIC_FILE_IO_ONLY",
+  "real_input_or_reference_arrays_consumed": false,
+  "runs": [
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "log_identity": {
+        "bytes": 16251,
+        "sha256": "8a35cd337d2bc3ecaa74923218afe6932b4ecb74d750446262f364b726e8d515"
+      },
+      "mode": "normal",
+      "seconds": 0.227,
+      "tests": 109
+    },
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "log_identity": {
+        "bytes": 16251,
+        "sha256": "c987b386749148e2966c1f601ce6ac1d7d7b611f3a5d4d86c98f3bd79f963bbb"
+      },
+      "mode": "optimized",
+      "seconds": 0.239,
+      "tests": 109
+    },
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "log_identity": {
+        "bytes": 16251,
+        "sha256": "d3f7ec65bcf186a6e42961cbe96f45f9745335dba88597676c6f24e8ca622a6d"
+      },
+      "mode": "relocated-normal",
+      "seconds": 0.206,
+      "tests": 109
+    },
+    {
+      "errors": 0,
+      "exit": 0,
+      "failures": 0,
+      "log_identity": {
+        "bytes": 16251,
+        "sha256": "391a4b075bd9992e40267e4cebc627c5286616eb400efb98a4122206dd844b34"
+      },
+      "mode": "relocated-optimized",
+      "seconds": 0.245,
+      "tests": 109
+    }
+  ],
+  "same_report_stop_preserved": true,
+  "same_tail_8192_different_prefix_hash_rejected": true,
+  "second_line_bytes": 8190,
+  "source_ast_extraction_is_test_only_production_reuses_original_module": true,
+  "test_source": {
+    "bytes": 82987,
+    "sha256": "816466556843770ae54348575e5369dcb3084b9884a83816327bdc5de6d3b03e"
+  },
+  "tests_per_mode": 109
+}

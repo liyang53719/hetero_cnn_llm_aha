@@ -1,0 +1,80 @@
+{
+  "continuation_delta": {
+    "inverse_exact": true,
+    "launch_replacements": [
+      {
+        "after": "CALLER_PIN = (25194, '7e73f20b4f799745933b1ca6623919042a8a473d6ce17c1f7303d1801b4af5a6')",
+        "before": "CALLER_PIN = (23328, '919395b434c82f4130385152c6e1a04f73feee1a71af76e0dfde8461a20d4640')"
+      }
+    ],
+    "no_budget_or_supervisor_function_change": true,
+    "original_launch": {
+      "bytes": 2047,
+      "sha256": "d73e3a84efee9ebe64e5e03ab44f05d77649a95efbd313255347c327c6baf978"
+    },
+    "original_run_capture": {
+      "bytes": 23328,
+      "sha256": "919395b434c82f4130385152c6e1a04f73feee1a71af76e0dfde8461a20d4640"
+    },
+    "run_capture_replacements": [
+      {
+        "after": "RELINK_PIN = (19837, '008e432e35b9b4d3c92f95a37f5eda52ad39d76f8cb7905f9855e7068306f802')",
+        "before": "RELINK_PIN = (19837, 'd80f19af41760b96f8a8a60d2a45faab21b2addea39bf5e805fe2a2a338e798d')"
+      },
+      {
+        "after": "RELINK_RECEIPT_PIN = (16702, '643258fd6a0255aa068446acdd15dbc2d63f20e3927cc458f264a4cf7c0af513')",
+        "before": "RELINK_RECEIPT_PIN = (16380, '64831215e25271d0ab4d882b2fea051f2b6ceacb5fe04e6af0f7f201e425f7e1')"
+      },
+      {
+        "after": "ELF_PIN = {'bytes': 13547616, 'sha256': '73a13d020b99fa78087c639629dcbb8984d3dfbf028baf3adb69b60b51774617'}",
+        "before": "ELF_PIN = {'bytes': 13537744, 'sha256': 'cb64b5cf1d5e9c226b9768fb3fdcbb3305bee894b6d904cb4cf29633d10fe5b1'}"
+      },
+      {
+        "after": "def full_native_log_observation(support, work, result):\n    # Reuse the fixed support's complete, same-fd, stable-stat file hasher.\n    # No tail, parsing, log rewrite, capsule interpretation or new byte budget.\n    observation = {'relative_path': 'phases/capture/native.log',\n                   'status': 'NO_CAPTURE_PHASE_RECORDED', 'complete_file_hashed': False,\n                   'content_parsed': False, 'capsule_interpreted': False,\n                   'retention': 'ORIGINAL_FULL_PHASE_FILE_RETAINED_IN_PLACE', 'byte_cap': MIB}\n    if support is not None and work is not None and result.get('stages'):\n        observation['identity'] = support.identity(work / 'phases/capture/native.log', MIB)\n        observation.update(status='COMPLETE_FILE_IDENTITY_OBSERVED', complete_file_hashed=True)\n    return observation\n\n\ndef save_tail(h, work, result, failure, stop, *, support=None):",
+        "before": "def save_tail(h, work, result, failure, stop):"
+      },
+      {
+        "after": "        try:\n            result['native_log_observation'] = full_native_log_observation(support, work, result)\n        except BaseException as observation_error:\n            name = type(observation_error).__name__\n            result['native_log_observation'] = {\n                'relative_path': 'phases/capture/native.log', 'status': 'IDENTITY_UNAVAILABLE',\n                'complete_file_hashed': False, 'content_parsed': False, 'capsule_interpreted': False,\n                'secondary_error_type': name if name in ('ValueError', 'OSError', 'FileNotFoundError',\n                    'PermissionError', 'TimeoutError', 'RuntimeError', 'MemoryError') else 'OTHER'}\n            if failure is None:\n                failure = observation_error\n        failure = h.save_preserving_failure(work, result, failure)",
+        "before": "        failure = h.save_preserving_failure(work, result, failure)"
+      },
+      {
+        "after": "    failure, work, h, support = None, None, None, None",
+        "before": "    failure, work, h = None, None, None"
+      },
+      {
+        "after": "failure = save_tail(h, work, result, failure, stop, support=support)",
+        "before": "failure = save_tail(h, work, result, failure, stop)"
+      },
+      {
+        "after": "        # Observation may have consumed the reserve or raised the alarm. Never restart it.\n        need(time.monotonic() < report_stop, 'INCOMPLETE_EVIDENCE_WINDOW')\n        signal.setitimer(signal.ITIMER_REAL, max(0.001, report_stop - time.monotonic()))\n        failure = h.save_preserving_failure(work, result, failure)",
+        "before": "        failure = h.save_preserving_failure(work, result, failure)"
+      },
+      {
+        "after": "CONFIG_PIN = (1587, '6e0417a3224aabea8d6f3a512ce3013cbe3ccd27cc9a2f2605baf12bc631efc6')",
+        "before": "CONFIG_PIN = (1561, 'c9341bcaf055c0f3bbc5b9d391b8657e6e86aa8b96f6d243cf94fd4c84145776')"
+      }
+    ],
+    "support_identity_reused_no_new_reader_parser": true
+  },
+  "elf_reader_inherited_relink_gate_without_changes": true,
+  "exact_replacements": [
+    {
+      "new": "SHARED_SECONDS = 10620\n",
+      "occurrences": 1,
+      "old": "SHARED_SECONDS = 6600\n"
+    }
+  ],
+  "inverse_exact": true,
+  "reason": "Independent fresh execution process has a separately authorized 10620-second timer; original phase budget upper bound must admit the single 10410-second capture phase.",
+  "reference_helper_original_bytes": true,
+  "relink_code_called_readonly_helpers_only": true,
+  "supervisor_derived": {
+    "bytes": 16349,
+    "sha256": "9eae42e6787d710d7e31f94e1453255e40affe94f63dc8d3f7c11b542dce0834"
+  },
+  "supervisor_functions_and_cleanup_logic_changed": false,
+  "supervisor_original": {
+    "bytes": 16348,
+    "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+  }
+}

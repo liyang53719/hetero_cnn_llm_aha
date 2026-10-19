@@ -1,0 +1,27 @@
+{
+  "comparison_source": "BIND_COMPARISON_SOURCE",
+  "inputs": "BIND_INPUTS",
+  "model_execution_receipt": "BIND_MODEL_EXECUTION_RECEIPT",
+  "reference_root": "BIND_REFERENCE_ROOT",
+  "relink_config": "BIND_RELINK_CONFIG",
+  "relink_source": "BIND_RELINK_SOURCE",
+  "review_evidence": [
+    {
+      "bytes": 9281,
+      "role": "accepted_actual_capsule_relink",
+      "sha256": "52f77ba0baff3d7c00ee614334733c216126c6513c81d0fb3f818e6be3a73f3b"
+    },
+    {
+      "bytes": 10373,
+      "role": "accepted_actual_reference_models",
+      "sha256": "468969f36d80fe77c8ab778b7a6366932489da2e08d6d455e13a0b96684fa261"
+    },
+    {
+      "bytes": 5047,
+      "role": "finite_source_B_and_cycle_floor",
+      "sha256": "d5181a15ff32fe62cd1849a67c05f3cbc5156baf1a2f38653f9559cc1ea3c171"
+    }
+  ],
+  "schema": "UNBOUND_PC01_CAPTURE_TEMPLATE_NOT_EXECUTABLE",
+  "work": "BIND_WORK"
+}

@@ -1,0 +1,85 @@
+{
+  "actual_acceptance_requires": "outer exit 0 plus original native/cleanup/evidence and before/after identity checks; status alone is insufficient",
+  "author_cold": {
+    "errors": 0,
+    "failures": 0,
+    "modes": 4,
+    "tests": 109
+  },
+  "budget": {
+    "address_space_gib": 6,
+    "comparison_seconds": 60,
+    "disk_admission_gib": 3,
+    "kill_seconds": 5,
+    "main_cycle_cap": 8000000,
+    "memory_admission_gib": 8,
+    "outer_receipt_seconds": 5,
+    "parent_term_seconds": 10610,
+    "single_cpu": true,
+    "tail_seconds": 120,
+    "total_seconds": 10620
+  },
+  "checkpoint_available": false,
+  "cold_command_template": "python3 -I -S -B run_cold.py --support-source REPO/development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py",
+  "first_failure_preserved": true,
+  "fresh_reset_PC0_required": true,
+  "frozen_source_review_pending_labels": "Preserved historical pre-review text; this STATUS records the subsequent formal acceptance.",
+  "full_block_pass": false,
+  "full_native_log": {
+    "capsule_interpretation": "REQUIRES_ACTUAL_ORIGINAL_TERMINAL_EVIDENCE_AUDIT",
+    "maximum_bytes": 1048576,
+    "parsing": false,
+    "reader": "original_fixed_support.identity",
+    "relative_path": "phases/capture/native.log",
+    "retained_in_place": true,
+    "tail_slicing": false,
+    "whole_file_identity": true
+  },
+  "independent_cold": {
+    "errors": 0,
+    "failures": 0,
+    "modes": 2,
+    "tests": 109
+  },
+  "new_capture_execution": "NOT_EXECUTED_BY_THIS_SOURCE_PREPARATION_OR_PUBLICATION",
+  "observation_failure_vocabulary": "FIXED_TYPE_ONLY_NO_FREE_TEXT",
+  "prior_actual_PC1_022_specific_predicate": "UNKNOWN",
+  "prior_actual_failure_preserved": true,
+  "private_paths_arrays_binaries_or_raw_logs_published": false,
+  "production_manifest": {
+    "bytes": 386,
+    "sha256": "1c6d5cbf1572edecc7fce9462b6a66e543963c7d445aa13ef7c47ccb527575fd"
+  },
+  "qualification": "ACCEPT_PC01_CAPSULE_CAPTURE_SOURCE_AND_FIXED_10620_SECOND_INVOCATION_CONTRACT_ONLY",
+  "qualified_relink_elf": {
+    "bytes": 13547616,
+    "scope": "ACTUAL_COMPILE_LINK_ONLY",
+    "sha256": "73a13d020b99fa78087c639629dcbb8984d3dfbf028baf3adb69b60b51774617"
+  },
+  "report_deadline": "min(original_stop, report_start+120)",
+  "root_cause": null,
+  "scope": "PC01_CAPSULE_CAPTURE_SOURCE_AND_FIXED_INVOCATION_CONTRACT_ONLY",
+  "source_counts": {
+    "bridge_sources": 29,
+    "relink_staged": 48,
+    "reused_archive_items": 19,
+    "system_files": 39,
+    "upstream_sources": 44
+  },
+  "source_manifest": {
+    "bytes": 3125,
+    "sha256": "a9bc98c45d7c2f41a733e4ae7d0186061971f0fb347216290b26c0a035cb2331"
+  },
+  "source_review": {
+    "MANIFEST.json": {
+      "bytes": 1200,
+      "sha256": "d721c347563f238f7bcd86d03669e936019e3e689c2828815daf68f14c637616"
+    },
+    "SUMMARY.json": {
+      "bytes": 4414,
+      "sha256": "814a71629f3fbc404352c8435547f12fea7f1e40bd59fc015c0ab6ec4f2dca5f"
+    },
+    "verdict": "ACCEPT_PC01_CAPSULE_CAPTURE_SOURCE_AND_FIXED_10620_SECOND_INVOCATION_CONTRACT_ONLY"
+  },
+  "workflow_changed": false
+}

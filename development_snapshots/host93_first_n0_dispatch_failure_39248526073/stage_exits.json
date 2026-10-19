@@ -1,0 +1,130 @@
+{
+  "schema": "host93-ci-stage-exits-v6",
+  "stages": [
+    {
+      "child_maxrss_kib_cumulative": 28948,
+      "child_system_cpu_seconds": 0.724919,
+      "child_user_cpu_seconds": 0.966892,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "NOT_COLLECTED",
+        "merged_log_tail": "",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 0,
+      "failure_boundary": "NONE",
+      "failure_code": "NONE",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_wheels_acquire",
+      "native_record_status": "PASS",
+      "receipt_timed_out": false,
+      "seconds": 2.206252,
+      "status": "EXIT0_CLEANED",
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "child_maxrss_kib_cumulative": 73756,
+      "child_system_cpu_seconds": 1.0692979999999999,
+      "child_user_cpu_seconds": 4.985697,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "NOT_COLLECTED",
+        "merged_log_tail": "",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 0,
+      "failure_boundary": "NONE",
+      "failure_code": "NONE",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_runtime_install",
+      "native_record_status": "PASS",
+      "receipt_timed_out": false,
+      "seconds": 6.090402,
+      "status": "EXIT0_CLEANED",
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "child_maxrss_kib_cumulative": 73756,
+      "child_system_cpu_seconds": 0.2162170000000001,
+      "child_user_cpu_seconds": 0.6824330000000005,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "NOT_COLLECTED",
+        "merged_log_tail": "",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 0,
+      "failure_boundary": "NONE",
+      "failure_code": "NONE",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_raw_acquire",
+      "native_record_status": "PASS",
+      "receipt_timed_out": false,
+      "seconds": 7.458911,
+      "status": "EXIT0_CLEANED",
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "child_maxrss_kib_cumulative": 73756,
+      "child_system_cpu_seconds": 0.1748240000000001,
+      "child_user_cpu_seconds": 0.8248879999999996,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "NOT_COLLECTED",
+        "merged_log_tail": "",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 0,
+      "failure_boundary": "NONE",
+      "failure_code": "NONE",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_inputs_prepare",
+      "native_record_status": "PASS",
+      "receipt_timed_out": false,
+      "seconds": 1.064079,
+      "status": "EXIT0_CLEANED",
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "child_maxrss_kib_cumulative": 234740,
+      "child_system_cpu_seconds": 0.21802900000000003,
+      "child_user_cpu_seconds": 3.3864609999999997,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "AVAILABLE",
+        "merged_log_tail": "NOT_COMPLETED:DISPATCH",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 1,
+      "failure_boundary": "NATIVE_SUPERVISION",
+      "failure_code": "CHILD_EXIT_NONZERO",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_reference",
+      "native_record_status": "FAIL",
+      "receipt_timed_out": false,
+      "seconds": 3.626513,
+      "status": "FAILED",
+      "waitid_code": 1,
+      "waitid_status": 1
+    }
+  ]
+}

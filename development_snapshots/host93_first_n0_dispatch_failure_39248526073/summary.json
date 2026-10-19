@@ -1,0 +1,60 @@
+{
+  "chirrtl_observation": {
+    "extmodule_count": null,
+    "historical_fir_equal": null,
+    "library_source_info_count": null,
+    "line_count": null,
+    "module_count": null,
+    "other_source_info_count": null,
+    "project_source_info_count": null,
+    "source_info_count": null,
+    "source_info_utf8_bytes": null,
+    "state": "NOT_COLLECTED",
+    "utf8_bytes": null
+  },
+  "completed_components": [
+    "n0_runtime",
+    "n0_inputs"
+  ],
+  "contract_failure": {
+    "boundary": "UNREPORTED",
+    "code": "UNMAPPED_CONTRACT"
+  },
+  "failure_category": "INPUT_OR_CONTRACT",
+  "fifo_observation": {
+    "cases": 0,
+    "comparisons": 0,
+    "state": "NOT_COLLECTED",
+    "tools": {}
+  },
+  "generation_diagnostics": null,
+  "mode": "host-cluster-first-n0",
+  "n0_observation": {
+    "capture": null,
+    "capture_state": "NOT_COLLECTED",
+    "comparison": null,
+    "comparison_rss": null,
+    "comparison_state": "NOT_COLLECTED",
+    "cycle_cap": 8000000,
+    "inputs_ready": true,
+    "numeric_window_seconds": 3600,
+    "reference_ready": false,
+    "reference_rss": null,
+    "runtime_ready": true,
+    "source_reduction_lower_bound": 2428928,
+    "state": "COLLECTING"
+  },
+  "schema": "host93-ci-summary-v7",
+  "scope": {
+    "cpp_compiled": false,
+    "cpp_generated": false,
+    "fresh_host_sv": false,
+    "n0_numeric": false,
+    "reset_launch": false,
+    "toolchain_build": false,
+    "toolchain_tiny": false,
+    "weights_loaded": false
+  },
+  "seconds": 21.214023,
+  "status": "INCOMPLETE"
+}

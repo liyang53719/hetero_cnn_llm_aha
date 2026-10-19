@@ -39,6 +39,11 @@ CLUSTER_CONTRACT_BOUNDARY = 'CLUSTER_GENERATION_WITNESS'
 CLUSTER_CONTRACT_CODES = ('CLUSTER_CHILD_ARGS', 'CLUSTER_TOP_LINK', 'CLUSTER_LIBRARY_GRAPH',
                           'CLUSTER_INITIALIZER', 'CLUSTER_ABI', 'CLUSTER_ARTIFACTS', 'CLUSTER_CENSUS')
 CLUSTER_HIERARCHY = b'`verilator_config\nhier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"\n'
+FIRST_N0_CATALOG_SIZE = 5251
+FIRST_N0_CATALOG_SHA = '0fb411a09f1643ba8d248beb8db4cad34ab622e685e11a3156d39d67695dc04d'
+FIRST_N0_PREFIX = 'candidates/host93_first_n0_sources/bridge/'
+FIRST_N0_EXTERNAL_INCLUDES = frozenset(('VHostBlockTop.h', 'VHostBlockTop__Syms.h',
+    'VHostBlockTop___024root.h', 'verilated.h', 'verilated_sym_props.h'))
 
 
 def need(ok, message):
@@ -103,6 +108,72 @@ def load(repo):
     support = verified_module(buffers[SUPPORT], repo / SUPPORT, pins['repo'][SUPPORT], 'verified_host_execution_fs')
     lexical = verified_module(buffers[INIT], repo / INIT, pins['repo'][INIT], 'verified_host_execution_lexical')
     return pins, buffers, support, lexical
+
+
+
+def load_first_n0(repo):
+    """Read only the fixed 22-source catalog and compile exactly the verified buffers."""
+    catalog = unique_json(small_read(HERE / 'FIRST_N0_SOURCES.json',
+                                    FIRST_N0_CATALOG_SIZE, FIRST_N0_CATALOG_SHA))
+    need(set(catalog) == {'schema', 'origin_manifest_sha256', 'sources'} and
+         catalog['schema'] == 'FIXED_FIRST_N0_COMPILE_SOURCES_V1' and
+         catalog['origin_manifest_sha256'] == '38afc16d7a5c56e47b950e47c8a5ddfe2a8abc5374b77884539296407d8705fc',
+         'fixed first N0 catalog schema/origin')
+    rows = catalog['sources']; fixtures = {}
+    need(type(rows) is dict and len(rows) == 22, 'fixed first N0 source count')
+    for path, pin in rows.items():
+        need(type(path) is str and path.startswith(FIRST_N0_PREFIX) and
+             re.fullmatch(r'(?:source/first_n0_main\.cpp|include/[a-z0-9_]+\.(?:hpp|inc))',
+                          path[len(FIRST_N0_PREFIX):]) is not None,
+             'fixed first N0 source location')
+        need(type(pin) is dict and set(pin) == {'bytes', 'sha256', 'fixture'} and
+             pin['fixture'] == Path(path).name and pin['fixture'] not in fixtures and
+             pin['fixture'] not in FIRST_N0_EXTERNAL_INCLUDES,
+             'collision-free first N0 flat fixture names')
+        fixtures[pin['fixture']] = small_read(repo / path, pin['bytes'], pin['sha256'])
+    need('first_n0_main.cpp' in fixtures, 'fixed first N0 driver')
+    # Fixed generated/runtime names remain covered by the existing toolchain and
+    # generated-source gates. Root syntax and runtime handles remain UNKNOWN.
+    for raw in fixtures.values():
+        quoted = re.findall(r'^\s*#\s*include\s*"([^"\n]+)"', raw.decode('ascii'), re.MULTILINE)
+        need(all(name in fixtures or name in FIRST_N0_EXTERNAL_INCLUDES for name in quoted),
+             'fixed first N0 quoted include closure')
+    return catalog, fixtures
+
+
+def stable_first_n0(repo, catalog, fixtures, support, work):
+    current_catalog, current = load_first_n0(repo)
+    need(current_catalog == catalog and current == fixtures, 'fixed first N0 source drift')
+    tree = support.tree_inventory(work / 'fixtures', 4 * 1024**2, 22, 22, 1024**2)
+    need(set(tree['entries']) == set(fixtures), 'exact first N0 fixture include closure')
+    for name, raw in fixtures.items():
+        row = tree['entries'][name]
+        need(row['kind'] == 'regular' and row['bytes'] == len(raw) and
+             row['sha256'] == sha(raw) and row['mode'] == '0o600',
+             'first N0 fixture identity/mode drift')
+        need(small_read(work / 'fixtures' / name, len(raw), sha(raw)) == raw,
+             'first N0 fixture same-buffer drift')
+
+
+def compiled_first_n0_elf(support, work, tree):
+    """Bounded identity and ELF magic, with no invocation or qualification."""
+    path = work / 'obj/VHostBlockTop'
+    row = tree['entries'].get('obj/VHostBlockTop', {})
+    need(row.get('kind') == 'regular', 'new first N0 ELF missing')
+    expected = {key: row[key] for key in ('bytes', 'sha256', 'mode')}
+    need(expected['bytes'] > 4 and int(expected['mode'], 8) & 0o111 and
+         support.identity(path, 512 * 1024**2) == expected, 'new first N0 compiled ELF identity/mode')
+    parent, fd, before = support.regular_fd(path)
+    try:
+        need(os.read(fd, 4) == b'\x7fELF', 'new first N0 host is not an ELF')
+        stamp = lambda x: (x.st_dev, x.st_ino, x.st_mode, x.st_size, x.st_mtime_ns, x.st_ctime_ns)
+        need(stamp(before) == stamp(os.fstat(fd)) ==
+             stamp(os.stat(path.name, dir_fd=parent, follow_symlinks=False)),
+             'new first N0 ELF changed during header read')
+    finally:
+        os.close(fd); os.close(parent)
+    need(support.identity(path, 512 * 1024**2) == expected, 'new first N0 ELF changed after compile')
+    return {'path': str(path), **expected}
 
 
 def json_current(support, path, cap=1024**2):
@@ -552,10 +623,12 @@ def check_log(raw):
 
 
 def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: Path, configuration: Path,
-        *, stop_after_generation=False, diagnostic_callback=None, cluster_boundary=False):
+        *, stop_after_generation=False, diagnostic_callback=None, cluster_boundary=False, first_n0=False):
     need(type(stop_after_generation) is bool, 'explicit generation-only bool')
     need(type(cluster_boundary) is bool and not (stop_after_generation and cluster_boundary),
          'explicit disjoint cluster continuation bool')
+    need(type(first_n0) is bool and (not first_n0 or (cluster_boundary and not stop_after_generation)),
+         'explicit first N0 cluster compile-only bool')
     variant = stop_after_generation or cluster_boundary
     need(callable(diagnostic_callback) if variant else diagnostic_callback is None,
          'cluster generation callback pairing')
@@ -564,6 +637,9 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         need(work != root and root not in work.parents and work not in root.parents, 'fresh disjoint work root')
     need(not os.path.lexists(work), 'work already exists')
     pins, buffers, support, lexical = load(repo)
+    n0_catalog, n0_fixtures = load_first_n0(repo) if first_n0 else (None, None)
+    fixtures = tuple(n0_fixtures.items()) if first_n0 else (
+        ('short_launch.cpp', buffers['short_launch.cpp']), ('canonical_launch.hpp', buffers[LAUNCH]))
     before = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
                      fifo_valid_split=variant)
     source_map = generation_source_map(before, idma, retained) if variant else None
@@ -575,25 +651,34 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         support.fresh_directory(work)
         for name in ('obj', 'fixtures', 'home', 'tmp'):
             support.fresh_directory(work / name)
-        for name, raw in (('short_launch.cpp', buffers['short_launch.cpp']), ('canonical_launch.hpp', buffers[LAUNCH])):
+        for name, raw in fixtures:
             fd = os.open(work / 'fixtures' / name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
             with os.fdopen(fd, 'wb') as stream:
                 need(stream.write(raw) == len(raw), 'short fixed fixture write')
         save(work / 'INPUTS_BEFORE.json', before)
         save(work / 'SOURCE_INPUTS.json', {'pins': pins, 'emission': emission_before, 'backend': toolchain['backend'], 'configured_runtime': toolchain['configured_runtime'], 'host_programs': toolchain['host_programs']})
         argv = commands(work, toolchain['backend'], before, configuration)
+        if first_n0:
+            command = argv['host93_cpp_generate']
+            need(command.count('--exe') == 1 and
+                 command[command.index('--exe') + 1] == str(work / 'fixtures/short_launch.cpp'),
+                 'fixed first N0 generation command')
+            command[command.index('--exe') + 1] = str(work / 'fixtures/first_n0_main.cpp')
         env = environment(work, toolchain['verilator_root'])
         results = {}; witness = None; previous = None; qualification = None
         frozen_generated = None; executed_elf = None; generation_report = None
         phases = ('host93_cpp_generate',) if stop_after_generation else (
-            'host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch')
+            ('host93_cpp_generate', 'host93_cpp_compile') if first_n0 else
+            ('host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch'))
         for phase in phases:
             need(closure(support, idma, retained, configuration, host_emission['sv'], buffers,
                          fifo_valid_split=variant) == before, 'pre-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
+            if first_n0:
+                stable_first_n0(repo, n0_catalog, n0_fixtures, support, work)
             need(verify_emission(support, host_emission) == emission_before, 'pre-phase emission drift')
-            for name, raw in (('short_launch.cpp', buffers['short_launch.cpp']), ('canonical_launch.hpp', buffers[LAUNCH])):
+            for name, raw in fixtures:
                 need(small_read(work / 'fixtures' / name, len(raw), sha(raw)) == raw, 'fixture drift')
             if frozen_generated is not None:
                 for name, pin in frozen_generated.items():
@@ -637,6 +722,8 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
                          fifo_valid_split=variant) == before, 'post-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
+            if first_n0:
+                stable_first_n0(repo, n0_catalog, n0_fixtures, support, work)
             need(verify_emission(support, host_emission) == emission_before, 'post-phase emission drift')
             tree = support.tree_inventory(work, bound['tree_bytes'], bound['file_count'], bound['entry_count'], 128 * 1024**2 if phase == 'host93_cpp_generate' else 512 * 1024**2)
             if stop_after_generation:
@@ -667,6 +754,26 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
             results[phase] = {'exit_code': 0, 'cleanup_confirmed': True, 'log_sha256': sha(result['raw_log']),
                               'usage': result['usage'], 'evidence_root': str(result['evidence_root']), 'tree': result_pin}
             previous = tree
+        if first_n0:
+            elf = compiled_first_n0_elf(support, work, previous)
+            after = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
+                            fifo_valid_split=variant)
+            need(after == before, 'final first N0 input drift')
+            stable_sources(repo, pins, buffers)
+            stable_first_n0(repo, n0_catalog, n0_fixtures, support, work)
+            need(verify_emission(support, host_emission) == emission_before, 'final first N0 emission drift')
+            verify_tools(support, toolchain)
+            need(compiled_first_n0_elf(support, work, previous) == elf, 'final first N0 ELF drift')
+            save(work / 'INPUTS_AFTER.json', after)
+            report = {'status': 'COMPILED_FIRST_N0_FIXTURE_ONLY', 'compiled_executable': elf,
+                      'generated_witness': witness, 'phases': results,
+                      'source_count': 307, 'include_count': 8, 'define_count': 4,
+                      'fixture_catalog': {'bytes': FIRST_N0_CATALOG_SIZE, 'sha256': FIRST_N0_CATALOG_SHA},
+                      'inputs_unchanged': True, 'execution_qualification': 'NOT_RUN',
+                      'current_abi_or_runtime_handles_claim': False,
+                      'ram_or_weights_or_n0_or_full_block_claim': False}
+            save(work / 'RESULT.json', report)
+            return report
         elf_path = work / 'obj/VHostBlockTop'
         elf = {'path': str(elf_path), **support.identity(elf_path, 512 * 1024**2)}
         need(int(elf['mode'], 8) & 0o111 and {k: elf[k] for k in ('bytes', 'sha256', 'mode')} == executed_elf, 'new host ELF changed around execution')

@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=69541
-SHA='021ea9c9c31c5539630421acf76a4891c9e6b72bf11e23453860acef82335956'
+SIZE=77219
+SHA='853d7d53c2b85376b643a90ae1421d9d9766c5ad6d415e8e5ddf1570ab0aa79c'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -36,6 +36,24 @@ FPIN=PINS['candidates/host93_ci_recovery/fifo_preflight/fifo_preflight.py']
 PREFLIGHT=G.load(HERE/'fifo_preflight/fifo_preflight.py',FPIN['bytes'],FPIN['sha256'],'cold_fixed_fifo_preflight')
 EPIN=PINS['candidates/host93_ci_recovery/execution/host_execution.py']
 EXECUTION=G.load(HERE/'execution/host_execution.py',EPIN['bytes'],EPIN['sha256'],'cold_fixed_cluster_execution')
+
+NPIN=PINS['candidates/host93_ci_recovery/first_n0/pipeline.py']
+PIPELINE=G.load(HERE/'first_n0/pipeline.py',NPIN['bytes'],NPIN['sha256'],'cold_n0_pipeline')
+NROOT=Path(G.os.environ.get('N0_TEST_SOURCE_ROOT',str(HERE.parent/'host93_first_n0_sources')))
+if not NROOT.is_absolute():raise ValueError('absolute explicit N0 test source root')
+NPIN=PINS['candidates/host93_first_n0_sources/comparison/n0_compare.py']
+COMPARATOR=G.load(NROOT/'comparison/n0_compare.py',NPIN['bytes'],NPIN['sha256'],'cold_n0_comparator')
+
+def n0_counts():
+    c={key:0 for key in COMPARATOR.COUNT_KEYS}
+    c.update(scope='FIRST_N0_M128_ONLY',status='ACK0_ACTUAL_CAPTURED',phase='OUTPUT',code='ACK0_COMPLETE',numeric_comparison='NOT_RUN',full_block_pass=False,root256_handles='UNKNOWN',cycle_budget=8000000,reduction_only_source_floor=2428928,unproven_overhead_allowance=5571072,cycles=3000000,launches=1,jobs=1,owner_dones=1,completion_acks=1,committed_bytes=786432,successful_b=12288,writeback_bytes=786432,post_pc=1,post_issued_jobs=1,further_eval_calls=0,actual_values=196608,actual_bytes=786432)
+    c.update({key:[0]*size for key,size in COMPARATOR.ARRAY_SIZES.items()});c['axi']={key:0 for key in COMPARATOR.AXI_KEYS};c['axi'].update(bs=12288,strobed_bytes=786432);return c
+
+def n0_comparison(passed=True,exact=False):
+    r=COMPARATOR.new_report();r.update(status='N0_LIMITED_TOLERANCE_PASS' if passed else 'N0_LIMITED_TOLERANCE_FAIL',code=None,stage='COMPLETE',numeric_pass=passed,bit_exact=exact,hash_exact=exact,reference_hash_accepted=True,capture_basic_counts_accepted=True,actual_bytes=786432,reference_bytes=786432,actual_sha256=PIPELINE.F32['sha256'] if exact else 'a'*64,reference_sha256=PIPELINE.F32['sha256'],capture_sha256='b'*64,limits={'max_abs':.03125,'mean_abs':.005})
+    r['metrics']={'shape':[1,128,1536],'elements':196608,'max_abs':0.0 if exact else .03 if passed else .04,'mean_abs':0.0 if exact else .004,'relative_l2':0.0,'cosine':1.0,'normalized_max_abs':.03,'different_elements':0 if exact else 5,'bit_exact':exact,'actual_f32_sha256':r['actual_sha256'],'reference_f32_sha256':r['reference_sha256'],'finite':True};return r
+
+RSS={'sampled_leader_max_kib':1000,'limit_kib':1572864,'os_hard_limit':False,'includes_descendants':False}
 
 # Safe JSON schema fixture only; no generated private bytes are reconstructed.
 CLUSTER_REPORT = {'by_rule': {},
@@ -212,7 +230,7 @@ class Cold(unittest.TestCase):
     def test_summary_wall(self):
         x=fixture();x['summary.json']['seconds']=6601
         with self.assertRaises(ValueError):G.validate_evidence(x)
-    def test_phase_all_names_have_bounds(self):self.assertEqual(set(G.STAGES)|set(G.FRONTLOAD_STAGES)|set(G.FIFO_STAGES),set(G.PHASE_CAPS))
+    def test_phase_all_names_have_bounds(self):self.assertEqual(set(G.STAGES)|set(G.FRONTLOAD_STAGES)|set(G.FIFO_STAGES)|set(G.N0_FRONT_STAGES)|{'host93_first_n0','host93_n0_compare'},set(G.PHASE_CAPS))
     def test_header_phase_order_and_counts(self):
         self.assertEqual(len(G.STAGES),34);self.assertEqual(len(G.BUILD_STAGES),16)
         self.assertEqual(G.STAGES[11:16],('flex_header_acquire','flex_header_compile','fresh_autoconf','fresh_configure','fresh_make'))
@@ -220,7 +238,7 @@ class Cold(unittest.TestCase):
         self.assertEqual(G.PHASE_CAPS['flex_header_acquire'],(120,90,40,512*G.MIB,4*G.MIB,65536))
         self.assertEqual(G.PHASE_CAPS['flex_header_compile'],(30,10,10,512*G.MIB,4*G.MIB,65536))
     def test_header_phase_failure_stops_both_modes(self):
-        for mode in G.MODES:
+        for mode in (m for m in G.MODES if m!=G.N0_MODE):
             for name in ('flex_header_acquire','flex_header_compile'):
                 with self.subTest(mode=mode,name=name):
                     code,summary,stages=self.mock_whole_job(name,mode,True)
@@ -300,7 +318,7 @@ class Cold(unittest.TestCase):
             with self.assertRaises(ValueError):G.exact(Path('/tmp/not-read'),0,'PENDING')
             comp.assert_not_called()
 
-    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False, diagnostic_match=True, fifo_contract=None):
+    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False, diagnostic_match=True, fifo_contract=None, phase_deadline=False):
         with tempfile.TemporaryDirectory() as t:
             base=Path(t);repo=base/'repo';repo.mkdir();out=base/'out';archive=base/'idma.zip'
             fixed={'bytes':1,'sha256':'1'*64,'path':str(base/'observed')}
@@ -308,7 +326,7 @@ class Cold(unittest.TestCase):
                 x=dict(zip(('total_seconds','work_seconds','cpu_seconds','as_bytes','fsize_bytes','log_bytes'),G.PHASE_CAPS[name]));x['sample_rows']=x['total_seconds']+2;return x
             def group(names,result):
                 def run(repo,work,call,*args,**kwargs):
-                    selected=names[:16] if kwargs.get("stop_after_build") else names[:1] if kwargs.get('stop_after_generation') else names
+                    selected=names[:16] if kwargs.get("stop_after_build") else names[:1] if kwargs.get('stop_after_generation') else names[:2] if kwargs.get('first_n0') else names
                     for name in selected:
                         try:
                             call(name,['/fixed/fixture'],base,{},cfg(name))
@@ -319,7 +337,7 @@ class Cold(unittest.TestCase):
                             error.safe_contract_boundary='BUILD_CONFIGURE_CPPFLAGS_AFTER'
                             error.safe_contract_code='CPPFLAGS_VALUE'
                             raise error
-                    return {'diagnostic_only':True} if kwargs.get('stop_after_generation') else result
+                    return {'status':'COMPILED_FIRST_N0_FIXTURE_ONLY','compiled_executable':fixed} if kwargs.get('first_n0') else {'diagnostic_only':True} if kwargs.get('stop_after_generation') else result
                 return types.SimpleNamespace(run=run)
             tools=group(G.STAGES[:20],{'backend':fixed})
             emission=group(G.STAGES[20:28],{'fir':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_fir']},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}})
@@ -342,8 +360,27 @@ class Cold(unittest.TestCase):
                     raise error
                 preflight=types.SimpleNamespace(run=fail_fifo)
             execution.validate_cluster_census=EXECUTION.validate_cluster_census
-            census=types.SimpleNamespace(collect=lambda *a:generation_fixture_report(True),validate_report=CENSUS.validate_report,empty_report=CENSUS.empty_report) if mode=='host-cluster-reset-launch' else CENSUS
+            census=types.SimpleNamespace(collect=lambda *a:generation_fixture_report(True),validate_report=CENSUS.validate_report,empty_report=CENSUS.empty_report) if mode in ('host-cluster-reset-launch',G.N0_MODE) else CENSUS
             modules={'verified_fifo_preflight':preflight,'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT,'verified_ci_generation_diagnostics':census}
+            if mode==G.N0_MODE:
+                def front(repo,work,pins,call,stop,observation,completed):
+                    for i,name in enumerate(G.N0_FRONT_STAGES,1):
+                        if phase_deadline:
+                            with mock.patch.object(G.time,'monotonic',return_value=stop-14):call(name,['/fixed/fixture'],base,{},cfg(name))
+                        else:call(name,['/fixed/fixture'],base,{},cfg(name))
+                        if i==2:observation.update(state='COLLECTING',runtime_ready=True);completed.append('n0_runtime')
+                        if i==4:observation['inputs_ready']=True;completed.append('n0_inputs')
+                        if i==5:observation.update(reference_ready=True,reference_rss=copy.deepcopy(RSS));completed.append('n0_reference')
+                    return {'private':'mock'}
+                def numeric(repo,work,pins,call,stop,front,result,observation,completed,stages):
+                    observation['capture_state']='READ_ERROR'
+                    try:call('host93_first_n0',['/fixed/fixture'],base,{},cfg('host93_first_n0'))
+                    except BaseException:observation['capture_state']='NATIVE_FAILED';raise
+                    observation.update(capture_state='AVAILABLE',capture=n0_counts());completed.append('n0_capture')
+                    observation['comparison_state']='READ_ERROR'
+                    call('host93_n0_compare',['/fixed/fixture'],base,{},cfg('host93_n0_compare'))
+                    observation.update(comparison_state='AVAILABLE',comparison=n0_comparison(),comparison_rss=copy.deepcopy(RSS),state='COMPLETE');completed.append('n0_comparison');return True
+                modules['verified_n0_pipeline']=types.SimpleNamespace(run_frontdoor=front,run_numeric=numeric,empty_observation=PIPELINE.empty_observation,PRIVATE_STAGES=PIPELINE.PRIVATE_STAGES,private_diagnostics=lambda *args:G.empty_diagnostics('READ_ERROR'),need=PIPELINE.need)
             def native(*args,**kwargs):
                 name=args[2]
                 if name=='idma319_extract':
@@ -371,13 +408,16 @@ class Cold(unittest.TestCase):
                  mock.patch.object(G,'project_pin_map',return_value=(PINS,buffers)), \
                  mock.patch.object(G,'generation_schema_module',return_value=CENSUS), \
                  mock.patch.object(G,'execution_schema_module',return_value=EXECUTION), \
+                 mock.patch.object(G,'n0_schema_module',return_value=PIPELINE), \
+                 mock.patch.object(G,'n0_comparison_module',return_value=COMPARATOR), \
                  mock.patch.object(G,'module_from',side_effect=lambda repo,pins,relative,name:modules[name]), \
                  mock.patch.object(G,'exact',return_value=b''), \
                  mock.patch.object(G,'memory_disk_gate'), \
                  mock.patch.object(G.signal,'signal'), mock.patch.object(G.signal,'setitimer'), \
                  mock.patch('builtins.print'):
                 code=G.execute(repo,out,None if mode=='build-diagnostic' else archive,G.time.monotonic()+1000.,mode)
-            self.assertEqual(G.verify_evidence(out),0)
+            with mock.patch.object(G,'n0_schema_module',return_value=PIPELINE),mock.patch.object(G,'n0_comparison_module',return_value=COMPARATOR):
+                self.assertEqual(G.verify_evidence(out),0)
             summary=G.decode((out/'evidence/summary.json').read_bytes())
             stages=G.decode((out/'evidence/stage_exits.json').read_bytes())['stages']
             return code,summary,stages
@@ -471,7 +511,7 @@ class Cold(unittest.TestCase):
         row.update(status='FAILED',**defaults());row['diagnostics']=G.empty_diagnostics('READ_ERROR')
         with self.assertRaises(ValueError):G.validate_evidence(x)
     def test_all_modes_reject_rows_after_first_failure(self):
-        for mode in G.MODES:
+        for mode in (m for m in G.MODES if m!=G.N0_MODE):
             x=fixture(True,mode);x['summary.json'].update(status='INCOMPLETE',failure_category='UNEXPECTED')
             row=x['stage_exits.json']['stages'][0]
             row.update(status='FAILED',**defaults());row['diagnostics']=G.empty_diagnostics('READ_ERROR')
@@ -950,5 +990,111 @@ class Cold(unittest.TestCase):
             self.assertTrue(G.validate_evidence(x))
         x['stage_exits.json']['stages']=x['stage_exits.json']['stages'][:34]
         with self.assertRaises(ValueError):G.validate_evidence(x)
+
+
+def n0_fixture(passed=True,exact=False):
+    x=fixture(True,'host-cluster-reset-launch');s=x['summary.json'];s.update(schema='host93-ci-summary-v7',mode=G.N0_MODE,status=G.success_status(G.N0_MODE) if passed else 'N0_LIMITED_TOLERANCE_FAIL',failure_category='NONE' if passed else 'NUMERIC_MISMATCH',completed_components=list(G.mode_components(G.N0_MODE)))
+    s['scope'].update(reset_launch=False,n0_numeric=passed,weights_loaded=True)
+    s['n0_observation']=PIPELINE.empty_observation();s['n0_observation'].update(state='COMPLETE',runtime_ready=True,inputs_ready=True,reference_ready=True,reference_rss=copy.deepcopy(RSS),capture_state='AVAILABLE',capture=n0_counts(),comparison_state='AVAILABLE',comparison=n0_comparison(passed,exact),comparison_rss=copy.deepcopy(RSS))
+    x['stage_exits.json']['stages']=[{'name':n,'status':'EXIT0_CLEANED','seconds':.1,'diagnostics':G.empty_diagnostics(),**clean_observation()} for n in G.mode_stages(G.N0_MODE)]
+    if not passed:x['stage_exits.json']['stages'][-1].update(status='FAILED',exit_code=1,waitid_status=1,native_record_status='FAIL',failure_boundary='NATIVE_SUPERVISION',failure_code='CHILD_EXIT_NONZERO',diagnostics=G.empty_diagnostics('READ_ERROR'))
+    return x
+
+class N0Cold(unittest.TestCase):
+    def validate(self,x):
+        with mock.patch.object(G,'n0_schema_module',return_value=PIPELINE),mock.patch.object(G,'n0_comparison_module',return_value=COMPARATOR):return G.validate_evidence(x)
+    def cycle_fixture(self):
+        x=n0_fixture();s=x['summary.json'];s.update(status='INCOMPLETE',failure_category='UNEXPECTED',completed_components=list(G.mode_components(G.N0_MODE)[:-2]));s['scope'].update(n0_numeric=False,weights_loaded=False)
+        c=n0_counts();c.update(status='INCOMPLETE_CYCLE_BUDGET',phase='RTL_N0',code='CYCLE_BUDGET',cycles=8000000,completion_acks=0,actual_values=0,actual_bytes=0);c['axi'].update(ar_stall=500,aw_stall=400,w_stall=300,r_stall=200,b_stall=100)
+        s['n0_observation'].update(state='COLLECTING',capture_state='REPORTED',capture=c,comparison_state='NOT_COLLECTED',comparison=None,comparison_rss=None)
+        del x['stage_exits.json']['stages'][-1];x['stage_exits.json']['stages'][-1].update(status='FAILED',exit_code=2,waitid_status=2,native_record_status='FAIL',failure_boundary='NATIVE_SUPERVISION',failure_code='CHILD_EXIT_NONZERO',diagnostics=G.empty_diagnostics('READ_ERROR'))
+        return x
+    def test_cycle_budget_retains_counts_without_numeric_qualification(self):self.assertTrue(self.validate(self.cycle_fixture()))
+    def test_cycle_budget_cannot_hide_timeout_or_signal(self):
+        for field,value in [('receipt_timed_out',True),('waitid_code',2),('cleanup_confirmed',False)]:
+            x=self.cycle_fixture();x['stage_exits.json']['stages'][-1][field]=value
+            with self.subTest(field=field),self.assertRaises(ValueError):self.validate(x)
+    def test_cycle_budget_rejects_bad_or_private_counts(self):
+        for field,value in [('cycles',7999999),('completion_acks',1),('actual_values',196608),('private_path','/secret')]:
+            x=self.cycle_fixture();x['summary.json']['n0_observation']['capture'][field]=value
+            with self.subTest(field=field),self.assertRaises(ValueError):self.validate(x)
+    def test_cycle_stall_bound(self):
+        x=self.cycle_fixture();x['summary.json']['n0_observation']['capture']['axi']['b_stall']=8000001
+        with self.assertRaises(ValueError):self.validate(x)
+    def reference_after_compare_failure(self):
+        x=n0_fixture(False);s=x['summary.json'];s.update(status='INCOMPLETE',failure_category='INPUT_OR_CONTRACT',contract_failure={'boundary':'N0_REFERENCE_RECEIPT','code':'N0_REFERENCE'});s['completed_components'].remove('n0_comparison');s['n0_observation'].update(state='COLLECTING',comparison_state='READ_ERROR',comparison=None,comparison_rss=None);return x
+    def test_reference_postread_after_natural_compare_failure(self):self.assertTrue(self.validate(self.reference_after_compare_failure()))
+    def test_reference_postread_exception_is_narrow(self):
+        for kind in ('timeout','signal','cleanup','unrelated_boundary','wrong_count'):
+            x=self.reference_after_compare_failure();row=x['stage_exits.json']['stages'][-1]
+            if kind=='timeout':row['receipt_timed_out']=True
+            elif kind=='signal':row['waitid_code']=2
+            elif kind=='cleanup':row['cleanup_confirmed']=False
+            elif kind=='unrelated_boundary':x['summary.json']['contract_failure']={'boundary':'N0_CAPTURE_RECEIPT','code':'N0_CAPTURE'}
+            else:x['stage_exits.json']['stages'].pop()
+            with self.subTest(kind=kind),self.assertRaises(ValueError):self.validate(x)
+    def test_new_mode_shared_deadline_fixed_label(self):
+        code,summary,rows=Cold().mock_whole_job(mode=G.N0_MODE,phase_deadline=True)
+        self.assertEqual(code,1);self.assertEqual(rows,[]);self.assertEqual(summary['contract_failure'],{'boundary':'N0_DEADLINE','code':'N0_DEADLINE'})
+    def test_new_order43(self):
+        self.assertEqual(len(G.mode_stages(G.N0_MODE)),43);self.assertEqual(G.mode_stages(G.N0_MODE)[:5],G.N0_FRONT_STAGES);self.assertEqual(G.mode_stages(G.N0_MODE)[-3:],('host93_cpp_compile','host93_first_n0','host93_n0_compare'));self.assertNotIn('host93_reset_launch',G.mode_stages(G.N0_MODE))
+    def test_complete_tolerance_and_exact_separate(self):
+        for exact in (False,True):self.assertTrue(self.validate(n0_fixture(True,exact)))
+    def test_complete_numeric_fail(self):self.assertTrue(self.validate(n0_fixture(False)))
+    def test_new_whole_mock_success(self):
+        code,summary,rows=Cold().mock_whole_job(mode=G.N0_MODE);self.assertEqual(code,0);self.assertEqual(len(rows),43);self.assertTrue(summary['scope']['n0_numeric']);self.assertFalse(summary['scope']['reset_launch'])
+    def test_first_failure_all43(self):
+        for phase in G.mode_stages(G.N0_MODE):
+            with self.subTest(phase=phase):
+                code,s,rows=Cold().mock_whole_job(phase,G.N0_MODE,True,b'private tensor values must never escape');self.assertEqual(code,1);self.assertEqual(rows[-1]['name'],phase);self.assertFalse(s['scope']['n0_numeric'])
+                if phase in PIPELINE.PRIVATE_STAGES:self.assertNotIn('private tensor',json.dumps(s)+json.dumps(rows))
+    def test_prefix_missing_each_front_or_capture(self):
+        for i in (*range(5),40,41,42):
+            x=n0_fixture();del x['stage_exits.json']['stages'][i]
+            with self.subTest(i=i),self.assertRaises(ValueError):self.validate(x)
+    def test_capture_tuple_cannot_claim_signal(self):
+        for field,value in [('waitid_status',9),('waitid_code',2),('receipt_timed_out',True),('cleanup_confirmed',False),('kill_attempted',False)]:
+            x=n0_fixture();x['stage_exits.json']['stages'][41][field]=value
+            with self.subTest(field=field),self.assertRaises(ValueError):self.validate(x)
+    def test_capture_protocol_fields(self):
+        for field,value in [('successful_b',12287),('actual_values',196607),('writeback_bytes',0),('completion_acks',0),('phase','RTL_N0'),('code','CYCLE_BUDGET'),('root256_handles',256)]:
+            x=n0_fixture();x['summary.json']['n0_observation']['capture'][field]=value
+            with self.subTest(field=field),self.assertRaises(ValueError):self.validate(x)
+    def test_compare_bad_denominator_or_unapproved_metric(self):
+        for field,value in [('elements',1),('max_abs',float('nan')),('finite',False),('first_difference_flat',0)]:
+            x=n0_fixture();x['summary.json']['n0_observation']['comparison']['metrics'][field]=value
+            with self.subTest(field=field),self.assertRaises(ValueError):self.validate(x)
+    def test_compare_tolerance_not_exact_required(self):
+        x=n0_fixture();self.assertFalse(x['summary.json']['n0_observation']['comparison']['bit_exact']);self.assertTrue(self.validate(x))
+    def test_compare_larger_threshold_rejected(self):
+        x=n0_fixture();x['summary.json']['n0_observation']['comparison']['limits']['max_abs']=1.
+        with self.assertRaises(ValueError):self.validate(x)
+    def test_unknown_fields_and_paths_rejected(self):
+        for target in ('observation','capture','comparison'):
+            x=n0_fixture();o=x['summary.json']['n0_observation'];(o if target=='observation' else o[target])['private_path']='/secret'
+            with self.subTest(target=target),self.assertRaises(ValueError):self.validate(x)
+    def test_compare_failure_cannot_hide_timeout(self):
+        x=n0_fixture(False);x['stage_exits.json']['stages'][-1].update(receipt_timed_out=True)
+        with self.assertRaises(ValueError):self.validate(x)
+    def test_resources_exact(self):
+        self.assertEqual(G.PHASE_CAPS['host93_first_n0'][:4],(3540,3510,3540,6*G.GIB));self.assertEqual(G.PHASE_CAPS['host93_n0_compare'][:4],(30,15,25,8*G.GIB));self.assertEqual(PIPELINE.empty_observation()['cycle_cap'],8000000)
+    def test_bad_private_diagnostic_not_generic_sanitizer(self):
+        with tempfile.TemporaryDirectory() as t:
+            p=Path(t)/'log';p.write_bytes(b'private payload [1,2,3] password=secret')
+            with mock.patch.object(PIPELINE,'fixed_markers',return_value={'NOT_COMPLETED:RESOURCE'}):
+                value=PIPELINE.private_diagnostics(Path(t),{},'n0_reference',p)
+            self.assertEqual(value['merged_log_tail'],'PRIVATE_PHASE_FAILED:NO_FIXED_STATUS_MARKER');self.assertNotIn('payload',json.dumps(value))
+    def test_private_marker_only(self):
+        with tempfile.TemporaryDirectory() as t:
+            p=Path(t)/'log';p.write_bytes(b'secret\nNOT_COMPLETED:RESOURCE\nNOT_COMPLETED:invented-secret\n')
+            with mock.patch.object(PIPELINE,'fixed_markers',return_value={'NOT_COMPLETED:RESOURCE'}):value=PIPELINE.private_diagnostics(Path(t),{},'n0_reference',p)
+            self.assertEqual(value['merged_log_tail'],'NOT_COMPLETED:RESOURCE')
+    def test_private_read_failure_explicit(self):
+        with tempfile.TemporaryDirectory() as t:self.assertEqual(PIPELINE.private_diagnostics(Path(t),{},'n0_reference',Path(t)/'missing')['context_state'],'READ_ERROR')
+    def test_deadline_never_restarts(self):
+        bound=PIPELINE.limits(120,100,90,8*G.GIB,4*G.MIB)
+        with mock.patch.object(PIPELINE.time,'monotonic',return_value=100):
+            actual=PIPELINE.cap_deadline(bound,130);self.assertEqual(actual['total_seconds'],30);self.assertEqual(actual['work_seconds'],15)
+            with self.assertRaises(ValueError):PIPELINE.cap_deadline(bound,116)
 
 if __name__=='__main__':unittest.main(verbosity=2)

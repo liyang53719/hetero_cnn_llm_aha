@@ -976,3 +976,14 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - N0仅计划8M探索帽、wall3600/CPU3540/Host单核AS6GiB，受共享余量；2428928计算下界不是完工上界，预算耗尽INCOMPLETE。单RTL/单RAM的真实B→ACK0→全值读回桥尚未完成，不在本批授予数值资格。
 - 当前cluster身份不能继承旧8endpoint门；root256仍UNKNOWN。无权重/张量/二进制/完整日志上传，无后续block或fullblock资格。
 - 参考 SOURCE 审 review_frozen_n0_reference_source_20261019T1036：MANIFEST 1227 B / 6ea5150332941dbacc9ec5304887c2ac2e0ffa3e4706ac5f1202f95f39a0b4fd；SUMMARY 4492 B / 91e8dbf66951f56916fac12b48ea9bf9f9e6c77498b776155620e294e12797ad。收据 SOURCE 审 review_n0_receipt_binding_independent_20261019T1036：MANIFEST 1013 B / 02e7a4e205b8ae11eecef952fd7bb1c37a67bb70eb4174befe7a0fb183d15933；SUMMARY 4598 B / b27b3431547e14ae991a7b03c492fb00032553b05c1483c9541bd3114525e23a。独立参考24+24、收据14+14通过；均仅SOURCE，实际NOT_EXECUTED。
+
+## 2026-10-19 首个 M128 N0 有界同作业 SOURCE 后继（SOURCE已审，尚未实际）
+- 新 host-cluster-first-n0 43阶段复用当前cluster/seed1参数/同作业archive与ELF，固定16输入和原参考双SHA；root header语法与256 handles仍UNKNOWN，不沿旧八endpoint门。
+- 单RTL单RAM，完整12288次B退休→ACK0→196608值读回，无进一步eval。原比较五函数、FP32→FP64、max_abs≤.03125/mean_abs≤.005保持；容差PASS与bit/hash exact分列，不授wholeblock。
+- 五前门1440秒，参考AS8G/4intra1interop/CPU90/wall120；N0窗口3600内预留原比较30秒，模拟单核AS6G。共同6600从checkout/setup前计，末120安全保留；8M探索帽、2428928归约下界及5571072未证余量明确。
+- 新数据/runtime/numeric日志只出固定安全码与有限计数/aggregate指标。周期/资源超限INCOMPLETE；仅完整原容差比较false为数值FAIL。原fatal/监督/旧mode与另外两workflow保持。
+- 主178+178与adapter API47+47均纯mock，fresh82来源投影source-only exit0；组件独审冷测分别继承，未实际参考/模型/权重/数值。总SOURCE已有限通过，父唯一发布/启动；此处不预填PASS。
+
+v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标签关联、比较收据首次读取/JSON固定错误映射、仅新mode共同截止固定码。原native异常优先、数值/资源/阶段不变；178+178和47+47为本v2重跑，组件结果继承。v1审MANIFEST2da2084592c139b66f6c3f0c69aaf06b9053a3b94b1fc82b571513a7a7365669，SUMMARY40a91f106e92eba56be2fe6bddd00e7a222b99e82dd30ca9fa914930961269da；v2总SOURCE已有限通过，实际仍NOT_EXECUTED。
+
+总SOURCE正式审：review_first_n0_whole_delta_20261019T1117，MANIFEST 2517B / 313e60aaf65d0a7d5d4c0526fca8291e9b2aa41c08ef1fef51411ba7a17712de；SUMMARY 5816B / 5662b24df8aa688ef0db25206eb51e9cc11aeeb45036400d36a370b0ef4f78d3，结论SOURCE_GO_FIRST_M128_N0_SAME_JOB_43_STAGE_ONLY。只授有限SOURCE，实际与数值结果尚未执行。

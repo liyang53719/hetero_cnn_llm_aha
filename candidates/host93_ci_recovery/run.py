@@ -23,19 +23,19 @@ import types
 
 HERE = Path(__file__).absolute().parent
 SUPPORT = ('ci_support_v3.py', 16348, '653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1')
-PINS_SIZE = 4676
-PINS_SHA = '17ed1578772e99bdabda48fc32614b8bde717f71a4b48d5f22da0248add4450b'
+PINS_SIZE = 14979
+PINS_SHA = '48eeb7ab6075326158f1577019727a669e0c9cead5e60467ea33e160c60da8c0'
 MIB = 1024**2
 GIB = 1024**3
 EVIDENCE = ('summary.json', 'source_hashes.json', 'stage_exits.json')
 COMPONENTS = ('toolchain', 'host_emission', 'idma319', 'retained13', 'configuration', 'host_execution')
-CATEGORIES = ('NONE', 'TIMEOUT', 'INPUT_OR_CONTRACT', 'SYSTEM', 'INTERRUPTED', 'UNEXPECTED')
+CATEGORIES = ('NONE', 'TIMEOUT', 'INPUT_OR_CONTRACT', 'SYSTEM', 'INTERRUPTED', 'UNEXPECTED','NUMERIC_MISMATCH')
 STAGES = ('official_source473',) + tuple('host_' + x + '-' + y for y in ('version', 'micro') for x in ('autoconf', 'autom4te', 'm4', 'flex', 'bison')) + ('flex_header_acquire', 'flex_header_compile', 'fresh_autoconf', 'fresh_configure', 'fresh_make') + tuple('derived_tiny_' + x for x in ('version', 'generate', 'compile', 'run')) + ('host93_java_version', 'host93_acquire_jar87', 'host93_acquire_hardfloat20', 'host93_assemble', 'host93_class', 'host93_chirrtl', 'host93_acquire_firtool', 'host93_sv', 'idma319_extract', 'retained13_assemble', 'host93_configuration', 'host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch')
 SCOPES = ('toolchain_build', 'toolchain_tiny', 'fresh_host_sv', 'cpp_generated', 'cpp_compiled', 'reset_launch', 'n0_numeric', 'weights_loaded')
 GENERATED_KINDS = ('derived_backend', 'host93_fir', 'host93_sv', 'host_elf', 'diagnostic_fir')
-MODES = ('host-reset-launch','build-diagnostic','host-chirrtl-diagnostic','host-generation-diagnostic','host-cluster-reset-launch')
-FRONTLOAD_MODES = ('host-chirrtl-diagnostic','host-generation-diagnostic','host-cluster-reset-launch')
-CLUSTER_MODES = ('host-generation-diagnostic','host-cluster-reset-launch')
+MODES = ('host-reset-launch','build-diagnostic','host-chirrtl-diagnostic','host-generation-diagnostic','host-cluster-reset-launch','host-cluster-first-n0')
+FRONTLOAD_MODES = ('host-chirrtl-diagnostic','host-generation-diagnostic','host-cluster-reset-launch','host-cluster-first-n0')
+CLUSTER_MODES = ('host-generation-diagnostic','host-cluster-reset-launch','host-cluster-first-n0')
 CLUSTER_CONTRACT_CODES = ('CLUSTER_CHILD_ARGS','CLUSTER_TOP_LINK','CLUSTER_LIBRARY_GRAPH','CLUSTER_INITIALIZER','CLUSTER_ABI','CLUSTER_ARTIFACTS','CLUSTER_CENSUS')
 BUILD_STAGES = STAGES[:16]
 CHIRRTL_STAGES = STAGES[20:25] + ('host93_chirrtl_diagnostic',)
@@ -48,13 +48,24 @@ def empty_fifo_observation():
     return {'state':'NOT_COLLECTED','cases':0,'comparisons':0,'tools':{}}
 
 
+N0_MODE='host-cluster-first-n0'
+N0_FRONT_STAGES=('n0_wheels_acquire','n0_runtime_install','n0_raw_acquire','n0_inputs_prepare','n0_reference')
+N0_FRONT_COMPONENTS=('n0_runtime','n0_inputs','n0_reference')
+N0_BOUNDARIES=('N0_SOURCE','N0_RUNTIME_PREPARE','N0_RUNTIME_TREE','N0_RAW_RECEIPT','N0_INPUT_RECEIPT','N0_REFERENCE_RECEIPT','N0_REFERENCE_RSS','N0_CAPTURE_RECEIPT','N0_CAPTURE_INPUTS','N0_CAPTURE_ELF','N0_COMPARE_RECEIPT','N0_COMPARE_RSS','N0_DEADLINE','N0_PHASE_ORDER')
+N0_CODES=('N0_SOURCE','N0_PATH','N0_READ','N0_CHANGED','N0_JSON','N0_INPUTS','N0_RUNTIME','N0_REFERENCE','N0_CAPTURE','N0_COMPARISON','N0_RSS','N0_DEADLINE','N0_FLAGS','N0_OUTPUT','N0_PHASE')
+class NumericMismatch(RuntimeError):
+    pass
+
 def mode_stages(mode):
+    if mode==N0_MODE:return N0_FRONT_STAGES+FIFO_STAGES+FRONTLOAD_STAGES[:-1]+('host93_first_n0','host93_n0_compare')
     return FIFO_STAGES+FRONTLOAD_STAGES if mode=='host-cluster-reset-launch' else FIFO_STAGES+FRONTLOAD_STAGES[:-2] if mode=='host-generation-diagnostic' else FRONTLOAD_STAGES if mode in FRONTLOAD_MODES else BUILD_STAGES if mode=='build-diagnostic' else STAGES
 
 def mode_components(mode):
+    if mode==N0_MODE:return N0_FRONT_COMPONENTS+('fifo_preflight','chirrtl_diagnostic')+COMPONENTS[:-1]+('host_compilation','n0_capture','n0_comparison')
     return ('fifo_preflight','chirrtl_diagnostic')+COMPONENTS if mode=='host-cluster-reset-launch' else ('toolchain_build',) if mode=='build-diagnostic' else ('fifo_preflight','chirrtl_diagnostic')+COMPONENTS[:-1]+('host_generation_diagnostic',) if mode=='host-generation-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS if mode in FRONTLOAD_MODES else COMPONENTS
 
 def success_status(mode):
+    if mode==N0_MODE:return 'N0_LIMITED_TOLERANCE_PASS_REQUIRES_ACTIONS_EXIT0'
     return 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0' if mode=='host-generation-diagnostic' else 'READY_REQUIRES_ACTIONS_EXIT0'
 
 CHIRRTL_NUMERIC = ('utf8_bytes','line_count','module_count','extmodule_count','source_info_count','source_info_utf8_bytes','project_source_info_count','library_source_info_count','other_source_info_count')
@@ -342,7 +353,7 @@ def pin(value, path=False):
         name = value['path']
         require(type(name) is str and len(name) <= 240 and re.fullmatch('[A-Za-z0-9_./-]+', name) and
                 not name.startswith('/') and '..' not in name.split('/') and
-                name.startswith(('candidates/host93_ci_recovery/', 'candidates/host93_micro_diagnostics/', 'development_snapshots/', 'candidates/qwen2_resident_matrix/')),
+                (name in ('scripts/qwen2_layer0_model_gate.py','scripts/qwen2_layer0_payload.py','src/heteronpu/pinned_block_payload.py','src/heteronpu/pinned_gdn_payload.py','config/payload_pins/qwen2_layer0.json','spec/numerical_contract.md') or name.startswith(('candidates/qwen2_fullblock_','config/upstream/weight_headers/qwen2_1p5b/','candidates/host93_first_n0_sources/','candidates/host93_ci_recovery/', 'candidates/host93_micro_diagnostics/', 'development_snapshots/', 'candidates/qwen2_resident_matrix/'))),
                 'only project-relative source names')
 
 
@@ -416,9 +427,9 @@ def contract_failure_observation(error):
         return {'boundary': 'NONE', 'code': 'NONE'}
     boundary = getattr(error, 'safe_contract_boundary', 'UNREPORTED')
     code = getattr(error, 'safe_contract_code', 'UNMAPPED_CONTRACT')
-    if type(boundary) is not str or boundary not in CONTRACT_BOUNDARIES or boundary == 'NONE':
+    if type(boundary) is not str or boundary not in CONTRACT_BOUNDARIES+N0_BOUNDARIES or boundary == 'NONE':
         boundary = 'UNREPORTED'
-    if type(code) is not str or code not in CONTRACT_CODES or code == 'NONE':
+    if type(code) is not str or code not in CONTRACT_CODES+N0_CODES or code == 'NONE':
         code = 'UNMAPPED_CONTRACT'
     return {'boundary': boundary, 'code': code}
 
@@ -426,18 +437,20 @@ def contract_failure_observation(error):
 def validate_evidence(objects):
     keys(objects, EVIDENCE)
     summary, sources, exits = (objects[n] for n in EVIDENCE)
-    keys(summary, ('schema', 'mode', 'status', 'failure_category', 'contract_failure', 'completed_components', 'scope', 'seconds', 'chirrtl_observation', 'generation_diagnostics', 'fifo_observation'))
-    require(summary['schema'] == 'host93-ci-summary-v6' and summary['mode'] in MODES and summary['status'] in
-            ('INCOMPLETE', 'READY_REQUIRES_ACTIONS_EXIT0', 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0') and summary['failure_category'] in CATEGORIES and
+    numeric=summary.get('mode')==N0_MODE
+    keys(summary, ('schema', 'mode', 'status', 'failure_category', 'contract_failure', 'completed_components', 'scope', 'seconds', 'chirrtl_observation', 'generation_diagnostics', 'fifo_observation')+(('n0_observation',) if numeric else ()))
+    require(summary['schema'] == ('host93-ci-summary-v7' if numeric else 'host93-ci-summary-v6') and summary['mode'] in MODES and summary['status'] in
+            ('INCOMPLETE', 'READY_REQUIRES_ACTIONS_EXIT0', 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0','N0_LIMITED_TOLERANCE_PASS_REQUIRES_ACTIONS_EXIT0','N0_LIMITED_TOLERANCE_FAIL') and summary['failure_category'] in CATEGORIES and
             finite(summary['seconds']) and summary['seconds'] <= 6600, 'summary values')
     detail = summary['contract_failure']
     keys(detail, ('boundary', 'code'))
-    require(type(detail['boundary']) is str and detail['boundary'] in CONTRACT_BOUNDARIES and
-            type(detail['code']) is str and detail['code'] in CONTRACT_CODES, 'fixed safe contract labels')
+    require(type(detail['boundary']) is str and detail['boundary'] in CONTRACT_BOUNDARIES+(N0_BOUNDARIES if numeric else ()) and
+            type(detail['code']) is str and detail['code'] in CONTRACT_CODES+(N0_CODES if numeric else ()), 'fixed safe contract labels')
     require((detail['boundary'] == 'NONE') == (detail['code'] == 'NONE') and
             (detail['code'] == 'NONE') == (summary['failure_category'] != 'INPUT_OR_CONTRACT'),
             'contract labels match failure category')
     mode=summary['mode']
+    front_offset=5 if numeric else 0
     component_order=mode_components(mode)
     required_stages=mode_stages(mode)
     completed = summary['completed_components']
@@ -445,7 +458,7 @@ def validate_evidence(objects):
             all(x in component_order for x in completed) and completed == list(component_order[:len(completed)]), 'finite ordered completed components')
     keys(summary['scope'], SCOPES)
     require(all(type(x) is bool for x in summary['scope'].values()) and
-            not summary['scope']['n0_numeric'] and not summary['scope']['weights_loaded'], 'finite scope flags')
+            (numeric or not summary['scope']['n0_numeric'] and not summary['scope']['weights_loaded']), 'finite scope flags')
     scope = summary['scope']
     require(scope['toolchain_build'] == ('toolchain' in completed or 'toolchain_build' in completed) and scope['toolchain_tiny'] == ('toolchain' in completed) and
             scope['fresh_host_sv'] == ('host_emission' in completed) and
@@ -495,7 +508,7 @@ def validate_evidence(objects):
                 'measured diagnostic identity comparison')
         require(len(completed)==component_order.index('chirrtl_diagnostic')+1 or observed['historical_fir_equal'], 'no continuation without exact historical FIR identity')
     elif observed['state']=='REPORTED':
-        require(mode in FRONTLOAD_MODES and completed==(['fifo_preflight'] if mode in CLUSTER_MODES else []) and observed['historical_fir_equal'] is None,
+        require(mode in FRONTLOAD_MODES and completed==list(N0_FRONT_COMPONENTS if numeric else ())+(['fifo_preflight'] if mode in CLUSTER_MODES else []) and observed['historical_fir_equal'] is None,
                 'failed child numeric report cannot claim verified FIR')
         require(all(type(observed[key]) is int and 0 <= observed[key] <= 2147483647 for key in CHIRRTL_NUMERIC) and
                 0 < observed['utf8_bytes'] and 0 < observed['line_count'] <= observed['utf8_bytes'] and
@@ -535,9 +548,9 @@ def validate_evidence(objects):
         else:
             failed = True
     if detail['boundary'] in FIFO_CONTRACTS:
-        require(mode in CLUSTER_MODES and not completed and not failed and
-                len(seen) in FIFO_CONTRACT_COUNTS[detail['boundary']] and
-                seen==list(FIFO_STAGES[:len(seen)]), 'FIFO parent failure belongs to its clean native prefix')
+        require(mode in CLUSTER_MODES and completed==list(N0_FRONT_COMPONENTS if numeric else ()) and not failed and
+                len(seen)-front_offset in FIFO_CONTRACT_COUNTS[detail['boundary']] and
+                seen[front_offset:]==list(FIFO_STAGES[:len(seen)-front_offset]), 'FIFO parent failure belongs to its clean native prefix')
         require(detail['code'] in (FIFO_CONTRACTS[detail['boundary']],)+FIFO_REQUIRE_CODES,
                 'fixed FIFO parent boundary/code pair')
     fifo=summary['fifo_observation']
@@ -546,17 +559,17 @@ def validate_evidence(objects):
         require(mode in CLUSTER_MODES and fifo=={'state':'AVAILABLE','cases':4,'comparisons':5180,'tools':FIFO_TOOLS} and
                 type(fifo['cases']) is int and type(fifo['comparisons']) is int,
                 'fixed FIFO cases and tool identities required')
-        require(len(exits['stages'])>=3 and all(row['status']=='EXIT0_CLEANED' and
+        require(len(exits['stages'])>=front_offset+3 and all(row['status']=='EXIT0_CLEANED' and
                 row['waitid_code']==1 and row['waitid_status']==0 and row['receipt_timed_out'] is False and
                 row['kill_attempted'] is True and row['kill_result'] in ('SIGNAL_SENT_BEFORE_REAP','GROUP_ALREADY_ABSENT')
-                for row in exits['stages'][:3]), 'FIFO observation requires all three clean native stages')
+                for row in exits['stages'][front_offset:front_offset+3]), 'FIFO observation requires all three clean native stages')
     else:
         require(fifo==empty_fifo_observation() and type(fifo['cases']) is int and type(fifo['comparisons']) is int,
                 'no unqualified FIFO observation')
     if mode in CLUSTER_MODES:
-        require(len(seen)<=3 or 'fifo_preflight' in completed, 'later stages require real FIFO qualification')
+        require(len(seen)<=front_offset+3 or 'fifo_preflight' in completed, 'later stages require real FIFO qualification')
     if mode in FRONTLOAD_MODES:
-        offset=3 if mode in CLUSTER_MODES else 0
+        offset=front_offset+(3 if mode in CLUSTER_MODES else 0)
         if 'chirrtl_diagnostic' in completed:
             require(len(exits['stages'])>=offset+len(CHIRRTL_STAGES) and
                     all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][offset:offset+len(CHIRRTL_STAGES)]),
@@ -575,13 +588,13 @@ def validate_evidence(objects):
         generation_schema_module().validate_report(generation)
         require(generation['state']!='NOT_COLLECTED', 'generation stage diagnostics cannot remain uncollected')
     if detail['boundary']=='CLUSTER_GENERATION_WITNESS':
-        require(mode=='host-cluster-reset-launch' and detail['code'] in CLUSTER_CONTRACT_CODES and
-                completed==list(component_order[:-1]) and not failed and len(seen) in (35,36,37),
+        require(mode in ('host-cluster-reset-launch',N0_MODE) and detail['code'] in CLUSTER_CONTRACT_CODES and
+                completed==list(component_order[:component_order.index('host_compilation')] if numeric else component_order[:-1]) and not failed and len(seen) in ((40,41) if numeric else (35,36,37)),
                 'cluster parent witness failure binds the clean generation/compile/runtime prefix')
-    if mode=='host-cluster-reset-launch':
-        if len(seen)>35 or 'host_execution' in completed:
-            require(generation is not None and len(exits['stages'])>=35 and
-                    all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][:35]),
+    if mode in ('host-cluster-reset-launch',N0_MODE):
+        if len(seen)>front_offset+35 or 'host_execution' in completed or 'host_compilation' in completed:
+            require(generation is not None and len(exits['stages'])>=front_offset+35 and
+                    all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][:front_offset+35]),
                     'cluster compilation requires clean FIFO/Host generation prefix')
             execution_schema_module().validate_cluster_census(generation)
         if 'host_execution' in completed:
@@ -590,17 +603,44 @@ def validate_evidence(objects):
         require(mode=='host-generation-diagnostic' and seen==list(required_stages) and not failed and
                 generation is not None and generation['state']=='AVAILABLE',
                 'completed generation diagnostic requires all35 clean stages and observed census')
-    if summary['status'] == 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0':
+    if numeric:
+        pipeline=n0_schema_module(); comparator=n0_comparison_module()
+        pipeline.validate_public(summary['n0_observation'],completed,exits['stages'],scope,comparator)
+        for row in exits['stages']:
+            if row['status']=='FAILED' and row['name'] in pipeline.PRIVATE_STAGES:
+                pipeline.validate_private_diagnostics(HERE.parents[1],project_map,row['name'],row['diagnostics'])
+        for component,count in (('n0_runtime',2),('n0_inputs',4),('n0_reference',5),('host_compilation',41),('n0_capture',42)):
+            if component in completed:require(len(seen)>=count and all(row['status']=='EXIT0_CLEANED' and pipeline.natural_exit(row,0) for row in exits['stages'][:count]),'N0 component requires its full clean native prefix')
+        require(len(seen)<=5 or 'n0_reference' in completed,'FIFO/Host needs closed reference frontdoor')
+        require(len(seen)<=41 or 'host_compilation' in completed,'capture needs compiled same-job model')
+        require(len(seen)<=42 or 'n0_capture' in completed,'compare needs real capture')
+        require(scope['cpp_compiled']==scope['cpp_generated']==('host_compilation' in completed) and not scope['reset_launch'],'N0 compilation exact qualification')
+        if detail['boundary'] in N0_BOUNDARIES:
+            require(summary['failure_category']=='INPUT_OR_CONTRACT' and detail['code'] in N0_CODES and len(seen) in pipeline.PARENT_COUNTS[detail['boundary']],'finite N0 parent failure')
+            require(not failed or detail['boundary'] in ('N0_COMPARE_RECEIPT','N0_COMPARE_RSS','N0_REFERENCE_RECEIPT','N0_DEADLINE') and seen[-1]=='host93_n0_compare' and pipeline.natural_exit(exits['stages'][-1],1),'N0 parent failure cannot hide a native failure')
+    if summary['status'] in ('N0_LIMITED_TOLERANCE_PASS_REQUIRES_ACTIONS_EXIT0','N0_LIMITED_TOLERANCE_FAIL'):
+        passed=summary['status']=='N0_LIMITED_TOLERANCE_PASS_REQUIRES_ACTIONS_EXIT0'
+        require(numeric and completed==list(component_order) and seen==list(required_stages) and scope['n0_numeric']==passed and scope['weights_loaded'] and summary['failure_category']==('NONE' if passed else 'NUMERIC_MISMATCH') and failed!=(passed),'N0 numerical status requires complete denominator and native tuple')
+    elif summary['status'] == 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0':
         require(mode=='host-generation-diagnostic' and summary['failure_category']=='NONE' and
                 completed==list(component_order) and not failed and seen==list(required_stages) and
                 generation is not None and generation['state']=='AVAILABLE', 'diagnostic-only requires generation exit0 and observed census, never runtime qualification')
     elif summary['status'] == 'READY_REQUIRES_ACTIONS_EXIT0':
-        require(mode!='host-generation-diagnostic' and summary['failure_category'] == 'NONE' and completed == list(component_order) and
+        require(mode not in ('host-generation-diagnostic',N0_MODE) and summary['failure_category'] == 'NONE' and completed == list(component_order) and
                 (scope['toolchain_build'] if mode=='build-diagnostic' else all(scope[x] for x in SCOPES[:6])) and not failed and set(seen) == set(required_stages), 'ready requires every finite stage')
     else:
-        require(summary['failure_category'] != 'NONE', 'failure status cannot hide error')
+        require(summary['failure_category'] not in ('NONE','NUMERIC_MISMATCH'), 'failure status cannot hide error')
     return True
 
+
+def n0_schema_module():
+    pins=decode(exact(HERE/'RUN_PINS.json',PINS_SIZE,PINS_SHA))['files']
+    row=pins['candidates/host93_ci_recovery/first_n0/pipeline.py']
+    return load(HERE/'first_n0/pipeline.py',row['bytes'],row['sha256'],'verified_n0_pipeline_schema')
+
+def n0_comparison_module():
+    pins=decode(exact(HERE/'RUN_PINS.json',PINS_SIZE,PINS_SHA))['files'];name='candidates/host93_first_n0_sources/comparison/n0_compare.py';row=pins[name]
+    return load(HERE.parents[1]/name,row['bytes'],row['sha256'],'verified_n0_comparison_schema')
 
 def execution_schema_module():
     pins=decode(exact(HERE/'RUN_PINS.json',PINS_SIZE,PINS_SHA))['files']
@@ -674,6 +714,14 @@ PHASE_CAPS = {
     'host93_cpp_compile': (1800,1740,1740,6*GIB,512*MIB,4*MIB),
     'host93_reset_launch': (30,10,10,2*GIB,8*MIB,MIB),
 }
+PHASE_CAPS.update({
+ 'n0_wheels_acquire':(180,165,120,512*MIB,256*MIB,65536),
+ 'n0_runtime_install':(120,100,90,2*GIB,GIB,65536),
+ 'n0_raw_acquire':(900,880,300,512*MIB,128*MIB,65536),
+ 'n0_inputs_prepare':(120,100,60,256*MIB,128*MIB,65536),
+ 'n0_reference':(120,100,90,8*GIB,4*MIB,65536),
+ 'host93_first_n0':(3540,3510,3540,6*GIB,4*MIB,65536),
+ 'host93_n0_compare':(30,15,25,8*GIB,4*MIB,65536)})
 for _name in STAGES:
     if _name.startswith('host_'):
         PHASE_CAPS[_name]=(30,10,10,512*MIB,4*MIB,65536)
@@ -766,6 +814,9 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
     chirrtl_observation = empty_chirrtl_observation()
     generation_diagnostics=None
     fifo_observation=empty_fifo_observation()
+    n0_observation=None
+    pipeline=None
+    numeric_mismatch=False
     try:
         out.mkdir(mode=0o700)
         (out/'private').mkdir(mode=0o700)
@@ -779,7 +830,9 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
         def call_phase(name, argv, cwd, environment, bound):
             nonlocal chirrtl_observation
             require(name in mode_stages(mode) and name not in {x['name'] for x in stages}, 'one finite phase invocation')
-            require(time.monotonic() < work_stop-15, 'shared work window exhausted')
+            if mode==N0_MODE:pipeline.need(time.monotonic() < work_stop-15,'N0_DEADLINE','N0_DEADLINE')
+            else:require(time.monotonic() < work_stop-15, 'shared work window exhausted')
+            if mode==N0_MODE:pipeline.need(name==mode_stages(mode)[len(stages)],'N0_PHASE_ORDER','N0_PHASE')
             phase_limits(name, bound)
             if name in ('host93_cpp_generate','host93_cpp_compile'):
                 memory_disk_gate(out,8*GIB,3*GIB)
@@ -797,7 +850,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                 return {'record':record,'raw_log':raw,'usage':usage,'evidence_root':str(evidence)}
             except BaseException:
                 row.update(observation)
-                row['diagnostics']=collect_build_diagnostics(repo,pins,evidence/'native.log',str(out/'toolchain'/'verilator'))
+                row['diagnostics']=pipeline.private_diagnostics(repo,pins,name,evidence/'native.log') if mode==N0_MODE and name in pipeline.PRIVATE_STAGES else collect_build_diagnostics(repo,pins,evidence/'native.log',str(out/'toolchain'/'verilator'))
                 if name=='host93_chirrtl_diagnostic' and row['diagnostics']['context_state']=='AVAILABLE':
                     try:
                         reported=diagnostic.parse_observation(row['diagnostics']['merged_log_tail'].encode('ascii'))
@@ -809,6 +862,10 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                 row['seconds']=round(time.monotonic()-began,6)
                 print(json.dumps({'phase':name,'status':row['status'],'seconds':row['seconds']},sort_keys=True),flush=True)
         prefix='candidates/host93_ci_recovery/'
+        if mode==N0_MODE:
+            pipeline=module_from(repo,pins,prefix+'first_n0/pipeline.py','verified_n0_pipeline')
+            n0_observation=pipeline.empty_observation()
+            front=pipeline.run_frontdoor(repo,out/'n0_frontdoor',pins,call_phase,work_stop,n0_observation,completed)
         if mode in CLUSTER_MODES:
             preflight=module_from(repo,pins,prefix+'fifo_preflight/fifo_preflight.py','verified_fifo_preflight')
             result=preflight.run(repo,out/'fifo_preflight',call_phase,base_support,buffers)
@@ -889,6 +946,19 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                     require(result.get('diagnostic_only') is True and generation_diagnostics is not None and
                             generation_diagnostics['state']=='AVAILABLE', 'generation-only diagnostic must return explicit observed report')
                     completed.append('host_generation_diagnostic')
+                elif mode==N0_MODE:
+                    result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration,
+                                         cluster_boundary=True,first_n0=True,diagnostic_callback=collect_generation)
+                    execution.validate_cluster_census(generation_diagnostics)
+                    pipeline.need(result.get('status')=='COMPILED_FIRST_N0_FIXTURE_ONLY','N0_CAPTURE_ELF','N0_CAPTURE')
+                    completed.append('host_compilation');scopes.update(cpp_generated=True,cpp_compiled=True)
+                    generated['host_elf']={k:result['compiled_executable'][k] for k in ('bytes','sha256')}
+                    try:
+                        matched=pipeline.run_numeric(repo,out/'n0_numeric',pins,call_phase,work_stop,front,result,n0_observation,completed,stages)
+                    finally:
+                        scopes['weights_loaded']='n0_capture' in completed
+                    scopes['n0_numeric']=matched
+                    numeric_mismatch=not matched
                 else:
                     result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration,
                                          cluster_boundary=True,diagnostic_callback=collect_generation)
@@ -904,6 +974,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
         # All fixed source content is checked again after the final native phase.
         for name,row in pins.items():exact(repo/name,row['bytes'],row['sha256'])
         if archive is not None: exact(archive,9926876,'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce')
+        if numeric_mismatch:raise NumericMismatch('N0 limited tolerance comparison completed false')
     except BaseException as error:
         failure=error
         if (out/'private').is_dir():
@@ -913,9 +984,10 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
     finally:
         signal.setitimer(signal.ITIMER_REAL, max(0.001,shared_stop-time.monotonic()))
         try:
-            category='NONE' if failure is None else ('TIMEOUT' if isinstance(failure,TimeoutError) else 'INPUT_OR_CONTRACT' if isinstance(failure,(ValueError,KeyError,AssertionError)) else 'SYSTEM' if isinstance(failure,OSError) else 'INTERRUPTED' if isinstance(failure,(KeyboardInterrupt,SystemExit)) else 'UNEXPECTED')
-            summary={'schema':'host93-ci-summary-v6','mode':mode,'status':success_status(mode) if failure is None else 'INCOMPLETE',
+            category='NONE' if failure is None else ('NUMERIC_MISMATCH' if isinstance(failure,NumericMismatch) else 'TIMEOUT' if isinstance(failure,TimeoutError) else 'INPUT_OR_CONTRACT' if isinstance(failure,(ValueError,KeyError,AssertionError)) else 'SYSTEM' if isinstance(failure,OSError) else 'INTERRUPTED' if isinstance(failure,(KeyboardInterrupt,SystemExit)) else 'UNEXPECTED')
+            summary={'schema':'host93-ci-summary-v7' if mode==N0_MODE else 'host93-ci-summary-v6','mode':mode,'status':success_status(mode) if failure is None else 'N0_LIMITED_TOLERANCE_FAIL' if isinstance(failure,NumericMismatch) else 'INCOMPLETE',
                      'failure_category':category,'contract_failure':contract_failure_observation(failure),'completed_components':completed,'scope':scopes,'seconds':round(time.monotonic()-started,6),'chirrtl_observation':chirrtl_observation,'generation_diagnostics':generation_diagnostics,'fifo_observation':fifo_observation}
+            if mode==N0_MODE:summary['n0_observation']=n0_observation if n0_observation is not None else n0_schema_module().empty_observation()
             sources={'schema':'host93-ci-source-hashes-v3','project_sources':source_rows,
                      'fixed_inputs':({'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}} if mode!='build-diagnostic' else {}),'generated':generated}
             objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v6','stages':stages}}

@@ -1,0 +1,45 @@
+{
+  "channels": [
+    "ar",
+    "aw",
+    "w",
+    "r",
+    "b"
+  ],
+  "unit": "one_per_channel_per_observed_main_high_edge",
+  "condition": "retained_pre_valid && !retained_pre_ready",
+  "window": "private_scheduler_work_edges_including_idle_launch_and_ack_excluding_reset",
+  "directions": {
+    "ar": {
+      "valid_source": "HOST",
+      "ready_source": "RAM"
+    },
+    "aw": {
+      "valid_source": "HOST",
+      "ready_source": "RAM"
+    },
+    "w": {
+      "valid_source": "HOST",
+      "ready_source": "RAM"
+    },
+    "r": {
+      "valid_source": "RAM",
+      "ready_source": "HOST"
+    },
+    "b": {
+      "valid_source": "RAM",
+      "ready_source": "HOST"
+    }
+  },
+  "sampling": "existing settled low-edge Frame pre_.axi, counted once after matching actual high evaluation and resident acceptance",
+  "location": "N0ModelScheduler::observe_counts, before adapter_.retire_high",
+  "idle_valid_false_counts": 0,
+  "successful_handshake_counts": 0,
+  "sustained_stall": "one per matching high edge, not one per episode",
+  "simultaneous_channels": "independently counted; sum may exceed cycles",
+  "maximum_each": "counts.cycles <= 8000000",
+  "additional_eval": false,
+  "changes_signal_or_transport_state": false,
+  "failure_reporting": "a throwing high-edge contract check may terminate without a complete counts file; native supervisor remains authoritative",
+  "report_schema_changed": false
+}

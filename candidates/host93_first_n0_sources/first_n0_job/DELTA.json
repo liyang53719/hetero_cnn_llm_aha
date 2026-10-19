@@ -1,0 +1,56 @@
+{
+  "actual": "NOT_EXECUTED",
+  "baseline_commit": "ab12f7056d9cb7bf2c781a8ffbdeb7e2351ffd0d",
+  "predecessor_review": {
+    "complete_findings": [
+      "F1",
+      "F2",
+      "F3"
+    ],
+    "directory": "review_first_n0_whole_source_20261019T1110",
+    "manifest": {
+      "bytes": 2408,
+      "sha256": "2da2084592c139b66f6c3f0c69aaf06b9053a3b94b1fc82b571513a7a7365669"
+    },
+    "summary": {
+      "bytes": 8412,
+      "sha256": "40a91f106e92eba56be2fe6bddd00e7a222b99e82dd30ca9fa914930961269da"
+    }
+  },
+  "preserved": [
+    "old modes",
+    "original supervisor/WNOWAIT and cleanup",
+    "all arithmetic RTL",
+    "allReady/atomic handshakes",
+    "reference dualSHA and 16 inputSHA",
+    "original numerical thresholds",
+    "root256 UNKNOWN"
+  ],
+  "production_changes": [
+    "43-stage explicit mode and finite public schema",
+    "five fixed input/runtime/reference phases",
+    "same-job existing cluster generation+compile binds22 new bridge files",
+    "single-RAM actual capture plus unchanged original comparator",
+    "private fixed-code diagnostics for seven new phases",
+    "finite cycle-cap counters retain INCOMPLETE"
+  ],
+  "scope": "FIRST_N0_M128_ONLY",
+  "v2_only_fixes": [
+    "F1_NATURAL_COMPARE_REFERENCE_POSTREAD_LABEL_ASSOCIATION",
+    "F2_BOUNDED_FIRST_COMPARE_RECEIPT",
+    "F3_NEW_MODE_SHARED_DEADLINE_LABEL"
+  ],
+  "version": 2,
+  "whole_source_review": {
+    "directory": "review_first_n0_whole_delta_20261019T1117",
+    "manifest": {
+      "bytes": 2517,
+      "sha256": "313e60aaf65d0a7d5d4c0526fca8291e9b2aa41c08ef1fef51411ba7a17712de"
+    },
+    "summary": {
+      "bytes": 5816,
+      "sha256": "5662b24df8aa688ef0db25206eb51e9cc11aeeb45036400d36a370b0ef4f78d3"
+    },
+    "verdict": "SOURCE_GO_FIRST_M128_N0_SAME_JOB_43_STAGE_ONLY"
+  }
+}

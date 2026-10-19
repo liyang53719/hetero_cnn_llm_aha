@@ -1,0 +1,73 @@
+{
+  "actual": "NOT_EXECUTED",
+  "adapter_api": {
+    "child_processes": false,
+    "new_repair_tests": 5,
+    "normal": 47,
+    "numeric_imports": false,
+    "optimized": 47,
+    "v1_retained": 42
+  },
+  "component_tests_inherited_not_rerun_here": {
+    "bridge": [
+      27,
+      27
+    ],
+    "comparison": [
+      33,
+      33
+    ],
+    "execution": [
+      54,
+      54
+    ],
+    "input_adapter": [
+      26,
+      26
+    ],
+    "receipt": [
+      14,
+      14
+    ],
+    "reference": [
+      24,
+      24
+    ],
+    "runtime": [
+      34,
+      34
+    ]
+  },
+  "coordinator": {
+    "new_repair_tests": 3,
+    "normal": 178,
+    "optimized": 178,
+    "v1_retained": 175
+  },
+  "prior_local_attempts": {
+    "attempt2": "test-harness newline SyntaxError; no production execution",
+    "attempt3": "test expectations for existing compiler logs and mock pin-reader failed; fixed test scope and canonical map reuse"
+  },
+  "scope": "SOURCE_AND_TINY_MOCK_ONLY",
+  "source_only_fresh_overlay": {
+    "created_output": false,
+    "exit_code": 0,
+    "fixed_files": 82
+  },
+  "v1_preserved": {
+    "bytes": 25462,
+    "sha256": "a6609e48753f4a966a395895718cc27ff2d5e4c2e8b7a45a5d0cc1812f5a3348"
+  },
+  "whole_source_review": {
+    "directory": "review_first_n0_whole_delta_20261019T1117",
+    "manifest": {
+      "bytes": 2517,
+      "sha256": "313e60aaf65d0a7d5d4c0526fca8291e9b2aa41c08ef1fef51411ba7a17712de"
+    },
+    "summary": {
+      "bytes": 5816,
+      "sha256": "5662b24df8aa688ef0db25206eb51e9cc11aeeb45036400d36a370b0ef4f78d3"
+    },
+    "verdict": "SOURCE_GO_FIRST_M128_N0_SAME_JOB_43_STAGE_ONLY"
+  }
+}

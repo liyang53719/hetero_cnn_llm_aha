@@ -15,8 +15,8 @@ import unittest
 from unittest import mock
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'host_execution.py'
-SIZE = 46046
-SHA = 'e128cfe0ba74e2cb78498f41b3ef7ff4b7eb41df37ea6f13be8e45f440e670cd'
+SIZE = 52525
+SHA = 'b3470853d6b2a74b0ce75028cde553344cf3a76a12eddcb3fb8f2e169b229a1a'
 RAW = SOURCE.read_bytes()
 def load(raw):
     if len(raw) != SIZE or hashlib.sha256(raw).hexdigest() != SHA:
@@ -28,6 +28,9 @@ g = load(RAW)
 if len(sys.argv) < 3 or sys.argv[1] != '--repo':
     raise SystemExit('Supply --repo ABSOLUTE_REPO')
 REPO = Path(sys.argv[2]); del sys.argv[1:3]
+BRIDGE = REPO / 'candidates/host93_first_n0_sources/bridge'
+if len(sys.argv) >= 3 and sys.argv[1] == '--bridge':
+    BRIDGE = Path(sys.argv[2]); del sys.argv[1:3]
 PINS, BUFFERS, SUPPORT, LEXICAL = g.load(REPO)
 PORTS = g.unique_json(BUFFERS[g.CONTRACT])['HOST_PORTS']
 LEAF = 'qwen2_matrix_command_endpoint_cold'
@@ -398,8 +401,8 @@ class DerivedFifoClosureCold(unittest.TestCase):
         source=ast.parse(RAW)
         run=next(n for n in source.body if isinstance(n,ast.FunctionDef) and n.name=='run')
         calls=[n for n in ast.walk(run) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='closure']
-        self.assertEqual(len(calls),5)
-        self.assertEqual(sum(any(k.arg=='fifo_valid_split' and isinstance(k.value,ast.Name) and k.value.id=='variant' for k in c.keywords) for c in calls),5)
+        self.assertEqual(len(calls),6)
+        self.assertEqual(sum(any(k.arg=='fifo_valid_split' and isinstance(k.value,ast.Name) and k.value.id=='variant' for k in c.keywords) for c in calls),6)
 
 
 
@@ -678,5 +681,230 @@ class ClusterContinuation(unittest.TestCase):
             with self.assertRaises(ValueError) as caught:
                 g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),True,SV)
             self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_ARTIFACTS')
+
+
+
+class FirstN0CompileOnly(unittest.TestCase):
+    def materialize(self, base):
+        catalog = g.unique_json(g.small_read(HERE / 'FIRST_N0_SOURCES.json',
+                                           g.FIRST_N0_CATALOG_SIZE, g.FIRST_N0_CATALOG_SHA))
+        repo = base / 'bridge_repo'
+        for path, pin in catalog['sources'].items():
+            raw = g.small_read(BRIDGE / path[len(g.FIRST_N0_PREFIX):], pin['bytes'], pin['sha256'])
+            target = repo / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(raw)
+        return repo
+
+    def invoke(self, base, *, fail=None, mutate=None, callback_edit=None, callback_error=None):
+        bridge_repo = self.materialize(base)
+        work = base / 'work'; seen = []; commands = []; callbacks = []
+        failure = RuntimeError('first N0 native fixture failure')
+        actual_loader = g.load_first_n0
+        before = generation_inputs(base)
+        def phase(name, argv, cwd, environment, bound):
+            seen.append(name); commands.append(copy.deepcopy(argv))
+            self.assertEqual(bound, g.LIMITS[name])
+            self.assertEqual(cwd, work)
+            if name == 'host93_cpp_generate': cluster_fixture(work)
+            if name == fail: raise failure
+            if name == 'host93_cpp_compile':
+                leaf = CLUSTER_TEST_LEAF
+                for path, raw in [('obj/V' + leaf + '/lib' + leaf + '.a', b'archive'),
+                                  ('obj/VHostBlockTop__ALL.a', b'toparchive'),
+                                  ('obj/VHostBlockTop', b'\x7fELFfake')]:
+                    target = work / path; target.write_bytes(raw)
+                    target.chmod(0o700 if target.name == 'VHostBlockTop' else 0o600)
+            if mutate is not None: mutate(name, work, bridge_repo)
+            return {'record': {'exit_code': 0, 'cleanup_confirmed': True}, 'raw_log': b'',
+                    'usage': {}, 'evidence_root': str(base / name)}
+        def callback(work, source_map):
+            callbacks.append(source_map)
+            if callback_error is not None: raise callback_error
+            result = cluster_census(work)
+            if callback_edit is not None: callback_edit(result)
+            return result
+        def run():
+            with mock.patch.object(g, 'load', return_value=(PINS, BUFFERS, SUPPORT, LEXICAL)), \
+                 mock.patch.object(g, 'closure', return_value=before) as closure, \
+                 mock.patch.object(g, 'verify_tools', return_value={}), \
+                 mock.patch.object(g, 'verify_emission', return_value={}), \
+                 mock.patch.object(g, 'load_first_n0', side_effect=lambda repo: actual_loader(bridge_repo)), \
+                 mock.patch.object(g, 'generated_witness', side_effect=RuntimeError('old ABI forbidden')), \
+                 mock.patch.object(g, 'check_log', side_effect=RuntimeError('reset qualification forbidden')):
+                result = g.run(REPO, work, phase,
+                    {'verilator_root': '/tmp/tools', 'backend': {'path': '/tmp/tools/bin/verilator_bin'},
+                     'configured_runtime': {}, 'host_programs': {}}, {'sv': {}},
+                    base / 'idma', base / 'retained', base / 'config', cluster_boundary=True,
+                    diagnostic_callback=callback, first_n0=True)
+                self.assertTrue(all(call.kwargs == {'fifo_valid_split': True}
+                                    for call in closure.call_args_list))
+                return result
+        return run, seen, commands, callbacks, failure, bridge_repo
+
+    def test_first_n0_two_phases_only_exact_command_delta_and_compiled_identity(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td); run, seen, commands, callbacks, _, _ = self.invoke(base)
+            result = run()
+            self.assertEqual(seen, ['host93_cpp_generate', 'host93_cpp_compile'])
+            self.assertEqual(len(callbacks), 1); self.assertEqual(len(callbacks[0]), 307)
+            original = g.commands(base / 'work', {'path': '/tmp/tools/bin/verilator_bin'},
+                                  generation_inputs(base), base / 'config')
+            expected = original['host93_cpp_generate'][:]
+            expected[expected.index('--exe') + 1] = str(base / 'work/fixtures/first_n0_main.cpp')
+            self.assertEqual(commands, [expected, original['host93_cpp_compile']])
+            self.assertEqual(result['status'], 'COMPILED_FIRST_N0_FIXTURE_ONLY')
+            self.assertEqual(result['execution_qualification'], 'NOT_RUN')
+            self.assertNotIn('qualification', result); self.assertNotIn('elf', result)
+            self.assertEqual(set(result['phases']), set(seen))
+            self.assertFalse(result['ram_or_weights_or_n0_or_full_block_claim'])
+            self.assertFalse(result['current_abi_or_runtime_handles_claim'])
+            witness = result['generated_witness']
+            self.assertEqual(witness['accumulator_seed_parameter'], 1)
+            self.assertFalse(witness['runtime_handles_verified'])
+            self.assertFalse(witness['root_header_parsed']); self.assertFalse(witness['old_abi_inherited'])
+            self.assertIsNone(witness['instance_handle_count'])
+            path = base / 'work/obj/VHostBlockTop'
+            self.assertEqual(result['compiled_executable'], {'path': str(path), **SUPPORT.identity(path, 1024)})
+            fixtures = base / 'work/fixtures'
+            self.assertEqual(len(list(fixtures.iterdir())), 22)
+            self.assertFalse((fixtures / 'short_launch.cpp').exists())
+            self.assertEqual(json.loads((base / 'work/RESULT.json').read_text()), result)
+            self.assertFalse((base / 'work/host93_reset_launch_TREE.json').exists())
+
+    def test_existing_routes_never_load_first_n0_sources(self):
+        with mock.patch.object(g, 'load_first_n0', side_effect=RuntimeError('new route forbidden')) as loader:
+            with tempfile.TemporaryDirectory() as td:
+                run, seen, _, _ = ClusterContinuation().execute_fixture(Path(td))
+                result = run()
+                self.assertEqual(result['status'], 'PASS_NEW_HOST_RESET_AND_ONE_LAUNCH_ONLY')
+                self.assertEqual(seen, list(g.LIMITS))
+            loader.assert_not_called()
+
+    def test_first_n0_invalid_flags_rejected_before_loading(self):
+        for first, cluster, stop in [(True, False, False), (True, True, True),
+                                      (1, True, False), (None, True, False), ('yes', True, False)]:
+            with self.subTest(first=first, cluster=cluster, stop=stop), \
+                 mock.patch.object(g, 'load', side_effect=RuntimeError('load forbidden')) as loader:
+                with self.assertRaises(ValueError):
+                    g.run('/tmp/repo', '/tmp/work', lambda *x: None, {}, {}, '/tmp/idma',
+                          '/tmp/retained', '/tmp/config', cluster_boundary=cluster,
+                          stop_after_generation=stop, diagnostic_callback=lambda *x: {}, first_n0=first)
+                loader.assert_not_called()
+
+    def test_first_n0_catalog_fixed_collision_free_include_closure(self):
+        with tempfile.TemporaryDirectory() as td:
+            repo = self.materialize(Path(td))
+            catalog, fixtures = g.load_first_n0(repo)
+            self.assertEqual(len(catalog['sources']), len(fixtures))
+            self.assertEqual(len(fixtures), 22)
+            self.assertIn('first_n0_main.cpp', fixtures)
+            self.assertEqual(fixtures['canonical_launch.hpp'], BUFFERS[g.LAUNCH])
+            original = g.small_read
+            for mutation in ('collision', 'source_path', 'include_escape', 'extra_external'):
+                bad = copy.deepcopy(catalog)
+                paths = list(bad['sources'])
+                escaped = None
+                if mutation == 'collision':
+                    bad['sources'][paths[0]]['fixture'] = bad['sources'][paths[1]]['fixture']
+                elif mutation == 'source_path':
+                    bad['sources']['../escape'] = bad['sources'].pop(paths[0])
+                elif mutation == 'include_escape':
+                    escaped = paths[0]
+                else:
+                    bad['sources'][paths[0]]['fixture'] = 'VHostBlockTop.h'
+                def fake(path, size, digest):
+                    if path == HERE / 'FIRST_N0_SOURCES.json': return json.dumps(bad).encode()
+                    if escaped is not None and path == repo / escaped: return b'#include "../escape.hpp"\n'
+                    return original(path, size, digest)
+                with self.subTest(mutation=mutation), mock.patch.object(g, 'small_read', side_effect=fake):
+                    with self.assertRaises(ValueError): g.load_first_n0(repo)
+
+    def test_first_n0_missing_changed_and_symlink_sources_rejected(self):
+        for mutation in ('missing', 'same_size', 'symlink', 'parent_symlink'):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as td:
+                base = Path(td); repo = self.materialize(base)
+                target = repo / (g.FIRST_N0_PREFIX + 'source/first_n0_main.cpp')
+                if mutation == 'missing': target.unlink()
+                elif mutation == 'same_size': target.write_bytes(b'X' + target.read_bytes()[1:])
+                elif mutation == 'symlink':
+                    alternate = base / 'alternate.cpp'; target.rename(alternate); target.symlink_to(alternate)
+                else:
+                    alternate = base / 'alternate'; target.parent.rename(alternate); target.parent.symlink_to(alternate)
+                with self.assertRaises((OSError, ValueError)): g.load_first_n0(repo)
+
+    def test_first_n0_source_and_fixture_drift_before_return(self):
+        for phase in ('host93_cpp_generate', 'host93_cpp_compile'):
+            for mutation in ('source', 'fixture', 'extra_header', 'fixture_mode', 'fixture_symlink'):
+                with self.subTest(phase=phase, mutation=mutation), tempfile.TemporaryDirectory() as td:
+                    def mutate(name, work, repo):
+                        if name != phase: return
+                        target = work / 'fixtures/first_n0_driver.hpp'
+                        if mutation == 'source':
+                            target = repo / (g.FIRST_N0_PREFIX + 'include/first_n0_driver.hpp')
+                        if mutation in ('source', 'fixture'): target.write_bytes(b'X' + target.read_bytes()[1:])
+                        elif mutation == 'extra_header': (work / 'fixtures/unpinned.hpp').write_bytes(b'extra')
+                        elif mutation == 'fixture_mode': target.chmod(0o700)
+                        else:
+                            raw = target.read_bytes(); target.unlink()
+                            alternate = work / 'alternate.hpp'; alternate.write_bytes(raw); target.symlink_to(alternate)
+                    run, seen, _, _, _, _ = self.invoke(Path(td), mutate=mutate)
+                    with self.assertRaises((ValueError, OSError)): run()
+                    self.assertEqual(seen, ['host93_cpp_generate'] if phase == 'host93_cpp_generate'
+                                     else ['host93_cpp_generate', 'host93_cpp_compile'])
+
+    def test_first_n0_native_failure_callback_and_no_reset(self):
+        for phase in ('host93_cpp_generate', 'host93_cpp_compile'):
+            with self.subTest(phase=phase), tempfile.TemporaryDirectory() as td:
+                run, seen, _, callbacks, failure, _ = self.invoke(Path(td), fail=phase)
+                with self.assertRaises(RuntimeError) as caught: run()
+                self.assertIs(caught.exception, failure); self.assertEqual(len(callbacks), 1)
+                self.assertNotIn('host93_reset_launch', seen)
+
+    def test_first_n0_census_callback_and_seed_gates_stop_compile(self):
+        for mutation in ('census', 'callback', 'seed', 'initializer'):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as td:
+                def mutate(name, work, repo):
+                    if name != 'host93_cpp_generate': return
+                    if mutation == 'seed':
+                        target = work / ('obj/V' + CLUSTER_TEST_LEAF + '__hierMkArgs.f')
+                        target.write_bytes(target.read_bytes().replace(b"1\\'h1", b"1\\'h0"))
+                    if mutation == 'initializer':
+                        target = work / ('obj/V' + CLUSTER_TEST_LEAF + '/' + CLUSTER_TEST_LEAF + '.cpp')
+                        target.write_bytes(target.read_bytes().replace(b'm_seqnum{0}', b'm_seqnum{1}'))
+                run, seen, _, _, _, _ = self.invoke(Path(td), mutate=mutate,
+                    callback_edit=(lambda report: report.update(state='CONTRACT_ERROR')) if mutation == 'census' else None,
+                    callback_error=RuntimeError('callback failed') if mutation == 'callback' else None)
+                with self.assertRaises((RuntimeError, ValueError)): run()
+                self.assertEqual(seen, ['host93_cpp_generate'])
+
+    def test_first_n0_compiled_artifact_gates_fail_closed(self):
+        for mutation in ('missing_child', 'missing_top', 'not_elf', 'not_executable', 'generated_drift'):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as td:
+                def mutate(name, work, repo):
+                    if name != 'host93_cpp_compile': return
+                    if mutation == 'missing_child':
+                        (work / ('obj/V' + CLUSTER_TEST_LEAF + '/lib' + CLUSTER_TEST_LEAF + '.a')).unlink()
+                    elif mutation == 'missing_top': (work / 'obj/VHostBlockTop__ALL.a').unlink()
+                    elif mutation == 'not_elf': (work / 'obj/VHostBlockTop').write_bytes(b'NOTELFxx')
+                    elif mutation == 'not_executable': (work / 'obj/VHostBlockTop').chmod(0o600)
+                    else: (work / 'obj/VHostBlockTop.h').write_bytes(b'changed')
+                run, seen, _, _, _, _ = self.invoke(Path(td), mutate=mutate)
+                with self.assertRaises(ValueError): run()
+                self.assertEqual(seen, ['host93_cpp_generate', 'host93_cpp_compile'])
+
+    def test_first_n0_elf_hash_drift_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td); run, _, _, _, _, _ = self.invoke(base)
+            actual = SUPPORT.identity
+            target = base / 'work/obj/VHostBlockTop'; calls = []
+            def identity(path, cap, *args, **kwargs):
+                result = actual(path, cap, *args, **kwargs)
+                if Path(path) == target:
+                    calls.append(path)
+                    if len(calls) == 2: target.write_bytes(b'\x7fELFdrift')
+                return result
+            with mock.patch.object(SUPPORT, 'identity', side_effect=identity):
+                with self.assertRaises(ValueError): run()
 
 if __name__=='__main__':unittest.main()

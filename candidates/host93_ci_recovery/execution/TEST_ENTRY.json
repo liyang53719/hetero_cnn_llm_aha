@@ -1,0 +1,22 @@
+{
+  "also_test_with": "-O",
+  "argv_after_test_path": [
+    "--repo",
+    "ABSOLUTE_REPOSITORY",
+    "--bridge",
+    "ABSOLUTE_FROZEN_BRIDGE_SOURCE_ROOT"
+  ],
+  "bridge_default_if_omitted": "REPO/candidates/host93_first_n0_sources/bridge",
+  "native_execution": false,
+  "required_python_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ],
+  "same_buffer_bootstrap": "import sys, os, stat, hashlib, types\nif not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode):\n    raise SystemExit(\"Python -I -S -B required before local loading\")\np = sys.argv[1]\nif not p.startswith(\"/\") or any(x in (\"\", \".\", \"..\") for x in p[1:].split(\"/\")):\n    raise SystemExit(\"absolute clean source path required\")\nparts = p[1:].split(\"/\")\nparent = os.open(\"/\", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)\nfor part in parts[:-1]:\n    nxt = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)\n    os.close(parent)\n    parent = nxt\nfd = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)\nwith os.fdopen(fd, \"rb\") as stream:\n    before = os.fstat(stream.fileno())\n    if not stat.S_ISREG(before.st_mode) or before.st_size != 61950:\n        raise SystemExit(\"source regular/exact size before compile\")\n    raw = stream.read(61950 + 1)\n    after = os.fstat(stream.fileno())\ncurrent = os.stat(parts[-1], dir_fd=parent, follow_symlinks=False)\nos.close(parent)\nstamp = lambda x: (x.st_dev, x.st_ino, x.st_mode, x.st_size, x.st_mtime_ns, x.st_ctime_ns)\nif len(raw) != 61950 or hashlib.sha256(raw).hexdigest() != \"98b69c8d5fce159c1c6474a224c4a508990944974c98dd223b044830214f3e10\" or stamp(before) != stamp(after) or stamp(before) != stamp(current):\n    raise SystemExit(\"source identity before compile\")\nsys.argv = sys.argv[1:]\ntest_module = types.ModuleType(\"__main__\")\ntest_module.__file__ = p\nsys.modules[\"__main__\"] = test_module\nexec(compile(raw, p, \"exec\", dont_inherit=True), test_module.__dict__)\n",
+  "test": {
+    "bytes": 61950,
+    "name": "test_cold.py",
+    "sha256": "98b69c8d5fce159c1c6474a224c4a508990944974c98dd223b044830214f3e10"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "origin_manifest_sha256": "38afc16d7a5c56e47b950e47c8a5ddfe2a8abc5374b77884539296407d8705fc",
+  "schema": "FIXED_FIRST_N0_COMPILE_SOURCES_V1",
+  "sources": {
+    "candidates/host93_first_n0_sources/bridge/include/axi_protocol.hpp": {
+      "bytes": 6569,
+      "fixture": "axi_protocol.hpp",
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/canonical16_identities.hpp": {
+      "bytes": 3844,
+      "fixture": "canonical16_identities.hpp",
+      "sha256": "0f46d5f389af952a793ac38812009d3da081a858b2fd1f650f8feda513cfd499"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/canonical_launch.hpp": {
+      "bytes": 2065,
+      "fixture": "canonical_launch.hpp",
+      "sha256": "7b4a6bf463335d7984fbc803ccb4cca275b54344fa883d82403fa55de4f0a7bc"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/completion_payload.hpp": {
+      "bytes": 1971,
+      "fixture": "completion_payload.hpp",
+      "sha256": "aa31a256347d3938edc5b9e84b332d90b98a8947383b4cfe02b520e0eb23c697"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/first_n0_diagnostic_codes.inc": {
+      "bytes": 33617,
+      "fixture": "first_n0_diagnostic_codes.inc",
+      "sha256": "bc76bd3b21d7d3aeb81325763070aa2946e8d6f9b0d0ef8f11ad227034861225"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/first_n0_diagnostics.hpp": {
+      "bytes": 2168,
+      "fixture": "first_n0_diagnostics.hpp",
+      "sha256": "d2553e8cd2ff2732fe42d453c8660e94f8a9f685f6dae41a41b5847c8769c271"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/first_n0_driver.hpp": {
+      "bytes": 4887,
+      "fixture": "first_n0_driver.hpp",
+      "sha256": "d313b1bbefc44418d1822290fd9f90ae46ba9122481523cc732fc5e787cd97d3"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/first_n0_inputs.hpp": {
+      "bytes": 1695,
+      "fixture": "first_n0_inputs.hpp",
+      "sha256": "d6ef16b6ba0148b59fb4aad84244906425783606f5daec98bd9d92c56958fe82"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/first_n0_limits.hpp": {
+      "bytes": 720,
+      "fixture": "first_n0_limits.hpp",
+      "sha256": "52dd7b039421de27da6e02352247f3236b80114d6e046c46c7e1eeb3589f7c00"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/first_n0_result.hpp": {
+      "bytes": 1232,
+      "fixture": "first_n0_result.hpp",
+      "sha256": "ca0ddcce83c84691afd48f17ba6cd893936979daa8128c1625ac6614b2083754"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/fixed_file_io.hpp": {
+      "bytes": 2337,
+      "fixture": "fixed_file_io.hpp",
+      "sha256": "ca890f5e09cf79c8c3f838b85ef4521a2e71c6b00af67c8d8ac298a42a41d579"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/generated_binding.hpp": {
+      "bytes": 164037,
+      "fixture": "generated_binding.hpp",
+      "sha256": "84b1e85078f9864610a1dbee1c68a7ff40e4ba847dd239f54fd079151e066afe"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/host_ports.hpp": {
+      "bytes": 3123,
+      "fixture": "host_ports.hpp",
+      "sha256": "374845951e3fad70448b52bfa33418d19a08c9cf58200526adf20fb9b78486de"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/n0_field_registry.inc": {
+      "bytes": 12696,
+      "fixture": "n0_field_registry.inc",
+      "sha256": "af5130f58aa27e39859fd9efdc19b3bd8c8536c3bfc4d9b3853740d3bc8eb0f2"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/n0_model_fields.hpp": {
+      "bytes": 21381,
+      "fixture": "n0_model_fields.hpp",
+      "sha256": "33dd661d89ef01c57f4fe1573779904ed52fd25c335f4041fc8b64c318e51c69"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/n0_model_scheduler.inc": {
+      "bytes": 20875,
+      "fixture": "n0_model_scheduler.inc",
+      "sha256": "0c31771cd3d7a12044710467d85a87f2a6a53e7b6c881344db87af62f54f87f6"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/n0_production_guard.hpp": {
+      "bytes": 5395,
+      "fixture": "n0_production_guard.hpp",
+      "sha256": "462fe82cdc24ea9fb9e15000fecee3bb6559f6f4d59dac4c7c95e99216537a3a"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/runtime_policy.hpp": {
+      "bytes": 4425,
+      "fixture": "runtime_policy.hpp",
+      "sha256": "1d8a87ec0c09371d55f886099b86b2dc656ab7f3929add99c514c6cef2e08b24"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/runtime_ram.hpp": {
+      "bytes": 27124,
+      "fixture": "runtime_ram.hpp",
+      "sha256": "1a186ecc517afbfd78775bd093bcd6918aedc647958fa0c09bf455a0bb708bbd"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/sha256.hpp": {
+      "bytes": 4541,
+      "fixture": "sha256.hpp",
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "candidates/host93_first_n0_sources/bridge/include/silu_observer.hpp": {
+      "bytes": 19085,
+      "fixture": "silu_observer.hpp",
+      "sha256": "4517356fae02531b1eab19d825423440c197bfeb0f5269475dda501da1225245"
+    },
+    "candidates/host93_first_n0_sources/bridge/source/first_n0_main.cpp": {
+      "bytes": 6812,
+      "fixture": "first_n0_main.cpp",
+      "sha256": "d569ddacaa2ec3260fbbc975c0da631a842d34f9344ebd10ea53db0e31ed8a15"
+    }
+  }
+}

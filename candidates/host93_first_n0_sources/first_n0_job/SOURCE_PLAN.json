@@ -1,0 +1,100 @@
+{
+  "actual": "NOT_EXECUTED",
+  "comparator_limits": {
+    "max_abs": 0.03125,
+    "mean_abs": 0.005
+  },
+  "component_reviews": {
+    "bridge": {
+      "directory": "review_first_n0_bridge_v4_source_20261019T1059",
+      "manifest_sha256": "f530c6297961b8bfe99b6b485e7469b9b2b6e36a1de05112a112cedf660e1317",
+      "summary_sha256": "26968a14ee3b5694c937df081403b40d3cb65af47484b3ef625e632170a274c3"
+    },
+    "comparison": {
+      "directory": "review_first_n0_comparator_source_20261019T1051",
+      "manifest_sha256": "a2c3412cd4721924a28edd14c28ee7d6ab5e8ba3be5e125b137daa5351b7068d",
+      "summary_sha256": "f49af97db6c849b512293dadbde5385368fb6bda3bc77e1bf311a6f16b3f3895"
+    },
+    "execution_pin_delta": {
+      "directory": "audit_first_n0_execution_v3_pin_delta_20261019T1103",
+      "manifest_sha256": "a02db86ecc54c6663394f3dca7050f6a7b2d0f14ea6f52cd20d89a9b2fc92e47",
+      "summary_sha256": "a896033b11c340db3d4912557b325f337d72bb3f77eddcac0f4020b8981729c3"
+    },
+    "input_adapter": {
+      "directory": "review_n0_input_adapter_source_20261019T1103",
+      "manifest_sha256": "2011fdd57c6c6105514623e7296611f4d720316b41226ebba6d3ecf2079713f3",
+      "summary_sha256": "0f9053683de3495710d7eb9bac5c297c5677bfe5ef47b12098c7fa34f1a6d168"
+    },
+    "input_receipt": {
+      "directory": "review_n0_receipt_binding_independent_20261019T1036",
+      "manifest_sha256": "02e7a4e205b8ae11eecef952fd7bb1c37a67bb70eb4174befe7a0fb183d15933",
+      "summary_sha256": "b27b3431547e14ae991a7b03c492fb00032553b05c1483c9541bd3114525e23a"
+    },
+    "reference": {
+      "directory": "review_frozen_n0_reference_source_20261019T1036",
+      "manifest_sha256": "6ea5150332941dbacc9ec5304887c2ac2e0ffa3e4706ac5f1202f95f39a0b4fd",
+      "summary_sha256": "91e8dbf66951f56916fac12b48ea9bf9f9e6c77498b776155620e294e12797ad"
+    },
+    "runtime": {
+      "directory": "review_n0_runtime_frontdoor_delta_20261019T1050",
+      "manifest_sha256": "8907081e560b5b138969921f6761fabad37153345bc863bbc2b61296e1406c28",
+      "summary_sha256": "599be0cf98bfafe464ecdceecd1cd374c41527b3bc823344b8d92276f049b15c"
+    }
+  },
+  "exact_required_for_numeric_pass": false,
+  "frontdoor_seconds": 1440,
+  "full_denominator": 196608,
+  "mode": "host-cluster-first-n0",
+  "numeric_cycle_cap": 8000000,
+  "numeric_window_seconds": 3600,
+  "old_mode_stage_counts": [
+    34,
+    16,
+    34,
+    35,
+    37
+  ],
+  "predecessor_review": {
+    "complete_findings": [
+      "F1",
+      "F2",
+      "F3"
+    ],
+    "directory": "review_first_n0_whole_source_20261019T1110",
+    "manifest": {
+      "bytes": 2408,
+      "sha256": "2da2084592c139b66f6c3f0c69aaf06b9053a3b94b1fc82b571513a7a7365669"
+    },
+    "summary": {
+      "bytes": 8412,
+      "sha256": "40a91f106e92eba56be2fe6bddd00e7a222b99e82dd30ca9fa914930961269da"
+    }
+  },
+  "reduction_floor": 2428928,
+  "reference_double_exact_required": true,
+  "root256": "UNKNOWN",
+  "shared_job_seconds": 6600,
+  "source_pin_count": 82,
+  "stages": 43,
+  "terminal_reserve_seconds": 120,
+  "unproven_allowance": 5571072,
+  "version": 2,
+  "weights_or_tensors_published": false,
+  "whole_source_review": {
+    "directory": "review_first_n0_whole_delta_20261019T1117",
+    "manifest": {
+      "bytes": 2517,
+      "sha256": "313e60aaf65d0a7d5d4c0526fca8291e9b2aa41c08ef1fef51411ba7a17712de"
+    },
+    "summary": {
+      "bytes": 5816,
+      "sha256": "5662b24df8aa688ef0db25206eb51e9cc11aeeb45036400d36a370b0ef4f78d3"
+    },
+    "verdict": "SOURCE_GO_FIRST_M128_N0_SAME_JOB_43_STAGE_ONLY"
+  },
+  "workflow": {
+    "bytes": 5179,
+    "sha256": "0878fdfa6c13891be297a5e942dcce5cfbac491e4b92488097e743be43a5a4c7"
+  },
+  "workflow_target": ".github/workflows/host93-ci-recovery-once.yml"
+}

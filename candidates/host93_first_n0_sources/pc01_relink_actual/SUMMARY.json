@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "verdict": "ACCEPT_ACTUAL_PC01_DRIVER_COMPILE_LINK_ONLY",
+  "actual_evidence_manifest": {
+    "bytes": 882,
+    "sha256": "50e3fdc555dc211e71a2638e18fffa006322fb13ad5f3467f598b996551c01d3"
+  },
+  "independent_review": {
+    "manifest": {
+      "bytes": 1256,
+      "sha256": "9fc63304848d842ec22d617fc05d5b2bba1413a15c80fd1b2ed797a887d50de1"
+    },
+    "summary": {
+      "bytes": 5665,
+      "sha256": "768474add541e8c033126d02a8f0efbb4bd913fcf6ccaa412bd7f727b9b49195"
+    }
+  },
+  "scope": {
+    "driver_compiled": true,
+    "driver_linked": true,
+    "backend_or_RTL_regenerated": false,
+    "produced_executable_invoked": false,
+    "PC01_executed": false,
+    "numeric_qualified": false,
+    "full_block_qualified": false,
+    "long_execution_admission": false
+  },
+  "stage_qualification": {
+    "native_stages": 2,
+    "natural_exit_codes": [
+      0,
+      0
+    ],
+    "timed_out": [
+      false,
+      false
+    ],
+    "cleanup_complete": [
+      true,
+      true
+    ],
+    "stdout_stderr_bytes": [
+      0,
+      0
+    ],
+    "outer_exit_code": 0
+  },
+  "outer": {
+    "exit_code": 0,
+    "finished_utc": "2026-10-19T19:31:59.801665+00:00",
+    "seconds": 5.451080440005171,
+    "not_child_exit": true
+  },
+  "coordinator_seconds": 5.409103641999536,
+  "stages": [
+    {
+      "name": "compile",
+      "native_seconds": 3.459783,
+      "phase_seconds": 3.4701103910047095,
+      "cpu_limit": 80,
+      "user_cpu_seconds": 2.9933449999999997,
+      "system_cpu_seconds": 0.437828,
+      "maxrss_kib_cumulative": 337732
+    },
+    {
+      "name": "link",
+      "native_seconds": 0.14449,
+      "phase_seconds": 0.15403618100390304,
+      "cpu_limit": 10,
+      "user_cpu_seconds": 0.08637500000000031,
+      "system_cpu_seconds": 0.05073,
+      "maxrss_kib_cumulative": 337732
+    }
+  ],
+  "object": {
+    "bytes": 1327264,
+    "sha256": "10fbc760637ab4d8f0be22119da9fe60a9e493ed4efe8ee683b42e067095c304"
+  },
+  "binary": {
+    "bytes": 13537744,
+    "sha256": "cb64b5cf1d5e9c226b9768fb3fdcbb3305bee894b6d904cb4cf29633d10fe5b1"
+  },
+  "old_archive": {
+    "bytes": 17631506,
+    "sha256": "dafcc125c4a4463b9ff454fda6b7a4031bfa17fd98cde1e8386ff058ce245b2f"
+  },
+  "static_closure": {
+    "elf64_x86_64": true,
+    "ET_DYN_and_DF_1_PIE": true,
+    "fixed_interpreter": true,
+    "no_RPATH_or_RUNPATH": true,
+    "needed_count": 5,
+    "dependency_tokens": 44,
+    "dependency_unique": 41,
+    "new_bridge_dependencies": 26,
+    "cached_header_dependencies": 15,
+    "unique_translation_unit": "pc01_main.cpp",
+    "system_files_rehashed": 39,
+    "aliases_rechecked": 49,
+    "old_runtime_objects_reused": 3,
+    "old_archive_and_copy_match": true
+  },
+  "limitations": [
+    "The .d file is -MMD output and excludes system headers; this is not a syscall trace or a claim about every dynamically opened file.",
+    "Resource max RSS in the inherited supervision receipt is cumulative child accounting, not a new per-phase peak measurement.",
+    "Actual timings are wall times of this relink run; no simulation cycles were observed.",
+    "The two-window 180+10620 authorization requires separate future SOURCE/ELF identity/resource admission; waiting between them is not simulation time.",
+    "The reviewer performed readonly hashes, static ELF parsing and receipt/source comparison only, without compiler/native/RTL execution."
+  ],
+  "source_review_manifest": {
+    "bytes": 842,
+    "sha256": "dd3cc28794623ce26a1c62c11202a0b21f06f978149dc2108e8004a3b544833e"
+  },
+  "source_review_summary": {
+    "bytes": 4019,
+    "sha256": "d92812b4e48c3e3132a7b753fbe3fd77535afdd2231d5628b398da507c9fa854"
+  },
+  "private_data_uploaded": false
+}

@@ -1235,3 +1235,12 @@ SOURCE 独审结论为 `ACCEPT_PC01_DRIVER_COMPILE_LINK_SOURCE_AND_180_SECOND_IN
 重链单次总墙钟上界 180 秒，含初始 pin/准入、95 秒 compile phase、25 秒 link phase及 30 秒落证；外层 TERM 170 秒、KILL 5 秒、尾 shell 5 秒仍在 180 秒内。该入口仅验证产生 ELF 的静态身份，不执行 PC01 ELF。SOURCE 准备本身未 C++ 编译、未 native、未 RTL；独立实际结果另依冻结收据审定，本发布不推断其结果。
 
 后续单次 fresh PC0→ACK0→PC1→ACK1 执行另设自己的 t0，预算最多 10620 秒，和独立重链 180 秒合计上界 10800 秒；两步等待不计仿真 wall，不冒充同一 t0。8,000,000 主周期是总 cap，不能保证完成。原 N0 2,956,951 周期的协调墙钟 2904.533148 秒与 native 墙钟 2904.369166 秒分列；按原速度推算仅是预算参考，不能替代未知 PC1 吞吐实测。长执行合同与三轨比较另审，SOURCE 结论不授予长 RTL 或数值通过。
+
+
+## 2026-10-19 PC01 驱动复用原 archive 的实际编译与链接
+
+已完成唯一低资源两阶段资格：新 PC01 驱动编译与原 Host archive 链接，原 native 墙钟分别 3.459783 / 0.144490 秒，两者自然退出 0、未超时且清理确认；外层退出 0、总墙钟 5.451080440 秒。没有重建 backend 或重新生成 RTL，没有调用新可执行文件。
+
+新 ELF 13,537,744 B / cb64b5cf1d5e9c226b9768fb3fdcbb3305bee894b6d904cb4cf29633d10fe5b1；原 archive 17,631,506 B / dafcc125c4a4463b9ff454fda6b7a4031bfa17fd98cde1e8386ff058ce245b2f。独核 80 项工作树、47 source/cache、39 固定系统文件与49别名及 .d/ELF 静态链。-MMD 不含系统头，RSS 为累计子进程记账。正式独审 ACCEPT_ACTUAL_PC01_DRIVER_COMPILE_LINK_ONLY；MANIFEST1256 B / 9fc63304848d842ec22d617fc05d5b2bba1413a15c80fd1b2ed797a887d50de1，SUMMARY5665 B / 768474add541e8c033126d02a8f0efbb4bd913fcf6ccaa412bd7f727b9b49195。
+
+后继在独立审查的 fresh 单 Host/Syms/单 RAM 中绑定此成功 ELF/receipt，连续 PC0→ACK0→PC1→ACK1，再作完整196608值三轨比较。两次实际窗口分别上限180秒和10620秒，后者包含比较与落证；中间准备等待不算仿真时间。PC01实际/数值/fullblock均未授通过，五block仍0/5。此次安全三路径只持久化汇总，不触发新的Host/RTL/native作业；普通push轻量guard另记。全部原输入、参考、输出、二进制及证据保留，无清理。

@@ -1117,3 +1117,12 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 作者 37 项均为合成 mock/入口守门，实际包未复制、native 未启动。独立另核 28 项（接收 3+3、协调 6+6、入口 5+5），与作者计数分列；原 COLD_RESULT 的 PENDING 保留为形成时状态。未来真实 PASS 只限固定工具探针，不授 backend、Host 或 N0 数值。
 - 公开十一份安全源码/说明，排除私有命令、binding/profile、实际路径参数、机器库存、原始日志；不改 workflow。本计划以父 1208dd2071628d7ab0ae1f6ed4faf4101070af72 的 212582 B 精确前缀加本尾作一次完整替换，禁止追加整篇全文。
 - 正式 SOURCE 审查 review_local_tool_qualification_source_20261019T1618：MANIFEST 3003 B / SHA256 23a85dfef016c6ce0e62ca5a41d0733416eaf2973310755436a0b6a04bccd5cc；SUMMARY 4040 B / SHA256 ffb6f9ed4e130d3b9201081d459c3bc9f0e100917887f44c76077d56e1dc655a。结论 SOURCE_GO_SINGLE_BOUNDED_PRESET_AND_FIVE_TOOL_QUALIFICATION_ONLY；原 13 阶段/480 秒/单核与入口 argv 已核，实际执行及终态证据仍待父独立准入。
+
+## 2026-10-19 16:26 UTC：本地固定五工具实际资格有限通过（独审闭合）
+
+- 已审提交 2b0f065831d670869753ba06ae7212919002f8e8 的单次本地资格执行记录有限 PASS：3 数据+5 version+5 generation，共 13 阶段自然退出 0、未超时且 cleanup=true，原 waitid code/status=1/0；外层 0 未替代逐阶段终态。独立 actual 审查已接受本次有限事实。
+- 实际版本为 autoconf/autom4te 2.72、m4 1.4.19、flex 2.6.4、bison 3.8.2。固定入口通过原有限生成输出断言；writer 只读重核 13 日志的原 hash、5 版本首行与 5 精确 stdout，不重跑工具。
+- 外层 5.990563 秒、入口 5.890277 秒分别记录；原 480 秒共享上限及单 CPU 保持。累计 child maxrss 不冒作独立阶段峰值。固定五包接收/stage/private-copy 已到，未联网且不继承旧下载 cleanup。
+- 本次通过仅授固定五工具的有限版本/生成事实；未执行生成 C/C++，backend、Host 与 N0 数值仍未开始。原八件证据清单 MANIFEST 1019 B / SHA256 b92989398267369d36f66cdc37c76751ed6a82591c13a410608948dfb7a11de3；原 RESULT 75078 B / SHA256 c4f9e7242b3762b72055c4a87f388286c2b84df0aea3a462b4f637e1004d4cd9。
+- 本批只公开安全 summary/README 与本尾，不上传私有路径、binding/profile、库存、日志、生成代码或依赖数据；无 workflow 变更。本计划以父提交的 214641 B 精确前缀加本尾一次完整替换，禁止将完整文档追加。
+- 正式 actual 审查 review_local_tool_qualification_actual_20261019T1624：MANIFEST 595 B / SHA256 71668ec6424b76fcd7483a688c4879d620721eefd83947b3286e9f7f63b583c9；SUMMARY 3567 B / SHA256 8cc44a685098d90074096609df24cee51974d690de43a27db3ea216b873837b2。独立两树 273 entries/217 普通文件/10,305,771 B 与固定探针输出、只读 binder 后验通过；没有再执行工具。结论仅 ACCEPT_ACTUAL_LOCAL_FIXED_FIVE_TOOL_VERSION_AND_GENERATION_ONLY，不扩为通用 ABI、头编译、backend 或 N0 资格。

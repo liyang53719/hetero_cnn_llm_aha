@@ -1,0 +1,114 @@
+{
+  "actual_review": {
+    "directory": "review_local_tool_qualification_actual_20261019T1624",
+    "manifest": {
+      "bytes": 595,
+      "sha256": "71668ec6424b76fcd7483a688c4879d620721eefd83947b3286e9f7f63b583c9"
+    },
+    "state": "ACCEPTED",
+    "summary": {
+      "bytes": 3567,
+      "sha256": "8cc44a685098d90074096609df24cee51974d690de43a27db3ea216b873837b2"
+    },
+    "verdict": "ACCEPT_ACTUAL_LOCAL_FIXED_FIVE_TOOL_VERSION_AND_GENERATION_ONLY"
+  },
+  "data_scope": {
+    "accepted_data_files": 6,
+    "executable_private_tools": 5,
+    "fixed_packages": 5,
+    "private_copies": 68,
+    "selected_package_members": 67,
+    "stage_result_files": 69
+  },
+  "execution_location": "local",
+  "publication_note": "Safe aggregate projection only. No private paths, binding/profile bodies, inventories, raw logs, generated code or dependency binaries.",
+  "readback": {
+    "bounded_phase_logs_hashed": 13,
+    "exact_generation_log_contracts_checked": 5,
+    "fixed_version_headers_checked": 5,
+    "generated_file_witnesses": "INDEPENDENT_FOUR_GENERATED_TEXT_TOKEN_CONTRACTS_AND_EXACT_M4_STDOUT_ACCEPTED",
+    "independent_current_tree_observation": {
+      "bytes": 10305771,
+      "content_type_mode_match": true,
+      "entries": 273,
+      "regular_files": 217
+    },
+    "independent_readonly_binder_postflight": true,
+    "total_log_bytes": 14043
+  },
+  "resource_note": "Saved maxrss is cumulative coordinator-child accounting, not an independent per-stage measured peak.",
+  "schema": "SAFE_LOCAL_FIXED_FIVE_TOOL_QUALIFICATION_ACTUAL_V1",
+  "scope": {
+    "backend_build": false,
+    "derived_tiny_model": false,
+    "fixed_five_tool_generation_probes": true,
+    "fixed_five_tool_versions": true,
+    "flex_header_compilation": false,
+    "general_abi_qualification": false,
+    "generated_probe_code_executed": false,
+    "host_build_or_run": false,
+    "n0_numeric": false,
+    "network_started": false,
+    "old_download_cleanup_inherited": false,
+    "reference_rerun": false
+  },
+  "source_commit": "2b0f065831d670869753ba06ae7212919002f8e8",
+  "source_evidence": {
+    "manifest": {
+      "bytes": 1019,
+      "sha256": "b92989398267369d36f66cdc37c76751ed6a82591c13a410608948dfb7a11de3"
+    },
+    "outer_result": {
+      "bytes": 149,
+      "sha256": "341b4135b0152238056b5febff6e5a17430a287e97f8e03b1918445591cf32a5"
+    },
+    "result": {
+      "bytes": 75078,
+      "sha256": "c4f9e7242b3762b72055c4a87f388286c2b84df0aea3a462b4f637e1004d4cd9"
+    }
+  },
+  "stages": {
+    "all_cleanup_confirmed": true,
+    "all_natural_exit_zero": true,
+    "all_not_timed_out": true,
+    "all_process_groups_absent_after_cleanup": true,
+    "all_reaped": true,
+    "all_waitid_code_status": [
+      1,
+      0
+    ],
+    "count": 13,
+    "data_preparation": 3,
+    "generation": 5,
+    "ordered_names": [
+      "local_dependencies_accept_cached",
+      "local_dependencies_stage_preset",
+      "local_dependencies_prepare_private",
+      "host_autoconf-version",
+      "host_autom4te-version",
+      "host_m4-version",
+      "host_flex-version",
+      "host_bison-version",
+      "host_autoconf-micro",
+      "host_autom4te-micro",
+      "host_m4-micro",
+      "host_flex-micro",
+      "host_bison-micro"
+    ],
+    "version": 5
+  },
+  "status": "PASS_FIXED_FIVE_TOOL_VERSION_AND_GENERATION_ONLY",
+  "timing": {
+    "cpu_affinity_count": 1,
+    "entry_seconds": 5.890277,
+    "outer_seconds": 5.990563,
+    "shared_cap_seconds": 480
+  },
+  "versions": {
+    "autoconf": "2.72",
+    "autom4te": "2.72",
+    "bison": "3.8.2",
+    "flex": "2.6.4",
+    "m4": "1.4.19"
+  }
+}

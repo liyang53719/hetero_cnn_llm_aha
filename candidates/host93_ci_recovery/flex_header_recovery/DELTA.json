@@ -1,0 +1,60 @@
+{
+  "changed_paths_relative_to_ci_candidate": [
+    "run.py",
+    "RUN_PINS.json",
+    "toolchain/ci_toolchain.py",
+    "toolchain/SOURCE_PINS.json",
+    "toolchain/flex_header.py",
+    "test_run_cold.py",
+    "toolchain/test_toolchain_cold.py",
+    "toolchain/test_transport_cold.py",
+    "toolchain/test_flex_header_cold.py"
+  ],
+  "earlier_failures_same_cause_claimed": false,
+  "identified_source_gap": "Historical selected67 includes this header, but current CI never stages those packages and used empty CPPFLAGS. This patch adds both the one-header acquisition and its explicit include path.",
+  "minimal_changes": [
+    "single libfl-dev fixed-byte acquisition using existing pure parser",
+    "real header C++ compile and depfile witness",
+    "same include at configure and configured Makefile witness",
+    "two added supervised shared-budget phases in both strict mode sequences",
+    "raw pin updates and affected cold tests"
+  ],
+  "observed_latest_failure": "V3ParseLex.cpp:30 includes generated V3Lexer_pregen.yy.cpp:369; FlexLexer.h unavailable; flex 2.6.4 generation succeeded; make naturally exited 2, receipt timeout false and cleanup true.",
+  "parent_commit": "c00255a68fcc3eab80b6038e9dfd764d4e22ab87",
+  "preserved_actual_runs": [
+    39185138343,
+    39187570266,
+    39191780530
+  ],
+  "schema": "HOST93_FLEX_HEADER_SOURCE_DELTA_V1",
+  "source_manifest": {
+    "directory": "candidate_ci_flex_header_source_v1_20261019T0300",
+    "manifest": {
+      "bytes": 6046,
+      "sha256": "8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_flex_header_source_20261019T0311",
+    "manifest": {
+      "bytes": 1999,
+      "sha256": "44303c275d27457eff82fd5f99191553d54aadcb3cd528355d17f22ad0dd8476"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 5092,
+      "sha256": "87ddb3dfc2e5e39f3eb645639a4e6470c67ee5754e3dc193e3d0d87f23b8d42e"
+    },
+    "verdict": "SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY"
+  },
+  "unchanged": [
+    "WNOWAIT/native supervisor",
+    "shared 6600 seconds",
+    "other phase caps",
+    "safe build-log context sanitizer",
+    "derived initializer patch",
+    "full Host source/assembly/reset-launch contract",
+    "build-only workflow",
+    "all prior actual evidence"
+  ]
+}

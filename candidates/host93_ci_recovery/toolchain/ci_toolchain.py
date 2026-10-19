@@ -21,9 +21,18 @@ import stat
 import types
 
 HERE = Path(__file__).absolute().parent
-PINS_BYTES = 2791
-PINS_SHA = 'cc070fce2a6f1ef8cbba5a78cfca8937e21d6e2233d1e0aa9288dd50ee266538'
+PINS_BYTES = 3575
+PINS_SHA = '42e1b206dcf89a886c74eec321823bb23e72422dcc856041bb83a339697d87fa'
 PREFIX = 'development_snapshots/'
+HEADER_MODULE = 'candidates/host93_ci_recovery/toolchain/flex_header.py'
+HEADER_INPUTS = PREFIX + 'canonical_host93_dependency_source_20261018/worker/'
+HEADER_PLAN = PREFIX + 'canonical_verilator_dependencies_source_20261018/worker/DEPENDENCY_PLAN.json'
+HEADER_SIZE = 6893
+HEADER_SHA = 'ee9859d6b3027ed565f98f42744e438ab31b2cd2e9f797ddf870029ca2021686'
+HEADER_PROBE = (b'#include <FlexLexer.h>\n'
+    b'static_assert(sizeof(FlexLexer) > 0, "complete FlexLexer");\n'
+    b'static_assert(sizeof(yyFlexLexer) > 0, "complete yyFlexLexer");\n'
+    b'int host93_flex_header_probe(yyFlexLexer* lexer) { return lexer != nullptr; }\n')
 SUPPORT = PREFIX + 'canonical_host93_fixed_core_build_source_20261018/run_build_gate.py'
 ACQ = PREFIX + 'canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/'
 PATCH = PREFIX + 'canonical_host93_verilator_seqnum_build_source_20261018/'
@@ -96,7 +105,8 @@ def module(raw, path, name):
 
 def load_sources(repo):
     pins = json.loads(initial_read(HERE / 'SOURCE_PINS.json', PINS_BYTES, PINS_SHA))
-    buffers = {name: initial_read(repo / name, p['bytes'], p['sha256']) for name, p in pins.items()}
+    buffers = {name: initial_read(HERE / 'flex_header.py' if name == HEADER_MODULE else repo / name,
+                                  p['bytes'], p['sha256']) for name, p in pins.items()}
     support = module(buffers[SUPPORT], repo / SUPPORT, 'fixed_ci_toolchain_filesystem_support')
     return support, pins, buffers
 
@@ -126,6 +136,8 @@ def limits(total, work, as_mib, fsize_mib, tree_mib, log_bytes=1024**2):
 
 SOURCE_LIMITS = limits(420, 400, 512, 64, 80, 128 * 1024)
 PROBE_LIMITS = limits(30, 10, 512, 4, 8, 65536)
+HEADER_LIMITS = limits(120, 90, 512, 4, 8, 65536)
+HEADER_LIMITS['cpu_seconds'] = 40
 BUILD_LIMITS = {
     'autoconf': limits(180, 160, 1024, 64, 64, 256 * 1024),
     'configure': limits(180, 160, 1024, 64, 128, 256 * 1024),
@@ -187,7 +199,7 @@ def acquisition_argv(repo, output, buffers):
     return ['/usr/bin/python3', '-I', '-S', '-B', '-c', code]
 
 
-ACQUISITION_PHASES = ('official_source473',)
+ACQUISITION_PHASES = ('official_source473', 'flex_header_acquire')
 
 TRANSPORT_KEYS = ('HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'NO_PROXY',
                   'http_proxy', 'https_proxy', 'all_proxy', 'no_proxy',
@@ -341,7 +353,83 @@ def qualify_tools(support, tools, buffers, work, call_phase, env):
             'scope': 'onsite official-image tool identity and finite generation probes only'}
 
 
-def build_commands(root, work):
+def header_acquisition_argv(repo, output, buffers):
+    plan = json.loads(buffers[HEADER_PLAN])
+    rows = [p for p in json.loads(buffers[HEADER_INPUTS + 'PINS.json'])['packages']
+            if p['package'] == 'libfl-dev']
+    require(len(rows) == 1, 'one fixed libfl-dev package')
+    raw = buffers[HEADER_MODULE]
+    parser = buffers[HEADER_INPUTS + 'stage_dependencies.py']
+    code = ('import sys\n'
+            'if not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode): raise SystemExit(1)\n'
+            'import types\nfrom pathlib import Path\n'
+            "m=types.ModuleType('fixed_ci_flex_header_acquisition')\n"
+            'm.__file__=' + repr(str(repo / HEADER_MODULE)) + '\n'
+            'exec(compile(' + repr(raw) + ",m.__file__,'exec',dont_inherit=True),m.__dict__)\n"
+            'm.stage(Path(' + repr(str(output)) + '),' + repr(plan) + ',' + repr(rows[0]) + ',' +
+            repr(parser) + ',' + repr(str(repo / (HEADER_INPUTS + 'stage_dependencies.py'))) + ')\n')
+    require(len(code.encode()) <= 120 * 1024, 'bounded header acquisition argument')
+    return ['/usr/bin/python3', '-I', '-S', '-B', '-c', code]
+
+
+def checked_header(support, include):
+    raw = support.checked_read(include / 'FlexLexer.h', HEADER_SIZE, HEADER_SHA)
+    pin = support.identity(include / 'FlexLexer.h', HEADER_SIZE)
+    require(len(raw) == HEADER_SIZE and pin == {'bytes': HEADER_SIZE, 'sha256': HEADER_SHA, 'mode': '0o600'},
+            'fixed private FlexLexer header')
+    return pin
+
+
+def expected_header_receipt():
+    return {'schema': 'SINGLE_FLEX_HEADER_ACQUISITION_V1',
+        'purpose': 'PINNED_HEADER_ONLY_FOR_PUBLIC_SOURCE_CI',
+        'package': {'filename': 'libfl-dev_2.6.4-8.2+b4_amd64.deb', 'bytes': 85600,
+                    'sha256': '1b40033660656acd5c2f85d2c45a4e02bf57a0facc5e0623327474cb911b3136'},
+        'header': {'path': 'include/FlexLexer.h', 'source_path': 'usr/include/FlexLexer.h',
+                   'bytes': HEADER_SIZE, 'sha256': HEADER_SHA, 'mode': '0o600'},
+        'parser': {'bytes': 20634, 'sha256': '3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79'},
+        'plan_sha256': '84ba3f04c62bca43cc277c3a5acdaf8e108feefa2c307db21f593964a5b40f55',
+        'package_pin_sha256': '8f1af8c3766157adfd85824ef36f19c76f265669129196f7f18aea2e45db81e8'}
+
+
+def qualify_flex_header(support, tools, buffers, repo, work, call_phase, env):
+    destination = work / 'flex-header'
+    acquired, tree = checked_phase(call_phase, support, tools, 'flex_header_acquire',
+        header_acquisition_argv(repo, destination, buffers), work, env, HEADER_LIMITS, destination)
+    require(set(tree['entries']) == {'include', 'include/FlexLexer.h', 'RECEIPT.json'} and
+            tree['files'] == 2, 'single header and private receipt only')
+    receipt_pin = support.identity(destination / 'RECEIPT.json', 4096)
+    receipt = json.loads(support.checked_read(destination / 'RECEIPT.json', receipt_pin['bytes'], receipt_pin['sha256']))
+    require(receipt == expected_header_receipt() and receipt_pin['mode'] == '0o600', 'exact header source receipt')
+    include = destination / 'include'
+    header = checked_header(support, include)
+    probe = work / 'flex-header-probe'
+    support.fresh_directory(probe)
+    write_fixture(probe / 'probe.cpp', HEADER_PROBE)
+    argv = ['/usr/bin/g++', '-std=c++17', '-g0', '-I' + str(include), '-MMD',
+            '-MF', 'probe.d', '-MT', 'probe.o', '-c', 'probe.cpp', '-o', 'probe.o']
+    compiled, outputs = checked_phase(call_phase, support, tools, 'flex_header_compile',
+                                      argv, probe, env, PROBE_LIMITS, probe)
+    checked_header(support, include)
+    require(set(outputs['entries']) == {'probe.cpp', 'probe.d', 'probe.o'} and outputs['files'] == 3,
+            'finite header compilation outputs')
+    require(support.checked_read(probe / 'probe.cpp', len(HEADER_PROBE), sha(HEADER_PROBE)) == HEADER_PROBE,
+            'unchanged header compile fixture')
+    obj = support.identity(probe / 'probe.o', 4 * 1024**2)
+    require(obj['bytes'] > 0 and obj['mode'] == '0o600', 'nonempty compiled header object')
+    dependency = support.identity(probe / 'probe.d', 4096)
+    raw = support.checked_read(probe / 'probe.d', dependency['bytes'], dependency['sha256'])
+    require(raw.decode('ascii').replace('\\\n', '').split() ==
+            ['probe.o:', 'probe.cpp', str(include / 'FlexLexer.h')], 'compiler used exact staged header')
+    return {'source_receipt': receipt, 'header_identity': header,
+            'acquisition_usage': acquired['usage'], 'compile_usage': compiled['usage'],
+            'compile_log_sha256': sha(compiled['raw_log']), 'object': obj, 'dependency': dependency,
+            'compiled_not_linked_or_executed': True}
+
+
+def build_commands(root, work, include):
+    require(Path(include).is_absolute() and re.fullmatch('[A-Za-z0-9_/.-]+', str(include)) is not None
+            and '..' not in Path(include).parts, 'fixed make-safe header include path')
     return {
         'autoconf': ['/usr/bin/autoconf', '--warnings=all', '--output=configure', 'configure.ac'],
         'configure': ['/bin/sh', './configure', '--srcdir=.', '--cache-file=/dev/null',
@@ -349,12 +437,29 @@ def build_commands(root, work):
             '--disable-tcmalloc', '--disable-jemalloc', '--disable-defenv', '--disable-ccwarn',
             '--disable-longtests', '--with-solver=no', 'CC=/usr/bin/gcc', 'CXX=/usr/bin/g++',
             'AR=/usr/bin/ar', 'PERL=/usr/bin/perl', 'PYTHON3=/usr/bin/python3',
-            'LEX=/usr/bin/flex', 'YACC=/usr/bin/bison', 'CPPFLAGS=', 'CFLAGS=-g0',
+            'LEX=/usr/bin/flex', 'YACC=/usr/bin/bison', 'CPPFLAGS=-I' + str(include), 'CFLAGS=-g0',
             'CXXFLAGS=-g0', 'LDFLAGS=', 'LIBS='],
         'make': ['/usr/bin/make', '-C', 'src', '-j1', 'opt', 'SHELL=/bin/sh',
             'MAKE=/usr/bin/make', 'BEAR=', 'BEAR_OBJ_OPT=', 'OBJCACHE=',
             'VERILATOR_NO_OPT_BUILD=0', 'VL_NOOPT=0', 'VL_DEBUG=', 'VL_VLCOV='],
     }
+
+
+def header_include_witness(template, configured, include):
+    expected = 'CPPFLAGS += -I' + str(include)
+    require(template.decode('utf-8').splitlines().count('CPPFLAGS += @CPPFLAGS@') == 1,
+            'finite official CPPFLAGS substitution')
+    require(configured.decode('utf-8').splitlines().count(expected) == 1,
+            'configured Makefile lost exact header include')
+    return {'configured_cppflags': expected, 'substitution_count': 1}
+
+
+def verify_header_include(support, root, include):
+    data = []
+    for name in ('src/Makefile_obj.in', 'src/Makefile_obj'):
+        pin = support.identity(root / name, 4 * 1024**2)
+        data.append(support.checked_read(root / name, pin['bytes'], pin['sha256']))
+    return header_include_witness(*data, include)
 
 
 def objcache_configure_witness(raw):
@@ -542,8 +647,11 @@ def run(repo: Path, work: Path, call_phase, stop_after_build=False):
         save_private(work / 'derived473_tree.json', derived)
         qualification = qualify_tools(support, tools, buffers, work, call_phase, env)
         save_private(work / 'tool_qualification.json', qualification)
+        header = qualify_flex_header(support, tools, buffers, repo, work, call_phase, env)
+        save_private(work / 'flex_header_qualification.json', header)
+        include = work / 'flex-header/include'
         env = environment(work, root)
-        commands = build_commands(root, work)
+        commands = build_commands(root, work, include)
         builds = {}
         required = {
             'autoconf': ('configure',),
@@ -552,6 +660,7 @@ def run(repo: Path, work: Path, call_phase, stop_after_build=False):
             'make': ('bin/verilator_bin', 'src/config_rev.h'),
         }
         for phase in ('autoconf', 'configure', 'make'):
+            checked_header(support, include)
             immutable_sources(support, root, derived)
             for relative in ('.autom4te.cfg', 'aclocal.m4', '.git'):
                 require(not os.path.lexists(root / relative), 'unapproved build configuration')
@@ -561,11 +670,14 @@ def run(repo: Path, work: Path, call_phase, stop_after_build=False):
                 verify_objcache_disabled(support, root)
             result, tree = checked_phase(call_phase, support, tools, 'fresh_' + phase,
                                         commands[phase], root, env, BUILD_LIMITS[phase], root)
+            checked_header(support, include)
             immutable_sources(support, root, derived)
             require(all(tree['entries'].get(n, {}).get('bytes', 0) > 0 for n in required[phase]),
                     'required fresh build output missing')
             builds[phase] = {'exit_code': 0, 'cleanup_confirmed': True,
                              'log_sha256': sha(result['raw_log']), 'usage': result['usage']}
+            if phase == 'configure':
+                builds[phase]['header_include'] = verify_header_include(support, root, include)
             if phase in ('autoconf', 'configure'):
                 builds[phase]['objcache_disabled'] = verify_objcache_disabled(support, root, phase == 'configure')
             save_private(work / ('build_' + phase + '_tree.json'), tree)
@@ -585,7 +697,7 @@ def run(repo: Path, work: Path, call_phase, stop_after_build=False):
                   'backend': backend, 'verilator_root': str(root), 'host_programs': tools,
                   'source_commit': COMMIT, 'source_members': 473, 'source_original_bytes': 11747893,
                   'source_receipt': receipt_pin, 'source_phase_usage': acquired['usage'],
-                  'patch': patch, 'qualification': qualification, 'build': builds,
+                  'patch': patch, 'qualification': qualification, 'flex_header': header, 'build': builds,
                   'configured_runtime': runtime_pin, 'tiny': tiny,
                   'historical_actual_or_review_inherited': False,
                   'production_host_claim': False}

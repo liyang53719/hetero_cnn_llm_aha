@@ -1,0 +1,114 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "cause_observed_in_run": 39191780530,
+  "excluded": [
+    "package installation",
+    "other four dependency packages",
+    "old unbound five-package staging",
+    "source or archive mutation",
+    "native execution in cold tests",
+    "expanded 6600-second deadline",
+    "supervisor or sanitizer edits",
+    "earlier failure cause reassignment",
+    "numeric inference or weights-loaded claim"
+  ],
+  "expected_parent_commit": "c00255a68fcc3eab80b6038e9dfd764d4e22ab87",
+  "header": {
+    "bytes": 6893,
+    "sha256": "ee9859d6b3027ed565f98f42744e438ab31b2cd2e9f797ddf870029ca2021686",
+    "source_member": "usr/include/FlexLexer.h",
+    "staged_mode": "0o600",
+    "staged_relative_path": "flex-header/include/FlexLexer.h"
+  },
+  "modes": {
+    "build-diagnostic": {
+      "last_stage": "fresh_make",
+      "stages": 16,
+      "tiny_or_host_executed": false
+    },
+    "default": "host-reset-launch",
+    "host-reset-launch": {
+      "continuation": "original derived tiny, Host emission, idma319, retained13, configuration, C++ generate/compile, short reset-launch",
+      "stages": 34
+    }
+  },
+  "new_phase_time_debited_from_original_shared_remaining_budget": true,
+  "new_phases": {
+    "flex_header_acquire": {
+      "as_bytes": 536870912,
+      "cpu_seconds": 40,
+      "fsize_bytes": 4194304,
+      "log_bytes": 65536,
+      "network": "default platform proxy/CA; fixed HTTPS URL; no redirect; no retry or direct fallback",
+      "total_seconds": 120,
+      "work_seconds": 90
+    },
+    "flex_header_compile": {
+      "as_bytes": 536870912,
+      "cpu_seconds": 10,
+      "fsize_bytes": 4194304,
+      "log_bytes": 65536,
+      "network": false,
+      "operation": "g++ -std=c++17 -g0 -I<exact-staged-include> -MMD -MF probe.d -MT probe.o -c probe.cpp -o probe.o; no link or object execution",
+      "total_seconds": 30,
+      "work_seconds": 10
+    }
+  },
+  "ordered_toolchain_prefix": [
+    "official_source473",
+    "ten existing version/generation probes",
+    "flex_header_acquire",
+    "flex_header_compile",
+    "fresh_autoconf",
+    "fresh_configure",
+    "fresh_make"
+  ],
+  "original_build_and_host_caps_changed": false,
+  "package": {
+    "bytes": 85600,
+    "max_transfer_bytes": 85601,
+    "sha256": "1b40033660656acd5c2f85d2c45a4e02bf57a0facc5e0623327474cb911b3136",
+    "url": "https://deb.debian.org/debian/pool/main/f/flex/libfl-dev_2.6.4-8.2+b4_amd64.deb"
+  },
+  "parser": {
+    "bytes": 20634,
+    "called_entry": "validate_package",
+    "old_five_package_staging_entry_called": false,
+    "relative_source": "development_snapshots/canonical_host93_dependency_source_20261018/worker/stage_dependencies.py",
+    "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
+  },
+  "publication_policy": "Parent alone publishes and triggers one original Host workflow; build-only workflow unchanged; safe three-JSON evidence only.",
+  "runtime_witnesses": [
+    "Exact source-buffer package/parser/header pins before use",
+    "Only staged header and private receipt from acquisition",
+    "Real C++ compilation of complete FlexLexer and yyFlexLexer types",
+    "Nonempty object and dependency file naming exactly probe.cpp and staged FlexLexer.h",
+    "Same explicit configure CPPFLAGS=-I path, with configured src/Makefile_obj substitution witness",
+    "Header exact bytes/hash/mode rechecked before and after each of autoconf, configure, make"
+  ],
+  "schema": "HOST93_SINGLE_FLEX_HEADER_SOURCE_PLAN_V1",
+  "scope": "One pinned public Debian package, one exact header, real compile probe, then the original in-job build/tiny/Host sequence; fail closed at first failure.",
+  "shared_wall_seconds": 6600,
+  "source_manifest": {
+    "directory": "candidate_ci_flex_header_source_v1_20261019T0300",
+    "manifest": {
+      "bytes": 6046,
+      "sha256": "8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b"
+    }
+  },
+  "source_pin_chain": "run.py -> RUN_PINS.json -> ci_toolchain.py/SOURCE_PINS.json/flex_header.py; SOURCE_PINS retains same-buffer verified original repo sources plus fixed dependency plan/PINS/parser and local pinned header module; child compiles only embedded verified buffers.",
+  "source_review": {
+    "directory": "review_ci_flex_header_source_20261019T0311",
+    "manifest": {
+      "bytes": 1999,
+      "sha256": "44303c275d27457eff82fd5f99191553d54aadcb3cd528355d17f22ad0dd8476"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 5092,
+      "sha256": "87ddb3dfc2e5e39f3eb645639a4e6470c67ee5754e3dc193e3d0d87f23b8d42e"
+    },
+    "verdict": "SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY"
+  },
+  "status": "SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY"
+}

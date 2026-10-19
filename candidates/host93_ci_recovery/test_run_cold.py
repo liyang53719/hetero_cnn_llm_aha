@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=43446
-SHA='9802744d5dce075badd39a3f073e123d4781543071deed3e0086f387ec48f888'
+SIZE=43611
+SHA='23fcbb7789bc4489d83c99f4a760a60d6add8340e54b32386cf68812c333a8f9'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -129,6 +129,25 @@ class Cold(unittest.TestCase):
         x=fixture();x['summary.json']['seconds']=6601
         with self.assertRaises(ValueError):G.validate_evidence(x)
     def test_phase_all_names_have_bounds(self):self.assertEqual(set(G.STAGES),set(G.PHASE_CAPS))
+    def test_header_phase_order_and_counts(self):
+        self.assertEqual(len(G.STAGES),34);self.assertEqual(len(G.BUILD_STAGES),16)
+        self.assertEqual(G.STAGES[11:16],('flex_header_acquire','flex_header_compile','fresh_autoconf','fresh_configure','fresh_make'))
+    def test_header_fixed_small_bounds(self):
+        self.assertEqual(G.PHASE_CAPS['flex_header_acquire'],(120,90,40,512*G.MIB,4*G.MIB,65536))
+        self.assertEqual(G.PHASE_CAPS['flex_header_compile'],(30,10,10,512*G.MIB,4*G.MIB,65536))
+    def test_header_phase_failure_stops_both_modes(self):
+        for mode in G.MODES:
+            for name in ('flex_header_acquire','flex_header_compile'):
+                with self.subTest(mode=mode,name=name):
+                    code,summary,stages=self.mock_whole_job(name,mode,True)
+                    self.assertEqual(code,1);self.assertEqual(stages[-1]['name'],name)
+                    self.assertFalse(summary['scope']['toolchain_build'])
+                    self.assertFalse(summary['scope']['reset_launch'])
+                    self.assertNotIn('fresh_make',[row['name'] for row in stages])
+    def test_old_phase_sequence_cannot_claim_ready(self):
+        x=fixture(True)
+        x['stage_exits.json']['stages']=[row for row in x['stage_exits.json']['stages'] if not row['name'].startswith('flex_header_')]
+        with self.assertRaises(ValueError):G.validate_evidence(x)
     def test_phase_bounds_exact(self):
         for name,caps in G.PHASE_CAPS.items():
             values=dict(zip(('total_seconds','work_seconds','cpu_seconds','as_bytes','fsize_bytes','log_bytes'),caps));values['sample_rows']=caps[0]+2
@@ -205,12 +224,12 @@ class Cold(unittest.TestCase):
                 x=dict(zip(('total_seconds','work_seconds','cpu_seconds','as_bytes','fsize_bytes','log_bytes'),G.PHASE_CAPS[name]));x['sample_rows']=x['total_seconds']+2;return x
             def group(names,result):
                 def run(repo,work,call,*args,**kwargs):
-                    selected=names[:14] if kwargs.get("stop_after_build") else names
+                    selected=names[:16] if kwargs.get("stop_after_build") else names
                     for name in selected:call(name,['/fixed/fixture'],base,{},cfg(name))
                     return result
                 return types.SimpleNamespace(run=run)
-            tools=group(G.STAGES[:18],{'backend':fixed})
-            emission=group(G.STAGES[18:26],{'fir':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_fir']},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}})
+            tools=group(G.STAGES[:20],{'backend':fixed})
+            emission=group(G.STAGES[20:28],{'fir':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_fir']},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}})
             execution=group(G.STAGES[-3:],{'elf':fixed})
             modules={'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT}
             def native(*args,**kwargs):
@@ -279,7 +298,7 @@ class Cold(unittest.TestCase):
 
     def test_build_mode_ready(self):
         self.assertTrue(G.validate_evidence(fixture(True,'build-diagnostic')))
-    def test_build_mode_only14_mock(self):
+    def test_build_mode_only16_mock(self):
         code,summary,stages=self.mock_whole_job(mode='build-diagnostic')
         self.assertEqual(code,0);self.assertEqual([x['name'] for x in stages],list(G.BUILD_STAGES))
         self.assertEqual(summary['completed_components'],['toolchain_build'])

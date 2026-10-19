@@ -1,7 +1,19 @@
 {
+  "candidates/host93_ci_recovery/toolchain/flex_header.py": {
+    "bytes": 13781,
+    "sha256": "66bad0a2aa866d8df0d6380d15620e095afcc2819d014e01c202e18f017dfce6"
+  },
   "development_snapshots/canonical_host93_dependency_source_20261018/probe/MODE_DEFINITIONS.json": {
     "bytes": 3946,
     "sha256": "41f1a55af603d55d78b3a2804beb9a282b189ac27ecb927cb82fe89e29b22ac9"
+  },
+  "development_snapshots/canonical_host93_dependency_source_20261018/worker/PINS.json": {
+    "bytes": 205675,
+    "sha256": "abc9e5f55b045b6402cc5c13e4d4c4263eb6a7403e84b01a165a12b5d5d20cd0"
+  },
+  "development_snapshots/canonical_host93_dependency_source_20261018/worker/stage_dependencies.py": {
+    "bytes": 20634,
+    "sha256": "3f56c0b6ce0f41f245abf8d37ff55fa5257d71ead395f49410a2746924682a79"
   },
   "development_snapshots/canonical_host93_derived_micro_source_20261018/fixtures/main.cpp": {
     "bytes": 4269,
@@ -50,5 +62,9 @@
   "development_snapshots/canonical_host93_verilator_seqnum_build_source_20261018/PATCH.json": {
     "bytes": 1619,
     "sha256": "784e777dbf4cfdef53788ff1c3d69a31c5e416a7d10c2d5a387b795b42cb1fe2"
+  },
+  "development_snapshots/canonical_verilator_dependencies_source_20261018/worker/DEPENDENCY_PLAN.json": {
+    "bytes": 2594,
+    "sha256": "80fcca670bc897602db187f8f8db7b0ff7e8c3ee496a5cbef24266a03085be7e"
   }
 }

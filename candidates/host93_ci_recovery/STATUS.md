@@ -96,3 +96,17 @@ On 2026-10-19 at 00:38 UTC, the working environment was observed to have reverte
 ## Temporary-data policy
 
 Small source checkpoints must be pushed promptly and identify PASS scope, TEMP_SOURCE, or FAIL. Check temporary tracked files hourly. Daily cleanup may remove only confirmed unnecessary tracked temporary data recoverable from Git history, using a normal deletion commit without rewriting history. Preserve reproduction source, pins, hashes and safe result summaries. Do not delete untracked unique files, active work or sole evidence. No deletion was performed in this checkpoint.
+
+# FlexLexer header recovery checkpoint
+
+SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY. Parent commit: c00255a68fcc3eab80b6038e9dfd764d4e22ab87.
+
+Latest preserved actual 39191780530 remains FAIL: generated lexer compilation could not find FlexLexer.h, natural make exit 2, timeout false, cleanup true. Earlier failures are preserved without claiming the same cause.
+
+New isolated source supplies one exact pinned header, a real compile/depfile probe, and the identical explicit configure include. Two supervised phases share the unchanged 6600-second budget. Default full mode is 34 stages; build-only is 16. The full same-job continuation still stops at the first failure.
+
+Cold reruns passed in normal and -O: coordinator 82+82, toolchain 58+58, header 26+26, transport 7+7, support 41+41, regressions 7+7, and diagnostics 463+727 per mode. Tests were SOURCE/synthetic only. New actual: NOT_EXECUTED. Independent SOURCE review: GO, confined to the fixed header same-job recovery.
+
+Frozen SOURCE manifest: 6046 bytes / 8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b. SOURCE review GO; actual NOT_EXECUTED.
+
+SOURCE review: SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY; review manifest 1999 bytes / 44303c275d27457eff82fd5f99191553d54aadcb3cd528355d17f22ad0dd8476; summary 5092 bytes / 87ddb3dfc2e5e39f3eb645639a4e6470c67ee5754e3dc193e3d0d87f23b8d42e. This is SOURCE acceptance only; new actual remains NOT_EXECUTED.

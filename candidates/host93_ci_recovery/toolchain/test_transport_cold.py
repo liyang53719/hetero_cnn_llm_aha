@@ -9,7 +9,7 @@ from unittest import mock
 HERE=Path(__file__).absolute().parent
 SOURCE=HERE/'ci_toolchain.py'
 RAW=SOURCE.read_bytes()
-if len(RAW)!=32715 or hashlib.sha256(RAW).hexdigest()!='fcec5c2d6917cdfe460ff01d8a922500497971459d4269aabdbf3610e43f9b2d':
+if len(RAW)!=39767 or hashlib.sha256(RAW).hexdigest()!='1364bd565d24b94e066d64a76c3730e18b9c4f99c4030f0c3a236083e6efef95':
     raise ValueError('fixed module identity before compile')
 g=types.ModuleType('verified_transport_only');g.__file__=str(SOURCE)
 exec(compile(RAW,str(SOURCE),'exec',dont_inherit=True),g.__dict__)
@@ -23,7 +23,7 @@ class Cold(unittest.TestCase):
                 self.assertEqual(g.phase_environment(name,{'PATH':'/usr/bin:/bin'}),{'PATH':'/usr/bin:/bin',**values})
     def test_native_remains_clean(self):
         with mock.patch.dict(g.os.environ,{key:'private fixture' for key in g.TRANSPORT_KEYS},clear=True):
-            for name in ('fresh_configure','fresh_make','derived_tiny_run','class','sv','java_version'):
+            for name in ('flex_header_compile','fresh_configure','fresh_make','derived_tiny_run','class','sv','java_version'):
                 self.assertEqual(g.phase_environment(name,{'PATH':'/usr/bin:/bin'}),{'PATH':'/usr/bin:/bin'})
     def test_no_credentials_or_unlisted_env_copied(self):
         with mock.patch.dict(g.os.environ,{'GITHUB_TOKEN':'never-copy','OTHER_SECRET':'never-copy','HTTPS_PROXY':'as-is'},clear=True):

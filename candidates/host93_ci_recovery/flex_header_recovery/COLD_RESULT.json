@@ -1,0 +1,53 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "all_14_suite_invocations_exit_code": 0,
+  "initial_invocation_issue": {
+    "cause": "The first aggregate invocation omitted required --repo; invocation corrected without source changes. Corrected full normal and optimized suite runs both pass.",
+    "exit_code": 2,
+    "suite": "support"
+  },
+  "modes": [
+    "normal",
+    "optimized"
+  ],
+  "native_tools_executed": false,
+  "network_executed": false,
+  "raw_logs_private_not_for_publication": true,
+  "real_header_acquired": false,
+  "real_header_compiled": false,
+  "real_toolchain_built": false,
+  "reported_suite_counts_per_mode": {
+    "coordinator": 82,
+    "diagnostics": {
+      "context_checks": 727,
+      "structured_checks": 463
+    },
+    "header": 26,
+    "support": 41,
+    "support_regressions": 7,
+    "toolchain": 58,
+    "transport": 7
+  },
+  "schema": "HOST93_FLEX_HEADER_COLD_RESULT_V1",
+  "source_manifest": {
+    "directory": "candidate_ci_flex_header_source_v1_20261019T0300",
+    "manifest": {
+      "bytes": 6046,
+      "sha256": "8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_flex_header_source_20261019T0311",
+    "manifest": {
+      "bytes": 1999,
+      "sha256": "44303c275d27457eff82fd5f99191553d54aadcb3cd528355d17f22ad0dd8476"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 5092,
+      "sha256": "87ddb3dfc2e5e39f3eb645639a4e6470c67ee5754e3dc193e3d0d87f23b8d42e"
+    },
+    "verdict": "SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY"
+  },
+  "status": "PASS_SOURCE_AND_SYNTHETIC_ONLY"
+}

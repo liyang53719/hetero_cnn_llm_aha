@@ -19,8 +19,8 @@ parser.add_argument('--repo', required=True, type=Path)
 args = parser.parse_args()
 HERE = Path(__file__).absolute().parent
 RAW = (HERE / 'ci_toolchain.py').read_bytes()
-EXPECTED_BYTES = 32715
-EXPECTED_SHA = 'fcec5c2d6917cdfe460ff01d8a922500497971459d4269aabdbf3610e43f9b2d'
+EXPECTED_BYTES = 39767
+EXPECTED_SHA = '1364bd565d24b94e066d64a76c3730e18b9c4f99c4030f0c3a236083e6efef95'
 if len(RAW) != EXPECTED_BYTES or hashlib.sha256(RAW).hexdigest() != EXPECTED_SHA:
     raise ValueError('cold component pin mismatch')
 g = types.ModuleType('fixed_ci_toolchain_cold')
@@ -64,11 +64,34 @@ def early_flags():
 
 
 test('seven_early_flag_refusals', early_flags)
-test('fixed_thirteen_published_sources', lambda: g.require(len(pins) == 13, 'pins13'))
+test('fixed_seventeen_sources_including_one_header_module', lambda: g.require(len(pins) == 17, 'pins17'))
 test('finite_projection_pin', lambda: g.require(g.project_micro(buffers, args.repo, Path('/synthetic/fixtures'))[1]
      ['sha256'] == '7bae86ca47e3cfe319fed2cdaf69b722be004279672a1f4c62e14dfed47b06a0', 'projection pin'))
 test('limits_exact_build', lambda: g.require([(x['total_seconds'], x['work_seconds']) for x in g.BUILD_LIMITS.values()]
      == [(180, 160), (180, 160), (3600, 3570)], 'build budget'))
+test('header_acquisition_budget_shared_phase', lambda: g.require(
+    tuple(g.HEADER_LIMITS[k] for k in ('total_seconds','work_seconds','cpu_seconds','as_bytes','fsize_bytes','log_bytes'))
+    == (120,90,40,512*1024**2,4*1024**2,65536), 'header acquisition fixed limits'))
+test('header_probe_real_compile_source', lambda: g.require(
+    b'#include <FlexLexer.h>' in g.HEADER_PROBE and b'sizeof(yyFlexLexer)' in g.HEADER_PROBE,
+    'complete header class compile fixture'))
+test('explicit_same_include_configure', lambda: g.require(
+    'CPPFLAGS=-I/synthetic/include' in g.build_commands(Path('/synthetic/root'),Path('/synthetic/work'),Path('/synthetic/include'))['configure'],
+    'explicit header include'))
+test('unsafe_include_refused', lambda: rejects(lambda: g.build_commands(Path('/synthetic/root'),Path('/synthetic/work'),Path('/synthetic/unsafe include')),
+    'make-safe header'))
+test('exact_configured_header_include_witness', lambda: g.header_include_witness(
+    b'CPPFLAGS += @CPPFLAGS@\n', b'CPPFLAGS += -I/synthetic/include\n', Path('/synthetic/include')))
+test('missing_configured_header_include_refused', lambda: rejects(lambda: g.header_include_witness(
+    b'CPPFLAGS += @CPPFLAGS@\n', b'CPPFLAGS += \n', Path('/synthetic/include')), 'lost exact header include'))
+test('foreign_configured_header_include_refused', lambda: rejects(lambda: g.header_include_witness(
+    b'CPPFLAGS += @CPPFLAGS@\n', b'CPPFLAGS += -I/foreign/include\n', Path('/synthetic/include')), 'lost exact header include'))
+test('changed_cppflags_substitution_refused', lambda: rejects(lambda: g.header_include_witness(
+    b'CPPFLAGS = @CPPFLAGS@\n', b'CPPFLAGS += -I/synthetic/include\n', Path('/synthetic/include')), 'finite official CPPFLAGS'))
+test('header_same_buffer_embedded_not_path_import', lambda: g.require(
+    repr(buffers[g.HEADER_MODULE]) in g.header_acquisition_argv(args.repo, Path('/synthetic/output'), buffers)[-1] and
+    repr(buffers[g.HEADER_INPUTS + 'stage_dependencies.py']) in g.header_acquisition_argv(args.repo, Path('/synthetic/output'), buffers)[-1],
+    'verified header and parser literal buffers'))
 test('limits_exact_tiny', lambda: g.require([(x['total_seconds'], x['work_seconds']) for x in g.TINY_LIMITS.values()]
      == [(30, 10), (120, 90), (300, 240), (30, 10)], 'tiny budget'))
 test('source_same_buffer_embedded_not_path_import', lambda: g.require(
@@ -216,11 +239,14 @@ def mock_write(path, raw=b'SYNTHETIC ONLY\n', executable=False):
     path.chmod(0o700 if executable else 0o600)
 
 
-def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False, stop_after_build=False):
+def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False, stop_after_build=False, header_fault=None):
     """Exercise complete run orchestration with explicit fake process outputs."""
     saved = {name: getattr(g, name) for name in ('host_identities', 'verify_official473',
-                                               'materialize_patched', 'immutable_sources', 'verify_objcache_disabled')}
+                                               'materialize_patched', 'immutable_sources', 'verify_objcache_disabled',
+                                               'HEADER_SIZE', 'HEADER_SHA', 'verify_header_include')}
     calls = []
+    synthetic_header = b'// SYNTHETIC header; never compiled or represented as real header.\n'
+    g.HEADER_SIZE, g.HEADER_SHA = len(synthetic_header), g.sha(synthetic_header)
     g.host_identities = lambda support: {}
     g.verify_official473 = lambda *a: ({'members': []}, {'root': 'SYNTHETIC', 'files': 0, 'bytes': 0, 'entries': {}})
     def materialize(s, source, root, table, original, buf):
@@ -234,6 +260,7 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
     g.materialize_patched = materialize
     g.immutable_sources = lambda *a: None
     g.verify_objcache_disabled = lambda *a: {'SYNTHETIC_ONLY': True}
+    g.verify_header_include = lambda *a: {'SYNTHETIC_ONLY': True}
     try:
         with tempfile.TemporaryDirectory() as temporary:
             work = Path(temporary) / 'work'
@@ -262,13 +289,34 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
                         for filename, generated in definition['generated_files'].items():
                             text = '\n'.join(generated['contains']).replace('Autoconf 2.72', 'Autoconf 2.71')
                             mock_write(cwd / filename, text.encode())
+                elif name == 'flex_header_acquire':
+                    destination = work / 'flex-header'
+                    mock_write(destination / 'include/FlexLexer.h', synthetic_header)
+                    g.save_private(destination / 'RECEIPT.json', g.expected_header_receipt())
+                    if header_fault == 'missing':
+                        (destination / 'include/FlexLexer.h').unlink()
+                    if header_fault == 'wrong_hash':
+                        mock_write(destination / 'include/FlexLexer.h', b'X' * len(synthetic_header))
+                elif name == 'flex_header_compile':
+                    g.require(argv == ['/usr/bin/g++', '-std=c++17', '-g0', '-I' + str(work / 'flex-header/include'),
+                        '-MMD', '-MF', 'probe.d', '-MT', 'probe.o', '-c', 'probe.cpp', '-o', 'probe.o'],
+                        'real compile request with exact staged include and depfile')
+                    mock_write(cwd / 'probe.o', b'' if header_fault == 'empty_object' else b'SYNTHETIC OBJECT NEVER COMPILED')
+                    used = str(work / 'flex-header/include/FlexLexer.h')
+                    if header_fault == 'wrong_dependency': used = '/synthetic/system/FlexLexer.h'
+                    mock_write(cwd / 'probe.d', ('probe.o: probe.cpp \\\n ' + used + '\n').encode())
+                    if header_fault == 'compile_mutation':
+                        mock_write(work / 'flex-header/include/FlexLexer.h', b'X' * len(synthetic_header))
                 elif name == 'fresh_autoconf':
                     mock_write(cwd / 'configure')
                 elif name == 'fresh_configure':
+                    g.require('CPPFLAGS=-I' + str(work / 'flex-header/include') in argv, 'configure uses identical explicit include')
                     for filename in ('Makefile', 'src/Makefile', 'src/Makefile_obj', 'src/config_package.h',
                                      'include/verilated.mk', 'include/verilated_config.h', 'config.status', 'config.log'):
                         mock_write(cwd / filename)
                 elif name == 'fresh_make':
+                    if header_fault == 'make_mutation':
+                        mock_write(work / 'flex-header/include/FlexLexer.h', b'X' * len(synthetic_header))
                     mock_write(cwd / 'bin/verilator_bin', b'SYNTHETIC backend never run\n', True)
                     mock_write(cwd / 'src/config_rev.h')
                 elif name == 'derived_tiny_version':
@@ -295,10 +343,17 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
             if fail_at is not None:
                 rejects(lambda: g.run(args.repo, work, callback), 'synthetic requested stop')
                 g.require(calls[-1] == fail_at and calls.count(fail_at) == 1, 'no retry/fallback after failure')
+            elif header_fault:
+                parts = {'missing': 'single header', 'wrong_hash': 'fixed input SHA',
+                         'empty_object': 'nonempty compiled header object', 'wrong_dependency': 'compiler used exact staged header',
+                         'compile_mutation': 'fixed input SHA', 'make_mutation': 'fixed input SHA'}
+                rejects(lambda: g.run(args.repo, work, callback), parts[header_fault])
+                last = 'fresh_make' if header_fault == 'make_mutation' else ('flex_header_acquire' if header_fault in ('missing','wrong_hash') else 'flex_header_compile')
+                g.require(calls[-1] == last and not any(n.startswith('derived_tiny') for n in calls), 'header failure blocks later stages')
             elif stop_after_build:
                 result = g.run(args.repo, work, callback, stop_after_build=True)
                 g.require(result['status']=='PASS_FRESH_DERIVED_BACKEND_BUILD_ONLY' and result['tiny'] is None, 'build-only scope')
-                g.require(len(calls)==14 and calls[-1]=='fresh_make' and result['backend']['bytes']>0, 'exact14 and backend postflight')
+                g.require(len(calls)==16 and calls[-1]=='fresh_make' and result['backend']['bytes']>0, 'exact16 and backend postflight')
                 g.require(not (work/'micro').exists(), 'no new backend or tiny execution')
             elif corrupt_runtime:
                 rejects(lambda: g.run(args.repo, work, callback), 'include closure drift')
@@ -311,10 +366,10 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
                 g.require(result['status'] == 'PASS_FRESH_DERIVED_TOOLCHAIN_AND_TINY_ONLY' and
                           result['qualification']['version_count'] == result['qualification']['tiny_count'] == 5,
                           'synthetic full orchestration result')
-                g.require(len(calls) == 18 and calls[0] == 'official_source473' and
-                          calls[11:14] == ['fresh_autoconf', 'fresh_configure', 'fresh_make'] and
-                          calls[14:] == ['derived_tiny_version', 'derived_tiny_generate', 'derived_tiny_compile', 'derived_tiny_run'],
-                          'exact 18 non-native callback order')
+                g.require(len(calls) == 20 and calls[0] == 'official_source473' and
+                          calls[11:16] == ['flex_header_acquire', 'flex_header_compile', 'fresh_autoconf', 'fresh_configure', 'fresh_make'] and
+                          calls[16:] == ['derived_tiny_version', 'derived_tiny_generate', 'derived_tiny_compile', 'derived_tiny_run'],
+                          'exact 20 non-native callback order')
                 g.require(result['tiny']['witness']['derived_initializer_contract']['initializer_value'] == 0,
                           'synthetic initialized target witness')
                 g.require('original_uninitialized_failure_preserved' not in result['tiny']['witness'],
@@ -325,11 +380,13 @@ def run_synthetic(fail_at=None, corrupt_runtime=False, corrupt_initializer=False
             setattr(g, name, value)
 
 
-test('full_eighteen_phase_synthetic_orchestration', run_synthetic)
-test('build_only_fourteen_phase_synthetic_orchestration', lambda: run_synthetic(stop_after_build=True))
+test('full_twenty_phase_synthetic_orchestration', run_synthetic)
+test('build_only_sixteen_phase_synthetic_orchestration', lambda: run_synthetic(stop_after_build=True))
 for phase in ('official_source473', 'host_autoconf-version', 'host_bison-micro',
-              'fresh_autoconf', 'fresh_configure', 'fresh_make', 'derived_tiny_compile'):
+              'flex_header_acquire', 'flex_header_compile', 'fresh_autoconf', 'fresh_configure', 'fresh_make', 'derived_tiny_compile'):
     test('stop_without_retry_' + phase, lambda phase=phase: run_synthetic(fail_at=phase))
+for fault in ('missing', 'wrong_hash', 'empty_object', 'wrong_dependency', 'compile_mutation', 'make_mutation'):
+    test('header_' + fault + '_refused', lambda fault=fault: run_synthetic(header_fault=fault))
 test('configured_runtime_drift_refused', lambda: run_synthetic(corrupt_runtime=True))
 test('uninitialized_generated_target_refused', lambda: run_synthetic(corrupt_initializer=True))
 

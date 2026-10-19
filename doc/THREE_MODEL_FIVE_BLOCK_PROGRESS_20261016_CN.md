@@ -805,3 +805,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 安全 context AVAILABLE 实录 V3Lexer_pregen.yy.cpp:369:10 缺 FlexLexer.h（由 V3ParseLex.cpp:30 引入），随后 make Error1/2。原三JSON保存于 development_snapshots/host93_ci_context_failure_39191780530；原两次FAIL不倒填此根因。
 - 固定 libfl-dev 选中表已有6893B头（SHA256 ee9859d6b3027ed565f98f42744e438ab31b2cd2e9f797ddf870029ca2021686）；下一最小核暂存目录/include接线并增加真实头编译probe。尚不声明修复成功或backend/Host资格。
 - 本批只持久化安全失败证据和说明，不触发新构建；后续修复与有界实际需独立SOURCE门及真实终态。仍保全部复现源码/pin和原FAIL，未清除唯一证据。
+
+## FlexLexer.h 最小恢复 SOURCE 候选
+
+最新保留的 39191780530 仍为 FAIL：flex 2.6.4 已生成 lexer，随后 V3ParseLex.cpp:30 所含生成源在第 369 行找不到 FlexLexer.h；make 自然退出 2，未超时且清理确认。前两次失败保留，不推定同因。
+
+新候选在既有 10 项工具探针后增加两段：只获取固定 libfl-dev 包并经原纯解析函数提取已钉住的单个头；再用 g++ 实际编译小例并核依赖文件确实使用该头。configure 使用同一个显式 -I，生成 Makefile 必须保留该参数，各 build 段前后复核头哈希。两段上限为 120/90 秒（CPU 40）及 30/10 秒，均从原共享 6600 秒扣除，不增加既有资源。
+
+默认完整模式 34 段，头 probe、工具 build 与 tiny 成功才在同 job 继续既有 Host 生成与短 reset-launch；首失败即停。build-only 为 16 段并止于 make。双模式冷测通过：协调 82、工具链 58、单头 26、transport 7、support 41、regression 7、diagnostics 463+727，各 normal/-O 一次。这里只是 SOURCE/合成检验，真实头编译和新 actual 均未执行；独立 SOURCE 审查已 GO，仅限该固定头、同 job 恢复范围。父发布者唯一修改原 Host workflow 注释触发，build-only workflow 保持原字节。
+
+本 SOURCE 冻结 manifest 为 6046 字节 / 8f7a33a6b8a76a62e0455af44b9d34cea79bd98a63cd14d931d1ef252b5a717b；独立审查已 GO，新 actual 仍未执行。
+
+SOURCE 审结论 SOURCE_GO_FIXED_FLEX_HEADER_SAME_JOB_HOST_RECOVERY_ONLY；审查 manifest 1999 字节 / 44303c275d27457eff82fd5f99191553d54aadcb3cd528355d17f22ad0dd8476，SUMMARY 5092 字节 / 87ddb3dfc2e5e39f3eb645639a4e6470c67ee5754e3dc193e3d0d87f23b8d42e。仅为 SOURCE 接受，实际仍为 NOT_EXECUTED，不赋新 actual PASS。

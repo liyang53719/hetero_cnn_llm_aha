@@ -1,0 +1,37 @@
+{
+  "actions_log_path_not_copied": true,
+  "budget_or_phase_changes": false,
+  "changes": [
+    "one comment",
+    "fixed job env HOST93_PRIVATE_ROOT",
+    "digit-only run id and exact root binding in existing bind step",
+    "actual/verify/upload use same fixed root"
+  ],
+  "expanded_old_ci_path": "NOT_IN_THREE_SAFE_JSON",
+  "parent_commit": "ccdd46b8fcac78834dd462f00a821c9430b3f7d2",
+  "production_python_changed": false,
+  "raw_marker": "N0_ACQUISITION_FAILED:RAW_OUTPUT:RAW_RULE_014",
+  "raw_rule_014_unchanged": true,
+  "schema": 1,
+  "source_review": {
+    "directory": "review_n0_raw_output_workflow_source_20261019T1153",
+    "manifest": {
+      "bytes": 2609,
+      "sha256": "8ab1f343ea7c2eb08215b0d989ac1e61ad90bd5da41b599dc93f688b90957a85"
+    },
+    "status": "SOURCE_GO",
+    "summary": {
+      "bytes": 2688,
+      "sha256": "b030cc9b8d9f1bb781f1fb7af9a442ddabf76a5a52e7eab385418f886ae8deb1"
+    },
+    "verdict": "SOURCE_GO_FIRST_N0_WORKFLOW_FIXED_TMP_ROOT_ONLY"
+  },
+  "workflow_new": {
+    "bytes": 5347,
+    "sha256": "bee96f354ba9819ab748ec1cd8e0614484be88166f062433aef7146659e49e42"
+  },
+  "workflow_old": {
+    "bytes": 5179,
+    "sha256": "0878fdfa6c13891be297a5e942dcce5cfbac491e4b92488097e743be43a5a4c7"
+  }
+}

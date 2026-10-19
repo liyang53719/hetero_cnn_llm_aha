@@ -1,0 +1,47 @@
+{
+  "actual": "NOT_EXECUTED",
+  "mocked": [
+    "strict_opener synthetic pre-network stop",
+    "collect_fixed forbidden sentinel"
+  ],
+  "native_processes": 0,
+  "network_calls": 0,
+  "normal": {
+    "cases": 11,
+    "exit_code": 0,
+    "log": {
+      "bytes": 110,
+      "sha256": "f1385e4d2479958d9aaab90647c066a8a0e02b66c8a56c3529252d927550168e"
+    }
+  },
+  "optimized": {
+    "cases": 11,
+    "exit_code": 0,
+    "log": {
+      "bytes": 110,
+      "sha256": "7272d8a9f35252edde036ff9ad1fff8900d3811e85874d2143cb0c5053c7a283"
+    }
+  },
+  "payloads_acquired": 0,
+  "prior_runtime_tests_rerun": false,
+  "real": [
+    "fixed stage_entry main flags",
+    "raw same-buffer loader",
+    "full raw check_sources",
+    "original prepare_output"
+  ],
+  "schema": 1,
+  "source_review": {
+    "directory": "review_n0_raw_output_workflow_source_20261019T1153",
+    "manifest": {
+      "bytes": 2609,
+      "sha256": "8ab1f343ea7c2eb08215b0d989ac1e61ad90bd5da41b599dc93f688b90957a85"
+    },
+    "status": "SOURCE_GO",
+    "summary": {
+      "bytes": 2688,
+      "sha256": "b030cc9b8d9f1bb781f1fb7af9a442ddabf76a5a52e7eab385418f886ae8deb1"
+    },
+    "verdict": "SOURCE_GO_FIRST_N0_WORKFLOW_FIXED_TMP_ROOT_ONLY"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "actual": "NOT_EXECUTED",
+  "base_workflow": {
+    "bytes": 5179,
+    "sha256": "0878fdfa6c13891be297a5e942dcce5cfbac491e4b92488097e743be43a5a4c7"
+  },
+  "network_or_native_here": false,
+  "parent_commit": "ccdd46b8fcac78834dd462f00a821c9430b3f7d2",
+  "prior_actual_review": {
+    "directory": "review_first_n0_actual_39246774912_20261019T1150",
+    "manifest": {
+      "bytes": 1852,
+      "sha256": "cc711667ee6074321c4a4e4e27b5054d5abb9fa3fe48eb032800b25c78cb6e5c"
+    },
+    "summary": {
+      "bytes": 6930,
+      "sha256": "88b3b19aa816f08e83116b644cd916b476efbe2ec0ff009cd358a91e8b8e5725"
+    }
+  },
+  "schema": 1,
+  "scope": "WORKFLOW_FIXED_RAW_OUTPUT_ROOT_ONLY",
+  "source_candidate_manifest": {
+    "bytes": 1446,
+    "sha256": "a05359bd39a24257e89d14d53d571cbc770c773e577c46e228ccfa3491434b9b"
+  },
+  "source_review": {
+    "directory": "review_n0_raw_output_workflow_source_20261019T1153",
+    "manifest": {
+      "bytes": 2609,
+      "sha256": "8ab1f343ea7c2eb08215b0d989ac1e61ad90bd5da41b599dc93f688b90957a85"
+    },
+    "status": "SOURCE_GO",
+    "summary": {
+      "bytes": 2688,
+      "sha256": "b030cc9b8d9f1bb781f1fb7af9a442ddabf76a5a52e7eab385418f886ae8deb1"
+    },
+    "verdict": "SOURCE_GO_FIRST_N0_WORKFLOW_FIXED_TMP_ROOT_ONLY"
+  },
+  "target_workflow": ".github/workflows/host93-ci-recovery-once.yml",
+  "unchanged_inputs": {
+    "candidates/host93_ci_recovery/first_n0/pipeline.py": {
+      "bytes": 28972,
+      "sha256": "ccb2a03c1fa3211de3e8467a020107c693a591c8b94ff6dba0653191bb9bbc7f"
+    },
+    "candidates/host93_ci_recovery/first_n0/stage_entry.py": {
+      "bytes": 5627,
+      "sha256": "a3fad553a94bb07b210b32b947cbeaf15dc2fa6b4c314317d99132d6458bedd5"
+    },
+    "candidates/host93_ci_recovery/run.py": {
+      "bytes": 77219,
+      "sha256": "853d7d53c2b85376b643a90ae1421d9d9766c5ad6d415e8e5ddf1570ab0aa79c"
+    },
+    "config/payload_pins/qwen2_layer0.json": {
+      "bytes": 11221,
+      "sha256": "190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/manifest.json": {
+      "bytes": 5109,
+      "sha256": "46818a6fde79b4bff4615abc38cca7d8cb9386cdd0298bc07c403cb3d2ceab25"
+    },
+    "development_snapshots/canonical_raw_acquisition_source_20261018/ACQUISITION_PLAN.json": {
+      "bytes": 14096,
+      "sha256": "7af00f7b0ebe36a2d31cd18de72ff9da487197eb91ab671cb60a53b2c076d220"
+    },
+    "development_snapshots/canonical_raw_acquisition_source_20261018/PLATFORM_API_EVIDENCE.json": {
+      "bytes": 635,
+      "sha256": "e44c899d4cb57dfb13bca3723e0640ab9e0872d7738a17722d7b6b8133e2c53f"
+    },
+    "development_snapshots/canonical_raw_acquisition_source_20261018/acquire_raw.py": {
+      "bytes": 17991,
+      "sha256": "4cff91b1a5e76a6a1701426fd1e6cb1f8db32ee8b7e762bb17575364b12d932a"
+    },
+    "scripts/qwen2_layer0_payload.py": {
+      "bytes": 11555,
+      "sha256": "202b73649dfceed5e0d8ec73fd0b1e9f0de96d936141e3d9808d5e10d5c1beb9"
+    },
+    "src/heteronpu/pinned_block_payload.py": {
+      "bytes": 7517,
+      "sha256": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30"
+    },
+    "src/heteronpu/pinned_gdn_payload.py": {
+      "bytes": 6626,
+      "sha256": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b"
+    }
+  },
+  "workflow_new": {
+    "bytes": 5347,
+    "sha256": "bee96f354ba9819ab748ec1cd8e0614484be88166f062433aef7146659e49e42"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "actual": "NOT_EXECUTED",
+  "numeric_qualification": false,
+  "prior_actual": "INCOMPLETE_RAW_OUTPUT_RAW_RULE_014",
+  "prior_actual_review": {
+    "directory": "review_first_n0_actual_39246774912_20261019T1150",
+    "manifest": {
+      "bytes": 1852,
+      "sha256": "cc711667ee6074321c4a4e4e27b5054d5abb9fa3fe48eb032800b25c78cb6e5c"
+    },
+    "summary": {
+      "bytes": 6930,
+      "sha256": "88b3b19aa816f08e83116b644cd916b476efbe2ec0ff009cd358a91e8b8e5725"
+    }
+  },
+  "prior_runtime_tests_rerun": false,
+  "python_production_changed": false,
+  "schema": 1,
+  "source_review": {
+    "directory": "review_n0_raw_output_workflow_source_20261019T1153",
+    "manifest": {
+      "bytes": 2609,
+      "sha256": "8ab1f343ea7c2eb08215b0d989ac1e61ad90bd5da41b599dc93f688b90957a85"
+    },
+    "status": "SOURCE_GO",
+    "summary": {
+      "bytes": 2688,
+      "sha256": "b030cc9b8d9f1bb781f1fb7af9a442ddabf76a5a52e7eab385418f886ae8deb1"
+    },
+    "verdict": "SOURCE_GO_FIRST_N0_WORKFLOW_FIXED_TMP_ROOT_ONLY"
+  },
+  "status": "TEMP_SOURCE_SOURCE_GO_ACTUAL_NOT_EXECUTED",
+  "whole_block_qualification": false
+}

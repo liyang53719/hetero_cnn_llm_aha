@@ -1,5 +1,5 @@
 name: host93-ci-recovery-once
-# TEMP_SOURCE: canonical M128 first N0 only; exact reference recovery and full-value tolerance comparison, no full-block claim.
+# TEMP_SOURCE: fixed fresh /tmp output root satisfies unchanged raw acquisition path admission.
 # TEMP SOURCE: publish this exact workflow only after whole-job SOURCE review.
 # A push touching only this path launches one new Host job, never a retry.
 on:
@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 110
     env:
+      HOST93_PRIVATE_ROOT: /tmp/host93-first-n0-${{ github.run_id }}-${{ github.run_attempt }}
       PYTHONDONTWRITEBYTECODE: '1'
       PYTHONNOUSERSITE: '1'
       OMP_NUM_THREADS: '1'
@@ -45,6 +46,8 @@ jobs:
           test "$GITHUB_ACTIONS" = true
           test "$GITHUB_EVENT_NAME" = push
           test "$GITHUB_RUN_ATTEMPT" = 1
+          [[ "$GITHUB_RUN_ID" =~ ^[0-9]+$ ]]
+          test "$HOST93_PRIVATE_ROOT" = "/tmp/host93-first-n0-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
           test "$GITHUB_REPOSITORY" = liyang53719/hetero_cnn_llm_aha
           test "$GITHUB_REF" = refs/heads/main
           [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
@@ -80,7 +83,7 @@ jobs:
           set -euo pipefail
           umask 077
           remaining=$(python3 -I -S -B -c 'import os,time,sys; x=int(float(os.environ["HOST93_WORK_DEADLINE"])-time.monotonic()-10); sys.exit(1) if x<=0 else print(x)')
-          timeout --signal=TERM --kill-after=10s "${remaining}s" python3 -I -S -B candidates/host93_ci_recovery/run.py --repo "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/host93-ci-private" --idma-archive "$RUNNER_TEMP/host93-idma.zip" --job-deadline "$HOST93_WORK_DEADLINE" --mode host-cluster-first-n0 --execute
+          timeout --signal=TERM --kill-after=10s "${remaining}s" python3 -I -S -B candidates/host93_ci_recovery/run.py --repo "$GITHUB_WORKSPACE" --out "$HOST93_PRIVATE_ROOT" --idma-archive "$RUNNER_TEMP/host93-idma.zip" --job-deadline "$HOST93_WORK_DEADLINE" --mode host-cluster-first-n0 --execute
       - name: Validate only sanitized evidence
         id: safe
         if: always() && (steps.actual.outcome == 'success' || steps.actual.outcome == 'failure')
@@ -89,7 +92,7 @@ jobs:
         run: |
           set -euo pipefail
           remaining=$(python3 -I -S -B -c 'import os,time,sys; x=min(30,int(float(os.environ["HOST93_JOB_DEADLINE"])-time.monotonic()-60)); sys.exit(1) if x<=0 else print(x)')
-          timeout --signal=TERM --kill-after=2s "${remaining}s" python3 -I -S -B candidates/host93_ci_recovery/run.py --verify-evidence --out "$RUNNER_TEMP/host93-ci-private"
+          timeout --signal=TERM --kill-after=2s "${remaining}s" python3 -I -S -B candidates/host93_ci_recovery/run.py --verify-evidence --out "$HOST93_PRIVATE_ROOT"
       - name: Upload only three validated safe JSON files
         if: always() && steps.safe.outcome == 'success'
         timeout-minutes: 1
@@ -101,6 +104,6 @@ jobs:
           include-hidden-files: false
           overwrite: false
           path: |
-            ${{ runner.temp }}/host93-ci-private/evidence/summary.json
-            ${{ runner.temp }}/host93-ci-private/evidence/source_hashes.json
-            ${{ runner.temp }}/host93-ci-private/evidence/stage_exits.json
+            ${{ env.HOST93_PRIVATE_ROOT }}/evidence/summary.json
+            ${{ env.HOST93_PRIVATE_ROOT }}/evidence/source_hashes.json
+            ${{ env.HOST93_PRIVATE_ROOT }}/evidence/stage_exits.json

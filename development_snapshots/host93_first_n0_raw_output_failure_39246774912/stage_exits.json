@@ -1,0 +1,80 @@
+{
+  "schema": "host93-ci-stage-exits-v6",
+  "stages": [
+    {
+      "child_maxrss_kib_cumulative": 29500,
+      "child_system_cpu_seconds": 0.364565,
+      "child_user_cpu_seconds": 0.8489869999999999,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "NOT_COLLECTED",
+        "merged_log_tail": "",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 0,
+      "failure_boundary": "NONE",
+      "failure_code": "NONE",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_wheels_acquire",
+      "native_record_status": "PASS",
+      "receipt_timed_out": false,
+      "seconds": 1.875846,
+      "status": "EXIT0_CLEANED",
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "child_maxrss_kib_cumulative": 73396,
+      "child_system_cpu_seconds": 0.682275,
+      "child_user_cpu_seconds": 4.789891,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "NOT_COLLECTED",
+        "merged_log_tail": "",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 0,
+      "failure_boundary": "NONE",
+      "failure_code": "NONE",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_runtime_install",
+      "native_record_status": "PASS",
+      "receipt_timed_out": false,
+      "seconds": 5.526463,
+      "status": "EXIT0_CLEANED",
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "child_maxrss_kib_cumulative": 73396,
+      "child_system_cpu_seconds": 0.0070349999999999024,
+      "child_user_cpu_seconds": 0.06531799999999954,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "AVAILABLE",
+        "merged_log_tail": "N0_ACQUISITION_FAILED:RAW_OUTPUT:RAW_RULE_014",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 1,
+      "failure_boundary": "NATIVE_SUPERVISION",
+      "failure_code": "CHILD_EXIT_NONZERO",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "n0_raw_acquire",
+      "native_record_status": "FAIL",
+      "receipt_timed_out": false,
+      "seconds": 0.101443,
+      "status": "FAILED",
+      "waitid_code": 1,
+      "waitid_status": 1
+    }
+  ]
+}

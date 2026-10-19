@@ -1,0 +1,163 @@
+{
+  "chirrtl_observation": {
+    "extmodule_count": 17,
+    "historical_fir_equal": true,
+    "library_source_info_count": 4945,
+    "line_count": 293837,
+    "module_count": 682,
+    "other_source_info_count": 0,
+    "project_source_info_count": 249537,
+    "source_info_count": 254482,
+    "source_info_utf8_bytes": 22570940,
+    "state": "AVAILABLE",
+    "utf8_bytes": 42417256
+  },
+  "completed_components": [
+    "fifo_preflight",
+    "chirrtl_diagnostic",
+    "toolchain",
+    "host_emission",
+    "idma319",
+    "retained13",
+    "configuration",
+    "host_execution"
+  ],
+  "contract_failure": {
+    "boundary": "NONE",
+    "code": "NONE"
+  },
+  "failure_category": "NONE",
+  "fifo_observation": {
+    "cases": 4,
+    "comparisons": 5180,
+    "state": "AVAILABLE",
+    "tools": {
+      "icarus": {
+        "bytes": 51640,
+        "sha256": "a6071e4b4a68feafca0c8ee0e6aa275eee9a43a108c62801cfd1eca6eab6d8a3"
+      },
+      "vvp": {
+        "bytes": 1354376,
+        "sha256": "a10bd7d4a0850308ac8c2c98115b6a3084f9be978307610f2a521190c28f4023"
+      }
+    }
+  },
+  "generation_diagnostics": {
+    "by_rule": {},
+    "caps": {
+      "example_cap": false,
+      "partial": false,
+      "record_cap": false,
+      "report_byte_cap": false
+    },
+    "counts": {
+      "error_headers": 0,
+      "example_paths": 0,
+      "fatal_summary_headers": 0,
+      "unparsed_headers": 0,
+      "warning_headers": 0
+    },
+    "fatal_summaries": {
+      "error_total": null,
+      "header_count_comparison": "NOT_AVAILABLE",
+      "process_attribution": "NOT_AVAILABLE",
+      "warning_total": null
+    },
+    "log_identity": {
+      "bytes": 1872,
+      "sha256": "3fa42ee18387e696c31810afdaaba4c8e3d42ab619d7b64b1e0fc6382ca2a884"
+    },
+    "omission": {
+      "examples": 0,
+      "records": 0
+    },
+    "records": [],
+    "scan_complete": true,
+    "schema_version": 1,
+    "source_derivations": [
+      {
+        "base_identity": {
+          "bytes": 4411,
+          "sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+        },
+        "derived_identity": {
+          "bytes": 4662,
+          "sha256": "cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6"
+        },
+        "source_id": "idma/deps/common_cells/src/cc_passthrough_stream_fifo.sv"
+      }
+    ],
+    "state": "AVAILABLE",
+    "wrapper": {
+      "always_comb_count": 2,
+      "always_comb_lines": [
+        123,
+        184
+      ],
+      "args_identity": {
+        "bytes": 32810,
+        "sha256": "6ae0d4333db213f9dcb7d9bc2ba3eb1caf3f00817cb0a2c9f99d0bda07ba268a"
+      },
+      "candidate_count": 1,
+      "cluster_structure": {
+        "expected_structure_observed": false,
+        "handle_declaration_count": null,
+        "instance_handle_count": null,
+        "library_target_count": 1,
+        "makegraph_identity": {
+          "bytes": 34706,
+          "sha256": "45f18f4c1347ef461ed305d85cab9dc4059a5f283ec1e44ed7a03421f4370ad9"
+        },
+        "makegraph_state": "AVAILABLE",
+        "matching_library_target_count": 1,
+        "root_header_identity": {
+          "bytes": 5296945,
+          "sha256": "82307c51e8722e51062eaf38200355143d5e86cdaa50fdd4f0c9d24e0c458ef6"
+        },
+        "root_header_read": {
+          "final_code": "OK",
+          "final_observed_size": 5296945,
+          "first_code": "SIZE_LIMIT",
+          "first_observed_size": 5296945,
+          "retry_outcome": "SUCCEEDED"
+        },
+        "root_header_state": "UNRECOGNIZED_SYNTAX"
+      },
+      "combo_input_count": 18,
+      "combo_output_count": 2,
+      "combo_update_call_count": 1,
+      "combo_update_import_count": 1,
+      "dependency_conclusion": "NOT_ESTABLISHED",
+      "dpi_import_count": 6,
+      "handshakes": [],
+      "hierarchical_child": 1,
+      "module": "bf16_context_lane_cluster16_rev8b_b_candidate",
+      "specialization": "UNKNOWN",
+      "state": "AVAILABLE",
+      "syntax_state": "FINITE_PARSE_AVAILABLE",
+      "top_args_identity": {
+        "bytes": 32736,
+        "sha256": "2f1d903e8b6274a4917b06f1153c4227cfa9a6182ebf6ae695bd2bf8dba8ed7f"
+      },
+      "top_references_wrapper": true,
+      "wrapper_identity": {
+        "bytes": 7959,
+        "sha256": "acbd12f080c1f92bf5f1d26549c4e9e0654bd0b535a2a3e81b5c3fbedf612590"
+      }
+    }
+  },
+  "mode": "host-cluster-reset-launch",
+  "schema": "host93-ci-summary-v6",
+  "scope": {
+    "cpp_compiled": true,
+    "cpp_generated": true,
+    "fresh_host_sv": true,
+    "n0_numeric": false,
+    "reset_launch": true,
+    "toolchain_build": true,
+    "toolchain_tiny": true,
+    "weights_loaded": false
+  },
+  "seconds": 870.427722,
+  "status": "READY_REQUIRES_ACTIONS_EXIT0"
+}

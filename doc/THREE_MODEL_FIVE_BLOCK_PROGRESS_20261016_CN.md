@@ -957,3 +957,13 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - 审前v1误读根目录旧同名无参数RTL，未发布/未执行；v2改由固定retained13真实投影与Host参数传递闭合。unsigned bit参数ENABLE_ACCUMULATOR_SEED确为1，固定官方序列给出1'h1及SHA512特化名前缀，逐args/wrapper/构造/archive绑定；不由旧安全摘要UNKNOWN推无-G，也不宽松接受任意后缀。
 - v2冷测仅本次受影响协调器153+153与execution44+44；FIFO17+17、extract24+24、config22+22、census68+68及其它未变测试继承，不冒称重跑。
 - SOURCE独审身份：review_cluster_reset_launch_source_20261019T0932，MANIFEST d5f9c6e56c727a4f15595eb116cfe6f2a2a63dd8d53f413d60de3ece9592ecdd，SUMMARY d0550433add06abb32f26a09b176f94c5f9b54d56b71d182c282fb394ce4f686；有限37阶段编译/原短reset-launch源码获审，actual仍NOT_EXECUTED，未知256与无RAM/数值范围保持。
+
+### 2026-10-19：首次 cluster Host 编译与原短 reset/launch 有限实际通过（39232100796）
+
+- attempt1 Actions success，源码29e0c301；原三JSON保存于development_snapshots/host93_cluster_reset_launch_success_39232100796。总870.427722秒，37native全自然0/cleanuptrue/无timeout；生成123.743956秒、compile/link56.433910秒、reset-launch0.055328秒。
+- 同job真实FIFO抽取组合4cases/5180再次通过，工具build/tiny及历史FIR/SV精确身份通过。完整1872B生成日志0warning/0error/0unparsed、零遗漏，原warning-fatal保留。
+- 已pin新cluster门核seed=1特化、wrapper/构造/库/83顶层口与新ELF稳定链；安全摘要报告ELF13323224B/9bda15e2efa466a55632d34bd1aeba21d223102a88e47618fe975247fad56aba。私有生成物未上传，不称独立重读或256实例隔离证明。
+- 原短刺激字节不变，reset高/低各4个高边沿，最多16候选边沿中的首次launch握手后零eval/无显式final。成功路径检查三marker，但成功raw log未上传，当前只据固定源码/原收据及scope作有限结论，不冒称复读marker或具体握手边沿。
+- cpp_generated/cpp_compiled/reset_launch首次在本路线实际为true；AXI输入仍全0，无RAM响应/权重/N0数值/fullblock，相关未授范围不因Actions成功扩大。FIFO5180也不授FF/reset/delta等价。
+- root header5296945B有界读取OK但语法仍UNRECOGNIZED，256handles仍null/UNKNOWN；不扩parser、不伪填。独立actual审已接受有限范围：review_cluster_reset_actual_39232100796_20261019T1006；MANIFEST 1066 B / fa51d430f3851a556b7c6f2472e1ddb3f6e475c43abeabcdde86958801f5b22f；SUMMARY 11813 B / 120ffd07a662deb267be143b1c890c87d787637e2ac8d50da91c79a8963edbb3；verdict PASS_ACTUAL_CLUSTER_HOST_COMPILE_AND_BOUNDED_RESET_LAUNCH_ONLY。
+- 本次仅安全五路径持久化，不改workflow、不触发新的 Host/native 作业；下一首数值阶段先只读核已有冻结输入/参考/驱动和最小缺口，尚未运行。

@@ -1,0 +1,121 @@
+{
+  "actual_review": {
+    "directory": "review_local_continuation_actual_20261019T1700",
+    "manifest": {
+      "bytes": 601,
+      "sha256": "31b293e9394fe8a25b88c341e5a43816500ea1b6534bced6db41197081507f16"
+    },
+    "state": "ACCEPTED",
+    "summary": {
+      "bytes": 4807,
+      "file": "SUMMARY.md",
+      "sha256": "7a9d23fbacc4c3be6d0467e7624d18638a3f35d9aad331ba8c383ebd8a275894"
+    },
+    "verdict": "ACCEPT_ACTUAL_LOCAL_CONTINUATION_AUTOCONF_WITNESS_FAILURE_ONLY"
+  },
+  "completed_native_stages": [
+    {
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "official_source473",
+      "seconds": 14.45835,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "local_flex_header_cached",
+      "seconds": 0.218933,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "flex_header_compile",
+      "seconds": 0.397787,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    {
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "fresh_autoconf",
+      "seconds": 0.456368,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 0
+    }
+  ],
+  "coordinator_seconds": 19.469299,
+  "execution_location": "local",
+  "failure": {
+    "evidence": "ORIGINAL_OUTER_TRACEBACK",
+    "fixed_rejection": "finite OBJCACHE cache branch",
+    "interpretation": "Finite text-witness rejection; no claim about semantic equivalence or unsafe cache behavior.",
+    "location": "objcache_configure_witness",
+    "occurred_after": "fresh_autoconf",
+    "occurred_before": "fresh_configure",
+    "type": "ContractFailure"
+  },
+  "inherited_assets_note": "Existing FIFO, fixed SV and historical reference were preconditions/readback only; no new FIFO, emission or numerical result is claimed.",
+  "outer": {
+    "exit_code": 1,
+    "not_child_exit": true,
+    "seconds": 19.522997
+  },
+  "parent_data_only": {
+    "bytes": 94920448,
+    "copied_inputs": 16,
+    "new_frontdoor_qualification": false,
+    "numeric_conversion": false
+  },
+  "publication_note": "Safe aggregate projection, not original RESULT. Private paths, inventory, raw logs, generated configuration/source and arrays remain local.",
+  "resources": {
+    "outer_kill_after_seconds": 5,
+    "outer_term_seconds": 6590,
+    "rss_note": "Cumulative child maxrss is not a separately measured stage peak.",
+    "total_budget_seconds": 6600
+  },
+  "schema": "SAFE_LOCAL_CONTINUATION_EARLY_FAILURE_V1",
+  "scope": {
+    "autoconf_exit0": true,
+    "backend_make_executed": false,
+    "baseline_adopted": false,
+    "cached_flex_header_stage_exit0": true,
+    "configure_executed": false,
+    "full_block_pass": false,
+    "gxx_flex_header_probe_exit0": true,
+    "host_generation_compile_or_run": false,
+    "n0_numeric": false,
+    "new_fifo_execution": false,
+    "new_tool_qualification": false,
+    "reference_regenerated": false,
+    "source473_acquisition_stage_exit0": true
+  },
+  "source_commit": "a2ba85252bf3f922044e84cf6464da36211c5b51",
+  "source_evidence": {
+    "evidence_members": 7,
+    "manifest": {
+      "bytes": 1005,
+      "sha256": "1df2aeb35058396f0ae93e3808f3fd7f7a6bd6f7b97f35ebfe363b35991cfe26"
+    },
+    "outer_result": {
+      "bytes": 133,
+      "sha256": "753fbec9803e30ad7a2421448b8b268b7238db6ad82f35ac46dc03bbf6efbf62"
+    },
+    "result": {
+      "bytes": 13281,
+      "sha256": "aa84b58cb1e2a7e7f612c7369ec4a1b0dd25f8df9cb213e57ae611430c397d2a"
+    },
+    "traceback_log": {
+      "bytes": 3786,
+      "sha256": "9f1a2536e97ad4e5f415fab3e6a33ed7bb1722397068290c73f646bd4adfa88f"
+    }
+  },
+  "status": "INCOMPLETE"
+}

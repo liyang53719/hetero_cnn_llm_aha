@@ -1146,3 +1146,11 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - v1仅F01 HOLD（报告/恢复二次错误覆盖原错）已在独立v2窄修：保首错、固定四项恢复均尝试、报告窗口受120秒与总stop双夹。除run.finally外协调器AST与v1一致，入口仅更新pin；原两工具/header适配逐字不变。作者普通/-O/搬迁双模各135组，共540纯mock通过；独审135+135并继承原capture2/compare1测试边界，不能相加冒作实际测试。
 - SOURCE独审：M798/93030e61dae1c6c9d92a06b25866abe4f4ecc59979721bee315d1e0598b8dbb6，S3891/cb4cce9f49ec298c45e299d0415b6c1cf6bf736281052bdc749d06e2b41cdc7f，结论SOURCE_GO_SINGLE_BOUNDED_LOCAL_BACKEND_HOST_N0_CONTINUATION。原件待审标签由独立STATUS准确补最终身份，不热改冻结源。
 - 本次仅安全源码/冷测/审摘要持久化，无workflow变更、无本地backend/Host/N0新增实际资格；全链一次执行虽已有条件授权，仍须私有binding、现场原门与原监督同满足。最终成功必须原进程exit0与RESULT及cleanup一致，RESULT在恢复之前写出不能单独授成功。机器路径、权重、原receipt/日志、实际command/launcher与搬迁副本不公开，full_block_pass/baseline_adopted继续false。
+
+## 2026-10-19 17:06 UTC：本地 continuation 早期 INCOMPLETE（独审闭合）
+
+- 单次源提交 a2ba85252bf3f922044e84cf6464da36211c5b51 的 continuation 外层退出 1，整体 INCOMPLETE；四 native 阶段 official_source473、cached header、g++ header probe、autoconf 均自然 0/未超时/cleanup=true，原 waitid 1/0。独立 actual 审查已闭合。
+- 保存的 traceback 将父后验拒绝定位到 objcache_configure_witness 的“finite OBJCACHE cache branch”文本锚条件；发生在 autoconf 成功后、configure 启动前。原 RESULT 的 ContractFailure 不被倒填成子进程失败；不推断生成配置语义等价或缓存错误启用。
+- 本次未 configure/make、未 Host 生成/编译/运行、未 N0 比较，不是数值 FAIL。外层 19.522997 秒与协调器 19.469299 秒分列；没有自动重试。父 16 输入/94,920,448 B 只是数据复制，既有 FIFO/SV/参考不计本次新资格。
+- 原七件证据 MANIFEST 1005 B / SHA256 1df2aeb35058396f0ae93e3808f3fd7f7a6bd6f7b97f35ebfe363b35991cfe26；RESULT 13281 B / SHA256 aa84b58cb1e2a7e7f612c7369ec4a1b0dd25f8df9cb213e57ae611430c397d2a。本批只公开安全 summary/README/本尾，排除私有路径、库存、日志、配置生成物与数组；无 workflow 或执行源码变动。计划以父 222028 B 精确前缀加本尾一次完整替换，禁止追加全文。
+- 正式 actual 审查 review_local_continuation_actual_20261019T1700：MANIFEST.json 601 B / SHA256 31b293e9394fe8a25b88c341e5a43816500ea1b6534bced6db41197081507f16；SUMMARY.md 4807 B / SHA256 7a9d23fbacc4c3be6d0467e7624d18638a3f35d9aad331ba8c383ebd8a275894。结论 ACCEPT_ACTUAL_LOCAL_CONTINUATION_AUTOCONF_WITNESS_FAILURE_ONLY，接受原失败证据与有限执行边界，不授后续构建或数值资格。

@@ -23,8 +23,8 @@ import types
 
 HERE = Path(__file__).absolute().parent
 SUPPORT = ('ci_support_v3.py', 16348, '653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1')
-PINS_SIZE = 3772
-PINS_SHA = '67195f8448b10847a95ce11e0000eafd831c884510918028e75ad8b80307a437'
+PINS_SIZE = 4676
+PINS_SHA = 'dbb5961cb069dc1329789bd274f96fcb9810c1a8389991a5711e530977841b80'
 MIB = 1024**2
 GIB = 1024**3
 EVIDENCE = ('summary.json', 'source_hashes.json', 'stage_exits.json')
@@ -38,12 +38,19 @@ FRONTLOAD_MODES = ('host-chirrtl-diagnostic','host-generation-diagnostic')
 BUILD_STAGES = STAGES[:16]
 CHIRRTL_STAGES = STAGES[20:25] + ('host93_chirrtl_diagnostic',)
 FRONTLOAD_STAGES = CHIRRTL_STAGES + STAGES[:20] + STAGES[26:]
+FIFO_STAGES = ('icarus_acquire','fifo_compile','fifo_run')
+FIFO_TOOLS = {'icarus': {'bytes':51640,'sha256':'a6071e4b4a68feafca0c8ee0e6aa275eee9a43a108c62801cfd1eca6eab6d8a3'},
+              'vvp': {'bytes':1354376,'sha256':'a10bd7d4a0850308ac8c2c98115b6a3084f9be978307610f2a521190c28f4023'}}
+
+def empty_fifo_observation():
+    return {'state':'NOT_COLLECTED','cases':0,'comparisons':0,'tools':{}}
+
 
 def mode_stages(mode):
-    return FRONTLOAD_STAGES[:-2] if mode=='host-generation-diagnostic' else FRONTLOAD_STAGES if mode in FRONTLOAD_MODES else BUILD_STAGES if mode=='build-diagnostic' else STAGES
+    return FIFO_STAGES+FRONTLOAD_STAGES[:-2] if mode=='host-generation-diagnostic' else FRONTLOAD_STAGES if mode in FRONTLOAD_MODES else BUILD_STAGES if mode=='build-diagnostic' else STAGES
 
 def mode_components(mode):
-    return ('toolchain_build',) if mode=='build-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS[:-1]+('host_generation_diagnostic',) if mode=='host-generation-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS if mode in FRONTLOAD_MODES else COMPONENTS
+    return ('toolchain_build',) if mode=='build-diagnostic' else ('fifo_preflight','chirrtl_diagnostic')+COMPONENTS[:-1]+('host_generation_diagnostic',) if mode=='host-generation-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS if mode in FRONTLOAD_MODES else COMPONENTS
 
 def success_status(mode):
     return 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0' if mode=='host-generation-diagnostic' else 'READY_REQUIRES_ACTIONS_EXIT0'
@@ -80,6 +87,162 @@ CONTRACT_BOUNDARIES = ('NONE', 'UNREPORTED', 'HEADER_QUALIFICATION', 'CHIRRTL_DI
                   'HOME_BEFORE', 'CCACHE_BINDING_BEFORE', 'OBJCACHE_BEFORE',
                   'PHASE_AND_TREE', 'HEADER_AFTER', 'SOURCE_AFTER', 'OUTPUTS_AFTER',
                   'CPPFLAGS_AFTER', 'OBJCACHE_AFTER', 'RECEIPT_AFTER'))
+
+
+# Exact finite labels/counts from the pinned three-phase FIFO adapter.
+FIFO_CONTRACTS = {'FIFO_AFTER_COMPILE_FIXTURES': 'FIXTURE_CHANGED',
+ 'FIFO_AFTER_COMPILE_LIBRARIES': 'LIBRARY_CHANGED',
+ 'FIFO_AFTER_COMPILE_STAGE': 'PACKAGE_STAGE',
+ 'FIFO_AFTER_COMPILE_TREE': 'TREE_INVENTORY',
+ 'FIFO_AFTER_RUN_FIXTURES': 'FIXTURE_CHANGED',
+ 'FIFO_AFTER_RUN_LIBRARIES': 'LIBRARY_CHANGED',
+ 'FIFO_AFTER_RUN_STAGE': 'PACKAGE_STAGE',
+ 'FIFO_AFTER_RUN_TREE': 'TREE_INVENTORY',
+ 'FIFO_BEFORE_COMPILE_FIXTURES': 'FIXTURE_CHANGED',
+ 'FIFO_BEFORE_COMPILE_LIBRARIES': 'LIBRARY_CHANGED',
+ 'FIFO_BEFORE_COMPILE_STAGE': 'PACKAGE_STAGE',
+ 'FIFO_COMPILED_IDENTITY': 'COMPILED_IDENTITY',
+ 'FIFO_COMPILED_MODULES': 'VVP_MODULES',
+ 'FIFO_COMPILED_NONEMPTY': 'COMPILED_EMPTY',
+ 'FIFO_COMPILED_READ': 'COMPILED_READ',
+ 'FIFO_MODULE_RECEIPT': 'RECEIPT_WRITE',
+ 'FIFO_RUN_OBSERVATION': 'FIFO_OBSERVATION',
+ 'FIFO_RUN_SAME_COMPILED': 'COMPILED_CHANGED',
+ 'FIFO_WORKROOT': 'WORKROOT',
+ 'FINAL_SOURCE_IDENTITIES': 'SOURCE_CHANGED',
+ 'ICARUS_CONTRACT_LOAD': 'SOURCE_LOAD',
+ 'ICARUS_LIBRARY_IDENTITIES': 'LIBRARY_IDENTITIES',
+ 'ICARUS_LIBRARY_RECEIPT': 'RECEIPT_WRITE',
+ 'ICARUS_PACKAGE_ELF': 'PACKAGE_ELF',
+ 'ICARUS_RECEIPT_DECODE': 'INPUT_JSON',
+ 'ICARUS_RECEIPT_READ': 'RECEIPT_READ',
+ 'ICARUS_STAGE_VERIFY': 'PACKAGE_STAGE',
+ 'ICARUS_TOOL_IDENTITIES': 'TOOL_IDENTITY',
+ 'LIBRARY_BZ2_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_BZ2_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_BZ2_READ': 'LIBRARY_READ',
+ 'LIBRARY_BZ2_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_BZ2_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_C_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_C_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_C_READ': 'LIBRARY_READ',
+ 'LIBRARY_C_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_C_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_GCC_S_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_GCC_S_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_GCC_S_READ': 'LIBRARY_READ',
+ 'LIBRARY_GCC_S_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_GCC_S_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_LOADER_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_LOADER_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_LOADER_READ': 'LIBRARY_READ',
+ 'LIBRARY_LOADER_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_LOADER_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_M_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_M_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_M_READ': 'LIBRARY_READ',
+ 'LIBRARY_M_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_M_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_READLINE_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_READLINE_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_READLINE_READ': 'LIBRARY_READ',
+ 'LIBRARY_READLINE_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_READLINE_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_READLINE_TRANSITIVE': 'LIBRARY_TRANSITIVE',
+ 'LIBRARY_STDCXX_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_STDCXX_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_STDCXX_READ': 'LIBRARY_READ',
+ 'LIBRARY_STDCXX_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_STDCXX_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_TINFO_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_TINFO_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_TINFO_READ': 'LIBRARY_READ',
+ 'LIBRARY_TINFO_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_TINFO_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_Z_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_Z_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_Z_READ': 'LIBRARY_READ',
+ 'LIBRARY_Z_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_Z_STABLE': 'LIBRARY_STABLE',
+ 'PHASE_LOG_POSTFLIGHT': 'PHASE_LOG_BOUND'}
+FIFO_REQUIRE_CODES = ('ELF_DEPENDENCY_DUPLICATE', 'ELF_DEPENDENCY_NAME', 'ELF_DEPENDENCY_OFFSET', 'ELF_DYNAMIC_BOUND', 'ELF_DYNAMIC_COUNT', 'ELF_DYNAMIC_TAGS', 'ELF_ENCODING', 'ELF_HEADER', 'ELF_INTERPRETER', 'ELF_PROGRAM_HEADERS', 'ELF_SEGMENT', 'ELF_SONAME', 'ELF_STRING_TABLE', 'INPUT_CHANGED', 'INPUT_PATH_SYNTAX', 'INPUT_REGULAR', 'INPUT_SHA', 'INPUT_SYMLINK', 'LIBRARY_OWNERSHIP', 'LIBRARY_PATH', 'LIBRARY_STABLE', 'LIBRARY_TRANSITIVE')
+FIFO_CONTRACT_COUNTS = {'FIFO_AFTER_COMPILE_FIXTURES': (2,),
+ 'FIFO_AFTER_COMPILE_LIBRARIES': (2,),
+ 'FIFO_AFTER_COMPILE_STAGE': (2,),
+ 'FIFO_AFTER_COMPILE_TREE': (2,),
+ 'FIFO_AFTER_RUN_FIXTURES': (3,),
+ 'FIFO_AFTER_RUN_LIBRARIES': (3,),
+ 'FIFO_AFTER_RUN_STAGE': (3,),
+ 'FIFO_AFTER_RUN_TREE': (3,),
+ 'FIFO_BEFORE_COMPILE_FIXTURES': (0, 1),
+ 'FIFO_BEFORE_COMPILE_LIBRARIES': (1,),
+ 'FIFO_BEFORE_COMPILE_STAGE': (1,),
+ 'FIFO_COMPILED_IDENTITY': (2,),
+ 'FIFO_COMPILED_MODULES': (2,),
+ 'FIFO_COMPILED_NONEMPTY': (2,),
+ 'FIFO_COMPILED_READ': (2,),
+ 'FIFO_MODULE_RECEIPT': (2,),
+ 'FIFO_RUN_OBSERVATION': (3,),
+ 'FIFO_RUN_SAME_COMPILED': (3,),
+ 'FIFO_WORKROOT': (0,),
+ 'FINAL_SOURCE_IDENTITIES': (0, 1, 2, 3),
+ 'ICARUS_CONTRACT_LOAD': (0,),
+ 'ICARUS_LIBRARY_IDENTITIES': (1,),
+ 'ICARUS_LIBRARY_RECEIPT': (1,),
+ 'ICARUS_PACKAGE_ELF': (1,),
+ 'ICARUS_RECEIPT_DECODE': (1,),
+ 'ICARUS_RECEIPT_READ': (1,),
+ 'ICARUS_STAGE_VERIFY': (1,),
+ 'ICARUS_TOOL_IDENTITIES': (1,),
+ 'LIBRARY_BZ2_ELF': (1, 2, 3),
+ 'LIBRARY_BZ2_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_BZ2_READ': (1, 2, 3),
+ 'LIBRARY_BZ2_RESOLVE': (1, 2, 3),
+ 'LIBRARY_BZ2_STABLE': (1, 2, 3),
+ 'LIBRARY_C_ELF': (1, 2, 3),
+ 'LIBRARY_C_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_C_READ': (1, 2, 3),
+ 'LIBRARY_C_RESOLVE': (1, 2, 3),
+ 'LIBRARY_C_STABLE': (1, 2, 3),
+ 'LIBRARY_GCC_S_ELF': (1, 2, 3),
+ 'LIBRARY_GCC_S_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_GCC_S_READ': (1, 2, 3),
+ 'LIBRARY_GCC_S_RESOLVE': (1, 2, 3),
+ 'LIBRARY_GCC_S_STABLE': (1, 2, 3),
+ 'LIBRARY_LOADER_ELF': (1, 2, 3),
+ 'LIBRARY_LOADER_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_LOADER_READ': (1, 2, 3),
+ 'LIBRARY_LOADER_RESOLVE': (1, 2, 3),
+ 'LIBRARY_LOADER_STABLE': (1, 2, 3),
+ 'LIBRARY_M_ELF': (1, 2, 3),
+ 'LIBRARY_M_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_M_READ': (1, 2, 3),
+ 'LIBRARY_M_RESOLVE': (1, 2, 3),
+ 'LIBRARY_M_STABLE': (1, 2, 3),
+ 'LIBRARY_READLINE_ELF': (1, 2, 3),
+ 'LIBRARY_READLINE_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_READLINE_READ': (1, 2, 3),
+ 'LIBRARY_READLINE_RESOLVE': (1, 2, 3),
+ 'LIBRARY_READLINE_STABLE': (1, 2, 3),
+ 'LIBRARY_READLINE_TRANSITIVE': (1, 2, 3),
+ 'LIBRARY_STDCXX_ELF': (1, 2, 3),
+ 'LIBRARY_STDCXX_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_STDCXX_READ': (1, 2, 3),
+ 'LIBRARY_STDCXX_RESOLVE': (1, 2, 3),
+ 'LIBRARY_STDCXX_STABLE': (1, 2, 3),
+ 'LIBRARY_TINFO_ELF': (1, 2, 3),
+ 'LIBRARY_TINFO_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_TINFO_READ': (1, 2, 3),
+ 'LIBRARY_TINFO_RESOLVE': (1, 2, 3),
+ 'LIBRARY_TINFO_STABLE': (1, 2, 3),
+ 'LIBRARY_Z_ELF': (1, 2, 3),
+ 'LIBRARY_Z_OWNERSHIP': (1, 2, 3),
+ 'LIBRARY_Z_READ': (1, 2, 3),
+ 'LIBRARY_Z_RESOLVE': (1, 2, 3),
+ 'LIBRARY_Z_STABLE': (1, 2, 3),
+ 'PHASE_LOG_POSTFLIGHT': (1, 2, 3)}
+CONTRACT_BOUNDARIES += tuple(sorted(FIFO_CONTRACTS))
+CONTRACT_CODES += tuple(sorted((set(FIFO_CONTRACTS.values())|set(FIFO_REQUIRE_CODES))-set(CONTRACT_CODES)))
 
 
 def require(ok, reason):
@@ -176,7 +339,7 @@ def pin(value, path=False):
         name = value['path']
         require(type(name) is str and len(name) <= 240 and re.fullmatch('[A-Za-z0-9_./-]+', name) and
                 not name.startswith('/') and '..' not in name.split('/') and
-                name.startswith(('candidates/host93_ci_recovery/', 'development_snapshots/', 'candidates/qwen2_resident_matrix/')),
+                name.startswith(('candidates/host93_ci_recovery/', 'candidates/host93_micro_diagnostics/', 'development_snapshots/', 'candidates/qwen2_resident_matrix/')),
                 'only project-relative source names')
 
 
@@ -260,8 +423,8 @@ def contract_failure_observation(error):
 def validate_evidence(objects):
     keys(objects, EVIDENCE)
     summary, sources, exits = (objects[n] for n in EVIDENCE)
-    keys(summary, ('schema', 'mode', 'status', 'failure_category', 'contract_failure', 'completed_components', 'scope', 'seconds', 'chirrtl_observation', 'generation_diagnostics'))
-    require(summary['schema'] == 'host93-ci-summary-v5' and summary['mode'] in MODES and summary['status'] in
+    keys(summary, ('schema', 'mode', 'status', 'failure_category', 'contract_failure', 'completed_components', 'scope', 'seconds', 'chirrtl_observation', 'generation_diagnostics', 'fifo_observation'))
+    require(summary['schema'] == 'host93-ci-summary-v6' and summary['mode'] in MODES and summary['status'] in
             ('INCOMPLETE', 'READY_REQUIRES_ACTIONS_EXIT0', 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0') and summary['failure_category'] in CATEGORIES and
             finite(summary['seconds']) and summary['seconds'] <= 6600, 'summary values')
     detail = summary['contract_failure']
@@ -327,9 +490,9 @@ def validate_evidence(objects):
         require('diagnostic_fir' in sources['generated'] and sources['generated']['diagnostic_fir']['bytes']==observed['utf8_bytes'] and
                 observed['historical_fir_equal']==(sources['generated']['diagnostic_fir']==HISTORICAL_FIR),
                 'measured diagnostic identity comparison')
-        require(len(completed)==1 or observed['historical_fir_equal'], 'no continuation without exact historical FIR identity')
+        require(len(completed)==component_order.index('chirrtl_diagnostic')+1 or observed['historical_fir_equal'], 'no continuation without exact historical FIR identity')
     elif observed['state']=='REPORTED':
-        require(mode in FRONTLOAD_MODES and not completed and observed['historical_fir_equal'] is None,
+        require(mode in FRONTLOAD_MODES and completed==(['fifo_preflight'] if mode=='host-generation-diagnostic' else []) and observed['historical_fir_equal'] is None,
                 'failed child numeric report cannot claim verified FIR')
         require(all(type(observed[key]) is int and 0 <= observed[key] <= 2147483647 for key in CHIRRTL_NUMERIC) and
                 0 < observed['utf8_bytes'] and 0 < observed['line_count'] <= observed['utf8_bytes'] and
@@ -349,7 +512,7 @@ def validate_evidence(objects):
                 sources['generated']['host93_sv'] == {'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'},
                 'scope requires the deterministic fixed FIR and SV')
     keys(exits, ('schema', 'stages'))
-    require(exits['schema'] == 'host93-ci-stage-exits-v6' and type(exits['stages']) is list and len(exits['stages']) <= len(STAGES), 'stage schema/count')
+    require(exits['schema'] == 'host93-ci-stage-exits-v6' and type(exits['stages']) is list and len(exits['stages']) <= len(required_stages), 'stage schema/count')
     seen = []
     failed = False
     for row in exits['stages']:
@@ -368,13 +531,35 @@ def validate_evidence(objects):
                     row['failure_boundary']=='NONE' and row['native_record_status']=='PASS', 'stage terminal tuple')
         else:
             failed = True
+    if detail['boundary'] in FIFO_CONTRACTS:
+        require(mode=='host-generation-diagnostic' and not completed and not failed and
+                len(seen) in FIFO_CONTRACT_COUNTS[detail['boundary']] and
+                seen==list(FIFO_STAGES[:len(seen)]), 'FIFO parent failure belongs to its clean native prefix')
+        require(detail['code'] in (FIFO_CONTRACTS[detail['boundary']],)+FIFO_REQUIRE_CODES,
+                'fixed FIFO parent boundary/code pair')
+    fifo=summary['fifo_observation']
+    keys(fifo,('state','cases','comparisons','tools'))
+    if 'fifo_preflight' in completed:
+        require(mode=='host-generation-diagnostic' and fifo=={'state':'AVAILABLE','cases':4,'comparisons':5180,'tools':FIFO_TOOLS} and
+                type(fifo['cases']) is int and type(fifo['comparisons']) is int,
+                'fixed FIFO cases and tool identities required')
+        require(len(exits['stages'])>=3 and all(row['status']=='EXIT0_CLEANED' and
+                row['waitid_code']==1 and row['waitid_status']==0 and row['receipt_timed_out'] is False and
+                row['kill_attempted'] is True and row['kill_result'] in ('SIGNAL_SENT_BEFORE_REAP','GROUP_ALREADY_ABSENT')
+                for row in exits['stages'][:3]), 'FIFO observation requires all three clean native stages')
+    else:
+        require(fifo==empty_fifo_observation() and type(fifo['cases']) is int and type(fifo['comparisons']) is int,
+                'no unqualified FIFO observation')
+    if mode=='host-generation-diagnostic':
+        require(len(seen)<=3 or 'fifo_preflight' in completed, 'later stages require real FIFO qualification')
     if mode in FRONTLOAD_MODES:
+        offset=3 if mode=='host-generation-diagnostic' else 0
         if 'chirrtl_diagnostic' in completed:
-            require(len(exits['stages'])>=len(CHIRRTL_STAGES) and
-                    all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][:len(CHIRRTL_STAGES)]),
+            require(len(exits['stages'])>=offset+len(CHIRRTL_STAGES) and
+                    all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][offset:offset+len(CHIRRTL_STAGES)]),
                     'available diagnostic requires all six successful native stages')
         require(seen==list(required_stages[:len(seen)]), 'fixed frontloaded stage prefix')
-        require(len(seen)<=len(CHIRRTL_STAGES) or observed['state']=='AVAILABLE' and observed['historical_fir_equal'], 'toolchain after exact diagnostic identity only')
+        require(len(seen)<=offset+len(CHIRRTL_STAGES) or observed['state']=='AVAILABLE' and observed['historical_fir_equal'], 'toolchain after exact diagnostic identity only')
     if observed['state']=='REPORTED':
         require(exits['stages'] and exits['stages'][-1]['name']=='host93_chirrtl_diagnostic' and exits['stages'][-1]['status']=='FAILED', 'reported numbers belong only to failed diagnostic child')
     require(not seen or bool(sources['project_sources']), 'native stage evidence needs source identities')
@@ -389,7 +574,7 @@ def validate_evidence(objects):
     if 'host_generation_diagnostic' in completed:
         require(mode=='host-generation-diagnostic' and seen==list(required_stages) and not failed and
                 generation is not None and generation['state']=='AVAILABLE',
-                'completed generation diagnostic requires all32 clean stages and observed census')
+                'completed generation diagnostic requires all35 clean stages and observed census')
     if summary['status'] == 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0':
         require(mode=='host-generation-diagnostic' and summary['failure_category']=='NONE' and
                 completed==list(component_order) and not failed and seen==list(required_stages) and
@@ -439,6 +624,9 @@ def limits(total, work, cpu, address, fsize, log=MIB):
 # Approved finite per-process maxima. Components may only tighten these values.
 # Aggregate tree limits remain component postflight acceptance, not OS hard caps.
 PHASE_CAPS = {
+    'icarus_acquire': (120,90,40,512*MIB,4*MIB,65536),
+    'fifo_compile': (30,10,10,512*MIB,4*MIB,65536),
+    'fifo_run': (30,10,10,512*MIB,4*MIB,65536),
     'official_source473': (420,400,400,512*MIB,64*MIB,2*MIB),
     'flex_header_acquire': (120,90,40,512*MIB,4*MIB,65536),
     'flex_header_compile': (30,10,10,512*MIB,4*MIB,65536),
@@ -556,6 +744,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
     failure = None
     chirrtl_observation = empty_chirrtl_observation()
     generation_diagnostics=None
+    fifo_observation=empty_fifo_observation()
     try:
         out.mkdir(mode=0o700)
         (out/'private').mkdir(mode=0o700)
@@ -599,6 +788,15 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                 row['seconds']=round(time.monotonic()-began,6)
                 print(json.dumps({'phase':name,'status':row['status'],'seconds':row['seconds']},sort_keys=True),flush=True)
         prefix='candidates/host93_ci_recovery/'
+        if mode=='host-generation-diagnostic':
+            preflight=module_from(repo,pins,prefix+'fifo_preflight/fifo_preflight.py','verified_fifo_preflight')
+            result=preflight.run(repo,out/'fifo_preflight',call_phase,base_support,buffers)
+            if result!={'cases':4,'comparisons':5180,'tools':FIFO_TOOLS}:
+                error=ValueError('fixed FIFO preflight result required')
+                error.safe_contract_boundary='FIFO_RUN_OBSERVATION';error.safe_contract_code='FIFO_OBSERVATION'
+                raise error
+            fifo_observation={'state':'AVAILABLE',**result}
+            completed.append('fifo_preflight')
         if mode in FRONTLOAD_MODES:
             emission=module_from(repo,pins,prefix+'emission/host_emission.py','verified_ci_host_emission')
             diagnostic=module_from(repo,pins,prefix+'emission/chirrtl_diagnostic.py','verified_ci_chirrtl_diagnostic')
@@ -686,8 +884,8 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
         signal.setitimer(signal.ITIMER_REAL, max(0.001,shared_stop-time.monotonic()))
         try:
             category='NONE' if failure is None else ('TIMEOUT' if isinstance(failure,TimeoutError) else 'INPUT_OR_CONTRACT' if isinstance(failure,(ValueError,KeyError,AssertionError)) else 'SYSTEM' if isinstance(failure,OSError) else 'INTERRUPTED' if isinstance(failure,(KeyboardInterrupt,SystemExit)) else 'UNEXPECTED')
-            summary={'schema':'host93-ci-summary-v5','mode':mode,'status':success_status(mode) if failure is None else 'INCOMPLETE',
-                     'failure_category':category,'contract_failure':contract_failure_observation(failure),'completed_components':completed,'scope':scopes,'seconds':round(time.monotonic()-started,6),'chirrtl_observation':chirrtl_observation,'generation_diagnostics':generation_diagnostics}
+            summary={'schema':'host93-ci-summary-v6','mode':mode,'status':success_status(mode) if failure is None else 'INCOMPLETE',
+                     'failure_category':category,'contract_failure':contract_failure_observation(failure),'completed_components':completed,'scope':scopes,'seconds':round(time.monotonic()-started,6),'chirrtl_observation':chirrtl_observation,'generation_diagnostics':generation_diagnostics,'fifo_observation':fifo_observation}
             sources={'schema':'host93-ci-source-hashes-v3','project_sources':source_rows,
                      'fixed_inputs':({'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}} if mode!='build-diagnostic' else {}),'generated':generated}
             objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v6','stages':stages}}

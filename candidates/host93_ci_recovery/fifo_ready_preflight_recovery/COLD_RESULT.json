@@ -1,0 +1,41 @@
+{
+  "actual": "NOT_EXECUTED",
+  "all_current": true,
+  "capture_note": "One initial coordinator capture had zero tests/exit5 due only to detached __main__ harness globals; retained. Corrected same-buffer harness then ran147+147. Earlier direct146 passed before adding table-equality test.",
+  "configuration": {
+    "normal": 22,
+    "optimized": 22
+  },
+  "coordinator": {
+    "normal": 147,
+    "optimized": 147
+  },
+  "execution": {
+    "normal": 27,
+    "optimized": 27
+  },
+  "extractor": {
+    "normal": 24,
+    "optimized": 24
+  },
+  "native": false,
+  "preflight_adapter": {
+    "normal": 17,
+    "optimized": 17
+  },
+  "root_header_census": {
+    "normal": 68,
+    "optimized": 68
+  },
+  "whole_source_review": {
+    "directory": "review_fifo_ready_whole_source_20261019T0847",
+    "manifest": {
+      "bytes": 1586,
+      "sha256": "b8980bdc7114e4848d11092757aac00d04b5d57641cc55b8832e3578e3a42e69"
+    },
+    "summary": {
+      "bytes": 6022,
+      "sha256": "b6a1b784b5301dc410478ecc07077e2c3432452047f0b4f451873d096571d61e"
+    }
+  }
+}

@@ -47,7 +47,7 @@ WARNING_PREFIX = 'idma_source_export_attempt_v8_20261017/source/idma_export/'
 CONFIG_NAMES = ('hierarchy.vlt', 'readonly.vlt', 'dma_hints.vlt', 'precision_warnings.vlt')
 FIFO_PATH = 'deps/common_cells/src/cc_passthrough_stream_fifo.sv'
 FIFO_BASE = (4411, '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352')
-FIFO_DERIVED = (4536, 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70')
+FIFO_DERIVED = (4662, 'cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6')
 LIMITS = {'wall_seconds': 60, 'cpu_seconds': 45, 'address_space_bytes': 768 * 1024**2,
           'file_bytes': 512 * 1024, 'output_tree_bytes': 1024 * 1024}
 
@@ -317,10 +317,10 @@ def warning_rows(warnings, sums, closure):
 
 
 def migrate_fifo_warning_rows(rows, raw):
-    """Only two existing FIFO WIDTH rows move with the pinned valid_o split."""
+    """Only two existing FIFO WIDTH rows move with the pinned valid_o/ready_o splits."""
     fixed = (
-        (81, 88, b"                if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n"),
-        (100, 107, b"                if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n"),
+        (81, 98, b"                if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n"),
+        (100, 114, b"                if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n"),
     )
     expected = {(FIFO_PATH, old, 'WIDTHEXPAND', FIFO_BASE[1]) for old, new, text in fixed}
     observed = [row for row in rows if row[0] == FIFO_PATH]

@@ -26,6 +26,7 @@ MAX_WRAPPER_BYTES = 512 * 1024
 MAX_DIRECTORY_ENTRIES = 4096
 MAX_MAKEGRAPH_BYTES = 256 * 1024
 MAX_ROOT_HEADER_BYTES = 4 * 1024**2
+MAX_ROOT_HEADER_RETRY_BYTES = 16 * 1024**2
 SOURCE_PREFIXES = ('idma/', 'retained/', 'host/')
 STATES = frozenset(('NOT_COLLECTED', 'AVAILABLE', 'READ_ERROR', 'SANITIZER_ERROR', 'CONTRACT_ERROR'))
 # Frozen ascii rule names from pinned official V3Error.h, SHA256 45d2feddb6872b1f812e9d79a7d82ffe050547fd08105db54bcdb04286d90db4.
@@ -48,7 +49,7 @@ _HANDSHAKES = ('seed_begin_valid_i', 'seed_begin_ready_o', 'seed_commit_valid_i'
                'out_ready_i', 'completion_valid_o', 'completion_ready_i')
 _FIFO_SOURCE = 'idma/deps/common_cells/src/cc_passthrough_stream_fifo.sv'
 _FIFO_BASE = {'bytes': 4411, 'sha256': '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352'}
-_FIFO_DERIVED = {'bytes': 4536, 'sha256': 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70'}
+_FIFO_DERIVED = {'bytes': 4662, 'sha256': 'cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6'}
 _MESSAGES = frozenset(('Circular combinational logic reported.',
                       'Verilator warning reported; unstructured text omitted.',
                       'Verilator error reported; unstructured text omitted.',
@@ -100,29 +101,79 @@ def _directory(path):
         raise
 
 
+_READ_FAILURE_STATES = {
+    'MISSING': 'MISSING', 'DIRECTORY_MISSING': 'MISSING',
+    'READ_ERROR': 'READ_ERROR', 'DIRECTORY_READ_ERROR': 'READ_ERROR',
+    'NOT_REGULAR': 'CONTRACT_ERROR', 'INVALID_SIZE': 'CONTRACT_ERROR',
+    'SIZE_LIMIT': 'CONTRACT_ERROR', 'FILE_CHANGED': 'CONTRACT_ERROR',
+    'DIRECTORY_CHANGED': 'CONTRACT_ERROR', 'CONTRACT_ERROR': 'CONTRACT_ERROR',
+}
+
+
+class _ReadContractError(ValueError):
+    def __init__(self, code, observed_size):
+        super().__init__('generation diagnostic read contract')
+        self.code = code
+        self.observed_size = observed_size
+
+
+def _read_need(ok, code, observed_size):
+    if not ok:
+        raise _ReadContractError(code, observed_size)
+
+
 def _read(path, cap):
-    path = Path(_absolute(path))
-    parent = _directory(path.parent)
+    # Legacy callers still receive bytes or the same broad OS/ValueError classes.
+    # Failure metadata is finite and never includes the exception text or path.
+    observed_size = None
+    directory_phase = False
     try:
-        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
-        with os.fdopen(fd, 'rb') as stream:
-            before = os.fstat(stream.fileno())
-            _need(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= cap)
-            raw = stream.read(cap + 1)
-            after = os.fstat(stream.fileno())
-        current = os.stat(path.name, dir_fd=parent, follow_symlinks=False)
-        fresh_parent = _directory(path.parent)
+        path = Path(_absolute(path))
+        directory_phase = True
+        parent = _directory(path.parent)
         try:
-            original_dir, fresh_dir = os.fstat(parent), os.fstat(fresh_parent)
-            _need((original_dir.st_dev, original_dir.st_ino) == (fresh_dir.st_dev, fresh_dir.st_ino))
-            _need(_stamp(before) == _stamp(os.stat(path.name, dir_fd=fresh_parent, follow_symlinks=False)))
+            directory_phase = False
+            fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
+            try:
+                before = os.fstat(fd)
+                observed_size = before.st_size
+                if stat.S_ISDIR(before.st_mode):
+                    raise IsADirectoryError('generation diagnostic read contract')
+                _read_need(stat.S_ISREG(before.st_mode), 'NOT_REGULAR', observed_size)
+                _read_need(before.st_size >= 0, 'INVALID_SIZE', observed_size)
+                _read_need(before.st_size <= cap, 'SIZE_LIMIT', observed_size)
+                with os.fdopen(fd, 'rb') as stream:
+                    fd = None
+                    raw = stream.read(cap + 1)
+                    after = os.fstat(stream.fileno())
+            finally:
+                if fd is not None:
+                    os.close(fd)
+            current = os.stat(path.name, dir_fd=parent, follow_symlinks=False)
+            directory_phase = True
+            fresh_parent = _directory(path.parent)
+            try:
+                original_dir, fresh_dir = os.fstat(parent), os.fstat(fresh_parent)
+                _read_need((original_dir.st_dev, original_dir.st_ino) ==
+                           (fresh_dir.st_dev, fresh_dir.st_ino), 'DIRECTORY_CHANGED', observed_size)
+                directory_phase = False
+                _read_need(_stamp(before) == _stamp(os.stat(path.name, dir_fd=fresh_parent, follow_symlinks=False)),
+                           'FILE_CHANGED', observed_size)
+            finally:
+                os.close(fresh_parent)
+            _read_need(len(raw) == before.st_size and len(raw) <= cap and
+                       _stamp(before) == _stamp(after) == _stamp(current), 'FILE_CHANGED', observed_size)
+            return raw
         finally:
-            os.close(fresh_parent)
-        _need(len(raw) == before.st_size and len(raw) <= cap and
-              _stamp(before) == _stamp(after) == _stamp(current))
-        return raw
-    finally:
-        os.close(parent)
+            os.close(parent)
+    except OSError as error:
+        error._generation_read_code = (('DIRECTORY_MISSING' if directory_phase else 'MISSING')
+            if isinstance(error, FileNotFoundError) else
+            ('DIRECTORY_READ_ERROR' if directory_phase else 'READ_ERROR'))
+        if isinstance(error, IsADirectoryError) and observed_size is not None:
+            error._generation_read_code = 'NOT_REGULAR'
+        error._generation_observed_size = observed_size
+        raise
 
 
 def _identity(raw):
@@ -258,6 +309,9 @@ def _empty_cluster():
     return {'makegraph_state': 'NOT_COLLECTED', 'makegraph_identity': None,
             'library_target_count': None, 'matching_library_target_count': None,
             'root_header_state': 'NOT_COLLECTED', 'root_header_identity': None,
+            'root_header_read': {'first_code': 'NOT_COLLECTED', 'first_observed_size': None,
+                                 'retry_outcome': 'NOT_ATTEMPTED',
+                                 'final_code': 'NOT_COLLECTED', 'final_observed_size': None},
             'handle_declaration_count': None, 'instance_handle_count': None,
             'expected_structure_observed': False}
 
@@ -361,20 +415,66 @@ def _root_handles(raw, result):
     result.update(root_header_state='AVAILABLE', instance_handle_count=len(set(pairs)))
 
 
+def _root_header_read_attempt(path, cap):
+    try:
+        raw = _read(path, cap)
+        return raw, 'OK', len(raw)
+    except _ReadContractError as error:
+        return None, error.code, error.observed_size
+    except OSError as error:
+        return (None, getattr(error, '_generation_read_code',
+                             'MISSING' if isinstance(error, FileNotFoundError) else 'READ_ERROR'),
+                getattr(error, '_generation_observed_size', None))
+    except (ValueError, TypeError):
+        return None, 'CONTRACT_ERROR', None
+
+
+def _root_header_observation(path, result):
+    # Only an observed regular file over 4 MiB and at most 16 MiB may retry.
+    # Both reads retain the same descriptor/name/directory stability checks.
+    read = result['root_header_read']
+    cap = MAX_ROOT_HEADER_BYTES
+    raw, code, size = _root_header_read_attempt(path, cap)
+    read.update(first_code=code, first_observed_size=size, retry_outcome='NOT_ATTEMPTED')
+    if code == 'SIZE_LIMIT' and type(size) is int and cap < size <= MAX_ROOT_HEADER_RETRY_BYTES:
+        cap = MAX_ROOT_HEADER_RETRY_BYTES
+        raw, code, size = _root_header_read_attempt(path, cap)
+        read['retry_outcome'] = 'SUCCEEDED' if code == 'OK' else 'FAILED'
+    read.update(final_code=code, final_observed_size=size)
+    result['root_header_identity'] = None
+    if code != 'OK':
+        result['root_header_state'] = _READ_FAILURE_STATES[code]
+        return
+    result['root_header_identity'] = _identity(raw)
+    result['root_header_state'] = 'UNRECOGNIZED_SYNTAX'
+    try:
+        _root_handles(raw, result)
+        checked, code, size = _root_header_read_attempt(path, cap)
+        if code == 'OK' and checked != raw:
+            code = 'FILE_CHANGED'
+        read.update(final_code=code, final_observed_size=size)
+        if code != 'OK':
+            result['root_header_state'] = _READ_FAILURE_STATES[code]
+    except (OSError, UnicodeError):
+        result['root_header_state'] = 'READ_ERROR'
+    except (ValueError, TypeError):
+        result['root_header_state'] = 'CONTRACT_ERROR'
+
+
 def _cluster_observations(obj, leaf, wrapper):
     result = wrapper['cluster_structure']
     for name, cap, field, parser in (
             ('VHostBlockTop_hier.mk', MAX_MAKEGRAPH_BYTES, 'makegraph', _makegraph),
             ('VHostBlockTop___024root.h', MAX_ROOT_HEADER_BYTES, 'root_header', _root_handles)):
         try:
-            raw = _read(obj / name, cap)
-            result[field + '_identity'] = _identity(raw)
-            result[field + '_state'] = 'UNRECOGNIZED_SYNTAX'
-            if field == 'makegraph':
-                parser(raw, leaf, result)
+            if field == 'root_header':
+                _root_header_observation(obj / name, result)
             else:
-                parser(raw, result)
-            _need(_read(obj / name, cap) == raw)
+                raw = _read(obj / name, cap)
+                result[field + '_identity'] = _identity(raw)
+                result[field + '_state'] = 'UNRECOGNIZED_SYNTAX'
+                parser(raw, leaf, result)
+                _need(_read(obj / name, cap) == raw)
         except FileNotFoundError:
             result[field + '_state'] = 'MISSING'
         except (OSError, UnicodeError):
@@ -672,13 +772,62 @@ def _validate_report(report):
               (wrapper['top_args_identity'] is None) == (wrapper['top_references_wrapper'] is None))
         if wrapper['state'] == 'AVAILABLE':
             _need(wrapper['syntax_state'] != 'NOT_COLLECTED')
-        for field, cap in (('makegraph', MAX_MAKEGRAPH_BYTES), ('root_header', MAX_ROOT_HEADER_BYTES)):
+        for field, cap in (('makegraph', MAX_MAKEGRAPH_BYTES), ('root_header',
+                MAX_ROOT_HEADER_RETRY_BYTES if type(cluster['root_header_read']) is dict and
+                cluster['root_header_read'].get('retry_outcome') == 'SUCCEEDED' else MAX_ROOT_HEADER_BYTES)):
             _need(cluster[field + '_state'] in ('NOT_COLLECTED', 'AVAILABLE', 'MISSING', 'READ_ERROR', 'CONTRACT_ERROR', 'UNRECOGNIZED_SYNTAX'))
             identity(cluster[field + '_identity'], cap)
             if cluster[field + '_state'] in ('AVAILABLE', 'UNRECOGNIZED_SYNTAX'):
                 _need(cluster[field + '_identity'] is not None)
             if cluster[field + '_state'] == 'NOT_COLLECTED':
                 _need(cluster[field + '_identity'] is None)
+        read = cluster['root_header_read']
+        _need(type(read) is dict and set(read) == set(_empty_cluster()['root_header_read']))
+        for prefix in ('first', 'final'):
+            code, size = read[prefix + '_code'], read[prefix + '_observed_size']
+            _need(type(code) is str and code in {'NOT_COLLECTED', 'OK'} | set(_READ_FAILURE_STATES))
+            _need(size is None or (type(size) is int and -(2**63) <= size < 2**63))
+            if code in ('NOT_COLLECTED', 'CONTRACT_ERROR'):
+                _need(size is None)
+            elif code in ('OK', 'SIZE_LIMIT', 'NOT_REGULAR', 'FILE_CHANGED', 'DIRECTORY_CHANGED', 'INVALID_SIZE'):
+                _need(size is not None)
+            if size is not None:
+                _need((size < 0) == (code == 'INVALID_SIZE'))
+        first_code, first_size = read['first_code'], read['first_observed_size']
+        final_code, final_size = read['final_code'], read['final_observed_size']
+        retry = read['retry_outcome']
+        _need(type(retry) is str and retry in ('NOT_ATTEMPTED', 'SUCCEEDED', 'FAILED'))
+        eligible = (first_code == 'SIZE_LIMIT' and
+                    MAX_ROOT_HEADER_BYTES < first_size <= MAX_ROOT_HEADER_RETRY_BYTES)
+        _need((retry != 'NOT_ATTEMPTED') == eligible)
+        if first_code == 'SIZE_LIMIT':
+            _need(first_size > MAX_ROOT_HEADER_BYTES)
+        if first_code == 'OK':
+            _need(first_size <= MAX_ROOT_HEADER_BYTES)
+        for code, size, cap in ((first_code, first_size, MAX_ROOT_HEADER_BYTES),
+                (final_code, final_size, MAX_ROOT_HEADER_RETRY_BYTES if eligible else MAX_ROOT_HEADER_BYTES)):
+            if size is not None and code not in ('SIZE_LIMIT', 'NOT_REGULAR', 'INVALID_SIZE'):
+                _need(size <= cap)
+        state, ident = cluster['root_header_state'], cluster['root_header_identity']
+        if first_code == 'NOT_COLLECTED':
+            _need(final_code == 'NOT_COLLECTED' and state == 'NOT_COLLECTED')
+        else:
+            _need(final_code != 'NOT_COLLECTED' and state != 'NOT_COLLECTED')
+        have_bytes = first_code == 'OK' or retry == 'SUCCEEDED'
+        _need((ident is not None) == have_bytes)
+        if first_code == 'OK':
+            _need(ident['bytes'] == first_size)
+        if final_code == 'OK':
+            _need(have_bytes and ident['bytes'] == final_size and
+                  state in ('AVAILABLE', 'UNRECOGNIZED_SYNTAX', 'READ_ERROR', 'CONTRACT_ERROR'))
+        elif final_code != 'NOT_COLLECTED':
+            _need(state == _READ_FAILURE_STATES[final_code])
+            if final_code == 'SIZE_LIMIT':
+                _need(final_size > (MAX_ROOT_HEADER_RETRY_BYTES if eligible else MAX_ROOT_HEADER_BYTES))
+        if retry == 'FAILED':
+            _need(final_code in _READ_FAILURE_STATES and ident is None)
+        if first_code != 'OK' and retry == 'NOT_ATTEMPTED':
+            _need(final_code == first_code and final_size == first_size)
         for key in ('library_target_count', 'matching_library_target_count'):
             _need((cluster[key] is not None) == (cluster['makegraph_state'] == 'AVAILABLE'))
             if cluster[key] is not None: natural(cluster[key], MAX_DIRECTORY_ENTRIES)

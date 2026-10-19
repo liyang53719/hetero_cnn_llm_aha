@@ -15,7 +15,7 @@ from unittest import mock
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'host_execution.py'
 SIZE = 33886
-SHA = 'a6f03d274c8dc32d46d553dfbf0d15bae64b061c46878b949d30748d008ff44a'
+SHA = 'b68c15f8dcaadac57d6b855073ba3b689d79776607083f8d19fa4f513419e2b2'
 RAW = SOURCE.read_bytes()
 def load(raw):
     if len(raw) != SIZE or hashlib.sha256(raw).hexdigest() != SHA:
@@ -345,7 +345,7 @@ class DerivedFifoClosureCold(unittest.TestCase):
         actual['SHA256SUMS.json']['sha256'] = g.IDMA_META['SHA256SUMS.json'][1]
         fifo = g.FIFO_SPLIT if variant else g.FIFO_BASE
         actual[g.FIFO_PATH].update(bytes=fifo[0],sha256=fifo[1])
-        itree = {'root':str(idma/'sources'),'entries':actual,'bytes':3072200+(125 if variant else 0)}
+        itree = {'root':str(idma/'sources'),'entries':actual,'bytes':3072200+(251 if variant else 0)}
         expected13 = {'retained/r'+str(i)+'.sv':'4'*64 for i in range(13)}
         rtree = {'root':str(retained/'source'),'entries':{n:{'kind':'regular','bytes':0,'sha256':v,'mode':'0o600'} for n,v in expected13.items()},'bytes':0}
         content = {name:(g.CLUSTER_HIERARCHY if name=='hierarchy.vlt' and variant else b'old fixed fixture') for name in g.CONFIG_NAMES}
@@ -376,10 +376,10 @@ class DerivedFifoClosureCold(unittest.TestCase):
             result=self.fixture(variant)
             self.assertEqual(len(result['sources']),307)
             self.assertEqual(len(result['idma_tree']['entries']),319)
-            self.assertEqual(result['idma_tree']['bytes'],3072200+(125 if variant else 0))
+            self.assertEqual(result['idma_tree']['bytes'],3072200+(251 if variant else 0))
     def test_derived_rejects_base_wrong_identity_or_other_change(self):
         edits=(lambda x:x['actual'][g.FIFO_PATH].update(bytes=g.FIFO_BASE[0],sha256=g.FIFO_BASE[1]),
-               lambda x:x['actual'][g.FIFO_PATH].update(bytes=4537),
+               lambda x:x['actual'][g.FIFO_PATH].update(bytes=4663),
                lambda x:x['actual'][g.FIFO_PATH].update(sha256='0'*64),
                lambda x:x['sums'].update({g.FIFO_PATH:'0'*64}),
                lambda x:x['admitted'].update({g.FIFO_PATH:'0'*64}),

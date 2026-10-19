@@ -1,5 +1,5 @@
 name: host93-ci-recovery-once
-# TEMP_SOURCE: generation-only cluster hierarchy visibility and fixed FIFO valid split; fatal warnings retained.
+# TEMP_SOURCE: FIFO ready split four-state preflight then cluster generation-only; fatal warnings retained.
 # TEMP SOURCE: publish this exact workflow only after whole-job SOURCE review.
 # A push touching only this path launches one new Host job, never a retry.
 on:

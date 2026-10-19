@@ -926,3 +926,13 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - root_header CONTRACT_ERROR且identity=null，首次固定读取未返回、parser未进入；缺文件本应MISSING，不能倒填具体读取门。后继仅需固定安全读取码/观察size，不盲扩cap或parser。
 - 固定源支持remaining ready_o过程聚合候选：保真实SameCycleRW ready_i依赖，将ready_o原flush分支独立；iDMA原子gating和allReady不动。先前4/5180不能授新拆块资格，下一需相同四态矩阵与背压小测重新实际验证。原三JSON/FAIL保留，actual独审已接受有限失败证据。
 - actual独审 review_cluster_generation_actual_39220292509_20261019T0821：MANIFEST eb09e9bd53bba6456b898b693d6f753b23fd2a1599d6668e13c6335a252457b2，SUMMARY 924da874fe0c25f3f3af51d2ab8b534ed6d6e33f3b913d09e9045eb4b72eadb8；只接受原失败证据。
+
+### 2026-10-19：FIFO ready 双拆块与同 job 四态前门（TEMP_SOURCE）
+
+- 原39220292509仍为INCOMPLETE：完整4001B日志剩1条UNOPTFLAT，9条Example齐全；旧root_header原因与256实例数未知，不倒填。
+- 固定NoCompute源锥独核支持过程聚合反边候选：ready_o方程不依valid_i，原大块却同时读valid_i并写ready_o。保SameCycleRW真实ready_i依赖及原flush procedural语义，不能推广为全设计无环。
+- 本后继仅把ready_o两条原赋值移入独立组合过程，保原valid_o拆块、状态更新、iDMA原子gating与算术。4411→4536→4662单成员身份明确，319合3072451B；原两WIDTHEXPAND仅81→98、100→114精确同句迁移，零新增豁免。
+- generation-diagnostic同job先3个Icarus/FIFO阶段；真实4case/5180必须通过，再走原32阶段，保共享6600秒与原限额、首失败停。既有reference/cases不改，不重复Host模型或工具阶段；全链34/build16原行为保留。
+- 四态资格限抽取组合方程与手动状态矩阵/背压轨迹，不授FF/reset/delta周期或生产数值等价；旧5180不能替代新派生实际。
+- root_header仅加固定读失败码与实际字节长；首4MiB读仅SIZE_LIMIT且size≤16MiB才条件重读，稳定性合同/解析器保持，超过16MiB仍未知。
+- 当前仅SOURCE/mock；新actual NOT_EXECUTED，独立总SOURCE审GO (review_fifo_ready_whole_source_20261019T0847; manifest b8980bdc7114e4848d11092757aac00d04b5d57641cc55b8832e3578e3a42e69; summary b6a1b784b5301dc410478ecc07077e2c3432452047f0b4f451873d096571d61e)。生成仍warning-fatal，禁止Host C++compile/run、权重与长数值；仅三安全JSON可上传。

@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=57526
-SHA='d24e70d4231b3e786a5ac9107c2ad4d839edd7760e99dcfd83c0b74524f590ed'
+SIZE=67218
+SHA='5a48edf2deb418f48edff5f29e41d74b7770a700ce6f052eaf5f96c0ea191249'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -31,6 +31,9 @@ DPIN=PINS.get('candidates/host93_ci_recovery/emission/chirrtl_diagnostic.py')
 DIAGNOSTIC=G.load(HERE/'emission/chirrtl_diagnostic.py',DPIN['bytes'],DPIN['sha256'],'cold_chirrtl_contracts') if DPIN else None
 GPIN=PINS.get('candidates/host93_ci_recovery/execution/generation_diagnostics.py')
 CENSUS=G.load(HERE/'execution/generation_diagnostics.py',GPIN['bytes'],GPIN['sha256'],'cold_generation_diagnostics') if GPIN else None
+
+FPIN=PINS['candidates/host93_ci_recovery/fifo_preflight/fifo_preflight.py']
+PREFLIGHT=G.load(HERE/'fifo_preflight/fifo_preflight.py',FPIN['bytes'],FPIN['sha256'],'cold_fixed_fifo_preflight')
 
 def generation_fixture_report():
     with tempfile.TemporaryDirectory() as td:
@@ -59,9 +62,9 @@ def fixture(ready=False, mode='host-reset-launch'):
     if ready and mode in G.FRONTLOAD_MODES:generated['diagnostic_fir']=dict(G.HISTORICAL_FIR)
     if ready and mode=='host-generation-diagnostic':generated.pop('host_elf',None)
     observation={'state':'AVAILABLE','utf8_bytes':G.HISTORICAL_FIR['bytes'],'line_count':293837,'module_count':682,'extmodule_count':17,'source_info_count':254482,'source_info_utf8_bytes':1000000,'project_source_info_count':249537,'library_source_info_count':4945,'other_source_info_count':0,'historical_fir_equal':True} if ready and mode in G.FRONTLOAD_MODES else G.empty_chirrtl_observation()
-    return {'summary.json':{'schema':'host93-ci-summary-v5','mode':mode,'status':G.success_status(mode) if ready else 'INCOMPLETE',
+    return {'summary.json':{'schema':'host93-ci-summary-v6','mode':mode,'status':G.success_status(mode) if ready else 'INCOMPLETE',
              'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','contract_failure':{'boundary':'NONE' if ready else 'UNREPORTED','code':'NONE' if ready else 'UNMAPPED_CONTRACT'},'completed_components':list(G.mode_components(mode)) if ready else [],
-             'scope':{x:ready and (x=='toolchain_build' if build else x in G.SCOPES[:3] if mode=='host-generation-diagnostic' else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0,'chirrtl_observation':observation,'generation_diagnostics':generation_fixture_report() if ready and mode=='host-generation-diagnostic' else None},
+             'scope':{x:ready and (x=='toolchain_build' if build else x in G.SCOPES[:3] if mode=='host-generation-diagnostic' else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0,'chirrtl_observation':observation,'generation_diagnostics':generation_fixture_report() if ready and mode=='host-generation-diagnostic' else None,'fifo_observation':{'state':'AVAILABLE','cases':4,'comparisons':5180,'tools':copy.deepcopy(G.FIFO_TOOLS)} if ready and mode=='host-generation-diagnostic' else G.empty_fifo_observation()},
             'source_hashes.json':{'schema':'host93-ci-source-hashes-v3','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
               'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
             'stage_exits.json':{'schema':'host93-ci-stage-exits-v6','stages':stages}}
@@ -142,7 +145,7 @@ class Cold(unittest.TestCase):
     def test_summary_wall(self):
         x=fixture();x['summary.json']['seconds']=6601
         with self.assertRaises(ValueError):G.validate_evidence(x)
-    def test_phase_all_names_have_bounds(self):self.assertEqual(set(G.STAGES)|set(G.FRONTLOAD_STAGES),set(G.PHASE_CAPS))
+    def test_phase_all_names_have_bounds(self):self.assertEqual(set(G.STAGES)|set(G.FRONTLOAD_STAGES)|set(G.FIFO_STAGES),set(G.PHASE_CAPS))
     def test_header_phase_order_and_counts(self):
         self.assertEqual(len(G.STAGES),34);self.assertEqual(len(G.BUILD_STAGES),16)
         self.assertEqual(G.STAGES[11:16],('flex_header_acquire','flex_header_compile','fresh_autoconf','fresh_configure','fresh_make'))
@@ -230,7 +233,7 @@ class Cold(unittest.TestCase):
             with self.assertRaises(ValueError):G.exact(Path('/tmp/not-read'),0,'PENDING')
             comp.assert_not_called()
 
-    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False, diagnostic_match=True):
+    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None, contract_postflight=False, diagnostic_match=True, fifo_contract=None):
         with tempfile.TemporaryDirectory() as t:
             base=Path(t);repo=base/'repo';repo.mkdir();out=base/'out';archive=base/'idma.zip'
             fixed={'bytes':1,'sha256':'1'*64,'path':str(base/'observed')}
@@ -262,7 +265,16 @@ class Cold(unittest.TestCase):
                 return group(G.STAGES[26:28],{'fir':{'path':fixed['path'],**G.HISTORICAL_FIR},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}}).run(repo,work,call)
             diagnostic.resume_sv=resume
             diagnostic.parse_observation=DIAGNOSTIC.parse_observation if DIAGNOSTIC else None
-            modules={'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT,'verified_ci_generation_diagnostics':CENSUS}
+            preflight=group(G.FIFO_STAGES,{'cases':4,'comparisons':5180,'tools':copy.deepcopy(G.FIFO_TOOLS)})
+            if fifo_contract:
+                boundary,count=fifo_contract
+                def fail_fifo(repo,work,call,*args):
+                    for name in G.FIFO_STAGES[:count]:call(name,['/fixed/fixture'],base,{},cfg(name))
+                    error=ValueError('private finite preflight fixture')
+                    error.safe_contract_boundary=boundary;error.safe_contract_code=G.FIFO_CONTRACTS[boundary]
+                    raise error
+                preflight=types.SimpleNamespace(run=fail_fifo)
+            modules={'verified_fifo_preflight':preflight,'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT,'verified_ci_generation_diagnostics':CENSUS}
             def native(*args,**kwargs):
                 name=args[2]
                 if name=='idma319_extract':
@@ -307,8 +319,8 @@ class Cold(unittest.TestCase):
         self.assertNotIn('private fixture',json.dumps(summary))
     def test_contract_enum_matches_pinned_toolchain(self):
         self.assertTrue(set(TOOLCHAIN.CONTRACT_CODES)<=set(G.CONTRACT_CODES))
-        self.assertEqual(set(G.CONTRACT_CODES)-set(TOOLCHAIN.CONTRACT_CODES),{'CHIRRTL_FIR_IDENTITY_MISMATCH','DIAGNOSTIC_CONTRACT','DIAGNOSTIC_EMITTER','DIAGNOSTIC_DERIVATION','DIAGNOSTIC_STATS','DIAGNOSTIC_FIR_OUTPUT','DIAGNOSTIC_RESUME_IDENTITY'})
-        self.assertEqual(set(G.CONTRACT_BOUNDARIES)-set(TOOLCHAIN.CONTRACT_BOUNDARIES),{'CHIRRTL_DIAGNOSTIC'})
+        self.assertEqual(set(G.CONTRACT_CODES)-set(TOOLCHAIN.CONTRACT_CODES)-set(G.FIFO_CONTRACTS.values())-set(G.FIFO_REQUIRE_CODES),{'CHIRRTL_FIR_IDENTITY_MISMATCH','DIAGNOSTIC_CONTRACT','DIAGNOSTIC_EMITTER','DIAGNOSTIC_DERIVATION','DIAGNOSTIC_STATS','DIAGNOSTIC_FIR_OUTPUT','DIAGNOSTIC_RESUME_IDENTITY'})
+        self.assertEqual(set(G.CONTRACT_BOUNDARIES)-set(TOOLCHAIN.CONTRACT_BOUNDARIES)-set(G.FIFO_CONTRACTS),{'CHIRRTL_DIAGNOSTIC'})
     def test_unknown_contract_message_not_public(self):
         self.assertEqual(G.contract_failure_observation(ValueError('/private/path password=fixture')),
                          {'boundary':'UNREPORTED','code':'UNMAPPED_CONTRACT'})
@@ -473,16 +485,16 @@ class Cold(unittest.TestCase):
         x=fixture(True,'host-generation-diagnostic');self.assertTrue(G.validate_evidence(x))
         self.assertEqual(x['summary.json']['status'],'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0')
         self.assertFalse(any(x['summary.json']['scope'][k] for k in ('cpp_generated','cpp_compiled','reset_launch')))
-    def test_generation_only_mock_runs32_and_stops(self):
+    def test_generation_only_mock_runs35_and_stops(self):
         code,summary,stages=self.mock_whole_job(mode='host-generation-diagnostic')
-        self.assertEqual(code,0);self.assertEqual([x['name'] for x in stages],list(G.FRONTLOAD_STAGES[:-2]))
+        self.assertEqual(code,0);self.assertEqual([x['name'] for x in stages],list(G.FIFO_STAGES+G.FRONTLOAD_STAGES[:-2]))
         self.assertEqual(summary['completed_components'],list(G.mode_components('host-generation-diagnostic')))
         self.assertEqual(summary['generation_diagnostics']['state'],'AVAILABLE')
         self.assertFalse(summary['scope']['cpp_generated']);self.assertFalse(summary['scope']['cpp_compiled'])
         self.assertFalse(summary['scope']['reset_launch'])
     def test_generation_failure_collects_and_preserves_nonzero(self):
         code,summary,stages=self.mock_whole_job('host93_cpp_generate','host-generation-diagnostic',True,b'%Warning-UNOPTFLAT: /private/x.sv:3:2: circular\n%Error: Exiting due to 1 warning(s)\n')
-        self.assertEqual(code,1);self.assertEqual(len(stages),32);self.assertEqual(stages[-1]['exit_code'],2)
+        self.assertEqual(code,1);self.assertEqual(len(stages),35);self.assertEqual(stages[-1]['exit_code'],2)
         self.assertEqual(summary['generation_diagnostics']['state'],'AVAILABLE')
         self.assertNotIn('/private/',str(summary['generation_diagnostics']))
         self.assertFalse(summary['scope']['cpp_compiled']);self.assertFalse(summary['scope']['reset_launch'])
@@ -528,7 +540,7 @@ class Cold(unittest.TestCase):
         with self.assertRaises(ValueError):G.validate_evidence(x)
     def test_generation_scope_needs_historical_fir_gate(self):
         code,summary,stages=self.mock_whole_job(mode='host-generation-diagnostic',diagnostic_match=False)
-        self.assertEqual(code,1);self.assertEqual(len(stages),6);self.assertIsNone(summary['generation_diagnostics'])
+        self.assertEqual(code,1);self.assertEqual(len(stages),9);self.assertIsNone(summary['generation_diagnostics'])
 
     def test_build_mode_ready(self):
         self.assertTrue(G.validate_evidence(fixture(True,'build-diagnostic')))
@@ -648,7 +660,7 @@ class Cold(unittest.TestCase):
                 failure_code='CHILD_EXIT_NONZERO',failure_boundary='NATIVE_SUPERVISION')
             with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
     def test_all_native_failures_collect_context_in_both_modes(self):
-        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES),('host-chirrtl-diagnostic',G.FRONTLOAD_STAGES),('host-generation-diagnostic',G.FRONTLOAD_STAGES[:-2])):
+        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES),('host-chirrtl-diagnostic',G.FRONTLOAD_STAGES),('host-generation-diagnostic',G.FIFO_STAGES+G.FRONTLOAD_STAGES[:-2])):
             for name in names:
                 with self.subTest(mode=mode,name=name),mock.patch.object(G,'collect_build_diagnostics',wraps=G.collect_build_diagnostics) as collector:
                     code,summary,stages=self.mock_whole_job(name,mode,True,b'fixed native failure context\n')
@@ -746,5 +758,83 @@ class Cold(unittest.TestCase):
             p=Path(t)/'native.log';p.write_bytes(b'fixture\n')
             self.assertEqual(G.compiler_log_tail(p),(b'fixture\n',False))
 
+    def test_fifo_three_stage_prefix_and_original_modes(self):
+        self.assertEqual(G.mode_stages('host-generation-diagnostic'),G.FIFO_STAGES+G.FRONTLOAD_STAGES[:-2])
+        for mode in ('host-reset-launch','host-chirrtl-diagnostic','build-diagnostic'):
+            self.assertTrue(set(G.FIFO_STAGES).isdisjoint(G.mode_stages(mode)))
+    def test_fifo_native_failure_stops_before_host_or_tools(self):
+        for name in G.FIFO_STAGES:
+            code,summary,rows=self.mock_whole_job(name,'host-generation-diagnostic',True,b'finite FIFO failure\n')
+            self.assertEqual(code,1);self.assertEqual(rows[-1]['name'],name)
+            self.assertEqual(summary['fifo_observation'],G.empty_fifo_observation())
+            self.assertEqual(summary['completed_components'],[])
+            self.assertFalse(any(summary['scope'].values()))
+    def test_fifo_claim_requires_native_rows_and_tools(self):
+        for kind in ('no_rows','missing_tool','wrong_hash','case_bool','bad_count','failed_row','signal','no_kill'):
+            x=fixture(True,'host-generation-diagnostic');f=x['summary.json']['fifo_observation'];rows=x['stage_exits.json']['stages']
+            if kind=='no_rows':rows.clear()
+            elif kind=='missing_tool':f['tools'].pop('vvp')
+            elif kind=='wrong_hash':f['tools']['icarus']['sha256']='0'*64
+            elif kind=='case_bool':f['cases']=True
+            elif kind=='bad_count':f['comparisons']=5120
+            elif kind=='failed_row':rows[1]['status']='FAILED'
+            elif kind=='signal':rows[1].update(waitid_code=2,waitid_status=9)
+            else:rows[1].update(kill_attempted=False,kill_result='NOT_REQUESTED')
+            with self.subTest(kind=kind),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_fifo_forbidden_in_other_modes(self):
+        for mode in ('host-reset-launch','host-chirrtl-diagnostic','build-diagnostic'):
+            x=fixture(True,mode);x['summary.json']['fifo_observation']=fixture(True,'host-generation-diagnostic')['summary.json']['fifo_observation']
+            with self.subTest(mode=mode),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_fifo_no_qualification_no_host_continuation(self):
+        x=fixture(True,'host-generation-diagnostic');x['summary.json']['completed_components']=[]
+        x['summary.json']['fifo_observation']=G.empty_fifo_observation()
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_historical_mismatch_retains_fifo_only(self):
+        code,summary,rows=self.mock_whole_job(mode='host-generation-diagnostic',diagnostic_match=False)
+        self.assertEqual(code,1);self.assertEqual(len(rows),9)
+        self.assertEqual(summary['completed_components'],['fifo_preflight','chirrtl_diagnostic'])
+        self.assertEqual(summary['fifo_observation']['comparisons'],5180)
+        self.assertFalse(any(summary['scope'].values()))
+    def test_generation_reported_failure_retains_fifo(self):
+        values={'utf8_bytes':96*G.MIB+1,'line_count':293837,'module_count':682,'extmodule_count':17,'source_info_count':254482,'source_info_utf8_bytes':1000000,'project_source_info_count':249537,'library_source_info_count':4945,'other_source_info_count':0}
+        log=DIAGNOSTIC.MARKER+b' '.join(k.encode()+b'='+str(values[k]).encode() for k in G.CHIRRTL_NUMERIC)+b'\nException: cap\n'
+        code,summary,rows=self.mock_whole_job('host93_chirrtl_diagnostic','host-generation-diagnostic',True,log)
+        self.assertEqual(code,1);self.assertEqual(len(rows),9)
+        self.assertEqual(summary['completed_components'],['fifo_preflight'])
+        self.assertEqual(summary['chirrtl_observation']['state'],'REPORTED')
+
+    def test_fifo_parent_labels_bound_to_clean_prefix(self):
+        for boundary,counts in G.FIFO_CONTRACT_COUNTS.items():
+            for count in counts:
+                code,summary,rows=self.mock_whole_job(mode='host-generation-diagnostic',fifo_contract=(boundary,count))
+                self.assertEqual(code,1);self.assertEqual(len(rows),count)
+                self.assertTrue(all(row['status']=='EXIT0_CLEANED' for row in rows))
+                self.assertEqual(summary['contract_failure'],{'boundary':boundary,'code':G.FIFO_CONTRACTS[boundary]})
+                self.assertEqual(summary['fifo_observation'],G.empty_fifo_observation())
+                self.assertNotIn('private finite',str(summary))
+    def test_fifo_parent_labels_reject_wrong_native_progress(self):
+        for boundary,count in (('ICARUS_RECEIPT_READ',0),('FIFO_COMPILED_MODULES',1),('FIFO_RUN_OBSERVATION',2)):
+            x=fixture(False,'host-generation-diagnostic')
+            x['source_hashes.json']['project_sources']=[{'path':n,**p} for n,p in sorted(PINS.items())]
+            x['stage_exits.json']['stages']=fixture(True,'host-generation-diagnostic')['stage_exits.json']['stages'][:count]
+            x['summary.json']['contract_failure']={'boundary':boundary,'code':G.FIFO_CONTRACTS[boundary]}
+            with self.subTest(boundary=boundary),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_fifo_parent_labels_reject_failed_native_or_wrong_code(self):
+        for kind in ('failed','code','completed'):
+            x=fixture(False,'host-generation-diagnostic')
+            x['source_hashes.json']['project_sources']=[{'path':n,**p} for n,p in sorted(PINS.items())]
+            x['stage_exits.json']['stages']=fixture(True,'host-generation-diagnostic')['stage_exits.json']['stages'][:1]
+            x['summary.json']['contract_failure']={'boundary':'ICARUS_RECEIPT_READ','code':'RECEIPT_READ'}
+            if kind=='failed':
+                x['stage_exits.json']['stages'][0].update(status='FAILED',exit_code=1,waitid_status=1,native_record_status='FAIL',failure_code='CHILD_EXIT_NONZERO',failure_boundary='NATIVE_SUPERVISION',diagnostics=G.empty_diagnostics('READ_ERROR'))
+            elif kind=='code':x['summary.json']['contract_failure']['code']='DIAGNOSTIC_EMITTER'
+            else:x['summary.json']['completed_components']=['fifo_preflight']
+            with self.subTest(kind=kind),self.assertRaises(ValueError):G.validate_evidence(x)
+
+    def test_fifo_adapter_labels_match_fixed_source(self):
+        self.assertEqual(G.FIFO_CONTRACTS,PREFLIGHT.PARENT_CONTRACTS)
+        self.assertEqual(G.FIFO_CONTRACT_COUNTS,PREFLIGHT.CONTRACT_COMPLETED_COUNTS)
+        self.assertEqual(set(G.FIFO_REQUIRE_CODES),set(PREFLIGHT.REQUIRE_CODES.values()))
+        for name,pin in PREFLIGHT.REQUIRED_SOURCES.items():self.assertEqual(PINS[name],pin)
 
 if __name__=='__main__':unittest.main(verbosity=2)

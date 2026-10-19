@@ -23,8 +23,8 @@ import zipfile
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'extract_idma.py'
 RAW = SOURCE.read_bytes()
-SIZE = 21505
-SHA = 'eb9f4f365d141fef65bf45f8730e2047069cd035833fc48ab34165669aa1663c'
+SIZE = 22764
+SHA = '2efd8b77e61ce68d01af2217e8e7a772da5ad46336531f5c21107cd0a7e2b532'
 
 
 def load(raw):
@@ -81,6 +81,8 @@ def contract_fixture():
 # Fixed reviewed source fixture, not a live archive or repository input.
 FIFO_BASE_FIXTURE = b'// Copyright 2024 ETH Zurich and University of Bologna.\n// Solderpad Hardware License, Version 0.51, see LICENSE for details.\n// SPDX-License-Identifier: SHL-0.51\n\n// Authors:\n// - Thomas Benz  <tbenz@iis.ee.ethz.ch>\n// - Tobias Senti <tsenti@ethz.ch>\n\n`include "common_cells/assertions.svh"\n`include "common_cells/registers.svh"\n\n/// Stream FIFO that does not cut the timing path. When full; pushing data is allowed if in\n/// the same cycle data is popped. Creates longer timing paths but can use buffer space more\n/// efficiently.\nmodule cc_passthrough_stream_fifo #(\n    /// Depth can be arbitrary from 2 to 2**32\n    parameter int unsigned Depth       = 32\'d8,\n    /// Print information when the simulation launches\n    parameter bit          PrintInfo   = 1\'b0,\n    /// If the FIFO is full, allow reading and writing in the same cycle\n    parameter bit          SameCycleRW = 1\'b1,\n    /// Type of the FIFO\n    parameter type         data_t      = logic\n) (\n    /// Clock\n    input  logic                 clk_i,\n    /// Asynchronous reset active low\n    input  logic                 rst_ni,\n    /// Synchronous clear active high; clears all sequential logic\n    input  logic                 clr_i,\n    /// Fifo flush. Compared to clr_i, this only clears internal pointers.\n    /// Sufficient for most functional purposes.\n    input  logic                 flush_i,\n    /// data to push into the FIFO\n    input  data_t                data_i,\n    /// input data valid\n    input  logic                 valid_i,\n    /// FIFO is not full\n    output logic                 ready_o,\n    /// output data\n    output data_t                data_o,\n    /// FIFO is not empty\n    output logic                 valid_o,\n    /// pop head from FIFO\n    input  logic                 ready_i\n);\n    /// Bit Width of the read and write pointers\n    /// One additional bit to detect overflows\n    localparam int unsigned PointerWidth = $clog2(Depth) + 1;\n\n    // Read and write pointers\n    logic [PointerWidth-1:0]  read_ptr_d,  read_ptr_q;\n    logic [PointerWidth-1:0] write_ptr_d, write_ptr_q;\n\n    // Data\n    data_t [Depth-1:0] data_d, data_q;\n\n    // Enable storage\n    logic load_data;\n\n    assign data_o = data_q[read_ptr_q[PointerWidth-2:0]];\n\n    // Logic\n    always_comb begin\n        // Default\n        load_data   = 1\'b0;\n        read_ptr_d  = read_ptr_q;\n        write_ptr_d = write_ptr_q;\n        data_d      = data_q;\n\n        if (flush_i) begin // Flush\n            read_ptr_d  = \'0;\n            write_ptr_d = \'0;\n            valid_o     = 1\'b0;\n            ready_o     = 1\'b0;\n        end else begin\n            // Read\n            valid_o = read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? read_ptr_q[PointerWidth-2:0] != write_ptr_q[PointerWidth-2:0] : 1\'b1;\n            if (ready_i && valid_o) begin\n                if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    read_ptr_d[PointerWidth-2:0] = \'0;\n                    read_ptr_d[PointerWidth-1]   = !read_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment counter\n                    read_ptr_d = read_ptr_q + \'d1;\n                end\n            end\n\n            // Write -> Also able to write if we read in the same cycle\n            ready_o     = (read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? 1\'b1 : write_ptr_q[PointerWidth-2:0] != read_ptr_q[PointerWidth-2:0])\n                || (SameCycleRW && ready_i && valid_o);\n\n            if (valid_i && ready_o) begin\n                load_data = 1\'b1;\n                data_d[write_ptr_q[PointerWidth-2:0]] = data_i;\n\n                if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    write_ptr_d[PointerWidth-2:0] = \'0;\n                    write_ptr_d[PointerWidth-1]   = !write_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment pointer\n                    write_ptr_d = write_ptr_q + \'d1;\n                end\n            end\n        end\n    end\n\n    // Flip Flops\n    `FFARNC( read_ptr_q,  read_ptr_d, clr_i, \'0, clk_i, rst_ni)\n    `FFARNC(write_ptr_q, write_ptr_d, clr_i, \'0, clk_i, rst_ni)\n\n    `FFLARNC(data_q, data_d, load_data, clr_i, \'0, clk_i, rst_ni)\n\nendmodule\n'
 
+
+FIFO_DERIVED_FIXTURE = b'// Copyright 2024 ETH Zurich and University of Bologna.\n// Solderpad Hardware License, Version 0.51, see LICENSE for details.\n// SPDX-License-Identifier: SHL-0.51\n\n// Authors:\n// - Thomas Benz  <tbenz@iis.ee.ethz.ch>\n// - Tobias Senti <tsenti@ethz.ch>\n\n`include "common_cells/assertions.svh"\n`include "common_cells/registers.svh"\n\n/// Stream FIFO that does not cut the timing path. When full; pushing data is allowed if in\n/// the same cycle data is popped. Creates longer timing paths but can use buffer space more\n/// efficiently.\nmodule cc_passthrough_stream_fifo #(\n    /// Depth can be arbitrary from 2 to 2**32\n    parameter int unsigned Depth       = 32\'d8,\n    /// Print information when the simulation launches\n    parameter bit          PrintInfo   = 1\'b0,\n    /// If the FIFO is full, allow reading and writing in the same cycle\n    parameter bit          SameCycleRW = 1\'b1,\n    /// Type of the FIFO\n    parameter type         data_t      = logic\n) (\n    /// Clock\n    input  logic                 clk_i,\n    /// Asynchronous reset active low\n    input  logic                 rst_ni,\n    /// Synchronous clear active high; clears all sequential logic\n    input  logic                 clr_i,\n    /// Fifo flush. Compared to clr_i, this only clears internal pointers.\n    /// Sufficient for most functional purposes.\n    input  logic                 flush_i,\n    /// data to push into the FIFO\n    input  data_t                data_i,\n    /// input data valid\n    input  logic                 valid_i,\n    /// FIFO is not full\n    output logic                 ready_o,\n    /// output data\n    output data_t                data_o,\n    /// FIFO is not empty\n    output logic                 valid_o,\n    /// pop head from FIFO\n    input  logic                 ready_i\n);\n    /// Bit Width of the read and write pointers\n    /// One additional bit to detect overflows\n    localparam int unsigned PointerWidth = $clog2(Depth) + 1;\n\n    // Read and write pointers\n    logic [PointerWidth-1:0]  read_ptr_d,  read_ptr_q;\n    logic [PointerWidth-1:0] write_ptr_d, write_ptr_q;\n\n    // Data\n    data_t [Depth-1:0] data_d, data_q;\n\n    // Enable storage\n    logic load_data;\n\n    assign data_o = data_q[read_ptr_q[PointerWidth-2:0]];\n\n    // Output validity\n    always_comb begin\n        if (flush_i) begin // Flush\n            valid_o     = 1\'b0;\n        end else begin\n            valid_o = read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? read_ptr_q[PointerWidth-2:0] != write_ptr_q[PointerWidth-2:0] : 1\'b1;\n        end\n    end\n\n    // Output readiness\n    always_comb begin\n        if (flush_i) begin // Flush\n            ready_o     = 1\'b0;\n        end else begin\n            ready_o     = (read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? 1\'b1 : write_ptr_q[PointerWidth-2:0] != read_ptr_q[PointerWidth-2:0])\n                || (SameCycleRW && ready_i && valid_o);\n        end\n    end\n\n    // Logic\n    always_comb begin\n        // Default\n        load_data   = 1\'b0;\n        read_ptr_d  = read_ptr_q;\n        write_ptr_d = write_ptr_q;\n        data_d      = data_q;\n\n        if (flush_i) begin // Flush\n            read_ptr_d  = \'0;\n            write_ptr_d = \'0;\n        end else begin\n            // Read\n            if (ready_i && valid_o) begin\n                if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    read_ptr_d[PointerWidth-2:0] = \'0;\n                    read_ptr_d[PointerWidth-1]   = !read_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment counter\n                    read_ptr_d = read_ptr_q + \'d1;\n                end\n            end\n\n            // Write -> Also able to write if we read in the same cycle\n\n            if (valid_i && ready_o) begin\n                load_data = 1\'b1;\n                data_d[write_ptr_q[PointerWidth-2:0]] = data_i;\n\n                if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    write_ptr_d[PointerWidth-2:0] = \'0;\n                    write_ptr_d[PointerWidth-1]   = !write_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment pointer\n                    write_ptr_d = write_ptr_q + \'d1;\n                end\n            end\n        end\n    end\n\n    // Flip Flops\n    `FFARNC( read_ptr_q,  read_ptr_d, clr_i, \'0, clk_i, rst_ni)\n    `FFARNC(write_ptr_q, write_ptr_d, clr_i, \'0, clk_i, rst_ni)\n\n    `FFLARNC(data_q, data_d, load_data, clr_i, \'0, clk_i, rst_ni)\n\nendmodule\n'
 
 def fifo_selection_fixture():
     names = [g.FIFO_PATH, 'SHA256SUMS.json', 'SOURCE_CLOSURE.json'] + [
@@ -247,7 +249,7 @@ class Tiny(unittest.TestCase):
         raw = (HERE / 'ENTRY.json').read_bytes()
         self.assertEqual(len(raw), 5451)
         self.assertEqual(hashlib.sha256(raw).hexdigest(),
-                         '214005162183a87a38537598ccdc92e07f897e9215fe5499e1ecc359b46158e8')
+                         '9542df5b0728ebb2f590a7eaebc7315945809cc2d7dc963fd6220b4cb04d21da')
         code = compile(json.loads(raw)['bootstrap'], '<pinned actual loader>', 'exec', dont_inherit=True)
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / 'extract_idma.py'
@@ -263,7 +265,7 @@ class Tiny(unittest.TestCase):
         raw = (HERE / 'ENTRY.json').read_bytes()
         self.assertEqual(len(raw), 5451)
         self.assertEqual(hashlib.sha256(raw).hexdigest(),
-                         '214005162183a87a38537598ccdc92e07f897e9215fe5499e1ecc359b46158e8')
+                         '9542df5b0728ebb2f590a7eaebc7315945809cc2d7dc963fd6220b4cb04d21da')
         code = compile(json.loads(raw)['bootstrap'], '<pinned actual loader>', 'exec', dont_inherit=True)
         with mock.patch.object(sys, 'argv', ['-c', str(SOURCE)]), \
              mock.patch.object(builtins, 'print') as output:
@@ -287,11 +289,13 @@ class Tiny(unittest.TestCase):
         changed = [(a, b) for a, b in zip(original, result) if a != b]
         self.assertEqual(len(changed), 1)
         self.assertEqual((len(result[0][1]), g.sha(result[0][1])), g.FIFO_DERIVED)
-        self.assertEqual(sum(r['bytes'] for r, b in result), 3072325)
+        self.assertEqual(result[0][1], FIFO_DERIVED_FIXTURE)
+        self.assertEqual(provenance['intermediate'], {'bytes': 4536, 'sha256': g.FIFO_VALID_SPLIT[1]})
+        self.assertEqual(sum(r['bytes'] for r, b in result), 3072451)
         self.assertEqual(provenance['original'], {'bytes': 4411, 'sha256': g.FIFO_BASE[1]})
-        self.assertEqual(provenance['derived'], {'bytes': 4536, 'sha256': g.FIFO_DERIVED[1]})
+        self.assertEqual(provenance['derived'], {'bytes': 4662, 'sha256': g.FIFO_DERIVED[1]})
         self.assertTrue(provenance['original_manifest_unchanged'])
-        self.assertEqual(provenance['selected_bytes_delta'], 125)
+        self.assertEqual(provenance['selected_bytes_delta'], 251)
 
     def test_19_fifo_wrong_base_hash_extra_missing_and_duplicate_rejected(self):
         original = fifo_selection_fixture()
@@ -317,13 +321,13 @@ class Tiny(unittest.TestCase):
                 bad[1] = (row, b'Y' + raw[1:])
             with self.assertRaises(ValueError):
                 g.derive_fifo_valid_split(bad)
-        with mock.patch.object(g, 'FIFO_DERIVED', (4536, '0' * 64)):
+        with mock.patch.object(g, 'FIFO_DERIVED', (4662, '0' * 64)):
             with self.assertRaisesRegex(ValueError, 'derived identity'):
                 g.derive_fifo_valid_split(original)
 
     def test_20_cli_split_is_explicit_default_false(self):
         for option, enabled in (([], False), (['--fifo-valid-split'], True)):
-            result = {'status': 'mock', 'selected_files': 319, 'selected_bytes': 3072325 if enabled else 3072200,
+            result = {'status': 'mock', 'selected_files': 319, 'selected_bytes': 3072451 if enabled else 3072200,
                       'archive_unchanged': True, 'native_executed': False}
             with mock.patch.object(sys, 'argv', ['extract_idma.py', '--archive', '/tmp/archive',
                                                '--out', '/tmp/output'] + option), \
@@ -367,7 +371,7 @@ class Tiny(unittest.TestCase):
                     prepare.assert_called_once_with(b'mock archive')
                     self.assertEqual(derive.call_count, int(enabled))
                     self.assertEqual(report['selected_files'], 319)
-                    self.assertEqual(report['selected_bytes'], 3072325 if enabled else 3072200)
+                    self.assertEqual(report['selected_bytes'], 3072451 if enabled else 3072200)
                     self.assertTrue(report['complete'])
                     self.assertTrue(report['archive_unchanged'])
                     self.assertFalse(report['native_executed'])
@@ -383,6 +387,35 @@ class Tiny(unittest.TestCase):
             for name in ('SHA256SUMS.json', 'SOURCE_CLOSURE.json'):
                 self.assertEqual(outputs[0][name], outputs[1][name])
 
+
+
+    def test_23_ready_split_exact_anchor_rejects_same_length_mutations(self):
+        original = fifo_selection_fixture()
+        mutations = [
+            (b"ready_o     = 1'b0;", b"ready_o    =  1'b0;"),
+            (b"|| (SameCycleRW && ready_i && valid_o);", b"|| (SameCycleRZ && ready_i && valid_o);")]
+        real_sha = g.sha
+        for before, after in mutations:
+            bad = copy.deepcopy(original)
+            row, raw = bad[0]
+            changed = raw.replace(before, after, 1)
+            self.assertNotEqual(changed, raw)
+            self.assertEqual(len(changed), len(raw))
+            bad[0] = (row, changed)
+            def mocked_sha(data):
+                if len(data) == g.FIFO_BASE[0]:
+                    return g.FIFO_BASE[1]
+                if len(data) == g.FIFO_VALID_SPLIT[0]:
+                    return g.FIFO_VALID_SPLIT[1]
+                return real_sha(data)
+            with mock.patch.object(g, 'sha', side_effect=mocked_sha):
+                with self.assertRaisesRegex(ValueError, 'ready split exact unique transformation anchors'):
+                    g.derive_fifo_valid_split(bad)
+
+    def test_24_valid_only_intermediate_identity_must_pass_before_ready_split(self):
+        with mock.patch.object(g, 'FIFO_VALID_SPLIT', (4536, '0' * 64)):
+            with self.assertRaisesRegex(ValueError, 'valid-only intermediate identity'):
+                g.derive_fifo_valid_split(fifo_selection_fixture())
 
 
 if __name__ == '__main__':

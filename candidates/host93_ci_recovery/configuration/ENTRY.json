@@ -15,7 +15,7 @@
     "-S",
     "-B",
     "-c",
-    "import sys, os, stat, hashlib\nif not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode):\n    raise SystemExit(\"Python -I -S -B required\")\np = sys.argv[1]\nif not p.startswith(\"/\") or any(x in (\"\", \".\", \"..\") for x in p[1:].split(\"/\")):\n    raise SystemExit(\"absolute clean source path required\")\nparts = p[1:].split(\"/\")\nparent = os.open(\"/\", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)\nfor part in parts[:-1]:\n    next_fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)\n    os.close(parent)\n    parent = next_fd\nfd = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW, dir_fd=parent)\nbefore = os.fstat(fd)\nidentity = lambda x: tuple(getattr(x, \"st_\" + k) for k in (\"dev\", \"ino\", \"mode\", \"size\", \"mtime_ns\", \"ctime_ns\"))\nif not stat.S_ISREG(before.st_mode) or before.st_size != 25044:\n    raise SystemExit(\"source type/size mismatch before compile\")\nwith os.fdopen(fd, \"rb\") as stream:\n    raw = stream.read(25044 + 1)\n    after = os.fstat(stream.fileno())\ncurrent = os.stat(parts[-1], dir_fd=parent, follow_symlinks=False)\nos.close(parent)\nif len(raw) != 25044 or hashlib.sha256(raw).hexdigest() != \"5234e210a012323a44e4d579a16af2dbac52b47f90e974a2716e23c5d9942216\" or identity(before) != identity(after) or identity(before) != identity(current):\n    raise SystemExit(\"source identity mismatch before compile\")\nns = {\"__name__\": \"verified_4vlt_entry\", \"__file__\": p, \"__verified_source_pin__\": {\"bytes\": 25044, \"sha256\": \"5234e210a012323a44e4d579a16af2dbac52b47f90e974a2716e23c5d9942216\"}}\nexec(compile(raw, p, \"exec\", dont_inherit=True), ns)\nraise SystemExit(ns[\"main\"](sys.argv[2:]))\n",
+    "import sys, os, stat, hashlib\nif not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode):\n    raise SystemExit(\"Python -I -S -B required\")\np = sys.argv[1]\nif not p.startswith(\"/\") or any(x in (\"\", \".\", \"..\") for x in p[1:].split(\"/\")):\n    raise SystemExit(\"absolute clean source path required\")\nparts = p[1:].split(\"/\")\nparent = os.open(\"/\", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)\nfor part in parts[:-1]:\n    next_fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)\n    os.close(parent)\n    parent = next_fd\nfd = os.open(parts[-1], os.O_RDONLY | os.O_NOFOLLOW, dir_fd=parent)\nbefore = os.fstat(fd)\nidentity = lambda x: tuple(getattr(x, \"st_\" + k) for k in (\"dev\", \"ino\", \"mode\", \"size\", \"mtime_ns\", \"ctime_ns\"))\nif not stat.S_ISREG(before.st_mode) or before.st_size != 25053:\n    raise SystemExit(\"source type/size mismatch before compile\")\nwith os.fdopen(fd, \"rb\") as stream:\n    raw = stream.read(25053 + 1)\n    after = os.fstat(stream.fileno())\ncurrent = os.stat(parts[-1], dir_fd=parent, follow_symlinks=False)\nos.close(parent)\nif len(raw) != 25053 or hashlib.sha256(raw).hexdigest() != \"cfe6d84b5d997d1331d66be6bd228a53ffae1e3a57099fb92260c472f79224a7\" or identity(before) != identity(after) or identity(before) != identity(current):\n    raise SystemExit(\"source identity mismatch before compile\")\nns = {\"__name__\": \"verified_4vlt_entry\", \"__file__\": p, \"__verified_source_pin__\": {\"bytes\": 25053, \"sha256\": \"cfe6d84b5d997d1331d66be6bd228a53ffae1e3a57099fb92260c472f79224a7\"}}\nexec(compile(raw, p, \"exec\", dont_inherit=True), ns)\nraise SystemExit(ns[\"main\"](sys.argv[2:]))\n",
     "ABSOLUTE_GENERATOR_SOURCE_PATH"
   ],
   "optional_argument_default": false,
@@ -24,9 +24,9 @@
   ],
   "schema": 1,
   "source": {
-    "bytes": 25044,
+    "bytes": 25053,
     "name": "generate_4vlt.py",
-    "sha256": "5234e210a012323a44e4d579a16af2dbac52b47f90e974a2716e23c5d9942216"
+    "sha256": "cfe6d84b5d997d1331d66be6bd228a53ffae1e3a57099fb92260c472f79224a7"
   },
   "status": "TEMP_SOURCE_NOT_ACTUAL_GENERATION_AUTHORITY"
 }

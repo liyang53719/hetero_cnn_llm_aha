@@ -17,7 +17,7 @@ from unittest import mock
 HERE = Path(__file__).absolute().parent
 
 LOAD_PINS = {
-    str(HERE / 'generation_diagnostics.py'): (44036, '991077cf2914b681b7bf08b264a852dd5aa6f4bdc4e317d4d3033f4f36438bde'),
+    str(HERE / 'generation_diagnostics.py'): (51843, 'fb1b7bf9a747d02827233a820975231c151788f6aff2b54c8f7a7e589e5c0bf7'),
     str(HERE.parent / 'safe_build_diagnostics.py'): (11942, '97ab72651c9acadf1e4d242225bdfc21dea3807aa911e448ce7330b762fa4a60'),
 }
 
@@ -123,6 +123,20 @@ class Cold(unittest.TestCase):
         if raw is not None:
             self.log.write_bytes(raw)
         return g.collect(self.log, self.root, kwargs.get('source_map', MAP), kwargs.get('sanitizer', s))
+
+    def collect_header_reads(self, header, outcomes):
+        original, calls, pending = g._read, [], iter(outcomes)
+        def observed(path, cap):
+            if path == header:
+                calls.append(cap)
+                outcome = next(pending)
+                if isinstance(outcome, BaseException):
+                    raise outcome
+                return outcome
+            return original(path, cap)
+        with mock.patch.object(g, '_read', side_effect=observed):
+            result = self.collect()
+        return result, calls
 
     def warning(self, number=1, rule='UNOPTFLAT', source=SOURCE):
         return ('%Warning-' + rule + ': ' + source + ':' + str(number) + ':16: Signal unoptimizable: Circular combinational logic: \'private_signal\'\n').encode()
@@ -629,7 +643,9 @@ class Cold(unittest.TestCase):
         with header.open('wb') as f: f.truncate(g.MAX_ROOT_HEADER_BYTES + 1)
         c = self.collect()['wrapper']['cluster_structure']
         self.assertEqual(c['makegraph_state'], 'CONTRACT_ERROR')
-        self.assertEqual(c['root_header_state'], 'CONTRACT_ERROR')
+        self.assertEqual(c['root_header_state'], 'UNRECOGNIZED_SYNTAX')
+        self.assertEqual(c['root_header_read']['first_code'], 'SIZE_LIMIT')
+        self.assertEqual(c['root_header_read']['retry_outcome'], 'SUCCEEDED')
         mk.unlink(); mk.symlink_to(self.log)
         header.unlink(); header.symlink_to(self.log)
         c = self.collect()['wrapper']['cluster_structure']
@@ -650,10 +666,10 @@ class Cold(unittest.TestCase):
         self.assertEqual(result['source_derivations'], [{'source_id': g._FIFO_SOURCE,
             'base_identity': g._FIFO_BASE, 'derived_identity': g._FIFO_DERIVED}])
         self.assertEqual(result['counts']['warning_headers'], 0)
-        for identity in (g._FIFO_BASE, dict(g._FIFO_DERIVED, sha256='b' * 64), dict(g._FIFO_DERIVED, bytes=4535)):
+        for identity in (g._FIFO_BASE, dict(g._FIFO_DERIVED, sha256='b' * 64), dict(g._FIFO_DERIVED, bytes=4661)):
             r = self.collect(source_map=[dict(source, **identity)])
             self.assertEqual(r['source_derivations'], [])
-        bad = copy.deepcopy(result); bad['source_derivations'][0]['derived_identity']['bytes'] = 4535
+        bad = copy.deepcopy(result); bad['source_derivations'][0]['derived_identity']['bytes'] = 4661
         with self.assertRaises(ValueError): g.validate_report(bad)
 
     def test_46_cluster_tampering_is_not_observed_closure(self):
@@ -791,6 +807,263 @@ class Cold(unittest.TestCase):
         self.assertEqual(report['wrapper']['syntax_state'], 'UNRECOGNIZED_SYNTAX')
         self.assertFalse(report['wrapper']['cluster_structure']['expected_structure_observed'])
         self.assertIs(g.validate_report(report), report)
+
+
+    def test_58_root_read_normal_missing_and_parser_failure(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        raw = header.read_bytes()
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['root_header_read'], {
+            'first_code': 'OK', 'first_observed_size': len(raw),
+            'retry_outcome': 'NOT_ATTEMPTED', 'final_code': 'OK',
+            'final_observed_size': len(raw)})
+        header.unlink()
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['root_header_read'], {
+            'first_code': 'MISSING', 'first_observed_size': None,
+            'retry_outcome': 'NOT_ATTEMPTED', 'final_code': 'MISSING',
+            'final_observed_size': None})
+        for payload, state in ((b'private unknown grammar', 'UNRECOGNIZED_SYNTAX'),
+                               (b'\xffprivate parser error', 'READ_ERROR'),
+                               (raw.replace(b'};', raw.splitlines()[2] + b'\n};'), 'CONTRACT_ERROR')):
+            header.write_bytes(payload)
+            c = self.collect()['wrapper']['cluster_structure']
+            self.assertEqual(c['root_header_state'], state)
+            self.assertEqual(c['root_header_read']['first_code'], 'OK')
+            self.assertEqual(c['root_header_read']['final_code'], 'OK')
+            self.assertEqual(c['root_header_read']['retry_outcome'], 'NOT_ATTEMPTED')
+
+    def test_59_read_reason_comes_from_same_fd_fstat_before_read(self):
+        self.log.write_bytes(b'tiny')
+        baseline = os.stat(self.log)
+        for mode, size, code in ((g.stat.S_IFREG, g.MAX_ROOT_HEADER_BYTES + 1, 'SIZE_LIMIT'),
+                                 (g.stat.S_IFIFO, g.MAX_ROOT_HEADER_RETRY_BYTES + 1, 'NOT_REGULAR'),
+                                 (g.stat.S_IFDIR, 4, 'NOT_REGULAR'),
+                                 (g.stat.S_IFREG, -1, 'INVALID_SIZE')):
+            info = types.SimpleNamespace(**{name: getattr(baseline, name) for name in
+                ('st_dev', 'st_ino', 'st_mode', 'st_size', 'st_mtime_ns', 'st_ctime_ns')})
+            info.st_mode = mode; info.st_size = size
+            with self.subTest(code=code), mock.patch.object(g.os, 'fstat', return_value=info), \
+                    mock.patch.object(g.os, 'fdopen', side_effect=RuntimeError('must not read')) as opener:
+                expected_error = IsADirectoryError if mode == g.stat.S_IFDIR else g._ReadContractError
+                with self.assertRaises(expected_error) as caught:
+                    g._read(self.log, g.MAX_ROOT_HEADER_BYTES)
+                if mode == g.stat.S_IFDIR:
+                    self.assertEqual((caught.exception._generation_read_code,
+                                      caught.exception._generation_observed_size), (code, size))
+                else:
+                    self.assertIsInstance(caught.exception, ValueError)
+                    self.assertEqual((caught.exception.code, caught.exception.observed_size), (code, size))
+                self.assertNotIn(str(self.log), str(caught.exception))
+                opener.assert_not_called()
+
+    def test_60_bounded_size_retry_and_exact_limits(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        small = header.read_bytes()
+        raw = small + b' ' * (g.MAX_ROOT_HEADER_BYTES + 1 - len(small))
+        first = g._ReadContractError('SIZE_LIMIT', len(raw))
+        report, calls = self.collect_header_reads(header, [first, raw, raw])
+        c = report['wrapper']['cluster_structure']
+        self.assertEqual(calls, [4 * 1024**2, 16 * 1024**2, 16 * 1024**2])
+        self.assertEqual(c['root_header_read'], {
+            'first_code': 'SIZE_LIMIT', 'first_observed_size': len(raw),
+            'retry_outcome': 'SUCCEEDED', 'final_code': 'OK', 'final_observed_size': len(raw)})
+        self.assertEqual(c['root_header_identity'], g._identity(raw))
+        self.assertEqual(c['instance_handle_count'], 256)
+        self.assertTrue(c['expected_structure_observed'])
+        self.assertLessEqual(len(g.canonical_json(report)), 64 * 1024)
+        self.assertEqual((g.MAX_LOG_BYTES, g.MAX_REPORT_BYTES), (4 * 1024**2, 64 * 1024))
+        # The inclusive 16 MiB gate is checked with tiny mocked outcomes, not a large file.
+        first = g._ReadContractError('SIZE_LIMIT', g.MAX_ROOT_HEADER_RETRY_BYTES)
+        last = g._ReadContractError('SIZE_LIMIT', g.MAX_ROOT_HEADER_RETRY_BYTES + 1)
+        report, calls = self.collect_header_reads(header, [first, last])
+        c = report['wrapper']['cluster_structure']
+        self.assertEqual(calls, [4 * 1024**2, 16 * 1024**2])
+        self.assertEqual(c['root_header_read']['retry_outcome'], 'FAILED')
+        self.assertEqual(c['root_header_read']['final_code'], 'SIZE_LIMIT')
+        self.assertEqual(c['root_header_read']['final_observed_size'], 16 * 1024**2 + 1)
+        self.assertIsNone(c['root_header_identity'])
+        self.assertFalse(c['expected_structure_observed'])
+
+    def test_61_over_16mib_is_unknown_without_retry_or_parser(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        size = g.MAX_ROOT_HEADER_RETRY_BYTES + 1
+        with mock.patch.object(g, '_root_handles', side_effect=RuntimeError('parser must not run')) as parser:
+            report, calls = self.collect_header_reads(header, [g._ReadContractError('SIZE_LIMIT', size)])
+        parser.assert_not_called()
+        c = report['wrapper']['cluster_structure']
+        self.assertEqual(calls, [4 * 1024**2])
+        self.assertEqual(c['root_header_state'], 'CONTRACT_ERROR')
+        self.assertEqual(c['root_header_read'], {
+            'first_code': 'SIZE_LIMIT', 'first_observed_size': size,
+            'retry_outcome': 'NOT_ATTEMPTED', 'final_code': 'SIZE_LIMIT', 'final_observed_size': size})
+        self.assertIsNone(c['root_header_identity'])
+        self.assertIsNone(c['instance_handle_count'])
+        self.assertFalse(c['expected_structure_observed'])
+
+    def test_62_only_precise_size_limit_can_retry(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        failures = [(g._ReadContractError('NOT_REGULAR', g.MAX_ROOT_HEADER_BYTES + 1), 'NOT_REGULAR'),
+                    (g._ReadContractError('INVALID_SIZE', -1), 'INVALID_SIZE'),
+                    (g._ReadContractError('FILE_CHANGED', 4), 'FILE_CHANGED'),
+                    (g._ReadContractError('DIRECTORY_CHANGED', 4), 'DIRECTORY_CHANGED'),
+                    (ValueError('/private/SIZE_LIMIT secret'), 'CONTRACT_ERROR'),
+                    (PermissionError('/private/SIZE_LIMIT secret'), 'READ_ERROR'),
+                    (FileNotFoundError('/private/SIZE_LIMIT secret'), 'MISSING')]
+        for failure, code in failures:
+            with self.subTest(code=code):
+                report, calls = self.collect_header_reads(header, [failure])
+                c = report['wrapper']['cluster_structure']
+                self.assertEqual(calls, [4 * 1024**2])
+                self.assertEqual(c['root_header_read']['first_code'], code)
+                self.assertEqual(c['root_header_read']['final_code'], code)
+                self.assertEqual(c['root_header_read']['retry_outcome'], 'NOT_ATTEMPTED')
+                self.assertEqual(c['root_header_state'], g._READ_FAILURE_STATES[code])
+                self.assertIsNone(c['root_header_identity'])
+                for token in (b'/private', b'secret', b'errno', b'traceback'):
+                    self.assertNotIn(token, g.canonical_json(report))
+
+    def test_63_descriptor_and_directory_changes_have_distinct_codes(self):
+        self.log.write_bytes(b'tiny')
+        original = g.os.fstat
+        for changed_call, key, expected in ((2, 'st_mtime_ns', 'FILE_CHANGED'),
+                                             (4, 'st_ino', 'DIRECTORY_CHANGED')):
+            count = [0]
+            def changed(fd):
+                info = original(fd); count[0] += 1
+                if count[0] == changed_call:
+                    return types.SimpleNamespace(**{name: getattr(info, name) + (1 if name == key else 0)
+                        for name in ('st_dev', 'st_ino', 'st_mode', 'st_size', 'st_mtime_ns', 'st_ctime_ns')})
+                return info
+            with self.subTest(code=expected), mock.patch.object(g.os, 'fstat', side_effect=changed):
+                raw, code, size = g._root_header_read_attempt(self.log, g.MAX_ROOT_HEADER_BYTES)
+            self.assertEqual((raw, code, size), (None, expected, 4))
+        self.log.unlink(); self.log.mkdir()
+        self.assertEqual(g._root_header_read_attempt(self.log, g.MAX_ROOT_HEADER_BYTES)[1], 'NOT_REGULAR')
+        self.log.rmdir(); os.mkfifo(self.log)
+        self.assertEqual(g._root_header_read_attempt(self.log, g.MAX_ROOT_HEADER_BYTES)[1], 'NOT_REGULAR')
+
+    def test_64_directory_errors_keep_fstat_size_without_exception_text(self):
+        self.log.write_bytes(b'tiny')
+        original = g._directory
+        for number in (1, 2):
+            for error_type, expected in ((PermissionError, 'DIRECTORY_READ_ERROR'),
+                                         (FileNotFoundError, 'DIRECTORY_MISSING')):
+                count = [0]
+                def failed(path):
+                    count[0] += 1
+                    if count[0] == number:
+                        raise error_type('/private/secret_directory')
+                    return original(path)
+                with self.subTest(number=number, code=expected), mock.patch.object(g, '_directory', side_effect=failed):
+                    raw, code, size = g._root_header_read_attempt(self.log, g.MAX_ROOT_HEADER_BYTES)
+                self.assertEqual((raw, code, size), (None, expected, None if number == 1 else 4))
+        # Legacy missing-file exception classification is preserved.
+        self.log.unlink()
+        with self.assertRaises(FileNotFoundError): g._read(self.log, g.MAX_LOG_BYTES)
+
+    def test_65_failed_retry_and_recheck_never_become_available(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        size = g.MAX_ROOT_HEADER_BYTES + 1
+        for failure, expected in ((PermissionError('/private/retry_secret'), 'READ_ERROR'),
+                                  (FileNotFoundError('/private/retry_secret'), 'MISSING'),
+                                  (g._ReadContractError('FILE_CHANGED', size), 'FILE_CHANGED'),
+                                  (g._ReadContractError('NOT_REGULAR', 0), 'NOT_REGULAR'),
+                                  (g._ReadContractError('DIRECTORY_CHANGED', size), 'DIRECTORY_CHANGED')):
+            report, calls = self.collect_header_reads(header, [g._ReadContractError('SIZE_LIMIT', size), failure])
+            c = report['wrapper']['cluster_structure']
+            self.assertEqual(calls, [4 * 1024**2, 16 * 1024**2])
+            self.assertEqual(c['root_header_read']['retry_outcome'], 'FAILED')
+            self.assertEqual(c['root_header_read']['final_code'], expected)
+            self.assertIsNone(c['root_header_identity'])
+            self.assertIsNone(c['instance_handle_count'])
+            self.assertFalse(c['expected_structure_observed'])
+            self.assertNotIn(b'retry_secret', g.canonical_json(report))
+        raw = header.read_bytes()
+        report, calls = self.collect_header_reads(header, [raw, raw + b' '])
+        c = report['wrapper']['cluster_structure']
+        self.assertEqual(calls, [4 * 1024**2, 4 * 1024**2])
+        self.assertEqual(c['root_header_read']['first_code'], 'OK')
+        self.assertEqual(c['root_header_read']['final_code'], 'FILE_CHANGED')
+        self.assertEqual(c['root_header_read']['final_observed_size'], len(raw) + 1)
+        self.assertEqual(c['root_header_identity'], g._identity(raw))
+        self.assertFalse(c['expected_structure_observed'])
+        large = raw + b' ' * (size - len(raw))
+        report, calls = self.collect_header_reads(header, [g._ReadContractError('SIZE_LIMIT', size), large,
+            g._ReadContractError('FILE_CHANGED', size)])
+        c = report['wrapper']['cluster_structure']
+        self.assertEqual(calls, [4 * 1024**2, 16 * 1024**2, 16 * 1024**2])
+        self.assertEqual(c['root_header_read']['retry_outcome'], 'SUCCEEDED')
+        self.assertEqual(c['root_header_read']['final_code'], 'FILE_CHANGED')
+        self.assertEqual(c['root_header_identity'], g._identity(large))
+        self.assertIsNone(c['instance_handle_count'])
+        self.assertFalse(c['expected_structure_observed'])
+
+    def test_66_root_read_schema_rejects_scalar_and_state_tampering(self):
+        cluster_fixture(self.root)
+        original = self.collect()
+        for update in ({'extra': '/private'}, {'first_code': 'private'}, {'final_code': True},
+                       {'first_observed_size': True}, {'first_observed_size': 1.0},
+                       {'first_observed_size': '1'}, {'first_observed_size': -1},
+                       {'first_observed_size': 2**63}, {'final_observed_size': None},
+                       {'first_observed_size': g.MAX_ROOT_HEADER_BYTES + 1},
+                       {'first_code': 'CONTRACT_ERROR'}, {'retry_outcome': 'SUCCEEDED'},
+                       {'retry_outcome': 'FAILED'}, {'retry_outcome': True},
+                       {'final_code': 'NOT_COLLECTED'}, {'final_code': 'FILE_CHANGED'}):
+            report = copy.deepcopy(original)
+            report['wrapper']['cluster_structure']['root_header_read'].update(update)
+            with self.subTest(update=update), self.assertRaises(ValueError):
+                g.validate_report(report)
+        for replacement in (None, [], {}, 'private'):
+            report = copy.deepcopy(original)
+            report['wrapper']['cluster_structure']['root_header_read'] = replacement
+            with self.assertRaises(ValueError): g.validate_report(report)
+
+    def test_67_retry_schema_correlates_first_size_outcome_and_identity(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        size = g.MAX_ROOT_HEADER_BYTES + 1
+        raw = header.read_bytes() + b' ' * (size - header.stat().st_size)
+        success, unused = self.collect_header_reads(header, [g._ReadContractError('SIZE_LIMIT', size), raw, raw])
+        failed, unused = self.collect_header_reads(header, [g._ReadContractError('SIZE_LIMIT', size), PermissionError('secret')])
+        oversized, unused = self.collect_header_reads(header, [g._ReadContractError('SIZE_LIMIT', g.MAX_ROOT_HEADER_RETRY_BYTES + 1)])
+        edits = [(success, {'first_observed_size': g.MAX_ROOT_HEADER_BYTES}),
+                 (success, {'first_observed_size': g.MAX_ROOT_HEADER_RETRY_BYTES + 1}),
+                 (success, {'first_observed_size': None}),
+                 (success, {'retry_outcome': 'NOT_ATTEMPTED'}),
+                 (success, {'retry_outcome': 'FAILED'}),
+                 (success, {'final_observed_size': size - 1}),
+                 (failed, {'retry_outcome': 'SUCCEEDED'}),
+                 (failed, {'final_code': 'OK'}),
+                 (failed, {'final_code': 'SIZE_LIMIT', 'final_observed_size': g.MAX_ROOT_HEADER_RETRY_BYTES}),
+                 (oversized, {'retry_outcome': 'FAILED'}),
+                 (oversized, {'final_observed_size': g.MAX_ROOT_HEADER_RETRY_BYTES + 2}),
+                 (oversized, {'final_code': 'NOT_REGULAR'})]
+        for original, update in edits:
+            report = copy.deepcopy(original)
+            report['wrapper']['cluster_structure']['root_header_read'].update(update)
+            with self.subTest(update=update), self.assertRaises(ValueError): g.validate_report(report)
+        report = copy.deepcopy(failed)
+        report['wrapper']['cluster_structure']['root_header_identity'] = g._identity(b'')
+        with self.assertRaises(ValueError): g.validate_report(report)
+        report = copy.deepcopy(success)
+        report['wrapper']['cluster_structure']['root_header_identity'] = None
+        with self.assertRaises(ValueError): g.validate_report(report)
+
+    def test_68_frozen_parsers_and_fifo_exact_identities(self):
+        source = (HERE / 'generation_diagnostics.py').read_text()
+        expected = {'_makegraph': (2097, 'de68244bf412a07fab7cfc8e630556e623a4eaca81782590956563a8c625286c'),
+                    '_root_handles': (3153, '96333de18799d3199280323ffea507f50d518fcfd8aaf2ae8c08f41f368eaef3')}
+        found = {}
+        for node in ast.parse(source).body:
+            if isinstance(node, ast.FunctionDef) and node.name in expected:
+                raw = ast.get_source_segment(source, node).encode()
+                found[node.name] = (len(raw), hashlib.sha256(raw).hexdigest())
+        self.assertEqual(found, expected)
+        self.assertEqual(g._FIFO_BASE, {'bytes': 4411, 'sha256': '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352'})
+        self.assertEqual(g._FIFO_DERIVED, {'bytes': 4662, 'sha256': 'cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6'})
+        old_split = {'bytes': 4536, 'sha256': 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70'}
+        report = self.collect(source_map=[dict(MAP[0], id=g._FIFO_SOURCE, **old_split)])
+        self.assertEqual(report['source_derivations'], [])
 
 
 if __name__ == '__main__':

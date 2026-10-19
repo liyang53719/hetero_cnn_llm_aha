@@ -35,7 +35,8 @@ EXTRAS = ('SHA256SUMS.json', 'SOURCE_CLOSURE.json', 'COMMITS.json',
 CLOCK = 'deps/tech_cells_generic/src/rtl/tc_clk.sv'
 FIFO_PATH = 'deps/common_cells/src/cc_passthrough_stream_fifo.sv'
 FIFO_BASE = (4411, '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352')
-FIFO_DERIVED = (4536, 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70')
+FIFO_VALID_SPLIT = (4536, 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70')
+FIFO_DERIVED = (4662, 'cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6')
 DEFINES = {name: '' for name in ('TARGET_ASIC', 'TARGET_RTL', 'TARGET_SYNTHESIS', 'TARGET_VERILATOR')}
 LIMITS = {'total_seconds': 60, 'work_seconds': 55, 'cpu_seconds': 40,
           'cpu_affinity_count': 1, 'as_bytes': 512 * 1024**2,
@@ -236,7 +237,7 @@ def prepare(raw):
 
 
 def derive_fifo_valid_split(verified):
-    """One fixed base-to-derived FIFO buffer after all original 319 pass prepare."""
+    """Fixed valid_o then ready_o splits after all original 319 pass prepare."""
     need(len(verified) == 319, 'FIFO split requires original 319 selection')
     names = [item['relative_destination'] for item, content in verified]
     need(len(set(names)) == 319 and names.count(FIFO_PATH) == 1,
@@ -260,18 +261,32 @@ def derive_fifo_valid_split(verified):
     split = (b'    // Output validity\n    always_comb begin\n'
              b'        if (flush_i) begin // Flush\n' + zero +
              b'        end else begin\n' + compare + b'        end\n    end\n\n')
-    derived = original.replace(zero, b'', 1).replace(compare, b'', 1).replace(anchor, split + anchor, 1)
+    intermediate = original.replace(zero, b'', 1).replace(compare, b'', 1).replace(anchor, split + anchor, 1)
+    need((len(intermediate), sha(intermediate)) == FIFO_VALID_SPLIT,
+         'FIFO split exact valid-only intermediate identity')
+    ready_zero = b"            ready_o     = 1'b0;\n"
+    ready_equation = (b"            ready_o     = (read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n"
+                      b"                ? 1'b1 : write_ptr_q[PointerWidth-2:0] != read_ptr_q[PointerWidth-2:0])\n"
+                      b"                || (SameCycleRW && ready_i && valid_o);\n")
+    need(intermediate.count(ready_zero) == intermediate.count(ready_equation) ==
+         intermediate.count(anchor) == 1, 'FIFO ready split exact unique transformation anchors')
+    ready_split = (b'    // Output readiness\n    always_comb begin\n'
+                   b'        if (flush_i) begin // Flush\n' + ready_zero +
+                   b'        end else begin\n' + ready_equation + b'        end\n    end\n\n')
+    derived = intermediate.replace(ready_zero, b'', 1).replace(ready_equation, b'', 1).replace(
+        anchor, ready_split + anchor, 1)
     need((len(derived), sha(derived)) == FIFO_DERIVED, 'FIFO split exact derived identity')
     result = list(verified)
     result[position] = (dict(item, bytes=FIFO_DERIVED[0], sha256=FIFO_DERIVED[1]), derived)
     need([row['relative_destination'] for row, content in result] == names and
-         sum(row['bytes'] for row, content in result) == 3072325, 'FIFO split exact output delta')
+         sum(row['bytes'] for row, content in result) == 3072451, 'FIFO split exact output delta')
     return result, {'relative_destination': FIFO_PATH,
                     'original': {'bytes': FIFO_BASE[0], 'sha256': FIFO_BASE[1]},
                     'derived': {'bytes': FIFO_DERIVED[0], 'sha256': FIFO_DERIVED[1]},
-                    'operation': 'exact_valid_o_combinational_block_split',
+                    'intermediate': {'bytes': FIFO_VALID_SPLIT[0], 'sha256': FIFO_VALID_SPLIT[1]},
+                    'operation': 'exact_valid_o_and_ready_o_combinational_block_split',
                     'original_manifest_unchanged': True, 'selected_file_count_delta': 0,
-                    'selected_bytes_delta': 125}
+                    'selected_bytes_delta': 251}
 
 
 def fresh(path):
@@ -385,7 +400,7 @@ def extract(archive, out, entry, fifo_valid_split=False):
         if fifo_valid_split:
             verified, derivation = derive_fifo_valid_split(verified)
             report['source_derivations'] = [derivation]
-        expected_bytes = 3072325 if fifo_valid_split else 3072200
+        expected_bytes = 3072451 if fifo_valid_split else 3072200
         for item, content in verified:
             need(len(content) == item['bytes'] and sha(content) == item['sha256'], 'buffer identity before write')
             relative = 'sources/' + item['relative_destination']

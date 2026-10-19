@@ -30,7 +30,7 @@ IDMA_META = {'SHA256SUMS.json': (104165, 'a699b8074b8099e00859d5174c0a5fb6b5a171
 SV_PIN = (76366612, '2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61')
 FIFO_PATH = 'deps/common_cells/src/cc_passthrough_stream_fifo.sv'
 FIFO_BASE = (4411, '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352')
-FIFO_SPLIT = (4536, 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70')
+FIFO_SPLIT = (4662, 'cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6')
 CLUSTER_HIERARCHY = b'`verilator_config\nhier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"\n'
 
 
@@ -146,7 +146,7 @@ def closure(support, idma, retained, configuration, sv, buffers, *, fifo_valid_s
     need(len(sums) == 927 and len(admitted) == 312, 'iDMA metadata counts')
     tree = support.tree_inventory(root, 8 * 1024**2, 319, 1024, 2 * 1024**2)
     actual = {p: row for p, row in tree['entries'].items() if row['kind'] == 'regular'}
-    need(len(actual) == 319 and tree['bytes'] == 3072200 + (125 if fifo_valid_split else 0), 'exact iDMA319 tree')
+    need(len(actual) == 319 and tree['bytes'] == 3072200 + (251 if fifo_valid_split else 0), 'exact iDMA319 tree')
     if fifo_valid_split:
         need(sums.get(FIFO_PATH) == admitted.get(FIFO_PATH) == FIFO_BASE[1], 'original FIFO provenance')
         need(FIFO_PATH in actual and (actual[FIFO_PATH]['bytes'], actual[FIFO_PATH]['sha256']) == FIFO_SPLIT,

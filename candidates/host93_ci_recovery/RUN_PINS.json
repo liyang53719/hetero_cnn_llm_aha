@@ -10,11 +10,11 @@
     },
     "candidates/host93_ci_recovery/configuration/ENTRY.json": {
       "bytes": 2390,
-      "sha256": "98b3fa1bddaf0b2b2f998039080ccc750462e34a1f74ab3c0ec1d5cbb6d9838a"
+      "sha256": "ebab4731e7aee736c37a02de72ffcae47c2aaf2e7e14e39db8ed90b1d357adbc"
     },
     "candidates/host93_ci_recovery/configuration/generate_4vlt.py": {
-      "bytes": 25044,
-      "sha256": "5234e210a012323a44e4d579a16af2dbac52b47f90e974a2716e23c5d9942216"
+      "bytes": 25053,
+      "sha256": "cfe6d84b5d997d1331d66be6bd228a53ffae1e3a57099fb92260c472f79224a7"
     },
     "candidates/host93_ci_recovery/emission/EmitCanonicalHost93Diagnostic.scala": {
       "bytes": 3520,
@@ -37,24 +37,32 @@
       "sha256": "777cbe5288224509388e10eeb613db4c61d90caeb815cf81b35cbd4e7bd40f5e"
     },
     "candidates/host93_ci_recovery/execution/generation_diagnostics.py": {
-      "bytes": 44036,
-      "sha256": "991077cf2914b681b7bf08b264a852dd5aa6f4bdc4e317d4d3033f4f36438bde"
+      "bytes": 51843,
+      "sha256": "fb1b7bf9a747d02827233a820975231c151788f6aff2b54c8f7a7e589e5c0bf7"
     },
     "candidates/host93_ci_recovery/execution/host_execution.py": {
       "bytes": 33886,
-      "sha256": "a6f03d274c8dc32d46d553dfbf0d15bae64b061c46878b949d30748d008ff44a"
+      "sha256": "b68c15f8dcaadac57d6b855073ba3b689d79776607083f8d19fa4f513419e2b2"
     },
     "candidates/host93_ci_recovery/execution/short_launch.cpp": {
       "bytes": 3890,
       "sha256": "9947385aab851df5de2be79e44f1f42a627857c4e463fcba13064c2973396b66"
     },
+    "candidates/host93_ci_recovery/fifo_preflight/fifo_preflight.py": {
+      "bytes": 16203,
+      "sha256": "b587e46b579537a720e89089c0fc860c64880b9186570d6bd2f70cb90b1ffdf5"
+    },
+    "candidates/host93_ci_recovery/fifo_preflight/fifo_ready_split_miter.sv": {
+      "bytes": 5992,
+      "sha256": "f243a444637c373cacac66a78cffafaf882b2526ae0108bd396b6e9e4be1ee54"
+    },
     "candidates/host93_ci_recovery/idma319/ENTRY.json": {
       "bytes": 5451,
-      "sha256": "214005162183a87a38537598ccdc92e07f897e9215fe5499e1ecc359b46158e8"
+      "sha256": "9542df5b0728ebb2f590a7eaebc7315945809cc2d7dc963fd6220b4cb04d21da"
     },
     "candidates/host93_ci_recovery/idma319/extract_idma.py": {
-      "bytes": 21505,
-      "sha256": "eb9f4f365d141fef65bf45f8730e2047069cd035833fc48ab34165669aa1663c"
+      "bytes": 22764,
+      "sha256": "2efd8b77e61ce68d01af2217e8e7a772da5ad46336531f5c21107cd0a7e2b532"
     },
     "candidates/host93_ci_recovery/retained13/SOURCE_PLAN.json": {
       "bytes": 26494,
@@ -83,6 +91,18 @@
     "candidates/host93_ci_recovery/toolchain/flex_header.py": {
       "bytes": 13781,
       "sha256": "66bad0a2aa866d8df0d6380d15620e095afcc2819d014e01c202e18f017dfce6"
+    },
+    "candidates/host93_micro_diagnostics/fixtures/fifo_valid_split_cases.sv": {
+      "bytes": 11336,
+      "sha256": "90ec11c7a463bfebff87c2e026204cc84de37bd19b6ed5013eb817d1e7abb4e1"
+    },
+    "candidates/host93_micro_diagnostics/icarus_stage.py": {
+      "bytes": 39139,
+      "sha256": "907dd10148db6d3de4e614453fb130638d2149ee523b16b4aa97246d04c29554"
+    },
+    "candidates/host93_micro_diagnostics/run.py": {
+      "bytes": 53278,
+      "sha256": "235a619fc7d304578ff78a958c173a33cb50d1a860dbf56fe2051fd4396ba3b8"
     }
   },
   "schema": 1

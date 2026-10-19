@@ -798,3 +798,10 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 原上下文v1的SOURCE HOLD保留（review manifest 65c775b7eaf50815a905445445b8f19fe634299199dde5f225659c514d0c6f55，summary 491db3c0e57d000ca703096c099a8880c697d02d9c255773ab5778f9d05c852a）。v2仅修F01固定GCC连写路径选项表与F02先识别认证/凭据键值再折叠长token；含MF/MT/MQ/B同类正反例、长键短值和普通文本正控。反例为合成SOURCE输入，不称旧真实日志曾泄露。
 
 - v2独立SOURCE GO身份：review manifest `9c3c5c60198f421581a186f6b7f1012e058d5e65db8336bdfc3552cad137fe8a`；summary `ba9d80bf9f08062c378e4c3253b6ed8090e5d5eb6bb002623b48dd6d2a7f2129`。85静核、独立normal/-O主78各、旧去敏463与上下文727各、原4反例及12正控各通过；未变support/toolchain证据按身份继承。最终13path内容审独立进行，metadata封口未重跑测试，新actual仍NOT_EXECUTED。
+
+### 2026-10-19：FAIL，有限日志已给出 FlexLexer.h 缺失诊断
+
+- ced20f4f 的 build-only run 39191780530 attempt 1 已结束失败；前13阶段成功，fresh_make 自然 exit2，waitid1/2、timeoutfalse、cleanuptrue，54.294193秒。协调入口65.508032秒。
+- 安全 context AVAILABLE 实录 V3Lexer_pregen.yy.cpp:369:10 缺 FlexLexer.h（由 V3ParseLex.cpp:30 引入），随后 make Error1/2。原三JSON保存于 development_snapshots/host93_ci_context_failure_39191780530；原两次FAIL不倒填此根因。
+- 固定 libfl-dev 选中表已有6893B头（SHA256 ee9859d6b3027ed565f98f42744e438ab31b2cd2e9f797ddf870029ca2021686）；下一最小核暂存目录/include接线并增加真实头编译probe。尚不声明修复成功或backend/Host资格。
+- 本批只持久化安全失败证据和说明，不触发新构建；后续修复与有界实际需独立SOURCE门及真实终态。仍保全部复现源码/pin和原FAIL，未清除唯一证据。

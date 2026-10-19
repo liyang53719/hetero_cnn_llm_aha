@@ -1,0 +1,177 @@
+{
+  "approval_scope": "Only independently reviewed compile/link exact invocation; no authorization for RTL is created by this file.",
+  "common_limits": {
+    "as_bytes": 6442450944,
+    "cpu_affinity_count": 1,
+    "cumulative_rusage_maxrss_cap_bytes": 6442450944,
+    "entry_count": 256,
+    "file_count": 128,
+    "fsize_bytes": 67108864,
+    "log_bytes": 1048576,
+    "resource_gate_disk_available_bytes": 3221225472,
+    "resource_gate_mem_available_bytes": 8589934592,
+    "tree_bytes": 268435456
+  },
+  "compile_argv_template": [
+    "FIXED_APPROVED_CXX",
+    "-B",
+    "FRESH_FIXED_COMPILER_SEARCH/",
+    "-MMD",
+    "-DVERILATOR=1",
+    "-DVM_COVERAGE=0",
+    "-DVM_SC=0",
+    "-DVM_TIMING=0",
+    "-DVM_TRACE=0",
+    "-DVM_TRACE_FST=0",
+    "-DVM_TRACE_VCD=0",
+    "-DVM_TRACE_SAIF=0",
+    "-DVM_VPI=0",
+    "-faligned-new",
+    "-fcf-protection=none",
+    "-Wno-bool-operation",
+    "-Wno-int-in-bool-context",
+    "-Wno-shadow",
+    "-Wno-sign-compare",
+    "-Wno-subobject-linkage",
+    "-Wno-tautological-compare",
+    "-Wno-uninitialized",
+    "-Wno-unused-but-set-parameter",
+    "-Wno-unused-but-set-variable",
+    "-Wno-unused-parameter",
+    "-Wno-unused-variable",
+    "-DVM_PREFIX_INCLUDE=<VHostBlockTop.h>",
+    "-DVM_PREFIX_INCLUDE_DPI=<VHostBlockTop__Dpi.h>",
+    "-std=c++17",
+    "-O0",
+    "-I",
+    "FRESH_SOURCE_INCLUDE",
+    "-I",
+    "FIXED_GENERATED_HEADER_ROOT",
+    "-I",
+    "FIXED_VERILATOR_INCLUDE",
+    "-I",
+    "FIXED_VERILATOR_VLTSTD",
+    "-c",
+    "FRESH_PC01_MAIN_CPP",
+    "-o",
+    "FRESH_PC01_MAIN_O"
+  ],
+  "compiler": {
+    "bytes": 1166360,
+    "realpath": "/usr/bin/x86_64-linux-gnu-g++-14",
+    "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d"
+  },
+  "compiler_dependency_plan": {
+    "additional_fixed_real_files": 3,
+    "closed_program_set": [
+      "g++",
+      "cc1plus",
+      "collect2",
+      "as",
+      "ld"
+    ],
+    "existing_catalog_identity": {
+      "bytes": 17181,
+      "sha256": "eb96b59bacab297190a7cf84157f26612d91d8e8c85b333707122a037a32a18d"
+    },
+    "existing_fixed_files": 36,
+    "new_dynamic_soname": "libatomic.so.1",
+    "new_static_inputs": [
+      "libpthread.a",
+      "libpthread_nonshared.a"
+    ],
+    "rule": "Retain exact local read-only mount profile, descriptor snapshots, protected ancestors, current uid_map/gid_map and pre/post identities; fixed symlinks only inside compiler-search to these pinned tool realpaths. Reuse finite ELF reader; add only libatomic soname and pinned dependency facts. No global owner exemption or PATH fallback."
+  },
+  "cpp_compiled": false,
+  "delta_from_source_relink_contract": "Original compile/link command, dependency, resource, deadline, process supervision and first-failure semantics unchanged. Only exact config/assembled-production/caller pins and source member count are updated.",
+  "environment": {
+    "HOME": "FRESH_HOME",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "LD_LIBRARY_PATH": "FIXED_READONLY_LIBRARY_DIRECTORY",
+    "PATH": "FRESH_FIXED_COMPILER_SEARCH",
+    "TMPDIR": "FRESH_TMP",
+    "TZ": "UTC"
+  },
+  "final_receipt_reserve_seconds": 30,
+  "full_rtl_wall_budget_authorized": false,
+  "initial_preflight_stage_max_seconds": 30,
+  "link_argv_template": [
+    "FIXED_APPROVED_CXX",
+    "-B",
+    "FRESH_FIXED_COMPILER_SEARCH/",
+    "FRESH_PC01_MAIN_O",
+    "FIXED_VERILATED_O",
+    "FIXED_VERILATED_DPI_O",
+    "FIXED_VERILATED_THREADS_O",
+    "FIXED_HOST_ARCHIVE",
+    "-pthread",
+    "-lpthread",
+    "-latomic",
+    "-o",
+    "FRESH_PC01_EXECUTABLE"
+  ],
+  "native_phase_count": 2,
+  "outer_guard": {
+    "kill_after_term_seconds": 5,
+    "outer_receipt_reserve_seconds": 5,
+    "tail_note": "Thirty seconds after the native-stage cutoff comprises up to twenty seconds of coordinator receipt time, five of fallback outer kill grace, and five for outer evidence. The outer guard is stricter than the inner 180s timer.",
+    "term_after_seconds": 170,
+    "total_seconds": 180
+  },
+  "phases": {
+    "driver_compile": {
+      "cpu_seconds": 80,
+      "total_seconds": 95,
+      "work_seconds": 80
+    },
+    "driver_link": {
+      "cpu_seconds": 10,
+      "total_seconds": 25,
+      "work_seconds": 10
+    }
+  },
+  "postflight": [
+    "Both stages naturally exit0 and cleanup_confirmed true under original supervisor",
+    "All original/staged source/cache/compiler/library identities unchanged",
+    "pc01_main.o present regular bounded file; resulting ELF fixed PIE profile and dependencies bounded to catalog, recorded size/SHA",
+    "No launch of pc01 executable, constructor, --help or version probe in this compile/link scope",
+    "Final receipt error must not replace original exception; preserve bounded source codes only"
+  ],
+  "private_fixed_inputs": {
+    "catalog": {
+      "bytes": 18466,
+      "sha256": "3882312fb75efa443fbe65af05cf882cea420a9af5be9a4ca69e4b0b2773e1e1"
+    },
+    "config": {
+      "bytes": 1280,
+      "sha256": "5ddb8de56e0c595b98e9f0cc8d1682fdd958c9398c29dbe8e34b747e2e6cc62e"
+    },
+    "reuse": {
+      "bytes": 3849,
+      "sha256": "dcadbcf1d8220a3bfe259409cfbdf835a1e01d22863dccd895d72362e3ab1958"
+    }
+  },
+  "rtl_executed": false,
+  "schema": "PC01_COMPILE_LINK_EXECUTION_CONTRACT_V1",
+  "scope": "FRESH_DRIVER_COMPILE_AND_REGULAR_ARCHIVE_LINK_ONLY",
+  "shared_total_seconds": 180,
+  "source_files_implemented": [
+    "run_relink.py",
+    "launch.py",
+    "dependency_gate.py"
+  ],
+  "staging": {
+    "reused_artifact_files": 19,
+    "rule": "24 unchanged original bridge members + 4 exact capsule replacements + 1 exact added capsule header; all 29 plus the unchanged 19 cached artifacts staged through the original checked-buffer path. Original checked bytes -> fresh regular files, no symlink data paths. Preserve relative generated/Verilator header layout. Fixed original and staged size/hash before and after both native phases. No generated Makefile, backend or SV emitter.",
+    "source_files": 29
+  },
+  "status": "SOURCE_ONLY_PENDING_INDEPENDENT_CAPSULE_AND_BINDING_REVIEW",
+  "supervisor": {
+    "bytes": 16348,
+    "entry": "fixed_support + run_phase unchanged; WNOWAIT/reap/process-group cleanup, first error and safety codes preserved",
+    "path": "candidates/host93_ci_recovery/ci_support_v3.py",
+    "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+  },
+  "timing_rule": "One t0 before initial path/hash/admission; each original run_phase reserves 5s cleanup +10s phase postflight within its total; all phases plus receipts within t0+180. No deadline restart or automatic retry."
+}

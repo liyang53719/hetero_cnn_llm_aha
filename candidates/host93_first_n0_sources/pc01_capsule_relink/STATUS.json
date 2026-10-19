@@ -1,0 +1,70 @@
+{
+  "actual_result": "NOT_EXECUTED",
+  "application_accuracy_pass": null,
+  "baseline_adopted": false,
+  "compiler_dependencies": 39,
+  "frozen_author_metadata_pending_notes_superseded_by_status": true,
+  "frozen_source_manifest": {
+    "bytes": 9105,
+    "sha256": "0ed658647a5cd1c50829e01195229791eb67e0c07e7bb88aebf69676164bc753"
+  },
+  "full_block_pass": false,
+  "independent_public_entry_cold": {
+    "negative_normal": 4,
+    "negative_optimized": 4,
+    "normal": 101,
+    "optimized": 101,
+    "python": "3.13"
+  },
+  "independent_source_cold": {
+    "python": "3.13",
+    "relocated_normal": 101,
+    "relocated_optimized": 101
+  },
+  "native_phases": 2,
+  "official_raw_numeric_pass": null,
+  "original_failure": "NATURAL_EXIT_1_PC1_022_ROOT_CAUSE_UNKNOWN",
+  "private_binding_or_cache_published": false,
+  "production_delta_lines": 3,
+  "production_manifest": {
+    "bytes": 542,
+    "sha256": "a111716b048345c1d69f56cc0289db8b8431df95755b36b5563a0ccc7ec79733"
+  },
+  "public_cold_entry_review": {
+    "MANIFEST.json": {
+      "bytes": 1399,
+      "sha256": "357114cbe5d20be524b3fde1f094b45877a5d19f9a5cfc2774059d9b0ee9385c"
+    },
+    "SUMMARY.json": {
+      "bytes": 1858,
+      "sha256": "aba3aee700aa3006782c9fc62efd715f9d70b50212feeff6440cc6d048dc4ef2"
+    }
+  },
+  "public_cold_fixture_entry_acceptance": "ACCEPT_PC01_CAPSULE_RELINK_PUBLIC_COLD_ENTRY_ONLY",
+  "publication_parent_commit": "ef59eb4c52e8b814509fc087def732474ebc223d",
+  "publication_requires_capsule_source_parent": true,
+  "reused_cache_members": 19,
+  "schema": "PC01_CAPSULE_RELINK_SOURCE_STATUS_V1",
+  "shared_wall_cap_seconds": 180,
+  "source_members": 29,
+  "source_production_acceptance": "ACCEPT_PC01_CAPSULE_DRIVER_RELINK_SOURCE_AND_FIXED_180_SECOND_CONTRACT_ONLY",
+  "source_review": {
+    "MANIFEST.json": {
+      "bytes": 867,
+      "sha256": "8c277daab23a327e7855836efec358dad77f8b71589ec950ee426fc4e2e6c615"
+    },
+    "SUMMARY.json": {
+      "bytes": 3506,
+      "sha256": "e74c8bd61f1f9575fdbfbae4d65fdf8119b3e8d730de135f1b70c5b25c61c4f6"
+    }
+  },
+  "source_scope": {
+    "cpp_compiled": false,
+    "native_executed": false,
+    "rtl_executed": false
+  },
+  "staged_total": 48,
+  "status": "PRODUCTION_SOURCE_AND_PUBLIC_COLD_ENTRY_REVIEWED_PUBLICATION_CONTENT_PENDING",
+  "typed_recipe_bit_exact_to_rtl": null,
+  "upstream_source_pins": 44
+}

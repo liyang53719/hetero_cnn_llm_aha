@@ -1,0 +1,266 @@
+{
+  "added_members": [
+    "bridge/include/pc01_failure_capsule.hpp"
+  ],
+  "assembled_bridge_production_manifest": {
+    "bytes": 4632,
+    "sha256": "0e6dcab21cec61004b35d6b657456ace9817f7a6be382077e6c2c80bb433ba4a"
+  },
+  "baseline_relink_production_manifest": {
+    "bytes": 542,
+    "sha256": "a35cade7661452ca804b78dbb2f931c4a5e685785b503d5989738a02f3a8d69a"
+  },
+  "baseline_relink_runner": {
+    "bytes": 19837,
+    "sha256": "d80f19af41760b96f8a8a60d2a45faab21b2addea39bf5e805fe2a2a338e798d"
+  },
+  "capsule_original_source_pins": {
+    "bytes": 6547,
+    "sha256": "868b1b8e5f2ca4b973e0a569e51b13647f2cc84191ccf736b7adcef0a541c1bc"
+  },
+  "capsule_production_manifest": {
+    "bytes": 911,
+    "sha256": "e49b1959b50097320daebf2ecbd16eeed3d3e21ebff8d8b3a34346384ce0ff8c"
+  },
+  "changed_original_members": [
+    "bridge/include/pc01_driver.hpp",
+    "bridge/include/pc1_model_scheduler.inc",
+    "bridge/include/runtime_ram.hpp",
+    "bridge/source/pc01_main.cpp"
+  ],
+  "command_contract": {
+    "bytes": 3446,
+    "sha256": "6e35a033308211c65da7f8d0c647e287338599362dc85851c961f8b522de82b7"
+  },
+  "compiler_catalog": {
+    "bytes": 18466,
+    "sha256": "3882312fb75efa443fbe65af05cf882cea420a9af5be9a4ca69e4b0b2773e1e1"
+  },
+  "counts": {
+    "bridge_after": 29,
+    "bridge_before": 28,
+    "changed_original": 4,
+    "compiler_dependencies": 39,
+    "new_header": 1,
+    "reused_artifacts": 19,
+    "staged_total": 48,
+    "unchanged_bridge": 24,
+    "upstream_pins": 44
+  },
+  "input_buffers_delta": "One exact cardinality literal: 28 to 29.",
+  "inverse_runner_exact": true,
+  "missing_source_pins": [],
+  "native_authority_created": false,
+  "old_actual_relink_receipt": {
+    "bytes": 16380,
+    "sha256": "64831215e25271d0ab4d882b2fea051f2b6ceacb5fe04e6af0f7f201e425f7e1"
+  },
+  "old_pc01_binary": {
+    "bytes": 13537744,
+    "sha256": "cb64b5cf1d5e9c226b9768fb3fdcbb3305bee894b6d904cb4cf29633d10fe5b1"
+  },
+  "original_bridge_files": {
+    "bridge/include/axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "bridge/include/canonical16_identities.hpp": {
+      "bytes": 3844,
+      "sha256": "0f46d5f389af952a793ac38812009d3da081a858b2fd1f650f8feda513cfd499"
+    },
+    "bridge/include/canonical_launch.hpp": {
+      "bytes": 2065,
+      "sha256": "7b4a6bf463335d7984fbc803ccb4cca275b54344fa883d82403fa55de4f0a7bc"
+    },
+    "bridge/include/completion_payload.hpp": {
+      "bytes": 2268,
+      "sha256": "1dbab0fec1057e55ccc931588fa7f58a5598ce272e4542edda49c80eb03ee3ef"
+    },
+    "bridge/include/first_n0_diagnostic_codes.inc": {
+      "bytes": 38917,
+      "sha256": "ed087651b2e699086e85a83aa5794c7d4bcca068967b5edae3fd796ea69959cf"
+    },
+    "bridge/include/first_n0_diagnostics.hpp": {
+      "bytes": 2262,
+      "sha256": "bcd8a80d1402a77f4285a5233db21dbbd2d99667594d4046a4a0e11a335725f7"
+    },
+    "bridge/include/first_n0_driver.hpp": {
+      "bytes": 4887,
+      "sha256": "d313b1bbefc44418d1822290fd9f90ae46ba9122481523cc732fc5e787cd97d3"
+    },
+    "bridge/include/first_n0_inputs.hpp": {
+      "bytes": 1695,
+      "sha256": "d6ef16b6ba0148b59fb4aad84244906425783606f5daec98bd9d92c56958fe82"
+    },
+    "bridge/include/first_n0_limits.hpp": {
+      "bytes": 720,
+      "sha256": "52dd7b039421de27da6e02352247f3236b80114d6e046c46c7e1eeb3589f7c00"
+    },
+    "bridge/include/first_n0_result.hpp": {
+      "bytes": 1232,
+      "sha256": "ca0ddcce83c84691afd48f17ba6cd893936979daa8128c1625ac6614b2083754"
+    },
+    "bridge/include/fixed_file_io.hpp": {
+      "bytes": 2337,
+      "sha256": "ca890f5e09cf79c8c3f838b85ef4521a2e71c6b00af67c8d8ac298a42a41d579"
+    },
+    "bridge/include/generated_binding.hpp": {
+      "bytes": 164037,
+      "sha256": "84b1e85078f9864610a1dbee1c68a7ff40e4ba847dd239f54fd079151e066afe"
+    },
+    "bridge/include/host_ports.hpp": {
+      "bytes": 3123,
+      "sha256": "374845951e3fad70448b52bfa33418d19a08c9cf58200526adf20fb9b78486de"
+    },
+    "bridge/include/n0_field_registry.inc": {
+      "bytes": 12696,
+      "sha256": "af5130f58aa27e39859fd9efdc19b3bd8c8536c3bfc4d9b3853740d3bc8eb0f2"
+    },
+    "bridge/include/n0_model_fields.hpp": {
+      "bytes": 21381,
+      "sha256": "33dd661d89ef01c57f4fe1573779904ed52fd25c335f4041fc8b64c318e51c69"
+    },
+    "bridge/include/n0_model_scheduler.inc": {
+      "bytes": 20875,
+      "sha256": "0c31771cd3d7a12044710467d85a87f2a6a53e7b6c881344db87af62f54f87f6"
+    },
+    "bridge/include/n0_production_guard.hpp": {
+      "bytes": 5395,
+      "sha256": "462fe82cdc24ea9fb9e15000fecee3bb6559f6f4d59dac4c7c95e99216537a3a"
+    },
+    "bridge/include/pc01_driver.hpp": {
+      "bytes": 7854,
+      "sha256": "03d943d1210abb180747d8a6ea0bd80a465c938162494c30142d499697d41d58"
+    },
+    "bridge/include/pc01_result.hpp": {
+      "bytes": 1215,
+      "sha256": "04de9a667ecc52e66b2c2a24440bf09e19738c41ad9892a67e60f60b9e2b781d"
+    },
+    "bridge/include/pc1_model_scheduler.inc": {
+      "bytes": 13247,
+      "sha256": "6cdc1abc8c8229a883a67ea398ef714fdef5ea7f5d8f4518a9492e0aa69bdd0f"
+    },
+    "bridge/include/pc1_production_guard.hpp": {
+      "bytes": 10672,
+      "sha256": "fea46eecd53f1f5b65d1a4919ea5d198a1b441bc421abc516ed1a764e73450f4"
+    },
+    "bridge/include/pc1_retirement_adapter.inc": {
+      "bytes": 5367,
+      "sha256": "d732d88dedbde541c1bcb37ec66b0c905b7f14042d1fed06fa07dd689cab25d9"
+    },
+    "bridge/include/runtime_policy.hpp": {
+      "bytes": 4429,
+      "sha256": "88157f9014ee02b7573c2d8116193ce1c7b223f1bb51d85d2aca0156e0a0c0bd"
+    },
+    "bridge/include/runtime_ram.hpp": {
+      "bytes": 30120,
+      "sha256": "0feccb73809ca33682bf7c594f38784fa356dd1d7ce89b162505fe4c71b63fd5"
+    },
+    "bridge/include/sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "bridge/include/silu_observer.hpp": {
+      "bytes": 19085,
+      "sha256": "4517356fae02531b1eab19d825423440c197bfeb0f5269475dda501da1225245"
+    },
+    "bridge/source/first_n0_main.cpp": {
+      "bytes": 6812,
+      "sha256": "d569ddacaa2ec3260fbbc975c0da631a842d34f9344ebd10ea53db0e31ed8a15"
+    },
+    "bridge/source/pc01_main.cpp": {
+      "bytes": 7450,
+      "sha256": "1188e3be3f486f4a4492b187f5208a773e38a39d46d887fef104fa40e39e8d26"
+    }
+  },
+  "original_bridge_production_manifest": {
+    "bytes": 4472,
+    "sha256": "40ebb6c1957941b90906c4dc5c0d561816fa413aa5a4431a1bd2d191f39dc5b1"
+  },
+  "original_failure_preserved": "Prior PC01 RTL run natural exit 1, PC1_022 remains failure. This source capsule does not diagnose root cause or authorize replay.",
+  "overlay_files": {
+    "bridge/include/pc01_driver.hpp": {
+      "bytes": 8342,
+      "sha256": "17b33ae6c97780bf57aaf5cacff72eea8b91db6d69da317935aae5bf02042e27"
+    },
+    "bridge/include/pc01_failure_capsule.hpp": {
+      "bytes": 7260,
+      "sha256": "e21a64c914669154f4e13cc1943ce266993155b7350d801a55c5574613710629"
+    },
+    "bridge/include/pc1_model_scheduler.inc": {
+      "bytes": 17583,
+      "sha256": "f89620782efcdf6c9e8fa7605a41a0172c13dee4a932c208e47d15bae5b6ec0d"
+    },
+    "bridge/include/runtime_ram.hpp": {
+      "bytes": 30187,
+      "sha256": "e43c3c391e722153c56c171ee94de433dca799e581a7d9d7028c9b6aa7a60620"
+    },
+    "bridge/source/pc01_main.cpp": {
+      "bytes": 7682,
+      "sha256": "3dc999c597d3c3aea682a4fb95a3abdb09af2678c8b62a3839132c71bfbf0ead"
+    }
+  },
+  "qualification": "SOURCE_ONLY_NOT_COMPILED_OR_EXECUTED",
+  "remaining_gates": [
+    "Independent capsule SOURCE acceptance",
+    "Independent successor relink binding SOURCE and exact outer invocation acceptance",
+    "Separate explicit native execution authority and fresh admission",
+    "Separate finite capture/replay authority and binding for any future RTL invocation"
+  ],
+  "repository_head_observed": "fbd6887d138378afc6387d0c84a961988bcf3358",
+  "reused_archive": {
+    "bytes": 17631506,
+    "sha256": "dafcc125c4a4463b9ff454fda6b7a4031bfa17fd98cde1e8386ff058ce245b2f"
+  },
+  "reused_inputs": {
+    "bytes": 3849,
+    "sha256": "dcadbcf1d8220a3bfe259409cfbdf835a1e01d22863dccd895d72362e3ab1958"
+  },
+  "review_pending": true,
+  "runtime_function_delta": [
+    "input_buffers"
+  ],
+  "schema": "PC01_CAPSULE_RELINK_SOURCE_BINDING_DELTA_V1",
+  "unchanged_functions": [
+    "commands",
+    "environment",
+    "identity",
+    "main",
+    "module",
+    "need",
+    "phase_limits",
+    "read",
+    "resource_gate",
+    "run",
+    "safe_failure_code",
+    "supervised_sequence",
+    "verify_copies",
+    "write_exact"
+  ],
+  "unchanged_original_members": [
+    "bridge/include/axi_protocol.hpp",
+    "bridge/include/canonical16_identities.hpp",
+    "bridge/include/canonical_launch.hpp",
+    "bridge/include/completion_payload.hpp",
+    "bridge/include/first_n0_diagnostic_codes.inc",
+    "bridge/include/first_n0_diagnostics.hpp",
+    "bridge/include/first_n0_driver.hpp",
+    "bridge/include/first_n0_inputs.hpp",
+    "bridge/include/first_n0_limits.hpp",
+    "bridge/include/first_n0_result.hpp",
+    "bridge/include/fixed_file_io.hpp",
+    "bridge/include/generated_binding.hpp",
+    "bridge/include/host_ports.hpp",
+    "bridge/include/n0_field_registry.inc",
+    "bridge/include/n0_model_fields.hpp",
+    "bridge/include/n0_model_scheduler.inc",
+    "bridge/include/n0_production_guard.hpp",
+    "bridge/include/pc01_result.hpp",
+    "bridge/include/pc1_production_guard.hpp",
+    "bridge/include/pc1_retirement_adapter.inc",
+    "bridge/include/runtime_policy.hpp",
+    "bridge/include/sha256.hpp",
+    "bridge/include/silu_observer.hpp",
+    "bridge/source/first_n0_main.cpp"
+  ]
+}

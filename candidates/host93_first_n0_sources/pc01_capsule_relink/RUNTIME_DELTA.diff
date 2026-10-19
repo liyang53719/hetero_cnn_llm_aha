@@ -1,0 +1,26 @@
+--- accepted/run_relink.py
++++ successor/run_relink.py
+@@ -10,12 +10,12 @@
+ import time
+ import types
+ 
+-CONFIG_PIN = (1258, '7783c61b84692ed8e353bb26db934f250f614b6a408e8dbe379b499758d0c0af')
++CONFIG_PIN = (1280, '5ddb8de56e0c595b98e9f0cc8d1682fdd958c9398c29dbe8e34b747e2e6cc62e')
+ CATALOG_PIN = (18466, '3882312fb75efa443fbe65af05cf882cea420a9af5be9a4ca69e4b0b2773e1e1')
+ REUSE_PIN = (3849, 'dcadbcf1d8220a3bfe259409cfbdf835a1e01d22863dccd895d72362e3ab1958')
+ GATE_PIN = (5122, '49281296cb6daa034c6e7f2f741ff6d7af9b0e61abdd96d77c1856349e8597c7')
+ HELPER_PIN = (14870, 'a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684')
+-PRODUCTION_PIN = (4472, '40ebb6c1957941b90906c4dc5c0d561816fa413aa5a4431a1bd2d191f39dc5b1')
++PRODUCTION_PIN = (4632, '0e6dcab21cec61004b35d6b657456ace9817f7a6be382077e6c2c80bb433ba4a')
+ ORIGINAL_PINS = (8657, 'f6257e57710d16c93ee3edd406814e6b1aa4e5004f5258eac73173e20c34f7e4')
+ COMMAND_PIN = (3446, '6e35a033308211c65da7f8d0c647e287338599362dc85851c961f8b522de82b7')
+ SHARED_SECONDS = 180
+@@ -94,7 +94,7 @@
+ def input_buffers(g, repo, source, reuse):
+     production = json.loads(read(source / 'PRODUCTION_MANIFEST.json', PRODUCTION_PIN))
+     source_pins = json.loads(read(source / 'SOURCE_PINS.json', ORIGINAL_PINS))
+-    need(len(production['files']) == 28 and len(source_pins['sources']) == 44 and
++    need(len(production['files']) == 29 and len(source_pins['sources']) == 44 and
+          len(reuse['files']) == 19, 'FIXED_SOURCE_COUNTS')
+     for rel, pin in source_pins['sources'].items():
+         g.checked(repo / rel, pin, 4 * MIB)

@@ -1,0 +1,166 @@
+{
+  "assembled_source_members": 29,
+  "compiler_invoked": false,
+  "fixed_public_input_manifest": {
+    "bytes": 12127,
+    "sha256": "53cd03fa0107b0723725194ace4c6ec15d6f91fbf94799a211a611f006028ddc"
+  },
+  "fixed_public_inputs": 39,
+  "negative_modes": [
+    {
+      "cases": [
+        {
+          "case": "missing_capsule_header",
+          "exception_type": "FileNotFoundError",
+          "rejected": true,
+          "safe_code": null
+        },
+        {
+          "case": "same_size_capsule_header_drift",
+          "exception_type": "ValueError",
+          "rejected": true,
+          "safe_code": "ENTRY_HASH_OR_DRIFT"
+        },
+        {
+          "case": "same_size_manifest_drift",
+          "exception_type": "ValueError",
+          "rejected": true,
+          "safe_code": "ENTRY_HASH_OR_DRIFT"
+        },
+        {
+          "case": "unpinned_entry",
+          "exception_type": "SystemExit",
+          "rejected": true,
+          "safe_code": "PUBLIC_COLD_ENTRY_IDENTITY"
+        }
+      ],
+      "native_compiler_or_model_invoked": false,
+      "network_used": false,
+      "optimized": false,
+      "python_version": [
+        3,
+        13,
+        5
+      ]
+    },
+    {
+      "cases": [
+        {
+          "case": "missing_capsule_header",
+          "exception_type": "FileNotFoundError",
+          "rejected": true,
+          "safe_code": null
+        },
+        {
+          "case": "same_size_capsule_header_drift",
+          "exception_type": "ValueError",
+          "rejected": true,
+          "safe_code": "ENTRY_HASH_OR_DRIFT"
+        },
+        {
+          "case": "same_size_manifest_drift",
+          "exception_type": "ValueError",
+          "rejected": true,
+          "safe_code": "ENTRY_HASH_OR_DRIFT"
+        },
+        {
+          "case": "unpinned_entry",
+          "exception_type": "SystemExit",
+          "rejected": true,
+          "safe_code": "PUBLIC_COLD_ENTRY_IDENTITY"
+        }
+      ],
+      "native_compiler_or_model_invoked": false,
+      "network_used": false,
+      "optimized": true,
+      "python_version": [
+        3,
+        13,
+        5
+      ]
+    }
+  ],
+  "network_used": false,
+  "original_54_source_members_unchanged": true,
+  "positive_modes": [
+    {
+      "exit_code": 0,
+      "mode": "normal",
+      "stderr": {
+        "bytes": 11134,
+        "sha256": "a3f3bdb4f28cc68ee0bbd919de06ebc2ad7a4ccc02d3e048ecc8e0bff0056c0e"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests": 101
+    },
+    {
+      "exit_code": 0,
+      "mode": "optimized",
+      "stderr": {
+        "bytes": 11134,
+        "sha256": "6136ab722b7cc06e7549ff3a5f1d86c8e65f957815a3ff6cf3decedcec155f69"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests": 101
+    },
+    {
+      "exit_code": 0,
+      "mode": "relocated",
+      "stderr": {
+        "bytes": 11134,
+        "sha256": "c4c35f33c771be38e82ccaf6715db2288bbdeb1531d56fb83dbe3b0900b4b57d"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests": 101
+    },
+    {
+      "exit_code": 0,
+      "mode": "relocated_optimized",
+      "stderr": {
+        "bytes": 11134,
+        "sha256": "42640b35387b54aeb5acf9c12cb56b632af12176f7f1c1f0bad31bda8dbd83fe"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests": 101
+    }
+  ],
+  "production_source_files_modified": 0,
+  "published_entry": {
+    "bytes": 3069,
+    "sha256": "129d5782cd2dd3d74c52ed50ced7e57e909092509f60eb1a513a5ade3229f2d9"
+  },
+  "python_identity": {
+    "bytes": 6832784,
+    "sha256": "889c603f0d17cb54060951bcf4c4f9b8c9ebd9e52b392c70209bbb9755d797d9"
+  },
+  "python_version": [
+    3,
+    13,
+    5
+  ],
+  "reused_functions": [
+    "launch.checked",
+    "run_relink.write_exact"
+  ],
+  "review_status": "PENDING_INDEPENDENT_TEST_ENTRY_REVIEW",
+  "rtl_executed": false,
+  "schema": "PC01_CAPSULE_RELINK_PUBLIC_COLD_ENTRY_DELTA_V1",
+  "scope": "PURE_TEST_FIXTURE_ENTRY_ONLY",
+  "source_package_manifest": {
+    "bytes": 9105,
+    "sha256": "0ed658647a5cd1c50829e01195229791eb67e0c07e7bb88aebf69676164bc753"
+  },
+  "unchanged_final_entry": "run_cold.py"
+}

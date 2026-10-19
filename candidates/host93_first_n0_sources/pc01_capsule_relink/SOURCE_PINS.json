@@ -1,0 +1,62 @@
+{
+  "assembled_production_manifest_identity": {
+    "bytes": 4632,
+    "sha256": "0e6dcab21cec61004b35d6b657456ace9817f7a6be382077e6c2c80bb433ba4a"
+  },
+  "capsule_production_manifest_identity": {
+    "bytes": 911,
+    "sha256": "e49b1959b50097320daebf2ecbd16eeed3d3e21ebff8d8b3a34346384ce0ff8c"
+  },
+  "machine_paths_published": false,
+  "private_config_identity": {
+    "bytes": 1280,
+    "sha256": "5ddb8de56e0c595b98e9f0cc8d1682fdd958c9398c29dbe8e34b747e2e6cc62e"
+  },
+  "private_dependency_catalog_identity": {
+    "bytes": 18466,
+    "sha256": "3882312fb75efa443fbe65af05cf882cea420a9af5be9a4ca69e4b0b2773e1e1"
+  },
+  "private_reuse_binding_identity": {
+    "bytes": 3849,
+    "sha256": "dcadbcf1d8220a3bfe259409cfbdf835a1e01d22863dccd895d72362e3ab1958"
+  },
+  "repository_files": {
+    "candidates/host93_ci_recovery/ci_support_v3.py": {
+      "bytes": 16348,
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+    },
+    "candidates/host93_first_n0_sources/local_binding_observer/binding_observer.py": {
+      "bytes": 11781,
+      "sha256": "62a7f5b4f9250f66e5c62ed9d8b6a486642e135e5e934fc505ae2dfadc850904"
+    },
+    "candidates/host93_first_n0_sources/local_binding_observer/local_mount_profile.py": {
+      "bytes": 7087,
+      "sha256": "cdbe1030e3bf2a9b2222836f7f594b4800c4315dfb31a4438a8b76c07cd18c8f"
+    },
+    "candidates/host93_first_n0_sources/local_dependency_bootstrap/bootstrap.py": {
+      "bytes": 25509,
+      "sha256": "c2a7ca58d8fba3df8b76071e25ad740386ab5113a59897181b39b4d303e50ea8"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/PRODUCTION_MANIFEST.json": {
+      "bytes": 4472,
+      "sha256": "40ebb6c1957941b90906c4dc5c0d561816fa413aa5a4431a1bd2d191f39dc5b1"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/RELINK_CONTRACT.json": {
+      "bytes": 3446,
+      "sha256": "6e35a033308211c65da7f8d0c647e287338599362dc85851c961f8b522de82b7"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/SOURCE_PINS.json": {
+      "bytes": 8657,
+      "sha256": "f6257e57710d16c93ee3edd406814e6b1aa4e5004f5258eac73173e20c34f7e4"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_execution/dependency_gate.py": {
+      "bytes": 5104,
+      "sha256": "57207b29c56024c2288afe9faffbc81bd2bd921868dc44badc428fd03673554c"
+    },
+    "candidates/host93_first_n0_sources/pc1_reference_execution/run_reference.py": {
+      "bytes": 14870,
+      "sha256": "a1eef5869774d6b66aa332966d1de7a3b0cbca5fad640e65d9ee666d609f9684"
+    }
+  },
+  "schema": "PC01_CAPSULE_RELINK_SOURCE_PINS_V1"
+}

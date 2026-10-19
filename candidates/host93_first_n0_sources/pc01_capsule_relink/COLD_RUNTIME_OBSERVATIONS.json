@@ -1,0 +1,15 @@
+{
+  "compiler_executed": false,
+  "exact_pinned_python_313_relocated_normal_tests": 101,
+  "exact_pinned_python_313_relocated_optimized_tests": 101,
+  "original_four_mode_tests_python_version": "3.12",
+  "original_four_modes_each_tests": 101,
+  "production_source_mutated": false,
+  "python_313_identity": {
+    "bytes": 6832784,
+    "sha256": "889c603f0d17cb54060951bcf4c4f9b8c9ebd9e52b392c70209bbb9755d797d9"
+  },
+  "readonly_frozen_tree_direct_runs": "Fixture PermissionError because inherited tests write beneath HERE; use a writable fixture copy. This is not a production failure.",
+  "rtl_executed": false,
+  "schema": "PC01_CAPSULE_RELINK_SAFE_COLD_RUNTIME_OBSERVATIONS_V1"
+}

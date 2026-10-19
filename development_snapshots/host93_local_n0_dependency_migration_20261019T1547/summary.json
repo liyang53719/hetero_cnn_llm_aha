@@ -1,0 +1,116 @@
+{
+  "authorization": "Explicit user approval reported by the parent for the two dependency trees and the scoped duplicate-directory permission recovery.",
+  "memory_snapshot": {
+    "later_stage_admission_requires_fresh_check": true,
+    "mem_available_kib": 8907320,
+    "observed_utc": "2026-10-19T15:49:40.313608+00:00",
+    "original_threshold_kib": 8388608,
+    "threshold_met_at_snapshot": true
+  },
+  "migration": {
+    "destination_content_structure_modes_verified_before_duplicate_removal": true,
+    "old_duplicate_trees_removed": [
+      "runtime",
+      "wheels"
+    ],
+    "other_original_root_members_recorded_unchanged": true,
+    "saved_source_and_copy_inventories_byte_identical": true,
+    "total_regular_bytes": 1010352549,
+    "total_regular_files": 15579,
+    "trees": {
+      "runtime": {
+        "bytes": 794446463,
+        "files": 15568
+      },
+      "wheels": {
+        "bytes": 215906086,
+        "files": 11
+      }
+    }
+  },
+  "observed_utc": "2026-10-19T15:49:40.313608+00:00",
+  "projection_checks": "Seven saved record hashes, equal inventories and aggregate regular-file counts/bytes verified. No reads or writes of the two live private dependency trees by this projection.",
+  "publication_privacy": {
+    "absolute_machine_paths": false,
+    "arrays_or_dependency_bodies": false,
+    "per_file_private_inventory": false,
+    "raw_logs_or_full_resource_inventory": false
+  },
+  "reference_scan": {
+    "errors": 0,
+    "global_reference_absence_proved": false,
+    "references_found": 0,
+    "visibility": "current proc namespace"
+  },
+  "removal_permission_recovery": {
+    "disk_copy_directory_mode_preserved": "0500",
+    "initial_wheels_directory_mode": "0500",
+    "initial_wheels_removal": "PERMISSION_DENIED",
+    "runtime_already_removed_at_that_point": true,
+    "scope": "Owner-write added only to the exact old private wheels duplicate directory pending deletion.",
+    "system_permissions_changed": false
+  },
+  "review": {
+    "directory": "review_local_n0_dependency_migration_20261019T1551",
+    "manifest": {
+      "bytes": 569,
+      "sha256": "6c9608f773de977627d3295d16ea2d20b71d9a39757017ba5c59c7eb7865d040"
+    },
+    "state": "ACCEPTED",
+    "summary": {
+      "bytes": 3094,
+      "sha256": "7182ad672508917a1670e6b8432abd67ead8224b96f970edf6d49ece6c318d6c"
+    },
+    "verdict": "ACCEPT_AUTHORIZED_LOCAL_RUNTIME_WHEELS_MIGRATION_ONLY"
+  },
+  "review_readback_scope": {
+    "destination_all_file_hashes_structure_modes_match_saved_before_inventory": true,
+    "new_runtime_forward_or_dut_execution": false,
+    "old_two_trees_absent": true,
+    "remaining_original_six_subtrees_and_external_raw2_reference_unchanged": true,
+    "source_before_copy_and_reference_scan_are_parent_recorded": true
+  },
+  "schema": "SAFE_LOCAL_DEPENDENCY_MIGRATION_SUMMARY_V1",
+  "scope": {
+    "actual_n0_completed": false,
+    "full_block_pass": false,
+    "host_started": false,
+    "migration_record_only": true,
+    "numeric_pass": false
+  },
+  "source_evidence_manifest": {
+    "bytes": 932,
+    "sha256": "aa06b04084c7ed459cf9240075037faecc5e21ac88c111c9a3fc144029e427f2"
+  },
+  "source_record_identities": {
+    "BEFORE.json": {
+      "bytes": 1862,
+      "sha256": "ad35be6d4fd561fd1142afbb7c60d721dfdb6abcee0f237fac1ccb35f5cf2563"
+    },
+    "COPY_INVENTORY.json": {
+      "bytes": 3441085,
+      "sha256": "12cab2311aa919c4ae3e20266c0f0aa8f87653c590ed595ab65fa8fe73526b7d"
+    },
+    "COPY_RESULT.json": {
+      "bytes": 535,
+      "sha256": "21f65e3d0d8633b0657c4c468902494edf4d2fd1682266f35fe4838b2815020c"
+    },
+    "PRESERVED_INVENTORY.json": {
+      "bytes": 5226,
+      "sha256": "8930e890c9e210a0b57cc95695e0beeb088ee45c25f5ba0b386cddf5c343bc11"
+    },
+    "REMOVAL_PERMISSION_BOUNDARY.json": {
+      "bytes": 347,
+      "sha256": "7f2305d0caada326076a7ddf10ff27aa6b0005cc712f939059664ddda784f0e6"
+    },
+    "RESULT.json": {
+      "bytes": 2361,
+      "sha256": "a4faf5e179cb7bbd2a1d1bd3087b351843d404239d2a3d63b8eb53fa1fdc3de0"
+    },
+    "SOURCE_INVENTORY.json": {
+      "bytes": 3441085,
+      "sha256": "12cab2311aa919c4ae3e20266c0f0aa8f87653c590ed595ab65fa8fe73526b7d"
+    }
+  },
+  "status": "AUTHORIZED_COPY_VERIFY_DUPLICATE_REMOVAL_RECORDED"
+}

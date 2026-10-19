@@ -1084,3 +1084,10 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 八份 repo-relative 底层来源、五固定官方包、67原data与四行cfg relocation保持。work_root/system_programs/native_profile三项为null，schema固定；真实工具/系统库绑定、native probe及same-job backend/Host尚未取得资格。COLD原PENDING标签是作者冻结时记录，README另列后续独审身份。
 - 原473源、seqnum唯一补丁、make -j1、8 GiB Host准入、3 GiB磁盘门、原AS/单核/共享6600秒均未改，未来bootstrap只能消耗原预算。SOURCE检查、argv构造、静态profile或可执行副本不等于实际授权或兼容性PASS。
 - 只发布最小10件安全文本；不复制底层八来源，不上传本地日志、反例输出、机器库存或搬迁测试副本。完整计划按父205211 B精确前缀加此纯尾整体替换，禁止重复追加全文。
+
+## 2026-10-19 15:52 UTC：获批本地依赖 copy-verify-delete 的安全摘要
+- 用户明确批准后，父先复制并核验两棵 runtime/wheels 的 SHA、结构与 mode，再删除旧重复两树。共15,579普通文件/1,010,352,549 B；runtime15,568文件/794,446,463 B，wheels11文件/215,906,086 B，保存的源/副本库存逐字一致，原根其它资产记录保持。
+- 旧 wheels 目录0500初次拒删时runtime已删；恢复仅为该待删除私有重复目录增加owner写位，副本目录保持0500，未改系统权限。引用检查的无引用/无错误结果仅覆盖当前proc namespace。
+- 15:49:40 UTC 的 MemAvailable=8,907,320 KiB达到原8 GiB门8,388,608 KiB；这是时点快照，后续阶段须重新验原门。没有Host运行，实际N0尚未完成，不授数值/full-block PASS。
+- 原证据MANIFEST932 B / aa06b04084c7ed459cf9240075037faecc5e21ac88c111c9a3fc144029e427f2；独审ACCEPT_AUTHORIZED_LOCAL_RUNTIME_WHEELS_MIGRATION_ONLY已闭：MANIFEST569 B / 6c9608f773de977627d3295d16ea2d20b71d9a39757017ba5c59c7eb7865d040；SUMMARY3094 B / 7182ad672508917a1670e6b8432abd67ead8224b96f970edf6d49ece6c318d6c。当前磁盘副本全量hash/结构/mode、旧树缺席、保留六子树/raw2/FP32均独核；迁移前观察及引用扫描仍归父保存记录。仅发布最小safe summary、README和本计划，不发布绝对机器路径、逐文件库存、数组/依赖/log内容，不改workflow。
+- 本投影只读保存记录，未触碰两私有树。完整计划按父207063 B精确前缀加此纯尾替换，禁止追加完整旧文档；本后继仅填正式审身份，原迁移证据不改。

@@ -1,0 +1,52 @@
+{
+  "byte_identical_functions": [
+    "decode",
+    "finite",
+    "identity",
+    "load",
+    "natural",
+    "need",
+    "plain",
+    "read",
+    "save",
+    "source_map",
+    "verify"
+  ],
+  "changed_or_added_functions": [
+    "allowed_markers",
+    "execute",
+    "main",
+    "modules",
+    "project_receipt",
+    "safe_failure",
+    "validate",
+    "validate_reference"
+  ],
+  "coordinator_base": {
+    "bytes": 16300,
+    "path": "candidates/host93_first_n0_sources/dispatch_diagnostic/run.py",
+    "sha256": "e23f954b28cfe1cf9fd9ee3ae2bcaf9c960f1315241e5d9c05a9bfec23597856"
+  },
+  "coordinator_derived": {
+    "bytes": 19370,
+    "sha256": "2ac4c215a6d321df2eeb48384f974b041c1e762027a4b47c37a6527468d6e279"
+  },
+  "no_workflow_change": true,
+  "original_reference_and_pins_unchanged": true,
+  "qualification": "local original historical reference only; no adoption or DUT",
+  "runtime_binding_only": "4 exact substitutions and historical docstring; all11 wheel/acquisition/install/tree helpers unchanged",
+  "schema": 1,
+  "source_review": {
+    "directory": "review_local_n0_historical_probe_source_20261019T1315",
+    "manifest": {
+      "bytes": 1088,
+      "sha256": "8c92ad8835d4517a770ed11ccccd7ce67b369c29af0cd9fe6c077eb12407af51"
+    },
+    "summary": {
+      "bytes": 4563,
+      "sha256": "a8316aeae7f24e110740413dcccc7d4e3b996707d6517cb9e99e732ab2c29f85"
+    },
+    "verdict": "SOURCE_GO_LOCAL_ORIGINAL_HISTORICAL_N0_REFERENCE_FOUR_STAGE_ONLY"
+  },
+  "stage3": "new read-only exact raw2 identity receipt"
+}

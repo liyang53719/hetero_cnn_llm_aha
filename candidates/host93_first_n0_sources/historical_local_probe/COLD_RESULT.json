@@ -1,0 +1,48 @@
+{
+  "actual": "NOT_EXECUTED",
+  "first_main_smoke": {
+    "exit_code": 0,
+    "tests": 19
+  },
+  "main_normal": {
+    "exit_code": 0,
+    "tests": 31
+  },
+  "main_optimized": {
+    "exit_code": 0,
+    "tests": 31
+  },
+  "native_executed": false,
+  "network_executed": false,
+  "numerical_imports": false,
+  "runtime_inherited": {
+    "review": {
+      "directory": "review_historical_n0_runtime_source_20261019T1311",
+      "manifest": {
+        "bytes": 696,
+        "sha256": "ef960b8388f991513bbb4f557a342b801a2cee5a0ddf61f4981f7d96919852a9"
+      },
+      "summary": {
+        "bytes": 1745,
+        "sha256": "3a23c5e12cc309e81577cfc68be100dc36de092b6583010077955106df4e4c24"
+      },
+      "verdict": "SOURCE_GO_ISOLATED_HISTORICAL_PYTHON_RUNTIME_BINDING_ONLY"
+    },
+    "tests_normal": 26,
+    "tests_optimized": 26
+  },
+  "schema": 1,
+  "source_only_exit_code": 0,
+  "source_review": {
+    "directory": "review_local_n0_historical_probe_source_20261019T1315",
+    "manifest": {
+      "bytes": 1088,
+      "sha256": "8c92ad8835d4517a770ed11ccccd7ce67b369c29af0cd9fe6c077eb12407af51"
+    },
+    "summary": {
+      "bytes": 4563,
+      "sha256": "a8316aeae7f24e110740413dcccc7d4e3b996707d6517cb9e99e732ab2c29f85"
+    },
+    "verdict": "SOURCE_GO_LOCAL_ORIGINAL_HISTORICAL_N0_REFERENCE_FOUR_STAGE_ONLY"
+  }
+}

@@ -1042,3 +1042,12 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 原参考线程 set4/1、build equality、官方类编译/forward、双 SHA 输出验收未到达；工具、Host、DUT、捕获和数值比较均未到，全部 scopefalse。canonical16准备不代表权重加载到RTL，本次不是 N0 数值 FAIL。
 - 按授权边界停止，不自动重抽、不重跑43阶段、不降低原profile/双SHA；后续缺口为满足原冻结AVX512 profile的可用执行资源。39252523415独立候选自然AVX512/双SHA事实保留且未采纳，较旧未知ISA仍未知。
 - 本批仅安全五路径，无workflow或执行源码变化，不触发新的Host/native作业；普通文档push仍可触发guard。计划按验证前缀的完整文档替换，禁止append整份全文。
+
+## 2026-10-19 本地 historical 原参考资格薄探针 TEMP_SOURCE（实际未执行）
+- 原 39255764538 的自然 AVX2/原 AVX512 门失败已保留；没有自动重抽、没有把此前候选采纳为基线。当前新增仅隔离的本地四阶段源码，原 43 阶段及所有 workflow 不变。
+- 精确复用原 PINS 中 historical CPython：30,894,944 B / fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7，版本前缀 [3,12]；与 CI ci31214 分列。11 个官方 wheel 原 URL/size/SHA、获取/安装/树观察函数不变，仅四处解释器绑定与说明句派生。
+- 四阶段为固定 wheels、离线安装、既存 raw2 只读身份、原 n0_reference.py --python-profile historical。两原资产总 789,504 B，不写原目录、不复制进 Git；仅产生新的私有同资产身份收据，明确不冒充先前 CI same-job 下载收据。
+- 原官方类、一次 forward、五库/原运行时来源、自然 AVX512/4-1 线程/构建、BF16 与 FP32LE 双 SHA 全保；仅四 native 成功清理、原 PASS 收据、RSS 观察、父重读 FP32LE 及源/raw2 后验共同通过才给 local_reference_qualified。baseline_adopted/DUT/fullblock 始终 false，成功 BF16 只有原 worker 报告 hash、不冒称父重读。
+- 共享 720 秒外层从任何源检查/包动作前开始，work 600 秒，留 120 秒安全落证。wheel/install 共 300 秒，raw 只读 30/10，原 reference 120/90 CPU/8 GiB AS；参考采样 RSS 1.5 GiB 是观察验收且仅 leader。所有上限扣同一剩余预算，不自动重试。
+- 本轮 31+31 stdlib/mock cold 与 SOURCE-only overlay 通过，child/network/pip/数值导入均未执行；runtime 子片独立 26+26 是继承。runtime 审 review_historical_n0_runtime_source_20261019T1311 M ef960b8388f991513bbb4f557a342b801a2cee5a0ddf61f4981f7d96919852a9 / S 3a23c5e12cc309e81577cfc68be100dc36de092b6583010077955106df4e4c24；总 SOURCE 审 review_local_n0_historical_probe_source_20261019T1315: MANIFEST.json 1088 B / 8c92ad8835d4517a770ed11ccccd7ce67b369c29af0cd9fe6c077eb12407af51; SUMMARY.json 4563 B / a8316aeae7f24e110740413dcccc7d4e3b996707d6517cb9e99e732ab2c29f85; SOURCE_GO_LOCAL_ORIGINAL_HISTORICAL_N0_REFERENCE_FOUR_STAGE_ONLY。
+- 状态 TEMP_SOURCE / actual NOT_EXECUTED；仅源审通过后父方唯一执行一次本地资格 probe。此批无 workflow，不触发新的 Host/native 作业；普通 guard 可运行。

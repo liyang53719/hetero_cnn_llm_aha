@@ -831,3 +831,13 @@ normal/-O 冷测均过：协调90、工具链118、header26、transport7、suppo
 本 SOURCE manifest 为6029字节 / d8695b6bc1cd54c724fb3f589e7cc068b0c787c3c1efe490bfee4f0c8a8a48e3；独立审查已 GO，最新实际的具体后验门仍 UNKNOWN，新 actual 未执行。
 
 SOURCE 审结论 SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY；审查 manifest 2096字节 / 07d6a2539856f5a1d037d2bec4751d9714b2b44ad51acb1372fe94d326f2c633，SUMMARY 3108字节 / cbdc2da60afb685bcb201e9a123a6a020c68335ac0dbe08a5768f27e4579063c。新 actual 仍 NOT_EXECUTED，不赋真实 build/Host PASS；上一 actual 具体门仍 UNKNOWN。
+
+### 2026-10-19：全部失败子阶段统一有界上下文（SOURCE）
+
+- 实际 39195434991 工具 build/tiny 及 Host class 已成功；CHIRRTL exit 1，14.112065 秒，timeout false、cleanup true。总 609.431408 秒，26 阶段中 25 成功，整体仍 FAIL。
+- 原三 JSON 未保留 CHIRRTL 日志，根因 UNKNOWN；不据运行时间、JVM/AS 猜原因，旧证据不改。历史静比未发现命令或资源合同阻点，cwd/Java/locale/权限/新 classes 差异不能定因。
+- 既有去敏尾统一用于所有失败 call_phase 子阶段，覆盖 full 34 与 build-only 16 阶段，无逐阶段白名单。失败必须 AVAILABLE / READ_ERROR / SANITIZER_ERROR，无日志为 READ_ERROR；成功仍 NOT_COLLECTED。
+- 固定 native.log 末至多 1 MiB，连续末 80 行、每行至多 512 可见字符、规范化诊断整体至多 16 KiB。有限去敏器不变，不保证完美泛化脱敏，不直接采集环境或私有 traceback。
+- stage-exits 升 v4；summary v3/source-hashes v2、命令、JVM/AS、资源、监督器及共享 6600 秒不变。旧 v3 实际仍由旧固定 validator 验证。
+- normal/-O 各 101/118/26/7/41/7 及去敏 463+727 通过；仅 SOURCE/微例，新 actual NOT_EXECUTED，独审与发布由父统一接续。
+- 冻结 SOURCE manifest：7100 B / 564f7f266fe454aa0d78ae2720c733d1170147b09efbbf16a64f8cbf9ea9af92；独立 SOURCE GO（review_ci_all_stage_context_source_20261019T0353），审 manifest 1119 B / 828226c4965ec6032700cca6104b7d5109c829ca94afd9b6f3ef5dc53e54f0ca；审 SUMMARY 3054 B / 517b26c29bf5d0a1ee4a6e8b0d9a87e946fef724d6ddd58413461330f85478e7。新 actual NOT_EXECUTED，原失败根因 UNKNOWN。

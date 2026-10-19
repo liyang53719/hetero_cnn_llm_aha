@@ -1,0 +1,49 @@
+{
+  "actual_root_cause": "UNKNOWN",
+  "actual_status": "NOT_EXECUTED",
+  "changed": [
+    "Replace fresh_make-only branch with uniform collection after any supervised phase failure.",
+    "Require attempted context state on FAILED rows, empty NOT_COLLECTED on successful rows.",
+    "Advance stage-exits v3 to v4; summary-v3 and source-hashes-v2 unchanged.",
+    "Bind test loader to new run bytes; all-stage/both-mode synthetic cases."
+  ],
+  "not_a_chirrtl_behavior_fix": true,
+  "production_files": [
+    "run.py"
+  ],
+  "schema": "HOST93_ALL_STAGE_CONTEXT_DELTA_V1",
+  "source_manifest": {
+    "directory": "candidate_ci_all_stage_context_source_v1_20261019T0349",
+    "manifest": {
+      "bytes": 7100,
+      "sha256": "564f7f266fe454aa0d78ae2720c733d1170147b09efbbf16a64f8cbf9ea9af92"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_all_stage_context_source_20261019T0353",
+    "manifest": {
+      "bytes": 1119,
+      "sha256": "828226c4965ec6032700cca6104b7d5109c829ca94afd9b6f3ef5dc53e54f0ca"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3054,
+      "sha256": "517b26c29bf5d0a1ee4a6e8b0d9a87e946fef724d6ddd58413461330f85478e7"
+    },
+    "verdict": "SOURCE_GO_UNIFORM_BOUNDED_FAILED_STAGE_CONTEXT_ONLY"
+  },
+  "test_files": [
+    "test_run_cold.py"
+  ],
+  "unchanged": [
+    "native commands and cwd",
+    "environment and acquisition transport",
+    "JVM and all resource caps",
+    "6600-second shared deadline",
+    "phase order/count",
+    "original supervisor WNOWAIT/cleanup",
+    "finite sanitizer",
+    "package/header/source pins",
+    "native failure and safe contract labels"
+  ]
+}

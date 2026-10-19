@@ -1,0 +1,54 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "all_final_suite_invocations_exit0": true,
+  "all_stage_failure_cases_per_mode": {
+    "build-diagnostic": 16,
+    "host-reset-launch": 34
+  },
+  "all_stage_missing_log_cases": 34,
+  "counts_are_not_actual_native_passes": true,
+  "exploratory_invocation_errors": "Six initial calls omitted required --repo and exited argparse 2 before tests; corrected final calls all pass. A legacy synthetic failed-row fixture was migrated to READ_ERROR for v4.",
+  "native_or_network_started": false,
+  "normal": {
+    "context_checks": 727,
+    "coordinator_tests": 101,
+    "header_tests": 26,
+    "structured_diagnostic_checks": 463,
+    "support_regressions": 7,
+    "support_tests": 41,
+    "toolchain_tests": 118,
+    "transport_tests": 7
+  },
+  "optimized": {
+    "context_checks": 727,
+    "coordinator_tests": 101,
+    "header_tests": 26,
+    "structured_diagnostic_checks": 463,
+    "support_regressions": 7,
+    "support_tests": 41,
+    "toolchain_tests": 118,
+    "transport_tests": 7
+  },
+  "schema": "HOST93_ALL_STAGE_CONTEXT_COLD_RESULT_V1",
+  "source_manifest": {
+    "directory": "candidate_ci_all_stage_context_source_v1_20261019T0349",
+    "manifest": {
+      "bytes": 7100,
+      "sha256": "564f7f266fe454aa0d78ae2720c733d1170147b09efbbf16a64f8cbf9ea9af92"
+    }
+  },
+  "source_review": {
+    "directory": "review_ci_all_stage_context_source_20261019T0353",
+    "manifest": {
+      "bytes": 1119,
+      "sha256": "828226c4965ec6032700cca6104b7d5109c829ca94afd9b6f3ef5dc53e54f0ca"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3054,
+      "sha256": "517b26c29bf5d0a1ee4a6e8b0d9a87e946fef724d6ddd58413461330f85478e7"
+    },
+    "verdict": "SOURCE_GO_UNIFORM_BOUNDED_FAILED_STAGE_CONTEXT_ONLY"
+  },
+  "status": "PASS_COLD_SOURCE_AND_SYNTHETIC_ONLY"
+}

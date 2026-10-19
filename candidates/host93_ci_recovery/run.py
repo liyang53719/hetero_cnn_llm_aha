@@ -93,17 +93,19 @@ def bounded_read(path, cap):
 
 
 def compiler_log_tail(path):
-    """Read at most 1 MiB from the fixed merged native.log, after supervision."""
+    """Read at most 1 MiB from the fixed merged native.log, after supervision.
+
+    The legacy function name is retained; all failed native phases use this reader."""
     p = plain_path(path)
     with p.open('rb') as stream:
         before = os.fstat(stream.fileno())
-        require(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= GIB, 'bounded merged compiler log')
+        require(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= GIB, 'bounded merged native log')
         truncated = before.st_size > MIB
         stream.seek(max(0, before.st_size-MIB))
         raw = stream.read(MIB+1)
         after = os.fstat(stream.fileno())
     stamp=lambda x:(x.st_dev,x.st_ino,x.st_mode,x.st_size,x.st_mtime_ns,x.st_ctime_ns)
-    require(len(raw)==min(before.st_size,MIB) and stamp(before)==stamp(after)==stamp(p.stat()), 'stable merged compiler log tail')
+    require(len(raw)==min(before.st_size,MIB) and stamp(before)==stamp(after)==stamp(p.stat()), 'stable merged native log tail')
     if truncated:
         raw=raw.partition(b'\n')[2]  # Never parse a partial line as a new source location.
     return raw,truncated
@@ -296,7 +298,7 @@ def validate_evidence(objects):
                 sources['generated']['host93_sv'] == {'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'},
                 'scope requires the deterministic fixed FIR and SV')
     keys(exits, ('schema', 'stages'))
-    require(exits['schema'] == 'host93-ci-stage-exits-v3' and type(exits['stages']) is list and len(exits['stages']) <= len(STAGES), 'stage schema/count')
+    require(exits['schema'] == 'host93-ci-stage-exits-v4' and type(exits['stages']) is list and len(exits['stages']) <= len(STAGES), 'stage schema/count')
     seen = []
     failed = False
     for row in exits['stages']:
@@ -304,8 +306,11 @@ def validate_evidence(objects):
         require(row['name'] in required_stages and row['name'] not in seen and row['status'] in ('EXIT0_CLEANED','FAILED') and finite(row['seconds']), 'stage values')
         seen.append(row['name'])
         validate_observation(row)
-        require(row['name']=='fresh_make' and row['status']=='FAILED' or
-                row['diagnostics']==empty_diagnostics(), 'only failed fresh_make collects compiler context')
+        if row['status']=='FAILED':
+            require(row['diagnostics']['context_state']!='NOT_COLLECTED',
+                    'every failed native stage must attempt bounded context collection')
+        else:
+            require(row['diagnostics']==empty_diagnostics(), 'successful native stage has no failure context')
         if row['status'] == 'EXIT0_CLEANED':
             require(row['exit_code'] == 0 and row['cleanup_confirmed'] is True and row['failure_code']=='NONE' and
                     row['failure_boundary']=='NONE' and row['native_record_status']=='PASS', 'stage terminal tuple')
@@ -424,7 +429,9 @@ def module_from(repo, pins, relative, name):
 
 
 def collect_build_diagnostics(repo, pins, log_path, build_root):
-    # Fixed caller path only, after failed fresh_make; do not expose exceptions.
+    # Fixed caller path only, after any failed native phase; do not expose exceptions.
+    # This no-weights job reuses the finite public-source sanitizer, not a generic
+    # promise of secret removal. Never inspect environment or private traceback.
     try:
         private, read_truncated = compiler_log_tail(log_path)
     except BaseException:
@@ -493,8 +500,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                 return {'record':record,'raw_log':raw,'usage':usage,'evidence_root':str(evidence)}
             except BaseException:
                 row.update(observation)
-                if name=='fresh_make':
-                    row['diagnostics']=collect_build_diagnostics(repo,pins,evidence/'native.log',str(out/'toolchain'/'verilator'))
+                row['diagnostics']=collect_build_diagnostics(repo,pins,evidence/'native.log',str(out/'toolchain'/'verilator'))
                 raise
             finally:
                 row['seconds']=round(time.monotonic()-began,6)
@@ -551,7 +557,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                      'failure_category':category,'contract_failure':contract_failure_observation(failure),'completed_components':completed,'scope':scopes,'seconds':round(time.monotonic()-started,6)}
             sources={'schema':'host93-ci-source-hashes-v2','project_sources':source_rows,
                      'fixed_inputs':({'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}} if mode=='host-reset-launch' else {}),'generated':generated}
-            objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v3','stages':stages}}
+            objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v4','stages':stages}}
             validate_evidence(objects)
             evidence=out/'evidence';evidence.mkdir(mode=0o700)
             for name,value in objects.items():write_json(evidence/name,value)

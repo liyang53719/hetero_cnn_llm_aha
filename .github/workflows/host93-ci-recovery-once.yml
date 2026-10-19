@@ -1,5 +1,5 @@
 name: host93-ci-recovery-once
-# Fixed FlexLexer header, canonical CPPFLAGS whitespace, and safe postflight failure codes.
+# Collect bounded sanitized context for every failed native stage in the same Host job.
 # TEMP SOURCE: publish this exact workflow only after whole-job SOURCE review.
 # A push touching only this path launches one new Host job, never a retry.
 on:

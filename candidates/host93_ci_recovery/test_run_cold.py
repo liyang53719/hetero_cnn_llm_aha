@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=46252
-SHA='7b51f9ab8cf6f7fd8c8c8ed3abe9d6f939df14cac4a88f3ceb86c76bdf6d43a1'
+SIZE=46602
+SHA='a073c617020ee50b78b8fd46362705a69668ce6e008f3a3e5b21ac1735536233'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -52,7 +52,7 @@ def fixture(ready=False, mode='host-reset-launch'):
              'scope':{x:ready and (x=='toolchain_build' if build else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0},
             'source_hashes.json':{'schema':'host93-ci-source-hashes-v2','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
               'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
-            'stage_exits.json':{'schema':'host93-ci-stage-exits-v3','stages':stages}}
+            'stage_exits.json':{'schema':'host93-ci-stage-exits-v4','stages':stages}}
 
 
 class Cold(unittest.TestCase):
@@ -359,7 +359,7 @@ class Cold(unittest.TestCase):
         with self.assertRaises(ValueError):G.validate_evidence(x)
     def test_unknown_cleanup_remains_null(self):
         x=fixture(True,'build-diagnostic');x['summary.json'].update(status='INCOMPLETE',failure_category='UNEXPECTED')
-        row=x['stage_exits.json']['stages'][-1];row.update(status='FAILED',**defaults())
+        row=x['stage_exits.json']['stages'][-1];row.update(status='FAILED',**defaults());row['diagnostics']=G.empty_diagnostics('READ_ERROR')
         self.assertTrue(G.validate_evidence(x));self.assertIsNone(row['cleanup_confirmed'])
     def test_final_signal_mismatch_rejected(self):
         x=fixture(True);x['stage_exits.json']['stages'][0]['final_reap_signal']=9
@@ -436,11 +436,98 @@ class Cold(unittest.TestCase):
         for tail in ('word '*100, 'visible \\t and \\x1b', '\n'.join(['x']*80)):
             d=G.empty_diagnostics();d.update(context_state='AVAILABLE',merged_log_tail=tail)
             G.validate_diagnostics(d)
-    def test_context_only_failed_make(self):
-        for index,status in ((0,'FAILED'),(-1,'EXIT0_CLEANED')):
-            x=fixture(True,'build-diagnostic');row=x['stage_exits.json']['stages'][index]
-            row['status']=status;row['diagnostics'].update(context_state='AVAILABLE',merged_log_tail='context')
-            with self.subTest(index=index,status=status),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_successful_stage_context_rejected_for_every_stage(self):
+        for index,name in enumerate(G.STAGES):
+            x=fixture(True);row=x['stage_exits.json']['stages'][index]
+            row['diagnostics'].update(context_state='AVAILABLE',merged_log_tail='context')
+            with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_failed_stage_uncollected_context_rejected_for_every_stage(self):
+        for index,name in enumerate(G.STAGES):
+            x=fixture(True);row=x['stage_exits.json']['stages'][index]
+            x['summary.json'].update(status='INCOMPLETE',failure_category='INPUT_OR_CONTRACT',
+                contract_failure={'boundary':'UNREPORTED','code':'UNMAPPED_CONTRACT'})
+            row.update(status='FAILED',exit_code=1,native_record_status='FAIL',
+                failure_code='CHILD_EXIT_NONZERO',failure_boundary='NATIVE_SUPERVISION')
+            with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_all_native_failures_collect_context_in_both_modes(self):
+        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES)):
+            for name in names:
+                with self.subTest(mode=mode,name=name),mock.patch.object(G,'collect_build_diagnostics',wraps=G.collect_build_diagnostics) as collector:
+                    code,summary,stages=self.mock_whole_job(name,mode,True,b'fixed native failure context\n')
+                    self.assertEqual(code,1);self.assertEqual(stages[-1]['name'],name)
+                    self.assertEqual([row['name'] for row in stages],list(names[:names.index(name)+1]))
+                    self.assertEqual(stages[-1]['diagnostics']['context_state'],'AVAILABLE')
+                    self.assertEqual(stages[-1]['diagnostics']['merged_log_tail'],'fixed native failure context')
+                    self.assertEqual(stages[-1]['failure_code'],'CHILD_EXIT_NONZERO')
+                    self.assertFalse(stages[-1]['receipt_timed_out'])
+                    self.assertTrue(stages[-1]['cleanup_confirmed'])
+                    self.assertTrue(all(row['diagnostics']==G.empty_diagnostics() for row in stages[:-1]))
+                    collector.assert_called_once()
+                    self.assertEqual(collector.call_args.args[2].parts[-3:],('phases',name,'native.log'))
+    def test_all_native_failures_without_log_are_read_error(self):
+        for name in G.STAGES:
+            with self.subTest(name=name):
+                code,summary,stages=self.mock_whole_job(name,nonzero=True)
+                self.assertEqual(stages[-1]['diagnostics'],G.empty_diagnostics('READ_ERROR'))
+                self.assertEqual(code,1)
+    def test_chirrtl_stack_context_and_source_location_preserved(self):
+        log=(b'CANONICAL_HOST93_CHIRRTL_BEGIN source=public\n'
+             b'Exception in thread "main" java.lang.IllegalArgumentException: requirement failed\n'
+             b'\tat demo.Emit.main(EmitCanonicalHost93.scala:17)\n'
+             b'Caused by: java.lang.RuntimeException: fixed fixture failure\n')
+        code,summary,stages=self.mock_whole_job('host93_chirrtl',nonzero=True,context=log)
+        tail=stages[-1]['diagnostics']['merged_log_tail']
+        self.assertIn('requirement failed',tail);self.assertIn('EmitCanonicalHost93.scala:17',tail)
+        self.assertIn('\\tat demo.Emit.main',tail);self.assertIn('Caused by:',tail)
+        self.assertEqual(stages[-1]['diagnostics']['observations'],[])
+        self.assertTrue(summary['scope']['toolchain_build']);self.assertTrue(summary['scope']['toolchain_tiny'])
+        self.assertFalse(summary['scope']['fresh_host_sv']);self.assertFalse(summary['scope']['weights_loaded'])
+        self.assertEqual(stages[-1]['failure_boundary'],'NATIVE_SUPERVISION')
+    def test_acquisition_context_redacts_transport_text(self):
+        log=(b'fetch failed https://user:tiny-secret@example.invalid/private\n'
+             b'Authorization: Bearer fixture-auth\n'
+             b'CMAKE_PRIVATE_AUTHENTICATION_SERVICE_PASSWORD="tiny-secret"\n'
+             b'failed opening /private/cache/input.scala\n'
+             b'ordinary acquisition error remains\n')
+        with mock.patch.dict(G.os.environ,{'HTTPS_PROXY':'must-not-read-this-value'},clear=True):
+            code,summary,stages=self.mock_whole_job('host93_acquire_jar87',nonzero=True,context=log)
+        tail=stages[-1]['diagnostics']['merged_log_tail']
+        for secret in ('tiny-secret','fixture-auth','example.invalid','/private','must-not-read-this-value'):
+            self.assertNotIn(secret,tail)
+        self.assertIn('[URL]',tail);self.assertIn('[AUTH_HEADER]',tail);self.assertIn('[PATH]',tail)
+        self.assertIn('ordinary acquisition error remains',tail)
+    def test_chirrtl_tail_controls_and_large_input_keep_existing_caps(self):
+        log=b'old context\n'*(G.MIB//10)+b'\n'+b'\n'.join([b'x'*700 for _ in range(90)])+b'\nlast line\tvisible\x1b\n'
+        code,summary,stages=self.mock_whole_job('host93_chirrtl',nonzero=True,context=log)
+        d=stages[-1]['diagnostics'];G.validate_diagnostics(d)
+        self.assertTrue(d['truncated']);self.assertEqual(d['context_state'],'AVAILABLE')
+        self.assertLessEqual(len(d['merged_log_tail'].split('\n')),80)
+        self.assertTrue(d['merged_log_tail'].endswith('last line\\tvisible\\x1b'))
+        self.assertNotIn('old context',d['merged_log_tail'])
+        self.assertLessEqual(len(CONTEXT.canonical_json(d)),16384)
+    def test_success_never_calls_context_collector(self):
+        with mock.patch.object(G,'collect_build_diagnostics') as collector:
+            code,summary,stages=self.mock_whole_job()
+        self.assertEqual(code,0);collector.assert_not_called()
+    def test_postflight_contract_does_not_relabel_success_as_native_failure(self):
+        with mock.patch.object(G,'collect_build_diagnostics') as collector:
+            code,summary,stages=self.mock_whole_job(contract_postflight=True)
+        self.assertEqual(code,1);collector.assert_not_called()
+        self.assertTrue(all(row['diagnostics']==G.empty_diagnostics() for row in stages))
+    def test_chirrtl_sanitizer_error_is_explicit_and_not_private_text(self):
+        with mock.patch.object(CONTEXT,'sanitize_build_context',side_effect=ValueError('private-token-fixture')):
+            code,summary,stages=self.mock_whole_job('host93_chirrtl',nonzero=True,context=b'fixture')
+        self.assertEqual(stages[-1]['diagnostics'],G.empty_diagnostics('SANITIZER_ERROR'))
+        self.assertNotIn('private-token-fixture',json.dumps(summary)+json.dumps(stages))
+    def test_native_timeout_collects_context_without_changing_classification(self):
+        code,summary,stages=self.mock_whole_job('host93_cpp_compile',context=b'last compile line\n')
+        self.assertEqual(summary['failure_category'],'TIMEOUT')
+        self.assertEqual(stages[-1]['failure_code'],'SUPERVISOR_TIMEOUT_CLASSIFICATION')
+        self.assertTrue(stages[-1]['receipt_timed_out'])
+        self.assertEqual(stages[-1]['diagnostics']['merged_log_tail'],'last compile line')
+    def test_v3_stage_evidence_requires_original_validator(self):
+        x=fixture(True);x['stage_exits.json']['schema']='host93-ci-stage-exits-v3'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
     def test_stage_old_schema_rejected(self):
         x=fixture(True);x['stage_exits.json']['schema']='host93-ci-stage-exits-v2'
         with self.assertRaises(ValueError):G.validate_evidence(x)

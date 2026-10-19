@@ -124,3 +124,11 @@ Cold reruns pass normal/-O: coordinator 90+90, toolchain 118+118, header 26+26, 
 Frozen SOURCE manifest: 6029 bytes / d8695b6bc1cd54c724fb3f589e7cc068b0c787c3c1efe490bfee4f0c8a8a48e3. SOURCE review GO; new actual NOT_EXECUTED.
 
 SOURCE review: SOURCE_GO_FIXED_CPPFLAGS_AND_SAFE_CONTRACT_LABELS_ONLY. Review manifest: 2096 bytes / 07d6a2539856f5a1d037d2bec4751d9714b2b44ad51acb1372fe94d326f2c633; summary: 3108 bytes / cbdc2da60afb685bcb201e9a123a6a020c68335ac0dbe08a5768f27e4579063c. New actual remains NOT_EXECUTED; the prior actual precise gate remains UNKNOWN.
+
+## Uniform failed-native context
+
+Independent SOURCE review is GO for this finite context-only delta; new actual NOT_EXECUTED. Prior run 39195434991 proves toolchain build/tiny and 25 successful native stages, followed by CHIRRTL exit 1 / timeout false / cleanup true. Its root cause is unknown because original context was NOT_COLLECTED.
+
+The narrow delta covers every failed supervised child uniformly and advances stage-exits to v4. Commands, JVM/resources, supervisor and sanitizer remain unchanged. Final normal/-O cold counts: 101 coordinator; 118 toolchain; 26 header; 7 transport; 41 support; 7 regressions; 463 + 727 sanitizer checks. These are source/synthetic tests.
+
+Frozen SOURCE manifest: 7100 B / 564f7f266fe454aa0d78ae2720c733d1170147b09efbbf16a64f8cbf9ea9af92. Independent SOURCE GO: review_ci_all_stage_context_source_20261019T0353; MANIFEST 1119 B / 828226c4965ec6032700cca6104b7d5109c829ca94afd9b6f3ef5dc53e54f0ca; SUMMARY 3054 B / 517b26c29bf5d0a1ee4a6e8b0d9a87e946fef724d6ddd58413461330f85478e7. Verdict: SOURCE_GO_UNIFORM_BOUNDED_FAILED_STAGE_CONTEXT_ONLY.

@@ -1,0 +1,121 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "argv_or_jvm_changed": false,
+  "between_stage_postflight": "Successful native rows stay successful and NOT_COLLECTED; existing fixed summary contract labels remain.",
+  "collection": {
+    "failed_states": [
+      "AVAILABLE",
+      "READ_ERROR",
+      "SANITIZER_ERROR"
+    ],
+    "input_suffix_max_bytes": 1048576,
+    "max_canonical_diagnostics_bytes": 16384,
+    "max_line_visible_ascii_chars": 512,
+    "max_lines": 80,
+    "missing_log_state": "READ_ERROR",
+    "path": "out/phases/<fixed stage name>/native.log",
+    "perfect_generic_secret_removal_claim": false,
+    "private_exception_or_environment_dump": false,
+    "sanitizer_changed": false,
+    "success_state": "NOT_COLLECTED",
+    "trigger": "Any exception from existing supervised run_phase for an already appended FAILED stage row"
+  },
+  "evidence_schemas": {
+    "source_hashes": "host93-ci-source-hashes-v2",
+    "stage_exits": "host93-ci-stage-exits-v4",
+    "summary": "host93-ci-summary-v3"
+  },
+  "expected_parent_commit": "4a4c8729d39873c0710c80b36daa9091496e5edb",
+  "historical_source_comparison": {
+    "directory": "review_host_emit_contract_20261019T0348",
+    "historical_equalities": [
+      "normalized seven-token JVM argv, 1 GiB heap, CPU1",
+      "4 GiB AS, 60-second CPU/work",
+      "same pinned 87-JAR content and 93-source recipe"
+    ],
+    "manifest": {
+      "bytes": 848,
+      "sha256": "4749168ec5599dfecbfb7af7062d2dd3cc6f195115f7fbf396c30a17244bbafb"
+    },
+    "report": {
+      "bytes": 11293,
+      "sha256": "a64a4bd18678e8d354998d4153d38a319b9dc2b7cdc236715973077249797e2a"
+    },
+    "root_cause": "UNKNOWN",
+    "source_proven_differences_without_causal_claim": [
+      "selected Java21 installation and measured identity",
+      "phase cwd",
+      "explicit clean HOME/TMPDIR/JAVA_HOME, C.UTF-8",
+      "umask077 private directories",
+      "fresh classes measured rather than historical output replay"
+    ],
+    "source_proven_launch_or_limit_mismatch": false,
+    "static_checks": 15
+  },
+  "latest_actual": {
+    "attempt": 1,
+    "cleanup_confirmed": true,
+    "context_state": "NOT_COLLECTED",
+    "exit_code": 1,
+    "failed_stage": "host93_chirrtl",
+    "failure_boundary": "NATIVE_SUPERVISION",
+    "failure_code": "CHILD_EXIT_NONZERO",
+    "fresh_host_sv": false,
+    "native_stage_count": 26,
+    "receipt_timed_out": false,
+    "review": {
+      "directory": "review_host93_ci_configure_contract_actual_39195434991_20261019T0348",
+      "manifest": {
+        "bytes": 678,
+        "sha256": "b3ae1b81eda8d3c83991a8601e3d5d588d32fafab0211ebaf828fed1b337cb6f"
+      },
+      "summary": {
+        "bytes": 4270,
+        "sha256": "d0367b34e1af0af4c13372c779675bb3f3ee525407209783d5b8989618e8810c"
+      }
+    },
+    "root_cause": "UNKNOWN_PRIVATE_LOG_NOT_PUBLISHED",
+    "run_id": 39195434991,
+    "seconds": 609.431408,
+    "status": "INCOMPLETE",
+    "successful_native_stages": 25,
+    "toolchain_build": true,
+    "toolchain_tiny": true
+  },
+  "modes": {
+    "build-diagnostic": 16,
+    "default": "host-reset-launch",
+    "host-reset-launch": 34
+  },
+  "network_or_native_execution_by_author": false,
+  "new_native_phases": 0,
+  "old_actual_reinterpreted": false,
+  "old_v3_evidence_requires_original_pinned_validator": true,
+  "resources_changed": false,
+  "schema": "HOST93_ALL_STAGE_CONTEXT_SOURCE_PLAN_V1",
+  "scope": "Uniform bounded context for every failed call_phase child in the fixed no-weights job, including acquisition, Python preparation, Java/FIRRTL, Verilator/C++, and short execution.",
+  "shared_wall_seconds": 6600,
+  "source_manifest": {
+    "directory": "candidate_ci_all_stage_context_source_v1_20261019T0349",
+    "manifest": {
+      "bytes": 7100,
+      "sha256": "564f7f266fe454aa0d78ae2720c733d1170147b09efbbf16a64f8cbf9ea9af92"
+    }
+  },
+  "source_pin_chain_changed": false,
+  "source_review": {
+    "directory": "review_ci_all_stage_context_source_20261019T0353",
+    "manifest": {
+      "bytes": 1119,
+      "sha256": "828226c4965ec6032700cca6104b7d5109c829ca94afd9b6f3ef5dc53e54f0ca"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 3054,
+      "sha256": "517b26c29bf5d0a1ee4a6e8b0d9a87e946fef724d6ddd58413461330f85478e7"
+    },
+    "verdict": "SOURCE_GO_UNIFORM_BOUNDED_FAILED_STAGE_CONTEXT_ONLY"
+  },
+  "status": "SOURCE_GO_FIXED_CONTEXT_SCOPE_ONLY",
+  "supervisor_changed": false
+}

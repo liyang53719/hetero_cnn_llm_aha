@@ -861,3 +861,11 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - 同 job 按原门继续工具构建、固定双 handle 微例及 SV，SV 76,366,612 B / 2fcc1ba7… 精确恢复。三项工具/发射 scope 为 true，其他 Host C++/reset/数值/权重资格仍 false。
 - 31 项 native 成功后，Host C++ 生成自然 exit 2，150.280978 秒、未超时、已确认清理；总 831.028087 秒。去敏尾保留“35 warning(s)”致命退出与部分 UNOPTFLAT，尾被截断，未认定全部告警类别或真实组合环。
 - 本小批仅持久化原三份安全 JSON 与范围说明，不改 workflow、不重复触发。下一步只读核告警策略与模块结构，再作有证据的最小修复。原六次失败证据及未知根因边界保留。
+
+### 2026-10-19 Host 生成告警完整诊断候选（实际未执行）
+- 原 run39200026785 已恢复历史 FIR/SV 精确身份，工具 build/tiny/freshSV 有限范围通过；第32阶段生成自然 exit2、未超时、cleanuptrue。80行尾仅保4个 UNOPTFLAT 标题及一条35-warning fatal 摘要，不能补全31条或认定行为环。
+- 新 host-generation-diagnostic 按原六阶段前置及历史 FIR 门继续到生成，共32阶段，之后停止；不进入 C++ compile/reset-launch。原34/16路径及6600秒共享总墙、各native资源上限、warning-fatal与四VLT原样。
+- 对固定 native.log 在既有4MiB上限内完整稳定读取，统计所有warning/error类别，保最多128标题及16条Example公开源身份/行列；64KiB输出预算，显式缺失/截断/未知状态。多个fatal总数不相加，stage完整性不等于process归属。
+- 固定endpoint层级参数与wrapper只发hash和有限结构计数，叶wrapper/iDMA聚合只是候选；5条isolate_assignments在5.053无效，不能称隔离生效。本轮不加-Wno-fatal、不改算术/架构。
+- 冷测最终136+136、23+23、36+36通过；初始mock注入遗漏与执行测试漏--repo均如实保留。其余未改测试仅继承，不称重测。SOURCE有限独审GO，actual NOT_EXECUTED；父发布后唯一有界诊断job。
+- SOURCE GO: review_ci_generation_diagnostics_source_v2_20261019T0513; MANIFEST 1420 bytes / 08dea7a19aa456b4e8fff4c874749143529354e5c4e3941ccc05719f8c50c2dd; SUMMARY 4242 bytes / c25b7abd069253901f6edadc663bbf932c1783384cb0e1c1e32e843bff7b0ce3. Scope: SOURCE_GO_BOUNDED_GENERATION_CENSUS_ONLY_NO_CPP_OR_RUNTIME. Actual NOT_EXECUTED.

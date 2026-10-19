@@ -14,8 +14,8 @@ import unittest
 from unittest import mock
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'host_execution.py'
-SIZE = 28183
-SHA = '93c2305bd0fddc22a6a7113c5e1e7d6617152e13ec30f7a2a9bdb02cd4f38c88'
+SIZE = 32379
+SHA = '930ac6464bab76d32409c4ecf39abbc8cb89fd940a5ec30c46eea12a677be53a'
 RAW = SOURCE.read_bytes()
 def load(raw):
     if len(raw) != SIZE or hashlib.sha256(raw).hexdigest() != SHA:
@@ -63,6 +63,33 @@ def witness(root, compiled=False):
 def filelist():
     sources=sorted(g.DROP)+['idma/source_'+str(i)+'.sv' for i in range(292)]
     return ('\n'.join(['+define+'+n for n in g.DEFINES]+['+incdir+@ROOT@/include'+str(i) for i in range(8)]+['@ROOT@/'+n for n in sources])+'\n').encode()
+
+
+def generation_inputs(base):
+    idma_entries = {'rtl/source_' + str(i) + '.sv': {'kind': 'regular',
+                    'bytes': len(str(i)), 'sha256': g.sha(str(i).encode())} for i in range(293)}
+    retained_entries = {'retained_' + str(i) + '.sv': {'kind': 'regular',
+                        'bytes': len(str(i)), 'sha256': g.sha(str(i).encode())} for i in range(13)}
+    sources = [str(base / 'idma/sources' / name) for name in idma_entries]
+    sources += [str(base / 'retained/source' / name) for name in retained_entries] + [SV]
+    return {'sv': {'path': SV, 'bytes': 4, 'sha256': g.sha(b'host')},
+            'idma_tree': {'entries': idma_entries}, 'retained_tree': {'entries': retained_entries},
+            'sources': sources, 'includes': ['include' + str(i) for i in range(8)],
+            'defines': dict(g.DEFINES)}
+
+
+def diagnostic_run(base, phase, callback):
+    before = generation_inputs(base)
+    with mock.patch.object(g, 'closure', return_value=before), \
+         mock.patch.object(g, 'verify_tools', return_value={}), \
+         mock.patch.object(g, 'verify_emission', return_value={}), \
+         mock.patch.object(g, 'generated_witness', side_effect=RuntimeError('no diagnostic witness')):
+        return g.run(REPO, base / 'work', phase,
+                     {'verilator_root': '/tmp/tools', 'backend': {'path': '/tmp/tools/bin/verilator_bin'},
+                      'configured_runtime': {}, 'host_programs': {}}, {'sv': {}},
+                     base / 'idma', base / 'retained', base / 'config',
+                     stop_after_generation=True, diagnostic_callback=callback)
+
 
 class Cold(unittest.TestCase):
     def test_01_same_buffer_before_compile(self):
@@ -163,5 +190,145 @@ class Cold(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError,'synthetic failure'):
                     g.run(REPO,work,phase,{'verilator_root':'/tmp/tools','backend':{'path':'/tmp/tools/bin/verilator_bin'},'configured_runtime':{},'host_programs':{}},{'sv':{}},base/'idma',base/'retained',base/'config')
             self.assertEqual(seen,['host93_cpp_generate']);self.assertTrue((work/'FAILED.json').is_file())
+
+
+    def test_15_generation_only_success_one_phase_callback_no_cpp_or_elf(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td); seen = []; callbacks = []
+            def phase(name, argv, cwd, environment, limits):
+                seen.append(name)
+                self.assertNotIn('-Wno-fatal', argv)
+                self.assertEqual(limits, g.LIMITS['host93_cpp_generate'])
+                return {'record': {'exit_code': 0, 'cleanup_confirmed': True},
+                        'raw_log': b'', 'usage': {}, 'evidence_root': str(base / name)}
+            result = diagnostic_run(base, phase, lambda work, sources: callbacks.append((work, sources)))
+            self.assertEqual(seen, ['host93_cpp_generate'])
+            self.assertEqual(len(callbacks), 1); self.assertEqual(callbacks[0][0], base / 'work')
+            self.assertEqual(len(callbacks[0][1]), 307)
+            self.assertTrue(result['diagnostic_only']); self.assertFalse(result['host_qualification_claim'])
+            self.assertEqual(list(result['phases']), seen)
+            self.assertNotIn('elf', result); self.assertNotIn('generated_witness', result)
+            self.assertNotIn('qualification', result)
+            self.assertTrue((base / 'work/GENERATION_ONLY_RESULT.json').is_file())
+            self.assertTrue((base / 'work/INPUTS_AFTER.json').is_file())
+            self.assertFalse((base / 'work/RESULT.json').exists())
+            self.assertFalse((base / 'work/FAILED.json').exists())
+            self.assertEqual(list((base / 'work/obj').iterdir()), [])
+
+    def test_16_generation_failure_callback_preserves_native_exception(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td); seen = []; callbacks = []; failure = RuntimeError('native generation failure')
+            def phase(name, *args):
+                seen.append(name)
+                raise failure
+            with self.assertRaises(RuntimeError) as caught:
+                diagnostic_run(base, phase, lambda work, sources: callbacks.append((work, sources)))
+            self.assertIs(caught.exception, failure)
+            self.assertEqual(seen, ['host93_cpp_generate']); self.assertEqual(len(callbacks), 1)
+            self.assertTrue((base / 'work/FAILED.json').is_file())
+            self.assertFalse((base / 'work/GENERATION_ONLY_RESULT.json').exists())
+            self.assertEqual(list((base / 'work/obj').iterdir()), [])
+
+    def test_17_callback_failure_does_not_mask_native_exception(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td); failure = RuntimeError('original native failure'); callbacks = []
+            def phase(*args): raise failure
+            def callback(work, sources):
+                callbacks.append(work)
+                raise ValueError('secondary callback failure')
+            with self.assertRaises(RuntimeError) as caught: diagnostic_run(base, phase, callback)
+            self.assertIs(caught.exception, failure); self.assertEqual(len(callbacks), 1)
+            failed = json.loads((base / 'work/FAILED.json').read_text())
+            self.assertEqual(failed['error']['message'], 'original native failure')
+
+    def test_18_callback_failure_after_native_success_fails_gate(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td); seen = []; callbacks = []
+            def phase(name, *args):
+                seen.append(name)
+                return {'record': {'exit_code': 0, 'cleanup_confirmed': True},
+                        'raw_log': b'', 'usage': {}, 'evidence_root': str(base / name)}
+            def callback(work, sources):
+                callbacks.append(work)
+                raise ValueError('callback failed after native success')
+            with self.assertRaisesRegex(ValueError, 'callback failed after native success'):
+                diagnostic_run(base, phase, callback)
+            self.assertEqual(seen, ['host93_cpp_generate']); self.assertEqual(len(callbacks), 1)
+            self.assertTrue((base / 'work/FAILED.json').is_file())
+            self.assertFalse((base / 'work/GENERATION_ONLY_RESULT.json').exists())
+
+    def test_19_generation_option_explicit_bool_and_callback_pairing(self):
+        for stop, callback in ((1, lambda *x: None), (0, None), ('true', lambda *x: None),
+                               (None, None), (True, None), (True, 42), (False, lambda *x: None)):
+            with mock.patch.object(g, 'load', side_effect=RuntimeError('must guard before loading')) as loader:
+                with self.assertRaises(ValueError):
+                    g.run('/tmp/repo', '/tmp/work', lambda *x: None, {}, {}, '/tmp/idma',
+                          '/tmp/retained', '/tmp/config', stop_after_generation=stop,
+                          diagnostic_callback=callback)
+                loader.assert_not_called()
+
+    def test_20_exact_307_diagnostic_aliases_and_hashes(self):
+        base = Path('/tmp/diagnostic-inputs'); before = generation_inputs(base)
+        sources = g.generation_source_map(before, base / 'idma', base / 'retained')
+        self.assertEqual(len(sources), 307)
+        self.assertEqual([row['path'] for row in sources], before['sources'])
+        self.assertEqual(len({row['id'] for row in sources}), 307)
+        self.assertEqual(sum(row['id'].startswith('idma/') for row in sources), 293)
+        self.assertEqual(sum(row['id'].startswith('retained/') for row in sources), 13)
+        for row in sources:
+            self.assertEqual(set(row), {'path', 'id', 'bytes', 'sha256'})
+            self.assertFalse(row['id'].startswith('/')); self.assertNotIn(str(base), row['id'])
+            if row['id'].startswith('idma/'):
+                expected = before['idma_tree']['entries'][row['id'][5:]]
+            elif row['id'].startswith('retained/'):
+                expected = before['retained_tree']['entries'][row['id'][9:]]
+            else:
+                self.assertEqual(row['id'], 'host/HostBlockCollection.sv'); expected = before['sv']
+            self.assertEqual(row['bytes'], expected['bytes']); self.assertEqual(row['sha256'], expected['sha256'])
+        for bad_path in ('/tmp/not-in-verified-closure.sv', '/tmp/diagnostic-inputs/idma/sources/../escape.sv'):
+            bad = dict(before); bad['sources'] = before['sources'][:-1] + [bad_path]
+            with self.assertRaises(ValueError): g.generation_source_map(bad, base / 'idma', base / 'retained')
+        bad = dict(before); bad['sources'] = before['sources'][:-1] + [before['sources'][0]]
+        with self.assertRaises(ValueError): g.generation_source_map(bad, base / 'idma', base / 'retained')
+        before['idma_tree']['entries']['rtl/source_0.sv']['sha256'] = 'not-a-digest'
+        with self.assertRaises(ValueError): g.generation_source_map(before, base / 'idma', base / 'retained')
+
+    def test_21_nonzero_generation_record_still_calls_callback_and_fails(self):
+        for callback_fails in (False, True):
+            with tempfile.TemporaryDirectory() as td:
+                base = Path(td); seen = []; callbacks = []
+                def phase(name, *args):
+                    seen.append(name)
+                    return {'record': {'exit_code': 1, 'cleanup_confirmed': True},
+                            'raw_log': b'warning fatal', 'usage': {}, 'evidence_root': str(base / name)}
+                def callback(work, sources):
+                    callbacks.append(work)
+                    if callback_fails: raise RuntimeError('secondary callback failure')
+                with self.assertRaisesRegex(ValueError, 'phase failed or cleanup unconfirmed'):
+                    diagnostic_run(base, phase, callback)
+                self.assertEqual(seen, ['host93_cpp_generate']); self.assertEqual(len(callbacks), 1)
+                self.assertTrue((base / 'work/FAILED.json').is_file())
+                self.assertEqual(list((base / 'work/obj').iterdir()), [])
+
+    def assert_receipt_failure_preserves(self, native_failure):
+        with tempfile.TemporaryDirectory() as td:
+            base=Path(td);failure=RuntimeError('original failure');original_save=g.save
+            def save(path, value):
+                if path.name=='FAILED.json':raise OSError('receipt disk failure')
+                return original_save(path,value)
+            def phase(name,*args):
+                if native_failure:raise failure
+                return {'record':{'exit_code':0,'cleanup_confirmed':True},'raw_log':b'', 'usage':{},'evidence_root':str(base/name)}
+            def callback(work,sources):
+                if not native_failure:raise failure
+            with mock.patch.object(g,'save',side_effect=save), self.assertRaises(RuntimeError) as caught:
+                diagnostic_run(base,phase,callback)
+            self.assertIs(caught.exception,failure)
+    def test_22_failed_receipt_preserves_native_exception(self):
+        self.assert_receipt_failure_preserves(True)
+    def test_23_failed_receipt_preserves_callback_exception(self):
+        self.assert_receipt_failure_preserves(False)
+
+
 
 if __name__=='__main__':unittest.main()

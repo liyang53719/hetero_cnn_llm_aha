@@ -23,8 +23,8 @@ import types
 
 HERE = Path(__file__).absolute().parent
 SUPPORT = ('ci_support_v3.py', 16348, '653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1')
-PINS_SIZE = 3585
-PINS_SHA = '88512f0d4a666890aa7b8e4d93b74de0d7ce9ebc9126d08f290535f85dded649'
+PINS_SIZE = 3772
+PINS_SHA = '0b40847cc2afb46e058e479bd99bb6f02e37c38a756fde96b9530ce5c8c1b22e'
 MIB = 1024**2
 GIB = 1024**3
 EVIDENCE = ('summary.json', 'source_hashes.json', 'stage_exits.json')
@@ -33,13 +33,20 @@ CATEGORIES = ('NONE', 'TIMEOUT', 'INPUT_OR_CONTRACT', 'SYSTEM', 'INTERRUPTED', '
 STAGES = ('official_source473',) + tuple('host_' + x + '-' + y for y in ('version', 'micro') for x in ('autoconf', 'autom4te', 'm4', 'flex', 'bison')) + ('flex_header_acquire', 'flex_header_compile', 'fresh_autoconf', 'fresh_configure', 'fresh_make') + tuple('derived_tiny_' + x for x in ('version', 'generate', 'compile', 'run')) + ('host93_java_version', 'host93_acquire_jar87', 'host93_acquire_hardfloat20', 'host93_assemble', 'host93_class', 'host93_chirrtl', 'host93_acquire_firtool', 'host93_sv', 'idma319_extract', 'retained13_assemble', 'host93_configuration', 'host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch')
 SCOPES = ('toolchain_build', 'toolchain_tiny', 'fresh_host_sv', 'cpp_generated', 'cpp_compiled', 'reset_launch', 'n0_numeric', 'weights_loaded')
 GENERATED_KINDS = ('derived_backend', 'host93_fir', 'host93_sv', 'host_elf', 'diagnostic_fir')
-MODES = ('host-reset-launch','build-diagnostic','host-chirrtl-diagnostic')
+MODES = ('host-reset-launch','build-diagnostic','host-chirrtl-diagnostic','host-generation-diagnostic')
+FRONTLOAD_MODES = ('host-chirrtl-diagnostic','host-generation-diagnostic')
 BUILD_STAGES = STAGES[:16]
 CHIRRTL_STAGES = STAGES[20:25] + ('host93_chirrtl_diagnostic',)
 FRONTLOAD_STAGES = CHIRRTL_STAGES + STAGES[:20] + STAGES[26:]
 
 def mode_stages(mode):
-    return FRONTLOAD_STAGES if mode=='host-chirrtl-diagnostic' else BUILD_STAGES if mode=='build-diagnostic' else STAGES
+    return FRONTLOAD_STAGES[:-2] if mode=='host-generation-diagnostic' else FRONTLOAD_STAGES if mode in FRONTLOAD_MODES else BUILD_STAGES if mode=='build-diagnostic' else STAGES
+
+def mode_components(mode):
+    return ('toolchain_build',) if mode=='build-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS[:-1]+('host_generation_diagnostic',) if mode=='host-generation-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS if mode in FRONTLOAD_MODES else COMPONENTS
+
+def success_status(mode):
+    return 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0' if mode=='host-generation-diagnostic' else 'READY_REQUIRES_ACTIONS_EXIT0'
 
 CHIRRTL_NUMERIC = ('utf8_bytes','line_count','module_count','extmodule_count','source_info_count','source_info_utf8_bytes','project_source_info_count','library_source_info_count','other_source_info_count')
 HISTORICAL_FIR = {'bytes':42417256,'sha256':'264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a'}
@@ -253,9 +260,9 @@ def contract_failure_observation(error):
 def validate_evidence(objects):
     keys(objects, EVIDENCE)
     summary, sources, exits = (objects[n] for n in EVIDENCE)
-    keys(summary, ('schema', 'mode', 'status', 'failure_category', 'contract_failure', 'completed_components', 'scope', 'seconds', 'chirrtl_observation'))
-    require(summary['schema'] == 'host93-ci-summary-v4' and summary['mode'] in MODES and summary['status'] in
-            ('INCOMPLETE', 'READY_REQUIRES_ACTIONS_EXIT0') and summary['failure_category'] in CATEGORIES and
+    keys(summary, ('schema', 'mode', 'status', 'failure_category', 'contract_failure', 'completed_components', 'scope', 'seconds', 'chirrtl_observation', 'generation_diagnostics'))
+    require(summary['schema'] == 'host93-ci-summary-v5' and summary['mode'] in MODES and summary['status'] in
+            ('INCOMPLETE', 'READY_REQUIRES_ACTIONS_EXIT0', 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0') and summary['failure_category'] in CATEGORIES and
             finite(summary['seconds']) and summary['seconds'] <= 6600, 'summary values')
     detail = summary['contract_failure']
     keys(detail, ('boundary', 'code'))
@@ -265,7 +272,7 @@ def validate_evidence(objects):
             (detail['code'] == 'NONE') == (summary['failure_category'] != 'INPUT_OR_CONTRACT'),
             'contract labels match failure category')
     mode=summary['mode']
-    component_order=('toolchain_build',) if mode=='build-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS if mode=='host-chirrtl-diagnostic' else COMPONENTS
+    component_order=mode_components(mode)
     required_stages=mode_stages(mode)
     completed = summary['completed_components']
     require(type(completed) is list and len(completed) == len(set(completed)) and
@@ -278,6 +285,8 @@ def validate_evidence(objects):
             scope['fresh_host_sv'] == ('host_emission' in completed) and
             scope['reset_launch'] == ('host_execution' in completed), 'scope/component consistency')
     require(not scope['reset_launch'] or scope['cpp_compiled'] and scope['cpp_generated'], 'scope sequencing')
+    if mode=='host-generation-diagnostic':
+        require(not any(scope[k] for k in ('cpp_generated','cpp_compiled','reset_launch')), 'generation diagnostic cannot qualify Host C++ or execution')
     require(mode!='build-diagnostic' or all(not scope[k] for k in SCOPES if k!='toolchain_build'), 'build-only cannot claim executed backend/tiny/Host')
     keys(sources, ('schema', 'project_sources', 'fixed_inputs', 'generated'))
     require(sources['schema'] == 'host93-ci-source-hashes-v3', 'source schema')
@@ -305,7 +314,7 @@ def validate_evidence(objects):
     observed=summary['chirrtl_observation']
     keys(observed, ('state',)+CHIRRTL_NUMERIC+('historical_fir_equal',))
     if 'chirrtl_diagnostic' in completed:
-        require(mode=='host-chirrtl-diagnostic' and observed['state']=='AVAILABLE', 'completed diagnostic observation required')
+        require(mode in FRONTLOAD_MODES and observed['state']=='AVAILABLE', 'completed diagnostic observation required')
         require(all(type(observed[key]) is int and 0 <= observed[key] <= 96*MIB for key in CHIRRTL_NUMERIC) and
                 0 < observed['utf8_bytes'] <= 96*MIB and type(observed['historical_fir_equal']) is bool,
                 'bounded numeric diagnostic only')
@@ -320,7 +329,7 @@ def validate_evidence(objects):
                 'measured diagnostic identity comparison')
         require(len(completed)==1 or observed['historical_fir_equal'], 'no continuation without exact historical FIR identity')
     elif observed['state']=='REPORTED':
-        require(mode=='host-chirrtl-diagnostic' and not completed and observed['historical_fir_equal'] is None,
+        require(mode in FRONTLOAD_MODES and not completed and observed['historical_fir_equal'] is None,
                 'failed child numeric report cannot claim verified FIR')
         require(all(type(observed[key]) is int and 0 <= observed[key] <= 2147483647 for key in CHIRRTL_NUMERIC) and
                 0 < observed['utf8_bytes'] and 0 < observed['line_count'] <= observed['utf8_bytes'] and
@@ -340,7 +349,7 @@ def validate_evidence(objects):
                 sources['generated']['host93_sv'] == {'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'},
                 'scope requires the deterministic fixed FIR and SV')
     keys(exits, ('schema', 'stages'))
-    require(exits['schema'] == 'host93-ci-stage-exits-v5' and type(exits['stages']) is list and len(exits['stages']) <= len(STAGES), 'stage schema/count')
+    require(exits['schema'] == 'host93-ci-stage-exits-v6' and type(exits['stages']) is list and len(exits['stages']) <= len(STAGES), 'stage schema/count')
     seen = []
     failed = False
     for row in exits['stages']:
@@ -359,7 +368,7 @@ def validate_evidence(objects):
                     row['failure_boundary']=='NONE' and row['native_record_status']=='PASS', 'stage terminal tuple')
         else:
             failed = True
-    if mode=='host-chirrtl-diagnostic':
+    if mode in FRONTLOAD_MODES:
         if 'chirrtl_diagnostic' in completed:
             require(len(exits['stages'])>=len(CHIRRTL_STAGES) and
                     all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][:len(CHIRRTL_STAGES)]),
@@ -369,12 +378,34 @@ def validate_evidence(objects):
     if observed['state']=='REPORTED':
         require(exits['stages'] and exits['stages'][-1]['name']=='host93_chirrtl_diagnostic' and exits['stages'][-1]['status']=='FAILED', 'reported numbers belong only to failed diagnostic child')
     require(not seen or bool(sources['project_sources']), 'native stage evidence needs source identities')
-    if summary['status'] == 'READY_REQUIRES_ACTIONS_EXIT0':
-        require(summary['failure_category'] == 'NONE' and completed == list(component_order) and
+    generation=summary['generation_diagnostics']
+    generated_stage=any(row['name']=='host93_cpp_generate' for row in exits['stages'])
+    if generation is None:
+        require(mode!='host-generation-diagnostic' or not generated_stage, 'generation stage must attempt complete bounded diagnostics')
+    else:
+        require(mode=='host-generation-diagnostic' and generated_stage, 'generation census belongs only to the diagnostic generation stage')
+        generation_schema_module().validate_report(generation)
+        require(generation['state']!='NOT_COLLECTED', 'generation stage diagnostics cannot remain uncollected')
+    if 'host_generation_diagnostic' in completed:
+        require(mode=='host-generation-diagnostic' and seen==list(required_stages) and not failed and
+                generation is not None and generation['state']=='AVAILABLE',
+                'completed generation diagnostic requires all32 clean stages and observed census')
+    if summary['status'] == 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0':
+        require(mode=='host-generation-diagnostic' and summary['failure_category']=='NONE' and
+                completed==list(component_order) and not failed and seen==list(required_stages) and
+                generation is not None and generation['state']=='AVAILABLE', 'diagnostic-only requires generation exit0 and observed census, never runtime qualification')
+    elif summary['status'] == 'READY_REQUIRES_ACTIONS_EXIT0':
+        require(mode!='host-generation-diagnostic' and summary['failure_category'] == 'NONE' and completed == list(component_order) and
                 (scope['toolchain_build'] if mode=='build-diagnostic' else all(scope[x] for x in SCOPES[:6])) and not failed and set(seen) == set(required_stages), 'ready requires every finite stage')
     else:
         require(summary['failure_category'] != 'NONE', 'failure status cannot hide error')
     return True
+
+
+def generation_schema_module():
+    pins=decode(exact(HERE/'RUN_PINS.json',PINS_SIZE,PINS_SHA))['files']
+    row=pins['candidates/host93_ci_recovery/execution/generation_diagnostics.py']
+    return load(HERE/'execution/generation_diagnostics.py',row['bytes'],row['sha256'],'verified_generation_diagnostics_schema')
 
 
 def verify_evidence(out):
@@ -508,7 +539,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
     shared_stop = min(supplied_deadline, started+6600)
     work_stop = shared_stop-5
     require(work_stop > started, 'shared evidence reserve unavailable')
-    require(mode in MODES and ((mode=='build-diagnostic' and archive is None) or (mode in ('host-reset-launch','host-chirrtl-diagnostic') and archive is not None)), 'mode-specific fixed archive arguments')
+    require(mode in MODES and ((mode=='build-diagnostic' and archive is None) or (mode in ('host-reset-launch',)+FRONTLOAD_MODES and archive is not None)), 'mode-specific fixed archive arguments')
     repo, out = map(plain_path, (repo, out))
     if archive is not None: archive=plain_path(archive)
     require(repo.is_dir() and out.parent.is_dir() and not os.path.lexists(out) and
@@ -524,6 +555,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
     scopes = {x:False for x in SCOPES}
     failure = None
     chirrtl_observation = empty_chirrtl_observation()
+    generation_diagnostics=None
     try:
         out.mkdir(mode=0o700)
         (out/'private').mkdir(mode=0o700)
@@ -567,7 +599,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                 row['seconds']=round(time.monotonic()-began,6)
                 print(json.dumps({'phase':name,'status':row['status'],'seconds':row['seconds']},sort_keys=True),flush=True)
         prefix='candidates/host93_ci_recovery/'
-        if mode=='host-chirrtl-diagnostic':
+        if mode in FRONTLOAD_MODES:
             emission=module_from(repo,pins,prefix+'emission/host_emission.py','verified_ci_host_emission')
             diagnostic=module_from(repo,pins,prefix+'emission/chirrtl_diagnostic.py','verified_ci_chirrtl_diagnostic')
             early=diagnostic.run(repo,out/'emission',call_phase,emission,buffers[prefix+'emission/EmitCanonicalHost93Diagnostic.scala'])
@@ -592,7 +624,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             completed.append('toolchain_build')
         else:
             completed.append('toolchain');scopes['toolchain_tiny']=True
-            if mode=='host-chirrtl-diagnostic':
+            if mode in FRONTLOAD_MODES:
                 host=diagnostic.resume_sv(repo,out/'emission',call_phase,emission,early['resume_context'])
             else:
                 emission=module_from(repo,pins,prefix+'emission/host_emission.py','verified_ci_host_emission')
@@ -617,10 +649,27 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             call_phase('host93_configuration',argv,out,environment,limits(60,45,45,768*MIB,4*MIB))
             completed.append('configuration')
             execution=module_from(repo,pins,prefix+'execution/host_execution.py','verified_ci_host_execution')
-            result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration)
-            completed.append('host_execution')
-            for name in ('cpp_generated','cpp_compiled','reset_launch'):scopes[name]=True
-            generated['host_elf']={k:result['elf'][k] for k in ('bytes','sha256')}
+            if mode=='host-generation-diagnostic':
+                census=module_from(repo,pins,prefix+'execution/generation_diagnostics.py','verified_ci_generation_diagnostics')
+                sanitizer=module_from(repo,pins,prefix+'safe_build_diagnostics.py','verified_safe_build_diagnostics')
+                def collect_generation(work,source_map):
+                    nonlocal generation_diagnostics
+                    try:
+                        report=census.collect(out/'phases'/'host93_cpp_generate'/'native.log',work,source_map,sanitizer)
+                        census.validate_report(report)
+                        generation_diagnostics=report
+                    except BaseException:
+                        generation_diagnostics=census.empty_report('CONTRACT_ERROR')
+                result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration,
+                                     stop_after_generation=True,diagnostic_callback=collect_generation)
+                require(result.get('diagnostic_only') is True and generation_diagnostics is not None and
+                        generation_diagnostics['state']=='AVAILABLE', 'generation-only diagnostic must return explicit observed report')
+                completed.append('host_generation_diagnostic')
+            else:
+                result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration)
+                completed.append('host_execution')
+                for name in ('cpp_generated','cpp_compiled','reset_launch'):scopes[name]=True
+                generated['host_elf']={k:result['elf'][k] for k in ('bytes','sha256')}
         # All fixed source content is checked again after the final native phase.
         for name,row in pins.items():exact(repo/name,row['bytes'],row['sha256'])
         if archive is not None: exact(archive,9926876,'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce')
@@ -634,11 +683,11 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
         signal.setitimer(signal.ITIMER_REAL, max(0.001,shared_stop-time.monotonic()))
         try:
             category='NONE' if failure is None else ('TIMEOUT' if isinstance(failure,TimeoutError) else 'INPUT_OR_CONTRACT' if isinstance(failure,(ValueError,KeyError,AssertionError)) else 'SYSTEM' if isinstance(failure,OSError) else 'INTERRUPTED' if isinstance(failure,(KeyboardInterrupt,SystemExit)) else 'UNEXPECTED')
-            summary={'schema':'host93-ci-summary-v4','mode':mode,'status':'READY_REQUIRES_ACTIONS_EXIT0' if failure is None else 'INCOMPLETE',
-                     'failure_category':category,'contract_failure':contract_failure_observation(failure),'completed_components':completed,'scope':scopes,'seconds':round(time.monotonic()-started,6),'chirrtl_observation':chirrtl_observation}
+            summary={'schema':'host93-ci-summary-v5','mode':mode,'status':success_status(mode) if failure is None else 'INCOMPLETE',
+                     'failure_category':category,'contract_failure':contract_failure_observation(failure),'completed_components':completed,'scope':scopes,'seconds':round(time.monotonic()-started,6),'chirrtl_observation':chirrtl_observation,'generation_diagnostics':generation_diagnostics}
             sources={'schema':'host93-ci-source-hashes-v3','project_sources':source_rows,
                      'fixed_inputs':({'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}} if mode!='build-diagnostic' else {}),'generated':generated}
-            objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v5','stages':stages}}
+            objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v6','stages':stages}}
             validate_evidence(objects)
             evidence=out/'evidence';evidence.mkdir(mode=0o700)
             for name,value in objects.items():write_json(evidence/name,value)
@@ -649,7 +698,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
         finally:
             signal.setitimer(signal.ITIMER_REAL,0)
             signal.signal(signal.SIGALRM,old_alarm);signal.signal(signal.SIGTERM,old_term);os.umask(old_mask)
-    print(json.dumps({'status':'READY_REQUIRES_ACTIONS_EXIT0' if failure is None else 'INCOMPLETE'},sort_keys=True),flush=True)
+    print(json.dumps({'status':success_status(mode) if failure is None else 'INCOMPLETE'},sort_keys=True),flush=True)
     return 0 if failure is None else 1
 
 

@@ -1,0 +1,144 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "budgets": "Unchanged shared6600 seconds and every original native wall/CPU/AS/file/log cap; generation log remains4MiB.",
+  "census": {
+    "canonical_json_bytes": 65536,
+    "completion": "scan_complete describes full merged stage log scan; partial/omissions disclose output truncation or unparsed headers. Process attribution is always NOT_AVAILABLE; multiple fatal totals are never added.",
+    "example_coordinate_cap": 16,
+    "message_policy": "Finite classifications only after existing sanitizer; no arbitrary diagnostic body or path strings. Exact known source IDs include verified SHA256 and bounded coordinates.",
+    "read_states": [
+      "NOT_COLLECTED",
+      "AVAILABLE",
+      "READ_ERROR",
+      "SANITIZER_ERROR",
+      "CONTRACT_ERROR"
+    ],
+    "record_cap": 128,
+    "source_map_entries": 307,
+    "source_prefixes": [
+      "host/",
+      "idma/",
+      "retained/"
+    ],
+    "stable_log_bytes": 4194304
+  },
+  "changed_source_files": [
+    "run.py",
+    "RUN_PINS.json",
+    "test_run_cold.py",
+    "execution/host_execution.py",
+    "execution/test_cold.py",
+    "execution/ENTRY.json",
+    "execution/generation_diagnostics.py",
+    "execution/test_generation_diagnostics_cold.py"
+  ],
+  "evidence_schema": {
+    "source_hashes": "host93-ci-source-hashes-v3",
+    "stage_exits": "host93-ci-stage-exits-v6",
+    "summary": "host93-ci-summary-v5"
+  },
+  "expected_parent_commit": "0f6299fdda3f50c488f62b2fcf23c7b0eda6bd6f",
+  "mode": "host-generation-diagnostic",
+  "native_argv_delta": "None. Existing warning-fatal, checks and all four VLT files retained.",
+  "ordering": "Existing six-phase frontload, exact historical FIR gate, existing remaining20 toolchain +2 SV +3 input/configuration +1 generation; stop before C++ compile/reset-launch.",
+  "original_modes_retained": {
+    "build-diagnostic": 16,
+    "host-chirrtl-diagnostic": 34,
+    "host-reset-launch": 34
+  },
+  "qualification": "Even exit0 is DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0. cpp_generated, cpp_compiled, reset_launch, n0_numeric, weights_loaded remain false; earlier build/tiny/freshSV scopes retain their precise meaning. Native nonzero remains INCOMPLETE.",
+  "schema": 1,
+  "scope": "Bounded generation-only warning/error census and finite fresh wrapper syntax observations. No waiver or cycle correction.",
+  "source_review": {
+    "directory": "review_ci_generation_diagnostics_source_v2_20261019T0513",
+    "manifest": {
+      "bytes": 1420,
+      "sha256": "08dea7a19aa456b4e8fff4c874749143529354e5c4e3941ccc05719f8c50c2dd"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 4242,
+      "sha256": "c25b7abd069253901f6edadc663bbf932c1783384cb0e1c1e32e843bff7b0ce3"
+    },
+    "verdict": "SOURCE_GO_BOUNDED_GENERATION_CENSUS_ONLY_NO_CPP_OR_RUNTIME"
+  },
+  "source_review_evidence": {
+    "last_actual": {
+      "SUMMARY.json": {
+        "bytes": 5115,
+        "sha256": "2777d48afa3703e4a3176c5c032843c128267047de078d6174ce5ba534942a6b"
+      },
+      "directory": "review_host93_ci_chirrtl_frontload_actual_39200026785_20261019T0451",
+      "manifest": {
+        "bytes": 507,
+        "sha256": "6d63fc1789179a92905cac684bd77d9b2f2500261d48ba47a553a7a9ee8c9a91"
+      }
+    },
+    "unoptflat_structure": {
+      "REPORT.md": {
+        "bytes": 9255,
+        "sha256": "465b1bb725be2b84810c417d09ca1ea2d734676061aee6c2c965035240f59a22"
+      },
+      "directory": "review_host93_unoptflat_structure_20261019T0450",
+      "manifest": {
+        "bytes": 4126,
+        "sha256": "3e118cfaef4756e8739e99b0eb754f5416b5f5b7e76f7649de3ca94eadfba2a9"
+      }
+    },
+    "warning_policy": {
+      "REPORT.md": {
+        "bytes": 8974,
+        "sha256": "7e9a41e50178a3ed7126dfb323b907be47146fa747297d6a3ba9684612411999"
+      },
+      "directory": "review_host93_warning_policy_20261019T0452",
+      "manifest": {
+        "bytes": 1612,
+        "sha256": "5da5de4f9d602ca332a9224a4b419037e88b6189d2f78430ae84af39b8f95f2d"
+      }
+    },
+    "workflow": {
+      "SUMMARY.json": {
+        "bytes": 1197,
+        "sha256": "c90fb598ca866a8340f68180a8a289d482431af1a29b8cac8d593bd0495bac95"
+      },
+      "directory": "review_ci_generation_diagnostic_workflow_20261019T0506",
+      "manifest": {
+        "bytes": 128,
+        "sha256": "b0be646362d8f3d568160751faa5391076ea00a68df6c48b2e5cc7fe58565187"
+      }
+    }
+  },
+  "stage_count": 32,
+  "v1_frozen_source": {
+    "directory": "candidate_ci_generation_diagnostics_source_v1_20261019T0457",
+    "manifest": {
+      "bytes": 10127,
+      "sha256": "5f959cf55cd43c1b4752b8379a6f72874de68e057141121c2fa176fe3527cd40"
+    }
+  },
+  "v1_source_hold": {
+    "directory": "review_ci_generation_diagnostics_source_hold_20261019T0511",
+    "manifest": {
+      "bytes": 128,
+      "sha256": "7370b0235de024b349fd3df2389e360a8efbd0565aa13dc6242e7d3d0d20a068"
+    },
+    "summary": {
+      "bytes": 6370,
+      "sha256": "7d75b23f6e02ae7a18a3f84caac94616265947a491537707d8108e5c87a11d42"
+    }
+  },
+  "v2_repairs": [
+    "Recognize official mixed error+warning fatal summary without summing processes",
+    "Bind retained record severity/rule totals to global by_rule/counts",
+    "Pin both cold loader input buffers before compile, including sanitizer",
+    "Private FAILED.json save is best effort and preserves original exception",
+    "Publish only fixed qwen2_matrix_command_endpoint wrapper alias",
+    "Malformed warning/error header breaks Example association"
+  ],
+  "workflow_draft": {
+    "bytes": 4578,
+    "name": "host93-ci-generation-diagnostic.workflow.draft.yml",
+    "sha256": "67761003e51ce8b3566432a5053345388bcc246c5c921ec4aa8831d16b6f60f9"
+  },
+  "wrapper": "Unique fixed endpoint __hierMkArgs.f <=256KiB, fixed derived wrapper <=512KiB, optional fixed Host top args <=256KiB; no log-derived paths opened. Hashes and finite module/specialization/always_comb/DPI/handshake syntax counts only; dependency_conclusion always NOT_ESTABLISHED."
+}

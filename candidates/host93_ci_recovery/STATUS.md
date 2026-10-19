@@ -146,3 +146,13 @@ V2 strict schema correction: AVAILABLE/completed diagnostic requires all six fro
 Frozen SOURCE MANIFEST 8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094; SOURCE review GO; actual NOT_EXECUTED.
 
 SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4eaa8fe194a228b4dbda03b5c7276c59744ce1eb3f65738de143d1218fd; SUMMARY edf619617fe69086c238742f74010daa94cd0bd53d310bfec7e18aab8e08e7c3. Actual remains NOT_EXECUTED.
+
+## Generation census successor (SOURCE GO; actual NOT_EXECUTED)
+
+The new32-stage host-generation-diagnostic mode stops after generation. Warning-fatal, native argv, all budgets, original34/16 modes and the exact historical FIR/SV gates remain. It publishes at most64KiB of finite warning/error census and wrapper syntax observations from a complete stable log of at most4MiB. Source coordinates use only the verified307-input map. Multiple fatal totals are never summed; subprocess attribution remains unavailable. This does not qualify generated C++, compilation, runtime, numeric behavior or weights.
+
+Prior run39200026785 passed tool build/tiny/freshSV and failed generation naturally with exit2 and cleanuptrue. Its truncated tail retained four UNOPTFLAT headings and35-warning fatal, leaving all-warning classification and actual cycles unresolved. Five existing isolate_assignments directives have no effect in5.053; neither isolation nor split effectiveness is claimed.
+
+Affected cold reruns: coordinator136+136, execution23+23, census36+36, all final exits0. Other unchanged suites are inherited from the prior reviewed source, not rerun. Initial fixture errors and missing --repo invocations are recorded accurately. No new actual native work was performed.
+
+SOURCE GO: review_ci_generation_diagnostics_source_v2_20261019T0513; MANIFEST 1420 bytes / 08dea7a19aa456b4e8fff4c874749143529354e5c4e3941ccc05719f8c50c2dd; SUMMARY 4242 bytes / c25b7abd069253901f6edadc663bbf932c1783384cb0e1c1e32e843bff7b0ce3. Scope: SOURCE_GO_BOUNDED_GENERATION_CENSUS_ONLY_NO_CPP_OR_RUNTIME. Actual NOT_EXECUTED.

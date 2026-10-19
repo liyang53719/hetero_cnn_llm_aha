@@ -1,0 +1,59 @@
+{
+  "actual_status": "NOT_EXECUTED",
+  "all_final_suite_invocations_exit0": true,
+  "draft_outcomes": [
+    {
+      "outcome": "136 tests,4 errors each; synthetic mock patched exact/load globally but omitted new generation schema loader. Fixture injection corrected; production unchanged by this fix.",
+      "scope": "initial coordinator normal/-O"
+    },
+    {
+      "outcome": "exit1 before tests: required --repo omitted. Correct final commands both pass21.",
+      "scope": "initial execution normal/-O invocation"
+    }
+  ],
+  "final_suite_invocations": 6,
+  "inherited_unchanged_tests": {
+    "detail": "No rerun or new native qualification claimed for unchanged support/toolchain/header/transport/emission/CHIRRTL/sanitizer suites. Their source bytes retained.",
+    "manifest": {
+      "bytes": 9580,
+      "sha256": "8d7f3fc6749bc22de9def574836e4eb3247cd834493f4816bbd3956b304a9094"
+    },
+    "source": "candidate_ci_chirrtl_frontload_source_v2_20261019T0427"
+  },
+  "native_or_network_started": false,
+  "normal": {
+    "coordinator_tests": 136,
+    "execution_component_tests": 23,
+    "generation_census_tests": 36
+  },
+  "optimized": {
+    "coordinator_tests": 136,
+    "execution_component_tests": 23,
+    "generation_census_tests": 36
+  },
+  "source_review": {
+    "directory": "review_ci_generation_diagnostics_source_v2_20261019T0513",
+    "manifest": {
+      "bytes": 1420,
+      "sha256": "08dea7a19aa456b4e8fff4c874749143529354e5c4e3941ccc05719f8c50c2dd"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 4242,
+      "sha256": "c25b7abd069253901f6edadc663bbf932c1783384cb0e1c1e32e843bff7b0ce3"
+    },
+    "verdict": "SOURCE_GO_BOUNDED_GENERATION_CENSUS_ONLY_NO_CPP_OR_RUNTIME"
+  },
+  "v1_source_hold": {
+    "directory": "review_ci_generation_diagnostics_source_hold_20261019T0511",
+    "manifest": {
+      "bytes": 128,
+      "sha256": "7370b0235de024b349fd3df2389e360a8efbd0565aa13dc6242e7d3d0d20a068"
+    },
+    "summary": {
+      "bytes": 6370,
+      "sha256": "7d75b23f6e02ae7a18a3f84caac94616265947a491537707d8108e5c87a11d42"
+    }
+  },
+  "v2_changes": "Only the six independently confirmed v1 source defects plus exact pins and tiny tests; coordinator behavior unchanged, embedded dependency pins refreshed."
+}

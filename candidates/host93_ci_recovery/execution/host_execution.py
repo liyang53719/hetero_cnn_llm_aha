@@ -173,6 +173,43 @@ def closure(support, idma, retained, configuration, sv, buffers):
             'includes': [str(root / p) for p in includes], 'defines': defines}
 
 
+
+def generation_source_map(before, idma, retained):
+    """Finite diagnostic aliases from the already verified compilation closure."""
+    sources = before['sources']
+    need(type(sources) is list and len(sources) == 307 and
+         all(type(path) is str for path in sources) and len(set(sources)) == 307,
+         'exact 307 diagnostic sources')
+    admitted = {}
+    for prefix, root, tree in (('idma', clean(idma) / 'sources', before['idma_tree']),
+                               ('retained', clean(retained) / 'source', before['retained_tree'])):
+        for relative, row in tree['entries'].items():
+            if row['kind'] != 'regular':
+                continue
+            need(type(relative) is str and relative and not relative.startswith('/') and
+                 all(part not in ('', '.', '..') for part in relative.split('/')),
+                 'diagnostic relative source path')
+            path = str(clean(root / relative))
+            need(path not in admitted, 'ambiguous diagnostic source path')
+            admitted[path] = {'id': prefix + '/' + relative,
+                              'bytes': row['bytes'], 'sha256': row['sha256']}
+    sv = before['sv']; svpath = str(clean(sv['path']))
+    need(svpath not in admitted, 'ambiguous diagnostic Host source path')
+    admitted[svpath] = {'id': 'host/HostBlockCollection.sv',
+                        'bytes': sv['bytes'], 'sha256': sv['sha256']}
+    result = []
+    for path in sources:
+        need(str(clean(path)) == path and path in admitted, 'unknown diagnostic source path')
+        row = admitted[path]
+        need(type(row['bytes']) is int and row['bytes'] >= 0 and
+             type(row['sha256']) is str and re.fullmatch('[0-9a-f]{64}', row['sha256']) is not None,
+             'diagnostic source identity')
+        result.append({'path': path, **row})
+    need(len({row['id'] for row in result}) == 307,
+         'unique diagnostic source aliases')
+    return result
+
+
 def verify_tools(support, toolchain):
     backend = toolchain['backend']; root = clean(toolchain['verilator_root'])
     need(clean(backend['path']) == root / 'bin/verilator_bin', 'fresh backend root')
@@ -333,13 +370,18 @@ def check_log(raw):
             'ram_model': False, 'weights_loaded': False, 'n0_numerics': False, 'full_block_claim': False}
 
 
-def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: Path, configuration: Path):
+def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: Path, configuration: Path,
+        *, stop_after_generation=False, diagnostic_callback=None):
+    need(type(stop_after_generation) is bool, 'explicit generation-only bool')
+    need(callable(diagnostic_callback) if stop_after_generation else diagnostic_callback is None,
+         'generation-only callback pairing')
     repo, work, idma, retained, configuration = map(clean, (repo, work, idma, retained, configuration))
     for root in (repo, HERE, idma, retained, configuration, clean(toolchain['verilator_root'])):
         need(work != root and root not in work.parents and work not in root.parents, 'fresh disjoint work root')
     need(not os.path.lexists(work), 'work already exists')
     pins, buffers, support, lexical = load(repo)
     before = closure(support, idma, retained, configuration, host_emission['sv'], buffers)
+    source_map = generation_source_map(before, idma, retained) if stop_after_generation else None
     verify_tools(support, toolchain)
     emission_before = verify_emission(support, host_emission)
     ports = unique_json(buffers[CONTRACT])['HOST_PORTS']
@@ -358,7 +400,9 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         env = environment(work, toolchain['verilator_root'])
         results = {}; witness = None; previous = None; qualification = None
         frozen_generated = None; executed_elf = None
-        for phase in ('host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch'):
+        phases = ('host93_cpp_generate',) if stop_after_generation else (
+            'host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch')
+        for phase in phases:
             need(closure(support, idma, retained, configuration, host_emission['sv'], buffers) == before, 'pre-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
@@ -378,15 +422,44 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
             if phase != 'host93_cpp_generate':
                 witness = generated_witness(support, previous, lexical, ports, phase == 'host93_reset_launch', before['sv']['path'])
             bound = LIMITS[phase]
-            result = call_phase(phase, argv[phase], work, dict(env), dict(bound))
+            if stop_after_generation:
+                native_failed = False; callback_error = None
+                try:
+                    result = call_phase(phase, argv[phase], work, dict(env), dict(bound))
+                except BaseException:
+                    native_failed = True
+                    raise
+                finally:
+                    try:
+                        diagnostic_callback(work, source_map)
+                    except BaseException as error:
+                        if not native_failed:
+                            callback_error = error
+            else:
+                result = call_phase(phase, argv[phase], work, dict(env), dict(bound))
             record = result['record']
             need(record.get('exit_code') == 0 and record.get('cleanup_confirmed') is True, 'phase failed or cleanup unconfirmed')
+            if stop_after_generation and callback_error is not None:
+                raise callback_error
             need(type(result['raw_log']) is bytes and len(result['raw_log']) <= bound['log_bytes'], 'phase raw log bound')
             need(closure(support, idma, retained, configuration, host_emission['sv'], buffers) == before, 'post-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
             need(verify_emission(support, host_emission) == emission_before, 'post-phase emission drift')
             tree = support.tree_inventory(work, bound['tree_bytes'], bound['file_count'], bound['entry_count'], 128 * 1024**2 if phase == 'host93_cpp_generate' else 512 * 1024**2)
+            if stop_after_generation:
+                result_pin = save(work / (phase + '_TREE.json'), tree)
+                results[phase] = {'exit_code': 0, 'cleanup_confirmed': True,
+                                  'log_sha256': sha(result['raw_log']), 'usage': result['usage'],
+                                  'evidence_root': str(result['evidence_root']), 'tree': result_pin}
+                save(work / 'INPUTS_AFTER.json', before)
+                report = {'status': 'GENERATION_DIAGNOSTIC_ONLY', 'diagnostic_only': True,
+                          'phases': results, 'source_count': 307, 'include_count': 8,
+                          'define_count': 4, 'inputs_unchanged': True,
+                          'host_qualification_claim': False,
+                          'ram_or_weights_or_n0_or_full_block_claim': False}
+                save(work / 'GENERATION_ONLY_RESULT.json', report)
+                return report
             if frozen_generated is None:
                 frozen_generated = {p: {k: row[k] for k in ('bytes', 'sha256', 'mode')} for p, row in tree['entries'].items() if row['kind'] == 'regular' and p.startswith('obj/') and p.endswith(('.cpp', '.h', '.mk', '.f', '.sv', '.vlt'))}
                 need(bool(frozen_generated), 'no generated source closure')
@@ -426,7 +499,10 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
                 failed['tree'] = save(work / 'FAILED_TREE.json', tree)
             except Exception as tree_error:
                 failed['tree_error'] = str(tree_error)[:1024]
-            save(work / 'FAILED.json', failed)
+            try:
+                save(work / 'FAILED.json', failed)
+            except Exception:
+                pass  # A private receipt failure must preserve the original failure.
         raise
     finally:
         os.umask(old_umask)

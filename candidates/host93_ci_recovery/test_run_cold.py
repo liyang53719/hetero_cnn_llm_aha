@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=53459
-SHA='1d2184337d0c1049687a62fd0b7447465eadfd0a1386656d6a56bb76c2e71495'
+SIZE=57310
+SHA='974542f6db7aaf98263d86bdf6880987ddd8e137ec62fdf2cb0df20d68f9ef75'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -29,6 +29,13 @@ TPIN=PINS['candidates/host93_ci_recovery/toolchain/ci_toolchain.py']
 TOOLCHAIN=G.load(HERE/'toolchain/ci_toolchain.py',TPIN['bytes'],TPIN['sha256'],'cold_toolchain_contracts')
 DPIN=PINS.get('candidates/host93_ci_recovery/emission/chirrtl_diagnostic.py')
 DIAGNOSTIC=G.load(HERE/'emission/chirrtl_diagnostic.py',DPIN['bytes'],DPIN['sha256'],'cold_chirrtl_contracts') if DPIN else None
+GPIN=PINS.get('candidates/host93_ci_recovery/execution/generation_diagnostics.py')
+CENSUS=G.load(HERE/'execution/generation_diagnostics.py',GPIN['bytes'],GPIN['sha256'],'cold_generation_diagnostics') if GPIN else None
+
+def generation_fixture_report():
+    with tempfile.TemporaryDirectory() as td:
+        root=Path(td);log=root/'native.log';log.write_bytes(b'')
+        return CENSUS.collect(log,root,[{'path':'/private/fixture.sv','id':'host/fixture.sv','bytes':0,'sha256':'a'*64}],CONTEXT)
 
 
 def defaults():
@@ -49,14 +56,15 @@ def fixture(ready=False, mode='host-reset-launch'):
     generated={'derived_backend':{'bytes':1,'sha256':'1'*64}} if ready else {}
     if ready and not build:
         generated.update({'host_elf':{'bytes':1,'sha256':'1'*64},'host93_fir':{'bytes':42417256,'sha256':'264f8b3a11c02d0d0917001f1d69452ec1c1294c426c9c81e1e577cdc523385a'},'host93_sv':{'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'}})
-    if ready and mode=='host-chirrtl-diagnostic':generated['diagnostic_fir']=dict(G.HISTORICAL_FIR)
-    observation={'state':'AVAILABLE','utf8_bytes':G.HISTORICAL_FIR['bytes'],'line_count':293837,'module_count':682,'extmodule_count':17,'source_info_count':254482,'source_info_utf8_bytes':1000000,'project_source_info_count':249537,'library_source_info_count':4945,'other_source_info_count':0,'historical_fir_equal':True} if ready and mode=='host-chirrtl-diagnostic' else G.empty_chirrtl_observation()
-    return {'summary.json':{'schema':'host93-ci-summary-v4','mode':mode,'status':'READY_REQUIRES_ACTIONS_EXIT0' if ready else 'INCOMPLETE',
-             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','contract_failure':{'boundary':'NONE' if ready else 'UNREPORTED','code':'NONE' if ready else 'UNMAPPED_CONTRACT'},'completed_components':(['toolchain_build'] if build else ['chirrtl_diagnostic']+list(G.COMPONENTS) if mode=='host-chirrtl-diagnostic' else list(G.COMPONENTS)) if ready else [],
-             'scope':{x:ready and (x=='toolchain_build' if build else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0,'chirrtl_observation':observation},
+    if ready and mode in G.FRONTLOAD_MODES:generated['diagnostic_fir']=dict(G.HISTORICAL_FIR)
+    if ready and mode=='host-generation-diagnostic':generated.pop('host_elf',None)
+    observation={'state':'AVAILABLE','utf8_bytes':G.HISTORICAL_FIR['bytes'],'line_count':293837,'module_count':682,'extmodule_count':17,'source_info_count':254482,'source_info_utf8_bytes':1000000,'project_source_info_count':249537,'library_source_info_count':4945,'other_source_info_count':0,'historical_fir_equal':True} if ready and mode in G.FRONTLOAD_MODES else G.empty_chirrtl_observation()
+    return {'summary.json':{'schema':'host93-ci-summary-v5','mode':mode,'status':G.success_status(mode) if ready else 'INCOMPLETE',
+             'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','contract_failure':{'boundary':'NONE' if ready else 'UNREPORTED','code':'NONE' if ready else 'UNMAPPED_CONTRACT'},'completed_components':list(G.mode_components(mode)) if ready else [],
+             'scope':{x:ready and (x=='toolchain_build' if build else x in G.SCOPES[:3] if mode=='host-generation-diagnostic' else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0,'chirrtl_observation':observation,'generation_diagnostics':generation_fixture_report() if ready and mode=='host-generation-diagnostic' else None},
             'source_hashes.json':{'schema':'host93-ci-source-hashes-v3','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
               'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
-            'stage_exits.json':{'schema':'host93-ci-stage-exits-v5','stages':stages}}
+            'stage_exits.json':{'schema':'host93-ci-stage-exits-v6','stages':stages}}
 
 
 class Cold(unittest.TestCase):
@@ -230,15 +238,18 @@ class Cold(unittest.TestCase):
                 x=dict(zip(('total_seconds','work_seconds','cpu_seconds','as_bytes','fsize_bytes','log_bytes'),G.PHASE_CAPS[name]));x['sample_rows']=x['total_seconds']+2;return x
             def group(names,result):
                 def run(repo,work,call,*args,**kwargs):
-                    selected=names[:16] if kwargs.get("stop_after_build") else names
+                    selected=names[:16] if kwargs.get("stop_after_build") else names[:1] if kwargs.get('stop_after_generation') else names
                     for name in selected:
-                        call(name,['/fixed/fixture'],base,{},cfg(name))
+                        try:
+                            call(name,['/fixed/fixture'],base,{},cfg(name))
+                        finally:
+                            if kwargs.get('stop_after_generation'):kwargs['diagnostic_callback'](work,[{'path':'/private/fixture.sv','id':'host/fixture.sv','bytes':0,'sha256':'a'*64}])
                         if contract_postflight and name == 'fresh_configure':
                             error=ValueError('private fixture text must not publish')
                             error.safe_contract_boundary='BUILD_CONFIGURE_CPPFLAGS_AFTER'
                             error.safe_contract_code='CPPFLAGS_VALUE'
                             raise error
-                    return result
+                    return {'diagnostic_only':True} if kwargs.get('stop_after_generation') else result
                 return types.SimpleNamespace(run=run)
             tools=group(G.STAGES[:20],{'backend':fixed})
             emission=group(G.STAGES[20:28],{'fir':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_fir']},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}})
@@ -251,7 +262,7 @@ class Cold(unittest.TestCase):
                 return group(G.STAGES[26:28],{'fir':{'path':fixed['path'],**G.HISTORICAL_FIR},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}}).run(repo,work,call)
             diagnostic.resume_sv=resume
             diagnostic.parse_observation=DIAGNOSTIC.parse_observation if DIAGNOSTIC else None
-            modules={'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT}
+            modules={'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT,'verified_ci_generation_diagnostics':CENSUS}
             def native(*args,**kwargs):
                 name=args[2]
                 kwargs['diagnostics'].update(clean_observation())
@@ -264,6 +275,8 @@ class Cold(unittest.TestCase):
                         native_record_status='FAIL',failure_code='CHILD_EXIT_NONZERO' if nonzero else 'SUPERVISOR_TIMEOUT_CLASSIFICATION',
                         failure_boundary='NATIVE_SUPERVISION')
                     raise ValueError('synthetic child exit') if nonzero else TimeoutError('synthetic boundary')
+                if mode=='host-generation-diagnostic' and name=='host93_cpp_generate':
+                    args[5].mkdir(parents=True,exist_ok=True);(args[5]/'native.log').write_bytes(b'')
                 return {'exit_code':0,'cleanup_confirmed':True},b'private synthetic',{'child_user_cpu_seconds':0.1,'child_system_cpu_seconds':0.01}
             support=types.SimpleNamespace(deadline_ready=lambda:None,fixed_support=lambda repo:(None,None,None),run_phase=native,diagnostic_defaults=defaults)
             prefix='candidates/host93_ci_recovery/'
@@ -271,6 +284,7 @@ class Cold(unittest.TestCase):
             with mock.patch.dict(G.os.environ,{'GITHUB_ACTIONS':'true'},clear=True), \
                  mock.patch.object(G,'load',return_value=support), \
                  mock.patch.object(G,'project_pin_map',return_value=(PINS,buffers)), \
+                 mock.patch.object(G,'generation_schema_module',return_value=CENSUS), \
                  mock.patch.object(G,'module_from',side_effect=lambda repo,pins,relative,name:modules[name]), \
                  mock.patch.object(G,'exact',return_value=b''), \
                  mock.patch.object(G,'memory_disk_gate'), \
@@ -451,6 +465,67 @@ class Cold(unittest.TestCase):
             x=fixture();x[name]['schema']=schema
             with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
 
+    def test_generation_only_fixture_accepted_no_runtime(self):
+        x=fixture(True,'host-generation-diagnostic');self.assertTrue(G.validate_evidence(x))
+        self.assertEqual(x['summary.json']['status'],'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0')
+        self.assertFalse(any(x['summary.json']['scope'][k] for k in ('cpp_generated','cpp_compiled','reset_launch')))
+    def test_generation_only_mock_runs32_and_stops(self):
+        code,summary,stages=self.mock_whole_job(mode='host-generation-diagnostic')
+        self.assertEqual(code,0);self.assertEqual([x['name'] for x in stages],list(G.FRONTLOAD_STAGES[:-2]))
+        self.assertEqual(summary['completed_components'],list(G.mode_components('host-generation-diagnostic')))
+        self.assertEqual(summary['generation_diagnostics']['state'],'AVAILABLE')
+        self.assertFalse(summary['scope']['cpp_generated']);self.assertFalse(summary['scope']['cpp_compiled'])
+        self.assertFalse(summary['scope']['reset_launch'])
+    def test_generation_failure_collects_and_preserves_nonzero(self):
+        code,summary,stages=self.mock_whole_job('host93_cpp_generate','host-generation-diagnostic',True,b'%Warning-UNOPTFLAT: /private/x.sv:3:2: circular\n%Error: Exiting due to 1 warning(s)\n')
+        self.assertEqual(code,1);self.assertEqual(len(stages),32);self.assertEqual(stages[-1]['exit_code'],2)
+        self.assertEqual(summary['generation_diagnostics']['state'],'AVAILABLE')
+        self.assertNotIn('/private/',str(summary['generation_diagnostics']))
+        self.assertFalse(summary['scope']['cpp_compiled']);self.assertFalse(summary['scope']['reset_launch'])
+    def test_generation_missing_log_is_explicit_read_error(self):
+        code,summary,stages=self.mock_whole_job('host93_cpp_generate','host-generation-diagnostic',True)
+        self.assertEqual(code,1);self.assertEqual(summary['generation_diagnostics']['state'],'READ_ERROR')
+    def test_generation_early_failure_has_no_census_claim(self):
+        code,summary,stages=self.mock_whole_job('host93_class','host-generation-diagnostic',True)
+        self.assertEqual(code,1);self.assertIsNone(summary['generation_diagnostics'])
+    def test_generation_schema_refuses_host_qualification(self):
+        for key in ('cpp_generated','cpp_compiled','reset_launch'):
+            x=fixture(True,'host-generation-diagnostic');x['summary.json']['scope'][key]=True
+            with self.subTest(key=key),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_schema_refuses_compile_or_runtime_rows(self):
+        for name in ('host93_cpp_compile','host93_reset_launch'):
+            x=fixture(True,'host-generation-diagnostic');row=copy.deepcopy(x['stage_exits.json']['stages'][-1]);row['name']=name;x['stage_exits.json']['stages'].append(row)
+            with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_schema_requires_attempted_census(self):
+        for value in (None,CENSUS.empty_report()):
+            x=fixture(True,'host-generation-diagnostic');x['summary.json']['generation_diagnostics']=value
+            with self.subTest(value=value),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_census_forbidden_before_generation(self):
+        x=fixture(False,'host-generation-diagnostic');x['summary.json']['generation_diagnostics']=generation_fixture_report()
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_census_forbidden_in_other_modes(self):
+        for mode in ('host-reset-launch','build-diagnostic','host-chirrtl-diagnostic'):
+            x=fixture(True,mode);x['summary.json']['generation_diagnostics']=generation_fixture_report()
+            with self.subTest(mode=mode),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_completed_component_requires_all_clean_stages(self):
+        for action in ('missing','failed','report'):
+            x=fixture(True,'host-generation-diagnostic');x['summary.json']['status']='INCOMPLETE';x['summary.json']['failure_category']='SYSTEM'
+            if action=='missing': x['stage_exits.json']['stages'].pop()
+            elif action=='failed':
+                row=x['stage_exits.json']['stages'][-1];row.update(status='FAILED',exit_code=2,native_record_status='FAIL',failure_code='CHILD_EXIT_NONZERO',failure_boundary='NATIVE_SUPERVISION');row['diagnostics']['context_state']='READ_ERROR'
+            else:x['summary.json']['generation_diagnostics']=CENSUS.empty_report('READ_ERROR')
+            with self.subTest(action=action),self.assertRaises(ValueError):G.validate_evidence(x)
+
+    def test_generation_status_cannot_be_full_ready(self):
+        x=fixture(True,'host-generation-diagnostic');x['summary.json']['status']='READY_REQUIRES_ACTIONS_EXIT0'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_diagnostic_status_forbidden_in_full_mode(self):
+        x=fixture(True);x['summary.json']['status']='DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_generation_scope_needs_historical_fir_gate(self):
+        code,summary,stages=self.mock_whole_job(mode='host-generation-diagnostic',diagnostic_match=False)
+        self.assertEqual(code,1);self.assertEqual(len(stages),6);self.assertIsNone(summary['generation_diagnostics'])
+
     def test_build_mode_ready(self):
         self.assertTrue(G.validate_evidence(fixture(True,'build-diagnostic')))
     def test_build_mode_only16_mock(self):
@@ -569,7 +644,7 @@ class Cold(unittest.TestCase):
                 failure_code='CHILD_EXIT_NONZERO',failure_boundary='NATIVE_SUPERVISION')
             with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
     def test_all_native_failures_collect_context_in_both_modes(self):
-        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES),('host-chirrtl-diagnostic',G.FRONTLOAD_STAGES)):
+        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES),('host-chirrtl-diagnostic',G.FRONTLOAD_STAGES),('host-generation-diagnostic',G.FRONTLOAD_STAGES[:-2])):
             for name in names:
                 with self.subTest(mode=mode,name=name),mock.patch.object(G,'collect_build_diagnostics',wraps=G.collect_build_diagnostics) as collector:
                     code,summary,stages=self.mock_whole_job(name,mode,True,b'fixed native failure context\n')

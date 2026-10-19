@@ -1,52 +1,57 @@
 {
-  "acquisition": {
-    "fixed_package_parser_test": "real fixed deb and pinned decoded tar buffers with mocked decoder",
-    "inherited_from": "v1",
-    "normal_tests": 40,
-    "optimized_tests": 40
-  },
   "actual": "NOT_EXECUTED",
-  "local_decoder_probe": {
-    "actual": "NOT_EXECUTED_HOST_PRECONDITION_UNMET",
-    "cold_results_inherited_from": "v1",
-    "normal_static_mock_tests": 6,
-    "optimized_static_mock_tests": 6,
-    "reason": "local UID65534 is incompatible with fixed UID0 trust gate; not a CI outcome"
-  },
-  "native_hdl_executed": false,
-  "new_libzstd_adapter_executed": false,
-  "original_frozen_sources_changed": false,
-  "package_tools_executed": false,
-  "portable_cold": {
-    "decoder": "mock only",
-    "isolated_fresh_relocation": true,
+  "inherited_acquisition_cold": {
     "normal_tests": 40,
-    "optimized_tests": 40
+    "optimized_tests": 40,
+    "rerun_in_this_delta": false
   },
+  "inherited_decoder_probe_cold": {
+    "actual": "NOT_EXECUTED_HOST_PRECONDITION_UNMET",
+    "normal_tests": 6,
+    "optimized_tests": 6,
+    "rerun_in_this_delta": false
+  },
+  "inherited_portable_cold": {
+    "normal_tests": 40,
+    "optimized_tests": 40,
+    "rerun_in_this_delta": false
+  },
+  "native_tools_executed": false,
+  "network_used": false,
+  "original_source_and_actual_unchanged": true,
+  "prior_actual": "39210024872",
+  "prior_actual_postflight_gate": "UNKNOWN",
   "runner": {
-    "accepted_cleanup_controls": 2,
-    "early_failure_prefix_subcases": 24,
-    "new_negative_cases": 20,
-    "normal_tests": 27,
-    "optimized_tests": 27
+    "normal_tests": 40,
+    "optimized_tests": 40,
+    "result": {
+      "bytes": 2694,
+      "sha256": "1da534337a058db845c81fad622e268972fd0e3b866e810eb48a1e6472c06e01"
+    }
   },
   "source_review": {
-    "directory": "review_host_micro_job_source_v2_20261019T0621",
+    "directory": "review_micro_postflight_source_v2_20261019T0652",
     "manifest": {
-      "bytes": 1009,
-      "sha256": "f1b32efd6d010ab67984d86730dbd339532e4e889b7a9170c4f5f9bd569edd01"
+      "bytes": 1008,
+      "sha256": "eb1f34bbeba3d44986cdc58a913609b269cddb97f4e9e998c7733db68729f4a6"
     },
     "status": "GO",
     "summary": {
-      "bytes": 4633,
-      "sha256": "c7e8cb9221b88a2114201173b56822a33f2c92138cf837f8baef42ad15f60bb6"
+      "bytes": 4589,
+      "sha256": "d1ab76eb6fe8f33cda59d5d66b0fd3057b01a1a577286e8b11ecca35b5d57efe"
     },
-    "verdict": "SOURCE_GO_FINITE_25_STAGE_FIFO_AND_MODELED_HOST_MICRO_JOB"
+    "verdict": "SOURCE_GO_FINITE_MICRO_PARENT_POSTFLIGHT_DELTA"
+  },
+  "static_local_read_and_elf": {
+    "inherited_from": "postflight_v1",
+    "native_or_library_loaded": false,
+    "normal_aliases_passed": 9,
+    "optimized_aliases_passed": 9,
+    "target_ci_identity_qualified": false
   },
   "status": "SOURCE_ONLY_COLD_PASS",
   "v1_hold_findings_closed": [
-    "F01",
-    "F02",
-    "F03"
+    "PC01",
+    "PC02"
   ]
 }

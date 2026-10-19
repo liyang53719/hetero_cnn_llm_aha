@@ -1,30 +1,17 @@
-# Fixed implementation and execution contract
+# Narrow parent-postflight successor
 
-Parent baseline: cf01cf5f718ac150ef21b34beaf61195e09fa299. Existing Host and build-only code/workflows remain unchanged. A new entry is projected to candidates/host93_micro_diagnostics/run.py. Parent owns the independent workflow and all native execution/publication.
+Parent: c61098f94ac8c789b8f7fc2ed397af6bf495ea19. Existing SOURCE_PINS, acquisition module, five SV fixtures, portable cold entry, original supervisor and toolchain components remain byte-identical. Parent owns publication and the sole next workflow trigger.
 
-Interface:
-- Actual: python3 -I -S -B candidates/host93_micro_diagnostics/run.py --execute --repo REPO --out OUT --deadline HOST93_WORK_DEADLINE.
-- Safe validation: the same entry with --verify-evidence --out OUT.
-- Without explicit execute arguments it refuses native work. The workflow binds the reviewed git SHA and first attempt. Project imports use size/SHA-verified same buffers; the entry's own bytes are observed and rechecked, while the workflow git SHA binds its launch.
+The fixed-library lexical exception applies only beneath /usr/lib/x86_64-linux-gnu/ to libstdc++.so.6 and its bounded numeric version suffix. The generic path grammar is not widened to plus-bearing work paths or unrelated names. Existing absolute-path, no-parent-hop, no-symlink and same-descriptor read checks remain. The exception does not waive root ownership or ELF checks.
 
-The workflow establishes t0 before checkout: full job deadline t0+6600, work deadline t0+6480, leaving 120 seconds for safe validation/upload. The entry uses that same work deadline and never restarts a 6600-second window.
+All parent postflight checkpoints receive fixed safe boundary/code observations. Known local contract reasons map to finite public codes; unexpected exception text is never copied. Existing safe toolchain labels are retained under finite allowlists. Native stage rows continue reporting the original child outcome; a later parent failure does not rewrite a successful child as failed. The strict three-JSON consumer binds the new detail to overall success/failure.
 
-Fixed sequence:
-1. Icarus acquisition/staging: 120 seconds total, 90 work, 40 CPU, 512 MiB AS, 4 MiB FSIZE, 16 MiB private selected tree, 64 KiB merged log.
-2. FIFO compile and FIFO vvp: each 30 total / 10 work / 10 CPU, 512 MiB AS, 4 MiB FSIZE, 8 MiB tree, 64 KiB merged log.
-3. The unchanged original 20 fixed Verilator source, host-tool probe, FlexLexer header, build and tool-tiny stages. Existing per-stage limits remain; make stays 3600 total / 3570 work / 4 GiB AS. The shared wall can stop the sequence sooner.
-4. Transparent then opaque generation: each the same 30/10 micro limits. Opaque is last. Its real nonzero terminal record remains FAILED; a narrowly recognized expected model observation may produce DIAGNOSTIC_OBSERVED overall. No Host qualification is granted.
+Original sequence, invocation and timing remain: --execute --repo REPO --out OUT --deadline HOST93_WORK_DEADLINE, and --verify-evidence --out OUT. The work deadline is the pre-checkout t0+6480 inside t0+6600 total with120 seconds reserved for final evidence. Fixed acquisition120/90 and micro30/10 phase windows, original20 tool limits, no-warning-suppression policy and first-unexpected-failure stop are unchanged.
 
-Official Icarus package: https://archive.ubuntu.com/ubuntu/pool/universe/i/iverilog/iverilog_12.0-2build2_amd64.deb, 2125764 bytes, SHA256 f19394cee05ad526e0eb3873bc6c17a5828f56df17fbe2db40cb66513a2d4667. Exact whole-buffer identity precedes archive parsing. The package is Zstandard. A bounded existing host libzstd capability is privately identified via a protected same-inode file descriptor before network access. Each single frame must decode to the exact fixed tar size/SHA, followed by the literal 39-member size/SHA allowlist. No package installation, generic extraction, or library download occurs.
+The fixed official package and decoded tar buffers are inspected as data only. Real39 selected file bytes, original receipt consumer and21 ELF dependency reads are replayed; decoder identity fields are explicitly synthetic because the original CI private receipt is unavailable. Separate local library byte reads test lexical/ELF parser behavior, not target-CI library identity or runtime linkage. No package program, HDL tool, dynamic library adapter, network or new CI is executed during this successor preparation.
 
-Selected package files total 6379063 bytes; the largest is 2873976 bytes. The 21 selected ELF files have a fixed seven-soname direct dependency union. Fixed current host library candidates and their ELF metadata are privately read and rechecked; this is not a capture of every loader-mapped library. The actual compile/vvp phase supplies linkage/function evidence. Generated vvp module references must stay under the staged ivl directory. Explicit staged-vvp invocation avoids the generated system-path shebang.
+Inherited receipt-provenance limit: the parent re-reads the private child-produced receipt. Selected member bytes are independently hard-pinned, but this check does not independently attest arbitrary changes to the receipt's decoder/tar provenance fields. No new provenance assurance is claimed by this successor.
 
-FIFO qualification requires four exact CASE lines (1294,1294,1296,1296), the exact PASS line, then the fixed fixture-line-229 Icarus finish notice with bounded picoseconds. The standard sixth notice is supported by the v12 upstream finish implementation; it is not dropped as unknown text.
+V2 is a consumer-only successor to the preserved v1 HOLD. Rejected count traces remain failures; the consumer correction grants no success or later-stage qualification. Original local read/ELF evidence and all non-consumer v1 checks are inherited, not represented as new executions.
 
-The retained official Verilator commit is 4e194cc3ec8e27b18e17f80d7f99c15f984bbdae, with the existing sole m_seqnum initialization source delta. A missing prior backend supplies no current executable qualification. The paired model must use the newly qualified backend in the same job.
-
-Evidence under OUT/evidence is exactly summary.json, source_hashes.json, and stage_exits.json. Strict schema binds statuses to the stage prefix and actual terminal observations. Every failed stage attempts the existing bounded redacted tail collection. No perfect generic secrecy claim is made; this is the finite public-source, no-weights job scope.
-
-V2 inherits the frozen v1 source and its limited review except for the three strict consumer associations above. The portable cold entry is a separate reviewed test-only replacement. Neither changes execution or expands qualification.
-
-Independent SOURCE acceptance: review_host_micro_job_source_v2_20261019T0621, MANIFEST SHA256 f1b32efd6d010ab67984d86730dbd339532e4e889b7a9170c4f5f9bd569edd01; SUMMARY SHA256 c7e8cb9221b88a2114201173b56822a33f2c92138cf837f8baef42ad15f60bb6. Verdict: SOURCE_GO_FINITE_25_STAGE_FIFO_AND_MODELED_HOST_MICRO_JOB. Actual remains NOT_EXECUTED.
+Independent SOURCE acceptance: review_micro_postflight_source_v2_20261019T0652, MANIFEST SHA256 eb1f34bbeba3d44986cdc58a913609b269cddb97f4e9e998c7733db68729f4a6; SUMMARY SHA256 d1ab76eb6fe8f33cda59d5d66b0fd3057b01a1a577286e8b11ecca35b5d57efe. Verdict: SOURCE_GO_FINITE_MICRO_PARENT_POSTFLIGHT_DELTA. New actual remains NOT_EXECUTED.

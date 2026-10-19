@@ -4,6 +4,7 @@ import sys
 if not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode):
     raise SystemExit('require Python -I -S -B before project loads')
 import argparse
+import contextlib
 import hashlib
 import json
 import math
@@ -35,8 +36,216 @@ FIFO_PASS = 'PASS fifo_valid_split local four-state matrix and stepped backpress
 ICARUS_IDENTITIES = {'icarus':{'bytes':51640,'sha256':'a6071e4b4a68feafca0c8ee0e6aa275eee9a43a108c62801cfd1eca6eab6d8a3'},'vvp':{'bytes':1354376,'sha256':'a10bd7d4a0850308ac8c2c98115b6a3084f9be978307610f2a521190c28f4023'}}
 
 
+# Fixed public labels only. No exception text is projected into evidence.
+TOOL_CONTRACT_CODES = ('NONE', 'UNMAPPED_CONTRACT', 'MISSING_FIXED_FIELD',
+    'HEADER_IDENTITY', 'INPUT_SIZE', 'INPUT_SHA', 'INPUT_CHANGED', 'INPUT_REGULAR',
+    'INPUT_IDENTITY_CAP', 'INPUT_GREW', 'INPUT_IDENTITY_CHANGED', 'INPUT_ENCODING', 'INPUT_JSON', 'SOURCE_CHANGED',
+    'BUILD_CONFIGURATION', 'HOME_CONFIGURATION', 'CCACHE_BINDING', 'TOOL_IDENTITY',
+    'PHASE_RESULT', 'PHASE_LOG_BOUND', 'TREE_ROOT_MODE', 'TREE_ENTRY_CAP',
+    'TREE_SYMLINK', 'TREE_DIRECTORY_MODE', 'TREE_SPECIAL_FILE', 'TREE_FILE_CAP',
+    'TREE_BYTE_CAP', 'BUILD_OUTPUT_MISSING', 'CPPFLAGS_TEMPLATE', 'CPPFLAGS_VALUE',
+    'OBJCACHE_BRANCH', 'OBJCACHE_BLOCK', 'OBJCACHE_GUARD', 'OBJCACHE_OFFICIAL',
+    'OBJCACHE_TEMPLATE', 'OBJCACHE_OUTPUT', 'OBJCACHE_WITNESS', 'RECEIPT_CAP',
+    'RECEIPT_WRITE', 'HEADER_PACKAGE_COUNT', 'HEADER_ARGUMENT_BOUND', 'HEADER_OUTPUT_SET',
+    'HEADER_RECEIPT', 'HEADER_PROBE_OUTPUT_SET', 'HEADER_PROBE_SOURCE',
+    'HEADER_PROBE_OBJECT', 'HEADER_PROBE_DEPENDENCY')
+TOOL_CONTRACT_BOUNDARIES = ('NONE', 'UNREPORTED', 'HEADER_QUALIFICATION') + tuple(
+    'BUILD_' + phase + '_' + check
+    for phase in ('AUTOCONF', 'CONFIGURE', 'MAKE')
+    for check in ('HEADER_BEFORE', 'SOURCE_BEFORE', 'CONFIGURATION_BEFORE',
+                  'HOME_BEFORE', 'CCACHE_BINDING_BEFORE', 'OBJCACHE_BEFORE',
+                  'PHASE_AND_TREE', 'HEADER_AFTER', 'SOURCE_AFTER', 'OUTPUTS_AFTER',
+                  'CPPFLAGS_AFTER', 'OBJCACHE_AFTER', 'RECEIPT_AFTER'))
+
+
+PARENT_CONTRACTS = {'PHASE_ORDER': 'PHASE_ORDER',
+ 'PHASE_BUDGET': 'PHASE_BUDGET',
+ 'PHASE_LOG_POSTFLIGHT': 'PHASE_LOG_BOUND',
+ 'OPAQUE_CONTEXT': 'OPAQUE_CONTEXT',
+ 'OPAQUE_LOG_READ': 'LOG_READ',
+ 'OPAQUE_OBSERVATION': 'OPAQUE_OBSERVATION',
+ 'OPAQUE_BUDGET': 'PHASE_BUDGET',
+ 'ICARUS_CONTRACT_LOAD': 'SOURCE_LOAD',
+ 'ICARUS_RECEIPT_READ': 'RECEIPT_READ',
+ 'ICARUS_RECEIPT_DECODE': 'INPUT_JSON',
+ 'ICARUS_STAGE_VERIFY': 'PACKAGE_STAGE',
+ 'ICARUS_PACKAGE_ELF': 'PACKAGE_ELF',
+ 'ICARUS_LIBRARY_IDENTITIES': 'LIBRARY_IDENTITIES',
+ 'ICARUS_LIBRARY_RECEIPT': 'RECEIPT_WRITE',
+ 'ICARUS_TOOL_IDENTITIES': 'TOOL_IDENTITY',
+ 'FIFO_WORKROOT': 'WORKROOT',
+ 'FIFO_COMPILED_IDENTITY': 'COMPILED_IDENTITY',
+ 'FIFO_COMPILED_NONEMPTY': 'COMPILED_EMPTY',
+ 'FIFO_COMPILED_READ': 'COMPILED_READ',
+ 'FIFO_COMPILED_MODULES': 'VVP_MODULES',
+ 'FIFO_MODULE_RECEIPT': 'RECEIPT_WRITE',
+ 'FIFO_RUN_SAME_COMPILED': 'COMPILED_CHANGED',
+ 'FIFO_RUN_OBSERVATION': 'FIFO_OBSERVATION',
+ 'TOOLCHAIN_STAGE_COUNT': 'TOOLCHAIN_STAGE_COUNT',
+ 'TOOLCHAIN_IDENTITIES': 'TOOL_IDENTITY',
+ 'HOST_RUNTIME_ROOT': 'RUNTIME_ROOT',
+ 'HOST_RUNTIME_READ': 'RUNTIME_READ',
+ 'HOST_RUNTIME_DECODE': 'INPUT_JSON',
+ 'HOST_WORKROOT': 'WORKROOT',
+ 'HOST_ENVIRONMENT': 'HOST_ENVIRONMENT',
+ 'HOST_TRANSPARENT_LOG': 'TRANSPARENT_DIAGNOSTIC',
+ 'HOST_OPAQUE_RESULT': 'OPAQUE_OBSERVATION',
+ 'FINAL_SOURCE_IDENTITIES': 'SOURCE_CHANGED',
+ 'FINAL_RUNNER_IDENTITIES': 'SOURCE_CHANGED',
+ 'FIFO_BEFORE_COMPILE_STAGE': 'PACKAGE_STAGE',
+ 'FIFO_BEFORE_COMPILE_FIXTURES': 'FIXTURE_CHANGED',
+ 'FIFO_BEFORE_COMPILE_LIBRARIES': 'LIBRARY_CHANGED',
+ 'FIFO_AFTER_COMPILE_STAGE': 'PACKAGE_STAGE',
+ 'FIFO_AFTER_COMPILE_FIXTURES': 'FIXTURE_CHANGED',
+ 'FIFO_AFTER_COMPILE_LIBRARIES': 'LIBRARY_CHANGED',
+ 'FIFO_AFTER_RUN_STAGE': 'PACKAGE_STAGE',
+ 'FIFO_AFTER_RUN_FIXTURES': 'FIXTURE_CHANGED',
+ 'FIFO_AFTER_RUN_LIBRARIES': 'LIBRARY_CHANGED',
+ 'FIFO_AFTER_COMPILE_TREE': 'TREE_INVENTORY',
+ 'FIFO_AFTER_RUN_TREE': 'TREE_INVENTORY',
+ 'HOST_TRANSPARENT_TREE': 'TREE_INVENTORY',
+ 'HOST_OPAQUE_TREE': 'TREE_INVENTORY',
+ 'HOST_TRANSPARENT_BEFORE_FIXTURES': 'FIXTURE_CHANGED',
+ 'HOST_TRANSPARENT_BEFORE_TOOLS': 'TOOL_IDENTITY',
+ 'HOST_TRANSPARENT_BEFORE_RUNTIME': 'RUNTIME_CHANGED',
+ 'HOST_TRANSPARENT_BEFORE_BACKEND': 'BACKEND_CHANGED',
+ 'HOST_TRANSPARENT_AFTER_FIXTURES': 'FIXTURE_CHANGED',
+ 'HOST_TRANSPARENT_AFTER_TOOLS': 'TOOL_IDENTITY',
+ 'HOST_TRANSPARENT_AFTER_RUNTIME': 'RUNTIME_CHANGED',
+ 'HOST_TRANSPARENT_AFTER_BACKEND': 'BACKEND_CHANGED',
+ 'HOST_OPAQUE_BEFORE_FIXTURES': 'FIXTURE_CHANGED',
+ 'HOST_OPAQUE_BEFORE_TOOLS': 'TOOL_IDENTITY',
+ 'HOST_OPAQUE_BEFORE_RUNTIME': 'RUNTIME_CHANGED',
+ 'HOST_OPAQUE_BEFORE_BACKEND': 'BACKEND_CHANGED',
+ 'HOST_OPAQUE_AFTER_FIXTURES': 'FIXTURE_CHANGED',
+ 'HOST_OPAQUE_AFTER_TOOLS': 'TOOL_IDENTITY',
+ 'HOST_OPAQUE_AFTER_RUNTIME': 'RUNTIME_CHANGED',
+ 'HOST_OPAQUE_AFTER_BACKEND': 'BACKEND_CHANGED',
+ 'LIBRARY_BZ2_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_BZ2_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_BZ2_READ': 'LIBRARY_READ',
+ 'LIBRARY_BZ2_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_BZ2_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_C_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_C_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_C_READ': 'LIBRARY_READ',
+ 'LIBRARY_C_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_C_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_GCC_S_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_GCC_S_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_GCC_S_READ': 'LIBRARY_READ',
+ 'LIBRARY_GCC_S_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_GCC_S_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_M_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_M_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_M_READ': 'LIBRARY_READ',
+ 'LIBRARY_M_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_M_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_READLINE_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_READLINE_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_READLINE_READ': 'LIBRARY_READ',
+ 'LIBRARY_READLINE_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_READLINE_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_STDCXX_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_STDCXX_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_STDCXX_READ': 'LIBRARY_READ',
+ 'LIBRARY_STDCXX_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_STDCXX_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_Z_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_Z_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_Z_READ': 'LIBRARY_READ',
+ 'LIBRARY_Z_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_Z_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_TINFO_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_TINFO_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_TINFO_READ': 'LIBRARY_READ',
+ 'LIBRARY_TINFO_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_TINFO_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_LOADER_RESOLVE': 'LIBRARY_PATH',
+ 'LIBRARY_LOADER_OWNERSHIP': 'LIBRARY_OWNERSHIP',
+ 'LIBRARY_LOADER_READ': 'LIBRARY_READ',
+ 'LIBRARY_LOADER_ELF': 'LIBRARY_ELF',
+ 'LIBRARY_LOADER_STABLE': 'LIBRARY_STABLE',
+ 'LIBRARY_READLINE_TRANSITIVE': 'LIBRARY_TRANSITIVE'}
+REQUIRE_CODES = {'fixed system library directory': 'LIBRARY_PATH',
+ 'protected root-owned host library': 'LIBRARY_OWNERSHIP',
+ 'stable library resolution': 'LIBRARY_STABLE',
+ 'target readline transitive dependency': 'LIBRARY_TRANSITIVE',
+ 'ELF64 little endian': 'ELF_ENCODING',
+ 'fixed x86-64 ELF header': 'ELF_HEADER',
+ 'ELF program-header bound': 'ELF_PROGRAM_HEADERS',
+ 'ELF segment bound': 'ELF_SEGMENT',
+ 'ELF dynamic bound': 'ELF_DYNAMIC_BOUND',
+ 'fixed dynamic interpreter': 'ELF_INTERPRETER',
+ 'one dynamic table': 'ELF_DYNAMIC_COUNT',
+ 'no RPATH and exact string table': 'ELF_DYNAMIC_TAGS',
+ 'mapped bounded string table': 'ELF_STRING_TABLE',
+ 'dynamic dependency offset': 'ELF_DEPENDENCY_OFFSET',
+ 'bounded soname': 'ELF_SONAME',
+ 'fixed dependency soname': 'ELF_DEPENDENCY_NAME',
+ 'unique needed sonames': 'ELF_DEPENDENCY_DUPLICATE',
+ 'absolute normalized ASCII path': 'INPUT_PATH_SYNTAX',
+ 'symlink refused': 'INPUT_SYMLINK',
+ 'bounded regular input': 'INPUT_REGULAR',
+ 'stable same-buffer input': 'INPUT_CHANGED',
+ 'fixed source identity': 'INPUT_SHA'}
+FALLBACK_CODES = {'INPUT_OR_CONTRACT':'UNMAPPED_CONTRACT','TIMEOUT':'TIMEOUT_FAILURE','SYSTEM':'SYSTEM_FAILURE','INTERRUPTED':'INTERRUPTED_FAILURE','UNEXPECTED':'UNEXPECTED_FAILURE'}
+CONTRACT_CODES = frozenset(TOOL_CONTRACT_CODES) | frozenset(PARENT_CONTRACTS.values()) | frozenset(REQUIRE_CODES.values()) | frozenset(FALLBACK_CODES.values())
+CONTRACT_BOUNDARIES = frozenset(TOOL_CONTRACT_BOUNDARIES) | frozenset(PARENT_CONTRACTS)
+
+
+class ContractFailure(ValueError):
+    def __init__(self, boundary, code):
+        if type(boundary) is not str or boundary not in CONTRACT_BOUNDARIES or type(code) is not str or code not in CONTRACT_CODES or boundary=='NONE' or code=='NONE':
+            raise ValueError('invalid fixed contract label')
+        self.safe_contract_boundary=boundary
+        self.safe_contract_code=code
+        super().__init__('fixed contract rejection')
+
+
+def failure_category(error):
+    return 'NONE' if error is None else 'TIMEOUT' if isinstance(error,TimeoutError) else 'INPUT_OR_CONTRACT' if isinstance(error,(ValueError,KeyError)) else 'SYSTEM' if isinstance(error,OSError) else 'INTERRUPTED' if isinstance(error,(SystemExit,KeyboardInterrupt)) else 'UNEXPECTED'
+
+
+def safe_contract_pair(boundary,code):
+    if type(boundary) is not str or type(code) is not str: return False
+    if boundary in PARENT_CONTRACTS:
+        return code==PARENT_CONTRACTS[boundary] or code in REQUIRE_CODES.values()
+    return boundary not in ('NONE','UNREPORTED') and boundary in TOOL_CONTRACT_BOUNDARIES and code not in ('NONE',) and code in TOOL_CONTRACT_CODES
+
+
+@contextlib.contextmanager
+def contract_check(boundary):
+    require(boundary in PARENT_CONTRACTS,'fixed parent contract boundary')
+    try:
+        yield
+    except BaseException as error:
+        try:
+            old_boundary=getattr(error,'safe_contract_boundary',None)
+            old_code=getattr(error,'safe_contract_code',None)
+            if not safe_contract_pair(old_boundary,old_code):
+                error.safe_contract_boundary=boundary
+                error.safe_contract_code=old_code if type(old_code) is str and old_code in REQUIRE_CODES.values() else PARENT_CONTRACTS[boundary]
+        except BaseException:
+            pass  # Labels must never replace the original failure.
+        raise
+
+
+def contract_failure_observation(error):
+    if error is None: return {'boundary':'NONE','code':'NONE'}
+    try:
+        boundary=getattr(error,'safe_contract_boundary',None)
+        code=getattr(error,'safe_contract_code',None)
+        if safe_contract_pair(boundary,code): return {'boundary':boundary,'code':code}
+    except BaseException:
+        pass
+    return {'boundary':'UNREPORTED','code':FALLBACK_CODES[failure_category(error)]}
+
+
 def require(ok, reason):
-    if not ok: raise ValueError(reason)
+    if not ok:
+        if reason in REQUIRE_CODES: raise ContractFailure('UNREPORTED',REQUIRE_CODES[reason])
+        raise ValueError(reason)
 
 
 def sha(raw): return hashlib.sha256(raw).hexdigest()
@@ -52,7 +261,7 @@ def finite(value, cap=6480):
 
 def path(value):
     p=Path(value)
-    require(p.is_absolute() and re.fullmatch('[A-Za-z0-9_/.-]+',str(p)) and '..' not in p.parts, 'absolute normalized ASCII path')
+    require(p.is_absolute() and (re.fullmatch('[A-Za-z0-9_/.-]+',str(p)) or re.fullmatch(r'/usr/lib/x86_64-linux-gnu/libstdc\+\+\.so\.6(?:\.[0-9]{1,3}){0,2}',str(p))) and '..' not in p.parts, 'absolute normalized ASCII path')
     for q in (p,)+tuple(p.parents): require(not q.is_symlink(), 'symlink refused')
     return p
 
@@ -240,8 +449,17 @@ def verify_evidence(out):
 
 def validate_evidence(objects):
     keys(objects,EVIDENCE);summary,sources,exits=(objects[n] for n in EVIDENCE)
-    keys(summary,('schema','status','failure_category','seconds','fifo','toolchain','host_pair','production_host_qualified'))
-    require(summary['schema']=='host93-micro-summary-v1' and summary['status'] in ('INCOMPLETE','DIAGNOSTIC_OBSERVED') and summary['failure_category'] in CATEGORIES and finite(summary['seconds']) and summary['production_host_qualified'] is False,'finite summary')
+    keys(summary,('schema','status','failure_category','contract_failure','seconds','fifo','toolchain','host_pair','production_host_qualified'))
+    require(summary['schema']=='host93-micro-summary-v2' and summary['status'] in ('INCOMPLETE','DIAGNOSTIC_OBSERVED') and summary['failure_category'] in CATEGORIES and finite(summary['seconds']) and summary['production_host_qualified'] is False,'finite summary')
+    detail=summary['contract_failure'];keys(detail,('boundary','code'))
+    boundary,code=detail['boundary'],detail['code']
+    require(type(boundary) is str and type(code) is str and boundary in CONTRACT_BOUNDARIES and code in CONTRACT_CODES,'finite safe contract labels')
+    if summary['failure_category']=='NONE':
+        require(detail=={'boundary':'NONE','code':'NONE'},'success has no contract failure')
+    else:
+        require(safe_contract_pair(boundary,code) or boundary=='UNREPORTED' and code==FALLBACK_CODES[summary['failure_category']],'failure has correlated finite labels')
+        if boundary in TOOL_CONTRACT_BOUNDARIES and boundary not in ('NONE','UNREPORTED'):
+            require(summary['failure_category']=='INPUT_OR_CONTRACT','toolchain contract category')
     keys(summary['fifo'],('cases','comparisons'));require(summary['fifo'] in ({'cases':0,'comparisons':0},{'cases':4,'comparisons':5180}),'finite FIFO observation')
     require(type(summary['toolchain']) is bool,'toolchain Boolean')
     keys(summary['host_pair'],('transparent_exit0','opaque_warning_count','opaque_combo_handshake_path'))
@@ -273,6 +491,36 @@ def validate_evidence(objects):
             failed=True;require(row['diagnostics']['context_state']!='NOT_COLLECTED','failed context attempted')
         else:
             require(row['exit_code']==0 and row['cleanup_confirmed'] is True and row['receipt_timed_out'] is False and row['native_record_status']=='PASS' and row['failure_code']=='NONE' and row['failure_boundary']=='NONE' and row['waitid_code']==1 and row['waitid_status']==0 and row['kill_attempted'] is True and row['kill_result'] in ('SIGNAL_SENT_BEFORE_REAP','GROUP_ALREADY_ABSENT') and row['diagnostics']==empty_context(),'clean successful terminal tuple')
+    if boundary in PARENT_CONTRACTS:
+        count=len(rows)
+        if boundary.startswith('ICARUS_') or boundary.startswith('FIFO_BEFORE_COMPILE') or boundary=='FIFO_WORKROOT': wanted=(1,)
+        elif boundary.startswith('LIBRARY_'): wanted=(1,2,3)
+        elif boundary.startswith('FIFO_AFTER_COMPILE') or boundary.startswith('FIFO_COMPILED') or boundary=='FIFO_MODULE_RECEIPT': wanted=(2,)
+        elif boundary.startswith('FIFO_AFTER_RUN') or boundary.startswith('FIFO_RUN_'): wanted=(3,)
+        elif boundary=='TOOLCHAIN_STAGE_COUNT': wanted=tuple(range(3,26))
+        elif boundary.startswith('TOOLCHAIN_') or boundary.startswith('HOST_RUNTIME_') or boundary in ('HOST_WORKROOT','HOST_ENVIRONMENT'): wanted=(23,)
+        elif boundary.startswith('HOST_TRANSPARENT_BEFORE_'): wanted=(23,)
+        elif boundary.startswith('HOST_TRANSPARENT_'): wanted=(24,)
+        elif boundary.startswith('HOST_OPAQUE_BEFORE_'): wanted=(24,)
+        elif boundary.startswith(('HOST_OPAQUE_','OPAQUE_','FINAL_')): wanted=(25,)
+        elif boundary=='PHASE_LOG_POSTFLIGHT': wanted=tuple(range(1,26))
+        elif boundary=='PHASE_ORDER': wanted=tuple(range(26))
+        else: wanted=tuple(range(25))
+        require(count in wanted,'parent contract stage prefix')
+        if boundary=='PHASE_ORDER':
+            pass  # This guard also rejects re-entry after a failed/final row.
+        elif boundary=='PHASE_LOG_POSTFLIGHT':
+            require(failed,'log rejection precedes clean phase assignment')
+        elif boundary.startswith('OPAQUE_'):
+            require(failed and pair['opaque_warning_count']==0 and pair['opaque_combo_handshake_path'] is False,'opaque rejection precedes completed observation')
+            if boundary=='OPAQUE_BUDGET':
+                require(natural_nonzero(rows[-1]) and rows[-1]['diagnostics']['context_state']=='AVAILABLE','opaque budget follows validated natural warning')
+        elif boundary.startswith('FINAL_'):
+            require(failed and natural_nonzero(rows[-1]) and pair['opaque_warning_count']>0,'final source checks follow completed opaque observation')
+        elif boundary=='TOOLCHAIN_STAGE_COUNT' or boundary.startswith('HOST_OPAQUE_') and '_BEFORE_' not in boundary:
+            require(not failed or count==25 and natural_nonzero(rows[-1]) and rows[-1]['diagnostics']['context_state']=='AVAILABLE','post-return checks require clean phases or validated opaque warning')
+        else:
+            require(not failed,'ordinary parent postflight requires clean native prefix')
     clean=lambda n:len(rows)>n and rows[n]['status']=='EXIT0_CLEANED'
     fifo=summary['fifo']['cases']==4
     require(not fifo or clean(2) and {'icarus','vvp'}<=set(sources['tools']),'FIFO requires successful run and fixed tool identities')
@@ -318,6 +566,7 @@ def host_argv(backend,fixtures,work,opaque):
 
 LIBRARIES = ('libbz2.so.1.0','libc.so.6','libgcc_s.so.1','libm.so.6','libreadline.so.8','libstdc++.so.6','libz.so.1','libtinfo.so.6','ld-linux-x86-64.so.2')
 INTERPRETER = '/lib64/ld-linux-x86-64.so.2'
+LIBRARY_ALIASES = dict(zip(LIBRARIES,('BZ2', 'C', 'GCC_S', 'M', 'READLINE', 'STDCXX', 'Z', 'TINFO', 'LOADER')))
 
 
 def elf_dependencies(raw):
@@ -359,12 +608,18 @@ def library_identities():
     result={}
     for name in LIBRARIES:
         invoked=Path(INTERPRETER if name=='ld-linux-x86-64.so.2' else '/usr/lib/x86_64-linux-gnu/'+name)
-        resolved=Path(os.path.realpath(invoked));require(str(resolved).startswith('/usr/lib/x86_64-linux-gnu/'),'fixed system library directory')
-        before=resolved.stat();require(before.st_uid==0 and before.st_nlink>=1 and stat.S_ISREG(before.st_mode) and not before.st_mode&0o022,'protected root-owned host library')
-        raw=read(resolved,32*MIB);meta=elf_dependencies(raw)
-        after=resolved.stat();require((before.st_dev,before.st_ino,before.st_mode,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_mode,after.st_size,after.st_mtime_ns,after.st_ctime_ns) and Path(os.path.realpath(invoked))==resolved,'stable library resolution')
+        boundary='LIBRARY_'+LIBRARY_ALIASES[name]
+        with contract_check(boundary+'_RESOLVE'):
+            resolved=Path(os.path.realpath(invoked));require(str(resolved).startswith('/usr/lib/x86_64-linux-gnu/'),'fixed system library directory')
+        with contract_check(boundary+'_OWNERSHIP'):
+            before=resolved.stat();require(before.st_uid==0 and before.st_nlink>=1 and stat.S_ISREG(before.st_mode) and not before.st_mode&0o022,'protected root-owned host library')
+        with contract_check(boundary+'_READ'): raw=read(resolved,32*MIB)
+        with contract_check(boundary+'_ELF'): meta=elf_dependencies(raw)
+        with contract_check(boundary+'_STABLE'):
+            after=resolved.stat();require((before.st_dev,before.st_ino,before.st_mode,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_mode,after.st_size,after.st_mtime_ns,after.st_ctime_ns) and Path(os.path.realpath(invoked))==resolved,'stable library resolution')
         result[name]={'path':str(resolved),'bytes':len(raw),'sha256':sha(raw),'mode':oct(stat.S_IMODE(before.st_mode)),**meta}
-    require('libtinfo.so.6' in result['libreadline.so.8']['needed'],'target readline transitive dependency')
+    with contract_check('LIBRARY_READLINE_TRANSITIVE'):
+        require('libtinfo.so.6' in result['libreadline.so.8']['needed'],'target readline transitive dependency')
     return result
 
 
@@ -422,23 +677,30 @@ def execute(repo,out,supplied_deadline):
                 value['truncated']=value['truncated'] or truncated;validate_context(value);return value
             except BaseException: return empty_context('SANITIZER_ERROR')
         def call_phase(name,argv,cwd,environment,bound):
-            require(len(rows)<25 and name==STAGES[len(rows)] and (not rows or rows[-1]['status']=='EXIT0_CLEANED'),'single ordered phase')
-            require(bound==bounds[name] and time.monotonic()<stop-15,'unchanged fixed budget within shared deadline')
+            with contract_check('PHASE_ORDER'):
+                require(len(rows)<25 and name==STAGES[len(rows)] and (not rows or rows[-1]['status']=='EXIT0_CLEANED'),'single ordered phase')
+            with contract_check('PHASE_BUDGET'):
+                require(bound==bounds[name] and time.monotonic()<stop-15,'unchanged fixed budget within shared deadline')
             began=time.monotonic();evidence=out/'phases'/name;observation={}
             row={'name':name,'status':'FAILED','seconds':0.0,'diagnostics':empty_context(),**supervisor.diagnostic_defaults()};rows.append(row)
             print(json.dumps({'phase':name,'status':'START'},sort_keys=True),flush=True)
             try:
                 record,raw,usage=supervisor.run_phase(support,base,name,argv,cwd,evidence,environment,bound,stop,owner,diagnostics=observation)
-                require(len(raw)<=bound['log_bytes'],'bounded complete log')
+                with contract_check('PHASE_LOG_POSTFLIGHT'):
+                    require(len(raw)<=bound['log_bytes'],'bounded complete log')
                 row.update(observation);row['status']='EXIT0_CLEANED'
                 return {'record':record,'raw_log':raw,'usage':usage,'evidence_root':str(evidence)}
             except BaseException:
                 row.update(observation);row['diagnostics']=context(evidence/'native.log')
                 if name=='host_opaque':
-                    require(row['diagnostics']['context_state']=='AVAILABLE','opaque context collection required')
-                    raw=read(evidence/'native.log',65536)
-                    count=opaque_observation(raw,row)
-                    require(time.monotonic()-began<bound['total_seconds'],'opaque postflight total budget')
+                    with contract_check('OPAQUE_CONTEXT'):
+                        require(row['diagnostics']['context_state']=='AVAILABLE','opaque context collection required')
+                    with contract_check('OPAQUE_LOG_READ'):
+                        raw=read(evidence/'native.log',65536)
+                    with contract_check('OPAQUE_OBSERVATION'):
+                        count=opaque_observation(raw,row)
+                    with contract_check('OPAQUE_BUDGET'):
+                        require(time.monotonic()-began<bound['total_seconds'],'opaque postflight total budget')
                     return {'opaque_warning_count':count}
                 raise
             finally:
@@ -452,57 +714,97 @@ def execute(repo,out,supplied_deadline):
         call_phase('icarus_acquire',acquisition_argv(buffers[PREFIX+'icarus_stage.py'],stage,HERE/'icarus_stage.py'),out,transport,ACQUIRE_LIMITS)
         # Acquisition contract and binary/library identity checking are supplied
         # by the separately reviewed fixed package component, never host PATH.
-        acquisition=loaded(PREFIX+'icarus_stage.py','fixed_icarus_contract')
-        package=decode(read(stage/'RECEIPT.json',32768))
-        acquisition.verify_stage(stage,package)
-        verify_package_elf(stage,package)
-        libraries=library_identities()
-        write_json(out/'icarus_libraries_private.json',libraries)
-        members={r['path']:r for r in package['selected']}
-        safe_tools.update({alias:{k:members['usr/bin/'+name][k] for k in ('bytes','sha256')} for alias,name in (('icarus','iverilog'),('vvp','vvp'))})
+        with contract_check('ICARUS_CONTRACT_LOAD'):
+            acquisition=loaded(PREFIX+'icarus_stage.py','fixed_icarus_contract')
+        with contract_check('ICARUS_RECEIPT_READ'):
+            package_raw=read(stage/'RECEIPT.json',32768)
+        with contract_check('ICARUS_RECEIPT_DECODE'):
+            package=decode(package_raw)
+        with contract_check('ICARUS_STAGE_VERIFY'):
+            acquisition.verify_stage(stage,package)
+        with contract_check('ICARUS_PACKAGE_ELF'):
+            verify_package_elf(stage,package)
+        with contract_check('ICARUS_LIBRARY_IDENTITIES'):
+            libraries=library_identities()
+        with contract_check('ICARUS_LIBRARY_RECEIPT'):
+            write_json(out/'icarus_libraries_private.json',libraries)
+        with contract_check('ICARUS_TOOL_IDENTITIES'):
+            members={r['path']:r for r in package['selected']}
+            safe_tools.update({alias:{k:members['usr/bin/'+name][k] for k in ('bytes','sha256')} for alias,name in (('icarus','iverilog'),('vvp','vvp'))})
         icarus=str(stage/'usr/bin/iverilog');vvp=str(stage/'usr/bin/vvp');ivl=stage/'usr/lib/x86_64-linux-gnu/ivl'
-        fifo=out/'fifo';fifo.mkdir(mode=0o700)
-        def fifo_identity():
-            acquisition.verify_stage(stage,package);unchanged_fixtures()
-            require(library_identities()==libraries,'unchanged Icarus library closure')
-        fifo_identity()
+        with contract_check('FIFO_WORKROOT'):
+            fifo=out/'fifo';fifo.mkdir(mode=0o700)
+        def fifo_identity(boundary):
+            with contract_check(boundary+'_STAGE'): acquisition.verify_stage(stage,package)
+            with contract_check(boundary+'_FIXTURES'): unchanged_fixtures()
+            with contract_check(boundary+'_LIBRARIES'):
+                require(library_identities()==libraries,'unchanged Icarus library closure')
+        fifo_identity('FIFO_BEFORE_COMPILE')
         compile_argv=[icarus,'-B'+str(ivl),'-g2012','-s','fifo_valid_split_tb','-o',str(fifo/'fifo.vvp')]+[str(out/'fixtures'/n) for n in FIXTURES[:2]]
         call_phase('fifo_compile',compile_argv,fifo,env,MICRO_LIMITS)
-        fifo_identity();support.tree_inventory(fifo,8*MIB,512,1024,4*MIB)
-        compiled=support.identity(fifo/'fifo.vvp',4*MIB)
-        require(compiled['bytes']>0,'new compiled FIFO')
-        modules=verify_vvp_modules(support.checked_read(fifo/'fifo.vvp',compiled['bytes'],compiled['sha256']),ivl)
-        write_json(out/'fifo_modules_private.json',{'modules':modules,'staged_only':True})
+        fifo_identity('FIFO_AFTER_COMPILE')
+        with contract_check('FIFO_AFTER_COMPILE_TREE'): support.tree_inventory(fifo,8*MIB,512,1024,4*MIB)
+        with contract_check('FIFO_COMPILED_IDENTITY'):
+            compiled=support.identity(fifo/'fifo.vvp',4*MIB)
+        with contract_check('FIFO_COMPILED_NONEMPTY'):
+            require(compiled['bytes']>0,'new compiled FIFO')
+        with contract_check('FIFO_COMPILED_READ'):
+            compiled_raw=support.checked_read(fifo/'fifo.vvp',compiled['bytes'],compiled['sha256'])
+        with contract_check('FIFO_COMPILED_MODULES'):
+            modules=verify_vvp_modules(compiled_raw,ivl)
+        with contract_check('FIFO_MODULE_RECEIPT'):
+            write_json(out/'fifo_modules_private.json',{'modules':modules,'staged_only':True})
         result=call_phase('fifo_run',[vvp,'-N','-M'+str(ivl),str(fifo/'fifo.vvp')],fifo,env,MICRO_LIMITS)
-        fifo_identity();require(support.identity(fifo/'fifo.vvp',4*MIB)==compiled,'same compiled FIFO')
-        support.tree_inventory(fifo,8*MIB,512,1024,4*MIB)
-        observed_fifo=fifo_observation(result['raw_log'],out/'fixtures/fifo_valid_split_cases.sv')
+        fifo_identity('FIFO_AFTER_RUN')
+        with contract_check('FIFO_RUN_SAME_COMPILED'): require(support.identity(fifo/'fifo.vvp',4*MIB)==compiled,'same compiled FIFO')
+        with contract_check('FIFO_AFTER_RUN_TREE'):
+            support.tree_inventory(fifo,8*MIB,512,1024,4*MIB)
+        with contract_check('FIFO_RUN_OBSERVATION'):
+            observed_fifo=fifo_observation(result['raw_log'],out/'fixtures/fifo_valid_split_cases.sv')
         tools=tool.run(repo,out/'toolchain',call_phase)
-        require(len(rows)==23,'exact original twenty toolchain stages')
-        safe_tools['derived_backend']={k:tools['backend'][k] for k in ('bytes','sha256')};tool_ok=True
-        root=path(tools['verilator_root']);backend=tools['backend'];runtime=decode(support.checked_read(tools['configured_runtime']['path'],tools['configured_runtime']['bytes'],tools['configured_runtime']['sha256']))
-        host=out/'host';host.mkdir(mode=0o700)
-        hostenv=tool.environment(out,root)
+        with contract_check('TOOLCHAIN_STAGE_COUNT'):
+            require(len(rows)==23,'exact original twenty toolchain stages')
+        with contract_check('TOOLCHAIN_IDENTITIES'):
+            safe_tools['derived_backend']={k:tools['backend'][k] for k in ('bytes','sha256')};tool_ok=True
+        with contract_check('HOST_RUNTIME_ROOT'): root=path(tools['verilator_root']);backend=tools['backend']
+        with contract_check('HOST_RUNTIME_READ'):
+            runtime_raw=support.checked_read(tools['configured_runtime']['path'],tools['configured_runtime']['bytes'],tools['configured_runtime']['sha256'])
+        with contract_check('HOST_RUNTIME_DECODE'): runtime=decode(runtime_raw)
+        with contract_check('HOST_WORKROOT'):
+            host=out/'host';host.mkdir(mode=0o700)
+        with contract_check('HOST_ENVIRONMENT'):
+            hostenv=tool.environment(out,root)
         for opaque in (False,True):
-            unchanged_fixtures();tool.unchanged_tools(support,tools['host_programs']);tool.verify_runtime(support,root,runtime)
-            require(support.identity(backend['path'],64*MIB)=={k:backend[k] for k in ('bytes','sha256','mode')},'same derived backend')
+            boundary='HOST_OPAQUE' if opaque else 'HOST_TRANSPARENT'
+            with contract_check(boundary+'_BEFORE_FIXTURES'): unchanged_fixtures()
+            with contract_check(boundary+'_BEFORE_TOOLS'): tool.unchanged_tools(support,tools['host_programs'])
+            with contract_check(boundary+'_BEFORE_RUNTIME'): tool.verify_runtime(support,root,runtime)
+            with contract_check(boundary+'_BEFORE_BACKEND'):
+                require(support.identity(backend['path'],64*MIB)=={k:backend[k] for k in ('bytes','sha256','mode')},'same derived backend')
             result=call_phase('host_opaque' if opaque else 'host_transparent',host_argv(backend['path'],out/'fixtures',host,opaque),host,hostenv,MICRO_LIMITS)
-            support.tree_inventory(host,8*MIB,512,1024,4*MIB)
-            unchanged_fixtures();tool.unchanged_tools(support,tools['host_programs']);tool.verify_runtime(support,root,runtime)
-            require(support.identity(backend['path'],64*MIB)=={k:backend[k] for k in ('bytes','sha256','mode')},'unchanged derived backend')
+            with contract_check(boundary+'_TREE'): support.tree_inventory(host,8*MIB,512,1024,4*MIB)
+            with contract_check(boundary+'_AFTER_FIXTURES'): unchanged_fixtures()
+            with contract_check(boundary+'_AFTER_TOOLS'): tool.unchanged_tools(support,tools['host_programs'])
+            with contract_check(boundary+'_AFTER_RUNTIME'): tool.verify_runtime(support,root,runtime)
+            with contract_check(boundary+'_AFTER_BACKEND'):
+                require(support.identity(backend['path'],64*MIB)=={k:backend[k] for k in ('bytes','sha256','mode')},'unchanged derived backend')
             if opaque:
-                pair['opaque_warning_count']=result['opaque_warning_count'];pair['opaque_combo_handshake_path']=True
+                with contract_check('HOST_OPAQUE_RESULT'):
+                    pair['opaque_warning_count']=result['opaque_warning_count'];pair['opaque_combo_handshake_path']=True
             else:
-                require(not re.search(rb'(?mi)^\s*%(?:Warning|Error)',result['raw_log']),'transparent has no warning or error')
+                with contract_check('HOST_TRANSPARENT_LOG'):
+                    require(not re.search(rb'(?mi)^\s*%(?:Warning|Error)',result['raw_log']),'transparent has no warning or error')
                 pair['transparent_exit0']=True
-        for n,pin in pins.items(): exact(HERE/n[len(PREFIX):] if n.startswith(PREFIX) else repo/n,pin)
-        require(public_sources(pins)==source_rows,'unchanged runner and manifest')
+        with contract_check('FINAL_SOURCE_IDENTITIES'):
+            for n,pin in pins.items(): exact(HERE/n[len(PREFIX):] if n.startswith(PREFIX) else repo/n,pin)
+        with contract_check('FINAL_RUNNER_IDENTITIES'):
+            require(public_sources(pins)==source_rows,'unchanged runner and manifest')
     except BaseException as error: failure=error
     finally:
         try:
             require(time.monotonic()<stop,'same work deadline before evidence')
-            category='NONE' if failure is None else 'TIMEOUT' if isinstance(failure,TimeoutError) else 'INPUT_OR_CONTRACT' if isinstance(failure,(ValueError,KeyError)) else 'SYSTEM' if isinstance(failure,OSError) else 'INTERRUPTED' if isinstance(failure,(SystemExit,KeyboardInterrupt)) else 'UNEXPECTED'
-            summary={'schema':'host93-micro-summary-v1','status':'DIAGNOSTIC_OBSERVED' if failure is None else 'INCOMPLETE','failure_category':category,'seconds':round(time.monotonic()-start,6),'fifo':observed_fifo,'toolchain':tool_ok,'host_pair':pair,'production_host_qualified':False}
+            category=failure_category(failure)
+            summary={'schema':'host93-micro-summary-v2','status':'DIAGNOSTIC_OBSERVED' if failure is None else 'INCOMPLETE','failure_category':category,'contract_failure':contract_failure_observation(failure),'seconds':round(time.monotonic()-start,6),'fifo':observed_fifo,'toolchain':tool_ok,'host_pair':pair,'production_host_qualified':False}
             objects={'summary.json':summary,'source_hashes.json':{'schema':'host93-micro-source-hashes-v1','project_sources':source_rows,'tools':safe_tools},'stage_exits.json':{'schema':'host93-micro-stage-exits-v1','stages':rows}}
             validate_evidence(objects);(out/'evidence').mkdir(mode=0o700)
             for n,obj in objects.items(): write_json(out/'evidence'/n,obj)

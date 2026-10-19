@@ -888,3 +888,13 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - runner 27+27、acquisition 40+40 冷测通过；正式整 SOURCE 审已有限 GO，ACTUAL_NOT_EXECUTED。只允许三份有界安全 JSON；完整日志、生成源码和宿主库身份保持私有。
 - 原 v1 SOURCE 的三处证据消费关联缺口已隔离修复：FIFO 正观察绑定固定工具身份，clean EXIT0 绑定 waitid/cleanup 成功元组，opaque 正观察绑定 AVAILABLE；执行路径与预算未改。另已审 portable 冷测入口显式接收三个固定数据文件参数，不执行包内程序。
 - 独立 SOURCE 审：review_host_micro_job_source_v2_20261019T0621，MANIFEST f1b32efd6d010ab67984d86730dbd339532e4e889b7a9170c4f5f9bd569edd01；SUMMARY c7e8cb9221b88a2114201173b56822a33f2c92138cf837f8baef42ad15f60bb6。实际仍未执行；不授完整 FIFO 或生产 Host 行为资格。
+
+### 2026-10-19：微例取得后父门诊断与固定 libstdc++ 路径修复 SOURCE
+
+- 原 actual39210024872 仅取得子进程自然0/cleanuptrue（1.30257秒），父在 FIFO compile START 前停止，总1.39925秒；原具体后验门未记录，仍 UNKNOWN，原三JSON不改。
+- 固定真实包39成员的 receipt/验证/21 ELF闭包静态回放均过，receipt9896字节小于32768上限；decoder身份明确用synthetic字段，不冒充旧CI私有receipt。
+- 源码反例确认原路径词法不接受标准libstdc++中的“+”，于open前拒。后继仅给固定系统目录下该库名及有限数字版本形式例外，其余路径、UID、same-fd及ELF门保持。
+- 所有父后验补固定安全boundary/code，固定库alias可定位规则；不输出动态路径或异常原文，子进程成功行不改写为失败。
+- 新后继仍原25阶段、原6600/6480共享时限和首失败停；不改FIFO算术、原子握手、warningfatal或工具构建资源。v2本轮runner冷测40+40通过，v1的35+35及静读9+9保留继承，旧取得/portable/probe套件仅继承；SOURCE已有限GO；ACTUAL_NOT_EXECUTED，不授完整FIFO/生产Host资格。
+- 原 SOURCE v1 HOLD 的 PC01/PC02 仅证据消费关联缺口；v2 保留错误stage-count的INCOMPLETE三JSON，并拒3个已证标签/阶段矛盾。原执行门、成功资格、词法修复及资源不改。
+- 独立SOURCE审 review_micro_postflight_source_v2_20261019T0652：MANIFEST eb1f34bbeba3d44986cdc58a913609b269cddb97f4e9e998c7733db68729f4a6，SUMMARY d1ab76eb6fe8f33cda59d5d66b0fd3057b01a1a577286e8b11ecca35b5d57efe。原CI后验门仍UNKNOWN，新实际仍NOT_EXECUTED。

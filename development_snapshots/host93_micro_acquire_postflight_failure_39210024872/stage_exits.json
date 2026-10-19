@@ -1,0 +1,30 @@
+{
+  "schema": "host93-micro-stage-exits-v1",
+  "stages": [
+    {
+      "child_maxrss_kib_cumulative": 43612,
+      "child_system_cpu_seconds": 0.030795999999999997,
+      "child_user_cpu_seconds": 0.129555,
+      "cleanup_confirmed": true,
+      "diagnostics": {
+        "context_state": "NOT_COLLECTED",
+        "merged_log_tail": "",
+        "observations": [],
+        "truncated": false
+      },
+      "exit_code": 0,
+      "failure_boundary": "NONE",
+      "failure_code": "NONE",
+      "final_reap_signal": null,
+      "kill_attempted": true,
+      "kill_result": "SIGNAL_SENT_BEFORE_REAP",
+      "name": "icarus_acquire",
+      "native_record_status": "PASS",
+      "receipt_timed_out": false,
+      "seconds": 1.30257,
+      "status": "EXIT0_CLEANED",
+      "waitid_code": 1,
+      "waitid_status": 0
+    }
+  ]
+}

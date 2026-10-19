@@ -1,5 +1,5 @@
 name: host93-micro-diagnostics-once
-# Run bounded FIFO four-state and transparent/opaque handshake diagnostics only.
+# TEMP_SOURCE: fixed libstdc++ pathname and explicit parent postflight diagnostics; original failure retained.
 # TEMP SOURCE: publish this exact workflow only after whole-job SOURCE review.
 # A push touching only this path launches one new Host job, never a retry.
 on:

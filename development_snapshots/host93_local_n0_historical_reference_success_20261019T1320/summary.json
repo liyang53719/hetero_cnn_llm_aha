@@ -1,0 +1,33 @@
+{
+  "contract_failure": {
+    "boundary": "NONE",
+    "exception_type": "NONE"
+  },
+  "observation_state": "AVAILABLE",
+  "reference": {
+    "code": null,
+    "expected_capability": "AVX512",
+    "fp32le_exact_reported": true,
+    "native_exact_reported": true,
+    "observed_capability": "AVX512",
+    "python_profile": "historical",
+    "stage": "COMPLETE",
+    "status": "PASS_FROZEN_N0_EXACT",
+    "worker_accepted": true
+  },
+  "sampled_rss": {
+    "includes_descendants": false,
+    "limit_kib": 1572864,
+    "os_hard_limit": false,
+    "sampled_leader_max_kib": 300024
+  },
+  "schema": "n0-historical-local-summary-v1",
+  "scope": {
+    "baseline_adopted": false,
+    "dut_executed": false,
+    "fullblock_executed": false,
+    "local_reference_qualified": true
+  },
+  "seconds": 58.951018,
+  "status": "LOCAL_REFERENCE_EXACT_ONLY"
+}

@@ -1,0 +1,57 @@
+{
+  "command_line_guard_variable_inherited_by_child": true,
+  "forbidden_hierarchy_targets": [
+    "hier_build",
+    "hier_verilation",
+    "hier_launch_verilator"
+  ],
+  "fresh_object_source_bytes": 80273076,
+  "fresh_object_sources": 516,
+  "guard_argument": "VM_HIER_VERILATOR=/bin/sh -c 'exit 97'",
+  "make_or_dryrun_executed_during_source_prep": false,
+  "old_absolute_fixture_inputs_remain_read_only": true,
+  "old_native_objects_or_archives_copied": false,
+  "old_options_inherited_by_child": false,
+  "old_targets": [
+    "VQwenOwnerKernel.mk",
+    "Vbf16_context_lane_cluster16_rev8b_b_candidate_3/bf16_context_lane_cluster16_rev8b_b_candidate_3.sv",
+    "Vbf16_context_lane_cluster16_rev8b_b_candidate_3/Vbf16_context_lane_cluster16_rev8b_b_candidate_3.mk"
+  ],
+  "original_makefile_bytes_changed": false,
+  "run_directory_override": "VM_HIER_RUN_DIR=<fixed fresh work>",
+  "schema": "FINITE_CACHED_OWNER_MAKE_ROUTE_V1",
+  "sole_child_make_has_hier_include_or_generation_recipe": false,
+  "source_lines": {
+    "child.mk": "59-61 classes+verilated include;64-66 archive",
+    "top.mk": "69-74 fixture compile and executable link",
+    "top_hier.mk": "15-16 forbidden recursive top route;334-345 generation recipes;347 sole child library recipe",
+    "verilated.mk": "217-235 prerequisites;287,299-317 native compile/PCH/archive"
+  },
+  "source_makefile_identities": {
+    "VQwenOwnerKernel.mk": {
+      "bytes": 2617,
+      "sha256": "1ec9850e6e21d0263c011db5e7b94e68d4feb23cc168c816b02bac6e68f0789b"
+    },
+    "VQwenOwnerKernel_classes.mk": {
+      "bytes": 2094,
+      "sha256": "d27ede62bd07b65d5a39feb7ccdeee86586777e24deb3acbf53c360a08830de7"
+    },
+    "VQwenOwnerKernel_hier.mk": {
+      "bytes": 47443,
+      "sha256": "6b274337c166b78b61fdf3def7303ca259e094bb41107ad7bdd78caea03e7b4f"
+    },
+    "Vbf16_context_lane_cluster16_rev8b_b_candidate_3/Vbf16_context_lane_cluster16_rev8b_b_candidate_3.mk": {
+      "bytes": 2632,
+      "sha256": "99b8ba80d408ff5c325381ca808e43a5c5d4053097d7693a68083bc080625a45"
+    },
+    "Vbf16_context_lane_cluster16_rev8b_b_candidate_3/Vbf16_context_lane_cluster16_rev8b_b_candidate_3_classes.mk": {
+      "bytes": 2297,
+      "sha256": "5b2b3665e794f62d4d85ed71570a361a2a8d262040d57b546adecc889a0c25eb"
+    },
+    "qualified_runtime/include/verilated.mk": {
+      "bytes": 13718,
+      "sha256": "9922434e612a5c4e0638538b5000f353ef3ab73f4975a51a94ba3e453868275c"
+    }
+  },
+  "top_target": "VQwenOwnerKernel"
+}

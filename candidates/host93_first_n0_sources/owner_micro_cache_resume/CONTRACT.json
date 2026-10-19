@@ -1,0 +1,47 @@
+{
+  "MemAvailable_floor_gib": 8,
+  "actual": "NOT_EXECUTED",
+  "as_gib": 6,
+  "cached_read_verify_copy_counts_against_total": true,
+  "copied_source_bytes_modified": false,
+  "cpus": 1,
+  "disk_floor_gib": 3,
+  "entire_old_tree_revalidated_before_and_after_phases": true,
+  "exact_cache": {
+    "bytes": 80670440,
+    "entries": 536,
+    "files": 528,
+    "obj_bytes": 80273076,
+    "obj_files": 516
+  },
+  "fixture_source_reads_may_use_pinned_old_absolute_paths": true,
+  "full_current_phase_plus_tail_required_before_and_after_preflight": true,
+  "generation_phase_present": false,
+  "header_parser_changed": false,
+  "header_reader": "original bootstrap.checked returns same verified buffer; exact fixed4630258 identity and16MiB outer cap",
+  "old_tree_mutated": false,
+  "outer_kill_grace_seconds": 5,
+  "outer_receipt_seconds": 5,
+  "outer_term_seconds": 950,
+  "phase_seconds": {
+    "build": 600,
+    "run": 300
+  },
+  "phase_work_cpu_seconds": {
+    "build": 585,
+    "run": 285
+  },
+  "prior_generation": "NATURAL_ZERO_WITH_PARENT_POSTFLIGHT_HEADER_BOUND_FAILURE",
+  "publication_label": "TEMP",
+  "qualification": {
+    "application_accuracy_pass": null,
+    "full_block_pass": false,
+    "full_job_completed": false,
+    "historical_host_failure_reproduced": null,
+    "official_accuracy_pass": null,
+    "typed_reference_rtl_pass": null
+  },
+  "schema": "OWNER_CACHE_RESUME_SOURCE_CONTRACT_V1",
+  "shared_seconds": 960,
+  "tail_seconds": 60
+}

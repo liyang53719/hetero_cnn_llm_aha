@@ -1,0 +1,39 @@
+{
+  "cache_bytes": 80670440,
+  "cache_entries": 536,
+  "cache_files": 528,
+  "cluster_witness": {
+    "accumulator_seed_parameter": 1,
+    "child_archive": "obj/Vbf16_context_lane_cluster16_rev8b_b_candidate_3/libbf16_context_lane_cluster16_rev8b_b_candidate_3.a",
+    "initializer": {
+      "class_byte_range": [
+        314,
+        641
+      ],
+      "class_sha256": "4c19e2d695acee4c6e85c8a27afcf290ccfe3c9f9e77c20ed1dd809a236ea109",
+      "leaf": "bf16_context_lane_cluster16_rev8b_b_candidate_3",
+      "m_seqnum_initializer": 0,
+      "wrapper_sha256": "367bc3aabdc0a70296f2fb9899d04fc6647e584f58b4b3147bf7059ec64fd99e"
+    },
+    "instance_handle_count": null,
+    "leaf": "bf16_context_lane_cluster16_rev8b_b_candidate_3",
+    "old_abi_inherited": false,
+    "owner_ports": 196,
+    "ram_or_weights_or_n0_or_full_block_claim": false,
+    "root_header_parsed": false,
+    "runtime_handles_verified": false,
+    "status": "FINITE_CLUSTER_OWNER_MICRO_SOURCE_WITNESS"
+  },
+  "errors": 0,
+  "generation_or_compile_or_rtl_executed": false,
+  "observations": 95,
+  "original_census_exact": true,
+  "owner_ports": 196,
+  "schema": "OWNER_CACHE_GENERATED_READONLY_REPLAY_V1",
+  "source_pin": {
+    "bytes": 28124,
+    "sha256": "10d9c44a669315e4a66e8de47135bbe622454e13321e1a12e1eabb93e2114871"
+  },
+  "status": "PASS",
+  "warnings": 0
+}

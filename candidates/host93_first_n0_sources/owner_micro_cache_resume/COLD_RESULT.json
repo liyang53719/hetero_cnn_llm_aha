@@ -1,0 +1,39 @@
+{
+  "actual_cache_tree_copied": false,
+  "cache_result": {
+    "bytes": 526,
+    "sha256": "6dfdfc7a39b3a83fd3ab382bb8cfdda48404735775843c1b12a3394778d17fac"
+  },
+  "cache_test_manifest": {
+    "bytes": 2852,
+    "sha256": "d46dc3f5b27ee75a7cf1a6afa234c36d9777bc45d191ad665b50e9c03e8caded"
+  },
+  "cache_tests": 66,
+  "errors": 0,
+  "failures": 0,
+  "generated_readonly_result": {
+    "bytes": 1338,
+    "sha256": "425584a715e783dd1c4393e27b68cff0e779f1cf57f7fe326528e493e4095d2e"
+  },
+  "header_result": {
+    "bytes": 491,
+    "sha256": "7865f3b792197a71e15cc1f63d28988541c132b762ee76456e8cd4538c7c6029"
+  },
+  "header_test_manifest": {
+    "bytes": 3013,
+    "sha256": "7d777488ad2de725443a1afe32fa8645ddb04981f09328c56f21447924979b41"
+  },
+  "header_tests": 45,
+  "modes": [
+    "normal",
+    "optimized",
+    "relocated"
+  ],
+  "native_make_compiler_rtl_or_network_executed": false,
+  "production_run_main_executed": false,
+  "schema": "OWNER_CACHE_RESUME_COLD_RESULT_V1",
+  "skipped": 0,
+  "source_readonly_generated_postflight": "PASS_95_FIELDS_196_PORTS_AND_ORIGINAL_CLUSTER_WITNESS",
+  "status": "PASS",
+  "total_tests": 111
+}

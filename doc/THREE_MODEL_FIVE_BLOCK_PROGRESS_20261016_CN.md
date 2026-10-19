@@ -1400,3 +1400,15 @@ capture仍空，counts/N0/qraw数组未写；PC1输出不完整，三轨比较NO
 原七件证据 manifest 959 B / cecf9a7c0da9c2674198ae18992855afa660d546dc0ec24a7542552d7838a5da；冻结 work inventory 536 项、528 普通文件、8 目录、80,670,440 字节。正式 actual 独审已接受此有限范围：review_owner_micro_generation_actual_20261019T2322，MANIFEST 282 B / d8a40602b4d5a500801f374ec93efc5be7b455fd87ae2a12ab07b01a205c6828；SUMMARY.md 4666 B / c2816c97363998f17e782f19245051cf507f45a8b98543302998cea2438e33ee；verdict ACCEPT_ACTUAL_OWNER_GENERATION_NATURAL_ZERO_POSTFLIGHT_HEADER_BOUND_FAILURE_ONLY。 独审逐项重核 7 件原证据、536 项当前树、39 件源码包成员、7 件 staged owner 原件及 338 件原始源输入（79,657,058 字节）。现物闭合只授有限生成缓存来源资格，不授可搬迁、可编译、ABI 或 runtime 成功；工具/系统依赖与资源准入仍由后继实际入口独立把关。没有 owner job/partial/window/目标 issue 的运行观测，不授原 Host 故障复现资格；原两轮 Host 失败与 UNKNOWN 上游边界不变。official/application/typed-to-RTL 及历史故障重现均 null，full_job/full_block=false，五 block 0/5。
 
 本批只发布 SUMMARY/README 安全聚合及本计划完整 replacement，不带原日志、私有机器路径、数组或 binary，不重跑任何 native/测试，不改原 FAIL；后继 cache/read-bound 修复另审。不触发新的 Host/RTL/native 作业；workflow 文件不变，普通 push 的轻量 guard 另记。
+
+### TEMP Owner 固定header门与生成缓存续接（SOURCE，2026-10-19）
+
+原session42131的generation自然0/cleanup、零warning/error，父因4630258B root header进入仍为4MiB的small_read而失败。原outer1和完整生成证据保持，未编译/运行。本后继只准备固定header读取修复及fresh目录build→run，不重新生成/backend，不冒充本轮生成成功。
+
+1. header_gate仅接受固定leaf、mode600、4630258B/a9371ed20684a6b5635de6203918cd33b910d856bd83618cf4a33c9dda398aaf；复用原bootstrap.checked的同fd同buffer返回，显式16MiB绝对上限，原95字段parser零改。真实header回放通过95项，15×普通/-O/搬迁=45冷例全过。另已只读验证196端口、原cluster seed/seqnum与库图、census与原receipt全同，零warning/error；这些是生成源后验，不授编译或RTL行为资格。
+2. 绑定原536项/528文件/80670440B完整库存及正式实际审身份，每阶段前后重核。516个生成obj源/80273076B以验hash的同一buffer复制到fresh obj，源字节不改；无.o/.a/PCH/库输入或hardlink。旧fixture绝对.cpp/-I引用明确作为受核只读输入保留，不能说所有driver输入均来自fresh副本。
+3. 原make仅显式top executable，三个-o封住top.mk/child.mk/child.sv生成target，原C++/PCH/archive/link全部保留。-o不继承，但唯一child archive make没有hier include或生成recipe；禁止hier_build。固定继承VM_HIER_VERILATOR=/bin/sh -c 'exit 97'与fresh VM_HIER_RUN_DIR提供额外首错停止，不增加程序依赖或改写makefile。原环境/单核-j1/O0/工具和配置保持，未执行make dry-run。
+4. 一次总960秒从最早父T0开始，全部缓存复验/复制/加载计入；build600（work/CPU585）、run300（285）、尾60，AS6GiB单CPU及原8GiB/3GiB准入。阶段前及前验后须剩完整该阶段窗口+尾储备，否则INCOMPLETE首停；950TERM+5KILL+5落证，不延长或承诺ETA。保原first exception/code/traceback与完整日志身份，原generation只标记历史只读复验，不追加native通过阶段。
+5. cache22×普通/-O/搬迁=66纯mock通过，与header合计111，0失败/错误/skip。未复制真实80MB树、执行编译器/RTL或生产run/main；实际源树只读后验单独列示。SOURCE及精确命令总审身份见STATUS，原41冻结成员不热改。
+
+本批公开16份安全原件、STATUS与本计划完整后继。私有绑定/profile/COMMAND/outer/现物路径/日志仅本地。full job/full block=false，历史Host故障重现、official/application accuracy和typed-to-RTL仍null；唯一实际仍由父在源/命令独审与当前准入后执行。

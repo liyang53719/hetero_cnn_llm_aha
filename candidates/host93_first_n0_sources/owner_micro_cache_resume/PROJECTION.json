@@ -1,0 +1,157 @@
+{
+  "deleted_block_restore_is_anchored": true,
+  "derived_main": {
+    "bytes": 28124,
+    "sha256": "10d9c44a669315e4a66e8de47135bbe622454e13321e1a12e1eabb93e2114871"
+  },
+  "inverse_exact": true,
+  "main_exact_replacements": [
+    {
+      "count": 1,
+      "new": "qualified backend, accepted generation cache, fresh build/run.",
+      "old": "qualified backend, fresh generation/build/run."
+    },
+    {
+      "count": 1,
+      "new": "CONFIG_PIN = (2892, '2c69f571e0285e1f7dfdde282ff4bd8556eeeac9f93a9425b84aeb7e8162f4ee')",
+      "old": "CONFIG_PIN = (2300, 'b4262e6d181b60225d7cde73aa4c398a4406af9af16e508ec4d9677642f2f464')"
+    },
+    {
+      "count": 1,
+      "new": "SUPERVISION_PIN = (4363, '10a14b6eafe7cb977790ceea59fb5b4821f9f010df01a7448d4bce1928c3225a')\nCACHE_GATE_PIN = (5313, 'bc4dc052931317d4e3c0f99bd6beb42d85073a78c2d3efcecd19e8f539756871')\nHEADER_GATE_PIN = (899, 'e03ae18149849b305ba69434b78dbba9212b7f5f163d7e5bcc5c44b872b14109')",
+      "old": "SUPERVISION_PIN = (4394, '0147d6132bdfa6dccecce28eb6bb31f27ec3876d0345cad4d9e4e70002d106f2')"
+    },
+    {
+      "count": 1,
+      "new": "stop = started + 960",
+      "old": "stop = started + 1320"
+    },
+    {
+      "count": 1,
+      "new": "'schema':'OWNER_LOCAL_MICRO_CACHE_RESUME_EXECUTION_V1'",
+      "old": "'schema':'OWNER_LOCAL_MICRO_EXECUTION_V1'"
+    },
+    {
+      "count": 1,
+      "new": "'host_archive_reused':False, 'generation_executed':False, 'generation_cache_reused':True, 'shared_seconds_cap':960",
+      "old": "'host_archive_reused':False, 'shared_seconds_cap':1320"
+    },
+    {
+      "count": 1,
+      "new": "(resource.RLIMIT_CPU,960)",
+      "old": "(resource.RLIMIT_CPU,1320)"
+    },
+    {
+      "count": 1,
+      "new": "'driver_manifest','original_generation','n0','wq','cache'}",
+      "old": "'driver_manifest','original_generation','n0','wq'}"
+    },
+    {
+      "count": 1,
+      "new": "cfg['schema']=='OWNER_LOCAL_MICRO_CACHE_PRIVATE_BINDING_V1'",
+      "old": "cfg['schema']=='OWNER_LOCAL_MICRO_PRIVATE_BINDING_V1'"
+    },
+    {
+      "count": 1,
+      "new": "        cache=module(Path(__file__).resolve().parent/'cache_gate.py',CACHE_GATE_PIN,'owner_fixed_cache_gate')\n        header=module(Path(__file__).resolve().parent/'header_gate.py',HEADER_GATE_PIN,'owner_fixed_header_gate')\n        fs,base,support_pins=supervisor.fixed_support(repo)",
+      "old": "        fs,base,support_pins=supervisor.fixed_support(repo)"
+    },
+    {
+      "count": 1,
+      "new": "        cache_root=g.clean(cfg['cache']['root'])\n        expected_cache_argv=commands(executor,cache_root,toolchain,inputs,old/'configuration',Path(cfg['n0']),Path(cfg['wq']))['generate']\n        cache_tree,cache_receipt=cache.accept(g,fs,cfg['cache'],sup,expected_cache_argv)\n        target=g.clean(cfg['work'])",
+      "old": "        target=g.clean(cfg['work'])"
+    },
+    {
+      "count": 1,
+      "new": "for p in (repo,old,bdir,source,cache_root):",
+      "old": "for p in (repo,old,bdir,source):"
+    },
+    {
+      "count": 1,
+      "new": "        def fixed_commands():\n            original=commands(executor,work,toolchain,inputs,old/'configuration',Path(cfg['n0']),Path(cfg['wq']))\n            return {'build':cache.build_command(g,original['build'],work),'run':original['run']}\n        argv=fixed_commands()",
+      "old": "        argv=commands(executor,work,toolchain,inputs,old/'configuration',Path(cfg['n0']),Path(cfg['wq']))"
+    },
+    {
+      "count": 1,
+      "new": "        generated=cache.stage_objects(g,fs,relink,cache_tree,work);binary=None;last_tree=None;generation_report=None",
+      "old": "        generated={};binary=None;last_tree=None;generation_report=None"
+    },
+    {
+      "count": 1,
+      "new": "            read(Path(__file__).resolve().parent/'supervision.py',SUPERVISION_PIN)\n            read(Path(__file__).resolve().parent/'cache_gate.py',CACHE_GATE_PIN)\n            read(Path(__file__).resolve().parent/'header_gate.py',HEADER_GATE_PIN)\n            checked_cache,checked_receipt=cache.accept(g,fs,cfg['cache'],sup,expected_cache_argv)\n            need(checked_cache==cache_tree and checked_receipt==cache_receipt,'CACHE_RECEIPT_DRIFT')",
+      "old": "            read(Path(__file__).resolve().parent/'supervision.py',SUPERVISION_PIN)"
+    },
+    {
+      "count": 1,
+      "new": "            need(fixed_commands()==argv and",
+      "old": "            need(commands(executor,work,toolchain,inputs,old/'configuration',Path(cfg['n0']),Path(cfg['wq']))==argv and"
+    },
+    {
+      "count": 1,
+      "inverse_deleted_block_before_unique_anchor": "            stage['cluster_witness']",
+      "new": "",
+      "old": "            if name=='generate':\n                generation_report=census.collect(work/'phases/generate/native.log',work,source_map,sanitizer)\n                census.validate_report(generation_report);executor.validate_cluster_census(generation_report)\n                result['generation_census']=generation_report\n                result['observation_profile']=observation_declarations(executor.generated_text(fs,tree,'obj/VQwenOwnerKernel___024root.h',16*MIB),observations)\n                generated={n:{k:x[k] for k in ('bytes','sha256','mode')} for n,x in tree['entries'].items()\n                           if x['kind']=='regular' and n.startswith('obj/') and n.endswith(('.cpp','.h','.mk','.f','.sv','.vlt'))}\n                need(bool(generated),'GENERATED_CLOSURE_EMPTY')\n"
+    },
+    {
+      "count": 1,
+      "new": "generation_report,True,sv['path'])",
+      "old": "generation_report,name!='generate',sv['path'])"
+    },
+    {
+      "count": 1,
+      "new": "        # Revalidate the original natural-zero generation output; no new native phase is claimed.\n        generation_report=census.collect(cache_root/'phases/generate/native.log',cache_root,source_map,sanitizer)\n        census.validate_report(generation_report);executor.validate_cluster_census(generation_report)\n        need(generation_report==cache_receipt['generation_census'],'CACHE_CENSUS_DRIFT')\n        tree=fs.tree_inventory(work,96*MIB,1024,2048,16*MIB)\n        result['observation_profile']=observation_declarations(header.header_text(g,tree),observations)\n        result['cached_generation_witness']=witness(fs,tree,lexical,ports,generation_report,False,sv['path'])\n        result['generation_cache']={'scope':'EXISTING_GENERATION_REVALIDATED_READ_ONLY',\n            'local_generation_executed':False,'original_outer_exit':1,'original_generation_natural_zero':True,\n            'tree_identity':cache.TREE_PIN,'receipt_identity':cache.RECEIPT_PIN,'review_identity':cache.REVIEW_PIN,\n            'copied_object_source_members':len(generated),'old_absolute_fixture_inputs_pinned':True,\n            'copied_makefiles_modified':False,'regeneration_fail_closed_exit':97}\n        executor.save(work/'CACHE_ACCEPTANCE_TREE.json',tree)\n        sup.sequence(supervisor,fs,base,work,argv,env,stop,owner,preflight,after_phase,result,",
+      "old": "        sup.sequence(supervisor,fs,base,work,argv,env,stop,owner,preflight,after_phase,result,"
+    },
+    {
+      "count": 1,
+      "new": "status='COMPLETE_TWO_SUPERVISED_PHASES_DIAGNOSTIC_ONLY'",
+      "old": "status='COMPLETE_THREE_SUPERVISED_PHASES_DIAGNOSTIC_ONLY'"
+    },
+    {
+      "count": 1,
+      "new": "p.add_argument('--execute-reviewed-owner-cache',action='store_true')",
+      "old": "p.add_argument('--execute-reviewed-owner-micro',action='store_true')"
+    },
+    {
+      "count": 1,
+      "new": "args.execute_reviewed_owner_cache",
+      "old": "args.execute_reviewed_owner_micro"
+    },
+    {
+      "count": 1,
+      "new": "\nFIXED_FAILURE_CODES += ('CACHE_ACTUAL_REVIEW_SCOPE', 'CACHE_BINDING_KEYS', 'CACHE_CENSUS_DRIFT', 'CACHE_COPY_READBACK', 'CACHE_DIRECTORY', 'CACHE_EXACT_TOP_BUILD', 'CACHE_EXACT_TOTALS', 'CACHE_EXACT_TREE_SHAPE', 'CACHE_GENERATION_SCOPE', 'CACHE_ORIGINAL_TREE_DRIFT', 'CACHE_RECEIPT_DRIFT', 'CACHE_REGULAR_MEMBER', 'CACHE_ROOT_BINDING', 'CACHE_SAFE_UNIQUE_MEMBER', 'CACHE_SOURCE_ONLY_MEMBERS', 'EXACT_TWO_COMMANDS', 'OWNER_FIXED_HEADER_IDENTITY')\n\ndef failure_fields(error):",
+      "old": "\ndef failure_fields(error):"
+    }
+  ],
+  "original_main": {
+    "bytes": 25935,
+    "sha256": "9eaf9a3029e905e1eaaaf1cdd7d72778b5a7556a96435513c95ef92be5372144"
+  },
+  "supervision_exact_replacements": [
+    {
+      "count": 1,
+      "new": "Fixed cached-owner build/run sequence",
+      "old": "Fixed owner generation/build/run sequence"
+    },
+    {
+      "count": 1,
+      "new": "SHARED_SECONDS = 960",
+      "old": "SHARED_SECONDS = 1320"
+    },
+    {
+      "count": 1,
+      "new": "{'build', 'run'}",
+      "old": "{'generate', 'build', 'run'}"
+    },
+    {
+      "count": 1,
+      "new": "('build', 'run')",
+      "old": "('generate', 'build', 'run')"
+    },
+    {
+      "count": 1,
+      "new": "EXACT_TWO_COMMANDS",
+      "old": "EXACT_THREE_COMMANDS"
+    }
+  ]
+}

@@ -757,3 +757,10 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 最窄路径补丁仅在 `plain_path` 完整路径读取前要求 ASCII `[A-Za-z0-9_/.-]+`，关闭 make 消费 tab、美元符、反引号、分号等路径的整合缺口；原 WNOWAIT 清理与资源/阶段逻辑保持。
 - 只准备真实 Host reset 后首次 launch 握手即停，不加载权重、不回放 RAM、不宣称 N0 数值、8 个活句柄或整块数值通过。仅3个严格 schema 安全 JSON允许上传，失败 step/job 不能被摘要覆盖。
 - 完整 SOURCE 独审结论为 `SOURCE_GO_SINGLE_BOUNDED_CI_HOST_RESET_LAUNCH_ONLY`，manifest SHA256 `e5e7c995825cb34aceee1f5c67e4d10d43177b286519651a344b9418e82cbc84`，summary SHA256 `6f9aaba2f134dea2833c612b6bb6bd2c5345578407040c64b48eff484e814b58`。对应 run `3895215a…`、support `931c8d8e…`、Host 源 manifest `08ccafe4…` 和父提供的精确工作流。原候选中的 PENDING 是冻结历史，不热改。本批冻结时首次 CI actual 为 PENDING。
+
+
+### 2026-10-19 首次 Host93 单 CI 实际失败已保全
+
+提交 `7e0ac9fd` 的 run 39185138343 / attempt1 终态 FAIL，payload guard 39185138377 单独成功。原安全3JSON记录主序列63.518112秒，13阶段 EXIT0_CLEANED 后 fresh_make 在47.995942秒 FAILED；Host生成/编译/reset/launch尚未开始。原失败行的退出/CPU为空且cleanup=false来自异常路径默认值，不能推断实际清理失败或OOM。已定位收据投影缺口，原编译根因仍未知。
+
+本批只保存原3安全JSON与解释说明；不提交ZIP、API原文、原日志、系统库存或产物。后继修复失败也保真实退出/信号/timeout/rusage/已确认cleanup，未知为null，并加入固定去敏截断诊断；只做构建诊断资格，保原失败，不自动重试整Host。

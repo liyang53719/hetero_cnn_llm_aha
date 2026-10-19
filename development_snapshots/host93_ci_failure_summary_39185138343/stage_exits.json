@@ -1,0 +1,131 @@
+{
+  "schema": "host93-ci-stage-exits-v1",
+  "stages": [
+    {
+      "child_system_cpu_seconds": 0.110167,
+      "child_user_cpu_seconds": 0.5141169999999999,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "official_source473",
+      "seconds": 3.233471,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.004838999999999996,
+      "child_user_cpu_seconds": 0.0026280000000000747,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_autoconf-version",
+      "seconds": 0.033011,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.014268000000000003,
+      "child_user_cpu_seconds": 0.036026,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_autom4te-version",
+      "seconds": 0.113676,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.0009799999999999809,
+      "child_user_cpu_seconds": 0.0009810000000000096,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_m4-version",
+      "seconds": 0.033563,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.0020210000000000228,
+      "child_user_cpu_seconds": 0.0,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_flex-version",
+      "seconds": 0.03306,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.0018689999999999818,
+      "child_user_cpu_seconds": 0.0,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_bison-version",
+      "seconds": 0.032946,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.023917999999999995,
+      "child_user_cpu_seconds": 0.06584099999999993,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_autoconf-micro",
+      "seconds": 0.244765,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.013676000000000021,
+      "child_user_cpu_seconds": 0.06745000000000001,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_autom4te-micro",
+      "seconds": 0.187767,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.0019979999999999998,
+      "child_user_cpu_seconds": 0.0,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_m4-micro",
+      "seconds": 0.09944,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.002605999999999997,
+      "child_user_cpu_seconds": 0.0031600000000000517,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_flex-micro",
+      "seconds": 0.066808,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.003720000000000001,
+      "child_user_cpu_seconds": 0.011531999999999987,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "host_bison-micro",
+      "seconds": 0.18062,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 0.026238999999999985,
+      "child_user_cpu_seconds": 0.15886299999999998,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "fresh_autoconf",
+      "seconds": 0.303456,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": 1.4297159999999998,
+      "child_user_cpu_seconds": 2.675043,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "name": "fresh_configure",
+      "seconds": 9.867718,
+      "status": "EXIT0_CLEANED"
+    },
+    {
+      "child_system_cpu_seconds": null,
+      "child_user_cpu_seconds": null,
+      "cleanup_confirmed": false,
+      "exit_code": null,
+      "name": "fresh_make",
+      "seconds": 47.995942,
+      "status": "FAILED"
+    }
+  ]
+}

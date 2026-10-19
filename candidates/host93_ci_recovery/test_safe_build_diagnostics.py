@@ -162,3 +162,142 @@ def run_tests(module):
     reject_input(good, allowlist=frozenset(("src/token\n.cpp",)))
     check(result(b"")["observations"] == [], "empty input")
     return checks
+
+
+def run_context_tests(module):
+    sanitize = module['sanitize_build_context']
+    encode = module['canonical_json']
+    root = '/private/fixed/build'
+    paths = frozenset(('src/unit.cpp', 'include/api.h'))
+    checks = 0
+
+    def check(ok, label):
+        nonlocal checks
+        checks += 1
+        if not ok:
+            raise RuntimeError('context test failed: ' + label)
+
+    def result(raw):
+        value = sanitize(raw, root, paths)
+        check(set(value) == {'observations','merged_log_tail','truncated','context_state'}, 'exact keys')
+        check(value['context_state'] == 'AVAILABLE', 'available even for empty input')
+        check(len(encode(value)) <= 16384, 'whole diagnostic canonical cap')
+        tail = value['merged_log_tail']
+        lines = tail.split('\n') if tail else []
+        check(len(lines) <= 80 and all(len(x) <= 512 for x in lines), 'line caps')
+        check(all(32 <= ord(x) <= 126 or x == '\n' for x in tail), 'visible ASCII')
+        return value
+
+    positive = [
+        "g++ -I../include -c V3Ast__gen.cpp -o V3Ast__gen.o",
+        "V3Ast__gen.cpp:19:7: error: no matching function for call to 'AstNode::clone(int)'",
+        '   19 | AstNode* result = node.clone(1);',
+        '      |                  ~~~~~~~~~~^~~',
+        'In file included from ../V3Ast.cpp:41:',
+        "../V3AstNodeExpr.h:22:3: note: candidate expects 2 arguments, 1 provided",
+        "bison: verilog.y:583: error: unexpected identifier",
+        "Can't locate Parse/RecDescent.pm in @INC (you may need to install the Parse::RecDescent module)",
+        'syntax error at ../astgen line 18, near "=>"',
+        'make[2]: *** [../Makefile_obj:29: V3Ast__gen.o] Error 1',
+        'make[1]: *** [Makefile:64: opt] Error 2',
+        '',
+        'arbitrary short compiler text without a known category',
+    ]
+    value = result(('\n'.join(positive)+'\n').encode())
+    check(value['merged_log_tail'] == '\n'.join(positive), 'complete consecutive compiler/Perl/bison context')
+    check(value['observations'] == [], 'context retained independently of old category matches')
+    check(not value['truncated'], 'short complete context not truncated')
+    for path in ('/home/alice/build/src/generated.cpp', 'C:\\Users\\alice\\generated.cpp',
+                 '\\\\server\\share\\generated.cpp', '~/private/file', '/private/fixed/build/src/unit.cpp'):
+        tail = result((path + ':41:2: error: generated source failed').encode())['merged_log_tail']
+        check(path not in tail and '[PATH]:41:2: error:' in tail, 'absolute location redacted and coordinates retained')
+    for raw in ("make: Entering directory '/home/alice/work tree'", 'g++ -I/private/include -L/opt/lib file.cpp',
+                'cc --sysroot=/private/sysroot file.cpp', 'opened "/private/path with spaces/file"'):
+        tail = result(raw.encode())['merged_log_tail']
+        check('/private' not in tail and '/home/alice' not in tail and '/opt/lib' not in tail, 'embedded/quoted path redaction')
+    for raw in ('src/obj_opt/V3Ast__gen.cpp:1: error: failed', '../generated.cpp:2: error: failed',
+                '../../include/config_package.h:3: error: failed', 'int result = lhs / rhs;', 'one/two: error'):
+        check(result(raw.encode())['merged_log_tail'] == raw, 'relative paths and ordinary slash syntax retained')
+    for raw, secret in (
+        ('TOKEN=small-secret', 'small-secret'), ('password: "a secret with spaces"', 'a secret with spaces'),
+        ("{'api_key': 'short-secret'}", 'short-secret'), ('AWS_SECRET_ACCESS_KEY=small-secret', 'small-secret'),
+        ('Authorization: Bearer short-secret', 'short-secret'), ('authorization : Basic c2VjcmV0', 'c2VjcmV0'),
+        ('Proxy-Authorization: Basic tiny', 'tiny'), ('Cookie: SID=short-cookie; other=x', 'short-cookie'),
+        ('Set-Cookie: SID=short-cookie; Secure', 'short-cookie'), ('X-Api-Key: tiny-key', 'tiny-key'),
+        ('client_secret="short secret"', 'short secret'), ('--password short-secret --verbose', 'short-secret'),
+        ('--access-token=small-secret', 'small-secret'), ('Bearer short-secret', 'short-secret'),
+        (r'password="a\" escaped-secret"', 'escaped-secret'),
+        (r"password='a\' escaped-secret'", 'escaped-secret'),
+        ('credential=secret-value', 'secret-value'), ('session_id: small-secret', 'small-secret'),
+        ('see https://user:pass@example.invalid/private?token=tiny', 'example.invalid'),
+        ('see ssh://git@example.invalid/project', 'example.invalid'), ('see www.example.invalid/token', 'example.invalid'),
+        ('key AKIAABCDEFGHIJKLMNOP', 'AKIAABCDEFGHIJKLMNOP'), ('key ghp_abcdefghijklmnop', 'ghp_abcdefghijklmnop'),
+        ('opaque ' + 'aB7_'*16, 'aB7_'*16), ('jwt ' + 'abcD'*12 + '.' + 'efGH'*12, 'abcD'*12),
+    ):
+        tail = result(raw.encode())['merged_log_tail']
+        check(secret not in tail, 'credential/url/token fixture redacted')
+    for label in ('PRIVATE KEY','RSA PRIVATE KEY','EC PRIVATE KEY','OPENSSH PRIVATE KEY','ENCRYPTED PRIVATE KEY'):
+        raw = ('before\n-----BEGIN '+label+'-----\nshort key body\n-----END '+label+'-----\nafter').encode()
+        check(result(raw)['merged_log_tail'] == 'before\n[PRIVATE_KEY]\n[PRIVATE_KEY]\n[PRIVATE_KEY]\nafter', 'multiline PEM preserves record positions')
+    raw = b'-----BEGIN PRIVATE KEY-----\n' + b'short key line\n'*100 + b'-----END PRIVATE KEY-----\nafter'
+    tail = result(raw)['merged_log_tail']
+    check('short key' not in tail and tail.endswith('\nafter') and len(tail.split('\n')) == 80, 'key start before 80-line boundary')
+    check(result(b'partial private body\n-----END PRIVATE KEY-----\nafter')['merged_log_tail'] == '[PRIVATE_KEY]\n[PRIVATE_KEY]\nafter', 'truncated input missing BEGIN')
+    check(result(b'before\n-----BEGIN PRIVATE KEY-----\nshort body')['merged_log_tail'] == 'before\n[PRIVATE_KEY]\n[PRIVATE_KEY]', 'unclosed key block')
+    check(result(b'first\n-----END PRIVATE KEY-----\nsecond\n-----END PRIVATE KEY-----')['merged_log_tail'] == '\n'.join(['[PRIVATE_KEY]']*4), 'multiple orphan END markers')
+    raw = b'a\x00b\x1b[31m\r\t\x7f\xff' + '\u202e'.encode('utf-8')
+    tail = result(raw)['merged_log_tail']
+    for escaped in ('\\x00','\\x1b','\\r','\\t','\\x7f','\\xff','\\u202e'):
+        check(escaped in tail, 'control/unicode/invalid UTF-8 visible')
+    lines = [('context %03d' % n) for n in range(100)]
+    value = result(('\n'.join(lines)+'\n').encode())
+    check(value['merged_log_tail'] == '\n'.join(lines[-80:]) and value['truncated'], 'last consecutive 80 records')
+    value = result(('many short words '*100 + ' TOKEN=never-expose').encode())
+    check(len(value['merged_log_tail']) == 512 and value['merged_log_tail'].endswith('...[TRUNCATED]') and value['truncated'], 'line cap after redaction')
+    check('never-expose' not in value['merged_log_tail'], 'clip cannot expose secret')
+    raw = '\n'.join(('record %03d ' % n) + 'word '*98 for n in range(80)).encode()
+    value = result(raw); tail = value['merged_log_tail']
+    check(value['truncated'] and 1 < len(tail.split('\n')) < 80, 'whole-object byte cap drops oldest complete records')
+    check(tail.split('\n')[-1].startswith('record 079 ') and all(('record %03d ' % n) in tail for n in range(int(tail[7:10]),80)), 'byte cap retains consecutive suffix')
+    check(result(b'')['merged_log_tail'] == '', 'empty log explicitly available')
+    check(result(b'\n\n\n')['merged_log_tail'] == '\n\n', 'blank records retained')
+    # F01: every fixed GCC joined path option must remove absolute machine paths.
+    joined_options = ('I','L','isystem','iquote','include','imacros','idirafter',
+                      'iprefix','iwithprefixbefore','iwithprefix','isysroot',
+                      'MF','MT','MQ','B','o')
+    for option in joined_options:
+        for path in ('/private/fixed/build/deps.d', r'C:\private\build\deps.d'):
+            value = result(('g++ -'+option+path+' -c unit.cpp').encode())
+            tail = value['merged_log_tail']
+            check(path not in tail and '-'+option+'[PATH]' in tail,
+                  'F01 fixed joined GCC option removes absolute path')
+        raw = 'g++ -'+option+'generated/deps.d -c unit.cpp'
+        check(result(raw.encode())['merged_log_tail'] == raw,
+              'F01 fixed option preserves relative generated name')
+    # F02: long key names must be recognized before token-like runs are collapsed.
+    for key in ('CMAKE_PRIVATE_AUTHENTICATION_SERVICE_PASSWORD',
+                'BUILD_CONFIGURATION_CREDENTIAL_PROVIDER_API_KEY',
+                'X_'*45+'TOKEN'):
+        for value in ('"tiny-secret"', "'tiny secret'", 'tiny-secret'):
+            tail = result((key+'='+value).encode())['merged_log_tail']
+            check('tiny-secret' not in tail and 'tiny secret' not in tail and '[REDACTED]' in tail,
+                  'F02 long credential key with short value redacted')
+        tail = result(('--'+key+' "tiny-secret"').encode())['merged_log_tail']
+        check('tiny-secret' not in tail and '[REDACTED]' in tail,
+              'F02 long credential option with short value redacted')
+    raw = 'CMAKE_PUBLIC_BUILD_CONFIGURATION_VARIABLE_NAME="ordinary-value"'
+    tail = result(raw.encode())['merged_log_tail']
+    check('ordinary-value' in tail and '[LONG_TOKEN]' in tail,
+          'F02 ordinary unmatched short prose survives long-name folding')
+    # Bound-sized degenerate inputs exercise scanner/regex termination without native work.
+    for raw in (b'-'*1048576, b'x'*1048576, (b'-----END PRIVATE KEY-----\n'*40000)):
+        value = result(raw)
+        check(value['context_state'] == 'AVAILABLE', 'bounded degenerate input completes')
+    for raw in (None, 'text', b'x'*1048577):
+        try:
+            sanitize(raw, root, paths)
+        except ValueError:
+            check(True, 'invalid context input rejected')
+        else:
+            raise RuntimeError('invalid context input accepted')
+    return checks

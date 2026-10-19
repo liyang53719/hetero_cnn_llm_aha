@@ -1,24 +1,47 @@
 {
-  "from_diagnostic_v1": {
-    "coordinator_changes": "support raw pin and immediate pin map only",
-    "edits": [
-      "native-call boundary guard before receipt recovery",
-      "diagnostic exception preserves first failure and cannot imply success",
-      "same phase deadline rechecked after diagnostics"
-    ],
-    "existing_production_function_changed": "run_phase",
-    "other_production_bytes_unchanged": true
+  "context_limits": {
+    "canonical_diagnostics_bytes": 16384,
+    "input_bytes": 1048576,
+    "line_characters": 512,
+    "lines": 80
   },
-  "original_failure_not_reclassified": true,
-  "support_changed_existing_functions": [
-    "run_phase"
+  "from_commit": "9d9fa6e994709e526868ba39f7d79c388da38d55",
+  "new_native_execution": false,
+  "prior_actual_failure_preserved": true,
+  "prior_source_hold": {
+    "findings": [
+      "F01",
+      "F02"
+    ],
+    "manifest_sha256": "65c775b7eaf50815a905445445b8f19fe634299199dde5f225659c514d0c6f55",
+    "summary_sha256": "491db3c0e57d000ca703096c099a8880c697d02d9c255773ab5778f9d05c852a",
+    "verdict": "SOURCE_HOLD"
+  },
+  "production_changes": [
+    "run.py: collect bounded context and strict stage-exits v3 states/caps",
+    "safe_build_diagnostics.py: append context sanitizer; legacy projection unchanged",
+    "RUN_PINS.json: updated sanitizer identity"
   ],
-  "support_new_functions": [
-    "diagnostic_defaults",
-    "terminal_observation"
+  "schema": 1,
+  "source_findings_closed": [
+    "F01",
+    "F02"
   ],
-  "toolchain_changed_existing_functions": [
-    "run"
+  "source_review": {
+    "manifest_sha256": "9c3c5c60198f421581a186f6b7f1012e058d5e65db8336bdfc3552cad137fe8a",
+    "status": "SOURCE_GO_SINGLE_BOUNDED_CI_BUILD_CONTEXT_DIAGNOSTIC_ONLY",
+    "summary_sha256": "ba9d80bf9f08062c378e4c3253b6ed8090e5d5eb6bb002623b48dd6d2a7f2129"
+  },
+  "source_v2_corrections": [
+    "F01 fixed joined GCC path-option table includes MF/MT/MQ/B and same-class paths",
+    "F02 credential/header redaction precedes long-token folding; bounded option matching retained"
   ],
-  "wnowait_and_observer_source_pins_unchanged": true
+  "unchanged": [
+    "native stdout/stderr merge",
+    "ci_support_v3.py and SUPPORT_PINS.json",
+    "original WNOWAIT and observation sources",
+    "toolchain sources, source pins, environment, budgets and postflights",
+    "14-stage build-only stopping point",
+    "original Host workflow"
+  ]
 }

@@ -6,8 +6,8 @@ import hashlib
 from pathlib import Path
 HERE=Path(__file__).absolute().parent
 PINS={
- 'safe_build_diagnostics.py':(6486,'7e73383cacf3d14992a6b9be083f7db4311ee5996a8b1cd54dbb11b2061176a1'),
- 'test_safe_build_diagnostics.py':(9096,'a1a4255619fcccf142fa8956c02353979e818a0ab9b1bcc9776bf09da73deef7'),
+ 'safe_build_diagnostics.py':(11942,'97ab72651c9acadf1e4d242225bdfc21dea3807aa911e448ce7330b762fa4a60'),
+ 'test_safe_build_diagnostics.py':(19000,'d01b997fded243138e48f5e06dd255a4750b037d6a64631e9104c972af58af66'),
 }
 buffers={name:(HERE/name).read_bytes() for name in PINS}
 for name,(size,digest) in PINS.items():
@@ -19,4 +19,5 @@ fixture={'__file__':str(HERE/'test_safe_build_diagnostics.py'),'__name__':'verif
 exec(compile(buffers['safe_build_diagnostics.py'],module['__file__'],'exec',dont_inherit=True),module)
 exec(compile(buffers['test_safe_build_diagnostics.py'],fixture['__file__'],'exec',dont_inherit=True),fixture)
 checks=fixture['run_tests'](module)
-print('PURE_SANITIZER_TESTS_PASS checks='+str(checks)+' optimize='+str(sys.flags.optimize))
+context_checks=fixture['run_context_tests'](module)
+print('PURE_SANITIZER_TESTS_PASS checks='+str(checks)+' context_checks='+str(context_checks)+' optimize='+str(sys.flags.optimize))

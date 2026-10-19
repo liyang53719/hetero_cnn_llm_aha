@@ -1,6 +1,50 @@
-# Host93 CI recovery: original FAIL; build-only diagnostic SOURCE reviewed; actual PENDING
+# Host93 CI recovery: prior build FAIL; bounded-context SOURCE reviewed; actual NOT_EXECUTED
 
-## Current diagnostic checkpoint (2026-10-19)
+## Current bounded-context checkpoint (2026-10-19)
+
+Actions run 39187570266 remains FAIL. Its first 13 stages exited zero with
+confirmed cleanup; fresh_make naturally exited 2, receipt_timed_out=false, and
+cleanup_confirmed=true. The empty five-category diagnostic projection does not
+mean no compiler error. The underlying compiler failure remains unknown.
+
+The new SOURCE candidate retains a consecutive, finitely redacted merged-log
+tail after failed fresh_make: input <=1 MiB, <=80 lines, <=512 characters per
+line, and <=16 KiB for the entire canonical diagnostics object. It preserves
+ordinary compiler/Perl/bison context and generated relative source names.
+NOT_COLLECTED, AVAILABLE, READ_ERROR, and SANITIZER_ERROR distinguish absent,
+empty, and failed collection. Stage-exits schema is v3; summary/source schemas
+remain v2, with the same exact three-file/combined 1 MiB evidence boundary.
+
+Affected v2 cold reruns pass in normal and optimized Python: coordinator 78+78,
+legacy sanitizer 463+463, and context 727+727.
+Unchanged support 41+41, support regressions 7+7, toolchain 41+41, and transport
+7+7 results are inherited from exact v1 source/log identities, not claimed as
+new v2 executions. These are synthetic/source results only.
+Original support/WNOWAIT, clean native environment, toolchain sources and
+budgets, and the original 14-stage build-only boundary are unchanged. No new
+backend, Host, tensor, weight, or numeric execution is claimed.
+
+The original context v1 remains SOURCE_HOLD for two synthetic privacy findings.
+F01 fixes the finite joined GCC path-option table; F02 recognizes credential
+keys/authentication before long-token folding. Prior HOLD review manifest:
+65c775b7eaf50815a905445445b8f19fe634299199dde5f225659c514d0c6f55; summary:
+491db3c0e57d000ca703096c099a8880c697d02d9c255773ab5778f9d05c852a.
+Current independent v2 SOURCE review:
+SOURCE_GO_SINGLE_BOUNDED_CI_BUILD_CONTEXT_DIAGNOSTIC_ONLY.
+Review manifest SHA256:
+9c3c5c60198f421581a186f6b7f1012e058d5e65db8336bdfc3552cad137fe8a;
+review summary SHA256:
+ba9d80bf9f08062c378e4c3253b6ed8090e5d5eb6bb002623b48dd6d2a7f2129.
+Independent source checks: 85. Both-mode independent reruns: coordinator78,
+legacy sanitizer463, context727, original counterexamples4 and positive controls12.
+The final 13-path publication content check remains separate. New context actual: NOT_EXECUTED.
+SOURCE manifest SHA256: 6f5b7959c880d60b56638c3472d77cd114ff3292781ad796c499e305f893e402.
+Only the parent publisher may apply the approved minimal payload and its
+separately verified one-shot workflow. Review alone is not actual qualification.
+The following historical NOT_EXECUTED/PENDING statements describe their original
+checkpoint dates, not the current status of the prior run.
+
+## Historical v2 SOURCE checkpoint (before actual run 39187570266)
 
 Original Actions run 39185138343 remains FAIL. Thirteen prerequisite phases had
 EXIT0_CLEANED; fresh_make then failed after 47.995942 seconds. Its private native

@@ -1,5 +1,5 @@
 {
-  "actual_status": "PENDING_SOURCE_REVIEW_AND_OWNER_SINGLE_PUSH",
+  "actual_status": "NOT_EXECUTED",
   "backend_executed": false,
   "budget": {
     "coordinator_fresh_make_log_max_bytes": 4194304,
@@ -12,40 +12,44 @@
     "workflow_total_seconds": 6600,
     "workflow_work_deadline_offset": 6480
   },
-  "fixed_diagnostic_paths": {
-    "bytes": 75898,
-    "count": 473,
-    "projection": "member path only; exact literal frozenset in run.py",
-    "repository_path": "development_snapshots/canonical_host93_official_source_acquisition_source_20261018/receipt600_future_v3/FIXED_CORE_MEMBERS.json",
-    "sha256": "4d21da6543c04411c19177752150eca0f1ba0c53dcd0db79aed1bb28d0f5573a"
+  "evidence_schemas": {
+    "source_hashes.json": "host93-ci-source-hashes-v2",
+    "stage_exits.json": "host93-ci-stage-exits-v3",
+    "summary.json": "host93-ci-summary-v2"
   },
+  "expected_parent_commit": "9d9fa6e994709e526868ba39f7d79c388da38d55",
   "host_executed": false,
-  "new_mode": "build-diagnostic",
-  "original_actual_review": {
-    "manifest_sha256": "3bdbfc5c09e6de7eb56a0ecf3d6b76ea197bc16bcddc29a467800195a641221f",
-    "summary_sha256": "a572949021d251d2b60c8daff7a450f3148be155007a9d4af408ee8f483c8045"
+  "prior_fresh_make": {
+    "cleanup_confirmed": true,
+    "compiler_cause": "UNKNOWN",
+    "exit_code": 2,
+    "filtered_context_empty": true,
+    "receipt_timed_out": false
   },
-  "original_ci_run": 39185138343,
-  "original_failure_cause": "UNKNOWN; private native receipt/log not available",
-  "original_sources": {
-    "ci_support_v2.py": {
-      "bytes": 9154,
-      "sha256": "931c8d8e4b42c125617ca1058dac809723f8371ffe90205da6b0c64b0aea1a26"
-    },
-    "run.py": {
-      "bytes": 24501,
-      "sha256": "3895215ac36cacdc88745588f6bc90a8ab4f28985f864abe428cbf444e38f47a"
-    },
-    "toolchain/ci_toolchain.py": {
-      "bytes": 32522,
-      "sha256": "b1f993b9ca05cb2a26ca76ca302e74016d773a001f0954338e1951dc194a1be5"
-    }
+  "prior_run": 39187570266,
+  "prior_source_hold": {
+    "findings": [
+      "F01",
+      "F02"
+    ],
+    "manifest_sha256": "65c775b7eaf50815a905445445b8f19fe634299199dde5f225659c514d0c6f55",
+    "summary_sha256": "491db3c0e57d000ca703096c099a8880c697d02d9c255773ab5778f9d05c852a",
+    "verdict": "SOURCE_HOLD"
   },
   "public_diagnostics": {
-    "canonical_bytes_max": 8192,
+    "canonical_diagnostics_bytes_max": 16384,
+    "context": "consecutive suffix after finite path/secret redaction; unknown ordinary text retained",
+    "context_lines_max": 80,
     "input_merged_log_tail_bytes_max": 1048576,
+    "line_chars_max": 512,
     "observations_max": 20,
-    "prose": "fixed category descriptions only",
+    "privacy_limit": "finite public-source clean-environment build only; no perfect generic secret-removal guarantee",
+    "states": [
+      "NOT_COLLECTED",
+      "AVAILABLE",
+      "READ_ERROR",
+      "SANITIZER_ERROR"
+    ],
     "unknown_cleanup": null
   },
   "public_evidence": [
@@ -56,26 +60,27 @@
   "public_evidence_total_bytes_max": 1048576,
   "schema": 1,
   "source_changes": [
-    "optional finite diagnostic sink with original exception preserved",
-    "strict v2 exact three-file safe evidence",
-    "fixed compiler-log sanitizer",
-    "explicit 14-stage stop_after_build mode"
+    "bounded consecutive compiler-log context independent of five-category projection",
+    "explicit NOT_COLLECTED/AVAILABLE/READ_ERROR/SANITIZER_ERROR collection state",
+    "strict stage-exits v3 schema and context caps",
+    "same-buffer source pins refreshed",
+    "F01 fixed GCC joined-path options; F02 credential recognition before token folding"
   ],
-  "stage_count": 14,
-  "status": "SOURCE_CANDIDATE_ACTUAL_NOT_RUN",
-  "successor_of": {
-    "candidate_manifest_sha256": "c481573f900fd0bcd7f0111bee72c11663b427249df38255dd3230d2c8505fde",
-    "fixed_findings": [
-      "F01 preparation cannot consume stale receipt",
-      "F02 diagnostic projection cannot cross phase wall and return success"
-    ],
-    "hold_review_manifest_sha256": "1047b3c447d67b3b495f965a2506c688eab94cace01ac2ee24547a3370c1eb9c",
-    "hold_review_summary_sha256": "3cf355dd6fd08b9eaa06ae7039860f2e4cc68ceb2706cc6ff99f00743142e0c1"
+  "source_manifest": {
+    "bytes": 4783,
+    "sha256": "6f5b7959c880d60b56638c3472d77cd114ff3292781ad796c499e305f893e402"
   },
+  "source_review": {
+    "manifest_sha256": "9c3c5c60198f421581a186f6b7f1012e058d5e65db8336bdfc3552cad137fe8a",
+    "status": "SOURCE_GO_SINGLE_BOUNDED_CI_BUILD_CONTEXT_DIAGNOSTIC_ONLY",
+    "summary_sha256": "ba9d80bf9f08062c378e4c3253b6ed8090e5d5eb6bb002623b48dd6d2a7f2129"
+  },
+  "stage_count": 14,
+  "status": "SOURCE_REVIEWED_PENDING_SINGLE_PUBLISH",
   "workflow": {
-    "bytes": 3954,
-    "path": ".github/workflows/host93-ci-build-diagnostic-once.yml",
-    "sha256": "d7968b5c6f1170e7a03251595c3ba1f8bd347b8ca39b19d4fe584c9700c00f93",
-    "supplied_separately_by_owner": true
+    "no_automatic_retry": true,
+    "one_shot_only": true,
+    "original_host_workflow_unchanged": true,
+    "publication_owned_by_parent": true
   }
 }

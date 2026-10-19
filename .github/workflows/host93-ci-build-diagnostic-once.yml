@@ -1,6 +1,6 @@
 name: host93-ci-build-diagnostic-once
 # SOURCE gate required: one build-only diagnostic attempt, no Host or derived-model micro execution.
-# Only this workflow path launches the new diagnostic; the original Host failure is retained.
+# New reviewed context-tail diagnostic; both prior failures remain recorded and are not retried.
 on:
   push:
     branches: [main]

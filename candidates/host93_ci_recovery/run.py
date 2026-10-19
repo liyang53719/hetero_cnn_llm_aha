@@ -23,8 +23,8 @@ import types
 
 HERE = Path(__file__).absolute().parent
 SUPPORT = ('ci_support_v3.py', 16348, '653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1')
-PINS_SIZE = 3031
-PINS_SHA = '79cb3fd4994cb321118e17f99a6405806f7409f0b9988c45428d8a580a1ac784'
+PINS_SIZE = 3032
+PINS_SHA = '64f4933bae8d2ad6ed7e6e230891f4e9a5cb720fbea623da2ed39903c022b66a'
 MIB = 1024**2
 GIB = 1024**3
 EVIDENCE = ('summary.json', 'source_hashes.json', 'stage_exits.json')
@@ -136,8 +136,9 @@ def pin(value, path=False):
                 'only project-relative source names')
 
 
-def empty_diagnostics():
-    return {'observations': [], 'merged_log_tail': '', 'truncated': False}
+def empty_diagnostics(state='NOT_COLLECTED'):
+    require(state in ('NOT_COLLECTED','READ_ERROR','SANITIZER_ERROR'), 'finite empty context state')
+    return {'observations': [], 'merged_log_tail': '', 'truncated': False, 'context_state': state}
 
 
 DIAGNOSTIC_MESSAGES = {
@@ -157,10 +158,10 @@ OBSERVATION_KEYS = ('exit_code','final_reap_signal','receipt_timed_out','cleanup
 
 
 def validate_diagnostics(value):
-    keys(value, ('observations','merged_log_tail','truncated'))
+    keys(value, ('observations','merged_log_tail','truncated','context_state'))
+    require(value['context_state'] in ('NOT_COLLECTED','AVAILABLE','READ_ERROR','SANITIZER_ERROR'), 'finite context collection state')
     require(type(value['observations']) is list and len(value['observations']) <= 20 and
             type(value['truncated']) is bool and type(value['merged_log_tail']) is str, 'finite diagnostic shape')
-    lines=[]
     for row in value['observations']:
         require(type(row) is dict and row.get('category') in DIAGNOSTIC_MESSAGES and
                 row.get('message') == DIAGNOSTIC_MESSAGES[row['category']], 'fixed diagnostic prose only')
@@ -172,9 +173,13 @@ def validate_diagnostics(value):
             require(row['path'] in DIAGNOSTIC_PATHS and type(row['line']) is int and 1 <= row['line'] <= 9999999 and
                     (row['column'] is None or type(row['column']) is int and 1 <= row['column'] <= 9999999), 'fixed public source location')
             location=row['path']+':'+str(row['line'])+(':'+str(row['column']) if row['column'] is not None else '')+': '
-        lines.append(location+category+': '+row['message'])
-    require(value['merged_log_tail']=='\n'.join(lines), 'merged compiler log tail must be reconstructed fixed observations')
-    require(len((json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True)+'\n').encode('ascii'))<=8192,
+    tail=value['merged_log_tail']
+    require(all(32 <= ord(c) <= 126 or c=='\n' for c in tail), 'context must visibly escape controls and non-ASCII')
+    lines=tail.split('\n') if tail else []
+    require(len(lines)<=80 and all(len(line)<=512 for line in lines), 'context line count/length cap')
+    if value['context_state']!='AVAILABLE':
+        require(not value['observations'] and not tail and not value['truncated'], 'unavailable context cannot contain evidence')
+    require(len((json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True)+'\n').encode('ascii'))<=16384,
             'diagnostic canonical byte cap')
 
 
@@ -251,7 +256,7 @@ def validate_evidence(objects):
                 sources['generated']['host93_sv'] == {'bytes':76366612,'sha256':'2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61'},
                 'scope requires the deterministic fixed FIR and SV')
     keys(exits, ('schema', 'stages'))
-    require(exits['schema'] == 'host93-ci-stage-exits-v2' and type(exits['stages']) is list and len(exits['stages']) <= len(STAGES), 'stage schema/count')
+    require(exits['schema'] == 'host93-ci-stage-exits-v3' and type(exits['stages']) is list and len(exits['stages']) <= len(STAGES), 'stage schema/count')
     seen = []
     failed = False
     for row in exits['stages']:
@@ -259,6 +264,8 @@ def validate_evidence(objects):
         require(row['name'] in required_stages and row['name'] not in seen and row['status'] in ('EXIT0_CLEANED','FAILED') and finite(row['seconds']), 'stage values')
         seen.append(row['name'])
         validate_observation(row)
+        require(row['name']=='fresh_make' and row['status']=='FAILED' or
+                row['diagnostics']==empty_diagnostics(), 'only failed fresh_make collects compiler context')
         if row['status'] == 'EXIT0_CLEANED':
             require(row['exit_code'] == 0 and row['cleanup_confirmed'] is True and row['failure_code']=='NONE' and
                     row['failure_boundary']=='NONE' and row['native_record_status']=='PASS', 'stage terminal tuple')
@@ -373,6 +380,24 @@ def module_from(repo, pins, relative, name):
     return load(repo / relative, row['bytes'], row['sha256'], name)
 
 
+
+def collect_build_diagnostics(repo, pins, log_path, build_root):
+    # Fixed caller path only, after failed fresh_make; do not expose exceptions.
+    try:
+        private, read_truncated = compiler_log_tail(log_path)
+    except BaseException:
+        return empty_diagnostics('READ_ERROR')
+    try:
+        diagnostic = module_from(repo,pins,'candidates/host93_ci_recovery/safe_build_diagnostics.py','verified_safe_build_diagnostics')
+        result = diagnostic.sanitize_build_context(private,build_root,DIAGNOSTIC_PATHS)
+        result['truncated'] = result['truncated'] or read_truncated
+        validate_diagnostics(result)
+        require(result['context_state']=='AVAILABLE', 'successful context sanitizer state')
+        return result
+    except BaseException:
+        return empty_diagnostics('SANITIZER_ERROR')
+
+
 def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
     started = time.monotonic()
     require(os.environ.get('GITHUB_ACTIONS') == 'true' and type(supplied_deadline) is float and
@@ -427,14 +452,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             except BaseException:
                 row.update(observation)
                 if name=='fresh_make':
-                    try:
-                        diagnostic=module_from(repo,pins,'candidates/host93_ci_recovery/safe_build_diagnostics.py','verified_safe_build_diagnostics')
-                        private,read_truncated=compiler_log_tail(evidence/'native.log')
-                        sanitized=diagnostic.sanitize_build_diagnostics(private,str(out/'toolchain'/'verilator'),DIAGNOSTIC_PATHS)
-                        row['diagnostics']={'observations':sanitized['observations'], 'merged_log_tail':sanitized['stderr_tail'],
-                                            'truncated':read_truncated or sanitized['truncated']}
-                    except BaseException:
-                        row['diagnostics']=empty_diagnostics()
+                    row['diagnostics']=collect_build_diagnostics(repo,pins,evidence/'native.log',str(out/'toolchain'/'verilator'))
                 raise
             finally:
                 row['seconds']=round(time.monotonic()-began,6)
@@ -491,7 +509,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                      'failure_category':category,'completed_components':completed,'scope':scopes,'seconds':round(time.monotonic()-started,6)}
             sources={'schema':'host93-ci-source-hashes-v2','project_sources':source_rows,
                      'fixed_inputs':({'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}} if mode=='host-reset-launch' else {}),'generated':generated}
-            objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v2','stages':stages}}
+            objects={'summary.json':summary,'source_hashes.json':sources,'stage_exits.json':{'schema':'host93-ci-stage-exits-v3','stages':stages}}
             validate_evidence(objects)
             evidence=out/'evidence';evidence.mkdir(mode=0o700)
             for name,value in objects.items():write_json(evidence/name,value)

@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=42466
-SHA='ef3116b0eef292e43e96937432a834be25c81fce92f50124959296878d058799'
+SIZE=43446
+SHA='9802744d5dce075badd39a3f073e123d4781543071deed3e0086f387ec48f888'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -23,6 +23,8 @@ def load(raw):
     return g
 G=load(RAW)
 PINS=G.decode(G.exact(HERE/'RUN_PINS.json',G.PINS_SIZE,G.PINS_SHA))['files']
+CPIN=PINS['candidates/host93_ci_recovery/safe_build_diagnostics.py']
+CONTEXT=G.load(HERE/'safe_build_diagnostics.py',CPIN['bytes'],CPIN['sha256'],'cold_context_same_buffer')
 
 
 def defaults():
@@ -48,7 +50,7 @@ def fixture(ready=False, mode='host-reset-launch'):
              'scope':{x:ready and (x=='toolchain_build' if build else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0},
             'source_hashes.json':{'schema':'host93-ci-source-hashes-v2','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
               'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
-            'stage_exits.json':{'schema':'host93-ci-stage-exits-v2','stages':stages}}
+            'stage_exits.json':{'schema':'host93-ci-stage-exits-v3','stages':stages}}
 
 
 class Cold(unittest.TestCase):
@@ -195,7 +197,7 @@ class Cold(unittest.TestCase):
             with self.assertRaises(ValueError):G.exact(Path('/tmp/not-read'),0,'PENDING')
             comp.assert_not_called()
 
-    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False):
+    def mock_whole_job(self, fail_name=None, mode="host-reset-launch", nonzero=False, context=None):
         with tempfile.TemporaryDirectory() as t:
             base=Path(t);repo=base/'repo';repo.mkdir();out=base/'out';archive=base/'idma.zip'
             fixed={'bytes':1,'sha256':'1'*64,'path':str(base/'observed')}
@@ -210,11 +212,14 @@ class Cold(unittest.TestCase):
             tools=group(G.STAGES[:18],{'backend':fixed})
             emission=group(G.STAGES[18:26],{'fir':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_fir']},'sv':{'path':fixed['path'],**fixture(True)['source_hashes.json']['generated']['host93_sv']}})
             execution=group(G.STAGES[-3:],{'elf':fixed})
-            modules={'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution}
+            modules={'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT}
             def native(*args,**kwargs):
                 name=args[2]
                 kwargs['diagnostics'].update(clean_observation())
                 if name==fail_name:
+                    if context is not None:
+                        args[5].mkdir(parents=True)
+                        (args[5]/'native.log').write_bytes(context)
                     kwargs['diagnostics'].update(exit_code=2 if nonzero else -9, final_reap_signal=None if nonzero else 9,
                         receipt_timed_out=not nonzero,waitid_status=2 if nonzero else None,waitid_code=1 if nonzero else None,
                         native_record_status='FAIL',failure_code='CHILD_EXIT_NONZERO' if nonzero else 'SUPERVISOR_TIMEOUT_CLASSIFICATION',
@@ -314,11 +319,80 @@ class Cold(unittest.TestCase):
     def test_fixed_diagnostic_accepted(self):
         msg=G.DIAGNOSTIC_MESSAGES['syntax_error_reported']
         row={'path':'src/V3Error.cpp','line':4,'column':2,'category':'syntax_error_reported','message':msg}
-        d={'observations':[row],'merged_log_tail':'src/V3Error.cpp:4:2: syntax_error_reported: '+msg,'truncated':True}
+        d={'observations':[row],'merged_log_tail':'src/V3Error.cpp:4:2: syntax_error_reported: '+msg,'truncated':True,'context_state':'AVAILABLE'}
         G.validate_diagnostics(d)
         for value in ('/private/V3Error.cpp','src/not_in_fixed_tree.cpp'):
             d['observations'][0]['path']=value
             with self.assertRaises(ValueError):G.validate_diagnostics(d)
+    def test_context_available_without_category(self):
+        code,summary,stages=self.mock_whole_job('fresh_make','build-diagnostic',True,
+            b'V3Ast__gen.cpp:41: error: no matching function for call\n  41 | f(1);\nmake: *** [all] Error 2\n')
+        row=stages[-1]
+        self.assertEqual(code,1);self.assertEqual(row['exit_code'],2)
+        self.assertEqual(row['diagnostics']['context_state'],'AVAILABLE')
+        self.assertEqual(row['diagnostics']['observations'],[])
+        self.assertIn('no matching function',row['diagnostics']['merged_log_tail'])
+        self.assertFalse(summary['scope']['toolchain_build'])
+        self.assertTrue(all(x['diagnostics']['context_state']=='NOT_COLLECTED' for x in stages[:-1]))
+    def test_failed_make_missing_log_state(self):
+        code,summary,stages=self.mock_whole_job('fresh_make','build-diagnostic',True)
+        self.assertEqual(stages[-1]['diagnostics'],G.empty_diagnostics('READ_ERROR'))
+        self.assertEqual(code,1)
+    def test_failed_make_empty_log_available(self):
+        code,summary,stages=self.mock_whole_job('fresh_make','build-diagnostic',True,b'')
+        self.assertEqual(stages[-1]['diagnostics']['context_state'],'AVAILABLE')
+        self.assertEqual(stages[-1]['diagnostics']['merged_log_tail'],'')
+        self.assertEqual(code,1)
+    def test_collector_read_error_does_not_load_sanitizer(self):
+        with mock.patch.object(G,'compiler_log_tail',side_effect=OSError('PRIVATE read failure')),mock.patch.object(G,'module_from') as module:
+            self.assertEqual(G.collect_build_diagnostics(None,None,None,None),G.empty_diagnostics('READ_ERROR'))
+            module.assert_not_called()
+    def test_collector_source_failure_is_sanitizer_error(self):
+        with mock.patch.object(G,'compiler_log_tail',return_value=(b'context',False)),mock.patch.object(G,'module_from',side_effect=ValueError('PRIVATE pin failure')):
+            self.assertEqual(G.collect_build_diagnostics(None,None,None,None),G.empty_diagnostics('SANITIZER_ERROR'))
+    def test_collector_sanitizer_exceptions_are_explicit(self):
+        for exc in (ValueError('PRIVATE'),TimeoutError('PRIVATE'),KeyboardInterrupt()):
+            module=types.SimpleNamespace(sanitize_build_context=mock.Mock(side_effect=exc))
+            with self.subTest(exc=type(exc)),mock.patch.object(G,'compiler_log_tail',return_value=(b'context',False)),mock.patch.object(G,'module_from',return_value=module):
+                self.assertEqual(G.collect_build_diagnostics(None,None,None,None),G.empty_diagnostics('SANITIZER_ERROR'))
+    def test_collector_malformed_output_rejected(self):
+        invalid=G.empty_diagnostics();invalid['context_state']='AVAILABLE';invalid['merged_log_tail']='x'*513
+        module=types.SimpleNamespace(sanitize_build_context=mock.Mock(return_value=invalid))
+        with mock.patch.object(G,'compiler_log_tail',return_value=(b'context',False)),mock.patch.object(G,'module_from',return_value=module):
+            self.assertEqual(G.collect_build_diagnostics(None,None,None,None),G.empty_diagnostics('SANITIZER_ERROR'))
+    def test_collector_read_truncation_propagates(self):
+        with mock.patch.object(G,'compiler_log_tail',return_value=(b'make: failed',True)),mock.patch.object(G,'module_from',return_value=CONTEXT):
+            result=G.collect_build_diagnostics(None,None,None,'/fixed/build')
+            self.assertEqual(result['context_state'],'AVAILABLE');self.assertTrue(result['truncated'])
+    def test_context_unknown_state_rejected(self):
+        for state in ('FAILED','',None,1,True):
+            d=G.empty_diagnostics();d['context_state']=state
+            with self.subTest(state=state),self.assertRaises(ValueError):G.validate_diagnostics(d)
+    def test_context_nonavailable_evidence_rejected(self):
+        for state in ('NOT_COLLECTED','READ_ERROR','SANITIZER_ERROR'):
+            for change in ({'merged_log_tail':'ordinary context'},{'truncated':True}):
+                d=G.empty_diagnostics(state);d.update(change)
+                with self.subTest(state=state,change=change),self.assertRaises(ValueError):G.validate_diagnostics(d)
+    def test_context_caps_and_controls_rejected(self):
+        for tail in ('x'*513,'\n'.join(['x']*81),'\n'.join(['x'*500]*40),'tab\t','carriage\r','escape\x1b','unicode \u202e'):
+            d=G.empty_diagnostics();d.update(context_state='AVAILABLE',merged_log_tail=tail)
+            with self.subTest(tail=tail[:20]),self.assertRaises(ValueError):G.validate_diagnostics(d)
+    def test_context_max_line_and_visible_escape_accepted(self):
+        for tail in ('word '*100, 'visible \\t and \\x1b', '\n'.join(['x']*80)):
+            d=G.empty_diagnostics();d.update(context_state='AVAILABLE',merged_log_tail=tail)
+            G.validate_diagnostics(d)
+    def test_context_only_failed_make(self):
+        for index,status in ((0,'FAILED'),(-1,'EXIT0_CLEANED')):
+            x=fixture(True,'build-diagnostic');row=x['stage_exits.json']['stages'][index]
+            row['status']=status;row['diagnostics'].update(context_state='AVAILABLE',merged_log_tail='context')
+            with self.subTest(index=index,status=status),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_stage_old_schema_rejected(self):
+        x=fixture(True);x['stage_exits.json']['schema']='host93-ci-stage-exits-v2'
+        with self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_context_missing_state_rejected(self):
+        d=G.empty_diagnostics();del d['context_state']
+        with self.assertRaises(ValueError):G.validate_diagnostics(d)
+
     def test_diagnostic_extra_keys_rejected(self):
         d=G.empty_diagnostics();d['raw']='private'
         with self.assertRaises(ValueError):G.validate_diagnostics(d)

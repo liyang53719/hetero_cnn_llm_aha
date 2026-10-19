@@ -783,3 +783,18 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 前13阶段EXIT0_CLEANED；fresh_make 62.251071s，原waitid code1/status2、最终exit2，receipt_timed_out=false，cleanup_confirmed=true。子进程CPU user60.802876/system1.282175秒，累计子进程RSS峰616720KiB，非阶段专属内存仪表。总73.883024s。
 - 合并日志分类输出为空，不能推无错误；当前过滤器只保少数固定分类，未保完整去敏上下文。具体构建根因未知，不推OOM、不改预算。原第一次FAIL保留。
 - 下一仅SOURCE：核固定make源闭包与make/g++/bison/perl格式盲区，准备有限完整合并日志尾、路径/secret占位与错误前后上下文。无自动重跑；本次摘要不授任何工具/Host/数值资格。
+
+
+## 2026-10-19 构建失败完整上下文 SOURCE 后继（独审通过，actual 未执行）
+
+- 原 run 39187570266 保持 FAIL：fresh_make 自然退出2、receipt_timed_out=false、cleanup_confirmed=true；空五类分类输出不能推无错误，编译根因仍未知。原第一次 FAIL 不改写。
+- 后继只在失败 fresh_make 读取原私有 stdout/stderr 合并 native.log 的末至多1 MiB；保留最近连续至多80行，逐行去敏后至多512字符，整个诊断 canonical JSON 至多16 KiB。普通 make/g++/Perl/bison 错误及生成源相对名不再依赖五类命中；超额只裁行长或丢最旧完整行。
+- 绝对机器路径、URL、常见凭据键值/认证头、长token及PEM私钥块用占位符替换；控制符/非ASCII可见转义。这是固定公开源码与clean native环境的有限诊断，不保证任意秘密文本完全去敏，不开放其他任意工作负载日志。
+- context_state 明分 NOT_COLLECTED/AVAILABLE/READ_ERROR/SANITIZER_ERROR，空日志与读/去敏失败不混淆；原失败仍优先。仅stage_exits改v3，summary/source仍v2，仍只有3JSON与总1 MiB安全上传边界。
+- 原 WNOWAIT/support/toolchain/官方源/单行patch/clean环境/预算/后验及14阶段build-only停点原字节或原合同保持；不执行backend、模型微例、Host或数值。
+- v2受影响normal/-O纯冷测重跑主78+78、旧去敏463+463与新上下文727+727，全exit0；support41+41、回归7+7、工具41+41、运输7+7按未变源码/原日志身份继承v1实测，未重新执行；没有新native、下载、构建或CI执行。SOURCE manifest为6f5b7959c880d60b56638c3472d77cd114ff3292781ad796c499e305f893e402；独立SOURCE审已闭合为SOURCE_GO_SINGLE_BOUNDED_CI_BUILD_CONTEXT_DIAGNOSTIC_ONLY，实际资格不预填。
+- 最小发布仅必要源码/pin/测试、安全摘要、STATUS与中文计划；不带原测试logs、私有日志、绝对本机路径或全库存。唯一父发布者待独审封口后另核新一次性workflow；不自动重试原Host，不提升预算，完整block仍0/5。
+
+- 原上下文v1的SOURCE HOLD保留（review manifest 65c775b7eaf50815a905445445b8f19fe634299199dde5f225659c514d0c6f55，summary 491db3c0e57d000ca703096c099a8880c697d02d9c255773ab5778f9d05c852a）。v2仅修F01固定GCC连写路径选项表与F02先识别认证/凭据键值再折叠长token；含MF/MT/MQ/B同类正反例、长键短值和普通文本正控。反例为合成SOURCE输入，不称旧真实日志曾泄露。
+
+- v2独立SOURCE GO身份：review manifest `9c3c5c60198f421581a186f6b7f1012e058d5e65db8336bdfc3552cad137fe8a`；summary `ba9d80bf9f08062c378e4c3253b6ed8090e5d5eb6bb002623b48dd6d2a7f2129`。85静核、独立normal/-O主78各、旧去敏463与上下文727各、原4反例及12正控各通过；未变support/toolchain证据按身份继承。最终13path内容审独立进行，metadata封口未重跑测试，新actual仍NOT_EXECUTED。

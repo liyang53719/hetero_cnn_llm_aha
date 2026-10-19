@@ -1,4 +1,35 @@
 {
+  "all_exit_codes_zero": true,
+  "backend_executed": false,
+  "ci_run_executed": false,
+  "counts_per_mode": {
+    "coordinator_tests": 78,
+    "sanitizer_context_checks": 727,
+    "sanitizer_legacy_checks": 463,
+    "support_review_regression_tests": 7,
+    "support_tests": 41,
+    "toolchain_checks": 41,
+    "transport_tests": 7
+  },
+  "evidence_origin": {
+    "coordinator": "RERUN_V2",
+    "sanitizer": "RERUN_V2",
+    "support": "INHERITED_UNCHANGED_V1",
+    "support_review_regressions": "INHERITED_UNCHANGED_V1",
+    "toolchain": "INHERITED_UNCHANGED_V1",
+    "transport": "INHERITED_UNCHANGED_V1"
+  },
+  "host_executed": false,
+  "independent_source_review_checks": {
+    "context_per_mode": 727,
+    "coordinator_per_mode": 78,
+    "legacy_sanitizer_per_mode": 463,
+    "original_counterexamples_per_mode": 4,
+    "original_positive_controls_per_mode": 12,
+    "source_checks": 85
+  },
+  "inherited_v1_source_manifest_sha256": "cf67633e10ccb15bcbf5c9d4ce91ed19630eae5bb21a2534fc46061483de7518",
+  "metadata_finalization_reran_tests": false,
   "modes": [
     "-I -S -B",
     "-I -S -B -O"
@@ -6,15 +37,12 @@
   "native_tools_executed": false,
   "network_executed": false,
   "real_build_executed": false,
-  "status": "PASS_PURE_SOURCE_AND_MOCK_ONLY",
-  "unchanged_v1_test_evidence_per_mode": {
-    "sanitizer_checks": 463,
-    "toolchain": 41,
-    "transport": 7
+  "schema": 1,
+  "source_manifest_sha256": "6f5b7959c880d60b56638c3472d77cd114ff3292781ad796c499e305f893e402",
+  "source_review": {
+    "manifest_sha256": "9c3c5c60198f421581a186f6b7f1012e058d5e65db8336bdfc3552cad137fe8a",
+    "status": "SOURCE_GO_SINGLE_BOUNDED_CI_BUILD_CONTEXT_DIAGNOSTIC_ONLY",
+    "summary_sha256": "ba9d80bf9f08062c378e4c3253b6ed8090e5d5eb6bb002623b48dd6d2a7f2129"
   },
-  "v2_test_counts_per_mode": {
-    "coordinator": 63,
-    "support_original": 41,
-    "support_review_regressions": 7
-  }
+  "status": "PASS_AFFECTED_V2_COLD_WITH_UNCHANGED_V1_EVIDENCE"
 }

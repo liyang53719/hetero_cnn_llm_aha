@@ -165,3 +165,111 @@ def sanitize_build_diagnostics(log_bytes, build_root, allowed_paths):
         result["stderr_tail"] = _tail(rows)
         result["truncated"] = True
     return result
+
+
+# Context is a bounded diagnostic for this public-source, clean-environment build.
+# These finite redactions are NOT a general-purpose secret-removal guarantee.
+MAX_CONTEXT_BYTES = 16 * 1024
+MAX_CONTEXT_LINES = 80
+MAX_CONTEXT_LINE_CHARS = 512
+_PRIVATE_BEGIN = re.compile(r'-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----')
+_PRIVATE_END = re.compile(r'-----END (?:[A-Z0-9]+ )*PRIVATE KEY-----')
+_URL = re.compile(r'(?i)\b(?:[a-z][a-z0-9+.-]{1,20}://|www\.)[^\s\x00-\x1f\"\'<>]+')
+_HEADER = re.compile(r'(?i)\b(?:proxy-authorization|authorization|x-api-key|x-auth-token|cookie|set-cookie)\s*:\s*.*')
+_SECRET_NAME = r'[A-Za-z0-9_.-]{0,128}(?:password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|private[_-]?key|credential|authorization|cookie|session[_-]?id)[A-Za-z0-9_.-]{0,128}'
+_SECRET_VALUE = r'''(?:"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|[^\s,;\}\]]+)'''
+_KEY_VALUE = re.compile(r'(?i)(?<![A-Za-z0-9_.-])([\"\']?' + _SECRET_NAME + r'[\"\']?[ \t]*[:=][ \t]*)' + _SECRET_VALUE)
+_SECRET_OPTION = re.compile(r'(?i)(?<![A-Za-z0-9_.-])(--' + _SECRET_NAME + r'[ \t]+)' + _SECRET_VALUE)
+_AUTH = re.compile(r'(?i)\b(?:Bearer|Basic)[ \t]+[^\s,;\}\]]+')
+_QUOTED_PATH = re.compile(r'''(["'`])(?:[A-Za-z]:[\\/]|\\\\|/|~/)[^\n]*?\1''')
+_OPTION_PATH = re.compile(r'''(-(?:I|L|isystem|iquote|include|imacros|idirafter|iprefix|iwithprefixbefore|iwithprefix|isysroot|MF|MT|MQ|B|o))(?:/|[A-Za-z]:[\\/])[^\s"'`<>\[\]{}(),;:]+''')
+_ABSOLUTE_PATH = re.compile(r'''(?<![A-Za-z0-9_./\\])(?:/(?![/*])|[A-Za-z]:[\\/]|\\\\|~/)[^\s"'`<>\[\]{}(),;:]+''')
+_LONG_TOKEN = re.compile(r'[A-Za-z0-9_+/.=\-]{40,}')
+_KNOWN_TOKEN = re.compile(r'\b(?:(?:AKIA|ASIA)[A-Z0-9]{16}|(?:gh[pousr]_|github_pat_|sk-)[A-Za-z0-9_-]{12,})\b')
+_LINE_MARKER = '...[TRUNCATED]'
+
+
+def _visible_ascii(text):
+    """Escape all controls, invalid UTF-8 and non-ASCII; LF is split by caller."""
+    out = []
+    for char in text:
+        n = ord(char)
+        if 32 <= n <= 126:
+            out.append(char)
+        elif char == '\t':
+            out.append('\\t')
+        elif char == '\r':
+            out.append('\\r')
+        elif n <= 255:
+            out.append('\\x%02x' % n)
+        elif n <= 65535:
+            out.append('\\u%04x' % n)
+        else:
+            out.append('\\U%08x' % n)
+    return ''.join(out)
+
+
+def _redact_context_line(line):
+    # Redact before clipping, so no clipping boundary exposes a partial secret.
+    # Preserve credential keys until their values have been redacted.
+    line = _HEADER.sub('[AUTH_HEADER]', line)
+    line = _AUTH.sub('[AUTH]', line)
+    line = _KEY_VALUE.sub(lambda m: m[1] + '[REDACTED]', line)
+    line = _SECRET_OPTION.sub(lambda m: m[1] + '[REDACTED]', line)
+    line = _URL.sub('[URL]', line)
+    line = _QUOTED_PATH.sub(lambda m: m[1] + '[PATH]' + m[1], line)
+    line = _OPTION_PATH.sub(lambda m: m[1] + '[PATH]', line)
+    line = _ABSOLUTE_PATH.sub('[PATH]', line)
+    line = _KNOWN_TOKEN.sub('[TOKEN]', line)
+    line = _LONG_TOKEN.sub('[LONG_TOKEN]', line)
+    return _visible_ascii(line)
+
+
+def sanitize_build_context(log_bytes, build_root, allowed_paths):
+    """Keep a consecutive suffix of at most 80 redacted merged-log lines.
+
+    Each line is at most 512 printable ASCII characters; the entire returned
+    diagnostics object, canonical JSON plus LF, is at most 16 KiB. Old fixed
+    observations remain a bounded adjunct. All input lines are scanned before
+    selecting the suffix so PEM blocks beginning earlier are still covered.
+    An unmatched END marker conservatively redacts the prefix through that END,
+    including a block whose BEGIN fell outside the caller's 1 MiB read window.
+    """
+    observed = sanitize_build_diagnostics(log_bytes, build_root, allowed_paths)
+    raw_lines = log_bytes.decode('utf-8', errors='backslashreplace').split('\n')
+    if raw_lines[-1] == '':
+        raw_lines.pop()  # A terminal LF is a terminator, not another log record.
+    private = [False] * len(raw_lines)
+    block_start = None
+    prefix_end = -1
+    for index, line in enumerate(raw_lines):
+        if _PRIVATE_BEGIN.search(line):
+            if block_start is None:
+                block_start = index
+        if _PRIVATE_END.search(line):
+            if block_start is None:
+                prefix_end = index
+            else:
+                private[block_start:index+1] = [True] * (index + 1 - block_start)
+            block_start = None
+    if prefix_end >= 0:
+        private[:prefix_end+1] = [True] * (prefix_end+1)
+    if block_start is not None:
+        private[block_start:] = [True] * (len(raw_lines) - block_start)
+    selected = range(max(0, len(raw_lines) - MAX_CONTEXT_LINES), len(raw_lines))
+    lines = []
+    truncated = len(raw_lines) > MAX_CONTEXT_LINES or observed['truncated']
+    for index in selected:
+        line = '[PRIVATE_KEY]' if private[index] else _redact_context_line(raw_lines[index])
+        if len(line) > MAX_CONTEXT_LINE_CHARS:
+            line = line[:MAX_CONTEXT_LINE_CHARS-len(_LINE_MARKER)] + _LINE_MARKER
+            truncated = True
+        lines.append(line)
+    result = {'observations': observed['observations'], 'merged_log_tail': '\n'.join(lines),
+              'truncated': truncated, 'context_state': 'AVAILABLE'}
+    while len(canonical_json(result)) > MAX_CONTEXT_BYTES:
+        # Drop only oldest whole lines; never pick isolated matching errors.
+        lines.pop(0)
+        result['merged_log_tail'] = '\n'.join(lines)
+        result['truncated'] = True
+    return result

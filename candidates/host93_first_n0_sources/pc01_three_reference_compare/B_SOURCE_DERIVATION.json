@@ -1,0 +1,92 @@
+{
+  "base_mod_1024": 64,
+  "burst_descriptors_per_window": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    2,
+    2,
+    1,
+    2
+  ],
+  "columns": 1536,
+  "full_strobed_bytes": 786432,
+  "full_w_beats": 12288,
+  "qraw_base": 4484322368,
+  "row_stride_bytes": 6144,
+  "rows": 128,
+  "schema": 1,
+  "scope": "Qraw-only finite source derivation; not N0 B count; not an actual capture",
+  "source_review": {
+    "manifest": {
+      "bytes": 168,
+      "sha256": "373011e9464437afa0181aaf907740d03b99976539b78563fe060fc626403395"
+    },
+    "name": "review_pc01_source_cycle_floor_20261019T1934",
+    "summary": {
+      "bytes": 5047,
+      "sha256": "d5181a15ff32fe62cd1849a67c05f3cbc5156baf1a2f38653f9559cc1ea3c171"
+    }
+  },
+  "sources": {
+    "candidates/host93_ci_recovery/emission/EmitCanonicalHost93Diagnostic.scala": {
+      "bytes": 3520,
+      "lines": [
+        [
+          21,
+          24
+        ]
+      ],
+      "sha256": "f4fb8ca9666fc97e4d2bcc9f883d8e1c066d1ec80fc7c13c1a91d388f253bc2f"
+    },
+    "candidates/qwen2_public21_binding/current_overlay.patch": {
+      "bytes": 256840,
+      "lines": [
+        [
+          979,
+          981
+        ],
+        [
+          1004,
+          1008
+        ],
+        [
+          1536,
+          1551
+        ]
+      ],
+      "sha256": "2774aacc19b2877dc77dae5d145b628aee2e4eb2589c98f917904669b56715ad"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": {
+      "bytes": 20407,
+      "lines": [
+        [
+          170,
+          196
+        ],
+        [
+          215,
+          230
+        ]
+      ],
+      "sha256": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff"
+    }
+  },
+  "successful_b_per_row": 16,
+  "successful_b_total": 2048,
+  "window_columns": [
+    160,
+    160,
+    160,
+    160,
+    160,
+    160,
+    160,
+    160,
+    160,
+    96
+  ]
+}

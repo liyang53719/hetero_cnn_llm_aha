@@ -1244,3 +1244,16 @@ SOURCE 独审结论为 `ACCEPT_PC01_DRIVER_COMPILE_LINK_SOURCE_AND_180_SECOND_IN
 新 ELF 13,537,744 B / cb64b5cf1d5e9c226b9768fb3fdcbb3305bee894b6d904cb4cf29633d10fe5b1；原 archive 17,631,506 B / dafcc125c4a4463b9ff454fda6b7a4031bfa17fd98cde1e8386ff058ce245b2f。独核 80 项工作树、47 source/cache、39 固定系统文件与49别名及 .d/ELF 静态链。-MMD 不含系统头，RSS 为累计子进程记账。正式独审 ACCEPT_ACTUAL_PC01_DRIVER_COMPILE_LINK_ONLY；MANIFEST1256 B / 9fc63304848d842ec22d617fc05d5b2bba1413a15c80fd1b2ed797a887d50de1，SUMMARY5665 B / 768474add541e8c033126d02a8f0efbb4bd913fcf6ccaa412bd7f727b9b49195。
 
 后继在独立审查的 fresh 单 Host/Syms/单 RAM 中绑定此成功 ELF/receipt，连续 PC0→ACK0→PC1→ACK1，再作完整196608值三轨比较。两次实际窗口分别上限180秒和10620秒，后者包含比较与落证；中间准备等待不算仿真时间。PC01实际/数值/fullblock均未授通过，五block仍0/5。此次安全三路径只持久化汇总，不触发新的Host/RTL/native作业；普通push轻量guard另记。全部原输入、参考、输出、二进制及证据保留，无清理。
+
+
+## 2026-10-19 PC01 三轨完整比较只读 SOURCE 已独审
+
+新增 candidates/host93_first_n0_sources/pc01_three_reference_compare/ 的8件冻结原件与安全README/STATUS。生产接口 compare(capture_root, reference_root, reference_receipt, *, shared_stop) 返回数据观察；固定loader对同一已核buffer执行。所有实际路径只由私有caller配置给入，不含数组、私有绑定或raw日志。本批不触发新的Host/RTL/native作业；workflow文件不变，普通push的轻量guard另记。
+
+正式SOURCE结论 ACCEPT_PC01_THREE_REFERENCE_READONLY_COMPARISON_SOURCE_ONLY。独审MANIFEST128 B / 56b6158791820af77740b6691d7e019738be2e0aa682e976339b2c00cdb37e1d，SUMMARY2803 B / bb77658273a04d0ccd1b7794711e99e29f6eb39995045ee2f6ff841101a473ab。冻结源MANIFEST3055 B / a77e371a5a927ca1dd4837eff66c7947310faa09a0a9f1ba7de05d6a5a81f9ce含21成员和16来源。作者普通/-O/搬迁双模式各48例，独审48+48纯合成冷测通过，另核128组Fraction与266项拓宽边界；未读取真实完整capture或参考数组。
+
+消费者沿真实counts的41个顶层字段、15个AXI字段，固定ACK0/ACK1、PC序列、jobs/dones、完整786432字节/196608值及MAC/issue/add计数，交叉核窗口和退休。freshPC0 N0必须逐字匹配3c25077e原SHA；qraw完整且有限。专属qraw B=2048由固定burstWrites、1KiB页门与每行十窗[1,2,1,2,2,1,2,2,1,2]推导，16×128；W beats仍12288。该数不替换N0的B12288。N0内部门与completion payload只由已审driver成功控制流加caller关联的自然exit0证明，不能称为consumer独立receipt观测。
+
+三个参考输出身份独立固定为typed FP32 346b2974…、数学RN-FP32 42604d28…、数学RN-FP64 ef5d02aa…，原RESULT.json1249 B / ae61290bf5ba0d5ff2f21920c8913a15736c788e3093a06ff2c9e0ba89b586f6另核；收据自述不能设定期望。typed全量逐bit/mismatch/hash独立列，数学两轨分别给整数绝对误差总量、近似均值/最大值、完整ULP分桶和相对误差；它们相对RN导出值，不冒充未舍入实数点积全量精确误差。位差仍保留完整诊断。所有七文件同buffer消费且前后重核。
+
+本片SOURCE_ONLY，实际capture比较未执行。official_raw_numeric_pass、application_accuracy_pass、typed_recipe_bit_exact_to_rtl均null，full_block_pass=false，无新增容差。caller须真实关联固定native源、退出0与cleanup及同RAM来源，方可分别汇总typed匹配和数学诊断。函数只读、无child/无timer，≤60秒合作检查使用min(start+60,shared_stop)，不能延长caller硬截止。独立重链180秒和后续长窗口10620秒合计最多10800秒；比较完全在后一个原窗口内，长入口另审。

@@ -1,0 +1,42 @@
+{
+  "actual_capture_comparison": "NOT_EXECUTED",
+  "application_accuracy_pass": null,
+  "arrays_published": false,
+  "author_cold_modes": 4,
+  "author_cold_tests_each": 48,
+  "caller_native_exit_cleanup_source_association_required": true,
+  "full_block_pass": false,
+  "independent_cold_modes": 2,
+  "independent_cold_tests_each": 48,
+  "independent_fraction_cases": 128,
+  "independent_widening_cases": 266,
+  "local_seconds_cap": 60,
+  "math_fp32_fp64": "separate_exported_value_diagnostics_only",
+  "new_tolerance": null,
+  "official_raw_numeric_pass": null,
+  "private_paths_published": false,
+  "real_arrays_read_in_source_cold": false,
+  "reference_models_rerun": false,
+  "rtl_executed_by_this_batch": false,
+  "schema": 1,
+  "shared_deadline_extended": false,
+  "source_manifest": {
+    "bytes": 3055,
+    "sha256": "a77e371a5a927ca1dd4837eff66c7947310faa09a0a9f1ba7de05d6a5a81f9ce"
+  },
+  "source_review": {
+    "directory": "review_pc01_three_compare_source_20261019T1945",
+    "manifest": {
+      "bytes": 128,
+      "sha256": "56b6158791820af77740b6691d7e019738be2e0aa682e976339b2c00cdb37e1d"
+    },
+    "summary": {
+      "bytes": 2803,
+      "sha256": "bb77658273a04d0ccd1b7794711e99e29f6eb39995045ee2f6ff841101a473ab"
+    },
+    "verdict": "ACCEPT_PC01_THREE_REFERENCE_READONLY_COMPARISON_SOURCE_ONLY"
+  },
+  "status": "TEMP_SOURCE_PC01_THREE_REFERENCE_COMPARISON_ONLY",
+  "typed_bit_comparison": "separate_complete_196608_observation",
+  "typed_recipe_bit_exact_to_rtl": null
+}

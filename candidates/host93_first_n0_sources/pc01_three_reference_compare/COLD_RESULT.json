@@ -1,0 +1,55 @@
+{
+  "modes": {
+    "normal": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4038,
+        "sha256": "ceb04478c5093ae7eb9560df735040549b0054974c545efbd3423f0fdc2b9c79"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "optimized": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4038,
+        "sha256": "c4c59054771cc42ec99d5ce428ab2fa08a92fd7d0a39afa07fbe3a535c6577d2"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "relocated": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4038,
+        "sha256": "af453b148ee0248ffdbd68bb77b223aa988b2a41e672669d60de86c170602069"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "relocated_optimized": {
+      "exit": 0,
+      "stderr": {
+        "bytes": 4038,
+        "sha256": "f85df044a5f900890f6d4f546e92c60ca92bc38694b68c945c569595ce162f3a"
+      },
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "production_relocated_bytes_identical": true,
+  "real_capture_or_reference_arrays_read": false,
+  "reference_model_rerun": false,
+  "rtl_executed": false,
+  "schema": 1,
+  "status": "PASS_PURE_MOCK_SOURCE_ONLY",
+  "tests_each": 48
+}

@@ -1,0 +1,48 @@
+{
+  "api": "compare(capture_root, reference_root, reference_receipt, *, shared_stop) -> observation",
+  "application_accuracy_pass": null,
+  "caller_requirements": [
+    "Fixed producer/source/native association",
+    "Native natural exit 0 and cleanup confirmed before compare",
+    "Reference actual EXECUTION_RESULT 17596/c7367d084b11ecf6a895bd165dd5e3d51dfa3ddbfdb439dce24a4b183659e2e7 and three phase natural0/cleanup",
+    "Retain original first failure and hard shared deadline; reserve comparison within same total window"
+  ],
+  "capture_leaves": [
+    "counts.json",
+    "actual_n0.f32le",
+    "actual_qraw.f32le"
+  ],
+  "full_block_pass": false,
+  "loader": "load_compare(source_root) -> compare",
+  "new_tolerance": null,
+  "observation_status": "COMPLETE_DATA_OBSERVATION_ONLY",
+  "official_raw_numeric_pass": null,
+  "reference_acceptance": {
+    "manifest": {
+      "bytes": 381,
+      "sha256": "b8598654be706a69c38eba26e1913aee52f21b29c76b680ad66c0ad0caf7251c"
+    },
+    "summary": {
+      "bytes": 10373,
+      "sha256": "468969f36d80fe77c8ab778b7a6366932489da2e08d6d455e13a0b96684fa261"
+    },
+    "verdict": "ACCEPT_ACTUAL_PC1_TWO_REFERENCE_MODELS_COMPLETE_DIAGNOSTIC_ONLY"
+  },
+  "reference_leaves": [
+    "qraw.typed.f32le",
+    "qraw.math.f32le",
+    "qraw.math.f64le",
+    "RESULT.json"
+  ],
+  "reference_receipt_leaf": "RESULT.json",
+  "resource": {
+    "caller_original_total_seconds_cap": 10800,
+    "file_writes": false,
+    "local_seconds_cap": 60,
+    "new_child": false,
+    "new_timer": false,
+    "stop": "min(start + 60, caller shared_stop)"
+  },
+  "schema": 1,
+  "typed_recipe_bit_exact_to_rtl": null
+}

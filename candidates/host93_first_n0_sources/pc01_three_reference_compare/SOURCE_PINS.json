@@ -1,0 +1,31 @@
+{
+  "capture_axi_keys": 15,
+  "capture_top_level_keys": 41,
+  "files": {
+    "B_SOURCE_DERIVATION.json": {
+      "bytes": 1875,
+      "sha256": "e4f5c62a356bc916ec53df298804cef7450e7bff68be0b087116a7d690752804"
+    },
+    "PRODUCER_SOURCE_PINS.json": {
+      "bytes": 3353,
+      "sha256": "0e5fdc54da55804282640bbc44a1f667684f4339ecb061177600a983ef315961"
+    },
+    "compare.py": {
+      "bytes": 15167,
+      "sha256": "c8e8026838bc955364ae1c171e9775d7138acff20074fb168dfe3000b2fc4820"
+    },
+    "load_compare.py": {
+      "bytes": 1180,
+      "sha256": "2161141538deb72a17e30ace874e7c955213d8e2f7017658a61ebba91f96a856"
+    },
+    "test_compare_cold.py": {
+      "bytes": 15908,
+      "sha256": "ea672632b010723800041b118bec7bf2085647067e257c7a300da902d355b2d0"
+    }
+  },
+  "reference_receipt": {
+    "bytes": 1249,
+    "sha256": "ae61290bf5ba0d5ff2f21920c8913a15736c788e3093a06ff2c9e0ba89b586f6"
+  },
+  "schema": 1
+}

@@ -1,0 +1,70 @@
+{
+  "files": {
+    "candidates/host93_ci_recovery/emission/EmitCanonicalHost93Diagnostic.scala": {
+      "bytes": 3520,
+      "sha256": "f4fb8ca9666fc97e4d2bcc9f883d8e1c066d1ec80fc7c13c1a91d388f253bc2f"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/PRODUCTION_MANIFEST.json": {
+      "bytes": 4472,
+      "sha256": "40ebb6c1957941b90906c4dc5c0d561816fa413aa5a4431a1bd2d191f39dc5b1"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/REFERENCE_INTERFACE.json": {
+      "bytes": 966,
+      "sha256": "c628e8d7af98d4b4f348c1f30a6f6afbb8fe9463ba3ea7ed787b81bc1a1cdb1d"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/SOURCE_PINS.json": {
+      "bytes": 8657,
+      "sha256": "f6257e57710d16c93ee3edd406814e6b1aa4e5004f5258eac73173e20c34f7e4"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/axi_protocol.hpp": {
+      "bytes": 6569,
+      "sha256": "b94ee2dc53596074b49e9ac7853f9de0fc4ec90fba4981a0dc5387587f0a8294"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/completion_payload.hpp": {
+      "bytes": 2268,
+      "sha256": "1dbab0fec1057e55ccc931588fa7f58a5598ce272e4542edda49c80eb03ee3ef"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/n0_model_scheduler.inc": {
+      "bytes": 20875,
+      "sha256": "0c31771cd3d7a12044710467d85a87f2a6a53e7b6c881344db87af62f54f87f6"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc01_driver.hpp": {
+      "bytes": 7854,
+      "sha256": "03d943d1210abb180747d8a6ea0bd80a465c938162494c30142d499697d41d58"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc01_result.hpp": {
+      "bytes": 1215,
+      "sha256": "04de9a667ecc52e66b2c2a24440bf09e19738c41ad9892a67e60f60b9e2b781d"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc1_model_scheduler.inc": {
+      "bytes": 13247,
+      "sha256": "6cdc1abc8c8229a883a67ea398ef714fdef5ea7f5d8f4518a9492e0aa69bdd0f"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc1_production_guard.hpp": {
+      "bytes": 10672,
+      "sha256": "fea46eecd53f1f5b65d1a4919ea5d198a1b441bc421abc516ed1a764e73450f4"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/pc1_retirement_adapter.inc": {
+      "bytes": 5367,
+      "sha256": "d732d88dedbde541c1bcb37ec66b0c905b7f14042d1fed06fa07dd689cab25d9"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/include/runtime_ram.hpp": {
+      "bytes": 30120,
+      "sha256": "0feccb73809ca33682bf7c594f38784fa356dd1d7ce89b162505fe4c71b63fd5"
+    },
+    "candidates/host93_first_n0_sources/pc01_bridge/bridge/source/pc01_main.cpp": {
+      "bytes": 7450,
+      "sha256": "1188e3be3f486f4a4492b187f5208a773e38a39d46d887fef104fa40e39e8d26"
+    },
+    "candidates/qwen2_public21_binding/current_overlay.patch": {
+      "bytes": 256840,
+      "sha256": "2774aacc19b2877dc77dae5d145b628aee2e4eb2589c98f917904669b56715ad"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": {
+      "bytes": 20407,
+      "sha256": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff"
+    }
+  },
+  "schema": 1,
+  "scope": "Caller must bind reviewed producer sources to same successful native phase; consumer does not independently observe completion payload"
+}

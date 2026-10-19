@@ -3,6 +3,7 @@ import sys
 if not (sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode):
     raise SystemExit('Use -I -S -B')
 import ast
+import copy
 import builtins
 import hashlib
 import json
@@ -14,8 +15,8 @@ import unittest
 from unittest import mock
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'host_execution.py'
-SIZE = 33886
-SHA = 'b68c15f8dcaadac57d6b855073ba3b689d79776607083f8d19fa4f513419e2b2'
+SIZE = 46046
+SHA = 'e128cfe0ba74e2cb78498f41b3ef7ff4b7eb41df37ea6f13be8e45f440e670cd'
 RAW = SOURCE.read_bytes()
 def load(raw):
     if len(raw) != SIZE or hashlib.sha256(raw).hexdigest() != SHA:
@@ -398,6 +399,284 @@ class DerivedFifoClosureCold(unittest.TestCase):
         run=next(n for n in source.body if isinstance(n,ast.FunctionDef) and n.name=='run')
         calls=[n for n in ast.walk(run) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='closure']
         self.assertEqual(len(calls),5)
-        self.assertEqual(sum(any(k.arg=='fifo_valid_split' and isinstance(k.value,ast.Name) and k.value.id=='stop_after_generation' for k in c.keywords) for c in calls),5)
+        self.assertEqual(sum(any(k.arg=='fifo_valid_split' and isinstance(k.value,ast.Name) and k.value.id=='variant' for k in c.keywords) for c in calls),5)
+
+
+
+CLUSTER_TEST_LEAF = g.CLUSTER_MODULE + '_3'
+
+def cluster_fixture(root):
+    leaf = CLUSTER_TEST_LEAF; child = 'V' + leaf
+    with mock.patch.dict(globals(), {'LEAF': leaf, 'CHILD': child}):
+        generated(root)
+    p = root / ('obj/' + child + '__hierMkArgs.f')
+    p.write_bytes(("--prefix " + child + " --mod-prefix " + child +
+                   " --lib-create " + leaf + " --hierarchical-child 1 --top-module-encoded " + leaf +
+                   " -GENABLE_ACCUMULATOR_SEED=1\\'h1\n").encode())
+    (root / 'obj/VHostBlockTop___024root.h').write_bytes(b'unknown root syntax; must not be parsed\n')
+
+
+def cluster_census(root):
+    leaf = CLUSTER_TEST_LEAF; child = 'V' + leaf
+    def ident(path):
+        raw = (root / path).read_bytes()
+        return {'bytes': len(raw), 'sha256': g.sha(raw)}
+    return {'state': 'AVAILABLE', 'scan_complete': True,
+            'counts': dict.fromkeys(('warning_headers','error_headers','fatal_summary_headers','example_paths','unparsed_headers'), 0),
+            'records': [], 'by_rule': {}, 'omission': {'records':0,'examples':0},
+            'caps': dict.fromkeys(('record_cap','example_cap','report_byte_cap','partial'), False),
+            'wrapper': {'state':'AVAILABLE','module':g.CLUSTER_MODULE,'candidate_count':1,'hierarchical_child':1,
+                        'top_references_wrapper':True,'syntax_state':'FINITE_PARSE_AVAILABLE',
+                        'specialization':'UNKNOWN','combo_input_count':18,'combo_output_count':2,
+                        'dpi_import_count':6,'combo_update_import_count':1,'combo_update_call_count':1,
+                        'always_comb_count':2,'args_identity':ident('obj/'+child+'__hierMkArgs.f'),
+                        'top_args_identity':ident('obj/VHostBlockTop__hierMkArgs.f'),
+                        'wrapper_identity':ident('obj/'+child+'/'+leaf+'.sv'),
+                        'cluster_structure': {'makegraph_state':'AVAILABLE','library_target_count':1,
+                            'matching_library_target_count':1,'makegraph_identity':ident('obj/VHostBlockTop_hier.mk'),
+                            'root_header_state':'UNRECOGNIZED_SYNTAX','instance_handle_count':None,
+                            'handle_declaration_count':None,'expected_structure_observed':False}}}
+
+
+def cluster_invoke(base, phase, callback):
+    before = generation_inputs(base)
+    with mock.patch.object(g, 'closure', return_value=before) as check_closure, \
+         mock.patch.object(g, 'verify_tools', return_value={}), \
+         mock.patch.object(g, 'verify_emission', return_value={}), \
+         mock.patch.object(g, 'generated_witness', side_effect=RuntimeError('legacy endpoint witness forbidden')):
+        result = g.run(REPO, base/'work', phase,
+            {'verilator_root':'/tmp/tools','backend':{'path':'/tmp/tools/bin/verilator_bin'},
+             'configured_runtime':{},'host_programs':{}}, {'sv':{}},
+            base/'idma', base/'retained', base/'config', cluster_boundary=True, diagnostic_callback=callback)
+        if not all(call.kwargs == {'fifo_valid_split':True} for call in check_closure.call_args_list):
+            raise RuntimeError('derived closure not preserved at every gate')
+        return result
+
+
+class ClusterContinuation(unittest.TestCase):
+    def execute_fixture(self, base, fail=None, mutate=None, callback_edit=None, callback_error=None):
+        work = base/'work'; seen=[]; callbacks=[]
+        failure = RuntimeError('native first failure')
+        def phase(name, argv, cwd, environment, bound):
+            seen.append(name)
+            self.assertEqual(bound, g.LIMITS[name])
+            if name == 'host93_cpp_generate': cluster_fixture(work)
+            if name == fail: raise failure
+            if name == 'host93_cpp_compile':
+                leaf = CLUSTER_TEST_LEAF
+                for name, data in [('obj/V'+leaf+'/lib'+leaf+'.a',b'archive'),
+                                   ('obj/VHostBlockTop__ALL.a',b'toparchive'),
+                                   ('obj/VHostBlockTop',b'\x7fELFfake')]:
+                    p=work/name;p.write_bytes(data);p.chmod(0o700 if p.name=='VHostBlockTop' else 0o600)
+            if mutate is not None: mutate(seen[-1],work)
+            return {'record':{'exit_code':0,'cleanup_confirmed':True},
+                    'raw_log':LOG if seen[-1]=='host93_reset_launch' else b'',
+                    'usage':{},'evidence_root':str(base/seen[-1])}
+        def callback(work, source_map):
+            callbacks.append((work, source_map))
+            if callback_error is not None: raise callback_error
+            report=cluster_census(work)
+            if callback_edit is not None: callback_edit(report)
+            return report
+        return lambda: cluster_invoke(base, phase, callback),seen,callbacks,failure
+
+    def test_cluster_three_phases_same_closure_callback_once_unknown_handles(self):
+        with tempfile.TemporaryDirectory() as td:
+            base=Path(td); run,seen,callbacks,_=self.execute_fixture(base)
+            original=g.generated_text
+            def forbid_root(*args,**kwargs):
+                self.assertNotEqual(args[2], 'obj/VHostBlockTop___024root.h')
+                return original(*args,**kwargs)
+            with mock.patch.object(g,'generated_text',side_effect=forbid_root): result=run()
+            self.assertEqual(seen,list(g.LIMITS));self.assertEqual(len(callbacks),1)
+            self.assertEqual(len(callbacks[0][1]),307)
+            witness=result['generated_witness']
+            self.assertIsNone(witness['instance_handle_count'])
+            self.assertFalse(witness['runtime_handles_verified']);self.assertFalse(witness['root_header_parsed'])
+            self.assertFalse(result['ram_or_weights_or_n0_or_full_block_claim'])
+            self.assertEqual(result['qualification']['scope'],'REAL_RESET_AND_ONE_LAUNCH_EDGE_ONLY')
+            self.assertFalse((base/'work/GENERATION_ONLY_RESULT.json').exists())
+
+    def test_cluster_each_native_failure_stops_and_callback_only_generation(self):
+        for failed in g.LIMITS:
+            with self.subTest(failed=failed), tempfile.TemporaryDirectory() as td:
+                run,seen,callbacks,failure=self.execute_fixture(Path(td),fail=failed)
+                with self.assertRaises(RuntimeError) as caught:run()
+                self.assertIs(caught.exception,failure)
+                self.assertEqual(seen,list(g.LIMITS)[:list(g.LIMITS).index(failed)+1])
+                self.assertEqual(len(callbacks),1)
+
+    def test_cluster_native_exception_wins_callback_exception(self):
+        with tempfile.TemporaryDirectory() as td:
+            run,seen,callbacks,failure=self.execute_fixture(Path(td),fail='host93_cpp_generate',callback_error=ValueError('secondary'))
+            with self.assertRaises(RuntimeError) as caught:run()
+            self.assertIs(caught.exception,failure);self.assertEqual(len(callbacks),1)
+
+    def test_cluster_callback_exception_blocks_compile(self):
+        with tempfile.TemporaryDirectory() as td:
+            secondary=ValueError('secondary')
+            run,seen,callbacks,_=self.execute_fixture(Path(td),callback_error=secondary)
+            with self.assertRaises(ValueError) as caught:run()
+            self.assertIs(caught.exception,secondary);self.assertEqual(seen,['host93_cpp_generate'])
+
+    def test_cluster_census_failure_blocks_compile_with_label(self):
+        with tempfile.TemporaryDirectory() as td:
+            run,seen,callbacks,_=self.execute_fixture(Path(td),callback_edit=lambda x:x.update(state='CONTRACT_ERROR'))
+            with self.assertRaises(ValueError) as caught:run()
+            self.assertEqual(seen,['host93_cpp_generate'])
+            self.assertEqual(caught.exception.safe_contract_boundary,g.CLUSTER_CONTRACT_BOUNDARY)
+            self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_CENSUS')
+
+    def test_cluster_census_rejects_each_count_cap_and_shape(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);cluster_fixture(root);report=cluster_census(root)
+            self.assertTrue(g.validate_cluster_census(report))
+            edits=[lambda x:x.update(state='CONTRACT_ERROR'),lambda x:x.update(scan_complete=False),
+                   lambda x:x['wrapper'].update(candidate_count=2),lambda x:x['wrapper'].update(candidate_count=True),
+                   lambda x:x['wrapper'].update(module='qwen2_matrix_command_endpoint'),
+                   lambda x:x['wrapper'].update(top_references_wrapper=False),
+                   lambda x:x['wrapper'].update(syntax_state='UNRECOGNIZED_SYNTAX'),
+                   lambda x:x['wrapper']['cluster_structure'].update(library_target_count=2),
+                   lambda x:x['wrapper']['cluster_structure'].update(makegraph_state='UNRECOGNIZED_SYNTAX')]
+            edits += [lambda x,k=k:x['counts'].update({k:1}) for k in report['counts']]
+            edits += [lambda x,k=k:x['caps'].update({k:True}) for k in report['caps']]
+            edits += [lambda x,k=k:x['wrapper'].update({k:99}) for k in ('combo_input_count','combo_output_count','dpi_import_count','combo_update_import_count','combo_update_call_count','always_comb_count')]
+            for edit in edits:
+                bad=copy.deepcopy(report);edit(bad)
+                with self.assertRaises(ValueError) as caught:g.validate_cluster_census(bad)
+                self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_CENSUS')
+            for bad in (None,{},[],{'state':'AVAILABLE','scan_complete':True},
+                        {**report,'counts':None}, {**report,'caps':None}, {**report,'wrapper':None}):
+                with self.assertRaises(ValueError):g.validate_cluster_census(bad)
+
+    def test_cluster_witness_rejects_args_link_initializer_abi_artifacts(self):
+        leaf=CLUSTER_TEST_LEAF;child='V'+leaf
+        cases=[('obj/'+child+'__hierMkArgs.f',b'--hierarchical-child 1',b'--hierarchical-child 2','CLUSTER_CHILD_ARGS'),
+               ('obj/'+child+'__hierMkArgs.f',b'\n',b' -GENABLE_ACCUMULATOR_SEED=1\n','CLUSTER_CHILD_ARGS'),
+               ('obj/VHostBlockTop__hierMkArgs.f',SV.encode(),b'/tmp/other.sv','CLUSTER_TOP_LINK'),
+               ('obj/VHostBlockTop.mk',b'include',b'omit','CLUSTER_LIBRARY_GRAPH'),
+               ('obj/'+child+'/'+leaf+'.cpp',b'm_seqnum{0}',b'm_seqnum{1}','CLUSTER_INITIALIZER'),
+               ('obj/'+child+'/'+leaf+'.cpp',b'_protectlib_final',b'_missing_final','CLUSTER_INITIALIZER'),
+               ('obj/VHostBlockTop.h',b'io_launch_bits_descriptors,24,0',b'io_launch_bits_descriptors,23,0','CLUSTER_ABI')]
+        for name,old,new,code in cases:
+            with self.subTest(code=code,name=name),tempfile.TemporaryDirectory() as td:
+                root=Path(td);cluster_fixture(root);p=root/name;raw=p.read_bytes();self.assertIn(old,raw);p.write_bytes(raw.replace(old,new))
+                with self.assertRaises(ValueError) as caught:g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),False,SV)
+                self.assertEqual(caught.exception.safe_contract_code,code)
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);cluster_fixture(root)
+            with self.assertRaises(ValueError) as caught:g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),True,SV)
+            self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_ARTIFACTS')
+
+    def test_cluster_census_identity_binding_rejects_drift(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);cluster_fixture(root);report=cluster_census(root)
+            p=root/('obj/V'+CLUSTER_TEST_LEAF+'/'+CLUSTER_TEST_LEAF+'.sv');p.write_bytes(p.read_bytes()+b'\n')
+            with self.assertRaises(ValueError) as caught:g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,report,False,SV)
+            self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_INITIALIZER')
+
+    def test_cluster_generated_source_drift_during_compile_stops_reset(self):
+        def mutate(phase,work):
+            if phase=='host93_cpp_compile':
+                p=work/'obj/VHostBlockTop.h';p.write_bytes(p.read_bytes()+b'\n')
+        with tempfile.TemporaryDirectory() as td:
+            run,seen,callbacks,_=self.execute_fixture(Path(td),mutate=mutate)
+            with self.assertRaisesRegex(ValueError,'generated source changed after phase'):run()
+            self.assertEqual(seen,list(g.LIMITS)[:2])
+
+    def test_cluster_elf_drift_around_reset_rejected(self):
+        def mutate(phase,work):
+            if phase=='host93_reset_launch':(work/'obj/VHostBlockTop').write_bytes(b'\x7fELFchanged')
+        with tempfile.TemporaryDirectory() as td:
+            run,seen,callbacks,_=self.execute_fixture(Path(td),mutate=mutate)
+            with self.assertRaisesRegex(ValueError,'ELF changed around execution'):run()
+            self.assertEqual(seen,list(g.LIMITS))
+
+    def test_cluster_flags_rejected_before_load(self):
+        for stop,cluster,callback in ((True,True,lambda *x:None),(False,1,lambda *x:None),(False,None,None),(False,True,None),(False,True,42)):
+            with mock.patch.object(g,'load',side_effect=RuntimeError('must not load')) as loader:
+                with self.assertRaises(ValueError):
+                    g.run('/tmp/repo','/tmp/work',lambda *x:None,{}, {}, '/tmp/idma','/tmp/retained','/tmp/config',stop_after_generation=stop,cluster_boundary=cluster,diagnostic_callback=callback)
+                loader.assert_not_called()
+
+    def test_cluster_constructor_scope_and_comments_fail_closed(self):
+        with mock.patch.dict(globals(),{'LEAF':CLUSTER_TEST_LEAF,'CHILD':'V'+CLUSTER_TEST_LEAF}):raw=wrapper()
+        self.assertEqual(g.initialized_cluster(raw,LEXICAL,CLUSTER_TEST_LEAF)['m_seqnum_initializer'],0)
+        for bad in (raw+raw,b'namespace fake {\n'+raw+b'}\n',raw.replace(b'm_seqnum{0}',b'/*m_seqnum{0}*/')):
+            with self.assertRaises(ValueError):g.initialized_cluster(bad,LEXICAL,CLUSTER_TEST_LEAF)
+
+
+    def test_cluster_parameter_hash_and_all_finite_prefixes(self):
+        expected = hashlib.sha512((g.CLUSTER_MODULE+'_ENABLE_ACCUMULATOR_SEED=1').encode('ascii')).hexdigest()
+        self.assertEqual(g.CLUSTER_PARAMETER_HASH,expected)
+        for length in range(1,128):
+            self.assertTrue(g.valid_cluster_leaf(g.CLUSTER_MODULE+'_'+expected[:length]))
+        for suffix in ('','a','3a','30C',expected,expected+'0','../3','_3'):
+            self.assertFalse(g.valid_cluster_leaf(g.CLUSTER_MODULE+'_'+suffix))
+        self.assertFalse(g.valid_cluster_leaf(g.CLUSTER_MODULE))
+        self.assertFalse(g.valid_cluster_leaf(None))
+        for length in (1,2,64,127):
+            with self.subTest(length=length),tempfile.TemporaryDirectory() as td, \
+                 mock.patch.dict(globals(),{'CLUSTER_TEST_LEAF':g.CLUSTER_MODULE+'_'+expected[:length]}):
+                root=Path(td);cluster_fixture(root)
+                result=g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),False,SV)
+                self.assertEqual(result['leaf'],CLUSTER_TEST_LEAF)
+                self.assertEqual(result['accumulator_seed_parameter'],1)
+
+    def test_cluster_rejects_unsuffixed_nonprefix_and_excessive_child(self):
+        for leaf in (g.CLUSTER_MODULE,g.CLUSTER_MODULE+'_a',g.CLUSTER_MODULE+'_3a',
+                     g.CLUSTER_MODULE+'_'+g.CLUSTER_PARAMETER_HASH,g.CLUSTER_MODULE+'_30C'):
+            with self.subTest(leaf=leaf),tempfile.TemporaryDirectory() as td, \
+                 mock.patch.dict(globals(),{'CLUSTER_TEST_LEAF':leaf}):
+                root=Path(td);cluster_fixture(root)
+                with self.assertRaises(ValueError) as caught:
+                    g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),False,SV)
+                self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_CHILD_ARGS')
+
+    def test_cluster_requires_exact_one_typed_seed_argument(self):
+        original=b"-GENABLE_ACCUMULATOR_SEED=1\\'h1"
+        alternatives=(b'',b'-GENABLE_ACCUMULATOR_SEED=0',b"-GENABLE_ACCUMULATOR_SEED=1\\'h0",
+                      b'-GENABLE_ACCUMULATOR_SEED=1',b"-GENABLE_ACCUMULATOR_SEED=32\\'h1",
+                      b"-GENABLE_ACCUMULATOR_SEED=1\\'b1",b'-G ENABLE_ACCUMULATOR_SEED=1',
+                      original+b' '+original,original+b' -GUNKNOWN=1',
+                      original+b' --hierarchical-params-file /tmp/unknown')
+        for replacement in alternatives:
+            with self.subTest(replacement=replacement),tempfile.TemporaryDirectory() as td:
+                root=Path(td);cluster_fixture(root)
+                p=root/('obj/V'+CLUSTER_TEST_LEAF+'__hierMkArgs.f');raw=p.read_bytes()
+                self.assertIn(original,raw);p.write_bytes(raw.replace(original,replacement))
+                with self.assertRaises(ValueError) as caught:
+                    g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),False,SV)
+                self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_CHILD_ARGS')
+
+    def test_cluster_child_prefix_aliases_must_all_match(self):
+        for flag in ('--prefix','--mod-prefix','--lib-create','--top-module-encoded'):
+            with self.subTest(flag=flag),tempfile.TemporaryDirectory() as td:
+                root=Path(td);cluster_fixture(root)
+                p=root/('obj/V'+CLUSTER_TEST_LEAF+'__hierMkArgs.f');raw=p.read_bytes()
+                name=('V' if flag in ('--prefix','--mod-prefix') else '')+CLUSTER_TEST_LEAF
+                old=(flag+' '+name).encode();self.assertIn(old,raw)
+                p.write_bytes(raw.replace(old,(flag+' '+name+'0').encode()))
+                with self.assertRaises(ValueError) as caught:
+                    g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),False,SV)
+                self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_CHILD_ARGS')
+
+    def test_cluster_mismatched_wrapper_constructor_or_archive_is_rejected(self):
+        leaf=CLUSTER_TEST_LEAF;child='V'+leaf
+        for name,old,new,code in (
+                ('obj/VHostBlockTop__hierMkArgs.f',(child+'/'+leaf+'.sv').encode(),b'Vother/other.sv','CLUSTER_TOP_LINK'),
+                ('obj/'+child+'/'+leaf+'.cpp',(child+'_container').encode(),(child+'0_container').encode(),'CLUSTER_INITIALIZER')):
+            with self.subTest(code=code),tempfile.TemporaryDirectory() as td:
+                root=Path(td);cluster_fixture(root);p=root/name;p.write_bytes(p.read_bytes().replace(old,new))
+                with self.assertRaises(ValueError) as caught:
+                    g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),False,SV)
+                self.assertEqual(caught.exception.safe_contract_code,code)
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);cluster_fixture(root)
+            for name in ('obj/'+child+'/lib'+leaf+'0.a','obj/VHostBlockTop__ALL.a','obj/VHostBlockTop'):
+                (root/name).write_bytes(b'artifact')
+            with self.assertRaises(ValueError) as caught:
+                g.cluster_generated_witness(SUPPORT,tree(root),LEXICAL,PORTS,cluster_census(root),True,SV)
+            self.assertEqual(caught.exception.safe_contract_code,'CLUSTER_ARTIFACTS')
 
 if __name__=='__main__':unittest.main()

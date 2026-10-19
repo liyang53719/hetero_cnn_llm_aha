@@ -1,0 +1,44 @@
+{
+  "actual": "NOT_EXECUTED",
+  "all_current_exit_codes": 0,
+  "capture": "fixed size/SHA test buffer before compile, tests independently pin runtime target buffers",
+  "current_runs": {
+    "coordinator": {
+      "normal": 153,
+      "optimized": 153
+    },
+    "execution": {
+      "normal": 44,
+      "optimized": 44
+    }
+  },
+  "inherited_not_rerun": {
+    "configuration": 22,
+    "extractor": 24,
+    "fifo_preflight": 17,
+    "other": "unchanged supervision, sanitizer, toolchain, retained/emission and transport suites",
+    "root_header_census": 68
+  },
+  "native_or_network": false,
+  "optimized_flag": "-O",
+  "python_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ],
+  "schema": 1,
+  "source_review": {
+    "directory": "review_cluster_reset_launch_source_20261019T0932",
+    "manifest": {
+      "bytes": 1158,
+      "sha256": "d5f9c6e56c727a4f15595eb116cfe6f2a2a63dd8d53f413d60de3ece9592ecdd"
+    },
+    "summary": {
+      "bytes": 5655,
+      "sha256": "d0550433add06abb32f26a09b176f94c5f9b54d56b71d182c282fb394ce4f686"
+    },
+    "verdict": "SOURCE_GO_CLUSTER_HOST_COMPILE_RESET_LAUNCH_ONLY"
+  },
+  "status": "PASS_SOURCE_AND_MOCK_ONLY",
+  "v1_preserved_not_current_evidence": "Unreviewed v1 no-parameter assumption corrected before review/publication/execution. Its39+39 execution and initial153 coordinator observations do not qualify the corrected v2."
+}

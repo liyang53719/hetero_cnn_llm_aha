@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=67218
-SHA='5a48edf2deb418f48edff5f29e41d74b7770a700ce6f052eaf5f96c0ea191249'
+SIZE=69541
+SHA='021ea9c9c31c5539630421acf76a4891c9e6b72bf11e23453860acef82335956'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -34,8 +34,75 @@ CENSUS=G.load(HERE/'execution/generation_diagnostics.py',GPIN['bytes'],GPIN['sha
 
 FPIN=PINS['candidates/host93_ci_recovery/fifo_preflight/fifo_preflight.py']
 PREFLIGHT=G.load(HERE/'fifo_preflight/fifo_preflight.py',FPIN['bytes'],FPIN['sha256'],'cold_fixed_fifo_preflight')
+EPIN=PINS['candidates/host93_ci_recovery/execution/host_execution.py']
+EXECUTION=G.load(HERE/'execution/host_execution.py',EPIN['bytes'],EPIN['sha256'],'cold_fixed_cluster_execution')
 
-def generation_fixture_report():
+# Safe JSON schema fixture only; no generated private bytes are reconstructed.
+CLUSTER_REPORT = {'by_rule': {},
+ 'caps': {'example_cap': False, 'partial': False, 'record_cap': False, 'report_byte_cap': False},
+ 'counts': {'error_headers': 0,
+            'example_paths': 0,
+            'fatal_summary_headers': 0,
+            'unparsed_headers': 0,
+            'warning_headers': 0},
+ 'fatal_summaries': {'error_total': None,
+                     'header_count_comparison': 'NOT_AVAILABLE',
+                     'process_attribution': 'NOT_AVAILABLE',
+                     'warning_total': None},
+ 'log_identity': {'bytes': 1874,
+                  'sha256': '46e43993bb5e0fe0d995e5eb23a31eb5ad7a125dfa69e26502b5584ddd96eaa1'},
+ 'omission': {'examples': 0, 'records': 0},
+ 'records': [],
+ 'scan_complete': True,
+ 'schema_version': 1,
+ 'source_derivations': [{'base_identity': {'bytes': 4411,
+                                           'sha256': '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352'},
+                         'derived_identity': {'bytes': 4662,
+                                              'sha256': 'cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6'},
+                         'source_id': 'idma/deps/common_cells/src/cc_passthrough_stream_fifo.sv'}],
+ 'state': 'AVAILABLE',
+ 'wrapper': {'always_comb_count': 2,
+             'always_comb_lines': [123, 184],
+             'args_identity': {'bytes': 32810,
+                               'sha256': '6ae0d4333db213f9dcb7d9bc2ba3eb1caf3f00817cb0a2c9f99d0bda07ba268a'},
+             'candidate_count': 1,
+             'cluster_structure': {'expected_structure_observed': False,
+                                   'handle_declaration_count': None,
+                                   'instance_handle_count': None,
+                                   'library_target_count': 1,
+                                   'makegraph_identity': {'bytes': 34706,
+                                                          'sha256': '45f18f4c1347ef461ed305d85cab9dc4059a5f283ec1e44ed7a03421f4370ad9'},
+                                   'makegraph_state': 'AVAILABLE',
+                                   'matching_library_target_count': 1,
+                                   'root_header_identity': {'bytes': 5296945,
+                                                            'sha256': '82307c51e8722e51062eaf38200355143d5e86cdaa50fdd4f0c9d24e0c458ef6'},
+                                   'root_header_read': {'final_code': 'OK',
+                                                        'final_observed_size': 5296945,
+                                                        'first_code': 'SIZE_LIMIT',
+                                                        'first_observed_size': 5296945,
+                                                        'retry_outcome': 'SUCCEEDED'},
+                                   'root_header_state': 'UNRECOGNIZED_SYNTAX'},
+             'combo_input_count': 18,
+             'combo_output_count': 2,
+             'combo_update_call_count': 1,
+             'combo_update_import_count': 1,
+             'dependency_conclusion': 'NOT_ESTABLISHED',
+             'dpi_import_count': 6,
+             'handshakes': [],
+             'hierarchical_child': 1,
+             'module': 'bf16_context_lane_cluster16_rev8b_b_candidate',
+             'specialization': 'UNKNOWN',
+             'state': 'AVAILABLE',
+             'syntax_state': 'FINITE_PARSE_AVAILABLE',
+             'top_args_identity': {'bytes': 32736,
+                                   'sha256': '2f1d903e8b6274a4917b06f1153c4227cfa9a6182ebf6ae695bd2bf8dba8ed7f'},
+             'top_references_wrapper': True,
+             'wrapper_identity': {'bytes': 7959,
+                                  'sha256': 'acbd12f080c1f92bf5f1d26549c4e9e0654bd0b535a2a3e81b5c3fbedf612590'}}}
+
+
+def generation_fixture_report(cluster=False):
+    if cluster:return copy.deepcopy(CLUSTER_REPORT)
     with tempfile.TemporaryDirectory() as td:
         root=Path(td);log=root/'native.log';log.write_bytes(b'')
         return CENSUS.collect(log,root,[{'path':'/private/fixture.sv','id':'host/fixture.sv','bytes':0,'sha256':'a'*64}],CONTEXT)
@@ -64,7 +131,7 @@ def fixture(ready=False, mode='host-reset-launch'):
     observation={'state':'AVAILABLE','utf8_bytes':G.HISTORICAL_FIR['bytes'],'line_count':293837,'module_count':682,'extmodule_count':17,'source_info_count':254482,'source_info_utf8_bytes':1000000,'project_source_info_count':249537,'library_source_info_count':4945,'other_source_info_count':0,'historical_fir_equal':True} if ready and mode in G.FRONTLOAD_MODES else G.empty_chirrtl_observation()
     return {'summary.json':{'schema':'host93-ci-summary-v6','mode':mode,'status':G.success_status(mode) if ready else 'INCOMPLETE',
              'failure_category':'NONE' if ready else 'INPUT_OR_CONTRACT','contract_failure':{'boundary':'NONE' if ready else 'UNREPORTED','code':'NONE' if ready else 'UNMAPPED_CONTRACT'},'completed_components':list(G.mode_components(mode)) if ready else [],
-             'scope':{x:ready and (x=='toolchain_build' if build else x in G.SCOPES[:3] if mode=='host-generation-diagnostic' else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0,'chirrtl_observation':observation,'generation_diagnostics':generation_fixture_report() if ready and mode=='host-generation-diagnostic' else None,'fifo_observation':{'state':'AVAILABLE','cases':4,'comparisons':5180,'tools':copy.deepcopy(G.FIFO_TOOLS)} if ready and mode=='host-generation-diagnostic' else G.empty_fifo_observation()},
+             'scope':{x:ready and (x=='toolchain_build' if build else x in G.SCOPES[:3] if mode=='host-generation-diagnostic' else x not in ('n0_numeric','weights_loaded')) for x in G.SCOPES},'seconds':1.0,'chirrtl_observation':observation,'generation_diagnostics':generation_fixture_report(mode=='host-cluster-reset-launch') if ready and mode in G.CLUSTER_MODES else None,'fifo_observation':{'state':'AVAILABLE','cases':4,'comparisons':5180,'tools':copy.deepcopy(G.FIFO_TOOLS)} if ready and mode in G.CLUSTER_MODES else G.empty_fifo_observation()},
             'source_hashes.json':{'schema':'host93-ci-source-hashes-v3','project_sources':[{'path':n,**p} for n,p in sorted(PINS.items())] if ready else [],
               'fixed_inputs':{} if build else {'idma_archive':{'bytes':9926876,'sha256':'a8012f28942acd248dcc2942613a39669579d02d3f7bf687f98776b64e8f2dce'}},'generated':generated},
             'stage_exits.json':{'schema':'host93-ci-stage-exits-v6','stages':stages}}
@@ -246,7 +313,7 @@ class Cold(unittest.TestCase):
                         try:
                             call(name,['/fixed/fixture'],base,{},cfg(name))
                         finally:
-                            if kwargs.get('stop_after_generation'):kwargs['diagnostic_callback'](work,[{'path':'/private/fixture.sv','id':'host/fixture.sv','bytes':0,'sha256':'a'*64}])
+                            if (kwargs.get('stop_after_generation') or kwargs.get('cluster_boundary')) and name=='host93_cpp_generate':kwargs['diagnostic_callback'](work,[{'path':'/private/fixture.sv','id':'host/fixture.sv','bytes':0,'sha256':'a'*64}])
                         if contract_postflight and name == 'fresh_configure':
                             error=ValueError('private fixture text must not publish')
                             error.safe_contract_boundary='BUILD_CONFIGURE_CPPFLAGS_AFTER'
@@ -274,13 +341,15 @@ class Cold(unittest.TestCase):
                     error.safe_contract_boundary=boundary;error.safe_contract_code=G.FIFO_CONTRACTS[boundary]
                     raise error
                 preflight=types.SimpleNamespace(run=fail_fifo)
-            modules={'verified_fifo_preflight':preflight,'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT,'verified_ci_generation_diagnostics':CENSUS}
+            execution.validate_cluster_census=EXECUTION.validate_cluster_census
+            census=types.SimpleNamespace(collect=lambda *a:generation_fixture_report(True),validate_report=CENSUS.validate_report,empty_report=CENSUS.empty_report) if mode=='host-cluster-reset-launch' else CENSUS
+            modules={'verified_fifo_preflight':preflight,'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT,'verified_ci_generation_diagnostics':census}
             def native(*args,**kwargs):
                 name=args[2]
                 if name=='idma319_extract':
-                    self.assertEqual('--fifo-valid-split' in args[3],mode=='host-generation-diagnostic')
+                    self.assertEqual('--fifo-valid-split' in args[3],mode in G.CLUSTER_MODES)
                 if name=='host93_configuration':
-                    self.assertEqual('--cluster-boundary' in args[3],mode=='host-generation-diagnostic')
+                    self.assertEqual('--cluster-boundary' in args[3],mode in G.CLUSTER_MODES)
                 kwargs['diagnostics'].update(clean_observation())
                 if name==fail_name:
                     if context is not None:
@@ -291,7 +360,7 @@ class Cold(unittest.TestCase):
                         native_record_status='FAIL',failure_code='CHILD_EXIT_NONZERO' if nonzero else 'SUPERVISOR_TIMEOUT_CLASSIFICATION',
                         failure_boundary='NATIVE_SUPERVISION')
                     raise ValueError('synthetic child exit') if nonzero else TimeoutError('synthetic boundary')
-                if mode=='host-generation-diagnostic' and name=='host93_cpp_generate':
+                if mode in G.CLUSTER_MODES and name=='host93_cpp_generate':
                     args[5].mkdir(parents=True,exist_ok=True);(args[5]/'native.log').write_bytes(b'')
                 return {'exit_code':0,'cleanup_confirmed':True},b'private synthetic',{'child_user_cpu_seconds':0.1,'child_system_cpu_seconds':0.01}
             support=types.SimpleNamespace(deadline_ready=lambda:None,fixed_support=lambda repo:(None,None,None),run_phase=native,diagnostic_defaults=defaults)
@@ -301,6 +370,7 @@ class Cold(unittest.TestCase):
                  mock.patch.object(G,'load',return_value=support), \
                  mock.patch.object(G,'project_pin_map',return_value=(PINS,buffers)), \
                  mock.patch.object(G,'generation_schema_module',return_value=CENSUS), \
+                 mock.patch.object(G,'execution_schema_module',return_value=EXECUTION), \
                  mock.patch.object(G,'module_from',side_effect=lambda repo,pins,relative,name:modules[name]), \
                  mock.patch.object(G,'exact',return_value=b''), \
                  mock.patch.object(G,'memory_disk_gate'), \
@@ -319,8 +389,8 @@ class Cold(unittest.TestCase):
         self.assertNotIn('private fixture',json.dumps(summary))
     def test_contract_enum_matches_pinned_toolchain(self):
         self.assertTrue(set(TOOLCHAIN.CONTRACT_CODES)<=set(G.CONTRACT_CODES))
-        self.assertEqual(set(G.CONTRACT_CODES)-set(TOOLCHAIN.CONTRACT_CODES)-set(G.FIFO_CONTRACTS.values())-set(G.FIFO_REQUIRE_CODES),{'CHIRRTL_FIR_IDENTITY_MISMATCH','DIAGNOSTIC_CONTRACT','DIAGNOSTIC_EMITTER','DIAGNOSTIC_DERIVATION','DIAGNOSTIC_STATS','DIAGNOSTIC_FIR_OUTPUT','DIAGNOSTIC_RESUME_IDENTITY'})
-        self.assertEqual(set(G.CONTRACT_BOUNDARIES)-set(TOOLCHAIN.CONTRACT_BOUNDARIES)-set(G.FIFO_CONTRACTS),{'CHIRRTL_DIAGNOSTIC'})
+        self.assertEqual(set(G.CONTRACT_CODES)-set(TOOLCHAIN.CONTRACT_CODES)-set(G.FIFO_CONTRACTS.values())-set(G.FIFO_REQUIRE_CODES)-set(G.CLUSTER_CONTRACT_CODES),{'CHIRRTL_FIR_IDENTITY_MISMATCH','DIAGNOSTIC_CONTRACT','DIAGNOSTIC_EMITTER','DIAGNOSTIC_DERIVATION','DIAGNOSTIC_STATS','DIAGNOSTIC_FIR_OUTPUT','DIAGNOSTIC_RESUME_IDENTITY'})
+        self.assertEqual(set(G.CONTRACT_BOUNDARIES)-set(TOOLCHAIN.CONTRACT_BOUNDARIES)-set(G.FIFO_CONTRACTS)-{'CLUSTER_GENERATION_WITNESS'},{'CHIRRTL_DIAGNOSTIC'})
     def test_unknown_contract_message_not_public(self):
         self.assertEqual(G.contract_failure_observation(ValueError('/private/path password=fixture')),
                          {'boundary':'UNREPORTED','code':'UNMAPPED_CONTRACT'})
@@ -660,7 +730,7 @@ class Cold(unittest.TestCase):
                 failure_code='CHILD_EXIT_NONZERO',failure_boundary='NATIVE_SUPERVISION')
             with self.subTest(name=name),self.assertRaises(ValueError):G.validate_evidence(x)
     def test_all_native_failures_collect_context_in_both_modes(self):
-        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES),('host-chirrtl-diagnostic',G.FRONTLOAD_STAGES),('host-generation-diagnostic',G.FIFO_STAGES+G.FRONTLOAD_STAGES[:-2])):
+        for mode,names in (('host-reset-launch',G.STAGES),('build-diagnostic',G.BUILD_STAGES),('host-chirrtl-diagnostic',G.FRONTLOAD_STAGES),('host-generation-diagnostic',G.FIFO_STAGES+G.FRONTLOAD_STAGES[:-2]),('host-cluster-reset-launch',G.FIFO_STAGES+G.FRONTLOAD_STAGES)):
             for name in names:
                 with self.subTest(mode=mode,name=name),mock.patch.object(G,'collect_build_diagnostics',wraps=G.collect_build_diagnostics) as collector:
                     code,summary,stages=self.mock_whole_job(name,mode,True,b'fixed native failure context\n')
@@ -836,5 +906,49 @@ class Cold(unittest.TestCase):
         self.assertEqual(G.FIFO_CONTRACT_COUNTS,PREFLIGHT.CONTRACT_COMPLETED_COUNTS)
         self.assertEqual(set(G.FIFO_REQUIRE_CODES),set(PREFLIGHT.REQUIRE_CODES.values()))
         for name,pin in PREFLIGHT.REQUIRED_SOURCES.items():self.assertEqual(PINS[name],pin)
+
+    def test_cluster_mode37_same_job_no_duplicate_stage(self):
+        code,summary,rows=self.mock_whole_job(mode='host-cluster-reset-launch')
+        self.assertEqual(code,0);self.assertEqual(len(rows),37);self.assertEqual(len(set(x['name'] for x in rows)),37)
+        self.assertEqual([x['name'] for x in rows],list(G.FIFO_STAGES+G.FRONTLOAD_STAGES))
+        self.assertEqual(summary['completed_components'],['fifo_preflight','chirrtl_diagnostic']+list(G.COMPONENTS))
+        self.assertTrue(all(summary['scope'][x] for x in G.SCOPES[:6]))
+        self.assertFalse(summary['scope']['n0_numeric']);self.assertFalse(summary['scope']['weights_loaded'])
+        self.assertEqual(summary['generation_diagnostics']['wrapper']['cluster_structure']['root_header_state'],'UNRECOGNIZED_SYNTAX')
+    def test_cluster_ready_fixture_and_unknown_handles_remain_unknown(self):
+        x=fixture(True,'host-cluster-reset-launch');self.assertTrue(G.validate_evidence(x))
+        self.assertIsNone(x['summary.json']['generation_diagnostics']['wrapper']['cluster_structure']['instance_handle_count'])
+    def test_cluster_compile_or_runtime_failure_stops_and_keeps_census(self):
+        for name in ('host93_cpp_compile','host93_reset_launch'):
+            code,summary,rows=self.mock_whole_job(name,'host-cluster-reset-launch',True,b'fixed native failure\n')
+            self.assertEqual(code,1);self.assertEqual(rows[-1]['name'],name)
+            self.assertEqual(rows[-1]['status'],'FAILED');self.assertFalse(summary['scope']['reset_launch'])
+            self.assertEqual(summary['generation_diagnostics']['state'],'AVAILABLE')
+    def test_cluster_bad_census_cannot_qualify_compile(self):
+        for kind in ('missing','old_wrapper','unknown_make','missing_combo','partial','wrong_inputs'):
+            x=fixture(True,'host-cluster-reset-launch');r=x['summary.json']['generation_diagnostics']
+            if kind=='missing':x['summary.json']['generation_diagnostics']=None
+            elif kind=='old_wrapper':r['wrapper']['module']='qwen2_matrix_command_endpoint'
+            elif kind=='unknown_make':r['wrapper']['cluster_structure']['makegraph_state']='MISSING'
+            elif kind=='missing_combo':r['wrapper']['combo_update_call_count']=0
+            elif kind=='partial':r['caps']['partial']=True
+            else:r['wrapper']['combo_input_count']=17
+            with self.subTest(kind=kind),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_cluster_codegen_prefix_cannot_be_skipped_or_failed(self):
+        for kind in ('remove','swap','failed'):
+            x=fixture(True,'host-cluster-reset-launch');rows=x['stage_exits.json']['stages']
+            if kind=='remove':del rows[34]
+            elif kind=='swap':rows[34],rows[35]=rows[35],rows[34]
+            else:rows[34]['status']='FAILED'
+            with self.subTest(kind=kind),self.assertRaises(ValueError):G.validate_evidence(x)
+    def test_cluster_contract_label_exact_progress(self):
+        for count in (35,36,37):
+            x=fixture(True,'host-cluster-reset-launch');x['stage_exits.json']['stages']=x['stage_exits.json']['stages'][:count]
+            s=x['summary.json'];s.update(status='INCOMPLETE',failure_category='INPUT_OR_CONTRACT',contract_failure={'boundary':'CLUSTER_GENERATION_WITNESS','code':'CLUSTER_INITIALIZER'})
+            s['completed_components'].pop();s['scope'].update(cpp_generated=False,cpp_compiled=False,reset_launch=False)
+            x['source_hashes.json']['generated'].pop('host_elf')
+            self.assertTrue(G.validate_evidence(x))
+        x['stage_exits.json']['stages']=x['stage_exits.json']['stages'][:34]
+        with self.assertRaises(ValueError):G.validate_evidence(x)
 
 if __name__=='__main__':unittest.main(verbosity=2)

@@ -24,7 +24,7 @@ import types
 HERE = Path(__file__).absolute().parent
 SUPPORT = ('ci_support_v3.py', 16348, '653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1')
 PINS_SIZE = 4676
-PINS_SHA = 'dbb5961cb069dc1329789bd274f96fcb9810c1a8389991a5711e530977841b80'
+PINS_SHA = '17ed1578772e99bdabda48fc32614b8bde717f71a4b48d5f22da0248add4450b'
 MIB = 1024**2
 GIB = 1024**3
 EVIDENCE = ('summary.json', 'source_hashes.json', 'stage_exits.json')
@@ -33,8 +33,10 @@ CATEGORIES = ('NONE', 'TIMEOUT', 'INPUT_OR_CONTRACT', 'SYSTEM', 'INTERRUPTED', '
 STAGES = ('official_source473',) + tuple('host_' + x + '-' + y for y in ('version', 'micro') for x in ('autoconf', 'autom4te', 'm4', 'flex', 'bison')) + ('flex_header_acquire', 'flex_header_compile', 'fresh_autoconf', 'fresh_configure', 'fresh_make') + tuple('derived_tiny_' + x for x in ('version', 'generate', 'compile', 'run')) + ('host93_java_version', 'host93_acquire_jar87', 'host93_acquire_hardfloat20', 'host93_assemble', 'host93_class', 'host93_chirrtl', 'host93_acquire_firtool', 'host93_sv', 'idma319_extract', 'retained13_assemble', 'host93_configuration', 'host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch')
 SCOPES = ('toolchain_build', 'toolchain_tiny', 'fresh_host_sv', 'cpp_generated', 'cpp_compiled', 'reset_launch', 'n0_numeric', 'weights_loaded')
 GENERATED_KINDS = ('derived_backend', 'host93_fir', 'host93_sv', 'host_elf', 'diagnostic_fir')
-MODES = ('host-reset-launch','build-diagnostic','host-chirrtl-diagnostic','host-generation-diagnostic')
-FRONTLOAD_MODES = ('host-chirrtl-diagnostic','host-generation-diagnostic')
+MODES = ('host-reset-launch','build-diagnostic','host-chirrtl-diagnostic','host-generation-diagnostic','host-cluster-reset-launch')
+FRONTLOAD_MODES = ('host-chirrtl-diagnostic','host-generation-diagnostic','host-cluster-reset-launch')
+CLUSTER_MODES = ('host-generation-diagnostic','host-cluster-reset-launch')
+CLUSTER_CONTRACT_CODES = ('CLUSTER_CHILD_ARGS','CLUSTER_TOP_LINK','CLUSTER_LIBRARY_GRAPH','CLUSTER_INITIALIZER','CLUSTER_ABI','CLUSTER_ARTIFACTS','CLUSTER_CENSUS')
 BUILD_STAGES = STAGES[:16]
 CHIRRTL_STAGES = STAGES[20:25] + ('host93_chirrtl_diagnostic',)
 FRONTLOAD_STAGES = CHIRRTL_STAGES + STAGES[:20] + STAGES[26:]
@@ -47,10 +49,10 @@ def empty_fifo_observation():
 
 
 def mode_stages(mode):
-    return FIFO_STAGES+FRONTLOAD_STAGES[:-2] if mode=='host-generation-diagnostic' else FRONTLOAD_STAGES if mode in FRONTLOAD_MODES else BUILD_STAGES if mode=='build-diagnostic' else STAGES
+    return FIFO_STAGES+FRONTLOAD_STAGES if mode=='host-cluster-reset-launch' else FIFO_STAGES+FRONTLOAD_STAGES[:-2] if mode=='host-generation-diagnostic' else FRONTLOAD_STAGES if mode in FRONTLOAD_MODES else BUILD_STAGES if mode=='build-diagnostic' else STAGES
 
 def mode_components(mode):
-    return ('toolchain_build',) if mode=='build-diagnostic' else ('fifo_preflight','chirrtl_diagnostic')+COMPONENTS[:-1]+('host_generation_diagnostic',) if mode=='host-generation-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS if mode in FRONTLOAD_MODES else COMPONENTS
+    return ('fifo_preflight','chirrtl_diagnostic')+COMPONENTS if mode=='host-cluster-reset-launch' else ('toolchain_build',) if mode=='build-diagnostic' else ('fifo_preflight','chirrtl_diagnostic')+COMPONENTS[:-1]+('host_generation_diagnostic',) if mode=='host-generation-diagnostic' else ('chirrtl_diagnostic',)+COMPONENTS if mode in FRONTLOAD_MODES else COMPONENTS
 
 def success_status(mode):
     return 'DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0' if mode=='host-generation-diagnostic' else 'READY_REQUIRES_ACTIONS_EXIT0'
@@ -241,7 +243,8 @@ FIFO_CONTRACT_COUNTS = {'FIFO_AFTER_COMPILE_FIXTURES': (2,),
  'LIBRARY_Z_RESOLVE': (1, 2, 3),
  'LIBRARY_Z_STABLE': (1, 2, 3),
  'PHASE_LOG_POSTFLIGHT': (1, 2, 3)}
-CONTRACT_BOUNDARIES += tuple(sorted(FIFO_CONTRACTS))
+CONTRACT_BOUNDARIES += tuple(sorted(FIFO_CONTRACTS))+('CLUSTER_GENERATION_WITNESS',)
+CONTRACT_CODES += CLUSTER_CONTRACT_CODES
 CONTRACT_CODES += tuple(sorted((set(FIFO_CONTRACTS.values())|set(FIFO_REQUIRE_CODES))-set(CONTRACT_CODES)))
 
 
@@ -492,7 +495,7 @@ def validate_evidence(objects):
                 'measured diagnostic identity comparison')
         require(len(completed)==component_order.index('chirrtl_diagnostic')+1 or observed['historical_fir_equal'], 'no continuation without exact historical FIR identity')
     elif observed['state']=='REPORTED':
-        require(mode in FRONTLOAD_MODES and completed==(['fifo_preflight'] if mode=='host-generation-diagnostic' else []) and observed['historical_fir_equal'] is None,
+        require(mode in FRONTLOAD_MODES and completed==(['fifo_preflight'] if mode in CLUSTER_MODES else []) and observed['historical_fir_equal'] is None,
                 'failed child numeric report cannot claim verified FIR')
         require(all(type(observed[key]) is int and 0 <= observed[key] <= 2147483647 for key in CHIRRTL_NUMERIC) and
                 0 < observed['utf8_bytes'] and 0 < observed['line_count'] <= observed['utf8_bytes'] and
@@ -532,7 +535,7 @@ def validate_evidence(objects):
         else:
             failed = True
     if detail['boundary'] in FIFO_CONTRACTS:
-        require(mode=='host-generation-diagnostic' and not completed and not failed and
+        require(mode in CLUSTER_MODES and not completed and not failed and
                 len(seen) in FIFO_CONTRACT_COUNTS[detail['boundary']] and
                 seen==list(FIFO_STAGES[:len(seen)]), 'FIFO parent failure belongs to its clean native prefix')
         require(detail['code'] in (FIFO_CONTRACTS[detail['boundary']],)+FIFO_REQUIRE_CODES,
@@ -540,7 +543,7 @@ def validate_evidence(objects):
     fifo=summary['fifo_observation']
     keys(fifo,('state','cases','comparisons','tools'))
     if 'fifo_preflight' in completed:
-        require(mode=='host-generation-diagnostic' and fifo=={'state':'AVAILABLE','cases':4,'comparisons':5180,'tools':FIFO_TOOLS} and
+        require(mode in CLUSTER_MODES and fifo=={'state':'AVAILABLE','cases':4,'comparisons':5180,'tools':FIFO_TOOLS} and
                 type(fifo['cases']) is int and type(fifo['comparisons']) is int,
                 'fixed FIFO cases and tool identities required')
         require(len(exits['stages'])>=3 and all(row['status']=='EXIT0_CLEANED' and
@@ -550,10 +553,10 @@ def validate_evidence(objects):
     else:
         require(fifo==empty_fifo_observation() and type(fifo['cases']) is int and type(fifo['comparisons']) is int,
                 'no unqualified FIFO observation')
-    if mode=='host-generation-diagnostic':
+    if mode in CLUSTER_MODES:
         require(len(seen)<=3 or 'fifo_preflight' in completed, 'later stages require real FIFO qualification')
     if mode in FRONTLOAD_MODES:
-        offset=3 if mode=='host-generation-diagnostic' else 0
+        offset=3 if mode in CLUSTER_MODES else 0
         if 'chirrtl_diagnostic' in completed:
             require(len(exits['stages'])>=offset+len(CHIRRTL_STAGES) and
                     all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][offset:offset+len(CHIRRTL_STAGES)]),
@@ -566,11 +569,23 @@ def validate_evidence(objects):
     generation=summary['generation_diagnostics']
     generated_stage=any(row['name']=='host93_cpp_generate' for row in exits['stages'])
     if generation is None:
-        require(mode!='host-generation-diagnostic' or not generated_stage, 'generation stage must attempt complete bounded diagnostics')
+        require(mode not in CLUSTER_MODES or not generated_stage, 'generation stage must attempt complete bounded diagnostics')
     else:
-        require(mode=='host-generation-diagnostic' and generated_stage, 'generation census belongs only to the diagnostic generation stage')
+        require(mode in CLUSTER_MODES and generated_stage, 'generation census belongs only to the diagnostic generation stage')
         generation_schema_module().validate_report(generation)
         require(generation['state']!='NOT_COLLECTED', 'generation stage diagnostics cannot remain uncollected')
+    if detail['boundary']=='CLUSTER_GENERATION_WITNESS':
+        require(mode=='host-cluster-reset-launch' and detail['code'] in CLUSTER_CONTRACT_CODES and
+                completed==list(component_order[:-1]) and not failed and len(seen) in (35,36,37),
+                'cluster parent witness failure binds the clean generation/compile/runtime prefix')
+    if mode=='host-cluster-reset-launch':
+        if len(seen)>35 or 'host_execution' in completed:
+            require(generation is not None and len(exits['stages'])>=35 and
+                    all(row['status']=='EXIT0_CLEANED' for row in exits['stages'][:35]),
+                    'cluster compilation requires clean FIFO/Host generation prefix')
+            execution_schema_module().validate_cluster_census(generation)
+        if 'host_execution' in completed:
+            require(seen==list(required_stages) and not failed, 'cluster execution completion requires all37 clean stages')
     if 'host_generation_diagnostic' in completed:
         require(mode=='host-generation-diagnostic' and seen==list(required_stages) and not failed and
                 generation is not None and generation['state']=='AVAILABLE',
@@ -585,6 +600,12 @@ def validate_evidence(objects):
     else:
         require(summary['failure_category'] != 'NONE', 'failure status cannot hide error')
     return True
+
+
+def execution_schema_module():
+    pins=decode(exact(HERE/'RUN_PINS.json',PINS_SIZE,PINS_SHA))['files']
+    row=pins['candidates/host93_ci_recovery/execution/host_execution.py']
+    return load(HERE/'execution/host_execution.py',row['bytes'],row['sha256'],'verified_cluster_execution_schema')
 
 
 def generation_schema_module():
@@ -788,7 +809,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                 row['seconds']=round(time.monotonic()-began,6)
                 print(json.dumps({'phase':name,'status':row['status'],'seconds':row['seconds']},sort_keys=True),flush=True)
         prefix='candidates/host93_ci_recovery/'
-        if mode=='host-generation-diagnostic':
+        if mode in CLUSTER_MODES:
             preflight=module_from(repo,pins,prefix+'fifo_preflight/fifo_preflight.py','verified_fifo_preflight')
             result=preflight.run(repo,out/'fifo_preflight',call_phase,base_support,buffers)
             if result!={'cases':4,'comparisons':5180,'tools':FIFO_TOOLS}:
@@ -835,7 +856,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             extractor=repo/(prefix+'idma319/extract_idma.py')
             idma=out/'idma319'
             extract_argv=[sys.executable,'-I','-S','-B','-c',entry['bootstrap'],str(extractor),'--archive',str(archive),'--out',str(idma)]
-            if mode=='host-generation-diagnostic': extract_argv.append('--fifo-valid-split')
+            if mode in CLUSTER_MODES: extract_argv.append('--fifo-valid-split')
             call_phase('idma319_extract',extract_argv,out,environment,limits(60,45,40,512*MIB,4*MIB))
             completed.append('idma319')
             retained=out/'retained13'
@@ -846,11 +867,11 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             # ENTRY supplies the immutable same-buffer bootstrap; source path is caller-bound.
             argv=[sys.executable,'-I','-S','-B','-c',entry['argv_prefix'][5],str(repo/(prefix+'configuration/generate_4vlt.py')),
                   '--repo',str(repo),'--sv',host['sv']['path'],'--idma-root',str(idma/'sources'),'--out',str(configuration)]
-            if mode=='host-generation-diagnostic': argv.append('--cluster-boundary')
+            if mode in CLUSTER_MODES: argv.append('--cluster-boundary')
             call_phase('host93_configuration',argv,out,environment,limits(60,45,45,768*MIB,4*MIB))
             completed.append('configuration')
             execution=module_from(repo,pins,prefix+'execution/host_execution.py','verified_ci_host_execution')
-            if mode=='host-generation-diagnostic':
+            if mode in CLUSTER_MODES:
                 census=module_from(repo,pins,prefix+'execution/generation_diagnostics.py','verified_ci_generation_diagnostics')
                 sanitizer=module_from(repo,pins,prefix+'safe_build_diagnostics.py','verified_safe_build_diagnostics')
                 def collect_generation(work,source_map):
@@ -861,11 +882,20 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
                         generation_diagnostics=report
                     except BaseException:
                         generation_diagnostics=census.empty_report('CONTRACT_ERROR')
-                result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration,
-                                     stop_after_generation=True,diagnostic_callback=collect_generation)
-                require(result.get('diagnostic_only') is True and generation_diagnostics is not None and
-                        generation_diagnostics['state']=='AVAILABLE', 'generation-only diagnostic must return explicit observed report')
-                completed.append('host_generation_diagnostic')
+                    return generation_diagnostics
+                if mode=='host-generation-diagnostic':
+                    result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration,
+                                         stop_after_generation=True,diagnostic_callback=collect_generation)
+                    require(result.get('diagnostic_only') is True and generation_diagnostics is not None and
+                            generation_diagnostics['state']=='AVAILABLE', 'generation-only diagnostic must return explicit observed report')
+                    completed.append('host_generation_diagnostic')
+                else:
+                    result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration,
+                                         cluster_boundary=True,diagnostic_callback=collect_generation)
+                    execution.validate_cluster_census(generation_diagnostics)
+                    completed.append('host_execution')
+                    for name in ('cpp_generated','cpp_compiled','reset_launch'):scopes[name]=True
+                    generated['host_elf']={k:result['elf'][k] for k in ('bytes','sha256')}
             else:
                 result=execution.run(repo,out/'host_execution',call_phase,tools,host,idma,retained,configuration)
                 completed.append('host_execution')

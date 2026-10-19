@@ -945,3 +945,15 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - root header5296945B首次SIZE_LIMIT、16MiB条件重读OK，后验仍UNRECOGNIZED_SYNTAX；256handles未知/null，expected_structure=false，不推定未知语法原因。
 - 原summary保持DIAGNOSTIC_ONLY_REQUIRES_ACTIONS_EXIT0；Host C++compile/reset-launch、数值与权重scope仍false。下一compile+短刺激须独立SOURCE续跑接口审核，本小批不改workflow、不触发。
 - 独立actual审身份GO（review_fifo_ready_generation_actual_39226255480_20261019T0913；MANIFEST 5391de4dac6d078be67847c4aa341542733784256b329b6815dce1c7c1b7cbb0；SUMMARY 43c8f1b3d2d1a09f6f07c988e9f5052286f99d145ddb4db96e234f886945c772；仅四态抽取组合与Host生成有限资格）；原失败历史均保留，不用本轮成功倒填此前失败原因。
+
+### 2026-10-19：cluster同job编译与原短reset/launch后继（TEMP_SOURCE）
+
+- 已持久化39226255480有限成功；原35阶段/4cases5180/零warning和root header语法未知/256null不改写为完整Host运行资格。
+- 新显式mode host-cluster-reset-launch为37阶段：复用同job现有FIFO前门、精确FIR门、工具/Host生成，再接原1800/1740编译与30/10短reset-launch，保共享6600秒及所有原资源上限。
+- 旧endpoint参数/8handles门不适用于cluster。新窄门绑定实际单cluster args、wrapper/top链接、m_seqnum0构造、83顶层口及生成树身份；编译后核新child/top archive和ELF，前后输入/生成文件/ELF不漂移。
+- 既有census须完整零warning/error、有限18入2出/6DPI/1combo/2comb与1匹配library规则才许编译。root header解析器不扩，未知256不伪填；此资格限真实链接和短刺激，不称全部实例/DPI数值等价。
+- 原short_launch.cpp/launch payload字节不变：reset高/低各4个高边沿，最多16候选边沿内首个真实launch握手即返回，此后零eval/无显式final；AXI输入仍全0，不供RAM响应、权重、完整协议或长数值。
+- 当前SOURCE/mock；新actual NOT_EXECUTED，独立SOURCE审已GO。原35/34/16模式保持；首失败停、warning-fatal与三JSON安全上传保持。
+- 审前v1误读根目录旧同名无参数RTL，未发布/未执行；v2改由固定retained13真实投影与Host参数传递闭合。unsigned bit参数ENABLE_ACCUMULATOR_SEED确为1，固定官方序列给出1'h1及SHA512特化名前缀，逐args/wrapper/构造/archive绑定；不由旧安全摘要UNKNOWN推无-G，也不宽松接受任意后缀。
+- v2冷测仅本次受影响协调器153+153与execution44+44；FIFO17+17、extract24+24、config22+22、census68+68及其它未变测试继承，不冒称重跑。
+- SOURCE独审身份：review_cluster_reset_launch_source_20261019T0932，MANIFEST d5f9c6e56c727a4f15595eb116cfe6f2a2a63dd8d53f413d60de3ece9592ecdd，SUMMARY d0550433add06abb32f26a09b176f94c5f9b54d56b71d182c282fb394ce4f686；有限37阶段编译/原短reset-launch源码获审，actual仍NOT_EXECUTED，未知256与无RAM/数值范围保持。

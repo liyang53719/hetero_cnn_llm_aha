@@ -31,6 +31,13 @@ SV_PIN = (76366612, '2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec1005
 FIFO_PATH = 'deps/common_cells/src/cc_passthrough_stream_fifo.sv'
 FIFO_BASE = (4411, '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352')
 FIFO_SPLIT = (4662, 'cf5607bf61d0e1ca95d523689ba5170fe937dcfb2f94c001661b4a897bf9e5f6')
+CLUSTER_MODULE = 'bf16_context_lane_cluster16_rev8b_b_candidate'
+CLUSTER_LEAF = re.compile(re.escape(CLUSTER_MODULE) + r'_[0-9a-f]{1,127}\Z')
+CLUSTER_PARAMETER_HASH = '30c271aa0606321f6461b96aaa068709c25b914c50dd86a54a5813ec65e7b238da67ba144083832b8f6cc572100e57e0d59bfdbcb748931891ef0b6ea82c6073'
+CLUSTER_SEED_ARGUMENT = "-GENABLE_ACCUMULATOR_SEED=1'h1"
+CLUSTER_CONTRACT_BOUNDARY = 'CLUSTER_GENERATION_WITNESS'
+CLUSTER_CONTRACT_CODES = ('CLUSTER_CHILD_ARGS', 'CLUSTER_TOP_LINK', 'CLUSTER_LIBRARY_GRAPH',
+                          'CLUSTER_INITIALIZER', 'CLUSTER_ABI', 'CLUSTER_ARTIFACTS', 'CLUSTER_CENSUS')
 CLUSTER_HIERARCHY = b'`verilator_config\nhier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"\n'
 
 
@@ -374,6 +381,166 @@ def generated_witness(support, tree, lexical, host_ports, compiled=False, sv_pat
             'eight_runtime_handles_verified': False, 'old_abi_inherited': False}
 
 
+def cluster_failure(error, code):
+    # Finite private-gate labels only; never publish the exception text.
+    need(code in CLUSTER_CONTRACT_CODES, 'finite cluster contract code')
+    error.safe_contract_boundary = CLUSTER_CONTRACT_BOUNDARY
+    error.safe_contract_code = code
+    return error
+
+
+def validate_cluster_census(report):
+    """Admission for a limited compile/reset continuation, not a handle proof.
+
+    The pinned coordinator validates the complete census schema first. This pure
+    predicate checks only the already-observed finite generation prerequisites.
+    It deliberately does not require recognized root syntax or 256 handles.
+    """
+    try:
+        need(type(report) is dict and report['state'] == 'AVAILABLE' and
+             report['scan_complete'] is True, 'available complete cluster census')
+        need(type(report['counts']) is dict and
+             all(type(value) is int and value == 0 for value in report['counts'].values()) and
+             set(report['counts']) == {'warning_headers', 'error_headers', 'fatal_summary_headers',
+                                      'example_paths', 'unparsed_headers'}, 'clean cluster diagnostic headers')
+        need(type(report['caps']) is dict and report['records'] == [] and report['by_rule'] == {} and
+             report['omission'] == {'records': 0, 'examples': 0} and
+             set(report['caps']) == {'record_cap', 'example_cap', 'report_byte_cap', 'partial'} and
+             all(value is False for value in report['caps'].values()), 'complete untruncated cluster census')
+        wrapper = report['wrapper']
+        need(type(wrapper) is dict, 'finite cluster wrapper object')
+        cluster = wrapper['cluster_structure']
+        need(wrapper['state'] == 'AVAILABLE' and wrapper['module'] == CLUSTER_MODULE and
+             type(wrapper['candidate_count']) is int and wrapper['candidate_count'] == 1 and
+             type(wrapper['hierarchical_child']) is int and wrapper['hierarchical_child'] == 1 and
+             wrapper['top_references_wrapper'] is True and
+             wrapper['syntax_state'] == 'FINITE_PARSE_AVAILABLE', 'finite sole cluster wrapper')
+        for key, value in (('combo_input_count', 18), ('combo_output_count', 2),
+                           ('dpi_import_count', 6), ('combo_update_import_count', 1),
+                           ('combo_update_call_count', 1), ('always_comb_count', 2)):
+            need(type(wrapper[key]) is int and wrapper[key] == value, 'fixed cluster wrapper counts')
+        need(type(cluster) is dict and cluster['makegraph_state'] == 'AVAILABLE' and
+             type(cluster['library_target_count']) is int and cluster['library_target_count'] == 1 and
+             type(cluster['matching_library_target_count']) is int and
+             cluster['matching_library_target_count'] == 1, 'single cluster library graph')
+        return True
+    except (ValueError, KeyError, TypeError, AssertionError) as error:
+        raise cluster_failure(ValueError('cluster census admission rejected'), 'CLUSTER_CENSUS') from error
+
+
+def valid_cluster_leaf(leaf):
+    # V3Param hashes base + '_ENABLE_ACCUMULATOR_SEED=' + ascii(false).
+    # Only a prefix of this fixed seed-one digest is admitted; rehash collisions
+    # remain unknown and fail closed. No actual private suffix is presumed.
+    return bool(type(leaf) is str and CLUSTER_LEAF.fullmatch(leaf) is not None and
+                CLUSTER_PARAMETER_HASH.startswith(leaf[len(CLUSTER_MODULE) + 1:]))
+
+
+def initialized_cluster(raw, lexical, leaf):
+    need(valid_cluster_leaf(leaf), 'fixed seed-one parameterized cluster leaf')
+    need(type(raw) is bytes and len(raw) <= 65536, 'bounded actual cluster wrapper')
+    text = raw.decode('ascii'); clean_text, ignored = lexical.lexical_mask(text)
+    child, container = 'V' + leaf, 'V' + leaf + '_container'
+    declarations = list(re.finditer(r'\bclass\s+' + re.escape(container) + r'\b', clean_text))
+    need(len(declarations) == 1, 'one actual cluster container')
+    start = declarations[0].start(); depth = 0
+    for char in clean_text[:start]:
+        depth += (char == '{') - (char == '}')
+        need(depth >= 0, 'invalid cluster class scope')
+    need(depth == 0, 'cluster container must have top-level scope')
+    pattern = (r'class\s+' + re.escape(container) + r'\s*:\s*public\s+' + re.escape(child) +
+        r'\s*\{\s*public\s*:\s*long\s+long\s+m_seqnum\s*;\s*' + re.escape(container) +
+        r'\s*\(\s*const\s+char\s*\*\s*scopep__V\s*\)\s*:\s*' + re.escape(child) +
+        r'\s*\(\s*scopep__V\s*\)\s*,\s*m_seqnum\s*\{\s*0\s*\}\s*\{\s*\}\s*\}\s*;')
+    match = re.match(pattern, text[start:])
+    need(match is not None, 'actual scoped cluster ctor requires m_seqnum{0}')
+    end = start + match.end()
+    need(not any(a < end and b > start for a, b, kind in ignored), 'comment/literal inside cluster ctor')
+    return {'leaf': leaf, 'class_byte_range': [start, end], 'class_sha256': sha(raw[start:end]),
+            'wrapper_sha256': sha(raw), 'm_seqnum_initializer': 0}
+
+
+def cluster_generated_witness(support, tree, lexical, host_ports, report,
+                              compiled=False, sv_path=None):
+    """Same-job cluster linkage and limited native smoke acceptance only."""
+    code = 'CLUSTER_CENSUS'
+    try:
+        validate_cluster_census(report)
+        names = tree['entries']
+        observed = report['wrapper']; cluster = observed['cluster_structure']
+        for identity in (observed['args_identity'], observed['top_args_identity'],
+                         observed['wrapper_identity'], cluster['makegraph_identity']):
+            need(type(identity) is dict and set(identity) == {'bytes', 'sha256'} and
+                 type(identity['bytes']) is int and 0 < identity['bytes'] <= 512 * 1024 and
+                 type(identity['sha256']) is str and re.fullmatch('[0-9a-f]{64}', identity['sha256']),
+                 'finite nonempty cluster census identities')
+        def text(name, cap=4 * 1024**2, identity=None):
+            raw = generated_text(support, tree, name, cap)
+            if identity is not None:
+                need({'bytes': len(raw.encode('ascii')), 'sha256': sha(raw.encode('ascii'))} == identity,
+                     'cluster census and generated closure disagree')
+            return raw
+        code = 'CLUSTER_CHILD_ARGS'
+        candidates = [p for p in names if p.startswith('obj/V') and p.endswith('__hierMkArgs.f') and
+                      p != 'obj/VHostBlockTop__hierMkArgs.f']
+        need(len(candidates) == 1, 'one parameterized cluster child')
+        expected_args = candidates[0]
+        leaf = expected_args[len('obj/V'):-len('__hierMkArgs.f')]
+        need(valid_cluster_leaf(leaf), 'fixed seed-one parameterized cluster child family')
+        child = 'V' + leaf
+        wrapper = child + '/' + leaf + '.sv'; archive = child + '/lib' + leaf + '.a'
+        tokens = shlex.split(text(expected_args, 256 * 1024, observed['args_identity']))
+        def option(flag):
+            need(tokens.count(flag) == 1 and tokens.index(flag) + 1 < len(tokens) and
+                 not any(value.startswith(flag + '=') for value in tokens), 'unique cluster child option')
+            return tokens[tokens.index(flag) + 1]
+        need(option('--lib-create') == leaf and option('--hierarchical-child') == '1' and
+             option('--top-module-encoded') == leaf and option('--prefix') == child and
+             option('--mod-prefix') == child and
+             [value for value in tokens if value.startswith('-G')] == [CLUSTER_SEED_ARGUMENT] and
+             not any(value == '--hierarchical-params-file' or value.startswith('--hierarchical-params-file=') for value in tokens),
+             'same parameterized cluster leaf and sole typed seed-one argument')
+        code = 'CLUSTER_TOP_LINK'
+        top_args = shlex.split(text('obj/VHostBlockTop__hierMkArgs.f', 256 * 1024, observed['top_args_identity']))
+        need(top_args.count(wrapper) == 1 and sv_path is not None and top_args.count(str(sv_path)) == 1 and
+             top_args.index(wrapper) < top_args.index(str(sv_path)) and
+             not any(value.startswith('-G') for value in top_args), 'same-job cluster wrapper precedes Host SV')
+        code = 'CLUSTER_LIBRARY_GRAPH'
+        top_mk = text('obj/VHostBlockTop.mk')
+        hier_mk = text('obj/VHostBlockTop_hier.mk', 256 * 1024, cluster['makegraph_identity'])
+        need('include VHostBlockTop_hier.mk' in top_mk and archive in hier_mk and
+             child + '.mk' in hier_mk, 'same-job single cluster library make graph')
+        code = 'CLUSTER_INITIALIZER'
+        cpp = text('obj/' + child + '/' + leaf + '.cpp', 65536)
+        initializer = initialized_cluster(cpp.encode('ascii'), lexical, leaf)
+        wrapper_text = text('obj/' + wrapper, 512 * 1024, observed['wrapper_identity'])
+        need('chandle handle__V' in wrapper_text, 'actual cluster protected wrapper handle')
+        for suffix in ('create', 'combo_update', 'seq_update', 'final'):
+            symbol = leaf + '_protectlib_' + suffix
+            need(symbol in cpp and symbol in wrapper_text, 'actual cluster protected boundary missing')
+        code = 'CLUSTER_ABI'
+        header = text('obj/VHostBlockTop.h')
+        ports = {}
+        for direction, widthkind, name, high, low, words in re.findall(r'VL_(IN|OUT)(8|16|64|W)?\s*\(\s*&?([A-Za-z_][A-Za-z0-9_]*)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*(\d+))?\s*\)', header):
+            need(name not in ports and low == '0', 'duplicate/nonzero-low actual cluster top port')
+            ports[name] = ['input' if direction == 'IN' else 'output', int(high) + 1]
+        need(ports == host_ports and len(ports) == 83, 'new actual cluster Host83-port declaration contract')
+        code = 'CLUSTER_ARTIFACTS'
+        if compiled:
+            for path in ('obj/' + archive, 'obj/VHostBlockTop__ALL.a', 'obj/VHostBlockTop'):
+                need(names.get(path, {}).get('kind') == 'regular' and names[path]['bytes'] > 0,
+                     'new cluster/top archive or ELF missing')
+        return {'status': 'FINITE_CLUSTER_RESET_LAUNCH_WITNESS', 'leaf': leaf,
+                'initializer': initializer, 'child_archive': 'obj/' + archive, 'host_ports': 83,
+                'accumulator_seed_parameter': 1, 'instance_handle_count': None, 'runtime_handles_verified': False,
+                'root_header_parsed': False, 'old_abi_inherited': False,
+                'ram_or_weights_or_n0_or_full_block_claim': False}
+    except (ValueError, KeyError, TypeError, AssertionError) as error:
+        if getattr(error, 'safe_contract_boundary', None) != CLUSTER_CONTRACT_BOUNDARY:
+            cluster_failure(error, code)
+        raise
+
+
 def check_log(raw):
     need(type(raw) is bytes and len(raw) <= 1024**2, 'short launch log bound')
     lines = raw.decode('ascii').splitlines()
@@ -385,18 +552,21 @@ def check_log(raw):
 
 
 def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: Path, configuration: Path,
-        *, stop_after_generation=False, diagnostic_callback=None):
+        *, stop_after_generation=False, diagnostic_callback=None, cluster_boundary=False):
     need(type(stop_after_generation) is bool, 'explicit generation-only bool')
-    need(callable(diagnostic_callback) if stop_after_generation else diagnostic_callback is None,
-         'generation-only callback pairing')
+    need(type(cluster_boundary) is bool and not (stop_after_generation and cluster_boundary),
+         'explicit disjoint cluster continuation bool')
+    variant = stop_after_generation or cluster_boundary
+    need(callable(diagnostic_callback) if variant else diagnostic_callback is None,
+         'cluster generation callback pairing')
     repo, work, idma, retained, configuration = map(clean, (repo, work, idma, retained, configuration))
     for root in (repo, HERE, idma, retained, configuration, clean(toolchain['verilator_root'])):
         need(work != root and root not in work.parents and work not in root.parents, 'fresh disjoint work root')
     need(not os.path.lexists(work), 'work already exists')
     pins, buffers, support, lexical = load(repo)
     before = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
-                     fifo_valid_split=stop_after_generation)
-    source_map = generation_source_map(before, idma, retained) if stop_after_generation else None
+                     fifo_valid_split=variant)
+    source_map = generation_source_map(before, idma, retained) if variant else None
     verify_tools(support, toolchain)
     emission_before = verify_emission(support, host_emission)
     ports = unique_json(buffers[CONTRACT])['HOST_PORTS']
@@ -414,12 +584,12 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         argv = commands(work, toolchain['backend'], before, configuration)
         env = environment(work, toolchain['verilator_root'])
         results = {}; witness = None; previous = None; qualification = None
-        frozen_generated = None; executed_elf = None
+        frozen_generated = None; executed_elf = None; generation_report = None
         phases = ('host93_cpp_generate',) if stop_after_generation else (
             'host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch')
         for phase in phases:
             need(closure(support, idma, retained, configuration, host_emission['sv'], buffers,
-                         fifo_valid_split=stop_after_generation) == before, 'pre-phase input drift')
+                         fifo_valid_split=variant) == before, 'pre-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
             need(verify_emission(support, host_emission) == emission_before, 'pre-phase emission drift')
@@ -436,9 +606,11 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
                 finally:
                     os.close(fd); os.close(parent)
             if phase != 'host93_cpp_generate':
-                witness = generated_witness(support, previous, lexical, ports, phase == 'host93_reset_launch', before['sv']['path'])
+                witness = (cluster_generated_witness(support, previous, lexical, ports, generation_report,
+                           phase == 'host93_reset_launch', before['sv']['path']) if cluster_boundary else
+                           generated_witness(support, previous, lexical, ports, phase == 'host93_reset_launch', before['sv']['path']))
             bound = LIMITS[phase]
-            if stop_after_generation:
+            if variant and phase == 'host93_cpp_generate':
                 native_failed = False; callback_error = None
                 try:
                     result = call_phase(phase, argv[phase], work, dict(env), dict(bound))
@@ -447,7 +619,7 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
                     raise
                 finally:
                     try:
-                        diagnostic_callback(work, source_map)
+                        generation_report = diagnostic_callback(work, source_map)
                     except BaseException as error:
                         if not native_failed:
                             callback_error = error
@@ -455,11 +627,14 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
                 result = call_phase(phase, argv[phase], work, dict(env), dict(bound))
             record = result['record']
             need(record.get('exit_code') == 0 and record.get('cleanup_confirmed') is True, 'phase failed or cleanup unconfirmed')
-            if stop_after_generation and callback_error is not None:
+            if variant and phase == 'host93_cpp_generate' and callback_error is not None:
                 raise callback_error
+            if cluster_boundary and phase == 'host93_cpp_generate':
+                validate_cluster_census(generation_report)
+                generation_report = unique_json(json.dumps(generation_report, sort_keys=True, allow_nan=False).encode())
             need(type(result['raw_log']) is bytes and len(result['raw_log']) <= bound['log_bytes'], 'phase raw log bound')
             need(closure(support, idma, retained, configuration, host_emission['sv'], buffers,
-                         fifo_valid_split=stop_after_generation) == before, 'post-phase input drift')
+                         fifo_valid_split=variant) == before, 'post-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
             need(verify_emission(support, host_emission) == emission_before, 'post-phase emission drift')
@@ -483,7 +658,9 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
             else:
                 for name, pin in frozen_generated.items():
                     need(support.identity(work / name, 128 * 1024**2) == pin, 'generated source changed after phase')
-            witness = generated_witness(support, tree, lexical, ports, phase != 'host93_cpp_generate', before['sv']['path'])
+            witness = (cluster_generated_witness(support, tree, lexical, ports, generation_report,
+                       phase != 'host93_cpp_generate', before['sv']['path']) if cluster_boundary else
+                       generated_witness(support, tree, lexical, ports, phase != 'host93_cpp_generate', before['sv']['path']))
             if phase == 'host93_reset_launch':
                 qualification = check_log(result['raw_log'])
             result_pin = save(work / (phase + '_TREE.json'), tree)
@@ -494,7 +671,7 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         elf = {'path': str(elf_path), **support.identity(elf_path, 512 * 1024**2)}
         need(int(elf['mode'], 8) & 0o111 and {k: elf[k] for k in ('bytes', 'sha256', 'mode')} == executed_elf, 'new host ELF changed around execution')
         after = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
-                                fifo_valid_split=stop_after_generation)
+                                fifo_valid_split=variant)
         need(after == before, 'final input drift')
         save(work / 'INPUTS_AFTER.json', after)
         report = {'status': 'PASS_NEW_HOST_RESET_AND_ONE_LAUNCH_ONLY', 'elf': elf,
@@ -509,7 +686,7 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         if work.is_dir() and not work.is_symlink():
             try:
                 after = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
-                                fifo_valid_split=stop_after_generation)
+                                fifo_valid_split=variant)
                 failed['input_postcheck'] = {'unchanged': after == before, 'sha256': sha(json.dumps(after, sort_keys=True).encode())}
             except Exception as post_error:
                 failed['input_postcheck'] = {'unchanged': False, 'error': str(post_error)[:1024]}

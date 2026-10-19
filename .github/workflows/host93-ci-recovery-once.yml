@@ -1,5 +1,5 @@
 name: host93-ci-recovery-once
-# TEMP_SOURCE: FIFO ready split four-state preflight then cluster generation-only; fatal warnings retained.
+# TEMP_SOURCE: FIFO preflight and cluster Host compile/reset-launch; numerical and full-block qualification excluded.
 # TEMP SOURCE: publish this exact workflow only after whole-job SOURCE review.
 # A push touching only this path launches one new Host job, never a retry.
 on:
@@ -60,7 +60,7 @@ jobs:
           umask 077
           remaining=$(python3 -I -S -B -c 'import os,time,sys; x=min(185,int(float(os.environ["HOST93_JOB_DEADLINE"])-time.monotonic()-5)); sys.exit(1) if x<=0 else print(x)')
           timeout --signal=TERM --kill-after=5s "${remaining}s" python3 -I -S -B candidates/host93_ci_recovery/download_idma.py --out "$RUNNER_TEMP/host93-idma.zip"
-      - name: Frontload CHIRRTL and collect generation-only diagnostics
+      - name: Run FIFO-preflight cluster Host compile and bounded reset-launch
         id: actual
         timeout-minutes: 111
         shell: bash
@@ -68,7 +68,7 @@ jobs:
           set -euo pipefail
           umask 077
           remaining=$(python3 -I -S -B -c 'import os,time,sys; x=int(float(os.environ["HOST93_WORK_DEADLINE"])-time.monotonic()-10); sys.exit(1) if x<=0 else print(x)')
-          timeout --signal=TERM --kill-after=10s "${remaining}s" python3 -I -S -B candidates/host93_ci_recovery/run.py --repo "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/host93-ci-private" --idma-archive "$RUNNER_TEMP/host93-idma.zip" --job-deadline "$HOST93_WORK_DEADLINE" --mode host-generation-diagnostic --execute
+          timeout --signal=TERM --kill-after=10s "${remaining}s" python3 -I -S -B candidates/host93_ci_recovery/run.py --repo "$GITHUB_WORKSPACE" --out "$RUNNER_TEMP/host93-ci-private" --idma-archive "$RUNNER_TEMP/host93-idma.zip" --job-deadline "$HOST93_WORK_DEADLINE" --mode host-cluster-reset-launch --execute
       - name: Validate only sanitized evidence
         id: safe
         if: always() && (steps.actual.outcome == 'success' || steps.actual.outcome == 'failure')

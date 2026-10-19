@@ -775,3 +775,11 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - 作者纯冷测：主 63+63、支持 41+41 与新回归 7+7、工具 41+41、运输 7+7、去敏检查 463+463。独立整链 SOURCE 已闭合：SOURCE_GO_SINGLE_BOUNDED_CI_BUILD_DIAGNOSTIC_ONLY，审 manifest `55cca6e9bc7a56e28b017d152188a8ba983de30dfad2e2b087d0acb3209fbe37` / summary `cc00d4be3e225a45e951c6ff50217731128c3a519da46d6c18d16f1e36843245`；独审新增反例 7+7、支持 41+41、主 63+63 均过，F01/F02闭合。作者测试不代独审。新 actual 尚未执行。只提交再生源码、pin、摘要与计划，不提交任何新生成物。
 
 - 原 v1 HOLD 留存，新 v2 仅禁止准备拒绝后读取旧收据，并使诊断投影受原 phase 截止约束；原异常始终优先。最终内容 17 件源码/metadata/STATUS，加中文计划纯尾与独立新 workflow，共 19 paths；parent 固定 cf0eaa059b029b303d402c983addb0f973b55e0f。首次诊断实际待唯一普通发布触发，结果不预填。
+
+
+## 2026-10-19 第二次 CI 构建诊断实际 FAIL（39187570266）
+
+- 固定 commit `5f75602a5b5ea8f85c34d8df4b67f256b4a4a7ef`，新诊断 job attempt1 已 failure；仅持久化三原始安全 JSON 与本摘要，不提交 API/joblog、私有 native 日志、生成物或库存。独立实际审待封。
+- 前13阶段EXIT0_CLEANED；fresh_make 62.251071s，原waitid code1/status2、最终exit2，receipt_timed_out=false，cleanup_confirmed=true。子进程CPU user60.802876/system1.282175秒，累计子进程RSS峰616720KiB，非阶段专属内存仪表。总73.883024s。
+- 合并日志分类输出为空，不能推无错误；当前过滤器只保少数固定分类，未保完整去敏上下文。具体构建根因未知，不推OOM、不改预算。原第一次FAIL保留。
+- 下一仅SOURCE：核固定make源闭包与make/g++/bison/perl格式盲区，准备有限完整合并日志尾、路径/secret占位与错误前后上下文。无自动重跑；本次摘要不授任何工具/Host/数值资格。

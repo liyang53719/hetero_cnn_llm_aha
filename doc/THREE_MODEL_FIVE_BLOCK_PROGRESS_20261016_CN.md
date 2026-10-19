@@ -918,3 +918,11 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - v3 仅重跑 census 57+57 与 coordinator 136+136；extractor 22+22、configuration 21+21、execution 27+27 继承原样 v1。四类 census 范围/候选漂移/计数缺口保留 v1 HOLD，v2 窄修后两项同类边界另存 HOLD，v3 只认 root 直接成员，嵌套类型/函数声明降未知；零 always_comb 保 census 并降未知。均源码/mock，无 native。SOURCE 独审已闭，actual NOT_EXECUTED。
 
 - SOURCE 独审已 GO：review_cluster_fifo_generation_v3_source_20261019T0759，MANIFEST ae4cb32c220aa1b8e20dd2a83fa68a43048b8aa20176b93aa4e2e4016bc32f8e，SUMMARY 791bb998b85747a22dd018c37881d8f47af600c98851ed5e921cfe0702c692c4；actual 仍 NOT_EXECUTED，生成后仍停。
+
+### 2026-10-19：cluster 生成诊断 39220292509 原 FAIL，剩余 iDMA 单告警
+
+- 提交 0a1c06be 的唯一 run 39220292509/attempt1，32 阶段31成功，生成自然 exit2/未超时/cleanuptrue，97.573698秒；总574.048876秒。FIR历史身份、工具build/tiny与freshSV通过，Host生成/编译/reset/数值资格仍false。
+- 完整4001B日志有1个UNOPTFLAT及全部9个Example，0未解析/省略；前次35降1，本次定位idma_axi_read:87。cluster实际wrapper18入2出、6DPI、单combo点、两always_comb；单匹配archive规则不代表库已编译，specialization与256handles仍未知。
+- root_header CONTRACT_ERROR且identity=null，首次固定读取未返回、parser未进入；缺文件本应MISSING，不能倒填具体读取门。后继仅需固定安全读取码/观察size，不盲扩cap或parser。
+- 固定源支持remaining ready_o过程聚合候选：保真实SameCycleRW ready_i依赖，将ready_o原flush分支独立；iDMA原子gating和allReady不动。先前4/5180不能授新拆块资格，下一需相同四态矩阵与背压小测重新实际验证。原三JSON/FAIL保留，actual独审已接受有限失败证据。
+- actual独审 review_cluster_generation_actual_39220292509_20261019T0821：MANIFEST eb09e9bd53bba6456b898b693d6f753b23fd2a1599d6668e13c6335a252457b2，SUMMARY 924da874fe0c25f3f3af51d2ab8b534ed6d6e33f3b913d09e9045eb4b72eadb8；只接受原失败证据。

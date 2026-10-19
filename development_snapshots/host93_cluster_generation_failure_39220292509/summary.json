@@ -1,0 +1,226 @@
+{
+  "chirrtl_observation": {
+    "extmodule_count": 17,
+    "historical_fir_equal": true,
+    "library_source_info_count": 4945,
+    "line_count": 293837,
+    "module_count": 682,
+    "other_source_info_count": 0,
+    "project_source_info_count": 249537,
+    "source_info_count": 254482,
+    "source_info_utf8_bytes": 22570940,
+    "state": "AVAILABLE",
+    "utf8_bytes": 42417256
+  },
+  "completed_components": [
+    "chirrtl_diagnostic",
+    "toolchain",
+    "host_emission",
+    "idma319",
+    "retained13",
+    "configuration"
+  ],
+  "contract_failure": {
+    "boundary": "UNREPORTED",
+    "code": "UNMAPPED_CONTRACT"
+  },
+  "failure_category": "INPUT_OR_CONTRACT",
+  "generation_diagnostics": {
+    "by_rule": {
+      "ERROR:NONE": 2,
+      "WARNING:UNOPTFLAT": 1
+    },
+    "caps": {
+      "example_cap": false,
+      "partial": false,
+      "record_cap": false,
+      "report_byte_cap": false
+    },
+    "counts": {
+      "error_headers": 2,
+      "example_paths": 9,
+      "fatal_summary_headers": 1,
+      "unparsed_headers": 0,
+      "warning_headers": 1
+    },
+    "fatal_summaries": {
+      "error_total": null,
+      "header_count_comparison": "GLOBAL_HEADERS_MATCH",
+      "process_attribution": "NOT_AVAILABLE",
+      "warning_total": 1
+    },
+    "log_identity": {
+      "bytes": 4001,
+      "sha256": "a19c7e174ad6bf088b0be43f75af3b9cbb5d609c00f414bab9ab03214c55afd1"
+    },
+    "omission": {
+      "examples": 0,
+      "records": 0
+    },
+    "records": [
+      {
+        "column": 12,
+        "examples": [
+          {
+            "column": 12,
+            "line": 87,
+            "source_id": "idma/idma/src/backend/idma_axi_read.sv",
+            "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+          },
+          {
+            "column": 30,
+            "line": 169,
+            "source_id": "idma/idma/src/backend/idma_axi_read.sv",
+            "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+          },
+          {
+            "column": 12,
+            "line": 132,
+            "source_id": "idma/idma/target/rtl/idma_generated.sv",
+            "source_sha256": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2"
+          },
+          {
+            "column": 5,
+            "line": 74,
+            "source_id": "idma/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+            "source_sha256": "d5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70"
+          },
+          {
+            "column": 34,
+            "line": 39,
+            "source_id": "idma/deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+            "source_sha256": "d5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70"
+          },
+          {
+            "column": 12,
+            "line": 88,
+            "source_id": "idma/idma/src/backend/idma_axi_read.sv",
+            "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+          },
+          {
+            "column": 12,
+            "line": 88,
+            "source_id": "idma/idma/src/backend/idma_axi_read.sv",
+            "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+          },
+          {
+            "column": 30,
+            "line": 168,
+            "source_id": "idma/idma/src/backend/idma_axi_read.sv",
+            "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+          },
+          {
+            "column": 12,
+            "line": 87,
+            "source_id": "idma/idma/src/backend/idma_axi_read.sv",
+            "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+          }
+        ],
+        "line": 87,
+        "message": "Circular combinational logic reported.",
+        "ordinal": 1,
+        "rule": "UNOPTFLAT",
+        "severity": "WARNING",
+        "source_id": "idma/idma/src/backend/idma_axi_read.sv",
+        "source_sha256": "f6fb3ca497c9f4c0df656bfeaa2cc6dcd5bb2b8d233bad1b6be8130c0ff3596f"
+      },
+      {
+        "column": null,
+        "line": null,
+        "message": "Warning-fatal exit summary reported.",
+        "ordinal": 2,
+        "rule": "NONE",
+        "severity": "ERROR",
+        "source_id": "UNKNOWN_PATH",
+        "source_sha256": null
+      },
+      {
+        "column": null,
+        "line": null,
+        "message": "Verilator error reported; unstructured text omitted.",
+        "ordinal": 3,
+        "rule": "NONE",
+        "severity": "ERROR",
+        "source_id": "UNKNOWN_PATH",
+        "source_sha256": null
+      }
+    ],
+    "scan_complete": true,
+    "schema_version": 1,
+    "source_derivations": [
+      {
+        "base_identity": {
+          "bytes": 4411,
+          "sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+        },
+        "derived_identity": {
+          "bytes": 4536,
+          "sha256": "d5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70"
+        },
+        "source_id": "idma/deps/common_cells/src/cc_passthrough_stream_fifo.sv"
+      }
+    ],
+    "state": "AVAILABLE",
+    "wrapper": {
+      "always_comb_count": 2,
+      "always_comb_lines": [
+        123,
+        184
+      ],
+      "args_identity": {
+        "bytes": 32810,
+        "sha256": "6ae0d4333db213f9dcb7d9bc2ba3eb1caf3f00817cb0a2c9f99d0bda07ba268a"
+      },
+      "candidate_count": 1,
+      "cluster_structure": {
+        "expected_structure_observed": false,
+        "handle_declaration_count": null,
+        "instance_handle_count": null,
+        "library_target_count": 1,
+        "makegraph_identity": {
+          "bytes": 34706,
+          "sha256": "45f18f4c1347ef461ed305d85cab9dc4059a5f283ec1e44ed7a03421f4370ad9"
+        },
+        "makegraph_state": "AVAILABLE",
+        "matching_library_target_count": 1,
+        "root_header_identity": null,
+        "root_header_state": "CONTRACT_ERROR"
+      },
+      "combo_input_count": 18,
+      "combo_output_count": 2,
+      "combo_update_call_count": 1,
+      "combo_update_import_count": 1,
+      "dependency_conclusion": "NOT_ESTABLISHED",
+      "dpi_import_count": 6,
+      "handshakes": [],
+      "hierarchical_child": 1,
+      "module": "bf16_context_lane_cluster16_rev8b_b_candidate",
+      "specialization": "UNKNOWN",
+      "state": "AVAILABLE",
+      "syntax_state": "FINITE_PARSE_AVAILABLE",
+      "top_args_identity": {
+        "bytes": 32736,
+        "sha256": "2f1d903e8b6274a4917b06f1153c4227cfa9a6182ebf6ae695bd2bf8dba8ed7f"
+      },
+      "top_references_wrapper": true,
+      "wrapper_identity": {
+        "bytes": 7959,
+        "sha256": "acbd12f080c1f92bf5f1d26549c4e9e0654bd0b535a2a3e81b5c3fbedf612590"
+      }
+    }
+  },
+  "mode": "host-generation-diagnostic",
+  "schema": "host93-ci-summary-v5",
+  "scope": {
+    "cpp_compiled": false,
+    "cpp_generated": false,
+    "fresh_host_sv": true,
+    "n0_numeric": false,
+    "reset_launch": false,
+    "toolchain_build": true,
+    "toolchain_tiny": true,
+    "weights_loaded": false
+  },
+  "seconds": 574.048876,
+  "status": "INCOMPLETE"
+}

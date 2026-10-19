@@ -7,6 +7,25 @@
     "production_chain_modified": false
   },
   "base_repository_commit": "18e757084e4812fe2496ba8321438a468e17b646",
+  "current_cold_validation": {
+    "flags": [
+      "-I",
+      "-S",
+      "-B"
+    ],
+    "mock_main_only": true,
+    "native_executed": false,
+    "normal": {
+      "status": "PASS",
+      "tests": 21
+    },
+    "optimized": {
+      "status": "PASS",
+      "tests": 21
+    },
+    "real_sv_read": false,
+    "repo_read_scope": "five pinned small data files only"
+  },
   "entry": "ENTRY.json",
   "files": {
     "COLD_TESTS.json": {
@@ -14,25 +33,50 @@
       "sha256": "62843ae7402ae4525bc3aa58b85bf362a45ff3630ba7b70afc86a386f131736b"
     },
     "ENTRY.json": {
-      "bytes": 2296,
-      "sha256": "4f442b428c43a05f083e61eed37a86081496d7085d1658b6b205b507f18c3726"
+      "bytes": 2390,
+      "sha256": "98b3fa1bddaf0b2b2f998039080ccc750462e34a1f74ab3c0ec1d5cbb6d9838a"
     },
     "README.md": {
       "bytes": 5149,
       "sha256": "a4e62d6fcce8671b4b7ae35d11ce287867f152da6887a8f6a1e7b771300ec9b7"
     },
     "generate_4vlt.py": {
-      "bytes": 21954,
-      "sha256": "b29a17b9cc39e5a93473df922ed4c87489e1e346fafb830c1fbb721e1931b81f"
+      "bytes": 25044,
+      "sha256": "5234e210a012323a44e4d579a16af2dbac52b47f90e974a2716e23c5d9942216"
     },
     "test_tiny.py": {
-      "bytes": 11279,
-      "sha256": "3dc998834e6388003fd4c07ac47548e9953fcbf3506a0ec29b5ac0e77f598adb"
+      "bytes": 23567,
+      "sha256": "c1b6d04797ab21be6ea93520616e184fffc28abbe281a79205eb7f1f8e6653d1"
     }
   },
-  "identity": "ci_host_4vlt_source_v1_20261019T0048",
+  "historical_evidence_note": "Copied COLD_TESTS.json and README.md describe the earlier endpoint baseline and are not evidence for this optional variant.",
+  "identity": "ci_cluster_fifo_generation_configuration_source_v1_20261019T0730",
+  "optional_variant": {
+    "added_waivers": 0,
+    "default": false,
+    "dma_hints_vlt_unchanged": true,
+    "hierarchy_selector": "bf16_context_lane_cluster16_rev8b_b_candidate",
+    "migration_provenance_field": "fifo_warning_migration",
+    "option": "--cluster-boundary",
+    "original_warning_inventory_and_927_manifest_unchanged": true,
+    "precision_existing_row_migrations": [
+      {
+        "derived_line": 88,
+        "original_line": 81,
+        "path": "deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+        "rule": "WIDTHEXPAND"
+      },
+      {
+        "derived_line": 107,
+        "original_line": 100,
+        "path": "deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+        "rule": "WIDTHEXPAND"
+      }
+    ],
+    "readonly_vlt_unchanged": true
+  },
   "prior_review_inherited": false,
   "schema": 1,
-  "status": "TEMP_SOURCE_NEW_IDENTITY_PENDING_INDEPENDENT_COLD_REVIEW",
-  "tests": "COLD_TESTS.json"
+  "status": "SOURCE_ONLY_NORMAL_AND_OPTIMIZED_COLD_TESTS_PASS_NOT_NATIVE_EXECUTED",
+  "tests": "test_tiny.py"
 }

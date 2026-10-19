@@ -907,3 +907,14 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - SOURCE 补片仅 +5 字节，允许既有有限信号名前的固定 top 前缀可选；原文件后缀/坐标、同 warning block、自然退出/cleanup、错误与 fatal 计数门不变。新合成测试不反构造私有路径。
 - 原 40+40 冷测通过；新 8+8 通过。可搬迁测试后继只重跑 8+8，40+40 按原字节继承。生产可见性方案只提出具体边界选择及风险，不改 RTL、allReady、算术或单 combo 调用。
 - SOURCE 有限审 GO：review_micro_observer_source_20261019T0719，MANIFEST 1753 B / e4705aba0fc221aaedc50755a9165319eb0b48a9bde254698abc8b3da8280a00，SUMMARY 3449 B / 0ebfdfc599d55a85a0374d7e7cdc0fd0f62369ec633c250501e226eb493970b9；verdict SOURCE_GO_FINITE_OPTIONAL_TOP_PREFIX_OBSERVER_ONLY。独立复核 40+40、8+8。本批不改 workflow、不触发重编或新 job，生产方案仍只读提案。
+
+### 2026-10-19：cluster 边界与 FIFO 单项派生，生成诊断候选
+
+- 当前父提交 d03e8fec；前次 39213008977 原 FAIL 与安全观察保留。FIFO 真实 4/5180 仅涵盖抽取组合逻辑及手动状态；Host 透明/opaque 仍是 MODEL 观察。
+- 固定源级逐项核 40 个 cluster 当前输入→两输出对、4096 payload 读路径及同步写：输出为寄存 FIFO 头，无当前输入/写穿/pop 旁路。真实 out_ready→step_ready 与全叶 allReady 原子握手保持。透明范围是握手/准入；seed bank、结果/flags 读指针仍留 cluster。
+- 唯一 generation-diagnostic 变体采用已审 valid_o 拆块和既有 cluster hier_block。319 文件总 3072325 B，仅 FIFO +125 B；原 927 表不热改。两既有 WIDTHEXPAND 原语句 81/100→88/107 精确迁移，零新增豁免。
+- 官方固定层级源码支持同参数共享一个 specialization/library 规则；每实例 model/seqnum 分开，VerilatedContext 并非各建；clock 任意分类变化触发 seq，单个静态 combo 调用点不能推出每周期动态次数。
+- 32 阶段及共享 6600 秒不变，生成仍 600/540 秒、AS 6 GiB；生成后停，不运行 Host C++ compile/reset。报告从产物计 make 规则/handle，缺失 MISSING、未知语法 UNRECOGNIZED，不能把期望 256 倒填实际。
+- v3 仅重跑 census 57+57 与 coordinator 136+136；extractor 22+22、configuration 21+21、execution 27+27 继承原样 v1。四类 census 范围/候选漂移/计数缺口保留 v1 HOLD，v2 窄修后两项同类边界另存 HOLD，v3 只认 root 直接成员，嵌套类型/函数声明降未知；零 always_comb 保 census 并降未知。均源码/mock，无 native。SOURCE 独审已闭，actual NOT_EXECUTED。
+
+- SOURCE 独审已 GO：review_cluster_fifo_generation_v3_source_20261019T0759，MANIFEST ae4cb32c220aa1b8e20dd2a83fa68a43048b8aa20176b93aa4e2e4016bc32f8e，SUMMARY 791bb998b85747a22dd018c37881d8f47af600c98851ed5e921cfe0702c692c4；actual 仍 NOT_EXECUTED，生成后仍停。

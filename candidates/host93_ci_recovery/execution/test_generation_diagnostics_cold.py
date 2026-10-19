@@ -17,7 +17,7 @@ from unittest import mock
 HERE = Path(__file__).absolute().parent
 
 LOAD_PINS = {
-    str(HERE / 'generation_diagnostics.py'): (31577, 'ec844694b0c42809dcb0cb06df83e28c6057868566473d36ff988f79ef4cb9db'),
+    str(HERE / 'generation_diagnostics.py'): (44036, '991077cf2914b681b7bf08b264a852dd5aa6f4bdc4e317d4d3033f4f36438bde'),
     str(HERE.parent / 'safe_build_diagnostics.py'): (11942, '97ab72651c9acadf1e4d242225bdfc21dea3807aa911e448ce7330b762fa4a60'),
 }
 
@@ -76,6 +76,39 @@ endmodule
 ''')
     (obj / 'VHostBlockTop__hierMkArgs.f').write_text('V' + leaf + '/' + leaf + '.sv /private/HostBlockCollection.sv\n')
     return args, wrapper
+
+
+CLUSTER = 'bf16_context_lane_cluster16_rev8b_b_candidate'
+
+
+def cluster_fixture(root, leaf=CLUSTER + '_cold', handles=256, libraries=None):
+    args, wrapper = fixture(root, leaf)
+    raw = wrapper.read_text()
+    for a, b in (('seed_begin_valid_i', 'seed_block_i'), ('seed_begin_ready_o', 'lane_out_o'),
+                 ('seed_commit_valid_i', 'seed_commit_i'), ('seed_commit_ready_o', 'cluster_flags_o')):
+        raw = raw.replace(a, b)
+    wrapper.write_text(raw)
+    if libraries is None:
+        libraries = [leaf]
+    graph = '# Hierarchical Verilation -*- Makefile -*-\nifndef VM_HIER_VERILATION_INCLUDED\nVM_HIER_VERILATION_INCLUDED = 1\n\nVM_HIER_LIBS := \\\n'
+    for name in libraries:
+        graph += '  V' + name + '/lib' + name + '.a \\\n'
+    graph += '\n'
+    for name in libraries:
+        child = 'V' + name
+        graph += (child + '/lib' + name + '.a: ' + child + '/' + child + '.mk \n'
+                  '\t$(MAKE) -f ' + child + '.mk -C ' + child + ' VM_PREFIX=' + child + '\n\n')
+    graph += 'endif  # Guard\n'
+    mk = root / 'obj/VHostBlockTop_hier.mk'
+    mk.write_text(graph)
+    header = root / 'obj/VHostBlockTop___024root.h'
+    text = 'class VHostBlockTop___024root final : public VerilatedModule {\npublic:\n'
+    for i in range(handles):
+        text += ('    void* HostBlockTop__DOT__owner__DOT__matrix__DOT__leaves_' + str(i // 32) +
+                 '__DOT__matrix__DOT__g_production__DOT__g_cluster__BRA__' + str(i % 32) +
+                 '__KET____DOT__u_cluster__DOT__handle___05FV;\n')
+    header.write_text(text + '};\n')
+    return args, wrapper, mk, header
 
 
 class Cold(unittest.TestCase):
@@ -510,6 +543,254 @@ class Cold(unittest.TestCase):
                 # One reported category may be absent; both cannot be absent.
                 bad['fatal_summaries']['error_total'] = None
             with self.assertRaises(ValueError): g.validate_report(bad)
+
+
+    def test_37_cluster_complete_counts_are_observed(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        result = self.collect()
+        w = result['wrapper']; c = w['cluster_structure']
+        self.assertEqual(w['module'], CLUSTER)
+        self.assertEqual(w['candidate_count'], 1)
+        self.assertEqual(w['syntax_state'], 'FINITE_PARSE_AVAILABLE')
+        self.assertEqual((w['combo_input_count'], w['combo_output_count']), (2, 2))
+        self.assertEqual(w['handshakes'], [])
+        self.assertEqual(c['library_target_count'], 1)
+        self.assertEqual(c['matching_library_target_count'], 1)
+        self.assertEqual(c['handle_declaration_count'], 256)
+        self.assertEqual(c['instance_handle_count'], 256)
+        self.assertTrue(c['expected_structure_observed'])
+        self.assertEqual(w['dependency_conclusion'], 'NOT_ESTABLISHED')
+        self.assertEqual(c['root_header_identity']['sha256'], hashlib.sha256(header.read_bytes()).hexdigest())
+        self.assertEqual(g.validate_report(json.loads(g.canonical_json(result))), result)
+
+    def test_38_cluster_missing_files_remain_missing(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        mk.unlink(); header.unlink()
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['makegraph_state'], 'MISSING')
+        self.assertEqual(c['root_header_state'], 'MISSING')
+        self.assertIsNone(c['library_target_count'])
+        self.assertIsNone(c['instance_handle_count'])
+        self.assertIsNone(c['handle_declaration_count'])
+        self.assertFalse(c['expected_structure_observed'])
+
+    def test_39_cluster_unknown_syntax_and_mapping(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        mk.write_text('VM_HIER_LIBS = guessed.a\n')
+        header.write_text(header.read_text().replace('g_cluster__BRA__', 'private_cluster__BRA__'))
+        r = self.collect(); c = r['wrapper']['cluster_structure']
+        self.assertEqual(c['makegraph_state'], 'UNRECOGNIZED_SYNTAX')
+        self.assertEqual(c['root_header_state'], 'UNRECOGNIZED_SYNTAX')
+        self.assertEqual(c['handle_declaration_count'], 256)
+        self.assertIsNone(c['instance_handle_count'])
+        self.assertFalse(c['expected_structure_observed'])
+        self.assertNotIn(b'private_cluster', g.canonical_json(r))
+
+    def test_40_cluster_actual_countercounts_and_duplicate(self):
+        args, wrapper, mk, header = cluster_fixture(self.root, handles=255, libraries=[CLUSTER + '_cold', CLUSTER + '_other'])
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['library_target_count'], 2)
+        self.assertEqual(c['instance_handle_count'], 255)
+        self.assertFalse(c['expected_structure_observed'])
+        header.write_text(header.read_text().replace('};', header.read_text().splitlines()[2] + '\n};'))
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['root_header_state'], 'CONTRACT_ERROR')
+        self.assertIsNone(c['instance_handle_count'])
+
+    def test_41_cluster_secret_suffix_is_never_exported(self):
+        leaf = CLUSTER + '_secretProductionIdentifier'
+        cluster_fixture(self.root, leaf=leaf)
+        r = self.collect()
+        self.assertTrue(r['wrapper']['cluster_structure']['expected_structure_observed'])
+        self.assertNotIn(b'secretProductionIdentifier', g.canonical_json(r))
+        r['wrapper']['module'] = leaf
+        with self.assertRaises(ValueError): g.validate_report(r)
+
+    def test_42_cluster_schema_rejects_contradictions(self):
+        cluster_fixture(self.root)
+        original = self.collect()
+        for modify in (
+            lambda r: r['wrapper'].update(candidate_count=2),
+            lambda r: r['wrapper'].update(cluster_structure=None),
+            lambda r: r['wrapper'].update(top_references_wrapper=False),
+            lambda r: r['wrapper'].update(specialization='UNKNOWN'),
+            lambda r: r['wrapper']['cluster_structure'].update(instance_handle_count=255),
+            lambda r: r['wrapper']['cluster_structure'].update(root_header_state='MISSING'),
+            lambda r: r['wrapper']['cluster_structure'].update(matching_library_target_count=2),
+            lambda r: r['wrapper']['cluster_structure'].update(handle_declaration_count=True),
+            lambda r: r['wrapper']['cluster_structure'].update(expected_structure_observed=False),
+            lambda r: r['wrapper']['cluster_structure'].update(extra='secret')):
+            bad = copy.deepcopy(original); modify(bad)
+            with self.assertRaises(ValueError): g.validate_report(bad)
+
+    def test_43_cluster_graph_and_header_bounds_and_symlinks(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        with mk.open('wb') as f: f.truncate(g.MAX_MAKEGRAPH_BYTES + 1)
+        with header.open('wb') as f: f.truncate(g.MAX_ROOT_HEADER_BYTES + 1)
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['makegraph_state'], 'CONTRACT_ERROR')
+        self.assertEqual(c['root_header_state'], 'CONTRACT_ERROR')
+        mk.unlink(); mk.symlink_to(self.log)
+        header.unlink(); header.symlink_to(self.log)
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['makegraph_state'], 'READ_ERROR')
+        self.assertEqual(c['root_header_state'], 'READ_ERROR')
+
+    def test_44_cluster_multiple_candidates_counted_without_disclosure(self):
+        cluster_fixture(self.root)
+        (self.root / ('obj/V' + CLUSTER + '_secretOther__hierMkArgs.f')).write_text('private')
+        r = self.collect()
+        self.assertEqual(r['wrapper']['candidate_count'], 2)
+        self.assertEqual(r['wrapper']['state'], 'CONTRACT_ERROR')
+        self.assertNotIn(b'secretOther', g.canonical_json(r))
+
+    def test_45_source_derivation_exact_identity_even_without_warnings(self):
+        source = dict(MAP[0], id=g._FIFO_SOURCE, **g._FIFO_DERIVED)
+        result = self.collect(source_map=[source])
+        self.assertEqual(result['source_derivations'], [{'source_id': g._FIFO_SOURCE,
+            'base_identity': g._FIFO_BASE, 'derived_identity': g._FIFO_DERIVED}])
+        self.assertEqual(result['counts']['warning_headers'], 0)
+        for identity in (g._FIFO_BASE, dict(g._FIFO_DERIVED, sha256='b' * 64), dict(g._FIFO_DERIVED, bytes=4535)):
+            r = self.collect(source_map=[dict(source, **identity)])
+            self.assertEqual(r['source_derivations'], [])
+        bad = copy.deepcopy(result); bad['source_derivations'][0]['derived_identity']['bytes'] = 4535
+        with self.assertRaises(ValueError): g.validate_report(bad)
+
+    def test_46_cluster_tampering_is_not_observed_closure(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        original = g._read; reads = [0]
+        def mutate(path, cap):
+            raw = original(path, cap)
+            if str(path) == str(header):
+                reads[0] += 1
+                if reads[0] == 1: header.write_bytes(raw + b'// changed\n')
+            return raw
+        with mock.patch.object(g, '_read', side_effect=mutate):
+            c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['root_header_state'], 'CONTRACT_ERROR')
+        self.assertIsNone(c['instance_handle_count'])
+        self.assertFalse(c['expected_structure_observed'])
+
+
+    def test_47_cluster_partial_wrapper_preserves_other_observations(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        wrapper.unlink()
+        w = self.collect()['wrapper']; c = w['cluster_structure']
+        self.assertEqual(w['state'], 'MISSING')
+        self.assertEqual(c['library_target_count'], 1)
+        self.assertEqual(c['instance_handle_count'], 256)
+        self.assertFalse(c['expected_structure_observed'])
+
+    def test_48_cluster_unknown_handle_spelling_and_out_of_range(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        raw = header.read_text()
+        for altered in (raw.replace('leaves_7', 'leaves_8'),
+                        raw.replace('g_cluster__BRA__31', 'g_cluster__BRA__32'),
+                        raw.replace('__BRA__', '__05B').replace('__KET__', '__05D')):
+            header.write_text(altered)
+            c = self.collect()['wrapper']['cluster_structure']
+            self.assertEqual(c['handle_declaration_count'], 256)
+            self.assertIsNone(c['instance_handle_count'])
+            self.assertEqual(c['root_header_state'], 'UNRECOGNIZED_SYNTAX')
+            self.assertFalse(c['expected_structure_observed'])
+
+    def test_49_cluster_graph_rule_contradiction_and_comments(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        raw = mk.read_text()
+        mk.write_text(raw.replace(' VM_PREFIX=V', ' VM_PREFIX=otherV'))
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['makegraph_state'], 'UNRECOGNIZED_SYNTAX')
+        self.assertIsNone(c['library_target_count'])
+        mk.write_text(raw)
+        header.write_text(header.read_text().replace('    void* ', '//  void* ', 1))
+        c = self.collect()['wrapper']['cluster_structure']
+        self.assertEqual(c['instance_handle_count'], 255)
+        self.assertFalse(c['expected_structure_observed'])
+
+    def test_50_source_derivation_rejects_contradictory_record(self):
+        mapping = [dict(MAP[0], id=g._FIFO_SOURCE, **g._FIFO_DERIVED)]
+        r = self.collect(self.warning(), source_map=mapping)
+        r['records'][0]['source_sha256'] = g._FIFO_BASE['sha256']
+        with self.assertRaises(ValueError): g.validate_report(r)
+
+    def test_51_header_requires_closed_target_scope(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        raw = header.read_text()
+        lines = raw.splitlines()
+        mutations = [raw.removesuffix('};\n'),
+                     raw.replace('public:\n', 'public:\n#if 0\n').replace('};\n', '#endif\n};\n'),
+                     '\n'.join(lines[:2]) + '\n};\nnamespace synthetic {\n' + '\n'.join(lines[2:-1]) + '\n}\n']
+        for changed in mutations:
+            with self.subTest(changed=changed[:50]):
+                header.write_text(changed)
+                c = self.collect()['wrapper']['cluster_structure']
+                self.assertEqual(c['root_header_state'], 'UNRECOGNIZED_SYNTAX')
+                self.assertIsNone(c['instance_handle_count'])
+                self.assertFalse(c['expected_structure_observed'])
+
+    def test_52_header_fixed_guard_positive_unknown_guard_negative(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        raw = header.read_text(); guard = 'VERILATED_VHOSTBLOCKTOP___024ROOT_H_'
+        guarded = '#ifndef ' + guard + '\n#define ' + guard + '\n#include "verilated.h"\n' + raw + '#endif\n'
+        header.write_text(guarded)
+        self.assertTrue(self.collect()['wrapper']['cluster_structure']['expected_structure_observed'])
+        header.write_text(guarded.replace('#ifndef ' + guard, '#ifdef OTHER'))
+        self.assertFalse(self.collect()['wrapper']['cluster_structure']['expected_structure_observed'])
+
+    def test_53_make_only_fixed_outer_guard(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        raw = mk.read_text()
+        for start, end in (('define synthetic\n', 'endef\n'), ('ifeq (0,1)\n', 'endif\n')):
+            mk.write_text(raw.replace('VM_HIER_LIBS := ', start + 'VM_HIER_LIBS := ', 1).replace('endif  # Guard\n', end + 'endif  # Guard\n'))
+            c = self.collect()['wrapper']['cluster_structure']
+            self.assertEqual(c['makegraph_state'], 'UNRECOGNIZED_SYNTAX')
+            self.assertIsNone(c['library_target_count'])
+            self.assertFalse(c['expected_structure_observed'])
+
+    def test_54_candidate_set_is_rechecked(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        original = g._read; inserted = [False]
+        def read_and_insert(path, cap):
+            raw = original(path, cap)
+            if path == args and not inserted[0]:
+                inserted[0] = True
+                (self.root / ('obj/V' + CLUSTER + '_private_marker__hierMkArgs.f')).write_bytes(b'unparsed')
+            return raw
+        with mock.patch.object(g, '_read', side_effect=read_and_insert):
+            report = self.collect()
+        self.assertEqual(report['wrapper']['state'], 'CONTRACT_ERROR')
+        self.assertFalse(report['wrapper']['cluster_structure']['expected_structure_observed'])
+        self.assertNotIn(b'private_marker', g.canonical_json(report))
+
+    def test_55_finite_parse_counter_coherence(self):
+        cluster_fixture(self.root)
+        original = self.collect()
+        for edit in (dict(always_comb_count=None), dict(dpi_import_count=0),
+                     dict(always_comb_count=0, always_comb_lines=[]),
+                     dict(dpi_import_count=None), dict(always_comb_lines=[])):
+            report = copy.deepcopy(original); report['wrapper'].update(edit)
+            with self.subTest(edit=edit):
+                with self.assertRaises(ValueError): g.validate_report(report)
+
+    def test_56_nested_type_declarations_remain_unknown(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        raw = header.read_text()
+        for kind in ('class unused', 'struct unused', 'union unused', 'struct', 'void unused()'):
+            header.write_text(raw.replace('public:\n', 'public:\n' + kind + ' {\n').replace('};\n', '};\n};\n'))
+            c = self.collect()['wrapper']['cluster_structure']
+            self.assertEqual(c['root_header_state'], 'UNRECOGNIZED_SYNTAX')
+            self.assertIsNone(c['instance_handle_count'])
+            self.assertFalse(c['expected_structure_observed'])
+
+    def test_57_zero_comb_constructor_retains_census_unknown(self):
+        args, wrapper, mk, header = cluster_fixture(self.root)
+        wrapper.write_text(wrapper.read_text().replace('always_comb', 'initial'))
+        report = self.collect(self.warning())
+        self.assertEqual(report['counts']['warning_headers'], 1)
+        self.assertEqual(report['wrapper']['always_comb_count'], 0)
+        self.assertEqual(report['wrapper']['syntax_state'], 'UNRECOGNIZED_SYNTAX')
+        self.assertFalse(report['wrapper']['cluster_structure']['expected_structure_observed'])
+        self.assertIs(g.validate_report(report), report)
 
 
 if __name__ == '__main__':

@@ -23,8 +23,8 @@ import zipfile
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'extract_idma.py'
 RAW = SOURCE.read_bytes()
-SIZE = 18268
-SHA = 'c9367ce7401e0d6909ebb10f16222813a2436e71dece956772f013fd226a0b84'
+SIZE = 21505
+SHA = 'eb9f4f365d141fef65bf45f8730e2047069cd035833fc48ab34165669aa1663c'
 
 
 def load(raw):
@@ -76,6 +76,21 @@ def contract_fixture():
     lines += ['+incdir+@ROOT@/inc' + str(i) for i in range(8)]
     lines += ['@ROOT@/' + name for name in sources]
     return manifest, closure, ('\n'.join(lines) + '\n').encode()
+
+
+# Fixed reviewed source fixture, not a live archive or repository input.
+FIFO_BASE_FIXTURE = b'// Copyright 2024 ETH Zurich and University of Bologna.\n// Solderpad Hardware License, Version 0.51, see LICENSE for details.\n// SPDX-License-Identifier: SHL-0.51\n\n// Authors:\n// - Thomas Benz  <tbenz@iis.ee.ethz.ch>\n// - Tobias Senti <tsenti@ethz.ch>\n\n`include "common_cells/assertions.svh"\n`include "common_cells/registers.svh"\n\n/// Stream FIFO that does not cut the timing path. When full; pushing data is allowed if in\n/// the same cycle data is popped. Creates longer timing paths but can use buffer space more\n/// efficiently.\nmodule cc_passthrough_stream_fifo #(\n    /// Depth can be arbitrary from 2 to 2**32\n    parameter int unsigned Depth       = 32\'d8,\n    /// Print information when the simulation launches\n    parameter bit          PrintInfo   = 1\'b0,\n    /// If the FIFO is full, allow reading and writing in the same cycle\n    parameter bit          SameCycleRW = 1\'b1,\n    /// Type of the FIFO\n    parameter type         data_t      = logic\n) (\n    /// Clock\n    input  logic                 clk_i,\n    /// Asynchronous reset active low\n    input  logic                 rst_ni,\n    /// Synchronous clear active high; clears all sequential logic\n    input  logic                 clr_i,\n    /// Fifo flush. Compared to clr_i, this only clears internal pointers.\n    /// Sufficient for most functional purposes.\n    input  logic                 flush_i,\n    /// data to push into the FIFO\n    input  data_t                data_i,\n    /// input data valid\n    input  logic                 valid_i,\n    /// FIFO is not full\n    output logic                 ready_o,\n    /// output data\n    output data_t                data_o,\n    /// FIFO is not empty\n    output logic                 valid_o,\n    /// pop head from FIFO\n    input  logic                 ready_i\n);\n    /// Bit Width of the read and write pointers\n    /// One additional bit to detect overflows\n    localparam int unsigned PointerWidth = $clog2(Depth) + 1;\n\n    // Read and write pointers\n    logic [PointerWidth-1:0]  read_ptr_d,  read_ptr_q;\n    logic [PointerWidth-1:0] write_ptr_d, write_ptr_q;\n\n    // Data\n    data_t [Depth-1:0] data_d, data_q;\n\n    // Enable storage\n    logic load_data;\n\n    assign data_o = data_q[read_ptr_q[PointerWidth-2:0]];\n\n    // Logic\n    always_comb begin\n        // Default\n        load_data   = 1\'b0;\n        read_ptr_d  = read_ptr_q;\n        write_ptr_d = write_ptr_q;\n        data_d      = data_q;\n\n        if (flush_i) begin // Flush\n            read_ptr_d  = \'0;\n            write_ptr_d = \'0;\n            valid_o     = 1\'b0;\n            ready_o     = 1\'b0;\n        end else begin\n            // Read\n            valid_o = read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? read_ptr_q[PointerWidth-2:0] != write_ptr_q[PointerWidth-2:0] : 1\'b1;\n            if (ready_i && valid_o) begin\n                if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    read_ptr_d[PointerWidth-2:0] = \'0;\n                    read_ptr_d[PointerWidth-1]   = !read_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment counter\n                    read_ptr_d = read_ptr_q + \'d1;\n                end\n            end\n\n            // Write -> Also able to write if we read in the same cycle\n            ready_o     = (read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? 1\'b1 : write_ptr_q[PointerWidth-2:0] != read_ptr_q[PointerWidth-2:0])\n                || (SameCycleRW && ready_i && valid_o);\n\n            if (valid_i && ready_o) begin\n                load_data = 1\'b1;\n                data_d[write_ptr_q[PointerWidth-2:0]] = data_i;\n\n                if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    write_ptr_d[PointerWidth-2:0] = \'0;\n                    write_ptr_d[PointerWidth-1]   = !write_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment pointer\n                    write_ptr_d = write_ptr_q + \'d1;\n                end\n            end\n        end\n    end\n\n    // Flip Flops\n    `FFARNC( read_ptr_q,  read_ptr_d, clr_i, \'0, clk_i, rst_ni)\n    `FFARNC(write_ptr_q, write_ptr_d, clr_i, \'0, clk_i, rst_ni)\n\n    `FFLARNC(data_q, data_d, load_data, clr_i, \'0, clk_i, rst_ni)\n\nendmodule\n'
+
+
+def fifo_selection_fixture():
+    names = [g.FIFO_PATH, 'SHA256SUMS.json', 'SOURCE_CLOSURE.json'] + [
+        'synthetic/source' + str(i) + '.sv' for i in range(316)]
+    remaining = 3072200 - len(FIFO_BASE_FIXTURE)
+    contents = [FIFO_BASE_FIXTURE] + [b'x' * (remaining // 318) for i in range(317)]
+    contents.append(b'x' * (remaining - sum(map(len, contents[1:]))))
+    return [({'zip_member': g.PREFIX + name, 'relative_destination': name,
+              'bytes': len(raw), 'sha256': g.sha(raw)}, raw)
+            for name, raw in zip(names, contents)]
 
 
 class Tiny(unittest.TestCase):
@@ -230,9 +245,9 @@ class Tiny(unittest.TestCase):
 
     def test_16_actual_loader_bad_size_same_length_sha_precompile(self):
         raw = (HERE / 'ENTRY.json').read_bytes()
-        self.assertEqual(len(raw), 5433)
+        self.assertEqual(len(raw), 5451)
         self.assertEqual(hashlib.sha256(raw).hexdigest(),
-                         'cd4289a148af3da6e67747085d3a72467386a28cd7d8b3e6e64e79f20851fad7')
+                         '214005162183a87a38537598ccdc92e07f897e9215fe5499e1ecc359b46158e8')
         code = compile(json.loads(raw)['bootstrap'], '<pinned actual loader>', 'exec', dont_inherit=True)
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / 'extract_idma.py'
@@ -246,9 +261,9 @@ class Tiny(unittest.TestCase):
 
     def test_17_actual_loader_source_only_and_isolation_guard(self):
         raw = (HERE / 'ENTRY.json').read_bytes()
-        self.assertEqual(len(raw), 5433)
+        self.assertEqual(len(raw), 5451)
         self.assertEqual(hashlib.sha256(raw).hexdigest(),
-                         'cd4289a148af3da6e67747085d3a72467386a28cd7d8b3e6e64e79f20851fad7')
+                         '214005162183a87a38537598ccdc92e07f897e9215fe5499e1ecc359b46158e8')
         code = compile(json.loads(raw)['bootstrap'], '<pinned actual loader>', 'exec', dont_inherit=True)
         with mock.patch.object(sys, 'argv', ['-c', str(SOURCE)]), \
              mock.patch.object(builtins, 'print') as output:
@@ -259,6 +274,115 @@ class Tiny(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 exec(code, {})
             read.assert_not_called()
+
+
+    def test_18_exact_fifo_delta_and_original_selection_unchanged(self):
+        original = fifo_selection_fixture()
+        snapshot = copy.deepcopy(original)
+        result, provenance = g.derive_fifo_valid_split(original)
+        self.assertEqual(original, snapshot)
+        self.assertEqual(len(result), 319)
+        self.assertEqual([r['relative_destination'] for r, b in result],
+                         [r['relative_destination'] for r, b in original])
+        changed = [(a, b) for a, b in zip(original, result) if a != b]
+        self.assertEqual(len(changed), 1)
+        self.assertEqual((len(result[0][1]), g.sha(result[0][1])), g.FIFO_DERIVED)
+        self.assertEqual(sum(r['bytes'] for r, b in result), 3072325)
+        self.assertEqual(provenance['original'], {'bytes': 4411, 'sha256': g.FIFO_BASE[1]})
+        self.assertEqual(provenance['derived'], {'bytes': 4536, 'sha256': g.FIFO_DERIVED[1]})
+        self.assertTrue(provenance['original_manifest_unchanged'])
+        self.assertEqual(provenance['selected_bytes_delta'], 125)
+
+    def test_19_fifo_wrong_base_hash_extra_missing_and_duplicate_rejected(self):
+        original = fifo_selection_fixture()
+        for kind in range(7):
+            bad = copy.deepcopy(original)
+            if kind == 0:
+                row, raw = bad[0]
+                raw = b'X' + raw[1:]
+                bad[0] = (dict(row, sha256=g.sha(raw)), raw)
+            elif kind == 1:
+                bad[0][0]['sha256'] = '0' * 64
+            elif kind == 2:
+                bad.append(copy.deepcopy(bad[1]))
+            elif kind == 3:
+                bad[0][0]['relative_destination'] = 'synthetic/other.sv'
+                bad[0][0]['zip_member'] = g.PREFIX + 'synthetic/other.sv'
+            elif kind == 4:
+                bad[1] = copy.deepcopy(bad[0])
+            elif kind == 5:
+                bad.pop()
+            else:
+                row, raw = bad[1]
+                bad[1] = (row, b'Y' + raw[1:])
+            with self.assertRaises(ValueError):
+                g.derive_fifo_valid_split(bad)
+        with mock.patch.object(g, 'FIFO_DERIVED', (4536, '0' * 64)):
+            with self.assertRaisesRegex(ValueError, 'derived identity'):
+                g.derive_fifo_valid_split(original)
+
+    def test_20_cli_split_is_explicit_default_false(self):
+        for option, enabled in (([], False), (['--fifo-valid-split'], True)):
+            result = {'status': 'mock', 'selected_files': 319, 'selected_bytes': 3072325 if enabled else 3072200,
+                      'archive_unchanged': True, 'native_executed': False}
+            with mock.patch.object(sys, 'argv', ['extract_idma.py', '--archive', '/tmp/archive',
+                                               '--out', '/tmp/output'] + option), \
+                 mock.patch.object(g, '__entry_monotonic__', 12.0, create=True), \
+                 mock.patch.object(g, 'extract', return_value=result) as run, \
+                 mock.patch.object(builtins, 'print'):
+                g.main()
+                run.assert_called_once_with('/tmp/archive', '/tmp/output', 12.0, enabled)
+
+    def test_21_original_prepare_failure_prevents_derivation(self):
+        with tempfile.TemporaryDirectory() as td:
+            with mock.patch.object(g, 'limits'), mock.patch.object(g, 'arm'), \
+                 mock.patch.object(g, 'checked_read', return_value=(b'mock archive', {'bytes': 12})), \
+                 mock.patch.object(g, 'prepare', side_effect=ValueError('original 319 not verified')), \
+                 mock.patch.object(g, 'derive_fifo_valid_split') as derive:
+                with self.assertRaisesRegex(ValueError, 'original 319'):
+                    g.extract('/unused/archive', Path(td) / 'failed', time.monotonic(), True)
+                derive.assert_not_called()
+
+
+
+    def test_22_mock_archive_extracts_exact_baseline_or_single_derived_source(self):
+        original = fifo_selection_fixture()
+        read_source = g.checked_read
+        archive = '/unused/fixed-archive'
+        def read(path, size, digest):
+            if str(path) == archive:
+                self.assertEqual((size, digest), (g.ARCHIVE_SIZE, g.ARCHIVE_SHA))
+                return b'mock archive', {'bytes': g.ARCHIVE_SIZE, 'sha256': g.ARCHIVE_SHA}
+            return read_source(path, size, digest)
+        with tempfile.TemporaryDirectory() as td:
+            reports = []
+            outputs = []
+            for enabled in (False, True):
+                out = Path(td) / ('derived' if enabled else 'baseline')
+                with mock.patch.object(g, 'limits'), mock.patch.object(g, 'arm'), \
+                     mock.patch.object(g, 'checked_read', side_effect=read), \
+                     mock.patch.object(g, 'prepare', return_value=(original, {'mock': True})) as prepare, \
+                     mock.patch.object(g, 'derive_fifo_valid_split', wraps=g.derive_fifo_valid_split) as derive:
+                    report = g.extract(archive, out, time.monotonic(), enabled)
+                    prepare.assert_called_once_with(b'mock archive')
+                    self.assertEqual(derive.call_count, int(enabled))
+                    self.assertEqual(report['selected_files'], 319)
+                    self.assertEqual(report['selected_bytes'], 3072325 if enabled else 3072200)
+                    self.assertTrue(report['complete'])
+                    self.assertTrue(report['archive_unchanged'])
+                    self.assertFalse(report['native_executed'])
+                reports.append(report)
+                outputs.append({str(p.relative_to(out / 'sources')): p.read_bytes()
+                                for p in (out / 'sources').rglob('*') if p.is_file()})
+            self.assertEqual(outputs[0], {row['relative_destination']: raw for row, raw in original})
+            self.assertEqual(set(outputs[0]), set(outputs[1]))
+            self.assertEqual([name for name in outputs[0] if outputs[0][name] != outputs[1][name]],
+                             [g.FIFO_PATH])
+            self.assertNotIn('source_derivations', reports[0])
+            self.assertEqual(len(reports[1]['source_derivations']), 1)
+            for name in ('SHA256SUMS.json', 'SOURCE_CLOSURE.json'):
+                self.assertEqual(outputs[0][name], outputs[1][name])
+
 
 
 if __name__ == '__main__':

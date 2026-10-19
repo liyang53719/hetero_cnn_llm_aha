@@ -24,7 +24,7 @@ import types
 HERE = Path(__file__).absolute().parent
 SUPPORT = ('ci_support_v3.py', 16348, '653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1')
 PINS_SIZE = 3772
-PINS_SHA = '0b40847cc2afb46e058e479bd99bb6f02e37c38a756fde96b9530ce5c8c1b22e'
+PINS_SHA = '67195f8448b10847a95ce11e0000eafd831c884510918028e75ad8b80307a437'
 MIB = 1024**2
 GIB = 1024**3
 EVIDENCE = ('summary.json', 'source_hashes.json', 'stage_exits.json')
@@ -636,7 +636,9 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             entry=decode(buffers[prefix+'idma319/ENTRY.json'])
             extractor=repo/(prefix+'idma319/extract_idma.py')
             idma=out/'idma319'
-            call_phase('idma319_extract',[sys.executable,'-I','-S','-B','-c',entry['bootstrap'],str(extractor),'--archive',str(archive),'--out',str(idma)],out,environment,limits(60,45,40,512*MIB,4*MIB))
+            extract_argv=[sys.executable,'-I','-S','-B','-c',entry['bootstrap'],str(extractor),'--archive',str(archive),'--out',str(idma)]
+            if mode=='host-generation-diagnostic': extract_argv.append('--fifo-valid-split')
+            call_phase('idma319_extract',extract_argv,out,environment,limits(60,45,40,512*MIB,4*MIB))
             completed.append('idma319')
             retained=out/'retained13'
             call_phase('retained13_assemble',[sys.executable,'-I','-S','-B',str(repo/(prefix+'retained13/run_retained13.py')),'--repo',str(repo),'--out',str(retained)],out,environment,limits(60,45,40,512*MIB,4*MIB))
@@ -646,6 +648,7 @@ def execute(repo, out, archive, supplied_deadline, mode='host-reset-launch'):
             # ENTRY supplies the immutable same-buffer bootstrap; source path is caller-bound.
             argv=[sys.executable,'-I','-S','-B','-c',entry['argv_prefix'][5],str(repo/(prefix+'configuration/generate_4vlt.py')),
                   '--repo',str(repo),'--sv',host['sv']['path'],'--idma-root',str(idma/'sources'),'--out',str(configuration)]
+            if mode=='host-generation-diagnostic': argv.append('--cluster-boundary')
             call_phase('host93_configuration',argv,out,environment,limits(60,45,45,768*MIB,4*MIB))
             completed.append('configuration')
             execution=module_from(repo,pins,prefix+'execution/host_execution.py','verified_ci_host_execution')

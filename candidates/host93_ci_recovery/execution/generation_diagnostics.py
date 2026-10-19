@@ -24,14 +24,19 @@ MAX_SOURCE_ROWS = 307
 MAX_ARGS_BYTES = 256 * 1024
 MAX_WRAPPER_BYTES = 512 * 1024
 MAX_DIRECTORY_ENTRIES = 4096
+MAX_MAKEGRAPH_BYTES = 256 * 1024
+MAX_ROOT_HEADER_BYTES = 4 * 1024**2
 SOURCE_PREFIXES = ('idma/', 'retained/', 'host/')
 STATES = frozenset(('NOT_COLLECTED', 'AVAILABLE', 'READ_ERROR', 'SANITIZER_ERROR', 'CONTRACT_ERROR'))
 # Frozen ascii rule names from pinned official V3Error.h, SHA256 45d2feddb6872b1f812e9d79a7d82ffe050547fd08105db54bcdb04286d90db4.
 RULE_IDS = frozenset(('CONTASSINIT', 'CONSTWRITTEN', 'LIFETIME', 'NEEDTIMINGOPT', 'NOTIMING', 'PORTSHORT', 'TASKNSVAR', 'UNSUPPORTED', 'ALWCOMBORDER', 'ALWNEVER', 'ASCRANGE', 'ASSIGNDLY', 'ASSIGNEQEXPR', 'ASSIGNIN', 'BADSTDPRAGMA', 'BADVLTPRAGMA', 'BLKANDNBLK', 'BLKLOOPINIT', 'BLKSEQ', 'BSSPACE', 'CASEINCOMPLETE', 'CASEOVERLAP', 'CASEWITHX', 'CASEX', 'CASTCONST', 'CDCRSTLOGIC', 'CLKDATA', 'CMPCONST', 'COLONPLUS', 'COMBDLY', 'CONSTRAINTIGN', 'CONTASSREG', 'COVERIGN', 'DECLFILENAME', 'DEFOVERRIDE', 'DEFPARAM', 'DEPRECATED', 'ENCAPSULATED', 'ENDLABEL', 'ENUMITEMWIDTH', 'ENUMVALUE', 'EOFNEWLINE', 'FINALDLY', 'FSMMULTI', 'FUNCTIMECTL', 'FUTURE', 'GENCLK', 'GENUNNAMED', 'HIERBLOCK', 'HIERPARAM', 'IEEEMAYDEPRECATE', 'IFDEPTH', 'IGNOREDRETURN', 'IMPERFECTSCH', 'IMPLICIT', 'IMPLICITSTATIC', 'IMPORTSTAR', 'IMPURE', 'INCABSPATH', 'INFINITELOOP', 'INITIALDLY', 'INSECURE', 'INSIDETRUE', 'LATCH', 'LITENDIAN', 'MINTYPMAXDLY', 'MISINDENT', 'MODDUP', 'MODMISSING', 'MULTIDRIVEN', 'MULTIDRIVENPROC', 'MULTITOP', 'NEVERMATCH', 'NEWERSTD', 'NOEFFECT', 'NOLATCH', 'NONSTD', 'NORETURN', 'NOTREDOP', 'NULLPORT', 'PARAMNODEFAULT', 'PINCONNECTEMPTY', 'PINMISSING', 'PINNOCONNECT', 'PINNOTFOUND', 'PKGNODECL', 'PREPROCZERO', 'PROCASSINIT', 'PROCASSWIRE', 'PROFOUTOFDATE', 'PROTECTED', 'PROTOTYPEMIS', 'RANDC', 'REALCVT', 'REDEFMACRO', 'RISEFALLDLY', 'SELRANGE', 'SHORTREAL', 'SIDEEFFECT', 'SIMILARNAME', 'SPECIFYIGN', 'SPLITVAR', 'STATICVAR', 'STMTDLY', 'SUPERNFIRST', 'SYMRSVDWORD', 'SYNCASYNCNET', 'TICKCOUNT', 'TIMESCALEMOD', 'UNDRIVEN', 'UNOPT', 'UNOPTFLAT', 'UNOPTTHREADS', 'UNPACKED', 'UNSATCONSTR', 'UNSIGNED', 'UNUSED', 'UNUSEDGENVAR', 'UNUSEDLOOP', 'UNUSEDPARAM', 'UNUSEDSIGNAL', 'USERERROR', 'USERFATAL', 'USERINFO', 'USERWARN', 'VARHIDDEN', 'WAITCONST', 'WIDTH', 'WIDTHCONCAT', 'WIDTHEXPAND', 'WIDTHTRUNC', 'WIDTHXZEXPAND', 'ZERODLY', 'ZEROREPL'))
 _HEX = re.compile(r'[0-9a-f]{64}\Z')
 _REL = re.compile(r'[A-Za-z0-9_.+\-]+(?:/[A-Za-z0-9_.+\-]+)*\Z')
-_LEAF = re.compile(r'qwen2_matrix_command_endpoint[A-Za-z0-9_]{0,96}\Z')
-_CANDIDATE = re.compile(r'V(qwen2_matrix_command_endpoint[A-Za-z0-9_]{0,96})__hierMkArgs\.f\Z')
+_ENDPOINT = 'qwen2_matrix_command_endpoint'
+_CLUSTER = 'bf16_context_lane_cluster16_rev8b_b_candidate'
+_FAMILY = '(?:' + _ENDPOINT + '|' + _CLUSTER + ')'
+_LEAF = re.compile(_FAMILY + r'[A-Za-z0-9_]{0,96}\Z')
+_CANDIDATE = re.compile('V(' + _FAMILY + r'[A-Za-z0-9_]{0,96})__hierMkArgs\.f\Z')
 _HEADER = re.compile(rb'^%(Warning|Error)(?:-([^:]*))?:[ \t]*(.*)$')
 _LOCATION = re.compile(r'^([^:\r\n]{1,2048}):([1-9][0-9]{0,6}):(?:([1-9][0-9]{0,6}):)?[ \t]*(.*)$')
 _FATAL = re.compile(r'Exiting due to (?:(?P<errors>[0-9]{1,7}) error\(s\)(?:, (?P<mixed_warnings>[0-9]{1,7}) warning\(s\))?|(?P<warnings>[0-9]{1,7}) warning\(s\))\Z')
@@ -41,6 +46,9 @@ _HANDSHAKES = ('seed_begin_valid_i', 'seed_begin_ready_o', 'seed_commit_valid_i'
                'seed_ack_valid_o', 'seed_ack_ready_i', 'seed_abort_i', 'cmd_valid_i',
                'cmd_ready_o', 'step_valid_i', 'step_ready_o', 'out_valid_o',
                'out_ready_i', 'completion_valid_o', 'completion_ready_i')
+_FIFO_SOURCE = 'idma/deps/common_cells/src/cc_passthrough_stream_fifo.sv'
+_FIFO_BASE = {'bytes': 4411, 'sha256': '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352'}
+_FIFO_DERIVED = {'bytes': 4536, 'sha256': 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70'}
 _MESSAGES = frozenset(('Circular combinational logic reported.',
                       'Verilator warning reported; unstructured text omitted.',
                       'Verilator error reported; unstructured text omitted.',
@@ -122,7 +130,7 @@ def _identity(raw):
 
 
 def _empty_wrapper(state='NOT_COLLECTED'):
-    return {'state': state, 'args_identity': None, 'top_args_identity': None,
+    return {'state': state, 'candidate_count': None, 'cluster_structure': None, 'args_identity': None, 'top_args_identity': None,
             'wrapper_identity': None, 'module': None, 'specialization': 'UNKNOWN',
             'hierarchical_child': None, 'top_references_wrapper': None,
             'syntax_state': 'NOT_COLLECTED', 'always_comb_count': None, 'always_comb_lines': [],
@@ -134,7 +142,7 @@ def _empty_wrapper(state='NOT_COLLECTED'):
 
 def empty_report(state='NOT_COLLECTED'):
     _need(state in STATES)
-    return {'schema_version': 1, 'state': state, 'scan_complete': False, 'log_identity': None,
+    return {'schema_version': 1, 'source_derivations': [], 'state': state, 'scan_complete': False, 'log_identity': None,
             'counts': {'warning_headers': 0, 'error_headers': 0, 'fatal_summary_headers': 0,
                        'example_paths': 0, 'unparsed_headers': 0},
             'by_rule': {}, 'records': [],
@@ -212,7 +220,8 @@ def _structure(raw, leaf, result):
     calls = [m for m in calls if not any(a.start() <= m.start() < a.end() for a in imports)]
     result['combo_update_call_count'] = len(calls)
     ports = [_port(p) for p in modules[0][2].split(',')]
-    if not all(ports) or len(imports) != 1 or len(calls) != 1:
+    if (not all(ports) or len(imports) != 1 or len(calls) != 1 or
+            not comb_blocks or result['dpi_import_count'] < len(imports)):
         return
     args = imports[0][1].split(',')
     # The generated handle argument has implicit input direction.
@@ -230,7 +239,7 @@ def _structure(raw, leaf, result):
     result['combo_output_count'] = sum(direction == 'output' for direction, name in parameters)
     pairs = dict((name, (direction, actual)) for (direction, name), actual in zip(parameters, call_args[1:]))
     selected = []
-    for name in _HANDSHAKES:
+    for name in (_HANDSHAKES if result['module'] == _ENDPOINT else ()):
         if name in directions:
             pair = pairs.get(name)
             declaration = re.search(r'\b' + re.escape(name) + r'\b', modules[0][2])
@@ -244,23 +253,178 @@ def _structure(raw, leaf, result):
     result['syntax_state'] = 'FINITE_PARSE_AVAILABLE'
 
 
+
+def _empty_cluster():
+    return {'makegraph_state': 'NOT_COLLECTED', 'makegraph_identity': None,
+            'library_target_count': None, 'matching_library_target_count': None,
+            'root_header_state': 'NOT_COLLECTED', 'root_header_identity': None,
+            'handle_declaration_count': None, 'instance_handle_count': None,
+            'expected_structure_observed': False}
+
+
+def _makegraph(raw, leaf, result):
+    text = raw.decode('ascii')
+    if any(ord(c) < 32 and c not in '\r\n\t' for c in text):
+        return
+    # One fixed emitter section and its exact archive build rules. Nothing is
+    # executed, and neither generated paths nor specialization suffixes escape.
+    if (not text.startswith('# Hierarchical Verilation -*- Makefile -*-\n') or
+            not text.endswith('endif  # Guard\n')):
+        return
+    controls = [line.strip() for line in text.splitlines()
+                if re.match(r'^\s*(?:(?:override|export|private)\s+)*(?:ifn?def|ifeq|ifneq|else|endif|define|endef)\b', line)]
+    if (controls != ['ifndef VM_HIER_VERILATION_INCLUDED', 'endif  # Guard'] or
+            text.count('\nVM_HIER_VERILATION_INCLUDED = 1\n') != 1 or
+            text.index('ifndef VM_HIER_VERILATION_INCLUDED\n') > text.find('VM_HIER_LIBS := ') or
+            re.search(r'^(?:[^\n]*\\\n)*[^\n]*(?:\$\(eval|\$\{eval)', text, re.M)):
+        return
+    sections = list(re.finditer(r'^VM_HIER_LIBS := \\\n((?:  [^\n]+ \\\n)*)\n', text, re.M))
+    if len(sections) != 1 or len(re.findall(r'^VM_HIER_LIBS\b', text, re.M)) != 1:
+        return
+    targets = []
+    for line in sections[0][1].splitlines():
+        match = re.fullmatch(r'  V(' + _CLUSTER + r'[A-Za-z0-9_]{0,96})/lib\1\.a \\', line)
+        if match is None:
+            return
+        targets.append(match[1])
+    _need(len(targets) == len(set(targets)))
+    actual_rules = re.findall(r'^([^\s:#]+\.a):[^\n]*$', text, re.M)
+    expected_rules = ['V' + name + '/lib' + name + '.a' for name in targets]
+    if sorted(actual_rules) != sorted(expected_rules):
+        return
+    for name in targets:
+        prefix = 'V' + name
+        rule = (prefix + '/lib' + name + '.a: ' + prefix + '/' + prefix + '.mk \n'
+                '\t$(MAKE) -f ' + prefix + '.mk -C ' + prefix + ' VM_PREFIX=' + prefix + '\n')
+        if text.count(rule) != 1:
+            return
+    result.update(makegraph_state='AVAILABLE', library_target_count=len(targets),
+                  matching_library_target_count=targets.count(leaf))
+
+
+def _root_handles(raw, result):
+    text = raw.decode('ascii')
+    if any(ord(c) < 32 and c not in '\r\n\t' for c in text):
+        return
+    text = _sv_mask(text)
+    matches = list(re.finditer(r'\bclass\s+VHostBlockTop___024root\s+(?:final\s*)?:\s*public\s+VerilatedModule\s*\{', text))
+    if len(matches) != 1:
+        return
+    target = matches[0]
+    # Only the fixed standard include guard is understood; all other directives
+    # are unknown. No preprocessor execution or conditional evaluation occurs.
+    controls = [line.strip() for line in text.splitlines() if re.match(r'^\s*#', line)]
+    guard = 'VERILATED_VHOSTBLOCKTOP___024ROOT_H_'
+    guards = [line for line in controls if not re.fullmatch(r'#\s*include\s*', line)]
+    if guards not in ([], ['#ifndef ' + guard, '#define ' + guard, '#endif']):
+        return
+    if guards and not (text.index('#ifndef ' + guard) < text.index('#define ' + guard) < target.start() < text.rindex('#endif')):
+        return
+    if '\\' in text or "'" in text or any(c in text[:target.start()] for c in '{}'):
+        return
+    depth = 1; closing = None
+    for index in range(target.end(), len(text)):
+        if text[index] == '{': depth += 1
+        elif text[index] == '}':
+            depth -= 1
+            if depth == 0:
+                closing = index
+                break
+    if closing is None or re.match(r'\s*;', text[closing + 1:]) is None:
+        return
+    body = text[target.end():closing]
+    # Nested aggregate declarations require more than the fixed direct-member
+    # grammar. Keep them unknown rather than treating uninstantiated types as instances.
+    if re.search(r'\b(?:class|struct|union)\b', body):
+        return
+    # Fixed source chain: Host owner.matrix.leaves_[0..7], endpoint.matrix,
+    # array.g_production.g_cluster[0..31].u_cluster. Unsupported name encoding
+    # remains unknown. BRA/KET is the accepted format, not an assertion that a
+    # new native header has already been observed. Missing/oversized means unknown.
+    pattern = re.compile(r'^\s*void\s*\*\s*((?:__PVT__)?HostBlockTop__DOT__owner__DOT__matrix__DOT__leaves_([0-7])__DOT__matrix__DOT__g_production__DOT__g_cluster__BRA__(0|[1-9]|[12][0-9]|3[01])__KET____DOT__u_cluster__DOT__handle(?:___05F|__)V)\s*;\s*$', re.M)
+    matches = list(pattern.finditer(body))
+    cursor = 0; member_depth = 0
+    for match in matches:
+        for char in body[cursor:match.start()]:
+            if char == '{': member_depth += 1
+            elif char == '}': member_depth -= 1
+        if member_depth != 0:
+            return
+        cursor = match.end()
+    declarations = re.findall(r'^\s*void\s*\*\s*((?:[A-Za-z_][A-Za-z0-9_]*)?handle(?:___05F|__)V)\s*;\s*$', text, re.M)
+    result['handle_declaration_count'] = len(declarations)
+    all_handles = list(re.finditer(r'\b(?:[A-Za-z_][A-Za-z0-9_]*)?handle(?:___05F|__)V\b', text))
+    if len(all_handles) != len(matches) or len(declarations) != len(matches):
+        return
+    pairs = [(int(m[2]), int(m[3])) for m in matches]
+    _need(len(pairs) == len(set(pairs)))
+    result.update(root_header_state='AVAILABLE', instance_handle_count=len(set(pairs)))
+
+
+def _cluster_observations(obj, leaf, wrapper):
+    result = wrapper['cluster_structure']
+    for name, cap, field, parser in (
+            ('VHostBlockTop_hier.mk', MAX_MAKEGRAPH_BYTES, 'makegraph', _makegraph),
+            ('VHostBlockTop___024root.h', MAX_ROOT_HEADER_BYTES, 'root_header', _root_handles)):
+        try:
+            raw = _read(obj / name, cap)
+            result[field + '_identity'] = _identity(raw)
+            result[field + '_state'] = 'UNRECOGNIZED_SYNTAX'
+            if field == 'makegraph':
+                parser(raw, leaf, result)
+            else:
+                parser(raw, result)
+            _need(_read(obj / name, cap) == raw)
+        except FileNotFoundError:
+            result[field + '_state'] = 'MISSING'
+        except (OSError, UnicodeError):
+            result[field + '_state'] = 'READ_ERROR'
+        except (ValueError, TypeError):
+            result[field + '_state'] = 'CONTRACT_ERROR'
+        if result[field + '_state'] != 'AVAILABLE':
+            if field == 'makegraph':
+                result['library_target_count'] = result['matching_library_target_count'] = None
+            else:
+                result['instance_handle_count'] = None
+                if result[field + '_state'] != 'UNRECOGNIZED_SYNTAX':
+                    result['handle_declaration_count'] = None
+    result['expected_structure_observed'] = _cluster_complete(wrapper)
+
+
+def _cluster_complete(wrapper):
+    result = wrapper['cluster_structure']
+    return bool(result is not None and wrapper['state'] == 'AVAILABLE' and
+                wrapper['candidate_count'] == 1 and wrapper['module'] == _CLUSTER and
+                wrapper['specialization'] == 'ENABLED' and wrapper['hierarchical_child'] == 1 and
+                wrapper['top_references_wrapper'] is True and
+                wrapper['syntax_state'] == 'FINITE_PARSE_AVAILABLE' and
+                result['makegraph_state'] == 'AVAILABLE' and
+                result['library_target_count'] == result['matching_library_target_count'] == 1 and
+                result['root_header_state'] == 'AVAILABLE' and result['instance_handle_count'] == 256)
+
+
+def _candidates(obj):
+    fd = _directory(obj)
+    try:
+        names = []
+        with os.scandir(fd) as entries:
+            for index, item in enumerate(entries):
+                _need(index < MAX_DIRECTORY_ENTRIES)
+                if _CANDIDATE.fullmatch(item.name): names.append(item.name)
+        return sorted(names)
+    finally:
+        os.close(fd)
+
+
 def _wrapper(work):
     result = _empty_wrapper('MISSING')
     try:
         obj = Path(work) / 'obj'
-        fd = _directory(obj)
-        try:
-            candidates = []
-            with os.scandir(fd) as entries:
-                for index, item in enumerate(entries):
-                    _need(index < MAX_DIRECTORY_ENTRIES)
-                    if _CANDIDATE.fullmatch(item.name):
-                        candidates.append(item.name)
-                        _need(len(candidates) <= 1)
-        finally:
-            os.close(fd)
+        candidates = _candidates(obj)
+        result['candidate_count'] = len(candidates)
         if not candidates:
             return result
+        _need(len(candidates) == 1)
         candidate = candidates[0]
         args_raw = _read(obj / candidate, MAX_ARGS_BYTES)
         args = shlex.split(args_raw.decode('ascii'))
@@ -273,10 +437,12 @@ def _wrapper(work):
               option('--hierarchical-child') == '1' and option('--top-module-encoded') == leaf)
         seed = [x.split('=', 1)[1] for x in args if x.startswith('-GENABLE_ACCUMULATOR_SEED=')]
         _need(len(seed) <= 1)
-        result.update(args_identity=_identity(args_raw), module='qwen2_matrix_command_endpoint', hierarchical_child=1,
+        result.update(args_identity=_identity(args_raw), module=(_CLUSTER if leaf.startswith(_CLUSTER) else _ENDPOINT), hierarchical_child=1,
                       specialization=('ENABLED' if seed and seed[0] in
                                       ('1', "32'h1", "32'sh1", "32'd1", "32'sd1", "'sh1") else
                                       'DISABLED' if seed and seed[0] == '0' else 'UNKNOWN'))
+        if result['module'] == _CLUSTER:
+            result['cluster_structure'] = _empty_cluster()
         relative = 'V' + leaf + '/' + leaf + '.sv'
         wrapper_raw = _read(obj / relative, MAX_WRAPPER_BYTES)
         result.update(state='AVAILABLE', wrapper_identity=_identity(wrapper_raw), syntax_state='UNRECOGNIZED_SYNTAX')
@@ -292,6 +458,9 @@ def _wrapper(work):
               _read(obj / relative, MAX_WRAPPER_BYTES) == wrapper_raw)
         if result['top_args_identity'] is not None:
             _need(_read(obj / 'VHostBlockTop__hierMkArgs.f', MAX_ARGS_BYTES) == top_raw)
+        if result['cluster_structure'] is not None:
+            _cluster_observations(obj, leaf, result)
+        _need(_candidates(obj) == candidates)
         return result
     except FileNotFoundError:
         result['state'] = 'MISSING'
@@ -299,6 +468,8 @@ def _wrapper(work):
         result['state'] = 'READ_ERROR'
     except (ValueError, TypeError):
         result['state'] = 'CONTRACT_ERROR'
+    if result['cluster_structure'] is not None:
+        _cluster_observations(obj, leaf, result)
     return result
 
 
@@ -307,6 +478,10 @@ def collect(log_path, work, source_map, sanitizer):
     try:
         work = Path(_absolute(work))
         sources = _sources(source_map)
+        for row in source_map:
+            if row['id'] == _FIFO_SOURCE and {k: row[k] for k in ('bytes', 'sha256')} == _FIFO_DERIVED:
+                report['source_derivations'] = [{'source_id': _FIFO_SOURCE,
+                    'base_identity': dict(_FIFO_BASE), 'derived_identity': dict(_FIFO_DERIVED)}]
     except (ValueError, TypeError, KeyError):
         return empty_report('CONTRACT_ERROR')
     try:
@@ -418,9 +593,16 @@ def _validate_report(report):
     def location(row):
         _need((row['source_id'] == 'UNKNOWN_PATH' and row['source_sha256'] is None) or
               (_public_source(row['source_id']) and type(row['source_sha256']) is str and _HEX.fullmatch(row['source_sha256'])))
+        if report['source_derivations'] and row['source_id'] == _FIFO_SOURCE:
+            _need(row['source_sha256'] == _FIFO_DERIVED['sha256'])
         for key in ('line', 'column'):
             _need(row[key] is None or (type(row[key]) is int and 1 <= row[key] <= MAX_COORDINATE))
         _need(row['column'] is None or row['line'] is not None)
+    _need(type(report['source_derivations']) is list and report['source_derivations'] in ([],
+          [{'source_id': _FIFO_SOURCE, 'base_identity': _FIFO_BASE, 'derived_identity': _FIFO_DERIVED}]))
+    for derivation in report['source_derivations']:
+        identity(derivation['base_identity'], MAX_LOG_BYTES)
+        identity(derivation['derived_identity'], MAX_LOG_BYTES)
     identity(report['log_identity'], MAX_LOG_BYTES)
     _need(report['scan_complete'] == (report['state'] in ('AVAILABLE', 'SANITIZER_ERROR')))
     _need((report['log_identity'] is not None) == report['scan_complete'])
@@ -478,7 +660,39 @@ def _validate_report(report):
     identity(wrapper['args_identity'], MAX_ARGS_BYTES)
     identity(wrapper['top_args_identity'], MAX_ARGS_BYTES)
     identity(wrapper['wrapper_identity'], MAX_WRAPPER_BYTES)
-    _need(wrapper['module'] is None or wrapper['module'] == 'qwen2_matrix_command_endpoint')
+    _need(wrapper['module'] is None or wrapper['module'] in (_ENDPOINT, _CLUSTER))
+    if wrapper['candidate_count'] is not None: natural(wrapper['candidate_count'], MAX_DIRECTORY_ENTRIES)
+    if wrapper['module'] is not None: _need(wrapper['candidate_count'] == 1)
+    cluster = wrapper['cluster_structure']
+    _need((cluster is not None) == (wrapper['module'] == _CLUSTER))
+    if cluster is not None:
+        _need(type(cluster) is dict and set(cluster) == set(_empty_cluster()))
+        _need(wrapper['handshakes'] == [] and wrapper['args_identity'] is not None and
+              wrapper['hierarchical_child'] == 1 and
+              (wrapper['top_args_identity'] is None) == (wrapper['top_references_wrapper'] is None))
+        if wrapper['state'] == 'AVAILABLE':
+            _need(wrapper['syntax_state'] != 'NOT_COLLECTED')
+        for field, cap in (('makegraph', MAX_MAKEGRAPH_BYTES), ('root_header', MAX_ROOT_HEADER_BYTES)):
+            _need(cluster[field + '_state'] in ('NOT_COLLECTED', 'AVAILABLE', 'MISSING', 'READ_ERROR', 'CONTRACT_ERROR', 'UNRECOGNIZED_SYNTAX'))
+            identity(cluster[field + '_identity'], cap)
+            if cluster[field + '_state'] in ('AVAILABLE', 'UNRECOGNIZED_SYNTAX'):
+                _need(cluster[field + '_identity'] is not None)
+            if cluster[field + '_state'] == 'NOT_COLLECTED':
+                _need(cluster[field + '_identity'] is None)
+        for key in ('library_target_count', 'matching_library_target_count'):
+            _need((cluster[key] is not None) == (cluster['makegraph_state'] == 'AVAILABLE'))
+            if cluster[key] is not None: natural(cluster[key], MAX_DIRECTORY_ENTRIES)
+        if cluster['makegraph_state'] == 'AVAILABLE':
+            _need(cluster['matching_library_target_count'] <= min(1, cluster['library_target_count']))
+        _need((cluster['instance_handle_count'] is not None) == (cluster['root_header_state'] == 'AVAILABLE'))
+        if cluster['handle_declaration_count'] is not None:
+            natural(cluster['handle_declaration_count'], MAX_ROOT_HEADER_BYTES)
+            _need(cluster['root_header_state'] in ('AVAILABLE', 'UNRECOGNIZED_SYNTAX'))
+        if cluster['instance_handle_count'] is not None:
+            natural(cluster['instance_handle_count'], 256)
+            _need(cluster['instance_handle_count'] == cluster['handle_declaration_count'])
+        _need(type(cluster['expected_structure_observed']) is bool and
+              cluster['expected_structure_observed'] == _cluster_complete(wrapper))
     _need(wrapper['specialization'] in ('UNKNOWN','ENABLED','DISABLED') and (wrapper['hierarchical_child'] is None or (type(wrapper['hierarchical_child']) is int and wrapper['hierarchical_child'] == 1)) and (wrapper['top_references_wrapper'] is None or type(wrapper['top_references_wrapper']) is bool) and wrapper['syntax_state'] in ('NOT_COLLECTED','UNRECOGNIZED_SYNTAX','FINITE_PARSE_AVAILABLE') and wrapper['dependency_conclusion'] == 'NOT_ESTABLISHED')
     for key in ('always_comb_count','dpi_import_count','combo_update_import_count','combo_update_call_count','combo_input_count','combo_output_count'):
         if wrapper[key] is not None: natural(wrapper[key], MAX_WRAPPER_BYTES)
@@ -496,7 +710,10 @@ def _validate_report(report):
     if wrapper['syntax_state'] == 'FINITE_PARSE_AVAILABLE':
         _need(wrapper['wrapper_identity'] is not None and wrapper['module'] is not None and
               wrapper['combo_update_import_count'] == 1 and wrapper['combo_update_call_count'] == 1 and
-              wrapper['combo_input_count'] is not None and wrapper['combo_output_count'] is not None)
+              wrapper['combo_input_count'] is not None and wrapper['combo_output_count'] is not None and
+              type(wrapper['always_comb_count']) is int and wrapper['always_comb_count'] >= 1 and
+              len(wrapper['always_comb_lines']) == min(wrapper['always_comb_count'], 16) and
+              type(wrapper['dpi_import_count']) is int and wrapper['dpi_import_count'] >= wrapper['combo_update_import_count'])
     if wrapper['state'] == 'AVAILABLE':
         _need(wrapper['wrapper_identity'] is not None and wrapper['args_identity'] is not None and wrapper['module'] is not None)
     _need(len(canonical_json(report)) <= MAX_REPORT_BYTES)

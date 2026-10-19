@@ -11,8 +11,8 @@ import unittest
 from unittest import mock
 
 HERE=Path(__file__).absolute().parent
-SIZE=57310
-SHA='974542f6db7aaf98263d86bdf6880987ddd8e137ec62fdf2cb0df20d68f9ef75'
+SIZE=57526
+SHA='d24e70d4231b3e786a5ac9107c2ad4d839edd7760e99dcfd83c0b74524f590ed'
 RAW=(HERE/'run.py').read_bytes()
 
 def load(raw):
@@ -265,6 +265,10 @@ class Cold(unittest.TestCase):
             modules={'verified_ci_chirrtl_diagnostic':diagnostic,'verified_ci_toolchain':tools,'verified_ci_host_emission':emission,'verified_ci_host_execution':execution,'verified_safe_build_diagnostics':CONTEXT,'verified_ci_generation_diagnostics':CENSUS}
             def native(*args,**kwargs):
                 name=args[2]
+                if name=='idma319_extract':
+                    self.assertEqual('--fifo-valid-split' in args[3],mode=='host-generation-diagnostic')
+                if name=='host93_configuration':
+                    self.assertEqual('--cluster-boundary' in args[3],mode=='host-generation-diagnostic')
                 kwargs['diagnostics'].update(clean_observation())
                 if name==fail_name:
                     if context is not None:

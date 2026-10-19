@@ -1,0 +1,76 @@
+{
+  "actual": "NOT_EXECUTED",
+  "all_final_exit_codes": 0,
+  "earlier_failed_execution_test": "One initial AST call-count test expected four closure calls while the source had five; corrected to require all five explicit variant flags, including exception postflight. The preserved initial log is not passing evidence.",
+  "inherited_not_rerun": "Unchanged supervision, sanitizer, toolchain, emission, transport and retained-source suites are inherited, not claimed rerun.",
+  "inherited_v1_runs": {
+    "configuration": {
+      "normal": 21,
+      "optimized": 21
+    },
+    "execution": {
+      "normal": 27,
+      "optimized": 27
+    },
+    "extractor": {
+      "normal": 22,
+      "optimized": 22
+    }
+  },
+  "no_native_or_network": true,
+  "python_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ],
+  "runs": {
+    "census": {
+      "normal": 57,
+      "optimized": 57
+    },
+    "coordinator": {
+      "normal": 136,
+      "optimized": 136
+    }
+  },
+  "schema": 1,
+  "source_review": {
+    "directory": "review_cluster_fifo_generation_v3_source_20261019T0759",
+    "manifest": {
+      "bytes": 2198,
+      "sha256": "ae4cb32c220aa1b8e20dd2a83fa68a43048b8aa20176b93aa4e2e4016bc32f8e"
+    },
+    "summary": {
+      "bytes": 6919,
+      "sha256": "791bb998b85747a22dd018c37881d8f47af600c98851ed5e921cfe0702c692c4"
+    },
+    "verdict": "SOURCE_GO_CLUSTER_FIFO_GENERATION_DIAGNOSTIC_ONLY"
+  },
+  "status": "PASS_SOURCE_AND_TINY_ONLY",
+  "v1_census_superseded": {
+    "normal": 50,
+    "optimized": 50
+  },
+  "v2_census_superseded": {
+    "normal": 55,
+    "optimized": 55
+  },
+  "v2_review": {
+    "directory": "review_cluster_fifo_generation_v2_source_20261019T0753",
+    "findings": [
+      "C01-NESTED",
+      "C04-PRODUCER"
+    ],
+    "manifest": {
+      "bytes": 2198,
+      "sha256": "482289e1666f448ee38f2c0d3560a6e6814b788710b4ee99411aca348ae86b3a"
+    },
+    "summary": {
+      "bytes": 9415,
+      "sha256": "82d5f380c70248f3793b68d3134837cf4771588dc18546a7588a06c8a7af41b0"
+    },
+    "verdict": "HOLD"
+  },
+  "v2_scope": "Historical: four finite review gaps; original four classes closed.",
+  "v3_scope": "Only direct root members qualify; zero-comb producer remains unknown while preserving census."
+}

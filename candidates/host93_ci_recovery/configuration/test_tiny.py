@@ -16,8 +16,9 @@ from unittest import mock
 
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'generate_4vlt.py'
-SIZE = 21954
-SHA = 'b29a17b9cc39e5a93473df922ed4c87489e1e346fafb830c1fbb721e1931b81f'
+SIZE = 25044
+SHA = '5234e210a012323a44e4d579a16af2dbac52b47f90e974a2716e23c5d9942216'
+ENTRY_PIN = (2390, '98b3fa1bddaf0b2b2f998039080ccc750462e34a1f74ab3c0ec1d5cbb6d9838a')
 RAW = SOURCE.read_bytes()
 
 def load(raw):
@@ -40,6 +41,9 @@ N0 = INPUTS[g.BRIDGE + 'n0_fields.hpp']
 CONTRACT = g.unique_json(INPUTS['development_snapshots/canonical_host93_same_sv_source_20261018/checker/CONTRACT.json'])
 WARNINGS = g.unique_json(INPUTS[g.PROFILE + 'WARNINGS.json'])
 FIELDS, ORIGINS = g.derive_fields(BINDING, N0, CONTRACT)
+
+# Fixed reviewed source fixture; no native HDL execution.
+FIFO_DERIVED_FIXTURE = b'// Copyright 2024 ETH Zurich and University of Bologna.\n// Solderpad Hardware License, Version 0.51, see LICENSE for details.\n// SPDX-License-Identifier: SHL-0.51\n\n// Authors:\n// - Thomas Benz  <tbenz@iis.ee.ethz.ch>\n// - Tobias Senti <tsenti@ethz.ch>\n\n`include "common_cells/assertions.svh"\n`include "common_cells/registers.svh"\n\n/// Stream FIFO that does not cut the timing path. When full; pushing data is allowed if in\n/// the same cycle data is popped. Creates longer timing paths but can use buffer space more\n/// efficiently.\nmodule cc_passthrough_stream_fifo #(\n    /// Depth can be arbitrary from 2 to 2**32\n    parameter int unsigned Depth       = 32\'d8,\n    /// Print information when the simulation launches\n    parameter bit          PrintInfo   = 1\'b0,\n    /// If the FIFO is full, allow reading and writing in the same cycle\n    parameter bit          SameCycleRW = 1\'b1,\n    /// Type of the FIFO\n    parameter type         data_t      = logic\n) (\n    /// Clock\n    input  logic                 clk_i,\n    /// Asynchronous reset active low\n    input  logic                 rst_ni,\n    /// Synchronous clear active high; clears all sequential logic\n    input  logic                 clr_i,\n    /// Fifo flush. Compared to clr_i, this only clears internal pointers.\n    /// Sufficient for most functional purposes.\n    input  logic                 flush_i,\n    /// data to push into the FIFO\n    input  data_t                data_i,\n    /// input data valid\n    input  logic                 valid_i,\n    /// FIFO is not full\n    output logic                 ready_o,\n    /// output data\n    output data_t                data_o,\n    /// FIFO is not empty\n    output logic                 valid_o,\n    /// pop head from FIFO\n    input  logic                 ready_i\n);\n    /// Bit Width of the read and write pointers\n    /// One additional bit to detect overflows\n    localparam int unsigned PointerWidth = $clog2(Depth) + 1;\n\n    // Read and write pointers\n    logic [PointerWidth-1:0]  read_ptr_d,  read_ptr_q;\n    logic [PointerWidth-1:0] write_ptr_d, write_ptr_q;\n\n    // Data\n    data_t [Depth-1:0] data_d, data_q;\n\n    // Enable storage\n    logic load_data;\n\n    assign data_o = data_q[read_ptr_q[PointerWidth-2:0]];\n\n    // Output validity\n    always_comb begin\n        if (flush_i) begin // Flush\n            valid_o     = 1\'b0;\n        end else begin\n            valid_o = read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? read_ptr_q[PointerWidth-2:0] != write_ptr_q[PointerWidth-2:0] : 1\'b1;\n        end\n    end\n\n    // Logic\n    always_comb begin\n        // Default\n        load_data   = 1\'b0;\n        read_ptr_d  = read_ptr_q;\n        write_ptr_d = write_ptr_q;\n        data_d      = data_q;\n\n        if (flush_i) begin // Flush\n            read_ptr_d  = \'0;\n            write_ptr_d = \'0;\n            ready_o     = 1\'b0;\n        end else begin\n            // Read\n            if (ready_i && valid_o) begin\n                if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    read_ptr_d[PointerWidth-2:0] = \'0;\n                    read_ptr_d[PointerWidth-1]   = !read_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment counter\n                    read_ptr_d = read_ptr_q + \'d1;\n                end\n            end\n\n            // Write -> Also able to write if we read in the same cycle\n            ready_o     = (read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n                ? 1\'b1 : write_ptr_q[PointerWidth-2:0] != read_ptr_q[PointerWidth-2:0])\n                || (SameCycleRW && ready_i && valid_o);\n\n            if (valid_i && ready_o) begin\n                load_data = 1\'b1;\n                data_d[write_ptr_q[PointerWidth-2:0]] = data_i;\n\n                if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n                    // On overflow reset pointer to zero and flip imaginary bit\n                    write_ptr_d[PointerWidth-2:0] = \'0;\n                    write_ptr_d[PointerWidth-1]   = !write_ptr_q[PointerWidth-1];\n                end else begin\n                    // Increment pointer\n                    write_ptr_d = write_ptr_q + \'d1;\n                end\n            end\n        end\n    end\n\n    // Flip Flops\n    `FFARNC( read_ptr_q,  read_ptr_d, clr_i, \'0, clk_i, rst_ni)\n    `FFARNC(write_ptr_q, write_ptr_d, clr_i, \'0, clk_i, rst_ni)\n\n    `FFLARNC(data_q, data_d, load_data, clr_i, \'0, clk_i, rst_ni)\n\nendmodule\n'
 
 def tiny_sv(fields=None, paths=None):
     fields = FIELDS if fields is None else fields
@@ -214,6 +218,126 @@ class Tiny(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'overlaps'):
                 g.main(['--repo', '/tmp/repo', '--sv', '/tmp/same.sv', '--idma-root', '/tmp/idma', '--out', '/tmp/repo/out'])
             reader.assert_not_called()
+
+
+    def test_18_cluster_selector_and_fixed_two_warning_moves_only(self):
+        rows = g.warning_rows(*warnings_fixture())
+        new_rows, provenance = g.migrate_fifo_warning_rows(rows, FIFO_DERIVED_FIXTURE)
+        hints = INPUTS[g.PROFILE + 'structural_hints.vlt']
+        baseline = g.render(FIELDS, hints, rows, '/tmp/relocated-idma')
+        derived = g.render(FIELDS, hints, new_rows, '/tmp/relocated-idma', True)
+        self.assertEqual(baseline['hierarchy.vlt'],
+                         b'`verilator_config\nhier_block -module "qwen2_matrix_command_endpoint"\n')
+        self.assertEqual(derived['hierarchy.vlt'],
+                         b'`verilator_config\nhier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"\n')
+        for name in ('readonly.vlt', 'dma_hints.vlt'):
+            self.assertEqual(baseline[name], derived[name])
+        old_lines = baseline['precision_warnings.vlt'].splitlines(keepends=True)
+        new_lines = derived['precision_warnings.vlt'].splitlines(keepends=True)
+        changes = [(a, b) for a, b in zip(old_lines, new_lines) if a != b]
+        prefix = b'lint_off -rule WIDTHEXPAND -file "/tmp/relocated-idma/' + g.FIFO_PATH.encode() + b'" -lines '
+        self.assertEqual(changes, [(prefix + b'81\n', prefix + b'88\n'),
+                                   (prefix + b'100\n', prefix + b'107\n')])
+        self.assertEqual(provenance['added_waivers'], 0)
+        self.assertEqual([(r['original'], r['derived']) for r in provenance['fixed_line_mapping']],
+                         [(81, 88), (100, 107)])
+        self.assertEqual(len(new_rows), 21)
+        self.assertTrue(provenance['original_warning_inventory_unchanged'])
+        self.assertTrue(provenance['original_manifests_unchanged'])
+        for invalid in ('true', 1, None):
+            with self.assertRaisesRegex(ValueError, 'boolean'):
+                g.render(FIELDS, hints, rows, '/tmp/relocated-idma', invalid)
+
+    def test_19_migration_rejects_wrong_rule_line_hash_text_and_missing_extra(self):
+        original = g.warning_rows(*warnings_fixture())
+        target = next(i for i, row in enumerate(original) if row[0] == g.FIFO_PATH)
+        for kind in range(5):
+            bad = list(original)
+            row = list(bad[target])
+            if kind == 0:
+                row[2] = 'WIDTHTRUNC'
+            elif kind == 1:
+                row[1] = 82
+            elif kind == 2:
+                row[3] = g.FIFO_DERIVED[1]
+            elif kind == 3:
+                row[0] = 'missing_fifo.sv'
+            else:
+                bad.append(tuple(row))
+            bad[target] = tuple(row)
+            with self.assertRaisesRegex(ValueError, 'original rule/line/base SHA'):
+                g.migrate_fifo_warning_rows(bad, FIFO_DERIVED_FIXTURE)
+        with self.assertRaisesRegex(ValueError, 'derived source identity'):
+            g.migrate_fifo_warning_rows(original, b'X' + FIFO_DERIVED_FIXTURE[1:])
+        bad_text = FIFO_DERIVED_FIXTURE.replace(b'if (read_ptr_q[PointerWidth-2:0] == (Depth-1))',
+                                               b'if (read_ptr_q[PointerWidth-2:0] != (Depth-1))', 1)
+        with mock.patch.object(g, 'sha', return_value=g.FIFO_DERIVED[1]):
+            with self.assertRaisesRegex(ValueError, 'statement bytes'):
+                g.migrate_fifo_warning_rows(original, bad_text)
+
+    def test_20_mock_main_variant_defaults_and_provenance(self):
+        warnings, sums, closure = warnings_fixture()
+        records = []
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            repo, idma, sv = root / 'repo', root / 'idma', root / 'same.sv'
+            original_rows = g.warning_rows(warnings, sums, closure)
+            def read(path, digest, size=None, cap=None):
+                if path == sv:
+                    return tiny_sv()
+                if repo in path.parents:
+                    return INPUTS[str(path.relative_to(repo))]
+                relative = str(path.relative_to(idma))
+                if relative == 'SHA256SUMS.json':
+                    return json.dumps(sums).encode()
+                if relative == 'SOURCE_CLOSURE.json':
+                    return json.dumps(closure).encode()
+                if relative == g.FIFO_PATH and digest == g.FIFO_DERIVED[1]:
+                    self.assertIn(size, (None, g.FIFO_DERIVED[0]))
+                    return FIFO_DERIVED_FIXTURE
+                expected = {r[3] for r in original_rows if r[0] == relative}
+                self.assertEqual(expected, {digest})
+                line = max(r[1] for r in original_rows if r[0] == relative)
+                return b'fixture\n' * line
+            for option in ([], ['--cluster-boundary']):
+                with mock.patch.object(g, 'checked_read', side_effect=read), \
+                     mock.patch.object(g.resource, 'setrlimit'), mock.patch.object(g.signal, 'alarm'), \
+                     mock.patch.object(g.os, 'sched_getaffinity', return_value={0}), \
+                     mock.patch.object(g.os, 'sched_setaffinity'), \
+                     mock.patch.object(g, 'write_fresh') as write, mock.patch.object(builtins, 'print'):
+                    self.assertEqual(g.main(['--repo', str(repo), '--sv', str(sv), '--idma-root', str(idma),
+                                             '--out', str(root / 'out')] + option), 0)
+                    records.append(write.call_args.args[1])
+        baseline, derived = [json.loads(files['MANIFEST.json']) for files in records]
+        self.assertEqual(baseline['hierarchy']['hier_block'], ['qwen2_matrix_command_endpoint'])
+        self.assertNotIn('fifo_warning_migration', baseline)
+        self.assertEqual(derived['hierarchy']['hier_block'], ['bf16_context_lane_cluster16_rev8b_b_candidate'])
+        self.assertEqual(derived['fifo_warning_migration']['added_waivers'], 0)
+        self.assertEqual(baseline['idma_manifest_inputs'], derived['idma_manifest_inputs'])
+        self.assertEqual(derived['idma_warning_sources'][g.FIFO_PATH]['sha256'], g.FIFO_DERIVED[1])
+        self.assertEqual(baseline['idma_warning_sources'][g.FIFO_PATH]['sha256'], g.FIFO_BASE[1])
+
+    def test_21_entry_identity_and_flags_before_source_compile(self):
+        entry_raw = (HERE / 'ENTRY.json').read_bytes()
+        self.assertEqual((len(entry_raw), hashlib.sha256(entry_raw).hexdigest()), ENTRY_PIN)
+        entry = json.loads(entry_raw)
+        self.assertEqual(entry['source'], {'name': SOURCE.name, 'bytes': SIZE, 'sha256': SHA})
+        code = compile(entry['argv_prefix'][5], '<pinned config loader>', 'exec', dont_inherit=True)
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / 'generate_4vlt.py'
+            for raw in (RAW + b'x', b'X' + RAW[1:]):
+                path.write_bytes(raw)
+                with mock.patch.object(sys, 'argv', ['-c', str(path)]), \
+                     mock.patch.object(builtins, 'compile', side_effect=RuntimeError('must not compile')) as compiler:
+                    with self.assertRaisesRegex(SystemExit, 'before compile'):
+                        exec(code, {})
+                    compiler.assert_not_called()
+        with mock.patch.object(sys, 'flags', types.SimpleNamespace(isolated=False)), \
+             mock.patch.object(os, 'open', side_effect=RuntimeError('must not read source')) as reader:
+            with self.assertRaises(SystemExit):
+                exec(code, {})
+            reader.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -45,6 +45,9 @@ MATRIX = {'steps': 64, 'wideSteps': 64, 'stalls': 64, 'group_sliceMask': 8,
 IDENT = r'[A-Za-z_][A-Za-z0-9_]*'
 WARNING_PREFIX = 'idma_source_export_attempt_v8_20261017/source/idma_export/'
 CONFIG_NAMES = ('hierarchy.vlt', 'readonly.vlt', 'dma_hints.vlt', 'precision_warnings.vlt')
+FIFO_PATH = 'deps/common_cells/src/cc_passthrough_stream_fifo.sv'
+FIFO_BASE = (4411, '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352')
+FIFO_DERIVED = (4536, 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70')
 LIMITS = {'wall_seconds': 60, 'cpu_seconds': 45, 'address_space_bytes': 768 * 1024**2,
           'file_bytes': 512 * 1024, 'output_tree_bytes': 1024 * 1024}
 
@@ -312,7 +315,41 @@ def warning_rows(warnings, sums, closure):
     return sorted(rows)
 
 
-def render(fields, hints, rows, idma_root):
+
+def migrate_fifo_warning_rows(rows, raw):
+    """Only two existing FIFO WIDTH rows move with the pinned valid_o split."""
+    fixed = (
+        (81, 88, b"                if (read_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n"),
+        (100, 107, b"                if (write_ptr_q[PointerWidth-2:0] == (Depth-1)) begin\n"),
+    )
+    expected = {(FIFO_PATH, old, 'WIDTHEXPAND', FIFO_BASE[1]) for old, new, text in fixed}
+    observed = [row for row in rows if row[0] == FIFO_PATH]
+    need(len(rows) == 21 and len(observed) == 2 and set(observed) == expected,
+         'FIFO warning migration exact original rule/line/base SHA')
+    need((len(raw), sha(raw)) == FIFO_DERIVED, 'FIFO warning migration exact derived source identity')
+    lines = raw.splitlines(keepends=True)
+    for old, new, text in fixed:
+        need(len(lines) >= new and lines[new - 1] == text,
+             'FIFO warning migration exact statement bytes at derived line')
+    changed = {(FIFO_PATH, old, 'WIDTHEXPAND', FIFO_BASE[1]):
+               (FIFO_PATH, new, 'WIDTHEXPAND', FIFO_DERIVED[1]) for old, new, text in fixed}
+    result = sorted(changed.get(row, row) for row in rows)
+    need(len(result) == len(set(result)) == 21 and
+         [row for row in result if row[0] != FIFO_PATH] ==
+         sorted(row for row in rows if row[0] != FIFO_PATH), 'FIFO warning migration exact two-row delta')
+    provenance = {'relative_path': FIFO_PATH, 'rule': 'WIDTHEXPAND',
+                  'original_source': {'bytes': FIFO_BASE[0], 'sha256': FIFO_BASE[1]},
+                  'derived_source': {'bytes': FIFO_DERIVED[0], 'sha256': FIFO_DERIVED[1]},
+                  'fixed_line_mapping': [{'original': old, 'derived': new,
+                                          'statement_utf8': text.decode('utf-8')}
+                                         for old, new, text in fixed],
+                  'added_waivers': 0, 'original_warning_inventory_unchanged': True,
+                  'original_manifests_unchanged': True}
+    return result, provenance
+
+
+def render(fields, hints, rows, idma_root, cluster_boundary=False):
+    need(type(cluster_boundary) is bool, 'cluster boundary option must be boolean')
     need(len(fields) == 610 and len(rows) == 21, 'render exact item counts')
     readonly = ['`verilator_config']
     for (module, name), width in sorted(fields.items()):
@@ -326,7 +363,9 @@ def render(fields, hints, rows, idma_root):
         precision.append('lint_off -rule ' + rule + ' -file "' + str(root / relative) + '" -lines ' + str(line))
     need(len(set(readonly)) == 611 and len(set(precision)) == 22, 'duplicate config directive')
     return {
-        'hierarchy.vlt': b'`verilator_config\nhier_block -module "qwen2_matrix_command_endpoint"\n',
+        'hierarchy.vlt': ('`verilator_config\nhier_block -module "' +
+                          ('bf16_context_lane_cluster16_rev8b_b_candidate' if cluster_boundary else
+                           'qwen2_matrix_command_endpoint') + '"\n').encode(),
         'readonly.vlt': ('\n'.join(readonly) + '\n').encode(),
         'dma_hints.vlt': hints,
         'precision_warnings.vlt': ('\n'.join(precision) + '\n').encode(),
@@ -364,6 +403,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('repo', 'sv', 'idma-root', 'out'):
         parser.add_argument('--' + name, required=True)
+    parser.add_argument('--cluster-boundary', action='store_true')
     args = parser.parse_args(argv)
     repo, sv, idma, out = map(absolute, (args.repo, args.sv, args.idma_root, args.out))
     for source in (repo, idma, sv, Path(__file__).absolute().parent):
@@ -392,13 +432,17 @@ def main(argv=None):
     del sv_raw
     meta = {p: unique_json(checked_read(idma / p, digest, size)) for p, (size, digest) in IDMA_META.items()}
     rows = warning_rows(unique_json(inputs[PROFILE + 'WARNINGS.json']), meta['SHA256SUMS.json'], meta['SOURCE_CLOSURE.json'])
+    fifo_warning_migration = None
+    if args.cluster_boundary:
+        fifo_raw = checked_read(idma / FIFO_PATH, FIFO_DERIVED[1], FIFO_DERIVED[0])
+        rows, fifo_warning_migration = migrate_fifo_warning_rows(rows, fifo_raw)
     source_records = {}
     for relative, line, rule, digest in rows:
         if relative not in source_records:
             raw = checked_read(idma / relative, digest, cap=2 * 1024**2)
             source_records[relative] = {'bytes': len(raw), 'sha256': digest, 'lines': len(raw.splitlines())}
         need(line <= source_records[relative]['lines'], 'warning line exceeds verified source')
-    files = render(fields, inputs[PROFILE + 'structural_hints.vlt'], rows, idma)
+    files = render(fields, inputs[PROFILE + 'structural_hints.vlt'], rows, idma, args.cluster_boundary)
     manifest = {
         'schema': 1, 'status': 'CONFIGURATION_GENERATED_NOT_NATIVE_OR_RUNTIME_QUALIFIED',
         'source_identity': globals().get('__verified_source_pin__'),
@@ -408,12 +452,16 @@ def main(argv=None):
         'idma_warning_sources': source_records,
         'readonly_count': 610, 'readonly_source_counts': {'binding_unique': 468, 'n0_unique': 81, 'contract_taps': 75, 'matrix_fields': 9},
         'readonly_fields': [{'module': m, 'signal': n, 'width': w, 'declaration_line': declarations[m, n]['line'], 'origins': sorted(origins[m, n])} for (m, n), w in sorted(fields.items())],
-        'hierarchy': {'hier_block': ['qwen2_matrix_command_endpoint'], 'verified_paths': PATHS},
+        'hierarchy': {'hier_block': [('bf16_context_lane_cluster16_rev8b_b_candidate'
+                                     if args.cluster_boundary else 'qwen2_matrix_command_endpoint')],
+                      'verified_paths': PATHS},
         'precision_warning_directives': 21,
         'dma_hints': {'original_bytes': True, 'isolate_assignments_count': 5, 'split_var_count': 3, 'optimization_claim': False, 'note': 'The five isolate_assignments directives have no effect in 5.053. split_var grammar support alone proves no optimization.'},
         'boundaries': {'native_executed': False, 'large_sv_full_checker_executed': False, 'abi_verified': False, 'eight_handles_verified': False, 'runtime_verified': False, 'production_modified': False},
         'files': {p: {'bytes': len(raw), 'sha256': sha(raw)} for p, raw in files.items()},
     }
+    if fifo_warning_migration is not None:
+        manifest['fifo_warning_migration'] = fifo_warning_migration
     need(manifest['source_identity'] is not None, 'verified same-buffer loader identity required')
     files['MANIFEST.json'] = (json.dumps(manifest, sort_keys=True, indent=2) + '\n').encode()
     write_fresh(out, files)

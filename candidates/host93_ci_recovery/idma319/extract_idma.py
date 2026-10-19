@@ -33,6 +33,9 @@ PUBLISHED = {
 EXTRAS = ('SHA256SUMS.json', 'SOURCE_CLOSURE.json', 'COMMITS.json',
           'SOURCE_EXPORT_POLICY.json', 'idma.f.in', 'idma/Bender.lock')
 CLOCK = 'deps/tech_cells_generic/src/rtl/tc_clk.sv'
+FIFO_PATH = 'deps/common_cells/src/cc_passthrough_stream_fifo.sv'
+FIFO_BASE = (4411, '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352')
+FIFO_DERIVED = (4536, 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70')
 DEFINES = {name: '' for name in ('TARGET_ASIC', 'TARGET_RTL', 'TARGET_SYNTHESIS', 'TARGET_VERILATOR')}
 LIMITS = {'total_seconds': 60, 'work_seconds': 55, 'cpu_seconds': 40,
           'cpu_affinity_count': 1, 'as_bytes': 512 * 1024**2,
@@ -231,6 +234,46 @@ def prepare(raw):
         return verified, description
 
 
+
+def derive_fifo_valid_split(verified):
+    """One fixed base-to-derived FIFO buffer after all original 319 pass prepare."""
+    need(len(verified) == 319, 'FIFO split requires original 319 selection')
+    names = [item['relative_destination'] for item, content in verified]
+    need(len(set(names)) == 319 and names.count(FIFO_PATH) == 1,
+         'FIFO split missing, extra or duplicate target/selection')
+    need(sum(item['bytes'] for item, content in verified) == 3072200,
+         'FIFO split original selected byte total')
+    for item, content in verified:
+        need(item['zip_member'] == PREFIX + item['relative_destination'] and
+             len(content) == item['bytes'] and sha(content) == item['sha256'],
+             'FIFO split original buffer identity')
+    position = names.index(FIFO_PATH)
+    item, original = verified[position]
+    need((item['bytes'], item['sha256']) == FIFO_BASE and
+         (len(original), sha(original)) == FIFO_BASE, 'FIFO split exact base identity')
+    zero = b"            valid_o     = 1'b0;\n"
+    compare = (b"            valid_o = read_ptr_q[PointerWidth-1] == write_ptr_q[PointerWidth-1]\n"
+               b"                ? read_ptr_q[PointerWidth-2:0] != write_ptr_q[PointerWidth-2:0] : 1'b1;\n")
+    anchor = b'    // Logic\n'
+    need(original.count(zero) == original.count(compare) == original.count(anchor) == 1,
+         'FIFO split exact unique transformation anchors')
+    split = (b'    // Output validity\n    always_comb begin\n'
+             b'        if (flush_i) begin // Flush\n' + zero +
+             b'        end else begin\n' + compare + b'        end\n    end\n\n')
+    derived = original.replace(zero, b'', 1).replace(compare, b'', 1).replace(anchor, split + anchor, 1)
+    need((len(derived), sha(derived)) == FIFO_DERIVED, 'FIFO split exact derived identity')
+    result = list(verified)
+    result[position] = (dict(item, bytes=FIFO_DERIVED[0], sha256=FIFO_DERIVED[1]), derived)
+    need([row['relative_destination'] for row, content in result] == names and
+         sum(row['bytes'] for row, content in result) == 3072325, 'FIFO split exact output delta')
+    return result, {'relative_destination': FIFO_PATH,
+                    'original': {'bytes': FIFO_BASE[0], 'sha256': FIFO_BASE[1]},
+                    'derived': {'bytes': FIFO_DERIVED[0], 'sha256': FIFO_DERIVED[1]},
+                    'operation': 'exact_valid_o_combinational_block_split',
+                    'original_manifest_unchanged': True, 'selected_file_count_delta': 0,
+                    'selected_bytes_delta': 125}
+
+
 def fresh(path):
     parent, name = parent_fd(path)
     try:
@@ -318,7 +361,8 @@ def limits(entry):
     arm(entry + 55)
 
 
-def extract(archive, out, entry):
+def extract(archive, out, entry, fifo_valid_split=False):
+    need(type(fifo_valid_split) is bool, 'FIFO split option must be boolean')
     need(signal.getitimer(signal.ITIMER_REAL) == (0.0, 0.0) and
          signal.SIGALRM not in signal.pthread_sigmask(signal.SIG_BLOCK, []), 'fresh unblocked timer required')
     need(globals().get('__verified_source_pin__') is not None, 'verified source entry required')
@@ -338,6 +382,10 @@ def extract(archive, out, entry):
         report['archive_before'] = before
         verified, description = prepare(raw)
         report['selection_basis'] = description
+        if fifo_valid_split:
+            verified, derivation = derive_fifo_valid_split(verified)
+            report['source_derivations'] = [derivation]
+        expected_bytes = 3072325 if fifo_valid_split else 3072200
         for item, content in verified:
             need(len(content) == item['bytes'] and sha(content) == item['sha256'], 'buffer identity before write')
             relative = 'sources/' + item['relative_destination']
@@ -346,7 +394,7 @@ def extract(archive, out, entry):
             report['subset_inventory'].append(dict(item, mode='0600'))
         names, size = tree(root)
         need(names == sorted('sources/' + item['relative_destination'] for item, raw in verified) and
-             len(names) == 319 and size == 3072200, 'exact extracted tree')
+             len(names) == 319 and size == expected_bytes, 'exact extracted tree')
         unused, after = checked_read(archive, ARCHIVE_SIZE, ARCHIVE_SHA)
         report['archive_after'] = after
         need(before == after, 'archive changed')
@@ -389,11 +437,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--archive')
     parser.add_argument('--out')
+    parser.add_argument('--fifo-valid-split', action='store_true')
     args = parser.parse_args()
     if args.archive is None and args.out is None:
         print(json.dumps({'status': 'SOURCE_ONLY_NO_ARCHIVE_READ_NO_EXTRACTION'}))
         return
     need(args.archive is not None and args.out is not None, '--archive and --out are both required')
-    result = extract(args.archive, args.out, globals()['__entry_monotonic__'])
+    result = extract(args.archive, args.out, globals()['__entry_monotonic__'], args.fifo_valid_split)
     print(json.dumps({key: result[key] for key in ('status', 'selected_files', 'selected_bytes',
                                                   'archive_unchanged', 'native_executed')}, sort_keys=True))

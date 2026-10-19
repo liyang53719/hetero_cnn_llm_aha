@@ -28,6 +28,10 @@ DEFINES = {'TARGET_ASIC': '', 'TARGET_RTL': '', 'TARGET_SYNTHESIS': '', 'TARGET_
 IDMA_META = {'SHA256SUMS.json': (104165, 'a699b8074b8099e00859d5174c0a5fb6b5a171a28cad30bab8dd96226dc67b19'),
              'SOURCE_CLOSURE.json': (73326, 'a3161f06be82894bbab48e3efae325e868385ea204d5f2aab47978ce9bd10aa1')}
 SV_PIN = (76366612, '2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61')
+FIFO_PATH = 'deps/common_cells/src/cc_passthrough_stream_fifo.sv'
+FIFO_BASE = (4411, '68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352')
+FIFO_SPLIT = (4536, 'd5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70')
+CLUSTER_HIERARCHY = b'`verilator_config\nhier_block -module "bf16_context_lane_cluster16_rev8b_b_candidate"\n'
 
 
 def need(ok, message):
@@ -134,19 +138,26 @@ def parse_filelist(raw):
     return sources, includes, defines
 
 
-def closure(support, idma, retained, configuration, sv, buffers):
+def closure(support, idma, retained, configuration, sv, buffers, *, fifo_valid_split=False):
+    need(type(fifo_valid_split) is bool, 'explicit FIFO derivation bool')
     root = idma / 'sources'
     metadata = {p: unique_json(small_read(root / p, size, digest)) for p, (size, digest) in IDMA_META.items()}
     sums, admitted = metadata['SHA256SUMS.json'], metadata['SOURCE_CLOSURE.json']['admitted_input_hashes']
     need(len(sums) == 927 and len(admitted) == 312, 'iDMA metadata counts')
     tree = support.tree_inventory(root, 8 * 1024**2, 319, 1024, 2 * 1024**2)
     actual = {p: row for p, row in tree['entries'].items() if row['kind'] == 'regular'}
-    need(len(actual) == 319 and tree['bytes'] == 3072200, 'exact iDMA319 tree')
+    need(len(actual) == 319 and tree['bytes'] == 3072200 + (125 if fifo_valid_split else 0), 'exact iDMA319 tree')
+    if fifo_valid_split:
+        need(sums.get(FIFO_PATH) == admitted.get(FIFO_PATH) == FIFO_BASE[1], 'original FIFO provenance')
+        need(FIFO_PATH in actual and (actual[FIFO_PATH]['bytes'], actual[FIFO_PATH]['sha256']) == FIFO_SPLIT,
+             'exact sole derived FIFO identity')
     for name, row in actual.items():
         expected = IDMA_META['SHA256SUMS.json'][1] if name == 'SHA256SUMS.json' else sums.get(name)
+        if fifo_valid_split and name == FIFO_PATH: expected = FIFO_SPLIT[1]
         need(row['sha256'] == expected, 'iDMA bytes disagree with pinned manifest')
     for name, digest in admitted.items():
-        need(name in actual and actual[name]['sha256'] == digest == sums.get(name), 'iDMA admitted closure disagreement')
+        expected = FIFO_SPLIT[1] if fifo_valid_split and name == FIFO_PATH else digest
+        need(name in actual and actual[name]['sha256'] == expected and digest == sums.get(name), 'iDMA admitted closure disagreement')
     source_pin = actual['idma.f.in']
     sources, includes, defines = parse_filelist(small_read(root / 'idma.f.in', source_pin['bytes'], source_pin['sha256']))
     need(set(sources) <= set(admitted) and metadata['SOURCE_CLOSURE.json']['initial_filelist_defines'] == DEFINES, 'filelist/manifest contract')
@@ -161,6 +172,9 @@ def closure(support, idma, retained, configuration, sv, buffers):
     need(manifest['readonly_count'] == 610 and manifest['precision_warning_directives'] == 21 and manifest['sv'] == {'bytes': SV_PIN[0], 'sha256': SV_PIN[1]}, 'config scope and same-SV identity')
     for name in CONFIG_NAMES:
         need({k: config_tree['entries'][name][k] for k in ('bytes', 'sha256')} == manifest['files'][name], 'config output identity')
+    if fifo_valid_split:
+        need(small_read(configuration / 'hierarchy.vlt', len(CLUSTER_HIERARCHY), sha(CLUSTER_HIERARCHY)) == CLUSTER_HIERARCHY,
+             'diagnostic variant requires sole cluster hierarchy')
     svpath = clean(sv['path'])
     observed = support.identity(svpath, 80 * 1024**2)
     need((observed['bytes'], observed['sha256']) == SV_PIN and observed['bytes'] == sv['bytes'] and observed['sha256'] == sv['sha256'], 'fresh emission same-SV pin')
@@ -380,7 +394,8 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         need(work != root and root not in work.parents and work not in root.parents, 'fresh disjoint work root')
     need(not os.path.lexists(work), 'work already exists')
     pins, buffers, support, lexical = load(repo)
-    before = closure(support, idma, retained, configuration, host_emission['sv'], buffers)
+    before = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
+                     fifo_valid_split=stop_after_generation)
     source_map = generation_source_map(before, idma, retained) if stop_after_generation else None
     verify_tools(support, toolchain)
     emission_before = verify_emission(support, host_emission)
@@ -403,7 +418,8 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         phases = ('host93_cpp_generate',) if stop_after_generation else (
             'host93_cpp_generate', 'host93_cpp_compile', 'host93_reset_launch')
         for phase in phases:
-            need(closure(support, idma, retained, configuration, host_emission['sv'], buffers) == before, 'pre-phase input drift')
+            need(closure(support, idma, retained, configuration, host_emission['sv'], buffers,
+                         fifo_valid_split=stop_after_generation) == before, 'pre-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
             need(verify_emission(support, host_emission) == emission_before, 'pre-phase emission drift')
@@ -442,7 +458,8 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
             if stop_after_generation and callback_error is not None:
                 raise callback_error
             need(type(result['raw_log']) is bytes and len(result['raw_log']) <= bound['log_bytes'], 'phase raw log bound')
-            need(closure(support, idma, retained, configuration, host_emission['sv'], buffers) == before, 'post-phase input drift')
+            need(closure(support, idma, retained, configuration, host_emission['sv'], buffers,
+                         fifo_valid_split=stop_after_generation) == before, 'post-phase input drift')
             verify_tools(support, toolchain)
             stable_sources(repo, pins, buffers)
             need(verify_emission(support, host_emission) == emission_before, 'post-phase emission drift')
@@ -476,7 +493,8 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         elf_path = work / 'obj/VHostBlockTop'
         elf = {'path': str(elf_path), **support.identity(elf_path, 512 * 1024**2)}
         need(int(elf['mode'], 8) & 0o111 and {k: elf[k] for k in ('bytes', 'sha256', 'mode')} == executed_elf, 'new host ELF changed around execution')
-        after = closure(support, idma, retained, configuration, host_emission['sv'], buffers)
+        after = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
+                                fifo_valid_split=stop_after_generation)
         need(after == before, 'final input drift')
         save(work / 'INPUTS_AFTER.json', after)
         report = {'status': 'PASS_NEW_HOST_RESET_AND_ONE_LAUNCH_ONLY', 'elf': elf,
@@ -490,7 +508,8 @@ def run(repo, work, call_phase, toolchain, host_emission, idma: Path, retained: 
         failed = {'status': 'FAILED_HOST_EXECUTION', 'error': {'type': type(error).__name__, 'message': str(error)[:2048]}, 'production_or_numerical_claim': False}
         if work.is_dir() and not work.is_symlink():
             try:
-                after = closure(support, idma, retained, configuration, host_emission['sv'], buffers)
+                after = closure(support, idma, retained, configuration, host_emission['sv'], buffers,
+                                fifo_valid_split=stop_after_generation)
                 failed['input_postcheck'] = {'unchanged': after == before, 'sha256': sha(json.dumps(after, sort_keys=True).encode())}
             except Exception as post_error:
                 failed['input_postcheck'] = {'unchanged': False, 'error': str(post_error)[:1024]}

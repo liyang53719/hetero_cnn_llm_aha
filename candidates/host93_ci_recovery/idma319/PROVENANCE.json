@@ -1,4 +1,38 @@
 {
+  "current_candidate": "candidate_ci_cluster_fifo_generation_source_v1_20261019T0730",
+  "current_cold_validation": {
+    "flags": [
+      "-I",
+      "-S",
+      "-B"
+    ],
+    "includes_mock_full_extraction": true,
+    "native_executed": false,
+    "network_used": false,
+    "normal": {
+      "status": "PASS",
+      "tests": 22
+    },
+    "optimized": {
+      "status": "PASS",
+      "tests": 22
+    },
+    "real_archive_read": false
+  },
+  "current_source_files": {
+    "ENTRY.json": {
+      "bytes": 5451,
+      "sha256": "214005162183a87a38537598ccdc92e07f897e9215fe5499e1ecc359b46158e8"
+    },
+    "extract_idma.py": {
+      "bytes": 21505,
+      "sha256": "eb9f4f365d141fef65bf45f8730e2047069cd035833fc48ab34165669aa1663c"
+    },
+    "test_tiny.py": {
+      "bytes": 24158,
+      "sha256": "379ed68cac82ef2eebfb28325a862cff02459777a524034e0772ac216476f487"
+    }
+  },
   "evidence": [
     {
       "bytes": 5650,
@@ -21,6 +55,29 @@
       "sha256": "973567ae2b74562399fee9a64595f07ecf3eb728e180082cfd51838c720f701b"
     }
   ],
+  "fifo_valid_split": {
+    "byte_delta": 125,
+    "default": false,
+    "derived": {
+      "bytes": 4536,
+      "sha256": "d5482112dccd8a60bb142982fded05b64658b097b4227bf21a514f2da5d34e70"
+    },
+    "file_delta": 0,
+    "native_validation_claimed": false,
+    "option": "--fifo-valid-split",
+    "original": {
+      "bytes": 4411,
+      "sha256": "68de1c713e40d97950591111dccd37a7546025f7fe6750fa3092826422557352"
+    },
+    "original_927_entry_manifest_unchanged": true,
+    "output_bytes": 3072325,
+    "output_files": 319,
+    "precondition": "Fixed archive plus all 319 original selected buffers pass before exact transformation.",
+    "relative_destination": "deps/common_cells/src/cc_passthrough_stream_fifo.sv",
+    "report_field": "source_derivations",
+    "source_reference": "candidate_idma_fifo_valid_split_micro_source_v1_20261019T0545"
+  },
+  "historical_evidence_note": "Copied COLD_RESULT.json and README.md refer to the earlier baseline and are not current-candidate cold evidence.",
   "new_contract_sizes_from_parent_handoff": {
     "archive_entries": 929,
     "closure": 73326,

@@ -14,8 +14,8 @@ import unittest
 from unittest import mock
 HERE = Path(__file__).absolute().parent
 SOURCE = HERE / 'host_execution.py'
-SIZE = 32379
-SHA = '930ac6464bab76d32409c4ecf39abbc8cb89fd940a5ec30c46eea12a677be53a'
+SIZE = 33886
+SHA = 'a6f03d274c8dc32d46d553dfbf0d15bae64b061c46878b949d30748d008ff44a'
 RAW = SOURCE.read_bytes()
 def load(raw):
     if len(raw) != SIZE or hashlib.sha256(raw).hexdigest() != SHA:
@@ -330,5 +330,74 @@ class Cold(unittest.TestCase):
         self.assert_receipt_failure_preserves(False)
 
 
+
+
+class DerivedFifoClosureCold(unittest.TestCase):
+    def fixture(self, variant, mutate=None):
+        idma, retained, config = map(Path, ('/tmp/cluster-idma', '/tmp/cluster-retained', '/tmp/cluster-config'))
+        sources = sorted(g.DROP) + [g.FIFO_PATH] + ['source/s'+str(i)+'.sv' for i in range(291)]
+        admitted = {name:'1'*64 for name in sources + [g.CLOCK] + ['include/h'+str(i)+'.svh' for i in range(17)]}
+        admitted[g.FIFO_PATH] = g.FIFO_BASE[1]
+        extra = ['idma.f.in','SHA256SUMS.json','SOURCE_CLOSURE.json'] + ['meta'+str(i)+'.json' for i in range(4)]
+        sums = {**admitted, **{name:'2'*64 for name in extra}}
+        sums.update({'unselected/'+str(i):'3'*64 for i in range(927-len(sums))})
+        actual = {name:{'kind':'regular','bytes':0,'sha256':digest,'mode':'0o600'} for name,digest in sums.items() if not name.startswith('unselected/')}
+        actual['SHA256SUMS.json']['sha256'] = g.IDMA_META['SHA256SUMS.json'][1]
+        fifo = g.FIFO_SPLIT if variant else g.FIFO_BASE
+        actual[g.FIFO_PATH].update(bytes=fifo[0],sha256=fifo[1])
+        itree = {'root':str(idma/'sources'),'entries':actual,'bytes':3072200+(125 if variant else 0)}
+        expected13 = {'retained/r'+str(i)+'.sv':'4'*64 for i in range(13)}
+        rtree = {'root':str(retained/'source'),'entries':{n:{'kind':'regular','bytes':0,'sha256':v,'mode':'0o600'} for n,v in expected13.items()},'bytes':0}
+        content = {name:(g.CLUSTER_HIERARCHY if name=='hierarchy.vlt' and variant else b'old fixed fixture') for name in g.CONFIG_NAMES}
+        ctree = {'root':str(config),'entries':{n:{'kind':'regular','bytes':len(raw),'sha256':g.sha(raw),'mode':'0o600'} for n,raw in content.items()},'bytes':sum(map(len,content.values()))}
+        ctree['entries']['MANIFEST.json']={'kind':'regular','bytes':1,'sha256':'5'*64,'mode':'0o600'}
+        manifest={'readonly_count':610,'precision_warning_directives':21,'sv':{'bytes':g.SV_PIN[0],'sha256':g.SV_PIN[1]},'files':{n:{'bytes':v['bytes'],'sha256':v['sha256']} for n,v in ctree['entries'].items() if n!='MANIFEST.json'}}
+        state={'actual':actual,'tree':itree,'sums':sums,'admitted':admitted,'content':content}
+        if mutate: mutate(state)
+        encoded=lambda obj:json.dumps(obj).encode()
+        def read(p,size,digest):
+            p=Path(p)
+            if p==idma/'sources/SHA256SUMS.json':return encoded(sums)
+            if p==idma/'sources/SOURCE_CLOSURE.json':return encoded({'admitted_input_hashes':admitted,'initial_filelist_defines':g.DEFINES})
+            if p==idma/'sources/idma.f.in':return b'fixed mocked filelist'
+            if p==config/'hierarchy.vlt':
+                raw=content['hierarchy.vlt']
+                if len(raw)!=size or g.sha(raw)!=digest:raise ValueError('wrong fixed hierarchy bytes')
+                return raw
+            raise ValueError('unexpected fixture read')
+        trees={str(idma/'sources'):itree,str(retained/'source'):rtree,str(config):ctree}
+        support=types.SimpleNamespace(tree_inventory=lambda root,*args:trees[str(root)],identity=lambda *args:{'bytes':g.SV_PIN[0],'sha256':g.SV_PIN[1],'mode':'0o600'})
+        buffers={g.RETAINED_PLAN:encoded({'expected13':expected13,'source_order':list(expected13)})}
+        with mock.patch.object(g,'small_read',side_effect=read),mock.patch.object(g,'json_current',return_value=(manifest,None)),mock.patch.object(g,'parse_filelist',return_value=(sources,['include/'+str(i) for i in range(8)],g.DEFINES)):
+            return g.closure(support,idma,retained,config,{'path':'/tmp/same-host.sv','bytes':g.SV_PIN[0],'sha256':g.SV_PIN[1]},buffers,fifo_valid_split=variant)
+
+    def test_original_and_exact_derived_closures(self):
+        for variant in (False,True):
+            result=self.fixture(variant)
+            self.assertEqual(len(result['sources']),307)
+            self.assertEqual(len(result['idma_tree']['entries']),319)
+            self.assertEqual(result['idma_tree']['bytes'],3072200+(125 if variant else 0))
+    def test_derived_rejects_base_wrong_identity_or_other_change(self):
+        edits=(lambda x:x['actual'][g.FIFO_PATH].update(bytes=g.FIFO_BASE[0],sha256=g.FIFO_BASE[1]),
+               lambda x:x['actual'][g.FIFO_PATH].update(bytes=4537),
+               lambda x:x['actual'][g.FIFO_PATH].update(sha256='0'*64),
+               lambda x:x['sums'].update({g.FIFO_PATH:'0'*64}),
+               lambda x:x['admitted'].update({g.FIFO_PATH:'0'*64}),
+               lambda x:x['actual']['source/s0.sv'].update(sha256='0'*64),
+               lambda x:x['actual'].pop('source/s0.sv'),
+               lambda x:x['tree'].update(bytes=3072200),
+               lambda x:x['content'].update({'hierarchy.vlt':b'`verilator_config\nhier_block -module "qwen2_matrix_command_endpoint"\n'}))
+        for index,edit in enumerate(edits):
+            with self.subTest(index=index):
+                with self.assertRaises(ValueError):self.fixture(True,edit)
+    def test_default_rejects_derived_fifo(self):
+        with self.assertRaises(ValueError):self.fixture(False,lambda x:x['actual'][g.FIFO_PATH].update(bytes=g.FIFO_SPLIT[0],sha256=g.FIFO_SPLIT[1]))
+    def test_generation_only_calls_use_exact_derived_flag(self):
+        import ast
+        source=ast.parse(RAW)
+        run=next(n for n in source.body if isinstance(n,ast.FunctionDef) and n.name=='run')
+        calls=[n for n in ast.walk(run) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='closure']
+        self.assertEqual(len(calls),5)
+        self.assertEqual(sum(any(k.arg=='fifo_valid_split' and isinstance(k.value,ast.Name) and k.value.id=='stop_after_generation' for k in c.keywords) for c in calls),5)
 
 if __name__=='__main__':unittest.main()

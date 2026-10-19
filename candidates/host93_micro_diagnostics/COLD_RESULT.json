@@ -1,0 +1,52 @@
+{
+  "acquisition": {
+    "fixed_package_parser_test": "real fixed deb and pinned decoded tar buffers with mocked decoder",
+    "inherited_from": "v1",
+    "normal_tests": 40,
+    "optimized_tests": 40
+  },
+  "actual": "NOT_EXECUTED",
+  "local_decoder_probe": {
+    "actual": "NOT_EXECUTED_HOST_PRECONDITION_UNMET",
+    "cold_results_inherited_from": "v1",
+    "normal_static_mock_tests": 6,
+    "optimized_static_mock_tests": 6,
+    "reason": "local UID65534 is incompatible with fixed UID0 trust gate; not a CI outcome"
+  },
+  "native_hdl_executed": false,
+  "new_libzstd_adapter_executed": false,
+  "original_frozen_sources_changed": false,
+  "package_tools_executed": false,
+  "portable_cold": {
+    "decoder": "mock only",
+    "isolated_fresh_relocation": true,
+    "normal_tests": 40,
+    "optimized_tests": 40
+  },
+  "runner": {
+    "accepted_cleanup_controls": 2,
+    "early_failure_prefix_subcases": 24,
+    "new_negative_cases": 20,
+    "normal_tests": 27,
+    "optimized_tests": 27
+  },
+  "source_review": {
+    "directory": "review_host_micro_job_source_v2_20261019T0621",
+    "manifest": {
+      "bytes": 1009,
+      "sha256": "f1b32efd6d010ab67984d86730dbd339532e4e889b7a9170c4f5f9bd569edd01"
+    },
+    "status": "GO",
+    "summary": {
+      "bytes": 4633,
+      "sha256": "c7e8cb9221b88a2114201173b56822a33f2c92138cf837f8baef42ad15f60bb6"
+    },
+    "verdict": "SOURCE_GO_FINITE_25_STAGE_FIFO_AND_MODELED_HOST_MICRO_JOB"
+  },
+  "status": "SOURCE_ONLY_COLD_PASS",
+  "v1_hold_findings_closed": [
+    "F01",
+    "F02",
+    "F03"
+  ]
+}

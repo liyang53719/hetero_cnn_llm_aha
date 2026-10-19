@@ -876,3 +876,15 @@ SOURCE GO: review_ci_chirrtl_frontload_source_v2_20261019T0429; MANIFEST c440e4e
 - 完整 77,661 B 日志扫描得到 35 个 UNOPTFLAT header（32 固定 Host SV 坐标、3 固定 iDMA 坐标）、2 个无规则 ERROR header、1 个 fatal 摘要，0 未解析/0 记录省略。全 stage 数量匹配不代表进程归属已证明。
 - Example 路径 358 条仅保存 16、省略 342，明确 partial；wrapper 摘要 22 输入/21 输出/6 DPI/2 always_comb，依赖结论仍未建立。不得把类别完整升级成全部组合环已排除。
 - 本次原三份安全 JSON 与范围说明小批保存，无 workflow 变更、不重复触发。下一步同 hash SV/iDMA 分组核结构，再决定最小修复；原七次失败证据保留。
+
+### 2026-10-19：FIFO 四态与 Host 透明/opaque 配对小诊断 SOURCE
+
+- 原 35 条 UNOPTFLAT 分类和实际 FAIL 保留；本轮只准备小复现，不自动豁免 warningfatal，不改八叶原子握手或数值模型。
+- FIFO 只把 valid_o 的原 procedural flush/指针比较独立成组合过程。微例覆盖 Depth 2/3、SameCycleRW 0/1，共 5180 次已编写的稳定组合/手动推进状态比较；尚未真实四态执行，不授完整寄存器宏、reset、时钟或 delta-cycle 等价资格。
+- Host 透明/opaque 使用相同八叶 atomic gating，opaque 每叶只有一个全输入/四输出 DPI 调用；这是手写边界模型，无 DPI 实现，不等同真实 22 输入/21 输出 protect-lib wrapper，也不穷尽全部 35 条 SCC。
+- 新独立小 job 先固定 Icarus 包取得、FIFO compile/vvp，成功才复用原 20 个工具资格阶段，再生成透明/opaque 两例。总 25 阶段，首个意外失败停；只有最后 opaque 的纯 UNOPTFLAT、精确 warningfatal 数量及 combo/atomic Example 路径可记模型观察，原生非零仍原样记 FAILED。
+- 共享时限从 checkout 前 t0 开始，6600 秒总墙内只用到 t0+6480，预留 120 秒安全验证/上传；小例每阶段 30 秒总/10 秒工作，原 make 预算不扩。原 Host 与 build-only 入口不改，无 Scala/FIR/完整 Host 重建。
+- 官方 Icarus 12.0-2build2 包 2125764 字节/SHA f19394cee05ad526e0eb3873bc6c17a5828f56df17fbe2db40cb66513a2d4667 已由父唯一只读取得，Zstd/tar/39 选定成员身份已静核。新 host libzstd 适配器仅冷测；本机 UID65534 不满足 UID0 门，已知前拒 probe 不执行、不放宽，实际能力留目标 CI 前置测量。
+- runner 27+27、acquisition 40+40 冷测通过；正式整 SOURCE 审已有限 GO，ACTUAL_NOT_EXECUTED。只允许三份有界安全 JSON；完整日志、生成源码和宿主库身份保持私有。
+- 原 v1 SOURCE 的三处证据消费关联缺口已隔离修复：FIFO 正观察绑定固定工具身份，clean EXIT0 绑定 waitid/cleanup 成功元组，opaque 正观察绑定 AVAILABLE；执行路径与预算未改。另已审 portable 冷测入口显式接收三个固定数据文件参数，不执行包内程序。
+- 独立 SOURCE 审：review_host_micro_job_source_v2_20261019T0621，MANIFEST f1b32efd6d010ab67984d86730dbd339532e4e889b7a9170c4f5f9bd569edd01；SUMMARY c7e8cb9221b88a2114201173b56822a33f2c92138cf837f8baef42ad15f60bb6。实际仍未执行；不授完整 FIFO 或生产 Host 行为资格。

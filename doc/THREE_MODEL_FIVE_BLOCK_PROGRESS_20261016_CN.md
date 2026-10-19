@@ -1059,3 +1059,11 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - raw2 是既存 789504 B 同资产只读资格，本次未重新获取 raw2、不动原目录；收据不冒充 CI same-job 下载。local_reference_qualified=true，baseline_adopted/DUT/fullblock=false，不授 RTL N0 数值或 fullblock PASS，不回填历史未知 ISA，不改变既有 AVX2 拒绝事实。
 - 父记录的更早 bwrap 环境初始化失败未启动用户代码，START/log/output 尚未创建，故不算 native 重试；本次原 invocation 是唯一实际计算。600work+120安全尾和无自动重抽保持。
 - 实际独审 review_local_n0_historical_actual_20261019T1326，MANIFEST.json 848 B / 73979f6760b463d612bbbcc4176e1bd0fcbe653d436a773e49ccfe7a3f8e1277；SUMMARY.json 5431 B / d01bc4c5a43eff0248ee4ae4854dfed849cf1c31ae30bcbc5811f7acd4fc1b2d；ACCEPT_ACTUAL_LOCAL_ORIGINAL_HISTORICAL_N0_REFERENCE_EXACT_ONLY；仅三原安全 JSON、README 与计划完整 replacement，私有 array/runtime/log 不上传。无源码/workflow 变更，不触发新的 Host/native 作业；普通 guard 可运行。
+
+## 2026-10-19 本地 N0 续接资源缺口与固定工具来源准备（纯说明）
+- 本地原historical参考已获有限实际资格；可复用的16输入94920448 B、同SHA SV76366612 B与iDMA原ZIP9926876 B只读身份已有核对，具体固定pin见local_continuation_plan/SOURCE_PINS.json。旧CI same-job收据不冒用，ZIP须按现ready_o+valid_o派生重新提取。
+- 当前限定检索缺可验证backend/完整473树/真实模型，PATH中autoconf/autom4te/m4/flex/bison缺失；须按原Verilator revision、唯一seqnum补丁、五官方包/67选定成员、真实工具微例与新构建恢复，不能用历史binary或mock头替资格。顶层VHostBlockTop和cluster真实参数/链接门保持。
+- 比较器当前硬选ci31214；未来独立historical adapter只改profile绑定，原五函数/FP64归约/196608/finite/原容差和exact分列不改，本批不混入未审代码。既存资产本地入口与真实单RAM/B退休→ACK0读回仍需有限SOURCE后继。
+- 13:36:49Z MemAvailable7998820 KiB低于原8388608 KiB门，差389788 KiB；cgroup限额不可见，不授硬内存保证。原8GiB内存/3GiB磁盘门不放宽；runtime与wheel的tmpfs迁移/删除仅proposal，等待用户明确答复，未动现物。
+- 历史39232100796 make451.755421+gen123.743956+compile56.433910=631.933287秒；37阶段858.346829/协调870.427722仅参照，非当前ETA。累计RUSAGE_CHILDREN RSS不作阶段实测峰值。成本只读审PENDING。
+- 本批仅固定来源/必要变更/资源缺口说明与计划完整replacement；没有新增测试、下载/安装/搬迁/Host执行，没有workflow变更，不触发新的Host/native作业。普通guard可运行。

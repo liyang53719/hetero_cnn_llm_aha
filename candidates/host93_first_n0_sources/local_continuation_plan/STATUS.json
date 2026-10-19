@@ -1,0 +1,26 @@
+{
+  "baseline_adopted": false,
+  "cost_review": "PENDING",
+  "data_moved_or_deleted": false,
+  "execution_authorized_by_this_document": false,
+  "host_started_here": false,
+  "memory_gate_bytes": 8589934592,
+  "n0_dut_numeric_pass": false,
+  "new_tests_run": false,
+  "resource_observation": {
+    "cgroup_memory_limits_visible": false,
+    "live_future_admission_required": true,
+    "mem_available_kib": 7998820,
+    "observed_utc": "2026-10-19T13:36:49Z",
+    "private_evidence_identity": {
+      "bytes": 1727,
+      "sha256": "da1980516030906ec79c424517d4ae40a30db09e6fcec2aea94f4b0eb52737f9"
+    },
+    "required_kib": 8388608,
+    "shortfall_kib": 389788
+  },
+  "runtime_migration": "PROPOSAL_WAITING_FOR_USER",
+  "schema": 1,
+  "status": "TEMP_DOCUMENTATION_SOURCE_PREPARATION_ONLY",
+  "workflows_changed": false
+}

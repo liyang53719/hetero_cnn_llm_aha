@@ -1,0 +1,137 @@
+{
+  "files": {
+    "candidates/host93_ci_recovery/SUPPORT_PINS.json": {
+      "bytes": 806,
+      "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"
+    },
+    "candidates/host93_ci_recovery/ci_support_v3.py": {
+      "bytes": 16348,
+      "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+    },
+    "candidates/host93_ci_recovery/first_n0/pipeline.py": {
+      "bytes": 28972,
+      "sha256": "ccb2a03c1fa3211de3e8467a020107c693a591c8b94ff6dba0653191bb9bbc7f"
+    },
+    "candidates/host93_ci_recovery/first_n0/stage_entry.py": {
+      "bytes": 5627,
+      "sha256": "a3fad553a94bb07b210b32b947cbeaf15dc2fa6b4c314317d99132d6458bedd5"
+    },
+    "candidates/host93_ci_recovery/run.py": {
+      "bytes": 77219,
+      "sha256": "853d7d53c2b85376b643a90ae1421d9d9766c5ad6d415e8e5ddf1570ab0aa79c"
+    },
+    "candidates/host93_first_n0_sources/dispatch_diagnostic/n0_dispatch_candidate.py": {
+      "bytes": 21659,
+      "sha256": "40ce6657c103a1b78b06f9370ebe15b234207a6ce98d7d8e74f5951b0dd51139"
+    },
+    "candidates/host93_first_n0_sources/dispatch_diagnostic/raw2_adapter.py": {
+      "bytes": 18633,
+      "sha256": "0924380e220161ddc0595fd2116c54ec83f1db08137484a25b4986915abba46d"
+    },
+    "candidates/host93_first_n0_sources/dispatch_diagnostic/run.py": {
+      "bytes": 16300,
+      "sha256": "e23f954b28cfe1cf9fd9ee3ae2bcaf9c960f1315241e5d9c05a9bfec23597856"
+    },
+    "candidates/host93_first_n0_sources/reference/PINS.json": {
+      "bytes": 6364,
+      "sha256": "ecea4b9b9137c06ae3c3f37bf9710f40f12a4556d1ae2c9aa77b84a857548db8"
+    },
+    "candidates/host93_first_n0_sources/reference/WHEELS.json": {
+      "bytes": 7947,
+      "sha256": "ddfbba18f68182631118ba0108d0a8d5d51db1b32d07094fa00e4c83cd147caf"
+    },
+    "candidates/host93_first_n0_sources/reference/n0_reference.py": {
+      "bytes": 13753,
+      "sha256": "d26bd286857a6bff8217472733658cbdcb1e6590fa095e0d0589bc1be81b8fc4"
+    },
+    "candidates/host93_first_n0_sources/reference/requirements-direct.lock": {
+      "bytes": 2587,
+      "sha256": "c49b3b6241845e0d68c60e96187a557418c96febd7fbbb15eb1d3bba24e6d3e1"
+    },
+    "candidates/host93_first_n0_sources/reference/requirements-runtime.txt": {
+      "bytes": 1217,
+      "sha256": "9bd334944d52ae82a86ca89ac44612920270c028f29c15fde93ba4d656535a83"
+    },
+    "candidates/host93_first_n0_sources/runtime/runtime_wheel_gate.py": {
+      "bytes": 16625,
+      "sha256": "736ab1d718ffb3fd100fb4e4bb92857fbae0b80bb1fd195c064f36833032050d"
+    },
+    "candidates/qwen2_fullblock_ci_execution/platform.py": {
+      "bytes": 6165,
+      "sha256": "d644fbf000f5237d6b1e46cd8564d80d0cb5c737f431e21e674cdf98fa128cd8"
+    },
+    "candidates/qwen2_fullblock_ci_execution/runtime_profile.py": {
+      "bytes": 3898,
+      "sha256": "cb2156e677907d60eb5bd6f62f63f926c215701bec068467e4cc84c6cdf67b95"
+    },
+    "candidates/qwen2_fullblock_ci_prepare/requirements-runtime.txt": {
+      "bytes": 1217,
+      "sha256": "9bd334944d52ae82a86ca89ac44612920270c028f29c15fde93ba4d656535a83"
+    },
+    "candidates/qwen2_fullblock_reference_m128/FROZEN_CONTRACT.json": {
+      "bytes": 19978,
+      "sha256": "64835641b2c0c16d83beb75fbcd9d1c83ade8676fbd825f5e6ab646167af723f"
+    },
+    "candidates/qwen2_fullblock_reference_m128/capture.py": {
+      "bytes": 20084,
+      "sha256": "7bbee0a7edc6d36fb4996657ecea75c5181d292c9761bbb18ca4b12fc2486a86"
+    },
+    "candidates/qwen2_fullblock_reference_m128/pins.json": {
+      "bytes": 154690,
+      "sha256": "48e20d380cfc6ac0ab5b9e1690bb507e37cf99468b0df8e79a1d37da0f16110f"
+    },
+    "config/payload_pins/qwen2_layer0.json": {
+      "bytes": 11221,
+      "sha256": "190e1fca0edff7c783c6981a6759f57162e63c4754ffc0f3481df64de9d06f88"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/manifest.json": {
+      "bytes": 5109,
+      "sha256": "46818a6fde79b4bff4615abc38cca7d8cb9386cdd0298bc07c403cb3d2ceab25"
+    },
+    "config/upstream/weight_headers/qwen2_1p5b/modeling_qwen2.py": {
+      "bytes": 63883,
+      "sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad"
+    },
+    "development_snapshots/canonical_host93_fixed_core_build_source_20261018/GATE_PLAN.json": {
+      "bytes": 160737,
+      "sha256": "cd489d6530321fa95b79fc1d0e82d5599d358a1cb882165e44805dcafb98bd42"
+    },
+    "development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py": {
+      "bytes": 28551,
+      "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+    },
+    "development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py": {
+      "bytes": 17327,
+      "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a"
+    },
+    "development_snapshots/canonical_raw_acquisition_source_20261018/ACQUISITION_PLAN.json": {
+      "bytes": 14096,
+      "sha256": "7af00f7b0ebe36a2d31cd18de72ff9da487197eb91ab671cb60a53b2c076d220"
+    },
+    "development_snapshots/canonical_raw_acquisition_source_20261018/PLATFORM_API_EVIDENCE.json": {
+      "bytes": 635,
+      "sha256": "e44c899d4cb57dfb13bca3723e0640ab9e0872d7738a17722d7b6b8133e2c53f"
+    },
+    "development_snapshots/canonical_raw_acquisition_source_20261018/acquire_raw.py": {
+      "bytes": 17991,
+      "sha256": "4cff91b1a5e76a6a1701426fd1e6cb1f8db32ee8b7e762bb17575364b12d932a"
+    },
+    "development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py": {
+      "bytes": 16693,
+      "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+    },
+    "scripts/qwen2_layer0_payload.py": {
+      "bytes": 11555,
+      "sha256": "202b73649dfceed5e0d8ec73fd0b1e9f0de96d936141e3d9808d5e10d5c1beb9"
+    },
+    "src/heteronpu/pinned_block_payload.py": {
+      "bytes": 7517,
+      "sha256": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30"
+    },
+    "src/heteronpu/pinned_gdn_payload.py": {
+      "bytes": 6626,
+      "sha256": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b"
+    }
+  },
+  "schema": "n0-dispatch-sources-v1"
+}

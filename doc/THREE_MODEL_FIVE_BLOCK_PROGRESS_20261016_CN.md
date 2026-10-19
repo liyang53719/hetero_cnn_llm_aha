@@ -1016,3 +1016,11 @@ v1 整体有限HOLD仅三项；v2已隔离修复比较失败后参考复读标�
 - 只上传三份严格安全 JSON：固定能力枚举、到达/通过门、形状/双 SHA 布尔、有限原生终态、soft sampled leader RSS。失败日志仅取至多四条固定状态标识；无张量、私有全文日志、系统清单或任意路径。
 - coordinator 19+19、搬迁 19+19；raw2 53+53；candidate 18+18、搬迁 18+18，均为纯源码/stdlib/mock。没有实际获取、数值 import/forward 或 DUT 执行。原 D01/D02 HOLD 保留，新后继只补可信测试入口及成对观察字段原子提交/原失败码优先。
 - SOURCE 独审身份：review_n0_dispatch_coordinator_20261019T1221: MANIFEST.json 1189 bytes / 6362d7dd7060e9a8b9fc5216ee4a9355569929f10654b63426b9c818bbc2f339; SUMMARY.json 5432 bytes / 602e9cbb587b9ac52c4d9a564c3d31b88181a7d9ecc2db53c431723ea3b3ce84; verdict SOURCE_GO_INDEPENDENT_N0_DISPATCH_FOUR_STAGE_DIAGNOSTIC_ONLY；本批实际状态 NOT_EXECUTED。后续唯一实际由父按已授权四阶段执行，独立结果须审后报告，不能自动接回 DUT。
+
+
+### 2026-10-19 独立自然 dispatch N0 候选实测成功（未采纳基线）
+- 原 run 39252523415 / attempt 1 / head 07bb63edae88a95ec4aadd28d2ebf6ee0e81768c 为 success；协调器 18.262813 秒，四阶段均自然 exit 0、未超时、cleanup true。仅保三份安全 JSON 与说明，不重新运行。
+- 本次自然 expected/observed capability 均 AVX512，11 项 source/runtime/raw2/线程/build/forward/postflight 门全通过。原两项 Range 合计 789,504 字节，一次原官方类 forward 的 `[1,128,1536]` / 196,608 值形状和有限性门通过；原 BF16 与 FP32LE 双 SHA exact 均 true，未放宽原哈希。
+- 原摘要 CANDIDATE_EXACT_MATCH_ONLY / AVAILABLE；reference_accepted、baseline_adopted、DUT/RTL/fullblock 均 false。它仅是独立参考候选事实，不授 Host N0 容差数值 PASS、AXI/单 RAM 退休、RTL 读回或 wholeblock 资格。
+- 采样 leader RSS 308,408 KiB 是有限软观测，不是硬限或整树峰值；私有张量/receipt/成功日志未上传，本地未对其重新读回哈希。前次 39248526073 实际 capability 枚举仍未知，不能用本次 AVX512 倒填，亦不保证下次硬件能力。
+- 实际独审身份：review_n0_dispatch_actual_39252523415_20261019T1236；MANIFEST.json 1032 B / f4adc0bb88800054fbf9aac77c9d84c8cd87009034aadb4e0009d2c76882bc38；SUMMARY.json 7225 B / 889efb81b48c3b7a50fbec0495511f912bac6dedb9b426324bc127f6a6e62ae6；ACCEPT_ACTUAL_INDEPENDENT_N0_NATURAL_AVX512_DUAL_SHA_EXACT_CANDIDATE_ONLY。本次安全五路径不改 workflow/源码、不触发新的 Host/native 作业；文档 push 仍可能运行 guard。计划发布必须验证当前全文前缀，再完整替换一次，严禁把完整文档再次 append。

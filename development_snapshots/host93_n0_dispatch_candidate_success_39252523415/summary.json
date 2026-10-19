@@ -1,0 +1,68 @@
+{
+  "candidate": {
+    "baseline_adopted": false,
+    "bf16_sha_exact": true,
+    "capability_observed": true,
+    "code": null,
+    "dual_sha_exact": true,
+    "dut_executed": false,
+    "expected_capability": "AVX512",
+    "f32_sha_exact": true,
+    "full_shape_verified": true,
+    "fullblock_executed": false,
+    "gates_passed": {
+      "build": true,
+      "capability": true,
+      "environment": true,
+      "forward": true,
+      "import": true,
+      "native": true,
+      "postflight": true,
+      "raw2": true,
+      "source": true,
+      "thread": true,
+      "version": true
+    },
+    "gates_reached": {
+      "build": true,
+      "capability": true,
+      "environment": true,
+      "forward": true,
+      "import": true,
+      "native": true,
+      "postflight": true,
+      "raw2": true,
+      "source": true,
+      "thread": true,
+      "version": true
+    },
+    "hashes_checked": true,
+    "observed_capability": "AVX512",
+    "reference_accepted": false,
+    "rtl_executed": false,
+    "schema": 1,
+    "scope": "INDEPENDENT_N0_DISPATCH_CANDIDATE",
+    "stage": "COMPLETE",
+    "status": "CANDIDATE_EXACT_MATCH"
+  },
+  "contract_failure": {
+    "boundary": "NONE",
+    "exception_type": "NONE"
+  },
+  "observation_state": "AVAILABLE",
+  "sampled_rss": {
+    "includes_descendants": false,
+    "limit_kib": 1572864,
+    "os_hard_limit": false,
+    "sampled_leader_max_kib": 308408
+  },
+  "schema": "n0-dispatch-summary-v1",
+  "scope": {
+    "baseline_adopted": false,
+    "dut_executed": false,
+    "fullblock_executed": false,
+    "reference_accepted": false
+  },
+  "seconds": 18.262813,
+  "status": "CANDIDATE_EXACT_MATCH_ONLY"
+}

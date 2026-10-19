@@ -1412,3 +1412,18 @@ capture仍空，counts/N0/qraw数组未写；PC1输出不完整，三轨比较NO
 5. cache22×普通/-O/搬迁=66纯mock通过，与header合计111，0失败/错误/skip。未复制真实80MB树、执行编译器/RTL或生产run/main；实际源树只读后验单独列示。SOURCE及精确命令总审身份见STATUS，原41冻结成员不热改。
 
 本批公开16份安全原件、STATUS与本计划完整后继。私有绑定/profile/COMMAND/outer/现物路径/日志仅本地。full job/full block=false，历史Host故障重现、official/application accuracy和typed-to-RTL仍null；唯一实际仍由父在源/命令独审与当前准入后执行。
+
+
+## TEMP 2026-10-19 23:48 UTC：Owner cache 编译成功，有限 typed-RAM 运行失败
+
+原 session 44110 已结束：build 自然 0 / 62.420557 秒，run 自然 1 / 109.877769 秒；两阶段 cleanup=true、timed_out=false。outer=1 / 176.78127549499914 秒。原 EXECUTION_RESULT 为 INCOMPLETE、ValueError，原安全码/边界为 null；run 监督诊断保留 CHILD_EXIT_NONZERO。本轮实际总体为 FAIL，不篡改原收据。
+
+cache 续接复用原固定生成源码，未重生成或重 backend。新的 owner ELF 为 12718080 B / a91ff84921ba6b116b762a3f4eb384f1518be88e3feca562c1ee2996b6ba4fa1；原 516 个 obj 源及 makefile 字节/旧 fixture 读取合同不变。960 秒总额、600 compile + 300 run + 60 落证、单 CPU、AS 6 GiB 与原 8 GiB/3 GiB 准入均保留。
+
+run 末行 edge=76580、CONTRACT_FAILURE / RESET_REQUIRED_HIGH，采样为 HIGH_EVAL_POST_SOFTWARE_PREVIOUS_EDGE。软件已记录两 window terminal（52379、62000），首 drain request=1、terminal=0；matrix groups/dones=2、issues=7680，当前 RTL wideSteps=7680/steps=61440/mask255。软件写账本为 descriptor1、beats10、committed640、response0；N0/Wq returned bytes 为 786432/491520。软件只处理到上一沿，response0 不能推断当前高沿未 ACK；typed-RAM 账本也不是 AXI B 退休证据。
+
+owner_sharedPoison/router_bad/coor_bad/coor_serviceError/win_resetRequired 同时观测为 1；不认定其首因次序。typed RAM 或 RTL 原因待查。本轮并未执行 Host PC0 前缀或 iDMA/AXI，ng160 partial1 首 issue 目标未达，不能与原 Host 同因合并。完整 job/block 未完成、五 block 仍 0/5，official/application/typed-to-RTL 三资格及 historical_host_failure_reproduced 均保留 null。
+
+安全详情位于 candidates/host93_first_n0_sources/owner_micro_cache_failure_actual/ 的 SUMMARY.json 与 README_CN.md。原证据 MANIFEST 959 B / 140559eb53a4ef330a5e8e54b1b544d801b323bc2c39bcfe2b9bb3cb969935f4；原日志/工作树/数组/二进制私有保留，本批无任何新 native 或测试。
+
+正式 actual 独审已封：review_owner_cache_actual_20261019T2348，M786/0a832dcb156af5f8df8620b2b43846dd0071bd36afdf42c0b9e3091a7fafbdcd，S9476/14bb3cbebaa5002dad596c235db675cec66904a60e0ec8c8101d735ac853f1b1，verdict ACCEPT_ACTUAL_OWNER_CACHE_BUILD_NATURAL_ZERO_RUNTIME_RESET_REQUIRED_HIGH_ONLY；仅接受上述有限事实，根因与 Host 同因仍未知。v2 为 metadata-only 后继，事实和范围不改。本段为原 279840 字节计划的纯追加；发布使用完整 replacement，不把完整文件再次 append。

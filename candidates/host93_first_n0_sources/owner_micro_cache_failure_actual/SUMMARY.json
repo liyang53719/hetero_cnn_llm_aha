@@ -1,0 +1,250 @@
+{
+  "actual_review": {
+    "directory": "review_owner_cache_actual_20261019T2348",
+    "manifest": {
+      "bytes": 786,
+      "sha256": "0a832dcb156af5f8df8620b2b43846dd0071bd36afdf42c0b9e3091a7fafbdcd"
+    },
+    "summary": {
+      "bytes": 9476,
+      "file": "SUMMARY.md",
+      "sha256": "14bb3cbebaa5002dad596c235db675cec66904a60e0ec8c8101d735ac853f1b1"
+    },
+    "verdict": "ACCEPT_ACTUAL_OWNER_CACHE_BUILD_NATURAL_ZERO_RUNTIME_RESET_REQUIRED_HIGH_ONLY"
+  },
+  "actual_review_status": "FORMALLY_ACCEPTED_LIMITED_SCOPE",
+  "application_accuracy_pass": null,
+  "backend_rebuilt": false,
+  "cache_consumption": {
+    "copied_makefiles_modified": false,
+    "copied_object_source_members": 516,
+    "old_absolute_fixture_inputs_pinned": true,
+    "original_generation_receipt_identity": {
+      "bytes": 191163,
+      "sha256": "b0211d4e00b3d8cf5b9829d3e4be54d840348a92cadce7e777287f58db6e15bf"
+    },
+    "original_generation_review_identity": {
+      "bytes": 4666,
+      "sha256": "c2816c97363998f17e782f19245051cf507f45a8b98543302998cea2438e33ee"
+    },
+    "original_tree_identity": {
+      "bytes": 121623,
+      "sha256": "627b9e8d809da06a00a54d55dae065abf9fa777535570ba3ab0c8124cd238cfa"
+    },
+    "regeneration_fail_closed_exit": 97
+  },
+  "completed_blocks": 0,
+  "driver_production_manifest": {
+    "bytes": 1019,
+    "sha256": "ad587ca4d0ee05953202c5378442bf11e936b2205632a3e2e124a4bbab722475"
+  },
+  "evidence_identities": {
+    "EXECUTION_RESULT.json": {
+      "bytes": 155088,
+      "sha256": "31a8cf47e11b92fe304f735733f15f6b9ab496b22b41d155f566f1f16d187b4e"
+    },
+    "OUTER_RESULT.json": {
+      "bytes": 134,
+      "sha256": "527309f538c62cab9e3aa3ed7831e8a801f279f0d9599e31bc08f03e3e970682"
+    },
+    "START.json": {
+      "bytes": 257,
+      "sha256": "fe8f9580287f2a5a756e21fce1b02ac0f19124e0536b03f1742a96bcedbee14e"
+    },
+    "WORK_TREE.json": {
+      "bytes": 138896,
+      "sha256": "cd79027b5105f5f00e95c6b719785be083b0d584d6168e6af352f7a354698856"
+    }
+  },
+  "evidence_manifest": {
+    "bytes": 959,
+    "sha256": "140559eb53a4ef330a5e8e54b1b544d801b323bc2c39bcfe2b9bb3cb969935f4"
+  },
+  "evidence_member_count": 7,
+  "executed_source_publication_commit": "8fbfbfbdf01de5711b39d863ad90bccc70c61158",
+  "failure": {
+    "original_exception_type": "ValueError",
+    "original_failure_boundary": null,
+    "original_failure_code": null,
+    "root_cause": "UNKNOWN",
+    "run_diagnostics_failure_boundary": "NATIVE_SUPERVISION",
+    "run_diagnostics_failure_code": "CHILD_EXIT_NONZERO",
+    "same_cause_as_original_host": "NOT_ESTABLISHED",
+    "terminal_driver_code": "RESET_REQUIRED_HIGH",
+    "terminal_driver_status": "CONTRACT_FAILURE",
+    "typed_ram_or_rtl_first_cause": "NOT_ESTABLISHED"
+  },
+  "full_block_pass": false,
+  "full_job_completed": false,
+  "generation_cache_reused": true,
+  "generation_executed": false,
+  "historical_host_failure_reproduced": null,
+  "host_archive_reused": false,
+  "host_prefix_executed": false,
+  "idma_axi_executed": false,
+  "official_accuracy_pass": null,
+  "original_evidence_unchanged": true,
+  "original_execution_status": "INCOMPLETE",
+  "original_host_failures_preserved": true,
+  "outer": {
+    "exit_code": 1,
+    "finished_utc": "2026-10-19T23:42:25.191602+00:00",
+    "not_child_exit": true,
+    "seconds": 176.78127549499914
+  },
+  "overall_status": "FAIL",
+  "owner_binary_identity": {
+    "bytes": 12718080,
+    "sha256": "a91ff84921ba6b116b762a3f4eb384f1518be88e3feca562c1ee2996b6ba4fa1"
+  },
+  "owner_target_boundary_observed": false,
+  "phases": {
+    "build": {
+      "cleanup_confirmed": true,
+      "full_log_identity": {
+        "bytes": 32385,
+        "sha256": "e698e29fadb7d10248454d8875e7748891d07392f6d67f0051377a09aa40aa9c"
+      },
+      "native_receipt_identity": {
+        "bytes": 1582,
+        "sha256": "0020d763acee29b67133a627e94209bc66786ae25587523c8af232ec01ed6007"
+      },
+      "natural_exit_code": 0,
+      "phase_address_space_limit_bytes": 6442450944,
+      "phase_cpu_limit_seconds": 585,
+      "receipt_status": "PASS",
+      "seconds": 62.420557,
+      "started": true,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    "run": {
+      "cleanup_confirmed": true,
+      "full_log_identity": {
+        "bytes": 13238,
+        "sha256": "6de8bfac1443d0beeae995b365b431f59fde5a6df63c2fb214b36038b19d1a02"
+      },
+      "native_receipt_identity": {
+        "bytes": 1150,
+        "sha256": "1e6b5c82b5ebd706a5688c20fcb74fb9cae515aae2a54cd1f13d4b21f936873e"
+      },
+      "natural_exit_code": 1,
+      "phase_address_space_limit_bytes": 6442450944,
+      "phase_cpu_limit_seconds": 285,
+      "receipt_status": "FAIL",
+      "seconds": 109.877769,
+      "started": true,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 1
+    }
+  },
+  "publication": {
+    "arrays_included": false,
+    "binaries_included": false,
+    "git_write_performed": false,
+    "new_execution_or_test_performed_for_summary": false,
+    "private_absolute_paths_included": false,
+    "raw_logs_included": false,
+    "workflow_files_changed": false
+  },
+  "publication_label": "TEMP",
+  "required_blocks": 5,
+  "resource_contract": {
+    "address_space_limit_bytes": 6442450944,
+    "build_reserved_seconds": 600,
+    "cpu_affinity_count": 1,
+    "maxrss_kib_cumulative_parent_children": 1586744,
+    "maxrss_scope": "Cumulative coordinator child maximum; not a separate measurement for each phase",
+    "minimum_disk_available_bytes": 3221225472,
+    "minimum_mem_available_bytes": 8589934592,
+    "run_reserved_seconds": 300,
+    "shared_seconds_cap": 960,
+    "tail_reserved_seconds": 60
+  },
+  "run_log_lines": 4,
+  "schema": "OWNER_MICRO_CACHE_BUILD_RUN_FAILURE_SAFE_SUMMARY_V1",
+  "scope": "ACTUAL_OWNER_COMPILE_AND_FINITE_TYPED_RAM_RUN_FAILURE_ONLY",
+  "session": 44110,
+  "source_counts": {
+    "compiled_sv_sources": 307,
+    "defines": 4,
+    "include_directories": 8,
+    "observation_fields": 95,
+    "owner_ports": 196
+  },
+  "start_utc": "2026-10-19T23:39:28.415020+00:00",
+  "terminal_observation": {
+    "current_edge_handshake_inference_from_software_counters": false,
+    "cycle_limit": 500000,
+    "drain_completion_edge_observed": 0,
+    "edge": 76580,
+    "first_window_request_edge": 3,
+    "first_window_terminal_edge": 52379,
+    "inputs_verified": true,
+    "rtl_valid_zero_payload_not_claimed_as_handshake": true,
+    "sample": "HIGH_EVAL_POST_SOFTWARE_PREVIOUS_EDGE",
+    "scope": "CURRENT_HIGH_POST_EVAL_RTL_WITH_SOFTWARE_LEDGER_THROUGH_PREVIOUS_EDGE",
+    "second_window_request_edge": 52381,
+    "second_window_terminal_edge": 62000,
+    "selected_rtl_scalars": {
+      "banks_poison": 0,
+      "coor_bad": 1,
+      "coor_block": 1,
+      "coor_drainPending": 1,
+      "coor_ng": 0,
+      "coor_poison": 0,
+      "coor_serviceError": 1,
+      "coor_state": 8,
+      "coor_sumPending": 0,
+      "coor_windowPending": 0,
+      "dense_state": 7,
+      "dense_status": 0,
+      "matrix_group_sliceMask": 255,
+      "matrix_poison": 0,
+      "matrix_state": 0,
+      "matrix_steps": 61440,
+      "matrix_wideSteps": 7680,
+      "owner_sharedPoison": 1,
+      "router_bad": 1,
+      "router_fault": 0,
+      "router_malformed": 0,
+      "router_state": 2,
+      "router_stray": 0,
+      "win_resetRequired": 1
+    },
+    "software_ledger": {
+      "committed_bytes": 640,
+      "current_window_issues": 2560,
+      "drain_requests": 1,
+      "drain_terminals": 0,
+      "issues": 7680,
+      "jobs": 1,
+      "matrix_dones": 2,
+      "matrix_groups": 2,
+      "n0_requested_bytes": 786432,
+      "n0_returned_bytes": 786432,
+      "ram_state": 3,
+      "read_requests": 19968,
+      "read_responses": 19968,
+      "target_edge": 0,
+      "window_requests": 2,
+      "window_terminals": 2,
+      "wq_requested_bytes": 491520,
+      "wq_returned_bytes": 491520,
+      "write_data_beats": 10,
+      "write_descriptors": 1,
+      "write_responses": 0
+    },
+    "write_response_zero_does_not_prove_current_edge_unacknowledged": true
+  },
+  "typed_reference_rtl_pass": null,
+  "work_inventory": {
+    "directories": 9,
+    "entries": 608,
+    "regular_file_bytes": 493245462,
+    "regular_files": 599,
+    "scope": "Counts of the frozen parent inventory; the formal actual review independently revalidated the current full tree against it."
+  }
+}

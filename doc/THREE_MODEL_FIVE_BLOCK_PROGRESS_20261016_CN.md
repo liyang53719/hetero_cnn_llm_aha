@@ -704,3 +704,15 @@ batch1/M128继续推进；1024/1224长序列待用户选择，不阻塞M128。
 - todo：生成审闭后再确认参数特化、独立叶状态与层级库编译/实际链接，最后执行 DPI scope 与两个独立 handle 的交错状态、单侧 reset 和独立销毁微例。源码中的期望结果不是实际运行证据。
 - 边界：四阶段总窗 30/120/300/30 s、工作上限 10/90/240/10 s，原单核资源和保锚清理不变；默认模板仍 UNBOUND，全部实际槽与冻结安全史保持 `PENDING_AT_FREEZE`，本条仅追加已审构建和版本事实。
 - 边界：原官方生成失败、同资产只读静态资格及未初始化风险历史完整保留；新补丁不冒称旧补丁恢复。此批不含工具 binary、对象/归档、实际生成 C++、日志或机器库存；无真实 Host/RTL 数值新增 PASS，完整 block 0/5。
+
+### 2026-10-19 00:09 UTC：派生工具固定 tiny 四阶段实际闭合，层级库与双 handle 有限运行通过
+
+- done：派生构建实际审 `61a4f6b18e782f8562d76b1fc77cedb22a86a0c225f900633002931b36b6a818` 与新 backend 版本实际审 `60fcf5826de40e78db516916616926da77b2ad8b249478fd381000afbf7da022` 已闭合；版本 outer exit 0/0.123 s。banner 的官方 revision 不代替派生源码、patch 和 binary 的固定身份。
+- done：同两份人工 fixture、fresh work root 的新生成 outer exit 0/0.241 s；实际审 `d214ccf7cec8bb7b80c4fefccb0907f4bedd547188df7ad37c88e54c20e878e0` 核 38 文件/129,537 B、STEP=3 参数特化、独立 protected wrapper 和 top 边界。真实目标 class 内的 field、constructor、唯一 `m_seqnum{0}` 定域通过；旧/新目标 class 仅增加 13 B initializer。整份新 wrapper 是 2,831 B，另有成对 protection hash 变化，不能把此前 2,832 B 人工 positive 当实际产物。
+- done：tiny compile outer exit 0/7.250 s；实际审 `fb32a7c17386917d4588e6f36ede2ceb0ea332d470ad04b63fd9856049e337e0` 核 57 文件/3,417,795 B、七次 O0 编译、一次 top 链接。独立 child archive 68,192 B、组合 top archive 136,728 B 与实际对象逐 byte 对应，ELF 900,240 B；层级资格由生成边界、独立归档和实际链接共同支持，不只依赖旗标或未来 archive 路径。
+- done：tiny run outer/native 均 exit 0，outer 0.161 s，保锚清理闭合；实际审 `797d17c03028f01e29d9ba0d3430aada7aff852fed4ba86883b25fbe2fa55b72` 仅授固定派生微例双 handle 运行。五条预期 marker 与固定源码断言匹配，57 件已编译树完整不变。两个独立 context/model 使用同名 TOP scope，导出路由分别选定；交错 checkpoint A=137/B=455，单侧 reset 后 A=7/B=455，销毁 A 后 B 可继续到 469。
+- done：源码控制流可计得 110 次 check、220 次 export read、3 次 export write；110/220 是固定 fixture 的静态计数，不是单独插桩的运行仪表。实际运行结论按已审输出、断言路径及固定二进制身份限定。
+- done：新增独立安全实际摘要 `development_snapshots/canonical_host93_derived_micro_actual_summary_20261019/ACTUAL_SUMMARY.json`，13,795 B/SHA256 `c60ed76779ba54da2cf1e7b545beffb270e02842b471a536bdf6caaec559d4df`，记录四阶段真实审与精确来源身份。原 14 件 SOURCE 包及其 `PENDING_AT_FREEZE` 全部保持；本追加与单件摘要不作为未来执行授权，不携带本机路径、系统库存、日志、实际生成 C++ 或二进制。
+- 边界：原官方生成 native 0/outer 1 的失败、只读静态资格和未初始化风险历史完整保留；旧生成物不因新 tiny 成功而获准 compile/run。新目标构造初始化与一次有限运行不能证明普遍无 UB、任意生命周期模式或全部 DPI 内存路由；本例观察 TOP 导出和经普通端口到达的 leaf count，不是 leaf 私有内存 DPI 资格。
+- 边界：四阶段原总窗 30/120/300/30 s、工作上限 10/90/240/10 s 未增；绝对 work-stop 不是可最迟 spawn 后再给整段工作时间。leader 采样不代表 compiler 子树，累计 RUSAGE_CHILDREN maxrss 不当作阶段 RSS。此微例不授 Host ABI、真实 Host 回放或完整 block 数值资格，完整 block 计数保持既有 0/5。
+- todo：在独立 SOURCE/身份门与有限预算下继续真实 Host 生成模型、RAM/DPI 接线和数值回放；真实 Host 输入、执行和完整 block PASS 仍需各自证据，不能由本微例自动继承。

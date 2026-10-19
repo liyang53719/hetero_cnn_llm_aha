@@ -1,0 +1,393 @@
+{
+  "schema": "host93-derived-tiny-safe-actual-summary-v1",
+  "date_utc": "2026-10-19",
+  "status": "ACCEPTED_FIXED_DERIVED_TINY_FOUR_STAGES_ONLY",
+  "purpose": "Sanitized historical evidence summary. This file is not an executable gate or future execution authorization.",
+  "official_origin": {
+    "repository": "https://github.com/verilator/verilator",
+    "commit": "4e194cc3ec8e27b18e17f80d7f99c15f984bbdae",
+    "tree": "3300b1cc13a3903fe3113ae65087ae75b2cdb2df",
+    "original_source_preserved": true
+  },
+  "derived_tool": {
+    "patch_scope": "Single V3ProtectLib constructor initializer m_seqnum{0}; official source remains unchanged.",
+    "source_identity": {
+      "derived_source": {
+        "bytes": 22430,
+        "sha256": "380f292c6e82ce30cd7c0b3375ac3f2b91e5c1e872a2c733ca6d0490122cf6fb"
+      },
+      "original_source": {
+        "bytes": 22417,
+        "sha256": "bddc3100c2ce83d7a4fe4656b0ff33cca1be70ea9a8295037c6aea72bc0ec6c1"
+      },
+      "patch_record": {
+        "bytes": 1619,
+        "sha256": "784e777dbf4cfdef53788ff1c3d69a31c5e416a7d10c2d5a387b795b42cb1fe2"
+      }
+    },
+    "source_candidate_manifest": {
+      "bytes": 1507,
+      "sha256": "4912209f9cafe7e343736bb1becd66d472d3d31893b1dbfdc92018472be7f3b8"
+    },
+    "source_review_manifest": {
+      "bytes": 2306,
+      "sha256": "6d1109aed1e5bdf59213ae8503302c11517e9c046a6520830a37c6a9f0e69b0b"
+    },
+    "backend_binary": {
+      "bytes": 19076520,
+      "sha256": "75dd308bde0b9cb1e64b36a03ba8be38c64c2b59087dd52300fa8b43a107aeb2"
+    },
+    "backend_build_actual_review": {
+      "manifest": {
+        "bytes": 1616,
+        "sha256": "61a4f6b18e782f8562d76b1fc77cedb22a86a0c225f900633002931b36b6a818"
+      },
+      "summary": {
+        "bytes": 5739,
+        "sha256": "ba97b65774278e5aef424092f2590acc891235ad038e5db280acee1e89b2ba6e"
+      },
+      "verdict": "PASS_ACTUAL_DERIVED_SEQNUM_INCREMENTAL_BUILD_ONLY",
+      "phase": "derived_incremental",
+      "outer_exit": 0,
+      "native_exit": 0,
+      "cleanup_confirmed": true,
+      "outer_elapsed_seconds": 5.442
+    },
+    "version_string_scope": "The reported 5.053 devel revision remains the official commit string. Exact derived source/patch/binary identities distinguish this tool."
+  },
+  "handwritten_fixtures": {
+    "tiny.sv": {
+      "bytes": 938,
+      "sha256": "339baf2e67c47d6f00597f6daee72f2e7b5c47ae8803dac54ff30911bcba7a85"
+    },
+    "main.cpp": {
+      "bytes": 4269,
+      "sha256": "774064865f2e1d224363b6c63ae75dac3abe5f0afe6c05105920724fe4e161c0"
+    }
+  },
+  "source_reviews": {
+    "finite_derived_micro_v2": {
+      "manifest": {
+        "bytes": 1003,
+        "sha256": "b550aea214533532d2826fa74a90c7000c2db1fc220c764999cf1f68fb255236"
+      },
+      "summary": {
+        "bytes": 1427,
+        "sha256": "55cb36c70b20cd14df3d7cb781b56c4d51799b77b1c937f3504a54e40ad4783a"
+      },
+      "verdict": "SOURCE_GO_DERIVED_MICRO_UNBOUND_ONLY"
+    },
+    "version_identity_v3": {
+      "manifest": {
+        "bytes": 2014,
+        "sha256": "c057e20a469b1f02ef16e8d3cbfebdee2457406e33a6511ae3565e3f841b9591"
+      },
+      "summary": {
+        "bytes": 1381,
+        "sha256": "81a5724e4ee4e5fcede9b44c320cbb98869cf8f1c5ea9c0421ce7f59bd1279f2"
+      },
+      "verdict": "SOURCE_GO_DERIVED_MICRO_VERSION_IDENTITY_ONLY"
+    },
+    "generate_identity_v4": {
+      "manifest": {
+        "bytes": 1175,
+        "sha256": "404da3cdd348d264c855c79bad1d19fe115456ac28ef7a9bbd8c74717b385be6"
+      },
+      "summary": {
+        "bytes": 1429,
+        "sha256": "8c1bfcbb71a0db27b9306e0b8f75238601557e3589d45924830333c14bfde87a"
+      },
+      "verdict": "SOURCE_GO_DERIVED_MICRO_GENERATE_IDENTITY_ONLY"
+    },
+    "compile_identity_v5": {
+      "manifest": {
+        "bytes": 1034,
+        "sha256": "b7171fb88006234e284582d13ff4447a59674d2afd4c895c21c95a6522b47b7c"
+      },
+      "summary": {
+        "bytes": 1473,
+        "sha256": "b3593262c1c8bd7ac998bf03c263a9c1e642505dc2dfec8c7207cc2a8cead4c3"
+      },
+      "verdict": "SOURCE_GO_DERIVED_MICRO_COMPILE_IDENTITY_ONLY"
+    },
+    "run_identity_v6": {
+      "manifest": {
+        "bytes": 894,
+        "sha256": "4abfe11e97a0af9358e921c7ca8d3f80e513c0bd940255ab0a18d13ef9a93fe3"
+      },
+      "summary": {
+        "bytes": 1400,
+        "sha256": "d07512b8d8e7efd964bbd12d8bc05b37e50084a8fb365d52099335bbb83f138e"
+      },
+      "verdict": "SOURCE_GO_DERIVED_MICRO_RUN_IDENTITY_ONLY"
+    },
+    "portable_14_file_content": {
+      "manifest": {
+        "bytes": 1383,
+        "sha256": "cdd4d317bf1e5ed4d62c0c6565037ecd1db47710a48e7d529f73e7c6b45738fe"
+      },
+      "summary": {
+        "bytes": 1508,
+        "sha256": "ba81c16cfd6622eefca02725042ecb9c9efb08948b4d39f705a974c11accee53"
+      },
+      "verdict": "CONTENT_SOURCE_GO_FINITE_PORTABLE_DERIVED_MICRO_ONLY"
+    }
+  },
+  "four_stage_actual_reviews": {
+    "version": {
+      "manifest": {
+        "bytes": 1208,
+        "sha256": "60fcf5826de40e78db516916616926da77b2ad8b249478fd381000afbf7da022"
+      },
+      "summary": {
+        "bytes": 4257,
+        "sha256": "d87130ee4fd90487ae8cb0e3a274eec0731f72561feff44aea0146671c3df2ca"
+      },
+      "verdict": "PASS_ACTUAL_DERIVED_BACKEND_VERSION_ONLY",
+      "phase": "version",
+      "outer_exit": 0,
+      "native_exit": 0,
+      "cleanup_confirmed": true,
+      "outer_elapsed_seconds": 0.123
+    },
+    "generate": {
+      "manifest": {
+        "bytes": 900,
+        "sha256": "d214ccf7cec8bb7b80c4fefccb0907f4bedd547188df7ad37c88e54c20e878e0"
+      },
+      "summary": {
+        "bytes": 6060,
+        "sha256": "d8b01c33937f24824e48925812e8acbc4b5b2f825b018d8e9a1cb04dc49e2b4b"
+      },
+      "verdict": "PASS_ACTUAL_DERIVED_MICRO_GENERATION_ONLY",
+      "phase": "generate",
+      "outer_exit": 0,
+      "native_exit": 0,
+      "cleanup_confirmed": true,
+      "outer_elapsed_seconds": 0.241
+    },
+    "compile": {
+      "manifest": {
+        "bytes": 1215,
+        "sha256": "fb32a7c17386917d4588e6f36ede2ceb0ea332d470ad04b63fd9856049e337e0"
+      },
+      "summary": {
+        "bytes": 5092,
+        "sha256": "78af21ab3a380ce8a31f1ba10aecad36624b8cb8c4d912d5be282d7076fb606e"
+      },
+      "verdict": "PASS_ACTUAL_DERIVED_MICRO_COMPILE_ONLY",
+      "phase": "compile",
+      "outer_exit": 0,
+      "native_exit": 0,
+      "cleanup_confirmed": true,
+      "outer_elapsed_seconds": 7.25
+    },
+    "run": {
+      "manifest": {
+        "bytes": 913,
+        "sha256": "797d17c03028f01e29d9ba0d3430aada7aff852fed4ba86883b25fbe2fa55b72"
+      },
+      "summary": {
+        "bytes": 5450,
+        "sha256": "d5a5d5e0607fe33816a575b5952a4bf9a29c6d70bffd99e183c7717fc23d778d"
+      },
+      "verdict": "PASS_ACTUAL_DERIVED_MICRO_DUAL_HANDLE_RUNTIME_ONLY",
+      "phase": "run",
+      "outer_exit": 0,
+      "native_exit": 0,
+      "cleanup_confirmed": true,
+      "outer_elapsed_seconds": 0.161
+    }
+  },
+  "generation_static_evidence": {
+    "files": 38,
+    "bytes": 129537,
+    "work_inventory_sha256": "360aa5ce07849d3d80c33e94826b08e3a7fb714545cbf755eb26ae2dd75ad664",
+    "specialized_parameterized_leaf": "micro_leaf_f",
+    "STEP": 3,
+    "unsized_signed_hex_value_3_accepted": true,
+    "separate_protected_wrapper_and_top_boundary_verified": true,
+    "generated_wrapper": {
+      "bytes": 2831,
+      "sha256": "2107622c200b80b5560b64d48b9da64314e81517270d71c739a86c34a083d6a1"
+    },
+    "target_container_initializer": {
+      "class_byte_range": [
+        279,
+        466
+      ],
+      "class_sha256": "e65f21c6e35d0c788b908e80d28dd9710869aff33c9919c00efbb5d5a7f29b18",
+      "container": "Vmicro_leaf_f_container",
+      "does_not_claim_general_cpp_semantics_or_runtime_correctness": true,
+      "initialized_member": "m_seqnum",
+      "initializer_value": 0,
+      "leaf": "micro_leaf_f",
+      "member_ranges": {
+        "ctor": [
+          371,
+          463
+        ],
+        "field": [
+          347,
+          366
+        ],
+        "initializer": [
+          449,
+          460
+        ]
+      },
+      "status": "FINITE_TARGET_CONTAINER_INITIALIZER_WITNESS",
+      "unknown_body_refused": true,
+      "wrapper_sha256": "2107622c200b80b5560b64d48b9da64314e81517270d71c739a86c34a083d6a1"
+    },
+    "old_to_new_target_class_delta_bytes": 13,
+    "whole_wrapper_delta_is_not_only_initializer": "Protection-pair hash also changed; paired SV/C++ hash was checked. The actual 2831-byte wrapper is not the earlier 2832-byte synthetic positive.",
+    "compiled_artifacts_observed_in_generate_phase": false
+  },
+  "compiled_hierarchy_evidence": {
+    "independent_child_archive": {
+      "bytes": 68192,
+      "sha256": "381742698de3ea7851b64ea6e2ef6e8bdcefeb1bb967eeda1491520f27ebe9e4"
+    },
+    "combined_top_archive": {
+      "bytes": 136728,
+      "sha256": "36ba6da4080f8e4a74f1c4d3b7f966e3c81598556380374c076318325ed4ff24"
+    },
+    "executable": {
+      "bytes": 900240,
+      "sha256": "c9701b155d0520d591be3ef3b98b2440e853a8716f2dac23b9f8de43b754ee61"
+    },
+    "archive_members_equal_real_objects": true,
+    "O0_compile_commands": 7,
+    "top_link_commands": 1,
+    "compiled_work_files": 57,
+    "compiled_work_bytes": 3417795,
+    "compiled_work_inventory_sha256": "bbbd1a45dd97f7b468185df71efab9ee1a3f4f1336473f69845adb84657a15d2",
+    "basis": "Independent child and top object/archive identities plus actual make/compile/top-link evidence; not just the hierarchical flag or an archive path."
+  },
+  "runtime_observation": {
+    "exact_expected_marker_lines_matched": 5,
+    "same_top_scope_name": "dual.micro_top",
+    "distinct_context_model_scope": true,
+    "top_DPI_export_writes": 3,
+    "checkpoint_counts": {
+      "A": 137,
+      "B": 455
+    },
+    "reset_A_only": {
+      "A": 7,
+      "B_preserved": 455
+    },
+    "after_A_close": {
+      "B_continues": 469
+    },
+    "compiled_tree_unchanged": true,
+    "retained_files": 57,
+    "retained_bytes": 3417795,
+    "work_tree_inventory_sha256": "bbbd1a45dd97f7b468185df71efab9ee1a3f4f1336473f69845adb84657a15d2",
+    "result_identity": {
+      "bytes": 763,
+      "sha256": "c6b74477ddf0b22443d003bbbfb5083a8f5022b9d81fc9f83aeef1b00cc73cad"
+    },
+    "work_tree_record_identity": {
+      "bytes": 11875,
+      "sha256": "bbbd1a45dd97f7b468185df71efab9ee1a3f4f1336473f69845adb84657a15d2"
+    },
+    "original_result_terminal_success": false,
+    "acceptance_basis": "Separate independent actual review and observed outer exit, without rewriting original pending-acceptance phase records."
+  },
+  "source_control_flow_accounting": {
+    "check_invocations": 110,
+    "export_reads": 220,
+    "export_writes": 3,
+    "positive_clock_ticks_A": 17,
+    "positive_clock_ticks_B_before_A_close": 32,
+    "positive_clock_ticks_B_total": 33,
+    "scope": "Static accounting from the fixed fixture control flow. These are not separately instrumented runtime counters."
+  },
+  "original_failure_preserved": {
+    "native_exit": 0,
+    "outer_exit": 1,
+    "cause": "Original valid STEP signed-hex literal was rejected by the old finite checker; the original container also had an uninitialized sequence member.",
+    "failure_review": {
+      "manifest": {
+        "bytes": 1780,
+        "sha256": "129bd4776e0b54ae49b827b0d733912fc913dce3d140f5000a12d8eac4f6da97"
+      },
+      "summary": {
+        "bytes": 6382,
+        "sha256": "eff504995e9ef318c23f0c68dfda55e4a4ac5530e9f46c132b9f3c8b89acd456"
+      },
+      "verdict": "CONFIRMED_ACTUAL_GENERATE_POSTFLIGHT_FAILURE"
+    },
+    "readonly_static_review": {
+      "manifest": {
+        "bytes": 603,
+        "sha256": "230cc4cc633114d3b59c96af42c529a0ab3b086fc495305ae47fceed76a0684b"
+      },
+      "summary": {
+        "bytes": 2822,
+        "sha256": "0ff0976cd7bdeafd9822f1de254baa5586fd3fe563f21add6c8b9d1d0957d956"
+      },
+      "verdict": "PASS_ACTUAL_READONLY_STATIC_COMPARISON_ONLY"
+    },
+    "readonly_outer_exit": 0,
+    "readonly_did_not_authorize_old_compile_or_run": true,
+    "old_generated_compile_or_runtime_authorized": false
+  },
+  "portable_source_snapshot": {
+    "file_count": 14,
+    "bytes": 100017,
+    "manifest": {
+      "bytes": 2728,
+      "sha256": "e8687fa569ed6bbfbb176b9cfc2e736db1a20688074e97afe65cbe992ea6fbaa"
+    },
+    "bindings_at_its_freeze": "PENDING_AT_FREEZE",
+    "original_package_unchanged": true,
+    "this_summary_is_separate": true
+  },
+  "limits_and_measurement_scope": {
+    "source_gate_total_seconds": {
+      "version": 30,
+      "generate": 120,
+      "compile": 300,
+      "run": 30
+    },
+    "source_gate_work_max_seconds": {
+      "version": 10,
+      "generate": 90,
+      "compile": 240,
+      "run": 10
+    },
+    "source_gate_absolute_work_stop_offsets_seconds": {
+      "version": 20,
+      "generate": 110,
+      "compile": 280,
+      "run": 20
+    },
+    "notes": [
+      "Absolute work-stop offsets are not latest-spawn allowances.",
+      "Generation included owned-group make/Perl/child Verilator processes.",
+      "CPU/AS/FSIZE constraints are per process/file; aggregate tree/log caps are postflight soft limits.",
+      "Leader samples are not subtree CPU/RSS; cumulative RUSAGE_CHILDREN maxrss is not phase/instantaneous RSS.",
+      "Static configured limits were not separately runtime-instrumented."
+    ]
+  },
+  "qualification_boundaries": {
+    "fixed_tiny_only": true,
+    "direct_leaf_private_memory_DPI_qualified": false,
+    "arbitrary_lifecycle_patterns_qualified": false,
+    "general_undefined_behavior_clearance": false,
+    "Host_ABI_or_Host_execution_qualified": false,
+    "Host93_large_input_qualified": false,
+    "full_block_numerical_correctness_qualified": false,
+    "original_uninitialized_assets_preserved": true
+  },
+  "excluded_content": [
+    "local absolute paths",
+    "host program or system inventories",
+    "native logs",
+    "generated C++ or HDL contents",
+    "native binaries or archives"
+  ]
+}

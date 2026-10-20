@@ -1460,3 +1460,18 @@ v3 production manifest1019/67ae76c51aacbcabb47bdf10cc59a8d1cb7c506760907d506c7f0
 SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64e722506ec2e4fcbf57b8619f3f261c8927b4475d0d7d75434c7a15c7d6fd3c，S5238/a092a51a7d94f0cc2eee1f65e4b909cc5bea8ec40797a9c66e3c305c614420dd，GO_OWNER_DRIVER_RELINK_RUN_SOURCE_AND_EXACT_540_COMMAND_ONLY。独立39+39 helper-boundary冷测通过，与作者156分列；12复用/39依赖子审已闭，未重执行原actual。本片实际NOT_EXECUTED；300秒与500000局部cycles不保证目标完成。完整bounded JSONL原样保留供后续actual独审，caller不解析raw_high_before_settle并授资格。full_job/full_block=false，official/application/typed-to-RTL及historical_host_failure_reproduced均null，不把局部owner与原Host认定同因。
 
 公开前缀 candidates/host93_first_n0_sources/owner_driver_relink_run/；只投影14件安全public原件+STATUS和完整计划。私有binding/COMMAND/outer/原.d夹具、原工作树、数组、日志不发布。本段是原285715字节计划纯追加，实际发布用完整replacement，禁止把全文件重复append。
+
+
+## TEMP：Owner v3 driver-only 真实 settled failure（2026-10-20）
+
+唯一 session 92317 已自然终态：compile 0 / 1.663322s，link 0 / 0.123427s，局部 run 1 / 150.140876s；三阶段均未超时且 cleanup=true。outer exit=1，159.6861525139975s，于 2026-10-20T00:12:16.633883+00:00 结束。原 EXECUTION_RESULT 保留 INCOMPLETE/ValueError 和 null failure_code/boundary；run 原诊断为 NATIVE_SUPERVISION/CHILD_EXIT_NONZERO，安全实际结论为 FAIL。
+
+本轮只新编译 v3 driver 并链接已核 owner archive/runtime objects，没有复用旧 driver object、重生成或重建 backend。新 ELF 12726288 B / 211b05da7c5747970277f2d0756ea25a39f6156113a3c1bf803796f57cd2ab4e；完整四行运行日志 20870 B / 4eacd6c718e0c7f69a440889a9d03345fbce45e13b30ef3028a8aaabbdca7ea1。
+
+末 edge=92364，RESET_REQUIRED_SETTLED；同沿 raw-high 和完成软件退休后的 low-settled 均 resetRequired=1，dense_state=6/status=8。固定 Protocol.scala 3123 B / 5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783 定义 Numerical=8、Memory=3，故本次属于 Numerical 状态类别，具体首写分支及上游原因仍 UNKNOWN。
+
+本轮首 drain 已真实退休：128 个 typed write responses、128 descriptors、1280 data beats、81920 committed bytes，drain terminal edge=81467；这不是 Host AXI B 证明。第三 window request edge=81469，ng=160/K[0,1024)/reuseA=1；末条 requests=3、terminals=2，matrix groups=3/dones=2，wideSteps=12800、steps=102400，N0/Wq returned=786432/819200B。无第三 window terminal，也未达到 ng=160 partial1 首 issue 目标。末条 valid=0 的元数据不作为本沿新握手或 terminal。原 Host 同一计数/窗口位置仅相容，同因尚未建立；旧 v2 早期 FAIL 和全部原证据保留。
+
+正式 actual 审：review_owner_driver_relink_actual_20261020T0014，MANIFEST.json 770 B / 1e829f2d6553cc0f1b6fe0223851325767e8c7af5de934154ef554eafe0a8be2；SUMMARY.md 8002 B / 05bc84539e07589dbb3f216de953d32e64b9ed3f29b0161485be07eb51292953。verdict ACCEPT_ACTUAL_OWNER_V3_RELINK_NATURAL_ZERO_SETTLED_NUMERICAL_STATUS_FAILURE_ONLY。独立核当前 53 项树、七证据、42 caller/28 core、338 原生成输入、完整输入及新 ELF/.d/archive 关联；39 系统依赖沿 SOURCE 资格，本次未重 hash。独立终态读验不倒填运行失败后未执行的 success-only postflight。
+
+公开安全两正文位于 candidates/host93_first_n0_sources/owner_driver_settled_failure_actual/；不含机器私有路径、原始日志、数组或二进制。证据 manifest 957 B / ebfd84179a8b3dd6ee270977a5959bc16aebc1d83c521a562afb2f65276c54cf。该摘要没有新 native/RTL/测试。Host 前缀和 iDMA/AXI 未执行，完整 job/full block=false，五 block 0/5；official/application/typed-to-RTL/historical-host-reproduction 均保持 null。下一步须单独定位 Numerical 首写，不把本次 FAIL 改记为成功。

@@ -1,0 +1,391 @@
+{
+  "actual_review": {
+    "directory": "review_owner_driver_relink_actual_20261020T0014",
+    "manifest": {
+      "bytes": 770,
+      "sha256": "1e829f2d6553cc0f1b6fe0223851325767e8c7af5de934154ef554eafe0a8be2"
+    },
+    "summary": {
+      "bytes": 8002,
+      "file": "SUMMARY.md",
+      "sha256": "05bc84539e07589dbb3f216de953d32e64b9ed3f29b0161485be07eb51292953"
+    },
+    "verdict": "ACCEPT_ACTUAL_OWNER_V3_RELINK_NATURAL_ZERO_SETTLED_NUMERICAL_STATUS_FAILURE_ONLY"
+  },
+  "actual_review_scope": {
+    "caller_source_members": 42,
+    "complete_n0_and_wq_hashes_rechecked": true,
+    "copied_reuse_inputs": 12,
+    "core_v3_members": 28,
+    "current_work_tree_entries": 53,
+    "evidence_members": 7,
+    "fresh_fixtures": 7,
+    "independent_post_terminal_checks_do_not_backfill_failed_postflight": true,
+    "new_elf_object_and_ordered_twelve_user_dependency_closure_rechecked": true,
+    "original_generation_input_files": 338,
+    "success_only_after_run_caller_postflight_completed": false,
+    "system_dependencies_39_new_rehash": false,
+    "whole_old_compiled_tree_new_rehash": false
+  },
+  "actual_review_status": "FORMALLY_ACCEPTED_LIMITED_SCOPE",
+  "actual_review_status_definition": {
+    "definition": "Status.Numerical=8; Status.Memory=3; Status.Protocol=7",
+    "meaning": "Observed Dense status 8 identifies the numerical status category only; the precise first-writing branch and upstream cause remain UNKNOWN.",
+    "source_file": "Protocol.scala",
+    "source_identity": {
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    }
+  },
+  "application_accuracy_pass": null,
+  "backend_rebuilt": false,
+  "compiled_model_reuse": {
+    "old_driver_object_reused": false,
+    "owner_archive_reused": true,
+    "prior_receipt_identity": {
+      "bytes": 155088,
+      "sha256": "31a8cf47e11b92fe304f735733f15f6b9ab496b22b41d155f566f1f16d187b4e"
+    },
+    "prior_review_identity": {
+      "bytes": 9476,
+      "sha256": "14bb3cbebaa5002dad596c235db675cec66904a60e0ec8c8101d735ac853f1b1"
+    },
+    "prior_tree_identity": {
+      "bytes": 138896,
+      "sha256": "cd79027b5105f5f00e95c6b719785be083b0d584d6168e6af352f7a354698856"
+    },
+    "regular_archive": true,
+    "staged_bytes": 24151608,
+    "staged_members": 12
+  },
+  "completed_blocks": 0,
+  "driver_production_manifest": {
+    "bytes": 1019,
+    "sha256": "67ae76c51aacbcabb47bdf10cc59a8d1cb7c506760907d506c7f09681279b6fc"
+  },
+  "evidence_identities": {
+    "EXECUTION_RESULT.json": {
+      "bytes": 161733,
+      "sha256": "10d7e7857735a71968785b42059e185bf60cebb0c5d31347531d31b3a233d439"
+    },
+    "OUTER_RESULT.json": {
+      "bytes": 133,
+      "sha256": "a9bddc3c26531bbebb4845339009d48dedea93b6e1a5cc3a23b243c606d2d816"
+    },
+    "START.json": {
+      "bytes": 257,
+      "sha256": "ba4113ccfa65ba49e10362de5363c621cbe6ac5d8ebbab1b850df74203169c69"
+    },
+    "WORK_TREE.json": {
+      "bytes": 9254,
+      "sha256": "7fd699e30642b848348fc811a104edcc699d2d470859723b4a760fa9c616c671"
+    }
+  },
+  "evidence_manifest": {
+    "bytes": 957,
+    "sha256": "ebfd84179a8b3dd6ee270977a5959bc16aebc1d83c521a562afb2f65276c54cf"
+  },
+  "evidence_member_count": 7,
+  "executed_source_publication_commit": "bff316eb486d6639e80b8fbd7aec8124d704b3f0",
+  "failure": {
+    "host_position_relation": "COMPATIBLE_COUNTER_AND_WINDOW_POSITION_ONLY",
+    "original_exception_type": "ValueError",
+    "original_failure_boundary": null,
+    "original_failure_code": null,
+    "root_cause": "UNKNOWN",
+    "run_diagnostics_failure_boundary": "NATIVE_SUPERVISION",
+    "run_diagnostics_failure_code": "CHILD_EXIT_NONZERO",
+    "same_cause_as_original_host": "NOT_ESTABLISHED",
+    "terminal_driver_code": "RESET_REQUIRED_SETTLED",
+    "terminal_driver_status": "CONTRACT_FAILURE",
+    "typed_ram_or_rtl_first_cause": "NOT_ESTABLISHED"
+  },
+  "full_block_pass": false,
+  "full_job_completed": false,
+  "generation_executed": false,
+  "historical_host_failure_reproduced": null,
+  "host_archive_reused": false,
+  "host_prefix_executed": false,
+  "idma_axi_executed": false,
+  "new_driver_dependency_file_identity": {
+    "bytes": 1437,
+    "sha256": "15dee13f2cf2a3c7f816673b89c9688517f1a48e34018d7d60b5f0df387de33d"
+  },
+  "new_driver_object_identity": {
+    "bytes": 189176,
+    "sha256": "c0cd963119b1e908971d896a56c3ac893a48bc34d52560041ead6520623d9a89"
+  },
+  "official_accuracy_pass": null,
+  "original_evidence_unchanged": true,
+  "original_execution_status": "INCOMPLETE",
+  "original_host_failures_preserved": true,
+  "outer": {
+    "exit_code": 1,
+    "finished_utc": "2026-10-20T00:12:16.633883+00:00",
+    "not_child_exit": true,
+    "seconds": 159.6861525139975
+  },
+  "overall_status": "FAIL",
+  "owner_binary_identity": {
+    "bytes": 12726288,
+    "sha256": "211b05da7c5747970277f2d0756ea25a39f6156113a3c1bf803796f57cd2ab4e"
+  },
+  "owner_target_boundary_observed": false,
+  "phases": {
+    "compile": {
+      "cleanup_confirmed": true,
+      "full_log_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native_receipt_identity": {
+        "bytes": 2328,
+        "sha256": "0fc6dc2ba4383dec2696b1679600d36f5b7e696d24b35a6762d9b6ef99eaa089"
+      },
+      "natural_exit_code": 0,
+      "phase_address_space_limit_bytes": 6442450944,
+      "phase_cpu_limit_seconds": 105,
+      "receipt_status": "PASS",
+      "seconds": 1.663322,
+      "started": true,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    "link": {
+      "cleanup_confirmed": true,
+      "full_log_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native_receipt_identity": {
+        "bytes": 1667,
+        "sha256": "036927a095c8e09ba64bde1e79f7c2ec8f0f768141e7317b96a615e977e575b4"
+      },
+      "natural_exit_code": 0,
+      "phase_address_space_limit_bytes": 6442450944,
+      "phase_cpu_limit_seconds": 45,
+      "receipt_status": "PASS",
+      "seconds": 0.123427,
+      "started": true,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 0
+    },
+    "run": {
+      "cleanup_confirmed": true,
+      "full_log_identity": {
+        "bytes": 20870,
+        "sha256": "4eacd6c718e0c7f69a440889a9d03345fbce45e13b30ef3028a8aaabbdca7ea1"
+      },
+      "native_receipt_identity": {
+        "bytes": 1145,
+        "sha256": "857882a49d0f5e966473f588e804f95f22ddc3595701c101ea096a1b19ff047f"
+      },
+      "natural_exit_code": 1,
+      "phase_address_space_limit_bytes": 6442450944,
+      "phase_cpu_limit_seconds": 285,
+      "receipt_status": "FAIL",
+      "seconds": 150.140876,
+      "started": true,
+      "timed_out": false,
+      "waitid_code": 1,
+      "waitid_status": 1
+    }
+  },
+  "previous_v2_early_failure_preserved": true,
+  "publication": {
+    "arrays_included": false,
+    "binaries_included": false,
+    "git_write_performed": false,
+    "new_execution_or_test_performed_for_summary": false,
+    "private_absolute_paths_included": false,
+    "raw_logs_included": false,
+    "workflow_files_changed": false
+  },
+  "publication_label": "TEMP",
+  "required_blocks": 5,
+  "resource_contract": {
+    "address_space_limit_bytes": 6442450944,
+    "compile_reserved_seconds": 120,
+    "cpu_affinity_count": 1,
+    "initial_admission": {
+      "disk_available_bytes": 25035530240,
+      "mem_available_bytes": 9141805056
+    },
+    "link_reserved_seconds": 60,
+    "maxrss_kib_cumulative_parent_children": 206492,
+    "maxrss_scope": "Cumulative coordinator child maximum; not a separate measurement for each phase",
+    "minimum_disk_available_bytes": 3221225472,
+    "minimum_mem_available_bytes": 8589934592,
+    "phase_admissions": [
+      {
+        "disk_available_bytes": 25011200000,
+        "mem_available_bytes": 9108631552,
+        "phase": "compile"
+      },
+      {
+        "disk_available_bytes": 25010982912,
+        "mem_available_bytes": 9106964480,
+        "phase": "link"
+      },
+      {
+        "disk_available_bytes": 24998232064,
+        "mem_available_bytes": 9108819968,
+        "phase": "run"
+      }
+    ],
+    "run_reserved_seconds": 300,
+    "shared_seconds_cap": 540,
+    "tail_reserved_seconds": 60
+  },
+  "run_log_lines": 4,
+  "schema": "OWNER_DRIVER_RELINK_SETTLED_FAILURE_SAFE_SUMMARY_V1",
+  "scope": "ACTUAL_OWNER_DRIVER_COMPILE_LINK_AND_FINITE_TYPED_RAM_SETTLED_FAILURE_ONLY",
+  "session": 92317,
+  "start_utc": "2026-10-20T00:09:36.951654+00:00",
+  "terminal_observation": {
+    "current_request_valid": 0,
+    "current_result_valid": 0,
+    "current_window_register_metadata": {
+      "win_request_bits_cols": 160,
+      "win_request_bits_identity": 458754,
+      "win_request_bits_kWindow_begin": 0,
+      "win_request_bits_kWindow_blockId": 1,
+      "win_request_bits_kWindow_enabled": 1,
+      "win_request_bits_kWindow_end": 1024,
+      "win_request_bits_kWindow_pairReverse": 1,
+      "win_request_bits_ng": 160,
+      "win_request_bits_reuseA": 1,
+      "win_request_bits_slot": 0
+    },
+    "cycle_limit": 500000,
+    "drain_completion_edge_observed": 81467,
+    "edge": 92364,
+    "first_write_causal_order_established": false,
+    "inputs_verified": true,
+    "invalid_payload_not_claimed_as_new_handshake_or_terminal": true,
+    "raw_high_before_settle": {
+      "edge": 92364,
+      "reset_required": true,
+      "sample": "HIGH_EVAL_POST_EXTERNAL_INPUTS_PRE_RETIREMENT",
+      "selected_rtl_scalars": {
+        "banks_poison": 0,
+        "coor_bad": 1,
+        "coor_block": 0,
+        "coor_drainPending": 0,
+        "coor_ng": 160,
+        "coor_poison": 0,
+        "coor_serviceError": 1,
+        "coor_state": 3,
+        "coor_status": 0,
+        "coor_sumPending": 0,
+        "coor_windowPending": 1,
+        "dense_groupDone": 0,
+        "dense_groupStarted": 1,
+        "dense_pendingContext": 4,
+        "dense_state": 6,
+        "dense_status": 8,
+        "dense_windowPhase": 3,
+        "matrix_group_sliceMask": 255,
+        "matrix_poison": 0,
+        "matrix_stalls": 0,
+        "matrix_state": 2,
+        "matrix_steps": 102400,
+        "matrix_wideSteps": 12800,
+        "owner_matrixDebt": 1,
+        "owner_memoryDebt": 0,
+        "owner_readDebt": 0,
+        "owner_sharedPoison": 1,
+        "owner_writeDebt": 0,
+        "router_bad": 1,
+        "router_fault": 0,
+        "router_malformed": 0,
+        "router_state": 2,
+        "router_stray": 0,
+        "win_resetRequired": 1
+      }
+    },
+    "request_edges": [
+      3,
+      52381,
+      81469,
+      0
+    ],
+    "sample": "LOW_POST_EDGE_SETTLED_SOFTWARE_RETIRED",
+    "scope": "LOW_AFTER_CURRENT_EDGE_INPUT_RETIREMENT_AND_EXISTING_FALLING_EVAL",
+    "selected_settled_rtl_scalars": {
+      "banks_poison": 0,
+      "coor_bad": 1,
+      "coor_block": 0,
+      "coor_drainPending": 0,
+      "coor_ng": 160,
+      "coor_poison": 0,
+      "coor_serviceError": 1,
+      "coor_state": 3,
+      "coor_status": 0,
+      "coor_sumPending": 0,
+      "coor_windowPending": 1,
+      "dense_groupDone": 0,
+      "dense_groupStarted": 1,
+      "dense_pendingContext": 4,
+      "dense_state": 6,
+      "dense_status": 8,
+      "dense_windowPhase": 3,
+      "matrix_group_sliceMask": 255,
+      "matrix_poison": 0,
+      "matrix_stalls": 0,
+      "matrix_state": 2,
+      "matrix_steps": 102400,
+      "matrix_wideSteps": 12800,
+      "owner_matrixDebt": 1,
+      "owner_memoryDebt": 0,
+      "owner_readDebt": 0,
+      "owner_sharedPoison": 1,
+      "owner_writeDebt": 0,
+      "router_bad": 1,
+      "router_fault": 0,
+      "router_malformed": 0,
+      "router_state": 2,
+      "router_stray": 0,
+      "win_resetRequired": 1
+    },
+    "software_ledger": {
+      "committed_bytes": 81920,
+      "current_window_issues": 5120,
+      "drain_requests": 1,
+      "drain_terminals": 1,
+      "issues": 12800,
+      "jobs": 1,
+      "matrix_dones": 2,
+      "matrix_groups": 3,
+      "n0_requested_bytes": 786432,
+      "n0_returned_bytes": 786432,
+      "ram_state": 0,
+      "read_requests": 25088,
+      "read_responses": 25088,
+      "target_edge": 0,
+      "window_requests": 3,
+      "window_terminals": 2,
+      "wq_requested_bytes": 819200,
+      "wq_returned_bytes": 819200,
+      "write_data_beats": 1280,
+      "write_descriptors": 128,
+      "write_responses": 128
+    },
+    "terminal_edges": [
+      52379,
+      62000,
+      0
+    ]
+  },
+  "typed_reference_rtl_pass": null,
+  "work_inventory": {
+    "directories": 11,
+    "entries": 53,
+    "regular_file_bytes": 37417993,
+    "regular_files": 38,
+    "scope": "Counts of frozen parent inventory only; this summary does not independently rehash the full work tree.",
+    "symlinks": 4
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "cold_loader_per_mode": 8,
+  "cold_main_per_mode": 93,
+  "finding_closed": "Raw-high combinational reset is deferred to complete low settle after exact sampled transaction retirement; raw-high evidence retained. F01 exit preservation retained.",
+  "independent_review": {
+    "diagnosis_normal": 26,
+    "diagnosis_optimized": 26,
+    "manifest_members": 28,
+    "original_source_pins": 17,
+    "relocated_cold_normal": 93,
+    "relocated_cold_optimized": 93,
+    "scope": "SOURCE_ONLY_NO_NATIVE_OR_RTL"
+  },
+  "modes": 4,
+  "native_executed": false,
+  "predecessor_preserved": true,
+  "production_manifest": {
+    "bytes": 1019,
+    "sha256": "67ae76c51aacbcabb47bdf10cc59a8d1cb7c506760907d506c7f09681279b6fc"
+  },
+  "rtl_executed": false,
+  "scope": "SOURCE_ONLY_NOT_EXECUTED",
+  "source_candidate_manifest": {
+    "bytes": 4361,
+    "sha256": "914574a446262c3aaa826311ce85231b8326b595e9e693fe421b083f74f005f5"
+  },
+  "source_review": {
+    "directory": "review_owner_micro_core_v3_20261019T2356",
+    "manifest": {
+      "bytes": 1181,
+      "sha256": "6b109cd2f3b65e6f0b57327966f595f4703edf9b5c05f8518d27c58a7a8430ec"
+    },
+    "summary": {
+      "bytes": 4658,
+      "file": "SUMMARY.md",
+      "sha256": "947fb90d4aeae27c3b727efab7ea4b2784a0b367201a5453363da2af8e7aecf3"
+    },
+    "verdict": "GO_OWNER_MICRO_V3_FALLING_LOW_SETTLE_SOURCE_ONLY"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "OWNER_MICRO_SOURCE_ORIGIN_PINS_V1",
+  "files": {
+    "host93_sv_calibration_attempt_v1_20261018/rtl/HostBlockCollection.sv": {
+      "bytes": 76366612,
+      "sha256": "2fcc1ba70ad3406b967292624329593aa38e3fe562e9ff3ac675eec100562f61"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+      "bytes": 106105,
+      "sha256": "94e6198a060044ae58a90328394ec8d11fe3311647fef62c1a1b975f2504ff4a"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "bytes": 24369,
+      "sha256": "15cc34f041228f38d69b15868a9f9c45fb3f9ea53a9275ec6a6d9fd70b4b0c25"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+      "bytes": 49990,
+      "sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala": {
+      "bytes": 3789,
+      "sha256": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/IdmaWeightBurst.scala": {
+      "bytes": 20407,
+      "sha256": "3d0afaff91e8cc8915e99ad3276339bda7d044404b39cd1c2a77c621b990f5ff"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/candidates/qwen2_resident_matrix/production_qkv_reduction/Public21QkvReductionRouter.scala": {
+      "bytes": 8760,
+      "sha256": "aa9d28733ef6e101ad4f3ccb51e3844787970b0292427b847cdae230585be5dc"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/candidates/qwen2_resident_matrix/dense_block_reduce/DenseBlockReductionCoordinator.scala": {
+      "bytes": 11773,
+      "sha256": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseOwner.scala": {
+      "bytes": 100073,
+      "sha256": "f402c19b32fb9619b549bdbe4c65c3237d49fcde01210701ed048c24540f9ac6"
+    },
+    "host93_class_calibration_attempt_v1_20261018/scala/candidates/qwen2_resident_matrix/transposed_owner/TransposedDenseBanks.scala": {
+      "bytes": 19261,
+      "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d"
+    },
+    "candidate_local_pc01_bridge_source_v1_20261019T1832/public/bridge/include/canonical_launch.hpp": {
+      "bytes": 2065,
+      "sha256": "7b4a6bf463335d7984fbc803ccb4cca275b54344fa883d82403fa55de4f0a7bc"
+    },
+    "candidate_local_pc01_bridge_source_v1_20261019T1832/public/bridge/include/runtime_policy.hpp": {
+      "bytes": 4429,
+      "sha256": "88157f9014ee02b7573c2d8116193ce1c7b223f1bb51d85d2aca0156e0a0c0bd"
+    },
+    "candidate_local_pc01_bridge_source_v1_20261019T1832/public/bridge/include/sha256.hpp": {
+      "bytes": 4541,
+      "sha256": "7a47104d65a6366cf5eaf38772abea38fcc58c0cfb5a882b1084cb7efd8ece8e"
+    },
+    "candidate_local_pc01_bridge_source_v1_20261019T1832/public/bridge/include/pc01_driver.hpp": {
+      "bytes": 7854,
+      "sha256": "03d943d1210abb180747d8a6ea0bd80a465c938162494c30142d499697d41d58"
+    },
+    "host93_pc1_reference_models_attempt_20261019T1912/EXECUTION_RESULT.json": {
+      "bytes": 17596,
+      "sha256": "c7367d084b11ecf6a895bd165dd5e3d51dfa3ddbfdb439dce24a4b183659e2e7"
+    },
+    "review_pc01_owner_micro_route_plan_20261019T2252/MANIFEST.json": {
+      "bytes": 485,
+      "sha256": "43d10de5476f4aff0ed5c19d1ac4682299f76fd09ca0a8be84e312106e1edc8b"
+    },
+    "review_pc01_owner_micro_route_plan_20261019T2252/SUMMARY.md": {
+      "bytes": 4481,
+      "sha256": "c2db1fad02f995c380eaf077447965a9b57d34b892efe496b7a2fc1c1c0cd02a"
+    }
+  }
+}

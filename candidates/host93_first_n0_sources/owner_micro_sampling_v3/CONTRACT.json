@@ -1,0 +1,73 @@
+{
+  "schema": "OWNER_MICRO_DRIVER_CONTRACT_V1",
+  "status": "SOURCE_ONLY_NOT_EXECUTED",
+  "argv": [
+    "<fixed newly built owner_micro ELF>",
+    "<absolute fixed N0 FP32 file>",
+    "<absolute fixed Wq BF16 file>"
+  ],
+  "fixed_input_leaf_names_required": false,
+  "input_path_contract": "Absolute component walk, no dot/dotdot or symlinks; stable regular fd, exact size and SHA; consume the same verified buffer.",
+  "job": {
+    "m": 128,
+    "n": 1536,
+    "k": 1536,
+    "tag": 458753,
+    "identity": 458754,
+    "a": 4483535872,
+    "b": 4295032896,
+    "dst": 4484322368,
+    "c": 0,
+    "writeBytes": 786432,
+    "weightBf16": true,
+    "activationBf16": false,
+    "outputBf16": false,
+    "materializeDenseOutput": false,
+    "other_payloads": 0
+  },
+  "prefixWorkspace": {
+    "valid": true,
+    "base": 4507654464,
+    "extent": 786432,
+    "generation": 8,
+    "splitK_internal_constant": 2560
+  },
+  "cycle_limit_after_reset": 500000,
+  "progress_period_cycles": 32768,
+  "max_jsonl_records": 17,
+  "jsonl_record_limit_bytes": 32768,
+  "exit_codes": {
+    "0": "TARGET_BOUNDARY_OBSERVED / NG160_PARTIAL1_FIRST_ISSUE",
+    "1": "CONTRACT_FAILURE",
+    "2": "INPUT_ERROR or INCOMPLETE or output failure"
+  },
+  "initialization": "randReset(0), randSeed(1), four reset-high cycles then four released idle cycles, verified empty actual debt/Matrix counters; no internal state forcing.",
+  "ram": "One global external transaction. Normal memory.valid is rejected. Burst request has frozen 1x64B length, echoes captured full tag and last=1, reads only fixed N0/Wq payload. Write ng0 only: row-order 128 descriptors of 10x64B; exact LAST and byte coverage; typed response only after all data commits. No iDMA or AXI is instantiated at the external boundary.",
+  "boundary": "Four exact window requests, three matching successful partial terminals (ng0 p0,p1 and ng160 p0), each physical Matrix count/done retired, ng0 true sum/drain with 128 typed write responses/81920 committed bytes, then first ng160 p1 accepted Matrix step. Expected wide12801/slice102408 is a corroborating counter, not sole proof.",
+  "failure_order": "Original low-pre-edge reset and runtime gates precede captured handshakes. Raw HIGH_EVAL_POST 95-field snapshot/reset is retained as diagnostic, not an immediate combinational-reset verdict. Runtime fatal still rejects immediately. Original Progress/RAM validations retire exactly the captured edge once. At clock low, updated producer signals are driven and settled; complete resetRequired/runtime gates run before any next rising edge. LOW_POST_EDGE_SETTLED_SOFTWARE_RETIRED includes the current edge in software counts; raw_high_before_settle labels the earlier mixed-time snapshot. No internal state or reset masking.",
+  "output": "Bounded scalar JSONL only, stdout. No arrays/private paths/exception strings/raw inputs. Current RTL scalars and software counts are distinct. On normal target stop, job is deliberately still live and no full terminal or ACK1 is claimed. Each record additionally preserves its current raw-high snapshot (or null before a high capture), distinctly labeled; no extra JSONL records.",
+  "caller_qualification": "Caller must verify 196 ports and all 95 exact generated observation member widths, fixed sources/tools/dependencies, phase exits and cleanup. Production manifest alone does not qualify execution.",
+  "resource_contract_external": {
+    "total_seconds": 540,
+    "driver_compile_seconds": 120,
+    "link_seconds": 60,
+    "run_seconds": 300,
+    "tail_seconds": 60,
+    "address_space_bytes": 6442450944,
+    "cpu_count": 1,
+    "generate_not_in_this_successor": true,
+    "owner_archive_runtime_reuse_requires_independent_caller_qualification": true
+  },
+  "official_raw_numeric_pass": null,
+  "application_accuracy_pass": null,
+  "typed_recipe_bit_exact_to_rtl": null,
+  "full_block_pass": false,
+  "plan_review": {
+    "verdict": "ACCEPT_FINITE_UNCHANGED_OWNER_TOP_MICRO_ROUTE_PLAN_ONLY",
+    "manifest_bytes": 485,
+    "manifest_sha256": "43d10de5476f4aff0ed5c19d1ac4682299f76fd09ca0a8be84e312106e1edc8b",
+    "summary_bytes": 4481,
+    "summary_sha256": "c2db1fad02f995c380eaf077447965a9b57d34b892efe496b7a2fc1c1c0cd02a",
+    "summary_file": "SUMMARY.md"
+  }
+}

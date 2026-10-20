@@ -1,0 +1,139 @@
+{
+  "scope": "PURE_MOCK_SOURCE_AND_FIXED_LOADER_ONLY",
+  "native_executed": false,
+  "cpp_executed": false,
+  "rtl_executed": false,
+  "runs": [
+    {
+      "location": "original",
+      "optimized": false,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "script": "cold_entry.py",
+      "tests": 93,
+      "exit_code": 0,
+      "log": "original_ordinary_cold_entry.log",
+      "log_bytes": 192,
+      "log_sha256": "abfc0eaadb5151d317e55d3a0f27ae9e45ea0b7f5d143a81278102f4253dcf44"
+    },
+    {
+      "location": "original",
+      "optimized": false,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "script": "test_loader_negative.py",
+      "tests": 8,
+      "exit_code": 0,
+      "log": "original_ordinary_test_loader_negative.log",
+      "log_bytes": 658,
+      "log_sha256": "0b473729baa5f7ca30413a93def6d7bee4ab69c3db22e34882b60819ba312f61"
+    },
+    {
+      "location": "original",
+      "optimized": true,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B",
+        "-O"
+      ],
+      "script": "cold_entry.py",
+      "tests": 93,
+      "exit_code": 0,
+      "log": "original_optimized_cold_entry.log",
+      "log_bytes": 192,
+      "log_sha256": "abfc0eaadb5151d317e55d3a0f27ae9e45ea0b7f5d143a81278102f4253dcf44"
+    },
+    {
+      "location": "original",
+      "optimized": true,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B",
+        "-O"
+      ],
+      "script": "test_loader_negative.py",
+      "tests": 8,
+      "exit_code": 0,
+      "log": "original_optimized_test_loader_negative.log",
+      "log_bytes": 658,
+      "log_sha256": "0b473729baa5f7ca30413a93def6d7bee4ab69c3db22e34882b60819ba312f61"
+    },
+    {
+      "location": "relocated",
+      "optimized": false,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "script": "cold_entry.py",
+      "tests": 93,
+      "exit_code": 0,
+      "log": "relocated_ordinary_cold_entry.log",
+      "log_bytes": 192,
+      "log_sha256": "7e68e79cc2dda6672c813fda52e25396cffca748bff5f6dfb93aa04dbd084cbb"
+    },
+    {
+      "location": "relocated",
+      "optimized": false,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "script": "test_loader_negative.py",
+      "tests": 8,
+      "exit_code": 0,
+      "log": "relocated_ordinary_test_loader_negative.log",
+      "log_bytes": 658,
+      "log_sha256": "71cce98ab96c901270d26e6ac88d97edb24bcf7c94e20a5d109197692829ebf3"
+    },
+    {
+      "location": "relocated",
+      "optimized": true,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B",
+        "-O"
+      ],
+      "script": "cold_entry.py",
+      "tests": 93,
+      "exit_code": 0,
+      "log": "relocated_optimized_cold_entry.log",
+      "log_bytes": 192,
+      "log_sha256": "b7212b77f337011f5a0838e7bf913997a412a0fadedd8231b0f61bf6c88f54e4"
+    },
+    {
+      "location": "relocated",
+      "optimized": true,
+      "python_flags": [
+        "-I",
+        "-S",
+        "-B",
+        "-O"
+      ],
+      "script": "test_loader_negative.py",
+      "tests": 8,
+      "exit_code": 0,
+      "log": "relocated_optimized_test_loader_negative.log",
+      "log_bytes": 658,
+      "log_sha256": "af83795d30ad95f64c8b43c8e7ba251e0826abaef93efbbed3ac54dd10e76833"
+    }
+  ],
+  "author_tests_per_mode": 101,
+  "limits": {
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 15,
+    "wall_seconds": 20,
+    "cpu_count": 1
+  }
+}

@@ -1427,3 +1427,19 @@ owner_sharedPoison/router_bad/coor_bad/coor_serviceError/win_resetRequired 同�
 安全详情位于 candidates/host93_first_n0_sources/owner_micro_cache_failure_actual/ 的 SUMMARY.json 与 README_CN.md。原证据 MANIFEST 959 B / 140559eb53a4ef330a5e8e54b1b544d801b323bc2c39bcfe2b9bb3cb969935f4；原日志/工作树/数组/二进制私有保留，本批无任何新 native 或测试。
 
 正式 actual 独审已封：review_owner_cache_actual_20261019T2348，M786/0a832dcb156af5f8df8620b2b43846dd0071bd36afdf42c0b9e3091a7fafbdcd，S9476/14bb3cbebaa5002dad596c235db675cec66904a60e0ec8c8101d735ac853f1b1，verdict ACCEPT_ACTUAL_OWNER_CACHE_BUILD_NATURAL_ZERO_RUNTIME_RESET_REQUIRED_HIGH_ONLY；仅接受上述有限事实，根因与 Host 同因仍未知。v2 为 metadata-only 后继，事实和范围不改。本段为原 279840 字节计划的纯追加；发布使用完整 replacement，不把完整文件再次 append。
+
+### Owner 响应退休观察调度 v3（独立 SOURCE 后继，2026-10-19）
+
+本批在独立 owner_micro_sampling_v3 目录保存原 owner driver 的最小观察调度后继；原 v2 与 session44110 FAIL 不改。当前只有 SOURCE/纯冷测，v3 编译/native/RTL 均 NOT_EXECUTED。
+
+固定原 Dense 合同只以响应 fire、tag 与 error 判 ACK，有效零 data 与真实 adapter 相同。首 good ACK 使 Wait→Req 并累加640字节，而外部 C++ 响应 valid 尚未更新时，raw-high 的 unexpectedAck 组合门可能立即变1。原实际记录只观测到当前 RTL 字节640/writeDebt0和上一沿软件response0；缺少该沿 writeState/rawAck/drainPoison 的直接值。静态源码与原生成调度支持这种半步观察解释，但不把纯表达式反例冒充新 RTL，也不判定与原 Host ng160 同因。合法 valid 保持到下一低沿并非采样协议违规；持续越过下一高沿的重复响应仍应拒绝。
+
+唯一生产变化在 main 调度及同记录诊断：原低沿门、采样 fires、Ram/Progress 退休校验正文完全保留。原高沿95字段和reset值保存为 raw_high_before_settle，runtime fatal仍立即拒绝；随后按原采样事务结算一次，在 clock=0 驱动已更新 producer，eval/priority/eval 完整 settle 后检查完整 reset/runtime，检查先于任何下一上升沿。新 LOW_POST_EDGE_SETTLED_SOFTWARE_RETIRED 软件账本含当前沿；原高后快照另有明确样本标签。没有写内部状态、清错误或mask门。
+
+每轮低沿前2次eval、高沿1次、falling-low2次，timeInc仍2次；原下轮开头的同一次下降沿提前到本轮末尾，不增加 owner/Matrix 上升沿。下降沿可以正常触发原wrapper的seq-DPI更新，不能称从不调用seq；原seqnum选择保持不变。目标停止点现在包含末尾正常下降沿，仍无下一计算上升沿。
+
+六件其余生产原件逐byte不变，固定输入、196端口、95观察、VLT、500000周期、12801目标与原退休/数值资格门不变。公开冷测93主+8loader，普通/-O/搬迁四模式全部通过，涵盖bad tag/error、持续reset/poison、stall、重复响应、原事务错误、一次退休无double/missed及raw快照保留。这些不执行C++或RTL。正式 SOURCE 已获有限 GO：review_owner_micro_core_v3_20261019T2356，MANIFEST 1181 B / 6b109cd2f3b65e6f0b57327966f595f4703edf9b5c05f8518d27c58a7a8430ec；SUMMARY.md 4658 B / 947fb90d4aeae27c3b727efab7ea4b2784a0b367201a5453363da2af8e7aecf3；verdict GO_OWNER_MICRO_V3_FALLING_LOW_SETTLE_SOURCE_ONLY。独立核28成员/17来源、93+93冷测及26+26原式诊断；只授本片SOURCE，原actual缺叶的局限仍保留。
+
+后继caller按另审540秒共享上限准备driver-only编译120、链接60、运行300、落证60，单CPU、AS6GiB；复用原owner archive/runtime须独立资格，不能从源码推定本轮已编译或修复成功。official/application/typed-to-RTL、历史Host故障复现均null，full_job/full_block=false，五block0/5。
+
+本批公开原生产/可搬迁cold与安全说明及本计划完整replacement；私有生成坐标报告、原日志、数组与binary不入公开。仅源码发布，不触发新的Host/RTL/native作业；workflow文件不变，普通push轻量guard另记。

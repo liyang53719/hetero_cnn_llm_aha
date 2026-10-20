@@ -1,0 +1,833 @@
+{
+  "schema": "OWNER_NUMERICAL_CONSUMPTION_V4",
+  "scope": "SOURCE_ONLY_CURRENT_FIXED_GENERATED_HEADER",
+  "root_header_bytes": 4630258,
+  "root_header_sha256": "a9371ed20684a6b5635de6203918cd33b910d856bd83618cf4a33c9dda398aaf",
+  "metadata": [
+    {
+      "label": "state",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__state",
+      "width": 4,
+      "declaration": "CData/*3:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__state;",
+      "fixed_header_line": 8127,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:714"
+    },
+    {
+      "label": "status",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__status",
+      "width": 8,
+      "declaration": "CData/*7:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__status;",
+      "fixed_header_line": 8132,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:715"
+    },
+    {
+      "label": "windowActive",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowActive",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowActive;",
+      "fixed_header_line": 8166,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:744"
+    },
+    {
+      "label": "windowPhase",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowPhase",
+      "width": 3,
+      "declaration": "CData/*2:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowPhase;",
+      "fixed_header_line": 8172,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:752"
+    },
+    {
+      "label": "job_m",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_m",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_m;",
+      "fixed_header_line": 12518,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1293"
+    },
+    {
+      "label": "job_k",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_k",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_k;",
+      "fixed_header_line": 12520,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1293"
+    },
+    {
+      "label": "job_n",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_n",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_n;",
+      "fixed_header_line": 12519,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1293"
+    },
+    {
+      "label": "job_outputBf16",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_outputBf16",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_outputBf16;",
+      "fixed_header_line": 8131,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1293"
+    },
+    {
+      "label": "job_materializeDenseOutput",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_materializeDenseOutput",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_materializeDenseOutput;",
+      "fixed_header_line": 8130,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1293"
+    },
+    {
+      "label": "job_activationBf16",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_activationBf16",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_activationBf16;",
+      "fixed_header_line": 8129,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1293"
+    },
+    {
+      "label": "job_weightBf16",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_weightBf16",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__job_weightBf16;",
+      "fixed_header_line": 8128,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1293"
+    },
+    {
+      "label": "finite",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__finite",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__finite;",
+      "fixed_header_line": 8346,
+      "producer": "TransposedDenseOwner.scala:944-946; VQwenOwnerKernel___024root__207.cpp:2880+ complete4096-consumption predicate",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "sourceFinite",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__sourceFinite",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__sourceFinite;",
+      "fixed_header_line": 8202,
+      "producer": "TransposedDenseOwner.scala:868-869",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "responseBad",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__responseBad",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__responseBad;",
+      "fixed_header_line": 8203,
+      "producer": "TransposedDenseOwner.scala:871",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "burstIsA",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstIsA",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstIsA;",
+      "fixed_header_line": 8140,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1075"
+    },
+    {
+      "label": "burstIsPrefix",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstIsPrefix",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstIsPrefix;",
+      "fixed_header_line": 8189,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1075"
+    },
+    {
+      "label": "burstOutstanding",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstOutstanding",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstOutstanding;",
+      "fixed_header_line": 8139,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1074"
+    },
+    {
+      "label": "burstTag",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstTag",
+      "width": 64,
+      "declaration": "QData/*63:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__burstTag;",
+      "fixed_header_line": 47681,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1074"
+    },
+    {
+      "label": "received",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__received",
+      "width": 8,
+      "declaration": "CData/*7:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__received;",
+      "fixed_header_line": 8141,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1074"
+    },
+    {
+      "label": "written",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__written",
+      "width": 3,
+      "declaration": "CData/*2:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__written;",
+      "fixed_header_line": 8160,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1139"
+    },
+    {
+      "label": "captured",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__captured",
+      "width": 3,
+      "declaration": "CData/*2:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__captured;",
+      "fixed_header_line": 8158,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1140"
+    },
+    {
+      "label": "terminalIssued",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__terminalIssued",
+      "width": 5,
+      "declaration": "CData/*4:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__terminalIssued;",
+      "fixed_header_line": 8155,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:935"
+    },
+    {
+      "label": "contexts",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__contexts",
+      "width": 3,
+      "declaration": "CData/*2:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__contexts;",
+      "fixed_header_line": 8142,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1132"
+    },
+    {
+      "label": "groupSequence",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__groupSequence",
+      "width": 32,
+      "declaration": "IData/*31:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__groupSequence;",
+      "fixed_header_line": 41890,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1142"
+    },
+    {
+      "label": "kPolicy_enabled",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_enabled",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_enabled;",
+      "fixed_header_line": 8175,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1289"
+    },
+    {
+      "label": "kPolicy_begin",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_begin",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_begin;",
+      "fixed_header_line": 12533,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1289"
+    },
+    {
+      "label": "kPolicy_end",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_end",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_end;",
+      "fixed_header_line": 12534,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1289"
+    },
+    {
+      "label": "kPolicy_blockId",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_blockId",
+      "width": 32,
+      "declaration": "IData/*31:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_blockId;",
+      "fixed_header_line": 41887,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1289"
+    },
+    {
+      "label": "kPolicy_pairReverse",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_pairReverse",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__kPolicy_pairReverse;",
+      "fixed_header_line": 8176,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1289"
+    },
+    {
+      "label": "pendingK",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__pendingK",
+      "width": 12,
+      "declaration": "SData/*11:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__pendingK;",
+      "fixed_header_line": 12563,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:909"
+    },
+    {
+      "label": "pendingContext",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__pendingContext",
+      "width": 3,
+      "declaration": "CData/*2:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__pendingContext;",
+      "fixed_header_line": 8208,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:909"
+    },
+    {
+      "label": "seedOutstanding",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__seedOutstanding",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__seedOutstanding;",
+      "fixed_header_line": 8190,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:802"
+    },
+    {
+      "label": "seedState",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__seedState",
+      "width": 3,
+      "declaration": "CData/*2:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__seedState;",
+      "fixed_header_line": 8186,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:774"
+    },
+    {
+      "label": "restoring",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__restoring",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__restoring;",
+      "fixed_header_line": 8183,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1295"
+    },
+    {
+      "label": "savingPrefix",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__savingPrefix",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__savingPrefix;",
+      "fixed_header_line": 8192,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:787"
+    },
+    {
+      "label": "drainActive",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainActive",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainActive;",
+      "fixed_header_line": 8177,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1448"
+    },
+    {
+      "label": "drainReadPending",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainReadPending",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainReadPending;",
+      "fixed_header_line": 8180,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1501"
+    },
+    {
+      "label": "drainPoison",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainPoison",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainPoison;",
+      "fixed_header_line": 8182,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1530"
+    },
+    {
+      "label": "matching",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__matching",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__matching;",
+      "fixed_header_line": 8392,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1386"
+    },
+    {
+      "label": "io_matrix_result_ready_0",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__io_matrix_result_ready_0",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__io_matrix_result_ready_0;",
+      "fixed_header_line": 8397,
+      "producer": "TransposedDenseOwner.scala:941; MatrixPipeline.scala:18,59 and QwenOwner routing",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "io_matrix_result_valid_0",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__io_matrix_result_valid_0",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__io_matrix_result_valid_0;",
+      "fixed_header_line": 8116,
+      "producer": "TransposedDenseOwner.scala:941; MatrixPipeline.scala:18,59 and QwenOwner routing",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "writeState",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__writeState",
+      "width": 2,
+      "declaration": "CData/*1:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__writeState;",
+      "fixed_header_line": 8159,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:737"
+    },
+    {
+      "label": "result_context_0",
+      "member": "QwenOwnerKernel__DOT__core__DOT__packedQk__DOT__io_port_result_bits_context_0",
+      "width": 3,
+      "declaration": "CData/*2:0*/ QwenOwnerKernel__DOT__core__DOT__packedQk__DOT__io_port_result_bits_context_0;",
+      "fixed_header_line": 6143,
+      "producer": "MatrixPipeline.scala:18-22,59,173-176; VQwenOwnerKernel___024root__165.cpp:397-422 head-selected Matrix FIFO alias",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "result_error_0",
+      "member": "QwenOwnerKernel__DOT__core__DOT__packedQk__DOT__io_port_result_bits_error_0",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__core__DOT__packedQk__DOT__io_port_result_bits_error_0;",
+      "fixed_header_line": 6145,
+      "producer": "MatrixPipeline.scala:18-22,59,173-176; VQwenOwnerKernel___024root__165.cpp:397-422 head-selected Matrix FIFO alias",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "result_last_0",
+      "member": "QwenOwnerKernel__DOT__core__DOT__packedQk__DOT__io_port_result_bits_last_0",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__core__DOT__packedQk__DOT__io_port_result_bits_last_0;",
+      "fixed_header_line": 6144,
+      "producer": "MatrixPipeline.scala:18-22,59,173-176; VQwenOwnerKernel___024root__165.cpp:397-422 head-selected Matrix FIFO alias",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "tile_responseValid",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValid",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValid;",
+      "fixed_header_line": 8963,
+      "producer": "TransposedDenseBanks.scala:160-173,186-196; response selectedTile/value/error registers, not live request key",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "tile_responseError",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseError",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseError;",
+      "fixed_header_line": 8964,
+      "producer": "TransposedDenseBanks.scala:160-173,186-196; response selectedTile/value/error registers, not live request key",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "tile_io_tiles_response_ready_0",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__io_tiles_response_ready_0",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__io_tiles_response_ready_0;",
+      "fixed_header_line": 8923,
+      "producer": "TransposedDenseBanks.scala:160-173,186-196; response selectedTile/value/error registers, not live request key",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "windowNg",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowNg",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowNg;",
+      "fixed_header_line": 12530,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1290"
+    },
+    {
+      "label": "windowCols",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowCols",
+      "width": 8,
+      "declaration": "CData/*7:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowCols;",
+      "fixed_header_line": 8167,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1291"
+    },
+    {
+      "label": "windowSlot",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowSlot",
+      "width": 2,
+      "declaration": "CData/*1:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowSlot;",
+      "fixed_header_line": 8168,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1291"
+    },
+    {
+      "label": "windowIdentity",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowIdentity",
+      "width": 32,
+      "declaration": "IData/*31:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__windowIdentity;",
+      "fixed_header_line": 41885,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1290"
+    },
+    {
+      "label": "drainIdentity",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainIdentity",
+      "width": 32,
+      "declaration": "IData/*31:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainIdentity;",
+      "fixed_header_line": 41888,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1448"
+    },
+    {
+      "label": "drainNg",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainNg",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainNg;",
+      "fixed_header_line": 12535,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1448"
+    },
+    {
+      "label": "writeRow",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__writeRow",
+      "width": 7,
+      "declaration": "CData/*6:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__writeRow;",
+      "fixed_header_line": 8162,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:738"
+    },
+    {
+      "label": "prefixWriteIndex",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__prefixWriteIndex",
+      "width": 8,
+      "declaration": "CData/*7:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__prefixWriteIndex;",
+      "fixed_header_line": 8185,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:772"
+    },
+    {
+      "label": "drainCols",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainCols",
+      "width": 8,
+      "declaration": "CData/*7:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__drainCols;",
+      "fixed_header_line": 8178,
+      "producer": "TransposedDenseOwner.scala:706-1544, fixed selected class; declaration/state source retained",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT",
+      "exact_scala_anchor": "TransposedDenseOwner.scala:1448"
+    },
+    {
+      "label": "matrix_group_groupSequence",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__group_groupSequence",
+      "width": 32,
+      "declaration": "IData/*31:0*/ QwenOwnerKernel__DOT__matrix__DOT__group_groupSequence;",
+      "fixed_header_line": 13479,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "matrix_group_tag",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__group_tag",
+      "width": 32,
+      "declaration": "IData/*31:0*/ QwenOwnerKernel__DOT__matrix__DOT__group_tag;",
+      "fixed_header_line": 13480,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "matrix_group_transposedDense",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__group_transposedDense",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__matrix__DOT__group_transposedDense;",
+      "fixed_header_line": 197,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "matrix_group_sliceMask",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__group_sliceMask",
+      "width": 8,
+      "declaration": "CData/*7:0*/ QwenOwnerKernel__DOT__matrix__DOT__group_sliceMask;",
+      "fixed_header_line": 199,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "matrix_seen",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__seen",
+      "width": 5,
+      "declaration": "CData/*4:0*/ QwenOwnerKernel__DOT__matrix__DOT__seen;",
+      "fixed_header_line": 202,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "matrix_closed",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__closed",
+      "width": 5,
+      "declaration": "CData/*4:0*/ QwenOwnerKernel__DOT__matrix__DOT__closed;",
+      "fixed_header_line": 203,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "matrix_seeded",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__seeded",
+      "width": 5,
+      "declaration": "CData/*4:0*/ QwenOwnerKernel__DOT__matrix__DOT__seeded;",
+      "fixed_header_line": 204,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "matrix_endIssued",
+      "member": "QwenOwnerKernel__DOT__matrix__DOT__endIssued",
+      "width": 1,
+      "declaration": "CData/*0:0*/ QwenOwnerKernel__DOT__matrix__DOT__endIssued;",
+      "fixed_header_line": 201,
+      "producer": "MatrixPipeline.scala:43-47,68,137,178-179,195-197",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "tile_key_slot",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_slot",
+      "width": 2,
+      "declaration": "CData/*1:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_slot;",
+      "fixed_header_line": 8965,
+      "producer": "TransposedDenseBanks.scala:160-173,186-196; response selectedTile/value/error registers, not live request key",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "tile_key_identity",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_identity",
+      "width": 32,
+      "declaration": "IData/*31:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_identity;",
+      "fixed_header_line": 42254,
+      "producer": "TransposedDenseBanks.scala:160-173,186-196; response selectedTile/value/error registers, not live request key",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "tile_key_ng",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_ng",
+      "width": 16,
+      "declaration": "SData/*15:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_ng;",
+      "fixed_header_line": 12592,
+      "producer": "TransposedDenseBanks.scala:160-173,186-196; response selectedTile/value/error registers, not live request key",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    },
+    {
+      "label": "tile_key_index",
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_index",
+      "width": 11,
+      "declaration": "SData/*10:0*/ QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__selectedTile_index;",
+      "fixed_header_line": 12593,
+      "producer": "TransposedDenseBanks.scala:160-173,186-196; response selectedTile/value/error registers, not live request key",
+      "consumer": "numeric_meta at original LOW_PRE_EDGE; no assignment to DUT"
+    }
+  ],
+  "result_payload": {
+    "member_pattern": "QwenOwnerKernel__DOT__core__DOT__packedQk__DOT__io_port_result_bits_value_{n}_{col}_0",
+    "n_range": [
+      0,
+      15
+    ],
+    "col_range": [
+      0,
+      255
+    ],
+    "width": 32,
+    "count": 4096,
+    "unique_exact_rectangular_inventory": true,
+    "root_header_first_line": 32282,
+    "root_header_last_line": 36507,
+    "producer": "generated __165.cpp 397-422 first words and following split functions: Matrix values head selects storage0/1; __207.cpp 2880+ consumes same alias in Dense finite",
+    "consumer": "numeric_result only actual result.fire; exact4096 pointer members, n-major/col-major; complete sample SHA and firstbad scalar only"
+  },
+  "burst_ports": [
+    {
+      "member": "io_burstResponse_ready",
+      "root_header_line": 104,
+      "declaration": "VL_OUT8(io_burstResponse_ready,0,0);",
+      "width": 1,
+      "producer": "driver Ram::drive lines103-104; top port sourced from original captured Ram byte vector",
+      "consumer_plan": "on burstResponse.fire inspect full16 words/32 halfwords as source type requires; preserve source classification,error,last,tag,received and first invalid index/raw; no array emission"
+    },
+    {
+      "member": "io_burstResponse_valid",
+      "root_header_line": 105,
+      "declaration": "VL_IN8(io_burstResponse_valid,0,0);",
+      "width": 1,
+      "producer": "driver Ram::drive lines103-104; top port sourced from original captured Ram byte vector",
+      "consumer_plan": "on burstResponse.fire inspect full16 words/32 halfwords as source type requires; preserve source classification,error,last,tag,received and first invalid index/raw; no array emission"
+    },
+    {
+      "member": "io_burstResponse_bits_error",
+      "root_header_line": 107,
+      "declaration": "VL_IN8(io_burstResponse_bits_error,0,0);",
+      "width": 1,
+      "producer": "driver Ram::drive lines103-104; top port sourced from original captured Ram byte vector",
+      "consumer_plan": "on burstResponse.fire inspect full16 words/32 halfwords as source type requires; preserve source classification,error,last,tag,received and first invalid index/raw; no array emission"
+    },
+    {
+      "member": "io_burstResponse_bits_last",
+      "root_header_line": 106,
+      "declaration": "VL_IN8(io_burstResponse_bits_last,0,0);",
+      "width": 1,
+      "producer": "driver Ram::drive lines103-104; top port sourced from original captured Ram byte vector",
+      "consumer_plan": "on burstResponse.fire inspect full16 words/32 halfwords as source type requires; preserve source classification,error,last,tag,received and first invalid index/raw; no array emission"
+    },
+    {
+      "member": "io_burstResponse_bits_tag",
+      "root_header_line": 47483,
+      "declaration": "VL_IN64(io_burstResponse_bits_tag,63,0);",
+      "width": 64,
+      "producer": "driver Ram::drive lines103-104; top port sourced from original captured Ram byte vector",
+      "consumer_plan": "on burstResponse.fire inspect full16 words/32 halfwords as source type requires; preserve source classification,error,last,tag,received and first invalid index/raw; no array emission"
+    },
+    {
+      "member": "io_burstResponse_bits_data",
+      "root_header_line": 13474,
+      "declaration": "VL_INW(io_burstResponse_bits_data,511,0,16);",
+      "width": 512,
+      "producer": "driver Ram::drive lines103-104; top port sourced from original captured Ram byte vector",
+      "consumer_plan": "on burstResponse.fire inspect full16 words/32 halfwords as source type requires; preserve source classification,error,last,tag,received and first invalid index/raw; no array emission"
+    }
+  ],
+  "tile_response_payload": [
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_0",
+      "width": 32,
+      "root_header_line": 42271
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_1",
+      "width": 32,
+      "root_header_line": 42272
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_2",
+      "width": 32,
+      "root_header_line": 42273
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_3",
+      "width": 32,
+      "root_header_line": 42274
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_4",
+      "width": 32,
+      "root_header_line": 42275
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_5",
+      "width": 32,
+      "root_header_line": 42276
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_6",
+      "width": 32,
+      "root_header_line": 42277
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_7",
+      "width": 32,
+      "root_header_line": 42278
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_8",
+      "width": 32,
+      "root_header_line": 42279
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_9",
+      "width": 32,
+      "root_header_line": 42280
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_10",
+      "width": 32,
+      "root_header_line": 42281
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_11",
+      "width": 32,
+      "root_header_line": 42282
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_12",
+      "width": 32,
+      "root_header_line": 42283
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_13",
+      "width": 32,
+      "root_header_line": 42284
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_14",
+      "width": 32,
+      "root_header_line": 42285
+    },
+    {
+      "member": "QwenOwnerKernel__DOT__TransposedDenseDownOwner__DOT__banks__DOT__responseValue_15",
+      "width": 32,
+      "root_header_line": 42286
+    }
+  ],
+  "source_paths_are_generated_basenames_only": true,
+  "additional_vlt_required": false,
+  "production_manifest_members_unchanged": 7,
+  "old_observations_still95_and_not_counted_as_numeric_closure": true,
+  "reads_in_new_metadata": 69,
+  "total_explicit_leaf_inventory": 4187,
+  "later_non_numeric_writes": "NOT_ALL_SAMPLED; candidate set only, winner UNKNOWN",
+  "arithmetic_scope": "sourcefinite, masks, BF16range and original3Numerical candidate guards; no numeric tolerance or state gate changes"
+}

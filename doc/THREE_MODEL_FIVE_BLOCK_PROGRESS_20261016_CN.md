@@ -1475,3 +1475,17 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 正式 actual 审：review_owner_driver_relink_actual_20261020T0014，MANIFEST.json 770 B / 1e829f2d6553cc0f1b6fe0223851325767e8c7af5de934154ef554eafe0a8be2；SUMMARY.md 8002 B / 05bc84539e07589dbb3f216de953d32e64b9ed3f29b0161485be07eb51292953。verdict ACCEPT_ACTUAL_OWNER_V3_RELINK_NATURAL_ZERO_SETTLED_NUMERICAL_STATUS_FAILURE_ONLY。独立核当前 53 项树、七证据、42 caller/28 core、338 原生成输入、完整输入及新 ELF/.d/archive 关联；39 系统依赖沿 SOURCE 资格，本次未重 hash。独立终态读验不倒填运行失败后未执行的 success-only postflight。
 
 公开安全两正文位于 candidates/host93_first_n0_sources/owner_driver_settled_failure_actual/；不含机器私有路径、原始日志、数组或二进制。证据 manifest 957 B / ebfd84179a8b3dd6ee270977a5959bc16aebc1d83c521a562afb2f65276c54cf。该摘要没有新 native/RTL/测试。Host 前缀和 iDMA/AXI 未执行，完整 job/full block=false，五 block 0/5；official/application/typed-to-RTL/historical-host-reproduction 均保持 null。下一步须单独定位 Numerical 首写，不把本次 FAIL 改记为成功。
+
+
+## 2026-10-20：owner Numerical 首坏只读闭包 v4 SOURCE（正式独审通过）
+
+本批只发布独立源码候选、可搬迁纯冷测与安全元数据；不触发新的 Host/RTL/native 作业。workflow文件不变，普通push的轻量guard另记。原v3及原92317实际失败证据不改，首写数据和上游根因仍未知。
+
+- 独立目录：`candidates/host93_first_n0_sources/owner_micro_numerical_v4/`。生产仍原7件，仅 `owner_micro.cpp` 改；另6件逐byte同v3，原196端口、95控制观察、VLT不变。完整源码逆投影回v3逐byte成立。
+- 新Numerical闭包明确独立于旧95控制字段：69个标量、4096个Matrix结果消费alias、16个tile响应值、6个burst端口，共4187当前固定root声明叶。消费矩阵、宽度、生成producer和driverconsumer随源码固定；已有root包含全部字段，无VLT改动/重生成。
+- 原LOW_PRE_EDGE实际fire时只读保存三条Numerical入口：结果协议元数据+完整有限性掩码/BF16范围、burst源格式/RNE有限性、active drain响应error和真实selectedTile key。4096结果只在实际fire扫描，保完整样本SHA、计数与首坏坐标/raw32/指数类别；不输出payload数组/权重。
+- 保旧status与high/settled实际status、三候选集合和首次0→8的低沿样本；后写Protocol/Memory/admission/reset未全部采样，same-edge winner明确UNKNOWN。辅助观察错误不替代原失败/exit。原Ram/Progress、驱动信号、握手、有限门、每轮5eval/2timeInc均保留；不是修复RTL。
+- 四模式同buffer冷测（原/搬迁×普通/-O）每模式138主例+8loader例通过；仅纯mock/source，没有执行C++/RTL。含全4096alias顺序、首中末坏值、NaN/Inf/次正规、M16掩码反例、BF16范围、无fire、优先级、首坏保持与有界输出。
+- 当前固定N0/Wq、M128、K[0,1024)+[1024,1536)及局部目标不变。未来仅沿原caller复用archive/runtime，540秒compile120/link60/run300/tail60，单CPU、AS6GiB；本冻结阶段actual=NOT_EXECUTED。
+- 静态计划已独审：`review_owner_numerical_firstwrite_plan_20261020T0022`，M411/5d1fc6521d62f2b9df0fdbb133406c66340e4fcf7e165f1eef39bdcdc0bb5220，S4460/38ed35b8cc048613ad27895bd4519b4ee789557b33c9736dd93cfbc77b138c93。v4生产SOURCE已封 `review_owner_micro_core_v4_20261020T0031`，M2326/0a21394bd641a78cd6e07831873e199669f81bd9c2068115abab04db97f58984，SUMMARY.md4320/1eee1058e4e64039525f9364b9ea8ed5e158843612b0f32e36057d83c096d50a，结论 GO_OWNER_MICRO_V4_NUMERICAL_CONSUMPTION_OBSERVER_SOURCE_ONLY；独立搬迁普通/-O 138+138 主例与 8+8 loader 例通过。只补 metadata，生产与 COLD 不改。
+- 正确算法数值范围不等于本轮RTL数据正确；旧Host仅位置相容，不能倒填同因。official_raw/application_accuracy/typed_recipe_to_rtl均不授PASS，full_block=false。

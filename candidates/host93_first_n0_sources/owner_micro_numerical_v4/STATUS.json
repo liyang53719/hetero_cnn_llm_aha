@@ -1,0 +1,36 @@
+{
+  "actual_root_cause": "UNKNOWN",
+  "cold_loader_per_mode": 8,
+  "cold_main_per_mode": 138,
+  "frozen_candidate_manifest": {
+    "bytes": 6773,
+    "sha256": "27952f24db30ba1d4789ee11f061b33e14415322f5ae1fc1aa8dd278b7ff8126"
+  },
+  "independent_review_cold": {
+    "normal_loader": 8,
+    "normal_main": 138,
+    "optimized_loader": 8,
+    "optimized_main": 138,
+    "relocated": true
+  },
+  "modes": 4,
+  "native_executed": false,
+  "new_numeric_leaf_inventory": 4187,
+  "original_observations": 95,
+  "rtl_executed": false,
+  "same_edge_winner": "UNKNOWN_NOT_ALL_LATER_WRITES_SAMPLED",
+  "scope": "SOURCE_ONLY_NOT_EXECUTED",
+  "source_review": {
+    "directory": "review_owner_micro_core_v4_20261020T0031",
+    "manifest": {
+      "bytes": 2326,
+      "sha256": "0a21394bd641a78cd6e07831873e199669f81bd9c2068115abab04db97f58984"
+    },
+    "summary": {
+      "bytes": 4320,
+      "file": "SUMMARY.md",
+      "sha256": "1eee1058e4e64039525f9364b9ea8ed5e158843612b0f32e36057d83c096d50a"
+    },
+    "verdict": "GO_OWNER_MICRO_V4_NUMERICAL_CONSUMPTION_OBSERVER_SOURCE_ONLY"
+  }
+}

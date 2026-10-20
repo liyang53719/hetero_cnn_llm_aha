@@ -1,0 +1,63 @@
+{
+  "author_tests": {
+    "errors": 0,
+    "failed": 0,
+    "max_rss_kib": 26256,
+    "modes": [
+      "normal",
+      "optimized",
+      "relocated",
+      "relocated_optimized"
+    ],
+    "passed_executions": 156,
+    "result_identities": {
+      "normal": {
+        "bytes": 1220,
+        "sha256": "b489d35abdccb36669b29b2b045c23ea5f062a8e03f87b9e567ce58d7d92dfbe"
+      },
+      "optimized": {
+        "bytes": 1223,
+        "sha256": "08feeca0c0baab29ba5ddacd46c84acb40222a9804adbb2e67cd852f1cfa5553"
+      },
+      "relocated": {
+        "bytes": 1223,
+        "sha256": "9390f793360ab6a10008338939bb38040d5925c084ad648789c15d1e588f5c08"
+      },
+      "relocated_optimized": {
+        "bytes": 1233,
+        "sha256": "eb7382638875e40423e1ca28ac2857c7d84b0242577ab7f3a36b6be6b79374c4"
+      }
+    },
+    "skipped": 0,
+    "tests_per_mode": 39
+  },
+  "independent_review_tests": "Pending separate reviewer record, never merged into author counts",
+  "prior_header_and_supervisor_tests": "Inherited source evidence, not counted as new tests",
+  "publication_label": "TEMP",
+  "read_only_actual_input_replay": {
+    "bytes": 727,
+    "sha256": "2c9d7b990d385fb1f3e09dc824e843ebb9ac8eb92bf9c5b44ca6daf4463ecc45"
+  },
+  "schema": "OWNER_DRIVER_RELINK_RUN_COLD_SUMMARY_V1",
+  "scope": {
+    "actual_old_dependency_fixture_bytes": 1272,
+    "actual_old_dependency_fixture_public": false,
+    "full_run_mock": false,
+    "native_make_compiler_rtl_network_executed": false,
+    "real_24mb_inventory_copied": false,
+    "synthetic_length_reporting_buffers": true
+  },
+  "status": "PASS_PINNED_HELPER_BOUNDARY_MOCK_ONLY",
+  "test_manifest": {
+    "bytes": 3086,
+    "sha256": "6ca61adb26878fb1b061be75504fb5f679348b78bf637e275f7edfc092efa190"
+  },
+  "test_source": {
+    "bytes": 32317,
+    "sha256": "572246b5ee77489f1ec17e353b1347916deb89eeb595d7828fc9bdf42ca50e3b"
+  },
+  "test_summary": {
+    "bytes": 3880,
+    "sha256": "b668027ffc0bb2971733a1376708a3874ecc89fe2c88067c38e75ef4c1a69f97"
+  }
+}

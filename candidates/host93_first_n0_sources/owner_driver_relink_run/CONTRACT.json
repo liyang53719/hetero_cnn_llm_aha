@@ -1,0 +1,51 @@
+{
+  "MemAvailable_floor_gib": 8,
+  "actual": "NOT_EXECUTED",
+  "all_checks_hashes_copy_count_against_total": true,
+  "as_gib": 6,
+  "backend_rebuilt": false,
+  "cpus": 1,
+  "disk_floor_gib": 3,
+  "fixed_reused_bytes": 24151608,
+  "fixed_reused_members": 12,
+  "full_current_phase_plus_tail_required_before_and_after_preflight": true,
+  "generation_executed": false,
+  "make_invoked": false,
+  "model_cpp_recompiled": false,
+  "new_dependency_rule_exact_order": true,
+  "new_dependency_rule_members": 12,
+  "new_driver_fixture_reads_use_fresh_staging": true,
+  "new_executable_elf_checked_before_after_run": true,
+  "old_driver_object_reused": false,
+  "only_new_driver_cpp_compiled": true,
+  "original_supervisor_unchanged": true,
+  "outer_kill_grace_seconds": 5,
+  "outer_receipt_seconds": 5,
+  "outer_term_seconds": 530,
+  "owner_archive_regular_not_thin": true,
+  "phase_seconds": {
+    "compile": 120,
+    "link": 60,
+    "run": 300
+  },
+  "phase_work_cpu_seconds": {
+    "compile": 105,
+    "link": 45,
+    "run": 285
+  },
+  "preexisting_generation_and_compiled_trees_revalidated_read_only": true,
+  "publication_label": "TEMP",
+  "qualification": {
+    "application_accuracy_pass": null,
+    "full_block_pass": false,
+    "full_job_completed": false,
+    "historical_host_failure_reproduced": null,
+    "official_accuracy_pass": null,
+    "typed_reference_rtl_pass": null
+  },
+  "runtime_log": "opaque full bounded JSONL retained for independent actual audit",
+  "schema": "OWNER_DRIVER_RELINK_RUN_SOURCE_CONTRACT_V1",
+  "shared_seconds": 540,
+  "system_dependencies": 39,
+  "tail_seconds": 60
+}

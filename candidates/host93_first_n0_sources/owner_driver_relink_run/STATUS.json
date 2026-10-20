@@ -1,0 +1,80 @@
+{
+  "actual": "NOT_EXECUTED",
+  "budget_seconds": {
+    "compile": 120,
+    "link": 60,
+    "outer_kill": 5,
+    "outer_receipt": 5,
+    "outer_term": 530,
+    "run": 300,
+    "tail": 60,
+    "total": 540
+  },
+  "cold_result": {
+    "bytes": 1996,
+    "sha256": "b855eefe490313ece8fdea755dde5efa3c88b290ef2bc63ace6725e6fbbfb5a5"
+  },
+  "compiled_model_reuse": {
+    "bytes": 24151608,
+    "make_or_generation_or_model_recompile": false,
+    "members": 12,
+    "old_driver_object_reused": false
+  },
+  "production_manifest": {
+    "bytes": 881,
+    "sha256": "873ec0e9364d04bfbbbbd1f7ad82f489503d2fa135b6fc9a6279b8b22603be24"
+  },
+  "publication": {
+    "new_native_or_tests_in_publication": false,
+    "payload_originals": 14,
+    "private_bindings_commands_outer_excluded": true,
+    "private_dependency_fixture_excluded": true,
+    "raw_logs_arrays_binaries_excluded": true,
+    "workflow_changed": false
+  },
+  "publication_label": "TEMP",
+  "qualification": {
+    "application_accuracy_pass": null,
+    "full_block_pass": false,
+    "full_job_completed": false,
+    "historical_host_failure_reproduced": null,
+    "official_accuracy_pass": null,
+    "typed_reference_rtl_pass": null
+  },
+  "schema": "OWNER_DRIVER_RELINK_RUN_SOURCE_PUBLIC_STATUS_V1",
+  "scope": "FIXED_SOURCE_AND_EXACT_540_COMMAND_ONLY",
+  "source_candidate_manifest": {
+    "bytes": 6623,
+    "sha256": "80ce83fbac42216017ab65691c9cacc95d6102ceae52e65c633f9ac0e5e2e39e"
+  },
+  "source_review": {
+    "directory": "review_owner_driver_relink_source_20261020T0003",
+    "manifest": {
+      "bytes": 2388,
+      "sha256": "64e722506ec2e4fcbf57b8619f3f261c8927b4475d0d7d75434c7a15c7d6fd3c"
+    },
+    "summary": {
+      "bytes": 5238,
+      "file": "SUMMARY.md",
+      "sha256": "a092a51a7d94f0cc2eee1f65e4b909cc5bea8ec40797a9c66e3c305c614420dd"
+    },
+    "verdict": "GO_OWNER_DRIVER_RELINK_RUN_SOURCE_AND_EXACT_540_COMMAND_ONLY"
+  },
+  "verification": {
+    "author_tests": {
+      "errors": 0,
+      "failures": 0,
+      "modes": 4,
+      "passed": 156,
+      "per_mode": 39,
+      "skipped": 0
+    },
+    "independent_review_tests": {
+      "normal": 39,
+      "optimized": 39,
+      "passed": 78
+    },
+    "read_only_real_cache_inputs": "608-entry original tree / 12 inputs / 95 declarations / fixed old-.d path projection verified read-only",
+    "scope": "Pinned helper-boundary mocks, not full run() or native qualification"
+  }
+}

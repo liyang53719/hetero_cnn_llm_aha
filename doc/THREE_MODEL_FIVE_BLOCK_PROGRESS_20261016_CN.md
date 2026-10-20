@@ -1443,3 +1443,20 @@ owner_sharedPoison/router_bad/coor_bad/coor_serviceError/win_resetRequired 同�
 后继caller按另审540秒共享上限准备driver-only编译120、链接60、运行300、落证60，单CPU、AS6GiB；复用原owner archive/runtime须独立资格，不能从源码推定本轮已编译或修复成功。official/application/typed-to-RTL、历史Host故障复现均null，full_job/full_block=false，五block0/5。
 
 本批公开原生产/可搬迁cold与安全说明及本计划完整replacement；私有生成坐标报告、原日志、数组与binary不入公开。仅源码发布，不触发新的Host/RTL/native作业；workflow文件不变，普通push轻量guard另记。
+
+
+## TEMP 2026-10-20 00:05 UTC：Owner v3 driver-only 540 秒续接 SOURCE
+
+原 owner cache actual 的 build 已自然0，但 run 在 RESET_REQUIRED_HIGH 自然1结束；这份失败及上游原因未明均保留。本片只准备复用已审 owner model 的普通 archive +3 runtime objects，fresh 编译新的 v3 driver.o，再 direct g++ link，随后一次有限 owner 局部 run。无 make、generation、model C++/PCH/child library 或 backend 重编，旧 driver.o 和旧 executable 不作为新驱动输入。
+
+精确复用12件，共24151608 B：2 generated headers、6 Verilator headers、3 runtime objects、1 VQwenOwnerKernel__ALL.a。top普通archive已含23对象成员，其中10个child对象；无需另链child archive。原608项树（599files、493245462 B）、成功build log/.d/makefile、receipt及formal review前后只读核验，原generation/source/profile/dependency门保留。所有编译输入复制到fresh路径并同buffer验后写；新.d恰核12个依赖及顺序，不借旧fixture绝对路径。新ELF及固定needed库在link后/run前后重验。
+
+v3 production manifest1019/67ae76c51aacbcabb47bdf10cc59a8d1cb7c506760907d506c7f09681279b6fc；仅driver变化，6件原接口/观察/辅助同字节。原196端口/95字段与固定header reader不变。主caller由已审cache main的29处精确替换派生并可逆还原；原ci_support_v3监督、39系统依赖与只读mount profile不改。
+
+唯一总540秒从父outer最早t0计入全部加载/hash/staging；compile120 + link60 + run300 + tail60，各native工作/CPU105、45、285秒，原15秒监督余量保留。阶段前及preflight后要求完整当前窗口加尾限；不足即INCOMPLETE。单CPU/AS6GiB、原MemAvailable≥8GiB和盘≥3GiB每阶段准入。普通Python -I -S -B父入口：530TERM+5KILL+5落证，不使用-O，不重置起点。
+
+作者helper-boundary purecold39项×普通/-O/搬迁普通/搬迁-O=156 PASS，0fail/error/skip，最高RSS26256KiB；不是完整run mock，也没有native/编译/RTL。另独立只读原现物回放通过608项树、12项输入、95声明及旧.d的明确路径投影；该投影不是新编译器实际.d。源码M6623/80ce83fbac42216017ab65691c9cacc95d6102ceae52e65c633f9ac0e5e2e39e，COLD1996/b855eefe490313ece8fdea755dde5efa3c88b290ef2bc63ace6725e6fbbfb5a5。
+
+SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64e722506ec2e4fcbf57b8619f3f261c8927b4475d0d7d75434c7a15c7d6fd3c，S5238/a092a51a7d94f0cc2eee1f65e4b909cc5bea8ec40797a9c66e3c305c614420dd，GO_OWNER_DRIVER_RELINK_RUN_SOURCE_AND_EXACT_540_COMMAND_ONLY。独立39+39 helper-boundary冷测通过，与作者156分列；12复用/39依赖子审已闭，未重执行原actual。本片实际NOT_EXECUTED；300秒与500000局部cycles不保证目标完成。完整bounded JSONL原样保留供后续actual独审，caller不解析raw_high_before_settle并授资格。full_job/full_block=false，official/application/typed-to-RTL及historical_host_failure_reproduced均null，不把局部owner与原Host认定同因。
+
+公开前缀 candidates/host93_first_n0_sources/owner_driver_relink_run/；只投影14件安全public原件+STATUS和完整计划。私有binding/COMMAND/outer/原.d夹具、原工作树、数组、日志不发布。本段是原285715字节计划纯追加，实际发布用完整replacement，禁止把全文件重复append。

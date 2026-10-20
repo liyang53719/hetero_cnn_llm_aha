@@ -1,0 +1,80 @@
+{
+  "author_tests": {
+    "address_space_limit_bytes": 536870912,
+    "cpu_affinity_count": 1,
+    "cpu_limit_seconds": 30,
+    "errors": 0,
+    "failed": 0,
+    "max_rss_kib": 28384,
+    "modes": [
+      "normal",
+      "optimized",
+      "relocated",
+      "relocated_optimized"
+    ],
+    "passed_executions": 64,
+    "result_identities": {
+      "normal": {
+        "bytes": 997,
+        "sha256": "fa964c26a67934f2afe557134974ee94c47dc9e71d656084d1567f2a559d48e5"
+      },
+      "optimized": {
+        "bytes": 988,
+        "sha256": "1af94afb28da88502bee5a54f27edf584b6880869e4ae89e176382c23c70cd2d"
+      },
+      "relocated": {
+        "bytes": 1065,
+        "sha256": "9b3ee7fe3630d039da141d8cff6c2a403a01d469c5088567d23ffa9a2f58701f"
+      },
+      "relocated_optimized": {
+        "bytes": 1087,
+        "sha256": "060555e6ddff0fa718110ccef1ab90529bb15c4459172784e2eb8b42cbf50c62"
+      }
+    },
+    "skipped": 0,
+    "tests_per_mode": 16
+  },
+  "independent_review_tests": "Separate reviewer record; not merged into author counts",
+  "inherited_prior_39_by_4": {
+    "not_added_to_new_counts": true,
+    "rerun": false,
+    "summary_identity": {
+      "bytes": 1996,
+      "sha256": "b855eefe490313ece8fdea755dde5efa3c88b290ef2bc63ace6725e6fbbfb5a5"
+    }
+  },
+  "inherited_readonly_reuse_observation": {
+    "identity": {
+      "bytes": 727,
+      "sha256": "2c9d7b990d385fb1f3e09dc824e843ebb9ac8eb92bf9c5b44ca6daf4463ecc45"
+    },
+    "not_new_numerical_coverage": true,
+    "rerun": false
+  },
+  "publication_label": "TEMP",
+  "schema": "OWNER_NUMERICAL_RELINK_PIN_INCREMENT_COLD_V1",
+  "scope": {
+    "entry_one_pin_literal_only": true,
+    "four_helpers_byte_unchanged": true,
+    "full_run_mock": false,
+    "main_two_pin_literals_only": true,
+    "native_compiler_linker_rtl_make_network_or_outer_executed": false,
+    "numerical_runtime_or_arithmetic_validation": false,
+    "private_command_chain_read_only": true,
+    "same_buffer_positive_and_negative": true,
+    "six_driver_fixture_files_byte_unchanged": true
+  },
+  "status": "PASS_PIN_ONLY_INCREMENT_PURE_COLD",
+  "test_manifest": {
+    "bytes": 6276,
+    "sha256": "59eec1aa8a19a0d8d51f155b3428efdb79218d3648192c08032718d7aea326e6"
+  },
+  "test_source": {
+    "bytes": 20181,
+    "sha256": "221cc19cdf768e8844002740a2676c417dfe4af93f0a1635dfd08b17751b67f2"
+  },
+  "test_summary": {
+    "bytes": 4972,
+    "sha256": "8fe612ad1895d4b9ce4ce371f5b2a1eeed1711dbc1380c02f1118689d70b448b"
+  }
+}

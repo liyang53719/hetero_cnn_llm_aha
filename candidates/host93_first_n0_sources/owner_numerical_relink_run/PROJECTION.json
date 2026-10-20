@@ -1,0 +1,158 @@
+{
+  "derived": {
+    "bytes": 31361,
+    "sha256": "134a817c0dfae21736654e7bfaa40d4ff870e2de552366353c741f9512a6741b"
+  },
+  "inverse_exact": true,
+  "original": {
+    "bytes": 28124,
+    "sha256": "10d9c44a669315e4a66e8de47135bbe622454e13321e1a12e1eabb93e2114871"
+  },
+  "substitutions": [
+    {
+      "count": 1,
+      "new": "Single fixed owner diagnostic: accepted compiled model, fresh driver compile/link/run.",
+      "old": "Single fixed owner-only diagnostic: qualified backend, accepted generation cache, fresh build/run."
+    },
+    {
+      "count": 1,
+      "new": "CONFIG_PIN = (3026, '851da9550b41300033be542a2ea782b288520927eb2d5d00897ac40f4253af85')",
+      "old": "CONFIG_PIN = (2892, '2c69f571e0285e1f7dfdde282ff4bd8556eeeac9f93a9425b84aeb7e8162f4ee')"
+    },
+    {
+      "count": 1,
+      "new": "DRIVER_PIN = (1020, '50ceabdd66b261e14084c2efe0609601b63d2724293ccd7a6f47531d6baebde0')",
+      "old": "DRIVER_PIN = (1019, 'ad587ca4d0ee05953202c5378442bf11e936b2205632a3e2e124a4bbab722475')"
+    },
+    {
+      "count": 1,
+      "new": "SUPERVISION_PIN = (4391, 'ffce52ca02bb04fd24cf792b1e9a2c495d3daaa37992da0deeabeab7db9e29a6')\nREUSE_GATE_PIN = (8936, 'df631aab1d0dc587c8e4b4293990ae2da71f391260981d56481495b56bef0a93')\nREUSE_BINDING_PIN = (680, '12d9248eb232820913564dd5f2a806e3362cf9f90192a0c8733521ba412c4d36')",
+      "old": "SUPERVISION_PIN = (4363, '10a14b6eafe7cb977790ceea59fb5b4821f9f010df01a7448d4bce1928c3225a')"
+    },
+    {
+      "count": 1,
+      "new": "FIXED_FAILURE_CODES += ('REUSE_EXACT_TREE_SHAPE', 'REUSE_SAFE_UNIQUE_MEMBER', 'REUSE_DIRECTORY', 'REUSE_REGULAR_MEMBER', 'REUSE_EXACT_TOTALS', 'REUSE_ORIGINAL_TREE_DRIFT', 'REUSE_BINDING_KEYS', 'REUSE_ROOT_BINDING', 'REUSE_ACTUAL_REVIEW_SCOPE', 'REUSE_PRIOR_SCOPE', 'REUSE_BUILD_RECORD', 'REUSE_REGULAR_ARCHIVE', 'REUSE_FIXED_COPY_COUNT', 'REUSE_COPY_READBACK', 'REUSE_DEPENDENCY_RULE', 'REUSE_DEPENDENCY_EXACT_CLOSURE', 'REUSE_ORIGINAL_BYTES_DRIFT', 'REUSE_BINDING_DRIFT', 'REUSE_TOOLCHAIN_ROOT', 'REUSE_COMPILER_SEARCH', 'FRESH_RELOCATABLE_OBJECT', 'FRESH_OBJECT_DRIFT', 'FRESH_DEPENDENCY_DRIFT')\n\ndef failure_fields(error):",
+      "old": "def failure_fields(error):"
+    },
+    {
+      "count": 1,
+      "new": "stop = started + 540",
+      "old": "stop = started + 960"
+    },
+    {
+      "count": 1,
+      "new": "'schema':'OWNER_DRIVER_RELINK_RUN_EXECUTION_V1'",
+      "old": "'schema':'OWNER_LOCAL_MICRO_CACHE_RESUME_EXECUTION_V1'"
+    },
+    {
+      "count": 1,
+      "new": "'generation_cache_reused':True, 'owner_archive_reused':True, 'old_driver_object_reused':False, 'shared_seconds_cap':540",
+      "old": "'generation_cache_reused':True, 'shared_seconds_cap':960"
+    },
+    {
+      "count": 1,
+      "new": "(resource.RLIMIT_CPU,540)",
+      "old": "(resource.RLIMIT_CPU,960)"
+    },
+    {
+      "count": 1,
+      "new": "'original_generation','n0','wq','cache','reuse_binding'}",
+      "old": "'original_generation','n0','wq','cache'}"
+    },
+    {
+      "count": 1,
+      "new": "cfg['schema']=='OWNER_DRIVER_RELINK_RUN_PRIVATE_BINDING_V1'",
+      "old": "cfg['schema']=='OWNER_LOCAL_MICRO_CACHE_PRIVATE_BINDING_V1'"
+    },
+    {
+      "count": 1,
+      "new": "        header=module(Path(__file__).resolve().parent/'header_gate.py',HEADER_GATE_PIN,'owner_fixed_header_gate')\n        reuse=module(Path(__file__).resolve().parent/'reuse_gate.py',REUSE_GATE_PIN,'owner_fixed_compiled_reuse')",
+      "old": "        header=module(Path(__file__).resolve().parent/'header_gate.py',HEADER_GATE_PIN,'owner_fixed_header_gate')"
+    },
+    {
+      "count": 1,
+      "new": "        cache_tree,cache_receipt=cache.accept(g,fs,cfg['cache'],sup,expected_cache_argv)\n        reuse_raw=read(Path(cfg['reuse_binding']),REUSE_BINDING_PIN);reuse_cfg=json.loads(reuse_raw)\n        need(Path(reuse_cfg['verilator_root'])==Path(toolchain['verilator_root']),'REUSE_TOOLCHAIN_ROOT')\n        reuse_tree,reuse_receipt=reuse.accept(g,fs,reuse_cfg,sup)\n        reuse_buffers=reuse.buffers(g,reuse_cfg)",
+      "old": "        cache_tree,cache_receipt=cache.accept(g,fs,cfg['cache'],sup,expected_cache_argv)"
+    },
+    {
+      "count": 1,
+      "new": "for p in (repo,old,bdir,source,cache_root,Path(reuse_cfg['root'])):",
+      "old": "for p in (repo,old,bdir,source,cache_root):"
+    },
+    {
+      "count": 1,
+      "new": "for n in ('obj','fixtures','home','tmp','phases','compiler-search')",
+      "old": "for n in ('obj','fixtures','home','tmp','phases')"
+    },
+    {
+      "count": 1,
+      "new": "        def fixed_commands():\n            return reuse.commands(catalog,work,Path(cfg['n0']),Path(cfg['wq']))",
+      "old": "        def fixed_commands():\n            original=commands(executor,work,toolchain,inputs,old/'configuration',Path(cfg['n0']),Path(cfg['wq']))\n            return {'build':cache.build_command(g,original['build'],work),'run':original['run']}"
+    },
+    {
+      "count": 1,
+      "new": "        for name in ('cc1plus','collect2','as','ld'):\n            (work/'compiler-search'/name).symlink_to(catalog['programs'][name])\n        env=relink.environment(catalog,work)\n        generated=reuse.stage(g,fs,relink,work,reuse_buffers);binary=None;last_tree=None;generation_report=None",
+      "old": "        env=executor.environment(work,toolchain['verilator_root'])\n        # The exact original fixed system PATH/MAKE/CC/CXX/AR/PERL scheme is retained.\n        env['LD_LIBRARY_PATH']=str(Path(catalog['libraries']['libstdc++.so.6']).parent)\n        generated=cache.stage_objects(g,fs,relink,cache_tree,work);binary=None;last_tree=None;generation_report=None"
+    },
+    {
+      "count": 1,
+      "new": "            read(Path(__file__).resolve().parent/'header_gate.py',HEADER_GATE_PIN)\n            read(Path(__file__).resolve().parent/'reuse_gate.py',REUSE_GATE_PIN)\n            need(read(Path(cfg['reuse_binding']),REUSE_BINDING_PIN)==reuse_raw,'REUSE_BINDING_DRIFT')\n            re_tree,re_receipt=reuse.accept(g,fs,reuse_cfg,sup)\n            need(re_tree==reuse_tree and re_receipt==reuse_receipt and reuse.buffers(g,reuse_cfg)==reuse_buffers,'REUSE_ORIGINAL_BYTES_DRIFT')",
+      "old": "            read(Path(__file__).resolve().parent/'header_gate.py',HEADER_GATE_PIN)"
+    },
+    {
+      "count": 1,
+      "new": "            need(fixed_commands()==argv and env==relink.environment(catalog,work),'ARGV_OR_ENV_DRIFT')\n            search=work/'compiler-search'\n            need(sorted(p.name for p in search.iterdir())==['as','cc1plus','collect2','ld'],'REUSE_COMPILER_SEARCH')\n            for name in ('cc1plus','collect2','as','ld'):\n                need((search/name).is_symlink() and str((search/name).resolve(strict=True))==catalog['programs'][name],'REUSE_COMPILER_SEARCH')\n            if 'object' in result:\n                g.checked(work/'obj/owner_micro.o',result['object'],64*MIB,fixed_leaf='owner_micro.o')\n                g.checked(work/'obj/owner_micro.d',result['dependency_file'],MIB,fixed_leaf='owner_micro.d')",
+      "old": "            need(fixed_commands()==argv and\n                 env=={**executor.environment(work,toolchain['verilator_root']),'LD_LIBRARY_PATH':str(Path(catalog['libraries']['libstdc++.so.6']).parent)},'ARGV_OR_ENV_DRIFT')"
+    },
+    {
+      "count": 1,
+      "new": "            if name=='compile':\n                obj_pin={k:v for k,v in fs.identity(work/'obj/owner_micro.o',64*MIB).items() if k in ('bytes','sha256')}\n                obj_raw=g.checked(work/'obj/owner_micro.o',obj_pin,64*MIB,fixed_leaf='owner_micro.o')\n                need(obj_raw[:4]==b'\\x7fELF' and len(obj_raw)>=18 and int.from_bytes(obj_raw[16:18],'little')==1,'FRESH_RELOCATABLE_OBJECT')\n                dep_pin={k:v for k,v in fs.identity(work/'obj/owner_micro.d',MIB).items() if k in ('bytes','sha256')}\n                dep_raw=g.checked(work/'obj/owner_micro.d',dep_pin,MIB,fixed_leaf='owner_micro.d')\n                stage['dependency_closure']=reuse.dependency_closure(g,dep_raw,work)\n                result['object']=obj_pin;result['dependency_file']=dep_pin\n            if name=='link':\n                binary=d.check_binary(g,repo,catalog,work/'obj/VQwenOwnerKernel');result['binary']=binary",
+      "old": "            stage['cluster_witness']=witness(fs,tree,lexical,ports,generation_report,True,sv['path'])\n            if name=='build':\n                binary=d.check_binary(g,repo,catalog,work/'obj/VQwenOwnerKernel');result['binary']=binary"
+    },
+    {
+      "count": 1,
+      "new": "        tree=fs.tree_inventory(work,64*MIB,1024,2048,32*MIB)",
+      "old": "        tree=fs.tree_inventory(work,96*MIB,1024,2048,16*MIB)"
+    },
+    {
+      "count": 1,
+      "new": "result['cached_compiled_model_witness']=witness(fs,reuse_tree,lexical,ports,generation_report,True,sv['path'])",
+      "old": "result['cached_generation_witness']=witness(fs,tree,lexical,ports,generation_report,False,sv['path'])"
+    },
+    {
+      "count": 1,
+      "new": "            'local_generated_sources_recompiled':False,'old_absolute_fixture_inputs_pinned':True}\n        result['compiled_model_reuse']={'scope':'EXISTING_OWNER_COMPILED_MODEL_REVALIDATED_READ_ONLY',\n            'tree_identity':reuse.TREE_PIN,'receipt_identity':reuse.RECEIPT_PIN,'review_identity':reuse.REVIEW_PIN,\n            'staged_members':len(generated),'staged_bytes':sum(x['bytes'] for x in generated.values()),\n            'regular_archive':True,'old_driver_object_reused':False,'fresh_driver_dependency_closure_required':True}\n        result['staged_reuse_inputs']=generated",
+      "old": "            'copied_object_source_members':len(generated),'old_absolute_fixture_inputs_pinned':True,\n            'copied_makefiles_modified':False,'regeneration_fail_closed_exit':97}"
+    },
+    {
+      "count": 1,
+      "new": "COMPLETE_THREE_SUPERVISED_PHASES_DIAGNOSTIC_ONLY",
+      "old": "COMPLETE_TWO_SUPERVISED_PHASES_DIAGNOSTIC_ONLY"
+    },
+    {
+      "count": 1,
+      "new": "--execute-reviewed-owner-relink",
+      "old": "--execute-reviewed-owner-cache"
+    },
+    {
+      "count": 1,
+      "new": "args.execute_reviewed_owner_relink",
+      "old": "args.execute_reviewed_owner_cache"
+    },
+    {
+      "count": 1,
+      "new": "tree=fs.tree_inventory(work/'obj',256*MIB,1024,2048,64*MIB)",
+      "old": "tree=fs.tree_inventory(work,2*1024**3,32768,65536,512*MIB)"
+    },
+    {
+      "count": 1,
+      "new": "        # Header view consists only of the twelve copied, identity-checked regular inputs.\n        tree={'root':str(work),'entries':{n:{'kind':'regular',**fs.identity(work/n,32*MIB)} for n in generated}}",
+      "old": "        tree=fs.tree_inventory(work,64*MIB,1024,2048,32*MIB)"
+    },
+    {
+      "count": 1,
+      "new": "executor.save(work/'REUSE_ACCEPTANCE_INPUTS.json',tree)",
+      "old": "executor.save(work/'CACHE_ACCEPTANCE_TREE.json',tree)"
+    }
+  ]
+}

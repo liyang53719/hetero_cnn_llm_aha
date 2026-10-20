@@ -1,0 +1,69 @@
+{
+  "driver_manifest": {
+    "bytes": 1020,
+    "sha256": "50ceabdd66b261e14084c2efe0609601b63d2724293ccd7a6f47531d6baebde0"
+  },
+  "driver_only_changed": true,
+  "entry_substitution": {
+    "count": 1,
+    "new": "CALLER_PIN = (31361, '134a817c0dfae21736654e7bfaa40d4ff870e2de552366353c741f9512a6741b')",
+    "old": "CALLER_PIN = (31361, 'cc81cf0eeadfbca06e05dc8e600d5031a9a09ca5df772f65ed6ca8c593627095')"
+  },
+  "main_function_bodies_byte_identical": true,
+  "main_substitutions": [
+    {
+      "count": 1,
+      "new": "CONFIG_PIN = (3026, '851da9550b41300033be542a2ea782b288520927eb2d5d00897ac40f4253af85')",
+      "old": "CONFIG_PIN = (3023, 'a212824486e1151fd2d64c79bf05969b0d32d5e283ae710480cb0ca95005f4bf')"
+    },
+    {
+      "count": 1,
+      "new": "DRIVER_PIN = (1020, '50ceabdd66b261e14084c2efe0609601b63d2724293ccd7a6f47531d6baebde0')",
+      "old": "DRIVER_PIN = (1019, '67ae76c51aacbcabb47bdf10cc59a8d1cb7c506760907d506c7f09681279b6fc')"
+    }
+  ],
+  "new_driver": {
+    "bytes": 437173,
+    "sha256": "7e6fe0d25ae744a408f1c47a5c43be61efb1069d2f7d75f5f0671ad83b2517af"
+  },
+  "new_entry": {
+    "bytes": 2052,
+    "sha256": "ca116a5164013bbbae45b44c33c62a4e16e6884b51a58d2ccda0bc18855396b7"
+  },
+  "new_main": {
+    "bytes": 31361,
+    "sha256": "134a817c0dfae21736654e7bfaa40d4ff870e2de552366353c741f9512a6741b"
+  },
+  "prior_driver": {
+    "bytes": 21662,
+    "sha256": "68c5728e5c1d2fb0b1580786ace4c3fe0d0728d090657df832aef056ae3c8b7b"
+  },
+  "prior_entry": {
+    "bytes": 2052,
+    "sha256": "102bf99c13df0529a3630de9d325bda7968d48dbbf6ced48e93b0e5e573507b7"
+  },
+  "prior_main": {
+    "bytes": 31361,
+    "sha256": "cc81cf0eeadfbca06e05dc8e600d5031a9a09ca5df772f65ed6ca8c593627095"
+  },
+  "schema": "OWNER_DRIVER_RELINK_PIN_UPDATE_V1",
+  "six_fixture_files_unchanged": true,
+  "unchanged_helpers": {
+    "cache_gate.py": {
+      "bytes": 5313,
+      "sha256": "bc4dc052931317d4e3c0f99bd6beb42d85073a78c2d3efcecd19e8f539756871"
+    },
+    "header_gate.py": {
+      "bytes": 899,
+      "sha256": "e03ae18149849b305ba69434b78dbba9212b7f5f163d7e5bcc5c44b872b14109"
+    },
+    "reuse_gate.py": {
+      "bytes": 8936,
+      "sha256": "df631aab1d0dc587c8e4b4293990ae2da71f391260981d56481495b56bef0a93"
+    },
+    "supervision.py": {
+      "bytes": 4391,
+      "sha256": "ffce52ca02bb04fd24cf792b1e9a2c495d3daaa37992da0deeabeab7db9e29a6"
+    }
+  }
+}

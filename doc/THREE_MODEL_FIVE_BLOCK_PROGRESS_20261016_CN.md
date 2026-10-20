@@ -1489,3 +1489,16 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 当前固定N0/Wq、M128、K[0,1024)+[1024,1536)及局部目标不变。未来仅沿原caller复用archive/runtime，540秒compile120/link60/run300/tail60，单CPU、AS6GiB；本冻结阶段actual=NOT_EXECUTED。
 - 静态计划已独审：`review_owner_numerical_firstwrite_plan_20261020T0022`，M411/5d1fc6521d62f2b9df0fdbb133406c66340e4fcf7e165f1eef39bdcdc0bb5220，S4460/38ed35b8cc048613ad27895bd4519b4ee789557b33c9736dd93cfbc77b138c93。v4生产SOURCE已封 `review_owner_micro_core_v4_20261020T0031`，M2326/0a21394bd641a78cd6e07831873e199669f81bd9c2068115abab04db97f58984，SUMMARY.md4320/1eee1058e4e64039525f9364b9ea8ed5e158843612b0f32e36057d83c096d50a，结论 GO_OWNER_MICRO_V4_NUMERICAL_CONSUMPTION_OBSERVER_SOURCE_ONLY；独立搬迁普通/-O 138+138 主例与 8+8 loader 例通过。只补 metadata，生产与 COLD 不改。
 - 正确算法数值范围不等于本轮RTL数据正确；旧Host仅位置相容，不能倒填同因。official_raw/application_accuracy/typed_recipe_to_rtl均不授PASS，full_block=false。
+
+
+## TEMP：Owner v4 Numerical 只读闭包的原540秒 pin-only 接线（2026-10-20）
+
+在已发布并独审的 v4 owner driver 之上，本批只更新既有 driver-only caller 的 CONFIG_PIN、DRIVER_PIN 与 entry CALLER_PIN。run_owner_relink.py 为31361 B / 134a817c0dfae21736654e7bfaa40d4ff870e2de552366353c741f9512a6741b，launch.py 为2052 B / ca116a5164013bbbae45b44c33c62a4e16e6884b51a58d2ccda0bc18855396b7；四个 reuse/supervision/cache/header helper 及全部函数字节不变。有限逆投影恢复原 caller/entry；原监督、命令、依赖规则和首错门未放宽。
+
+固定 v4 production manifest1020 B / 50ceabdd66b261e14084c2efe0609601b63d2724293ccd7a6f47531d6baebde0，7件中只 owner_micro.cpp 变。4187叶 Numerical 资格由 review_owner_micro_core_v4_20261020T0031 绑定实际 producer 与固定4630258B root header：M2326/0a21394bd641a78cd6e07831873e199669f81bd9c2068115abab04db97f58984，S4320/1eee1058e4e64039525f9364b9ea8ed5e158843612b0f32e36057d83c096d50a。原196端口/95观察不变，不能用旧95门冒充全部新增数值闭包。
+
+精确复用仍是原12个已核 owner header/archive/runtime 输入，共24151608B；不复用旧 driver object，不调用 make/Verilator，不重新生成、backend或model编译。fresh 新driver编译→链接→局部run；新.d恰12有序fresh user inputs，原件/副本/对象/ELF和完整输入按原门前后核验。原540总墙含检查及复制，compile120+link60+run300+tail60；各native CPU105/45/285，单CPU、AS6GiB，MemAvailable≥8GiB、盘≥3GiB。父普通-I-S-B，最早t0/530TERM+5KILL+5落证不变，完整阶段窗口不足即INCOMPLETE。
+
+本次作者增量16×4=64 PASS；独立16+16=32 PASS，分列不合并。旧39×4与只读库存回放只继承未重跑；无本次数值或RTL实测。总SOURCE review_owner_driver_relink_v2_source_20261020T0034：M1116/33ec0c74734089ec7b960b3cb0cc4f2e13a4946361957e56fad737d5927a4d17，S3301/915a66f448c617f149e0a277969eb3f96b5c86c19abd6179a592b1d38d319707；verdict GO_OWNER_NUMERICAL_DRIVER_PIN_ONLY_SOURCE_AND_EXACT_540_COMMAND。总候选M9701/cc119fafceffd703688e78fdb3cdda627193a763e55e42afc2fce8dad406d221。
+
+公开15原件+STATUS位于 candidates/host93_first_n0_sources/owner_numerical_relink_run/；私有绑定/COMMAND/outer、测试机器路径、日志、数组和二进制不公开。当前该后继实际NOT_EXECUTED，额外扫描耗时未知，300秒不保证目标到达。caller保完整bounded JSONL，不靠候选集合或status布尔授PASS；具体首写/同沿winner/Host同因需实际充分证据，旧92317 settled Numerical FAIL及早期FAIL原件保留。完整job/fullblock=false，五block仍0/5，official/application/typed-to-RTL/historical-host-reproduction均null。

@@ -1,0 +1,55 @@
+{
+  "schema": "fixed93-pv-reuse-core-only-bundle-v1",
+  "status": "TEMP_CORE_ONLY_NOT_FULLBLOCK_ADMITTED",
+  "files": {
+    "CORE_DELTA.patch": {
+      "bytes": 5446,
+      "sha256": "52f1da4438e4323175afe1add981e6a20028492bf57a480c5cfc4e00324c581d"
+    },
+    "CORE_PINS.json": {
+      "bytes": 1426,
+      "sha256": "532d584c57923625312969bc4f446d463334772730255d7b07a2523cd9cace53"
+    },
+    "CORE_TEST_RESULT.json": {
+      "bytes": 2788,
+      "sha256": "961d9b8533c6372b745fee74ec0f48093aadf45e52390f4f6c5158776cfe9cf8"
+    },
+    "PACKAGE_CHECKS.json": {
+      "bytes": 1071,
+      "sha256": "f93d74e893a9ca9b3cb8255ee23334165b8d521c6111b0fa0e3f6fb018d3994d"
+    },
+    "README_CN.md": {
+      "bytes": 4929,
+      "sha256": "63391e7ba6d114f9329019271b764f7be395e2440fcad69715039801e6fd84b9"
+    },
+    "compile/INPUT_PINS.json": {
+      "bytes": 109186,
+      "sha256": "a81215f2d7ae8d58582c3befbed8dccba27bb2bf40ec996437e2448b16288537"
+    },
+    "compile/RESULT.json": {
+      "bytes": 3479,
+      "sha256": "1e98cab24684b6ad26532e0276c6756458b1a4b93fd38be835a0a057bd63bebb"
+    },
+    "compile/run_compile.py": {
+      "bytes": 3766,
+      "sha256": "ddc5fb3898a1032e3b5aa9219dee4b45b12bf1c1a9804ea2e34dd4a50a0e4d6b"
+    },
+    "tests/run_tests.py": {
+      "bytes": 5806,
+      "sha256": "8991ff4db1347e7f9ca2a56bdedd11b5bc80f845e5051143ec75494af409d5c3"
+    },
+    "tests/synthetic_services.py": {
+      "bytes": 13994,
+      "sha256": "83179e93f56d2ce35bbedbaee64c581e253ac4e216e19294fa09283c3d785ae3"
+    },
+    "tests/test_reuse.py": {
+      "bytes": 15182,
+      "sha256": "acc8080c1d1383c93e66e4049a09778289987b89c774d327aeea909592bfb155"
+    }
+  },
+  "observer_included": false,
+  "core_source_sha256": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "3b7f25537da7492d3c706c55129ca5ed0a18d9c2e0ec4f5d9e6e43b1ae2210d4",
+    "candidates/qwen2_fixed93_attention/owner.py": "b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e"
+  }
+}

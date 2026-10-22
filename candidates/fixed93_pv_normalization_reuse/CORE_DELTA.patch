@@ -1,0 +1,73 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -171,6 +171,9 @@
+   canonicalPvAckTap.foreach { tap => tap:=0.U.asTypeOf(tap);dontTouch(tap) }
+   // CANONICAL_OBSERVATION_TAPS_END
+   val scoreOut=scores.read(key,state===st("attExpRead"));val probOut=probs.read(key,state===st("attProbRead"))
++  // One write site preserves the existing SRAM port count. Both mutually
++  // exclusive writes use key/scalarValue; no second buffer or write port.
++  when(state===st("attExpResult") || (enableProductionPackedQk16.B && state===st("attProbScale") && col===0.U)){probs.write(key,scalarValue)}
+   val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)
+   vectorA:=av;vectorB:=bv
+   val vout=VecInit((0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a.io.out})
+@@ -660,13 +663,26 @@
+   when(state===st("attExpRead")){state:=st("attExpWait")}
+   when(state===st("attExpWait")){calc(ScalarOp.Add,scoreOut,F32.neg(maxScore),"attExpDiff")}
+   when(state===st("attExpDiff")){calc(ScalarOp.ExpNegative,scalarValue,0.U,"attExpResult")}
+-  when(state===st("attExpResult")){probs.write(key,scalarValue);calc(ScalarOp.Add,sum,scalarValue,"attExpSum")}
++  when(state===st("attExpResult")){calc(ScalarOp.Add,sum,scalarValue,"attExpSum")}
+   when(state===st("attExpSum")){sum:=scalarValue;when(key<token){key:=key+1.U;state:=st("attExpRead")}.otherwise{calc(ScalarOp.Div,F32.lit(1),scalarValue,"attInv")}}
+   when(state===st("attInv")){scale:=scalarValue;col:=0.U;state:=st("attPVStart")}
+   when(state===st("attPVStart")){clearAcc();key:=0.U;state:=st("attProbRead")}
+   when(state===st("attProbRead")){state:=st("attProbWait")}
+-  when(state===st("attProbWait")){calc(ScalarOp.Mul,probOut,scale,"attProbScale")}
+-  when(state===st("attProbScale")){probability:=scalarValue;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++  if(enableProductionPackedQk16){
++    // Fixed93 only: the first PV column group replaces each dead raw exp with
++    // its FP32 normalized value. Later groups reuse it, never a BF16 copy.
++    // All causal keys are rewritten for each head/query before PV starts.
++    when(state===st("attProbWait")){
++      when(col===0.U){calc(ScalarOp.Mul,probOut,scale,"attProbScale")}
++      .otherwise{probability:=probOut;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++    }
++    // Reached only after the original scalar error check accepted the result.
++    // attProbRead was earlier, so this is not a same-edge SRAM read/write.
++    when(state===st("attProbScale")){probability:=scalarValue;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++  }else{
++    when(state===st("attProbWait")){calc(ScalarOp.Mul,probOut,scale,"attProbScale")}
++    when(state===st("attProbScale")){probability:=scalarValue;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++  }
+   when(state===st("attPVCompute")){fmA:=VecInit(Seq.fill(16)(probability));fmB:=packet.asTypeOf(fmB);when(fmDone){acc:=fmOut;macs:=macs+16.U
+     when(key<token){key:=key+1.U;state:=st("attProbRead")}.otherwise{state:=st("attPVWrite")}}}
+   when(state===st("attPVWrite")){write(ptr("att",rowOffset(s.hidden.U)+head*s.headDim.U+col),VecInit(acc.map(materialize)).asUInt,"attPVWritten")}
+--- a/candidates/qwen2_fixed93_attention/owner.py
++++ b/candidates/qwen2_fixed93_attention/owner.py
+@@ -80,10 +80,14 @@
+                     total = self._op('add', total, probability)
+                 self.peak_probability_words = max(self.peak_probability_words, len(probabilities))
+                 inverse = self._op('div', 0x3f800000, total)
+-                # Exactly the existing OfficialAttentionOwner PV16 body.
++                # Reuse the existing probability storage after denominator use.
++                # Only col=0 evaluates Mul; all eight PV inputs stay raw FP32
++                # until the unchanged per-use Matrix BF16 ingress conversion.
+                 for col in range(0, 128, 16):
+                     for key, probability in enumerate(probabilities):
+-                        probability = self._op('mul', probability, inverse)
++                        if col == 0:
++                            probability = self._op('mul', probability, inverse)
++                            probabilities[key] = probability
+                         v = yield from self._read(j.c + (key * 256 + kv_head * 128 + col) * 4)
+                         lanes = yield from self._matrix_step(0x24, (probability,) + (0,) * 15, v,
+                             clear=key == 0, last=key == token, steps=token + 1)
+@@ -255,7 +259,10 @@
+ 
+     def report(self):
+         r = super().report()
+-        r.update(candidate='fixed93_packed_qk16_pv16_source_candidate',
++        r.update(candidate='fixed93_packed_qk16_pv16_normalization_reuse_candidate',
++                 normalization_evaluations_per_causal_key=1,
++                 probability_use_repeats=8, normalization_reuses_per_causal_key=7,
++                 scalar_schedule_changed=True,
+                  integration_review_pending=True, fullblock_candidate_run_executed=False,
+                  hardware_simulation=False, model_ticks_are_hardware_cycles=False,
+                  packed_operand_staging_words=256,

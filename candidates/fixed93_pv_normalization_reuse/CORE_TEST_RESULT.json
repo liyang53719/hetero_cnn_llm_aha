@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "tests_run": 20,
+  "failures": 0,
+  "errors": 0,
+  "cases": [
+    {
+      "m": 16,
+      "heads": 12,
+      "variant": "SYNTHETIC_EXACT_RNE_SURROGATE",
+      "causal_keys": 1632,
+      "old_normalize": 13056,
+      "new_normalize": 1632,
+      "actual_pv_uses": 13056,
+      "output_acks": 1536,
+      "owner_model_ticks": 133641,
+      "hardware_cycles": null,
+      "fullblock_executed": false,
+      "native_executed": false
+    },
+    {
+      "m": 1,
+      "heads": 12,
+      "variant": "SYNTHETIC_EXACT_RNE_SURROGATE",
+      "causal_keys": 12,
+      "old_normalize": 96,
+      "new_normalize": 12,
+      "actual_pv_uses": 96,
+      "output_acks": 96,
+      "owner_model_ticks": 1838,
+      "hardware_cycles": null,
+      "fullblock_executed": false,
+      "native_executed": false
+    },
+    {
+      "m": 2,
+      "heads": 12,
+      "variant": "SYNTHETIC_EXACT_RNE_SURROGATE",
+      "causal_keys": 36,
+      "old_normalize": 288,
+      "new_normalize": 36,
+      "actual_pv_uses": 288,
+      "output_acks": 192,
+      "owner_model_ticks": 4476,
+      "hardware_cycles": null,
+      "fullblock_executed": false,
+      "native_executed": false
+    }
+  ],
+  "evidence_scope": "real Python owner/shared-client control plus rational-RNE test doubles and source/FSM contracts only",
+  "native_executed": false,
+  "chisel_compiled": false,
+  "rtl_executed": false,
+  "eda_executed": false,
+  "fullblock_executed": false,
+  "m128_executed": false,
+  "imported_readonly_source_dependencies": {
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+    "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+    "candidates/qwen2_fixed93_attention/client.py": "5d23d47f51b2db59d435f47d073314921988e3079e69422acc3746d541afadaa"
+  },
+  "executed_from": "review_bundle/tests/run_tests.py",
+  "test_suite_sha256": {
+    "tests/test_reuse.py": "acc8080c1d1383c93e66e4049a09778289987b89c774d327aeea909592bfb155",
+    "tests/synthetic_services.py": "83179e93f56d2ce35bbedbaee64c581e253ac4e216e19294fa09283c3d785ae3",
+    "tests/run_tests.py": "8991ff4db1347e7f9ca2a56bdedd11b5bc80f845e5051143ec75494af409d5c3"
+  },
+  "pins_sha256": "532d584c57923625312969bc4f446d463334772730255d7b07a2523cd9cace53"
+}

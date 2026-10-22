@@ -1,0 +1,18 @@
+{
+  "schema": "fixed93-pv-normalization-reuse-core-pins-v1",
+  "status": "TEMP_NOT_RUNTIME_ADMISSION",
+  "baseline_scala_sha256": "a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491",
+  "baseline_python_sha256": "1e90ecb2e5cf26755c7fe5b7cc201d563afde23af6c27105daeb2387cb5cf443",
+  "source_dependencies": {
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+    "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8",
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+    "candidates/qwen2_fixed93_attention/client.py": "5d23d47f51b2db59d435f47d073314921988e3079e69422acc3746d541afadaa"
+  },
+  "outputs": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": "3b7f25537da7492d3c706c55129ca5ed0a18d9c2e0ec4f5d9e6e43b1ae2210d4",
+    "candidates/qwen2_fixed93_attention/owner.py": "b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "status": "PASS_PORTABLE_CORE_PACKAGE_CHECKS",
+  "negative_preflight_cases": [
+    {
+      "name": "missing_required_roots",
+      "exit_code": 2,
+      "rejected_before_cases": true
+    },
+    {
+      "name": "optimized_python_rejected",
+      "exit_code": 1,
+      "rejected_before_cases": true
+    },
+    {
+      "name": "wrong_baseline_sha",
+      "exit_code": 1,
+      "rejected_before_cases": true
+    },
+    {
+      "name": "nonempty_work_rejected",
+      "exit_code": 1,
+      "rejected_before_cases": true
+    },
+    {
+      "name": "unpinned_initializer_rejected",
+      "exit_code": 1,
+      "rejected_before_cases": true
+    }
+  ],
+  "positive_case_suite": {
+    "tests": 20,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 9.249,
+    "from_final_package_runner": true
+  },
+  "python_syntax_parse": "PASS",
+  "source_and_output_sha_gates": "PASS",
+  "no_unpinned_pyc_or_initializers": "PASS",
+  "no_private_absolute_paths": "PASS",
+  "no_classes_logs_weights_or_base_copies": "PASS",
+  "compile_wrapper_executed": false,
+  "observer_included": false
+}

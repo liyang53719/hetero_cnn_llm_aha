@@ -1525,3 +1525,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - ONGOING / TEMP：算法数组、token/operand 语义、调度/cache 对应、数值与完整 block 尚未由本工具验证。成功输出强制保留 fullblock_acceptance=false、numerical_acceptance=false、RTL=false；不得将本批合成单测升级为 M128 通过。
 - TODO：增加有界语义层和独立数值审查。已有失联运行仍缺可信终态与清理证据，不读取未封流造 PASS，不重复昂贵作业；此局部阻塞不应阻止独立代码和合成测试继续。
 - 五 block 完整 RTL 仍 0/5，无新增 MAC 利用率实测。未上传权重、可重建 tensor、真实日志或二进制。本批不删除临时数据。
+
+## TEMP：Fixed93 PV16 归一化原位复用核心补丁（2026-10-21）
+
+- DONE / PASS（有限）：`candidates/fixed93_pv_normalization_reuse/` 保存两文件核心 patch、输入/输出 pins、便携合成测试及编译复现脚本。入本工作树后 root 再跑 20 项测试通过（9.425 秒）。真实 Python owner/shared clients 只跑 synthetic M1/M2/M16；算术服务是 exact-rational RNE 替身，不是 native、Chisel 或完整 block 通过。
+- 核心改动：每 head/query 的 col=0 计算归一化 FP32 并覆盖原 probs，后 7 个 PV16 列组复用；Scala 原 exp 写入和新写回合并为一个 write site，不新增缓存容量/FMA/寄存器声明。仅选中 packed-QK16 profile 生效。物理端口与面积未经 RTL/综合签核，Scalar 调度明确改变。
+- DONE / PASS（有限编译）：修改后的单个 Qwen2Block.scala 增量 scalac 通过，19.63 秒、16 classes；没有 elaboration、CHIRRTL/SV/RTL 或仿真。便携 compile wrapper 本身未再运行，真实同源编译摘要单列，不重复计数。
+- 性能仅预测：M128 少 693504 次归一化 Mul，源码无停顿状态模型少 2774016 拍；非 RTL 实测，DDR 事务与 Matrix issues 不变。当前选中调度中 Attention 1609728 笔读写各至少占两个与新 Matrix step 不重叠的握手拍，完整 block T>=5529600；固定4096 MAC/拍、有效MAC6014828544，保守源码上界<=26.5564236111%。允许在飞流水活动重叠，不能据此称上游整体不支持高利用率。旧63.5659%是忽略此供数约束的 issue-only 上界，不是实际可达预测。
+- ONGOING / TEMP：observer 新schema、最新33-symbol helper基线合并、closure/预算/admission独立集成。本核心包不含 observer，不可直接接旧 observer，也未准入完整 M128。
+- TODO：先完成新观察契约的有界集成验证，再解除 Attention 串行供数瓶颈。完整五block RTL仍0/5，80%/90%目标未达；不上传权重、可重建tensor、原始日志、class或基线副本。

@@ -1534,3 +1534,10 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 性能仅预测：M128 少 693504 次归一化 Mul，源码无停顿状态模型少 2774016 拍；非 RTL 实测，DDR 事务与 Matrix issues 不变。当前选中调度中 Attention 1609728 笔读写各至少占两个与新 Matrix step 不重叠的握手拍，完整 block T>=5529600；固定4096 MAC/拍、有效MAC6014828544，保守源码上界<=26.5564236111%。允许在飞流水活动重叠，不能据此称上游整体不支持高利用率。旧63.5659%是忽略此供数约束的 issue-only 上界，不是实际可达预测。
 - ONGOING / TEMP：observer 新schema、最新33-symbol helper基线合并、closure/预算/admission独立集成。本核心包不含 observer，不可直接接旧 observer，也未准入完整 M128。
 - TODO：先完成新观察契约的有界集成验证，再解除 Attention 串行供数瓶颈。完整五block RTL仍0/5，80%/90%目标未达；不上传权重、可重建tensor、原始日志、class或基线副本。
+
+## PASS（有限）/ TEMP：PV 复用 v2 独立容器读取器（2026-10-21）
+
+- DONE / PASS：新增 `candidates/fixed93_pv_reuse_evidence/`，保留旧 v1 读取器不覆盖。入工作树重跑21项合成测试通过（1.157秒、21892KiB）；独审另写16项微型端到端案例通过，两者不合并冒充实际模型覆盖。
+- 新入口严格绑定归一化复用的 plan/observation/contract 与 ordinary event-v2，exp仍为原v1；拒绝旧v1混配、1/8/7声明错误、bool冒整数、缺终态/FINISH和尾随字节。只验证可信终态声明与容器，不证明真实693504次复用、数值或调度语义。
+- ONGOING / TEMP：source closure/anchors/preflight接线；预算增量经有限SOURCE审查为+99072事件、+24470784字节，不授实际运行资格。
+- 完整block/native/RTL均未执行，本批不继承前任候选的实际PASS，五block RTL仍0/5。

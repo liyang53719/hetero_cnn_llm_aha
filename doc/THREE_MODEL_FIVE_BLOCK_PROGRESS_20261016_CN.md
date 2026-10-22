@@ -1517,3 +1517,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 正式actual review_owner_numerical_actual_20261020T0046：M1213/e569e7897d10f300c245b24cc9ffeb72d8cc7dd95282ae69835b558c32ac4685，SUMMARY.md9536/01e92b6d94c23679c80efc7c70ebae1b0e03ab9c3c1336fa70a1f80c74737158；ACCEPT_ACTUAL_OWNER_V4_MATRIX_NONFINITE_CONSUMPTION_FAILURE_ONLY。独核53项当前树、338原source、7fixture/12copies、完整输入及ELF/.d/23archive/3runtime；39系统依赖及原608整树未本次重hash，success-only caller postflight未执行，独立读验不倒填。
 
 七证据manifest957/6912c2979ad9c37a89ef334e88af8eefb2718cef9ee48e23257bcbfd5c8c9a26，完整四行run log34777/5bf4b4fa15b820c25f2743777286c2fb823fdee2ca910975f8f5831974a57260，新ELF12826184/482a6d48bf8e3e320c9dd4634308dad1209acc9d49ad6c44afdd8f81eaacfceb。公开安全摘要在candidates/host93_first_n0_sources/owner_numerical_failure_actual/；不上传原权重、数组、完整日志、二进制或机器路径，摘要无新native/测试。fulljob/fullblock=false、五block0/5，official/application/typed-to-RTL/historical-host-reproduction均null；后续只可依据新证据定位上游非有限来源，不能将本FAIL改记PASS。
+
+## PASS（有限范围）/ TEMP：离线证据容器校验器（2026-10-21）
+
+- DONE / PASS：新增 `candidates/fixed93_offline_evidence/` 的只读校验器、纯合成测试及 pinned r3 decoder。复制至本工作树后重跑 16 个 unittest 方法通过，0.416 秒、最大 RSS 21592 KiB。未运行 DUT、native 数值内核、Chisel elaboration 或 RTL。
+- 精确范围：外部可信原会话终态声明与 receipts 的一致性、双 LEC1 流完整文件身份、frame/hash chain、真实 EOF/FINISH 和外部 seal；缺终态、身份混淆、清理异常、截断和尾随字节拒绝。原会话 attestation 必须由可信原始终态证据建立，本工具不生成该证据。
+- ONGOING / TEMP：算法数组、token/operand 语义、调度/cache 对应、数值与完整 block 尚未由本工具验证。成功输出强制保留 fullblock_acceptance=false、numerical_acceptance=false、RTL=false；不得将本批合成单测升级为 M128 通过。
+- TODO：增加有界语义层和独立数值审查。已有失联运行仍缺可信终态与清理证据，不读取未封流造 PASS，不重复昂贵作业；此局部阻塞不应阻止独立代码和合成测试继续。
+- 五 block 完整 RTL 仍 0/5，无新增 MAC 利用率实测。未上传权重、可重建 tensor、真实日志或二进制。本批不删除临时数据。

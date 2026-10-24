@@ -1,5 +1,11 @@
 # Block checklist（只读视图）
 
+## 当前证据说明
+
+以下说明引自唯一状态源 [doc/block_checklist.yaml](block_checklist.yaml)；dated 当前证据索引也位于该 YAML。
+
+doc/block_checklist.yaml是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见doc/block_checklist.yaml末尾20261015节。 2026-10-24当前证据见doc/block_checklist.yaml末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。
+
 当前最终目标：Qwen2-1.5B、Qwen3.5-0.8B、Qwen3.5-35B-A3B各自典型block实际生成RTL数值通过，Matrix整block有效MAC利用率≥90%；Matrix/Vector分报，固定配置资源分母。
 U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史并排除当前派工。
 
@@ -84,6 +90,11 @@ U00=ongoing；U01=to do。C03.3仅为E0，Q38及旧R00/整网任务保留历史�
 
 部分子项 done 的父项仍为 ongoing；官方权重、真实RTL/状态连续性按各自完整门禁验收。
 队列默认跳过所有 done 和已有负责人正在执行的 ongoing 叶项，不自动重开历史任务。
+
+## 历史附录：2026-10-12至13原始快照
+
+以下原文从旧只读视图迁入唯一 YAML 状态源后生成；仅保全历史，不代表当前运行或新的验收。
+原文 SHA256：`939d3fc05c4804fea89319735ff49381af4312032fa0b4abe1789384ec3e7b14`。
 
 2026-10-12 QKV归约接入进度与资源/验真范围见 [Qwen2分块归约记录](QWEN2_QKV_BLOCK_REDUCTION_20261012_CN.md)。这是Q21.3的实现子门，未关闭Q22/Q23/U01；官方BF16为用户批准目标，原FAIL与其余四个block的M128缺口保留。
 

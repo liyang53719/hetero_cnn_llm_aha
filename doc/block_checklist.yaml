@@ -7,7 +7,7 @@
 - to do
 - ongoing
 - done
-说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。
+说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。 2026-10-24当前证据见本文件末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。
 任务:
 - 编号: C00
   名称: 重建最新源码与证据基线
@@ -1925,3 +1925,139 @@ M16阶段成本与独立后置恢复增量20261015:
   CI范围: 上述源码CI成功与cost01实际模型及独立后置参考观测分列；不能用源码CI替代数值运行证据。
   下一步: 按线性工作量、因果Attention与固定物理执行成本分别评审新的M128预算；情景推算不是测得上限，不自动加时或重跑旧长链。
   保留验收: 仅M16的DIAGNOSTIC_SOFTWARE_OWNER诊断，当前Chisel映射与完整RTL未验，性能NO_GO；不推M128、其他四block或更长prefill。原M128四项数值失败及3300秒预算失败保留，完整RTL数值与90百分比目标保持，U00.2 ongoing、U01 to do及全部历史任务状态不变。
+
+当前证据索引20261024:
+  核对基线:
+    提交: 5a8e99c8db278bbb5e441d4fdc294c20dbf41f00
+    Git树: 0b5849d39f8fbf014652e2d351333fd87d367882
+    范围: 仅复核公开metadata的Git blob及SHA256并关联既有验收；本次未重跑模型、native、RTL或数值比较。
+  历史保持: 此前dated节为当时快照，不作为最新派工结论；全部旧FAIL、UNKNOWN、恢复归属及原始记录保留。新独立PASS不追认旧失败；未知run仍为UNKNOWN。
+  Qwen2历史完整M128:
+    文件: reports/execution/QWEN2_SAME_HOST_M128_REPLAY_IDENTITY_20261017/summary.json
+    SHA256: c0f24d55a09cd0f3352db9f609bd4fdcdfe928c20d177c25f5602e444719369c
+    设计提交: 8ba333c76722b47b681be88612b1c6987e34a5f4
+    范围: PASS_FRESH_SAME_HOST_M128_ASSIGNED27：真正fresh cold M128，同host官方27项已分配门、28观察；FP32 softmax未分配官方容差，显式mask未物化。不是29节点全门、当前新profile、硬件recipe或RTL验收。
+  Qwen35_0p8B_L0完整软件:
+    文件: reports/execution/QWEN35_FULL_M128_COLD_CARRIED_20261024/summary.json
+    SHA256: 0f38dc52d9c659c95d6cce9d3dd1e276600f874030412e90765bab142d6fb2cd
+    设计提交: 1ea9b511fc982b2d928472b0dadd9f794c1c20d8
+    范围: PASS_CORRECTED_POSTFLIGHT_NUMERICAL_COMPARISON：fresh cold128→carried128完整typed-software实际执行，32终态、2提交、38张量；每窗口17 assigned门及7项重叠operator门原阈值通过，Prep为DIAGNOSTIC_UNASSIGNED/passed=null，48次评估不是48个独立边界。首次comparison导入失败保留，修正比较不重跑actual、不重捕官方reference、不重置原时钟；不是native/public
+      Command128、Chisel等价、RTL、全模型或性能验收。
+    发布提交: db4bcb148038b9979442e19e95383a9fa5000d0a
+    关联文件:
+    - 文件: reports/execution/QWEN35_FULL_M128_COLD_CARRIED_20261024/SOURCE_PINS.json
+      SHA256: 30dd9d7e91a78c25cf9b7bd268f35d57bee450d0f8e2a4e9a9b99dceb3e3fb18
+    - 文件: reports/execution/QWEN35_FULL_M128_COLD_CARRIED_20261024/REPRODUCE.md
+      SHA256: 1387ea504a6bdf185b94afb1b45db0f251056fd9db7523c35c85667377939e32
+  Qwen2当前新模式: INCOMPLETE：selected schedule、direct transport均显式opt-in，ordered-vector-fold默认关闭。小刺激/冷测试PASS不继承历史M128；新profile/source/input/native闭包及整block数值资格尚未闭合。
+  局部源码与证据:
+  - 文件: plans/QWEN2_SELECTED_SCHEDULE_MODEL_20261024_ZH.md
+    SHA256: 3b31bfab3dd9df25baadd8c2e0dc5e3d43bddf94aa1b34450343686118c79522
+    设计提交: 1bdf70eb42de8752edeb616e8ef01e166628ca35
+    范围: PASS仅76+76有限owner控制与M2数值冷测试；新M128和硬件对应仍INCOMPLETE。
+  - 文件: plans/QWEN2_DIRECT_TRANSPORT_AND_BOUND_20261024_ZH.md
+    SHA256: bd80c368f156704759f208bc6dd50dbd023aa084b8ac8001c0f047acb618d1e8
+    设计提交: 0e3ae37f75053f0e292838a31934c5221769399d
+    范围: PASS仅74+74直通微型回归及已发布76+76回归；固定4096 MAC的63.56590758% Matrix界与29.0631232471%单Scalar必要界均为有条件架构上界，取max周期下界、不能相加，不是实测利用率。
+  - 文件: QWEN2_ORDERED_VECTOR_FOLD_PLAN_CN.md
+    SHA256: a9ecb63407a878de882875f8d0df1b18d865b357f8596d3885090c05d1ee2891
+    设计提交: 529da6815e32bfb463ee8e496ca0bfb8da67e26b
+    范围: TEMP/INCOMPLETE，默认关闭有序fold微模型；12+12测试范围不等于真实Chisel接口或M128。原隔离导入失败、3c2283a测试前Git线程失败与后续窄修复分列，不追认旧失败。
+  - 文件: candidates/qwen2_ordered_vector_chisel/README_CN.md
+    SHA256: 8775c43567c351f5230368ab9f9c597627cd2fdbe0431de5d166edf50eea51d5
+    设计提交: 5a8e99c8db278bbb5e441d4fdc294c20dbf41f00
+    范围: SOURCE_COMPOSE_PASS / BOUNDED_REFERENCE_TEST_PASS：默认关闭的三文件Chisel控制overlay，复用原16 ALU；normal/-O/-I/-I -O各28项source/Python client及12项微模型测试。不是执行新增Scala；真实同拍竞争、COMPILE、ELABORATION、RTL、M128、频率/面积与性能仍TEMP
+      / INCOMPLETE，生产源码未改。
+    关联文件:
+    - 文件: candidates/qwen2_ordered_vector_chisel/PROFILE_PINS.json
+      SHA256: 526a9227de4dfe3a7e674c13164f2767b5a6a388ceb2f6eafc89c4918572c12a
+    - 文件: candidates/qwen2_ordered_vector_chisel/validation/VALIDATION.json
+      SHA256: 1a3e517c7695c94be49c0ecff5d0855938d1f0ea2eebf0167e832a263d4d9f36
+    - 文件: candidates/qwen2_ordered_vector_chisel/validation/INDEPENDENT_REVIEW.json
+      SHA256: 9782952a97a6fd212b122fd57d11b7e24c380994affc29eb550faae69e9ab7fb
+  五block顺序:
+  - Qwen2_1p5B完整block
+  - Qwen35_0p8B_L0
+  - Qwen35_0p8B_L3
+  - Qwen35_35B_L0
+  - Qwen35_35B_L3
+  当前进行中: 已发布默认关闭的16 ALU有序fold真实Chisel接口候选overlay，源码组合和Python client/微模型冷测试PASS；下一步先补齐可复现有界compile-only闭包，再独立验证elaboration、真实client同拍故障竞争与RTL数值。compile/RTL/M128/性能仍TEMP，不将源码审查、微模型step或host耗时当成硬件执行。
+  任务与验收边界: 保持全部46父项和62叶项原状态、负责人、前置及完成边界；U00.2 ongoing，U01 to do。其余三个block无新增PASS；五block完整RTL数值0/5，固定资源完整周期90%目标未达，hardware_cycles/hardware_utilization仍无实测。冻结plan及其SHA256不变。
+
+历史只读附录20261012至20261013:
+  来源文件: doc/BLOCK_CHECKLIST.md
+  来源提交: 5a8e99c8db278bbb5e441d4fdc294c20dbf41f00
+  来源文件SHA256: 3052ceb06503417aac6bf1e40173daf5caa8f3d4b58f95f63c75bb33fc7006bf
+  原文SHA256: 939d3fc05c4804fea89319735ff49381af4312032fa0b4abe1789384ec3e7b14
+  范围: 原只读MD于2026-10-12至13手工追加的历史快照，原文逐字保留；不是当前状态、当前运行或新验收。最新状态只见本YAML任务及20261024证据索引。
+  原文: |
+    
+    2026-10-12 QKV归约接入进度与资源/验真范围见 [Qwen2分块归约记录](QWEN2_QKV_BLOCK_REDUCTION_20261012_CN.md)。这是Q21.3的实现子门，未关闭Q22/Q23/U01；官方BF16为用户批准目标，原FAIL与其余四个block的M128缺口保留。
+    
+    2026-10-12 本轮QKV分块归约已在公开21命令cold M16完整模型到达终态，17输出共1,671,168B ACK，15主阶段+6内部节点对固定配方逐bit一致、官方27已分配门通过。Q21.3仍ongoing：M128同源实际链正在执行，future scores未执行不能冒作全29节点通过，Chisel仅前端/默认关闭，尚无本批RTL验收。a2e4远端payload成功；model浅克隆基线FAIL已修且冷117测试通过；frontend原job cancelled但保存了完整PASS工件，等待修正预算后的新CI。详见分块归约记录；五block M128总门保持open。
+    
+    2026-10-12 15:42 UTC：Qwen2-1.5B L0完整cold M128公开21命令对应软件模型已完成，官方27已分配因果节点门均通过，116源/实际ACK/固定配方经独立复核。[完整记录](QWEN2_QKV_BLOCK_REDUCTION_20261012_CN.md)。Q21.3仍ongoing，保留full29缺口、carried128/Chisel/RTL未验；Q22/Q23及其余四block M128不关闭。新增共享Add的原始事件已记录，完整周期预测待纳入其bank/Vector开销，不声称达到80%利用率。
+    
+    38b943c 的model/frontend/payload三门及下载工件已闭环：新118模型小测＋原71数值策略小测，159 CHIRRTL，均保持各自身份；未把这些CI小门称为M128重放或RTL数值验收。
+    
+    2026-10-12 0.8B L0 typed owner前缀：真实embedding→RMS→QKV/Z/AB，两个M128输入窗口8个owner终态及原12项前缀数值门通过。见[来源与范围](QWEN35_GDN_PREFILL_PREFIX_20261012_CN.md)。这仍是S04/Q35B下的模型前置子门，未接公共Command128/Conv/chunk/state/FFN、无新RTL；第二输入窗口不等于carried GDN状态验收。S04/Q35B/U00.2/U01及五block M128总门保持open。
+    
+    2026-10-12 17:04 UTC：0.8B L0的真实typed投影写回→Conv4/SiLU/history staging已在两个M128输入窗口完成10个owner终态，原12项前缀门、实际Conv/SiLU同输入门及端到端原门通过。见[本轮数据与范围](QWEN35_GDN_PREFILL_CONV_20261012_CN.md)。两个Conv均cold，history未发布/无generation提交，仍不是carried GDN或完整block。S02/S04/Q35B/U00.2/U01及五block总目标保持open。e0bf前缀两CI及其下载工件已核闭环，cb93596的独立产物复核、两CI及下载工件均已闭环。
+    
+    2026-10-12 17:34 UTC：0.8B L0实际Conv/AB→InputPrep M128软件前缀完成，两个cold输入窗口12个owner、全部1,638,400个新增FP32字对独立固定配方一致，原RMS/投影/Conv门保持。103项冷小测试通过；[数值与范围](QWEN35_GDN_PREFILL_PREP_20261012_CN.md)保留全部native差异，InputPrep native stage未另授门限。尚未真正chunk/state/fence或完整block，原Chisel准备owner仍M1。S02/S04/Q35B/U00.2/U01及五block总目标保持open。
+    
+    2026-10-12 18:21 UTC：ada0a8a 两CI/103测试/工件闭环。新增全16头、完整128²状态的M16 true chunk64边界模型174.48秒固定算术逐bit通过；纯官方state原门仍1/262144超限，QKV-only反事实将其消除，不能宣称完整GDN通过。原M128合法UF拒绝保留，显式IEEE软件策略默认关闭且未接Chisel控制。16阶段完整typed协调器、双root最终fence、Down真实FP32seed及pointwise排空小门已落地，实际整链待归约修复后验证。[范围与原FAIL](QWEN35_GDN_CHUNK_PREFILL_20261012_CN.md)。此映射M128 Vector约2124万issue，固定4096资源乐观Matrix利用率≤3.168%，非RTL实测；五block M128总门、S02/S04/Q35B/U00.2/U01继续open。
+    
+    2026-10-12 19:07 UTC：07b9a9b8 两CI、271测试和18,996B紧凑工件已核闭环。下一批将通用两段K512投影真正接入同一GDN完整typed软件协调器，保留BF16物理跨度、原共享Vector Add、普通/seeded切换及双state最后发布。冷完整workflow305测试/21进程通过；实际cold16→carried16仍PENDING，尚不继承独立候选的state通过。[实现与验真范围](QWEN35_GDN_PROJECTION_REDUCTION_20261012_CN.md)。显式IEEE与新投影的Chisel控制/公共Command128仍未接，五block M128总门不关闭。
+    
+    2026-10-12 19:20 UTC：8ef1239a 两轻CI/305测试/47执行测试源与紧凑工件闭环；0.8B L0同一完整typed软件模型cold16→实际carried16完成32终态、双root generation1→2，所有原已分配完整节点/state/operator门通过，旧FP32状态单点失败已在实际链消除。Prep单独门未分配，Chisel/Command128仍未接，不升级为M128或RTL通过。[逐项记录](QWEN35_GDN_PROJECTION_REDUCTION_20261012_CN.md)。同源完整M128已基于分阶段预算启动一次，S04/Q35B/U00.2/U01及五block总门继续open。
+    
+    2026-10-12 19:52 UTC：完整cold128已到16阶段终态并提交generation1，原carried128继续。旧normal-only输出比较在两个合法BF16 subnormal处拒绝，原FAIL保留；新增显式finite-prefill比较域接受合法有限编码，保持全部max/mean/ULP/state门和实际算术不变，独立位级/旧域等价门已通过。见[比较域依据](QWEN35_GDN_PROJECTION_REDUCTION_20261012_CN.md)。完整双窗口M128仍待实际终态及全部比较，不关闭五block/Chisel/RTL总门。
+    
+    2026-10-12 19:57 UTC：0.8B L0完整typed软件模型cold128→实际carried128一次运行正常完成32终态和双root generation1→2；每窗真实两个64-token chunk。finite-BF16域、全部原数值阈值下，各17个已分配节点、完整FP32 state及Conv/SiLU operator门均通过，旧normal-only拒绝明确保留；Prep仍unassigned。313/22最终轻门通过。[完整记录](QWEN35_GDN_PROJECTION_REDUCTION_20261012_CN.md)。这是S04/Q35B的模型数值子门完成，公共Command128/Chisel/RTL仍未接，不关闭父项及五block总验收；下一步0.8B L3 M128模型，35B-A3B两block未完成。
+    
+    2026-10-12 20:07–20:20 UTC：37b7de的GDN软件/公共payload两CI成功，313测试/22suite及21,490B工件逐hash核验。下一步0.8B L3完整prefill模型的官方BF16 prefix采集源码已准备并独立审查；环境替换后两源码逐hash精确恢复，新环境11项stdlib门通过。旧M16原始采集不可见，旧M128终态未知，不能继承成现环境通过。参考入口和下一数据链范围见[L3计划](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。0.8B L3/35B-A3B两block及Chisel/RTL总门继续open。
+    
+    2026-10-12 20:53 UTC：0.8B L3新官方M16/M128采集完成；同一实际typed软件资源执行RMS→packed Q/gate→K→V的cold128/carried128前缀，8个accepted terminals、1,572,864个BF16输出逐bit吻合官方，原门通过。M16元数据路径错误原EXIT1与独立posthoc身份恢复并列保留。见[L3记录](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。仅四阶段前缀，无实际KV续写、Norm256/RoPE/Attention/FFN和公共Command128/Chisel/RTL；C03.2/C04.2/C05为实现子门，S01/Q35A/U00.2/U01及五block总目标保持open。2b21两轻CI与1116B工件已核闭环，本批模型小门/新CI继续收口。
+    
+    
+    2026-10-12 21:42 UTC：8ca23b28 三轻CI与L3/GDN工件闭环。0.8B L3实际typed软件八阶段RMS/QKV→Q/K Norm256→partial64 RoPE的cold16/carried16完成16终态，前缀8门及每窗22/57原producer门通过；其余35 producer尚未纳入统一观察（其中4个最终输出已另验），KV/Attention/FFN尚未执行。[范围及预算失败](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。首轮M128在600秒宿主预算受控停止（cold8＋carried4），不是整链通过；精确检查开销小修后完整双窗重新执行一次，当前PENDING。仅C03.2/C04.2/C05模型子门推进，不关闭S01/Q35A/U00.2/U01或五block总门。
+    
+    
+    2026-10-12 21:51 UTC：0.8B L3同一typed软件模型cold128/carried128的RMS/QKV→Q/K Norm256→partial64 RoPE八阶段前缀完成16终态，原门及独立raw/source审计通过。新增Q Norm/Q RoPE输出cold4点、carried1点各1ULP差异，最大0.015625，不能称全bitexact；全部原阈值保留。首轮600秒预算FAIL与修复后522秒PASS分别归档，宿主检查加速非硬件优化。最终90 L3＋原316 GDN同源轻门已验，远端CI待闭环。[来源与精确范围](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。完整L3、公共Command128/Chisel/RTL、35B-A3B两个block及五block总门仍open。
+    
+    
+    2026-10-12 22:00 UTC：78e2f52三CI与两份compact工件已核闭环（L3 90/10/70源，GDN316/22/49源）。前缀四个/一个Q Norm BF16差异经固定全形状官方QK单算子传播，cold/carried原QK门最大差1.0/0.5失败，cold缩放logits仍0.0625失败；尚未执行实际Matrix owner，不能当硬件失败或放宽验收。先定位mean/rsqrt通用数值差，再接完整L3；前缀PASS与完整block open并列保留。
+    
+    - 2026-10-12 C2局部进展：旧C1的Norm小差传播为条件QK 10/8个超限已保留；通用DEFAULT256+SqrtDiv修复在真实双M16八命令/22已观察producer零bit差，完整M128前缀待终态。Chisel同模块overlay仅源/符号门，生产Host未启用；完整L3/五block总项仍ongoing。
+    - 新KV staging仅34项合成控制门，实际K/V与最终block凭据接线todo。固定单Scalar映射的L3条件利用率上界约7.56%/7.77%，不是实测或最终Vector架构结论。
+    - 后继QK blocker：matching-input的现行ascending FP32 FMA仍cold1/carry2字超限（max1.0），其中carry [0,5,26,64]因果有效；独立C配方预检，尚非Matrix owner。需通用归约机制定位，禁止用C2条件官方QK通过替代此门。
+    - 22:30 UTC更新：C2真实cold128/carried128八命令前缀16终态完成，22已观察Norm/RoPE producer的FP32/BF16全部逐bit相同；61源/18输出/52观察封存复核。只关闭C2局部前缀数值门，QK配方超限、KV/完整L3/Chisel/五block总项仍open。
+    
+    - 2026-10-12 23:04 UTC：478a542两CI/137tests/80源工件闭环。显式矩形Matrix profile与旧模式共资源小门完成；GQA同输入双M16子算子实际QK/scale/BF16概率/context全bitexact，FP32softmax过原门。18个owner门含held-success poison修复和M17/cache33边界；干净209tests/18suites通过。该运行重放封存prefix写回，KV装载仍宿主设置，不是现场完整block或M128；57节点/最终fence、公共Host/生产Chisel/RTL和五block总门保持open。[准确范围和来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+    
+    - 2026-10-12 23:28 UTC：97446 的 L3/GDN/payload 成功工件已核，两个旧 Qwen2 门因源身份绑定失败，原 FAIL 保留；新历史 commit:path 与 observer v2 修复48小门通过。实际 Sigmoid gate 双M16回放四官方门逐bit相同、46合成门；GQA封存28门及八旧新全事件对照通过，仅宿主检查优化。冷受影响1392次软件测试执行（原1395人工合计更正，原日志未改）/313秒已过，新CI待验，完整L3活链、M128 GQA/五block/Chisel/RTL仍open。[范围与来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+    
+    - c554后继身份收口：L3 219/19/95源与GDN330/23/50源原CI工件已核；Qwen2 contract旧helper传递pin拒绝保留。六文件显式v2闭包与原frontend全文门精确两行扩展修复完成，独立审查及全新环境完整contract566小测/156.913秒通过；未重跑模型/RTL、未改数值门。原frontend821测试/159 CHIRRTL及工件已成功闭环，c554五門为四成功/一身份FAIL；新修复提交CI待验，19阶段L3活链、真实KV末残差提交与五block总门仍open。
+    
+    
+    - 2026-10-13：a35adbd7 原四 CI 全成功并核完工件（contract566、GDN330、frontend821／159IR）；原 c554 身份 FAIL 与 5 个未打包 .pyc 的不可比限制保留。完整 L3 19 段 typed 软件活链与真实末 Add→KV 双根提交已接线，小门及独立审查通过，真实双 M16 执行中；原 57 producer 中未物化 mask-add 保持缺失，不能按末输出替代验收。公共 Command128、生产 Chisel／RTL、五 block M128 和 S01/Q35A/U00.2/U01 父项保持 open。[来源与范围](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+    
+    - 2026-10-13 00:55 UTC：L3 cold16真实19命令完整typed软件链及末Add→KV双根generation1已完成；56实际物化producer、最终输出、实际KV和行和全过原门。mask-add未物化保留，6个融合因果真实小门证明max/exp/sum排除future与PV零系数语义（±0位差保留）。carried16原任务继续，完整双M128、生产Command128／Chisel／RTL和五block总门未关闭。[指标与范围](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。
+    
+    - 01:00 UTC：原双M16监督在1200秒软件预算退出，cold19完整/原数值门通过；carry17、Down部分、末Add未到，generation仍1。原FAIL与部分证据已保全；下一完整pair1800秒依实测预算待本批CI后启动，不能继承partial state或关闭双窗门。
+    
+    - 2026-10-13 01:45 UTC：43fc70f三CI及596测试/两份紧凑工件已核闭环。0.8B L3完整cold16→实际carried16 typed软件链从raw重新运行正常结束，38终态、双root generation2/32tokens、每窗56已物化原producer及最终output/KV/行和全过；91源/42输出/102观察/实际cache依赖独立核验。原1200秒FAIL不覆盖，57中未物化mask-add保留；公共Command128/Chisel/RTL和完整双M128仍open。[完整范围与计数](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。后续单次7200秒M128预算依据1364秒完整M16和33秒guard计时，非数值门限。
+    - 用户要求所有已过case补MAC/占空比账：本双M16已有物理流量、Matrix FMA、Scalar/Vector逻辑次数；硬件全周期/busy/stall/overlap仍unknown。条件单Scalar映射Matrix上界3.1026%／3.0891%独立列示，不当实测。Qwen2 M128、L0 M16/M128与L3子链现有证据清单继续补齐；后续流水整改必须计bank端口/lease/排空和完整周期，不关闭U01或承诺80%。
+    - 2026-10-13 已完成首批15个已有结果窗口的[MAC/占空比证据清单](PASSED_CASE_UTILIZATION_20261013_CN.md)：逐case区分软件调用/源界/RTL实测及数值通过范围，缺完整周期或busy timeline明确unknown。98c7历史L3双M1有实测0.14426%／0.14413%和发射占空比2.37385%／2.37148%，保留压力DDR和native未验范围；其余软件case不由宿主秒数计算利用率。流水机会与bank/lease/credit/异常排空代价已列，完整计数器无扰接入和当前五block联合验收仍todo。
+    
+    - 2026-10-13 03:46 UTC：0.8B L3完整cold128→真实carried128 typed软件链一次运行EXIT0，6658.907秒在7200秒预算内；38真实终态、KV0→128→256、generation0→1→2。每窗56已计算producer与最终output/KV/行和原门均通过，KV逐bit相同，mask-add未物化保留；91源/42输出/102观察与真正carried依赖另有独立审查。见[完整数值与来源](QWEN35_L3_PREFILL_MODEL_20261012_CN.md)。仅关闭该完整M128软件子门；公共Command128/生产Chisel/RTL及五block联合总门继续open。当前已有Qwen2 L0 coldM128、0.8B L0/L3双M128的已分配软件数值门；35B-A3B L0/L3完整block尚未实现验收。
+    - 本次双M128 Matrix实际软件FMA为2,415,919,104／2,483,027,968，Scalar请求7,989,248／8,644,608；完整硬件cycle/busy仍unknown。单Scalar基本请求条件Matrix上界≤3.0661%／≤2.9692%，未满足80%/90%目标；17条逐窗口[性能记录](PASSED_CASE_UTILIZATION_20261013_CN.md)保留证据层级。下一步优先资源安全K2048、官方精度与真实35B prefill接线，任何流水整改仍须固定资源、bank/lease和原数值门。
+    
+    - 2026-10-13 35B前置：K2048使用原16×1376×256 A SRAM的双N160显式destructive lease，保持五context；原Matrix/Vector/TypedMemory实际两partial→Add→BF16写ACK小闭包已接线，旧0.8B默认路径保持。合成K2048、N160、跨窗、混模式、错误退休/reset门推进，官方35B profile与完整block未验。详见[资源、实际范围与下一步](QWEN35_35B_K2048_PARTIAL_LEASE_20261013_CN.md)。硬件全cycle/busy仍unknown；源/CI小批收口中，不关闭Q35C/Q35D/U00.2/U01。
+    
+    - 2026-10-13 05:15 UTC：f8a46ff的K2048双partial四轻CI/387+247测试及工件全部核验闭环。新增35B原始embedding→H2048 RMS实际typed-memory子链在同资源先M16再M128完成全ACK/终态发布；全部对应FP32节点/BF16输出对冻结原官方组件逐bit相同。三块1024 BF16存储不扩容，以output前128B保存32FP32 partial并二次读输入。M128实际1,332,736 Scalar请求、1,572,864B读、524,288B写ACK；硬件cycle/占空比仍unknown。见[来源、资源和范围](QWEN35_35B_H2048_RMS_20261013_CN.md)。本批独立review及冷447+247门已通过；a5f49a1四项CI与三工件已下载核验闭环；35B完整两block、生产Chisel/RTL、Q35C/Q35D/U00.2/U01仍open。
+    
+    - 2026-10-13 06:10 UTC：35B L0真实原embedding→H2048 RMS→全N8192 QKV的M16/M128软件前缀均完成全部写ACK与终态，固定配方逐bit一致、官方各Q/K/V原门通过；Q/K微小denormal位差1019/7904如实保留。M128 useful/executed均2147483648、Vector Add65536、Scalar1332736，完整硬件cycle/busy未知，算术有效比例100%不等于MAC利用率。见[本轮来源与范围](QWEN35_35B_RMS_QKV_PREFIX_20261013_CN.md)。53源冻结、原失败保全；独立复核和冷GDN465/Attention247完整workflow已通过，新发布CI待核。Conv/state/MoE和完整35B L0/L3、公共Command128/生产Chisel/RTL、五block联合门与80%目标不关闭。
+    
+    - 2026-10-13 恢复重验：未发布候选tree `96a065ce7a3fb2e573ab8656f2996fe60e945d29` 的19文件逐blob恢复；新获取payload、隔离官方runtime和实际RMS/全形状reference重建后，真实35B L0 RMS→全QKV M16/M128再次完成。M16逻辑16行/物理pad128，useful268435456、executed2147483648；M128真128行，二者均2147483648。新逐段官方门及固定配方通过，53源/9native复核；未继承丢失候选PASS。新冷GDN467项/33套、Attention247项/23套全过，独立raw复核完成；新精确提交CI仍待收口。见恢复结果JSON及RMS-QKV中文报告。完整35B L0/L3、生产Chisel/RTL与80%/90%利用率目标保持open；硬件cycle/busy/stall仍unknown。

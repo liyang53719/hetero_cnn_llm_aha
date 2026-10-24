@@ -251,12 +251,22 @@ def render(doc: dict, plan: dict) -> str:
            '| 编号 | 优先级 | 事项 | 状态 |', '|---|---|---|---|']
     if '当前统一验收目标' in plan:
         out[2:2] = ['当前最终目标：Qwen2-1.5B、Qwen3.5-0.8B、Qwen3.5-35B-A3B各自典型block实际生成RTL数值通过，Matrix整block有效MAC利用率≥90%；Matrix/Vector分报，固定配置资源分母。', f"U00={nodes['U00']['状态']}；U01={nodes['U01']['状态']}。C03.3仅为E0，Q38及旧R00/整网任务保留历史并排除当前派工。", '']
+    if doc.get('说明'):
+        out[2:2] = ['## 当前证据说明', '',
+                     '以下说明引自唯一状态源 [doc/block_checklist.yaml](block_checklist.yaml)；dated 当前证据索引也位于该 YAML。',
+                     '', text(doc['说明']).replace('此文件', 'doc/block_checklist.yaml').replace('本文件', 'doc/block_checklist.yaml'), '']
     for task in plan['任务']:
         row = parents[task['编号']]
         for item in [row] + row.get('子项', []):
             out.append('| ' + ' | '.join(map(text, (item['编号'], task['优先级'], item['名称'], item['状态']))) + ' |')
     out.extend(['', '部分子项 done 的父项仍为 ongoing；官方权重、真实RTL/状态连续性按各自完整门禁验收。',
                 '队列默认跳过所有 done 和已有负责人正在执行的 ongoing 叶项，不自动重开历史任务。', ''])
+    historical = doc.get('历史只读附录20261012至20261013')
+    if historical:
+        out.extend(['## 历史附录：2026-10-12至13原始快照', '',
+                    '以下原文从旧只读视图迁入唯一 YAML 状态源后生成；仅保全历史，不代表当前运行或新的验收。',
+                    '原文 SHA256：`' + historical['原文SHA256'] + '`。',
+                    historical['原文']])
     return '\n'.join(out)
 
 

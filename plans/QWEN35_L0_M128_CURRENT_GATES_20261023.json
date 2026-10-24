@@ -1,5 +1,5 @@
 {
-  "as_of_utc": "2026-10-23T17:20:35.449031+00:00",
+  "as_of_utc": "2026-10-23T17:29:31.949913+00:00",
   "completed_gates": [
     {
       "evidence": "reports/execution/QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023/RECOVERY_RECEIPT.json",
@@ -18,21 +18,28 @@
       "gate": "fresh_official_isolated_runtime",
       "private_receipt_sha256": "2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d",
       "status": "PASS_ISOLATED_PINNED_RUNTIME_READY"
+    },
+    {
+      "candidate_numerical_acceptance": false,
+      "case_identity": "cold16_then_carried16_from_second_window",
+      "evidence": "reports/execution/QWEN35_OFFICIAL_REFERENCE_CAPTURE_20261023/SUMMARY.json",
+      "gate": "fresh_official_M16_capture",
+      "manifest_sha256": "e2ab33feaafda28e70b387e5f872ff12caa1884ddc2ca981243066a41c549e2a",
+      "status": "VERIFIED_OFFICIAL_SOFTWARE_REFERENCE_ONLY"
+    },
+    {
+      "candidate_numerical_acceptance": false,
+      "case_identity": "cold128_then_carried128",
+      "evidence": "reports/execution/QWEN35_OFFICIAL_REFERENCE_CAPTURE_20261023/SUMMARY.json",
+      "gate": "fresh_official_M128_cold_carried_capture",
+      "manifest_sha256": "d2ad73c9b8742e8419c3c2dc453fd2c3ff08288e6781746c31bee33a5a1bd5c4",
+      "status": "VERIFIED_OFFICIAL_SOFTWARE_REFERENCE_ONLY"
     }
   ],
   "historical_plan": "plans/QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023.json",
   "historical_plan_preserved_unchanged": true,
+  "latest_capture_source_commit": "93fb48799da266ff75d050d474a50437f8fcd091",
   "pending_gates": [
-    {
-      "constraint": "Separate fresh process and fresh output; verify all manifest/source/runtime identities before M128.",
-      "gate": "fresh_official_M16_capture",
-      "status": "NOT_EXECUTED"
-    },
-    {
-      "constraint": "Actual same-instance cold128 then carried128 DynamicCache; not an M16 substitute.",
-      "gate": "fresh_official_M128_cold_carried_capture",
-      "status": "NOT_EXECUTED"
-    },
     {
       "constraint": "Original verified inputs; independently checked Matrix/Vector identities; explicit R2, IEEE, K512 and experimental equal-head exp policies.",
       "gate": "fresh_complete_typed_M128_replay",
@@ -61,6 +68,7 @@
     "acquisition_command": "\"$PYTHON\" -I -S -B scripts/acquire_qwen35_official_runtime.py --lock config/upstream/qwen3_5_0p8b/official_runtime_lock_20261023.json --output \"$FRESH_ARTIFACTS\" --torch-wheel \"$TORCH_WHEEL\" --reuse-directory \"$VERIFIED_WHEEL_DIR\" --reuse-directory \"$VERIFIED_ARCHIVE_DIR\" --execute",
     "acquisition_source": "scripts/acquire_qwen35_official_runtime.py",
     "acquisition_source_validation": "Eight no-network unit tests. New reusable collector was not used for the recorded acquisition and has no live-download PASS claim.",
+    "capture_launch_precaution": "Use a fresh nonexistent -X pycache_prefix as well as -B for each separate capture process; -B alone does not prevent old bytecode reads.",
     "capture_replay_comparison_commands": "Use unchanged bounded command templates from the historical plan only after the corresponding fresh prerequisite passes.",
     "fresh_acquisition_warning": "The collector writes a NEW measured acquisition lock. Review its new SHA before installing; do not inherit the historical acquisition or runtime receipt. Torch is mandatory verified local reuse, never redownloaded.",
     "historical_installer_telemetry_boundary": "The frozen successful installer records duplicate_archive_gets_included=true for the original acquisition. Do not apply that historical telemetry unchanged to a new acquisition: review the new acquisition report and any required report adapter before installation, then independently qualify the new runtime. The new collector is not claimed as an already-executed end-to-end reconstruction.",
@@ -75,5 +83,5 @@
   "schema": 1,
   "scope": "Record actual completed prerequisites separately from historical PLAN_ONLY. This is not official block numerical or RTL acceptance.",
   "source_commit_before_batch": "60d560336d9c2c8e7c1db40556028daacffd8ad8",
-  "status": "INPUTS_MATRIX_AND_ISOLATED_RUNTIME_READY_CAPTURE_REPLAY_PENDING"
+  "status": "INPUTS_MATRIX_RUNTIME_AND_OFFICIAL_REFERENCES_READY_TYPED_REPLAY_PENDING"
 }

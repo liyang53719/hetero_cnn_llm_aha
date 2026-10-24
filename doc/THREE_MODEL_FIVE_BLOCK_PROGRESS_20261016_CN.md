@@ -2192,3 +2192,29 @@ reports/execution/QWEN35_NATIVE_M128_DECAY_CROSSING_20261023/summary.json。
   [精确依赖锁](../config/upstream/qwen3_5_0p8b/official_runtime_lock_20261023.json)。
   仅复现源码、精确锁、hash、尺寸和安全摘要进入公开候选；完整私有 receipt/manifest、
   原始输入输出、权重、NPZ 和文本编码数据不上传。本更新本身没有 commit、push 或清理。
+
+
+## VERIFIED（新官方完整 L0 M16/M128 reference）/ PENDING（候选数值与 RTL）：2026-10-23
+
+- 在运行时批次 `93fb48799da266ff75d050d474a50437f8fcd091` 后，未修改的官方 capture
+  先执行 M16、逐项验真，再以独立新进程/新目录执行 M128；两次实际退出 0。
+  M16 为 cold16→carried16，只取两原始窗口各前 16 行，不能替代 cold128→carried128。
+- 新 M128 使用完整原始窗口与同一实际 DynamicCache，prior token 为 0、128；每次实际
+  执行 2 个 chunk64，padding 0。carried 卷积历史与 recurrent initial state 均匹配
+  cold 最终 cache。14 项原参数的 bytes/shape/混合存储类型保持不变。
+- 两次各 91 个 tensor 文件；M16 activation 11,359,232 B、9.967843943 秒、峰值 RSS
+  567,615,488 B；M128 activation 45,113,344 B、11.168520706 秒、峰值 RSS 564,559,872 B。
+  独立只读复核各自全部 tensor、23,583 项 runtime provenance、8 项源码和输入/payload
+  manifest，无尺寸或 hash 差异。没有在复核中重跑模型或候选。
+- 新 M16 manifest SHA256 `e2ab33feaafda28e70b387e5f872ff12caa1884ddc2ca981243066a41c549e2a`；
+  新 M128 manifest SHA256 `d2ad73c9b8742e8419c3c2dc453fd2c3ff08288e6781746c31bee33a5a1bd5c4`。
+  实际 DEFAULT、单 CPU/单线程、eval/inference、禁 autocast、确定性与最高精度已记录。
+- 明确保留观察缺口：`linear_attn.conv1d` module forward 未调用，只有实际 functional
+  convolution 边界被捕获；全部 chunk 内部状态、三角求解和 functional 内部并未全捕获。
+  只执行官方完整 L0，不是完整模型；官方 reference 成功不等于候选数值 PASS。
+- 完整 typed M128 replay 和原阈值比较仍未执行，RTL 仍 0/5，无周期、吞吐或 MAC
+  利用率新增证据。历史 PLAN_ONLY/回执和 runtime01 失败不回写。仅安全摘要与当前门更新，
+  不公开权重、输入输出、tensor 数值、私有路径或可重建 payload 的文本。
+- 证据见 [reference 安全摘要](../reports/execution/QWEN35_OFFICIAL_REFERENCE_CAPTURE_20261023/SUMMARY.json)、
+  [恢复记录追加](QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023_CN.md) 与
+  [当前门清单](../plans/QWEN35_L0_M128_CURRENT_GATES_20261023.json)。

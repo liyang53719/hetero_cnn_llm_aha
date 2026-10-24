@@ -1,0 +1,298 @@
+{
+  "boundaries": {
+    "candidate_typed_replay_executed": false,
+    "complete_environment_or_os_source_closure": false,
+    "full_checkpoint_sha256_verified": false,
+    "hardware_performance_established": false,
+    "numerical_acceptance_claimed": false,
+    "numerical_comparison_performed": false,
+    "official_complete_layer0_executed": true,
+    "official_full_model_executed": false,
+    "owner_executed": false,
+    "physical_cache_conditions_measured": false,
+    "rtl_executed": false
+  },
+  "created_utc": "2026-10-23T17:29:31.949913+00:00",
+  "environment": {
+    "aten_dispatch": "DEFAULT",
+    "autocast": false,
+    "cpu_count": 1,
+    "deterministic_algorithms": true,
+    "eval": true,
+    "float32_matmul_precision": "highest",
+    "inference": true,
+    "packages": {
+      "huggingface-hub": "1.33.0",
+      "numpy": "2.3.5",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.23.2",
+      "torch": "2.10.0+cpu",
+      "transformers": "5.19.0.dev0"
+    },
+    "python": "3.12.14",
+    "torch_interop_threads": 1,
+    "torch_threads": 1
+  },
+  "fixture_manifest": {
+    "bytes": 8897,
+    "sha256": "e21aa8318cdfbb8b982753288a3a8b9bcfc946dc20bd4c9424e545ca1761333a"
+  },
+  "observation_limits": {
+    "convolution_boundary": "Official functional causal_conv1d_fn executed and captured; conv1d module forward was not called.",
+    "launcher_bytecode_policy": "Root reports a separate fresh pycache prefix for each launch. This launcher option is not an independently measured field in the native manifest.",
+    "not_an_os_network_sandbox": true,
+    "python_observers": "Read-only module hooks and function wrappers call original arithmetic and return original results unchanged.",
+    "unobserved_internals": "L2-normalized Q/K, FP32 triangular systems/solves, per-chunk intermediate states, and functional residual/activation internals are not fully captured.",
+    "unobserved_module": "linear_attn.conv1d"
+  },
+  "original_layer0_parameter_count": 14,
+  "original_layer0_payload_bytes": 43111008,
+  "original_parameter_bytes_and_storage_dtypes_verified": true,
+  "preservation": "Earlier PLAN_ONLY/input/runtime receipts and failed runtime01 are unchanged; no historical capture PASS is inherited.",
+  "publication": "Only metadata, hashes, sizes and counts. No private absolute paths, tensor values, weight/input/output files, arrays, NPZ, native binaries or encoded payloads.",
+  "runner": {
+    "bytes": 27752,
+    "path": "candidates/qwen35_gdn_prefill/native/capture.py",
+    "sha256": "72c5181034162ee9a475d3118c85a18dab62e50348ab6e753795cbfefa8f03e7"
+  },
+  "runs": {
+    "M128": {
+      "case_identity": "cold128_then_carried128",
+      "cases": {
+        "carried128": {
+          "chunk_size": 64,
+          "final_cache": {
+            "conv_state": {
+              "bytes": 49152,
+              "dtype": "BF16",
+              "sha256": "3892e2265a105f9bba36cce91d7de9b1b23473b768acdb3d22e654bf5d62d24e",
+              "shape": "1x6144x4"
+            },
+            "recurrent_state": {
+              "bytes": 1048576,
+              "dtype": "F32",
+              "sha256": "f4122c9bd6bc724441a58eb7177302168f91e224c5dbd46b0325ae454a58a80f",
+              "shape": "1x16x128x128"
+            }
+          },
+          "initial_state_is_actual_prior_cache": true,
+          "input": {
+            "bytes": 262144,
+            "dtype": "BF16",
+            "sha256": "01e6c989b40eb2a9774cb9fe93f9818fb18128e996771ec581fdb23587270fc0",
+            "shape": "1x128x1024"
+          },
+          "num_chunks": 2,
+          "official_function_body_observed": true,
+          "output": {
+            "bytes": 262144,
+            "dtype": "BF16",
+            "sha256": "7dee80d8e985949bd9e3a9cc1a77c3c2b5ff059e0289be01c68d13f924bf0aae",
+            "shape": "1x128x1024"
+          },
+          "pad_size": 0,
+          "past_tokens": 128,
+          "sequence_length": 128,
+          "source_token_end_exclusive": 256,
+          "source_token_start": 128
+        },
+        "cold128": {
+          "chunk_size": 64,
+          "final_cache": {
+            "conv_state": {
+              "bytes": 49152,
+              "dtype": "BF16",
+              "sha256": "98f2f5af780914ae527c4e4949a6cb40cd2d892d8a305805df580a0c4f8865c7",
+              "shape": "1x6144x4"
+            },
+            "recurrent_state": {
+              "bytes": 1048576,
+              "dtype": "F32",
+              "sha256": "26ded1996b264a4e13e2e6c84435a81e03e01fb53b4467e401ecd3a1d2818ec3",
+              "shape": "1x16x128x128"
+            }
+          },
+          "initial_state_is_actual_prior_cache": true,
+          "input": {
+            "bytes": 262144,
+            "dtype": "BF16",
+            "sha256": "6e8c1a99dd98313abeb693afbe1fdf3aece5ebfab4b19f4737f3b663a0013b54",
+            "shape": "1x128x1024"
+          },
+          "num_chunks": 2,
+          "official_function_body_observed": true,
+          "output": {
+            "bytes": 262144,
+            "dtype": "BF16",
+            "sha256": "3fd5c899da137b7882135a4f8d7028c7ac263e663be65eed578ac898b14335f0",
+            "shape": "1x128x1024"
+          },
+          "pad_size": 0,
+          "past_tokens": 0,
+          "sequence_length": 128,
+          "source_token_end_exclusive": 128,
+          "source_token_start": 0
+        }
+      },
+      "created_utc": "2026-10-23T17:29:31.949913+00:00",
+      "independent_readonly_verification": {
+        "capture_reexecuted_by_reviewer": false,
+        "carried_convolution_history_bit_exact": true,
+        "carried_recurrent_state_bit_exact": true,
+        "exact_directory_inventory": true,
+        "fixture_and_payload_manifest_records_rehashed": 2,
+        "full_input_or_exact_M16_prefix_verified": true,
+        "runtime_provenance_records_rehashed": 23583,
+        "same_cache_object_observed": true,
+        "source_records_rehashed": 8,
+        "tensor_size_sha_and_geometry": true,
+        "zero_mismatches": true
+      },
+      "manifest": {
+        "bytes": 8966736,
+        "sha256": "d2ad73c9b8742e8419c3c2dc453fd2c3ff08288e6781746c31bee33a5a1bd5c4"
+      },
+      "module_boundary_events": 60,
+      "observed_module_count": 15,
+      "private_summary": {
+        "bytes": 3175,
+        "sha256": "50334224e782d5bf104c59eee3de19cae0ec0771f05a24a6bba33a3a085ead36"
+      },
+      "query_tokens": 128,
+      "resources": {
+        "activation_bytes": 45113344,
+        "cpu_budget_seconds": 120,
+        "elapsed_seconds": 11.168520706007257,
+        "peak_rss_bytes": 564559872,
+        "wall_budget_seconds": 120
+      },
+      "status": "CAPTURED_OFFICIAL_SOFTWARE_REFERENCE_ONLY",
+      "tensor_files": 91,
+      "total_directory_files": 93,
+      "unobserved_module_count": 1
+    },
+    "M16": {
+      "case_identity": "cold16_then_carried16_from_second_window",
+      "cases": {
+        "carried16": {
+          "chunk_size": 64,
+          "final_cache": {
+            "conv_state": {
+              "bytes": 49152,
+              "dtype": "BF16",
+              "sha256": "f06c5a7e9c82fa6afb87785181829b0f39e83a6479661a19a529180142bf1447",
+              "shape": "1x6144x4"
+            },
+            "recurrent_state": {
+              "bytes": 1048576,
+              "dtype": "F32",
+              "sha256": "ab87ca81aab17c2d53f67b4cab58e564774a7ae8e4a380a4c7e383f18f41f584",
+              "shape": "1x16x128x128"
+            }
+          },
+          "initial_state_is_actual_prior_cache": true,
+          "input": {
+            "bytes": 32768,
+            "dtype": "BF16",
+            "sha256": "a24b815636c594465e7510c3c98cf74447f6a166f301cc1ecf9d3cedb3daf326",
+            "shape": "1x16x1024"
+          },
+          "num_chunks": 1,
+          "official_function_body_observed": true,
+          "output": {
+            "bytes": 32768,
+            "dtype": "BF16",
+            "sha256": "61e7b2be0fdf51a76c2057999b7c6f2f6b56fd78282cb5750da16b013a8c9bb9",
+            "shape": "1x16x1024"
+          },
+          "pad_size": 48,
+          "past_tokens": 16,
+          "sequence_length": 16,
+          "source_token_end_exclusive": 144,
+          "source_token_start": 128
+        },
+        "cold16": {
+          "chunk_size": 64,
+          "final_cache": {
+            "conv_state": {
+              "bytes": 49152,
+              "dtype": "BF16",
+              "sha256": "a31b97931172ef95d1dac2a145fcc799fa472412d2e4fbea3ae2c0c63d57b619",
+              "shape": "1x6144x4"
+            },
+            "recurrent_state": {
+              "bytes": 1048576,
+              "dtype": "F32",
+              "sha256": "a280057d471d2d1896aa054539d1a7c5e30e23164596c337b9df7a498b368f9e",
+              "shape": "1x16x128x128"
+            }
+          },
+          "initial_state_is_actual_prior_cache": true,
+          "input": {
+            "bytes": 32768,
+            "dtype": "BF16",
+            "sha256": "88916e8b8abd3c9b465099058cf6a5c40a43f1c7d102a294eefdb2e9afe2940e",
+            "shape": "1x16x1024"
+          },
+          "num_chunks": 1,
+          "official_function_body_observed": true,
+          "output": {
+            "bytes": 32768,
+            "dtype": "BF16",
+            "sha256": "3eeefa404b45316d29bb90aff8aef09b50440a5141a551e41ea04b6561948ad0",
+            "shape": "1x16x1024"
+          },
+          "pad_size": 48,
+          "past_tokens": 0,
+          "sequence_length": 16,
+          "source_token_end_exclusive": 16,
+          "source_token_start": 0
+        }
+      },
+      "created_utc": "2026-10-23T17:28:11.680132+00:00",
+      "independent_readonly_verification": {
+        "capture_reexecuted_by_reviewer": false,
+        "carried_convolution_history_bit_exact": true,
+        "carried_recurrent_state_bit_exact": true,
+        "exact_directory_inventory": true,
+        "fixture_and_payload_manifest_records_rehashed": 2,
+        "full_input_or_exact_M16_prefix_verified": true,
+        "runtime_provenance_records_rehashed": 23583,
+        "same_cache_object_observed": true,
+        "source_records_rehashed": 8,
+        "tensor_size_sha_and_geometry": true,
+        "zero_mismatches": true
+      },
+      "manifest": {
+        "bytes": 8966353,
+        "sha256": "e2ab33feaafda28e70b387e5f872ff12caa1884ddc2ca981243066a41c549e2a"
+      },
+      "module_boundary_events": 60,
+      "observed_module_count": 15,
+      "private_summary": {
+        "bytes": 3183,
+        "sha256": "31ac200546714867d678bfd6079d1a0afe35a39af759279a795dd7e8439e2bbb"
+      },
+      "query_tokens": 16,
+      "resources": {
+        "activation_bytes": 11359232,
+        "cpu_budget_seconds": 120,
+        "elapsed_seconds": 9.967843942984473,
+        "peak_rss_bytes": 567615488,
+        "wall_budget_seconds": 120
+      },
+      "status": "CAPTURED_OFFICIAL_SOFTWARE_REFERENCE_ONLY",
+      "tensor_files": 91,
+      "total_directory_files": 93,
+      "unobserved_module_count": 1
+    }
+  },
+  "runtime_receipt": {
+    "bytes": 7331503,
+    "sha256": "2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d"
+  },
+  "schema": 1,
+  "scope": "Two separately launched, freshly captured official complete L0 CPU references. Not candidate numerical acceptance, full-model execution, owner execution, RTL or hardware performance evidence.",
+  "source_commit_at_execution": "93fb48799da266ff75d050d474a50437f8fcd091",
+  "status": "VERIFIED_FRESH_OFFICIAL_M16_M128_REFERENCES_ONLY"
+}

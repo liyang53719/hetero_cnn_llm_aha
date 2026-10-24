@@ -85,3 +85,20 @@ Matrix launcher 的 1 CPU、1 GiB 地址空间、65 秒 CPU、75 秒外层超时
 根执行工具报告的资格进程资源限额为：1 CPU、4 GiB 地址空间、260 秒 CPU、qualifier 内部 240 秒 alarm、外层 300 秒及 5 秒终止宽限；不把这些 launcher 限额冒称为回执内的独立资源测量。fixture 测试另用 1 CPU/512 MiB/30 秒限制，不与 runtime 进程合并。
 
 完整 receipt、文件清单和绝对路径仅在本地保留；公开候选只包含复现脚本、锁、hash、尺寸和安全摘要，不上传权重、输入、输出、NPZ 或可重建权重的文本编码。下一步仍是各自独立进程的新 M16、M128 官方 capture，再执行完整 cold128→carried128 typed block 和原门限比较。运行时 ready 不是官方 block 数值 PASS、候选 PASS、RTL PASS、硬件周期或 MAC 利用率证据。
+
+## 追加：2026-10-23 17:29 UTC，新 M16/M128 官方完整 L0 reference 已实际捕获
+
+运行时批次提交 `93fb48799da266ff75d050d474a50437f8fcd091` 后，根使用未改动的 `native/capture.py`，先后在两个独立新进程与新输出目录执行 M16、M128，均退出 0。M16 逐项复核通过后才进入 M128；没有重用丢失的历史 capture 或给旧回执补 PASS。运行的 capture 源码 SHA256 为 `72c5181034162ee9a475d3118c85a18dab62e50348ab6e753795cbfefa8f03e7`。
+
+- M16 是 `cold16_then_carried16_from_second_window`，取两个原始 128-token 窗口各自前 16 行，实际 prior token 数为 0、16。每次实际官方调用为 1 个 64-token chunk，padding 48；不能称为 cold128/carried128。共 91 个 tensor 文件、11,359,232 B activation；记录耗时 9.967843943 秒，峰值 RSS 567,615,488 B。
+- M128 是真正的 `cold128_then_carried128`，两个原始输入窗口逐字节一致，同一 DynamicCache 对象连续使用，实际 prior token 数为 0、128。每次官方调用为 2 个 64-token chunk，padding 0；carried 的卷积历史与 recurrent initial state 均与 cold 的最终 cache 位一致。共 91 个 tensor 文件、45,113,344 B activation；记录耗时 11.168520706 秒，峰值 RSS 564,559,872 B。
+- 两次均保留原完整 24-layer 配置，仅构造并执行官方完整 decoder layer0；14 项原 checkpoint 参数的 bytes、shape 与 BF16/F32 存储类型核验通过。实际 DEFAULT dispatch、1 CPU、intra/inter-op 各 1 线程、eval、inference、禁 autocast、确定性算法及最高 float32 matmul 精度均记录在 manifest。
+- 独立标准库只读复核逐项检查两次各 91 个 tensor 文件、精确目录清单、23,583 个 runtime provenance 记录、8 个源码记录及 fixture/payload manifest，尺寸与 SHA256 全部匹配；另核对输入切片、chunk 几何和 cache 连续性。复核没有重跑模型、reference 或候选。
+
+M16 manifest 为 8,966,353 B，SHA256 `e2ab33feaafda28e70b387e5f872ff12caa1884ddc2ca981243066a41c549e2a`；M128 manifest 为 8,966,736 B，SHA256 `d2ad73c9b8742e8419c3c2dc453fd2c3ff08288e6781746c31bee33a5a1bd5c4`。公开的 [reference 安全摘要](../reports/execution/QWEN35_OFFICIAL_REFERENCE_CAPTURE_20261023/SUMMARY.json) 只列元数据、hash、尺寸与计数，不包含 tensor 数值或私有绝对路径。
+
+观察边界仍明确：15 个 named module 各被调用两次，但 `linear_attn.conv1d` module forward 未调用，实际执行的是已捕获边界的官方 functional `causal_conv1d_fn`。没有声称捕获全部内部量；L2-normalized Q/K、FP32 三角系统/求解、每 chunk 中间状态和 functional residual/activation 内部仍不完整。hooks 返回 None，包装函数以原参数调用原算术并原样返回结果。
+
+原 capture 自带 120 秒 CPU/wall 限额及 128 MiB activation 上限。根报告两次均使用独立 fresh pycache prefix，避免 `-B` 只禁写、不禁读旧 bytecode 的问题；这属于 launcher 记录，不冒称为 native manifest 中的独立测量。Python 包/解释器/OS 受信边界不变，不据此声称 OS 网络沙箱。
+
+当前只新增“官方完整 L0 软件 reference 已捕获并验真”证据。完整 typed M128 replay、原阈值数值比较仍未执行；没有候选 PASS、owner/RTL PASS、硬件周期、吞吐或 MAC 利用率证据，五完整 RTL 仍 0/5。实际剩余门已更新至 [当前门清单](../plans/QWEN35_L0_M128_CURRENT_GATES_20261023.json)，历史计划、输入/Matrix 回执、runtime01 失败及 runtime02 资格回执保持不变。

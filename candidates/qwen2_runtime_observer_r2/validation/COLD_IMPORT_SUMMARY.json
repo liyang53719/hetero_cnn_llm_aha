@@ -1,0 +1,120 @@
+{
+  "status": "PASS_COLD_IMPORT_ONLY",
+  "scope": "Cold import and exact module/map identity only; no numerical or observer nonintrusion qualification.",
+  "private_config_sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030",
+  "parent": {
+    "status": "EXITED",
+    "exit": 0,
+    "timed_out": false,
+    "group_remaining": false,
+    "wall_seconds": 2.3738376030232757,
+    "limits": {
+      "cpus": 1,
+      "address_space_bytes": 268435456,
+      "cpu_seconds": 20,
+      "wall_seconds": 25
+    },
+    "numeric_execution": false,
+    "config_unchanged": true,
+    "sources_unchanged": true
+  },
+  "imported_targets": [
+    "candidates.qwen2_resident_matrix.ffn_attention.attention_owner",
+    "candidates.qwen2_resident_matrix.production_qk16_model.schedule",
+    "candidates.qwen2_resident_matrix.production_qk16_model.ordered_work",
+    "candidates.qwen2_resident_matrix.attention_packed_owner.client",
+    "candidates.qwen2_resident_matrix.official_bf16.owners",
+    "candidates.qwen2_resident_matrix.production_qk16_model.entry",
+    "scripts.qwen2_block_recipe_model",
+    "harness",
+    "runtime_observer",
+    "reference_capture",
+    "_qualified_runtime_fields",
+    "_qualified_runtime_observer",
+    "_qualified_runtime_observer.monitor",
+    "_qualified_runtime_observer.capture"
+  ],
+  "target_count": 14,
+  "cold_pin_files_verified": 522,
+  "cold_pin_selected_bytes": 90065315,
+  "task_payloads_hashed": false,
+  "excluded_without_read_labels": [
+    "native_elf/official_bf16_matrix_silu.so",
+    "input_payloads/kr.f32le",
+    "input_payloads/qr.f32le",
+    "input_payloads/v.f32le"
+  ],
+  "definition_codegen_events": 140,
+  "definition_codegen_kinds": {
+    "pinned_dataclass_method_definition": 140
+  },
+  "rejection_kinds": {
+    "bytecode_cache_not_admitted": 136
+  },
+  "allowed_dependency_self_tests": [
+    "pinned NumPy import initialization and self-tests"
+  ],
+  "dependency_initialization_events": [
+    "ctypes.dlopen(None): pinned dependency initialization"
+  ],
+  "restrictions": {
+    "explicit_cdll_permitted": false,
+    "matrix_elf_loading_permitted": false,
+    "native_retry": false,
+    "numerical_qualification": false,
+    "observation_construction_permitted": false,
+    "observer_nonintrusion_qualification": false,
+    "rtl": false,
+    "task_construction_permitted": false,
+    "task_execution_permitted": false,
+    "task_tensor_reads_permitted": false,
+    "task_profile_violations": 0
+  },
+  "independent_pre_execution_review_counts": {
+    "status": "PASS_COLD_IMPORT_ONLY",
+    "parent_status": "EXITED",
+    "exit": 0,
+    "timed_out": false,
+    "group_remaining": false,
+    "wall_seconds": 2.3738376030232757,
+    "config_unchanged": true,
+    "sources_unchanged": true,
+    "target_count": 14,
+    "module_entries": 247,
+    "unique_objects": 244,
+    "module_differences": 0,
+    "map_differences": 0,
+    "unique_mapped_files": 18,
+    "map_segments": 100,
+    "dataclass_method_definition_factories": 140,
+    "task_profile_violations": 0,
+    "non_bytecode_cache_rejections": 0,
+    "numerical_qualification": false
+  },
+  "evidence": [
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/PARENT.json",
+      "bytes": 1878,
+      "sha256": "f73d52c03b239c0fa4160c65a3efe4d0148e32026ed0d934333a5a9af6de3e92"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/RESULT.json",
+      "bytes": 182296,
+      "sha256": "c43625a93e1b5f6987f6f1348fa4cb4c7b241883fcfd69971726d8073165868a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/COLD_PIN_AUDIT.json",
+      "bytes": 301680,
+      "sha256": "1abac7e65085152005d5db046d5b69d16b073b126f9c335baa22d1fab4a5b944"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/INDEPENDENT_COLD_REVIEW.json",
+      "bytes": 7727,
+      "sha256": "cd3a11d9db7df2870306a541cab6ea81e06cb4069553cef81cd7409caa0fc81a"
+    }
+  ]
+}

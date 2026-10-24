@@ -1,0 +1,129 @@
+{
+  "pre_m1": {
+    "config_sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030",
+    "review_sha256": "af8b1223825eb7f92c038ec1c9010508942302b4eb65f45fbff0499b652bfecc",
+    "files": 696,
+    "mismatches": [],
+    "visible_process_conflicts": [],
+    "m1_directory_absent": true,
+    "m1_ledger_absent": true,
+    "input_pins_rehashed": {
+      "qr": {
+        "bytes": 786432,
+        "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+      },
+      "kr": {
+        "bytes": 131072,
+        "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+      },
+      "v": {
+        "bytes": 131072,
+        "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+      }
+    }
+  },
+  "m1_qualified_before_m2": {
+    "status": "PASS_M1_ALL_GATES_AND_PRE_M2_696_PINS",
+    "config_sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030",
+    "m1_parent_sha256": "735963714c16aeee0d1dd6836f740bebb58e471af71d5a19d16e5e2f0ab03cde",
+    "m1_result_sha256": "21f6879c5bff3fe0adb8a3f2b8df28f412d79231081ab22c9e1a2b157734d8dc",
+    "capture_fields_rehashed": 10,
+    "all_pins_rehashed": 696,
+    "m2_not_yet_started": true
+  },
+  "post_run_readonly_recheck": {
+    "status": "PASS_READONLY_RECHECK_RUNTIME_OBSERVER_ATTENTION_M1_M2_ONLY",
+    "runs": [
+      {
+        "m": 1,
+        "status": "PASS_RUNTIME_OBSERVER_ATTENTION_COMPONENT_ONLY",
+        "wall_seconds": 3.8301788920070976,
+        "parent_sha256": "735963714c16aeee0d1dd6836f740bebb58e471af71d5a19d16e5e2f0ab03cde",
+        "result_sha256": "21f6879c5bff3fe0adb8a3f2b8df28f412d79231081ab22c9e1a2b157734d8dc",
+        "output_words": 1536,
+        "score_words": 12,
+        "intermediate_fields": 10,
+        "packed_acks": 12,
+        "packed_done": 12,
+        "phases": {
+          "RUNTIME_AFTER_NATIVE_LOAD": {
+            "module_entries": 106,
+            "unique_module_objects": 103,
+            "unique_mappings": 11
+          },
+          "RUNTIME_POSTFLIGHT": {
+            "module_entries": 270,
+            "unique_module_objects": 267,
+            "unique_mappings": 19
+          },
+          "RUNTIME_ARM_1_TERMINAL": {
+            "module_entries": 250,
+            "unique_module_objects": 247,
+            "unique_mappings": 19
+          },
+          "RUNTIME_ARM_0_TERMINAL": {
+            "module_entries": 250,
+            "unique_module_objects": 247,
+            "unique_mappings": 19
+          }
+        }
+      },
+      {
+        "m": 2,
+        "status": "PASS_RUNTIME_OBSERVER_ATTENTION_COMPONENT_ONLY",
+        "wall_seconds": 5.340143728011753,
+        "parent_sha256": "b131ae1bd9f56cac2d39bf5357b7524c26b2c0284a668e6eb527a38452796719",
+        "result_sha256": "908c8a360db9529ba57e4065d85070e5a5a20be6f627d7bf397838b544fe47f1",
+        "output_words": 3072,
+        "score_words": 36,
+        "intermediate_fields": 10,
+        "packed_acks": 24,
+        "packed_done": 24,
+        "phases": {
+          "RUNTIME_AFTER_NATIVE_LOAD": {
+            "module_entries": 106,
+            "unique_module_objects": 103,
+            "unique_mappings": 11
+          },
+          "RUNTIME_POSTFLIGHT": {
+            "module_entries": 270,
+            "unique_module_objects": 267,
+            "unique_mappings": 19
+          },
+          "RUNTIME_ARM_1_TERMINAL": {
+            "module_entries": 250,
+            "unique_module_objects": 247,
+            "unique_mappings": 19
+          },
+          "RUNTIME_ARM_0_TERMINAL": {
+            "module_entries": 250,
+            "unique_module_objects": 247,
+            "unique_mappings": 19
+          }
+        }
+      }
+    ],
+    "post_run_all_pins_rehashed": 696,
+    "no_fullblock_or_hardware_qualification": true
+  },
+  "raw_evidence": [
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "PRE_M1_FULL_PIN_CHECK.json",
+      "bytes": 999,
+      "sha256": "f84742db3b2adc2d4a68a52b1606d0024383541922952175627392316502c5ca"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1_QUALIFIED_PRE_M2.json",
+      "bytes": 414,
+      "sha256": "3d1ca3f0d339b02eafc47cd168a4ce6501e95df95285f9d22033e89f1ed84380"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1_M2_READONLY_RECHECK.json",
+      "bytes": 2350,
+      "sha256": "95679c95ca473dcc18287910331eddf8e0e033341e96c9f1bbb2a15c2cf78c53"
+    }
+  ]
+}

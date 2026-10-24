@@ -1,0 +1,125 @@
+{
+  "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+  "reviewed_at_utc": "2026-10-24T23:42:00Z",
+  "scope": "Exact-byte runtime module/observer preparation for a potential separately authorized bounded numerical M1. Successful cold closure is preparation evidence only and does not qualify or authorize numerical execution.",
+  "config_sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030",
+  "limits": {
+    "cpu_seconds": 30,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 45,
+    "cpus": 1
+  },
+  "executable_sources": {
+    "admission.py": "f93d48554af9d4a6dd3c19154213c616813625578a659a83026e7e9545094bb3",
+    "harness.py": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab",
+    "worker.py": "7b20d2070925c6c2859564424b325087ffc13576321965d48840d4d628e772c6",
+    "launch.py": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+    "runtime_observer.py": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+    "reference_capture.py": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+    "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+    "cold_import.py": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+    "run_cold.py": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870"
+  },
+  "manifest": {
+    "total_file_pins": 696,
+    "implementation_source_pins_independently_rehashed": 10,
+    "new_future_source_independently_rehashed": true,
+    "selected_cold_code_runtime_files_verified_by_cold": 522,
+    "cold_selected_bytes": 90065315,
+    "exact_runtime_mapping_allowlist": 19,
+    "cold_mapped_unique_files": 18,
+    "cold_matrix_elf_present": false,
+    "inherited_runtime_graph_metadata_unchanged": true,
+    "reference_source_roles": 10,
+    "input_tensor_pin_metadata_unchanged": true,
+    "input_tensor_content_rehashed_in_preparation": false,
+    "full_native_manifest_must_be_reverified_by_authorized_worker": true
+  },
+  "test_results": {
+    "status": "PASS_REVIEWED_PURE_SOFTWARE_LOGS",
+    "modes": [
+      "normal",
+      "optimized",
+      "isolated",
+      "isolated_optimized"
+    ],
+    "test_runs": 24,
+    "test_cases_per_mode": 125,
+    "test_case_executions": 500,
+    "counts": {
+      "preparation": 25,
+      "admission": 21,
+      "reference_static": 21,
+      "module_inventory_and_replay": 35,
+      "cold_mock": 20,
+      "worker_audit_mock": 3
+    },
+    "source_hashes_and_log_hashes_reverified": true,
+    "reviewer_reran_tests": false
+  },
+  "offline_replay": {
+    "entries": 247,
+    "unique_objects": 244,
+    "reclassified_prior_name_conflicts": [
+      "_decimal"
+    ],
+    "remaining_recorded_differences": 0,
+    "live_admission": false,
+    "old_fail_unchanged": true
+  },
+  "cold_runtime": {
+    "status": "PASS_COLD_IMPORT_ONLY",
+    "parent_status": "EXITED",
+    "exit": 0,
+    "timed_out": false,
+    "group_remaining": false,
+    "wall_seconds": 2.3738376030232757,
+    "config_unchanged": true,
+    "sources_unchanged": true,
+    "target_count": 14,
+    "module_entries": 247,
+    "unique_objects": 244,
+    "module_differences": 0,
+    "map_differences": 0,
+    "unique_mapped_files": 18,
+    "map_segments": 100,
+    "dataclass_method_definition_factories": 140,
+    "task_profile_violations": 0,
+    "non_bytecode_cache_rejections": 0,
+    "numerical_qualification": false
+  },
+  "resolved_findings": [
+    "Complete module inventories distinguish file modules, built-in/frozen objects, explicit ordinary namespaces, typing compatibility classes, and source-bound synthetic carriers; no blanket no-file or directory exemption exists.",
+    "Built-in/frozen display names are diagnostic rather than mechanical acceptance strings; recognition, exact importer/origin, canonical snapshot/live object identity, interpreter pin, and builtin no-file checks remain mandatory.",
+    "Cold-only dataclass factory admission is pinned to exact standard-library caller source/code, generated source/code, namespace function and argument identities; only method definition is permitted.",
+    "Worker raw inventory collection is static and JSON-safe. Module and mapping failures are independently aggregated with complete raw evidence before FAIL.",
+    "Unknown mappings are recorded without opening or hashing their contents; existing input pins cannot make a payload eligible as runtime mapping.",
+    "The previously observed __future__.py dependency is explicitly pinned and the known lazy recipe module is normally imported during cold preparation."
+  ],
+  "reviewed_invariants": [
+    "Both potential DUT arms retain ordered_fold=True; only observation off/on differs. Production owner, schedule/work, arithmetic, observer monitor and original independent reference recipe were not changed by this preparation.",
+    "Real service lifecycle validation, packet/event comparison, ticket bijection, output/scores/writes/flags/counters and terminal resource-release requirements remain unchanged.",
+    "Independent original reference import/execution occurs only after both original client terminal ACKs and resource release and successful off/on control comparison. Captured DUT fields are never filled from the reference.",
+    "Actual worker will reverify all pinned manifest/input bytes and real runtime mappings; this preparation did not read tensor payloads or load the Matrix ELF.",
+    "One-use launcher ledger, exact review/config/source identity, -B -I -S worker flags, 1 CPU/1 GiB/30 CPU seconds/45 wall seconds, identity-checked cleanup, and same-config successful M1 prerequisite for M2 remain enforced.",
+    "This review binds ten executable source files. No numerical M1/M2 has been created in the new directory; root must separately authorize the specific real attempt.",
+    "Prior R1 numeric FAIL and both R2/R2b cold FAILs remain unchanged; no prior result or attempt ledger is reused or reclassified as PASS."
+  ],
+  "limitations": [
+    "No actual numerical M1/M2 authorization is granted. Root must explicitly authorize execution of these exact bytes; an available admission receipt is not that authorization.",
+    "Cold initialization includes pinned Python/NumPy initialization and dependency ELF loading, but no Matrix CDLL, service/Observation construction, reset/job, task arithmetic, user tensor content read, or reference run.",
+    "The complete cold inventory covers the selected normal-import path and known lazy recipe import, not all future numerical branches. Live per-stage module/maps audits remain mandatory.",
+    "No real off/on observation equality or ten-field numeric equality was established by the new preparation. Those remain unestablished until a separately authorized bounded whole attempt passes.",
+    "Inherited closure/input metadata was compared without reading user tensor bytes. The authorized worker must perform the full manifest check; resource fit of actual workload plus added audits remains unestablished.",
+    "Offline JSON replay does not replace live object equality or runtime file/mapping verification.",
+    "No native build, M16/M128, RTL, full-block run, hardware timing/utilization or hardware acceptance was performed or approved."
+  ],
+  "raw_review": {
+    "root": "qwen2_runtime_observer_r2c_20261024T2335",
+    "relative": "independent_review/INDEPENDENT_REVIEW.json",
+    "bytes": 13026,
+    "sha256": "af8b1223825eb7f92c038ec1c9010508942302b4eb65f45fbff0499b652bfecc"
+  },
+  "temporal_scope": "This is the pre-execution review, not the later independent review of completed M1/M2. Its original status and requirement for separate authorization are retained."
+}

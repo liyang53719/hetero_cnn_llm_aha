@@ -1,0 +1,25 @@
+Saved pure-software/mock log summary. No tests or native jobs were rerun for packaging.
+normal preparation                 25 tests  0.002s  OK  sha256 eea909e80cac976e042df6bc3545b70fb14ff6a007d31081c1e4a83f66f1a024
+normal admission                   21 tests  0.005s  OK  sha256 d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076
+normal reference_capture_static    21 tests  0.848s  OK  sha256 19e39754e7ad5e6e0002d90d0aebec81f8fcfe7e4700ad8fcff4c19a9c43d836
+normal module_inventory            35 tests  0.623s  OK  sha256 7f428cd684b91cf5636083f7a73f2b02da815b489a6c66eec84adb5d75aad6ca
+normal cold_import_mock            20 tests  0.025s  OK  sha256 e9eccb7dd87caa1240258288f0f39d0a162553582f35a9fac8ae329bed19cc2c
+normal worker_audit_mock            3 tests  0.007s  OK  sha256 27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac
+O      preparation                 25 tests  0.001s  OK  sha256 ed179141ca6d22c53745f642b3e4de6edccbb4e4cd1ca9439174096fc5e2a7f2
+O      admission                   21 tests  0.005s  OK  sha256 d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076
+O      reference_capture_static    21 tests  0.886s  OK  sha256 276d15e490230cc8539e57dc8ac7205ada1f1d078cbe9caa93ffc692d99a9e00
+O      module_inventory            35 tests  0.642s  OK  sha256 94ed4e37d4d05a39142b2a93599510152c185e6ad32690fea9f98a2bad557d8a
+O      cold_import_mock            20 tests  0.030s  OK  sha256 cec8806e24af4311cc4923143096493c92c663a9bb9d416a56143bce4abb75bb
+O      worker_audit_mock            3 tests  0.007s  OK  sha256 27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac
+I      preparation                 25 tests  0.002s  OK  sha256 eea909e80cac976e042df6bc3545b70fb14ff6a007d31081c1e4a83f66f1a024
+I      admission                   21 tests  0.007s  OK  sha256 019d928826775c4ff088cfb2dd8c548ff4b0b49c6b6f2bc898976dca7df0357b
+I      reference_capture_static    21 tests  0.891s  OK  sha256 9d25c0f4b026321bfadaecc0cc9987e8f11ae59054fabc7bf278c5e411515188
+I      module_inventory            35 tests  0.595s  OK  sha256 426a77cdbd20ef70400a7d42aa1bfbbeb3c57f2e361fa089f76b3a4395aca6a3
+I      cold_import_mock            20 tests  0.028s  OK  sha256 fe4988a7fe402c28910775152ccb012e903125901080fe3c18a3d0a2893c856b
+I      worker_audit_mock            3 tests  0.007s  OK  sha256 27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac
+I_O    preparation                 25 tests  0.001s  OK  sha256 ed179141ca6d22c53745f642b3e4de6edccbb4e4cd1ca9439174096fc5e2a7f2
+I_O    admission                   21 tests  0.005s  OK  sha256 d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076
+I_O    reference_capture_static    21 tests  0.871s  OK  sha256 dec2c0987c2ebad28c8c5b56583d46bba4829dffedf88572b85805c1f905a0e8
+I_O    module_inventory            35 tests  0.614s  OK  sha256 39023bf1fcaa60036244c1186cfba1b16d94e7125e5f0aec9355147c9e8235d9
+I_O    cold_import_mock            20 tests  0.028s  OK  sha256 fe4988a7fe402c28910775152ccb012e903125901080fe3c18a3d0a2893c856b
+I_O    worker_audit_mock            3 tests  0.008s  OK  sha256 7d59a8fbca92ef540f42b6883247c3844892d23f501b6cf2621d0e535813fb81

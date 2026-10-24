@@ -1,0 +1,378 @@
+{
+  "status": "PASS_SAVED_PURE_SOFTWARE_TEST_LOGS",
+  "reviewer_or_packager_reran_tests": false,
+  "test_runs": 24,
+  "test_cases_per_mode": {
+    "normal": 125,
+    "O": 125,
+    "I": 125,
+    "I_O": 125
+  },
+  "total_test_case_executions": 500,
+  "source_pins": {
+    "launch.py": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b",
+    "runtime_observer.py": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+    "worker.py": "7b20d2070925c6c2859564424b325087ffc13576321965d48840d4d628e772c6",
+    "admission.py": "f93d48554af9d4a6dd3c19154213c616813625578a659a83026e7e9545094bb3",
+    "test_reference_capture_static.py": "5e0e8ad4c3c2e8439c12d406c097762152e99540be9b0a78274c5588c96fb3e8",
+    "run_cold.py": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870",
+    "test_admission.py": "0e601f38c9b70c3605d779e94b93faca3f76ac6f355f456b557f3401e9524412",
+    "harness.py": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab",
+    "test_cold_import_mock.py": "67a49cd5ef889d32b565b447773aa83ddb1ce940d6d1747fb032167dec833063",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+    "test_worker_audit_mock.py": "0d7bcf80c5f55e6b34f72f4e8224ae643a9d46e91e1d6d3231887d28a486362a",
+    "replay_inventory.py": "26e1810887acd0362541ad9cdc791dcd55476b1d5f56e9b1705a34ab0878b5df",
+    "cold_import.py": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+    "reference_capture.py": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+    "test_preparation.py": "87bed8be22cdf6ac8186e511d060ecb2b1f9dfbd54e3ebde915289d02ece3323",
+    "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+    "test_module_inventory.py": "ba280c7f6b3bc023e441f9b8c3caefd7898b63957f29935933f77bf682154aa2"
+  },
+  "source_file_count": 17,
+  "source_and_log_hashes_reverified": true,
+  "sources_unchanged": true,
+  "runs": [
+    {
+      "mode": "normal",
+      "test": "preparation",
+      "test_count": 25,
+      "elapsed_seconds": 0.002,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/normal_test_preparation.py.log",
+        "bytes": 124,
+        "sha256": "eea909e80cac976e042df6bc3545b70fb14ff6a007d31081c1e4a83f66f1a024"
+      }
+    },
+    {
+      "mode": "normal",
+      "test": "admission",
+      "test_count": 21,
+      "elapsed_seconds": 0.005,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/normal_test_admission.py.log",
+        "bytes": 120,
+        "sha256": "d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076"
+      }
+    },
+    {
+      "mode": "normal",
+      "test": "reference_capture_static",
+      "test_count": 21,
+      "elapsed_seconds": 0.848,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/normal_test_reference_capture_static.py.log",
+        "bytes": 120,
+        "sha256": "19e39754e7ad5e6e0002d90d0aebec81f8fcfe7e4700ad8fcff4c19a9c43d836"
+      }
+    },
+    {
+      "mode": "normal",
+      "test": "module_inventory",
+      "test_count": 35,
+      "elapsed_seconds": 0.623,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/normal_test_module_inventory.py.log",
+        "bytes": 134,
+        "sha256": "7f428cd684b91cf5636083f7a73f2b02da815b489a6c66eec84adb5d75aad6ca"
+      }
+    },
+    {
+      "mode": "normal",
+      "test": "cold_import_mock",
+      "test_count": 20,
+      "elapsed_seconds": 0.025,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/normal_test_cold_import_mock.py.log",
+        "bytes": 119,
+        "sha256": "e9eccb7dd87caa1240258288f0f39d0a162553582f35a9fac8ae329bed19cc2c"
+      }
+    },
+    {
+      "mode": "normal",
+      "test": "worker_audit_mock",
+      "test_count": 3,
+      "elapsed_seconds": 0.007,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/normal_test_worker_audit_mock.py.log",
+        "bytes": 101,
+        "sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+      }
+    },
+    {
+      "mode": "O",
+      "test": "preparation",
+      "test_count": 25,
+      "elapsed_seconds": 0.001,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/O_test_preparation.py.log",
+        "bytes": 124,
+        "sha256": "ed179141ca6d22c53745f642b3e4de6edccbb4e4cd1ca9439174096fc5e2a7f2"
+      }
+    },
+    {
+      "mode": "O",
+      "test": "admission",
+      "test_count": 21,
+      "elapsed_seconds": 0.005,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/O_test_admission.py.log",
+        "bytes": 120,
+        "sha256": "d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076"
+      }
+    },
+    {
+      "mode": "O",
+      "test": "reference_capture_static",
+      "test_count": 21,
+      "elapsed_seconds": 0.886,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/O_test_reference_capture_static.py.log",
+        "bytes": 120,
+        "sha256": "276d15e490230cc8539e57dc8ac7205ada1f1d078cbe9caa93ffc692d99a9e00"
+      }
+    },
+    {
+      "mode": "O",
+      "test": "module_inventory",
+      "test_count": 35,
+      "elapsed_seconds": 0.642,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/O_test_module_inventory.py.log",
+        "bytes": 134,
+        "sha256": "94ed4e37d4d05a39142b2a93599510152c185e6ad32690fea9f98a2bad557d8a"
+      }
+    },
+    {
+      "mode": "O",
+      "test": "cold_import_mock",
+      "test_count": 20,
+      "elapsed_seconds": 0.03,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/O_test_cold_import_mock.py.log",
+        "bytes": 119,
+        "sha256": "cec8806e24af4311cc4923143096493c92c663a9bb9d416a56143bce4abb75bb"
+      }
+    },
+    {
+      "mode": "O",
+      "test": "worker_audit_mock",
+      "test_count": 3,
+      "elapsed_seconds": 0.007,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/O_test_worker_audit_mock.py.log",
+        "bytes": 101,
+        "sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+      }
+    },
+    {
+      "mode": "I",
+      "test": "preparation",
+      "test_count": 25,
+      "elapsed_seconds": 0.002,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_test_preparation.py.log",
+        "bytes": 124,
+        "sha256": "eea909e80cac976e042df6bc3545b70fb14ff6a007d31081c1e4a83f66f1a024"
+      }
+    },
+    {
+      "mode": "I",
+      "test": "admission",
+      "test_count": 21,
+      "elapsed_seconds": 0.007,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_test_admission.py.log",
+        "bytes": 120,
+        "sha256": "019d928826775c4ff088cfb2dd8c548ff4b0b49c6b6f2bc898976dca7df0357b"
+      }
+    },
+    {
+      "mode": "I",
+      "test": "reference_capture_static",
+      "test_count": 21,
+      "elapsed_seconds": 0.891,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_test_reference_capture_static.py.log",
+        "bytes": 120,
+        "sha256": "9d25c0f4b026321bfadaecc0cc9987e8f11ae59054fabc7bf278c5e411515188"
+      }
+    },
+    {
+      "mode": "I",
+      "test": "module_inventory",
+      "test_count": 35,
+      "elapsed_seconds": 0.595,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_test_module_inventory.py.log",
+        "bytes": 134,
+        "sha256": "426a77cdbd20ef70400a7d42aa1bfbbeb3c57f2e361fa089f76b3a4395aca6a3"
+      }
+    },
+    {
+      "mode": "I",
+      "test": "cold_import_mock",
+      "test_count": 20,
+      "elapsed_seconds": 0.028,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_test_cold_import_mock.py.log",
+        "bytes": 119,
+        "sha256": "fe4988a7fe402c28910775152ccb012e903125901080fe3c18a3d0a2893c856b"
+      }
+    },
+    {
+      "mode": "I",
+      "test": "worker_audit_mock",
+      "test_count": 3,
+      "elapsed_seconds": 0.007,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_test_worker_audit_mock.py.log",
+        "bytes": 101,
+        "sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+      }
+    },
+    {
+      "mode": "I_O",
+      "test": "preparation",
+      "test_count": 25,
+      "elapsed_seconds": 0.001,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_O_test_preparation.py.log",
+        "bytes": 124,
+        "sha256": "ed179141ca6d22c53745f642b3e4de6edccbb4e4cd1ca9439174096fc5e2a7f2"
+      }
+    },
+    {
+      "mode": "I_O",
+      "test": "admission",
+      "test_count": 21,
+      "elapsed_seconds": 0.005,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_O_test_admission.py.log",
+        "bytes": 120,
+        "sha256": "d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076"
+      }
+    },
+    {
+      "mode": "I_O",
+      "test": "reference_capture_static",
+      "test_count": 21,
+      "elapsed_seconds": 0.871,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_O_test_reference_capture_static.py.log",
+        "bytes": 120,
+        "sha256": "dec2c0987c2ebad28c8c5b56583d46bba4829dffedf88572b85805c1f905a0e8"
+      }
+    },
+    {
+      "mode": "I_O",
+      "test": "module_inventory",
+      "test_count": 35,
+      "elapsed_seconds": 0.614,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_O_test_module_inventory.py.log",
+        "bytes": 134,
+        "sha256": "39023bf1fcaa60036244c1186cfba1b16d94e7125e5f0aec9355147c9e8235d9"
+      }
+    },
+    {
+      "mode": "I_O",
+      "test": "cold_import_mock",
+      "test_count": 20,
+      "elapsed_seconds": 0.028,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_O_test_cold_import_mock.py.log",
+        "bytes": 119,
+        "sha256": "fe4988a7fe402c28910775152ccb012e903125901080fe3c18a3d0a2893c856b"
+      }
+    },
+    {
+      "mode": "I_O",
+      "test": "worker_audit_mock",
+      "test_count": 3,
+      "elapsed_seconds": 0.008,
+      "status": "OK",
+      "exit": 0,
+      "original_log": {
+        "root": "qwen2_runtime_observer_r2c_20261024T2335",
+        "relative": "run_software_final/I_O_test_worker_audit_mock.py.log",
+        "bytes": 101,
+        "sha256": "7d59a8fbca92ef540f42b6883247c3844892d23f501b6cf2621d0e535813fb81"
+      }
+    }
+  ],
+  "raw_results": {
+    "root": "qwen2_runtime_observer_r2c_20261024T2335",
+    "relative": "run_software_final/RESULTS.json",
+    "bytes": 13054,
+    "sha256": "1abf5d82b6872495b7388c07ffd65aded4ae418d15e3cf1864ff13960b189446"
+  }
+}

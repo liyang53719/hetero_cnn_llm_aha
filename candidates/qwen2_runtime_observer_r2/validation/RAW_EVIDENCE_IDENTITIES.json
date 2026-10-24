@@ -1,0 +1,1171 @@
+{
+  "status": "PRIVATE_RAW_EVIDENCE_PRESERVED_PUBLIC_IDENTITIES_ONLY",
+  "scope": "Saved Observation M1/M2 attention-component software model with existing native ELF only; not full-block, RTL, hardware cycles, synthesis/QoR, or 80-90% qualification.",
+  "private_contents_included": false,
+  "files": [
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "EXACT_PROFILE_DIFF.json",
+      "bytes": 10182,
+      "sha256": "a08717119b84594c14aa00f3ade7cfe20ed2c7de2e94e9d84073b3eb9bff96a3"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "EXACT_SOURCE_DIFF.patch",
+      "bytes": 78481,
+      "sha256": "9a7e80363094866e621f870d4b3e095d78081fa4afbbef37da0d622aeaab525b"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_REPORT.json",
+      "bytes": 4992,
+      "sha256": "e4c8e5139dd283bb88917cb44e25c35b7d2af14e407f7d599bef20c1430eb0c7"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_dot_bf16.u32le",
+      "bytes": 48,
+      "sha256": "3de53d07fb2e3501ee62de57f069800b86df605ea15b4c3aaea16ecef2210af6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_dot_parts.u32le",
+      "bytes": 768,
+      "sha256": "0917d4a8b8a748fc56c9c76435b89799318775603adb053dc616bd6b7ffe51fa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_normalizer.u32le",
+      "bytes": 144,
+      "sha256": "ecc8ddfed2b3c7da9450f4aaf735731b62f8487a4986d40a61804d046085810e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_prob_bf16.u32le",
+      "bytes": 48,
+      "sha256": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_pv_bf16.u32le",
+      "bytes": 6144,
+      "sha256": "e6dae33593be24b0b96249ade751717d6c587f56a8268cd49d9f6b2580c6706a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_pv_raw.u32le",
+      "bytes": 6144,
+      "sha256": "e6dae33593be24b0b96249ade751717d6c587f56a8268cd49d9f6b2580c6706a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_scores_bf16.u32le",
+      "bytes": 48,
+      "sha256": "31b363d7a2c3b53f942b1f3fddc9c9588e87279e0ec2391b84db78c89782ef15"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_softmax_exp.u32le",
+      "bytes": 48,
+      "sha256": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_softmax_fp32.u32le",
+      "bytes": 48,
+      "sha256": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/CAPTURE_unrounded_dot_sum.u32le",
+      "bytes": 48,
+      "sha256": "a404449506cf798ef5c1864b66f8f5f74a4f61f7308e4be07b598d1615bfa090"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/IDENTITY.json",
+      "bytes": 121,
+      "sha256": "d07126f710f04d7eac5736100176525bb194c5ed24d08d8d20f35a07129d2007"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/MAPS_AFTER_CDLL.txt",
+      "bytes": 6997,
+      "sha256": "00376edba39023397e25287cd11b22754febdac4d84d7d7db8837fe06057bf2a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/PARENT.json",
+      "bytes": 745,
+      "sha256": "735963714c16aeee0d1dd6836f740bebb58e471af71d5a19d16e5e2f0ab03cde"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RESULT.json",
+      "bytes": 25754,
+      "sha256": "21f6879c5bff3fe0adb8a3f2b8df28f412d79231081ab22c9e1a2b157734d8dc"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_AFTER_NATIVE_LOAD/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 6997,
+      "sha256": "ad9b440ef53d6b136ca06b03b14ae278b21c11e4025f2e80b6a84a11c0ca0a5e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_AFTER_NATIVE_LOAD/MAPS_RAW.txt",
+      "bytes": 6997,
+      "sha256": "ad9b440ef53d6b136ca06b03b14ae278b21c11e4025f2e80b6a84a11c0ca0a5e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_AFTER_NATIVE_LOAD/MAP_AUDIT.json",
+      "bytes": 16114,
+      "sha256": "93f34ad43cddb8109da3cda51009b1f602c4b45abd5d10dd0cdb27c9e64063fe"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_AFTER_NATIVE_LOAD/MODULES_RAW.json",
+      "bytes": 30940,
+      "sha256": "050e2ac2df828b5fa7b33fce78ff9e5d1b1d5f1690e7fbf020445c51dbaa4dbf"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_AFTER_NATIVE_LOAD/MODULE_AUDIT.json",
+      "bytes": 152651,
+      "sha256": "f73277d3a3967336a55c0d4e167e830fd9b2d6bccb05640e17d747df9c1e04a3"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_AFTER_NATIVE_LOAD/SUMMARY.json",
+      "bytes": 96,
+      "sha256": "5124e034723ea7dd17c7f6b34a6aa710663cce7aff2ba6f8167ef404fda32e23"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_0_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17674,
+      "sha256": "85a8889077fa7390b62bb80eaa7f1d71c27a1145a71ff341e0258094660759da"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_0_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17674,
+      "sha256": "85a8889077fa7390b62bb80eaa7f1d71c27a1145a71ff341e0258094660759da"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_0_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_0_TERMINAL/MODULES_RAW.json",
+      "bytes": 90718,
+      "sha256": "b3ca7c7c0d018fea9a513aafeec849e855e5aebe7fa2121419a017b48c90d693"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_0_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 493200,
+      "sha256": "1cce14d66037d8703390b16b8dcf31d9878020ad2d029c16cbc6d5abfee91e16"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_1_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17674,
+      "sha256": "86a8c2b67437c74c5400edac964a86ab6b06a150faa2d0195124f2391cc1a681"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_1_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17674,
+      "sha256": "86a8c2b67437c74c5400edac964a86ab6b06a150faa2d0195124f2391cc1a681"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_1_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_1_TERMINAL/MODULES_RAW.json",
+      "bytes": 90718,
+      "sha256": "b3ca7c7c0d018fea9a513aafeec849e855e5aebe7fa2121419a017b48c90d693"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_1_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 493200,
+      "sha256": "159ff4829482be57a68923b7b7f8eb6399ef003167c129560d9700775744b50a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_POSTFLIGHT/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17772,
+      "sha256": "806974a51f51dbc9f3dfc5042c5ebe775e7586f6aa696bfd48cfe67998a99510"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_POSTFLIGHT/MAPS_RAW.txt",
+      "bytes": 17772,
+      "sha256": "806974a51f51dbc9f3dfc5042c5ebe775e7586f6aa696bfd48cfe67998a99510"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_POSTFLIGHT/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_POSTFLIGHT/MODULES_RAW.json",
+      "bytes": 97450,
+      "sha256": "f6c3e6259617015041a6c1bc6bdf58c84a7248521e3535e34322ea2dc94c9bd1"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_POSTFLIGHT/MODULE_AUDIT.json",
+      "bytes": 528042,
+      "sha256": "24ea3b1e6728126339acf895ee08fc84649e06214ab311102fd2e4658cca5658"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/RUNTIME_POSTFLIGHT/SUMMARY.json",
+      "bytes": 89,
+      "sha256": "7b67f351afec714a99c2d03f484bc70d35c97143839335f1e6fb21a78f8f5415"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/SERVICE_EVENTS_0.json",
+      "bytes": 83325,
+      "sha256": "77fdd2e1b25e1941b31173f91339243887e98d8ddce59250d7995f02d1d9078d"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/SERVICE_EVENTS_1.json",
+      "bytes": 83637,
+      "sha256": "351b93fb2693bb8deef90261ff16aefc0ec2e9f11d27ea29c587ff32d5d402c1"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/STAGES.jsonl",
+      "bytes": 16021,
+      "sha256": "0b1dff4db595270050ffb1cb76d9c1b75efd61681003cd2049132d26a958fd07"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1/worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1_M2_READONLY_RECHECK.json",
+      "bytes": 2350,
+      "sha256": "95679c95ca473dcc18287910331eddf8e0e033341e96c9f1bbb2a15c2cf78c53"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M1_QUALIFIED_PRE_M2.json",
+      "bytes": 414,
+      "sha256": "3d1ca3f0d339b02eafc47cd168a4ce6501e95df95285f9d22033e89f1ed84380"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_REPORT.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/CAPTURE_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/IDENTITY.json",
+      "bytes": 121,
+      "sha256": "0e578d897175ae5a5373c28580a2a995241e2fe61aba0052e766b76dcd9efa10"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/MAPS_AFTER_CDLL.txt",
+      "bytes": 6997,
+      "sha256": "076c1cad24ddd6c760d4fee5ae42e1914b85bd68771faee8a87eafeffcf95d22"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/PARENT.json",
+      "bytes": 744,
+      "sha256": "b131ae1bd9f56cac2d39bf5357b7524c26b2c0284a668e6eb527a38452796719"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RESULT.json",
+      "bytes": 25776,
+      "sha256": "908c8a360db9529ba57e4065d85070e5a5a20be6f627d7bf397838b544fe47f1"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_AFTER_NATIVE_LOAD/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 6997,
+      "sha256": "ed07997323d19da161322a13eded9bb99211dff96163fa19514c5d0737535bfe"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_AFTER_NATIVE_LOAD/MAPS_RAW.txt",
+      "bytes": 6997,
+      "sha256": "ed07997323d19da161322a13eded9bb99211dff96163fa19514c5d0737535bfe"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_AFTER_NATIVE_LOAD/MAP_AUDIT.json",
+      "bytes": 16114,
+      "sha256": "93f34ad43cddb8109da3cda51009b1f602c4b45abd5d10dd0cdb27c9e64063fe"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_AFTER_NATIVE_LOAD/MODULES_RAW.json",
+      "bytes": 30940,
+      "sha256": "050e2ac2df828b5fa7b33fce78ff9e5d1b1d5f1690e7fbf020445c51dbaa4dbf"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_AFTER_NATIVE_LOAD/MODULE_AUDIT.json",
+      "bytes": 152651,
+      "sha256": "18dd76b57e8511a584380c0c0b7e65e3ef639f85c3eacafe8ba1a9a720e07fd4"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_AFTER_NATIVE_LOAD/SUMMARY.json",
+      "bytes": 96,
+      "sha256": "5124e034723ea7dd17c7f6b34a6aa710663cce7aff2ba6f8167ef404fda32e23"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_0_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17674,
+      "sha256": "bca55cf5a6523b22291c6fb24f07e622a571a3d3df75ee3de36169b59d3a15bf"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_0_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17674,
+      "sha256": "bca55cf5a6523b22291c6fb24f07e622a571a3d3df75ee3de36169b59d3a15bf"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_0_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "13961e9f338ca4ca9fd32b2eb95abb90f3cff6e43befba618af22c4b8213fa46"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_0_TERMINAL/MODULES_RAW.json",
+      "bytes": 90718,
+      "sha256": "b3ca7c7c0d018fea9a513aafeec849e855e5aebe7fa2121419a017b48c90d693"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_0_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 493200,
+      "sha256": "c90678e83588c0c42efc6cee9d82ba72112f370e17384fb1da5d31b3207a3048"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_1_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17674,
+      "sha256": "5039ee2cf4431065bfee45ae60c4bb065adf997b7822fcbb1cd926922325320d"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_1_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17674,
+      "sha256": "5039ee2cf4431065bfee45ae60c4bb065adf997b7822fcbb1cd926922325320d"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_1_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "13961e9f338ca4ca9fd32b2eb95abb90f3cff6e43befba618af22c4b8213fa46"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_1_TERMINAL/MODULES_RAW.json",
+      "bytes": 90718,
+      "sha256": "b3ca7c7c0d018fea9a513aafeec849e855e5aebe7fa2121419a017b48c90d693"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_1_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 493200,
+      "sha256": "fe905eed05069e9af8a65418abf605e2e58b60707588d5c78a6f5bfad61e544a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_POSTFLIGHT/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "302836d484bffd756ba0540e474defcf3f8869b58453c652a201ed67cd598bb6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_POSTFLIGHT/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "302836d484bffd756ba0540e474defcf3f8869b58453c652a201ed67cd598bb6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_POSTFLIGHT/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "13961e9f338ca4ca9fd32b2eb95abb90f3cff6e43befba618af22c4b8213fa46"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_POSTFLIGHT/MODULES_RAW.json",
+      "bytes": 97450,
+      "sha256": "f6c3e6259617015041a6c1bc6bdf58c84a7248521e3535e34322ea2dc94c9bd1"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_POSTFLIGHT/MODULE_AUDIT.json",
+      "bytes": 528042,
+      "sha256": "0e209dfbcec00d70fb45af7380d40c4c11601daa344f77cc32d15f13f6f577f8"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/RUNTIME_POSTFLIGHT/SUMMARY.json",
+      "bytes": 89,
+      "sha256": "7b67f351afec714a99c2d03f484bc70d35c97143839335f1e6fb21a78f8f5415"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/SERVICE_EVENTS_0.json",
+      "bytes": 210399,
+      "sha256": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/SERVICE_EVENTS_1.json",
+      "bytes": 210711,
+      "sha256": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/STAGES.jsonl",
+      "bytes": 16045,
+      "sha256": "238487cd0cdf108f4d748233942df88581676391c13ef86a5ca2c23cf8269481"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "M2/worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "PRESERVED_FAILURES.json",
+      "bytes": 9922,
+      "sha256": "1fa3fd6db23564aed1729f19093524aa261983870da4108d3aa86bc8865b5c89"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "PRE_M1_FULL_PIN_CHECK.json",
+      "bytes": 999,
+      "sha256": "f84742db3b2adc2d4a68a52b1606d0024383541922952175627392316502c5ca"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "PRIVATE_CONFIG.json",
+      "bytes": 197022,
+      "sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "attempts/M1.json",
+      "bytes": 198,
+      "sha256": "f47a007d7e3a0c351d6d9cc47e039889ce19503e2780f8d237d9248bdca5facf"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "attempts/M2.json",
+      "bytes": 198,
+      "sha256": "687533a38187fe1dc6bd91a2c0d5eb181e8afae3f7acaaa999ebe974bc3d6488"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/PARENT.json",
+      "bytes": 1878,
+      "sha256": "f73d52c03b239c0fa4160c65a3efe4d0148e32026ed0d934333a5a9af6de3e92"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/00_before_import/MAPS.txt",
+      "bytes": 6046,
+      "sha256": "ec9f2b324c37dea69d0a882fdd151fbcc4a1a3be08071ac733641d85a6dd0d98"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/00_before_import/MAP_AUDIT.json",
+      "bytes": 24613,
+      "sha256": "dca62ade2ed15f4f3f986aa3f3e30361f35beb27818422e72a9439118e17d122"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/00_before_import/MODULES_RAW.json",
+      "bytes": 29703,
+      "sha256": "b607d071c0fb262311250160abeb2eb9f4dd2333c3fc381f5af8382f9f24feb1"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/00_before_import/MODULE_AUDIT.json",
+      "bytes": 118950,
+      "sha256": "417cb9e5f726f607fa2658d66f0b4e18f523ada8f7840225a090470aa226be75"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/00_before_import/VALIDATION.json",
+      "bytes": 39,
+      "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/01_after_import_or_failure/MAPS.txt",
+      "bytes": 16674,
+      "sha256": "2fde56ed7efafab9388832ecd78033e750bb90f554d44311a4017f2e65aa653e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/01_after_import_or_failure/MAP_AUDIT.json",
+      "bytes": 65912,
+      "sha256": "ff86e5338a78a05b79efe624794d8b0bde0c35dbca1298f0fdc8234cdd0f5f5d"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/01_after_import_or_failure/MODULES_RAW.json",
+      "bytes": 103484,
+      "sha256": "4e691e33423897f73d604436ea92bdab91e83a6d04655d39b01d667bd0c1b5ce"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/01_after_import_or_failure/MODULE_AUDIT.json",
+      "bytes": 488354,
+      "sha256": "d349b093a9e112cda7e493697287c5ba0acb5ad99e7e437f6cb4b9471999e325"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/01_after_import_or_failure/VALIDATION.json",
+      "bytes": 39,
+      "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/COLD_PIN_AUDIT.json",
+      "bytes": 301680,
+      "sha256": "1abac7e65085152005d5db046d5b69d16b073b126f9c335baa22d1fab4a5b944"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker/RESULT.json",
+      "bytes": 182296,
+      "sha256": "c43625a93e1b5f6987f6f1348fa4cb4c7b241883fcfd69971726d8073165868a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "cold_normal_01/worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/COLD_READ_SCOPE_SUMMARY.json",
+      "bytes": 158,
+      "sha256": "a5c59011585e1a407fb5e5ab67f0a46c3e7b6bdd29bfff38b753d514e42221cd"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/COLD_RESULT_VERIFICATION.json",
+      "bytes": 855,
+      "sha256": "342e6fe13c807f7b42289eb246cebab65584ed50247b86836e13fbc4f3493435"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/EXACT_COLD_CHECK.log",
+      "bytes": 10527,
+      "sha256": "3cd0de696d56f498c9d3d034eb43a859360ab012e7c3285350813656ba62005e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/INDEPENDENT_COLD_REVIEW.json",
+      "bytes": 7727,
+      "sha256": "cd3a11d9db7df2870306a541cab6ea81e06cb4069553cef81cd7409caa0fc81a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/INDEPENDENT_REVIEW.json",
+      "bytes": 13026,
+      "sha256": "af8b1223825eb7f92c038ec1c9010508942302b4eb65f45fbff0499b652bfecc"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/INHERITED_METADATA_COMPARISON.json",
+      "bytes": 208,
+      "sha256": "8c28567ad22f213518f66b107ead0fe9e92cb8c93503830edce963ce482ba7dd"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/POSTCOLD_IDENTITY_CHECK.log",
+      "bytes": 1785,
+      "sha256": "b720ba4eedee92ae5372f728cb934c04581657eeadd7920437a77aca408087af"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/READONLY_EXECUTION_REVIEW.json",
+      "bytes": 23119,
+      "sha256": "2a572aa0e44e010c32b77107775c6eb1f06302768e7b7cd6f7da398d34d4ffa5"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/ADDITIONAL_BINDINGS_CHECK.log",
+      "bytes": 195,
+      "sha256": "ffc8dd78416593079a9bb36cd07bae247f880ccbc1b73bd6b3f110a6c06641b8"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/ALL_696_PINS_SHA256_CHECK.log",
+      "bytes": 80340,
+      "sha256": "c8b898485df44351e8cfb536bbb259fa6b9a8a7fa9641c08cfc43bdffeb1c471"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/ALL_PINS_CHECK.json",
+      "bytes": 3951,
+      "sha256": "817a230ebb4131a4d0d9fade3d0b36094e20cc56a2ad30018c0bcf1e14e29b8d"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/ARTIFACT_CHECK.log",
+      "bytes": 159,
+      "sha256": "900f11315dd4b3391e2b29baf07ebe968757cd4170d3d82f08467aa97326fafa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/CAPTURE_REHASH.tsv",
+      "bytes": 3381,
+      "sha256": "df28b728e2d99c4ff21cd91e1c008109801eb3df4f7ce718f70586ab27a98981"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/EXECUTION_INPUT_EVIDENCE.sha256",
+      "bytes": 15208,
+      "sha256": "f947584b1af58a78264707ab6473cea58609e8e5dd74098dd28d415527faafa8"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/EXPECTED_PINS.tsv",
+      "bytes": 126505,
+      "sha256": "43e0f75af418423e70fe9bf88b428fff5860f815960a7a6dae49c6d86604fb7c"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/FINAL_RECEIPT_PIN_CHECK.log",
+      "bytes": 501,
+      "sha256": "0ab26bde71e17066b10124c7350d8259ca4124953d2072c3aca93646d702aacd"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/FINAL_TEN_EXECUTABLE_PIN_CHECK.log",
+      "bytes": 1231,
+      "sha256": "97628e2a5b75710617cf3797fc97d054e69fbe8852fb08d8ce9b8286f713b06a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_AFTER_NATIVE_LOAD_AUDITED_MAPS.tsv",
+      "bytes": 3837,
+      "sha256": "8178e01a9a2fe513ca669cbe5daf27aa7a63a842129f970b18c08219f2148cc6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_AFTER_NATIVE_LOAD_CHECK.json",
+      "bytes": 597,
+      "sha256": "4bd34df5d6b70c6a75e905711c18e8e386ff232c737bbff751d3dd73e69b7b51"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_AFTER_NATIVE_LOAD_RAW_MAPS.tsv",
+      "bytes": 3837,
+      "sha256": "8178e01a9a2fe513ca669cbe5daf27aa7a63a842129f970b18c08219f2148cc6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_ARM_0_TERMINAL_AUDITED_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "48210d3d26aa9f78563e81deb69eb62182920419b57fb460dc38b2b8eaf2882f"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_ARM_0_TERMINAL_CHECK.json",
+      "bytes": 825,
+      "sha256": "230bece66125023be9512dd1dbb844f7e11494d72507f8442de9a8001c320b11"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_ARM_0_TERMINAL_RAW_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "48210d3d26aa9f78563e81deb69eb62182920419b57fb460dc38b2b8eaf2882f"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_ARM_1_TERMINAL_AUDITED_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "48210d3d26aa9f78563e81deb69eb62182920419b57fb460dc38b2b8eaf2882f"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_ARM_1_TERMINAL_CHECK.json",
+      "bytes": 825,
+      "sha256": "be1b2ae6ef398f1d2efddd23a2dea25f03b74118a6fbcd84468dfaedb192496e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_ARM_1_TERMINAL_RAW_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "48210d3d26aa9f78563e81deb69eb62182920419b57fb460dc38b2b8eaf2882f"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_MAPS_AFTER_CDLL.tsv",
+      "bytes": 835,
+      "sha256": "3e5585ff1ee7c06bcbe5a01e143ef14d92d3cfbef7e50fbdc349a86aee7b9aa6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_POSTFLIGHT_AUDITED_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "48210d3d26aa9f78563e81deb69eb62182920419b57fb460dc38b2b8eaf2882f"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_POSTFLIGHT_CHECK.json",
+      "bytes": 821,
+      "sha256": "f9c4af644918260320f7ece607ed4db235db44f67331bfb216e7caaf965168cd"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_POSTFLIGHT_RAW_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "48210d3d26aa9f78563e81deb69eb62182920419b57fb460dc38b2b8eaf2882f"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_RECEIPT_CHECK.json",
+      "bytes": 4367,
+      "sha256": "8939ed661610d100aea0ea190f73c5f148058c337566d09a8bf68d5aa7e965e9"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M1_SERVICE_REPLAY.json",
+      "bytes": 307,
+      "sha256": "b5a40c8fc484a529ee3726aa90b47e0c2d015f45e6cfd9e206898a507366fd5a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_AFTER_NATIVE_LOAD_AUDITED_MAPS.tsv",
+      "bytes": 3837,
+      "sha256": "8178e01a9a2fe513ca669cbe5daf27aa7a63a842129f970b18c08219f2148cc6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_AFTER_NATIVE_LOAD_CHECK.json",
+      "bytes": 597,
+      "sha256": "4bd34df5d6b70c6a75e905711c18e8e386ff232c737bbff751d3dd73e69b7b51"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_AFTER_NATIVE_LOAD_RAW_MAPS.tsv",
+      "bytes": 3837,
+      "sha256": "8178e01a9a2fe513ca669cbe5daf27aa7a63a842129f970b18c08219f2148cc6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_ARM_0_TERMINAL_AUDITED_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "979ba5d60dc32ea9553cf00fd443ef30f7569ff9353a5fd8429573ff352e93fa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_ARM_0_TERMINAL_CHECK.json",
+      "bytes": 825,
+      "sha256": "230bece66125023be9512dd1dbb844f7e11494d72507f8442de9a8001c320b11"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_ARM_0_TERMINAL_RAW_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "979ba5d60dc32ea9553cf00fd443ef30f7569ff9353a5fd8429573ff352e93fa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_ARM_1_TERMINAL_AUDITED_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "979ba5d60dc32ea9553cf00fd443ef30f7569ff9353a5fd8429573ff352e93fa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_ARM_1_TERMINAL_CHECK.json",
+      "bytes": 825,
+      "sha256": "be1b2ae6ef398f1d2efddd23a2dea25f03b74118a6fbcd84468dfaedb192496e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_ARM_1_TERMINAL_RAW_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "979ba5d60dc32ea9553cf00fd443ef30f7569ff9353a5fd8429573ff352e93fa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_MAPS_AFTER_CDLL.tsv",
+      "bytes": 835,
+      "sha256": "3e5585ff1ee7c06bcbe5a01e143ef14d92d3cfbef7e50fbdc349a86aee7b9aa6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_POSTFLIGHT_AUDITED_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "979ba5d60dc32ea9553cf00fd443ef30f7569ff9353a5fd8429573ff352e93fa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_POSTFLIGHT_CHECK.json",
+      "bytes": 821,
+      "sha256": "f9c4af644918260320f7ece607ed4db235db44f67331bfb216e7caaf965168cd"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_POSTFLIGHT_RAW_MAPS.tsv",
+      "bytes": 11006,
+      "sha256": "979ba5d60dc32ea9553cf00fd443ef30f7569ff9353a5fd8429573ff352e93fa"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_RECEIPT_CHECK.json",
+      "bytes": 4366,
+      "sha256": "aef814b501f114656b44e8ea97fe18847c51430ae69785b72ede11acbf033b56"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/M2_SERVICE_REPLAY.json",
+      "bytes": 308,
+      "sha256": "167143a9799c6a1d665f3c14901a71f8faf3cb90109f01c08774e047e2c432d3"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/MAPS_RAW_IDENTITY_CHECK.tsv",
+      "bytes": 188,
+      "sha256": "0935cf58a176af57a52db5ed6b0d6fd73b693c8eaaaf2b3038e1440bacc1201e"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/PRESERVED_COLD_REVIEW_EVIDENCE_CHECK.log",
+      "bytes": 845,
+      "sha256": "7db19868c6a4b88562c06be4a36caab0bebb7222fa79101f07b33273042f331d"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/PRESERVED_FAILURES_CHECK.log",
+      "bytes": 4018,
+      "sha256": "a2bdd1983ea3ade69e6fbf9f382aeb90228e2ce024fecede7308ac8902d1ae57"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/PRESERVED_NATIVE_PREPARATION_EVIDENCE_CHECK.log",
+      "bytes": 2444,
+      "sha256": "124cf051e119e0aeb48b260c065706f1c2bd326681072603ec1ccdd1cc7260c1"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/PRESERVED_ORIGINAL_FAIL_IDENTITY_CHECK.log",
+      "bytes": 428,
+      "sha256": "000849c5dc1dcc81d1e1ef6fabd1e5aae4df8e7ae01bd846978ffd097d502a00"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/PRESERVED_R2_FAIL_BASELINE_CHECK.log",
+      "bytes": 2222,
+      "sha256": "47172d91f21b42537126ebba6174acc24551a92d0a1a2fcf2d80023f9eeb6ece"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/REVIEW_CHECK_EVIDENCE.sha256",
+      "bytes": 9541,
+      "sha256": "fccb378cb3c0f53a38ba537f44bb8ffd9fdf50ebcb5fe3a70ceb3793d3b8a732"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/SERVICE_EVENT_REHASH.tsv",
+      "bytes": 294,
+      "sha256": "27583bf32d4f140aee19070a7e623e7b7efc15bcb5af16f4b0425af2ef68afa7"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/check_artifacts.sh",
+      "bytes": 5313,
+      "sha256": "94975e1b3652e57a685de9f36e5fc9e78850b6532ba554d51abe936e3e30cddf"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/check_inventory.jq",
+      "bytes": 3863,
+      "sha256": "fb351805f31b2c3eb483a5d4d472630eab852aa8000915730bbe7d20bd7d2d2b"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/check_run.jq",
+      "bytes": 5954,
+      "sha256": "81cf385198d05419d6fc50b7d42f9d05bd4be08a1ee54a4c50bea3120ec41fe6"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/check_services.jq",
+      "bytes": 3910,
+      "sha256": "86855dcb7674897f4f71420273e4ba6ac6a2ea1c39d7999ae4cab3c6ed13dcdf"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "inventory_replay/COMPLETE_SAVED_INVENTORY_REPLAY.json",
+      "bytes": 38763,
+      "sha256": "5be47fef050e9df5ea907d759133f4f2667518063a6249dccfa16820da9ed562"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_O_test_admission.py.log",
+      "bytes": 120,
+      "sha256": "d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_O_test_cold_import_mock.py.log",
+      "bytes": 119,
+      "sha256": "fe4988a7fe402c28910775152ccb012e903125901080fe3c18a3d0a2893c856b"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_O_test_module_inventory.py.log",
+      "bytes": 134,
+      "sha256": "39023bf1fcaa60036244c1186cfba1b16d94e7125e5f0aec9355147c9e8235d9"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_O_test_preparation.py.log",
+      "bytes": 124,
+      "sha256": "ed179141ca6d22c53745f642b3e4de6edccbb4e4cd1ca9439174096fc5e2a7f2"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_O_test_reference_capture_static.py.log",
+      "bytes": 120,
+      "sha256": "dec2c0987c2ebad28c8c5b56583d46bba4829dffedf88572b85805c1f905a0e8"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_O_test_worker_audit_mock.py.log",
+      "bytes": 101,
+      "sha256": "7d59a8fbca92ef540f42b6883247c3844892d23f501b6cf2621d0e535813fb81"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_test_admission.py.log",
+      "bytes": 120,
+      "sha256": "019d928826775c4ff088cfb2dd8c548ff4b0b49c6b6f2bc898976dca7df0357b"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_test_cold_import_mock.py.log",
+      "bytes": 119,
+      "sha256": "fe4988a7fe402c28910775152ccb012e903125901080fe3c18a3d0a2893c856b"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_test_module_inventory.py.log",
+      "bytes": 134,
+      "sha256": "426a77cdbd20ef70400a7d42aa1bfbbeb3c57f2e361fa089f76b3a4395aca6a3"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_test_preparation.py.log",
+      "bytes": 124,
+      "sha256": "eea909e80cac976e042df6bc3545b70fb14ff6a007d31081c1e4a83f66f1a024"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_test_reference_capture_static.py.log",
+      "bytes": 120,
+      "sha256": "9d25c0f4b026321bfadaecc0cc9987e8f11ae59054fabc7bf278c5e411515188"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/I_test_worker_audit_mock.py.log",
+      "bytes": 101,
+      "sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/O_test_admission.py.log",
+      "bytes": 120,
+      "sha256": "d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/O_test_cold_import_mock.py.log",
+      "bytes": 119,
+      "sha256": "cec8806e24af4311cc4923143096493c92c663a9bb9d416a56143bce4abb75bb"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/O_test_module_inventory.py.log",
+      "bytes": 134,
+      "sha256": "94ed4e37d4d05a39142b2a93599510152c185e6ad32690fea9f98a2bad557d8a"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/O_test_preparation.py.log",
+      "bytes": 124,
+      "sha256": "ed179141ca6d22c53745f642b3e4de6edccbb4e4cd1ca9439174096fc5e2a7f2"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/O_test_reference_capture_static.py.log",
+      "bytes": 120,
+      "sha256": "276d15e490230cc8539e57dc8ac7205ada1f1d078cbe9caa93ffc692d99a9e00"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/O_test_worker_audit_mock.py.log",
+      "bytes": 101,
+      "sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/RESULTS.json",
+      "bytes": 13054,
+      "sha256": "1abf5d82b6872495b7388c07ffd65aded4ae418d15e3cf1864ff13960b189446"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/normal_test_admission.py.log",
+      "bytes": 120,
+      "sha256": "d5557644f94799de88d5d3e1ec5519779a563f8d5e3635a321aad5a9ce276076"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/normal_test_cold_import_mock.py.log",
+      "bytes": 119,
+      "sha256": "e9eccb7dd87caa1240258288f0f39d0a162553582f35a9fac8ae329bed19cc2c"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/normal_test_module_inventory.py.log",
+      "bytes": 134,
+      "sha256": "7f428cd684b91cf5636083f7a73f2b02da815b489a6c66eec84adb5d75aad6ca"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/normal_test_preparation.py.log",
+      "bytes": 124,
+      "sha256": "eea909e80cac976e042df6bc3545b70fb14ff6a007d31081c1e4a83f66f1a024"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/normal_test_reference_capture_static.py.log",
+      "bytes": 120,
+      "sha256": "19e39754e7ad5e6e0002d90d0aebec81f8fcfe7e4700ad8fcff4c19a9c43d836"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "run_software_final/normal_test_worker_audit_mock.py.log",
+      "bytes": 101,
+      "sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+    }
+  ]
+}

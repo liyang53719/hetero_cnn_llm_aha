@@ -1,0 +1,426 @@
+{
+  "status": "PASS_READONLY_EXECUTION_REVIEW_RUNTIME_OBSERVER_ATTENTION_M1_M2_ONLY",
+  "reviewed_at_utc": "2026-10-24T23:50:30Z",
+  "config_sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030",
+  "preparation_review_sha256": "af8b1223825eb7f92c038ec1c9010508942302b4eb65f45fbff0499b652bfecc",
+  "scope": "Two unique, bounded M1 and M2 runtime-observer attention-component attempts, with observer-off/on controls and unchanged independent original reference recipe. Read-only post-run evidence verification, not another execution or authorization.",
+  "method": {
+    "task_code_imported": false,
+    "numpy_imported": false,
+    "matrix_cdll_loaded_by_reviewer": false,
+    "task_or_numerical_reexecution": false,
+    "tools": "Shell, jq, sha256sum, stat, readlink, cmp; independent jq validation of saved JSON and lifecycle events",
+    "input_content_read": "Authorized streaming SHA256 only; no tensor copies",
+    "writes": "Only new execution_postrun files and this report in the current independent_review directory"
+  },
+  "limits": {
+    "cpu_seconds": 30,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 45,
+    "cpus": 1
+  },
+  "receipts": [
+    {
+      "m": 1,
+      "parent_sha256": "735963714c16aeee0d1dd6836f740bebb58e471af71d5a19d16e5e2f0ab03cde",
+      "result_sha256": "21f6879c5bff3fe0adb8a3f2b8df28f412d79231081ab22c9e1a2b157734d8dc",
+      "returncode": 0,
+      "timed_out": false,
+      "group_remaining": false,
+      "automatic_retry": false
+    },
+    {
+      "m": 2,
+      "parent_sha256": "b131ae1bd9f56cac2d39bf5357b7524c26b2c0284a668e6eb527a38452796719",
+      "result_sha256": "908c8a360db9529ba57e4065d85070e5a5a20be6f627d7bf397838b544fe47f1",
+      "returncode": 0,
+      "timed_out": false,
+      "group_remaining": false,
+      "automatic_retry": false
+    }
+  ],
+  "ledger_checks": {
+    "only_M1_M2_claims_present": true,
+    "status": "CLAIMED_NO_RETRY",
+    "same_exact_config": true,
+    "worker_parent_birth_identity_consistent": true,
+    "M1_entire_success_precedes_M2": true,
+    "M1_prerequisite_source_gate_and_saved_qualification_receipt_match": true
+  },
+  "service_event_replay": [
+    {
+      "status": "PASS_INDEPENDENT_SAVED_EVENT_LIFECYCLE_REPLAY",
+      "events": 615,
+      "groups": 108,
+      "terminal": true,
+      "released": true,
+      "canonical_off_on_equal": true,
+      "ticket_policy": "Only first-appearance ticket alpha-renaming; all other raw values and edges compared",
+      "no_dut_execution": true
+    },
+    {
+      "status": "PASS_INDEPENDENT_SAVED_EVENT_LIFECYCLE_REPLAY",
+      "events": 1515,
+      "groups": 216,
+      "terminal": true,
+      "released": true,
+      "canonical_off_on_equal": true,
+      "ticket_policy": "Only first-appearance ticket alpha-renaming; all other raw values and edges compared",
+      "no_dut_execution": true
+    }
+  ],
+  "module_map_checks": {
+    "all_8_phase_audits_verified": true,
+    "total_module_entries_reviewed": 1752,
+    "total_nested_file_identity_records": 2586,
+    "total_file_mapping_segments": 728,
+    "raw_module_names_and_all_aliases_complete": true,
+    "raw_maps_equal_pre_audit_snapshots": true,
+    "every_raw_file_map_matches_audit_path_inode_device": true,
+    "current_mapped_inode_device_and_pins_match": true,
+    "all_errors_empty": true,
+    "phase_counts_per_run": [
+      {
+        "status": "PASS_READONLY_COMPLETE_SAVED_INVENTORY",
+        "phase": "AFTER_NATIVE_LOAD",
+        "entries": 106,
+        "objects": 103,
+        "all_raw_entries_accounted_for": true,
+        "all_aliases_accounted_for": true,
+        "kinds": [
+          {
+            "kind": "built-in",
+            "count": 34
+          },
+          {
+            "kind": "frozen",
+            "count": 17
+          },
+          {
+            "kind": "normal_file_module",
+            "count": 54
+          },
+          {
+            "kind": "normal_main_script",
+            "count": 1
+          }
+        ],
+        "file_identity_records": 127,
+        "map_segments": 49,
+        "map_files": 11,
+        "errors": [],
+        "not_a_new_live_object_admission": true
+      },
+      {
+        "status": "PASS_READONLY_COMPLETE_SAVED_INVENTORY",
+        "phase": "ARM_0_TERMINAL",
+        "entries": 250,
+        "objects": 247,
+        "all_raw_entries_accounted_for": true,
+        "all_aliases_accounted_for": true,
+        "kinds": [
+          {
+            "kind": "built-in",
+            "count": 43
+          },
+          {
+            "kind": "frozen",
+            "count": 17
+          },
+          {
+            "kind": "normal_file_module",
+            "count": 178
+          },
+          {
+            "kind": "normal_main_script",
+            "count": 1
+          },
+          {
+            "kind": "normal_namespace_package",
+            "count": 8
+          },
+          {
+            "kind": "registered_typing_compat_namespace",
+            "count": 2
+          },
+          {
+            "kind": "synthetic_namespace_package",
+            "count": 1
+          }
+        ],
+        "file_identity_records": 378,
+        "map_segments": 105,
+        "map_files": 19,
+        "errors": [],
+        "not_a_new_live_object_admission": true
+      },
+      {
+        "status": "PASS_READONLY_COMPLETE_SAVED_INVENTORY",
+        "phase": "ARM_1_TERMINAL",
+        "entries": 250,
+        "objects": 247,
+        "all_raw_entries_accounted_for": true,
+        "all_aliases_accounted_for": true,
+        "kinds": [
+          {
+            "kind": "built-in",
+            "count": 43
+          },
+          {
+            "kind": "frozen",
+            "count": 17
+          },
+          {
+            "kind": "normal_file_module",
+            "count": 178
+          },
+          {
+            "kind": "normal_main_script",
+            "count": 1
+          },
+          {
+            "kind": "normal_namespace_package",
+            "count": 8
+          },
+          {
+            "kind": "registered_typing_compat_namespace",
+            "count": 2
+          },
+          {
+            "kind": "synthetic_namespace_package",
+            "count": 1
+          }
+        ],
+        "file_identity_records": 378,
+        "map_segments": 105,
+        "map_files": 19,
+        "errors": [],
+        "not_a_new_live_object_admission": true
+      },
+      {
+        "status": "PASS_READONLY_COMPLETE_SAVED_INVENTORY",
+        "phase": "POSTFLIGHT",
+        "entries": 270,
+        "objects": 267,
+        "all_raw_entries_accounted_for": true,
+        "all_aliases_accounted_for": true,
+        "kinds": [
+          {
+            "kind": "built-in",
+            "count": 47
+          },
+          {
+            "kind": "frozen",
+            "count": 17
+          },
+          {
+            "kind": "normal_file_module",
+            "count": 194
+          },
+          {
+            "kind": "normal_main_script",
+            "count": 1
+          },
+          {
+            "kind": "normal_namespace_package",
+            "count": 8
+          },
+          {
+            "kind": "registered_typing_compat_namespace",
+            "count": 2
+          },
+          {
+            "kind": "synthetic_namespace_package",
+            "count": 1
+          }
+        ],
+        "file_identity_records": 410,
+        "map_segments": 105,
+        "map_files": 19,
+        "errors": [],
+        "not_a_new_live_object_admission": true
+      }
+    ],
+    "both_MAPS_AFTER_CDLL_snapshots_also_checked": true,
+    "loaded_map_list_equals_exact_19_path_allowlist": true,
+    "builtin_frozen_display_names_are_diagnostic_not_name_equality_gates": true
+  },
+  "artifact_rehash": {
+    "capture_files": 20,
+    "capture_storage_lengths_match": true,
+    "capture_bytes_match_report_and_original_reference_raw_sha256": true,
+    "saved_service_streams": 4,
+    "service_stream_hashes_match_terminal_stages": true,
+    "all_execution_artifacts_hashed": true
+  },
+  "prior_failures": [
+    {
+      "root": "qwen2_runtime_observer_prepare_20261024T2255",
+      "config_sha256": "4dbbee106cfa0ad63e7ef6ecd769c2c8e3daf7d3d49a28ca8119b2bb6a861226",
+      "parent_sha256": "eadb829cf4260438395ee00c44f3150c47f64de2dfb48ff718bb59e9cbd13314",
+      "status": "FAILED_RETAINED",
+      "source_config_parent_baselines_rechecked": true,
+      "M2_absent": true
+    },
+    {
+      "root": "qwen2_runtime_observer_r2_20261024T2320",
+      "config_sha256": "06b07fecfcc396728f938840c273fe9a6312613a5d597a582d52fe606f5e4212",
+      "parent_sha256": "5a6d19e3f1655b4be7820999b155d2617aba051577e8dfb8dfb1344ffddf9ff7",
+      "status": "FAILED_RETAINED",
+      "source_config_parent_baselines_rechecked": true,
+      "M2_absent": true
+    },
+    {
+      "root": "qwen2_runtime_observer_r2b_20261024T2330",
+      "config_sha256": "327ed3fefbd8a862cabd5228c47fc7b881ff0e91736cc9bf16bb4cd8ca226d5a",
+      "parent_sha256": "e15c0e7f2b2e561fbd182aaa89676d5a2ccf585aa1134b197438743b9e689812",
+      "status": "FAILED_RETAINED",
+      "source_config_parent_baselines_rechecked": true,
+      "M2_absent": true
+    }
+  ],
+  "prior_failure_checks": {
+    "original_M1_ledger_and_identity_unchanged": true,
+    "R2_frozen_baseline_rechecked": true,
+    "R2b_full_failing_module_inventory_hash_unchanged": true,
+    "all_prior_preflight_evidence_receipt_hashes_unchanged": true,
+    "no_prior_outcome_reclassified": true
+  },
+  "limitations": [
+    "This review validates preserved evidence and current pinned bytes; it does not recreate historical live Python objects or historical execution.",
+    "Only the 20 raw capture payload files are independently rehashed. Presence/frequency hashes are checked as preserved report metadata, not regenerated from separate mask/frequency files.",
+    "Reference normalizer frequency differs by design because its actual PV packets repeat values; shape, presence and raw value hashes agree. Do not claim frequency metadata equality.",
+    "Original reference control/recipe remains independent of DUT values, but shared exact RNE primitives are disclosed; this is not a fully independent arithmetic implementation.",
+    "Runtime model steps/edges and wall-clock durations are software evidence, not hardware cycles, RTL simulation, synthesis, PPA, or throughput qualification.",
+    "Historical FAIL preservation is established against the available frozen config/source/parent/ledger/audit baselines; this report does not invent missing historical full-directory hashes."
+  ],
+  "fullblock": false,
+  "RTL": false,
+  "hardware_acceptance": false,
+  "M16_or_M128": false,
+  "further_execution_authorized": false,
+  "open_blockers": [],
+  "raw_review": {
+    "root": "qwen2_runtime_observer_r2c_20261024T2335",
+    "relative": "independent_review/READONLY_EXECUTION_REVIEW.json",
+    "bytes": 23119,
+    "sha256": "2a572aa0e44e010c32b77107775c6eb1f06302768e7b7cd6f7da398d34d4ffa5"
+  },
+  "scope_boundary": "Saved Observation M1/M2 attention-component software model with existing native ELF only; not full-block, RTL, hardware cycles, synthesis/QoR, or 80-90% qualification.",
+  "runs": [
+    {
+      "status": "PASS_READONLY_RECEIPTS_STAGES_AND_REFERENCE_BINDING",
+      "m": 1,
+      "parent_wall_seconds": 3.8301788920070976,
+      "stage_count": 14,
+      "stage_sequence": [
+        "INPUTS_VERIFIED",
+        "NATIVE_LOADED",
+        "RUNTIME_AUDIT_AFTER_NATIVE_LOAD",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "RUNTIME_AUDIT_ARM_0_TERMINAL",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "RUNTIME_AUDIT_ARM_1_TERMINAL",
+        "OBSERVER_OFF_ON_CONTROL_EQUAL",
+        "REFERENCE_COMPARE_START",
+        "REFERENCE_COMPARE_PASS",
+        "RUNTIME_AUDIT_POSTFLIGHT",
+        "POSTFLIGHT_MAPS_PASS"
+      ],
+      "output_words": 1536,
+      "score_words": 12,
+      "packed_acks": 12,
+      "packed_done": 12,
+      "terminal_before_reference": true,
+      "reference_source_pins_exact": true,
+      "normalizer_frequency_note": "Reference observes each actual PV packet; runtime observer records committed normalizer once. Raw values and presence must agree, not frequency metadata.",
+      "runtime_software_only": true,
+      "capture_field_count": 10,
+      "capture_metadata_summary": "M1_OBSERVATION_SUMMARY.json"
+    },
+    {
+      "status": "PASS_READONLY_RECEIPTS_STAGES_AND_REFERENCE_BINDING",
+      "m": 2,
+      "parent_wall_seconds": 5.340143728011753,
+      "stage_count": 14,
+      "stage_sequence": [
+        "INPUTS_VERIFIED",
+        "NATIVE_LOADED",
+        "RUNTIME_AUDIT_AFTER_NATIVE_LOAD",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "RUNTIME_AUDIT_ARM_0_TERMINAL",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "RUNTIME_AUDIT_ARM_1_TERMINAL",
+        "OBSERVER_OFF_ON_CONTROL_EQUAL",
+        "REFERENCE_COMPARE_START",
+        "REFERENCE_COMPARE_PASS",
+        "RUNTIME_AUDIT_POSTFLIGHT",
+        "POSTFLIGHT_MAPS_PASS"
+      ],
+      "output_words": 3072,
+      "score_words": 36,
+      "packed_acks": 24,
+      "packed_done": 24,
+      "terminal_before_reference": true,
+      "reference_source_pins_exact": true,
+      "normalizer_frequency_note": "Reference observes each actual PV packet; runtime observer records committed normalizer once. Raw values and presence must agree, not frequency metadata.",
+      "runtime_software_only": true,
+      "capture_field_count": 10,
+      "capture_metadata_summary": "M2_OBSERVATION_SUMMARY.json"
+    }
+  ],
+  "manifest_rehash": {
+    "files": 696,
+    "total_bytes": 156109063,
+    "all_sha256_sizes_and_canonical_paths_match": true,
+    "input_pins": {
+      "qr": {
+        "file": "input_payloads/qr.f32le",
+        "bytes": 786432,
+        "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+      },
+      "kr": {
+        "file": "input_payloads/kr.f32le",
+        "bytes": 131072,
+        "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+      },
+      "v": {
+        "file": "input_payloads/v.f32le",
+        "bytes": 131072,
+        "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+      }
+    },
+    "reference_source_pins_match": true,
+    "ten_execution_sources_final_rehash": {
+      "admission.py": "f93d48554af9d4a6dd3c19154213c616813625578a659a83026e7e9545094bb3",
+      "harness.py": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab",
+      "worker.py": "7b20d2070925c6c2859564424b325087ffc13576321965d48840d4d628e772c6",
+      "launch.py": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b",
+      "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+      "runtime_observer.py": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+      "reference_capture.py": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+      "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+      "cold_import.py": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+      "run_cold.py": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870"
+    }
+  },
+  "evidence": {
+    "execution_inputs": {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/EXECUTION_INPUT_EVIDENCE.sha256",
+      "bytes": 15208,
+      "sha256": "f947584b1af58a78264707ab6473cea58609e8e5dd74098dd28d415527faafa8"
+    },
+    "independent_checks": {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/execution_postrun/REVIEW_CHECK_EVIDENCE.sha256",
+      "bytes": 9541,
+      "sha256": "fccb378cb3c0f53a38ba537f44bb8ffd9fdf50ebcb5fe3a70ceb3793d3b8a732"
+    }
+  },
+  "public_projection_contains_no_private_paths_or_tensor_payloads": true
+}

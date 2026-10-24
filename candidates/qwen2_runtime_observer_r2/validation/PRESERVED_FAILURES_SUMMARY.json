@@ -1,0 +1,520 @@
+{
+  "status": "PRIOR_FAILURES_RETAINED_UNMODIFIED",
+  "original_failures_reclassified_as_pass": false,
+  "later_pass_does_not_change_prior_failure": true,
+  "later_pass_config_sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030",
+  "failures": [
+    {
+      "root": "qwen2_runtime_observer_prepare_20261024T2255",
+      "status": "FAILED_RETAINED",
+      "reason": "Original actual M1 failed because __future__.py was not pinned. It remains FAILED_RETAINED.",
+      "config": {
+        "root": "qwen2_runtime_observer_prepare_20261024T2255",
+        "relative": "PRIVATE_CONFIG.json",
+        "bytes": 191793,
+        "sha256": "4dbbee106cfa0ad63e7ef6ecd769c2c8e3daf7d3d49a28ca8119b2bb6a861226"
+      },
+      "source_pins": [
+        {
+          "file": "admission.py",
+          "sha256": "48d656e7623b959a0b4a692408ec140903770e7497d82ecbe75e48b6dea31b8d",
+          "unchanged": true
+        },
+        {
+          "file": "harness.py",
+          "sha256": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab",
+          "unchanged": true
+        },
+        {
+          "file": "worker.py",
+          "sha256": "0bf063d943d06bc0370c7cb31b48fd6b927ef3d430ebbfda2900fbf0e1598a89",
+          "unchanged": true
+        },
+        {
+          "file": "launch.py",
+          "sha256": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b",
+          "unchanged": true
+        },
+        {
+          "file": "runtime_closure.py",
+          "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+          "unchanged": true
+        },
+        {
+          "file": "runtime_observer.py",
+          "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+          "unchanged": true
+        },
+        {
+          "file": "reference_capture.py",
+          "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+          "unchanged": true
+        }
+      ],
+      "recorded_parent_sha256": "eadb829cf4260438395ee00c44f3150c47f64de2dfb48ff718bb59e9cbd13314",
+      "parent": {
+        "status": "FAILED_RETAINED",
+        "m": 1,
+        "returncode": 1,
+        "timed_out": false,
+        "group_remaining": false,
+        "wall_seconds": 1.9209057610132731,
+        "automatic_retry": false
+      },
+      "m2_directory_absent": true,
+      "m2_ledger_absent": true,
+      "original_evidence": [
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_REPORT.json",
+          "bytes": 4992,
+          "sha256": "e4c8e5139dd283bb88917cb44e25c35b7d2af14e407f7d599bef20c1430eb0c7"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_dot_bf16.u32le",
+          "bytes": 48,
+          "sha256": "3de53d07fb2e3501ee62de57f069800b86df605ea15b4c3aaea16ecef2210af6"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_dot_parts.u32le",
+          "bytes": 768,
+          "sha256": "0917d4a8b8a748fc56c9c76435b89799318775603adb053dc616bd6b7ffe51fa"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_normalizer.u32le",
+          "bytes": 144,
+          "sha256": "ecc8ddfed2b3c7da9450f4aaf735731b62f8487a4986d40a61804d046085810e"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_prob_bf16.u32le",
+          "bytes": 48,
+          "sha256": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_pv_bf16.u32le",
+          "bytes": 6144,
+          "sha256": "e6dae33593be24b0b96249ade751717d6c587f56a8268cd49d9f6b2580c6706a"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_pv_raw.u32le",
+          "bytes": 6144,
+          "sha256": "e6dae33593be24b0b96249ade751717d6c587f56a8268cd49d9f6b2580c6706a"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_scores_bf16.u32le",
+          "bytes": 48,
+          "sha256": "31b363d7a2c3b53f942b1f3fddc9c9588e87279e0ec2391b84db78c89782ef15"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_softmax_exp.u32le",
+          "bytes": 48,
+          "sha256": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_softmax_fp32.u32le",
+          "bytes": 48,
+          "sha256": "6ea78411bee8a810b9a18819c5a4ac7c827e71678cc4d1db9a0ab8c8d8a9b2e2"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/CAPTURE_unrounded_dot_sum.u32le",
+          "bytes": 48,
+          "sha256": "a404449506cf798ef5c1864b66f8f5f74a4f61f7308e4be07b598d1615bfa090"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/IDENTITY.json",
+          "bytes": 121,
+          "sha256": "651b9f8b80b8cf26646e87aba0825ddcc2e2337ea878bdc3a2b93897ec7139f9"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/MAPS_AFTER_CDLL.txt",
+          "bytes": 6997,
+          "sha256": "20f8a5e5dd81203e17683b631438b1f36175a6e2a3de0e4777ebc32657498cf2"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/MAPS_ON_FAILURE.txt",
+          "bytes": 17870,
+          "sha256": "feec032e00d12f59a76f0a2cb5a819fb4c23ec43bc9767e87bfd7a1bbc2e53d9"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/PARENT.json",
+          "bytes": 754,
+          "sha256": "eadb829cf4260438395ee00c44f3150c47f64de2dfb48ff718bb59e9cbd13314"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/SERVICE_EVENTS_0.json",
+          "bytes": 83325,
+          "sha256": "77fdd2e1b25e1941b31173f91339243887e98d8ddce59250d7995f02d1d9078d"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/SERVICE_EVENTS_1.json",
+          "bytes": 83637,
+          "sha256": "351b93fb2693bb8deef90261ff16aefc0ec2e9f11d27ea29c587ff32d5d402c1"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/STAGES.jsonl",
+          "bytes": 15494,
+          "sha256": "3092fec94d10f66a236a804441543ec4c4f111d082326f0438a3c8d1bad6a791"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "M1/worker.log",
+          "bytes": 723,
+          "sha256": "13513e46c6c4020defaaa5f712c7f3478a63e077b978b533b91eda08cc0bdd3f"
+        },
+        {
+          "root": "qwen2_runtime_observer_prepare_20261024T2255",
+          "relative": "attempts/M1.json",
+          "bytes": 202,
+          "sha256": "e31144bbaf64277c84fe0487c5bece5e91da97a8f5de8947dc5386a82fc28dfc"
+        }
+      ]
+    },
+    {
+      "root": "qwen2_runtime_observer_r2_20261024T2320",
+      "status": "FAILED_RETAINED",
+      "reason": "Cold-only attempt failed because a normal dataclass generated definition was misclassified. No numerical task or Matrix ELF was executed.",
+      "config": {
+        "root": "qwen2_runtime_observer_r2_20261024T2320",
+        "relative": "PRIVATE_CONFIG.json",
+        "bytes": 196344,
+        "sha256": "06b07fecfcc396728f938840c273fe9a6312613a5d597a582d52fe606f5e4212"
+      },
+      "source_pins": [
+        {
+          "file": "admission.py",
+          "sha256": "f93d48554af9d4a6dd3c19154213c616813625578a659a83026e7e9545094bb3",
+          "unchanged": true
+        },
+        {
+          "file": "harness.py",
+          "sha256": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab",
+          "unchanged": true
+        },
+        {
+          "file": "worker.py",
+          "sha256": "7b20d2070925c6c2859564424b325087ffc13576321965d48840d4d628e772c6",
+          "unchanged": true
+        },
+        {
+          "file": "launch.py",
+          "sha256": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b",
+          "unchanged": true
+        },
+        {
+          "file": "runtime_closure.py",
+          "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+          "unchanged": true
+        },
+        {
+          "file": "runtime_observer.py",
+          "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+          "unchanged": true
+        },
+        {
+          "file": "reference_capture.py",
+          "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+          "unchanged": true
+        },
+        {
+          "file": "module_inventory.py",
+          "sha256": "d59c75cbaa5f5b653f50a60a8fb460888c3fe1bbd80f450f1a0d43777e73f486",
+          "unchanged": true
+        },
+        {
+          "file": "cold_import.py",
+          "sha256": "5d187e3094e5be0fe9dd5287830bbbcb067cfaf6a5b768bb28c96a5fb852967a",
+          "unchanged": true
+        },
+        {
+          "file": "run_cold.py",
+          "sha256": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870",
+          "unchanged": true
+        }
+      ],
+      "recorded_parent_sha256": "5a6d19e3f1655b4be7820999b155d2617aba051577e8dfb8dfb1344ffddf9ff7",
+      "parent": {
+        "status": "FAILED_RETAINED",
+        "exit": 1,
+        "timed_out": false,
+        "group_remaining": false,
+        "wall_seconds": 2.122130597010255,
+        "numeric_execution": false,
+        "config_unchanged": true,
+        "sources_unchanged": true
+      },
+      "m2_directory_absent": true,
+      "m2_ledger_absent": true,
+      "original_evidence": [
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/PARENT.json",
+          "bytes": 1880,
+          "sha256": "5a6d19e3f1655b4be7820999b155d2617aba051577e8dfb8dfb1344ffddf9ff7"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/00_before_import/MAPS.txt",
+          "bytes": 6046,
+          "sha256": "901b5355312ca6bc4918f6f4989356ae615a84a548fd7d61aca322fa7abc763b"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/00_before_import/MAP_AUDIT.json",
+          "bytes": 24613,
+          "sha256": "16d77414819a78699d7ea163817af124cb632b22316716607d7a05085ecca235"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/00_before_import/MODULES_RAW.json",
+          "bytes": 29700,
+          "sha256": "69dea971ea9bea336cf82e6b4931e16651648c96ae6ec7a0a84b2501f2a8926c"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/00_before_import/MODULE_AUDIT.json",
+          "bytes": 118941,
+          "sha256": "b0a96b850421502c52146c018f2e22062c9db6c85a42c785cc99fcbdf793d55c"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/00_before_import/VALIDATION.json",
+          "bytes": 39,
+          "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MAPS.txt",
+          "bytes": 16674,
+          "sha256": "901a02de70cb63abc42a7045bf6d6d0d12e2f3d9f4d8335d89466fe1190de74e"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MAP_AUDIT.json",
+          "bytes": 65912,
+          "sha256": "98f453c92b7f6812e16783d9ce133bbeab298e438f96791fc609eafcf2dbb9a9"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MODULES_RAW.json",
+          "bytes": 85565,
+          "sha256": "9357b99fc7e0f2ca7dc9ab69317717ddc543bbecb781131fb0ed9d9ebd456763"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MODULE_AUDIT.json",
+          "bytes": 406321,
+          "sha256": "5712e0470301c16acbb89a7a8919e226bb164f8eead301c0b1149e15dd35eab1"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/VALIDATION.json",
+          "bytes": 39,
+          "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/COLD_PIN_AUDIT.json",
+          "bytes": 301660,
+          "sha256": "cf938590156da078b710155ab1ab024f3276b77796a561a4974c289858197c48"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker/RESULT.json",
+          "bytes": 120161,
+          "sha256": "cf03ab1c9aae95a7581e72c2422e840e2295975afcfbdd2b085fe046c767e93e"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2_20261024T2320",
+          "relative": "cold_normal_01/worker.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "root": "qwen2_runtime_observer_r2b_20261024T2330",
+      "status": "FAILED_RETAINED",
+      "reason": "Cold-only attempt failed because the built-in _decimal module uses the legitimate display name decimal. Full imports completed; no numerical task executed.",
+      "config": {
+        "root": "qwen2_runtime_observer_r2b_20261024T2330",
+        "relative": "PRIVATE_CONFIG.json",
+        "bytes": 196682,
+        "sha256": "327ed3fefbd8a862cabd5228c47fc7b881ff0e91736cc9bf16bb4cd8ca226d5a"
+      },
+      "source_pins": [
+        {
+          "file": "admission.py",
+          "sha256": "f93d48554af9d4a6dd3c19154213c616813625578a659a83026e7e9545094bb3",
+          "unchanged": true
+        },
+        {
+          "file": "harness.py",
+          "sha256": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab",
+          "unchanged": true
+        },
+        {
+          "file": "worker.py",
+          "sha256": "7b20d2070925c6c2859564424b325087ffc13576321965d48840d4d628e772c6",
+          "unchanged": true
+        },
+        {
+          "file": "launch.py",
+          "sha256": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b",
+          "unchanged": true
+        },
+        {
+          "file": "runtime_closure.py",
+          "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+          "unchanged": true
+        },
+        {
+          "file": "runtime_observer.py",
+          "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+          "unchanged": true
+        },
+        {
+          "file": "reference_capture.py",
+          "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+          "unchanged": true
+        },
+        {
+          "file": "module_inventory.py",
+          "sha256": "d59c75cbaa5f5b653f50a60a8fb460888c3fe1bbd80f450f1a0d43777e73f486",
+          "unchanged": true
+        },
+        {
+          "file": "cold_import.py",
+          "sha256": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+          "unchanged": true
+        },
+        {
+          "file": "run_cold.py",
+          "sha256": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870",
+          "unchanged": true
+        }
+      ],
+      "recorded_parent_sha256": "e15c0e7f2b2e561fbd182aaa89676d5a2ccf585aa1134b197438743b9e689812",
+      "parent": {
+        "status": "FAILED_RETAINED",
+        "exit": 1,
+        "timed_out": false,
+        "group_remaining": false,
+        "wall_seconds": 2.2218273420003243,
+        "numeric_execution": false,
+        "config_unchanged": true,
+        "sources_unchanged": true
+      },
+      "m2_directory_absent": true,
+      "m2_ledger_absent": true,
+      "original_evidence": [
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/PARENT.json",
+          "bytes": 1887,
+          "sha256": "e15c0e7f2b2e561fbd182aaa89676d5a2ccf585aa1134b197438743b9e689812"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/00_before_import/MAPS.txt",
+          "bytes": 6046,
+          "sha256": "083622fe02d71a32fd399297684f88bb707669d29e582955fccb1f6544ec6b6d"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/00_before_import/MAP_AUDIT.json",
+          "bytes": 24613,
+          "sha256": "dae9ed229171af40c963ffc94c39b9c3f8f23577464f90e01c0fbae1fe00bc59"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/00_before_import/MODULES_RAW.json",
+          "bytes": 29703,
+          "sha256": "a8fce204c0f40a818e27a6f169f16e0886121730dc685864d70fb5359da04f04"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/00_before_import/MODULE_AUDIT.json",
+          "bytes": 118950,
+          "sha256": "9698b3b0a5e92a7dc12572902004b60a6a2144ebb11371d7cdf53709ea41e512"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/00_before_import/VALIDATION.json",
+          "bytes": 39,
+          "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MAPS.txt",
+          "bytes": 16723,
+          "sha256": "2e1471d4d7c0abca48db57891bde6726e65d673c8aca091a77e42d3033f50772"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MAP_AUDIT.json",
+          "bytes": 65912,
+          "sha256": "13d7fa26cd6fc58870896180c8a292c6d7fedbc5588a7e8dcb7ab1bce1e1075d"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MODULES_RAW.json",
+          "bytes": 103484,
+          "sha256": "2e8c58d687fad565e96b278438fae7880e73e7eb177df61a38100adcb2829b47"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/MODULE_AUDIT.json",
+          "bytes": 488599,
+          "sha256": "5b5c6495393cd9c4f6d0ff877556149def539be3a6654db4081e37d680d886bc"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/01_after_import_or_failure/VALIDATION.json",
+          "bytes": 234,
+          "sha256": "153d71671754541eaf5f1dda7aa28763b2d7a7405c0cdc64411c250e3bea5e7c"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/COLD_PIN_AUDIT.json",
+          "bytes": 301680,
+          "sha256": "1dbbaca2cce78e2c08403db107d28a2d982a153e95896a6ffbec121443c23ef2"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker/RESULT.json",
+          "bytes": 182486,
+          "sha256": "34309576d5f72e4acc5bbb52404a2d555db1a6eac6aa0a98de4254c68bb9af69"
+        },
+        {
+          "root": "qwen2_runtime_observer_r2b_20261024T2330",
+          "relative": "cold_normal_01/worker.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "source_record": {
+    "root": "qwen2_runtime_observer_r2c_20261024T2335",
+    "relative": "PRESERVED_FAILURES.json",
+    "bytes": 9922,
+    "sha256": "1fa3fd6db23564aed1729f19093524aa261983870da4108d3aa86bc8865b5c89"
+  }
+}

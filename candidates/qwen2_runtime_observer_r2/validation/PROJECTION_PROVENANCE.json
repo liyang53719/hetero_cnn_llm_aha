@@ -1,0 +1,135 @@
+{
+  "status": "PASS_EXACT_METADATA_PROJECTION",
+  "scope": "Saved Observation M1/M2 attention-component software model with existing native ELF only; not full-block, RTL, hardware cycles, synthesis/QoR, or 80-90% qualification.",
+  "method": "Paired the old private files insertion order with the old public files insertion order only after all 692 bytes/hash pin values matched. Preserved labels for 685 unchanged pins; assigned ten new_wrapper labels and one explicit standard-library __future__.py label. Seven old wrapper pins are absent from the new profile.",
+  "mapping_pairs_verified": 692,
+  "unchanged_common_pins": 685,
+  "removed_old_wrapper_pins": 7,
+  "added_wrapper_pins": 10,
+  "added_stdlib_pins": 1,
+  "new_total_pins": 696,
+  "sources": [
+    {
+      "root": "qwen2_runtime_observer_prepare_20261024T2255",
+      "relative": "PRIVATE_CONFIG.json",
+      "bytes": 191793,
+      "sha256": "4dbbee106cfa0ad63e7ef6ecd769c2c8e3daf7d3d49a28ca8119b2bb6a861226"
+    },
+    {
+      "root": "qwen2_runtime_observer_prepare_20261024T2255",
+      "relative": "overlay/candidates/qwen2_runtime_observer_prepare/PROFILE_PROJECTION.json",
+      "bytes": 152631,
+      "sha256": "c53cc1c968a2166015f4d748a9f440489956d34a4b1f09dfe21fc68b0aa8e41a"
+    },
+    {
+      "root": "qwen2_runtime_observer_prepare_20261024T2255",
+      "relative": "overlay/candidates/qwen2_runtime_observer_prepare/REFERENCE_SOURCE_IDENTITIES.json",
+      "bytes": 2282,
+      "sha256": "33668fc3c17e74f26b712979ece02aec353c8eabe64ac7992aaad252195ecc95"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "PRIVATE_CONFIG.json",
+      "bytes": 197022,
+      "sha256": "793635db42c92f03ea022cafed313f49a40b6d6de05b33fb8baff60f33056030"
+    },
+    {
+      "root": "qwen2_runtime_observer_r2c_20261024T2335",
+      "relative": "independent_review/READONLY_EXECUTION_REVIEW.json",
+      "bytes": 23119,
+      "sha256": "2a572aa0e44e010c32b77107775c6eb1f06302768e7b7cd6f7da398d34d4ffa5"
+    }
+  ],
+  "source_metadata_unchanged": {
+    "input_pins": true,
+    "reference_roles": true,
+    "runtime_graph": true
+  },
+  "new_pins": {
+    "python_runtime/lib/python3.12/__future__.py": {
+      "bytes": 5218,
+      "sha256": "981d4c398849f9ebcab72300d9c1fe288fd6d7f28957b3b3fa3a493a5836d95c"
+    },
+    "new_wrapper/admission.py": {
+      "bytes": 1561,
+      "sha256": "f93d48554af9d4a6dd3c19154213c616813625578a659a83026e7e9545094bb3"
+    },
+    "new_wrapper/cold_import.py": {
+      "bytes": 30697,
+      "sha256": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580"
+    },
+    "new_wrapper/harness.py": {
+      "bytes": 9463,
+      "sha256": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab"
+    },
+    "new_wrapper/launch.py": {
+      "bytes": 4860,
+      "sha256": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b"
+    },
+    "new_wrapper/module_inventory.py": {
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1"
+    },
+    "new_wrapper/reference_capture.py": {
+      "bytes": 18962,
+      "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b"
+    },
+    "new_wrapper/run_cold.py": {
+      "bytes": 4218,
+      "sha256": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870"
+    },
+    "new_wrapper/runtime_closure.py": {
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+    },
+    "new_wrapper/runtime_observer.py": {
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+    },
+    "new_wrapper/worker.py": {
+      "bytes": 15089,
+      "sha256": "7b20d2070925c6c2859564424b325087ffc13576321965d48840d4d628e772c6"
+    }
+  },
+  "removed_pins": {
+    "new_wrapper/admission.py": {
+      "bytes": 1508,
+      "sha256": "48d656e7623b959a0b4a692408ec140903770e7497d82ecbe75e48b6dea31b8d"
+    },
+    "new_wrapper/harness.py": {
+      "bytes": 9463,
+      "sha256": "456aedfc3f77a77e8203ca5a0729dc1694ad0be6996cbdc91794df67ba9e0eab"
+    },
+    "new_wrapper/launch.py": {
+      "bytes": 4860,
+      "sha256": "fb6d869cac004b3e1331f6dc2d1662abc1ca0425c2ac4ef6772f2e5696268c6b"
+    },
+    "new_wrapper/reference_capture.py": {
+      "bytes": 18962,
+      "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b"
+    },
+    "new_wrapper/runtime_closure.py": {
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+    },
+    "new_wrapper/runtime_observer.py": {
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+    },
+    "new_wrapper/worker.py": {
+      "bytes": 11861,
+      "sha256": "0bf063d943d06bc0370c7cb31b48fd6b927ef3d430ebbfda2900fbf0e1598a89"
+    }
+  },
+  "no_tests_or_native_execution_during_projection": true,
+  "private_data_excluded": [
+    "input tensor contents",
+    "capture tensor contents",
+    "raw process maps",
+    "complete per-module inventories",
+    "private executable config",
+    "raw large logs",
+    "absolute private paths"
+  ],
+  "private_raw_evidence_preserved": true
+}

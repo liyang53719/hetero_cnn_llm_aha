@@ -1,0 +1,62 @@
+{
+  "oracle_harness": {
+    "root": "oracle_harness",
+    "relative": "candidates/qwen2_selected_scala_model/test_schedule_numeric.py",
+    "bytes": 26242,
+    "sha256": "6f9655c3eac6811d9d9a4328c95492d7bbc4b0a72c81b23f0af6c92940ba206b"
+  },
+  "original_driver": {
+    "root": "raw",
+    "relative": "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py",
+    "bytes": 35767,
+    "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a"
+  },
+  "original_owner": {
+    "root": "raw",
+    "relative": "candidates/qwen2_resident_matrix/official_bf16/owners.py",
+    "bytes": 9394,
+    "sha256": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a"
+  },
+  "original_adapter": {
+    "root": "raw",
+    "relative": "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+    "bytes": 18144,
+    "sha256": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8"
+  },
+  "prefix_owner": {
+    "root": "raw",
+    "relative": "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+    "bytes": 19134,
+    "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+  },
+  "arithmetic": {
+    "root": "raw",
+    "relative": "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py",
+    "bytes": 25923,
+    "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+  },
+  "exp_recipe": {
+    "root": "raw",
+    "relative": "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+    "bytes": 2243,
+    "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d"
+  },
+  "observer": {
+    "root": "full",
+    "relative": "candidates/qwen2_resident_matrix/official_bf16/observation.py",
+    "bytes": 23902,
+    "sha256": "13ec64d2f8985256d4bdf78595a628eb106a79117e62c728ac3e486d09e4f627"
+  },
+  "buffer_helper": {
+    "root": "full",
+    "relative": "scripts/observe_qwen2_attention_model.py",
+    "bytes": 29330,
+    "sha256": "18446e01900f81c6bbf9cf211c1df6b9a86b06013e6d7ef8ae8609eea2309a45"
+  },
+  "buffer": {
+    "root": "full",
+    "relative": "candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py",
+    "bytes": 10280,
+    "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f"
+  }
+}

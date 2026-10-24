@@ -1,0 +1,48 @@
+{
+  "schema": "strict-lane-compile-public-exact-manifest-v1",
+  "files": {
+    "PUBLICATION_WHITELIST.txt": {
+      "bytes": 171,
+      "sha256": "91d2c839cfe6eae5911735bd3e29c4050834fe4a2454318e11f6cd635e821b50"
+    },
+    "README.md": {
+      "bytes": 1123,
+      "sha256": "7340080263a5828068348abc700f1bd0599b26df60dddf453d04a6a2873f69e0"
+    },
+    "REPRODUCTION_PINS.json": {
+      "bytes": 3992,
+      "sha256": "5af19695ac585eaf5a59b8e93efaf0f639ce31eac6d92d716c1d23df3a7a312a"
+    },
+    "SUMMARY.json": {
+      "bytes": 2574,
+      "sha256": "710672915346e21006e2daf09f56db04f0bc8a967b578472abced3b0e0ed5a67"
+    },
+    "launch_compile.py": {
+      "bytes": 3431,
+      "sha256": "b38d80c8387e335972c329423b41d712df5021edb0126d71e915297c3454d1c2"
+    },
+    "launch_compile.py.patch": {
+      "bytes": 1033,
+      "sha256": "7931c711c5edbebb3bebd88e89643254985b2e9432e6c47021727e75f8751391"
+    },
+    "run_compile.py": {
+      "bytes": 11665,
+      "sha256": "982517f07f04a1859c9fe13b7e6cb8195040e373a3c59a9dbd53831aab46fb7e"
+    },
+    "run_compile.py.patch": {
+      "bytes": 3489,
+      "sha256": "7c3e45e009b3d594693a11617585166f8e32bb3159753538d358b0e97e82d1e6"
+    }
+  },
+  "original_exact_files": [
+    "run_compile.py",
+    "launch_compile.py",
+    "run_compile.py.patch",
+    "launch_compile.py.patch"
+  ],
+  "upstream_source_manifest": {
+    "bytes": 1347,
+    "sha256": "3d635348d3b013ed9595af5700f35866fa7835d245e95dec63784ba1c18f62a7"
+  },
+  "scope": "Compile-only coordinator excerpt; no hardware arithmetic qualification"
+}

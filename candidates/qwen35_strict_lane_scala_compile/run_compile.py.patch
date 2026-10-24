@@ -1,0 +1,53 @@
+--- original/run_compile.py
++++ new/run_compile.py
+@@ -105,17 +105,17 @@
+ 
+ 
+ def verify_inputs(plan):
+-    need(len(plan['tool_paths']) == 314 and len(plan['sources']) == 27 and len(plan['inputs']) == 351, 'fixed tool and source closure')
++    need(len(plan['tool_paths']) == 314 and len(plan['sources']) == 10 and len(plan['inputs']) == 331, 'fixed tool and source closure')
+     return {p: checked(p, pin) for p, pin in plan['inputs'].items()}
+ 
+ 
+ def main(plan, start, stop, work_stop, deadline_handler):
+     work = Path(plan['work'])
+-    need(plan['schema'] == 'qwen35-chunk-transpose-scala-compile-bound-v1', 'plan schema')
++    need(plan['schema'] == 'strict-fp32-single-lane-scala-compile-bound-v1', 'plan schema')
+     need(plan['runtime_entry'] == 'scala.tools.nsc.Main' and plan['argv'].count('scala.tools.nsc.Main') == 1,
+          'compile-only entry')
+-    need(len(plan['argv'][-27:]) == len(set(plan['argv'][-27:])) == 27 and
+-         set(plan['argv'][-27:]) == set(plan['sources']) and
++    need(len(plan['argv'][-10:]) == len(set(plan['argv'][-10:])) == 10 and
++         set(plan['argv'][-10:]) == set(plan['sources']) and
+          plan['argv'][plan['argv'].index('-d') + 1] == str(work / 'classes'), 'exact compile source/output')
+     need(work.parent == Path('/tmp') and work.parent.resolve() == work.parent and
+          not os.path.lexists(work), 'fresh canonical output')
+@@ -181,8 +181,8 @@
+                'sample_rows': 181}
+         thread = threading.Thread(target=watchdog, daemon=True)
+         thread.start()
+-        record, _, usage = module.run_phase(support, base, 'compile_chunk_transpose', plan['argv'], work,
+-            work / 'phases' / 'compile_chunk_transpose', plan['environment'], cfg, stop,
++        record, _, usage = module.run_phase(support, base, 'compile_strict_fp32_lane', plan['argv'], work,
++            work / 'phases' / 'compile_strict_fp32_lane', plan['environment'], cfg, stop,
+             owner={'handler': deadline_handler, 'deadline': stop}, diagnostics=diagnostics)
+         done.set()
+         thread.join(timeout=1)
+@@ -201,7 +201,7 @@
+         classes = {k: v for k, v in tree['files'].items() if k.startswith('classes/')}
+         need(classes and all(k.endswith('.class') for k in classes), 'class-only output')
+         need(all('classes/' + k in classes and classes['classes/' + k]['bytes'] > 0
+-                 for k in plan['expected_classes']), 'all required contract/protocol/scalar/loan/derived/transpose classes present')
++                 for k in plan['expected_classes']), 'all required single-lane, original FMA and HardFloat classes present')
+         dump(work / 'OUTPUT_MANIFEST.json', classes)
+         dump(work / 'WATCH.json', watch)
+         dump(work / 'DIAGNOSTICS.json', diagnostics)
+@@ -211,7 +211,7 @@
+         need(inventory(work)['bytes'] <= limits['owned_output_bytes'] - 2 * 1024**2,
+              'final owned cap with terminal receipt reserve')
+         need(time.monotonic() < stop, 'terminal global deadline')
+-        result.update(status='PASS_QWEN35_CHUNK_TRANSPOSE_SCALA_COMPILE_ONLY', source_count=27,
++        result.update(status='PASS_STRICT_FP32_SINGLE_LANE_SCALA_COMPILE_ONLY', source_count=10,
+                       tool_count=314, class_count=len(classes), record=record, usage=usage,
+                       elapsed_seconds=time.monotonic() - start,
+                       qualification='Compilation only; no constructor/elaboration/RTL/handshake/numerical execution')

@@ -1874,3 +1874,10 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 明确集成阻断：0x00800000×0x3f7fffff精确积(2^24−1)×2^-150，RNE交付0x00800000；原HardFloat源码tininess-after规范预期UF|NX=3，旧vector16.cpp final-abs修正给NX=1，fatal30接受不同。原型保HardFloat规范，不静默修改旧CPP/旧证据，不称旧软件error边界等价；该差异不是硬件实测，原型PASS不能解除未来集成阻断。
 
 公开16件75428B在 candidates/qwen35_strict_fp32_lane/，manifest SHA256 7d1a6abb9f595dd3a3151f6c02709d4b0b755e07866491bf531bbb24e3ce9aaf，排除机器命令/raw日志/工具/IR/权重，非完整可直接运行包。五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。
+
+
+## PASS（仅10源Scala编译）：strict FP32隔离单lane
+
+唯一85081自然0/17.330634545秒，331输入before/after全字段同并接plan，55class全hash/magic同、29required齐；总67封件926956B。原leader身份采样同，WNOWAIT自然0/reap/group absent/cleanup确认，无timeout，compiler log空；观测自然退出后组清理不作强杀PASS。独审ACTUAL_COMPILE_REVIEW SHA256 2586ff6f604b84d6d95d7a7a5c4f21a95f53afdb1a4159fa289c0b6b375a8a1a。
+
+仅SCALA_COMPILE_ONLY，不构造/执行原算术链、不授硬件数值或RTL/阵列资格，UF3与旧CPP1的集成阻断保留，五RTL0/5及Qwen2full UNKNOWN不变。公开9件29028B在 candidates/qwen35_strict_lane_scala_compile/，manifest SHA256 7db2ae55d0feda03dc4f90542f0b477fc4bdf0b143a2f394a55ae674320480b0；无重复生产源/完整工具表/机器plan/class/IR/log，非完整可直接运行closure。未push、无新CI、无清理。

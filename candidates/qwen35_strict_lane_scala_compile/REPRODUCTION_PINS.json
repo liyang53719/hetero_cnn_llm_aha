@@ -1,0 +1,106 @@
+{
+  "schema": "strict-lane-compile-public-source-pins-v1",
+  "compile_source_manifest": {
+    "bytes": 1347,
+    "sha256": "3d635348d3b013ed9595af5700f35866fa7835d245e95dec63784ba1c18f62a7"
+  },
+  "private_frozen_plan_fingerprint": {
+    "bytes": 171512,
+    "sha256": "fd0b10fcc43fde00bc56997c2af750df28b18929de3887b9f73c1dcdd137d12f"
+  },
+  "production_source_manifest": {
+    "bytes": 1834,
+    "sha256": "4d4440124c330369d3baf88bca0fa3a1315a64f7686c41f0651ad714c4a43061"
+  },
+  "source_only_public_manifest": {
+    "bytes": 2767,
+    "sha256": "7d1a6abb9f595dd3a3151f6c02709d4b0b755e07866491bf531bbb24e3ce9aaf"
+  },
+  "source_count": 10,
+  "source_bytes": 59776,
+  "Scala_source_pins": {
+    "hardfloat/common.scala": {
+      "bytes": 3925,
+      "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb"
+    },
+    "hardfloat/primitives.scala": {
+      "bytes": 5105,
+      "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31"
+    },
+    "hardfloat/rawFloatFromFN.scala": {
+      "bytes": 3037,
+      "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce"
+    },
+    "hardfloat/rawFloatFromRecFN.scala": {
+      "bytes": 2877,
+      "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317"
+    },
+    "hardfloat/recFNFromFN.scala": {
+      "bytes": 2352,
+      "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d"
+    },
+    "hardfloat/fNFromRecFN.scala": {
+      "bytes": 2853,
+      "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d"
+    },
+    "hardfloat/RoundAnyRawFNToRecFN.scala": {
+      "bytes": 13901,
+      "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d"
+    },
+    "hardfloat/MulAddRecFN.scala": {
+      "bytes": 15353,
+      "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b"
+    },
+    "integration/gemmini/EmitHeteroBF16Fma.scala": {
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"
+    },
+    "source/StrictFp32MatrixLane.scala": {
+      "bytes": 6801,
+      "sha256": "71b2ef457fadd2e3f1bf8c1d603ec0faa4276921b320855cfe85a82a8f6e259b"
+    }
+  },
+  "inputs": 331,
+  "existing_tool_count": 314,
+  "existing_supervisor_sources": 6,
+  "existing_classpath_jars": 87,
+  "tools_not_copied": "Reuse the already frozen offline closure; this excerpt omits its machine plan and full tool table. No download or repinning is provided.",
+  "required_class_count": 29,
+  "required_classes": [
+    "heteronpu/experimental/HeteroFullFp32FmaPre.class",
+    "heteronpu/experimental/StrictFp32LaneRequest.class",
+    "heteronpu/experimental/StrictFp32LaneResponse.class",
+    "heteronpu/experimental/StrictFp32MatrixLane.class",
+    "heteronpu/experimental/StrictFp32LaneMode$.class",
+    "heteronpu/experimental/StrictFp32LaneStatus$.class",
+    "gemmini/HeteroBF16FmaLane.class",
+    "gemmini/HeteroBF16FmaPre.class",
+    "gemmini/HeteroBF16FmaMul.class",
+    "gemmini/HeteroBF16FmaPost.class",
+    "gemmini/HeteroBF16FmaRound.class",
+    "gemmini/EmitHeteroBF16Fma$.class",
+    "hardfloat/RawFloat.class",
+    "hardfloat/MulAddRecFN_interIo.class",
+    "hardfloat/MulAddRecFNToRaw_preMul.class",
+    "hardfloat/MulAddRecFNToRaw_postMul.class",
+    "hardfloat/MulAddRecFN.class",
+    "hardfloat/RoundAnyRawFNToRecFN.class",
+    "hardfloat/RoundRawFNToRecFN.class",
+    "hardfloat/consts$.class",
+    "hardfloat/isSigNaNRawFloat$.class",
+    "hardfloat/lowMask$.class",
+    "hardfloat/countLeadingZeros$.class",
+    "hardfloat/orReduceBy2$.class",
+    "hardfloat/orReduceBy4$.class",
+    "hardfloat/rawFloatFromFN$.class",
+    "hardfloat/rawFloatFromRecFN$.class",
+    "hardfloat/recFNFromFN$.class",
+    "hardfloat/fNFromRecFN$.class"
+  ],
+  "actual_generated_class_inventory": {
+    "classes": 55,
+    "bytes": 445083,
+    "manifest_bytes": 8645,
+    "manifest_sha256": "91dfbd43a1c6cd2ef9663d63464950a0e1ee7521991e9c93b9751f15c497bafb"
+  }
+}

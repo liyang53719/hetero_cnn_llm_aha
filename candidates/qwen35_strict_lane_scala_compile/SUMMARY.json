@@ -1,0 +1,63 @@
+{
+  "schema": "strict-lane-compile-public-summary-v1",
+  "status": "PASS_STRICT_FP32_SINGLE_LANE_SCALA_COMPILE_ONLY",
+  "actual_review": {
+    "bytes": 6482,
+    "sha256": "2586ff6f604b84d6d95d7a7a5c4f21a95f53afdb1a4159fa289c0b6b375a8a1a"
+  },
+  "source_review": {
+    "bytes": 11605,
+    "sha256": "a1451d9ef72e20ee34c779ce0e3fc958a0ef4850d4ddfd26d0c47c1f1b5a9dda"
+  },
+  "result": {
+    "natural_exit_code": 0,
+    "coordinator_elapsed_seconds": 17.33040040297783,
+    "child_phase_seconds": 16.642838,
+    "sources": 10,
+    "source_bytes": 59776,
+    "inputs_before_after_equal": 331,
+    "generated_classes": 55,
+    "class_bytes": 445083,
+    "required_base_classes_present": 29,
+    "required_not_total_prediction": true,
+    "all_generated_class_size_SHA_magic_verified": true,
+    "WNOWAIT_natural_exit0": true,
+    "identity_anchor_confirmed": true,
+    "reaped": true,
+    "group_absent": true,
+    "cleanup_confirmed": true,
+    "timed_out": false,
+    "parent_exception": null,
+    "compiler_log_bytes": 0,
+    "closed_output_files": 67,
+    "closed_output_bytes": 926956,
+    "peak_sampled_descendant_RSS_bytes": 299786240,
+    "sample_scope": "0.2s sampled descendant sum, not instantaneous or combined parent peak"
+  },
+  "run_limits": {
+    "total_seconds": 180,
+    "work_seconds": 150,
+    "cleanup_seconds": 5,
+    "post_seconds": 25,
+    "cpu_count": 1,
+    "address_space_per_process_bytes": 4294967296,
+    "sampled_descendant_RSS_bytes": 2147483648,
+    "sampled_and_terminal_owned_bytes": 16777216,
+    "single_file_bytes": 4194304,
+    "log_bytes": 2097152
+  },
+  "qualification": [
+    "Only scala.tools.nsc.Main ran. Original Emit App was compiled as source, not invoked.",
+    "Source and output identities were checked before/after; reviewer did not repeat compiler or large tool hashes."
+  ],
+  "not_qualified": [
+    "Module construction or hardware elaboration",
+    "CHIRRTL/SystemVerilog/RTL/EDA",
+    "HardFloat values, flags or real handshake equivalence",
+    "BF16 NaN payload",
+    "16-word fault barrier, UT or main array integration",
+    "physical area/Fmax or80 percent utilization"
+  ],
+  "retained_blocker": "HardFloat source flags UF|NX=3 versus old CPP predicate NX=1 at the minnormal boundary remains a future numerical-integration blocker. Compilation does not alter old code/evidence or resolve it.",
+  "public_scope": "Four original coordinator/diff files are exact. No duplicate production/model source, machine plan, tool table, actual logs/receipts, generated class or IR payload. Not a standalone runnable package."
+}

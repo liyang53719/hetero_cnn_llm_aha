@@ -1,0 +1,91 @@
+{
+  "additional_inputs": {
+    "sources/chunk_transpose/SOURCE_MANIFEST.json": {
+      "bytes": 1470,
+      "sha256": "675008eead4e8ef948cca9c93adfb7b682e4767944910eb18f2b7170d88a1ab9"
+    },
+    "sources/chunk_transpose/source/GdnChunkTransposeOwner.scala": {
+      "bytes": 11503,
+      "sha256": "293946fc86104c624b109d13e3d59338831a8a4c5a818d64aab8f649c4c026bd"
+    }
+  },
+  "baseline_349_input_reproduction_description": {
+    "all_existing_input_descriptors_byte_identical": true,
+    "bytes": 8935,
+    "logical_label": "prior_derived_r2/REPRODUCTION_PINS.json",
+    "sha256": "5d95516e2633d2222ba1361cf993dba5a4139d3c4cacb857e800016cd8d62577"
+  },
+  "compiler_main": "scala.tools.nsc.Main",
+  "independent_review_pin_only": {
+    "bytes": 7031,
+    "sha256": "65b91657b5bb6f64b86ac792c488a45e6f7c1af8c8c96b28eb926610495c1cf0"
+  },
+  "input_count": 351,
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "machine_plan_pin_only": {
+    "bytes": 190343,
+    "sha256": "b6a7f552ee352a85e71385aea8afb681b178962a37ed380762e90703e7f98ebf"
+  },
+  "omitted": [
+    "machine-specific FROZEN_PLAN, ROOT_ARGV and source closure tables",
+    "production owner and Python model/test payloads already published separately",
+    "all tool/JAR/class/IR binaries",
+    "raw logs, execution receipts, process identities and authority"
+  ],
+  "ordered_JAR_count_unchanged": 87,
+  "original_files": {
+    "launch_compile.py": {
+      "bytes": 3423,
+      "sha256": "d9e9ecffa8a7e79135ddc087c96d865de2ad4642eec48248b892b4acba7fb33f"
+    },
+    "launch_compile.py.patch": {
+      "bytes": 1029,
+      "sha256": "54cd1f8083f02b20dd8389eec29b9d3969b7349cd7880c4605bb6567fff7c637"
+    },
+    "run_compile.py": {
+      "bytes": 11669,
+      "sha256": "8591e1c348eab207bef1162d9ea7751eff0e50a7f1f84db776f8bf933cc2bb41"
+    },
+    "run_compile.py.patch": {
+      "bytes": 3481,
+      "sha256": "e117dd168c02c95d847aa160313dc4a1f99363141e5efd37a5d27537f14d59cb"
+    }
+  },
+  "required_class_additions": [
+    "heteronpu/continuous/GdnChunkTransposeJob.class",
+    "heteronpu/continuous/GdnChunkTransposeResult.class",
+    "heteronpu/continuous/GdnChunkTransposePort.class",
+    "heteronpu/continuous/GdnChunkTransposeOwner.class"
+  ],
+  "required_class_baseline_count": 41,
+  "required_class_count": 45,
+  "required_is_subset_not_total": true,
+  "schema": "transpose-compile-logical-input-delta-v1",
+  "source_bytes": 182588,
+  "source_count": 27,
+  "source_manifest_pin_only": {
+    "bytes": 1708,
+    "sha256": "2c9773aea7780d6785b5297efb6c50e50c535b942287e7f5accb28e638965f55"
+  },
+  "source_order": "Original ordered 26-source list in baseline, followed by sources/chunk_transpose/source/GdnChunkTransposeOwner.scala",
+  "standalone_runnable": false,
+  "supervisor_source_count_unchanged": 6,
+  "target_runtime": "CPython 3.12.14 -I -S -B; JDK21; Scala 2.13.16; Chisel compiler plugin 6.7.0",
+  "tool_count_unchanged": 314
+}

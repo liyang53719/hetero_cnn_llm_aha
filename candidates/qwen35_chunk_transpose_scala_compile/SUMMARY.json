@@ -1,0 +1,73 @@
+{
+  "actual": {
+    "WNOWAIT_exit_code": 0,
+    "all_current_class_hashes_verified": true,
+    "anchor_confirmed": true,
+    "class_bytes": 1563484,
+    "class_count": 146,
+    "cleanup_confirmed": true,
+    "closed_output_bytes": 2121598,
+    "closed_output_files": 158,
+    "compiler_log_bytes": 0,
+    "compiler_phase_seconds": 33.563329,
+    "cumulative_child_maxrss_KiB": 363468,
+    "group_absent": true,
+    "input_before_after_exact_including_stamps": true,
+    "input_count": 351,
+    "internal_result_elapsed_seconds": 34.326577917003306,
+    "natural_exit_then_original_anchored_group_cleanup_signal": true,
+    "natural_launcher_exit_code": 0,
+    "reaped": true,
+    "required_class_subset_count": 45,
+    "sampled_descendant_peak_rss_bytes": 371867648,
+    "source_bytes": 182588,
+    "source_count": 27,
+    "stdout_elapsed_seconds": 34.32682427801774,
+    "timeout_or_parent_exception": false
+  },
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "not_granted": [
+    "candidate App or Module construction",
+    "CHIRRTL elaboration or SystemVerilog/RTL generation and simulation",
+    "real memory read/write ACK, backpressure, checkpoint or held terminal validation",
+    "Scalar/Loan arithmetic execution or independent numerical validation",
+    "complete chunk/block, Host/public/recurrent integration or root publication",
+    "hardware latency/utilization or full-model PASS",
+    "resolution of previous Qwen2 execution/cleanup UNKNOWN"
+  ],
+  "private_paths_or_raw_evidence_included": false,
+  "production_sources_models_and_tool_table_duplicated": false,
+  "review_pin_only": {
+    "bytes": 7031,
+    "sha256": "65b91657b5bb6f64b86ac792c488a45e6f7c1af8c8c96b28eb926610495c1cf0"
+  },
+  "schema": "transpose-compile-public-summary-v1",
+  "scope_caveats": [
+    "RSS 与 aggregate owned 门按 0.2 秒采样，不是瞬时全进程总峰值上界。",
+    "cumulative child maxrss 不是协调进程加子进程的同时总峰值。",
+    "生成 Emit/App/服务类的 class 文件不等于执行这些类的构造或 main。",
+    "单次编译时长不是模型、硬件或未来运行完成时间保证。"
+  ],
+  "source_manifest_pin_only": {
+    "bytes": 1708,
+    "sha256": "2c9773aea7780d6785b5297efb6c50e50c535b942287e7f5accb28e638965f55"
+  },
+  "status": "PASS_QWEN35_CHUNK_TRANSPOSE_SCALA_COMPILE_ONLY",
+  "summary_zh": "独立转置 owner 的完整 27 源闭包由原固定 Scala 编译入口完成一次离线编译。新增 source、计划和实际输出分别核验；没有把先前 Python 合同模型通过等同为 Scala 或硬件行为证明。"
+}

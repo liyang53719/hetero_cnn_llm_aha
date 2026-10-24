@@ -1,0 +1,20 @@
+--- baseline/launch_compile.py
++++ transpose/launch_compile.py
+@@ -18,7 +18,7 @@
+ 
+ 
+ def expired(*_):
+-    raise TimeoutError('CHUNK_DERIVED_SCALA_COMPILE_GLOBAL_DEADLINE_OR_RESOURCE_STOP')
++    raise TimeoutError('CHUNK_TRANSPOSE_SCALA_COMPILE_GLOBAL_DEADLINE_OR_RESOURCE_STOP')
+ 
+ 
+ need(len(sys.argv) == 1, 'no variable compile arguments')
+@@ -36,7 +36,7 @@
+ resource.setrlimit(resource.RLIMIT_FSIZE, (4 * 1024**2, 4 * 1024**2))
+ resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+ HERE = Path(__file__).resolve().parent
+-PINS = {'FROZEN_PLAN.json': {'bytes': 188883, 'sha256': 'afb857b50a8fccf37cff9a4af92f586906ef7dbbce1e810aecddba868edf8d59'}, 'run_compile.py': {'bytes': 11651, 'sha256': '37b8a68231d02cc0fcc794d1c09cda5197a3f0b7854b00581f3933dd572308ae'}}
++PINS = {'FROZEN_PLAN.json': {'bytes': 190343, 'sha256': 'b6a7f552ee352a85e71385aea8afb681b178962a37ed380762e90703e7f98ebf'}, 'run_compile.py': {'bytes': 11669, 'sha256': '8591e1c348eab207bef1162d9ea7751eff0e50a7f1f84db776f8bf933cc2bb41'}}
+ 
+ 
+ def raw_fixed(name):

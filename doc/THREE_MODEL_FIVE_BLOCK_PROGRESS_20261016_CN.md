@@ -1847,3 +1847,10 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 18组Python对应模型控一次自然0/外0.349906391秒/内0.269774秒，两完整2048模拟事务轨迹，26内容pins+manifest前后同。首次exec CreateProcess传输拒绝、输出目录不存在后才创建成功执行，不称第一次测试失败。资源记录CPU10/10/AS256MiB/1CPU/外10秒/单文件FSIZE1MiB；4MiB为提案及末态4848B核限，非运行中aggregate实测，无RSS测量。独审SHA256 ff71e9b2fa99212652b5228df1d1e43748edc2c9eeee5684421e85a7409fa252。
 
 公开11件88698B在 candidates/qwen35_chunk_transpose/，manifest SHA256 46eba3dde29a0ae68f891f349f0bb9802ef32aebab9f1a4b377618e96d9e7f9b；8原件加限定scope与清单，排除机器命令/原日志，不是独立运行closure。Scala编译/真实ACK/RTL均TEMP未验，五RTL0/5、Qwen2full UNKNOWN不变。未push、无新增CI、无清理。
+
+
+## PASS（仅27源Scala编译）：转置owner
+
+唯一35789自然0，总34.326824278秒；351 before/after含stamp逐项同且接固定plan，146class/1563484B实hash/magic核同、45必需subset齐；158封件2121598B库存闭合。原child确权WNOWAIT自然0、reap/group absent/cleanup确认，无timeout。独审ACTUAL_COMPILE_REVIEW SHA256 65b91657b5bb6f64b86ac792c488a45e6f7c1af8c8c96b28eb926610495c1cf0。
+
+仅SCALA_COMPILE_ONLY，未运行Module/CHIRRTL/真实ACK/RTL/数值；五RTL0/5及Qwen2full UNKNOWN不变。公开9项30160B在 candidates/qwen35_chunk_transpose_scala_compile/，manifest SHA256 b0a5a752372b3537f98bf4248239ea56f256bd77062634acce447f4147eced61，旧349pins引用上包仅新增2逻辑pins，无生产源/模型/工具表/机器plan/日志重复，非完整可直接执行closure。未push、无新CI、无清理。

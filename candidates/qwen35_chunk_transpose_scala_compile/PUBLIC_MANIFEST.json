@@ -1,0 +1,45 @@
+{
+  "files": {
+    "PUBLICATION_WHITELIST.json": {
+      "bytes": 301,
+      "sha256": "1f4b62b73fc72f265c1e8e18d79ca520f8486610d7766d22040b4a5de0a7cba2"
+    },
+    "README.md": {
+      "bytes": 2174,
+      "sha256": "e26240e49a6dd000b2958e118b3a5994eeb561ebec059cc156c6b0565748e93d"
+    },
+    "REPRODUCTION_PINS.json": {
+      "bytes": 3472,
+      "sha256": "1664abe436483ccdc11d501ab1010f315f554e3532afdbfa90caab8b1412ceee"
+    },
+    "SUMMARY.json": {
+      "bytes": 3156,
+      "sha256": "556446f85a1f9d1f5135b1942453b6f0c3629447f2a85649150367bf8fd3d60c"
+    },
+    "launch_compile.py": {
+      "bytes": 3423,
+      "sha256": "d9e9ecffa8a7e79135ddc087c96d865de2ad4642eec48248b892b4acba7fb33f"
+    },
+    "launch_compile.py.patch": {
+      "bytes": 1029,
+      "sha256": "54cd1f8083f02b20dd8389eec29b9d3969b7349cd7880c4605bb6567fff7c637"
+    },
+    "run_compile.py": {
+      "bytes": 11669,
+      "sha256": "8591e1c348eab207bef1162d9ea7751eff0e50a7f1f84db776f8bf933cc2bb41"
+    },
+    "run_compile.py.patch": {
+      "bytes": 3481,
+      "sha256": "e117dd168c02c95d847aa160313dc4a1f99363141e5efd37a5d27537f14d59cb"
+    }
+  },
+  "original_exact_files": [
+    "run_compile.py",
+    "launch_compile.py",
+    "run_compile.py.patch",
+    "launch_compile.py.patch"
+  ],
+  "production_source_model_and_tool_table_omitted": true,
+  "schema": "transpose-compile-public-manifest-v1",
+  "scope": "Actual Scala compile only; incomplete runnable source excerpt"
+}

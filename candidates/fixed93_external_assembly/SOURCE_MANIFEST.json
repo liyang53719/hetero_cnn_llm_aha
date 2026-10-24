@@ -1,0 +1,23 @@
+{
+  "actual_authorized": false,
+  "files": {
+    "INPUT_PINS.json": {
+      "bytes": 640,
+      "sha256": "8082f8cc943a81217b919d652acaf8ba9c9e106e1e5cc608c6479a2927abf759"
+    },
+    "README.md": {
+      "bytes": 2755,
+      "sha256": "e0cfe013c76505d795c8e4727aa45d56c5757c42519f7c2c0dfbec623d527ba5"
+    },
+    "SUMMARY.json": {
+      "bytes": 1437,
+      "sha256": "f42ed0c92c9329e58dbd808ca32932fcb93124db285c5e0b88a0f8ab8d5f9137"
+    },
+    "prepare_assembly.py": {
+      "bytes": 25773,
+      "sha256": "7af6659807b31ec1bdfac53cad551681bc43a24f9d36b6e7ec33691648d4677b"
+    }
+  },
+  "schema": "fixed93-external-assembly-public-tool-v1",
+  "scope": "Small source materialization only; no real preflight or DUT/native/fullblock acceptance"
+}

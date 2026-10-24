@@ -1,0 +1,13 @@
+{
+  "logical_frozen_roots": [
+    "work/qwen2_recovered_inputs",
+    "work/qwen2_recovered_reference"
+  ],
+  "manifests": {
+    "baseline/SOURCE_MANIFEST.json": "e34dbc5b4274399552bfb1d200bca6119ea734030d195201aadfe96b4472acb0",
+    "pv_bundle/SOURCE_BUNDLE_MANIFEST.json": "3b94f42d7612c363d4edd2daee6355e732e70e6f39c671d8bd4ec293b48bea3d",
+    "resolver_bundle/SOURCE_BUNDLE_MANIFEST.json": "f5a8e2191f2e4b1012b8cb480ec9c94a195a88a36b4b69a3802dd057adeaa580"
+  },
+  "physical_locations": "Supplied explicitly through required CLI options; never inferred or published here.",
+  "schema": "fixed93-external-assembly-tool-prerequisites-v1"
+}

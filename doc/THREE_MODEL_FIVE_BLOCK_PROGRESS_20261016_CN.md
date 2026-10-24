@@ -1557,3 +1557,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 新loader仅编译已pin源字节，不用未pin pyc；before/after检查保留code/globals/class/defaults身份。原21/17/1、finalfence、debt和same-live门未弱化。
 - ONGOING / TEMP：真实小assembly及完整preflight。文档process cap指preflight-only/no-DUT，不存在SOURCE_ONLY绕过：真实预检仍须321源码、全部prep、1638 runtime和46冻结文件全hash（后者189998063字节），30份reference仅stat。预计读取约851MB，但本批未读取真实冻结数据，也未实际预检/native/M128/RTL。
 - 旧失联运行及唯一证据不动，未删除临时数据；完整运行容量门不下调，五block RTL仍0/5。
+
+## PASS（有限组装）/ FAIL（实际预检）：固定Git依赖与工作树解耦待修（2026-10-21）
+
+- DONE / PASS（仅组装）：保存 `candidates/fixed93_external_assembly/` 的小型builder、pins与脱敏摘要；实际唯一组装1.720秒自然退出0，547文件/8806882字节，无输入/参考读取或复制，无DUT/native。摘要记录组装时点，不是后续预检结果。
+- FAIL：另行实际执行完整preflight，1.018秒自然退出1、未超时，runtime校验发现活跃工作仓库 `.git/HEAD` 与旧pin不同，未到46冻结输入hash。因此不能宣称约851MB全部验证，更不是模型数值失败或通过。原失败组装和记录保留。
+- 归因：Git确为执行依赖；原配方执行 `git show HEAD:<source>` / `rev-parse HEAD`，admission安装并校验固定Git profile，不能删掉HEAD检查或盲改pin。错误耦合在于使用会随本地提交变化的publication工作树来承担固定算术源码来源。
+- ONGOING / TEMP：将固定detached commit及exact pack/profile迁移为独立可恢复源码依赖；不回退工作树，不改失败候选，不弱化原固定源码/对象校验。新候选须重新真实preflight，不继承旧PASS。
+- 完整block/native/RTL未执行，五block RTL仍0/5。builder源码入本工作树仅逐pin核对和语法检查，没有重复组装。

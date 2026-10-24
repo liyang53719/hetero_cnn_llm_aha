@@ -1,0 +1,40 @@
+{
+  "DUT_executed": false,
+  "actual_authorized": false,
+  "bytes_including_receipt": 8806882,
+  "execution_count": 1,
+  "files_including_receipt": 547,
+  "fullblock_acceptance": false,
+  "input_reference_files_opened": 0,
+  "limitations": [
+    "Summary records the one root-executed small materialization; it is not proof of external payload or runtime hashes.",
+    "Machine-specific physical paths and the full generated receipt are intentionally not included.",
+    "Real complete preflight and any native/M128 execution require separate authorization."
+  ],
+  "logical_output_cap_bytes": 9437184,
+  "native_executed": false,
+  "payloads_copied": 0,
+  "preparation_files": 224,
+  "private_assembly_receipt": {
+    "bytes": 97372,
+    "sha256": "df42d5523b7e62bf48a0484cbab8d73fadf394e9de398d91bd4515abe04db0f2"
+  },
+  "real_preflight_executed": false,
+  "root_reported_elapsed_seconds": 1.72,
+  "root_reported_exit_code": 0,
+  "runtime_payloads_hashed": 0,
+  "schema": "fixed93-external-assembly-public-summary-v1",
+  "selected_files": 9,
+  "source_files": 306,
+  "source_manifest": {
+    "bytes": 112347,
+    "sha256": "39ae180ce12df8f22c085b8b2ca507fbceb2aa29e47c2b04edd77786eebc2142"
+  },
+  "status": "MATERIALIZED_SMALL_SOURCE_ASSEMBLY_ONLY",
+  "support_files": 6,
+  "temporary_logical_bytes": 617892,
+  "tool_source": {
+    "bytes": 25773,
+    "sha256": "7af6659807b31ec1bdfac53cad551681bc43a24f9d36b6e7ec33691648d4677b"
+  }
+}

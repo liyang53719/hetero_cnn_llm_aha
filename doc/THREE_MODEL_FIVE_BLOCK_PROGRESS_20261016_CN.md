@@ -1908,3 +1908,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 唯一10672新副本实际自然0/总1.199853478秒，70例value/flags同独立Fraction/HF源规范，5batch。正负边界01/02实际flags3、issue[3,0]止Mul且Add sentinel未改；阈值恰等03 flags1继续Add，精确subnormal09 flags0继续Add。旧24列沿历史已封实际，新增46旧列仅源码预测，不重复加载旧ELF。新增N44差异不冒充旧实测。2370前后同、121依赖subset、23封件2304028B全核，三阶段自然0/WNOWAIT/reap/cleanup确认；旧CPP SHA不变。独审R2_ACTUAL_REVIEW SHA256 db6147fd48e56d8375ae30e7b59b6eb9c8bb4ad43f46cabb22ca44a329324285。
 
 仅隔离finiteMul软件参考修复PASS，不自动替换完整模型或授HardFloat/RTL flags资格，硬件及整模集成仍阻断。公开12件47208B在 candidates/qwen35_uf_predicate_r2/，manifest SHA256 37195330ca9e1e491c8b38caa6862800c5cdd8242047f52503c2ba707aa25ac5；含新副本/patch/刺激/有限摘要与相对pins，无重复模型/工具表/原log/ELF。五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。
+
+
+## FAIL保留 / PASS（仅软件参考wrapper）：strict两pass契约
+
+首次1954自然exit1，加载wrapper的dataclasses触发安装后的no-pyc门，尚未mock/CDLL/trace；714仅BEFORE，AFTER缺失，cleanup确认。R2只在guard前精确预加载并核dataclasses/fractions原runtime来源，保持fresh pycache/-B及guard后全拒pyc，wrapper/ELF/刺激/mock/driver不改；旧FAIL保留不作数值FAIL。
+
+唯一R2实际自然0，总0.547398621秒，714前后完整一致/12封件801596B核验；52请求（44唯一）99真实trace=52Mul+47Add，46成功+5Mul fatal不发Add+1Add fatal保诊断不commit，12非finite前拒无trace。13组93项明确MOCK，不混实际native；原ELF未重编，标准FENV sticky/controls同、DE0→1另列，原child身份/WNOWAIT/reap/group absent/cleanup闭合。独审R2_ACTUAL_REVIEW SHA256 cd2eddc2d601250dfa0a0a352e092a99d1f441387f3dcad7d4e575ab0dfa4437。
+
+仅隔离finite/RNE/fatal30软件参考wrapper，不替旧op6/Exp/16lane/整模，也不授硬件flags/真实握手/RTL。公开12项66313B在 candidates/qwen35_strict_reference/，manifest SHA256 5f9b07a568d70ba1770e8c05ce453428477f812c69752be927e0c9dbededafc9，排除机器plan/工具表/ELF/rawlog/重复模型，非standalone。硬件与整模集成仍阻断、五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。

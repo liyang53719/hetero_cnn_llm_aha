@@ -1,0 +1,52 @@
+{
+  "schema": "public-exact-source-excerpt-manifest-v1",
+  "files": {
+    "PUBLICATION_WHITELIST.txt": {
+      "bytes": 224,
+      "sha256": "46c17b6337b995a3d6fe0ce373de9dae6d6cd1840a20825691394e634e397dba"
+    },
+    "README.md": {
+      "bytes": 2208,
+      "sha256": "6e7c0e907e69024f68966ffaefea3df6fbf4787620c82dd0601c66897a9c42ff"
+    },
+    "REPRODUCTION_PINS.json": {
+      "bytes": 2114,
+      "sha256": "778a877c17209e32594ad78872b482f65027a832b6d5fb2e781461d16f3ee0c9"
+    },
+    "STIMULI.json": {
+      "bytes": 10792,
+      "sha256": "debe4689182532c53503f2da61f20105dc45484810ca492d716e6d39ebd0218e"
+    },
+    "SUMMARY.json": {
+      "bytes": 3696,
+      "sha256": "54ca1d5531b821d17d8cdb673d4ac6aeaeff3a6620d0b6ec17c3d7ac90299c7f"
+    },
+    "launch_wrapper.py": {
+      "bytes": 3562,
+      "sha256": "2662172eeef60dedc6608c50b6430c8278ae1d60148cb170343fb40c954c98ef"
+    },
+    "native_controls.py": {
+      "bytes": 11272,
+      "sha256": "ab4ad51b90ae6b934afc0f40a2e5727903710e4190781f42ceb014a6eb886fe2"
+    },
+    "native_controls.py.patch": {
+      "bytes": 1433,
+      "sha256": "4a49fcebf4d71584be0051adb2265b694f9eea7a7c56e2be6fd2ee81cd1cd831"
+    },
+    "protocol_controls.py": {
+      "bytes": 10754,
+      "sha256": "9c2baa7d9a0589ca5d14fd256c680c3e6e9878ba3d12d2c9a50e8ed270b53300"
+    },
+    "run_wrapper.py": {
+      "bytes": 12856,
+      "sha256": "7a09256e0dd350715a37be2421a4e8dd7951a678a69873d3c6024057746c0c3c"
+    },
+    "strict_reference.py": {
+      "bytes": 5668,
+      "sha256": "b1d1cab354a20c8b349f355fc3f32e0f2244384ced55349d1e12983526515de8"
+    }
+  },
+  "source_copy_count": 7,
+  "actual_scope": "isolated single-lane software wrapper only",
+  "no_private_plan_or_raw_evidence": true
+}

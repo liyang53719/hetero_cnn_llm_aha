@@ -1,0 +1,101 @@
+{
+  "schema": "public-isolated-strict-reference-wrapper-summary-v1",
+  "status": "PASS_ISOLATED_STRICT_REFERENCE_WRAPPER_SOFTWARE_ONLY",
+  "policy": "finite-fp32-rne-separate-mul-add-hf-tiny-after-fatal30-v1",
+  "observed": {
+    "native_requests": 52,
+    "unique_input_triples": 44,
+    "native_trace_calls": 99,
+    "Mul_calls": 52,
+    "Add_calls": 47,
+    "successful_requests": 46,
+    "Mul_fatal_requests": 5,
+    "Add_fatal_requests": 1,
+    "native_bound_nonfinite_preadmissions_without_arithmetic": 12,
+    "protocol_mock_groups": 13,
+    "protocol_mock_evaluate_invocations": 93,
+    "all52_bits_flags_validity_and_commit_match_independent_Fraction": true,
+    "pinned_inputs_before_after_unchanged": 714,
+    "natural_child_exit": 0,
+    "cleanup_confirmed": true,
+    "coordinator_elapsed_seconds": 0.5473986210126895,
+    "child_elapsed_seconds": 0.3076,
+    "sampled_descendant_peak_rss_bytes": 49795072,
+    "cumulative_children_maxrss_kib": 48708,
+    "closed_output_bytes": 801596
+  },
+  "numerical_boundaries": {
+    "minnormal_delivery_but_unbounded_tiny": {
+      "product": "00800000",
+      "mulFlags": 3,
+      "Add_executed": false,
+      "accCommit": false
+    },
+    "Mul_overflow": {
+      "product": "7f800000",
+      "mulFlags": 5,
+      "Add_executed": false,
+      "accCommit": false
+    },
+    "Add_overflow": {
+      "value": "7f800000",
+      "addFlags": 5,
+      "diagnostics_valid": true,
+      "accCommit": false
+    }
+  },
+  "fenv": {
+    "standard_FE_sticky_and_controls_retained": true,
+    "MXCSR_before": 8096,
+    "MXCSR_after": 8098,
+    "DE_before": 0,
+    "DE_after": 1,
+    "whole_MXCSR_equal_claimed": false,
+    "environment_repaired": false
+  },
+  "first_attempt": {
+    "status": "FAIL_PRE_NATIVE_CANDIDATE_STDLIB_IMPORT_GUARD",
+    "natural_child_exit": 1,
+    "cleanup_confirmed": true,
+    "arithmetic_reached": false,
+    "failure_preserved": true,
+    "repair": "17-line dataclasses/fractions preload with pinned source origins and fresh absent bytecode prefix before unchanged audit; no general pyc permission."
+  },
+  "reused_library": {
+    "rebuilt": false,
+    "bytes": 16088,
+    "sha256": "37bf6e8c8d4ed8ecd56071ed45eebc1b0ed424eaf213533f9ecbc92d183e95ba"
+  },
+  "limits": {
+    "wall_seconds": 60,
+    "shared_work_seconds": 40,
+    "native_seconds_max": 10,
+    "cleanup_seconds": 5,
+    "post_seconds": 15,
+    "CPU_count": 1,
+    "per_process_address_space_bytes": 1073741824,
+    "sampled_descendant_RSS_cap_bytes": 536870912,
+    "owned_output_cap_bytes": 8388608
+  },
+  "qualification_exclusions": [
+    "Not52 unique inputs;20 prior directed plus32 overlapping signed-zero combinations.",
+    "93 MOCK evaluations are not93 actual native cases; negative ABI/environment failures are scripted controls, not induced native faults.",
+    "No HardFloat numerical/flags execution, RTL simulation,16lane issue/group equivalence, matrix integration, Exp/op6 replacement or full-model qualification.",
+    "Old CPP/model and previous evidence unchanged; isolated repaired software does not remove hardware or global integration blockers.",
+    "This excerpt is not a complete runnable closure; no private plan, original logs, full runtime/tool table, ELF binary or library seal included."
+  ],
+  "evidence_pins": {
+    "actual_review": {
+      "bytes": 8265,
+      "sha256": "cd2eddc2d601250dfa0a0a352e092a99d1f441387f3dcad7d4e575ab0dfa4437"
+    },
+    "R2_source_review": {
+      "bytes": 5268,
+      "sha256": "1d4c65c6266badaf57e57946e479bd9390b28c3b344db9b559da3c3d0117f1cb"
+    },
+    "first_failure_review": {
+      "bytes": 6307,
+      "sha256": "bc8efa702eedf7795730ccbc484ffb8419110fc3be4707b611f43af8617d7d36"
+    }
+  }
+}

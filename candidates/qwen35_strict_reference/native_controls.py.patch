@@ -1,0 +1,26 @@
+--- R1/native_controls.py
++++ R2/native_controls.py
+@@ -51,6 +51,23 @@
+     checked(plan['candidate_cpp_path'], plan['inputs'][plan['candidate_cpp_path']])
+     checked(library, plan['inputs'][library])
+     import ctypes as C
++    # Only these two candidate imports need preparation before the no-pyc gate.
++    # A fresh absent prefix plus -B makes their cache probes fall back to source.
++    need(not os.path.lexists(sys.pycache_prefix), 'fresh pycache root absent before preload')
++    stdlib = Path(plan['python']).parent.parent / 'lib' / 'python3.12'
++    preload_paths = {name: str(stdlib / (name + '.py'))
++                     for name in ('dataclasses', 'fractions')}
++    for path in preload_paths.values():
++        need(path in plan['python_runtime_sources'], 'preload in original runtime source closure')
++        checked(path, plan['inputs'][path])
++    import dataclasses
++    import fractions
++    for name, module in (('dataclasses', dataclasses), ('fractions', fractions)):
++        path = preload_paths[name]
++        need(module.__file__ == path and module.__spec__.origin == path,
++             'preloaded stdlib exact pinned source origin')
++        checked(path, plan['inputs'][path])
++    need(not os.path.lexists(sys.pycache_prefix), 'fresh pycache root absent after preload')
+     loaded = []
+     def audit(event, args):
+         if event.startswith('socket.') or event == 'urllib.Request' or event in {

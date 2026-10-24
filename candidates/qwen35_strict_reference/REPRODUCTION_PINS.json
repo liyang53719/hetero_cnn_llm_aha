@@ -1,0 +1,60 @@
+{
+  "schema": "public-strict-wrapper-relative-source-pins-v1",
+  "source_files": {
+    "strict_reference.py": {
+      "bytes": 5668,
+      "sha256": "b1d1cab354a20c8b349f355fc3f32e0f2244384ced55349d1e12983526515de8"
+    },
+    "protocol_controls.py": {
+      "bytes": 10754,
+      "sha256": "9c2baa7d9a0589ca5d14fd256c680c3e6e9878ba3d12d2c9a50e8ed270b53300"
+    },
+    "native_controls.py": {
+      "bytes": 11272,
+      "sha256": "ab4ad51b90ae6b934afc0f40a2e5727903710e4190781f42ceb014a6eb886fe2"
+    },
+    "run_wrapper.py": {
+      "bytes": 12856,
+      "sha256": "7a09256e0dd350715a37be2421a4e8dd7951a678a69873d3c6024057746c0c3c"
+    },
+    "launch_wrapper.py": {
+      "bytes": 3562,
+      "sha256": "2662172eeef60dedc6608c50b6430c8278ae1d60148cb170343fb40c954c98ef"
+    },
+    "STIMULI.json": {
+      "bytes": 10792,
+      "sha256": "debe4689182532c53503f2da61f20105dc45484810ca492d716e6d39ebd0218e"
+    },
+    "native_controls.py.patch": {
+      "bytes": 1433,
+      "sha256": "4a49fcebf4d71584be0051adb2265b694f9eea7a7c56e2be6fd2ee81cd1cd831"
+    }
+  },
+  "upstream_source_manifest": {
+    "bytes": 2130,
+    "sha256": "3374d580695ef1a9490290305abf3b32a15d9440dcbc12b3c46ca8ecb83adfff"
+  },
+  "fixed_plan_pin_only": {
+    "bytes": 232055,
+    "sha256": "d74d6961cd731af619ce52aa9e1be19ca9e1adf269da5d737dd2dca9b7f8d87a"
+  },
+  "dependencies_not_republished": {
+    "repaired_cpp": {
+      "bytes": 5078,
+      "sha256": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7"
+    },
+    "independent_Fraction_reference": {
+      "bytes": 7487,
+      "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+    },
+    "library": {
+      "rebuilt": false,
+      "bytes": 16088,
+      "sha256": "37bf6e8c8d4ed8ecd56071ed45eebc1b0ed424eaf213533f9ecbc92d183e95ba"
+    }
+  },
+  "target": "CPython3.12.14, isolated/no-site/no-bytecode; exact original pinned plan and prior library seal required",
+  "entry": "launch_wrapper.py",
+  "portable_execution_claimed": false,
+  "patch_basis": "native_controls.py.patch is R1 to R2 only; strict_reference/protocol/run/STIMULI unchanged."
+}

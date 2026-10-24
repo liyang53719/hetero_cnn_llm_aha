@@ -10,3 +10,10 @@
 本批不运行或触发 manual dispatch、模型权重下载、native-heavy、Scala 编译、RTL/EDA、完整 M128。微模型 step 和主机耗时不等于硬件周期；没有同源完整 block 和固定资源周期分母前，不声称 80%/90% 利用率、whole-block 加速、频率或面积通过。历史 PASS 与历史失败均不改写。
 
 公开证据溯源：`candidates/qwen2_ordered_vector_fold/validation/VALIDATION.json` 保留历史原始字节清单，其中 `candidates/qwen2_ordered_vector_fold/validation/ORIGINAL_ISOLATED_FAILURE.log` 的原始 SHA256 为 `830fdac11347dc862fbce83f5356fc3aad291d2f604d802910d544147fe07a57`。同一相对路径的公开脱敏日志 SHA256 为 `b52bedb4ac9b197adfd6cb06e85cd0b64dc4c7aeadc71bf3e33fc0b0798a9bb6`；唯一变化是删除一处私有绝对路径前缀，保留仓库相对路径、行号、导入语句和错误类型。这是有意且预期的哈希差异；历史 `VALIDATION.json` 不是全部公开文件的发布后字节清单，也不应被改写成这样的清单。
+
+## 2026-10-24：CI 启动失败与窄修复
+
+- 提交 `3c2283a998290c4d59bef25dd894b0dbb2f4d638` 的 [fold CI 40128345899](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40128345899) 在测试前的 Git 清洁快照失败：Git 2.55.0 在既定 256 MiB 限制下报 `fatal: unable to create threaded lstat: Resource temporarily unavailable`，exit 128，模型测试尚未启动。独立 payload guard 成功不代表 fold CI 成功；旧失败记录保留，不重写为 PASS。
+- 本次只在 `git status` 命令加入 `-c core.preloadIndex=false -c index.threads=1`，关闭该命令的并行预加载及多线程索引读取；不写入仓库、用户或系统 Git 配置。源 pins、严格 12+12 测试计数、所有资源/deadline 限制和 dirty/untracked 拒绝逻辑不变。
+- 本地 Git 2.52.0 的 18,000 文件普通 fixture 中，旧/新命令均成功。另用共享 31 字节生成文本的 180,000 条目长路径索引，在相同 256 MiB、20 CPU 秒、单 CPU 预算下合成复现旧命令的同一线程错误，新命令成功并正确报告故意缺失的工作树路径为 dirty；这不是原 Git 2.55.0 CI 环境的等同复现。精确 snapshot 的 clean、tracked-dirty、untracked 和恢复 clean 检查通过，Git 配置字节不变；修订后的精确 runner 在独立源 pin 副本上 `-I -B`、`-I -B -O` 各 12 项通过。
+- 上述 PASS 仅限本地修复回归，不代表旧 CI 转绿或 Chisel/完整 M128 验收。修复发布后的新自动 CI 必须针对其精确提交另行核验；不手动重跑旧失败作业，也不扩大执行范围。

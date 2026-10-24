@@ -1,0 +1,117 @@
+--- baseline/narrow_fullblock_attention.py
++++ overlay/narrow_fullblock_attention.py
+@@ -189,6 +189,7 @@
+         self.last_memory_tag = -1
+         self.last_ticket = None
+         self.client_identity = None
++        self.identity_tick_frame = None
+         self.stream = None
+         self.service_pending_result = None
+         self.service_group = None
+@@ -252,6 +253,61 @@
+                 self.client_identity = ids
+             require(ids == self.client_identity, 'owned Matrix client instance replaced')
+ 
++    def _cheap_identity(self):
++        require(threading.get_ident() == self.thread, 'observation thread changed')
++        require(self.owner.matrix is self.services[0] and self.owner.scalar is self.services[1] and
++                self.owner.matrix.lib is self.library and self.owner.matrix.resource_address == self.resource_address,
++                'owned service/native resource identity changed')
++        require(self.owner.matrix.profile is self.profile,
++                'QKV profile replaced')
++        require(self.owner.matrix._bindings.keys() == self.binding_snapshot.keys() and all(
++                self.owner.matrix._bindings[tag] is binding for tag, binding in self.binding_snapshot.items()),
++                'public Dense role bindings changed during Attention')
++        if self.job_object is not None:
++            require(self.owner.job is self.job_object, 'accepted Attention Job instance replaced')
++        client = self.owner.matrix_client
++        if client is not None:
++            module, matrix = sys.modules[CLIENT_MODULE], sys.modules[MATRIX_MODULE]
++            require(type(client) is module.Fixed93MatrixClient and client.service is self.services[0] and
++                    type(client.packed) is module.PackedQkClient and type(client.legacy) is matrix.LegacyMatrixClient and
++                    client.packed.owner is self.owner and client.legacy.owner is self.owner and
++                    client.packed.service is self.services[0] and client.legacy.service is self.services[0],
++                    'exact owned client/service binding changed')
++            ids = (id(client), id(client.packed), id(client.legacy))
++            if self.client_identity is None:
++                self.client_identity = ids
++            require(ids == self.client_identity, 'owned Matrix client instance replaced')
++
++    def _integrity(self, frame, event, code):
++        # tick-boundary-metadata-integrity-v1: only deep profile values and
++        # native ABI metadata move to full boundaries. Ownership stays live.
++        if code is self.codes['tick']:
++            require(frame.f_locals.get('self') is self.owner,
++                    'wrong owner instance reached tick integrity boundary')
++            if event == 'call':
++                require(self.identity_tick_frame is None, 'nested/reentered observed owner tick')
++                self._identity()
++                self.identity_tick_frame = id(frame)
++                return
++            require(self.identity_tick_frame == id(frame), 'unmatched observed owner tick frame')
++            if event in ('return', 'exception'):
++                self._identity()
++                return
++        if (self.identity_tick_frame is None or event not in ('call', 'line', 'return') or self.error is not None or
++                (code is self.codes['_attention'] and event == 'call' and not self.started)):
++            self._identity()
++            return
++        # No frame retention or cross-callback code cache. Prove this callback
++        # is dynamically inside the one admitted, still-live tick frame.
++        cursor = frame
++        for _ in range(128):
++            if cursor is None or id(cursor) == self.identity_tick_frame:
++                break
++            cursor = cursor.f_back
++        require(cursor is not None and id(cursor) == self.identity_tick_frame,
++                'observed callback outside active owner tick frame')
++        self._cheap_identity()
++
+     def _trace_intact(self):
+         if self.dispatcher is None:
+             return sys.gettrace() is self._callback
+@@ -290,6 +346,9 @@
+             self.error = self.error or 'trace replaced during observation'
+         if kind is not None:
+             self.error = self.error or 'driver exited with an exception'
++        if self.identity_tick_frame is not None:
++            self.error = self.error or 'observation closed with an open owner tick frame'
++            self.identity_tick_frame = None
+         # Verification/stream errors cannot replace a driver exception or result.
+         try:
+             self._validate()
+@@ -607,11 +666,15 @@
+ 
+     def _trace(self, frame, event, arg):
+         code = frame.f_code
++        closing_tick = (code is self.codes['tick'] and event == 'return' and
++                        self.identity_tick_frame == id(frame))
+         if code not in self.all_codes:
+             return None
+         if code is self.scalar_code and (frame.f_back is None or frame.f_back.f_code is not self.exp_code):
+             return None
+         if self.disarmed or (self.stream is not None and self.stream.failed):
++            if closing_tick:
++                self.identity_tick_frame = None
+             return self._callback
+         try:
+             # Contract op-evidence-boundary-v1: these normal callbacks have
+@@ -624,7 +687,7 @@
+                 require(frame.f_locals.get('self') is self.owner,
+                         'wrong owner instance reached pinned observed method')
+                 return self._callback
+-            self._identity()
++            self._integrity(frame, event, code)
+             if event == 'exception':
+                 # StopIteration is generator control, not an operation fault.
+                 if arg[0] not in (StopIteration, GeneratorExit):
+@@ -692,6 +755,9 @@
+             # Preserve original returns/exceptions. First failure prevents any
+             # completeness claim; no reference values repair missing records.
+             self.error = self.error or str(error)
++        finally:
++            if closing_tick:
++                self.identity_tick_frame = None
+         return self._callback
+     def _coverage(self):
+         m = self.job['m']

@@ -1,0 +1,30 @@
+{
+  "actual_execution_authorized": false,
+  "baseline_observer": {
+    "bytes": 55735,
+    "sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d"
+  },
+  "explicit_limit": "ABI/profile-value mutation restored within the same tick can be undetected; exact dynamic ownership checks remain on originally retained callbacks. Prior nonconsumer _op exemption unchanged.",
+  "full_boundaries": [
+    "observer_validate",
+    "tick_call",
+    "tick_return_including_None",
+    "all_observed_exceptions",
+    "first_attention_call_before_start",
+    "outside_tick",
+    "unknown_event",
+    "latched_error"
+  ],
+  "max_tick_ancestry_frames": 128,
+  "observer": {
+    "bytes": 59696,
+    "sha256": "a81397f0034a18e8973200e77edee6d575e841d0744f54e0e498ca0251b420a0"
+  },
+  "policy_id": "tick-boundary-metadata-integrity-v1",
+  "prior_policy": "op-evidence-boundary-v1",
+  "schema": "attention-integrity-policy-v1",
+  "status": "SOURCE_SYNTHETIC_REVIEW_PENDING",
+  "transient_metadata_detection_equivalent": false,
+  "unchanged_event_schema": true,
+  "unchanged_numerical_schedule": true
+}

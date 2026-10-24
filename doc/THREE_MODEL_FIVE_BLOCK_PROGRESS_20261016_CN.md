@@ -1627,3 +1627,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 实际main_loop CPU32.520110039→27.504084966秒，降低15.42%；wall33.802740322→28.343136417秒，降低16.15%。这是历史单次非同期对照，不是合成2.375/2.58倍，更不是硬件利用率、M128速度预测或完整block通过。
 - 原0437诊断仍FAIL，只允许关闭的辅助profile作不完整热点判断，不补造其33字段或完整封流证据。
 - ONGOING / TEMP：另立tick边界完整性契约，保原full identity函数及全部数值/event/line检查，拟将完整ABI/profile值检查限定到tick边界、异常和tick外，内部每callback保cheap归属。同tick瞬变恢复检测能力变化将明示；目前仅实现/合成，不准actual。五block完整RTL仍0/5、M128未通过、无新增MAC利用率实测。本批不删除任何临时数据。
+
+## PASS（有限合成）/ TEMP：明确tick边界完整性策略（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_tick_identity_policy/` 9文件便携源码/patch/policy/原测试与安全摘要。入树checker核外部两baseline pins、内存compile3 Python并hash通过；没有重跑原46项合成控制，也没有从此公开包启动actual。prepare-synthetic仅准备新目录并打印命令，不自动执行。
+- 原full `_identity`及全部25既有方法逐字不变；同一真实owner.tick frame内部正常原保留回调用cheap thread/owner/services/library/resource/profile对象/Dense bindings key-value身份/job/client归属检查。tick call/return、异常、tick外、bootstrap、enter/exit和error后仍full；不改变14 line/6 scalar锚、所有字段/event/fence和原0325无证据_op过滤。
+- 合成已独审：46scope/归属/异常/漂移控制、真实共享dispatcher双subscriber差分与六scalar40槽一致。400合成ticks的full核验8400→800；另一scalar片段46→2也仅指full核验次数，不是删标量证据。mock ABI成本约1倍，不能作真实速度判断。
+- 新契约明确不等同旧逐回调防篡改：同tick内ABI/profile值改变又恢复不保证发现，持续到退出/异常仍拒；重入/错frame/缺边界拒，handled exception不提前关scope，匹配return/finally和终态清理闭合。
+- 本包只source/synthetic，完整M128/数值oracle/RTL资格不成立。后续0526单新臂实际结果独立保存与审查，不以本公开摘录授运行权限或替代实际记录；五block完整RTL仍0/5。

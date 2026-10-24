@@ -1,0 +1,99 @@
+{
+  "author_synthetic_result": {
+    "control_count": 46,
+    "controls": {
+      "boundaries": 8,
+      "cheap_guards": 21,
+      "lifecycle": 11,
+      "metadata_drift": 6
+    },
+    "field_slots": 40,
+    "forbidden_attempts": {},
+    "full_check_counts": {
+      "400_ticks_new_full": 800,
+      "400_ticks_old_full": 8400,
+      "scalar_new_full": 2,
+      "scalar_old_full": 46
+    },
+    "independent_test_rerun": false,
+    "internal_wall_seconds": 0.6133578730077716,
+    "observed_exit": 0,
+    "original_real_trace_dispatcher": true,
+    "original_whole_listener": true,
+    "scalar_consumers": 6,
+    "scope": "Synthetic frames, owner, profile, ABI metadata, sinks and terminal edge; original observer/dispatcher CodeTypes. No model/native or full 14-line/48-domain execution.",
+    "source_before_after_unchanged": true,
+    "status": "PASS_TICK_BOUNDARY_SOURCE_SYNTHETIC_ONLY"
+  },
+  "integrity_limit": {
+    "cheap_ownership_predicates_retained": true,
+    "claim": "This changes metadata-integrity policy. Reduced full-check counts do not mean fewer fields or scalar consumers.",
+    "old_every_callback_integrity_equivalent": false,
+    "persistent_drift_at_full_boundary_rejected": true,
+    "same_tick_transient_ABI_profile_restore_can_evade_full_check": true
+  },
+  "packaging": {
+    "actual_or_original_tests_rerun": false,
+    "all_five_original_files_byte_identical": true,
+    "original_baseline_payloads_copied": false,
+    "original_source_manifest_published": false,
+    "original_tests_modified": false
+  },
+  "performance_limit": {
+    "M2_timing_or_M128_projection": false,
+    "measured_performance_improvement_claimed": false,
+    "mock_ABI_speed_ratio_approximately": 1.0,
+    "real_33_symbol_ABI_cost_measured": false
+  },
+  "policy_id": "tick-boundary-metadata-integrity-v1",
+  "prior_policy_id": "op-evidence-boundary-v1",
+  "provenance": {
+    "author_cold_result": {
+      "bytes": 1358,
+      "sha256": "33a5c6d967e5d7266797878586adf60a7fcd0b771e94a23f86055b872278bcc8"
+    },
+    "cold_seal": {
+      "bytes": 1209,
+      "sha256": "957b9ec94696055a2c6dd4b8a45158f74fd9f1b8bb026fc646c61dc24911c2c1"
+    },
+    "frozen_source_manifest": {
+      "bytes": 1399,
+      "sha256": "4af98199e419ca0e03d87c2268936ba288d30d9c16620919e18a262f578bc2c3"
+    },
+    "independent_source_synthetic_review": {
+      "bytes": 10718,
+      "sha256": "d8314ddec4cda8bc14fbd7edb5542333b407ee5393e670215572f6aa8b842682"
+    }
+  },
+  "qualification": {
+    "M128_authorized": false,
+    "M2_executed_in_source_controls": false,
+    "RTL_pass": false,
+    "actual_authorized": false,
+    "actual_execution_authorized": false,
+    "fullblock_pass": false,
+    "model_executed_in_source_controls": false,
+    "native_executed_in_source_controls": false,
+    "numerical_acceptance": false,
+    "successor_0526": "Not qualified by this source review; separate independent actual review and root decision remain required as of packaging."
+  },
+  "schema": "tick-boundary-integrity-public-source-synthetic-summary-v1",
+  "source_scope": {
+    "changed_existing_methods": [
+      "__init__",
+      "__exit__",
+      "_trace"
+    ],
+    "cheap_identity_derivation_exact_per_independent_review": true,
+    "dispatcher_and_wholeblock_unchanged": true,
+    "full_identity_source_bytes_unchanged": true,
+    "new_methods": [
+      "_cheap_identity",
+      "_integrity"
+    ],
+    "production_field_event_schedule_codec_consumers_changed": false,
+    "unchanged_original_methods": 25,
+    "whole_module_inverse_ast_equal_per_independent_review": true
+  },
+  "status": "GO_TICK_BOUNDARY_METADATA_INTEGRITY_SOURCE_SYNTHETIC_ONLY"
+}

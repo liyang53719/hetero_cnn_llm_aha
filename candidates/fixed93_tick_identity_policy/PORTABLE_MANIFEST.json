@@ -1,0 +1,107 @@
+{
+  "external_baseline_inputs": {
+    "cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "narrow_fullblock_attention.py": {
+      "bytes": 55735,
+      "sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d"
+    }
+  },
+  "files": {
+    "DESIGN.md": {
+      "bytes": 6868,
+      "sha256": "653d558af8ca060a90f6666bfdeff2648552ce007ee6cc056914a967439833b8"
+    },
+    "POLICY.json": {
+      "bytes": 1099,
+      "sha256": "56d75ce841d589f4fd5c18f2813e33657aefc7698572b2cfcca7e7dff5169801"
+    },
+    "README.md": {
+      "bytes": 4760,
+      "sha256": "a7156497844802880218a737aa65f9d56cb80cc602adb268d7e90b6e2b8504c5"
+    },
+    "SUMMARY.json": {
+      "bytes": 3635,
+      "sha256": "c8dd79f3ccd420cf2d7a0cf9da62edfff1de29737d4a2bb98fd1f683ea14d47a"
+    },
+    "check.py": {
+      "bytes": 6399,
+      "sha256": "3f3f699e81b0a5ffd538247bd1e621bcadf10b78212bdbb72908344b31dd1ce4"
+    },
+    "observer.patch": {
+      "bytes": 6211,
+      "sha256": "7d1ee650f13c0ef5f83ea98fe12f0595e5f7200b35da262e47d0ddcd9465de3c"
+    },
+    "overlay/narrow_fullblock_attention.py": {
+      "bytes": 59696,
+      "sha256": "a81397f0034a18e8973200e77edee6d575e841d0744f54e0e498ca0251b420a0"
+    },
+    "tests.py": {
+      "bytes": 27346,
+      "sha256": "6d7f29b700e09215320de4520ffd0d260b97509c117675f63c2d78239bbd35f2"
+    }
+  },
+  "provenance": {
+    "author_cold_result": {
+      "bytes": 1358,
+      "sha256": "33a5c6d967e5d7266797878586adf60a7fcd0b771e94a23f86055b872278bcc8"
+    },
+    "cold_seal": {
+      "bytes": 1209,
+      "sha256": "957b9ec94696055a2c6dd4b8a45158f74fd9f1b8bb026fc646c61dc24911c2c1"
+    },
+    "frozen_source_manifest": {
+      "bytes": 1399,
+      "sha256": "4af98199e419ca0e03d87c2268936ba288d30d9c16620919e18a262f578bc2c3"
+    },
+    "independent_source_synthetic_review": {
+      "bytes": 10718,
+      "sha256": "d8314ddec4cda8bc14fbd7edb5542333b407ee5393e670215572f6aa8b842682"
+    }
+  },
+  "publish_whitelist": [
+    "DESIGN.md",
+    "POLICY.json",
+    "PORTABLE_MANIFEST.json",
+    "README.md",
+    "SUMMARY.json",
+    "check.py",
+    "observer.patch",
+    "overlay/narrow_fullblock_attention.py",
+    "tests.py"
+  ],
+  "schema": "tick-boundary-integrity-portable-source-excerpt-v1",
+  "scope": "Source and synthetic qualification only. Not actual authority or a standalone model runtime.",
+  "synthetic_input_contract": {
+    "baseline_root": "CLI --baseline",
+    "dynamic_manifest": "Generated only inside caller-selected temporary staging directory. Never edit the frozen test or production observer.",
+    "original_test_cli": [
+      "--baseline"
+    ],
+    "package_overlay": "overlay/narrow_fullblock_attention.py"
+  },
+  "unchanged_original_files": {
+    "DESIGN.md": {
+      "bytes": 6868,
+      "sha256": "653d558af8ca060a90f6666bfdeff2648552ce007ee6cc056914a967439833b8"
+    },
+    "POLICY.json": {
+      "bytes": 1099,
+      "sha256": "56d75ce841d589f4fd5c18f2813e33657aefc7698572b2cfcca7e7dff5169801"
+    },
+    "observer.patch": {
+      "bytes": 6211,
+      "sha256": "7d1ee650f13c0ef5f83ea98fe12f0595e5f7200b35da262e47d0ddcd9465de3c"
+    },
+    "overlay/narrow_fullblock_attention.py": {
+      "bytes": 59696,
+      "sha256": "a81397f0034a18e8973200e77edee6d575e841d0744f54e0e498ca0251b420a0"
+    },
+    "tests.py": {
+      "bytes": 27346,
+      "sha256": "6d7f29b700e09215320de4520ffd0d260b97509c117675f63c2d78239bbd35f2"
+    }
+  }
+}

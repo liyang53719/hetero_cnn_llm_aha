@@ -1,0 +1,30 @@
+{
+  "result": "INDEPENDENT_PASS_SCALA_CLASS_COMPILE_ONLY",
+  "receipt_sha256": "19044586d46fee7c40a17eafff3bc59a737ed192bbb33feb610b6107d4d605af",
+  "checks": {
+    "all_550_class_hashes_recomputed": true,
+    "all_92_copied_source_hashes_recomputed": true,
+    "three_postimages_only_changed": true,
+    "sourcefile_attribute_counts": {
+      "Qwen2Block.scala": 10,
+      "QwenOwnerProtocol.scala": 12,
+      "HostBlockTop.scala": 32
+    },
+    "only_scala_tools_nsc_Main_executed": true,
+    "no_v_sv_fir_mlir": true,
+    "two_complete_cleanup_scans_before_reap": true,
+    "original_deadlines_preserved": true,
+    "original_runner_sources_unchanged": true,
+    "bootstrap_module_origin_checked": true
+  },
+  "isolated_launcher_sha256": "a907f730cd92d8539943813eadbeda30188ceac2d600a6e015c5765e15c01269",
+  "memory_limit_caveat": "4GiB RLIMIT_AS applies per process, not RSS or aggregate process-tree memory.",
+  "compile_vs_hardware_boundary": "Selected fixed 92-source closure with three candidate postimages, not whole bare-main build; no enable=true hardware construction.",
+  "ci_review": {
+    "chisel-offline-workspace.yml": "compile/Test-compile followed by emitter in same command; no compile-only selector",
+    "chisel-continuous-prefill.yml": "scope skip is whole-job only; active job tests and emits",
+    "chisel-p0-safety.yml": "separate compile step exists but later emit/test not selectable off; different p0 project",
+    "chisel-qwen2-continuous-block.yml": "tiny/real only; test, EmitQwenBlock and Verilator follow"
+  },
+  "ci_dispatch_performed": false
+}

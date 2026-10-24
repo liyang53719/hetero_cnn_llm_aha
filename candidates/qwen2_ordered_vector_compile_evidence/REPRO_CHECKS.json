@@ -1,0 +1,18 @@
+{
+  "status": "PASS_SOURCE_STAGING_AND_PREFLIGHT_ONLY",
+  "checks": [
+    "existing_destination_rejected",
+    "candidate_drift_rejected_before_output",
+    "all_92_staged_sources_exact_executed_input_match",
+    "portable_original_runner_preflight_pass_no_java"
+  ],
+  "real_compile_reexecuted": false,
+  "stage_helper_sha256": "ae8a6fded719ab4d6641ec9e4377aea1d159271f60a526eb4998f05cc5d28c05",
+  "preflight": {
+    "preflight_pass": true,
+    "source_count": 92,
+    "jar_count": 87,
+    "compiler_started": false,
+    "runner_manifest_sha256": "b42363f4e4eb619a30961a0353ff1588cca345729d8bcce7f3c49698670858c7"
+  }
+}

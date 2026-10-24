@@ -1,0 +1,59 @@
+{
+  "files": {
+    "INPUT_DELTA.json": {
+      "bytes": 31555,
+      "sha256": "8a1ec7dc15e0e30358be1f60baf1be715153903f6726c40a35ce068db292a4d6"
+    },
+    "PUBLICATION_WHITELIST.json": {
+      "bytes": 476,
+      "sha256": "dbad590acc024dbd0418e9453fef79154b31a7c02c3684dcbfaa202d8b46ddb5"
+    },
+    "README.md": {
+      "bytes": 2803,
+      "sha256": "c313140e59f8a1c62b3b04985e527d7e92ced5b54c07819f24f97e541830f94e"
+    },
+    "SUMMARY.json": {
+      "bytes": 4557,
+      "sha256": "561e0d5cea36a8ab9b309706b90f81076ad2ceeed2a5f8b01ea6109b8ea8ed37"
+    },
+    "launch_chirrtl.py": {
+      "bytes": 3611,
+      "sha256": "ff681bbe26cf2c398ba604ddbb4626c30c53e50f674b40a6fd9ff0ed647917ec"
+    },
+    "parser_controls.py": {
+      "bytes": 11303,
+      "sha256": "bdd405ed7bf1bd42619abdbf83fbd17837e325dd113cf5625c0a51c5d8d21ee9"
+    },
+    "patches/GdnChunkTransposeChirrtl.scala.patch": {
+      "bytes": 12064,
+      "sha256": "4b11028c99d3608e3785624314851550d4627bfc65759ff030b80f19b2e17b8e"
+    },
+    "patches/launch_chirrtl.py.patch": {
+      "bytes": 742,
+      "sha256": "287c43ed7468b677ae0ff1b1f9857ec646a2a49b412d6dbd6abc48e06f384ef5"
+    },
+    "patches/run_chirrtl.py.patch": {
+      "bytes": 8039,
+      "sha256": "69fa524dfa7b0916e2922f9ead19fabda45abf7bc3aef1b2225e8bf89a137fb1"
+    },
+    "run_chirrtl.py": {
+      "bytes": 20120,
+      "sha256": "f178fb38d523b6853509ba4c9dd116b7108c92bd7be9d4507642a726e27aca94"
+    },
+    "source/GdnChunkTransposeChirrtl.scala": {
+      "bytes": 11385,
+      "sha256": "231549412ce1f6468dd00cee8a77b007778ff89e60d7514fe35ddc312a7e6e49"
+    }
+  },
+  "original_exact_files": [
+    "source/GdnChunkTransposeChirrtl.scala",
+    "run_chirrtl.py",
+    "launch_chirrtl.py",
+    "parser_controls.py",
+    "patches/GdnChunkTransposeChirrtl.scala.patch",
+    "patches/run_chirrtl.py.patch",
+    "patches/launch_chirrtl.py.patch"
+  ],
+  "schema": "transpose-chirrtl-public-manifest-v1",
+  "scope": "One real owner CHIRRTL frontend only; incomplete runnable source excerpt"
+}

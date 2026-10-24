@@ -1,0 +1,11 @@
+--- baseline/launch_chirrtl.py
++++ new/launch_chirrtl.py
+@@ -36,7 +36,7 @@
+ resource.setrlimit(resource.RLIMIT_FSIZE, (4 * 1024**2, 4 * 1024**2))
+ resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+ HERE = Path(__file__).resolve().parent
+-PINS = {'FROZEN_PLAN.json': {'bytes': 284003, 'sha256': 'd209632a1b96065afc98e77e60a4474ac525b8009e193fd372d428dcdc411a32'}, 'run_chirrtl.py': {'bytes': 19600, 'sha256': 'b049bd763fc1d479aad942674b5960af9a9e749f6c80297d435dc72e3bb32b19'}}
++PINS = {'FROZEN_PLAN.json': {'bytes': 285739, 'sha256': 'c2c303c40eb8e14062bf8b4144bdbd716d76f48797aac5a520c39ad1b012b189'}, 'run_chirrtl.py': {'bytes': 20120, 'sha256': 'f178fb38d523b6853509ba4c9dd116b7108c92bd7be9d4507642a726e27aca94'}}
+ 
+ 
+ def raw_fixed(name):

@@ -1,0 +1,110 @@
+{
+  "actual": {
+    "both_anchored_reaped_group_absent_cleanup_confirmed": true,
+    "both_natural_unreaped_exit_codes": [
+      0,
+      0
+    ],
+    "class_load_rows": 4839,
+    "closed_output_bytes": 1748641,
+    "closed_output_files": 23,
+    "compile_seconds": 6.146074,
+    "cumulative_child_maxrss_KiB": 233460,
+    "elaborate_seconds": 2.897674,
+    "emitter_class_bytes": 28649,
+    "emitter_class_files": 3,
+    "external_exec_network_guard_replacement_attempts": [
+      0,
+      0,
+      0
+    ],
+    "hidden_classes": 358,
+    "hidden_hosts": 13,
+    "input_files_before_after": 501,
+    "internal_elapsed_seconds": 9.67032112099696,
+    "natural_launcher_exit_code": 0,
+    "no_timeout_parent_exception_or_resource_stop": true,
+    "ordinary_emitter_classes": 3,
+    "ordinary_input_classes": 17,
+    "original_class_files": 146,
+    "original_cleanup_signal_after_natural_exit_observed": true,
+    "sampled_descendant_peak_rss_bytes": 238645248,
+    "stdout_elapsed_seconds": 9.670592749986099
+  },
+  "actual_review_pin_only": {
+    "bytes": 10423,
+    "sha256": "b5c97e928f79f2a1b6f90438bbbd807282fe48ce8997da0e9bc1054a049315bf"
+  },
+  "caveats": [
+    "真实生成的是硬件中间表示；没有 SystemVerilog 或 RTL 仿真。",
+    "端口宽方向、单模块与寄存器 tile 结构不证明背压、末 ACK、阶段 checkpoint、错误恢复或 held terminal 的实际行为。",
+    "精确类白名单只允许接口/常量和该 owner；编译目录含其他服务类不代表加载或实例化许可。",
+    "使用 JDK21 进程内已弃用 SecurityManager，出现预期警告；实际安装、保持及零禁用操作计数已核。",
+    "RSS 与输出总量门为 0.2 秒采样，不是瞬时全进程总峰值证明。"
+  ],
+  "frontend": {
+    "IO_leaves_including_clock_reset": 109,
+    "IR_bytes": 139800,
+    "IR_format": "CHIRRTL/FIRRTL 3.3.0",
+    "IR_generated": true,
+    "IR_payload_supplied": false,
+    "IR_sha256": "6949334f3288ab6024a01dabaa2fc3e5148b69f80bfd841a9201cec3f49f47a8",
+    "child_or_external_or_memory_instances": 0,
+    "circuit_count": 1,
+    "independent_nested_flip_parse_matches_every_declared_leaf": true,
+    "input_bits": 2030,
+    "input_leaves": 57,
+    "metadata_control_registers_additional": true,
+    "module_count": 1,
+    "output_bits": 1904,
+    "output_leaves": 52,
+    "owner": "GdnChunkTransposeOwner",
+    "owner_constructors": 1,
+    "phase3_phase4_receipts_and_private_decay_ports_present": true,
+    "tile_element_bits": 512,
+    "tile_payload_bytes": 1024,
+    "tile_register_rows": 16
+  },
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "compile_work_max_seconds": 120,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "elaboration_work_max_seconds": 30,
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "phase_work_stop_rule": "min(shared start+150, phase entry+phase cap); preparations and first cleanup consume same shared work window",
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "machine_paths_raw_evidence_tools_IR_classes_included": false,
+  "not_granted": [
+    "firtool or backend execution",
+    "SystemVerilog/RTL generation or simulation",
+    "real memory request/ACK and shared fabric recovery",
+    "Scalar/Loan/Vector or extra physical service instantiation",
+    "functional transpose or full chunk/block numeric proof",
+    "Host/public/recurrent/root publication integration",
+    "timing/utilization/full-model PASS",
+    "resolution of previous Qwen2 execution/cleanup UNKNOWN"
+  ],
+  "parser_controls": {
+    "groups": 29,
+    "internal_seconds": 0.01087223898502998,
+    "not_hardware_behavior_cases": true,
+    "outer_seconds": 0.08728025300661102,
+    "status": "PASS_PURE_CLASS_LOG_PARSER_CONTROLS_ONLY"
+  },
+  "schema": "transpose-chirrtl-public-summary-v1",
+  "standalone_runnable": false,
+  "status": "PASS_OWNER_CHIRRTL_FRONTEND_ONLY",
+  "summary_zh": "一次有界双 JVM 执行先编译独立 emitter，再真正构造一个转置 owner 并输出 CHIRRTL。501 输入前后身份一致，原 146 个 class 与新 3 个 emitter class 实哈希核验；两阶段自然退出与确权清理闭合。"
+}

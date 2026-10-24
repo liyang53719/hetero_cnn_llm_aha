@@ -1854,3 +1854,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 唯一35789自然0，总34.326824278秒；351 before/after含stamp逐项同且接固定plan，146class/1563484B实hash/magic核同、45必需subset齐；158封件2121598B库存闭合。原child确权WNOWAIT自然0、reap/group absent/cleanup确认，无timeout。独审ACTUAL_COMPILE_REVIEW SHA256 65b91657b5bb6f64b86ac792c488a45e6f7c1af8c8c96b28eb926610495c1cf0。
 
 仅SCALA_COMPILE_ONLY，未运行Module/CHIRRTL/真实ACK/RTL/数值；五RTL0/5及Qwen2full UNKNOWN不变。公开9项30160B在 candidates/qwen35_chunk_transpose_scala_compile/，manifest SHA256 b0a5a752372b3537f98bf4248239ea56f256bd77062634acce447f4147eced61，旧349pins引用上包仅新增2逻辑pins，无生产源/模型/工具表/机器plan/日志重复，非完整可直接执行closure。未push、无新CI、无清理。
+
+
+## PASS（仅单owner CHIRRTL前端）：phase3/4转置
+
+唯一53452自然0、总9.67059275秒，501输入前后含stamp同，146原class+3emitter全hash，两阶段WNOWAIT自然0/reap/group absent/cleanup确认。独立解析4839加载行仅17+3普通类、358隐藏/13精确宿主，无服务实现。
+
+单CHIRRTL139800B，SHA256 6949334f3288ab6024a01dabaa2fc3e5148b69f80bfd841a9201cec3f49f47a8；独立递归bundle/flip核109端口叶（57入52出），tile为UInt512×16共8192bit寄存器payload，无memory/子实例。独审ACTUAL_REVIEW SHA256 b5c97e928f79f2a1b6f90438bbbd807282fe48ce8997da0e9bc1054a049315bf。仅前端构造/声明，不是实际ACK/数据转置/RTL仿真，五RTL0/5、Qwen2full UNKNOWN不变。
+
+公开12件108677B在 candidates/qwen35_chunk_transpose_chirrtl/，manifest SHA256 c7cb1bb2244bc4cdd0acbe30bc2fc9a6e3260fa2920578bce6337ad4b826d447。引用旧351pins+150逻辑增量，不复制生产源/工具表/IR/class/机器plan/log；原runner非完整运行closure。未push、无新CI、无清理。

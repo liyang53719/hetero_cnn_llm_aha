@@ -1,0 +1,692 @@
+{
+  "JAR_count": 87,
+  "actual_review_pin_only": {
+    "bytes": 10423,
+    "sha256": "b5c97e928f79f2a1b6f90438bbbd807282fe48ce8997da0e9bc1054a049315bf"
+  },
+  "additional_inputs": 150,
+  "additional_pins": {
+    "inputs/prior_compile_metadata/ACTUAL_COMPILE_REVIEW.json": {
+      "bytes": 7031,
+      "sha256": "65b91657b5bb6f64b86ac792c488a45e6f7c1af8c8c96b28eb926610495c1cf0"
+    },
+    "inputs/prior_compile_metadata/OUTPUT_MANIFEST.json": {
+      "bytes": 23519,
+      "sha256": "fe59105b0b3d9f8c296758a4297ef9dd73e7c7d7e9ab1e58d5c8881821b965f2"
+    },
+    "inputs/prior_compile_metadata/RESULT.json": {
+      "bytes": 33499,
+      "sha256": "44a2947becb74fe212a92a98cb7d3aec282ee73071527d36ff5b576177a0f59e"
+    },
+    "inputs/transpose_classes/gemmini/EmitHeteroFP32Alu$.class": {
+      "bytes": 4893,
+      "sha256": "9dfe560170cc6960c9099de6b8b3993d730eb8086e440e3ea7ec7a599a5c2762"
+    },
+    "inputs/transpose_classes/gemmini/EmitHeteroFP32Alu$delayedInit$body.class": {
+      "bytes": 822,
+      "sha256": "791a6123a1b2c429ba1d94044c729d8502b66a853bfe4b91e6a520de52f2da16"
+    },
+    "inputs/transpose_classes/gemmini/EmitHeteroFP32Alu.class": {
+      "bytes": 1269,
+      "sha256": "97cdb0f135f9f8b025ea744843ef3993896f8b84f0368884ba306d1f329df7a0"
+    },
+    "inputs/transpose_classes/gemmini/HeteroFP32Alu$$anon$1.class": {
+      "bytes": 4937,
+      "sha256": "2e51f7e7627ddbfd114dbbfd07ba5b4fa5dce6d74c5f4bb6dd756a200d2874b7"
+    },
+    "inputs/transpose_classes/gemmini/HeteroFP32Alu.class": {
+      "bytes": 16015,
+      "sha256": "9c5264e4cc7f2e4d0532d836d1fe0b6b701563c70c77697e2484825e90f874e1"
+    },
+    "inputs/transpose_classes/hardfloat/AddRawFN$$anon$1.class": {
+      "bytes": 5811,
+      "sha256": "a94dfc9750ee9fc9972caa1a22aa55e496d188b686f7e5abdf4cbd529420861e"
+    },
+    "inputs/transpose_classes/hardfloat/AddRawFN.class": {
+      "bytes": 46670,
+      "sha256": "993f8db3b9c19d6ae9132ca39097511a2ff6cdbc71fadf4fe8eda5d750f5ee59"
+    },
+    "inputs/transpose_classes/hardfloat/AddRecFN$$anon$2.class": {
+      "bytes": 6149,
+      "sha256": "5989c6ce1372c58f5886b202fc24c6c245ecbd6921f293b6676c7a6cbf0ceeda"
+    },
+    "inputs/transpose_classes/hardfloat/AddRecFN.class": {
+      "bytes": 16483,
+      "sha256": "4579698d075b121cc1d5243272d26e3308efee4306e2ee6607f7cd9cdbda590e"
+    },
+    "inputs/transpose_classes/hardfloat/DivSqrtRawFN_small$$anon$1.class": {
+      "bytes": 8243,
+      "sha256": "df717d544d0f9067006b9597e1a1aeadd51c3b6c507b52ac4f2924e127eebf30"
+    },
+    "inputs/transpose_classes/hardfloat/DivSqrtRawFN_small.class": {
+      "bytes": 63567,
+      "sha256": "f99411d06fb7631773f57e53bf15121e57fcb48d1446e8b5f14e3ecaa524e9bb"
+    },
+    "inputs/transpose_classes/hardfloat/DivSqrtRecFNToRaw_small$$anon$2.class": {
+      "bytes": 8372,
+      "sha256": "949ed5359e2616e68d89e7f330d48d98dcec525bc7d005144e90712e74f9f7f0"
+    },
+    "inputs/transpose_classes/hardfloat/DivSqrtRecFNToRaw_small.class": {
+      "bytes": 17700,
+      "sha256": "4a895101aafb35f88137f01940d2d1603a87c2e2decfea5fcfe4f6da74a74271"
+    },
+    "inputs/transpose_classes/hardfloat/DivSqrtRecFN_small$$anon$3.class": {
+      "bytes": 7783,
+      "sha256": "fe57b1ee2613873f6697f34acc6dc300fc6048ee6aa339b203745fd51672f75c"
+    },
+    "inputs/transpose_classes/hardfloat/DivSqrtRecFN_small.class": {
+      "bytes": 20797,
+      "sha256": "4967334dcdd179fe071454942f3fc62e8ac63ea5fa83205de37645cbd1b21de4"
+    },
+    "inputs/transpose_classes/hardfloat/INToRecFN$$anon$1.class": {
+      "bytes": 5857,
+      "sha256": "829e226259ec57e141d8ed31813d7b90a6dfe88b1bb7f8465cd9317f475ee1b6"
+    },
+    "inputs/transpose_classes/hardfloat/INToRecFN.class": {
+      "bytes": 13694,
+      "sha256": "2cde998f5154247c362d60dc4377e40bb44c2f46009393da324d02083a5a852d"
+    },
+    "inputs/transpose_classes/hardfloat/MulFullRawFN$$anon$1.class": {
+      "bytes": 4711,
+      "sha256": "6b860def543ebffdb020f6b0d447e4ba94ea5c0c8bf2c5ab903f51bebc6909be"
+    },
+    "inputs/transpose_classes/hardfloat/MulFullRawFN.class": {
+      "bytes": 19395,
+      "sha256": "6704dc04bf27d251d4b442895065d24cef74c3f06e1fe8e792d8fc12cbea1a82"
+    },
+    "inputs/transpose_classes/hardfloat/MulRawFN$$anon$2.class": {
+      "bytes": 4673,
+      "sha256": "d97f774ab78c63941f414f2afa2610da32bcf0235cb270db1999b0ecff709f93"
+    },
+    "inputs/transpose_classes/hardfloat/MulRawFN.class": {
+      "bytes": 11394,
+      "sha256": "39fa3b5dc16b7c4f1f499097e9af0c147c13aa478c254870a2f5583cfb57074b"
+    },
+    "inputs/transpose_classes/hardfloat/MulRecFN$$anon$3.class": {
+      "bytes": 5783,
+      "sha256": "bf99a6a6e53980850571a1fc5b95f1225ccbcfa81ccdfa7bedd462639fe421b8"
+    },
+    "inputs/transpose_classes/hardfloat/MulRecFN.class": {
+      "bytes": 14785,
+      "sha256": "a834e0ec0f3e3154ff7c955f80eeafe418578cae7228b3d827c81b7108160d96"
+    },
+    "inputs/transpose_classes/hardfloat/RawFloat.class": {
+      "bytes": 5512,
+      "sha256": "633fbd2450d4bbb5dfb785badc924a57065f79e45145ec2b1c0d290ec1ef48ad"
+    },
+    "inputs/transpose_classes/hardfloat/RecFNToIN$$anon$1.class": {
+      "bytes": 5466,
+      "sha256": "ba07a2c9871513201f89120b187f09883d1434705a4cad31257893ddfb17a185"
+    },
+    "inputs/transpose_classes/hardfloat/RecFNToIN.class": {
+      "bytes": 29608,
+      "sha256": "1db5328fd39e44a60cb9fb13a35762cb16a979fc80ffa275a04567e2665fefe7"
+    },
+    "inputs/transpose_classes/hardfloat/RoundAnyRawFNToRecFN$$anon$1.class": {
+      "bytes": 6588,
+      "sha256": "c90b82e5cd82409a365fc3023fab29e27153c82133e9a53e5356f8740de5bd13"
+    },
+    "inputs/transpose_classes/hardfloat/RoundAnyRawFNToRecFN.class": {
+      "bytes": 52152,
+      "sha256": "7705812399f0176fb2e63f41de7cc603b817ed51e46888adbc78b2f3bffafdd4"
+    },
+    "inputs/transpose_classes/hardfloat/RoundRawFNToRecFN$$anon$2.class": {
+      "bytes": 6444,
+      "sha256": "c245d67ec1be1b1aa92f2a524afc346f815fca0dbf7f77daa9def93fd8559ffb"
+    },
+    "inputs/transpose_classes/hardfloat/RoundRawFNToRecFN.class": {
+      "bytes": 13157,
+      "sha256": "d5af032bd4c39263774d0d76b0feeaaac17749b69151401a096fc9bbfa149ce7"
+    },
+    "inputs/transpose_classes/hardfloat/consts$.class": {
+      "bytes": 2295,
+      "sha256": "5f5882380d5eb6df2d517f9523ef86e5d2c50305f8deaf771a8d0458d4cc3a1a"
+    },
+    "inputs/transpose_classes/hardfloat/consts.class": {
+      "bytes": 1759,
+      "sha256": "d356adb4a78c8ec7a6784d892930c689396a9c3ed0acb631fb11cdcc829c0d6b"
+    },
+    "inputs/transpose_classes/hardfloat/countLeadingZeros$.class": {
+      "bytes": 1341,
+      "sha256": "6de6ed9db0052f794bdbd239f1a73e13ee7f7821a198a328c1fbd3ad0197290a"
+    },
+    "inputs/transpose_classes/hardfloat/countLeadingZeros.class": {
+      "bytes": 712,
+      "sha256": "562858d3adb7717695c208efe8f5b001a17b7e3ce9529c9d9270b5837168bf90"
+    },
+    "inputs/transpose_classes/hardfloat/fNFromRecFN$.class": {
+      "bytes": 8053,
+      "sha256": "d42bcfdb858ac04211d2bc3540e69f352cca78572264c2369fc592db3c074033"
+    },
+    "inputs/transpose_classes/hardfloat/fNFromRecFN.class": {
+      "bytes": 811,
+      "sha256": "675cb12c56d8a43644b824666ce44ebc27d84741c7edeb15685276c4cb0cfa62"
+    },
+    "inputs/transpose_classes/hardfloat/isSigNaNRawFloat$.class": {
+      "bytes": 1464,
+      "sha256": "39a89a9642f50f85cf214ccb541b1c89e0850f81527ceb4e715518a73721e06e"
+    },
+    "inputs/transpose_classes/hardfloat/isSigNaNRawFloat.class": {
+      "bytes": 735,
+      "sha256": "511638eec7e702bfbd72b2c9da8af1551496dcee868ba12b38458655ddb4dd8c"
+    },
+    "inputs/transpose_classes/hardfloat/lowMask$.class": {
+      "bytes": 5946,
+      "sha256": "089655bbef3d1f492bf08023f90eea4502d0e20f594ac39e78d1f60dc80bb4b1"
+    },
+    "inputs/transpose_classes/hardfloat/lowMask.class": {
+      "bytes": 886,
+      "sha256": "7d66c152ef57b788d2c411d290a5310de66cac7f5dad3c5a91572e3aeb0efeca"
+    },
+    "inputs/transpose_classes/hardfloat/orReduceBy2$.class": {
+      "bytes": 4626,
+      "sha256": "e0b846e2a921cc7e9ffd34db5b0d5d855c419870cbb3fc734946d88010f847a9"
+    },
+    "inputs/transpose_classes/hardfloat/orReduceBy2.class": {
+      "bytes": 680,
+      "sha256": "49dceb267125c32f1681d7ed8de0f73e954d0ac896deec69d6126d828e71f900"
+    },
+    "inputs/transpose_classes/hardfloat/orReduceBy4$.class": {
+      "bytes": 4629,
+      "sha256": "9395aafdd6e056a5a9b53265129f414778ae69092f05e1c34c2c49960809b7fe"
+    },
+    "inputs/transpose_classes/hardfloat/orReduceBy4.class": {
+      "bytes": 680,
+      "sha256": "50d12479d9661c8192be870aa6073f2918d4432c5dcaac73611053ac3fbe5e98"
+    },
+    "inputs/transpose_classes/hardfloat/rawFloatFromFN$.class": {
+      "bytes": 11760,
+      "sha256": "2f32149331a7ca3d209139f2ba3d6694b6324d7a0e88eb0194bb5782e15c0c27"
+    },
+    "inputs/transpose_classes/hardfloat/rawFloatFromFN.class": {
+      "bytes": 841,
+      "sha256": "8f89b8b41b7e43a457cfe089b7864e4fb925da92dbe2b2186424f50b59ebfdb0"
+    },
+    "inputs/transpose_classes/hardfloat/rawFloatFromIN$.class": {
+      "bytes": 8932,
+      "sha256": "f905b6c14903e51f58d018f37abf4e1e0c639360b9dcc503236e4f2cf83f5624"
+    },
+    "inputs/transpose_classes/hardfloat/rawFloatFromIN.class": {
+      "bytes": 820,
+      "sha256": "db55e0929b6f8251f626e861fe5cc19a239ff85854683d9fbcd72f0799dc1442"
+    },
+    "inputs/transpose_classes/hardfloat/rawFloatFromRecFN$.class": {
+      "bytes": 7449,
+      "sha256": "2e546d212b11c04485498546193ac9a53aaea8ed5bcbac4ef1561545f0e22d02"
+    },
+    "inputs/transpose_classes/hardfloat/rawFloatFromRecFN.class": {
+      "bytes": 860,
+      "sha256": "a6c0cf14baaa7c7c3991045c9f976118e61c701d19ec856b84212ccc14c9c712"
+    },
+    "inputs/transpose_classes/hardfloat/recFNFromFN$.class": {
+      "bytes": 4041,
+      "sha256": "68bcb0bdc553941a8586c68e706690ace29ddc80121e10630c9b0de137e5b5e0"
+    },
+    "inputs/transpose_classes/hardfloat/recFNFromFN.class": {
+      "bytes": 811,
+      "sha256": "2e94e6a33e66cd1255bc48e89375ac5387dd8b0029447a06bec60791ba761872"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/BlockScalarFloat$$anon$1.class": {
+      "bytes": 5504,
+      "sha256": "b5317037561632d10604a5c4e8de2d4c77fbc706bef1a26893eb13be7da4a64e"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/BlockScalarFloat$.class": {
+      "bytes": 551,
+      "sha256": "d197acaf610d3b48cfe08b453d2956f707cb4a152d1b5d245bae9a94f63b07be"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/BlockScalarFloat.class": {
+      "bytes": 105143,
+      "sha256": "4485fc42e0e092e0e3b16ae3bc2adf48e7ebd3fb07d2e2475b883ec2264b4c82"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/BoundJob.class": {
+      "bytes": 5576,
+      "sha256": "8fc6c90684d5911d2e0d0e8dee86e7204bde2d9797fff3dd6c78dac6227cd67f"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ChainConfig$.class": {
+      "bytes": 2763,
+      "sha256": "597b226b7a7798947b67f346003ea11a2df6586c43e73292c347e6d056b5b1cf"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ChainConfig.class": {
+      "bytes": 7909,
+      "sha256": "0ddebb6e956c22349a840e8fe17c7a379b1e1053d7e6c727a24e1b58e9c6575d"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ChainResult.class": {
+      "bytes": 4021,
+      "sha256": "06ccbf4fdf0bd868e3a263583e07d5c36e45ea23c030749b73c592cc118f9c8c"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ContinuousElementwiseTop$$anon$2.class": {
+      "bytes": 9823,
+      "sha256": "c808603fd7b9f6a83ea8a51524f1767ba521efa342f21d4c30e0a9b6bf2210d2"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ContinuousElementwiseTop$.class": {
+      "bytes": 1158,
+      "sha256": "227ca1116b928a8d7a6555f63ee7b896488bb24fe14b3bc9ef8ebba73b3d3402"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ContinuousElementwiseTop.class": {
+      "bytes": 21241,
+      "sha256": "20c44ae3ece7c2a98f8bbaed0f401d7c6aa450bb0268fe63659041fcc83e1eb2"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElemOp$.class": {
+      "bytes": 720,
+      "sha256": "52dd82c6f122b1166b6167740c44700dc14a659873dc9dacb3e22cf9961e0f48"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElemOp.class": {
+      "bytes": 732,
+      "sha256": "8c0a39be156ff328ba9f6e9f878c5856c294b3eb43a445bf61444c392cced86a"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseLoanOp$.class": {
+      "bytes": 1082,
+      "sha256": "ca295c3791a3190f5eb5fbe829e6735080d5132aecfaa6020535567385d45743"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseLoanOp.class": {
+      "bytes": 1150,
+      "sha256": "4edcde04f1e41f6d2746b4427cbe703eaf69b3ee5c59406d3f3ce32d7124beae"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseLoanPort.class": {
+      "bytes": 5991,
+      "sha256": "ee13a80529cb31e728f53440931a5d27c87ab0f85d9ead3af4d3be3c11f3c48f"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseLoanRequest.class": {
+      "bytes": 4296,
+      "sha256": "5c664dae5da91c8b8a83371a74d200c349c7d648360de374243ee1d206395a63"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseLoanResult.class": {
+      "bytes": 3743,
+      "sha256": "6738b27924a5c79d15c57345172e72fcb81541449e238b1e72e3282a2187c3cd"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseMemoryEngine$$anon$1.class": {
+      "bytes": 7406,
+      "sha256": "0ae73918b1ba71f04ba20ad3d8cbf7b06523586f0e4516a16afd7790758f28e1"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseMemoryEngine$.class": {
+      "bytes": 1156,
+      "sha256": "a411b49435be43f6bc5d0aa4c4ee633642e08ac9bb580b9fae6aba97f8dd4174"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseMemoryEngine.class": {
+      "bytes": 105145,
+      "sha256": "cc5631f394c032f93e699da8731c6c4a395e20ba9a26b02a07372cd9e589d19e"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseRegisterLoan$.class": {
+      "bytes": 1156,
+      "sha256": "23ed8c5898080763b675f377122111e415682c0163e94136cae547439d15f027"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ElementwiseRegisterLoan.class": {
+      "bytes": 41919,
+      "sha256": "5483c64a322f901cf2dbd2d6d9e4abfaa15322e383a78c0820d1db3897ec452d"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/F32$.class": {
+      "bytes": 4266,
+      "sha256": "6f193d2d056f98302520ea4e4d6e862ea498c221ada643e0106a2db43dd3a779"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/F32.class": {
+      "bytes": 1343,
+      "sha256": "d037474bc63d5d5f91f565cee455a253ba9cc5642c988148f331c3d05e912a3b"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$.class": {
+      "bytes": 11009,
+      "sha256": "a93c7cb90397a051807de2d6da6ccc974a91f9e75a192499da221c4cb0e737f0"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$AckBytes$.class": {
+      "bytes": 3155,
+      "sha256": "4f7fb2a541746a249834a14093ae8ff063ce6320ee94fe5d7eab63cd609b2a94"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$AckBytes.class": {
+      "bytes": 3880,
+      "sha256": "5348e78add335e0f2b05d891b9142e5254eb269e82652bd50ab6fc527023161f"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Bases$.class": {
+      "bytes": 2815,
+      "sha256": "8ff5bc618e7ae45a3a70480467431d7430d2b794466cc11fe6c701ba226042af"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Bases.class": {
+      "bytes": 4285,
+      "sha256": "f79e03b9af4890b87fdbd3da3ccd14f14d7f2911d1abfe124e567e17ffded6b8"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Committed$.class": {
+      "bytes": 2527,
+      "sha256": "d44d0f3f2fbadde4f2385c8b6d1977e84688bfc936643d53569a6d63c0eb8d41"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Committed.class": {
+      "bytes": 3577,
+      "sha256": "96502797ed779c1ebf606a68a1a856f526748d96ce6cd99ada244c710f229c8f"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Matrix$.class": {
+      "bytes": 2584,
+      "sha256": "26014379109853e7ab92dcf8565b25ae6b45607669c646373229ddbf238def20"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Matrix.class": {
+      "bytes": 5496,
+      "sha256": "1206aef2fdc3bcadcd1a043c289b5decc74ae7be5045ab6af2a1951226c64914"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Phase$.class": {
+      "bytes": 2612,
+      "sha256": "8dad042cefeb4636c9dc12ec988412f6e3a72c610ab406f9fb59491c0bfb0e98"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Phase.class": {
+      "bytes": 3685,
+      "sha256": "70b94c346a2fbe72353700a7afe2ee20211d627d58ed8cf202dcc32aa117b882"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Plan.class": {
+      "bytes": 18062,
+      "sha256": "07b3435e067b03814692e88d49962626649862540972899bdfff7bfd9f33bdf2"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Shape$.class": {
+      "bytes": 2495,
+      "sha256": "1d4b79141f5b5149ebb50137c04e7180069c5fe4da3ac4bd8f90415ab7bc772e"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Shape.class": {
+      "bytes": 4177,
+      "sha256": "aaf3a8b8b0c7b0454e481d46cc2fdc70053939d405f18d85b98e6dbdb36ea2dc"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Span$.class": {
+      "bytes": 2276,
+      "sha256": "60cf7734884fab273c342cf69ff51bb80b06ce85706f7b2000e00cf28439efdc"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Span.class": {
+      "bytes": 5553,
+      "sha256": "39a8a9b47c01cd6b916889a7a3d14bb3368773a64f89f0f87b05982ee13ebb32"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Step$.class": {
+      "bytes": 2413,
+      "sha256": "a1cffba0150ae6da64378fe547caadbdb69be31451e34bc89fd8eae6c198ce4a"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan$Step.class": {
+      "bytes": 3377,
+      "sha256": "2da6f07e31c2489e9784330413504d1fe4aa43b7a52bf058596d160d120a8816"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkAddressPlan.class": {
+      "bytes": 12775,
+      "sha256": "aea0ef2311d80ccabb862deed71e33317950df975de7fa89dc726a7ba08956ca"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkCommittedState.class": {
+      "bytes": 3926,
+      "sha256": "f9f6310127822aed30664922013e65de6f0bc54dea54859db9b6b0bb4a0836cf"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkDerivedAndPairJob.class": {
+      "bytes": 4747,
+      "sha256": "73597e3a7d330b7f7a5bf89a58d23ad8b45067a59a80929e0fa0c6adcaa06a1d"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkDerivedAndPairOwner.class": {
+      "bytes": 135769,
+      "sha256": "d64aad3157adf59a922796e3262768469c79a65fbd473554bab4f2905b226c1f"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkDerivedAndPairPort.class": {
+      "bytes": 7668,
+      "sha256": "859dc1ef2d61065fcc969cf23bfd65c75e2fbb11ce60158da566e6db5fee803e"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkDerivedAndPairResult.class": {
+      "bytes": 6888,
+      "sha256": "8af89d5d2b8041c616045717c2f6bb156ed55a4e010e154461e810bcd0e3e98c"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkGeometry$.class": {
+      "bytes": 2167,
+      "sha256": "ac581d70c9d2f68d1741c17ec61af0933147130b1eaca3cf07210a7cfbe6085e"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkGeometry.class": {
+      "bytes": 1774,
+      "sha256": "ab01ee3f62c76f9f305cda6b2beb568780d617f837ee61e85b31539776cdf8df"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkJob.class": {
+      "bytes": 6076,
+      "sha256": "7ca2115927758399d55bb79301fcfbbdc4fdbba9943f5587ada3ab655bcfe892"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkLoadPrepJob.class": {
+      "bytes": 5595,
+      "sha256": "6def07cd0a899b3015b07089a118da427f2125ef40b714be85031f450078eb5e"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkLoadPrepOwner.class": {
+      "bytes": 84354,
+      "sha256": "435e7603aa9bed4ff1c5026c0547e24563ea651cdf41796126a773d673957112"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkLoadPrepPort.class": {
+      "bytes": 7013,
+      "sha256": "f6cacbfa4ee99894441af2496ebc74d982ddbd2d127ab495290871c3b72d11ce"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkLoadPrepResult.class": {
+      "bytes": 5095,
+      "sha256": "cf0405dace71e0462c3de42036fffab86b0ca0b2d7445e87db7ed807f857482d"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkPreparedReceipt.class": {
+      "bytes": 5854,
+      "sha256": "bf32854c3efbd149168523efbe70ec0ec8d5432a73abb0878c4339f82e348e0d"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkPrivateDecay.class": {
+      "bytes": 4648,
+      "sha256": "596d545673077bef104ec43ab40d0751472a0919acd3599a731e430009b2dd13"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkStageReceipt.class": {
+      "bytes": 6162,
+      "sha256": "70b2f8b46b1642bacd5591a1e388885a7e3f63dc0affa4b4ad93f62daec7c1ba"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkStagingResult.class": {
+      "bytes": 6577,
+      "sha256": "5e631d3c697cb789567f95facd0d6cbf41f7c70294fa3b9a089e3d19c9d016fa"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkTransposeJob.class": {
+      "bytes": 4428,
+      "sha256": "8f784c840425d2a54442459cb1094cc882f839e2846cebd6f3a93935bdffac1c"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkTransposeOwner.class": {
+      "bytes": 78344,
+      "sha256": "13ad63b6e218dcc42953680790ab6dad237f247d0091be7d88233b5010318273"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkTransposePort.class": {
+      "bytes": 6565,
+      "sha256": "1986ad82a1dbd407fbbd9b5d0ad40c465cfb182124ed20f73c4db45b3ae91881"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkTransposeResult.class": {
+      "bytes": 6842,
+      "sha256": "2fe54f364580bf664c900d4b12b62624d93682c0cb7c75fd311fa61c33157d3c"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkVectorPolicy$.class": {
+      "bytes": 710,
+      "sha256": "165c29fef9576a2a0cf615a01989980f2a1e5ac07ee03e0561e5f1de4ca6fe16"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnChunkVectorPolicy.class": {
+      "bytes": 848,
+      "sha256": "af2d7beadf386a7178788ddba4aa16d2bd337de2ada79250a9d80de72e6d65cc"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnConv4Job.class": {
+      "bytes": 6072,
+      "sha256": "eba693ebe7103071e0bca080a09113563d152b73153ed681ae03e798bbfbce5c"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnConv4OwnerPort.class": {
+      "bytes": 7185,
+      "sha256": "433cb3d30500c4d7603b9d1164de5752a6de5bc8c05f8370e947de3a4cbc58ff"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnConv4Result.class": {
+      "bytes": 4866,
+      "sha256": "c918f32659f948b3540fe5de6bcaffb239a35b0c4d759e12ecd52f3e8d7e6ce2"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/GdnScalarClient.class": {
+      "bytes": 4818,
+      "sha256": "7f920611e973c8da4de84c8d8ba2b500d7070f9a709d49034531f320f48d1c19"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/JobResult.class": {
+      "bytes": 4027,
+      "sha256": "6e0bb8218b62bef0222e8d747109baea1bd04871cee86b042d47205fe73679aa"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/Launch.class": {
+      "bytes": 3394,
+      "sha256": "7025a49b46f61e336ed36eef38c4b911d4b3d3384aaf9c7b657ecfe61bfca325"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/MemoryRequest.class": {
+      "bytes": 4442,
+      "sha256": "6ec09b6a0df2c6bf7240e49996045c7f677bbc30bd9420292aa20bf13dfba48a"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/MemoryResponse.class": {
+      "bytes": 3844,
+      "sha256": "0236d19d9e33578c1670965db16c9a4f22e00c85758d083f5b7959203ac14b03"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ProgramWord.class": {
+      "bytes": 5370,
+      "sha256": "7b05b7c58865384d6df7894a67a9a4abdb8d1107f482b62a3f5d4363b0163e55"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ProgramWrite.class": {
+      "bytes": 4044,
+      "sha256": "036393cceef77a22e3b17a01da58e01ee31adaa40356e1960c0a08e54ff464b2"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/Region.class": {
+      "bytes": 4118,
+      "sha256": "5d3ddc4becea31a51ed2daaec859ad333b776e37d36572149a770951287f0cd2"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/RegionWrite.class": {
+      "bytes": 3515,
+      "sha256": "9daf50fe497bf819c39edad45f9c7599449a77a4facf823635556b0a9b670b64"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ScalarOp$.class": {
+      "bytes": 1136,
+      "sha256": "4a095575eb8b82fa750c87c2bdb20131933769c6154c3a57ec72ba476387d597"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ScalarOp.class": {
+      "bytes": 1134,
+      "sha256": "eeba8f9a388f29722e183a61cf51e6fc83e26723a69176b2e96e62a27f1784cc"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/ScalarRequest.class": {
+      "bytes": 3652,
+      "sha256": "d367e9393d6febb5198f82d12e0be80edeb3f2ceb0fb846597703e68aa17d32f"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/Status$.class": {
+      "bytes": 1325,
+      "sha256": "2594e0188f60aa905bd491480effad7b2a8d01c9fe2a9ccaed29c0dda2d67597"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/Status.class": {
+      "bytes": 1359,
+      "sha256": "325112b8fc18f2075b15c5a90d15add0f9faab51623af35beb1fe8bc4943b1c5"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/Tensor.class": {
+      "bytes": 4458,
+      "sha256": "f1fd71e8dbe93785673c7cd8928337dda26bb28d08f217f10d4a71ef53630b6b"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/TensorMath$.class": {
+      "bytes": 5965,
+      "sha256": "adfd474a2a18d02fc4b69c9b0dff86872a80df154b73e30d3cbd2937fce69c26"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/TensorMath.class": {
+      "bytes": 1560,
+      "sha256": "5d50de44ec859713b792cdb06dc6e61664158aff80d448679b228bc29dd34f9d"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/TensorProgram$$anon$1.class": {
+      "bytes": 9666,
+      "sha256": "b3c04795dbc1e4a905059bbe9465c5684fa909e99bfce2775216a7c46a404020"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/TensorProgram$.class": {
+      "bytes": 839,
+      "sha256": "0b0f51bbcd19f7b33186502eacde872b6fb192de36222852230a3c0fdbc2f3d2"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/TensorProgram.class": {
+      "bytes": 73998,
+      "sha256": "ca093e2cd6ec4e75b569fa5cdd36139977755d634a3cadd1b131a5373e048703"
+    },
+    "inputs/transpose_classes/heteronpu/continuous/TensorWrite.class": {
+      "bytes": 3941,
+      "sha256": "e4bc6e7162a9d7830f73d85704caebaaa5a26319c013d295ae37281f819b645f"
+    },
+    "inputs/transpose_classes/heteronpu/p0/LocalSramConfig$.class": {
+      "bytes": 2326,
+      "sha256": "8827caa3db156bb573917db65bca7d54a5a1c009a0640bc2692b54bbae545faf"
+    },
+    "inputs/transpose_classes/heteronpu/p0/LocalSramConfig.class": {
+      "bytes": 8270,
+      "sha256": "1dadd78dc7735872fc0ccb44d6471d3c65663b6e16835a3a400c96fefd1a9cfc"
+    },
+    "inputs/transpose_classes/heteronpu/p0/SharedL2Fabric$.class": {
+      "bytes": 775,
+      "sha256": "6ab1a2aa10322876d637a5fcb4c53b978954654194108790d6dbc5509cee4e4b"
+    },
+    "inputs/transpose_classes/heteronpu/p0/SharedL2Fabric.class": {
+      "bytes": 44198,
+      "sha256": "cadff7b48c85aafd5a8c93e4fd83cdd8de6cc89bc13afe2e7726a8ca2a820dd4"
+    },
+    "inputs/transpose_classes/heteronpu/p0/SharedL2FabricIO.class": {
+      "bytes": 11729,
+      "sha256": "750405c103290c5a6fb7815bd10b9215e65b53b36691ff5919655c26742daed1"
+    },
+    "source/GdnChunkTransposeChirrtl.scala": {
+      "bytes": 11385,
+      "sha256": "231549412ce1f6468dd00cee8a77b007778ff89e60d7514fe35ddc312a7e6e49"
+    }
+  },
+  "allowed_hidden_hosts": [
+    "heteronpu.continuous.GdnChunkAddressPlan$",
+    "heteronpu.continuous.GdnChunkCommittedState",
+    "heteronpu.continuous.GdnChunkDerivedAndPairResult",
+    "heteronpu.continuous.GdnChunkJob",
+    "heteronpu.continuous.GdnChunkPrivateDecay",
+    "heteronpu.continuous.GdnChunkStageReceipt",
+    "heteronpu.continuous.GdnChunkTransposeJob",
+    "heteronpu.continuous.GdnChunkTransposeOwner",
+    "heteronpu.continuous.GdnChunkTransposePort",
+    "heteronpu.continuous.GdnChunkTransposeResult",
+    "heteronpu.continuous.MemoryRequest",
+    "heteronpu.continuous.MemoryResponse",
+    "heteronpu.continuous.contracttests.GdnChunkTransposeChirrtl$"
+  ],
+  "allowed_ordinary_input_classes": [
+    "heteronpu.continuous.GdnChunkAddressPlan$",
+    "heteronpu.continuous.GdnChunkAddressPlan$Phase",
+    "heteronpu.continuous.GdnChunkAddressPlan$Shape",
+    "heteronpu.continuous.GdnChunkCommittedState",
+    "heteronpu.continuous.GdnChunkDerivedAndPairResult",
+    "heteronpu.continuous.GdnChunkGeometry$",
+    "heteronpu.continuous.GdnChunkJob",
+    "heteronpu.continuous.GdnChunkPrivateDecay",
+    "heteronpu.continuous.GdnChunkStageReceipt",
+    "heteronpu.continuous.GdnChunkTransposeJob",
+    "heteronpu.continuous.GdnChunkTransposeOwner",
+    "heteronpu.continuous.GdnChunkTransposePort",
+    "heteronpu.continuous.GdnChunkTransposeResult",
+    "heteronpu.continuous.GdnChunkVectorPolicy$",
+    "heteronpu.continuous.MemoryRequest",
+    "heteronpu.continuous.MemoryResponse",
+    "heteronpu.continuous.Status$"
+  ],
+  "baseline_351_input_description": {
+    "all_original_descriptors_retained": true,
+    "bytes": 3472,
+    "logical_label": "prior_transpose_compile/REPRODUCTION_PINS.json",
+    "sha256": "1664abe436483ccdc11d501ab1010f315f554e3532afdbfa90caab8b1412ceee"
+  },
+  "class_files_supplied": false,
+  "expected_emitter_classes": [
+    "heteronpu/continuous/contracttests/GdnChunkTransposeChirrtl.class",
+    "heteronpu/continuous/contracttests/GdnChunkTransposeChirrtl$.class",
+    "heteronpu/continuous/contracttests/GdnChunkTransposeChirrtl$NoExternalTools.class"
+  ],
+  "full_tool_table_duplicated": false,
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "compile_work_max_seconds": 120,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "elaboration_work_max_seconds": 30,
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "phase_work_stop_rule": "min(shared start+150, phase entry+phase cap); preparations and first cleanup consume same shared work window",
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "machine_plan_pin_only": {
+    "bytes": 285739,
+    "sha256": "c2c303c40eb8e14062bf8b4144bdbd716d76f48797aac5a520c39ad1b012b189"
+  },
+  "original_class_count": 146,
+  "relative_labels_are_not_path_templates": true,
+  "schema": "transpose-chirrtl-public-relative-input-delta-v1",
+  "source_manifest_pin_only": {
+    "bytes": 2938,
+    "sha256": "fdde32104a0bc286339577eee2556cac9951c7aa082d668debb54595a1e62234"
+  },
+  "standalone_runnable": false,
+  "supervisor_count": 6,
+  "tool_count": 314,
+  "total_input_count": 501
+}

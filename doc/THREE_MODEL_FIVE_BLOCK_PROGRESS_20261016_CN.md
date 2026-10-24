@@ -1777,3 +1777,12 @@ R2唯一实际总11.457736474秒、双自然0/WNOWAIT/reap/group absent/cleanup�
 仅CHIRRTL前端构造/展开资格，生成硬件中间表示但未运行firtool、未生成SystemVerilog、未进行RTL仿真/真实ACK/数值或完整chunk；五RTL0/5、Qwen2 full UNKNOWN不变。
 
 公开12件200425B在 candidates/qwen35_state_transfer_chirrtl/，manifest SHA256 da8f37cf8e9203ff097d89a31533921e796e9a3409c45679442b85ae45eb315b，含原emitter/runner/修复diff/复现模板/相对pins，排除机器plan、IR、日志、工具/class。非原完整监督closure。未push、无新CI、无清理。
+
+
+## TEMP / INCOMPLETE：真实 Treadle owner 测试源码，依赖未齐
+
+新增显式 Treadle 的 GdnChunkStateTransferColdSpec.scala，直接实例化真实owner而非Python替身。仅cold M16/head0、1024次固定64B零写/ACK、双向背压及8周期held done；6399 active/6412显式step是源码推导，尚未编译或执行，不记测试PASS。静审 SHA256 175060f6ba0a407aaa7115e9df00c53a4193de4a5333f18c35ecb7e073657b0f 仅SOURCE_REVIEW。
+
+已有无RTL解释路线：chiseltest6.0内置Treadle2/firrtl2 LowForm，但当前锁106 JAR仅可复用81，缺25项19329566B。官方repo.maven.apache.org不在当前环境允许出站域，零网络尝试；这不是已发生DNS/HTTP失败。未换代理、未绕过、未安装；原87工具闭包不变。私有firtool1.62.1实际存在，不称缺失；Verilator/VCS后端仍缺。
+
+公开8项53926B在 candidates/qwen35_state_transfer_treadle_test/，manifest SHA256 862c31ebc4e53120547bb79f23b774af52de84721390736a99ebcc4b7514254d。包含精确官方依赖URL/pin、原测试源码及限定状态，不含机器计划/二进制/日志。未授JVM/Treadle实际PASS，五RTL0/5、旧Qwen2执行/清理UNKNOWN不变。未push、无新CI、无清理。

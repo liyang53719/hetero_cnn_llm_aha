@@ -1,0 +1,56 @@
+{
+  "exact_original_files": {
+    "CLASSPATH_SELECTION.json": {
+      "bytes": 23158,
+      "sha256": "d5cde590aa74781ca55ca735a50ecb8edbfc1f8719ef69b3c989f6dc5fc7499e"
+    },
+    "MISSING25.json": {
+      "bytes": 11498,
+      "sha256": "0b02b8f6d6fe4e567e7b439d7798f1025d9681e667cc20c543471e95e6bfdb68"
+    },
+    "TEST_DESIGN.md": {
+      "bytes": 4246,
+      "sha256": "631b2e64dc38e14757e5fa6aab3d287e1ed7fb781d17070463214b9b3717daf4"
+    },
+    "source/GdnChunkStateTransferColdSpec.scala": {
+      "bytes": 8141,
+      "sha256": "66584f6ac439183f632d782f948a471f9071f52d04296c16f8847193062fe7cd"
+    }
+  },
+  "external_production_sources_by_basename": {
+    "GdnChunkAddressPlan.scala": {
+      "bytes": 9520,
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943"
+    },
+    "GdnChunkProtocol.scala": {
+      "bytes": 3170,
+      "sha256": "59e525e049114a447f6a82672b06fac29eb0ef8a580a5f5f0c27c75396e28fcf"
+    },
+    "GdnChunkStateTransferOwner.scala": {
+      "bytes": 9636,
+      "sha256": "8b75a469a1f43a215029034fcae5b90295d804a7355a1f741b5d28792ce1a7e8"
+    },
+    "Protocol.scala": {
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    }
+  },
+  "original_dependency_lock": {
+    "bytes": 26390,
+    "sha256": "75559554a865bcc72d74e2ec14795b031baa319ecf575f2e5d9aa4f87960a907"
+  },
+  "schema": "qwen35-treadle-public-source-references-v1",
+  "scope": "References only; external production sources and artifacts are not included. No executable closure or test result is supplied.",
+  "upstream_dependency_manifest": {
+    "bytes": 825,
+    "sha256": "8c28f65d8e1ca9ee22a26389015403f07136413b097567fa7236b8694f67b9d3"
+  },
+  "upstream_private_test_input_description": {
+    "bytes": 52072,
+    "sha256": "196b0cef6389937f5ca078e7e8513ffa2e29b7cb5c49f5d6a08287d5f08b2afa"
+  },
+  "upstream_test_manifest": {
+    "bytes": 1427,
+    "sha256": "49d19793a23b63b71532ae093a9916b8afc555dbe2da2532323203b009179d2f"
+  }
+}

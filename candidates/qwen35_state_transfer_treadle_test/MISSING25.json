@@ -1,0 +1,187 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2707568,
+      "coordinate": "edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar",
+      "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5",
+      "target_relative": "jars/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar"
+    },
+    {
+      "bytes": 4510129,
+      "coordinate": "edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+      "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b",
+      "target_relative": "jars/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar"
+    },
+    {
+      "bytes": 1878533,
+      "coordinate": "net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar",
+      "sha256": "34ed1e1f27fa896bca50dbc4e99cf3732967cec387a7a0d5e3486c09673fe8c6",
+      "target_relative": "jars/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar"
+    },
+    {
+      "bytes": 336742,
+      "coordinate": "org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar",
+      "sha256": "131a6594969bc4f321d652ea2a33bc0e378ca312685ef87791b2c60b29d01ea5",
+      "target_relative": "jars/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar"
+    },
+    {
+      "bytes": 594388,
+      "coordinate": "org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar",
+      "sha256": "2b84fb7bf25f2e4b51bd8cca802fb0bc0ec4c528c88c35cdeb8087349bb154b5",
+      "target_relative": "jars/org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar"
+    },
+    {
+      "bytes": 318845,
+      "coordinate": "org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar",
+      "sha256": "63d7610f4aa092cdc9401a338aada587792df6f1512e7b93bf365b7c07ffeb9f",
+      "target_relative": "jars/org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar"
+    },
+    {
+      "bytes": 84495,
+      "coordinate": "org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar",
+      "sha256": "7f7b8396cd29455e0a3653ae831e3c73b344ac6e1f37ba20d159ec13e7e2d6d3",
+      "target_relative": "jars/org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar"
+    },
+    {
+      "bytes": 10223,
+      "coordinate": "org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar",
+      "sha256": "a36d3e807bfe872972d55b6f80c883418b1d715f738f329c84d3678205398c7b",
+      "target_relative": "jars/org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar"
+    },
+    {
+      "bytes": 356326,
+      "coordinate": "org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar",
+      "sha256": "496ff9d3f423ac96e47d7a08136d1f7dbafa2ccbc228af553e7d1d90a2bc8224",
+      "target_relative": "jars/org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar"
+    },
+    {
+      "bytes": 1592150,
+      "coordinate": "org/scalactic/scalactic_2.13/3.2.19/scalactic_2.13-3.2.19.jar",
+      "sha256": "c27c33de17d450e29e66c16c5af4cfa33e8ffcf03c124f0a3d249d848cccd4af",
+      "target_relative": "jars/org/scalactic/scalactic_2.13/3.2.19/scalactic_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalactic/scalactic_2.13/3.2.19/scalactic_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 1406,
+      "coordinate": "org/scalatest/scalatest-compatible/3.2.19/scalatest-compatible-3.2.19.jar",
+      "sha256": "5dc6b8fa5396fe9e1a7c2b72df174a8eb3e92770cdc3e70636d3eba673cd0da3",
+      "target_relative": "jars/org/scalatest/scalatest-compatible/3.2.19/scalatest-compatible-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-compatible/3.2.19/scalatest-compatible-3.2.19.jar"
+    },
+    {
+      "bytes": 3755368,
+      "coordinate": "org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar",
+      "sha256": "30230081d029f6341b83fe7f157d336113e1c97497fe950169293d28a5bf2936",
+      "target_relative": "jars/org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 53805,
+      "coordinate": "org/scalatest/scalatest-diagrams_2.13/3.2.19/scalatest-diagrams_2.13-3.2.19.jar",
+      "sha256": "a77294d3d5a564e1d8cd6550d4ac795ac042fa90efa91d139da123d7ec5f3bec",
+      "target_relative": "jars/org/scalatest/scalatest-diagrams_2.13/3.2.19/scalatest-diagrams_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-diagrams_2.13/3.2.19/scalatest-diagrams_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 81679,
+      "coordinate": "org/scalatest/scalatest-featurespec_2.13/3.2.19/scalatest-featurespec_2.13-3.2.19.jar",
+      "sha256": "58a44e6be12409596feab4d4123900ef2af55d3fcb72033412059ce055e91dee",
+      "target_relative": "jars/org/scalatest/scalatest-featurespec_2.13/3.2.19/scalatest-featurespec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-featurespec_2.13/3.2.19/scalatest-featurespec_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 174360,
+      "coordinate": "org/scalatest/scalatest-flatspec_2.13/3.2.19/scalatest-flatspec_2.13-3.2.19.jar",
+      "sha256": "de4d28423dc69e91fdc8f3a03a4fb6b443c5626b819c896e5fbe4a73a375654a",
+      "target_relative": "jars/org/scalatest/scalatest-flatspec_2.13/3.2.19/scalatest-flatspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-flatspec_2.13/3.2.19/scalatest-flatspec_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 103459,
+      "coordinate": "org/scalatest/scalatest-freespec_2.13/3.2.19/scalatest-freespec_2.13-3.2.19.jar",
+      "sha256": "f3e463422cca38117bb48665602543474fbc2c37427b1133a9c34332f895b08a",
+      "target_relative": "jars/org/scalatest/scalatest-freespec_2.13/3.2.19/scalatest-freespec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-freespec_2.13/3.2.19/scalatest-freespec_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 110329,
+      "coordinate": "org/scalatest/scalatest-funspec_2.13/3.2.19/scalatest-funspec_2.13-3.2.19.jar",
+      "sha256": "4c682781b67c5daeeebb9e132a78929b824f88747b963b9aa8bd24a0a7d6893b",
+      "target_relative": "jars/org/scalatest/scalatest-funspec_2.13/3.2.19/scalatest-funspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funspec_2.13/3.2.19/scalatest-funspec_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 63740,
+      "coordinate": "org/scalatest/scalatest-funsuite_2.13/3.2.19/scalatest-funsuite_2.13-3.2.19.jar",
+      "sha256": "926aeb37193ad79d0b380160765c9ab61d4367b994c1ab715896fe4961241d5e",
+      "target_relative": "jars/org/scalatest/scalatest-funsuite_2.13/3.2.19/scalatest-funsuite_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funsuite_2.13/3.2.19/scalatest-funsuite_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 2031514,
+      "coordinate": "org/scalatest/scalatest-matchers-core_2.13/3.2.19/scalatest-matchers-core_2.13-3.2.19.jar",
+      "sha256": "033f16c1143fbe51675d080b13ac319d98581d0331ba3ccebb121e3904a774a3",
+      "target_relative": "jars/org/scalatest/scalatest-matchers-core_2.13/3.2.19/scalatest-matchers-core_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-matchers-core_2.13/3.2.19/scalatest-matchers-core_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 183616,
+      "coordinate": "org/scalatest/scalatest-mustmatchers_2.13/3.2.19/scalatest-mustmatchers_2.13-3.2.19.jar",
+      "sha256": "8ebbd5c12843d75f15283f31c35994b6e733ce737f666b05528fa8b6e67ad32e",
+      "target_relative": "jars/org/scalatest/scalatest-mustmatchers_2.13/3.2.19/scalatest-mustmatchers_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-mustmatchers_2.13/3.2.19/scalatest-mustmatchers_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 33934,
+      "coordinate": "org/scalatest/scalatest-propspec_2.13/3.2.19/scalatest-propspec_2.13-3.2.19.jar",
+      "sha256": "6c1c7d557485861d920b1c26748a871232b626e93d466a3d9bb8dbbc6e38485d",
+      "target_relative": "jars/org/scalatest/scalatest-propspec_2.13/3.2.19/scalatest-propspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-propspec_2.13/3.2.19/scalatest-propspec_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 26505,
+      "coordinate": "org/scalatest/scalatest-refspec_2.13/3.2.19/scalatest-refspec_2.13-3.2.19.jar",
+      "sha256": "7a4c836cf66c99c1e12ca96e6d94c4f68b7dbb49144f9e13af73ada4df752652",
+      "target_relative": "jars/org/scalatest/scalatest-refspec_2.13/3.2.19/scalatest-refspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-refspec_2.13/3.2.19/scalatest-refspec_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 184886,
+      "coordinate": "org/scalatest/scalatest-shouldmatchers_2.13/3.2.19/scalatest-shouldmatchers_2.13-3.2.19.jar",
+      "sha256": "64658d736039267baae0108af620617e8ce88b2f4683112e2e31e4ad2a603c0f",
+      "target_relative": "jars/org/scalatest/scalatest-shouldmatchers_2.13/3.2.19/scalatest-shouldmatchers_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-shouldmatchers_2.13/3.2.19/scalatest-shouldmatchers_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 134854,
+      "coordinate": "org/scalatest/scalatest-wordspec_2.13/3.2.19/scalatest-wordspec_2.13-3.2.19.jar",
+      "sha256": "08050f3d05c72575cac29a1483185b443d5f9f34c1fcf80c683083330385ef93",
+      "target_relative": "jars/org/scalatest/scalatest-wordspec_2.13/3.2.19/scalatest-wordspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-wordspec_2.13/3.2.19/scalatest-wordspec_2.13-3.2.19.jar"
+    },
+    {
+      "bytes": 712,
+      "coordinate": "org/scalatest/scalatest_2.13/3.2.19/scalatest_2.13-3.2.19.jar",
+      "sha256": "c37d97f16172d45b2aef0cebbe59dd2174b7d1ff2c2f272516707cf923015a52",
+      "target_relative": "jars/org/scalatest/scalatest_2.13/3.2.19/scalatest_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest_2.13/3.2.19/scalatest_2.13-3.2.19.jar"
+    }
+  ],
+  "count": 25,
+  "origin": "https://repo.maven.apache.org/maven2/",
+  "schema": "qwen35-treadle-missing-jars-v1",
+  "source_lock": {
+    "bytes": 26390,
+    "sha256": "75559554a865bcc72d74e2ec14795b031baa319ecf575f2e5d9aa4f87960a907"
+  },
+  "total_bytes": 19329566
+}

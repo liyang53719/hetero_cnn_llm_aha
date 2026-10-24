@@ -1,0 +1,35 @@
+{
+  "files": {
+    "CLASSPATH_SELECTION.json": {
+      "bytes": 23158,
+      "sha256": "d5cde590aa74781ca55ca735a50ecb8edbfc1f8719ef69b3c989f6dc5fc7499e"
+    },
+    "MISSING25.json": {
+      "bytes": 11498,
+      "sha256": "0b02b8f6d6fe4e567e7b439d7798f1025d9681e667cc20c543471e95e6bfdb68"
+    },
+    "PUBLIC_MANIFEST.json": {
+      "bytes": 1119,
+      "sha256": "862c31ebc4e53120547bb79f23b774af52de84721390736a99ebcc4b7514254d"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 2008,
+      "sha256": "6785dd310f3f5d3f894c1d4582941949b9d9022851552d06e3a07061cbfc44ff"
+    },
+    "STATUS.md": {
+      "bytes": 2517,
+      "sha256": "6f939bb812db35b025acb65d3d38aaf55ea5d1326286aacba62956879b8b6824"
+    },
+    "TEST_DESIGN.md": {
+      "bytes": 4246,
+      "sha256": "631b2e64dc38e14757e5fa6aab3d287e1ed7fb781d17070463214b9b3717daf4"
+    },
+    "source/GdnChunkStateTransferColdSpec.scala": {
+      "bytes": 8141,
+      "sha256": "66584f6ac439183f632d782f948a471f9071f52d04296c16f8847193062fe7cd"
+    }
+  },
+  "schema": "exact-public-file-allowlist-v1",
+  "scope": "Publish exactly these seven files plus this whitelist; no original machine-local inputs, download plan, logs or binaries.",
+  "whitelist_self_not_recursively_pinned": true
+}

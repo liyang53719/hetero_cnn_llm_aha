@@ -1,4 +1,4 @@
-"""Post-cleanup stdlib-only comparison of one isolated head0/M64 or M128 output."""
+"""Post-cleanup stdlib-only comparison of one bounded isolated head0 or all16 output."""
 import argparse
 import hashlib
 import json
@@ -10,7 +10,7 @@ import time
 
 # -I omits the script directory; admit only this pinned helper directory.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from chunk_case import plan_case, validate_carry
+from chunk_case import case, plan_case, validate_carry, validate_first_states
 
 HERE=Path(__file__).resolve().parent
 PLAN_SHA = None
@@ -32,20 +32,21 @@ def bf(w):
     e=(w>>7)&255;f=w&127;need(e!=255,'nonfinite BF16')
     x=math.ldexp(float(f if e==0 else 128+f),-133 if e==0 else e-134)
     return -x if w&0x8000 else x
-def state_metrics(actual, reference):
-    need(len(actual)==len(reference)==65536,'after128 state extent')
+def state_metrics(actual, reference, heads=1):
+    selected=case(128, heads);elements=selected['state_bytes']//4
+    need(len(actual)==len(reference)==selected['state_bytes'],'after128 state extent')
     values=[x[0] for x in struct.iter_unpack('<f',actual)]
     refs=[x[0] for x in struct.iter_unpack('<f',reference)]
     need(all(math.isfinite(x) for x in values+refs),'nonfinite after128 state')
     errors=[abs(x-y) for x,y in zip(values,refs)]
     tolerances=[1e-4+1e-4*abs(y) for y in refs]
-    worst=max(range(16384),key=lambda i:errors[i]/tolerances[i])
-    return {'elements':16384,'max_abs':max(errors),'mean_abs':math.fsum(errors)/16384,
+    worst=max(range(elements),key=lambda i:errors[i]/tolerances[i])
+    return {'elements':elements,'max_abs':max(errors),'mean_abs':math.fsum(errors)/elements,
       'bit_mismatches':sum(x!=y for x,y in zip(struct.iter_unpack('<I',actual),struct.iter_unpack('<I',reference))),
       'violations':sum(e>t for e,t in zip(errors,tolerances)),'atol':1e-4,'rtol':1e-4,
       'meets_existing_state_threshold':all(e<=t for e,t in zip(errors,tolerances)),
       'max_error_over_tolerance':errors[worst]/tolerances[worst],
-      'worst_normalized_location':{'head':0,'key_row':worst//128,'value_column':worst%128},
+      'worst_normalized_location':{'head':worst//16384,'key_row':(worst//128)%128,'value_column':worst%128},
       'actual_nonzero':sum(x!=0 for x in values),'reference_nonzero':sum(x!=0 for x in refs)}
 
 
@@ -58,7 +59,7 @@ def main():
     args = parser.parse_args()
     PLAN_SHA = args.reviewed_plan_sha256
     start=time.monotonic();raw=args.plan.read_bytes();need(sha(raw)==PLAN_SHA,'plan changed');plan=json.loads(raw)
-    selected=plan_case(plan);tokens=selected['tokens'];elements=selected['elements']
+    selected=plan_case(plan);tokens=selected['tokens'];heads=selected['heads'];elements=selected['elements'];label=selected['label'].upper()
     run = Path(plan['run_directory'])
     launch=json.loads((run/'LAUNCH.json').read_text());actual=run/'actual'
     need(launch['isolated_component_complete_uncompared'] is True and launch['natural_exit'] is True and
@@ -72,12 +73,12 @@ def main():
     a=(actual/'output.bf16le').read_bytes();r=Path(plan['reference_slice']).read_bytes()
     need(len(a)==len(r)==elements*2 and sha(a)==summary['output_sha256'],'output extent/hash')
     need(summary['output_reference_read'] is False and summary['state_oracle_available'] is selected['state_oracle'] and
-      summary['owner']['production_geometry'] is False and summary['terminal_count']==1,'component scope')
+      summary['owner']['production_geometry'] is (heads==16) and summary['terminal_count']==1,'component scope')
     av=[w[0] for w in struct.iter_unpack('<H',a)];rv=[w[0] for w in struct.iter_unpack('<H',r)]
     da=[bf(w) for w in av];dr=[bf(w) for w in rv];errors=[abs(x-y) for x,y in zip(da,dr)]
     worst=max(range(elements),key=errors.__getitem__)
     maximum=max(errors);mean=math.fsum(errors)/elements
-    report={'status':f'ISOLATED_HEAD0_M{tokens}_COMPARISON_COMPLETE','scope':f'REAL_SAVED_PREP_HEAD0_TOKENS0_{tokens-1}_ONLY',
+    report={'status':f'ISOLATED_{label}_M{tokens}_COMPARISON_COMPLETE','scope':f'REAL_SAVED_PREP_{label}_TOKENS0_{tokens-1}_ONLY',
       'full_block_acceptance':False,'original_execution_status':'UNKNOWN','original_continuation':False,
       'state_numerical_validation':None,'state_oracle_available':selected['state_oracle'],'hardware_simulation':False,
       'elements':elements,'max_abs':maximum,'mean_abs':mean,'bit_mismatches':sum(x!=y for x,y in zip(av,rv)),
@@ -85,8 +86,9 @@ def main():
       'thresholds':{'max_abs':0.03125,'mean_abs':0.005},'meets_existing_node_thresholds':maximum<=0.03125 and mean<=0.005,
       'actual_nonzero':sum(x!=0 for x in da),'reference_nonzero':sum(x!=0 for x in dr),
       'actual_max_magnitude':max(map(abs,da)),'reference_max_magnitude':max(map(abs,dr)),
-      'worst_location':{'token':worst//128,'head':0,'value_column':worst%128},
-      'policy':plan['policy'],'reference_mapping':f'native0020 [1,128,16,128], concatenate token0..{tokens-1}/head0/128 values',
+      'worst_location':{'token':worst//(heads*128),'head':(worst//128)%heads,'value_column':worst%128},
+      'policy':plan['policy'],'reference_mapping':('native0020 [1,128,16,128], exact full contiguous tensor' if heads==16 else
+          f'native0020 [1,128,16,128], concatenate token0..{tokens-1}/head0/128 values'),
       'mean_reduction':'binary64 absolute deltas, stdlib math.fsum/count; no NumPy reduction-bit identity claim',
       'plan_sha256':PLAN_SHA,'output_pin':pin(actual/'output.bf16le'),'state_unvalidated_pin':pin(actual/'state.fp32le'),
       'reference_slice_pin':pin(plan['reference_slice']),'summary_pin':pin(actual/'summary.json'),
@@ -97,10 +99,12 @@ def main():
     if selected['state_oracle']:
         state=(actual/'state.fp32le').read_bytes();reference_state=Path(plan['reference_state_slice']).read_bytes()
         need(sha(state)==summary['state_sha256'],'after128 state hash')
-        validate_carry(summary['actual_chunks_completed'],summary['observed_second_chunk_prior_state_read_beats'])
-        report.update(state_numerical_validation=state_metrics(state,reference_state),
+        validate_carry(summary['actual_chunks_completed'],summary['observed_second_chunk_prior_state_read_beats'],heads)
+        validate_first_states(summary['first_chunk_state_sha256'],heads)
+        report.update(state_numerical_validation=state_metrics(state,reference_state,heads),
             state_pin=report.pop('state_unvalidated_pin'),reference_state_pin=pin(plan['reference_state_slice']),
-            state_reference_mapping='native0021 [1,16,128,128] FP32 after128, head0 first65536 bytes, identical official final cache0043',
+            state_reference_mapping=('native0021 [1,16,128,128] FP32 after128, full contiguous state, identical official final cache0043' if heads==16 else
+                'native0021 [1,16,128,128] FP32 after128, head0 first65536 bytes, identical official final cache0043'),
             actual_chunks_completed=summary['actual_chunks_completed'],
             observed_second_chunk_prior_state_read_beats=summary['observed_second_chunk_prior_state_read_beats'],
             first_chunk_actual_state_sha256=summary['first_chunk_state_sha256'],after64_state_oracle_available=False)

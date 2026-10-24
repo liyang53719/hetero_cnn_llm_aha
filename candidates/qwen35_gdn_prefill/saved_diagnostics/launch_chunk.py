@@ -143,6 +143,10 @@ def observe(run, owner, strict, plan):
             progress = dict(terminal_count=len(commands), roots_generation=value.get('roots', {}).get('generation'),
                 last_phase=commands[-1].get('phase') if commands else None,
                 last_role=commands[-1].get('role') if commands else None, mtime_ns=p.stat().st_mtime_ns)
+            if plan['policy']['heads'] == 16:
+                progress.update(chunk_context=value.get('context'), chunk_position=value.get('position'),
+                    head_chunk_completions=value.get('head_chunk_completions'),
+                    second_chunk_prior_state_read_beats=value.get('second_chunk_prior_state_read_beats'))
         except (json.JSONDecodeError, FileNotFoundError):
             progress = dict(state='PARTIAL_WRITE_RETRY_NEXT_HEARTBEAT')
     return dict(group_rss_bytes=rss, group_cpu_seconds=cpu, **output, progress=progress)
@@ -222,8 +226,8 @@ def execute(plan, plan_sha, start, plan_path):
             signal.signal(sig, signal.SIG_IGN)
         if owner is not None:
             try:
-                proof = strict.cleanup_owned(owner, stop - 5)
-                strict.validate_cleanup_proof(proof, owner=owner, stop=stop - 5)
+                proof = strict.cleanup_owned(owner, stop - selected['postflight_reserve_seconds'])
+                strict.validate_cleanup_proof(proof, owner=owner, stop=stop - selected['postflight_reserve_seconds'])
                 save(run / 'CLEANUP.json', owner['strict_cleanup_observation'])
             except BaseException as error:
                 proof = None
@@ -249,6 +253,7 @@ def execute(plan, plan_sha, start, plan_path):
             record['roots_generation'] = summary.get('roots', {}).get('generation')
             complete = (summary.get('status') == 'ISOLATED_CHUNK_COMPLETE_UNCOMPARED' and
                         record['terminal_count'] == 1 and summary.get('output_elements') == selected['elements'] and
+                        (selected['heads'] == 1 or summary.get('actual_chunks_completed') == selected['chunks']) and
                         (run / 'actual' / 'output.bf16le').is_file())
         except BaseException as error:
             complete = False; record['child_summary_error'] = repr(error)

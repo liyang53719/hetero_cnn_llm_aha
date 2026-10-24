@@ -1,13 +1,13 @@
-# Saved Prep-g and real-input head0/M64/M128 diagnostic checkpoint
+# Saved Prep-g and real-input head0/all16 chunk diagnostic checkpoint
 
 This is a sanitized record and CLI-rooted helper adaptation of already completed
-private Prep-g, head0/M64, and head0/M128 diagnostics on 2026-10-24. Preparing this
+private Prep-g, head0/M64, head0/M128, and all16/M128 diagnostics on 2026-10-24. Preparing this
 checkpoint did not load native arithmetic, run an owner, access weights, or run RTL.
 No original production source, mathematical recipe, policy, or acceptance threshold
 is changed here. The original execution remains UNKNOWN and is not continued.
 
 Relocated native child/supervisor: TEMP_NOT_EXECUTED. Stdlib mapping/control/CLI tests
-and post-comparison of previously completed M128 artifacts passed. These checks and
+and post-comparison of previously completed head0/M128 and all16/M128 artifacts passed. These checks and
 historical numerical PASS do not qualify the adapted native launcher or child.
 
 ## Acceptance boundary
@@ -29,8 +29,18 @@ historical numerical PASS do not qualify the adapted native launcher or child.
   differences, max absolute error 7.450580596923828e-9, mean 2.33948623684253e-11.
   Every element meets abs(actual-reference) <= 1e-4 + 1e-4 * abs(reference), with
   zero violations. This is tolerance acceptance, not state bit identity.
-- TEMP: state after token 63 still has no matching official state oracle. Full
-  16-head/full-block execution and acceptance, RTL, hardware cycles, effective MAC
+- PASS, all16/M128 isolated chunk only: one original ChunkOwner/driver terminal,
+  32 internal head-chunks, 262,144 BF16 output values. Fifty-five words differ,
+  max 1.52587890625e-5, mean 9.90735132821996e-11, meeting the same node bounds.
+- PASS, final after128 all16 state only: 262,144 FP32 values, 227,510 bit differences,
+  max 9.5367431640625e-7, mean 1.230785461504479e-9. Every element meets the same
+  1e-4 absolute plus 1e-4 relative state gate, with zero violations. Tolerance
+  acceptance is not output/state bit identity.
+- The extracted actual head0 output, final state, and first-chunk state digest are
+  identical to the prior head0/M128 diagnostic. This is actual-to-actual consistency,
+  not an additional official after64 state oracle.
+- TEMP: state after token 63 still has no matching official state oracle. Full-block
+  execution/acceptance, committed/published state, RTL, hardware cycles, effective MAC
   utilization, hardware QoR, and relocated native execution remain unvalidated.
 
 `observed_metrics.json` contains small aggregate results, not raw tensor values.
@@ -44,8 +54,9 @@ cannot identify the observed official factors because those factors were not cap
 
 The actual input was the first 64 or 128 rows of an already saved real Prep result, not zeros,
 a generated fixture, a Prep rerun, or an original receipt replay. Diagnostic writes
-and ACKs rehydrated TypedMemory. A single non-production-geometry ChunkOwner terminal
-used heads=1, key/value dimensions=128, host_batch=true, cold state, IEEE finite gradual
+and ACKs rehydrated TypedMemory. Each diagnostic used one ChunkOwner/driver terminal,
+heads=1 (head0 slices) or heads=16 (all16/M128), key/value dimensions=128, host_batch=true,
+cold state, IEEE finite gradual
 underflow policy, fatal mask 28, finite_mul_tininess_r2, experimental P7 split-ln2 exp,
 legacy ascending FP32 cumsum, and row1_streaming matmul. The actual child was blocked
 from reference access. Comparison occurred only after supervised completion and cleanup.
@@ -66,6 +77,20 @@ and state_decay=1,024 beats, with two chunks completed. No after64 official stat
 comparison is implied. Official output0020 is [1,128,16,128] BF16 with head0 selected
 at each token stride. Official state0021 is [1,16,128,128] FP32 after128; head0 is its
 first 65,536 bytes. The complete state0021 and final-cache0043 blobs are identical.
+
+For all16/M128, candidate and supervisor times were 430.2692614609841 and
+431.0102035700111 seconds. One CPU, 1 GiB address-space and sampled-RSS caps,
+600-second CPU/compute and 660-second outer budgets were used, with 60 seconds
+reserved for cleanup/receipts. Natural exit was 0, strict retained-leader cleanup
+was confirmed, and all 1,106 historical input pins remained stable. All 16 heads
+completed two internal chunks in the single terminal; each head had the same
+65,536/65,536/1,024 second-chunk carry-read counts. Full contiguous output0020 and
+state0021 were compared, not head0-strided slices. The dimensions match production
+geometry, but this is still an isolated software diagnostic: state was not committed,
+output/state were not published, and generation was not advanced. The reused helper
+preserves per-head/chunk completion and carry progress plus file/directory fsync.
+These local wall times and software head-chunk counts are not hardware cycles,
+utilization, or full-block acceleration evidence.
 
 ## What is and is not included
 
@@ -120,14 +145,19 @@ python prepare_chunk.py \
   --official-output "$OFFICIAL_CHUNK_BF16" --cpu "$ALLOWED_CPU" --output "$NEW_CHUNK_DIR"
 ```
 
-The default is --tokens 64. To prepare M128, append all of these arguments to the
-prepare_chunk.py command above; 128 is the only additional supported case:
+The default is --tokens 64 --heads 1. To prepare head0/M128, append all of these
+arguments to the prepare_chunk.py command above:
 
 ```sh
 --tokens 128 --official-state "$OFFICIAL_STATE_0021_FP32" \
   --official-final-cache "$OFFICIAL_FINAL_CACHE_0043_FP32" \
   --official-manifest "$OFFICIAL_CAPTURE_MANIFEST"
 ```
+
+To select all16/M128, also append `--heads 16`. Only heads 1 or 16 are admitted,
+and heads 16 requires tokens 128. It selects the historical all16 address map and
+resource bounds, full contiguous output/state mapping, and every-head carry checks.
+No arbitrary head subset, larger token count, or policy change is supported.
 
 State inputs are mandatory only for M128 and rejected for M64, because the after128
 oracle must never be treated as an after64 oracle. The same child, supervisor, and
@@ -154,9 +184,10 @@ operational failure; that is not a numerical verdict and gives no permission to
 retry or signal an unrelated process.
 Audit hooks guard accidental access; they are not a native-code security sandbox.
 Generated plans and run outputs contain private evidence and must never be committed.
-The comparison applies the existing node thresholds to the selected head0 output;
-M128 additionally applies the existing per-element state gate to the final after128
-head0 state. It cannot promote all-head, full-block, after64-state, or RTL acceptance.
+The comparison applies the existing node thresholds to the selected head0 or all16
+output; M128 additionally applies the existing per-element state gate to the matching
+final after128 state. It cannot promote full-block, state-commit, after64-state, or
+RTL acceptance, or qualify the adapted native child/supervisor.
 
 ## Lightweight checks performed for this extension
 
@@ -165,14 +196,17 @@ python -I -S -B -m unittest discover -s candidates/qwen35_gdn_prefill/saved_diag
   -p 'test_chunk_cases.py' -v
 ```
 
-Thirteen stdlib tests passed: fixed 64/128 bounds, default64 preservation, CLI state
-requirements, token-strided head0 and contiguous state mapping, extent/cache identity,
-exact carry completion/read counts, every-element state tolerance (not aggregate-only),
-nonfinite rejection, native-independent CLI help under -I -S -B (plus child import-only), and fail-closed
-cleanup admission.
+Twenty-one stdlib tests passed: bounded heads/tokens and all16 resource/address
+configuration, default head0/M64 preservation, CLI state requirements, token-strided
+head0 versus full contiguous output/state mapping, extent/cache identity, every-head
+carry completion/read counts and first-state identities, every-element state tolerance
+(including the final head, not aggregate-only), nonfinite rejection, native-independent
+CLI help under -I -S -B (plus child import-only), durable file/replace/directory fsync
+ordering, all16 heartbeat progress and 32-head-chunk terminal admission with head0
+behavior preserved, and fail-closed cleanup admission.
 Synthetic comparator fixtures test control flow only, not numerical owner correctness.
 Source AST and JSON parse checks passed. A separate adapted comparator run over the
-already completed private M128 artifacts reproduced every historical result field,
+already completed private head0/M128 and all16/M128 artifacts reproduced every historical result field,
 except its own script hash and comparison duration; all input pins remained stable.
-It wrote only a fresh private comparison file. No preparation, candidate, native owner,
+Each wrote only a fresh private comparison file. No preparation, candidate, native owner,
 model, supervisor execution, or Prep arithmetic was rerun for these checks.

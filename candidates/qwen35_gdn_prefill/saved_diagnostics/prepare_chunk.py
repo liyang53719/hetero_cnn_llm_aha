@@ -1,4 +1,4 @@
-"""Prepare an isolated head0/M64 or M128 plan from CLI-supplied private inputs; never execute it.
+"""Prepare an isolated head0/M64, head0/M128, or all16/M128 plan from CLI-supplied private inputs; never execute it.
 
 Uses stdlib only. Hashes the admitted source/runtime closure, snapshots source and
 slices data, and pins the new helper code. No Git command, native load, or build.
@@ -14,7 +14,7 @@ import stat
 
 # -I omits the script directory; admit only this pinned helper directory.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from chunk_case import case, head0_output, head0_state, prep_rows
+from chunk_case import ALL16_LIMITS, case, output_slice, state_slice, prep_rows
 
 HERE = Path(__file__).resolve().parent
 CHECKPOINT = HERE.parents[2]
@@ -67,9 +67,12 @@ def parse_args(argv=None):
         parser.add_argument('--' + option, type=Path, required=True)
     parser.add_argument('--cpu', type=int, required=True)
     parser.add_argument('--tokens', type=int, choices=(64, 128), default=64)
+    parser.add_argument('--heads', type=int, choices=(1, 16), default=1)
     for option in ('official-state', 'official-final-cache', 'official-manifest'):
         parser.add_argument('--' + option, type=Path)
     args = parser.parse_args(argv)
+    if args.heads == 16 and args.tokens != 128:
+        parser.error('--heads 16 requires --tokens 128')
     state_inputs = (args.official_state, args.official_final_cache, args.official_manifest)
     if args.tokens == 128 and not all(state_inputs):
         parser.error('--tokens 128 requires --official-state, --official-final-cache and --official-manifest')
@@ -80,7 +83,7 @@ def parse_args(argv=None):
 
 def main():
     args = parse_args()
-    selected = case(args.tokens)
+    selected = case(args.tokens, args.heads)
     root = args.repository.resolve(strict=True)
     runtime = args.runtime_site.resolve(strict=True)
     out = args.output.resolve()
@@ -130,6 +133,9 @@ def main():
     if selected['state_oracle']:
         artifact.update(spec['m128']['artifacts'])
         historical = spec['m128']
+    if args.heads == 16:
+        artifact.update(spec['all16_m128']['artifacts'])
+        historical = spec['all16_m128']
     prep = admit(args.saved_prep, artifact['actual/cold128.prep.actual.fp32le'], True)
     reference = admit(args.official_output, artifact['official_chunk_m128.bf16le'], True)
     admit(args.saved_pins, artifact['metadata/prior_pins.json'])
@@ -140,13 +146,13 @@ def main():
     need(all(x['terminal_accepted'] is True and x['complete'] is True and x['status'] is None
              for x in progress['commands']), 'original terminal completion required')
     selected_prep = prep_rows(prep, args.tokens)
-    selected_reference = head0_output(reference, args.tokens)
+    selected_reference = output_slice(reference, args.tokens, args.heads)
     selected_state = None
     if selected['state_oracle']:
         state = admit(args.official_state, artifact['official_state_after128.f32le'], True)
         final_cache = admit(args.official_final_cache, artifact['official_final_cache.f32le'], True)
         admit(args.official_manifest, artifact['official_manifest.json'])
-        selected_state = head0_state(state, final_cache)
+        selected_state = state_slice(state, final_cache, args.heads)
     for name in ('prepare_chunk.py', 'chunk_child.py', 'launch_chunk.py', 'compare_chunk.py', 'chunk_case.py', 'pins.json'):
         admit(HERE / name)
     os.umask(0o077)
@@ -156,20 +162,23 @@ def main():
         create(target, raw)
         admit(target, source_pins[relative])
     saved_name = f'saved_prep_first{args.tokens}.fp32le'
-    ref_name = f'official_head0_first{args.tokens}.bf16le'
+    ref_name = ('official_all16_output.bf16le' if args.heads == 16 else
+                f'official_head0_first{args.tokens}.bf16le')
     saved_slice = out / 'inputs' / saved_name
     ref_slice = out / 'reference' / ref_name
     create(saved_slice, selected_prep)
     create(ref_slice, selected_reference)
     admit(saved_slice, artifact[saved_name])
     admit(ref_slice, artifact[ref_name])
-    ref_state = out / 'reference/official_head0_after128.f32le'
+    ref_state = out / 'reference' / f"official_{selected['label']}_after128.f32le"
     if selected_state is not None:
         create(ref_state, selected_state)
         admit(ref_state, artifact[ref_state.name])
-    policy = dict(spec['policy'], tokens=args.tokens)
+    policy = dict(spec['policy'], tokens=args.tokens, heads=args.heads)
     limits = dict(spec['limits'], cpu_seconds=selected['driver_seconds'],
                   driver_wall_seconds=selected['driver_seconds'], outer_wall_seconds=selected['outer_seconds'])
+    if args.heads == 16:
+        limits.update(ALL16_LIMITS)
     plan = {
         'schema': selected['schema'],
         'python': str(args.python.resolve(strict=True)), 'repository': str(root),

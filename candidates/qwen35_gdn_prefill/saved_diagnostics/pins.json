@@ -1,4 +1,41 @@
 {
+  "all16_m128": {
+    "actual_after128_state": {
+      "bytes": 1048576,
+      "sha256": "c6d456077826211ff5e5a832eb7540448b1097f31e3bc28ba0610a9faba62e04"
+    },
+    "actual_output": {
+      "bytes": 524288,
+      "sha256": "02d5161f86aa8a754c6935f3786055910fbec1592405014ceafd412b53889e25"
+    },
+    "artifacts": {
+      "official_all16_after128.f32le": {
+        "bytes": 1048576,
+        "sha256": "26ded1996b264a4e13e2e6c84435a81e03e01fb53b4467e401ecd3a1d2818ec3"
+      },
+      "official_all16_output.bf16le": {
+        "bytes": 524288,
+        "sha256": "9b61414ce2f2e3a7f71d838a893ca5ec1d342e0d63edb5895796d9f7c1573e54"
+      }
+    },
+    "head0_consistency": {
+      "after128_state_sha256": "cd36020c66eb6d0926fffb2d18a85472f8b2bdd2ee08bb0fc9506515775a1e12",
+      "after64_official_oracle_available": false,
+      "after64_state_sha256": "a56a1b22d512cb0c419f1784be60354ba70eb66d83617a33db99aba3101b8e2c",
+      "identical_to_prior_head0_m128": true,
+      "output_sha256": "e8c3d9e2790052831d536b09e93568628070ae5f4423dd3d41f4fb85c8f62a93"
+    },
+    "historical_comparison_sha256": "8c2b2c12adab10a0928dad8390547d4a19ce8ae5a77cb40307035afcdd4cd602",
+    "historical_input_pin_count": 1106,
+    "historical_plan_sha256": "121c610ff15a05c8985b34839d38ad2e5c1d4065816db525b2a9fb260094136a",
+    "historical_result_pins_sha256": "aaecb4195e4fbb57a9898b5e85549db324a3fa53efbddb319b4e8f4ea20e8527",
+    "historical_script_sha256": {
+      "child.py": "7f1011cc102bdf9153be1f9dbd25dde61f72c343f4b1745b9ce6530fac4acbaa",
+      "compare.py": "9afc938430d957868f81a471f1752b8eb3ab5d2707257292dc3f171ad1533c7b",
+      "launch.py": "e2c8a9d4ffa22cb229d2b3327250abe9f9990072c873a47ee597077db5650c30",
+      "prepare.py": "8c566c3e4042c1f78b8255142a039c9a750ed535c7e8b343ab13fd1f30b2dedf"
+    }
+  },
   "artifacts": {
     "actual/cold128.ab.actual.bf16le": {
       "bytes": 8192,

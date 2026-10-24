@@ -2,12 +2,110 @@
   "acceptance": {
     "RTL": "TEMP",
     "after_64_state_oracle": "TEMP",
-    "full_16_heads": "TEMP",
+    "full_16_heads": "PASS_ISOLATED_CHUNK_M128_ONLY",
     "full_block": "TEMP",
     "hardware_or_effective_MAC_utilization": "TEMP",
-    "relocated_native_supervisor": "TEMP_NOT_EXECUTED"
+    "relocated_native_supervisor": "TEMP_NOT_EXECUTED",
+    "state_commit": "TEMP"
   },
-  "evidence_origin": "Previously completed private saved-word diagnostic and isolated native head0 M64/M128 runs; this checkpoint did not rerun any owner.",
+  "all16_tokens0_127": {
+    "actual_chunks_completed": 32,
+    "actual_nonzero": 262144,
+    "after64_state_oracle_available": false,
+    "before_after_pins_match": true,
+    "bit_mismatches": 55,
+    "bounds": {
+      "address_space_bytes": 1073741824,
+      "cpu_count": 1,
+      "cpu_seconds": 600,
+      "driver_wall_seconds": 600,
+      "file_bytes": 8388608,
+      "log_bytes": 2097152,
+      "minimum_disk_available_bytes": 268435456,
+      "minimum_host_available_bytes": 2147483648,
+      "outer_wall_seconds": 660,
+      "output_bytes": 33554432,
+      "sampled_rss_bytes": 1073741824
+    },
+    "candidate_elapsed_seconds": 430.2692614609841,
+    "cleanup": "Two complete owned-group absence scans before direct retained-leader reap",
+    "elements": 262144,
+    "full_block_acceptance": false,
+    "generation_advanced": false,
+    "hardware_simulation": false,
+    "head0_consistency": {
+      "after128_state_sha256": "cd36020c66eb6d0926fffb2d18a85472f8b2bdd2ee08bb0fc9506515775a1e12",
+      "after64_official_oracle_available": false,
+      "after64_state_sha256": "a56a1b22d512cb0c419f1784be60354ba70eb66d83617a33db99aba3101b8e2c",
+      "identical_to_prior_head0_m128": true,
+      "output_sha256": "e8c3d9e2790052831d536b09e93568628070ae5f4423dd3d41f4fb85c8f62a93"
+    },
+    "max_abs": 1.52587890625e-05,
+    "mean_abs": 9.90735132821996e-11,
+    "mean_reduction": "binary64 absolute deltas, stdlib math.fsum/count; no NumPy reduction-bit identity claim",
+    "meets_existing_node_thresholds": true,
+    "natural_exit": 0,
+    "output_published": false,
+    "owned_cleanup_confirmed": true,
+    "per_head_second_chunk_carry": {
+      "all_match": true,
+      "heads_checked": 16,
+      "required_read_beats": {
+        "inter_matmul": 65536,
+        "predict_matmul": 65536,
+        "state_decay": 1024
+      }
+    },
+    "policy": {
+      "cold": true,
+      "cumsum_policy": "legacy_ascending_fp32",
+      "exp_policy": "experimental_equal_heads_chunk_candidate_p7_split_ln2_gradual_underflow_v1",
+      "heads": 16,
+      "host_batch": true,
+      "key_dim": 128,
+      "matmul_policy": "row1_streaming",
+      "tokens": 128,
+      "value_dim": 128,
+      "vector_backend": "finite_mul_tininess_r2",
+      "vector_exception_policy": "ieee_rne_finite_gradual_underflow",
+      "vector_fatal_mask": 28
+    },
+    "reference_mapping": "native0020 [1,128,16,128], exact full contiguous tensor",
+    "reference_nonzero": 262144,
+    "scope": "REAL_SAVED_PREP_ALL16_TOKENS0_127_ONLY",
+    "source_pin_count": 1106,
+    "state_committed": false,
+    "state_numerical_validation": {
+      "actual_nonzero": 261248,
+      "atol": 0.0001,
+      "bit_mismatches": 227510,
+      "elements": 262144,
+      "max_abs": 9.5367431640625e-07,
+      "max_error_over_tolerance": 0.003976213056452241,
+      "mean_abs": 1.230785461504479e-09,
+      "meets_existing_state_threshold": true,
+      "reference_nonzero": 261248,
+      "rtol": 0.0001,
+      "violations": 0,
+      "worst_normalized_location": {
+        "head": 8,
+        "key_row": 4,
+        "value_column": 81
+      }
+    },
+    "state_oracle_available": true,
+    "state_published": false,
+    "state_reference_mapping": "native0021 [1,16,128,128] FP32 after128, full contiguous state, identical official final cache0043",
+    "status": "PASS_EXISTING_NODE_AND_AFTER128_STATE_THRESHOLDS_ONLY",
+    "supervisor_elapsed_seconds": 431.0102035700111,
+    "supervisor_peak_sampled_rss_bytes": 142675968,
+    "terminal_count": 1,
+    "thresholds": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    }
+  },
+  "evidence_origin": "Previously completed private saved-word diagnostic and isolated native head0 M64/M128 and all16 M128 runs; this checkpoint did not rerun any owner.",
   "full_block_acceptance": false,
   "head0_tokens0_127": {
     "actual_chunks_completed": 2,
@@ -186,7 +284,7 @@
   "relocated_helpers": {
     "status": "TEMP_NOT_EXECUTED",
     "status_scope": "Relocated native child and supervisor; the pure-stdlib comparator was tested separately.",
-    "validation": "13 stdlib mapping/control/CLI tests plus AST/JSON checks passed. Adapted post-comparison matched every historical M128 result field except its own code hash and comparison duration; no native owner or supervisor execution."
+    "validation": "21 stdlib mapping/control/CLI tests plus AST/JSON checks passed. Adapted post-comparison matched every historical head0/M128 and all16/M128 result field except its own code hash/size and comparison duration; no native owner or supervisor execution."
   },
   "schema": 1
 }

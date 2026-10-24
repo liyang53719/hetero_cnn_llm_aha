@@ -1,0 +1,106 @@
+{
+  "acceptance": {
+    "M128_acceptance": false,
+    "M2_observer_equivalence_only": true,
+    "RTL_pass": false,
+    "fullblock_pass": false,
+    "fullblock_seal_called": false,
+    "matrix_binary_provenance_verified_by_observer": false,
+    "numerical_acceptance": false,
+    "public_advance_calls": 0,
+    "public_completed": 0,
+    "public_jobs": 0,
+    "public_pc": 0,
+    "wholeblock_scope": "INCOMPLETE_WHOLEBLOCK"
+  },
+  "comparison_status": "MATCHED_SUCCESS_M2_OBSERVER_EQUIVALENCE_ONLY",
+  "equivalence": {
+    "all33_field_presence_output_files_exact_size_SHA_equal": true,
+    "attention_records": 8565,
+    "decoded_semantic_differences": {},
+    "epoch_normalization": false,
+    "four_long_lived_forward_reverse_mappings_verified": true,
+    "known_generic_references_matched": 1515,
+    "opaque_ID_category_counts": {
+      "actual_object_reference": 3051,
+      "done_object": 216,
+      "fifo_object": 48,
+      "job_object": 1,
+      "matrix_object": 3031,
+      "owner_object": 3031,
+      "request_object": 696,
+      "result_object": 936,
+      "scalar_object": 1
+    },
+    "opaque_ID_difference_rows": 11011,
+    "raw_logical_record_differences": {
+      "attention": 3391,
+      "wholeblock": 1515
+    },
+    "short_lived_cross_run_alias_equivalence_proven": false,
+    "tag_normalization": false,
+    "transport_exact_size_SHA_equal": true,
+    "wholeblock_records": 2211
+  },
+  "main_loop_timing": {
+    "cpu_reduction_percent": 15.424379151806345,
+    "current_0503_new": {
+      "cpu_seconds": 27.504084966000004,
+      "wall_seconds": 28.3431364170101
+    },
+    "historical_0417_new": {
+      "cpu_seconds": 32.520110039,
+      "wall_seconds": 33.802740321989404
+    },
+    "scope": "Main loop includes owner, dual callbacks, codec and transport; excludes constructor and sealing I/O. Historical single runs, not concurrent pairs or repeats; no confidence interval, full-size projection, or synthetic microbenchmark speedup claim.",
+    "wall_reduction_percent": 16.1513648094019
+  },
+  "packaging": {
+    "actual_or_source_tests_rerun": false,
+    "independently_executable_runtime": false,
+    "raw_receipts_profiles_streams_arrays_published": false
+  },
+  "post_exit_inventory": {
+    "bytes": 6019366,
+    "files": 51
+  },
+  "prior_0437_diagnostic": {
+    "actual_run_status": "FAIL",
+    "auxiliary_samples": 3134,
+    "interpretation": "Partial auxiliary hotspot hypothesis only, not PASS, no repaired or upgraded status, no unsealed stream read.",
+    "known_reentrant_drop": 1,
+    "sampling_status": "INCOMPLETE_SAMPLING"
+  },
+  "provenance": {
+    "actual_review": {
+      "bytes": 31211,
+      "sha256": "39c51ac6aa3eff3e6778417a7f5924117f2883cb71e404c85f3074fef978bcdf"
+    },
+    "frozen_source_manifest": {
+      "bytes": 4093,
+      "sha256": "c50d06d79d1bd3adca8b62974f6adb0f64f6d629aff728584b57404a4270a5dc"
+    },
+    "prior_failed_diagnostic_review": {
+      "bytes": 15289,
+      "sha256": "7940b7ccfa0c00f1d9f264cb6b63f679703fc7c7a3ffcb829faf676183d8297b"
+    },
+    "source_cold_review": {
+      "bytes": 18377,
+      "sha256": "043649747b7a8f855a1861cccc24d3800cefc171ea9eb4100d621aa6c10f9b72"
+    }
+  },
+  "run_boundary": {
+    "actual_M2_executed_in_reviewed_run": true,
+    "compilation_performed_in_actual_run": false,
+    "historical_comparison_only": true,
+    "official_input_payload_read": false,
+    "old_unsealed_stream_read": false,
+    "publication_authorizes_new_actual_execution": false,
+    "reference_payload_read": false,
+    "sampling_enabled_in_0503": false
+  },
+  "schema": "single-m2-frame-cache-limited-public-summary-v1",
+  "scope": "Single new finite N1 synthetic M2 observer equivalence against the sealed historical 0417 new arm; no repeated paired benchmark or independent numerical oracle.",
+  "source_after_all21_pins_unchanged": true,
+  "status": "CONFIRMED_SINGLE_M2_FRAME_CACHE_HISTORICAL_EQUIVALENCE_ONLY"
+}

@@ -1,0 +1,186 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 5139,
+      "sha256": "c904a79f2af16e14ca7a739e60ad0b5125adc4bb4162bc2fd0fc89fcef382fe2"
+    },
+    "SUMMARY.json": {
+      "bytes": 3896,
+      "sha256": "e83f0d79feeae9b1338acf5f207c335c4ceca8d60e7ae85bf0b5a3d2e820e6e3"
+    },
+    "check.py": {
+      "bytes": 4790,
+      "sha256": "0b7811b3aeb0441c49c61a69aa65493b4b938de9586d9000e741ccb1e613febe"
+    },
+    "source/cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "source/m2_authority.py": {
+      "bytes": 9548,
+      "sha256": "00a07d4271a496a51032d65d79b3aa5c1387fabd1ab766aa3789da8b8400d5c9"
+    },
+    "source/m2_context.py": {
+      "bytes": 18496,
+      "sha256": "704a0639f7dd4c62c140ba59336d42ce1f76a7553a41a7ac4da65aba6d7576a0"
+    },
+    "source/m2_entry.py": {
+      "bytes": 7363,
+      "sha256": "bd153c6495abe516df379178204192624d74f506e09b820aba3648393c85238b"
+    },
+    "source/m2_io.py": {
+      "bytes": 11216,
+      "sha256": "de1b9e5479e632ceb70f7a0f18f7e139cc5a1f938851ed28c893fca104dbb087"
+    },
+    "source/m2_runtime.py": {
+      "bytes": 6585,
+      "sha256": "2189b657e99c463cd812e6b1a780052f4fbf1f0ac6c002f2cf72e64d7f1a90d2"
+    },
+    "source/m2_supervision_gate.py": {
+      "bytes": 12781,
+      "sha256": "c061af714412ee4543f293d70ab6cda925de8848fe5983807897d6e4a26d5383"
+    },
+    "source/narrow_fullblock_attention.py": {
+      "bytes": 55735,
+      "sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d"
+    },
+    "source/native_adapter.py": {
+      "bytes": 8727,
+      "sha256": "12c4d24854a8dabe6b44bf07ea42246b7d9367e611f45a37213ddd2f91cf6368"
+    },
+    "source/parent/decode_diff.py": {
+      "bytes": 14269,
+      "sha256": "a2d93d57674545eabf4e2f1681ddf42ff01f9f2c5a758f137db089e77f02315e"
+    },
+    "source/parent/history_compare.py": {
+      "bytes": 7537,
+      "sha256": "ee80666d58e9a4debe888373a15f2956a293dd4e14ae6b8bd50df78eebc7ff89"
+    },
+    "source/run_pair.py": {
+      "bytes": 16273,
+      "sha256": "eae326cc80064e666b02dbf5038a710bd4083c30b55c6e320241d356b3565d63"
+    },
+    "source/success_driver.py": {
+      "bytes": 13398,
+      "sha256": "04d00400b50d5303f5f74b61a0908be54878c36895563757134722800d9987ab"
+    }
+  },
+  "machine_path_policy": "No private machine-specific absolute paths. Generic OS paths and the protocol role label in unchanged source are not rewritten.",
+  "prohibited_payloads": [
+    "HISTORY.json",
+    "ADMISSION.json",
+    "original SOURCE_MANIFEST.json",
+    "raw receipts",
+    "profiles",
+    "streams",
+    "input/output arrays",
+    "ELF",
+    "runtime dependencies"
+  ],
+  "provenance": {
+    "actual_review": {
+      "bytes": 31211,
+      "sha256": "39c51ac6aa3eff3e6778417a7f5924117f2883cb71e404c85f3074fef978bcdf"
+    },
+    "frozen_source_manifest": {
+      "bytes": 4093,
+      "sha256": "c50d06d79d1bd3adca8b62974f6adb0f64f6d629aff728584b57404a4270a5dc"
+    },
+    "prior_failed_diagnostic_review": {
+      "bytes": 15289,
+      "sha256": "7940b7ccfa0c00f1d9f264cb6b63f679703fc7c7a3ffcb829faf676183d8297b"
+    },
+    "source_cold_review": {
+      "bytes": 18377,
+      "sha256": "043649747b7a8f855a1861cccc24d3800cefc171ea9eb4100d621aa6c10f9b72"
+    }
+  },
+  "publish_whitelist": [
+    "PORTABLE_MANIFEST.json",
+    "README.md",
+    "SUMMARY.json",
+    "check.py",
+    "source/cached_wholeblock.py",
+    "source/m2_authority.py",
+    "source/m2_context.py",
+    "source/m2_entry.py",
+    "source/m2_io.py",
+    "source/m2_runtime.py",
+    "source/m2_supervision_gate.py",
+    "source/narrow_fullblock_attention.py",
+    "source/native_adapter.py",
+    "source/parent/decode_diff.py",
+    "source/parent/history_compare.py",
+    "source/run_pair.py",
+    "source/success_driver.py"
+  ],
+  "schema": "single-m2-frame-cache-public-source-excerpt-v1",
+  "scope": "Reviewable source excerpts and limited summary only; no independent execution package or authority.",
+  "source_files": {
+    "source/cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b",
+      "source_relative_path": "cached_wholeblock.py"
+    },
+    "source/m2_authority.py": {
+      "bytes": 9548,
+      "sha256": "00a07d4271a496a51032d65d79b3aa5c1387fabd1ab766aa3789da8b8400d5c9",
+      "source_relative_path": "m2_authority.py"
+    },
+    "source/m2_context.py": {
+      "bytes": 18496,
+      "sha256": "704a0639f7dd4c62c140ba59336d42ce1f76a7553a41a7ac4da65aba6d7576a0",
+      "source_relative_path": "m2_context.py"
+    },
+    "source/m2_entry.py": {
+      "bytes": 7363,
+      "sha256": "bd153c6495abe516df379178204192624d74f506e09b820aba3648393c85238b",
+      "source_relative_path": "m2_entry.py"
+    },
+    "source/m2_io.py": {
+      "bytes": 11216,
+      "sha256": "de1b9e5479e632ceb70f7a0f18f7e139cc5a1f938851ed28c893fca104dbb087",
+      "source_relative_path": "m2_io.py"
+    },
+    "source/m2_runtime.py": {
+      "bytes": 6585,
+      "sha256": "2189b657e99c463cd812e6b1a780052f4fbf1f0ac6c002f2cf72e64d7f1a90d2",
+      "source_relative_path": "m2_runtime.py"
+    },
+    "source/m2_supervision_gate.py": {
+      "bytes": 12781,
+      "sha256": "c061af714412ee4543f293d70ab6cda925de8848fe5983807897d6e4a26d5383",
+      "source_relative_path": "m2_supervision_gate.py"
+    },
+    "source/narrow_fullblock_attention.py": {
+      "bytes": 55735,
+      "sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d",
+      "source_relative_path": "narrow_fullblock_attention.py"
+    },
+    "source/native_adapter.py": {
+      "bytes": 8727,
+      "sha256": "12c4d24854a8dabe6b44bf07ea42246b7d9367e611f45a37213ddd2f91cf6368",
+      "source_relative_path": "native_adapter.py"
+    },
+    "source/parent/decode_diff.py": {
+      "bytes": 14269,
+      "sha256": "a2d93d57674545eabf4e2f1681ddf42ff01f9f2c5a758f137db089e77f02315e",
+      "source_relative_path": "parent/decode_diff.py"
+    },
+    "source/parent/history_compare.py": {
+      "bytes": 7537,
+      "sha256": "ee80666d58e9a4debe888373a15f2956a293dd4e14ae6b8bd50df78eebc7ff89",
+      "source_relative_path": "parent/history_compare.py"
+    },
+    "source/run_pair.py": {
+      "bytes": 16273,
+      "sha256": "eae326cc80064e666b02dbf5038a710bd4083c30b55c6e320241d356b3565d63",
+      "source_relative_path": "run_pair.py"
+    },
+    "source/success_driver.py": {
+      "bytes": 13398,
+      "sha256": "04d00400b50d5303f5f74b61a0908be54878c36895563757134722800d9987ab",
+      "source_relative_path": "success_driver.py"
+    }
+  }
+}

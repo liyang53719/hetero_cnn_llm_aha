@@ -1618,3 +1618,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 归因依据保留FAIL：前次真实单臂诊断自然FAIL43.2338秒、cleanup闭合，因1次重入丢样在正常退出/封流前拒绝。已关闭辅助profile有3134样本、2071栈，无overflow/深度截断，不能改成PASS；原两主流只stat未读，未导出/比较33字段。辅助报告SHA35240218ec3844f0f6bba263eba7344e595816ff08be3ba14f19ac28d9463ed7，独审仅允许不完整热点定位。
 - 样本排他叶分类：audit39.247%、identity排audit后41.129%、codec2.234%；原identity45.12%是inclusive，不可相加，更不是精确CPU域测量。无需为零丢样重复诊断。
 - ONGOING / TEMP：新无采样单new-arm M2接线/冷审中，拟封流后parent对照0417已封结果；历史数据不入child。尚无本补丁真实M2/M128/完整RTL资格，五blockRTL仍0/5，无新MAC利用率实测；原失败与唯一证据不清理。
+
+## PASS（有限实际历史对照）/ TEMP：frame缓存真实M2验证（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_m2_frame_cache_validation/` 17文件源码审阅摘录，13份原Python逐字保留；不含历史HISTORY、原预算/ADMISSION、日志、payload、权重或ELF。入树静态checker核全部pins并内存compile14 Python成功，不执行原运行/测试代码；不是独立可运行包。
+- 实际唯一单new臂M2无采样，自然0/37.227324秒，无外soft/hard停线。原WNOWAIT0、PID/start ticks、CONSUMED、reaped/group absent/cleanup闭合；只在新臂封流并清理后，由parent读取0417历史已封new作比较，历史数据不进入child计算。
+- PASS精确范围：`MATCHED_SINGLE_M2_FRAME_CACHE_HISTORICAL_EQUIVALENCE_ONLY`，独审SHA39c51ac6aa3eff3e6778417a7f5924117f2883cb71e404c85f3074fef978bcdf；51闭合文件6019366B，33字段/presence/输出文件与transport精确相同，每臂8565 Attention/2211 wholeblock记录语义差分为空；11011 opaque差异行及4长期映射核验。未复跑DUT、未读旧未封流。
+- 实际main_loop CPU32.520110039→27.504084966秒，降低15.42%；wall33.802740322→28.343136417秒，降低16.15%。这是历史单次非同期对照，不是合成2.375/2.58倍，更不是硬件利用率、M128速度预测或完整block通过。
+- 原0437诊断仍FAIL，只允许关闭的辅助profile作不完整热点判断，不补造其33字段或完整封流证据。
+- ONGOING / TEMP：另立tick边界完整性契约，保原full identity函数及全部数值/event/line检查，拟将完整ABI/profile值检查限定到tick边界、异常和tick外，内部每callback保cheap归属。同tick瞬变恢复检测能力变化将明示；目前仅实现/合成，不准actual。五block完整RTL仍0/5、M128未通过、无新增MAC利用率实测。本批不删除任何临时数据。

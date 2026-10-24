@@ -77,6 +77,8 @@ jobs:
                       text=True, preexec_fn=limits, timeout=min(30, remaining),
                       check=False,
                   )
+                  if time.monotonic() - started >= 120:
+                      raise SystemExit('Cold aggregate exceeded 120-second budget')
                   print(f'=== {filename}; optimized={optimized}; expected={expected}', flush=True)
                   print(completed.stdout, end='', flush=True)
                   counts = re.findall(r'^Ran (\d+) tests? in .+s$', completed.stdout, re.MULTILINE)
@@ -88,6 +90,8 @@ jobs:
               if total != 76:
                   raise SystemExit('Cold aggregate count mismatch')
               totals.append(total)
+          if time.monotonic() - started >= 120:
+              raise SystemExit('Cold aggregate exceeded 120-second budget')
           print(json.dumps({
               'status': 'PASS_COLD_TESTS_ONLY', 'normal_tests': totals[0],
               'optimized_tests': totals[1], 'native_execution': False,

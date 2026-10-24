@@ -60,10 +60,14 @@ class _Binding:
             fn = self.value
             if (fn.__code__ is not self.code or fn.__defaults__ is not self.defaults or
                     (None if fn.__kwdefaults__ is None else tuple((k, type(v), v) for k, v in fn.__kwdefaults__.items())) != self.kwdefaults or
-                    len(fn.__closure__ or ()) != len(self.closure) or
-                    any(cell.cell_contents is not value for cell, value in
-                        zip(fn.__closure__ or (), self.closure))):
+                    len(fn.__closure__ or ()) != len(self.closure)):
                 _changed(self.name + ' code/defaults/closure')
+            # Empty closures need no iterator/generator allocation. Keep cell
+            # reads after code/defaults/length checks, in their original order.
+            if self.closure:
+                for cell, value in zip(fn.__closure__ or (), self.closure):
+                    if cell.cell_contents is not value:
+                        _changed(self.name + ' code/defaults/closure')
 
 
 # Retain original class definitions AND every defining op in the super() chain.

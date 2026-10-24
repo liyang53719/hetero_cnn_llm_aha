@@ -7,7 +7,7 @@ test_full_driver and explicitly use mocked numerical transports.
 """
 from collections import Counter
 from contextlib import contextmanager
-from types import MethodType
+from types import MethodType, SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -168,6 +168,112 @@ class ScalarBindingColdTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
                     s.legacy_exp_routing_identity(s.exp_policy)
         self.assertEqual(s.legacy_exp_routing_identity(s.exp_policy), before)
+
+    def test_empty_closure_keeps_binding_code_defaults_and_kwdefaults_checks(self):
+        def fn(*, enabled=True):
+            return enabled
+        owner = SimpleNamespace(fn=fn)
+        pin = s._Binding.capture(owner, 'fn')
+        self.assertEqual(pin.closure, ())
+        self.assertIsNone(pin.check())
+        for name, changed in (('__code__', fn.__code__.replace(co_name='changed')),
+                              ('__defaults__', (1,)),
+                              ('__kwdefaults__', {'enabled': 1})):
+            with self.subTest(attribute=name), replaced_function_attribute(fn, name, changed):
+                with self.assertRaisesRegex(ValueError, '^Scalar arithmetic binding changed: fn code/defaults/closure$'):
+                    pin.check()
+        with patch.object(owner, 'fn', object()):
+            with self.assertRaisesRegex(ValueError, '^Scalar arithmetic binding changed: fn$'):
+                pin.check()
+        self.assertIsNone(pin.check())
+
+    def test_nonempty_closure_checks_every_cell_by_identity(self):
+        class EqualValue:
+            def __eq__(self, other):
+                raise AssertionError('closure comparison must use identity')
+        left, right = EqualValue(), EqualValue()
+        def fn():
+            return left, right
+        pin = s._Binding.capture(SimpleNamespace(fn=fn), 'fn')
+        self.assertEqual(len(pin.closure), 2)
+        for cell, original in zip(fn.__closure__, pin.closure):
+            with self.subTest(cell=id(cell)):
+                try:
+                    cell.cell_contents = EqualValue()
+                    with self.assertRaisesRegex(ValueError, '^Scalar arithmetic binding changed: fn code/defaults/closure$'):
+                        pin.check()
+                finally:
+                    cell.cell_contents = original
+        self.assertIsNone(pin.check())
+
+    def test_empty_cell_preserves_binding_and_metadata_error_precedence(self):
+        captured = object()
+        def fn(*, enabled=True):
+            return captured, enabled
+        owner = SimpleNamespace(fn=fn)
+        pin = s._Binding.capture(owner, 'fn')
+        cell = fn.__closure__[0]
+        original = cell.cell_contents
+        try:
+            del cell.cell_contents
+            with self.assertRaisesRegex(ValueError, '^Cell is empty$'):
+                pin.check()
+            for name, changed in (('__code__', fn.__code__.replace(co_name='changed')),
+                                  ('__defaults__', (1,)),
+                                  ('__kwdefaults__', {'enabled': 1})):
+                with self.subTest(attribute=name), replaced_function_attribute(fn, name, changed):
+                    with self.assertRaisesRegex(ValueError, '^Scalar arithmetic binding changed: fn code/defaults/closure$'):
+                        pin.check()
+                    with patch.object(owner, 'fn', object()):
+                        with self.assertRaisesRegex(ValueError, '^Scalar arithmetic binding changed: fn$'):
+                            pin.check()
+        finally:
+            cell.cell_contents = original
+        self.assertIsNone(pin.check())
+
+    def test_closure_mismatch_precedes_later_empty_cell(self):
+        left, right = object(), object()
+        def fn():
+            return left, right
+        pin = s._Binding.capture(SimpleNamespace(fn=fn), 'fn')
+        first, second = fn.__closure__
+        originals = pin.closure
+        try:
+            first.cell_contents = object()
+            del second.cell_contents
+            with self.assertRaisesRegex(ValueError, '^Scalar arithmetic binding changed: fn code/defaults/closure$'):
+                pin.check()
+        finally:
+            first.cell_contents, second.cell_contents = originals
+        self.assertIsNone(pin.check())
+
+    def test_each_binding_is_checked_in_unchanged_scalar_and_routing_order(self):
+        for cls, count in ((s.prep.PrepScalar, 3), (s.decay.DecayScalar, 4)):
+            scalar = bare(cls)
+            guard = s.ScalarIdentityGuard(scalar)
+            expected = [pin for _, _, _, pins in s._CLASS_PINS[:count] for pin in pins]
+            expected += [pin for pins in s._MODULE_PINS[:count] for pin in pins]
+            expected += [*s._NUMPY_PINS, *s._STRUCT_PINS]
+            if cls is s.decay.DecayScalar:
+                expected.append(s._DECAY_NUMPY_PIN)
+            expected += [*s._ROUTE_PINS, *s._VECTOR_POLICY_PINS,
+                         *s._CHUNK_ALIAS_PINS, s._CHUNK_EXP_PIN]
+            visited, original = [], s._Binding.check
+            def checked(pin):
+                visited.append(pin)
+                return original(pin)
+            with patch.object(s._Binding, 'check', checked):
+                guard.check(scalar)
+                s.chunk_exp_routing_identity(s.exp_policy)
+            self.assertEqual([id(pin) for pin in visited], [id(pin) for pin in expected])
+
+    def test_first_class_binding_error_precedes_later_class_mutation(self):
+        scalar = bare(s.decay.DecayScalar)
+        guard = s.ScalarIdentityGuard(scalar)
+        with patch.object(s.rms.SharedScalar, 'acquire', object()), \
+             patch.object(s.prep.PrepScalar, 'op', object()):
+            with self.assertRaisesRegex(ValueError, '^Scalar arithmetic binding changed: acquire$'):
+                guard.check(scalar)
 
 
 class ScalarBindingActualArithmeticTests(unittest.TestCase):

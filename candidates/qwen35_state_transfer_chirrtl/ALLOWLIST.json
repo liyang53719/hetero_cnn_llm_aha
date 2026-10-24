@@ -1,0 +1,62 @@
+{
+  "allowed_file_count": 12,
+  "allowed_files": [
+    "ALLOWLIST.json",
+    "INPUT_PINS.json",
+    "MANIFEST.json",
+    "README.md",
+    "REPRODUCE_COMMAND.txt",
+    "SUMMARY.json",
+    "launch_chirrtl.py",
+    "launch_chirrtl.py.patch",
+    "parser_controls.py",
+    "run_chirrtl.py",
+    "run_chirrtl.py.patch",
+    "source/GdnChunkStateTransferChirrtl.scala"
+  ],
+  "content_file_pins": {
+    "INPUT_PINS.json": {
+      "bytes": 132990,
+      "sha256": "940622519d46662715c8e1ecba516b117283819f4c45e04cfe49e1610853a743"
+    },
+    "README.md": {
+      "bytes": 4200,
+      "sha256": "8dc4cdf6d5fc3c8fecf182f8be29b73873839e0d96badb47cd0a8bb5290f8776"
+    },
+    "REPRODUCE_COMMAND.txt": {
+      "bytes": 3369,
+      "sha256": "bfc19c96952ec7e88cc3ecee87ba76b758bf9ddf5df8d940cd730a442b1fbcef"
+    },
+    "SUMMARY.json": {
+      "bytes": 13078,
+      "sha256": "d6f77e2d97bde05d52995ccfce516f67842ca76a683e414a4fbaaf49de099c6f"
+    },
+    "launch_chirrtl.py": {
+      "bytes": 3611,
+      "sha256": "7826e73adc7914da83ad9e3665349d257f187a263e2453fe09d148d1806382cd"
+    },
+    "launch_chirrtl.py.patch": {
+      "bytes": 735,
+      "sha256": "3da2279979d9eac16d32c889fa96cd64bf5f42ca27d92715f2a45d8253548fae"
+    },
+    "parser_controls.py": {
+      "bytes": 6633,
+      "sha256": "ef50e7c7bda836929346148952ed4dc6434528868217bbea09ec89b651620153"
+    },
+    "run_chirrtl.py": {
+      "bytes": 19218,
+      "sha256": "61b9a12f6db4aaa7f991414b9da91fb790cfb912169adf8821a8125734c49463"
+    },
+    "run_chirrtl.py.patch": {
+      "bytes": 5090,
+      "sha256": "209810ecf206c637acf12b179bab416606b7283acd83af22d9b9d9ab60ba3f1d"
+    },
+    "source/GdnChunkStateTransferChirrtl.scala": {
+      "bytes": 7235,
+      "sha256": "e2c155721bba105f75eaaa1853fc81b97179b2bb0071fa4ed2d2b1c5d7911604"
+    }
+  },
+  "publish_rule": "Only these 12 regular files. Never recursively publish the parent directory. No excluded authority, plan, logs, raw receipts, original review, class files, generated IR, existing owner/Chunk source, or tools.",
+  "schema": "public-excerpt-exact-allowlist-v1",
+  "self_and_manifest_pinning": "MANIFEST.json pins ALLOWLIST.json and all other content. The final handoff pins MANIFEST.json externally, avoiding self-hash or circular pins."
+}

@@ -1766,3 +1766,14 @@ PASS只限SCALA_COMPILE_ONLY，未执行AddressPlan方法、Bundle/Module构造�
 仅SCALA_COMPILE_ONLY，不执行Module、Chisel展开、真实Memory ACK、RTL或GDN算术；不能称已集成Host或完整prefill。Qwen2 full执行/清理UNKNOWN与五RTL0/5不变，无MAC实测提升。
 
 公开8项130509B位于 candidates/qwen35_state_transfer_scala_compile/，manifest SHA256 79534496d8728b38deef64bb1df7c299e47081046e71d39beb02e5f773945857。原runner摘录/相对pins/复现模板非完整机器closure，不提交机器plan/raw日志/工具/class。未push，无新增CI，无清理。
+
+
+## PASS（仅单 owner CHIRRTL 前端）：保留原后置 FAIL
+
+R1 两个JVM自然0且cleanup确认，已生成84930B CHIRRTL，但后置类名检查只接受带数字Lambda序号，误拒当前JDK21无数字格式273条；原AFTER缺失、整体FAIL保留，不以产物存在补PASS。R2只修精确冻结宿主的格式/来源检查，未知类不放宽。21组纯解析控制通过；第一次root wrapper CPU9硬限与脚本10冲突，在测试前退出，保留后改匹配10/10，不隐去前置错误。
+
+R2唯一实际总11.457736474秒、双自然0/WNOWAIT/reap/group absent/cleanup闭合，381输入前后全同；51原class及3emitter类核验，17普通/273隐藏类来源与宿主精确一致，exec/network/guard replacement尝试0。真实构造一个owner并检查64个IO叶，单CHIRRTL84930B，SHA256 74cae2f313e575d16418b61592e0c7e083781f78fd5980368b1fb60de74e595e，与R1产物同。实际独审 SHA256 5af1a9bea2eb177e47be114401d54e5ab8f0c120335fc4819f615446e67db4e1。
+
+仅CHIRRTL前端构造/展开资格，生成硬件中间表示但未运行firtool、未生成SystemVerilog、未进行RTL仿真/真实ACK/数值或完整chunk；五RTL0/5、Qwen2 full UNKNOWN不变。
+
+公开12件200425B在 candidates/qwen35_state_transfer_chirrtl/，manifest SHA256 da8f37cf8e9203ff097d89a31533921e796e9a3409c45679442b85ae45eb315b，含原emitter/runner/修复diff/复现模板/相对pins，排除机器plan、IR、日志、工具/class。非原完整监督closure。未push、无新CI、无清理。

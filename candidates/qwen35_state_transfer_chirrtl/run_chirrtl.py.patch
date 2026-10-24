@@ -1,0 +1,84 @@
+--- r1/run_chirrtl.py
++++ r2/run_chirrtl.py
+@@ -139,9 +139,49 @@
+     return raw
+ 
+ 
++def validate_loaded_classes(raw, plan, compiled):
++    """Pure postcondition over bounded log text. Never imports or executes logged classes."""
++    original = {x[:-6].replace('/', '.') for x in plan['input_class_relatives']}
++    emitted = {x[:-6].replace('/', '.') for x in compiled}
++    expected = {x: 'file:' + Path(plan['input_class_root']).as_posix() + '/' for x in original}
++    expected.update({x: 'file:' + (Path(plan['work']) / 'classes').as_posix() + '/' for x in emitted})
++    loaded, ordinary, hidden, hosts = [], [], [], set()
++    for line in raw.decode('utf-8').splitlines():
++        if '[class,load]' not in line:
++            continue
++        row = line.split('[class,load]', 1)[1].strip()
++        need(' source:' in row, 'class-load source missing')
++        name, source = row.split(' source:', 1)
++        source = source.strip()
++        need(name and source, 'class-load name/source missing')
++        loaded.append(name)
++        need(not name.startswith('hardfloat.'), 'HardFloat class forbidden')
++        if not name.startswith('heteronpu.'):
++            continue
++        if name in expected:
++            need(source == expected[name], 'fixed candidate class root mismatch')
++            hosts.add(name)
++            ordinary.append(name)
++            continue
++        match = re.fullmatch(r'(.+)\$\$Lambda(?:\$[0-9]+)?/0x[0-9a-fA-F]+', name)
++        need(match is not None, 'unknown candidate class or hidden-lambda spelling')
++        host = match.group(1)
++        need(host in expected and host in hosts and source == host,
++             'hidden lambda exact pinned and already loaded host/source')
++        hidden.append({'name': name, 'host': host})
++    need(loaded and set(plan['required_elaboration_classes']).issubset(loaded),
++         'required elaboration classes missing')
++    return {'required': plan['required_elaboration_classes'], 'loaded_count': len(loaded),
++            'candidate_classes': [x for x in loaded if x.startswith('heteronpu.')],
++            'ordinary_candidate_count': len(ordinary), 'hidden_lambda_count': len(hidden),
++            'hidden_host_names': sorted({x['host'] for x in hidden}),
++            'hardware_class_loaded': True, 'source': 'elaboration-class-load.log',
++            'scope': 'one frontend owner only; class loading is not simulation'}
++
++
+ def main(plan, start, stop, work_stop, deadline_handler):
+     work = Path(plan['work'])
+-    need(plan['schema'] == 'qwen35-state-transfer-chirrtl-bound-v1', 'plan schema')
++    need(plan['schema'] == 'qwen35-state-transfer-chirrtl-bound-v2', 'plan schema')
+     need(plan['compile_argv'].count('scala.tools.nsc.Main') == 1 and
+          plan['compile_argv'][-1:] == list(plan['sources']) and
+          plan['compile_argv'][plan['compile_argv'].index('-d') + 1] == str(work / 'classes'),
+@@ -275,28 +315,12 @@
+              'single owner CHIRRTL circuit without instances/memories/external modules')
+         need({p.name for p in (work / 'ir').iterdir()} == {'GdnChunkStateTransferOwner.fir'}, 'one IR artifact')
+         loaded_raw = terminal_bytes(work / 'elaboration-class-load.log', limits['log_bytes'])
+-        loaded = []
+-        for line in loaded_raw.decode().splitlines():
+-            if '[class,load]' in line and ' source:' in line:
+-                loaded.append(line.split('[class,load]', 1)[1].strip().split(' source:', 1)[0])
+-        allowed_candidate = {x[:-6].replace('/', '.') for x in plan['input_class_relatives']}
+-        allowed_candidate |= {x[:-6].replace('/', '.') for x in compiled}
+-        def candidate_allowed(name):
+-            if name in allowed_candidate:
+-                return True
+-            hidden = re.fullmatch(r'(.+)\$\$Lambda\$[0-9]+(?:/0x[0-9a-fA-F]+)?', name)
+-            return bool(hidden and hidden.group(1) in allowed_candidate)
+-        need(loaded and set(plan['required_elaboration_classes']).issubset(loaded) and
+-             all(not x.startswith('heteronpu.') or candidate_allowed(x) for x in loaded) and
+-             not any(x.startswith('hardfloat.') for x in loaded), 'exact candidate class inventory, no Host/HardFloat')
++        class_scope = validate_loaded_classes(loaded_raw, plan, compiled)
+         after = verify_inputs(plan)
+         need(after == before, 'input identity before/after drift')
+         dump(work / 'AFTER.json', after)
+         dump(work / 'ELABORATION_RESULT.json', elaboration)
+-        dump(work / 'CLASS_LOADING_SCOPE.json', {'required': plan['required_elaboration_classes'],
+-             'loaded_count': len(loaded), 'candidate_classes': [x for x in loaded if x.startswith('heteronpu.')],
+-             'hardware_class_loaded': True, 'source': 'elaboration-class-load.log',
+-             'scope': 'one frontend owner only; class loading is not simulation'})
++        dump(work / 'CLASS_LOADING_SCOPE.json', class_scope)
+         dump(work / 'WATCH.json', watch)
+         dump(work / 'DIAGNOSTICS.json', diagnostics)
+         final_tree = inventory(work, hashes=True)

@@ -1,0 +1,36 @@
+审阅与独立复现说明（不是自动执行脚本）
+
+本摘录不含完整 FROZEN_PLAN.json、依赖、51 个输入 class、监督闭包或实际证据。不得直接运行 launch_chirrtl.py；它要求原完整计划的精确字节与固定路径。公开 INPUT_PINS.json 不是替代计划。复现必须另行取得每个输入、校验、审查资源与进程生命周期约束，并冻结新的环境配置，不能沿用本次 actual 的 PASS。
+
+通用位置示例只用于说明，不是本次机器目录：
+  PYTHON=/opt/cpython-3.12.14/bin/python3.12
+  EXCERPT_ROOT=/opt/chirrtl-source-excerpt
+  JAVA=/opt/pinned-jdk/bin/java
+  ORIGINAL_CLASSES=/opt/pinned-input-classes
+  JARS=<INPUT_PINS.json 中 87 个条目按原序映射后的冒号分隔绝对路径>
+  WORK=/tmp/new-chirrtl-attempt
+
+纯 parser 控制的入口形状：
+  "$PYTHON" -I -S -B "$EXCERPT_ROOT/parser_controls.py"
+该入口要求真实 CPython 3.12.14、相邻原字节 run_chirrtl.py、可用的未阻塞期限信号及允许设置 CPU soft/hard 10/10 秒的继承环境。它先校验 driver，只抽取 need/validate_loaded_classes 的 AST，执行 21 组字符串控制，不执行 driver main、JVM 或硬件。外层如先固定 hard CPU=9 秒，会在代码请求 10/10 秒时失败；这是历史上第一次 root 包装器设置错误，不是 parser 21 组测试失败。此说明没有运行该入口。
+
+原两阶段 Java 入口形状（不包含原监督执行器；禁止当作等价直接重跑命令）：
+  共同参数：-Xmx1024m -XX:ActiveProcessorCount=1 -XX:-UsePerfData -Djava.awt.headless=true
+  -Djava.io.tmpdir=$WORK/tmp -Duser.home=$WORK/home -XX:ErrorFile=$WORK/hs_err_pid%p.log
+  编译："$JAVA" <共同参数> -cp "$JARS" scala.tools.nsc.Main
+        -classpath "$ORIGINAL_CLASSES:$JARS" -deprecation -feature -unchecked
+        -language:reflectiveCalls -d "$WORK/classes"
+        "$EXCERPT_ROOT/source/GdnChunkStateTransferChirrtl.scala"
+  展开："$JAVA" <共同参数> -Djava.security.manager=allow
+        -Dchunk.expected.input.classes="$ORIGINAL_CLASSES"
+        -Dchunk.expected.emitter.classes="$WORK/classes"
+        -Dchunk.expected.ir.root="$WORK/ir"
+        -Xlog:class+load=info:file=$WORK/elaboration-class-load.log:uptime,level,tags
+        -cp "$WORK/classes:$ORIGINAL_CLASSES:$JARS"
+        heteronpu.continuous.contracttests.GdnChunkStateTransferChirrtl
+
+原实际只编译新 emitter，未重新编译四个 owner/Chunk 依赖源。原计划没有给这次 emitter 编译添加 -Xplugin；这里不补造参数。87 个 JAR 是 314 工具集合的子集，并非宣称最小依赖闭包。
+
+以上形状没有实现原监督保障：1 CPU 亲和性、4 GiB AS、2 GiB 采样 RSS、2 MiB 日志、16 MiB owned output、4 MiB 单文件；总 180 秒、共享 work 150 秒、编译 phase 120 秒和展开 phase 30 秒、cleanup 5 秒及 postflight 25 秒预算；固定 argv/env、身份/FD/pin 核对、WNOWAIT 观测/回收/清理及 before/after 381 项核对。两个 phase 不是各获得新的 150 秒预算。Java guard 只针对固定 Java 闭包的进程/网络调用与替换计数，不是任意 JNI 或网络沙箱。
+
+原 full plan pin：221617 B，SHA-256 dae101e5efb583478c27d5e16562b4bbdca2d5f743a8f44c14bdd1fa5912f41e。它被有意排除。已有历史记录的通过与失败均不得由复现入口说明改写。

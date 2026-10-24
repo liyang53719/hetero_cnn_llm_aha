@@ -1,0 +1,335 @@
+{
+  "actual_status": "PASS_OWNER_CHIRRTL_FRONTEND_ONLY",
+  "artifact_scope": "Sanitized source and result excerpt only; not standalone, complete raw evidence, permission to run, or hardware/model acceptance.",
+  "class_load_checks": {
+    "HardFloat_classes_loaded": 0,
+    "distinct_exact_previously_loaded_hosts": 11,
+    "hidden_lambdas": 273,
+    "hidden_sources": "Exact already-loaded pinned host, with either Host$$Lambda/0xHEX or Host$$Lambda$digits/0xHEX spelling.",
+    "ordinary_candidate_classes": 17,
+    "ordinary_sources": "Exact pinned original or new emitter class root; no extra candidate roots.",
+    "original_log_included": false,
+    "required_names_present": [
+      "heteronpu.continuous.GdnChunkStateTransferOwner",
+      "heteronpu.continuous.GdnChunkStateTransferPort",
+      "heteronpu.continuous.GdnChunkJob",
+      "heteronpu.continuous.MemoryRequest",
+      "heteronpu.continuous.MemoryResponse",
+      "circt.stage.ChiselStage$"
+    ],
+    "scope": "Bounded fixed JDK21 log postcondition, not a proof of arbitrary dynamic loading safety.",
+    "total_records": 4611,
+    "unknown_candidate_classes": 0
+  },
+  "cleanup_interpretation": "Both JVMs were observed naturally exited with WNOWAIT code=1/status=0, then reaped with process group absent and cleanup confirmed. kill_attempted=true and signal_sent_before_reap describe the original group cleanup after natural exit, not a timeout kill; these facts are preserved.",
+  "elapsed": {
+    "coordinator_RESULT_internal_seconds_9dp": "11.457449684",
+    "independent_outer_wall_measured": false,
+    "note": "Rounded to 9 decimal places from recorded monotonic intervals. These are not independently measured outer wall times.",
+    "root_stdout_internal_seconds_9dp": "11.457736474"
+  },
+  "emitter_compilation": {
+    "class_bytes": 24878,
+    "class_count": 3,
+    "class_pins": {
+      "heteronpu/continuous/contracttests/GdnChunkStateTransferChirrtl$.class": {
+        "bytes": 19644,
+        "sha256": "8a2f5488b3c5c8534935fbdd5ef57978d37eb7dbb6a57730d268720f5e871a3b"
+      },
+      "heteronpu/continuous/contracttests/GdnChunkStateTransferChirrtl$NoExternalTools.class": {
+        "bytes": 3001,
+        "sha256": "743e031cc06533f2161a2aa4fe0a56bb04eea18580e031bcbcdcdf4374bbcdf9"
+      },
+      "heteronpu/continuous/contracttests/GdnChunkStateTransferChirrtl.class": {
+        "bytes": 2233,
+        "sha256": "fd5a1e0fec4d9e7aa727fc43cc133938538c982c90f19316ce6f07a454f24274"
+      }
+    },
+    "classes_included": false,
+    "original_dependency_sources_recompiled": false,
+    "source_bytes": 7235,
+    "source_count": 1
+  },
+  "fixed_java_guard": {
+    "external_exec_attempts": 0,
+    "locked": true,
+    "network_attempts": 0,
+    "replacement_attempts": 0,
+    "scope": "Observed guarded operations in the fixed Java closure only; not a general arbitrary-JNI, network-isolation, or operating-system security sandbox."
+  },
+  "frontend": {
+    "RTL_generated": false,
+    "actual_handshake_tested": false,
+    "constructors": 1,
+    "external_exec_attempts": 0,
+    "fir_bytes": 84930,
+    "fir_sha256": "74cae2f313e575d16418b61592e0c7e083781f78fd5980368b1fb60de74e595e",
+    "guard_locked": true,
+    "guard_replacement_attempts": 0,
+    "instances": 0,
+    "io_leaf_checks": 64,
+    "modules": 1,
+    "network_attempts": 0,
+    "numerical_tested": false,
+    "sources_bound": true,
+    "status": "PASS_OWNER_CHIRRTL_FRONTEND_ONLY"
+  },
+  "hardware_intermediate_representation": {
+    "GDN_numerical_compute_engine_instantiated": false,
+    "artifact_included": false,
+    "declaration_counts": {
+      "circuit ": 1,
+      "class ": 0,
+      "cmem ": 0,
+      "extmodule ": 0,
+      "inst ": 0,
+      "intmodule ": 0,
+      "mem ": 0,
+      "module ": 1,
+      "object ": 0,
+      "smem ": 0
+    },
+    "firtool_inference_or_lowering_performed": false,
+    "format": "CHIRRTL",
+    "generated": true,
+    "ordinary_address_and_control_arithmetic_present": true,
+    "pin": {
+      "bytes": 84930,
+      "sha256": "74cae2f313e575d16418b61592e0c7e083781f78fd5980368b1fb60de74e595e"
+    },
+    "same_bytes_as_R1_generated_IR": true,
+    "top": "GdnChunkStateTransferOwner"
+  },
+  "historical_outcomes_preserved": {
+    "R1": {
+      "CHIRRTL_bytes": 84930,
+      "CHIRRTL_generated": true,
+      "child_compile_and_elaboration_natural_exit": 0,
+      "independent_original_failure_review_pin": {
+        "bytes": 53525,
+        "sha256": "c567f62fb0490436a2e623f9384a71105e54c8153ebd439108fe84449f3300a0"
+      },
+      "io_leaves_checked": 64,
+      "original_failure_not_reclassified": true,
+      "overall_status": "FAIL_OR_UNKNOWN_OWNER_CHIRRTL_ATTEMPT",
+      "owner_constructed": true,
+      "parent_failure_boundary": "Postflight class-log parser rejected actual JDK21 Host$$Lambda/0xHEX spelling; no all-input AFTER or final inventory completed."
+    },
+    "first_root_parser_wrapper": {
+      "excluded_result_pin": {
+        "bytes": 518,
+        "sha256": "d3abbe4b0e633ee515f2a52023240e03dea842dbb128cfc5d5c472f083f93d84"
+      },
+      "fixed_controls_requested_cpu_soft_hard_seconds": [
+        10,
+        10
+      ],
+      "outer_cpu_soft_hard_seconds": [
+        8,
+        9
+      ],
+      "parser_tests_executed": false,
+      "reason": "Outer wrapper set CPU soft8/hard9, but fixed controls sets10/10; rejected at resource.setrlimit before test execution. No source change. This is not a parser logic failure.",
+      "source_changed": false,
+      "status": "PRETEST_WRAPPER_SETUP_FAILURE"
+    },
+    "new_R2_actual": "One new actual after corrected parser controls. This frontend-only result does not amend historical failures or inherit prior qualification.",
+    "second_root_parser_wrapper": {
+      "JVM_executed": false,
+      "all21_method_results_ok": true,
+      "controls_internal_elapsed_seconds_9dp": "0.010067652",
+      "excluded_result_pin": {
+        "bytes": 520,
+        "sha256": "06ca7b03851cb556c9285d7613df988bf959fde54efdb98c48ecafae6648981a"
+      },
+      "exit_code": 0,
+      "groups": 21,
+      "outer_cpu_soft_hard_seconds": [
+        10,
+        10
+      ],
+      "owner_constructed": false,
+      "source_unchanged": true,
+      "status": "PASS_PURE_CLASS_LOG_PARSER_CONTROLS_ONLY",
+      "wrapper_record_elapsed_seconds_9dp": "0.114676704"
+    }
+  },
+  "independent_actual_review": {
+    "no_new_actual_executed_by_review_or_packaging": true,
+    "parser_control_review_pin": {
+      "bytes": 4503,
+      "sha256": "99bd9e8d529b082d9a55b9ebecde9699b5c261c65e68c417bef04ca8e4178bae"
+    },
+    "pin": {
+      "bytes": 60273,
+      "sha256": "5af1a9bea2eb177e47be114401d54e5ab8f0c120335fc4819f615446e67db4e1"
+    },
+    "raw_report_included": false,
+    "reviewed_at_utc": "2026-10-21T14:32:14.193734+00:00",
+    "root_reported_natural_exit": 0,
+    "source_review_pin": {
+      "bytes": 7286,
+      "sha256": "bf60558d4acb5da4e7044210d81384e05a948b9ad1eefd05de64b4cf3d6ec9f2"
+    }
+  },
+  "input_verification": {
+    "after_pin": {
+      "bytes": 128356,
+      "sha256": "fda5b833f5f59fefa2857b8f03cd312f483a2f00fe2eb4fd5e650c43ea2d65c0"
+    },
+    "all_before_after_entries_and_identity_equal": true,
+    "before_pin": {
+      "bytes": 128356,
+      "sha256": "fda5b833f5f59fefa2857b8f03cd312f483a2f00fe2eb4fd5e650c43ea2d65c0"
+    },
+    "between_phases": "Only original 51 classes and new emitter classes are rechecked, not all 381 inputs.",
+    "bytes": 297560375,
+    "classpath_jar_count": 87,
+    "count": 381,
+    "original_class_bytes": 277143,
+    "original_class_count": 51,
+    "packager_rehashed_tools_or_input_classes": false,
+    "reviewer_rehashed_all314_tools": false,
+    "tool_count": 314
+  },
+  "not_demonstrated": [
+    "firtool complete internal width inference or lowering",
+    "SystemVerilog or other RTL emission",
+    "RTL simulation",
+    "actual ready/valid or real Memory ACK functional transfer",
+    "functional arithmetic or FP32/GDN numerical correctness",
+    "complete chunk64 prefill or full GDN",
+    "Host integration or root/public/recurrent qualification",
+    "full model PASS"
+  ],
+  "overall_acceptance": {
+    "RTL_targets_passed": 0,
+    "RTL_targets_total": 5,
+    "old_Qwen2_full_execution_and_cleanup": "UNKNOWN",
+    "old_Qwen2_stream_touched": false,
+    "prior_PASS_inherited": false
+  },
+  "package_preparation": {
+    "JVM_or_emitter_executed": false,
+    "metadata_only_plus_six_small_original_sources": true,
+    "new_tests_or_parser_controls_executed": false,
+    "original_candidate_or_repository_modified": false,
+    "original_run_logs_or_receipts_read_for_packaging": false,
+    "raw_plan_or_review_or_authority_or_logs_or_classes_or_generated_IR_included": false,
+    "tool_binary_or_input_class_bytes_read_for_packaging": false,
+    "upload_or_push_performed": false
+  },
+  "phase_terminal_checks": {
+    "compile_emitter": {
+      "WNOWAIT_code": 1,
+      "WNOWAIT_status": 0,
+      "anchor_confirmed": true,
+      "child_system_cpu_seconds_9dp": "0.198500000",
+      "child_user_cpu_seconds_9dp": "6.766182000",
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_state": "absent",
+      "internal_elapsed_seconds_9dp": "7.074864465",
+      "kill_attempted": true,
+      "kill_result": "signal_sent_before_reap",
+      "maxrss_kib_cumulative_parent_children": 227532,
+      "parent_exception": null,
+      "reaped": true,
+      "resource_scope": "child processes of this coordinator; cumulative maxrss, not phase-specific",
+      "status": "PASS",
+      "timed_out": false
+    },
+    "elaborate": {
+      "WNOWAIT_code": 1,
+      "WNOWAIT_status": 0,
+      "anchor_confirmed": true,
+      "child_system_cpu_seconds_9dp": "0.251286000",
+      "child_user_cpu_seconds_9dp": "3.365890000",
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_state": "absent",
+      "internal_elapsed_seconds_9dp": "3.717150531",
+      "kill_attempted": true,
+      "kill_result": "signal_sent_before_reap",
+      "maxrss_kib_cumulative_parent_children": 227532,
+      "parent_exception": null,
+      "reaped": true,
+      "resource_scope": "child processes of this coordinator; cumulative maxrss, not phase-specific",
+      "status": "PASS",
+      "timed_out": false
+    }
+  },
+  "resources": {
+    "cumulative_maxrss_not_per_phase_peak": true,
+    "cumulative_parent_children_maxrss_kib": 227532,
+    "declared_limits": {
+      "address_space_bytes": 4294967296,
+      "aggregate_is_sample_enforced_not_instantaneous": true,
+      "aggregate_rss_bytes": 2147483648,
+      "child_cpu_seconds": 150,
+      "cleanup_seconds": 5,
+      "compile_work_max_seconds": 120,
+      "cpu_affinity_count": 1,
+      "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+      "elaboration_work_max_seconds": 30,
+      "log_bytes": 2097152,
+      "minimum_host_memavailable_bytes": 3221225472,
+      "minimum_tmpfs_available_bytes": 67108864,
+      "owned_output_bytes": 16777216,
+      "phase_work_stop_rule": "min(shared start+150, phase entry+phase cap); preparations and first cleanup consume same shared work window",
+      "postflight_seconds": 25,
+      "single_file_bytes": 4194304,
+      "total_wall_seconds": 180,
+      "work_seconds": 150
+    },
+    "final_inventory_bytes_excluding_self_and_result": 1452849,
+    "final_inventory_files_excluding_self_and_result": 21,
+    "observed_peak_sampled_descendant_rss_bytes": 231886848,
+    "sample_interval_seconds": 0.2,
+    "sampled_not_instantaneous": true,
+    "terminal_owned_bytes": 1502572,
+    "terminal_owned_files": 23,
+    "watch_reason": null
+  },
+  "schema": "qwen35-state-transfer-chirrtl-public-summary-v1",
+  "source_provenance": {
+    "exact_original_file_bytes": 42522,
+    "exact_original_file_count": 6,
+    "exact_original_files": {
+      "launch_chirrtl.py": {
+        "bytes": 3611,
+        "sha256": "7826e73adc7914da83ad9e3665349d257f187a263e2453fe09d148d1806382cd"
+      },
+      "launch_chirrtl.py.patch": {
+        "bytes": 735,
+        "sha256": "3da2279979d9eac16d32c889fa96cd64bf5f42ca27d92715f2a45d8253548fae"
+      },
+      "parser_controls.py": {
+        "bytes": 6633,
+        "sha256": "ef50e7c7bda836929346148952ed4dc6434528868217bbea09ec89b651620153"
+      },
+      "run_chirrtl.py": {
+        "bytes": 19218,
+        "sha256": "61b9a12f6db4aaa7f991414b9da91fb790cfb912169adf8821a8125734c49463"
+      },
+      "run_chirrtl.py.patch": {
+        "bytes": 5090,
+        "sha256": "209810ecf206c637acf12b179bab416606b7283acd83af22d9b9d9ab60ba3f1d"
+      },
+      "source/GdnChunkStateTransferChirrtl.scala": {
+        "bytes": 7235,
+        "sha256": "e2c155721bba105f75eaaa1853fc81b97179b2bb0071fa4ed2d2b1c5d7911604"
+      }
+    },
+    "existing_owner_or_chunk_source_duplicated": false,
+    "original_r2_plan": {
+      "bytes": 221617,
+      "sha256": "dae101e5efb583478c27d5e16562b4bbdca2d5f743a8f44c14bdd1fa5912f41e"
+    },
+    "original_r2_source_manifest": {
+      "bytes": 2036,
+      "sha256": "d28868fe5f376dd3c189b7b7eb23f60cebe0a0fafc17ce83c8e8ef6dda1e381b"
+    }
+  },
+  "status": "PASS_ACTUAL_SINGLE_OWNER_CHIRRTL_FRONTEND_ONLY"
+}

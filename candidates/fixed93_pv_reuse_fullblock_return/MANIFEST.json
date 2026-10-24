@@ -1,0 +1,46 @@
+{
+  "actual_authorized": false,
+  "file_count": 9,
+  "files": {
+    "PUBLIC_PINS.json": {
+      "bytes": 4987,
+      "sha256": "e41bcc382566c753fd3f5f9ffb239abf424bf670e825f02a37871832e82f1b83"
+    },
+    "README.md": {
+      "bytes": 2128,
+      "sha256": "c89f5381ef26a924f8e136354a9ff901096affd5dc86e6ab81c764f898019313"
+    },
+    "SUMMARY.md": {
+      "bytes": 3170,
+      "sha256": "94098116af1ec8b9239e1b1c4af210c2124efae4127be9e79fe6196184577ed3"
+    },
+    "check_public_sources.py": {
+      "bytes": 10859,
+      "sha256": "9f1bf06e9359a45c507d3d84ab370e2253df96dfef48f0846b3f0f7725fa19d5"
+    },
+    "overlay/admission.py": {
+      "bytes": 11060,
+      "sha256": "45308534ed1e6f6ae9ee5733e37c56ca8c1301349066553c3e4dde527717090b"
+    },
+    "overlay/contract/PV_REUSE_EXACT_CAPACITY.json": {
+      "bytes": 2050,
+      "sha256": "e3384582aa343265dac573d18200a5e54d0974bfb4fc33b5a9c99e1a7268c327"
+    },
+    "overlay/integration/interface.py": {
+      "bytes": 14730,
+      "sha256": "f6f35a759a8ad675bb546cdc2ce463644fdcccf8e4bbfac90b1e5789d3014dfa"
+    },
+    "overlay/integration/runtime_support/native_artifact.py": {
+      "bytes": 4038,
+      "sha256": "9414d83de228c6219fb2bd479c88c3cf092ef766d1f73aa6ad696262d7ddc37c"
+    },
+    "prepare_fullblock.py": {
+      "bytes": 25769,
+      "sha256": "d2b6249c4d0597b2c1f948737eabacc6af1124c5214a4190e401e177b0c7093a"
+    }
+  },
+  "production_source_changed": false,
+  "public_is_not_complete_assembly": true,
+  "schema": "fixed93-fullblock-return-public-excerpt-manifest-v1",
+  "total_file_bytes": 78791
+}

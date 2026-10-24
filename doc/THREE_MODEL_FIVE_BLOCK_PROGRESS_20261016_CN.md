@@ -1582,3 +1582,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 独审核1011实际observer open routes/327 distinct，9个witness各3次、manifest3次；实际empty记录/raw均0，summary保留INCOMPLETE、reuse0、both_domains_verified=false。52字节未封wholeblock头未当完成证据。
 - 身份/资源：228pins、lease/CONSUMED/原进程start ticks、WNOWAIT自然0、reaped/group absent/cleanup confirmed闭合；whole CPU18.1445秒，采样组RSS242839552B，独立最终15文件552322B。LAUNCH的550900B为最终receipt写入前快照，不冒充最终stat。
 - 独审实际摘要SHA69ef9b3f2955cba917dab9db71a3bf0f6883ba55c81adba56d66d9686f3592dc。该资格不授新fullblock运行，不复用一次性authority，完整M128/数值/RTL仍未通过，五block RTL仍0/5。
+
+## PASS（有限SOURCE/cold）/ TEMP：恢复完整M128入口与精确容量预算（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_pv_reuse_fullblock_return/`，仅10份便携源码、相对pins、摘要和checker；不是完整可执行组装包，不含机器专用预算/ADMISSION、输入、参考、原始日志或二进制。入树后bytes/5 Python AST checker自然0（0.017823秒、RSS16000KiB），未执行生产模块。
+- PASS（精确范围）：新完整候选唯一组装550文件/8827685B，1.418925秒自然0；原306源码、9 selected、6 support逐字不变。恢复原完整runner的3次advance、producer→KV→Attention→tail→双封流→postseal oracle，未继承startup-only停线。三处loader从已核raw source编译，避免未pin的pyc；没有改算术源码。
+- 唯一SOURCE/cold含真实preflight与24监督mock，自然0/2.371522秒；manifest 4e5496a21b3ecd2b99c0022c1e99bb1666eafb284c84e91b525fc0e1c89c2889，budget 571cbb74b8bbc88aecabb52c493f7795441eef4d07eb4d6eafd7986ab5228617。独审仅GO_FIXED93_M128_FULLBLOCK_SOURCE_COLD，actual未授权/未执行。
+- 精确字段上界审计使Attention容量预算减少813159528B；记录数量/内容、wholeblock上界和536870912B余量均不减少。future-owned22103939876B，fresh可用空间要求22640810788B；它是现场检查而非排他预留。
+- ONGOING / TEMP：实际准入前另发现observer逐次身份检查反复构造ABI表/profile副本的时间风险，正在做无模型微基准和保持逐次核验的窄优化。本候选冻结，不因SOURCE/cold GO直接重复昂贵前缀；6600秒窗口内完成尚无证据。
+- 完整M128数值/实际RTL仍未通过，五block RTL仍0/5，未新增利用率实测。本批不删除任何临时数据，不继承旧失联运行PASS。

@@ -1,0 +1,154 @@
+{
+  "all_original_overlay_pins": {
+    "BUDGET_PROPOSAL.json": {
+      "after": {
+        "bytes": 3339,
+        "sha256": "571cbb74b8bbc88aecabb52c493f7795441eef4d07eb4d6eafd7986ab5228617"
+      },
+      "before": {
+        "bytes": 3229,
+        "sha256": "6604fbd7ee32ae56b54649c67633cb122d82cd7473eae92683e81155881a5f3c"
+      }
+    },
+    "admission.py": {
+      "after": {
+        "bytes": 11060,
+        "sha256": "45308534ed1e6f6ae9ee5733e37c56ca8c1301349066553c3e4dde527717090b"
+      },
+      "before": {
+        "bytes": 10282,
+        "sha256": "c35913d797f20891730664e36d8893b87b954b8f3b4ebe5acf30b109716060ae"
+      }
+    },
+    "contract/PV_REUSE_EXACT_CAPACITY.json": {
+      "after": {
+        "bytes": 2050,
+        "sha256": "e3384582aa343265dac573d18200a5e54d0974bfb4fc33b5a9c99e1a7268c327"
+      },
+      "before": null
+    },
+    "integration/interface.py": {
+      "after": {
+        "bytes": 14730,
+        "sha256": "f6f35a759a8ad675bb546cdc2ce463644fdcccf8e4bbfac90b1e5789d3014dfa"
+      },
+      "before": {
+        "bytes": 13888,
+        "sha256": "17b61451b031f887aad5eac6a2689ba6ca5d3414efc1a052bdd7d5292003c6c2"
+      }
+    },
+    "integration/runtime_support/native_artifact.py": {
+      "after": {
+        "bytes": 4038,
+        "sha256": "9414d83de228c6219fb2bd479c88c3cf092ef766d1f73aa6ad696262d7ddc37c"
+      },
+      "before": {
+        "bytes": 3203,
+        "sha256": "c2dd1ddb14dc9e112f5a1a8b6f0a66d3167a5eef7ca0964fe798370233bdae31"
+      }
+    }
+  },
+  "assembled_receipt": {
+    "bytes": 97765,
+    "sha256": "29e1b5c9cde3a6c9d0a66e4752e2ffc2d87e5ad2cf1d1a1f76a239a501f646ef"
+  },
+  "assembled_source_manifest": {
+    "bytes": 113576,
+    "sha256": "4e5496a21b3ecd2b99c0022c1e99bb1666eafb284c84e91b525fc0e1c89c2889"
+  },
+  "base_full_receipt": {
+    "bytes": 98784,
+    "sha256": "9254099e334902bf01f173f978ef244d5c574a219d023060bc0fe6794110cf42"
+  },
+  "base_full_source_manifest": {
+    "bytes": 112503,
+    "sha256": "cc82716a4801c111225c1dc6cb4435ca3120482f4e21ebd01fd1d3a6f1e7b90b"
+  },
+  "complete_source_package_manifest": {
+    "bytes": 3037,
+    "sha256": "aa68227fb8182cc9ae089491cd2e9c288c793c3f68bc3b18d0b4fb6f40f0c0ae"
+  },
+  "execution_authorized": false,
+  "full_entry": "integration/runner.py",
+  "omitted_machine_bound_metadata": {
+    "OVERLAY_PINS.json": {
+      "bytes": 7835,
+      "sha256": "3281939bb9673f7a3806b438dff31d9a33fd70adb24f3319496e4691a2ad9286"
+    },
+    "overlay/BUDGET_PROPOSAL.json": {
+      "bytes": 3339,
+      "sha256": "571cbb74b8bbc88aecabb52c493f7795441eef4d07eb4d6eafd7986ab5228617"
+    }
+  },
+  "original_40_case_result_inherited": false,
+  "original_builder": {
+    "bytes": 25769,
+    "sha256": "d2b6249c4d0597b2c1f948737eabacc6af1124c5214a4190e401e177b0c7093a"
+  },
+  "original_overlay_count": 5,
+  "production_source_changed": false,
+  "public_is_not_replacement_package": true,
+  "published_capacity_contract": {
+    "bytes": 2050,
+    "path": "overlay/contract/PV_REUSE_EXACT_CAPACITY.json",
+    "sha256": "e3384582aa343265dac573d18200a5e54d0974bfb4fc33b5a9c99e1a7268c327"
+  },
+  "published_overlay_count": 4,
+  "published_python_overlays": {
+    "admission.py": {
+      "after": {
+        "bytes": 11060,
+        "sha256": "45308534ed1e6f6ae9ee5733e37c56ca8c1301349066553c3e4dde527717090b"
+      },
+      "before": {
+        "bytes": 10282,
+        "sha256": "c35913d797f20891730664e36d8893b87b954b8f3b4ebe5acf30b109716060ae"
+      }
+    },
+    "integration/interface.py": {
+      "after": {
+        "bytes": 14730,
+        "sha256": "f6f35a759a8ad675bb546cdc2ce463644fdcccf8e4bbfac90b1e5789d3014dfa"
+      },
+      "before": {
+        "bytes": 13888,
+        "sha256": "17b61451b031f887aad5eac6a2689ba6ca5d3414efc1a052bdd7d5292003c6c2"
+      }
+    },
+    "integration/runtime_support/native_artifact.py": {
+      "after": {
+        "bytes": 4038,
+        "sha256": "9414d83de228c6219fb2bd479c88c3cf092ef766d1f73aa6ad696262d7ddc37c"
+      },
+      "before": {
+        "bytes": 3203,
+        "sha256": "c2dd1ddb14dc9e112f5a1a8b6f0a66d3167a5eef7ca0964fe798370233bdae31"
+      }
+    }
+  },
+  "retained_full_runner": {
+    "bytes": 33055,
+    "sha256": "18bcb01425e468e3efd7d4542daeef7637962aff7af93f207ed0fb8af29f4429"
+  },
+  "retained_full_worker": {
+    "bytes": 3333,
+    "sha256": "4f5ff9d0ed1e61caa45dc8eb4486059a7be6baa71567fc8ffec731b8c4bf6e0a"
+  },
+  "runtime_metadata": {
+    "bytes": 379561,
+    "sha256": "d5ab1421b3f1f5ff3e7e68c7586052ad892cfcc01f607e2be33a1540da905786"
+  },
+  "schema": "fixed93-pv-reuse-fullblock-public-source-pins-v1",
+  "source_cold_review": {
+    "actual_authorized": false,
+    "identity": {
+      "bytes": 7279,
+      "sha256": "9af46b4d2a237eecad2406024f4822892f4b044e189d4c78dbe623efd2cea1a0"
+    },
+    "native_executed": false,
+    "reviewed_utc": "2026-10-21T03:07:27.052517+00:00",
+    "status": "GO_FIXED93_M128_FULLBLOCK_SOURCE_COLD"
+  },
+  "source_selected_support_unchanged": true,
+  "startup_pass_inherited_as_fullblock_qualification": false
+}

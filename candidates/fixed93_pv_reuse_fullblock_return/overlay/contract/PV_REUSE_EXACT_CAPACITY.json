@@ -1,0 +1,59 @@
+{
+  "actual_authorized": false,
+  "all_records_fields_arrays_and_payloads_preserved": true,
+  "fullblock_qualified": false,
+  "historical_capacity_contract": "contract/PV_REUSE_CAPACITY.json",
+  "historical_capacity_pin": {
+    "bytes": 1187,
+    "sha256": "d369d9ebffcd93f591b9326c6917e5c400d2c6acf6c47f2913f9b5c1976686ca"
+  },
+  "metadata_cap_headroom": 14,
+  "new_max_metadata": 116,
+  "new_max_output": 7375567454,
+  "new_max_raw": 4281892568,
+  "new_max_records": 15165072,
+  "nonstream_reservations_unchanged": true,
+  "owned_reservation_bytes": 22103939876,
+  "preserved_raw_slack": 946430,
+  "preserved_record_slack": 135,
+  "review": {
+    "DECISION.json": {
+      "bytes": 1861,
+      "sha256": "954d13dc365bbb42507673f31cd608f866ee96f401031d1b4775a9ab124ccf71"
+    },
+    "INDEPENDENT_ACCOUNTING.json": {
+      "bytes": 17352,
+      "sha256": "a69c87c4727fb8abe70a38e1f8b12c0bacb75e3061f29158d94b5bffb508214a"
+    },
+    "REVIEW.md": {
+      "bytes": 11709,
+      "sha256": "15e263c4e47c5d0d8b84a65dd8c331abcd7c5ba42c6d14e56ff32f3512a54c46"
+    },
+    "independent_accounting.py": {
+      "bytes": 9187,
+      "sha256": "734da600803f9c0a7891976cb871d26464dcf48e04fb57f4d97d6c6efe2a7845"
+    }
+  },
+  "review_directory": "review_attention_exact_capacity_20261021T0244",
+  "schema": "fixed93-pv-reuse-exact-capacity-source-v1",
+  "scope": "Current frozen 48-domain finite successful M128 Attention source path only; no time/RSS/numerical/RTL proof and no execution authority.",
+  "separate_margin_bytes": 536870912,
+  "source_success_counts": {
+    "M": 128,
+    "causal": 99072,
+    "events": 15164937,
+    "matrix_steps": 847872,
+    "normal_groups": 19200,
+    "pv_steps": 792576,
+    "qk_groups": 6912,
+    "qk_steps": 55296,
+    "reads": 1597440,
+    "results": 799488,
+    "writes": 12288
+  },
+  "source_success_metadata_max": 102,
+  "source_success_raw_bytes": 4280946138,
+  "startup_available_bytes_required": 22640810788,
+  "status": "GO_FOR_SOURCE_SUCCESS_CAPACITY_DELTA_ONLY",
+  "wholeblock_stream_bytes_unchanged": 14412800198
+}

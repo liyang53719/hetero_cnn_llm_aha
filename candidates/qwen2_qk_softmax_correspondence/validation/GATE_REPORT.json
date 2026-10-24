@@ -1,0 +1,105 @@
+{
+  "bounded_slice_status": "PASS_PINNED_QK_CELL_MAP_AND_SOURCE_TOPOLOGY_ONLY",
+  "coordinate_check": {
+    "full_tile_unique_cells": 256,
+    "integer_only": true,
+    "ordered_coordinate_comparisons": 2176,
+    "tail_key_counts": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "current_main_binding": {
+    "att_score_body_matches_selected": false,
+    "has_official_materialize_function": false,
+    "has_production_packed_qk16_selector": false,
+    "matches_selected_postimage": false,
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+    "sha256": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "status": "MISMATCH"
+  },
+  "historical_cold_m128": {
+    "acceptance_inherited_by_this_gate": false,
+    "assigned_gates": 27,
+    "carried": false,
+    "ci": {
+      "commit": "8ba333c76722b47b681be88612b1c6987e34a5f4",
+      "run_attempt": "1",
+      "run_id": "39017864296"
+    },
+    "model": {
+      "layer": 0,
+      "model_id": "Qwen/Qwen2-1.5B-Instruct",
+      "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8"
+    },
+    "observed_stages": 28,
+    "result_reexecuted": false,
+    "status": "PASS_FRESH_SAME_HOST_M128_ASSIGNED27"
+  },
+  "python_schedule": {
+    "composition": [
+      "candidates/qwen2_resident_matrix/attention_packed_m16/m16.patch",
+      "candidates/qwen2_resident_matrix/attention_packed_m128/tiled.patch"
+    ],
+    "path": "candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py",
+    "sha256": "a65dca9d24862c2b552117ce2c9cfdb270215b12881490fc50b5545b938b6086",
+    "source_imported": false
+  },
+  "schema": 1,
+  "scope": {
+    "arithmetic_equivalence": false,
+    "cycle_or_timing_claim": false,
+    "full29_acceptance": false,
+    "full_block_acceptance": false,
+    "mask_tensor_fabricated": false,
+    "native_model_imported": false,
+    "new_tolerance": false,
+    "projection_only": true,
+    "rtl_executed": false,
+    "scala_executed": false,
+    "scalar_arithmetic_executed": false,
+    "scale_constant_numerically_validated": false
+  },
+  "selected_scala": {
+    "kind": "HISTORICAL_PRODUCTION_POSTIMAGE_NOT_CURRENT_MAIN",
+    "path": "development_snapshots/canonical_host_observation_taps_source_20261017/baseline/Qwen2Block.scala",
+    "postimage_ledger": "candidates/qwen2_resident_matrix/production_qk16_rebase/POSTIMAGE_PINS.json",
+    "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68"
+  },
+  "source_commit": "cacc259d8893754b8cae968b5355ccf37e5b79cf",
+  "source_pins_sha256": "45a636cc2c267af6328a5bbe08bb1e5f0c6571810bf46c866e822ba0f69e530b",
+  "status": "INCOMPLETE",
+  "symbolic_topology": [
+    "16 ordered Add folds from +0",
+    "materialize completed dot",
+    "Mul by headDim-dependent scale; selected Qwen2 geometry is 128",
+    "materialize scaled score",
+    "same score feeds storage and max update",
+    "stored score plus negated per-head max feeds exp"
+  ],
+  "unproven": {
+    "explicit_mask_tensor_observation": "INCOMPLETE",
+    "final_all_resource_debt_join": "INCOMPLETE",
+    "full_block_source_binding": "INCOMPLETE",
+    "official_softmax_fp32_elementwise_acceptance": "INCOMPLETE",
+    "physical_384_byte_panel": "INCOMPLETE",
+    "pv6_supply_and_context_retention": "INCOMPLETE",
+    "scalar_exception_policy_equivalence": "INCOMPLETE",
+    "shared_bank_scratch_ack_release": "INCOMPLETE",
+    "six_head_schedule_equivalence": "INCOMPLETE"
+  }
+}

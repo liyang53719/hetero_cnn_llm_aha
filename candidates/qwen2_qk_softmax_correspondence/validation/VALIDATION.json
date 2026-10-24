@@ -1,0 +1,88 @@
+{
+  "claims": {
+    "full29_acceptance": false,
+    "full_block_acceptance": false,
+    "mask_data_fabricated": false,
+    "native_model_import": false,
+    "new_model_execution": false,
+    "new_tolerance": false,
+    "numerical_equivalence": false,
+    "rtl_execution": false,
+    "scala_execution": false,
+    "timing_equivalence": false
+  },
+  "cli_results": {
+    "normal_exit": 2,
+    "optimized_exit": 2,
+    "report": "GATE_REPORT.json",
+    "reports_byte_equal": true,
+    "sha256": "86b13f748916d2f8eb30e900f1e74f70c02550d2b5affe483fa28a9a290f8ab8",
+    "status": "INCOMPLETE"
+  },
+  "code_pins_sha256": "1645ae971a2fe50d8baf3c5724984b9b30df2df45f35cf2b8f04b3dcd91fad37",
+  "current_main_binding_status": "MISMATCH",
+  "historical_acceptance_inherited": false,
+  "historical_assigned27_retained": true,
+  "independent_review": {
+    "normal_test_methods": 55,
+    "optimized_test_methods": 55,
+    "prior_projection_gaps_closed": [
+      "request_result_and_score_read_forwarding",
+      "initial_lane_loop_and_selector_width",
+      "exp_endpoint_opcode"
+    ],
+    "scope": "READ_ONLY_SOURCE_AND_BOUNDED_STDLIB_TESTS",
+    "status": "NO_P0_P1_OR_REMAINING_PRIOR_P2"
+  },
+  "python_version": "3.12.14",
+  "reproduction_commands": [
+    "timeout -k 2 30s python -I -B candidates/qwen2_qk_softmax_correspondence/test_gate.py --source-root .",
+    "timeout -k 2 30s python -I -B -O candidates/qwen2_qk_softmax_correspondence/test_gate.py --source-root .",
+    "timeout -k 2 20s python -I -B candidates/qwen2_qk_softmax_correspondence/gate.py --source-root .",
+    "timeout -k 2 20s python -I -B -O candidates/qwen2_qk_softmax_correspondence/gate.py --source-root ."
+  ],
+  "schema": 1,
+  "source_commit": "cacc259d8893754b8cae968b5355ccf37e5b79cf",
+  "source_inputs_postflight": {
+    "files": 10,
+    "hashes_match": true,
+    "source_imported": false
+  },
+  "source_pins_sha256": "45a636cc2c267af6328a5bbe08bb1e5f0c6571810bf46c866e822ba0f69e530b",
+  "status": "PASS_SOURCE_GATE_TESTS_ONLY",
+  "test_process_limits": {
+    "address_space_bytes": 268435456,
+    "allowed_cpu_count": 1,
+    "cpu_seconds": 20,
+    "shell_wall_seconds": 30
+  },
+  "test_results": [
+    {
+      "elapsed_seconds": 2.112,
+      "exit_code": 0,
+      "log": "TESTS_NORMAL.log",
+      "methods": 55,
+      "mode": "normal",
+      "sha256": "ba7d5cae2015b8e73c7ae974b529dc8cf79bb22fe26ae984fe10e5a6b2633a48"
+    },
+    {
+      "elapsed_seconds": 2.087,
+      "exit_code": 0,
+      "log": "TESTS_OPTIMIZED.log",
+      "methods": 55,
+      "mode": "optimized",
+      "sha256": "eab557d81a00d12e4a4c831363283fae1dfa541ce4fba9f03183415cf21cf6fd"
+    }
+  ],
+  "unproven": {
+    "explicit_mask_tensor_observation": "INCOMPLETE",
+    "final_all_resource_debt_join": "INCOMPLETE",
+    "full_block_source_binding": "INCOMPLETE",
+    "official_softmax_fp32_elementwise_acceptance": "INCOMPLETE",
+    "physical_384_byte_panel": "INCOMPLETE",
+    "pv6_supply_and_context_retention": "INCOMPLETE",
+    "scalar_exception_policy_equivalence": "INCOMPLETE",
+    "shared_bank_scratch_ack_release": "INCOMPLETE",
+    "six_head_schedule_equivalence": "INCOMPLETE"
+  }
+}

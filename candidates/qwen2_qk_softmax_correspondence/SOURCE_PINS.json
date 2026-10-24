@@ -1,0 +1,49 @@
+{
+  "derived_schedule_sha256": "a65dca9d24862c2b552117ce2c9cfdb270215b12881490fc50b5545b938b6086",
+  "schema": 1,
+  "source_commit": "cacc259d8893754b8cae968b5355ccf37e5b79cf",
+  "source_repository": "liyang53719/hetero_cnn_llm_aha",
+  "sources": {
+    "candidates/qwen2_resident_matrix/attention_packed_m128/pins.json": {
+      "bytes": 25528,
+      "sha256": "883cd0b6c50c112c2dbc80a533bece90a0ee8d606a81615f1242c06f5e0b93ad"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m128/tiled.patch": {
+      "bytes": 5679,
+      "sha256": "c29860c602bb2733ab6d3d5f95fcc9156879c0acaeceecfa861af1b12809830b"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m16/m16.patch": {
+      "bytes": 2750,
+      "sha256": "f2d65a3767b0d9c4c8691b62d475705f5fa0cd9cd8c8c25fb5c765c0cfaf47f0"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/client.py": {
+      "bytes": 17894,
+      "sha256": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py": {
+      "bytes": 4683,
+      "sha256": "ddd2c2b2d7a60bbcae27013f1f38e17bdc514cffe15572124c9bdfabff2c81bd"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/POSTIMAGE_PINS.json": {
+      "bytes": 1351,
+      "sha256": "f7b534e22e3d707129a00315343a71365ade205f0b0052a69593146e383659fb"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": {
+      "bytes": 41013,
+      "sha256": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4"
+    },
+    "development_snapshots/canonical_host_observation_taps_source_20261017/baseline/Qwen2Block.scala": {
+      "bytes": 52708,
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68"
+    },
+    "reports/execution/QWEN2_SAME_HOST_M128_REPLAY_IDENTITY_20261017/MANIFEST.json": {
+      "bytes": 13411,
+      "sha256": "c8abbb310adb06ca64ca5b5384365e1d755228244e37e06f5d7bba3ed6051b7f"
+    },
+    "reports/execution/QWEN2_SAME_HOST_M128_REPLAY_IDENTITY_20261017/full_m128_summary.json": {
+      "bytes": 1526,
+      "sha256": "35624698ebd114c2e766cad42b4266a041b2328805f53e87da6e3cc7dc08ea19"
+    }
+  },
+  "target_postimage_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68"
+}

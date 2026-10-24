@@ -1820,3 +1820,12 @@ PASS仅SCALA_COMPILE_ONLY，不执行Emit App/Module/CHIRRTL、真实Scalar/ACK�
 15组纯Python对应控制唯一自然0，外1.33311112秒/内1.260561秒，32内容pins前后同；两合成完整轨迹各13410事务：3681读、2816写、2144Add、2209Exp、2560Mul16。原序与payload在线对照使用模拟服务，共享helper不是独立FP32DUT；subnormal部分测试为注入接收门。26980 modelcycles不作硬件周期/全block利用率。独审ACTUAL_CONTROLS_REVIEW SHA256 78795c2a5e06f6ec4f2f163d6fac4090c17bbea3f95027f3c42106762f2335ba。
 
 公开10件112580B在 candidates/qwen35_chunk_derived/，manifest SHA256 503afae0679ea4952962c1030b0a5a0dd9bcdd210251881fadb0378e6eba9d64。原7源字节不改；排除机器命令/原manifest/日志/数组，非独立运行closure。Scala编译/CHIRRTL/真实Scalar或Loan/ACK仍TEMP未验，五RTL0/5、Qwen2full UNKNOWN不变。未push、无新CI、无清理。
+
+
+## FAIL保留 / PASS仅R2 Scala编译：DerivedAndPair Enum绑定修复
+
+原26源编译自然exit1，唯一诊断位于23名链式解构Enum(23)，报object <none> is not a member of package scala。349 BEFORE匹配，0class，AFTER未执行；cleanup确认，无资源超限。Scala多绑定展开问题仅推断，未泛化证明根因。原失败独审 SHA256 4215e3197706a4f2552cad3742376afe60cd2ee7e6bf2c61ba5ec69c1e4d2b25 保留。
+
+R2仅一次Enum23后原序0..22显式命名，逆替换整owner恢复原SHA；模型及24外源不变。15组纯Python控制重跑自然0，34内容pins同，两轨迹全部字段/hash与原相同，限模拟服务。新26源实际编译25418自然0/33.930169611秒，349输入前后完整身份同，142class/1467305B、41必要类齐，WNOWAIT自然0/reap/group absent/cleanup确认。实际独审SHA256 1486feb0998506858a6205d9d318f550e8898c45c291c5950a719a2bd6bccf9d。
+
+PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五RTL0/5、旧Qwen2 UNKNOWN不变。公开11项57570B在 candidates/qwen35_chunk_derived_r2/，manifest SHA256 f202b82ba4c26c4d26aa57bfd210c1807d247b2dd37a44f4977447468bebd63e；仅新owner/patch/绑定表/测试diff/runner/相对pins及摘要，不重复模型或私有日志/机器plan，非完整可直接运行closure。未push、无新CI、无清理。

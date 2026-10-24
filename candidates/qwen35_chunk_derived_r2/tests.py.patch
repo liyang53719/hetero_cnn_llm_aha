@@ -1,0 +1,26 @@
+--- a/tests.py
++++ b/tests.py
+@@ -391,6 +391,23 @@
+         text = compact(source)
+         self.assertIn('Enum(11)', text)
+         self.assertIn('Enum(23)', text)
++        binding = json.loads(PINS.text('own', 'ENUM_REBINDING.json'))
++        self.assertEqual(binding['names_in_original_order'], list(MODEL.STEPS))
++        self.assertEqual(binding['indices'], list(range(23)))
++        self.assertEqual(binding['count'], 23)
++        self.assertEqual(binding['width_bits'], (23 - 1).bit_length())
++        self.assertEqual(text.count('Enum(23)'), 1)
++        block = '  private val microSteps = Enum(23)\n' + ''.join(
++            f'  val {name} = microSteps({i})\n' for i, name in enumerate(MODEL.STEPS))
++        declaration = '  val ' + ' :: '.join(MODEL.STEPS) + ' :: Nil = Enum(23)\n'
++        self.assertEqual(binding['new_binding_block'], block)
++        self.assertEqual(binding['original_declaration'], declaration)
++        self.assertEqual(source.count(block), 1)
++        restored = source.replace(block, declaration).encode('utf-8')
++        self.assertEqual(dict(bytes=len(restored), sha256=hashlib.sha256(restored).hexdigest()),
++                         binding['original_owner'])
++        self.assertEqual(hashlib.sha256(PINS.cache[('own', 'derived_model.py')]).hexdigest(),
++                         binding['model']['sha256'])
+         self.assertIn('Seq.fill(4)(0.U(512.W))', text)
+         for state in MODEL.STATES:
+             self.assertIn(state, source)

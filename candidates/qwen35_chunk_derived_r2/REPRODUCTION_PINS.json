@@ -1,0 +1,192 @@
+{
+  "JVM": [
+    "JDK21",
+    "-Xmx1024m",
+    "-XX:ActiveProcessorCount=1",
+    "existing pinned Chisel plugin 6.7.0 / Scala2.13.16"
+  ],
+  "R2_compile_manifest": {
+    "bytes": 1706,
+    "sha256": "c9dabdb4b8e1d0d9c3e864a32bd2ceef27c190da16add62beee8f13d1aae2639"
+  },
+  "R2_source_manifest": {
+    "bytes": 1831,
+    "sha256": "ba44d84d46b1c4785188cf2e37ca34eb77d06db8f0223ad4e67ec151a59f2758"
+  },
+  "actual_review_pin_only": {
+    "bytes": 7074,
+    "sha256": "1486feb0998506858a6205d9d318f550e8898c45c291c5950a719a2bd6bccf9d"
+  },
+  "additional_input_pins": {
+    "sources/chunk_derived_r2/SOURCE_MANIFEST.json": {
+      "bytes": 1831,
+      "sha256": "ba44d84d46b1c4785188cf2e37ca34eb77d06db8f0223ad4e67ec151a59f2758"
+    },
+    "sources/chunk_derived_r2/source/GdnChunkDerivedAndPairOwner.scala": {
+      "bytes": 20232,
+      "sha256": "9b5a9484f5d5ce2e19c4e7b3e9b429a80b939c8a652066541a6eff4b4ea5785f"
+    },
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": {
+      "bytes": 10756,
+      "sha256": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+    },
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala": {
+      "bytes": 6408,
+      "sha256": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815"
+    },
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala": {
+      "bytes": 6094,
+      "sha256": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7"
+    },
+    "sources/repository/chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala": {
+      "bytes": 583,
+      "sha256": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464"
+    },
+    "sources/repository/chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala": {
+      "bytes": 4816,
+      "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5"
+    }
+  },
+  "additional_inputs_count": 7,
+  "baseline_342_input_table": {
+    "all_existing_specs_byte_identical": true,
+    "bytes": 105083,
+    "includes": {
+      "Scala_sources": 20,
+      "source_manifests": 2,
+      "supervisor_sources": 6,
+      "tools": 314
+    },
+    "logical_label": "prior_loadprep_compile/INPUT_PINS.json",
+    "sha256": "7dc5aefc8e218521b68a48ee004ed34f2c27abf469bcf1aabfb253127667f029"
+  },
+  "combined_input_count": 349,
+  "compiler_main": "scala.tools.nsc.Main",
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "logical_labels_not_machine_paths": true,
+  "machine_plan_content_pin_only": {
+    "bytes": 188883,
+    "sha256": "afb857b50a8fccf37cff9a4af92f586906ef7dbbce1e810aecddba868edf8d59"
+  },
+  "omitted": [
+    "machine-specific FROZEN_PLAN and argv files",
+    "tool binaries/JARs/classfiles",
+    "raw logs/receipts/authority",
+    "old unchanged model and dependency source payloads"
+  ],
+  "ordered_87_JAR_classpath": "exact ordered_relative_entries in baseline table; unchanged",
+  "original_compile_manifest": {
+    "bytes": 1707,
+    "sha256": "55a1a990ff1d7ec97b25677208c82b642fb41f608b5bedc418b3e87d55cad6ac"
+  },
+  "original_source_manifest": {
+    "bytes": 1415,
+    "sha256": "2c9ed3998f85dbb70f449af4beaffbb07c1e66be24c1007b838e8d0bd4de4e33"
+  },
+  "required_class_count": 41,
+  "required_classes": [
+    "heteronpu/continuous/GdnChunkGeometry.class",
+    "heteronpu/continuous/GdnChunkGeometry$.class",
+    "heteronpu/continuous/GdnChunkVectorPolicy.class",
+    "heteronpu/continuous/GdnChunkVectorPolicy$.class",
+    "heteronpu/continuous/GdnChunkJob.class",
+    "heteronpu/continuous/GdnChunkCommittedState.class",
+    "heteronpu/continuous/GdnChunkStageReceipt.class",
+    "heteronpu/continuous/GdnChunkStagingResult.class",
+    "heteronpu/continuous/GdnChunkAddressPlan.class",
+    "heteronpu/continuous/GdnChunkAddressPlan$.class",
+    "heteronpu/continuous/MemoryRequest.class",
+    "heteronpu/continuous/MemoryResponse.class",
+    "heteronpu/continuous/ScalarRequest.class",
+    "heteronpu/continuous/ScalarOp.class",
+    "heteronpu/continuous/ScalarOp$.class",
+    "heteronpu/continuous/GdnScalarClient.class",
+    "heteronpu/continuous/BlockScalarFloat.class",
+    "heteronpu/continuous/GdnChunkPreparedReceipt.class",
+    "heteronpu/continuous/GdnChunkLoadPrepJob.class",
+    "heteronpu/continuous/GdnChunkLoadPrepResult.class",
+    "heteronpu/continuous/GdnChunkLoadPrepPort.class",
+    "heteronpu/continuous/GdnChunkLoadPrepOwner.class",
+    "gemmini/HeteroFP32Alu.class",
+    "heteronpu/continuous/GdnChunkDerivedAndPairOwner.class",
+    "heteronpu/continuous/GdnChunkDerivedAndPairPort.class",
+    "heteronpu/continuous/GdnChunkDerivedAndPairJob.class",
+    "heteronpu/continuous/GdnChunkPrivateDecay.class",
+    "heteronpu/continuous/GdnChunkDerivedAndPairResult.class",
+    "heteronpu/continuous/ElementwiseLoanOp.class",
+    "heteronpu/continuous/ElementwiseLoanOp$.class",
+    "heteronpu/continuous/ElementwiseLoanRequest.class",
+    "heteronpu/continuous/ElementwiseLoanResult.class",
+    "heteronpu/continuous/ElementwiseLoanPort.class",
+    "heteronpu/continuous/ElementwiseRegisterLoan.class",
+    "heteronpu/continuous/ElementwiseMemoryEngine.class",
+    "heteronpu/continuous/ContinuousElementwiseTop.class",
+    "heteronpu/continuous/TensorProgram.class",
+    "heteronpu/p0/LocalSramConfig.class",
+    "heteronpu/p0/LocalSramConfig$.class",
+    "heteronpu/p0/SharedL2Fabric.class",
+    "heteronpu/p0/SharedL2FabricIO.class"
+  ],
+  "required_is_subset_not_total": true,
+  "schema": "derived-r2-compile-logical-reproduction-pins-v1",
+  "source_bytes": 171085,
+  "source_count": 26,
+  "source_order": [
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/AddRecFN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/DivSqrtRecFN_small.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/INToRecFN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/MulRecFN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/RecFNToIN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/common.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/fNFromRecFN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/primitives.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/rawFloatFromFN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/rawFloatFromIN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/rawFloatFromRecFN.scala",
+    "sources/hardfloat_snapshot/hardfloat/src/main/scala/recFNFromFN.scala",
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala",
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+    "sources/repository/integration/gemmini/EmitHeteroFP32Alu.scala",
+    "sources/chunk_contract/source/GdnChunkProtocol.scala",
+    "sources/chunk_contract/source/GdnChunkAddressPlan.scala",
+    "sources/chunk_loadprep/source/GdnChunkLoadPrepOwner.scala",
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala",
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala",
+    "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala",
+    "sources/repository/chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala",
+    "sources/repository/chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala",
+    "sources/chunk_derived_r2/source/GdnChunkDerivedAndPairOwner.scala"
+  ],
+  "standalone_runnable": false,
+  "test_patch_after": {
+    "bytes": 47923,
+    "sha256": "66f63a81776be6a1e824eb1a41454df6f131c0865837bbc261430489eae8daab"
+  },
+  "test_patch_before": {
+    "bytes": 46756,
+    "sha256": "7ebf0a867a4fb072bf7747be9f782810f357c13bd21a41ff66bbe5a000d381dd"
+  },
+  "unchanged_model_reference": {
+    "bytes": 21979,
+    "logical_label": "prior_derived/derived_model.py",
+    "sha256": "7be6faf9643653df31d05ee1e1c599d09feb2b06ad6b4d8345b8a17007b71767"
+  }
+}

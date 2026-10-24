@@ -1,0 +1,76 @@
+{
+  "R2_compile": {
+    "JARs": 87,
+    "WNOWAIT_exit_observed": 0,
+    "before_after_exact_including_stamps": true,
+    "class_bytes": 1467305,
+    "class_count": 142,
+    "cleanup_confirmed": true,
+    "cumulative_child_maxrss_KiB": 362600,
+    "input_files_before_after": 349,
+    "internal_elapsed_seconds": 33.9299436010042,
+    "native_phase_seconds": 33.295019,
+    "natural_exit_code": 0,
+    "natural_exit_then_original_anchored_group_cleanup_signal": true,
+    "no_timeout_or_parent_exception": true,
+    "reaped_and_group_absent": true,
+    "required_class_subset_count": 41,
+    "sampled_descendant_peak_rss_bytes": 371052544,
+    "source_bytes": 171085,
+    "source_files": 26,
+    "status": "PASS_QWEN35_CHUNK_DERIVED_SCALA_COMPILE_ONLY",
+    "tools": 314
+  },
+  "R2_controls": {
+    "arithmetic_services": "shared simulated integer binary32 RNE and frozen P7 nodes; not an independent oracle",
+    "full_synthetic_cases": 2,
+    "injected_subnormal_scope": "receiver-policy control only, not evidence that the prepared request naturally produces that response",
+    "internal_seconds": 1.268213,
+    "model_byte_identical": true,
+    "outer_seconds": 1.3426205630094046,
+    "pinned_content_files_before_after": 34,
+    "status": "PASS_PYTHON_PROTOCOL_AND_SIMULATED_SERVICES_ONLY",
+    "test_methods": 15,
+    "trace_and_write_hashes_same_as_original": true,
+    "transactions_each": 13410
+  },
+  "execution_boundaries": {
+    "CPU_count": 1,
+    "address_space_bytes": 4294967296,
+    "cleanup_seconds": 5,
+    "log_bytes": 2097152,
+    "owned_output_bytes": 16777216,
+    "postflight_seconds": 25,
+    "sampled_aggregate_RSS_bytes": 2147483648,
+    "shared_work_seconds": 150,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180
+  },
+  "not_granted": [
+    "candidate App or Module construction",
+    "CHIRRTL/elaboration/SystemVerilog/RTL simulation",
+    "real Scalar or Loan arithmetic/handshake",
+    "real memory ACK and fabric recovery",
+    "independent FP32 validation",
+    "complete chunk/block or Host/public/recurrent integration",
+    "hardware timing/utilization/full-model PASS",
+    "any Qwen2 UNKNOWN execution/cleanup resolution"
+  ],
+  "old_attempt": {
+    "cause": "23项pattern lowering限制仅推断；没有独立证明Scala所有>22模式均失败",
+    "diagnostic": "object <none> is not a member of package scala",
+    "diagnostic_line": 102,
+    "exit_code": 1,
+    "retained": true,
+    "status": "CONFIRMED_COMPILE_FAILURE_CLEANUP_COMPLETE"
+  },
+  "original_model_omitted": true,
+  "review_pin_only": {
+    "bytes": 7074,
+    "sha256": "1486feb0998506858a6205d9d318f550e8898c45c291c5950a719a2bd6bccf9d"
+  },
+  "schema": "derived-r2-public-result-summary-v1",
+  "status": "PASS_SCALA_COMPILE_ONLY_WITH_PYTHON_MODEL_CONTROLS",
+  "summary_zh": "唯一源码修复把23名字的List解构改为同一次Enum(23)与按原序0至22显式索引；其余owner字节逆替换完全恢复原版。新的纯Python小控和真实Scala编译分别通过，资格不互相代替。",
+  "unsafe_payloads_or_private_paths_included": false
+}

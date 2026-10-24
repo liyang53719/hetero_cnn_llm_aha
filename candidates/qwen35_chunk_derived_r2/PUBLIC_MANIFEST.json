@@ -1,0 +1,47 @@
+{
+  "files": {
+    "ENUM_REBINDING.json": {
+      "bytes": 2521,
+      "sha256": "870de6a93ec6479a16477a692b514fa9bf974b9696a38ddebb304aa1670f2542"
+    },
+    "PUBLICATION_WHITELIST.json": {
+      "bytes": 400,
+      "sha256": "b8738bec5f6eefdcc5866129bfedf05a47afba1aa4f8a25d4bcec2dce7a71ab4"
+    },
+    "README.md": {
+      "bytes": 2721,
+      "sha256": "5e108d3a31b60a584042170d38e19a0a6206e8c21f468f23d08e0f9e7514240c"
+    },
+    "REPRODUCTION_PINS.json": {
+      "bytes": 8935,
+      "sha256": "5d95516e2633d2222ba1361cf993dba5a4139d3c4cacb857e800016cd8d62577"
+    },
+    "SUMMARY.json": {
+      "bytes": 3085,
+      "sha256": "008c7151c516c31871c9d9893211ba2031b260c3af2cf08df0b0b8898d121673"
+    },
+    "launch_compile.py": {
+      "bytes": 3421,
+      "sha256": "fe813b01ecd34e3d14ed466e8fd11a98ec818bc4ee5b04ff4ec58be3d67e3405"
+    },
+    "owner.patch": {
+      "bytes": 1504,
+      "sha256": "55ae4b0696d87eef36e3e176fffc4331440a8b7622db1201423bed6a948d1d05"
+    },
+    "run_compile.py": {
+      "bytes": 11651,
+      "sha256": "37b8a68231d02cc0fcc794d1c09cda5197a3f0b7854b00581f3933dd572308ae"
+    },
+    "source/GdnChunkDerivedAndPairOwner.scala": {
+      "bytes": 20232,
+      "sha256": "9b5a9484f5d5ce2e19c4e7b3e9b429a80b939c8a652066541a6eff4b4ea5785f"
+    },
+    "tests.py.patch": {
+      "bytes": 1483,
+      "sha256": "1475564af1746b6430b6830f40eb555297e707b42041aa036d0d7255391f6791"
+    }
+  },
+  "original_model_payload_duplicated": false,
+  "schema": "derived-r2-public-excerpt-manifest-v1",
+  "scope": "Rebound source + Python controls + Scala compile-only; not standalone executable closure"
+}

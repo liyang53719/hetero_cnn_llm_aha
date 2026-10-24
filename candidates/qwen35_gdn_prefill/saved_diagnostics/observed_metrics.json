@@ -107,7 +107,7 @@
       "mean_abs": 0.005
     }
   },
-  "evidence_origin": "Previously completed private saved-word diagnostic and isolated native head0 M64/M128 and all16 M128 runs; this checkpoint did not rerun any owner.",
+  "evidence_origin": "Previously completed private saved-word, isolated Chunk, and saved-boundary suffix diagnostics; this checkpoint did not rerun any owner.",
   "full_block_acceptance": false,
   "head0_tokens0_127": {
     "actual_chunks_completed": 2,
@@ -313,6 +313,74 @@
         "token": 25
       }
     },
+    "down": {
+      "actual_executed_fmas": 469762048,
+      "actual_max_magnitude": 0.859375,
+      "actual_nonzero": 131072,
+      "bit_mismatches": 10051,
+      "candidate_elapsed_seconds": 30.567867791978642,
+      "elements": 131072,
+      "independent_postflight": "PASS",
+      "max_abs": 0.0009765625,
+      "mean_abs": 4.963985887229683e-06,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "official_reference_file": "0038.bf16le",
+      "output_pin": {
+        "bytes": 262144,
+        "sha256": "fa504fdf2c132671c504c51262c73cab467ebe4ad7ca87d820b71b3a82945ac9"
+      },
+      "reference_max_magnitude": 0.859375,
+      "reference_nonzero": 131072,
+      "reference_pin": {
+        "bytes": 262144,
+        "sha256": "b7a6c39b87622a05706905daab903c5823de0b4acd47e2aa174071cd63e34430"
+      },
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 0,
+        "token": 101
+      }
+    },
+    "gate": {
+      "actual_executed_fmas": 469762048,
+      "actual_max_magnitude": 6.8125,
+      "actual_nonzero": 458752,
+      "bit_mismatches": 8636,
+      "candidate_elapsed_seconds": 16.58186813700013,
+      "elements": 458752,
+      "independent_postflight": "PASS",
+      "max_abs": 0.015625,
+      "mean_abs": 1.8651137647144162e-05,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "official_reference_file": "0032.bf16le",
+      "output_pin": {
+        "bytes": 917504,
+        "sha256": "9abfde314b150e290227b7b35913edeff57c96567d6ea2a1d5e0c016b882f187"
+      },
+      "reference_max_magnitude": 6.8125,
+      "reference_nonzero": 458752,
+      "reference_pin": {
+        "bytes": 917504,
+        "sha256": "26d1131ce366cb91eb90c8a557aa098c218ac18cf128f932c340be2cfface02b"
+      },
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 269,
+        "token": 101
+      }
+    },
     "gated_norm": {
       "actual_max_magnitude": 8.0625,
       "actual_nonzero": 262144,
@@ -361,6 +429,40 @@
         "token": 95
       }
     },
+    "output": {
+      "actual_executed_fmas": 0,
+      "actual_max_magnitude": 0.7890625,
+      "actual_nonzero": 130913,
+      "bit_mismatches": 5770,
+      "candidate_elapsed_seconds": 1.0958992909872904,
+      "elements": 131072,
+      "independent_postflight": "PASS",
+      "max_abs": 0.001953125,
+      "mean_abs": 5.045527416314144e-06,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "official_reference_file": "0041.bf16le",
+      "output_pin": {
+        "bytes": 262144,
+        "sha256": "982584d3b3bfd13b760dc95ab9a691b567580fde06b476bcf09d769678de6933"
+      },
+      "reference_max_magnitude": 0.7890625,
+      "reference_nonzero": 130914,
+      "reference_pin": {
+        "bytes": 262144,
+        "sha256": "3fd5c899da137b7882135a4f8d7028c7ac263e663be65eed578ac898b14335f0"
+      },
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.05,
+        "mean_abs": 0.01
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 0,
+        "token": 115
+      }
+    },
     "post_norm": {
       "actual_max_magnitude": 16.375,
       "actual_nonzero": 130908,
@@ -383,6 +485,74 @@
         "batch": 0,
         "column": 804,
         "token": 95
+      }
+    },
+    "silu_mul": {
+      "actual_executed_fmas": 0,
+      "actual_max_magnitude": 3.015625,
+      "actual_nonzero": 458752,
+      "bit_mismatches": 17603,
+      "candidate_elapsed_seconds": 39.103893460996915,
+      "elements": 458752,
+      "independent_postflight": "PASS",
+      "max_abs": 0.0078125,
+      "mean_abs": 3.129680926861056e-06,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "official_reference_file": "0037.bf16le",
+      "output_pin": {
+        "bytes": 917504,
+        "sha256": "cac5104204a24cd43bf1194921a86c8922dc9be19d3b9efdc7c8b88cb746f006"
+      },
+      "reference_max_magnitude": 3.015625,
+      "reference_nonzero": 458752,
+      "reference_pin": {
+        "bytes": 917504,
+        "sha256": "547978905fce99eed235c0568759e4875b06af82c7929fd384c06f68149d0f4f"
+      },
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 488,
+        "token": 115
+      }
+    },
+    "up": {
+      "actual_executed_fmas": 469762048,
+      "actual_max_magnitude": 3.9375,
+      "actual_nonzero": 458752,
+      "bit_mismatches": 13496,
+      "candidate_elapsed_seconds": 17.42011495103361,
+      "elements": 458752,
+      "independent_postflight": "PASS",
+      "max_abs": 0.0078125,
+      "mean_abs": 1.3680442634722567e-05,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "official_reference_file": "0036.bf16le",
+      "output_pin": {
+        "bytes": 917504,
+        "sha256": "3885bbf62358271fd13958b7056d8e9574c86652b17dc19b033e57bbdfc156aa"
+      },
+      "reference_max_magnitude": 3.9375,
+      "reference_nonzero": 458752,
+      "reference_pin": {
+        "bytes": 917504,
+        "sha256": "6e68942ccf5a800f1f131d2b1f77a6d9ea2796d4d96950d1837544c00fb9d880"
+      },
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 3274,
+        "token": 29
       }
     }
   },

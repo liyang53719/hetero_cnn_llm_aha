@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from prepare_chunk import HERE, CHECKPOINT, checked, create, need
-from suffix_case import NAMES, case, plan_case
+from suffix_case import NAMES, MATRIX_CASES, TRANSPOSES, case, plan_case
 
 
 def transpose_words(raw, n=1024, k=2048):
@@ -42,9 +42,9 @@ def parse_args(argv=None):
         parser.add_argument('--' + option, type=Path)
     parser.add_argument('--cpu', type=int, required=True)
     args = parser.parse_args(argv)
-    if (args.case == 'o') != bool(args.matrix_library and args.matrix_receipt):
-        parser.error('ordinary O requires both Matrix library and receipt; other cases reject them')
-    if args.case != 'o' and (args.matrix_library or args.matrix_receipt):
+    if (args.case in MATRIX_CASES) != bool(args.matrix_library and args.matrix_receipt):
+        parser.error('Matrix cases require both existing library and receipt; Scalar cases reject them')
+    if args.case not in MATRIX_CASES and (args.matrix_library or args.matrix_receipt):
         parser.error('Scalar cases cannot load a Matrix library')
     return args
 
@@ -95,7 +95,7 @@ def main():
         need(git['execution_pins']['/usr/bin/git'] == spec['git_binary_sha256'], 'Git executable identity')
         need(not (root / '.git/objects/info/alternates').exists() and not (root / '.git/refs/replace').exists(),
              'Git alternates/replacements not admitted')
-    if args.case == 'o':
+    if args.case in MATRIX_CASES:
         library = args.matrix_library.resolve(strict=True); receipt_path = args.matrix_receipt.resolve(strict=True)
         admit(library, spec['matrix_library']); receipt = json.loads(admit(receipt_path, capture=True))
         need(receipt['status'] == 'PASS_HOST_BUILD_ONLY' and receipt['returncode'] == 0 and
@@ -112,14 +112,15 @@ def main():
     data = {}; records = {}
     for section, mapping_path in (('stage_inputs', args.inputs), ('references', args.references)):
         paths = json.loads(admit(mapping_path, capture=True)); expected = selected[section]
-        required = set(expected) - ({'weight_kn'} if section == 'stage_inputs' and args.case == 'o' else set())
+        transposes = TRANSPOSES.get(args.case, {}) if section == 'stage_inputs' else {}
+        required = set(expected) - set(transposes)
         need(set(paths) == required, 'exact explicit input path map: ' + section)
         records[section] = {}
         for name in required:
             digest = {key: expected[name][key] for key in ('bytes', 'sha256')}
             data[section, name] = admit(paths[name], digest, True)
-        if section == 'stage_inputs' and args.case == 'o':
-            data[section, 'weight_kn'] = transpose_words(data[section, 'weight_nk'])
+        for target, (source, n, k) in transposes.items():
+            data[section, target] = transpose_words(data[section, source], n, k)
         for name in expected:
             raw = data[section, name]
             need(len(raw) == expected[name]['bytes'] and hashlib.sha256(raw).hexdigest() == expected[name]['sha256'], 'fixed mapped words')
@@ -139,7 +140,7 @@ def main():
         reference_paths=[str(Path(p).resolve()) for p in json.loads(args.references.read_text()).values()] +
                         [entry['path'] for entry in records['references'].values()],
         note='Fresh explicit saved-boundary diagnostic only; native adaptation TEMP_NOT_EXECUTED.')
-    if args.case == 'o':
+    if args.case in MATRIX_CASES:
         plan['matrix_library'] = str(library)
     plan['child_argv'] = [plan['python'], '-I', '-S', '-B', str(HERE / 'suffix_child.py'), str(out / 'PLAN.json')]
     plan_case(plan)

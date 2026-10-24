@@ -261,7 +261,7 @@ python -I -S -B prepare_suffix.py --case "$CASE" \
   --repository "$FRESH_SOURCE_REPO" --runtime-site "$RUNTIME_SITE" \
   --python "$PYTHON_BIN" --compiler "$COMPILER" --cpu "$ALLOWED_CPU" \
   --inputs "$INPUT_PATH_MAP" --references "$REFERENCE_PATH_MAP" --output "$NEW_SUFFIX_DIR"
-# For case o only, append --matrix-library "$MATRIX_LIBRARY" --matrix-receipt "$BUILD_RECEIPT".
+# For Matrix cases o, gate_up, final_triplet, append --matrix-library "$MATRIX_LIBRARY" --matrix-receipt "$BUILD_RECEIPT".
 python -I -S -B launch_chunk.py --plan "$NEW_SUFFIX_DIR/PLAN.json" --reviewed-plan-sha256 "$PLAN_SHA"
 # Native execution additionally requires explicit --execute; it was not run here.
 python -I -S -B compare_suffix.py --plan "$NEW_SUFFIX_DIR/PLAN.json" \
@@ -271,5 +271,73 @@ python -I -S -B compare_suffix.py --historical-case "$CASE" --bundle "$SAVED_BUN
 python -I -S -B -m unittest discover -s . -p 'test_*cases.py' -v
 ```
 
-`CASE` is exactly `gated_norm`, `o`, or `residual_post_norm`. Private generated plans
+`CASE` is exactly `gated_norm`, `o`, `residual_post_norm`, `gate_up`, or
+`final_triplet` (the last two are described below). Private generated plans
 and native receipts must stay outside Git. Audit hooks are not a native-code sandbox.
+
+## Saved final suffix and cold actual-boundary chain
+
+Five further historical M128 node outputs passed their existing gates. No owner was
+rerun for this checkpoint; relocated native preparation/launch/child paths remain
+TEMP_NOT_EXECUTED even where stdlib tests and saved comparison parity pass.
+
+| Stage | BF16 values | Max absolute | Mean absolute | Word differences | Local seconds |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Gate | 458752 | 0.015625 | 1.8651137647144162e-5 | 8636 | 16.581868 |
+| Up | 458752 | 0.0078125 | 1.3680442634722567e-5 | 13496 | 17.420115 |
+| SiLUMul | 458752 | 0.0078125 | 3.129680926861056e-6 | 17603 | 39.103893 |
+| Seeded Down | 131072 | 0.0009765625 | 4.963985887229683e-6 | 10051 | 30.567868 |
+| Final output | 131072 | 0.001953125 | 5.045527416314144e-6 | 5770 | 1.095899 |
+
+Final output uses max 0.05 / mean 0.01; all other listed nodes retain max 0.03125 /
+mean 0.005. Prep has no assigned numerical acceptance threshold. Numerical failure,
+incomplete execution, and the original run's UNKNOWN status are not interchangeable.
+
+Gate and Up share one ordinary Dense owner, Matrix, actual post_norm input,
+TypedMemory and bank storage, with one initial reset and no prefix. Each executes
+469762048 FP32 FMAs. The final triplet has genuine SiLUMul -> Down -> Add handoffs
+through the same allocated storage. Original Down uses K2560+1024, a private
+unpublished 524288-byte FP32 prefix, 8192 prefix reads/seed beats, 32 seed ACKs,
+64 results, 14 groups/done, 114688 steps, and 469762048 FMAs. It does not use
+IndependentK512. The original Matrix build is reused; no compile is part of prep.
+Historical supervisor times are 35.608069 s for Gate/Up and 72.734784 s for the
+triplet. Natural exit 0, retained-leader cleanup and independent postflight passed.
+These facts describe those saved diagnostics, not new execution of this adapter.
+
+The new cases are `gate_up` and `final_triplet`, using the same CLI above. Both
+require `--matrix-library` and `--matrix-receipt`. Explicit input maps contain:
+
+- Gate/Up: `post_norm,gate_weight_nk,up_weight_nk`; references `gate,up`.
+- Final triplet: `gate,up,attention_residual,weight_nk`; references
+  `silu_mul,down,output`.
+
+All NK weights are original opaque BF16 words transposed to KN with inverse-map
+verification, not numerically converted. The triplet's exact source-identity
+allowance is four original Elementwise Git reads; Gate/Up allows none. Source and
+runtime closures remain the relative digests in `pins.json`; `suffix_pins.json`
+adds the reviewed private artifact hashes, never their contents or absolute roots.
+Original model and arithmetic sources are untouched.
+
+`cold_chain_pins.json` sanitizes the historical chain into logical bundle names,
+relative artifact paths, digests, edges and aggregate metrics. Its 13 actual
+predecessor-to-consumer edges and 62 selected artifact pins match before and after
+checking. It covers 15 BF16 stage outputs plus history staging, Prep provenance,
+and isolated after128-state numerical diagnostics. It is not a completion seal:
+the six original prefix owner terminals came from full_m128_02, which remains
+UNKNOWN. Later separate diagnostics and saved-boundary rehydration cannot establish
+a single-resident full-block lifecycle, joint state/history commit, generation
+advance, RTL or hardware utilization. Preparation of another full run does not
+qualify this adapter or change any of those limitations.
+
+Use a private JSON object mapping `prefix,chunk,gated_norm,o,residual_postnorm,
+gate_up,final_triplet` to their explicit saved bundle roots, then run:
+
+```sh
+python -I -S -B check_cold_chain.py --roots "$PRIVATE_ROOT_MAP" --output "$NEW_CHAIN_CHECK"
+```
+
+Forty-one stdlib tests pass, including the prior 34 and new genuine Down receipt-schema, fixed-case, stage admission,
+seed/prefix rejection, final-output threshold, CLI and sanitized-chain checks.
+The reused comparator independently reproduces all five new saved node metrics;
+the chain checker reproduces all 13 edges with stable selected pins. These checks
+import no numerical model and execute no native arithmetic, owner, launcher or build.

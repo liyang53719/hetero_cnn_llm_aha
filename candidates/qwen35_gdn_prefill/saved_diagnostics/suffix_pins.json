@@ -1,5 +1,397 @@
 {
   "cases": {
+    "final_triplet": {
+      "historical_artifacts": {
+        "PLAN.json": {
+          "bytes": 650106,
+          "sha256": "6e68f3eaed659423d33bdfc67bb0b1beabaee0f3515ce4c4b8e5dbc63a8666fc"
+        },
+        "RESULT_PINS.json": {
+          "bytes": 4180,
+          "sha256": "d827c373cdb85ab7300995447f6f006635d8a5c71e8e22b82be3562350660839"
+        },
+        "child.py": {
+          "bytes": 19675,
+          "sha256": "2274b3b80ce89a4e3ebadcf63b35a035f54e65d0c115ac65276b52df85889c26"
+        },
+        "compare.py": {
+          "bytes": 26271,
+          "sha256": "8f287f651a4cf5e81da0b4d45006fa239ab9e83b6578bbfdf4b20c2cd1c5e5e8"
+        },
+        "comparison.json": {
+          "bytes": 30149,
+          "sha256": "c30c8043a92f85353745098efc11f92f73ce5c99b19e8db22f53610303a42eeb"
+        },
+        "launch.py": {
+          "bytes": 16167,
+          "sha256": "354c17b26e27c88cb72e9d47332ac59a53418893de0dfa453955803a510dcb3b"
+        },
+        "prepare.py": {
+          "bytes": 19816,
+          "sha256": "0371d0663d2649fcd066495aa68b009d3c3fa7af84511dc50fa49449bf0d5f56"
+        },
+        "reference/down.bf16le": {
+          "bytes": 262144,
+          "sha256": "b7a6c39b87622a05706905daab903c5823de0b4acd47e2aa174071cd63e34430"
+        },
+        "reference/output.bf16le": {
+          "bytes": 262144,
+          "sha256": "3fd5c899da137b7882135a4f8d7028c7ac263e663be65eed578ac898b14335f0"
+        },
+        "reference/silu_mul.bf16le": {
+          "bytes": 917504,
+          "sha256": "547978905fce99eed235c0568759e4875b06af82c7929fd384c06f68149d0f4f"
+        },
+        "run/CLEANUP.json": {
+          "bytes": 5060,
+          "sha256": "8eba0054c80aa2b4803e2473b363da9a568e049887d1baa7f03286c9bbe76731"
+        },
+        "run/LAUNCH.json": {
+          "bytes": 3888,
+          "sha256": "b6272db9571ac3cc0efba66402beea606c828ea05bc26261ff46ea63e95e59d2"
+        },
+        "run/SOURCE_GIT.jsonl": {
+          "bytes": 1787,
+          "sha256": "8504f25b1ba21a38342f975adc2818a8e3a8fa8abe9433fd275e8d3523e6b84d"
+        },
+        "run/START.json": {
+          "bytes": 191,
+          "sha256": "26411c3f4d526932bbb47786947e537779de533eed1e8adeb574b45e676d6d22"
+        },
+        "run/actual/HANDOFF_down_TO_output.json": {
+          "bytes": 3647,
+          "sha256": "61cd0220dbd2e872247fa606294a5c3c5e9df181f98e56024759432f57840528"
+        },
+        "run/actual/HANDOFF_silu_mul_TO_down.json": {
+          "bytes": 3835,
+          "sha256": "7bb4785f5acd62e9f4d2e5cd4e76082271b56d62ff73123b47ef5c59c8760c29"
+        },
+        "run/actual/MANIFEST.json": {
+          "bytes": 11532,
+          "sha256": "05cd71b1fc6c0eaef5259a86c3e393f24efe669d0a2f3632923bb23392b98c50"
+        },
+        "run/actual/TRIPLET_TERMINAL.json": {
+          "bytes": 21516,
+          "sha256": "b53d857af507c7a44ccc3901329968c54522003e3c7447b04e51d762cd65356d"
+        },
+        "run/actual/down/STAGE_LEDGER.json": {
+          "bytes": 13460,
+          "sha256": "093bf253b7e6d8df5a06cff90dce45af5e1f4aa603bd0f582857dbd8970c90ee"
+        },
+        "run/actual/down/STAGE_START.json": {
+          "bytes": 9359,
+          "sha256": "1ccc0e6c7c8f1eb836d037bda240846f0b80b1096b9e16772e98c5f1c4b73d41"
+        },
+        "run/actual/down/STAGE_TERMINAL.json": {
+          "bytes": 13460,
+          "sha256": "093bf253b7e6d8df5a06cff90dce45af5e1f4aa603bd0f582857dbd8970c90ee"
+        },
+        "run/actual/down/output.bf16le": {
+          "bytes": 262144,
+          "sha256": "fa504fdf2c132671c504c51262c73cab467ebe4ad7ca87d820b71b3a82945ac9"
+        },
+        "run/actual/down/summary.json": {
+          "bytes": 18029,
+          "sha256": "46aa7af667c81ea267e9e1ba77aeb608f2c4c7a03df6f1650e09a1d13461a00f"
+        },
+        "run/actual/output/STAGE_LEDGER.json": {
+          "bytes": 13575,
+          "sha256": "07331c0285ecafddf1c10c236f6e69cea4ef9cbb033ab28cd1136df967e7dac7"
+        },
+        "run/actual/output/STAGE_START.json": {
+          "bytes": 9361,
+          "sha256": "57e4ca8737786f8c40f7aa715342ebf9609612fecdda4f92aa10650271b52af3"
+        },
+        "run/actual/output/STAGE_TERMINAL.json": {
+          "bytes": 13575,
+          "sha256": "07331c0285ecafddf1c10c236f6e69cea4ef9cbb033ab28cd1136df967e7dac7"
+        },
+        "run/actual/output/output.bf16le": {
+          "bytes": 262144,
+          "sha256": "982584d3b3bfd13b760dc95ab9a691b567580fde06b476bcf09d769678de6933"
+        },
+        "run/actual/output/summary.json": {
+          "bytes": 19901,
+          "sha256": "8e4fbf73a23ba5fbe1a9b22ad1712af290106410a763778fae1148ccc437e01e"
+        },
+        "run/actual/silu_mul/STAGE_LEDGER.json": {
+          "bytes": 13346,
+          "sha256": "8dc4075669a14901a600273f2c3643e66ee9008305f1716181df9ad513ef4200"
+        },
+        "run/actual/silu_mul/STAGE_START.json": {
+          "bytes": 9362,
+          "sha256": "e434340c13abece196a3cb10b3e66ff27453814506537f86636ec2f649887355"
+        },
+        "run/actual/silu_mul/STAGE_TERMINAL.json": {
+          "bytes": 13346,
+          "sha256": "8dc4075669a14901a600273f2c3643e66ee9008305f1716181df9ad513ef4200"
+        },
+        "run/actual/silu_mul/output.bf16le": {
+          "bytes": 917504,
+          "sha256": "cac5104204a24cd43bf1194921a86c8922dc9be19d3b9efdc7c8b88cb746f006"
+        },
+        "run/actual/silu_mul/summary.json": {
+          "bytes": 19808,
+          "sha256": "d3673020a0b57e33594fa45c1c7102f451ee2c00224c1b70b967f1d7b322c86a"
+        },
+        "run/actual/summary.json": {
+          "bytes": 20887,
+          "sha256": "59010fd5eecd26ff10ca528ca43084391018e3ab5c3f940d0051669f3478598f"
+        },
+        "source_git_guard.py": {
+          "bytes": 2983,
+          "sha256": "abb686186a813c87aa51615d63f2520e470a9c2bf0090a79c392897c52f11e81"
+        }
+      },
+      "historical_input_pin_count": 1459,
+      "policy": {
+        "automatic_retry": false,
+        "coordinated_reset_calls": 0,
+        "dense_owner": "GdnProjectionOwner",
+        "direct_actual_interstage_regions": true,
+        "down": "original TypedSeededDenseDriver K2560+1024, original prefix DDR seed permutation, final BF16 RNE",
+        "down_expected_fmas": 469762048,
+        "down_expected_steps": 114688,
+        "enable_ieee_exp": true,
+        "enable_softplus": true,
+        "full_block_generation": 0,
+        "initial_reset_calls": 1,
+        "matrix": "MatrixService",
+        "no_arithmetic_adapters_or_monkeypatches": true,
+        "output": "original ElementwiseOwner Add(attention_residual,down), BF16 RNE",
+        "prefix_allocated_bytes": 524288,
+        "prefix_never_published": true,
+        "scalar": "DecayScalar",
+        "shared_scalar_matrix_memory_owners_banks": true,
+        "silu_mul": "original ElementwiseOwner SiluMul(gate,up), BF16 SiLU before BF16 product",
+        "single_resident_full_block_lifecycle": false,
+        "state_or_history_allocations": false,
+        "tokens": 128,
+        "workspace_generation": 1,
+        "workspace_generation_note": "Original positive PrefixWorkspace version only, not a block generation."
+      },
+      "references": {
+        "down": {
+          "bytes": 262144,
+          "filename": "down.bf16le",
+          "sha256": "b7a6c39b87622a05706905daab903c5823de0b4acd47e2aa174071cd63e34430"
+        },
+        "output": {
+          "bytes": 262144,
+          "filename": "output.bf16le",
+          "sha256": "3fd5c899da137b7882135a4f8d7028c7ac263e663be65eed578ac898b14335f0"
+        },
+        "silu_mul": {
+          "bytes": 917504,
+          "filename": "silu_mul.bf16le",
+          "sha256": "547978905fce99eed235c0568759e4875b06af82c7929fd384c06f68149d0f4f"
+        }
+      },
+      "stage_inputs": {
+        "attention_residual": {
+          "bytes": 262144,
+          "filename": "attention_residual.bf16le",
+          "sha256": "75d2692d7203ec3098b321d7f1da84a7fae4cba2b01de6e5e5aadd4adb5afd73"
+        },
+        "gate": {
+          "bytes": 917504,
+          "filename": "gate.bf16le",
+          "sha256": "9abfde314b150e290227b7b35913edeff57c96567d6ea2a1d5e0c016b882f187"
+        },
+        "up": {
+          "bytes": 917504,
+          "filename": "up.bf16le",
+          "sha256": "3885bbf62358271fd13958b7056d8e9574c86652b17dc19b033e57bbdfc156aa"
+        },
+        "weight_kn": {
+          "bytes": 7340032,
+          "filename": "down_weight_kn.bf16le",
+          "sha256": "7aecd838566f59e8e1a2684bbd226067a8ef220179f3f77548d30a76cdfa145d"
+        },
+        "weight_nk": {
+          "bytes": 7340032,
+          "filename": "down_weight_nk.bf16le",
+          "sha256": "57c93b2a4452740b0b82386debc7c66df7774f98425a0253dd9d3e7006e989ac"
+        }
+      },
+      "stages": [
+        "silu_mul",
+        "down",
+        "output"
+      ]
+    },
+    "gate_up": {
+      "historical_artifacts": {
+        "PLAN.json": {
+          "bytes": 615903,
+          "sha256": "23553bbb86b681e11af788a74f62b9e765e18016ed194e7c3c54163309041391"
+        },
+        "RESULT_PINS.json": {
+          "bytes": 3047,
+          "sha256": "3baf7fc9700161b6fab29a1db97fbdeb521b8aa36282965fc1645ca7bae5566b"
+        },
+        "child.py": {
+          "bytes": 14908,
+          "sha256": "7550aa4c35f8f3895039eb01e6e474d5dc2ea490b8b2e5dc449dd6f308791048"
+        },
+        "compare.py": {
+          "bytes": 15602,
+          "sha256": "e5a83b00a189f8fc7fc56d0ab3a4048a4c2552ae1be57258ac4c20d1c2c501cf"
+        },
+        "comparison.json": {
+          "bytes": 9942,
+          "sha256": "66819bb4931a92a21da93edab7dc5bb7dfc80bbca3db9b9adcceda344a9eab54"
+        },
+        "launch.py": {
+          "bytes": 15885,
+          "sha256": "54e33d5ecfe96635583ef1b5395dbb33a6cf4e003fd8ddc2ce83acfcfcb60fca"
+        },
+        "prepare.py": {
+          "bytes": 13751,
+          "sha256": "c1adfed0beb242c5971c4b15c1b33d15a9fa09f522f606be0e884c88e0286f72"
+        },
+        "reference/gate.bf16le": {
+          "bytes": 917504,
+          "sha256": "26d1131ce366cb91eb90c8a557aa098c218ac18cf128f932c340be2cfface02b"
+        },
+        "reference/up.bf16le": {
+          "bytes": 917504,
+          "sha256": "6e68942ccf5a800f1f131d2b1f77a6d9ea2796d4d96950d1837544c00fb9d880"
+        },
+        "run/CLEANUP.json": {
+          "bytes": 5062,
+          "sha256": "a7d200ddc4a031c4f9e87dcfabc90f50fa6be4cde4d4d73979762fa789727b8f"
+        },
+        "run/LAUNCH.json": {
+          "bytes": 3806,
+          "sha256": "2ef20379a3589fe4b067b7a5e75d8b3bb5822c5cfec3467c4cc1e6120710ef16"
+        },
+        "run/START.json": {
+          "bytes": 191,
+          "sha256": "eb5a13bcb4aec3dc02812a895fee04d52a81cf8160db7927cfb2a1a6a1cca94c"
+        },
+        "run/actual/MANIFEST.json": {
+          "bytes": 7294,
+          "sha256": "0b7760cb6059440c4e6201d6fc172f1fc6b20208e66d8ea67eed3585c0c37109"
+        },
+        "run/actual/PAIR_TERMINAL.json": {
+          "bytes": 13437,
+          "sha256": "112489408df757b83d3cc0ea9cf9eb58d97c010b8055bc56704207ecd8627aa1"
+        },
+        "run/actual/RESOURCE_REUSE.json": {
+          "bytes": 3677,
+          "sha256": "29980a8b33459e913dc3ebc579de62b51141ae0d2adf79c7404359199c2e5fe6"
+        },
+        "run/actual/gate/STAGE_LEDGER.json": {
+          "bytes": 10810,
+          "sha256": "46c3a62f1137ec266260734f9115c842058caac10042202746f6bb095a1cb0a2"
+        },
+        "run/actual/gate/STAGE_START.json": {
+          "bytes": 7448,
+          "sha256": "46efa2453f93b1f25bdc83ca065f39647c22f95c75ab3e4bbb51ad5bd540a2e9"
+        },
+        "run/actual/gate/STAGE_TERMINAL.json": {
+          "bytes": 10810,
+          "sha256": "46c3a62f1137ec266260734f9115c842058caac10042202746f6bb095a1cb0a2"
+        },
+        "run/actual/gate/output.bf16le": {
+          "bytes": 917504,
+          "sha256": "9abfde314b150e290227b7b35913edeff57c96567d6ea2a1d5e0c016b882f187"
+        },
+        "run/actual/gate/summary.json": {
+          "bytes": 13413,
+          "sha256": "8e0471376f3367998fc4b680829a1fdbfaa1f9504028be3610d743f874e1728d"
+        },
+        "run/actual/summary.json": {
+          "bytes": 12984,
+          "sha256": "d5c55ca453828605fd6fd1d6667fdd8f88fdec6339a3615cef7a5f894d849f97"
+        },
+        "run/actual/up/STAGE_LEDGER.json": {
+          "bytes": 10803,
+          "sha256": "25a005f03473980855fcfe0f6deba6056b3468aa9ab5f80a35552bb48b444e9b"
+        },
+        "run/actual/up/STAGE_START.json": {
+          "bytes": 7442,
+          "sha256": "e367a0d97839a744d8dfceb87ebf4a6c2b2efc1ef9e6572748bc629bc696beed"
+        },
+        "run/actual/up/STAGE_TERMINAL.json": {
+          "bytes": 10803,
+          "sha256": "25a005f03473980855fcfe0f6deba6056b3468aa9ab5f80a35552bb48b444e9b"
+        },
+        "run/actual/up/output.bf16le": {
+          "bytes": 917504,
+          "sha256": "3885bbf62358271fd13958b7056d8e9574c86652b17dc19b033e57bbdfc156aa"
+        },
+        "run/actual/up/summary.json": {
+          "bytes": 13418,
+          "sha256": "495ef70e41d37a598e9860b9a8a486338cf4831c259e6a9d118e487c189dda8e"
+        }
+      },
+      "historical_input_pin_count": 1369,
+      "policy": {
+        "automatic_retry": false,
+        "coordinated_reset_calls": 0,
+        "driver": "TypedDenseDriver",
+        "full_block_generation": 0,
+        "gate_up_recipe": "original ordinary single-K-chunk sequential-K FP32 FMA with final BF16 RNE",
+        "independent_k512_applied": false,
+        "initial_reset_calls": 1,
+        "matrix": "MatrixService",
+        "ordinary_dense": true,
+        "owner": "GdnProjectionOwner",
+        "same_post_norm_mutable_region": true,
+        "shared_owner_matrix_memory_and_banks": true,
+        "single_resident_full_block_lifecycle": false,
+        "state_or_history_allocations": false,
+        "tokens": 128,
+        "weight_pack": "original uint16 [N,K] transpose to [K,N], complete inverse mapping verified, no numeric conversion",
+        "workspace_generation": 1,
+        "workspace_generation_note": "Positive metadata required by original PrefixWorkspace, not a block generation; no prefix memory used."
+      },
+      "references": {
+        "gate": {
+          "bytes": 917504,
+          "filename": "gate.bf16le",
+          "sha256": "26d1131ce366cb91eb90c8a557aa098c218ac18cf128f932c340be2cfface02b"
+        },
+        "up": {
+          "bytes": 917504,
+          "filename": "up.bf16le",
+          "sha256": "6e68942ccf5a800f1f131d2b1f77a6d9ea2796d4d96950d1837544c00fb9d880"
+        }
+      },
+      "stage_inputs": {
+        "gate_weight_kn": {
+          "bytes": 7340032,
+          "filename": "gate_weight_kn.bf16le",
+          "sha256": "04a165b6a53de58dea5f72837d832b0ff43236a033a1313b6e14e43aad3f7d09"
+        },
+        "gate_weight_nk": {
+          "bytes": 7340032,
+          "filename": "gate_weight_nk.bf16le",
+          "sha256": "ac1e1d4df4f3adca7e0bc15ee7310ce093f9108baa712cfb86f57b03e6d6e140"
+        },
+        "post_norm": {
+          "bytes": 262144,
+          "filename": "post_norm.bf16le",
+          "sha256": "e05ad5cf7f7dc23033da9742512210fb82b06fa9ff3e96c2991611d838c56acd"
+        },
+        "up_weight_kn": {
+          "bytes": 7340032,
+          "filename": "up_weight_kn.bf16le",
+          "sha256": "27421cc784552034a8d715ed66cf34b4d6593b0fd7d2d4d5ba4a84018334b34d"
+        },
+        "up_weight_nk": {
+          "bytes": 7340032,
+          "filename": "up_weight_nk.bf16le",
+          "sha256": "0317b5f7a4e522c75c5013a70f14c510262b79596ac298ef52b5e04740d76367"
+        }
+      },
+      "stages": [
+        "gate",
+        "up"
+      ]
+    },
     "gated_norm": {
       "historical_artifacts": {
         "PLAN.json": {

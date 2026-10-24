@@ -68,13 +68,13 @@ def receipt_fixture(stage):
 
 
 class SuffixTests(unittest.TestCase):
-    def test_only_three_fixed_cases_and_policies(self):
+    def test_only_five_fixed_cases_and_policies(self):
         for name in cases.NAMES:
             selected = cases.plan_case(plan_for(name))
             self.assertEqual((selected['tokens'], selected['driver_seconds'], selected['outer_seconds']), (128, 180, 210))
             self.assertEqual(selected['limits']['address_space_bytes'], 1 << 30)
             self.assertEqual(supervisor.plan_case(plan_for(name)), selected)
-        for name in ('post_norm', 'final_residual', 'gate_up', 128, True, None):
+        for name in ('post_norm', 'final_residual', 'arbitrary_suffix', 128, True, None):
             with self.assertRaises(ValueError):
                 cases.case(name)
         self.assertFalse(cases.case('o')['policy']['independent_k512_applied'])
@@ -107,12 +107,12 @@ class SuffixTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             preparation.transpose_words(raw[:-2], 2, 3)
 
-    def test_cli_requires_explicit_inputs_and_matrix_only_for_o(self):
+    def test_cli_requires_explicit_inputs_and_matrix_for_dense_cases(self):
         options = ('repository', 'runtime-site', 'python', 'compiler', 'inputs', 'references', 'output')
         common = [value for option in options for value in ('--' + option, 'not-opened')] + ['--cpu', '0']
         matrix = ['--matrix-library', 'elf', '--matrix-receipt', 'receipt']
         for name in cases.NAMES:
-            self.assertEqual(preparation.parse_args(common + ['--case', name] + (matrix if name == 'o' else [])).case, name)
+            self.assertEqual(preparation.parse_args(common + ['--case', name] + (matrix if name in cases.MATRIX_CASES else [])).case, name)
         for suffix in (['--case', 'o'], ['--case', 'gated_norm'] + matrix, ['--case', 'post_norm'],
                        ['--case', 'o', '--matrix-library', 'elf']):
             with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
@@ -242,7 +242,7 @@ class SuffixTests(unittest.TestCase):
         top = [node for node in tree.body if isinstance(node, (ast.Import, ast.ImportFrom))]
         self.assertFalse(any(isinstance(node, ast.ImportFrom) and (node.module or '').startswith('candidates.') for node in top))
         self.assertIn('ReductionPolicy.Torch210CpuDefault1024', source)
-        self.assertIn('m=128, k=2048, n=1024', source)
+        self.assertIn("dense_driver('o', 'gated_norm', 'weight_kn', 2048, 1024, 90)", source)
         self.assertNotIn('IndependentK512', source)
         self.assertNotIn('.preflight_response(', source)
         self.assertIn('driver.input is previous.output', source)

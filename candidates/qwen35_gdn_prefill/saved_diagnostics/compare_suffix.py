@@ -11,7 +11,7 @@ import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from compare_chunk import bf16_metrics, pin, sha, verify
-from suffix_case import NAMES, case, plan_case, complete, need
+from suffix_case import NAMES, DENSE_STAGES, case, plan_case, complete, need
 
 SCOPE_FLAGS = ('full_block_acceptance', 'single_resident_full_block_lifecycle', 'original_continuation',
                'state_committed', 'history_committed', 'generation_advanced', 'output_reference_read')
@@ -19,6 +19,8 @@ SCALAR_CALLS = {
     'gated_norm': dict(add=526336, div=264192, exp_negative=262144, mul_ieee_rne=1574912, sqrt=2048),
     'attention_residual': dict(add=131072),
     'post_norm': dict(add=275584, mul_ieee_rne=393344, sqrt=128, div=128),
+    'silu_mul': dict(add=458752, div=458752, exp_negative=458752, mul_ieee_rne=1376256),
+    'output': dict(add=131072),
 }
 
 
@@ -38,8 +40,12 @@ def supervised_admission(launch, cleanup, plan_sha):
 
 def metrics(actual, reference, stage, byte_count):
     result = bf16_metrics(actual, reference, byte_count // 2); worst = result.pop('worst_index')
+    width = 3584 if stage in ('gate', 'up', 'silu_mul') else 1024
+    if stage == 'output':
+        result['thresholds'] = dict(max_abs=.05, mean_abs=.01)
+        result['meets_existing_node_thresholds'] = result['max_abs'] <= .05 and result['mean_abs'] <= .01
     result['worst_location'] = (dict(token=worst//2048, head=(worst//128)%16, column=worst%128)
-                                if stage == 'gated_norm' else dict(batch=0, token=worst//1024, column=worst%1024))
+                                if stage == 'gated_norm' else dict(batch=0, token=worst//width, column=worst%width))
     return result
 
 
@@ -56,28 +62,45 @@ def stage_admission(stage, summary, terminal, plan, plan_sha, prior_sha=None):
          terminal['output_sha256'] == summary['output_sha256'] and terminal['output_bytes'] == expected_bytes and
          terminal['output_published'] is True, 'durable real stage terminal identity')
     keys = {'gated_norm': ('core', 'z', 'weight'), 'o': ('gated_norm', 'weight_kn'),
-            'attention_residual': ('hidden', 'o'), 'post_norm': ('weight',)}[stage]
+            'attention_residual': ('hidden', 'o'), 'post_norm': ('weight',),
+            'gate': ('post_norm', 'gate_weight_kn'), 'up': ('post_norm', 'up_weight_kn'),
+            'silu_mul': ('gate', 'up'), 'down': ('weight_kn',), 'output': ('attention_residual',)}[stage]
     expected_inputs = [plan['stage_inputs'][key]['sha256'] for key in keys]
-    if stage == 'post_norm':
-        need(prior_sha is not None, 'matching actual residual required'); expected_inputs.insert(0, prior_sha)
+    if stage in ('post_norm', 'down', 'output'):
+        need(prior_sha is not None, 'matching actual predecessor required')
+        expected_inputs.insert(1 if stage == 'output' else 0, prior_sha)
     need(summary['input_sha256'] == expected_inputs, 'actual driver input hash chain')
-    if stage == 'o':
+    if stage in DENSE_STAGES:
         counts = summary['counts']; matrix = summary['matrix']; mc = matrix['counters']
-        need(summary['response'] == [90, None, 262144] and summary['numeric_fault'] is None and
-             summary['executed_fmas'] == 268435456 and counts['steps'] == 65536 and
-             counts['a_read_beats'] == 8192 and counts['b_read_beats'] == 65536 and
-             counts['write_data_bytes'] == counts['ack_bytes'] == 262144 and counts['done'] == 7 and counts['results'] == 32 and
-             mc['owner_acquires'] == mc['owner_releases'] == mc['owner_responses'] == 1 and mc.get('aborts', 0) == 0 and
-             matrix['dense_fma_calls'] == 268435456 and matrix['normal_fma_calls'] == 0 and
-             matrix['same_accumulator_resource'] is True and matrix['reset_required'] is False, 'ordinary Dense recipe/lifecycle')
-        need(summary['workspace_metadata'] == dict(base=0x1000000, extent=524288, generation=1, prefix_bytes=0,
-             memory_region_allocated=False), 'workspace metadata is not block generation')
+        tag, fmas, steps, reads, done, results = {
+            'o': (90, 268435456, 65536, 8192, 7, 32),
+            'gate': (120, 469762048, 114688, 4096, 23, 112),
+            'up': (130, 469762048, 114688, 4096, 23, 112),
+            'down': (150, 469762048, 114688, 14336, 14, 64)}[stage]
+        cumulative = 2 if stage == 'up' else 1
+        need(summary['response'] == [tag, None, expected_bytes] and summary['numeric_fault'] is None and
+             summary['executed_fmas'] == fmas and counts['steps'] == steps and
+             counts['a_read_beats'] == reads and counts['b_read_beats'] == steps and
+             counts['write_data_bytes'] == counts['ack_bytes'] == expected_bytes and counts['done'] == done and counts['results'] == results and
+             mc['owner_acquires'] == mc['owner_releases'] == mc['owner_responses'] == cumulative and mc.get('aborts', 0) == 0 and
+             matrix['dense_fma_calls'] == fmas*cumulative and matrix['normal_fma_calls'] == 0 and
+             matrix['same_accumulator_resource'] is True and matrix['reset_required'] is False, 'Dense recipe/lifecycle')
+        if stage == 'down':
+            need(all(counts[key] == value for key, value in dict(prefix_ack_bytes=524288, prefix_read_beats=8192,
+                 prefix_write_data_bytes=524288, seed_acks=32, seed_beats=8192, seed_begins=32, seed_errors=0).items()) and
+                 summary['prefix_bytes'] == summary['prefix_extent'] == 524288 and
+                 type(summary['prefix_version']) is list and all(type(v) is int for v in summary['prefix_version']) and
+                 summary['prefix_version'] == [150, 1, 0, 1, 2560] and
+                 summary['prefix_published'] is False and mc['dense_seed_acks'] == 32, 'original private seeded prefix')
+        else:
+            need(summary['workspace_metadata'] == dict(base=0x4000000 if stage in ('gate', 'up') else 0x1000000,
+                 extent=524288, generation=1, prefix_bytes=0, memory_region_allocated=False), 'ordinary metadata without prefix')
     else:
         response = summary['response']; owner = summary['owner']; accepted = owner['accepted']
-        reads = {'gated_norm': 16392, 'attention_residual': 8192, 'post_norm': 4128}[stage]
+        reads = {'gated_norm': 16392, 'attention_residual': 8192, 'post_norm': 4128, 'silu_mul': 28672, 'output': 8192}[stage]
         binding = summary['scalar_arithmetic_binding']
         need(response['status'] is None and response['write_bytes'] == expected_bytes and
-             response['tag'] == {'gated_norm': 80, 'attention_residual': 100, 'post_norm': 110}[stage] and
+             response['tag'] == {'gated_norm': 80, 'attention_residual': 100, 'post_norm': 110, 'silu_mul': 140, 'output': 160}[stage] and
              owner['scalar_calls'] == SCALAR_CALLS[stage] and accepted['read_requests'] == reads and
              accepted['write_requests'] == accepted['write_acks'] == expected_bytes//64 and
              accepted['memory_responses'] == reads + expected_bytes//64 and accepted['owner_results'] == 1 and
@@ -86,9 +109,11 @@ def stage_admission(stage, summary, terminal, plan, plan_sha, prior_sha=None):
         if stage == 'gated_norm':
             need(summary['staging_complete'] is True and owner['production_geometry'] is True and owner['active_heads'] == 16,
                  'full original GatedNorm geometry')
-        if stage == 'attention_residual':
-            need(owner['operation'] == 'Add' and owner['hidden_width'] == 1024 and owner['test_geometry'] is False,
-                 'original residual Add geometry')
+        if stage in ('attention_residual', 'output', 'silu_mul'):
+            need(owner['operation'] == ('SiluMul' if stage == 'silu_mul' else 'Add') and owner['hidden_width'] == 1024 and owner['test_geometry'] is False,
+                 'original elementwise geometry')
+            if stage == 'silu_mul':
+                need(owner['ffn_width'] == 3584 and owner['production_geometry'] is True, 'full SiLUMul width')
         if stage == 'post_norm':
             need(owner['identity']['policy'] == 'torch210_cpu_default1024', 'original RMS policy')
 
@@ -118,6 +143,15 @@ def compare_fresh(plan_path, plan_sha):
              handoff['source_sha256'] == reports['attention_residual']['output_pin']['sha256'] and
              handoff['source_bytes'] == 262144 and handoff['written_beats'] == handoff['acknowledged_beats'] == 4096 and
              all(handoff[key] is True for key in ('same_scalar', 'same_memory', 'same_region', 'same_storage')), 'direct resident pair handoff')
+    if selected['name'] == 'final_triplet':
+        need(len(root['handoffs']) == 2, 'two actual resident handoffs')
+        for handoff, producer, consumer in zip(root['handoffs'], ('silu_mul', 'down'), ('down', 'output')):
+            need(handoff['producer'] == producer and handoff['consumer'] == consumer and
+                 handoff['method'] == 'DIRECT_GENUINE_ACCEPTED_TYPED_REGION_NO_COPY_OR_REPLACEMENT' and
+                 handoff['source_sha256'] == reports[producer]['output_pin']['sha256'] and
+                 handoff['source_bytes'] == reports[producer]['output_pin']['bytes'] and
+                 handoff['written_beats'] == handoff['acknowledged_beats'] == handoff['source_bytes']//64 and
+                 all(handoff[key] is True for key in ('same_memory', 'same_region', 'same_storage')), 'actual resident triplet chain')
     verify(plan)
     need(all(pin(path) == recorded for path, recorded in stable.items()) and pin(plan_path)['sha256'] == plan_sha, 'comparison artifacts changed')
     return reports
@@ -136,11 +170,11 @@ def compare_historical(name, bundle):
     supervised_admission(load(bundle / 'run/LAUNCH.json'), load(bundle / 'run/CLEANUP.json'), plan_sha)
     verify(plan); historical = load(bundle / 'comparison.json'); reports = {}
     for stage in selected['stages']:
-        directory = bundle / 'run/actual' / (stage if name == 'residual_post_norm' else '')
+        directory = bundle / 'run/actual' / (stage if len(selected['stages']) > 1 else '')
         reference = bundle / 'reference' / selected['references'][stage]['filename']
         output = directory / 'output.bf16le'; summary = load(directory / 'summary.json')
         report = metrics(output.read_bytes(), reference.read_bytes(), stage, selected['references'][stage]['bytes'])
-        old = historical['stages'][stage] if name == 'residual_post_norm' else historical
+        old = historical['stages'][stage] if len(selected['stages']) > 1 else historical
         for key in report:
             if key != 'numerical_mismatches':
                 need(report[key] == old[key], 'historical comparator metric parity: ' + stage + '/' + key)

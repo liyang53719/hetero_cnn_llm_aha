@@ -1,0 +1,112 @@
+{
+  "description": "Selected genuine saved Down receipt fields, with no identifiers or raw data; synthetic fixtures do not substitute for this schema regression.",
+  "source_pins": {
+    "run/actual/down/STAGE_TERMINAL.json": {
+      "bytes": 13460,
+      "sha256": "093bf253b7e6d8df5a06cff90dce45af5e1f4aa603bd0f582857dbd8970c90ee"
+    },
+    "run/actual/down/summary.json": {
+      "bytes": 18029,
+      "sha256": "46aa7af667c81ea267e9e1ba77aeb608f2c4c7a03df6f1650e09a1d13461a00f"
+    }
+  },
+  "summary": {
+    "aborted_for_deadline": false,
+    "accepted_ack_beats": 4096,
+    "accepted_write_beats": 4096,
+    "block_generation": 0,
+    "complete": true,
+    "counts": {
+      "a_read_beats": 14336,
+      "ack_bytes": 262144,
+      "b_read_beats": 114688,
+      "done": 14,
+      "peak_results": 2,
+      "prefix_ack_bytes": 524288,
+      "prefix_read_beats": 8192,
+      "prefix_write_data_bytes": 524288,
+      "read_responses": 137216,
+      "results": 64,
+      "seed_acks": 32,
+      "seed_beats": 8192,
+      "seed_begins": 32,
+      "seed_errors": 0,
+      "steps": 114688,
+      "ticks": 372593,
+      "write_commands": 12288,
+      "write_data_bytes": 262144
+    },
+    "executed_fmas": 469762048,
+    "full_block_acceptance": false,
+    "generation_advanced": false,
+    "history_committed": false,
+    "input_sha256": [
+      "cac5104204a24cd43bf1194921a86c8922dc9be19d3b9efdc7c8b88cb746f006",
+      "7aecd838566f59e8e1a2684bbd226067a8ef220179f3f77548d30a76cdfa145d"
+    ],
+    "matrix": {
+      "accumulator_bytes": 81920,
+      "counter_provenance": "Actual C++ std::fma calls; no shape-derived or hardware-cycle totals.",
+      "counters": {
+        "dense_done": 14,
+        "dense_groups": 14,
+        "dense_results": 64,
+        "dense_seed_acks": 32,
+        "dense_steps": 114688,
+        "owner_acquires": 1,
+        "owner_releases": 1,
+        "owner_responses": 1
+      },
+      "dense_fma_calls": 469762048,
+      "hardware_simulation": false,
+      "model_ticks_are_hardware_cycles": false,
+      "normal_fma_calls": 0,
+      "reset_required": false,
+      "same_accumulator_resource": true
+    },
+    "numeric_fault": null,
+    "original_continuation": false,
+    "output_published": true,
+    "output_reference_read": false,
+    "output_sha256": "fa504fdf2c132671c504c51262c73cab467ebe4ad7ca87d820b71b3a82945ac9",
+    "prefix_bytes": 524288,
+    "prefix_extent": 524288,
+    "prefix_published": false,
+    "prefix_version": [
+      150,
+      1,
+      0,
+      1,
+      2560
+    ],
+    "response": [
+      150,
+      null,
+      262144
+    ],
+    "single_resident_full_block_lifecycle": false,
+    "stage": "down",
+    "state_committed": false,
+    "status": "ISOLATED_STAGE_COMPLETE_UNCOMPARED",
+    "terminal_count": 1
+  },
+  "terminal": {
+    "input_sha256": [
+      "cac5104204a24cd43bf1194921a86c8922dc9be19d3b9efdc7c8b88cb746f006",
+      "7aecd838566f59e8e1a2684bbd226067a8ef220179f3f77548d30a76cdfa145d"
+    ],
+    "output_bytes": 262144,
+    "output_published": true,
+    "output_sha256": "fa504fdf2c132671c504c51262c73cab467ebe4ad7ca87d820b71b3a82945ac9",
+    "plan_sha256": "6e68f3eaed659423d33bdfc67bb0b1beabaee0f3515ce4c4b8e5dbc63a8666fc",
+    "real_owner_terminal": true,
+    "response": [
+      150,
+      null,
+      262144
+    ],
+    "stage": "down",
+    "status": "STAGE_COMPLETE_UNCOMPARED",
+    "terminal_count": 1
+  }
+}

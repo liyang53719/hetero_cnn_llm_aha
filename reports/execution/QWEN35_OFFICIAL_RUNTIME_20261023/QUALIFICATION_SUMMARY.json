@@ -1,0 +1,170 @@
+{
+  "acquisition": {
+    "additional_authorized_window_seconds": 300,
+    "cumulative_limit_bytes": 536870912,
+    "duplicate_archive_gets_included": true,
+    "first_300_second_window_expired": true,
+    "network_bytes": 77569305,
+    "new_reusable_acquisition_script": "Source and eight no-network unit tests only; not used for the recorded historical acquisition.",
+    "second_window_elapsed_seconds": 236.30157061241334,
+    "torch_redownloaded": false
+  },
+  "attempts": [
+    {
+      "label": "runtime01",
+      "reason": "Unanticipated pip urllib3 import-time IPv6 capability probe was denied before socket creation; no PASS receipt emitted. Failed attempt retained unchanged.",
+      "status": "FAILED_OFFLINE_INSTALL"
+    },
+    {
+      "label": "runtime02",
+      "repair": "Narrow process-local suppression of pinned offline-only urllib3 capability probe during import; original stdlib flag restored; socket guard unchanged. Fresh install and independent qualifier rerun.",
+      "status": "PASS_ISOLATED_PINNED_RUNTIME_READY"
+    }
+  ],
+  "boundaries": {
+    "aten_dispatch": "DEFAULT",
+    "complete_environment_or_os_source_closure": false,
+    "historical_environment_byte_identical_reproduction_claimed": false,
+    "host_interpreter_and_stdlib_trusted_and_measured": true,
+    "network_control": "Python-level audit and all pip HTTP transport denied; not a native OS sandbox",
+    "numerical_pass": false,
+    "official_capture_executed": false,
+    "one_cpu": true,
+    "rtl_executed": false,
+    "torch_intra_inter_op_threads": 1,
+    "typed_full_block_replay_executed": false
+  },
+  "checks": {
+    "actual_metadata_dependency_closure": true,
+    "canonical_direct_url": true,
+    "clean_sys_path": true,
+    "deterministic_highest_no_autocast": true,
+    "exact_distribution_set": true,
+    "import_origins": true,
+    "installed_record_integrity": true,
+    "installed_tree_unchanged": true,
+    "lock_and_retained_artifacts": true,
+    "locked_wheel_payloads": true,
+    "no_site_or_user_site": true,
+    "official_transformers_payload": true,
+    "offline_install_evidence": true,
+    "one_cpu_affinity": true,
+    "pinned_versions": true,
+    "preimport_environment": true,
+    "provenance_unchanged": true,
+    "python312": true,
+    "python_and_wheel_compatibility": true,
+    "qualification_network_process_guard": true,
+    "torch_default_dispatch": true,
+    "torch_one_thread": true
+  },
+  "created_utc": "2026-10-23T17:20:35.449031+00:00",
+  "installation_report": {
+    "bytes": 7928,
+    "elapsed_seconds": 17.92704177799169,
+    "sha256": "84e8b32055cd2604315675e4070f740cc4b5cb48de8d2442135961978e674cf5"
+  },
+  "inventory": {
+    "artifact_records": 23582,
+    "bootstrap_files": 476,
+    "installed_distributions": 38,
+    "installed_files": 19964,
+    "locked_wheels": 38,
+    "transformers_stage_files": 3065,
+    "unique_file_bytes": 1237248965,
+    "unique_files": 23575
+  },
+  "pins": {
+    "dependency_lock_sha256": "806f6a7f409e85965261bf864fcc8de4558aaedf9f3da26759323625ca131497",
+    "numpy": "2.3.5",
+    "torch": "2.10.0+cpu",
+    "torch_commit": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "transformers": "5.19.0.dev0",
+    "transformers_archive_bytes": 28738230,
+    "transformers_archive_sha256": "15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d",
+    "transformers_commit": "14e738b5d0cc69aa27a95dde272aea41fde44f2f"
+  },
+  "reconstruction_limits": [
+    "New bounded acquisition collector has eight no-network unit tests only, not a live end-to-end reconstruction result.",
+    "Frozen installer historical acquisition telemetry must not be reused unchanged for a different acquisition; fresh review and qualification remain mandatory."
+  ],
+  "runtime_receipt": {
+    "bytes": 7331503,
+    "private_full_receipt_published": false,
+    "sha256": "2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d"
+  },
+  "schema": 1,
+  "scope": "Fresh official software runtime qualification only. No official capture, typed replay, numerical comparison, owner execution, RTL or hardware performance PASS.",
+  "source_commit_before_batch": "60d560336d9c2c8e7c1db40556028daacffd8ad8",
+  "sources": [
+    {
+      "bytes": 12515,
+      "path": "scripts/acquire_qwen35_official_runtime.py",
+      "sha256": "32350753e9a71bee1071efb0302fa7cbb45f0532a6d044575a1ee880338c8cba"
+    },
+    {
+      "bytes": 20695,
+      "path": "scripts/install_qwen35_official_runtime.py",
+      "sha256": "517a64fe24b195e8a469a388284292a23e4cabd91361613b4076cc2f57601642"
+    },
+    {
+      "bytes": 7752,
+      "path": "scripts/pip_qwen35_offline_driver.py",
+      "sha256": "d6b5953062250492f5fcb457b58704f4ed0122ac2e54f277c00b3b2cf569d193"
+    },
+    {
+      "bytes": 3226,
+      "path": "scripts/qwen35_runtime_network_guard.py",
+      "sha256": "adf905304fe32c34ccb07892f2627fcb76417178d36058270b74a4666b28c2c5"
+    },
+    {
+      "bytes": 2141,
+      "path": "scripts/qwen35_backend_runner.py",
+      "sha256": "43a4c91380fc9ad6e3ca2d7780e623e2780a5c69126983d93c40b653a8e309e4"
+    },
+    {
+      "bytes": 8210,
+      "path": "scripts/check_qwen35_native_pip_cache.py",
+      "sha256": "08f908cafee190db694f85dfb06b8db8f2d9cae6e659be1ead772cdc42e99174"
+    },
+    {
+      "bytes": 50210,
+      "path": "scripts/qualify_qwen35_official_runtime.py",
+      "sha256": "7686d0da3a220607b91f73934a22df7a949eda2ab74d6c89c20a82fdfe6e74f4"
+    },
+    {
+      "bytes": 4854,
+      "path": "tests/test_qwen35_runtime_acquisition.py",
+      "sha256": "d2def339b0016f4da8cbdc490925c9d3bd67343aff15ff2d04cebc6b54d0cfaa"
+    },
+    {
+      "bytes": 5735,
+      "path": "tests/test_qwen35_offline_runtime_installer.py",
+      "sha256": "d3af6e3fb42bec251ca9a1a31c7258ff2e2889241fa9d7e96464128d604f01d0"
+    },
+    {
+      "bytes": 14714,
+      "path": "tests/test_qwen35_official_runtime_qualifier.py",
+      "sha256": "1a7fb86422a1466f7bdc70dfe9468ae58c198f5fb84d7eb251df741fad7d3668"
+    },
+    {
+      "bytes": 78695,
+      "path": "config/upstream/qwen3_5_0p8b/official_runtime_lock_20261023.json",
+      "sha256": "806f6a7f409e85965261bf864fcc8de4558aaedf9f3da26759323625ca131497"
+    }
+  ],
+  "status": "PASS_ISOLATED_PINNED_RUNTIME_READY_ONLY",
+  "tests": {
+    "acquisition_no_network_unit_tests": 8,
+    "installer_stdlib_safety_tests": 9,
+    "native_pip_cache_fixture": {
+      "expected_denied_missing_or_corrupt_cache_fallbacks": 2,
+      "http_calls": 0,
+      "result_sha256": "d3d2b22b58f902a09c67c7fc573491e6e2aa4b03482a3ce9c54d5380179fef48",
+      "socket_attempts": 0,
+      "status": "PASS_NATIVE_PIP_CACHE_FIXTURE",
+      "subprocess_calls": 0
+    },
+    "qualifier_stdlib_fixture_tests": 24
+  }
+}

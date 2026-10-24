@@ -49,3 +49,39 @@ Matrix launcher 的 1 CPU、1 GiB 地址空间、65 秒 CPU、75 秒外层超时
 - 本次未执行官方 forward、完整 typed block、数值验收或 RTL；这些结果不能由输入哈希或 host-build PASS 推导。
 
 只保留可复现源码入口、pin、hash、尺寸、摘要与经过区分的证据。权重、输入、编译库、含私有绝对路径的本地 manifest 没有上传或提交，禁止以文本编码替代上传。本次也没有 push 或公开发布。
+
+## 追加：2026-10-23 17:20 UTC，官方隔离运行时实际就绪
+
+以上 `PLAN_ONLY` 与九项输入/Matrix 恢复回执属于先前时点的独立历史证据，不回写为运行时 PASS。本追加只关闭新的官方 Python 运行时资格门；新的官方 reference、完整 typed block、数值比较和 RTL 仍未执行。
+
+可公开复核：[运行时安全摘要](../reports/execution/QWEN35_OFFICIAL_RUNTIME_20261023/QUALIFICATION_SUMMARY.json)、[当前门禁与重建计划](../plans/QWEN35_L0_M128_CURRENT_GATES_20261023.json)、[精确公开依赖锁](../config/upstream/qwen3_5_0p8b/official_runtime_lock_20261023.json)。原 `PLAN_ONLY` 文件保持不变；新获取器的源码/fixture 测试不能冒称本次历史获取已经使用该脚本。
+
+### 新安装与资格结果
+
+- 根进程实际执行新安装及 `scripts/qualify_qwen35_official_runtime.py`，qualification 退出码 0；新回执状态为 `PASS_ISOLATED_PINNED_RUNTIME_READY`，22 项非空、严格布尔检查全部为 true。回执时间为 `2026-10-23T17:20:35.449031+00:00`，没有继承旧目录或旧 receipt 的 PASS。
+- CPython 3.12，隔离 `site-packages`，`-S`、禁 user-site、固定 PYTHONPATH；加载模块路径和当前进程 native maps 已检查。Torch `2.10.0+cpu`，git commit `449b1768410104d3ed79d3bcfe4ba1d65c7f22c0`；NumPy `2.3.5`；Transformers `5.19.0.dev0`。
+- Torch 导入前为 `ATEN_CPU_CAPABILITY=default`，实际 DEFAULT dispatch、单允许 CPU、intra/inter-op 各 1 线程；确定性算法、最高 float32 matmul 精度与 inference/no-autocast 状态通过检查。这里只核运行时策略，不构造 Qwen 层、不加载权重、不执行模型 forward；实际模型的 eval/inference 仍由后续 capture 门验证。
+- Transformers 保持固定 commit `14e738b5d0cc69aa27a95dde272aea41fde44f2f`、canonical GitHub archive URL 及原 ZIP SHA256。原生 pip `direct_url.json`、安装报告及构建 wheel 的 origin 均一致，没有手写或修复来源元数据。四项固定官方源码及全部已安装 Transformers package 文件均与固定 archive 核对；构建 wheel 另锚定生成的 metadata。
+- 38 项已锁 wheel 中，pip `26.2.1` 只用于独立 bootstrap；37 项运行时 wheel 加上从固定 archive 构建的 Transformers，构成 38 个已安装 distribution。实际 wheel/安装 METADATA、Python 与 wheel tag 兼容性、marker/extra 传递依赖、原生 RECORD、console script 以及完整已安装文件归属均经过检查。没有使用 host site-packages 补缺。
+
+### 失败尝试与离线边界
+
+第一次新安装在最终 guard 审计时失败：固定 pip 所带 urllib3 的导入期 IPv6 能力探测试图创建 socket，被原有 guard 拒绝；失败证据完整保留，没有 runtime-ready receipt，也不计为成功安装。第二次使用另一全新目录；仅避免安装器不需要的该项能力探测，临时值在导入后恢复，未放行原被拒绝的 socket 操作，也未改变系统安全设置。
+
+第二次安装的两个父进程阶段各有实际 socket 拒绝自检与 pip transport 拒绝自检；每个实际 backend PID 均对应显式 guard 激活及入口验证。qualifier 独立复核事件类型、次数、顺序及 PID 集合，拒绝任意多余拒绝事件，不以泛化的“预期自检”标记掩盖失败。依赖安装只消费已锁本地文件；固定 archive 使用原生 pip verified-download cache 路径，canonical Link 与来源记录不改。
+
+这是 Python 层审计和固定受信源码范围，不是任意 native 代码的 OS 沙箱。现有解释器、已加载标准库和系统 native 库有测量记录，但没有重新构建并证明完整解释器/OS 源码闭包；`complete_environment_closure=false` 必须保留。
+
+### 可复核的有限证据
+
+- 新 runtime receipt：7,331,503 B，SHA256 `2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d`。
+- qualification 输出：2,474 B，SHA256 `eae7b8f6a52b5496a7d736b610239bf1de171caeabba201b449d4e33a5800818`。
+- 精确依赖锁 SHA256：`806f6a7f409e85965261bf864fcc8de4558aaedf9f3da26759323625ca131497`。
+- 运行的 qualifier 源码：50,210 B，SHA256 `7686d0da3a220607b91f73934a22df7a949eda2ab74d6c89c20a82fdfe6e74f4`。
+- 回执含 23,582 个 artifact 记录，去重后为 23,575 个路径、1,237,248,965 B；不能把“记录数”说成“不同文件数”。其中已安装文件 19,964 个，bootstrap 文件 476 个，保留原生 Transformers stage 文件 3,065 个。38 个锁定 wheel 与 installer/driver/guard/runner、wrapper、来源报告和资格源码/输出均有当前路径、尺寸与 SHA256。
+- 独立标准库只读校验重新哈希了上述全部记录，3.74 秒退出 0，并核对新回执与不可覆盖的 candidate 字节一致、失败尝试没有 ready receipt。该复核没有导入 Torch、加载模型或重跑资格过程。
+- qualifier 的 24 项标准库 fixture 测试实际通过，0.019 秒；覆盖空/伪真 checks、路径逃逸、符号链接、重复 JSON/ZIP、安装 RECORD 篡改、pip 原生路径重定位、vendor metadata、entrypoint 内容和 guard/PID 负例。这是代码契约测试，不替代上述实际 runtime qualification。
+
+根执行工具报告的资格进程资源限额为：1 CPU、4 GiB 地址空间、260 秒 CPU、qualifier 内部 240 秒 alarm、外层 300 秒及 5 秒终止宽限；不把这些 launcher 限额冒称为回执内的独立资源测量。fixture 测试另用 1 CPU/512 MiB/30 秒限制，不与 runtime 进程合并。
+
+完整 receipt、文件清单和绝对路径仅在本地保留；公开候选只包含复现脚本、锁、hash、尺寸和安全摘要，不上传权重、输入、输出、NPZ 或可重建权重的文本编码。下一步仍是各自独立进程的新 M16、M128 官方 capture，再执行完整 cold128→carried128 typed block 和原门限比较。运行时 ready 不是官方 block 数值 PASS、候选 PASS、RTL PASS、硬件周期或 MAC 利用率证据。

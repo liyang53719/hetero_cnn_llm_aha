@@ -2159,3 +2159,36 @@ reports/execution/QWEN35_NATIVE_M128_DECAY_CROSSING_20261023/summary.json。
   实际证据见 [恢复回执](../reports/execution/QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023/RECOVERY_RECEIPT.json)
   与 [中文更新](QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023_CN.md)。仅源码入口、pin、hash、
   尺寸与安全摘要进入候选小批，不提交权重、输入、ELF、私有路径或签名跳转参数。
+
+
+## PASS（新官方隔离运行时资格）/ PENDING（新 reference、完整 block 数值/RTL）：2026-10-23
+
+- 在先前真实输入与当前目录 Matrix host-build 恢复之后，另建全新官方运行时，根实际
+  qualification 退出 0；`PASS_ISOLATED_PINNED_RUNTIME_READY` 的 22 项检查全部为真。
+  CPython 3.12、Torch 2.10.0+cpu/git `449b1768410104d3ed79d3bcfe4ba1d65c7f22c0`、
+  NumPy 2.3.5、Transformers 5.19.0.dev0；原 fixed commit/archive SHA、四项官方源码及
+  原生 canonical pip 来源不变。DEFAULT dispatch、单 CPU/单线程、确定性、最高精度、
+  inference/no-autocast 与隔离导入路径均实际验证，没有导入 host site-packages 补缺。
+- 38 个锁定 wheel（pip 仅 bootstrap）及固定 archive 支撑 38 个已安装 distribution；
+  实际 metadata/marker/extra 依赖闭包、wheel/RECORD、生成脚本和完整文件归属均核验。
+  新 receipt SHA256 `2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d`，
+  7,331,503 B。独立标准库进程重新核验 23,582 个 artifact 记录，去重为 23,575 个路径，
+  包括 19,964 个已安装文件；记录数与不同文件数严格分列。只读复核 3.74 秒退出 0，
+  没有再次导入 Torch 或运行模型。qualifier 另有 24 项有界标准库 fixture 测试通过。
+- 首次新安装因 urllib3 导入期的非必要 IPv6 socket 探测被原 guard 拒绝，终态 FAILED，
+  失败证据保留且无 ready receipt。第二次在新目录中只避免该探测，原 socket guard
+  未放宽；两个安装父阶段自检与每个 backend PID/guard 入口均重新核验，没有接纳失败
+  尝试的多余拒绝事件。旧 PLAN_ONLY 与九项输入/Matrix 回执不改写为本次资格证据。
+- 限定为 Python 包依赖与运行时策略就绪。解释器、已加载标准库和系统 native 库仍有
+  明确受信边界，`complete_environment_closure=false`；Python guard 不冒充 OS native
+  沙箱。根工具报告本次 1 CPU/4 GiB 地址空间/260 CPU 秒/内部 240 秒/外层 300+5 秒。
+- 本批没有构造 Qwen 层、加载权重或执行官方 forward、新 M16/M128 capture、完整 typed
+  cold→carried block、原阈值比较或 RTL。实际模型 eval/inference 仍由 capture 门验证。
+  完整数值、RTL、周期/MAC 利用率没有新增 PASS；五完整 RTL 仍 0/5，旧 Qwen2 M128
+  UNKNOWN，不自动重跑旧作业。下一步仍逐门完成新 reference 与完整官方输入 block。
+- 详细新增证据与边界见 [恢复记录追加](QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023_CN.md)。
+  另见 [运行时安全摘要](../reports/execution/QWEN35_OFFICIAL_RUNTIME_20261023/QUALIFICATION_SUMMARY.json)、
+  [当前门禁计划](../plans/QWEN35_L0_M128_CURRENT_GATES_20261023.json) 及
+  [精确依赖锁](../config/upstream/qwen3_5_0p8b/official_runtime_lock_20261023.json)。
+  仅复现源码、精确锁、hash、尺寸和安全摘要进入公开候选；完整私有 receipt/manifest、
+  原始输入输出、权重、NPZ 和文本编码数据不上传。本更新本身没有 commit、push 或清理。

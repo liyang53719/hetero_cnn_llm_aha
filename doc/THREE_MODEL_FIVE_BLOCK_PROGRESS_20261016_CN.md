@@ -1565,3 +1565,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 归因：Git确为执行依赖；原配方执行 `git show HEAD:<source>` / `rev-parse HEAD`，admission安装并校验固定Git profile，不能删掉HEAD检查或盲改pin。错误耦合在于使用会随本地提交变化的publication工作树来承担固定算术源码来源。
 - ONGOING / TEMP：将固定detached commit及exact pack/profile迁移为独立可恢复源码依赖；不回退工作树，不改失败候选，不弱化原固定源码/对象校验。新候选须重新真实preflight，不继承旧PASS。
 - 完整block/native/RTL未执行，五block RTL仍0/5。builder源码入本工作树仅逐pin核对和语法检查，没有重复组装。
+
+## PASS（有限实际预检）/ TEMP：独立固定Git执行依赖（2026-10-21）
+
+- DONE：`candidates/fixed93_git_runtime_isolation/` 保存两个便携builder、两组synthetic测试、AST fixture和相对pins/摘要；不提交Git对象、真实runtime清单或原始日志。入工作树重跑30项snapshot测试（1.285秒）与29项successor纯元数据测试（0.666秒）通过。
+- 实际固定快照唯一创建自然0/0.266秒，20文件/63240510字节；原固定HEAD从已pin字节重建，5个其余Git文件按原pin复制；只迁移6Git+12profile路径，其余1620 runtime pins不变，15份非生成Git/profile内容不变。没有执行Git命令、profile.verify或native数值内核。
+- 实际后继组装唯一创建自然0/1.572秒，548文件/8815291字节；原321源码逐字保持，只更新runtime/top/prod及增加隔离说明。原0150失败版本不动，不回退publication工作树。
+- PASS（仅真实SOURCE preflight）：新候选manifest cc82716a4801c111225c1dc6cb4435ca3120482f4e21ebd01fd1d3a6f1e7b90b，完整preflight自然退出0/1.519秒、RSS22828KiB；1638运行依赖全hash、46外部非reference文件全hash、30 reference仅stat。此范围基于已pin源码控制流及真实自然成功，不宣称独立syscall轨迹证明。
+- ONGOING / TEMP：真实runtime初始化/构造、完整模型M128、调度/数值与RTL仍未通过；预算OPEN、actual_admission=false，完整run空间门不降低。五block RTL仍0/5，90%利用率目标保留，不能把这次预检通过当推理通过。

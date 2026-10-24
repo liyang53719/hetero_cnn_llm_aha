@@ -1,0 +1,36 @@
+{
+  "bytes_excluding_manifest": 73742,
+  "files": {
+    "README.md": {
+      "bytes": 3159,
+      "sha256": "c20f84b9d5dd5581799bf79e19d523c0ecb04cef5703d71fa57b286073cef51e"
+    },
+    "SUMMARY.json": {
+      "bytes": 1261,
+      "sha256": "df83be9ce7b7b7ecf3645629f4ab393e1312917e70a961840e06b4a1798a5d53"
+    },
+    "fixture_original_git_profile.txt": {
+      "bytes": 3939,
+      "sha256": "adb037af47c3894c5f29f310bdb3e03c739e60c3f8cbe58d3794e40a379817b4"
+    },
+    "prepare_fixed_git.py": {
+      "bytes": 16305,
+      "sha256": "32317f07f94bf5a8de7decbed1b0b421650e4ce9b023626c2d9cf0baf4f98bd1"
+    },
+    "prepare_successor.py": {
+      "bytes": 26167,
+      "sha256": "c3ae2bcab66c811cdabbba4c8fa6b9362e3118128617ebc8259adfb050d87479"
+    },
+    "test_prepare_fixed_git.py": {
+      "bytes": 14888,
+      "sha256": "5df3880ffc7f41e6c8ea02864cf4222ad6579a373d7c32b4090cc018fb87e8e0"
+    },
+    "test_successor_metadata.py": {
+      "bytes": 8023,
+      "sha256": "5bc2b77cc9adfe10efe3e3ce88e3c4e2a971c57f196caefdc91010861d845163"
+    }
+  },
+  "files_excluding_manifest": 7,
+  "schema": "fixed-git-runtime-isolation-public-source-v1",
+  "scope": "LIMITED_SOURCE_AND_SYNTHETIC_QUALIFICATION_ONLY"
+}

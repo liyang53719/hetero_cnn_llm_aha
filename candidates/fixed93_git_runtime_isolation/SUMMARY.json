@@ -1,0 +1,27 @@
+{
+  "Git_execution_qualified": false,
+  "M128_or_fullblock_qualified": false,
+  "full_preflight_verified": false,
+  "native_or_DUT_qualified": false,
+  "permission_to_execute_materialization": false,
+  "permission_to_execute_preflight": false,
+  "regenerated_profile_metadata_files": 3,
+  "relocated_entries": 18,
+  "runtime_provenance_removed": false,
+  "runtime_total_entries": 1638,
+  "schema": "fixed-git-runtime-isolation-public-summary-v1",
+  "scope": "Portable preparation sources and synthetic checks only. Actual snapshot/assembly receipts and all machine-specific data are excluded; separate root-reviewed execution is required. Historical failure evidence remains unchanged.",
+  "snapshot_author_cases": 30,
+  "snapshot_independent_cases": 35,
+  "snapshot_output_cap_bytes": 67108864,
+  "source_review_receipts_sha256": {
+    "snapshot": "4d8817c40f686e519e13a76b7b16dcd974ce2263aefc341224d0585c179d8e74",
+    "successor": "ffbda2d0986a9a25850c87a7bb87aa976062b1908809ac233d7498c3dca4fc15"
+  },
+  "status": "LIMITED_SOURCE_AND_SYNTHETIC_QUALIFICATION_ONLY",
+  "successor_author_cases": 29,
+  "successor_independent_cases": 44,
+  "successor_output_cap_bytes": 9437184,
+  "unchanged_relocated_payload_pins": 15,
+  "unchanged_unrelated_entries": 1620
+}

@@ -1,0 +1,57 @@
+"""Finite genuine Git provenance environment. No replacement Git or model execution."""
+import hashlib,json,os,stat
+from pathlib import Path
+HERE=Path(__file__).resolve().parent
+LINEAGE_SHA='5847cce8b8cf3fa2ec8df675e6c323c16d6850acfc087e6334cc2a1d23165baa'
+def need(v,msg):
+ if not v:raise ValueError(msg)
+def checked(spec,retain=False):
+ p=Path(spec['path']);need(p.is_absolute() and not any(q.is_symlink() for q in (p,*p.parents)),'canonical provenance path');st=p.stat();need(stat.S_ISREG(st.st_mode),'regular provenance file')
+ h=hashlib.sha256();n=0;chunks=[]
+ with os.fdopen(os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK),'rb') as f:
+  before=os.fstat(f.fileno());need(stat.S_ISREG(before.st_mode),'regular opened provenance')
+  while b:=f.read(1048576):
+   h.update(b);n+=len(b)
+   if retain:chunks.append(b)
+  after=os.fstat(f.fileno())
+ stamp=lambda x:(x.st_dev,x.st_ino,x.st_size,x.st_mtime_ns,x.st_ctime_ns)
+ need(stamp(before)==stamp(after)==stamp(p.stat()),'stable provenance read')
+ need(n==spec['bytes'] and h.hexdigest()==spec['sha256'],'exact provenance file bytes')
+ return b''.join(chunks) if retain else None
+def boundary(head,shallow,expected):
+ need(head==expected+'\n' and shallow==expected+'\n','genuine detached HEAD and exact shallow boundary')
+def verify():
+ raw=checked(dict(path=str(HERE/'LINEAGE.json'),bytes=5231,sha256=LINEAGE_SHA),retain=True);v=json.loads(raw)
+ need(v['profile']=='genuine_public_git_dir_bound_to_exact_mirror_sources_v1','selected provenance profile')
+ need(v['git']['path']=='/usr/bin/git','actual sanitized PATH Git');checked(v['git'])
+ gd=Path(v['git_dir']);need(gd==Path(v['git_metadata'][0]['path']).parent,'exact genuine repository root')
+ for n in ('commondir','config.worktree','info/grafts','objects/info/alternates','objects/info/http-alternates'):
+  need(not (gd/n).exists() and not (gd/n).is_symlink(),'no Git object indirection '+n)
+ need({p.name for p in (gd/'objects').iterdir()}=={'info','pack'},'no loose or alternate object stores')
+ need(not any((gd/'objects/info').iterdir()),'empty object info namespace')
+ pack=gd/'objects/pack';expected={Path(s['path']) for s in v['git_metadata'] if Path(s['path']).parent==pack}
+ need(set(pack.iterdir())==expected,'exact Git pack inventory')
+ for s in v['git_metadata']:checked(s)
+ boundary((gd/'HEAD').read_text(),(gd/'shallow').read_text(),v['head'])
+ payloads=[]
+ for item in v['object_lineage']:
+  payload=checked(item['artifact'],retain=True);payloads.append(payload)
+  need(hashlib.sha1(item['type'].encode()+b' '+str(len(payload)).encode()+b'\0'+payload).hexdigest()==item['oid'],'Git object identity')
+ items=v['object_lineage'];need([i['type'] for i in items]==['commit','tree','tree','tree','tree','blob'],'exact lineage types')
+ need(items[0]['oid']==v['head'] and payloads[0].splitlines()[0]==b'tree '+items[1]['oid'].encode(),'commit root tree link')
+ for index,name in enumerate((b'chisel',b'continuous_prefill',b'tests',b'qwen2_block.cpp'),1):
+  data=payloads[index];entries={};cursor=0
+  while cursor<len(data):
+   space=data.index(b' ',cursor);nul=data.index(b'\0',space);key=data[space+1:nul];oid=data[nul+1:nul+21]
+   need(len(oid)==20 and key not in entries,'valid unique tree entry');entries[key]=oid.hex();cursor=nul+21
+  need(cursor==len(data) and entries.get(name)==items[index+1]['oid'],'linked tree path component')
+ need(items[-1]['oid']==v['cpp_blob_oid'],'terminal C++ blob link')
+ checked(v['committed_cpp']);checked(v['mirror_cpp'])
+ need({k:v['committed_cpp'][k] for k in ('bytes','sha256')}=={k:v['mirror_cpp'][k] for k in ('bytes','sha256')},'full mirror/committed equality')
+ return v
+def environment(base):
+ need(not any(k.startswith('GIT_') for k in base),'no inherited Git overrides')
+ v=verify();need(base.get('PATH')=='/usr/bin:/bin','reviewed Git resolution')
+ return dict(base,**v['proposed_environment'])
+if __name__=='__main__':
+ print('SOURCE_ONLY_GENUINE_GIT_PROFILE_NO_PROBE')

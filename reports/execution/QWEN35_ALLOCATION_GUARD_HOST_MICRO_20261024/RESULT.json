@@ -1,0 +1,238 @@
+{
+  "status": "PASS_METADATA_GUARD_EQUIVALENCE_AND_MICROBENCH_ONLY",
+  "mutation_and_valid_cases": 89,
+  "benchmark": [
+    {
+      "regions": 1,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          486.7964,
+          520.1155,
+          540.8047,
+          518.8286,
+          487.7018,
+          512.1816,
+          518.0764,
+          521.8551,
+          490.9847
+        ],
+        "candidate": [
+          593.2135,
+          609.5561,
+          586.887,
+          581.5069,
+          595.547,
+          569.1133,
+          560.5704,
+          547.677,
+          552.0936
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 518.0764,
+        "candidate": 581.5069
+      },
+      "speed_ratio": 0.8909204688714787,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 16,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          2460.8465,
+          2328.6786,
+          2242.1564,
+          2162.826,
+          2443.5595,
+          2366.6403,
+          2509.3805,
+          2497.9183,
+          2399.871
+        ],
+        "candidate": [
+          1871.9244,
+          1868.1277,
+          1909.0703,
+          2018.2916,
+          2008.3426,
+          1935.7173,
+          2168.748,
+          2132.5516,
+          2239.8152
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 2399.871,
+        "candidate": 2008.3426
+      },
+      "speed_ratio": 1.1949510008899877,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 2664,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 57,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          7462.8161,
+          7045.5382,
+          7178.2628,
+          6994.7879,
+          6982.4864,
+          7252.3141,
+          7124.6522,
+          7303.8877,
+          7315.2688
+        ],
+        "candidate": [
+          5433.486,
+          5555.5745,
+          5429.9227,
+          5474.104,
+          5584.6784,
+          5413.7362,
+          5637.6049,
+          5580.9868,
+          5604.2006
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 7178.2628,
+        "candidate": 5555.5745
+      },
+      "speed_ratio": 1.292082897997318,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 4712,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 128,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          16243.5704,
+          19328.4199,
+          19751.2056,
+          16951.9405,
+          16627.075,
+          16577.5976,
+          16264.6771,
+          17066.3275,
+          19567.501
+        ],
+        "candidate": [
+          12793.1826,
+          13917.0477,
+          13191.5426,
+          13674.6332,
+          13031.6012,
+          13244.9109,
+          13282.6998,
+          14007.2324,
+          14235.6493
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 16951.9405,
+        "candidate": 13282.6998
+      },
+      "speed_ratio": 1.2762420859650838,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 17000,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 512,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          63276.9881,
+          65642.2427,
+          65715.1379,
+          62209.9628,
+          61954.6888,
+          64494.7354,
+          61062.8988,
+          67988.4093,
+          66679.0201
+        ],
+        "candidate": [
+          46383.3964,
+          47067.9111,
+          51664.5565,
+          49729.0343,
+          46876.5455,
+          49147.2509,
+          45862.1319,
+          44597.1929,
+          47236.3003
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 64494.7354,
+        "candidate": 47067.9111
+      },
+      "speed_ratio": 1.3702485173598453,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 66152,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    }
+  ],
+  "source_expression_extracted_by_ast": true,
+  "full_resource_guard_function_tested_with_doubles": true,
+  "model_imported": false,
+  "native_called": false,
+  "fullmodel_requalified": false,
+  "hardware_performance_claim": false,
+  "cpu_affinity": [
+    0
+  ],
+  "maxrss_kib": 18976,
+  "wall_seconds": 14.727824344008695,
+  "scope": "exact built-in dict fast path; original set behavior retained otherwise"
+}

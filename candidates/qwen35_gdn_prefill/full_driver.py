@@ -326,7 +326,9 @@ class FullBlockCoordinator:
         require(self.resource_identity == self._resource_identity() and
                 self.matrix.resource_address == self.matrix.lib.matrix_accumulator_address(),
                 'shared owner/bank/service replaced')
-        require(set(self.memory.regions) == set(self.allocations) and
+        require((self.memory.regions.keys() == self.allocations.keys()
+                 if type(self.memory.regions) is dict and type(self.allocations) is dict
+                 else set(self.memory.regions) == set(self.allocations)) and
                 all(self.memory.regions.get(base) is region for base, region in self.allocations.items()),
                 'physical allocation replaced or added after prelaunch')
         require(all(owner.scalar is self.scalar for owner in (self.rms, self.conv, self.prep,

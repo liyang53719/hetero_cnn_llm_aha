@@ -1,0 +1,241 @@
+{
+  "status": "PASS_HOST_METADATA_MICROBENCH_ONLY",
+  "source_sha256": "e6e5a7c2b45e05f8081bb8d825a1832a0d8038bec7f301ade2c596f236b412c2",
+  "original_predicate": "set(self.memory.regions) == set(self.allocations)",
+  "candidate_predicate": "(self.memory.regions.keys() == self.allocations.keys()\n                 if type(self.memory.regions) is dict and type(self.allocations) is dict\n                 else set(self.memory.regions) == set(self.allocations))",
+  "original_predicate_ast_sha256": "4c6de128d398fef497ec2be54f875d383a9e0cb186a2ee7fdd61d4637dacdd9f",
+  "candidate_predicate_ast_sha256": "813bf7565ff9a535c7e2953eda5972d91245501a36c7d13c23f1385eb3200015",
+  "baseline_scope": "Exact old predicate only; not historical full source",
+  "benchmark": [
+    {
+      "regions": 1,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          504.6432,
+          511.773,
+          487.922,
+          501.5264,
+          488.8294,
+          492.8304,
+          515.6827,
+          507.7799,
+          496.7302
+        ],
+        "candidate": [
+          538.5181,
+          612.9591,
+          584.1728,
+          541.9273,
+          579.4277,
+          536.0174,
+          588.1728,
+          610.3091,
+          572.0134
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 501.5264,
+        "candidate": 579.4277
+      },
+      "speed_ratio": 0.865554753423076,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 16,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          2306.1553,
+          2319.7006,
+          2348.0743,
+          2369.6377,
+          2266.9403,
+          2271.0574,
+          2255.2226,
+          2289.1025,
+          2275.1676
+        ],
+        "candidate": [
+          2041.9428,
+          1980.1778,
+          2014.7128,
+          1933.2673,
+          1984.5444,
+          1939.744,
+          1969.7902,
+          1940.2328,
+          1919.0339
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 2289.1025,
+        "candidate": 1969.7902
+      },
+      "speed_ratio": 1.1621047256707846,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 2664,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 57,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          7077.6501,
+          7167.8578,
+          7505.7597,
+          7429.3532,
+          7710.6674,
+          7632.2045,
+          7548.2971,
+          7560.7022,
+          7599.6314
+        ],
+        "candidate": [
+          5537.0676,
+          5426.5073,
+          5962.5065,
+          5709.8966,
+          5880.356,
+          5816.9957,
+          5728.9612,
+          6166.3132,
+          6270.7726
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 7548.2971,
+        "candidate": 5816.9957
+      },
+      "speed_ratio": 1.2976281037993547,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 4712,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 128,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          15879.9267,
+          17067.9424,
+          16898.7155,
+          16160.1851,
+          15618.9443,
+          15735.2191,
+          15782.1913,
+          15671.2008,
+          15968.3756
+        ],
+        "candidate": [
+          12484.8269,
+          12670.803,
+          12808.2903,
+          12541.7044,
+          12185.3285,
+          12256.2902,
+          11886.0295,
+          11893.0911,
+          12093.865
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 15879.9267,
+        "candidate": 12256.2902
+      },
+      "speed_ratio": 1.2956552464790692,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 17000,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    },
+    {
+      "regions": 512,
+      "calls_per_repeat": 10000,
+      "repeats": 9,
+      "ns_per_call_samples": {
+        "original": [
+          68218.2308,
+          67562.4742,
+          70756.3519,
+          71204.2967,
+          71245.2415,
+          69369.3069,
+          68366.6144,
+          65471.058,
+          66601.9443
+        ],
+        "candidate": [
+          52676.5192,
+          51764.1986,
+          55432.5606,
+          54274.0755,
+          52024.5945,
+          52608.3022,
+          53856.0657,
+          50420.3282,
+          60298.8083
+        ]
+      },
+      "median_ns_per_call": {
+        "original": 68366.6144,
+        "candidate": 52676.5192
+      },
+      "speed_ratio": 1.29785747878345,
+      "tracemalloc": {
+        "original": {
+          "peak_extra_traced_bytes": 66152,
+          "retained_extra_traced_bytes": 104
+        },
+        "candidate": {
+          "peak_extra_traced_bytes": 640,
+          "retained_extra_traced_bytes": 104
+        }
+      }
+    }
+  ],
+  "cpu_affinity": [
+    0
+  ],
+  "wall_seconds": 15.494726750999689,
+  "maxrss_kib": 19060,
+  "fullmodel_requalified": false,
+  "native_called": false,
+  "hardware_performance_claim": false,
+  "measurement_scope": "Allocation require condition: key comparison plus identity scan",
+  "report_annotation": "Scope label added after measurement; timing code unchanged"
+}

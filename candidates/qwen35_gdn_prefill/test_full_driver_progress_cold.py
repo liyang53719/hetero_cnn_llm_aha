@@ -455,6 +455,48 @@ class PublicRunTests(unittest.TestCase):
             self.assertFalse((Path(directory) / 'result' / 'actual_terminal.json').exists())
 
 
+# Only this reviewed host-allocation predicate may differ from the frozen source.
+# All surrounding resource checks, value identity checks, call sites and order
+# still have to match the original whole-method AST after this narrow mapping.
+ALLOCATION_GUARD_ORIGINAL = 'set(self.memory.regions) == set(self.allocations)'
+ALLOCATION_GUARD_REVIEWED = (
+    'self.memory.regions.keys() == self.allocations.keys() '
+    'if type(self.memory.regions) is dict and type(self.allocations) is dict '
+    'else set(self.memory.regions) == set(self.allocations)'
+)
+ALLOCATION_GUARD_AST_SHA256 = '2c8e8aa55da75f224a067a46b0fe573198b88817f93f41407382e8aa041711ba'
+ALLOCATION_GUARD_MESSAGE = 'physical allocation replaced or added after prelaunch'
+
+
+def allocation_guard_for_baseline(method):
+    """Map one pinned predicate, never omit an entire guard from comparison."""
+    reviewed = ast.parse(ALLOCATION_GUARD_REVIEWED, mode='eval').body
+    if hashlib.sha256(ast.dump(reviewed).encode()).hexdigest() != ALLOCATION_GUARD_AST_SHA256:
+        raise ValueError('reviewed allocation predicate AST pin mismatch')
+    normalized = deepcopy(method)
+    guards = [node for node in ast.walk(normalized)
+              if isinstance(node, ast.Call)
+              and any(isinstance(arg, ast.Constant) and arg.value == ALLOCATION_GUARD_MESSAGE
+                      for arg in node.args)]
+    if len(guards) != 1 or len(normalized.body) < 2:
+        raise ValueError('expected one allocation guard at the original site')
+    guard = guards[0]
+    if (not isinstance(normalized.body[1], ast.Expr)
+            or normalized.body[1].value is not guard
+            or not isinstance(guard.func, ast.Name) or guard.func.id != 'require'
+            or len(guard.args) != 2 or guard.keywords
+            or not isinstance(guard.args[1], ast.Constant)
+            or guard.args[1].value != ALLOCATION_GUARD_MESSAGE):
+        raise ValueError('allocation guard call shape or position changed')
+    condition = guard.args[0]
+    if (not isinstance(condition, ast.BoolOp) or not isinstance(condition.op, ast.And)
+            or len(condition.values) != 2
+            or ast.dump(condition.values[0]) != ast.dump(reviewed)):
+        raise ValueError('unreviewed allocation predicate or guard structure')
+    condition.values[0] = ast.parse(ALLOCATION_GUARD_ORIGINAL, mode='eval').body
+    return normalized
+
+
 class SourceInvarianceTests(unittest.TestCase):
     def test_all_arithmetic_guards_transport_commit_and_job_order_unchanged(self):
         base = ast.parse(BASELINE_SOURCE)
@@ -470,7 +512,9 @@ class SourceInvarianceTests(unittest.TestCase):
         self.assertEqual(new.keys() - old.keys(), {'_progress_snapshot'})
         self.assertEqual(old.keys() - new.keys(), set())
         for name in old.keys() - {'run_window'}:
-            self.assertEqual(ast.dump(old[name]), ast.dump(new[name]), name)
+            current = (allocation_guard_for_baseline(new[name])
+                       if name == '_check_resources' else new[name])
+            self.assertEqual(ast.dump(old[name]), ast.dump(current), name)
         def assignments(tree):
             return [ast.dump(n) for n in tree.body if isinstance(n, (ast.Assign, ast.AnnAssign))]
         self.assertEqual(assignments(base), assignments(TREE))
@@ -484,6 +528,77 @@ class SourceInvarianceTests(unittest.TestCase):
         self.assertIn('FullBlockCoordinator', names)
         self.assertNotIn('FullBlockProgress', names)
         self.assertIn('run', names)
+
+
+    def resource_method(self, tree):
+        coordinator = next(node for node in tree.body
+                           if isinstance(node, ast.ClassDef) and node.name == 'FullBlockCoordinator')
+        return deepcopy(next(node for node in coordinator.body
+                             if isinstance(node, ast.FunctionDef) and node.name == '_check_resources'))
+
+    def test_reviewed_allocation_predicate_is_pinned_and_normalization_is_detached(self):
+        method = self.resource_method(TREE)
+        before = ast.dump(method)
+        normalized = allocation_guard_for_baseline(method)
+        baseline = self.resource_method(ast.parse(BASELINE_SOURCE))
+        self.assertEqual(ast.dump(normalized), ast.dump(baseline))
+        self.assertEqual(ast.dump(method), before)
+        self.assertNotEqual(ast.dump(normalized), before)
+        with patch.dict(globals(), ALLOCATION_GUARD_REVIEWED='True'):
+            with self.assertRaisesRegex(ValueError, 'AST pin mismatch'):
+                allocation_guard_for_baseline(method)
+
+    def test_unreviewed_allocation_predicates_fail_closed(self):
+        mutations = (
+            'True',
+            ALLOCATION_GUARD_ORIGINAL,
+            ALLOCATION_GUARD_REVIEWED.replace('type(self.memory.regions) is dict',
+                                            'isinstance(self.memory.regions, dict)'),
+            ALLOCATION_GUARD_REVIEWED.replace(' and type(self.allocations) is dict', ''),
+            ALLOCATION_GUARD_REVIEWED.replace('keys() ==', 'keys() !='),
+            ALLOCATION_GUARD_REVIEWED.replace('else set(self.memory.regions) == set(self.allocations)',
+                                            'else True'),
+        )
+        for expression in mutations:
+            with self.subTest(expression=expression):
+                method = self.resource_method(TREE)
+                method.body[1].value.args[0].values[0] = ast.parse(expression, mode='eval').body
+                with self.assertRaisesRegex(ValueError, 'unreviewed allocation predicate'):
+                    allocation_guard_for_baseline(method)
+
+    def test_missing_duplicate_reordered_or_malformed_allocation_guard_rejects(self):
+        for mutation in ('missing', 'duplicate', 'reordered', 'message', 'callee', 'or', 'extra_operand'):
+            with self.subTest(mutation=mutation):
+                method = self.resource_method(TREE)
+                guard = method.body[1].value
+                if mutation == 'missing':
+                    del method.body[1]
+                elif mutation == 'duplicate':
+                    method.body.append(deepcopy(method.body[1]))
+                elif mutation == 'reordered':
+                    method.body[0], method.body[1] = method.body[1], method.body[0]
+                elif mutation == 'message':
+                    guard.args[1] = ast.Constant('different failure')
+                elif mutation == 'callee':
+                    guard.func = ast.Name(id='not_require', ctx=ast.Load())
+                elif mutation == 'or':
+                    guard.args[0].op = ast.Or()
+                elif mutation == 'extra_operand':
+                    guard.args[0].values.append(ast.Constant(True))
+                with self.assertRaises(ValueError):
+                    allocation_guard_for_baseline(method)
+
+    def test_normalization_does_not_erase_other_guards_or_region_value_identity(self):
+        baseline = self.resource_method(ast.parse(BASELINE_SOURCE))
+        for index, operand in ((0, None), (1, 1), (2, None)):
+            with self.subTest(guard_index=index):
+                method = self.resource_method(TREE)
+                if operand is None:
+                    method.body[index].value.args[0] = ast.Constant(True)
+                else:
+                    method.body[index].value.args[0].values[operand] = ast.Constant(True)
+                normalized = allocation_guard_for_baseline(method)
+                self.assertNotEqual(ast.dump(normalized), ast.dump(baseline))
 
 
 

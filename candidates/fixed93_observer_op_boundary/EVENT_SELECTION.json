@@ -1,0 +1,150 @@
+{
+  "schema": "fixed93-op-evidence-selection-inventory-v1",
+  "integrity_policy": "op-evidence-boundary-v1",
+  "line_evidence_anchors": {
+    "_attention": [
+      "qk_check",
+      "qk_pass",
+      "score",
+      "exp",
+      "output"
+    ],
+    "_matrix_step": [
+      "matrix_input_fp32",
+      "matrix_input",
+      "pv_check",
+      "pv_pass"
+    ],
+    "tick": [
+      "memory_accept",
+      "memory_match",
+      "write_ack"
+    ],
+    "_write": [
+      "store_check",
+      "store_pass"
+    ]
+  },
+  "scalar_return_anchors": [
+    "fold",
+    "dot",
+    "scale",
+    "denominator",
+    "inverse",
+    "normalize"
+  ],
+  "original_point_source_bindings": [
+    [
+      "qk_check",
+      "_attention",
+      "if any((not finite(x) for x in lanes)):"
+    ],
+    [
+      "qk_pass",
+      "_attention",
+      "total = 0"
+    ],
+    [
+      "fold",
+      "_attention",
+      "total = self._op('add', total, lane)"
+    ],
+    [
+      "dot",
+      "_attention",
+      "dot = self._op('bf', total)"
+    ],
+    [
+      "scale",
+      "_attention",
+      "score = self._op('bf', self._op('mul', dot, 1035273459))"
+    ],
+    [
+      "score",
+      "_attention",
+      "scores.append(score)"
+    ],
+    [
+      "exp",
+      "_attention",
+      "probabilities.append(probability)"
+    ],
+    [
+      "denominator",
+      "_attention",
+      "total = self._op('add', total, probability)"
+    ],
+    [
+      "inverse",
+      "_attention",
+      "inverse = self._op('div', 1065353216, total)"
+    ],
+    [
+      "normalize",
+      "_attention",
+      "probability = self._op('mul', probability, inverse)"
+    ],
+    [
+      "output",
+      "_attention",
+      "yield from self._write("
+    ],
+    [
+      "matrix_input_fp32",
+      "_matrix_step",
+      "a = tuple((self._op('bf', x) >> 16 for x in a))"
+    ],
+    [
+      "matrix_input",
+      "_matrix_step",
+      "result = (yield LegacyRequest("
+    ],
+    [
+      "pv_check",
+      "_matrix_step",
+      "if lanes is not None and any((not finite(x) for x in lanes)):"
+    ],
+    [
+      "pv_pass",
+      "_matrix_step",
+      "return lanes"
+    ],
+    [
+      "store_check",
+      "_write",
+      "if len(words) != LANES or any((not finite(v) for v in words)):"
+    ],
+    [
+      "store_pass",
+      "_write",
+      "yield (address, struct.pack("
+    ],
+    [
+      "write_ack",
+      "tick",
+      "self.counts['write_acks'] += 1"
+    ],
+    [
+      "memory_accept",
+      "tick",
+      "self.counts['write_requests' if self.request.write else 'read_requests'] += 1"
+    ],
+    [
+      "memory_match",
+      "tick",
+      "self.memory_pending = False"
+    ]
+  ],
+  "event_domains": 48,
+  "field_domains": 16,
+  "domain_counts_basis": "unchanged source/previous source bound contract; not newly executed coverage",
+  "relevant_bf16_ops": 39124992,
+  "minimum_normal_callbacks": 78249984,
+  "formula": "8*6912*16 + 99072*8*16 + 792576*32 + 128*1536",
+  "normal_callback_multiplier": 2,
+  "_op_line_events_saved": 0,
+  "all_non_op_callbacks_unchanged": true,
+  "native_execution": false,
+  "DUT_execution": false,
+  "count_scope": "successful fixed-shape M128 source path; not an actual observation or elapsed-time bound"
+}

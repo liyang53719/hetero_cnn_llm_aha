@@ -1,0 +1,47 @@
+{
+  "schema": "fixed93-op-boundary-public-source-bundle-v1",
+  "scope": "portable source/patch/policy/synthetic test only; not actual authorization",
+  "source_bundle_manifest_sha256": "ae19eba2da1a967c1edf3ba7390e23a49b7022bebd2dc0458e89e2027f43246c",
+  "files": {
+    "fullblock_attention.py": {
+      "bytes": 55827,
+      "sha256": "940e7929f99177fff04ade16c22a69309a3264454df9f0d822f7c7630abb1774"
+    },
+    "SOURCE_DELTA.diff": {
+      "bytes": 1152,
+      "sha256": "645e710fdfe427cd2dc2ec652a26c4eec388068dbc7918718b68abdff1787356"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 881,
+      "sha256": "52d03e0d0d7ea758c24aad07d73f5827f6f9e8d717a0d173f1da429083703ef2"
+    },
+    "POLICY.json": {
+      "bytes": 787,
+      "sha256": "aa7db62c0da1f35dd4a20c56172c47d92a75e9ee5e41d5ac5c3abf27addefc25"
+    },
+    "OBSERVATION_CONTRACT.md": {
+      "bytes": 6667,
+      "sha256": "a083f9568b6466f03622bc6f94c3614f88ed9b700588ec995472672072d7afa4"
+    },
+    "EVENT_SELECTION.json": {
+      "bytes": 3170,
+      "sha256": "9f9950d75cf9da294e35be8a214bc3979caac290c502b4680222040c576b3aa5"
+    },
+    "AST_DELTA.json": {
+      "bytes": 297,
+      "sha256": "09926661f007c02f0dccf51b53490dd421324932c75f567df7c488800b364238"
+    },
+    "tests.py": {
+      "bytes": 13548,
+      "sha256": "8082a3b7a9a1d8fb80e4862c5fda3dff1f20be43ba50833aaba9feb2df45cec0"
+    },
+    "README.md": {
+      "bytes": 2416,
+      "sha256": "e0f31305647e7d2d7ddf78179898a82894b60dafd3ad7f1fc3a1579c51896f50"
+    },
+    "SUMMARY.json": {
+      "bytes": 1616,
+      "sha256": "d9468b6763593ca940c44439a6eb18728347137f292af6873670916fcd6fdcb4"
+    }
+  }
+}

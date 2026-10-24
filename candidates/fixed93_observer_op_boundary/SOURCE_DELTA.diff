@@ -1,0 +1,19 @@
+--- a/observation/fullblock_attention.py
++++ b/observation/fullblock_attention.py
+@@ -613,6 +613,16 @@
+         if self.disarmed or (self.stream is not None and self.stream.failed):
+             return self._callback
+         try:
++            # Contract op-evidence-boundary-v1: these normal callbacks have
++            # no scalar field/event consumer. Keep instance/thread checks, but
++            # do not inspect unrelated ABI/profile metadata at these two
++            # no-evidence boundaries. Exceptions retain the original path.
++            if (frame.f_code is self.codes['_op'] and event in ('call', 'return') and
++                    (frame.f_back is None or frame.f_back.f_code is not self.codes['_attention'])):
++                require(threading.get_ident() == self.thread, 'observation thread changed')
++                require(frame.f_locals.get('self') is self.owner,
++                        'wrong owner instance reached pinned observed method')
++                return self._callback
+             self._identity()
+             if event == 'exception':
+                 # StopIteration is generator control, not an operation fault.

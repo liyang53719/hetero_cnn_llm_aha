@@ -1,0 +1,26 @@
+{
+  "schema": "fixed93-attention-op-boundary-source-pins-v1",
+  "actual_execution_authorized": false,
+  "files": {
+    "baseline_observer": {
+      "relative_name": "observation/fullblock_attention.py",
+      "bytes": 55063,
+      "sha256": "31eaa951a093f4584c2adee16bd44744282ad7e989c2e23a3f657efaab4a15f9"
+    },
+    "candidate_observer": {
+      "relative_name": "fullblock_attention.py",
+      "bytes": 55827,
+      "sha256": "940e7929f99177fff04ade16c22a69309a3264454df9f0d822f7c7630abb1774"
+    },
+    "shared_dispatcher_and_wholeblock": {
+      "relative_name": "capture/wholeblock.py",
+      "bytes": 47910,
+      "sha256": "181a17a663f303c37ccb79224ad2f0f1cf333115314987a9118a6f6115d9d6ea"
+    },
+    "patch": {
+      "relative_name": "SOURCE_DELTA.diff",
+      "bytes": 1152,
+      "sha256": "645e710fdfe427cd2dc2ec652a26c4eec388068dbc7918718b68abdff1787356"
+    }
+  }
+}

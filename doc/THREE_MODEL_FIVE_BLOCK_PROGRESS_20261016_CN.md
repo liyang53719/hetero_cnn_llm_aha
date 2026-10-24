@@ -1591,3 +1591,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 精确字段上界审计使Attention容量预算减少813159528B；记录数量/内容、wholeblock上界和536870912B余量均不减少。future-owned22103939876B，fresh可用空间要求22640810788B；它是现场检查而非排他预留。
 - ONGOING / TEMP：实际准入前另发现observer逐次身份检查反复构造ABI表/profile副本的时间风险，正在做无模型微基准和保持逐次核验的窄优化。本候选冻结，不因SOURCE/cold GO直接重复昂贵前缀；6600秒窗口内完成尚无证据。
 - 完整M128数值/实际RTL仍未通过，五block RTL仍0/5，未新增利用率实测。本批不删除任何临时数据，不继承旧失联运行PASS。
+
+## PASS（合成差分）/ TEMP：观测器无证据回调热路径（2026-10-21）
+
+- DONE：`candidates/fixed93_observer_op_boundary/` 保存原位小patch、完整observer源码、relative pins、显式policy及合成测试，共11文件。只在 `_trace` 原try内新增一条早筛If；移除此If即恢复原0300模块AST，原identity、dispatcher、另一个observer、16字段/line/exp/fence逻辑不变。
+- 新policy为 `op-evidence-boundary-v1`：只对exact `_op`、caller非exact `_attention`的正常call/return保留code/thread/owner轻量核验、跳过全ABI/profile库存核验；exception与其余事件仍走原路径。明确不同于旧逐回调防篡改契约：被滤两点间篡改并恢复ABI/profile不保证发现；持续漂移下一保留边界仍拒绝，双故障时报告优先级可能不同。
+- PASS有限范围：入树后root重跑合成测试自然0/0.167948秒/RSS22236KiB。真实共享dispatcher和原wholeblock回调用于MOCK public/support帧，六scalar消费者记录、正常/处理异常/传播异常、恢复debt、持续漂移拒绝、瞬时漂移预期差异闭合。独立listener确认_op仍被分发；不是所有域或真实中间数组的执行覆盖，无native/DUT。
+- 独立无ELF的同ctypes结构微基准：active dispatcher正常call/return pair中位164.979→9.000微秒，约18.33倍；仅此回调成本，不是完整M128或硬件速度。直接callback新计时部分零增量是CPU时钟粒度，不是零成本。旧同频预构造另测仅约1.09倍，未混入本版。
+- ONGOING / TEMP：新policy真实装配绑定与已有native的有限M2成功子链差分校准待做；M2不得冒充完整block/prefill通过。旧0300冻结、不借其cold或一次性authority准入新版本。完整M128数值及五block RTL仍未通过，无新MAC利用率实测。

@@ -1,0 +1,26 @@
+{
+  "schema": "fixed93-observation-integrity-policy-v1",
+  "identity": "op-evidence-boundary-v1",
+  "baseline_policy": "full-inventory-at-every-admitted-attention-listener-event",
+  "wire_schema_changed": false,
+  "evidence_fields_changed": false,
+  "event_domains_changed": false,
+  "dispatcher_changed": false,
+  "wholeblock_subscriber_changed": false,
+  "normal_fast_path": {
+    "code": "_op",
+    "events": [
+      "call",
+      "return"
+    ],
+    "caller": "not exact _attention CodeType, including None",
+    "checks": [
+      "exact admitted code",
+      "same thread",
+      "exact owner instance"
+    ]
+  },
+  "exception_path": "unchanged full identity and observer poison",
+  "transient_drift_detection_at_filtered_callbacks": false,
+  "actual_execution_authorized": false
+}

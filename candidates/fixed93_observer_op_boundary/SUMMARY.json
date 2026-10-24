@@ -1,0 +1,46 @@
+{
+  "schema": "fixed93-op-boundary-source-synthetic-summary-v1",
+  "policy": "op-evidence-boundary-v1",
+  "author_synthetic_status": "PASS_MOCK_CONTRACT_ONLY",
+  "author_exit": 0,
+  "author_wall_seconds": 0.16477674500492867,
+  "author_child_cpu_seconds": 0.14428,
+  "author_peak_rss_kib": 22468,
+  "retained_synthetic_identity_calls_old_new": [
+    10,
+    1
+  ],
+  "forbidden_attempts": {},
+  "previous_attempts": [
+    {
+      "scope": "wrapper before test startup",
+      "exit": 127,
+      "reason": "optional timing executable unavailable"
+    },
+    {
+      "scope": "test fixture",
+      "exit": 1,
+      "reason": "helper parameter collided with modeled scalar operand name; test-only rename"
+    }
+  ],
+  "independent_micro": {
+    "scope": "same-ctypes synthetic constant-operation call+return through actual shared dispatcher; no ELF or native call",
+    "old_pair_median_microseconds": 164.979,
+    "new_pair_median_microseconds": 9.0,
+    "ratio": 18.329945528827736,
+    "decision_sha256": "f4597c0ef9b36af1d4df9c69ec21d5aed4c744c9177a752836cb48cd1221a671",
+    "comparison_sha256": "c70566896d952c5996205ffe9796ee3444753072034412497a4de81535231fb8"
+  },
+  "actual_execution_authorized": false,
+  "DUT_execution": false,
+  "M128_acceptance": false,
+  "numerical_acceptance": false,
+  "event_schema_changed": false,
+  "integrity_sampling_changed": true,
+  "pending": [
+    "independent source/synthetic review",
+    "active policy binding in successor contract/admission/result",
+    "single success real M2 dual-observer codec calibration",
+    "new full-run time assessment and root admission"
+  ]
+}

@@ -1958,3 +1958,14 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 同一 Contraction 实例现在跨两个 chunk64 的 UT/QK 四次运行复用两个4096-word bank与两个1024-word panel；新增同步重入所有权拒绝、部分panel读失败后复用、错误地址与复制bank身份负例。主fixture核8192个实际回调/算术事件，5120读、1024写、2048算术观察，保留4210688项数值比较。独立实际10测试12.838秒exit0，1CPU/512MiB/60秒限制，四个源码hash前后相同；旧7测试回执不改，新回执独立保存。
 
 明确限制：上游 _matmul 是逐输出beat协程，本候选仍为整平面同步软件；未复用实际prefill调度器，未验证异步ACK、phase/chunk次序、物理端口或RTL。40960B仅提议数据存储，不是既有免费资源。五完整RTL0/5、Qwen2完整M128仍UNKNOWN、无MAC实测。远端main核f93f0c4（原49笔已发2笔），余47笔发布等待中断后确认；本修改单独本地保存。临时目录盘点423项，无清理。
+
+
+## PASS（仅原协程复用与 strict 软件数值）/ INCOMPLETE（完整 owner 接入）：2026-10-23
+
+新增 candidates/qwen35_chunk_strict_contraction/upstream_coroutine.py，直接绑定既有 ChunkOwner._matmul、_read、_write、_mul_add 实际方法，执行原 row/16列beat/K 次序。只把 _op 接到已有 strict integer FP32；不构造原 Vector16、不改原 ChunkOwner policy，不冒称已把4096-plane两bank/panel方案接进原 owner。复用既有 MemoryRequest/MemoryResponse，测试由原 TypedMemory.begin_write/write_data/acknowledge 完成实际软件字节写与ACK。没有独立仿造一份成功 ChunkResult。
+
+作者合并14测试（原10+新4）22.175秒exit0，1CPU/512MiB虚拟内存/60秒墙钟与CPU限额。新测试完整执行一个UT及另一个独立QK矩阵，每个64×128乘128×64；共2105344中间/输出word与flags逐项对照当前两bank模型，70656个原协程请求按独立row-major地址/tag逐个核。此跨调度对照共享strict整数primitive，不是独立完整flags oracle，原NumPy/Fraction回归保留。每phase原协程35072读/256写，提议panel方案1280读/256写，均仅实际软件事务计数，不作cycles/bandwidth/utilization结论。独立同范围14测试21.505秒exit0；12个收据文件的终态大小/hash复核一致，运行期代码冻结，未做运行前hash捕获，不声称前后hash双验。新收据UPSTREAM_COROUTINE_VALIDATION_SCOPE单列，旧7项与10项收据不改。
+
+新负例包含malformed/stale响应、非finite源、悬停写期间重入拒绝、第二写坏ACK后首beat ACK保留且不发布，以及minnormal边界strict flags3止Mul不发Add。失败物理写由测试caller明确failed-retire；adapter关闭只释放本地busy，不能替代accepted transaction drain。输出全部数据和ACK通过也保持unpublished；phase输入仍是明确合成边界，不冒称prep/decay已生产或真实M128两chunk链。
+
+剩余接入阻断与下一步：ChunkOwner构造仍要求原PrepScalar/精确Vector16，TypedChunkDriver要求精确ChunkOwner/ChunkJob并核真实producer完整ACK、ScratchPlan和output/state双span；不能用局部phase replay伪造完整staging成功。应在既有owner中增明确默认关闭phase/算术policy hook，保留原typed driver、lease、abort/reset/drain和完整state/output发布边界，先真实producer到UT/QK有界接入；whole-plane方案另须把同步read/write改成可悬停协程并证明两bank/panel生命周期、physical ports和broadcast成本。原Vector16 CPP flags1与strict/HardFloat源码规范flags3差异仍阻断数值等价声明。五完整RTL0/5、Qwen2完整M128仍UNKNOWN；没有Scala/RTL运行、网络、安装、提交、push、CI或清理。

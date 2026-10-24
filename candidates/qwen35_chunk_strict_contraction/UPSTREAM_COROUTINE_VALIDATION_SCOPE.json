@@ -1,0 +1,139 @@
+{
+  "status": "PASS_REVIEWED_SOFTWARE_UPSTREAM_COROUTINE_REPLAY_ONLY",
+  "base_revision": "20b0592d0a9a6447a6ac2689a22ddc1ecfa7c37c",
+  "author_tests": 14,
+  "author_exit": 0,
+  "author_unittest_elapsed_seconds": 22.175,
+  "author_initial_adapter_tests": 4,
+  "author_initial_adapter_elapsed_seconds": 7.746,
+  "independent_review": {
+    "status": "PASS_SOFTWARE_UPSTREAM_COROUTINE_REPLAY_ONLY",
+    "tests": 14,
+    "unittest_elapsed_seconds": 21.505,
+    "exit_code": 0,
+    "cpu_count": 1,
+    "address_space_bytes": 536870912,
+    "wall_limit_seconds": 60,
+    "cpu_limit_seconds": 60,
+    "runtime_source_frozen_during_run": true,
+    "post_run_receipt_file_sizes_and_hashes_verified": true,
+    "source_hashes_before_after_equal": null,
+    "reviewed_runtime_sha256": {
+      "model.py": "89cce2f9706cecd1a4e942d66e8e29ad754f86443276c8cf91aafceedab3ff7b",
+      "upstream_coroutine.py": "c185687a4f86ef2606dd4d0057f3157016a1c2fa4e09e7ab80b72373a640367c",
+      "test_upstream_coroutine.py": "5e6af774a6d2dc0b050d4e117c59f55a6b687c51ed4de3fe445ed9de4fa84636"
+    }
+  },
+  "cpu_count": 1,
+  "address_space_bytes": 536870912,
+  "wall_limit_seconds": 60,
+  "cpu_limit_seconds": 60,
+  "unchanged_upstream_executable_methods": [
+    "ChunkOwner._matmul",
+    "ChunkOwner._read",
+    "ChunkOwner._write",
+    "ChunkOwner._mul_add"
+  ],
+  "existing_types_and_byte_memory_used": [
+    "MemoryRequest",
+    "MemoryResponse",
+    "TypedMemory",
+    "WriteCommand",
+    "WriteAck"
+  ],
+  "arithmetic_provider": "existing strict integer lane_model, substituted _op, NOT native Vector16",
+  "bridge_full_phases": [
+    5,
+    6
+  ],
+  "bridge_heads": 1,
+  "bridge_chunks_per_phase": 1,
+  "bridge_inputs": "two distinct synthetic phase-boundary operand sets; not upstream produced or one complete M128 chain",
+  "bridge_intermediate_and_output_words_compared": 2105344,
+  "bridge_corresponding_per_lane_flags_compared": 2105344,
+  "bridge_full_address_and_tag_requests_checked": 70656,
+  "bridge_per_phase_read_requests": 35072,
+  "bridge_per_phase_write_requests": 256,
+  "bridge_per_phase_write_acks": 256,
+  "panel_candidate_per_phase_read_beats": 1280,
+  "bridge_per_phase_mul_lane_ops": 524288,
+  "bridge_per_phase_add_lane_ops": 524288,
+  "bridge_per_phase_pair_lane_ops": 4096,
+  "original_ten_tests_including_m128_full_intermediates_retained": true,
+  "cross_schedule_numerical_reference_shares_integer_primitive": true,
+  "independent_full_plane_flag_oracle": false,
+  "negative_cases": [
+    "bad read tag/nbytes/length/error type/memory error",
+    "nonfinite read rejected by actual upstream _read",
+    "stale response tag before first Mul",
+    "second write bad ACK keeps first acknowledged beat, caller retires physical obligation",
+    "nested program refused while original write suspended",
+    "strict minnormal UF3 stops actual original coroutine before Add"
+  ],
+  "original_chunkowner_policy_modified": false,
+  "native_vector16_executed": false,
+  "whole_plane_schedule_connected_to_upstream_owner": false,
+  "chunkjob_admission_or_chunkresult_used": false,
+  "typed_chunkdriver_used": false,
+  "actual_chunkowner_tick_transport_or_abort_drain_tested": false,
+  "ready_valid_or_timing_tested": false,
+  "output_or_state_publication": false,
+  "phase_chunk_scheduler_integrated": false,
+  "producer_provenance_integrated": false,
+  "physical_port_or_broadcast_model": false,
+  "full_block_pass": false,
+  "rtl_pass": false,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "source_hashes_capture": "author post-run capture and independent post-run hash verification; runtime source/test freeze during independent run; no pre-run hash equality claim",
+  "files": {
+    "candidates/qwen35_chunk_strict_contraction/model.py": {
+      "bytes": 6830,
+      "sha256": "89cce2f9706cecd1a4e942d66e8e29ad754f86443276c8cf91aafceedab3ff7b"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_model.py": {
+      "bytes": 18493,
+      "sha256": "55e81ca48c138637489b88c35f3542be88634304741eef7216c6d963de659a38"
+    },
+    "candidates/qwen35_chunk_strict_contraction/schedule_probe.py": {
+      "bytes": 3532,
+      "sha256": "09a21ee55c8ab891b04856ab4d642df3da19eea2d878f110daef0a0d47d0dd17"
+    },
+    "candidates/qwen35_chunk_strict_contraction/upstream_coroutine.py": {
+      "bytes": 5050,
+      "sha256": "c185687a4f86ef2606dd4d0057f3157016a1c2fa4e09e7ab80b72373a640367c"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_upstream_coroutine.py": {
+      "bytes": 11142,
+      "sha256": "5e6af774a6d2dc0b050d4e117c59f55a6b687c51ed4de3fe445ed9de4fa84636"
+    },
+    "candidates/qwen35_chunk_strict_contraction/README.md": {
+      "bytes": 11166,
+      "sha256": "94d283b6aed58402f71cdf78daed497f2e85ae117fa344ca1a4470ef1b4cbb12"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/model.py": {
+      "bytes": 47272,
+      "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40"
+    },
+    "candidates/qwen35_gdn_prefill/rms_owner.py": {
+      "bytes": 24408,
+      "sha256": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c"
+    },
+    "candidates/qwen35_gdn_prefill/typed_dense.py": {
+      "bytes": 21132,
+      "sha256": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+    },
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": {
+      "bytes": 37079,
+      "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412"
+    },
+    "candidates/qwen35_strict_fp32_lane/lane_model.py": {
+      "bytes": 7605,
+      "sha256": "13d755388217a621b59f114687a08266a33003ead358a8100cdfb7ce428acd32"
+    },
+    "candidates/qwen35_strict_fp32_lane/fraction_reference.py": {
+      "bytes": 7487,
+      "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+    }
+  }
+}

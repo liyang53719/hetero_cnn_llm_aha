@@ -99,8 +99,8 @@ CPU. The 60-second wall-clock and CPU limits cover the complete test process.
 
 VALIDATION_SCOPE.json is preserved as the original seven-test numerical receipt
 for commit a21686c52a7f60f728165950c78a73b789193a6d, not a manifest of the
-extended files. SCHEDULE_VALIDATION_SCOPE.json records the new ten-test run
-and the current source hashes. Historical timings do not qualify changed code.
+extended files. SCHEDULE_VALIDATION_SCOPE.json records the historical ten-test run
+and source hashes at that revision. Historical timings do not qualify changed code.
 
 Requires already-installed NumPy. No download, compilation, hardware job, or
 production/source manifest changes. An adversarial full Contraction run checks actual output/intermediates against
@@ -116,3 +116,56 @@ supplies a non-upstream/noncausal factor matrix to reach that generic fault
 path; it is not upstream workload evidence. Geometry controls reject M1 and
 aliased spans. No asynchronous transport, retirement, abort/drain or publication
 protocol is tested. This remains software-only regardless of test outcome.
+
+## Actual upstream coroutine replay (separate integration boundary)
+
+upstream_coroutine.py now binds the existing ChunkOwner._matmul, _read,
+_write and _mul_add executable methods directly, rather than copying their
+control flow. Only _op is replaced by the same strict integer FP32 primitive
+used in Contraction. It therefore executes the ORIGINAL row/16-column-beat/K
+memory schedule, NOT the proposed whole-plane two-bank/panel schedule.
+No ChunkOwner policy or production source is changed, no Vector16 binary is
+loaded, and no native Vector16 numerical equivalence is implied. In particular,
+the known minnormal boundary is strict flags=3 and stops before Add; the old
+Vector16 C++ flags=1 discrepancy remains an integration blocker.
+
+The bounded adapter exposes the existing MemoryRequest/MemoryResponse types
+and resumes the actual upstream coroutine only after a valid matching full
+64-byte response. The test uses the existing TypedMemory begin_write,
+write_data and acknowledge methods. Request suspension is a Python generator
+boundary, not ready/valid clock timing. The caller owns physical completion
+and drain. Closing the adapter releases only its local ownership, never a
+physical accepted transaction. There is no ChunkJob admission, ChunkResult,
+TypedChunkDriver, full owner abort/reset/drain, or output/state publication.
+
+The new test executes one complete phase 5 and one distinct complete phase 6,
+at one head and one chunk boundary each. It compares all 2,105,344 intermediate
+and output words AND flags against the whole-plane strict model, and checks
+all 70,656 requests against independently derived row-major addresses/tags.
+This cross-schedule comparison shares the integer arithmetic primitive; it
+is not an independent full-plane flags oracle. The original NumPy/Fraction
+tests remain the independent numerical evidence. Inputs are fresh synthetic
+phase-boundary matrices, not upstream prep/decay output or a full M128 chain.
+
+Each replay phase performs 35,072 reads and 256 writes, versus 1,280 reads and
+256 writes in the proposed panel schedule. These actual software transaction
+counts expose the unresolved scheduling/storage tradeoff; they are not cycles,
+hardware bandwidth, utilization or QoR. All output bytes become written and
+ACKed but remain unpublished. Negative tests reject malformed/stale responses,
+nonfinite input, and re-entry while a write is suspended; a bad second ACK
+leaves only the first beat acknowledged and never publishes the destination.
+The test explicitly retires the physical failed write itself, not the adapter.
+
+Run both numerical/schedule and upstream-replay suites within the same bounds:
+
+    OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 timeout 60s bash -c 'ulimit -v 524288; ulimit -t 60; taskset -c $(awk "/Cpus_allowed_list/{split(\$2,a,\",\");split(a[1],b,\"-\"); print b[1]}" /proc/self/status) python -B -m unittest candidates.qwen35_chunk_strict_contraction.test_model candidates.qwen35_chunk_strict_contraction.test_upstream_coroutine -v'
+
+UPSTREAM_COROUTINE_VALIDATION_SCOPE.json records this revision's bounded run.
+Earlier validation receipts remain historical and do not qualify changed code.
+Next integration requires an explicit phase hook in the existing owner and
+the same TypedChunkDriver allocation/ACK/drain obligations, full producer
+provenance, and output/state staging. Moving the whole-plane program there
+also requires actual suspended-read/write workspace lifetime, resource leases,
+fault drain, and physical bank-port/broadcast accounting. This replay does not
+resolve those requirements or validate phases 1–4/7–18, state carry, full block
+or RTL.

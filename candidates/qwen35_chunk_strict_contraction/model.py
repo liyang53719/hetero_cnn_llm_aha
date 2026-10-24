@@ -40,6 +40,17 @@ class ArithmeticFault(ValueError):
         self.stage, self.k, self.lane, self.word, self.flags = stage, k, lane, word, flags
 
 
+def validate_contraction(a, kt, pair, destination, phase):
+    """Shared full-chunk geometry admission, independent of execution order."""
+    if phase not in (5, 6):
+        raise ValueError('only UtMatmul / IntraMatmul')
+    if [(m.rows, m.cols) for m in (a, kt, pair, destination)] != [(64,128),(128,64),(64,64),(64,64)]:
+        raise ValueError('complete chunk64 / K128 required')
+    matrices = (a, kt, pair, destination)
+    if any(x.base < y.end and y.base < x.end for i,x in enumerate(matrices) for y in matrices[:i]):
+        raise ValueError('matrix spans must be disjoint')
+
+
 class Contraction:
     """Run one full 64x128 @ 128x64 phase, never token-recurrent M1.
 
@@ -79,13 +90,7 @@ class Contraction:
     def run(self, a, kt, pair, destination, *, phase):
         if self._busy:
             raise RuntimeError('contraction workspace already owned by an active run')
-        if phase not in (5, 6):
-            raise ValueError('only UtMatmul / IntraMatmul')
-        if [(m.rows, m.cols) for m in (a, kt, pair, destination)] != [(64,128),(128,64),(64,64),(64,64)]:
-            raise ValueError('complete chunk64 / K128 required')
-        matrices = (a, kt, pair, destination)
-        if any(x.base < y.end and y.base < x.end for i,x in enumerate(matrices) for y in matrices[:i]):
-            raise ValueError('matrix spans must be disjoint')
+        validate_contraction(a, kt, pair, destination, phase)
         self._busy = True
         try:
             return self._run(a, kt, pair, destination, phase)

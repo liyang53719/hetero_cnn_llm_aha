@@ -1,0 +1,110 @@
+{
+  "acceptance": {
+    "RTL": "TEMP",
+    "after_64_state_oracle": "TEMP",
+    "full_block": "TEMP",
+    "hardware_or_effective_MAC_utilization": "TEMP"
+  },
+  "evidence_origin": "Previously completed private saved-word diagnostic and isolated native chunk run; this checkpoint did not rerun either.",
+  "full_block_acceptance": false,
+  "head0_tokens0_63": {
+    "before_after_pins_match": true,
+    "bit_mismatches": 6,
+    "candidate_elapsed_seconds": 13.013652981026098,
+    "cleanup": "Two complete owned-group absence scans before direct retained-leader reap",
+    "elements": 8192,
+    "max_abs": 9.5367431640625e-07,
+    "mean_abs": 1.1937872912426428e-10,
+    "mean_reduction": "binary64 absolute deltas, stdlib math.fsum/count; no NumPy reduction-bit identity claim",
+    "meets_existing_node_thresholds": true,
+    "natural_exit": 0,
+    "owned_cleanup_confirmed": true,
+    "policy": {
+      "cold": true,
+      "cumsum_policy": "legacy_ascending_fp32",
+      "exp_policy": "experimental_equal_heads_chunk_candidate_p7_split_ln2_gradual_underflow_v1",
+      "heads": 1,
+      "host_batch": true,
+      "key_dim": 128,
+      "matmul_policy": "row1_streaming",
+      "tokens": 64,
+      "value_dim": 128,
+      "vector_backend": "finite_mul_tininess_r2",
+      "vector_exception_policy": "ieee_rne_finite_gradual_underflow",
+      "vector_fatal_mask": 28
+    },
+    "reference_mapping": "native0020 [1,128,16,128], concatenate token0..63/head0/128 values",
+    "scope": "REAL_SAVED_PREP_HEAD0_TOKENS0_63_ONLY",
+    "source_pin_count": 1101,
+    "state_numerical_validation": null,
+    "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+    "supervisor_elapsed_seconds": 14.323243860038929,
+    "supervisor_peak_sampled_rss_bytes": 53329920,
+    "thresholds": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    }
+  },
+  "observed_date": "2026-10-24",
+  "original_continuation": false,
+  "original_execution_status": "UNKNOWN",
+  "prep_g": {
+    "attribution_limit": "Official exp/softplus factors were not captured. Factor replacements are counterfactual sensitivity diagnostics, not observed official operation attribution or a complete flags oracle.",
+    "before_after_pins_match": true,
+    "bounds": {
+      "address_space_bytes": 268435456,
+      "cpu_count": 1,
+      "cpu_seconds": 45,
+      "wall_seconds": 55
+    },
+    "factor_sensitivity": {
+      "replace_both": {
+        "bit_mismatches": 355,
+        "elements": 2048,
+        "max_abs": 4.76837158203125e-07,
+        "max_ulp": 2,
+        "mean_abs": 2.1783167273720365e-09
+      },
+      "replace_exp_only": {
+        "bit_mismatches": 1281,
+        "elements": 2048,
+        "max_abs": 5.960464477539062e-07,
+        "max_ulp": 34,
+        "mean_abs": 4.7014434370998935e-09
+      },
+      "replace_softplus_only": {
+        "bit_mismatches": 1458,
+        "elements": 2048,
+        "max_abs": 1.430511474609375e-06,
+        "max_ulp": 27,
+        "mean_abs": 6.457883888294278e-08
+      }
+    },
+    "native_arithmetic_executed": false,
+    "official_comparison": {
+      "bit_mismatches": 1587,
+      "elements": 2048,
+      "max_abs": 1.430511474609375e-06,
+      "max_ulp": 36,
+      "mean_abs": 6.69931829169932e-08,
+      "passed": null,
+      "status": "DIAGNOSTIC_UNASSIGNED",
+      "thresholds": null
+    },
+    "owner_executed": false,
+    "recipe_bit_match": {
+      "bit_mismatches": 0,
+      "elements": 2048,
+      "max_abs": 0.0,
+      "max_ulp": 0,
+      "mean_abs": 0.0,
+      "status": "PASS_RECIPE_BIT_MATCH_ONLY"
+    },
+    "scope": "SAVED_COLD_PREP_G_INDEPENDENT_RATIONAL_DIAGNOSTIC"
+  },
+  "relocated_helpers": {
+    "status": "TEMP_NOT_EXECUTED",
+    "validation": "Source-only syntax and static review; historical numerical PASS does not qualify adapted helpers or launcher."
+  },
+  "schema": 1
+}

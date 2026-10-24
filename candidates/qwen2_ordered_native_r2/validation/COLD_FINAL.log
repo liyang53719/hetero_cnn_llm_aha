@@ -1,0 +1,32 @@
+test_claim_prevents_repeated_output_alias (__main__.Gate.test_claim_prevents_repeated_output_alias) ... ok
+test_compiler_and_network_rejected (__main__.Gate.test_compiler_and_network_rejected) ... ok
+test_declared_input_allowed (__main__.Gate.test_declared_input_allowed) ... ok
+test_exact_helper_existing_decorator (__main__.Gate.test_exact_helper_existing_decorator) ... ok
+test_exact_review_config_one_byte_change_rejected (__main__.Gate.test_exact_review_config_one_byte_change_rejected) ... ok
+test_expected_payload_never_allowed (__main__.Gate.test_expected_payload_never_allowed) ... ok
+test_good_manifest_cold (__main__.Gate.test_good_manifest_cold) ... ok
+test_implicit_profile_rejected (__main__.Gate.test_implicit_profile_rejected) ... ok
+test_integrity_window_does_not_open_other_reference (__main__.Gate.test_integrity_window_does_not_open_other_reference) ... ok
+test_launcher_no_retry_and_caps (__main__.Gate.test_launcher_no_retry_and_caps) ... ok
+test_m2_requires_m1_terminal (__main__.Gate.test_m2_requires_m1_terminal) ... ok
+test_manifest_drift_rejected (__main__.Gate.test_manifest_drift_rejected) ... ok
+test_missing_needed_edge_rejected (__main__.Gate.test_missing_needed_edge_rejected) ... ok
+test_missing_needed_library_rejected (__main__.Gate.test_missing_needed_library_rejected) ... ok
+test_no_numeric_packages_imported (__main__.Gate.test_no_numeric_packages_imported) ... ok
+test_only_original_git_queries (__main__.Gate.test_only_original_git_queries) ... ok
+test_only_pinned_cdll (__main__.Gate.test_only_pinned_cdll) ... ok
+test_oracle_after_terminal_allowed (__main__.Gate.test_oracle_after_terminal_allowed) ... ok
+test_oracle_read_before_terminal_rejected (__main__.Gate.test_oracle_read_before_terminal_rejected) ... ok
+test_original_finish_releases_scalar_before_terminal_ack (__main__.Gate.test_original_finish_releases_scalar_before_terminal_ack) ... ok
+test_real_service_constructors_not_replaced (__main__.Gate.test_real_service_constructors_not_replaced) ... ok
+test_reference_only_after_real_arms (__main__.Gate.test_reference_only_after_real_arms) ... ok
+test_review_receipt_byte_change_rejected (__main__.Gate.test_review_receipt_byte_change_rejected) ... ok
+test_reviewed_executable_source_change_rejected (__main__.Gate.test_reviewed_executable_source_change_rejected) ... ok
+test_stage_receipt_written_independently (__main__.Gate.test_stage_receipt_written_independently) ... ok
+test_unknown_maps_all_preserved_before_fail (__main__.Gate.test_unknown_maps_all_preserved_before_fail) ... ok
+test_unreachable_extra_library_rejected (__main__.Gate.test_unreachable_extra_library_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.130s
+
+OK

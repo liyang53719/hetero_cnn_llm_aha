@@ -1,0 +1,12 @@
+test_exact_mock_passes (__main__.ClosureTests.test_exact_mock_passes) ... ok
+test_missing_git_pcre_edge_rejected (__main__.ClosureTests.test_missing_git_pcre_edge_rejected) ... ok
+test_missing_libz_record_rejected (__main__.ClosureTests.test_missing_libz_record_rejected) ... ok
+test_origin_runpath_resolves (__main__.ClosureTests.test_origin_runpath_resolves) ... ok
+test_soname_mismatch_rejected (__main__.ClosureTests.test_soname_mismatch_rejected) ... ok
+test_unknown_loader_token_rejected (__main__.ClosureTests.test_unknown_loader_token_rejected) ... ok
+test_unresolved_needed_rejected (__main__.ClosureTests.test_unresolved_needed_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.007s
+
+OK

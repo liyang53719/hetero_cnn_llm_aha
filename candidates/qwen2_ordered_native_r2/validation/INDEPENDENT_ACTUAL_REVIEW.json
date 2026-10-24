@@ -1,0 +1,522 @@
+{
+  "schema": 1,
+  "status": "PASS_INDEPENDENT_ACTUAL_REVIEW_ATTENTION_COMPONENT_ONLY",
+  "config_sha256": "b1fe0eaa01065f507f79755f1eb446f727701f899908b7f5e3a3af1646f4ca7c",
+  "independent_static_review_sha256": "d1f9d815c7f972ebac2a1c605603304b0c8eced93e369f9cd9aebafa75584b97",
+  "review_mode": "read_only_artifact_and_current_file_identity_verification_no_native_rerun",
+  "limits": {
+    "cpu_seconds": 30,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 45,
+    "cpus": 1
+  },
+  "executable_sources": {
+    "admission.py": "6baff816f280d889b2e49830e4c17907193bc5a42f4af20f1500fda099f3896b",
+    "harness.py": "375694f7bf28bb25eb3745829e98df7e3270d557b8db038199ade7b36f9b45c6",
+    "worker.py": "ce6711af2b28fceb50e6571f8ea017102b1e0d74a8ecbb27a21da2b70c369672",
+    "launch.py": "b05e44a04eef1c10c759f36457566d01e70b9a814ae74083cef4549650d3c3bc",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+  },
+  "manifest_files_rehashed": 1318,
+  "runtime_graph_sha256": "dc49c1f8e0288f38811db9b56d47c6dabe87dc4746030eeed11f37e912bfe436",
+  "input_pins": {
+    "qr": {
+      "bytes": 786432,
+      "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+    },
+    "kr": {
+      "bytes": 131072,
+      "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+    },
+    "v": {
+      "bytes": 131072,
+      "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+    }
+  },
+  "native_elf_sha256": "c03ab303a6d0780f379a13f8f0339872a6b00e066c8481b8e8f39a16243cf5b8",
+  "checks": {
+    "parent_child_birth_identity_bound": true,
+    "once_ledgers_exact": true,
+    "m1_terminal_precedes_m2_parent_start": true,
+    "two_serial_arm_terminals_before_reference": true,
+    "stage_arm_output_and_score_hashes_equal_reference": true,
+    "full_saved_mapping_audits_reconstructed": true,
+    "mapped_file_hash_size_inode_device_reverified": true,
+    "config_and_review_and_sources_unchanged": true,
+    "r1_failure_preserved": true
+  },
+  "runs": [
+    {
+      "m": 1,
+      "status": "PASS_REAL_NATIVE_ATTENTION_COMPONENT_ONLY",
+      "parent_exit_code": 0,
+      "timed_out": false,
+      "group_remaining": false,
+      "wall_seconds": 1.3689430960221216,
+      "stage_order": [
+        "INPUTS_VERIFIED",
+        "NATIVE_LOADED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "REFERENCE_COMPARE_START",
+        "REFERENCE_COMPARE_PASS",
+        "POSTFLIGHT_MAPS_PASS"
+      ],
+      "native_fmas_per_arm": 442368,
+      "arms": [
+        {
+          "counts": {
+            "read": 288,
+            "memory_response": 384,
+            "write": 96
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 571,
+            "normal_groups": 108,
+            "normal_steps": 192,
+            "normal_results": 108,
+            "normal_done": 108,
+            "legacy_model_ticks": 1133,
+            "legacy_replies": 96,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 7704,
+            "add": 312,
+            "mul": 216,
+            "div": 12
+          },
+          "native_fmas": 442368,
+          "edges": 1704,
+          "held_checks": 0,
+          "work_events": null
+        },
+        {
+          "counts": {
+            "read": 288,
+            "memory_response": 384,
+            "write": 96
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 991,
+            "normal_groups": 108,
+            "normal_steps": 192,
+            "normal_results": 108,
+            "normal_done": 108,
+            "legacy_model_ticks": 1133,
+            "legacy_replies": 96,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 7680,
+            "add": 120,
+            "mul": 204,
+            "div": 12
+          },
+          "native_fmas": 442368,
+          "edges": 2124,
+          "held_checks": 420,
+          "work_events": {
+            "scan": 192,
+            "add_stripe": 192,
+            "scale": 12,
+            "retire": 12
+          }
+        }
+      ],
+      "comparison": {
+        "output_words": 1536,
+        "score_words": 12,
+        "output_sha256": "e6dae33593be24b0b96249ade751717d6c587f56a8268cd49d9f6b2580c6706a",
+        "scores_sha256": "31b363d7a2c3b53f942b1f3fddc9c9588e87279e0ec2391b84db78c89782ef15",
+        "reference": "original independent control/recipe; shared exact RNE primitives disclosed"
+      },
+      "mapped_unique_elf_files": 17,
+      "mapped_files": [
+        {
+          "name": "python3.12",
+          "bytes": 30894944,
+          "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+        },
+        {
+          "name": "ld-linux-x86-64.so.2",
+          "bytes": 225672,
+          "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307"
+        },
+        {
+          "name": "libc.so.6",
+          "bytes": 1995216,
+          "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92"
+        },
+        {
+          "name": "libdl.so.2",
+          "bytes": 14408,
+          "sha256": "295fa521a03cd2faa99974f378c9e23dd622021ec7d32bcad4f8ea61aec8a872"
+        },
+        {
+          "name": "libgcc_s.so.1",
+          "bytes": 182856,
+          "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af"
+        },
+        {
+          "name": "libm.so.6",
+          "bytes": 977112,
+          "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+        },
+        {
+          "name": "libpthread.so.0",
+          "bytes": 14408,
+          "sha256": "85e21f7dba0394411d00959176fd18b470e575b0b05f1f4f41e5636802ce0500"
+        },
+        {
+          "name": "librt.so.1",
+          "bytes": 14552,
+          "sha256": "7b7b84d1aedda0e0b2bdfc68844362782132180b8f02be1300e21e77572e514b"
+        },
+        {
+          "name": "libstdc++.so.6.0.33",
+          "bytes": 2497768,
+          "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00"
+        },
+        {
+          "name": "libutil.so.1",
+          "bytes": 14408,
+          "sha256": "e3981d10efd152a53f083e38f5f9ddde7a049c85d0ab388a5eec91b52fc98a11"
+        },
+        {
+          "name": "libz.so.1.3.1",
+          "bytes": 125376,
+          "sha256": "85590dd58edf5445e18bc7193e5ebc01ac5841f1ae187e97705a662e90c6421e"
+        },
+        {
+          "name": "official_bf16_matrix_silu.so",
+          "bytes": 27352,
+          "sha256": "c03ab303a6d0780f379a13f8f0339872a6b00e066c8481b8e8f39a16243cf5b8"
+        },
+        {
+          "name": "libgfortran-040039e1-0352e75f.so.5.0.0",
+          "bytes": 2833617,
+          "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980"
+        },
+        {
+          "name": "libquadmath-96973f99-934c22de.so.0.0.0",
+          "bytes": 250985,
+          "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6"
+        },
+        {
+          "name": "libscipy_openblas64_-fdde5778.so",
+          "bytes": 25034001,
+          "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12"
+        },
+        {
+          "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+          "bytes": 10808937,
+          "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+        },
+        {
+          "name": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+          "bytes": 231833,
+          "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845"
+        }
+      ],
+      "artifacts": {
+        "IDENTITY.json": {
+          "bytes": 121,
+          "sha256": "12b8c0bdbc02c3eaa866b7dced0ea96cae15d505f5000950bdb1d6cd0d9bce9a"
+        },
+        "MAPS_AFTER_CDLL.txt": {
+          "bytes": 7046,
+          "sha256": "d1ca10172a8db8e0dcb13f40021ba587af94fe2113f0a9ee413884ac14a34b13"
+        },
+        "MAPS_BEFORE_AUDIT.txt": {
+          "bytes": 17674,
+          "sha256": "1e7c1ecfdea8ed191bb496f3ef1fff1e27ed75e4ab66e1943f444bc5b818e688"
+        },
+        "MAP_AUDIT.json": {
+          "bytes": 36643,
+          "sha256": "e3e98ed57acf4a2ec86b13f476df6b50f1ebdbb9a9e0a8b8318ddf0574f10ee5"
+        },
+        "PARENT.json": {
+          "bytes": 745,
+          "sha256": "185beb2aa978a1906abaf457106ac39047646ec7cfe3e2de310248c9e6e3fc7d"
+        },
+        "RESULT.json": {
+          "bytes": 3886,
+          "sha256": "86d82c7bd33bb2850b02365c3b14f1f2215541e233eff557046a9f6437e36daa"
+        },
+        "STAGES.jsonl": {
+          "bytes": 2819,
+          "sha256": "0d2906f1ec139dfac33fd977d3abe24fc4251a150ab3a9d2738989fc3b0c6767"
+        },
+        "worker.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "once_ledger": {
+          "bytes": 195,
+          "sha256": "272ade5ba2d5fe0e247a97a1235b2966edc2e36588208931e79a5577e2486f12"
+        }
+      }
+    },
+    {
+      "m": 2,
+      "status": "PASS_REAL_NATIVE_ATTENTION_COMPONENT_ONLY",
+      "parent_exit_code": 0,
+      "timed_out": false,
+      "group_remaining": false,
+      "wall_seconds": 1.7722939049708657,
+      "stage_order": [
+        "INPUTS_VERIFIED",
+        "NATIVE_LOADED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "REFERENCE_COMPARE_START",
+        "REFERENCE_COMPARE_PASS",
+        "POSTFLIGHT_MAPS_PASS"
+      ],
+      "native_fmas_per_arm": 933888,
+      "arms": [
+        {
+          "counts": {
+            "read": 768,
+            "memory_response": 960,
+            "write": 192
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 1291,
+            "normal_groups": 216,
+            "normal_steps": 480,
+            "normal_results": 312,
+            "normal_done": 216,
+            "legacy_model_ticks": 2885,
+            "legacy_replies": 288,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 20040,
+            "add": 936,
+            "mul": 648,
+            "div": 24
+          },
+          "native_fmas": 933888,
+          "edges": 4176,
+          "held_checks": 0,
+          "work_events": null
+        },
+        {
+          "counts": {
+            "read": 768,
+            "memory_response": 960,
+            "write": 192
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 2155,
+            "normal_groups": 216,
+            "normal_steps": 480,
+            "normal_results": 312,
+            "normal_done": 216,
+            "legacy_model_ticks": 2885,
+            "legacy_replies": 288,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 19968,
+            "add": 360,
+            "mul": 612,
+            "div": 24
+          },
+          "native_fmas": 933888,
+          "edges": 5040,
+          "held_checks": 864,
+          "work_events": {
+            "scan": 384,
+            "add_stripe": 384,
+            "scale": 24,
+            "retire": 36
+          }
+        }
+      ],
+      "comparison": {
+        "output_words": 3072,
+        "score_words": 36,
+        "output_sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+        "scores_sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+        "reference": "original independent control/recipe; shared exact RNE primitives disclosed"
+      },
+      "mapped_unique_elf_files": 17,
+      "mapped_files": [
+        {
+          "name": "python3.12",
+          "bytes": 30894944,
+          "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+        },
+        {
+          "name": "ld-linux-x86-64.so.2",
+          "bytes": 225672,
+          "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307"
+        },
+        {
+          "name": "libc.so.6",
+          "bytes": 1995216,
+          "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92"
+        },
+        {
+          "name": "libdl.so.2",
+          "bytes": 14408,
+          "sha256": "295fa521a03cd2faa99974f378c9e23dd622021ec7d32bcad4f8ea61aec8a872"
+        },
+        {
+          "name": "libgcc_s.so.1",
+          "bytes": 182856,
+          "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af"
+        },
+        {
+          "name": "libm.so.6",
+          "bytes": 977112,
+          "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+        },
+        {
+          "name": "libpthread.so.0",
+          "bytes": 14408,
+          "sha256": "85e21f7dba0394411d00959176fd18b470e575b0b05f1f4f41e5636802ce0500"
+        },
+        {
+          "name": "librt.so.1",
+          "bytes": 14552,
+          "sha256": "7b7b84d1aedda0e0b2bdfc68844362782132180b8f02be1300e21e77572e514b"
+        },
+        {
+          "name": "libstdc++.so.6.0.33",
+          "bytes": 2497768,
+          "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00"
+        },
+        {
+          "name": "libutil.so.1",
+          "bytes": 14408,
+          "sha256": "e3981d10efd152a53f083e38f5f9ddde7a049c85d0ab388a5eec91b52fc98a11"
+        },
+        {
+          "name": "libz.so.1.3.1",
+          "bytes": 125376,
+          "sha256": "85590dd58edf5445e18bc7193e5ebc01ac5841f1ae187e97705a662e90c6421e"
+        },
+        {
+          "name": "official_bf16_matrix_silu.so",
+          "bytes": 27352,
+          "sha256": "c03ab303a6d0780f379a13f8f0339872a6b00e066c8481b8e8f39a16243cf5b8"
+        },
+        {
+          "name": "libgfortran-040039e1-0352e75f.so.5.0.0",
+          "bytes": 2833617,
+          "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980"
+        },
+        {
+          "name": "libquadmath-96973f99-934c22de.so.0.0.0",
+          "bytes": 250985,
+          "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6"
+        },
+        {
+          "name": "libscipy_openblas64_-fdde5778.so",
+          "bytes": 25034001,
+          "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12"
+        },
+        {
+          "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+          "bytes": 10808937,
+          "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+        },
+        {
+          "name": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+          "bytes": 231833,
+          "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845"
+        }
+      ],
+      "artifacts": {
+        "IDENTITY.json": {
+          "bytes": 121,
+          "sha256": "1dc6502beb74fa3ee6a496644a9d43a25d67319c05dc24f58f131d623bc56926"
+        },
+        "MAPS_AFTER_CDLL.txt": {
+          "bytes": 7046,
+          "sha256": "080abea4ee230e3859e805b0a61ee065e37fac26fcba4b38c535bdd0031811a9"
+        },
+        "MAPS_BEFORE_AUDIT.txt": {
+          "bytes": 17674,
+          "sha256": "4972f3624fb84060bbf8567bbc581580487cb5a304e579d6b3a892750cf4eb9e"
+        },
+        "MAP_AUDIT.json": {
+          "bytes": 36643,
+          "sha256": "e3e98ed57acf4a2ec86b13f476df6b50f1ebdbb9a9e0a8b8318ddf0574f10ee5"
+        },
+        "PARENT.json": {
+          "bytes": 745,
+          "sha256": "baa58de69ab40bd7c29e989575125e4d73cdea65cc8d5eb89861a0c323ab802a"
+        },
+        "RESULT.json": {
+          "bytes": 3894,
+          "sha256": "2e3b05ea1861a9539071463cac57297b6b79d09a02062e7c0a602f6181d28a6d"
+        },
+        "STAGES.jsonl": {
+          "bytes": 2829,
+          "sha256": "1801931f8ded046c3cb24abea08978d1027dc580c8dd5e13856f31f4a4c4971b"
+        },
+        "worker.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "once_ledger": {
+          "bytes": 195,
+          "sha256": "5771c0c8e29740c050c979bbca2e919c33d0f8aaeae6c5de214ed33e70e501be"
+        }
+      }
+    }
+  ],
+  "r1_failure_artifacts": {
+    "PRIVATE_CONFIG.json": {
+      "bytes": 323292,
+      "sha256": "46ea3d6ee08a668e6162e800fbbd7628ddafdd7829098ba455d57aa5e7ead922"
+    },
+    "attempts/M1.json": {
+      "bytes": 197,
+      "sha256": "0fe1eed1914d3e048bcff635cd48bb9125f91b2210576b962565029cda9da86e"
+    },
+    "runs/M1/PARENT.json": {
+      "bytes": 666,
+      "sha256": "e77ba8d5b708dd4c0308e8c8d17801461946ca81d5dabcc184eac29d16123033"
+    },
+    "runs/M1/IDENTITY.json": {
+      "bytes": 121,
+      "sha256": "75e14276a8a696142c6b32d7af2e96ce56d294beb5bfad0e458f97a12a03dc3f"
+    },
+    "runs/M1/worker.log": {
+      "bytes": 960,
+      "sha256": "05bc2aded5b3cd3761908e338dc3ea08a208ab29582c8ecfcd7423bd1c755961"
+    },
+    "STATIC_ELF_NEEDED.json": {
+      "bytes": 8929,
+      "sha256": "4b88994715ddb05dd6b3b350daf322c7c14bff7bdf86e82a1a382a678464d8fb"
+    }
+  },
+  "resource_semantics": "Each M worker executes default-off then ordered-on serially. Each arm constructs one real MatrixService, one real ScalarService and one OfficialAttentionOwner. Both arms use the same loaded ELF and its sole global accumulator, explicitly td_reset before each arm. They are not the same Python service instances. Scalar releases at finish; Matrix releases after the accepted terminal ACK.",
+  "limits_of_evidence": [
+    "This review checked saved artifacts and current pinned bytes, not a new native run.",
+    "Output and score digests were cross-checked across both terminal stages and the independent original-recipe comparison receipt; raw output tensors were not re-executed or newly recomputed.",
+    "No live PID was signalled or inferred solely from reused numeric PID; cleanup is evidenced by the birth-bound launcher exit receipts.",
+    "Native FMA counts are software-call observations, not hardware cycles, utilization or physical throughput.",
+    "This qualifies only the declared qr/kr/v-input Attention component at M1 and M2, not raw-provider, full-block, M16/M128, RTL, elaboration or utilization claims."
+  ],
+  "private_original_sha256": "122013c6b2a1c68fb801844918554844317c35f97e283e608796997d15f02cc8",
+  "public_projection": "Process birth identities retained privately and independently verified; omitted from public projection."
+}

@@ -1,0 +1,86 @@
+{
+  "runtime": {
+    "admission.py": {
+      "bytes": 1463,
+      "sha256": "6baff816f280d889b2e49830e4c17907193bc5a42f4af20f1500fda099f3896b"
+    },
+    "harness.py": {
+      "bytes": 6804,
+      "sha256": "375694f7bf28bb25eb3745829e98df7e3270d557b8db038199ade7b36f9b45c6"
+    },
+    "launch.py": {
+      "bytes": 4850,
+      "sha256": "b05e44a04eef1c10c759f36457566d01e70b9a814ae74083cef4549650d3c3bc"
+    },
+    "worker.py": {
+      "bytes": 10745,
+      "sha256": "ce6711af2b28fceb50e6571f8ea017102b1e0d74a8ecbb27a21da2b70c369672"
+    },
+    "runtime_closure.py": {
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+    },
+    "test_gate.py": {
+      "bytes": 11596,
+      "sha256": "ecccc547baa992b4cb09d716ed96ad12eb72523fca1724b560e16251f778647a"
+    }
+  },
+  "static_review": {
+    "schema": 1,
+    "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+    "config_sha256": "b1fe0eaa01065f507f79755f1eb446f727701f899908b7f5e3a3af1646f4ca7c",
+    "limits": {
+      "cpu_seconds": 30,
+      "address_space_bytes": 1073741824,
+      "wall_seconds": 45,
+      "cpus": 1
+    },
+    "executable_sources": {
+      "admission.py": "6baff816f280d889b2e49830e4c17907193bc5a42f4af20f1500fda099f3896b",
+      "harness.py": "375694f7bf28bb25eb3745829e98df7e3270d557b8db038199ade7b36f9b45c6",
+      "worker.py": "ce6711af2b28fceb50e6571f8ea017102b1e0d74a8ecbb27a21da2b70c369672",
+      "launch.py": "b05e44a04eef1c10c759f36457566d01e70b9a814ae74083cef4549650d3c3bc",
+      "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+    },
+    "independent_checks": {
+      "all_manifest_files_rehashed": 1318,
+      "manifest_paths_sizes_and_hashes_match": true,
+      "static_graph_structurally_valid": true,
+      "runtime_graph_sha256": "dc49c1f8e0288f38811db9b56d47c6dabe87dc4746030eeed11f37e912bfe436",
+      "graph_roots": 5,
+      "graph_elf_nodes": 19,
+      "graph_dependency_edges": 51,
+      "r1_to_r2_source_patch_reconstructed_exactly": true,
+      "source_patch_sha256": "b63209a0820af56790fbc5b8f16287843146c9859c88998b90b22ad141250306",
+      "r1_to_r2_config_diff_reconstructed_exactly": true,
+      "config_diff_entries": 39,
+      "config_diff_sha256": "0cd46d9e0f627dc8ac2a9ba3231277221b503fdc973218165b2fde256d93ad95",
+      "r2_attempt_ledger_absent_at_review": true,
+      "r1_failed_attempt_preserved": true,
+      "r1_m2_ledger_absent": true
+    },
+    "review_scope": [
+      "Exact review receipt, config-byte identity and all five executable-source hashes are checked in launcher and worker before target runtime execution.",
+      "The new per-profile exclusive attempt ledger does not alter R1; M2 requires the same-config successful M1 terminal and empty child group. No automatic retry exists.",
+      "Launch resource limits, loader override rejection, pinned interpreter, fixed Git search path and birth-identity-limited child cleanup were read and reviewed. Unexpected residual groups fail closed.",
+      "The pinned static ELF graph binds NEEDED/interpreter edges and canonical target files. Its source resolver, scoped roots and graph validator were reviewed without loading target libraries.",
+      "Full maps are persisted before per-mapping checks, and all discovered mapping failures are recorded with file hash, size, inode and device checks before rejection.",
+      "ARM_TERMINAL_ACKED follows actual owner terminal acknowledgement and service release. Independent original-recipe comparison runs after both arms; its PASS stage does not replace the final manifest and mapping gates.",
+      "Input payload access remains restricted to declared qr/kr/v. Source integrity hashing may read the oracle source before terminal; reference numerical execution and comparison do not occur before terminal.",
+      "R1 numerical harness arithmetic and real owner/client/service calls remain unchanged. This is an Attention component profile, not a full block or hardware qualification."
+    ],
+    "existing_cold_test_logs_reviewed": {
+      "tests_each_mode": 27,
+      "isolated_log_sha256": "a5a62679d89f76b988e1559f477ab3e256bf333b3aba407d064fc98375a7bdbd",
+      "isolated_optimized_log_sha256": "f87d9a17579241bbf875c99268cbf6e3bf6c9d73e286274ce8ebd5171c4210ce",
+      "tests_rerun_by_reviewer": false
+    },
+    "limitations": [
+      "Static graph review is not proof of the libraries a future worker will actually load; runtime mappings must still pass the preserved-evidence gate.",
+      "No R2 native execution, NumPy import, numerical retry, compiler invocation, elaboration or RTL execution was performed by this reviewer.",
+      "This receipt grants no execution authority. Root must separately authorize any new attempt. Any source or config change requires a new exact review receipt."
+    ]
+  },
+  "source_patch_sha256": "b63209a0820af56790fbc5b8f16287843146c9859c88998b90b22ad141250306",
+  "config_diff_sha256": "0cd46d9e0f627dc8ac2a9ba3231277221b503fdc973218165b2fde256d93ad95"
+}

@@ -1,0 +1,18 @@
+{
+  "boundary": "Declared qr/kr/v Attention component inputs; no raw-provider or complete block claim",
+  "inputs": {
+    "qr": {
+      "bytes": 786432,
+      "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+    },
+    "kr": {
+      "bytes": 131072,
+      "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+    },
+    "v": {
+      "bytes": 131072,
+      "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+    }
+  },
+  "actual_input_source": "Frozen official AST capture; first M token-major prefixes; output oracle is independent original Python recipe"
+}

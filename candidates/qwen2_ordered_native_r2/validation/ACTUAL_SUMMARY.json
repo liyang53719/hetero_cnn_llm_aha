@@ -1,0 +1,281 @@
+{
+  "status": "PASS_REAL_NATIVE_ATTENTION_M1_M2_COMPONENT_ONLY",
+  "config_sha256": "b1fe0eaa01065f507f79755f1eb446f727701f899908b7f5e3a3af1646f4ca7c",
+  "static_review_sha256": "d1f9d815c7f972ebac2a1c605603304b0c8eced93e369f9cd9aebafa75584b97",
+  "native_elf_sha256": "c03ab303a6d0780f379a13f8f0339872a6b00e066c8481b8e8f39a16243cf5b8",
+  "limits": {
+    "cpus": 1,
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 45
+  },
+  "native_library_recompiled": false,
+  "actual_matrix_and_original_scalar_services": true,
+  "each_m_arms": "off and on run serially; each owns one original ScalarService and MatrixService; same sole native accumulator reset between arms",
+  "runs": [
+    {
+      "m": 1,
+      "status": "PASS_REAL_NATIVE_ATTENTION_COMPONENT_ONLY",
+      "returncode": 0,
+      "timed_out": false,
+      "group_remaining": false,
+      "wall_seconds": 1.3689430960221216,
+      "comparison": {
+        "output_words": 1536,
+        "score_words": 12,
+        "output_sha256": "e6dae33593be24b0b96249ade751717d6c587f56a8268cd49d9f6b2580c6706a",
+        "scores_sha256": "31b363d7a2c3b53f942b1f3fddc9c9588e87279e0ec2391b84db78c89782ef15",
+        "reference": "original independent control/recipe; shared exact RNE primitives disclosed"
+      },
+      "arms": [
+        {
+          "counts": {
+            "read": 288,
+            "memory_response": 384,
+            "write": 96
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 571,
+            "normal_groups": 108,
+            "normal_steps": 192,
+            "normal_results": 108,
+            "normal_done": 108,
+            "legacy_model_ticks": 1133,
+            "legacy_replies": 96,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 7704,
+            "add": 312,
+            "mul": 216,
+            "div": 12
+          },
+          "native_fmas": 442368,
+          "edges": 1704,
+          "held_checks": 0,
+          "work_events": null
+        },
+        {
+          "counts": {
+            "read": 288,
+            "memory_response": 384,
+            "write": 96
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 991,
+            "normal_groups": 108,
+            "normal_steps": 192,
+            "normal_results": 108,
+            "normal_done": 108,
+            "legacy_model_ticks": 1133,
+            "legacy_replies": 96,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 7680,
+            "add": 120,
+            "mul": 204,
+            "div": 12
+          },
+          "native_fmas": 442368,
+          "edges": 2124,
+          "held_checks": 420,
+          "work_events": {
+            "scan": 192,
+            "add_stripe": 192,
+            "scale": 12,
+            "retire": 12
+          }
+        }
+      ],
+      "input_reverified": true,
+      "reference_after_both_terminals": true,
+      "mapped_elf_files": 17,
+      "mapping_failures": 0,
+      "stage_order": [
+        "INPUTS_VERIFIED",
+        "NATIVE_LOADED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "REFERENCE_COMPARE_START",
+        "REFERENCE_COMPARE_PASS",
+        "POSTFLIGHT_MAPS_PASS"
+      ],
+      "artifact_identities": {
+        "IDENTITY.json": {
+          "bytes": 121,
+          "sha256": "12b8c0bdbc02c3eaa866b7dced0ea96cae15d505f5000950bdb1d6cd0d9bce9a"
+        },
+        "MAPS_AFTER_CDLL.txt": {
+          "bytes": 7046,
+          "sha256": "d1ca10172a8db8e0dcb13f40021ba587af94fe2113f0a9ee413884ac14a34b13"
+        },
+        "MAPS_BEFORE_AUDIT.txt": {
+          "bytes": 17674,
+          "sha256": "1e7c1ecfdea8ed191bb496f3ef1fff1e27ed75e4ab66e1943f444bc5b818e688"
+        },
+        "MAP_AUDIT.json": {
+          "bytes": 36643,
+          "sha256": "e3e98ed57acf4a2ec86b13f476df6b50f1ebdbb9a9e0a8b8318ddf0574f10ee5"
+        },
+        "PARENT.json": {
+          "bytes": 745,
+          "sha256": "185beb2aa978a1906abaf457106ac39047646ec7cfe3e2de310248c9e6e3fc7d"
+        },
+        "RESULT.json": {
+          "bytes": 3886,
+          "sha256": "86d82c7bd33bb2850b02365c3b14f1f2215541e233eff557046a9f6437e36daa"
+        },
+        "STAGES.jsonl": {
+          "bytes": 2819,
+          "sha256": "0d2906f1ec139dfac33fd977d3abe24fc4251a150ab3a9d2738989fc3b0c6767"
+        },
+        "worker.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "m": 2,
+      "status": "PASS_REAL_NATIVE_ATTENTION_COMPONENT_ONLY",
+      "returncode": 0,
+      "timed_out": false,
+      "group_remaining": false,
+      "wall_seconds": 1.7722939049708657,
+      "comparison": {
+        "output_words": 3072,
+        "score_words": 36,
+        "output_sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+        "scores_sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+        "reference": "original independent control/recipe; shared exact RNE primitives disclosed"
+      },
+      "arms": [
+        {
+          "counts": {
+            "read": 768,
+            "memory_response": 960,
+            "write": 192
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 1291,
+            "normal_groups": 216,
+            "normal_steps": 480,
+            "normal_results": 312,
+            "normal_done": 216,
+            "legacy_model_ticks": 2885,
+            "legacy_replies": 288,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 20040,
+            "add": 936,
+            "mul": 648,
+            "div": 24
+          },
+          "native_fmas": 933888,
+          "edges": 4176,
+          "held_checks": 0,
+          "work_events": null
+        },
+        {
+          "counts": {
+            "read": 768,
+            "memory_response": 960,
+            "write": 192
+          },
+          "service_counts": {
+            "owner_acquires": 1,
+            "packed_model_ticks": 2155,
+            "normal_groups": 216,
+            "normal_steps": 480,
+            "normal_results": 312,
+            "normal_done": 216,
+            "legacy_model_ticks": 2885,
+            "legacy_replies": 288,
+            "owner_responses": 1,
+            "owner_releases": 1
+          },
+          "scalar_calls": {
+            "bf": 19968,
+            "add": 360,
+            "mul": 612,
+            "div": 24
+          },
+          "native_fmas": 933888,
+          "edges": 5040,
+          "held_checks": 864,
+          "work_events": {
+            "scan": 384,
+            "add_stripe": 384,
+            "scale": 24,
+            "retire": 36
+          }
+        }
+      ],
+      "input_reverified": true,
+      "reference_after_both_terminals": true,
+      "mapped_elf_files": 17,
+      "mapping_failures": 0,
+      "stage_order": [
+        "INPUTS_VERIFIED",
+        "NATIVE_LOADED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "ARM_START",
+        "ARM_TERMINAL_ACKED",
+        "REFERENCE_COMPARE_START",
+        "REFERENCE_COMPARE_PASS",
+        "POSTFLIGHT_MAPS_PASS"
+      ],
+      "artifact_identities": {
+        "IDENTITY.json": {
+          "bytes": 121,
+          "sha256": "1dc6502beb74fa3ee6a496644a9d43a25d67319c05dc24f58f131d623bc56926"
+        },
+        "MAPS_AFTER_CDLL.txt": {
+          "bytes": 7046,
+          "sha256": "080abea4ee230e3859e805b0a61ee065e37fac26fcba4b38c535bdd0031811a9"
+        },
+        "MAPS_BEFORE_AUDIT.txt": {
+          "bytes": 17674,
+          "sha256": "4972f3624fb84060bbf8567bbc581580487cb5a304e579d6b3a892750cf4eb9e"
+        },
+        "MAP_AUDIT.json": {
+          "bytes": 36643,
+          "sha256": "e3e98ed57acf4a2ec86b13f476df6b50f1ebdbb9a9e0a8b8318ddf0574f10ee5"
+        },
+        "PARENT.json": {
+          "bytes": 745,
+          "sha256": "baa58de69ab40bd7c29e989575125e4d73cdea65cc8d5eb89861a0c323ab802a"
+        },
+        "RESULT.json": {
+          "bytes": 3894,
+          "sha256": "2e3b05ea1861a9539071463cac57297b6b79d09a02062e7c0a602f6181d28a6d"
+        },
+        "STAGES.jsonl": {
+          "bytes": 2829,
+          "sha256": "1801931f8ded046c3cb24abea08978d1027dc580c8dd5e13856f31f4a4c4971b"
+        },
+        "worker.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "fullblock": false,
+  "direct_public_prefix": false,
+  "rtl": false,
+  "hardware_cycles": false,
+  "utilization_claim": false,
+  "private_payloads_or_raw_maps_published": false
+}

@@ -1,0 +1,502 @@
+{
+  "graph_sha256": "dc49c1f8e0288f38811db9b56d47c6dabe87dc4746030eeed11f37e912bfe436",
+  "roots": [
+    "python3.12",
+    "git",
+    "official_bf16_matrix_silu.so",
+    "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+    "_umath_linalg.cpython-312-x86_64-linux-gnu.so"
+  ],
+  "files": {
+    "python3.12": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "needed": [
+        "libpthread.so.0",
+        "libdl.so.2",
+        "libutil.so.1",
+        "libm.so.6",
+        "librt.so.1",
+        "libc.so.6"
+      ],
+      "soname": null
+    },
+    "git": {
+      "bytes": 4082768,
+      "sha256": "356db14e102d68a1a37d8a1ac577dfd678d45d46e92f468bef8b7154e7bfdc60",
+      "needed": [
+        "libpcre2-8.so.0",
+        "libz.so.1",
+        "libc.so.6"
+      ],
+      "soname": null
+    },
+    "official_bf16_matrix_silu.so": {
+      "bytes": 27352,
+      "sha256": "c03ab303a6d0780f379a13f8f0339872a6b00e066c8481b8e8f39a16243cf5b8",
+      "needed": [
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "soname": null
+    },
+    "_multiarray_umath.cpython-312-x86_64-linux-gnu.so": {
+      "bytes": 10808937,
+      "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd",
+      "needed": [
+        "libscipy_openblas64_-fdde5778.so",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "soname": null
+    },
+    "_umath_linalg.cpython-312-x86_64-linux-gnu.so": {
+      "bytes": 231833,
+      "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845",
+      "needed": [
+        "libscipy_openblas64_-fdde5778.so",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "soname": null
+    },
+    "libpthread.so.0": {
+      "bytes": 14408,
+      "sha256": "85e21f7dba0394411d00959176fd18b470e575b0b05f1f4f41e5636802ce0500",
+      "needed": [
+        "libc.so.6"
+      ],
+      "soname": "libpthread.so.0"
+    },
+    "libdl.so.2": {
+      "bytes": 14408,
+      "sha256": "295fa521a03cd2faa99974f378c9e23dd622021ec7d32bcad4f8ea61aec8a872",
+      "needed": [
+        "libc.so.6"
+      ],
+      "soname": "libdl.so.2"
+    },
+    "libutil.so.1": {
+      "bytes": 14408,
+      "sha256": "e3981d10efd152a53f083e38f5f9ddde7a049c85d0ab388a5eec91b52fc98a11",
+      "needed": [
+        "libc.so.6"
+      ],
+      "soname": "libutil.so.1"
+    },
+    "libm.so.6": {
+      "bytes": 977112,
+      "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3",
+      "needed": [
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "soname": "libm.so.6"
+    },
+    "librt.so.1": {
+      "bytes": 14552,
+      "sha256": "7b7b84d1aedda0e0b2bdfc68844362782132180b8f02be1300e21e77572e514b",
+      "needed": [
+        "libc.so.6"
+      ],
+      "soname": "librt.so.1"
+    },
+    "libc.so.6": {
+      "bytes": 1995216,
+      "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92",
+      "needed": [
+        "ld-linux-x86-64.so.2"
+      ],
+      "soname": "libc.so.6"
+    },
+    "ld-linux-x86-64.so.2": {
+      "bytes": 225672,
+      "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307",
+      "needed": [],
+      "soname": "ld-linux-x86-64.so.2"
+    },
+    "libpcre2-8.so.0.14.0": {
+      "bytes": 711216,
+      "sha256": "8dde125b341abfdf4a596d2974cd3048e350cbc8d2d77acd54ea044f7815ca77",
+      "needed": [
+        "libc.so.6"
+      ],
+      "soname": "libpcre2-8.so.0"
+    },
+    "libz.so.1.3.1": {
+      "bytes": 125376,
+      "sha256": "85590dd58edf5445e18bc7193e5ebc01ac5841f1ae187e97705a662e90c6421e",
+      "needed": [
+        "libc.so.6"
+      ],
+      "soname": "libz.so.1"
+    },
+    "libscipy_openblas64_-fdde5778.so": {
+      "bytes": 25034001,
+      "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12",
+      "needed": [
+        "libm.so.6",
+        "libpthread.so.0",
+        "libgfortran-040039e1-0352e75f.so.5.0.0",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "soname": "libscipy_openblas64_-fdde5778.so"
+    },
+    "libstdc++.so.6.0.33": {
+      "bytes": 2497768,
+      "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00",
+      "needed": [
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2",
+        "libgcc_s.so.1"
+      ],
+      "soname": "libstdc++.so.6"
+    },
+    "libgcc_s.so.1": {
+      "bytes": 182856,
+      "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af",
+      "needed": [
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "soname": "libgcc_s.so.1"
+    },
+    "libgfortran-040039e1-0352e75f.so.5.0.0": {
+      "bytes": 2833617,
+      "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980",
+      "needed": [
+        "libquadmath-96973f99-934c22de.so.0.0.0",
+        "libz.so.1",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "soname": "libgfortran-040039e1-0352e75f.so.5.0.0"
+    },
+    "libquadmath-96973f99-934c22de.so.0.0.0": {
+      "bytes": 250985,
+      "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6",
+      "needed": [
+        "libm.so.6",
+        "libc.so.6"
+      ],
+      "soname": "libquadmath-96973f99-934c22de.so.0.0.0"
+    }
+  },
+  "edges": [
+    {
+      "source": "python3.12",
+      "needed": "libpthread.so.0",
+      "target": "libpthread.so.0",
+      "kind": "needed"
+    },
+    {
+      "source": "python3.12",
+      "needed": "libdl.so.2",
+      "target": "libdl.so.2",
+      "kind": "needed"
+    },
+    {
+      "source": "python3.12",
+      "needed": "libutil.so.1",
+      "target": "libutil.so.1",
+      "kind": "needed"
+    },
+    {
+      "source": "python3.12",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "python3.12",
+      "needed": "librt.so.1",
+      "target": "librt.so.1",
+      "kind": "needed"
+    },
+    {
+      "source": "python3.12",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "python3.12",
+      "needed": "/lib64/ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "interpreter"
+    },
+    {
+      "source": "git",
+      "needed": "libpcre2-8.so.0",
+      "target": "libpcre2-8.so.0.14.0",
+      "kind": "needed"
+    },
+    {
+      "source": "git",
+      "needed": "libz.so.1",
+      "target": "libz.so.1.3.1",
+      "kind": "needed"
+    },
+    {
+      "source": "git",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "git",
+      "needed": "/lib64/ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "interpreter"
+    },
+    {
+      "source": "official_bf16_matrix_silu.so",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "official_bf16_matrix_silu.so",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libscipy_openblas64_-fdde5778.so",
+      "target": "libscipy_openblas64_-fdde5778.so",
+      "kind": "needed"
+    },
+    {
+      "source": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libstdc++.so.6",
+      "target": "libstdc++.so.6.0.33",
+      "kind": "needed"
+    },
+    {
+      "source": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libgcc_s.so.1",
+      "target": "libgcc_s.so.1",
+      "kind": "needed"
+    },
+    {
+      "source": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "needed": "ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "needed"
+    },
+    {
+      "source": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libscipy_openblas64_-fdde5778.so",
+      "target": "libscipy_openblas64_-fdde5778.so",
+      "kind": "needed"
+    },
+    {
+      "source": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libgcc_s.so.1",
+      "target": "libgcc_s.so.1",
+      "kind": "needed"
+    },
+    {
+      "source": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libpthread.so.0",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libdl.so.2",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libutil.so.1",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libm.so.6",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libm.so.6",
+      "needed": "ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "needed"
+    },
+    {
+      "source": "librt.so.1",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libc.so.6",
+      "needed": "ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "needed"
+    },
+    {
+      "source": "libc.so.6",
+      "needed": "/lib64/ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "interpreter"
+    },
+    {
+      "source": "libpcre2-8.so.0.14.0",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libz.so.1.3.1",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libscipy_openblas64_-fdde5778.so",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libscipy_openblas64_-fdde5778.so",
+      "needed": "libpthread.so.0",
+      "target": "libpthread.so.0",
+      "kind": "needed"
+    },
+    {
+      "source": "libscipy_openblas64_-fdde5778.so",
+      "needed": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "target": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "kind": "needed"
+    },
+    {
+      "source": "libscipy_openblas64_-fdde5778.so",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libscipy_openblas64_-fdde5778.so",
+      "needed": "ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "needed"
+    },
+    {
+      "source": "libstdc++.so.6.0.33",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libstdc++.so.6.0.33",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libstdc++.so.6.0.33",
+      "needed": "ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "needed"
+    },
+    {
+      "source": "libstdc++.so.6.0.33",
+      "needed": "libgcc_s.so.1",
+      "target": "libgcc_s.so.1",
+      "kind": "needed"
+    },
+    {
+      "source": "libgcc_s.so.1",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libgcc_s.so.1",
+      "needed": "ld-linux-x86-64.so.2",
+      "target": "ld-linux-x86-64.so.2",
+      "kind": "needed"
+    },
+    {
+      "source": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "needed": "libquadmath-96973f99-934c22de.so.0.0.0",
+      "target": "libquadmath-96973f99-934c22de.so.0.0.0",
+      "kind": "needed"
+    },
+    {
+      "source": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "needed": "libz.so.1",
+      "target": "libz.so.1.3.1",
+      "kind": "needed"
+    },
+    {
+      "source": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "needed": "libgcc_s.so.1",
+      "target": "libgcc_s.so.1",
+      "kind": "needed"
+    },
+    {
+      "source": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libquadmath-96973f99-934c22de.so.0.0.0",
+      "needed": "libm.so.6",
+      "target": "libm.so.6",
+      "kind": "needed"
+    },
+    {
+      "source": "libquadmath-96973f99-934c22de.so.0.0.0",
+      "needed": "libc.so.6",
+      "target": "libc.so.6",
+      "kind": "needed"
+    }
+  ],
+  "root_scope": "Python, Git, combined Matrix, NumPy eager multiarray/linalg; compiler and lazy/test extensions excluded",
+  "absolute_paths_redacted": true
+}

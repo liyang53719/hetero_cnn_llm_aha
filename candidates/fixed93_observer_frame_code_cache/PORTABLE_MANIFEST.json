@@ -1,0 +1,113 @@
+{
+  "files": {
+    "BASE_PINS.json": {
+      "bytes": 3439,
+      "sha256": "16d63202c8dc45d6864c9f3d745004e6e087a3d552fc521c4e69764fd325b9c7"
+    },
+    "README.md": {
+      "bytes": 4330,
+      "sha256": "ed7088413f08c96a96ec7139e4ae7a556ac2e34f83ca12d421bfa4a720e943ff"
+    },
+    "check.py": {
+      "bytes": 5857,
+      "sha256": "68055cfdaf244cc1793cca2a1b9ae60f9e50368c1e7d2ed096e5acc276c9a6b5"
+    },
+    "overlay/narrow_fullblock_attention.py": {
+      "bytes": 55735,
+      "sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d"
+    },
+    "overlay/wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "patches/narrow_fullblock_attention.patch": {
+      "bytes": 5651,
+      "sha256": "1abe5ed691a13f28b39a15eb53f578512ac2ef37aaa240f58fc4a32e75c1c57a"
+    },
+    "patches/wholeblock.patch": {
+      "bytes": 2036,
+      "sha256": "e29d85c7c8287354f56c84d794e05e9a715b7181b08610d9ca127d07b8567f73"
+    },
+    "tests.py": {
+      "bytes": 17446,
+      "sha256": "69f78fb7a5dd86782dbd42ab0db69296e76f488a87368742b073e92b50bb00ce"
+    }
+  },
+  "frozen_source_manifest_sha256": "02e08b02ed21aeb7a1bfed0bc6686cd3a071741a0ef5d42cd1d737f321d7ada6",
+  "original_tests_sha256": "e1bf0b50eedb227973513f61059c7b5c5cc02b1c90a10d465b93ff644d05bd5d",
+  "publish_whitelist": [
+    "BASE_PINS.json",
+    "PORTABLE_MANIFEST.json",
+    "README.md",
+    "check.py",
+    "overlay/narrow_fullblock_attention.py",
+    "overlay/wholeblock.py",
+    "patches/narrow_fullblock_attention.patch",
+    "patches/wholeblock.patch",
+    "tests.py"
+  ],
+  "schema": "attention-frame-code-cache-portable-source-v1",
+  "scope": {
+    "actual_authorized": false,
+    "model_data_packaged": false,
+    "native_artifacts_packaged": false,
+    "private_absolute_paths_packaged": false,
+    "purpose": "Portable source excerpt and synthetic test contract, not an independently complete model execution package.",
+    "raw_logs_packaged": false,
+    "runtime_packaged": false,
+    "verification": "No new test or model execution is claimed by this packaging revision."
+  },
+  "test_inputs": {
+    "baseline/capture/wholeblock.py": {
+      "bytes": 47910,
+      "sha256": "181a17a663f303c37ccb79224ad2f0f1cf333115314987a9118a6f6115d9d6ea"
+    },
+    "baseline/frozen_layout.py": {
+      "bytes": 12496,
+      "sha256": "a097f7475cb7a24664b189072983d4da80d208547aafae3ed52c794814d54824"
+    },
+    "baseline/source/candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py": {
+      "bytes": 42761,
+      "sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
+    },
+    "old_observer": {
+      "bytes": 55827,
+      "sha256": "940e7929f99177fff04ade16c22a69309a3264454df9f0d822f7c7630abb1774"
+    },
+    "old_observer_parent/m2_io.py": {
+      "bytes": 11216,
+      "sha256": "de1b9e5479e632ceb70f7a0f18f7e139cc5a1f938851ed28c893fca104dbb087"
+    },
+    "package/overlay/narrow_fullblock_attention.py": {
+      "bytes": 55735,
+      "sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d"
+    },
+    "package/overlay/wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    }
+  },
+  "test_packaging_delta": "Only the original PINS assignment is replaced by CLI-root resolution and eager size/SHA-256 checks. Test bodies are unchanged.",
+  "unchanged_original_files": {
+    "BASE_PINS.json": {
+      "bytes": 3439,
+      "sha256": "16d63202c8dc45d6864c9f3d745004e6e087a3d552fc521c4e69764fd325b9c7"
+    },
+    "overlay/narrow_fullblock_attention.py": {
+      "bytes": 55735,
+      "sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d"
+    },
+    "overlay/wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "patches/narrow_fullblock_attention.patch": {
+      "bytes": 5651,
+      "sha256": "1abe5ed691a13f28b39a15eb53f578512ac2ef37aaa240f58fc4a32e75c1c57a"
+    },
+    "patches/wholeblock.patch": {
+      "bytes": 2036,
+      "sha256": "e29d85c7c8287354f56c84d794e05e9a715b7181b08610d9ca127d07b8567f73"
+    }
+  }
+}

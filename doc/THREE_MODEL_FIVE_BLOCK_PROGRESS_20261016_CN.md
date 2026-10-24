@@ -1609,3 +1609,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 实际独审 `CONFIRMED_MATCHED_SUCCESS_M2_OBSERVER_EQUIVALENCE_ONLY`，摘要SHA8055216d02e43c73d62a6fefaea64f32498965421631c5028e53f9b758f5a9c4：97最终封闭文件10958996B逐hash；33数组/存在掩码/输出文件逐字相同，transport相同；每arm8565 Attention与2211 wholeblock语义记录一致。11011个opaque身份差异保留，仅允许字段，4长期对象双向映射保持；不宣称短命对象跨进程alias等价。独审未复跑DUT/decoder。
 - 性能实测分层：main_loop CPU34.917529478→32.520110039秒（约减少6.9%）；wall35.905736048→33.802740322秒（约减少5.86%）。不是18.33倍整体加速，不是硬件周期或MAC利用率。合成微段倍数不能外推完整M128时限。
 - ONGOING：仅主循环有界栈采样诊断设计中，尚未实际执行；已用纯stdlib实证cProfile漏trace回调内部成本，拟用SIGPROF且不改原SIGALRM期限。当前M128/fullblock/独立数值资格/RTL均false，五block完整RTL仍0/5，最终90%目标保留。不运行未经耗时校准的长作业，不清理原失败/唯一证据。
+
+## PASS（合成）/ TEMP：每次回调缓存只读frame CodeType（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_observer_frame_code_cache/` 9文件源码/patch/relative pins/便携检查与合成测试。只将原dispatcher的6处、Attention callback的15处当前frame.f_code访问替换为该次回调内的一次读取；不跨回调缓存，不改caller的嵌套f_code或任何identity/异常/事件分支。反变换两模块AST精确还原原版；既有三个audit guards字节不变。
+- PASS精确范围：入树静态checker验证全部7输入pins及逆AST；root再跑真实共享dispatcher、两个原subscriber加独立测试listener、原三个audit hook上的合成差分，自然0，wrapper1.201496秒/RSS30488KiB，无native/模型/真实M2。
+- 每轮1800循环：identity两臂各3600次不变，f_code审计事件100803→23403。root三轮中位CPU227998108→95995697ns，约2.375倍；作者另一批约2.58倍，均只是合成微段，不作M128或真实M2速度承诺。只对固定已核hooks忽略的object.__getattr__事件作等效判断，不保证任意第三方有状态hook等价。
+- 归因依据保留FAIL：前次真实单臂诊断自然FAIL43.2338秒、cleanup闭合，因1次重入丢样在正常退出/封流前拒绝。已关闭辅助profile有3134样本、2071栈，无overflow/深度截断，不能改成PASS；原两主流只stat未读，未导出/比较33字段。辅助报告SHA35240218ec3844f0f6bba263eba7344e595816ff08be3ba14f19ac28d9463ed7，独审仅允许不完整热点定位。
+- 样本排他叶分类：audit39.247%、identity排audit后41.129%、codec2.234%；原identity45.12%是inclusive，不可相加，更不是精确CPU域测量。无需为零丢样重复诊断。
+- ONGOING / TEMP：新无采样单new-arm M2接线/冷审中，拟封流后parent对照0417已封结果；历史数据不入child。尚无本补丁真实M2/M128/完整RTL资格，五blockRTL仍0/5，无新MAC利用率实测；原失败与唯一证据不清理。

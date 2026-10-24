@@ -1,0 +1,64 @@
+{
+  "base_files": {
+    "narrow_fullblock_attention.py": {
+      "baseline_direct_f_code_read_sites": 15,
+      "baseline_module_ast_sha256": "c9cb7407887d5b3f46d1c063171a064d5674c5e9027cc608092516ec1d09083d",
+      "bytes": 55827,
+      "diagnostic_0437_source": "candidate_attention_m2_diagnostic_20261021T0437/narrow_fullblock_attention.py",
+      "diagnostic_0437_source_identical": true,
+      "existing_op_evidence_boundary_v1_preserved": true,
+      "inverse_transform_module_ast_equal": true,
+      "inverse_transformed_module_ast_sha256": "c9cb7407887d5b3f46d1c063171a064d5674c5e9027cc608092516ec1d09083d",
+      "native_33_helper_source_identical": true,
+      "native_33_helper_source_sha256": "5b14cb692677d9526162497d6a3962196111ae39dc1b59fabf9aeab95af07998",
+      "no_preexisting_code_local_or_argument": true,
+      "outside_target_method_source_identical": true,
+      "overlay": "overlay/narrow_fullblock_attention.py",
+      "overlay_bytes": 55735,
+      "overlay_direct_f_code_read_sites": 1,
+      "overlay_sha256": "4d78c423af8b59caba7a224cc97edb8ab87b7486121dbb04209d7db5c819f95d",
+      "patch": "patches/narrow_fullblock_attention.patch",
+      "patch_sha256": "1abe5ed691a13f28b39a15eb53f578512ac2ef37aaa240f58fc4a32e75c1c57a",
+      "sha256": "940e7929f99177fff04ade16c22a69309a3264454df9f0d822f7c7630abb1774",
+      "source": "candidate_attention_success_m2_calibration_20261021T0417/narrow_fullblock_attention.py",
+      "target_method": "Fixed93FullblockAttentionObservation._trace",
+      "unchanged_parent_frame_f_code_read_sites": 2
+    },
+    "wholeblock.py": {
+      "baseline_direct_f_code_read_sites": 6,
+      "baseline_module_ast_sha256": "ec41927001a6929c275532720756a7ea54605a2fe0ba82014807d49b7e850b4c",
+      "bytes": 47910,
+      "inverse_transform_module_ast_equal": true,
+      "inverse_transformed_module_ast_sha256": "ec41927001a6929c275532720756a7ea54605a2fe0ba82014807d49b7e850b4c",
+      "no_preexisting_code_local_or_argument": true,
+      "outside_target_method_source_identical": true,
+      "overlay": "overlay/wholeblock.py",
+      "overlay_bytes": 47890,
+      "overlay_direct_f_code_read_sites": 1,
+      "overlay_sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b",
+      "patch": "patches/wholeblock.patch",
+      "patch_sha256": "e29d85c7c8287354f56c84d794e05e9a715b7181b08610d9ca127d07b8567f73",
+      "sha256": "181a17a663f303c37ccb79224ad2f0f1cf333115314987a9118a6f6115d9d6ea",
+      "source": "candidate_pv_reuse_fullblock_ready_20261021T0300/capture/wholeblock.py",
+      "target_method": "TraceDispatcher._dispatch",
+      "unchanged_parent_frame_f_code_read_sites": 1
+    }
+  },
+  "runtime_test_or_native_execution_performed": false,
+  "schema": "attention-frame-code-cache-base-pins-v1",
+  "source_only": true,
+  "unchanged_guard_source_pins": {
+    "candidate_attention_success_m2_calibration_20261021T0417/m2_io.py": {
+      "bytes": 11216,
+      "sha256": "de1b9e5479e632ceb70f7a0f18f7e139cc5a1f938851ed28c893fca104dbb087"
+    },
+    "candidate_attention_success_m2_calibration_20261021T0417/m2_supervision_gate.py": {
+      "bytes": 12166,
+      "sha256": "e582007ac7d8904288ffdd19c90e072cebf066ab70f7c6d4f3f7f51c5255e419"
+    },
+    "candidate_pv_reuse_fullblock_ready_20261021T0300/integration/runtime_support/gates.py": {
+      "bytes": 34580,
+      "sha256": "27c53a91b30158f58871a51fcd73130a62940e056a5cf082761ad00751dc1cc3"
+    }
+  }
+}

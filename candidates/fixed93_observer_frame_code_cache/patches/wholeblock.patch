@@ -1,0 +1,39 @@
+--- a/wholeblock.py
++++ b/wholeblock.py
+@@ -121,29 +121,30 @@
+         sys.settrace(self.callback)
+ 
+     def _dispatch(self, frame, event, arg):
+-        if frame.f_code not in self.codes:
++        code = frame.f_code
++        if code not in self.codes:
+             return None
+         if self.failed is not None:
+             return self.callback
+         try:
+             need(threading.get_ident() == self.thread, 'foreign traced thread')
+             if event=='call':
+-                frame.f_trace_lines = frame.f_code in self.line_codes
+-                if frame.f_code is self.scalar_code:
++                frame.f_trace_lines = code in self.line_codes
++                if code is self.scalar_code:
+                     # Guard every real scalar global call, including legal
+                     # prefix clients. Never restrict client to Attention here.
+                     need(frame.f_locals.get('self') is self.scalar_instance,
+                          'wrong shared ScalarService instance')
+-            elif event=='exception' and frame.f_code not in self.line_codes:
++            elif event=='exception' and code not in self.line_codes:
+                 need(len(self._resume_lines)<self.max_exception_frames,
+                      'handled-exception resume-frame cap')
+                 self._resume_lines.add(id(frame))
+                 frame.f_trace_lines = True
+             # Registration is bounded; snapshot prevents mutation during iteration.
+             for listener, codes in tuple(self._listeners.values()):
+-                if frame.f_code in codes:
++                if code in codes:
+                     listener(frame, event, arg)
+-            if event=='call' and frame.f_code is self.scalar_code and (
++            if event=='call' and code is self.scalar_code and (
+                     frame.f_back is None or frame.f_back.f_code is not self.exp_code):
+                 # Listener saw the original global call once. Non-exp scalar
+                 # arithmetic gets no local return/line tracing.

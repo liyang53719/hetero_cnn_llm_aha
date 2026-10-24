@@ -1,0 +1,85 @@
+--- a/narrow_fullblock_attention.py
++++ b/narrow_fullblock_attention.py
+@@ -606,9 +606,10 @@
+                                 epoch=client.epoch, pending=client._request_pending, tracks_reply=client._tracks_reply)
+ 
+     def _trace(self, frame, event, arg):
+-        if frame.f_code not in self.all_codes:
++        code = frame.f_code
++        if code not in self.all_codes:
+             return None
+-        if frame.f_code is self.scalar_code and (frame.f_back is None or frame.f_back.f_code is not self.exp_code):
++        if code is self.scalar_code and (frame.f_back is None or frame.f_back.f_code is not self.exp_code):
+             return None
+         if self.disarmed or (self.stream is not None and self.stream.failed):
+             return self._callback
+@@ -617,7 +618,7 @@
+             # no scalar field/event consumer. Keep instance/thread checks, but
+             # do not inspect unrelated ABI/profile metadata at these two
+             # no-evidence boundaries. Exceptions retain the original path.
+-            if (frame.f_code is self.codes['_op'] and event in ('call', 'return') and
++            if (code is self.codes['_op'] and event in ('call', 'return') and
+                     (frame.f_back is None or frame.f_back.f_code is not self.codes['_attention'])):
+                 require(threading.get_ident() == self.thread, 'observation thread changed')
+                 require(frame.f_locals.get('self') is self.owner,
+@@ -627,16 +628,16 @@
+             if event == 'exception':
+                 # StopIteration is generator control, not an operation fault.
+                 if arg[0] not in (StopIteration, GeneratorExit):
+-                    self._event('observed_exception', function=frame.f_code.co_name,
++                    self._event('observed_exception', function=code.co_name,
+                                 exception_type=arg[0].__name__, detail=str(arg[1])[:512])
+-            if frame.f_code in self.service_codes:
++            if code in self.service_codes:
+                 self._service(frame, event, arg)
+-            elif frame.f_code is self.ticket_code:
++            elif code is self.ticket_code:
+                 require(frame.f_locals.get('self') is self.services[0], 'wrong inherited ticket getter instance')
+                 if event == 'return':
+                     require(type(arg) is int and arg >= 0, 'ticket getter invalid return')
+                     self.last_ticket = arg
+-            elif frame.f_code is self.exp_code:
++            elif code is self.exp_code:
+                 require(frame.f_locals.get('scalar') is self.services[1] and frame.f_locals.get('client') is self.owner,
+                         'wrong exp caller/service binding')
+                 if event == 'call':
+@@ -651,7 +652,7 @@
+                     self.event_counts['exp_nodes'] += 1
+                     self.event_counts['exp_actual_primitives'] += expected
+                     self.exp_nodes, self.exp_coord = None, None
+-            elif frame.f_code is self.scalar_code:
++            elif code is self.scalar_code:
+                 require(frame.f_locals.get('self') is self.services[1] and frame.f_locals.get('client') is self.owner,
+                         'wrong exp ScalarService/client instance')
+                 if event == 'return' and type(arg) is int:
+@@ -662,23 +663,23 @@
+                     operation = 'mul' if index == 0 or index == 16 or index % 2 == 0 else 'add'
+                     require(local['operation'] == operation, 'actual exp primitive order drift')
+                     self.exp_nodes.append((0 if operation == 'mul' else 1, local['a'], local['b'], arg))
+-            elif frame.f_code is self.legacy_code:
++            elif code is self.legacy_code:
+                 self._legacy(frame, event, arg)
+-            elif frame.f_code in (self.codes['packed_tick'], self.codes['packed_commit']):
++            elif code in (self.codes['packed_tick'], self.codes['packed_commit']):
+                 self._packed(frame, event, arg)
+             else:
+                 require(frame.f_locals.get('self') is self.owner, 'wrong owner instance reached pinned observed method')
+-                if event == 'call' and frame.f_code is self.codes['_attention'] and not self.started:
++                if event == 'call' and code is self.codes['_attention'] and not self.started:
+                     self._start()
+                 if event == 'line':
+                     self._line(frame)
+-                elif event == 'return' and frame.f_code is self.codes['_op'] and type(arg) is int:
++                elif event == 'return' and code is self.codes['_op'] and type(arg) is int:
+                     self._scalar(frame, arg)
+-                elif event == 'return' and frame.f_code is self.codes['tick'] and isinstance(arg, dict):
++                elif event == 'return' and code is self.codes['tick'] and isinstance(arg, dict):
+                     self._tick(frame, arg)
+-                elif event == 'call' and frame.f_code is self.codes['_fault']:
++                elif event == 'call' and code is self.codes['_fault']:
+                     self._event('owner_fault', status=frame.f_locals['status'], detail=frame.f_locals['detail'])
+-                elif event == 'call' and frame.f_code is self.codes['_finish']:
++                elif event == 'call' and code is self.codes['_finish']:
+                     client = self.owner.matrix_client
+                     self._event('owner_finish_called', status=frame.f_locals.get('status'), ack_bytes=self.owner.ack_bytes,
+                         expected_write_bytes=self.owner.job.write_bytes, memory_pending=self.owner.memory_pending,

@@ -2047,3 +2047,26 @@ R1首次runner错误禁止原Prep来源验证所需git show，0.200秒error发�
 根实际有界运行exit0，cold4+既有range回归4均0skip/error/failure，原ChunkOwner._exp五词Scalar分派通过，payload0.130929718秒。分派5候选Scalar calls，内部63Mul/45Add/5integerRNE，3非正常1零，无旧80截断；真实R2 Vector16仅用于此分派策略admission，分派不执行Vector算术。两次真实单lane UF检查属于独立range回归阶段。1CPU/512MiB/20CPU/25alarm/外层30+2KILL，38pins不变，无denied/编译/下载。cold阶段所有dlopen受禁且未发生，stdlib ctypes预先初始化另行披露。
 
 见 QWEN35_EQUAL_HEADS_EXP_DISPATCH_20261023_CN.md 及 reports/execution/QWEN35_EQUAL_HEADS_EXP_DISPATCH_20261023/summary.json。策略/分派子门done；full_driver共享Scalar身份冻结、官方完整128-token block数值及RTL绑定ongoing/todo。不是完整chunk/prefill、官方数值或RTL PASS；五完整RTL仍0/5，Qwen2旧M128UNKNOWN，未新增MAC利用率证据。第二档1024/1224未定不阻塞128；仅本地小批，远端发布待确认，私有manifest/rawresult/log不提交，无清理。
+
+
+## 2026-10-23：共享 Scalar callable 身份小门，实验 exp 未接入完整 block
+
+- 新增导入时固定的 Scalar 函数/MRO/code/defaults/closure、helper/常量/NumPy
+  绑定及严格 enable 标志检查；完整 coordinator 仍只接受 exact PrepScalar，默认
+  legacy exp 与 Vector fatal30 不变。独立 DecayScalar 的 _evaluate_exp/op/_node
+  检查不等于已接入完整 block，不增加物理算术资源或生产 opcode。
+- 检查覆盖 admission、非最终 tick 内 callback、外部观察者返回和最终 report；
+  保持最终 preflight → owner 接受 → joint commit 无新增可失败检查，避免输出已
+  发布而 history/state/roots 未共同提交。提交后观察者破坏身份只会拒绝报告，不回滚。
+- 实际 attempt2 exit0：89 项（9+57+17+4+2）全通过、0 skip/error/failure，
+  29.509101262 秒、peak RSS 227284 KiB，101 source pins 前后一致，载入本仓库
+  Python 来源全部有 pin，无 denied。57 项是明确模拟数值 transport 的控制测试；
+  只有 2 项执行真实小 Scalar，共 13 次 public 操作，不是完整层、chunk 或 block。
+- attempt1 cold9 项中 5 error，后续 NOT RUN，失败完整保留。原因是测试 mock
+  清理函数 __code__ 失败并遗留修改；只修复测试恢复逻辑，生产检查和容差未放宽。
+- 验收边界：完整数值 UNKNOWN、RTL 0/5。未跑权重/Torch/Vector/Matrix 算术、未
+  下载/编译，未复核运行中 FP 环境。导入前修改、同步 callback 改写使用后恢复、
+  源码与已载入 bytecode 等价、任意 owner 方法及敌对解释器不在本身份小门保证内。
+- 详细记录：doc/QWEN35_SCALAR_CALLABLE_GUARD_20261023_CN.md；可复核摘要：
+  reports/execution/QWEN35_SCALAR_CALLABLE_GUARD_20261023/summary.json。
+  下一步仍是独立审查 full_driver 实验 exp 的显式接入及来源，不自动扩大资格。

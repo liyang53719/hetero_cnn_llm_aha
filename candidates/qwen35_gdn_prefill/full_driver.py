@@ -35,6 +35,8 @@ from .chunk.vector import (Vector16, LEGACY_POLICY, IEEE_POLICY, POLICY_MASKS,
 from .gated_norm import model as norm
 from .elementwise import model as elt
 from .dense_prefix import TypedSeededDenseDriver
+from .scalar_identity import (ScalarIdentityGuard, SCALAR_SOURCE_FILES,
+                              legacy_exp_routing_identity)
 
 
 SCOPE = 'QWEN35_L0_COMPLETE_TYPED_SOFTWARE_COORDINATOR'
@@ -60,7 +62,10 @@ ACTUAL_SOURCE_FILES = (
     'candidates/qwen35_gdn_prefill/conv/scalar.py',
     'candidates/qwen35_gdn_prefill/prep/model.py',
     'candidates/qwen35_gdn_prefill/prep/scalar.py',
+    'candidates/qwen35_gdn_prefill/prep/layout.py',
+    'candidates/qwen35_gdn_prefill/prep/reduction.py',
     'candidates/qwen35_gdn_prefill/chunk/model.py',
+    'candidates/qwen35_gdn_prefill/chunk/exp_policy.py',
     'candidates/qwen35_gdn_prefill/chunk/vector.py',
     'candidates/qwen35_gdn_prefill/chunk/vector16.cpp',
     'candidates/qwen35_gdn_prefill/gated_norm/model.py',
@@ -69,7 +74,7 @@ ACTUAL_SOURCE_FILES = (
     'candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py',
     'scripts/build_shared_matrix_recipe.py',
     'src/heteronpu/model_geometry.py',
-)
+) + SCALAR_SOURCE_FILES
 WEIGHTS = {'qkv': 'linear_attn.in_proj_qkv.weight', 'z': 'linear_attn.in_proj_z.weight',
            'o': 'linear_attn.out_proj.weight', 'gate': 'mlp.gate_proj.weight',
            'up': 'mlp.up_proj.weight', 'down': 'mlp.down_proj.weight'}
@@ -142,8 +147,9 @@ class FullBlockCoordinator:
                 vector.fatal_mask == POLICY_MASKS[vector.exception_policy],
                 'explicit coherent Vector exception policy required')
         self.scalar = prep.PrepScalar(enable_softplus=True) if scalar is None else scalar
-        require(type(self.scalar) is prep.PrepScalar and self.scalar.enable_softplus,
+        require(type(self.scalar) is prep.PrepScalar and self.scalar.enable_softplus is True,
                 'one explicitly Softplus-enabled PrepScalar required')
+        self._scalar_guard = ScalarIdentityGuard(self.scalar)
         self.projection_policy = ProjectionPolicy(projection_policy)
         self.projection_module = self.projection_profile = None
         if self.projection_policy is ProjectionPolicy.IndependentK512:
@@ -249,7 +255,9 @@ class FullBlockCoordinator:
         return (id(self.memory), id(self.matrix), id(self.dense), id(self.dense.a_banks),
                 id(self.dense.b_banks), self.matrix.resource_address, id(self.scalar),
                 id(self.vector), self.vector.resource_address,
-                self.vector.arithmetic_identity(),
+                self.vector.arithmetic_identity(), self._scalar_guard.check(self.scalar),
+                legacy_exp_routing_identity(chunk.ep), self.chunk.exp_policy, self.chunk.layout, self.prep.layout,
+                self.prep.gate_policy, self.prep.reduction_policy,
                 self.vector.exception_policy, self.vector.fatal_mask, self.policy,
                 self.projection_policy, self.projection_profile, id(self.projection_module), id(self.dense_wire),
                 *(id(owner) for owner in (self.rms, self.conv, self.prep, self.chunk,
@@ -416,9 +424,15 @@ class FullBlockCoordinator:
             self._launch()
         driver = self.active
         held = driver.owner.ports()['response']
-        if self.role == 'output' and held is not None and status(held) is None and not self.aborted and controls.get('response_ready', True):
+        accepting_output = (self.role == 'output' and held is not None and status(held) is None and
+                            not self.aborted and controls.get('response_ready', True))
+        if accepting_output:
             self._preflight_commit(held)
         event = driver.tick(abort=self.aborted, **controls)
+        # Keep final owner acceptance -> joint commit free of fallible checks.
+        # Other ticks may execute owner callbacks without producing a terminal.
+        if not accepting_output:
+            self._check_resources()
         if driver.response is None:
             return event
         self.receipts[self.role] = driver.response
@@ -433,6 +447,7 @@ class FullBlockCoordinator:
                                     (driver.response.tag, None, driver.job.output_bytes))
             if self.role == 'output':
                 self._commit()
+                self._check_resources()
         else:
             self._fail(failed or 'Aborted')
         report = driver.report()
@@ -507,6 +522,7 @@ class FullBlockCoordinator:
                     projection_profile=None if self.projection_profile is None else asdict(self.projection_profile),
                     vector_fatal_mask=self.vector.fatal_mask,
                     vector_arithmetic_backend=self.vector.backend_report(),
+                    scalar_arithmetic_binding=self._scalar_guard.report(self.scalar),
                     vector_policy_control_bound_to_current_chisel=False,
                     roots=asdict(self.roots), response=None if self.response is None else asdict(self.response),
                     reset_required=self.locked, commands=self.commands, window_inputs=self.window_inputs,
@@ -518,13 +534,16 @@ class FullBlockCoordinator:
 
 
 def freeze_identity(root, fixture, weights, inputs, library, vector, output,
-                    projection_policy=ProjectionPolicy.Legacy):
+                    projection_policy=ProjectionPolicy.Legacy, *, scalar=None):
     """Snapshot only execution/validation sources, not numerical references."""
     from .input_fixture import SOURCE_FILES
     require(type(vector) is Vector16, 'original Vector16 required for execution snapshot')
     vector.arithmetic_identity()
     require(verify_library(vector.library, arithmetic_backend=vector.backend_identity.backend)[2] ==
             vector.backend_identity, 'Vector native build changed after construction')
+    require(type(scalar) is prep.PrepScalar and scalar.enable_softplus is True,
+            'original Softplus-enabled PrepScalar required for execution snapshot')
+    scalar_binding = ScalarIdentityGuard(scalar).report(scalar)
     matrix_receipt = Path(os.environ['MATRIX_SERVICE_COMPILE_RECEIPT']).resolve(strict=True)
     vector_receipt = vector.library.with_suffix('.json')
     build = json.loads(matrix_receipt.read_text())
@@ -562,6 +581,7 @@ def freeze_identity(root, fixture, weights, inputs, library, vector, output,
                 fixture_manifest=str((Path(fixture) / 'manifest.json').resolve()),
                 vector_exception_policy=vector.exception_policy, vector_fatal_mask=vector.fatal_mask,
                 vector_arithmetic_backend=vector.backend_report(),
+                scalar_arithmetic_binding=scalar_binding,
                 public_command128_executed=False, rtl_executed=False)
 
 
@@ -629,7 +649,9 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         if vector is None:
             vector = Vector16(vector_library, exception_policy=vector_exception_policy,
                               arithmetic_backend=vector_arithmetic_backend)
-        identity = freeze_identity(ROOT, fixture, weights, inputs, library, vector, output, projection_policy)
+        scalar = prep.PrepScalar(enable_softplus=True)
+        identity = freeze_identity(ROOT, fixture, weights, inputs, library, vector, output,
+                                   projection_policy, scalar=scalar)
         selected_projection = ProjectionPolicy(projection_policy)
         if selected_projection is ProjectionPolicy.IndependentK512:
             from .projection_driver import GDN_PROJECTION_PROFILE
@@ -647,7 +669,7 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         matrix = d.MatrixService(lib)
         coordinator = FullBlockCoordinator(weights,
             {phase: inputs[phase + '.hidden.bf16le'][:rows * 2048] for phase in ('cold128', 'carried128')},
-            matrix=matrix, vector=vector, rms_policy=rms_policy,
+            matrix=matrix, vector=vector, scalar=scalar, rms_policy=rms_policy,
             projection_policy=projection_policy, observe=record)
         for phase, cold in (('cold128', True), ('carried128', False)):
             remaining = budget_seconds - (time.monotonic() - start)
@@ -658,6 +680,8 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
                 break
         report = coordinator.report()
         verification = final_identity(identity, ROOT, fixture)
+        verification['scalar_arithmetic_binding_unchanged'] = (
+            report['scalar_arithmetic_binding'] == identity['scalar_arithmetic_binding'])
         verification['output_files_unchanged'] = all((output / name).stat().st_size == item['bytes'] and
             sha((output / name).read_bytes()) == item['sha256'] for name, item in output_files.items())
         complete = coordinator.roots.generation == 2 and all(

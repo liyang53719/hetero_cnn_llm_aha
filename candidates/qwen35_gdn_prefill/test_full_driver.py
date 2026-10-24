@@ -185,6 +185,121 @@ class FullCoordinatorControlTests(unittest.TestCase):
     def start(self):
         self.c.start('cold', cold=True, expected_generation=0)
 
+    def test_scalar_modified_before_constructor_is_rejected_before_allocation(self):
+        from .test_scalar_identity import bare
+        scalar = bare()
+        for method in ('op', '_exp_node', '_soft_node', 'acquire', 'release'):
+            with self.subTest(method=method), patch.object(scalar, method, lambda *args: 0):
+                with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+                    f.FullBlockCoordinator({}, {}, matrix=self.c.matrix, vector=self.c.vector, scalar=scalar)
+        for value in (False, 1):
+            scalar.enable_softplus = value
+            with self.assertRaisesRegex(ValueError, 'explicitly Softplus-enabled'):
+                f.FullBlockCoordinator({}, {}, matrix=self.c.matrix, vector=self.c.vector, scalar=scalar)
+        # Standalone DecayScalar guards do not widen full-block admission.
+        from ..qwen35_35b_exp.scalar import DecayScalar
+        with self.assertRaisesRegex(ValueError, 'explicitly Softplus-enabled'):
+            f.FullBlockCoordinator({}, {}, matrix=self.c.matrix, vector=self.c.vector, scalar=bare(DecayScalar))
+
+    def test_source_snapshot_rejects_scalar_drift_before_writing_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(f, 'verify_library', return_value=(None, None, self.c.vector.backend_identity)):
+                with patch.object(self.c.scalar, 'op', lambda *args: 0):
+                    with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+                        f.freeze_identity(root, root, {}, {}, root / 'not-loaded', self.c.vector,
+                                          root, scalar=self.c.scalar)
+                with patch.object(f.prep.PrepScalar, 'op', lambda *args: 0):
+                    with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+                        f.freeze_identity(root, root, {}, {}, root / 'not-loaded', self.c.vector,
+                                          root, scalar=self.c.scalar)
+            self.assertEqual(list(root.iterdir()), [])
+
+    def test_scalar_instance_and_class_binding_are_frozen_before_launch(self):
+        with patch.object(self.c.scalar, 'op', lambda *args: 0):
+            with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+                self.start()
+        with patch.object(f.prep.PrepScalar, 'op', lambda *args: 0):
+            with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+                self.start()
+        with patch.object(f.chunk, 'ep', SimpleNamespace(operation=lambda policy: 'softplus')):
+            with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+                self.start()
+        self.assertFalse(self.c.launched)
+
+    def test_scalar_configuration_and_owner_selection_are_frozen(self):
+        for target, name, value in ((self.c.scalar, 'enable_softplus', False),
+                                    (self.c.scalar, 'enable_softplus', 1),
+                                    (self.c.chunk, 'exp_policy', 'different'),
+                                    (self.c.prep, 'gate_policy', 'different'),
+                                    (self.c.prep, 'reduction_policy', 'different')):
+            with self.subTest(field=name, value=value), patch.object(target, name, value):
+                with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed|shared owner/bank/service replaced'):
+                    self.start()
+        self.assertEqual(self.c.report()['scalar_arithmetic_binding']['implementation'], 'PrepScalar')
+        self.assertIsNone(self.c.report()['scalar_arithmetic_binding']['enable_ieee_exp'])
+
+    def test_scalar_mutation_inside_nonterminal_tick_is_rejected_immediately(self):
+        self.start()
+        original = self.c.active.tick
+        def mutated_tick(**controls):
+            event = original(**controls)
+            self.c.scalar.op = lambda *args: 0
+            return event
+        self.c.active.tick = mutated_tick
+        with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+            self.c.tick()
+        self.assertIsNone(self.c.response)
+        self.assertEqual(self.c.roots.generation, 0)
+        self.assertEqual(self.c.commands, [])
+
+    def test_scalar_mutation_after_intermediate_observer_cannot_launch_next_owner(self):
+        def mutate(*args):
+            self.c.scalar._exp_node = lambda *args: 0
+        self.c.observe = mutate
+        self.start()
+        with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+            self.until(lambda: bool(self.c.commands))
+        self.assertEqual(len(self.c.test_launches), 1)
+        self.assertEqual(self.c.roots.generation, 0)
+        with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+            self.c.report()
+
+    def test_final_scalar_callback_cannot_issue_success_report(self):
+        def mutate(phase, role, report, outputs):
+            if role == 'output':
+                self.c.scalar.op = lambda *args: 0
+        self.c.observe = mutate
+        self.start()
+        with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+            self.until(lambda: self.c.response is not None)
+        # Output callback is after the software commit, not a rollback facility.
+        self.assertEqual(self.c.roots.generation, 1)
+        with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+            self.c.report()
+
+    def test_final_acceptance_guard_cannot_split_joint_publication(self):
+        self.start()
+        self.final_pending()
+        self.c.tick()  # Final ACK: held successful terminal, no publication yet.
+        self.assert_uncommitted()
+        original = self.c.active.tick
+        def mutated_acceptance(**controls):
+            event = original(**controls)
+            self.c.scalar.op = lambda *args: 0
+            return event
+        self.c.active.tick = mutated_acceptance
+        with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+            self.c.tick()
+        # The guard fails only AFTER the no-fallible-check joint fence.
+        self.assertEqual(self.c.roots.generation, 1)
+        for name in ('history', 'state', 'output'):
+            region = self.c.memory.regions[self.c.plan[name]]
+            self.assertTrue(region.published)
+            self.assertEqual(getattr(self.c.roots, name), region.base)
+        with self.assertRaisesRegex(ValueError, 'Scalar arithmetic binding changed'):
+            self.c.report()
+
     def test_vector_backend_identity_is_frozen_before_launch(self):
         self.c.vector.backend_identity = replace(self.c.vector.backend_identity,
                                                  implementation_version='different')
@@ -485,6 +600,7 @@ class IdentityReceiptTests(unittest.TestCase):
                 (input_fixture.gdn, 'load_payload', ({}, {})),
                 (f.d, 'library_from_environment', Path(directory) / 'not-loaded.so'),
                 (f, 'freeze_identity', {}), (f, 'final_identity', {'source_unchanged': True}),
+                (f.prep, 'PrepScalar', object()),
                 (f.C, 'CDLL', SimpleNamespace(td_reset=lambda: 0)),
                 (matrix_service, 'configure_library', SimpleNamespace(td_reset=lambda: 0)),
                 (f.d, 'MatrixService', object()), (f, 'FullBlockCoordinator', coordinator))

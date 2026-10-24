@@ -1,0 +1,32 @@
+{
+  "actual_execution_authorized": false,
+  "baseline": {
+    "bytes": 59696,
+    "sha256": "a81397f0034a18e8973200e77edee6d575e841d0744f54e0e498ca0251b420a0"
+  },
+  "baseline_policy_id": "tick-boundary-metadata-integrity-v1",
+  "call_return_exception_outside_tick_unchanged": true,
+  "dispatcher_and_other_subscribers_unchanged": true,
+  "evidence_hook_counts": {
+    "_attention": 5,
+    "_matrix_step": 4,
+    "_write": 2,
+    "tick": 3
+  },
+  "filtered_checks": [
+    "thread",
+    "exact_owner",
+    "exact_tick_frame_when_tick",
+    "ancestor_active_tick_128"
+  ],
+  "only_normal_line_inside_exact_tick_without_error": true,
+  "op_policy_unchanged": "op-evidence-boundary-v1",
+  "original_integrity_sampling_equivalent": false,
+  "policy_id": "event-only-owner-lines-v1",
+  "scalar_return_anchors_unchanged": 6,
+  "schema": "attention-event-only-owner-lines-policy-v1",
+  "successor": {
+    "bytes": 61922,
+    "sha256": "a11a11d5102feaa5b72b9a31d944530ceb627a371176240359498c0d6f8fa8e2"
+  }
+}

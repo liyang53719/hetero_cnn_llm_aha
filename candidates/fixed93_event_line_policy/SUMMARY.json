@@ -1,0 +1,118 @@
+{
+  "author_synthetic_result": {
+    "additional_test_only_subscriber": true,
+    "all_14_hook_fields_presence_events_and_fences_equal": true,
+    "exception_resume_tick_lifecycle_unchanged": true,
+    "external_wall_seconds": 0.8161226600059308,
+    "field_slots": 40,
+    "forbidden_attempts": {},
+    "full_checks_per_variant": 800,
+    "guard_cases": [
+      "thread",
+      "owner",
+      "wrong_tick",
+      "detached",
+      "depth",
+      "outside_tick"
+    ],
+    "independent_test_rerun": false,
+    "internal_wall_seconds": 0.7459674270066898,
+    "normal_nonhook_cases": 8,
+    "observed_exit": 0,
+    "original_real_trace_dispatcher": true,
+    "original_wholeblock_listener": true,
+    "other_listener_delivery_identical": true,
+    "other_listener_lines_per_variant": 4400,
+    "retained_hook_count": 14,
+    "scalar_consumers": 6,
+    "scope": "Original observer/dispatcher/Wholeblock CodeTypes with synthetic owner, service, profile, ABI metadata, frame locals and sinks. No model/native import or computation; not full 48-domain execution.",
+    "source_before_after_unchanged": true,
+    "status": "PASS_EVENT_ONLY_OWNER_LINES_SOURCE_SYNTHETIC_ONLY",
+    "ticks_per_benchmark_variant": 400
+  },
+  "integrity_limit": {
+    "arbitrary_in_process_tampering_guarantee": false,
+    "filter_only_normal_nonhook_line_inside_proven_live_tick_without_error": true,
+    "first_error_and_detection_timing_may_differ": true,
+    "old_per_line_integrity_sampling_equivalent": false,
+    "persistent_bad_matrix_locals_reject_at_applicable_hook": true,
+    "persistent_ownership_changes_reject_at_applicable_retained_identity_point": true,
+    "thread_exact_owner_exact_tick_frame_and_bounded_ancestry_retained": true,
+    "transient_locals_or_cheap_identity_restored_before_applicable_retained_hook_or_event_can_escape": true
+  },
+  "packaging": {
+    "all_five_original_files_byte_identical": true,
+    "baseline_sources_or_model_payloads_copied": false,
+    "original_source_manifest_published": false,
+    "original_tests_modified": false,
+    "original_tests_or_actual_rerun": false,
+    "raw_receipts_or_runtime_arrays_published": false
+  },
+  "performance_limit": {
+    "M128_projection_or_time_guarantee": false,
+    "actual_M2_speedup_measured": false,
+    "real_native_ABI_cost_measured": false,
+    "recorded_ratio_is_only_mock_metadata_microbenchmark": true,
+    "reported_synthetic_median_old_over_new_cpu_ratio": 1.1216329957914672,
+    "static_body_positions": 193,
+    "static_nonhook_positions": 179,
+    "static_positions_are_not_runtime_callback_counts_or_speed_ratio": true
+  },
+  "policy_id": "event-only-owner-lines-v1",
+  "prior_policy_ids": [
+    "tick-boundary-metadata-integrity-v1",
+    "op-evidence-boundary-v1"
+  ],
+  "provenance": {
+    "author_cold_result": {
+      "bytes": 3279,
+      "sha256": "08003452b33a58e01eb5dc2de3e8713efcd815cd921dc78ddfa1f46868addd0e"
+    },
+    "cold_seal": {
+      "bytes": 1251,
+      "sha256": "696cdcd67e4ad6382b5f8322a0d81de72d3f6f84f09d946044db8f4169b09be3"
+    },
+    "frozen_source_manifest": {
+      "bytes": 1408,
+      "sha256": "809219c62f171460a255717d8a79f80449095b7bce2a77b5f1f521ad7637676a"
+    },
+    "independent_source_synthetic_review": {
+      "bytes": 14374,
+      "sha256": "39aa62754886b456d21e69841082f67e58f8389f02acba4c24f4e2d5be087c61"
+    }
+  },
+  "qualification": {
+    "M128_authorized": false,
+    "M2_executed_in_source_controls": false,
+    "RTL_pass": false,
+    "actual_authorized": false,
+    "actual_execution_authorized": false,
+    "fullblock_pass": false,
+    "model_executed_in_source_controls": false,
+    "native_executed_in_source_controls": false,
+    "next_gate": "A separately pinned successor must consume the new line policy plus prior tick/op policies in source, review, root authority and result. Prior 0526 authority does not authorize this change.",
+    "numerical_acceptance": false
+  },
+  "schema": "event-only-owner-lines-public-source-synthetic-summary-v1",
+  "source_scope": {
+    "all_14_hook_consumer_bodies_byte_identical": true,
+    "call_return_exception_unknown_outside_tick_and_failed_state_routes_unchanged": true,
+    "changed_existing_methods": [
+      "__init__",
+      "_trace"
+    ],
+    "dispatcher_and_original_wholeblock_listener_unchanged": true,
+    "hook_counts": {
+      "_attention": 5,
+      "_matrix_step": 4,
+      "_write": 2,
+      "tick": 3
+    },
+    "identity_cheap_identity_integrity_line_bodies_byte_identical": true,
+    "immutable_exact_code_to_line_table": true,
+    "production_fields_events_fences_codec_schedule_and_scalar_consumers_changed": false,
+    "unchanged_original_methods": 28,
+    "whole_module_inverse_ast_equal_per_independent_review": true
+  },
+  "status": "GO_EVENT_ONLY_OWNER_LINES_SOURCE_SYNTHETIC_ONLY"
+}

@@ -1644,3 +1644,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 实测loop CPU16.407840106秒/wall16.902397798秒；相对0503 frame-cache历史单次降低40.34399%/40.36511%，相对0417new CPU降低49.54556%。两种历史比较分开，不能拼成同期paired benchmark或M128/6600秒保证。
 - ONGOING / TEMP：四owner方法的193静态line位置中14是真实字段/event hook；下一独立line契约拟只在同真实tick且无stickyerror时跳无产物line的深检查，保thread/owner/frame归属、所有exception和hook原context检查。该静态比例不是动态速度，瞬时locals/身份恢复检测差异必须明示。目前只准实现/合成，未实际执行新line版。
 - 完整128-token block未通过，五block完整RTL仍0/5，无新硬件利用率实测。原失联运行、入口FAIL和不完整profile均保留；没有清理或重写历史。
+
+## PASS（有限合成）/ TEMP：Attention局部真实event-line策略（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_event_line_policy/` 9文件便携原源码/patch/policy/测试摘录。入树仅pins/hash、3 Python内存compile通过，未重跑原cold或actual。五原件逐字不变，无原运行权限、日志或payload。
+- 独立新契约：同真实tick且无sticky error时，Attention非hook line仅核thread/owner/frame归属后早返。所有call/return/exception、tick外、shared dispatcher与另一个listener原样；原14个真实line hook和6个scalar return消费者完整保留。hook表在构造末尾memory points都解析后建立。
+- 四函数193个静态主体line位置中14个hook、179个无字段/event产出；这是静态位置不是动态次数或速度比。matrix_step的8个非hook位置原有context/opcode/col/causal检查仍在4个保留hook原样重验；同tick内locals/cheap身份瞬变恢复可能漏检，持久错误到hook拒绝，错误发现时刻可能延后。不能称旧逐line防篡改等价。
+- 合成独审：两模块关系/逆AST成立，28个其余方法逐字；14原consumer CodeTypes、6scalar40槽、真实dispatcher另一listener4400line/400tick记录一致，每400tick两臂full核验均800。约1.12倍mock仅合成，不外推M2。
+- 本包只source/synthetic；后续0549的实际M2单臂另行source-bound验证，不由该公开包授予运行或M128资格。完整128-token block及五block RTL仍未通过，无新利用率实测；旧失败原件不改。

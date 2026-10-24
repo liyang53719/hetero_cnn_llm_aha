@@ -2013,3 +2013,10 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 新增 opt-in 测试只注入 `_compute` 的合成矩阵写入与单 UT 相位，原 ChunkOwner `_op`/`_mul_add`/`_matmul`/tick/ACK/drain 和真实 Vector16 不替换；明确 R2 backend、host_batch=True、fatal30不变，复用已验证库无编译。完整64×128×64 UT执行32768 native Mul→Add batch及256 pair Mul，4096终值对照NumPy分离舍入，row15/col0的16lane完整128K独立acc链共4096中间word及Add lane/Mul-Add聚合flags对照strict整数。没有全平面独立flags或全部Mul lane flags资格。
 
 首次执行前独审修正tick后position偏到下一K、参考acc依赖native输入两处测试缺陷。根实际5测试（3native、2不加载库负例）0skip、1.682秒unittest/1.838724377秒payload、exit0；1CPU/512MiB/50秒CPU/55秒alarm及外层GNU timeout60秒+2秒KILL，audit禁派生进程/网络，1679文件前后hash一致。不是既有owned-group supervisor运行证明。包括无库/错backend拒绝且CDLL禁止、UF3首Mul失败不发Add、接受结果写后abort真实排空、最后ACK背压。相位耗尽原owner必须Protocol失败，无output/state写、发布、commit/generation；不能称完整chunk/M128或block成功。五完整RTL仍0/5，Qwen2旧M128UNKNOWN，无新MAC利用率实测。仅准备本地小批，远端发布仍待确认，无清理。
+
+
+## PASS（真实 Prep/producer → native UT/QK 软件切片）/ INCOMPLETE（完整 M128/block/RTL）：2026-10-23
+
+新增 opt-in 单测试，无 `_compute`/`_op`/`_mul_add` 或 native 函数替换。合成 raw Conv/AB 参数经原 Prep 实际计算128 token并发布，再以真实R2 Vector16、host_batch=True、fatal30运行原ChunkOwner的head0/chunk0 producer及完整UT/QK；原scalar/exp不改。819200 Prep words对照现有Fraction/RNE近似配方，其中49408活动字段、769792格式零填充；87040 producer words与8192UT/QK输出对照独立NumPy/exp配方，不是官方PyTorch精度或全中间值/flags验收。实际65536 native batch+5280 single，非硬件周期。
+
+R1首次runner错误禁止原Prep来源验证所需git show，0.200秒error发生于admission前，证据保留，不算数值失败/PASS。R2只放行两次完全固定argv/cwd、固定git哈希的只读源码读取，原10秒timeout不改；1CPU/512MiB/50CPU/55alarm、GNU timeout60秒+2秒KILL，1684文件前后hash一致。根实际1测试5.427秒/5.551884267秒payload、0skip/error/failure、exit0，无编译或RTL。最终QK ACK后接受首个solve_v读，原abort/drain退出Aborted，chunks_started1/completed0，output/state未写、scratch/output/state未发布，无generation commit。五完整RTL仍0/5、Qwen2旧M128UNKNOWN、无新MAC利用率。仅本地小批，远端发布待确认，无清理。

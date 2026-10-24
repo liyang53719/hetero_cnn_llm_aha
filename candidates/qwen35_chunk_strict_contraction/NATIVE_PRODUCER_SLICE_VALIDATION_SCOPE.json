@@ -1,0 +1,122 @@
+{
+  "status": "PASS_NATIVE_RAW_PREP_TO_CHUNK0_UT_QK_SLICE_ONLY",
+  "incomplete": [
+    "complete chunk",
+    "complete M128 chunk chain",
+    "all heads",
+    "real convolution/projections/model weights",
+    "official PyTorch numerical validation",
+    "full block",
+    "Chisel/HardFloat/RTL",
+    "hardware utilization"
+  ],
+  "base_commit": "52e8d94def612f6c16e175ee028fc0eb95572ec8",
+  "date_utc": "2026-10-23",
+  "arithmetic_backend": "finite_mul_tininess_r2",
+  "fatal_mask": 30,
+  "host_batch": true,
+  "instance_arithmetic_or_compute_hooks": false,
+  "source_hashes": {
+    "candidates/qwen35_chunk_strict_contraction/test_native_producer_slice.py": "cd7601bd9f40ddc882b2a2fc9895bfdd1119ed220d9a690e4cc1c714f4a36ce3",
+    "candidates/qwen35_chunk_strict_contraction/real_producer_slice.py": "f9c30815362136301e83660a71647736ab31cab2a1971fe930e945b7da3e51ee",
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "d8a7ce5456507d5f29423434aa3d985b4ccff50744f832f5b06b7cfebb81c533",
+    "candidates/qwen35_gdn_prefill/prep/model.py": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/prep/test_model.py": "bf0d7123a903b203f79e38d4d07cb0943a481e0454ac4d025013dd18effe1c62",
+    "candidates/qwen35_gdn_prefill/prep/reduction.py": "326a10cea54338e4168b2150f27820d7ca40283e562d6beea6256e77113cbca1",
+    "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+    "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe"
+  },
+  "library_sha256": "b04209e85923fc858092ec6019e6b183cdc92a0afabed75cbf63179a83302bd2",
+  "execution": {
+    "tests": 1,
+    "skips": 0,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 5.55188426701352,
+    "pinned_files": 1684,
+    "pre_post_hashes_match": true,
+    "source_identity_git_shows": 2,
+    "hardware_simulation": false,
+    "complete_block": false,
+    "unittest_seconds": 5.427,
+    "exit_code": 0,
+    "cpu_affinity_count": 1,
+    "address_space_bytes": 536870912,
+    "cpu_limit_seconds": 50,
+    "payload_alarm_seconds": 55,
+    "outer_timeout_seconds": 60,
+    "outer_kill_after_seconds": 2,
+    "compile_processes": 0,
+    "supervision": "GNU timeout plus same-process resource limits; two exact read-only git show subprocesses with original timeout 10 seconds; no owned-group supervisor proof"
+  },
+  "comparison": {
+    "prep_words_including_padding": 819200,
+    "active_head0_prep_words": 49408,
+    "zero_padding_prep_words": 769792,
+    "producer_matrix_words": 87040,
+    "ut_qk_final_words": 8192,
+    "all_arithmetic_intermediates_compared": false,
+    "complete_independent_flags_oracle": false,
+    "oracle": "Fraction/RNE existing approximation recipe for Prep; NumPy separately rounded FP32 and existing exp recipe for producer and UT/QK; not official PyTorch accuracy"
+  },
+  "native_counts": {
+    "mul_add_calls": 65536,
+    "single_calls": 5280,
+    "mul_issues": 68608,
+    "add_issues": 67744,
+    "mul_lane_operations": 1097728,
+    "add_lane_operations": 1050784
+  },
+  "chunk_counts": {
+    "read_requests": 76449,
+    "write_requests": 6976,
+    "write_acks": 6976,
+    "scratch_ack_bytes": 446464,
+    "exp_negative_calls": 2209,
+    "exp_saturations": 0,
+    "chunks_started": 1,
+    "chunks_completed": 0
+  },
+  "terminal": {
+    "status": "Aborted",
+    "reason": "Accept first solve_v RHS read after final QK ACK, then actual abort/drain before consuming data",
+    "staging_complete": false,
+    "output_state_written": false,
+    "output_state_scratch_published": false,
+    "generation_advanced": false
+  },
+  "attempts": [
+    {
+      "name": "R1",
+      "status": "FAIL_RUNNER_ALLOWLIST_BEFORE_PREP_ADMISSION",
+      "tests": 1,
+      "errors": 1,
+      "unittest_seconds": 0.2,
+      "payload_seconds": 0.3383237470407039,
+      "reason": "Audit prohibited required read-only committed-source git show; no numerical PASS",
+      "artifact_hashes": {
+        "runner.py": "665dba9ce5d447fe4cb2b8db7afcba169aa06bcb5b3d8277e5a74c8e0f473cd5",
+        "pins.json": "553e1c65634462f4a289e53af2b3554d5e6a765f7599ec9620623dd0fc646dd3",
+        "result.json": "3aff630d5d52cc4aaa31d69584c4bd7ade3e9eb4148bb48852719ea58fb90d64",
+        "run.log": "fa898b47ee46e1db1103b0501286ded37da7c372c532554dd30982e568eb954d"
+      }
+    },
+    {
+      "name": "R2",
+      "status": "PASS_LIMITED_NATIVE_SLICE",
+      "artifact_hashes": {
+        "runner.py": "9edf8554494f02c7d6522ab0bc0246afb0c900c028830639cfa2d832cd8ab80b",
+        "pins.json": "08be78a2c601efa3ec19ab5d6d16b47bf9538e725f69d0cd26a3149c6471290d",
+        "result.json": "2454e855c9e18fcd2ac97e5006ae061f9b1d78544d7063e051c6b93a2d21f320",
+        "run.log": "0ca1459c3deba86aeab477d9217e1a7ff95ecca061e56e96c711a5af358cbf6b"
+      }
+    }
+  ]
+}

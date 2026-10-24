@@ -16,7 +16,7 @@ l=importlib.util.module_from_spec(spec);spec.loader.exec_module(l)
 
 
 class LaunchTests(unittest.TestCase):
-    def invoke(self, directory, *, denied=False, cpu=True, child_exit=0, include=False, conv_permission=False):
+    def invoke(self, directory, *, denied=False, cpu=True, child_exit=0, include=False, conv_permission=False, clock_start=100.):
         base=Path(directory);runner=base/'runner.py'
         runner.write_text('def execute(*args, **kwargs):\n result='+repr(dict(exit=child_exit,error=None,cleanup_complete=True))+
             "\n result.update(argv=args[0], stage_stop=kwargs['stage_stop'], absolute_stop=kwargs['absolute_stop'], stdout_limit=kwargs['stdout_limit'], tree_limit=kwargs['tree_limit'])\n return result\n")
@@ -37,7 +37,8 @@ class LaunchTests(unittest.TestCase):
         with patch.object(l,'_load_gate',return_value=fake),patch.object(l,'check_code'),patch.object(l.sys,'executable',str(interpreter)), \
              patch.object(l.os,'sched_getaffinity',return_value={1} if cpu else {0}), \
              patch.object(l.os,'sched_setaffinity') as affinity,patch.object(l.resource,'setrlimit') as limits, \
-             patch.object(l.signal,'signal'),patch.object(l.signal,'setitimer'),patch('builtins.print'):
+             patch.object(l.signal,'signal'),patch.object(l.signal,'setitimer'), \
+             patch.object(l.time,'monotonic',return_value=clock_start),patch('builtins.print'):
             result=l.main(args)
             return result,json.loads((base/'result/PROCESS.json').read_text()),affinity.call_args_list,limits.call_args_list
 
@@ -57,6 +58,19 @@ class LaunchTests(unittest.TestCase):
             self.assertEqual(report['supervision']['absolute_stop']-report['started_monotonic'],325)
             self.assertEqual(report['supervision']['stdout_limit'],4<<20)
             self.assertEqual(report['supervision']['tree_limit'],128<<20)
+
+    def test_deadlines_derive_from_representative_clock_starts(self):
+        # The fractional sample reproduces lossy subtraction of absolute stops.
+        # Compare exact deadline construction, without tolerances or live clocks.
+        for start in (0., 200.00000000000006, (1 << 20) + .125, (1 << 40) + .125):
+            with self.subTest(start=start),tempfile.TemporaryDirectory() as d:
+                _,report,_,_=self.invoke(d,clock_start=start)
+                self.assertEqual(report['started_monotonic'],start)
+                self.assertEqual(report['outer_stop'],start+330)
+                self.assertEqual(report['work_stop'],start+300)
+                self.assertEqual(report['cleanup_stop'],start+325)
+                self.assertEqual(report['supervision']['stage_stop'],start+300)
+                self.assertEqual(report['supervision']['absolute_stop'],start+325)
 
     def test_original_cleanup_denial_creates_no_outputs(self):
         with tempfile.TemporaryDirectory() as d:

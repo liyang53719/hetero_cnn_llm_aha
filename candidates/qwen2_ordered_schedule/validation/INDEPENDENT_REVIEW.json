@@ -1,0 +1,42 @@
+{
+  "status": "PASS_INDEPENDENT_GENERATOR_NUMERIC_REVIEW",
+  "tests": {
+    "isolated": 21,
+    "isolated_optimized": 21
+  },
+  "resources": {
+    "cpu_count": 1,
+    "cpu_seconds": 20,
+    "address_space_bytes": 268435456,
+    "wall_seconds": 25
+  },
+  "wall_seconds": [
+    3.231,
+    3.433
+  ],
+  "findings_fixed": [
+    "pre-retire forged final-key response",
+    "next work before prior owner consumes response"
+  ],
+  "checks": [
+    "disabled run AST equals old implementation",
+    "exact inner patch reconstructs schedule postimage",
+    "same work/response identity and single consume",
+    "result-valid and abort gate pending response",
+    "no ScalarService or owner scalar calls for QK work"
+  ],
+  "files": {
+    "ordered_work.py": "505651c4452f07743e6c59e0457d5e955624a05f343bf7d7869a3e99b2ec9e61",
+    "schedule.py": "4cd2609d2fe1ffffd5d14b9398c45c108b9382c0097d5316502b41486f37cf1b",
+    "selected_schedule.patch": "c11ea09d3481e31d42d69c2261687ed40bbf4f7a3674cd8bbf0942b72f0af4fa",
+    "test_numeric.py": "af816a5c319f759731bedaddd9869eeab6d85bcfeb0cd53497c601051e953a62",
+    "prepare.py": "403ceb998107bddd236825c83710e430e2e6a3467510b692a20ba9d231aaa0e6",
+    "README_CN.md": "1ec9f75577e2e8f8596f0ae0161c85c5e7589fef20e3c76fee8ece2ad88043b8",
+    "SOURCE_PINS.json": "23e9199fafe513b2018546aac71beb8c4f4d66a63ee1120299e81a0da768e739"
+  },
+  "limitations": [
+    "Actual owner hooks not integrated",
+    "Full block/native/RTL not executed",
+    "No hardware cycle or utilization acceptance"
+  ]
+}

@@ -1,0 +1,75 @@
+--- a/candidates/qwen2_resident_matrix/production_qk16_model/schedule.py
++++ b/candidates/qwen2_resident_matrix/production_qk16_model/schedule.py
+@@ -9,11 +9,15 @@
+ from ..ffn_attention.scalar_recipe import exp_negative
+ from ..ffn_public.prefix_arithmetic import ArithmeticFault, finite
+ from ..ffn_public.prefix_owners import PrefixFault
++from .ordered_work import OrderedFoldWork, OrderedRetired
+ 
+ 
+ class ProductionQk16Schedule(PackedSchedule):
+     """Packed QK only; keep the official per-head softmax and legacy PV tail."""
+-    def __init__(self):
++    def __init__(self, *, ordered_fold=False):
++        if type(ordered_fold) is not bool:
++            raise ValueError('ordered_fold must be an explicit Boolean')
++        self.ordered_fold = ordered_fold
+         super().__init__()
+         self.active_qk_keys = 0
+ 
+@@ -48,24 +52,37 @@
+                             tuple(b), depth == 0, final, 8, 255,
+                             tuple((r, 16 * local + r) for local in range(count)
+                                   for r in range(16)) if final else ())
+-                    # Read/check one live selected key at a time, like attPackedSelect.
+-                    # Do not call selected_words(): it checks/copies the entire tile.
+-                    for local in range(count):
+-                        lanes = tuple(result.value[r][16 * local + r] for r in range(16))
+-                        if any(not finite(x) for x in lanes):
+-                            raise ArithmeticFault('selected production QK16 nonfinite lane')
+-                        total = 0
+-                        for lane in lanes:
+-                            total = o._op('add', total, lane)
+-                        dot = o._op('bf', total)
+-                        if not finite(dot):
+-                            raise ArithmeticFault('selected production QK16 nonfinite materialized dot')
+-                        score = o._op('bf', o._op('mul', dot, 0x3db504f3))
+-                        if not finite(score):
+-                            raise ArithmeticFault('selected production QK16 nonfinite materialized score')
+-                        scores.append(score)
+-                        if o._less(maximum, score):
+-                            maximum = score
++                    if self.ordered_fold:
++                        # Consumer-owned progression; no ScalarService requests.
++                        work = OrderedFoldWork(result, count, maximum)
++                        for local in range(count):
++                            retired = yield work
++                            if not work.consume(retired, local):
++                                raise PrefixFault('Protocol', 'foreign, early or unordered fold retirement')
++                            if retired.error:
++                                raise ArithmeticFault('ordered QK strict arithmetic fault at key %d' % local)
++                            score = retired.score
++                            scores.append(score)
++                            maximum = retired.maximum
++                    else:
++                        # Read/check one live selected key at a time, like attPackedSelect.
++                        # Do not call selected_words(): it checks/copies the entire tile.
++                        for local in range(count):
++                            lanes = tuple(result.value[r][16 * local + r] for r in range(16))
++                            if any(not finite(x) for x in lanes):
++                                raise ArithmeticFault('selected production QK16 nonfinite lane')
++                            total = 0
++                            for lane in lanes:
++                                total = o._op('add', total, lane)
++                            dot = o._op('bf', total)
++                            if not finite(dot):
++                                raise ArithmeticFault('selected production QK16 nonfinite materialized dot')
++                            score = o._op('bf', o._op('mul', dot, 0x3db504f3))
++                            if not finite(score):
++                                raise ArithmeticFault('selected production QK16 nonfinite materialized score')
++                            scores.append(score)
++                            if o._less(maximum, score):
++                                maximum = score
+                     # Resume only after the same client's result/done/response drain.
+                     yield PackedConsumerAck(result.tag)
+                 self.active_qk_keys = 0

@@ -1,0 +1,26 @@
+test_abort_never_returns_pending_score_or_releases_result (__main__.OrderedNumeric.test_abort_never_returns_pending_score_or_releases_result) ... ok
+test_all_tail_extents_no_inactive_reads (__main__.OrderedNumeric.test_all_tail_extents_no_inactive_reads) ... ok
+test_default_off_is_exact_old_generator (__main__.OrderedNumeric.test_default_off_is_exact_old_generator) ... ok
+test_fatal_flags_mask_nx_allowed (__main__.OrderedNumeric.test_fatal_flags_mask_nx_allowed) ... ok
+test_generator_rejects_forged_or_out_of_order_work_retirement (__main__.OrderedNumeric.test_generator_rejects_forged_or_out_of_order_work_retirement) ... ok
+test_m1_m2_full_attention_words_and_downstream_order (__main__.OrderedNumeric.test_m1_m2_full_attention_words_and_downstream_order) ... ok
+test_m2_earlier_fold_or_scale_fault_beats_later_nan (__main__.OrderedNumeric.test_m2_earlier_fold_or_scale_fault_beats_later_nan) ... ok
+test_m2_later_scan_fault_preserves_prior_score_and_no_ack (__main__.OrderedNumeric.test_m2_later_scan_fault_preserves_prior_score_and_no_ack) ... ok
+test_m2_rounding_zero_subnormal_finite_overflow_boundaries (__main__.OrderedNumeric.test_m2_rounding_zero_subnormal_finite_overflow_boundaries) ... ok
+test_next_work_waits_previous_owner_consumption (__main__.OrderedNumeric.test_next_work_waits_previous_owner_consumption) ... ok
+test_work_reply_is_held_until_ready_and_no_ack_side_effect (__main__.OrderedNumeric.test_work_reply_is_held_until_ready_and_no_ack_side_effect) ... ok
+test_finite_fold_then_bf_dot_overflow_is_not_committed_or_scaled (_pinned_selected_numeric.ProductionQk16FaultOrderingTests.test_finite_fold_then_bf_dot_overflow_is_not_committed_or_scaled) ... ok
+test_injected_nonfinite_bf_score_cannot_commit_or_retire (_pinned_selected_numeric.ProductionQk16FaultOrderingTests.test_injected_nonfinite_bf_score_cannot_commit_or_retire) ... ok
+test_later_key_nonfinite_does_not_pre_scan_or_erase_first_score (_pinned_selected_numeric.ProductionQk16FaultOrderingTests.test_later_key_nonfinite_does_not_pre_scan_or_erase_first_score) ... ok
+test_nonfinite_current_key_stops_before_fold_or_score (_pinned_selected_numeric.ProductionQk16FaultOrderingTests.test_nonfinite_current_key_stops_before_fold_or_score) ... ok
+test_each_head_finishes_original_softmax_and_legacy_pv_before_next_head (_pinned_selected_numeric.ProductionQk16NumericTests.test_each_head_finishes_original_softmax_and_legacy_pv_before_next_head) ... ok
+test_live_key_cells_and_commit_order_precede_final_ack (_pinned_selected_numeric.ProductionQk16NumericTests.test_live_key_cells_and_commit_order_precede_final_ack) ... ok
+test_m2_actual_generator_output_scores_and_fold_match (_pinned_selected_numeric.ProductionQk16NumericTests.test_m2_actual_generator_output_scores_and_fold_match) ... ok
+test_physical_q_k_v_reads_have_no_cross_head_reuse_or_panel (_pinned_selected_numeric.ProductionQk16NumericTests.test_physical_q_k_v_reads_have_no_cross_head_reuse_or_panel) ... ok
+test_harness_imports_are_stdlib_and_guards_survive_optimization (_pinned_selected_numeric.ColdSourceIsolationTests.test_harness_imports_are_stdlib_and_guards_survive_optimization) ... ok
+test_raw_sources_match_candidate_input_pins (_pinned_selected_numeric.ColdSourceIsolationTests.test_raw_sources_match_candidate_input_pins) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 3.300s
+
+OK

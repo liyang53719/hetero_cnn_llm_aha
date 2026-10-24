@@ -1,0 +1,33 @@
+{
+  "status": "PASS_GENERATOR_NUMERIC_ONLY",
+  "cpu_limit_seconds": 20,
+  "address_space_bytes": 268435456,
+  "cpu_affinity_count": 1,
+  "wall_limit_seconds": 25,
+  "results": [
+    {
+      "mode": "normal",
+      "exit_code": 0,
+      "wall_seconds": 3.2046644120127894,
+      "sha256": "993559670ceb568ccd5f66ca888a80970fbad629f65442e9efa56e8dbd73f6f3"
+    },
+    {
+      "mode": "optimized",
+      "exit_code": 0,
+      "wall_seconds": 3.4073806080268696,
+      "sha256": "4de53d3fe5ac8ddb6a6c28fb1cef0cd36161c984b05d1acfccc9d5f97d664414"
+    },
+    {
+      "mode": "isolated",
+      "exit_code": 0,
+      "wall_seconds": 3.447683460020926,
+      "sha256": "944805aa82d61dc59d3cfb67870a7a96b51929bc0e8720904fa889766c95e63f"
+    },
+    {
+      "mode": "isolated_optimized",
+      "exit_code": 0,
+      "wall_seconds": 3.4691097979666665,
+      "sha256": "6fc9a65c6a170375c80e33f09e6fc5cb9c0bc2b575b55861631ce94ae4750c3d"
+    }
+  ]
+}

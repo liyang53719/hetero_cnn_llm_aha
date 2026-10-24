@@ -1,0 +1,21 @@
+{
+  "status": "TWO_SOFTWARE_PROTOCOL_DEFECTS_REPRODUCED_THEN_FIXED",
+  "failure_log_sha256": {
+    "next_work_failure.log": "1cb55b73712d25c94de9ed39ff71672bb7dff16c089f8d83cb440a5d5ea710c2",
+    "pre_retire_failure.log": "2a9141ef1bfbedf577c8df797591080f057d2ba938db91e68124a669067c86c8"
+  },
+  "findings": [
+    {
+      "test": "test_generator_rejects_forged_or_out_of_order_work_retirement",
+      "before": "One-key work at pre-retire could accept a forged score and yield ACK.",
+      "fix": "Require actual ready-transferred response object and single canonical consume; precise state/key validation."
+    },
+    {
+      "test": "test_next_work_waits_previous_owner_consumption",
+      "before": "Adapter released active before owner consumed final response.",
+      "fix": "Retain old work until terminal state and accepted response consumed; reject early new work."
+    }
+  ],
+  "not_hardware_failures": true,
+  "previous_failures_not_relabelled_pass": true
+}

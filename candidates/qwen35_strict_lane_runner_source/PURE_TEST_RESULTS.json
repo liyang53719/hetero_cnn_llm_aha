@@ -1,0 +1,16 @@
+{
+  "status": "PASS_PURE_PYTHON",
+  "checks": [
+    "execution false blocks admission",
+    "unreviewed backend blocks authorized plan",
+    "missing dependency rejected",
+    "fast-exit oversized log rejected",
+    "terminal timeout rejected",
+    "group existence checks distinguish absent/present",
+    "termination raises into cleanup",
+    "inventory failure still emits FAILED RESULT"
+  ],
+  "JVM_executed": false,
+  "network_attempted": false,
+  "actual_output_absent": true
+}

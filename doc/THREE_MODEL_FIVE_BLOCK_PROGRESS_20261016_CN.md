@@ -1926,3 +1926,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 PASS仅限已实际运行的 Python Fraction/fixture逐字一致性检查；独立源码审查未见阻断缺陷。Scala编译、展开、Treadle和RTL均未运行。冻结输入实际去重41=20+24−3，纠正前节44的计数说明；历史52请求、52Mul+47Add=99真实软件trace不变，旧原始证据不改。
 
 依赖阻塞归因更正：此前25个Maven缺件从未提交网络请求，不是实际访问被拒。本次通过正式 require_escalated 路径尝试下载，沙箱启动在Python执行前失败；独立输出目录不存在，无HTTP结果、无下载成功，不修改受限系统路径或绕过。下载器源码已准备，保留失败记录；缺件仍未补齐。五block完整RTL仍0/5，Qwen2完整M128终态UNKNOWN，未push、无新CI、无清理。
+
+
+## TEMP：单 lane 测试驱动与 Treadle 官方源路径核查（2026-10-22）
+
+新增 candidates/qwen35_strict_lane_runner_source/：强制准入与源码pin、终态容量复核、有界清理及失败receipt保留。实际运行8项纯Python负例/mock检查通过，独审另做5项phase状态mock；无真实子进程/JVM/网络/硬件测试。故意注入inventory失败的FAILED记录是负例，不是硬件失败。公开不含机器PLAN、依赖二进制或私有路径，非standalone硬件运行包。
+
+核官方chiseltest固定d764fdf74652426b57c6eae00d71eac19effd224的13个源文件并验证Git blob身份：显式Treadle路径为ChiselBridge → Scala firrtl2 low lowering → JVM解释器，选定路径无需firtool/SV/原生编译器，但可能生成low FIRRTL。仅SOURCE_ROUTE_VERIFIED，不是运行、数值或资源实测；相对targetDir及无blackbox/extmodule结构门仍须实际执行前核查，执行gate未打开。
+
+缺少25个JAR与沙箱提权启动失败仍阻断实测；原下载失败记录保留，不绕过受限路径。五完整RTL0/5、无新整块利用率证据。无push/CI/清理。

@@ -1,0 +1,496 @@
+--- a/assembly_preflight.py
++++ b/assembly_preflight.py
+@@ -17,7 +17,9 @@
+ MANIFEST = HERE / 'SOURCE_MANIFEST.json'
+ BASE_SHA = 'fb45a594e6cf516f9ce722d5db1279950241083206486e164782367b48811423'
+ R3_SHA = '26928f829488600765cefa2d836f4afe32413e03798ae0eb958bfd016994e13d'
+-CONTRACT = 'original-algorithm-arrays-plus-true-events-and-fixed-attention-v1'
++CONTRACT = 'original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1'
++PV_REUSE_DELTA = {'source/candidates/qwen2_fixed93_attention/owner.py': {'before': {'bytes': 15337, 'sha256': '1e90ecb2e5cf26755c7fe5b7cc201d563afde23af6c27105daeb2387cb5cf443'}, 'after': {'bytes': 15806, 'sha256': 'b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e'}}, 'selected/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala': {'before': {'bytes': 56051, 'sha256': 'a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491'}, 'after': {'bytes': 57109, 'sha256': '3b7f25537da7492d3c706c55129ca5ed0a18d9c2e0ec4f5d9e6e43b1ae2210d4'}}}
++
+ 
+ 
+ def need(ok, message):
+@@ -74,6 +76,49 @@
+     return found
+ 
+ 
++def successor_assembly(base_objects):
++    """Exactly two reviewed byte deltas; all other baseline entries retained."""
++    need(type(base_objects) is list and len(base_objects) == 321, 'exact321 baseline objects')
++    result = {}
++    for item in base_objects:
++        need(type(item) is dict and {'path','bytes','sha256'} <= item.keys(), 'baseline object shape')
++        name = item['path']
++        need(type(name) is str and name not in result and not Path(name).is_absolute() and
++             '..' not in Path(name).parts, 'unique relative baseline namespace')
++        need(type(item['bytes']) is int and item['bytes'] >= 0 and type(item['sha256']) is str and
++             len(item['sha256']) == 64 and all(c in '0123456789abcdef' for c in item['sha256']),
++             'baseline strict byte/hash types')
++        result[name] = dict(bytes=item['bytes'], sha256=item['sha256'])
++    for name, change in PV_REUSE_DELTA.items():
++        need(result.get(name) == change['before'], 'wrong predecessor for exact successor delta: '+name)
++        result[name] = dict(change['after'])
++    return result
++
++
++def validate_successor_identity(manifest):
++    need(type(manifest) is dict and manifest.get('schema') == 'fixed93-pv-reuse-source-manifest-v1' and
++         manifest.get('evidence_contract') == CONTRACT and
++         manifest.get('candidate_identity') == 'fixed93-pv-normalization-reuse-source-candidate-v1' and
++         manifest.get('reviewed_manifest_sha256','missing') is None and
++         manifest.get('predecessor_reviewed_manifest_sha256') == R3_SHA and
++         manifest.get('candidate_review_status') == 'SOURCE_PREPARED_REVIEW_SEPARATE' and
++         manifest.get('old_pass_inherited') is False and manifest.get('actual_execution_authorized') is False,
++         'exact new PV reuse identity; predecessor PASS is not current authority')
++
++
++def validate_successor_domain(manifest, expected, directory, hash_key, size_key, count):
++    hashes, sizes = manifest[hash_key], manifest[size_key]
++    need(type(hashes) is dict and type(sizes) is dict and hashes.keys() == sizes.keys() and len(hashes) == count,
++         'exact successor domain inventory: '+directory)
++    need(all(type(name) is str and not Path(name).is_absolute() and '..' not in Path(name).parts and
++             type(sizes[name]) is int and sizes[name] >= 0 and type(sha) is str and len(sha) == 64 and
++             all(c in '0123456789abcdef' for c in sha) for name,sha in hashes.items()),
++         'strict successor source byte/hash types')
++    need({directory+'/'+name:dict(bytes=sizes[name],sha256=sha) for name,sha in hashes.items()} ==
++         {name:pin for name,pin in expected.items() if name.startswith(directory+'/')},
++         'only exact owner and selected Scala successor changes allowed: '+directory)
++
++
+ def verify(expected_sha):
+     need(sys.flags.isolated and sys.flags.no_site and sys.dont_write_bytecode and not sys.flags.optimize,
+          'python -I -S -B without optimization required')
+@@ -84,14 +129,11 @@
+     raw = checked(MANIFEST)
+     need(digest(raw) == expected_sha, 'reviewed manifest file differs')
+     manifest = json.loads(raw)
+-    need(manifest['schema'] == 'fixed93-fullblock-integration-source-v1' and
+-         manifest['evidence_contract'] == CONTRACT and manifest['reviewed_manifest_sha256'] == R3_SHA,
+-         'wrong source/contract/R3 identity')
++    validate_successor_identity(manifest)
+     base = checked(HERE / 'ASSEMBLY_BASE.json')
+     need(digest(base) == BASE_SHA, 'exact306/selected9/support6 predecessor assembly')
+     base_objects = json.loads(base)['objects']
+-    base_by_path = {p['path']: {'bytes': p['bytes'], 'sha256': p['sha256']} for p in base_objects}
+-    need(len(base_objects) == len(base_by_path) == 321, 'unique predecessor assembly objects')
++    expected_successor = successor_assembly(base_objects)
+     for directory, hash_key, size_key, count in (
+             ('source', 'source_sha256', 'source_bytes', 306),
+             ('selected', 'selected_source_sha256', 'selected_source_bytes', 9),
+@@ -100,10 +142,7 @@
+         need(type(hashes) is dict and type(sizes) is dict and hashes.keys() == sizes.keys() and
+              len(hashes) == count and source_inventory(HERE / directory) == set(hashes),
+              'exact immutable assembly inventory: ' + directory)
+-        need({directory + '/' + name: dict(bytes=sizes[name], sha256=sha)
+-              for name, sha in hashes.items()} ==
+-             {name: pin for name, pin in base_by_path.items() if name.startswith(directory + '/')},
+-             'source/selected/support must remain byte-for-byte predecessor: ' + directory)
++        validate_successor_domain(manifest, expected_successor, directory, hash_key, size_key, count)
+         for name, sha in hashes.items():
+             checked(relative(HERE / directory, name), dict(bytes=sizes[name], sha256=sha), retain=False)
+     for name, pin in manifest['preparation_files'].items():
+--- a/capture/wholeblock.py
++++ b/capture/wholeblock.py
+@@ -16,7 +16,7 @@
+ import threading
+ import types
+ 
+-CONTRACT = 'original-algorithm-arrays-plus-true-events-and-fixed-attention-v1'
++CONTRACT = 'original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1'
+ ANCHORS = json.loads(Path(__file__).with_name('anchors.json').read_text())
+ LIMIT_FIELDS = {'contexts','bank_bytes','max_chunk','max_metadata','max_record','max_records','max_output','max_raw'}
+ TRACE_FIELDS = {'codec','max_trace_call_bytes','max_semantic_bytes','max_listener_count',
+--- a/contract/OBSERVATION_CONTRACT.md
++++ b/contract/OBSERVATION_CONTRACT.md
+@@ -1,6 +1,6 @@
+ # Fixed93 M128 fullblock observation contract proposal
+ 
+-Status: source proposal only. No new actual execution, numerical PASS, resource admission, RTL result or hardware-cycle claim is provided by this document. This is the original public21 complete-block task, not 128 independent M1 jobs and not an expansion of the earlier ABI micro-test's every-physical-bank promise.
++Status: PV-reuse successor source proposal only. Old R3/source/empty-lifecycle PASS is predecessor evidence, not acceptance of this changed owner/observer. No new actual execution, numerical PASS, resource admission, RTL result or hardware-cycle claim is provided by this document. This is the original public21 complete-block task, not 128 independent M1 jobs and not an expansion of the earlier ABI micro-test's every-physical-bank promise.
+ 
+ ## Execution and input boundary
+ 
+@@ -12,7 +12,7 @@
+ 
+ Preserve raw complete arrays of n0, qraw, qr, q, kraw, kr, k, vraw, v, same-live KV, att, o, r, n1, gate, up, silu, act, down and y. Gate/up are accepted resident tile values, never virtual-DDR sentinels. The same-live K/V views provide cache_k/cache_v; layouts and exact copied KV bytes are recorded.
+ 
+-For Attention, preserve all16 named fields and their per-word presence/frequency, using raw unsigned little-endian FP32/BF16-widened words: packed_stripes, fold_before, fold_after, dot_raw, dot_bf16, scale_fp32, score_bf16, score_difference, exp_fp32, denominator_step, probability_fp32, probability_bf16, pv_key_raw, normalizer, pv_final_raw and pv_bf16. Causal-future positions are absent, not invented zeros. Both probability domains retain all8 actual PV16 normalization repetitions and require equality before exporting a read-only representative for the inherited comparator. Every per-key selected16 PV result and its finite-check boundary is retained. Complete field memory is197,614,080 bytes, including presence.
++For Attention, preserve all16 named fields and their per-word presence/frequency, using raw unsigned little-endian FP32/BF16-widened words: packed_stripes, fold_before, fold_after, dot_raw, dot_bf16, scale_fp32, score_bf16, score_difference, exp_fp32, denominator_step, probability_fp32, probability_bf16, pv_key_raw, normalizer, pv_final_raw and pv_bf16. Causal-future positions are absent, not invented zeros. For every causal key, retain one actual FP32 normalization evaluation and all8 actual pre-BF16 Matrix operands plus all8 actual BF16 operands. Require the first use to match the actual normalization result and all7 reuses to match the first actual use, in order, before exporting a read-only representative for the inherited comparator. No skipped Scalar evaluation is fabricated as an observation. Every per-key selected16 PV result and its finite-check boundary is retained. Complete field memory is197,614,080 bytes, including presence.
+ 
+ Attention exp retains the actually executed1-or17 primitive entries as compact typed records, at most272 bytes per causal key, plus coordinates/result. These records come from actual ScalarService returns, never from an oracle. Ordinary Scalar op returns are not a newly promised fullblock trace domain.
+ 
+--- a/fullblock_runtime.py
++++ b/fullblock_runtime.py
+@@ -27,7 +27,7 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ SOURCE = HERE / 'source'
+-CONTRACT = 'original-algorithm-arrays-plus-true-events-and-fixed-attention-v1'
++CONTRACT = 'original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1'
+ CODEC_FIELDS = frozenset(('contexts', 'bank_bytes', 'max_chunk', 'max_metadata',
+                          'max_record', 'max_records', 'max_output', 'max_raw'))
+ TRACE_FIELDS = frozenset(('codec', 'max_trace_call_bytes', 'max_semantic_bytes',
+--- a/integration/EVIDENCE_INVENTORY.json
++++ b/integration/EVIDENCE_INVENTORY.json
+@@ -177,7 +177,7 @@
+     "No historical PASS inherited"
+   ],
+   "diagnostic_count": 1,
+-  "evidence_contract": "original-algorithm-arrays-plus-true-events-and-fixed-attention-v1",
++  "evidence_contract": "original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1",
+   "expected_counts_prediction_only": {
+     "attention_active_fma": 632291328,
+     "attention_normal_groups": 19200,
+--- a/integration/interface.py
++++ b/integration/interface.py
+@@ -11,7 +11,7 @@
+ from pathlib import Path
+ import sys
+ 
+-CONTRACT = 'original-algorithm-arrays-plus-true-events-and-fixed-attention-v1'
++CONTRACT = 'original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1'
+ 
+ 
+ class MissingPrerequisite(ValueError):
+@@ -154,6 +154,14 @@
+ 
+ 
+ def validate_observation(capture, report):
++    need(type(report) is dict and report.get('schema') == 'fixed93-fullblock-attention-pv-reuse-observation-v1',
++         'PV reuse observation schema required')
++    expected_reuse = {'normalization_evaluations_per_causal_key':1, 'probability_use_repeats':8,
++                      'normalization_reuses_per_causal_key':7, 'observed_normalization_reuses':693504}
++    need(all(type(report.get(k)) is int and report[k] == v for k,v in expected_reuse.items()) and
++         report.get('scalar_schedule_changed') is True and
++         report.get('both_probability_domains_repeats_verified') is True,
++         'actual one normalization/eight operands/seven reuses contract required')
+     need(type(report) is dict and report.get('complete_observation') is True and
+          report.get('control_only') is False and str(report.get('status', '')).startswith('COMPLETE_'),
+          'complete actual Fixed93 observation required')
+--- a/integration/runner.py
++++ b/integration/runner.py
+@@ -347,7 +347,7 @@
+                 report['algorithm_artifact_seal']=seal_algorithm_artifacts(out,report,capture)
+                 report['wholeblock_observation']=wholeblock.seal(report=report)
+                 validate_wholeblock_seal(report['wholeblock_observation'],report['algorithm_artifact_seal'])
+-                report['evidence_contract']='original-algorithm-arrays-plus-true-events-and-fixed-attention-v1'
++                report['evidence_contract']='original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1'
+                 report['unobserved_native_silu_internal_exp_nodes']=17
+                 report['unobserved_native_silu_pre_bf16_product']=True
+                 report['every_dense_physical_bank_recorded']=False
+--- a/observation/event_stream.py
++++ b/observation/event_stream.py
+@@ -174,7 +174,7 @@
+         require(not self.failed and self.seal is None, 'event stream unavailable')
+         raw = event_bytes(dict(sequence=self.count, kind=kind, tick=tick, **values))
+         try:
+-            metadata = {'schema': 'fixed93-attention-event-v1', 'sequence': self.count, 'kind': kind}
++            metadata = {'schema': 'fixed93-attention-event-v2', 'sequence': self.count, 'kind': kind}
+             self.fmt.metadata_bytes(metadata, EVENT_METADATA_MAX)
+             self.writer.event(raw, metadata)
+         except BaseException:
+--- a/observation/fullblock_attention.py
++++ b/observation/fullblock_attention.py
+@@ -1,8 +1,10 @@
+ """Source-only M<=128 Fixed93 observer adapter; no DUT or native import.
+ 
+ Construct around one already admitted owner operation. Observation never invokes
+-an owner/service primitive; sys.settrace reads actual locals/returns. Production
+-arithmetic, cache, FIFO and ownership stay with unchanged original classes.
++an owner/service primitive; sys.settrace reads actual locals/returns. Candidate
++normalization evaluates once and reuses seven times; all eight
++FP32 probability operands are read at the actual pre-BF16 Matrix boundary.
++TEMP source-only candidate: not integrated or admitted as a fullblock run.
+ """
+ from array import array
+ import ast
+@@ -17,6 +19,7 @@
+ import types
+ from .source_guard import (OWNER_MODULE, CLIENT_MODULE, MATRIX_MODULE, ARITHMETIC_MODULE,
+     PROFILED_MODULE, OFFICIAL_MATRIX_MODULE, PROFILE_MODULE, REVIEWED_MANIFEST_SHA256,
++    CANDIDATE_IDENTITY, PREDECESSOR_REVIEWED_MANIFEST_SHA256,
+     SELECTED, SENTINEL, require, sha, verify_closure, verify_loaded)
+ from .event_stream import EventStream, CODEC_PINS
+ 
+@@ -106,7 +109,7 @@
+                     'source_manifest_sha256', 'native_library_path', 'native_library_sha256'}
+         require(type(trace_limits) is dict and set(trace_limits) == required, 'explicit exact trace_limits schema required')
+         require(array('I').itemsize == 4, 'uint32 observation storage required')
+-        require(trace_limits['schema'] == 'fixed93-attention-trace-limits-v1', 'trace limits schema')
++        require(trace_limits['schema'] == 'fixed93-attention-pv-reuse-trace-limits-v1', 'trace limits schema')
+         require(type(trace_limits['max_m']) is int and 1 <= trace_limits['max_m'] <= 128, 'trace M cap')
+         require(type(trace_limits['max_field_bytes']) is int and
+                 field_storage_bytes(trace_limits['max_m']) <= trace_limits['max_field_bytes'], 'field storage budget missing/too small')
+@@ -162,6 +165,9 @@
+         point('inverse', '_attention', "inverse = self._op('div', 1065353216, total)")
+         point('normalize', '_attention', "probability = self._op('mul', probability, inverse)")
+         point('output', '_attention', 'yield from self._write(')
++        # A generator call event repeats on resume. This first-statement line
++        # executes exactly once for each real helper invocation, before BF16.
++        point('matrix_input_fp32', '_matrix_step', "a = tuple((self._op('bf', x) >> 16 for x in a))")
+         point('matrix_input', '_matrix_step', 'result = (yield LegacyRequest(')
+         point('pv_check', '_matrix_step', 'if lanes is not None and any((not finite(x) for x in lanes)):')
+         point('pv_pass', '_matrix_step', 'return lanes')
+@@ -176,6 +182,8 @@
+         self.fields = {}
+         self.fold_coord, self.fold_index = None, 0
+         self.event_counts = Counter()
++        self.pending_normalization = None
++        self.normalization_reuse_count = 0
+         self.lease, self.last_packed_tag, self.completed_groups = None, -1, 0
+         self.pending_memory = None
+         self.last_memory_tag = -1
+@@ -336,7 +344,28 @@
+         # success-state repair or successful completeness claim is possible.
+         if self.error is not None:
+             return
+-        if kind == 'packed_start_fire':
++        if kind == 'pv_normalize':
++            require(self.pending_normalization is None and e['col'] == 0,
++                    'normalization must occur once immediately before first use')
++            coord = e['head'], e['token'], e['key']
++            require(0 <= e['key'] <= e['token'] < self.job['m'], 'noncausal normalization')
++            self.pending_normalization = (coord, e['fp32_word'])
++        elif kind == 'pv_probability_fp32_use':
++            h, t, k, use = e['head'], e['token'], e['key'], e['col'] // 16
++            require(type(e['is_reuse']) is bool and e['is_reuse'] == (use > 0), 'probability reuse tag mismatch')
++            if use == 0:
++                require(self.pending_normalization == ((h, t, k), e['probability_word']),
++                        'first actual probability use differs from actual normalization return')
++                self.pending_normalization = None
++            else:
++                f, m = self.fields['probability_fp32'], self.job['m']
++                start = ((h * m + t) * m + k) * 8
++                require(self.pending_normalization is None and f['frequency'][start] == 1 and
++                        f['frequency'][start + use - 1] == 1 and
++                        f['words'][start] == e['probability_word'],
++                        'reuse must follow and equal actual first probability use')
++                self.normalization_reuse_count += 1
++        elif kind == 'packed_start_fire':
+             require(self.lease is None and e['tag'] > self.last_packed_tag and 1 <= e['count'] <= 16,
+                     'duplicate/stale/concurrent packed lease')
+             self.last_packed_tag = e['tag']
+@@ -423,7 +452,7 @@
+         elif line == self.line['inverse']:
+             self._put('normalizer', (h, t, 0), (c['maximum'], c['total'], result))
+         elif line == self.line['normalize']:
+-            self._put('probability_fp32', (*self._h_t_k(c), c['col']//16), (result,))
++            require(c['col'] == 0 and local['operation'] == 'mul', 'extra/non-first normalization evaluation')
+             self._event('pv_normalize', head=h, token=t, key=c['key'], col=c['col'],
+                         exp_word=local['a'], inverse_word=local['b'], fp32_word=result)
+ 
+@@ -448,7 +477,15 @@
+             c = self._context(frame)
+             require(local['opcode'] == 0x24, 'fixed93 PV helper unexpectedly used for QK')
+             coord = (*self._h_t_k(c), c['col']//16)
+-            if line == self.line['matrix_input']:
++            require(type(c['col']) is int and 0 <= c['col'] < 128 and c['col'] % 16 == 0 and
++                    0 <= c['key'] <= c['token'] < self.job['m'], 'invalid/noncausal PV use coordinate')
++            if line == self.line['matrix_input_fp32']:
++                # Read this invocation's actual a[0]. Never project/repeat a
++                # saved Scalar result into any of the eight operand slots.
++                self._put('probability_fp32', coord, (local['a'][0],))
++                self._event('pv_probability_fp32_use', head=c['head'], token=c['token'], key=c['key'],
++                            col=c['col'], probability_word=local['a'][0], is_reuse=c['col'] != 0)
++            elif line == self.line['matrix_input']:
+                 self._put('probability_bf16', coord, (local['a'][0] << 16,))
+                 self._event('pv_bf16_input', head=c['head'], token=c['token'], key=c['key'], col=c['col'], probability_word=local['a'][0] << 16)
+             elif line == self.line['pv_check']:
+@@ -682,7 +719,8 @@
+     def _fences(self):
+         m = self.job['m']
+         causal = 12 * m * (m + 1) // 2
+-        expected = {k: 8 * causal for k in ('pv_normalize', 'pv_bf16_input', 'pv_selected16_finite_check', 'pv_selected16_finite_pass')}
++        expected = {k: 8 * causal for k in ('pv_probability_fp32_use', 'pv_bf16_input', 'pv_selected16_finite_check', 'pv_selected16_finite_pass')}
++        expected['pv_normalize'] = causal
+         expected.update({k: causal for k in ('qk_selected16_finite_check', 'qk_selected16_finite_pass', 'score_finite_commit')})
+         expected.update({k: 96 * m for k in ('store_finite_check', 'store_finite_pass', 'memory_write_accepted', 'write_ack', 'write_response')})
+         expected.update(owner_finish_called=1, owner_terminal_accepted=1, job_accepted=1, matrix_release=1, exp_nodes=causal)
+@@ -698,7 +736,8 @@
+         return (all(self.event_counts[k] == count for k, count in expected.items()) and
+                 self.lease is None and self.completed_groups == groups and self.pending_memory is None and
+                 self.fold_coord is None and self.service_group is None and self.service_pending_result is None and
+-                self.service_release_seen and self.exp_nodes is None and self.stream_seal is not None and self._repeats())
++                self.service_release_seen and self.exp_nodes is None and self.stream_seal is not None and
++                self.pending_normalization is None and self.normalization_reuse_count == 7 * causal and self._repeats())
+ 
+     def _field_chunks(self, name):
+         field = self.fields[name]['words']
+@@ -736,11 +775,14 @@
+                 and r['same_services'] and r['same_job'] and r['state'] == 'idle' and not r['poison']
+                 and r['matrix_released'] and not r['matrix_reset_required'] and r['client_retired']
+                 and not r['memory_pending'] and r['scalar_released'] and self._coverage() and self._fences())
+-        return dict(schema='fixed93-fullblock-attention-observation-v1', complete_observation=bool(complete),
++        return dict(schema='fixed93-fullblock-attention-pv-reuse-observation-v1', complete_observation=bool(complete),
+             status='COMPLETE_ATTENTION_OBSERVATION_NOT_FULLBLOCK_ACCEPTANCE' if complete else 'INCOMPLETE',
+             source_preparation_only=True, control_only=False, numerical_acceptance=False, native_acceptance=False, fullblock_acceptance=False,
+             hardware_simulation=False, historical_results_inherited=False,
+             source_manifest_sha256=self.closure_sha256, reviewed_manifest_sha256=REVIEWED_MANIFEST_SHA256,
++            candidate_identity=CANDIDATE_IDENTITY, candidate_review_status='SOURCE_PREPARED_REVIEW_SEPARATE',
++            integration_status='SOURCE_BOUND_PV_REUSE_FULLBLOCK_CANDIDATE',
++            predecessor_reviewed_manifest_sha256=PREDECESSOR_REVIEWED_MANIFEST_SHA256,
+             source_sha256=self.sources, selected_source_sha256=SELECTED, instrumentation_sha256=self.instrumentation,
+             python=sys.version, loaded_functions_checked=self.loaded_checked, observer_error=self.error,
+             job=self.job, terminal=self.terminal, accepted_retirement=self.retirement,
+@@ -752,10 +794,13 @@
+             event_codec_source_sha256=CODEC_PINS, event_file='attention-events.lec1',
+             exp_node_schema='one typed u32le event per causal exp: actual17 nodes, or actual first1 plus explicit cutoff absence',
+             trace_api='CPython source-bound actual locals/returns, same-thread dispatcher',
+-            probability_normalization_repeats=8, both_probability_domains_repeats_verified=bool(complete),
++            normalization_evaluations_per_causal_key=1, probability_use_repeats=8,
++            normalization_reuses_per_causal_key=7, observed_normalization_reuses=self.normalization_reuse_count,
++            probability_fp32_source='each actual _matrix_step a[0] before BF16 conversion',
++            scalar_schedule_changed=True, both_probability_domains_repeats_verified=bool(complete),
+             pv_finite_boundary='every returned selected16 key packet',
+             field_storage_bytes=0 if self.job is None else field_storage_bytes(self.job['m']),
+-            history_state='fixed counters + one fold + one packed lease + one memory debt + one Matrix group/result',
++            history_state='fixed counters + one fold + one packed lease + one memory debt + one Matrix group/result + one pending normalization',
+             owner_scope='exact Fixed93AttentionOwner/ProfiledMatrixService/OfficialMatrixService/MatrixService/ScalarService',
+             native_file_sha256=self.trace_limits['native_library_sha256'],
+             matrix_binary_provenance_verified_by_observer=False,
+@@ -779,7 +824,7 @@
+ 
+     def legacy_adapter(self):
+         require(self.report()['complete_observation'] and self._repeats(),
+-                'legacy projection requires full fields, coverage/fences, and all8 actual repeats in both probability domains')
++                'legacy projection requires full fields, coverage/fences, and all8 actual Matrix operands in both probability domains, not eight normalization evaluations')
+         return _LegacyProjection(self)
+ 
+ 
+--- a/observation/source_guard.py
++++ b/observation/source_guard.py
+@@ -1,4 +1,4 @@
+-"""Read-only CPython observation of the unchanged reviewed fixed93 R3 owner.
++"""Read-only identity checks for the TEMP PV normalization reuse candidate.
+ 
+ Import is stdlib-only and never imports/constructs the runtime or loads a DSO.
+ Construct after the caller has independently admitted and constructed services.
+@@ -20,7 +20,9 @@
+ PROFILED_MODULE = 'candidates.qwen2_resident_matrix.dense_block_reduce.matrix_binding'
+ OFFICIAL_MATRIX_MODULE = 'candidates.qwen2_resident_matrix.official_bf16.dense_silu'
+ 
+-REVIEWED_MANIFEST_SHA256 = '26928f829488600765cefa2d836f4afe32413e03798ae0eb958bfd016994e13d'
++PREDECESSOR_REVIEWED_MANIFEST_SHA256 = '26928f829488600765cefa2d836f4afe32413e03798ae0eb958bfd016994e13d'
++REVIEWED_MANIFEST_SHA256 = None  # Candidate does not inherit the predecessor's review.
++CANDIDATE_IDENTITY = 'fixed93-pv-normalization-reuse-source-candidate-v1'
+ OWNER_MODULE = 'candidates.qwen2_fixed93_attention.owner'
+ CLIENT_MODULE = 'candidates.qwen2_fixed93_attention.client'
+ BASE_MODULE = 'candidates.qwen2_resident_matrix.ffn_attention.attention_owner'
+@@ -28,7 +30,7 @@
+ ARITHMETIC_MODULE = 'candidates.qwen2_resident_matrix.ffn_public.prefix_arithmetic'
+ MATRIX_MODULE = 'candidates.qwen2_resident_matrix.ffn_attention.matrix_service'
+ PINS = {
+-    OWNER_MODULE: '1e90ecb2e5cf26755c7fe5b7cc201d563afde23af6c27105daeb2387cb5cf443',
++    OWNER_MODULE: 'b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e',
+     CLIENT_MODULE: '5d23d47f51b2db59d435f47d073314921988e3079e69422acc3746d541afadaa',
+     'candidates.qwen2_resident_matrix.official_bf16.owners': '0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a',
+     BASE_MODULE: '65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8',
+@@ -48,7 +50,7 @@
+     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala': '15cc34f041228f38d69b15868a9f9c45fb3f9ea53a9275ec6a6d9fd70b4b0c25',
+     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala': '94e6198a060044ae58a90328394ec8d11fe3311647fef62c1a1b975f2504ff4a',
+     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala': 'f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3',
+-    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala': 'a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491',
++    'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala': '3b7f25537da7492d3c706c55129ca5ed0a18d9c2e0ec4f5d9e6e43b1ae2210d4',
+     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala': '58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0',
+     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala': '83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc',
+     'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala': '9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5',
+@@ -81,7 +83,13 @@
+     raw = manifest.read_bytes()
+     require(sha(raw) == manifest_sha256, 'unverified/changed closure manifest')
+     data = json.loads(raw)
+-    require(data.get('reviewed_manifest_sha256') == REVIEWED_MANIFEST_SHA256, 'R3 review identity missing/drifted')
++    require(data.get('schema') == 'fixed93-pv-reuse-source-manifest-v1' and
++            data.get('candidate_identity') == CANDIDATE_IDENTITY and
++            data.get('evidence_contract') == 'original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1' and
++            data.get('reviewed_manifest_sha256', 'missing') is None and
++            data.get('predecessor_reviewed_manifest_sha256') == PREDECESSOR_REVIEWED_MANIFEST_SHA256 and
++            data.get('candidate_review_status') == 'SOURCE_PREPARED_REVIEW_SEPARATE',
++            'candidate identity required; predecessor R3 review cannot authorize changed sources')
+     sources, sizes = data.get('source_sha256'), data.get('source_bytes')
+     require(isinstance(sources, dict) and isinstance(sizes, dict) and sources.keys() == sizes.keys(), 'closure hash/size inventory mismatch')
+     for module, digest in PINS.items():
+--- a/selected/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/selected/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -171,6 +171,9 @@
+   canonicalPvAckTap.foreach { tap => tap:=0.U.asTypeOf(tap);dontTouch(tap) }
+   // CANONICAL_OBSERVATION_TAPS_END
+   val scoreOut=scores.read(key,state===st("attExpRead"));val probOut=probs.read(key,state===st("attProbRead"))
++  // One write site preserves the existing SRAM port count. Both mutually
++  // exclusive writes use key/scalarValue; no second buffer or write port.
++  when(state===st("attExpResult") || (enableProductionPackedQk16.B && state===st("attProbScale") && col===0.U)){probs.write(key,scalarValue)}
+   val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)
+   vectorA:=av;vectorB:=bv
+   val vout=VecInit((0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a.io.out})
+@@ -660,13 +663,26 @@
+   when(state===st("attExpRead")){state:=st("attExpWait")}
+   when(state===st("attExpWait")){calc(ScalarOp.Add,scoreOut,F32.neg(maxScore),"attExpDiff")}
+   when(state===st("attExpDiff")){calc(ScalarOp.ExpNegative,scalarValue,0.U,"attExpResult")}
+-  when(state===st("attExpResult")){probs.write(key,scalarValue);calc(ScalarOp.Add,sum,scalarValue,"attExpSum")}
++  when(state===st("attExpResult")){calc(ScalarOp.Add,sum,scalarValue,"attExpSum")}
+   when(state===st("attExpSum")){sum:=scalarValue;when(key<token){key:=key+1.U;state:=st("attExpRead")}.otherwise{calc(ScalarOp.Div,F32.lit(1),scalarValue,"attInv")}}
+   when(state===st("attInv")){scale:=scalarValue;col:=0.U;state:=st("attPVStart")}
+   when(state===st("attPVStart")){clearAcc();key:=0.U;state:=st("attProbRead")}
+   when(state===st("attProbRead")){state:=st("attProbWait")}
+-  when(state===st("attProbWait")){calc(ScalarOp.Mul,probOut,scale,"attProbScale")}
+-  when(state===st("attProbScale")){probability:=scalarValue;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++  if(enableProductionPackedQk16){
++    // Fixed93 only: the first PV column group replaces each dead raw exp with
++    // its FP32 normalized value. Later groups reuse it, never a BF16 copy.
++    // All causal keys are rewritten for each head/query before PV starts.
++    when(state===st("attProbWait")){
++      when(col===0.U){calc(ScalarOp.Mul,probOut,scale,"attProbScale")}
++      .otherwise{probability:=probOut;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++    }
++    // Reached only after the original scalar error check accepted the result.
++    // attProbRead was earlier, so this is not a same-edge SRAM read/write.
++    when(state===st("attProbScale")){probability:=scalarValue;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++  }else{
++    when(state===st("attProbWait")){calc(ScalarOp.Mul,probOut,scale,"attProbScale")}
++    when(state===st("attProbScale")){probability:=scalarValue;read(ptr("v",key.pad(32)*s.kv.U+kvHead*s.headDim.U+col),"attPVCompute")}
++  }
+   when(state===st("attPVCompute")){fmA:=VecInit(Seq.fill(16)(probability));fmB:=packet.asTypeOf(fmB);when(fmDone){acc:=fmOut;macs:=macs+16.U
+     when(key<token){key:=key+1.U;state:=st("attProbRead")}.otherwise{state:=st("attPVWrite")}}}
+   when(state===st("attPVWrite")){write(ptr("att",rowOffset(s.hidden.U)+head*s.headDim.U+col),VecInit(acc.map(materialize)).asUInt,"attPVWritten")}
+--- a/source/candidates/qwen2_fixed93_attention/owner.py
++++ b/source/candidates/qwen2_fixed93_attention/owner.py
+@@ -80,10 +80,14 @@
+                     total = self._op('add', total, probability)
+                 self.peak_probability_words = max(self.peak_probability_words, len(probabilities))
+                 inverse = self._op('div', 0x3f800000, total)
+-                # Exactly the existing OfficialAttentionOwner PV16 body.
++                # Reuse the existing probability storage after denominator use.
++                # Only col=0 evaluates Mul; all eight PV inputs stay raw FP32
++                # until the unchanged per-use Matrix BF16 ingress conversion.
+                 for col in range(0, 128, 16):
+                     for key, probability in enumerate(probabilities):
+-                        probability = self._op('mul', probability, inverse)
++                        if col == 0:
++                            probability = self._op('mul', probability, inverse)
++                            probabilities[key] = probability
+                         v = yield from self._read(j.c + (key * 256 + kv_head * 128 + col) * 4)
+                         lanes = yield from self._matrix_step(0x24, (probability,) + (0,) * 15, v,
+                             clear=key == 0, last=key == token, steps=token + 1)
+@@ -255,7 +259,10 @@
+ 
+     def report(self):
+         r = super().report()
+-        r.update(candidate='fixed93_packed_qk16_pv16_source_candidate',
++        r.update(candidate='fixed93_packed_qk16_pv16_normalization_reuse_candidate',
++                 normalization_evaluations_per_causal_key=1,
++                 probability_use_repeats=8, normalization_reuses_per_causal_key=7,
++                 scalar_schedule_changed=True,
+                  integration_review_pending=True, fullblock_candidate_run_executed=False,
+                  hardware_simulation=False, model_ticks_are_hardware_cycles=False,
+                  packed_operand_staging_words=256,
+--- a/supervision/gate.py
++++ b/supervision/gate.py
+@@ -14,7 +14,7 @@
+ OWNED = CANDIDATE / 'work/fixed93_fullblock'
+ OUTPUT = OWNED / 'run01'
+ SUPPORT = CANDIDATE / 'support'
+-CONTRACT = 'original-algorithm-arrays-plus-true-events-and-fixed-attention-v1'
++CONTRACT = 'original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1'
+ RECEIPT_BYTES = 32768
+ LOG_FILE_BYTES = 32768
+ SAMPLE_LINE_BYTES = 2048

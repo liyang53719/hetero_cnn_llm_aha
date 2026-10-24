@@ -1,0 +1,145 @@
+{
+  "baseline": {
+    "ASSEMBLY_BASE.json": {
+      "bytes": 65016,
+      "sha256": "fb45a594e6cf516f9ce722d5db1279950241083206486e164782367b48811423"
+    },
+    "BUDGET_PROPOSAL.json": {
+      "bytes": 3296,
+      "sha256": "86ae9b6f24768ad5ffff81805678152e2649657daccf3e2d428ce504cd42f3b9"
+    },
+    "PRODUCTION_SOURCE_MANIFEST.json": {
+      "bytes": 94430,
+      "sha256": "4d5c19e16aafb372182fa59a37b64cbb3440669a81b992d8eb3338a34af4b364"
+    },
+    "SOURCE_MANIFEST.json": {
+      "bytes": 110623,
+      "sha256": "e34dbc5b4274399552bfb1d200bca6119ea734030d195201aadfe96b4472acb0"
+    },
+    "capture/anchors.json": {
+      "bytes": 14501,
+      "sha256": "7968a8f2bb180d69f8ae2d5685c7b7b303e613e0ad0ce6ecc9b7cc2e5b3158b9"
+    },
+    "observation/RESOURCE_BOUNDS.json": {
+      "bytes": 1134,
+      "sha256": "b1f9fedba62b210ac32d5792247d6a1d833318ca07a9740a85dccf6e930408d8"
+    },
+    "observation/SOURCE_MANIFEST.json": {
+      "bytes": 1734,
+      "sha256": "3fd6008027135a0443e36a6910986c8fe2bf67c84b8e80ddc47cb9f5f4b20f60"
+    },
+    "source/work/qwen2_fixed93_fullblock_binding/FROZEN_BINDING.json": {
+      "bytes": 693,
+      "sha256": "ad48c390a33dc89f8ad376ff046d1f0426a846741b9512089447afa097a810fa"
+    }
+  },
+  "baseline_changed_files": {
+    "assembly_preflight.py": {
+      "bytes": 8727,
+      "sha256": "7abe761d7930698ba14d7d14dba350dfaced72ad3c3f091f6f56f35993d2cac1"
+    },
+    "capture/wholeblock.py": {
+      "bytes": 47907,
+      "sha256": "5a44df73c3c303aa7406a64d794d26c8b4702b8c60986dc6fcd0431aa6ec0aa0"
+    },
+    "contract/OBSERVATION_CONTRACT.md": {
+      "bytes": 7113,
+      "sha256": "c695742c1e283899ad6411db910846e4244da132a1dad6126d7ae8151e7598bf"
+    },
+    "fullblock_runtime.py": {
+      "bytes": 50315,
+      "sha256": "6ea5464c5914e850df3d422597dd78de4df8368e5e55d241205048e347d0394a"
+    },
+    "integration/EVIDENCE_INVENTORY.json": {
+      "bytes": 14482,
+      "sha256": "ccb71a547551466f167491bf0a1532555ddfe543e734eb6cb378d910d5cb9c09"
+    },
+    "integration/interface.py": {
+      "bytes": 13209,
+      "sha256": "df373c76e624154f53a3e6f98a02938109433de5c28f2e00b8b11103db876f53"
+    },
+    "integration/runner.py": {
+      "bytes": 33088,
+      "sha256": "1e3a5dcd863b2f9ecff6330cd04adcfd509d3e42fc67b5b5ec6c7185663a7e86"
+    },
+    "observation/event_stream.py": {
+      "bytes": 11568,
+      "sha256": "4d6449ba48888439389a5c2e161d32b6ee19ff8397acbb1efda9342f9d3b65ca"
+    },
+    "observation/fullblock_attention.py": {
+      "bytes": 51615,
+      "sha256": "86e54d66b228bdbb167dc9d2b5a4983b8158f4e9e3f94d1090a27e7954089c33"
+    },
+    "observation/source_guard.py": {
+      "bytes": 17223,
+      "sha256": "662aeee5470cbafd79292947bd19213327b30927b6688b2b56dac2ceac6f5bdc"
+    },
+    "selected/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": {
+      "bytes": 56051,
+      "sha256": "a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491"
+    },
+    "source/candidates/qwen2_fixed93_attention/owner.py": {
+      "bytes": 15337,
+      "sha256": "1e90ecb2e5cf26755c7fe5b7cc201d563afde23af6c27105daeb2387cb5cf443"
+    },
+    "supervision/gate.py": {
+      "bytes": 18264,
+      "sha256": "d76633ded5ce9c36e7af3750695cbcbc8d12acbfdae4f18fa1c009926642efa8"
+    }
+  },
+  "overlay": {
+    "assembly_preflight.py": {
+      "bytes": 11565,
+      "sha256": "250861e75f9166531c190ff2f4031997949cfc7bc0c7020ef6589f8de9eef708"
+    },
+    "capture/wholeblock.py": {
+      "bytes": 47910,
+      "sha256": "181a17a663f303c37ccb79224ad2f0f1cf333115314987a9118a6f6115d9d6ea"
+    },
+    "contract/OBSERVATION_CONTRACT.md": {
+      "bytes": 7468,
+      "sha256": "ca8ff40a348e9098e3c9cd1e8685ecd31cf9fc67982533ac26969493dfb68d05"
+    },
+    "fullblock_runtime.py": {
+      "bytes": 50318,
+      "sha256": "160c977f1fcf8d76845776228226ac541d48d24b33debeced7cd84b2f4cbb181"
+    },
+    "integration/EVIDENCE_INVENTORY.json": {
+      "bytes": 14485,
+      "sha256": "0ad0e7f4050b6d7860f54aae4f344cf42c5037768155d8586ca6a7abdb4665b2"
+    },
+    "integration/interface.py": {
+      "bytes": 13888,
+      "sha256": "17b61451b031f887aad5eac6a2689ba6ca5d3414efc1a052bdd7d5292003c6c2"
+    },
+    "integration/runner.py": {
+      "bytes": 33091,
+      "sha256": "ae64a4cad935c88abbe4122c7fac9e11e337c3c639671bcd41611f61e64d1139"
+    },
+    "observation/event_stream.py": {
+      "bytes": 11568,
+      "sha256": "b3e1e6c341e75d0806db91ffcac9d54254fd69b5dcddb7a4d1a2aed51ffa9065"
+    },
+    "observation/fullblock_attention.py": {
+      "bytes": 55063,
+      "sha256": "31eaa951a093f4584c2adee16bd44744282ad7e989c2e23a3f657efaab4a15f9"
+    },
+    "observation/source_guard.py": {
+      "bytes": 17907,
+      "sha256": "5c34fcb824f2f6e1015f5a478b7a15432262b694f89950b163d60325775addf2"
+    },
+    "selected/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": {
+      "bytes": 57109,
+      "sha256": "3b7f25537da7492d3c706c55129ca5ed0a18d9c2e0ec4f5d9e6e43b1ae2210d4"
+    },
+    "source/candidates/qwen2_fixed93_attention/owner.py": {
+      "bytes": 15806,
+      "sha256": "b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e"
+    },
+    "supervision/gate.py": {
+      "bytes": 18267,
+      "sha256": "7fb0513b91aac135e41a1b18c6c7414490f4b2532aed6b7391a35e2da1196e86"
+    }
+  },
+  "schema": "fixed93-pv-reuse-integration-inputs-v1"
+}

@@ -1,0 +1,87 @@
+{
+  "actual_authorized": false,
+  "baseline_manifest_sha256": "e34dbc5b4274399552bfb1d200bca6119ea734030d195201aadfe96b4472acb0",
+  "files": {
+    "CAPACITY_PROPOSAL.json": {
+      "bytes": 1187,
+      "sha256": "6c0d68a42a93e97a7b2893d6babc6d0a35308049be050af8acb21e76aa95af7c"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 5343,
+      "sha256": "0b2318619e8fe32c663abca64bae68c845a978371b224fded80089180e87e8e2"
+    },
+    "INTEGRATION_DELTA.patch": {
+      "bytes": 35946,
+      "sha256": "22e8bf2b2bde849d9997d3936fe0cb3f998720535e221df8762d707cbf3aa9f6"
+    },
+    "README.md": {
+      "bytes": 7074,
+      "sha256": "6e6e10f9333680b783c26d50dccab1048aab40895c4f935835431ffd4ab2e587"
+    },
+    "overlay/assembly_preflight.py": {
+      "bytes": 11565,
+      "sha256": "250861e75f9166531c190ff2f4031997949cfc7bc0c7020ef6589f8de9eef708"
+    },
+    "overlay/capture/wholeblock.py": {
+      "bytes": 47910,
+      "sha256": "181a17a663f303c37ccb79224ad2f0f1cf333115314987a9118a6f6115d9d6ea"
+    },
+    "overlay/contract/OBSERVATION_CONTRACT.md": {
+      "bytes": 7468,
+      "sha256": "ca8ff40a348e9098e3c9cd1e8685ecd31cf9fc67982533ac26969493dfb68d05"
+    },
+    "overlay/fullblock_runtime.py": {
+      "bytes": 50318,
+      "sha256": "160c977f1fcf8d76845776228226ac541d48d24b33debeced7cd84b2f4cbb181"
+    },
+    "overlay/integration/EVIDENCE_INVENTORY.json": {
+      "bytes": 14485,
+      "sha256": "0ad0e7f4050b6d7860f54aae4f344cf42c5037768155d8586ca6a7abdb4665b2"
+    },
+    "overlay/integration/interface.py": {
+      "bytes": 13888,
+      "sha256": "17b61451b031f887aad5eac6a2689ba6ca5d3414efc1a052bdd7d5292003c6c2"
+    },
+    "overlay/integration/runner.py": {
+      "bytes": 33091,
+      "sha256": "ae64a4cad935c88abbe4122c7fac9e11e337c3c639671bcd41611f61e64d1139"
+    },
+    "overlay/observation/event_stream.py": {
+      "bytes": 11568,
+      "sha256": "b3e1e6c341e75d0806db91ffcac9d54254fd69b5dcddb7a4d1a2aed51ffa9065"
+    },
+    "overlay/observation/fullblock_attention.py": {
+      "bytes": 55063,
+      "sha256": "31eaa951a093f4584c2adee16bd44744282ad7e989c2e23a3f657efaab4a15f9"
+    },
+    "overlay/observation/source_guard.py": {
+      "bytes": 17907,
+      "sha256": "5c34fcb824f2f6e1015f5a478b7a15432262b694f89950b163d60325775addf2"
+    },
+    "overlay/selected/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": {
+      "bytes": 57109,
+      "sha256": "3b7f25537da7492d3c706c55129ca5ed0a18d9c2e0ec4f5d9e6e43b1ae2210d4"
+    },
+    "overlay/source/candidates/qwen2_fixed93_attention/owner.py": {
+      "bytes": 15806,
+      "sha256": "b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e"
+    },
+    "overlay/supervision/gate.py": {
+      "bytes": 18267,
+      "sha256": "7fb0513b91aac135e41a1b18c6c7414490f4b2532aed6b7391a35e2da1196e86"
+    },
+    "prepare_metadata.py": {
+      "bytes": 10726,
+      "sha256": "c228c32d0eb3d277b74d8d85a5d9f735b4bf5ae221076a29314b34b9d4ca371d"
+    },
+    "tests/source_controls.py": {
+      "bytes": 14608,
+      "sha256": "1b028c7f6f0e986bb784a182553346c2fc5ac65c10c29290c128d6dc0364da1f"
+    }
+  },
+  "fullblock_acceptance": false,
+  "native_executed": false,
+  "schema": "fixed93-pv-reuse-source-preparation-bundle-v1",
+  "scope": "Small portable source overlay plus metadata generator; no generated assembly, payload, admission or actual result.",
+  "status": "AUTHOR_SOURCE_AND_SYNTHETIC_ONLY_PENDING_INDEPENDENT_REVIEW"
+}

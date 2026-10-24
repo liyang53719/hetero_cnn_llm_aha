@@ -1541,3 +1541,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 新入口严格绑定归一化复用的 plan/observation/contract 与 ordinary event-v2，exp仍为原v1；拒绝旧v1混配、1/8/7声明错误、bool冒整数、缺终态/FINISH和尾随字节。只验证可信终态声明与容器，不证明真实693504次复用、数值或调度语义。
 - ONGOING / TEMP：source closure/anchors/preflight接线；预算增量经有限SOURCE审查为+99072事件、+24470784字节，不授实际运行资格。
 - 完整block/native/RTL均未执行，本批不继承前任候选的实际PASS，五block RTL仍0/5。
+
+## PASS（有限）/ TEMP：PV 复用源码接线准备（2026-10-21）
+
+- DONE / PASS（有限）：新增 `candidates/fixed93_pv_reuse_integration/` 的小源码 overlay、便携元数据生成器、relative pins、预算提案与纯源/MOCK检查；入工作树后13组通过（1.374秒、23468KiB）。没有复制完整源码树或权重，没有真实preflight/native/DUT/RTL执行。
+- 321项身份清单只允许 owner 与 selected Qwen2Block 两项变化，其他319项变动拒绝；更新两处owner anchors、1/8/7合同及算法seal的证据清单传播。observer以当前严格33-symbol helper基线合并，未带回旧_FuncPtr启动错误；保留旧冻结候选和原失败证据。
+- 预算提案独审：净增99072条事件，raw增加3071232字节，frame/metadata增加21399552字节，合计24470784字节；owned上界22917099404字节，含原reserve的startup门23453970316字节。预算仍OPEN，不能凭source审查授实际运行资格。
+- ONGOING / TEMP：新完整assembly/preflight、实际constructor/dispatcher、资源准入和模型完整128token数值验证。MOCK字段检查不等于完整closure内容重hash，也不等于新模型运行通过。
+- 新源码准备不继承前任actual PASS，完整五block RTL仍0/5；最终完整RTL数值和90%利用率目标继续保留。

@@ -1,0 +1,603 @@
+{
+  "attention_fields": {
+    "denominator_step": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "dot_bf16": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "dot_raw": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "exp_fp32": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "fold_after": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128,
+        16
+      ],
+      "word_format": "u32le"
+    },
+    "fold_before": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128,
+        16
+      ],
+      "word_format": "u32le"
+    },
+    "normalizer": {
+      "coverage": "complete",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        3
+      ],
+      "word_format": "u32le"
+    },
+    "packed_stripes": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128,
+        16
+      ],
+      "word_format": "u32le"
+    },
+    "probability_bf16": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128,
+        8
+      ],
+      "word_format": "u32le"
+    },
+    "probability_fp32": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128,
+        8
+      ],
+      "word_format": "u32le"
+    },
+    "pv_bf16": {
+      "coverage": "complete",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "pv_final_raw": {
+      "coverage": "complete",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "pv_key_raw": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128,
+        8,
+        16
+      ],
+      "word_format": "u32le"
+    },
+    "scale_fp32": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "score_bf16": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    },
+    "score_difference": {
+      "coverage": "causal",
+      "frequency": "one byte per logical word; absent future positions remain unobserved",
+      "shape": [
+        12,
+        128,
+        128
+      ],
+      "word_format": "u32le"
+    }
+  },
+  "claim_limits": [
+    "No RTL/Scala/Chisel execution",
+    "No hardware-cycle utilization",
+    "No native HardFloat flag bus capture",
+    "No whole-model official forward",
+    "No new M128 admission or numerical result",
+    "No historical PASS inherited"
+  ],
+  "diagnostic_count": 1,
+  "evidence_contract": "original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1",
+  "expected_counts_prediction_only": {
+    "attention_active_fma": 632291328,
+    "attention_normal_groups": 19200,
+    "attention_normal_steps": 847872,
+    "attention_owner_legacy_result_fires": 792576,
+    "attention_owner_request_fires": 854784,
+    "attention_service_result_retirements": 799488,
+    "attention_useful_fma": 25362432,
+    "dense_active_fma": 5989466112,
+    "dense_steps": 1462272,
+    "fixed4096_issue_capacity": 9462349824,
+    "pv16_steps": 792576,
+    "qk_groups": 6912,
+    "qk_steps": 55296,
+    "whole_active_fma": 6621757440,
+    "whole_issue_events": 2310144,
+    "whole_useful_fma": 6014828544
+  },
+  "extra_actual_kv": {
+    "bytes": 262144,
+    "name": "kv",
+    "origin": "same-live k||v exact copy after 4096 ACKed 64-byte writes"
+  },
+  "extra_actual_producer_outputs": [
+    {
+      "format": "raw FP32 words little endian",
+      "name": "qraw",
+      "official_raw_reference": false,
+      "shape": [
+        128,
+        1536
+      ]
+    },
+    {
+      "format": "raw FP32 words little endian",
+      "name": "kraw",
+      "official_raw_reference": false,
+      "shape": [
+        128,
+        256
+      ]
+    },
+    {
+      "format": "raw FP32 words little endian",
+      "name": "vraw",
+      "official_raw_reference": false,
+      "shape": [
+        128,
+        256
+      ]
+    }
+  ],
+  "full_29_node_acceptance": false,
+  "nodes": [
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        8960
+      ],
+      "name": "act",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "att",
+      "origin": "complete Fixed93 observed PV converted to token-major only for att"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "name": "cache_k",
+      "origin": "same-live complete KV physical subview"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "name": "cache_v",
+      "origin": "same-live complete KV physical subview"
+    },
+    {
+      "category": "reference_only",
+      "coverage": "reference_only",
+      "logical_shape": [
+        128,
+        128
+      ],
+      "name": "cos",
+      "origin": "independent reference only"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "down",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        8960
+      ],
+      "name": "gate",
+      "origin": "accepted resident tile reads, not virtual DDR reservation"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "name": "k",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        256
+      ],
+      "name": "kr",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "causal positions only; future absent",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "logits",
+      "origin": "causal Fixed93 observed score"
+    },
+    {
+      "category": "reference_only",
+      "coverage": "reference_only",
+      "logical_shape": [
+        1,
+        1,
+        128,
+        128
+      ],
+      "name": "mask",
+      "origin": "independent reference only"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "n0",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "n1",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "o",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "causal positions only; future absent",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "prob",
+      "origin": "eight actual normalized uses; read-only representative after equality"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "pv",
+      "origin": "complete Fixed93 observed PV converted to token-major only for att"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "q",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "qr",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "r",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "reference_only",
+      "coverage": "reference_only",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "repeat_k",
+      "origin": "independent reference only"
+    },
+    {
+      "category": "reference_only",
+      "coverage": "reference_only",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "repeat_v",
+      "origin": "independent reference only"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "causal positions only; future absent",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "scores",
+      "origin": "causal Fixed93 observed score"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        8960
+      ],
+      "name": "silu",
+      "origin": "actual original BF16 SiLU phase4 return"
+    },
+    {
+      "category": "reference_only",
+      "coverage": "reference_only",
+      "logical_shape": [
+        128,
+        128
+      ],
+      "name": "sin",
+      "origin": "independent reference only"
+    },
+    {
+      "category": "diagnostic_no_fp32_tolerance",
+      "coverage": "causal positions only; future absent",
+      "logical_shape": [
+        1,
+        12,
+        128,
+        128
+      ],
+      "name": "softmax_fp32",
+      "origin": "eight actual normalized uses; read-only representative after equality"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        8960
+      ],
+      "name": "up",
+      "origin": "accepted resident tile reads, not virtual DDR reservation"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        256
+      ],
+      "name": "v",
+      "origin": "ACKed actual physical output"
+    },
+    {
+      "category": "reference_only",
+      "coverage": "reference_only",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "x",
+      "origin": "independent reference only"
+    },
+    {
+      "category": "numerical_reference_gate",
+      "coverage": "complete",
+      "logical_shape": [
+        1,
+        128,
+        1536
+      ],
+      "name": "y",
+      "origin": "ACKed actual physical output"
+    }
+  ],
+  "not_required_by_current_contract": [
+    "every Dense physical4096 bank snapshot",
+    "every active 6,621,757,440 FMA independently recomputed",
+    "unexported nested SiLU exp or pre-BF16 products"
+  ],
+  "numerical_gate_count": 22,
+  "reference_node_count": 29,
+  "reference_only_count": 6,
+  "schema": "fixed93-fullblock-evidence-inventory-v1",
+  "silu_export": {
+    "actual_lane_error_words": 1146880,
+    "actual_phase_flag_words": 6881280,
+    "actual_phase_words": 6881280,
+    "calls": 71680,
+    "lanes_per_phase": 16,
+    "native_inner_exp_17_nodes": "UNOBSERVED: unchanged ELF does not export them",
+    "phase4_and_phase5": "actual post-BF16 materialization only",
+    "phase4_phase5_pre_bf16_products": "UNOBSERVED: unchanged ELF does not export them",
+    "phases_per_call": 6,
+    "required": true
+  },
+  "status": "SOURCE_ONLY_NOT_EXECUTED",
+  "wholeblock_event_contract": {
+    "not_sufficient": [
+      "CappedTrace persisted prefix",
+      "summary counters without reconstructable events",
+      "event payload filled from expected arithmetic",
+      "reference output read before wholeblock seal"
+    ],
+    "required": [
+      "accepted command/job/completion/launch result order and original metadata bindings",
+      "true accepted read address/tag/response payload and write command/data/ACK",
+      "actual Matrix group/step/seed/result/retirement and shared service lease fields",
+      "resident gate/up tile reads; Down workspace read/seed/write/ACK schedule",
+      "Attention packed FIFO borrow/score commit/result retirement and every selected finite boundary",
+      "source/loaded objects, epochs/tickets, same-live identities and zero debt final publication"
+    ]
+  }
+}

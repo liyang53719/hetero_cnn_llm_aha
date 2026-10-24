@@ -1,0 +1,44 @@
+{
+  "schema": "qwen35_derived_public_source_manifest_v1",
+  "files": {
+    "INPUT_PINS.json": {
+      "bytes": 7002,
+      "sha256": "1b8a2eeb5ac2abbff61610b39ce9b639a839c547d4869f556442627f0cd3f4fa"
+    },
+    "INTERFACE_CONTRACT.md": {
+      "bytes": 3999,
+      "sha256": "a35fb3e0828f6af5c51e87019620d0ab373775a76ab869db3a6029746c7c8bd3"
+    },
+    "PUBLICATION_WHITELIST.json": {
+      "bytes": 815,
+      "sha256": "d22586be9afead5f08625f4e8b5d701ae997f883aaff1dfbcaa5045d0b58beb0"
+    },
+    "README.md": {
+      "bytes": 2940,
+      "sha256": "2866f6f5037e94d28723e5e4ab1a36917754eb27a53b0efc5a60ada1f2506bf7"
+    },
+    "SCOPE.json": {
+      "bytes": 2636,
+      "sha256": "61292e1600f6c64a92cac6b48c01ab444585be1ff989e03d95a02ee2e8ed0da5"
+    },
+    "TEST_SCOPE.json": {
+      "bytes": 5117,
+      "sha256": "a4c0c7512214ac0aa8c21960b6c9cf8e55981edc96b55284606732dab44fae9d"
+    },
+    "derived_model.py": {
+      "bytes": 21979,
+      "sha256": "7be6faf9643653df31d05ee1e1c599d09feb2b06ad6b4d8345b8a17007b71767"
+    },
+    "source/GdnChunkDerivedAndPairOwner.scala": {
+      "bytes": 19767,
+      "sha256": "3c49663e5ae7ae9b760ddfb3bf1e72060d41f87d00ce92ced7b82d8e8062a1de"
+    },
+    "tests.py": {
+      "bytes": 46756,
+      "sha256": "7ebf0a867a4fb072bf7747be9f782810f357c13bd21a41ff66bbe5a000d381dd"
+    }
+  },
+  "original_source_count": 7,
+  "scope": "source plus finite Python simulated-protocol result excerpt; not standalone or hardware qualification",
+  "source_manifest_sha256": "2c9ed3998f85dbb70f449af4beaffbb07c1e66be24c1007b838e8d0bd4de4e33"
+}

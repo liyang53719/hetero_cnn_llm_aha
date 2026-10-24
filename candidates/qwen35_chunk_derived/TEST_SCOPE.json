@@ -1,0 +1,118 @@
+{
+  "schema": "qwen35_derived_public_test_scope_v1",
+  "status": "PASS_PYTHON_PROTOCOL_AND_SIMULATED_SERVICES_ONLY",
+  "summary_cn": "独立 DerivedAndPair owner 源码及纯 Python 协议/模拟服务小控已完成。此次运行不执行 Scala，不构造硬件，也不证明真实 Scalar、Loan、Memory 的握手或 FP32 数值正确性。",
+  "source_manifest": {
+    "bytes": 1415,
+    "sha256": "2c9ed3998f85dbb70f449af4beaffbb07c1e66be24c1007b838e8d0bd4de4e33"
+  },
+  "source_static_review": {
+    "bytes": 11884,
+    "sha256": "3824f8249debf9094a712fab3d034f0a3e81ab3258f0fb52ea48525e44d57fe0"
+  },
+  "actual_review": {
+    "bytes": 6311,
+    "sha256": "78795c2a5e06f6ec4f2f163d6fac4090c17bbea3f95027f3c42106762f2335ba"
+  },
+  "original_source_files": {
+    "INPUT_PINS.json": {
+      "bytes": 7002,
+      "sha256": "1b8a2eeb5ac2abbff61610b39ce9b639a839c547d4869f556442627f0cd3f4fa"
+    },
+    "INTERFACE_CONTRACT.md": {
+      "bytes": 3999,
+      "sha256": "a35fb3e0828f6af5c51e87019620d0ab373775a76ab869db3a6029746c7c8bd3"
+    },
+    "README.md": {
+      "bytes": 2940,
+      "sha256": "2866f6f5037e94d28723e5e4ab1a36917754eb27a53b0efc5a60ada1f2506bf7"
+    },
+    "SCOPE.json": {
+      "bytes": 2636,
+      "sha256": "61292e1600f6c64a92cac6b48c01ab444585be1ff989e03d95a02ee2e8ed0da5"
+    },
+    "derived_model.py": {
+      "bytes": 21979,
+      "sha256": "7be6faf9643653df31d05ee1e1c599d09feb2b06ad6b4d8345b8a17007b71767"
+    },
+    "source/GdnChunkDerivedAndPairOwner.scala": {
+      "bytes": 19767,
+      "sha256": "3c49663e5ae7ae9b760ddfb3bf1e72060d41f87d00ce92ced7b82d8e8062a1de"
+    },
+    "tests.py": {
+      "bytes": 46756,
+      "sha256": "7ebf0a867a4fb072bf7747be9f782810f357c13bd21a41ff66bbe5a000d381dd"
+    }
+  },
+  "qualification": {
+    "unittest_groups": 15,
+    "full_simulated_cases": [
+      {
+        "tokens": 16,
+        "head": 3,
+        "chunk": 0
+      },
+      {
+        "tokens": 128,
+        "head": 11,
+        "chunk": 1
+      }
+    ],
+    "transactions_per_case": 13410,
+    "per_case": {
+      "read_transactions": 3681,
+      "successful_write_ack_events": 2816,
+      "exp4_requests": 2209,
+      "single_lane_add1_requests": 2144,
+      "mul16_requests": 2560,
+      "read_bytes": 235584,
+      "scratch_ack_bytes": 180224,
+      "external_output_ack_bytes": 0,
+      "state_out_ack_bytes": 0
+    },
+    "source_content_pins_before_after": 32,
+    "content_split": {
+      "package": 8,
+      "external": 24
+    },
+    "natural_exit_code": 0,
+    "outer_wall_seconds": 1.333111120009562,
+    "test_report_seconds": 1.260561,
+    "test_limits": {
+      "wall_seconds": 10,
+      "one_cpu": true,
+      "address_space_bytes": 268435456,
+      "cpu_soft_hard_seconds": [
+        10,
+        10
+      ],
+      "per_log_bytes": 1048576,
+      "owned_output_bytes": 4194304
+    },
+    "python_version_scope": "CPython 3.12 required by test entry; exact interpreter binding is retained only in private execution evidence."
+  },
+  "what_was_checked_cn": [
+    "完整 64 行原序与四个 64 B payload 的生命期；KB/KBG/QG/KE 全部算完才开始逐次写 ACK。",
+    "gates[63] 新增补读、完整 phase1 身份/计数、最后 pair ACK 后私有 decay 有效及完整 context/head/chunk 绑定。",
+    "请求/响应背压、错 tag 优先级、错误 held done 与锁定、Loan abort/resetLoan 恒低的错误退休路径。",
+    "模拟 Add/Mul 的 RNE、signed zero、exact subnormal 与 after-rounding tininess；legacy P7 Exp 内部 flags 策略。"
+  ],
+  "limits_cn": [
+    "模型和参考原序转录共享模拟 RNE/P7 服务助手，因此不是独立数值 oracle。",
+    "两个 subnormal 服务响应属于刻意注入的接收门控制，不是对应请求的自然结果；另有 literal helper 向量检验 exact subnormal。",
+    "每 case 的 26980 model cycles 是该 Python 握手驱动及停顿模式计数，不是硬件时延、频率、完整 block 利用率或完成时间承诺。",
+    "仅两个有界合成输入轨迹与有限负例，不是 Scala 等价性证明、任意背压/故障穷举或完整模型验收。",
+    "原公共 M1/recurrent 门、Host 根提交 fence、共享算术服务及顶层均未改变；chunk 顶层接线和 phase15 消费仍非本批成果。"
+  ],
+  "not_qualified": [
+    "Scala compilation",
+    "Chisel/CHIRRTL elaboration",
+    "RTL generation or simulation",
+    "real Scalar/Loan/Memory handshake or ACK",
+    "independent FP32 DUT validation",
+    "integrated phase15 decay consumption",
+    "complete chunk/block/model",
+    "hardware timing, utilization or QoR"
+  ],
+  "publication_boundary_cn": "这是不完整的公开源码摘录。七个原始内容文件逐字保留，原 README/SCOPE 的 SOURCE-only 及未执行声明是冻结时历史；本文件单列随后有限 Python 结果。机器相关 TEST_COMMAND.json、原 SOURCE_MANIFEST、原日志/收据、工具二进制、权重、数组与硬件 IR 均未收入。保留的 tests.py 需要原完整 pinned package，不能把本包当独立可执行闭包，也不提供重建私有执行计划或绕过资源门的脚本。"
+}

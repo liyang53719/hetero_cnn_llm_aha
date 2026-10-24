@@ -1811,3 +1811,12 @@ PASS仅SCALA_COMPILE_ONLY，不执行Emit App/Module/CHIRRTL、真实Scalar/ACK�
 实际构造单LoadPrep owner、生成CHIRRTL131416B，SHA256 b95431cf614e93810812bb1c313c1ff3dee456eb8ff715956f8dd947900b139f。独立递归解析确认97端口叶（67输入30输出）、单模块无子实例/存储；实际独审SHA256 b1eeac5a9bff69648a903bdbcc56207370ad3d29ded6ed2d4a52c0821649eb57。27纯parser控制是先行限定测试，不与前端混淆。
 
 仅Chisel构造/CHIRRTL前端，未运行firtool/SV/RTL仿真、真实Scalar/ACK/完整prefill，无MAC测量。五RTL0/5、Qwen2full UNKNOWN不变。公开12项99140B在 candidates/qwen35_chunk_loadprep_chirrtl/，manifest SHA256 49bc4527eb1b7cb183ff70eb3747f4abf61c1689496c734de93ba478b9ecdcaa；复用已有342pins加120增量，不复制IR/class/生产源/机器plan/日志。原runner摘录非完整可直接执行closure。未push、无新CI、无清理。
+
+
+## PASS（仅Python协议/模拟服务）：DerivedAndPair phase2源码
+
+新增独立owner借现Scalar Exp4及同16路ALU Loan Add1/Mul2，不新造exp/Vector、不改Host/public接线。保留gates63补读、phase1完整资格、256B四槽全部tuple结果算完再写、末2816ACK后带完整context私有decay有效。Loan abort/reset不保持高等terminal；真实错误response退役后held done再锁定，失败不授drained。
+
+15组纯Python对应控制唯一自然0，外1.33311112秒/内1.260561秒，32内容pins前后同；两合成完整轨迹各13410事务：3681读、2816写、2144Add、2209Exp、2560Mul16。原序与payload在线对照使用模拟服务，共享helper不是独立FP32DUT；subnormal部分测试为注入接收门。26980 modelcycles不作硬件周期/全block利用率。独审ACTUAL_CONTROLS_REVIEW SHA256 78795c2a5e06f6ec4f2f163d6fac4090c17bbea3f95027f3c42106762f2335ba。
+
+公开10件112580B在 candidates/qwen35_chunk_derived/，manifest SHA256 503afae0679ea4952962c1030b0a5a0dd9bcdd210251881fadb0378e6eba9d64。原7源字节不改；排除机器命令/原manifest/日志/数组，非独立运行closure。Scala编译/CHIRRTL/真实Scalar或Loan/ACK仍TEMP未验，五RTL0/5、Qwen2full UNKNOWN不变。未push、无新CI、无清理。

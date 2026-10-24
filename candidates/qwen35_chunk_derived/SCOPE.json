@@ -1,0 +1,80 @@
+{
+  "candidate_source_files": [
+    "source/GdnChunkDerivedAndPairOwner.scala"
+  ],
+  "decay_scope": "only successful final phase2 result; full accepted context/head/chunk; trusted scheduler must retain exclusively to same-identity phase15; never publishes roots",
+  "geometry": {
+    "chunk_rows": 64,
+    "heads": 16,
+    "key_dim": 128,
+    "tokens": [
+      16,
+      128
+    ],
+    "value_dim": 128
+  },
+  "implemented_claim": "independent source-level phase2 controller only",
+  "proposed_controls": {
+    "complete_model_cases": 2,
+    "models_or_tests_executed": false,
+    "simulated_service": "integer binary32 RNE Add/Mul and separately rounded frozen legacy P7 Exp nodes; not independent HardFloat validation",
+    "source_parse_only_completed": true,
+    "success_case_shapes": [
+      {
+        "chunk": 0,
+        "head": 3,
+        "tokens": 16
+      },
+      {
+        "chunk": 1,
+        "head": 11,
+        "tokens": 128
+      }
+    ],
+    "transactions_per_complete_case": 13410,
+    "unittest_groups": 15
+  },
+  "recovery": "loan.abort/resetLoan held low; consume error terminal; owner done retirement locks until coordinated complete fabric reset. No owner-local clear or replay isolation.",
+  "resources": {
+    "context_control_counters": "additional explicitly declared registers, not counted as free",
+    "new_arithmetic_unit": false,
+    "new_tensor_sram": false,
+    "payload_bytes": 256,
+    "payload_registers": "4 x UInt(512.W)",
+    "scalar_registers": "8 x UInt(32.W), additional to payload"
+  },
+  "schema": "derived_phase2_source_scope_v1",
+  "services": {
+    "memory": "original full 64B MemoryRequest/Response",
+    "scalar": "original GdnScalarClient, ExpNegative4 only, b=+0",
+    "vector": "original flipped ElementwiseLoanPort, Add1/Mul2 only; no instantiated service"
+  },
+  "status": "SOURCE_PREPARATION_TESTS_NOT_EXECUTED",
+  "success_per_head_chunk": {
+    "add_request_result_each": 2144,
+    "exp_request_result_each": 2209,
+    "external_output_ack_bytes": 0,
+    "mul_request_result_each": 2560,
+    "read_bytes": 235584,
+    "scratch_ack_bytes": 180224,
+    "state_out_ack_bytes": 0,
+    "write_acks": 2816
+  },
+  "unchanged": [
+    "all base source files",
+    "existing scalar and elementwise loan implementation",
+    "public and recurrent M1 gates",
+    "Host terminal/root fence",
+    "phase1 owner",
+    "ChunkProtocol and AddressPlan"
+  ],
+  "unexecuted": [
+    "Scala compile",
+    "Chisel elaboration",
+    "RTL generation",
+    "real memory/loan/scalar handshake",
+    "independent FP32 numerical validation",
+    "complete chunk/block",
+    "utilization measurement"
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "RTL_targets_passed": 0,
+  "RTL_targets_total": 5,
+  "Scala_source_bytes_republished": false,
+  "classes": {
+    "LoadPrepOwner_class": {
+      "bytes": 84354,
+      "sha256": "435e7603aa9bed4ff1c5026c0547e24563ea651cdf41796126a773d673957112"
+    },
+    "all_class_pins_magic_and_exact_inventory_independently_verified": true,
+    "bytes": 950518,
+    "count": 116,
+    "package_counts": {
+      "gemmini": 5,
+      "hardfloat": 47,
+      "heteronpu/continuous": 64
+    },
+    "required_subset_count": 23,
+    "required_subset_present": true
+  },
+  "cleanup_interpretation": "Original support observed natural CLD_EXITED/status 0 while unreaped, then performed the recorded group cleanup before reaping. kill_attempted=true is preserved; it is not described as no signal and is not a timeout termination.",
+  "frozen_inputs": {
+    "all_identity_stamps_equal": true,
+    "all_pins_match_plan": true,
+    "before_after_identical": true,
+    "bytes": 297315977,
+    "count": 342
+  },
+  "not_validated": [
+    "Bundle/Module construction",
+    "AddressPlan runtime behavior",
+    "CHIRRTL or other hardware IR generation",
+    "SystemVerilog or RTL simulation",
+    "real ready/valid, memory ACK or backpressure",
+    "shared scalar FP32 numerical behavior",
+    "Host integration, root publication or receipt provenance",
+    "chunk64 prefill, full model, QoR or utilization"
+  ],
+  "original_Qwen2_full_status": "execution and cleanup UNKNOWN; unchanged",
+  "package_is_standalone_executable": false,
+  "prior_Python_controls_or_other_PASS_inherited": false,
+  "private_actual_review_digest": {
+    "bytes": 7668,
+    "sha256": "d99fe81838ade88d28f1da89067978b38c7c53bb3d278d6d29eecae03be0acdb"
+  },
+  "private_before_after_digest": {
+    "bytes": 115257,
+    "sha256": "460cba1e7d0f42dd1e8cd5ba0982e7d7620971f8e151140d6d52f6cb902f0224"
+  },
+  "private_output_manifest_digest": {
+    "bytes": 18472,
+    "sha256": "254ac53b2b8b719c4018be89b186a88a40ba449cae50fbbdd7b9213e4cb44457"
+  },
+  "private_result_digest": {
+    "bytes": 32436,
+    "sha256": "28225af45d4548a81117ac4e1377720427eed91179af6c72f5d4eebfb095e229"
+  },
+  "qualification": "仅 20 份 Scala 源编译与类型检查通过。",
+  "raw_private_evidence_included": false,
+  "resource_limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "resource_observations": {
+    "child_system_cpu_seconds": 0.398805,
+    "child_user_cpu_seconds": 27.841243,
+    "closed_output_bytes": 1479364,
+    "closed_output_files": 128,
+    "cumulative_children_maxrss_kib": 328024,
+    "interpretation": "Sampled aggregate RSS is not an instantaneous hard peak; cumulative children maxrss is not a separate per-phase measurement.",
+    "peak_sampled_descendant_rss_bytes": 335360000,
+    "sample_interval_seconds": 0.2,
+    "watch_stop_reason": null
+  },
+  "schema": "qwen35-loadprep-compile-public-summary-v1",
+  "source_closure": {
+    "bytes": 122196,
+    "chunk_sources": 3,
+    "count": 20,
+    "unchanged_HardFloat": 13,
+    "unchanged_shared": 4
+  },
+  "source_manifest": {
+    "bytes": 1559,
+    "sha256": "53b203dc34c6b14561139f7c8b42551dae5e303eba560532e7bb65f6c37a610f"
+  },
+  "status": "PASS_ACTUAL_TWENTY_SOURCE_LOADPREP_SCALA_COMPILE_ONLY",
+  "terminal": {
+    "anchor_confirmed": true,
+    "cleanup_confirmed": true,
+    "exit_code": 0,
+    "group_state": "absent",
+    "kill_attempted": true,
+    "kill_result": "signal_sent_before_reap",
+    "parent_exception": null,
+    "reaped": true,
+    "status": "PASS",
+    "timed_out": false
+  },
+  "timing": {
+    "independently_measured_outer_wall_seconds": null,
+    "interpretation": "Distinct recorded monotonic boundaries; launcher stdout timing is not an independently measured outer wall duration.",
+    "launcher_stdout_seconds_root_reported": 29.268740754007013,
+    "phase_record_seconds": 28.568111,
+    "phase_usage_seconds": 28.576697236989276,
+    "result_internal_seconds": 29.26701080100611
+  },
+  "tools_or_classes_included": false,
+  "waitid": {
+    "code": 1,
+    "status": 0
+  }
+}

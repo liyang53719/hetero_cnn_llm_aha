@@ -1,0 +1,24 @@
+{
+  "allow_extra_files": false,
+  "allow_symlinks": false,
+  "excluded_categories": [
+    "machine-specific plan and paths",
+    "raw logs/receipts/private reviews/authority",
+    "Scala sources already published",
+    "JDK/JAR/tool binaries",
+    "compiled classes/IR/RTL",
+    "weights/arrays"
+  ],
+  "files": [
+    "ALLOWLIST.json",
+    "INPUT_PINS.json",
+    "MANIFEST.json",
+    "README.md",
+    "REPRODUCE_COMMAND.txt",
+    "SUMMARY.json",
+    "launch_compile.py",
+    "run_compile.py"
+  ],
+  "recursive_parent_publication_allowed": false,
+  "schema": "qwen35-loadprep-compile-public-allowlist-v1"
+}

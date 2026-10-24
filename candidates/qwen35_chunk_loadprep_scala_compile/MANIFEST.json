@@ -1,0 +1,42 @@
+{
+  "files": {
+    "ALLOWLIST.json": {
+      "bytes": 606,
+      "sha256": "4c320de8e1ba3609f9f70c855b5a9c88aacacc93f5cf43f975699ef96ebf12bf"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 105083,
+      "sha256": "7dc5aefc8e218521b68a48ee004ed34f2c27abf469bcf1aabfb253127667f029"
+    },
+    "README.md": {
+      "bytes": 2921,
+      "sha256": "1ab52f8c749535e26419e1bb5e25a4ee722745d42c097f6a1c2e2ec46a6db654"
+    },
+    "REPRODUCE_COMMAND.txt": {
+      "bytes": 3028,
+      "sha256": "b60a9326e6583dd49882e9c606efb203cd7d035ce446c9e592cd4741bf82791d"
+    },
+    "SUMMARY.json": {
+      "bytes": 4565,
+      "sha256": "ed703a7cfb805960b5343d762de1ca7b5728f28feeedd61fba1ded09f1ebefa7"
+    },
+    "launch_compile.py": {
+      "bytes": 3422,
+      "sha256": "3ba508bb5b15619029c5ae6c874ff3d64c82b257416ab8235eca2e2c12a00bb9"
+    },
+    "run_compile.py": {
+      "bytes": 11651,
+      "sha256": "e08fa49790536b6a3a66a5d2dddf3f9be213612f056d7a5c29523ac1c210b021"
+    }
+  },
+  "original_exact_python_files": [
+    "run_compile.py",
+    "launch_compile.py"
+  ],
+  "schema": "qwen35-loadprep-compile-public-manifest-v1",
+  "scope": "Source and sanitized compile-only summary excerpt; not executable closure.",
+  "source_manifest": {
+    "bytes": 1559,
+    "sha256": "53b203dc34c6b14561139f7c8b42551dae5e303eba560532e7bb65f6c37a610f"
+  }
+}

@@ -1,0 +1,47 @@
+# Explanatory template only. Not executed; not a new runner or permission.
+# Compile only the exact 20 sources referenced by INPUT_PINS.json.
+# No candidate constructor, App, emitter, ChiselStage, test or model entry.
+# Obtain and verify all inputs independently. No discovery/download here.
+# JAVA, CLASSPATH, CHISEL_PLUGIN refer to independently mapped pinned tools.
+# SOURCE_ROOT contains repository/, hardfloat_snapshot/, chunk_contract/, chunk_loadprep/.
+# WORK_ROOT is fresh; HOME_DIR, TMP_DIR, CLASSES_DIR are within it.
+# Use an independently reviewed explicit environment: LANG/LC_ALL=C.UTF-8,
+# TZ=UTC, HOME=HOME_DIR, TMPDIR=TMP_DIR, and minimal PATH.
+# This bare command lacks the original deadline, CPU/RSS, output caps, identity,
+# WNOWAIT, reaping and cleanup safeguards. No execution equivalence claimed.
+# Original launcher needs the excluded frozen machine plan; do not fabricate it.
+
+"${JAVA}" \
+  -Xmx1024m \
+  -XX:ActiveProcessorCount=1 \
+  -XX:-UsePerfData \
+  -Djava.awt.headless=true \
+  "-Djava.io.tmpdir=${TMP_DIR}" \
+  "-Duser.home=${HOME_DIR}" \
+  "-XX:ErrorFile=${WORK_ROOT}/hs_err_pid%p.log" \
+  -cp "${CLASSPATH}" \
+  scala.tools.nsc.Main \
+  -classpath "${CLASSPATH}" \
+  "-Xplugin:${CHISEL_PLUGIN}" \
+  -deprecation -feature -unchecked -language:reflectiveCalls \
+  -d "${CLASSES_DIR}" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/AddRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/DivSqrtRecFN_small.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/INToRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/MulRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/RecFNToIN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/common.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/fNFromRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/primitives.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/rawFloatFromFN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/rawFloatFromIN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/rawFloatFromRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat_snapshot/hardfloat/src/main/scala/recFNFromFN.scala" \
+  "${SOURCE_ROOT}/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala" \
+  "${SOURCE_ROOT}/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala" \
+  "${SOURCE_ROOT}/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala" \
+  "${SOURCE_ROOT}/repository/integration/gemmini/EmitHeteroFP32Alu.scala" \
+  "${SOURCE_ROOT}/chunk_contract/source/GdnChunkProtocol.scala" \
+  "${SOURCE_ROOT}/chunk_contract/source/GdnChunkAddressPlan.scala" \
+  "${SOURCE_ROOT}/chunk_loadprep/source/GdnChunkLoadPrepOwner.scala"

@@ -1795,3 +1795,10 @@ R2唯一实际总11.457736474秒、双自然0/WNOWAIT/reap/group absent/cleanup�
 14组纯Python模型/模拟Scalar一次自然0，4完整合成轨迹，24内容pins前后同；外0.548627865秒/内0.458691秒，末held模型3周期。Scalar以整数binary32 RNE替身返回，不是独立硬件FP32验证；4192/10383/6592/16383为模型槽计数而非实测RTL周期或利用率。未编译Scala/运行Chisel/真实ACK/完整prefill。实际独审SHA256 f7fa65b26eae561ca045d3613efefb2b7b585f4928b9ba518e8ee0d849b6068f。
 
 公开9件91077B在 candidates/qwen35_chunk_loadprep/，manifest SHA256 332fec149550b035ed02085377a126513afeaa02389aa83fa8366b9d511ad5d7。原六源保持字节，原README的未测试状态是封源前快照，新增TEST_SCOPE记录实际限域；排除机器命令/原manifest/日志，非独立完整运行closure。Scala编译仍TEMP，五RTL0/5、Qwen2 UNKNOWN不变；未push、无新增CI、无清理。
+
+
+## PASS（仅20源 Scala 编译）：LoadPrep owner
+
+20完整源（含13 HardFloat及原Scalar支持）唯一编译自然0，总29.268740754秒；116class/950518B、23必需类型齐，342输入before/after内容与身份同。WNOWAIT自然0后组清理/reap/group absent/cleanup确认；未将清理kill_attempted误报为强杀。独审ACTUAL_REVIEW SHA256 d99fe81838ade88d28f1da89067978b38c7c53bb3d278d6d29eecae03be0acdb。SOURCE有限GO在启动前已发，完整SOURCE收据封存晚于启动，如实分列不倒填时间。
+
+PASS仅SCALA_COMPILE_ONLY，不执行Emit App/Module/CHIRRTL、真实Scalar/ACK或数值；五RTL0/5、Qwen2full UNKNOWN不变。公开8件132608B在 candidates/qwen35_chunk_loadprep_scala_compile/，manifest SHA256 6e6a74e54f27801a7e4c749226fc49ce144a2d2250f4c22ab1b0d706fa9b5a0b，复现模板/原runner摘录不是完整冻结机器closure，不提交工具/class/机器plan/log。未push、无新CI、无清理。

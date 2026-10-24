@@ -2038,3 +2038,12 @@ R1首次runner错误禁止原Prep来源验证所需git show，0.200秒error发�
 15项候选14逐词相同、1差1ULP（c2a00001→候选05bfec5b，参考05bfec5a）；旧错误置零7、候选0。没有数值容差，passed/thresholds/numerical_acceptance仍null，4测试PASS不等于exp正确舍入或官方数值PASS。历史1618次非零丢失只引用原摘要，不称本批重现。见 QWEN35_EXP_RANGE_CONTRACT_20261023_CN.md 和 reports/execution/QWEN35_EXP_RANGE_CONTRACT_20261023/summary.json。
 
 本子门done；官方输入完整block数值、现有候选到Chisel的opcode/FSM/异常策略绑定仍ongoing/todo。五完整RTL仍0/5、Qwen2旧M128UNKNOWN；没有新增周期或MAC利用率证据，最终真实完整RTL及80%/90%目标不变。1024或1224第二档未定不阻塞128；不重启旧Qwen2作业。仅本地小批，远端发布仍待确认；私有manifest/log不提交，无清理。
+
+
+## PASS（EQUAL_HEADS 实验 exp 策略/Scalar 分派）/ INCOMPLETE（完整 block/RTL）：2026-10-23
+
+新增独立 EQUAL_HEADS_EXPERIMENTAL_EXP，复用已有 DecayScalar；旧 IEEE_EXP 仍只允许 GROUPED_35B，legacy exp/fatal30默认不变。新策略明确启用 Scalar、IEEE28及一致mask，未知 operation/identity policy fail-closed；身份含helper来源及experimental、numerical_acceptance=null、production_new_opcode_bound=false。full_driver未接入，运行时Scalar callable冻结缺口仍待审查，不以源码hash冒充通用防篡改。
+
+根实际有界运行exit0，cold4+既有range回归4均0skip/error/failure，原ChunkOwner._exp五词Scalar分派通过，payload0.130929718秒。分派5候选Scalar calls，内部63Mul/45Add/5integerRNE，3非正常1零，无旧80截断；真实R2 Vector16仅用于此分派策略admission，分派不执行Vector算术。两次真实单lane UF检查属于独立range回归阶段。1CPU/512MiB/20CPU/25alarm/外层30+2KILL，38pins不变，无denied/编译/下载。cold阶段所有dlopen受禁且未发生，stdlib ctypes预先初始化另行披露。
+
+见 QWEN35_EQUAL_HEADS_EXP_DISPATCH_20261023_CN.md 及 reports/execution/QWEN35_EQUAL_HEADS_EXP_DISPATCH_20261023/summary.json。策略/分派子门done；full_driver共享Scalar身份冻结、官方完整128-token block数值及RTL绑定ongoing/todo。不是完整chunk/prefill、官方数值或RTL PASS；五完整RTL仍0/5，Qwen2旧M128UNKNOWN，未新增MAC利用率证据。第二档1024/1224未定不阻塞128；仅本地小批，远端发布待确认，私有manifest/rawresult/log不提交，无清理。

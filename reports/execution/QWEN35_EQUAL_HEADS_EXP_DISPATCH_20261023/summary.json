@@ -1,0 +1,216 @@
+{
+  "bounds": {
+    "automatic_build": false,
+    "cpu_affinity": [
+      0
+    ],
+    "cpu_seconds": [
+      20,
+      20
+    ],
+    "inner_alarm_seconds": 25,
+    "memory_bytes": [
+      536870912,
+      536870912
+    ],
+    "required_external_timeout_seconds": 30,
+    "subprocess_and_network_denied": true
+  },
+  "cold_phase_all_dlopen_denied": true,
+  "ctypes_loads_after_hook": [
+    {
+      "library_role": "current_process",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "current_process",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "current_process",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "current_process",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "r2_library",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "r2_library",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "current_process",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "current_process",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "r2_library",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "r2_library",
+      "phase": "range_regression"
+    },
+    {
+      "library_role": "current_process",
+      "phase": "scalar_dispatch_probe"
+    },
+    {
+      "library_role": "current_process",
+      "phase": "scalar_dispatch_probe"
+    },
+    {
+      "library_role": "r2_library",
+      "phase": "scalar_dispatch_probe"
+    }
+  ],
+  "denied_operations": [],
+  "elapsed_seconds": 0.13092971802689135,
+  "error": null,
+  "exit_code": 0,
+  "external_role_sha256": {
+    "compiler_receipt_identity_only": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "python_interpreter": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "r2_build_receipt": "33e727a5adb2ad5525ead4ae77a179f7c669aaa61460b4f1d71e2935397210b1",
+    "r2_library": "b04209e85923fc858092ec6019e6b183cdc92a0afabed75cbf63179a83302bd2"
+  },
+  "full_block": false,
+  "full_driver_wired": false,
+  "numerical_acceptance": null,
+  "peak_rss_kib": 28660,
+  "pin_scope": "Reviewed existing range-contract dependency pins plus equal-head policy, original ChunkOwner, cold tests, scalar-dispatch probe and bounded runner; external manifest kept private.",
+  "pins_unchanged": true,
+  "prehook_initialization": "stdlib ctypes interpreter handle only",
+  "raw_log_sha256": "701e9fbe698c85aed8cfbd5206692469784981394341dc14a26227e0420bf23d",
+  "raw_result_sha256": "17b8a0898049ff07df74af8bdc670ba470fbc6c2a93bd09eab2690e233aae3e7",
+  "rtl_executed": false,
+  "runtime_scalar_callable_identity_guard_complete": false,
+  "scalar_dispatch_probe": {
+    "decay_internal_calls": {
+      "add": 45,
+      "integer_rne": 5,
+      "mul": 63
+    },
+    "exp_stats": {
+      "calls": 5,
+      "inputs_abs_ge_80": 5,
+      "max_abs_input_word": 1120924085,
+      "saturated_abs_ge_80": 0,
+      "subnormal_outputs": 3,
+      "zero_outputs": 1
+    },
+    "full_block_executed": false,
+    "full_chunk_executed": false,
+    "numerical_acceptance": null,
+    "original_owner_executed": true,
+    "production_new_opcode_bound": false,
+    "rows": [
+      {
+        "input_word": 3265265664,
+        "output_word": 96464058
+      },
+      {
+        "input_word": 3266227280,
+        "output_word": 8388582
+      },
+      {
+        "input_word": 3266783058,
+        "output_word": 120829
+      },
+      {
+        "input_word": 3268407732,
+        "output_word": 1
+      },
+      {
+        "input_word": 3268407733,
+        "output_word": 0
+      }
+    ],
+    "rtl_validated": false,
+    "scalar_calls": {
+      "exp_negative_ieee_rne": 5
+    },
+    "scope": "TINY_ORIGINAL_CHUNK_OWNER_SCALAR_DISPATCH_ONLY",
+    "source_identity": {
+      "admitted_layout": "EQUAL_HEADS",
+      "compound_sources": {
+        "candidates/qwen35_35b_exp/scalar.py": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5",
+        "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": "a8c5ae8b13b6e7f8ce9699ddaeca855e118101807c20e4aa2ddc132c71e347db",
+        "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+        "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1"
+      },
+      "correctly_rounded_claim": false,
+      "experimental": true,
+      "full_block_validated": false,
+      "numerical_acceptance": null,
+      "operation": "exp_negative_ieee_rne",
+      "policy": "experimental_equal_heads_chunk_candidate_p7_split_ln2_gradual_underflow_v1",
+      "production_new_opcode_bound": false,
+      "required_vector_fatal_mask": 28,
+      "rtl_validated": false,
+      "torch_bitexact_claim": false
+    },
+    "vector_arithmetic_executed": false
+  },
+  "scope": "EQUAL_HEADS_POLICY_GATES_RANGE_REGRESSION_AND_SCALAR_DISPATCH_ONLY",
+  "source_pins": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen35_35b_exp/run_range_contract_bounded.py": "b0dca67c3708ecf0f11b5be6585af95a5cd988b696246bce99671f16b8e267dc",
+    "candidates/qwen35_35b_exp/scalar.py": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5",
+    "candidates/qwen35_35b_exp/test_range_contract.py": "43fdb1590b9c34256871267e1da73e593c2fc43e7aff64f581c15b7b88422af4",
+    "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+    "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+    "candidates/qwen35_35b_prefill/sum_tiles.py": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+    "candidates/qwen35_gdn_prefill/chunk/cumsum.py": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f",
+    "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": "a8c5ae8b13b6e7f8ce9699ddaeca855e118101807c20e4aa2ddc132c71e347db",
+    "candidates/qwen35_gdn_prefill/chunk/matmul_reuse.py": "17c7c5ff373ddbb68fdb62ba3c53fa4e7f451c5818af06631ae471d6e9383a1b",
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40",
+    "candidates/qwen35_gdn_prefill/chunk/probe_equal_heads_exp_dispatch.py": "175429146c1728221c52fad9c79d66bc9eb2d7148b8a2849a6bac3da7fb63a60",
+    "candidates/qwen35_gdn_prefill/chunk/run_equal_heads_exp_bounded.py": "dbbfc955f83e435c871d42a9e7f35c18c847ac473dccd56c961f2e22ec64941b",
+    "candidates/qwen35_gdn_prefill/chunk/test_equal_heads_exp_policy.py": "f7493385109f61473045bbed84b0e47bcc07f4c6a04745bbb0d0babb60cbc826",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "d8a7ce5456507d5f29423434aa3d985b4ccff50744f832f5b06b7cfebb81c533",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+    "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+  },
+  "suites": {
+    "cold": {
+      "errors": 0,
+      "failures": 0,
+      "skip_count": 0,
+      "success": true,
+      "tests": 4
+    },
+    "range_regression": {
+      "errors": 0,
+      "failures": 0,
+      "skip_count": 0,
+      "success": true,
+      "tests": 4
+    }
+  },
+  "validation_status": "PASS_POLICY_GATES_REGRESSION_AND_SCALAR_DISPATCH_ONLY"
+}

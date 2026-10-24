@@ -1,0 +1,27 @@
+{
+  "exit": 0,
+  "timeout": false,
+  "cleanup_group_absent": true,
+  "wall_seconds": 0.8182531310012564,
+  "mode": "-I -S -B -O",
+  "script_sha256": "35da451022452ca86481b28d99c9017aa775c734bd4ce03fc5c4402792078a36",
+  "config_sha256": "9e6c1c509c365bcea686d36d47acc8638ccfa0b0237c1ece03cddeed21d3ad5b",
+  "manifest_sha256": "db7e045a42029f741fd94c1eea5d09e7b1929ac3e446001cc0d8e2a85a01a7ba",
+  "source_pins": {
+    "MANIFEST.json": "db7e045a42029f741fd94c1eea5d09e7b1929ac3e446001cc0d8e2a85a01a7ba",
+    "test_profile.py": "6ec5c707e1640954ea0e261a03bf67d67f686c9aeb2840fd85cd722d99063f86",
+    "run_bounded.py": "148486ce33c656bcc6b05b22fd0927fee3c4d1c050a442e08afe2f6cd9e71fec",
+    "check_binding.py": "35da451022452ca86481b28d99c9017aa775c734bd4ce03fc5c4402792078a36",
+    "profile_gate.py": "c12cebf32e26bf2fc24b560f5f305456b396960bcefdbbd8d6badc0284fed29f",
+    "prepare_profile.py": "27a7125a021de5afa23e0d1506863c4e7512d61da892a33b11ddd7542555a5da",
+    "README.md": "8cee97453ba78fdddd566426cfca76d4a6cd7ee8753b731b07cd1b0bc2598ba0"
+  },
+  "source_unchanged": true,
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "limits": {
+    "cpus": 1,
+    "address_space_bytes": 268435456,
+    "cpu_seconds": 20,
+    "wall_seconds": 25
+  }
+}

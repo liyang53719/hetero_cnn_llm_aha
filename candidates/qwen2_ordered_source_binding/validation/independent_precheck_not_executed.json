@@ -1,0 +1,9 @@
+{
+  "status": "NOT_EXECUTED_IDENTITY_PRECHECK_FAILED",
+  "expected_old_config_sha256": "0af242e255972e0a199d684da7054b4fbab3537fea9ff74ce18b0aab5cb2ca49",
+  "actual_config_sha256_at_failure": "not_recorded",
+  "reason": "Parent changed the old PRIVATE_CONFIG while reviewer was about to validate its immutable identity. The first configuration hash assertion failed before dependency reads and before subprocess creation.",
+  "normal_import_child_started": false,
+  "native_task_started": false,
+  "retry_scope": "A later explicitly frozen FINAL_CONFIG with updated runner is a materially different reviewed target; one authorized independent execution remains pending."
+}

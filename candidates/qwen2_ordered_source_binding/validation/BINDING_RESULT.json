@@ -1,0 +1,1035 @@
+{
+  "status": "PASS_NORMAL_MODULE_LOAD_AND_CODE_BINDING_ONLY",
+  "bound": [
+    "run",
+    "work",
+    "consume",
+    "matrix",
+    "op",
+    "tick",
+    "client",
+    "buffer.__init__",
+    "buffer._put",
+    "buffer._bytes",
+    "buffer.field_summary"
+  ],
+  "negative_rejections": [
+    "wrong_digest",
+    "same_bytes_wrong_path",
+    "one_byte_source_change",
+    "replacement_method"
+  ],
+  "source_files_verified": 316,
+  "imports": [
+    {
+      "module": "__main__",
+      "sha256": "35da451022452ca86481b28d99c9017aa775c734bd4ce03fc5c4402792078a36",
+      "name": "check_binding.py"
+    },
+    {
+      "module": "_collections_abc",
+      "sha256": "d4945c8410c4bab351741b04bca3de066f7c27ed7e38df89e206a96617102ffb",
+      "name": "_collections_abc.py"
+    },
+    {
+      "module": "_compat_pickle",
+      "sha256": "12c8356a3d40bd0a336f13d7c6e2bed50d5c1a876563766a3175a6b328b5855e",
+      "name": "_compat_pickle.py"
+    },
+    {
+      "module": "_compression",
+      "sha256": "3ad5d60627477a60939ee44fc1bb3a05dbe8fb52f0f75039b8f5d8f1a278b981",
+      "name": "_compression.py"
+    },
+    {
+      "module": "_frozen_importlib",
+      "sha256": "d112d54b7831cf4a818d4841d5ff8003b54df220a6dabafa61f67d7c7a5603f7",
+      "name": "_bootstrap.py"
+    },
+    {
+      "module": "_frozen_importlib_external",
+      "sha256": "e6ad72f3f0f9b65c99ab52598cd02ab748511dcdce1dd51f18dace9be9a680c6",
+      "name": "_bootstrap_external.py"
+    },
+    {
+      "module": "_normal_pinned_buffer",
+      "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f",
+      "name": "capture.py"
+    },
+    {
+      "module": "_normal_pinned_observer.capture",
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+      "name": "capture.py"
+    },
+    {
+      "module": "_normal_pinned_observer.monitor",
+      "sha256": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87",
+      "name": "monitor.py"
+    },
+    {
+      "module": "_weakrefset",
+      "sha256": "91895a451d06e9f521a1171b31b9b19bc9740f35af00d4fa106338ab7167c9ac",
+      "name": "_weakrefset.py"
+    },
+    {
+      "module": "abc",
+      "sha256": "e558702a95cdce3febd289da021715d2b92bc43995b8a1bc58dfa1c3d8010287",
+      "name": "abc.py"
+    },
+    {
+      "module": "argparse",
+      "sha256": "7cc582dcb3b76e2c957f78a3f74e9809d6c311d6aab7bcaa2c9954d0cbff5f30",
+      "name": "argparse.py"
+    },
+    {
+      "module": "ast",
+      "sha256": "b515c23dbbc459329d3b802a3aac742cc456d7472e66f7ed6e9dc97e40596d7d",
+      "name": "ast.py"
+    },
+    {
+      "module": "bz2",
+      "sha256": "76ab3252924e71e859d7d90e8d3db13b6554975cfcac0fdadced4de7f8779330",
+      "name": "bz2.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.attention_packed_owner.client",
+      "sha256": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1",
+      "name": "client.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.attention_packed_owner.hooks",
+      "sha256": "f8415cf0cc5e78c6b0b0ad46d127f8f5c69ef6c53b142004a9eb03fe40cd46d7",
+      "name": "hooks.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.attention_packed_owner.protocol",
+      "sha256": "d153de82a85efb87e0f359ad84a8744e9c1a5d28ba12a8f689fa179a9eea63f3",
+      "name": "protocol.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.attention_packed_owner.schedule",
+      "sha256": "ddd2c2b2d7a60bbcae27013f1f38e17bdc514cffe15572124c9bdfabff2c81bd",
+      "name": "schedule.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.ffn_attention.attention_owner",
+      "sha256": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c",
+      "name": "attention_owner.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.ffn_attention.matrix_service",
+      "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+      "name": "matrix_service.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.ffn_attention.scalar_recipe",
+      "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+      "name": "scalar_recipe.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.ffn_public.prefix_arithmetic",
+      "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880",
+      "name": "prefix_arithmetic.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.ffn_public.prefix_owners",
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+      "name": "prefix_owners.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.production_qk16_model.ordered_owner",
+      "sha256": "c8ef9d1374230bc78e7a38fcdda4208ea842e9a494ecb2dd22b486fc3c62813a",
+      "name": "ordered_owner.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.production_qk16_model.ordered_work",
+      "sha256": "505651c4452f07743e6c59e0457d5e955624a05f343bf7d7869a3e99b2ec9e61",
+      "name": "ordered_work.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.production_qk16_model.routing",
+      "sha256": "3fa190b5f0ecc6f1cb05383a7efafa4db64566c10f5b9bfcfda7b11ac574a534",
+      "name": "routing.py"
+    },
+    {
+      "module": "candidates.qwen2_resident_matrix.production_qk16_model.schedule",
+      "sha256": "4cd2609d2fe1ffffd5d14b9398c45c108b9382c0097d5316502b41486f37cf1b",
+      "name": "schedule.py"
+    },
+    {
+      "module": "codecs",
+      "sha256": "7b7839e53a77961153240aecfe11edc8054d05b1dedd83894450dae21ec05785",
+      "name": "codecs.py"
+    },
+    {
+      "module": "collections",
+      "sha256": "7fdb04dd248ab37909f46d2085bfee56b32d7e91e49ad3a2fad99c453295659b",
+      "name": "__init__.py"
+    },
+    {
+      "module": "collections.abc",
+      "sha256": "9cb4208f99128a0489b6c8e6c61637617dd7d4250c59e065491957eda084dd10",
+      "name": "abc.py"
+    },
+    {
+      "module": "contextlib",
+      "sha256": "8b7a477f978a8532852fd81e241c78182516bc4975d672d580a5848a76e11eb6",
+      "name": "contextlib.py"
+    },
+    {
+      "module": "contextvars",
+      "sha256": "5ed260be8d1f4fe92261b7810b4bb1e8539c42093d7493f677d076e1a87f459a",
+      "name": "contextvars.py"
+    },
+    {
+      "module": "copy",
+      "sha256": "cbd25547933176fcf6bb05c2adc9f4796d15ac20b9b82dcf890daea7203daeab",
+      "name": "copy.py"
+    },
+    {
+      "module": "copyreg",
+      "sha256": "c8eda41f05c6bf95a4da4726a530409d2485ae060b8d019b3a8034389a15d3e9",
+      "name": "copyreg.py"
+    },
+    {
+      "module": "ctypes",
+      "sha256": "e048845f8f5c14a5fc873526a27da4a19d4eed25ab2f2a01fa6e0b79faca78d0",
+      "name": "__init__.py"
+    },
+    {
+      "module": "ctypes._endian",
+      "sha256": "c5d692bdce10dfee242752620061bab684633bc72445a3def484961ef1bdbf3a",
+      "name": "_endian.py"
+    },
+    {
+      "module": "dataclasses",
+      "sha256": "d242aea5fcf6408b1c1f622442f88f68b9526ce1f8bd2890d74a144677c427d9",
+      "name": "dataclasses.py"
+    },
+    {
+      "module": "datetime",
+      "sha256": "ef20dc6b3554cd585dddffdc573f1f9a7a54c522f2a3fb4576c44edbb1e14238",
+      "name": "datetime.py"
+    },
+    {
+      "module": "dis",
+      "sha256": "44c0b389c96124d8fb5cb0bc41c7a2aa7a6848ef4001b4000dcbd858efa4a1a2",
+      "name": "dis.py"
+    },
+    {
+      "module": "encodings",
+      "sha256": "78c4744d407690f321565488710b5aaf6486b5afa8d185637aa1e7633ab59cd8",
+      "name": "__init__.py"
+    },
+    {
+      "module": "encodings.aliases",
+      "sha256": "6fdcc49ba23a0203ae6cf28e608f8e6297d7c4d77d52e651db3cb49b9564c6d2",
+      "name": "aliases.py"
+    },
+    {
+      "module": "encodings.utf_8",
+      "sha256": "ba0cac060269583523ca9506473a755203037c57d466a11aa89a30a5f6756f3d",
+      "name": "utf_8.py"
+    },
+    {
+      "module": "enum",
+      "sha256": "f35e542d8c4c1d2b5e910138d726fa48774925f3c4dc5462793ebcb66aa55501",
+      "name": "enum.py"
+    },
+    {
+      "module": "fnmatch",
+      "sha256": "6683da36e47af523f3f41e18ad244d837783e19e98911cc0b7415dea81494ebc",
+      "name": "fnmatch.py"
+    },
+    {
+      "module": "functools",
+      "sha256": "de4a1d37c795e2a065124b5c49357893433bc6bb111b41277ccc9930ef08d4c9",
+      "name": "functools.py"
+    },
+    {
+      "module": "genericpath",
+      "sha256": "2b0b35d2206778af4081cf81dd9b513876e72c35a55bec941402e1fa62b1f1aa",
+      "name": "genericpath.py"
+    },
+    {
+      "module": "gettext",
+      "sha256": "a5c249a522b6b8e3aa6f1b12a8bcc09508b99ad612b58d2fc973db27ea3b7cc3",
+      "name": "gettext.py"
+    },
+    {
+      "module": "hashlib",
+      "sha256": "6dbdebf270868b391080e21dc9687eddfaf321c965ad979f68d3f5c423c613ab",
+      "name": "hashlib.py"
+    },
+    {
+      "module": "importlib",
+      "sha256": "d540b5ac137fcb3e26a8d5f2939649e34373c6685f98a30a9f682cf231be5854",
+      "name": "__init__.py"
+    },
+    {
+      "module": "importlib._abc",
+      "sha256": "80aab7931dc999dee581c8b8b56fcd973fe156335a96ceeaf6acfc03cebf10e8",
+      "name": "_abc.py"
+    },
+    {
+      "module": "importlib._bootstrap",
+      "sha256": "d112d54b7831cf4a818d4841d5ff8003b54df220a6dabafa61f67d7c7a5603f7",
+      "name": "_bootstrap.py"
+    },
+    {
+      "module": "importlib._bootstrap_external",
+      "sha256": "e6ad72f3f0f9b65c99ab52598cd02ab748511dcdce1dd51f18dace9be9a680c6",
+      "name": "_bootstrap_external.py"
+    },
+    {
+      "module": "importlib.machinery",
+      "sha256": "d045cd7ecf2a12b6ecbfbef79eb114e87ef2ebd756f5b705f73e6f3266e3dede",
+      "name": "machinery.py"
+    },
+    {
+      "module": "importlib.util",
+      "sha256": "671f2995653f673f6d5056a1089debef473bc28ae7114f7a8db71475733d6876",
+      "name": "util.py"
+    },
+    {
+      "module": "inspect",
+      "sha256": "5c54ebf0bfdc25397750e5d0f63800751650ee50e65325ff3ea4069c9bfa5f75",
+      "name": "inspect.py"
+    },
+    {
+      "module": "io",
+      "sha256": "7cec3cb8ac004058dd0a5af246e6d950fb59c7ddd0058fda48bcb3fcb98d8822",
+      "name": "io.py"
+    },
+    {
+      "module": "ipaddress",
+      "sha256": "ba8d3389ff084fcb232b48204ec04f2b3ea4bd0eadf7b18c814947d185de2c64",
+      "name": "ipaddress.py"
+    },
+    {
+      "module": "json",
+      "sha256": "d5d41e2c29049515d295d81a6d40b4890fbec8d8482cfb401630f8ef2f77e4d5",
+      "name": "__init__.py"
+    },
+    {
+      "module": "json.decoder",
+      "sha256": "382cd02af6f7efede5a6d4abbcda1015e5c7a75794b0016022878f9cf32a24f6",
+      "name": "decoder.py"
+    },
+    {
+      "module": "json.encoder",
+      "sha256": "52bfb1b66029cc70fa3bd7fe11df9f2e03922d413407a341b387a22c987f24f8",
+      "name": "encoder.py"
+    },
+    {
+      "module": "json.scanner",
+      "sha256": "572958017eae8842eeddd0e3d18d3c56cc0a197348224915e1d87ce937841764",
+      "name": "scanner.py"
+    },
+    {
+      "module": "keyword",
+      "sha256": "18c2be738c04ad20ad375f6a71db34b3823c7f40b0340f5294d0e89f3c9b093b",
+      "name": "keyword.py"
+    },
+    {
+      "module": "linecache",
+      "sha256": "9eb9194707991b49f9fea67a5222b0e6a0e49c865cdffc69fbc80a1f829e77fb",
+      "name": "linecache.py"
+    },
+    {
+      "module": "locale",
+      "sha256": "3988c5419552d5b9f0bef3695102376f79357f0f440e9cd1f32c501f966e6ef3",
+      "name": "locale.py"
+    },
+    {
+      "module": "lzma",
+      "sha256": "58fb9d2fdc8a8af7b25e218f17ea3b51bdfa53bdf40f440ab33c605974ca5c2e",
+      "name": "lzma.py"
+    },
+    {
+      "module": "ntpath",
+      "sha256": "6c0d55ee892f98ef87b1ed3c50c9dfc7e267a98d2db47e08d3dc67529af56725",
+      "name": "ntpath.py"
+    },
+    {
+      "module": "numbers",
+      "sha256": "ac381960a3dc1db0498b0bd43d8ef278d6599713121a186b153ff09d9552e0db",
+      "name": "numbers.py"
+    },
+    {
+      "module": "numpy",
+      "sha256": "93924ac4b793328947dfd9eb9355e54eccdfd26a92c8dd52188aed2e52c7eb38",
+      "name": "__init__.py"
+    },
+    {
+      "module": "numpy.__config__",
+      "sha256": "50c60b30d4a99d1f7829ce309f9c902635f48972c5830fdbfce25c0044ade89e",
+      "name": "__config__.py"
+    },
+    {
+      "module": "numpy._array_api_info",
+      "sha256": "373252b9ff2fbad8c64aa8aa6a1ab78d12374b1317e17d5cbdae09e9d16fe045",
+      "name": "_array_api_info.py"
+    },
+    {
+      "module": "numpy._core",
+      "sha256": "c89d22cb57d793da200859df9425b30412f094a492fb1950582a560a8cda4fa7",
+      "name": "__init__.py"
+    },
+    {
+      "module": "numpy._core._add_newdocs",
+      "sha256": "c922ae3ffe2c54f34b1e9d688e04cc8524568b7775f02701147147903f177fe5",
+      "name": "_add_newdocs.py"
+    },
+    {
+      "module": "numpy._core._add_newdocs_scalars",
+      "sha256": "67959c2005f2d95b3c9162c2ce0cafc56547d02025f8eeb86052b7b6d6d4ef27",
+      "name": "_add_newdocs_scalars.py"
+    },
+    {
+      "module": "numpy._core._asarray",
+      "sha256": "7c23472da6823fee486be451fdb22b1f1598df1925726be56621a12480e228b3",
+      "name": "_asarray.py"
+    },
+    {
+      "module": "numpy._core._dtype",
+      "sha256": "70ce899e3a072d445608780df15990ca37a28838dcc210792ff7cf30e7b5bae3",
+      "name": "_dtype.py"
+    },
+    {
+      "module": "numpy._core._dtype_ctypes",
+      "sha256": "28f3e56a40ec3e4b938523abe6a1705b48c9f559e36ef5b811684e6c21d81881",
+      "name": "_dtype_ctypes.py"
+    },
+    {
+      "module": "numpy._core._exceptions",
+      "sha256": "5fc120d61ab5b94f0bf7088ec05a368d1aba4b4be78c27606051e3de1016f42a",
+      "name": "_exceptions.py"
+    },
+    {
+      "module": "numpy._core._internal",
+      "sha256": "619ea730654ebdf4c3d67ce4d97a91773f24d395959d81a29636f54e71ef32af",
+      "name": "_internal.py"
+    },
+    {
+      "module": "numpy._core._machar",
+      "sha256": "6145f6e1761bc5727bf4aad66abdbb1650d829f7a876bfd10a413bc346c44eab",
+      "name": "_machar.py"
+    },
+    {
+      "module": "numpy._core._methods",
+      "sha256": "e2a8945044b9c273857979cf6afb6aa8c561674f5965e48a970a9d3f0d9e2922",
+      "name": "_methods.py"
+    },
+    {
+      "module": "numpy._core._multiarray_umath",
+      "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd",
+      "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so"
+    },
+    {
+      "module": "numpy._core._string_helpers",
+      "sha256": "e929a0a22ea80f60ae9e3c014abf41676d079029ef5ba9d33db953394de95a78",
+      "name": "_string_helpers.py"
+    },
+    {
+      "module": "numpy._core._type_aliases",
+      "sha256": "9ac147064676b35c0a432ba0b8afdc17a3414b4ff700ec30ee3de8876ea6a374",
+      "name": "_type_aliases.py"
+    },
+    {
+      "module": "numpy._core._ufunc_config",
+      "sha256": "f63e91d7662635b693e7ecb9ac200e3c16e01f86d81989670e016afaf6799c3b",
+      "name": "_ufunc_config.py"
+    },
+    {
+      "module": "numpy._core.arrayprint",
+      "sha256": "00002f92b23453a3daff064e9e9b95641a5db020a3a58a5c585f2c03f48f61b8",
+      "name": "arrayprint.py"
+    },
+    {
+      "module": "numpy._core.einsumfunc",
+      "sha256": "85e15e0a210a8e2faa7d593ccc06756f96ca9be31430bcc2113310ef2c870617",
+      "name": "einsumfunc.py"
+    },
+    {
+      "module": "numpy._core.fromnumeric",
+      "sha256": "b347fa59f908455c0564c943add61bdc48f217dbcc1abd1b9acd0f73e55c3803",
+      "name": "fromnumeric.py"
+    },
+    {
+      "module": "numpy._core.function_base",
+      "sha256": "413d696e597ff2b7ffdd9b06b4b42801e435392a82a9e006b4c4f33c013523fc",
+      "name": "function_base.py"
+    },
+    {
+      "module": "numpy._core.getlimits",
+      "sha256": "df641eeed94115dca20ef7528c6d5ca766b4349d2b48cc5e0d18a3dda8223eb8",
+      "name": "getlimits.py"
+    },
+    {
+      "module": "numpy._core.memmap",
+      "sha256": "c88b10ea7f64a59ba58204492459136e35709c1e257a8ca2cef529736894e27f",
+      "name": "memmap.py"
+    },
+    {
+      "module": "numpy._core.multiarray",
+      "sha256": "cf01c17723a8c6205170e846d9007fc410189bea7c0114a941bc9ef44cebac1a",
+      "name": "multiarray.py"
+    },
+    {
+      "module": "numpy._core.numeric",
+      "sha256": "fc3727bd7bbaa1a1d74a2f50f8157dc86cdfc7bb5cf620b1ebdafd3272439b98",
+      "name": "numeric.py"
+    },
+    {
+      "module": "numpy._core.numerictypes",
+      "sha256": "d7924b057d26fcc4206a21ffc81048e6096fd2f5ee794d1aae74b9e915df5319",
+      "name": "numerictypes.py"
+    },
+    {
+      "module": "numpy._core.overrides",
+      "sha256": "32d8333816af1bbc33418080eceec0add089555ef649321bfdcbe4581b832c91",
+      "name": "overrides.py"
+    },
+    {
+      "module": "numpy._core.printoptions",
+      "sha256": "345a6fcb96e78dbbea9ca7aa42dd2f784131a400180153688865c7de98255807",
+      "name": "printoptions.py"
+    },
+    {
+      "module": "numpy._core.records",
+      "sha256": "8685c20ecc0cea16f2b6219d6069214484b34239ea2265dc21d1a536e3940d7e",
+      "name": "records.py"
+    },
+    {
+      "module": "numpy._core.shape_base",
+      "sha256": "ef20cfac85d39a606764c512b475ecab58893621a623110071ea7143da3e2554",
+      "name": "shape_base.py"
+    },
+    {
+      "module": "numpy._core.umath",
+      "sha256": "b7f49020747b764305f95469f1d2b2ae838477dd28a8d9739a01b0687dbca96f",
+      "name": "umath.py"
+    },
+    {
+      "module": "numpy._distributor_init",
+      "sha256": "14148976054795071ae41ad011560fa059ba2924c98481675ad59b1241214d2a",
+      "name": "_distributor_init.py"
+    },
+    {
+      "module": "numpy._expired_attrs_2_0",
+      "sha256": "ccfdf511799bc3281c384cf27ad0c4a7e4712fd7147db51486df79eb368e49ff",
+      "name": "_expired_attrs_2_0.py"
+    },
+    {
+      "module": "numpy._globals",
+      "sha256": "9396559f351b28d48b3e667451163024de42ffbc48cdf30d69a4ac052acf4ee2",
+      "name": "_globals.py"
+    },
+    {
+      "module": "numpy._pytesttester",
+      "sha256": "0e39582fcb8834dd9759ade79e55fa80f1aea0b8dcc750627bf3d0cdba767290",
+      "name": "_pytesttester.py"
+    },
+    {
+      "module": "numpy._typing",
+      "sha256": "306e56bfd75cdd9c8e9837e2747e5c16dca47b234cefb02b0b8477516ed39fe6",
+      "name": "__init__.py"
+    },
+    {
+      "module": "numpy._typing._array_like",
+      "sha256": "10f6547c94a36a6bec589e91b39670c00ff916106961da227dc555b557163e7d",
+      "name": "_array_like.py"
+    },
+    {
+      "module": "numpy._typing._char_codes",
+      "sha256": "8f4ee7a64f3635bec8adadb3ed94e553751c38fc2dda033ba992ab3cb7634f8f",
+      "name": "_char_codes.py"
+    },
+    {
+      "module": "numpy._typing._dtype_like",
+      "sha256": "f0ce517a42ea7617848d63089f84676e4133b12ee309ab42893d03e6183ee777",
+      "name": "_dtype_like.py"
+    },
+    {
+      "module": "numpy._typing._nbit",
+      "sha256": "2926cac0e2adb686fee72b53e6f095907ac3327d181efca9b534f28ffe8061cc",
+      "name": "_nbit.py"
+    },
+    {
+      "module": "numpy._typing._nbit_base",
+      "sha256": "9cf669b1096db91e41d22680605f6a0f685efe45e79acb2ffd185a50d16c5beb",
+      "name": "_nbit_base.py"
+    },
+    {
+      "module": "numpy._typing._nested_sequence",
+      "sha256": "b28d5a818187779803a3f201bef1ea041e65b2a19b1ea37f8a6c82e541d4f872",
+      "name": "_nested_sequence.py"
+    },
+    {
+      "module": "numpy._typing._scalars",
+      "sha256": "2e15d8d814c799e60acde2197e98efb8c9fee5e38b8d4da7f73ef3d65e5b29ff",
+      "name": "_scalars.py"
+    },
+    {
+      "module": "numpy._typing._shape",
+      "sha256": "e9c16ff8b6d2c86f6695f4813861b2ba5f50fc652b95c1d00bd2596be9b6d1c0",
+      "name": "_shape.py"
+    },
+    {
+      "module": "numpy._typing._ufunc",
+      "sha256": "1ce91a13eeb05747dddeb9876460b7f580072087fcb72be5cde903e32e064310",
+      "name": "_ufunc.py"
+    },
+    {
+      "module": "numpy._utils",
+      "sha256": "8559d9ec2d0c09235b330f99caaf8c282612b5a197e91cea14c9e787b79de1d1",
+      "name": "__init__.py"
+    },
+    {
+      "module": "numpy._utils._convertions",
+      "sha256": "d3133175e2cece20e61ec44cffc96e121e12fa441d328320e86c4d0c36acebd9",
+      "name": "_convertions.py"
+    },
+    {
+      "module": "numpy._utils._inspect",
+      "sha256": "cc5b890011f4f03d4a82afde79c6240f53a0834397a75b78a2a8d9c4cd2474b9",
+      "name": "_inspect.py"
+    },
+    {
+      "module": "numpy.dtypes",
+      "sha256": "cee3f0802d228c5da80d100e27a23d24a85a26e857140ca00722d06a856d4f9e",
+      "name": "dtypes.py"
+    },
+    {
+      "module": "numpy.exceptions",
+      "sha256": "c75cfb0b6463ac3156f2d2dec1b663c8c890a24d16066e642ae44f23154b5238",
+      "name": "exceptions.py"
+    },
+    {
+      "module": "numpy.lib",
+      "sha256": "cd81aea847cfaaaecb0db89da7162cf068023409a8278c50805bc5dd7289e518",
+      "name": "__init__.py"
+    },
+    {
+      "module": "numpy.lib._array_utils_impl",
+      "sha256": "1985a2c8da8b43b0c6512057cf46db47a000a994ad0c8c147bbb6c6d9fffd793",
+      "name": "_array_utils_impl.py"
+    },
+    {
+      "module": "numpy.lib._arraypad_impl",
+      "sha256": "cf9fbe5d3f344dc9c365ecc756b7716ae252637c82e2f30375dec994efa1df3c",
+      "name": "_arraypad_impl.py"
+    },
+    {
+      "module": "numpy.lib._arraysetops_impl",
+      "sha256": "545760a456497322616053dc4e4fcb403fd2aea5faa68cbfb21b0b2af662832d",
+      "name": "_arraysetops_impl.py"
+    },
+    {
+      "module": "numpy.lib._arrayterator_impl",
+      "sha256": "1ed3800c81ee1bd0036db3138268783ff9ae91ed55fbc13e14d10eddb54e18f0",
+      "name": "_arrayterator_impl.py"
+    },
+    {
+      "module": "numpy.lib._datasource",
+      "sha256": "ce4f956e7e099431c455adc37ba0373608e79e2cd2262f8717466fbc0e98228e",
+      "name": "_datasource.py"
+    },
+    {
+      "module": "numpy.lib._format_impl",
+      "sha256": "cdc437c57c4f7fb7a992db18adc7416c83ee38287d38f575837801ea085fe2b1",
+      "name": "_format_impl.py"
+    },
+    {
+      "module": "numpy.lib._function_base_impl",
+      "sha256": "0191b2376f44730e0b46e5354cd51c3c2edc5473bdc9ee1b27d15023b9ff1b07",
+      "name": "_function_base_impl.py"
+    },
+    {
+      "module": "numpy.lib._histograms_impl",
+      "sha256": "52dbbb68041ced9a6c1e7ff4e288149d9ab565c7477e2a5cabd791abcd7ba155",
+      "name": "_histograms_impl.py"
+    },
+    {
+      "module": "numpy.lib._index_tricks_impl",
+      "sha256": "83b369e04f001bdb20ca2f474d482f38cd3ca489408ff72f5f0e1c73b36b5392",
+      "name": "_index_tricks_impl.py"
+    },
+    {
+      "module": "numpy.lib._iotools",
+      "sha256": "d23b69be99792feff5383236d45fb58b5f6dd5edcbfbac09c517750922dec0bd",
+      "name": "_iotools.py"
+    },
+    {
+      "module": "numpy.lib._nanfunctions_impl",
+      "sha256": "71d393edd6308ef52923d8841d3af0cdb6ed2a13fd65980e08c8ab4c17983d49",
+      "name": "_nanfunctions_impl.py"
+    },
+    {
+      "module": "numpy.lib._npyio_impl",
+      "sha256": "92e71acf00ae7e1e26370102c99c447abc6ca9afc6c50333d6462e65444323cb",
+      "name": "_npyio_impl.py"
+    },
+    {
+      "module": "numpy.lib._polynomial_impl",
+      "sha256": "4d68aa946dd60daf7bb5acb1402125b590fd4cd854c85a6bccbfd499decbc6ca",
+      "name": "_polynomial_impl.py"
+    },
+    {
+      "module": "numpy.lib._scimath_impl",
+      "sha256": "400538b8cfc837356a093b3e013132cb526144497fc03267ff2814ef962d7e01",
+      "name": "_scimath_impl.py"
+    },
+    {
+      "module": "numpy.lib._shape_base_impl",
+      "sha256": "e6f914f6b3cec0abd273b4f3c5d7d6b4cd3cb95d26d798873d3c5ba9c638ece7",
+      "name": "_shape_base_impl.py"
+    },
+    {
+      "module": "numpy.lib._stride_tricks_impl",
+      "sha256": "cb7531a778c5cc3c26210d77ecddb36a9efebd6fe338d5109979db7eaaeceb40",
+      "name": "_stride_tricks_impl.py"
+    },
+    {
+      "module": "numpy.lib._twodim_base_impl",
+      "sha256": "de738bbc20fa71f33a303de8dfcd45e3c181f29a2ab1418308339094e0505e66",
+      "name": "_twodim_base_impl.py"
+    },
+    {
+      "module": "numpy.lib._type_check_impl",
+      "sha256": "59e55f5b3ff42a5bdbd8affa974c789c7c070703d881f7317998a757f769fe6c",
+      "name": "_type_check_impl.py"
+    },
+    {
+      "module": "numpy.lib._ufunclike_impl",
+      "sha256": "d1e7a67ff11894b9926b88a736bde2b89d5ea1332a2f2211d27e9d4329a06b76",
+      "name": "_ufunclike_impl.py"
+    },
+    {
+      "module": "numpy.lib._utils_impl",
+      "sha256": "96db16f4c329de4d6fc3b22789d8584f97e8f60ae0c33eb6e1fbd17a21c3c967",
+      "name": "_utils_impl.py"
+    },
+    {
+      "module": "numpy.lib._version",
+      "sha256": "e1d52b73d26cd0a3c443969da18291e5d9cfe1f7e3083b4950a3ea70c6aec18e",
+      "name": "_version.py"
+    },
+    {
+      "module": "numpy.lib.array_utils",
+      "sha256": "5db732849f52d0894d9cff4dcbacb280b30400259650f34e53cbdebe3d531292",
+      "name": "array_utils.py"
+    },
+    {
+      "module": "numpy.lib.format",
+      "sha256": "9e9274789853eee28d2b96b49423067e226ff91e23c8d86220f7996c970d5c1b",
+      "name": "format.py"
+    },
+    {
+      "module": "numpy.lib.introspect",
+      "sha256": "bbec207ccb98b7c188dc09d135d5ece23e30f5e353b1ace5aab6b34be3fb80a0",
+      "name": "introspect.py"
+    },
+    {
+      "module": "numpy.lib.mixins",
+      "sha256": "29f7fbe9272981657772bba2708f40edae337c19c65665edc10cccceee710c4a",
+      "name": "mixins.py"
+    },
+    {
+      "module": "numpy.lib.npyio",
+      "sha256": "79a3ef7c7192cd413bd132471cb3823c85fd1b98a132e0447b1cbafcf36127d4",
+      "name": "npyio.py"
+    },
+    {
+      "module": "numpy.lib.scimath",
+      "sha256": "aa315a41eab4cc4225ee02aa3a16a3fef9820bf29a15dc9398774b514912a792",
+      "name": "scimath.py"
+    },
+    {
+      "module": "numpy.lib.stride_tricks",
+      "sha256": "c74fc17f097270102547706fa714e775e3fde9d1c14ff7c049b9134d3cc16202",
+      "name": "stride_tricks.py"
+    },
+    {
+      "module": "numpy.linalg",
+      "sha256": "ee956f17038914a380ac6794b3a30d8f730daaab31ef1c74beddbfedabcd020e",
+      "name": "__init__.py"
+    },
+    {
+      "module": "numpy.linalg._linalg",
+      "sha256": "eab0bbee9c8758d387934dc32849f01deceb50261d02e22d41f03ad6ff2562cc",
+      "name": "_linalg.py"
+    },
+    {
+      "module": "numpy.linalg._umath_linalg",
+      "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845",
+      "name": "_umath_linalg.cpython-312-x86_64-linux-gnu.so"
+    },
+    {
+      "module": "numpy.linalg.linalg",
+      "sha256": "e8d8a63faf2d61ad2a051825587f3bfed3a1dac72c86d0e97307ef06f99de8fa",
+      "name": "linalg.py"
+    },
+    {
+      "module": "numpy.matrixlib",
+      "sha256": "52de88a9f8ee03e930c28e8704e6008058d75c2fe1ed857fdc7c83b0a33bd9d9",
+      "name": "__init__.py"
+    },
+    {
+      "module": "numpy.matrixlib.defmatrix",
+      "sha256": "c29c3a95953d5faaa9f30009a240d7b76441acbd5e5ea96606dfa88c8c18ce55",
+      "name": "defmatrix.py"
+    },
+    {
+      "module": "numpy.version",
+      "sha256": "e5acbe1a666da629f581c40a2c09d54229c7aa918f3a1d567dbac0829c807472",
+      "name": "version.py"
+    },
+    {
+      "module": "opcode",
+      "sha256": "192f6008508f28d3273bff42eaea9b01c8394dab1607cd36aea778bdd166c3a6",
+      "name": "opcode.py"
+    },
+    {
+      "module": "operator",
+      "sha256": "b2af20f67667203c1730e686cc5d0427becc94db4c97f1d3efe3ed2158473f6a",
+      "name": "operator.py"
+    },
+    {
+      "module": "os",
+      "sha256": "54c43a1fc69c979c70d8f7d097174cee163bfe59937723ee353043dd4a0211e1",
+      "name": "os.py"
+    },
+    {
+      "module": "os.path",
+      "sha256": "03825681086638649a43480954f7f6a16b4da3bd41ece956864ae96e4f795cd9",
+      "name": "posixpath.py"
+    },
+    {
+      "module": "pathlib",
+      "sha256": "10ba48ae8063cfe7589436041d0d4628c05f427c7709cf8e75e486f8930cc32c",
+      "name": "pathlib.py"
+    },
+    {
+      "module": "pickle",
+      "sha256": "7e3447b6d993a6306a7893fd2fba916010ed79f8e09ceb56158a550fa8099a14",
+      "name": "pickle.py"
+    },
+    {
+      "module": "platform",
+      "sha256": "f5ff83f15c841792be42709a6710dc8d7a9f72791c1ae4cad719b1fb0abe0a05",
+      "name": "platform.py"
+    },
+    {
+      "module": "posixpath",
+      "sha256": "03825681086638649a43480954f7f6a16b4da3bd41ece956864ae96e4f795cd9",
+      "name": "posixpath.py"
+    },
+    {
+      "module": "re",
+      "sha256": "8ff3c37c63b917fcf8dc8d50993a502292a3dc159e41de4f4018c72a53d1c07b",
+      "name": "__init__.py"
+    },
+    {
+      "module": "re._casefix",
+      "sha256": "1b12d9136f23db6c3f6f26053fefc15ca964b886838c7b9c1fabf8d2efc1e5c8",
+      "name": "_casefix.py"
+    },
+    {
+      "module": "re._compiler",
+      "sha256": "c75620761098a70ed75b9accef63ef2881d8abb6d4e5cbfd10074bd165eefe4d",
+      "name": "_compiler.py"
+    },
+    {
+      "module": "re._constants",
+      "sha256": "fa4fdb200f238f9e7817b63892b0d69833d8165134801e775e10cc113348a375",
+      "name": "_constants.py"
+    },
+    {
+      "module": "re._parser",
+      "sha256": "a51a85b37cf3f44ba7ff25754da5f31306e4ccfa6eb3c017f9d37bdf4e770840",
+      "name": "_parser.py"
+    },
+    {
+      "module": "reprlib",
+      "sha256": "e177bc70da83a7fbcde6fd261dc15da34e8a20873b1cccd4f9a1f8f27cca3779",
+      "name": "reprlib.py"
+    },
+    {
+      "module": "shutil",
+      "sha256": "53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8",
+      "name": "shutil.py"
+    },
+    {
+      "module": "stat",
+      "sha256": "052af0327eae6941b69b05c088b3e748f79995635f80ac4cc7125eb333eb4c77",
+      "name": "stat.py"
+    },
+    {
+      "module": "struct",
+      "sha256": "9c231f9497caf513a22dee8f790b07f969b0e45854a0bdd6dd84b492e08c2856",
+      "name": "struct.py"
+    },
+    {
+      "module": "textwrap",
+      "sha256": "62867e40cdea6669b361f72af4d7daf0359f207c92cbeddfc7c7506397c1f31c",
+      "name": "textwrap.py"
+    },
+    {
+      "module": "threading",
+      "sha256": "846f450ae794e4aab823a163f8c71d27751148af33e91dd3de886686a4e8ebfb",
+      "name": "threading.py"
+    },
+    {
+      "module": "token",
+      "sha256": "1a4d994ce9744f4bfe2d964fc24d112a1e76796a08c2e45a2d73c82a8587f922",
+      "name": "token.py"
+    },
+    {
+      "module": "tokenize",
+      "sha256": "026f566ac63e60d69c8185a3880831b657accc5eac984fadf271fc99a5e5825d",
+      "name": "tokenize.py"
+    },
+    {
+      "module": "types",
+      "sha256": "345474ef027a1273f353da9bdc1f7c18f65335e72e681bcc0376774cc51f2405",
+      "name": "types.py"
+    },
+    {
+      "module": "typing",
+      "sha256": "be92d60fb8382bb29ead21c128825d7c96d0e8c915b44f840791e49f5a8d554c",
+      "name": "typing.py"
+    },
+    {
+      "module": "urllib",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "name": "__init__.py"
+    },
+    {
+      "module": "urllib.parse",
+      "sha256": "e6af7f475262f1de335bb2e41e26adb94d6103977cf5fe1ddc430dc6a3b1623f",
+      "name": "parse.py"
+    },
+    {
+      "module": "warnings",
+      "sha256": "6405e281882932205eae641b2d31fba7776f94517a206d289465a1caffbf310e",
+      "name": "warnings.py"
+    },
+    {
+      "module": "weakref",
+      "sha256": "56f8d313fb74019e53eb9287400702fbce788b7fe30e097b0b6e06296f3f080c",
+      "name": "weakref.py"
+    },
+    {
+      "module": "zipimport",
+      "sha256": "a96f1d7a7b6aaf421a3cf382b94b1422f4f0ad452fdd0bb61d635b560d7a4e91",
+      "name": "zipimport.py"
+    }
+  ],
+  "mappings": [
+    {
+      "name": "python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "bytes": 30894944
+    },
+    {
+      "name": "LC_CTYPE",
+      "sha256": "1257597210f43630e7c8a745ae95127e96b93a43515ac5163cab459ddc1664b3",
+      "bytes": 367708
+    },
+    {
+      "name": "gconv-modules.cache",
+      "sha256": "52c227df9d53248238602c1ddaccd2c8ddc4cc6a61aa45d7c425af590b8806a5",
+      "bytes": 27028
+    },
+    {
+      "name": "ld-linux-x86-64.so.2",
+      "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307",
+      "bytes": 225672
+    },
+    {
+      "name": "libc.so.6",
+      "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92",
+      "bytes": 1995216
+    },
+    {
+      "name": "libdl.so.2",
+      "sha256": "295fa521a03cd2faa99974f378c9e23dd622021ec7d32bcad4f8ea61aec8a872",
+      "bytes": 14408
+    },
+    {
+      "name": "libgcc_s.so.1",
+      "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af",
+      "bytes": 182856
+    },
+    {
+      "name": "libm.so.6",
+      "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3",
+      "bytes": 977112
+    },
+    {
+      "name": "libpthread.so.0",
+      "sha256": "85e21f7dba0394411d00959176fd18b470e575b0b05f1f4f41e5636802ce0500",
+      "bytes": 14408
+    },
+    {
+      "name": "librt.so.1",
+      "sha256": "7b7b84d1aedda0e0b2bdfc68844362782132180b8f02be1300e21e77572e514b",
+      "bytes": 14552
+    },
+    {
+      "name": "libstdc++.so.6.0.33",
+      "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00",
+      "bytes": 2497768
+    },
+    {
+      "name": "libutil.so.1",
+      "sha256": "e3981d10efd152a53f083e38f5f9ddde7a049c85d0ab388a5eec91b52fc98a11",
+      "bytes": 14408
+    },
+    {
+      "name": "libz.so.1.3.1",
+      "sha256": "85590dd58edf5445e18bc7193e5ebc01ac5841f1ae187e97705a662e90c6421e",
+      "bytes": 125376
+    },
+    {
+      "name": "libgfortran-040039e1-0352e75f.so.5.0.0",
+      "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980",
+      "bytes": 2833617
+    },
+    {
+      "name": "libquadmath-96973f99-934c22de.so.0.0.0",
+      "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6",
+      "bytes": 250985
+    },
+    {
+      "name": "libscipy_openblas64_-fdde5778.so",
+      "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12",
+      "bytes": 25034001
+    },
+    {
+      "name": "_multiarray_umath.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd",
+      "bytes": 10808937
+    },
+    {
+      "name": "_umath_linalg.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845",
+      "bytes": 231833
+    }
+  ],
+  "dependency_initialization_events": [
+    "ctypes.dlopen(None) dependency initialization"
+  ],
+  "allowed_dependency_self_tests": [
+    "NumPy float32 ones(2).dot",
+    "NumPy ones((20,20)) matrix-multiply BLAS FPE self-check"
+  ],
+  "task_services_constructed": false,
+  "task_jobs": 0,
+  "matrix_elf_loaded": false,
+  "task_tensor_reads": 0,
+  "numerical_or_observer_nonintrusion_qualification": false,
+  "rtl": false
+}

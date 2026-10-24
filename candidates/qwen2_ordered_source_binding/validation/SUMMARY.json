@@ -1,0 +1,70 @@
+{
+  "status": "PASS_NORMAL_IMPORT_AND_CODE_BINDING_ONLY",
+  "base_commit": "c8de5739b68e7cfc3489cbe677681a5af6009442",
+  "config_sha256": "9e6c1c509c365bcea686d36d47acc8638ccfa0b0237c1ece03cddeed21d3ad5b",
+  "manifest_sha256": "db7e045a42029f741fd94c1eea5d09e7b1929ac3e446001cc0d8e2a85a01a7ba",
+  "source_files": 316,
+  "source_bytes": 4457398,
+  "admitted_runtime_file_pins": 202,
+  "extra_file_pins": 5,
+  "actual_loaded_file_modules": 181,
+  "actual_mapped_files": 18,
+  "actual_mapped_elfs": 16,
+  "actual_mapped_locale_files": 2,
+  "bound_methods": 11,
+  "binding_negative_rejections": 4,
+  "profile_tests_per_mode": 10,
+  "profile_test_positive": 1,
+  "profile_test_negative": 9,
+  "same_result_sha256_all_three_runs": "af68d6e15b1bb11e296939847ecce3cbb974a3d2381e3ba86621ce9984244d5f",
+  "historical_failures": [
+    {
+      "attempt": "attempt01",
+      "cause": "R2 had no per-file stdlib Python source pins; struct.py rejected before NumPy import. Failure maps preservation also initially rejected resolved /proc/self/maps.",
+      "log_sha256": "fa5e0e561a545d54f90d763222677d7dfd98747208ca06b93450c2c3ddc9181e",
+      "receipt_sha256": "2f4bdf1f025c9d77632f9f4d5acd9e71c612e5b56217f32864857feb67616ee4",
+      "status": "FAIL_PRESERVED"
+    },
+    {
+      "attempt": "attempt02",
+      "cause": "Strict all-file mapping gate rejected previously unlisted non-ELF LC_CTYPE; complete maps retained.",
+      "log_sha256": "8c007c15adb5e734fa1ec2c26223d0cc7dcf309c5fbffe080a20e0b0cbcf6e45",
+      "receipt_sha256": "b441dd9891de2be8a768974a105018c7a6c0ec77d954f4e173b87b732502cdb0",
+      "status": "FAIL_PRESERVED"
+    },
+    {
+      "attempt": "attempt03",
+      "cause": "Strict all-file mapping gate rejected previously unlisted non-ELF gconv-modules.cache; complete maps retained.",
+      "log_sha256": "be74916b9af6f564d0b2570d5c425a5c05bd6da33e3f9fe7926c082cfed2159e",
+      "receipt_sha256": "70b8fe0e61c30935b86891fccb32fbcdf230ac12f0527f25edf0a29843a9c2c9",
+      "status": "FAIL_PRESERVED"
+    },
+    {
+      "attempt": "final_normal",
+      "cause": "New already-loaded-module gate rejected startup site _distutils_hack, absent from manifest. Final process uses -S to exclude automatic site extension, not preload or an alias.",
+      "log_sha256": "d0fa18203d802c5723c0136944c217f6055bd51ee40696fb48257cfa540c5d3e",
+      "receipt_sha256": "ed8d35194dbf6ce5356b33d1f196d9700dd72c3cd7f178af0725bf6d864f4190",
+      "status": "FAIL_PRESERVED"
+    }
+  ],
+  "static_fix_not_separate_failure": "Compiler-name substring exclusion accidentally removed libgcc_s.so.1, which was already in the audited R2 runtime closure; the full maps difference was reviewed and the exact original library pin restored. No compiler executable was allowed.",
+  "review_fix": "Runner now enforces exact config keys, resolved runtime path/pin dictionary, exact observer/buffer/worker extras, rather than merely checking hash multiset. Earlier exact execution config was correct; generic gate weakness was fixed before final evidence.",
+  "dependency_init_disclosure": [
+    "ctypes PyDLL(None)",
+    "original NumPy extension/BLAS runtime initialization",
+    "original NumPy float32 two-element dot sanity check",
+    "original NumPy 20-by-20 BLAS FPE self-check"
+  ],
+  "limits": [
+    "No task-level Matrix ELF load/configure/service/owner/reset/job/Attention/tensor arithmetic or data read.",
+    "No Observation context/seal, real runtime observer capture or observer nonintrusion qualification.",
+    "No fullblock/M16/M128/RTL/elaboration or hardware-cycle/utilization claim.",
+    "The source-specific guarded entry names plus pinned-code review are not a universal sandbox.",
+    "Runtime manifest is an admission allowlist, not a claim that all 202 files executed."
+  ],
+  "resume_verification": {
+    "all_523_file_pins_rehashed": true,
+    "related_processes_observed": 0,
+    "existing_independent_run_not_repeated": true
+  }
+}

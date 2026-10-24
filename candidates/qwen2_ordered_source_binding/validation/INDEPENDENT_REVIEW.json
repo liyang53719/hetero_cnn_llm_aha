@@ -1,0 +1,126 @@
+{
+  "status": "PASS_READONLY_EVIDENCE_REVIEW_NORMAL_SOURCE_BINDING_ONLY",
+  "reviewed_at_utc": "2026-10-24T22:52:21Z",
+  "review_mode": "Read-only recovery and independent static evidence verification. No Python interpreter, application import, native task, test suite, numerical workload or RTL was launched by this review.",
+  "independent_execution_provenance": "The independent optimized normal-import subprocess had already completed and written its receipt before this review. This review verified that existing receipt and its artifacts; it did not repeat the execution. The earlier failed identity precheck is retained as historical NOT_EXECUTED evidence and is superseded only for the later frozen target by the completed run receipt.",
+  "decision_scope": "Normal source module loading and code-object binding only. No Observation context or real service observation, numerical accuracy, observer nonintrusion or RTL qualification is established.",
+  "blocking_findings": [],
+  "frozen_identity": {
+    "base_commit": "c8de5739b68e7cfc3489cbe677681a5af6009442",
+    "r2_config_sha256": "b1fe0eaa01065f507f79755f1eb446f727701f899908b7f5e3a3af1646f4ca7c",
+    "final_config_sha256": "9e6c1c509c365bcea686d36d47acc8638ccfa0b0237c1ece03cddeed21d3ad5b",
+    "manifest_sha256": "db7e045a42029f741fd94c1eea5d09e7b1929ac3e446001cc0d8e2a85a01a7ba",
+    "source_file_count": 316,
+    "source_file_bytes": 4457398,
+    "runtime_admission_pin_count": 202,
+    "extra_pin_count": 5,
+    "all_523_pins_independently_rehashed": true,
+    "file_size_or_sha256_mismatches": 0,
+    "all_seven_implementation_hashes_match_each_run_receipt": true,
+    "r2_rehash_manifest_source_dictionary_match": true,
+    "observer_role_and_buffer_pins_match_selected_sources": true
+  },
+  "static_profile_gate_review": {
+    "exact_eight_config_keys": true,
+    "manifest_hash_and_exact_source_pin_dictionary": true,
+    "canonical_source_root": true,
+    "exact_resolved_runtime_paths_and_pin_dictionary": true,
+    "exact_observer_buffer_worker_extra_dictionary": true,
+    "runtime_roots_checked_without_executing_python": true,
+    "gate_loaded_by_explicit_file_with_origin_check": true,
+    "gate_runs_before_subprocess_creation": true,
+    "explicit_failures_not_python_assertions": true,
+    "profile_tests_source_positive": 1,
+    "profile_tests_source_negative": 9,
+    "existing_normal_test_log": "10 tests, OK",
+    "existing_optimized_test_log": "10 tests, OK",
+    "tests_rerun_by_this_review": false,
+    "qualification": "Exact-path and exact-extra gate weakness is fixed in the reviewed profile_gate.py. Config test outcomes are verified from existing logs and test source, not a new test execution. This is an exact manifest/profile gate, not a general-purpose sandbox."
+  },
+  "common_report_verification": {
+    "result_status": "PASS_NORMAL_MODULE_LOAD_AND_CODE_BINDING_ONLY",
+    "three_result_files_byte_identical": true,
+    "result_sha256": "af68d6e15b1bb11e296939847ecce3cbb974a3d2381e3ba86621ce9984244d5f",
+    "binding_stage_sha256": "b00e0a9731ac90fdb6fb66b82c95d7c07008d7bd8cefd81c02d3a49b4ff1e5c1",
+    "bound_methods": 11,
+    "negative_rejections": ["wrong_digest", "same_bytes_wrong_path", "one_byte_source_change", "replacement_method"],
+    "source_files_verified": 316,
+    "binding_stage_verified_reads": 432,
+    "file_backed_module_records": 181,
+    "unique_module_names": 181,
+    "all_import_name_hash_pairs_match_admitted_files": true,
+    "all_binding_stage_path_hash_records_match_admitted_files": true,
+    "mapped_unique_files": 18,
+    "elf_files_verified_by_magic": 16,
+    "non_elf_locale_files": ["LC_CTYPE", "gconv-modules.cache"],
+    "mapped_file_segments_per_run": 100,
+    "mapped_device_inode_mismatches_all_three_runs": 0,
+    "all_mapped_file_hashes_and_sizes_match_report_and_admission_pins": true,
+    "negative_fixture_copies_verified": "same_source is byte-identical to the selected schedule source; changed_source is exactly that source plus one newline. Originals were not changed.",
+    "code_binding_inspection": "The worker obtains methods from normally imported modules and calls monitor.bind with ast_test=false. The pinned binder requires the loaded code filename, source SHA-256, full compiled class method code object, first line and line table to match. Source compilation does not execute altered methods."
+  },
+  "runs": [
+    {
+      "label": "final_normal",
+      "mode": "-I -S -B",
+      "receipt_sha256": "eaff5a5b476a5ee0dd9259a18ae764ca3623c98f734b4c8620667eb653f40366",
+      "identity_sha256": "b5c71e0459ff9ca417437a700fb04701f2cf866599c01b1bd0c49a0da2e5fb3c",
+      "maps_sha256": "3d28ad854bf6171ac476879bd4af1976909a236a31dec2945276494d122ed663",
+      "exit": 0,
+      "timeout": false,
+      "cleanup_group_absent": true,
+      "wall_seconds": 0.7674216440063901
+    },
+    {
+      "label": "final_optimized",
+      "mode": "-I -S -B -O",
+      "receipt_sha256": "21291e910c40e6f12f1b0fd2e0007517affc67105d0e70147c01e2f8348e3186",
+      "identity_sha256": "87155ddc755321942dbcf9d91335c0714ce4853b3fa2842c887abe924ab69f68",
+      "maps_sha256": "b0e7309ec42e906ea7a7385fa76711f1695cd9bd3fadf728f206a2f7ae9352c3",
+      "exit": 0,
+      "timeout": false,
+      "cleanup_group_absent": true,
+      "wall_seconds": 0.868718717014417
+    },
+    {
+      "label": "previously_completed_independent_optimized",
+      "mode": "-I -S -B -O",
+      "receipt_sha256": "17b40de85ca0e1dd54baa24b2b55aeb02af475223ca5470a3966d7810e2a7bea",
+      "identity_sha256": "0936f1b4ffae9f1cc90f322e5e491e358e21e36281fa2f8d5243f048defbf6b7",
+      "maps_sha256": "95c2ea5001a9b7537ac3e60c8d8066c4ed695c19ed4420c8c16cddd35b223487",
+      "exit": 0,
+      "timeout": false,
+      "cleanup_group_absent": true,
+      "wall_seconds": 0.8182531310012564
+    }
+  ],
+  "receipt_consistency": {
+    "pid_parent_and_process_group_agree_with_recorded_proc_stat": true,
+    "script_config_manifest_and_log_hashes_match_current_artifacts": true,
+    "source_unchanged_reported_all_runs": true,
+    "process_logs_empty_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "limits": {"cpus": 1, "address_space_bytes": 268435456, "cpu_seconds": 20, "wall_seconds": 25},
+    "cleanup_evidence_scope": "Cleanup is the recorded result of each original bounded wrapper, not a new process launch or a new assertion about a reused operating-system PID."
+  },
+  "retained_history": [
+    {"label": "attempt01", "status": "FAIL_PRESERVED", "cause": "Missing exact stdlib source pins rejected struct.py; the initial failure-map preservation also rejected the resolved proc maps path."},
+    {"label": "attempt02", "status": "FAIL_PRESERVED", "cause": "Unadmitted LC_CTYPE mapping."},
+    {"label": "attempt03", "status": "FAIL_PRESERVED", "cause": "Unadmitted gconv-modules.cache mapping."},
+    {"label": "historical_final_normal", "status": "FAIL_PRESERVED", "cause": "Unpinned startup _distutils_hack. The final child uses -S to suppress automatic site startup rather than preloading or aliasing it."}
+  ],
+  "history_verification": "All four historical log and receipt hashes match the public summary. The libgcc_s substring-filter correction is a reviewed static closure difference, not a separate failed execution. Existing failed evidence remains intact.",
+  "dependency_initialization_disclosure": [
+    "Normal imports include original pinned ctypes PyDLL(None).",
+    "Normal imports include pinned NumPy extension and BLAS initialization; they are not native-free.",
+    "Pinned NumPy initializes its original float32 two-element dot sanity check and 20-by-20 BLAS FPE self-check. These permitted dependency self-tests are not task numerical qualification."
+  ],
+  "prohibited_or_unqualified_work": [
+    "No new review execution of task-level Matrix ELF loading, configure_library, owner/service construction, reset, job, Attention arithmetic or user tensor reads.",
+    "The original binding worker reports no task services, jobs, Matrix ELF or tensor reads and statically limits named task entry points. These assertions are supported by the pinned specific worker path and recorded maps, not a universal sandbox guarantee.",
+    "No Observation context, capture/seal, real runtime ten-field observation or numerical/observer-nonintrusion qualification.",
+    "No fullblock, M16, M128, RTL, elaboration or hardware-cycle/utilization claim.",
+    "The 202 runtime pins are an admission allowlist, not a claim that all 202 files executed."
+  ],
+  "public_evidence_copy_verification": "Public BINDING_RESULT, all three receipts, the historical independent precheck and both final profile-test logs are byte-identical to their original evidence files.",
+  "redaction": "No private absolute paths, raw process stat, raw maps, environment values or user tensor contents are included. Original detailed evidence remains local and unchanged."
+}

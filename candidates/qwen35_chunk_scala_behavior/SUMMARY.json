@@ -1,0 +1,179 @@
+{
+  "actual_behavior_result": {
+    "all_frozen_inputs_before_after_equal": true,
+    "assertion_count_interpretation": "Scala check 辅助函数的动态断言求值次数，包含循环内重复求值；不是 161258 个独立测试案例，也不表示完备覆盖。",
+    "assertion_evaluation_count": 161258,
+    "behavior": {
+      "cleanup_confirmed": true,
+      "elapsed_seconds_reported": 0.945938,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_attempted_interpretation": "原监督在 WNOWAIT 已观测自然 exit 0 后清理进程组，并非为获得 PASS 而超时强杀。",
+      "natural_exit_code": 0,
+      "observed_while_unreaped": {
+        "code": 1,
+        "status": 0
+      },
+      "reaped": true,
+      "timed_out": false
+    },
+    "class_load_log_included": false,
+    "compile": {
+      "cleanup_confirmed": true,
+      "elapsed_seconds_reported": 9.92845,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_attempted_interpretation": "原监督在 WNOWAIT 已观测自然 exit 0 后清理进程组，并非为获得 PASS 而超时强杀。",
+      "natural_exit_code": 0,
+      "observed_while_unreaped": {
+        "code": 1,
+        "status": 0
+      },
+      "reaped": true,
+      "timed_out": false
+    },
+    "elapsed_measurement_note": "均为原监督或 launcher 内部计时，不是摘录制作方独立测得的外层 wall time。stdout 与 RESULT 计时测点不同。",
+    "expected_rejection_helper_call_count": 1090,
+    "forbidden_bundle_classes_absent": [
+      "heteronpu.continuous.GdnChunkJob",
+      "heteronpu.continuous.GdnChunkCommittedState",
+      "heteronpu.continuous.GdnChunkStageReceipt",
+      "heteronpu.continuous.GdnChunkStagingResult"
+    ],
+    "forbidden_hardware_package_prefixes_absent": [
+      "chisel3",
+      "firrtl",
+      "circt",
+      "hardfloat"
+    ],
+    "frozen_input_bytes": 297406220,
+    "frozen_input_count": 354,
+    "interstage_verified_inventory": "原 27 个生产 class 与新测试 class；没有声称阶段中间重新 hash 全部 354 项。",
+    "loaded_class_unique_record_count": 1330,
+    "named_group_count": 13,
+    "named_groups": [
+      "class_origins",
+      "m16_m128_capacities",
+      "24_shape_offsets",
+      "head_initial_chunk_order",
+      "63_to_64_boundaries",
+      "valid_rows_padding_rejection",
+      "state_fp32_output_bf16",
+      "56_bit_span_endpoints",
+      "alignment",
+      "five_span_ten_pair_aliases",
+      "cold_warm_generation_policy",
+      "phase_predecessors",
+      "declared_byte_obligations"
+    ],
+    "original_and_test_classes_unchanged": true,
+    "outer_exit_code": 0,
+    "rejection_count_interpretation": "1090 次预期拒绝辅助函数调用，核对 IllegalArgumentException 及指定原因；不另行宣称为独立测试案例数。",
+    "required_classes_loaded_from_expected_roots": true,
+    "required_loaded_class_count": 5,
+    "required_loaded_classes": [
+      "heteronpu.continuous.GdnChunkAddressPlan$",
+      "heteronpu.continuous.GdnChunkAddressPlan$Plan",
+      "heteronpu.continuous.GdnChunkGeometry$",
+      "heteronpu.continuous.GdnChunkVectorPolicy$",
+      "heteronpu.continuous.contracttests.GdnChunkAddressPlanBehavior$"
+    ],
+    "result_elapsed_seconds_reported": 11.517333194,
+    "sealed_output_bytes_included": false,
+    "sealed_output_file_count": 21,
+    "sealed_output_total_bytes": 785301,
+    "sequential_jvm_phases": 2,
+    "status": "PASS_SCALA_ADDRESS_PLAN_BEHAVIOR_ONLY",
+    "stdout_elapsed_seconds_rounded_9dp": 11.517577852,
+    "test_class_bytes": 76713,
+    "test_class_count": 2,
+    "test_source_count": 1
+  },
+  "actual_review": {
+    "bytes": 13606,
+    "interpretation": "该摘要标识独立复核的私有证据；本公开摘录不等于完整证据集。终态事实及摘要由实际复核方提供，制作摘录时没有打开原始收据。",
+    "raw_review_included": false,
+    "sha256": "33bec671116fd6af252f718454f06da41837c6e397606dd5cd82a99858a10eeb",
+    "status": "PASS_ACTUAL_SCALA_ADDRESS_PLAN_METHOD_EVALUATION_ONLY"
+  },
+  "included_exact_source_pins": {
+    "launch_behavior.py": {
+      "bytes": 3607,
+      "sha256": "3c661270fbb4f6b21a81ef439c002753b2bff50ab2877d7054b118e38cb7f757"
+    },
+    "run_behavior.py": {
+      "bytes": 15488,
+      "sha256": "ade9a021206e73c76b28080af82fce6ce581fa6689ad3225e4e5cbec3157d1b2"
+    },
+    "source/GdnChunkAddressPlanBehavior.scala": {
+      "bytes": 29236,
+      "sha256": "5a3e7d663ec578872e5aa1a663ba044e725e64feafa9133da570e5952a71ad5e"
+    }
+  },
+  "input_counts": {
+    "auxiliary_supervisor_inputs": 6,
+    "behavior_classpath_entries": 3,
+    "behavior_classpath_jars": 1,
+    "compile_classpath_jars": 87,
+    "new_test_source": 1,
+    "original_production_classes": 27,
+    "pinned_tools": 314,
+    "prior_compile_evidence_pins": 3,
+    "production_scala_sources": 2,
+    "production_source_manifest": 1,
+    "total": 354,
+    "total_bytes": 297406220
+  },
+  "original_source_package": {
+    "file_count": 9,
+    "manifest": {
+      "bytes": 1517,
+      "sha256": "1a39ca0b95de4eae62062249ed458bd579a0571a6b5fd2f202522a8d5fb8abea"
+    },
+    "total_bytes": 259793
+  },
+  "package_kind": "SOURCE_AND_STATUS_EXCERPT_NOT_STANDALONE_EXECUTABLE_CLOSURE",
+  "package_state": "SEALED_SOURCE_STATUS_EXCERPT",
+  "packaging_actions": {
+    "actual_logs_or_receipts_read": false,
+    "candidate_import_or_execution": false,
+    "candidate_static_checker_executed": false,
+    "jvm_or_compiler_executed": false,
+    "original_machine_plan_metadata_read": true,
+    "published_or_pushed": false,
+    "python_checks": "只对两份原 Python 源做 AST parse 和内存 compile-to-code-object，不 import/exec 候选；另做元数据及公开文件字节/hash 一致性检查。",
+    "raw_argv_or_machine_roots_copied": false,
+    "repository_modified": false,
+    "tests_executed": false,
+    "tool_class_or_support_payload_reads": false
+  },
+  "qualification_limits": {
+    "actual_ack_handshake_validated": false,
+    "chisel_elaboration_executed": false,
+    "chunk64_prefill_hardware_validated": false,
+    "expectedAckBytes_scope": "只验证真实 Scala 方法返回的字节义务，不表示传输发生、ACK 到达、真实握手或调度硬件正确。",
+    "five_rtl_targets_passed": 0,
+    "five_rtl_targets_total": 5,
+    "fp32_bf16_scope": "仅核地址、布局和末拍边界；没有验证 FP32/BF16 GDN 数值运算。",
+    "full_block_validated": false,
+    "gdn_numerical_arithmetic_validated": false,
+    "hardware_bundle_instantiated": false,
+    "module_constructed": false,
+    "prior_pass_inherited": false,
+    "prior_qwen2_full_run_cleanup_status": "UNKNOWN",
+    "prior_qwen2_full_run_execution_status": "UNKNOWN",
+    "rtl_generation_executed": false,
+    "scala_address_plan_methods_evaluated": true,
+    "utilization_validated": false
+  },
+  "reproduction_template_is_original_supervision": false,
+  "schema": "qwen35-chunk-behavior-public-summary-v1",
+  "scope": "REAL_SCALA_ADDRESS_PLAN_METHOD_EVALUATION_ONLY_NOT_HARDWARE_OR_ARITHMETIC",
+  "source_repository_commit_prefix": "db4977f",
+  "terminal_result_pin": {
+    "bytes": 32745,
+    "raw_result_included": false,
+    "sha256": "5a97bbb4fdc47e4c4de471f9d8406e6e826ef733e89160e0eb33a458103da794"
+  },
+  "说明": "唯一受监督实际尝试顺序启动两个 JVM，只编译新测试源，再直接求值原生产 Scala AddressPlan 方法；不是 Python 镜像测试，不继承先前 compile-only PASS。"
+}

@@ -1,0 +1,40 @@
+{
+  "files": {
+    "ALLOWLIST.json": {
+      "bytes": 734,
+      "sha256": "81cae268c10b39856854afa2f87a1a42033de92c379b3808777af0b51e5ede96"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 106261,
+      "sha256": "1160eac2191f752200ebcc9b9ece4653fa354732d0e0f50bd44616bfa5f0417a"
+    },
+    "README.md": {
+      "bytes": 6091,
+      "sha256": "4232c098dc5f3ef8d706b13fd98e775fdbc7f912ac562e2dcd584aad2a6e1967"
+    },
+    "REPRODUCE_COMMAND.txt": {
+      "bytes": 3373,
+      "sha256": "f382aacaf32fe21bae7908faf023e4c7786b478a0e0c1a6d6578e3704cf98e14"
+    },
+    "SUMMARY.json": {
+      "bytes": 7517,
+      "sha256": "478c333b134797493af7bf1b14ca6fa515b8b4f988509bdb572bcf319a7baa3b"
+    },
+    "launch_behavior.py": {
+      "bytes": 3607,
+      "sha256": "3c661270fbb4f6b21a81ef439c002753b2bff50ab2877d7054b118e38cb7f757"
+    },
+    "run_behavior.py": {
+      "bytes": 15488,
+      "sha256": "ade9a021206e73c76b28080af82fce6ce581fa6689ad3225e4e5cbec3157d1b2"
+    },
+    "source/GdnChunkAddressPlanBehavior.scala": {
+      "bytes": 29236,
+      "sha256": "5a3e7d663ec578872e5aa1a663ba044e725e64feafa9133da570e5952a71ad5e"
+    }
+  },
+  "hash_algorithm": "sha256",
+  "package_state": "SEALED_SOURCE_STATUS_EXCERPT",
+  "schema": "qwen35-chunk-behavior-public-manifest-v1",
+  "self_excluded": "MANIFEST.json"
+}

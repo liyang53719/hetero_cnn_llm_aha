@@ -1739,3 +1739,12 @@ Qwen2 fixed93 M128 原运行连接中断，恢复句柄不可用。最后监督�
 PASS只限SCALA_COMPILE_ONLY，未执行AddressPlan方法、Bundle/Module构造、Chisel展开、真实ACK/算术/prefill或RTL；没有新MAC实测。两源不带Host/HardFloat，不改公共门；Qwen2原full执行/清理仍UNKNOWN，五RTL0/5。
 
 复现模板/原runner摘录/相对pins与限定摘要在 candidates/qwen35_chunk_scala_compile/，8件125648B，manifest SHA256 cb80d6cdf65cb0ed63d78b0168e2e045e4db9438a3ddcec76c5d05aa1a328ae3。排除机器plan、工具/class二进制、raw日志及重复Scala源；非开箱即用完整closure，模板不冒称原监督复现。未push，无新CI，无清理。
+
+
+## PASS（仅真实 Scala 地址计划求值）：13组行为测试
+
+2026-10-21 原 AddressPlan 方法实际JVM求值通过：13组、161258次断言求值、1090次预期拒绝；不是161258个独立case。编译9.92845秒、行为0.945938秒，launcher总11.517577852秒；两阶段WNOWAIT自然0/已reap/group absent/cleanup确认。354输入前后同，中间只额外核原27class与新2class，不称354中间全hash。1330条类加载记录来源核实，行为classpath无Chisel，未见Bundle/硬件包。独审ACTUAL_REVIEW SHA256 33bec671116fd6af252f718454f06da41837c6e397606dd5cd82a99858a10eeb。
+
+通过范围为Scala地址/容量/边界/阶段字节义务，不是实际ACK、数值、prefill、RTL或利用率。Qwen2先前full仍执行/清理UNKNOWN，五RTL仍0/5。
+
+公开9件173615B位于 candidates/qwen35_chunk_scala_behavior/；manifest SHA256 9070ef26c09376c92bfa08017bfaeeb55c9c2f4d5bad7720d623a05a23700600。含原测试源码/runner摘录及复现模板、相对pins，排除机器plan/日志/class，非完整开箱closure。未push，无新增CI，无临时数据清理。

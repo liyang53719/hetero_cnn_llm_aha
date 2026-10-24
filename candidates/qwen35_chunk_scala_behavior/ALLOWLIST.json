@@ -1,0 +1,25 @@
+{
+  "allow_extra_files": false,
+  "allow_symlinks": false,
+  "excluded_categories": [
+    "机器特定绝对根和原始 argv",
+    "FROZEN_PLAN 内容",
+    "原始日志、收据及 ADMISSION",
+    "Python runtime、工具二进制、任何 class 字节或运行 payload",
+    "已在 db4977f 提交的两份生产 Scala",
+    "数组、权重、RTL 或其他运行产物"
+  ],
+  "files": [
+    "ALLOWLIST.json",
+    "INPUT_PINS.json",
+    "MANIFEST.json",
+    "README.md",
+    "REPRODUCE_COMMAND.txt",
+    "SUMMARY.json",
+    "launch_behavior.py",
+    "run_behavior.py",
+    "source/GdnChunkAddressPlanBehavior.scala"
+  ],
+  "recursive_parent_publication_allowed": false,
+  "schema": "qwen35-chunk-behavior-public-allowlist-v1"
+}

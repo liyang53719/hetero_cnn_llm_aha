@@ -1,0 +1,58 @@
+# 仅为解释性的两阶段 shell 入口模板；未执行，不是新 runner。
+# 本模板不是原冻结 launcher、监督系统、执行授权或完整可执行闭包。
+# 不得用伪造 FROZEN_PLAN 运行摘录中的原 launcher。
+#
+# 输入必须由接收方独立取得并按 INPUT_PINS.json 复核。
+# 原生产源码在 db4977f 的 candidates/qwen35_chunk_contract/source/，未复制。
+# 原 27 个生产 class 仅列摘要，未包含字节，须独立取得并核实整个目录恰为 27 项。
+# 本次两阶段不会重编生产 Scala；生产编译是先前单独限定的步骤。
+#
+# 接收方自行提供并检查如下变量，模板不进行发现、下载或自动路径转换：
+# JAVA：已校验 JDK java；COMPILER_CLASSPATH：87 个 compile_classpath 条目的有序本地映射。
+# INPUT_CLASSES：已核验的原 27 个 class 所在绝对目录，不允许额外 class。
+# SCALA_LIBRARY：已校验 Scala 2.13.16 library JAR。
+# EXCERPT_ROOT：此摘录根目录；WORK_ROOT：新的输出目录，不能是任何证据树。
+# HOME_DIR、TMP_DIR、TEST_CLASSES、CLASS_LOAD_LOG：WORK_ROOT 下独立可写位置。
+# 独立设置 HOME、TMPDIR、LANG=LC_ALL=C.UTF-8、TZ=UTC 及最小显式 PATH。
+#
+# 阶段一：只编译 1 个测试源。87 JAR 只是固定编译集合，不声称最小依赖。
+# 不使用 Chisel plugin，不运行依赖解析器，不重编两份生产源。
+"${JAVA}" \
+  -Xmx1024m \
+  -XX:ActiveProcessorCount=1 \
+  -XX:-UsePerfData \
+  -Djava.awt.headless=true \
+  "-Djava.io.tmpdir=${TMP_DIR}" \
+  "-Duser.home=${HOME_DIR}" \
+  "-XX:ErrorFile=${WORK_ROOT}/hs_err_pid%p.log" \
+  -cp "${COMPILER_CLASSPATH}" \
+  scala.tools.nsc.Main \
+  -classpath "${INPUT_CLASSES}:${COMPILER_CLASSPATH}" \
+  -deprecation -feature -unchecked -language:reflectiveCalls \
+  -d "${TEST_CLASSES}" \
+  "${EXCERPT_ROOT}/source/GdnChunkAddressPlanBehavior.scala"
+
+# 这里只展示阶段入口，不实现阶段准入或进程清理控制。
+# 在进入阶段二之前，须由另行审查的监督确认阶段一自然 exit 0、回收和清理闭合，
+# 并建立新测试 class 库存、复核新测试 class 和原 27 类；不得仅凭本模板继续。
+# 原运行的中间复核是这两套 class，不是再次重 hash 全部 354 个输入。
+#
+# 阶段二：恰好三个 classpath 条目；唯一 JAR 是 Scala library。
+# 没有 Chisel、HardFloat、firrtl、circt；不得添加它们以绕过失败。
+"${JAVA}" \
+  -Xmx512m \
+  -XX:ActiveProcessorCount=1 \
+  -XX:-UsePerfData \
+  -Djava.awt.headless=true \
+  "-Djava.io.tmpdir=${TMP_DIR}" \
+  "-Duser.home=${HOME_DIR}" \
+  "-XX:ErrorFile=${WORK_ROOT}/hs_err_pid%p.log" \
+  "-Dchunk.expected.input.classes=${INPUT_CLASSES}" \
+  "-Xlog:class+load=info:file=${CLASS_LOAD_LOG}:uptime,level,tags" \
+  -cp "${TEST_CLASSES}:${INPUT_CLASSES}:${SCALA_LIBRARY}" \
+  heteronpu.continuous.contracttests.GdnChunkAddressPlanBehavior
+
+# 以上入口没有实现原 180 秒全局期限、共享 start+150 工作窗、编译 120 秒/行为 30 秒
+# 且均受共享截止约束、CPU/RSS/输出限制、身份确认、WNOWAIT/回收/清理保障。
+# 也不实现前后 354 输入复核、阶段间及末尾 class 复核、class-load 拒绝规则和最终封存。
+# 直接执行这段文本不等价于原受监督运行。独立尝试必须另行审查并冻结其输入和监督。

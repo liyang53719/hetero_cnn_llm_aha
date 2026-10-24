@@ -129,11 +129,11 @@ class CiFixtureTests(unittest.TestCase):
             self.assertIn(path, workflow['on']['push']['paths'])
 
     def test_source_evidence_and_discovery_include_required_native_inputs_and_suites(self):
-        self.assertEqual(set(run_tests.CI_FIXTURE_INPUTS), {
+        self.assertEqual(run_tests.CI_FIXTURE_INPUTS, (
             '.github/workflows/qwen35-gdn-prefill-model.yml',
             'candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp',
             'candidates/qwen35_uf_predicate_r2/STIMULI.json',
-        })
+        ))
         files = set(run_tests.source_files())
         for name in run_tests.CI_FIXTURE_INPUTS:
             self.assertIn(run_tests.ROOT / name, files)
@@ -142,6 +142,19 @@ class CiFixtureTests(unittest.TestCase):
                      'candidates/qwen35_gdn_prefill/chunk/test_backend_native.py',
                      'candidates/qwen35_gdn_prefill/test_ci_fixtures.py'):
             self.assertIn(run_tests.ROOT / name, tests)
+
+    def test_postterminal_helpers_are_pinned_separately_and_suites_are_discovered(self):
+        self.assertEqual(run_tests.POSTTERMINAL_SOURCE_INPUTS, (
+            'scripts/idma_source_export_20261017/strict_cleanup.py',
+            'scripts/idma_source_export_20261017/bounded_run.py',
+        ))
+        self.assertTrue(set(run_tests.CI_FIXTURE_INPUTS).isdisjoint(run_tests.POSTTERMINAL_SOURCE_INPUTS))
+        files = set(run_tests.source_files())
+        for name in run_tests.POSTTERMINAL_SOURCE_INPUTS:
+            self.assertIn(run_tests.ROOT / name, files)
+        tests = {path for directory in run_tests.SOURCE_DIRS for path in directory.glob('test_*.py')}
+        for name in ('test_terminal_gate.py', 'test_cold_postterminal.py', 'test_launch_cold.py'):
+            self.assertIn(run_tests.ROOT / 'candidates/qwen35_gdn_prefill/postterminal' / name, tests)
 
 
 if __name__ == '__main__':

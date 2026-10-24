@@ -1,0 +1,255 @@
+{
+  "claim_kind": "conditional_fixed_resource_architecture_upper_bound",
+  "exact_bound": {
+    "architecture_useful_macs_per_service_clock_upper_bound": {
+      "denominator": 47,
+      "numerator": 122372
+    },
+    "architecture_utilization_upper_bound": {
+      "denominator": 48128,
+      "numerator": 30593
+    },
+    "attention_disjoint_normal_issue_slots": 847872,
+    "attention_useful_macs_reconciled": 25362432,
+    "causal_pairs": 8256,
+    "dense_useful_macs_given": 5989466112,
+    "fixed_4096_whole_block_capacity_denominator": 9462349824,
+    "hardware_service_clock_cycles_lower_bound": 2310144,
+    "ideal_dense_normal_issue_slots_lower_bound": 1462272,
+    "inputs": {
+      "dense_useful_macs_per_token": 46792704,
+      "fixed_matrix_macs": 4096,
+      "full_block_useful_macs": 6014828544,
+      "head_dim": 128,
+      "heads": 12,
+      "pv_columns_per_step": 16,
+      "pv_steps": 792576,
+      "qk_pack": 16,
+      "qk_steps": 55296,
+      "tokens": 128,
+      "wide_normal_steps_per_service_clock": 1
+    },
+    "pv_normal_issue_slots": 792576,
+    "qk_key_groups_per_head": 576,
+    "qk_normal_issue_slots": 55296
+  },
+  "limitations": [
+    "This is an optimistic upper bound, not sustained one-step-per-cycle attainability.",
+    "Command, operand gathering, seed, memory, scalar, result and drain overheads are omitted.",
+    "Issue-slot exclusivity does not assert that all DDR, scalar or internal pipeline activity is nonoverlapping.",
+    "Selected source limits packed Attention to m <= 128 at Qwen2Block.scala:345; no longer-sequence claim is made.",
+    "Manifest regression is not source elaboration, selected-body reconstruction, functional or numerical validation."
+  ],
+  "native_rtl_eda_or_ci_validation": false,
+  "not_measured_utilization": true,
+  "not_predicted_runtime": true,
+  "premises": [
+    "Canonical 128-token Qwen2 profile, selected packed QK16 plus legacy PV.",
+    "Given Dense useful work: 128 * 46792704 MACs; given full-block useful work: 6014828544 MACs.",
+    "Fixed physical Matrix capacity is 4096 MACs, with at most one wide normal step per service clock.",
+    "All given Dense Matrix work uses that shared normal-step issue resource; no extra arithmetic engine is assumed.",
+    "A Dense issue is optimistically granted up to 4096 useful MACs; seed transfers do not replace required Dense products."
+  ],
+  "proof": [
+    "QK and PV require 55296 + 792576 = 847872 distinct shared-port normal issue slots.",
+    "Dense requires ceil(5989466112 / 4096) = 1462272 additional disjoint normal issue slots.",
+    "At most one such issue per service clock implies C >= 2310144, independently of any Python model ticks.",
+    "The whole-block denominator is 4096 * C, not active slices or a Dense-only interval.",
+    "U <= 6014828544 / (4096 * 2310144) = 30593/48128 exactly."
+  ],
+  "python_scheduler_ticks_used_as_hardware_cycles": false,
+  "reviewed_selected_source_anchors": [
+    {
+      "claim": "One external Matrix service; legacy core and Dense use this service.",
+      "excerpt": "val matrix=Module(new MatrixPipelineService(enableTransposedDense=enableTransposedDense,enableAccumulatorSeed=enableTransposedSeed,enablePackedDrainStatus=enableProductionPackedQk16))",
+      "lines_inclusive": [
+        131,
+        155
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Dense and legacy ready signals are exclusive and feed one step mux.",
+      "excerpt": "matrix.io.port.step.valid:=Mux(useDense,dense.matrix.step.valid,legacy.io.port.step.valid)",
+      "lines_inclusive": [
+        486,
+        512
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Packed QK overrides that same port; legacy, Dense, and Dense seed handshakes are disabled.",
+      "excerpt": "legacy.io.port.group.ready:=false.B;legacy.io.port.step.ready:=false.B\ndense.matrix.group.ready:=false.B;dense.matrix.step.ready:=false.B\nmatrix.io.port.step.valid:=p.step.valid;matrix.io.port.step.bits:=p.step.bits",
+      "lines_inclusive": [
+        517,
+        541
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Eight selected slices and five legal contexts share one normal step; contexts are not issue ports.",
+      "excerpt": "val leaves=Seq.fill(8)(Module(new RetainedMatrixEndpoint(enableAccumulatorSeed)))\nval legalContext=x.context<5.U",
+      "lines_inclusive": [
+        65,
+        80
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "One payload fans out to selected slices on gated service clock; one legal step.fire enqueues metadata.",
+      "excerpt": "gate.io.clk_i:=clock;gate.io.test_en_i:=false.B\ntags.io.enq.valid:=io.port.step.fire && legalStep",
+      "lines_inclusive": [
+        141,
+        167
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Each legal accepted normal step increments wideSteps once, independent of active slice count.",
+      "excerpt": "steps:=steps+PopCount(group.sliceMask);wideSteps:=wideSteps+1.U",
+      "lines_inclusive": [
+        192,
+        197
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Groups enter only in idle; terminal done waits for returned values to retire.",
+      "excerpt": "io.port.group.ready:=state===idle && !poison\nio.port.done.valid:=state===finish && !values.io.deq.valid",
+      "lines_inclusive": [
+        60,
+        63
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "The accepted group remains registered through completion; done.fire alone returns normal operation to idle.",
+      "excerpt": "when(io.port.done.fire){state:=Mux(poison,locked,idle)}",
+      "lines_inclusive": [
+        178,
+        206
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "QK uses eight normal steps, context zero, opcode 0x23, and all eight slices.",
+      "excerpt": "val finalIndex=Mux(descriptor.pv,descriptor.count-1.U,7.U)\nio.port.group.bits.sliceMask:=Mux(descriptor.pv,0x0f.U,0xff.U)",
+      "lines_inclusive": [
+        41,
+        59
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala",
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "The selected packed client is QK only and holds ownership until completion.fire.",
+      "excerpt": "c.io.start.bits.tag:=packedTag.get;c.io.start.bits.pv:=false.B;c.io.start.bits.count:=packedKeys\nwhen(c.io.completion.fire){packedOwned.get:=false.B}",
+      "lines_inclusive": [
+        203,
+        220
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Legacy PV uses opcode 0x24 and sliceMask=1; the one port cannot issue Dense on its seven inactive slices.",
+      "excerpt": "matrixRequest.bits.opcode:=Mux(dot,0x23.U,Mux(pv,0x24.U,0x20.U))",
+      "lines_inclusive": [
+        179,
+        199
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Packed QK iterates depth 0..112 by 16 and causal key groups of at most sixteen.",
+      "excerpt": "when(key+packedKeys<=token){key:=key+packedKeys;state:=st(\"attKey\")}",
+      "lines_inclusive": [
+        579,
+        613
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Legacy PV iterates all causal keys and eight sixteen-column chunks per head.",
+      "excerpt": "when(key<token){key:=key+1.U;state:=st(\"attProbRead\")}.otherwise{state:=st(\"attPVWrite\")}",
+      "lines_inclusive": [
+        622,
+        630
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Legacy requests become single normal stream steps, not another arithmetic engine.",
+      "excerpt": "when(io.port.step.fire){state:=waitResult}",
+      "lines_inclusive": [
+        216,
+        245
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc",
+      "source_kind": "selected_scala_postimage"
+    }
+  ],
+  "schema": 1,
+  "source_identity": {
+    "manifest_bytes": 1351,
+    "manifest_path_relative_to_source_root": "candidates/qwen2_resident_matrix/production_qk16_rebase/POSTIMAGE_PINS.json",
+    "manifest_sha256": "f7b534e22e3d707129a00315343a71365ade205f0b0052a69593146e383659fb",
+    "raw_main_scala_used_as_selected_postimage": false,
+    "selected_postimage_bodies_verified_by_this_program": false,
+    "selected_scala_postimages": [
+      {
+        "base_sha256": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+        "post_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68"
+      },
+      {
+        "base_sha256": "b3dad7ae7a23c96ac720cd9920ff3595d1d83f77a2664ed73526e71e5b49a3ae",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+        "post_sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3"
+      },
+      {
+        "base_sha256": "8a2c2d41e68719fb2714e3658b45ec0cd8bbe9f9173dbd9c9a91e7344f16e995",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+        "post_sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc"
+      },
+      {
+        "base_sha256": "59c041ac92a4a0105ddf0bc5ad521e59b0ebb7d76c30bdeb4eb009943bb19545",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+        "post_sha256": "15cc34f041228f38d69b15868a9f9c45fb3f9ea53a9275ec6a6d9fd70b4b0c25"
+      },
+      {
+        "base_sha256": null,
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala",
+        "post_sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+      }
+    ],
+    "source_commit": "1bdf70eb42de8752edeb616e8ef01e166628ca35",
+    "source_tree": "cc48abbc5e4fe59782e04feac3baa2057f300567",
+    "verification_scope": "Pinned manifest bytes and declared selected identities only; selected Scala bodies are not read or compiled."
+  }
+}

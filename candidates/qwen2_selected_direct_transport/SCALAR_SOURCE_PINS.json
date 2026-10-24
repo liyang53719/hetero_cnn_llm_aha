@@ -1,0 +1,16 @@
+{
+  "identity_proof_sha256": "b1d1e1beb464316958923862f87b00b33a13440dfff294d0a5f7968ee63a3bb0",
+  "schema": 1,
+  "scope": "Unchanged current-main BlockFloat definition inherited by selected composed Qwen2Block; not a new selected postimage.",
+  "selected_qwen2block_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+  "source_commit": "1bdf70eb42de8752edeb616e8ef01e166628ca35",
+  "source_tree": "cc48abbc5e4fe59782e04feac3baa2057f300567",
+  "sources": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "bytes": 8313,
+      "git_blob": "021c878dcb1106335d8a0cf768fdb862ab00533c",
+      "mode": "100644",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    }
+  }
+}

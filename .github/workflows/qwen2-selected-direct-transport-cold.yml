@@ -1,0 +1,128 @@
+name: qwen2-selected-direct-transport-cold
+
+# Source-bound control, wire and integer-bound tests only, not full M128 or RTL.
+# Existing selected-schedule cold tests remain required; no native/EDA build.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-selected-direct-transport-cold.yml'
+      - 'candidates/qwen2_selected_direct_transport/**'
+      - 'candidates/qwen2_selected_scala_model/**'
+      - 'plans/QWEN2_DIRECT_TRANSPORT_AND_BOUND_20261024_ZH.md'
+  pull_request:
+    paths:
+      - '.github/workflows/qwen2-selected-direct-transport-cold.yml'
+      - 'candidates/qwen2_selected_direct_transport/**'
+      - 'candidates/qwen2_selected_scala_model/**'
+      - 'plans/QWEN2_DIRECT_TRANSPORT_AND_BOUND_20261024_ZH.md'
+permissions:
+  contents: read
+jobs:
+  isolated-cold-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require existing source-only patch utility
+        run: patch --version
+      - name: Require 74 direct and 76 prior tests in both Python modes
+        shell: bash
+        run: |
+          python -I -B - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import resource
+          import subprocess
+          import sys
+          import time
+          
+          root = Path.cwd().resolve()
+          suites = (
+              ('direct', 'candidates/qwen2_selected_direct_transport', 74, (
+                  ('test_direct_public.py', 16, True, True),
+                  ('test_kv_wire.py', 16, True, False),
+                  ('test_architecture_bound.py', 16, True, True),
+                  ('test_prepare.py', 6, True, True),
+                  ('test_traffic.py', 4, False, True),
+                  ('test_scalar_bound.py', 16, True, True),
+              )),
+              ('prior', 'candidates/qwen2_selected_scala_model', 76, (
+                  ('test_routing.py', 26, True, True),
+                  ('test_schedule_numeric.py', 10, True, True),
+                  ('test_control_regression.py', 17, True, True),
+                  ('test_prepare_geometry.py', 8, True, True),
+                  ('run_existing_numeric_regressions.py', 15, True, True),
+              )),
+          )
+          available_cpus = os.sched_getaffinity(0)
+          if not available_cpus:
+              raise SystemExit('No available CPU for bounded cold tests')
+          selected_cpu = min(available_cpus)
+          
+          
+          def limits():
+              resource.setrlimit(resource.RLIMIT_CPU, (20, 20))
+              memory = 256 * 1024 * 1024
+              resource.setrlimit(resource.RLIMIT_AS, (memory, memory))
+              os.sched_setaffinity(0, {selected_cpu})
+          
+          
+          started = time.monotonic()
+          totals = {name: [] for name, _, _, _ in suites}
+          for optimized in (False, True):
+              for name, relative, expected_total, tests in suites:
+                  total = 0
+                  for filename, expected, source_root, verbose in tests:
+                      remaining = 120 - (time.monotonic() - started)
+                      if remaining <= 0:
+                          raise SystemExit('Cold aggregate exceeded 120-second budget')
+                      command = [sys.executable, '-I', '-B']
+                      if optimized:
+                          command.append('-O')
+                      command.append(str(root / relative / filename))
+                      if source_root:
+                          command += ['--source-root', str(root)]
+                      if verbose:
+                          command.append('-v')
+                      completed = subprocess.run(
+                          command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                          text=True, preexec_fn=limits, timeout=min(30, remaining),
+                          check=False,
+                      )
+                      if time.monotonic() - started >= 120:
+                          raise SystemExit('Cold aggregate exceeded 120-second budget')
+                      print(f'=== {name}/{filename}; optimized={optimized}; expected={expected}', flush=True)
+                      print(completed.stdout, end='', flush=True)
+                      counts = re.findall(r'^Ran (\d+) tests? in .+s$', completed.stdout, re.MULTILINE)
+                      ok_lines = re.findall(r'^OK$', completed.stdout, re.MULTILINE)
+                      bad = re.search(r'\b(?:skipped|expected failures|unexpected successes)\b', completed.stdout)
+                      if completed.returncode != 0 or counts != [str(expected)] or len(ok_lines) != 1 or bad:
+                          raise SystemExit('Cold suite failed, skipped, empty or count-mismatched')
+                      total += expected
+                  if total != expected_total:
+                      raise SystemExit('Cold aggregate count mismatch')
+                  totals[name].append(total)
+          if time.monotonic() - started >= 120:
+              raise SystemExit('Cold aggregate exceeded 120-second budget')
+          print(json.dumps({
+              'status': 'PASS_COLD_TESTS_ONLY',
+              'direct_normal_tests': totals['direct'][0],
+              'direct_optimized_tests': totals['direct'][1],
+              'prior_normal_tests': totals['prior'][0],
+              'prior_optimized_tests': totals['prior'][1],
+              'native_execution': False, 'scala_execution': False,
+              'full_m128_acceptance': False, 'rtl_acceptance': False,
+              'hardware_timing_measured': False,
+          }, sort_keys=True))
+          PY
+      - name: Require checkout unchanged
+        shell: bash
+        run: |
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"

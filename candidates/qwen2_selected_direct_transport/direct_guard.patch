@@ -1,0 +1,16 @@
+--- a/candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py
+@@ -250,6 +250,13 @@
+         Its Matrix packets go through the same acquired service used by Dense.
+         Host counts consume only the backend's accepted terminal after DDR ACKs.
+         """
++        from candidates.qwen2_resident_matrix.production_qk16_model.schedule import ProductionQk16Schedule
++        binding = getattr(self, 'selected_direct_binding', None)
++        selected = type(getattr(self.attention_owner, 'packed_schedule', None)) is ProductionQk16Schedule
++        if binding is not None or selected:
++            from candidates.qwen2_resident_matrix.production_qk16_model.direct_transport import DirectBinding
++            require(type(binding) is DirectBinding, 'exact selected direct binding required')
++            binding.check(self)
+         backend = self.attention_owner
+         require(backend is not None and backend.matrix is self.matrix_service,
+                 'Attention backend/shared Matrix service not attached')

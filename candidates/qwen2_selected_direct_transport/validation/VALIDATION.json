@@ -1,0 +1,287 @@
+{
+  "limits": {
+    "address_space_mib": 256,
+    "cpu_affinity": [
+      0
+    ],
+    "cpu_seconds_per_process": 20,
+    "wall_seconds_per_process": 30
+  },
+  "new_normal_tests": 74,
+  "new_optimized_tests": 74,
+  "python": "3.12.14",
+  "remaining": [
+    "No full-block M128/profile2/native or RTL qualification",
+    "Full default M2 driver regression is outside fixed synthetic service: legacy QK unsupported; probe reached9 accepted reads with default LegacyMatrixClient and no selected binding",
+    "Default full-run source/hash admission is unchanged and rejects new closure pending separate reviewed profile/input freeze",
+    "Source bounds are necessary limits for current selected schedule, not timing measurements or restrictions on alternative valid architectures"
+  ],
+  "resolved_development_findings": [
+    "metadata regions lack data; metadata identity guard now uses optional data/provider",
+    "guard now pins reserved and payload capacity",
+    "invalid final_ack_stall rejects before binding",
+    "detached binding and retained scratch_last reject",
+    "exact-type foreign-service/inner-client links reject",
+    "actual idle owner retains job metadata, so release guard uses idle plus Matrix/Scalar retirement",
+    "initial source-count50 expectation updated to final51",
+    "receipt extraction counts attribute corrected to actual ScalarControlAdapter.calls; no arithmetic failure",
+    "test_kv_wire CLI omits unsupported -v; final aggregate commands corrected without source changes"
+  ],
+  "runs": [
+    {
+      "count": 16,
+      "elapsed_seconds": 1.3208,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_direct_public.py"
+    },
+    {
+      "count": 16,
+      "elapsed_seconds": 0.3163,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_kv_wire.py"
+    },
+    {
+      "count": 16,
+      "elapsed_seconds": 0.1145,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_architecture_bound.py"
+    },
+    {
+      "count": 6,
+      "elapsed_seconds": 0.1469,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_prepare.py"
+    },
+    {
+      "count": 4,
+      "elapsed_seconds": 0.0691,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_traffic.py"
+    },
+    {
+      "count": 16,
+      "elapsed_seconds": 0.1094,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_scalar_bound.py"
+    },
+    {
+      "count": 16,
+      "elapsed_seconds": 1.4231,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_direct_public.py"
+    },
+    {
+      "count": 16,
+      "elapsed_seconds": 0.4538,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_kv_wire.py"
+    },
+    {
+      "count": 16,
+      "elapsed_seconds": 0.3348,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_architecture_bound.py"
+    },
+    {
+      "count": 6,
+      "elapsed_seconds": 0.3584,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_prepare.py"
+    },
+    {
+      "count": 4,
+      "elapsed_seconds": 0.1995,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_traffic.py"
+    },
+    {
+      "count": 16,
+      "elapsed_seconds": 0.3353,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "direct",
+      "test": "test_scalar_bound.py"
+    },
+    {
+      "count": 26,
+      "elapsed_seconds": 0.2474,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_routing.py"
+    },
+    {
+      "count": 10,
+      "elapsed_seconds": 0.7334,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_schedule_numeric.py"
+    },
+    {
+      "count": 17,
+      "elapsed_seconds": 0.2212,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_control_regression.py"
+    },
+    {
+      "count": 8,
+      "elapsed_seconds": 0.0849,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_prepare_geometry.py"
+    },
+    {
+      "count": 15,
+      "elapsed_seconds": 2.9601,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "run_existing_numeric_regressions.py"
+    },
+    {
+      "count": 26,
+      "elapsed_seconds": 0.3757,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_routing.py"
+    },
+    {
+      "count": 10,
+      "elapsed_seconds": 0.9273,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_schedule_numeric.py"
+    },
+    {
+      "count": 17,
+      "elapsed_seconds": 0.3477,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_control_regression.py"
+    },
+    {
+      "count": 8,
+      "elapsed_seconds": 0.237,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "test_prepare_geometry.py"
+    },
+    {
+      "count": 15,
+      "elapsed_seconds": 2.8633,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "suite": "prior_unchanged",
+      "test": "run_existing_numeric_regressions.py"
+    }
+  ],
+  "schema": 1,
+  "scope": {
+    "additional_scalar_source_pins": 1,
+    "full_block": false,
+    "full_m128_numeric": false,
+    "hardware_cycles_measured": false,
+    "m2_jobs": 1,
+    "native_execution": false,
+    "native_imports": false,
+    "real_control": "PublicExecution, existing physical driver, PhysicalMemory, selected Attention owner and existing clients ASTs",
+    "rtl_generation": false,
+    "scala_execution": false,
+    "synthetic": "Host, Dense parent, Matrix/Scalar arithmetic services",
+    "transport_source_pins": 51
+  },
+  "source_bound_results": {
+    "actual_hardware_measurement": false,
+    "combine_rule": "MAX_NOT_SUM",
+    "combined_cycles_lower_bound": 5052671,
+    "combined_utilization_bound_fraction": [
+      1468464,
+      5052671
+    ],
+    "mandatory_scalar_requests": 1684224,
+    "matrix_cycles_lower_bound": 2310144,
+    "matrix_utilization_bound_fraction": [
+      30593,
+      48128
+    ],
+    "scalar_cycles_lower_bound": 5052671
+  },
+  "source_commit": "1bdf70eb42de8752edeb616e8ef01e166628ca35",
+  "source_tree": "cc48abbc5e4fe59782e04feac3baa2057f300567",
+  "status": "BOUNDED_PASS_OVERALL_INCOMPLETE",
+  "tested_code_sha256": {
+    "ARCHITECTURE_BOUND.json": "0983a532dcecbd5cc997f72f65470682194987a83d52bf4fe545247c98184813",
+    "CODE_PINS.json": "0ca0a700cbda6ffce1650856a46d29ced6f578cb4fc2e03443e3a9166e56cfa2",
+    "INPUT_PINS.json": "2dce94e18f94638e92f2e266d0f67c03c2531a0a1e8beef99b1f877fb4bb0a6f",
+    "README_CN.md": "5558c38d71085ad67f7124b12e7e062ac63709feaf7cc97df1872a39195d608d",
+    "SCALAR_BOUND.json": "d7b12bbc50633aa73137d76388bae83c4e4dc5383976c8a7c5af2b20a13cc0bf",
+    "SCALAR_SOURCE_PINS.json": "40cd67da2fb81ffb85452c83e0be40230a1f8ad2e4f690a1d762d83d2cb77f7f",
+    "architecture_bound.py": "6038a238a2473e55b90697e2f5af7227fee6b08ac7f6a1ca8535b40210155759",
+    "direct_guard.patch": "4ec4aaa834150ffaf89b4efff6675b6f668f390117a66bee5f1c13916d0d505e",
+    "direct_test_support.py": "a690358442a4ffc031506080c70193679775fb29ca1a89d6efe54d8b54b312e7",
+    "direct_transport.py": "5ac7d734c10ad46cc0f8608aa42b777cf91d8124fec5b46e417e81c79dd64dff",
+    "prepare.py": "7d9c38aa253c5445208e25504fb115f5e40ecbee07bfab71e49feca86d9376ba",
+    "scalar_bound.py": "82237b81dd12a603e6ab4e28ff800b5e1c89b02b2c52bcedbf2b44a44fe1a063",
+    "test_architecture_bound.py": "1caaf76e2f3f2250eec04d5ef5d1023a4ff7b8a174bf263efb28c1d6878cdc81",
+    "test_direct_public.py": "6c9b447418c2dd2775816c940eb8c17fcfe92c16dfce9cb3018db7760597327a",
+    "test_kv_wire.py": "8d59e0011ad518bf3da25e46144873419fea7aa4ab7888f35623e0c6a175077f",
+    "test_prepare.py": "42a021d3a66abf0b3531e0327c4167296a9f475eb0b35dcd91413b6e101ae9fd",
+    "test_scalar_bound.py": "81e19bacf5fcbe802524697c855c68fdc4513e29d88b505cca6e48261e508f92",
+    "test_traffic.py": "0efe5aca95fb4d72304302cc5745116ef34a8a5ea613eb1e283c8c916a4c278c",
+    "traffic_plan.py": "84991d576e3f4b9af5b1b383ded39d2625943780e03b18a475384df428cc9ec7"
+  },
+  "unchanged_prior_normal_tests": 76,
+  "unchanged_prior_optimized_tests": 76
+}

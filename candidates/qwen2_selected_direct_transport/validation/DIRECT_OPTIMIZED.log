@@ -1,0 +1,117 @@
+=== test_direct_public.py: optimized=True, expected=16, returncode=0
+test_actual_pinned_definitions_without_native_imports (__main__.DirectPublicControlTests.test_actual_pinned_definitions_without_native_imports) ... ok
+test_bind_checks_dispatch_and_retirement_before_install_or_acquisition (__main__.DirectPublicControlTests.test_bind_checks_dispatch_and_retirement_before_install_or_acquisition) ... ok
+test_direct_runtime_cannot_enable_raw_driver_or_copy_payload (__main__.DirectPublicControlTests.test_direct_runtime_cannot_enable_raw_driver_or_copy_payload) ... ok
+test_every_core_read_maps_once_in_order_to_external_ddr (__main__.DirectPublicControlTests.test_every_core_read_maps_once_in_order_to_external_ddr) ... ok
+test_invalid_final_ack_stall_rejected_before_binding_and_valid_retry (__main__.DirectPublicControlTests.test_invalid_final_ack_stall_rejected_before_binding_and_valid_retry) ... ok
+test_one_actual_m2_job_not_two_m1_invocations (__main__.DirectPublicControlTests.test_one_actual_m2_job_not_two_m1_invocations) ... ok
+test_one_shared_matrix_acquisition_and_no_raw_or_scratch_operations (__main__.DirectPublicControlTests.test_one_shared_matrix_acquisition_and_no_raw_or_scratch_operations) ... ok
+test_original_bank_service_and_physical_map_mutations_before_memory_step (__main__.DirectPublicControlTests.test_original_bank_service_and_physical_map_mutations_before_memory_step) ... ok
+test_process_resource_bounds (__main__.DirectPublicControlTests.test_process_resource_bounds) ... ok
+test_raw_transport_binding_and_schedule_mutations_before_memory_step (__main__.DirectPublicControlTests.test_raw_transport_binding_and_schedule_mutations_before_memory_step) ... ok
+test_retained_dense_and_prefix_debts_before_memory_step (__main__.DirectPublicControlTests.test_retained_dense_and_prefix_debts_before_memory_step) ... ok
+test_router_and_packed_legacy_link_mutations_before_memory_step (__main__.DirectPublicControlTests.test_router_and_packed_legacy_link_mutations_before_memory_step) ... ok
+test_scratch_payload_and_debts_before_memory_step (__main__.DirectPublicControlTests.test_scratch_payload_and_debts_before_memory_step) ... ok
+test_source_pin_mismatch_fails_before_prior_ast_loading (__main__.DirectPublicControlTests.test_source_pin_mismatch_fails_before_prior_ast_loading) ... ok
+test_source_root_is_required_even_in_isolated_mode (__main__.DirectPublicControlTests.test_source_root_is_required_even_in_isolated_mode) ... ok
+test_write_command_data_ack_fence_and_final_terminal (__main__.DirectPublicControlTests.test_write_command_data_ack_fence_and_final_terminal) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.104s
+
+OK
+
+=== test_kv_wire.py: optimized=True, expected=16, returncode=0
+test_actual_bytes_and_16u32_roundtrip_all_512_bits (__main__.WireTests.test_actual_bytes_and_16u32_roundtrip_all_512_bits) ... ok
+test_endian_mutations_are_detected_by_exact_wire_oracle (__main__.WireTests.test_endian_mutations_are_detected_by_exact_wire_oracle) ... ok
+test_malformed_matching_beats_are_errors_not_successful_fabricated_payloads (__main__.WireTests.test_malformed_matching_beats_are_errors_not_successful_fabricated_payloads) ... ok
+test_noncanonical_identity_never_becomes_a_reply (__main__.WireTests.test_noncanonical_identity_never_becomes_a_reply) ... ok
+test_pin_mutations_fail_before_extraction (__main__.WireTests.test_pin_mutations_fail_before_extraction) ... ok
+test_public_conversion_refuses_unrepresentable_512bit_payload (__main__.WireTests.test_public_conversion_refuses_unrepresentable_512bit_payload) ... ok
+test_all_4096_lines_use_64byte_not_word_addresses (__main__.AddressTests.test_all_4096_lines_use_64byte_not_word_addresses) ... ok
+test_word_address_divisor_mutation_is_detected (__main__.AddressTests.test_word_address_divisor_mutation_is_detected) ... ok
+test_abort_and_soft_reset_preserve_debt_until_exact_ack (__main__.RawBankTests.test_abort_and_soft_reset_preserve_debt_until_exact_ack) ... ok
+test_acquisition_needs_every_obligation_and_canonical_owner (__main__.RawBankTests.test_acquisition_needs_every_obligation_and_canonical_owner) ... ok
+test_actual_fixed_backing_and_all4096_two_bank_locations (__main__.RawBankTests.test_actual_fixed_backing_and_all4096_two_bank_locations) ... ok
+test_all_wire_encodings_survive_actual_bank_write_and_read (__main__.RawBankTests.test_all_wire_encodings_survive_actual_bank_write_and_read) ... ok
+test_bad_raw_keys_data_and_lines_never_touch_banks (__main__.RawBankTests.test_bad_raw_keys_data_and_lines_never_touch_banks) ... ok
+test_default_disabled_raw_port_does_not_allocate_or_borrow (__main__.RawBankTests.test_default_disabled_raw_port_does_not_allocate_or_borrow) ... ok
+test_exact_ack_and_release_are_separate_fences_for_read_and_write (__main__.RawBankTests.test_exact_ack_and_release_are_separate_fences_for_read_and_write) ... ok
+test_source_banks_port_and_word_guards_remain_live_under_optimized_launcher (__main__.RawBankTests.test_source_banks_port_and_word_guards_remain_live_under_optimized_launcher) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.221s
+
+OK
+{"backing": "original Banks: 16 x 1376 x 256 bits", "exclusions": ["arithmetic", "native", "RTL", "full block", "M128 prefill", "raw-cache/direct-route architecture equivalence"], "extractions": {"candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": {"definitions": ["MemoryResponse"], "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b", "unchanged_ast": true}, "candidates/qwen2_resident_matrix/raw_kv/model.py": {"definitions": ["uint", "location", "Key", "Request", "Response", "Obligations", "valid_key", "RawKvPort"], "sha256": "83a855fab9dbe3e2c24c7b51a7a353a23146e7f70d70e73fa5b3e4d8db30bd93", "unchanged_ast": true}, "candidates/qwen2_resident_matrix/raw_kv_attention/model.py": {"definitions": ["Binding", "Read", "Reply", "KvSupply"], "sha256": "b06818894913ff6180a2a6331fc182305eb40b9788a4577580baad0aaaa38b6c", "unchanged_ast": true}, "candidates/qwen2_resident_matrix/raw_kv_attention/numeric_bridge.py": {"definitions": ["require", "decode_ddr_response"], "sha256": "2ba286747f2eaa168023a41e4d8ef00dcc0bdc3a75001559713fe477197ce20d", "unchanged_ast": true}, "candidates/qwen2_resident_matrix/raw_kv_public/model.py": {"lines": [79, 82], "method": "PublicKvTransport.tick", "scope": "unchanged guarded response_fire body only", "sha256": "350b58a197e3a4c6d2882cc590091c88215935af8120d020dad5c9bc72c7401d", "unchanged_ast": true}, "candidates/qwen2_resident_matrix/transposed_down/model.py": {"definitions": ["Banks"], "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412", "unchanged_ast": true}}, "launcher_optimized": true, "limits": {"address_space_mib": 256, "allowed_cpus": 1, "cpu_seconds": 20}, "patterns": 771, "pinned_sources": 51, "raw_lines": 4096, "scope": "wire / bank-port protocol only; not full PublicKvTransport execution", "source_commit": "1bdf70eb42de8752edeb616e8ef01e166628ca35", "source_compile_optimize": 0, "status": "pass", "tests": 16, "walking_bits": 512}
+
+=== test_architecture_bound.py: optimized=True, expected=16, returncode=0
+test_attention_is_not_hidden_under_dense_slots (__main__.ExactArchitectureBoundTests.test_attention_is_not_hidden_under_dense_slots) ... ok
+test_exact_counts_and_dense_ceiling (__main__.ExactArchitectureBoundTests.test_exact_counts_and_dense_ceiling) ... ok
+test_pv_inactive_slices_cannot_be_filled_by_dense (__main__.ExactArchitectureBoundTests.test_pv_inactive_slices_cannot_be_filled_by_dense) ... ok
+test_reject_each_noncanonical_input (__main__.ExactArchitectureBoundTests.test_reject_each_noncanonical_input) ... ok
+test_reject_non_integer_and_unknown_inputs (__main__.ExactArchitectureBoundTests.test_reject_non_integer_and_unknown_inputs) ... ok
+test_reject_wrong_resource_caps (__main__.ExactArchitectureBoundTests.test_reject_wrong_resource_caps) ... ok
+test_returned_inputs_cannot_change_later_calls (__main__.ExactArchitectureBoundTests.test_returned_inputs_cannot_change_later_calls) ... ok
+test_whole_block_fixed_resource_denominator (__main__.ExactArchitectureBoundTests.test_whole_block_fixed_resource_denominator) ... ok
+test_checked_in_evidence_reproducible (__main__.PinnedEvidenceTests.test_checked_in_evidence_reproducible) ... ok
+test_json_evidence_has_exact_fraction_and_no_floats (__main__.PinnedEvidenceTests.test_json_evidence_has_exact_fraction_and_no_floats) ... ok
+test_missing_explicit_source_root_rejected (__main__.PinnedEvidenceTests.test_missing_explicit_source_root_rejected) ... ok
+test_real_fixture_manifest_matches_fixed_pins (__main__.PinnedEvidenceTests.test_real_fixture_manifest_matches_fixed_pins) ... ok
+test_reject_changed_selected_hash_without_writes (__main__.PinnedEvidenceTests.test_reject_changed_selected_hash_without_writes) ... ok
+test_reject_duplicate_selected_path (__main__.PinnedEvidenceTests.test_reject_duplicate_selected_path) ... ok
+test_reject_tampered_fixture_manifest_without_writes (__main__.PinnedEvidenceTests.test_reject_tampered_fixture_manifest_without_writes) ... ok
+test_reviewed_anchors_identify_selected_source_not_raw_main (__main__.PinnedEvidenceTests.test_reviewed_anchors_identify_selected_source_not_raw_main) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.003s
+
+OK
+
+=== test_prepare.py: optimized=True, expected=6, returncode=0
+test_binding_does_not_allocate_payload_resources (__main__.PreparationTests.test_binding_does_not_allocate_payload_resources) ... ok
+test_candidate_source_drift_rejects_before_output (__main__.PreparationTests.test_candidate_source_drift_rejects_before_output) ... ok
+test_changed_original_public_source_rejects_before_output (__main__.PreparationTests.test_changed_original_public_source_rejects_before_output) ... ok
+test_exact_nine_file_overlay_and_unchanged_driver_loop (__main__.PreparationTests.test_exact_nine_file_overlay_and_unchanged_driver_loop) ... ok
+test_input_symlink_rejects (__main__.PreparationTests.test_input_symlink_rejects) ... ok
+test_unknown_candidate_file_pin_rejects (__main__.PreparationTests.test_unknown_candidate_file_pin_rejects) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.036s
+
+OK
+
+=== test_traffic.py: optimized=True, expected=4, returncode=0
+test_all_lengths_count_actual_causal_loops (__main__.TrafficTests.test_all_lengths_count_actual_causal_loops) ... ok
+test_m128_counts_are_not_representation_equivalence (__main__.TrafficTests.test_m128_counts_are_not_representation_equivalence) ... ok
+test_m2_control_trace_counts (__main__.TrafficTests.test_m2_control_trace_counts) ... ok
+test_noncanonical_shapes_reject (__main__.TrafficTests.test_noncanonical_shapes_reject) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
+
+=== test_scalar_bound.py: optimized=True, expected=16, returncode=0
+test_actual_pinned_blockfloat_bytes_and_anchors (__main__.ScalarEvidenceTests.test_actual_pinned_blockfloat_bytes_and_anchors) ... ok
+test_checked_in_evidence_is_reproducible (__main__.ScalarEvidenceTests.test_checked_in_evidence_is_reproducible) ... ok
+test_json_is_exact_and_not_a_timing_claim (__main__.ScalarEvidenceTests.test_json_is_exact_and_not_a_timing_claim) ... ok
+test_layer1_artifact_still_has_original_bound (__main__.ScalarEvidenceTests.test_layer1_artifact_still_has_original_bound) ... ok
+test_requires_explicit_fixture_root (__main__.ScalarEvidenceTests.test_requires_explicit_fixture_root) ... ok
+test_selected_and_unchanged_source_are_distinct (__main__.ScalarEvidenceTests.test_selected_and_unchanged_source_are_distinct) ... ok
+test_tampered_blockfloat_rejected_without_writes (__main__.ScalarEvidenceTests.test_tampered_blockfloat_rejected_without_writes) ... ok
+test_tampered_dedicated_pins_rejected_without_writes (__main__.ScalarEvidenceTests.test_tampered_dedicated_pins_rejected_without_writes) ... ok
+test_exact_whole_block_fixed4096_fraction (__main__.ScalarFormulaTests.test_exact_whole_block_fixed4096_fraction) ... ok
+test_max_combination_never_sum (__main__.ScalarFormulaTests.test_max_combination_never_sum) ... ok
+test_minimum_span_has_correct_edge_endpoints (__main__.ScalarFormulaTests.test_minimum_span_has_correct_edge_endpoints) ... ok
+test_reject_each_noncanonical_input (__main__.ScalarFormulaTests.test_reject_each_noncanonical_input) ... ok
+test_reject_fifteen_add_shortcut_and_changed_throughput (__main__.ScalarFormulaTests.test_reject_fifteen_add_shortcut_and_changed_throughput) ... ok
+test_reject_non_integer_and_unscoped_budget_inputs (__main__.ScalarFormulaTests.test_reject_non_integer_and_unscoped_budget_inputs) ... ok
+test_returned_inputs_cannot_mutate_canonical_calculation (__main__.ScalarFormulaTests.test_returned_inputs_cannot_mutate_canonical_calculation) ... ok
+test_scores_and_mandatory_operations (__main__.ScalarFormulaTests.test_scores_and_mandatory_operations) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.003s
+
+OK
+

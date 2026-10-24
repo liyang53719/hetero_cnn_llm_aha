@@ -1,0 +1,52 @@
+{
+  "additional_scalar_source_files": 1,
+  "fixed_findings": [
+    "PhysicalMemory metadata regions may omit data",
+    "pin reserved and payload capacity, not only base/extent",
+    "reject invalid final_ack_stall before single-use binding",
+    "reject detached binding/scratch_last payload",
+    "reject exact-type foreign-service and changed inner client links",
+    "actual retired owner retains job metadata; state/service debt determine idle"
+  ],
+  "independent_tests_per_mode": 74,
+  "isolated_python": true,
+  "limitations": [
+    "synthetic Host/Dense/arithmetic controls",
+    "M2 Attention control only, not full block",
+    "no M128 numeric/native/Scala/RTL execution",
+    "Banks assertions explicitly preserved with compile optimize=0"
+  ],
+  "limits": {
+    "address_space_mib": 256,
+    "cpu_count": 1,
+    "cpu_seconds": 20
+  },
+  "normal": true,
+  "optimized": true,
+  "reviewed_runtime_sha256": "5ac7d734c10ad46cc0f8608aa42b777cf91d8124fec5b46e417e81c79dd64dff",
+  "reviewed_scalar_bound_sha256": "82237b81dd12a603e6ab4e28ff800b5e1c89b02b2c52bcedbf2b44a44fe1a063",
+  "reviewed_selected_scala_files": 5,
+  "scalar_review": {
+    "combine_resource_bounds": "MAX_NOT_SUM",
+    "exact_utilization_bound": [
+      1468464,
+      5052671
+    ],
+    "last_result_span": 5052671,
+    "minimum_accept_spacing": 3,
+    "no_old_silu_or_pv6_budget": true,
+    "same_root_clock": true,
+    "successful_block_premise": true
+  },
+  "schema": 1,
+  "scope": [
+    "direct control16",
+    "Matrix bound16",
+    "source composition6",
+    "wire/bank16",
+    "traffic4",
+    "mandatory Scalar bound16"
+  ],
+  "status": "NO_REMAINING_BLOCKER_IN_REVIEWED_BOUNDED_SCOPE",
+  "verified_anchor_excerpt_ranges": 28
+}

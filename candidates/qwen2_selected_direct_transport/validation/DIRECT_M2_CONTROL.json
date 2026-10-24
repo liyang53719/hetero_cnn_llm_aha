@@ -1,0 +1,55 @@
+{
+  "accepted_jobs": 1,
+  "all_core_reads_equal_ordered_external_reads": true,
+  "driver_counts": {
+    "final_ack_stall": 5,
+    "matrix_requests": 504,
+    "matrix_results": 504,
+    "read_requests": 768,
+    "requests": 960,
+    "responses": 960,
+    "ticks": 4594,
+    "write_acks": 192,
+    "write_requests": 192
+  },
+  "external_read_count": 768,
+  "final_ack_fence": {
+    "final_ack_tick": 4594,
+    "held_ticks": 5,
+    "terminal_strictly_after_final_ack": true,
+    "terminal_tick": 4595
+  },
+  "full_block_execution": false,
+  "hardware_cycles": false,
+  "hardware_utilization": false,
+  "matrix_service_counts": {
+    "legacy_model_ticks": 3210,
+    "legacy_replies": 288,
+    "normal_done": 216,
+    "normal_groups": 216,
+    "normal_results": 312,
+    "normal_steps": 480,
+    "owner_acquires": 1,
+    "owner_releases": 1,
+    "owner_responses": 1,
+    "packed_model_ticks": 1383
+  },
+  "native_execution": false,
+  "physical_counts": {
+    "read_bytes": 49152,
+    "write_ack_bytes": 12288,
+    "write_acks": 192,
+    "write_commands": 192,
+    "write_data_bytes": 12288
+  },
+  "rows": 2,
+  "scalar_operation_calls": {
+    "add": 936,
+    "bf": 20040,
+    "div": 24,
+    "mul": 648
+  },
+  "schema": 1,
+  "scope": "M2 Attention control only; actual Public/PhysicalMemory/owner/client methods, synthetic Host/Dense/arithmetic",
+  "scratch_events": 0
+}

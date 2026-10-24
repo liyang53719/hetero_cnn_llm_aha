@@ -1,0 +1,242 @@
+{
+  "claim_kind": "conditional_necessary_qk_scalar_architecture_upper_bound_layer2",
+  "cycle_domain": "Elapsed shared root-clock span inherited by Qwen2Block and its local Scalar, not ABI/software ticks or active-only/gated-MAC counters.",
+  "exact_bound": {
+    "combined_architecture_utilization_upper_bound": {
+      "denominator": 5052671,
+      "numerator": 1468464
+    },
+    "combined_max_service_clock_cycles_lower_bound": 5052671,
+    "first_qk_scalar_accept_to_last_qk_scalar_result_span_lower_bound": 5052671,
+    "fixed_4096_whole_block_capacity_denominator": 20695740416,
+    "inputs": {
+      "fixed_matrix_macs": 4096,
+      "full_block_useful_macs_given": 6014828544,
+      "heads": 12,
+      "matrix_layer1_cycles_lower_bound": 2310144,
+      "qk_adds_per_score": 16,
+      "qk_scale_muls_per_score": 1,
+      "scalar_acceptance_spacing_lower_bound": 3,
+      "scalar_acceptance_to_result_spacing_lower_bound": 2,
+      "tokens": 128
+    },
+    "mandatory_qk_scalar_adds": 1585152,
+    "mandatory_qk_scalar_operations": 1684224,
+    "mandatory_qk_scalar_scale_muls": 99072,
+    "mandatory_qk_scores": 99072,
+    "matrix_layer1_cycles_lower_bound": 2310144,
+    "scalar_layer2_utilization_upper_bound": {
+      "denominator": 5052671,
+      "numerator": 1468464
+    }
+  },
+  "layer1_artifact": "ARCHITECTURE_BOUND.json",
+  "layer_combination": "MAX of necessary cycle lower bounds, never SUM",
+  "limitations": [
+    "The three-clock Scalar acceptance spacing is deliberately optimistic; Qwen control bubbles, caller gaps, stalls, and all other work can only strengthen this necessary bound.",
+    "Failed requests may bypass normal, but they cannot establish a successful full-block completion and are excluded from this conditional proof.",
+    "The strict Add/Mul path and explicit first zero-add are counted as implemented; this is not a mathematical reduction-tree minimum.",
+    "A new score consumer, extra scalar instances, altered clocks or different scalar state machine requires a new proof.",
+    "No longer-sequence, synthesized Fmax, runtime measurement, numerical pass, or native/RTL/EDA/CI completion is claimed."
+  ],
+  "native_rtl_eda_or_ci_validation": false,
+  "not_measured_utilization": true,
+  "not_predicted_runtime": true,
+  "premises": [
+    "Successful canonical M128 causal Qwen2 block, twelve query heads, selected packed QK16 score-consumer path.",
+    "Given full-block useful work remains 6014828544 MACs and fixed physical Matrix capacity remains 4096 MACs.",
+    "All actual key scores are consumed through the selected core's one local BlockScalarFloat on the inherited service clock.",
+    "Only mandatory QK reduction Add and scaling Mul work is counted; no PV, softmax, SiLU, normalization, or other Scalar budget is assumed."
+  ],
+  "proof": [
+    "Causal score count P = 12 * 128 * 129 / 2 = 99072.",
+    "Selected source initializes sum to positive zero and issues all sixteen lane Adds, then one Mul per score: N = 17 * P = 1684224.",
+    "Earliest accepted edge e0 enters normal; e1 registers ALU output and enters done; e2 may consume result and returns to idle; e3 may accept the next request.",
+    "Thus accepted requests are at least three service clocks apart, and final result consumption is at least two clocks after its acceptance.",
+    "First mandatory acceptance to last mandatory result span is at least 3 * (N - 1) + 2 = 5052671 service clocks.",
+    "The whole block contains that span: C >= max(2310144, 5052671) = 5052671. Arbitrary Matrix and other-resource overlap is allowed.",
+    "U <= 6014828544 / (4096 * 5052671) = 1468464/5052671 exactly."
+  ],
+  "python_scheduler_ticks_used_as_hardware_cycles": false,
+  "reviewed_source_anchors": [
+    {
+      "claim": "One local BlockScalarFloat Module inherits the Qwen2 core implicit clock; no clock override occurs in the reviewed selected body.",
+      "excerpt": "val scalar=Module(new BlockScalarFloat(enableSoftplus=enableGdnSoftplus));scalar.io.request.valid:=state===st(\"scalarReq\");scalar.io.request.bits:=scalarRequest;scalar.io.result.ready:=state===st(\"scalarRsp\")",
+      "lines_inclusive": [
+        103,
+        107
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Each calc call stores an operation and enters the request state for that one local Scalar.",
+      "excerpt": "def calc(op:Int,a:UInt,b:UInt,next:String):Unit={scalarRequest.op:=op.U;scalarRequest.a:=a;scalarRequest.b:=b;scalarResume:=st(next);state:=st(\"scalarReq\")}",
+      "lines_inclusive": [
+        301,
+        301
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "The core waits for request.fire and then result.fire; errors fail rather than complete the block successfully.",
+      "excerpt": "when(state===st(\"scalarReq\")&&scalar.io.request.fire){state:=st(\"scalarRsp\")}",
+      "lines_inclusive": [
+        333,
+        334
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Owner tokens are j.m; Attention enters attQLoad after token/head/key/lane initialization. Packed Attention rejects m above 128.",
+      "excerpt": "base:=0.U;tokens:=j.m;epoch:=j.tag(31,16)\ntoken:=0.U;head:=0.U;key:=0.U;depth:=0.U;col:=0.U;sum:=0.U;lane:=0.U;clearAcc()",
+      "lines_inclusive": [
+        335,
+        356
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Each causal packed key group has at most sixteen actual keys, including its tail.",
+      "excerpt": "val packedKeys=Mux(token-key>=15.U,16.U(5.W),(token-key+1.U)(4,0))",
+      "lines_inclusive": [
+        153,
+        153
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Both the first packed score and every selected subsequent score initialize lane zero and positive-zero sum; no first-add bypass.",
+      "excerpt": "when(depth===112.U){acc:=fmOut;lane:=0.U;sum:=0.U;state:=st(\"attReduce\")}\n.otherwise{acc:=selected;lane:=0.U;sum:=0.U;state:=st(\"attReduce\")}",
+      "lines_inclusive": [
+        579,
+        589
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Each score executes Add at lane 0 through lane 15, then a strict ScalarOp.Mul scaling operation.",
+      "excerpt": "when(state===st(\"attReduce\")){calc(ScalarOp.Add,sum,acc(lane),\"attReduceDone\")}\nwhen(state===st(\"attReduceDone\")){sum:=scalarValue;when(lane===15.U){\n.otherwise{calc(ScalarOp.Mul,dotValue,F32.lit(1/math.sqrt(s.headDim.toDouble)),\"attScore\")}",
+      "lines_inclusive": [
+        594,
+        599
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Every actual causal key score is committed before advancing packed selection/groups; no padded keys are counted as scores.",
+      "excerpt": "when(packedSelected.get+&1.U<packedKeys){\nwhen(key+packedKeys<=token){key:=key+packedKeys;state:=st(\"attKey\")}",
+      "lines_inclusive": [
+        600,
+        613
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Q-cache loading finishes by resetting causal key to zero for each head/token.",
+      "excerpt": "when(state===st(\"attQStored\")){when(depth+16.U<s.headDim.U){depth:=depth+16.U;state:=st(\"attQLoad\")}.otherwise{key:=0.U;maxScore:=\"hff800000\".U;state:=st(\"attKey\")}}",
+      "lines_inclusive": [
+        558,
+        560
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "After PV output, the loop advances all heads then tokens and reenters attQLoad.",
+      "excerpt": ".elsewhen(head+1.U<s.heads.U){head:=head+1.U;depth:=0.U;state:=st(\"attQLoad\")}.elsewhen(token+1.U<tokens){token:=token+1.U;head:=0.U;depth:=0.U;state:=st(\"attQLoad\")}",
+      "lines_inclusive": [
+        630,
+        630
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_kind": "selected_scala_postimage"
+    },
+    {
+      "claim": "Same heteronpu.continuous package; ScalarOp.Add=0 and Mul=1 bind to this implementation, which imports gemmini.HeteroFP32Alu.",
+      "excerpt": "package heteronpu.continuous\nimport gemmini.HeteroFP32Alu\nval Add=0;val Mul=1;val Div=2;val Sqrt=3;val ExpNegative=4",
+      "lines_inclusive": [
+        2,
+        17
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "source_kind": "unchanged_current_main_dependency"
+    },
+    {
+      "claim": "BlockScalarFloat is a clocked Module with registered state and one HeteroFP32Alu; ready only idle and result valid only done.",
+      "excerpt": "class BlockScalarFloat(enableSoftplus: Boolean = false) extends Module {\nval alu=Module(new HeteroFP32Alu);alu.io.op:=false.B;alu.io.x:=a;alu.io.y:=b\nio.request.ready:=state===idle;io.result.valid:=state===done;io.result.bits:=out;io.error:=err",
+      "lines_inclusive": [
+        32,
+        55
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "source_kind": "unchanged_current_main_dependency"
+    },
+    {
+      "claim": "A successful finite Add/Mul captures in idle, goes to normal, registers the ALU result, then enters done.",
+      "excerpt": "is(idle){when(io.request.fire){a:=io.request.bits.a;b:=io.request.bits.b;op:=io.request.bits.op;err:=false.B\n.elsewhen(io.request.bits.op===ScalarOp.Div.U || io.request.bits.op===ScalarOp.Sqrt.U){state:=divIssue}.otherwise{state:=normal}\nis(normal){\nalu.io.op:=op===ScalarOp.Mul.U || op===ScalarOp.MulIeeeRne.U\nout:=alu.io.out\nstate:=done",
+      "lines_inclusive": [
+        58,
+        81
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "source_kind": "unchanged_current_main_dependency"
+    },
+    {
+      "claim": "Only result.fire in done returns to idle; same-edge result and next request cannot both fire.",
+      "excerpt": "is(done){when(io.result.fire){state:=idle}}",
+      "lines_inclusive": [
+        108,
+        108
+      ],
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "source_kind": "unchanged_current_main_dependency"
+    }
+  ],
+  "schema": 1,
+  "source_identity": {
+    "dedicated_pins_path": "SCALAR_SOURCE_PINS.json",
+    "dedicated_pins_sha256": "40cd67da2fb81ffb85452c83e0be40230a1f8ad2e4f690a1d762d83d2cb77f7f",
+    "identity_proof_file_read_by_this_program": false,
+    "pins": {
+      "identity_proof_sha256": "b1d1e1beb464316958923862f87b00b33a13440dfff294d0a5f7968ee63a3bb0",
+      "schema": 1,
+      "scope": "Unchanged current-main BlockFloat definition inherited by selected composed Qwen2Block; not a new selected postimage.",
+      "selected_qwen2block_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "source_commit": "1bdf70eb42de8752edeb616e8ef01e166628ca35",
+      "source_tree": "cc48abbc5e4fe59782e04feac3baa2057f300567",
+      "sources": {
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+          "bytes": 8313,
+          "git_blob": "021c878dcb1106335d8a0cf768fdb862ab00533c",
+          "mode": "100644",
+          "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+        }
+      }
+    },
+    "scope": "Current-main BlockFloat bytes are verified; selected Qwen2Block anchors were reviewed separately against its exact postimage hash. No elaboration or runtime closure is claimed.",
+    "selected_qwen2block_body_read_by_this_program": false,
+    "unchanged_blockfloat_body_hash_and_anchors_verified": true
+  }
+}

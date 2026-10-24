@@ -1,0 +1,27 @@
+=== test_direct_public.py: optimized=False, expected=16, returncode=0
+test_actual_pinned_definitions_without_native_imports (__main__.DirectPublicControlTests.test_actual_pinned_definitions_without_native_imports) ... ok
+test_bind_checks_dispatch_and_retirement_before_install_or_acquisition (__main__.DirectPublicControlTests.test_bind_checks_dispatch_and_retirement_before_install_or_acquisition) ... ok
+test_direct_runtime_cannot_enable_raw_driver_or_copy_payload (__main__.DirectPublicControlTests.test_direct_runtime_cannot_enable_raw_driver_or_copy_payload) ... ok
+test_every_core_read_maps_once_in_order_to_external_ddr (__main__.DirectPublicControlTests.test_every_core_read_maps_once_in_order_to_external_ddr) ... ok
+test_invalid_final_ack_stall_rejected_before_binding_and_valid_retry (__main__.DirectPublicControlTests.test_invalid_final_ack_stall_rejected_before_binding_and_valid_retry) ... ok
+test_one_actual_m2_job_not_two_m1_invocations (__main__.DirectPublicControlTests.test_one_actual_m2_job_not_two_m1_invocations) ... ok
+test_one_shared_matrix_acquisition_and_no_raw_or_scratch_operations (__main__.DirectPublicControlTests.test_one_shared_matrix_acquisition_and_no_raw_or_scratch_operations) ... ok
+test_original_bank_service_and_physical_map_mutations_before_memory_step (__main__.DirectPublicControlTests.test_original_bank_service_and_physical_map_mutations_before_memory_step) ... ok
+test_process_resource_bounds (__main__.DirectPublicControlTests.test_process_resource_bounds) ... ok
+test_raw_transport_binding_and_schedule_mutations_before_memory_step (__main__.DirectPublicControlTests.test_raw_transport_binding_and_schedule_mutations_before_memory_step) ... ok
+test_retained_dense_and_prefix_debts_before_memory_step (__main__.DirectPublicControlTests.test_retained_dense_and_prefix_debts_before_memory_step) ... ok
+test_router_and_packed_legacy_link_mutations_before_memory_step (__main__.DirectPublicControlTests.test_router_and_packed_legacy_link_mutations_before_memory_step) ... ok
+test_scratch_payload_and_debts_before_memory_step (__main__.DirectPublicControlTests.test_scratch_payload_and_debts_before_memory_step) ... ok
+test_source_pin_mismatch_fails_before_prior_ast_loading (__main__.DirectPublicControlTests.test_source_pin_mismatch_fails_before_prior_ast_loading) ... ok
+test_source_root_is_required_even_in_isolated_mode (__main__.DirectPublicControlTests.test_source_root_is_required_even_in_isolated_mode) ... ok
+test_write_command_data_ack_fence_and_final_terminal (__main__.DirectPublicControlTests.test_write_command_data_ack_fence_and_final_terminal) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.119s
+
+OK
+
+=== test_kv_wire.py: optimized=False, expected=16, returncode=2
+usage: test_kv_wire.py [-h] --source-root SOURCE_ROOT
+test_kv_wire.py: error: unrecognized arguments: -v
+

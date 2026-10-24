@@ -1,0 +1,71 @@
+{
+  "independent_actual_review_provenance": {
+    "bytes": 37390,
+    "sha256": "6c0656877962bd643f793c2297266f972060675a8964615993986a741f3b8a3c"
+  },
+  "limits": {
+    "M128_acceptance": false,
+    "RTL_pass": false,
+    "actual_execution_authorized": false,
+    "fullblock_pass": false,
+    "independent_numeric_oracle": false,
+    "predecessor_integrity_sampling_equivalence": false,
+    "prior_execution_authority_inherited": false
+  },
+  "original_provenance_files_included": false,
+  "packaging": {
+    "raw_evidence_included": false,
+    "repository_commit_or_push_performed": false,
+    "standalone_executable": false,
+    "streams_arrays_or_raw_logs_read": false,
+    "tests_or_actual_work_rerun": false,
+    "validated_code_rewritten": false
+  },
+  "reviewed_historical_run": {
+    "actual_M2_executed": true,
+    "attention_record_count": 8565,
+    "closed_inventory": {
+      "bytes": 6011752,
+      "files": 51
+    },
+    "epoch_normalization": false,
+    "excluded_report_keys": [
+      "timings",
+      "variant",
+      "observer_identity",
+      "instrumentation_sha256"
+    ],
+    "first_semantic_differences": [],
+    "generic_long_lived_references_checked": 1515,
+    "long_lived_bidirectional_mapping_count": 4,
+    "main_loop_cpu_seconds": 8.033911631,
+    "main_loop_wall_seconds": 8.280947778999689,
+    "matrix_binary_provenance_verified_by_observer": false,
+    "observer_error": null,
+    "opaque_id_difference_rows": 11011,
+    "outer_returncode": 0,
+    "outer_wall_seconds": 17.36953832898871,
+    "output_field_presence_files_matching_historical": 33,
+    "raw_stream_byte_equality_claimed": false,
+    "sampling_enabled": false,
+    "semantic_differences": {},
+    "short_lived_alias_equivalence": false,
+    "tag_normalization": false,
+    "timing_caveat": "Single new M2 against historical runs, no contemporaneous pair, repeats or confidence interval. Main loop includes real owner + two observers + codec + transport checks, excludes constructors and seal IO. Parent historical comparison is not separately timed. No full-size prediction or M128 admission.",
+    "transport_hash_matches": true,
+    "unobserved_domains": [
+      "expanded4096 Matrix bank per issue",
+      "SiLU nested17 exp nodes and preBF16 multiply"
+    ],
+    "wholeblock_record_count": 2211,
+    "wholeblock_scope": "INCOMPLETE_WHOLEBLOCK"
+  },
+  "routing_contract_difference": "Source-attested owner-frame routing additionally skips f_code audits and thread/owner/ancestor checks and listener delivery on eligible nonhook lines. Call, hooks, exception, first exception-resume line and return/yield retain original delivery; each return/yield expires the local segment and a real resume call rebinds. Transient skipped-line identity/locals/metadata drift restored before a retained boundary may evade detection. Actual event equivalence does not imply predecessor per-line integrity sampling equality.",
+  "schema": "single-m2-frame-routing-portable-summary-v1",
+  "scope": "ONE HISTORICAL M2 OBSERVER EQUIVALENCE RESULT ONLY; NOT NEW EXECUTION EVIDENCE",
+  "source_manifest_provenance": {
+    "bytes": 4616,
+    "sha256": "5fd47a15b55f8a35014729ef81f86325d5d5b34b5470ead2782f3d98fe6ed9f7"
+  },
+  "status_reported_by_pinned_review": "CONFIRMED_SINGLE_M2_FRAME_ROUTING_HISTORICAL_EQUIVALENCE_ONLY"
+}

@@ -1,0 +1,86 @@
+{
+  "M128_authorized": false,
+  "actual_execution_authorized": false,
+  "exact_frozen_source_files": [
+    "CODEC_PINS.json",
+    "FRAME_ROUTING.json",
+    "POLICY.json",
+    "README.md",
+    "anchors.json",
+    "cached_wholeblock.py",
+    "narrow_fullblock_attention.py"
+  ],
+  "files": {
+    "CODEC_PINS.json": {
+      "bytes": 253,
+      "sha256": "d49b6f296bf1a6717565e9a3c6d0d401b146abc041ca907ae0659a4537ed22cf"
+    },
+    "FRAME_ROUTING.json": {
+      "bytes": 2365,
+      "sha256": "0cf100e24fc824761f8ba342139ed249b941142f2b93757027f046c859706e3e"
+    },
+    "POLICY.json": {
+      "bytes": 787,
+      "sha256": "aa7db62c0da1f35dd4a20c56172c47d92a75e9ee5e41d5ac5c3abf27addefc25"
+    },
+    "PORTABLE.md": {
+      "bytes": 2231,
+      "sha256": "b762294bdd1560b906858e338da17b0d27c0576899536f70a14ca8d4402d407e"
+    },
+    "README.md": {
+      "bytes": 1930,
+      "sha256": "e2957956caf81fb70a4cdcb7fe9f840694df985a41489f767adb91056b3080bf"
+    },
+    "SUMMARY.json": {
+      "bytes": 3307,
+      "sha256": "45a038aea1b27bd74499052d75cb60bdcec7876c9729f359d8e224b4dfde8291"
+    },
+    "SUMMARY.md": {
+      "bytes": 3179,
+      "sha256": "6c96d5fc5ae30d79c1dbee61b214127b3ab714eeac4129b21452356aa744c368"
+    },
+    "anchors.json": {
+      "bytes": 14501,
+      "sha256": "038f66631dff0142cd9bc4f8bbd7851457a6effca24406d5440780d5bb740f1a"
+    },
+    "cached_wholeblock.py": {
+      "bytes": 54729,
+      "sha256": "3ce648c0c8e8e74fb7df90fe7f629fb9bfc8d253d4979b69d408de64cc1d6662"
+    },
+    "check_portable.py": {
+      "bytes": 3481,
+      "sha256": "50b44b70f0f0e24b435a1d4c35183a4b18bbf3ea912ca42593968535620c578b"
+    },
+    "narrow_fullblock_attention.py": {
+      "bytes": 61979,
+      "sha256": "0661a37e1f030f4326825ad556aff6678fabdb8900a1085993d62105a8ff4363"
+    }
+  },
+  "fullblock_authorized": false,
+  "omitted": [
+    "original source manifest",
+    "independent actual review receipt",
+    "machine-specific budgets and source",
+    "launch, supervision and authority files",
+    "runtime dependencies and payloads",
+    "inputs, reference arrays and outputs",
+    "sealed streams and other raw evidence",
+    "logs"
+  ],
+  "original_provenance": {
+    "independent_actual_review": {
+      "bytes": 37390,
+      "sha256": "6c0656877962bd643f793c2297266f972060675a8964615993986a741f3b8a3c"
+    },
+    "original_provenance_files_included": false,
+    "source_manifest": {
+      "bytes": 4616,
+      "sha256": "5fd47a15b55f8a35014729ef81f86325d5d5b34b5470ead2782f3d98fe6ed9f7"
+    }
+  },
+  "prior_execution_authority_inherited": false,
+  "schema": "single-m2-frame-routing-portable-excerpt-v1",
+  "scope": "EXACT SOURCE EXCERPT AND SANITIZED HISTORICAL M2 SUMMARY ONLY",
+  "standalone_executable": false,
+  "verification": "Exact file inventory, SHA-256 and in-memory Python compile only. No imports, behavioral tests, execution, decoding or evidence reads."
+}

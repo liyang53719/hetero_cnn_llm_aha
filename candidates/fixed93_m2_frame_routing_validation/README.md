@@ -1,0 +1,9 @@
+# Single-new-arm M2 source-attested frame routing
+
+Independent successor of the frozen successful unsampled 0549 candidate. No predecessor authority is inherited. Only a new root admission may execute one new M2 arm; all old scopes are rejected. No sampler, no old arm, no fullblock/M128 authorization. The existing 120-second total /105-second work /1CPU /2GiB /80MiB aggregate /20MiB single limits are unchanged. Inputs, ELF, runtime and model source are referenced read-only, not copied.
+
+The two observer modules are the exact reviewed 0613 overlay. Their source-attested-owner-frame-routing-v1 policy is consumed by parent/child admission and recorded in ARM/final receipt. The original loaded-source factory is unchanged. The honest capture.cached_wholeblock loader additionally checks every new routing method CodeType/globals against its pinned source, including nested closure code. Wholeblock callbacks, all numeric/event helpers and the original driver remain unchanged.
+
+This explicitly changes off-hook per-line thread/owner/ancestor integrity sampling, not model arithmetic or event fields. Return/yield expires the local trace segment, resume call rebinds, exception first line is delivered and altered/additional registrations fall back. Fourteen hooks, six scalar consumers, SiLU and nonline exception recovery remain. Transient drift restored before a retained boundary may escape. This is not identical predecessor integrity coverage.
+
+Only parent_files contains the pinned historical comparison declaration/helpers. Child cannot read historical arrays or streams. The parent may compare only after natural success, independent current source/identity/cleanup acceptance and both new streams sealed. Historical byte/semantic matching is limited M2 equivalence, not an independent numerical oracle or complete Wholeblock. No native rebuild, full preflight repeat or model run is part of source/cold preparation.

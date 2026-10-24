@@ -1670,3 +1670,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 新完整性边界明确：非hook的thread/owner/祖先校验改在保留事件采样，瞬变并恢复不保证被发现；不能称旧逐line防篡改等价。原Attention29方法和原dispatcher投递body逆AST一致，不改计算或字段。
 - 已封合成：cold02真实 tracing 控制投递68→25；cold03单独nested yield-from/send、两个同CodeType generator交错、14新闭包、38控制事件和25 mock hook一致，投递134→67。原cold01因负例fixture污染后续正例FAIL保留，仅修测试分离；合成约3.57倍不外推实际。
 - 本提交仅source/synthetic范围；0629后续实际M2独立资格与本包分开。主线将以独立M16子链校准规模，不能算完整block。完整128-token block未通过，五block完整RTL仍0/5，无新硬件利用率实测；未清理临时数据。
+
+## PASS（有限实际 M2 历史等价）/ TEMP：frame routing 实际验证（2026-10-21）
+
+- DONE：新增 candidates/fixed93_m2_frame_routing_validation，12 文件 151625 字节，7 原件逐字；入树只核11 pins和3 Python内存compile，无运行代码/测试重跑。公开scope独审 SHA 61c66e4a830e6838d0c9de22283b3a300e0bb5915a59bf1bd9a24bea97149160，缺少运行依赖为有意，不是standalone kit。
+- 新单臂实际自然0，外wrapper17.369538329秒，无soft/hard停线；原WNOWAIT0、parent/child start ticks、reaped/group absent/cleanup闭合。独审 SHA 6c0656877962bd643f793c2297266f972060675a8964615993986a741f3b8a3c。
+- 51已封文件6011752字节；33 field/presence/output及transport匹配历史，8565 Attention+2211 wholeblock记录语义diff空；11011 opaque-ID差异与4长期双向映射核验。21source不变，routing policy/ADMISSION/ARM绑定。只有限M2 observer历史等价，不是独立数值oracle，也不恢复旧逐line瞬变检测契约。
+- main_loop CPU8.033911631秒/wall8.280947779秒，较0549历史单次约减少46.19%；非同期paired benchmark、非硬件周期或利用率。wholeblock仍INCOMPLETE、0 public advance/SiLU，不能算完整prefill。
+- ONGOING / TEMP：下一独立M16 Attention规模校准在准备新输入形状、计数和有限codec预算；不复用M2历史数值PASS，新大输出拟放独立tmpfs并分别核进程/驻留内存。尚未实际执行M16。完整128-token模型及五block RTL验收未通过，未清理临时数据，未push。

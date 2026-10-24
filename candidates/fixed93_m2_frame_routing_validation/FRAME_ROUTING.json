@@ -1,0 +1,52 @@
+{
+  "all_control_events_preserved": true,
+  "event_schema_changed": false,
+  "evidence_hook_counts": {
+    "_attention": 5,
+    "_matrix_step": 4,
+    "_write": 2,
+    "tick": 3
+  },
+  "exact_two_listener_routes": true,
+  "exception_resume_line_delivered": true,
+  "extra_listener_fallback": true,
+  "frame_segment_expires_on_return": true,
+  "full_identity_frequency_changed": true,
+  "generator_resume_rebinds": true,
+  "max_tick_ancestry_frames": 128,
+  "module_files": {
+    "CODEC_PINS.json": {
+      "bytes": 253,
+      "sha256": "d49b6f296bf1a6717565e9a3c6d0d401b146abc041ca907ae0659a4537ed22cf"
+    },
+    "anchors.json": {
+      "bytes": 14501,
+      "sha256": "038f66631dff0142cd9bc4f8bbd7851457a6effca24406d5440780d5bb740f1a"
+    },
+    "cached_wholeblock.py": {
+      "bytes": 54729,
+      "sha256": "3ce648c0c8e8e74fb7df90fe7f629fb9bfc8d253d4979b69d408de64cc1d6662"
+    },
+    "narrow_fullblock_attention.py": {
+      "bytes": 61979,
+      "sha256": "0661a37e1f030f4326825ad556aff6678fabdb8900a1085993d62105a8ff4363"
+    }
+  },
+  "no_frame_retention": true,
+  "nonhook_line_sampling_changed": true,
+  "original_full_identity_unchanged": true,
+  "policy_id": "source-attested-owner-frame-routing-v1",
+  "registry_identity_checked": true,
+  "sampling_enabled": false,
+  "schema": "fixed93-attention-source-attested-owner-frame-routing-v1",
+  "scope": "On skipped off-hook owner lines, thread, self-owner, locals and tick-ancestor checks are no longer sampled. The original checks remain at call, retained evidence/control boundaries and return/exception. A transient change restored before such a boundary is not guaranteed detected; a failure may be detected later. This is not equivalent to predecessor integrity sampling. Real call/retained evidence/exception/return delivery, all14 hooks, SiLU and nonline exception recovery remain. No sampler or actual authority.",
+  "scope_must_close": true,
+  "shared_dispatcher_unchanged": false,
+  "skipped_line_thread_owner_ancestry_sampling_changed": true,
+  "transient_frame_ownership_detection_equivalent": false,
+  "transient_locals_detection_equivalent": false,
+  "transient_metadata_detection_equivalent": false,
+  "underlying_event_line_policy": "event-only-owner-lines-v1",
+  "underlying_integrity_policy": "op-evidence-boundary-v1",
+  "underlying_tick_policy": "tick-boundary-metadata-integrity-v1"
+}

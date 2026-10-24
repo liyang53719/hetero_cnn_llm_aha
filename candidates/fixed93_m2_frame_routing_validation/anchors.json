@@ -1,0 +1,352 @@
+{
+  "capped_records_write": {
+    "end_lineno": 89,
+    "firstlineno": 81,
+    "qualname": "CappedRecords.write",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_fullgroup/down_driver.py",
+    "sha256": "f836f751dacd1182c027e1e02260308bb4609fc02c5624685caafaebe0efcd50"
+  },
+  "capped_write": {
+    "end_lineno": 67,
+    "firstlineno": 58,
+    "qualname": "CappedTrace.write",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py",
+    "sha256": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336"
+  },
+  "coupled_tick": {
+    "end_lineno": 251,
+    "firstlineno": 188,
+    "qualname": "Coupled.tick",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py",
+    "sha256": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336"
+  },
+  "dense_retire_done": {
+    "end_lineno": 481,
+    "firstlineno": 476,
+    "qualname": "DenseLibraryAdapter.retire_done",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "dense_retire_result": {
+    "end_lineno": 466,
+    "firstlineno": 453,
+    "qualname": "DenseLibraryAdapter.retire_result",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "dense_retire_seed_ack": {
+    "end_lineno": 474,
+    "firstlineno": 468,
+    "qualname": "DenseLibraryAdapter.retire_seed_ack",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "dense_td_group": {
+    "end_lineno": 441,
+    "firstlineno": 435,
+    "qualname": "DenseLibraryAdapter.td_group",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "dense_td_seed_beat": {
+    "end_lineno": 429,
+    "firstlineno": 427,
+    "qualname": "DenseLibraryAdapter.td_seed_beat",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "dense_td_seed_begin": {
+    "end_lineno": 425,
+    "firstlineno": 423,
+    "qualname": "DenseLibraryAdapter.td_seed_begin",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "dense_td_seed_commit": {
+    "end_lineno": 433,
+    "firstlineno": 431,
+    "qualname": "DenseLibraryAdapter.td_seed_commit",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "dense_td_step": {
+    "end_lineno": 451,
+    "firstlineno": 443,
+    "qualname": "DenseLibraryAdapter.td_step",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "exp_negative": {
+    "end_lineno": 44,
+    "firstlineno": 18,
+    "qualname": "exp_negative",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+    "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d"
+  },
+  "jsonable": {
+    "end_lineno": 92,
+    "firstlineno": 89,
+    "qualname": "jsonable",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_drain/check_numeric.py",
+    "sha256": "7e552390364b985e112a350387623204d76fd17cc6ce146afb42ca2bc8b825be"
+  },
+  "matrix_abort": {
+    "end_lineno": 302,
+    "firstlineno": 299,
+    "qualname": "MatrixService.abort",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_accept_group": {
+    "end_lineno": 331,
+    "firstlineno": 318,
+    "qualname": "MatrixService.accept_group",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_accept_step": {
+    "end_lineno": 351,
+    "firstlineno": 333,
+    "qualname": "MatrixService.accept_step",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_acquire": {
+    "end_lineno": 268,
+    "firstlineno": 258,
+    "qualname": "MatrixService.acquire",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_release": {
+    "end_lineno": 284,
+    "firstlineno": 278,
+    "qualname": "MatrixService.release",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_reset": {
+    "end_lineno": 297,
+    "firstlineno": 286,
+    "qualname": "MatrixService.reset",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_retire_done": {
+    "end_lineno": 369,
+    "firstlineno": 362,
+    "qualname": "MatrixService.retire_done",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_retire_legacy_reply": {
+    "end_lineno": 376,
+    "firstlineno": 371,
+    "qualname": "MatrixService.retire_legacy_reply",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_retire_owner_response": {
+    "end_lineno": 276,
+    "firstlineno": 270,
+    "qualname": "MatrixService.retire_owner_response",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "matrix_retire_result": {
+    "end_lineno": 360,
+    "firstlineno": 353,
+    "qualname": "MatrixService.retire_result",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "official_dense_step": {
+    "end_lineno": 215,
+    "firstlineno": 181,
+    "qualname": "OfficialDenseLibraryAdapter.td_step",
+    "relative_path": "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py",
+    "sha256": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699"
+  },
+  "owner_attention": {
+    "end_lineno": 96,
+    "firstlineno": 29,
+    "qualname": "Fixed93AttentionOwner._attention",
+    "relative_path": "candidates/qwen2_fixed93_attention/owner.py",
+    "sha256": "b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e"
+  },
+  "owner_matrix_step": {
+    "end_lineno": 97,
+    "firstlineno": 80,
+    "qualname": "AttentionOwner._matrix_step",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+    "sha256": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8"
+  },
+  "owner_tick": {
+    "end_lineno": 258,
+    "firstlineno": 129,
+    "qualname": "Fixed93AttentionOwner.tick",
+    "relative_path": "candidates/qwen2_fixed93_attention/owner.py",
+    "sha256": "b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e"
+  },
+  "owner_write": {
+    "end_lineno": 163,
+    "firstlineno": 159,
+    "qualname": "PrefixOwner._write",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+    "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+  },
+  "physical_publish": {
+    "end_lineno": 170,
+    "firstlineno": 164,
+    "qualname": "PhysicalMemory.publish",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py",
+    "sha256": "08092c8d316f353ab93b179e6ee633f5af4a04e85dbf519696e9e279c32495f3"
+  },
+  "physical_read_bytes64": {
+    "end_lineno": 79,
+    "firstlineno": 65,
+    "qualname": "PhysicalMemory.read_bytes64",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py",
+    "sha256": "08092c8d316f353ab93b179e6ee633f5af4a04e85dbf519696e9e279c32495f3"
+  },
+  "physical_terminal": {
+    "end_lineno": 162,
+    "firstlineno": 152,
+    "qualname": "PhysicalMemory.terminal",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py",
+    "sha256": "08092c8d316f353ab93b179e6ee633f5af4a04e85dbf519696e9e279c32495f3"
+  },
+  "physical_write_event": {
+    "end_lineno": 150,
+    "firstlineno": 103,
+    "qualname": "PhysicalMemory.write_event",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py",
+    "sha256": "08092c8d316f353ab93b179e6ee633f5af4a04e85dbf519696e9e279c32495f3"
+  },
+  "public__host_edge": {
+    "end_lineno": 129,
+    "firstlineno": 102,
+    "qualname": "PublicExecution._host_edge",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py",
+    "sha256": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3"
+  },
+  "public_attention_edge": {
+    "end_lineno": 214,
+    "firstlineno": 183,
+    "qualname": "PublicExecution.attention_edge",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py",
+    "sha256": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3"
+  },
+  "public_ordinary_edge": {
+    "end_lineno": 270,
+    "firstlineno": 236,
+    "qualname": "PublicExecution.ordinary_edge",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py",
+    "sha256": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3"
+  },
+  "public_prefix_edge": {
+    "end_lineno": 168,
+    "firstlineno": 139,
+    "qualname": "PublicExecution.prefix_edge",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py",
+    "sha256": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3"
+  },
+  "reduce_tick": {
+    "end_lineno": 238,
+    "firstlineno": 94,
+    "qualname": "ReductionDriver.tick",
+    "relative_path": "candidates/qwen2_resident_matrix/dense_block_reduce/public_execution.py",
+    "sha256": "30bcb5a59e67d3502f7bd57d20590c8d9d5209ef357cafd9a78721c10c0e6e67"
+  },
+  "scalar_op": {
+    "end_lineno": 187,
+    "firstlineno": 151,
+    "qualname": "ScalarService.op",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py",
+    "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+  },
+  "silu_execute": {
+    "end_lineno": 406,
+    "firstlineno": 376,
+    "qualname": "execute_silu",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_fullgroup/check_numeric.py",
+    "sha256": "7fd62ea5f59af4ba6da36d74b289e0aba85b1eb35b1d3e060a7d8e95d0b55336"
+  },
+  "silu_vector": {
+    "end_lineno": 138,
+    "firstlineno": 125,
+    "qualname": "ObservedSiluLibrary.sf_vector",
+    "relative_path": "candidates/qwen2_resident_matrix/official_bf16/execution.py",
+    "sha256": "e3b5906d7589885e5aade7344d8c7d7497b61aa967b2034dbba4e1e0ebeb25d0"
+  },
+  "workspace_accept_group": {
+    "end_lineno": 251,
+    "firstlineno": 228,
+    "qualname": "SharedWorkspace.accept_group",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_accept_read": {
+    "end_lineno": 347,
+    "firstlineno": 333,
+    "qualname": "SharedWorkspace.accept_read",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_begin": {
+    "end_lineno": 226,
+    "firstlineno": 208,
+    "qualname": "SharedWorkspace.begin",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_finish": {
+    "end_lineno": 417,
+    "firstlineno": 407,
+    "qualname": "SharedWorkspace.finish",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_invalidate": {
+    "end_lineno": 424,
+    "firstlineno": 419,
+    "qualname": "SharedWorkspace.invalidate",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_retire_read": {
+    "end_lineno": 358,
+    "firstlineno": 349,
+    "qualname": "SharedWorkspace.retire_read",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_seed_ack": {
+    "end_lineno": 397,
+    "firstlineno": 386,
+    "qualname": "SharedWorkspace.seed_ack",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_seed_beat": {
+    "end_lineno": 384,
+    "firstlineno": 374,
+    "qualname": "SharedWorkspace.seed_beat",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_seed_begin": {
+    "end_lineno": 372,
+    "firstlineno": 368,
+    "qualname": "SharedWorkspace.seed_begin",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  },
+  "workspace_write_event": {
+    "end_lineno": 331,
+    "firstlineno": 270,
+    "qualname": "SharedWorkspace.write_event",
+    "relative_path": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_memory.py",
+    "sha256": "c344fc34d5a70deb4ad31250e33250c8b32cf31e91b98bc70f6c6e524bd3bc93"
+  }
+}

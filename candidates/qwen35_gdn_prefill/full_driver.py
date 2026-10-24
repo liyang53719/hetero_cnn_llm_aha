@@ -23,6 +23,7 @@ import os
 import struct
 from pathlib import Path
 import time
+from typing import NamedTuple
 
 import numpy as np
 
@@ -155,6 +156,26 @@ class FullBlockResult:
     history: int | None
     state: int | None
     failed_role: str | None = None
+
+
+class FullBlockProgress(NamedTuple):
+    """Detached telemetry only, never an owner receipt or numerical evidence.
+
+    Elapsed time is relative to this window's start; ticks and terminal count
+    are coordinator totals. Chunk head/subchunk are zero-based and may be None.
+    Every field is an exact immutable primitive, never a live model handle.
+    """
+    phase: str
+    role: str
+    ticks: int
+    owner_state: str | None
+    owner_ticks: int | None
+    chunk_phase: str | None
+    chunk_head: int | None
+    chunk_subchunk: int | None
+    generation: int
+    terminal_count: int
+    elapsed_seconds: float
 
 
 class FullBlockCoordinator:
@@ -535,11 +556,44 @@ class FullBlockCoordinator:
         self.locked = self.aborted = False
         self._check_resources()
 
-    def run_window(self, phase, *, cold, expected_generation, budget_seconds=1800, hook=None):
+    def _progress_snapshot(self, elapsed_seconds):
+        owner = None if self.active is None else self.active.owner
+        context = self.chunk.context if self.role == 'chunk' and owner is not None else {}
+        require(type(context) is dict, 'progress requires plain chunk context')
+        snapshot = FullBlockProgress(self.phase, self.role, self.ticks,
+            getattr(owner, 'state', None), getattr(owner, 'ticks', None),
+            context.get('phase'), context.get('head'), context.get('chunk'),
+            self.roots.generation, len(self.commands), float(elapsed_seconds))
+        # Do not coerce arbitrary model objects via str/int or leak them through
+        # annotations alone. Reject subclasses as well as mutable field values.
+        expected = (str, str, int, str, int, str, int, int, int, int, float)
+        optional = (3, 4, 5, 6, 7)
+        require(all(type(value) is kind or (index in optional and value is None)
+                    for index, (value, kind) in enumerate(zip(snapshot, expected))),
+                'progress fields must be detached exact primitives')
+        return snapshot
+
+    def run_window(self, phase, *, cold, expected_generation, budget_seconds=1800, hook=None,
+                   progress=None, progress_interval_seconds=30):
+        """Run unchanged transport with optional rate-limited read-only telemetry.
+
+        Unlike legacy hook(self), progress receives no live objects and cannot
+        supply controls. This is a trusted diagnostic API, not a Python sandbox.
+        It runs before tick's existing resource guard, never inside final
+        preflight/acceptance/joint commit. Exceptions propagate to
+        run's owned FAILED summary; no synthetic owner receipt is manufactured.
+        No terminal notification is forced: observe remains the terminal API.
+        """
         require(type(budget_seconds) in (int, float) and 0 < budget_seconds <= 7200,
                 'bounded positive wall budget required')
+        if progress is not None:
+            require(callable(progress) and type(progress_interval_seconds) in (int, float) and
+                    1 <= progress_interval_seconds <= 7200,
+                    'progress requires callable and 1..7200 second cadence')
         self.start(phase, cold=cold, expected_generation=expected_generation)
-        deadline, drain_deadline = time.monotonic() + budget_seconds, None
+        started = time.monotonic()
+        deadline, drain_deadline = started + budget_seconds, None
+        next_progress = started
         while self.response is None:
             now = time.monotonic()
             if now >= deadline and drain_deadline is None:
@@ -548,6 +602,9 @@ class FullBlockCoordinator:
             controls = {} if hook is None else dict(hook(self) or {})
             if drain_deadline is not None:
                 controls = {'abort': True}
+            if progress is not None and now >= next_progress:
+                progress(self._progress_snapshot(now - started))
+                next_progress = now + progress_interval_seconds
             self.tick(**controls)
         return self.response
 
@@ -661,11 +718,22 @@ def final_identity(identity, root, fixture):
 def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_library=None,
         rms_policy=rms.ReductionPolicy.Torch210CpuDefault1024, observe=None,
         vector_exception_policy=LEGACY_POLICY, projection_policy=ProjectionPolicy.Legacy,
-        vector_arithmetic_backend=LEGACY_BACKEND, chunk_exp_policy=chunk.ep.LEGACY_EXP):
-    """Actual-only two-window entrypoint. Existing libraries only; never builds."""
+        vector_arithmetic_backend=LEGACY_BACKEND, chunk_exp_policy=chunk.ep.LEGACY_EXP,
+        progress=None, progress_interval_seconds=30, window_budget_seconds=None):
+    """Actual-only two-window entrypoint. Existing libraries only; never builds.
+
+    progress receives bounded-cadence FullBlockProgress snapshots, not outputs
+    or live resources. elapsed_seconds restarts for each window. It cannot
+    select controls; legacy terminal observe behavior is unchanged. An explicit
+    window_budget_seconds caps each window at min(remaining total, cap) without
+    changing run_window's 7200 second ceiling. None preserves legacy behavior.
+    """
     from .input_fixture import ROOT, load_fixture, gdn
     from ..qwen2_resident_matrix.ffn_attention.matrix_service import configure_library
     require(type(rows) is int and rows in (16, 128), 'M16 or M128 only')
+    if window_budget_seconds is not None:
+        require(type(window_budget_seconds) in (int, float) and 0 < window_budget_seconds <= 7200,
+                'bounded positive per-window wall budget required')
     output = Path(output)
     require(not output.exists(), 'fresh output directory required')
     require((vector is None) != (vector_library is None), 'explicit Vector16 or existing Vector16 library required')
@@ -719,7 +787,10 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
             remaining = budget_seconds - (time.monotonic() - start)
             require(remaining > 0, 'full coordinator wall budget exceeded')
             result = coordinator.run_window(phase, cold=cold, expected_generation=coordinator.roots.generation,
-                                            budget_seconds=remaining)
+                                            budget_seconds=(remaining if window_budget_seconds is None else
+                                                            min(remaining, window_budget_seconds)),
+                                            progress=progress,
+                                            progress_interval_seconds=progress_interval_seconds)
             if result.status is not None:
                 break
         report = coordinator.report()

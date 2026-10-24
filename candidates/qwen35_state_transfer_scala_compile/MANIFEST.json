@@ -1,0 +1,36 @@
+{
+  "files": {
+    "ALLOWLIST.json": {
+      "bytes": 757,
+      "sha256": "8b7307a65ee86a25dfb5d43545668c7a0440f565b1b67f9f7cbc848e5bcf2e5d"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 99725,
+      "sha256": "5f69cf77ed95db583af7274aec2ba9b745902892923f8124b2d11d12ea51916f"
+    },
+    "README.md": {
+      "bytes": 4630,
+      "sha256": "add9fc6373930d1d200b2d6895e8061027d5d548f769b241c0cbd7111bf247c9"
+    },
+    "REPRODUCE_COMMAND.txt": {
+      "bytes": 2633,
+      "sha256": "a12c38c61c7f52a2ed117eb2d2a3d97c21c40a97276ea995ce88c45c56fe382a"
+    },
+    "SUMMARY.json": {
+      "bytes": 6523,
+      "sha256": "cbfc9e2a122bd5a01cf55bae95571e606d00897e41109fbbe00a9d8c77abfeec"
+    },
+    "launch_compile.py": {
+      "bytes": 3428,
+      "sha256": "3c64f7f7c2af44fbec228b37d79adb5c20706ef9f52ff584f81c66d262010cfa"
+    },
+    "run_compile.py": {
+      "bytes": 11662,
+      "sha256": "8149cb200c649987792a6e15fa5f828925e935579387fafbccb96312e2c79f3c"
+    }
+  },
+  "hash_algorithm": "sha256",
+  "package_state": "SEALED_SOURCE_STATUS_EXCERPT",
+  "schema": "qwen35-state-transfer-compile-public-manifest-v1",
+  "self_excluded": "MANIFEST.json"
+}

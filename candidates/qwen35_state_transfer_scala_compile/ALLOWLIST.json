@@ -1,0 +1,26 @@
+{
+  "allow_extra_files": false,
+  "allow_symlinks": false,
+  "excluded_categories": [
+    "machine-specific absolute private workspace or home paths",
+    "machine FROZEN_PLAN content",
+    "raw logs, receipts and private reviews",
+    "ADMISSION or execution authority",
+    "all four Scala source files and source package manifests",
+    "arrays and weights",
+    "tool, JDK and JAR binaries",
+    "compiled classes and other run outputs"
+  ],
+  "files": [
+    "ALLOWLIST.json",
+    "INPUT_PINS.json",
+    "MANIFEST.json",
+    "README.md",
+    "REPRODUCE_COMMAND.txt",
+    "SUMMARY.json",
+    "launch_compile.py",
+    "run_compile.py"
+  ],
+  "recursive_parent_publication_allowed": false,
+  "schema": "qwen35-state-transfer-compile-public-allowlist-v1"
+}

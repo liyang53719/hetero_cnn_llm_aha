@@ -1757,3 +1757,12 @@ PASS只限SCALA_COMPILE_ONLY，未执行AddressPlan方法、Bundle/Module构造�
 16组纯Python对应模型/源码控制一次自然0，12条合成完整1024拍路径，17内容pins前后同；外0.662024925秒、内0.579626秒。不是Chisel实际ACK/数值/RTL验证；没有AS/CPU/affinity或RSS实测收据，不宣称资源峰值。owner Scala编译仍TEMP待验证。独审COLD_REVIEW SHA256 ef65cf5052b2846931ca962b6c7077867f719b8e4f1561e0a89a59f7c3a6dcf9。
 
 公开8件84075B在 candidates/qwen35_chunk_state_transfer/，原7源manifest SHA256 9f0bf9b848a7fe5db706f395f574652fba5aa10e1e56d43522f599779c1fcd7e，单列TEST_SCOPE SHA256 4ffc537aa0fc227332f6328f0b6a04858bf8f26487f276c09daca5a7d4e67ba9。Qwen2 full仍UNKNOWN，五RTL0/5，无新的MAC利用率测量；未push、无新CI、无清理。
+
+
+## PASS（仅四源 Scala 编译）：私有状态搬运 owner
+
+2026-10-21 四源一次编译自然0，launcher内部16.588148327秒；51class/277143B与全部63封件746367B核验，326输入before/after完整一致。WNOWAIT自然0之后组清理、reap/group absent/cleanup确认，无timeout，不以kill_attempted清理记录误判被杀退出。实际独审 SHA256 3cd8d101cad9cc2c7be5e40f42203fa6f12f95246c91d7d3db46d32dcf0d1f09。
+
+仅SCALA_COMPILE_ONLY，不执行Module、Chisel展开、真实Memory ACK、RTL或GDN算术；不能称已集成Host或完整prefill。Qwen2 full执行/清理UNKNOWN与五RTL0/5不变，无MAC实测提升。
+
+公开8项130509B位于 candidates/qwen35_state_transfer_scala_compile/，manifest SHA256 79534496d8728b38deef64bb1df7c299e47081046e71d39beb02e5f773945857。原runner摘录/相对pins/复现模板非完整机器closure，不提交机器plan/raw日志/工具/class。未push，无新增CI，无清理。

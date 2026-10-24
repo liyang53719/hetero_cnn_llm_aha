@@ -1,0 +1,154 @@
+{
+  "actual_compile_only_result": {
+    "all_class_sha256_and_cafebabe_verified": true,
+    "all_expected_classes_present": true,
+    "all_inputs_match_frozen_plan_content_pins": true,
+    "child_exit": {
+      "anchor_confirmed": true,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_attempted_interpretation": "Original supervisor group cleanup after WNOWAIT had observed natural exit 0. This was not a timeout kill or evidence that the compiler was terminated to obtain a pass.",
+      "kill_result": "signal_sent_before_reap",
+      "observed_while_unreaped": {
+        "code": 1,
+        "status": 0
+      },
+      "reaped": true,
+      "timed_out": false
+    },
+    "class_count": 51,
+    "closed_output_bytes": 746367,
+    "closed_output_file_count": 63,
+    "elapsed_measurement_scope": "Launcher-internal monotonic elapsed, rounded to 9 decimal places. RESULT and stdout are distinct measurements; neither is a separately measured outer wall time.",
+    "expected_class_count": 15,
+    "frozen_before_after_input_count": 326,
+    "frozen_before_after_inputs_equal": true,
+    "outer_exit_code": 0,
+    "output_class_bytes": 277143,
+    "result_internal_elapsed_seconds_rounded_9dp": 16.587893995,
+    "status": "PASS_QWEN35_CHUNK_STATE_TRANSFER_SCALA_COMPILE_ONLY",
+    "stdout_elapsed_seconds_rounded_9dp": 16.588148327,
+    "unique_actual_attempts_reported": 1
+  },
+  "actual_review": {
+    "bytes": 18348,
+    "interpretation": "Digest identifies the independently reviewed private evidence. This public excerpt is not the full evidence set.",
+    "raw_review_included": false,
+    "sha256": "3cd8d101cad9cc2c7be5e40f42203fa6f12f95246c91d7d3db46d32dcf0d1f09",
+    "status": "PASS_ACTUAL_FOUR_SOURCE_STATE_TRANSFER_SCALA_COMPILE_ONLY"
+  },
+  "expected_chunk_class_files": [
+    "heteronpu/continuous/GdnChunkGeometry$.class",
+    "heteronpu/continuous/GdnChunkVectorPolicy$.class",
+    "heteronpu/continuous/GdnChunkJob.class",
+    "heteronpu/continuous/GdnChunkCommittedState.class",
+    "heteronpu/continuous/GdnChunkStageReceipt.class",
+    "heteronpu/continuous/GdnChunkStagingResult.class",
+    "heteronpu/continuous/GdnChunkAddressPlan$.class",
+    "heteronpu/continuous/GdnChunkAddressPlan$Plan.class",
+    "heteronpu/continuous/Status$.class",
+    "heteronpu/continuous/MemoryRequest.class",
+    "heteronpu/continuous/MemoryResponse.class",
+    "heteronpu/continuous/GdnChunkStateTransferJob.class",
+    "heteronpu/continuous/GdnChunkStateTransferResult.class",
+    "heteronpu/continuous/GdnChunkStateTransferPort.class",
+    "heteronpu/continuous/GdnChunkStateTransferOwner.class"
+  ],
+  "input_counts": {
+    "auxiliary_supervisor_inputs": 6,
+    "classpath_jars": 87,
+    "frozen_input_bytes": 297219204,
+    "frozen_inputs": 326,
+    "pinned_tool_bytes": 296950644,
+    "pinned_tools": 314,
+    "scala_source_bytes": 25449,
+    "scala_sources": 4,
+    "source_package_manifests": 2
+  },
+  "package_kind": "SOURCE_AND_STATUS_EXCERPT_NOT_STANDALONE_EXECUTABLE_CLOSURE",
+  "package_state": "SEALED_SOURCE_STATUS_EXCERPT",
+  "packaging_actions": {
+    "candidate_executed": false,
+    "candidate_static_checker_executed": false,
+    "compilation_executed": false,
+    "original_machine_plan_read": true,
+    "published_or_pushed": false,
+    "python_checks": "AST parse and compile-to-code-object only, without importing or executing either runner. Byte/hash and metadata correspondence checks only.",
+    "raw_actual_logs_or_receipts_read": false,
+    "repository_modified": false,
+    "scala_source_bytes_read": false,
+    "small_independent_actual_review_read": true,
+    "tests_executed": false,
+    "tool_binary_reads_or_rehashes": false
+  },
+  "private_evidence_included": false,
+  "private_evidence_pins": {
+    "AFTER.json": {
+      "bytes": 109104,
+      "sha256": "5ed34b2bac3520e6452d0940338962f42a57f6e1968fc1a2c44e140a91d32279"
+    },
+    "BEFORE.json": {
+      "bytes": 109104,
+      "sha256": "5ed34b2bac3520e6452d0940338962f42a57f6e1968fc1a2c44e140a91d32279"
+    },
+    "OUTPUT_MANIFEST.json": {
+      "bytes": 8472,
+      "sha256": "eb2548b45a272d7d2019270fe4bf05fcdabe3722b7b51cffdce53bba6b31d985"
+    },
+    "RESULT.json": {
+      "bytes": 29973,
+      "sha256": "ff844f31b2033644ba815ffdb21839c5fcf2e6ac0ce22d4783f6d81c323a6848"
+    }
+  },
+  "qualification_limits": {
+    "candidate_bundle_constructed": false,
+    "candidate_constructor_executed": false,
+    "candidate_module_constructed": false,
+    "candidate_plan_constructed_or_evaluated": false,
+    "chisel_elaboration_executed": false,
+    "chunk64_prefill_validated": false,
+    "five_rtl_targets_passed": 0,
+    "five_rtl_targets_total": 5,
+    "fp32_gdn_arithmetic_validated": false,
+    "full_block_validated": false,
+    "global_root_lock_validated": false,
+    "host_public_recurrent_or_root_publication_qualified": false,
+    "numerical_correctness_validated": false,
+    "prior_pass_inherited": false,
+    "prior_qwen2_full_run_cleanup_status": "UNKNOWN",
+    "prior_qwen2_full_run_execution_status": "UNKNOWN",
+    "real_ready_valid_ack_validated": false,
+    "real_state_transfer_validated": false,
+    "receipt_producer_authenticity_validated": false,
+    "response_nbytes_check_qualified": false,
+    "rtl_generation_executed": false,
+    "utilization_validated": false
+  },
+  "reproduction_template_is_original_supervision": false,
+  "runner_source_pins": {
+    "launch_compile.py": {
+      "bytes": 3428,
+      "sha256": "3c64f7f7c2af44fbec228b37d79adb5c20706ef9f52ff584f81c66d262010cfa"
+    },
+    "run_compile.py": {
+      "bytes": 11662,
+      "sha256": "8149cb200c649987792a6e15fa5f828925e935579387fafbccb96312e2c79f3c"
+    }
+  },
+  "schema": "qwen35-state-transfer-compile-public-summary-v1",
+  "scope": "FOUR_SOURCE_SCALA_COMPILATION_TYPE_CHECK_ONLY_NOT_CANDIDATE_CONSTRUCTION_OR_ELABORATION",
+  "selected_resource_observations": {
+    "child_system_cpu_seconds": 0.27001,
+    "child_user_cpu_seconds": 15.446034,
+    "final_owned_bytes": 746367,
+    "interpretation": "Sampled RSS/output peaks are not hard instantaneous aggregate maxima. AS4GiB is per process. Cumulative maxrss is not phase-specific. No separately measured root outer wall.",
+    "maxrss_kib_cumulative_parent_children": 266220,
+    "native_child_seconds": 15.922024,
+    "peak_sampled_descendant_rss_bytes": 271835136,
+    "phase_usage_seconds_rounded_9dp": 15.93280207,
+    "sampled_owned_peak_bytes": 696852,
+    "sampling_interval_seconds": 0.2
+  }
+}

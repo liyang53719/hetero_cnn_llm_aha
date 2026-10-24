@@ -1,0 +1,1791 @@
+{
+  "additional_frozen_input": {
+    "count": 2,
+    "files": {
+      "sources/chunk_contract/SOURCE_MANIFEST.json": {
+        "bytes": 1144,
+        "sha256": "5380d72d8d4c28cc69e27dc566b932889bf479e0befc9e31e0a9407f61aa90b2"
+      },
+      "sources/chunk_state_transfer/SOURCE_MANIFEST.json": {
+        "bytes": 1505,
+        "sha256": "9f0bf9b848a7fe5db706f395f574652fba5aa10e1e56d43522f599779c1fcd7e"
+      }
+    },
+    "purpose": "Original Chunk contract and StateTransfer source package manifest digests; metadata only, not included."
+  },
+  "auxiliary_supervisor_inputs": {
+    "count": 6,
+    "files": {
+      "sources/repository/candidates/host93_ci_recovery/SUPPORT_PINS.json": {
+        "bytes": 806,
+        "resolved_relative": "sources/repository/candidates/host93_ci_recovery/SUPPORT_PINS.json",
+        "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"
+      },
+      "sources/repository/candidates/host93_ci_recovery/ci_support_v3.py": {
+        "bytes": 16348,
+        "resolved_relative": "sources/repository/candidates/host93_ci_recovery/ci_support_v3.py",
+        "sha256": "653de8cdfbdbb5ffe9b3725467ee0f44c98da353e1d680fec4f282d2b73d00d1"
+      },
+      "sources/repository/development_snapshots/canonical_host93_fixed_core_build_source_20261018/GATE_PLAN.json": {
+        "bytes": 160737,
+        "resolved_relative": "sources/repository/development_snapshots/canonical_host93_fixed_core_build_source_20261018/GATE_PLAN.json",
+        "sha256": "cd489d6530321fa95b79fc1d0e82d5599d358a1cb882165e44805dcafb98bd42"
+      },
+      "sources/repository/development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py": {
+        "bytes": 28551,
+        "resolved_relative": "sources/repository/development_snapshots/canonical_host93_fixed_core_build_source_20261018/run_build_gate.py",
+        "sha256": "8f1560c5f0a8e78a991f98c30031cbd18df220e3eb82cf2c78de4ec0438bdafb"
+      },
+      "sources/repository/development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py": {
+        "bytes": 17327,
+        "resolved_relative": "sources/repository/development_snapshots/canonical_host93_observation_source_20261018/calibration/run_class_gate.py",
+        "sha256": "ade8c397292fb92226e8e83d5e461112b2b4021d60e793493ad54e830c61448a"
+      },
+      "sources/repository/development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py": {
+        "bytes": 16693,
+        "resolved_relative": "sources/repository/development_snapshots/canonical_runtime_ram_source_20261018/run_behavior.py",
+        "sha256": "2eda970f0841b8aebffad451c44a414ed5effe6fbb51a3c04900eeec881b65d2"
+      }
+    },
+    "not_used_by_bare_command_template": true,
+    "required_by_original_launcher": true
+  },
+  "classpath": {
+    "bytes": 61870159,
+    "count": 87,
+    "ordered_relative_entries": [
+      "tools/dependencies/com/eed3si9n/shaded-apache-httpasyncclient/0.7.0/shaded-apache-httpasyncclient-0.7.0.jar",
+      "tools/dependencies/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar",
+      "tools/dependencies/com/github/luben/zstd-jni/1.5.5-10/zstd-jni-1.5.5-10.jar",
+      "tools/dependencies/com/github/mwiede/jsch/0.2.17/jsch-0.2.17.jar",
+      "tools/dependencies/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar",
+      "tools/dependencies/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.13/2.13.5.2/jsoniter-scala-core_2.13-2.13.5.2.jar",
+      "tools/dependencies/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar",
+      "tools/dependencies/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar",
+      "tools/dependencies/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar",
+      "tools/dependencies/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar",
+      "tools/dependencies/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar",
+      "tools/dependencies/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar",
+      "tools/dependencies/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar",
+      "tools/dependencies/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar",
+      "tools/dependencies/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar",
+      "tools/dependencies/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar",
+      "tools/dependencies/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar",
+      "tools/dependencies/com/outr/moduload_2.13/1.1.7/moduload_2.13-1.1.7.jar",
+      "tools/dependencies/com/outr/perfolation_2.13/1.2.9/perfolation_2.13-1.2.9.jar",
+      "tools/dependencies/com/outr/scribe_2.13/3.13.0/scribe_2.13-3.13.0.jar",
+      "tools/dependencies/com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar",
+      "tools/dependencies/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar",
+      "tools/dependencies/com/typesafe/config/1.4.2/config-1.4.2.jar",
+      "tools/dependencies/commons-io/commons-io/2.15.0/commons-io-2.15.0.jar",
+      "tools/dependencies/dev/dirs/directories/26/directories-26.jar",
+      "tools/dependencies/io/get-coursier/coursier-cache_2.13/2.1.8/coursier-cache_2.13-2.1.8.jar",
+      "tools/dependencies/io/get-coursier/coursier-core_2.13/2.1.8/coursier-core_2.13-2.1.8.jar",
+      "tools/dependencies/io/get-coursier/coursier-proxy-setup/2.1.8/coursier-proxy-setup-2.1.8.jar",
+      "tools/dependencies/io/get-coursier/coursier-util_2.13/2.1.8/coursier-util_2.13-2.1.8.jar",
+      "tools/dependencies/io/get-coursier/coursier_2.13/2.1.8/coursier_2.13-2.1.8.jar",
+      "tools/dependencies/io/get-coursier/jniutils/windows-jni-utils/0.3.3/windows-jni-utils-0.3.3.jar",
+      "tools/dependencies/io/github/alexarchambault/concurrent-reference-hash-map/1.1.0/concurrent-reference-hash-map-1.1.0.jar",
+      "tools/dependencies/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar",
+      "tools/dependencies/io/github/alexarchambault/windows-ansi/windows-ansi/0.0.5/windows-ansi-0.0.5.jar",
+      "tools/dependencies/io/github/java-diff-utils/java-diff-utils/4.15/java-diff-utils-4.15.jar",
+      "tools/dependencies/javax/inject/javax.inject/1/javax.inject-1.jar",
+      "tools/dependencies/jline/jline/2.14.6/jline-2.14.6.jar",
+      "tools/dependencies/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar",
+      "tools/dependencies/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar",
+      "tools/dependencies/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar",
+      "tools/dependencies/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar",
+      "tools/dependencies/net/openhft/zero-allocation-hashing/0.16/zero-allocation-hashing-0.16.jar",
+      "tools/dependencies/org/apache/commons/commons-compress/1.24.0/commons-compress-1.24.0.jar",
+      "tools/dependencies/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
+      "tools/dependencies/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar",
+      "tools/dependencies/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar",
+      "tools/dependencies/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar",
+      "tools/dependencies/org/apache/logging/log4j/log4j-slf4j-impl/2.17.1/log4j-slf4j-impl-2.17.1.jar",
+      "tools/dependencies/org/apache/xbean/xbean-reflect/3.7/xbean-reflect-3.7.jar",
+      "tools/dependencies/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar",
+      "tools/dependencies/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "tools/dependencies/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+      "tools/dependencies/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar",
+      "tools/dependencies/org/codehaus/plexus/plexus-archiver/4.9.0/plexus-archiver-4.9.0.jar",
+      "tools/dependencies/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar",
+      "tools/dependencies/org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar",
+      "tools/dependencies/org/codehaus/plexus/plexus-io/3.4.1/plexus-io-3.4.1.jar",
+      "tools/dependencies/org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar",
+      "tools/dependencies/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar",
+      "tools/dependencies/org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar",
+      "tools/dependencies/org/iq80/snappy/snappy/0.4/snappy-0.4.jar",
+      "tools/dependencies/org/jline/jline-builtins/3.24.1/jline-builtins-3.24.1.jar",
+      "tools/dependencies/org/jline/jline-native/3.24.1/jline-native-3.24.1.jar",
+      "tools/dependencies/org/jline/jline-reader/3.24.1/jline-reader-3.24.1.jar",
+      "tools/dependencies/org/jline/jline-style/3.24.1/jline-style-3.24.1.jar",
+      "tools/dependencies/org/jline/jline-terminal-jansi/3.24.1/jline-terminal-jansi-3.24.1.jar",
+      "tools/dependencies/org/jline/jline-terminal-jna/3.24.1/jline-terminal-jna-3.24.1.jar",
+      "tools/dependencies/org/jline/jline-terminal/3.24.1/jline-terminal-3.24.1.jar",
+      "tools/dependencies/org/jline/jline/3.27.1/jline-3.27.1-jdk8.jar",
+      "tools/dependencies/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar",
+      "tools/dependencies/org/json4s/json4s-ast_2.13/4.0.6/json4s-ast_2.13-4.0.6.jar",
+      "tools/dependencies/org/json4s/json4s-core_2.13/4.0.6/json4s-core_2.13-4.0.6.jar",
+      "tools/dependencies/org/json4s/json4s-native-core_2.13/4.0.6/json4s-native-core_2.13-4.0.6.jar",
+      "tools/dependencies/org/json4s/json4s-native_2.13/4.0.6/json4s-native_2.13-4.0.6.jar",
+      "tools/dependencies/org/json4s/json4s-scalap_2.13/4.0.6/json4s-scalap_2.13-4.0.6.jar",
+      "tools/dependencies/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar",
+      "tools/dependencies/org/scala-lang/modules/scala-collection-compat_2.13/2.11.0/scala-collection-compat_2.13-2.11.0.jar",
+      "tools/dependencies/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar",
+      "tools/dependencies/org/scala-lang/modules/scala-xml_2.13/2.2.0/scala-xml_2.13-2.2.0.jar",
+      "tools/dependencies/org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar",
+      "tools/dependencies/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+      "tools/dependencies/org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar",
+      "tools/dependencies/org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16.jar",
+      "tools/dependencies/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+      "tools/dependencies/org/tukaani/xz/1.9/xz-1.9.jar",
+      "tools/dependencies/org/virtuslab/scala-cli/config_2.13/0.2.1/config_2.13-0.2.1.jar",
+      "tools/dependencies/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar"
+    ]
+  },
+  "collection_method": "Pins are read from the small frozen plan and runner metadata. Unchanged tool/classpath/support pins are reused from the prior sanitized excerpt and compared with the frozen plan metadata. No Scala source bytes, raw actual run logs or raw run receipts, JARs, JDK files, or other tool binaries were read or rehashed while making this excerpt. The small independent actual-review report was read to prepare SUMMARY.",
+  "compiler_plugin_relative": "tools/dependencies/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+  "file_bytes_included_in_this_package": false,
+  "frozen_input_bytes": 297219204,
+  "frozen_input_count": 326,
+  "metadata_provenance": {
+    "excluded_machine_frozen_plan": {
+      "bytes": 165616,
+      "sha256": "4ee795a6ce78d05790cb0a431ae73d45cb9e6c1ab36cf147ff41327d3ac264f6"
+    },
+    "excluded_runner_delta": {
+      "bytes": 2162,
+      "sha256": "2e9057bd55493e0465ea0aa5ea2dae36fff335266df7aeb584fe7bd32026f7f0"
+    },
+    "original_runner_source_manifest": {
+      "bytes": 1483,
+      "sha256": "fe8c0706c975e0f7dc2889a697cd9353a7e8e3459c45885dc6d206032568405e"
+    },
+    "prior_sanitized_input_pins": {
+      "bytes": 98771,
+      "sha256": "bbe5e1d8f392b3036a907c0e30f3d09b1db71284a223981563a808c3c430d8c6"
+    },
+    "tool_support_reuse_basis": "Frozen runner DELTA declares 314 tools and 6 supervisor inputs unchanged. Their relative metadata matches all corresponding frozen-plan entries; no prior PASS is inherited."
+  },
+  "namespace_mapping_rule": "Strip sources/ when resolving against caller-selected SOURCE_ROOT. For tools/, use independently chosen local JDK, dependency, and operating-system locations; logical names do not authorize copying into or modifying a system root. Resolved-relative names preserve inventory alias relationships only, not an assumption that the caller has identical symlinks.",
+  "namespaces": {
+    "sources/chunk_contract": "External two-source Chunk contract package; SOURCE_ROOT/chunk_contract in the command template. Referenced, not copied.",
+    "sources/chunk_state_transfer": "External StateTransfer source package; SOURCE_ROOT/chunk_state_transfer in the command template. Not included; no publication or repository commit is asserted here.",
+    "sources/repository": "External repository snapshot; SOURCE_ROOT/repository in the command template.",
+    "tools/dependencies": "External JAR tree in Maven-coordinate layout; not included.",
+    "tools/jdk": "External pinned JDK home; not included.",
+    "tools/system": "External system-tree names without a leading slash; not included. No instruction to modify or overwrite a system tree."
+  },
+  "purpose": "Relative digest reference only. Not a replacement FROZEN_PLAN, executable closure, or execution authorization.",
+  "relative_names_are_logical_labels_not_original_machine_paths": true,
+  "schema": "qwen35-state-transfer-compile-public-relative-pins-v1",
+  "source_repository_reference": {
+    "note": "Obtain all four sources independently and check the listed byte counts and SHA-256 digests. Logical package paths are not a claim that this excerpt publishes or relocates source files.",
+    "reference_is_digest_based": true,
+    "source_bytes_included": false
+  },
+  "sources": {
+    "bytes": 25449,
+    "compiler_argument_order": [
+      "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "sources/chunk_contract/source/GdnChunkProtocol.scala",
+      "sources/chunk_contract/source/GdnChunkAddressPlan.scala",
+      "sources/chunk_state_transfer/source/GdnChunkStateTransferOwner.scala"
+    ],
+    "count": 4,
+    "files": {
+      "sources/chunk_contract/source/GdnChunkAddressPlan.scala": {
+        "bytes": 9520,
+        "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943"
+      },
+      "sources/chunk_contract/source/GdnChunkProtocol.scala": {
+        "bytes": 3170,
+        "sha256": "59e525e049114a447f6a82672b06fac29eb0ef8a580a5f5f0c27c75396e28fcf"
+      },
+      "sources/chunk_state_transfer/source/GdnChunkStateTransferOwner.scala": {
+        "bytes": 9636,
+        "sha256": "8b75a469a1f43a215029034fcae5b90295d804a7355a1f741b5d28792ce1a7e8"
+      },
+      "sources/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": {
+        "bytes": 3123,
+        "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+      }
+    }
+  },
+  "tools": {
+    "bytes": 296950644,
+    "count": 314,
+    "files": {
+      "tools/dependencies/com/eed3si9n/shaded-apache-httpasyncclient/0.7.0/shaded-apache-httpasyncclient-0.7.0.jar": {
+        "bytes": 2083419,
+        "resolved_relative": "tools/dependencies/com/eed3si9n/shaded-apache-httpasyncclient/0.7.0/shaded-apache-httpasyncclient-0.7.0.jar",
+        "sha256": "98e96c3720741283e5976938a35b0c617a90af653b1956f99368161f5951dc21"
+      },
+      "tools/dependencies/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar": {
+        "bytes": 881454,
+        "resolved_relative": "tools/dependencies/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar",
+        "sha256": "814b15a9bf598e0fa854dd70ba9f6e03a413a97979de0c3f49317295e4352bc8"
+      },
+      "tools/dependencies/com/github/luben/zstd-jni/1.5.5-10/zstd-jni-1.5.5-10.jar": {
+        "bytes": 6749816,
+        "resolved_relative": "tools/dependencies/com/github/luben/zstd-jni/1.5.5-10/zstd-jni-1.5.5-10.jar",
+        "sha256": "9465fb23f4e95630f225d0108dbf9830cd8bf537dd6c63792eb7c9a7014151c1"
+      },
+      "tools/dependencies/com/github/mwiede/jsch/0.2.17/jsch-0.2.17.jar": {
+        "bytes": 544782,
+        "resolved_relative": "tools/dependencies/com/github/mwiede/jsch/0.2.17/jsch-0.2.17.jar",
+        "sha256": "744667315fcaaa1b00d2ef177fb2660036a9733f6ccd93a5c87ce800fde6b832"
+      },
+      "tools/dependencies/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar": {
+        "bytes": 200745,
+        "resolved_relative": "tools/dependencies/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar",
+        "sha256": "7fcdf69482982f0dd3f48b7dac27f091e3f1e3cb80eae4c7ac73890d51095c9c"
+      },
+      "tools/dependencies/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.13/2.13.5.2/jsoniter-scala-core_2.13-2.13.5.2.jar": {
+        "bytes": 175634,
+        "resolved_relative": "tools/dependencies/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.13/2.13.5.2/jsoniter-scala-core_2.13-2.13.5.2.jar",
+        "sha256": "86d9f5335dc6418a3b5ac28d2cfb6ed939236541566738df3bc0da2420d0f100"
+      },
+      "tools/dependencies/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar": {
+        "bytes": 127408,
+        "resolved_relative": "tools/dependencies/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar",
+        "sha256": "2e5037bda974630b046794274e344273919abf4727acfcd86352617dce68f82b"
+      },
+      "tools/dependencies/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar": {
+        "bytes": 13854,
+        "resolved_relative": "tools/dependencies/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar",
+        "sha256": "5f2a0648230a662e8be049df308d583d7369f13af683e44ddf5829b6d741a228"
+      },
+      "tools/dependencies/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar": {
+        "bytes": 85362,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar",
+        "sha256": "078af5bf405bbf41d6eca6441b2bcd282551d054c47acf4f949b6c983063b117"
+      },
+      "tools/dependencies/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar": {
+        "bytes": 367336,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar",
+        "sha256": "814edf957545fd952e97a772d850643516acc18000119ad566c03368c43c60f2"
+      },
+      "tools/dependencies/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar": {
+        "bytes": 119360,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar",
+        "sha256": "0e663be9a6c81e9515bdd07c04831397e38ea648a211e85ad005300fe840a03d"
+      },
+      "tools/dependencies/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar": {
+        "bytes": 240608,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar",
+        "sha256": "dd34c47a41d005d0e0ca947e208a20fbc136ea02357333392ba9ba6a96beb1c7"
+      },
+      "tools/dependencies/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar": {
+        "bytes": 110570,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar",
+        "sha256": "95d22fef52254a6ea3ddabec144dd01ed6d9046b02cf5b124b89cf3627e8869a"
+      },
+      "tools/dependencies/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar": {
+        "bytes": 205712,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar",
+        "sha256": "39c52652da329751ed4bb05c62053ff91b1d86c3b06c9488b7f6bfd0d2e05feb"
+      },
+      "tools/dependencies/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar": {
+        "bytes": 245064,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar",
+        "sha256": "b504db94ec69487b1460e3e97cc7cfdab7960d219d5724bb62d31c044f29d5df"
+      },
+      "tools/dependencies/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar": {
+        "bytes": 114894,
+        "resolved_relative": "tools/dependencies/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar",
+        "sha256": "9c00332462f16ccaf2f49fcd31af2040b28f0329200d02c7817e8c0841d28ebc"
+      },
+      "tools/dependencies/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar": {
+        "bytes": 83064,
+        "resolved_relative": "tools/dependencies/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar",
+        "sha256": "f412ecbb235c2460b45e63584109723dea8d94b819c78c9bfc38f50cba8546c0"
+      },
+      "tools/dependencies/com/outr/moduload_2.13/1.1.7/moduload_2.13-1.1.7.jar": {
+        "bytes": 9645,
+        "resolved_relative": "tools/dependencies/com/outr/moduload_2.13/1.1.7/moduload_2.13-1.1.7.jar",
+        "sha256": "53bdf91631e018b2cbb3a96151d34576d8c7551288a398444fc4ce6e1fbdbea1"
+      },
+      "tools/dependencies/com/outr/perfolation_2.13/1.2.9/perfolation_2.13-1.2.9.jar": {
+        "bytes": 62101,
+        "resolved_relative": "tools/dependencies/com/outr/perfolation_2.13/1.2.9/perfolation_2.13-1.2.9.jar",
+        "sha256": "cdf192a807103ea0e26d3b16b2fe316bef4cb7f1a4c3d0cc80b9955a93f4eb4f"
+      },
+      "tools/dependencies/com/outr/scribe_2.13/3.13.0/scribe_2.13-3.13.0.jar": {
+        "bytes": 483251,
+        "resolved_relative": "tools/dependencies/com/outr/scribe_2.13/3.13.0/scribe_2.13-3.13.0.jar",
+        "sha256": "7ab781667feef71f3da9f9170efea06771e324d7ebcfde5e1e77144550bda4e8"
+      },
+      "tools/dependencies/com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar": {
+        "bytes": 226757,
+        "resolved_relative": "tools/dependencies/com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar",
+        "sha256": "fd7373889b7a92cf3e97db36c920ba272aec158a9387b3259fca9f2dfaeda914"
+      },
+      "tools/dependencies/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar": {
+        "bytes": 34654,
+        "resolved_relative": "tools/dependencies/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar",
+        "sha256": "688cb118a6021d819138e855208c956031688be4b47a24bb615becc63acedf07"
+      },
+      "tools/dependencies/com/typesafe/config/1.4.2/config-1.4.2.jar": {
+        "bytes": 295444,
+        "resolved_relative": "tools/dependencies/com/typesafe/config/1.4.2/config-1.4.2.jar",
+        "sha256": "0076c249b4387d8369146528fd5dacb3efba098dc02ecf9ac81debdfc2e12fd5"
+      },
+      "tools/dependencies/commons-io/commons-io/2.15.0/commons-io-2.15.0.jar": {
+        "bytes": 500628,
+        "resolved_relative": "tools/dependencies/commons-io/commons-io/2.15.0/commons-io-2.15.0.jar",
+        "sha256": "a328dad730921d197b6a9b195dffa00e41c974c2dac8fe37e84d31706bca7792"
+      },
+      "tools/dependencies/dev/dirs/directories/26/directories-26.jar": {
+        "bytes": 14239,
+        "resolved_relative": "tools/dependencies/dev/dirs/directories/26/directories-26.jar",
+        "sha256": "6d18fe25aa30b7e08b908cd21151d8f96e22965c640acd7751add9bbfe6137d4"
+      },
+      "tools/dependencies/io/get-coursier/coursier-cache_2.13/2.1.8/coursier-cache_2.13-2.1.8.jar": {
+        "bytes": 441834,
+        "resolved_relative": "tools/dependencies/io/get-coursier/coursier-cache_2.13/2.1.8/coursier-cache_2.13-2.1.8.jar",
+        "sha256": "1074ca0717d743296d8d4eec1206eb9a74cb31aa76abf307931da8fe4ac02067"
+      },
+      "tools/dependencies/io/get-coursier/coursier-core_2.13/2.1.8/coursier-core_2.13-2.1.8.jar": {
+        "bytes": 1356411,
+        "resolved_relative": "tools/dependencies/io/get-coursier/coursier-core_2.13/2.1.8/coursier-core_2.13-2.1.8.jar",
+        "sha256": "0c83986214f80d6ae47c93884b982539feb7d07b0abf4714821d2144ea0e1378"
+      },
+      "tools/dependencies/io/get-coursier/coursier-proxy-setup/2.1.8/coursier-proxy-setup-2.1.8.jar": {
+        "bytes": 6831,
+        "resolved_relative": "tools/dependencies/io/get-coursier/coursier-proxy-setup/2.1.8/coursier-proxy-setup-2.1.8.jar",
+        "sha256": "6898f545052f8ca57e21d09edc4e15eefb5c729f7f2e4a726cf3a88478ec5d98"
+      },
+      "tools/dependencies/io/get-coursier/coursier-util_2.13/2.1.8/coursier-util_2.13-2.1.8.jar": {
+        "bytes": 563972,
+        "resolved_relative": "tools/dependencies/io/get-coursier/coursier-util_2.13/2.1.8/coursier-util_2.13-2.1.8.jar",
+        "sha256": "f98c2a3dedcaf87873990bc0df49cc1c70202211e96dc76813ed50bcc49ad085"
+      },
+      "tools/dependencies/io/get-coursier/coursier_2.13/2.1.8/coursier_2.13-2.1.8.jar": {
+        "bytes": 1106801,
+        "resolved_relative": "tools/dependencies/io/get-coursier/coursier_2.13/2.1.8/coursier_2.13-2.1.8.jar",
+        "sha256": "530c50e3a81e24e7ff4305ea8f637db378526c31f4d9474836a785da604ecd6e"
+      },
+      "tools/dependencies/io/get-coursier/jniutils/windows-jni-utils/0.3.3/windows-jni-utils-0.3.3.jar": {
+        "bytes": 82498,
+        "resolved_relative": "tools/dependencies/io/get-coursier/jniutils/windows-jni-utils/0.3.3/windows-jni-utils-0.3.3.jar",
+        "sha256": "ab68efcf162355e20007b238d8108b7ffec0c06b467ee44cbb44ec3f8ac3a7e6"
+      },
+      "tools/dependencies/io/github/alexarchambault/concurrent-reference-hash-map/1.1.0/concurrent-reference-hash-map-1.1.0.jar": {
+        "bytes": 27116,
+        "resolved_relative": "tools/dependencies/io/github/alexarchambault/concurrent-reference-hash-map/1.1.0/concurrent-reference-hash-map-1.1.0.jar",
+        "sha256": "552707982209afb9feffdccb2e73cc4681a1353e34a47df1bf643d1d2e0a2f61"
+      },
+      "tools/dependencies/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar": {
+        "bytes": 58017,
+        "resolved_relative": "tools/dependencies/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar",
+        "sha256": "2ed5882d03653438b52bee6a145bca84a95fe363f49afd06b9b92b5e7117afb5"
+      },
+      "tools/dependencies/io/github/alexarchambault/windows-ansi/windows-ansi/0.0.5/windows-ansi-0.0.5.jar": {
+        "bytes": 2948,
+        "resolved_relative": "tools/dependencies/io/github/alexarchambault/windows-ansi/windows-ansi/0.0.5/windows-ansi-0.0.5.jar",
+        "sha256": "f9acb082199470d4ca9165b36a4544ee9402ba09964476ba9710cd9ca4c41f69"
+      },
+      "tools/dependencies/io/github/java-diff-utils/java-diff-utils/4.15/java-diff-utils-4.15.jar": {
+        "bytes": 75692,
+        "resolved_relative": "tools/dependencies/io/github/java-diff-utils/java-diff-utils/4.15/java-diff-utils-4.15.jar",
+        "sha256": "964c69e3a23a892db2778ae6806aa1d42f81230032bd8e4982dc8620582ee6b7"
+      },
+      "tools/dependencies/javax/inject/javax.inject/1/javax.inject-1.jar": {
+        "bytes": 2497,
+        "resolved_relative": "tools/dependencies/javax/inject/javax.inject/1/javax.inject-1.jar",
+        "sha256": "91c77044a50c481636c32d916fd89c9118a72195390452c81065080f957de7ff"
+      },
+      "tools/dependencies/jline/jline/2.14.6/jline-2.14.6.jar": {
+        "bytes": 268780,
+        "resolved_relative": "tools/dependencies/jline/jline/2.14.6/jline-2.14.6.jar",
+        "sha256": "97d1acaac82409be42e622d7a54d3ae9d08517e8aefdea3d2ba9791150c2f02d"
+      },
+      "tools/dependencies/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar": {
+        "bytes": 640724,
+        "resolved_relative": "tools/dependencies/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar",
+        "sha256": "d269671656767e05a58dd634cbafc36ed70d417220b058d11c0d88dfd281616d"
+      },
+      "tools/dependencies/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar": {
+        "bytes": 1363209,
+        "resolved_relative": "tools/dependencies/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar",
+        "sha256": "474d7b88f6e97009b6ec1d98c3024dd95c23187c65dabfbc35331bcac3d173dd"
+      },
+      "tools/dependencies/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar": {
+        "bytes": 1879325,
+        "resolved_relative": "tools/dependencies/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar",
+        "sha256": "66d4f819a062a51a1d5627bffc23fac55d1677f0e0a1feba144aabdd670a64bb"
+      },
+      "tools/dependencies/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar": {
+        "bytes": 314048,
+        "resolved_relative": "tools/dependencies/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar",
+        "sha256": "a304da2389f760f1a36513d8b10ba546d50243cf0b94415ea2a76906114d7197"
+      },
+      "tools/dependencies/net/openhft/zero-allocation-hashing/0.16/zero-allocation-hashing-0.16.jar": {
+        "bytes": 90203,
+        "resolved_relative": "tools/dependencies/net/openhft/zero-allocation-hashing/0.16/zero-allocation-hashing-0.16.jar",
+        "sha256": "3bc39c640cc8314575de4ebcb1a0bca540516d3c60d49f8de7d638b09868553d"
+      },
+      "tools/dependencies/org/apache/commons/commons-compress/1.24.0/commons-compress-1.24.0.jar": {
+        "bytes": 1076223,
+        "resolved_relative": "tools/dependencies/org/apache/commons/commons-compress/1.24.0/commons-compress-1.24.0.jar",
+        "sha256": "fbf2c5d275e513c08f4e4fb539726dbf3ac2142af956ba93efb983244f0c36bd"
+      },
+      "tools/dependencies/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar": {
+        "bytes": 587402,
+        "resolved_relative": "tools/dependencies/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
+        "sha256": "d919d904486c037f8d193412da0c92e22a9fa24230b9d67a57855c5c31c7e94e"
+      },
+      "tools/dependencies/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar": {
+        "bytes": 238400,
+        "resolved_relative": "tools/dependencies/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar",
+        "sha256": "770cd903fa7b604d1f7ef7ba17f84108667294b2b478be8ed1af3bffb4ae0018"
+      },
+      "tools/dependencies/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar": {
+        "bytes": 301872,
+        "resolved_relative": "tools/dependencies/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar",
+        "sha256": "b0d8a4c8ab4fb8b1888d0095822703b0e6d4793c419550203da9e69196161de4"
+      },
+      "tools/dependencies/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar": {
+        "bytes": 1790452,
+        "resolved_relative": "tools/dependencies/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar",
+        "sha256": "c967f223487980b9364e94a7c7f9a8a01fd3ee7c19bdbf0b0f9f8cb8511f3d41"
+      },
+      "tools/dependencies/org/apache/logging/log4j/log4j-slf4j-impl/2.17.1/log4j-slf4j-impl-2.17.1.jar": {
+        "bytes": 24279,
+        "resolved_relative": "tools/dependencies/org/apache/logging/log4j/log4j-slf4j-impl/2.17.1/log4j-slf4j-impl-2.17.1.jar",
+        "sha256": "e9a03720e5d5076009c2530635da9d08485e28a0b0ec20708dadc51afb78e41e"
+      },
+      "tools/dependencies/org/apache/xbean/xbean-reflect/3.7/xbean-reflect-3.7.jar": {
+        "bytes": 148098,
+        "resolved_relative": "tools/dependencies/org/apache/xbean/xbean-reflect/3.7/xbean-reflect-3.7.jar",
+        "sha256": "104e5e9bb5a669f86722f32281960700f7ec8e3209ef51b23eb9b6d23d1629cb"
+      },
+      "tools/dependencies/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar": {
+        "bytes": 212014,
+        "resolved_relative": "tools/dependencies/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar",
+        "sha256": "bce5c887460542d69c0ffce05919fef8f56f9964a1505a99f6ae69a58351507e"
+      },
+      "tools/dependencies/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar": {
+        "bytes": 79111,
+        "resolved_relative": "tools/dependencies/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+        "sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb"
+      },
+      "tools/dependencies/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar": {
+        "bytes": 5128708,
+        "resolved_relative": "tools/dependencies/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+        "sha256": "ad3163d1b88094806cfec95fec58b4ebeeaa6af6ec6b2766a9c02becdbe42778"
+      },
+      "tools/dependencies/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar": {
+        "bytes": 23881,
+        "resolved_relative": "tools/dependencies/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar",
+        "sha256": "c6cf214fb53b83fff73e082b6752eab53dc67c987bbece87461600e9c0e8ad38"
+      },
+      "tools/dependencies/org/codehaus/plexus/plexus-archiver/4.9.0/plexus-archiver-4.9.0.jar": {
+        "bytes": 224611,
+        "resolved_relative": "tools/dependencies/org/codehaus/plexus/plexus-archiver/4.9.0/plexus-archiver-4.9.0.jar",
+        "sha256": "094d7eed03f8610cf149cade0340a5b2a55935dc77864e29f959c9e46a68a03e"
+      },
+      "tools/dependencies/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar": {
+        "bytes": 52873,
+        "resolved_relative": "tools/dependencies/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar",
+        "sha256": "52f77c5ec49f787c9c417ebed5d6efd9922f44a202f217376e4f94c0d74f3549"
+      },
+      "tools/dependencies/org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar": {
+        "bytes": 228336,
+        "resolved_relative": "tools/dependencies/org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar",
+        "sha256": "8b65840e41ca669a1a69ec1daedb3426304e560b24172cc93bb02e8c199e1ce7"
+      },
+      "tools/dependencies/org/codehaus/plexus/plexus-io/3.4.1/plexus-io-3.4.1.jar": {
+        "bytes": 79393,
+        "resolved_relative": "tools/dependencies/org/codehaus/plexus/plexus-io/3.4.1/plexus-io-3.4.1.jar",
+        "sha256": "ac3be07c2968f98656604ddb8fdf08f1cfc560bc7b329fd17847f151510dc2c4"
+      },
+      "tools/dependencies/org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar": {
+        "bytes": 192368,
+        "resolved_relative": "tools/dependencies/org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar",
+        "sha256": "270cd703b48c6e5c8c691f1875f22d62d22cfe072c73ae2f5814d83d68c1da0b"
+      },
+      "tools/dependencies/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar": {
+        "bytes": 287352,
+        "resolved_relative": "tools/dependencies/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar",
+        "sha256": "109e64fc65767c7a1a3bd654709d76f107b0a3b39db32cbf11139e13a6f5229b"
+      },
+      "tools/dependencies/org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar": {
+        "bytes": 256999,
+        "resolved_relative": "tools/dependencies/org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar",
+        "sha256": "2e5e775a9dc58ffa6bbd6aa6f099d62f8b62dcdeb4c3c3bbbe5cf2301bc2dcc1"
+      },
+      "tools/dependencies/org/iq80/snappy/snappy/0.4/snappy-0.4.jar": {
+        "bytes": 57954,
+        "resolved_relative": "tools/dependencies/org/iq80/snappy/snappy/0.4/snappy-0.4.jar",
+        "sha256": "46a0c87d504ce9d6063e1ff6e4d20738feb49d8abf85b5071a7d18df4f11bac9"
+      },
+      "tools/dependencies/org/jline/jline-builtins/3.24.1/jline-builtins-3.24.1.jar": {
+        "bytes": 271884,
+        "resolved_relative": "tools/dependencies/org/jline/jline-builtins/3.24.1/jline-builtins-3.24.1.jar",
+        "sha256": "a621bc48d38a12aed37b567d13407d389bc5dce935d187a01c19eaec969467d1"
+      },
+      "tools/dependencies/org/jline/jline-native/3.24.1/jline-native-3.24.1.jar": {
+        "bytes": 187919,
+        "resolved_relative": "tools/dependencies/org/jline/jline-native/3.24.1/jline-native-3.24.1.jar",
+        "sha256": "4337237502d3b647b981b007e14e75d79ec51497f52e9871baf6e2c6c9dfbd17"
+      },
+      "tools/dependencies/org/jline/jline-reader/3.24.1/jline-reader-3.24.1.jar": {
+        "bytes": 183527,
+        "resolved_relative": "tools/dependencies/org/jline/jline-reader/3.24.1/jline-reader-3.24.1.jar",
+        "sha256": "8263bdab9bf5be07e2324e98246c94d34cc7e0d451e527e8b08e410900c3b9db"
+      },
+      "tools/dependencies/org/jline/jline-style/3.24.1/jline-style-3.24.1.jar": {
+        "bytes": 28121,
+        "resolved_relative": "tools/dependencies/org/jline/jline-style/3.24.1/jline-style-3.24.1.jar",
+        "sha256": "1403880e2fa8426e9395585a4526b67a3f799b949488008fed2ab5063a11d4a1"
+      },
+      "tools/dependencies/org/jline/jline-terminal-jansi/3.24.1/jline-terminal-jansi-3.24.1.jar": {
+        "bytes": 48861,
+        "resolved_relative": "tools/dependencies/org/jline/jline-terminal-jansi/3.24.1/jline-terminal-jansi-3.24.1.jar",
+        "sha256": "1e53923725972413765093aac3cc5eb7d4690eaf758f4067a4972bd59d9e85a5"
+      },
+      "tools/dependencies/org/jline/jline-terminal-jna/3.24.1/jline-terminal-jna-3.24.1.jar": {
+        "bytes": 73643,
+        "resolved_relative": "tools/dependencies/org/jline/jline-terminal-jna/3.24.1/jline-terminal-jna-3.24.1.jar",
+        "sha256": "ec59d38160b0faa720472ff3f168564d22af4d991316ba30bffe2c163ae4040c"
+      },
+      "tools/dependencies/org/jline/jline-terminal/3.24.1/jline-terminal-3.24.1.jar": {
+        "bytes": 259162,
+        "resolved_relative": "tools/dependencies/org/jline/jline-terminal/3.24.1/jline-terminal-3.24.1.jar",
+        "sha256": "d9e32b47e134718eec9adcfaebf838130a163999ced820fc32795d4420f159e2"
+      },
+      "tools/dependencies/org/jline/jline/3.27.1/jline-3.27.1-jdk8.jar": {
+        "bytes": 1369150,
+        "resolved_relative": "tools/dependencies/org/jline/jline/3.27.1/jline-3.27.1-jdk8.jar",
+        "sha256": "9d165aff3d714a455de2e711dc90df09fdb0a0969a1cd4d52aa72a44cb545db0"
+      },
+      "tools/dependencies/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar": {
+        "bytes": 145596,
+        "resolved_relative": "tools/dependencies/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar",
+        "sha256": "6d9c8050943dce3e6e6cfb028a7cbd5fd46555c7edf89bf0d829061ff5d2ade6"
+      },
+      "tools/dependencies/org/json4s/json4s-ast_2.13/4.0.6/json4s-ast_2.13-4.0.6.jar": {
+        "bytes": 601457,
+        "resolved_relative": "tools/dependencies/org/json4s/json4s-ast_2.13/4.0.6/json4s-ast_2.13-4.0.6.jar",
+        "sha256": "c9fa3c4799615ebf299f616e4817efd16dcff341e1ee04e51e741d8add68bb43"
+      },
+      "tools/dependencies/org/json4s/json4s-core_2.13/4.0.6/json4s-core_2.13-4.0.6.jar": {
+        "bytes": 322728,
+        "resolved_relative": "tools/dependencies/org/json4s/json4s-core_2.13/4.0.6/json4s-core_2.13-4.0.6.jar",
+        "sha256": "7f7a6b7802a05d75a7612d0f5c54832bd473a7c60118192713f45d80d1d51e71"
+      },
+      "tools/dependencies/org/json4s/json4s-native-core_2.13/4.0.6/json4s-native-core_2.13-4.0.6.jar": {
+        "bytes": 85862,
+        "resolved_relative": "tools/dependencies/org/json4s/json4s-native-core_2.13/4.0.6/json4s-native-core_2.13-4.0.6.jar",
+        "sha256": "e51e542f5c5ef25495918dfe15bfebb417cee6a56f13b188e8088f2d50df1c65"
+      },
+      "tools/dependencies/org/json4s/json4s-native_2.13/4.0.6/json4s-native_2.13-4.0.6.jar": {
+        "bytes": 10229,
+        "resolved_relative": "tools/dependencies/org/json4s/json4s-native_2.13/4.0.6/json4s-native_2.13-4.0.6.jar",
+        "sha256": "f7089df299f43c6f76cfa2876d3a9cf9fd4d983e952f6ecfe11ed4b5f129e0c6"
+      },
+      "tools/dependencies/org/json4s/json4s-scalap_2.13/4.0.6/json4s-scalap_2.13-4.0.6.jar": {
+        "bytes": 360050,
+        "resolved_relative": "tools/dependencies/org/json4s/json4s-scalap_2.13/4.0.6/json4s-scalap_2.13-4.0.6.jar",
+        "sha256": "4ff2f359e2a6595d7b709ca1de43ed6da8c2cf67fe8b78f334e10f27c21c4361"
+      },
+      "tools/dependencies/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar": {
+        "bytes": 11369,
+        "resolved_relative": "tools/dependencies/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar",
+        "sha256": "1dee0481072d19c929b623e155e14d2f6085dc011529a0a0dbefc84cf571d865"
+      },
+      "tools/dependencies/org/scala-lang/modules/scala-collection-compat_2.13/2.11.0/scala-collection-compat_2.13-2.11.0.jar": {
+        "bytes": 7090,
+        "resolved_relative": "tools/dependencies/org/scala-lang/modules/scala-collection-compat_2.13/2.11.0/scala-collection-compat_2.13-2.11.0.jar",
+        "sha256": "0c1108883b7b97851750e8932f9584346ccb23f1260c197f97295ac2e6c56cec"
+      },
+      "tools/dependencies/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar": {
+        "bytes": 1127123,
+        "resolved_relative": "tools/dependencies/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar",
+        "sha256": "68f266c4fa37cb20a76e905ad940e241190ce288b7e4a9877f1dd1261cd1a9a7"
+      },
+      "tools/dependencies/org/scala-lang/modules/scala-xml_2.13/2.2.0/scala-xml_2.13-2.2.0.jar": {
+        "bytes": 546068,
+        "resolved_relative": "tools/dependencies/org/scala-lang/modules/scala-xml_2.13/2.2.0/scala-xml_2.13-2.2.0.jar",
+        "sha256": "0d9d63091a73cf837cd5412671a30abecad460dc254aeb43a2b18f4910af6a09"
+      },
+      "tools/dependencies/org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar": {
+        "bytes": 12308669,
+        "resolved_relative": "tools/dependencies/org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar",
+        "sha256": "f59982714591e321ba9c087af2c8666e2f5fb92b11a0cef72c2c5e9b342152d3"
+      },
+      "tools/dependencies/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar": {
+        "bytes": 5926340,
+        "resolved_relative": "tools/dependencies/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+        "sha256": "1ebb2b6f9e4eb4022497c19b1e1e825019c08514f962aaac197145f88ed730f1"
+      },
+      "tools/dependencies/org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar": {
+        "bytes": 3801119,
+        "resolved_relative": "tools/dependencies/org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar",
+        "sha256": "fb49ccd9cac7464486ab993cda20a3c1569d8ef26f052e897577ad2a4970fb1d"
+      },
+      "tools/dependencies/org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16.jar": {
+        "bytes": 271996,
+        "resolved_relative": "tools/dependencies/org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16.jar",
+        "sha256": "776ef74d8bc1222f4b6e7b5dc5dd1f0abfc97ab853cb4932292dee0b32111906"
+      },
+      "tools/dependencies/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar": {
+        "bytes": 41125,
+        "resolved_relative": "tools/dependencies/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+        "sha256": "d3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0"
+      },
+      "tools/dependencies/org/tukaani/xz/1.9/xz-1.9.jar": {
+        "bytes": 116013,
+        "resolved_relative": "tools/dependencies/org/tukaani/xz/1.9/xz-1.9.jar",
+        "sha256": "211b306cfc44f8f96df3a0a3ddaf75ba8c5289eed77d60d72f889bb855f535e5"
+      },
+      "tools/dependencies/org/virtuslab/scala-cli/config_2.13/0.2.1/config_2.13-0.2.1.jar": {
+        "bytes": 209024,
+        "resolved_relative": "tools/dependencies/org/virtuslab/scala-cli/config_2.13/0.2.1/config_2.13-0.2.1.jar",
+        "sha256": "e9567682876d6941b7daac9d995ef241aebe1c1e3dc50e123245a4df53699626"
+      },
+      "tools/dependencies/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar": {
+        "bytes": 309001,
+        "resolved_relative": "tools/dependencies/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar",
+        "sha256": "d87d607e500885356c03c1cae61e8c2e05d697df8787d5aba13484c2eb76a844"
+      },
+      "tools/jdk/bin/java": {
+        "bytes": 14384,
+        "resolved_relative": "tools/jdk/bin/java",
+        "sha256": "6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba"
+      },
+      "tools/jdk/bin/jpackage": {
+        "bytes": 14408,
+        "resolved_relative": "tools/jdk/bin/jpackage",
+        "sha256": "f7073d4d9573eb8471a09220e691278591b784cd44050cdfe6c5d6c7afa52175"
+      },
+      "tools/jdk/bin/keytool": {
+        "bytes": 14408,
+        "resolved_relative": "tools/jdk/bin/keytool",
+        "sha256": "bfd62a2ed799d9f2760ca528df3dc2df31fb6a33c521321b84e2ab67007b987d"
+      },
+      "tools/jdk/bin/rmiregistry": {
+        "bytes": 14440,
+        "resolved_relative": "tools/jdk/bin/rmiregistry",
+        "sha256": "61643ace60a614a691769f7b14b28a768b3bbbe12078a7c9e630a723812635ef"
+      },
+      "tools/jdk/conf/accessibility.properties": {
+        "bytes": 391,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/accessibility.properties",
+        "sha256": "e8a107880e6ec598c99a4865bc2d24678e8370142bfdb5ca27fdbe266b4c6cb7"
+      },
+      "tools/jdk/conf/jaxp.properties": {
+        "bytes": 7302,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/jaxp.properties",
+        "sha256": "7d95c49465d0c836d608d02856d3b097934dfb5dc4bd2279affaf337d045b708"
+      },
+      "tools/jdk/conf/logging.properties": {
+        "bytes": 2732,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/logging.properties",
+        "sha256": "b62d2733ab99556b108a1951d894c5a8d76b1ac7a00c02c388f9eb9be046c56f"
+      },
+      "tools/jdk/conf/management/jmxremote.access": {
+        "bytes": 3997,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/management/jmxremote.access",
+        "sha256": "0c25d26ee212ca1e8c33f67c3c460d43fe849c3a1d23dbe341148517602b280c"
+      },
+      "tools/jdk/conf/management/management.properties": {
+        "bytes": 14988,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/management/management.properties",
+        "sha256": "07dffdd85b01c19bf46ca320a699aba48dd6b01043eb0bd6a9528c7993312bad"
+      },
+      "tools/jdk/conf/net.properties": {
+        "bytes": 7441,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/net.properties",
+        "sha256": "2e070ed1d97052f0ce8771ed2ef74a38d7c260a45fde7a3682c8844e5fdf58a4"
+      },
+      "tools/jdk/conf/security/java.policy": {
+        "bytes": 2294,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/java.policy",
+        "sha256": "d51bcab7ed301caeff3779a5e777e6019864cecee5e2abc102ef991b0de77af2"
+      },
+      "tools/jdk/conf/security/java.security": {
+        "bytes": 71428,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/java.security",
+        "sha256": "9108fb3a906e07d6692985cdda551fc1c6a6957c8241060b48f07de88e83f8bb"
+      },
+      "tools/jdk/conf/security/nss.cfg": {
+        "bytes": 106,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/nss.cfg",
+        "sha256": "84b778712c4b3f09798681f9d8ff3a298bcad76bb65ae8925ed8bd80a14621f4"
+      },
+      "tools/jdk/conf/security/policy/README.txt": {
+        "bytes": 2390,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/policy/README.txt",
+        "sha256": "6da0747334b0fea7592fd92614b2bbc8b126535e129b1fee483774d914e98eb5"
+      },
+      "tools/jdk/conf/security/policy/limited/default_US_export.policy": {
+        "bytes": 146,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/policy/limited/default_US_export.policy",
+        "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+      },
+      "tools/jdk/conf/security/policy/limited/default_local.policy": {
+        "bytes": 647,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/policy/limited/default_local.policy",
+        "sha256": "2b2627548e61316150d47ffc3e6cad465ca05b3cccd4785eb7d21aa7baa0f441"
+      },
+      "tools/jdk/conf/security/policy/limited/exempt_local.policy": {
+        "bytes": 566,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/policy/limited/exempt_local.policy",
+        "sha256": "8c3d7648abcd95a272ce12db870082937f4d7f6878d730d83cb7fbb31eb8b2c9"
+      },
+      "tools/jdk/conf/security/policy/unlimited/default_US_export.policy": {
+        "bytes": 146,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/policy/unlimited/default_US_export.policy",
+        "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+      },
+      "tools/jdk/conf/security/policy/unlimited/default_local.policy": {
+        "bytes": 193,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/policy/unlimited/default_local.policy",
+        "sha256": "8d8a318e6d90dfd7e26612d2b6385aa704f686ca6134c551f8928418d92b851a"
+      },
+      "tools/jdk/conf/sound.properties": {
+        "bytes": 1210,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/sound.properties",
+        "sha256": "299c2360b6155eb28990ec49cd21753f97e43442fe8fab03e04f3e213df43a66"
+      },
+      "tools/jdk/conf/swing.properties": {
+        "bytes": 113,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/swing.properties",
+        "sha256": "a5ba486e49d565f1b0eb6a08e7518f2f79d23bed2a1a527f454f81b7eae8fb9d"
+      },
+      "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.base/aes.md": {
+        "bytes": 1444,
+        "resolved_relative": "tools/jdk/legal/java.base/aes.md",
+        "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d"
+      },
+      "tools/jdk/legal/java.base/asm.md": {
+        "bytes": 1582,
+        "resolved_relative": "tools/jdk/legal/java.base/asm.md",
+        "sha256": "683be15695bd248272d60f5b7fbe5e126a935ea6bf231a624a9aa164733e1d1d"
+      },
+      "tools/jdk/legal/java.base/c-libutl.md": {
+        "bytes": 1556,
+        "resolved_relative": "tools/jdk/legal/java.base/c-libutl.md",
+        "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9"
+      },
+      "tools/jdk/legal/java.base/cldr.md": {
+        "bytes": 9601,
+        "resolved_relative": "tools/jdk/legal/java.base/cldr.md",
+        "sha256": "19515e14a240e022640e95b61b5095127fa9690755950b4a2b0a02e783e08163"
+      },
+      "tools/jdk/legal/java.base/gcc.md": {
+        "bytes": 128099,
+        "resolved_relative": "tools/jdk/legal/java.base/gcc.md",
+        "sha256": "589e34f142cdf7d1430daa573e61c2e3dd0330c9eb5a2c00d4a98b3a4450810b"
+      },
+      "tools/jdk/legal/java.base/icu.md": {
+        "bytes": 30197,
+        "resolved_relative": "tools/jdk/legal/java.base/icu.md",
+        "sha256": "1bf28459c6e0af9f3429f4f8becd1668d6544055f8df240277456bc4b3d8a752"
+      },
+      "tools/jdk/legal/java.base/public_suffix.md": {
+        "bytes": 17783,
+        "resolved_relative": "tools/jdk/legal/java.base/public_suffix.md",
+        "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429"
+      },
+      "tools/jdk/legal/java.base/siphash.md": {
+        "bytes": 8256,
+        "resolved_relative": "tools/jdk/legal/java.base/siphash.md",
+        "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76"
+      },
+      "tools/jdk/legal/java.base/unicode.md": {
+        "bytes": 9078,
+        "resolved_relative": "tools/jdk/legal/java.base/unicode.md",
+        "sha256": "6f72f10d166b2c2e8a395e03e734c5afc852b59aeca73ced124f6b9c96268d53"
+      },
+      "tools/jdk/legal/java.compiler/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.datatransfer/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.desktop/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.desktop/colorimaging.md": {
+        "bytes": 167,
+        "resolved_relative": "tools/jdk/legal/java.desktop/colorimaging.md",
+        "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189"
+      },
+      "tools/jdk/legal/java.desktop/mesa3d.md": {
+        "bytes": 5732,
+        "resolved_relative": "tools/jdk/legal/java.desktop/mesa3d.md",
+        "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152"
+      },
+      "tools/jdk/legal/java.desktop/pipewire.md": {
+        "bytes": 1479,
+        "resolved_relative": "tools/jdk/legal/java.desktop/pipewire.md",
+        "sha256": "56a8fb1652c70ac204d13bb52ca4d678162e7d21a97d10209c2a633de8082de0"
+      },
+      "tools/jdk/legal/java.desktop/xwd.md": {
+        "bytes": 1348,
+        "resolved_relative": "tools/jdk/legal/java.desktop/xwd.md",
+        "sha256": "1d4ffa93c87f35084b02a7aa90a21084b4019db4fe1003c2e5ce775b4a384f59"
+      },
+      "tools/jdk/legal/java.instrument/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.logging/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.management.rmi/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.management/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.naming/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.net.http/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.prefs/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.rmi/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.scripting/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.se/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.security.jgss/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.security.sasl/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.smartcardio/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.smartcardio/pcsclite.md": {
+        "bytes": 2155,
+        "resolved_relative": "tools/jdk/legal/java.smartcardio/pcsclite.md",
+        "sha256": "b39ce363c281ed36e937f9e6c03311d7dbf0b20d3614dde084130c2a10909692"
+      },
+      "tools/jdk/legal/java.sql.rowset/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.sql/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.transaction.xa/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.xml.crypto/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.xml.crypto/santuario.md": {
+        "bytes": 11505,
+        "resolved_relative": "tools/jdk/legal/java.xml.crypto/santuario.md",
+        "sha256": "d08690d25f660f145c73365d260ed522cd0aace8a0e1396706551b7a1ae8c9a3"
+      },
+      "tools/jdk/legal/java.xml/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/java.xml/bcel.md": {
+        "bytes": 11196,
+        "resolved_relative": "tools/jdk/legal/java.xml/bcel.md",
+        "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1"
+      },
+      "tools/jdk/legal/java.xml/dom.md": {
+        "bytes": 3761,
+        "resolved_relative": "tools/jdk/legal/java.xml/dom.md",
+        "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148"
+      },
+      "tools/jdk/legal/java.xml/jcup.md": {
+        "bytes": 1448,
+        "resolved_relative": "tools/jdk/legal/java.xml/jcup.md",
+        "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf"
+      },
+      "tools/jdk/legal/java.xml/xalan.md": {
+        "bytes": 13477,
+        "resolved_relative": "tools/jdk/legal/java.xml/xalan.md",
+        "sha256": "c27eb875da4be683d4d7422be986e5e30f636ede31958ff1d39f9cd6109e7a00"
+      },
+      "tools/jdk/legal/java.xml/xerces.md": {
+        "bytes": 11848,
+        "resolved_relative": "tools/jdk/legal/java.xml/xerces.md",
+        "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244"
+      },
+      "tools/jdk/legal/jdk.accessibility/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.attach/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.charsets/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.compiler/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.crypto.cryptoki/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.crypto.cryptoki/pkcs11cryptotoken.md": {
+        "bytes": 4095,
+        "resolved_relative": "tools/jdk/legal/jdk.crypto.cryptoki/pkcs11cryptotoken.md",
+        "sha256": "1f36ff1342a581142c858f90064e20633d43529ac82adb85345bd902a14e18b2"
+      },
+      "tools/jdk/legal/jdk.crypto.cryptoki/pkcs11wrapper.md": {
+        "bytes": 2131,
+        "resolved_relative": "tools/jdk/legal/jdk.crypto.cryptoki/pkcs11wrapper.md",
+        "sha256": "371974b1fca3744a3892c7ee1fcc593b8b4281fc218f4cafd2f709e9df5fd81d"
+      },
+      "tools/jdk/legal/jdk.crypto.ec/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.dynalink/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.dynalink/dynalink.md": {
+        "bytes": 1502,
+        "resolved_relative": "tools/jdk/legal/jdk.dynalink/dynalink.md",
+        "sha256": "17312591cabee3ef6c34ed8897d92e4e361ba9cea41ec00dcd61a322a8fc2cdb"
+      },
+      "tools/jdk/legal/jdk.editpad/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.hotspot.agent/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.httpserver/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.incubator.vector/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.internal.ed/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.internal.jvmstat/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.internal.le/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.internal.le/jline.md": {
+        "bytes": 1579,
+        "resolved_relative": "tools/jdk/legal/jdk.internal.le/jline.md",
+        "sha256": "a6fb63a226b77b03cbd7559cce6cdc3e1ea8563af960b1dce2330c8e1dce1abf"
+      },
+      "tools/jdk/legal/jdk.internal.opt/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.internal.opt/jopt-simple.md": {
+        "bytes": 1122,
+        "resolved_relative": "tools/jdk/legal/jdk.internal.opt/jopt-simple.md",
+        "sha256": "99bc67f93cf57d6d20e6047731c93fbb267d70fbdd4115d119e0f85c6efe5c05"
+      },
+      "tools/jdk/legal/jdk.internal.vm.ci/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.internal.vm.compiler.management/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.internal.vm.compiler/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jartool/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.javadoc/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.javadoc/jquery.md": {
+        "bytes": 1157,
+        "resolved_relative": "tools/jdk/legal/jdk.javadoc/jquery.md",
+        "sha256": "b68f454c2bd58959c862d94bf0f16c3f78a2d537388ca060d354344db80ee695"
+      },
+      "tools/jdk/legal/jdk.javadoc/jqueryUI.md": {
+        "bytes": 1871,
+        "resolved_relative": "tools/jdk/legal/jdk.javadoc/jqueryUI.md",
+        "sha256": "7854d2d568992ae25ff65867bd9021d655f70670142f0796b29a3b0621f19530"
+      },
+      "tools/jdk/legal/jdk.jcmd/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jconsole/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jdeps/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jdi/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jdwp.agent/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jfr/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jlink/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jpackage/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jshell/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jsobject/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.jstatd/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.localedata/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.localedata/cldr.md": {
+        "bytes": 9601,
+        "resolved_relative": "tools/jdk/legal/java.base/cldr.md",
+        "sha256": "19515e14a240e022640e95b61b5095127fa9690755950b4a2b0a02e783e08163"
+      },
+      "tools/jdk/legal/jdk.localedata/thaidict.md": {
+        "bytes": 1346,
+        "resolved_relative": "tools/jdk/legal/jdk.localedata/thaidict.md",
+        "sha256": "c326144a2351c9608fa708b5d7d3c5a3da03e82b66479b128e9db4969539824a"
+      },
+      "tools/jdk/legal/jdk.management.agent/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.management.jfr/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.management/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.naming.dns/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.naming.rmi/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.net/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.nio.mapmode/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.random/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.sctp/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.security.auth/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.security.jgss/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.unsupported.desktop/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.unsupported/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.xml.dom/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/legal/jdk.zipfs/ASSEMBLY_EXCEPTION": {
+        "bytes": 1514,
+        "resolved_relative": "tools/jdk/legal/java.base/ASSEMBLY_EXCEPTION",
+        "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33"
+      },
+      "tools/jdk/lib/classlist": {
+        "bytes": 77098,
+        "resolved_relative": "tools/jdk/lib/classlist",
+        "sha256": "e5ef97a1545ec5d99da80d2216620b71e0d43022f2333b36242121d05f61b6b1"
+      },
+      "tools/jdk/lib/jar.binfmt": {
+        "bytes": 63,
+        "resolved_relative": "tools/jdk/lib/jar.binfmt",
+        "sha256": "5dbb3f5436767190cea7702211201d57d579a89426421ce3c944e2273c05825b"
+      },
+      "tools/jdk/lib/jexec": {
+        "bytes": 14384,
+        "resolved_relative": "tools/jdk/lib/jexec",
+        "sha256": "e1a198dc67ce0dfdd7c264fbf43aafdb4421991140b2a7e49bc4072bf8bc87c1"
+      },
+      "tools/jdk/lib/jfr/default.jfc": {
+        "bytes": 37449,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/jfr/default.jfc",
+        "sha256": "4fed4b508c5f1b69578293df84f94a63752f86b4259d97e12884e3b2ec56ef50"
+      },
+      "tools/jdk/lib/jfr/profile.jfc": {
+        "bytes": 37401,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/jfr/profile.jfc",
+        "sha256": "485fb90dbecee9a950c45247464351162b1eb0c35387fbb929f002c600807251"
+      },
+      "tools/jdk/lib/jrt-fs.jar": {
+        "bytes": 110115,
+        "resolved_relative": "tools/jdk/lib/jrt-fs.jar",
+        "sha256": "5c5944dd2dcdb6bcc15516f4bbb880ae11355e191cc943c0ff49cae0e9b9d89b"
+      },
+      "tools/jdk/lib/jspawnhelper": {
+        "bytes": 18560,
+        "resolved_relative": "tools/jdk/lib/jspawnhelper",
+        "sha256": "68639f00775f498d52275b748ee07cdbaca88d6de10e336bdf0098ad239ff3ff"
+      },
+      "tools/jdk/lib/jvm.cfg": {
+        "bytes": 54,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/jvm-amd64.cfg",
+        "sha256": "d5ad5a3e0c1cd2236d5f983f48f9a4b3612662dc7c89a6bb21994ed8327be25e"
+      },
+      "tools/jdk/lib/jvm.cfg-default": {
+        "bytes": 278,
+        "resolved_relative": "tools/jdk/lib/jvm.cfg-default",
+        "sha256": "b996efcbba5e7d7ab453d35c83c97a20b605341e412393b10e160264b766c555"
+      },
+      "tools/jdk/lib/libattach.so": {
+        "bytes": 16568,
+        "resolved_relative": "tools/jdk/lib/libattach.so",
+        "sha256": "c53dba014b070093c21fb6e72a0b061850992dd0fb44dfbdd4788c78232e02a8"
+      },
+      "tools/jdk/lib/libawt.so": {
+        "bytes": 923984,
+        "resolved_relative": "tools/jdk/lib/libawt.so",
+        "sha256": "2dcb2516ee866bb99764c7f816e102a5ec615c23fdba841da4933c5a602d884f"
+      },
+      "tools/jdk/lib/libawt_headless.so": {
+        "bytes": 46352,
+        "resolved_relative": "tools/jdk/lib/libawt_headless.so",
+        "sha256": "f5f87f7e236044a780e96a2ec91434d6c9785701d9f7b79ada79dc88434080b0"
+      },
+      "tools/jdk/lib/libdt_socket.so": {
+        "bytes": 31800,
+        "resolved_relative": "tools/jdk/lib/libdt_socket.so",
+        "sha256": "f47871c261535f8df96c3db4ca0812f1d1e0ffafbc33516abd29fa1ee03e7e8b"
+      },
+      "tools/jdk/lib/libextnet.so": {
+        "bytes": 16616,
+        "resolved_relative": "tools/jdk/lib/libextnet.so",
+        "sha256": "c2dda2331f31b4ea1b35e76a0a0a9b7cb151cb0987ed2d7bd43ab550074a3be0"
+      },
+      "tools/jdk/lib/libfontmanager.so": {
+        "bytes": 71504,
+        "resolved_relative": "tools/jdk/lib/libfontmanager.so",
+        "sha256": "3da8dbf93fe784abcbcb1ccdb4143be09552d08126f58cd59b6837bfc8d38079"
+      },
+      "tools/jdk/lib/libinstrument.so": {
+        "bytes": 50184,
+        "resolved_relative": "tools/jdk/lib/libinstrument.so",
+        "sha256": "4586752f309ed806ed4c8e8a145deb0ece3154c7c31f841555f22c658dee6dc5"
+      },
+      "tools/jdk/lib/libj2gss.so": {
+        "bytes": 50768,
+        "resolved_relative": "tools/jdk/lib/libj2gss.so",
+        "sha256": "d32fe3843818bb5541993a4e32db8f443739f2bce1ebdfdd82c06004be99f53b"
+      },
+      "tools/jdk/lib/libj2pcsc.so": {
+        "bytes": 16608,
+        "resolved_relative": "tools/jdk/lib/libj2pcsc.so",
+        "sha256": "b8454c47518b1860f701bf06dd12ce72ac86e7fa7a82f338081dd417606489ea"
+      },
+      "tools/jdk/lib/libj2pkcs11.so": {
+        "bytes": 97864,
+        "resolved_relative": "tools/jdk/lib/libj2pkcs11.so",
+        "sha256": "3c861b021758f2479a8b6bd9a899517c8bfeebaa1e2a323ec09cef020250c70f"
+      },
+      "tools/jdk/lib/libjaas.so": {
+        "bytes": 15448,
+        "resolved_relative": "tools/jdk/lib/libjaas.so",
+        "sha256": "0b4cddf5298c18ec73bbd7e15926eb6e97a811440c7d453caff91fed74831619"
+      },
+      "tools/jdk/lib/libjava.so": {
+        "bytes": 177256,
+        "resolved_relative": "tools/jdk/lib/libjava.so",
+        "sha256": "59d61e756d614086e523a297e34248e3f464b208548edc31e22585a64c99b6ef"
+      },
+      "tools/jdk/lib/libjavajpeg.so": {
+        "bytes": 54296,
+        "resolved_relative": "tools/jdk/lib/libjavajpeg.so",
+        "sha256": "78b164b0ddfa49eb66590c84b25ffbcc02479f4ee3338700a83104a99857fe76"
+      },
+      "tools/jdk/lib/libjdwp.so": {
+        "bytes": 306512,
+        "resolved_relative": "tools/jdk/lib/libjdwp.so",
+        "sha256": "a1411aacdcdceb7f0834594d0639d52f79c9d620addf1e5fd408e84af056de68"
+      },
+      "tools/jdk/lib/libjimage.so": {
+        "bytes": 39640,
+        "resolved_relative": "tools/jdk/lib/libjimage.so",
+        "sha256": "c7dda9c4dc1319ad3bf3a089be60921c7de37e65e177faa713893df4641545f3"
+      },
+      "tools/jdk/lib/libjli.so": {
+        "bytes": 77856,
+        "resolved_relative": "tools/jdk/lib/libjli.so",
+        "sha256": "4e96d7ed39513f5ee2f396573d1e32398ead6436f71867c20be5dd74391f94b7"
+      },
+      "tools/jdk/lib/libjsig.so": {
+        "bytes": 16504,
+        "resolved_relative": "tools/jdk/lib/libjsig.so",
+        "sha256": "0347e1a66e79fbac5b9cec0cc9d47ca7b5e2b4e26133e3adec4732219f2ff1a0"
+      },
+      "tools/jdk/lib/libjsound.so": {
+        "bytes": 81192,
+        "resolved_relative": "tools/jdk/lib/libjsound.so",
+        "sha256": "bd569937e0185d7f2782125d3a7d3f3f55eace85882be5f52dd7d300edbffe6a"
+      },
+      "tools/jdk/lib/libjsvml.so": {
+        "bytes": 870880,
+        "resolved_relative": "tools/jdk/lib/libjsvml.so",
+        "sha256": "29ad81a0d52c5e8217a5772e7f22f3ddcebb15516e9da79703a5a7d39cb06f95"
+      },
+      "tools/jdk/lib/liblcms.so": {
+        "bytes": 25888,
+        "resolved_relative": "tools/jdk/lib/liblcms.so",
+        "sha256": "e7aca0fbf6794cb428e10d877250ff4319ccab8928fa5b27ee240d2b4b47379d"
+      },
+      "tools/jdk/lib/lible.so": {
+        "bytes": 16984,
+        "resolved_relative": "tools/jdk/lib/lible.so",
+        "sha256": "6e81d23db61068049106b5703cfecc9bc9e9f9a8da4634ef7ade7a727c4beb79"
+      },
+      "tools/jdk/lib/libmanagement.so": {
+        "bytes": 24960,
+        "resolved_relative": "tools/jdk/lib/libmanagement.so",
+        "sha256": "a96e9a4d4f1b43e326ed172cad38c58633d1349974a459388da02cb18f75e9f0"
+      },
+      "tools/jdk/lib/libmanagement_agent.so": {
+        "bytes": 15440,
+        "resolved_relative": "tools/jdk/lib/libmanagement_agent.so",
+        "sha256": "9bdcb74a4745b17cf1af296b722330343d2b5122397c1840b69f44c8e76ced9c"
+      },
+      "tools/jdk/lib/libmanagement_ext.so": {
+        "bytes": 36832,
+        "resolved_relative": "tools/jdk/lib/libmanagement_ext.so",
+        "sha256": "6b58da014d24974751b386288c5bf959784256b894cafafe24f68e5f5379c3f1"
+      },
+      "tools/jdk/lib/libmlib_image.so": {
+        "bytes": 606640,
+        "resolved_relative": "tools/jdk/lib/libmlib_image.so",
+        "sha256": "c4421fd1629cba0e7a9aa040073f97b645e052e540e1877c2c30a266d04827a1"
+      },
+      "tools/jdk/lib/libnet.so": {
+        "bytes": 57216,
+        "resolved_relative": "tools/jdk/lib/libnet.so",
+        "sha256": "f5c87ba6c421e4cdb8d79d09338225b6aafbc6234b7b81e247d347fecb169aa8"
+      },
+      "tools/jdk/lib/libnio.so": {
+        "bytes": 109568,
+        "resolved_relative": "tools/jdk/lib/libnio.so",
+        "sha256": "0240bfeb03c13b3836fb1590de725af22aa96bf737b1e0a969002eaf3a02436f"
+      },
+      "tools/jdk/lib/libprefs.so": {
+        "bytes": 15632,
+        "resolved_relative": "tools/jdk/lib/libprefs.so",
+        "sha256": "4322eac4c50e8189905bb098c3845b23f9c7099942a15e99460426e4a1635208"
+      },
+      "tools/jdk/lib/librmi.so": {
+        "bytes": 15176,
+        "resolved_relative": "tools/jdk/lib/librmi.so",
+        "sha256": "8cdddad74ad92d09d7272e6605a250cfafcafac6783bc5f985b88131799eb031"
+      },
+      "tools/jdk/lib/libsaproc.so": {
+        "bytes": 74504,
+        "resolved_relative": "tools/jdk/lib/libsaproc.so",
+        "sha256": "06073a49c368fe1cbcf284625e06bbf58051c8b05e92a71cd5b9a97ddf54f2b0"
+      },
+      "tools/jdk/lib/libsctp.so": {
+        "bytes": 35896,
+        "resolved_relative": "tools/jdk/lib/libsctp.so",
+        "sha256": "924a9476b174c1dde4a52c35cea359b5a23d10558d8a0588490cb9c77cccfc33"
+      },
+      "tools/jdk/lib/libsyslookup.so": {
+        "bytes": 15080,
+        "resolved_relative": "tools/jdk/lib/libsyslookup.so",
+        "sha256": "77160ae45751c581cee71ea2725d81554e3827f8012e9bce1ccbebe8680acaf3"
+      },
+      "tools/jdk/lib/libverify.so": {
+        "bytes": 64104,
+        "resolved_relative": "tools/jdk/lib/libverify.so",
+        "sha256": "dc07b3a4475c6f140fdabbcb56477f184024addb2ddfc19239ee8e16fb225c08"
+      },
+      "tools/jdk/lib/libzip.so": {
+        "bytes": 40912,
+        "resolved_relative": "tools/jdk/lib/libzip.so",
+        "sha256": "cb03c0034210c1e43ca1569228d4038d99f96e0b9d50a2c31ee46fff7ff56839"
+      },
+      "tools/jdk/lib/modules": {
+        "bytes": 140853890,
+        "resolved_relative": "tools/jdk/lib/modules",
+        "sha256": "f82ec56fbf7c7b69da09a04d4fb103c74c44e6443c8a1b2744e59c5539e7f781"
+      },
+      "tools/jdk/lib/psfont.properties.ja": {
+        "bytes": 3793,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/psfont.properties.ja",
+        "sha256": "5a4bd51b969bf187ff86d94f4a71fdfbfa602762975fa3c73d264b4575f7c78f"
+      },
+      "tools/jdk/lib/psfontj2d.properties": {
+        "bytes": 11390,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/psfontj2d.properties",
+        "sha256": "780c565d5af3ee6f68b887b75c041cdf46a0592f67012f12eeb691283e92630a"
+      },
+      "tools/jdk/lib/security/blocked.certs": {
+        "bytes": 2488,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/blocked.certs",
+        "sha256": "96572f243f31c2ef81a6e627542e596f6a9295cff3c7ae095c1b595cb1457ded"
+      },
+      "tools/jdk/lib/security/cacerts": {
+        "bytes": 173333,
+        "resolved_relative": "tools/system/etc/ssl/certs/java/cacerts",
+        "sha256": "4d1e84babfc0cefd5650cd567c31bdf2b3eb04e420db22b87aee5801defb8f8b"
+      },
+      "tools/jdk/lib/security/default.policy": {
+        "bytes": 10657,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/default.policy",
+        "sha256": "2bd418aab30b091b136962f80be7ddf39dcba85f082a558a6993848ae65366ae"
+      },
+      "tools/jdk/lib/security/public_suffix_list.dat": {
+        "bytes": 227396,
+        "resolved_relative": "tools/system/etc/java-21-openjdk/security/public_suffix_list.dat",
+        "sha256": "16b42002aa6f83a7763c4cdbd399ecf738460377d447e362884495545afd60a3"
+      },
+      "tools/jdk/lib/server/classes.jsa": {
+        "bytes": 14581760,
+        "resolved_relative": "tools/jdk/lib/server/classes.jsa",
+        "sha256": "cf1b72c62276974d0eb95a1fc295a4e9dcff4f2904ca80896aff12880d7f10ad"
+      },
+      "tools/jdk/lib/server/classes_nocoops.jsa": {
+        "bytes": 14979072,
+        "resolved_relative": "tools/jdk/lib/server/classes_nocoops.jsa",
+        "sha256": "f2da61d435c9ad6d1f23e792a5f108e7e9ee8790b338ba84f0adc2d7060f90f9"
+      },
+      "tools/jdk/lib/server/libjsig.so": {
+        "bytes": 16608,
+        "resolved_relative": "tools/jdk/lib/server/libjsig.so",
+        "sha256": "e393a7dbd07a01ca68b43c8155bb83704ed2231dffaa7ba05129cd9d3412375d"
+      },
+      "tools/jdk/lib/server/libjvm.so": {
+        "bytes": 27033592,
+        "resolved_relative": "tools/jdk/lib/server/libjvm.so",
+        "sha256": "56a71b907446b53ea9ab0f1599d3c22298f150ac2f9530acc62d5e7fc003e564"
+      },
+      "tools/jdk/lib/tzdb.dat": {
+        "bytes": 102956,
+        "resolved_relative": "tools/jdk/lib/tzdb.dat",
+        "sha256": "5906b44e25a8a730131d7ba1beb5d15af27043f6536f1a169ca8a5d8b8bed8f8"
+      },
+      "tools/jdk/man/man1/java.1.gz": {
+        "bytes": 48629,
+        "resolved_relative": "tools/jdk/man/man1/java.1.gz",
+        "sha256": "8f7d1e27b9bfe9b47ab37d89a4249abb147d0b98cc19caacc7925c1196a4105d"
+      },
+      "tools/jdk/man/man1/jpackage.1.gz": {
+        "bytes": 5757,
+        "resolved_relative": "tools/jdk/man/man1/jpackage.1.gz",
+        "sha256": "3ce2f1c77412ae1013a20de916828e4852d07325261f2d995adc32289b5b6e41"
+      },
+      "tools/jdk/man/man1/keytool.1.gz": {
+        "bytes": 26192,
+        "resolved_relative": "tools/jdk/man/man1/keytool.1.gz",
+        "sha256": "5333ac24dc91812c2b0204ed06c557b72011d9c50b99928e617cd8df5ff3ab3b"
+      },
+      "tools/jdk/man/man1/rmiregistry.1.gz": {
+        "bytes": 1582,
+        "resolved_relative": "tools/jdk/man/man1/rmiregistry.1.gz",
+        "sha256": "bda5cea494f7807d827a2964bd8470a8ca23a8551ebff8a824ee4092ec3d4c34"
+      },
+      "tools/jdk/release": {
+        "bytes": 1212,
+        "resolved_relative": "tools/jdk/release",
+        "sha256": "36b8804939e4f135ac0f7a291fa7b4e8d99fd18dd08d05c9b869463c670cdd37"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+        "bytes": 225672,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libX11.so.6": {
+        "bytes": 1342984,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0",
+        "sha256": "b03e563b316b8b53c7988f0ee91d6656cc425538e00947a8b14482d179e80099"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libXau.so.6": {
+        "bytes": 14472,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+        "sha256": "4275ec5b14bec21770c44447b3a52977e211c7ba08745008f3a1783878e091bb"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libXdmcp.so.6": {
+        "bytes": 26728,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+        "sha256": "761409b24c818719f8c8a2a64a61c8ac6a3067f3d8882485dca64a98d7500040"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libXext.so.6": {
+        "bytes": 81568,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0",
+        "sha256": "74cef58f0855cbbe23fce87566249f717e5c8ebeceee09efee393616a9b17697"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libXft.so.2": {
+        "bytes": 105952,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libXft.so.2.3.6",
+        "sha256": "ea552c46f6733e75eff8283380e194a45a1e1df3b395ba9c6f1f01beb5271c14"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libXrender.so.1": {
+        "bytes": 47608,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0",
+        "sha256": "39fed75f787ac251cba86e30ccd979e3df1f84dd73c63a75eeb86a18fd413e64"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libXss.so.1": {
+        "bytes": 14496,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libXss.so.1.0.0",
+        "sha256": "ee25b3f08bed4d97c703890fb8ba27a70e0df6af67c13161e39a1e34db3396e4"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libasound.so.2": {
+        "bytes": 1178192,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0",
+        "sha256": "0faa79c7a37189b9efcd9bff5874cd1af1c05b0cc66831733087d84cbe87e811"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libatomic.so.1": {
+        "bytes": 30848,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libatomic.so.1.2.0",
+        "sha256": "9558489f171274c220104894258f483055853ed8a23d4ff754c850ce55765aa2"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1": {
+        "bytes": 141496,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.1.0",
+        "sha256": "7b0b0de90d8d3d4f07b99738c0285c6a0dbb6611d774ca44e7ea53a19a01ea68"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1": {
+        "bytes": 51376,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.1.0",
+        "sha256": "06530583d5927000480f4214d80d0213fec3d34cc448527f932a6eceb50cefef"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libbz2.so.1.0": {
+        "bytes": 74688,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "sha256": "c630f057efedc12f848710d71f40283895591e5b4608539f387895c64e0553da"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libc.so.6": {
+        "bytes": 1995216,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libcrypto.so.3": {
+        "bytes": 6517312,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "sha256": "8bb5f3fdffe280d4453eb79a4663c2c47af70b7c247fe2e94e2da703cee1fd3d"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libdb-5.3.so": {
+        "bytes": 1864304,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libdb-5.3.so",
+        "sha256": "cd87ddcf60a6e62ab0dedee64a4292c783e0e991de3329d959fac1ef2dc389af"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libdl.so.2": {
+        "bytes": 14408,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libdl.so.2",
+        "sha256": "295fa521a03cd2faa99974f378c9e23dd622021ec7d32bcad4f8ea61aec8a872"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libexpat.so.1": {
+        "bytes": 186520,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libexpat.so.1.12.3",
+        "sha256": "0fd7d092bd0bf5dcc29f31daaba2bad993b0d18a1ab771fb844e0a6dfa8efe18"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libffi.so.8": {
+        "bytes": 47576,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "sha256": "922024ec5a23f7de1095b1cff2f6cbfb377b5d58cd51fd0ec2e8fe35427653e2"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libfontconfig.so.1": {
+        "bytes": 317360,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.12.1",
+        "sha256": "d6344f71a0cfd5fcb154278f0be706021f75f79d1fcc973fc4ddb1dff40ab0ee"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libfreetype.so.6": {
+        "bytes": 845736,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.2",
+        "sha256": "9e376992a91e92d86809893a3b9eea22a4e27849db1686f6ca58032f79cdafb5"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+        "bytes": 182856,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0": {
+        "bytes": 1404320,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.8400.4",
+        "sha256": "980ab64e995225de1543779e3bafafac9d705904d42ca3b5eb76e7a336cc5e1d"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libgraphite2.so.3": {
+        "bytes": 166048,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libgraphite2.so.3.2.1",
+        "sha256": "5c4b17bdbd121d3c65f28c22d9c2a0504ca493d9e8fa7d7d31383c72237416b4"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libharfbuzz.so.0": {
+        "bytes": 1310560,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libharfbuzz.so.0.61020.0",
+        "sha256": "c0cc41333a8fc0c24428a61ba0af6380aabb1f0d91ac48c13ed743b06c8ccc87"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libjpeg.so.62": {
+        "bytes": 616512,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libjpeg.so.62.3.0",
+        "sha256": "0928fd49fa79e10f72eb3276f1cf603d928201a628cd78e0118a2e9c01fd2dac"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/liblcms2.so.2": {
+        "bytes": 422952,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/liblcms2.so.2.0.16",
+        "sha256": "a0afaac586186b4e6b06c157e48c49480fde35d671052ee1309f36881a4508e7"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/liblzma.so.5": {
+        "bytes": 198832,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/liblzma.so.5.8.1",
+        "sha256": "01e05a4b5268805a10a2414a8904fb1fb45c60626dce53b5ea19c1d491049b99"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libm.so.6": {
+        "bytes": 977112,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libm.so.6",
+        "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libncursesw.so.6": {
+        "bytes": 235520,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libncursesw.so.6.5",
+        "sha256": "ea1e3fea29b3d3f35e240f626e5e783885d1d17f7915e7840f2a1542058c154c"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libpanelw.so.6": {
+        "bytes": 22528,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libpanelw.so.6.5",
+        "sha256": "00fe6bd6cf946faace4dd2812b1afd7a7f2b6e578d436148dac5ba2c10ec74f5"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0": {
+        "bytes": 711216,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0",
+        "sha256": "8dde125b341abfdf4a596d2974cd3048e350cbc8d2d77acd54ea044f7815ca77"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libpcsclite.so.1": {
+        "bytes": 14568,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libpcsclite.so.1",
+        "sha256": "113d209b19bb9951ebb80bb29ef71561b7f1d4b139962c1907947fb584f3d246"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libpng16.so.16": {
+        "bytes": 231416,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libpng16.so.16.48.0",
+        "sha256": "56485ea502d222fa8b0d99f899470c1bacdca815a958d83c1b349d4e8f605255"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libpthread.so.0": {
+        "bytes": 14408,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+        "sha256": "85e21f7dba0394411d00959176fd18b470e575b0b05f1f4f41e5636802ce0500"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libreadline.so.8": {
+        "bytes": 362728,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libreadline.so.8.2",
+        "sha256": "a3334d88f3f6c6a25736667e0b39db0f68b4e7e6bf758a475aff681ddb33ad8b"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/librt.so.1": {
+        "bytes": 14552,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/librt.so.1",
+        "sha256": "7b7b84d1aedda0e0b2bdfc68844362782132180b8f02be1300e21e77572e514b"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libsqlite3.so.0": {
+        "bytes": 1571096,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libsqlite3.so.0.8.6",
+        "sha256": "14c4418a06c5c2e30f5fb57bc8add93762236ae17898c6708984cf15e680ca71"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libssl.so.3": {
+        "bytes": 1101760,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libssl.so.3",
+        "sha256": "4b34859318555bf96d518131bed5fc4d5e35fefa4e1729f49eaa26bd05263850"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libstdc++.so.6": {
+        "bytes": 2497768,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libtcl8.6.so": {
+        "bytes": 1885760,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libtcl8.6.so",
+        "sha256": "209f61ff2bca70b84450e7e40f664efeb05f533b12e79b49a55da295e8150af9"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libtinfo.so.6": {
+        "bytes": 220464,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libtinfo.so.6.5",
+        "sha256": "4013e7651ac68f547d8333517def25b2366c97eec7de7f06e105dbf3444ffebf"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libtk8.6.so": {
+        "bytes": 1551208,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libtk8.6.so",
+        "sha256": "7a9a2111be27c36e31a7f78c4dd83cac7badf92d3a11a5cbc1de21f0b7ecf798"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libutil.so.1": {
+        "bytes": 14408,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libutil.so.1",
+        "sha256": "e3981d10efd152a53f083e38f5f9ddde7a049c85d0ab388a5eec91b52fc98a11"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libuuid.so.1": {
+        "bytes": 39048,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0",
+        "sha256": "632fd43a9d8d6f3496833b7e62e7840f397163373dddf8b8eb0b2b7f36593117"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libxcb.so.1": {
+        "bytes": 170936,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+        "sha256": "a1cde2cec9b7b8b38e4cca450c55c63651efb80a2458d76964b56b763043f533"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libz.so.1": {
+        "bytes": 125376,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libz.so.1.3.1",
+        "sha256": "85590dd58edf5445e18bc7193e5ebc01ac5841f1ae187e97705a662e90c6421e"
+      },
+      "tools/system/usr/lib/x86_64-linux-gnu/libzstd.so.1": {
+        "bytes": 825336,
+        "resolved_relative": "tools/system/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.7",
+        "sha256": "27f07c9a49c2c956bcfb64cd4712976586a66facbf15fc7f09bc37413b5f2b21"
+      }
+    }
+  }
+}

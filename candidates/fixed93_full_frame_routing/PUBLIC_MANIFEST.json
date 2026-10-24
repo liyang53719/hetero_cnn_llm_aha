@@ -1,0 +1,26 @@
+{
+  "schema": "fixed93-public-source-excerpt-manifest-v1",
+  "scope": "SOURCE excerpt only; no actual authorization",
+  "files": {
+    "PACKAGE_ALLOWLIST.txt": {"bytes": 595, "sha256": "20886cc26a407deb216aadf3db954153eb33fc3bb3dcc1c94eb2ee355d7ad04c"},
+    "README.md": {"bytes": 6211, "sha256": "28b0ec7c155af75272d8523942f70360565a226294022434f5bb8a460d68e415"},
+    "SOURCE_PINS.json": {"bytes": 2727, "sha256": "c7d7395203b27a46b792e11938359bef38fb6a8999d4bef609990e34d17d49a5"},
+    "SUMMARY.json": {"bytes": 2169, "sha256": "59b1f1473a8b9954b197f3aa8af7ef1e1d36505dc11507d368b530e99da1ac22"},
+    "overlay/admission.py": {"bytes": 12642, "sha256": "c3da899b1b6b258c887b1cde2ada9cecb0f18869a119b43c109038550bd62f87"},
+    "overlay/capture/wholeblock.py": {"bytes": 54729, "sha256": "3ce648c0c8e8e74fb7df90fe7f629fb9bfc8d253d4979b69d408de64cc1d6662"},
+    "overlay/contract/FRAME_ROUTING_POLICY.json": {"bytes": 2571, "sha256": "be377f5df4edc8cd0de20c6e268581b35f2558eb5f546321cfbf953deb932b6b"},
+    "overlay/contract/OP_EVIDENCE_POLICY.json": {"bytes": 787, "sha256": "aa7db62c0da1f35dd4a20c56172c47d92a75e9ee5e41d5ac5c3abf27addefc25"},
+    "overlay/fullblock_runtime.py": {"bytes": 72099, "sha256": "a2cf8986e4f0bf6f2449a6f71fd17c118d4b50038410ad634fb874fdc10dc763"},
+    "overlay/integration/interface.py": {"bytes": 15056, "sha256": "5c16d60132947d06c765ec7ee681e149161bf769f781d689ff18d3894d7fccde"},
+    "overlay/integration/runner.py": {"bytes": 33133, "sha256": "9546820d728bc44e8cdd67e19f268faf0a7240aa2272ed51a3c0d6bb35d43d65"},
+    "overlay/observation/fullblock_attention.py": {"bytes": 61979, "sha256": "0661a37e1f030f4326825ad556aff6678fabdb8900a1085993d62105a8ff4363"},
+    "overlay/supervision/SUPPORT_PINS.json": {"bytes": 806, "sha256": "c2fd4d03c0dc30226a22992e5cd4d347659409d7625505404bd9b714a20105d2"},
+    "overlay/supervision/ci_support_v3_long.py": {"bytes": 16349, "sha256": "1c48470e6571dc425f7aee7c5e9f1153272d9cbd63b8cf6bfa60f5a7d30d6986"},
+    "overlay/supervision/gate.py": {"bytes": 20636, "sha256": "d2557a6ae74c8392559c274137f646d189f93db7b51a60633f5cb3d4d161b1ba"},
+    "overlay/supervision/supervisor_adapter.py": {"bytes": 14164, "sha256": "e4f55973ac8f174d6018a921e660dbbfa1678192e1918dc0c8b24589ea28863d"},
+    "patches/integration__runner.py.diff": {"bytes": 773, "sha256": "48f918654785a54c71034c4b2403350b957e0f2d042c896b0a5294f79970fdd6"},
+    "prepare_fullblock.py": {"bytes": 29220, "sha256": "963847d6163b1172c59f8b378a2dc70c6fbb6a8c8a74b5e0ba0edf7927ba60ee"},
+    "source_controls.py": {"bytes": 15344, "sha256": "a0a22c7852d138637b72d633dd23c3131f52abdfdc1ea1f52e7bb283ffe26835"},
+    "static_check.py": {"bytes": 10120, "sha256": "338678b34ad0e7f508eae9d17ab70b388b83459d7af892658d55a2c073efb395"}
+  }
+}

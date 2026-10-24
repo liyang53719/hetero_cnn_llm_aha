@@ -1688,3 +1688,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - M2/M16每step约16.7–16.8ms，仅风险均摊显示M128 Attention约4小时，非精确预测；prefix/tail数量不同亦不可忽略。旧6600秒预算缺乏支持。ONGOING：真正0300 full producer→KV→Attention→tail接回已验证routing，拟新43200秒总上限、1CPU、明确新source/review/ADMISSION；尚未启动完整M128，不能继承旧GO。
 - 资源：仅将可恢复Torch下载wheel188943803B完整复制到独立临时存储并多次SHA一致后移走原下载缓存，保留NumPy wheel、installed runtime、全部lock/pin及唯一证据；不建symlink，原缓存目录模式恢复。离线重装前需恢复原regular路径。本日不再另做仓库临时数据清理；没有删除已跟踪文件或重写历史。
 - 完整128-token block未通过；后四block未推进，五block完整RTL仍0/5，无新MAC利用率实测。所有本批提交仍本地，未宣称远端/CI更新。
+
+## PASS（完整入口源码/冷检）/ TEMP：真正 M128 全块已启动（2026-10-21）
+
+- DONE：新增 candidates/fixed93_full_frame_routing，21文件374868B，15原件逐字；入树静态checker首次因缺-S主动拒绝，按-I -S -B更正后20pins/12 Python AST/compile通过，不重跑builder/native。公开scope独审SHA581d542069384554f85448ef6c07bed706869180304b5b81c36738c614a55f7e。摘录非完整独立运行包、无权限/权重/日志。
+- 真完整入口保留pc0–8 producer、pc9本次K/V append、pc10–12 Attention、tail、public21完整seal后官方reference比较；不带M2/M16 synthetic输入或局部完成捷径。source-bound routing policy与233相对源码pins显式消费，原74 anchors/33 ABI helper约束保持。
+- 新metadata组装555文件8900809B自然0/1.419221秒；唯一完整冷检自然0/6.422731秒，1638 runtime、46 frozen输入hash、30 reference仅stat、24监督mocks和43201采样行闭合。SOURCE/COLD独审SHA7f58d9d17829e166698fa72e33d54dc950666fe3b4a035e15fb2b59ec694f845；没有以冷检冒充native/数值通过。
+- 新预算明确43200秒总上限=43185共享work（含计算和postseal比较）+5cleanup+10监督收口，单CPU、原2GiB门。保1秒/2048B采样不削字段，新owned22178896676B、fresh门22715767588B。12小时是上限，不保证完成，未继承旧6600权限。
+- ONGOING / TEMP：2026-10-21 07:49:01 UTC新唯一全块实际进程启动。source SHA8a5c06645e0190d8e0c401173ed423deaa48e04b29d2dc2032d6e2ba2b9a0566；budget32f9aace9d9cdc7264352cc3e7f3a1873b90b1f8d48e5c60676dd2d99de0be78。当前只STARTED，不是完成/PASS；继续沿原身份监测，不重启旧失联任务。
+- 完整数值、所有中间值/实际调度/缓存和终态证据仍待最终审；完整RTL0/5，无新硬件MAC利用率实测。模型通过后才冻结同刺激生成/回放RTL。该批不再清理；提交本地，不宣称远端CI已更新。

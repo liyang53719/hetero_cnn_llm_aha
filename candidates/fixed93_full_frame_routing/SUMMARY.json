@@ -1,0 +1,51 @@
+{
+  "schema": "fixed93-full-frame-routing-public-source-excerpt-summary-v1",
+  "scope": "Public review-only SOURCE excerpt; not a complete independently runnable assembly",
+  "source_bytes_unmodified": true,
+  "actual_execution_authorized": false,
+  "source_excerpt_is_actual_authority": false,
+  "fullblock_pass_claimed": false,
+  "numerical_pass_claimed": false,
+  "historical_calibration_qualification_inherited": false,
+  "full_original_pc0_through_pc20_runner_preserved": true,
+  "runner_change": "One observation integrity-policy report binding; original full computation preserved",
+  "policy": "source-attested-owner-frame-routing-v1",
+  "reduced_transient_integrity_sampling": true,
+  "predecessor_per_line_detection_equivalence_claimed": false,
+  "budget_proposal": {
+    "total_seconds": 43200,
+    "shared_work_seconds": 43185,
+    "cleanup_seconds": 5,
+    "final_supervisor_seconds": 10,
+    "one_cpu": true,
+    "process_address_space_bytes": 2147483648,
+    "includes_postseal_reference_comparison": true,
+    "fresh_free_space_gate_bytes": 22715767588,
+    "owned_reservation_bytes": 22178896676,
+    "separate_margin_bytes": 536870912,
+    "completion_guaranteed": false
+  },
+  "recorded_upstream_source_controls_not_rerun": {
+    "controls": 41,
+    "observer_functions_checked": 74,
+    "target_python": "3.12.14",
+    "elapsed_seconds": 0.6712374799972167,
+    "maxrss_kib": 35348,
+    "dut_imported": false,
+    "native_or_model_execution": false
+  },
+  "separate_assembly_status_at_excerpt_freeze": {
+    "metadata_materialized": true,
+    "files": 555,
+    "bytes": 8900809,
+    "top_manifest_sha256": "8a5c06645e0190d8e0c401173ed423deaa48e04b29d2dc2032d6e2ba2b9a0566",
+    "fresh_full_preflight_cold_review": "pending at excerpt freeze; not included or asserted here"
+  },
+  "package_verification_permitted": "New static hash, allowlist, JSON, AST and in-memory compile checks only",
+  "original_tests_rerun": false,
+  "builder_rerun": false,
+  "preflight_rerun": false,
+  "runtime_or_weight_copies": false,
+  "input_payloads_arrays_or_actual_streams_included": false,
+  "raw_receipts_logs_admission_or_private_machine_paths_included": false
+}

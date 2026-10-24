@@ -1,0 +1,12 @@
+--- before/integration/runner.py
++++ after/integration/runner.py
+@@ -90,7 +90,8 @@
+         actual_outputs_sealed=False,acceptance_sealed=False,
+         inner_wall_seconds=limits['inner_wall_seconds'],outer_wall_seconds=limits['outer_wall_seconds'],compile_executed=False,
+         whole_block_terminal=False,resource_limits=limits,scalar_sfu_unified_physical_arbiter_proven=False,
+-        reviewed_source_manifest=reviewed_source_manifest,historical_approval_inherited=False)
++        reviewed_source_manifest=reviewed_source_manifest,historical_approval_inherited=False,
++        observation_integrity_policy=runtime['observation_integrity_policy'])
+     def checkpoint(): save(out/'RESULT.json',report)
+     checkpoint()
+     gate=gates.OracleGate(DATA,out,REFERENCE)

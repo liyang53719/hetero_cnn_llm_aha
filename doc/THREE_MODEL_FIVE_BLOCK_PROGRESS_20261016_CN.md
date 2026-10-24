@@ -1549,3 +1549,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 预算提案独审：净增99072条事件，raw增加3071232字节，frame/metadata增加21399552字节，合计24470784字节；owned上界22917099404字节，含原reserve的startup门23453970316字节。预算仍OPEN，不能凭source审查授实际运行资格。
 - ONGOING / TEMP：新完整assembly/preflight、实际constructor/dispatcher、资源准入和模型完整128token数值验证。MOCK字段检查不等于完整closure内容重hash，也不等于新模型运行通过。
 - 新源码准备不继承前任actual PASS，完整五block RTL仍0/5；最终完整RTL数值和90%利用率目标继续保留。
+
+## PASS（有限）/ TEMP：外部冻结输入只读接线（2026-10-21）
+
+- DONE / PASS（有限）：新增 `candidates/fixed93_external_frozen_layout/`，固定逻辑文件身份映射到两个显式冻结外根，允许新候选复用原数据而不复制权重。入工作树重跑14组 resolver 合成测试（0.038秒）与5组 CodeType/synthetic 路由测试（0.057秒）通过；独审另有16个resolver案例与41个原seal谓词正反例，分列不合并覆盖。
+- 同一FD读取并hash、前后身份检查，拒绝路径逃逸/别名/写入/祖先变更；默认reference只stat，payload仍须原postseal开闸。Python audit guard不是native或OS隔离，不宣称覆盖任意native系统调用或预先持有的可写FD。
+- 新loader仅编译已pin源字节，不用未pin pyc；before/after检查保留code/globals/class/defaults身份。原21/17/1、finalfence、debt和same-live门未弱化。
+- ONGOING / TEMP：真实小assembly及完整preflight。文档process cap指preflight-only/no-DUT，不存在SOURCE_ONLY绕过：真实预检仍须321源码、全部prep、1638 runtime和46冻结文件全hash（后者189998063字节），30份reference仅stat。预计读取约851MB，但本批未读取真实冻结数据，也未实际预检/native/M128/RTL。
+- 旧失联运行及唯一证据不动，未删除临时数据；完整运行容量门不下调，五block RTL仍0/5。

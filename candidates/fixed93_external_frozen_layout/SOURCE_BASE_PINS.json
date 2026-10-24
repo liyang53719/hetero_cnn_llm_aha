@@ -1,0 +1,37 @@
+{
+  "baseline_manifest_sha256": "e34dbc5b4274399552bfb1d200bca6119ea734030d195201aadfe96b4472acb0",
+  "files": {
+    "admission.py": {
+      "bytes": 10141,
+      "origin": "current_fullblock_base",
+      "sha256": "acdf816e8c6595993972c4ec8d54dcc361727016bb07dc84d786948c95d2468c"
+    },
+    "assembly_preflight.py": {
+      "bytes": 11565,
+      "origin": "pv_source_overlay",
+      "sha256": "250861e75f9166531c190ff2f4031997949cfc7bc0c7020ef6589f8de9eef708"
+    },
+    "frozen_layout.py": {
+      "bytes": 0,
+      "origin": "new_file",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration/runner.py": {
+      "bytes": 33091,
+      "origin": "pv_source_overlay",
+      "sha256": "ae64a4cad935c88abbe4122c7fac9e11e337c3c639671bcd41611f61e64d1139"
+    },
+    "integration/runtime_support/gates.py": {
+      "bytes": 33643,
+      "origin": "current_fullblock_base",
+      "sha256": "0bd164a8ec5946230ecff6aa8cf3c58bcc6a699dedb94a6500e721606aef159f"
+    },
+    "integration/runtime_support/recipe.py": {
+      "bytes": 7702,
+      "origin": "current_fullblock_base",
+      "sha256": "ee45a5a6c853cec54571e25baddb25be294f7f77309d30059cdca605401e5969"
+    }
+  },
+  "pv_source_bundle_manifest_sha256": "3b94f42d7612c363d4edd2daee6355e732e70e6f39c671d8bd4ec293b48bea3d",
+  "schema": "external-frozen-routing-source-bases-v1"
+}

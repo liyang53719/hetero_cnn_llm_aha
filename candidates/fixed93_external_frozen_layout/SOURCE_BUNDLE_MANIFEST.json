@@ -1,0 +1,61 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 3215,
+      "sha256": "a4673e4f4aa9606f2ba89aece0a93328d7b64c4ab2796d6d876c851bcf2b7583"
+    },
+    "RESOLVER_API.md": {
+      "bytes": 2225,
+      "sha256": "038c0821ada596ab05d32b70f0de6a9847ecc6ee05fc41b02a971aae35539b9c"
+    },
+    "SOURCE_BASE_PINS.json": {
+      "bytes": 1377,
+      "sha256": "300a5ac6de8aea15cfb70242d8ce4768e4e318d81223dd43aca40f2a33110963"
+    },
+    "external_layout.patch": {
+      "bytes": 47602,
+      "sha256": "7c3cc29bcab8474469fdbe1983a6b07903ee6000a5121eae665830bfaf5c9d3a"
+    },
+    "overlay/admission.py": {
+      "bytes": 10282,
+      "sha256": "c35913d797f20891730664e36d8893b87b954b8f3b4ebe5acf30b109716060ae"
+    },
+    "overlay/assembly_preflight.py": {
+      "bytes": 18103,
+      "sha256": "57fa32c94022bcac193a4ef3963610d320560cade63d30f68a9da891f346e1c8"
+    },
+    "overlay/frozen_layout.py": {
+      "bytes": 12496,
+      "sha256": "a097f7475cb7a24664b189072983d4da80d208547aafae3ed52c794814d54824"
+    },
+    "overlay/integration/runner.py": {
+      "bytes": 33055,
+      "sha256": "18bcb01425e468e3efd7d4542daeef7637962aff7af93f207ed0fb8af29f4429"
+    },
+    "overlay/integration/runtime_support/gates.py": {
+      "bytes": 34580,
+      "sha256": "27c53a91b30158f58871a51fcd73130a62940e056a5cf082761ad00751dc1cc3"
+    },
+    "overlay/integration/runtime_support/recipe.py": {
+      "bytes": 10756,
+      "sha256": "f5e1ad860a81a519794eb3f22e3e10402f4987e87b3a7e16b736b5f5aba6ba66"
+    },
+    "tests/resolver_controls.py": {
+      "bytes": 12248,
+      "sha256": "1540016b91655ecba788ad2312e2d763024587ce303a67a29b680fb631e5e0ae"
+    },
+    "tests/routing_controls.py": {
+      "bytes": 11910,
+      "sha256": "30682adb3da419b2abe10211055ec18bf8f8c9130a592099503e2e0778f98faa"
+    }
+  },
+  "schema": "external-frozen-routing-source-bundle-v1",
+  "scope": {
+    "DUT_executed": false,
+    "actual_authorized": false,
+    "assembled_candidate": false,
+    "native_executed": false,
+    "real_preflight_executed": false
+  },
+  "status": "SOURCE_SYNTHETIC_PREPARED_INDEPENDENT_REVIEW_SEPARATE"
+}

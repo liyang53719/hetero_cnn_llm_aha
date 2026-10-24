@@ -1,0 +1,838 @@
+--- a/admission.py
++++ b/admission.py
+@@ -57,9 +57,10 @@
+     need(not _USED and _STATE is None and __name__ == 'admission' and sys.modules.get('admission') is sys.modules[__name__],
+          'one canonical new admission instance required')
+     need(type(request) is dict and Path(request['candidate']).resolve() == HERE, 'new candidate request required')
+-    from assembly_preflight import preflight, checked, CONTRACT, digest
++    from assembly_preflight import preflight, checked, CONTRACT, digest, frozen_layout
+     manifest_sha = request['reviewed_source_manifest']
+     cold, manifest, runtime, budget = preflight(manifest_sha)
++    layout = frozen_layout(manifest)
+     declaration = request['declaration']
+     need(type(declaration) is dict and declaration.get('authorized_by') == '/root' and
+          declaration.get('maximum_invocations') == 1 and declaration.get('automatic_retry') is False and
+@@ -128,6 +129,7 @@
+                        source_manifest_sha256=manifest_sha, admission_sha256=approval_sha), stream)
+     _USED = True
+     _STATE = dict(pid=os.getpid(), parent=parent, source_manifest=manifest, runtime_pins=runtime,
++                  external_layout_identity=cold['external_layout_identity'],
+                   wholeblock_trace_limits=budget['wholeblock_trace_limits'],
+                   attention_trace_limits=attention_limits, limits=budget,
+                   budget_sha256=_identity(HERE / 'BUDGET_PROPOSAL.json')['sha256'])
+@@ -136,8 +138,9 @@
+     os.environ['QWEN2_FIXED93_SOURCE_MANIFEST_SHA256'] = manifest_sha
+     os.environ['QWEN2_FIXED93_FROZEN_BINDING_SHA256'] = _identity(
+         HERE / 'source/work/qwen2_fixed93_fullblock_binding/FROZEN_BINDING.json')['sha256']
+-    os.environ['QWEN2_FIXED93_ARTIFACTS_SHA256'] = _identity(
+-        HERE / 'source/work/qwen2_recovered_inputs/ARTIFACTS.json')['sha256']
++    os.environ['QWEN2_FIXED93_ARTIFACTS_SHA256'] = layout.identity(
++        'work/qwen2_recovered_inputs/ARTIFACTS.json')['sha256']
++    layout.finish()
+     from integration.runtime_support import gates, native_artifact, runtime_adapter
+     from fullblock_runtime import wholeblock_observation
+     initialized = False
+--- a/assembly_preflight.py
++++ b/assembly_preflight.py
+@@ -12,6 +12,7 @@
+ from pathlib import Path
+ import stat
+ import sys
++import types
+ 
+ HERE = Path(__file__).resolve().parent
+ MANIFEST = HERE / 'SOURCE_MANIFEST.json'
+@@ -19,6 +20,12 @@
+ R3_SHA = '26928f829488600765cefa2d836f4afe32413e03798ae0eb958bfd016994e13d'
+ CONTRACT = 'original-algorithm-arrays-plus-true-events-and-pv-reuse-attention-v1'
+ PV_REUSE_DELTA = {'source/candidates/qwen2_fixed93_attention/owner.py': {'before': {'bytes': 15337, 'sha256': '1e90ecb2e5cf26755c7fe5b7cc201d563afde23af6c27105daeb2387cb5cf443'}, 'after': {'bytes': 15806, 'sha256': 'b18172eb9af3f047eaed5aa3d6e40741e57add5b0b856c6817017cc16693bc0e'}}, 'selected/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala': {'before': {'bytes': 56051, 'sha256': 'a6e7f781dd46063a7373c712f7d8eda289038e0be51e0f9184f382fe26805491'}, 'after': {'bytes': 57109, 'sha256': '3b7f25537da7492d3c706c55129ca5ed0a18d9c2e0ec4f5d9e6e43b1ae2210d4'}}}
++_FROZEN_RESOLVER = None
++_FROZEN_RESOLVER_PIN = None
++_FROZEN_RESOLVER_CODES = None
++_FROZEN_RESOLVER_OBJECTS = None
++_FROZEN_RESOLVER_MEMBERS = None
++_FROZEN_RESOLVER_DEFAULTS = None
+ 
+ 
+ 
+@@ -29,6 +36,113 @@
+ 
+ def digest(raw):
+     return hashlib.sha256(raw).hexdigest()
++
++
++def _resolver_defaults(module):
++    """Copy the small source-defined defaults, rather than alias mutable maps."""
++    result = {}
++    def snapshot(name, function):
++        defaults, keywords = function.__defaults__, function.__kwdefaults__
++        need(defaults is None or type(defaults) is tuple, 'resolver defaults tuple required')
++        need(keywords is None or type(keywords) is dict, 'resolver kwdefaults dict required')
++        def value(item):
++            need(type(item) in (type(None), bool, int, str, bytes), 'resolver immutable scalar default required')
++            return type(item), item
++        positional = None if defaults is None else tuple(value(item) for item in defaults)
++        keyword = None if keywords is None else tuple(sorted(
++            (key, value(item)) for key, item in keywords.items()
++            if type(key) is str))
++        need(keywords is None or len(keyword) == len(keywords), 'resolver keyword names required')
++        need(function.__closure__ is None, 'source resolver functions must retain no closure')
++        result[name] = positional, keyword
++    for name, item in vars(module).items():
++        if type(item) is types.FunctionType and item.__module__ == module.__name__:
++            snapshot(name, item)
++        elif type(item) is type and item.__module__ == module.__name__:
++            for member, method in vars(item).items():
++                if type(method) is types.FunctionType:
++                    snapshot(name+'.'+member, method)
++                elif type(method) is property:
++                    for accessor in ('fget', 'fset', 'fdel'):
++                        function = getattr(method, accessor)
++                        if function is not None:
++                            snapshot(name+'.'+member+'.'+accessor, function)
++    return result
++
++
++def _resolver_codes(module):
++    result = {}
++    for name, value in vars(module).items():
++        if type(value) is types.FunctionType and value.__module__ == module.__name__:
++            need(value.__globals__ is vars(module), 'resolver helper globals changed')
++            result[name] = value.__code__
++        elif type(value) is type and value.__module__ == module.__name__:
++            for member, method in vars(value).items():
++                if type(method) is types.FunctionType:
++                    need(method.__globals__ is vars(module), 'resolver method globals changed')
++                    result[name+'.'+member] = method.__code__
++                elif type(method) is property:
++                    for accessor in ('fget', 'fset', 'fdel'):
++                        function = getattr(method, accessor)
++                        if function is not None:
++                            need(type(function) is types.FunctionType and function.__globals__ is vars(module),
++                                 'resolver property globals changed')
++                            result[name+'.'+member+'.'+accessor] = function.__code__
++    need(result and all(type(code) is types.CodeType for code in result.values()),
++         'source resolver function code identities required')
++    return result
++
++
++def frozen_layout(manifest=None):
++    """Source-pinned resolver only; this does not attest transitive stdlib."""
++    global _FROZEN_RESOLVER, _FROZEN_RESOLVER_PIN, _FROZEN_RESOLVER_CODES
++    global _FROZEN_RESOLVER_OBJECTS, _FROZEN_RESOLVER_MEMBERS, _FROZEN_RESOLVER_DEFAULTS
++    runtime = manifest is None
++    if runtime:
++        raw = checked(MANIFEST)
++        need(digest(raw) == os.environ.get('QWEN2_FIXED93_SOURCE_MANIFEST_SHA256'),
++             'explicit runtime source-manifest SHA required before resolver load')
++        manifest = json.loads(raw)
++    path = HERE / 'frozen_layout.py'
++    raw = checked(path, manifest['preparation_files']['frozen_layout.py'])
++    pin = dict(bytes=len(raw), sha256=digest(raw))
++    module = _FROZEN_RESOLVER
++    if module is None:
++        need('frozen_layout' not in sys.modules, 'foreign resolver module is not admitted')
++        module = types.ModuleType('frozen_layout')
++        module.__file__, module.__package__ = str(path), ''
++        sys.modules['frozen_layout'] = module
++        try:
++            exec(compile(raw, str(path), 'exec', dont_inherit=True, optimize=0), module.__dict__)
++        except BaseException:
++            del sys.modules['frozen_layout']
++            raise
++        _FROZEN_RESOLVER = module
++        _FROZEN_RESOLVER_PIN = pin
++        _FROZEN_RESOLVER_CODES = _resolver_codes(module)
++        _FROZEN_RESOLVER_DEFAULTS = _resolver_defaults(module)
++        _FROZEN_RESOLVER_OBJECTS = dict(vars(module))
++        _FROZEN_RESOLVER_MEMBERS = {
++            name: dict(vars(value)) for name, value in vars(module).items()
++            if type(value) is type and value.__module__ == module.__name__}
++    need(type(module) is types.ModuleType and module is sys.modules.get('frozen_layout') and
++         module.__name__ == 'frozen_layout' and Path(module.__file__) == path and
++         pin == _FROZEN_RESOLVER_PIN, 'one source-pinned canonical resolver required')
++    need(vars(module).keys() == _FROZEN_RESOLVER_OBJECTS.keys() and
++         all(vars(module)[name] is value for name, value in _FROZEN_RESOLVER_OBJECTS.items()),
++         'canonical resolver globals changed')
++    for name, members in _FROZEN_RESOLVER_MEMBERS.items():
++        current = vars(vars(module)[name])
++        need(current.keys() == members.keys() and
++             all(current[key] is value for key, value in members.items()),
++             'canonical resolver class members changed')
++    codes = _resolver_codes(module)
++    need(codes.keys() == _FROZEN_RESOLVER_CODES.keys() and
++         all(code is _FROZEN_RESOLVER_CODES[name] for name, code in codes.items()),
++         'canonical resolver function code changed')
++    need(_resolver_defaults(module) == _FROZEN_RESOLVER_DEFAULTS,
++         'canonical resolver function defaults changed')
++    return module.load(HERE) if runtime else module.load(HERE, manifest)
+ 
+ 
+ def checked(path, expected=None, *, retain=True):
+@@ -156,29 +270,34 @@
+         checked(Path(name), pin, retain=False)
+     need(Path(sys.executable).resolve() == Path(runtime['python']['path']), 'exact existing Python runtime required')
+     copies = json.loads(checked(HERE / 'contract/FROZEN_DATA_COPIES.json'))
++    layout = frozen_layout(manifest)
+     reference_stats = 0
+     for name, pin in copies['files'].items():
+-        path = relative(HERE / 'source', name)
+-        if name.startswith('work/qwen2_recovered_reference/first/') and path.suffix in ('.f32le', '.bf16le'):
+-            st = path.lstat()
+-            need(stat.S_ISREG(st.st_mode) and not path.is_symlink() and st.st_size == pin['bytes'],
+-                 'frozen reference payload extent')
++        if name.startswith('work/qwen2_recovered_reference/first/') and Path(name).suffix in ('.f32le', '.bf16le'):
++            layout.stat_reference(name)
+             reference_stats += 1
+         else:
+-            checked(path, pin, retain=False)
++            need(layout.identity(name) == {k: pin[k] for k in ('bytes', 'sha256')},
++                 'frozen external identity drift: ' + name)
+     need(reference_stats == 30, 'exact29 + native mask reference payload stat-only boundary')
++    frozen_source_map = {name: str(layout.path(name)) for name in copies['files']}
+     binding = json.loads(checked(HERE / 'source/work/qwen2_fixed93_fullblock_binding/FROZEN_BINDING.json'))
+     source_map = {name: dict(bytes=manifest['source_bytes'][name], sha256=sha)
+                   for name, sha in manifest['source_sha256'].items()}
+     need(binding['source_closure_sha256'] == digest(json.dumps(source_map, sort_keys=True,
+          separators=(',', ':'), allow_nan=False).encode()), 'noncircular306 source binding')
+     budget = json.loads(checked(HERE / 'BUDGET_PROPOSAL.json'))
+-    result = dict(status='SOURCE_ASSEMBLY_BYTE_AST_ONLY', source_manifest_sha256=expected_sha,
++    result = dict(status='SOURCE_ASSEMBLY_EXTERNAL_FROZEN_BYTE_AST_ONLY', source_manifest_sha256=expected_sha,
+                   source_files=306, selected_files=9, support_files=6, runtime_files=len(runtime['files']),
++                  external_frozen_roots=[str(path) for path in layout.frozen_roots],
++                  frozen_source_map=frozen_source_map,
++                  external_layout_identity=checked(HERE / 'FROZEN_EXTERNAL_LAYOUT.json',
++                      manifest['preparation_files']['FROZEN_EXTERNAL_LAYOUT.json'], retain=False),
+                   input_reference_metadata_files=76, reference_payloads_stat_only=reference_stats,
+                   reference_payloads_read=0, native_imported=False, constructor_executed=False,
+                   actual_authorized=False, resource_gate_status=budget['status'],
+                   complete_actual_admission=False, fullblock=False, M128_executed=False, RTL=False)
++    layout.finish()
+     return result, manifest, runtime, budget
+ 
+ 
+--- /dev/null
++++ b/frozen_layout.py
+@@ -0,0 +1,267 @@
++"""Exact, read-only relocation of frozen files; logical identities never change.
++
++This is a source-reviewed Python I/O guard, not an OS sandbox or a defense
++against arbitrary native syscalls or previously opened writable descriptors.
++"""
++import hashlib
++import json
++import os
++from pathlib import Path
++import re
++import stat
++import sys
++
++SCHEMA = 'fixed93-readonly-external-frozen-layout-v1'
++LAYOUT_FILE = 'FROZEN_EXTERNAL_LAYOUT.json'
++COPY_FILE = 'contract/FROZEN_DATA_COPIES.json'
++PREFIXES = ('work/qwen2_recovered_inputs', 'work/qwen2_recovered_reference')
++REFERENCE_PREFIX = PREFIXES[1] + '/first/'
++MAX_METADATA = 2 * 1024 * 1024
++
++
++def need(ok, message):
++    if not ok:
++        raise ValueError(message)
++
++
++def logical_name(value):
++    need(type(value) is str and value and not Path(value).is_absolute() and
++         str(Path(value)) == value and all(p not in ('', '.', '..') for p in value.split('/')),
++         'canonical relative logical name required')
++    return value
++
++
++def canonical(value):
++    need(type(value) in (str, Path) or isinstance(value, Path), 'path required')
++    p = Path(value)
++    need(p.is_absolute() and str(p) == str(value) and p.resolve() == p and
++         not any(q.is_symlink() for q in (p, *p.parents)), 'aliased frozen path')
++    return p
++
++
++def stamp(s):
++    return (s.st_dev, s.st_ino, s.st_mode, s.st_nlink, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
++
++
++def regular(path):
++    path = canonical(path)
++    s = path.lstat()
++    need(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'regular nlink1 frozen file required')
++    return s
++
++
++def spec(value):
++    need(type(value) is dict and set(value) == {'bytes', 'sha256'} and
++         type(value['bytes']) is int and value['bytes'] >= 0 and
++         type(value['sha256']) is str and re.fullmatch('[0-9a-f]{64}', value['sha256']),
++         'exact typed byte/SHA pin required')
++    return dict(value)
++
++
++def parse(raw):
++    def pairs(items):
++        result = {}
++        for key, value in items:
++            need(key not in result, 'duplicate JSON key')
++            result[key] = value
++        return result
++    def invalid(value):
++        raise ValueError('nonfinite JSON constant')
++    return json.loads(raw, object_pairs_hook=pairs, parse_constant=invalid)
++
++
++def read_metadata(path, expected=None):
++    before = regular(path)
++    need(before.st_size <= MAX_METADATA, 'metadata exceeds bounded size')
++    with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
++        opened = os.fstat(stream.fileno())
++        need(stamp(opened) == stamp(before), 'metadata replaced before open')
++        raw = stream.read(MAX_METADATA + 1)
++        after = os.fstat(stream.fileno())
++    need(len(raw) <= MAX_METADATA and stamp(before) == stamp(after) == stamp(regular(path)),
++         'metadata changed during read')
++    identity = dict(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
++    need(expected is None or identity == spec(expected), 'metadata byte/hash drift')
++    return raw, identity
++
++
++class FrozenLayout:
++    """No writing API. path() supplies identity locations, not read permission."""
++    def __init__(self, roots, files, *, candidate, declaration):
++        need(type(roots) is dict and set(roots) == set(PREFIXES), 'exact two frozen roots')
++        self.candidate = canonical(candidate)
++        self.roots = {name: canonical(value) for name, value in roots.items()}
++        self.frozen_roots = tuple(self.roots[name] for name in PREFIXES)
++        for root in self.frozen_roots:
++            need(root.is_dir() and not root.is_relative_to(self.candidate) and
++                 not self.candidate.is_relative_to(root), 'frozen root overlaps candidate')
++        a, b = self.frozen_roots
++        need(not a.is_relative_to(b) and not b.is_relative_to(a), 'frozen roots overlap')
++        need(type(files) is dict and bool(files), 'exact frozen files required')
++        self.files, self.paths, self._initial, self._reverse = {}, {}, {}, {}
++        self._root_stamps = {p: stamp(p.stat()) for p in self.frozen_roots}
++        inodes = set()
++        for name, value in files.items():
++            logical_name(name)
++            matches = [prefix for prefix in PREFIXES if name.startswith(prefix + '/')]
++            need(len(matches) == 1, 'logical file outside fixed frozen namespaces')
++            prefix = matches[0]
++            p = canonical(self.roots[prefix] / name[len(prefix) + 1:])
++            need(p.is_relative_to(self.roots[prefix]), 'frozen file escapes root')
++            expected, before = spec(value), regular(p)
++            need(before.st_size == expected['bytes'], 'frozen file extent differs')
++            inode = (before.st_dev, before.st_ino)
++            need(inode not in inodes and p not in self._reverse, 'duplicate frozen inode/path alias')
++            inodes.add(inode)
++            self.files[name], self.paths[name] = expected, p
++            self._initial[name], self._reverse[p] = stamp(before), name
++        self.declaration = dict(declaration)
++        self._write_guard_installed = False
++
++    @property
++    def input_directory(self):
++        return canonical(self.roots[PREFIXES[0]] / 'typed')
++
++    @property
++    def reference_directory(self):
++        return canonical(self.roots[PREFIXES[1]] / 'first')
++
++    def contains(self, name):
++        logical_name(name)
++        return name in self.files
++
++    def is_reference(self, name):
++        return name.startswith(REFERENCE_PREFIX) and name.endswith(('.f32le', '.bf16le'))
++
++    def path(self, name):
++        logical_name(name)
++        need(name in self.files, 'undeclared frozen logical file')
++        p = self.paths[name]
++        need(stamp(regular(p)) == self._initial[name], 'frozen path identity changed')
++        return p
++
++    def logical(self, path):
++        p = canonical(path)
++        need(p in self._reverse, 'undeclared frozen physical file')
++        name = self._reverse[p]
++        need(self.path(name) == p, 'frozen reverse mapping drift')
++        return name
++
++    def _read(self, name, reference_opened, retain):
++        need(type(reference_opened) is bool, 'explicit reference-open state required')
++        p = self.path(name)
++        need(not self.is_reference(name) or reference_opened, 'reference payload before output seal')
++        before = self._initial[name]
++        digest, total, chunks = hashlib.sha256(), 0, [] if retain else None
++        with os.fdopen(os.open(p, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
++            opened = os.fstat(stream.fileno())
++            need(stamp(opened) == before, 'frozen file replaced between stat/open')
++            while raw := stream.read(1 << 20):
++                total += len(raw)
++                need(total <= self.files[name]['bytes'], 'frozen file grew during read')
++                digest.update(raw)
++                if retain:
++                    chunks.append(raw)
++            after = os.fstat(stream.fileno())
++        need(before == stamp(after) == stamp(regular(p)), 'frozen file changed during read')
++        result = dict(bytes=total, sha256=digest.hexdigest())
++        need(result == self.files[name], 'frozen content pin differs')
++        return b''.join(chunks) if retain else result
++
++    def read(self, name, *, reference_opened=False):
++        return self._read(name, reference_opened, True)
++
++    def identity(self, name, *, reference_opened=False):
++        return self._read(name, reference_opened, False)
++
++    def stat_reference(self, name):
++        need(self.is_reference(logical_name(name)), 'stat-only is limited to reference payloads')
++        p = self.path(name)
++        need(stamp(regular(p)) == self._initial[name], 'reference changed during stat')
++        return dict(logical_name=name, bytes=self.files[name]['bytes'], payload_opened=False)
++
++    def finish(self):
++        for p, before in self._root_stamps.items():
++            need(stamp(canonical(p).stat()) == before, 'frozen root changed during batch')
++        for name in self.files:
++            self.path(name)
++        return dict(files=len(self.files), all_initial_file_stamps_preserved=True)
++
++    def _write_path(self, value, dir_fd=None):
++        if type(value) is int:
++            value = os.readlink('/proc/self/fd/' + str(value))
++        need(isinstance(value, (str, bytes, os.PathLike)), 'unresolved mutation path')
++        p = Path(os.fsdecode(value))
++        if not p.is_absolute():
++            base = Path(os.getcwd()) if dir_fd is None or dir_fd == -1 else Path(os.readlink('/proc/self/fd/' + str(dir_fd)))
++            p = base / p
++        # Resolving aliases is intentional for DENY only, never read admission.
++        resolved = p.resolve()
++        need(not any(resolved == root or resolved.is_relative_to(root) or root.is_relative_to(resolved)
++                     for root in self.frozen_roots),
++             'frozen roots are permanently read-only')
++
++    def audit_write(self, event, args):
++        if event == 'open':
++            path, mode, flags = args
++            writing = (type(mode) is str and any(c in mode for c in 'wax+')) or (
++                type(flags) is int and bool(flags & (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC | os.O_APPEND)))
++            if writing:
++                # Python's open audit event omits dir_fd; never guess its base.
++                need(type(path) is int or Path(os.fsdecode(path)).is_absolute(),
++                     'relative writable open cannot prove a nonfrozen target')
++                self._write_path(path)
++        elif event in ('os.remove', 'os.rmdir'):
++            self._write_path(args[0], args[1])
++        elif event in ('os.mkdir', 'os.chmod'):
++            self._write_path(args[0], args[2])
++        elif event in ('os.chown', 'os.utime'):
++            self._write_path(args[0], args[3])
++        elif event in ('os.rename', 'os.link'):
++            self._write_path(args[0], args[2]); self._write_path(args[1], args[3])
++        elif event == 'os.symlink':
++            # A relative target is interpreted from the link's directory.
++            target, destination, dir_fd = args
++            destination = Path(os.fsdecode(destination))
++            if not destination.is_absolute():
++                base = Path(os.getcwd()) if dir_fd is None or dir_fd == -1 else Path(os.readlink('/proc/self/fd/' + str(dir_fd)))
++                destination = base / destination
++            target = Path(os.fsdecode(target))
++            if not target.is_absolute():
++                target = destination.parent / target
++            self._write_path(target); self._write_path(destination)
++        elif event == 'os.truncate':
++            self._write_path(args[0])
++
++    def install_write_guard(self):
++        need(not self._write_guard_installed, 'write guard installs once')
++        sys.addaudithook(self.audit_write)
++        self._write_guard_installed = True
++
++
++def load(candidate, manifest=None):
++    candidate = canonical(candidate)
++    if manifest is None:
++        raw, identity = read_metadata(candidate / 'SOURCE_MANIFEST.json')
++        expected = os.environ.get('QWEN2_FIXED93_SOURCE_MANIFEST_SHA256')
++        need(type(expected) is str and re.fullmatch('[0-9a-f]{64}', expected) and
++             identity['sha256'] == expected, 'explicit admitted source manifest identity required')
++        manifest = parse(raw)
++    need(type(manifest) is dict and type(manifest.get('preparation_files')) is dict,
++         'checked source manifest required')
++    pins = manifest['preparation_files']
++    raw, identity = read_metadata(candidate / LAYOUT_FILE, pins[LAYOUT_FILE])
++    value = parse(raw)
++    need(type(value) is dict and set(value) == {'schema', 'roots', 'files', 'copy_manifest', 'read_only', 'copy_payloads'} and
++         value['schema'] == SCHEMA and value['read_only'] is True and value['copy_payloads'] is False,
++         'exact readonly external layout schema')
++    copies_raw, copies_identity = read_metadata(candidate / COPY_FILE, pins[COPY_FILE])
++    need(value['copy_manifest'] == copies_identity, 'frozen logical inventory origin pin differs')
++    copies = parse(copies_raw)
++    need(type(value['files']) is dict and value['files'] == copies['files'] and len(value['files']) == 76,
++         'exact unchanged76 frozen logical file pins required')
++    layout = FrozenLayout(value['roots'], value['files'], candidate=candidate,
++                          declaration=dict(schema=SCHEMA, layout=identity, copy_manifest=copies_identity))
++    need(sum(layout.is_reference(name) for name in layout.files) == 30, 'exact30 reference payloads')
++    layout.install_write_guard()
++    return layout
+--- a/integration/runner.py
++++ b/integration/runner.py
+@@ -373,10 +373,10 @@
+         report['source_sha256_after']=after
+         report['input_identity_after']=gates.input_identity()
+         report['raw_identity_after']=gates.raw_identity(DATA)
+-        report['reference_identity_after']={n:dict(bytes=len(v),sha256=sha(REFERENCE/(n+'.f32le'))) for n,v in reference_bytes.items()}
++        report['reference_identity_after']={n:gates.reference_identity(n) for n in reference_bytes}
+         require(report['raw_identity_after']==preflight['raw_tensors'],'raw BF16 source drift')
+         require(all(report['reference_identity_after'][n]['sha256']==ref['outputs'][n]['sha256'] for n in reference_bytes),'reference payload drift')
+-        report['evidence_sha256_after']={p:sha(ROOT/p) for p in evidence}
++        report['evidence_sha256_after']=gates.evidence_identity(evidence)
+         report['tools_after']={k:dict(path=str(p),sha256=sha(p),bytes=p.stat().st_size) for k,p in tool_paths.items()}
+         report['native_artifact_identity_after']=native_artifact.identity()
+         report['native_artifact_audit']=list(gate.artifact_reads)
+--- a/integration/runtime_support/gates.py
++++ b/integration/runtime_support/gates.py
+@@ -28,9 +28,11 @@
+ CANDIDATE = HERE.parents[1]
+ ROOT = CANDIDATE / 'source'
+ OUTPUT_ROOT = CANDIDATE / 'work/fixed93_fullblock'
+-DATA = ROOT / 'work/qwen2_recovered_inputs/typed'
++DATA_LOGICAL = 'work/qwen2_recovered_inputs/typed'
++REFERENCE_LOGICAL = R.REFERENCE
++DATA = R.frozen_layout().input_directory
+ TAIL_INPUTS = DATA
+-REFERENCE = ROOT / R.REFERENCE
++REFERENCE = R.frozen_layout().reference_directory
+ ROLES = frozenset(('x', 'gamma0', 'wq', 'wk', 'wv', 'bq', 'bk', 'bv', 'rope',
+                    'wo', 'gamma1', 'wg', 'wu', 'wd'))
+ REFERENCES = R.NAMES
+@@ -61,14 +63,14 @@
+     dependencies={n:v['sha256'] for n,v in closure.source_manifest(ROOT).items()}
+     rp=R.load_pins(ROOT);art=R.artifact_binding()
+     for name in REFERENCE_METADATA:
+-        dependencies[str((REFERENCE/name).relative_to(ROOT))]=art['reference_metadata'][name]['sha256']
++        dependencies[REFERENCE_LOGICAL+'/'+name]=art['reference_metadata'][name]['sha256']
+     dependencies[R.FROZEN_BINDING]=R.digest(os.getenv(R.BINDING_ENV))
+     dependencies['work/qwen2_recovered_inputs/ARTIFACTS.json']=R.digest(os.getenv('QWEN2_FIXED93_ARTIFACTS_SHA256'))
+     for n,v in art['reference_proofs'].items():dependencies[n]=v['sha256']
+     runtime={n:v['sha256'] for n,v in art['runtime_read_files'].items()}
+     original.update(dependency_sha256=dependencies,runtime_read_sha256=runtime,
+         fullblock_reference_pins_sha256=R.PINS_SHA256,frozen_contract_sha256=R.FROZEN_CONTRACT_SHA256,
+-        data_path=str(DATA.relative_to(ROOT)),reference_path=str(REFERENCE.relative_to(ROOT)),
++        data_path=DATA_LOGICAL,reference_path=REFERENCE_LOGICAL,
+         historical_receipts_revalidated=False,lost_historical_evidence=list(LOST_HISTORICAL_EVIDENCE))
+     return original
+ 
+@@ -84,7 +86,7 @@
+ def _sha_spec(path, expected):
+     path = _canonical(path)
+     require(path.is_file(), 'missing pinned file: ' + str(path))
+-    actual = dict(bytes=path.stat().st_size, sha256=sha(path))
++    actual = R.identity(path)
+     require(actual['sha256'] == expected['sha256'] and
+             ('bytes' not in expected or actual['bytes'] == expected['bytes']),
+             'pinned file identity drift: ' + str(path))
+@@ -101,17 +103,17 @@
+     for name, digest in dependency.items():
+         require(type(name) is str and not Path(name).is_absolute() and '..' not in Path(name).parts and
+                 type(digest) is str and re.fullmatch('[0-9a-f]{64}', digest), 'invalid source pin')
+-        _sha_spec(ROOT / name, {'sha256': digest})
++        _sha_spec(R.frozen_path(name), {'sha256': digest})
+     require(p.get('fullblock_reference_pins_sha256') == R.PINS_SHA256 and
+             p.get('frozen_contract_sha256') == R.FROZEN_CONTRACT_SHA256,
+             'reviewed fullblock reference code pins required')
+-    for key, path in (('data_path', DATA), ('reference_path', REFERENCE)):
+-        require(p.get(key) == str(path.relative_to(ROOT)), 'fixed ' + key + ' binding')
++    for key, name in (('data_path', DATA_LOGICAL), ('reference_path', REFERENCE_LOGICAL)):
++        require(p.get(key) == name, 'fixed ' + key + ' binding')
+     for name in REFERENCE_METADATA:
+-        require(str((REFERENCE / name).relative_to(ROOT)) in dependency,
++        require(REFERENCE_LOGICAL+'/'+name in dependency,
+                 'fresh frozen reference metadata must be source-pinned: ' + name)
+     for name, digest in p.get('runtime_read_sha256', {}).items():
+-        path = Path(name) if Path(name).is_absolute() else ROOT / name
++        path = Path(name) if Path(name).is_absolute() else R.frozen_path(name)
+         _sha_spec(path, {'sha256': digest})
+     return p
+ 
+@@ -171,13 +173,13 @@
+ 
+ 
+ def data_path(value):
+-    require(type(value) is str and value == str(DATA.relative_to(ROOT)), 'exact published prefix input directory required')
++    require(type(value) is str and value == DATA_LOGICAL, 'exact published prefix input directory required')
+     require(_canonical(DATA).is_dir(), 'prefix input directory missing')
+     return DATA
+ 
+ 
+ def reference_path(value):
+-    require(type(value) is str and value == str(REFERENCE.relative_to(ROOT)),
++    require(type(value) is str and value == REFERENCE_LOGICAL,
+             'exact fresh frozen fullblock reference directory required')
+     require(_canonical(REFERENCE).is_dir(), 'frozen reference directory missing')
+     return REFERENCE
+@@ -188,7 +190,7 @@
+     require(out.parent == OUTPUT_ROOT and re.fullmatch('[A-Za-z0-9][A-Za-z0-9_-]{0,63}', out.name),
+             'output must be a fresh direct child of fullblock numeric work directory')
+     require(not out.exists() and Path(data) == DATA and
+-            all(not out.is_relative_to(p) and not p.is_relative_to(out) for p in (DATA, TAIL_INPUTS, REFERENCE)),
++            all(not out.is_relative_to(p) and not p.is_relative_to(out) for p in R.frozen_layout().frozen_roots),
+             'output exists/overlaps inputs or reference')
+ 
+ 
+@@ -229,14 +231,28 @@
+ 
+ def input_identity():
+     rp = _input_specs()
+-    return {name: _sha_spec(ROOT/spec['path'], spec) for name, spec in rp['producer_roles'].items()}
++    return {name: _sha_spec(R.frozen_path(spec['path']), spec) for name, spec in rp['producer_roles'].items()}
+ 
+ 
+ def raw_identity(data):
+     require(Path(data) == DATA, 'fixed raw provenance input required')
+     rp = _input_specs()
+     require(len(rp['raw_tensors']) == 13, 'exact thirteen raw provenance tensors required')
+-    return {spec['local_name']: _sha_spec(ROOT/spec['path'], spec) for spec in rp['raw_tensors']}
++    return {spec['local_name']: _sha_spec(R.frozen_path(spec['path']), spec) for spec in rp['raw_tensors']}
++
++
++def evidence_identity(names=None):
++    """Rehash exact metadata files while retaining their logical record keys."""
++    rp = R.load_pins(ROOT)
++    expected = {spec['path'] for spec in rp['input_metadata'].values()}
++    expected |= {REFERENCE_LOGICAL+'/'+name for name in REFERENCE_METADATA}
++    require(names is None or set(names) == expected, 'exact frozen evidence metadata required')
++    return {name: R.identity(R.frozen_path(name))['sha256'] for name in sorted(expected)}
++
++
++def reference_identity(name):
++    require(name in REFERENCES, 'exact frozen reference name required')
++    return R.identity(R.frozen_path(REFERENCE_LOGICAL+'/'+name+'.f32le'), reference_opened=True)
+ 
+ 
+ def validate_inputs(data, reference):
+@@ -251,8 +267,7 @@
+     # fixture/PhysicalMemory binding independently enforces readonly providers.
+     require(all(ready['roles'][name]['readonly'] is True for name in ('wo','gamma1','wg','wu','wd')),
+             'tail initial roles must remain readonly')
+-    evidence = {spec['path']:sha(ROOT/spec['path']) for spec in rp['input_metadata'].values()}
+-    evidence.update({str((REFERENCE/name).relative_to(ROOT)):sha(REFERENCE/name) for name in REFERENCE_METADATA})
++    evidence = evidence_identity()
+     raw = raw_identity(data)
+     return inputs, ready, evidence, dict(raw_tensors=raw, raw_payloads_rehashed_before_gate=13,
+         raw_tensor_metadata={s['local_name']:{k:s[k] for k in ('bytes','sha256')} for s in rp['raw_tensors']},
+@@ -278,7 +293,7 @@
+     ref = validate_reference_metadata(data, reference, recipe=(rp, frozen))
+     values = {}
+     for name, spec in ref['outputs'].items():
+-        raw = R.checked(ROOT, str((REFERENCE/spec['file']).relative_to(ROOT)), spec)
++        raw = R.checked(ROOT, REFERENCE_LOGICAL+'/'+spec['file'], spec, reference_opened=True)
+         require(R.sha(_token_bytes(name, raw, spec['shape'])) == spec['token_major_sha256'],
+                 'fixed reference layout identity drift: '+name)
+         native = bytearray()
+@@ -291,8 +306,9 @@
+                 native.extend(struct.pack('<H', word >> 16))
+         require(R.sha(native) == spec['native_sha256'], 'native reference identity drift: '+name)
+         values[name] = raw
+-    mask = R.checked(ROOT, str((REFERENCE/'mask.bf16le').relative_to(ROOT)),
+-        dict(bytes=rp['mask_contract']['native_bytes'], sha256=rp['mask_contract']['native_sha256']))
++    mask = R.checked(ROOT, REFERENCE_LOGICAL+'/mask.bf16le',
++        dict(bytes=rp['mask_contract']['native_bytes'], sha256=rp['mask_contract']['native_sha256']),
++        reference_opened=True)
+     expected = b''.join(struct.pack('<H', 0 if k <= q else 0xff7f) for q in range(128) for k in range(128))
+     require(mask == expected and values['mask'] == b''.join(struct.pack('<I', w << 16)
+             for (w,) in struct.iter_unpack('<H', mask)), 'exact native/export mask correspondence')
+@@ -344,12 +360,13 @@
+         from . import native_artifact
+         self.artifacts={name:Path(spec['path']) for name,spec in native_artifact.identity().items()}
+         rp = R.load_pins(ROOT)
+-        self.input_paths = {ROOT/s['path'] for s in rp['producer_roles'].values()}
+-        self.raw_paths = {ROOT/s['path'] for s in rp['raw_tensors']}
+-        self.reference_paths = {REFERENCE/(n+'.f32le') for n in REFERENCES} | {REFERENCE/'mask.bf16le'}
++        self.input_paths = {R.frozen_path(s['path']) for s in rp['producer_roles'].values()}
++        self.raw_paths = {R.frozen_path(s['path']) for s in rp['raw_tensors']}
++        self.reference_paths = {R.frozen_path(REFERENCE_LOGICAL+'/'+n+'.f32le') for n in REFERENCES}
++        self.reference_paths |= {R.frozen_path(REFERENCE_LOGICAL+'/mask.bf16le')}
+         require((len(self.input_paths), len(self.raw_paths), len(self.reference_paths)) == (14, 13, 30),
+                 'exact input/raw/reference path counts required')
+-        self.metadata_paths = {ROOT/name for name in p['dependency_sha256']}
++        self.metadata_paths = {R.frozen_path(name) for name in p['dependency_sha256']}
+         assembly = admission_metadata()
+         self.metadata_paths |= {R.safe_path(CANDIDATE,name) for name in assembly['files']}
+         self.metadata_paths |= {CANDIDATE/'ADMISSION.json', closure.MANIFEST}
+@@ -373,14 +390,17 @@
+         # The fullblock reference recipe transitively pins preserved M16/M128
+         # source closures. source_check rehashes these exact files after seal;
+         # denying them would recreate the old postseal validation self-lock.
+-        self.metadata_paths |= {ROOT/name for name in rp['sources']}
++        self.metadata_paths |= {R.frozen_path(name) for name in rp['sources']}
+         for preserved_closure in rp['preserved_execution_closures'].values():
+-            self.metadata_paths |= {ROOT/name for name in preserved_closure['sha256']}
++            self.metadata_paths |= {R.frozen_path(name) for name in preserved_closure['sha256']}
++        domains = (self.input_paths, self.raw_paths, self.reference_paths, self.metadata_paths)
++        require(all(not left & right for index, left in enumerate(domains) for right in domains[index+1:]),
++                'input/raw/reference/metadata allowlists must be disjoint')
+         # Local package files are admitted only by the exact source closure
+         # already present in dependency_sha256, never by directory enumeration.
+-        self.runtime_paths = {Path(n) if Path(n).is_absolute() else ROOT/n
++        self.runtime_paths = {Path(n) if Path(n).is_absolute() else R.frozen_path(n)
+                               for n in p.get('runtime_read_sha256', {})}
+-        self.runtime_paths |= {Path(s['path']) if Path(s['path']).is_absolute() else ROOT/s['path']
++        self.runtime_paths |= {Path(s['path']) if Path(s['path']).is_absolute() else R.frozen_path(s['path'])
+                                for s in rp['runtime_native_files'].values()}
+         self.runtime_paths |= {self.ctypes_path}
+         # New orchestration rechecks the anchored parent and already reviewed
+@@ -533,17 +553,17 @@
+                 self.source_cache_bypasses.append(str(path))
+                 raise FileNotFoundError(errno.ENOENT, 'use pinned source instead of bytecode cache', str(path))
+         if path in self.input_paths:
+-            self.input_reads.append(str(path.relative_to(ROOT)))
++            self.input_reads.append(R.frozen_name(path))
+             return
+         if path in self.reference_paths:
+             if not self.opened:
+                 self._deny(path)
+-            self.reference_reads.append(str(path.relative_to(ROOT)))
++            self.reference_reads.append(R.frozen_name(path))
+             return
+         if path in self.raw_paths:
+             if not self.opened:
+                 self._deny(path)
+-            self.provenance_reads.append(str(path.relative_to(ROOT)))
++            self.provenance_reads.append(R.frozen_name(path))
+             return
+         if path in self.artifacts.values():
+             self.artifact_reads.append(dict(event=event, path=str(path)))
+--- a/integration/runtime_support/recipe.py
++++ b/integration/runtime_support/recipe.py
+@@ -1,5 +1,5 @@
+ """Current recovered reference/operand binding. No historical execution approval reused."""
+-import hashlib,json,os,re,sys,types
++import hashlib,json,os,re,stat,sys,types
+ from pathlib import Path
+ HERE=Path(__file__).resolve().parent
+ CANDIDATE=HERE.parents[1]
+@@ -15,6 +15,8 @@
+ FROZEN_CONTRACT_FILE='candidates/qwen2_fullblock_reference_m128/FROZEN_CONTRACT.json'
+ FROZEN_CONTRACT_SHA256='64835641b2c0c16d83beb75fbcd9d1c83ade8676fbd825f5e6ab646167af723f'
+ METADATA_NAMES=frozenset(('BOUNDARY_BEFORE.json','BOUNDARY_AFTER.json','WRAPPER_BEFORE.json','WRAPPER_AFTER.json',REFERENCE_MANIFEST,'GO.json','OBSERVATIONS.json','STAGES.jsonl','stdout.log','stderr.log','PACKAGE_ORIGINS.json'))
++_LAYOUT=None
++_FROZEN_PREFIXES=('work/qwen2_recovered_inputs','work/qwen2_recovered_reference')
+ class Rejected(ValueError):pass
+ def need(ok,message):
+     if not ok:raise Rejected(message)
+@@ -25,22 +27,76 @@
+ def fields(a,b,label):need(isinstance(a,dict) and all(k in a and same(a[k],v) for k,v in b.items()),label)
+ def exact_keys(a,keys,label):need(type(a) is dict and set(a)==set(keys),label)
+ def digest(v):need(type(v) is str and re.fullmatch('[0-9a-f]{64}',v) and v!='0'*64,'explicit SHA256');return v
++def frozen_layout():
++    global _LAYOUT
++    if _LAYOUT is None:
++        module=sys.modules.get('assembly_preflight')
++        need(type(module) is types.ModuleType and module.__name__=='assembly_preflight' and
++             Path(module.__file__)==CANDIDATE/'assembly_preflight.py',
++             'canonical source-checked preflight loader required before runtime')
++        _LAYOUT=module.frozen_layout()
++    return _LAYOUT
++def _relative(name):
++    need(type(name) is str and name and name!='.','relative pinned path')
++    p=Path(name)
++    need(not p.is_absolute() and '..' not in p.parts and str(p)==name,'canonical relative pinned path')
++    return p
++def _frozen_namespace(name):
++    return any(name==prefix or name.startswith(prefix+'/') for prefix in _FROZEN_PREFIXES)
++def frozen_path(name):
++    p=_relative(name);layout=frozen_layout()
++    if layout.contains(name):return layout.path(name)
++    need(not _frozen_namespace(name),'undeclared frozen logical path: '+name)
++    need(p.parts[0]!='work' or name==FROZEN_BINDING,'undeclared local work path: '+name)
++    p=ROOT/p;need(not any(x.is_symlink() for x in (p,*p.parents)),'aliased pinned path');return p
++def frozen_name(path):
++    p=Path(path);layout=frozen_layout()
++    if any(p.is_relative_to(root) for root in layout.frozen_roots):return layout.logical(p)
++    need(p.is_relative_to(ROOT),'path outside local or exact frozen files')
++    name=str(p.relative_to(ROOT));need(frozen_path(name)==p,'physical/logical path mismatch');return name
+ def safe_path(root,name):
+-    p=Path(name);need(not p.is_absolute() and '..' not in p.parts,'relative pinned path')
+-    p=root/p;need(not any(x.is_symlink() for x in (p,*p.parents)),'aliased pinned path');return p
+-def identity(p):
+-    p=Path(p);need(p.is_file() and not any(x.is_symlink() for x in (p,*p.parents)),'regular unaliased file')
+-    h=hashlib.sha256();n=0
+-    with p.open('rb') as f:
+-        while b:=f.read(1048576):h.update(b);n+=len(b)
+-    return dict(bytes=n,sha256=h.hexdigest())
+-def checked(root,name,spec):
+-    p=safe_path(root,name);need(identity(p)=={k:spec[k] for k in ('bytes','sha256')},'pinned file drift '+name);return p.read_bytes()
+-def stat_only(root,name,size):need(safe_path(root,name).stat().st_size==size,'payload size')
++    p=_relative(name)
++    if Path(root)==ROOT:return frozen_path(name)
++    p=Path(root)/p;need(not any(x.is_symlink() for x in (p,*p.parents)),'aliased pinned path');return p
++def _local_read(path,*,retain):
++    p=Path(path)
++    need(p.is_absolute() and p.resolve()==p and not any(x.is_symlink() for x in (p,*p.parents)),
++         'regular unaliased file')
++    h=hashlib.sha256();n=0;parts=[] if retain else None
++    with os.fdopen(os.open(p,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK),'rb') as f:
++        before=os.fstat(f.fileno())
++        need(stat.S_ISREG(before.st_mode) and before.st_nlink==1,'regular single-link file')
++        while b:=f.read(1048576):
++            h.update(b);n+=len(b)
++            if retain:parts.append(b)
++        after=os.fstat(f.fileno())
++    stamp=lambda s:(s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns,s.st_nlink)
++    need(stamp(before)==stamp(after)==stamp(p.lstat()),'file changed during read')
++    return (b''.join(parts) if retain else dict(bytes=n,sha256=h.hexdigest()))
++def identity(p,*,reference_opened=False):
++    p=Path(p);layout=frozen_layout()
++    if any(p.is_relative_to(root) for root in layout.frozen_roots):
++        return layout.identity(layout.logical(p),reference_opened=reference_opened)
++    if p.is_relative_to(ROOT):
++        name=str(p.relative_to(ROOT))
++        need(not _frozen_namespace(name),'local frozen alias refused')
++        need(Path(name).parts[0]!='work' or name==FROZEN_BINDING,'undeclared local work path: '+name)
++    return _local_read(p,retain=False)
++def checked(root,name,spec,*,reference_opened=False):
++    p=safe_path(root,name);layout=frozen_layout()
++    raw=(layout.read(name,reference_opened=reference_opened)
++         if Path(root)==ROOT and layout.contains(name) else _local_read(p,retain=True))
++    need(dict(bytes=len(raw),sha256=sha(raw))=={k:spec[k] for k in ('bytes','sha256')},
++         'pinned file drift '+name);return raw
++def stat_only(root,name,size):
++    p=safe_path(root,name)
++    if Path(root)==ROOT and frozen_layout().contains(name):frozen_layout().stat_reference(name)
++    need(p.stat().st_size==size,'payload size')
+ def original():
+     raw=(ROOT/'candidates/qwen2_fullblock_reference_m128/pins.json').read_bytes();need(sha(raw)==PINS_SHA256,'original pins');return parse(raw)
+ def artifact_binding():
+-    p=ROOT/'work/qwen2_recovered_inputs/ARTIFACTS.json';need(p.stat().st_size<=2*1024*1024,'bounded artifact binding');raw=p.read_bytes()
++    name='work/qwen2_recovered_inputs/ARTIFACTS.json';p=frozen_path(name)
++    need(p.stat().st_size<=2*1024*1024,'bounded artifact binding');raw=frozen_layout().read(name)
+     need(sha(raw)==digest(os.environ.get('QWEN2_FIXED93_ARTIFACTS_SHA256')),'explicit setup binding')
+     b=parse(raw);fields(b,dict(schema=1,status='CURRENT_ARTIFACTS_INDEPENDENTLY_QUALIFIED',rows=128,old_pass_inherited=False),'current qualified artifacts');return b
+ # The original pure observation/layout verifier remains byte-pinned.
+@@ -54,7 +110,7 @@
+     need(root==ROOT,'fixed source root');b=artifact_binding();p=original()
+     for n,s in p['producer_roles'].items():s['path']='work/qwen2_recovered_inputs/typed/'+n+'.bin'
+     for s in p['raw_tensors']:s['path']='work/qwen2_recovered_inputs/raw/'+s['local_name']+'.bin'
+-    p['input_metadata']={'current_artifacts':dict(path='work/qwen2_recovered_inputs/ARTIFACTS.json',**identity(ROOT/'work/qwen2_recovered_inputs/ARTIFACTS.json'))}
++    p['input_metadata']={'current_artifacts':dict(path='work/qwen2_recovered_inputs/ARTIFACTS.json',**identity(frozen_path('work/qwen2_recovered_inputs/ARTIFACTS.json')))}
+     p['runtime_native_files']=b['runtime_native_files']
+     p['sources']={}
+     p['preserved_execution_closures']={}
+@@ -72,8 +128,8 @@
+     validate_observations(f['outputs'],pins);return f['outputs'],dict(path=FROZEN_CONTRACT_FILE,bytes=len(raw),sha256=sha(raw))
+ def validate_bootstrap_metadata(pins=None,*,seal_sha256):
+     # Compatibility API name only. This validates a CURRENT frozen pair, not bootstrap.
+-    pins=load_pins() if pins is None else pins;b=artifact_binding();directory=ROOT/REFERENCE
+-    sealraw=(directory/'SEAL.json').read_bytes();need(sha(sealraw)==digest(seal_sha256),'current reference seal')
++    pins=load_pins() if pins is None else pins;b=artifact_binding();directory=frozen_layout().reference_directory
++    sealraw=frozen_layout().read(REFERENCE+'/SEAL.json');need(sha(sealraw)==digest(seal_sha256),'current reference seal')
+     seal=parse(sealraw);fields(seal,dict(status='SEALED_FRESH_FROZEN_REPRODUCTION_REFERENCE_ONLY',mode='frozen',run_id='first',dut_executed=False,retries=0),'current frozen seal')
+     expected,_=source_expectations(pins)
+     files=set(METADATA_NAMES)|{n+'.f32le' for n in NAMES}|{'mask.bf16le'}

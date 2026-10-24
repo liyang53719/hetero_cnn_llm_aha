@@ -2027,3 +2027,14 @@ R1首次runner错误禁止原Prep来源验证所需git show，0.200秒error发�
 原Prep实际128-token输出接原ChunkOwner完整两个chunk64，R2 Vector16 host_batch真实运行，无_compute/_op/_mul_add/native替换，fatal30和scalar/exp不改。两chunk真实state carry、48scratch矩阵403456 FP32 words、16384 BF16输出及16384最终state words与独立分离舍入参考一致。Prep819200格式words包含49408活动字段及769792零填充；参考仍为现有近似配方，不是官方模型精度。native654336batch+18752single，21172544 lane操作只是计数，不冒充全中间值/flags比较。
 
 根实际1测试34.988秒/35.106447783秒payload、0skip/error/failure、exit0。1CPU/512MiB/110CPU/115alarm，GNU timeout120秒+2秒KILL；仅两次固定只读Git来源读取，1685文件前后hash一致，无编译/下载。724160读、27776写ACK，132096前state读beat及1024最终state staging读；98304B输出/state完整ACK，两个chunk完成、成功staging回执退休一次。末ACK背压及资源持有已核；scratch/output/state仍未发布，block commit/generation不变。cold单head合成raw输入，不是全head/完整block/RTL或MAC利用率验收。五完整RTL仍0/5、Qwen2旧M128UNKNOWN；仅本地小批，远端发布待确认，无清理。
+
+
+## PASS（既有 exp 结构/范围诊断小门）/ INCOMPLETE（exp 数值验收、完整 block/RTL）：2026-10-23
+
+先审计官方 pin 和既有实现，确认 abs>=80 截断来自本项目 BlockFloat/ConvScalar，不是上游 prefill 限制；exp(-80) 仍是 FP32/BF16 正常范围。复用原 35B DecayScalar split-ln2/渐进下溢候选，没有另造算法或放宽 GROUPED_35B/default fatal30；R2 后端修 UF 判定并不自动允许真实 UF。
+
+新增有界4项测试实际 exit0、0skip：整数RNE边界、15输入Decimal100/180位参考诊断、现有layout/enable/policy拒绝门，以及真实R2单lane UF|NX在fatal30拒绝/显式28接受。unittest0.012秒、payload0.168329477秒，1CPU/512MiB/20CPU/25alarm/外层30秒；32项源码/ELF/receipt/compiler/interpreter前后pin一致，无编译/下载/Torch/owner/RTL执行。Python audit限制不当作任意native沙箱证明。
+
+15项候选14逐词相同、1差1ULP（c2a00001→候选05bfec5b，参考05bfec5a）；旧错误置零7、候选0。没有数值容差，passed/thresholds/numerical_acceptance仍null，4测试PASS不等于exp正确舍入或官方数值PASS。历史1618次非零丢失只引用原摘要，不称本批重现。见 QWEN35_EXP_RANGE_CONTRACT_20261023_CN.md 和 reports/execution/QWEN35_EXP_RANGE_CONTRACT_20261023/summary.json。
+
+本子门done；官方输入完整block数值、现有候选到Chisel的opcode/FSM/异常策略绑定仍ongoing/todo。五完整RTL仍0/5、Qwen2旧M128UNKNOWN；没有新增周期或MAC利用率证据，最终真实完整RTL及80%/90%目标不变。1024或1224第二档未定不阻塞128；不重启旧Qwen2作业。仅本地小批，远端发布仍待确认；私有manifest/log不提交，无清理。

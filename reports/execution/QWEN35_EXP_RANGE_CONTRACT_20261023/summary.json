@@ -1,0 +1,243 @@
+{
+  "audit_scope": "Python audit hook restrictions, not a native-code sandbox",
+  "bounds": {
+    "automatic_build": false,
+    "cpu_affinity": [
+      0
+    ],
+    "cpu_seconds": [
+      20,
+      20
+    ],
+    "inner_alarm_seconds": 25,
+    "memory_bytes": [
+      536870912,
+      536870912
+    ],
+    "required_external_timeout_seconds": 30,
+    "subprocess_and_network_denied": true
+  },
+  "default_fatal_mask": 30,
+  "denied_operations": [],
+  "diagnostic": {
+    "cases": [
+      {
+        "candidate": "3f800000",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "3f800000",
+        "input": "00000000",
+        "legacy": "3f800000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "3f800000",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "3f800000",
+        "input": "80000000",
+        "legacy": "3f800000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "3f800000",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "3f800000",
+        "input": "80000001",
+        "legacy": "3f800000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "05bfed1a",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "05bfed1a",
+        "input": "c29fffff",
+        "legacy": "05bfed3c",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "05bfecba",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "05bfecba",
+        "input": "c2a00000",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "05bfec5b",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "05bfec5a",
+        "input": "c2a00001",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 1
+      },
+      {
+        "candidate": "00800026",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "00800026",
+        "input": "c2aeac4f",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "007fffe6",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "007fffe6",
+        "input": "c2aeac50",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "007fffa6",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "007fffa6",
+        "input": "c2aeac51",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "00000001",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "00000001",
+        "input": "c2cff1b3",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "00000001",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "00000001",
+        "input": "c2cff1b4",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "00000000",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "00000000",
+        "input": "c2cff1b5",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "00000000",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "00000000",
+        "input": "c2cfffff",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "00000000",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "00000000",
+        "input": "c2d00000",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      },
+      {
+        "candidate": "00000000",
+        "candidate_zero_when_reference_positive": false,
+        "decimal_reference": "00000000",
+        "input": "c2d00001",
+        "legacy": "00000000",
+        "passed": null,
+        "thresholds": null,
+        "ulp_distance": 0
+      }
+    ],
+    "global_correct_rounding_claim": false,
+    "numerical_acceptance": null,
+    "oracle": "Decimal.exp at 100/180 digits plus exact integer FP32 RNE",
+    "precision_stability_is_not_interval_proof": true,
+    "scope": "DIRECTED_DECIMAL_REFERENCE_NOT_OFFICIAL_TORCH_NOT_FULLBLOCK"
+  },
+  "diagnostic_summary": {
+    "candidate_false_zero": 0,
+    "elements": 15,
+    "exact": 14,
+    "legacy_false_zero": 7,
+    "max_ulp": 1,
+    "one_ulp": 1
+  },
+  "exit_code": 0,
+  "external_role_sha256": {
+    "compiler": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "native_r2_build_receipt": "33e727a5adb2ad5525ead4ae77a179f7c669aaa61460b4f1d71e2935397210b1",
+    "native_r2_elf": "b04209e85923fc858092ec6019e6b183cdc92a0afabed75cbf63179a83302bd2",
+    "python_interpreter": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+  },
+  "full_block": false,
+  "grouped_35b_only": true,
+  "hardware_cycles": null,
+  "numerical_acceptance": null,
+  "official_torch_executed": false,
+  "payload_elapsed_seconds": 0.16832947701914236,
+  "peak_rss_kib": 30080,
+  "pin_scope": "Static recursive candidates Python import closure, explicit R2 C++/ELF/receipt/compiler/interpreter and two official sources/BlockFloat; not complete installed Python/NumPy environment closure",
+  "production_sources_changed": false,
+  "raw_log_sha256": "999f8f30618b942c8839c00810763b0b0c236c10e192e6dcf2b84fbc3b55f664",
+  "rtl_executed": false,
+  "skip_count": 0,
+  "source_pin_count": 32,
+  "source_pins": {
+    "candidates/qwen2_resident_matrix/dense_block_reduce/dense_drain.py": "67a8d5da60efdea84c23b43c95188c4fc8f81fc4ea66f5a3c09f940c74eb6d44",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/k_window_model.py": "e7885f9ce1247d5feb9984804a5fad53254f6a458ff1ec64d05cfd65fe20d566",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/public_coordinator.py": "2a98feb6481b9ea3963e48c86d3ea9bc7f369b8093328d3f1082191815c09b2c",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/sum_tiles.py": "ef718cb76e744ae560cc95d67093ea7b7e9bf33fbfe7c1eb310cea1e8faffda0",
+    "candidates/qwen2_resident_matrix/dense_block_reduce/vector_add_model.py": "4784e8b5a7a5c45c4d25c2daa328c78735b22944bebb70b7c54f77f418f660da",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27",
+    "candidates/qwen2_resident_matrix/ffn_public/execute_numeric.py": "fa550e3b9df4aca6041eb3631f50e520fda762184db5bcaf70e707a7dc72ffb3",
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96",
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+    "candidates/qwen35_35b_exp/run_range_contract_bounded.py": "b0dca67c3708ecf0f11b5be6585af95a5cd988b696246bce99671f16b8e267dc",
+    "candidates/qwen35_35b_exp/scalar.py": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5",
+    "candidates/qwen35_35b_exp/test_range_contract.py": "43fdb1590b9c34256871267e1da73e593c2fc43e7aff64f581c15b7b88422af4",
+    "candidates/qwen35_35b_prefill/partial_tiles.py": "1e531ccd541a9d8d2cc64754098c6be16e194aa90455b9b8f4fe8a33b6451a90",
+    "candidates/qwen35_35b_prefill/projection_owner.py": "253b56b6bc8892942c76bb5de3249603ba4a8d7acc9ad2c96794f11a287ad65a",
+    "candidates/qwen35_35b_prefill/sum_tiles.py": "e834ad6fba1ca720f46c4e8a54809a42255d2628c876b9127503bb016c6c630b",
+    "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": "ba6a07f7507b43446c8848fcc33ea3a7dc83739c58a62c760eb88845a8eabf0d",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "d8a7ce5456507d5f29423434aa3d985b4ccff50744f832f5b06b7cfebb81c533",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/projection_owner.py": "71ed7e9bd228ac1cefc50c68c4afae5de7b2fc7111d18be28758f64f66c44b1b",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+    "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+    "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+  },
+  "source_pins_unchanged": true,
+  "status": "PASS_STRUCTURAL_GATES__INCOMPLETE_EXP_NUMERICAL_ACCEPTANCE",
+  "tests": 4,
+  "unittest_seconds": 0.012
+}

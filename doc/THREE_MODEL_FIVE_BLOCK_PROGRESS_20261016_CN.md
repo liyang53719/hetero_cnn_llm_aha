@@ -1802,3 +1802,12 @@ R2唯一实际总11.457736474秒、双自然0/WNOWAIT/reap/group absent/cleanup�
 20完整源（含13 HardFloat及原Scalar支持）唯一编译自然0，总29.268740754秒；116class/950518B、23必需类型齐，342输入before/after内容与身份同。WNOWAIT自然0后组清理/reap/group absent/cleanup确认；未将清理kill_attempted误报为强杀。独审ACTUAL_REVIEW SHA256 d99fe81838ade88d28f1da89067978b38c7c53bb3d278d6d29eecae03be0acdb。SOURCE有限GO在启动前已发，完整SOURCE收据封存晚于启动，如实分列不倒填时间。
 
 PASS仅SCALA_COMPILE_ONLY，不执行Emit App/Module/CHIRRTL、真实Scalar/ACK或数值；五RTL0/5、Qwen2full UNKNOWN不变。公开8件132608B在 candidates/qwen35_chunk_loadprep_scala_compile/，manifest SHA256 6e6a74e54f27801a7e4c749226fc49ce144a2d2250f4c22ab1b0d706fa9b5a0b，复现模板/原runner摘录不是完整冻结机器closure，不提交工具/class/机器plan/log。未push、无新CI、无清理。
+
+
+## PASS（仅单owner CHIRRTL前端）：LoadPrepAndCumsum
+
+唯一实际66162自然0、总9.002297696秒，462输入前后完整身份与内容同；116原类+3emitter，双JVM WNOWAIT自然0/reap/group absent/cleanup确认。独立类加载核19输入普通类+3emitter、385隐藏类/14精确宿主，未加载HardFloat/gemmini/BlockScalarFloat；exec/network/guard replacement0。
+
+实际构造单LoadPrep owner、生成CHIRRTL131416B，SHA256 b95431cf614e93810812bb1c313c1ff3dee456eb8ff715956f8dd947900b139f。独立递归解析确认97端口叶（67输入30输出）、单模块无子实例/存储；实际独审SHA256 b1eeac5a9bff69648a903bdbcc56207370ad3d29ded6ed2d4a52c0821649eb57。27纯parser控制是先行限定测试，不与前端混淆。
+
+仅Chisel构造/CHIRRTL前端，未运行firtool/SV/RTL仿真、真实Scalar/ACK/完整prefill，无MAC测量。五RTL0/5、Qwen2full UNKNOWN不变。公开12项99140B在 candidates/qwen35_chunk_loadprep_chirrtl/，manifest SHA256 49bc4527eb1b7cb183ff70eb3747f4abf61c1689496c734de93ba478b9ecdcaa；复用已有342pins加120增量，不复制IR/class/生产源/机器plan/日志。原runner摘录非完整可直接执行closure。未push、无新CI、无清理。

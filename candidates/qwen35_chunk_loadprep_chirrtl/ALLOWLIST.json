@@ -1,0 +1,29 @@
+{
+  "allow_extra_files": false,
+  "allow_symlinks": false,
+  "excluded": [
+    "machine plan and environment-specific paths",
+    "raw logs and receipts/private review",
+    "authority payload",
+    "production owner source and original compiled classes",
+    "JDK/JAR/tool binaries",
+    "IR/SV/RTL artifacts",
+    "weights/arrays"
+  ],
+  "files": [
+    "ALLOWLIST.json",
+    "INPUT_DELTA.json",
+    "MANIFEST.json",
+    "README.md",
+    "SUMMARY.json",
+    "launch_chirrtl.py",
+    "launch_chirrtl.py.patch",
+    "parser_controls.py",
+    "run_chirrtl.py",
+    "run_chirrtl.py.patch",
+    "source/GdnChunkLoadPrepChirrtl.scala",
+    "source/GdnChunkLoadPrepChirrtl.scala.patch"
+  ],
+  "recursive_parent_publication_allowed": false,
+  "schema": "loadprep-chirrtl-public-allowlist-v1"
+}

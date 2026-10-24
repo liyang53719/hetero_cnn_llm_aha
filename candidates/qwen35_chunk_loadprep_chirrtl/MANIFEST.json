@@ -1,0 +1,63 @@
+{
+  "exact_original_files": [
+    "launch_chirrtl.py",
+    "launch_chirrtl.py.patch",
+    "run_chirrtl.py",
+    "run_chirrtl.py.patch",
+    "parser_controls.py",
+    "source/GdnChunkLoadPrepChirrtl.scala",
+    "source/GdnChunkLoadPrepChirrtl.scala.patch"
+  ],
+  "files": {
+    "ALLOWLIST.json": {
+      "bytes": 787,
+      "sha256": "3a8b6378d8b98c757c8ec07875b31d1d602ee1ac060ed8ca7191f5a67e39a8a7"
+    },
+    "INPUT_DELTA.json": {
+      "bytes": 28363,
+      "sha256": "64ee559800491ca20abf476460893e3e280293c753ba7c0cd6f359baa4e775eb"
+    },
+    "README.md": {
+      "bytes": 3515,
+      "sha256": "5094191c3a1846fb367ae9ba85a3c2bebf2a5e00f0e6de33b701a5838fed24eb"
+    },
+    "SUMMARY.json": {
+      "bytes": 6176,
+      "sha256": "d970499519a7bbd806d9f6230f2f21ad0b60fa342766353399e3c9447e9e778b"
+    },
+    "launch_chirrtl.py": {
+      "bytes": 3611,
+      "sha256": "6c63c520ed60d3ded5760821a11920621347ff4c838761b8588f138b36493693"
+    },
+    "launch_chirrtl.py.patch": {
+      "bytes": 748,
+      "sha256": "0743c720ad72c888562933e69618581d0e36779ff6182825a0f6392585620c18"
+    },
+    "parser_controls.py": {
+      "bytes": 10612,
+      "sha256": "1fb5f3c929a19c18330d01f9f0d1fbfebaf6116cebdf00b79e0d0b14881891b2"
+    },
+    "run_chirrtl.py": {
+      "bytes": 19571,
+      "sha256": "7d04c522b18a569514271c98cdf592f6c5d8fd6bae71fbafbe4b7c1c0c84083a"
+    },
+    "run_chirrtl.py.patch": {
+      "bytes": 8939,
+      "sha256": "89343bcb9170257f24b36804c1259053f70803606e810bcfd4a622c0bb124cc3"
+    },
+    "source/GdnChunkLoadPrepChirrtl.scala": {
+      "bytes": 7969,
+      "sha256": "f798b5bf0556bb0722bb68670473b5a256ab01d540496239f2b5cd2288d58033"
+    },
+    "source/GdnChunkLoadPrepChirrtl.scala.patch": {
+      "bytes": 6751,
+      "sha256": "0812ebd30432ad4f38a1a4d5988f8282d66878956373129a12692695cfa32291"
+    }
+  },
+  "original_source_manifest": {
+    "bytes": 2713,
+    "sha256": "f5001af6604e126f399d8a078473d35bccdbfe63108b0565f04e14191a72fb2b"
+  },
+  "schema": "loadprep-chirrtl-public-manifest-v1",
+  "scope": "Sanitized source/diff/summary only; incomplete runnable closure."
+}

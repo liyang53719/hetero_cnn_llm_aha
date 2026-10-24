@@ -1,0 +1,173 @@
+{
+  "CHIRRTL": {
+    "artifact_name": "GdnChunkLoadPrepOwner.fir",
+    "artifact_not_included": true,
+    "circuits": 1,
+    "digest": {
+      "bytes": 131416,
+      "sha256": "b95431cf614e93810812bb1c313c1ff3dee456eb8ff715956f8dd947900b139f"
+    },
+    "extmodules": 0,
+    "ground_types": {
+      "Clock": 1,
+      "UInt": 96
+    },
+    "independently_parsed_actual_port_tree_matches_frozen_declarations": true,
+    "input_bits": 2193,
+    "inputs": 67,
+    "instances": 0,
+    "intmodules": 0,
+    "leaves": 97,
+    "mem_cmem_smem_mport": 0,
+    "modules": 1,
+    "output_bits": 1197,
+    "outputs": 30
+  },
+  "RTL_targets_passed": 0,
+  "RTL_targets_total": 5,
+  "class_loading": {
+    "BlockScalarFloat_or_F32_loaded": false,
+    "all_load_rows": 4737,
+    "gemmini_classes": 0,
+    "hardfloat_classes": 0,
+    "hidden_hosts": 14,
+    "hidden_lambda_classes": 385,
+    "input_ordinary_classes": 19,
+    "new_emitter_ordinary_classes": 3,
+    "ordinary_candidate_classes": 22,
+    "ordinary_exact_source_root_and_hidden_prior_host_source_match": true,
+    "required23_present": true,
+    "unknown_candidate_classes": 0
+  },
+  "cleanup_note": "Both stages preserve kill_attempted=true/signal_sent_before_reap after observing natural CLD_EXITED/status0. This is original post-exit group cleanup, not a timeout termination or claim that no signals were sent.",
+  "guard": {
+    "external_exec_attempts": 0,
+    "installed_and_retained": true,
+    "network_attempts": 0,
+    "replacement_attempts": 0,
+    "scope": "Fixed JDK21 emitter guard, not universal protection against arbitrary JNI.",
+    "warnings": "Five compiler deprecation warnings and JDK SecurityManager removal warnings are retained in original logs; guard installation and checks completed successfully in the pinned runtime."
+  },
+  "inputs": {
+    "all_match_frozen_plan": true,
+    "before_after_content_and_stamps_equal": true,
+    "bytes": 298333040,
+    "count": 462
+  },
+  "natural_waitid_both": {
+    "code": 1,
+    "status": 0
+  },
+  "new_emitter_classes": {
+    "all_pins_and_exact_inventory_verified": true,
+    "bytes": 25806,
+    "count": 3
+  },
+  "old_Qwen2_full_status": "execution and cleanup UNKNOWN; unchanged",
+  "original_classes": {
+    "bytes": 950518,
+    "count": 116,
+    "unchanged_inputs_not_recompiled": true
+  },
+  "original_owner_or_tools_or_artifacts_copied": false,
+  "package_standalone_runnable": false,
+  "private_actual_review_digest": {
+    "bytes": 14917,
+    "sha256": "b1eeac5a9bff69648a903bdbcc56207370ad3d29ded6ed2d4a52c0821649eb57"
+  },
+  "private_before_after_digest": {
+    "bytes": 155940,
+    "sha256": "811d5f31557aa98b6ee5fc2c71d7ca2f8c27d52ceb95aff0686bf71e70d303f6"
+  },
+  "private_result_digest": {
+    "bytes": 46294,
+    "sha256": "4df88016ae7b983c7bdfb4bc06f62390c2654447ccf1a0eb185e2df72292457f"
+  },
+  "pure_parser_controls": {
+    "groups": 27,
+    "scope": "Pure synthetic parser acceptance/rejection only, separately completed; not elaboration itself."
+  },
+  "qualification": "唯一 GdnChunkLoadPrepOwner 的 Chisel 前端构造、声明端口核验与单 CHIRRTL 产物通过。不是 scalar/ACK/RTL 功能通过。",
+  "qualification_limits": {
+    "CHIRRTL_generated": true,
+    "Host_root_publication_or_complete_chunk": false,
+    "QoR_utilization": false,
+    "SystemVerilog_or_RTL_simulation": false,
+    "declared_IO_bound_checks": true,
+    "full_FIRRTL_or_firtool_type_lowering": false,
+    "full_model": false,
+    "one_owner_frontend_construction": true,
+    "prior_Python_or_compile_or_other_owner_PASS_inherited": false,
+    "real_memory_ACK_or_scalar_handshake": false,
+    "shared_scalar_FP32_numerical_correctness": false
+  },
+  "raw_logs_machine_plan_or_authority_included": false,
+  "resource_limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "compile_work_max_seconds": 120,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "elaboration_work_max_seconds": 30,
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "phase_work_stop_rule": "min(shared start+150, phase entry+phase cap); preparations and first cleanup consume same shared work window",
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "resource_observations": {
+    "closed_output_bytes": 1672204,
+    "closed_output_files": 23,
+    "cumulative_children_maxrss_kib": 226584,
+    "not_instantaneous_peak_or_independent_phase_maxrss": true,
+    "peak_sampled_descendant_rss_bytes": 231337984,
+    "sample_interval_seconds": 0.2
+  },
+  "schema": "loadprep-chirrtl-public-summary-v1",
+  "source_manifest": {
+    "bytes": 2713,
+    "sha256": "f5001af6604e126f399d8a078473d35bccdbfe63108b0565f04e14191a72fb2b"
+  },
+  "status": "PASS_SINGLE_LOADPREP_OWNER_CHIRRTL_FRONTEND_ONLY",
+  "terminal": {
+    "compile_emitter": {
+      "anchor_confirmed": true,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_result": "signal_sent_before_reap",
+      "parent_exception": null,
+      "reaped": true,
+      "status": "PASS",
+      "timed_out": false
+    },
+    "elaborate": {
+      "anchor_confirmed": true,
+      "cleanup_confirmed": true,
+      "exit_code": 0,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_result": "signal_sent_before_reap",
+      "parent_exception": null,
+      "reaped": true,
+      "status": "PASS",
+      "timed_out": false
+    }
+  },
+  "timing": {
+    "compile_phase_seconds": 5.551541,
+    "elaborate_phase_seconds": 2.839975,
+    "independent_outer_wall_seconds": null,
+    "launcher_stdout_internal_seconds_root_reported": 9.00229769598809,
+    "note": "Different monotonic boundaries. Do not relabel launcher stdout as an independently measured outer wall duration.",
+    "result_internal_seconds": 9.002016603000811
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "tests": 1,
+  "successful": true,
+  "elapsed_seconds": 79.49179007398197,
+  "peak_rss_kib": 72616,
+  "process_cpu_seconds": 79.541714,
+  "runtime_bounds": {
+    "cpu_affinity": [
+      0
+    ],
+    "rlimit_as": [
+      536870912,
+      536870912
+    ],
+    "rlimit_cpu": [
+      120,
+      120
+    ],
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "python_bytecode_writes": false,
+    "external_wall_timeout_seconds": 120
+  },
+  "source_hashes_before_after_equal": true,
+  "changed_files": [],
+  "captured_files": 38,
+  "source_scope": "Explicit files, not a full runtime dependency closure"
+}

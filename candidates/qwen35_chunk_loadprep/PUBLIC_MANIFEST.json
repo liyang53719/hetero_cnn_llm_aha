@@ -1,0 +1,36 @@
+{
+  "exact_original_count": 6,
+  "files": {
+    "INPUT_PINS.json": {
+      "bytes": 4970,
+      "sha256": "ee43d3cd07e7c177833cfc74e8e3e552d3c5aa53f7c0135a5d8c4fedc358ef3a"
+    },
+    "README.md": {
+      "bytes": 5216,
+      "sha256": "0ad6a0ee902764dafcb18227334c6534cfd3299e4bc2bee35bc6de81263f51e7"
+    },
+    "SCOPE.json": {
+      "bytes": 888,
+      "sha256": "d91d80366f536a6b50a73acdc4a9a10a2eea5cce00e2298db7558b5d3b9bd9dd"
+    },
+    "TEST_SCOPE.json": {
+      "bytes": 4100,
+      "sha256": "762c5e629155038514dbbfb871bf54d58a3ca5455b8e0fbdf180e4436960066e"
+    },
+    "loadprep_model.py": {
+      "bytes": 17309,
+      "sha256": "22c9a2e7b5908c506e02b74b80ff91504651a574d7891ddf0bbf77cb157c3ee4"
+    },
+    "source/GdnChunkLoadPrepOwner.scala": {
+      "bytes": 13190,
+      "sha256": "d0f9885b029eebc57f98f40cce03926ae424bba6d03a43023f63ca912767fecf"
+    },
+    "tests.py": {
+      "bytes": 42829,
+      "sha256": "9a5d7d44043a842ac0c852a9e91efd5f4464117768bc58aa5765d212a4c857f8"
+    }
+  },
+  "schema": "qwen35-loadprep-public-source-excerpt-v1",
+  "scope": "Source plus actual Python-only model controls; no hardware qualification.",
+  "standalone_runnable": false
+}

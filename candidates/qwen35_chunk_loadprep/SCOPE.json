@@ -1,0 +1,29 @@
+{
+  "arithmetic_policy": "legacy ordered binary32 RNE through existing scalar Add; no new arithmetic instance",
+  "execution_authorized_by_manifest": false,
+  "head_count": 16,
+  "no_root_publication": true,
+  "not_qualified": [
+    "Scala compile",
+    "CHIRRTL elaboration",
+    "real shared scalar numerical",
+    "RTL simulation",
+    "complete chunk64",
+    "Host/public prefill",
+    "fullblock",
+    "utilization"
+  ],
+  "old_frozen_sources_modified": false,
+  "per_head_chunk_Add_issues": 64,
+  "per_head_chunk_write_ACK_bytes": 102400,
+  "phase": 1,
+  "production_entry": "GdnChunkLoadPrepOwner",
+  "python_scope": "Explicit-event software model plus simulated scalar responses, NOT independent hardware FP32/ACK verification",
+  "rows": 64,
+  "schema": "qwen35-phase1-source-model-scope-v1",
+  "status": "SOURCE_PREPARED_TESTS_NOT_EXECUTED",
+  "tokens": [
+    16,
+    128
+  ]
+}

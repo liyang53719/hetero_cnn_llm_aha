@@ -1,0 +1,124 @@
+{
+  "configured_outer_limits": {
+    "as_bytes": 268435456,
+    "cpu_affinity": 1,
+    "cpu_soft_hard": [
+      10,
+      10
+    ],
+    "fsize": 1048576,
+    "outer_wall": 10
+  },
+  "elapsed_seconds": {
+    "outer": 0.548627865005983,
+    "test_internal": 0.458691
+  },
+  "full_synthetic_cases": [
+    {
+      "chunk": 0,
+      "head": 0,
+      "model_cycles": 4192,
+      "read_beats": 400,
+      "simulated_add_results": 64,
+      "stalls": false,
+      "tokens": 16,
+      "write_ack_beats": 1600
+    },
+    {
+      "chunk": 0,
+      "head": 15,
+      "model_cycles": 10383,
+      "read_beats": 400,
+      "simulated_add_results": 64,
+      "stalls": true,
+      "tokens": 16,
+      "write_ack_beats": 1600
+    },
+    {
+      "chunk": 0,
+      "head": 0,
+      "model_cycles": 6592,
+      "read_beats": 1600,
+      "simulated_add_results": 64,
+      "stalls": false,
+      "tokens": 128,
+      "write_ack_beats": 1600
+    },
+    {
+      "chunk": 1,
+      "head": 15,
+      "model_cycles": 16383,
+      "read_beats": 1600,
+      "simulated_add_results": 64,
+      "stalls": true,
+      "tokens": 128,
+      "write_ack_beats": 1600
+    }
+  ],
+  "independent_actual_review_pin_only": {
+    "bytes": 5236,
+    "sha256": "f7fa65b26eae561ca045d3613efefb2b7b585f4928b9ba518e8ee0d849b6068f"
+  },
+  "no_measured_peak_RSS_claim": true,
+  "original_files_copied_exactly": {
+    "INPUT_PINS.json": {
+      "bytes": 4970,
+      "sha256": "ee43d3cd07e7c177833cfc74e8e3e552d3c5aa53f7c0135a5d8c4fedc358ef3a"
+    },
+    "README.md": {
+      "bytes": 5216,
+      "sha256": "0ad6a0ee902764dafcb18227334c6534cfd3299e4bc2bee35bc6de81263f51e7"
+    },
+    "SCOPE.json": {
+      "bytes": 888,
+      "sha256": "d91d80366f536a6b50a73acdc4a9a10a2eea5cce00e2298db7558b5d3b9bd9dd"
+    },
+    "loadprep_model.py": {
+      "bytes": 17309,
+      "sha256": "22c9a2e7b5908c506e02b74b80ff91504651a574d7891ddf0bbf77cb157c3ee4"
+    },
+    "source/GdnChunkLoadPrepOwner.scala": {
+      "bytes": 13190,
+      "sha256": "d0f9885b029eebc57f98f40cce03926ae424bba6d03a43023f63ca912767fecf"
+    },
+    "tests.py": {
+      "bytes": 42829,
+      "sha256": "9a5d7d44043a842ac0c852a9e91efd5f4464117768bc58aa5765d212a4c857f8"
+    }
+  },
+  "per_full_trace": {
+    "held_terminal_model_ticks": 3,
+    "scratch_model_ACK_bytes": 102400,
+    "simulated_Add_requests_results": 64,
+    "successful_model_write_ACKs": 1600
+  },
+  "private_machine_test_command_pin_only": {
+    "bytes": 943,
+    "sha256": "5a24026ba9b046d0e02ee80e4927ee88b3cc4ad0ca37e0c065bbcd538a856b1c"
+  },
+  "root_result_pin_only": {
+    "bytes": 695,
+    "sha256": "5bdfde3cd1241953d0d5ee5fc27aa55666244a3b4b757088f8d2a29c81292cdc"
+  },
+  "schema": "qwen35-loadprep-public-python-test-scope-v1",
+  "scope_limits": [
+    "原整数RNE helper只是模拟返回，不是实际HardFloat执行。Exact subnormal与signed zero可接受；错误注入不是自然Add下溢。",
+    "M16 padding不读源但仍完成64 Add/1600写，M128仅指定head/chunk的模型轨迹，不是M128模型验收。",
+    "原README/SCOPE是封源时未执行的历史说明；当前限定小控结果见本文件。",
+    "本摘录不含私有TEST_COMMAND及原SOURCE_MANIFEST，因此不是独立可运行闭包。原tests需要完整pinned包；不生成替代metadata或自动运行入口。",
+    "没有JAR/class/IR/工具/日志/数组/权重/ADMISSION或机器私有路径。",
+    "不授予Scala编译、CHIRRTL、Treadle、硬件ACK、数值DUT、完整chunk/block、RTL、性能/利用率资格。",
+    "Treadle25缺件的环境route未解；旧Qwen2执行/清理UNKNOWN与五RTL0/5不改变。"
+  ],
+  "source_manifest": {
+    "bytes": 1531,
+    "sha256": "90ff7ada76aadc74202fdb8186ddf75d3a3f5f221673b9b78d2540d49d4520ba"
+  },
+  "status": "PASS_PYTHON_PROTOCOL_AND_SIMULATED_SCALAR_ONLY",
+  "summary_cn": "一批14组纯Python控制自然结束，包含4条完整合成轨迹。不是Scala/Chisel/实际共享Scalar、真实内存ACK或独立FP32数值DUT结果。",
+  "test_counts": {
+    "complete_synthetic_trajectories": 4,
+    "content_pins_before_after": 24,
+    "methods": 14
+  }
+}

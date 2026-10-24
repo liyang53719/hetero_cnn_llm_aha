@@ -1786,3 +1786,12 @@ R2唯一实际总11.457736474秒、双自然0/WNOWAIT/reap/group absent/cleanup�
 已有无RTL解释路线：chiseltest6.0内置Treadle2/firrtl2 LowForm，但当前锁106 JAR仅可复用81，缺25项19329566B。官方repo.maven.apache.org不在当前环境允许出站域，零网络尝试；这不是已发生DNS/HTTP失败。未换代理、未绕过、未安装；原87工具闭包不变。私有firtool1.62.1实际存在，不称缺失；Verilator/VCS后端仍缺。
 
 公开8项53926B在 candidates/qwen35_state_transfer_treadle_test/，manifest SHA256 862c31ebc4e53120547bb79f23b774af52de84721390736a99ebcc4b7514254d。包含精确官方依赖URL/pin、原测试源码及限定状态，不含机器计划/二进制/日志。未授JVM/Treadle实际PASS，五RTL0/5、旧Qwen2执行/清理UNKNOWN不变。未push、无新CI、无清理。
+
+
+## PASS（仅 Python 协议与模拟 Scalar）：完整 phase1 LoadPrepAndCumsum 源码
+
+新增独立 GdnChunkLoadPrepOwner.scala，复用原GdnScalarClient Add；每head/chunk64次顺序FP32累加，完整gate/Q/K/V搬运和1600 scratch ACK，不重缩放Q。绑定prep完整资格和initial/上一chunk phase16+17同身份链，不增Vector资源、不改公共M1/Host/fence，不实现derived/exp。exact subnormal不误作underflow拒绝。
+
+14组纯Python模型/模拟Scalar一次自然0，4完整合成轨迹，24内容pins前后同；外0.548627865秒/内0.458691秒，末held模型3周期。Scalar以整数binary32 RNE替身返回，不是独立硬件FP32验证；4192/10383/6592/16383为模型槽计数而非实测RTL周期或利用率。未编译Scala/运行Chisel/真实ACK/完整prefill。实际独审SHA256 f7fa65b26eae561ca045d3613efefb2b7b585f4928b9ba518e8ee0d849b6068f。
+
+公开9件91077B在 candidates/qwen35_chunk_loadprep/，manifest SHA256 332fec149550b035ed02085377a126513afeaa02389aa83fa8366b9d511ad5d7。原六源保持字节，原README的未测试状态是封源前快照，新增TEST_SCOPE记录实际限域；排除机器命令/原manifest/日志，非独立完整运行closure。Scala编译仍TEMP，五RTL0/5、Qwen2 UNKNOWN不变；未push、无新增CI、无清理。

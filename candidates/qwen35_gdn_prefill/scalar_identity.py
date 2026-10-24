@@ -6,8 +6,8 @@ code, a mutate/use/restore callback, or modifications made before this module
 was imported. Checks do not revalidate the host FP environment or establish
 source-to-loaded-bytecode equivalence, arbitrary owner-method integrity or
 native execution correctness. File identity is a separate pre/post snapshot.
-DecayScalar is guarded for standalone tests; this does NOT admit it into the
-full-block coordinator or widen any exp/layout policy.
+DecayScalar admission remains a separate explicit full-driver policy gate;
+these guards do not widen any exp/layout policy or establish numerical acceptance.
 """
 from dataclasses import dataclass
 from types import FunctionType, MethodType
@@ -16,7 +16,7 @@ from . import rms_owner as rms
 from .conv import scalar as conv
 from .prep import scalar as prep
 from ..qwen35_35b_exp import scalar as decay
-from .chunk import exp_policy
+from .chunk import exp_policy, model as chunk, vector
 
 
 SCALAR_SOURCE_FILES = (
@@ -27,6 +27,7 @@ SCALAR_SOURCE_FILES = (
     'candidates/qwen35_35b_exp/scalar.py',
 )
 SCHEMA = 'shared_scalar_callable_identity_v1'
+FULL_ARITHMETIC_SEAL_SCHEMA = 'qwen35_full_arithmetic_selection_v2'
 
 
 def _changed(detail):
@@ -92,16 +93,48 @@ _RESOLVED = tuple({name: getattr(cls, name) for name in
                  for cls in (prep.PrepScalar, decay.DecayScalar))
 
 _ROUTE_PINS = tuple(_Binding.capture(exp_policy, name) for name in
-                    ('operation', 'LEGACY_EXP', 'CANDIDATE_POLICIES', 'OPERATION'))
+    ('operation', 'validate_policy', 'identity', 'LEGACY_EXP', 'IEEE_EXP',
+     'EQUAL_HEADS_EXPERIMENTAL_EXP', 'CANDIDATE_POLICIES', 'OPERATION', 'POLICY',
+     'DecayScalar', 'EQUAL_HEADS', 'GROUPED_35B', 'IEEE_POLICY', 'POLICY_MASKS', 'ROOT', 'sha'))
+_VECTOR_POLICY_PINS = tuple(_Binding.capture(vector, name) for name in ('IEEE_POLICY', 'POLICY_MASKS'))
+_MASK_CONTENTS = tuple((key, type(value), value) for key, value in exp_policy.POLICY_MASKS.items())
+_LAYOUT_CONTENTS = tuple((layout, tuple(vars(layout).items())) for layout in
+                         (exp_policy.EQUAL_HEADS, exp_policy.GROUPED_35B))
+_CHUNK_CLASS = chunk.ChunkOwner
+_CHUNK_EXP_PIN = _Binding.capture(_CHUNK_CLASS, '_exp')
+_CHUNK_ALIAS_PINS = tuple(_Binding.capture(chunk, name) for name in
+                         ('ep', 'ChunkOwner', 'finite', 'ArithmeticFault', 'EQUAL_HEADS',
+                          'LEGACY_CUMSUM', 'LEGACY_MATMUL'))
+
+
+def chunk_exp_routing_identity(policy_module):
+    """Import-anchored admission, operation selection and report helpers only."""
+    if policy_module is not exp_policy:
+        _changed('chunk exp_policy module alias')
+    for pin in (*_ROUTE_PINS, *_VECTOR_POLICY_PINS, *_CHUNK_ALIAS_PINS):
+        pin.check()
+    if tuple((key, type(value), value) for key, value in exp_policy.POLICY_MASKS.items()) != _MASK_CONTENTS:
+        _changed('Vector policy mask contents')
+    if any(tuple(vars(layout).items()) != contents for layout, contents in _LAYOUT_CONTENTS):
+        _changed('chunk layout contents')
+    _CHUNK_EXP_PIN.check()
+    return tuple(pin.value for pin in _ROUTE_PINS) + (_MASK_CONTENTS, _CHUNK_EXP_PIN.value)
 
 
 def legacy_exp_routing_identity(policy_module):
-    """Keep the existing coordinator's operation selection import-anchored."""
-    if policy_module is not _ROUTE_PINS[0].owner:
-        _changed('chunk exp_policy module alias')
-    for pin in _ROUTE_PINS:
-        pin.check()
-    return tuple(pin.value for pin in _ROUTE_PINS)
+    """Compatibility name; both routes retain the same import-anchored checks."""
+    return chunk_exp_routing_identity(policy_module)
+
+
+def chunk_exp_dispatch_identity(owner):
+    """Guard the original _exp dispatcher, not arbitrary owner methods."""
+    routing = chunk_exp_routing_identity(chunk.ep)
+    bound = getattr(owner, '_exp')
+    if (type(owner) is not _CHUNK_CLASS or '_exp' in vars(owner) or
+            type(bound) is not MethodType or bound.__self__ is not owner or
+            bound.__func__ is not _CHUNK_EXP_PIN.value):
+        _changed('resolved ChunkOwner._exp')
+    return (routing, type(owner), _CHUNK_EXP_PIN.value)
 
 
 class ScalarIdentityGuard:

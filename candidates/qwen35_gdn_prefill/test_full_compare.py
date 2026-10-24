@@ -256,6 +256,14 @@ def make_actual(directory):
                     rms_policy='synthetic_fixture', projection_policy='legacy_sequential_k',
                     projection_profile=None, vector_exception_policy='legacy_vector_fatal_underflow',
                     vector_fatal_mask=30)
+    from . import full_driver as f
+    from .test_scalar_identity import bare
+    scalar = bare()
+    identity.update(arithmetic_seal_schema=f.FULL_ARITHMETIC_SEAL_SCHEMA,
+        vector_arithmetic_backend={'backend': 'synthetic-control-only'},
+        scalar_arithmetic_binding=f._admit_chunk_scalar(f.chunk.ep.LEGACY_EXP, None, scalar).report(scalar),
+        chunk_exp_policy=f.chunk.ep.LEGACY_EXP, chunk_exp_identity=f.chunk.ep.identity(f.chunk.ep.LEGACY_EXP),
+        chunk_cumsum_policy=f.chunk.LEGACY_CUMSUM, chunk_matmul_policy=f.chunk.LEGACY_MATMUL)
     files, commands = {}, []
     for phase in c.PHASES:
         for role in c.ROLES:
@@ -283,10 +291,13 @@ def make_actual(directory):
         source_initialization='raw_inputs_and_parameters_only_before_launch',
         carried_dependency='preceding_actual_committed_history_and_fp32_state',
         source_unchanged=True, fixture_unchanged=True, library_unchanged=True, vector_library_unchanged=True,
-        final_identity=dict(source_unchanged=True, output_files_unchanged=True, identity_read_errors={}),
+        final_identity=dict(source_unchanged=True, output_files_unchanged=True, identity_read_errors={},
+                            scalar_arithmetic_binding_unchanged=True, chunk_exp_binding_unchanged=True),
         commands=commands, terminal_count=32, output_files=files,
         window_inputs=[dict(phase='cold128', cold=True, expected_generation=0, history_sha256=None, state_sha256=None),
                        dict(phase='carried128', cold=False, expected_generation=1, history_sha256=history, state_sha256=state)])
+    report.update({name: identity[name] for name in ('arithmetic_seal_schema', 'vector_arithmetic_backend', 'scalar_arithmetic_binding',
+        'chunk_exp_policy', 'chunk_exp_identity', 'chunk_cumsum_policy', 'chunk_matmul_policy')})
     (directory / 'identity.json').write_text(json.dumps(identity))
     write_seal(directory, report)
     return report
@@ -378,13 +389,78 @@ class ActualSealTest(unittest.TestCase):
     def test_postlaunch_policy_change_is_not_same_sealed_arithmetic(self):
         for key, changed in (('rms_policy', 'changed'), ('projection_policy', 'changed'),
                              ('projection_profile', {'ranges': [[0, 16], [16, 32]]}),
-                             ('vector_policy', 'changed'), ('vector_fatal_mask', 28)):
+                             ('vector_policy', 'changed'), ('vector_fatal_mask', 28),
+                             ('vector_arithmetic_backend', {}), ('scalar_arithmetic_binding', {}),
+                             ('chunk_exp_policy', 'unknown'), ('chunk_exp_identity', {}),
+                             ('chunk_cumsum_policy', 'changed'), ('chunk_matmul_policy', 'changed')):
             old = self.report[key]
             self.report[key] = changed
             write_seal(self.root, self.report)
             with self.assertRaisesRegex(ValueError, 'numerical policy differs from prelaunch'):
                 self.load()
             self.report[key] = old
+
+    def test_explicit_experimental_seal_requires_same_decay_and_ieee28(self):
+        from copy import deepcopy
+        from . import full_driver as f
+        from .test_scalar_identity import bare
+        scalar = bare(f.chunk.ep.DecayScalar)
+        identity = self.report['identity']
+        identity.update(chunk_exp_policy=f.chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP,
+            chunk_exp_identity=f.chunk.ep.identity(f.chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP),
+            scalar_arithmetic_binding=f.ScalarIdentityGuard(scalar).report(scalar),
+            vector_exception_policy=f.IEEE_POLICY, vector_fatal_mask=28)
+        self.report.update(chunk_exp_policy=identity['chunk_exp_policy'], chunk_exp_identity=identity['chunk_exp_identity'],
+            scalar_arithmetic_binding=identity['scalar_arithmetic_binding'], vector_policy=f.IEEE_POLICY,
+            vector_fatal_mask=28)
+        (self.root / 'identity.json').write_text(json.dumps(identity))
+        write_seal(self.root, self.report)
+        self.load()
+        original = deepcopy(identity)
+        for changed in ({'vector_exception_policy': f.LEGACY_POLICY}, {'vector_fatal_mask': 30},
+                        {'vector_fatal_mask': 28.0}, {'chunk_exp_policy': f.chunk.ep.IEEE_EXP},
+                        {'chunk_cumsum_policy': f.chunk.GUARDED_CUMSUM},
+                        {'chunk_matmul_policy': f.chunk.ROW4_MATMUL}):
+            probe = deepcopy(original)
+            probe.update(changed)
+            with self.assertRaises(ValueError):
+                c.verify_chunk_exp_seal(probe)
+        for name, value in (('implementation', 'PrepScalar'), ('implementation', 'GateScalar'),
+                            ('enable_ieee_exp', False), ('enable_ieee_exp', 1)):
+            probe = deepcopy(original)
+            probe['scalar_arithmetic_binding'][name] = value
+            with self.assertRaises(ValueError):
+                c.verify_chunk_exp_seal(probe)
+
+    def test_historical_receipt_without_v2_schema_is_not_relabelled(self):
+        for report in (self.report, self.report['identity']):
+            report.pop('arithmetic_seal_schema')
+        (self.root / 'identity.json').write_text(json.dumps(self.report['identity']))
+        write_seal(self.root, self.report)
+        with self.assertRaisesRegex(ValueError, 'numerical policy differs from prelaunch'):
+            self.load()
+
+    def test_missing_frozen_binding_checks_rejected(self):
+        for name in ('scalar_arithmetic_binding_unchanged', 'chunk_exp_binding_unchanged'):
+            del self.report['final_identity'][name]
+            write_seal(self.root, self.report)
+            with self.assertRaisesRegex(ValueError, 'final source/input/output verification failed'):
+                self.load()
+            self.report['final_identity'][name] = True
+
+    def test_matching_reports_cannot_relabel_scalar_or_exp_acceptance(self):
+        from copy import deepcopy
+        original = deepcopy(self.report)
+        for field, key, value in (('scalar_arithmetic_binding', 'implementation', 'GateScalar'),
+                                  ('scalar_arithmetic_binding', 'enable_softplus', 1),
+                                  ('chunk_exp_identity', 'numerical_acceptance', True)):
+            self.report = deepcopy(original)
+            self.report['identity'][field][key] = value
+            self.report[field][key] = value
+            (self.root / 'identity.json').write_text(json.dumps(self.report['identity']))
+            write_seal(self.root, self.report)
+            with self.assertRaisesRegex(ValueError, 'binding|identity seal'):
+                self.load()
 
 
 if __name__ == '__main__':

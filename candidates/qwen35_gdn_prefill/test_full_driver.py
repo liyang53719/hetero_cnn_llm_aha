@@ -33,6 +33,9 @@ class SyntheticTransport:
         self.role = coordinator.role
         if self.role == 'conv_silu':
             job.validate(current_generation=coordinator.window_roots.generation)
+        elif self.role == 'chunk':
+            owner = coordinator.chunk
+            job.validate(owner.geometry, owner.layout, owner.cumsum_policy, owner.exp_policy, owner.matmul_policy)
         else:
             job.validate()
         if self.role in f.DENSE:
@@ -126,6 +129,8 @@ class SyntheticTransport:
 
 class FullCoordinatorControlTests(unittest.TestCase):
     PROJECTION_POLICY = f.ProjectionPolicy.Legacy
+    CHUNK_EXP_POLICY = f.chunk.ep.LEGACY_EXP
+    ACTUAL_SCALAR = False
 
     @classmethod
     def setUpClass(cls):
@@ -146,7 +151,8 @@ class FullCoordinatorControlTests(unittest.TestCase):
         matrix.counts = Counter()
         vector = object.__new__(f.Vector16)
         vector.resource_address, vector.client = 456, None
-        vector.exception_policy, vector.fatal_mask = f.LEGACY_POLICY, 30
+        vector.exception_policy, vector.fatal_mask = ((f.IEEE_POLICY, 28) if
+            self.CHUNK_EXP_POLICY == f.chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP else (f.LEGACY_POLICY, 30))
         # Explicitly synthetic identity, not a compiled or executed backend.
         from .chunk.vector import BackendIdentity, VECTOR_ABI
         vector.backend_identity = BackendIdentity(f.LEGACY_BACKEND, 'synthetic-control-only',
@@ -159,13 +165,14 @@ class FullCoordinatorControlTests(unittest.TestCase):
         vector.calls, vector.lane_ops, vector.flags, vector.host_calls = (Counter() for _ in range(4))
         # The control fixture must not call CDLL(None) or scalar arithmetic
         # merely to initialize SharedScalar's host-environment check.
-        scalar = object.__new__(f.prep.PrepScalar)
-        scalar.client, scalar.enable_softplus = None, True
-        scalar.calls, scalar.internal_calls, scalar.soft_internal_calls = (Counter() for _ in range(3))
+        from .test_scalar_identity import bare
+        scalar = (f._new_chunk_scalar(self.CHUNK_EXP_POLICY, vector) if self.ACTUAL_SCALAR else
+                  bare(f.chunk.ep.DecayScalar if self.CHUNK_EXP_POLICY ==
+                       f.chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP else f.prep.PrepScalar))
         self.events = []
         self.c = f.FullBlockCoordinator(self.weights, {'cold': bytes(32768), 'carry': bytes(32768)},
             matrix=matrix, vector=vector, scalar=scalar, projection_policy=self.PROJECTION_POLICY,
-            observe=lambda *args: self.events.append(args))
+            observe=lambda *args: self.events.append(args), chunk_exp_policy=self.CHUNK_EXP_POLICY)
         self.c.test_launches = []
         def factory(owner, *args, **kwargs):
             return SyntheticTransport(self.c, args[-2], args[-1])
@@ -196,7 +203,7 @@ class FullCoordinatorControlTests(unittest.TestCase):
             scalar.enable_softplus = value
             with self.assertRaisesRegex(ValueError, 'explicitly Softplus-enabled'):
                 f.FullBlockCoordinator({}, {}, matrix=self.c.matrix, vector=self.c.vector, scalar=scalar)
-        # Standalone DecayScalar guards do not widen full-block admission.
+        # Default legacy admission is not widened by the explicit experimental route.
         from ..qwen35_35b_exp.scalar import DecayScalar
         with self.assertRaisesRegex(ValueError, 'explicitly Softplus-enabled'):
             f.FullBlockCoordinator({}, {}, matrix=self.c.matrix, vector=self.c.vector, scalar=bare(DecayScalar))
@@ -600,7 +607,7 @@ class IdentityReceiptTests(unittest.TestCase):
                 (input_fixture.gdn, 'load_payload', ({}, {})),
                 (f.d, 'library_from_environment', Path(directory) / 'not-loaded.so'),
                 (f, 'freeze_identity', {}), (f, 'final_identity', {'source_unchanged': True}),
-                (f.prep, 'PrepScalar', object()),
+                (f, '_new_chunk_scalar', object()),
                 (f.C, 'CDLL', SimpleNamespace(td_reset=lambda: 0)),
                 (matrix_service, 'configure_library', SimpleNamespace(td_reset=lambda: 0)),
                 (f.d, 'MatrixService', object()), (f, 'FullBlockCoordinator', coordinator))

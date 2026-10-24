@@ -2070,3 +2070,34 @@ R1首次runner错误禁止原Prep来源验证所需git show，0.200秒error发�
 - 详细记录：doc/QWEN35_SCALAR_CALLABLE_GUARD_20261023_CN.md；可复核摘要：
   reports/execution/QWEN35_SCALAR_CALLABLE_GUARD_20261023/summary.json。
   下一步仍是独立审查 full_driver 实验 exp 的显式接入及来源，不自动扩大资格。
+
+
+## PASS（显式 full_driver exp 接线/控制及十次 Scalar 分派）/ UNKNOWN（完整 block 数值）：2026-10-23
+
+原 FullBlockCoordinator/run/CLI/freeze_identity 增加独立 chunk_exp_policy，legacy 仍默认；
+实验只允许 EQUAL_HEADS_EXPERIMENTAL_EXP、exact DecayScalar 与两个字面量 True、显式 IEEE28。
+GateScalar/任意子类、GROUPED_35B 专用旧策略及未知策略拒绝。一个所选 Scalar 原样进入
+snapshot 和 coordinator，并由所有原 owner 共用；原 ChunkOwner 与实际 ChunkJob 同时接线。
+Prep gate/reduction、cumsum/matmul、projection、Vector backend 和 fatal30 默认均保持。
+
+新增 exp helper/alias/mask-content 与原 owner._exp 边界冻结、v2 arithmetic seal 和比较端
+policy/Scalar/IEEE28 一致性检查；数值阈值不变，最终 owner 接受→joint commit 无新增可失败
+检查。旧 seal 缺少 v2 字段 fail closed，不给历史报告补字段或追认；真实新资格需独立新证据。
+
+独立源码审查后根实际 attempt1 exit0，38.559589619981125 秒，peak RSS 235060 KiB，
+1CPU/512MiB/50CPU/55alarm/外部60秒+2秒KILL。144测试分9阶段全部通过、0skip/error/failure：
+cold Scalar9、新admission6、legacy synthetic57、实验synthetic11、合成seal/阈值38、
+backend cold17、equal-head cold4、实际legacy/实验 Scalar各1。实际仅原 owner._exp→所选
+Scalar各五词，共十次 public exp；Matrix/Vector为明确模拟handle，未启动任何数值窗口。
+真实TypedMemory写/ACK/发布和原adapter admission验证仍与模拟数值transport分列。
+
+144来源pin前后及归档时一致，72实际载入仓库Python来源全部覆盖，无denied；只有actual
+Scalar阶段3次CDLL(None)，无native Vector/Matrix加载或算术、编译/下载/Torch/RTL。
+见 QWEN35_FULL_DRIVER_EXP_POLICY_20261023_CN.md 与
+reports/execution/QWEN35_FULL_DRIVER_EXP_POLICY_20261023/summary.json；公开仅相对来源pin、
+角色hash及安全摘要，不包含私有路径、原日志/数组/权重。旧89项证据和私有pins原样保留。
+
+本小门done；完整官方输入block数值仍UNKNOWN，五完整RTL仍0/5，Qwen2旧M128状态不变，
+无新周期或MAC利用率实测。真实producer、全head、双chunk与完整block实验策略数值仍待
+单独审查，不能从本控制PASS自动升级或重跑长任务。中文计划随小批更新，尚未提交或发布；
+远端发布待确认，无清理，最终真实完整RTL及80%/90%目标不变。

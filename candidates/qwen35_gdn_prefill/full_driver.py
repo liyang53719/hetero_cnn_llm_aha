@@ -1,6 +1,6 @@
 """Typed SOFTWARE coordinator for the complete Qwen3.5-0.8B L0 GDN block.
 
-One byte map, DenseOwner/Matrix facade, PrepScalar and Vector16 serve every
+One byte map, DenseOwner/Matrix facade, selected shared Scalar and Vector16 serve every
 owner. Only raw inputs/constants are loaded before launch. No reference or
 native forward is imported here. This is not a public Command128 decoder,
 RTL implementation, hardware timing model, or numerical acceptance oracle.
@@ -35,8 +35,8 @@ from .chunk.vector import (Vector16, LEGACY_POLICY, IEEE_POLICY, POLICY_MASKS,
 from .gated_norm import model as norm
 from .elementwise import model as elt
 from .dense_prefix import TypedSeededDenseDriver
-from .scalar_identity import (ScalarIdentityGuard, SCALAR_SOURCE_FILES,
-                              legacy_exp_routing_identity)
+from .scalar_identity import (ScalarIdentityGuard, SCALAR_SOURCE_FILES, FULL_ARITHMETIC_SEAL_SCHEMA,
+                              chunk_exp_routing_identity, chunk_exp_dispatch_identity)
 
 
 SCOPE = 'QWEN35_L0_COMPLETE_TYPED_SOFTWARE_COORDINATOR'
@@ -66,6 +66,9 @@ ACTUAL_SOURCE_FILES = (
     'candidates/qwen35_gdn_prefill/prep/reduction.py',
     'candidates/qwen35_gdn_prefill/chunk/model.py',
     'candidates/qwen35_gdn_prefill/chunk/exp_policy.py',
+    'candidates/qwen35_gdn_prefill/chunk/cumsum.py',
+    'candidates/qwen35_gdn_prefill/chunk/matmul_reuse.py',
+    'candidates/qwen35_35b_exp/gate_scalar.py',
     'candidates/qwen35_gdn_prefill/chunk/vector.py',
     'candidates/qwen35_gdn_prefill/chunk/vector16.cpp',
     'candidates/qwen35_gdn_prefill/gated_norm/model.py',
@@ -83,6 +86,38 @@ WEIGHTS = {'qkv': 'linear_attn.in_proj_qkv.weight', 'z': 'linear_attn.in_proj_z.
 def require(ok, why):
     if not ok:
         raise ValueError('typed full block: ' + why)
+
+
+def _validate_chunk_exp_policy(policy, vector):
+    chunk_exp_routing_identity(chunk.ep)
+    require(type(policy) is str and policy in
+            (chunk.ep.LEGACY_EXP, chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP),
+            'explicit legacy or EQUAL_HEADS_EXPERIMENTAL_EXP chunk policy required')
+    if policy == chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP:
+        require(type(vector) is Vector16 and vector.exception_policy == chunk.ep.IEEE_POLICY and
+                type(vector.fatal_mask) is int and vector.fatal_mask == 28,
+                'experimental equal-head chunk exp requires explicit IEEE Vector mask 28')
+
+
+def _new_chunk_scalar(policy, vector):
+    _validate_chunk_exp_policy(policy, vector)
+    if policy == chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP:
+        return chunk.ep.DecayScalar(enable_softplus=True, enable_ieee_exp=True)
+    return prep.PrepScalar(enable_softplus=True)
+
+
+def _admit_chunk_scalar(policy, vector, scalar):
+    _validate_chunk_exp_policy(policy, vector)
+    if policy == chunk.ep.LEGACY_EXP:
+        require(type(scalar) is prep.PrepScalar and scalar.enable_softplus is True,
+                'one explicitly Softplus-enabled PrepScalar required')
+    else:
+        require(type(scalar) is chunk.ep.DecayScalar and scalar.enable_softplus is True and
+                scalar.enable_ieee_exp is True,
+                'one exact explicitly enabled DecayScalar with literal boolean flags required')
+    guard = ScalarIdentityGuard(scalar)
+    chunk.ep.validate_policy(policy, chunk.EQUAL_HEADS, scalar, vector)
+    return guard
 
 
 def sha(raw):
@@ -135,7 +170,8 @@ class FullBlockCoordinator:
     """
     def __init__(self, weights, inputs, *, matrix, vector, memory=None, dense=None,
                  scalar=None, rms_policy=rms.ReductionPolicy.Torch210CpuDefault1024,
-                 projection_policy=ProjectionPolicy.Legacy, observe=None):
+                 projection_policy=ProjectionPolicy.Legacy, observe=None,
+                 chunk_exp_policy=chunk.ep.LEGACY_EXP):
         require(type(matrix) is d.MatrixService and type(vector) is Vector16,
                 'explicit shared MatrixService and Vector16 required')
         vector.arithmetic_identity()
@@ -146,10 +182,9 @@ class FullBlockCoordinator:
         require(vector.exception_policy in POLICY_MASKS and
                 vector.fatal_mask == POLICY_MASKS[vector.exception_policy],
                 'explicit coherent Vector exception policy required')
-        self.scalar = prep.PrepScalar(enable_softplus=True) if scalar is None else scalar
-        require(type(self.scalar) is prep.PrepScalar and self.scalar.enable_softplus is True,
-                'one explicitly Softplus-enabled PrepScalar required')
-        self._scalar_guard = ScalarIdentityGuard(self.scalar)
+        self.chunk_exp_policy = chunk_exp_policy
+        self.scalar = _new_chunk_scalar(chunk_exp_policy, vector) if scalar is None else scalar
+        self._scalar_guard = _admit_chunk_scalar(chunk_exp_policy, vector, self.scalar)
         self.projection_policy = ProjectionPolicy(projection_policy)
         self.projection_module = self.projection_profile = None
         if self.projection_policy is ProjectionPolicy.IndependentK512:
@@ -171,7 +206,8 @@ class FullBlockCoordinator:
         self.conv_nodes = {}
         self.conv = conv.ConvOwner(self.scalar, observe=self._observe_conv)
         self.prep = prep.InputPrepOwner(self.scalar)
-        self.chunk = chunk.ChunkOwner(self.scalar, vector, host_batch=True)
+        self.chunk = chunk.ChunkOwner(self.scalar, vector, host_batch=True,
+                                      exp_policy=self.chunk_exp_policy)
         self.norm = norm.GatedNormOwner(self.scalar)
         self.elementwise = elt.ElementwiseOwner(self.scalar)
         self.policy, self.observe = rms.ReductionPolicy(rms_policy), observe
@@ -211,7 +247,7 @@ class FullBlockCoordinator:
                          prefix=1024 // 32 * 16384)
             for name, extent in sizes.items():
                 plan[name] = self._allocate(extent)
-            sizing = chunk.ChunkJob(0, 0, 0, 0, 0, 0, rows)
+            sizing = chunk.ChunkJob(0, 0, 0, 0, 0, 0, rows, exp_policy=self.chunk_exp_policy)
             plan['scratch'] = self._allocate(sizing.scratch_bytes)
             self.plans[phase] = plan
         self.cold_history = self._allocate(6144 * 8)
@@ -256,7 +292,9 @@ class FullBlockCoordinator:
                 id(self.dense.b_banks), self.matrix.resource_address, id(self.scalar),
                 id(self.vector), self.vector.resource_address,
                 self.vector.arithmetic_identity(), self._scalar_guard.check(self.scalar),
-                legacy_exp_routing_identity(chunk.ep), self.chunk.exp_policy, self.chunk.layout, self.prep.layout,
+                chunk_exp_dispatch_identity(self.chunk),
+                self.chunk_exp_policy, self.chunk.exp_policy, self.chunk.layout,
+                self.chunk.cumsum_policy, self.chunk.matmul_policy, self.prep.layout,
                 self.prep.gate_policy, self.prep.reduction_policy,
                 self.vector.exception_policy, self.vector.fatal_mask, self.policy,
                 self.projection_policy, self.projection_profile, id(self.projection_module), id(self.dense_wire),
@@ -354,7 +392,7 @@ class FullBlockCoordinator:
             previous = self.cold_state if self.cold else self.window_roots.state
             self.active = chunk.TypedChunkDriver(self.chunk, self.memory,
                 chunk.ChunkJob(tag, p['prep'], previous, p['state'], p[role], p['scratch'], rows,
-                               self.cold, self.window_roots.generation),
+                               self.cold, self.window_roots.generation, exp_policy=self.chunk_exp_policy),
                 current_generation=self.window_roots.generation,
                 published_state_base=None if self.cold else previous)
         elif role == 'gated_norm':
@@ -515,7 +553,8 @@ class FullBlockCoordinator:
 
     def report(self):
         self._check_resources()
-        return dict(scope=SCOPE, public_command128_executed=False, rtl_executed=False,
+        return dict(scope=SCOPE, arithmetic_seal_schema=FULL_ARITHMETIC_SEAL_SCHEMA,
+                    public_command128_executed=False, rtl_executed=False,
                     hardware_cycles=None, hardware_mac_utilization=None, native_acceptance=False,
                     rms_policy=self.policy.value, vector_policy=self.vector.exception_policy,
                     projection_policy=self.projection_policy.value,
@@ -523,6 +562,9 @@ class FullBlockCoordinator:
                     vector_fatal_mask=self.vector.fatal_mask,
                     vector_arithmetic_backend=self.vector.backend_report(),
                     scalar_arithmetic_binding=self._scalar_guard.report(self.scalar),
+                    chunk_exp_policy=self.chunk_exp_policy,
+                    chunk_exp_identity=chunk.ep.identity(self.chunk_exp_policy),
+                    chunk_cumsum_policy=self.chunk.cumsum_policy, chunk_matmul_policy=self.chunk.matmul_policy,
                     vector_policy_control_bound_to_current_chisel=False,
                     roots=asdict(self.roots), response=None if self.response is None else asdict(self.response),
                     reset_required=self.locked, commands=self.commands, window_inputs=self.window_inputs,
@@ -534,16 +576,16 @@ class FullBlockCoordinator:
 
 
 def freeze_identity(root, fixture, weights, inputs, library, vector, output,
-                    projection_policy=ProjectionPolicy.Legacy, *, scalar=None):
+                    projection_policy=ProjectionPolicy.Legacy, *, scalar=None,
+                    chunk_exp_policy=chunk.ep.LEGACY_EXP):
     """Snapshot only execution/validation sources, not numerical references."""
     from .input_fixture import SOURCE_FILES
     require(type(vector) is Vector16, 'original Vector16 required for execution snapshot')
     vector.arithmetic_identity()
     require(verify_library(vector.library, arithmetic_backend=vector.backend_identity.backend)[2] ==
             vector.backend_identity, 'Vector native build changed after construction')
-    require(type(scalar) is prep.PrepScalar and scalar.enable_softplus is True,
-            'original Softplus-enabled PrepScalar required for execution snapshot')
-    scalar_binding = ScalarIdentityGuard(scalar).report(scalar)
+    scalar_binding = _admit_chunk_scalar(chunk_exp_policy, vector, scalar).report(scalar)
+    exp_identity = chunk.ep.identity(chunk_exp_policy)
     matrix_receipt = Path(os.environ['MATRIX_SERVICE_COMPILE_RECEIPT']).resolve(strict=True)
     vector_receipt = vector.library.with_suffix('.json')
     build = json.loads(matrix_receipt.read_text())
@@ -570,7 +612,7 @@ def freeze_identity(root, fixture, weights, inputs, library, vector, output,
     receipts.mkdir()
     (receipts / 'matrix.json').write_bytes(matrix_receipt.read_bytes())
     (receipts / 'vector.json').write_bytes(vector_receipt.read_bytes())
-    return dict(scope=SCOPE, source_sha256=sources,
+    return dict(scope=SCOPE, arithmetic_seal_schema=FULL_ARITHMETIC_SEAL_SCHEMA, source_sha256=sources,
                 source_scope='actual_software_execution_and_input_build_validation_only',
                 identity_file_sha256={str(path.resolve()): sha(path.read_bytes()) for path in files},
                 parameter_sha256={name: sha(raw) for name, raw in weights.items()},
@@ -581,7 +623,9 @@ def freeze_identity(root, fixture, weights, inputs, library, vector, output,
                 fixture_manifest=str((Path(fixture) / 'manifest.json').resolve()),
                 vector_exception_policy=vector.exception_policy, vector_fatal_mask=vector.fatal_mask,
                 vector_arithmetic_backend=vector.backend_report(),
-                scalar_arithmetic_binding=scalar_binding,
+                scalar_arithmetic_binding=scalar_binding, chunk_exp_policy=chunk_exp_policy,
+                chunk_exp_identity=exp_identity, chunk_cumsum_policy=chunk.LEGACY_CUMSUM,
+                chunk_matmul_policy=chunk.LEGACY_MATMUL,
                 public_command128_executed=False, rtl_executed=False)
 
 
@@ -617,7 +661,7 @@ def final_identity(identity, root, fixture):
 def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_library=None,
         rms_policy=rms.ReductionPolicy.Torch210CpuDefault1024, observe=None,
         vector_exception_policy=LEGACY_POLICY, projection_policy=ProjectionPolicy.Legacy,
-        vector_arithmetic_backend=LEGACY_BACKEND):
+        vector_arithmetic_backend=LEGACY_BACKEND, chunk_exp_policy=chunk.ep.LEGACY_EXP):
     """Actual-only two-window entrypoint. Existing libraries only; never builds."""
     from .input_fixture import ROOT, load_fixture, gdn
     from ..qwen2_resident_matrix.ffn_attention.matrix_service import configure_library
@@ -649,9 +693,9 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         if vector is None:
             vector = Vector16(vector_library, exception_policy=vector_exception_policy,
                               arithmetic_backend=vector_arithmetic_backend)
-        scalar = prep.PrepScalar(enable_softplus=True)
+        scalar = _new_chunk_scalar(chunk_exp_policy, vector)
         identity = freeze_identity(ROOT, fixture, weights, inputs, library, vector, output,
-                                   projection_policy, scalar=scalar)
+                                   projection_policy, scalar=scalar, chunk_exp_policy=chunk_exp_policy)
         selected_projection = ProjectionPolicy(projection_policy)
         if selected_projection is ProjectionPolicy.IndependentK512:
             from .projection_driver import GDN_PROJECTION_PROFILE
@@ -670,7 +714,7 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         coordinator = FullBlockCoordinator(weights,
             {phase: inputs[phase + '.hidden.bf16le'][:rows * 2048] for phase in ('cold128', 'carried128')},
             matrix=matrix, vector=vector, scalar=scalar, rms_policy=rms_policy,
-            projection_policy=projection_policy, observe=record)
+            projection_policy=projection_policy, observe=record, chunk_exp_policy=chunk_exp_policy)
         for phase, cold in (('cold128', True), ('carried128', False)):
             remaining = budget_seconds - (time.monotonic() - start)
             require(remaining > 0, 'full coordinator wall budget exceeded')
@@ -682,6 +726,9 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         verification = final_identity(identity, ROOT, fixture)
         verification['scalar_arithmetic_binding_unchanged'] = (
             report['scalar_arithmetic_binding'] == identity['scalar_arithmetic_binding'])
+        verification['chunk_exp_binding_unchanged'] = all(report[name] == identity[name] for name in
+            ('arithmetic_seal_schema', 'chunk_exp_policy', 'chunk_exp_identity',
+             'chunk_cumsum_policy', 'chunk_matmul_policy'))
         verification['output_files_unchanged'] = all((output / name).stat().st_size == item['bytes'] and
             sha((output / name).read_bytes()) == item['sha256'] for name, item in output_files.items())
         complete = coordinator.roots.generation == 2 and all(
@@ -722,13 +769,16 @@ def main():
     parser.add_argument('--vector-arithmetic-backend', choices=ARITHMETIC_BACKENDS, default=LEGACY_BACKEND)
     parser.add_argument('--projection-policy', choices=tuple(p.value for p in ProjectionPolicy),
                         default=ProjectionPolicy.Legacy.value)
+    parser.add_argument('--chunk-exp-policy',
+                        choices=(chunk.ep.LEGACY_EXP, chunk.ep.EQUAL_HEADS_EXPERIMENTAL_EXP),
+                        default=chunk.ep.LEGACY_EXP)
     parser.add_argument('--rows', type=int, choices=(16, 128), default=16)
     parser.add_argument('--budget-seconds', type=int, default=1800)
     args = parser.parse_args()
     result = run(args.fixture, args.output, rows=args.rows, budget_seconds=args.budget_seconds,
                  vector_library=args.vector_library, vector_exception_policy=args.vector_exception_policy,
                  vector_arithmetic_backend=args.vector_arithmetic_backend,
-                 projection_policy=args.projection_policy)
+                 projection_policy=args.projection_policy, chunk_exp_policy=args.chunk_exp_policy)
     print(json.dumps({'status': result['status'], 'roots': result['roots']}), flush=True)
     return 0 if result['status'] == 'ACTUAL_COMPLETE_UNCOMPARED' else 1
 

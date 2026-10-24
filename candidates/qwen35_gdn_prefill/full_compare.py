@@ -100,6 +100,36 @@ def verify_source_hashes(hashes, root):
         require(sha(path.read_bytes()) == digest, 'source identity changed: ' + name)
 
 
+def verify_chunk_exp_seal(identity):
+    """Configuration provenance only; this does not assign an exp tolerance."""
+    from .chunk import exp_policy as ep, model as chunk
+    from .scalar_identity import SCHEMA, FULL_ARITHMETIC_SEAL_SCHEMA, chunk_exp_routing_identity
+    chunk_exp_routing_identity(ep)
+    require(identity.get('arithmetic_seal_schema') == FULL_ARITHMETIC_SEAL_SCHEMA,
+            'explicit v2 arithmetic seal required; historical receipts need requalification')
+    policy = identity.get('chunk_exp_policy')
+    require(type(policy) is str and policy in (ep.LEGACY_EXP, ep.EQUAL_HEADS_EXPERIMENTAL_EXP),
+            'unsupported full-block chunk exp policy seal')
+    require(identity.get('chunk_exp_identity') == ep.identity(policy),
+            'chunk exp source/operation identity seal differs')
+    scalar = identity.get('scalar_arithmetic_binding')
+    require(type(scalar) is dict and scalar.get('schema') == SCHEMA and
+            scalar.get('enable_softplus') is True and scalar.get('boundary_integrity_only') is True and
+            scalar.get('numerical_acceptance', 'missing') is None and
+            scalar.get('production_new_opcode_bound') is False,
+            'shared Scalar binding seal missing')
+    experimental = policy == ep.EQUAL_HEADS_EXPERIMENTAL_EXP
+    require(scalar.get('implementation') == ('DecayScalar' if experimental else 'PrepScalar') and
+            scalar.get('enable_ieee_exp', 'missing') is (True if experimental else None),
+            'chunk exp policy and shared Scalar binding disagree')
+    require(not experimental or (identity.get('vector_exception_policy') == ep.IEEE_POLICY and
+            type(identity.get('vector_fatal_mask')) is int and identity['vector_fatal_mask'] == 28),
+            'experimental chunk exp seal requires explicit IEEE28')
+    require(identity.get('chunk_cumsum_policy') == chunk.LEGACY_CUMSUM and
+            identity.get('chunk_matmul_policy') == chunk.LEGACY_MATMUL,
+            'full-block cumsum/matmul defaults changed')
+
+
 def load_actual(directory, *, root=ROOT):
     """Validate the entire seal BEFORE opening any native manifest/reference."""
     directory = Path(directory)
@@ -113,14 +143,22 @@ def load_actual(directory, *, root=ROOT):
             summary.get('identity') == identity, 'actual completion/identity seal missing')
     require(identity.get('rows') in (16, 128) and type(identity['rows']) is int, 'M16/M128 only')
     rows = identity['rows']
-    for summary_key, identity_key in (('rms_policy', 'rms_policy'),
+    for summary_key, identity_key in (('arithmetic_seal_schema', 'arithmetic_seal_schema'),
+                                     ('rms_policy', 'rms_policy'),
                                      ('projection_policy', 'projection_policy'),
                                      ('projection_profile', 'projection_profile'),
                                      ('vector_policy', 'vector_exception_policy'),
-                                     ('vector_fatal_mask', 'vector_fatal_mask')):
+                                     ('vector_fatal_mask', 'vector_fatal_mask'),
+                                     ('vector_arithmetic_backend', 'vector_arithmetic_backend'),
+                                     ('scalar_arithmetic_binding', 'scalar_arithmetic_binding'),
+                                     ('chunk_exp_policy', 'chunk_exp_policy'),
+                                     ('chunk_exp_identity', 'chunk_exp_identity'),
+                                     ('chunk_cumsum_policy', 'chunk_cumsum_policy'),
+                                     ('chunk_matmul_policy', 'chunk_matmul_policy')):
         require(summary_key in summary and identity_key in identity and
                 summary[summary_key] == identity[identity_key],
                 'actual numerical policy differs from prelaunch identity: ' + summary_key)
+    verify_chunk_exp_seal(identity)
     require(summary.get('full_block_executed') is True and summary.get('reset_required') is False and
             summary.get('roots', {}).get('generation') == 2 and
             summary.get('response', {}).get('status') is None and
@@ -132,6 +170,8 @@ def load_actual(directory, *, root=ROOT):
         require(summary.get(flag) is True, 'unverified actual identity: ' + flag)
     final_identity = summary.get('final_identity', {})
     require(final_identity and final_identity.get('identity_read_errors') == {} and
+            final_identity.get('scalar_arithmetic_binding_unchanged') is True and
+            final_identity.get('chunk_exp_binding_unchanged') is True and
             all(v is True for k, v in final_identity.items() if k != 'identity_read_errors'),
             'final source/input/output verification failed')
     commands = summary.get('commands', [])
@@ -509,7 +549,9 @@ def compare_run(actual_dir, native_manifest, fixture, output, *, root=ROOT):
         native_runtime_files=native['runtime_files'], native_environment=native['environment'],
         actual_identity_file_sha256=identity['identity_file_sha256'], actual_output_files=summary['output_files'],
         actual_numerical_policy={name: identity[name] for name in
-            ('rms_policy', 'projection_policy', 'projection_profile', 'vector_exception_policy', 'vector_fatal_mask')},
+            ('arithmetic_seal_schema', 'rms_policy', 'projection_policy', 'projection_profile', 'vector_exception_policy', 'vector_fatal_mask',
+             'vector_arithmetic_backend', 'scalar_arithmetic_binding', 'chunk_exp_policy', 'chunk_exp_identity',
+             'chunk_cumsum_policy', 'chunk_matmul_policy')},
         native_tensor_sha256={name: record['sha256'] for name, record in native['tensors'].items()},
         actual_generation=2, actual_terminal_count=32, actual_cache_continuity_verified=True,
         official_cache_continuity_verified=True, full_block_gate_pass=all(r['passed'] for r in reports),

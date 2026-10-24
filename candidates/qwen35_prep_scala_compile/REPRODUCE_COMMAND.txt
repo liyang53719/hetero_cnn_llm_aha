@@ -1,0 +1,59 @@
+# Explanatory shell template only. This file is not an executed script.
+# Scope: exactly one Scala compiler entry and the original 18-source order.
+# No Chisel constructor, hardware emitter, or test entry is invoked here.
+# This is NOT the original frozen launcher, supervision, or complete closure.
+# Never execute the copied launcher with a fabricated replacement FROZEN_PLAN.
+#
+# Independently obtain and verify the inputs against INPUT_PINS.json first.
+# No source/tool bytes are included. Relative namespaces are logical labels.
+# Supply all variables yourself; the template performs no discovery/download.
+# JAVA: selected pinned JDK Java executable, as an absolute caller-owned path.
+# CLASSPATH: all 87 JARs in INPUT_PINS.classpath.ordered_relative_entries order,
+#           joined by ':', each resolved by the caller to their own local tree.
+# CHISEL_PLUGIN: caller's path for INPUT_PINS.compiler_plugin_relative.
+# SOURCE_ROOT: caller-staged source tree with prep/, repository/, hardfloat/.
+# WORK_ROOT: caller-chosen fresh output root, never an existing evidence tree.
+# HOME_DIR, TMP_DIR, CLASSES_DIR: prepared writable subdirectories of WORK_ROOT.
+# Set HOME=HOME_DIR, TMPDIR=TMP_DIR, LANG=LC_ALL=C.UTF-8, TZ=UTC in your own
+# independently reviewed environment. Use a minimal explicit PATH as needed.
+# This bare compiler argv does not implement the original deadline, CPU/RSS,
+# output, identity, WNOWAIT, reap, or cleanup controls. No equivalence claimed.
+#
+# The following variables are placeholders, not values assigned by this file:
+# JAVA CLASSPATH CHISEL_PLUGIN SOURCE_ROOT WORK_ROOT HOME_DIR TMP_DIR CLASSES_DIR
+#
+"${JAVA}" \
+  -Xmx1024m \
+  -XX:ActiveProcessorCount=1 \
+  -XX:-UsePerfData \
+  -Djava.awt.headless=true \
+  "-Djava.io.tmpdir=${TMP_DIR}" \
+  "-Duser.home=${HOME_DIR}" \
+  "-XX:ErrorFile=${WORK_ROOT}/hs_err_pid%p.log" \
+  -cp "${CLASSPATH}" \
+  scala.tools.nsc.Main \
+  -classpath "${CLASSPATH}" \
+  "-Xplugin:${CHISEL_PLUGIN}" \
+  -deprecation \
+  -feature \
+  -unchecked \
+  -language:reflectiveCalls \
+  -d "${CLASSES_DIR}" \
+  "${SOURCE_ROOT}/prep/overlay/GdnInputPrepOwner.scala" \
+  "${SOURCE_ROOT}/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala" \
+  "${SOURCE_ROOT}/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala" \
+  "${SOURCE_ROOT}/repository/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala" \
+  "${SOURCE_ROOT}/repository/integration/gemmini/EmitHeteroFP32Alu.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/AddRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/DivSqrtRecFN_small.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/INToRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/MulRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/RecFNToIN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/RoundAnyRawFNToRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/common.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/fNFromRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/primitives.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/rawFloatFromFN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/rawFloatFromIN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/rawFloatFromRecFN.scala" \
+  "${SOURCE_ROOT}/hardfloat/src/main/scala/recFNFromFN.scala"

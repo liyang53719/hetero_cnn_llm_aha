@@ -1712,3 +1712,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 Qwen2 fixed93 M128 原运行连接中断，恢复句柄不可用。最后监督记录 12:04:40 UTC，最后计算进度 Attention / pc12、10 个 public 节点完成；没有原进程退出、清理或完整产物封印。本次既不是已证算术 FAIL，也不授予完整模型、数值或 RTL PASS。五项完整 RTL 仍 0/5。不得将旧 M2/M16 子链资格升级为完整 prefill。
 
 原候选、输入和证据保留，不读取未封存数值流、不盲目重跑；只沿可关联原身份的监督终态或平台记录恢复。普通开发及独立轻量测试继续。脱敏状态及哈希在 candidates/fixed93_fullblock_execution_unknown/；公开包 manifest SHA256 533a1fa26b4911bf5547405f8298f188fcb5e7cf59ffbd5c16b6f56d8a46392e。本批仅记录状态，无新增模型测试或 RTL 作业，无临时文件清理。
+
+
+## PASS（仅 Scala 编译）：Qwen3.5 Prep 多 token 补丁（2026-10-21）
+
+对已冻结 Prep 补丁及原支持源共18文件完成一次离线 Scala 编译。launcher 内部31.116176秒，compiler监督30.496078秒，自然退出0；89个class/843199B，4个预期Prep类齐，338输入before/after一致。实际独审 SHA256 681d3b16acd0d2c1e4b9afe478b5da1a66a13094c05384710992a1c717a47708。原WNOWAIT自然0后清理组并reap，cleanup confirmed，无timeout；不能将cleanup中的kill_attempted误解为编译强杀。
+
+精确资格仅SCALA_COMPILE_ONLY：未执行Chisel构造/展开，未生成RTL，未测试真实ACK、数值或完整GDN/M128；公共M1及recurrent门未改变。Qwen2先前完整运行仍执行/清理UNKNOWN，五RTL仍0/5，无新MAC利用率实测。
+
+复现命令模板、原runner源码摘录、相对输入pins及限定摘要位于 candidates/qwen35_prep_scala_compile/，8文件129291B，manifest SHA256 6a0b67b123a910b0aaec5ea49dda49a0d2c4f02a37e8cf14ac5f283a87da8075。机器冻结计划、工具二进制、class与raw logs不提交；原launcher缺机器计划不能直接运行，命令模板不等价复现原监督。未push，无新增CI，无清理。

@@ -1,0 +1,80 @@
+{
+  "actual_compile_only_result": {
+    "child_exit": {
+      "cleanup_confirmed": true,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_attempted_interpretation": "Original supervisor group cleanup after natural exit was observed; not evidence the compiler was terminated to obtain a pass.",
+      "observed_while_unreaped": {
+        "code": 1,
+        "status": 0
+      },
+      "reaped": true,
+      "timed_out": false
+    },
+    "class_count": 89,
+    "frozen_before_after_input_count": 338,
+    "frozen_before_after_inputs_equal": true,
+    "outer_exit_code": 0,
+    "output_class_bytes": 843199,
+    "status": "PASS_QWEN35_PREP_SCALA_COMPILE_ONLY",
+    "stdout_elapsed_measurement_scope": "Launcher-internal monotonic elapsed; not an independently measured outer wall time.",
+    "stdout_elapsed_seconds": 31.116176181996707
+  },
+  "actual_review": {
+    "bytes": 22125,
+    "interpretation": "Digest identifies the reviewed private evidence; this public excerpt is not the full evidence set.",
+    "raw_review_included": false,
+    "sha256": "681d3b16acd0d2c1e4b9afe478b5da1a66a13094c05384710992a1c717a47708",
+    "status": "PASS_ACTUAL_QWEN35_PREP_SCALA_COMPILE_ONLY"
+  },
+  "expected_prep_class_files": [
+    "heteronpu/continuous/GdnInputPrepOwner.class",
+    "heteronpu/continuous/GdnInputPrepJob.class",
+    "heteronpu/continuous/GdnInputPrepResult.class",
+    "heteronpu/continuous/GdnInputPrepOwnerPort.class"
+  ],
+  "input_counts": {
+    "classpath_jars": 87,
+    "pinned_tools": 314,
+    "scala_source_bytes": 111435,
+    "scala_sources": 18
+  },
+  "package_kind": "SOURCE_AND_STATUS_EXCERPT_NOT_STANDALONE_EXECUTABLE_CLOSURE",
+  "package_state": "SEALED_SOURCE_STATUS_EXCERPT",
+  "packaging_actions": {
+    "candidate_executed": false,
+    "compilation_executed": false,
+    "published_or_pushed": false,
+    "python_checks": "AST parse and compile-to-code-object only; no candidate import or exec",
+    "repository_modified": false,
+    "tests_executed": false,
+    "tool_binary_reads_or_rehashes": false
+  },
+  "qualification_limits": {
+    "ack_handshake_validated": false,
+    "chisel_construction_executed": false,
+    "five_rtl_targets_passed": 0,
+    "five_rtl_targets_total": 5,
+    "m128_validated": false,
+    "numerical_correctness_validated": false,
+    "prior_pass_inherited": false,
+    "prior_qwen2_full_run_cleanup_status": "UNKNOWN",
+    "prior_qwen2_full_run_execution_status": "UNKNOWN",
+    "rtl_generation_executed": false,
+    "token_schedule_validated": false
+  },
+  "reproduction_template_is_original_supervision": false,
+  "runner_source_pins": {
+    "launch_compile.py": {
+      "bytes": 3414,
+      "sha256": "54c57ca5c1838e31b04f0d1d23c7056eabc55f126716e4b33dffb419f35fa927"
+    },
+    "run_compile.py": {
+      "bytes": 11547,
+      "sha256": "0747cec3459f3154bbd54a55f743f7defbb8e4528e8e8082e26991a9db246654"
+    }
+  },
+  "schema": "qwen35-prep-compile-public-summary-v1",
+  "scope": "SCALA_COMPILE_ONLY_NOT_ELABORATION"
+}

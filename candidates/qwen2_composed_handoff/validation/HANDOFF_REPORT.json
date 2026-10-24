@@ -1,0 +1,262 @@
+{
+  "binding": {
+    "bare_main_difference": "EXPECTED_PINNED_RECIPE_COMPOSITION_NOT_MISSING_ARCHITECTURE",
+    "bare_main_sha256": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4",
+    "donor_sha256": "4375ccf715cf408975c3e45ae595955767b824404ef8337bb260ed807527dc1e",
+    "installed_postimage_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+    "m128_contract_binds_bare_scala_as_provenance": true,
+    "m128_operationally_executes_composed_scala": false,
+    "production_preimage_sha256": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558",
+    "sequential_softmax_pv_byte_preserved": true
+  },
+  "bounded_slice": "PASS_EXISTING_COMPOSITION_AND_RETAINED_QK_CONTROL_MODEL",
+  "composition": {
+    "donor_files": 13,
+    "external_hardfloat_source_bodies_not_verified": 20,
+    "full_92_source_compiler_closure_verified": false,
+    "installed_files": 5,
+    "planned_repository_scala_sources_verified": 72,
+    "postimages": [
+      {
+        "base_sha256": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+        "post_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68"
+      },
+      {
+        "base_sha256": "b3dad7ae7a23c96ac720cd9920ff3595d1d83f77a2664ed73526e71e5b49a3ae",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+        "post_sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3"
+      },
+      {
+        "base_sha256": "8a2c2d41e68719fb2714e3658b45ec0cd8bbe9f9173dbd9c9a91e7344f16e995",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+        "post_sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc"
+      },
+      {
+        "base_sha256": "59c041ac92a4a0105ddf0bc5ad521e59b0ebb7d76c30bdeb4eb009943bb19545",
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+        "post_sha256": "15cc34f041228f38d69b15868a9f9c45fb3f9ea53a9275ec6a6d9fd70b4b0c25"
+      },
+      {
+        "base_sha256": null,
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala",
+        "post_sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+      }
+    ],
+    "production_files": 77,
+    "source_files_unchanged": 120
+  },
+  "input_pins_sha256": "b9dfbec83de5b8b90f8525a89c28bac99b683d104f208236cb3449406e3a7ac2",
+  "retirement_cases": [
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 1,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 1,
+      "ticks": 99,
+      "token": 0
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 2,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 2,
+      "ticks": 162,
+      "token": 1
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 3,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 3,
+      "ticks": 225,
+      "token": 2
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 4,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 4,
+      "ticks": 288,
+      "token": 3
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 5,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 5,
+      "ticks": 351,
+      "token": 4
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 6,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 6,
+      "ticks": 414,
+      "token": 5
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 7,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 7,
+      "ticks": 477,
+      "token": 6
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 8,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 8,
+      "ticks": 540,
+      "token": 7
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 9,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 9,
+      "ticks": 603,
+      "token": 8
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 10,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 10,
+      "ticks": 666,
+      "token": 9
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 11,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 11,
+      "ticks": 729,
+      "token": 10
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 12,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 12,
+      "ticks": 792,
+      "token": 11
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 13,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 13,
+      "ticks": 855,
+      "token": 12
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 14,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 14,
+      "ticks": 918,
+      "token": 13
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 15,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 15,
+      "ticks": 981,
+      "token": 14
+    },
+    {
+      "base": 0,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 16,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 16,
+      "ticks": 1044,
+      "token": 15
+    },
+    {
+      "base": 112,
+      "completion_acks": 1,
+      "done_acks": 1,
+      "keys": 16,
+      "model_state": "complete",
+      "result_acks": 1,
+      "scores": 16,
+      "ticks": 1044,
+      "token": 127
+    }
+  ],
+  "schema": 1,
+  "scope": {
+    "existing_accepted_event_model_executed": true,
+    "full_block_acceptance": false,
+    "full_m128_reexecuted": false,
+    "hardware_cycles_claimed": false,
+    "historical_acceptance_inherited": false,
+    "native_arithmetic_imported": false,
+    "numerical_equivalence": false,
+    "production_fix_required_by_observed_case": false,
+    "rtl_generated": false,
+    "scala_behavior_executed": false,
+    "softmax_pv_behavior_executed": false,
+    "source_recipes_executed": true
+  },
+  "status": "INCOMPLETE",
+  "unproven": [
+    "production Scala dynamic behavior",
+    "Python six-head versus Scala per-head operational correspondence",
+    "shared-bank ACK/release and 384B panel",
+    "PV6 retention and final resource debt join",
+    "Scalar policy and full29 numerical acceptance"
+  ]
+}

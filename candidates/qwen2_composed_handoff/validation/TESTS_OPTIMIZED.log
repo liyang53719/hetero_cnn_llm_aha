@@ -1,0 +1,29 @@
+test_abort_held_tile_after_some_commits (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_abort_held_tile_after_some_commits) ... ok
+test_all_counts_mapping_stalls_and_tail (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_all_counts_mapping_stalls_and_tail) ... ok
+test_causal_tiles_global_key_order (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_causal_tiles_global_key_order) ... ok
+test_counts (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_counts) ... ok
+test_current_fault_on_score_edge (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_current_fault_on_score_edge) ... ok
+test_default_off (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_default_off) ... ok
+test_foreign_ack_cannot_retire_pending_read (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_foreign_ack_cannot_retire_pending_read) ... ok
+test_later_selected_nonfinite_suppresses_that_score (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_later_selected_nonfinite_suppresses_that_score) ... ok
+test_matching_error_no_gather_or_score (candidates.qwen2_resident_matrix.attention_qk16_owner_route.test_route.Control.test_matching_error_no_gather_or_score) ... ok
+test_all_tail_cases_retire_exactly_once (__main__.Integration.test_all_tail_cases_retire_exactly_once) ... ok
+test_cached_wrong_control_model_rejected (__main__.Integration.test_cached_wrong_control_model_rejected) ... ok
+test_cached_wrong_package_rejected (__main__.Integration.test_cached_wrong_package_rejected) ... ok
+test_changed_source_rejected (__main__.Integration.test_changed_source_rejected) ... ok
+test_cold_standalone_cli_has_no_unittest_import_dependencies (__main__.Integration.test_cold_standalone_cli_has_no_unittest_import_dependencies) ... ok
+test_composition_is_expected_not_missing_architecture (__main__.Integration.test_composition_is_expected_not_missing_architecture) ... ok
+test_existing_output_rejected (__main__.Integration.test_existing_output_rejected) ... ok
+test_missing_source_rejected (__main__.Integration.test_missing_source_rejected) ... ok
+test_no_numerical_module_imported (__main__.Integration.test_no_numerical_module_imported) ... ok
+test_real_planned_repository_source_selection (__main__.Integration.test_real_planned_repository_source_selection) ... ok
+test_selected_source_bytecode_rejected (__main__.Integration.test_selected_source_bytecode_rejected) ... ok
+test_software_provenance_is_not_composed_scala_execution (__main__.Integration.test_software_provenance_is_not_composed_scala_execution) ... ok
+test_source_guard_mutation_rejected (__main__.Integration.test_source_guard_mutation_rejected) ... ok
+test_stall_lengths_do_not_change_retirement (__main__.Integration.test_stall_lengths_do_not_change_retirement) ... ok
+test_unpinned_package_initializer_rejected_before_import (__main__.Integration.test_unpinned_package_initializer_rejected_before_import) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.590s
+
+OK

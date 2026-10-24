@@ -1,0 +1,83 @@
+{
+  "cli": {
+    "normal_exit": 2,
+    "optimized_exit": 2,
+    "report": "HANDOFF_REPORT.json",
+    "reports_byte_equal": true,
+    "sha256": "bedc3f77862d36d091f801d0e94e24c56370867786d4b218a0d2a9c580e7dbfd",
+    "status": "INCOMPLETE"
+  },
+  "code_pins_sha256": "bb7d04f9c99b32c2488756ab2857c74ce6fe93e5ff029b6cb6f53f9d2100ef27",
+  "independent_review": {
+    "scope": "NO_SCALA_ARITHMETIC_OR_FULL_BLOCK_ACCEPTANCE",
+    "status": "APPROVED_BOUNDED_SOURCE_CONTROL_SLICE"
+  },
+  "input_pins_sha256": "b9dfbec83de5b8b90f8525a89c28bac99b683d104f208236cb3449406e3a7ac2",
+  "legacy_assert_coverage_equal_under_optimized_mode": false,
+  "limits": {
+    "address_space_bytes": 268435456,
+    "cpu_affinity_count": 1,
+    "cpu_seconds": 20,
+    "shell_wall_seconds": 30
+  },
+  "production_code_changed": false,
+  "python_version": "3.12.14",
+  "reproduction_commands": [
+    "timeout -k 2 30s python -I -B candidates/qwen2_composed_handoff/test_handoff.py --source-root .",
+    "timeout -k 2 30s python -I -B -O candidates/qwen2_composed_handoff/test_handoff.py --source-root .",
+    "timeout -k 2 30s python -I -B candidates/qwen2_composed_handoff/replay_handoff.py --source-root . --output NEW_FRESH_OUTPUT"
+  ],
+  "schema": 1,
+  "scope": {
+    "existing_accepted_event_model_executed": true,
+    "full_block_acceptance": false,
+    "full_m128_reexecuted": false,
+    "hardware_cycles_claimed": false,
+    "historical_acceptance_inherited": false,
+    "native_arithmetic_imported": false,
+    "numerical_equivalence": false,
+    "production_fix_required_by_observed_case": false,
+    "rtl_generated": false,
+    "scala_behavior_executed": false,
+    "softmax_pv_behavior_executed": false,
+    "source_recipes_executed": true
+  },
+  "source_fixture": {
+    "actual_files": 120,
+    "all_hashes_match_after_tests": true,
+    "extra_files": 0,
+    "pinned_files": 120
+  },
+  "source_reference_commit": "cacc259d8893754b8cae968b5355ccf37e5b79cf",
+  "standalone_cli_import_regression_test_added": true,
+  "status": "PASS_EXISTING_COMPOSITION_AND_CONTROL_MODEL_TESTS_ONLY",
+  "tests": [
+    {
+      "elapsed_seconds": 0.343,
+      "existing_control_methods": 9,
+      "exit_code": 0,
+      "log": "TESTS_NORMAL.log",
+      "methods": 24,
+      "mode": "normal",
+      "new_integration_methods": 15,
+      "sha256": "7ad66ae9c7aa40c7ff08dc1bbb4b308ab240b013a228b39025c498e28c3e18cf"
+    },
+    {
+      "elapsed_seconds": 0.59,
+      "existing_control_methods": 9,
+      "exit_code": 0,
+      "log": "TESTS_OPTIMIZED.log",
+      "methods": 24,
+      "mode": "optimized",
+      "new_integration_methods": 15,
+      "sha256": "78891866f9c7df6fe6312d3d2ece59c860a27ecb2cfa519d998ea38520f97402"
+    }
+  ],
+  "unproven": [
+    "production Scala dynamic behavior",
+    "Python six-head versus Scala per-head operational correspondence",
+    "shared-bank ACK/release and 384B panel",
+    "PV6 retention and final resource debt join",
+    "Scalar policy and full29 numerical acceptance"
+  ]
+}

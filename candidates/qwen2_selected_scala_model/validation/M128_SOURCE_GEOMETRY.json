@@ -1,0 +1,64 @@
+{
+  "attention_issued_active_capacity_macs": 632291328,
+  "attention_useful_macs": 25362432,
+  "evidence": "SOURCE_WORK_PLAN_NOT_EXECUTION_OR_CYCLES",
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "installed_mac_lanes": 4096,
+  "logical_retention": {
+    "existing_dense_operand_words": 256,
+    "probability_capacity_words": 1024,
+    "query_words": 128,
+    "score_capacity_words": 1024,
+    "six_head_kv_cache": false,
+    "six_head_panel": false
+  },
+  "memory_beats": {
+    "k_reads": 792576,
+    "output_write_acks": 12288,
+    "q_reads": 12288,
+    "v_reads": 792576
+  },
+  "omitted_from_issue_counts": [
+    "DMA",
+    "Scalar work",
+    "bank waits",
+    "backpressure",
+    "client retirement",
+    "final completion ACK",
+    "other block operators"
+  ],
+  "prefill_jobs": 1,
+  "pv": {
+    "groups": 12288,
+    "issue_k": 1,
+    "issue_m": 16,
+    "issue_n": 32,
+    "issued_active_capacity_macs": 405798912,
+    "logical_k": "causal keys 1..rows",
+    "logical_m": 1,
+    "logical_n": 16,
+    "selected_lanes_per_step": 16,
+    "slice_mask": 1,
+    "steps": 792576,
+    "useful_macs": 12681216
+  },
+  "qk": {
+    "groups": 6912,
+    "issue_k": 1,
+    "issue_m": 16,
+    "issue_n": 256,
+    "issued_active_capacity_macs": 226492416,
+    "logical_k": 128,
+    "logical_m": 1,
+    "logical_n": "active keys 1..16",
+    "selected_lanes_per_step": "16 * active keys; at most 256 of 4096",
+    "slice_mask": 255,
+    "steps": 55296,
+    "useful_macs": 12681216
+  },
+  "required_denominator": "4096 * measured whole-block command-accept through final-completion-ACK cycles",
+  "rows": 128,
+  "scope": "Per-head correspondence baseline underfills the fixed physical array; not the final 90% architecture schedule",
+  "whole_block_useful_macs": 6014828544
+}

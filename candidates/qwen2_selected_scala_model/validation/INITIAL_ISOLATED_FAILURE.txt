@@ -1,0 +1,6 @@
+Final aggregate cold validation, 2026-10-24: earlier suites passed, then run_existing_numeric_regressions.py failed before test execution under python -I -B.
+Traceback (most recent call last):
+  File "run_existing_numeric_regressions.py", line 19, in <module>
+    import test_schedule_numeric as harness
+ModuleNotFoundError: No module named 'test_schedule_numeric'
+Reason: isolated mode does not add the script directory to sys.path. The original worker validation used -B without -I. This is a runner portability failure, not a numerical test failure.

@@ -1,0 +1,10 @@
+--- a/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py
++++ b/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py
+@@ -57,6 +57,7 @@
+                     reset_required=self.poison or self.matrix.reset_required, state=self.state))
+ 
+     def _validate(self, j):
++        packed.validate(self,j)
+         if j.kind != 'Attention' or any(getattr(j, name, False) for name in
+                 ('weight_bf16', 'activation_bf16', 'output_bf16')):
+             raise PrefixFault('Unsupported', 'legacy Attention uses FP32 memory containers')

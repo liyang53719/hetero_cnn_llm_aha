@@ -1,0 +1,36 @@
+{
+  "accepted_owner_port_edges": {
+    "job_fire": 1,
+    "matrix_request_fire": 504,
+    "matrix_result_fire": 504,
+    "memory_fire": 960,
+    "memory_response_fire": 960,
+    "response_fire": 1,
+    "scratch_fire": 0,
+    "scratch_response_fire": 0
+  },
+  "hardware_cycles": false,
+  "hardware_utilization": false,
+  "host_tick_calls": 5264,
+  "native_arithmetic_executed": false,
+  "no_handshake_is_not_a_hardware_idle_measure": true,
+  "observations_may_overlap": true,
+  "pre_edge_state_observations": {
+    "finish": 1,
+    "idle": 1,
+    "issue": 1427,
+    "matrix_issue": 689,
+    "matrix_wait": 1969,
+    "wait": 1177
+  },
+  "scope": "M2 synthetic words; unchanged composed owner/client control",
+  "units": "host Python tick calls and pre-edge state/port observations",
+  "wait_observations": {
+    "matrix_request_backpressure_ticks": 185,
+    "matrix_response_wait_ticks": 1465,
+    "memory_request_backpressure_ticks": 467,
+    "memory_response_wait_ticks": 217,
+    "no_owner_port_handshake_ticks": 2334,
+    "terminal_backpressure_ticks": 0
+  }
+}

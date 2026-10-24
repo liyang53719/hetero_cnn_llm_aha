@@ -1,0 +1,111 @@
+{
+  "materialized_commit": "c2ae535bd06fba440e9a486c93ff87282942e271",
+  "remote_equality_proof_sha256": "2de0872453ce8ee6887ff3bda668b3473b834d5c9d76cfc910f222ee476cb41f",
+  "selected_scala_postimages": [
+    {
+      "base_sha256": "2118e101b61510adb3d57129a07fe6064dd3160aea341e495cd2bd1e6ab7a558",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+      "post_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68"
+    },
+    {
+      "base_sha256": "b3dad7ae7a23c96ac720cd9920ff3595d1d83f77a2664ed73526e71e5b49a3ae",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "post_sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3"
+    },
+    {
+      "base_sha256": "8a2c2d41e68719fb2714e3658b45ec0cd8bbe9f9173dbd9c9a91e7344f16e995",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/MatrixPipeline.scala",
+      "post_sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc"
+    },
+    {
+      "base_sha256": "59c041ac92a4a0105ddf0bc5ad521e59b0ebb7d76c30bdeb4eb009943bb19545",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+      "post_sha256": "15cc34f041228f38d69b15868a9f9c45fb3f9ea53a9275ec6a6d9fd70b4b0c25"
+    },
+    {
+      "base_sha256": null,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala",
+      "post_sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+    }
+  ],
+  "source_commit": "1ea9b511fc982b2d928472b0dadd9f794c1c20d8",
+  "source_tree": "e6af2af0b35b7c12907a1ff0b66dd416f0e90571",
+  "sources": {
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/model.py": {
+      "bytes": 6233,
+      "sha256": "f82699680b2b0f0569f7b1b71eaee5fdd2fa31c64ef08b0b5a89d35793bc01d3"
+    },
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py": {
+      "bytes": 35767,
+      "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m128/pins.json": {
+      "bytes": 25528,
+      "sha256": "883cd0b6c50c112c2dbc80a533bece90a0ee8d606a81615f1242c06f5e0b93ad"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m128/tiled.patch": {
+      "bytes": 5679,
+      "sha256": "c29860c602bb2733ab6d3d5f95fcc9156879c0acaeceecfa861af1b12809830b"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m16/m16.patch": {
+      "bytes": 2750,
+      "sha256": "f2d65a3767b0d9c4c8691b62d475705f5fa0cd9cd8c8c25fb5c765c0cfaf47f0"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/client.py": {
+      "bytes": 17894,
+      "sha256": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/hooks.py": {
+      "bytes": 4780,
+      "sha256": "127f26fb04f2efc02bc8920d263cdbd14bda6a498315b2a2a9aad8fb99f23c7d"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/owner.patch": {
+      "bytes": 7961,
+      "sha256": "701f8a92e784763433f9e5348d9202dd344b4612095f7d5d150166546a85f762"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/protocol.py": {
+      "bytes": 968,
+      "sha256": "d153de82a85efb87e0f359ad84a8744e9c1a5d28ba12a8f689fa179a9eea63f3"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py": {
+      "bytes": 4683,
+      "sha256": "ddd2c2b2d7a60bbcae27013f1f38e17bdc514cffe15572124c9bdfabff2c81bd"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/test_client.py": {
+      "bytes": 20606,
+      "sha256": "fa9d0285db80253f354630385c2c203a5ec7d70f8c6bc3cc2169720914c4f92b"
+    },
+    "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": {
+      "bytes": 18144,
+      "sha256": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8"
+    },
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": {
+      "bytes": 29097,
+      "sha256": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27"
+    },
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": {
+      "bytes": 2243,
+      "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": {
+      "bytes": 8445,
+      "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": {
+      "bytes": 19134,
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": {
+      "bytes": 25923,
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+    },
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": {
+      "bytes": 9394,
+      "sha256": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/POSTIMAGE_PINS.json": {
+      "bytes": 1351,
+      "sha256": "f7b534e22e3d707129a00315343a71365ade205f0b0052a69593146e383659fb"
+    }
+  }
+}

@@ -1,0 +1,112 @@
+=== test_routing.py: normal=True, expected=26, returncode=0
+test_actual_official_owner_tick_m1_m2_synthetic_control (__main__.ComposedOwnerTests.test_actual_official_owner_tick_m1_m2_synthetic_control) ... ok
+test_actual_owner_nonfinite_selected_result_drains_retains_accepted_work (__main__.ComposedOwnerTests.test_actual_owner_nonfinite_selected_result_drains_retains_accepted_work) ... ok
+test_actual_owner_terminal_backpressure_does_not_release_service_early (__main__.ComposedOwnerTests.test_actual_owner_terminal_backpressure_does_not_release_service_early) ... ok
+test_default_owner_and_old_packed_profile_do_not_opt_in (__main__.ComposedOwnerTests.test_default_owner_and_old_packed_profile_do_not_opt_in) ... ok
+test_default_owner_keeps_original_1024_capacity (__main__.ComposedOwnerTests.test_default_owner_keeps_original_1024_capacity) ... ok
+test_explicit_entry_only_installs_on_exact_idle_original_owner (__main__.ComposedOwnerTests.test_explicit_entry_only_installs_on_exact_idle_original_owner) ... ok
+test_selected_admission_rejects_bad_length_before_resource_acquisition (__main__.ComposedOwnerTests.test_selected_admission_rejects_bad_length_before_resource_acquisition) ... ok
+test_accepted_qk_useful_work_is_retained_after_abort (__main__.RoutingTests.test_accepted_qk_useful_work_is_retained_after_abort) ... ok
+test_duplicate_legacy_reply_and_owner_release_are_not_accepted (__main__.RoutingTests.test_duplicate_legacy_reply_and_owner_release_are_not_accepted) ... ok
+test_duplicate_packed_consumer_completion_is_rejected (__main__.RoutingTests.test_duplicate_packed_consumer_completion_is_rejected) ... ok
+test_fixture_client_definitions_remain_snapshot_bound_and_stdlib_only (__main__.RoutingTests.test_fixture_client_definitions_remain_snapshot_bound_and_stdlib_only) ... ok
+test_foreign_and_stale_consumer_ack_cannot_discharge_current_result (__main__.RoutingTests.test_foreign_and_stale_consumer_ack_cannot_discharge_current_result) ... ok
+test_foreign_done_cannot_complete_or_switch (__main__.RoutingTests.test_foreign_done_cannot_complete_or_switch) ... ok
+test_held_packed_payload_is_stable_under_backpressure (__main__.RoutingTests.test_held_packed_payload_is_stable_under_backpressure) ... ok
+test_legacy_active_group_cannot_switch_to_qk (__main__.RoutingTests.test_legacy_active_group_cannot_switch_to_qk) ... ok
+test_legacy_final_waits_for_done_before_visible_reply (__main__.RoutingTests.test_legacy_final_waits_for_done_before_visible_reply) ... ok
+test_omitted_done_never_manufactures_owner_completion (__main__.RoutingTests.test_omitted_done_never_manufactures_owner_completion) ... ok
+test_omitted_packed_consumer_ack_never_retires_or_switches (__main__.RoutingTests.test_omitted_packed_consumer_ack_never_retires_or_switches) ... ok
+test_packed_switch_rejected_between_nonfinal_steps (__main__.RoutingTests.test_packed_switch_rejected_between_nonfinal_steps) ... ok
+test_qk_final_only_legacy_each_key_then_next_qk_one_service (__main__.RoutingTests.test_qk_final_only_legacy_each_key_then_next_qk_one_service) ... ok
+test_qk_key_count_requires_canonical_one_through_sixteen (__main__.RoutingTests.test_qk_key_count_requires_canonical_one_through_sixteen) ... ok
+test_request_branch_is_exact_and_no_packed_pv_is_admitted (__main__.RoutingTests.test_request_branch_is_exact_and_no_packed_pv_is_admitted) ... ok
+test_resource_or_acquisition_change_rejected_for_either_branch (__main__.RoutingTests.test_resource_or_acquisition_change_rejected_for_either_branch) ... ok
+test_stale_ack_while_legacy_active_is_not_a_branch_change (__main__.RoutingTests.test_stale_ack_while_legacy_active_is_not_a_branch_change) ... ok
+test_switch_fenced_before_result_done_and_owner_facing_retired (__main__.RoutingTests.test_switch_fenced_before_result_done_and_owner_facing_retired) ... ok
+test_write_debt_proxies_gate_retirement_and_foreign_ack (__main__.RoutingTests.test_write_debt_proxies_gate_retirement_and_foreign_ack) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.156s
+
+OK
+
+=== test_schedule_numeric.py: normal=True, expected=10, returncode=0
+test_harness_imports_are_stdlib_and_guards_survive_optimization (__main__.ColdSourceIsolationTests.test_harness_imports_are_stdlib_and_guards_survive_optimization) ... ok
+test_raw_sources_match_candidate_input_pins (__main__.ColdSourceIsolationTests.test_raw_sources_match_candidate_input_pins) ... ok
+test_finite_fold_then_bf_dot_overflow_is_not_committed_or_scaled (__main__.ProductionQk16FaultOrderingTests.test_finite_fold_then_bf_dot_overflow_is_not_committed_or_scaled) ... ok
+test_injected_nonfinite_bf_score_cannot_commit_or_retire (__main__.ProductionQk16FaultOrderingTests.test_injected_nonfinite_bf_score_cannot_commit_or_retire) ... ok
+test_later_key_nonfinite_does_not_pre_scan_or_erase_first_score (__main__.ProductionQk16FaultOrderingTests.test_later_key_nonfinite_does_not_pre_scan_or_erase_first_score) ... ok
+test_nonfinite_current_key_stops_before_fold_or_score (__main__.ProductionQk16FaultOrderingTests.test_nonfinite_current_key_stops_before_fold_or_score) ... ok
+test_each_head_finishes_original_softmax_and_legacy_pv_before_next_head (__main__.ProductionQk16NumericTests.test_each_head_finishes_original_softmax_and_legacy_pv_before_next_head) ... ok
+test_live_key_cells_and_commit_order_precede_final_ack (__main__.ProductionQk16NumericTests.test_live_key_cells_and_commit_order_precede_final_ack) ... ok
+test_m2_actual_generator_output_scores_and_fold_match (__main__.ProductionQk16NumericTests.test_m2_actual_generator_output_scores_and_fold_match) ... ok
+test_physical_q_k_v_reads_have_no_cross_head_reuse_or_panel (__main__.ProductionQk16NumericTests.test_physical_q_k_v_reads_have_no_cross_head_reuse_or_panel) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.691s
+
+OK
+
+=== test_control_regression.py: normal=True, expected=17, returncode=0
+test_m2_actual_owner_host_event_histogram (__main__.HostControlHistogramTests.test_m2_actual_owner_host_event_histogram) ... ok
+test_abort_before_issue_and_between_steps_does_not_invent_payload (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_abort_before_issue_and_between_steps_does_not_invent_payload) ... ok
+test_abort_exposed_result_is_byte_stable_through_backpressure (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_abort_exposed_result_is_byte_stable_through_backpressure) ... ok
+test_abort_held_result_waits_accepted_write_and_never_publishes (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_abort_held_result_waits_accepted_write_and_never_publishes) ... ok
+test_consumer_ack_waits_both_ready_edges_and_returns_metadata (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_consumer_ack_waits_both_ready_edges_and_returns_metadata) ... ok
+test_final_delivery_keeps_exact_service_payload_until_ack (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_final_delivery_keeps_exact_service_payload_until_ack) ... ok
+test_foreign_done_rejected_without_retiring_group (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_foreign_done_rejected_without_retiring_group) ... ok
+test_malformed_packets_rejected_before_admission (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_malformed_packets_rejected_before_admission) ... ok
+test_nonfinal_metadata_has_no_payload_or_service_retirement (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_nonfinal_metadata_has_no_payload_or_service_retirement) ... ok
+test_old_client_cannot_drive_a_later_identical_owner_acquisition (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_old_client_cannot_drive_a_later_identical_owner_acquisition) ... ok
+test_qk_eight_steps_enable_all_slices_and_select_wide_columns (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_qk_eight_steps_enable_all_slices_and_select_wide_columns) ... ok
+test_reset_epoch_and_resource_mismatch_reject_without_mutation (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_reset_epoch_and_resource_mismatch_reject_without_mutation) ... ok
+test_selected_finite_only_and_exact_special_bits (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_selected_finite_only_and_exact_special_bits) ... ok
+test_stale_foreign_and_noncanonical_tags_never_discharge (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_stale_foreign_and_noncanonical_tags_never_discharge) ... ok
+test_tagged_write_debts_gate_retirement_and_reject_wrong_acks (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_tagged_write_debts_gate_retirement_and_reject_wrong_acks) ... ok
+test_write_debts_are_bounded_metadata (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_write_debts_are_bounded_metadata) ... ok
+test_write_error_aborts_and_retains_other_debts (_qk16_routing_test.attention_packed_owner.test_client.ClientTests.test_write_error_aborts_and_retains_other_debts) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.108s
+
+OK
+{"accepted_owner_port_edges": {"job_fire": 1, "matrix_request_fire": 504, "matrix_result_fire": 504, "memory_fire": 960, "memory_response_fire": 960, "response_fire": 1, "scratch_fire": 0, "scratch_response_fire": 0}, "hardware_cycles": false, "hardware_utilization": false, "host_tick_calls": 5264, "native_arithmetic_executed": false, "no_handshake_is_not_a_hardware_idle_measure": true, "observations_may_overlap": true, "pre_edge_state_observations": {"finish": 1, "idle": 1, "issue": 1427, "matrix_issue": 689, "matrix_wait": 1969, "wait": 1177}, "scope": "M2 synthetic words; unchanged composed owner/client control", "units": "host Python tick calls and pre-edge state/port observations", "wait_observations": {"matrix_request_backpressure_ticks": 185, "matrix_response_wait_ticks": 1465, "memory_request_backpressure_ticks": 467, "memory_response_wait_ticks": 217, "no_owner_port_handshake_ticks": 2334, "terminal_backpressure_ticks": 0}}
+
+=== test_prepare_geometry.py: normal=True, expected=8, returncode=0
+test_exact_owner_overlay (__main__.CompositionTests.test_exact_owner_overlay) ... ok
+test_modified_raw_source_rejected_before_output (__main__.CompositionTests.test_modified_raw_source_rejected_before_output) ... ok
+test_offset_and_reapply_reject (__main__.CompositionTests.test_offset_and_reapply_reject) ... ok
+test_symlink_input_rejected (__main__.CompositionTests.test_symlink_input_rejected) ... ok
+test_all_valid_lengths_conserve_work (__main__.GeometryTests.test_all_valid_lengths_conserve_work) ... ok
+test_m2_matches_real_owner_control_test (__main__.GeometryTests.test_m2_matches_real_owner_control_test) ... ok
+test_noncanonical_lengths_reject (__main__.GeometryTests.test_noncanonical_lengths_reject) ... ok
+test_true_m128_source_work_not_execution (__main__.GeometryTests.test_true_m128_source_work_not_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.014s
+
+OK
+
+=== run_existing_numeric_regressions.py: normal=True, expected=15, returncode=0
+test_pv_six_gqa_rows_share_causal_end_at_fifteen_sixteen_seventeen (reviewed_attention_matrix_batch_test_model.BatchedNumericalBoundaryTests.test_pv_six_gqa_rows_share_causal_end_at_fifteen_sixteen_seventeen) ... ok
+test_qk_fifteen_sixteen_seventeen_causal_keys_keep_original_fold (reviewed_attention_matrix_batch_test_model.BatchedNumericalBoundaryTests.test_qk_fifteen_sixteen_seventeen_causal_keys_keep_original_fold) ... ok
+test_qk_must_not_round_eight_stripes_or_fold_with_a_tree (reviewed_attention_matrix_batch_test_model.BatchedNumericalBoundaryTests.test_qk_must_not_round_eight_stripes_or_fold_with_a_tree) ... ok
+test_signed_zero_and_cancellation_are_exact_fma_operations (reviewed_attention_matrix_batch_test_model.BatchedNumericalBoundaryTests.test_signed_zero_and_cancellation_are_exact_fma_operations) ... ok
+test_actual_finite_bf16_product_overflow_is_rejected_at_selected_cell (reviewed_attention_matrix_batch_test_model.DomainAndFaultTests.test_actual_finite_bf16_product_overflow_is_rejected_at_selected_cell) ... ok
+test_equal_probability_final_bf16_overflow_matches_original_store_guard (reviewed_attention_matrix_batch_test_model.DomainAndFaultTests.test_equal_probability_final_bf16_overflow_matches_original_store_guard) ... ok
+test_observed_callback_counts_and_operand_order_match_useful_mapping (reviewed_attention_matrix_batch_test_model.DomainAndFaultTests.test_observed_callback_counts_and_operand_order_match_useful_mapping) ... ok
+test_pv_requires_six_rows_with_identical_causal_length (reviewed_attention_matrix_batch_test_model.DomainAndFaultTests.test_pv_requires_six_rows_with_identical_causal_length) ... ok
+test_qk_rejects_bad_shapes_words_and_nonfinite_inputs_before_work (reviewed_attention_matrix_batch_test_model.DomainAndFaultTests.test_qk_rejects_bad_shapes_words_and_nonfinite_inputs_before_work) ... ok
+test_schedule_guards_reject_noninteger_or_out_of_range_profiles (reviewed_attention_matrix_batch_test_model.DomainAndFaultTests.test_schedule_guards_reject_noninteger_or_out_of_range_profiles) ... ok
+test_full_128_schedule_count_is_enumeration_only (reviewed_attention_matrix_batch_test_model.MappingAndCountTests.test_full_128_schedule_count_is_enumeration_only) ... ok
+test_model_and_cold_oracle_have_no_tensor_or_native_imports (reviewed_attention_matrix_batch_test_model.MappingAndCountTests.test_model_and_cold_oracle_have_no_tensor_or_native_imports) ... ok
+test_optimistic_serial_bound_keeps_ordered_fold_cost_explicit (reviewed_attention_matrix_batch_test_model.MappingAndCountTests.test_optimistic_serial_bound_keeps_ordered_fold_cost_explicit) ... ok
+test_cold_m1_m2_match_actual_original_generator_and_adapter (reviewed_attention_matrix_batch_test_model.OriginalGeneratorEquivalenceTests.test_cold_m1_m2_match_actual_original_generator_and_adapter) ... ok
+test_original_matrix_packets_preserve_eight_depths_and_causal_pv_end (reviewed_attention_matrix_batch_test_model.OriginalGeneratorEquivalenceTests.test_original_matrix_packets_preserve_eight_depths_and_causal_pv_end) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 2.635s
+
+OK
+

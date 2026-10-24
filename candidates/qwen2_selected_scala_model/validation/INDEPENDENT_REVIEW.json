@@ -1,0 +1,42 @@
+{
+  "checks": [
+    "independent 26 control +10 numeric normal/-O reruns",
+    "independent 8 composition/geometry normal/-O reruns",
+    "19 raw input and5 selected Scala postimage hashes",
+    "default source preservation; fresh partial overlay only"
+  ],
+  "limitations": [
+    "synthetic service for owner/control",
+    "Python Fraction/RNE arithmetic M2 only",
+    "no generated profile2/native composition",
+    "no fullM128 block execution",
+    "no Scala/RTL execution",
+    "final existing-regression runners validated by author, not included in independent runtime review"
+  ],
+  "relocation_review": {
+    "composed_runtime_package": "candidates/qwen2_resident_matrix/production_qk16_model",
+    "normal_rerun_tests": 34,
+    "optimized_rerun_tests": 34,
+    "prepare_sha256": "08234378259970b8b1b749e4f0aafe1d85530296032427772d92235961ed69cc",
+    "public_package": "candidates/qwen2_selected_scala_model",
+    "raw19_unchanged": true,
+    "result": "APPROVED_NARROW_PACKAGING_ONLY",
+    "six_output_path_and_sha256_identities_match": true
+  },
+  "result": "NO_CONFIRMED_DEFECT_IN_REVIEWED_SLICE",
+  "reviewed": [
+    "schedule.py",
+    "routing.py",
+    "entry.py",
+    "selected_owner.patch",
+    "selected_hooks.patch",
+    "prepare.py",
+    "geometry.py",
+    "CODE_PINS.json",
+    "test_routing.py",
+    "routing_test_support.py",
+    "test_schedule_numeric.py",
+    "test_prepare_geometry.py"
+  ],
+  "schema": 1
+}

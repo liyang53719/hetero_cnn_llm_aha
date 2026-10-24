@@ -1,0 +1,153 @@
+{
+  "coverage": {
+    "new_host_histogram": 1,
+    "new_m2_numeric": 10,
+    "new_prepare_geometry": 8,
+    "new_routing": 26,
+    "unchanged_matrix_batch_numeric": 15,
+    "unchanged_packed_client": 16
+  },
+  "execution": {
+    "full_block_m128": false,
+    "hardware_cycles_measured": false,
+    "historical_pass_inherited": false,
+    "native_execution": false,
+    "native_imports": false,
+    "new_m2_arithmetic": "existing Python Fraction binary32 RNE/FMA + BF16; unchanged official generator oracle",
+    "new_m2_control": "actual composed owner/client ASTs; synthetic-word shared-service adapter, no arithmetic backend",
+    "rtl_generation": false,
+    "scala_execution": false
+  },
+  "initial_failure": {
+    "error": "ModuleNotFoundError: test_schedule_numeric",
+    "phase": "pre-test isolated import",
+    "resolved": "explicit candidate-local importlib loader; final cold normal/-O reruns passed",
+    "test": "run_existing_numeric_regressions.py"
+  },
+  "limits": {
+    "address_space_mib": 256,
+    "cpu_affinity": [
+      0
+    ],
+    "cpu_seconds_per_process": 20,
+    "wall_seconds_per_process": 30
+  },
+  "normal_tests": 76,
+  "optimized_tests": 76,
+  "remaining": {
+    "full_numeric": "TEMP; owner-level opt-in only, original full admission unchanged",
+    "native": "existing profile2/native composition not loaded or executed",
+    "transport_cache": "selected Scala Dense-only cache vs existing Public raw-KV cache unresolved",
+    "unrun_existing": [
+      "attention_packed_owner/test_owner.py requires explicit native library",
+      "official_bf16/test_owners.py requires NumPy and explicit Matrix library/receipt for Attention",
+      "ffn_public/test_prefix_owners.py requires real ScalarService and source identity closure",
+      "ffn_attention/test_scalar_recipe.py requires real ScalarService/source identity closure",
+      "additional schedule/source-contract tests outside source19 not run"
+    ]
+  },
+  "runs": [
+    {
+      "count": 26,
+      "elapsed_seconds": 0.2551,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_routing.py"
+    },
+    {
+      "count": 10,
+      "elapsed_seconds": 0.8246,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_schedule_numeric.py"
+    },
+    {
+      "count": 17,
+      "elapsed_seconds": 0.2043,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_control_regression.py"
+    },
+    {
+      "count": 8,
+      "elapsed_seconds": 0.0791,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_prepare_geometry.py"
+    },
+    {
+      "count": 15,
+      "elapsed_seconds": 2.8153,
+      "optimized": false,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "run_existing_numeric_regressions.py"
+    },
+    {
+      "count": 26,
+      "elapsed_seconds": 0.4205,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_routing.py"
+    },
+    {
+      "count": 10,
+      "elapsed_seconds": 0.9508,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_schedule_numeric.py"
+    },
+    {
+      "count": 17,
+      "elapsed_seconds": 0.3441,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_control_regression.py"
+    },
+    {
+      "count": 8,
+      "elapsed_seconds": 0.2781,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "test_prepare_geometry.py"
+    },
+    {
+      "count": 15,
+      "elapsed_seconds": 2.9757,
+      "optimized": true,
+      "returncode": 0,
+      "status": "PASS",
+      "test": "run_existing_numeric_regressions.py"
+    }
+  ],
+  "schema": 1,
+  "source_commit": "1ea9b511fc982b2d928472b0dadd9f794c1c20d8",
+  "source_tree": "e6af2af0b35b7c12907a1ff0b66dd416f0e90571",
+  "status": "BOUNDED_TESTS_PASS_OVERALL_INCOMPLETE",
+  "tested_code_sha256": {
+    "CODE_PINS.json": "b8224d022b1068481f7d0e7405dc1d002006fc1fa2da29a09f9885a20c808919",
+    "INPUT_PINS.json": "87b03874543f4b9f7accee77d03bc0b983157185f6c518e9f77cc9484571beeb",
+    "README_CN.md": "3dc647616baf7664eac1bf80935a125ef7d585db66f3b5ecbd69fd8c279acdea",
+    "entry.py": "8663c901c288414080e2851feac6cf0132734823b51e43657eb13c8e46be6fd5",
+    "geometry.py": "653cf45036089569341d70f08f6083e5e68ea76db5e3d4ef4efa57dc54d464f6",
+    "prepare.py": "08234378259970b8b1b749e4f0aafe1d85530296032427772d92235961ed69cc",
+    "routing.py": "3fa190b5f0ecc6f1cb05383a7efafa4db64566c10f5b9bfcfda7b11ac574a534",
+    "routing_test_support.py": "a45b79fe1fe94eee007222e5820d2c7ace570a887c4244a5aeaf7c585cdd80dc",
+    "run_existing_numeric_regressions.py": "a034161d808a82e2057773678ddbfe33944bfcb9d7c88070c361f903668ccd4a",
+    "schedule.py": "b6b313dbba17f581025447208d375ad923976bf57a3787ce678a78bde4088e4e",
+    "selected_hooks.patch": "9fcfd5463a6c3312686086db786e7fa0be29f9989a51af891d2bd353a3d2ffd3",
+    "selected_owner.patch": "3511507beec1e95fa60bcc346309b10f1e87a36e29c440450eb03f81a72ff998",
+    "test_control_regression.py": "e3b756bb63c93cba373389108b7fb9912fe51e7fc2e4e3c1ae23f87307f7bc6a",
+    "test_prepare_geometry.py": "cff4b1a19b67698de93f7ff0376edad50fd5dd3d1cf54467ebe444fe41591f9c",
+    "test_routing.py": "480913f3d4282fff91dedf5642cc98590f4e6eecd149c65fe7b1a0910d9e6fbe",
+    "test_schedule_numeric.py": "6f9655c3eac6811d9d9a4328c95492d7bbc4b0a72c81b23f0af6c92940ba206b"
+  }
+}

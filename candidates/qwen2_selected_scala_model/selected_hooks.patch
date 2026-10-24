@@ -1,0 +1,38 @@
+--- a/candidates/qwen2_resident_matrix/attention_packed_owner/hooks.py
++++ b/candidates/qwen2_resident_matrix/attention_packed_owner/hooks.py
+@@ -3,9 +3,11 @@
+ from .schedule import PackedSchedule
+ from .client import PackedClient,PackedRequest,PackedConsumerAck,PackedWriteTag,PackedWriteAck
+ from ..ffn_public.prefix_owners import PrefixFault
++from ..production_qk16_model.schedule import ProductionQk16Schedule
++from ..production_qk16_model.routing import Qk16LegacyPvClient
+ 
+ def install(owner,schedule):
+-    if schedule is not None and type(schedule) is not PackedSchedule:raise ValueError('exact packed schedule required')
++    if schedule is not None and type(schedule) not in (PackedSchedule,ProductionQk16Schedule):raise ValueError('exact packed schedule required')
+     if schedule is not None:schedule.bind(owner)
+     owner.packed_schedule=schedule;owner.scratch_request=None;owner.scratch_pending=False;owner.scratch_write_tag=None;owner.scratch_leased=False;owner.scratch_last=None;owner.packed_memory_tag=None
+ 
+@@ -13,7 +15,13 @@
+     p.update(scratch=o.scratch_request if not o.scratch_pending else None,scratch_response_ready=o.scratch_pending)
+     return p
+ 
+-def client(o):return PackedClient(o.matrix,o)
++def validate(o,j):
++    if type(o.packed_schedule) is ProductionQk16Schedule:
++        o.packed_schedule.validate_length(j.m)
++
++def client(o):
++    return (Qk16LegacyPvClient(o.matrix,o) if type(o.packed_schedule) is ProductionQk16Schedule
++            else PackedClient(o.matrix,o))
+ def fault(o):
+     if not o.scratch_pending:o.scratch_request=None
+     queue_release(o)
+@@ -78,6 +86,7 @@
+ def record_result(o,result):
+     from .client import PackedResult,PackedStepAccepted,PackedRetired
+     if o.packed_schedule is None or type(result) is PackedResult:o.counts['matrix_results']+=1
++    elif type(o.packed_schedule) is ProductionQk16Schedule and o.matrix_client.is_legacy_result(result):o.counts['matrix_results']+=1
+     elif type(result) is PackedStepAccepted:o.counts['packed_nonfinal_accept_completions']+=1
+     elif type(result) is PackedRetired:o.counts['packed_consumer_retirements']+=1
+     else:raise PrefixFault('Protocol','unknown packed client completion')

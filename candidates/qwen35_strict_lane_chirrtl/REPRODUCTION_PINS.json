@@ -1,0 +1,304 @@
+{
+  "machine_plan_not_provided": true,
+  "new_input_count": 59,
+  "new_inputs_by_logical_role": {
+    "previous_compile/classes/gemmini/EmitHeteroBF16Fma$.class": {
+      "bytes": 5086,
+      "sha256": "3abfff7517169a227ad63ec4c4bde5cb685a507edc2b258e30154a7bb8ab2144"
+    },
+    "previous_compile/classes/gemmini/EmitHeteroBF16Fma$delayedInit$body.class": {
+      "bytes": 822,
+      "sha256": "48a9c654e7510e0afce8f9f8b0e30912aa0f79787d6567d758f39f6a2ee3f00d"
+    },
+    "previous_compile/classes/gemmini/EmitHeteroBF16Fma.class": {
+      "bytes": 1288,
+      "sha256": "92edb9596aaf03da385b21e8a0b890f9f8bf3a4fd20bc7ddc6d7bc62e110e5c9"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaLane$$anon$1.class": {
+      "bytes": 4835,
+      "sha256": "16ac60b8d70e89f6cc3b97ea95238293aae38a9950aa35fa19bb44ae186142f8"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaLane.class": {
+      "bytes": 12360,
+      "sha256": "1cbb87172f39f6ade3e1c0e2e50596c6953a81b7181e838dc81b0059386fee8f"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaMul$$anon$3.class": {
+      "bytes": 4509,
+      "sha256": "ee630ead0e0022a60763f04bdcac28e6809822172ee71c9992e0228e3760c87a"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaMul.class": {
+      "bytes": 6747,
+      "sha256": "a8088be9d30917298af467bff778e3bc1db5b8286b43897d711f1dc5a6357a02"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaPost$$anon$4.class": {
+      "bytes": 4628,
+      "sha256": "2ae8e36b6ef899a26c61fb1a337aad2cbe4e3afabac783bd2fb3b2b28e3478cd"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaPost.class": {
+      "bytes": 10677,
+      "sha256": "04d3d38e30b0808324ed481e7f90e8473d646725a03d94b748f5bf8c5dd5c38b"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaPre$$anon$2.class": {
+      "bytes": 5579,
+      "sha256": "ab0dbed539d84705db2e7d708093bf0b119ee8e1684a5ab1e3c2ec5b02b25e72"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaPre.class": {
+      "bytes": 13582,
+      "sha256": "418aae37e3e7633db82a71f2b89d5489d30092bcc8b0fc6c8469bc778f55a609"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaRound$$anon$5.class": {
+      "bytes": 4635,
+      "sha256": "0f3401259ec2d691d3ca2f3ea7666eede7df83a75ef0086627747716fd2c60f8"
+    },
+    "previous_compile/classes/gemmini/HeteroBF16FmaRound.class": {
+      "bytes": 11419,
+      "sha256": "7d3c8e97529d930226331cf308560ad2c39a6dd26d52a471576c737f01de4acf"
+    },
+    "previous_compile/classes/hardfloat/MulAddRecFN$$anon$3.class": {
+      "bytes": 6568,
+      "sha256": "a62b2eab8c6130ff5620c007bf9639ee56c7cb960d9f58aadbf70672494d1ae0"
+    },
+    "previous_compile/classes/hardfloat/MulAddRecFN.class": {
+      "bytes": 21839,
+      "sha256": "7d26a23f1d49204d9ec5b03af25bead7218f67392a7f2542563e893a29e278f7"
+    },
+    "previous_compile/classes/hardfloat/MulAddRecFNToRaw_postMul$$anon$2.class": {
+      "bytes": 5913,
+      "sha256": "d3e3ed5e29d4de5663e9d57d1bc6f1d91aa892697166ba88bc89cdb2a896b0dd"
+    },
+    "previous_compile/classes/hardfloat/MulAddRecFNToRaw_postMul.class": {
+      "bytes": 43883,
+      "sha256": "d981e08f851612846770954bd281e6f0065c17500e9a7654598496c64da1f8ae"
+    },
+    "previous_compile/classes/hardfloat/MulAddRecFNToRaw_preMul$$anon$1.class": {
+      "bytes": 7031,
+      "sha256": "aa88e3c0bd800d229055a7b95fb325ed9cbbfc5f59558c20c72ca57989eea030"
+    },
+    "previous_compile/classes/hardfloat/MulAddRecFNToRaw_preMul.class": {
+      "bytes": 30498,
+      "sha256": "e42ff702eee79ea133b91822ba74a77e81ffa2c5103329dc096fb43c92ed5c36"
+    },
+    "previous_compile/classes/hardfloat/MulAddRecFN_interIo.class": {
+      "bytes": 8695,
+      "sha256": "e1a6eba57db90ffb05f8d4a8bc5d4e9643c2a0bbd8f9a9a0919edf67339d3fe0"
+    },
+    "previous_compile/classes/hardfloat/RawFloat.class": {
+      "bytes": 5512,
+      "sha256": "633fbd2450d4bbb5dfb785badc924a57065f79e45145ec2b1c0d290ec1ef48ad"
+    },
+    "previous_compile/classes/hardfloat/RoundAnyRawFNToRecFN$$anon$1.class": {
+      "bytes": 6588,
+      "sha256": "c90b82e5cd82409a365fc3023fab29e27153c82133e9a53e5356f8740de5bd13"
+    },
+    "previous_compile/classes/hardfloat/RoundAnyRawFNToRecFN.class": {
+      "bytes": 52152,
+      "sha256": "7705812399f0176fb2e63f41de7cc603b817ed51e46888adbc78b2f3bffafdd4"
+    },
+    "previous_compile/classes/hardfloat/RoundRawFNToRecFN$$anon$2.class": {
+      "bytes": 6444,
+      "sha256": "c245d67ec1be1b1aa92f2a524afc346f815fca0dbf7f77daa9def93fd8559ffb"
+    },
+    "previous_compile/classes/hardfloat/RoundRawFNToRecFN.class": {
+      "bytes": 13157,
+      "sha256": "d5af032bd4c39263774d0d76b0feeaaac17749b69151401a096fc9bbfa149ce7"
+    },
+    "previous_compile/classes/hardfloat/consts$.class": {
+      "bytes": 2295,
+      "sha256": "5f5882380d5eb6df2d517f9523ef86e5d2c50305f8deaf771a8d0458d4cc3a1a"
+    },
+    "previous_compile/classes/hardfloat/consts.class": {
+      "bytes": 1759,
+      "sha256": "d356adb4a78c8ec7a6784d892930c689396a9c3ed0acb631fb11cdcc829c0d6b"
+    },
+    "previous_compile/classes/hardfloat/countLeadingZeros$.class": {
+      "bytes": 1341,
+      "sha256": "6de6ed9db0052f794bdbd239f1a73e13ee7f7821a198a328c1fbd3ad0197290a"
+    },
+    "previous_compile/classes/hardfloat/countLeadingZeros.class": {
+      "bytes": 712,
+      "sha256": "562858d3adb7717695c208efe8f5b001a17b7e3ce9529c9d9270b5837168bf90"
+    },
+    "previous_compile/classes/hardfloat/fNFromRecFN$.class": {
+      "bytes": 8053,
+      "sha256": "d42bcfdb858ac04211d2bc3540e69f352cca78572264c2369fc592db3c074033"
+    },
+    "previous_compile/classes/hardfloat/fNFromRecFN.class": {
+      "bytes": 811,
+      "sha256": "675cb12c56d8a43644b824666ce44ebc27d84741c7edeb15685276c4cb0cfa62"
+    },
+    "previous_compile/classes/hardfloat/isSigNaNRawFloat$.class": {
+      "bytes": 1464,
+      "sha256": "39a89a9642f50f85cf214ccb541b1c89e0850f81527ceb4e715518a73721e06e"
+    },
+    "previous_compile/classes/hardfloat/isSigNaNRawFloat.class": {
+      "bytes": 735,
+      "sha256": "511638eec7e702bfbd72b2c9da8af1551496dcee868ba12b38458655ddb4dd8c"
+    },
+    "previous_compile/classes/hardfloat/lowMask$.class": {
+      "bytes": 5946,
+      "sha256": "089655bbef3d1f492bf08023f90eea4502d0e20f594ac39e78d1f60dc80bb4b1"
+    },
+    "previous_compile/classes/hardfloat/lowMask.class": {
+      "bytes": 886,
+      "sha256": "7d66c152ef57b788d2c411d290a5310de66cac7f5dad3c5a91572e3aeb0efeca"
+    },
+    "previous_compile/classes/hardfloat/orReduceBy2$.class": {
+      "bytes": 4626,
+      "sha256": "e0b846e2a921cc7e9ffd34db5b0d5d855c419870cbb3fc734946d88010f847a9"
+    },
+    "previous_compile/classes/hardfloat/orReduceBy2.class": {
+      "bytes": 680,
+      "sha256": "49dceb267125c32f1681d7ed8de0f73e954d0ac896deec69d6126d828e71f900"
+    },
+    "previous_compile/classes/hardfloat/orReduceBy4$.class": {
+      "bytes": 4629,
+      "sha256": "9395aafdd6e056a5a9b53265129f414778ae69092f05e1c34c2c49960809b7fe"
+    },
+    "previous_compile/classes/hardfloat/orReduceBy4.class": {
+      "bytes": 680,
+      "sha256": "50d12479d9661c8192be870aa6073f2918d4432c5dcaac73611053ac3fbe5e98"
+    },
+    "previous_compile/classes/hardfloat/rawFloatFromFN$.class": {
+      "bytes": 11760,
+      "sha256": "2f32149331a7ca3d209139f2ba3d6694b6324d7a0e88eb0194bb5782e15c0c27"
+    },
+    "previous_compile/classes/hardfloat/rawFloatFromFN.class": {
+      "bytes": 841,
+      "sha256": "8f89b8b41b7e43a457cfe089b7864e4fb925da92dbe2b2186424f50b59ebfdb0"
+    },
+    "previous_compile/classes/hardfloat/rawFloatFromRecFN$.class": {
+      "bytes": 7449,
+      "sha256": "2e546d212b11c04485498546193ac9a53aaea8ed5bcbac4ef1561545f0e22d02"
+    },
+    "previous_compile/classes/hardfloat/rawFloatFromRecFN.class": {
+      "bytes": 860,
+      "sha256": "a6c0cf14baaa7c7c3991045c9f976118e61c701d19ec856b84212ccc14c9c712"
+    },
+    "previous_compile/classes/hardfloat/recFNFromFN$.class": {
+      "bytes": 4041,
+      "sha256": "68bcb0bdc553941a8586c68e706690ace29ddc80121e10630c9b0de137e5b5e0"
+    },
+    "previous_compile/classes/hardfloat/recFNFromFN.class": {
+      "bytes": 811,
+      "sha256": "2e94e6a33e66cd1255bc48e89375ac5387dd8b0029447a06bec60791ba761872"
+    },
+    "previous_compile/classes/heteronpu/experimental/HeteroFullFp32FmaPre$$anon$1.class": {
+      "bytes": 5661,
+      "sha256": "352f33800f92fb676af02b53bcaa5076fd1a521d229badfaf7e89dcb08744f72"
+    },
+    "previous_compile/classes/heteronpu/experimental/HeteroFullFp32FmaPre.class": {
+      "bytes": 13271,
+      "sha256": "dca72aca18cfddb269c206cfb726e537e2b3aaa610d22e89ef71fa56f4216fdd"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32LaneMode$.class": {
+      "bytes": 701,
+      "sha256": "de967583a01e0a170d3440f584df6b5b638ba719a139309b959b25a5c88cc3c2"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32LaneMode.class": {
+      "bytes": 807,
+      "sha256": "0e489c83c3723dd9522f8e62f868888a6dbcc4efd610a184b94d1f540140112e"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32LaneRequest.class": {
+      "bytes": 4286,
+      "sha256": "7cb4fcbf6846703738c18f466212c54a0798617b672db90065db400cfd53650e"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32LaneResponse.class": {
+      "bytes": 7668,
+      "sha256": "95be938b8fe3121e20a3c6283cba82c9522b69c94a2359f1876cfb6218721a88"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32LaneStatus$.class": {
+      "bytes": 1086,
+      "sha256": "35e452e326d87eb3dcdb7b8015ab8a7e75d5c53c5f07142e5fe0973cb52bfae9"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32LaneStatus.class": {
+      "bytes": 1171,
+      "sha256": "fb4d636d2b487129e23e67e701f8be40447703e6838cd6145bed74332a6dc01e"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32MatrixLane$$anon$2.class": {
+      "bytes": 4510,
+      "sha256": "5d6be49a248e4a077963a16f95b8a90490d515f6b629bf43c3e8648d53155c64"
+    },
+    "previous_compile/classes/heteronpu/experimental/StrictFp32MatrixLane.class": {
+      "bytes": 51096,
+      "sha256": "3d40d1ba159b9532ac56575ccdbdab3e20f306eedeb91285e91d25fbe450fa4b"
+    },
+    "previous_compile/metadata/ACTUAL_COMPILE_REVIEW.json": {
+      "bytes": 6482,
+      "sha256": "2586ff6f604b84d6d95d7a7a5c4f21a95f53afdb1a4159fa289c0b6b375a8a1a"
+    },
+    "previous_compile/metadata/OUTPUT_MANIFEST.json": {
+      "bytes": 8645,
+      "sha256": "91dfbd43a1c6cd2ef9663d63464950a0e1ee7521991e9c93b9751f15c497bafb"
+    },
+    "previous_compile/metadata/RESULT.json": {
+      "bytes": 30924,
+      "sha256": "9d1d8fe52e233a8c100b3e21b7f476df90d2a21e2babc60887bacaa768b67504"
+    },
+    "source/StrictFp32LaneChirrtl.scala": {
+      "bytes": 8201,
+      "sha256": "695dbe9c56694c7dd3f369331e47c8935e9e4e0c02bb0ffaf168e86839eaf513"
+    }
+  },
+  "no_path_rewrite_or_pin_bypass": true,
+  "omitted_machine_plan": {
+    "bytes": 234495,
+    "sha256": "49773df02f3045008a7ea081e92c68972a8ff6cd248857327a292704bf12f463"
+  },
+  "original_JARs": 87,
+  "original_exact_files": {
+    "IR_SCOPE.json": {
+      "bytes": 5187,
+      "sha256": "6e6e9815aa580123b0705554904c482fd252580aa62d9b122a7deab42d2ebecb"
+    },
+    "StrictFp32LaneChirrtl.scala.patch": {
+      "bytes": 13369,
+      "sha256": "32981b044c2af386dac0642506d2f52e1d5b54d1814b7ab8e8aab34ae43b9176"
+    },
+    "TOP_LEAVES.json": {
+      "bytes": 2654,
+      "sha256": "c8180a6ba71c694855fbbb0963a91f1a60a10b1c643de2cf1bfedbff1e5eff55"
+    },
+    "launch_chirrtl.py": {
+      "bytes": 3619,
+      "sha256": "79ff40316954ca22bda994522a720d1d68eda006a3a13fe84020f3919fafb6fb"
+    },
+    "launch_chirrtl.py.patch": {
+      "bytes": 1007,
+      "sha256": "f5b2383117f83e634a39f79a56eb1c169e9a9966d2724dc92465fef87e767fb9"
+    },
+    "parser_controls.py": {
+      "bytes": 22067,
+      "sha256": "68276f05f52b27b076ea01d735638a184f7efb88fd86be4df9bee7b95014c9e0"
+    },
+    "run_chirrtl.py": {
+      "bytes": 22401,
+      "sha256": "be9b9f32ddf7a08d0bc74c6f138c5bfb1197a76869a6ed8da9475682de61671e"
+    },
+    "run_chirrtl.py.patch": {
+      "bytes": 13205,
+      "sha256": "71364b6078a0adfa7adc9ad5ee5baab2f082c9f06eac660d85f2c56483e7fbfd"
+    },
+    "source/StrictFp32LaneChirrtl.scala": {
+      "bytes": 8201,
+      "sha256": "695dbe9c56694c7dd3f369331e47c8935e9e4e0c02bb0ffaf168e86839eaf513"
+    }
+  },
+  "original_production_class_count": 55,
+  "original_support": 6,
+  "original_tools": 314,
+  "production_lane_source": {
+    "bytes": 6801,
+    "sha256": "71b2ef457fadd2e3f1bf8c1d603ec0faa4276921b320855cfe85a82a8f6e259b"
+  },
+  "schema": "strict-lane-chirrtl-public-reproduction-fingerprints-v1",
+  "standalone_runnable": false,
+  "unchanged_prior_compile_input_count": 331,
+  "upstream_source_compile_manifest": {
+    "bytes": 1347,
+    "sha256": "3d635348d3b013ed9595af5700f35866fa7835d245e95dec63784ba1c18f62a7"
+  },
+  "upstream_source_manifest": {
+    "bytes": 2730,
+    "sha256": "c2f1c7f46da11616bf40b87b7fa10064c34ffe3e9a7963f59ecd9c119d4f881d"
+  }
+}

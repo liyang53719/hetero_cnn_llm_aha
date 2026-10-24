@@ -1881,3 +1881,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 唯一85081自然0/17.330634545秒，331输入before/after全字段同并接plan，55class全hash/magic同、29required齐；总67封件926956B。原leader身份采样同，WNOWAIT自然0/reap/group absent/cleanup确认，无timeout，compiler log空；观测自然退出后组清理不作强杀PASS。独审ACTUAL_COMPILE_REVIEW SHA256 2586ff6f604b84d6d95d7a7a5c4f21a95f53afdb1a4159fa289c0b6b375a8a1a。
 
 仅SCALA_COMPILE_ONLY，不构造/执行原算术链、不授硬件数值或RTL/阵列资格，UF3与旧CPP1的集成阻断保留，五RTL0/5及Qwen2full UNKNOWN不变。公开9件29028B在 candidates/qwen35_strict_lane_scala_compile/，manifest SHA256 7db2ae55d0feda03dc4f90542f0b477fc4bdf0b143a2f394a55ae674320480b0；无重复生产源/完整工具表/机器plan/class/IR/log，非完整可直接运行closure。未push、无新CI、无清理。
+
+
+## PASS（仅隔离单lane CHIRRTL前端）：原算术链复用结构
+
+唯一24570自然0，总10.785390577秒，390输入前后完整身份一致，55原class+3emitter核验；双阶段自然0/WNOWAIT/reap/group absent/cleanup确认。真实CHIRRTL319324B，SHA256 ea7b84533c96641771bd58ba97a10898d428fc6782b1ced726442ada0320eb7d。
+
+独立结构核9模块8边全可达各一次、唯一24×24变量乘法、27顶层叶（130/124payload）、12顶层寄存器553bit；不沿用无子模块门。独审ACTUAL_FRONTEND_REVIEW SHA256 b86ba2968769af2fcb96ea2fe202e95dd5e0dfe91aa03fa5d1d6368fb363924c。45纯parser正反例为先行fixture测试，非生成硬件行为。
+
+仅构造/CHIRRTL结构PASS，未执行数值/flags/握手/RTL或16lane阵列，面积/Fmax不继承；UF3与旧CPP1集成阻断保留，五RTL0/5、Qwen2full UNKNOWN不变。公开14项112395B在 candidates/qwen35_strict_lane_chirrtl/，manifest SHA256 a07c5330d5f1d0a3b6bab5b9bdcdd3a69444749dab94dbd486ef78e1a92a67e9。相对pins/原源摘录不含IR/class/完整工具表/机器plan/raw日志，非原完整运行closure。未push、无新CI、无清理。

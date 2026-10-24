@@ -1,0 +1,99 @@
+{
+  "actual": {
+    "IR": {
+      "bytes": 319324,
+      "included_in_public_package": false,
+      "sha256": "ea7b84533c96641771bd58ba97a10898d428fc6782b1ced726442ada0320eb7d"
+    },
+    "RSS_not_instantaneous_or_combined_parent_peak": true,
+    "all_reachable_once": true,
+    "closed_owned_bytes": 1879510,
+    "compile_child_seconds": 6.842559,
+    "coordinator_elapsed_seconds": 10.785095653001918,
+    "edges": 8,
+    "elaborate_child_seconds": 3.321712,
+    "guard_exec_network_replacement_attempts": [
+      0,
+      0,
+      0
+    ],
+    "hidden_host_count": 30,
+    "hidden_lambda_count": 659,
+    "input_bits": 134,
+    "input_leaves": 9,
+    "inputs_before_after": 390,
+    "modules": 9,
+    "natural_exit_code": 0,
+    "new_emitter_classes": 3,
+    "ordinary_source_bound_class_count": 37,
+    "original_classes": 55,
+    "output_bits": 127,
+    "output_leaves": 18,
+    "peak_sampled_descendant_RSS_bytes": 233377792,
+    "request_payload_bits": 130,
+    "response_payload_bits": 124,
+    "sample_interval_seconds": 0.2,
+    "top_leaves": 27,
+    "top_register_bits": 553,
+    "top_reset_registers": 12,
+    "two_natural_exits_anchored_reaped_group_absent_cleanup": true,
+    "variable_multiply_operand_bits": [
+      24,
+      24
+    ],
+    "variable_multiply_primitive_count": 1
+  },
+  "actual_review_fingerprint": {
+    "bytes": 11690,
+    "sha256": "b86ba2968769af2fcb96ea2fe202e95dd5e0dfe91aa03fa5d1d6368fb363924c"
+  },
+  "integration_blocker": {
+    "HardFloat_source_expected_flags": 3,
+    "a": "0x00800000",
+    "b": "0x3f7fffff",
+    "delivered_result": "0x00800000",
+    "fatal_acceptance_differs": true,
+    "frontend_pass_does_not_resolve": true,
+    "hardware_flags_not_executed": true,
+    "old_CPP_flags": 1,
+    "retained": true
+  },
+  "not_packaged": [
+    "machine plan or absolute environment paths",
+    "full tool pin tables or binary tools",
+    "original production source or model duplication",
+    "class files or CHIRRTL artifact",
+    "raw logs, actual receipts or authority payloads",
+    "weights or arrays"
+  ],
+  "parser": {
+    "fixture_not_generated_hardware": true,
+    "groups": 45,
+    "internal_seconds": 0.02002656098920852,
+    "outer_seconds": 0.09612863601068966,
+    "status": "PASS_PURE_CLASS_LOG_AND_IR_PARSER_CONTROLS_ONLY"
+  },
+  "qualification": {
+    "SystemVerilog": false,
+    "array_or_16_lane": false,
+    "eighty_percent_utilization": false,
+    "firtool_or_simulation": false,
+    "full_model": false,
+    "hardware_arithmetic_values": false,
+    "hardware_exception_flags": false,
+    "physical_area_Fmax_or_mapped_multiplier_count": false,
+    "real_handshake": false,
+    "same_area_as_BF16": false,
+    "single_lane_construction_and_CHIRRTL": true
+  },
+  "schema": "isolated-strict-lane-chirrtl-public-scope-v1",
+  "source_cold_review_fingerprint": {
+    "bytes": 5080,
+    "sha256": "eedd249b66755d7b0f01f36e9b0618c67a087f6fb3fada392062172eb5e0cfc8"
+  },
+  "source_review_fingerprint": {
+    "bytes": 10886,
+    "sha256": "96018a0ebf09c6bb09f425062c23b0d3caea2727dc07fed8b1a36bc1a67b360e"
+  },
+  "status": "PASS_ISOLATED_SINGLE_LANE_CHIRRTL_FRONTEND_ONLY"
+}

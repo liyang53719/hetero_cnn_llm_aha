@@ -1,0 +1,20 @@
+--- baseline/launch_chirrtl.py
++++ candidate/launch_chirrtl.py
+@@ -18,7 +18,7 @@
+ 
+ 
+ def expired(*_):
+-    raise TimeoutError('OWNER_CHIRRTL_GLOBAL_DEADLINE_OR_RESOURCE_STOP')
++    raise TimeoutError('ISOLATED_LANE_CHIRRTL_GLOBAL_DEADLINE_OR_RESOURCE_STOP')
+ 
+ 
+ need(len(sys.argv) == 1, 'no variable compile arguments')
+@@ -36,7 +36,7 @@
+ resource.setrlimit(resource.RLIMIT_FSIZE, (4 * 1024**2, 4 * 1024**2))
+ resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+ HERE = Path(__file__).resolve().parent
+-PINS = {'FROZEN_PLAN.json': {'bytes': 285739, 'sha256': 'c2c303c40eb8e14062bf8b4144bdbd716d76f48797aac5a520c39ad1b012b189'}, 'run_chirrtl.py': {'bytes': 20120, 'sha256': 'f178fb38d523b6853509ba4c9dd116b7108c92bd7be9d4507642a726e27aca94'}}
++PINS = {'FROZEN_PLAN.json': {'bytes': 234495, 'sha256': '49773df02f3045008a7ea081e92c68972a8ff6cd248857327a292704bf12f463'}, 'run_chirrtl.py': {'bytes': 22401, 'sha256': 'be9b9f32ddf7a08d0bc74c6f138c5bfb1197a76869a6ed8da9475682de61671e'}}
+ 
+ 
+ def raw_fixed(name):

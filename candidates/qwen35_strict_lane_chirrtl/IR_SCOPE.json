@@ -1,0 +1,110 @@
+{
+  "module_edges": {
+    "HeteroBF16FmaMul": [],
+    "HeteroBF16FmaPost": [
+      [
+        "post",
+        "MulAddRecFNToRaw_postMul_e8_s24"
+      ]
+    ],
+    "HeteroBF16FmaRound": [
+      [
+        "round",
+        "RoundRawFNToRecFN_e8_s24"
+      ]
+    ],
+    "HeteroFullFp32FmaPre": [
+      [
+        "pre",
+        "MulAddRecFNToRaw_preMul_e8_s24"
+      ]
+    ],
+    "MulAddRecFNToRaw_postMul_e8_s24": [],
+    "MulAddRecFNToRaw_preMul_e8_s24": [],
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24": [],
+    "RoundRawFNToRecFN_e8_s24": [
+      [
+        "roundAnyRawFNToRecFN",
+        "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24"
+      ]
+    ],
+    "StrictFp32MatrixLane": [
+      [
+        "pre",
+        "HeteroFullFp32FmaPre"
+      ],
+      [
+        "mul",
+        "HeteroBF16FmaMul"
+      ],
+      [
+        "post",
+        "HeteroBF16FmaPost"
+      ],
+      [
+        "round",
+        "HeteroBF16FmaRound"
+      ]
+    ]
+  },
+  "module_ports": {
+    "HeteroBF16FmaMul": [
+      "output io : { flip mulAddA : UInt<24>, flip mulAddB : UInt<24>, flip mulAddC : UInt<48>, mulAddResult : UInt<49>}"
+    ],
+    "HeteroBF16FmaPost": [
+      "output io : { flip meta : UInt<54>, flip mulAddResult : UInt<49>, raw : UInt<41>, invalid : UInt<1>}"
+    ],
+    "HeteroBF16FmaRound": [
+      "output io : { flip raw : UInt<41>, flip invalid : UInt<1>, out : UInt<32>, exceptionFlags : UInt<5>}"
+    ],
+    "HeteroFullFp32FmaPre": [
+      "output io : { flip a : UInt<32>, flip b : UInt<32>, flip c : UInt<32>, mulAddA : UInt<24>, mulAddB : UInt<24>, mulAddC : UInt<48>, meta : UInt<54>}"
+    ],
+    "MulAddRecFNToRaw_postMul_e8_s24": [
+      "output io : { flip fromPreMul : { isSigNaNAny : UInt<1>, isNaNAOrB : UInt<1>, isInfA : UInt<1>, isZeroA : UInt<1>, isInfB : UInt<1>, isZeroB : UInt<1>, signProd : UInt<1>, isNaNC : UInt<1>, isInfC : UInt<1>, isZeroC : UInt<1>, sExpSum : SInt<10>, doSubMags : UInt<1>, CIsDominant : UInt<1>, CDom_CAlignDist : UInt<5>, highAlignedSigC : UInt<26>, bit0AlignedSigC : UInt<1>}, flip mulAddResult : UInt<49>, flip roundingMode : UInt<3>, invalidExc : UInt<1>, rawOut : { isNaN : UInt<1>, isInf : UInt<1>, isZero : UInt<1>, sign : UInt<1>, sExp : SInt<10>, sig : UInt<27>}}"
+    ],
+    "MulAddRecFNToRaw_preMul_e8_s24": [
+      "output io : { flip op : UInt<2>, flip a : UInt<33>, flip b : UInt<33>, flip c : UInt<33>, mulAddA : UInt<24>, mulAddB : UInt<24>, mulAddC : UInt<48>, toPostMul : { isSigNaNAny : UInt<1>, isNaNAOrB : UInt<1>, isInfA : UInt<1>, isZeroA : UInt<1>, isInfB : UInt<1>, isZeroB : UInt<1>, signProd : UInt<1>, isNaNC : UInt<1>, isInfC : UInt<1>, isZeroC : UInt<1>, sExpSum : SInt<10>, doSubMags : UInt<1>, CIsDominant : UInt<1>, CDom_CAlignDist : UInt<5>, highAlignedSigC : UInt<26>, bit0AlignedSigC : UInt<1>}}"
+    ],
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24": [
+      "output io : { flip invalidExc : UInt<1>, flip infiniteExc : UInt<1>, flip in : { isNaN : UInt<1>, isInf : UInt<1>, isZero : UInt<1>, sign : UInt<1>, sExp : SInt<10>, sig : UInt<27>}, flip roundingMode : UInt<3>, flip detectTininess : UInt<1>, out : UInt<33>, exceptionFlags : UInt<5>}"
+    ],
+    "RoundRawFNToRecFN_e8_s24": [
+      "output io : { flip invalidExc : UInt<1>, flip infiniteExc : UInt<1>, flip in : { isNaN : UInt<1>, isInf : UInt<1>, isZero : UInt<1>, sign : UInt<1>, sExp : SInt<10>, sig : UInt<27>}, flip roundingMode : UInt<3>, flip detectTininess : UInt<1>, out : UInt<33>, exceptionFlags : UInt<5>}"
+    ],
+    "StrictFp32MatrixLane": [
+      "input clock : Clock",
+      "input reset : UInt<1>",
+      "output io : { flip request : { flip ready : UInt<1>, valid : UInt<1>, bits : { tag : UInt<32>, mode : UInt<2>, a : UInt<32>, b : UInt<32>, acc : UInt<32>}}, result : { flip ready : UInt<1>, valid : UInt<1>, bits : { tag : UInt<32>, mode : UInt<2>, status : UInt<3>, product : UInt<32>, productValid : UInt<1>, value : UInt<32>, valueValid : UInt<1>, accCommit : UInt<1>, mulFlags : UInt<5>, mulFlagsValid : UInt<1>, addFlags : UInt<5>, addFlagsValid : UInt<1>, fmaFlags : UInt<5>, fmaFlagsValid : UInt<1>, passesCompleted : UInt<2>}}, busy : UInt<1>}"
+    ]
+  },
+  "not_proven": [
+    "arithmetic output or flags",
+    "timing",
+    "physical mapped multiplier count",
+    "same area/Fmax",
+    "full array integration"
+  ],
+  "top_register_bits": 553,
+  "top_register_count": 12,
+  "top_register_types": {
+    "addPass": "UInt<1>",
+    "job": "{ tag : UInt<32>, mode : UInt<2>, a : UInt<32>, b : UInt<32>, acc : UInt<32>}",
+    "mulMeta": "UInt<54>",
+    "mulValue": "UInt<49>",
+    "postInvalid": "UInt<1>",
+    "postRaw": "UInt<41>",
+    "preA": "UInt<24>",
+    "preB": "UInt<24>",
+    "preC": "UInt<48>",
+    "preMeta": "UInt<54>",
+    "reply": "{ tag : UInt<32>, mode : UInt<2>, status : UInt<3>, product : UInt<32>, productValid : UInt<1>, value : UInt<32>, valueValid : UInt<1>, accCommit : UInt<1>, mulFlags : UInt<5>, mulFlagsValid : UInt<1>, addFlags : UInt<5>, addFlagsValid : UInt<1>, fmaFlags : UInt<5>, fmaFlagsValid : UInt<1>, passesCompleted : UInt<2>}",
+    "state": "UInt<3>"
+  },
+  "variable_mul_count": 1,
+  "variable_mul_module": "HeteroBF16FmaMul",
+  "variable_mul_operands": [
+    "io.mulAddA",
+    "io.mulAddB"
+  ]
+}

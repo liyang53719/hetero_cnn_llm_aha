@@ -1,0 +1,63 @@
+{
+  "files": {
+    "IR_SCOPE.json": {
+      "bytes": 5187,
+      "sha256": "6e6e9815aa580123b0705554904c482fd252580aa62d9b122a7deab42d2ebecb"
+    },
+    "PUBLICATION_WHITELIST.txt": {
+      "bytes": 289,
+      "sha256": "8cc466b4d5036fd2f8e340dcb8c2e37c78a7cf49ef082d09ae4763f5fd08f855"
+    },
+    "README.md": {
+      "bytes": 2143,
+      "sha256": "c70f9941edff62f5b41496532c5be27e837d80572a329938d7df2bdb5b12e162"
+    },
+    "REPRODUCTION_PINS.json": {
+      "bytes": 12942,
+      "sha256": "f20d20316d86de76797d772f1cf4c1ebd1694b00f26a8871972f9dc7d4f7926d"
+    },
+    "SUMMARY.json": {
+      "bytes": 3132,
+      "sha256": "3bb5f94587afc092d902bcdb68d880e222e09847543437b15842d8f0bfe94aa9"
+    },
+    "StrictFp32LaneChirrtl.scala.patch": {
+      "bytes": 13369,
+      "sha256": "32981b044c2af386dac0642506d2f52e1d5b54d1814b7ab8e8aab34ae43b9176"
+    },
+    "TOP_LEAVES.json": {
+      "bytes": 2654,
+      "sha256": "c8180a6ba71c694855fbbb0963a91f1a60a10b1c643de2cf1bfedbff1e5eff55"
+    },
+    "launch_chirrtl.py": {
+      "bytes": 3619,
+      "sha256": "79ff40316954ca22bda994522a720d1d68eda006a3a13fe84020f3919fafb6fb"
+    },
+    "launch_chirrtl.py.patch": {
+      "bytes": 1007,
+      "sha256": "f5b2383117f83e634a39f79a56eb1c169e9a9966d2724dc92465fef87e767fb9"
+    },
+    "parser_controls.py": {
+      "bytes": 22067,
+      "sha256": "68276f05f52b27b076ea01d735638a184f7efb88fd86be4df9bee7b95014c9e0"
+    },
+    "run_chirrtl.py": {
+      "bytes": 22401,
+      "sha256": "be9b9f32ddf7a08d0bc74c6f138c5bfb1197a76869a6ed8da9475682de61671e"
+    },
+    "run_chirrtl.py.patch": {
+      "bytes": 13205,
+      "sha256": "71364b6078a0adfa7adc9ad5ee5baab2f082c9f06eac660d85f2c56483e7fbfd"
+    },
+    "source/StrictFp32LaneChirrtl.scala": {
+      "bytes": 8201,
+      "sha256": "695dbe9c56694c7dd3f369331e47c8935e9e4e0c02bb0ffaf168e86839eaf513"
+    }
+  },
+  "original_exact_file_count": 9,
+  "schema": "isolated-strict-lane-chirrtl-public-excerpt-v1",
+  "scope": "Frontend-only incremental source; not standalone; no numeric/flags/array qualification",
+  "upstream_manifest": {
+    "bytes": 2730,
+    "sha256": "c2f1c7f46da11616bf40b87b7fa10064c34ffe3e9a7963f59ecd9c119d4f881d"
+  }
+}

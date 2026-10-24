@@ -1,0 +1,144 @@
+{
+  "leaf_count": 27,
+  "input_leaves": 9,
+  "output_leaves": 18,
+  "input_bits": 134,
+  "output_bits": 127,
+  "leaves": [
+    {
+      "path": "clock",
+      "width": 1,
+      "direction": "in"
+    },
+    {
+      "path": "reset",
+      "width": 1,
+      "direction": "in"
+    },
+    {
+      "path": "io.request.valid",
+      "width": 1,
+      "direction": "in"
+    },
+    {
+      "path": "io.request.ready",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.request.bits.tag",
+      "width": 32,
+      "direction": "in"
+    },
+    {
+      "path": "io.request.bits.mode",
+      "width": 2,
+      "direction": "in"
+    },
+    {
+      "path": "io.request.bits.a",
+      "width": 32,
+      "direction": "in"
+    },
+    {
+      "path": "io.request.bits.b",
+      "width": 32,
+      "direction": "in"
+    },
+    {
+      "path": "io.request.bits.acc",
+      "width": 32,
+      "direction": "in"
+    },
+    {
+      "path": "io.result.ready",
+      "width": 1,
+      "direction": "in"
+    },
+    {
+      "path": "io.result.valid",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.tag",
+      "width": 32,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.mode",
+      "width": 2,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.status",
+      "width": 3,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.product",
+      "width": 32,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.productValid",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.value",
+      "width": 32,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.valueValid",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.accCommit",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.mulFlags",
+      "width": 5,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.mulFlagsValid",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.addFlags",
+      "width": 5,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.addFlagsValid",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.fmaFlags",
+      "width": 5,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.fmaFlagsValid",
+      "width": 1,
+      "direction": "out"
+    },
+    {
+      "path": "io.result.bits.passesCompleted",
+      "width": 2,
+      "direction": "out"
+    },
+    {
+      "path": "io.busy",
+      "width": 1,
+      "direction": "out"
+    }
+  ]
+}

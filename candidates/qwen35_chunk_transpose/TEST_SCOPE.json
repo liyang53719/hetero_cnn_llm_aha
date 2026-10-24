@@ -1,0 +1,104 @@
+{
+  "schema": "qwen35-transpose-public-test-scope-v1",
+  "status": "PASS_SOURCE_AND_PYTHON_SIMULATED_TRANSPOSE_PROTOCOL_ONLY",
+  "summary_zh": "独立转置owner源码对应检查与Python模拟协议控制通过。一次私有job依次完成phase3 K→KT和phase4 KE→KET；每阶段512读、512成功模拟ACK，复用1KiB payload tile。所有服务响应均为测试替身，不授真实硬件ACK、Scala/Chisel或RTL资格。",
+  "source_manifest_sha256": "675008eead4e8ef948cca9c93adfb7b682e4767944910eb18f2b7170d88a1ab9",
+  "source_owner_sha256": "293946fc86104c624b109d13e3d59338831a8a4c5a818d64aab8f649c4c026bd",
+  "review_receipt_pin": {
+    "bytes": 5225,
+    "sha256": "ff71e9b2fa99212652b5228df1d1e43748edc2c9eeee5684421e85a7409fa252"
+  },
+  "controls": {
+    "unittest_groups": 18,
+    "synthetic_full_cases": [
+      {
+        "chunk": 1,
+        "cold": false,
+        "head": 15,
+        "read_write_counts": [
+          [
+            512,
+            512
+          ],
+          [
+            512,
+            512
+          ]
+        ],
+        "sha256": "d49094158cf2abf559208f0132c32d7a072e4c4be7a6c424ca0dee6ad5f40dbf",
+        "tokens": 128,
+        "transactions": 2048
+      },
+      {
+        "chunk": 0,
+        "cold": true,
+        "head": 3,
+        "read_write_counts": [
+          [
+            512,
+            512
+          ],
+          [
+            512,
+            512
+          ]
+        ],
+        "sha256": "13bc8b8f1ec82a2340d4dfacf9f1c92e0371b03bbb8c5bbee2efb3c4b8ad14e3",
+        "tokens": 16,
+        "transactions": 2048
+      }
+    ],
+    "content_pins_before_after": 26,
+    "manifest_before_after": true,
+    "exit_code": 0,
+    "outer_seconds": 0.3499063909985125,
+    "inner_seconds": 0.269774,
+    "memory_peak_measured": false
+  },
+  "execution_limits": {
+    "interpreter": "CPython3.12 with-I-S-B",
+    "wall_seconds": 10,
+    "cpu_count": 1,
+    "cpu_soft_hard_seconds": [
+      10,
+      10
+    ],
+    "address_space_bytes": 268435456,
+    "log_file_cap_bytes": 1048576,
+    "limits_enforced_by": "root external wrapper: wall, CPU time, affinity, address space and per-file fsize; not tests.py itself",
+    "owned_output_proposal_bytes": 4194304,
+    "owned_output_post_exit_bytes": 4848,
+    "owned_output_post_exit_below_proposal": true,
+    "continuous_aggregate_output_monitor_attested": false
+  },
+  "retained_failure_history": "A process-creation transport rejection occurred before the successful invocation. Root checked that fresh output did not exist before retrying creation. It was not a test assertion failure and did not grant duplicate execution. No old failure or UNKNOWN evidence was changed.",
+  "published_source_files_exact": [
+    "INPUT_PINS.json",
+    "INTERFACE_CONTRACT.md",
+    "README.md",
+    "SCOPE.json",
+    "SOURCE_MANIFEST.json",
+    "source/GdnChunkTransposeOwner.scala",
+    "tests.py",
+    "transpose_model.py"
+  ],
+  "portable_boundary": [
+    "This is an incomplete source excerpt, not a standalone runnable package.",
+    "Machine-specific TEST_COMMAND.json is deliberately omitted; originalSOURCE_MANIFEST remains unchanged and still lists its contentpin.",
+    "Originaltests require all originalmanifest files includingTEST_COMMAND and separately supplied fourdependency roots. Do not bypass its pins or describe this excerpt as directly runnable.",
+    "Repositoryrelative inputpins are correspondence dependencies, not a completeScala compiler toolchain.",
+    "OriginalREADME/SCOPE retain theirhistorical freeze-time not-executed statement; this independentTEST_SCOPE records the later limitedroot test.",
+    "No machine-specific paths, raw executionlogs, authority, generatedIR/classes/tools/binaries or payloadarrays are included."
+  ],
+  "not_qualified": [
+    "Scala compilation",
+    "Chisel construction or CHIRRTL elaboration",
+    "SystemVerilog, RTL simulation or synthesis",
+    "realMemory ACK/backpressure/heldterminal/recovery",
+    "Scalar/Loan/Matrix arithmetic or independentFP32DUT",
+    "completechunk/fullblock/Host integration or rootpublication",
+    "resourcearea/latency/utilization claims"
+  ],
+  "no_new_UT_or_performance_mapping": true,
+  "public_scope_revision": "R2 narrows aggregate-output attestation only. Original public excerpt retained; all8original files and actualreview unchanged."
+}

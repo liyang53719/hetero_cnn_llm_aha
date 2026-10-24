@@ -1838,3 +1838,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 单CHIRRTL213402B，SHA256 bb403c278d839b9dbd3dcb03e7e4a576dfeb4d37b34655cec150c27f3797e7ce；独立解析117端口叶与原源码全匹配，单owner无子实例。实际独审SHA256 7164c0bf279e5af50b2d68890f2f4ecb6e698d734951ce759afc3d1791f763bd。只构造/CHIRRTL前端，不是实际Loan/Scalar/ACK/算术或RTL仿真/完整chunk；五RTL0/5、Qwen2full UNKNOWN不变。
 
 公开12项109622B在 candidates/qwen35_chunk_derived_chirrtl/，manifest SHA256 ee247fc9e4a2ac64c824143c85f57474e283129f747a9a74b7666135fa08c88d；复用base349相对pins加146增量，无生产源/模型/工具/IR/class/日志重复。原runner仍非完整可直接执行closure。原Enum解构FAIL保留；未push、无新CI、无清理。
+
+
+## PASS（仅源码/Python模拟协议）：phase3/4单job转置
+
+独立owner复用一个1KiB tile，单job内部phase3末512ACK后才能phase4；每阶段512读/512ACK/32768B，逐读finite拒NaN/Inf，±0/subnormal按bit保留，无算术服务。phase4失败保phase3历史checkpoint，但整体drained/decay不授资格并锁定，末ACK与held终态明确。
+
+18组Python对应模型控一次自然0/外0.349906391秒/内0.269774秒，两完整2048模拟事务轨迹，26内容pins+manifest前后同。首次exec CreateProcess传输拒绝、输出目录不存在后才创建成功执行，不称第一次测试失败。资源记录CPU10/10/AS256MiB/1CPU/外10秒/单文件FSIZE1MiB；4MiB为提案及末态4848B核限，非运行中aggregate实测，无RSS测量。独审SHA256 ff71e9b2fa99212652b5228df1d1e43748edc2c9eeee5684421e85a7409fa252。
+
+公开11件88698B在 candidates/qwen35_chunk_transpose/，manifest SHA256 46eba3dde29a0ae68f891f349f0bb9802ef32aebab9f1a4b377618e96d9e7f9b；8原件加限定scope与清单，排除机器命令/原日志，不是独立运行closure。Scala编译/真实ACK/RTL均TEMP未验，五RTL0/5、Qwen2full UNKNOWN不变。未push、无新增CI、无清理。

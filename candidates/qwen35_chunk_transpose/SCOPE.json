@@ -1,0 +1,66 @@
+{
+  "additional_control_storage_not_in_payload_bound": true,
+  "arithmetic_requests": 0,
+  "chirrtl_elaboration": false,
+  "chunk_rows": 64,
+  "combined_transactions": 2048,
+  "complete_block_utilization_evidence": false,
+  "destination_shape": [
+    128,
+    64
+  ],
+  "error_recovery": "held terminal then locked; coordinated owner and transport reset/drain, no local reset assurance",
+  "execution_authorized": false,
+  "fixed_remote_commit": "adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "heads": 16,
+  "host_publication_changed": false,
+  "m1_public_and_recurrent_guards_changed": false,
+  "module_instances_added": 0,
+  "numerical_dut_validation": false,
+  "payload_bytes": 1024,
+  "phase3_checkpoint": "actual last successful matching ACK plus read/write count check; immutable across later phase4 failure",
+  "phases": [
+    3,
+    4
+  ],
+  "private_decay": "full accepted context/head/chunk, forwarded only after complete success",
+  "proposed_control_groups": 18,
+  "proposed_full_model_trajectories": [
+    {
+      "chunk": 0,
+      "cold": true,
+      "head": 3,
+      "tokens": 16
+    },
+    {
+      "chunk": 1,
+      "cold": false,
+      "head": 15,
+      "tokens": 128
+    }
+  ],
+  "read_bytes_per_phase": 32768,
+  "reads_per_phase": 512,
+  "receipt_provenance": "trusted scheduler obligation, not authenticated or demonstrated wiring",
+  "rtl_simulation": false,
+  "scala_compile": false,
+  "schema": "qwen35_chunk_transpose_scope_v1",
+  "scope": "SOURCE_AND_PROPOSED_PYTHON_PROTOCOL_MODEL_ONLY",
+  "scratch_ack_bytes_per_phase": 32768,
+  "source_shape": [
+    64,
+    128
+  ],
+  "stable_roots_and_matrices": "exclusive scheduler obligation through held done",
+  "test_scope": "Python finite-word permutation, integer addresses, source literals and simulated Decoupled responses; not Chisel execution",
+  "tile_shape": [
+    16,
+    16
+  ],
+  "tokens": [
+    16,
+    128
+  ],
+  "whole_chunk_implemented": false,
+  "write_acks_per_phase": 512
+}

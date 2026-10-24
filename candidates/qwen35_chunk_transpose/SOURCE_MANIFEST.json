@@ -1,0 +1,41 @@
+{
+  "actual_execution_authorized": false,
+  "files": {
+    "INPUT_PINS.json": {
+      "bytes": 5529,
+      "sha256": "37fb4554e87f48a75e43fb3bf03c60babc028c4f72e3dd65c6a31df15914ddb1"
+    },
+    "INTERFACE_CONTRACT.md": {
+      "bytes": 5623,
+      "sha256": "57ac4cfbfae5eacb2cf984b4e4476b996b7bd140b3d6383adb296042749e8396"
+    },
+    "README.md": {
+      "bytes": 3906,
+      "sha256": "4741429308cb176aa7226bfd71d2bd704f558fdcb3ba9924e3ea047b5490db05"
+    },
+    "SCOPE.json": {
+      "bytes": 1960,
+      "sha256": "d44dbb0cc0cb874f699ccb35220cfe1a2e2f556eaffaa83cd6db5c57757ebbc0"
+    },
+    "TEST_COMMAND.json": {
+      "bytes": 1339,
+      "sha256": "9266b843fb1eefebad668fcb129605b6751d595dc9bbbaa0c7f8fa9053a8cbd1"
+    },
+    "source/GdnChunkTransposeOwner.scala": {
+      "bytes": 11503,
+      "sha256": "293946fc86104c624b109d13e3d59338831a8a4c5a818d64aab8f649c4c026bd"
+    },
+    "tests.py": {
+      "bytes": 38309,
+      "sha256": "cbfeb1801541f025678ae4069a9b5130f9d9444e614391ad21d20ae3bc04470e"
+    },
+    "transpose_model.py": {
+      "bytes": 13904,
+      "sha256": "ae6583ee0a1448fb5e11d5d76cc98d1ae3aa0419933a058b8832caf16d94b7e8"
+    }
+  },
+  "fixed_base_commit": "adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "schema": "qwen35_chunk_transpose_source_manifest_v1",
+  "scope": "single private phase3 then4 owner source; proposed stdlib source/integer/bitwise and Python simulated-ACK controls only",
+  "status": "FROZEN_SOURCE_TESTS_NOT_EXECUTED"
+}

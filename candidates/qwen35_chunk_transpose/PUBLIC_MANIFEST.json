@@ -1,0 +1,58 @@
+{
+  "schema": "qwen35-transpose-public-source-excerpt-v1",
+  "scope": "SOURCE_AND_PYTHON_SIMULATED_PROTOCOL_ONLY",
+  "files": {
+    "INPUT_PINS.json": {
+      "bytes": 5529,
+      "sha256": "37fb4554e87f48a75e43fb3bf03c60babc028c4f72e3dd65c6a31df15914ddb1"
+    },
+    "INTERFACE_CONTRACT.md": {
+      "bytes": 5623,
+      "sha256": "57ac4cfbfae5eacb2cf984b4e4476b996b7bd140b3d6383adb296042749e8396"
+    },
+    "PUBLICATION_WHITELIST.json": {
+      "bytes": 351,
+      "sha256": "bad4046ed722b7f5e8f8e2bab1390f00c00190eadf117d8d5389638e36b74df7"
+    },
+    "README.md": {
+      "bytes": 3906,
+      "sha256": "4741429308cb176aa7226bfd71d2bd704f558fdcb3ba9924e3ea047b5490db05"
+    },
+    "SCOPE.json": {
+      "bytes": 1960,
+      "sha256": "d44dbb0cc0cb874f699ccb35220cfe1a2e2f556eaffaa83cd6db5c57757ebbc0"
+    },
+    "SOURCE_MANIFEST.json": {
+      "bytes": 1470,
+      "sha256": "675008eead4e8ef948cca9c93adfb7b682e4767944910eb18f2b7170d88a1ab9"
+    },
+    "TEST_SCOPE.json": {
+      "bytes": 4322,
+      "sha256": "62e6b7e6adea84745c5e60f721fe1233a3060639bb624d21dc160eeb63e36e11"
+    },
+    "source/GdnChunkTransposeOwner.scala": {
+      "bytes": 11503,
+      "sha256": "293946fc86104c624b109d13e3d59338831a8a4c5a818d64aab8f649c4c026bd"
+    },
+    "tests.py": {
+      "bytes": 38309,
+      "sha256": "cbfeb1801541f025678ae4069a9b5130f9d9444e614391ad21d20ae3bc04470e"
+    },
+    "transpose_model.py": {
+      "bytes": 13904,
+      "sha256": "ae6583ee0a1448fb5e11d5d76cc98d1ae3aa0419933a058b8832caf16d94b7e8"
+    }
+  },
+  "original_byte_copies": [
+    "INPUT_PINS.json",
+    "INTERFACE_CONTRACT.md",
+    "README.md",
+    "SCOPE.json",
+    "SOURCE_MANIFEST.json",
+    "source/GdnChunkTransposeOwner.scala",
+    "tests.py",
+    "transpose_model.py"
+  ],
+  "omitted_private_command": true,
+  "standalone_runnable": false
+}

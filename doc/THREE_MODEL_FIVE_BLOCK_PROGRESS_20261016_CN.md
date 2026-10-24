@@ -1652,3 +1652,13 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 四函数193个静态主体line位置中14个hook、179个无字段/event产出；这是静态位置不是动态次数或速度比。matrix_step的8个非hook位置原有context/opcode/col/causal检查仍在4个保留hook原样重验；同tick内locals/cheap身份瞬变恢复可能漏检，持久错误到hook拒绝，错误发现时刻可能延后。不能称旧逐line防篡改等价。
 - 合成独审：两模块关系/逆AST成立，28个其余方法逐字；14原consumer CodeTypes、6scalar40槽、真实dispatcher另一listener4400line/400tick记录一致，每400tick两臂full核验均800。约1.12倍mock仅合成，不外推M2。
 - 本包只source/synthetic；后续0549的实际M2单臂另行source-bound验证，不由该公开包授予运行或M128资格。完整128-token block及五block RTL仍未通过，无新利用率实测；旧失败原件不改。
+
+## PASS（有限实际 M2 历史对照和采样）/ TEMP：event-line 验证与热点定位（2026-10-21）
+
+- DONE：新增 candidates/fixed93_m2_event_line_profile_validation，24 文件、323459 字节；20 原源码/policy 摘录逐字保留。入树仅核 hash/pins 和 18 Python 内存 compile，未执行被摘录测试、native、模型或 decoder；不是完整独立运行包。独审 SHA d22c69a2c05a55c739244f05e6bff95cbe2c90b598b94d499e129a9f6df8929f，不含原权限、receipt、日志、数组、profile 或 ELF。
+- 0549 无采样单新臂自然 0，实际 main_loop CPU 14.929663849 秒 / wall 15.390011784 秒，相对 0526 历史单次降低 9.008963% / 8.947760%。独审 SHA e8a3a19af0176278ad5708e9366a72b1fd7482c503c8c0ef51cce381a78831f1；仅 M2 Attention 历史等价，不是同期性能对照或独立数值 oracle。
+- 0557 新诊断单臂自然 0，53 已封文件 6603299 字节；33 字段/presence/output 和 transport 精确匹配历史，8565 Attention / 2211 wholeblock 记录语义差分为空，11011 opaque-ID 差异和 4 长期映射单列。独审 SHA d461f9a060c755c1647464a20324af7a47a8602e653538d8ee35a9d168a3f1aa；Attention COMPLETE，wholeblock 仍 INCOMPLETE / 0 advance。
+- 辅助采样 1461 samples、925 stacks，报告 overflow/truncation/reentrant loss 均 0，已恢复 inactive；一次 CPU gap 超过 50ms。仅 Python 可见栈，不能保证每物理 tick、不能把采样份额当精确 CPU 份额，带采样耗时不能作性能验收。独立 V2 热点分析的选定 leaf：audit hooks 453、Attention trace 396、dispatcher 262、Whole observe 90、native_snapshot 42；inclusive 不可相加。
+- 辅助采样质量与主证据 seal 分离，安全恢复但不完整的采样可为 PARTIAL；不放松主证据或资源/恢复错误。0437 实际 FAIL 保留；R1 decoder 阻断是已撤回的静态推断，不是实际失败，也未扩宽 decoder。
+- ONGOING / TEMP：下一独立四 owner frame-local routing 正在源码/真实 tracing 合成验证，只拟跳过无证据非 hook line 的重复投递，保留全部 14 hook、call/return/exception、SiLU 和异常恢复。新瞬变检测边界须明确，尚无新 routing actual 资格。
+- 完整 128-token block 未通过，五 block 完整 RTL 仍 0/5，无新增硬件 MAC 利用率实测。本批仅本地小提交，不代表远端或 CI 更新；未删除临时数据、未重写历史。

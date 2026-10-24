@@ -1,0 +1,34 @@
+{
+  "actual_execution_authorized": false,
+  "arm": "new",
+  "diagnostic_only": true,
+  "historical_comparison_only": true,
+  "hz": 100,
+  "max_codes": 2048,
+  "max_depth": 48,
+  "max_profile_bytes": 4194304,
+  "max_samples": 12000,
+  "max_stacks": 4096,
+  "maximum_invocations": 1,
+  "model_or_observer_source_changed": false,
+  "pair_equivalence_claim": false,
+  "preexisting_active_prof_timer": "reject",
+  "preexisting_pending_prof_signal": "reject",
+  "preserve_sigalrm": true,
+  "preserve_trace_dispatcher": true,
+  "prior_handler_and_mask": "restore_after_pending_drain",
+  "quality_partial_blocks_main_evidence": false,
+  "reference_payload_read": false,
+  "region": "main_loop_only",
+  "report_gate_source": {
+    "bytes": 2109,
+    "sha256": "3c9d11db7f1574bd04a48e964df4ba427fbdd20f035a55446384c9411ba6c89c"
+  },
+  "sampler_source": {
+    "bytes": 8907,
+    "sha256": "7a68c2b80ca36e970ec8023a4c9a54111b93973a58328daca0fe244ff057017b"
+  },
+  "schema": "fixed93-main-loop-sigprof-independent-quality-v1",
+  "speed_measurement": false,
+  "unsafe_restore_blocks_main_evidence": true
+}

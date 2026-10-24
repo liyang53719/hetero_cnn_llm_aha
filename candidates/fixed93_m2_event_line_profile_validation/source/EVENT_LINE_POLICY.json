@@ -1,0 +1,41 @@
+{
+  "event_schema_changed": false,
+  "evidence_hook_counts": {
+    "_attention": 5,
+    "_matrix_step": 4,
+    "_write": 2,
+    "tick": 3
+  },
+  "full_identity_frequency_changed": true,
+  "max_tick_ancestry_frames": 128,
+  "module_files": {
+    "CODEC_PINS.json": {
+      "bytes": 253,
+      "sha256": "d49b6f296bf1a6717565e9a3c6d0d401b146abc041ca907ae0659a4537ed22cf"
+    },
+    "anchors.json": {
+      "bytes": 14501,
+      "sha256": "038f66631dff0142cd9bc4f8bbd7851457a6effca24406d5440780d5bb740f1a"
+    },
+    "cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "narrow_fullblock_attention.py": {
+      "bytes": 61922,
+      "sha256": "a11a11d5102feaa5b72b9a31d944530ceb627a371176240359498c0d6f8fa8e2"
+    }
+  },
+  "nonhook_line_sampling_changed": true,
+  "original_full_identity_unchanged": true,
+  "policy_id": "event-only-owner-lines-v1",
+  "sampling_enabled": false,
+  "schema": "fixed93-attention-event-only-owner-lines-v1",
+  "scope": "Only this Attention listener skips non-hook normal lines proven inside the same live tick without sticky failure, retaining thread/exact owner/frame checks. Fourteen original hooks, six scalar returns, all call/return/exception/outside-tick paths, scope cleanup and shared dispatcher/other subscribers stay unchanged. Prior tick and nonconsumer op integrity policies remain. Transient locals or cheap identity drift restored before the next retained event may escape; detection timing differs. No arithmetic, schedule, event or wire change; no execution authority.",
+  "scope_must_close": true,
+  "shared_dispatcher_unchanged": true,
+  "transient_locals_detection_equivalent": false,
+  "transient_metadata_detection_equivalent": false,
+  "underlying_integrity_policy": "op-evidence-boundary-v1",
+  "underlying_tick_policy": "tick-boundary-metadata-integrity-v1"
+}

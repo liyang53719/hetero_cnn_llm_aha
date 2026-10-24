@@ -1,0 +1,277 @@
+{
+  "acceptance": {
+    "M128_acceptance": false,
+    "RTL_pass": false,
+    "attention_status": "COMPLETE_ATTENTION_OBSERVATION_NOT_FULLBLOCK_ACCEPTANCE",
+    "fullblock_pass": false,
+    "fullblock_seal_called": false,
+    "independent_numeric_oracle": false,
+    "limits": [
+      "M=2 synthetic N1 Attention only. Not official input/reference values or independent numeric oracle.",
+      "Wholeblock remains incomplete, no public advance/job/completed/PC or SiLU work, original unobserved domains retained.",
+      "New event-only line contract explicitly differs from prior tick-policy cheap/local sampling, and prior tick metadata-integrity limits remain.",
+      "This auxiliary SIGPROF run is diagnostic, not speed acceptance; no authority for M128/fullblock/RTL or another actual invocation."
+    ],
+    "matrix_binary_provenance_verified_by_observer": false,
+    "numerical_acceptance": false,
+    "unobserved_domains": [
+      "expanded4096 Matrix bank per issue",
+      "SiLU nested17 exp nodes and preBF16 multiply"
+    ],
+    "wholeblock_scope": "INCOMPLETE_WHOLEBLOCK"
+  },
+  "auxiliary_report_policy": {
+    "R1_actual_executed": false,
+    "R1_decoder_static_blocker_claim_retracted": true,
+    "R1_runtime_blocker_proven": false,
+    "R2_change": "Separate auxiliary summary retained for reporting clarity, not a fix to a demonstrated actual failure; no decoder widening or model change.",
+    "main_seal_and_semantic_comparison_remain_required": true,
+    "malformed_or_unbounded_accounting_blocks_main_evidence": true,
+    "old_0437_actual_FAIL_unchanged": true,
+    "old_0437_failure": "FAIL_REENTRANT_DROP_RETAINED_UNCHANGED",
+    "quality_PARTIAL_alone_blocks_main_evidence": false,
+    "sampling_quality_grants_model_or_fullblock_PASS": false,
+    "unsafe_or_active_sampler_restore_blocks_main_evidence": true
+  },
+  "packaging": {
+    "actual_or_source_tests_rerun": false,
+    "checker_scope": "Exact relative whitelist and SHA-256/size, UTF-8 and private-path scan, in-memory Python compilation, and safe-summary consistency only; not independent actual-evidence revalidation.",
+    "native_loaded": false,
+    "new_actual_authority": false,
+    "old_unsealed_stream_read": false,
+    "original_verified_source_bytes_modified": false,
+    "raw_profile_or_streams_read": false,
+    "source_imported_or_executed": false,
+    "standalone_runtime_complete": false
+  },
+  "policy_contract": {
+    "event_line_policy_pin": {
+      "bytes": 1900,
+      "sha256": "3e0b9e620eb2834082ed8967126498515e4ded46142462e603fc6041d9b5d742"
+    },
+    "event_policy_sampling_flag_describes_observer_policy_not_auxiliary_SIGPROF": true,
+    "explicit_weakening": "New event-only owner-line policy additionally omits cheap ownership and matrix context/local checks on filtered normal nonhook lines. Transient values restored before a retained boundary may evade detection; original tick ABI/profile transient limits also remain. Actual equivalence does not restore old per-line anti-tamper sampling.",
+    "fourteen_evidence_hooks_and_six_scalar_returns_retained": true,
+    "nonconsumer_op_policy_pin": {
+      "bytes": 787,
+      "sha256": "aa7db62c0da1f35dd4a20c56172c47d92a75e9ee5e41d5ac5c3abf27addefc25"
+    },
+    "old_per_line_or_every_callback_integrity_equivalent": false,
+    "scope_close_evidence": "Source requires a matching tick return to clear scope, or exit latches error for open scope. Actual __exit__/report completed, observer_error=null and COMPLETE report plus exact source identity support proper closed lifecycle. No per-boundary counter was added; this is control-flow/source binding evidence, not an independently counted ABI-check trace.",
+    "shared_dispatcher_and_other_subscribers_unchanged": true
+  },
+  "profiled_0557_run": {
+    "equivalence": {
+      "all33_field_presence_output_files_exact_size_SHA_equal": true,
+      "attention_records": 8565,
+      "decoded_semantic_differences": {},
+      "generic_long_lived_references_checked": 1515,
+      "long_lived_mapping_count": 4,
+      "opaque_ID_category_counts": {
+        "actual_object_reference": 3051,
+        "done_object": 216,
+        "fifo_object": 48,
+        "job_object": 1,
+        "matrix_object": 3031,
+        "owner_object": 3031,
+        "request_object": 696,
+        "result_object": 936,
+        "scalar_object": 1
+      },
+      "opaque_ID_difference_rows": 11011,
+      "raw_logical_record_differences": {
+        "attention_raw_logical_records_different": 3391,
+        "attention_record_count_new": 8565,
+        "attention_record_count_old": 8565,
+        "wholeblock_raw_logical_records_different": 1515,
+        "wholeblock_record_count_new": 2211,
+        "wholeblock_record_count_old": 2211
+      },
+      "raw_stream_bytes_identical": false,
+      "short_lived_cross_run_alias_equivalence_proven": false,
+      "tag_or_epoch_normalization": false,
+      "transport_exact_size_SHA_equal": true,
+      "wholeblock_records": 2211
+    },
+    "main_loop_timing": {
+      "cpu_seconds": 15.754730906999999,
+      "wall_seconds": 16.24510132901196
+    },
+    "native_and_cleanup": {
+      "child_history_payload_read": false,
+      "cleanup_confirmed": true,
+      "cleanup_interpretation": "Original supervisor observes exit0 via WNOWAIT first, then group cleanup signal before reap; no timeout/forced result or final reap signal. Outer soft/hard stops both false.",
+      "constructor_native_reset_guard_probes": true,
+      "exit_code": 0,
+      "fresh_compile": false,
+      "group_state_after_reap": "absent",
+      "native_SHA256": "c03ab303a6d0780f379a13f8f0339872a6b00e066c8481b8e8f39a16243cf5b8",
+      "native_numeric_state_reused": false,
+      "native_record_status": "PASS",
+      "native_status": "VERIFIED_EXISTING_ELF_LOAD_ONLY",
+      "official_input_payload_read": false,
+      "outer_soft_or_hard_stop": false,
+      "real_native_initialization_observed": true,
+      "reaped": true,
+      "reference_payload_read": false,
+      "timed_out": false
+    },
+    "post_exit_inventory": {
+      "bytes": 6603299,
+      "files": 53
+    },
+    "sampling": {
+      "active": false,
+      "codes": 117,
+      "diagnostic_only": true,
+      "gaps_over_50ms": 1,
+      "limitations": [
+        "No C/native stack; delayed or coalesced signals can land at Python recovery.",
+        "Sample fractions are not exact subdomain CPU time.",
+        "Depth-truncated stacks retain the innermost 48 frames.",
+        "Sampling perturbs execution; this is not a speed acceptance run."
+      ],
+      "main_evidence_qualification_independent": true,
+      "max_observed_sample_cpu_gap_ns": 85532147,
+      "pending_drained": 0,
+      "physical_timer_coverage_proven": false,
+      "policy_pin": {
+        "bytes": 1092,
+        "sha256": "d1c7676c1f07acde9d8922defa51729ee340fcf2aff7a0778298813023cfd212"
+      },
+      "profile_pin_not_included": {
+        "bytes": 584037,
+        "sha256": "8092f6dd5ef975fd2dd050e987dee2d56fa0f32e19698a36cbf66a3bd138e601"
+      },
+      "quality": "COMPLETE_BOUNDED_SAMPLES",
+      "reported_loss_counters": {
+        "overflow_codes": 0,
+        "overflow_samples": 0,
+        "overflow_stacks": 0,
+        "reentrant_dropped": 0,
+        "truncated_stacks": 0
+      },
+      "restored": true,
+      "samples": 1461,
+      "speed_measurement": false,
+      "summary_pin_not_included": {
+        "bytes": 1185,
+        "sha256": "2608029afbda1314728d94adeab6ddc7239ff2ceffb0c807a965c65163c07e60"
+      },
+      "unique_stacks": 925
+    },
+    "source_after_all25_pins_unchanged": true,
+    "timing_limit": "SIGPROF perturbs this diagnostic main loop. Timings describe this run, not uninstrumented speed or historical speedup. Main loop includes real owner, two observers, codec, transport checks and SIGPROF; constructors and seals excluded. Parent historical comparison is not separately timed. No M128 or full-duration prediction."
+  },
+  "provenance": {
+    "R1_static_inference_correction": {
+      "bytes": 531,
+      "sha256": "33296c15994dfa57115e8a819675e25f9430558e99219897a1fa3cd99e34d783"
+    },
+    "frozen_R2_source_manifest": {
+      "bytes": 6066,
+      "sha256": "178cb9cc1bb5ef4dd2ecfae8d3cdb1f42b473674e95fa5cd165c0bcafacc0716"
+    },
+    "historical_0417_success_actual_review": {
+      "bytes": 40115,
+      "sha256": "8055216d02e43c73d62a6fefaea64f32498965421631c5028e53f9b758f5a9c4"
+    },
+    "historical_0526_actual_review": {
+      "bytes": 35704,
+      "sha256": "087197391d897ef27b1cec68f61ad374be3713af719804de2d107a5e4b1cf1db"
+    },
+    "profile_0557_actual_review": {
+      "bytes": 38522,
+      "sha256": "d461f9a060c755c1647464a20324af7a47a8602e653538d8ee35a9d168a3f1aa"
+    },
+    "profile_0557_source_cold_review": {
+      "bytes": 25511,
+      "sha256": "b80db07d77de49e14f5057d27c28f6d7e1a4260bb0d4968db360910117284a27"
+    },
+    "separate_hotspot_analysis_V2": {
+      "bytes": 32307,
+      "sha256": "8245b6d02ac0e5a83463d356c3c6903816ffe8468c522e4aaca7b1eb5f9a1602"
+    },
+    "unsampled_0549_actual_review": {
+      "bytes": 36605,
+      "sha256": "e8a3a19af0176278ad5708e9366a72b1fd7482c503c8c0ef51cce381a78831f1"
+    }
+  },
+  "schema": "single-m2-event-line-profile-public-summary-v1",
+  "scope": "One retained synthetic N1 Attention M=2 profile run, historical observer equivalence only; exact source excerpts, not a standalone runtime or renewed authorization.",
+  "separate_hotspot_analysis": {
+    "analysis_pin_not_included": {
+      "bytes": 32307,
+      "sha256": "8245b6d02ac0e5a83463d356c3c6903816ffe8468c522e4aaca7b1eb5f9a1602"
+    },
+    "checker_recomputes_profile_analysis": false,
+    "complete_physical_timer_coverage_proven": false,
+    "exact_CPU_fractions": false,
+    "limitations": [
+      "No C/native stack or exact subdomain CPU; Python recovery can receive delayed/coalesced ticks.",
+      "Partitions use the innermost known code, separating audit hooks from their outer identity callers.",
+      "Inclusive counts overlap and must not be added. Sampling perturbs timing.",
+      "No main stream read, numerical comparison or model completion inference."
+    ],
+    "profile_pin_not_included": {
+      "bytes": 584037,
+      "sha256": "8092f6dd5ef975fd2dd050e987dee2d56fa0f32e19698a36cbf66a3bd138e601"
+    },
+    "scope": "Five selected leaf rows; audit is the sum of three disjoint leaf functions. This is not the full categorized partition, and WholeblockObservation._observe/native_snapshot counts exclude separately classified helper frames.",
+    "selected_leaf_counts": [
+      {
+        "components": {
+          "CalibrationIO.audit": 158,
+          "FrozenLayout.audit_write": 190,
+          "frozen_exec.<locals>.audit": 105
+        },
+        "label": "audit hooks (three exact leaf functions grouped)",
+        "samples": 453
+      },
+      {
+        "label": "Fixed93FullblockAttentionObservation._trace",
+        "samples": 396
+      },
+      {
+        "label": "TraceDispatcher._dispatch",
+        "samples": 262
+      },
+      {
+        "label": "WholeblockObservation._observe",
+        "samples": 90
+      },
+      {
+        "label": "native_snapshot",
+        "samples": 42
+      }
+    ],
+    "source": "Already-completed separate retained-profile analysis V2; not the actual-review object and not recomputed by the public checker.",
+    "stored_sample_denominator": 1461
+  },
+  "source_cold_controls_reported_not_rerun": {
+    "diagnostic_cases": 49,
+    "duplicate_0540_full_test_package_included": false,
+    "native_or_model_executed_by_these_controls": false,
+    "source_cases": 72
+  },
+  "status": "CONFIRMED_SINGLE_M2_EVENT_LINE_PROFILE_HISTORICAL_EQUIVALENCE_ONLY",
+  "unsampled_0549_run": {
+    "cpu_reduction_percent": 9.008963077714693,
+    "historical_0526_main_loop": {
+      "cpu_seconds": 16.407840106000002,
+      "wall_seconds": 16.902397797995945
+    },
+    "new_main_loop": {
+      "cpu_seconds": 14.929663848999999,
+      "wall_seconds": 15.39001178399485
+    },
+    "post_exit_inventory": {
+      "bytes": 6014710,
+      "files": 51
+    },
+    "sampling_enabled": false,
+    "status": "CONFIRMED_SINGLE_M2_EVENT_LINE_POLICY_HISTORICAL_EQUIVALENCE_ONLY",
+    "timing_limit": "Single new M2 against historical runs, no contemporaneous pair, repeats or confidence interval. Main loop includes real owner + two observers + codec + transport checks, excludes constructors and seal IO. Parent historical comparison is not separately timed. No full-size prediction or M128 admission.",
+    "wall_reduction_percent": 8.947760146672278
+  }
+}

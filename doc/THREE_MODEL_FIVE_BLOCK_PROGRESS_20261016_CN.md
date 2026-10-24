@@ -1917,3 +1917,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 唯一R2实际自然0，总0.547398621秒，714前后完整一致/12封件801596B核验；52请求（44唯一）99真实trace=52Mul+47Add，46成功+5Mul fatal不发Add+1Add fatal保诊断不commit，12非finite前拒无trace。13组93项明确MOCK，不混实际native；原ELF未重编，标准FENV sticky/controls同、DE0→1另列，原child身份/WNOWAIT/reap/group absent/cleanup闭合。独审R2_ACTUAL_REVIEW SHA256 cd2eddc2d601250dfa0a0a352e092a99d1f441387f3dcad7d4e575ab0dfa4437。
 
 仅隔离finite/RNE/fatal30软件参考wrapper，不替旧op6/Exp/16lane/整模，也不授硬件flags/真实握手/RTL。公开12项66313B在 candidates/qwen35_strict_reference/，manifest SHA256 5f9b07a568d70ba1770e8c05ce453428477f812c69752be927e0c9dbededafc9，排除机器plan/工具表/ELF/rawlog/重复模型，非standalone。硬件与整模集成仍阻断、五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。
+
+
+## TEMP：Strict FP32 lane 真实 DUT 回归源码（2026-10-22）
+
+新增 candidates/qwen35_strict_lane_regression：实际 StrictFp32MatrixLane 的五组 ChiselTest/Treadle 测试源码，覆盖52个冻结请求、15字段、逐pass flags/valid/commit、有限请求3周期背压、12非有限预拒绝和3模式/编码拒绝、9个复位位置、退休同沿禁止新请求及恢复。每pass4周期、双pass8周期为待硬件验证期望，不是实测。
+
+PASS仅限已实际运行的 Python Fraction/fixture逐字一致性检查；独立源码审查未见阻断缺陷。Scala编译、展开、Treadle和RTL均未运行。冻结输入实际去重41=20+24−3，纠正前节44的计数说明；历史52请求、52Mul+47Add=99真实软件trace不变，旧原始证据不改。
+
+依赖阻塞归因更正：此前25个Maven缺件从未提交网络请求，不是实际访问被拒。本次通过正式 require_escalated 路径尝试下载，沙箱启动在Python执行前失败；独立输出目录不存在，无HTTP结果、无下载成功，不修改受限系统路径或绕过。下载器源码已准备，保留失败记录；缺件仍未补齐。五block完整RTL仍0/5，Qwen2完整M128终态UNKNOWN，未push、无新CI、无清理。

@@ -1,0 +1,33 @@
+{
+  "status": "TEMP_HARDWARE_NOT_RUN",
+  "source_fixture_consistency": "PASS",
+  "requests": 52,
+  "distinct_raw_triples": 41,
+  "historical_native_trace_calls_unchanged": 99,
+  "scala_compile": "NOT_RUN",
+  "chisel_elaboration": "NOT_RUN",
+  "treadle_simulation": "NOT_RUN",
+  "full_block_rtl_pass": false,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2443,
+      "sha256": "041e2b9c692b032666edd73f7c667fd35f7c1535162690aeec2842bba20ec81b"
+    },
+    {
+      "path": "generate_fixtures.py",
+      "bytes": 2859,
+      "sha256": "90ef466f978c36b2af732351026714531bad8ea74471bb0f1936fba26cb60f35"
+    },
+    {
+      "path": "source/StrictFp32LaneFixtures.scala",
+      "bytes": 7936,
+      "sha256": "03f24656d30d68bf58f5725a041ecca143dd1d6d98b91485b1c803bdfba2fc75"
+    },
+    {
+      "path": "source/StrictFp32MatrixLaneSpec.scala",
+      "bytes": 7780,
+      "sha256": "bbe807d378dac9f63e3a1b9cc2ed48920fae0e89f553ca80510968065d52ee85"
+    }
+  ]
+}

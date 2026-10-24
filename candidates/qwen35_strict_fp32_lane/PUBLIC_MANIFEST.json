@@ -1,0 +1,84 @@
+{
+  "schema": "strict-lane-public-exact-source-manifest-v1",
+  "scope": "Exact source excerpt and sanitized software-only scope, not standalone or hardware qualification",
+  "upstream_source_manifest": {
+    "bytes": 1834,
+    "sha256": "4d4440124c330369d3baf88bca0fa3a1315a64f7686c41f0651ad714c4a43061"
+  },
+  "exact_original_files": [
+    "DIRECTED_VECTORS.json",
+    "FLAGS_BOUNDARY_ADDENDUM.md",
+    "INPUT_PINS.json",
+    "INTERFACE_PROPOSAL.md",
+    "PROPOSAL_INPUT_PINS.json",
+    "README.md",
+    "SCOPE.json",
+    "SOURCE_MANIFEST.json",
+    "fraction_reference.py",
+    "lane_model.py",
+    "source/StrictFp32MatrixLane.scala",
+    "tests.py"
+  ],
+  "files": {
+    "DIRECTED_VECTORS.json": {
+      "bytes": 8866,
+      "sha256": "a32b71a797d321847dbc93968f6a570883c92070834dfcf84ee7ab4ffab1119c"
+    },
+    "FLAGS_BOUNDARY_ADDENDUM.md": {
+      "bytes": 2663,
+      "sha256": "89ce9f7cd25e3aa9d134ca89169a288cbd90ed2eef22f1a82bdd2f8f484c4f2e"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 4276,
+      "sha256": "1eedca6c64bfd1369282966d85dcaf02420401651eaed88bdbeea02af30626e7"
+    },
+    "INTERFACE_PROPOSAL.md": {
+      "bytes": 5608,
+      "sha256": "5ddb1ec4f0b1d378169f4a68f26b2c2b5ab0941eb430d0ea5771936d718ea3f5"
+    },
+    "PROPOSAL_INPUT_PINS.json": {
+      "bytes": 834,
+      "sha256": "d5bba9e9d77205f54de1ddc5e84a7e32d5ce21ac1d19bb3fc02262fc3a27176f"
+    },
+    "PUBLICATION_WHITELIST.txt": {
+      "bytes": 313,
+      "sha256": "aa86551783778daae9025cd2b99e6e3d28fdb7b1e17ca3e6f7b5d79413035cfb"
+    },
+    "PUBLIC_README.md": {
+      "bytes": 1369,
+      "sha256": "98c41265f133d56926038a03086cba72543c032cd652adfe1444a9bc0a9e1818"
+    },
+    "README.md": {
+      "bytes": 1555,
+      "sha256": "312c6b770f8a856ea5f1061e1dcbe703300a88ecf011b1a0fe89cc1d1dd5d1b0"
+    },
+    "SCOPE.json": {
+      "bytes": 1253,
+      "sha256": "85b66afbb134181e23ca9538266572793fea405648a2995c174c388bdf75c392"
+    },
+    "SOURCE_MANIFEST.json": {
+      "bytes": 1834,
+      "sha256": "4d4440124c330369d3baf88bca0fa3a1315a64f7686c41f0651ad714c4a43061"
+    },
+    "TEST_SCOPE.json": {
+      "bytes": 3043,
+      "sha256": "6e3ac1fb13a7f67c4e3d9b54381c67f398298819e416cb7f36c2470463b9db15"
+    },
+    "fraction_reference.py": {
+      "bytes": 7487,
+      "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+    },
+    "lane_model.py": {
+      "bytes": 7605,
+      "sha256": "13d755388217a621b59f114687a08266a33003ead358a8100cdfb7ce428acd32"
+    },
+    "source/StrictFp32MatrixLane.scala": {
+      "bytes": 6801,
+      "sha256": "71b2ef457fadd2e3f1bf8c1d603ec0faa4276921b320855cfe85a82a8f6e259b"
+    },
+    "tests.py": {
+      "bytes": 19154,
+      "sha256": "ec61bf19ae74a9040ef55f17a130b5003c068eb27bb13983fecb53de3a7a5dc4"
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "scope": "Finite binary32 strict Mul-RNE then Add-RNE, with original-source tininess-after numerical contract and fatal mask 30.",
+  "table_source": "Handwritten mathematical derivation. No candidate, reference, test, compiler, simulator, or hardware execution was used to derive this table.",
+  "execution_status": "NOT_RUN",
+  "claim_limit": "Software mathematics only; not HardFloat execution, not old-CPP fatal equivalence, and no BF16 or NaN-payload claim.",
+  "flags": {"NV": 16, "DZ": 8, "OF": 4, "UF": 2, "NX": 1},
+  "statuses": {"OK": 0, "MulFatal": 4, "AddFatal": 5},
+  "rounding": "Nearest, ties to even; overflow at exactabs >= 2^128 - 2^103; UF iff delivery is inexact and exactabs < 2^-126 - 2^-151.",
+  "representation": "a, b, acc, product, and value are uint32 hex strings. Flag fields and attempted/status are integers. MulFatal value=0 and add_flags=0 are unexecuted placeholders, not Add observations.",
+  "input_rejection": "All NaN and infinity inputs are outside the arithmetic oracle and must raise ValueError before any strict pass; they are not assigned fake NV flags in this table.",
+  "vectors": [
+    {
+      "id": "exact_identity",
+      "a": "0x3f800000", "b": "0x3f800000", "acc": "0x00000000",
+      "expected": {"product": "0x3f800000", "mul_flags": 0, "value": "0x3f800000", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "1 * 1 + 0 is exact at both passes."
+    },
+    {
+      "id": "retain_low_fraction_bit",
+      "a": "0x3f800001", "b": "0x3f800000", "acc": "0x00000000",
+      "expected": {"product": "0x3f800001", "mul_flags": 0, "value": "0x3f800001", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "The lowest FP32 fraction bit is retained; this is not BF16 truncation."
+    },
+    {
+      "id": "mul_midpoint_select_even_upper",
+      "a": "0x3f800001", "b": "0x3fc00000", "acc": "0x00000000",
+      "expected": {"product": "0x3fc00002", "mul_flags": 1, "value": "0x3fc00002", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "Exact product is 3/2 + 3*2^-24, halfway between 0x3fc00001 and 0x3fc00002; the upper endpoint is even."
+    },
+    {
+      "id": "negative_product_zero_mixed_add_zeros",
+      "a": "0x00000000", "b": "0xbf800000", "acc": "0x00000000",
+      "expected": {"product": "0x80000000", "mul_flags": 0, "value": "0x00000000", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "Mul uses xor sign: +0 * -1 = -0. Add of -0 and +0 yields +0 under RNE."
+    },
+    {
+      "id": "both_negative_add_zeros",
+      "a": "0x80000000", "b": "0x3f800000", "acc": "0x80000000",
+      "expected": {"product": "0x80000000", "mul_flags": 0, "value": "0x80000000", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "-0 * +1 = -0; -0 + -0 remains -0."
+    },
+    {
+      "id": "double_negative_mul_zero",
+      "a": "0x80000000", "b": "0xbf800000", "acc": "0x80000000",
+      "expected": {"product": "0x00000000", "mul_flags": 0, "value": "0x00000000", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "-0 * -1 = +0; +0 + -0 yields +0 under RNE."
+    },
+    {
+      "id": "exact_nonzero_cancellation",
+      "a": "0x3f800000", "b": "0x3f800000", "acc": "0xbf800000",
+      "expected": {"product": "0x3f800000", "mul_flags": 0, "value": "0x00000000", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "Exact cancellation of +1 and -1 yields +0, not -0."
+    },
+    {
+      "id": "exact_subnormal_product",
+      "a": "0x00800000", "b": "0x3f000000", "acc": "0x00000000",
+      "expected": {"product": "0x00400000", "mul_flags": 0, "value": "0x00400000", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "2^-126 * 1/2 = 2^-127 is exactly representable. Tininess without inexactness does not set UF."
+    },
+    {
+      "id": "exact_min_subnormal_add",
+      "a": "0x00000001", "b": "0x3f800000", "acc": "0x00000001",
+      "expected": {"product": "0x00000001", "mul_flags": 0, "value": "0x00000002", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "2^-149 is retained by Mul and the exact Add produces 2^-148. Neither pass sets UF."
+    },
+    {
+      "id": "positive_tiny_midpoint_to_zero",
+      "a": "0x00000001", "b": "0x3f000000", "acc": "0x3f800000",
+      "expected": {"product": "0x00000000", "mul_flags": 3, "value": "0x00000000", "add_flags": 0, "attempted": 1, "status": 4},
+      "notes": "Exact product 2^-150 ties between +0 and minsubnormal, selecting even +0 with UF|NX. The accumulator is not added."
+    },
+    {
+      "id": "negative_tiny_midpoint_to_zero",
+      "a": "0x80000001", "b": "0x3f000000", "acc": "0x3f800000",
+      "expected": {"product": "0x80000000", "mul_flags": 3, "value": "0x00000000", "add_flags": 0, "attempted": 1, "status": 4},
+      "notes": "Exact product -2^-150 ties to signed -0 with UF|NX. The accumulator is not added."
+    },
+    {
+      "id": "tiny_midpoint_select_even_subnormal",
+      "a": "0x00000001", "b": "0x3fc00000", "acc": "0x00000000",
+      "expected": {"product": "0x00000002", "mul_flags": 3, "value": "0x00000000", "add_flags": 0, "attempted": 1, "status": 4},
+      "notes": "Exact 3*2^-150 is halfway between encodings 1 and 2. Even encoding 2 wins, but inexact tiny delivery is fatal UF|NX."
+    },
+    {
+      "id": "minnormal_delivery_but_unbounded_tiny",
+      "a": "0x00800000", "b": "0x3f7fffff", "acc": "0x00000000",
+      "expected": {"product": "0x00800000", "mul_flags": 3, "value": "0x00000000", "add_flags": 0, "attempted": 1, "status": 4},
+      "notes": "Exact product is 2^-126 - 2^-150. Binary32 delivery ties to even minnormal, but exactabs is below the unbounded p=24 tininess threshold. Original-source contract therefore gives UF|NX. Old CPP delivered-exponent repair would instead give NX; that difference is an unresolved integration contract blocker, not a hardware observation."
+    },
+    {
+      "id": "exact_unbounded_tininess_threshold",
+      "a": "0x00f80000", "b": "0x3f042108", "acc": "0x00000000",
+      "expected": {"product": "0x00800000", "mul_flags": 1, "value": "0x00800000", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "Exact product is (2^28 - 8)*2^-154 = 2^-126 - 2^-151. Equality at the tininess threshold rounds to even minnormal in unbounded p=24 precision, so delivery is NX without UF."
+    },
+    {
+      "id": "below_overflow_threshold_to_maxfinite",
+      "a": "0x7f000600", "b": "0x3ffff400", "acc": "0x00000000",
+      "expected": {"product": "0x7f7fffff", "mul_flags": 1, "value": "0x7f7fffff", "add_flags": 0, "attempted": 2, "status": 0},
+      "notes": "Exact product is 2^128 - 9*2^100, below overflow threshold 2^128 - 8*2^100 but above maxfinite 2^128 - 16*2^100. It rounds to maxfinite with NX only."
+    },
+    {
+      "id": "mul_overflow_cannot_be_fused_away",
+      "a": "0x7f000000", "b": "0x40000000", "acc": "0xff000000",
+      "expected": {"product": "0x7f800000", "mul_flags": 5, "value": "0x00000000", "add_flags": 0, "attempted": 1, "status": 4},
+      "fused_expected": {"value": "0x7f000000", "flags": 0},
+      "notes": "Separate Mul computes 2^128 and overflows with OF|NX, preventing Add. A single exact FMA would compute 2^128 - 2^127 = 2^127 exactly, which is not strict behavior."
+    },
+    {
+      "id": "add_overflow_after_exact_mul",
+      "a": "0x7f7fffff", "b": "0x3f800000", "acc": "0x7f7fffff",
+      "expected": {"product": "0x7f7fffff", "mul_flags": 0, "value": "0x7f800000", "add_flags": 5, "attempted": 2, "status": 5},
+      "notes": "Mul is exact maxfinite. Doubling maxfinite in Add overflows with OF|NX; the diagnostic result is infinity, not a commit."
+    },
+    {
+      "id": "add_midpoint_select_even_lower",
+      "a": "0x3f800000", "b": "0x3f800000", "acc": "0x33800000",
+      "expected": {"product": "0x3f800000", "mul_flags": 0, "value": "0x3f800000", "add_flags": 1, "attempted": 2, "status": 0},
+      "notes": "1 + 2^-24 is halfway between 0x3f800000 and 0x3f800001. Even lower endpoint 1 wins with NX."
+    },
+    {
+      "id": "add_midpoint_select_even_upper",
+      "a": "0x3f800001", "b": "0x3f800000", "acc": "0x33800000",
+      "expected": {"product": "0x3f800001", "mul_flags": 0, "value": "0x3f800002", "add_flags": 1, "attempted": 2, "status": 0},
+      "notes": "(1 + 2^-23) + 2^-24 is halfway between 0x3f800001 and 0x3f800002. Even upper endpoint wins with NX."
+    },
+    {
+      "id": "strict_zero_versus_fused_negative_residue",
+      "a": "0x3f800001", "b": "0x3f7ffffe", "acc": "0xbf800000",
+      "expected": {"product": "0x3f800000", "mul_flags": 1, "value": "0x00000000", "add_flags": 0, "attempted": 2, "status": 0},
+      "fused_expected": {"value": "0xa8800000", "flags": 0},
+      "notes": "Exact product (1 + 2^-23)*(1 - 2^-23) = 1 - 2^-46 rounds to 1 with NX, then exact Add cancels to +0. One-round FMA instead returns exact -2^-46, encoding 0xa8800000."
+    }
+  ]
+}

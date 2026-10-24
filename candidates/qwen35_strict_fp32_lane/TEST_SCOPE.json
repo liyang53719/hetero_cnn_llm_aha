@@ -1,0 +1,76 @@
+{
+  "schema": "strict-fp32-single-lane-public-test-scope-v1",
+  "status": "PASS_SOURCE_AND_INDEPENDENT_SOFTWARE_REFERENCE_ONLY",
+  "source_manifest": {
+    "bytes": 1834,
+    "sha256": "4d4440124c330369d3baf88bca0fa3a1315a64f7686c41f0651ad714c4a43061"
+  },
+  "source_controls_review": {
+    "bytes": 7434,
+    "sha256": "d56b88544b75ea358befe9c105bdb5dedb7ddb2dd797d7baef54bc24832c6b2e"
+  },
+  "actual_review": {
+    "bytes": 5464,
+    "sha256": "8220c8d2ede6d732ca8367895284feba93e3e55a55bd420b8552bce79681a275"
+  },
+  "observed_run": {
+    "exit_code": 0,
+    "unittest_groups": 18,
+    "directed_vectors": 20,
+    "fixed_seed_finite_triples": 256,
+    "outer_seconds": 0.13298131097690202,
+    "script_seconds": 0.03881,
+    "content_pins": 30,
+    "additional_manifest_pin": 1,
+    "before_after_same": true,
+    "actual_interpreter": "CPython 3.12 target with -I -S -B",
+    "requested_recorded_limits": {
+      "outer_wall_seconds": 10,
+      "cpu_count": 1,
+      "cpu_soft_hard_seconds": [
+        10,
+        10
+      ],
+      "address_space_bytes": 268435456,
+      "per_file_bytes": 1048576
+    },
+    "closed_output_bytes": 4114,
+    "aggregate_limit_caveat": "4 MiB is the output proposal and was satisfied by the closed inventory; no continuous aggregate enforcement is inferred from FSIZE. No measured RSS is claimed."
+  },
+  "verified_scope": [
+    "Original new lane source literal checks, not Scala execution.",
+    "Finite exact-integer two-pass semantic model compared with a separate Fraction neighboring-binary32 RNE reference; no shared decode/round helper or Python float oracle.",
+    "Model-only M-then-A flags and rejection, signed zero/subnormal/overflow, staged pass count, tag, held result/reset/no-refill.",
+    "Legacy BF16 finite software examples; nonfinite raw responses are injected only to check protocol propagation."
+  ],
+  "known_integration_blocker": {
+    "operands": [
+      "0x00800000",
+      "0x3f7fffff"
+    ],
+    "product": "0x00800000",
+    "HardFloat_source_expected_flags": 3,
+    "old_CPP_predicate_flags": 1,
+    "flags_difference_measured_in_hardware": false,
+    "root_choice": "Isolated prototype keeps original shared HardFloat flags; original CPP, models and evidence remain unchanged.",
+    "resolved_by_this_PASS": false
+  },
+  "not_qualified": [
+    "Scala compile",
+    "CHIRRTL or RTL",
+    "HardFloat numerical equivalence",
+    "real ready/valid handshakes",
+    "BF16 NaN payload or nonfinite arithmetic equivalence",
+    "16-word group failure barrier",
+    "4096 array or full block integration",
+    "physical area or frequency",
+    "80 percent utilization"
+  ],
+  "publication": {
+    "original_exact_files": 12,
+    "machine_TEST_COMMAND_omitted": true,
+    "raw_logs_receipts_IR_classes_tools_weights_omitted": true,
+    "standalone_executable_package": false,
+    "original_pending_or_NOT_RUN_text": "Preserved historical pre-execution source documentation, not the current outcome. This separate TEST_SCOPE records the one completed software-only control run."
+  }
+}

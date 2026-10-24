@@ -1,0 +1,27 @@
+{
+  "CHIRRTL": false,
+  "RTL_simulation": false,
+  "candidate_execution": false,
+  "flags_normative": "original shared HardFloat unbounded-exponent precision tininess-after; root confirmed",
+  "fullblock_utilization": false,
+  "future_integration_blocker": "minnormal boundary UF changes fatal30 acceptance; not resolved by this prototype",
+  "no_new_physical_qualification": true,
+  "numerical_hardware_validation": false,
+  "old_cpp_flag_equivalence": false,
+  "original_sources_changed": false,
+  "physical_area_or_Fmax_equal": false,
+  "planned_controls": {
+    "NV_DZ_injection": "protocol fault handling only, not natural finite arithmetic",
+    "directed_vectors": 20,
+    "fixed_seed_triples": 256,
+    "legacy_nonfinite": "injected raw Round response, protocol only",
+    "unittest_groups": 18
+  },
+  "real_handshake": false,
+  "resource_choice": "logical4096Matrix+16Vector counts fixed in proposed future configuration; one isolated lane only now",
+  "sampled_or_measured_cycles": false,
+  "scala_compile": false,
+  "schema": "isolated-strict-lane-scope-v1",
+  "software_reference": "independent Fraction adjacent-binary32 oracle versus integer significand model; no shared round/decode helpers",
+  "status": "SOURCE_PENDING_ROOT_CONTROLS"
+}

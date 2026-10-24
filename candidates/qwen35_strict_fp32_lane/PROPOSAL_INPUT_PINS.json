@@ -1,0 +1,22 @@
+{
+  "files": {
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": {
+      "bytes": 3841,
+      "sha256": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+    },
+    "integration/gemmini/EmitHeteroBF16Fma.scala": {
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"
+    },
+    "integration/gemmini/EmitHeteroFP32Alu.scala": {
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+    },
+    "rtl/matrix/candidates/rev8b_b/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv": {
+      "bytes": 3311,
+      "sha256": "ad985950e9129c524f685385dac75db9f3bd4ca632e125f7e1b54103271fb418"
+    }
+  },
+  "fixed_commit": "adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "scope": "proposal-only; no execution authority"
+}

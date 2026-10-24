@@ -1863,3 +1863,14 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 单CHIRRTL139800B，SHA256 6949334f3288ab6024a01dabaa2fc3e5148b69f80bfd841a9201cec3f49f47a8；独立递归bundle/flip核109端口叶（57入52出），tile为UInt512×16共8192bit寄存器payload，无memory/子实例。独审ACTUAL_REVIEW SHA256 b5c97e928f79f2a1b6f90438bbbd807282fe48ce8997da0e9bc1054a049315bf。仅前端构造/声明，不是实际ACK/数据转置/RTL仿真，五RTL0/5、Qwen2full UNKNOWN不变。
 
 公开12件108677B在 candidates/qwen35_chunk_transpose_chirrtl/，manifest SHA256 c7cb1bb2244bc4cdd0acbe30bc2fc9a6e3260fa2920578bce6337ad4b826d447。引用旧351pins+150逻辑增量，不复制生产源/工具表/IR/class/机器plan/log；原runner非完整运行closure。未push、无新CI、无清理。
+
+
+## PASS（仅源码/独立软件参考）：隔离strict FP32单lane原型
+
+新fullFP32 Pre复用原Mul/Post/Round一条算术链，strict Mul后先舍入并判fatal/nonfinite，成功才p×+1+oldacc完成独立Add舍入；Mul符号零、逐pass flags及held/reset边界明确。BF16 raw单FMA为独立模式，原BF16源/阵列未改，不增第二算术链；尚未接16词故障屏障/全阵列/完整UT。逻辑资源数量固定的新配置不代表原综合面积/Fmax/netlist不变。
+
+18纯Python组一次自然0（20定向+256固定seed），整数RNE模型与Fraction邻值参考无共享舍入helper，外0.132981311秒/内0.03881秒；30内容+manifest前后同。仅软件参考与协议模型，BF16 NaN/Inf为注入raw回复门而非实际非有限算术回归，未运行硬件/Scala/RTL。独审ACTUAL_REVIEW SHA256 8220c8d2ede6d732ca8367895284feba93e3e55a55bd420b8552bce79681a275。
+
+明确集成阻断：0x00800000×0x3f7fffff精确积(2^24−1)×2^-150，RNE交付0x00800000；原HardFloat源码tininess-after规范预期UF|NX=3，旧vector16.cpp final-abs修正给NX=1，fatal30接受不同。原型保HardFloat规范，不静默修改旧CPP/旧证据，不称旧软件error边界等价；该差异不是硬件实测，原型PASS不能解除未来集成阻断。
+
+公开16件75428B在 candidates/qwen35_strict_fp32_lane/，manifest SHA256 7d1a6abb9f595dd3a3151f6c02709d4b0b755e07866491bf531bbb24e3ce9aaf，排除机器命令/raw日志/工具/IR/权重，非完整可直接运行包。五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。

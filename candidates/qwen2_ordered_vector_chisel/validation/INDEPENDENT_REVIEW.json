@@ -1,0 +1,27 @@
+{
+  "result": "source_patch_and_bounded_reference_review_approved",
+  "qualification": "SOURCE_COMPOSE_PASS_REFERENCE_PASS_COMPILE_RTL_TEMP",
+  "blocking_findings_remaining": [],
+  "fixed_finding": "Removed assertion that confused a backpressured external Scalar valid offer with an accepted conflicting resource use.",
+  "reviewed_patch_sha256": "e2325b7d7436a269687ba9fe1d2aaa45ef9a8b109189b2fa815e28aea7e998b8",
+  "reviewed_postimages": {
+    "Qwen2Block.scala": "9120b040016116ae400389fe027bdb26e4b6d450faeeef6dba058108d32ba48c",
+    "QwenOwnerProtocol.scala": "5153894739c0c3b68510e1d4ab34ad58071edaa3f248bd7999bcfe10dfe7059e",
+    "HostBlockTop.scala": "1ab50bfaa35800411677fa8a5243daf55cffa003c3737d541f19a20479a38e36"
+  },
+  "reviewed_test_sha256": "2d8bed4e1d0e16c9e45628cd47a608129d58350357a427df881a4397d6940167",
+  "independent_tests": {
+    "modes": [
+      "-I -B",
+      "-I -B -O"
+    ],
+    "tests_per_mode": 28,
+    "exit_codes": [
+      0,
+      0
+    ]
+  },
+  "blind_spot": "Early done is a source-derived Boolean gate/micro-model check, not actual client race injection or Scala execution.",
+  "post_review_documentation_delta": "Clarified main529da68 unchanged-byte pin verification, four-mode results, and early-done coverage limit. No code change.",
+  "compile_or_elaboration_performed": false
+}

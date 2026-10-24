@@ -1,0 +1,39 @@
+{
+  "input_selected_qwen2block_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+  "output_selected_qwen2block_sha256": "9120b040016116ae400389fe027bdb26e4b6d450faeeef6dba058108d32ba48c",
+  "relative_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+  "parameter": "enableOrderedVectorQkFold",
+  "default": false,
+  "requires": "enableProductionPackedQk16 && officialBf16 ownerDriven externalMatrix && headDim128",
+  "extra_data_register_bits": 16,
+  "reused_acc_words": 16,
+  "new_alu_instances": 0,
+  "source_main": "529da6815e32bfb463ee8e496ca0bfb8da67e26b",
+  "qualification": "TEMP_INCOMPLETE_NO_COMPILE_NO_RTL",
+  "selected_files": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": {
+      "before_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+      "after_sha256": "9120b040016116ae400389fe027bdb26e4b6d450faeeef6dba058108d32ba48c",
+      "before_bytes": 52708,
+      "after_bytes": 56854
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+      "before_sha256": "f14c7f27f65d9679ea1241607eede3bc26903ece4385e62317bf40d6dce963e3",
+      "after_sha256": "5153894739c0c3b68510e1d4ab34ad58071edaa3f248bd7999bcfe10dfe7059e",
+      "before_bytes": 49990,
+      "after_bytes": 50196
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "before_sha256": "15cc34f041228f38d69b15868a9f9c45fb3f9ea53a9275ec6a6d9fd70b4b0c25",
+      "after_sha256": "1ab50bfaa35800411677fa8a5243daf55cffa003c3737d541f19a20479a38e36",
+      "before_bytes": 24369,
+      "after_bytes": 24781
+    }
+  },
+  "unchanged_selected_files": {
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PackedAttentionStreamClient.scala": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+  },
+  "patch_sha256": "e2325b7d7436a269687ba9fe1d2aaa45ef9a8b109189b2fa815e28aea7e998b8",
+  "current_main_tree": "acd56798438d109133777c0ff59bbb05c6e85537",
+  "input_identity_note": "Selected postimages unchanged across 1bdf70e,3c2283a,529da68; input hashes are composed selected sources, not bare-main Qwen2Block."
+}

@@ -1,0 +1,73 @@
+{
+  "qualification": "SOURCE_COMPOSE_PASS_BOUNDED_REFERENCE_PASS_COMPILE_RTL_TEMP",
+  "source_main": "529da6815e32bfb463ee8e496ca0bfb8da67e26b",
+  "python": "3.12.14",
+  "cpu_affinity_count": 1,
+  "cpu_limit_seconds_per_process": 20,
+  "address_space_limit_bytes": 268435456,
+  "modes": [
+    "normal",
+    "optimized",
+    "isolated",
+    "isolated_optimized"
+  ],
+  "contract_tests_per_mode": 28,
+  "micro_tests_per_mode": 12,
+  "total_test_executions": 160,
+  "all_exit_codes": 0,
+  "contract_breakdown": {
+    "source_contracts": 9,
+    "unchanged_python_packed_client_tests": 16,
+    "micro_existing_client_integration_tests": 3
+  },
+  "source_gate_truth_assignments": 128,
+  "client_integration_tail_counts": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "source_overlay_roundtrip_exact": true,
+  "production_source_modified": false,
+  "chisel_compilation": {
+    "status": "TEMP_NOT_RUN",
+    "reason": "No verified immediately executable Scala compile-only toolchain closure was available. No downloads, rebuilds, emitters, elaboration or RTL-generating tests were attempted."
+  },
+  "rtl_simulation": false,
+  "eda": false,
+  "m128": false,
+  "native_model": false,
+  "model_steps_are_hardware_cycles": false,
+  "utilization_qualification": false,
+  "source_patch_sha256": "e2325b7d7436a269687ba9fe1d2aaa45ef9a8b109189b2fa815e28aea7e998b8",
+  "files": {
+    "test_contract.py": "2d8bed4e1d0e16c9e45628cd47a608129d58350357a427df881a4397d6940167",
+    "README_CN.md": "8775c43567c351f5230368ab9f9c597627cd2fdbe0431de5d166edf50eea51d5",
+    "prepare.py": "af28137a8b13d3bdad850dc1a79c261a4be25222d869ed46f1da682ad69532e3",
+    "TEST_INPUT_PINS.json": "2a52a28ca0ef995539495a9002787c271706e1d1fcafb5a848ef0e5e52b85db7",
+    "ordered_fold.patch": "e2325b7d7436a269687ba9fe1d2aaa45ef9a8b109189b2fa815e28aea7e998b8",
+    "PROFILE_PINS.json": "526a9227de4dfe3a7e674c13164f2767b5a6a388ceb2f6eafc89c4918572c12a"
+  },
+  "logs": {
+    "MICRO_OPTIMIZED.log": "b88eea50bb53f74155e3a9a20c803b37edf8ddc112963f1eead139bc15f080c7",
+    "CONTRACT_ISOLATED_OPTIMIZED.log": "dbcf8eb71e1fd09c983169fd08ce1c7408f73ad18b260d861fdfe7ed24599839",
+    "MICRO_ISOLATED_OPTIMIZED.log": "d8cf0e86a91a40829901b718ecfb44798bca0bd296fc72d542c37435a9a2603c",
+    "CONTRACT_NORMAL.log": "010388da55fd7088298ad28a8d6d5e6f5274a314bb93cb7c3a1630efe23d9606",
+    "MICRO_ISOLATED.log": "626f42a3339f3b63ee5a356ffb2f1f1330f4ecb9a5cccbcea93da02ae1909048",
+    "MICRO_NORMAL.log": "1159c19750479087feb79cb2859b6f07228d00ddaa596e57f9fee83dc99f9b97",
+    "CONTRACT_OPTIMIZED.log": "7f4486abfcdcc854101a99b3afdcf050468623ecf9da8c72b26e824be3bb1afc",
+    "CONTRACT_ISOLATED.log": "dbcf8eb71e1fd09c983169fd08ce1c7408f73ad18b260d861fdfe7ed24599839"
+  }
+}

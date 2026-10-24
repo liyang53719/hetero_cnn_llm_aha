@@ -1,0 +1,33 @@
+test_all_tails_live_result_then_real_ack_and_done_backpressure (__main__.LiveClientIntegration.test_all_tails_live_result_then_real_ack_and_done_backpressure) ... ok
+test_early_done_gate_blocks_same_observation_retire (__main__.LiveClientIntegration.test_early_done_gate_blocks_same_observation_retire) ... ok
+test_fault_prefix_real_client_abort_drain_no_success_ack (__main__.LiveClientIntegration.test_fault_prefix_real_client_abort_drain_no_success_ack) ... ok
+test_abort_before_issue_and_between_steps_does_not_invent_payload (_qk_contract_129.ClientTests.test_abort_before_issue_and_between_steps_does_not_invent_payload) ... ok
+test_abort_exposed_result_is_byte_stable_through_backpressure (_qk_contract_129.ClientTests.test_abort_exposed_result_is_byte_stable_through_backpressure) ... ok
+test_abort_held_result_waits_accepted_write_and_never_publishes (_qk_contract_129.ClientTests.test_abort_held_result_waits_accepted_write_and_never_publishes) ... ok
+test_consumer_ack_waits_both_ready_edges_and_returns_metadata (_qk_contract_129.ClientTests.test_consumer_ack_waits_both_ready_edges_and_returns_metadata) ... ok
+test_final_delivery_keeps_exact_service_payload_until_ack (_qk_contract_129.ClientTests.test_final_delivery_keeps_exact_service_payload_until_ack) ... ok
+test_foreign_done_rejected_without_retiring_group (_qk_contract_129.ClientTests.test_foreign_done_rejected_without_retiring_group) ... ok
+test_malformed_packets_rejected_before_admission (_qk_contract_129.ClientTests.test_malformed_packets_rejected_before_admission) ... ok
+test_nonfinal_metadata_has_no_payload_or_service_retirement (_qk_contract_129.ClientTests.test_nonfinal_metadata_has_no_payload_or_service_retirement) ... ok
+test_old_client_cannot_drive_a_later_identical_owner_acquisition (_qk_contract_129.ClientTests.test_old_client_cannot_drive_a_later_identical_owner_acquisition) ... ok
+test_qk_eight_steps_enable_all_slices_and_select_wide_columns (_qk_contract_129.ClientTests.test_qk_eight_steps_enable_all_slices_and_select_wide_columns) ... ok
+test_reset_epoch_and_resource_mismatch_reject_without_mutation (_qk_contract_129.ClientTests.test_reset_epoch_and_resource_mismatch_reject_without_mutation) ... ok
+test_selected_finite_only_and_exact_special_bits (_qk_contract_129.ClientTests.test_selected_finite_only_and_exact_special_bits) ... ok
+test_stale_foreign_and_noncanonical_tags_never_discharge (_qk_contract_129.ClientTests.test_stale_foreign_and_noncanonical_tags_never_discharge) ... ok
+test_tagged_write_debts_gate_retirement_and_reject_wrong_acks (_qk_contract_129.ClientTests.test_tagged_write_debts_gate_retirement_and_reject_wrong_acks) ... ok
+test_write_debts_are_bounded_metadata (_qk_contract_129.ClientTests.test_write_debts_are_bounded_metadata) ... ok
+test_write_error_aborts_and_retains_other_debts (_qk_contract_129.ClientTests.test_write_error_aborts_and_retains_other_debts) ... ok
+test_actual_client_and_debt_logic_unchanged (__main__.SourceContracts.test_actual_client_and_debt_logic_unchanged) ... ok
+test_default_off_through_existing_hierarchy (__main__.SourceContracts.test_default_off_through_existing_hierarchy) ... ok
+test_exact_composition_and_wrong_baseline_rejection (__main__.SourceContracts.test_exact_composition_and_wrong_baseline_rejection) ... ok
+test_no_false_conflict_on_backpressured_external_offer (__main__.SourceContracts.test_no_false_conflict_on_backpressured_external_offer) ... ok
+test_ordered_retire_and_last_key_no_wrap (__main__.SourceContracts.test_ordered_retire_and_last_key_no_wrap) ... ok
+test_safe_gate_exhaustive (__main__.SourceContracts.test_safe_gate_exhaustive) ... ok
+test_same_alu_acc_and_only_sixteen_fault_bits (__main__.SourceContracts.test_same_alu_acc_and_only_sixteen_fault_bits) ... ok
+test_state_codes_append_and_no_reuse_collision (__main__.SourceContracts.test_state_codes_append_and_no_reuse_collision) ... ok
+test_tail_zero_and_strict_flags_materialization (__main__.SourceContracts.test_tail_zero_and_strict_flags_materialization) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.032s
+
+OK

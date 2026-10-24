@@ -1,0 +1,201 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala
+@@ -51,7 +51,8 @@
+   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
+   * Each successor starts only after the previous stage's final write ACK.
+   */
+-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
++class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false) extends Module {
++  require(!enableOrderedVectorQkFold || (enableProductionPackedQk16 && s.headDim==128), "ordered vector QK fold requires selected production packed QK16 headDim128")
+   require(!enableProductionPackedQk16 || (ownerDriven && externalMatrix && Qwen2NumericPolicy.official(numericPolicy)), "production QK16 requires the official external-Matrix owner; capacity stays 1024")
+   require(!externalElementwiseLoan || (ownerDriven && externalScalar), "elementwise loan requires owner serialization and the shared Scalar")
+   Qwen2NumericPolicy.checkShape(numericPolicy,s)
+@@ -89,7 +90,8 @@
+     val acknowledgedWriteBytes=Output(UInt(64.W))
+   })
+   dontTouch(io) // Public ABI retained under the joint HardFloat elaboration.
+-  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseWeightHi","denseWeightReady","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked","biasRead","biasOperand","biasSum","biasWritten","normRetain","normOfficialRead","normOfficialSquare","normOfficialAdd","normOfficialTerm","normOfficialBlock","normOfficialResidue","normOfficialLane","attPackedIssue","attPackedSelect")
++  val names=Seq("idle","begin","memReq","memRsp","localReq","localRsp","localWrite","scalarReq","scalarRsp","advance","normLoad","normGot","normSquare","normReduce","normReduceDone","normMean","normEps","normSqrt","normInv","normEmit","normLocal","normGamma","normScale","normProduct","normWritten","denseLoad","denseGot","denseLoaded","denseLocal","denseWindowReq","denseWindowGot","denseWeight","denseWeightHi","denseWeightReady","denseCompute","denseBias","denseBiasGot","denseWrite","denseWritten","ropeStart","ropeEven","ropeOdd","ropeCos","ropeSin","ropeMul0","ropeMul1","ropeAdd0","ropeAdd1","ropeWrite0","ropeWrite1","ropeWritten","attQLoad","attQGot","attQStored","attKey","attLocal","attDot","attReduce","attReduceDone","attScore","attNextKey","attExpRead","attExpWait","attExpDiff","attExpResult","attExpSum","attInv","attPVStart","attProbRead","attProbWait","attProbScale","attPVCompute","attPVWrite","attPVWritten","siluRead","siluGate","siluUp","siluExp","siluDenom","siluInv","siluSign","siluGateMul","siluUpMul","siluNext","siluWritten","resIssue","resWait","finish","locked","biasRead","biasOperand","biasSum","biasWritten","normRetain","normOfficialRead","normOfficialSquare","normOfficialAdd","normOfficialTerm","normOfficialBlock","normOfficialResidue","normOfficialLane","attPackedIssue","attPackedSelect") ++ (if(enableOrderedVectorQkFold)Seq("attVectorScan","attVectorFold","attVectorScale","attVectorRetire")else Seq.empty[String])
++  require(names.size<=128,"block state encoding remains seven bits")
+   private val codes=names.zipWithIndex.toMap;def st(n:String):UInt=codes(n).U(7.W)
+   val state=RegInit(st("idle"));val resume=Reg(UInt(7.W));val scalarResume=Reg(UInt(7.W));val localResume=Reg(UInt(7.W))
+   val owner=Reg(new QwenOwnerJob)
+@@ -136,7 +138,12 @@
+   val scoreOut=scores.read(key,state===st("attExpRead"));val probOut=probs.read(key,state===st("attProbRead"))
+   val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)
+   vectorA:=av;vectorB:=bv
+-  val vout=VecInit((0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a.io.out})
++  // Same sixteen ALUs, now retain their existing combinational strict flags.
++  val vectorAlus=(0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a}
++  val vout=VecInit(vectorAlus.map(_.io.out))
++  val vflags=VecInit(vectorAlus.map(_.io.exceptionFlags))
++  // Only added data state: sixteen sticky fatal bits; acc[16] is reused.
++  val orderedQkFault=if(enableOrderedVectorQkFold)Some(RegInit(VecInit(Seq.fill(16)(false.B))))else None
+   // New control only; existing acc[16] holds selected words, never a tile copy.
+   val packedQk=if(enableProductionPackedQk16)Some(Module(new PackedAttentionStreamClient(true)))else None
+   val packedOwned=if(enableProductionPackedQk16)Some(RegInit(false.B))else None
+@@ -215,14 +222,14 @@
+       for(i<-0 until 256)c.io.operands.bits.b(i):=Mux((i/16).U<packedKeys,TensorMath.bf16Rne(denseWeights(i)),0.U)
+       c.io.result.ready:=packedCommitted.get && !poisoned
+       c.io.completion.ready:=packedBusy && (packedCommitted.get || poisoned || c.io.resetRequired)
+-      when(c.io.start.fire){packedOwned.get:=true.B;packedFinalIssued.get:=false.B;packedCommitted.get:=false.B;packedTag.get:=packedTag.get+1.U;packedGather.get:=0.U;packedSelected.get:=0.U}
++      when(c.io.start.fire){packedOwned.get:=true.B;packedFinalIssued.get:=false.B;packedCommitted.get:=false.B;packedTag.get:=packedTag.get+1.U;packedGather.get:=0.U;packedSelected.get:=0.U;orderedQkFault.foreach{fault=>fault:=VecInit(Seq.fill(16)(false.B))}}
+       when(c.io.operands.fire && depth===112.U){packedFinalIssued.get:=true.B}
+       when(c.io.completion.fire){packedOwned.get:=false.B}
+       when(dot){
+         // Nonfinal acceptance advances DDR/local feed without demanding a result.
+         fmDone:=Mux(depth===112.U,c.io.result.valid,c.io.operands.fire)
+         for(i<-0 until 16){fmOut(i):=c.io.result.bits.value(i)((packedSelected.get<<4)+i.U)}
+-        packedSelectedFault:=depth===112.U && c.io.result.valid && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)
++        packedSelectedFault:= !enableOrderedVectorQkFold.B && depth===112.U && c.io.result.valid && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)
+       }
+     }
+ 
+@@ -576,9 +583,12 @@
+         read(ptr("k",(key.pad(32)+packedGather.get+1.U)*s.kv.U+kvHead*s.headDim.U+depth),"attDot")
+       }.otherwise{state:=st("attPackedIssue")}
+     }
+-    when(state===st("attPackedIssue") && fmDone){
++    when(state===st("attPackedIssue") && fmDone && (!enableOrderedVectorQkFold.B || (!poisoned && !packedQk.get.io.resetRequired && !packedQk.get.io.port.done.valid))){
+       macs:=macs+(packedKeys<<4)
+-      when(depth===112.U){acc:=fmOut;lane:=0.U;sum:=0.U;state:=st("attReduce")}
++      when(depth===112.U){
++        if(enableOrderedVectorQkFold){clearAcc();lane:=0.U;state:=st("attVectorScan")}
++        else{acc:=fmOut;lane:=0.U;sum:=0.U;state:=st("attReduce")}
++      }
+       .otherwise{depth:=depth+16.U;localRead((depth+16.U)>>4,"attLocal")}
+     }
+     when(state===st("attPackedSelect") && !poisoned && !packedQk.get.io.resetRequired){
+@@ -590,6 +600,69 @@
+       }
+     }
+     when(packedBusy){assert(state=/=st("denseWindowGot"),"Dense operand clear excluded for entire QK group")}
++  }
++  if(enableOrderedVectorQkFold){
++    val c=packedQk.get
++    val scanning=state===st("attVectorScan")
++    val folding=state===st("attVectorFold")
++    val scaling=state===st("attVectorScale")
++    val retiring=state===st("attVectorRetire")
++    val orderedActive=scanning||folding||scaling||retiring
++    // A live held FIFO head is required throughout; any terminal offer wins.
++    // Last-connect failure/drain logic below remains the original client path.
++    val orderedSafe=packedBusy && !poisoned && !c.io.resetRequired && !c.io.port.done.valid &&
++      c.io.result.valid && !matrixFault && !f.address_error_o.orR
++    when(orderedActive){
++      vectorA:=VecInit(Seq.fill(16)(0.U(32.W)))
++      vectorB:=VecInit(Seq.fill(16)(0.U(32.W)))
++      vectorMul:=scaling
++      assert(!scalar.io.request.valid,"ordered QK excludes Scalar issue")
++      assert(!packedCommitted.get,"ordered QK holds result until final score retirement")
++    }
++    for(j<-0 until 16){
++      val active=j.U<packedKeys
++      val usable=active && !orderedQkFault.get(j)
++      // Do not consume or copy a full tile. Tail lanes feed zero to the ALUs.
++      val stripe=Mux(active,c.io.result.bits.value(lane)((16*j).U+lane),0.U(32.W))
++      when(scanning && orderedSafe && active && !TensorMath.finite(stripe)){
++        orderedQkFault.get(j):=true.B
++      }
++      when(folding && orderedSafe && usable){
++        vectorA(j):=acc(j);vectorB(j):=stripe
++        when(!TensorMath.finite(acc(j)) || !TensorMath.finite(stripe) ||
++          vflags(j)(4,1).orR || !TensorMath.finite(vout(j))){orderedQkFault.get(j):=true.B}
++        .otherwise{acc(j):=vout(j)}
++      }
++      when(scaling && orderedSafe && usable){
++        val dotValue=materialize(acc(j))
++        vectorA(j):=Mux(TensorMath.finite(dotValue),dotValue,0.U)
++        vectorB(j):=F32.lit(1/math.sqrt(s.headDim.toDouble))
++        val score=materialize(vout(j))
++        // Strict Mul, not MulIeeeRne: UF is fatal and NX alone is permitted.
++        when(!TensorMath.finite(dotValue) || vflags(j)(4,1).orR ||
++          !TensorMath.finite(vout(j)) || !TensorMath.finite(score)){orderedQkFault.get(j):=true.B}
++        .otherwise{acc(j):=score}
++      }
++    }
++    when(scanning && orderedSafe){
++      when(lane===15.U){lane:=0.U;state:=st("attVectorFold")}.otherwise{lane:=lane+1.U}
++    }
++    when(folding && orderedSafe){
++      when(lane===15.U){state:=st("attVectorScale")}.otherwise{lane:=lane+1.U}
++    }
++    when(scaling && orderedSafe){state:=st("attVectorRetire")}
++    when(retiring && orderedSafe){
++      // Parallel faults remain private until their original key retires.
++      when(orderedQkFault.get(packedSelected.get)){packedSelectedFault:=true.B}
++      .otherwise{
++        val score=acc(packedSelected.get)
++        scores.write(key+packedSelected.get,score)
++        when(F32.less(maxScore,score)){maxScore:=score}
++        when(packedSelected.get+&1.U===packedKeys){
++          packedCommitted.get:=true.B;state:=st("attNextKey")
++        }.otherwise{packedSelected.get:=packedSelected.get+1.U}
++      }
++    }
+   }
+   when(state===st("attReduce")){calc(ScalarOp.Add,sum,acc(lane),"attReduceDone")}
+   when(state===st("attReduceDone")){sum:=scalarValue;when(lane===15.U){
+@@ -658,7 +731,7 @@
+   }
+   // Last-connect safety checks override a compute transition, before a request.
+   when(matrixFault){fail(Status.Protocol.U)}
+-  when((state===st("denseCompute")||(state===(if(enableProductionPackedQk16)st("attPackedIssue")else st("attDot")) && (!enableProductionPackedQk16.B || depth===112.U))||state===st("attPVCompute")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}
++  when((state===st("denseCompute")||(state===(if(enableProductionPackedQk16)st("attPackedIssue")else st("attDot")) && (!enableProductionPackedQk16.B || depth===112.U) && !enableOrderedVectorQkFold.B)||state===st("attPVCompute")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}
+   when(f.address_error_o.orR && state=/=st("finish")&&state=/=st("locked")){fail(Status.Bounds.U)}
+   packedQk.foreach{c=>
+     // Track accepted work, including an acceptance concurrent with a fault.
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala
+@@ -52,7 +52,8 @@
+ /** No block launch is exposed. One decoded owner operation per transaction;
+   * the arithmetic implementation must return instead of advancing to a phase.
+   */
+-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
++class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false) extends Module {
++  require(!enableOrderedVectorQkFold || enableProductionPackedQk16,"ordered vector QK fold requires packed QK16")
+   require(!enableProductionPackedQk16 || (pipelined && Qwen2NumericPolicy.official(numericPolicy) && !bf16Gdn && !bf16QkNormRope && !bf16AttentionCore && !enableH2048RmsBorrower), "production QK16 keeps the official Qwen2 owner profile")
+   require(!enableH2048RmsBorrower || (pipelined && (bf16GdnBlock || bf16AttentionBlock) && s.maxTokens<=128),
+     "H2048 RMS borrower requires a pipelined BF16 block profile with at most 128 tokens")
+@@ -129,7 +130,7 @@
+     io.pipelineIssues:=0.U;io.pipelineStalls:=0.U
+   }else{
+     require(s.matrixColumns==256 && s.retainedMatrix)
+-    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16))
++    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold))
+     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+     // Elaborate one owner and one bank allocation; the common IO is storage-free.
+     val dense:DenseOwnerIO=if(enableTransposedDown)
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala
+@@ -10,7 +10,8 @@
+   * payload injection, or second iDMA exists. Metadata and owner traffic share
+   * the same arbiter, mailbox adapter, original upstream backend and AXI port.
+   */
+-class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
++class HostBlockTop(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false) extends Module {
++  require(!enableOrderedVectorQkFold || enableProductionPackedQk16,"ordered vector QK fold requires packed QK16")
+   require(!enablePublic21QkvReduction || (pipelined && enableResidentFfn && enableTransposedDown && Qwen2NumericPolicy.official(numericPolicy)),"public21 reduction requires the official resident profile")
+   Qwen2NumericPolicy.checkShape(numericPolicy,s)
+   require(!Qwen2NumericPolicy.official(numericPolicy) || (enableResidentFfn && pipelined && !bf16V && !bf16Qkv && !bf16Gdn && !bf16QkNormRope && !bf16AttentionCore),
+@@ -46,7 +47,7 @@
+     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
+   })
+   dontTouch(io)
+-  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16))
++  val cmd=Module(new HostBlockCommands(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold))
+   val hub=Module(new SharedMemoryArbiter(2))
+   val dmaPoison=Wire(Bool())
+   if(enablePublic21QkvReduction){owner.io.public21BackendReset.get:=hub.io.resetRequired || dmaPoison}
+@@ -109,8 +110,9 @@
+   io.pipelineIssues:=owner.io.pipelineIssues;io.pipelineStalls:=owner.io.pipelineStalls
+   io.memoryAccepted:=hub.io.accepted;io.memoryReturned:=hub.io.returned
+ }
+-class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false) extends Module {
+-  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDown,enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
++class HostBlockCollection(s:QwenBlockShape, weightReadBeats:Int=1,pipelined:Boolean=false,burstWrites:Boolean=false,commitTailRead:Boolean=false,overlapSilu:Boolean=false,bf16V:Boolean=false,bf16Qkv:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableTransposedDown:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false) extends Module {
++  require(!enableOrderedVectorQkFold || enableProductionPackedQk16,"ordered vector QK fold requires packed QK16")
++  val top=Module(new HostBlockTop(s,weightReadBeats,pipelined,burstWrites,commitTailRead,overlapSilu,bf16V,bf16Qkv,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDown,enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold));val port=IO(chiselTypeOf(top.io));port<>top.io;dontTouch(port)
+   val pre=Module(new HeteroBF16FmaPre);val a=IO(chiselTypeOf(pre.io));a<>pre.io;dontTouch(a)
+   val mul=Module(new HeteroBF16FmaMul);val b=IO(chiselTypeOf(mul.io));b<>mul.io;dontTouch(b)
+   val post=Module(new HeteroBF16FmaPost);val c=IO(chiselTypeOf(post.io));c<>post.io;dontTouch(c)

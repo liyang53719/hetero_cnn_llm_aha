@@ -6,7 +6,9 @@
     "full_block": "TEMP",
     "hardware_or_effective_MAC_utilization": "TEMP",
     "relocated_native_supervisor": "TEMP_NOT_EXECUTED",
-    "state_commit": "TEMP"
+    "single_resident_full_block_lifecycle": "TEMP",
+    "state_commit": "TEMP",
+    "suffix_stages": "PASS_SCOPED_SAVED_BOUNDARY_DIAGNOSTICS_ONLY"
   },
   "all16_tokens0_127": {
     "actual_chunks_completed": 32,
@@ -285,6 +287,104 @@
     "status": "TEMP_NOT_EXECUTED",
     "status_scope": "Relocated native child and supervisor; the pure-stdlib comparator was tested separately.",
     "validation": "21 stdlib mapping/control/CLI tests plus AST/JSON checks passed. Adapted post-comparison matched every historical head0/M128 and all16/M128 result field except its own code hash/size and comparison duration; no native owner or supervisor execution."
+  },
+  "saved_suffix_m128": {
+    "attention_residual": {
+      "actual_max_magnitude": 1.0078125,
+      "actual_nonzero": 130908,
+      "bit_mismatches": 273,
+      "candidate_elapsed_seconds": 2.711801131023094,
+      "elements": 131072,
+      "independent_postflight": "PASS",
+      "max_abs": 0.00048828125,
+      "mean_abs": 1.8699574866332114e-07,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "reference_max_magnitude": 1.0078125,
+      "reference_nonzero": 130908,
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 319,
+        "token": 25
+      }
+    },
+    "gated_norm": {
+      "actual_max_magnitude": 8.0625,
+      "actual_nonzero": 262144,
+      "bit_mismatches": 56,
+      "candidate_elapsed_seconds": 30.348722685012035,
+      "elements": 262144,
+      "independent_postflight": "PASS",
+      "max_abs": 0.001953125,
+      "mean_abs": 1.6022426052586525e-08,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "reference_max_magnitude": 8.0625,
+      "reference_nonzero": 262144,
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "column": 35,
+        "head": 1,
+        "token": 29
+      }
+    },
+    "o": {
+      "actual_max_magnitude": 1.0078125,
+      "actual_nonzero": 131072,
+      "bit_mismatches": 671,
+      "candidate_elapsed_seconds": 20.905865699984133,
+      "elements": 131072,
+      "independent_postflight": "PASS",
+      "max_abs": 0.00048828125,
+      "mean_abs": 1.922579855317963e-07,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "reference_max_magnitude": 1.0078125,
+      "reference_nonzero": 131072,
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 687,
+        "token": 95
+      }
+    },
+    "post_norm": {
+      "actual_max_magnitude": 16.375,
+      "actual_nonzero": 130908,
+      "bit_mismatches": 290,
+      "candidate_elapsed_seconds": 4.57120239303913,
+      "elements": 131072,
+      "independent_postflight": "PASS",
+      "max_abs": 0.015625,
+      "mean_abs": 6.4033083617687225e-06,
+      "meets_existing_node_thresholds": true,
+      "native_adaptation": "TEMP_NOT_EXECUTED",
+      "reference_max_magnitude": 16.375,
+      "reference_nonzero": 130908,
+      "status": "PASS_EXISTING_NODE_THRESHOLDS_ONLY",
+      "thresholds": {
+        "max_abs": 0.03125,
+        "mean_abs": 0.005
+      },
+      "worst_location": {
+        "batch": 0,
+        "column": 804,
+        "token": 95
+      }
+    }
   },
   "schema": 1
 }

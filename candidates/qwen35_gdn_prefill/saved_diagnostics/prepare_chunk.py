@@ -153,7 +153,7 @@ def main():
         final_cache = admit(args.official_final_cache, artifact['official_final_cache.f32le'], True)
         admit(args.official_manifest, artifact['official_manifest.json'])
         selected_state = state_slice(state, final_cache, args.heads)
-    for name in ('prepare_chunk.py', 'chunk_child.py', 'launch_chunk.py', 'compare_chunk.py', 'chunk_case.py', 'pins.json'):
+    for name in ('prepare_chunk.py', 'chunk_child.py', 'launch_chunk.py', 'compare_chunk.py', 'chunk_case.py', 'suffix_case.py', 'suffix_pins.json', 'pins.json'):
         admit(HERE / name)
     os.umask(0o077)
     out.mkdir(mode=0o700)

@@ -32,6 +32,25 @@ def bf(w):
     e=(w>>7)&255;f=w&127;need(e!=255,'nonfinite BF16')
     x=math.ldexp(float(f if e==0 else 128+f),-133 if e==0 else e-134)
     return -x if w&0x8000 else x
+def bf16_metrics(actual, reference, elements):
+    """Exact same finite BF16 decoding and binary64 fsum reduction for all cases."""
+    need(type(elements) is int and elements > 0 and len(actual) == len(reference) == elements * 2,
+         'BF16 extent')
+    av = [w[0] for w in struct.iter_unpack('<H', actual)]
+    rv = [w[0] for w in struct.iter_unpack('<H', reference)]
+    da = [bf(w) for w in av]; dr = [bf(w) for w in rv]
+    errors = [abs(x-y) for x,y in zip(da,dr)]
+    maximum = max(errors); mean = math.fsum(errors) / elements
+    return dict(elements=elements, max_abs=maximum, mean_abs=mean,
+        bit_mismatches=sum(x != y for x,y in zip(av,rv)),
+        numerical_mismatches=sum(x != y for x,y in zip(da,dr)),
+        thresholds={'max_abs': .03125, 'mean_abs': .005},
+        meets_existing_node_thresholds=maximum <= .03125 and mean <= .005,
+        actual_nonzero=sum(x != 0 for x in da), reference_nonzero=sum(x != 0 for x in dr),
+        actual_max_magnitude=max(map(abs,da)), reference_max_magnitude=max(map(abs,dr)),
+        worst_index=max(range(elements), key=errors.__getitem__))
+
+
 def state_metrics(actual, reference, heads=1):
     selected=case(128, heads);elements=selected['state_bytes']//4
     need(len(actual)==len(reference)==selected['state_bytes'],'after128 state extent')
@@ -74,18 +93,11 @@ def main():
     need(len(a)==len(r)==elements*2 and sha(a)==summary['output_sha256'],'output extent/hash')
     need(summary['output_reference_read'] is False and summary['state_oracle_available'] is selected['state_oracle'] and
       summary['owner']['production_geometry'] is (heads==16) and summary['terminal_count']==1,'component scope')
-    av=[w[0] for w in struct.iter_unpack('<H',a)];rv=[w[0] for w in struct.iter_unpack('<H',r)]
-    da=[bf(w) for w in av];dr=[bf(w) for w in rv];errors=[abs(x-y) for x,y in zip(da,dr)]
-    worst=max(range(elements),key=errors.__getitem__)
-    maximum=max(errors);mean=math.fsum(errors)/elements
+    metrics=bf16_metrics(a,r,elements);worst=metrics.pop('worst_index')
     report={'status':f'ISOLATED_{label}_M{tokens}_COMPARISON_COMPLETE','scope':f'REAL_SAVED_PREP_{label}_TOKENS0_{tokens-1}_ONLY',
       'full_block_acceptance':False,'original_execution_status':'UNKNOWN','original_continuation':False,
       'state_numerical_validation':None,'state_oracle_available':selected['state_oracle'],'hardware_simulation':False,
-      'elements':elements,'max_abs':maximum,'mean_abs':mean,'bit_mismatches':sum(x!=y for x,y in zip(av,rv)),
-      'numerical_mismatches':sum(x!=y for x,y in zip(da,dr)),
-      'thresholds':{'max_abs':0.03125,'mean_abs':0.005},'meets_existing_node_thresholds':maximum<=0.03125 and mean<=0.005,
-      'actual_nonzero':sum(x!=0 for x in da),'reference_nonzero':sum(x!=0 for x in dr),
-      'actual_max_magnitude':max(map(abs,da)),'reference_max_magnitude':max(map(abs,dr)),
+      **metrics,
       'worst_location':{'token':worst//(heads*128),'head':(worst//128)%heads,'value_column':worst%128},
       'policy':plan['policy'],'reference_mapping':('native0020 [1,128,16,128], exact full contiguous tensor' if heads==16 else
           f'native0020 [1,128,16,128], concatenate token0..{tokens-1}/head0/128 values'),

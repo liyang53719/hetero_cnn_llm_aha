@@ -21,7 +21,12 @@ import types
 
 # -I omits the script directory; admit only this pinned helper directory.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from chunk_case import plan_case
+from chunk_case import plan_case as chunk_plan_case
+from suffix_case import SCHEMA as SUFFIX_SCHEMA, plan_case as suffix_plan_case, complete as suffix_complete
+
+
+def plan_case(plan):
+    return suffix_plan_case(plan) if plan.get("schema") == SUFFIX_SCHEMA else chunk_plan_case(plan)
 
 HERE = Path(__file__).resolve().parent
 
@@ -143,7 +148,10 @@ def observe(run, owner, strict, plan):
             progress = dict(terminal_count=len(commands), roots_generation=value.get('roots', {}).get('generation'),
                 last_phase=commands[-1].get('phase') if commands else None,
                 last_role=commands[-1].get('role') if commands else None, mtime_ns=p.stat().st_mtime_ns)
-            if plan['policy']['heads'] == 16:
+            if plan.get('schema') == SUFFIX_SCHEMA:
+                progress.update(stage=value.get('stage'), owner_state=value.get('owner_state'),
+                    accepted_output_bytes=value.get('accepted_output_bytes'))
+            elif plan['policy']['heads'] == 16:
                 progress.update(chunk_context=value.get('context'), chunk_position=value.get('position'),
                     head_chunk_completions=value.get('head_chunk_completions'),
                     second_chunk_prior_state_read_beats=value.get('second_chunk_prior_state_read_beats'))
@@ -251,10 +259,13 @@ def execute(plan, plan_sha, start, plan_path):
             record['child_status'] = summary.get('status')
             record['terminal_count'] = summary.get('terminal_count')
             record['roots_generation'] = summary.get('roots', {}).get('generation')
-            complete = (summary.get('status') == 'ISOLATED_CHUNK_COMPLETE_UNCOMPARED' and
-                        record['terminal_count'] == 1 and summary.get('output_elements') == selected['elements'] and
-                        (selected['heads'] == 1 or summary.get('actual_chunks_completed') == selected['chunks']) and
-                        (run / 'actual' / 'output.bf16le').is_file())
+            if plan.get('schema') == SUFFIX_SCHEMA:
+                complete = suffix_complete(summary, run / 'actual', selected)
+            else:
+                complete = (summary.get('status') == 'ISOLATED_CHUNK_COMPLETE_UNCOMPARED' and
+                            record['terminal_count'] == 1 and summary.get('output_elements') == selected['elements'] and
+                            (selected['heads'] == 1 or summary.get('actual_chunks_completed') == selected['chunks']) and
+                            (run / 'actual' / 'output.bf16le').is_file())
         except BaseException as error:
             complete = False; record['child_summary_error'] = repr(error)
         natural = bool(observed and observed.si_code == os.CLD_EXITED and observed.si_status == 0)
@@ -265,7 +276,8 @@ def execute(plan, plan_sha, start, plan_path):
                  final_usage['log_bytes'] <= plan['limits']['log_bytes'], 'final output/log caps and receipt reserve')
         except BaseException as error:
             failure = (failure or '') + ' final resources: ' + repr(error)
-        record.update(status='ISOLATED_CHUNK_COMPLETE_UNCOMPARED' if complete and natural and proof and not failure else 'FAILED',
+        record.update(status=('ISOLATED_SUFFIX_COMPLETE_UNCOMPARED' if plan.get('schema') == SUFFIX_SCHEMA else
+                              'ISOLATED_CHUNK_COMPLETE_UNCOMPARED') if complete and natural and proof and not failure else 'FAILED',
             isolated_component_complete_uncompared=bool(complete and natural and proof and not failure),
             failure=failure, natural_exit=natural, cleanup_confirmed=proof is not None,
             returncode=None if owner is None else owner['process'].returncode,

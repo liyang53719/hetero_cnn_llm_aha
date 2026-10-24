@@ -1,0 +1,97 @@
+{
+  "actual_compile_only_result": {
+    "child_exit": {
+      "cleanup_confirmed": true,
+      "group_state": "absent",
+      "kill_attempted": true,
+      "kill_attempted_interpretation": "Original supervisor group cleanup after WNOWAIT had observed natural exit 0. This was not a timeout kill or evidence the compiler was terminated to obtain a pass.",
+      "kill_result": "signal_sent_before_reap",
+      "observed_while_unreaped": {
+        "code": 1,
+        "status": 0
+      },
+      "reaped": true,
+      "timed_out": false
+    },
+    "class_count": 27,
+    "frozen_before_after_input_count": 323,
+    "frozen_before_after_inputs_equal": true,
+    "outer_exit_code": 0,
+    "output_class_bytes": 124993,
+    "status": "PASS_QWEN35_CHUNK_CONTRACT_SCALA_COMPILE_ONLY",
+    "stdout_elapsed_measurement_scope": "Launcher-internal monotonic elapsed, reported to 9 decimal places; not an independently measured outer wall time.",
+    "stdout_elapsed_seconds_rounded_9dp": 9.967406827
+  },
+  "actual_review": {
+    "bytes": 12784,
+    "interpretation": "Digest identifies independently reviewed private evidence. This public excerpt is not the full evidence set.",
+    "raw_review_included": false,
+    "sha256": "8a919685a8f65e03eebd5293d383a8c2d35a0356ae6c53548774d0af6935e579",
+    "status": "PASS_ACTUAL_TWO_SOURCE_QWEN35_CHUNK_SCALA_COMPILE_ONLY"
+  },
+  "expected_chunk_class_files": [
+    "heteronpu/continuous/GdnChunkGeometry$.class",
+    "heteronpu/continuous/GdnChunkVectorPolicy$.class",
+    "heteronpu/continuous/GdnChunkJob.class",
+    "heteronpu/continuous/GdnChunkCommittedState.class",
+    "heteronpu/continuous/GdnChunkStageReceipt.class",
+    "heteronpu/continuous/GdnChunkStagingResult.class",
+    "heteronpu/continuous/GdnChunkAddressPlan$.class",
+    "heteronpu/continuous/GdnChunkAddressPlan$Plan.class"
+  ],
+  "input_counts": {
+    "auxiliary_supervisor_inputs": 6,
+    "classpath_jars": 87,
+    "frozen_input_bytes": 297204940,
+    "frozen_inputs": 323,
+    "pinned_tools": 314,
+    "scala_source_bytes": 12690,
+    "scala_sources": 2,
+    "source_package_manifests": 1
+  },
+  "package_kind": "SOURCE_AND_STATUS_EXCERPT_NOT_STANDALONE_EXECUTABLE_CLOSURE",
+  "package_state": "SEALED_SOURCE_STATUS_EXCERPT",
+  "packaging_actions": {
+    "actual_logs_or_receipts_read": false,
+    "candidate_executed": false,
+    "candidate_static_checker_executed": false,
+    "compilation_executed": false,
+    "original_machine_plan_read": false,
+    "published_or_pushed": false,
+    "python_checks": "AST parse and compile-to-code-object only; no candidate import or exec. Metadata and byte/hash integrity checks only.",
+    "repository_modified": false,
+    "tests_executed": false,
+    "tool_binary_reads_or_rehashes": false
+  },
+  "qualification_limits": {
+    "ack_handshake_validated": false,
+    "candidate_constructor_executed": false,
+    "chisel_construction_executed": false,
+    "chunk64_prefill_validated": false,
+    "five_rtl_targets_passed": 0,
+    "five_rtl_targets_total": 5,
+    "full_block_validated": false,
+    "module_executed": false,
+    "numerical_correctness_validated": false,
+    "prior_pass_inherited": false,
+    "prior_qwen2_full_run_cleanup_status": "UNKNOWN",
+    "prior_qwen2_full_run_execution_status": "UNKNOWN",
+    "rtl_generation_executed": false,
+    "scala_address_plan_evaluated": false,
+    "utilization_validated": false
+  },
+  "reproduction_template_is_original_supervision": false,
+  "runner_source_pins": {
+    "launch_compile.py": {
+      "bytes": 3422,
+      "sha256": "cef6d0cefdafe8a0fd804e068cbf80140e67acd70d717b7cabfd0b272de0f8b3"
+    },
+    "run_compile.py": {
+      "bytes": 11623,
+      "sha256": "a0812d26b06d1ad36a43399494a02be9af9a8793bb2849758953bbc4ff6406cc"
+    }
+  },
+  "schema": "qwen35-chunk-compile-public-summary-v1",
+  "scope": "TWO_SOURCE_SCALA_COMPILE_ONLY_NOT_ADDRESS_PLAN_EVALUATION_OR_ELABORATION",
+  "source_repository_commit_prefix": "db4977f"
+}

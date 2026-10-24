@@ -1,0 +1,36 @@
+{
+  "files": {
+    "ALLOWLIST.json": {
+      "bytes": 678,
+      "sha256": "fe78f1d17d5bf21fd187949d81e65856ea69cadc65b3961b517ab4191c2872c2"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 98771,
+      "sha256": "bbe5e1d8f392b3036a907c0e30f3d09b1db71284a223981563a808c3c430d8c6"
+    },
+    "README.md": {
+      "bytes": 3758,
+      "sha256": "294fba023181fa01c27dea6ad12c89cf6616515174b591d83922ccd9d6781325"
+    },
+    "REPRODUCE_COMMAND.txt": {
+      "bytes": 2319,
+      "sha256": "881a0aac9cd3bd1fdb7a82b39089b9d08a1a8c972c6ba9cc6d4e073d513a22e0"
+    },
+    "SUMMARY.json": {
+      "bytes": 3935,
+      "sha256": "ff822286f72afccca33dbd0f30a33d22832af48fc84d836275c2fb262c7d2f05"
+    },
+    "launch_compile.py": {
+      "bytes": 3422,
+      "sha256": "cef6d0cefdafe8a0fd804e068cbf80140e67acd70d717b7cabfd0b272de0f8b3"
+    },
+    "run_compile.py": {
+      "bytes": 11623,
+      "sha256": "a0812d26b06d1ad36a43399494a02be9af9a8793bb2849758953bbc4ff6406cc"
+    }
+  },
+  "hash_algorithm": "sha256",
+  "package_state": "SEALED_SOURCE_STATUS_EXCERPT",
+  "schema": "qwen35-chunk-compile-public-manifest-v1",
+  "self_excluded": "MANIFEST.json"
+}

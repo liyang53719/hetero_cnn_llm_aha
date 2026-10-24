@@ -1,0 +1,46 @@
+# Explanatory shell template only; not an executed script or new runner.
+# Scope: Scala compilation of exactly two Chunk contract sources.
+# No AddressPlan evaluation, constructor, Module, ChiselStage, emitter or test.
+# This is NOT the original frozen launcher, supervision or complete closure.
+# Never run the copied launcher with a fabricated replacement FROZEN_PLAN.
+#
+# Independently obtain and verify INPUT_PINS.json inputs before adapting this.
+# No Scala sources, tools or support bytes are included in this package.
+# The two Scala sources are referenced at repository commit db4977f.
+# Relative namespaces are logical labels, not original machine locations.
+# Supply variables yourself; this template performs no discovery/download.
+# JAVA: caller-selected absolute path to the pinned JDK Java executable.
+# CLASSPATH: the 87 INPUT_PINS.classpath.ordered_relative_entries, in order,
+#           caller-resolved to local paths and joined with ':'.
+# CHISEL_PLUGIN: caller-resolved INPUT_PINS.compiler_plugin_relative.
+# SOURCE_ROOT: caller-staged tree containing chunk_contract/source/.
+# WORK_ROOT: caller-selected fresh output root, never an evidence tree.
+# HOME_DIR, TMP_DIR, CLASSES_DIR: writable subdirectories of WORK_ROOT.
+# Set HOME=HOME_DIR, TMPDIR=TMP_DIR, LANG=LC_ALL=C.UTF-8 and TZ=UTC in an
+# independently reviewed environment, with a minimal explicit PATH as needed.
+# This bare compiler entry does not implement the original deadline, CPU/RSS,
+# output, identity, WNOWAIT, reaping or cleanup controls. No equivalence claimed.
+# Independent execution requires independently reviewed safeguards.
+#
+# Placeholders, not values assigned by this file:
+# JAVA CLASSPATH CHISEL_PLUGIN SOURCE_ROOT WORK_ROOT HOME_DIR TMP_DIR CLASSES_DIR
+#
+"${JAVA}" \
+  -Xmx1024m \
+  -XX:ActiveProcessorCount=1 \
+  -XX:-UsePerfData \
+  -Djava.awt.headless=true \
+  "-Djava.io.tmpdir=${TMP_DIR}" \
+  "-Duser.home=${HOME_DIR}" \
+  "-XX:ErrorFile=${WORK_ROOT}/hs_err_pid%p.log" \
+  -cp "${CLASSPATH}" \
+  scala.tools.nsc.Main \
+  -classpath "${CLASSPATH}" \
+  "-Xplugin:${CHISEL_PLUGIN}" \
+  -deprecation \
+  -feature \
+  -unchecked \
+  -language:reflectiveCalls \
+  -d "${CLASSES_DIR}" \
+  "${SOURCE_ROOT}/chunk_contract/source/GdnChunkProtocol.scala" \
+  "${SOURCE_ROOT}/chunk_contract/source/GdnChunkAddressPlan.scala"

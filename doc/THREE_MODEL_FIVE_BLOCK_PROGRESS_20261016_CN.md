@@ -1730,3 +1730,12 @@ Qwen2 fixed93 M128 原运行连接中断，恢复句柄不可用。最后监督�
 17组纯stdlib controls一次自然0：外0.314185912秒/内0.232493719秒，29内置pin前后同。PASS仅源码字面量、独立整数公式与Mock ACK合同，不执行或编译Scala方法、不证明真实握手/数值/chunk prefill；该新批Scala资格仍TEMP。独审COLD_REVIEW SHA256 58c7aee70ec6219ca224eb30d4fa4030c5ba804ac3f5005fa6b8386a1eec925c。
 
 公开7件43486B在 candidates/qwen35_chunk_contract/，6源manifest SHA256 5380d72d8d4c28cc69e27dc566b932889bf479e0befc9e31e0a9407f61aa90b2；额外TEST_SCOPE SHA256 9444d0841a343421659336d6a00e9fa5eca2e617719c06e88aacd3c6a8d24665。Qwen2完整运行仍UNKNOWN，五RTL仍0/5，无利用率实测提升，无push/新增CI/清理。
+
+
+## PASS（仅两源 Scala 编译）：ChunkProtocol / AddressPlan
+
+2026-10-21 两源独立编译一次自然0，launcher内部9.967406827秒，compiler监督9.417799秒；27class/124993B，323输入before/after一致，39封闭文件578057B均核。原WNOWAIT自然0、reaped/group absent/cleanup确认，无timeout。独审ACTUAL_REVIEW SHA256 8a919685a8f65e03eebd5293d383a8c2d35a0356ae6c53548774d0af6935e579。
+
+PASS只限SCALA_COMPILE_ONLY，未执行AddressPlan方法、Bundle/Module构造、Chisel展开、真实ACK/算术/prefill或RTL；没有新MAC实测。两源不带Host/HardFloat，不改公共门；Qwen2原full执行/清理仍UNKNOWN，五RTL0/5。
+
+复现模板/原runner摘录/相对pins与限定摘要在 candidates/qwen35_chunk_scala_compile/，8件125648B，manifest SHA256 cb80d6cdf65cb0ed63d78b0168e2e045e4db9438a3ddcec76c5d05aa1a328ae3。排除机器plan、工具/class二进制、raw日志及重复Scala源；非开箱即用完整closure，模板不冒称原监督复现。未push，无新CI，无清理。

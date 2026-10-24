@@ -1,0 +1,26 @@
+{
+  "allow_extra_files": false,
+  "allow_symlinks": false,
+  "excluded_categories": [
+    "machine-specific absolute paths",
+    "machine FROZEN_PLAN content",
+    "raw logs and receipts",
+    "ADMISSION or execution authority",
+    "Scala sources already committed at db4977f",
+    "arrays and weights",
+    "tool binaries",
+    "compiled classes and other run outputs"
+  ],
+  "files": [
+    "ALLOWLIST.json",
+    "INPUT_PINS.json",
+    "MANIFEST.json",
+    "README.md",
+    "REPRODUCE_COMMAND.txt",
+    "SUMMARY.json",
+    "launch_compile.py",
+    "run_compile.py"
+  ],
+  "recursive_parent_publication_allowed": false,
+  "schema": "qwen35-chunk-compile-public-allowlist-v1"
+}

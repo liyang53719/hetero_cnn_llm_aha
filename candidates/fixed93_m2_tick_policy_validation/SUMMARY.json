@@ -1,0 +1,119 @@
+{
+  "acceptance": {
+    "M128_acceptance": false,
+    "M2_observer_equivalence_only": true,
+    "RTL_pass": false,
+    "fullblock_pass": false,
+    "fullblock_seal_called": false,
+    "matrix_binary_provenance_verified_by_observer": false,
+    "numerical_acceptance": false,
+    "public_advance_calls": 0,
+    "public_completed": 0,
+    "public_jobs": 0,
+    "public_pc": 0,
+    "wholeblock_scope": "INCOMPLETE_WHOLEBLOCK"
+  },
+  "comparison_status": "MATCHED_SUCCESS_M2_OBSERVER_EQUIVALENCE_ONLY",
+  "equivalence": {
+    "all33_field_presence_output_files_exact_size_SHA_equal": true,
+    "attention_records": 8565,
+    "decoded_semantic_differences": {},
+    "epoch_normalization": false,
+    "four_long_lived_forward_reverse_mappings_verified": true,
+    "known_generic_references_matched": 1515,
+    "opaque_ID_category_counts": {
+      "actual_object_reference": 3051,
+      "done_object": 216,
+      "fifo_object": 48,
+      "job_object": 1,
+      "matrix_object": 3031,
+      "owner_object": 3031,
+      "request_object": 696,
+      "result_object": 936,
+      "scalar_object": 1
+    },
+    "opaque_ID_difference_rows": 11011,
+    "raw_logical_record_differences": {
+      "attention": 3391,
+      "wholeblock": 1515
+    },
+    "short_lived_cross_run_alias_equivalence_proven": false,
+    "tag_normalization": false,
+    "transport_exact_size_SHA_equal": true,
+    "wholeblock_records": 2211
+  },
+  "main_loop_timing": {
+    "cpu_reduction_percent": 40.343988442869325,
+    "current_0526_tick_policy": {
+      "cpu_seconds": 16.407840106000002,
+      "wall_seconds": 16.902397797995945
+    },
+    "historical_0503_cache": {
+      "cpu_seconds": 27.504084966000004,
+      "wall_seconds": 28.3431364170101
+    },
+    "outer_wall_seconds": 25.824388974011526,
+    "scope": "Single new M2 against historical runs, no contemporaneous pair, repeats or confidence interval. Main loop includes real owner + two observers + codec + transport checks, excludes constructors and seal IO. Parent historical comparison is not separately timed. No full-size prediction or M128 admission.",
+    "wall_reduction_percent": 40.3651115059659
+  },
+  "packaging": {
+    "actual_or_source_tests_rerun": false,
+    "independently_executable_runtime": false,
+    "raw_receipts_profiles_streams_arrays_published": false,
+    "source_synthetic_0517_package_unchanged_and_separate": true
+  },
+  "policy_contract": {
+    "explicit_weakening": "Same-tick transient ABI/profile values restored before a full boundary may not be detected. Actual equivalence does not restore old every-callback tamper detection.",
+    "full_identity_frequency_changed": true,
+    "old_every_callback_integrity_equivalent": false,
+    "original_full_identity_source_unchanged": true,
+    "policy_id": "tick-boundary-metadata-integrity-v1",
+    "policy_pin": {
+      "bytes": 1410,
+      "sha256": "fbb8c1c826a0a2a41975661d887d8ec08b2c2c49f3f7503957780d78a4843bfe"
+    },
+    "same_tick_transient_ABI_profile_restore_can_evade_full_check": true,
+    "scope_close_evidence": "Source requires a matching tick return to clear scope, or exit latches error for open scope. Actual __exit__/report completed, observer_error=null and COMPLETE report plus exact source identity support proper closed lifecycle. No per-boundary counter was added; this is control-flow/source binding evidence, not an independently counted ABI-check trace."
+  },
+  "post_exit_inventory": {
+    "bytes": 6014897,
+    "files": 51
+  },
+  "provenance": {
+    "actual_review": {
+      "bytes": 35704,
+      "sha256": "087197391d897ef27b1cec68f61ad374be3713af719804de2d107a5e4b1cf1db"
+    },
+    "frozen_source_manifest": {
+      "bytes": 4375,
+      "sha256": "b6ad5faacfffbdd3cc77f61231d8e6593bdfb33a4aea6cbaa64db28e0b098cf4"
+    },
+    "historical_0503_actual_review": {
+      "bytes": 31211,
+      "sha256": "39c51ac6aa3eff3e6778417a7f5924117f2883cb71e404c85f3074fef978bcdf"
+    },
+    "source_cold_review": {
+      "bytes": 19674,
+      "sha256": "2098e48865efc65df3fc05328dcee317f25b922d7a6d4788cc7fbde6b80a4fd0"
+    },
+    "source_policy_review": {
+      "bytes": 10718,
+      "sha256": "d8314ddec4cda8bc14fbd7edb5542333b407ee5393e670215572f6aa8b842682"
+    }
+  },
+  "run_boundary": {
+    "actual_M2_executed_in_reviewed_run": true,
+    "child_history_payload_read": false,
+    "compilation_performed_in_actual_run": false,
+    "historical_comparison_only": true,
+    "official_input_payload_read": false,
+    "old_unsealed_stream_read": false,
+    "publication_authorizes_new_actual_execution": false,
+    "reference_payload_read": false,
+    "sampling_enabled_in_0526": false
+  },
+  "schema": "single-m2-tick-policy-limited-public-summary-v1",
+  "scope": "Single new finite N1 synthetic M=2 Attention run; observer-output semantics compared with sealed historical 0417 new arm. Timing comparison below uses historical 0503 cache arm. Not a concurrent or repeated paired benchmark.",
+  "source_after_all21_pins_unchanged": true,
+  "status": "CONFIRMED_SINGLE_M2_TICK_POLICY_HISTORICAL_EQUIVALENCE_ONLY"
+}

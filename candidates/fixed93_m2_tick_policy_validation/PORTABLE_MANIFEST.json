@@ -1,0 +1,201 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 5651,
+      "sha256": "569dcdf62df757a8f58d8ea644a2d6805053e0bcb9e70224b73d070e7469f283"
+    },
+    "SUMMARY.json": {
+      "bytes": 5035,
+      "sha256": "40116928e306893d918557fcfa6ad5dcba0771d775a1cb99bbfd63eae8b313e9"
+    },
+    "check.py": {
+      "bytes": 4940,
+      "sha256": "e3ec0ae6e46e9cd797d4679afcf0cf73c542188e7199e0e688d63a035c09b53e"
+    },
+    "source/TICK_POLICY.json": {
+      "bytes": 1410,
+      "sha256": "fbb8c1c826a0a2a41975661d887d8ec08b2c2c49f3f7503957780d78a4843bfe"
+    },
+    "source/cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "source/m2_authority.py": {
+      "bytes": 9895,
+      "sha256": "40b67ec6785eb4cd43500b8355f2bc03fc17031424c8e152fc6c3eaa699b79d5"
+    },
+    "source/m2_context.py": {
+      "bytes": 18496,
+      "sha256": "704a0639f7dd4c62c140ba59336d42ce1f76a7553a41a7ac4da65aba6d7576a0"
+    },
+    "source/m2_entry.py": {
+      "bytes": 7308,
+      "sha256": "556660f4df87e715ad5ffe32751e0634e5b40d17b5e2fd7e0e17694b61cfb8a5"
+    },
+    "source/m2_io.py": {
+      "bytes": 11216,
+      "sha256": "de1b9e5479e632ceb70f7a0f18f7e139cc5a1f938851ed28c893fca104dbb087"
+    },
+    "source/m2_runtime.py": {
+      "bytes": 6583,
+      "sha256": "91843d394067eefc4bf1a35236f574a84c2c482fc8c11c94a6e7ca7f964ed078"
+    },
+    "source/m2_supervision_gate.py": {
+      "bytes": 12776,
+      "sha256": "10a1d81903b44a36b518328b5c609ebae4649b33d816ef558439afd1bd0e6a51"
+    },
+    "source/narrow_fullblock_attention.py": {
+      "bytes": 59696,
+      "sha256": "a81397f0034a18e8973200e77edee6d575e841d0744f54e0e498ca0251b420a0"
+    },
+    "source/native_adapter.py": {
+      "bytes": 8727,
+      "sha256": "12c4d24854a8dabe6b44bf07ea42246b7d9367e611f45a37213ddd2f91cf6368"
+    },
+    "source/parent/decode_diff.py": {
+      "bytes": 14269,
+      "sha256": "a2d93d57674545eabf4e2f1681ddf42ff01f9f2c5a758f137db089e77f02315e"
+    },
+    "source/parent/history_compare.py": {
+      "bytes": 7537,
+      "sha256": "ee80666d58e9a4debe888373a15f2956a293dd4e14ae6b8bd50df78eebc7ff89"
+    },
+    "source/run_pair.py": {
+      "bytes": 16189,
+      "sha256": "850973b841f754a5d53f255f203365b8f514d5d2c5b5b31cdd7c4cf3327b971d"
+    },
+    "source/success_driver.py": {
+      "bytes": 13398,
+      "sha256": "04d00400b50d5303f5f74b61a0908be54878c36895563757134722800d9987ab"
+    }
+  },
+  "machine_path_policy": "No private machine-specific absolute paths. Generic OS paths and the protocol role label remain unchanged in exact source.",
+  "prohibited_payloads": [
+    "HISTORY.json",
+    "ADMISSION.json",
+    "original SOURCE_MANIFEST.json",
+    "raw receipts",
+    "profiles",
+    "streams",
+    "ID row payloads",
+    "input/output arrays",
+    "ELF",
+    "runtime dependencies"
+  ],
+  "provenance": {
+    "actual_review": {
+      "bytes": 35704,
+      "sha256": "087197391d897ef27b1cec68f61ad374be3713af719804de2d107a5e4b1cf1db"
+    },
+    "frozen_source_manifest": {
+      "bytes": 4375,
+      "sha256": "b6ad5faacfffbdd3cc77f61231d8e6593bdfb33a4aea6cbaa64db28e0b098cf4"
+    },
+    "historical_0503_actual_review": {
+      "bytes": 31211,
+      "sha256": "39c51ac6aa3eff3e6778417a7f5924117f2883cb71e404c85f3074fef978bcdf"
+    },
+    "source_cold_review": {
+      "bytes": 19674,
+      "sha256": "2098e48865efc65df3fc05328dcee317f25b922d7a6d4788cc7fbde6b80a4fd0"
+    },
+    "source_policy_review": {
+      "bytes": 10718,
+      "sha256": "d8314ddec4cda8bc14fbd7edb5542333b407ee5393e670215572f6aa8b842682"
+    }
+  },
+  "publish_whitelist": [
+    "PORTABLE_MANIFEST.json",
+    "README.md",
+    "SUMMARY.json",
+    "check.py",
+    "source/TICK_POLICY.json",
+    "source/cached_wholeblock.py",
+    "source/m2_authority.py",
+    "source/m2_context.py",
+    "source/m2_entry.py",
+    "source/m2_io.py",
+    "source/m2_runtime.py",
+    "source/m2_supervision_gate.py",
+    "source/narrow_fullblock_attention.py",
+    "source/native_adapter.py",
+    "source/parent/decode_diff.py",
+    "source/parent/history_compare.py",
+    "source/run_pair.py",
+    "source/success_driver.py"
+  ],
+  "schema": "single-m2-tick-policy-public-source-excerpt-v1",
+  "scope": "Exact source excerpts and limited actual summary only; no independent execution package, renewed authority, or old integrity equivalence.",
+  "source_files": {
+    "source/TICK_POLICY.json": {
+      "bytes": 1410,
+      "sha256": "fbb8c1c826a0a2a41975661d887d8ec08b2c2c49f3f7503957780d78a4843bfe",
+      "source_relative_path": "TICK_POLICY.json"
+    },
+    "source/cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b",
+      "source_relative_path": "cached_wholeblock.py"
+    },
+    "source/m2_authority.py": {
+      "bytes": 9895,
+      "sha256": "40b67ec6785eb4cd43500b8355f2bc03fc17031424c8e152fc6c3eaa699b79d5",
+      "source_relative_path": "m2_authority.py"
+    },
+    "source/m2_context.py": {
+      "bytes": 18496,
+      "sha256": "704a0639f7dd4c62c140ba59336d42ce1f76a7553a41a7ac4da65aba6d7576a0",
+      "source_relative_path": "m2_context.py"
+    },
+    "source/m2_entry.py": {
+      "bytes": 7308,
+      "sha256": "556660f4df87e715ad5ffe32751e0634e5b40d17b5e2fd7e0e17694b61cfb8a5",
+      "source_relative_path": "m2_entry.py"
+    },
+    "source/m2_io.py": {
+      "bytes": 11216,
+      "sha256": "de1b9e5479e632ceb70f7a0f18f7e139cc5a1f938851ed28c893fca104dbb087",
+      "source_relative_path": "m2_io.py"
+    },
+    "source/m2_runtime.py": {
+      "bytes": 6583,
+      "sha256": "91843d394067eefc4bf1a35236f574a84c2c482fc8c11c94a6e7ca7f964ed078",
+      "source_relative_path": "m2_runtime.py"
+    },
+    "source/m2_supervision_gate.py": {
+      "bytes": 12776,
+      "sha256": "10a1d81903b44a36b518328b5c609ebae4649b33d816ef558439afd1bd0e6a51",
+      "source_relative_path": "m2_supervision_gate.py"
+    },
+    "source/narrow_fullblock_attention.py": {
+      "bytes": 59696,
+      "sha256": "a81397f0034a18e8973200e77edee6d575e841d0744f54e0e498ca0251b420a0",
+      "source_relative_path": "narrow_fullblock_attention.py"
+    },
+    "source/native_adapter.py": {
+      "bytes": 8727,
+      "sha256": "12c4d24854a8dabe6b44bf07ea42246b7d9367e611f45a37213ddd2f91cf6368",
+      "source_relative_path": "native_adapter.py"
+    },
+    "source/parent/decode_diff.py": {
+      "bytes": 14269,
+      "sha256": "a2d93d57674545eabf4e2f1681ddf42ff01f9f2c5a758f137db089e77f02315e",
+      "source_relative_path": "parent/decode_diff.py"
+    },
+    "source/parent/history_compare.py": {
+      "bytes": 7537,
+      "sha256": "ee80666d58e9a4debe888373a15f2956a293dd4e14ae6b8bd50df78eebc7ff89",
+      "source_relative_path": "parent/history_compare.py"
+    },
+    "source/run_pair.py": {
+      "bytes": 16189,
+      "sha256": "850973b841f754a5d53f255f203365b8f514d5d2c5b5b31cdd7c4cf3327b971d",
+      "source_relative_path": "run_pair.py"
+    },
+    "source/success_driver.py": {
+      "bytes": 13398,
+      "sha256": "04d00400b50d5303f5f74b61a0908be54878c36895563757134722800d9987ab",
+      "source_relative_path": "success_driver.py"
+    }
+  }
+}

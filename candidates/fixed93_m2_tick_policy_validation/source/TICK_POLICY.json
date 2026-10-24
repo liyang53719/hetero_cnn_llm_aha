@@ -1,0 +1,31 @@
+{
+  "event_schema_changed": false,
+  "full_identity_frequency_changed": true,
+  "max_tick_ancestry_frames": 128,
+  "module_files": {
+    "CODEC_PINS.json": {
+      "bytes": 253,
+      "sha256": "d49b6f296bf1a6717565e9a3c6d0d401b146abc041ca907ae0659a4537ed22cf"
+    },
+    "anchors.json": {
+      "bytes": 14501,
+      "sha256": "038f66631dff0142cd9bc4f8bbd7851457a6effca24406d5440780d5bb740f1a"
+    },
+    "cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "narrow_fullblock_attention.py": {
+      "bytes": 59696,
+      "sha256": "a81397f0034a18e8973200e77edee6d575e841d0744f54e0e498ca0251b420a0"
+    }
+  },
+  "original_full_identity_unchanged": true,
+  "policy_id": "tick-boundary-metadata-integrity-v1",
+  "sampling_enabled": false,
+  "schema": "fixed93-attention-tick-boundary-integrity-v1",
+  "scope": "Full old identity at tick call/return, all exceptions, bootstrap, outside tick, unknown events and after sticky error; cheap live ownership checks inside exactly proven tick. ABI/profile drift restored entirely within a tick can be missed. Prior normal nonconsumer _op exemption unchanged. Source/closure and final checks retained. No numerical/schedule/event changes.",
+  "scope_must_close": true,
+  "transient_metadata_detection_equivalent": false,
+  "underlying_integrity_policy": "op-evidence-boundary-v1"
+}

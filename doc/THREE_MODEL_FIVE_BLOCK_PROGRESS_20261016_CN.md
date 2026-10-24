@@ -1635,3 +1635,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 合成已独审：46scope/归属/异常/漂移控制、真实共享dispatcher双subscriber差分与六scalar40槽一致。400合成ticks的full核验8400→800；另一scalar片段46→2也仅指full核验次数，不是删标量证据。mock ABI成本约1倍，不能作真实速度判断。
 - 新契约明确不等同旧逐回调防篡改：同tick内ABI/profile值改变又恢复不保证发现，持续到退出/异常仍拒；重入/错frame/缺边界拒，handled exception不提前关scope，匹配return/finally和终态清理闭合。
 - 本包只source/synthetic，完整M128/数值oracle/RTL资格不成立。后续0526单新臂实际结果独立保存与审查，不以本公开摘录授运行权限或替代实际记录；五block完整RTL仍0/5。
+
+## PASS（有限实际M2历史对照）/ TEMP：tick策略真实验证（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_m2_tick_policy_validation/` 18文件审阅摘录，13份原Python和TICK_POLICY逐字保留。入树仅原件pins/hash及14 Python内存compile通过，无actual或源测试重跑；不含原ADMISSION/历史HISTORY/日志/数组/ELF，不是独立可执行验收包。
+- 实际唯一单new无采样M2自然0/25.824389秒，原WNOWAIT0、PID/start ticks、reaped/group absent/cleanup闭合，无外soft/hard停线。0526新tick契约在source/ADMISSION/ARM/final receipt中一致消费，whole仍INCOMPLETE且0 full advance，不能升级为全块。
+- 正式有限独审SHA087197391d897ef27b1cec68f61ad374be3713af719804de2d107a5e4b1cf1db：51已封产物6014897B、21源pins核验；33数组/presence/output与transport全等0417历史pins，8565+2211事件语义diff空，11011 opaque-ID账和4长期映射通过。完整Attention M2/error=null；不是独立数值oracle、RTL或旧逐回调防篡改等价。
+- 实测loop CPU16.407840106秒/wall16.902397798秒；相对0503 frame-cache历史单次降低40.34399%/40.36511%，相对0417new CPU降低49.54556%。两种历史比较分开，不能拼成同期paired benchmark或M128/6600秒保证。
+- ONGOING / TEMP：四owner方法的193静态line位置中14是真实字段/event hook；下一独立line契约拟只在同真实tick且无stickyerror时跳无产物line的深检查，保thread/owner/frame归属、所有exception和hook原context检查。该静态比例不是动态速度，瞬时locals/身份恢复检测差异必须明示。目前只准实现/合成，未实际执行新line版。
+- 完整128-token block未通过，五block完整RTL仍0/5，无新硬件利用率实测。原失联运行、入口FAIL和不完整profile均保留；没有清理或重写历史。

@@ -130,7 +130,12 @@ class TypedMemory:
     def _resolve(self, address, size=64):
         require(type(address) is int and address % 64 == 0 and size > 0 and size % 64 == 0,
                 'physical access alignment')
-        matches = [r for r in self.regions.values() if r.base <= address and address + size <= r.base + r.extent]
+        if type(size) is int:
+            end = address + size
+            matches = [r for r in self.regions.values() if r.base <= address and end <= r.base + r.extent]
+        else:
+            # Preserve the original accepted types and evaluation behavior.
+            matches = [r for r in self.regions.values() if r.base <= address and address + size <= r.base + r.extent]
         require(len(matches) == 1, 'physical access outside one allocation')
         return matches[0]
 

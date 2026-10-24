@@ -1,0 +1,32 @@
+{
+  "actual_model_executed": false,
+  "baseline_commit": "b74aa569e2576b4b363006acab5529f536e63749",
+  "baseline_source_sha256": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+  "candidate_source_sha256": "fac5ab5f56602132691c91074fc15b364b8a1f52aef329eab7b1ceb3060f8529",
+  "distinct_test_cases": 19,
+  "full_m128_status": "TEMP_NOT_RUN",
+  "native_arithmetic_executed": false,
+  "post_import_forbidden_audit_events": [],
+  "production_ast_unchanged_outside_resolve": true,
+  "rtl_executed": false,
+  "runs": [
+    {
+      "errors": 0,
+      "failures": 0,
+      "implementation": "baseline_git_object",
+      "seconds": 0.0055207699770107865,
+      "skipped": 0,
+      "tests": 19
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "implementation": "exact_int_hoist",
+      "seconds": 0.004598703992087394,
+      "skipped": 0,
+      "tests": 19
+    }
+  ],
+  "status": "PASS_MEMORY_ONLY_DIFFERENTIAL",
+  "test_source_sha256": "3c61d5381fae430f6476ed82742c32bd38f4c5a621339e2f48bf728629b82dd5"
+}

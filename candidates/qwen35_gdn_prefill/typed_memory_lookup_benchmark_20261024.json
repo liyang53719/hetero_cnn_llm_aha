@@ -1,0 +1,69 @@
+{
+  "actual_model_executed": false,
+  "baseline_commit": "b74aa569e2576b4b363006acab5529f536e63749",
+  "byte_sha256": {
+    "baseline": "bc4a199515ed35cda8c686c3acf73f8cd48b051825c70e1a1c0d2fd8cadb05ba",
+    "hoist": "bc4a199515ed35cda8c686c3acf73f8cd48b051825c70e1a1c0d2fd8cadb05ba"
+  },
+  "caveat": "Synthetic wall-time microbenchmark only; no end-to-end speedup or hardware-cycle claim.",
+  "distinct_addresses": 141,
+  "full_m128_status": "TEMP_NOT_RUN",
+  "iterations_per_sample": 20000,
+  "native_arithmetic_executed": false,
+  "python": "3.12.14",
+  "regions": 57,
+  "results": {
+    "read64": {
+      "checksum": 59,
+      "median_ns_per_call": {
+        "baseline": 2951.55395,
+        "hoist": 2531.7351
+      },
+      "ns_per_call_samples": {
+        "baseline": [
+          2886.04045,
+          2971.39385,
+          2951.55395,
+          2928.6125,
+          2960.0247
+        ],
+        "hoist": [
+          2531.7351,
+          2572.13535,
+          2484.68835,
+          2522.4947,
+          2623.1911
+        ]
+      },
+      "reduction_percent": 14.223654966564315
+    },
+    "resolve": {
+      "checksum": 30208,
+      "median_ns_per_call": {
+        "baseline": 2540.12495,
+        "hoist": 2155.75565
+      },
+      "ns_per_call_samples": {
+        "baseline": [
+          2750.9167,
+          2540.12495,
+          2534.8613,
+          2496.62435,
+          2588.7473
+        ],
+        "hoist": [
+          2362.04185,
+          2177.90245,
+          2155.75565,
+          2104.91515,
+          2152.9124
+        ]
+      },
+      "reduction_percent": 15.13190522379617
+    }
+  },
+  "rtl_executed": false,
+  "samples": 5,
+  "status": "MEASURED_MEMORY_LOOKUP_ONLY",
+  "typed_dense_sha256": "fac5ab5f56602132691c91074fc15b364b8a1f52aef329eab7b1ceb3060f8529"
+}

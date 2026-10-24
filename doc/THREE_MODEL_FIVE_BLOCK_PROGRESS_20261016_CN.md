@@ -1662,3 +1662,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 辅助采样质量与主证据 seal 分离，安全恢复但不完整的采样可为 PARTIAL；不放松主证据或资源/恢复错误。0437 实际 FAIL 保留；R1 decoder 阻断是已撤回的静态推断，不是实际失败，也未扩宽 decoder。
 - ONGOING / TEMP：下一独立四 owner frame-local routing 正在源码/真实 tracing 合成验证，只拟跳过无证据非 hook line 的重复投递，保留全部 14 hook、call/return/exception、SiLU 和异常恢复。新瞬变检测边界须明确，尚无新 routing actual 资格。
 - 完整 128-token block 未通过，五 block 完整 RTL 仍 0/5，无新增硬件 MAC 利用率实测。本批仅本地小提交，不代表远端或 CI 更新；未删除临时数据、未重写历史。
+
+## PASS（有限源码/真实 tracing 合成）/ TEMP：四 owner 局部 frame 路由（2026-10-21）
+
+- DONE：新增 candidates/fixed93_owner_frame_routing，12 文件 195768 字节，8 原文件逐字保留。入树 checker 仅 11 pins/hash、5 Python 内存 compile 通过；不执行原合成/native。公开范围独审 SHA 0078f204dca0ce32e8c809b59269070679bf08f85325440178539bc4e738d8c3，无原权限、日志、payload。
+- 新路由只在四 owner 真实 call 的原 listener 投递成功后建立，闭包不持有 frame/locals；return（包括 yield）显式 expiry、resume call 新绑、exception 后首 line 必须原投递。所有14 hook与非line事件保留，SiLU/其他53非line代码的异常恢复不改。注册generation/tuple对象/额外listener/错误状态变化回退原路径。
+- 新完整性边界明确：非hook的thread/owner/祖先校验改在保留事件采样，瞬变并恢复不保证被发现；不能称旧逐line防篡改等价。原Attention29方法和原dispatcher投递body逆AST一致，不改计算或字段。
+- 已封合成：cold02真实 tracing 控制投递68→25；cold03单独nested yield-from/send、两个同CodeType generator交错、14新闭包、38控制事件和25 mock hook一致，投递134→67。原cold01因负例fixture污染后续正例FAIL保留，仅修测试分离；合成约3.57倍不外推实际。
+- 本提交仅source/synthetic范围；0629后续实际M2独立资格与本包分开。主线将以独立M16子链校准规模，不能算完整block。完整128-token block未通过，五block完整RTL仍0/5，无新硬件利用率实测；未清理临时数据。

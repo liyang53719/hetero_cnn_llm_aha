@@ -1,0 +1,94 @@
+{
+  "actual_execution_authorized": false,
+  "exact_frozen_files": [
+    "POLICY.json",
+    "README.md",
+    "cached_wholeblock.py.patch",
+    "generator_controls.py",
+    "narrow_fullblock_attention.py.patch",
+    "overlay/cached_wholeblock.py",
+    "overlay/narrow_fullblock_attention.py",
+    "tests.py"
+  ],
+  "files": {
+    "POLICY.json": {
+      "bytes": 2554,
+      "sha256": "08676e4fda565e9a5742937f91a6950b4f023e9cc2ca4ccf08ab69256af2152c"
+    },
+    "PORTABLE.md": {
+      "bytes": 2647,
+      "sha256": "50a361797f13843844ed22b1d7aa27f25e9284d58e95525855dac10f69f67dc9"
+    },
+    "README.md": {
+      "bytes": 4958,
+      "sha256": "02b32c3642061bd24750f05b94590bca77fe07392e2b71811b894e4026810e56"
+    },
+    "SUMMARY.md": {
+      "bytes": 3402,
+      "sha256": "76d918ea10d9375d523518cd0d5c17b7214d5cdcd5c9367a7e58edfbbefa0cc0"
+    },
+    "cached_wholeblock.py.patch": {
+      "bytes": 7971,
+      "sha256": "917c4847c830aed1d444ebe7d44745ef79faf036e646aadb62129ef79f0ece95"
+    },
+    "check_portable.py": {
+      "bytes": 5904,
+      "sha256": "911d6071c5c85811e1f8521c9ab9fc716882f038b3490527df4c6130d8a3f91f"
+    },
+    "generator_controls.py": {
+      "bytes": 10195,
+      "sha256": "81e35e88bf82ad92627e071bfc9a8abdf9d364b8a010223e7cda67b5ae4800e7"
+    },
+    "narrow_fullblock_attention.py.patch": {
+      "bytes": 362,
+      "sha256": "aa6d3f8bb3d0ecc199d1a0267a6d9524e84f409f17ad623820f73d42024b01a6"
+    },
+    "overlay/cached_wholeblock.py": {
+      "bytes": 54729,
+      "sha256": "3ce648c0c8e8e74fb7df90fe7f629fb9bfc8d253d4979b69d408de64cc1d6662"
+    },
+    "overlay/narrow_fullblock_attention.py": {
+      "bytes": 61979,
+      "sha256": "0661a37e1f030f4326825ad556aff6678fabdb8900a1085993d62105a8ff4363"
+    },
+    "tests.py": {
+      "bytes": 37909,
+      "sha256": "6efa075b85242acf96a71cf4d37d93665f041357712e7301d9a8c3a79d744401"
+    }
+  },
+  "independent_source_review_status": "pending_at_package_creation",
+  "omitted": [
+    "original SOURCE_MANIFEST.json",
+    "COLD_SEAL.json",
+    "STATIC_SOURCE_COMPARISON.json",
+    "cold run evidence and logs",
+    "review receipts",
+    "baseline inputs",
+    "model and runtime data"
+  ],
+  "original_provenance": {
+    "cold_seal": {
+      "bytes": 4341,
+      "sha256": "14eeaf701b9572a65c779f90ce57143a7233c568fe4ebe1420071d6dc6ca7b19"
+    },
+    "original_provenance_files_included": false,
+    "source_manifest": {
+      "bytes": 4770,
+      "sha256": "bf953a026494b3ad866ea07fe6567149f3e294a95aab7e6f05ded119e7cb7d85"
+    }
+  },
+  "policy_id": "source-attested-owner-frame-routing-v1",
+  "schema": "attention-frame-routing-portable-v1",
+  "scope": "SOURCE/SYNTHETIC ONLY; no actual authority",
+  "test_inputs": {
+    "baseline/cached_wholeblock.py": {
+      "bytes": 47890,
+      "sha256": "5e9ff9f6aa8fdf487a7bb2761444ae12dcee163c1660b92b66711d035c008e7b"
+    },
+    "baseline/narrow_fullblock_attention.py": {
+      "bytes": 61922,
+      "sha256": "a11a11d5102feaa5b72b9a31d944530ceb627a371176240359498c0d6f8fa8e2"
+    }
+  },
+  "verification": "Hash and in-memory compile only by default. Optional preparation creates a new synthetic test stage without executing it."
+}

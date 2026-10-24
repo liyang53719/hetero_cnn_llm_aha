@@ -1,0 +1,10 @@
+--- a/narrow_fullblock_attention.py
++++ b/narrow_fullblock_attention.py
+@@ -343,6 +343,7 @@
+             sys.settrace(self._callback)
+         else:
+             self.registration = self.dispatcher.register(self._callback, self.all_codes)
++            self.dispatcher.bind_owner_line_routes(self)
+         return self
+ 
+     def __exit__(self, kind, error, tb):

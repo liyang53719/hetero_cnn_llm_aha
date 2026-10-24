@@ -1,0 +1,161 @@
+--- a/cached_wholeblock.py
++++ b/cached_wholeblock.py
+@@ -87,6 +87,8 @@
+         self.callback = self._dispatch
+         self._listeners = {}
+         self._next = 0
++        self._listener_generation = 0
++        self._owner_route = None
+         self.active = False
+         self.failed = None
+ 
+@@ -104,6 +106,7 @@
+             need(sys.gettrace() is self.callback, 'trace callback replaced')
+         self._next += 1
+         self._listeners[self._next] = (callback, codes)
++        self._listener_generation += 1
+         return self._next
+ 
+     def unregister(self, token):
+@@ -111,6 +114,8 @@
+         if self.active:
+             need(sys.gettrace() is self.callback, 'trace callback replaced')
+         del self._listeners[token]
++        self._listener_generation += 1
++        self._owner_route = None
+ 
+     def start(self):
+         need(not self.active and self.failed is None, 'dispatcher already active/failed')
+@@ -120,8 +125,132 @@
+         self.active = True
+         sys.settrace(self.callback)
+ 
++    def bind_owner_line_routes(self, attention):
++        """Opt in to source-attested-owner-frame-routing-v1, never generic filtering.
++
++        The source-pinned Attention listener supplies its immutable 14-hook map.
++        The only other listener must be this module's exact Wholeblock observer;
++        its four owner code entries are SUPPORT no-ops. No frame is retained.
++        """
++        need(self.active and self.failed is None and self._owner_route is None and
++             threading.get_ident() == self.thread and sys.gettrace() is self.callback,
++             'one live same-thread owner route binding required')
++        need(attention.dispatcher is self and attention.registration in self._listeners,
++             'current Attention registration required')
++        if len(self._listeners) != 2:
++            # A pre-existing extra subscriber keeps the original unfiltered path.
++            return False
++        token_a = attention.registration
++        entry_a = self._listeners[token_a]
++        callback = entry_a[0]
++        need(type(callback) is types.MethodType and callback is attention._callback and
++             callback.__self__ is attention and callback.__func__ is type(attention)._trace,
++             'exact current Attention listener required')
++        token_w, entry_w = next((k,v) for k,v in self._listeners.items() if k != token_a)
++        observe = entry_w[0]
++        need(type(observe) is types.MethodType and type(observe.__self__) is WholeblockObservation and
++             observe.__func__ is WholeblockObservation._observe and
++             observe.__self__.trace_dispatcher is self, 'exact current Wholeblock listener required')
++        whole = observe.__self__
++        names = (('_attention','owner_attention',5), ('_matrix_step','owner_matrix_step',4),
++                 ('tick','owner_tick',3), ('_write','owner_write',2))
++        lines = attention.evidence_lines
++        need(type(lines) is types.MappingProxyType and len(lines) == 4,
++             'immutable exact four-code line map required')
++        expected = {}
++        for member, key, count in names:
++            code = attention.codes[member]
++            need(type(code) is types.CodeType and code in self.line_codes and
++                 code in entry_a[1] and code in entry_w[1] and
++                 whole.by_code.get(code) == key and key in SUPPORT_ANCHORS and
++                 code in lines and type(lines[code]) is frozenset and len(lines[code]) == count and
++                 all(type(n) is int and n > 0 for n in lines[code]),
++                 'source-selected owner line consumer mismatch')
++            expected[code] = key
++        need(len(expected) == 4 and set(expected) == set(lines), 'aliased owner line codes')
++        self._owner_route = (attention, whole, self._listeners, self._listener_generation,
++                             token_a, entry_a, token_w, entry_w, lines,
++                             types.MappingProxyType(expected))
++        return True
++
++    def _route_frame(self, frame, code):
++        binding = self._owner_route
++        if binding is None:
++            return self.callback
++        attention, whole, registry, generation, token_a, entry_a, token_w, entry_w, lines, expected = binding
++        if code not in lines:
++            return self.callback
++        frame_id = id(frame)
++        tick_id = attention.identity_tick_frame
++        hooks, support_key = lines[code], expected[code]
++
++        def eligible():
++            # Values inspected here are observer/registry state, never frame
++            # locals or ancestry. Exact entry objects also catch direct registry
++            # replacement that bypassed register()/unregister() generation.
++            return (self.active and self.failed is None and self._owner_route is binding and
++                    self._listeners is registry and self._listener_generation == generation and
++                    len(registry) == 2 and registry.get(token_a) is entry_a and
++                    registry.get(token_w) is entry_w and attention.evidence_lines is lines and
++                    attention.error is None and not attention.disarmed and
++                    (attention.stream is None or not attention.stream.failed) and
++                    whole.failure is None and tick_id is not None and
++                    attention.identity_tick_frame == tick_id and
++                    whole.by_code.get(code) == support_key and support_key in SUPPORT_ANCHORS)
++
++        if not eligible():
++            return self.callback
++        live = True
++        resume_line = False
++
++        def local(current, event, arg):
++            nonlocal live, resume_line
++            try:
++                # The live segment's CodeType is immutable. The closure retains
++                # only its integer id, code and observer state, never a frame/locals.
++                if not live or id(current) != frame_id or event == 'call' or not eligible():
++                    live = False
++                    return self._dispatch(current, event, arg)
++                if event == 'line' and not resume_line and current.f_lineno not in hooks:
++                    return local
++                if event == 'exception':
++                    resume_line = True
++                elif event == 'line':
++                    resume_line = False
++                self._dispatch_code(current, event, arg, code)
++                if event == 'return':
++                    live = False
++                if not live or not eligible():
++                    live = False
++                    return self.callback
++                return local
++            except BaseException as error:
++                # New routing guards obey the original no-injection poison rule.
++                live = False
++                self.failed = type(error).__name__ + ': ' + str(error)[:512]
++                self.on_error(self.failed)
++                return self.callback
++            finally:
++                # Python uses return for both ordinary return and generator
++                # yield. next/send/throw/close must start a fresh global call.
++                if event == 'return':
++                    live = False
++
++        return local
++
+     def _dispatch(self, frame, event, arg):
+         code = frame.f_code
++        result = self._dispatch_code(frame, event, arg, code)
++        # Original call delivery, including listener poison, always comes first.
++        if event == 'call' and result is self.callback and self.failed is None:
++            try:
++                return self._route_frame(frame, code)
++            except BaseException as error:
++                self.failed = type(error).__name__ + ': ' + str(error)[:512]
++                self.on_error(self.failed)
++        return result
++
++    def _dispatch_code(self, frame, event, arg, code):
+         if code not in self.codes:
+             return None
+         if self.failed is not None:

@@ -1,0 +1,16 @@
+{
+  "schema": "attention-owner-frame-routing-policy-v1",
+  "policy_id": "source-attested-owner-frame-routing-v1",
+  "predecessor_policy_id": "event-only-owner-lines-v1",
+  "scope": "SOURCE/SYNTHETIC PROPOSAL; no assembled candidate or execution authority",
+  "eligible_codes": ["owner_attention", "owner_matrix_step", "owner_tick", "owner_write"],
+  "hook_counts": [5, 4, 3, 2],
+  "activation": "Only after the original real call has reached both exact registered callbacks without dispatcher, Attention, or Wholeblock sticky failure and the original Attention check established a live tick scope.",
+  "segment": "A closure stores only CodeType, frame id, current tick id, immutable hooks and observer/registration identities. No frame or frame-locals reference is retained. Every return, including a generator yield, expires it; each resume call rebinds.",
+  "skip": "Only a non-hook line of this same live frame and same admitted tick may bypass both listeners. Exact registry dictionary, generation, two entry tuple identities, source-selected SUPPORT mapping and observer live/error state are checked before each bypass.",
+  "preserved": "All original call/return/exception/unknown-event delivery, all fourteen hooks, six scalar-return consumers, first line after exception, SiLU line 396 plus its other lines, non-line-code exception-resume bookkeeping and all output/field/event helpers remain. No numeric, schedule or cache computation is changed.",
+  "fallback": "Expired or wrong frame, another call, registry mutation or added listener, different tick, error/disarm/failed stream or source-selected route mismatch uses the original dispatcher path and permanently expires this segment.",
+  "changed_detection": "On skipped off-hook owner lines, thread, self-owner, locals and tick-ancestor checks are no longer sampled. The original checks remain at call, retained evidence/control boundaries and return/exception. A transient change restored before such a boundary is not guaranteed detected; a failure may be detected later. This is not equivalent to predecessor integrity sampling.",
+  "unchanged_other_policy": "The op-evidence-boundary-v1 and tick-boundary-metadata-integrity-v1 policies remain explicit and unchanged.",
+  "limitations": "No arbitrary Python/native adversary sandbox; no M2 or M128 numerical oracle, actual timing claim or execution authorization. Extra subscriber behavior is not silently filtered. A new assembled source manifest, route policy binding, review and root ADMISSION are required before actual execution."
+}

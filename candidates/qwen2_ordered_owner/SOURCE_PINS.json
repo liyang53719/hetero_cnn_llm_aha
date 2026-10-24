@@ -1,0 +1,111 @@
+{
+  "base_main": "5109c30ab9eda147f5127c42dbb0a55d33a66363",
+  "ordered_schedule_delivery_patch_sha256": "e8a69e2e8489500f35c5a5a37197949994ecf881bbb96c004bef9cb004cca444",
+  "ordered_schedule_sha256": "4cd2609d2fe1ffffd5d14b9398c45c108b9382c0097d5316502b41486f37cf1b",
+  "ordered_work_sha256": "505651c4452f07743e6c59e0457d5e955624a05f343bf7d7869a3e99b2ec9e61",
+  "inputs": {
+    "attention_packed_owner/hooks.py": {
+      "before_sha256": "e4aed930d1a3f1742c95eaf1ec92350ef5c142ed276fbacb7821d473b4cf202d",
+      "after_sha256": "f8415cf0cc5e78c6b0b0ad46d127f8f5c69ef6c53b142004a9eb03fe40cd46d7"
+    },
+    "ffn_attention/attention_owner.py": {
+      "before_sha256": "2f8a6f9657771fa7d4c267a5151e1c739164e44c4768bacd9385275029625cdb",
+      "after_sha256": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c"
+    },
+    "production_qk16_model/entry.py": {
+      "before_sha256": "8663c901c288414080e2851feac6cf0132734823b51e43657eb13c8e46be6fd5",
+      "after_sha256": "3839bd08cb41eecf8a5442742eb7a7efde0bcdc13af2b2da4e20f0e82ace1257"
+    },
+    "production_qk16_model/direct_transport.py": {
+      "before_sha256": "5ac7d734c10ad46cc0f8608aa42b777cf91d8124fec5b46e417e81c79dd64dff",
+      "after_sha256": "f9c199ff33607d1295fb672f69c549d512aea07b83c9697743b3562f3663b509"
+    }
+  },
+  "ordered_schedule_commit": "5109c30ab9eda147f5127c42dbb0a55d33a66363",
+  "raw_sources": {
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/model.py": {
+      "bytes": 6233,
+      "sha256": "f82699680b2b0f0569f7b1b71eaee5fdd2fa31c64ef08b0b5a89d35793bc01d3"
+    },
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py": {
+      "bytes": 35767,
+      "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m128/pins.json": {
+      "bytes": 25528,
+      "sha256": "883cd0b6c50c112c2dbc80a533bece90a0ee8d606a81615f1242c06f5e0b93ad"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m128/tiled.patch": {
+      "bytes": 5679,
+      "sha256": "c29860c602bb2733ab6d3d5f95fcc9156879c0acaeceecfa861af1b12809830b"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_m16/m16.patch": {
+      "bytes": 2750,
+      "sha256": "f2d65a3767b0d9c4c8691b62d475705f5fa0cd9cd8c8c25fb5c765c0cfaf47f0"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/client.py": {
+      "bytes": 17894,
+      "sha256": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/hooks.py": {
+      "bytes": 4780,
+      "sha256": "127f26fb04f2efc02bc8920d263cdbd14bda6a498315b2a2a9aad8fb99f23c7d"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/owner.patch": {
+      "bytes": 7961,
+      "sha256": "701f8a92e784763433f9e5348d9202dd344b4612095f7d5d150166546a85f762"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/protocol.py": {
+      "bytes": 968,
+      "sha256": "d153de82a85efb87e0f359ad84a8744e9c1a5d28ba12a8f689fa179a9eea63f3"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/schedule.py": {
+      "bytes": 4683,
+      "sha256": "ddd2c2b2d7a60bbcae27013f1f38e17bdc514cffe15572124c9bdfabff2c81bd"
+    },
+    "candidates/qwen2_resident_matrix/attention_packed_owner/test_client.py": {
+      "bytes": 20606,
+      "sha256": "fa9d0285db80253f354630385c2c203a5ec7d70f8c6bc3cc2169720914c4f92b"
+    },
+    "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py": {
+      "bytes": 18144,
+      "sha256": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8"
+    },
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": {
+      "bytes": 29097,
+      "sha256": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27"
+    },
+    "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py": {
+      "bytes": 2243,
+      "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": {
+      "bytes": 8445,
+      "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": {
+      "bytes": 19134,
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": {
+      "bytes": 25923,
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+    },
+    "candidates/qwen2_resident_matrix/official_bf16/owners.py": {
+      "bytes": 9394,
+      "sha256": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a"
+    },
+    "candidates/qwen2_resident_matrix/production_qk16_rebase/POSTIMAGE_PINS.json": {
+      "bytes": 1351,
+      "sha256": "f7b534e22e3d707129a00315343a71365ade205f0b0052a69593146e383659fb"
+    }
+  },
+  "harness_and_composer_pins": {
+    "candidates/qwen2_selected_scala_model/routing_test_support.py": "a45b79fe1fe94eee007222e5820d2c7ace570a887c4244a5aeaf7c585cdd80dc",
+    "candidates/qwen2_selected_scala_model/test_schedule_numeric.py": "6f9655c3eac6811d9d9a4328c95492d7bbc4b0a72c81b23f0af6c92940ba206b",
+    "candidates/qwen2_selected_scala_model/INPUT_PINS.json": "87b03874543f4b9f7accee77d03bc0b983157185f6c518e9f77cc9484571beeb",
+    "candidates/qwen2_ordered_schedule/test_numeric.py": "af816a5c319f759731bedaddd9869eeab6d85bcfeb0cd53497c601051e953a62",
+    "candidates/qwen2_selected_direct_transport/direct_test_support.py": "a690358442a4ffc031506080c70193679775fb29ca1a89d6efe54d8b54b312e7",
+    "candidates/qwen2_selected_direct_transport/prepare.py": "7d9c38aa253c5445208e25504fb115f5e40ecbee07bfab71e49feca86d9376ba"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "status": "PASS_INDEPENDENT_SOFTWARE_CONTROL_REVIEW",
+  "reviewer": "review_ordered_fold_model",
+  "tests": {
+    "isolated": 19,
+    "isolated_optimized": 19
+  },
+  "resume_reran_tests": false,
+  "checks": [
+    "4 before/after source pins",
+    "exact patch rebuild",
+    "6 harness/composer pins",
+    "source-only composer",
+    "8 passing log hashes",
+    "3 retained development failure hashes"
+  ],
+  "functional_blockers": [],
+  "publication_fixes": [
+    "generated pyc removed",
+    "README explicitly labels non-fold ScalarControlAdapter synthetic",
+    "README distinguishes historical parent composition records"
+  ],
+  "ordered_owner_sha256": "c8ef9d1374230bc78e7a38fcdda4208ea842e9a494ecb2dd22b486fc3c62813a",
+  "inner_patch_sha256": "5ad2bd8a052344945490a36a4ff83996137174666f3ac1b15f26c99ce7a4f514",
+  "qualification": "Not native arithmetic, fullblock numerical, Chisel execution or RTL qualification"
+}

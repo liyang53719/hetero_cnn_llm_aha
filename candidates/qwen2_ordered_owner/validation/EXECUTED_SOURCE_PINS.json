@@ -1,0 +1,19 @@
+{
+  "scope": "Software owner/direct control fixture only; source unchanged since run_final",
+  "files": {
+    "SOURCE_PINS.json": "5f80e1b2a0d5f392c4e1ae776c9da7ca0c9b0ddb5696aadc6a83274472b9064b",
+    "ordered_owner.py": "c8ef9d1374230bc78e7a38fcdda4208ea842e9a494ecb2dd22b486fc3c62813a",
+    "owner_hooks.patch": "5ad2bd8a052344945490a36a4ff83996137174666f3ac1b15f26c99ce7a4f514",
+    "postimage/attention_packed_owner/hooks.py": "f8415cf0cc5e78c6b0b0ad46d127f8f5c69ef6c53b142004a9eb03fe40cd46d7",
+    "postimage/ffn_attention/attention_owner.py": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c",
+    "postimage/production_qk16_model/direct_transport.py": "f9c199ff33607d1295fb672f69c549d512aea07b83c9697743b3562f3663b509",
+    "postimage/production_qk16_model/entry.py": "3839bd08cb41eecf8a5442742eb7a7efde0bcdc13af2b2da4e20f0e82ace1257",
+    "prepare.py": "605297550292c5799d4b355566d94234e5f21c4aad0122807201f954c6cfc9c8",
+    "test_direct.py": "1b48a2a3cbdd4b0e9762dbb200bf589e6f840d0b402be47362ec9d793aca4d45",
+    "test_owner.py": "1ef38429db2ad5cd536a14143e051e16a8318df17e4d0dd9f853487e26d1a243"
+  },
+  "results_sha256": "f28966048298382445a935447efb777456773fe05baa81251c38fe19dcd7c327",
+  "postimage_composition_checked": true,
+  "existing_output_rejected": true,
+  "rerun_after_resume": false
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "log": "pv_priority_failure.log",
+    "sha256": "ac3e54f95d81a5d3a59a0efc791d7e03815fb972ddbbae05a4d58f5106a62b22",
+    "finding": "Legacy PV error priority regression; fixed guard scope",
+    "original_retained": true
+  },
+  {
+    "log": "prepare.log",
+    "sha256": "2c23471b2234cf15241905351d612bfe141a9ffb7cc83ce536bc5b14b6badace",
+    "finding": "Old direct postimage rejected by source composer; rebased to published source",
+    "original_retained": true
+  },
+  {
+    "log": "expanded.log",
+    "sha256": "3f3368452d3f184e716040c59042286e817f27c61f9d8dd0fa6ede2afe7fda6c",
+    "finding": "Test harness generator-frame KeyError; corrected traversal",
+    "original_retained": true
+  }
+]

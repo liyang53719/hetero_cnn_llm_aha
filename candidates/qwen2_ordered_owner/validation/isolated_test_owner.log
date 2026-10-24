@@ -1,0 +1,20 @@
+test_actual_owner_progresses_work_then_original_ack_and_terminal (__main__.OwnerHooks.test_actual_owner_progresses_work_then_original_ack_and_terminal) ... ok
+test_bad_matrix_result_rejected_before_work_creation (__main__.OwnerHooks.test_bad_matrix_result_rejected_before_work_creation) ... ok
+test_default_path_outputs_and_shared_identity_unchanged (__main__.OwnerHooks.test_default_path_outputs_and_shared_identity_unchanged) ... ok
+test_early_done_after_final_score_before_ack_is_not_success (__main__.OwnerHooks.test_early_done_after_final_score_before_ack_is_not_success) ... ok
+test_early_done_masks_old_unaccepted_memory_offer (__main__.OwnerHooks.test_early_done_masks_old_unaccepted_memory_offer) ... ok
+test_early_done_retains_accepted_memory_until_matching_response (__main__.OwnerHooks.test_early_done_retains_accepted_memory_until_matching_response) ... ok
+test_early_matching_done_at_every_phase_never_commits_score (__main__.OwnerHooks.test_early_matching_done_at_every_phase_never_commits_score) ... ok
+test_error_retirement_does_not_resume_softmax (__main__.OwnerHooks.test_error_retirement_does_not_resume_softmax) ... ok
+test_foreign_done_cannot_clear_current_group_debt (__main__.OwnerHooks.test_foreign_done_cannot_clear_current_group_debt) ... ok
+test_later_key_numerical_fault_preserves_prefix_without_group_ack (__main__.OwnerHooks.test_later_key_numerical_fault_preserves_prefix_without_group_ack) ... ok
+test_no_scan_on_same_edge_as_final_result_delivery (__main__.OwnerHooks.test_no_scan_on_same_edge_as_final_result_delivery) ... ok
+test_opt_in_requires_strict_backend_before_mutation (__main__.OwnerHooks.test_opt_in_requires_strict_backend_before_mutation) ... ok
+test_override_without_real_done_is_not_an_early_valid (__main__.OwnerHooks.test_override_without_real_done_is_not_an_early_valid) ... ok
+test_pv_error_and_nonfinite_keep_original_numerical_priority (__main__.OwnerHooks.test_pv_error_and_nonfinite_keep_original_numerical_priority) ... ok
+test_reset_each_phase_waits_real_result_done_drain (__main__.OwnerHooks.test_reset_each_phase_waits_real_result_done_drain) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.256s
+
+OK

@@ -1,0 +1,74 @@
+{
+  "status": "PASS_SOFTWARE_OWNER_DIRECT_CONTROL_ONLY",
+  "tests_each_mode": 19,
+  "cpu_limit_seconds": 20,
+  "address_space_bytes": 268435456,
+  "cpu_affinity_count": 1,
+  "wall_limit_seconds": 25,
+  "results": [
+    {
+      "mode": "normal",
+      "test": "test_owner.py",
+      "exit_code": 0,
+      "wall_seconds": 0.43744161998620257,
+      "log": "normal_test_owner.log",
+      "sha256": "c97b1c82bf6855c1c3ee3aab916b25e05d52d9913e4bee5cd74e26f19cc1b893"
+    },
+    {
+      "mode": "normal",
+      "test": "test_direct.py",
+      "exit_code": 0,
+      "wall_seconds": 0.6868849860038608,
+      "log": "normal_test_direct.log",
+      "sha256": "3b2988f0973977814a8657854ca37ef73e26bc6c3788cfbb7f59ada903e75e6c"
+    },
+    {
+      "mode": "optimized",
+      "test": "test_owner.py",
+      "exit_code": 0,
+      "wall_seconds": 0.6146410180372186,
+      "log": "optimized_test_owner.log",
+      "sha256": "349c34f71308a0942a7497f00361ac376376922d6d81b9c74bb6a3f70cade5f2"
+    },
+    {
+      "mode": "optimized",
+      "test": "test_direct.py",
+      "exit_code": 0,
+      "wall_seconds": 0.8663308050017804,
+      "log": "optimized_test_direct.log",
+      "sha256": "601e5bd39c344179b1e7f8802ff98c833d36ac7d9f0ae3ae6f9acb6a0acc32fd"
+    },
+    {
+      "mode": "isolated",
+      "test": "test_owner.py",
+      "exit_code": 0,
+      "wall_seconds": 0.46495889697689563,
+      "log": "isolated_test_owner.log",
+      "sha256": "3feddac239a42376a9cd2f4c21968777f9b64f54843adce68c3b786ae9a14f65"
+    },
+    {
+      "mode": "isolated",
+      "test": "test_direct.py",
+      "exit_code": 0,
+      "wall_seconds": 0.6716428169747815,
+      "log": "isolated_test_direct.log",
+      "sha256": "f9fc9191a8063731dd35be26d4964a0c2cdcc2eb87d88a3e1a8858fab8ce5000"
+    },
+    {
+      "mode": "isolated_optimized",
+      "test": "test_owner.py",
+      "exit_code": 0,
+      "wall_seconds": 0.5782688579638489,
+      "log": "isolated_optimized_test_owner.log",
+      "sha256": "f1676b7ad3bcf9fac6dfc83add8df360e571839c88e2bab189750b9af983b377"
+    },
+    {
+      "mode": "isolated_optimized",
+      "test": "test_direct.py",
+      "exit_code": 0,
+      "wall_seconds": 0.8232058339635842,
+      "log": "isolated_optimized_test_direct.log",
+      "sha256": "8de482b862e1fee7bb03faa00ce1ef17477107c2532148f2f0097b07641d7404"
+    }
+  ]
+}

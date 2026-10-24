@@ -1,0 +1,127 @@
+--- a/candidates/qwen2_resident_matrix/attention_packed_owner/hooks.py
++++ b/candidates/qwen2_resident_matrix/attention_packed_owner/hooks.py
+@@ -5,11 +5,13 @@
+ from ..ffn_public.prefix_owners import PrefixFault
+ from ..production_qk16_model.schedule import ProductionQk16Schedule
+ from ..production_qk16_model.routing import Qk16LegacyPvClient
++from ..production_qk16_model import ordered_owner
+ 
+ def install(owner,schedule):
+     if schedule is not None and type(schedule) not in (PackedSchedule,ProductionQk16Schedule):raise ValueError('exact packed schedule required')
+     if schedule is not None:schedule.bind(owner)
+     owner.packed_schedule=schedule;owner.scratch_request=None;owner.scratch_pending=False;owner.scratch_write_tag=None;owner.scratch_leased=False;owner.scratch_last=None;owner.packed_memory_tag=None
++    ordered_owner.initialize(owner)
+ 
+ def ports(o,p):
+     p.update(scratch=o.scratch_request if not o.scratch_pending else None,scratch_response_ready=o.scratch_pending)
+@@ -23,11 +25,13 @@
+     return (Qk16LegacyPvClient(o.matrix,o) if type(o.packed_schedule) is ProductionQk16Schedule
+             else PackedClient(o.matrix,o))
+ def fault(o):
++    ordered_owner.fault(o)
+     if not o.scratch_pending:o.scratch_request=None
+     queue_release(o)
+ 
+ def action(o,a):
+     if o.packed_schedule is None:return False
++    if ordered_owner.action(o,a):return True
+     if type(a) in (PackedRequest,PackedConsumerAck):
+         o.matrix_request=a;o.state='matrix_issue';return True
+     if type(a) is ScratchAction:
+@@ -90,3 +94,13 @@
+     elif type(result) is PackedStepAccepted:o.counts['packed_nonfinal_accept_completions']+=1
+     elif type(result) is PackedRetired:o.counts['packed_consumer_retirements']+=1
+     else:raise PrefixFault('Protocol','unknown packed client completion')
++
++
++def ordered_pre_client(o,p,done_override):
++    ordered_owner.pre_client(o,p,done_override)
++
++def ordered_post_client(o,p):
++    ordered_owner.post_client(o,p)
++
++def ordered_result_error(o,result):
++    return ordered_owner.result_error(o,result)
+--- a/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py
++++ b/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py
+@@ -243,6 +243,7 @@
+                 self._advance()
+             except PrefixFault as error:
+                 self._fault(error.status, error.detail)
++        packed.ordered_pre_client(self, p, done_override)
+         if p['memory'] is not None and memory_ready:
+             p['memory_fire'] = True
+             self.counts['write_requests' if self.request.write else 'read_requests'] += 1
+@@ -298,12 +299,13 @@
+                     p['matrix_result_fire'] = True
+                     packed.record_result(self, mp['result'])
+                     self.matrix_request = None
+-                    if not draining:
++                    if not draining and not packed.ordered_result_error(self, mp['result']):
+                         self._advance(mp['result'])
+                 if self.state == 'drain' and not self.memory_pending and not self.scratch_pending and not self.scratch_leased and self.matrix_client.ports()['drained']:
+                     self._finish(self.status, self.detail)
+             except MatrixProtocolError as error:
+                 self._fault('Protocol', str(error))
++        packed.ordered_post_client(self, p)
+         if p['response'] is not None and response_ready:
+             if self.matrix.owner is self:
+                 self.matrix.retire_owner_response(self)
+--- a/candidates/qwen2_resident_matrix/production_qk16_model/entry.py
++++ b/candidates/qwen2_resident_matrix/production_qk16_model/entry.py
+@@ -1,17 +1,21 @@
+ """Explicit owner-level opt-in; this is not a full-M128 numerical admission."""
+ from ..attention_packed_owner import hooks
+ from .schedule import ProductionQk16Schedule
++from .ordered_work import StrictLaneOps
+ 
+ STATUS = 'TEMP_NOT_FULL_M128_NUMERICALLY_QUALIFIED'
+ 
+ 
+-def install(owner):
++def install(owner, *, ordered_fold=False, ordered_lanes=None):
++    if type(ordered_fold) is not bool or (ordered_fold and type(ordered_lanes) is not StrictLaneOps) or (not ordered_fold and ordered_lanes is not None):
++        raise ValueError('explicit ordered mode and strict backend must be selected together')
+     from ..official_bf16.owners import OfficialAttentionOwner
+     if (type(owner) is not OfficialAttentionOwner or not owner.ports()['job_ready'] or
+             getattr(owner, 'packed_schedule', None) is not None or
+             owner.matrix.owner is not None or owner.scalar.client is not None):
+         raise ValueError('selected scheduling requires the exact idle original owner/services')
+-    schedule = ProductionQk16Schedule()
++    schedule = ProductionQk16Schedule(ordered_fold=ordered_fold)
++    if ordered_fold:schedule.ordered_lanes = ordered_lanes
+     hooks.install(owner, schedule)
+     return schedule
+ 
+--- a/candidates/qwen2_resident_matrix/production_qk16_model/direct_transport.py
++++ b/candidates/qwen2_resident_matrix/production_qk16_model/direct_transport.py
+@@ -95,7 +95,7 @@
+                 'selected direct Attention conflicts with Dense/prefix obligations')
+ 
+ 
+-def bind(x, physical, job):
++def bind(x, physical, job, *, ordered_fold=False, ordered_lanes=None):
+     require(getattr(x, 'selected_direct_binding', None) is None,
+             'selected direct route is single-bound')
+     require(x.attention_transport is None and x.attention_transport_binding is None and
+@@ -119,17 +119,17 @@
+                 'selected direct binding precedes original official role validation')
+     require(type(job.m) is int and 1 <= job.m <= 128, 'selected direct M1..128 required')
+     owner._validate(job)
+-    schedule = install_schedule(owner)
++    schedule = install_schedule(owner, ordered_fold=ordered_fold, ordered_lanes=ordered_lanes)
+     binding = DirectBinding(x, physical, job, schedule)
+     x.selected_direct_binding = binding
+     binding.check(x)
+     return binding
+ 
+ 
+-def run(x, physical, job, *, final_ack_stall=5):
++def run(x, physical, job, *, final_ack_stall=5, ordered_fold=False, ordered_lanes=None):
+     require(type(final_ack_stall) is int and final_ack_stall > 0,
+             'Attention final ACK must have a positive bounded stall')
+-    binding = bind(x, physical, job)
++    binding = bind(x, physical, job, ordered_fold=ordered_fold, ordered_lanes=ordered_lanes)
+     report = execute_attention_owner(x, physical, job, final_ack_stall=final_ack_stall,
+                                      enable_raw_kv=False)
+     binding.check(x)

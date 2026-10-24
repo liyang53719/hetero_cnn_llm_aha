@@ -1829,3 +1829,12 @@ PASS仅SCALA_COMPILE_ONLY，不执行Emit App/Module/CHIRRTL、真实Scalar/ACK�
 R2仅一次Enum23后原序0..22显式命名，逆替换整owner恢复原SHA；模型及24外源不变。15组纯Python控制重跑自然0，34内容pins同，两轨迹全部字段/hash与原相同，限模拟服务。新26源实际编译25418自然0/33.930169611秒，349输入前后完整身份同，142class/1467305B、41必要类齐，WNOWAIT自然0/reap/group absent/cleanup确认。实际独审SHA256 1486feb0998506858a6205d9d318f550e8898c45c291c5950a719a2bd6bccf9d。
 
 PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五RTL0/5、旧Qwen2 UNKNOWN不变。公开11项57570B在 candidates/qwen35_chunk_derived_r2/，manifest SHA256 f202b82ba4c26c4d26aa57bfd210c1807d247b2dd37a44f4977447468bebd63e；仅新owner/patch/绑定表/测试diff/runner/相对pins及摘要，不重复模型或私有日志/机器plan，非完整可直接运行closure。未push、无新CI、无清理。
+
+
+## PASS（仅单owner CHIRRTL前端）：DerivedAndPair R2
+
+唯一84772实际自然0/总10.694218065秒；495输入before/after含完整身份同、142原class+3emitter逐hash，双阶段WNOWAIT自然0/reap/group absent/cleanup确认。独立类加载仅24输入普通+3emitter、655隐藏/18限定宿主，无Loan/MemoryEngine/Scalar/HardFloat服务实现。29纯parser组是先行限定控制，非硬件测试。
+
+单CHIRRTL213402B，SHA256 bb403c278d839b9dbd3dcb03e7e4a576dfeb4d37b34655cec150c27f3797e7ce；独立解析117端口叶与原源码全匹配，单owner无子实例。实际独审SHA256 7164c0bf279e5af50b2d68890f2f4ecb6e698d734951ce759afc3d1791f763bd。只构造/CHIRRTL前端，不是实际Loan/Scalar/ACK/算术或RTL仿真/完整chunk；五RTL0/5、Qwen2full UNKNOWN不变。
+
+公开12项109622B在 candidates/qwen35_chunk_derived_chirrtl/，manifest SHA256 ee247fc9e4a2ac64c824143c85f57474e283129f747a9a74b7666135fa08c88d；复用base349相对pins加146增量，无生产源/模型/工具/IR/class/日志重复。原runner仍非完整可直接执行closure。原Enum解构FAIL保留；未push、无新CI、无清理。

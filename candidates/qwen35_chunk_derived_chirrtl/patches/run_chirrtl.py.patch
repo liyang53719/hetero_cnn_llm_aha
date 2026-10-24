@@ -1,0 +1,100 @@
+--- 1549/run_chirrtl.py
++++ 1701/run_chirrtl.py
+@@ -69,7 +69,7 @@
+         need(len(files) < 4096 and s.st_size <= 4 * 1024**2, 'owned file cap')
+         rel = p.relative_to(root).as_posix()
+         need(p.suffix.lower() not in {'.v', '.sv', '.fir', '.mlir'} or
+-             (p.suffix == '.fir' and rel == 'ir/GdnChunkLoadPrepOwner.fir'),
++             (p.suffix == '.fir' and rel == 'ir/GdnChunkDerivedAndPairOwner.fir'),
+              'only the fixed CHIRRTL artifact, no RTL/other IR')
+         total += s.st_size
+         logs += s.st_size if p.suffix == '.log' else 0
+@@ -110,8 +110,8 @@
+ 
+ def verify_inputs(plan):
+     need(len(plan['tool_paths']) == 314 and len(plan['sources']) == 1 and
+-         len(plan['input_classes']) == 116 and len(plan['inputs']) == 462,
+-         'fixed tools, one emitter source and original 116-class closure')
++         len(plan['input_classes']) == 142 and len(plan['inputs']) == 495,
++         'fixed tools, one emitter source and original 142-class closure')
+     tree = inventory(Path(plan['input_class_root']))
+     need(set(tree['files']) == set(plan['input_class_relatives']), 'exact original class directory')
+     return {p: checked(p, pin) for p, pin in plan['inputs'].items()}
+@@ -143,7 +143,7 @@
+     """Pure postcondition over bounded log text. Never imports or executes logged classes."""
+     available = {x[:-6].replace('/', '.') for x in plan['input_class_relatives']}
+     original = set(plan['allowed_input_classes'])
+-    need(len(original) == len(plan['allowed_input_classes']) == 19 and original <= available,
++    need(len(original) == len(plan['allowed_input_classes']) == 24 and original <= available,
+          'exact allowed frontend subset of compiled inputs')
+     need(set(compiled) == set(plan['expected_emitter_classes']), 'exact fixed emitter class set')
+     emitted = {x[:-6].replace('/', '.') for x in compiled}
+@@ -185,12 +185,12 @@
+ 
+ def main(plan, start, stop, work_stop, deadline_handler):
+     work = Path(plan['work'])
+-    need(plan['schema'] == 'qwen35-chunk-loadprep-chirrtl-bound-v1', 'plan schema')
++    need(plan['schema'] == 'qwen35-chunk-derived-chirrtl-bound-v1', 'plan schema')
+     need(plan['compile_argv'].count('scala.tools.nsc.Main') == 1 and
+          plan['compile_argv'][-1:] == list(plan['sources']) and
+          plan['compile_argv'][plan['compile_argv'].index('-d') + 1] == str(work / 'classes'),
+          'exact emitter-only compilation')
+-    need(plan['elaborate_argv'][-1] == 'heteronpu.continuous.contracttests.GdnChunkLoadPrepChirrtl' and
++    need(plan['elaborate_argv'][-1] == 'heteronpu.continuous.contracttests.GdnChunkDerivedChirrtl' and
+          plan['elaborate_argv'][plan['elaborate_argv'].index('-cp') + 1].split(':') ==
+          [str(work / 'classes'), plan['input_class_root']] + plan['jar_paths'] and
+          '-Djava.security.manager=allow' in plan['elaborate_argv'] and
+@@ -285,7 +285,7 @@
+             if name == 'compile_emitter':
+                 compiled = inventory(work / 'classes', hashes=True)['files']
+                 need(compiled and all(k.endswith('.class') and
+-                     k.startswith('heteronpu/continuous/contracttests/GdnChunkLoadPrepChirrtl')
++                     k.startswith('heteronpu/continuous/contracttests/GdnChunkDerivedChirrtl')
+                      for k in compiled), 'only emitter class output, no production recompilation')
+                 need(set(plan['expected_emitter_classes']) == set(compiled), 'exact emitter main/object/guard compiled')
+                 dump(work / 'COMPILED_EMITTER_CLASSES.json', compiled)
+@@ -299,25 +299,25 @@
+         elaboration = json.loads(lines[-1])
+         need(elaboration['status'] == 'PASS_OWNER_CHIRRTL_FRONTEND_ONLY' and
+              type(elaboration['constructors']) is int and elaboration['constructors'] == 1 and
+-             type(elaboration['io_leaf_checks']) is int and elaboration['io_leaf_checks'] == 97 and
++             type(elaboration['io_leaf_checks']) is int and elaboration['io_leaf_checks'] == 117 and
+              elaboration['sources_bound'] is True and elaboration['guard_locked'] is True and
+              all(type(elaboration[k]) is int and elaboration[k] == 0 for k in
+                  ('external_exec_attempts', 'network_attempts', 'guard_replacement_attempts', 'instances')) and
+              elaboration['modules'] == 1 and elaboration['RTL_generated'] is False and
+              elaboration['actual_handshake_tested'] is False and elaboration['numerical_tested'] is False,
+              'one real frontend elaboration and child guard checks completed')
+-        fir_raw = terminal_bytes(work / 'ir' / 'GdnChunkLoadPrepOwner.fir', 2 * 1024**2)
++        fir_raw = terminal_bytes(work / 'ir' / 'GdnChunkDerivedAndPairOwner.fir', 2 * 1024**2)
+         fir = fir_raw.decode('utf-8')
+         need(type(elaboration['fir_bytes']) is int and len(fir_raw) == elaboration['fir_bytes'] and
+              hashlib.sha256(fir_raw).hexdigest() == elaboration['fir_sha256'], 'CHIRRTL exact digest/bytes')
+         fir_lines = [x.strip() for x in fir.splitlines()]
+         need(fir_lines and fir_lines[0].startswith('FIRRTL version ') and
+-             sum(x.startswith('circuit GdnChunkLoadPrepOwner :') for x in fir_lines) == 1 and
++             sum(x.startswith('circuit GdnChunkDerivedAndPairOwner :') for x in fir_lines) == 1 and
+              sum(x.startswith('module ') for x in fir_lines) == 1 and
+-             sum(x.startswith('module GdnChunkLoadPrepOwner :') for x in fir_lines) == 1 and
++             sum(x.startswith('module GdnChunkDerivedAndPairOwner :') for x in fir_lines) == 1 and
+              not any(x.startswith(('extmodule ', 'inst ', 'mem ', 'cmem ', 'smem ')) for x in fir_lines),
+              'single owner CHIRRTL circuit without instances/memories/external modules')
+-        need({p.name for p in (work / 'ir').iterdir()} == {'GdnChunkLoadPrepOwner.fir'}, 'one IR artifact')
++        need({p.name for p in (work / 'ir').iterdir()} == {'GdnChunkDerivedAndPairOwner.fir'}, 'one IR artifact')
+         loaded_raw = terminal_bytes(work / 'elaboration-class-load.log', limits['log_bytes'])
+         class_scope = validate_loaded_classes(loaded_raw, plan, compiled)
+         after = verify_inputs(plan)
+@@ -334,11 +334,11 @@
+              'final owned cap with terminal receipt reserve')
+         need(time.monotonic() < stop, 'terminal global deadline')
+         result.update(status='PASS_OWNER_CHIRRTL_FRONTEND_ONLY', emitter_source_count=1,
+-                      original_class_count=116, emitter_class_count=len(compiled), tool_count=314,
++                      original_class_count=142, emitter_class_count=len(compiled), tool_count=314,
+                       records=records, usage=usages, elaboration=elaboration,
+                       elaboration_completed=True, owner_constructor_completed=True,
+                       elapsed_seconds=time.monotonic() - start,
+-                      qualification='One owner Chisel frontend/97 declared IO checks/CHIRRTL only; no firtool inference, RTL, handshake or numerical test')
++                      qualification='One owner Chisel frontend/117 declared IO checks/CHIRRTL only; no firtool inference, RTL, handshake or numerical test')
+     except BaseException as error:
+         result.update(status='FAIL_OR_UNKNOWN_OWNER_CHIRRTL_ATTEMPT', exception_type=type(error).__name__,
+                       exception=str(error)[:4096], elapsed_seconds=time.monotonic() - start)

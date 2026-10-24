@@ -1,0 +1,110 @@
+{
+  "actual": {
+    "IR": {
+      "artifact_included": false,
+      "bytes": 213402,
+      "circuits": 1,
+      "external_modules": 0,
+      "format": "CHIRRTL/FIRRTL3.3.0",
+      "instances": 0,
+      "memory_instances": 0,
+      "modules": 1,
+      "sha256": "bb403c278d839b9dbd3dcb03e7e4a576dfeb4d37b34655cec150c27f3797e7ce"
+    },
+    "before_after_exact_including_stamps": true,
+    "class_loading": {
+      "all_loaded_rows": 5160,
+      "all_required_loaded": true,
+      "hidden_host_count": 18,
+      "hidden_hosts_previously_loaded_and_source_exact": true,
+      "hidden_lambda_count": 655,
+      "no_HardFloat_Gemmini_Loan_implementation_MemoryEngine_BlockScalarFloat_or_LoadPrepOwner": true,
+      "ordinary_emitter_classes": 3,
+      "ordinary_input_classes": 24,
+      "ordinary_source_roots_exact": true,
+      "ordinary_total": 27
+    },
+    "cleanup": {
+      "WNOWAIT_anchor_reap_group_absence_confirmed": true,
+      "original_anchored_group_cleanup_signals_after_observed_exit": true,
+      "timeouts": false,
+      "two_natural_exit0": true
+    },
+    "compile_emitter_seconds": 6.518545,
+    "cumulative_children_maxrss_KiB": 229440,
+    "elaborate_seconds": 3.49451,
+    "guard": {
+      "external_exec_attempts": 0,
+      "installed_locked": true,
+      "network_attempts": 0,
+      "replacement_attempts": 0,
+      "scope": "current elaboration JVM Java checkExec/network paths, not general system sandbox"
+    },
+    "inputs_before_after": 495,
+    "internal_elapsed_seconds": 10.693885695000063,
+    "natural_launcher_exit": 0,
+    "new_emitter_class_bytes": 27544,
+    "new_emitter_classes": 3,
+    "original_class_inputs": 142,
+    "owned_output_bytes": 1894815,
+    "peak_sampled_descendant_RSS_bytes": 234942464,
+    "ports": {
+      "clock_reset_included": true,
+      "independent_IR_leaf_comparison": true,
+      "input_bits": 2525,
+      "input_leaves": 60,
+      "leaf_checks": 117,
+      "output_bits": 2790,
+      "output_leaves": 57
+    },
+    "source_constructor_count": 1
+  },
+  "actual_review_pin_only": {
+    "bytes": 10558,
+    "sha256": "7164c0bf279e5af50b2d68890f2f4ecb6e698d734951ce759afc3d1791f763bd"
+  },
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "aggregate_is_sample_enforced_not_instantaneous": true,
+    "aggregate_rss_bytes": 2147483648,
+    "child_cpu_seconds": 150,
+    "cleanup_seconds": 5,
+    "compile_work_max_seconds": 120,
+    "cpu_affinity_count": 1,
+    "cpu_selection": "min(current inherited allowed affinity); keep all JVM threads on it",
+    "elaboration_work_max_seconds": 30,
+    "log_bytes": 2097152,
+    "minimum_host_memavailable_bytes": 3221225472,
+    "minimum_tmpfs_available_bytes": 67108864,
+    "owned_output_bytes": 16777216,
+    "phase_work_stop_rule": "min(shared start+150, phase entry+phase cap); preparations and first cleanup consume same shared work window",
+    "postflight_seconds": 25,
+    "single_file_bytes": 4194304,
+    "total_wall_seconds": 180,
+    "work_seconds": 150
+  },
+  "not_granted": [
+    "memory request/ACK/backpressure or held-terminal runtime verification",
+    "real Scalar/Loan arithmetic or scheduling",
+    "independent FP32 validation",
+    "complete chunk/Host/public/recurrent integration",
+    "firtool/SystemVerilog/RTL simulation",
+    "synthesis/latency/utilization",
+    "any resolution of old Qwen2 UNKNOWN"
+  ],
+  "preserved_history": [
+    "Original Derived compile exit1 is retained; R2 compile PASS does not prove universal Scala>22 root cause.",
+    "Previous frontend/postcondition failures and parser-wrapper errors are not removed or relabeled."
+  ],
+  "production_sources_and_full_tool_pins_not_duplicated": true,
+  "pure_parser": {
+    "groups": 29,
+    "internal_seconds": 0.011710790000506677,
+    "natural_exit_code": 0,
+    "outer_seconds": 0.08458398500806652,
+    "scope": "synthetic bounded class-log parsing only, not JVM/candidate execution"
+  },
+  "schema": "derived-owner-chirrtl-public-summary-v1",
+  "status": "PASS_SINGLE_DERIVED_OWNER_CHIRRTL_FRONTEND_ONLY",
+  "summary_zh": "对枚举绑定修复后的DerivedAndPair单owner，先独立编译唯一emitter，再用已有142个class中的精确接口/owner子集执行一次真实Chisel构造与CHIRRTL序列化。没有构造Scalar、Loan、MemoryEngine、HardFloat或第二Vector服务实例。"
+}

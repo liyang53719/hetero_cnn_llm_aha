@@ -1,0 +1,50 @@
+{
+  "files": {
+    "INPUT_DELTA.json": {
+      "bytes": 34367,
+      "sha256": "5051b5c56cd1abddcdb1883fe4e5a8be5535babc56fafb7c6f9611e9dc0cea78"
+    },
+    "PUBLICATION_WHITELIST.json": {
+      "bytes": 472,
+      "sha256": "7984d2d7a4b434cc3a75a024eab1585f532e3cb51f8adce82eef0a4fdbd691f5"
+    },
+    "README.md": {
+      "bytes": 2904,
+      "sha256": "b1df7e333b14e4c6fe3432d0265a007fcb1b08d840da95cf9f5355468f80b543"
+    },
+    "SUMMARY.json": {
+      "bytes": 4310,
+      "sha256": "1b1ccc7a4d05077a8c0535504703f69ecdeb7486d7263ea5f55abb173ce808e6"
+    },
+    "launch_chirrtl.py": {
+      "bytes": 3611,
+      "sha256": "2ec9c0f002cffb7d8e0e238de86347e3de7b90e04f433352950e482d75fbbadc"
+    },
+    "parser_controls.py": {
+      "bytes": 12090,
+      "sha256": "f4759003828f3ddd29b1413fb23f01a731745346ad56ca1d3ea67a3a29e3f4ae"
+    },
+    "patches/GdnChunkDerivedChirrtl.scala.patch": {
+      "bytes": 11377,
+      "sha256": "d331ddf13032140da372344fff55bf975a913d47a7d82f365f104c47dc10bc5f"
+    },
+    "patches/launch_chirrtl.py.patch": {
+      "bytes": 739,
+      "sha256": "1ca797ec28191b4fc298dde7a72bd3e4e478d74bc545ccccdee2ca762eea7658"
+    },
+    "patches/run_chirrtl.py.patch": {
+      "bytes": 7481,
+      "sha256": "8d1cda60f45c66276d2b92e05f31d13cdcf052ad75eb67e40238554862c2ae37"
+    },
+    "run_chirrtl.py": {
+      "bytes": 19600,
+      "sha256": "b049bd763fc1d479aad942674b5960af9a9e749f6c80297d435dc72e3bb32b19"
+    },
+    "source/GdnChunkDerivedChirrtl.scala": {
+      "bytes": 10908,
+      "sha256": "4fef878d72fb5a058873c3b65776e36dfcf135a96283b5c4899ca4ce0b6e2a05"
+    }
+  },
+  "schema": "derived-chirrtl-public-source-excerpt-v1",
+  "scope": "single-owner CHIRRTL frontend only; no production/tool payload duplication; not standalone"
+}

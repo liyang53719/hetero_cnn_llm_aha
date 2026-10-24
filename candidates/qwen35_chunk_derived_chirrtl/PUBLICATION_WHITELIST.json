@@ -1,0 +1,18 @@
+{
+  "files": [
+    "INPUT_DELTA.json",
+    "PUBLICATION_WHITELIST.json",
+    "PUBLIC_MANIFEST.json",
+    "README.md",
+    "SUMMARY.json",
+    "launch_chirrtl.py",
+    "parser_controls.py",
+    "patches/GdnChunkDerivedChirrtl.scala.patch",
+    "patches/launch_chirrtl.py.patch",
+    "patches/run_chirrtl.py.patch",
+    "run_chirrtl.py",
+    "source/GdnChunkDerivedChirrtl.scala"
+  ],
+  "no_additional_files_authorized": true,
+  "schema": "exact-public-file-allowlist-v1"
+}

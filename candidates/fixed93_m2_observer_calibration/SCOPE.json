@@ -1,0 +1,45 @@
+{
+  "actual_run_observation_status": "CONFIRMED_MATCHED_SUCCESS_M2_OBSERVER_EQUIVALENCE_ONLY",
+  "envelope_is_executable_budget": false,
+  "excluded_execution": [
+    "captured original tests",
+    "original preflights",
+    "native ELF loading",
+    "model execution",
+    "actual calibration",
+    "fullblock",
+    "M128",
+    "numerical qualification"
+  ],
+  "execution_authority": "NONE; no permissions are inherited or created",
+  "historical_calibration_envelope": {
+    "address_space_cap_bytes": 2147483648,
+    "arm_order": [
+      "old",
+      "new"
+    ],
+    "cleanup_seconds": 5,
+    "cpu_count": 1,
+    "fresh_processes": true,
+    "post_seconds": 10,
+    "sampled_group_rss_bytes": 2147483648,
+    "total_owned_output_bytes": 83886080,
+    "total_wall_seconds": 120,
+    "work_seconds": 105
+  },
+  "independent_actual_receipt": {
+    "bytes": 40115,
+    "included": false,
+    "scope": "M2 observer equivalence only; no fullblock or numerical acceptance",
+    "sha256": "8055216d02e43c73d62a6fefaea64f32498965421631c5028e53f9b758f5a9c4"
+  },
+  "packaging_tests": [
+    "source hash and length consistency",
+    "captured source private absolute-path scan",
+    "in-memory compilation only",
+    "synthetic in-memory checker self-tests"
+  ],
+  "purpose": "source inspection and inert compile/hash validation only",
+  "schema": "public-source-review-scope-v1",
+  "wholeblock_status": "INCOMPLETE_WHOLEBLOCK"
+}

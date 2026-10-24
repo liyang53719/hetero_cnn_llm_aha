@@ -1599,3 +1599,13 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - PASS有限范围：入树后root重跑合成测试自然0/0.167948秒/RSS22236KiB。真实共享dispatcher和原wholeblock回调用于MOCK public/support帧，六scalar消费者记录、正常/处理异常/传播异常、恢复debt、持续漂移拒绝、瞬时漂移预期差异闭合。独立listener确认_op仍被分发；不是所有域或真实中间数组的执行覆盖，无native/DUT。
 - 独立无ELF的同ctypes结构微基准：active dispatcher正常call/return pair中位164.979→9.000微秒，约18.33倍；仅此回调成本，不是完整M128或硬件速度。直接callback新计时部分零增量是CPU时钟粒度，不是零成本。旧同频预构造另测仅约1.09倍，未混入本版。
 - ONGOING / TEMP：新policy真实装配绑定与已有native的有限M2成功子链差分校准待做；M2不得冒充完整block/prefill通过。旧0300冻结、不借其cold或一次性authority准入新版本。完整M128数值及五block RTL仍未通过，无新MAC利用率实测。
+
+## PASS（仅实际M2观测差分）/ INCOMPLETE：完整block仍未验收（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_m2_observer_calibration/` 20文件便携源码审阅摘录，14份原Python逐字保存；无原机器manifest/budget、ADMISSION、日志、数组、权重或ELF。入树后hash/15文件内存compile/13合成self-tests自然退出0；不执行摘录中的模型或运行入口，本公开摘录不是独立可运行包。
+- 两次入口FAIL均保留：0337实际1.2025秒自然失败，原Git来源校验读mirror C++源码被新只读清单漏列；0407实际2.2029秒自然失败，缺原成功入口的3条canonical imports。两次原WNOWAIT非零退出/reaped/group absent/cleanup均闭合，未到Attention计算；0407已加载并配置模型ELF，不写成zero-native。runtime内M16命令metadata此前已生成；未到的是context的M128形状metadata/owner构造。
+- 修正逐层验证：真实profile.verify核15spec/17唯一路径；0417真实加载预检R3自然0/14.240883秒，50+24描述符、9模块11类/helpers/revalidate通过。原metadata误拒和额外profile静态检查超时记录不改成PASS。预检不加载目标模型ELF、不计算。
+- PASS精确范围：0417单次两个fresh进程old→new，各跑同一真实Attention M2成功子链、既有native算术与原共享dispatcher/双observer/codec。外层自然0/85.059277秒，无外部soft/hard停线；原两child WNOWAIT0及清理闭合。每arm480 normal steps，非两个M1、非完整block。
+- 实际独审 `CONFIRMED_MATCHED_SUCCESS_M2_OBSERVER_EQUIVALENCE_ONLY`，摘要SHA8055216d02e43c73d62a6fefaea64f32498965421631c5028e53f9b758f5a9c4：97最终封闭文件10958996B逐hash；33数组/存在掩码/输出文件逐字相同，transport相同；每arm8565 Attention与2211 wholeblock语义记录一致。11011个opaque身份差异保留，仅允许字段，4长期对象双向映射保持；不宣称短命对象跨进程alias等价。独审未复跑DUT/decoder。
+- 性能实测分层：main_loop CPU34.917529478→32.520110039秒（约减少6.9%）；wall35.905736048→33.802740322秒（约减少5.86%）。不是18.33倍整体加速，不是硬件周期或MAC利用率。合成微段倍数不能外推完整M128时限。
+- ONGOING：仅主循环有界栈采样诊断设计中，尚未实际执行；已用纯stdlib实证cProfile漏trace回调内部成本，拟用SIGPROF且不改原SIGALRM期限。当前M128/fullblock/独立数值资格/RTL均false，五block完整RTL仍0/5，最终90%目标保留。不运行未经耗时校准的长作业，不清理原失败/唯一证据。

@@ -1,0 +1,125 @@
+{
+  "schema": "router-cold-source-requalification-v1",
+  "date_utc": "2026-10-24",
+  "local_base_commit": "e4580b57282f20e2844fb8b07db361917853f291",
+  "status": "PASS_CURRENT_COLD_SOURCE_IDENTITY_AND_REJECTION_ONLY",
+  "actual_qualification_status": "TEMP_REQUALIFICATION_REQUIRED",
+  "historical_actual_pass_inherited": false,
+  "actual_router_replay_executed": false,
+  "vector_matrix_native_arithmetic_executed": false,
+  "native_build_executed": false,
+  "full_block_executed": false,
+  "rtl_executed": false,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "frozen_identity_sha256": "bd2be32639995ec7b4c3f1c8248f4eb667b7d6046e444a8d6fd819c40c0da7b2",
+  "cold_identity_sha256": "bd899b0c4b6fd56cedd748e2844e085da0e4bf6375f2d31dc95d24fc90c4ddf8",
+  "source_coverage": {
+    "frozen_paths": 108,
+    "additional_paths": 3,
+    "total_paths": 111,
+    "per_source_hash_rejection_checks": 111
+  },
+  "actual_gate_function_ast_unchanged": {
+    "source_identity": true,
+    "run_actual": true,
+    "replay": true
+  },
+  "tests": {
+    "normal": {
+      "tests": 21,
+      "seconds": 1.132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "optimized": {
+      "tests": 21,
+      "seconds": 1.276,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "dependency_controls": {
+      "tests": 36,
+      "seconds": 0.091,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "cold_cli": {
+    "normal": "TEMP_REQUALIFICATION_REQUIRED",
+    "optimized": "TEMP_REQUALIFICATION_REQUIRED",
+    "actual_status": "NOT_EXECUTED",
+    "cold_source_identity_status": "PASS",
+    "no_numpy_or_torch_import_verified_by_subprocess_test": true,
+    "native_dlopen_rejected_by_subprocess_tripwire": true
+  },
+  "limits": {
+    "cpu_affinity_count": 1,
+    "address_space_bytes": 536870912,
+    "suite_wall_seconds": 120,
+    "cli_wall_seconds": 30
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "PyYAML": "6.0.3"
+  },
+  "retained_preparation_failures": [
+    {
+      "scope": "initial sparse router suite",
+      "tests": 20,
+      "errors": 3,
+      "failures": 0,
+      "reason": "required tracked model profile absent from sparse checkout",
+      "remedy": "materialized exact tracked config/model_profiles from independent clone"
+    },
+    {
+      "scope": "initial sparse supplementary controls",
+      "tests": 36,
+      "errors": 1,
+      "failures": 0,
+      "reason": "tracked qwen35_35b_exp package absent from sparse checkout",
+      "remedy": "materialized exact tracked package from independent clone"
+    }
+  ],
+  "original_ci": {
+    "commit": "df45d5a7a316f066adf427c17ae28d68ade5f32c",
+    "job_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40078020201/job/120825503256",
+    "normal_tests": 15,
+    "normal_passed": 14,
+    "normal_failed": 1,
+    "optimized_tests_executed": false,
+    "cold_clis_executed": false,
+    "final_boundary_check_executed": false
+  },
+  "retained_log_fingerprints": {
+    "final-normal.log": {
+      "bytes": 3455,
+      "sha256": "78687d9f320ea6eca45a207b7b9bad5c09a6b78380c3309f7c8beadf042b8310"
+    },
+    "final-optimized.log": {
+      "bytes": 3455,
+      "sha256": "ad87f2e3e3025b5d32125979e9f9f3e09528506c3286427db4a3c21764c45a33"
+    },
+    "final-normal-cli.log": {
+      "bytes": 1688,
+      "sha256": "ab53d12e06d1a29db912284918236056859c7280b1ab6d427c2699fcd807eaa4"
+    },
+    "final-optimized-cli.log": {
+      "bytes": 1688,
+      "sha256": "ab53d12e06d1a29db912284918236056859c7280b1ab6d427c2699fcd807eaa4"
+    },
+    "current-dependency-controls-2.log": {
+      "bytes": 7266,
+      "sha256": "845164121ea0fe1e87b8a3039dedd0e953eb63de5c38716a0e93071d98f56cff"
+    }
+  },
+  "source_fingerprints": {
+    "candidates/qwen35_35b_router/run_logits.py": "68d9a3d3c8b211177f18e0db09f96bed907475e911ed338cb210d5f4a291ce08",
+    "candidates/qwen35_35b_router/test_logits.py": "2658b1a45792da7e842af0ba1824b1aac90f3b31c4710e989c2acc0c7281afc7",
+    ".github/workflows/qwen35-router-logits-cold.yml": "d73578b07de254ea1ff5bff8f83517b5ca72361c42e33832305a2b16d6bbc8c4"
+  }
+}

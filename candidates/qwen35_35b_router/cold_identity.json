@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "scope": "CURRENT_COLD_SOURCE_IDENTITY_ONLY",
+  "actual_qualification_status": "TEMP_REQUALIFICATION_REQUIRED",
+  "frozen_identity_sha256": "bd2be32639995ec7b4c3f1c8248f4eb667b7d6046e444a8d6fd819c40c0da7b2",
+  "source_updates": {
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+      "previous_sha256": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a",
+      "sha256": "d8a7ce5456507d5f29423434aa3d985b4ccff50744f832f5b06b7cfebb81c533",
+      "audit": "Audited opt-in backend admission; legacy remains default; op/mul_add/lease methods and legacy C++ unchanged. No current router arithmetic qualification."
+    },
+    "candidates/qwen35_gdn_prefill/typed_dense.py": {
+      "previous_sha256": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+      "sha256": "fac5ab5f56602132691c91074fc15b364b8a1f52aef329eab7b1ceb3060f8529",
+      "audit": "Audited exact-int _resolve endpoint hoist; all other production AST unchanged. Memory-only tests do not qualify actual router execution."
+    },
+    "candidates/qwen35_35b_router/run_logits.py": {
+      "previous_sha256": "db7a74e6f42378698aab8b71ecc4662f3dc113520dbdbb47c5a6e3d5934a307f",
+      "sha256": "68d9a3d3c8b211177f18e0db09f96bed907475e911ed338cb210d5f4a291ce08",
+      "audit": "Separate current cold audit from unchanged frozen actual source gate. Current actual replay remains source-drift blocked."
+    },
+    "candidates/qwen35_35b_router/test_logits.py": {
+      "previous_sha256": "22bd73e30a0eee5e729ab710edb320c6e10fb97abda39df8438954945ed91c0a",
+      "sha256": "2658b1a45792da7e842af0ba1824b1aac90f3b31c4710e989c2acc0c7281afc7",
+      "audit": "Cold-only regression and rejection coverage; no actual/native execution."
+    }
+  },
+  "additional_sources": {
+    "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7",
+    "candidates/qwen35_35b_payload/source_manifest.json": "5e0845ecf47833d325de89208352cde5960059a35ccc0c634f85d46553e1c1a5",
+    "config/model_profiles/qwen3_5_35b_a3b.json": "5aec6e83ca8f29d1a4a905790a196c7f003bf74faabbe0d6d2aae15141b2ef04"
+  }
+}

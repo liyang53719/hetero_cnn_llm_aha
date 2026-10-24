@@ -1,4 +1,4 @@
-"""Cold-default, pinned saved-postnorm router logits diagnostic/replay gate.
+"""Cold-default source audit and separately frozen saved-postnorm replay gate.
 
 Only --run-actual admits numerical execution, and requires every fixture path.
 No download, live producer handoff, router-tail owner, public command or RTL.
@@ -19,6 +19,13 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 IDENTITY = HERE / 'logits_identity.json'
+COLD_IDENTITY = HERE / 'cold_identity.json'
+FROZEN_IDENTITY_SHA256 = 'bd2be32639995ec7b4c3f1c8248f4eb667b7d6046e444a8d6fd819c40c0da7b2'
+COLD_ADDITIONAL_SOURCES = {
+    'candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp',
+    'candidates/qwen35_35b_payload/source_manifest.json',
+    'config/model_profiles/qwen3_5_35b_a3b.json',
+}
 SCOPE = 'PINNED_SAVED_POSTNORM_ACTUAL_TYPED_ROUTER_LOGITS_ONLY'
 REQUIRED = ('producer_m16', 'producer_m128', 'payload', 'runtime_root',
             'matrix_library', 'matrix_receipt', 'vector_library', 'out')
@@ -66,6 +73,34 @@ def source_identity(root=ROOT, identity_path=IDENTITY):
                     path.resolve().is_relative_to(Path(root).resolve()), 'source containment')
             require(sha(path) == digest, 'source drift: ' + name)
     return identity
+
+
+def cold_source_identity(root=ROOT, identity_path=IDENTITY, cold_identity_path=COLD_IDENTITY):
+    """Audit current bytes without extending the historical replay authority.
+
+    Every frozen source remains checked. Reviewed replacements are cold-only;
+    neither this manifest nor its hashes are accepted by source_identity().
+    """
+    require(sha(identity_path) == FROZEN_IDENTITY_SHA256, 'frozen replay identity drift')
+    identity = json.loads(Path(identity_path).read_bytes())
+    cold = json.loads(Path(cold_identity_path).read_bytes())
+    require(cold['schema'] == 1 and cold['scope'] == 'CURRENT_COLD_SOURCE_IDENTITY_ONLY' and
+            cold['actual_qualification_status'] == 'TEMP_REQUALIFICATION_REQUIRED' and
+            cold['frozen_identity_sha256'] == FROZEN_IDENTITY_SHA256, 'cold identity scope')
+    pins = {**identity['base_sources'], **identity['candidate_sources']}
+    for name, change in cold['source_updates'].items():
+        require(name in pins and change['previous_sha256'] == pins[name] and
+                change['sha256'] != pins[name], 'cold update must retain frozen source provenance')
+        pins[name] = change['sha256']
+    require(set(cold['additional_sources']) == COLD_ADDITIONAL_SOURCES and
+            not COLD_ADDITIONAL_SOURCES.intersection(pins), 'cold additional source coverage')
+    pins.update(cold['additional_sources'])
+    for name, digest in pins.items():
+        path = Path(root) / name
+        require(not Path(name).is_absolute() and '..' not in Path(name).parts and
+                path.resolve().is_relative_to(Path(root).resolve()), 'cold source containment')
+        require(sha(path) == digest, 'cold source drift: ' + name)
+    return identity, cold
 
 
 def imported_source_identity(identity):
@@ -303,7 +338,14 @@ def main(argv=None):
     args = parser().parse_args(argv)
     validate_arguments(args)
     initial_identity = record(IDENTITY)
-    identity = source_identity()
+    # Actual execution has no cold-manifest fallback, and fails before fixture
+    # imports, allocation, native loading or output creation on source drift.
+    if args.run_actual:
+        identity = source_identity()
+    else:
+        initial_cold_identity = record(COLD_IDENTITY)
+        identity, cold = cold_source_identity()
+        identity_unchanged(initial_cold_identity, COLD_IDENTITY)
     identity_unchanged(initial_identity)
     cold_source_gate(identity)
     identity_unchanged(initial_identity)
@@ -314,6 +356,14 @@ def main(argv=None):
                   official_model_profile_admitted=False, hardware_cycles=None, hardware_utilization=None,
                   identity=initial_identity, base_commit=identity['base_commit'],
                   execution_commit=execution_commit())
+    if not args.run_actual:
+        identity_unchanged(initial_cold_identity, COLD_IDENTITY)
+        report.update(scope='CURRENT_ROUTER_COLD_SOURCE_AUDIT_ONLY',
+                      status='TEMP_REQUALIFICATION_REQUIRED', cold_source_identity_status='PASS',
+                      actual_qualification_status='TEMP_REQUALIFICATION_REQUIRED',
+                      historical_actual_pass_inherited=False, cold_identity=initial_cold_identity,
+                      reviewed_source_changes=sorted(cold['source_updates']),
+                      additional_cold_sources=sorted(cold['additional_sources']))
     if args.out is not None:
         args.out = args.out.resolve()
         args.out.mkdir()

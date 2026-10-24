@@ -14,6 +14,9 @@ from . import run_logits as gate, reference, payload
 class LogitsTests(unittest.TestCase):
     def test_cold_cli_has_no_numerical_import_or_actual_pass(self):
         code = ('import sys\nfrom candidates.qwen35_35b_router.run_logits import main\n'
+                'def audit(event, args):\n'
+                '    if event=="ctypes.dlopen": raise RuntimeError("native load")\n'
+                'sys.addaudithook(audit)\n'
                 'r=main()\n'
                 'if r["actual_status"]!="NOT_EXECUTED": raise RuntimeError("actual claim")\n'
                 'if "torch" in sys.modules or "numpy" in sys.modules: raise RuntimeError("numeric import")\n')
@@ -26,6 +29,96 @@ class LogitsTests(unittest.TestCase):
         self.assertEqual(report['actual_status'], 'NOT_EXECUTED')
         self.assertFalse(report['actual_matrix_owner_executed'])
         self.assertFalse(report['complete_router_owner'])
+        self.assertEqual(report['scope'], 'CURRENT_ROUTER_COLD_SOURCE_AUDIT_ONLY')
+        self.assertEqual(report['status'], 'TEMP_REQUALIFICATION_REQUIRED')
+        self.assertEqual(report['cold_source_identity_status'], 'PASS')
+        self.assertFalse(report['historical_actual_pass_inherited'])
+
+    def test_cold_identity_keeps_every_frozen_pin_and_optional_backend(self):
+        identity, cold = gate.cold_source_identity()
+        self.assertEqual(gate.sha(gate.IDENTITY), gate.FROZEN_IDENTITY_SHA256)
+        self.assertEqual(len(identity['base_sources']) + len(identity['candidate_sources']), 108)
+        self.assertEqual(set(cold['additional_sources']), gate.COLD_ADDITIONAL_SOURCES)
+        self.assertEqual(set(cold['source_updates']), {
+            'candidates/qwen35_gdn_prefill/chunk/vector.py',
+            'candidates/qwen35_gdn_prefill/typed_dense.py',
+            'candidates/qwen35_35b_router/run_logits.py',
+            'candidates/qwen35_35b_router/test_logits.py'})
+
+    def test_cold_rejects_drift_in_every_source_without_importing_it(self):
+        identity, cold = gate.cold_source_identity()
+        names = set(identity['base_sources']) | set(identity['candidate_sources']) | set(cold['additional_sources'])
+        original = gate.sha
+        for name in sorted(names):
+            target = gate.ROOT / name
+            def changed(path):
+                return '0' * 64 if Path(path) == target else original(path)
+            with self.subTest(source=name), patch.object(gate, 'sha', side_effect=changed):
+                with self.assertRaisesRegex(ValueError, 'cold source drift'):
+                    gate.cold_source_identity()
+
+    def test_cold_rejects_changed_frozen_identity_and_incomplete_manifest(self):
+        original = json.loads(gate.COLD_IDENTITY.read_bytes())
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            historical = root / 'historical.json'
+            historical.write_bytes(gate.IDENTITY.read_bytes() + b'\n')
+            with self.assertRaisesRegex(ValueError, 'frozen replay identity drift'):
+                gate.cold_source_identity(identity_path=historical)
+            for key, value in (('source_updates', {}), ('additional_sources', {}),
+                               ('scope', 'ACTUAL_PASS'), ('actual_qualification_status', 'PASS')):
+                changed = {**original, key: value}
+                lock = root / 'cold.json'
+                lock.write_text(json.dumps(changed))
+                with self.subTest(key=key), self.assertRaises(ValueError):
+                    gate.cold_source_identity(cold_identity_path=lock)
+            changed = json.loads(gate.COLD_IDENTITY.read_bytes())
+            name = next(iter(changed['source_updates']))
+            changed['source_updates'][name]['previous_sha256'] = '0' * 64
+            lock.write_text(json.dumps(changed))
+            with self.assertRaisesRegex(ValueError, 'frozen source provenance'):
+                gate.cold_source_identity(cold_identity_path=lock)
+
+    def test_cold_hashes_cannot_unlock_actual_or_allocate_output(self):
+        gate.cold_source_identity()  # Current cold hashes are valid, not replay authority.
+        out = gate.ROOT / 'work' / 'must-not-create-router-replay'
+        self.assertFalse(out.exists())
+        argv = ['--run-actual']
+        for key in gate.REQUIRED:
+            argv += ['--' + key.replace('_', '-'), str(out) if key == 'out' else '/missing/' + key]
+        with patch.object(gate, 'cold_source_identity', side_effect=AssertionError('cold authority used')) as cold, \
+                patch.object(gate, 'run_actual', side_effect=AssertionError('actual entered')) as actual, \
+                patch.object(gate, 'validate_fixtures', side_effect=AssertionError('fixtures read')) as fixtures:
+            with self.assertRaisesRegex(ValueError, 'source drift: candidates/qwen35_gdn_prefill/chunk/vector.py'):
+                gate.main(argv)
+        cold.assert_not_called(); actual.assert_not_called(); fixtures.assert_not_called()
+        self.assertFalse(out.exists())
+
+    def test_cold_rejects_source_symlink_outside_repository(self):
+        identity = json.loads(gate.IDENTITY.read_bytes())
+        first = next(iter(identity['base_sources']))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'repo'
+            path = root / first
+            path.parent.mkdir(parents=True)
+            path.symlink_to(gate.ROOT / first)
+            with self.assertRaisesRegex(ValueError, 'cold source containment'):
+                gate.cold_source_identity(root=root)
+
+    def test_cold_manifest_cannot_change_during_invocation(self):
+        original = gate.record
+        calls = 0
+        def changed(path):
+            nonlocal calls
+            result = original(path)
+            if Path(path) == gate.COLD_IDENTITY:
+                calls += 1
+                if calls > 1:
+                    result['sha256'] = '0' * 64
+            return result
+        with patch.object(gate, 'record', side_effect=changed):
+            with self.assertRaisesRegex(ValueError, 'identity file changed during invocation'):
+                gate.main([])
 
     def test_actual_requires_every_explicit_fixture(self):
         for missing in gate.REQUIRED:

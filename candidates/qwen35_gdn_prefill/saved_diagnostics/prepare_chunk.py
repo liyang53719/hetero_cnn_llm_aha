@@ -1,4 +1,4 @@
-"""Prepare an isolated head0/M64 plan from CLI-supplied private inputs; never execute it.
+"""Prepare an isolated head0/M64 or M128 plan from CLI-supplied private inputs; never execute it.
 
 Uses stdlib only. Hashes the admitted source/runtime closure, snapshots source and
 slices data, and pins the new helper code. No Git command, native load, or build.
@@ -9,7 +9,12 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import sys
 import stat
+
+# -I omits the script directory; admit only this pinned helper directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from chunk_case import case, head0_output, head0_state, prep_rows
 
 HERE = Path(__file__).resolve().parent
 CHECKPOINT = HERE.parents[2]
@@ -54,14 +59,28 @@ def create(path, raw):
         os.fsync(stream.fileno())
 
 
-def main():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     for option in ('repository', 'runtime-site', 'python', 'vector-library',
                    'vector-metadata', 'compiler', 'saved-prep', 'saved-pins',
                    'saved-progress', 'official-output', 'output'):
         parser.add_argument('--' + option, type=Path, required=True)
     parser.add_argument('--cpu', type=int, required=True)
-    args = parser.parse_args()
+    parser.add_argument('--tokens', type=int, choices=(64, 128), default=64)
+    for option in ('official-state', 'official-final-cache', 'official-manifest'):
+        parser.add_argument('--' + option, type=Path)
+    args = parser.parse_args(argv)
+    state_inputs = (args.official_state, args.official_final_cache, args.official_manifest)
+    if args.tokens == 128 and not all(state_inputs):
+        parser.error('--tokens 128 requires --official-state, --official-final-cache and --official-manifest')
+    if args.tokens == 64 and any(state_inputs):
+        parser.error('M64 has no official after64 state oracle; state inputs require --tokens 128')
+    return args
+
+
+def main():
+    args = parse_args()
+    selected = case(args.tokens)
     root = args.repository.resolve(strict=True)
     runtime = args.runtime_site.resolve(strict=True)
     out = args.output.resolve()
@@ -81,7 +100,10 @@ def main():
 
     # Check all dependencies before creating any output.
     source_data = {}
-    for relative, pin in spec['sources'].items():
+    source_pins = dict(spec['sources'])
+    if selected['state_oracle']:
+        source_pins.update(spec['m128']['sources'])
+    for relative, pin in source_pins.items():
         source_data[relative] = admit(root / relative, pin, capture=True)
     runtime_rows = []
     for name in spec['runtime']['site_tree']['roots']:
@@ -103,7 +125,11 @@ def main():
     for name, path in (('python', args.python), ('vector_library', args.vector_library),
                        ('vector_metadata', args.vector_metadata), ('compiler', args.compiler)):
         admit(path, spec['runtime'][name])
-    artifact = spec['artifacts']
+    artifact = dict(spec['artifacts'])
+    historical = spec
+    if selected['state_oracle']:
+        artifact.update(spec['m128']['artifacts'])
+        historical = spec['m128']
     prep = admit(args.saved_prep, artifact['actual/cold128.prep.actual.fp32le'], True)
     reference = admit(args.official_output, artifact['official_chunk_m128.bf16le'], True)
     admit(args.saved_pins, artifact['metadata/prior_pins.json'])
@@ -113,24 +139,39 @@ def main():
          'original six-terminal provenance required')
     need(all(x['terminal_accepted'] is True and x['complete'] is True and x['status'] is None
              for x in progress['commands']), 'original terminal completion required')
-    need(len(prep) == 128 * 25600 and len(reference) == 128 * 16 * 128 * 2, 'input extents')
-    for name in ('prepare_chunk.py', 'chunk_child.py', 'launch_chunk.py', 'compare_chunk.py', 'pins.json'):
+    selected_prep = prep_rows(prep, args.tokens)
+    selected_reference = head0_output(reference, args.tokens)
+    selected_state = None
+    if selected['state_oracle']:
+        state = admit(args.official_state, artifact['official_state_after128.f32le'], True)
+        final_cache = admit(args.official_final_cache, artifact['official_final_cache.f32le'], True)
+        admit(args.official_manifest, artifact['official_manifest.json'])
+        selected_state = head0_state(state, final_cache)
+    for name in ('prepare_chunk.py', 'chunk_child.py', 'launch_chunk.py', 'compare_chunk.py', 'chunk_case.py', 'pins.json'):
         admit(HERE / name)
     os.umask(0o077)
     out.mkdir(mode=0o700)
     for relative, raw in source_data.items():
         target = out / 'source_snapshot' / relative
         create(target, raw)
-        admit(target, spec['sources'][relative])
-    saved_slice = out / 'inputs/saved_prep_first64.fp32le'
-    ref_slice = out / 'reference/official_head0_first64.bf16le'
-    create(saved_slice, prep[:64 * 25600])
-    create(ref_slice, b''.join(reference[(r * 16 * 128) * 2:(r * 16 * 128 + 128) * 2]
-                              for r in range(64)))
-    admit(saved_slice, artifact['saved_prep_first64.fp32le'])
-    admit(ref_slice, artifact['official_head0_first64.bf16le'])
+        admit(target, source_pins[relative])
+    saved_name = f'saved_prep_first{args.tokens}.fp32le'
+    ref_name = f'official_head0_first{args.tokens}.bf16le'
+    saved_slice = out / 'inputs' / saved_name
+    ref_slice = out / 'reference' / ref_name
+    create(saved_slice, selected_prep)
+    create(ref_slice, selected_reference)
+    admit(saved_slice, artifact[saved_name])
+    admit(ref_slice, artifact[ref_name])
+    ref_state = out / 'reference/official_head0_after128.f32le'
+    if selected_state is not None:
+        create(ref_state, selected_state)
+        admit(ref_state, artifact[ref_state.name])
+    policy = dict(spec['policy'], tokens=args.tokens)
+    limits = dict(spec['limits'], cpu_seconds=selected['driver_seconds'],
+                  driver_wall_seconds=selected['driver_seconds'], outer_wall_seconds=selected['outer_seconds'])
     plan = {
-        'schema': 'qwen35_head0_m64_isolated_v1',
+        'schema': selected['schema'],
         'python': str(args.python.resolve(strict=True)), 'repository': str(root),
         'numpy_site': str(runtime), 'vector_library': str(args.vector_library.resolve(strict=True)),
         'cleanup_helper': str(root / 'scripts/idma_source_export_20261017/strict_cleanup.py'),
@@ -139,11 +180,15 @@ def main():
         'saved_prep_slice': str(saved_slice), 'saved_prep_slice_sha256': inputs[str(saved_slice)]['sha256'],
         'reference_directory': str(ref_slice.parent), 'reference_slice': str(ref_slice),
         'reference_paths': [str(args.official_output.resolve(strict=True)), str(ref_slice)],
-        'run_directory': str(out / 'run'), 'policy': spec['policy'], 'limits': spec['limits'],
-        'historical_input_pin_count': spec['historical_input_pin_count'],
-        'historical_plan_sha256': spec['historical_plan_sha256'],
+        'run_directory': str(out / 'run'), 'policy': policy, 'limits': limits,
+        'historical_input_pin_count': historical['historical_input_pin_count'],
+        'historical_plan_sha256': historical['historical_plan_sha256'],
         'note': 'Relocatable helper adaptation, not the original plan or an original-run continuation.',
     }
+    if selected['state_oracle']:
+        plan['reference_state_slice'] = str(ref_state)
+        plan['reference_paths'] += [str(path.resolve(strict=True)) for path in
+                                   (args.official_state, args.official_final_cache, args.official_manifest, ref_state)]
     plan['child_argv'] = [plan['python'], '-I', '-S', '-B', '-X',
                           'pycache_prefix=' + str(out / 'run/pycache'),
                           str(HERE / 'chunk_child.py'), str(out / 'PLAN.json')]
@@ -153,7 +198,7 @@ def main():
     raw = (json.dumps(plan, sort_keys=True, indent=2) + '\n').encode()
     create(out / 'PLAN.json', raw)
     print(json.dumps({'status': 'PREPARED_NOT_EXECUTED', 'plan_sha256': hashlib.sha256(raw).hexdigest(),
-                      'input_pins': len(inputs), 'historical_input_pins': 1101}, sort_keys=True))
+                      'input_pins': len(inputs), 'historical_input_pins': historical['historical_input_pin_count']}, sort_keys=True))
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
-"""One original head0/M64 chunk from saved actual Prep, without reference access."""
+"""One head0/M64 or M128 diagnostic terminal from saved actual Prep, without reference access."""
+from collections import Counter
 import hashlib
 import json
 import os
@@ -6,6 +7,10 @@ from pathlib import Path
 import struct
 import sys
 import time
+
+# -I omits the script directory; admit only this pinned helper directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from chunk_case import plan_case, validate_carry
 
 def need(ok,why):
     if not ok: raise ValueError(why)
@@ -18,7 +23,7 @@ def save(path,value):
 def main():
     plan_raw=Path(sys.argv[1]).read_bytes()
     need(digest(plan_raw)==os.environ['QWEN35_REVIEWED_PLAN_SHA256'],'reviewed plan changed')
-    p=json.loads(plan_raw);run=Path(p['run_directory']);permit=run/'START.json'
+    p=json.loads(plan_raw);selected=plan_case(p);tokens=selected['tokens'];run=Path(p['run_directory']);permit=run/'START.json'
     until=time.monotonic()+3
     while not permit.exists():
         need(time.monotonic()<until,'parent durable permit unavailable');time.sleep(.01)
@@ -45,15 +50,15 @@ def main():
                 need(run==path or run in path.parents,'write outside fresh run denied')
     sys.addaudithook(audit)
     sys.path[:0]=[p['repository'],str(Path(p['repository'])/'src'),p['numpy_site']]
-    started=time.monotonic();deadline=min(started+60,identity['work_stop_monotonic']-1)
+    started=time.monotonic();deadline=min(started+selected['driver_seconds'],identity['work_stop_monotonic']-1)
     from candidates.qwen35_gdn_prefill.chunk import model as m
     from candidates.qwen35_gdn_prefill.chunk.vector import Vector16,IEEE_POLICY,FINITE_MUL_UF_BACKEND
     scalar=m.ep.DecayScalar(enable_softplus=True,enable_ieee_exp=True)
     vector=Vector16(p['vector_library'],exception_policy=IEEE_POLICY,arithmetic_backend=FINITE_MUL_UF_BACKEND)
     source=Path(p['saved_prep_slice']).read_bytes()
-    need(len(source)==64*25600 and digest(source)==p['saved_prep_slice_sha256'],'saved Prep slice pin')
+    need(len(source)==tokens*25600 and digest(source)==p['saved_prep_slice_sha256'],'saved Prep slice pin')
     memory=m.TypedMemory()
-    job=m.ChunkJob(72,0x400000,0x800000,0x810000,0x820000,0x900000,64,
+    job=m.ChunkJob(72,0x400000,0x800000,0x810000,0x820000,0x900000,tokens,
         heads=1,exp_policy=m.ep.EQUAL_HEADS_EXPERIMENTAL_EXP)
     region=memory.allocate_output(job.input,len(source))
     # Explicit diagnostic rehydration, not a rerun of Prep or an original receipt.
@@ -71,14 +76,24 @@ def main():
     actual=run/'actual';actual.mkdir()
     save(actual/'summary.json',{'status':'RUNNING_ISOLATED_CHUNK_DIAGNOSTIC','full_block_acceptance':False})
     next_progress=time.monotonic();aborting=False;ticks=0
+    previous=m.ScratchPlan(job).chunks[0][0]['next_state'] if selected['state_oracle'] else None
+    carry=Counter();first_chunk_state_sha=None
     while driver.response is None:
         now=time.monotonic()
         if now>=deadline: aborting=True
         need(now<identity['work_stop_monotonic'],'bounded component abort drain')
-        driver.tick(abort=aborting)
+        context=dict(owner.context) if previous is not None else {}
+        if context.get('chunk')==1 and first_chunk_state_sha is None:
+            offset=previous.base-driver.scratch.base
+            first_chunk_state_sha=digest(bytes(driver.scratch.storage[64+offset:64+offset+65536]))
+        event=driver.tick(abort=aborting)
+        if previous is not None and event['memory_fire'] and not event['memory'].write and context.get('chunk')==1:
+            address=event['memory'].address
+            if previous.base<=address<previous.base+65536:
+                carry[context['phase']]+=1
         ticks+=1
         if now>=next_progress:
-            save(actual/'progress.json',{'scope':'ISOLATED_HEAD0_M64','context':dict(owner.context),
+            save(actual/'progress.json',{'scope':f'ISOLATED_HEAD0_M{tokens}','context':dict(owner.context),
                  'position':dict(owner.position),'ticks':ticks,'elapsed_seconds':now-started,
                  'aborting':aborting,'commands':[],'roots':{'generation':0}})
             next_progress=now+1
@@ -86,15 +101,22 @@ def main():
     report=driver.report()
     success=not aborting and driver.response.status is None and driver.response.staging_complete
     if success:
+        if selected['state_oracle']:
+            validate_carry(owner.counts['chunks_completed'], dict(carry))
+            need(first_chunk_state_sha is not None,'missing actual first-chunk state identity')
         output=driver.output.raw();state=driver.state_out.raw()
-        need(len(output)==8192*2 and len(state)==128*128*4,'complete component extents')
+        need(len(output)==selected['elements']*2 and len(state)==128*128*4,'complete component extents')
         (actual/'output.bf16le').write_bytes(output);(actual/'state.fp32le').write_bytes(state)
     report.update(status='ISOLATED_CHUNK_COMPLETE_UNCOMPARED' if success else 'ISOLATED_CHUNK_FAILED',
-       scope='REAL_SAVED_PREP_HEAD0_TOKENS0_63_DIAGNOSTIC',elapsed_seconds=time.monotonic()-started,
-       input_provenance='Verified saved actual Prep first64 rows, rehydrated by diagnostic writes/ACKs; Prep not reexecuted',
+       scope=f'REAL_SAVED_PREP_HEAD0_TOKENS0_{tokens-1}_DIAGNOSTIC',elapsed_seconds=time.monotonic()-started,
+       input_provenance=f'Verified saved actual Prep first{tokens} rows, rehydrated by diagnostic writes/ACKs; Prep not reexecuted',
        original_execution_status='UNKNOWN',full_block_acceptance=False,original_continuation=False,
-       output_reference_read=False,state_oracle_available=False,terminal_count=1,
-       output_elements=8192,policy=p['policy'],aborted_for_deadline=aborting)
+       output_reference_read=False,state_oracle_available=selected['state_oracle'],terminal_count=1,
+       output_elements=selected['elements'],policy=p['policy'],aborted_for_deadline=aborting)
+    if selected['state_oracle']:
+        report.update(observed_second_chunk_prior_state_read_beats=dict(carry),
+                      first_chunk_state_sha256=first_chunk_state_sha,first_chunk_state_oracle_available=False,
+                      actual_chunks_completed=owner.counts['chunks_completed'])
     save(actual/'summary.json',report)
     need(success,'isolated chunk failed; no retry')
     print(json.dumps({'status':report['status'],'elapsed_seconds':report['elapsed_seconds'],

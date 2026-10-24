@@ -19,6 +19,10 @@ import sys
 import time
 import types
 
+# -I omits the script directory; admit only this pinned helper directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from chunk_case import plan_case
+
 HERE = Path(__file__).resolve().parent
 
 
@@ -146,7 +150,8 @@ def observe(run, owner, strict, plan):
 
 def execute(plan, plan_sha, start, plan_path):
     stop = start + plan['limits']['outer_wall_seconds']
-    work_stop = stop - 15
+    selected = plan_case(plan)
+    work_stop = stop - selected['cleanup_reserve_seconds']
     run = Path(plan['run_directory'])
     owner = None; observed = None; proof = None; failure = None; strict = None
     created = False
@@ -193,7 +198,7 @@ def execute(plan, plan_sha, start, plan_path):
             last = -10
             while True:
                 now = time.monotonic()
-                need(now < work_stop, 'outer work deadline; fifteen seconds reserved for cleanup/receipts')
+                need(now < work_stop, 'outer work deadline; case-specific reserve for cleanup/receipts')
                 observed = os.waitid(os.P_PID, child.pid, os.WEXITED | os.WNOHANG | os.WNOWAIT)
                 sample = observe(run, owner, strict, plan)
                 record['observed_peak_rss_bytes'] = max(record['observed_peak_rss_bytes'], sample['group_rss_bytes'])
@@ -243,7 +248,7 @@ def execute(plan, plan_sha, start, plan_path):
             record['terminal_count'] = summary.get('terminal_count')
             record['roots_generation'] = summary.get('roots', {}).get('generation')
             complete = (summary.get('status') == 'ISOLATED_CHUNK_COMPLETE_UNCOMPARED' and
-                        record['terminal_count'] == 1 and summary.get('output_elements') == 8192 and
+                        record['terminal_count'] == 1 and summary.get('output_elements') == selected['elements'] and
                         (run / 'actual' / 'output.bf16le').is_file())
         except BaseException as error:
             complete = False; record['child_summary_error'] = repr(error)
@@ -275,7 +280,7 @@ def execute(plan, plan_sha, start, plan_path):
 def main():
     start = time.monotonic()
     def original_deadline(sig, frame):
-        raise TimeoutError('fixed 75-second original supervisor deadline')
+        raise TimeoutError('bounded case-specific supervisor deadline')
     signal.signal(signal.SIGALRM, original_deadline)
     signal.setitimer(signal.ITIMER_REAL, 75)
     parser = argparse.ArgumentParser(description=__doc__)
@@ -286,7 +291,8 @@ def main():
     path = args.plan.resolve(strict=True)
     need(sha(path) == args.reviewed_plan_sha256, 'reviewed plan SHA mismatch')
     plan = json.loads(path.read_text())
-    need(plan['schema'] == 'qwen35_head0_m64_isolated_v1', 'fixed plan schema')
+    selected = plan_case(plan)
+    signal.setitimer(signal.ITIMER_REAL, max(.001, start + selected['outer_seconds'] - time.monotonic()))
     if not args.execute:
         verify(plan)
         print(json.dumps(dict(status='READY_NOT_EXECUTED', readiness=readiness(plan),

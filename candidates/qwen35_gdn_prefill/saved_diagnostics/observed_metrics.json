@@ -2,11 +2,92 @@
   "acceptance": {
     "RTL": "TEMP",
     "after_64_state_oracle": "TEMP",
+    "full_16_heads": "TEMP",
     "full_block": "TEMP",
-    "hardware_or_effective_MAC_utilization": "TEMP"
+    "hardware_or_effective_MAC_utilization": "TEMP",
+    "relocated_native_supervisor": "TEMP_NOT_EXECUTED"
   },
-  "evidence_origin": "Previously completed private saved-word diagnostic and isolated native chunk run; this checkpoint did not rerun either.",
+  "evidence_origin": "Previously completed private saved-word diagnostic and isolated native head0 M64/M128 runs; this checkpoint did not rerun any owner.",
   "full_block_acceptance": false,
+  "head0_tokens0_127": {
+    "actual_chunks_completed": 2,
+    "actual_nonzero": 16384,
+    "after64_state_oracle_available": false,
+    "before_after_pins_match": true,
+    "bit_mismatches": 7,
+    "bounds": {
+      "address_space_bytes": 536870912,
+      "cpu_count": 1,
+      "cpu_seconds": 90,
+      "driver_wall_seconds": 90,
+      "file_bytes": 2097152,
+      "log_bytes": 1048576,
+      "minimum_disk_available_bytes": 134217728,
+      "minimum_host_available_bytes": 1073741824,
+      "outer_wall_seconds": 110,
+      "output_bytes": 16777216,
+      "sampled_rss_bytes": 536870912
+    },
+    "candidate_elapsed_seconds": 26.241959984006826,
+    "cleanup": "Two complete owned-group absence scans before direct retained-leader reap",
+    "elements": 16384,
+    "max_abs": 9.5367431640625e-07,
+    "mean_abs": 5.969114091897154e-11,
+    "mean_reduction": "binary64 absolute deltas, stdlib math.fsum/count; no NumPy reduction-bit identity claim",
+    "meets_existing_node_thresholds": true,
+    "natural_exit": 0,
+    "observed_second_chunk_prior_state_read_beats": {
+      "inter_matmul": 65536,
+      "predict_matmul": 65536,
+      "state_decay": 1024
+    },
+    "owned_cleanup_confirmed": true,
+    "policy": {
+      "cold": true,
+      "cumsum_policy": "legacy_ascending_fp32",
+      "exp_policy": "experimental_equal_heads_chunk_candidate_p7_split_ln2_gradual_underflow_v1",
+      "heads": 1,
+      "host_batch": true,
+      "key_dim": 128,
+      "matmul_policy": "row1_streaming",
+      "tokens": 128,
+      "value_dim": 128,
+      "vector_backend": "finite_mul_tininess_r2",
+      "vector_exception_policy": "ieee_rne_finite_gradual_underflow",
+      "vector_fatal_mask": 28
+    },
+    "reference_mapping": "native0020 [1,128,16,128], concatenate token0..127/head0/128 values",
+    "reference_nonzero": 16384,
+    "scope": "REAL_SAVED_PREP_HEAD0_TOKENS0_127_ONLY",
+    "source_pin_count": 1106,
+    "state_numerical_validation": {
+      "actual_nonzero": 16384,
+      "atol": 0.0001,
+      "bit_mismatches": 14458,
+      "elements": 16384,
+      "max_abs": 7.450580596923828e-09,
+      "max_error_over_tolerance": 7.038354743474721e-05,
+      "mean_abs": 2.33948623684253e-11,
+      "meets_existing_state_threshold": true,
+      "reference_nonzero": 16384,
+      "rtol": 0.0001,
+      "violations": 0,
+      "worst_normalized_location": {
+        "head": 0,
+        "key_row": 120,
+        "value_column": 56
+      }
+    },
+    "state_oracle_available": true,
+    "state_reference_mapping": "native0021 [1,16,128,128] FP32 after128, head0 first65536 bytes, identical official final cache0043",
+    "status": "PASS_EXISTING_NODE_AND_AFTER128_STATE_THRESHOLDS_ONLY",
+    "supervisor_elapsed_seconds": 27.35001520602964,
+    "supervisor_peak_sampled_rss_bytes": 63242240,
+    "thresholds": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    }
+  },
   "head0_tokens0_63": {
     "before_after_pins_match": true,
     "bit_mismatches": 6,
@@ -104,7 +185,8 @@
   },
   "relocated_helpers": {
     "status": "TEMP_NOT_EXECUTED",
-    "validation": "Source-only syntax and static review; historical numerical PASS does not qualify adapted helpers or launcher."
+    "status_scope": "Relocated native child and supervisor; the pure-stdlib comparator was tested separately.",
+    "validation": "13 stdlib mapping/control/CLI tests plus AST/JSON checks passed. Adapted post-comparison matched every historical M128 result field except its own code hash and comparison duration; no native owner or supervisor execution."
   },
   "schema": 1
 }

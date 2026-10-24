@@ -1,0 +1,340 @@
+{
+  "artifact_identities": {
+    "embedding/embed_tokens.rows_0_255.bin": {
+      "bytes": 524288,
+      "sha256": "5e6f4f309ddda446bf86c961ea13fc12030713b6cac428f7af6c8f9d1b5b83da"
+    },
+    "embedding/manifest.json": {
+      "bytes": 1504,
+      "sha256": "4a2eb0ffa5af20f998053801ed4717a43411971e2d7b89580d054c3fbf6cc2ed"
+    },
+    "fixture/carried128.hidden.bf16le": {
+      "bytes": 262144,
+      "sha256": "01e6c989b40eb2a9774cb9fe93f9818fb18128e996771ec581fdb23587270fc0"
+    },
+    "fixture/cold128.hidden.bf16le": {
+      "bytes": 262144,
+      "sha256": "6e8c1a99dd98313abeb693afbe1fdf3aece5ebfab4b19f4737f3b663a0013b54"
+    },
+    "fixture/manifest.json": {
+      "bytes": 8897,
+      "sha256": "e21aa8318cdfbb8b982753288a3a8b9bcfc946dc20bd4c9424e545ca1761333a"
+    },
+    "fixture/token_ids.u32le": {
+      "bytes": 1024,
+      "sha256": "9c6946815ecfab6fdf8fe33de15e93b4d65f2ff61cb233d8f6c0bda339589920"
+    },
+    "matrix/compile.json": {
+      "bytes": 2080,
+      "sha256": "0425ab17f2126cf8a3d0362e590d894898f586fb929c34c207a4dba2b3e80cf0"
+    },
+    "matrix/compile.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "matrix/matrix_silu_numeric.so": {
+      "bytes": 27032,
+      "sha256": "32b02255280c12c6eb3ec39ee02baa989e4c7a55c5f0e89f80edd1011ce7b7cc"
+    }
+  },
+  "artifact_inventory_scope": "Explicit nine-file embedding/fixture/Matrix allowlist. Concurrent runtime acquisition files are excluded and must receive a separate receipt.",
+  "created_utc": "2026-10-23T16:49:51.557124+00:00",
+  "embedding_acquisition": {
+    "acquired_utc": "2026-10-23T16:47:00.765399+00:00",
+    "bytes": 524288,
+    "canonical_url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+    "content_range": "bytes 70216-594503/1746942600",
+    "full_checkpoint_sha256_verified": false,
+    "range": "bytes=70216-594503",
+    "retained_receipt_source": "embedding/manifest.json",
+    "sha256": "5e6f4f309ddda446bf86c961ea13fc12030713b6cac428f7af6c8f9d1b5b83da",
+    "status": 206
+  },
+  "fixture": {
+    "files": {
+      "carried128.hidden.bf16le": {
+        "bytes": 262144,
+        "sha256": "01e6c989b40eb2a9774cb9fe93f9818fb18128e996771ec581fdb23587270fc0"
+      },
+      "cold128.hidden.bf16le": {
+        "bytes": 262144,
+        "sha256": "6e8c1a99dd98313abeb693afbe1fdf3aece5ebfab4b19f4737f3b663a0013b54"
+      },
+      "token_ids.u32le": {
+        "bytes": 1024,
+        "sha256": "9c6946815ecfab6fdf8fe33de15e93b4d65f2ff61cb233d8f6c0bda339589920"
+      }
+    },
+    "input_shapes": {
+      "carried128": [
+        1,
+        128,
+        1024
+      ],
+      "cold128": [
+        1,
+        128,
+        1024
+      ]
+    },
+    "intermediate_tensor_generation": false,
+    "operation": "Unchanged raw BF16 row copy, not a forward pass",
+    "retained_original_weights": {
+      "bytes": 43111008,
+      "count": 14,
+      "manifest_sha256": "6c47a66ee801740c3200203b6e18045cafd7e17f898660598119ab67e374e8e0",
+      "parameter_records": [
+        {
+          "bytes": 2048,
+          "dtype": "BF16",
+          "local_name": "input_layernorm.weight",
+          "sha256": "032420ad60956b0e62b5f4afbfc3a51a7148c79946f746ea4eb6b0ceb6c67e37",
+          "shape": [
+            1024
+          ]
+        },
+        {
+          "bytes": 64,
+          "dtype": "F32",
+          "local_name": "linear_attn.A_log",
+          "sha256": "ad78e0805c16a73f70c722e837d1d342df3d9714bea32d353d976e155dd73494",
+          "shape": [
+            16
+          ]
+        },
+        {
+          "bytes": 49152,
+          "dtype": "BF16",
+          "local_name": "linear_attn.conv1d.weight",
+          "sha256": "130344a7183ae52ad58fc5da96539f28071b64d452bb3acf0890a7947da44188",
+          "shape": [
+            6144,
+            1,
+            4
+          ]
+        },
+        {
+          "bytes": 32,
+          "dtype": "BF16",
+          "local_name": "linear_attn.dt_bias",
+          "sha256": "058cec20af625f4e3971da95b131af08db8f9ab26b1301b90c6f6401c5243388",
+          "shape": [
+            16
+          ]
+        },
+        {
+          "bytes": 32768,
+          "dtype": "BF16",
+          "local_name": "linear_attn.in_proj_a.weight",
+          "sha256": "e5197a79fc1daa00d06a0c04fd11a97ac3c10a6bd6460e957fd8383700d5d87b",
+          "shape": [
+            16,
+            1024
+          ]
+        },
+        {
+          "bytes": 32768,
+          "dtype": "BF16",
+          "local_name": "linear_attn.in_proj_b.weight",
+          "sha256": "02bab6a0eb77ad51435f77665d173876993d725ca3cd953f90c2b0754735db5e",
+          "shape": [
+            16,
+            1024
+          ]
+        },
+        {
+          "bytes": 12582912,
+          "dtype": "BF16",
+          "local_name": "linear_attn.in_proj_qkv.weight",
+          "sha256": "8904cdb2c2e3aa5fc158d074e3b84fb5165a6637f2bd38f67fb93b29406fe0dc",
+          "shape": [
+            6144,
+            1024
+          ]
+        },
+        {
+          "bytes": 4194304,
+          "dtype": "BF16",
+          "local_name": "linear_attn.in_proj_z.weight",
+          "sha256": "5a44325d73004f42dcd55558d357ceeccb54fafb9b7048071634ab1027e1c17d",
+          "shape": [
+            2048,
+            1024
+          ]
+        },
+        {
+          "bytes": 512,
+          "dtype": "F32",
+          "local_name": "linear_attn.norm.weight",
+          "sha256": "b92121af2866c2e156749dc12e27d5f873abb1595291be3a7465c8c65fd6e439",
+          "shape": [
+            128
+          ]
+        },
+        {
+          "bytes": 4194304,
+          "dtype": "BF16",
+          "local_name": "linear_attn.out_proj.weight",
+          "sha256": "cbee28fc3b42e07e491fffd593b2ee9ec58ae952dc9133e178f8a80ea916d308",
+          "shape": [
+            1024,
+            2048
+          ]
+        },
+        {
+          "bytes": 7340032,
+          "dtype": "BF16",
+          "local_name": "mlp.down_proj.weight",
+          "sha256": "57c93b2a4452740b0b82386debc7c66df7774f98425a0253dd9d3e7006e989ac",
+          "shape": [
+            1024,
+            3584
+          ]
+        },
+        {
+          "bytes": 7340032,
+          "dtype": "BF16",
+          "local_name": "mlp.gate_proj.weight",
+          "sha256": "ac1e1d4df4f3adca7e0bc15ee7310ce093f9108baa712cfb86f57b03e6d6e140",
+          "shape": [
+            3584,
+            1024
+          ]
+        },
+        {
+          "bytes": 7340032,
+          "dtype": "BF16",
+          "local_name": "mlp.up_proj.weight",
+          "sha256": "0317b5f7a4e522c75c5013a70f14c510262b79596ac298ef52b5e04740d76367",
+          "shape": [
+            3584,
+            1024
+          ]
+        },
+        {
+          "bytes": 2048,
+          "dtype": "BF16",
+          "local_name": "post_attention_layernorm.weight",
+          "sha256": "9c5f1eafa39cd5af93a2f9fadafd3362bc886938ab1a1db3954baea7887fe303",
+          "shape": [
+            1024
+          ]
+        }
+      ]
+    },
+    "state_generation": false,
+    "token_formula": "(73*i+19)%256, i=0..255",
+    "weight_payload_copied": false
+  },
+  "historical_plan": {
+    "bytes": 15795,
+    "file": "plans/QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023.json",
+    "sha256": "07a2f5cdc0dcba5322f61aa4c6f410d417cf171f39fb6a361281123a2eb9664c",
+    "unchanged": true
+  },
+  "independent_checks": {
+    "carried128_original_hash": true,
+    "cold128_original_hash": true,
+    "embedding_pin_and_http_manifest": true,
+    "fixture_source_and_external_14_weight_hashes": true,
+    "matrix_current_root_receipt_argv_compiler_source_library_identity": true,
+    "matrix_elf_magic": true
+  },
+  "matrix_build": {
+    "argv_template": [
+      "$CXX",
+      "-shared",
+      "-fPIC",
+      "-O2",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "$ROOT/candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp",
+      "$ROOT/candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp",
+      "-o",
+      "$NEW_MATRIX/matrix_silu_numeric.so"
+    ],
+    "compiler_basename": "x86_64-linux-gnu-g++-14",
+    "compiler_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "current_root_path_binding_verified": true,
+    "historical_receipt_rewritten": false,
+    "library_loaded": false,
+    "numeric_symbols_called": false,
+    "returncode": 0,
+    "rtl_generated": false,
+    "seconds_recorded_in_compile_receipt": 0.5625399749842472,
+    "sources_after": {
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+      "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+      "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1"
+    },
+    "sources_before": {
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": "7702e5975ff04393deb4969835eb5ffcfbb99258329ee6ac27fd75b289356e14",
+      "candidates/qwen2_resident_matrix/ffn_tiles/silu_recipe.cpp": "3195c9f9d4136e81d271090632489def292257e8323bd6ef4ef75f78cbdaf067",
+      "candidates/qwen2_resident_matrix/transposed_down/numeric_smoke.cpp": "bdd7513bd788c03ac92be1d7c2f3553d3d7e0723ce1ac2892e93dcef58782ef1"
+    },
+    "status": "PASS_HOST_BUILD_ONLY",
+    "two_translation_units_three_source_closure": "matrix_numeric.cpp includes transposed_down/numeric_smoke.cpp. The optional fourth official-BF16 wrapper is not required by this GDN path."
+  },
+  "model": {
+    "id": "Qwen/Qwen3.5-0.8B",
+    "layer": 0,
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "rows_per_window": 128,
+    "window_count": 2
+  },
+  "publication_boundary": "This sanitized receipt contains only public URLs, repository-relative source names, artifact hashes, dimensions, sizes and scope. Raw payload, raw input, compiled ELF and manifests containing private absolute paths remain local. No publication or upload was performed.",
+  "remaining_gates": {
+    "fresh_official_m128_capture": "NOT_RUN",
+    "fresh_official_m16_capture": "NOT_RUN",
+    "original_threshold_numerical_comparison": "NOT_RUN",
+    "qualified_isolated_official_runtime": "NOT_ESTABLISHED_BY_THIS_RECEIPT",
+    "rtl": "NOT_RUN",
+    "typed_m128_cold_carried_full_block": "NOT_RUN"
+  },
+  "root_tool_reported_transport_and_bounds": {
+    "canonical_head": {
+      "raw_signed_query_retained_in_this_report": false,
+      "reported_redirect_hostname": "us.aws.cdn.hf.co",
+      "reported_status": 302
+    },
+    "embedding_collector_reported_exit": 0,
+    "escalation_or_security_bypass_reported": false,
+    "evidence_kind": "Root agent execution-tool report; no retained raw HEAD or launcher log was supplied. Not independently reconstructed from disk.",
+    "fixture_build_and_verify_reported_exit": 0,
+    "matrix_launcher_limits": {
+      "address_space_limit_bytes": 1073741824,
+      "allowed_cpu_count": 1,
+      "builder_subprocess_timeout_seconds": 60,
+      "cpu_limit_seconds": 65,
+      "kill_after_seconds": 5,
+      "outer_timeout_seconds": 75
+    },
+    "matrix_launcher_reported_exit": 0,
+    "ordinary_network_used": true
+  },
+  "runtime_next_step": "Retain the original plan as PLAN_ONLY. Continue separately authorized recovery of official pinned Transformers and locked dependencies, preserving canonical provenance and bounded transfers; qualify a fresh runtime with actual artifacts records before capture. No ready runtime or full-block PASS is implied.",
+  "schema": 1,
+  "scope": "Independent read-only validation of newly recovered pinned embedding, byte-copy raw input fixture and fresh current-root Matrix build. No official model capture, DUT arithmetic, numerical acceptance or RTL run.",
+  "source_commit": "f5166c5d1b3311963926382d2139b89ef2151909",
+  "status": "VERIFIED_INPUT_RECOVERY_AND_CURRENT_ROOT_HOST_BUILD_ONLY",
+  "validation_process": {
+    "actions": [
+      "Read and hash recovered bytes and manifests",
+      "Invoke existing load_embedding and load_fixture validators",
+      "Invoke existing Matrix build-receipt validate without ELF load",
+      "Verify expected cold/carried hashes and ELF magic"
+    ],
+    "note": "The existing heteronpu package initializer imports NumPy; no model, DUT or arithmetic kernel was executed. An initial auxiliary no-NumPy assertion failed after identity validations, then the transitive import was confirmed and the intended identity checks reran successfully. This was not an artifact-validation failure.",
+    "numpy_imported_transitively": true,
+    "source_sha256": {
+      "candidates/qwen35_gdn_prefill/input_fixture.py": "ab9839f63d45a10302754b7cc730ee7bba76cd6d9fc895c1f801d6a94936ffa2",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+      "scripts/build_shared_matrix_recipe.py": "2bcb269f959c04af287d2c0de9cbaf63169081d897b26ee25a96392e20a9f271",
+      "src/heteronpu/pinned_block_payload.py": "db35754b316c97b13915cb6a54d0746ce3d95f9193b0e2cb760f47d1fa198c30",
+      "src/heteronpu/pinned_gdn_payload.py": "0ca49fdfccd3c6dbd9e7dfd7809229d46e05b3cd9de46007ed0ad013b786b01b",
+      "src/heteronpu/pinned_prefix_payload.py": "eee44129453010d2d2c0f94300acd448b57a434604396b5d524390ef36ec2b57",
+      "src/heteronpu/weight_header_contract.py": "dcbbb4ecc44533031eda62cf45176f73168c26248eca75d05f1a0976180182a8"
+    },
+    "torch_imported": false
+  }
+}

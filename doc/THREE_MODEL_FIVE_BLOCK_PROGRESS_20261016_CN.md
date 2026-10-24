@@ -2142,3 +2142,20 @@ reports/execution/QWEN35_FULL_DRIVER_EXP_POLICY_20261023/summary.json；公开�
 详细记录：doc/QWEN35_NATIVE_M128_DECAY_CROSSING_20261023_CN.md；安全摘要：
 reports/execution/QWEN35_NATIVE_M128_DECAY_CROSSING_20261023/summary.json。
 公开不含私有路径、原始数组、raw log 或权重，本批不修改历史 receipt。
+
+
+## PASS（真实 embedding/输入字节身份与当前目录 host-build）/ PENDING（运行时资格与完整数值）：2026-10-23
+
+- 恢复固定 Qwen3.5-0.8B revision 的 524,288 B embedding HTTP206 切片并核验原 SHA；
+  复用原有 14 项、43,111,008 B L0 权重，通过原 byte-copy build/verify 生成两个
+  262,144 B cold128/carried128 输入，原固定哈希均一致。没有模型 forward、状态或 golden。
+- 使用现有编译器完成新的当前根目录 Matrix 构建，回执 PASS_HOST_BUILD_ONLY、exit0、
+  0.5625399749842472 秒；27,032 B ELF 及精确 argv、编译器、三源文件和根目录绑定均经
+  独立只读复核。未改旧回执，未加载 ELF 或执行数值。工具报告的资源限额与磁盘证据分列。
+- 本批仅关闭输入缺失和旧 Matrix 回执目录绑定缺口；未建立官方隔离 runtime 资格，
+  未运行新的官方 M16/M128 capture、完整 typed cold→carried block 或原门限比较。
+  并行运行时恢复不纳入本批九文件回执；完整数值、RTL、周期/MAC 利用率仍无新增 PASS。
+- 原 [PLAN_ONLY 计划](../plans/QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023.json) 保持为历史计划；
+  实际证据见 [恢复回执](../reports/execution/QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023/RECOVERY_RECEIPT.json)
+  与 [中文更新](QWEN35_L0_M128_OFFICIAL_RECOVERY_20261023_CN.md)。仅源码入口、pin、hash、
+  尺寸与安全摘要进入候选小批，不提交权重、输入、ELF、私有路径或签名跳转参数。

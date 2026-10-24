@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "status": "PLAN_ONLY_NOT_EXECUTED",
+  "source_commit": "f5166c5d1b3311963926382d2139b89ef2151909",
+  "scope": "Fresh Qwen3.5-0.8B L0 M128 official reference plus separately executed typed full-block cold/carried replay and original-threshold comparison. No prior PASS is inherited.",
+  "restrictions": [
+    "No acquisition, installation, compilation, model capture, replay, or network probe was executed while preparing this plan.",
+    "Reuse the already verified 14 original L0 tensors; do not download them again.",
+    "Never rewrite historical receipts, relax identity checks or numerical thresholds, or substitute synthetic smoke inputs.",
+    "No public weights, input/output tensors, NPZ files, private absolute paths, or text-encoded data. Publish only source, pins, hashes and redacted summaries when separately authorized.",
+    "Honor network and filesystem denial. Do not change security settings or inspect denied paths. A sandbox-launch failure is not a download result."
+  ],
+  "parameter_contract": {
+    "ROOT": "Current repository root; run command templates from this directory.",
+    "PYTHON": "Verified Python 3.12 executable.",
+    "VERIFIED_PAYLOAD": "Existing verified external L0 payload directory; do not copy or rewrite its tensors.",
+    "TORCH_WHEEL": "Existing verified local official Torch wheel.",
+    "QUALIFIED_RUNTIME": "Fresh runtime below ROOT/work, qualified by the requirements below; not an old receipt with edited paths.",
+    "NEW_EMBED": "Fresh nonexistent embedding directory below ROOT/work.",
+    "NEW_FIXTURE": "Fresh nonexistent raw-input fixture directory below ROOT/work.",
+    "NEW_MATRIX": "Fresh nonexistent Matrix build directory below ROOT/work.",
+    "VECTOR_R2": "Existing independently verified R2 ELF with its adjacent original receipt; not rebuilt by this plan.",
+    "NEW_CAPTURE16": "Fresh M16 official reference directory below ROOT/work.",
+    "NEW_CAPTURE128": "Fresh M128 official reference directory below ROOT/work.",
+    "NEW_ACTUAL128": "Fresh complete typed M128 replay directory below ROOT/work.",
+    "NEW_COMPARISON": "Fresh nonexistent comparison JSON file below ROOT/work."
+  },
+  "verified_reuse": {
+    "layer0_payload": {
+      "tensor_count": 14,
+      "bytes": 43111008,
+      "manifest_sha256": "6c47a66ee801740c3200203b6e18045cafd7e17f898660598119ab67e374e8e0",
+      "pin": "config/upstream/qwen3_5_0p8b/layer0_payload_pin.json",
+      "dtypes": "Original BF16 and F32 storage; no cast or quantization."
+    },
+    "torch_wheel": {
+      "filename": "torch-2.10.0+cpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+      "bytes": 188943803,
+      "sha256": "ee40b8a4b4b2cf0670c6fd4f35a7ef23871af956fecb238fbf5da15a72650b1d",
+      "official_index": "https://download.pytorch.org/whl/cpu",
+      "download_required": false
+    },
+    "vector_r2": {
+      "library_sha256": "b04209e85923fc858092ec6019e6b183cdc92a0afabed75cbf63179a83302bd2",
+      "receipt_sha256": "33e727a5adb2ad5525ead4ae77a179f7c669aaa61460b4f1d71e2935397210b1",
+      "arithmetic_backend": "finite_mul_tininess_r2",
+      "revalidate_source_and_compiler_before_use": true
+    }
+  },
+  "embedding_acquisition": {
+    "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+    "range": "bytes=70216-594503",
+    "bytes": 524288,
+    "whole_shard_bytes": 1746942600,
+    "sha256": "5e6f4f309ddda446bf86c961ea13fc12030713b6cac428f7af6c8f9d1b5b83da",
+    "pin": "config/upstream/qwen3_5_0p8b/prefix_payload_pin.json",
+    "existing_implementation": "candidates/qwen35_gdn_prefill/input_fixture.py:collect_embedding; src/heteronpu/pinned_block_payload.py:fetch_range",
+    "checks": "HTTP 206; Content-Range bytes 70216-594503/1746942600; Content-Length 524288; identity encoding; read at most 524289 bytes; reject size/hash mismatch before writing.",
+    "request_timeout_seconds": 90,
+    "redirect_evidence": "Committed HTTP receipt does not retain a verifiable redirect chain or redirect count. Current redirect hosts must be observed and checked; do not guess or reuse expired signed URLs.",
+    "command": "timeout --signal=TERM --kill-after=5s 110s \"$PYTHON\" -B -m candidates.qwen35_gdn_prefill.input_fixture --root \"$ROOT\" collect-embedding --output \"$NEW_EMBED\""
+  },
+  "byte_only_input_fixture": {
+    "command": "\"$PYTHON\" -B -m candidates.qwen35_gdn_prefill.input_fixture --root \"$ROOT\" build --embedding \"$NEW_EMBED\" --layer0-payload \"$VERIFIED_PAYLOAD\" --output \"$NEW_FIXTURE\"",
+    "verification_command": "\"$PYTHON\" -B -m candidates.qwen35_gdn_prefill.input_fixture --root \"$ROOT\" verify-fixture --fixture \"$NEW_FIXTURE\"",
+    "token_ids": "(73*i+19)%256 for i=0..255, copied as unchanged BF16 rows",
+    "cold128": {"bytes": 262144, "sha256": "6e8c1a99dd98313abeb693afbe1fdf3aece5ebfab4b19f4737f3b663a0013b54"},
+    "carried128": {"bytes": 262144, "sha256": "01e6c989b40eb2a9774cb9fe93f9818fb18128e996771ec581fdb23587270fc0"},
+    "stop_if_either_hidden_hash_differs": true
+  },
+  "official_runtime": {
+    "status": "BLOCKED_PENDING_OFFICIAL_DEPENDENCY_LOCK_AND_FRESH_QUALIFICATION_IMPLEMENTATION",
+    "existing_builder": "scripts/rebuild_qwen35_official_runtime.sh",
+    "existing_builder_sufficient": false,
+    "existing_builder_gaps": [
+      "Does not install Transformers, huggingface-hub, tokenizers or safetensors.",
+      "Receipt uses sha256/wheels, while native/capture.py requires measured artifacts records with path, bytes and sha256.",
+      "Downloads Torch again even though its verified wheel is retained. Do not run this builder unmodified."
+    ],
+    "transformers": {
+      "revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+      "url": "https://github.com/huggingface/transformers/archive/14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip",
+      "sha256": "15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d",
+      "bytes": null,
+      "bytes_status": "Not present in available committed pins; must measure, not estimate.",
+      "bounded_acquisition_max_bytes": 134217728,
+      "redirect_expectation": "GitHub archive endpoint normally redirects to codeload.github.com. Exact current Location and HTTPS chain are unverified until a permitted bounded probe.",
+      "installed_source_checks": {
+        "src/transformers/cache_utils.py": {"bytes": 107721, "sha256": "abdcb0ae88aa5b924ef7d76879db680e9af8f3ec1dafbba7ce446ecb521a944b"},
+        "src/transformers/masking_utils.py": {"bytes": 80642, "sha256": "af3d84dfe82a0b57c40625c89fb32b2cd6bf7351432ee5e76a9e8eac4289575b"},
+        "src/transformers/models/qwen3_5/modeling_qwen3_5.py": {"bytes": 88051, "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18"},
+        "src/transformers/models/qwen3_5/configuration_qwen3_5.py": {"bytes": 8281, "sha256": "2f26c4bb911772d42a5f16e82bdea4b9ba1ac07872df527ec228622d35f3c30e"}
+      },
+      "separate_raw_source_downloads_required": false,
+      "installation_provenance": "Use the canonical official archive URL with its SHA256 fragment through pip, preserving the genuine direct_url.json. Installing a local ZIP creates file:// provenance and does not satisfy capture.py. Do not edit direct_url.json to manufacture a canonical origin. Reuse pip's verified HTTP cache when available.",
+      "bounded_install_route_status": "UNRESOLVED: canonical pip installation can refetch the archive. A separately bounded predownload does not bound that later fetch. Before installation, review an implementation that guarantees total body/dependency bounds while preserving genuine canonical provenance; do not run an unconstrained URL install or assume a cache hit."
+    },
+    "dependency_resolution": {
+      "official_index": "https://pypi.org/simple",
+      "artifact_host": "files.pythonhosted.org",
+      "base_version_and_hash_source": "scripts/rebuild_qwen35_official_runtime.sh",
+      "documented_additions": {"huggingface-hub": "1.33.0", "tokenizers": "0.23.2", "safetensors": "0.8.0"},
+      "historical_native_versions_differ": {"huggingface-hub": "1.31.0", "tokenizers": "0.23.1"},
+      "version_policy": "Use a newly pinned and fully recorded dependency set compatible with the unchanged Transformers source. A fresh reference is not byte-identical reproduction of the unavailable historical environment.",
+      "remaining_wheel_urls_sizes_and_hashes": null,
+      "next_step": "Resolve missing wheel and build-backend artifacts from official PyPI metadata, recording exact filename, version, HTTPS URL, bytes and SHA256 before installing. Reuse any local wheel only after exact lock/hash verification. Do not copy the mixed recovered runtime wholesale as qualified.",
+      "lock_installation": "Install verified locked wheels without index/dependency resolution into a fresh isolated site-packages directory; consume TORCH_WHEEL locally. Build/install the hash-verified canonical Transformers archive with a separately locked official build backend and no undeclared dependency fetch."
+    },
+    "fresh_qualification_requirements": [
+      "Actual Python 3.12 interpreter and isolated module paths; no user-site imports; pinned Torch 2.10.0+cpu and commit 449b1768410104d3ed79d3bcfe4ba1d65c7f22c0; NumPy 2.3.5.",
+      "ATEN_CPU_CAPABILITY=default before Torch import; one allowed CPU and one intra/inter-op thread; confirm DEFAULT dispatch. No autocast, eval/inference, deterministic algorithms and highest float32 matmul precision for capture.",
+      "Verify all four installed official source files, canonical Transformers direct_url URL and archive SHA; verify all installed wheel/source artifacts and dependency consistency.",
+      "Generate a new immutable runtime_receipt.json only after actual successful checks, with status PASS_ISOLATED_PINNED_RUNTIME_READY, nonempty measured checks and artifacts mapping each retained provenance artifact to current-root path, byte count and SHA256. This must be a new verifier result, not schema-only repair of an old receipt.",
+      "Artifacts must include current wrapper, dependency lock/acquisition/install reports, qualification source/output, exact installed native/source identities and archive provenance. Preserve failures and do not create a ready receipt on failure.",
+      "Record that runtime readiness is not an official block capture, candidate result, RTL result or numerical PASS."
+    ]
+  },
+  "bounded_network_test_plan": {
+    "status": "NOT_RUN",
+    "initial_action": "One HTTPS HEAD per canonical artifact endpoint, no automatic redirects, connect timeout 10 seconds, total timeout 30 seconds, at most three redirects inspected one hop at a time. HEAD tests reachability only; it cannot establish payload or range correctness.",
+    "body_limits": "Embedding body only through the existing checked 524288-byte collector; archive acquisition must abort above 134217728 bytes; dependency metadata at most 2097152 bytes per response before lock resolution.",
+    "provenance": "Record canonical URL, UTC time, status, sanitized redirect hostname/path, declared/measured length and exact hash. Never retain signed query strings or credentials in public plans/reports.",
+    "failure_rule": "Stop the denied operation; preserve the exact action/target/error and whether anything executed. No security-setting changes, denied-path reads, alternate-route bypass, automatic escalation retry or claim of acquisition on sandbox-launch failure."
+  },
+  "current_root_matrix": {
+    "status": "FRESH_BUILD_REQUIRED",
+    "reason": "Existing ELF/source bytes match but the old compile argv is bound to another checkout root. Do not edit its receipt.",
+    "command": "timeout --signal=TERM --kill-after=5s 75s \"$PYTHON\" -B scripts/build_shared_matrix_recipe.py --repo \"$ROOT\" --out \"$NEW_MATRIX\"",
+    "internal_compile_timeout_seconds": 60,
+    "compiler": "Existing trusted g++; no compiler download or installation.",
+    "environment_after_validation": {
+      "MATRIX_SERVICE_LIBRARY": "$NEW_MATRIX/matrix_silu_numeric.so",
+      "MATRIX_SERVICE_COMPILE_RECEIPT": "$NEW_MATRIX/compile.json"
+    },
+    "claim": "PASS_HOST_BUILD_ONLY, not official numerical comparison or RTL."
+  },
+  "official_capture_commands": [
+    "timeout --signal=TERM --kill-after=5s 140s \"$QUALIFIED_RUNTIME/python.sh\" -B -m candidates.qwen35_gdn_prefill.native.capture --root \"$ROOT\" --fixture \"$NEW_FIXTURE\" --runtime \"$QUALIFIED_RUNTIME\" --output \"$NEW_CAPTURE16\" --tokens 16",
+    "timeout --signal=TERM --kill-after=5s 140s \"$QUALIFIED_RUNTIME/python.sh\" -B -m candidates.qwen35_gdn_prefill.native.capture --root \"$ROOT\" --fixture \"$NEW_FIXTURE\" --runtime \"$QUALIFIED_RUNTIME\" --output \"$NEW_CAPTURE128\" --tokens 128"
+  ],
+  "capture_gate": "M16 first, separate fresh process; only continue after its manifest and all files validate. M128 captures original complete L0 using actual same-instance cold128 then carried128 DynamicCache. Each capture has internal 120-second CPU/wall limits and 128-MiB activation limit. M16 is only cold16/carried16 and never replaces M128.",
+  "typed_full_block_replay": {
+    "command": "timeout --signal=TERM --kill-after=10s 4000s \"$QUALIFIED_RUNTIME/python.sh\" -B -m candidates.qwen35_gdn_prefill.full_driver --fixture \"$NEW_FIXTURE\" --output \"$NEW_ACTUAL128\" --vector-library \"$VECTOR_R2\" --vector-exception-policy ieee_rne_finite_gradual_underflow --vector-arithmetic-backend finite_mul_tininess_r2 --projection-policy gdn_pair_k512_independent_fp32_sum --chunk-exp-policy experimental_equal_heads_chunk_candidate_p7_split_ln2_gradual_underflow_v1 --rows 128 --budget-seconds 3600",
+    "matrix_environment_required": true,
+    "resume_supported": false,
+    "terminal_gate": "Fresh actual_terminal.json and summary.json; status ACTUAL_COMPLETE_UNCOMPARED; 32 terminal commands; generation 2; actual same-instance cold-to-carried roots; unchanged source, fixture, Matrix, Vector and arithmetic-binding identities.",
+    "scope": "Typed software coordinator only. Experimental exp is explicitly selected; no native PASS, production opcode, RTL, hardware-cycle, throughput or MAC-utilization claim."
+  },
+  "comparison": {
+    "command": "timeout --signal=TERM --kill-after=5s 120s \"$QUALIFIED_RUNTIME/python.sh\" -B -m candidates.qwen35_gdn_prefill.full_compare --actual \"$NEW_ACTUAL128\" --native-manifest \"$NEW_CAPTURE128/manifest.json\" --fixture \"$NEW_FIXTURE\" --output \"$NEW_COMPARISON\"",
+    "gates": "Current committed finite-BF16 comparator and frozen thresholds unchanged; verify every actual/native output and all source/runtime/input identities before and after. Retain FAIL or MISSING honestly; no synthetic fallback or old PASS inheritance."
+  },
+  "resource_admission_before_execution": {
+    "required_observations": ["Current disk space and inode budget", "Current cgroup memory limit/current usage and process limits", "Current allowed CPU affinity", "Existing compiler and retained dependency identities"],
+    "historical_only_not_a_reservation": {"m128_pair_seconds": 2154.3035, "peak_rss_kib": 414600, "typed_memory_bytes": 126374528, "output_bytes": 29999104},
+    "budget_note": "The CLI default 1800 seconds is below historical M128 elapsed time. The explicit 3600-second compute/4000-second outer limit is a bounded proposal, not proof that current resources or changed arithmetic will complete."
+  },
+  "completion_condition": "Only a fresh qualified runtime, verified real embedding/inputs, fresh current-root Matrix receipt, fresh official M128 capture, completed real typed M128 cold/carried replay and passing unchanged final comparison close the numerical task. This plan itself closes none of those gates."
+}

@@ -18,6 +18,11 @@ PAYLOAD_DEPENDENCIES = tuple('src/heteronpu/' + name + '.py' for name in (
     'qwen35_dense_contract', 'pinned_block_payload', 'pinned_gdn_payload',
     'qwen_family_contracts', 'abi_validation', 'cgra_sfu', 'command',
     'dtypes', 'kv_engine', 'matrix_engine', 'scheduler'))
+CI_FIXTURE_INPUTS = (
+    '.github/workflows/qwen35-gdn-prefill-model.yml',
+    'candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp',
+    'candidates/qwen35_uf_predicate_r2/STIMULI.json',
+)
 
 
 def source_files():
@@ -30,6 +35,7 @@ def source_files():
              if p.is_file() and p.suffix in ('.py', '.cpp', '.c', '.json')}
     paths.add(ROOT / "config/upstream/weight_headers/qwen3_5_35b_a3b/activations.py")
     paths.update(ROOT / name for name in PAYLOAD_DEPENDENCIES)
+    paths.update(ROOT / name for name in CI_FIXTURE_INPUTS)
     paths.update(ROOT / record['path'] for record in records)
     from candidates.shared_resource_timing.model import SOURCE_PINS
     paths.update(ROOT / pin.path for pin in SOURCE_PINS)

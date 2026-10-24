@@ -1997,3 +1997,12 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 原M128 Prep与ChunkOwner/TypedChunkDriver实际完成两个chunk64，单head真实state carry，未用M1循环或注入生产矩阵。48个scratch矩阵403456 words、21172544 strict Add/Mul中间值比较通过；724160读、27776写及ACK，132096 carried-state读，末1024个state-staging读。32768B BF16输出与65536B最终state完整ACK，原owner成功staging回执退休一次，chunks_completed=2。output/state/scratch仍未发布，block commit/generation未推进，不能称完整block完成。
 
 作者1测试79.336秒，独审1测试73.409秒exit0，各自1CPU/512MiB/120秒限额，不与旧回归拼接。各38列明源码前后hash一致，作者/独审集合有一项差异，收据明确分别记录；37个既有文件与HEAD一致，9份作者artifact终态hash核验。保持原scalar与strict软件hook边界，不授原生Vector16或硬件资格；cold单head且合成原始输入，未覆盖全部head/模型权重/完整block/RTL。五完整RTL0/5、Qwen2旧M128UNKNOWN、无MAC利用率达标证据。小批本地提交并备份，远端发布待确认，未清理。
+
+
+## PASS（默认关闭R2后端接入及小批native软件算术）/ INCOMPLETE（完整block/RTL）：2026-10-23
+
+实际Vector16/build_library新增明确后端选择，legacy仍默认，R2绑定固定source/version/ABI/ELF，普通op与host_batch Mul→Add共用原R2primitive；full_driver冻结加载时身份、函数ABI与errcheck，接入前/回调后/最终report复查。初审发现接入前可重绑、errcheck遗漏、最终回调后未复查三处新接入漏洞，均修复；FAILED证据保留不出成功。exception_policy/fatalmask、scalarExp及两个CPP源码不改。
+
+独审最终58项纯Python身份/控制测试23.295秒PASS，1CPU/512MiB/120秒，全CDLL阻断；早期内存限额与CDLL(None)tripwire失败保留，不混作算术失败。随后根执行实际两次顺序编译和两个真实Vector16后端加载，3测试0skip、0failure/error，0.234秒unittest、0.690314秒payload。70有限样本×两后端×两策略=280单op，对照Fraction；另84个普通/批量对照，活动lane1/7/16。子进程1CPU/1GiB/40秒CPU/工作限额与2MiB文件限额，外层60秒预算；监督实际1.001870秒exit0，leader已reap、原owned group未见，不声称一般逃逸后代不存在或strict_cleanup.py已执行。ELF仅本地，公开源码/pin/hash/有限摘要。
+
+这只是native软件后端接入小批PASS，不是HardFloat/RTL、完整M128/block或MAC验收；合法UF是否接受与exp饱和仍须独立合同验证。五完整RTL0/5，Qwen2旧M128UNKNOWN。中文计划随本地小批提交，远端发布仍待确认，未启动长跑或清理。

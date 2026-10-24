@@ -1,0 +1,205 @@
+{
+  "cleanup_evidence_limit": "Parent observed original supervised process-group absence after reaping; not a strict_cleanup.py identity-scan proof or a claim about external processes.",
+  "cold_tests": {
+    "elapsed_seconds": 23.295,
+    "errors": 0,
+    "failures": 0,
+    "independent_review": true,
+    "limits": {
+      "address_space_bytes": 536870912,
+      "cpu_affinity_count": 1,
+      "wall_seconds": 120
+    },
+    "skips": 0,
+    "status": "PASS",
+    "synthetic_control_owners": true,
+    "tests_run": 58,
+    "vector_native_loaded": false
+  },
+  "compiler_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+  "date_utc": "2026-10-23",
+  "default_backend": "legacy_host_postfix_uf_v1",
+  "default_exception_policy": "legacy_vector_fatal_underflow",
+  "earlier_review_failure": {
+    "address_space_bytes": 536870912,
+    "elapsed_seconds": 5.667,
+    "errors": 31,
+    "exception": "MemoryError",
+    "exceptions": [
+      "MemoryError",
+      "NumPy_ArrayMemoryError"
+    ],
+    "failures": 0,
+    "numerical_result": false,
+    "passed": 20,
+    "passed_scope": {
+      "backend_admission_source": 13,
+      "full_coordinator_control": 5,
+      "identity_receipt": 2
+    },
+    "remedy": "Explicit synthetic scalar fixture and deterministic release of control-fixture reference cycles",
+    "retained_as_history": true,
+    "skips": 0,
+    "status": "FAILED_RESOURCE_CAP",
+    "tests_run": 51
+  },
+  "fatal_masks": {
+    "ieee_rne_finite_gradual_underflow": 28,
+    "legacy_vector_fatal_underflow": 30
+  },
+  "full_block_executed": false,
+  "hardware_mac_utilization": null,
+  "intermediate_instrumentation_failure": {
+    "numerical_result": false,
+    "reason": "Original control fixture called CDLL(None) during SharedScalar initialization; final fixture is explicitly synthetic",
+    "scope": "reviewer_only_CDLL_tripwire_against_original_scalar_fixture",
+    "tripwire_failures": 36
+  },
+  "native_limits": {
+    "address_space_bytes": 1073741824,
+    "core_dump_bytes": 0,
+    "cpu_affinity_count": 1,
+    "cpu_seconds": 40,
+    "downloads": false,
+    "file_size_bytes": 2097152,
+    "network_requests": false,
+    "supervisor_wall_bound_seconds": 60,
+    "work_alarm_seconds": 40
+  },
+  "native_tests": {
+    "backend_identities": [
+      {
+        "abi": "gdn_vector16_add_mul_policy_trace_v1",
+        "backend": "legacy_host_postfix_uf_v1",
+        "implementation_version": "vector16-host-v1",
+        "library_sha256": "71275803ea5ab05fd5ef991c133f0a87a9217e062fd012b416dd627aafd12e8d",
+        "source": "candidates/qwen35_gdn_prefill/chunk/vector16.cpp",
+        "source_sha256": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+      },
+      {
+        "abi": "gdn_vector16_add_mul_policy_trace_v1",
+        "backend": "finite_mul_tininess_r2",
+        "implementation_version": "vector16-finite-mul-uf-r2",
+        "library_sha256": "b04209e85923fc858092ec6019e6b183cdc92a0afabed75cbf63179a83302bd2",
+        "source": "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp",
+        "source_sha256": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7"
+      }
+    ],
+    "batch_cases": {
+      "backends": 2,
+      "checks": [
+        "result_words",
+        "flags",
+        "fault_stage",
+        "logical_issue_counts",
+        "lane_operation_counts"
+      ],
+      "exception_policies": 2,
+      "representative_lane_widths": [
+        1,
+        7,
+        16
+      ],
+      "scenarios": 7,
+      "total_comparisons": 84
+    },
+    "compiler_driver_invocations": 2,
+    "errors": 0,
+    "failures": 0,
+    "payload_elapsed_seconds": 0.6903140380163677,
+    "single_cases": {
+      "backends": 2,
+      "distinct_stimuli": 70,
+      "exception_policies": 2,
+      "oracle": "independent_exact_Fraction_binary32_RNE",
+      "total_evaluations": 280
+    },
+    "skips": 0,
+    "status": "PASS",
+    "test_elapsed_seconds": 0.234,
+    "tests_run": 3
+  },
+  "not_run": [
+    "full_M16_block",
+    "full_M128_block",
+    "16_head_long_job",
+    "checkpoint_or_weight_download",
+    "full_PyTorch_model_comparison",
+    "Chisel_or_HardFloat_hardware",
+    "RTL",
+    "area_timing",
+    "hardware_MAC_utilization"
+  ],
+  "opt_in_backend": "finite_mul_tininess_r2",
+  "parent_observation": {
+    "elapsed": 1.0018699660431594,
+    "exit_code": 0,
+    "leader_reaped": true,
+    "owned_group_absent": true,
+    "scope": "only this supervisor-created process group; no external process claim",
+    "work_timeout": false
+  },
+  "publication_contains_elf": false,
+  "publication_contains_private_absolute_paths": false,
+  "publication_contains_raw_logs": false,
+  "retained_original_evidence_fingerprints": {
+    "actual_parent_supervisor_not_published": {
+      "bytes": 1556,
+      "sha256": "2b4e13e094affef41c1b0b30c378346fda572652991b3b1de73ae88b553ab191"
+    },
+    "native_summary": {
+      "bytes": 1228,
+      "sha256": "7b28732730c3fba76a885928ea076039207ce41b2fb86c04e18b76ef18a68f87"
+    },
+    "parent_result": {
+      "bytes": 218,
+      "sha256": "533966008aac4cbf268d1443e8a67e5fde25598b2716686d819ee5eef7ce7478"
+    },
+    "reviewed_payload_not_published": {
+      "bytes": 4889,
+      "sha256": "5281e0c41637a13ab52c4f3b11a46064954796211e92c606728cf17e7a711f82"
+    },
+    "test_log_not_published": {
+      "bytes": 1862,
+      "sha256": "187ba5895a5c651fee5c1a92e991b36672799937017d96693bf5f88951d064af"
+    }
+  },
+  "rtl_executed": false,
+  "schema": "vector16-default-off-backend-integration-qualification-v1",
+  "scope": "EXISTING_VECTOR16_TINY_NATIVE_SOFTWARE_AND_GDN_IDENTITY_CONTROL_ONLY",
+  "source_fingerprint_scope": "selected changed integration/tests and fixed CPP/stimuli; not a full dependency/runtime closure",
+  "source_fingerprints": {
+    "candidates/qwen35_gdn_prefill/chunk/test_backend_native.py": {
+      "bytes": 7838,
+      "sha256": "7344770a59c51db33c12fda43b6602d83b49739aad42f5389310af41d3debc49"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/test_backend_selection.py": {
+      "bytes": 10367,
+      "sha256": "f07027ccf3ebb488bea131e6ca62ca6fa3ecc2b79a66a3021d6f498172052a7b"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+      "bytes": 13703,
+      "sha256": "d8a7ce5456507d5f29423434aa3d985b4ccff50744f832f5b06b7cfebb81c533"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": {
+      "bytes": 3841,
+      "sha256": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+    },
+    "candidates/qwen35_gdn_prefill/full_driver.py": {
+      "bytes": 41807,
+      "sha256": "1717a684ad8fceda644837507497a2a12393fb06a5c44ba753f1ac8b56a8cf0b"
+    },
+    "candidates/qwen35_gdn_prefill/test_full_driver.py": {
+      "bytes": 28448,
+      "sha256": "cfb6327e0fe70ce47b7dd4296d3f9d86a6caa082b2369364a73523a7f9708965"
+    },
+    "candidates/qwen35_uf_predicate_r2/STIMULI.json": {
+      "bytes": 14440,
+      "sha256": "695f2e8f6649cbe03723410fbef29d766bdf09b21dfb24e75bb0050d9260faf8"
+    },
+    "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp": {
+      "bytes": 5078,
+      "sha256": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7"
+    }
+  }
+}

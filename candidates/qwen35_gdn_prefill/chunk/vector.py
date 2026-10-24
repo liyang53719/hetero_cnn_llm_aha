@@ -8,17 +8,50 @@ Host calls/issue counts are NOT measured hardware cycles or achieved throughput.
 """
 from collections import Counter
 import ctypes as C
+from dataclasses import asdict, dataclass
 import json
 from pathlib import Path
 import shutil
 import subprocess
 
-from ..rms_owner import ArithmeticFault, finite, sha
+from ..rms_owner import ROOT, ArithmeticFault, finite, sha
 
 
 LEGACY_POLICY = 'legacy_vector_fatal_underflow'
 IEEE_POLICY = 'ieee_rne_finite_gradual_underflow'
 POLICY_MASKS = {LEGACY_POLICY: 30, IEEE_POLICY: 28}
+
+LEGACY_BACKEND = 'legacy_host_postfix_uf_v1'
+FINITE_MUL_UF_BACKEND = 'finite_mul_tininess_r2'
+ARITHMETIC_BACKENDS = (LEGACY_BACKEND, FINITE_MUL_UF_BACKEND)
+VECTOR_ABI = 'gdn_vector16_add_mul_policy_trace_v1'
+
+
+@dataclass(frozen=True)
+class BackendIdentity:
+    backend: str
+    implementation_version: str
+    source: str
+    source_sha256: str
+    abi: str
+    library_sha256: str
+
+
+def backend_source(arithmetic_backend):
+    """Closed, source-pinned choices; never discover a backend from a receipt."""
+    if type(arithmetic_backend) is not str or arithmetic_backend not in ARITHMETIC_BACKENDS:
+        raise ValueError('explicit supported Vector arithmetic backend required')
+    if arithmetic_backend == LEGACY_BACKEND:
+        name, version, digest = ('candidates/qwen35_gdn_prefill/chunk/vector16.cpp',
+            'vector16-host-v1', 'ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919')
+    else:
+        name, version, digest = ('candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp',
+            'vector16-finite-mul-uf-r2', 'a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7')
+    source = (ROOT / name).resolve(strict=True)
+    if sha(source.read_bytes()) != digest:
+        raise ValueError('Vector16 pinned arithmetic source changed: ' + name)
+    return source, dict(backend=arithmetic_backend, implementation_version=version,
+                       source=name, source_sha256=digest, abi=VECTOR_ABI)
 
 
 FLAGS = ('-std=c++17', '-O2', '-shared', '-fPIC', '-fno-fast-math',
@@ -36,42 +69,62 @@ class VectorArithmeticFault(ArithmeticFault):
             host_environment_status=environment, reason=reason)
 
 
-def build_library(directory):
+def build_library(directory, *, arithmetic_backend=LEGACY_BACKEND):
     """Explicit one-compiler-process host build; no parallel build or RTL."""
+    source, backend = backend_source(arithmetic_backend)
     directory = Path(directory).resolve()
     directory.mkdir(parents=True, exist_ok=True)
-    source = Path(__file__).with_name('vector16.cpp').resolve()
-    output = directory / 'gdn_vector16.so'
+    output = directory / ('gdn_vector16.so' if arithmetic_backend == LEGACY_BACKEND
+                          else 'gdn_vector16_finite_mul_tininess_r2.so')
     compiler = shutil.which('g++')
     if compiler is None:
         raise RuntimeError('g++ required for the generic 16-lane host adapter')
     argv = [compiler, *FLAGS, str(source), '-o', str(output)]
     subprocess.run(argv, check=True, capture_output=True, timeout=60)
+    # Recheck the pinned input after compilation, before issuing a receipt.
+    backend_source(arithmetic_backend)
     output.with_suffix('.json').write_text(json.dumps(dict(
         status='PASS_HOST_BUILD_ONLY', argv=argv, source_sha256=sha(source.read_bytes()),
         library_sha256=sha(output.read_bytes()), compiler_sha256=sha(Path(compiler).read_bytes()),
-        hardware_simulation=False, compiler_processes=1), indent=2) + '\n')
+        arithmetic_backend=backend, hardware_simulation=False, compiler_processes=1), indent=2) + '\n')
     return output
 
 
+def verify_library(library, *, arithmetic_backend=LEGACY_BACKEND):
+    """Validate identity without loading or executing the native library.
+
+    Original receipts without backend metadata remain valid ONLY for the
+    explicit/default legacy source. A new backend always requires its full
+    version/source/ABI record in addition to every original host build gate.
+    """
+    source, backend = backend_source(arithmetic_backend)
+    library = Path(library).resolve(strict=True)
+    receipt = json.loads(library.with_suffix('.json').read_text())
+    library_sha256 = sha(library.read_bytes())
+    if (type(receipt) is not dict or receipt.get('status') != 'PASS_HOST_BUILD_ONLY' or
+            receipt.get('source_sha256') != backend['source_sha256'] or
+            receipt.get('library_sha256') != library_sha256 or
+            type(receipt.get('argv')) is not list or not receipt['argv'] or
+            receipt['argv'][1:] != [*FLAGS, str(source), '-o', str(library)]):
+        raise ValueError('Vector16 requires its exact strict host build receipt')
+    if ('arithmetic_backend' in receipt or arithmetic_backend != LEGACY_BACKEND):
+        if receipt.get('arithmetic_backend') != backend:
+            raise ValueError('Vector16 arithmetic backend/version/source/ABI receipt mismatch')
+    compiler = Path(receipt['argv'][0]).resolve(strict=True)
+    if receipt.get('compiler_sha256') != sha(compiler.read_bytes()):
+        raise ValueError('Vector16 compiler identity changed after host build')
+    return library, receipt, BackendIdentity(**backend, library_sha256=library_sha256)
+
+
 class Vector16:
-    def __init__(self, library, *, exception_policy=LEGACY_POLICY):
+    def __init__(self, library, *, exception_policy=LEGACY_POLICY,
+                 arithmetic_backend=LEGACY_BACKEND):
         if exception_policy not in POLICY_MASKS:
             raise ValueError("explicit supported Vector exception policy required")
         self.exception_policy = exception_policy
         self.fatal_mask = POLICY_MASKS[exception_policy]
-        self.library = Path(library).resolve(strict=True)
-        receipt = json.loads(self.library.with_suffix('.json').read_text())
-        source = Path(__file__).with_name('vector16.cpp').resolve()
-        if (receipt.get('status') != 'PASS_HOST_BUILD_ONLY' or
-                receipt.get('source_sha256') != sha(source.read_bytes()) or
-                receipt.get('library_sha256') != sha(self.library.read_bytes()) or
-                receipt.get('argv', [])[1:] != [*FLAGS, str(source), '-o', str(self.library)]):
-            raise ValueError('Vector16 requires its exact strict host build receipt')
-        compiler = Path(receipt['argv'][0]).resolve(strict=True)
-        if receipt.get('compiler_sha256') != sha(compiler.read_bytes()):
-            raise ValueError('Vector16 compiler identity changed after host build')
-        self.build_receipt = receipt
+        self.library, self.build_receipt, self.backend_identity = verify_library(
+            library, arithmetic_backend=arithmetic_backend)
         self.lib = C.CDLL(str(self.library))
         self.lib.gdn_vector16.argtypes = (C.c_uint, C.POINTER(C.c_uint32),
             C.POINTER(C.c_uint32), C.POINTER(C.c_uint32), C.c_uint)
@@ -91,7 +144,40 @@ class Vector16:
         self.client, self.calls, self.lane_ops, self.flags = None, Counter(), Counter(), Counter()
         self.host_calls = Counter()
         self.resource_address = C.addressof(self.output)
-        self.library_sha256 = sha(self.library.read_bytes())
+        self.library_sha256 = self.backend_identity.library_sha256
+        self.__loaded_arithmetic_identity = self._current_arithmetic_identity()
+
+    @property
+    def _loaded_arithmetic_identity(self):
+        # Read-only admission baseline. This is an integrity guard against
+        # accidental rebinding, not isolation from arbitrary Python code.
+        return self.__loaded_arithmetic_identity
+
+    def _current_arithmetic_identity(self):
+        names = ('gdn_vector16', 'gdn_vector16_trace',
+                 'gdn_vector16_mul_add_policy_trace', 'gdn_vector16_environment')
+        try:
+            return (self.backend_identity, self.library, self.library_sha256, id(self.lib),
+                    tuple((id(getattr(self.lib, name)), tuple(getattr(self.lib, name).argtypes),
+                           getattr(self.lib, name).restype, id(getattr(getattr(self.lib, name), 'errcheck', None)))
+                          for name in names))
+        except (AttributeError, TypeError) as error:
+            raise ValueError('Vector16 loaded arithmetic binding changed') from error
+
+    def arithmetic_identity(self):
+        """Validate against the ORIGINAL constructor binding, never relabel it.
+
+        No source reads or extra arithmetic occur on coordinator resource checks.
+        File integrity is separately checked by pre/post execution snapshots.
+        """
+        current = self._current_arithmetic_identity()
+        if current != self._loaded_arithmetic_identity:
+            raise ValueError('Vector16 loaded arithmetic binding changed')
+        return current
+
+    def backend_report(self):
+        self.arithmetic_identity()
+        return asdict(self.backend_identity)
 
     def acquire(self, client):
         if self.client is not None:

@@ -30,7 +30,8 @@ from . import typed_dense as d, rms_owner as rms
 from .conv import model as conv
 from .prep import model as prep
 from .chunk import model as chunk
-from .chunk.vector import Vector16, LEGACY_POLICY, IEEE_POLICY, POLICY_MASKS
+from .chunk.vector import (Vector16, LEGACY_POLICY, IEEE_POLICY, POLICY_MASKS,
+                           LEGACY_BACKEND, ARITHMETIC_BACKENDS, verify_library)
 from .gated_norm import model as norm
 from .elementwise import model as elt
 from .dense_prefix import TypedSeededDenseDriver
@@ -132,6 +133,7 @@ class FullBlockCoordinator:
                  projection_policy=ProjectionPolicy.Legacy, observe=None):
         require(type(matrix) is d.MatrixService and type(vector) is Vector16,
                 'explicit shared MatrixService and Vector16 required')
+        vector.arithmetic_identity()
         self.memory = d.TypedMemory() if memory is None else memory
         require(type(self.memory) is d.TypedMemory and self.memory.pending is None,
                 'one drained TypedMemory required')
@@ -247,6 +249,7 @@ class FullBlockCoordinator:
         return (id(self.memory), id(self.matrix), id(self.dense), id(self.dense.a_banks),
                 id(self.dense.b_banks), self.matrix.resource_address, id(self.scalar),
                 id(self.vector), self.vector.resource_address,
+                self.vector.arithmetic_identity(),
                 self.vector.exception_policy, self.vector.fatal_mask, self.policy,
                 self.projection_policy, self.projection_profile, id(self.projection_module), id(self.dense_wire),
                 *(id(owner) for owner in (self.rms, self.conv, self.prep, self.chunk,
@@ -460,6 +463,7 @@ class FullBlockCoordinator:
         self._index += 1
         if self.observe is not None:
             self.observe(self.phase, completed_role, report, outputs)
+        self._check_resources()
         return event
 
     def reset(self):
@@ -495,12 +499,14 @@ class FullBlockCoordinator:
         return self.response
 
     def report(self):
+        self._check_resources()
         return dict(scope=SCOPE, public_command128_executed=False, rtl_executed=False,
                     hardware_cycles=None, hardware_mac_utilization=None, native_acceptance=False,
                     rms_policy=self.policy.value, vector_policy=self.vector.exception_policy,
                     projection_policy=self.projection_policy.value,
                     projection_profile=None if self.projection_profile is None else asdict(self.projection_profile),
                     vector_fatal_mask=self.vector.fatal_mask,
+                    vector_arithmetic_backend=self.vector.backend_report(),
                     vector_policy_control_bound_to_current_chisel=False,
                     roots=asdict(self.roots), response=None if self.response is None else asdict(self.response),
                     reset_required=self.locked, commands=self.commands, window_inputs=self.window_inputs,
@@ -515,6 +521,10 @@ def freeze_identity(root, fixture, weights, inputs, library, vector, output,
                     projection_policy=ProjectionPolicy.Legacy):
     """Snapshot only execution/validation sources, not numerical references."""
     from .input_fixture import SOURCE_FILES
+    require(type(vector) is Vector16, 'original Vector16 required for execution snapshot')
+    vector.arithmetic_identity()
+    require(verify_library(vector.library, arithmetic_backend=vector.backend_identity.backend)[2] ==
+            vector.backend_identity, 'Vector native build changed after construction')
     matrix_receipt = Path(os.environ['MATRIX_SERVICE_COMPILE_RECEIPT']).resolve(strict=True)
     vector_receipt = vector.library.with_suffix('.json')
     build = json.loads(matrix_receipt.read_text())
@@ -524,7 +534,8 @@ def freeze_identity(root, fixture, weights, inputs, library, vector, output,
     if ProjectionPolicy(projection_policy) is ProjectionPolicy.IndependentK512:
         from .projection_driver import SOURCE_FILES as PROJECTION_SOURCES
         extra_sources = PROJECTION_SOURCES
-    names = sorted(set(ACTUAL_SOURCE_FILES) | set(SOURCE_FILES) | set(compiled) | set(extra_sources))
+    names = sorted(set(ACTUAL_SOURCE_FILES) | set(SOURCE_FILES) | set(compiled) | set(extra_sources) |
+                   {vector.backend_identity.source})
     sources = {}
     for name in names:
         raw = (root / name).read_bytes()
@@ -550,6 +561,7 @@ def freeze_identity(root, fixture, weights, inputs, library, vector, output,
                 vector_compiler=str(Path(vector_build['argv'][0]).resolve()),
                 fixture_manifest=str((Path(fixture) / 'manifest.json').resolve()),
                 vector_exception_policy=vector.exception_policy, vector_fatal_mask=vector.fatal_mask,
+                vector_arithmetic_backend=vector.backend_report(),
                 public_command128_executed=False, rtl_executed=False)
 
 
@@ -584,7 +596,8 @@ def final_identity(identity, root, fixture):
 
 def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_library=None,
         rms_policy=rms.ReductionPolicy.Torch210CpuDefault1024, observe=None,
-        vector_exception_policy=LEGACY_POLICY, projection_policy=ProjectionPolicy.Legacy):
+        vector_exception_policy=LEGACY_POLICY, projection_policy=ProjectionPolicy.Legacy,
+        vector_arithmetic_backend=LEGACY_BACKEND):
     """Actual-only two-window entrypoint. Existing libraries only; never builds."""
     from .input_fixture import ROOT, load_fixture, gdn
     from ..qwen2_resident_matrix.ffn_attention.matrix_service import configure_library
@@ -614,7 +627,8 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         _, weights = gdn.load_payload(ROOT, Path(manifest['sources']['layer0_directory']))
         library = d.library_from_environment(ROOT)
         if vector is None:
-            vector = Vector16(vector_library, exception_policy=vector_exception_policy)
+            vector = Vector16(vector_library, exception_policy=vector_exception_policy,
+                              arithmetic_backend=vector_arithmetic_backend)
         identity = freeze_identity(ROOT, fixture, weights, inputs, library, vector, output, projection_policy)
         selected_projection = ProjectionPolicy(projection_policy)
         if selected_projection is ProjectionPolicy.IndependentK512:
@@ -658,7 +672,15 @@ def run(fixture, output, *, rows=16, budget_seconds=1800, vector=None, vector_li
         persist('summary.json', report)
         return report
     except BaseException as error:
-        report = dict(scope=SCOPE) if coordinator is None else coordinator.report()
+        try:
+            report = dict(scope=SCOPE) if coordinator is None else coordinator.report()
+        except Exception as report_error:
+            # An invalid final callback/resource must retain FAILED evidence,
+            # not suppress the summary or issue an unverified success report.
+            report = dict(scope=SCOPE, full_block_executed=False, native_acceptance=False,
+                public_command128_executed=False, rtl_executed=False,
+                live_resource_identity_valid=False,
+                report_error={'type': type(report_error).__name__, 'message': str(report_error)})
         report.update(identity=identity, output_files=output_files, status='FAILED', elapsed_seconds=time.monotonic() - start,
                       error={'type': type(error).__name__, 'message': str(error)})
         if identity is not None:
@@ -673,6 +695,7 @@ def main():
     parser.add_argument('--output', required=True)
     parser.add_argument('--vector-library', required=True)
     parser.add_argument('--vector-exception-policy', choices=(LEGACY_POLICY, IEEE_POLICY), default=LEGACY_POLICY)
+    parser.add_argument('--vector-arithmetic-backend', choices=ARITHMETIC_BACKENDS, default=LEGACY_BACKEND)
     parser.add_argument('--projection-policy', choices=tuple(p.value for p in ProjectionPolicy),
                         default=ProjectionPolicy.Legacy.value)
     parser.add_argument('--rows', type=int, choices=(16, 128), default=16)
@@ -680,6 +703,7 @@ def main():
     args = parser.parse_args()
     result = run(args.fixture, args.output, rows=args.rows, budget_seconds=args.budget_seconds,
                  vector_library=args.vector_library, vector_exception_policy=args.vector_exception_policy,
+                 vector_arithmetic_backend=args.vector_arithmetic_backend,
                  projection_policy=args.projection_policy)
     print(json.dumps({'status': result['status'], 'roots': result['roots']}), flush=True)
     return 0 if result['status'] == 'ACTUAL_COMPLETE_UNCOMPARED' else 1

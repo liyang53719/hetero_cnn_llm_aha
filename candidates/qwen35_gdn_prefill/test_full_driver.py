@@ -5,9 +5,11 @@ coordinator control. They replace ALL numerical owner transports and use no
 C++ library/compiler/checkpoint/RTL. Passing is not a full numerical pass.
 """
 from collections import Counter
+from contextlib import ExitStack
 from dataclasses import replace
 from types import SimpleNamespace
 from pathlib import Path
+import gc
 import json
 import tempfile
 import unittest
@@ -145,10 +147,24 @@ class FullCoordinatorControlTests(unittest.TestCase):
         vector = object.__new__(f.Vector16)
         vector.resource_address, vector.client = 456, None
         vector.exception_policy, vector.fatal_mask = f.LEGACY_POLICY, 30
+        # Explicitly synthetic identity, not a compiled or executed backend.
+        from .chunk.vector import BackendIdentity, VECTOR_ABI
+        vector.backend_identity = BackendIdentity(f.LEGACY_BACKEND, 'synthetic-control-only',
+            'synthetic-control-only', '0' * 64, VECTOR_ABI, '0' * 64)
+        vector.library, vector.library_sha256 = Path('synthetic-control-only'), '0' * 64
+        vector.lib = SimpleNamespace(**{name: SimpleNamespace(argtypes=(), restype=int)
+            for name in ('gdn_vector16', 'gdn_vector16_trace',
+                         'gdn_vector16_mul_add_policy_trace', 'gdn_vector16_environment')})
+        vector._Vector16__loaded_arithmetic_identity = vector._current_arithmetic_identity()
         vector.calls, vector.lane_ops, vector.flags, vector.host_calls = (Counter() for _ in range(4))
+        # The control fixture must not call CDLL(None) or scalar arithmetic
+        # merely to initialize SharedScalar's host-environment check.
+        scalar = object.__new__(f.prep.PrepScalar)
+        scalar.client, scalar.enable_softplus = None, True
+        scalar.calls, scalar.internal_calls, scalar.soft_internal_calls = (Counter() for _ in range(3))
         self.events = []
         self.c = f.FullBlockCoordinator(self.weights, {'cold': bytes(32768), 'carry': bytes(32768)},
-            matrix=matrix, vector=vector, projection_policy=self.PROJECTION_POLICY,
+            matrix=matrix, vector=vector, scalar=scalar, projection_policy=self.PROJECTION_POLICY,
             observe=lambda *args: self.events.append(args))
         self.c.test_launches = []
         def factory(owner, *args, **kwargs):
@@ -168,6 +184,40 @@ class FullCoordinatorControlTests(unittest.TestCase):
 
     def start(self):
         self.c.start('cold', cold=True, expected_generation=0)
+
+    def test_vector_backend_identity_is_frozen_before_launch(self):
+        self.c.vector.backend_identity = replace(self.c.vector.backend_identity,
+                                                 implementation_version='different')
+        with self.assertRaisesRegex(ValueError, 'loaded arithmetic binding changed'):
+            self.start()
+
+    def test_vector_native_batch_binding_is_frozen_before_launch(self):
+        self.c.vector.lib.gdn_vector16_mul_add_policy_trace = SimpleNamespace(argtypes=(), restype=int)
+        with self.assertRaisesRegex(ValueError, 'loaded arithmetic binding changed'):
+            self.start()
+
+    def test_vector_selected_identity_report_is_explicit(self):
+        report = self.c.report()['vector_arithmetic_backend']
+        self.assertEqual(report, self.c.vector.backend_report())
+        self.assertEqual(report['implementation_version'], 'synthetic-control-only')
+
+    def test_final_callback_cannot_relabel_loaded_backend_or_issue_success_report(self):
+        def mutate(phase, role, report, outputs):
+            if role == 'output':
+                self.c.vector.backend_identity = replace(self.c.vector.backend_identity,
+                                                         implementation_version='changed-after-final-ACK')
+        self.c.observe = mutate
+        self.start()
+        with self.assertRaisesRegex(ValueError, 'loaded arithmetic binding changed'):
+            self.until(lambda: self.c.response is not None)
+        with self.assertRaisesRegex(ValueError, 'loaded arithmetic binding changed'):
+            self.c.report()
+
+    def tearDown(self):
+        # Large control-only buffers participate in owner/callback cycles.
+        # Release them deterministically rather than depend on GC thresholds.
+        self.c = None
+        gc.collect()
 
     def until(self, predicate):
         for _ in range(100):
@@ -419,6 +469,38 @@ class ReducedFullCoordinatorControlTests(FullCoordinatorControlTests):
 
 
 class IdentityReceiptTests(unittest.TestCase):
+    def test_invalid_live_resource_report_still_persists_failed_summary(self):
+        from . import input_fixture
+        from ..qwen2_resident_matrix.ffn_attention import matrix_service
+        def rejected_window(*args, **kwargs):
+            raise ValueError('last callback changed loaded arithmetic binding')
+        def rejected_report():
+            raise ValueError('report cannot verify changed resource')
+        coordinator = SimpleNamespace(run_window=rejected_window, report=rejected_report,
+                                      roots=SimpleNamespace(generation=0))
+        with tempfile.TemporaryDirectory() as directory, ExitStack() as stack:
+            output = Path(directory) / 'failed-run'
+            inputs = {name + '.hidden.bf16le': bytes(32768) for name in ('cold128', 'carried128')}
+            replacements = ((input_fixture, 'load_fixture', ({'sources': {'layer0_directory': directory}}, inputs)),
+                (input_fixture.gdn, 'load_payload', ({}, {})),
+                (f.d, 'library_from_environment', Path(directory) / 'not-loaded.so'),
+                (f, 'freeze_identity', {}), (f, 'final_identity', {'source_unchanged': True}),
+                (f.C, 'CDLL', SimpleNamespace(td_reset=lambda: 0)),
+                (matrix_service, 'configure_library', SimpleNamespace(td_reset=lambda: 0)),
+                (f.d, 'MatrixService', object()), (f, 'FullBlockCoordinator', coordinator))
+            for module, name, value in replacements:
+                stack.enter_context(patch.object(module, name, return_value=value))
+            with self.assertRaisesRegex(ValueError, 'last callback changed'):
+                f.run(directory, output, vector=object())
+            report = json.loads((output / 'summary.json').read_text())
+            self.assertEqual(report['status'], 'FAILED')
+            self.assertFalse(report['full_block_executed'])
+            self.assertFalse(report['native_acceptance'])
+            self.assertFalse(report['live_resource_identity_valid'])
+            self.assertIn('last callback changed', report['error']['message'])
+            self.assertIn('cannot verify', report['report_error']['message'])
+            self.assertFalse((output / 'actual_terminal.json').exists())
+
     def test_final_identity_retains_missing_file_and_input_failure_details(self):
         from . import input_fixture
         with tempfile.TemporaryDirectory() as directory:

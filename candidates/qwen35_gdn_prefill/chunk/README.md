@@ -244,3 +244,58 @@ input domain has 70,688 requests, 4,705 arguments of magnitude at least80,
 and 1,618 nonzero native results discarded by saturation (largest1.775e-35).
 This is a local primitive diagnostic, not a bound on final output/state.
 Fullblock native thresholds and all end-to-end gates remain required.
+
+## Explicit arithmetic backend selection (default off)
+
+`Vector16` remains the only production class and owns the same 16-lane buffers.
+Arithmetic implementation selection is independent of exception policy:
+
+- Default `legacy_host_postfix_uf_v1` retains the original C++ primitive and
+  legacy build filename. Original strict legacy receipts remain accepted.
+- Explicit `finite_mul_tininess_r2` builds the already-reviewed, source-pinned
+  `candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp`. It changes only the
+  finite-Mul underflow predicate, not result rounding, Add, scalar `prepExp`,
+  lane geometry, resource ownership, or logical Mul-then-Add issue order.
+- Both still default to fatal mask 30. Selecting
+  `ieee_rne_finite_gradual_underflow` remains a separate explicit choice (28).
+  The corrected UF flag can therefore make a formerly accepted boundary Mul
+  fault under mask 30. Selecting a backend does not silently relax that policy.
+
+Build and load must select the same backend explicitly:
+
+```python
+from candidates.qwen35_gdn_prefill.chunk.vector import (
+    Vector16, build_library, FINITE_MUL_UF_BACKEND,
+)
+library = build_library(fresh_build_directory,
+                        arithmetic_backend=FINITE_MUL_UF_BACKEND)
+vector = Vector16(library, arithmetic_backend=FINITE_MUL_UF_BACKEND)
+```
+
+The R2 receipt must match its implementation version, exact source SHA and
+ABI in addition to the original source/compiler/arguments/ELF hash gates.
+Unknown names, implicit selection from a receipt, and loading an R2 binary
+through the legacy default are rejected. Its separate output filename does
+not overwrite a legacy build in the same directory. Building is still an
+explicit action; constructing `Vector16` or running `full_driver` never builds.
+
+The GDN `full_driver` exposes `--vector-arithmetic-backend`, defaults to legacy,
+adds the selected C++ source to the execution snapshot, and reports the
+backend/version/source/ELF/ABI alongside the separately selected fatal policy.
+These are software implementation identities, not hardware equivalence or
+numerical acceptance results.
+
+`test_backend_selection` contains cold receipt/source rejection tests only.
+`test_full_driver` still uses explicitly synthetic control-only transports.
+`test_backend_native` is a separate opt-in small real-native test using 70
+fixed finite stimuli and an exact Fraction oracle. It never compiles; without
+both `GDN_VECTOR16_LIBRARY` and `GDN_VECTOR16_FINITE_MUL_UF_LIBRARY` it explicitly
+skips rather than claiming numerical success. Native qualification must use
+fresh receipt-bound builds and the separately reviewed bounded supervisor.
+No full M16/M128 block, current Chisel binding, or RTL/throughput result follows
+from any of these tests.
+
+The bounded 2026-10-23 integration result and its limits are recorded in
+[the qualification note](BACKEND_SELECTION_QUALIFICATION_CN.md) and
+`backend_selection_qualification.json`. It includes actual tiny native tests,
+not a full-block or hardware pass.

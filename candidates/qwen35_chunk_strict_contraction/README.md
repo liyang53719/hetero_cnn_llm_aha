@@ -46,6 +46,39 @@ there is no third architectural accumulator bank. Each phase reads 1280
 64-byte beats and writes 256 beats. The interfaces are synchronous modeled
 reads/write completions, not asynchronous transport or real ACK evidence.
 
+One Contraction instance now retains exactly the same two bank lists and two
+panel lists across calls. Each accepted run clears its accumulator to +0,
+fully loads both panels before the next sixteen K steps, and overwrites the
+product bank before reading it for Add. A synchronous re-entry guard rejects
+recursive submissions from read, arithmetic-observer, and write callbacks
+without changing the active counters or workspace. This is not a thread lock.
+
+The two-chunk test reuses this single instance for phase 5 then 6 of each chunk.
+The test-only schedule_probe.py observes actual memory calls and arithmetic
+list identities, independently deriving addresses from row-major geometry.
+It verifies all 8192 ordered events across those four calls: 5120 successful
+reads, 2048 arithmetic observations, and 1024 successful writes. It checks
+stable bank/panel identity, full panel contents at every reload, alternate
+product-bank ownership, and the untouched previous accumulator at every Mul.
+These assertions augment, not replace, the existing complete numerical oracle.
+
+New negative tests inject wrong read addressing and copied diagnostic planes
+to check that the oracle rejects them; these are monitor tests, not hardware
+fault results. Actual model tests reject nested work from all three callback
+types and stop on a short/nonfinite beat during the second panel load. The
+failed beat does not install data or increment completed reads, no K=16 work
+or output write occurs, and a following real run reuses the same workspace
+without stale partial-panel/accumulator data. Failure never rolls back or
+publishes external writes; the older arithmetic/partial-write tests remain.
+
+Source-grounded limit: upstream chunk/model.py _matmul traverses output row
+and 16-column beats before K and yields memory transactions. This candidate
+instead proposes whole-plane two-pass reuse and synchronous callbacks. It
+does not reuse or validate that existing owner's scheduler/transport. The
+caller still chooses phase/chunk order. There are no outstanding reads,
+stalls, delayed/duplicate ACKs, abort/drain, publication or state-carry models
+here; the proposed storage is not evidence of physical bank ports or timing.
+
 The M128 test executes two distinct complete chunk64 contractions for both
 phases at one head: 2,097,152 strict MACs, 4,194,304 Matrix lane passes and
 16,384 Vector lane operations. It checks 4,210,688 intermediate/output words.
@@ -59,10 +92,15 @@ successful outputs of those missing phases.
 
 From repository root:
 
-    OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 timeout 60s bash -c 'ulimit -v 524288; taskset -c $(awk "/Cpus_allowed_list/{split(\$2,a,\",\");split(a[1],b,\"-\"); print b[1]}" /proc/self/status) python -B -m unittest candidates.qwen35_chunk_strict_contraction.test_model -v'
+    OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 timeout 60s bash -c 'ulimit -v 524288; ulimit -t 60; taskset -c $(awk "/Cpus_allowed_list/{split(\$2,a,\",\");split(a[1],b,\"-\"); print b[1]}" /proc/self/status) python -B -m unittest candidates.qwen35_chunk_strict_contraction.test_model -v'
 
 This bounds virtual address space to 512 MiB and execution to one permitted
-CPU. The 60-second wall-clock limit covers the complete test process.
+CPU. The 60-second wall-clock and CPU limits cover the complete test process.
+
+VALIDATION_SCOPE.json is preserved as the original seven-test numerical receipt
+for commit a21686c52a7f60f728165950c78a73b789193a6d, not a manifest of the
+extended files. SCHEDULE_VALIDATION_SCOPE.json records the new ten-test run
+and the current source hashes. Historical timings do not qualify changed code.
 
 Requires already-installed NumPy. No download, compilation, hardware job, or
 production/source manifest changes. An adversarial full Contraction run checks actual output/intermediates against

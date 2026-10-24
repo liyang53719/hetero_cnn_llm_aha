@@ -1,0 +1,78 @@
+{
+  "status": "PASS_SOFTWARE_NUMERICAL_AND_SYNCHRONOUS_WORKSPACE_ONLY",
+  "base_revision": "a21686c52a7f60f728165950c78a73b789193a6d",
+  "tests": 10,
+  "author_exit": 0,
+  "author_elapsed_seconds": 12.773658,
+  "source_hashes_before_after_equal": true,
+  "independent_review": {
+    "status": "PASS_SOFTWARE_ONLY",
+    "tests": 10,
+    "elapsed_seconds": 12.838,
+    "exit_code": 0,
+    "source_hashes_before_after_equal": true
+  },
+  "cpu_count": 1,
+  "address_space_bytes": 536870912,
+  "wall_limit_seconds": 60,
+  "cpu_limit_seconds": 60,
+  "token_chunks": [
+    64,
+    64
+  ],
+  "heads": 1,
+  "phases": [
+    "UT",
+    "QK"
+  ],
+  "single_workspace_runs": 4,
+  "persistent_bank_words": [
+    4096,
+    4096
+  ],
+  "persistent_panel_words": [
+    1024,
+    1024
+  ],
+  "proposed_data_storage_bytes": 40960,
+  "main_fixture_schedule_events_checked": 8192,
+  "main_fixture_read_callbacks_checked": 5120,
+  "main_fixture_arithmetic_observations_checked": 2048,
+  "main_fixture_write_callbacks_checked": 1024,
+  "main_fixture_original_numerical_word_comparisons": 4210688,
+  "negative_cases": [
+    "recursive submission rejected from read, observe and write callbacks without clobbering active counters",
+    "short and nonfinite KT read after partial second panel: no failed-beat install/completion, no K16 work or output write",
+    "fresh numerical run reuses actual buffers after each partial-panel fault without stale state",
+    "test-only monitor rejects wrong read address and copied arithmetic plane identity"
+  ],
+  "existing_seven_numerical_and_fault_tests_retained": true,
+  "original_seven_test_receipt": "VALIDATION_SCOPE.json (unchanged, applies to base revision only)",
+  "existing_prefill_scheduler_reused": false,
+  "phase_chunk_order_enforced": false,
+  "asynchronous_transport_or_ack_model": false,
+  "publication_protocol_tested": false,
+  "thread_synchronization_tested": false,
+  "full_block_pass": false,
+  "rtl_pass": false,
+  "measured_utilization": null,
+  "physical_buffer_port_model": false,
+  "files": {
+    "model.py": {
+      "bytes": 6655,
+      "sha256": "507944eddbb7b38fd9fc1f2b6ce144ade832294ed95a629a033dfdcadc9a536c"
+    },
+    "test_model.py": {
+      "bytes": 18493,
+      "sha256": "55e81ca48c138637489b88c35f3542be88634304741eef7216c6d963de659a38"
+    },
+    "schedule_probe.py": {
+      "bytes": 3532,
+      "sha256": "09a21ee55c8ab891b04856ab4d642df3da19eea2d878f110daef0a0d47d0dd17"
+    },
+    "README.md": {
+      "bytes": 7507,
+      "sha256": "750e0e94faaab3a22bb255fc4ab9226f8bedfd90a889ace39dc1bc56d11f7ce8"
+    }
+  }
+}

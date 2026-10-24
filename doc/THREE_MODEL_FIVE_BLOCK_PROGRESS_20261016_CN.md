@@ -1951,3 +1951,10 @@ PASS仅限已实际运行的 Python Fraction/fixture逐字一致性检查；独�
 R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因子掩盖等覆盖缺口已修；R2模型算术源码不变，mask为下三角含对角，对角值1，不是tril offset+1。作者7测试9.903s；独审同hash前后7测试9.425s、exit0，1CPU/512MiB虚拟内存/60s墙钟及CPU限额。4210688项NumPy中间/输出word对比，12条Fraction链3072中间word+flag及12最终word+flag；5条实际Contraction定向链1280中间word+flag，但5个最终比较仅bits，不冒称flags也被比较。包括FMA/K顺序/因子位置差异、Mul/AddFatal、pair下溢、部分写回失败。
 
 没有完整平面独立flags oracle，也不证明上游decay生成、全部head、递归state carry、完整block、异步传输、RTL或物理资源/QoR。本候选与此前49笔发布批次分开；不包含原权重/NPZ/数组转储。五完整RTL仍0/5，原Qwen2M128终态UNKNOWN。
+
+
+## PASS（仅同步软件缓存复用及数值回归）/ INCOMPLETE（真实调度）：2026-10-23
+
+同一 Contraction 实例现在跨两个 chunk64 的 UT/QK 四次运行复用两个4096-word bank与两个1024-word panel；新增同步重入所有权拒绝、部分panel读失败后复用、错误地址与复制bank身份负例。主fixture核8192个实际回调/算术事件，5120读、1024写、2048算术观察，保留4210688项数值比较。独立实际10测试12.838秒exit0，1CPU/512MiB/60秒限制，四个源码hash前后相同；旧7测试回执不改，新回执独立保存。
+
+明确限制：上游 _matmul 是逐输出beat协程，本候选仍为整平面同步软件；未复用实际prefill调度器，未验证异步ACK、phase/chunk次序、物理端口或RTL。40960B仅提议数据存储，不是既有免费资源。五完整RTL0/5、Qwen2完整M128仍UNKNOWN、无MAC实测。远端main核f93f0c4（原49笔已发2笔），余47笔发布等待中断后确认；本修改单独本地保存。临时目录盘点423项，无清理。

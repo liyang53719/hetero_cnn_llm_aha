@@ -47,11 +47,19 @@ class Contraction:
     after a modeled successful write. Failure leaves no completion; earlier
     writes may exist, so callers must not publish the destination on failure.
     observe(stage, k, words, flags) is a synchronous diagnostic hook. Consumers
-    must copy data they retain. It sees every rounded product and accumulator.
+    must not mutate these lists and must copy data they retain. It sees every
+    rounded product and accumulator.
+    One instance owns two persistent banks and two persistent input panels.
+    Calls reuse this workspace serially, starting with a cleared accumulator;
+    callbacks must not recursively submit work to the same instance. There is
+    no asynchronous transaction, chunk scheduler, or hardware ownership claim.
     """
     def __init__(self, read16, write16, observe=None):
         self.read16, self.write16, self.observe = read16, write16, observe
         self.counts = {}
+        self._banks = ([0]*LANES, [0]*LANES)
+        self._panels = ([0]*(ROWS*16), [0]*(16*ROWS))
+        self._busy = False
 
     def _read(self, address):
         values = list(self.read16(address))
@@ -69,6 +77,8 @@ class Contraction:
                 raise ArithmeticFault(stage, k, lane, word, flag)
 
     def run(self, a, kt, pair, destination, *, phase):
+        if self._busy:
+            raise RuntimeError('contraction workspace already owned by an active run')
         if phase not in (5, 6):
             raise ValueError('only UtMatmul / IntraMatmul')
         if [(m.rows, m.cols) for m in (a, kt, pair, destination)] != [(64,128),(128,64),(64,64),(64,64)]:
@@ -76,22 +86,39 @@ class Contraction:
         matrices = (a, kt, pair, destination)
         if any(x.base < y.end and y.base < x.end for i,x in enumerate(matrices) for y in matrices[:i]):
             raise ValueError('matrix spans must be disjoint')
+        self._busy = True
+        try:
+            return self._run(a, kt, pair, destination, phase)
+        finally:
+            # Calls are synchronous. Even a failed callback has returned before
+            # reuse; this does NOT roll back or publish any destination writes.
+            self._busy = False
+
+    def _run(self, a, kt, pair, destination, phase):
         self.counts = dict(phase=phase, read_beats=0, write_beats=0,
                            matrix_lane_passes=0, vector_lane_ops=0,
                            matrix_lanes=4096, vector_lanes=16,
                            proposed_storage_bytes=40960)
-        acc, product = [0]*LANES, [0]*LANES
+        acc, product = self._banks
+        ap, bp = self._panels
+        for lane in range(LANES):
+            acc[lane] = 0
         for start in range(0, K, 16):
             # Explicit 4 KiB A and B panels; reused for sixteen ascending K steps.
-            ap = [self._read(a.address(r,start)) for r in range(ROWS)]
-            bp = [sum((self._read(kt.address(start+k,c)) for c in range(0,64,16)), []) for k in range(16)]
+            # A beat is installed only after _read validates all sixteen words.
+            # Do not compute with a partially filled panel after a read failure.
+            for r in range(ROWS):
+                ap[r*16:(r+1)*16] = self._read(a.address(r,start))
+            for offset in range(16):
+                for c in range(0, ROWS, 16):
+                    bp[offset*64+c:offset*64+c+16] = self._read(kt.address(start+offset,c))
             for offset in range(16):
                 k = start + offset
                 flags = [0]*LANES
                 for r in range(ROWS):
                     for c in range(ROWS):
                         lane = r*64+c
-                        product[lane], flags[lane] = fp.mul(ap[r][offset], bp[offset][c])
+                        product[lane], flags[lane] = fp.mul(ap[r*16+offset], bp[offset*64+c])
                 self.counts['matrix_lane_passes'] += LANES
                 self._check('mul', k, product, flags)
                 # No accumulator update before the whole product plane is valid.

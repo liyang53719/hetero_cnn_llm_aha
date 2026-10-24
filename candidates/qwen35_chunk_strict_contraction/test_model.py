@@ -2,6 +2,7 @@
 import unittest
 import numpy as np
 from candidates.qwen35_chunk_strict_contraction.model import Contraction, Matrix, ArithmeticFault
+from candidates.qwen35_chunk_strict_contraction.schedule_probe import ScheduleProbe
 from candidates.qwen35_strict_fp32_lane import fraction_reference as exact
 
 
@@ -44,6 +45,8 @@ class Tests(unittest.TestCase):
         rng = np.random.default_rng(20261022)
         records, observed = [], 0
         outputs = []
+        owner = Contraction(memory.read, memory.write)
+        workspace = owner._banks + owner._panels
         for chunk in range(2):
             # Non-BF16 lower mantissa bits, mixed signs and cross-token coupling.
             q = rng.uniform(-.3,.3,(64,128)).astype(np.float32)
@@ -68,10 +71,15 @@ class Tests(unittest.TestCase):
                 rational_acc = {cell: 0 for cell in probes}
                 rational_product = {}
                 aw, bw, pw = words(a), words(kt), words(pair)
+                probe = ScheduleProbe(self, owner, memory, (a_m, kt_m, pair_m, dst), aw, bw)
                 def observe(stage,k,values,flags):
                     nonlocal expected_acc,expected_product,observed
+                    probe.observe(stage,k,values,flags)
                     seen.append((stage,k))
                     if stage == 'mul':
+                        # The active accumulator may not be overwritten by Mul.
+                        np.testing.assert_array_equal(np.asarray(owner._banks[k % 2],np.uint32),
+                                                      words(expected_acc).reshape(-1))
                         expected_product = np.multiply(a[:,k,None],kt[k,None,:],dtype=np.float32)
                         expected = expected_product
                     elif stage == 'add':
@@ -101,8 +109,11 @@ class Tests(unittest.TestCase):
                                 self.assertGreater(float(pair[r,c]),0)
                                 expected_pair = exact.mul(rational_acc[r,c],int(pw[r,c]))
                                 self.assertEqual((values[c-start],flags[c-start]),expected_pair)
-                owner = Contraction(memory.read,memory.write,observe)
+                owner.read16, owner.write16, owner.observe = probe.read, probe.write, observe
                 records.append(owner.run(a_m,kt_m,pair_m,dst,phase=phase))
+                probe.finish()
+                for actual, original in zip(owner._banks + owner._panels, workspace):
+                    self.assertIs(actual, original)
                 self.assertEqual(seen[:256],[(stage,k) for k in range(128) for stage in ('mul','add')])
                 result = memory.regions[dst.base].reshape(64,64)
                 np.testing.assert_array_equal(result,words(np.multiply(expected_acc,pair,dtype=np.float32)))
@@ -118,6 +129,88 @@ class Tests(unittest.TestCase):
         print('M128 boundary: two genuine chunk64 inputs, one head, phases 5/6; '
               '4194304 Matrix lane passes + 16384 Vector lane operations; '
               '4210688 intermediate/output words checked; NOT full block or RTL.')
+
+    def test_recursive_callbacks_cannot_reown_workspace(self):
+        memory, matrices, owner = self.fixture(np.zeros((64,128),np.uint32),
+                                              np.zeros((128,64),np.uint32))
+        attempted = set()
+        def try_reenter(kind):
+            if kind not in attempted:
+                attempted.add(kind)
+                counts = dict(owner.counts)
+                with self.assertRaisesRegex(RuntimeError, 'workspace already owned'):
+                    owner.run(*matrices, phase=5)
+                self.assertEqual(owner.counts, counts)
+                self.assertTrue(owner._busy)
+        def read(address):
+            try_reenter('read')
+            return memory.read(address)
+        def observe(*args):
+            try_reenter('observe')
+        def write(address, values):
+            try_reenter('write')
+            memory.write(address, values)
+        owner.read16, owner.write16, owner.observe = read, write, observe
+        result = owner.run(*matrices, phase=6)
+        self.assertEqual(attempted, {'read', 'observe', 'write'})
+        self.assertEqual((result['read_beats'], result['write_beats']), (1280, 256))
+        self.assertFalse(owner._busy)
+
+    def test_partial_panel_read_failure_and_clean_workspace_reuse(self):
+        for bad in ([0]*15, [0x7fc00000]+[0]*15):
+            with self.subTest(bad_length=len(bad)):
+                a = words(np.ones((64,128),np.float32))
+                kt = words(np.ones((128,64),np.float32)); kt[16:32] = 0x40000000
+                seen = []
+                memory, matrices, owner = self.fixture(a, kt,
+                    observe=lambda stage,k,*_: seen.append((stage,k)))
+                workspace = owner._banks + owner._panels
+                # Fail the third KT beat in panel 1, after panel 0 was consumed.
+                fail_at = matrices[1].base + 4*(16*64+32)
+                def read(address):
+                    return bad if address == fail_at else memory.read(address)
+                owner.read16 = read
+                with self.assertRaisesRegex(ValueError, 'finite FP32 read beat'):
+                    owner.run(*matrices, phase=5)
+                self.assertEqual(seen, [(stage,k) for k in range(16) for stage in ('mul','add')])
+                self.assertEqual(owner.counts['read_beats'], 194)
+                self.assertEqual(owner.counts['matrix_lane_passes'], 16*8192)
+                self.assertEqual(owner.counts['write_beats'], 0)
+                self.assertEqual(memory.writes, [])
+                self.assertTrue(all(word == 0x41800000 for word in owner._banks[0]))
+                self.assertEqual(owner._panels[1][:32], [0x40000000]*32)
+                self.assertEqual(owner._panels[1][32:48], [0x3f800000]*16)
+                self.assertFalse(owner._busy)
+                # Real second run through the same storage. Previous partial
+                # panels and nonzero accumulation must not leak into new work.
+                memory.regions[matrices[0].base][:] = 0
+                owner.read16, owner.observe = memory.read, None
+                result = owner.run(*matrices, phase=6)
+                self.assertEqual((result['read_beats'], result['write_beats']), (1280,256))
+                self.assertTrue(np.all(memory.regions[matrices[-1].base] == 0))
+                for actual, original in zip(owner._banks + owner._panels, workspace):
+                    self.assertIs(actual, original)
+
+    def test_schedule_oracle_rejects_wrong_address_and_bank_identity(self):
+        a = np.zeros((64,128),np.uint32); kt = np.zeros((128,64),np.uint32)
+        for mutant in ('address', 'bank'):
+            with self.subTest(mutant=mutant):
+                memory, matrices, owner = self.fixture(a, kt)
+                probe = ScheduleProbe(self, owner, memory, matrices, a, kt)
+                owner.read16, owner.write16, owner.observe = probe.read, probe.write, probe.observe
+                if mutant == 'address':
+                    original = owner._read
+                    owner._read = lambda address: original(address+64)
+                    reason = 'synchronous schedule mismatch'
+                else:
+                    # A copied plane has identical numbers but is not the
+                    # allocated product bank. The identity oracle must reject it.
+                    owner.observe = lambda stage,k,values,flags: probe.observe(stage,k,list(values),flags)
+                    reason = 'is not'
+                with self.assertRaisesRegex(AssertionError, reason):
+                    owner.run(*matrices, phase=5)
+                self.assertEqual(memory.writes, [])
+                self.assertFalse(owner._busy)
 
     def fixture(self, a, kt, pair=None, observe=None, write=None):
         memory=Memory()

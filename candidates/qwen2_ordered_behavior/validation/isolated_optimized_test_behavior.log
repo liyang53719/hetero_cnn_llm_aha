@@ -1,0 +1,38 @@
+test_all_tails_exact_prefix_hold_and_ack (__main__.CoupledBehavior.test_all_tails_exact_prefix_hold_and_ack) ... ok
+test_early_done_on_final_retire_preserves_only_prior_prefix (__main__.CoupledBehavior.test_early_done_on_final_retire_preserves_only_prior_prefix) ... ok
+test_early_matching_and_foreign_done_each_phase (__main__.CoupledBehavior.test_early_matching_and_foreign_done_each_phase) ... ok
+test_error_done_completion_keeps_protocol_status (__main__.CoupledBehavior.test_error_done_completion_keeps_protocol_status) ... ok
+test_fault_cancel_each_phase_then_tagged_drain (__main__.CoupledBehavior.test_fault_cancel_each_phase_then_tagged_drain) ... ok
+test_later_fault_is_private_until_ordered_retirement (__main__.CoupledBehavior.test_later_fault_is_private_until_ordered_retirement) ... ok
+test_live_client_payload_cannot_be_replaced_by_harness (__main__.CoupledBehavior.test_live_client_payload_cannot_be_replaced_by_harness) ... ok
+test_protocol_overrides_address_by_source_order (__main__.CoupledBehavior.test_protocol_overrides_address_by_source_order) ... ok
+test_result_not_yet_valid_stalls_without_read (__main__.CoupledBehavior.test_result_not_yet_valid_stalls_without_read) ... ok
+test_rounding_cancellation_signed_zero_subnormal_and_bf_overflow (__main__.CoupledBehavior.test_rounding_cancellation_signed_zero_subnormal_and_bf_overflow) ... ok
+test_same_edge_ack_and_early_done_drains_not_success (__main__.CoupledBehavior.test_same_edge_ack_and_early_done_drains_not_success) ... ok
+test_scale_underflow_before_later_scan_fault (__main__.CoupledBehavior.test_scale_underflow_before_later_scan_fault) ... ok
+test_acceptance_concurrent_fault_not_lost (__main__.DebtsAndBorrowers.test_acceptance_concurrent_fault_not_lost) ... ok
+test_coupled_failure_waits_all_accepted_feed_responses (__main__.DebtsAndBorrowers.test_coupled_failure_waits_all_accepted_feed_responses) ... ok
+test_idle_offers_and_busy_result_exclude_owner_launch (__main__.DebtsAndBorrowers.test_idle_offers_and_busy_result_exclude_owner_launch) ... ok
+test_profile_and_elementwise_exclusion (__main__.DebtsAndBorrowers.test_profile_and_elementwise_exclusion) ... ok
+test_three_accepted_debts_drain_only_matching_work (__main__.DebtsAndBorrowers.test_three_accepted_debts_drain_only_matching_work) ... ok
+test_abort_before_issue_and_between_steps_does_not_invent_payload (_behavior_ref_130.ClientTests.test_abort_before_issue_and_between_steps_does_not_invent_payload) ... ok
+test_abort_exposed_result_is_byte_stable_through_backpressure (_behavior_ref_130.ClientTests.test_abort_exposed_result_is_byte_stable_through_backpressure) ... ok
+test_abort_held_result_waits_accepted_write_and_never_publishes (_behavior_ref_130.ClientTests.test_abort_held_result_waits_accepted_write_and_never_publishes) ... ok
+test_consumer_ack_waits_both_ready_edges_and_returns_metadata (_behavior_ref_130.ClientTests.test_consumer_ack_waits_both_ready_edges_and_returns_metadata) ... ok
+test_final_delivery_keeps_exact_service_payload_until_ack (_behavior_ref_130.ClientTests.test_final_delivery_keeps_exact_service_payload_until_ack) ... ok
+test_foreign_done_rejected_without_retiring_group (_behavior_ref_130.ClientTests.test_foreign_done_rejected_without_retiring_group) ... ok
+test_malformed_packets_rejected_before_admission (_behavior_ref_130.ClientTests.test_malformed_packets_rejected_before_admission) ... ok
+test_nonfinal_metadata_has_no_payload_or_service_retirement (_behavior_ref_130.ClientTests.test_nonfinal_metadata_has_no_payload_or_service_retirement) ... ok
+test_old_client_cannot_drive_a_later_identical_owner_acquisition (_behavior_ref_130.ClientTests.test_old_client_cannot_drive_a_later_identical_owner_acquisition) ... ok
+test_qk_eight_steps_enable_all_slices_and_select_wide_columns (_behavior_ref_130.ClientTests.test_qk_eight_steps_enable_all_slices_and_select_wide_columns) ... ok
+test_reset_epoch_and_resource_mismatch_reject_without_mutation (_behavior_ref_130.ClientTests.test_reset_epoch_and_resource_mismatch_reject_without_mutation) ... ok
+test_selected_finite_only_and_exact_special_bits (_behavior_ref_130.ClientTests.test_selected_finite_only_and_exact_special_bits) ... ok
+test_stale_foreign_and_noncanonical_tags_never_discharge (_behavior_ref_130.ClientTests.test_stale_foreign_and_noncanonical_tags_never_discharge) ... ok
+test_tagged_write_debts_gate_retirement_and_reject_wrong_acks (_behavior_ref_130.ClientTests.test_tagged_write_debts_gate_retirement_and_reject_wrong_acks) ... ok
+test_write_debts_are_bounded_metadata (_behavior_ref_130.ClientTests.test_write_debts_are_bounded_metadata) ... ok
+test_write_error_aborts_and_retains_other_debts (_behavior_ref_130.ClientTests.test_write_error_aborts_and_retains_other_debts) ... ok
+
+----------------------------------------------------------------------
+Ran 33 tests in 0.102s
+
+OK

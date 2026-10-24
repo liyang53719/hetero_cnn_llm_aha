@@ -1,0 +1,20 @@
+test_abort_start_opening_and_issuing_priority (__main__.StreamEdges.test_abort_start_opening_and_issuing_priority) ... ok
+test_abort_with_done_fire_replies_instead_of_waiting_again (__main__.StreamEdges.test_abort_with_done_fire_replies_instead_of_waiting_again) ... ok
+test_bad_index_is_consumed_without_issuing_matrix_step (__main__.StreamEdges.test_bad_index_is_consumed_without_issuing_matrix_step) ... ok
+test_bad_result_is_discarded_even_without_consumer_ack (__main__.StreamEdges.test_bad_result_is_discarded_even_without_consumer_ack) ... ok
+test_completion_stall_and_same_edge_abort_cannot_publish_success (__main__.StreamEdges.test_completion_stall_and_same_edge_abort_cannot_publish_success) ... ok
+test_descriptor_legality_enters_error_reply_then_locked (__main__.StreamEdges.test_descriptor_legality_enters_error_reply_then_locked) ... ok
+test_disabled_has_no_handshake_and_keeps_live_wire (__main__.StreamEdges.test_disabled_has_no_handshake_and_keeps_live_wire) ... ok
+test_done_error_and_drain_simultaneous_terminal_handshakes (__main__.StreamEdges.test_done_error_and_drain_simultaneous_terminal_handshakes) ... ok
+test_early_done_overrides_result_ack_transition (__main__.StreamEdges.test_early_done_overrides_result_ack_transition) ... ok
+test_foreign_done_never_retires_matching_group (__main__.StreamEdges.test_foreign_done_never_retires_matching_group) ... ok
+test_issuing_terminal_prevents_step_and_requests_drain (__main__.StreamEdges.test_issuing_terminal_prevents_step_and_requests_drain) ... ok
+test_live_result_is_held_until_ack_and_success_waits_completion (__main__.StreamEdges.test_live_result_is_held_until_ack_and_success_waits_completion) ... ok
+test_operand_backpressure_preserves_index_and_payload_identity (__main__.StreamEdges.test_operand_backpressure_preserves_index_and_payload_identity) ... ok
+test_pause_grant_requires_drained_and_no_terminal_offer (__main__.StreamEdges.test_pause_grant_requires_drained_and_no_terminal_offer) ... ok
+test_real_eight_qk_steps_and_pv_counted_steps (__main__.StreamEdges.test_real_eight_qk_steps_and_pv_counted_steps) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.006s
+
+OK

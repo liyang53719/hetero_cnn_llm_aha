@@ -1,0 +1,76 @@
+{
+  "status": "PASS_SOFTWARE_MODELS_ONLY_HARDWARE_TEMP",
+  "tests_per_mode": 48,
+  "new_tests_per_mode": 32,
+  "retained_old_client_tests_per_mode": 16,
+  "cpu_limit_seconds": 20,
+  "address_space_bytes": 268435456,
+  "cpu_affinity_count": 1,
+  "wall_timeout_seconds": 25,
+  "results": [
+    {
+      "mode": "normal",
+      "test": "test_behavior.py",
+      "exit_code": 0,
+      "wall_seconds": 0.20707400399260223,
+      "log": "normal_test_behavior.log",
+      "sha256": "9d867a587946e7d5f427fe39a8dbeae32aed3d86de71d961ecb49101f71b4ed0"
+    },
+    {
+      "mode": "normal",
+      "test": "test_stream_edges.py",
+      "exit_code": 0,
+      "wall_seconds": 0.0822589750168845,
+      "log": "normal_test_stream_edges.log",
+      "sha256": "261db5956c4a506bd7e5c9ae5e845c9a75e9d33817250fe5b241550c208ec93a"
+    },
+    {
+      "mode": "optimized",
+      "test": "test_behavior.py",
+      "exit_code": 0,
+      "wall_seconds": 0.38270441303029656,
+      "log": "optimized_test_behavior.log",
+      "sha256": "e53a805b59e91d8d08542c4751e7f5d472f9867b6abf0b343ef30631325435c6"
+    },
+    {
+      "mode": "optimized",
+      "test": "test_stream_edges.py",
+      "exit_code": 0,
+      "wall_seconds": 0.21241901704343036,
+      "log": "optimized_test_stream_edges.log",
+      "sha256": "9a6b07a4c0f742c21a63677c730f464869deeacb7fa64796f9028838083a0085"
+    },
+    {
+      "mode": "isolated",
+      "test": "test_behavior.py",
+      "exit_code": 0,
+      "wall_seconds": 0.21613655099645257,
+      "log": "isolated_test_behavior.log",
+      "sha256": "621e0f958e3dcebeeeaaa4dd7d60a91fa0f5ce85c7050e2d9b0adb7dc96f721c"
+    },
+    {
+      "mode": "isolated",
+      "test": "test_stream_edges.py",
+      "exit_code": 0,
+      "wall_seconds": 0.06764662597561255,
+      "log": "isolated_test_stream_edges.log",
+      "sha256": "9a6b07a4c0f742c21a63677c730f464869deeacb7fa64796f9028838083a0085"
+    },
+    {
+      "mode": "isolated_optimized",
+      "test": "test_behavior.py",
+      "exit_code": 0,
+      "wall_seconds": 0.3528106259764172,
+      "log": "isolated_optimized_test_behavior.log",
+      "sha256": "9d867a587946e7d5f427fe39a8dbeae32aed3d86de71d961ecb49101f71b4ed0"
+    },
+    {
+      "mode": "isolated_optimized",
+      "test": "test_stream_edges.py",
+      "exit_code": 0,
+      "wall_seconds": 0.21181153802899644,
+      "log": "isolated_optimized_test_stream_edges.log",
+      "sha256": "368e2981eede19a1a7d948c971df0bb827062136b3f4518bbf6eb2109d1fe406"
+    }
+  ]
+}

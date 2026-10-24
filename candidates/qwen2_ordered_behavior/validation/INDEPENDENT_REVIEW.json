@@ -1,0 +1,33 @@
+{
+  "status": "PASS_INDEPENDENT_SOFTWARE_REVIEW_HARDWARE_TEMP",
+  "reviewer": "independent implementation reviewer",
+  "reviewed_files": {
+    "control.py": "a8ed562a5d534d7ec3e7e90a65c0f5e76fb948003887d58ba83899769c9cd79f",
+    "stream_client.py": "8dcf81b8358bdebff5ab7b16783f0f73f3e97a0081b3fc554b444eb821f9c95f",
+    "test_behavior.py": "14c8dbe567c04f9c7429be7ddd331e126c2740458052b485df4ecde9dc6a5202",
+    "test_stream_edges.py": "f4e14299e9301928529519519bf411c3eab452edb904434da77995c1afc0df0c"
+  },
+  "independent_tests": {
+    "isolated": {
+      "behavior": 33,
+      "client_edges": 15
+    },
+    "isolated_optimized": {
+      "behavior": 33,
+      "client_edges": 15
+    }
+  },
+  "findings": [
+    "Old service-client is not selected Scala StreamClient; implemented explicit full8-state software model.",
+    "Two pre-edge/priority defects reproduced before fixes; regressions retained.",
+    "Live client payload identity checked; no whole tile copy.",
+    "Same-edge ACK and early done may consume result but poison; no successful completion.",
+    "Accepted feed bits and borrower are boundary models, not full owner/DDR reachability."
+  ],
+  "not_proven": [
+    "Chisel execution/elaboration/RTL",
+    "HardFloat flags wire values",
+    "Complete prefill/M128",
+    "Hardware cycles, frequency, MAC utilization"
+  ]
+}

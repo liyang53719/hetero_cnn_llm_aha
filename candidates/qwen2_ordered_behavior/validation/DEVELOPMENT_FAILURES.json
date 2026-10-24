@@ -1,0 +1,18 @@
+{
+  "status": "FAILURES_RETAINED_AND_FIXED_IN_SOFTWARE_MODEL_ONLY",
+  "original_failure_count": 2,
+  "raw_failure_log_sha256": "e0f31ce99573ac99370161d31981fd4b6bafbec72e83f82db906a70bcbd7311c",
+  "failures": [
+    {
+      "test": "test_error_done_completion_keeps_protocol_status",
+      "before": "completion_error true but core poisoned false",
+      "fix": "Save pre-edge old_state before completing slice; test late protocol failure using old state."
+    },
+    {
+      "test": "test_protocol_overrides_address_by_source_order",
+      "before": "Bounds instead of Protocol",
+      "fix": "Apply matrix, address, client, numerical priorities in source order; address/client exclusions inspect pre-edge state."
+    }
+  ],
+  "scope": "These were new Python translation defects found during independent review, not demonstrated Chisel defects. Final tests pass; previous failures not relabeled PASS."
+}

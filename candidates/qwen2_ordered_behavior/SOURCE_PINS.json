@@ -1,0 +1,18 @@
+{
+  "raw_sources": {
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a",
+    "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27",
+    "candidates/qwen2_resident_matrix/attention_packed_owner/client.py": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1",
+    "candidates/qwen2_resident_matrix/attention_packed_owner/test_client.py": "fa9d0285db80253f354630385c2c203a5ec7d70f8c6bc3cc2169720914c4f92b"
+  },
+  "micro_model_sha256": "22eb8f56dbe2f969ef4cd0deb3f13c78c67383319b0d6ec039f2b97e0abb6a29",
+  "main": "172d67e569e0cee72d92cb72c2c94545b36919f4",
+  "selected_core_sha256": "9120b040016116ae400389fe027bdb26e4b6d450faeeef6dba058108d32ba48c",
+  "selected_client_sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0",
+  "selected_width_source": {
+    "relative_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BurstProtocol.scala",
+    "sha256": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91",
+    "note": "Exact selected92 classcompile source; MatrixStreamPort uses default returnTagBits=0; context3/tag32."
+  }
+}

@@ -1,0 +1,563 @@
+{
+  "actual_cold_root_carried_binding_verified": true,
+  "actual_generation": 1,
+  "actual_handoff_fabricated": false,
+  "actual_rerun": false,
+  "actual_terminal_fabricated": false,
+  "all_actual_terminal_count": 25,
+  "before_after_pins_verified": true,
+  "carried_diagnostics_performed": false,
+  "carried_result_not_inferred": true,
+  "cold_actual_tensor_count": 19,
+  "cold_gate_scope_only": true,
+  "cold_terminal_count": 16,
+  "combined_full_run_acceptance": false,
+  "conv_reference_arithmetic_selected": true,
+  "downstream_golden_injection": false,
+  "evidence_boundary_note": "Historical integrated cold128 only; carried comparison and combined cold/carried acceptance are not established. This receipt contains hashes and scalar summaries, not tensor values, original private paths or authority receipts.",
+  "evidence_kind": "SANITIZED_HISTORICAL_RUN_SPECIFIC_ADAPTER_RESULT_NOT_PORTABLE_ADAPTER_EXECUTION",
+  "executed_adapter_code_pins_sha256": "4bc6d8885e4abf02935acf691f8c8e57f0941413380fc2a752b230c961ac10a0",
+  "executed_adapter_source_sha256": {
+    "cold_postterminal.py": "d34561ed2231b213ed1d0dc97ee8263026e708457c6337393dba06c9710f0e36",
+    "launch_cold.py": "2b329e37986eee29c6daba6dbb9f2ff77a5c45cd1d5327366b702f3eb6772dea",
+    "terminal_gate.py": "a7d8bbd24e510f9388736b65977aabe7f16d7386bfb76e45a7868ea64442761b"
+  },
+  "frozen_plan_input_count": 1064,
+  "frozen_plan_inputs_before_after_verified": true,
+  "full_block_gate_pass": false,
+  "hardware_cycles": null,
+  "hardware_executed": false,
+  "independent_postflight": {
+    "cold_outputs_rechecked": 19,
+    "original_handoff_metadata_rechecked": true,
+    "owned_cleanup_proof_and_owning_popen_path_verified": true,
+    "reviewer_metric_fields_crosschecked": 172,
+    "sanitized_reviewer_receipt_sha256": "967883ca24287c7ab51e70e3532ac11db7dd0b57b587107a9de86626164cca1d",
+    "scope": "Genuine integrated Qwen3.5-0.8B L0 cold128, 16 owners and joint generation 1, assigned metrics only. Combined full run, RTL and Scala resource mapping remain unestablished.",
+    "source_runtime_reference_pins_rehashed": 23832
+  },
+  "metric_inventory_note": "The 7 operator entries overlap node checks (QKV, Z, AB and end-to-end SiLU); they are not 7 additional unique tensors or independent tests. The 19 actual files comprise 17 assigned node/state checks, one unassigned packed Prep file and one pre-SiLU observation assessed by operator checks.",
+  "metrics": {
+    "checks": {
+      "ab": {
+        "actual_sha256": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+        "bit_mismatches": 0,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 4096,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "attention_residual": {
+        "actual_sha256": "75d2692d7203ec3098b321d7f1da84a7fae4cba2b01de6e5e5aadd4adb5afd73",
+        "bit_mismatches": 273,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 131072,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.00048828125,
+        "max_bf16_ulp": 128,
+        "mean_abs": 1.8699574866332114e-07,
+        "native_sha256": "b487bb5e129f3cf5ce4c4a75504c914a3a16f8931d945b139da4ee4b13411f83",
+        "numerical_mismatches": 273,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "chunk": {
+        "actual_sha256": "02d5161f86aa8a754c6935f3786055910fbec1592405014ceafd412b53889e25",
+        "bit_mismatches": 55,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 262144,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 1.52587890625e-05,
+        "max_bf16_ulp": 6,
+        "mean_abs": 9.90735132821996e-11,
+        "native_sha256": "9b61414ce2f2e3a7f71d838a893ca5ec1d342e0d63edb5895796d9f7c1573e54",
+        "numerical_mismatches": 55,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "conv_silu": {
+        "actual_sha256": "25d11e4995844c553ec2d1c7fa37e827e951075dc33ce6aded5aa9d8af1f9adb",
+        "bit_mismatches": 919,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 786432,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "50541922e2919daed0646fc6fc2ea6707136d3196c8ddd861e8869245e325e8f",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 919,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "down": {
+        "actual_sha256": "fa504fdf2c132671c504c51262c73cab467ebe4ad7ca87d820b71b3a82945ac9",
+        "bit_mismatches": 10051,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 131072,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0009765625,
+        "max_bf16_ulp": 28568,
+        "mean_abs": 4.963985887229683e-06,
+        "native_sha256": "b7a6c39b87622a05706905daab903c5823de0b4acd47e2aa174071cd63e34430",
+        "numerical_mismatches": 10051,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "gate": {
+        "actual_sha256": "9abfde314b150e290227b7b35913edeff57c96567d6ea2a1d5e0c016b882f187",
+        "bit_mismatches": 8636,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 458752,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.015625,
+        "max_bf16_ulp": 29349,
+        "mean_abs": 1.8651137647144162e-05,
+        "native_sha256": "26d1131ce366cb91eb90c8a557aa098c218ac18cf128f932c340be2cfface02b",
+        "numerical_mismatches": 8636,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "gated_norm": {
+        "actual_sha256": "2b114dfb5a425a743bafc15b2d054adfb35c1b8ee71c9462ec15065dc916bca0",
+        "bit_mismatches": 56,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 262144,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.001953125,
+        "max_bf16_ulp": 6,
+        "mean_abs": 1.6022426052586525e-08,
+        "native_sha256": "3d489669a1a97ed60586a44159712d21b080877cfda52b79483635a920e8a2c6",
+        "numerical_mismatches": 56,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "history_staging": {
+        "actual_sha256": "1413736681e2903ed2ff6d28d0c8c97196c7744f4edb617d19be2ce16e54f799",
+        "bit_mismatches": 35,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 24576,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 5.289724578700294e-38,
+        "max_bf16_ulp": 12,
+        "mean_abs": 2.93562686286287e-41,
+        "native_sha256": "98f2f5af780914ae527c4e4949a6cb40cd2d892d8a305805df580a0c4f8865c7",
+        "numerical_mismatches": 35,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "input_norm": {
+        "actual_sha256": "a6caca5d99ec4ae6328417a5e017ad7501d8b6dfec3798e4f5a4230bbcaef468",
+        "bit_mismatches": 0,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 131072,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "a6caca5d99ec4ae6328417a5e017ad7501d8b6dfec3798e4f5a4230bbcaef468",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "o": {
+        "actual_sha256": "313672f457a18e093e44a8b50dac187d8f53c22dd2500f26b2cc73446b8a1a96",
+        "bit_mismatches": 671,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 131072,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.00048828125,
+        "max_bf16_ulp": 640,
+        "mean_abs": 1.922579855317963e-07,
+        "native_sha256": "b5dbf0764c4ce53258a4b37bfc49cbebb73120065e8e793b06db43a0f8ee0aab",
+        "numerical_mismatches": 671,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "output": {
+        "actual_sha256": "982584d3b3bfd13b760dc95ab9a691b567580fde06b476bcf09d769678de6933",
+        "bit_mismatches": 5770,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 131072,
+        "gate": "ORIGINAL_FULL_BLOCK_OUTPUT",
+        "max_abs": 0.001953125,
+        "max_bf16_ulp": 29120,
+        "mean_abs": 5.045527416314144e-06,
+        "native_sha256": "3fd5c899da137b7882135a4f8d7028c7ac263e663be65eed578ac898b14335f0",
+        "numerical_mismatches": 5770,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.05,
+          "mean_abs": 0.01
+        }
+      },
+      "post_norm": {
+        "actual_sha256": "e05ad5cf7f7dc23033da9742512210fb82b06fa9ff3e96c2991611d838c56acd",
+        "bit_mismatches": 290,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 131072,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.015625,
+        "max_bf16_ulp": 128,
+        "mean_abs": 6.4033083617687225e-06,
+        "native_sha256": "f37b66b32ff4a1493d887f8bbaaeef17ccf12f3cd261fee07996205727819aaa",
+        "numerical_mismatches": 290,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "prep": {
+        "actual_sha256": "04962b8286f69ed5cdef098b175e766ffef53f41bd3b702e7c5d1e7f778c68e1",
+        "elements": 819200,
+        "native_sha256": null,
+        "passed": null,
+        "status": "DIAGNOSTIC_UNASSIGNED",
+        "thresholds": null
+      },
+      "qkv": {
+        "actual_sha256": "8bae6c663641a75a7fec38a35a48edc3d46e419f5512cba08fd99b289507f76d",
+        "bit_mismatches": 1043,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 786432,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 9.4039548065783e-38,
+        "max_bf16_ulp": 201,
+        "mean_abs": 2.7149573871933194e-41,
+        "native_sha256": "d2e925b4bb4114a2696441c7004102ad51ae077be3161f7b293fcafbaee643f9",
+        "numerical_mismatches": 1043,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "silu_mul": {
+        "actual_sha256": "cac5104204a24cd43bf1194921a86c8922dc9be19d3b9efdc7c8b88cb746f006",
+        "bit_mismatches": 17603,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 458752,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0078125,
+        "max_bf16_ulp": 28789,
+        "mean_abs": 3.129680926861056e-06,
+        "native_sha256": "547978905fce99eed235c0568759e4875b06af82c7929fd384c06f68149d0f4f",
+        "numerical_mismatches": 17603,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "state_staging": {
+        "actual_sha256": "c6d456077826211ff5e5a832eb7540448b1097f31e3bc28ba0610a9faba62e04",
+        "bit_mismatches": 227510,
+        "elements": 262144,
+        "gate": "ORIGINAL_EVERY_ELEMENT_FP32_STATE",
+        "max_abs_error": 9.5367431640625e-07,
+        "max_tolerance_ratio": 0.003976213056452241,
+        "mismatches": 0,
+        "native_sha256": "26ded1996b264a4e13e2e6c84435a81e03e01fb53b4467e401ecd3a1d2818ec3",
+        "numerical_mismatches": 227510,
+        "passed": true,
+        "rmse": 6.729638077164864e-09,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "atol": 0.0001,
+          "rtol": 0.0001
+        }
+      },
+      "up": {
+        "actual_sha256": "3885bbf62358271fd13958b7056d8e9574c86652b17dc19b033e57bbdfc156aa",
+        "bit_mismatches": 13496,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 458752,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0078125,
+        "max_bf16_ulp": 29381,
+        "mean_abs": 1.3680442634722567e-05,
+        "native_sha256": "6e68942ccf5a800f1f131d2b1f77a6d9ea2796d4d96950d1837544c00fb9d880",
+        "numerical_mismatches": 13496,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "z": {
+        "actual_sha256": "357084d2ea03a68b6e9db00378fa17aad20741bf9964286c0f1b358a38d437a2",
+        "bit_mismatches": 0,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 262144,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "357084d2ea03a68b6e9db00378fa17aad20741bf9964286c0f1b358a38d437a2",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      }
+    },
+    "operator_checks": {
+      "ab": {
+        "actual_sha256": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+        "bit_mismatches": 0,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 4096,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "77b01d886883f9ca6c53eccf396a730db16fc6fc42a9875ae3992f4ab3d22d64",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "conv_same_actual_input": {
+        "actual_sha256": "4ff576f631ee9f99a744bd93f0dd32d61889d5d09901b96f041d3e5946145cea",
+        "bit_mismatches": 919,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 786432,
+        "gate": "ORIGINAL_SAME_ACTUAL_INPUT_CONV_SILU_1_BF16_ULP",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "43295a447f8e2f6f2bfa63dc4fb1e3ccd91a3f5b110e8d03c0ac543abd566b4f",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 919,
+        "status": "PASS",
+        "thresholds": {
+          "max_bf16_ulp": 1
+        }
+      },
+      "end_to_end_conv": {
+        "actual_sha256": "4ff576f631ee9f99a744bd93f0dd32d61889d5d09901b96f041d3e5946145cea",
+        "bit_mismatches": 919,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 786432,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "a3200f327fdf52b42bfe6b665d5773c1fb15d6a3b45f00e6cedfcbb8e4ef5e17",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 919,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "end_to_end_silu": {
+        "actual_sha256": "25d11e4995844c553ec2d1c7fa37e827e951075dc33ce6aded5aa9d8af1f9adb",
+        "bit_mismatches": 919,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 786432,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "50541922e2919daed0646fc6fc2ea6707136d3196c8ddd861e8869245e325e8f",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 919,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "qkv": {
+        "actual_sha256": "8bae6c663641a75a7fec38a35a48edc3d46e419f5512cba08fd99b289507f76d",
+        "bit_mismatches": 1043,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 786432,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 9.4039548065783e-38,
+        "max_bf16_ulp": 201,
+        "mean_abs": 2.7149573871933194e-41,
+        "native_sha256": "d2e925b4bb4114a2696441c7004102ad51ae077be3161f7b293fcafbaee643f9",
+        "numerical_mismatches": 1043,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      },
+      "silu_same_actual_input": {
+        "actual_sha256": "25d11e4995844c553ec2d1c7fa37e827e951075dc33ce6aded5aa9d8af1f9adb",
+        "bit_mismatches": 919,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 786432,
+        "gate": "ORIGINAL_SAME_ACTUAL_INPUT_CONV_SILU_1_BF16_ULP",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "cc8b88f4ea4622247b14b9bb682eafead8c3831e83d9e3b6f3f05e9a11bcf88f",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 919,
+        "status": "PASS",
+        "thresholds": {
+          "max_bf16_ulp": 1
+        }
+      },
+      "z": {
+        "actual_sha256": "357084d2ea03a68b6e9db00378fa17aad20741bf9964286c0f1b358a38d437a2",
+        "bit_mismatches": 0,
+        "comparison_domain": "finite_bf16_materialized_prefill_v1",
+        "elements": 262144,
+        "gate": "ORIGINAL_NATIVE_PER_NODE",
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "native_sha256": "357084d2ea03a68b6e9db00378fa17aad20741bf9964286c0f1b358a38d437a2",
+        "numerical_mismatches": 0,
+        "passed": true,
+        "signed_zero_only_mismatches": 0,
+        "status": "PASS",
+        "thresholds": {
+          "max_abs": 0.03125,
+          "mean_abs": 0.005
+        }
+      }
+    }
+  },
+  "node_gates_passed": true,
+  "numerical_gate_note": "Only each recorded threshold applies. General BF16 node/output gates are max_abs and mean_abs, not a bit-match or ULP criterion; selected same-input Conv/SiLU use the original 1-BF16-ULP gate. Prep remains unassigned.",
+  "numerical_thresholds_changed": false,
+  "official_block_recaptured": false,
+  "operator_gates_passed": true,
+  "original_native_cache_continuity_verified": true,
+  "passed": null,
+  "phase": "cold128",
+  "portable_adapter_actual_execution": "TEMP_NOT_EXECUTED",
+  "portable_adapter_code_pins_sha256": "807fd9205f43d3410838e008c7e43d7c153fa97aca52aafa07ace7e3b6046b31",
+  "portable_adapter_source_sha256": {
+    "cold_postterminal.py": "35195fd5fc09f35714a8f822eedb031cd3d44fdcd28fd5b19ff39f323a64210f",
+    "launch_cold.py": "ac681edfe99a6951b3a9440a6441d1e94a53b3714df7be06cb90bb80f4b5b450",
+    "terminal_gate.py": "c3f602a29beffa19d75b160deb2d27c15c2dc4c077b4e40bb4ac945d1dc276f8"
+  },
+  "portable_synthetic_tests": {
+    "actual_payload_reads": false,
+    "cli_cases_included_in_one_method": true,
+    "isolated_cli_denial_cases": 2,
+    "model_native_execution": false,
+    "module_methods": {
+      "test_cold_postterminal.py": 25,
+      "test_launch_cold.py": 13,
+      "test_terminal_gate.py": 37
+    },
+    "status": "PASS_SYNTHETIC_SOURCE_ONLY",
+    "unittest_methods": 75
+  },
+  "prep_threshold_assigned": false,
+  "process": {
+    "address_space_bytes": 4294967296,
+    "automatic_retry": false,
+    "cleanup_complete": true,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "cpu_seconds": 300,
+    "elapsed_seconds": 11.445305624976754,
+    "exit_code": 0,
+    "original_deadlines_changed": false,
+    "original_run_signaled": false,
+    "sampled_rss_limit_claimed": false,
+    "status": "DIAGNOSTIC_PROCESS_COMPLETE"
+  },
+  "recorded_actual_status": "FAILED",
+  "recorded_launch_status": "FAILED",
+  "review_state": "PASS_SCOPED_INDEPENDENT_POSTFLIGHT",
+  "rows": 128,
+  "rtl_executed": false,
+  "scala_resource_mapping_qualified": false,
+  "schema_version": 1,
+  "scope": "POST_TERMINAL_COLD128_ONLY_DIAGNOSTIC_NOT_FULL_ACCEPTANCE",
+  "source_commit": "e65598b2eaf72fc168614c6a36dc66bc3be4bdcc",
+  "source_process_sha256": "85c5d2d5b839b05be5c22e67adc933fe5d2a0ddd08326eed3e7e98ec5a886279",
+  "source_report_sha256": "be29b5ece62f3f9938317511a102c2d3abc69c937c08d893fb7e46753d288758",
+  "status": "COLD_DIAGNOSTIC_COMPLETE",
+  "whole_run_status": "INCOMPLETE"
+}

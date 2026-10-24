@@ -9,7 +9,7 @@ import sys
 import time
 
 ROOT=Path(__file__).resolve().parents[2]
-SOURCE_DIRS=tuple(Path(__file__).parent / name for name in ('', 'conv', 'prep', 'chunk', 'gated_norm', 'elementwise', 'native'))
+SOURCE_DIRS=tuple(Path(__file__).parent / name for name in ('', 'conv', 'prep', 'chunk', 'gated_norm', 'elementwise', 'native', 'postterminal'))
 SOURCE_DIRS += tuple(Path(__file__).parent.parent / name for name in (
     'qwen35_35b_prefill', 'qwen35_35b_payload', 'qwen35_35b_payload/tests',
     'qwen35_35b_rms', 'qwen35_35b_projection_reference', 'qwen35_35b_conv', 'qwen35_35b_ab', 'qwen35_35b_prep', 'qwen35_35b_exp', 'qwen35_35b_gated_norm', 'qwen35_35b_output', 'qwen35_35b_postnorm', 'shared_resource_timing'))
@@ -19,6 +19,9 @@ PAYLOAD_DEPENDENCIES = tuple('src/heteronpu/' + name + '.py' for name in (
     'qwen_family_contracts', 'abi_validation', 'cgra_sfu', 'command',
     'dtypes', 'kv_engine', 'matrix_engine', 'scheduler'))
 CI_FIXTURE_INPUTS = (
+    # Portable post-terminal tests replay these exact repository source helpers.
+    'scripts/idma_source_export_20261017/strict_cleanup.py',
+    'scripts/idma_source_export_20261017/bounded_run.py',
     '.github/workflows/qwen35-gdn-prefill-model.yml',
     'candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp',
     'candidates/qwen35_uf_predicate_r2/STIMULI.json',

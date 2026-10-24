@@ -65,6 +65,8 @@ on:
       - 'chisel/continuous_prefill/config/host_bf16_gdn_descriptor_contract.json'
       - 'config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py'
       - 'scripts/build_shared_matrix_recipe.py'
+      - 'scripts/idma_source_export_20261017/strict_cleanup.py'
+      - 'scripts/idma_source_export_20261017/bounded_run.py'
 permissions:
   contents: read
 jobs:

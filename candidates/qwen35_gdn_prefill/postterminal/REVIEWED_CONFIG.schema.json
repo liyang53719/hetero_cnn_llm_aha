@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:qwen35:reviewed-post-terminal-cold128-configuration:1",
+  "title": "Explicit reviewed post-terminal cold128 configuration",
+  "description": "Structural schema only. terminal_gate.load_reviewed_config is authoritative for cross-field, exact path, SHA and frozen identity checks. This file and a synthetic example grant no execution authority.",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "integer",
+      "const": 1
+    },
+    "scope": {
+      "const": "REVIEWED_POST_TERMINAL_COLD128_CONFIGURATION"
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "full_driver_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "paths": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path or path relative to this configuration file. Runtime additionally rejects symlinks, dot/parent segments, repeated separators and alternate spellings. No private defaults."
+        },
+        "harness": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path or path relative to this configuration file. Runtime additionally rejects symlinks, dot/parent segments, repeated separators and alternate spellings. No private defaults."
+        },
+        "run_directory": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path or path relative to this configuration file. Runtime additionally rejects symlinks, dot/parent segments, repeated separators and alternate spellings. No private defaults."
+        },
+        "fixture": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path or path relative to this configuration file. Runtime additionally rejects symlinks, dot/parent segments, repeated separators and alternate spellings. No private defaults."
+        },
+        "numpy_site": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path or path relative to this configuration file. Runtime additionally rejects symlinks, dot/parent segments, repeated separators and alternate spellings. No private defaults."
+        }
+      },
+      "required": [
+        "repository",
+        "harness",
+        "run_directory",
+        "fixture",
+        "numpy_site"
+      ],
+      "additionalProperties": false
+    },
+    "files": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "$ref": "#/$defs/pin"
+        },
+        "terminal_manifest": {
+          "$ref": "#/$defs/pin"
+        },
+        "reference_freeze": {
+          "$ref": "#/$defs/pin"
+        },
+        "native_manifest": {
+          "$ref": "#/$defs/pin"
+        }
+      },
+      "required": [
+        "plan",
+        "terminal_manifest",
+        "reference_freeze",
+        "native_manifest"
+      ],
+      "additionalProperties": false
+    },
+    "terminal": {
+      "type": "object",
+      "properties": {
+        "retained_exec_session": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "executor_exit_code": {
+          "type": "integer",
+          "const": 1
+        },
+        "owner_identity": {
+          "type": "object",
+          "properties": {
+            "pid": {
+              "type": "integer",
+              "minimum": 2
+            },
+            "ppid": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "group": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "session": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "pid",
+            "ppid",
+            "group",
+            "start",
+            "session"
+          ],
+          "additionalProperties": false
+        },
+        "boot_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "work_start_monotonic": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "retained_exec_session",
+        "executor_exit_code",
+        "owner_identity",
+        "boot_id",
+        "work_start_monotonic"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema",
+    "scope",
+    "source_commit",
+    "full_driver_sha256",
+    "paths",
+    "files",
+    "terminal"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "pin": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path or path relative to this configuration file. Runtime additionally rejects symlinks, dot/parent segments, repeated separators and alternate spellings. No private defaults."
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 33554432
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

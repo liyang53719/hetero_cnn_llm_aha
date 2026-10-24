@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "scope": "REVIEWED_POST_TERMINAL_COLD128_CONFIGURATION",
+  "source_commit": "1111111111111111111111111111111111111111",
+  "full_driver_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+  "paths": {
+    "repository": "repository",
+    "harness": "evidence",
+    "run_directory": "evidence/run",
+    "fixture": "fixtures/raw",
+    "numpy_site": "python/site-packages"
+  },
+  "files": {
+    "plan": {
+      "path": "evidence/PLAN.json",
+      "bytes": 1,
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "terminal_manifest": {
+      "path": "reviewed/handoff.json",
+      "bytes": 1,
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "reference_freeze": {
+      "path": "evidence/REFERENCE_FREEZE.json",
+      "bytes": 1,
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "native_manifest": {
+      "path": "reference/native/manifest.json",
+      "bytes": 1,
+      "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
+  "terminal": {
+    "retained_exec_session": 7,
+    "executor_exit_code": 1,
+    "owner_identity": {
+      "pid": 5,
+      "ppid": 2,
+      "group": 5,
+      "start": 123,
+      "session": 5
+    },
+    "boot_id": "a015bb85-7341-467e-9d31-616e413f7d75",
+    "work_start_monotonic": 100.0
+  }
+}

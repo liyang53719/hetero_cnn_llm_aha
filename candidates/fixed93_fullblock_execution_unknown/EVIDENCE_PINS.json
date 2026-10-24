@@ -1,0 +1,24 @@
+{
+  "description_zh": "这些内容哈希用于关联已冻结源码/冷测试和私有诊断，不公开私有诊断原文，不证明执行终态。",
+  "pins": {
+    "budget": {
+      "sha256": "32f9aace9d9cdc7264352cc3e7f3a1873b90b1f8d48e5c60676dd2d99de0be78"
+    },
+    "recovery_handle_addendum": {
+      "bytes": 1865,
+      "sha256": "074011f204710e8a19331494598bf02dc5bdab4b3c8f432e5d8db4c589de3a3e"
+    },
+    "source_cold_review": {
+      "bytes": 24934,
+      "sha256": "7f58d9d17829e166698fa72e33d54dc950666fe3b4a035e15fb2b59ec694f845"
+    },
+    "source_manifest": {
+      "sha256": "8a5c06645e0190d8e0c401173ed423deaa48e04b29d2dc2032d6e2ba2b9a0566"
+    },
+    "unknown_diagnostic_review": {
+      "bytes": 13532,
+      "sha256": "0e2b43725aae7b92ffda15252144a24c9433ebd7ef361d45dcff5cf434165295"
+    }
+  },
+  "schema": "public-status-content-pins-v1"
+}

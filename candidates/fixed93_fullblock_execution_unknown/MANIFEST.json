@@ -1,0 +1,22 @@
+{
+  "content_bytes": 4068,
+  "content_file_count": 3,
+  "content_files": {
+    "EVIDENCE_PINS.json": {
+      "bytes": 868,
+      "sha256": "207dd0cf5641a12abefa3dfb0f046f127a7023db7ac49f82c45137d6ee3415e1"
+    },
+    "STATUS.json": {
+      "bytes": 1973,
+      "sha256": "da793b975fdf091704993857a56a302be7727712cf0ae0546d1166526287ae8b"
+    },
+    "STATUS.md": {
+      "bytes": 1227,
+      "sha256": "1bff3bc5170b49103417373aae928e521d36bce1cf102357afb0f46c9976d963"
+    }
+  },
+  "manifest_self_pin_excluded": true,
+  "publication_scope": "Only the exact four-file package; no underlying private artifacts are authorized by these hashes.",
+  "schema": "sanitized-fullblock-status-package-v1",
+  "status": "UNKNOWN_EXECUTION_AND_CLEANUP"
+}

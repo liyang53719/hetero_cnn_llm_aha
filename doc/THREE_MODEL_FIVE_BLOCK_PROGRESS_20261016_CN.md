@@ -1705,3 +1705,10 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 已封17组轻量源码/数学布局/ACK合同替身检查自然0/0.457241秒，目标Python3.12.14，9输入前后pin同。独审SHAe896b24531e665de3142e394b0b4248d09b397704b7436c6df9f046f772eef5c。入树仅8pins/hash与Python内存compile，未重跑合成、未编译Scala、未生成RTL、没有真实握手或数值验收。
 - 该补丁仍TEMP硬件待验证，逐token prep不是chunk64 recurrent，更非完整L0 prefill通过；固定资源下每token源码计195read/400write，不是实测周期或系统利用率，80/90%目标没有新PASS证据。后四实际仍未启动。
 - 当前Qwen2完整M128保持原唯一运行，尚未终态。本批本地提交，不宣称远端更新；不再清理数据。
+
+
+## INCOMPLETE：完整 M128 执行及清理 UNKNOWN（2026-10-21 12:12 UTC）
+
+Qwen2 fixed93 M128 原运行连接中断，恢复句柄不可用。最后监督记录 12:04:40 UTC，最后计算进度 Attention / pc12、10 个 public 节点完成；没有原进程退出、清理或完整产物封印。本次既不是已证算术 FAIL，也不授予完整模型、数值或 RTL PASS。五项完整 RTL 仍 0/5。不得将旧 M2/M16 子链资格升级为完整 prefill。
+
+原候选、输入和证据保留，不读取未封存数值流、不盲目重跑；只沿可关联原身份的监督终态或平台记录恢复。普通开发及独立轻量测试继续。脱敏状态及哈希在 candidates/fixed93_fullblock_execution_unknown/；公开包 manifest SHA256 533a1fa26b4911bf5547405f8298f188fcb5e7cf59ffbd5c16b6f56d8a46392e。本批仅记录状态，无新增模型测试或 RTL 作业，无临时文件清理。

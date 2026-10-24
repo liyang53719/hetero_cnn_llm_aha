@@ -1,0 +1,113 @@
+--- a/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala
++++ b/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala
+@@ -4,7 +4,7 @@
+ import chisel3._
+ import chisel3.util._
+ 
+-/** Internal M1 producer bridge, not a public Host descriptor. The three inputs
++/** Internal producer bridge, not a public Host descriptor. The three inputs
+   * are separate pointers into Conv4's BF16 [Q heads, K heads, V heads] row.
+   * AB is the single Dense32 BF16 beat [A0..A15,B0..B15], dtBias is
+   * BF16 [heads], and ALog is original FP32 [heads]. These three spans must
+@@ -12,7 +12,10 @@
+   * Output vectors are FP32 [heads,128], gates are 64 bytes/head: {g,beta,0x14}.
+   * All four outputs are unpublished, disjoint staging allocations.
+   * recurrentMode is true ONLY for an existing-cache single-token decode; cold
+-  * M1 uses the chunk path. This owner does not implement an M128 prefill path.
++  * M1 uses the chunk scaling path. maxTokens defaults to 1: public instances
++  * remain M1. Explicit internal multi-token instances require 16 heads and
++  * packed Conv/core rows (12288/25600 bytes), AB rows of 64 bytes, and chunk
++  * scaling. This serial InputPrep loop is not a chunk64 or full prefill core.
+   */
+ class GdnInputPrepJob extends Bundle {
+   val tokens = UInt(16.W)
+@@ -64,14 +67,16 @@
+   * Output publication waits for the last gate ACK. Any failure locks until
+   * reset; reset must also reset/drain the shared service and transport.
+   */
+-class GdnInputPrepOwner(heads: Int = 16) extends Module {
++class GdnInputPrepOwner(heads: Int = 16, maxTokens: Int = 1) extends Module {
+   require(heads > 0 && heads <= 16)
++  require(maxTokens > 0 && maxTokens <= 128)
+   val io = IO(new GdnInputPrepOwnerPort)
+   val idle :: readParam :: waitParam :: readVector :: waitVector :: issue :: waitScalar :: writeVector :: waitWrite :: writeGate :: waitGate :: finish :: locked :: Nil = Enum(13)
+   val square :: sum :: epsilon :: root :: inverse :: normalize :: scaleQuery :: biasAdd :: softplus :: aExp :: aInverse :: logDecay :: betaExp :: betaDenominator :: betaInverse :: betaSign :: Nil = Enum(16)
+   val state = RegInit(idle)
+   val operation = RegInit(square)
+   val job = Reg(new GdnInputPrepJob)
++  val token = RegInit(0.U(16.W))
+   val parameters = Reg(Vec(4, Vec(16, UInt(32.W))))
+   val input = Reg(Vec(128, UInt(16.W)))
+   val output = Reg(Vec(128, UInt(32.W)))
+@@ -102,13 +107,15 @@
+ 
+   val inputBase = MuxLookup(role, job.queryIn)(Seq(1.U -> job.keyIn, 2.U -> job.valueIn))
+   val outputBase = MuxLookup(role, job.query)(Seq(1.U -> job.key, 2.U -> job.value))
+-  val paramBase = MuxLookup(param, job.ab)(Seq(1.U -> job.aLog, 2.U -> job.dtBias))
++  val inputTokenOffset = token.pad(64) * 12288.U
++  val outputTokenOffset = token.pad(64) * 25600.U
++  val paramBase = MuxLookup(param, job.ab + (token.pad(64) << 6))(Seq(1.U -> job.aLog, 2.U -> job.dtBias))
+   io.memory.valid := state === readParam || state === readVector || state === writeVector || state === writeGate
+   io.memory.bits.write := state === writeVector || state === writeGate
+-  io.memory.bits.address := MuxLookup(state, inputBase + (head.pad(64) << 8) + (beat.pad(64) << 6))(Seq(
++  io.memory.bits.address := MuxLookup(state, inputBase + inputTokenOffset + (head.pad(64) << 8) + (beat.pad(64) << 6))(Seq(
+     readParam -> paramBase,
+-    writeVector -> (outputBase + (head.pad(64) << 9) + (beat.pad(64) << 6)),
+-    writeGate -> (job.gates + (head.pad(64) << 6))))
++    writeVector -> (outputBase + outputTokenOffset + (head.pad(64) << 9) + (beat.pad(64) << 6)),
++    writeGate -> (job.gates + outputTokenOffset + (head.pad(64) << 6))))
+   val outputBeats = output.asUInt.asTypeOf(Vec(8, UInt(512.W)))
+   io.memory.bits.data := Mux(state === writeGate, Cat(0.U(448.W), beta, g), Mux(state === writeVector, outputBeats(beat), 0.U))
+   io.memory.bits.mask := Mux(io.memory.bits.write, Fill(64, 1.U(1.W)), 0.U)
+@@ -141,7 +148,7 @@
+   def fail(code: UInt): Unit = { status := code; state := finish }
+ 
+   when(io.job.fire) {
+-    job := io.job.bits; param := 0.U; role := 0.U; head := 0.U; beat := 0.U; lane := 0.U
++    job := io.job.bits; token := 0.U; param := 0.U; role := 0.U; head := 0.U; beat := 0.U; lane := 0.U
+     sequence := 0.U; accumulator := 0.U; status := Status.Ok.U; bytes := 0.U; cycles := 0.U
+     val j = io.job.bits
+     val reads = Seq((j.queryIn, heads * 256), (j.keyIn, heads * 256), (j.valueIn, heads * 256),
+@@ -153,7 +160,26 @@
+       base(5, 0) =/= 0.U || base.pad(66) + size.U > (BigInt(1) << 56).U }.reduce(_ || _)
+     val badOverlap = (for (w <- writes; r <- reads) yield overlap(w, r)).reduce(_ || _) ||
+       (for (i <- writes.indices; k <- 0 until i) yield overlap(writes(i), writes(k))).reduce(_ || _)
+-    when(j.tokens =/= 1.U || j.heads =/= heads.U || badAddress || badOverlap) { fail(Status.Bounds.U) }
++    // Multiple tokens share one packed allocation, not four overlapping role
++    // envelopes. Preserve the original separated-pointer checks for M1.
++    val multi = j.tokens > 1.U
++    val packedReads = Seq((j.queryIn, j.tokens.pad(66) * 12288.U),
++      (j.ab, j.tokens.pad(66) * 64.U), (j.aLog, 64.U), (j.dtBias, 64.U))
++    val packedWrite = (j.query, j.tokens.pad(66) * 25600.U)
++    val packedBadAddress = (packedReads :+ packedWrite).map { case (base, size) =>
++      base(5, 0) =/= 0.U || base.pad(82) + size.pad(82) > (BigInt(1) << 56).U }.reduce(_ || _)
++    val packedOverlap = packedReads.map { case (base, size) =>
++      packedWrite._1.pad(82) < base.pad(82) + size.pad(82) &&
++        base.pad(82) < packedWrite._1.pad(82) + packedWrite._2.pad(82) }.reduce(_ || _)
++    val packedPointers = j.keyIn.pad(66) === j.queryIn.pad(66) + 4096.U &&
++      j.valueIn.pad(66) === j.queryIn.pad(66) + 8192.U &&
++      j.key.pad(66) === j.query.pad(66) + 8192.U &&
++      j.value.pad(66) === j.query.pad(66) + 16384.U &&
++      j.gates.pad(66) === j.query.pad(66) + 24576.U
++    val badTokens = j.tokens === 0.U || j.tokens > maxTokens.U ||
++      (multi && ((heads != 16).B || j.recurrentMode))
++    val badLayout = Mux(multi, !packedPointers || packedBadAddress || packedOverlap, badAddress || badOverlap)
++    when(badTokens || j.heads =/= heads.U || badLayout) { fail(Status.Bounds.U) }
+       .otherwise { state := readParam }
+   }
+   when(io.memory.fire) {
+@@ -203,7 +229,13 @@
+         }
+         when(state === waitGate) {
+           bytes := bytes + 64.U
+-          when(head === (heads - 1).U) { state := finish }
++          when(head === (heads - 1).U) {
++            when(token.pad(17) + 1.U === job.tokens.pad(17)) { state := finish }
++              .otherwise {
++                token := token + 1.U; param := 0.U; role := 0.U; head := 0.U; beat := 0.U; lane := 0.U
++                accumulator := 0.U; state := readParam
++              }
++          }
+             .otherwise { head := head + 1.U; role := 0.U; beat := 0.U; state := readVector }
+         }
+       }

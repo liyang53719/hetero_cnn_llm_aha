@@ -1697,3 +1697,11 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 新预算明确43200秒总上限=43185共享work（含计算和postseal比较）+5cleanup+10监督收口，单CPU、原2GiB门。保1秒/2048B采样不削字段，新owned22178896676B、fresh门22715767588B。12小时是上限，不保证完成，未继承旧6600权限。
 - ONGOING / TEMP：2026-10-21 07:49:01 UTC新唯一全块实际进程启动。source SHA8a5c06645e0190d8e0c401173ed423deaa48e04b29d2dc2032d6e2ba2b9a0566；budget32f9aace9d9cdc7264352cc3e7f3a1873b90b1f8d48e5c60676dd2d99de0be78。当前只STARTED，不是完成/PASS；继续沿原身份监测，不重启旧失联任务。
 - 完整数值、所有中间值/实际调度/缓存和终态证据仍待最终审；完整RTL0/5，无新硬件MAC利用率实测。模型通过后才冻结同刺激生成/回放RTL。该批不再清理；提交本地，不宣称远端CI已更新。
+
+## PASS（有限源码/合成合同）/ TEMP：后续 Qwen3.5-0.8B L0 prep 小补丁（2026-10-21）
+
+- 先核21个关键源/官方pins逐字同remote adefaa78：已有Python GDN prep/chunk支持M1..128、full_driver只开放M16/M128；public-v3 descriptor/Scala两个GDN owner限制M1。这不是上游整体不支持prefill，也不应把现有Python软件完整路径冒充Chisel多token已实现。
+- 独立候选 candidates/qwen35_prep_tokens_source 共8文件70533B，单GdnInputPrepOwner源码/patch和明确合同；未改当前活全块，未改public/recurrent默认M1拒门。M>1仅内部显式maxTokens配置且16heads，Conv行12288B、packed prep行25600B、AB每token64B，整span防别名；仅末gate ACK后推进token，原16步算术顺序不改。
+- 已封17组轻量源码/数学布局/ACK合同替身检查自然0/0.457241秒，目标Python3.12.14，9输入前后pin同。独审SHAe896b24531e665de3142e394b0b4248d09b397704b7436c6df9f046f772eef5c。入树仅8pins/hash与Python内存compile，未重跑合成、未编译Scala、未生成RTL、没有真实握手或数值验收。
+- 该补丁仍TEMP硬件待验证，逐token prep不是chunk64 recurrent，更非完整L0 prefill通过；固定资源下每token源码计195read/400write，不是实测周期或系统利用率，80/90%目标没有新PASS证据。后四实际仍未启动。
+- 当前Qwen2完整M128保持原唯一运行，尚未终态。本批本地提交，不宣称远端更新；不再清理数据。

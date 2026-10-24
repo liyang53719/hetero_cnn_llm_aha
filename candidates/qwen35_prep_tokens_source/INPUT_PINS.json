@@ -1,0 +1,14 @@
+{
+  "schema": "qwen35-input-prep-token-source-input-v1",
+  "remote_commit": "adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "remote_commit_url": "https://github.com/liyang53719/hetero_cnn_llm_aha/commit/adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "baseline": {
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala",
+    "bytes": 13048,
+    "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe"
+  },
+  "production_overlay_count": 1,
+  "public_or_recurrent_gate_changes": false,
+  "model_or_rtl_execution_authorized": false,
+  "previous_qualification_inherited": false
+}

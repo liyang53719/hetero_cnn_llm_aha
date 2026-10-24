@@ -1,0 +1,44 @@
+{
+  "actual_execution_authorized": false,
+  "baseline": {
+    "bytes": 13048,
+    "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala",
+    "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe"
+  },
+  "files": {
+    "CONTRACT.md": {
+      "bytes": 5455,
+      "sha256": "e4ac02b4410d65d4bc3954787c4e15ae1fcb2e4fcbaf7ff88d98c0ac95f34db7"
+    },
+    "GdnInputPrepOwner.patch": {
+      "bytes": 6980,
+      "sha256": "504a75093a03918192dc02488538962ef898eb0e844b766c39505b4706661386"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 637,
+      "sha256": "d96056ef3edaace20b8494e512388815de26963abfe6b4dbaea23190d140f950"
+    },
+    "README.md": {
+      "bytes": 2848,
+      "sha256": "72afdda38fb7519340767df6792314b990ac7c1504192620e6e88caf36913fef"
+    },
+    "TEST_SCOPE.md": {
+      "bytes": 5521,
+      "sha256": "a911a21faf11d633967b1119611684c83259b27316f8a71972c4f9388d509a8a"
+    },
+    "overlay/GdnInputPrepOwner.scala": {
+      "bytes": 15119,
+      "sha256": "863801ca0ea2d33ef767bc70061ffa62e9cc83dff2cc2d4f18ba2bb71398181d"
+    },
+    "tests.py": {
+      "bytes": 32419,
+      "sha256": "cfeb750667ec815c9d50562e80f3c3eb293551501d4089cfb8e8b71d9f54d20a"
+    }
+  },
+  "previous_qualification_inherited": false,
+  "production_overlay_count": 1,
+  "public_or_recurrent_gate_changes": false,
+  "qualification": "SOURCE_PROPOSAL_AND_SYNTHETIC_CONTROLS_NOT_YET_EXECUTED",
+  "remote_commit": "adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "schema": "qwen35-input-prep-token-source-v1"
+}

@@ -1969,3 +1969,10 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 新负例包含malformed/stale响应、非finite源、悬停写期间重入拒绝、第二写坏ACK后首beat ACK保留且不发布，以及minnormal边界strict flags3止Mul不发Add。失败物理写由测试caller明确failed-retire；adapter关闭只释放本地busy，不能替代accepted transaction drain。输出全部数据和ACK通过也保持unpublished；phase输入仍是明确合成边界，不冒称prep/decay已生产或真实M128两chunk链。
 
 剩余接入阻断与下一步：ChunkOwner构造仍要求原PrepScalar/精确Vector16，TypedChunkDriver要求精确ChunkOwner/ChunkJob并核真实producer完整ACK、ScratchPlan和output/state双span；不能用局部phase replay伪造完整staging成功。应在既有owner中增明确默认关闭phase/算术policy hook，保留原typed driver、lease、abort/reset/drain和完整state/output发布边界，先真实producer到UT/QK有界接入；whole-plane方案另须把同步read/write改成可悬停协程并证明两bank/panel生命周期、physical ports和broadcast成本。原Vector16 CPP flags1与strict/HardFloat源码规范flags3差异仍阻断数值等价声明。五完整RTL0/5、Qwen2完整M128仍UNKNOWN；没有Scala/RTL运行、网络、安装、提交、push、CI或清理。
+
+
+## PASS（仅注入相位的真实软件owner生命周期）/ INCOMPLETE（完整block）：2026-10-23
+
+新增test-only instance hook，在真实ChunkOwner/TypedChunkDriver执行单head UT、QK各完整一相位；原tick/ports/_advance/_finish、lease、ScratchPlan、字节写ACK与drain未复制。1280合成operand beats经同driver实写/ACK后才读；admission input仅合成发布fixture，不授真实Prep/decay producer资格。每相位35072读/1536写ACK，8192终值与独立NumPy分离Mul/Add逐位相同，原中间值/Fraction回归保留。作者20项25.947秒exit0；独审20项仓库测试加3项临时边界测试共23项27.016秒exit0，1CPU/512MiB/60秒；16列明文件前后hash一致，不是完整依赖闭包。
+
+末ACK背压、abort/reset排空、stale/malformed ACK拒绝信用、strict UF3 Numerical、terminal保持及detach/reset通过。相位耗尽必须获得原owner的Protocol失败，output/state零写，staging/publication/commit/generation均false；这是预期负向生命周期，不是fullowner成功。Vector16仅不计算的lease shell，原CPP flags差异未解；whole-plane调度、真实producer全链、完整block/RTL未完成，五RTL仍0/5，Qwen2M128终态UNKNOWN，无新利用率。保留所有旧证据；仅本地提交，远端发布仍待确认，未清理。

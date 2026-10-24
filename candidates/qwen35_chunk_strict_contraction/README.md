@@ -169,3 +169,65 @@ also requires actual suspended-read/write workspace lifetime, resource leases,
 fault drain, and physical bank-port/broadcast accounting. This replay does not
 resolve those requirements or validate phases 1–4/7–18, state carry, full block
 or RTL.
+
+## Injected phase on the actual owner/typed-driver lifecycle
+
+injected_owner_phase.py is a deliberately test-only, instance-local hook, not
+an enabled production policy. It uses an actual ChunkOwner and unchanged
+TypedChunkDriver. Their original tick, ports, admission, leases, request
+identity, scratch byte writes/ACKs, response validation, abort/reset drain,
+terminal holding and retirement methods execute. The original row/beat/K
+_matmul, _read, _write and _mul_add execute with explicitly injected strict
+integer-software _op. No copied lifecycle controller is introduced.
+
+The fixture admits a one-head, 64-token, K128/value128 ChunkJob but replaces
+_compute with ONE phase. A synthetic admission-only input span is physically
+written, ACKed and published by the fixture, not produced by Prep arithmetic.
+Three synthetic phase operands are then written into the real ScratchPlan by
+1,280 actual driver write/ACK transactions before that same driver permits
+scratch reads. This proves transport provenance only, NOT numerical producer
+provenance. The actual phases 1–4/7–18, original _compute, complete producer
+chain, state carry and complete ChunkJob remain unimplemented in this hook.
+
+As in the upstream TransportOnlyTests, Vector16 is a noncomputing lease shell
+with original acquire/release methods. No Vector16 library is loaded; native
+operation counters remain zero. The unchanged owner acquires/releases that
+shell and a real PrepScalar; strict-software operation counts stay separate.
+Strict ArithmeticFault is explicitly translated to the owner's ArithmeticFault
+so its real Numerical terminal path captures phase/K/result/flags. This does
+not fix or qualify the native Vector16 minnormal flags discrepancy. Raw
+owner source_identity/report fields describe the original owner code only;
+they must not be used as numerical provenance for this injected program.
+
+Both full UT and QK contractions execute through this path and compare every
+final word against independent NumPy float32 Mul then Add, followed by pair
+Mul. The earlier full-intermediate and Fraction suites remain separate
+numerical evidence. Per phase, the actual driver performs 35,072 reads and
+1,536 writes/ACKs (1,280 fixture writes plus 256 contraction writes). Counts are
+software transactions, never hardware cycles, bandwidth or utilization.
+
+CRITICAL: even after all 256 contraction writes are ACKed, the original owner
+returns Protocol, not success, because no job.output/state_out bytes were
+written. That expected failure is the test's no-false-completion assertion,
+not a completed ChunkJob. Result.staging_complete, all publication/commit
+flags and generation advance remain false. The output/state allocations stay
+untouched. Exhaustion of an isolated injected phase cannot pass the original
+owner's full write-byte or typed-driver whole-staging gates.
+
+Tests hold the last ACK, block request acceptance, suspend accepted reads and
+writes, and inject abort/reset while preserving real leases until drain.
+Stale/duplicate ACKs, malformed byte counts/error types, Memory errors,
+nonfinite reads and strict flags=3 underflow exercise the existing owner
+terminal paths without granting bad-ACK credit. Partial scratch writes stay
+unpublished. detach removes the two test hooks only after drain and terminal
+retirement; calling it earlier is rejected. Reset then restores normal ready
+state with original _compute/_op, but does not qualify a subsequent full job.
+
+Run the existing suites plus this lifecycle regression under the same bounds:
+
+    OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 timeout 60s bash -c 'ulimit -v 524288; ulimit -t 60; taskset -c $(awk "/Cpus_allowed_list/{split(\$2,a,\",\");split(a[1],b,\"-\"); print b[1]}" /proc/self/status) python -B -m unittest candidates.qwen35_chunk_strict_contraction.test_model candidates.qwen35_chunk_strict_contraction.test_upstream_coroutine candidates.qwen35_chunk_strict_contraction.test_injected_owner_phase -v'
+
+INJECTED_OWNER_VALIDATION_SCOPE.json records the bounded run separately from
+historical receipts. No production owner source or class policy is modified.
+This is real software lifecycle coverage with explicitly injected arithmetic
+and operands, not full-owner integration, full-block acceptance, or RTL proof.

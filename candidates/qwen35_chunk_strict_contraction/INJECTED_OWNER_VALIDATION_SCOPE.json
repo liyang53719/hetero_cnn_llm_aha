@@ -1,0 +1,157 @@
+{
+  "status": "PASS_SOFTWARE_INJECTED_PHASE_REAL_OWNER_LIFECYCLE_ONLY",
+  "base_revision": "fc5a91cf5392f9982e1a72fb947b934e7a7560de",
+  "author_tests": 20,
+  "author_unittest_elapsed_seconds": 25.947,
+  "author_process_wall_seconds": 26.163828284974443,
+  "author_exit_code": 0,
+  "cpu_count": 1,
+  "address_space_bytes": 536870912,
+  "wall_limit_seconds": 60,
+  "cpu_limit_seconds": 60,
+  "source_hashes_before_after_equal": true,
+  "hash_scope": "16 listed files; not a complete imported dependency closure",
+  "files": {
+    "candidates/qwen35_chunk_strict_contraction/model.py": {
+      "bytes": 6830,
+      "sha256": "89cce2f9706cecd1a4e942d66e8e29ad754f86443276c8cf91aafceedab3ff7b"
+    },
+    "candidates/qwen35_chunk_strict_contraction/schedule_probe.py": {
+      "bytes": 3532,
+      "sha256": "09a21ee55c8ab891b04856ab4d642df3da19eea2d878f110daef0a0d47d0dd17"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_model.py": {
+      "bytes": 18493,
+      "sha256": "55e81ca48c138637489b88c35f3542be88634304741eef7216c6d963de659a38"
+    },
+    "candidates/qwen35_chunk_strict_contraction/upstream_coroutine.py": {
+      "bytes": 5050,
+      "sha256": "c185687a4f86ef2606dd4d0057f3157016a1c2fa4e09e7ab80b72373a640367c"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_upstream_coroutine.py": {
+      "bytes": 11142,
+      "sha256": "5e6af774a6d2dc0b050d4e117c59f55a6b687c51ed4de3fe445ed9de4fa84636"
+    },
+    "candidates/qwen35_chunk_strict_contraction/injected_owner_phase.py": {
+      "bytes": 5518,
+      "sha256": "ff3e3785e5c1c9af5828557296591a07aff8045ad03f48334ad6419338a903c6"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_injected_owner_phase.py": {
+      "bytes": 15228,
+      "sha256": "bade3c964efa4a92510884c4dc7d0490e82eed4eab26cf208ed65c0b11dd89ca"
+    },
+    "candidates/qwen35_chunk_strict_contraction/README.md": {
+      "bytes": 15440,
+      "sha256": "7b6192c83b9eeecad062449dac34c791e840ef87e7db79db32312bfc73adc979"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/model.py": {
+      "bytes": 47272,
+      "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+      "bytes": 9363,
+      "sha256": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a"
+    },
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": {
+      "bytes": 3727,
+      "sha256": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1"
+    },
+    "candidates/qwen35_gdn_prefill/rms_owner.py": {
+      "bytes": 24408,
+      "sha256": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c"
+    },
+    "candidates/qwen35_gdn_prefill/typed_dense.py": {
+      "bytes": 21132,
+      "sha256": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+    },
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": {
+      "bytes": 37079,
+      "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412"
+    },
+    "candidates/qwen35_strict_fp32_lane/lane_model.py": {
+      "bytes": 7605,
+      "sha256": "13d755388217a621b59f114687a08266a33003ead358a8100cdfb7ce428acd32"
+    },
+    "candidates/qwen35_strict_fp32_lane/fraction_reference.py": {
+      "bytes": 7487,
+      "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+    }
+  },
+  "actual_original_control": [
+    "ChunkOwner.tick",
+    "ChunkOwner.ports",
+    "ChunkOwner._advance",
+    "ChunkOwner._finish",
+    "TypedChunkDriver.tick",
+    "ChunkOwner._matmul",
+    "ChunkOwner._mul_add",
+    "ChunkOwner._read",
+    "ChunkOwner._write",
+    "Vector16.acquire",
+    "Vector16.release"
+  ],
+  "injected_instance_methods": [
+    "ChunkOwner._compute",
+    "ChunkOwner._op"
+  ],
+  "full_contraction_phases": [
+    5,
+    6
+  ],
+  "heads_per_phase": 1,
+  "chunks_per_phase": 1,
+  "phase_shape": "64x128 by 128x64 followed by pair Mul",
+  "independent_numpy_final_words_compared": 8192,
+  "earlier_full_intermediate_fraction_and_schedule_tests_retained": true,
+  "per_full_phase": {
+    "fixture_write_requests": 1280,
+    "contraction_read_requests": 35072,
+    "contraction_write_requests": 256,
+    "total_write_acks": 1536,
+    "mul_lane_ops": 524288,
+    "add_lane_ops": 524288,
+    "pair_lane_ops": 4096
+  },
+  "arithmetic_provider": "strict integer software _op, not native Vector16",
+  "vector_resource": "noncomputing Vector16 lease shell using original acquire/release; no native library",
+  "input_provenance": "synthetic admission-only bytes physically written/ACKed and fixture-published; no actual Prep terminal",
+  "phase_operand_provenance": "synthetic bytes written/ACKed via same TypedChunkDriver scratch transactions; not upstream arithmetic producers",
+  "expected_full_phase_owner_terminal": "Protocol because output/state write-byte obligations remain incomplete",
+  "negative_cases": [
+    "held last ACK before phase exhaustion",
+    "request-ready backpressure",
+    "accepted read abort/reset drain holds leases",
+    "accepted write abort drain holds physical obligation",
+    "stale prior write ACK drains without credit",
+    "duplicate retired ACK grants no credit",
+    "malformed nbytes/error type and Memory ACK during reset drain",
+    "read stale tag/short data/Memory error",
+    "nonfinite input Numerical path",
+    "strict minnormal flags3 Numerical path before Add",
+    "held terminal rejects reset/detach",
+    "detach after terminal restores original methods before reset"
+  ],
+  "production_source_or_class_policy_changed": false,
+  "original_compute_executed": false,
+  "native_vector16_executed": false,
+  "full_chunkjob_success": false,
+  "staging_complete": false,
+  "output_or_state_writes": false,
+  "output_or_state_publication": false,
+  "producer_arithmetic_provenance_integrated": false,
+  "whole_plane_schedule_installed": false,
+  "state_carry_tested": false,
+  "full_block_pass": false,
+  "rtl_executed": false,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "native_vector_min_normal_flags_discrepancy_resolved": false,
+  "independent_review": {
+    "status": "PASS_INJECTED_SOFTWARE_LIFECYCLE_ONLY",
+    "repository_tests": 20,
+    "additional_ad_hoc_tests": 3,
+    "elapsed_seconds": 27.016,
+    "exit_code": 0,
+    "listed_16_hashes_before_after_equal": true
+  }
+}

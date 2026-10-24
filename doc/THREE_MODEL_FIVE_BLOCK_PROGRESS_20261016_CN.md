@@ -1935,3 +1935,10 @@ PASS仅限已实际运行的 Python Fraction/fixture逐字一致性检查；独�
 核官方chiseltest固定d764fdf74652426b57c6eae00d71eac19effd224的13个源文件并验证Git blob身份：显式Treadle路径为ChiselBridge → Scala firrtl2 low lowering → JVM解释器，选定路径无需firtool/SV/原生编译器，但可能生成low FIRRTL。仅SOURCE_ROUTE_VERIFIED，不是运行、数值或资源实测；相对targetDir及无blackbox/extmodule结构门仍须实际执行前核查，执行gate未打开。
 
 缺少25个JAR与沙箱提权启动失败仍阻断实测；原下载失败记录保留，不绕过受限路径。五完整RTL0/5、无新整块利用率证据。无push/CI/清理。
+
+
+## PASS（仅冻结旧 IR 结构预检）/ TEMP（新测试电路未验证）：2026-10-22
+
+新增 candidates/qwen35_strict_lane_structure_gate，复用原已固定validate_ir，只加载两个必要函数，不运行原runner。27项纯Python方法实际通过（21类IR负例、6注解变体及大小/hash边界等，计数不相加冒充独立测试总数）。对既有319324B CHIRRTL / SHA ea7b84533c96641771bd58ba97a10898d428fc6782b1ced726442ada0320eb7d 的实际只读预检通过：9模块全图可达一次、8条实例边、唯一24×24变量乘法、无extmodule/intmodule/blackbox marker。
+
+完整IR hash及旧来源/类资格回执为必要边界，旧parser不是通用FIRRTL全语法安全分析器。未提供外部注解时明确不作注解不存在的结论；提供非空注解全部拒绝。没有新展开、JVM或RTL运行，不证明新runner的测试电路等同此旧IR，也不自动打开执行gate。原IR/classes不公开，七个公开文件只含代码、pins与有限摘要。五完整RTL仍0/5、M128原运行UNKNOWN、无新MAC利用率实测；未push、无新CI、无清理。

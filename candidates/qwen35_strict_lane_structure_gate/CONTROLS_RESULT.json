@@ -1,0 +1,30 @@
+{
+  "annotation_negative_cases": 6,
+  "hardware_executed": false,
+  "negative_ir_cases": [
+    "bad_instance_syntax",
+    "blackbox_marker",
+    "constant_operand",
+    "cycle",
+    "disconnected_extmodule",
+    "disconnected_intmodule",
+    "duplicate_chain",
+    "duplicate_circuit",
+    "duplicate_instance_name",
+    "duplicate_module",
+    "empty_ir",
+    "hidden_memory",
+    "missing_circuit",
+    "missing_edge",
+    "missing_multiplier",
+    "second_nested_multiplier",
+    "undefined_instance",
+    "unexpected_disconnected_module",
+    "wrong_circuit",
+    "wrong_operand",
+    "wrong_operand_width"
+  ],
+  "new_IR_generated": false,
+  "status": "PASS_SYNTHETIC_STRUCTURAL_CONTROLS_ONLY",
+  "test_methods": 27
+}

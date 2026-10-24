@@ -1,0 +1,37 @@
+{
+  "ir": {
+    "bytes": 319324,
+    "sha256": "ea7b84533c96641771bd58ba97a10898d428fc6782b1ced726442ada0320eb7d"
+  },
+  "parser": {
+    "bytes": 22401,
+    "sha256": "be9b9f32ddf7a08d0bc74c6f138c5bfb1197a76869a6ed8da9475682de61671e"
+  },
+  "qualification_receipts": {
+    "CLASS_LOADING_SCOPE.json": {
+      "bytes": 51612,
+      "sha256": "7506605c180dc0b3c317077f17fd5d5bc46acd1b88b9d4670c519a11c216bbc0"
+    },
+    "ELABORATION_RESULT.json": {
+      "bytes": 614,
+      "sha256": "1d7d6e3ac4601706ff6fa57195c6cbb3aa5c783a229336ff5566e0587ff9b875"
+    },
+    "IR_SCOPE_RESULT.json": {
+      "bytes": 1124,
+      "sha256": "4cbd6bb0b486c0f739dab90b72a3770d9192a926d8c2f6fb8e9bb836d108e66b"
+    },
+    "RESULT.json": {
+      "bytes": 46411,
+      "sha256": "a492088c960099b337b7c7e210786f8f645b4fbfc20ff9053a604df019daf0ed"
+    }
+  },
+  "qualification_summary": {
+    "bytes": 3132,
+    "sha256": "3bb5f94587afc092d902bcdb68d880e222e09847543437b15842d8f0bfe94aa9"
+  },
+  "schema": "strict-lane-existing-ir-structure-pins-v1",
+  "scope": {
+    "bytes": 5187,
+    "sha256": "6e6e9815aa580123b0705554904c482fd252580aa62d9b122a7deab42d2ebecb"
+  }
+}

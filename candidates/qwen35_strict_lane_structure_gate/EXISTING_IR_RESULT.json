@@ -1,0 +1,132 @@
+{
+  "JVM_executed": false,
+  "RTL_executed": false,
+  "ir": {
+    "bytes": 319324,
+    "sha256": "ea7b84533c96641771bd58ba97a10898d428fc6782b1ced726442ada0320eb7d"
+  },
+  "new_elaboration_executed": false,
+  "new_runner_same_circuit_proven": false,
+  "not_proven": [
+    "hardware arithmetic or flags",
+    "handshake",
+    "new test elaboration identity",
+    "physical multiplier mapping, area or Fmax",
+    "full array integration"
+  ],
+  "qualification_references": {
+    "ir": {
+      "bytes": 319324,
+      "sha256": "ea7b84533c96641771bd58ba97a10898d428fc6782b1ced726442ada0320eb7d"
+    },
+    "parser": {
+      "bytes": 22401,
+      "sha256": "be9b9f32ddf7a08d0bc74c6f138c5bfb1197a76869a6ed8da9475682de61671e"
+    },
+    "qualification_receipts": {
+      "CLASS_LOADING_SCOPE.json": {
+        "bytes": 51612,
+        "sha256": "7506605c180dc0b3c317077f17fd5d5bc46acd1b88b9d4670c519a11c216bbc0"
+      },
+      "ELABORATION_RESULT.json": {
+        "bytes": 614,
+        "sha256": "1d7d6e3ac4601706ff6fa57195c6cbb3aa5c783a229336ff5566e0587ff9b875"
+      },
+      "IR_SCOPE_RESULT.json": {
+        "bytes": 1124,
+        "sha256": "4cbd6bb0b486c0f739dab90b72a3770d9192a926d8c2f6fb8e9bb836d108e66b"
+      },
+      "RESULT.json": {
+        "bytes": 46411,
+        "sha256": "a492088c960099b337b7c7e210786f8f645b4fbfc20ff9053a604df019daf0ed"
+      }
+    },
+    "qualification_summary": {
+      "bytes": 3132,
+      "sha256": "3bb5f94587afc092d902bcdb68d880e222e09847543437b15842d8f0bfe94aa9"
+    },
+    "schema": "strict-lane-existing-ir-structure-pins-v1",
+    "scope": {
+      "bytes": 5187,
+      "sha256": "6e6e9815aa580123b0705554904c482fd252580aa62d9b122a7deab42d2ebecb"
+    }
+  },
+  "status": "PASS_EXISTING_IR_STRUCTURAL_PREFLIGHT_ONLY",
+  "structure": {
+    "all_reachable_once": true,
+    "annotation_scope": "absent; no external annotation claim",
+    "blackbox_markers": 0,
+    "extmodule_count": 0,
+    "hardware_numerics_tested": false,
+    "instance_count": 8,
+    "intmodule_count": 0,
+    "module_count": 9,
+    "module_edges": {
+      "HeteroBF16FmaMul": [],
+      "HeteroBF16FmaPost": [
+        [
+          "post",
+          "MulAddRecFNToRaw_postMul_e8_s24"
+        ]
+      ],
+      "HeteroBF16FmaRound": [
+        [
+          "round",
+          "RoundRawFNToRecFN_e8_s24"
+        ]
+      ],
+      "HeteroFullFp32FmaPre": [
+        [
+          "pre",
+          "MulAddRecFNToRaw_preMul_e8_s24"
+        ]
+      ],
+      "MulAddRecFNToRaw_postMul_e8_s24": [],
+      "MulAddRecFNToRaw_preMul_e8_s24": [],
+      "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24": [],
+      "RoundRawFNToRecFN_e8_s24": [
+        [
+          "roundAnyRawFNToRecFN",
+          "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24"
+        ]
+      ],
+      "StrictFp32MatrixLane": [
+        [
+          "pre",
+          "HeteroFullFp32FmaPre"
+        ],
+        [
+          "mul",
+          "HeteroBF16FmaMul"
+        ],
+        [
+          "post",
+          "HeteroBF16FmaPost"
+        ],
+        [
+          "round",
+          "HeteroBF16FmaRound"
+        ]
+      ]
+    },
+    "ports_match": true,
+    "reachable_modules": [
+      "HeteroBF16FmaMul",
+      "HeteroBF16FmaPost",
+      "HeteroBF16FmaRound",
+      "HeteroFullFp32FmaPre",
+      "MulAddRecFNToRaw_postMul_e8_s24",
+      "MulAddRecFNToRaw_preMul_e8_s24",
+      "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24",
+      "RoundRawFNToRecFN_e8_s24",
+      "StrictFp32MatrixLane"
+    ],
+    "top_register_bits_source": 553,
+    "top_register_count": 12,
+    "variable_mul_count": 1,
+    "variable_mul_operand_bits": [
+      24,
+      24
+    ]
+  }
+}

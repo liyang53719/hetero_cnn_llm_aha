@@ -1,0 +1,320 @@
+{
+  "all_original_overlay_pins": {
+    "BUDGET_PROPOSAL.json": {
+      "after": {
+        "bytes": 3160,
+        "sha256": "418405d1f8d616cb3a834f14ad4024587e2293f405062933c349055f93116a1f"
+      },
+      "before": {
+        "bytes": 3229,
+        "sha256": "6604fbd7ee32ae56b54649c67633cb122d82cd7473eae92683e81155881a5f3c"
+      }
+    },
+    "PREFIX_BINDING.json": {
+      "after": {
+        "bytes": 1629,
+        "sha256": "88def37c376cdfe389dd1299cb55dd6025324e8823b07220dc688bf356f7d68b"
+      },
+      "before": {
+        "bytes": 2119,
+        "sha256": "93442d91ea2a1d0b64a76d96d40b6b9a420ec4d24957e808a6cb54e15392166d"
+      }
+    },
+    "admission.py": {
+      "after": {
+        "bytes": 13151,
+        "sha256": "a20c509a6c9b64f6666fa711f2cac3c2e5639b45df3a9ca1f0d05499567a65df"
+      },
+      "before": {
+        "bytes": 10282,
+        "sha256": "c35913d797f20891730664e36d8893b87b954b8f3b4ebe5acf30b109716060ae"
+      }
+    },
+    "assembly_preflight.py": {
+      "after": {
+        "bytes": 18404,
+        "sha256": "cb7634da67b26618e28a57c9338a3a9627afacdb6486e2702581afe9c60a7676"
+      },
+      "before": {
+        "bytes": 18103,
+        "sha256": "57fa32c94022bcac193a4ef3963610d320560cade63d30f68a9da891f346e1c8"
+      }
+    },
+    "fullblock_runtime.py": {
+      "after": {
+        "bytes": 51355,
+        "sha256": "f90644b4c3593fdec22541231c96d97850fefc96392f655e7c425191a7d58d16"
+      },
+      "before": {
+        "bytes": 50318,
+        "sha256": "160c977f1fcf8d76845776228226ac541d48d24b33debeced7cd84b2f4cbb181"
+      }
+    },
+    "integration/attention_route_probe.py": {
+      "after": {
+        "bytes": 6518,
+        "sha256": "63a42dea1918a6cf6bd94893aaee30c603fbf414d5a08195627a5ec1dfb9eca3"
+      },
+      "before": null
+    },
+    "integration/interface.py": {
+      "after": {
+        "bytes": 15154,
+        "sha256": "6c1a024cd2019397ae9289d039a77dbbd2428173962841c63be22bdcfab0de58"
+      },
+      "before": {
+        "bytes": 13888,
+        "sha256": "17b61451b031f887aad5eac6a2689ba6ca5d3414efc1a052bdd7d5292003c6c2"
+      }
+    },
+    "integration/runtime_support/gates.py": {
+      "after": {
+        "bytes": 35576,
+        "sha256": "5a6e8e154812ebd9bb4fcbe16f5a61a7ad2757b7a69a581c3996a522e8db4dba"
+      },
+      "before": {
+        "bytes": 34580,
+        "sha256": "27c53a91b30158f58871a51fcd73130a62940e056a5cf082761ad00751dc1cc3"
+      }
+    },
+    "integration/runtime_support/native_artifact.py": {
+      "after": {
+        "bytes": 4661,
+        "sha256": "134245538486ee312863f4d729795fb57605607c45ce736f34568b28eeb2c3e6"
+      },
+      "before": {
+        "bytes": 3203,
+        "sha256": "c2dd1ddb14dc9e112f5a1a8b6f0a66d3167a5eef7ca0964fe798370233bdae31"
+      }
+    },
+    "integration/startup_probe.py": {
+      "after": {
+        "bytes": 15940,
+        "sha256": "1c7821eb1eeeda00a5178a1cc04b36d8853ba3102dc19bf1049e47b2f85377bb"
+      },
+      "before": {
+        "bytes": 14802,
+        "sha256": "fdb9e4853d9df08e4925504a4897a82ca00d265315b2abbe3d22746150da88cd"
+      }
+    },
+    "supervision/cold.py": {
+      "after": {
+        "bytes": 23535,
+        "sha256": "780558e904582b4c7aeaac61e999f36c6bffdb0af852bff69b781d5ec16140dc"
+      },
+      "before": {
+        "bytes": 23528,
+        "sha256": "61582172b43bd98b0df0f9c71611502e721c5d0ac32fa1f526ecb0582edd92fd"
+      }
+    },
+    "supervision/gate.py": {
+      "after": {
+        "bytes": 18929,
+        "sha256": "8f53b0df19fddfdcc64e24db81bbe932152b1024513e03d1b8eee06b2b31c0f4"
+      },
+      "before": {
+        "bytes": 18267,
+        "sha256": "7fb0513b91aac135e41a1b18c6c7414490f4b2532aed6b7391a35e2da1196e86"
+      }
+    },
+    "supervision/launch.py": {
+      "after": {
+        "bytes": 9834,
+        "sha256": "dfa19805ef2af875874ee05b6a8913e005218368ec4e682223c0bab840799903"
+      },
+      "before": {
+        "bytes": 9818,
+        "sha256": "3f3f32525fe19081a668615542316479936d67960ab4a1423398e1fdfa694b75"
+      }
+    },
+    "supervision/worker.py": {
+      "after": {
+        "bytes": 3340,
+        "sha256": "765af6462e955f0944be484aeae04ada8083272a7345b9d732ee7e33b8c9e4c0"
+      },
+      "before": {
+        "bytes": 3333,
+        "sha256": "4f5ff9d0ed1e61caa45dc8eb4486059a7be6baa71567fc8ffec731b8c4bf6e0a"
+      }
+    }
+  },
+  "complete_source_package_manifest": {
+    "bytes": 3561,
+    "sha256": "63c127f2727cfe541558db64c3535cf40613bd745d6150bca67aeb1d5a5797d0"
+  },
+  "excluded_private_package_content": {
+    "DELTA.diff": {
+      "identity": {
+        "bytes": 45614,
+        "sha256": "80d572a5c8382d322a51de71b88d8a23912ceb0c91c0134533ec30bd6fe889a4"
+      },
+      "reason": "Original internal-package auxiliary content is not included; complete private package remains required."
+    },
+    "OVERLAY_PINS.json": {
+      "identity": {
+        "bytes": 6380,
+        "sha256": "edb46be192389d154282747146d26df61939350c6a769767bcc878cff2b1171d"
+      },
+      "reason": "Exact machine-bound metadata is intentionally not distributed."
+    },
+    "README.md": {
+      "identity": {
+        "bytes": 5090,
+        "sha256": "15afc407b1084863e0226719d1e2b5e337a35a1ad56560bfa02505cb6990a7c6"
+      },
+      "reason": "Original internal-package auxiliary content is not included; complete private package remains required."
+    },
+    "overlay/BUDGET_PROPOSAL.json": {
+      "identity": {
+        "bytes": 3160,
+        "sha256": "418405d1f8d616cb3a834f14ad4024587e2293f405062933c349055f93116a1f"
+      },
+      "reason": "Exact machine-bound metadata is intentionally not distributed."
+    },
+    "overlay/PREFIX_BINDING.json": {
+      "identity": {
+        "bytes": 1629,
+        "sha256": "88def37c376cdfe389dd1299cb55dd6025324e8823b07220dc688bf356f7d68b"
+      },
+      "reason": "Exact machine-bound metadata is intentionally not distributed."
+    },
+    "synthetic_cold.py": {
+      "identity": {
+        "bytes": 18776,
+        "sha256": "14510b667c6bce7153ed7cdee0d7702a7388205a524c27ee0d361d1b47068b9b"
+      },
+      "reason": "Original internal-package auxiliary content is not included; complete private package remains required."
+    }
+  },
+  "execution_authorized": false,
+  "original_38_case_result_inherited": false,
+  "original_builder": {
+    "bytes": 19974,
+    "sha256": "63fcc2a3fb60634a350efe9fa1dd40aafff380f6d077d213eb24d40edd622612"
+  },
+  "original_overlay_count": 14,
+  "production_source_changed": false,
+  "public_is_not_replacement_package": true,
+  "published_overlay_count": 12,
+  "published_python_overlays": {
+    "admission.py": {
+      "after": {
+        "bytes": 13151,
+        "sha256": "a20c509a6c9b64f6666fa711f2cac3c2e5639b45df3a9ca1f0d05499567a65df"
+      },
+      "before": {
+        "bytes": 10282,
+        "sha256": "c35913d797f20891730664e36d8893b87b954b8f3b4ebe5acf30b109716060ae"
+      }
+    },
+    "assembly_preflight.py": {
+      "after": {
+        "bytes": 18404,
+        "sha256": "cb7634da67b26618e28a57c9338a3a9627afacdb6486e2702581afe9c60a7676"
+      },
+      "before": {
+        "bytes": 18103,
+        "sha256": "57fa32c94022bcac193a4ef3963610d320560cade63d30f68a9da891f346e1c8"
+      }
+    },
+    "fullblock_runtime.py": {
+      "after": {
+        "bytes": 51355,
+        "sha256": "f90644b4c3593fdec22541231c96d97850fefc96392f655e7c425191a7d58d16"
+      },
+      "before": {
+        "bytes": 50318,
+        "sha256": "160c977f1fcf8d76845776228226ac541d48d24b33debeced7cd84b2f4cbb181"
+      }
+    },
+    "integration/attention_route_probe.py": {
+      "after": {
+        "bytes": 6518,
+        "sha256": "63a42dea1918a6cf6bd94893aaee30c603fbf414d5a08195627a5ec1dfb9eca3"
+      },
+      "before": null
+    },
+    "integration/interface.py": {
+      "after": {
+        "bytes": 15154,
+        "sha256": "6c1a024cd2019397ae9289d039a77dbbd2428173962841c63be22bdcfab0de58"
+      },
+      "before": {
+        "bytes": 13888,
+        "sha256": "17b61451b031f887aad5eac6a2689ba6ca5d3414efc1a052bdd7d5292003c6c2"
+      }
+    },
+    "integration/runtime_support/gates.py": {
+      "after": {
+        "bytes": 35576,
+        "sha256": "5a6e8e154812ebd9bb4fcbe16f5a61a7ad2757b7a69a581c3996a522e8db4dba"
+      },
+      "before": {
+        "bytes": 34580,
+        "sha256": "27c53a91b30158f58871a51fcd73130a62940e056a5cf082761ad00751dc1cc3"
+      }
+    },
+    "integration/runtime_support/native_artifact.py": {
+      "after": {
+        "bytes": 4661,
+        "sha256": "134245538486ee312863f4d729795fb57605607c45ce736f34568b28eeb2c3e6"
+      },
+      "before": {
+        "bytes": 3203,
+        "sha256": "c2dd1ddb14dc9e112f5a1a8b6f0a66d3167a5eef7ca0964fe798370233bdae31"
+      }
+    },
+    "integration/startup_probe.py": {
+      "after": {
+        "bytes": 15940,
+        "sha256": "1c7821eb1eeeda00a5178a1cc04b36d8853ba3102dc19bf1049e47b2f85377bb"
+      },
+      "before": {
+        "bytes": 14802,
+        "sha256": "fdb9e4853d9df08e4925504a4897a82ca00d265315b2abbe3d22746150da88cd"
+      }
+    },
+    "supervision/cold.py": {
+      "after": {
+        "bytes": 23535,
+        "sha256": "780558e904582b4c7aeaac61e999f36c6bffdb0af852bff69b781d5ec16140dc"
+      },
+      "before": {
+        "bytes": 23528,
+        "sha256": "61582172b43bd98b0df0f9c71611502e721c5d0ac32fa1f526ecb0582edd92fd"
+      }
+    },
+    "supervision/gate.py": {
+      "after": {
+        "bytes": 18929,
+        "sha256": "8f53b0df19fddfdcc64e24db81bbe932152b1024513e03d1b8eee06b2b31c0f4"
+      },
+      "before": {
+        "bytes": 18267,
+        "sha256": "7fb0513b91aac135e41a1b18c6c7414490f4b2532aed6b7391a35e2da1196e86"
+      }
+    },
+    "supervision/launch.py": {
+      "after": {
+        "bytes": 9834,
+        "sha256": "dfa19805ef2af875874ee05b6a8913e005218368ec4e682223c0bab840799903"
+      },
+      "before": {
+        "bytes": 9818,
+        "sha256": "3f3f32525fe19081a668615542316479936d67960ab4a1423398e1fdfa694b75"
+      }
+    },
+    "supervision/worker.py": {
+      "after": {
+        "bytes": 3340,
+        "sha256": "765af6462e955f0944be484aeae04ada8083272a7345b9d732ee7e33b8c9e4c0"
+      },
+      "before": {
+        "bytes": 3333,
+        "sha256": "4f5ff9d0ed1e61caa45dc8eb4486059a7be6baa71567fc8ffec731b8c4bf6e0a"
+      }
+    }
+  },
+  "schema": "fixed93-pv-reuse-startup-public-source-pins-v1",
+  "source_selected_support_unchanged": true
+}

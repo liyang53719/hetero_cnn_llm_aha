@@ -1573,3 +1573,12 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 实际后继组装唯一创建自然0/1.572秒，548文件/8815291字节；原321源码逐字保持，只更新runtime/top/prod及增加隔离说明。原0150失败版本不动，不回退publication工作树。
 - PASS（仅真实SOURCE preflight）：新候选manifest cc82716a4801c111225c1dc6cb4435ca3120482f4e21ebd01fd1d3a6f1e7b90b，完整preflight自然退出0/1.519秒、RSS22828KiB；1638运行依赖全hash、46外部非reference文件全hash、30 reference仅stat。此范围基于已pin源码控制流及真实自然成功，不宣称独立syscall轨迹证明。
 - ONGOING / TEMP：真实runtime初始化/构造、完整模型M128、调度/数值与RTL仍未通过；预算OPEN、actual_admission=false，完整run空间门不降低。五block RTL仍0/5，90%利用率目标保留，不能把这次预检通过当推理通过。
+
+## PASS（有限实际startup）/ TEMP：PV复用初始化和空observer生命周期（2026-10-21）
+
+- DONE：新增 `candidates/fixed93_pv_reuse_startup_probe/` 的便携源码、relative pins、AST checker及安全摘要，无ADMISSION、原始routes/logs/数组。入树checker仅bytes/14个Python AST通过（0.054秒），不重复实际运行或继承内部38项cold结果。
+- 新候选唯一cold含完整preflight和24监督mock，自然0/1.519秒；随后root独立单次准入45秒总窗（30工作+5清理+10post）、1CPU/2GiB、16MiB owned。实际startup自然0/18.2306秒，没有外层soft/hard停线。
+- PASS精确范围：实际当前构造、原已核ELF加载/reset/FENV等初始化、固定Git profile验证、空Attention observer ctor/enter/exit/save；两次边界均在首个advance之前，pc0/decode、模型jobs/requests/completions/producers/服务事务及22区域写ACK为0，reference payload reads为空。不是zero-native，也不是模型数值验收。
+- 独审核1011实际observer open routes/327 distinct，9个witness各3次、manifest3次；实际empty记录/raw均0，summary保留INCOMPLETE、reuse0、both_domains_verified=false。52字节未封wholeblock头未当完成证据。
+- 身份/资源：228pins、lease/CONSUMED/原进程start ticks、WNOWAIT自然0、reaped/group absent/cleanup confirmed闭合；whole CPU18.1445秒，采样组RSS242839552B，独立最终15文件552322B。LAUNCH的550900B为最终receipt写入前快照，不冒充最终stat。
+- 独审实际摘要SHA69ef9b3f2955cba917dab9db71a3bf0f6883ba55c81adba56d66d9686f3592dc。该资格不授新fullblock运行，不复用一次性authority，完整M128/数值/RTL仍未通过，五block RTL仍0/5。

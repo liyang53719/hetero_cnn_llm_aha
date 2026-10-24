@@ -1,0 +1,82 @@
+{
+  "actual_authorized": false,
+  "file_count": 17,
+  "files": {
+    "PUBLIC_PINS.json": {
+      "bytes": 10234,
+      "sha256": "dfad97e3863ed1d2251d869ea3aa7c44037bbcec7d0893f8c90cb24b173aa2aa"
+    },
+    "README.md": {
+      "bytes": 2729,
+      "sha256": "82f3523474e6f1211e01c9945f08d9ab22565ced1272605ebc6ae4762525b572"
+    },
+    "SUMMARY.md": {
+      "bytes": 4440,
+      "sha256": "b862f642a2338f734a3438f563de981ed631b8aaa6644358c4200e7b3706ce0f"
+    },
+    "check_public_sources.py": {
+      "bytes": 7783,
+      "sha256": "93141a6c4a56fe945db0ed95135bac6ff6ad1c441092f437b5e0e24f0a599914"
+    },
+    "overlay/admission.py": {
+      "bytes": 13151,
+      "sha256": "a20c509a6c9b64f6666fa711f2cac3c2e5639b45df3a9ca1f0d05499567a65df"
+    },
+    "overlay/assembly_preflight.py": {
+      "bytes": 18404,
+      "sha256": "cb7634da67b26618e28a57c9338a3a9627afacdb6486e2702581afe9c60a7676"
+    },
+    "overlay/fullblock_runtime.py": {
+      "bytes": 51355,
+      "sha256": "f90644b4c3593fdec22541231c96d97850fefc96392f655e7c425191a7d58d16"
+    },
+    "overlay/integration/attention_route_probe.py": {
+      "bytes": 6518,
+      "sha256": "63a42dea1918a6cf6bd94893aaee30c603fbf414d5a08195627a5ec1dfb9eca3"
+    },
+    "overlay/integration/interface.py": {
+      "bytes": 15154,
+      "sha256": "6c1a024cd2019397ae9289d039a77dbbd2428173962841c63be22bdcfab0de58"
+    },
+    "overlay/integration/runtime_support/gates.py": {
+      "bytes": 35576,
+      "sha256": "5a6e8e154812ebd9bb4fcbe16f5a61a7ad2757b7a69a581c3996a522e8db4dba"
+    },
+    "overlay/integration/runtime_support/native_artifact.py": {
+      "bytes": 4661,
+      "sha256": "134245538486ee312863f4d729795fb57605607c45ce736f34568b28eeb2c3e6"
+    },
+    "overlay/integration/startup_probe.py": {
+      "bytes": 15940,
+      "sha256": "1c7821eb1eeeda00a5178a1cc04b36d8853ba3102dc19bf1049e47b2f85377bb"
+    },
+    "overlay/supervision/cold.py": {
+      "bytes": 23535,
+      "sha256": "780558e904582b4c7aeaac61e999f36c6bffdb0af852bff69b781d5ec16140dc"
+    },
+    "overlay/supervision/gate.py": {
+      "bytes": 18929,
+      "sha256": "8f53b0df19fddfdcc64e24db81bbe932152b1024513e03d1b8eee06b2b31c0f4"
+    },
+    "overlay/supervision/launch.py": {
+      "bytes": 9834,
+      "sha256": "dfa19805ef2af875874ee05b6a8913e005218368ec4e682223c0bab840799903"
+    },
+    "overlay/supervision/worker.py": {
+      "bytes": 3340,
+      "sha256": "765af6462e955f0944be484aeae04ada8083272a7345b9d732ee7e33b8c9e4c0"
+    },
+    "prepare_probe.py": {
+      "bytes": 19974,
+      "sha256": "63fcc2a3fb60634a350efe9fa1dd40aafff380f6d077d213eb24d40edd622612"
+    }
+  },
+  "original_private_package_replaced": false,
+  "original_source_changed": false,
+  "private_source_manifest": {
+    "bytes": 3561,
+    "sha256": "63c127f2727cfe541558db64c3535cf40613bd745d6150bca67aeb1d5a5797d0"
+  },
+  "schema": "fixed93-startup-public-excerpt-manifest-v1",
+  "total_file_bytes": 261557
+}

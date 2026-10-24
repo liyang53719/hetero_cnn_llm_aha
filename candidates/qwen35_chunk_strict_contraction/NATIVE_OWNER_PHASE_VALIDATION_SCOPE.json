@@ -1,0 +1,82 @@
+{
+  "status": "PASS_NATIVE_SYNTHETIC_UT_PHASE_ONLY",
+  "incomplete": [
+    "real numerical producer",
+    "complete chunk",
+    "M128",
+    "all heads",
+    "complete block",
+    "Chisel/HardFloat/RTL",
+    "hardware utilization"
+  ],
+  "date_utc": "2026-10-23",
+  "base_commit": "e8c9acdd6156765c5b7ddff106fc0adba20489fa",
+  "arithmetic_backend": "finite_mul_tininess_r2",
+  "fatal_mask": 30,
+  "host_batch": true,
+  "compute_injected": true,
+  "op_or_mul_add_injected": false,
+  "source_hashes": {
+    "candidates/qwen35_chunk_strict_contraction/test_native_owner_phase.py": "9d4b4ed694603bd25c0c27ada04be6c7e2cc7477b7182b319ff293b2b7cb5b23",
+    "candidates/qwen35_gdn_prefill/chunk/model.py": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40",
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": "d8a7ce5456507d5f29423434aa3d985b4ccff50744f832f5b06b7cfebb81c533",
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+    "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+    "candidates/qwen35_strict_fp32_lane/lane_model.py": "13d755388217a621b59f114687a08266a33003ead358a8100cdfb7ce428acd32",
+    "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7",
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412"
+  },
+  "library_sha256": "b04209e85923fc858092ec6019e6b183cdc92a0afabed75cbf63179a83302bd2",
+  "execution": {
+    "tests": 5,
+    "skips": 0,
+    "failures": 0,
+    "errors": 0,
+    "unittest_seconds": 1.682,
+    "payload_seconds": 1.8387243769830093,
+    "exit_code": 0,
+    "cpu_affinity_count": 1,
+    "address_space_bytes": 536870912,
+    "cpu_limit_seconds": 50,
+    "payload_alarm_seconds": 55,
+    "outer_timeout_seconds": 60,
+    "outer_kill_after_seconds": 2,
+    "pre_post_hash_count": 1679,
+    "pre_post_hashes_match": true,
+    "compile_processes": 0,
+    "hardware_simulation": false,
+    "supervision": "GNU timeout and same-process resource limits; no owned-group supervisor proof",
+    "actual_native_tests": 3,
+    "no_load_negative_tests": 2
+  },
+  "full_ut_counts": {
+    "native_mul_add_calls": 32768,
+    "native_single_calls": 256,
+    "logical_mul_issues": 33024,
+    "logical_add_issues": 32768,
+    "mul_lane_operations": 528384,
+    "add_lane_operations": 524288,
+    "read_requests": 35072,
+    "write_acks_including_fixture": 1536,
+    "final_numpy_words": 4096,
+    "selected_strict_intermediate_words": 4096,
+    "selected_chain_row": 15,
+    "selected_chain_columns": [
+      0,
+      15
+    ],
+    "selected_chain_k": [
+      0,
+      127
+    ]
+  },
+  "oracle_limits": "NumPy independent whole-output bits; strict integer selected independently carried 16-lane chain intermediate bits, Add lane flags and Mul/Add aggregate flags. Not a complete-plane independent flags oracle or all Mul per-lane flags comparison.",
+  "terminal": "Expected Protocol after full injected phase because output/state unwritten. Separate Numerical UF3 and Aborted tests. No output/state/scratch publication or generation commit.",
+  "artifact_hashes": {
+    "runner.py": "9ad1d4d41cb9c5a49f2ff3303d93995a31aeb222b36ce4eba17f4ae5ddaf86ff",
+    "pins.json": "80c4113f069bc2883d5d8fec7e211149d233c766a3101b820092558a4cb11798",
+    "result.json": "475c44a0c51f039324a595c7eba1a25e1fe9ab1b764a0b00a5d00b704ac2d4a8",
+    "run.log": "01ab4c854b90bf06bc67042734b6070aa04b683c7aae0ab3c1587fa1eab704a6"
+  }
+}

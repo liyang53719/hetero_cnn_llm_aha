@@ -2006,3 +2006,10 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 独审最终58项纯Python身份/控制测试23.295秒PASS，1CPU/512MiB/120秒，全CDLL阻断；早期内存限额与CDLL(None)tripwire失败保留，不混作算术失败。随后根执行实际两次顺序编译和两个真实Vector16后端加载，3测试0skip、0failure/error，0.234秒unittest、0.690314秒payload。70有限样本×两后端×两策略=280单op，对照Fraction；另84个普通/批量对照，活动lane1/7/16。子进程1CPU/1GiB/40秒CPU/工作限额与2MiB文件限额，外层60秒预算；监督实际1.001870秒exit0，leader已reap、原owned group未见，不声称一般逃逸后代不存在或strict_cleanup.py已执行。ELF仅本地，公开源码/pin/hash/有限摘要。
 
 这只是native软件后端接入小批PASS，不是HardFloat/RTL、完整M128/block或MAC验收；合法UF是否接受与exp饱和仍须独立合同验证。五完整RTL0/5，Qwen2旧M128UNKNOWN。中文计划随本地小批提交，远端发布仍待确认，未启动长跑或清理。
+
+
+## PASS（原 owner + native host_batch 合成 UT 相位）/ INCOMPLETE（真实 producer/完整 block/RTL）：2026-10-23
+
+新增 opt-in 测试只注入 `_compute` 的合成矩阵写入与单 UT 相位，原 ChunkOwner `_op`/`_mul_add`/`_matmul`/tick/ACK/drain 和真实 Vector16 不替换；明确 R2 backend、host_batch=True、fatal30不变，复用已验证库无编译。完整64×128×64 UT执行32768 native Mul→Add batch及256 pair Mul，4096终值对照NumPy分离舍入，row15/col0的16lane完整128K独立acc链共4096中间word及Add lane/Mul-Add聚合flags对照strict整数。没有全平面独立flags或全部Mul lane flags资格。
+
+首次执行前独审修正tick后position偏到下一K、参考acc依赖native输入两处测试缺陷。根实际5测试（3native、2不加载库负例）0skip、1.682秒unittest/1.838724377秒payload、exit0；1CPU/512MiB/50秒CPU/55秒alarm及外层GNU timeout60秒+2秒KILL，audit禁派生进程/网络，1679文件前后hash一致。不是既有owned-group supervisor运行证明。包括无库/错backend拒绝且CDLL禁止、UF3首Mul失败不发Add、接受结果写后abort真实排空、最后ACK背压。相位耗尽原owner必须Protocol失败，无output/state写、发布、commit/generation；不能称完整chunk/M128或block成功。五完整RTL仍0/5，Qwen2旧M128UNKNOWN，无新MAC利用率实测。仅准备本地小批，远端发布仍待确认，无清理。

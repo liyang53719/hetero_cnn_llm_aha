@@ -1,0 +1,127 @@
+--- baseline1912/native_diagnostic.py
++++ isolated1941/native_diagnostic.py
+@@ -1,4 +1,4 @@
+-"""One fixed software-native diagnostic, not RTL or executed HardFloat."""
++"""One isolated finite-Mul UF candidate: software only, not executed HardFloat."""
+ import hashlib
+ import json
+ import os
+@@ -34,13 +34,18 @@
+     plan_raw = plan_path.read_bytes()
+     need(len(plan_raw) <= 2 * 1024**2, 'bounded fixed plan')
+     plan = json.loads(plan_raw)
+-    need(plan['schema'] == 'uf-native-diagnostic-bound-v1' and str(plan_path) == plan['plan_path'], 'fixed plan')
++    need(plan['schema'] == 'uf-finite-mul-repair-bound-v1' and str(plan_path) == plan['plan_path'], 'fixed plan')
+     need(sys.pycache_prefix == str(Path(plan['work']) / 'tmp' / 'pycache'), 'fresh no-pyc source imports')
+     own = Path(__file__).resolve()
+     checked(own, plan['inputs'][str(own)])
+     table_raw = checked(plan['stimuli_path'], plan['inputs'][plan['stimuli_path']])
+     table = json.loads(table_raw)
+-    need(len(table['finite_single_lane_cases']) == 24 and len(table['native_batch_policy_cases']) == 3, 'bounded stimuli')
++    need(len(table['finite_single_lane_cases']) == 70 and len(table['native_batch_policy_cases']) == 5, 'bounded stimuli')
++    historical_raw = checked(plan['historical_result_path'], plan['inputs'][plan['historical_result_path']])
++    historical = json.loads(historical_raw)
++    need(historical['status'] == 'PASS_ORIGINAL_CPP_SOFTWARE_DIAGNOSTIC_ONLY' and
++         len(historical['cases']) == 24, 'sealed original 24-case historical software evidence')
++    historical_cases = {x['id']: x for x in historical['cases']}
+     reference_raw = checked(plan['reference_path'], plan['inputs'][plan['reference_path']])
+     reference = types.ModuleType('uf_fixed_fraction_reference')
+     reference.__file__ = plan['reference_path']
+@@ -75,7 +80,6 @@
+         'gdn_vector16_mul_add_policy_trace': ([P, P, P, P, U, P, C.POINTER(I), U], U),
+         'uf_diagnostic_environment': ([], I),
+         'uf_diagnostic_snapshot': ([P], None),
+-        'uf_diagnostic_raw': ([U, U, U, P], I),
+     }
+     functions = {}
+     for name, (args, restype) in signatures.items():
+@@ -133,30 +137,38 @@
+     for row in table['finite_single_lane_cases']:
+         op, a, b = row['op'], int(row['a'], 16), int(row['b'], 16)
+         expected, spec_flags = (reference.mul if op else reference.add)(a, b)
+-        need(expected == int(row['expected_value'], 16) and spec_flags == row['hardfloat_source_spec_flags'], 'independent Fraction matches fixed derivation')
++        if row['id'] in historical_cases:
++            need(expected == int(row['expected_value'], 16) and spec_flags == row['hardfloat_source_spec_flags'], 'independent Fraction matches original fixed derivation')
+         va, vb, out, flags = U(a), U(b), U(0xDEADBEEF), U(0xDEADBEEF)
+         environment()
+         before = snapshot()
+         actual = functions['gdn_vector16_trace'](op, C.byref(va), C.byref(vb), C.byref(out), 1, C.byref(flags))
+         after = snapshot()
+         retained(before, after)
+-        need(actual >= 0 and actual == flags.value == row['cpp_postfix_flags_source_prediction'] and
+-             out.value == expected and va.value == a and vb.value == b, 'original primitive bits/postfix flags')
+-        raw_out = U(0xDEADBEEF)
+-        raw_before = snapshot()
+-        host_flags = functions['uf_diagnostic_raw'](op, a, b, C.byref(raw_out))
+-        raw_after = snapshot()
+-        retained(raw_before, raw_after)
+-        need(host_flags >= 0 and host_flags <= 31 and raw_out.value == expected and
+-             (host_flags & ~2) == (actual & ~2), 'separate raw expression bits/non-UF flags')
++        need(actual >= 0 and actual == flags.value == spec_flags and out.value == expected and
++             va.value == a and vb.value == b, 'new actual primitive bits/all flags match independent Fraction/source-spec')
++        # The old primitive is NEVER loaded or executed by this new attempt.
++        # Only the original 24 have historical observed legacy flags.
++        if row['id'] in historical_cases:
++            old = historical_cases[row['id']]
++            need(old['op'] == op and old['a'] == row['a'] and old['b'] == row['b'] and
++                 old['value'] == f'{expected:08x}', 'exact historical case/input/value binding')
++            old_flags = old['cpp_postfix_flags']
++            legacy_kind = 'historical_original_software_observation'
++        else:
++            old_flags = (spec_flags & ~2) | (2 if (spec_flags & 1) and
++                         (expected & 0x7fffffff) < 0x00800000 else 0)
++            legacy_kind = 'old_source_rule_prediction_NOT_EXECUTED'
++        need((actual & ~2) == (old_flags & ~2), 'non-UF flags unchanged')
++        if op == 0:
++            need(actual == old_flags, 'all original Add flags unchanged')
+         observed = {'id': row['id'], 'op': op, 'a': row['a'], 'b': row['b'],
+-                    'value': f'{out.value:08x}', 'cpp_postfix_flags': actual,
+-                    'cpp_fatal30': bool(actual & 30), 'fraction_value': f'{expected:08x}',
++                    'value': f'{out.value:08x}', 'candidate_flags': actual,
++                    'candidate_fatal30': bool(actual & 30), 'fraction_value': f'{expected:08x}',
+                     'hardfloat_source_spec_flags': spec_flags, 'hardfloat_spec_fatal30': bool(spec_flags & 30),
+-                    'flags_differ': actual != spec_flags, 'raw_separate_expression_flags': host_flags,
+-                    'before_original': before, 'after_original': after,
+-                    'before_raw_probe': raw_before, 'after_raw_probe': raw_after}
+-        need(observed['flags_differ'] == row['expected_flags_difference'], 'explicit flags contract difference')
++                    'legacy_comparison_kind': legacy_kind, 'legacy_flags': old_flags,
++                    'differs_from_legacy_rule': actual != old_flags,
++                    'before_candidate': before, 'after_candidate': after}
+         cases.append(observed)
+         by_id[row['id']] = row
+     batches = []
+@@ -170,7 +182,7 @@
+             C.byref(out), 1, C.byref(lane), issues, 30)
+         after = snapshot()
+         retained(before, after)
+-        need(stages == row['cpp_stage_prediction'] and list(issues) == row['cpp_issue_flags_prediction'], 'real original mask30 stop/continue')
++        need(stages == row['candidate_stage_prediction'] and list(issues) == row['candidate_issue_flags_prediction'], 'real candidate mask30 stop/continue')
+         need(vb.value == int(pair['expected_value'], 16), 'in-place rounded product')
+         if stages == 1:
+             need(out.value == 0xDEADBEEF and lane.value == issues[0], 'Add genuinely unexecuted output sentinel')
+@@ -187,19 +199,20 @@
+     mapped_after = mappings()
+     need(mapped_after == mapped_before and loaded == [library], 'loaded identity stable')
+     checked(library, seal['pin'])
+-    result = {'status': 'PASS_ORIGINAL_CPP_SOFTWARE_DIAGNOSTIC_ONLY', 'cases': cases, 'batches': batches,
+-              'single_lane_cases': 24, 'batch_policy_cases': 3, 'library': seal,
++    result = {'status': 'PASS_ISOLATED_FINITE_MUL_UF_SOFTWARE_ONLY', 'cases': cases, 'batches': batches,
++              'single_lane_cases': 70, 'batch_policy_cases': 5, 'library': seal,
+               'initial_environment': initial_environment, 'final_environment': final_environment,
+               'executable_mappings': mapped_after, 'HardFloat_executed': False, 'RTL_executed': False,
+-              'raw_host_flags_are_separate_probe': True, 'old_cpp_source_modified': False,
++              'raw_probe_executed': False, 'historical_original_cases': 24,
++              'additional_legacy_predictions_not_executed': 46, 'old_cpp_source_modified': False,
+               'future_integration_flags_blocker_remains': True,
+-              'flags_difference_case_ids': [x['id'] for x in cases if x['flags_differ']]}
++              'legacy_flags_difference_case_ids': [x['id'] for x in cases if x['differs_from_legacy_rule']]}
+     target = Path(plan['work']) / 'NATIVE_RESULT.json'
+     raw = (json.dumps(result, indent=2, sort_keys=True) + '\n').encode()
+     need(len(raw) < 256 * 1024, 'bounded diagnostic result')
+     with target.open('xb') as f:
+         f.write(raw)
+-    print(json.dumps({'status': result['status'], 'cases': 24, 'batches': 3,
++    print(json.dumps({'status': result['status'], 'cases': 70, 'batches': 5,
+                       'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}), flush=True)
+ 
+ 

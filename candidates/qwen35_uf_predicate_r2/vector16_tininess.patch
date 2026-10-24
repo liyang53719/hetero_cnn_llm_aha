@@ -1,0 +1,45 @@
+--- baseline/vector16.cpp
++++ isolated_R2/vector16_tininess.cpp
+@@ -23,6 +23,27 @@
+ #endif
+ }
+ 
++// Isolated software-reference policy: finite binary32 Mul, RNE only.
++// Zero is excluded as in HardFloat commonCase. This does not use host UF.
++static bool finite_mul_tiny_after(uint32_t a, uint32_t b) {
++  const unsigned ea = (a >> 23) & 255u;
++  const unsigned eb = (b >> 23) & 255u;
++  // Caller proves ea != 255 and eb != 255.
++  const uint64_t ma = (a & 0x7fffffu) | (ea ? 0x800000u : 0u);
++  const uint64_t mb = (b & 0x7fffffu) | (eb ? 0x800000u : 0u);
++  const uint64_t product = ma * mb;
++  if (!product) return false;
++  int bits = 0;
++  for (uint64_t v = product; v; v >>= 1) ++bits;
++  const int shift = int(ea ? ea : 1u) + int(eb ? eb : 1u) - 149;
++  const int scaled_bits = bits + shift;
++  if (scaled_bits != 25) return scaled_bits < 25;
++  const uint64_t threshold = (uint64_t(1) << 25) - 1;
++  // Only here: shift in [-23,24]; every shifted value fits in 48 bits.
++  return shift >= 0 ? (product << unsigned(shift)) < threshold
++                    : product < (threshold << unsigned(-shift));
++}
++
+ static int compute(unsigned op, const uint32_t* a, const uint32_t* b,
+                    uint32_t* out, unsigned lanes, uint32_t* lane_flags) {
+   if (op > 1 || lanes == 0 || lanes > 16)
+@@ -44,8 +65,12 @@
+     unsigned lane = (f & FE_INVALID) ? 16 : 0;
+     lane |= (f & FE_DIVBYZERO) ? 8 : 0;
+     lane |= (f & FE_OVERFLOW) ? 4 : 0;
+-    // Match HardFloat tininess_afterRounding, even on hosts detecting before.
+-    lane |= ((f & FE_INEXACT) && std::fabs(r) < 0x1p-126f) ? 2 : 0;
++    // Only finite Mul changes UF policy. Add/nonfinite keep the old branch.
++    const bool finite_mul = op == 1 && (a[i] & 0x7f800000u) != 0x7f800000u &&
++                                     (b[i] & 0x7f800000u) != 0x7f800000u;
++    lane |= ((f & FE_INEXACT) &&
++             (finite_mul ? finite_mul_tiny_after(a[i], b[i])
++                         : std::fabs(r) < 0x1p-126f)) ? 2 : 0;
+     lane |= (f & FE_INEXACT) ? 1 : 0;
+     flags |= lane;
+     if (lane_flags) lane_flags[i] = lane;

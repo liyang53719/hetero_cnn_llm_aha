@@ -1,0 +1,15 @@
+--- unexecuted_R1/vector16_tininess.cpp
++++ isolated_R2/vector16_tininess.cpp
+@@ -68,9 +68,9 @@
+     // Only finite Mul changes UF policy. Add/nonfinite keep the old branch.
+     const bool finite_mul = op == 1 && (a[i] & 0x7f800000u) != 0x7f800000u &&
+                                      (b[i] & 0x7f800000u) != 0x7f800000u;
+-    const bool tiny = finite_mul ? finite_mul_tiny_after(a[i], b[i])
+-                                 : std::fabs(r) < 0x1p-126f;
+-    lane |= ((f & FE_INEXACT) && tiny) ? 2 : 0;
++    lane |= ((f & FE_INEXACT) &&
++             (finite_mul ? finite_mul_tiny_after(a[i], b[i])
++                         : std::fabs(r) < 0x1p-126f)) ? 2 : 0;
+     lane |= (f & FE_INEXACT) ? 1 : 0;
+     flags |= lane;
+     if (lane_flags) lane_flags[i] = lane;

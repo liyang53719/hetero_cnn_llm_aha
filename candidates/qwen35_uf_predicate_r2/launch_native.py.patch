@@ -1,0 +1,11 @@
+--- baseline1912/launch_native.py
++++ isolated1941/launch_native.py
+@@ -36,7 +36,7 @@
+ resource.setrlimit(resource.RLIMIT_FSIZE, (2 * 1024**2, 2 * 1024**2))
+ resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+ HERE = Path(__file__).resolve().parent
+-PINS = {'FROZEN_PLAN.json': {'bytes': 704781, 'sha256': '2f7153133e9e1a6f4f4966d005ce2bda2c085904c998ed3da42376d45836ad37'}, 'run_native.py': {'bytes': 17688, 'sha256': '5ddb9898800cbda97f1876564fa1b25f9224ca6dac5e7ab8745f76f67b8c0aa2'}}
++PINS = {'FROZEN_PLAN.json': {'bytes': 707346, 'sha256': '02afa6cb0b4e6b77400117afc4de34d0bf7984da2fbafd9aeccde4e4676046cf'}, 'run_native.py': {'bytes': 18000, 'sha256': 'bbd83a1eb930cdfe8a0578b35699382a414b3ee0778f96b24b5ccb25b6dd8aac'}}
+ 
+ 
+ def raw_fixed(name):

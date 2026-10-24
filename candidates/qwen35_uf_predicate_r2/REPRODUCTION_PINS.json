@@ -1,0 +1,101 @@
+{
+  "R2_source_manifest": {
+    "bytes": 2081,
+    "sha256": "a38cab58e69532979c3babfc18f5c92a860f2de6d9ca44092ab77377bdcb7584"
+  },
+  "actual_result_fingerprint": {
+    "bytes": 70887,
+    "sha256": "ecd9ad227b73edb85b9d1840f1990752ef5668c4b2fe470c386b88e5229be1dc"
+  },
+  "baseline_public_package_manifest": {
+    "bytes": 1416,
+    "sha256": "d069502fb1789ed076569817aa4025bca08c558ad71fd9640a3873c8cace1feb"
+  },
+  "baseline_runner_files": {
+    "diagnostic_probe.cpp": {
+      "bytes": 1815,
+      "sha256": "465102ab0ee27d1b93d9f6259249c7c5bb97d1d0e2479409b1d330cabed774b3"
+    },
+    "launch_native.py": {
+      "bytes": 3641,
+      "sha256": "bf3971ef8bae7f2c161befe6d87bfba12d264edaf6dfc39cf32c64bb65c5556a"
+    },
+    "native_diagnostic.py": {
+      "bytes": 11141,
+      "sha256": "20fef11325d3466637ad9bffcf7fe7b1e2b0fddff0436bf0041fdbd4eee851c3"
+    },
+    "run_native.py": {
+      "bytes": 17688,
+      "sha256": "5ddb9898800cbda97f1876564fa1b25f9224ca6dac5e7ab8745f76f67b8c0aa2"
+    }
+  },
+  "exact_copied_files": {
+    "R1_TO_R2.patch": {
+      "bytes": 771,
+      "sha256": "dd53fb79fe62e4ba8684a9f85fab22493bb0b3031662bf61fbe47c1a7c4d8c8c"
+    },
+    "STIMULI.json": {
+      "bytes": 14440,
+      "sha256": "695f2e8f6649cbe03723410fbef29d766bdf09b21dfb24e75bb0050d9260faf8"
+    },
+    "launch_native.py.patch": {
+      "bytes": 751,
+      "sha256": "85b53e0568cecb44eef889a908d2d9d19e86d47ba7935d82dc6556fa33ce95f2"
+    },
+    "native_diagnostic.py.patch": {
+      "bytes": 8538,
+      "sha256": "34b26a497e45ad29748e7125d5bf8319931dc134f1ef0e232abce56699be3685"
+    },
+    "run_native.py.patch": {
+      "bytes": 4630,
+      "sha256": "fb4d21e08fdc5046a00b3fa82ff0f16a4a4b7554683a994b339c960b348e3e74"
+    },
+    "vector16_tininess.cpp": {
+      "bytes": 5078,
+      "sha256": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7"
+    },
+    "vector16_tininess.patch": {
+      "bytes": 2095,
+      "sha256": "986977aaed5e194c10aed7c534fa949aa94a4f33dabb059427c5e0da95ed3c34"
+    }
+  },
+  "independent_Fraction_reference": {
+    "bytes": 7487,
+    "logical_file": "fraction_reference.py",
+    "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+  },
+  "new_shared_library_fingerprint_only": {
+    "bytes": 16088,
+    "sha256": "37bf6e8c8d4ed8ecd56071ed45eebc1b0ed424eaf213533f9ecbc92d183e95ba"
+  },
+  "omitted_environment_plan": {
+    "bytes": 707346,
+    "sha256": "02afa6cb0b4e6b77400117afc4de34d0bf7984da2fbafd9aeccde4e4676046cf"
+  },
+  "original_primitive": {
+    "bytes": 3841,
+    "repository_relative_path": "candidates/qwen35_gdn_prefill/chunk/vector16.cpp",
+    "sha256": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+  },
+  "resulting_runner_files": {
+    "diagnostic_probe.cpp": {
+      "bytes": 1815,
+      "sha256": "465102ab0ee27d1b93d9f6259249c7c5bb97d1d0e2479409b1d330cabed774b3"
+    },
+    "launch_native.py": {
+      "bytes": 3641,
+      "sha256": "467d80a9c38ba874e768e99c85132f565eaa94da2920c007c4889df2c6253e90"
+    },
+    "native_diagnostic.py": {
+      "bytes": 12070,
+      "sha256": "69975ce45fed12deda6dbf45678c70ad08fb2045359aa934fdc22f9f83d34a7a"
+    },
+    "run_native.py": {
+      "bytes": 18000,
+      "sha256": "bbd83a1eb930cdfe8a0578b35699382a414b3ee0778f96b24b5ccb25b6dd8aac"
+    }
+  },
+  "schema": "public-isolated-finite-Mul-UF-reproduction-pins-v1",
+  "standalone": false,
+  "tool_binaries_and_machine_paths_included": false
+}

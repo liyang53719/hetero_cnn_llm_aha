@@ -1,0 +1,60 @@
+--- baseline1912/run_native.py
++++ isolated1941/run_native.py
+@@ -154,7 +154,7 @@
+ 
+ def main(plan, start, stop, work_stop, deadline_handler):
+     work = Path(plan['work'])
+-    need(plan['schema'] == 'uf-native-diagnostic-bound-v1', 'plan schema')
++    need(plan['schema'] == 'uf-finite-mul-repair-bound-v1', 'plan schema')
+     expected_flags = ['-std=c++17', '-O2', '-shared', '-fPIC', '-fno-fast-math', '-ffp-contract=off', '-frounding-math']
+     need(plan['compile_flags'] == expected_flags, 'unchanged arithmetic flags')
+     need(plan['dependency_argv'] == [plan['compiler']] + expected_flags + ['-M'] + plan['sources'], 'fixed dependency only entry')
+@@ -261,7 +261,8 @@
+                      int.from_bytes(raw_library[18:20], 'little') == 62, 'one x86_64 ET_DYN little-endian library')
+                 library_seal = {'path': str(library), 'pin': {'bytes': len(raw_library),
+                     'sha256': hashlib.sha256(raw_library).hexdigest()}, 'compile_natural_cleanup': True,
+-                    'original_cpp_sha256': plan['inputs'][plan['sources'][0]]['sha256'],
++                    'candidate_cpp_sha256': plan['inputs'][plan['sources'][0]]['sha256'],
++                    'unchanged_original_cpp_sha256': plan['inputs'][plan['original_cpp_path']]['sha256'],
+                     'probe_sha256': plan['inputs'][plan['sources'][1]]['sha256'],
+                     'plan_sha256': hashlib.sha256((json.dumps(plan, indent=2, sort_keys=True) + '\n').encode()).hexdigest()}
+                 dump(work / 'LIBRARY_SEAL.json', library_seal)
+@@ -271,10 +272,13 @@
+         checked(library_seal['path'], library_seal['pin'])
+         raw_result = terminal_bytes(work / 'NATIVE_RESULT.json', 256 * 1024)
+         native = json.loads(raw_result)
+-        need(native['status'] == 'PASS_ORIGINAL_CPP_SOFTWARE_DIAGNOSTIC_ONLY' and
+-             native['single_lane_cases'] == 24 and native['batch_policy_cases'] == 3 and
+-             len(native['cases']) == 24 and len(native['batches']) == 3 and
+-             native['library'] == library_seal and native['flags_difference_case_ids'] == ['01', '02'] and
++        need(native['status'] == 'PASS_ISOLATED_FINITE_MUL_UF_SOFTWARE_ONLY' and
++             native['single_lane_cases'] == 70 and native['batch_policy_cases'] == 5 and
++             len(native['cases']) == 70 and len(native['batches']) == 5 and
++             native['library'] == library_seal and
++             native['historical_original_cases'] == 24 and native['additional_legacy_predictions_not_executed'] == 46 and
++             native['raw_probe_executed'] is False and
++             {'01', '02'} <= set(native['legacy_flags_difference_case_ids']) and
+              native['future_integration_flags_blocker_remains'] is True and
+              native['HardFloat_executed'] is False and native['RTL_executed'] is False,
+              'limited native software diagnostic postconditions')
+@@ -292,11 +296,11 @@
+         dump(work / 'FINAL_INVENTORY.json', final_tree)
+         need(inventory(work)['bytes'] <= limits['owned_output_bytes'] - 256 * 1024, 'terminal owned receipt reserve')
+         need(time.monotonic() < stop, 'terminal global deadline')
+-        result.update(status='PASS_ORIGINAL_CPP_SOFTWARE_DIAGNOSTIC_ONLY', records=records, usage=usages,
++        result.update(status='PASS_ISOLATED_FINITE_MUL_UF_SOFTWARE_ONLY', records=records, usage=usages,
+                       dependency_count=dependencies['unique_dependencies'], input_count=len(before),
+                       native_result_sha256=hashlib.sha256(raw_result).hexdigest(),
+                       source_count=2, elapsed_seconds=time.monotonic() - start,
+-                      qualification='Original C++ primitive and independent software Fraction comparison only; HardFloat flags are source spec, not hardware execution')
++                      qualification='Isolated finite-Mul UF candidate and independent Fraction software comparison only; old source unchanged, HardFloat flags not executed')
+     except BaseException as error:
+         result.update(status='FAIL_OR_UNKNOWN_UF_DIAGNOSTIC_ATTEMPT', exception_type=type(error).__name__,
+                       exception=str(error)[:4096], elapsed_seconds=time.monotonic() - start)
+@@ -312,5 +316,5 @@
+         result.setdefault('records', records)
+         result.setdefault('usage', usages)
+         dump(work / 'RESULT.json', result)
+-    print(json.dumps({'status': result['status'], 'cases': 24, 'batches': 3,
++    print(json.dumps({'status': result['status'], 'cases': 70, 'batches': 5,
+                       'elapsed_seconds': time.monotonic() - start}), flush=True)

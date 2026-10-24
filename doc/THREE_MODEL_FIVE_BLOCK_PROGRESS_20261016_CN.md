@@ -1899,3 +1899,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 2361输入前后全同，真实-M依赖121项（两个TU73/120）全在预pin集合，23终态文件2261062B全核；三阶段自然0/WNOWAIT/reap/group absent/cleanup。MXCSR8096→8098仅DE sticky新增，标准FE/control保持，不修改FTZ/DAZ。独审ACTUAL_REVIEW SHA256 38766c8172145b746de7a5d133bd430afa74df7cb38d1aeb2eba351fde7a7383。
 
 这是原C++软件primitive策略差异的实际证据，raw探针是第二次独立运算，不冒原API内部采样；仍未实测HardFloat/RTL flags。旧源/旧收据不改，UF契约集成阻断不解除。公开10项50874B在 candidates/qwen35_uf_native_diagnostic/，manifest SHA256 d069502fb1789ed076569817aa4025bca08c558ad71fd9640a3873c8cace1feb，无机器plan/工具表/二进制/原日志，入口缺冻结计划不可直接执行。五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。
+
+
+## PASS（仅隔离软件修复）：finite Mul的UF整数判据
+
+新隔离CPP副本以≤48bit精确乘积与T=(2^25−1)×2^-151严格小于比较，再与原本次FE_INEXACT相与得到UF；保原结果/其他flags/顺序/Add与nonfinite路径，不依赖host rawUF或finalabs。R1把tiny提前求值造成旧NX0短路语义改变，源码hold且从未执行，原件保留；R2只把选择放回原NX&&右侧，逆patch恢复旧CPP全部字节。
+
+唯一10672新副本实际自然0/总1.199853478秒，70例value/flags同独立Fraction/HF源规范，5batch。正负边界01/02实际flags3、issue[3,0]止Mul且Add sentinel未改；阈值恰等03 flags1继续Add，精确subnormal09 flags0继续Add。旧24列沿历史已封实际，新增46旧列仅源码预测，不重复加载旧ELF。新增N44差异不冒充旧实测。2370前后同、121依赖subset、23封件2304028B全核，三阶段自然0/WNOWAIT/reap/cleanup确认；旧CPP SHA不变。独审R2_ACTUAL_REVIEW SHA256 db6147fd48e56d8375ae30e7b59b6eb9c8bb4ad43f46cabb22ca44a329324285。
+
+仅隔离finiteMul软件参考修复PASS，不自动替换完整模型或授HardFloat/RTL flags资格，硬件及整模集成仍阻断。公开12件47208B在 candidates/qwen35_uf_predicate_r2/，manifest SHA256 37195330ca9e1e491c8b38caa6862800c5cdd8242047f52503c2ba707aa25ac5；含新副本/patch/刺激/有限摘要与相对pins，无重复模型/工具表/原log/ELF。五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。

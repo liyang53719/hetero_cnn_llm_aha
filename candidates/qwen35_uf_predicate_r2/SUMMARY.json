@@ -1,0 +1,132 @@
+{
+  "R1_history": "首冻结源码因提前计算tiny破坏NX短路被静审HOLD，未实际执行，不能称运行FAIL。R2把选择置回原FE_INEXACT&&右侧；旧版及证据保留。",
+  "actual_batches": 5,
+  "actual_cases": 70,
+  "actual_integrity": {
+    "actual_M_unique_dependencies": 121,
+    "all_dependencies_pre_pinned_subset": true,
+    "elapsed_stdout_seconds": 1.199853477999568,
+    "input_paths_before_after_unchanged": 2370,
+    "not_performance_prediction": true,
+    "owned_bytes": 2304028,
+    "owned_files": 23,
+    "three_natural_exit0_and_confirmed_cleanup": true
+  },
+  "additional_old_rule_prediction_only_cases": 46,
+  "all70_value_and_flags_match_Fraction_and_HardFloat_source_spec": true,
+  "batch_results": {
+    "boundary_midpoint": {
+      "Add_output_valid": false,
+      "flags": [
+        3,
+        0
+      ],
+      "stages": 1
+    },
+    "exact_subnormal": {
+      "Add_output_valid": true,
+      "flags": [
+        0,
+        0
+      ],
+      "stages": 2
+    },
+    "exact_unbounded_threshold": {
+      "Add_output_valid": true,
+      "flags": [
+        1,
+        0
+      ],
+      "stages": 2
+    },
+    "overflow": {
+      "Add_output_valid": false,
+      "flags": [
+        5,
+        0
+      ],
+      "stages": 1
+    },
+    "tiny_zero": {
+      "Add_output_valid": false,
+      "flags": [
+        3,
+        0
+      ],
+      "stages": 1
+    }
+  },
+  "date_utc": "2026-10-21",
+  "environment": "FE标准sticky和控制字段每操作保持；MXCSR 8096→8098，DE单列，不声称完整MXCSR保持。",
+  "future_hardware_and_model_integration_blocker_remains": true,
+  "historical_original_software_cases": 24,
+  "key_results": [
+    {
+      "historical_original_flags": 1,
+      "input": "00800000 × 3f7fffff",
+      "new_flags": 3,
+      "value": "00800000"
+    },
+    {
+      "historical_original_flags": 1,
+      "input": "80800000 × 3f7fffff",
+      "new_flags": 3,
+      "value": "80800000"
+    },
+    {
+      "input": "00f80000 × 3f042108",
+      "meaning": "恰等无界 p24 midpoint，不tiny；NX非致命，继续Add。",
+      "new_flags": 1,
+      "value": "00800000"
+    },
+    {
+      "input": "00800000 × 3f000000",
+      "meaning": "精确subnormal，继续Add。",
+      "new_flags": 0,
+      "value": "00400000"
+    },
+    {
+      "input": "00000003 × 4a2aaaaa",
+      "new_flags": 3,
+      "old_rule_NOT_EXECUTED": true,
+      "old_rule_prediction": 1,
+      "value": "00800000"
+    }
+  ],
+  "observed_resources": {
+    "cumulative_child_maxrss_KiB": 46848,
+    "not_instantaneous_aggregate_peak": true,
+    "sampled_descendant_RSS_bytes": 44535808
+  },
+  "old_ELF_executed_in_this_attempt": false,
+  "private_actual_review_fingerprint": {
+    "bytes": 12511,
+    "sha256": "db6147fd48e56d8375ae30e7b59b6eb9c8bb4ad43f46cabb22ca44a329324285"
+  },
+  "qualifications": {
+    "HardFloat_hardware_numerical_execution": false,
+    "RTL": false,
+    "full_array_or_block": false,
+    "hardware_flags_equivalence": false,
+    "hardware_handshake": false,
+    "native_CPP_software_arithmetic": true,
+    "old_model_replacement_or_PASS": false
+  },
+  "raw_arithmetic_probe_called": false,
+  "resource_limits": {
+    "CPU": 1,
+    "cleanup_seconds": 5,
+    "native_seconds": 10,
+    "owned_bytes": 8388608,
+    "per_process_AS_bytes": 1073741824,
+    "post_seconds": 15,
+    "sampled_aggregate_RSS_bytes": 536870912,
+    "shared_dependencies_compile_seconds": 30,
+    "shared_work_seconds": 40,
+    "total_seconds": 60
+  },
+  "schema": "public-isolated-finite-Mul-UF-software-summary-v1",
+  "scope_cn": "仅新隔离 C++ 副本的有限 Mul UF 判据修复与独立软件参考比较，不替换原 CPP 或模型。",
+  "source_scope": "只新增私有uint64 helper并替换finite Mul的UF tiny选择。FE_INEXACT仍为原真实交付，Add/nonfinite保原短路fallback，其他flags/值/ABI/顺序不变。",
+  "status": "PASS_ISOLATED_FINITE_MUL_UF_SOFTWARE_ONLY"
+}

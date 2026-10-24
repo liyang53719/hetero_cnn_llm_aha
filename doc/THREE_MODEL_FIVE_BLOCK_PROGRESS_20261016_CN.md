@@ -1983,3 +1983,10 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 新增real_producer_slice：仅原始Conv/AB BF16与A_log/dt_bias使用明确合成fixture，原TypedInputPrepDriver实际计算/ACK/发布128-token单head Prep；原ChunkOwner._compute不替换，实际生产cumsum、decay、products、pair、transpose及head0/chunk0完整UT/QK。不注入kb/kt/pair；只以1..16活动lane strict Add/Mul适配替代实例_op，原PrepScalar Div/Sqrt/Softplus/exp政策保留，不授原生Vector16算术等价。核819200 Prep words、87040 producer words与2148512 Add/Mul中间结果。QK末ACK后接受solve_v首读再走真实abort/drain，终态Aborted、chunks_started=1/completed=0，无output/state写或发布。
 
 首次wrapper因/usr/bin/time缺失exit127，Python未开始；只换Bash计时后首次实际2测试10.597秒通过，原失败证据保留。独审合并22测试37.926秒exit0，1CPU/512MiB/60秒。33捕获文件前后hash相同，其中26与收据28项重叠，另7Python；收据2Scala仅运行后验证，不夸称完整闭包。四个历史收据不改。仅该软件切片PASS，第二chunk/state carry、全部head、完整block及RTL未验收，五RTL0/5、Qwen2旧M128仍UNKNOWN、无MAC利用率。小批本地提交并备份，远端仍f93f0c4等待发布确认，无清理。
+
+
+## PASS（真实chunk0与部分chunk1 state carry软件续跑）/ INCOMPLETE（完整M128）：2026-10-23
+
+原_compute完成单head chunk0全部24个scratch矩阵（201728 FP32 words）、next_state及8192 BF16输出；chunk1真实执行producer、UT/QK、两个solve，再完成首个128列prediction行，1024个真实读覆盖chunk0 next_state全部65536B一次。13816128个strict Add/Mul中间结果与独立FP32检查匹配。接受下一行首读后真实abort/drain，Aborted、chunks_started=2/completed=1，partial output未发布、state_out未写，无完整staging或commit，不能报完整M128。
+
+最终源码独审1测试47.696秒exit0，旧22项另进程40.900秒exit0，各自1CPU/512MiB/60秒限额，不能把二者拼进同一60秒预算。36/37列明文件分别前后hash一致；最终30文件manifest为终态核验，不冒称创建于测试前。五份旧收据与生产源码、fatal30不改；首次源码与日志保留。仅软件续跑PASS，完整第二chunk、全部head、完整block、原生Vector16及RTL未验收，五RTL0/5、Qwen2旧M128UNKNOWN、无完整block利用率。小批本地提交备份，远端发布仍等待确认，无清理。

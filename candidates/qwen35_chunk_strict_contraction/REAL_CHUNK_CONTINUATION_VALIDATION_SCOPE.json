@@ -1,0 +1,483 @@
+{
+  "status": "PASS_BOUNDED_REAL_CHUNK0_AND_FIRST_CHUNK1_CARRY_ROW_ONLY",
+  "base_revision": "fe43b481a28e0599e874d73a4a2169d725d127b6",
+  "bounds": {
+    "cpu_count": 1,
+    "address_space_bytes": 536870912,
+    "wall_limit_seconds": 60,
+    "cpu_limit_seconds": 60,
+    "native_threads": 1
+  },
+  "author_first_attempt": {
+    "tests": 1,
+    "exit_code": 0,
+    "unittest_elapsed_seconds": 48.582,
+    "process_wall_seconds": 48.84,
+    "source_snapshot": "reports/execution/QWEN35_REAL_CHUNK_CONTINUATION_20261023/attempt1.test_source.py",
+    "artifacts": "reports/execution/QWEN35_REAL_CHUNK_CONTINUATION_20261023/attempt1.*",
+    "explicit_five_source_hashes_before_after_equal": true,
+    "final_source_difference": "Added exact request/operation counts and pristine suffix checks after first successful attempt; independently validated final source separately"
+  },
+  "independent_final_source_validation": {
+    "status": "PASS_BOUNDED_REAL_CHUNK0_AND_FIRST_CHUNK1_CARRY_ROW_ONLY",
+    "tests": 1,
+    "exit_code": 0,
+    "unittest_elapsed_seconds": 47.696,
+    "elapsed_seconds": 47.695884176006075,
+    "peak_rss_kib": 75276,
+    "runtime_bounds": {
+      "cpu_affinity": [
+        0
+      ],
+      "rlimit_as": [
+        536870912,
+        536870912
+      ],
+      "rlimit_cpu": [
+        60,
+        60
+      ],
+      "external_wall_timeout_seconds": 60,
+      "OPENBLAS_NUM_THREADS": 1,
+      "OMP_NUM_THREADS": 1,
+      "python_bytecode_writes": false
+    },
+    "new_test_sha256": "cb15b29b81944a4056721dc0539c1fd2a4a9af9440fced9cbf909888ba457a2f",
+    "captured_files": 36,
+    "source_hashes_before_after_equal": true,
+    "changed_files": [],
+    "hash_scope": "36 Python/old-receipt files captured before/after; explicit paths below; not a complete runtime import closure. New docs were excluded while being edited.",
+    "all_five_historical_receipts_byte_identical_to_HEAD": true,
+    "all_24_python_entries_in_prior_receipt_match": true,
+    "evidence": "Independent reviewer reported exact run result, peak RSS and before/after hashes; no reviewer log files were created under its no-edits constraint",
+    "unittest_summary": "Ran 1 test in 47.696s\n\nOK",
+    "before_after_files": {
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": {
+        "bytes": 29097,
+        "sha256": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27"
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": {
+        "bytes": 8445,
+        "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": {
+        "bytes": 19134,
+        "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": {
+        "bytes": 25923,
+        "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+      },
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": {
+        "bytes": 37079,
+        "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412"
+      },
+      "candidates/qwen35_35b_exp/gate_scalar.py": {
+        "bytes": 2206,
+        "sha256": "c3661f498912ec55b70bd4344a53013409e567c6f01f78af26fe515e8710532d"
+      },
+      "candidates/qwen35_35b_exp/scalar.py": {
+        "bytes": 3682,
+        "sha256": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5"
+      },
+      "candidates/qwen35_chunk_strict_contraction/INJECTED_OWNER_VALIDATION_SCOPE.json": {
+        "bytes": 6301,
+        "sha256": "78afdca3e763e8d333a3611ea074a272adebfebda4024a28a60df3eb9230051c"
+      },
+      "candidates/qwen35_chunk_strict_contraction/REAL_PRODUCER_VALIDATION_SCOPE.json": {
+        "bytes": 16293,
+        "sha256": "0c222bbef2999e6ceb108c4e610065fa825b44cb4e083b094a35d0133763be7f"
+      },
+      "candidates/qwen35_chunk_strict_contraction/SCHEDULE_VALIDATION_SCOPE.json": {
+        "bytes": 2572,
+        "sha256": "4e6af81df29e5d082de30086612dee96dedc429ec04a3723ef65e0197863bb77"
+      },
+      "candidates/qwen35_chunk_strict_contraction/UPSTREAM_COROUTINE_VALIDATION_SCOPE.json": {
+        "bytes": 5798,
+        "sha256": "fc75ad218b9de325aeda17b2c931f9748078dcaed80e98a16f87e84fd79aa808"
+      },
+      "candidates/qwen35_chunk_strict_contraction/VALIDATION_SCOPE.json": {
+        "bytes": 1187,
+        "sha256": "bb1ec3ac7f86c122851634512cda450e7ff1214c83a1300cb0c01b2329b71e96"
+      },
+      "candidates/qwen35_chunk_strict_contraction/injected_owner_phase.py": {
+        "bytes": 5518,
+        "sha256": "ff3e3785e5c1c9af5828557296591a07aff8045ad03f48334ad6419338a903c6"
+      },
+      "candidates/qwen35_chunk_strict_contraction/model.py": {
+        "bytes": 6830,
+        "sha256": "89cce2f9706cecd1a4e942d66e8e29ad754f86443276c8cf91aafceedab3ff7b"
+      },
+      "candidates/qwen35_chunk_strict_contraction/real_producer_slice.py": {
+        "bytes": 8363,
+        "sha256": "f9c30815362136301e83660a71647736ab31cab2a1971fe930e945b7da3e51ee"
+      },
+      "candidates/qwen35_chunk_strict_contraction/schedule_probe.py": {
+        "bytes": 3532,
+        "sha256": "09a21ee55c8ab891b04856ab4d642df3da19eea2d878f110daef0a0d47d0dd17"
+      },
+      "candidates/qwen35_chunk_strict_contraction/test_injected_owner_phase.py": {
+        "bytes": 15228,
+        "sha256": "bade3c964efa4a92510884c4dc7d0490e82eed4eab26cf208ed65c0b11dd89ca"
+      },
+      "candidates/qwen35_chunk_strict_contraction/test_model.py": {
+        "bytes": 18493,
+        "sha256": "55e81ca48c138637489b88c35f3542be88634304741eef7216c6d963de659a38"
+      },
+      "candidates/qwen35_chunk_strict_contraction/test_real_chunk_continuation.py": {
+        "bytes": 18775,
+        "sha256": "cb15b29b81944a4056721dc0539c1fd2a4a9af9440fced9cbf909888ba457a2f"
+      },
+      "candidates/qwen35_chunk_strict_contraction/test_real_producer_slice.py": {
+        "bytes": 15782,
+        "sha256": "dac18f0d2bf319334d05f611ec088bb77cce6727546d20f0d5c469455d7f12d4"
+      },
+      "candidates/qwen35_chunk_strict_contraction/test_upstream_coroutine.py": {
+        "bytes": 11142,
+        "sha256": "5e6af774a6d2dc0b050d4e117c59f55a6b687c51ed4de3fe445ed9de4fa84636"
+      },
+      "candidates/qwen35_chunk_strict_contraction/upstream_coroutine.py": {
+        "bytes": 5050,
+        "sha256": "c185687a4f86ef2606dd4d0057f3157016a1c2fa4e09e7ab80b72373a640367c"
+      },
+      "candidates/qwen35_gdn_prefill/chunk/cumsum.py": {
+        "bytes": 3059,
+        "sha256": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f"
+      },
+      "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": {
+        "bytes": 1765,
+        "sha256": "ba6a07f7507b43446c8848fcc33ea3a7dc83739c58a62c760eb88845a8eabf0d"
+      },
+      "candidates/qwen35_gdn_prefill/chunk/model.py": {
+        "bytes": 47272,
+        "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40"
+      },
+      "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+        "bytes": 9363,
+        "sha256": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a"
+      },
+      "candidates/qwen35_gdn_prefill/conv/model.py": {
+        "bytes": 22607,
+        "sha256": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486"
+      },
+      "candidates/qwen35_gdn_prefill/conv/scalar.py": {
+        "bytes": 3168,
+        "sha256": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132"
+      },
+      "candidates/qwen35_gdn_prefill/prep/layout.py": {
+        "bytes": 3797,
+        "sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29"
+      },
+      "candidates/qwen35_gdn_prefill/prep/model.py": {
+        "bytes": 29633,
+        "sha256": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11"
+      },
+      "candidates/qwen35_gdn_prefill/prep/reduction.py": {
+        "bytes": 1185,
+        "sha256": "326a10cea54338e4168b2150f27820d7ca40283e562d6beea6256e77113cbca1"
+      },
+      "candidates/qwen35_gdn_prefill/prep/scalar.py": {
+        "bytes": 3727,
+        "sha256": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1"
+      },
+      "candidates/qwen35_gdn_prefill/prep/test_model.py": {
+        "bytes": 26385,
+        "sha256": "bf0d7123a903b203f79e38d4d07cb0943a481e0454ac4d025013dd18effe1c62"
+      },
+      "candidates/qwen35_gdn_prefill/rms_owner.py": {
+        "bytes": 24408,
+        "sha256": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c"
+      },
+      "candidates/qwen35_gdn_prefill/typed_dense.py": {
+        "bytes": 21132,
+        "sha256": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+      },
+      "candidates/qwen35_strict_fp32_lane/lane_model.py": {
+        "bytes": 7605,
+        "sha256": "13d755388217a621b59f114687a08266a33003ead358a8100cdfb7ce428acd32"
+      }
+    }
+  },
+  "historical_22_test_regression": {
+    "status": "PASS_SOFTWARE_REAL_PREP_TO_QK_BOUNDED_SLICE_ONLY",
+    "tests": 22,
+    "exit_code": 0,
+    "failures": 0,
+    "errors": 0,
+    "unittest_elapsed_seconds": 40.9,
+    "elapsed_seconds": 40.90043282904662,
+    "peak_rss_kib": 87884,
+    "runtime_bounds": {
+      "cpu_affinity": [
+        0
+      ],
+      "rlimit_as": [
+        536870912,
+        536870912
+      ],
+      "rlimit_cpu": [
+        60,
+        60
+      ],
+      "external_wall_timeout_seconds": 60,
+      "OPENBLAS_NUM_THREADS": 1,
+      "OMP_NUM_THREADS": 1,
+      "python_bytecode_writes": false
+    },
+    "modules": [
+      "candidates.qwen35_chunk_strict_contraction.test_model",
+      "candidates.qwen35_chunk_strict_contraction.test_upstream_coroutine",
+      "candidates.qwen35_chunk_strict_contraction.test_injected_owner_phase",
+      "candidates.qwen35_chunk_strict_contraction.test_real_producer_slice"
+    ],
+    "captured_files": 37,
+    "source_hashes_before_after_equal": true,
+    "changed_files": [],
+    "hash_scope": "Same 36 explicitly listed before/after files as independent_final_source_validation plus fraction_reference.py below; not a complete runtime import closure. Separate process, not a combined 23-test run.",
+    "extra_before_after_files": {
+      "candidates/qwen35_strict_fp32_lane/fraction_reference.py": {
+        "bytes": 7487,
+        "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+      }
+    },
+    "evidence": "Independent reviewer reported exact run result, peak RSS and before/after hashes; no reviewer log files created under no-edits constraint",
+    "unittest_summary": "Ran 22 tests in 40.900s\n\nOK"
+  },
+  "static_review": {
+    "result": "No numerical-reference bug or scope overclaim found",
+    "method": "Independent read-only inspection of original compute/solve and new reference; independently derived request/op/byte counts; no runtime evidence"
+  },
+  "hash_scope": "Post-run/current manifest of 30 explicitly listed files, including historical documents and two new continuation files; not a complete imported dependency closure. Independently verified run-time before/after scopes are separately identified as 36 and 37 files.",
+  "files": {
+    "candidates/qwen35_chunk_strict_contraction/real_producer_slice.py": {
+      "bytes": 8363,
+      "sha256": "f9c30815362136301e83660a71647736ab31cab2a1971fe930e945b7da3e51ee"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_real_producer_slice.py": {
+      "bytes": 15782,
+      "sha256": "dac18f0d2bf319334d05f611ec088bb77cce6727546d20f0d5c469455d7f12d4"
+    },
+    "candidates/qwen35_chunk_strict_contraction/REAL_PRODUCER_SLICE.md": {
+      "bytes": 8371,
+      "sha256": "0a778fb351fb2d9da333ff33978757a10240054c036705b7e9189f47da2feb65"
+    },
+    "candidates/qwen35_chunk_strict_contraction/README.md": {
+      "bytes": 16569,
+      "sha256": "8df0b9f421f4da9062f09ed5d3cc91e2f58b4b4884c1211788d0a117bc358ac9"
+    },
+    "candidates/qwen35_chunk_strict_contraction/model.py": {
+      "bytes": 6830,
+      "sha256": "89cce2f9706cecd1a4e942d66e8e29ad754f86443276c8cf91aafceedab3ff7b"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_model.py": {
+      "bytes": 18493,
+      "sha256": "55e81ca48c138637489b88c35f3542be88634304741eef7216c6d963de659a38"
+    },
+    "candidates/qwen35_chunk_strict_contraction/upstream_coroutine.py": {
+      "bytes": 5050,
+      "sha256": "c185687a4f86ef2606dd4d0057f3157016a1c2fa4e09e7ab80b72373a640367c"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_upstream_coroutine.py": {
+      "bytes": 11142,
+      "sha256": "5e6af774a6d2dc0b050d4e117c59f55a6b687c51ed4de3fe445ed9de4fa84636"
+    },
+    "candidates/qwen35_chunk_strict_contraction/injected_owner_phase.py": {
+      "bytes": 5518,
+      "sha256": "ff3e3785e5c1c9af5828557296591a07aff8045ad03f48334ad6419338a903c6"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_injected_owner_phase.py": {
+      "bytes": 15228,
+      "sha256": "bade3c964efa4a92510884c4dc7d0490e82eed4eab26cf208ed65c0b11dd89ca"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/model.py": {
+      "bytes": 47272,
+      "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+      "bytes": 9363,
+      "sha256": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/cumsum.py": {
+      "bytes": 3059,
+      "sha256": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": {
+      "bytes": 1765,
+      "sha256": "ba6a07f7507b43446c8848fcc33ea3a7dc83739c58a62c760eb88845a8eabf0d"
+    },
+    "candidates/qwen35_gdn_prefill/prep/model.py": {
+      "bytes": 29633,
+      "sha256": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11"
+    },
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": {
+      "bytes": 3727,
+      "sha256": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1"
+    },
+    "candidates/qwen35_gdn_prefill/prep/reduction.py": {
+      "bytes": 1185,
+      "sha256": "326a10cea54338e4168b2150f27820d7ca40283e562d6beea6256e77113cbca1"
+    },
+    "candidates/qwen35_gdn_prefill/prep/layout.py": {
+      "bytes": 3797,
+      "sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29"
+    },
+    "candidates/qwen35_gdn_prefill/prep/test_model.py": {
+      "bytes": 26385,
+      "sha256": "bf0d7123a903b203f79e38d4d07cb0943a481e0454ac4d025013dd18effe1c62"
+    },
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": {
+      "bytes": 3168,
+      "sha256": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132"
+    },
+    "candidates/qwen35_gdn_prefill/rms_owner.py": {
+      "bytes": 24408,
+      "sha256": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c"
+    },
+    "candidates/qwen35_gdn_prefill/typed_dense.py": {
+      "bytes": 21132,
+      "sha256": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+    },
+    "candidates/qwen35_strict_fp32_lane/lane_model.py": {
+      "bytes": 7605,
+      "sha256": "13d755388217a621b59f114687a08266a33003ead358a8100cdfb7ce428acd32"
+    },
+    "candidates/qwen35_strict_fp32_lane/fraction_reference.py": {
+      "bytes": 7487,
+      "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": {
+      "bytes": 25923,
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+    },
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": {
+      "bytes": 37079,
+      "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": {
+      "bytes": 13048,
+      "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_real_chunk_continuation.py": {
+      "bytes": 18775,
+      "sha256": "cb15b29b81944a4056721dc0539c1fd2a4a9af9440fced9cbf909888ba457a2f"
+    },
+    "candidates/qwen35_chunk_strict_contraction/REAL_CHUNK_CONTINUATION.md": {
+      "bytes": 8031,
+      "sha256": "4f7ec2428e8f8adfa57e6eca1c614bd30aee67eafced495e89f7e1ef5810bcdc"
+    }
+  },
+  "actual_original_control": [
+    "InputPrepOwner._compute",
+    "TypedInputPrepDriver.tick",
+    "ChunkOwner._compute",
+    "ChunkOwner._solve",
+    "ChunkOwner._binary",
+    "ChunkOwner._matmul",
+    "ChunkOwner._mul_add",
+    "ChunkOwner._read",
+    "ChunkOwner._write",
+    "ChunkOwner._transpose",
+    "ChunkOwner._exp",
+    "ChunkOwner._cumsum_add",
+    "ChunkOwner._advance",
+    "ChunkOwner._finish",
+    "ChunkOwner.tick",
+    "TypedChunkDriver.tick"
+  ],
+  "instance_hook": [
+    "ChunkOwner._op: existing StrictProducerArithmetic"
+  ],
+  "arithmetic_provider": "Existing strict integer-software FP32 Add/Mul, 1..16 lanes; fatal mask30 unchanged",
+  "unchanged_scalar_provider": "Original PrepScalar Div/Sqrt/Softplus/Add/Mul and original ExpNegative",
+  "native_vector_resource": "Noncomputing original Vector16 lease shell; counters zero",
+  "input_provenance": "Distinct synthetic raw Conv/AB BF16 physically written/ACKed/published; actual M128 Prep core; no injected computed tensor",
+  "prep": {
+    "tokens": 128,
+    "active_heads": 1,
+    "zero_written_inactive_heads": 15,
+    "words_independently_compared": 819200,
+    "actual_publication": true
+  },
+  "chunk": {
+    "admitted_tokens": 128,
+    "heads": 1,
+    "key_dim": 128,
+    "value_dim": 128,
+    "cold": true,
+    "chunks_started": 2,
+    "chunks_completed": 1,
+    "chunk0_complete": true,
+    "chunk1_scope": "All producers, UT/QK, both solves and first full 128-output prediction row only",
+    "read_requests": 474881,
+    "write_requests": 20872,
+    "write_acks": 20872,
+    "scratch_ack_bytes": 1319424,
+    "scratch_reserved_bytes": 1679360,
+    "source_read_bytes": 204800,
+    "scratch_read_bytes": 30187584,
+    "output_written_acked_bytes": 16384,
+    "state_out_written_bytes": 0
+  },
+  "numeric_checks": {
+    "initial_cold_state_words": 16384,
+    "chunk0_all_24_matrix_words": 201728,
+    "chunk1_producers_ut_qk_solves_first_pred_row_words": 111744,
+    "chunk0_bf16_output_words": 8192,
+    "strict_intermediate_result_words": 13816128,
+    "strict_mul_lane_operations": 6930432,
+    "strict_add_lane_operations": 6885696,
+    "width1_issues": 4416,
+    "width16_issues": 863232,
+    "exp_negative_calls": 4418,
+    "independent_full_plane_flags_oracle": false
+  },
+  "carry": {
+    "kind": "Internal same-job chunk0 next_state -> chunk1 prediction row0",
+    "actual_previous_state_read_beats": 1024,
+    "actual_previous_state_read_bytes": 65536,
+    "every_previous_state_beat_read_exactly_once": true,
+    "nonzero_expected_state": true,
+    "nonzero_first_prediction_row": true,
+    "external_state_publication": false
+  },
+  "termination": {
+    "status": "Aborted",
+    "drained_request": "First lhs solvek read for chunk1 predict row1",
+    "response_consumed_by_generator": false,
+    "held_terminal": true,
+    "write_bytes": 16384,
+    "staging_complete": false,
+    "hook_detached_after_retirement": true
+  },
+  "unchanged_allocations": {
+    "scratch_suffix_bytes": 359936,
+    "output_suffix_bytes": 16384,
+    "state_out_bytes": 65536
+  },
+  "full_m128_chunk_run": false,
+  "full_block_pass": false,
+  "all_heads": false,
+  "state_carry_full_chunk1": false,
+  "output_or_state_publication": false,
+  "state_commit": false,
+  "generation_advanced": false,
+  "production_source_changed": false,
+  "fatal_mask_changed": false,
+  "native_vector16_executed": false,
+  "rtl_executed": false,
+  "scala_chisel_executed": false,
+  "hardware_cycles": null,
+  "physical_storage_proven": false,
+  "pretrained_accuracy": false,
+  "historical_receipts_preserved": [
+    "VALIDATION_SCOPE.json",
+    "SCHEDULE_VALIDATION_SCOPE.json",
+    "UPSTREAM_COROUTINE_VALIDATION_SCOPE.json",
+    "INJECTED_OWNER_VALIDATION_SCOPE.json",
+    "REAL_PRODUCER_VALIDATION_SCOPE.json"
+  ]
+}

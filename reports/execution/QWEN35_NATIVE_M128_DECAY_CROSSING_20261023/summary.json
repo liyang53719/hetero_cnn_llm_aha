@@ -1,0 +1,300 @@
+{
+  "attempt_count": 1,
+  "base_commit": "ee15adc016e83b00e628445507da97d7e579638f",
+  "bounds": {
+    "address_space_bytes": 536870912,
+    "automatic_build": false,
+    "compile_processes": 0,
+    "core_dump_limit_bytes": 0,
+    "cpu_affinity_count": 1,
+    "cpu_limit_seconds": 110,
+    "file_size_limit_bytes": 2097152,
+    "git_show_timeout_seconds": 10,
+    "other_requested_subprocesses_and_network_forbidden": true,
+    "outer_kill_after_seconds": 2,
+    "outer_timeout_seconds": 120,
+    "payload_alarm_seconds": 115,
+    "source_identity_git_show_allowlist_size": 1,
+    "source_identity_git_show_invocations": 2,
+    "supervision": "GNU timeout plus same-process resource limits and Python audit; not an owned-group supervisor or arbitrary native sandbox proof"
+  },
+  "comparison": {
+    "active_head0_prep_words": 49408,
+    "all_arithmetic_intermediates_compared": false,
+    "chunk_reference": "NumPy full-plane ascending K; Mul and Add round separately; independent retained/remainder BF16 rounding",
+    "complete_independent_flags_oracle": false,
+    "decay_reference": "Independent literal-constant split-ln2 P7 Fraction/integer-RNE recipe; no candidate evaluator call",
+    "final_state_fp32_words": 16384,
+    "inactive_format_zero_words": 769792,
+    "output_bf16_words": 16384,
+    "prep_fp32_words_including_padding": 819200,
+    "prep_reference": "Existing independent Fraction/RNE approximation recipe",
+    "recipe_fidelity_not_mathematical_exp_acceptance": true,
+    "scratch_fp32_words": 403456,
+    "scratch_matrices": 48
+  },
+  "date_utc": "2026-10-23",
+  "execution": {
+    "complete_block": false,
+    "elapsed_seconds": 36.06459264102159,
+    "errors": 0,
+    "exit_code": 0,
+    "failures": 0,
+    "hardware_simulation": false,
+    "peak_rss_kib": 70340,
+    "pinned_files": 1688,
+    "pre_post_hashes_match": true,
+    "skips": 0,
+    "source_identity_git_shows": 2,
+    "tests": 1,
+    "unittest_seconds": 35.92
+  },
+  "exit_code_evidence": "Root-observed bounded process exit",
+  "exp": {
+    "calls": 4418,
+    "cross80_roles": {
+      "chunk_decay": 2,
+      "cumulative": 124,
+      "pairwise": 124,
+      "remaining": 2
+    },
+    "input_roles": {
+      "chunk_decay": 2,
+      "cumulative": 128,
+      "pairwise": 4160,
+      "remaining": 128
+    },
+    "inputs_abs_ge_80": 252,
+    "internal_operation_counts": {
+      "add": 39762,
+      "integer_rne": 4418,
+      "mul": 53016
+    },
+    "internal_primitive_words_traced": false,
+    "max_abs_input_word": 1117915816,
+    "saturated_abs_ge_80": 0,
+    "scalar_calls": {
+      "exp_negative_ieee_rne": 4418
+    },
+    "scalar_subnormal_output_branch_exercised": false,
+    "subnormal_outputs": 0,
+    "zero_outputs": 0
+  },
+  "fixture": {
+    "a_log": 0,
+    "b": 0,
+    "chunks": 2,
+    "dt_bias": 0,
+    "first_cumulative_crossing_row": 2,
+    "heads": 1,
+    "individual_g_all_in_open_minus80_to_zero": true,
+    "input": "Synthetic raw Conv/AB boundary; not executed convolution or official weights",
+    "key_dim": 128,
+    "per_chunk_a": "row1=40, row2=41, other rows=-8",
+    "q_k": "Each chunk row r is one-hot e[r]",
+    "tokens": 128,
+    "tokens_per_chunk": 64,
+    "v": "Chunk0 row r is e[r]; chunk1 is all zero",
+    "value_dim": 128
+  },
+  "full_block_executed": false,
+  "hardware_cycles": null,
+  "implementation": {
+    "arithmetic": "Ascending K, separate FP32 RNE Mul then Add; no FMA",
+    "arithmetic_or_compute_hooks": false,
+    "cumsum_policy": "legacy_ascending_fp32",
+    "enable_ieee_exp": true,
+    "enable_softplus": true,
+    "exp_policy": "EQUAL_HEADS_EXPERIMENTAL_EXP",
+    "fatal_mask": 28,
+    "host_batch": true,
+    "legacy_defaults_changed": false,
+    "matmul_policy": "row1_streaming",
+    "matrix_arithmetic_executed": false,
+    "original_native_bindings": true,
+    "original_prep_and_chunk_callables": true,
+    "production_code_changed": false,
+    "reference_bytes_in_actual_memory": false,
+    "scalar_implementation": "exact DecayScalar",
+    "shared_scalar_instances": 1,
+    "vector_backend": "finite_mul_tininess_r2",
+    "vector_exception_policy": "ieee_rne_finite_gradual_underflow"
+  },
+  "legacy_reference_counterfactual": {
+    "carried_only_bf16_output_signal_survives_rounding": true,
+    "carried_only_rows_2_through_63_candidate_positive_legacy_zero": 62,
+    "chunk1_output_fp32_changed_words": 64,
+    "final_state_fp32_changed_words": 62,
+    "scope": "LEGACY_REFERENCE_COUNTERFACTUAL_NOT_ACTUAL_OWNER_RUN"
+  },
+  "limitations": [
+    "One head, synthetic raw inputs, and cold M128 only; not all heads or official complete-block numerical acceptance.",
+    "No FullBlockCoordinator numerical execution or joint publication/commit; no Chisel/HardFloat/RTL execution.",
+    "Scalar exp outputs here are all normal; Scalar subnormal-output branch is not covered.",
+    "Legacy comparison is an independent reference counterfactual, not an actual legacy job.",
+    "Only one selected native 16-lane Mul has independent per-lane flags checks; aggregate flag3=4 counts logical issues.",
+    "The interpreter hash is post-run evidence only, not a pre/post manifest pin.",
+    "Four authority files are separately checked by original source_identity at admission/terminal, not by the 1688-file manifest.",
+    "No complete Python/NumPy/native dependency closure or hostile-interpreter/native sandbox guarantee."
+  ],
+  "mac_utilization": null,
+  "mathematical_diagnostic": {
+    "actual_scalar_exp_returns_all_captured": false,
+    "call_weighted_ulp_histogram": {
+      "0": 4296,
+      "1": 122
+    },
+    "calls": 4418,
+    "comparison_subject": "independent P7 recipe words versus Decimal reference",
+    "decimal_precision_stable": true,
+    "distinct_input_ulp_histogram": {
+      "0": 180,
+      "1": 10
+    },
+    "distinct_inputs": 190,
+    "global_correct_rounding_claim": false,
+    "numerical_acceptance": null,
+    "observed_maximum_ulp_distance": 1,
+    "oracle": "Decimal.exp at 100/180 digits plus exact Fraction/integer FP32 RNE",
+    "precision_stability_is_not_interval_proof": true,
+    "scope": "Synthetic derived exp inputs only",
+    "thresholds": null
+  },
+  "native": {
+    "aggregate_exception_flag_issue_counts": {
+      "0": 1326214,
+      "1": 1206,
+      "3": 4
+    },
+    "aggregate_flag3_issue_count_is_not_lane_count": true,
+    "host_calls": {
+      "mul_add": 654336,
+      "single": 18752
+    },
+    "lane_operation_counts_not_full_numeric_comparisons": true,
+    "lane_operations": {
+      "add": 10572096,
+      "mul": 10600448
+    },
+    "logical_add_issues": 664896,
+    "logical_mul_issues": 662528,
+    "selected_underflow": {
+      "accepted_source": "Actual chunk0 next_state first beat",
+      "active_lanes": 16,
+      "aggregate_exception_flags": 3,
+      "all_16_lane_flags_checked": true,
+      "column": 0,
+      "complete_flags_oracle": false,
+      "generated_destination": "chunk1 decay_state first beat",
+      "lane0_exact_product_positive_rounded_positive_zero": true,
+      "lane0_exception_flags": 3,
+      "operands_and_rounded_results_fraction_checked": true,
+      "operation": "mul",
+      "other_15_lane_exception_flags_zero": true,
+      "phase": "chunk1 state_decay",
+      "row": 0,
+      "snapshot": "After accepted READ response runs exactly one native Mul, before generated WRITE acceptance"
+    }
+  },
+  "new_numerical_thresholds": false,
+  "numerical_acceptance": null,
+  "observed_exit_code": 0,
+  "official_weights": false,
+  "privacy": {
+    "private_paths_included": false,
+    "raw_arrays_included": false,
+    "raw_logs_included": false,
+    "weights_or_checkpoint_included": false
+  },
+  "provenance": {
+    "artifacts_sha256": {
+      "pins.json": "bc0520a06d398cc8335d7deb972480906b0d84e7dbacc94d5abb1c4726e01fdc",
+      "result.json": "4dbcd4bab9b8dee912c3b0dbf5531f0092cc118496b5bf39827ada3777669a5a",
+      "run.log": "4acbb165592e177b653d4fa3ddb3b032221d2410d326d35f106044d37af9f88b",
+      "runner.py": "54636e6df54370c483bc1972b44f42c72102ae407965db1ed1cad43427069368"
+    },
+    "existing_native_library_sha256": "b04209e85923fc858092ec6019e6b183cdc92a0afabed75cbf63179a83302bd2",
+    "full_python_numpy_native_dependency_closure": false,
+    "interpreter": {
+      "explicit_exact_interpreter_path_launched": true,
+      "in_pre_post_manifest": false,
+      "post_run_verification_time_utc": "2026-10-23T15:52:50Z",
+      "pre_post_identity_claim": false,
+      "sha256_post_run_only": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "manifest_pinned_files": 1688,
+    "manifest_pre_post_hashes_match": true,
+    "manifest_scope": "Primarily candidate files plus selected launcher/native/git/compiler evidence; not a full dependency closure",
+    "original_chunk_admission_and_terminal_authorities_not_manifest_entries": {
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+      "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18",
+      "integration/gemmini/EmitHeteroFP32Alu.scala": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+    },
+    "original_prep_committed_blob_check": {
+      "fixed_readonly_git_show_count": 2,
+      "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+      "source": "HEAD:chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala",
+      "working_tree_is_not_committed_blob": true
+    },
+    "selected_manifest_source_pins": {
+      "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+      "candidates/qwen2_resident_matrix/transposed_down/model.py": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412",
+      "candidates/qwen35_35b_exp/scalar.py": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5",
+      "candidates/qwen35_chunk_strict_contraction/decay_crossing_reference.py": "3690bf69039061f69389ba4a2d1fa56b1ea7d2bf0f5ba25b68cd8cdf68d6bca5",
+      "candidates/qwen35_chunk_strict_contraction/real_producer_slice.py": "f9c30815362136301e83660a71647736ab31cab2a1971fe930e945b7da3e51ee",
+      "candidates/qwen35_chunk_strict_contraction/test_native_m128_decay_crossing.py": "6f4f3e1ab9ffab31108dd1bc0c98a7e26cc7b488d6a0be8dc157318c4a516053",
+      "candidates/qwen35_chunk_strict_contraction/test_native_m128_single_head.py": "8e7c3c3f2c7ff6e712c102733b2ecc327aaaf9c6ffde45cbd7044921dd1781b4",
+      "candidates/qwen35_chunk_strict_contraction/test_real_chunk_continuation.py": "cb15b29b81944a4056721dc0539c1fd2a4a9af9440fced9cbf909888ba457a2f",
+      "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": "a8c5ae8b13b6e7f8ce9699ddaeca855e118101807c20e4aa2ddc132c71e347db",
+      "candidates/qwen35_gdn_prefill/chunk/model.py": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40",
+      "candidates/qwen35_gdn_prefill/chunk/vector.py": "d8a7ce5456507d5f29423434aa3d985b4ccff50744f832f5b06b7cfebb81c533",
+      "candidates/qwen35_gdn_prefill/conv/scalar.py": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132",
+      "candidates/qwen35_gdn_prefill/prep/layout.py": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+      "candidates/qwen35_gdn_prefill/prep/model.py": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11",
+      "candidates/qwen35_gdn_prefill/prep/reduction.py": "326a10cea54338e4168b2150f27820d7ca40283e562d6beea6256e77113cbca1",
+      "candidates/qwen35_gdn_prefill/prep/scalar.py": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1",
+      "candidates/qwen35_gdn_prefill/prep/test_model.py": "bf0d7123a903b203f79e38d4d07cb0943a481e0454ac4d025013dd18effe1c62",
+      "candidates/qwen35_gdn_prefill/rms_owner.py": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c",
+      "candidates/qwen35_gdn_prefill/typed_dense.py": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391",
+      "candidates/qwen35_uf_predicate_r2/vector16_tininess.cpp": "a54c125ba27357123c5edb1ec4ff0dad0e883f3dd47b66852d7e2f56fdceeec7"
+    }
+  },
+  "rtl_executed": false,
+  "schema": "qwen35_native_m128_decay_crossing_public_v1",
+  "scope": "Actual unchanged Prep M128 followed by two actual Chunk64 stages with one shared Scalar and native R2 Vector16; not FullBlockCoordinator numerical execution.",
+  "status": "PASS_SINGLE_HEAD_SYNTHETIC_NATIVE_M128_CROSS80_STAGING_ONLY",
+  "terminal": {
+    "generation_advanced": false,
+    "history_committed": false,
+    "output_bytes": 32768,
+    "output_published": false,
+    "owner_results": 1,
+    "scratch_published": false,
+    "staging_complete": true,
+    "state_bytes": 65536,
+    "state_committed": false,
+    "state_published": false,
+    "status": null,
+    "write_bytes": 98304
+  },
+  "torch_executed": false,
+  "transport": {
+    "carried_state_read_beats": 132096,
+    "chunks_completed": 2,
+    "chunks_started": 2,
+    "cumsum_add_issues": 128,
+    "cumsum_terms": 128,
+    "final_output_ack_backpressure_each_chunk": true,
+    "final_state_ack_backpressure": true,
+    "final_state_staging_read_beats": 1024,
+    "held_terminal_checked": true,
+    "memory_responses": 751936,
+    "owner_results": 1,
+    "read_requests": 724160,
+    "scratch_ack_bytes": 1679360,
+    "upper_triangle_masked": 4032,
+    "write_acks": 27776,
+    "write_requests": 27776
+  }
+}

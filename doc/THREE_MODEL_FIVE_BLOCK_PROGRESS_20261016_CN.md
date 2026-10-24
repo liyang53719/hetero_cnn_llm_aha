@@ -2101,3 +2101,44 @@ reports/execution/QWEN35_FULL_DRIVER_EXP_POLICY_20261023/summary.json；公开�
 无新周期或MAC利用率实测。真实producer、全head、双chunk与完整block实验策略数值仍待
 单独审查，不能从本控制PASS自动升级或重跑长任务。中文计划随小批更新，尚未提交或发布；
 远端发布待确认，无清理，最终真实完整RTL及80%/90%目标不变。
+
+
+## PASS（单 head native M128 累积衰减跨 80 软件 staging）/ UNKNOWN（完整 block/官方数值/RTL）：2026-10-23
+
+- done：一个共享 exact DecayScalar（Softplus/IEEE exp 均显式开启）接原 Prep 的真实
+  128-token 输出，再接原 ChunkOwner 的两个连续 chunk64；R2 Vector16、IEEE28、
+  host_batch、row1/ascending K 的分离 Mul/Add，无 arithmetic/compute/native hook。
+  旧 exp/fatal30 默认、生产代码和全部历史证据不改，不以 M1 或逐 token 循环冒充。
+- 合成 Q=K 为每 chunk 的 one-hot 行；chunk0 V 同形、chunk1 V 全零。每 chunk 的
+  A[1]=40、A[2]=41、其余 -8，A_log/bias/B=0，独立 g 均在 (-80,0]。实际 4418 次
+  exp 中 252 次累计/差分输入跨 80，零输出、subnormal 输出、旧截断均为 0；本批不
+  覆盖 Scalar subnormal-output 分支。chunk1 的 62 个 carry-only 输出保留到 BF16，
+  独立 legacy 反事实参考这些位置为零；没有实际执行 legacy owner。
+- 独立 Fraction/RNE Prep 819200 格式 words、48 scratch 矩阵 403456 FP32 words、
+  16384 BF16 输出和 16384 state words 全部匹配。新 P7 参考不调用候选 evaluator；
+  Decimal100/180 数学诊断为 190 个不同派生输入，最大观察误差 1 ULP，阈值及
+  numerical_acceptance 仍为 null，不是官方数值或全域正确舍入验收。诊断比较独立 P7
+  配方 words 与 Decimal，并未直接捕获全部实际 Scalar exp 返回。
+- 实际 native 21172544 lane 操作只是计数。聚合 flags=3 共 4 个逻辑 issue，非四 lane
+  或全 flags oracle；选定 chunk1 state_decay 的一个 16-lane 真 Mul 直接捕获原缓冲，
+  读源绑定 chunk0 next_state，Fraction/RNE 核验其 lane0 正非零精确积舍入 +0/UF|NX，
+  其他 15 lane flags=0。无 native 算术改写。
+- 原实际调度完成 724160 读、27776 写及 ACK、132096 carry 读 beat、1024 最终 staging
+  读 beat。98304B 输出/state 全部 ACK，两个 chunk 完成、成功回执退休一次；各最后
+  ACK 和 held terminal 背压通过。Chunk scratch/output/state 均未发布，无 joint block
+  commit 或 generation 推进，Prep 中间发布不等于完整 block 发布。
+- 根唯一 bounded run exit0：1 测试、0 skip/failure/error，35.920 秒 unittest、
+  36.064592641 秒 payload、70340 KiB peak RSS；1CPU/512MiB/110CPU/115alarm，
+  外层 GNU timeout120 秒+2 秒 KILL，复用已有 ELF，无编译/下载/权重/Torch/RTL。
+- 身份边界明确分列：1688 项 manifest pre/post hash 不变；四个非 manifest 权威文件由
+  原 Chunk source_identity 在 admission/terminal 核验；原 Prep 两次固定 git show
+  读取 committed HEAD blob，不冒充工作树。解释器未纳入该 manifest，仅使用明确路径
+  启动并于 15:52:50 UTC 后验 SHA 核验，不能追称 pre/post interpreter pin，也不宣称
+  完整 Python/NumPy/native 依赖闭包或任意 native 沙箱。旧 pins 原样保留。
+- ongoing/todo：全 head/完整官方 block 数值、实际资源/调度与 joint publication，及
+  Chisel opcode/FSM/异常策略绑定和完整 RTL/周期利用率仍需独立门；没有自动重跑长任务。
+  五完整 RTL 仍 0/5，旧 Qwen2 M128 UNKNOWN，最终 80%/90% 目标不变。尚未提交/发布。
+
+详细记录：doc/QWEN35_NATIVE_M128_DECAY_CROSSING_20261023_CN.md；安全摘要：
+reports/execution/QWEN35_NATIVE_M128_DECAY_CROSSING_20261023/summary.json。
+公开不含私有路径、原始数组、raw log 或权重，本批不修改历史 receipt。

@@ -1,0 +1,81 @@
+{
+  "schema": "QWEN35_STATE_TRANSFER_TEST_SCOPE_V1",
+  "status": "PASS_SOURCE_AND_PYTHON_STATE_TRANSFER_MODEL_ONLY",
+  "source_manifest": {
+    "bytes": 1505,
+    "sha256": "9f0bf9b848a7fe5db706f395f574652fba5aa10e1e56d43522f599779c1fcd7e"
+  },
+  "owner_source": {
+    "bytes": 9636,
+    "sha256": "8b75a469a1f43a215029034fcae5b90295d804a7355a1f741b5d28792ce1a7e8"
+  },
+  "actual_review": {
+    "bytes": 6143,
+    "sha256": "ef65cf5052b2846931ca962b6c7077867f719b8e4f1561e0a89a59f7c3a6dcf9"
+  },
+  "execution_evidence_pins": {
+    "RESULT.json": {
+      "bytes": 579,
+      "sha256": "a0f2667070af164ee87e4c2636af5ceca46d0e4d6656b7e3885162871bb36bc6"
+    },
+    "stdout.log": {
+      "bytes": 1587,
+      "sha256": "7e3451d1e71e00449af1fff9b242efb9e40b86bf88d87581b8fb025f3ab18187"
+    },
+    "stderr.log": {
+      "bytes": 2192,
+      "sha256": "5a9d90b983b78e717a05b9d46effedddec526669b1aae5568cb7016eda0930ee"
+    }
+  },
+  "result": {
+    "exit_code": 0,
+    "outer_seconds": 0.6620249249972403,
+    "internal_seconds": 0.579626,
+    "unittest_method_groups": 16,
+    "source_literal_groups": 5,
+    "python_model_groups": 11,
+    "full_synthetic_paths": 12,
+    "beats_per_path": 1024,
+    "input_content_pins_before_after": 17,
+    "source_package_files": 7,
+    "external_source_witness_files": 11,
+    "reported_rss_peak": null
+  },
+  "scope_cn": [
+    "新增独立私有状态搬运owner源码；本轮只执行对应Python事件模型及源码字面量检查，未执行Chisel。",
+    "12条完整合成路径为M16/M128 × head0/15 × cold零填/warm拷入/final拷出，每条1024个成功写ACK模型事件；不是实际硬件ACK或真实状态搬运。",
+    "读写位模式、独立fire、背压、末拍ACK、错误/失败锁定、五完整span/十对别名与generation/receipt字段检查通过。",
+    "MemoryResponse只有data/tag/error，没有nbytes；不能据固定512位响应声称已检测外部实际返回字节数。",
+    "失败可能留下私有部分写入，不回滚、不发布；恢复仍需原transport联合排空/复位。receipt真实来源和源/根稳定仍是未来scheduler集成义务。",
+    "原SOURCE_MANIFEST的tests_executed=false为执行前冻结事实，保持原字节不重写；本独立TEST_SCOPE记录后来的一次有限Python测试。",
+    "10秒timeout精确记录；1CPU/256MiB为执行提案，原小结果未记录affinity/RLIMIT或RSS，不能据此声称实测峰值。"
+  ],
+  "not_qualified": [
+    "Scala编译或elaboration",
+    "真实RTL/AXI/iDMA仿真",
+    "真实硬件ACK或状态搬运",
+    "浮点/GDN数值正确性",
+    "root发布/Host接线",
+    "完整chunk64/prefill/M128模型",
+    "RTL或利用率验收"
+  ],
+  "unchanged_status": {
+    "qwen2_full_execution_and_cleanup": "UNKNOWN",
+    "five_rtl_acceptance_passed": 0,
+    "five_rtl_acceptance_total": 5
+  },
+  "reproduce_pure_source_model_only": {
+    "command": [
+      "TARGET_CPYTHON_3_12_14",
+      "-I",
+      "-S",
+      "-B",
+      "tests.py",
+      "--base",
+      "FIXED_REPOSITORY_ROOT",
+      "--contract",
+      "PINNED_CHUNK_CONTRACT_PACKAGE_ROOT"
+    ],
+    "requires": "Exact original seven source files and eleven pinned source witnesses; the existing repository contract folder can supply the two contract source witnesses if their byte pins match. No tool download or binary copy required."
+  }
+}

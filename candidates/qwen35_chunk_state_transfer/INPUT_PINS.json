@@ -1,0 +1,73 @@
+{
+  "files": {
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala": {
+      "bytes": 4004,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockAxiAdapter.scala",
+      "role": "base",
+      "sha256": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": {
+      "bytes": 13275,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala",
+      "role": "base",
+      "sha256": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala": {
+      "bytes": 1760,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala",
+      "role": "base",
+      "sha256": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+      "bytes": 88647,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala",
+      "role": "base",
+      "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "bytes": 20853,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala",
+      "role": "base",
+      "sha256": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": {
+      "bytes": 3123,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "role": "base",
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+      "bytes": 32821,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "role": "base",
+      "sha256": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala": {
+      "bytes": 9243,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedIdma.scala",
+      "role": "base",
+      "sha256": "b7e424bca21cecc561045a707b62ee24a7cc7a0314cf8d218ce8e64bb24f29ee"
+    },
+    "base/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedMemoryArbiter.scala": {
+      "bytes": 3104,
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/SharedMemoryArbiter.scala",
+      "role": "base",
+      "sha256": "6814e2f80890dbd5f5e8711eade58857deb690ab3c4c0fe9d5ea4ee8291ed6c6"
+    },
+    "contract/source/GdnChunkAddressPlan.scala": {
+      "bytes": 9520,
+      "path": "source/GdnChunkAddressPlan.scala",
+      "role": "contract",
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943"
+    },
+    "contract/source/GdnChunkProtocol.scala": {
+      "bytes": 3170,
+      "path": "source/GdnChunkProtocol.scala",
+      "role": "contract",
+      "sha256": "59e525e049114a447f6a82672b06fac29eb0ef8a580a5f5f0c27c75396e28fcf"
+    }
+  },
+  "fixed_remote_commit": "adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "schema": "QWEN35_PRIVATE_STATE_TRANSFER_INPUTS_V1",
+  "scope": "11 small source witnesses; four Scala source files including new owner are the future compile source closure, not a toolchain closure"
+}

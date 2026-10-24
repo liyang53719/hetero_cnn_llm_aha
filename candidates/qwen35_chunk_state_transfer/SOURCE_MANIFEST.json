@@ -1,0 +1,48 @@
+{
+  "execution_authorized": false,
+  "files": {
+    "INPUT_PINS.json": {
+      "bytes": 3758,
+      "sha256": "a821ff8099f29c0ba59174627c45868a0e94a2aaf425c16fb33421bdf04c2bc9"
+    },
+    "INTERFACE_PROPOSAL.md": {
+      "bytes": 6017,
+      "sha256": "3a7de90c11d5a537f964dae452a14fe8f5b4615c4b69cc8e02b2e19930c519a8"
+    },
+    "README.md": {
+      "bytes": 3393,
+      "sha256": "ea4592ccc98cdfb324420d0df25c94a1af4555db3a5987d4d222f0da0775ee08"
+    },
+    "source/GdnChunkStateTransferOwner.scala": {
+      "bytes": 9636,
+      "sha256": "8b75a469a1f43a215029034fcae5b90295d804a7355a1f741b5d28792ce1a7e8"
+    },
+    "tests.py": {
+      "bytes": 42105,
+      "sha256": "ac4c829493af6857377772488625b7854fa48814c7c16628056762fc18e0cb9f"
+    },
+    "transfer_model.py": {
+      "bytes": 14292,
+      "sha256": "1d158518a31f667e6c82b782ad69b91147c7920e2978bb75fbb29e67a85b6e29"
+    }
+  },
+  "full_chunk_implemented": false,
+  "full_python_transfer_paths": 12,
+  "input_bytes": 189520,
+  "input_pin_count": 11,
+  "publication_authority": false,
+  "rtl_generated": false,
+  "scala_compiled": false,
+  "schema": "QWEN35_PRIVATE_STATE_TRANSFER_SOURCE_V1",
+  "scope": "NEW_PRIVATE_MEMORY_CONTROL_SOURCE_AND_PYTHON_MODEL_TEST_PROPOSAL_ONLY",
+  "test_limits_proposal": {
+    "address_space_bytes": 268435456,
+    "cpu_count": 1,
+    "memory_bytes": 268435456,
+    "owned_output_bytes": 4194304,
+    "single_log_bytes": 1048576,
+    "wall_seconds": 10
+  },
+  "test_method_groups": 16,
+  "tests_executed": false
+}

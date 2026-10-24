@@ -1748,3 +1748,12 @@ PASS只限SCALA_COMPILE_ONLY，未执行AddressPlan方法、Bundle/Module构造�
 通过范围为Scala地址/容量/边界/阶段字节义务，不是实际ACK、数值、prefill、RTL或利用率。Qwen2先前full仍执行/清理UNKNOWN，五RTL仍0/5。
 
 公开9件173615B位于 candidates/qwen35_chunk_scala_behavior/；manifest SHA256 9070ef26c09376c92bfa08017bfaeeb55c9c2f4d5bad7720d623a05a23700600。含原测试源码/runner摘录及复现模板、相对pins，排除机器plan/日志/class，非完整开箱closure。未push，无新增CI，无临时数据清理。
+
+
+## PASS（仅 Python 对应模型/源码控制）：chunk 私有状态搬运 owner
+
+新增独立 GdnChunkStateTransferOwner.scala，使用原512bit固定64B MemoryRequest/Response，单outstanding；仅每head的cold零填initial、warm复制stateIn、末chunk私有next_state搬出stateOut。每条1024拍，成功write ACK后推进；失败可能留下部分私有写入但不发布，held终态冻结后锁定，恢复需transport联合排空/复位。原Response只有data/tag/error、无nbytes，不虚构响应长度检查。公共M1/recurrent/Host根fence未改，无额外Vector算术资源。
+
+16组纯Python对应模型/源码控制一次自然0，12条合成完整1024拍路径，17内容pins前后同；外0.662024925秒、内0.579626秒。不是Chisel实际ACK/数值/RTL验证；没有AS/CPU/affinity或RSS实测收据，不宣称资源峰值。owner Scala编译仍TEMP待验证。独审COLD_REVIEW SHA256 ef65cf5052b2846931ca962b6c7077867f719b8e4f1561e0a89a59f7c3a6dcf9。
+
+公开8件84075B在 candidates/qwen35_chunk_state_transfer/，原7源manifest SHA256 9f0bf9b848a7fe5db706f395f574652fba5aa10e1e56d43522f599779c1fcd7e，单列TEST_SCOPE SHA256 4ffc537aa0fc227332f6328f0b6a04858bf8f26487f276c09daca5a7d4e67ba9。Qwen2 full仍UNKNOWN，五RTL0/5，无新的MAC利用率测量；未push、无新CI、无清理。

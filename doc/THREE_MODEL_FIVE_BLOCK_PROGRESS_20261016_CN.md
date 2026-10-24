@@ -2020,3 +2020,10 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 新增 opt-in 单测试，无 `_compute`/`_op`/`_mul_add` 或 native 函数替换。合成 raw Conv/AB 参数经原 Prep 实际计算128 token并发布，再以真实R2 Vector16、host_batch=True、fatal30运行原ChunkOwner的head0/chunk0 producer及完整UT/QK；原scalar/exp不改。819200 Prep words对照现有Fraction/RNE近似配方，其中49408活动字段、769792格式零填充；87040 producer words与8192UT/QK输出对照独立NumPy/exp配方，不是官方PyTorch精度或全中间值/flags验收。实际65536 native batch+5280 single，非硬件周期。
 
 R1首次runner错误禁止原Prep来源验证所需git show，0.200秒error发生于admission前，证据保留，不算数值失败/PASS。R2只放行两次完全固定argv/cwd、固定git哈希的只读源码读取，原10秒timeout不改；1CPU/512MiB/50CPU/55alarm、GNU timeout60秒+2秒KILL，1684文件前后hash一致。根实际1测试5.427秒/5.551884267秒payload、0skip/error/failure、exit0，无编译或RTL。最终QK ACK后接受首个solve_v读，原abort/drain退出Aborted，chunks_started1/completed0，output/state未写、scratch/output/state未发布，无generation commit。五完整RTL仍0/5、Qwen2旧M128UNKNOWN、无新MAC利用率。仅本地小批，远端发布待确认，无清理。
+
+
+## PASS（单 head 完整 M128 native GDN 软件 staging）/ INCOMPLETE（完整 block/RTL）：2026-10-23
+
+原Prep实际128-token输出接原ChunkOwner完整两个chunk64，R2 Vector16 host_batch真实运行，无_compute/_op/_mul_add/native替换，fatal30和scalar/exp不改。两chunk真实state carry、48scratch矩阵403456 FP32 words、16384 BF16输出及16384最终state words与独立分离舍入参考一致。Prep819200格式words包含49408活动字段及769792零填充；参考仍为现有近似配方，不是官方模型精度。native654336batch+18752single，21172544 lane操作只是计数，不冒充全中间值/flags比较。
+
+根实际1测试34.988秒/35.106447783秒payload、0skip/error/failure、exit0。1CPU/512MiB/110CPU/115alarm，GNU timeout120秒+2秒KILL；仅两次固定只读Git来源读取，1685文件前后hash一致，无编译/下载。724160读、27776写ACK，132096前state读beat及1024最终state staging读；98304B输出/state完整ACK，两个chunk完成、成功staging回执退休一次。末ACK背压及资源持有已核；scratch/output/state仍未发布，block commit/generation不变。cold单head合成raw输入，不是全head/完整block/RTL或MAC利用率验收。五完整RTL仍0/5、Qwen2旧M128UNKNOWN；仅本地小批，远端发布待确认，无清理。

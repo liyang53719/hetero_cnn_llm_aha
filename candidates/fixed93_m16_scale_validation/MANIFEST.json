@@ -1,0 +1,83 @@
+{
+  "M128_authorized": false,
+  "actual_execution_authorized": false,
+  "exact_frozen_source_files": [
+    "success_driver.py",
+    "parent/seal_check.py",
+    "tests.py"
+  ],
+  "files": {
+    "README.md": {
+      "bytes": 3195,
+      "sha256": "3653f9fc8a279c94f6e2bc732a7e1c58eb0d5703b1277e0d0dd22ad07d7273a7"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 728,
+      "sha256": "c593a39668af8d8d8d26c0c8515648071de58dbf940a9cfe050b2a870b350fea"
+    },
+    "SUMMARY.json": {
+      "bytes": 4777,
+      "sha256": "e00acc4ede2cf1591c576bc0e8e5b20ddad8d00628d55420bb24d098ebf53e75"
+    },
+    "SUMMARY.md": {
+      "bytes": 3887,
+      "sha256": "8b5ed18d2ab698afa4f234f604df1dec95c02404134c36e82d40b5f389890872"
+    },
+    "check_portable.py": {
+      "bytes": 4813,
+      "sha256": "58309bc8959f3fa602ed9c67ae5de6d1116e3efd63e1eadb6fb23908a5deca37"
+    },
+    "parent/seal_check.py": {
+      "bytes": 27264,
+      "sha256": "3dd4b5c91739dfd89058bd08530c6063202a47b27ff5b1463ea1057a6e67bbb5"
+    },
+    "success_driver.py": {
+      "bytes": 14094,
+      "sha256": "b97a7e1c984ef0a7e14ade4f95156ce7f4236d7d009c579d3fec5a34d2a6f67f"
+    },
+    "tests.py": {
+      "bytes": 17956,
+      "sha256": "3323831ba5f94972050911967c71b5faf8e8e53309d60e28b3492442df2fe514"
+    }
+  },
+  "fullblock_authorized": false,
+  "omitted": [
+    "original machine-specific source manifest and budget",
+    "execution grants, leases and read routes",
+    "runtime and native dependencies",
+    "inputs, references and output arrays",
+    "sealed streams, payloads and actual transport",
+    "raw logs",
+    "original review and cold evidence receipts",
+    "remaining source dependency closure"
+  ],
+  "original_provenance": {
+    "independent_actual_review": {
+      "bytes": 38944,
+      "sha256": "36f6730a381a612833cfb0163e4ab5ff438d946a4a3a63024baf90bc51ffe30a"
+    },
+    "non_target313_cold_seal": {
+      "bytes": 2100,
+      "sha256": "e0ec06c4a29a229319e80bb4fdbf15abcb695da421305e9dab0e7db5113281bc"
+    },
+    "source_manifest": {
+      "bytes": 5124,
+      "sha256": "c9905f0bc845b7de80b4bb2a88d8bcd9ba8aac8b8e0b54cf367ec63905c00742"
+    },
+    "target312_cold_seal": {
+      "bytes": 2243,
+      "sha256": "15719434c826f9a9a70b39d8aeb48b3379d246071c6fa7e944256904ac74cfd6"
+    },
+    "target312_source_cold_review": {
+      "bytes": 39604,
+      "sha256": "a90a0b533067f5ce93bfdd5ac95079681669178bf0b1a6cd5c586da42c4f9207"
+    }
+  },
+  "original_provenance_files_included": false,
+  "prior_execution_authority_inherited": false,
+  "publication_authorized": false,
+  "schema": "single-m16-scale-portable-excerpt-v1",
+  "scope": "EXACT THREE-FILE SOURCE EXCERPT AND SANITIZED HISTORICAL M16 SUMMARY ONLY",
+  "standalone_executable": false,
+  "verification": "Exact relative inventory, byte counts, SHA-256, AST parsing and in-memory compilation only. No candidate imports, original tests, model/native execution, stream decoding or omitted evidence reads."
+}

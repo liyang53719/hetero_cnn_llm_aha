@@ -1678,3 +1678,13 @@ SOURCE 正式独审：review_owner_driver_relink_source_20261020T0003，M2388/64
 - 51已封文件6011752字节；33 field/presence/output及transport匹配历史，8565 Attention+2211 wholeblock记录语义diff空；11011 opaque-ID差异与4长期双向映射核验。21source不变，routing policy/ADMISSION/ARM绑定。只有限M2 observer历史等价，不是独立数值oracle，也不恢复旧逐line瞬变检测契约。
 - main_loop CPU8.033911631秒/wall8.280947779秒，较0549历史单次约减少46.19%；非同期paired benchmark、非硬件周期或利用率。wholeblock仍INCOMPLETE、0 public advance/SiLU，不能算完整prefill。
 - ONGOING / TEMP：下一独立M16 Attention规模校准在准备新输入形状、计数和有限codec预算；不复用M2历史数值PASS，新大输出拟放独立tmpfs并分别核进程/驻留内存。尚未实际执行M16。完整128-token模型及五block RTL验收未通过，未清理临时数据，未push。
+
+## PASS（有限 M16 结构/规模实测）/ TEMP：向真正完整 M128 推进（2026-10-21）
+
+- DONE：新增 candidates/fixed93_m16_scale_validation，9文件79662B，3原源码逐字；入树仅8pins/hash和4 Python AST/compile。独审SHA e2d81d53fe997e3749ae4bdddf62db6c14326b714cd57a59301faa81f7ba7911。无原raw stream/transport/数组/权限，不是完整独立运行包。
+- M16预声明synthetic Q/K/V使用原GQA形状16token/2KV heads；源阶段修正错误KV长度，实际未采用错误值。首cold使用Python3.13，保留但不作目标资格；同源补目标3.12.14的106控制+projection自然0后才新准实际，旧错误建议保留。
+- 实际单新臂自然0，outer283.489771秒；loop CPU245.663893279秒/wall252.793958135秒。双流封存，268713 Attention记录、72393 whole记录（44355 semantic+28038 definition）；14592steps、1728groups、13248emits，27648read/1536write/ACK、133642driver ticks。独审SHA36f6730a381a612833cfb0163e4ab5ff438d946a4a3a63024baf90bc51ffe30a。
+- 终态50文件151549377B、33字段/presence/output、全部29184transport地址/packet、源/权限/cleanup闭合。不读取M2历史作同形比较，只有结构/调度规模PASS，没有独立数值oracle或完整block PASS。child maxRSS217346048B/supervisor113025024B不相加冒充并发峰值。
+- M2/M16每step约16.7–16.8ms，仅风险均摊显示M128 Attention约4小时，非精确预测；prefix/tail数量不同亦不可忽略。旧6600秒预算缺乏支持。ONGOING：真正0300 full producer→KV→Attention→tail接回已验证routing，拟新43200秒总上限、1CPU、明确新source/review/ADMISSION；尚未启动完整M128，不能继承旧GO。
+- 资源：仅将可恢复Torch下载wheel188943803B完整复制到独立临时存储并多次SHA一致后移走原下载缓存，保留NumPy wheel、installed runtime、全部lock/pin及唯一证据；不建symlink，原缓存目录模式恢复。离线重装前需恢复原regular路径。本日不再另做仓库临时数据清理；没有删除已跟踪文件或重写历史。
+- 完整128-token block未通过；后四block未推进，五block完整RTL仍0/5，无新MAC利用率实测。所有本批提交仍本地，未宣称远端/CI更新。

@@ -1,0 +1,101 @@
+{
+  "authority": {
+    "M128_authorized": false,
+    "RTL_or_hardware_qualification": false,
+    "actual_execution_authorized": false,
+    "fullblock_authorized": false,
+    "independent_numerical_acceptance": false,
+    "prior_execution_authority_inherited": false,
+    "publication_authorized": false,
+    "standalone_executable": false
+  },
+  "corrections": {
+    "cold02_controls": 106,
+    "cold02_native_or_model_execution": false,
+    "interpreter": "Initial cold01 ran under Python 3.13, a substantive target-interpreter qualification gap, not target 3.12 qualification. Separate cold02 under CPython 3.12.14 ran 106 source controls and the real supervision projection to exit 0 with unchanged source. The original cold01 evidence was retained; the added target seal repairs qualification, not historical evidence.",
+    "kv_heads": "Pre-freeze erroneous KV-head count 16 was corrected to 2, with exact fixture shape/index checks. The frozen source already contains the correction; no executed source was changed for this excerpt.",
+    "target_python": "3.12.14"
+  },
+  "geometry": {
+    "head_width": 128,
+    "k_words": 4096,
+    "kv_heads": 2,
+    "m": 16,
+    "q_words": 24576,
+    "query_heads": 12,
+    "v_words": 4096
+  },
+  "historical_result": {
+    "attention_records": 268713,
+    "field_and_presence_storage_bytes": 3305280,
+    "field_array_and_presence_file_count": 32,
+    "field_array_count": 16,
+    "field_presence_and_output_files_checked": 33,
+    "final_actual_bytes": 151549377,
+    "final_actual_files": 50,
+    "last_ack_hold_cycles": 4,
+    "loop_cpu_seconds": 245.663893279,
+    "loop_wall_seconds": 252.79395813499286,
+    "memory_reads": 27648,
+    "memory_writes": 1536,
+    "normal_steps": 14592,
+    "operand_definition_records": 28038,
+    "outer_returncode": 0,
+    "outer_wall_seconds": 283.48977095999,
+    "output_bytes": 98304,
+    "owner_response_hold_cycles": 4,
+    "pv_steps": 13056,
+    "qk_packed_steps": 1536,
+    "reviewed_address_sequence_and_output_packet_bytes": true,
+    "semantic_records": 44355,
+    "transport_transactions": 29184,
+    "wholeblock_subchain_records": 72393,
+    "write_acks": 1536
+  },
+  "limitations": [
+    "Synthetic input is not an official input/reference payload, an independent numerical oracle, or a historical pair comparison.",
+    "The historical run loaded an existing genuine native ELF and performed constructor reset/guard probes; it was not zero-native. The public checker does neither.",
+    "Sealed matrix-only Wholeblock subchain is explicitly incomplete; complete schedule/cache and fullblock-seal claims remain false.",
+    "Neither M2 nor M16 timing supports a simple linear time guarantee for M128 or fullblock. Fresh source/cold/authority and current resource gates are required for a new full run.",
+    "Sampled aggregate RSS and per-process/address-space limits do not prove a continuous memory peak; tmpfs residency is separate.",
+    "The observer routing policy retains its declared weakened transient nonhook ownership/metadata detection boundary; no predecessor anti-tamper equivalence is claimed."
+  ],
+  "policy": {
+    "id": "source-attested-owner-frame-routing-v1",
+    "sampling_enabled": false,
+    "transient_nonhook_integrity_equivalence": false
+  },
+  "review_boundary": {
+    "independent_reviewer_checked": "Source/authority/terminal/byte identities, terminal frames, all fields/presence/output, and complete source transport address sequence.",
+    "independent_reviewer_reran_full_decoders": false,
+    "original_parent_full_decoders_reached_eof": true,
+    "packaging_reran_tests_or_actual": false,
+    "packaging_reread_large_streams": false,
+    "portable_checker": "Exact inventory, sizes, SHA-256, AST parse and in-memory compile only; no candidate imports or execution."
+  },
+  "schema": "single-m16-scale-sanitized-historical-summary-v1",
+  "scope": "ONE HISTORICAL SYNTHETIC M16 ATTENTION SUBCHAIN; SEALED STRUCTURE ONLY",
+  "source_provenance": {
+    "independent_actual_review": {
+      "bytes": 38944,
+      "sha256": "36f6730a381a612833cfb0163e4ab5ff438d946a4a3a63024baf90bc51ffe30a"
+    },
+    "non_target313_cold_seal": {
+      "bytes": 2100,
+      "sha256": "e0ec06c4a29a229319e80bb4fdbf15abcb695da421305e9dab0e7db5113281bc"
+    },
+    "source_manifest": {
+      "bytes": 5124,
+      "sha256": "c9905f0bc845b7de80b4bb2a88d8bcd9ba8aac8b8e0b54cf367ec63905c00742"
+    },
+    "target312_cold_seal": {
+      "bytes": 2243,
+      "sha256": "15719434c826f9a9a70b39d8aeb48b3379d246071c6fa7e944256904ac74cfd6"
+    },
+    "target312_source_cold_review": {
+      "bytes": 39604,
+      "sha256": "a90a0b533067f5ce93bfdd5ac95079681669178bf0b1a6cd5c586da42c4f9207"
+    }
+  },
+  "status": "PASS_ACTUAL_SINGLE_M16_ATTENTION_SCALE_SEALED_STRUCTURE_ONLY"
+}

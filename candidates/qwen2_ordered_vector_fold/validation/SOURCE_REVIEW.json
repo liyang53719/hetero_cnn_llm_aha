@@ -1,0 +1,50 @@
+{
+  "status": "read_only_source_review_not_compilation",
+  "relative_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+  "postimage_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+  "source_role": "selected production postimage, not raw main Qwen2Block",
+  "anchors": [
+    {
+      "label": "official_bf16_materialize",
+      "start_line": 58,
+      "end_line": 60,
+      "sha256": "0a7e069409aeb711d1c3f6e101970ce9326596c0b044b130c4fb112111e7d689",
+      "text": "  private val officialBf16=Qwen2NumericPolicy.official(numericPolicy)\n  require(!officialBf16 || ownerDriven,\"official policy uses validated Host owner dispatch\")\n  def materialize(x:UInt):UInt=if(officialBf16)F32.bf(x)else x\n"
+    },
+    {
+      "label": "existing_acc",
+      "start_line": 102,
+      "end_line": 105,
+      "sha256": "4c337e8ea998fc2811d7446bbae27b703de3eccaae04e4052751418584d138bc",
+      "text": "  val token=RegInit(0.U(16.W));val col=RegInit(0.U(16.W));val depth=RegInit(0.U(16.W));val head=RegInit(0.U(8.W));val key=RegInit(0.U(16.W));val lane=RegInit(0.U(4.W))\n  val sum=RegInit(0.U(32.W));val scale=Reg(UInt(32.W));val maxScore=Reg(UInt(32.W));val probability=Reg(UInt(32.W))\n  val av=Reg(Vec(16,UInt(32.W)));val bv=Reg(Vec(16,UInt(32.W)));val cv=Reg(Vec(16,UInt(32.W)));val dv=Reg(Vec(16,UInt(32.W)))\n  val acc=Reg(Vec(16,UInt(32.W)));val tmp=Reg(Vec(16,UInt(32.W)));val tmp2=Reg(Vec(16,UInt(32.W)))\n"
+    },
+    {
+      "label": "existing_vector_alu_drops_flags",
+      "start_line": 137,
+      "end_line": 139,
+      "sha256": "df46d023a392bfcc3d14df604edc0f42bbb4bba9d27aa282bc0ce157cb2a51bf",
+      "text": "  val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)\n  vectorA:=av;vectorB:=bv\n  val vout=VecInit((0 until 16).map{i=>val a=Module(new HeteroFP32Alu);a.io.op:=vectorMul;a.io.x:=vectorA(i);a.io.y:=vectorB(i);a.io.out})\n"
+    },
+    {
+      "label": "last_commit_ack_and_completion",
+      "start_line": 216,
+      "end_line": 224,
+      "sha256": "0b8d6afcd570b88a82fcff3fd06c3f4e2c80aa75597add26a44aabc5d3a5f53e",
+      "text": "      c.io.result.ready:=packedCommitted.get && !poisoned\n      c.io.completion.ready:=packedBusy && (packedCommitted.get || poisoned || c.io.resetRequired)\n      when(c.io.start.fire){packedOwned.get:=true.B;packedFinalIssued.get:=false.B;packedCommitted.get:=false.B;packedTag.get:=packedTag.get+1.U;packedGather.get:=0.U;packedSelected.get:=0.U}\n      when(c.io.operands.fire && depth===112.U){packedFinalIssued.get:=true.B}\n      when(c.io.completion.fire){packedOwned.get:=false.B}\n      when(dot){\n        // Nonfinal acceptance advances DDR/local feed without demanding a result.\n        fmDone:=Mux(depth===112.U,c.io.result.valid,c.io.operands.fire)\n        for(i<-0 until 16){fmOut(i):=c.io.result.bits.value(i)((packedSelected.get<<4)+i.U)}\n"
+    },
+    {
+      "label": "ordered_old_reduce_and_retirement",
+      "start_line": 584,
+      "end_line": 612,
+      "sha256": "257962cf0a94b6456d100474d8bf69d3e930de53ff456692866fe3f157510d42",
+      "text": "    when(state===st(\"attPackedSelect\") && !poisoned && !packedQk.get.io.resetRequired){\n      // Select from the live FIFO head, never copy a full result tile.\n      val selected=VecInit((0 until 16).map(i=>packedQk.get.io.result.bits.value(i)((packedSelected.get<<4)+i.U)))\n      when(packedQk.get.io.result.valid){\n        when(selected.map(x=> !TensorMath.finite(x)).reduce(_||_)){packedSelectedFault:=true.B}\n        .otherwise{acc:=selected;lane:=0.U;sum:=0.U;state:=st(\"attReduce\")}\n      }\n    }\n    when(packedBusy){assert(state=/=st(\"denseWindowGot\"),\"Dense operand clear excluded for entire QK group\")}\n  }\n  when(state===st(\"attReduce\")){calc(ScalarOp.Add,sum,acc(lane),\"attReduceDone\")}\n  when(state===st(\"attReduceDone\")){sum:=scalarValue;when(lane===15.U){\n    val dotValue=materialize(scalarValue)\n    when(enableProductionPackedQk16.B && !TensorMath.finite(dotValue)){packedSelectedFault:=true.B}\n      .otherwise{calc(ScalarOp.Mul,dotValue,F32.lit(1/math.sqrt(s.headDim.toDouble)),\"attScore\")}\n  }.otherwise{lane:=lane+1.U;state:=st(\"attReduce\")}}\n  when(state===st(\"attScore\") && (!enableProductionPackedQk16.B || (!poisoned && !packedQk.map(_.io.resetRequired).getOrElse(false.B) && !packedQk.map(_.io.port.done.valid).getOrElse(false.B)))){\n    val score=materialize(scalarValue)\n    when(enableProductionPackedQk16.B && !TensorMath.finite(score)){packedSelectedFault:=true.B}\n    .otherwise{if(enableProductionPackedQk16){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),score);when(F32.less(maxScore,score)){maxScore:=score};state:=st(\"attNextKey\")}\n  }\n  if(!enableProductionPackedQk16){\n  when(state===st(\"attNextKey\") && !packedBusy){when(key<token){key:=key+1.U;state:=st(\"attKey\")}.otherwise{key:=0.U;sum:=0.U;state:=st(\"attExpRead\")}}\n  }else{\n    when(state===st(\"attNextKey\") && !poisoned && !packedQk.get.io.resetRequired){\n      when(packedSelected.get+&1.U<packedKeys){\n        packedSelected.get:=packedSelected.get+1.U;state:=st(\"attPackedSelect\")\n      }.elsewhen(!packedBusy){\n        when(key+packedKeys<=token){key:=key+packedKeys;state:=st(\"attKey\")}\n"
+    },
+    {
+      "label": "last_connect_fault_and_debt_drain",
+      "start_line": 659,
+      "end_line": 684,
+      "sha256": "4975219783a692fce4e47e12716321c2fb77557aec6b0c2115afc6c22e68f5c9",
+      "text": "  // Last-connect safety checks override a compute transition, before a request.\n  when(matrixFault){fail(Status.Protocol.U)}\n  when((state===st(\"denseCompute\")||(state===(if(enableProductionPackedQk16)st(\"attPackedIssue\")else st(\"attDot\")) && (!enableProductionPackedQk16.B || depth===112.U))||state===st(\"attPVCompute\")) && fmDone && fmOut.map(x=> !TensorMath.finite(x)).reduce(_||_)){fail(Status.Numerical.U)}\n  when(f.address_error_o.orR && state=/=st(\"finish\")&&state=/=st(\"locked\")){fail(Status.Bounds.U)}\n  packedQk.foreach{c=>\n    // Track accepted work, including an acceptance concurrent with a fault.\n    when(packedBusy && io.memory.fire){packedMemDebt.get:=true.B}\n    when(packedMemDebt.get && io.response.fire && io.response.bits.tag===request.tag){packedMemDebt.get:=false.B}\n    when(packedBusy && f.rd_valid_i(0) && f.rd_ready_o(0)){packedLocalDebt.get:=true.B}\n    when(packedLocalDebt.get && f.rd_resp_valid_o(0) && f.rd_resp_ready_i(0)){packedLocalDebt.get:=false.B}\n    when(packedBusy && scalar.io.request.fire){packedScalarDebt.get:=true.B}\n    when(packedScalarDebt.get && scalar.io.result.fire){packedScalarDebt.get:=false.B}\n    // Current poison suppresses new offers; already accepted work drains below.\n    when(packedBusy && (c.io.resetRequired || poisoned)){\n      io.memory.valid:=false.B;f.rd_valid_i:=0.U;scalar.io.request.valid:=false.B\n    }\n    when(state===st(\"finish\") && poisoned){\n      io.response.ready:=packedMemDebt.get && io.response.bits.tag===request.tag\n      f.rd_resp_ready_i:=Mux(packedLocalDebt.get,1.U,0.U)\n      scalar.io.result.ready:=packedScalarDebt.get\n    }\n    when((c.io.resetRequired || (c.io.completion.fire && c.io.completion.bits.error)) && state=/=st(\"finish\") && state=/=st(\"locked\")) {fail(Status.Protocol.U)}\n    when(packedSelectedFault){fail(Status.Numerical.U)}\n    when(state===st(\"attKey\") && !packedBusy && packedTag.get===0.U){fail(Status.Protocol.U)}\n  }\n}\n"
+    }
+  ]
+}

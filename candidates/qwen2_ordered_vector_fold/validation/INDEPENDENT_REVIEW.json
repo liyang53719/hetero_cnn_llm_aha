@@ -1,0 +1,17 @@
+{
+  "result": "approved_for_TEMP_INCOMPLETE_micro_model_only",
+  "normal_tests": 12,
+  "optimized_tests": 12,
+  "blocking_findings": [],
+  "initial_suggestions": [
+    "reverse fault discovery order coverage",
+    "independent maximum oracle and fixed mixed-sign signed-zero results"
+  ],
+  "suggestions_resolved": true,
+  "reviewed_model_sha256": "22eb8f56dbe2f969ef4cd0deb3f13c78c67383319b0d6ec039f2b97e0abb6a29",
+  "reviewed_test_sha256": "18b0a6b6e57fb3ec548ab978c0baaaf571ae86533cd6019476f7a44ccacbbf4c",
+  "reviewed_pins_sha256": "1a345d909e1f4d1567e525b5f4f1e3363820b4b8fba79c7bbc10607868ec219c",
+  "reviewed_readme_sha256": "06ece884aad8e0cf62591e096e4995101b38728abb3d35bfbffe815a9e4e15e2",
+  "post_review_readme_delta": "Documentation only: explicitly list final 12 tests/mode and added fault-order/max cases. No code change.",
+  "production_or_hardware_qualification": false
+}

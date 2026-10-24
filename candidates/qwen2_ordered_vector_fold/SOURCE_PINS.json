@@ -1,0 +1,34 @@
+{
+  "main_commit": "1bdf70eb42de8752edeb616e8ef01e166628ca35",
+  "selected_qwen2block_sha256": "31b618680b4c750398a0dcf21fa34185dd9fc9b1732e370cfce502915814bd68",
+  "sources": {
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": {
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+      "git_blob_sha": "d4e8938828fb23eed434489cfb00a908e6908ca8",
+      "bytes": 25923
+    },
+    "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py": {
+      "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a",
+      "git_blob_sha": "8e8e274a1e25d3b665a6fee544c06dd2a4f2f9b6",
+      "bytes": 35767
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c",
+      "bytes": 8313
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": {
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "git_blob_sha": "4908d7fe3100042341d45abc0e60eca7b7c16726",
+      "bytes": 3123
+    },
+    "integration/gemmini/EmitHeteroFP32Alu.scala": {
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "git_blob_sha": "d7e8191988456d32d6e9e90d58ca19dba2b2427e",
+      "bytes": 1130
+    }
+  },
+  "status": "TEMP_INCOMPLETE",
+  "hardware_simulation": false,
+  "model_steps_are_cycles": false
+}

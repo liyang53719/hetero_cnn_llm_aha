@@ -1,0 +1,18 @@
+{
+  "result": "approved_TEMP_INCOMPLETE_micro_model_only",
+  "only_code_change": "resolved candidate-directory import bootstrap and module origin check",
+  "production_prelude_imported": false,
+  "production_source_root_added_to_sys_path": false,
+  "independent_modes": [
+    "python -B -I",
+    "python -B -I -O"
+  ],
+  "tests_per_mode": 12,
+  "exit_codes": [
+    0,
+    0
+  ],
+  "model_unchanged": true,
+  "model_sha256": "22eb8f56dbe2f969ef4cd0deb3f13c78c67383319b0d6ec039f2b97e0abb6a29",
+  "test_sha256": "1f128626849d7fae088a9201983d013584d0c3845a012dce727fd2cf916b14bb"
+}

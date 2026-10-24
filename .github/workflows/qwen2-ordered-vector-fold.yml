@@ -1,0 +1,134 @@
+name: Qwen2 ordered vector fold micro-model
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qwen2-ordered-vector-fold.yml'
+      - 'QWEN2_ORDERED_VECTOR_FOLD_PLAN_CN.md'
+      - 'candidates/qwen2_ordered_vector_fold/**'
+      - 'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py'
+      - 'candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+  pull_request:
+    paths:
+      - '.github/workflows/qwen2-ordered-vector-fold.yml'
+      - 'QWEN2_ORDERED_VECTOR_FOLD_PLAN_CN.md'
+      - 'candidates/qwen2_ordered_vector_fold/**'
+      - 'candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py'
+      - 'candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala'
+      - 'chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala'
+      - 'integration/gemmini/EmitHeteroFP32Alu.scala'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qwen2-ordered-vector-fold-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  stdlib-micro-model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact 12 plus 12 isolated tests, bounded and read-only
+        timeout-minutes: 3
+        shell: bash
+        run: |
+          python -I -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import resource
+          import subprocess
+          import sys
+          import time
+
+          started = time.monotonic()
+          deadline = started + 120.0
+          if sys.version_info[:2] != (3, 12):
+              raise RuntimeError('Python 3.12 is required')
+          if not sys.flags.isolated or not sys.dont_write_bytecode:
+              raise RuntimeError('runner must use -I -B')
+          available = os.sched_getaffinity(0)
+          if not available:
+              raise RuntimeError('no available CPU')
+          os.sched_setaffinity(0, {min(available)})
+          resource.setrlimit(resource.RLIMIT_CPU, (20, 20))
+          resource.setrlimit(resource.RLIMIT_AS, (256 * 1024 * 1024,) * 2)
+          resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+          root = Path.cwd().resolve(strict=True)
+          candidate = Path('candidates/qwen2_ordered_vector_fold')
+          pins = json.loads((root / candidate / 'SOURCE_PINS.json').read_text())
+          inputs = [candidate / name for name in ('model.py', 'test_model.py', 'SOURCE_PINS.json')]
+          inputs.extend(Path(name) for name in pins['sources'])
+          git_env = dict(os.environ, GIT_OPTIONAL_LOCKS='0')
+
+          def remaining(stage):
+              left = deadline - time.monotonic()
+              if left <= 0:
+                  raise RuntimeError('aggregate deadline exceeded: ' + stage)
+              return left
+
+          def snapshot(stage):
+              status = subprocess.check_output(
+                  ['git', 'status', '--porcelain=v1', '--untracked-files=all'],
+                  cwd=root, env=git_env, timeout=min(10.0, remaining(stage)))
+              remaining(stage + ' post-git')
+              if status:
+                  raise RuntimeError('checkout is not clean: ' + stage)
+              result = {str(p): hashlib.sha256((root / p).read_bytes()).hexdigest() for p in inputs}
+              remaining(stage + ' post-hash')
+              return result
+
+          before = snapshot('before tests')
+          reports = []
+          for extra in ([], ['-O']):
+              command = [sys.executable, '-I', '-B', *extra,
+                         str(candidate / 'test_model.py'), '--source-root', '.', '-v']
+              budget = min(30.0, remaining('before child'))
+              child_started = time.monotonic()
+              child = subprocess.Popen(command, cwd=root, stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT, text=True)
+              try:
+                  output, _ = child.communicate(timeout=budget)
+              except BaseException:
+                  if child.poll() is None:
+                      child.kill()
+                  child.wait(timeout=1.0)
+                  raise
+              child_elapsed = time.monotonic() - child_started
+              remaining('post-child')
+              if child_elapsed > 30.0:
+                  raise RuntimeError('child exceeded 30-second wall deadline')
+              print(output, end='', flush=True)
+              summaries = re.findall(r'(?m)^Ran ([0-9]+) tests? in [0-9.]+s$', output)
+              successes = re.findall(r'(?m)^test_[^\n]+ \.\.\. ok$', output)
+              final_status = re.findall(r'(?m)^OK(?: \(.*\))?$', output)
+              if child.returncode != 0 or summaries != ['12'] or len(successes) != 12 or final_status != ['OK']:
+                  raise RuntimeError('expected exactly 12 successful tests with no skip or expected failure')
+              if re.search(r'(?i)\b(skip(?:ped)?|expected failure|unexpected success)\b', output):
+                  raise RuntimeError('skips and expected failures are not acceptance')
+              remaining('post-result validation')
+              reports.append({'mode': '-I -B' + (' -O' if extra else ''),
+                              'tests': 12, 'wall_seconds': round(child_elapsed, 6)})
+          if snapshot('after tests') != before:
+              raise RuntimeError('candidate or pinned source bytes changed')
+          remaining('final pre-report')
+          print(json.dumps({'status': 'PASS', 'scope': 'TEMP_INCOMPLETE_MICRO_MODEL_ONLY',
+                            'tests': reports, 'checkout_unchanged': True,
+                            'wall_seconds': round(time.monotonic() - started, 6)}), flush=True)
+          remaining('final post-report')
+          PY

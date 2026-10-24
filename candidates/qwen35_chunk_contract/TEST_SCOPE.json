@@ -1,0 +1,44 @@
+{
+  "five_rtl_targets": {
+    "passed": 0,
+    "total": 5
+  },
+  "frozen_manifest_note_zh": "原SOURCE_MANIFEST记录封板时未执行测试的状态，保持不改；此摘要单独绑定后续唯一控制结果。",
+  "geometry": "M16/M128 declarative layouts; fixed16heads/Dk128/Dv128/chunk64",
+  "groups": 17,
+  "independent_controls_review": {
+    "bytes": 3866,
+    "sha256": "58c7aee70ec6219ca224eb30d4fa4030c5ba804ac3f5005fa6b8386a1eec925c"
+  },
+  "internal_elapsed_seconds": 0.2324937189987395,
+  "not_validated": [
+    "Scala编译或方法执行",
+    "Chisel构造与RTL",
+    "真实ACK/背压/abort握手",
+    "FP32数值或完整chunk算术owner",
+    "完整prefill或利用率"
+  ],
+  "outer_elapsed_seconds": 0.3141859120078152,
+  "outer_exit_code": 0,
+  "pins_checked_before_after": {
+    "dependency_sources": 24,
+    "manifest_separately_pinned": true,
+    "package_contents": 5,
+    "total_inside_test": 29
+  },
+  "prior_qwen2_full_run_execution_and_cleanup": "UNKNOWN",
+  "privacy_zh": "不包含机器路径、原始运行日志、数组、权重或执行授权材料。",
+  "schema": "QWEN35_CHUNK_CONTRACT_PUBLIC_TEST_SCOPE_V1",
+  "source_manifest": {
+    "bytes": 1144,
+    "sha256": "5380d72d8d4c28cc69e27dc566b932889bf479e0befc9e31e0a9407f61aa90b2"
+  },
+  "status": "PASS_SOURCE_LITERAL_LAYOUT_AND_MOCK_ACK_CONTROLS_ONLY",
+  "summary_zh": "17组纯stdlib控制通过，仅核源码声明、独立整数布局和明确标注的Mock ACK合同；没有执行Scala方法、构造Chisel模块或真实握手/算术。",
+  "verified_scope": [
+    "固定24矩阵顺序、逐head initial与chunk SSA地址、M16 padding和M128双chunk布局。",
+    "56bit完整跨度、64B对齐、五区域非别名、cold/carried根代约束的源码与独立数学检查。",
+    "17个粗阶段、分类ACK字节义务、predecessor与MockAckContract拒绝缺失/重复/错序收据；不是实际ACK观测。",
+    "现M1 public/recurrent及Host持久双根fence源码保持原pin，未连接新chunk算术或Vector端口。"
+  ]
+}

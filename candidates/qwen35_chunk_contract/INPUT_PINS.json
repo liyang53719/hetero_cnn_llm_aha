@@ -1,0 +1,105 @@
+{
+  "schema": "QWEN35_CHUNK_CONTRACT_DEPENDENCIES_V1",
+  "fixed_remote_commit": "adefaa78c2d313d9927b4e87550dddc926b3c605",
+  "upstream_model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "upstream_transformers_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+  "scope": "24 source witnesses, not a compiler/native dependency closure",
+  "files": {
+    "config/upstream/qwen3_5_0p8b/manifest.json": {
+      "bytes": 2645,
+      "sha256": "ef61b656ac0ec16bceaaf219f0610153fe0b8f815f68e55a12f7ba3d3038e91a"
+    },
+    "config/upstream/qwen3_5_0p8b/modeling_qwen3_5.py": {
+      "bytes": 88051,
+      "sha256": "aac2a1bcca88829afc6dbdf83f97155ebf64d800ee9d703af3802a9aebcfcd18"
+    },
+    "config/model_profiles/qwen3_5_0p8b.json": {
+      "bytes": 2910,
+      "sha256": "55800cfadab21800d82ff8d0bd85419eef7ac32f824b103f83835bce149cf769"
+    },
+    "candidates/qwen35_gdn_prefill/full_driver.py": {
+      "bytes": 40229,
+      "sha256": "4e8fcca0133541539c1d2a4e0019436a3eac2d0a2694372202ab9bad8202bbb6"
+    },
+    "candidates/qwen35_gdn_prefill/full_compare.py": {
+      "bytes": 33673,
+      "sha256": "4faec1bf97918483c182da5aba5cc7ce0dd5b0affd922a5fb3341f632cdc74f5"
+    },
+    "candidates/qwen35_gdn_prefill/prep/model.py": {
+      "bytes": 29633,
+      "sha256": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11"
+    },
+    "candidates/qwen35_gdn_prefill/prep/layout.py": {
+      "bytes": 3797,
+      "sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/model.py": {
+      "bytes": 47272,
+      "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+      "bytes": 9363,
+      "sha256": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/vector16.cpp": {
+      "bytes": 3841,
+      "sha256": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/cumsum.py": {
+      "bytes": 3059,
+      "sha256": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": {
+      "bytes": 1765,
+      "sha256": "ba6a07f7507b43446c8848fcc33ea3a7dc83739c58a62c760eb88845a8eabf0d"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/matmul_reuse.py": {
+      "bytes": 3277,
+      "sha256": "17c7c5ff373ddbb68fdb62ba3c53fa4e7f451c5818af06631ae471d6e9383a1b"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/reference.py": {
+      "bytes": 22551,
+      "sha256": "2fa75494a96e10e6ed4e20c3ffc0030ce6566fbed37d02091e17eda1e083a995"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/README.md": {
+      "bytes": 14944,
+      "sha256": "331bf6145576410406a373bc5664e28b8a2aa6822e63a15450619eb35f686289"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentOwner.scala": {
+      "bytes": 13275,
+      "sha256": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnRecurrentProtocol.scala": {
+      "bytes": 1760,
+      "sha256": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+      "bytes": 32821,
+      "sha256": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": {
+      "bytes": 10756,
+      "sha256": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+      "bytes": 88647,
+      "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockTop.scala": {
+      "bytes": 20853,
+      "sha256": "e018e8ba50129c81f0c4c7385fe6ddc1fe65ee52678b1c036ef11671085e304d"
+    },
+    "integration/gemmini/EmitHeteroFP32Alu.scala": {
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+    },
+    "chisel/continuous_prefill/scripts/host_bf16_gdn_block_descriptor.py": {
+      "bytes": 19301,
+      "sha256": "99e0d14269aab0b97d6f5351a0631fde986b68847f3a583c48d4efb686cb289b"
+    }
+  }
+}

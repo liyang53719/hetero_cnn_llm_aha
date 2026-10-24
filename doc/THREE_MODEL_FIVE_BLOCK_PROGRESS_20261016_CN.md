@@ -1721,3 +1721,12 @@ Qwen2 fixed93 M128 原运行连接中断，恢复句柄不可用。最后监督�
 精确资格仅SCALA_COMPILE_ONLY：未执行Chisel构造/展开，未生成RTL，未测试真实ACK、数值或完整GDN/M128；公共M1及recurrent门未改变。Qwen2先前完整运行仍执行/清理UNKNOWN，五RTL仍0/5，无新MAC利用率实测。
 
 复现命令模板、原runner源码摘录、相对输入pins及限定摘要位于 candidates/qwen35_prep_scala_compile/，8文件129291B，manifest SHA256 6a0b67b123a910b0aaec5ea49dda49a0d2c4f02a37e8cf14ac5f283a87da8075。机器冻结计划、工具二进制、class与raw logs不提交；原launcher缺机器计划不能直接运行，命令模板不等价复现原监督。未push，无新增CI，无清理。
+
+
+## PASS（仅源码/整数布局/Mock ACK）：GDN chunk64 独立协议与地址计划
+
+新增 GdnChunkProtocol.scala 与 GdnChunkAddressPlan.scala，固定H16/D128、M16/M128，24矩阵SSA私有布局与阶段依赖；复用既有Host M1双根fence，不重造持久根提交，不改公共/recurrent拒门。scratch容量M16=13959168B、M128=26869760B，stateIn/stateOut各1048576B且保持FP32。仅Bundle与BigInt声明，非RTL地址生成器、ACK tracker、算术owner或Vector端口。
+
+17组纯stdlib controls一次自然0：外0.314185912秒/内0.232493719秒，29内置pin前后同。PASS仅源码字面量、独立整数公式与Mock ACK合同，不执行或编译Scala方法、不证明真实握手/数值/chunk prefill；该新批Scala资格仍TEMP。独审COLD_REVIEW SHA256 58c7aee70ec6219ca224eb30d4fa4030c5ba804ac3f5005fa6b8386a1eec925c。
+
+公开7件43486B在 candidates/qwen35_chunk_contract/，6源manifest SHA256 5380d72d8d4c28cc69e27dc566b932889bf479e0befc9e31e0a9407f61aa90b2；额外TEST_SCOPE SHA256 9444d0841a343421659336d6a00e9fa5eca2e617719c06e88aacd3c6a8d24665。Qwen2完整运行仍UNKNOWN，五RTL仍0/5，无利用率实测提升，无push/新增CI/清理。

@@ -1,0 +1,287 @@
+{
+  "schema": "uf-native-diagnostic-stimuli-proposal-v1",
+  "status": "STATIC_DERIVATIONS_NOT_EXECUTED",
+  "finite_single_lane_cases": [
+    {
+      "id": "01",
+      "op": 1,
+      "a": "00800000",
+      "b": "3f7fffff",
+      "expected_value": "00800000",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 3,
+      "expected_flags_difference": true
+    },
+    {
+      "id": "02",
+      "op": 1,
+      "a": "80800000",
+      "b": "3f7fffff",
+      "expected_value": "80800000",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 3,
+      "expected_flags_difference": true
+    },
+    {
+      "id": "03",
+      "op": 1,
+      "a": "00f80000",
+      "b": "3f042108",
+      "expected_value": "00800000",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 1,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "04",
+      "op": 1,
+      "a": "00800001",
+      "b": "3f7ffffe",
+      "expected_value": "00800000",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 1,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "05",
+      "op": 1,
+      "a": "00f80000",
+      "b": "3f042107",
+      "expected_value": "007fffff",
+      "cpp_postfix_flags_source_prediction": 3,
+      "hardfloat_source_spec_flags": 3,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "06",
+      "op": 1,
+      "a": "00f80000",
+      "b": "3f042109",
+      "expected_value": "00800001",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 1,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "07",
+      "op": 1,
+      "a": "00800000",
+      "b": "3f7ffffe",
+      "expected_value": "007fffff",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "08",
+      "op": 1,
+      "a": "00000001",
+      "b": "3f800000",
+      "expected_value": "00000001",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "09",
+      "op": 1,
+      "a": "00800000",
+      "b": "3f000000",
+      "expected_value": "00400000",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "10",
+      "op": 1,
+      "a": "00000001",
+      "b": "3f000000",
+      "expected_value": "00000000",
+      "cpp_postfix_flags_source_prediction": 3,
+      "hardfloat_source_spec_flags": 3,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "11",
+      "op": 1,
+      "a": "80000001",
+      "b": "3f000000",
+      "expected_value": "80000000",
+      "cpp_postfix_flags_source_prediction": 3,
+      "hardfloat_source_spec_flags": 3,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "12",
+      "op": 1,
+      "a": "00000001",
+      "b": "3fc00000",
+      "expected_value": "00000002",
+      "cpp_postfix_flags_source_prediction": 3,
+      "hardfloat_source_spec_flags": 3,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "13",
+      "op": 1,
+      "a": "7f7fffff",
+      "b": "40000000",
+      "expected_value": "7f800000",
+      "cpp_postfix_flags_source_prediction": 5,
+      "hardfloat_source_spec_flags": 5,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "14",
+      "op": 1,
+      "a": "7f000600",
+      "b": "3ffff400",
+      "expected_value": "7f7fffff",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 1,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "15",
+      "op": 1,
+      "a": "00000000",
+      "b": "bf800000",
+      "expected_value": "80000000",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "16",
+      "op": 1,
+      "a": "00800000",
+      "b": "3f800000",
+      "expected_value": "00800000",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "17",
+      "op": 0,
+      "a": "80000000",
+      "b": "80000000",
+      "expected_value": "80000000",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "18",
+      "op": 0,
+      "a": "00000000",
+      "b": "80000000",
+      "expected_value": "00000000",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "19",
+      "op": 0,
+      "a": "00800000",
+      "b": "807fffff",
+      "expected_value": "00000001",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "20",
+      "op": 0,
+      "a": "007fffff",
+      "b": "00000001",
+      "expected_value": "00800000",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "21",
+      "op": 0,
+      "a": "3f800000",
+      "b": "33800000",
+      "expected_value": "3f800000",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 1,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "22",
+      "op": 0,
+      "a": "3f800001",
+      "b": "33800000",
+      "expected_value": "3f800002",
+      "cpp_postfix_flags_source_prediction": 1,
+      "hardfloat_source_spec_flags": 1,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "23",
+      "op": 0,
+      "a": "7f7fffff",
+      "b": "7f7fffff",
+      "expected_value": "7f800000",
+      "cpp_postfix_flags_source_prediction": 5,
+      "hardfloat_source_spec_flags": 5,
+      "expected_flags_difference": false
+    },
+    {
+      "id": "24",
+      "op": 0,
+      "a": "3f800000",
+      "b": "bf800000",
+      "expected_value": "00000000",
+      "cpp_postfix_flags_source_prediction": 0,
+      "hardfloat_source_spec_flags": 0,
+      "expected_flags_difference": false
+    }
+  ],
+  "native_batch_policy_cases": [
+    {
+      "id": "legacy_boundary_continues",
+      "reuse_case": "01",
+      "acc": "00000000",
+      "fatal_mask": 30,
+      "cpp_stage_prediction": 2,
+      "cpp_issue_flags_prediction": [
+        1,
+        0
+      ],
+      "hardfloat_spec_mul_fatal": true
+    },
+    {
+      "id": "tiny_zero_stops",
+      "reuse_case": "10",
+      "acc": "3f800000",
+      "fatal_mask": 30,
+      "cpp_stage_prediction": 1,
+      "cpp_issue_flags_prediction": [
+        3,
+        0
+      ],
+      "hardfloat_spec_mul_fatal": true
+    },
+    {
+      "id": "overflow_stops",
+      "reuse_case": "13",
+      "acc": "3f800000",
+      "fatal_mask": 30,
+      "cpp_stage_prediction": 1,
+      "cpp_issue_flags_prediction": [
+        5,
+        0
+      ],
+      "hardfloat_spec_mul_fatal": true
+    }
+  ],
+  "raw_host_flags": "observational separate same-expression probe, no fixed UF prediction; not read inside original primitive",
+  "no_nonfinite_input_cases": "Original C ABI does not reject these; Python wrapper import not needed for this narrow diagnostic. Do not fabricate admission/NV behavior.",
+  "no_16_lane_batch": true
+}

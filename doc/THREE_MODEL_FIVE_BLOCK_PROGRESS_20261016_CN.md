@@ -1890,3 +1890,12 @@ PASS只Scala编译；未构造/CHIRRTL/真实Scalar或Loan/ACK/数值/RTL，五R
 独立结构核9模块8边全可达各一次、唯一24×24变量乘法、27顶层叶（130/124payload）、12顶层寄存器553bit；不沿用无子模块门。独审ACTUAL_FRONTEND_REVIEW SHA256 b86ba2968769af2fcb96ea2fe202e95dd5e0dfe91aa03fa5d1d6368fb363924c。45纯parser正反例为先行fixture测试，非生成硬件行为。
 
 仅构造/CHIRRTL结构PASS，未执行数值/flags/握手/RTL或16lane阵列，面积/Fmax不继承；UF3与旧CPP1集成阻断保留，五RTL0/5、Qwen2full UNKNOWN不变。公开14项112395B在 candidates/qwen35_strict_lane_chirrtl/，manifest SHA256 a07c5330d5f1d0a3b6bab5b9bdcdd3a69444749dab94dbd486ef78e1a92a67e9。相对pins/原源摘录不含IR/class/完整工具表/机器plan/raw日志，非原完整运行closure。未push、无新CI、无清理。
+
+
+## PASS（仅原C++软件诊断）：UF边界策略差异实测
+
+唯一92564自然0，总1.278891735秒；原vector16.cpp逐字复用、24finite刺激和3原mask30 batch，独立第二TU原生运算/Fraction值参考/HardFloat源码flags规范分列。正负minnormal边界输出00800000/80800000，原CPP postfix flags=1，raw-host实际flags=3，HardFloat源预期3；原mask30 issue=[1,0]实际继续Add。tiny-zero/overflow停Mul且Add sentinel保持。24交付值同Fraction，仅01/02有flags1/3/3差异。
+
+2361输入前后全同，真实-M依赖121项（两个TU73/120）全在预pin集合，23终态文件2261062B全核；三阶段自然0/WNOWAIT/reap/group absent/cleanup。MXCSR8096→8098仅DE sticky新增，标准FE/control保持，不修改FTZ/DAZ。独审ACTUAL_REVIEW SHA256 38766c8172145b746de7a5d133bd430afa74df7cb38d1aeb2eba351fde7a7383。
+
+这是原C++软件primitive策略差异的实际证据，raw探针是第二次独立运算，不冒原API内部采样；仍未实测HardFloat/RTL flags。旧源/旧收据不改，UF契约集成阻断不解除。公开10项50874B在 candidates/qwen35_uf_native_diagnostic/，manifest SHA256 d069502fb1789ed076569817aa4025bca08c558ad71fd9640a3873c8cace1feb，无机器plan/工具表/二进制/原日志，入口缺冻结计划不可直接执行。五RTL0/5、Qwen2full UNKNOWN不变；未push、无新CI、无清理。

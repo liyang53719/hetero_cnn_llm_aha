@@ -1,0 +1,72 @@
+{
+  "HardFloat_round_source": {
+    "bytes": 13901,
+    "logical_file": "RoundAnyRawFNToRecFN.scala",
+    "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d"
+  },
+  "all_tool_header_pins_or_binaries_included": false,
+  "build_flags": [
+    "-std=c++17",
+    "-O2",
+    "-shared",
+    "-fPIC",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-frounding-math"
+  ],
+  "compiler": {
+    "bytes": 1166360,
+    "name": "x86_64-linux-gnu-g++-14",
+    "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d"
+  },
+  "exact_original_files": {
+    "STIMULI.json": {
+      "bytes": 7459,
+      "sha256": "7c149604397ae5fe4f9a32b7dae400d4690d896839ee3d6d764769c4f0dd0168"
+    },
+    "diagnostic_probe.cpp": {
+      "bytes": 1815,
+      "sha256": "465102ab0ee27d1b93d9f6259249c7c5bb97d1d0e2479409b1d330cabed774b3"
+    },
+    "launch_native.py": {
+      "bytes": 3641,
+      "sha256": "bf3971ef8bae7f2c161befe6d87bfba12d264edaf6dfc39cf32c64bb65c5556a"
+    },
+    "native_diagnostic.py": {
+      "bytes": 11141,
+      "sha256": "20fef11325d3466637ad9bffcf7fe7b1e2b0fddff0436bf0041fdbd4eee851c3"
+    },
+    "run_native.py": {
+      "bytes": 17688,
+      "sha256": "5ddb9898800cbda97f1876564fa1b25f9224ca6dac5e7ab8745f76f67b8c0aa2"
+    }
+  },
+  "independent_fraction_reference": {
+    "bytes": 7487,
+    "logical_file": "fraction_reference.py",
+    "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+  },
+  "native_result_fingerprint": {
+    "bytes": 36702,
+    "sha256": "36b6479ef67df3a30d9c29aba856ead3cba493ef5f74ae55da66ac36c9669718"
+  },
+  "new_ELF_fingerprint_only": {
+    "bytes": 16072,
+    "sha256": "b9484da2a2f60d33def32dc6b3595031ceda04653233e99f166d1dc821a49b0b"
+  },
+  "omitted_machine_frozen_plan": {
+    "bytes": 704781,
+    "sha256": "2f7153133e9e1a6f4f4966d005ce2bda2c085904c998ed3da42376d45836ad37"
+  },
+  "original_primitive": {
+    "bytes": 3841,
+    "repository_relative_path": "candidates/qwen35_gdn_prefill/chunk/vector16.cpp",
+    "sha256": "ef614bd591129c9294e0a3846ca3b4a72c9fdd80ef626d188196cd1f4f0e6919"
+  },
+  "portable_standalone_execution": false,
+  "schema": "portable-uf-native-source-fingerprints-v1",
+  "upstream_source_manifest": {
+    "bytes": 956,
+    "sha256": "0c3c8493985be639b982592ed8df0168d3f7409fa7e353273c94545deec60432"
+  }
+}

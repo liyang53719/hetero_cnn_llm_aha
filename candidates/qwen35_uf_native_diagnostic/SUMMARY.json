@@ -1,0 +1,107 @@
+{
+  "RTL_or_array_test": false,
+  "actual_batch_effect": {
+    "legacy_boundary_continues": {
+      "attempted_stages": 2,
+      "issue_flags": [
+        1,
+        0
+      ],
+      "output_valid": true
+    },
+    "overflow_stops": {
+      "Add_output_valid": false,
+      "attempted_stages": 1,
+      "issue_flags": [
+        5,
+        0
+      ]
+    },
+    "tiny_zero_stops": {
+      "Add_output_valid": false,
+      "attempted_stages": 1,
+      "issue_flags": [
+        3,
+        0
+      ]
+    }
+  },
+  "actual_counts": {
+    "dependency_unique_files": 121,
+    "finite_single_lane_cases": 24,
+    "input_paths_before_after_equal": 2361,
+    "legacy_mask30_batch_cases": 3,
+    "separate_raw_expression_probes": 24,
+    "source_translation_units": 2
+  },
+  "cleanup": "三阶段均自然 exit 0，原 WNOWAIT 确权、回收及进程组清理完成，无超时。",
+  "critical_limits": [
+    "raw-host 是另一次同式 volatile 操作，不是对原函数内部 FE 状态的插桩。",
+    "HardFloat flags 仍为源规范预测，本批没有执行硬件算术。",
+    "可执行映射检查是加载后具绝对文件路径的来源核验，不是完整 native 沙箱。",
+    "真实 -M 依赖为预 pin 集合的子集，不宣称全系统 hermetic 构建。",
+    "固定刺激文件保留其冻结时 STATIC_DERIVATIONS_NOT_EXECUTED 标签，实际结果另由本摘要陈述。"
+  ],
+  "date_utc": "2026-10-21",
+  "environment": "RNE、FTZ/DAZ 关闭、SSE/x87 traps masked。每操作 FE_ALL_EXCEPT 与控制字段保持；MXCSR 8096→8098，DE bit1 真实新增，不能声称整个 MXCSR 不变。",
+  "flag_encoding": {
+    "divide_by_zero": 8,
+    "inexact": 1,
+    "invalid": 16,
+    "overflow": 4,
+    "underflow": 2
+  },
+  "future_old_CPP_vs_HardFloat_flags_integration_blocker_remains": true,
+  "hardware_equivalence": false,
+  "observed_boundary": [
+    {
+      "HardFloat_source_spec_flags": 3,
+      "a": "00800000",
+      "b": "3f7fffff",
+      "delivered": "00800000",
+      "original_cpp_postfix_flags": 1,
+      "separate_raw_host_flags": 3
+    },
+    {
+      "HardFloat_source_spec_flags": 3,
+      "a": "80800000",
+      "b": "3f7fffff",
+      "delivered": "80800000",
+      "original_cpp_postfix_flags": 1,
+      "separate_raw_host_flags": 3
+    }
+  ],
+  "old_cpp_modified": false,
+  "other_22_cases": "原 CPP、独立 raw-host 与 HardFloat 源规范 flags 在这些有限刺激上相同；所有 24 个交付值与独立 Fraction 参考相同。",
+  "private_review_fingerprint": {
+    "bytes": 11364,
+    "sha256": "38766c8172145b746de7a5d133bd430afa74df7cb38d1aeb2eba351fde7a7383"
+  },
+  "public_model_integration_authorized": false,
+  "qualification_cn": "原 C++ 软件 primitive 的真实执行诊断通过；不是 HardFloat 或 RTL 数值验证。",
+  "resources": {
+    "actual_owned_bytes": 2261062,
+    "cleanup_seconds": 5,
+    "configured_total_seconds": 60,
+    "cumulative_child_maxrss_KiB": 46344,
+    "native_max_seconds": 10,
+    "observed_sampled_descendant_RSS_bytes": 34381824,
+    "one_CPU": true,
+    "owned_limit_bytes": 8388608,
+    "per_process_AS_limit_bytes": 1073741824,
+    "post_seconds": 15,
+    "sampled_descendant_RSS_limit_bytes": 536870912,
+    "sampled_not_instantaneous_bound": true,
+    "shared_dependency_compile_max_seconds": 30,
+    "shared_work_seconds": 40
+  },
+  "schema": "public-uf-original-cpp-software-diagnostic-summary-v1",
+  "status": "PASS_ORIGINAL_CPP_SOFTWARE_DIAGNOSTIC_ONLY",
+  "timing": {
+    "compile_link_record_seconds": 0.224576,
+    "dependency_record_seconds": 0.063147,
+    "native_record_seconds": 0.249912,
+    "not_performance_prediction": true,
+    "total_stdout_seconds": 1.2788917349826079
+  }
+}

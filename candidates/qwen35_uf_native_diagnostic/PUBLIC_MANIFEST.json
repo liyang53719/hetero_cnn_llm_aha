@@ -1,0 +1,44 @@
+{
+  "exact_original_count": 5,
+  "files": {
+    "PUBLICATION_WHITELIST.txt": {
+      "bytes": 179,
+      "sha256": "f442843670a20fd2dc88ee70441df4854c32f57defd5b246e9a13fee3aca74d1"
+    },
+    "README.md": {
+      "bytes": 1498,
+      "sha256": "e724eba761a74868e534890ae02b48b2413d998d7a6f07d44f279fc59b58ae29"
+    },
+    "REPRODUCTION_PINS.json": {
+      "bytes": 2333,
+      "sha256": "089ebd32d7aaf92fad9078b79046f0aa5f3a59f15c0069532c3f7233064a01b3"
+    },
+    "STIMULI.json": {
+      "bytes": 7459,
+      "sha256": "7c149604397ae5fe4f9a32b7dae400d4690d896839ee3d6d764769c4f0dd0168"
+    },
+    "SUMMARY.json": {
+      "bytes": 3704,
+      "sha256": "f184634df8c0f88296b89d15fcc2e44318f8a207f6318a1062c53f70519704a9"
+    },
+    "diagnostic_probe.cpp": {
+      "bytes": 1815,
+      "sha256": "465102ab0ee27d1b93d9f6259249c7c5bb97d1d0e2479409b1d330cabed774b3"
+    },
+    "launch_native.py": {
+      "bytes": 3641,
+      "sha256": "bf3971ef8bae7f2c161befe6d87bfba12d264edaf6dfc39cf32c64bb65c5556a"
+    },
+    "native_diagnostic.py": {
+      "bytes": 11141,
+      "sha256": "20fef11325d3466637ad9bffcf7fe7b1e2b0fddff0436bf0041fdbd4eee851c3"
+    },
+    "run_native.py": {
+      "bytes": 17688,
+      "sha256": "5ddb9898800cbda97f1876564fa1b25f9224ca6dac5e7ab8745f76f67b8c0aa2"
+    }
+  },
+  "qualification": "ORIGINAL_CPP_SOFTWARE_DIAGNOSTIC_ONLY",
+  "schema": "portable-uf-native-excerpt-v1",
+  "standalone": false
+}

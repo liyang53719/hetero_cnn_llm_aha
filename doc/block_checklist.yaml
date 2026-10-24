@@ -7,7 +7,7 @@
 - to do
 - ongoing
 - done
-说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。 2026-10-24当前证据见本文件末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。
+说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。 2026-10-24当前证据见本文件末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。 2026-10-24最新导航：既有dated说明为各时点快照，本段仅更新当前导航，不改历史结果。后续已发布局部进展见doc/block_checklist.yaml中的“Qwen2有序归约已发布里程碑20261024”：selected默认关闭候选scalac编译、Python行为参考、M1/M2生成器调度、owner/direct控制、native Attention组件R2及observer AST软件fixture分别在各自有限范围PASS；observer原AST片的正常source-loaded TEMP保留为历史；后续正常模块加载/code-binding有限范围PASS，真实runtime Observation/capture及无干扰资格仍TEMP，开发与环境FAIL全部保留。各里程碑只补来源和导航，不关闭P03/C05/C08.2等任务，也不赋予M128/fullblock/Chisel/RTL/周期或利用率资格；完整block RTL仍0/5，固定4096-MAC的90%目标未达/未实测。
 任务:
 - 编号: C00
   名称: 重建最新源码与证据基线
@@ -2061,3 +2061,207 @@ M16阶段成本与独立后置恢复增量20261015:
     - 2026-10-13 06:10 UTC：35B L0真实原embedding→H2048 RMS→全N8192 QKV的M16/M128软件前缀均完成全部写ACK与终态，固定配方逐bit一致、官方各Q/K/V原门通过；Q/K微小denormal位差1019/7904如实保留。M128 useful/executed均2147483648、Vector Add65536、Scalar1332736，完整硬件cycle/busy未知，算术有效比例100%不等于MAC利用率。见[本轮来源与范围](QWEN35_35B_RMS_QKV_PREFIX_20261013_CN.md)。53源冻结、原失败保全；独立复核和冷GDN465/Attention247完整workflow已通过，新发布CI待核。Conv/state/MoE和完整35B L0/L3、公共Command128/生产Chisel/RTL、五block联合门与80%目标不关闭。
     
     - 2026-10-13 恢复重验：未发布候选tree `96a065ce7a3fb2e573ab8656f2996fe60e945d29` 的19文件逐blob恢复；新获取payload、隔离官方runtime和实际RMS/全形状reference重建后，真实35B L0 RMS→全QKV M16/M128再次完成。M16逻辑16行/物理pad128，useful268435456、executed2147483648；M128真128行，二者均2147483648。新逐段官方门及固定配方通过，53源/9native复核；未继承丢失候选PASS。新冷GDN467项/33套、Attention247项/23套全过，独立raw复核完成；新精确提交CI仍待收口。见恢复结果JSON及RMS-QKV中文报告。完整35B L0/L3、生产Chisel/RTL与80%/90%利用率目标保持open；硬件cycle/busy/stall仍unknown。
+
+Qwen2有序归约已发布里程碑20261024:
+  更新时间: '2026-10-24'
+  核对main: e8375f64d861c45fea3fbd6d445e5c213ff895a6
+  核对Git树: ef7e88ba2673946dd29486a17ef5a05ffc8748b9
+  性质: 已发布局部里程碑的来源与范围索引，不是任务状态更新或新的硬件验收。
+  历史边界: 当前证据索引20261024及其5a8e99c时点compile TEMP保持原文；后续scalac PASS仅见下列独立compile证据，不回写旧快照。
+  任务与验收边界: 46父项/62叶项及全部负责人、依赖、完成边界和证据保持不变。P03/C05/C04.2/C08.2/Q22/S00/S01仍to do，U00.2/Q21.3仍ongoing，U01仍to do。完整block RTL为0/5；固定4096-MAC资源分母的90%目标未达/未实测。
+  观察器边界: 第六项observer仅AST真实方法定义及scripted端点软件fixture PASS，其正常source-loaded TEMP保持历史原文。第七项仅正常模块加载/code-binding PASS；未进入Observation上下文、捕获真实runtime十字段或验证对真实服务无干扰，这些资格仍TEMP。十字段不是全部内部状态，不能继承native
+    R2数值资格。
+  检验说明: 每个里程碑均提供check_proof兼容的文件、SHA256、设计提交、范围和关联文件；标准validate不检查任意dated节，须另逐项显式check_proof并核对全部40个证据文件。README和URL仅供导航解释，不作为任务完成证明。
+  自动CI边界: 所列各提交的payload guard成功仅证明该次发布检查，不是候选测试/native重跑，也不代替下面各自的限定证据。
+  里程碑:
+  - 里程碑: ordered_fold_compile
+    发布提交: 172d67e569e0cee72d92cb72c2c94545b36919f4
+    关联既有任务:
+    - P03
+    关联含义: 仅进展/来源支持，不新增或关闭任务，不替代完成边界
+    范围: PASS仅selected默认关闭候选的一次scalac编译：92源、550class。没有elaboration、Chisel模块运行、真实client同拍竞争或RTL；不覆盖新完整block。源候选5a8e99c中的当时compile TEMP作为历史保留。
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40132026184
+    CI范围: payload guard，不是候选或native重跑
+    限制与来源关联任务:
+    - S00
+    - S01
+    设计提交: 5a8e99c8db278bbb5e441d4fdc294c20dbf41f00
+    文件: candidates/qwen2_ordered_vector_compile_evidence/SUMMARY.json
+    SHA256: 9445f7a7c3134361773973d545f3bfc0f248923ec31fce480b709bfa34934217
+    关联文件:
+    - 文件: candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json
+      SHA256: ce68505557a0c50fc9e5dfbfac531d3e13b8abb99d6e3f167392a645a0e693df
+    - 文件: candidates/qwen2_ordered_vector_compile_evidence/RUNNER_PINS.json
+      SHA256: b42363f4e4eb619a30961a0353ff1588cca345729d8bcce7f3c49698670858c7
+    - 文件: candidates/qwen2_ordered_vector_compile_evidence/README_CN.md
+      SHA256: 67b44bf1bf9a89a27cfd93279fab81679a3e94669246abc47a8246a9e756bac6
+    README与URL用途: 导航与解释，不作为任务完成证明
+  - 里程碑: ordered_fold_behavior
+    发布提交: e82f4c3c1e920cc882d47de407e44766546e1a11
+    关联既有任务:
+    - P03
+    关联含义: 仅进展/来源支持，不新增或关闭任务，不替代完成边界
+    范围: PASS仅显式翻译8-state pre-edge控制的Python软件参考及exact算术组合；四模式各48项，不是实际Chisel执行或硬件时序等价。两项开发优先级失败保留。
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40132948089
+    CI范围: payload guard，不是候选或native重跑
+    限制与来源关联任务:
+    - C05
+    - U00.2
+    设计提交: e82f4c3c1e920cc882d47de407e44766546e1a11
+    文件: candidates/qwen2_ordered_behavior/validation/RESULTS.json
+    SHA256: 5544b2d59cd3ee05dfc111fc45003bf69d7e0772ad004bf4fd7fd537ddc61c3f
+    关联文件:
+    - 文件: candidates/qwen2_ordered_behavior/README_CN.md
+      SHA256: 9f9f09c13dd623e6f6d9b3a5a06d11edadb3d662e4b296417e8e6869d18dd5a6
+    - 文件: candidates/qwen2_ordered_behavior/validation/DEVELOPMENT_FAILURES.json
+      SHA256: ff20808baae3c123a7b2e6e20bfa0221d4284528bc0a34226d9cb313845ba924
+    README与URL用途: 导航与解释，不作为任务完成证明
+  - 里程碑: ordered_fold_schedule
+    发布提交: 5109c30ab9eda147f5127c42dbb0a55d33a66363
+    关联既有任务:
+    - P03
+    关联含义: 仅进展/来源支持，不新增或关闭任务，不替代完成边界
+    范围: PASS仅真实Attention generator的M1/M2有界软件数值与工作项协议；四模式各21项。default-off；该历史片尚未接owner/direct/runtime，两个握手开发失败保留。Add/Mul事件不是周期。
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40133929646
+    CI范围: payload guard，不是候选或native重跑
+    限制与来源关联任务:
+    - C05
+    - Q21.3
+    - U00.2
+    设计提交: 5109c30ab9eda147f5127c42dbb0a55d33a66363
+    文件: candidates/qwen2_ordered_schedule/validation/RESULTS.json
+    SHA256: 9b0107fa9a28e042aa486aa43c3842ddce5aebd980c87c9b49725e70b7088b65
+    关联文件:
+    - 文件: candidates/qwen2_ordered_schedule/README_CN.md
+      SHA256: 1ec9f75577e2e8f8596f0ae0161c85c5e7589fef20e3c76fee8ece2ad88043b8
+    - 文件: candidates/qwen2_ordered_schedule/SOURCE_PINS.json
+      SHA256: 23e9199fafe513b2018546aac71beb8c4f4d66a63ee1120299e81a0da768e739
+    - 文件: candidates/qwen2_ordered_schedule/validation/DEVELOPMENT_FAILURES.json
+      SHA256: 42d6e5ac4374e61a6864930b4daab2611ba9c0492dc908b27ca500e9d196b699
+    README与URL用途: 导航与解释，不作为任务完成证明
+  - 里程碑: ordered_fold_owner
+    发布提交: a672a56feef9b661f6682bedfcbd702d1ddbc3fa
+    关联既有任务:
+    - C05
+    - P03
+    关联含义: 仅进展/来源支持，不新增或关闭任务，不替代完成边界
+    范围: PASS仅默认关闭真实Python owner/client及原direct physical driver控制集成；四模式各15owner+4direct。Matrix/Host/Dense及非fold ScalarControlAdapter是synthetic，仅ordered
+      lanes exact；不是完整Attention/native/fullblock数值证据，3类开发失败保留。
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40135909507
+    CI范围: payload guard，不是候选或native重跑
+    限制与来源关联任务:
+    - C04.2
+    - Q21.3
+    - U00.2
+    设计提交: a672a56feef9b661f6682bedfcbd702d1ddbc3fa
+    文件: candidates/qwen2_ordered_owner/validation/RESULTS.json
+    SHA256: f28966048298382445a935447efb777456773fe05baa81251c38fe19dcd7c327
+    关联文件:
+    - 文件: candidates/qwen2_ordered_owner/README_CN.md
+      SHA256: 56473f0a5108e42f02c183514f47c10355d134548966d35db810374e2066eeb7
+    - 文件: candidates/qwen2_ordered_owner/SOURCE_PINS.json
+      SHA256: 5f80e1b2a0d5f392c4e1ae776c9da7ca0c9b0ddb5696aadc6a83274472b9064b
+    - 文件: candidates/qwen2_ordered_owner/validation/DEVELOPMENT_FAILURES.json
+      SHA256: 12df4057057ec6bb6e225ec096351321f07c16b6ef8880bf3d44aa8b36eba6d8
+    README与URL用途: 导航与解释，不作为任务完成证明
+  - 里程碑: ordered_fold_native_r2
+    发布提交: 039bef44e37062e317af705ac8569db9809d7e3c
+    关联既有任务:
+    - P03
+    关联含义: 仅进展/来源支持，不新增或关闭任务，不替代完成边界
+    范围: PASS仅冻结qr/kr/v边界的真实native Attention组件M1/M2；各一次launch内off/on串行，两臂终态后与原Python recipe逐word比较，1536+12与3072+36；17实际ELF与1318pins复核，R1缺libz及独审配置漂移FAIL保留。不是prefix/fullblock/M128/PyTorch
+      bitexact/Chisel/RTL/硬件周期或利用率。
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40138411265
+    CI范围: payload guard，不是候选或native重跑
+    限制与来源关联任务:
+    - Q22
+    - S01
+    - Q21.3
+    - U00.2
+    设计提交: 039bef44e37062e317af705ac8569db9809d7e3c
+    文件: candidates/qwen2_ordered_native_r2/validation/ACTUAL_SUMMARY.json
+    SHA256: 0a84f561d7da8918f5ef5154b3040b7f93ee8b1764b14fa42ea96cf1a6e72765
+    关联文件:
+    - 文件: candidates/qwen2_ordered_native_r2/README_CN.md
+      SHA256: f993f4516d4e4537c0258bd93840f3bba14705c126ebf4ca78e143953d5f56c8
+    - 文件: candidates/qwen2_ordered_native_r2/validation/INDEPENDENT_ACTUAL_REVIEW.json
+      SHA256: 5f06e0ed7fe94d2008fd676b8d169406b5551acd7a50c696fdc3b740e9cf12d4
+    - 文件: candidates/qwen2_ordered_native_r2/SOURCE_PROFILE_PINS.json
+      SHA256: 15238d74abc5161c067540260c1c010ccbcc18d1f84214a2041c4b676125ebd6
+    - 文件: candidates/qwen2_ordered_native_r2/INPUT_PINS.json
+      SHA256: cdd37a552b5964ae8725284217f82265c23f6a48de939f6d9bd26f15c2c30d22
+    - 文件: candidates/qwen2_ordered_native_r2/RUNTIME_ELF_PINS.json
+      SHA256: 61798130c221fdb6bfedbbd6ef2c6013cf8e38ab755af3d5ac3852def9cd98e6
+    - 文件: candidates/qwen2_ordered_native_r2/validation/R1_FAILURE_RETAINED.json
+      SHA256: e13c93e8b5b07fa104755baabf001984eb09eecf40be15bb75501118296966dc
+    README与URL用途: 导航与解释，不作为任务完成证明
+  - 里程碑: ordered_fold_observer
+    发布提交: c8de5739b68e7cfc3489cbe677681a5af6009442
+    设计提交: c8de5739b68e7cfc3489cbe677681a5af6009442
+    关联既有任务:
+    - C08.2
+    限制与来源关联任务:
+    - C08.3
+    - U00.2
+    - P03
+    关联含义: 仅软件观察器候选进展，不关闭真实block runner或DUT回执验收
+    范围: PASS仅源码绑定observer的真实方法定义AST与scripted Matrix/Scalar端点fixture；26项四模式及独立26项。正常source-loaded mode仍TEMP，十字段不等于全部内部状态。驻留/shape/extent及绑定/帧失败归因保留；无native/M16/M128/fullblock/Chisel/RTL/周期或利用率资格，不继承R2数值证据。
+    文件: candidates/qwen2_ordered_observer/validation/SUMMARY.json
+    SHA256: 8d86e5d4f724d886cfc464e27af9e435eee8b65b5ef54b19440a18dea0afbc78
+    关联文件:
+    - 文件: candidates/qwen2_ordered_observer/README.md
+      SHA256: 786f68b0e5551d274e76fd23801b6a299dac99ea7cdf823f78a9e287d01b0a4a
+    - 文件: candidates/qwen2_ordered_observer/SOURCE_PINS.json
+      SHA256: 080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a
+    - 文件: candidates/qwen2_ordered_observer/capture.py
+      SHA256: 46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144
+    - 文件: candidates/qwen2_ordered_observer/monitor.py
+      SHA256: 43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87
+    - 文件: candidates/qwen2_ordered_observer/validation/RESULTS.json
+      SHA256: 0afecac26ec496d0a9103019b5a4d9b0b68ac24340968bceee159260bb8c26a9
+    - 文件: candidates/qwen2_ordered_observer/validation/INDEPENDENT_REVIEW.json
+      SHA256: 56a2ff0e5bb6447cf9647b5299fe132c3f473861b07483fa94157c106ef98547
+    - 文件: candidates/qwen2_ordered_observer/NEXT_SOURCE_BINDING_CN.md
+      SHA256: d4160b3ae4b04d0dc60f55cd4540ba28ce7b6fa3cfd9207800c1408261a5b138
+    - 文件: plans/qwen2_ordered_observer_plan_cn.md
+      SHA256: b842001c551010c2ea5886e36fd8bc7470f2e835a62ab88edbd0ab46ed889194
+    README与URL用途: 导航与解释，不作为任务完成证明
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40139666638
+    CI范围: payload guard，不是候选测试或native重跑
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+  - 里程碑: ordered_fold_normal_source_binding
+    发布提交: e8375f64d861c45fea3fbd6d445e5c213ff895a6
+    设计提交: e8375f64d861c45fea3fbd6d445e5c213ff895a6
+    来源基线: c8de5739b68e7cfc3489cbe677681a5af6009442
+    关联既有任务:
+    - C08.2
+    - U00.2
+    关联含义: 仅补正常模块加载与code绑定来源，不关闭观察器、真实block runner或DUT回执验收。
+    范围: PASS仅正常模块加载/code-binding：11方法及4拒绝例，正常/优化/既有独立优化三份原运行receipt一致；316源文件、181个具有文件身份的模块、18映射文件（16 ELF+2 locale）。保留四类历史FAIL及独立预检NOT_EXECUTED；不是Observation上下文/capture/seal、真实服务无干扰或数值资格，也不是fullblock/M16/M128/Chisel/RTL/硬件周期或利用率。
+    依赖初始化披露: 正常import包含原钉定ctypes PyDLL(None)、NumPy扩展/BLAS初始化、float32两元素dot及20×20 BLAS FPE自检；不是完全无native，但这些依赖自检不代表任务数值验收。
+    未执行与限制: 未加载任务级Matrix ELF，未构造owner/service、reset或接受job，未做任务Attention算术或用户tensor/参考读取；未进入Observation上下文或捕获真实runtime字段。指定入口拒绝器和pins审查不是通用沙箱；202个runtime
+      pins是准入表，不表示全部执行。
+    文件: candidates/qwen2_ordered_source_binding/validation/SUMMARY.json
+    SHA256: 1dd6641d2d9d064a2dbb05f45ab5ceddad10e61b0f57147829ba3139dc2fedc8
+    关联文件:
+    - 文件: candidates/qwen2_ordered_source_binding/README.md
+      SHA256: 8cee97453ba78fdddd566426cfca76d4a6cd7ee8753b731b07cd1b0bc2598ba0
+    - 文件: candidates/qwen2_ordered_source_binding/MANIFEST.json
+      SHA256: db7e045a42029f741fd94c1eea5d09e7b1929ac3e446001cc0d8e2a85a01a7ba
+    - 文件: candidates/qwen2_ordered_source_binding/check_binding.py
+      SHA256: 35da451022452ca86481b28d99c9017aa775c734bd4ce03fc5c4402792078a36
+    - 文件: candidates/qwen2_ordered_source_binding/profile_gate.py
+      SHA256: c12cebf32e26bf2fc24b560f5f305456b396960bcefdbbd8d6badc0284fed29f
+    - 文件: candidates/qwen2_ordered_source_binding/run_bounded.py
+      SHA256: 148486ce33c656bcc6b05b22fd0927fee3c4d1c050a442e08afe2f6cd9e71fec
+    - 文件: candidates/qwen2_ordered_source_binding/validation/BINDING_RESULT.json
+      SHA256: af68d6e15b1bb11e296939847ecce3cbb974a3d2381e3ba86621ce9984244d5f
+    - 文件: candidates/qwen2_ordered_source_binding/validation/INDEPENDENT_REVIEW.json
+      SHA256: 6186990bdfefea81b5131331877df1fbe726e07079164a5555dd9a33322e0989
+    - 文件: plans/qwen2_ordered_source_binding_plan_cn.md
+      SHA256: 93cfd7f067820f40c11837fa9adaee2c307c107e975275e0dd1ba74a55c3fe2c
+    README与URL用途: 导航与解释，不作为任务完成证明
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40140848322
+    CI范围: payload guard（38普通+38优化），不是正常绑定或native数值重跑
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+  设计与执行身份说明: 设计提交标识被索引候选/证据包的固定源码快照（可能为发布提交），不自动等于实际runtime HEAD；执行身份以各报告精确config/source/ELF pins为准。native R2继承owner源码基线a672a56feef9b661f6682bedfcbd702d1ddbc3fa，observer继承039bef44e37062e317af705ac8569db9809d7e3c；本次正常绑定以c8de5739b68e7cfc3489cbe677681a5af6009442为来源基线。

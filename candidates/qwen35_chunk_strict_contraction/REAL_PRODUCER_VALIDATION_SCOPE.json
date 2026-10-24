@@ -1,0 +1,419 @@
+{
+  "status": "PASS_SOFTWARE_REAL_PREP_TO_QK_BOUNDED_SLICE_ONLY",
+  "base_revision": "0007cacec1344fec331bddc454c45e363a7f6b1f",
+  "bounds": {
+    "cpu_count": 1,
+    "address_space_bytes": 536870912,
+    "wall_limit_seconds": 60,
+    "cpu_limit_seconds": 60,
+    "native_threads": 1
+  },
+  "launch_setup_failure": {
+    "attempt": 1,
+    "exit_code": 127,
+    "diagnosis": "/usr/bin/time absent; Python diagnostic never launched",
+    "artifacts": "reports/execution/QWEN35_REAL_PRODUCER_SLICE_20261023/attempt1.*"
+  },
+  "author_focused_run": {
+    "attempt": 2,
+    "tests": 2,
+    "unittest_elapsed_seconds": 10.597,
+    "process_wall_seconds": 10.828,
+    "exit_code": 0,
+    "artifacts": "reports/execution/QWEN35_REAL_PRODUCER_SLICE_20261023/attempt2.*",
+    "first_actual_attempt": true,
+    "two_candidate_python_hashes_before_after_equal": true,
+    "hash_scope": "Only the two new candidate/test Python files captured in attempt2.sources before the run; both match final source bytes"
+  },
+  "independent_combined_regression": {
+    "status": "PASS_SOFTWARE_REAL_PREP_TO_QK_BOUNDED_SLICE_ONLY",
+    "tests": 22,
+    "errors": 0,
+    "failures": 0,
+    "elapsed_seconds": 37.926254444988444,
+    "unittest_elapsed_seconds": 37.926,
+    "exit_code": 0,
+    "modules": [
+      "candidates.qwen35_chunk_strict_contraction.test_model",
+      "candidates.qwen35_chunk_strict_contraction.test_upstream_coroutine",
+      "candidates.qwen35_chunk_strict_contraction.test_injected_owner_phase",
+      "candidates.qwen35_chunk_strict_contraction.test_real_producer_slice"
+    ],
+    "runtime_bounds": {
+      "cpu_affinity": [
+        0
+      ],
+      "rlimit_as": [
+        536870912,
+        536870912
+      ],
+      "rlimit_cpu": [
+        60,
+        60
+      ],
+      "external_wall_timeout_seconds": 60,
+      "OPENBLAS_NUM_THREADS": 1,
+      "OMP_NUM_THREADS": 1,
+      "python_bytecode_writes": false
+    },
+    "hash_scope": "31 Python modules loaded at test-suite construction plus README.md and REAL_PRODUCER_SLICE.md; 33 total, not a complete imported dependency closure; later runtime imports may be absent",
+    "source_files": 33,
+    "source_hashes_before_after_equal": true,
+    "changed_files": [],
+    "overlap_with_top_level_28_files": 26,
+    "before_after_file_paths": [
+      "candidates/qwen35_chunk_strict_contraction/real_producer_slice.py",
+      "candidates/qwen35_chunk_strict_contraction/test_real_producer_slice.py",
+      "candidates/qwen35_chunk_strict_contraction/REAL_PRODUCER_SLICE.md",
+      "candidates/qwen35_chunk_strict_contraction/README.md",
+      "candidates/qwen35_chunk_strict_contraction/model.py",
+      "candidates/qwen35_chunk_strict_contraction/test_model.py",
+      "candidates/qwen35_chunk_strict_contraction/upstream_coroutine.py",
+      "candidates/qwen35_chunk_strict_contraction/test_upstream_coroutine.py",
+      "candidates/qwen35_chunk_strict_contraction/injected_owner_phase.py",
+      "candidates/qwen35_chunk_strict_contraction/test_injected_owner_phase.py",
+      "candidates/qwen35_gdn_prefill/chunk/model.py",
+      "candidates/qwen35_gdn_prefill/chunk/vector.py",
+      "candidates/qwen35_gdn_prefill/chunk/cumsum.py",
+      "candidates/qwen35_gdn_prefill/chunk/exp_policy.py",
+      "candidates/qwen35_gdn_prefill/prep/model.py",
+      "candidates/qwen35_gdn_prefill/prep/scalar.py",
+      "candidates/qwen35_gdn_prefill/prep/reduction.py",
+      "candidates/qwen35_gdn_prefill/prep/layout.py",
+      "candidates/qwen35_gdn_prefill/prep/test_model.py",
+      "candidates/qwen35_gdn_prefill/conv/scalar.py",
+      "candidates/qwen35_gdn_prefill/rms_owner.py",
+      "candidates/qwen35_gdn_prefill/typed_dense.py",
+      "candidates/qwen35_strict_fp32_lane/lane_model.py",
+      "candidates/qwen35_strict_fp32_lane/fraction_reference.py",
+      "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py",
+      "candidates/qwen2_resident_matrix/transposed_down/model.py",
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py",
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+      "candidates/qwen35_35b_exp/gate_scalar.py",
+      "candidates/qwen35_35b_exp/scalar.py",
+      "candidates/qwen35_chunk_strict_contraction/schedule_probe.py",
+      "candidates/qwen35_gdn_prefill/conv/model.py"
+    ],
+    "extra_before_after_files": {
+      "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": {
+        "bytes": 29097,
+        "sha256": "b3a3b61a0414ab72d67d6de192b79de332fddc64b459c55a6f7f5ff149abaa27"
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": {
+        "bytes": 8445,
+        "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+      },
+      "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py": {
+        "bytes": 19134,
+        "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+      },
+      "candidates/qwen35_35b_exp/gate_scalar.py": {
+        "bytes": 2206,
+        "sha256": "c3661f498912ec55b70bd4344a53013409e567c6f01f78af26fe515e8710532d"
+      },
+      "candidates/qwen35_35b_exp/scalar.py": {
+        "bytes": 3682,
+        "sha256": "5e8f44c7a9ab95d9b18fff2fe443b4cc8742b0f037b61ff12121f6ba12c2e8c5"
+      },
+      "candidates/qwen35_chunk_strict_contraction/schedule_probe.py": {
+        "bytes": 3532,
+        "sha256": "09a21ee55c8ab891b04856ab4d642df3da19eea2d878f110daef0a0d47d0dd17"
+      },
+      "candidates/qwen35_gdn_prefill/conv/model.py": {
+        "bytes": 22607,
+        "sha256": "bae5ae070906c5d8a301e48531e5d57590108dca730ff40384bae3fa393d3486"
+      }
+    },
+    "top_level_files_verified_after_run_only": [
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala"
+    ],
+    "top_level_28_files_all_match_after_run": true,
+    "all_four_historical_receipts_byte_identical_to_base_revision": true,
+    "source_review": "No blocking finding; original Prep/Chunk methods and actual producer provenance verified; only instance _op is replaced",
+    "evidence": "Independent reviewer reported exact run result and hashes; no reviewer log files were created under its no-edits constraint",
+    "unittest_summary": "Ran 22 tests in 37.926s\n\nOK"
+  },
+  "hash_scope": "28 explicitly listed files; not a complete imported dependency closure",
+  "files": {
+    "candidates/qwen35_chunk_strict_contraction/real_producer_slice.py": {
+      "bytes": 8363,
+      "sha256": "f9c30815362136301e83660a71647736ab31cab2a1971fe930e945b7da3e51ee"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_real_producer_slice.py": {
+      "bytes": 15782,
+      "sha256": "dac18f0d2bf319334d05f611ec088bb77cce6727546d20f0d5c469455d7f12d4"
+    },
+    "candidates/qwen35_chunk_strict_contraction/REAL_PRODUCER_SLICE.md": {
+      "bytes": 8371,
+      "sha256": "0a778fb351fb2d9da333ff33978757a10240054c036705b7e9189f47da2feb65"
+    },
+    "candidates/qwen35_chunk_strict_contraction/README.md": {
+      "bytes": 16569,
+      "sha256": "8df0b9f421f4da9062f09ed5d3cc91e2f58b4b4884c1211788d0a117bc358ac9"
+    },
+    "candidates/qwen35_chunk_strict_contraction/model.py": {
+      "bytes": 6830,
+      "sha256": "89cce2f9706cecd1a4e942d66e8e29ad754f86443276c8cf91aafceedab3ff7b"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_model.py": {
+      "bytes": 18493,
+      "sha256": "55e81ca48c138637489b88c35f3542be88634304741eef7216c6d963de659a38"
+    },
+    "candidates/qwen35_chunk_strict_contraction/upstream_coroutine.py": {
+      "bytes": 5050,
+      "sha256": "c185687a4f86ef2606dd4d0057f3157016a1c2fa4e09e7ab80b72373a640367c"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_upstream_coroutine.py": {
+      "bytes": 11142,
+      "sha256": "5e6af774a6d2dc0b050d4e117c59f55a6b687c51ed4de3fe445ed9de4fa84636"
+    },
+    "candidates/qwen35_chunk_strict_contraction/injected_owner_phase.py": {
+      "bytes": 5518,
+      "sha256": "ff3e3785e5c1c9af5828557296591a07aff8045ad03f48334ad6419338a903c6"
+    },
+    "candidates/qwen35_chunk_strict_contraction/test_injected_owner_phase.py": {
+      "bytes": 15228,
+      "sha256": "bade3c964efa4a92510884c4dc7d0490e82eed4eab26cf208ed65c0b11dd89ca"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/model.py": {
+      "bytes": 47272,
+      "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/vector.py": {
+      "bytes": 9363,
+      "sha256": "37e3af3886b2892335b0b765b676dfa9effcee27de4984ce1de3199c148f787a"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/cumsum.py": {
+      "bytes": 3059,
+      "sha256": "7c0d69db2910f0fbb33373da60bfbc393850a8440052d530ccfa001be7eb9b4f"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/exp_policy.py": {
+      "bytes": 1765,
+      "sha256": "ba6a07f7507b43446c8848fcc33ea3a7dc83739c58a62c760eb88845a8eabf0d"
+    },
+    "candidates/qwen35_gdn_prefill/prep/model.py": {
+      "bytes": 29633,
+      "sha256": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11"
+    },
+    "candidates/qwen35_gdn_prefill/prep/scalar.py": {
+      "bytes": 3727,
+      "sha256": "bd869a645eab426f2fbd374c742c0ae725ac727b67bed1edb532b8c1a5ac73b1"
+    },
+    "candidates/qwen35_gdn_prefill/prep/reduction.py": {
+      "bytes": 1185,
+      "sha256": "326a10cea54338e4168b2150f27820d7ca40283e562d6beea6256e77113cbca1"
+    },
+    "candidates/qwen35_gdn_prefill/prep/layout.py": {
+      "bytes": 3797,
+      "sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29"
+    },
+    "candidates/qwen35_gdn_prefill/prep/test_model.py": {
+      "bytes": 26385,
+      "sha256": "bf0d7123a903b203f79e38d4d07cb0943a481e0454ac4d025013dd18effe1c62"
+    },
+    "candidates/qwen35_gdn_prefill/conv/scalar.py": {
+      "bytes": 3168,
+      "sha256": "3131064d058a2262a059469f61b4830f0ec24ed74afd6b84745a2ada026fb132"
+    },
+    "candidates/qwen35_gdn_prefill/rms_owner.py": {
+      "bytes": 24408,
+      "sha256": "4b0b7f9530ce498f135857f4f02065442a9930ee35176fbb30999a9efb4e3c1c"
+    },
+    "candidates/qwen35_gdn_prefill/typed_dense.py": {
+      "bytes": 21132,
+      "sha256": "a0d454595709a056e296fd7212449fa8393c87d8a0893703fee8ac8b0b024391"
+    },
+    "candidates/qwen35_strict_fp32_lane/lane_model.py": {
+      "bytes": 7605,
+      "sha256": "13d755388217a621b59f114687a08266a33003ead358a8100cdfb7ce428acd32"
+    },
+    "candidates/qwen35_strict_fp32_lane/fraction_reference.py": {
+      "bytes": 7487,
+      "sha256": "857838e1a44a9c0b44f8b7bec814aa50063345e1aba7945b327b6b8a2d50fa5f"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py": {
+      "bytes": 25923,
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+    },
+    "candidates/qwen2_resident_matrix/transposed_down/model.py": {
+      "bytes": 37079,
+      "sha256": "3e6f73fa8fe6ce5e78b4578335e82d7e593d0cce0b35e8f401dc045e1df59412"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    },
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnInputPrepOwner.scala": {
+      "bytes": 13048,
+      "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe"
+    }
+  },
+  "actual_original_control": [
+    "InputPrepOwner._compute",
+    "InputPrepOwner.tick",
+    "TypedInputPrepDriver.tick",
+    "ChunkOwner._compute",
+    "ChunkOwner._exp",
+    "ChunkOwner._cumsum_add",
+    "ChunkOwner._transpose",
+    "ChunkOwner._matmul",
+    "ChunkOwner._mul_add",
+    "ChunkOwner._read",
+    "ChunkOwner._write",
+    "ChunkOwner.tick",
+    "ChunkOwner.ports",
+    "ChunkOwner._advance",
+    "ChunkOwner._finish",
+    "TypedChunkDriver.tick",
+    "Vector16.acquire",
+    "Vector16.release",
+    "TypedMemory.begin_write",
+    "TypedMemory.write_data",
+    "TypedMemory.acknowledge",
+    "TypedMemory.publish (Prep only)"
+  ],
+  "instance_hook": [
+    "ChunkOwner._op"
+  ],
+  "arithmetic_provider": "Existing strict integer software FP32 Add/Mul, 1..16 active lanes; fatal mask30 unchanged",
+  "unchanged_scalar_provider": "Original PrepScalar Add/Div/Sqrt/MulIeeeRne/Softplus and original ExpNegative implementation, including saturation abs>=80",
+  "native_vector_resource": "Noncomputing Vector16 lease shell; no native library loaded or native arithmetic called",
+  "owner_identity_warning": "Raw original owner report/source_identity is not numerical provenance for the strict instance hook",
+  "input_provenance": "Synthetic distinct raw ConvBF16 and ABBF16 physically fixture-written/ACKed/published; A_log/dt_bias readonly; no actual Conv/projection/RMS run",
+  "numerical_range": "A_log=-2, dt_bias=0.125, A=-4..-3.8125, B=-0.5..0.5; all causal pair>0.5; synthetic warm-range only, actual job is cold",
+  "prep": {
+    "tokens": 128,
+    "heads": 1,
+    "inactive_zero_written_heads": 15,
+    "core_words_per_token": 6400,
+    "core_bytes": 3276800,
+    "reads": 1666,
+    "writes": 51200,
+    "write_acks": 51200,
+    "actual_publication": true,
+    "independent_fraction_compared_words": 819200,
+    "distinct_input_rows": 128,
+    "distinct_output_rows": 128
+  },
+  "chunk": {
+    "admitted_tokens": 128,
+    "executed_heads": [
+      0
+    ],
+    "executed_chunks": [
+      0
+    ],
+    "key_dim": 128,
+    "value_dim": 128,
+    "cold": true,
+    "original_compute": true,
+    "synthetic_phase_operands_injected": false,
+    "scratch_reserved_bytes": 1679360,
+    "scratch_written_and_acked_bytes": 446464,
+    "reads": 76449,
+    "writes": 6976,
+    "write_acks": 6976,
+    "chunks_started": 1,
+    "chunks_completed": 0,
+    "exp_negative_calls": 2209,
+    "exp_saturations": 0,
+    "exp_zero_outputs": 0
+  },
+  "producer_before_ut": {
+    "reads": 6304,
+    "writes": 6464,
+    "complete_matrix_words_compared": 87040,
+    "matrix_names": [
+      "gates",
+      "q",
+      "k",
+      "v",
+      "kb",
+      "vb",
+      "kbg",
+      "qg",
+      "ke",
+      "kt",
+      "ket",
+      "pair"
+    ]
+  },
+  "contractions": {
+    "phases": [
+      "ut_matmul",
+      "intra_matmul"
+    ],
+    "per_phase_reads": 35072,
+    "per_phase_writes": 256,
+    "per_phase_write_acks": 256,
+    "independent_numpy_final_words_compared": 8192,
+    "full_ascending_k128": true,
+    "pair_multiplication_after_reduction": true
+  },
+  "strict_arithmetic": {
+    "mul_lane_operations": 1097728,
+    "add_lane_operations": 1050784,
+    "independent_numpy_intermediate_result_words_compared": 2148512,
+    "single_lane_issues": 2208,
+    "active_lane_unit_widths": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "full_plane_independent_flags_oracle": false,
+    "native_vector_calls": 0
+  },
+  "termination": {
+    "status": "Aborted",
+    "qk_final_ack_before_abort": true,
+    "first_solve_rhs_read_accepted_and_drained": 1,
+    "first_solve_rhs_data_consumed_by_generator": false,
+    "solve_arithmetic_executed": false,
+    "leases_held_until_drain": true,
+    "held_terminal_verified": true,
+    "detach_after_retirement": true,
+    "original_methods_restored": true
+  },
+  "production_source_or_class_policy_changed": false,
+  "full_chunkjob_success": false,
+  "staging_complete": false,
+  "output_or_state_writes": false,
+  "output_or_state_publication": false,
+  "scratch_publication": false,
+  "state_carry_tested": false,
+  "generation_advanced": false,
+  "second_chunk_executed": false,
+  "full_m128_chunk_run": false,
+  "full_block_pass": false,
+  "pretrained_accuracy": false,
+  "whole_plane_schedule_installed": false,
+  "rtl_executed": false,
+  "scala_chisel_executed": false,
+  "native_vector16_executed": false,
+  "hardware_cycles": null,
+  "hardware_utilization": null,
+  "physical_storage_proven": false,
+  "native_vector_min_normal_flags_discrepancy_resolved": false,
+  "preserved_historical_receipts": [
+    "VALIDATION_SCOPE.json",
+    "SCHEDULE_VALIDATION_SCOPE.json",
+    "UPSTREAM_COROUTINE_VALIDATION_SCOPE.json",
+    "INJECTED_OWNER_VALIDATION_SCOPE.json"
+  ]
+}

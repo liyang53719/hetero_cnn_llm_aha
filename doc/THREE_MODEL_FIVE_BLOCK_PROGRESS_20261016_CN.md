@@ -1976,3 +1976,10 @@ R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因
 新增test-only instance hook，在真实ChunkOwner/TypedChunkDriver执行单head UT、QK各完整一相位；原tick/ports/_advance/_finish、lease、ScratchPlan、字节写ACK与drain未复制。1280合成operand beats经同driver实写/ACK后才读；admission input仅合成发布fixture，不授真实Prep/decay producer资格。每相位35072读/1536写ACK，8192终值与独立NumPy分离Mul/Add逐位相同，原中间值/Fraction回归保留。作者20项25.947秒exit0；独审20项仓库测试加3项临时边界测试共23项27.016秒exit0，1CPU/512MiB/60秒；16列明文件前后hash一致，不是完整依赖闭包。
 
 末ACK背压、abort/reset排空、stale/malformed ACK拒绝信用、strict UF3 Numerical、terminal保持及detach/reset通过。相位耗尽必须获得原owner的Protocol失败，output/state零写，staging/publication/commit/generation均false；这是预期负向生命周期，不是fullowner成功。Vector16仅不计算的lease shell，原CPP flags差异未解；whole-plane调度、真实producer全链、完整block/RTL未完成，五RTL仍0/5，Qwen2M128终态UNKNOWN，无新利用率。保留所有旧证据；仅本地提交，远端发布仍待确认，未清理。
+
+
+## PASS（真实producer软件切片）/ INCOMPLETE（双chunk及完整block）：2026-10-23
+
+新增real_producer_slice：仅原始Conv/AB BF16与A_log/dt_bias使用明确合成fixture，原TypedInputPrepDriver实际计算/ACK/发布128-token单head Prep；原ChunkOwner._compute不替换，实际生产cumsum、decay、products、pair、transpose及head0/chunk0完整UT/QK。不注入kb/kt/pair；只以1..16活动lane strict Add/Mul适配替代实例_op，原PrepScalar Div/Sqrt/Softplus/exp政策保留，不授原生Vector16算术等价。核819200 Prep words、87040 producer words与2148512 Add/Mul中间结果。QK末ACK后接受solve_v首读再走真实abort/drain，终态Aborted、chunks_started=1/completed=0，无output/state写或发布。
+
+首次wrapper因/usr/bin/time缺失exit127，Python未开始；只换Bash计时后首次实际2测试10.597秒通过，原失败证据保留。独审合并22测试37.926秒exit0，1CPU/512MiB/60秒。33捕获文件前后hash相同，其中26与收据28项重叠，另7Python；收据2Scala仅运行后验证，不夸称完整闭包。四个历史收据不改。仅该软件切片PASS，第二chunk/state carry、全部head、完整block及RTL未验收，五RTL0/5、Qwen2旧M128仍UNKNOWN、无MAC利用率。小批本地提交并备份，远端仍f93f0c4等待发布确认，无清理。

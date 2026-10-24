@@ -231,3 +231,21 @@ INJECTED_OWNER_VALIDATION_SCOPE.json records the bounded run separately from
 historical receipts. No production owner source or class policy is modified.
 This is real software lifecycle coverage with explicitly injected arithmetic
 and operands, not full-owner integration, full-block acceptance, or RTL proof.
+
+## Real InputPrep producers through UT/QK, bounded abort slice
+
+[REAL_PRODUCER_SLICE.md](REAL_PRODUCER_SLICE.md) describes the next, separate
+software diagnostic. Actual M128 InputPrep computes and publishes its full
+one-active-head core; the unchanged ChunkOwner._compute then produces all
+head0/chunk0 cumsum/decay/product/transpose operands and both complete UT/QK
+outputs. Only the instance `_op` is replaced by existing strict integer
+Add/Mul, supporting 1..16 active lanes. No synthetic kb/kt/pair is injected.
+
+Both contractions' final writes are ACKed, then the real owner aborts and
+drains its first accepted solve read before consuming it. This intentionally
+ends Aborted with no full-job output/state writes, publication or generation
+advance. The original PrepScalar and ExpNegative remain unchanged. This does
+not execute chunk1, solves, a completed chunk, a full M128 block, native
+Vector16 or RTL, and synthetic warm-range inputs are not pretrained accuracy.
+`REAL_PRODUCER_VALIDATION_SCOPE.json` is a new receipt; earlier receipts remain
+historical, unchanged evidence of their own code and narrower boundaries.

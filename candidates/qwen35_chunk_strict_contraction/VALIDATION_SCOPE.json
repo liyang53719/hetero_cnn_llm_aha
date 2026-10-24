@@ -1,0 +1,45 @@
+{
+  "status": "PASS_ISOLATED_SYNTHETIC_CONTRACTION_ONLY",
+  "tests": 7,
+  "author_seconds": 9.903,
+  "independent_seconds": 9.425,
+  "independent_exit": 0,
+  "cpu_count": 1,
+  "address_space_bytes": 536870912,
+  "wall_cpu_limit_seconds": 60,
+  "token_chunks": [
+    64,
+    64
+  ],
+  "heads": 1,
+  "phases": [
+    "UT",
+    "QK"
+  ],
+  "numpy_word_comparisons": 4210688,
+  "fraction_main_intermediate_word_flag_pairs": 3072,
+  "fraction_main_final_word_flag_pairs": 12,
+  "directed_intermediate_word_flag_pairs": 1280,
+  "directed_final_bit_only_comparisons": 5,
+  "matrix_lane_passes": 4194304,
+  "vector_ops": 16384,
+  "proposed_data_storage_bytes": 40960,
+  "full_plane_flag_oracle": false,
+  "full_block_pass": false,
+  "rtl_pass": false,
+  "measured_utilization": null,
+  "files": {
+    "model.py": {
+      "bytes": 5366,
+      "sha256": "5dfc200d422eafe966b1a7072d850370ab3a49fa975141977d6e89978660f869"
+    },
+    "test_model.py": {
+      "bytes": 13024,
+      "sha256": "9ef5bc419e28f302f088907eb717386696ab1e49ac4cebf044be63097550ec4f"
+    },
+    "README.md": {
+      "bytes": 4963,
+      "sha256": "b70f76c2004a35c069da314aa76da66e79b75efd2c08ce232c965ad9af5068ca"
+    }
+  }
+}

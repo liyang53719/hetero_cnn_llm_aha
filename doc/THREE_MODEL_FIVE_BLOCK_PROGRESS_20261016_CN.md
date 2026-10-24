@@ -1942,3 +1942,12 @@ PASS仅限已实际运行的 Python Fraction/fixture逐字一致性检查；独�
 新增 candidates/qwen35_strict_lane_structure_gate，复用原已固定validate_ir，只加载两个必要函数，不运行原runner。27项纯Python方法实际通过（21类IR负例、6注解变体及大小/hash边界等，计数不相加冒充独立测试总数）。对既有319324B CHIRRTL / SHA ea7b84533c96641771bd58ba97a10898d428fc6782b1ced726442ada0320eb7d 的实际只读预检通过：9模块全图可达一次、8条实例边、唯一24×24变量乘法、无extmodule/intmodule/blackbox marker。
 
 完整IR hash及旧来源/类资格回执为必要边界，旧parser不是通用FIRRTL全语法安全分析器。未提供外部注解时明确不作注解不存在的结论；提供非空注解全部拒绝。没有新展开、JVM或RTL运行，不证明新runner的测试电路等同此旧IR，也不自动打开执行gate。原IR/classes不公开，七个公开文件只含代码、pins与有限摘要。五完整RTL仍0/5、M128原运行UNKNOWN、无新MAC利用率实测；未push、无新CI、无清理。
+
+
+## PASS（仅单 head 两个 chunk64 的 UT/QK 合成数值模型）：2026-10-23
+
+新增 candidates/qwen35_chunk_strict_contraction。真正执行M128边界的两个不同chunk64、phase5/6完整64×128乘128×64收缩，按K递增、FP32乘后加分别舍入、最后乘pair，不以循环单token替代chunk。提议复用4096 Matrix lane两pass和16 Vector最终因子运算，累计4194304 Matrix lane passes/16384 Vector运算；需40960B数据存储，未证明已有SRAM可免费复用，非完整block周期或利用率测量。
+
+R1原件保留：测试pair误用严格下三角、部分Fraction终值被零因子掩盖等覆盖缺口已修；R2模型算术源码不变，mask为下三角含对角，对角值1，不是tril offset+1。作者7测试9.903s；独审同hash前后7测试9.425s、exit0，1CPU/512MiB虚拟内存/60s墙钟及CPU限额。4210688项NumPy中间/输出word对比，12条Fraction链3072中间word+flag及12最终word+flag；5条实际Contraction定向链1280中间word+flag，但5个最终比较仅bits，不冒称flags也被比较。包括FMA/K顺序/因子位置差异、Mul/AddFatal、pair下溢、部分写回失败。
+
+没有完整平面独立flags oracle，也不证明上游decay生成、全部head、递归state carry、完整block、异步传输、RTL或物理资源/QoR。本候选与此前49笔发布批次分开；不包含原权重/NPZ/数组转储。五完整RTL仍0/5，原Qwen2M128终态UNKNOWN。

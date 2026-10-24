@@ -1,0 +1,44 @@
+{
+  "scope": "26 software-only observer tests per mode; synthetic arithmetic endpoints; not native/RTL",
+  "source_pins": {
+    "README.md": "786f68b0e5551d274e76fd23801b6a299dac99ea7cdf823f78a9e287d01b0a4a",
+    "SOURCE_PINS.json": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a",
+    "capture.py": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+    "monitor.py": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87",
+    "run_bounded.py": "da142ee17149b0ad1af009174bace637ceb6a4ba48f17cf9cfdd8bed87c5d998",
+    "test_observer.py": "4e79c1ad8a97f291f9073c611e145b03ebbd2370e751c4c60ce34106634aac3e"
+  },
+  "limits": {
+    "cpus": 1,
+    "address_space_bytes": 268435456,
+    "cpu_seconds": 20,
+    "wall_seconds": 25
+  },
+  "runs": [
+    {
+      "mode": "normal",
+      "exit": 0,
+      "wall_seconds": 5.38001839700155,
+      "log_sha256": "192b973d39eb30dfe36a953b0e2131a044f8e0e76c8bea719bf79be6dc500d5e"
+    },
+    {
+      "mode": "optimized",
+      "exit": 0,
+      "wall_seconds": 5.680122128978837,
+      "log_sha256": "ee49fb8b00892f79591664406eb31bd6c9b33b6e5e8f34d093c5b8fe783264ad"
+    },
+    {
+      "mode": "isolated",
+      "exit": 0,
+      "wall_seconds": 5.68332804297097,
+      "log_sha256": "1c9b935f6ca9b78dff5939fcfef2d86b1640c5eb2faf31df652be26bab959728"
+    },
+    {
+      "mode": "isolated_optimized",
+      "exit": 0,
+      "wall_seconds": 5.531492072972469,
+      "log_sha256": "0a24a2a41346a970c7dac64f895d5bb751d0719f5453ce55dd1f98e514a374a7"
+    }
+  ],
+  "source_unchanged": true
+}

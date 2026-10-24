@@ -1,0 +1,31 @@
+test_actual_abort_drain_never_seals (__main__.Tests.test_actual_abort_drain_never_seals) ... ok
+test_ast_mode_cannot_claim_runtime_source (__main__.Tests.test_ast_mode_cannot_claim_runtime_source) ... ok
+test_buffer_extent_drift_rejects (__main__.Tests.test_buffer_extent_drift_rejects) ... ok
+test_capture_failure_does_not_change_dut (__main__.Tests.test_capture_failure_does_not_change_dut) ... ok
+test_deleted_field_rejects (__main__.Tests.test_deleted_field_rejects) ... ok
+test_duplicate_commit_rejects (__main__.Tests.test_duplicate_commit_rejects) ... ok
+test_duplicate_consume_rejects (__main__.Tests.test_duplicate_consume_rejects) ... ok
+test_duplicate_intermediate_rejects (__main__.Tests.test_duplicate_intermediate_rejects) ... ok
+test_duplicate_scale_rejects (__main__.Tests.test_duplicate_scale_rejects) ... ok
+test_early_done_rejects (__main__.Tests.test_early_done_rejects) ... ok
+test_future_tail_cells_untouched (__main__.Tests.test_future_tail_cells_untouched) ... ok
+test_later_fault_cannot_complete_or_fake_prefix (__main__.Tests.test_later_fault_cannot_complete_or_fake_prefix) ... ok
+test_m1_m2_complete_real_owner_control (__main__.Tests.test_m1_m2_complete_real_owner_control) ... ok
+test_missing_ack_rejects (__main__.Tests.test_missing_ack_rejects) ... ok
+test_missing_intermediate_rejects (__main__.Tests.test_missing_intermediate_rejects) ... ok
+test_missing_pv_reuse_rejects (__main__.Tests.test_missing_pv_reuse_rejects) ... ok
+test_no_monitor_leak (__main__.Tests.test_no_monitor_leak) ... ok
+test_no_terminal_ack_rejects (__main__.Tests.test_no_terminal_ack_rejects) ... ok
+test_observer_does_not_change_actual_control (__main__.Tests.test_observer_does_not_change_actual_control) ... ok
+test_out_of_order_commit_rejects (__main__.Tests.test_out_of_order_commit_rejects) ... ok
+test_pv_order_and_duplicate_reject (__main__.Tests.test_pv_order_and_duplicate_reject) ... ok
+test_retired_result_objects_are_not_retained (__main__.Tests.test_retired_result_objects_are_not_retained) ... ok
+test_shape_drift_rejects (__main__.Tests.test_shape_drift_rejects) ... ok
+test_source_hash_drift_reject (__main__.Tests.test_source_hash_drift_reject) ... ok
+test_speculative_is_not_committed (__main__.Tests.test_speculative_is_not_committed) ... ok
+test_unknown_binding_role_rejects (__main__.Tests.test_unknown_binding_role_rejects) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 5.181s
+
+OK

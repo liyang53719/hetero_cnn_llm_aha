@@ -1,0 +1,49 @@
+{
+  "scope": "26 tests per mode, actual owner/schedule/client method definitions, scripted Matrix/Scalar endpoints; not numerical qualification",
+  "pass_modes": [
+    "normal",
+    "optimized",
+    "isolated",
+    "isolated_optimized"
+  ],
+  "native_runs": 0,
+  "rtl_runs": 0,
+  "failure_history": [
+    {
+      "retained_local_log": "probe.log",
+      "sha256": "ca3f4214a48b66352015fa2f5fd04cd05a81c3d176743fa3c347585dd8883f0a"
+    },
+    {
+      "retained_local_log": "probe2.log",
+      "sha256": "8045bdf49104a215ca3b1397710139be2fa04664bd80ca4763b6590d3737cb55"
+    },
+    {
+      "retained_local_log": "probe3.log",
+      "sha256": "d0441fa254abaf9d9deaa8cbdfdbf6302cef9abcc6c55a346d9a4d77cab92b94"
+    },
+    {
+      "retained_local_log": "probe4.log",
+      "sha256": "f3a719ebdb898788341be3d7330ef5d38248dd057b391a05343bc888c75dacc5"
+    }
+  ],
+  "failure_attribution": [
+    "Initial full-module bytecode binding differed from AST-definition fixture because imports change CPython 3.12 call opcode flags. Explicit AST-definition mode now compiles the same exact definitions; normal-source binding remains strict.",
+    "PackedClient returned ports do not contain state. Observer now binds actual pre-tick state at exact source line.",
+    "An executing nested generator may not expose gi_yieldfrom. Observer first searches active frame ancestors then suspended generator frames."
+  ],
+  "review_fixes": [
+    "Exact ten-field set, shape and extent enforced.",
+    "Original buffer _bytes helper actual code also bound.",
+    "Actual done deletes work/tag references and speculative state; completed metadata contains no tile/result object.",
+    "Nonintrusion checked against unobserved original owner and intentionally failed collector.",
+    "Initial field-set/shape/extent omission and completed-work strong-reference retention were found in review before freezing; no historical evidence was overwritten."
+  ],
+  "limits": [
+    "Normal loaded-source mode is implemented but not executed in this batch.",
+    "All ten fields are actual fixture execution values, but scripted endpoints are not numeric native Matrix/Scalar.",
+    "No per-add accumulator trajectory, scale pre-BF result, FP exception flags or intermediate PV key accumulator captured.",
+    "No fullgraph suffix dispatch change or full M16/M128 admission.",
+    "On an observation failure, monitoring stops and may retain the last active work/result for diagnosis. The completed-success path releases all work/tag result references; failure-path immediate reclamation is not claimed.",
+    "The approximately 63.57% slot ceiling is inherited parent-level fixed-resource analysis, not a result of these observer tests."
+  ]
+}

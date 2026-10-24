@@ -1,0 +1,42 @@
+{
+  "status": "PASS_INDEPENDENT_SOFTWARE_OBSERVER_REVIEW",
+  "source_pins": {
+    "README.md": "786f68b0e5551d274e76fd23801b6a299dac99ea7cdf823f78a9e287d01b0a4a",
+    "SOURCE_PINS.json": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a",
+    "capture.py": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+    "monitor.py": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87",
+    "run_bounded.py": "da142ee17149b0ad1af009174bace637ceb6a4ba48f17cf9cfdd8bed87c5d998",
+    "test_observer.py": "4e79c1ad8a97f291f9073c611e145b03ebbd2370e751c4c60ce34106634aac3e"
+  },
+  "parent_results_sha256": "0afecac26ec496d0a9103019b5a4d9b0b68ac24340968bceee159260bb8c26a9",
+  "parent_four_mode_logs_verified": true,
+  "independent_run": {
+    "mode": "-I -O -B",
+    "tests": 26,
+    "exit_code": 0,
+    "wall_seconds": 5.531177362019662,
+    "log_sha256": "c01331ff2b6bf7305ca2a07f50b3cf7eea5ab9017012a13121bfdf4ce4498dc9"
+  },
+  "limits": {
+    "cpus": 1,
+    "address_space_bytes": 268435456,
+    "cpu_seconds": 20,
+    "wall_seconds": 25
+  },
+  "source_unchanged": true,
+  "reviewed_closures": [
+    "Exact ten-field set, shape and extent validation, future-cell sentinels and actual event frequencies.",
+    "Published source pins and actual code-object bindings for seven DUT roles and PackedFields __init__, _put, _bytes and field_summary.",
+    "Scan/scale staging, successful consume and ordered score append before field commit. Speculative later-key values are not committed.",
+    "Eight actual PV probability observations per causal key, strict equal repeats, actual PackedClient result ACK then done, and clean owner terminal after all debt retirement.",
+    "Observer must stop before seal. Successful done drops work/tag/scale strong references, avoiding cumulative retained Matrix result tiles.",
+    "M1/M2 observed and unobserved outputs, clock, Scalar/Matrix counters, service events and fold events agree; capture failure does not change successful DUT execution."
+  ],
+  "limits_of_evidence": [
+    "Only actual owner definition AST software fixtures with synthetic Matrix/Scalar endpoints were executed; normal source-loaded monitoring mode was not executed.",
+    "No native, RTL, elaboration, M16/M128 or full-block execution occurred in this review.",
+    "The ten fields are not all internal bits: no per-add accumulator trajectory, unmaterialized scale Mul value, lane FP flags or per-key intermediate PV accumulator is observed.",
+    "An observation failure stops monitoring and rejects complete seal; the last active work may remain referenced for diagnosis. This is not a complete fault-trace facility.",
+    "Model steps and monitoring overhead are not hardware cycles or utilization evidence."
+  ]
+}

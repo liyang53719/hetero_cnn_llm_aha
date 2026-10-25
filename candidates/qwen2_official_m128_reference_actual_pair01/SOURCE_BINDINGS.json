@@ -1,0 +1,157 @@
+{
+  "config_bytes_published": false,
+  "exact_config_identity": {
+    "bytes": 4793988,
+    "sha256": "c5c8970a5409a8e736dc450fd86e99f9ef3661c62d7ecd690991f2bbbd665366"
+  },
+  "files": {
+    "capture_pair/capture_pair.py": {
+      "after_image": null,
+      "changed_from_public_r2": false,
+      "exact_text_diff": [],
+      "executed_identity": {
+        "bytes": 42040,
+        "sha256": "9d53546b3331f844dd0f5b9a3d1356b86f82f816bb50db5bfe4798e4e692ddcc"
+      },
+      "public_r2_identity": {
+        "bytes": 42040,
+        "sha256": "9d53546b3331f844dd0f5b9a3d1356b86f82f816bb50db5bfe4798e4e692ddcc"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/capture_pair/capture_pair.py"
+    },
+    "capture_pair/pins.json": {
+      "after_image": null,
+      "changed_from_public_r2": false,
+      "exact_text_diff": [],
+      "executed_identity": {
+        "bytes": 10910,
+        "sha256": "2ef96d86a0e7df7f5a79031dfc451cdfd0ada466219b3fc65b2561e80bac3b49"
+      },
+      "public_r2_identity": {
+        "bytes": 10910,
+        "sha256": "2ef96d86a0e7df7f5a79031dfc451cdfd0ada466219b3fc65b2561e80bac3b49"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/capture_pair/pins.json"
+    },
+    "full_reference_gate/gate_common.py": {
+      "after_image": "runtime_source_overrides/gate_common.py",
+      "changed_from_public_r2": true,
+      "exact_text_diff": [
+        "--- full_reference_gate/gate_common.py (public r2)\n",
+        "+++ full_reference_gate/gate_common.py (executed final profile)\n",
+        "@@ -24,7 +24,7 @@\n",
+        "     'Qwen2MLP': 'transformers/models/qwen2/modeling_qwen2.py',\n",
+        " }\n",
+        " LIMITS = {\n",
+        "-    'affinity_count': 4, 'cpu_seconds_hard': 60, 'wall_seconds': 90,\n",
+        "+    'affinity_count': 4, 'cpu_seconds_hard': 120, 'wall_seconds': 180,\n",
+        "     'sampled_tree_rss_bytes': 1610612736, 'rss_is_hard_cap': False,\n",
+        "     'poll_seconds': 0.02, 'cleanup_seconds': 2,\n",
+        "     'log_bytes_each': 1048576, 'output_bytes': 83886080,\n"
+      ],
+      "executed_identity": {
+        "bytes": 21955,
+        "sha256": "9502e6ebfdbfaf2b2a7fb8cefa6d2fd309a4dfa136aa53bbfc45091a0326e88c"
+      },
+      "public_r2_identity": {
+        "bytes": 21953,
+        "sha256": "4ca447b287072aebd103187efdf7594eceee35bd00acd64f769544188690d304"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/full_reference_gate/gate_common.py"
+    },
+    "full_reference_gate/network_policy.py": {
+      "after_image": null,
+      "changed_from_public_r2": false,
+      "exact_text_diff": [],
+      "executed_identity": {
+        "bytes": 11218,
+        "sha256": "e9d64b0372172233f1fcc7c374b79f9b5441ee728723868d996c09ca13e13f74"
+      },
+      "public_r2_identity": {
+        "bytes": 11218,
+        "sha256": "e9d64b0372172233f1fcc7c374b79f9b5441ee728723868d996c09ca13e13f74"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/full_reference_gate/network_policy.py"
+    },
+    "full_reference_gate/prepare_gate.py": {
+      "after_image": null,
+      "changed_from_public_r2": false,
+      "exact_text_diff": [],
+      "executed_identity": {
+        "bytes": 562,
+        "sha256": "0844b2f5d456570282e0aa6f4526afd27b74683f6511db72b671558339ace669"
+      },
+      "public_r2_identity": {
+        "bytes": 562,
+        "sha256": "0844b2f5d456570282e0aa6f4526afd27b74683f6511db72b671558339ace669"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/full_reference_gate/prepare_gate.py"
+    },
+    "full_reference_gate/run_gate.py": {
+      "after_image": null,
+      "changed_from_public_r2": false,
+      "exact_text_diff": [],
+      "executed_identity": {
+        "bytes": 27554,
+        "sha256": "32ca37b622591de55b2fc4c833c9a0900a2c70730ffbddbc09b6a015574721e5"
+      },
+      "public_r2_identity": {
+        "bytes": 27554,
+        "sha256": "32ca37b622591de55b2fc4c833c9a0900a2c70730ffbddbc09b6a015574721e5"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/full_reference_gate/run_gate.py"
+    },
+    "full_reference_gate/validate_outputs.py": {
+      "after_image": null,
+      "changed_from_public_r2": false,
+      "exact_text_diff": [],
+      "executed_identity": {
+        "bytes": 13789,
+        "sha256": "35e8d821111ae407a76ec44b6d99861d91e0946873685362696bd17495efd070"
+      },
+      "public_r2_identity": {
+        "bytes": 13789,
+        "sha256": "35e8d821111ae407a76ec44b6d99861d91e0946873685362696bd17495efd070"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/full_reference_gate/validate_outputs.py"
+    },
+    "full_reference_gate/worker.py": {
+      "after_image": "runtime_source_overrides/worker.py",
+      "changed_from_public_r2": true,
+      "exact_text_diff": [
+        "--- full_reference_gate/worker.py (public r2)\n",
+        "+++ full_reference_gate/worker.py (executed final profile)\n",
+        "@@ -181,7 +181,7 @@\n",
+        "     need(list(sys.version_info[:2]) == config['python_major_minor'] == [3, 12], 'Python version mismatch')\n",
+        "     need(sys.flags.isolated and sys.flags.no_site and sys.flags.dont_write_bytecode and sys.flags.optimize == 0, 'exact -I -S -B required')\n",
+        "     need(sorted(os.sched_getaffinity(0)) == cap['affinity'] and len(cap['affinity']) == 4, 'exact four-CPU affinity required')\n",
+        "-    need(resource.getrlimit(resource.RLIMIT_CPU) == (60, 60), '60 CPU-second hard worker limit required')\n",
+        "+    need(resource.getrlimit(resource.RLIMIT_CPU) == (120, 120), '120 CPU-second hard worker limit required')\n",
+        "     need(resource.getrlimit(resource.RLIMIT_AS) == tuple(cap['rlimit_as_unchanged']), 'RLIMIT_AS changed')\n",
+        "     sys.path[:] = [config['target'], config['runtime'], config['stdlib'], str(Path(config['stdlib']) / 'lib-dynload'), config['gate_directory']]\n",
+        "     config['_output'] = str(out)\n"
+      ],
+      "executed_identity": {
+        "bytes": 20738,
+        "sha256": "4406fe6dbc42a60061eec5b80a92470c20c1856e28c6b6f7c9ce09d06f532662"
+      },
+      "public_r2_identity": {
+        "bytes": 20735,
+        "sha256": "484b22ef83ae230cc571c1056fb4973c6b3331d3ce7d8a36d04cf6e6b77be371"
+      },
+      "public_r2_path": "candidates/qwen2_official_m128_reference_pair/full_reference_gate/worker.py"
+    }
+  },
+  "final_source_manifest_identity": {
+    "bytes": 7401,
+    "sha256": "d00fae78181faf46f9dcf1237ed3e98302fd41453eefa76efdbbd779bc0ac5ec"
+  },
+  "public_r2_parent_commit": "9e4d51f1acf8f5ac62326c6dd3ec54d2ab8fc9ff",
+  "repository": "liyang53719/hetero_cnn_llm_aha",
+  "rules": [
+    "Only two resource constants / worker expectation changed; model and terminal gate source bytes unchanged.",
+    "After-images are original executed bytes, not sanitized rewrites.",
+    "Assemble a separate private working directory; never overwrite the historical public r2 source/mock package."
+  ],
+  "schema": 1
+}

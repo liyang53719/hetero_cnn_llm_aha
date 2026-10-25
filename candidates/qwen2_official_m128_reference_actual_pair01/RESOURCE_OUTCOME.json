@@ -1,0 +1,72 @@
+{
+  "address_space_limit_changed": false,
+  "cleanup_seconds": 2,
+  "cpu_scope": "worker process including threads; Python subprocess/fork/spawn/exec/system audit events are denied; not a kernel aggregate tree CPU quota",
+  "cpu_usage_children": {
+    "ru_maxrss_bytes_linux": 571355136,
+    "ru_maxrss_note": "RUSAGE_CHILDREN high-water counter; not summed tree RSS",
+    "system_cpu_seconds": 2.7250389999999998,
+    "user_cpu_seconds": 47.643448
+  },
+  "failure_diagnostics_may_exceed_success_cap": true,
+  "full_manifest_pre_post_hashing_outside_worker_budget": true,
+  "hardware_performance_claimed": false,
+  "kernel_hard_wall_deadline": false,
+  "limit_reason": null,
+  "limits": {
+    "address_space_limit_changed": false,
+    "affinity_count": 4,
+    "cleanup_seconds": 2,
+    "cpu_seconds_hard": 120,
+    "deterministic_algorithms": true,
+    "interop_threads": 1,
+    "log_bytes_each": 1048576,
+    "output_bytes": 83886080,
+    "poll_seconds": 0.02,
+    "rss_is_hard_cap": false,
+    "sampled_tree_rss_bytes": 1610612736,
+    "threads_env": 4,
+    "wall_seconds": 180
+  },
+  "no_retry": true,
+  "overall_wall_note": "Measured by launcher before final receipt/seal writes, not a complete end-to-end final-seal duration.",
+  "parent_recorded_overall_wall_seconds_before_terminal_publication": 50.16429268801585,
+  "peak_sampled_tree_rss_bytes": 568340480,
+  "postflight": {
+    "bytes_checked": 1016158675,
+    "differences": {},
+    "files_checked": 18652,
+    "passed": true,
+    "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+    "wall_seconds": 0.9533391470322385
+  },
+  "preflight": {
+    "bytes_checked": 1016158675,
+    "files_checked": 18652,
+    "wall_seconds": 1.0259241619496606,
+    "worker_started": false
+  },
+  "remaining_tracked_live_count": 0,
+  "rss_is_hard_cap": false,
+  "schema": 1,
+  "strict_final_worker_plus_cleanup_lte180_qualification": false,
+  "successful_output_bytes_remaining": 17529298,
+  "terminal_output_budget": {
+    "actual_staged_bytes_checked_before_success_seal": true,
+    "base_output_bytes": 66325815,
+    "completion_seal_bytes": 14140,
+    "final_output_bytes": 66356782,
+    "limit_bytes": 83886080,
+    "receipt_bytes": 16827,
+    "terminal_log_bytes": {
+      "stderr.log": 0,
+      "stdout.log": 0
+    }
+  },
+  "worker_child_user_plus_system_cpu_seconds": 50.368487,
+  "worker_reaped": true,
+  "worker_returncode": 0,
+  "worker_wall_monitor_threshold_seconds": 180,
+  "worker_wall_scope": "Popen through worker exit and cleanup, including import and observed-file hashing; excludes parent manifest preflight",
+  "worker_wall_seconds": 48.15806052798871
+}

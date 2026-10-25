@@ -1,0 +1,75 @@
+{
+  "approval_and_claim_contents_excluded": true,
+  "dut_comparison": "NOT_RUN",
+  "execution_authority": false,
+  "execution_review": {
+    "original_private_review_identity": {
+      "bytes": 5947,
+      "sha256": "1899aa66eebd49dde597197280b9511cc7fbbdf91a8dd74089ee4e0357806545"
+    },
+    "projection": "EXECUTION_REVIEW_PROJECTION.json",
+    "status": "PASS_FRESH_OFFICIAL_M128_REFERENCE_EXECUTION_REVIEW_NOT_DUT_PASS"
+  },
+  "logical_run_id": "official_m128_reference_pair01",
+  "numeric_acceptance": "NOT_RUN",
+  "private_artifact_identities": {
+    "ALL29_VALIDATION.json": {
+      "bytes": 14647,
+      "sha256": "005cb36f8fc839524befd759ef63da105ec4d8975aad8cff5996e1e9a86ca9aa"
+    },
+    "COMPLETION_SEAL.json": {
+      "bytes": 14140,
+      "sha256": "8e027f3969a1df8871297f2b35fe7ab8f089c121b6ce5df07327c873509b260b"
+    },
+    "LAUNCH.json": {
+      "bytes": 3475,
+      "sha256": "011714b91268cbd937e1c6c6a5b80685d964656f6dca799fbf8c75e16f948857"
+    },
+    "POSTFLIGHT.json": {
+      "bytes": 239,
+      "sha256": "388506106ed0e1d5c1ddaf788d06c246e72d2053f79ddb37c71c594c5499bceb"
+    },
+    "PREFLIGHT.json": {
+      "bytes": 125,
+      "sha256": "ac6d83973f6fd05c5e7ec5fc599ece7aede051b556fd44f58aaa7c369c8e70e4"
+    },
+    "RECEIPT.json": {
+      "bytes": 16827,
+      "sha256": "cb1646e227fa3b36664fa4bb59e47769a3da61735d94179c4ceaaca5f1764bf7"
+    },
+    "REVIEW.json": {
+      "bytes": 12209,
+      "sha256": "84c4027acd2536d40f1345e6526b82253ef44311ba67aa04896477a0aad492d0"
+    },
+    "RUNTIME_IDENTITY.json": {
+      "bytes": 2874,
+      "sha256": "4d70e2b3cb9df7159439c15b9e49f15f3aa20af6e22883bb6d06c665c554629a"
+    },
+    "WORKER_RESULT.json": {
+      "bytes": 4249,
+      "sha256": "fcca1029e3cf22e9d0e2c826af63f83454da0c7486e9e60a33ca52b6f9082510"
+    },
+    "capture/RESULT.json": {
+      "bytes": 85243,
+      "sha256": "29050849d6449cb921b5a370a53fa7b693f2e17c16cf41b621ae8c41df7d21e7"
+    },
+    "capture/SEAL.json": {
+      "bytes": 6604,
+      "sha256": "606e509c35192e12768979e0a64dfbc58ac8f55a70581bb6286bc01a093811c7"
+    }
+  },
+  "private_config_identity": {
+    "bytes": 4793988,
+    "sha256": "c5c8970a5409a8e736dc450fd86e99f9ef3661c62d7ecd690991f2bbbd665366"
+  },
+  "public_artifacts_are_projections_not_original_receipts": true,
+  "public_source_mock_parent_commit": "9e4d51f1acf8f5ac62326c6dd3ec54d2ab8fc9ff",
+  "publication_review": {
+    "final_publication_review": "BOUND_SEPARATELY_BY_PUBLISHER",
+    "prior_package_technical_review_sha256": "0e80f8340715bf0be35babf2c40167ce52b398ab44755c91d929dda3ec9b53f4",
+    "prior_scope": "INDEPENDENT_TECHNICAL_PACKAGE_REVIEW_PASSED_NOT_PUBLICATION_GO"
+  },
+  "receipt_pass_scope": "REFERENCE_PAIR_CAPTURE_AND_SELF_CHECKS_COMPLETE_NOT_DUT_PASS",
+  "schema": 1,
+  "status": "EXECUTION_AND_PRIOR_PUBLIC_PACKAGE_TECHNICAL_REVIEWS_PASSED"
+}

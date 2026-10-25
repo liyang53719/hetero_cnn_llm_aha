@@ -1,0 +1,27 @@
+{
+  "actual_pair01_auto_retry": false,
+  "actual_pair01_worker_returncode": 0,
+  "additional_finalprofile_preparation_failure": {
+    "kind": "Author preparation-script expected six CONFIG_DRAFT anchors but source contained four; stopped before constructing final config.",
+    "original_record_identity": {
+      "bytes": 345,
+      "sha256": "ddea399b26c32f5539c8bcd3ef87fe2eb789d7f74bef4b0144bffc97b4ba0781"
+    },
+    "resolution": "Corrected local preparation script anchor count, restored source copies, prepared independently reviewed final profile.",
+    "scope": "Source preparation only, not a failed model run."
+  },
+  "historical_r2_60CPU_90wall_draft_remains_unchanged_and_not_reclassified_as_actual_run": true,
+  "history_reference": "candidates/qwen2_official_m128_reference_pair/evidence/FAILURE_HISTORY_SUMMARY.json",
+  "old_M16_and_all_failed_attempts_retained": true,
+  "old_evidence_modified": false,
+  "public_projection_initial_failure": {
+    "kind": "Initial preparer compared bytes/hash-only FP32 source metadata with a projection containing an additional dtype field; comparison stopped.",
+    "numeric_work_performed": false,
+    "original_failure_record_identity": {
+      "bytes": 380,
+      "sha256": "0926a9962ae622dad0fc3070af1ff7d258d8322f74a45ec5647600014f09f68a"
+    },
+    "resolution": "Compare the exact bytes/hash subset; preserve failed partial draft and failure JSON."
+  },
+  "schema": 1
+}

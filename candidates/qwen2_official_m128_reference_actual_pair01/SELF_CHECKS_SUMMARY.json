@@ -1,0 +1,132 @@
+{
+  "all29_finite": true,
+  "baseline_all29_intermediates_observed": false,
+  "baseline_state_unchanged": {
+    "compared_sections": [
+      "attention_dropout",
+      "buffers",
+      "inputs",
+      "layer_object_id",
+      "module_object_ids",
+      "module_training",
+      "parameters",
+      "rotary_max_seq_len_cached"
+    ],
+    "native_hashes_compared": true,
+    "original_object_identities_compared": true,
+    "passed": true
+  },
+  "bf16_prob_rowsum_abs_max_diagnostic_only": 0.00348663330078125,
+  "bf16_prob_rowsum_hard_gate_added": false,
+  "boundary_checkpoints": {
+    "after_baseline": {
+      "all_modules_eval": true,
+      "logical_tensor_identities_sha256": "892afb9413807848a2c568608d4018326bfa5f387fc13a44aff72fb1727b2f20",
+      "native_bytes_total": 110800000,
+      "rotary_max_seq_len_cached": 32768,
+      "tensor_counts": {
+        "buffers": 3,
+        "inputs": 3,
+        "parameters": 12
+      }
+    },
+    "after_observed": {
+      "all_modules_eval": true,
+      "logical_tensor_identities_sha256": "892afb9413807848a2c568608d4018326bfa5f387fc13a44aff72fb1727b2f20",
+      "native_bytes_total": 110800000,
+      "rotary_max_seq_len_cached": 32768,
+      "tensor_counts": {
+        "buffers": 3,
+        "inputs": 3,
+        "parameters": 12
+      }
+    },
+    "before_baseline": {
+      "all_modules_eval": true,
+      "logical_tensor_identities_sha256": "892afb9413807848a2c568608d4018326bfa5f387fc13a44aff72fb1727b2f20",
+      "native_bytes_total": 110800000,
+      "rotary_max_seq_len_cached": 32768,
+      "tensor_counts": {
+        "buffers": 3,
+        "inputs": 3,
+        "parameters": 12
+      }
+    }
+  },
+  "boundary_projection_digest_recipe": "SHA256 of UTF-8 JSON sort_keys=true,separators=(comma,colon), selected sections inputs/parameters/buffers with logical names and shape,dtype,native_bytes,native_sha256 only. No object address/ID is published.",
+  "causal_positions": 99072,
+  "dut_comparison": "NOT_RUN",
+  "full_live_code_identity_proven": false,
+  "future_probability_positive_zero_count": 97536,
+  "legacy_results_inherited": false,
+  "numeric_acceptance": "NOT_RUN",
+  "observed_state_unchanged": {
+    "compared_sections": [
+      "attention_dropout",
+      "buffers",
+      "inputs",
+      "layer_object_id",
+      "module_object_ids",
+      "module_training",
+      "parameters",
+      "rotary_max_seq_len_cached"
+    ],
+    "native_hashes_compared": true,
+    "original_object_identities_compared": true,
+    "passed": true
+  },
+  "pair_output_comparison": {
+    "all29_intermediate_noninterference_claimed": false,
+    "claim_scope": "y/prob only; no claim that all29 baseline intermediates were observed",
+    "outputs": {
+      "prob": {
+        "baseline_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c",
+        "byte_identical": true,
+        "native_bytes": 393216,
+        "observed_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c"
+      },
+      "y": {
+        "baseline_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa",
+        "byte_identical": true,
+        "native_bytes": 393216,
+        "observed_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa"
+      }
+    },
+    "passed": true
+  },
+  "passed": true,
+  "reported_status": "ALL29_CAPTURE_SELF_CHECKS_PASSED_NOT_DUT_ACCEPTANCE",
+  "same_original_object_identities_reported": true,
+  "schema": 1,
+  "scope_limit": "All29 are observed-arm consistency checks; same-instance baseline/observed equality is checked only for actual y/prob returns and original input/parameter/buffer boundary state.",
+  "semantic_relations": {
+    "act_equals_bf16_silu_times_up": {
+      "elements": 1146880,
+      "mismatches": 0,
+      "rounding": "FP32 then BF16 round-to-nearest-even"
+    },
+    "r_equals_bf16_x_plus_o": {
+      "elements": 196608,
+      "mismatches": 0,
+      "rounding": "FP32 then BF16 round-to-nearest-even"
+    },
+    "y_equals_bf16_r_plus_down": {
+      "elements": 196608,
+      "mismatches": 0,
+      "rounding": "FP32 then BF16 round-to-nearest-even"
+    }
+  },
+  "softmax_fp32_rows": 1536,
+  "softmax_fp32_rowsum_abs_lte": 2e-05,
+  "softmax_fp32_rowsum_abs_max": 1.9501757630990824e-07,
+  "structural_relations": [
+    "raw13 x prefix",
+    "exact causal mask",
+    "cold k alias",
+    "cold v transpose",
+    "GQA 6x k/v repeat",
+    "PV-to-att transpose/reshape",
+    "prob BF16 cast",
+    "causal/future mask domains"
+  ]
+}

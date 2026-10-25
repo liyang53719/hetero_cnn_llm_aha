@@ -1,0 +1,150 @@
+{
+  "DUT_acceptance": "NOT_RUN",
+  "all29_baseline_intermediate_noninterference_claimed": false,
+  "checks_count": 16724,
+  "execution_authority_for_another_run": false,
+  "facts": {
+    "binary_bytes": 50036736,
+    "binary_files": 60,
+    "complete_output_bytes": 66356782,
+    "config": {
+      "bytes": 4793988,
+      "sha256": "c5c8970a5409a8e736dc450fd86e99f9ef3661c62d7ecd690991f2bbbd665366"
+    },
+    "full_manifest_independent_rehash": {
+      "bytes": 1016158675,
+      "differences": [],
+      "files": 18652,
+      "wall_seconds": 1.0157385430065915
+    },
+    "live_tracked_identities_current_proc_view": [],
+    "model_call_counts": {
+      "Qwen2Attention.__init__": 1,
+      "Qwen2Attention.forward": 2,
+      "Qwen2Config.__init__": 1,
+      "Qwen2DecoderLayer.__init__": 1,
+      "Qwen2DecoderLayer.forward": 2,
+      "Qwen2MLP.__init__": 1,
+      "Qwen2MLP.forward": 2,
+      "Qwen2RMSNorm.__init__": 2,
+      "Qwen2RMSNorm.forward": 4,
+      "Qwen2RotaryEmbedding.__init__": 1,
+      "Qwen2RotaryEmbedding.forward": 2
+    },
+    "module_maps_closures": {
+      "FINAL": {
+        "maps": 263,
+        "modules": 2475,
+        "nonfile_origins": [
+          {
+            "code_origin_proven": false,
+            "file": null,
+            "has_location": false,
+            "module": "_remote_module_non_scriptable",
+            "origin": "torch-git"
+          }
+        ],
+        "verified_file_paths": 2500
+      },
+      "IMPORT": {
+        "maps": 179,
+        "modules": 1674,
+        "nonfile_origins": [],
+        "verified_file_paths": 1698
+      }
+    },
+    "native_y_prob_equality": {
+      "prob": {
+        "baseline": {
+          "bytes": 393216,
+          "sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c"
+        },
+        "byte_equal": true,
+        "observed": {
+          "bytes": 393216,
+          "sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c"
+        }
+      },
+      "y": {
+        "baseline": {
+          "bytes": 393216,
+          "sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa"
+        },
+        "byte_equal": true,
+        "observed": {
+          "bytes": 393216,
+          "sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa"
+        }
+      }
+    },
+    "parent_completion_seal": {
+      "bytes": 14140,
+      "sha256": "8e027f3969a1df8871297f2b35fe7ab8f089c121b6ce5df07327c873509b260b"
+    },
+    "parent_receipt": {
+      "bytes": 16827,
+      "sha256": "cb1646e227fa3b36664fa4bb59e47769a3da61735d94179c4ceaaca5f1764bf7"
+    },
+    "recorded_bf16_rowsum_diagnostic_only": 0.00348663330078125,
+    "recorded_postflight": {
+      "bytes_checked": 1016158675,
+      "differences": {},
+      "files_checked": 18652,
+      "passed": true,
+      "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+      "wall_seconds": 0.9533391470322385
+    },
+    "recorded_preflight": {
+      "bytes_checked": 1016158675,
+      "files_checked": 18652,
+      "wall_seconds": 1.0259241619496606,
+      "worker_started": false
+    },
+    "recorded_softmax_fp32_rowsum_abs_lte": 2e-05,
+    "recorded_softmax_fp32_rowsum_abs_max": 1.9501757630990824e-07,
+    "remaining_under80MiB_bytes": 17529298,
+    "resource_observations": {
+      "log_bytes": {
+        "stderr.log": 0,
+        "stdout.log": 0
+      },
+      "overall_wall_recorded_seconds": 50.16429268801585,
+      "peak_sampled_tree_rss_bytes": 568340480,
+      "postflight_hash_wall_seconds": 0.9533391470322385,
+      "preflight_hash_wall_seconds": 1.0259241619496606,
+      "rusage_children_highwater_bytes": 571355136,
+      "system_cpu_seconds": 2.7250389999999998,
+      "total_child_cpu_seconds": 50.368487,
+      "user_cpu_seconds": 47.643448,
+      "worker_internal_elapsed_seconds": 47.38366007601144,
+      "worker_plus_cleanup_wall_seconds": 48.15806052798871
+    },
+    "review": {
+      "bytes": 12209,
+      "sha256": "84c4027acd2536d40f1345e6526b82253ef44311ba67aa04896477a0aad492d0"
+    },
+    "run_file_count": 89,
+    "sealed_preterminal_artifact_count": 87,
+    "three_state_checkpoints_identical": true
+  },
+  "failure_count": 0,
+  "identity_note": "The identity above hashes the private original review, NOT this sanitized projection; this projection identity is in PROJECTION_IDENTITIES.json and publication ALLOWLIST.json.",
+  "limitations": [
+    "All29 finite/softmax/semantic checks are reviewed as source-bound worker evidence, not independently numerically recomputed.",
+    "Pair noninterference is actual native y/prob byte equality and identical original boundary state, not all29 baseline intermediate equivalence.",
+    "Module/maps closures are snapshots, not lifetime/all-live-code identity proof; dynamic torch-git no-file origin remains explicitly unproven.",
+    "Python audit/profile controls are not kernel isolation or native/unprofiled-thread bypass proof.",
+    "RSS is sampled; CPU RLIMIT is worker-process including threads.180wall is polling threshold, not strict final elapsed deadline.",
+    "Current /proc absence check is limited to the reviewer process view; parent receipt records worker reap and no remaining tracked processes."
+  ],
+  "numerical_self_checks_independently_recomputed": false,
+  "original_private_review_identity": {
+    "bytes": 5947,
+    "sha256": "1899aa66eebd49dde597197280b9511cc7fbbdf91a8dd74089ee4e0357806545"
+  },
+  "passed": true,
+  "retry_authorized": false,
+  "review_scope": "Read-only JSON/stat and opaque streaming-hash/byte comparison. No tensor decoding or numerical recomputation, no ML import, no new forward, native/DUT or RTL run.",
+  "schema": 1,
+  "status": "PASS_FRESH_OFFICIAL_M128_REFERENCE_EXECUTION_REVIEW_NOT_DUT_PASS"
+}

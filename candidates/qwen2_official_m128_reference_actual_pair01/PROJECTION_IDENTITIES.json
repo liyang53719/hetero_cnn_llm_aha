@@ -1,0 +1,50 @@
+{
+  "note": "Each identity hashes the published projection bytes, not the original private source artifact. Original identities are labeled separately inside each projection and EVIDENCE_BINDINGS.json. This index is itself bound by publication ALLOWLIST.json.",
+  "published_projections": {
+    "COMMAND_BOUNDARY.json": {
+      "bytes": 1932,
+      "sha256": "87294c902dc0862526da25aa968ec6195a63e60e738492e0bc0fc1bf94c96809"
+    },
+    "EVIDENCE_BINDINGS.json": {
+      "bytes": 2830,
+      "sha256": "e112423dd46357d97987bef02a906c5fa0015d6fafdadaca667ccab2c419b229"
+    },
+    "EXECUTION_REVIEW_PROJECTION.json": {
+      "bytes": 5766,
+      "sha256": "60c04369fb9765613c4c4c9b9360ca2030f1e2889c0a22eb4d35ac37b04514d2"
+    },
+    "FAILURE_HISTORY_DELTA.json": {
+      "bytes": 1431,
+      "sha256": "63a6d6669ecee787d551d1095fb1a7671c892142b539fb5f0bb9d8ed66052756"
+    },
+    "INPUT_AND_TOOL_PINS.json": {
+      "bytes": 6836,
+      "sha256": "62adb3bb457dd84400cf9eac746083e6b69fbce32c19777577d9b8b7c53eec87"
+    },
+    "OUTPUT_IDENTITIES.json": {
+      "bytes": 13528,
+      "sha256": "02c65f2d292a894877b49f22e27df9a07b15948b50d169fc99cd1189a9b291d0"
+    },
+    "PROFILE_LOGICAL.json": {
+      "bytes": 4289,
+      "sha256": "6768bc62fc77948f54bae3c39c45c0257e5e9983e4e53b52b4ff5f3c3871b376"
+    },
+    "PUBLICATION_ADAPTATION.json": {
+      "bytes": 909,
+      "sha256": "85e832ad1bb730ffce45aedd085a0e33b097f2d893a5bf517979ec7834c07807"
+    },
+    "RESOURCE_OUTCOME.json": {
+      "bytes": 2667,
+      "sha256": "863818323ba60db742beb32a39229192465f5b0aecc747b5e59287a9464dac3d"
+    },
+    "SELF_CHECKS_SUMMARY.json": {
+      "bytes": 4475,
+      "sha256": "5af6964564ce604bf33b25f0892fe5b08ef7aae2ee6bd67622f48f984442bc7e"
+    },
+    "SOURCE_BINDINGS.json": {
+      "bytes": 7040,
+      "sha256": "c03dd7fa9a1366b5b76ec732d6a15e1fd79b815205bd3f309fad34a5caf9db55"
+    }
+  },
+  "schema": 1
+}

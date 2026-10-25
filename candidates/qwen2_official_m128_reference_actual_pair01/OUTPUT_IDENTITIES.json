@@ -1,0 +1,549 @@
+{
+  "baseline_actual_returns": {
+    "prob": {
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "native_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "y": {
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "native_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    }
+  },
+  "baseline_native_bytes": 786432,
+  "binary_file_count": 60,
+  "observed_fields": {
+    "act": {
+      "fp32": {
+        "bytes": 4587520,
+        "dtype": "float32",
+        "sha256": "3e28760d480baead196ed6584a39b9a4d27b24abc9e4baa46a9660e19518fc60"
+      },
+      "native": {
+        "bytes": 2293760,
+        "sha256": "948a5cf6179529ae95fbb01c2c475c82c6a95f990d1a277f55cdfa10560ce7f6"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "att": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "de0f8a7dd441065c5ad87fd0345e9b96eed999374aebdbde329b5c24a0ab3bb5"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "cache_k": {
+      "fp32": {
+        "bytes": 131072,
+        "dtype": "float32",
+        "sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c"
+      },
+      "native": {
+        "bytes": 65536,
+        "sha256": "39c3834f8ff4d9296de43fd794d1e5e2af19f975e7255942e8f90d86c051dcd6"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    "cache_v": {
+      "fp32": {
+        "bytes": 131072,
+        "dtype": "float32",
+        "sha256": "387cdb6381e59c4b68753c3f7d7be19279f569aa2cb5efea0cf3c0a3432fbfb4"
+      },
+      "native": {
+        "bytes": 65536,
+        "sha256": "131c2ecc2366ccf26766df71cbd168e70954f182e2a570c1f329515c820a65a1"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    "cos": {
+      "fp32": {
+        "bytes": 65536,
+        "dtype": "float32",
+        "sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547"
+      },
+      "native": {
+        "bytes": 32768,
+        "sha256": "415e4f5c48f9ce716ee49c7532c44d38ce7615cd5785890021fcb1c4f9db6249"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        128,
+        128
+      ]
+    },
+    "down": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "7090bf38f6e732b6f8adabfe94723fc60310c4e4c27d3cfa6058f6dd1c40d4a1"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "f313c49ed557052ab1c2f614a44d80da2d3eaa30971db076b01fe00cbe7d337c"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "gate": {
+      "fp32": {
+        "bytes": 4587520,
+        "dtype": "float32",
+        "sha256": "ac90b955e05b01d44165ac02ca77f695805c3e0b4f340e72e877c47bc88d7c3c"
+      },
+      "native": {
+        "bytes": 2293760,
+        "sha256": "208918e1f4f079fdfe67de9cf79510c3576c101e3216a5dd1e6d87fc1feb0eed"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "k": {
+      "fp32": {
+        "bytes": 131072,
+        "dtype": "float32",
+        "sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c"
+      },
+      "native": {
+        "bytes": 65536,
+        "sha256": "39c3834f8ff4d9296de43fd794d1e5e2af19f975e7255942e8f90d86c051dcd6"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    "kr": {
+      "fp32": {
+        "bytes": 131072,
+        "dtype": "float32",
+        "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+      },
+      "native": {
+        "bytes": 65536,
+        "sha256": "72337ba037e58649dd6a426c35d86de1d618a6aebed35cf1228f1b0cc6c0ce15"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        256
+      ]
+    },
+    "logits": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "37671b73501c878f4b2f6f379ca1368e21c2db3069226d9dc40bd72ea2027f7e"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "mask": {
+      "fp32": {
+        "bytes": 65536,
+        "dtype": "float32",
+        "sha256": "a9f72e2719df06a4bc7cb364c8a61dcb0fd33750eaa6a242922b001b7471ec9c"
+      },
+      "native": {
+        "bytes": 32768,
+        "sha256": "e867bc6f62d8ec12f687265532d551c7fe92cc53360a2196ebefbcff74901cdd"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ]
+    },
+    "n0": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "bd41672e6ea7d12746b41e56d21b3309369ecfd87cc26319ae6adbf0874e5cf2"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "n1": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "5bb6ff866beb0e47e86d5cec61ecc767172e8fbf8f4cf5ed0ad5bb1f76753cda"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "o": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "6435b52b67aa684f348a46c8d7e8f70dfc1a85d0f983da870c6d0e3b24229550"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "3b8cb543c2a8ee66b3716cf7f06f53174c8eabae5d7bf0a6f3f942bdac1fd8d7"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "prob": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "d9c02d605505ee1f3a78ad719f70a03227f7ee66f54f6f39be0fe63ee14612ca"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "pv": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "032f30d280e06537f4065374fce768acd5098ee171cc6ef6354e50aad01590ee"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "f5d250263553a063e753e4f7dd76d1755df87e5dfab75cda82029708981b0556"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "q": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "e58005e1119948b53bcec128e5e99f09e51441c3a9c59e7441731a60d7e1aa62"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "qr": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "5e2d4a612d2179cbe25c09de4d15204b5ec0f6f9ac2a7a5f79cdb006efd08184"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "r": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "8c8d34497ac6c84b1f78aca09b9f317380d496c569e89baf754e5b381683dc3d"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "repeat_k": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "5391703c16f9aa95a213ca5042499e8ebccc209e54fb0747bfe5ecdca9246961"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "repeat_v": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "a33381d622fa8201956437d44a1ec8de42ecc1c11e84a0bee54a37741ce0877d"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "d6edded23a0459a2cbf44f694841633851c95e185ff88ec352ec6118319c2ecf"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "scores": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "b20e22725941e00f5702d73bdf2c9f723cad55eed37e3eca263861257eb6c110"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "silu": {
+      "fp32": {
+        "bytes": 4587520,
+        "dtype": "float32",
+        "sha256": "4a822c6732e83edff63e23449cb16b682ef2c655ad8f5509bfc37f0f4f86c3db"
+      },
+      "native": {
+        "bytes": 2293760,
+        "sha256": "2ddd98c82aaa3caea6aa196817b4f90075a89ceabe8f7054d082e7ceb9bdca09"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "sin": {
+      "fp32": {
+        "bytes": 65536,
+        "dtype": "float32",
+        "sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e"
+      },
+      "native": {
+        "bytes": 32768,
+        "sha256": "a84e52cca7fcaeb1f20a5238aee97f37a1a005828af43f85472a8ceecfa102dc"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        128,
+        128
+      ]
+    },
+    "softmax_fp32": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8"
+      },
+      "native": {
+        "bytes": 786432,
+        "sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8"
+      },
+      "native_dtype": "float32",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    "up": {
+      "fp32": {
+        "bytes": 4587520,
+        "dtype": "float32",
+        "sha256": "2c4cf209cc620972744bb26e40fd8aa97f3c51bc98cf771603fbaac97d40bd95"
+      },
+      "native": {
+        "bytes": 2293760,
+        "sha256": "a5d105e355584f68de938ffafc89eac986d439c3edddffc96e63853c913cd805"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    "v": {
+      "fp32": {
+        "bytes": 131072,
+        "dtype": "float32",
+        "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+      },
+      "native": {
+        "bytes": 65536,
+        "sha256": "9ab1b2551af4fcb7ca5e6eb7ccca6168269f0b78ac6308961b72abee3d61af2d"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        256
+      ]
+    },
+    "x": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "aef53bb116207509ae8c98f9fafea7ab296a0d917835810b39d7b2290863b85c"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    "y": {
+      "fp32": {
+        "bytes": 786432,
+        "dtype": "float32",
+        "sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef"
+      },
+      "native": {
+        "bytes": 393216,
+        "sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    }
+  },
+  "observed_native_and_fp32_bytes": 49250304,
+  "payload_bytes_total": 50036736,
+  "public_rehash_of_tensor_payloads_performed": false,
+  "schema": 1,
+  "scope": "Reported identities only; no tensor bytes, values, raw output files or maps. Hashes bind newly observed artifacts, not prior expected correctness.",
+  "source_capture_result_identity": {
+    "bytes": 85243,
+    "sha256": "29050849d6449cb921b5a370a53fa7b693f2e17c16cf41b621ae8c41df7d21e7"
+  },
+  "source_capture_seal_identity": {
+    "bytes": 6604,
+    "sha256": "606e509c35192e12768979e0a64dfbc58ac8f55a70581bb6286bc01a093811c7"
+  },
+  "source_validation_identity": {
+    "bytes": 14647,
+    "sha256": "005cb36f8fc839524befd759ef63da105ec4d8975aad8cff5996e1e9a86ca9aa"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "base_kind": "Old ordered-fullgraph composed candidate postimages, NOT raw main checkout",
+  "files": {
+    "candidates/qwen2_ordered_fullgraph_entry/bridge.py": {
+      "base": {
+        "bytes": 4850,
+        "sha256": "2868d0bca85eb15349430827b0cb8d1d9300f69619f8417a693c680a61e6cc19"
+      },
+      "postimage": {
+        "bytes": 8510,
+        "sha256": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+      }
+    },
+    "candidates/qwen2_ordered_fullgraph_entry/oracle_path_gate.py": {
+      "base": null,
+      "postimage": {
+        "bytes": 7529,
+        "sha256": "d59b811c31e4f8d98f928a189036e6754387ee4e6d4ab532ee8fd7a7f748cc36"
+      }
+    },
+    "candidates/qwen2_ordered_fullgraph_entry/registry.py": {
+      "base": {
+        "bytes": 23548,
+        "sha256": "218f41b2a4fa625653acf060c64a8aad02b6fc95eeef733dc4a764fb902ae1cb"
+      },
+      "postimage": {
+        "bytes": 23885,
+        "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+      }
+    },
+    "candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/__init__.py": {
+      "base": null,
+      "postimage": {
+        "bytes": 72,
+        "sha256": "53cc4e964d14a483f9fecc56b32a9935f10e76f757f27de97eb1bfa15c108567"
+      }
+    },
+    "candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/rope_capture.py": {
+      "base": null,
+      "postimage": {
+        "bytes": 25848,
+        "sha256": "25d31af4bc242344f6c545aaa56ebd32d8babd5490efa43b22508292e7bbc5d2"
+      }
+    },
+    "candidates/qwen2_ordered_fullgraph_entry/runner.py": {
+      "base": {
+        "bytes": 11086,
+        "sha256": "6f2fc1167beec4bdff6528cade244245d77499a6226b7c3c9129e63d929286da"
+      },
+      "postimage": {
+        "bytes": 14002,
+        "sha256": "fcd47fb619f174be3eebad0d51fa1d6f36e17e934aa0855fb3270bc537860fcc"
+      }
+    },
+    "candidates/qwen2_ordered_fullgraph_entry/service_trace.py": {
+      "base": {
+        "bytes": 3908,
+        "sha256": "7c94bf513875cb2eeec76eca0d3f3353e729c3dbf00c0598129c7b8d0f6ad049"
+      },
+      "postimage": {
+        "bytes": 11473,
+        "sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+      }
+    },
+    "candidates/qwen2_ordered_fullgraph_entry/stream.py": {
+      "base": null,
+      "postimage": {
+        "bytes": 21232,
+        "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+      }
+    }
+  },
+  "patch": {
+    "bytes": 85433,
+    "sha256": "a0b2fb46d00d8194a05d887d933dc34296baf3d7934ed95a9f0cdb94c9609198"
+  },
+  "private_composition_identity": {
+    "bytes": 2857,
+    "sha256": "356e954cc00ac07f8dbac424452d2a8c1f7e3309c00f48064ac255edd5fc311a"
+  },
+  "private_nine_file_patch_identity": {
+    "bytes": 85324,
+    "sha256": "f16825c34fc6d2774ec33d32118a1e217c3ce7fc9e0045d79c9650ed6791859d"
+  },
+  "schema": "public-source-only-composition-v1",
+  "scope": "Eight exact Python postimages; private SOURCE_PINS.json omitted. No complete runtime tree or execution binding generated.",
+  "status": "NOT_READY_DEFAULT_OFF",
+  "trace_dependency": {
+    "candidate": "candidates/qwen2_ordered_event_stream",
+    "component_review_sha256": "82dc68d28c9c6feb1c97965d94d1c430f87c2debe5908d0a33682a2ac1de0cf9",
+    "note": "bridge/service_trace/stream bytes are included unchanged; published trace runner remains M16 and is not this merged M128 runner.",
+    "private_r2_freeze_sha256": "e2e182d75fbb058c077d14d0c5a837848611aa1b1e084afc3117f1ac299f6f06",
+    "published_commit": "98d73a892d93c5f3b7b0b190b5255a6b82d2b781",
+    "published_tree": "d380a99b53ddf2d1ab0889cbde9ba26b6832f56e"
+  }
+}

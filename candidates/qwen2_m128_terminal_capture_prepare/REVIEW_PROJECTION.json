@@ -1,0 +1,84 @@
+{
+  "execution_go": false,
+  "frozen_file_count": 36,
+  "independent_tests": {
+    "additional_composition_groups_per_mode": 12,
+    "additional_groups": [
+      "one public fixture128/SiLU128/registry128 with exactly one prefix, suffix, and pc12 dispatch",
+      "caught absolute root access",
+      "caught normalized alias access",
+      "caught external symlink alias access",
+      "caught external hardlink inode access",
+      "caught existing fd access",
+      "caught proc-fd alias access",
+      "caught mmap fd access",
+      "caught relative/dirfd-ambiguous access without comparator",
+      "caught denial during final live verifier",
+      "original driver identity survives ordinary cleanup RuntimeError",
+      "original driver identity survives cleanup SystemExit"
+    ],
+    "all_passed": true,
+    "modes": [
+      "isolated_normal",
+      "isolated_optimized"
+    ],
+    "new_test_evidence_not_actual_DUT": "All roles and data are explicitly synthetic. rows128 call wiring is not a real M128 numerical execution.",
+    "source_gate_retention_cases_per_mode": 47,
+    "synthetic_runner_cases_per_mode": 11
+  },
+  "numeric_acceptance": "TEMP_NOT_EXECUTED",
+  "numerical_and_physical_limits": {
+    "fixed_physical_macs": 4096,
+    "full29_numeric_acceptance": "NOT_READY",
+    "legacy_pv_upper_bound_percent": 63.57,
+    "no_original_config_or_tolerance_changes": true,
+    "partial_causal_only_fields": [
+      "scores",
+      "prob",
+      "softmax_fp32"
+    ],
+    "performance_acceptance": false,
+    "physically_nonmaterialized_nodes": [
+      "repeat_k",
+      "repeat_v",
+      "logits",
+      "mask"
+    ],
+    "softmax_fp32": "No approved numerical comparison tolerance; original row-sum gate and diagnostics only."
+  },
+  "original_hash_does_not_bind_projection": true,
+  "private_original_identity": {
+    "bytes": 12007,
+    "sha256": "7bb4b3194eaf1b64e0169edff21ba383310e7c260f8ee96664f28eafcb88cc9d"
+  },
+  "private_source_manifest_identity": {
+    "bytes": 5804,
+    "sha256": "b029f4a642e2b4abb98c35dba1c32ea4c5d9e4dca3918287359dca57aa3182f1"
+  },
+  "projection_is_not_original_bytes": true,
+  "remaining": [
+    "A newly admitted real worker with exact final source/code/runtime/modules/maps closure, native ABI/ELF identity, provider initial/post identity, finite budgets and execution authorization is not supplied or qualified by this review.",
+    "The723-file base closure is a metadata draft (original normal722 plus combined ELF), with nine overlay source/data postimages separately pinned. It is not725 and not live-qualified. Historical750-file opaque hash evidence is not reinterpreted as future-run identity.",
+    "Complete actual fd/maps inventory, absence of inherited oracle descriptors/mappings and binding the full oracle file set to its independently sealed manifest must be checked and persisted by the future worker. Mock inventory tests are not live isolation qualification.",
+    "A usable fresh exact official M128 reference/input identity and exact terminal comparator thresholds must be independently established for the future run; this source-only review does not establish their status.",
+    "Python auditing is not an OS sandbox: direct native/syscall reads, descriptor transfer, concurrency/alias races and other processes remain outside its isolation guarantee and must stay excluded by source/runtime admission.",
+    "If monitoring API callback restoration itself fails, state is explicitly uncertain/sticky FAIL; foreign restoration is not claimed, and uncertain cleanup is not blindly retried or freed."
+  ],
+  "schema": "public-review-projection-v1",
+  "scope": "Read-only independent source/metadata review and stdlib/helper/explicit synthetic mock control. No original target import, original _rope execution, native ELF load, service/model arithmetic, ML, DUT, official reference, or RTL run.",
+  "status": "GO_EXACT_COMPOSED_SOURCE_MOCK_PREPARATION_ONLY",
+  "verified_seams": [
+    "Independent pure-stdlib unified-patch application in memory produces all nine exact frozen postimages; original files are never edited.",
+    "M128 profile is exact rows integer128. Exactly one public fixture/whole launch replaces the former outer M16 gate; no eight-M16 execution concatenation is introduced. Existing internal 16-lane/tile operations are not replaced.",
+    "Original prefix, direct pc12 ordered binding/execution, O projection and FFN suffix remain source-bound. Full whole-terminal checks precede acceptance; observer resource fallback executes original driver rather than inventing ACKs.",
+    "All15 original runtime-role source hashes and all9 original service-method source hashes match. This does not repeat or upgrade live normal/native qualification.",
+    "All original registry top-level function/class ASTs except the intentional seal_registry payload-holder change are identical, including _host_terminal, _live_terminal, terminal_snapshot and _attention.",
+    "Readonly x comes from the same original physical allocation/provider and is checked against profile shape/bytes/hash. Original single SiLU seal return is passed through unchanged. Neither replaces execution inputs.",
+    "RoPE capture remains byte-identical to independently reviewed r2, sees the original post-BF16 cosine/sine tuples, retains exact occurrence/presence checks, and seals only after consumed whole-registry terminal. Missing/duplicate/failed observation remains ineligible.",
+    "Exact oracle roots, complete regular-file enumeration and inode records are mandatory. Absolute/normalized/symlink/hardlink/fd/proc-fd/mmap and relative-name denial is sticky and fully recorded.",
+    "Caught early denial still permits original mocked prefix, suffix and terminal but rejects registry seal and comparison afterward; no-comparator branch also fails. Final verifier checks clean both before and after original _live_terminal wrapper.",
+    "Original _live_terminal is rechecked immediately before the single comparator scope. Oracle gate closes on comparator return or failure; old dirname gate alone is never credited for the new reference root.",
+    "Normal source/binding admission remains hard refusal. Ordinary monitor installation/cleanup failure is sticky evidence failure and does not skip original driver. Cleanup cannot replace an active original driver exception. Genuine cancellation is not promised to continue computation.",
+    "Stream retention keeps bounded receipts, not complete raw/canonical tuple/list materialization; journal path and count integrate with the new runner without inheriting old M16 execution permission."
+  ]
+}

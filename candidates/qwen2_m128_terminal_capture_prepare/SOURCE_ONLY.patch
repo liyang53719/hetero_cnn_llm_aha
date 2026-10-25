@@ -1,0 +1,1615 @@
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/bridge.py b/candidates/qwen2_ordered_fullgraph_entry/bridge.py
+--- a/candidates/qwen2_ordered_fullgraph_entry/bridge.py
++++ b/candidates/qwen2_ordered_fullgraph_entry/bridge.py
+@@ -3,7 +3,6 @@
+ No replacement owner/client/service, no arithmetic implementation, no payload
+ provider and no whole-block acceptance. Called only by the real suffix dispatch.
+ """
+-from contextlib import ExitStack
+ from pathlib import Path
+ import hashlib
+ import importlib
+@@ -34,20 +33,82 @@
+     return helper, observer
+ 
+ 
+-def make_service_trace(observer, service, profile, bind):
++def make_service_trace(observer, service, profile, bind, event_stream_path):
+     from .service_trace import make_trace
+-    return make_trace(observer, service, profile, bind)
++    return make_trace(observer, service, profile, bind, event_stream_path)
+ 
+ 
+-def make_dispatch(profile, *, enabled=False):
++def make_observation(monitor, owner, rows, base_fields, bindings):
++    from .service_trace import capture_error, monitoring_enter, monitoring_stop
++    class FullgraphObservation(monitor.Observation):
++        # No _line/_return wrapper: sys._getframe(1) still sees the original DUT.
++        def __enter__(self):
++            try:
++                need(not self.closed and self.tool is None and self.owner.state == 'idle' and
++                     not self.owner.poison and sys.gettrace() is None, 'single-use idle observation')
++                mon = sys.monitoring
++                return monitoring_enter(self, 'ordered-fold-observer', (3, 4),
++                    ((mon.events.LINE, self._line), (mon.events.PY_RETURN, self._return)),
++                    self.codes.values(), mon.events.LINE | mon.events.PY_RETURN)
++            except BaseException as error:
++                capture_error(self, error)
++                self.stop()
++                raise
++        def stop(self):
++            try:
++                mon = sys.monitoring
++                monitoring_stop(self, (mon.events.LINE, mon.events.PY_RETURN), self.codes.values())
++            except BaseException as error:
++                capture_error(self, error)
++                self.closed = True
++                if isinstance(error, KeyboardInterrupt):
++                    raise
++    # Original constructor/source binding errors intentionally remain fatal.
++    return FullgraphObservation(owner, rows, base_fields, bindings)
++
++
++def observe_driver(tracer, capture, run, state):
++    """Only monitor lifetime failures fall back; original driver exceptions escape."""
++    entered = []
++    try:
++        for context, key in ((tracer, 'service_error'), (capture, 'capture_error')):
++            try:
++                context.__enter__()
++                entered.append((context, key))
++            except KeyboardInterrupt:
++                raise  # Explicit cancellation is not a monitor fallback promise.
++            except BaseException as error:
++                state[key] = type(error).__name__ + ': ' + str(error)
++        return run()
++    finally:
++        original_error = sys.exc_info()
++        cancellation = None
++        for context, key in reversed(entered):
++            try:
++                context.__exit__(*original_error)
++            except BaseException as error:
++                if state[key] is None:
++                    state[key] = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt) and original_error[0] is None and cancellation is None:
++                    cancellation = error
++        # Finish other distinct cleanup operations, then preserve cancellation.
++        # An already active original driver/setup error always keeps its identity.
++        if cancellation is not None:
++            raise cancellation
++
++
++def make_dispatch(profile, *, enabled=False, event_stream_path=None):
+     """Return a pc12 callable and evidence holder; default does not bind anything."""
+     need(type(enabled) is bool, 'explicit ordered fullgraph enable')
+     state = {'invocations': 0, 'capture': None, 'capture_report': None,
+-             'capture_error': None, 'service_events': None, 'service_events_raw': (), 'service_error': None}
++             'capture_error': None, 'service_events': None, 'service_events_raw': None, 'service_error': None}
+     if not enabled:
+         return None, state
+     need(profile['qk_profile'] == 2 and profile['pv_profile'] == 0 and
+          profile['raw_kv_transport'] is False, 'QK-only profile2 / legacy PV0 / uncached direct required')
++    need(event_stream_path is not None and 'event_stream_max_bytes' in profile and
++         'event_stream_max_events' in profile,
++         'independently admitted raw stream destination and byte budget required')
+     helper, observer = load_observer_runtime(profile)
+     from candidates.qwen2_resident_matrix.production_qk16_model import direct_transport, ordered_work
+     exact = helper.load_exact(profile['exact_helper'])
+@@ -63,29 +124,37 @@
+         binding = direct_transport.bind(x, physical, job, ordered_fold=True, ordered_lanes=lanes)
+         owner = x.attention_owner
+         monitor, base = observer.load_observer(profile)
+-        capture = monitor.Observation(owner, job.m, base.PackedFields, observer.bindings(owner, profile))
+-        tracer = make_service_trace(observer, x.matrix_service, profile, monitor.bind)
++        capture = make_observation(monitor, owner, job.m, base.PackedFields, observer.bindings(owner, profile))
++        tracer = make_service_trace(observer, x.matrix_service, profile, monitor.bind, event_stream_path)
+         state['capture'] = capture
+         try:
+-            with ExitStack() as stack:
+-                stack.enter_context(tracer)
+-                stack.enter_context(capture)
+-                report = direct_transport.execute_attention_owner(x, physical, job,
+-                    final_ack_stall=5, enable_raw_kv=False)
++            report = observe_driver(tracer, capture,
++                lambda: direct_transport.execute_attention_owner(x, physical, job,
++                    final_ack_stall=5, enable_raw_kv=False), state)
+         finally:
+             # Keep partial raw evidence even if the original driver raises.
+             # This is NOT a successful lifecycle seal or acceptance result.
+-            state['service_events_raw'] = tuple(getattr(tracer, 'events', ()))
++            original_error = sys.exc_info()
++            try:
++                state['service_events_raw'] = tracer.raw_receipt()
++            except BaseException as error:
++                state['service_events_raw_error'] = type(error).__name__ + ': ' + str(error)
++                if state['service_error'] is None:
++                    state['service_error'] = state['service_events_raw_error']
++                if isinstance(error, KeyboardInterrupt) and original_error[0] is None:
++                    raise
+         # These are the original DirectBinding postconditions, not an abstract
+         # drain set. Original driver accepted final memory and owner ACKs.
+         binding.check(x)
+         need(physical.pending is None and x.matrix_service.owner is None,
+              'direct pc12 terminal before physical/service retirement')
+         try:
++            need(state['capture_error'] is None, 'monitor lifetime failed: ' + str(state['capture_error']))
+             state['capture_report'] = capture.seal()
+         except Exception as error:
+             state['capture_error'] = type(error).__name__ + ': ' + str(error)
+         try:
++            need(state['service_error'] is None, 'monitor lifetime failed: ' + str(state['service_error']))
+             state['service_events'] = tracer.seal()
+         except Exception as error:
+             state['service_error'] = type(error).__name__ + ': ' + str(error)
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/oracle_path_gate.py b/candidates/qwen2_ordered_fullgraph_entry/oracle_path_gate.py
+new file mode 100644
+--- /dev/null
++++ b/candidates/qwen2_ordered_fullgraph_entry/oracle_path_gate.py
+@@ -0,0 +1,154 @@
++"""Draft narrow oracle-file guard, not an execution authority or OS sandbox.
++
++Only a future exact-reviewed worker may install it. That worker must finish
++opaque oracle identity hashing in a different/preflight phase, close all such
++handles, keep payload bytes out of DUT state, and attest pinned source/modules/
++maps. The trusted runner must pass the ORIGINAL live-terminal verifier, not a
++boolean/report. This file does not load a model, oracle, provider, or native ELF.
++
++CPython open audit covers Python open/io.FileIO/os.open. Direct os.read/pread/
++readv on an existing fd have no audit event: inherited oracle fds and mappings
++must be rejected before activation. Native syscalls/ctypes, racing alias changes,
++fd transfer and another process are NOT isolated by this helper.
++Sealed-phase open names must be absolute because audit omits dir_fd. Normal
++dependency initialization must finish before this isolation phase begins. They remain
++source/closure restrictions, not a kernel sandbox guarantee.
++"""
++import os
++from pathlib import Path
++import sys
++
++
++class OracleAccessDenied(ValueError):
++    pass
++
++
++def need(ok, message):
++    if not ok:
++        raise OracleAccessDenied(message)
++
++
++class ExactOraclePathGate:
++    def __init__(self, roots, payload_paths):
++        need(type(roots) in (list, tuple) and bool(roots), 'exact oracle roots required')
++        self.roots = tuple(Path(p).resolve(strict=True) for p in roots)
++        need(all(p.is_dir() for p in self.roots), 'oracle root must be a directory')
++        need(type(payload_paths) in (list, tuple) and bool(payload_paths),
++             'complete sealed oracle file path list required')
++        # Include every sealed file under each oracle root, not merely one
++        # sentinel. This list must also be bound to the exact external manifest
++        # by the preflight worker; enumeration here is metadata only.
++        present = set()
++        for root in self.roots:
++            for child in root.rglob('*'):
++                need(not child.is_symlink(), 'symlink inside sealed oracle tree')
++                if child.is_file():present.add(child.resolve(strict=True))
++        declared = {Path(name).resolve(strict=True) for name in payload_paths}
++        need(len(declared) == len(payload_paths) and declared == present,
++             'complete exact oracle-root file enumeration required')
++        self.inodes = set()
++        for name in payload_paths:
++            path = Path(name).resolve(strict=True)
++            need(any(path.is_relative_to(root) for root in self.roots), 'payload outside oracle roots')
++            st = path.stat()
++            need(path.is_file(), 'oracle payload must be a regular file')
++            self.inodes.add((st.st_dev, st.st_ino))
++        self.state = 'SEALED'
++        self.installed = False
++        self.comparison_attempted = False
++        self.denied = []
++
++    def _oracle(self, target):
++        if type(target) is int:
++            need(target >= 0, 'invalid file descriptor')
++            try:
++                st = os.fstat(target)
++                name = os.readlink('/proc/self/fd/' + str(target))
++            except OSError as error:
++                raise OracleAccessDenied('unresolved file descriptor') from error
++            if (st.st_dev, st.st_ino) in self.inodes:
++                return True
++            target = name.removesuffix(' (deleted)')
++            if not target.startswith('/'):
++                return False  # pipe/socket/etc., never an oracle file
++        need(isinstance(target, (str, bytes, os.PathLike)), 'unresolved open target')
++        path = Path(os.fsdecode(target)).resolve()
++        if any(path.is_relative_to(root) for root in self.roots):
++            return True
++        try:
++            st = path.stat()
++        except FileNotFoundError:
++            return False
++        return (st.st_dev, st.st_ino) in self.inodes
++
++    def audit(self, event, args):
++        if self.state == 'COMPARING':
++            return
++        target = None
++        if event == 'open':
++            target = args[0]
++        elif event == 'mmap.__new__' and args[0] != -1:
++            target = args[0]
++        if target is None:
++            return
++        try:
++            if isinstance(target, (str, bytes, os.PathLike)):
++                # open audit omits dir_fd. Never guess cwd for a relative name.
++                need(Path(os.fsdecode(target)).is_absolute(),
++                     'relative open forbidden while oracle is sealed; dir_fd is not audited')
++            need(not self._oracle(target),
++                 'oracle file is sealed before/after terminal comparison')
++        except OracleAccessDenied as error:
++            self.denied.append({'event': event, 'target': os.fsdecode(target) if isinstance(target, bytes) else str(target),
++                                'reason': str(error), 'state': self.state})
++            raise
++
++    def require_clean(self):
++        need(not self.denied, 'sticky oracle isolation violation; comparison/acceptance forbidden')
++
++    def report(self):
++        return dict(state=self.state, installed=self.installed,
++                    comparison_attempted=self.comparison_attempted,
++                    denied=[dict(row) for row in self.denied],
++                    acceptance_eligible=not self.denied)
++
++    def assert_no_inherited_oracle(self, fd_targets, maps_text):
++        """Caller persists full raw fd/maps snapshot before invoking this check."""
++        need(type(fd_targets) is dict and type(maps_text) is str, 'raw fd/maps inventory required')
++        for fd, target in fd_targets.items():
++            need(type(fd) is int and fd >= 0, 'fd inventory type')
++            need(not self._oracle(target), 'preexisting oracle fd')
++            # Check current fd identity as well as the persisted path spelling.
++            need(not self._oracle(fd), 'current inherited oracle fd identity')
++        for line in maps_text.splitlines():
++            fields = line.split(maxsplit=5)
++            if len(fields) == 6 and fields[5].startswith('/'):
++                need(not self._oracle(fields[5].removesuffix(' (deleted)')), 'preexisting oracle mmap')
++
++    def install(self, fd_targets, maps_text):
++        need(not self.installed and self.state == 'SEALED', 'one installation only')
++        self.assert_no_inherited_oracle(fd_targets, maps_text)
++        sys.addaudithook(self.audit)
++        self.installed = True
++
++    def compare_after_live_terminal(self, verify_live_terminal, callback, *args, **kwargs):
++        """Scope oracle reads to one callback after original live terminal check.
++
++        Source admission MUST bind verify_live_terminal to registry._live_terminal
++        with the original x/physical/memory/report. An arbitrary callable here is
++        not authenticated. This control seam alone grants NO launch permission.
++        """
++        need(self.installed and self.state == 'SEALED' and not self.comparison_attempted,
++             'fresh installed terminal comparison gate required')
++        need(callable(verify_live_terminal) and callable(callback), 'source-bound callbacks required')
++        self.require_clean()
++        self.comparison_attempted = True
++        # Existing verifier returns None after checking live original objects.
++        # A boolean/dict supplied as proof is explicitly not accepted.
++        need(verify_live_terminal() is None, 'live verifier must succeed, not supply a boolean proof')
++        self.require_clean()
++        self.state = 'COMPARING'
++        try:
++            return callback(*args, **kwargs)
++        finally:
++            self.state = 'CLOSED'
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/registry.py b/candidates/qwen2_ordered_fullgraph_entry/registry.py
+--- a/candidates/qwen2_ordered_fullgraph_entry/registry.py
++++ b/candidates/qwen2_ordered_fullgraph_entry/registry.py
+@@ -308,13 +308,15 @@
+ 
+ def seal_registry(*, rows, actual, execution_report, capture_report,
+                   capture_fields, silu_library, terminal,
+-                  actual_provenance=NORMAL_PROVENANCE):
++                  actual_provenance=NORMAL_PROVENANCE, sealed_payloads=None):
+     """Validate complete actual inventory, then invoke the original SiLU seal.
+ 
+     The supplied silu_library is the existing source-bound ObservedSiluLibrary.
+     This function stores only hashes, shapes, source roles and view metadata.
+     The caller must not open references before obtaining terminal_snapshot.
+     """
++    need(sealed_payloads is None or (type(sealed_payloads) is dict and not sealed_payloads),
++         'fresh optional terminal-only payload holder required')
+     need(sys.byteorder == 'little', 'reviewed little-endian buffers required')
+     need(type(rows) is int and rows in (16, 128), 'original fullgraph row geometry')
+     need(type(terminal) is _TerminalEvidence and not terminal.consumed and
+@@ -377,6 +379,9 @@
+                              parent='kv', storage='view_of_ACKed_published_DDR',
+                              provenance='ORIGINAL_KV_ALLOCATION_VIEW', coverage='complete')
+     terminal.consumed = True
++    if sealed_payloads is not None:
++        # Preserve the exact original single seal return, not a re-run or recipe.
++        sealed_payloads['silu'] = silu
+     return dict(status='COMPLETE_ACTUAL_INVENTORY_NUMERIC_TEMP', numerical_status='TEMP',
+                 rows=rows, entries=entries, original_stages=list(STAGE_WIDTHS),
+                 attention_fields=list(ATTENTION_FIELDS), whole_terminal=True,
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/__init__.py b/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/__init__.py
+new file mode 100644
+--- /dev/null
++++ b/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/__init__.py
+@@ -0,0 +1 @@
++"""Passive original-operand capture package; no execution at import."""
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/rope_capture.py b/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/rope_capture.py
+new file mode 100644
+--- /dev/null
++++ b/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/rope_capture.py
+@@ -0,0 +1,494 @@
++"""Passive, source-bound RoPE operand capture. Preparation; not a launcher.
++
++Reads the original _rope frame only after both original BF16 tuple assignments.
++Never calls arithmetic, memory providers, original methods, or oracle code.
++Normal-runtime constructor has no fixture/source-rewrite bypass. Pure collector
++and monitor tests are control evidence only, never actual numerical acceptance.
++"""
++from array import array
++import ast
++import hashlib
++import json
++from pathlib import Path
++import struct
++import sys
++import threading
++from types import CodeType, MappingProxyType
++
++HERE = Path(__file__).resolve().parent
++PINS = json.loads((HERE / 'SOURCE_PINS.json').read_text())
++SENTINEL = 0xA5963CC3
++ROLE_HEADS = {3: 12, 6: 2}
++TARGET_STATEMENT = "xc = tuple(self._op('bf', self._op('mul', a, b)) for a, b in zip(x, cosine))"
++
++
++def need(condition, message):
++    if not condition:
++        raise ValueError(message)
++
++
++def digest(raw):
++    return hashlib.sha256(raw).hexdigest()
++
++
++def file_identity(path):
++    raw = Path(path).read_bytes()
++    return {'bytes': len(raw), 'sha256': digest(raw)}
++
++
++def child(code, name):
++    hits = [item for item in code.co_consts if isinstance(item, CodeType) and item.co_name == name]
++    need(len(hits) == 1, 'unique source code identity required: ' + name)
++    return hits[0]
++
++
++def expected_code(path, class_name, method):
++    source = Path(path).read_bytes()
++    root = compile(source, str(path), 'exec', dont_inherit=True, optimize=sys.flags.optimize)
++    return child(child(root, class_name), method)
++
++
++def binding(method, role, class_name, method_name):
++    """Verify an already normally loaded function; never import target code."""
++    pin = PINS['sources'][role]
++    path = Path(pin['path']).resolve(strict=True)
++    need(file_identity(path) == {key: pin[key] for key in ('bytes', 'sha256')}, 'bound source changed: ' + role)
++    function = getattr(method, '__func__', None)
++    need(function is not None and type(function.__code__) is CodeType, 'ordinary bound method required')
++    actual = function.__code__
++    need(actual.co_filename == str(path), 'non-normal source filename forbidden')
++    expected = expected_code(path, class_name, method_name)
++    need(actual == expected and actual.co_firstlineno == expected.co_firstlineno
++         and actual.co_linetable == expected.co_linetable, 'loaded complete code differs: ' + method_name)
++    module = sys.modules.get(pin['module'])
++    need(module is not None and Path(module.__file__).resolve(strict=True) == path,
++         'normal registered source module missing')
++    need(function.__module__ == pin['module'] and function.__globals__ is module.__dict__,
++         'function globals not the normally loaded source module')
++    source_class = module.__dict__.get(class_name)
++    need(source_class is not None and source_class.__dict__.get(method_name) is function,
++         'bound method not owned by original source class')
++    return actual
++
++
++def capture_line():
++    pin = PINS['sources']['official_owner']
++    tree = ast.parse(Path(pin['path']).read_text())
++    cls = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == 'OfficialPrefixOwner')
++    fn = next(node for node in cls.body if isinstance(node, ast.FunctionDef) and node.name == '_rope')
++    pattern = ast.dump(ast.parse(TARGET_STATEMENT).body[0], include_attributes=False)
++    hits = [node.lineno for node in ast.walk(fn) if isinstance(node, ast.stmt)
++            and ast.dump(node, include_attributes=False) == pattern]
++    need(len(hits) == 1, 'missing/ambiguous post-BF16 operand capture line')
++    return hits[0]
++
++
++class OperandData:
++    """Integer-word/presence collector. Does not certify producer provenance."""
++    def __init__(self, rows, jobs):
++        need(type(rows) is int and rows in (16, 128), 'rows must be M16 or M128')
++        need(type(jobs) is dict and set(jobs) == {3, 6}, 'exact Q/K RoPE jobs required')
++        self.rows = rows
++        self.jobs = {pc: dict(job) for pc, job in jobs.items()}
++        self.values = {name: array('I', [SENTINEL]) * (rows * 64) for name in ('cos', 'sin')}
++        self.frequency = {name: array('B', [0]) * (rows * 64) for name in ('cos', 'sin')}
++        self.cursor = 0
++        self.events = hashlib.sha256()
++        self.finished = False
++        need(sys.byteorder == 'little' and self.values['cos'].itemsize == 4, 'little-endian uint32 words required')
++
++    def expected_coordinate(self):
++        q_chunks = self.rows * 12 * 4
++        pc, position = (3, self.cursor) if self.cursor < q_chunks else (6, self.cursor - q_chunks)
++        heads = ROLE_HEADS[pc]
++        need(position < self.rows * heads * 4, 'excess capture event')
++        return pc, position // (heads * 4), (position // 4) % heads, (position % 4) * 16
++
++    def observe(self, *, pc, job, token, head, col, half, index, trig_index, cosine, sine):
++        need(not self.finished, 'capture already finished')
++        need(all(type(value) is int for value in (pc, token, head, col, half, index, trig_index)),
++             'capture coordinates must be exact integers')
++        need((pc, token, head, col) == self.expected_coordinate(), 'missing/duplicate/out-of-order/wrong-head operand event')
++        expected = self.jobs[pc]
++        need(type(job) is dict and job == expected and
++             all(type(job[key]) is type(expected[key]) for key in expected),
++             'job/source/destination binding changed')
++        need(half == 64 and trig_index == (token * 64 + col) * 4
++             and index == (token * expected['n'] + head * 128 + col) * 4,
++             'source-derived RoPE indices changed')
++        for name, values in (('cos', cosine), ('sin', sine)):
++            need(type(values) is tuple and len(values) == 16, 'exact original BF16 tuple required')
++            for lane, value in enumerate(values):
++                need(type(value) is int and 0 <= value < 1 << 32 and value & 0xFFFF == 0
++                     and value & 0x7F800000 != 0x7F800000,
++                     'actual operand is not finite materialized BF16 word')
++                offset = token * 64 + col + lane
++                if self.frequency[name][offset]:
++                    need(self.values[name][offset] == value, 'actual repeated RoPE operands differ')
++                else:
++                    self.values[name][offset] = value
++                self.frequency[name][offset] += 1
++            self.events.update(struct.pack('<5I2QI', pc, token, head, col, expected['tag'],
++                expected['b'] + trig_index, expected['c'] + trig_index, 0 if name == 'cos' else 1))
++            self.events.update(struct.pack('<16I', *values))
++        self.cursor += 1
++
++    def finish(self):
++        need(not self.finished, 'one-use capture seal')
++        need(self.cursor == self.rows * 14 * 4 and
++             all(value == 14 for field in self.frequency.values() for value in field),
++             'incomplete true operand occurrence coverage')
++        result, payloads = {}, {}
++        for name in ('cos', 'sin'):
++            raw = self.values[name].tobytes()
++            result[name] = {'physical_shape': [self.rows, 64], 'official_logical_shape': [self.rows, 128],
++                'container_dtype': 'uint32_FP32_bits_materialized_BF16', 'bytes': len(raw),
++                'raw_sha256': digest(raw), 'unique_words': self.rows * 64,
++                'observed_occurrences': self.rows * 64 * 14, 'Q_head_frequency': 12, 'K_head_frequency': 2,
++                'frequency_sha256': digest(self.frequency[name].tobytes()),
++                'official_to_actual_index': '(token * 64) + (official_column % 64)',
++                'independent_expanded_DUT_tensor_materialized': False}
++            payloads[name] = raw
++        self.finished = True
++        return {'fields': result, 'capture_chunks': self.cursor, 'ordered_event_sha256': self.events.hexdigest(),
++                'recomputed_operands': False, 'oracle_values_used': False}, MappingProxyType(payloads)
++
++
++class ScopedLineProbe:
++    """Own only unchanged registrations; cleanup never injects a DUT fault.
++
++    CPython has no get_callback API. register_callback returns the prior
++    callback; stale or foreign callbacks discovered this way are immediately
++    restored, and no local masks are cleared or foreign tool IDs freed.
++    Unexpected API failures leave the capture failed and any uncertain slot
++    reserved/disarmed rather than claiming successful cleanup or retrying it.
++    """
++    def __init__(self, code, line, consume):
++        need(sys.implementation.name == 'cpython' and sys.version_info[:2] == (3, 12), 'CPython 3.12 only')
++        self.code, self.line, self.consume = code, line, consume
++        self.tool = None
++        self.thread = threading.get_ident()
++        self.started = False
++        self.closed = False
++        self.error = None
++        self.cleanup_errors = []
++        self.cleanup_complete = False
++        self.residual_tool = None
++        self.registration_replaced = False
++        self._tool_name = 'qwen2-real-rope-operands-' + str(id(self))
++        self._line_callback = self._line
++        self._disarmed = True
++        self._callback_attempted = False
++        self._callback_registered = False
++        self._local_attempted = False
++        self._local_configured = False
++        self._stale_callback_restored = False
++        self._cleanup_attempted = False
++
++    def _remember(self, error, *, cleanup=False):
++        message = type(error).__name__ + ': ' + str(error) if isinstance(error, BaseException) else str(error)
++        if cleanup:
++            self.cleanup_errors.append(message)
++        if self.error is None:
++            self.error = message
++        elif message not in self.error:
++            self.error += '; ' + message
++
++    def _cleanup_safely(self):
++        # Keep this guard outside stop too. Even a failing/replaced cleanup
++        # function cannot escape a monitoring callback into the generator.
++        self._disarmed = True
++        self.closed = True
++        try:
++            self.stop()
++        except BaseException as error:
++            self._remember('monitoring cleanup failed: ' + type(error).__name__ + ': ' + str(error), cleanup=True)
++            self.cleanup_complete = False
++            self.residual_tool = self.tool
++
++    def __enter__(self):
++        need(threading.get_ident() == self.thread, 'observer thread changed before entry')
++        need(not self.started and not self.closed and self.tool is None and sys.gettrace() is None,
++             'single-use observation with no tracing required')
++        mon = sys.monitoring
++        # A free name is insufficient: free_tool_id does not remove stale
++        # callback registrations or local/global event masks.
++        for tool in (3, 4):
++            if mon.get_tool(tool) is not None or mon.get_events(tool) or mon.get_local_events(tool, self.code):
++                continue
++            try:
++                mon.use_tool_id(tool, self._tool_name)
++            except BaseException as error:
++                # A failed claim can have an uncertain outcome. Re-read the
++                # owner before cleanup; never free a racing foreign claim.
++                try:
++                    owned = mon.get_tool(tool) == self._tool_name
++                except BaseException as status_error:
++                    self._remember(error)
++                    self._remember(status_error, cleanup=True)
++                    self.residual_tool = tool
++                    self.closed = True
++                    raise error
++                if owned:
++                    self.tool = tool
++                    self._remember(error)
++                    self._cleanup_safely()
++                    raise
++                if isinstance(error, ValueError):
++                    continue
++                raise
++            self.tool = tool
++            break
++        need(self.tool is not None, 'monitor slots busy or retain events; do not take over another observer')
++        try:
++            need(mon.get_tool(self.tool) == self._tool_name and not mon.get_events(self.tool)
++                 and not mon.get_local_events(self.tool, self.code), 'monitor claim changed before callback registration')
++            self._callback_attempted = True
++            previous = mon.register_callback(self.tool, mon.events.LINE, self._line_callback)
++            if previous is not None:
++                replaced = mon.register_callback(self.tool, mon.events.LINE, previous)
++                if replaced is not self._line_callback:
++                    # A concurrent replacement is not ours. Restore the most
++                    # recently displaced registration and leave the tool alone.
++                    mon.register_callback(self.tool, mon.events.LINE, replaced)
++                    self.registration_replaced = True
++                    raise ValueError('callback changed while restoring a stale registration')
++                self._stale_callback_restored = True
++                raise ValueError('monitor slot retains a stale LINE callback; restored without using it')
++            self._callback_registered = True
++            need(mon.get_tool(self.tool) == self._tool_name and not mon.get_events(self.tool)
++                 and not mon.get_local_events(self.tool, self.code), 'monitor claim changed before local events')
++            self._local_attempted = True
++            mon.set_local_events(self.tool, self.code, mon.events.LINE)
++            self._local_configured = True
++            self.started = True
++            self._disarmed = False
++            return self
++        except BaseException as error:
++            self._remember(error)
++            self._cleanup_safely()
++            raise  # Refuse before any observed workload starts.
++
++    def _line(self, code, line):
++        if self._disarmed or code is not self.code or line != self.line:
++            return
++        try:
++            need(threading.get_ident() == self.thread, 'observer thread changed')
++            frame = sys._getframe(1)
++            need(frame.f_code is code, 'actual monitoring frame mismatch')
++            self.consume(frame)
++        except Exception as error:
++            self._remember(error)
++            self._cleanup_safely()
++
++    def _leave_foreign(self, message):
++        self.registration_replaced = True
++        self._remember(message)
++        self.residual_tool = self.tool
++        self.tool = None
++        self.cleanup_complete = False
++
++    def _stop_impl(self):
++        self._disarmed = True
++        self.closed = True
++        if self.tool is None:
++            return
++        if self._cleanup_attempted:
++            return  # Never retry an uncertain cleanup mutation blindly.
++        self._cleanup_attempted = True
++        mon, tool = sys.monitoring, self.tool
++        if mon.get_tool(tool) != self._tool_name:
++            self._leave_foreign('observer monitoring tool was replaced; untouched')
++            return
++        global_events = mon.get_events(tool)
++        local_events = mon.get_local_events(tool, self.code)
++        allowed_local = (mon.events.LINE,) if self.started else ((0, mon.events.LINE) if self._local_attempted else (0,))
++        if global_events or local_events not in allowed_local or self.registration_replaced:
++            self._leave_foreign('observer monitoring masks/registration changed; preserved')
++            return
++        if self._stale_callback_restored:
++            # The startup claim was ours, but this pre-existing callback was
++            # not. free_tool_id preserves that restored callback and masks.
++            mon.free_tool_id(tool)
++            self.tool = None
++            self.cleanup_complete = True
++            return
++        # Inspect/remove the callback before touching event masks. A foreign
++        # callback keeps its masks and tool name as well as the callback itself.
++        previous = mon.register_callback(tool, mon.events.LINE, None)
++        own = previous is self._line_callback
++        absent_after_failed_install = not self.started and not self._callback_registered and previous is None
++        if not own and not absent_after_failed_install:
++            mon.register_callback(tool, mon.events.LINE, previous)
++            self._leave_foreign('observer LINE callback was replaced; restored and preserved')
++            return
++        self._callback_registered = False
++        if mon.get_tool(tool) != self._tool_name or mon.get_events(tool) != global_events or mon.get_local_events(tool, self.code) != local_events:
++            self._leave_foreign('monitoring ownership changed during cleanup; no masks cleared or tool freed')
++            return
++        if local_events:
++            mon.set_local_events(tool, self.code, 0)
++        self._local_configured = False
++        mon.free_tool_id(tool)
++        self.tool = None
++        self.cleanup_complete = True
++
++    def stop(self):
++        self._disarmed = True
++        self.closed = True
++        try:
++            self._stop_impl()
++        except BaseException as error:
++            self._remember('monitoring cleanup failed: ' + type(error).__name__ + ': ' + str(error), cleanup=True)
++            self.cleanup_complete = False
++            self.residual_tool = self.tool
++
++    def __exit__(self, *exception):
++        self._cleanup_safely()
++        return False
++
++
++JOB_KEYS = ('kind', 'tag', 'a', 'b', 'dst', 'm', 'n', 'k', 'write_bytes', 'c',
++            'weight_bf16', 'activation_bf16', 'output_bf16')
++
++
++def job_record(job):
++    return {name: getattr(job, name) for name in JOB_KEYS}
++
++
++def jobs_from_fixture(fixture, physical, rows):
++    need(physical.fixture is fixture and fixture.scope == 'QWEN2_21_METADATA_ONLY', 'original physical fixture identity')
++    specs = fixture.specs
++    rope = physical.regions['rope']
++    need(specs['x'][1] == (rows, 1536) and specs['rope'][1] == (2, 1024, 64), 'original x/RoPE geometry')
++    need(rope['readonly'] is True and rope['base'] == specs['rope'][0]
++         and rope['extent'] == 2 * 1024 * 64 * 4, 'original readonly rope allocation')
++    jobs = {}
++    for pc, src, dst, width in ((3, 'qr', 'q', 1536), (6, 'kr', 'k', 256)):
++        need(specs[src][1] == specs[dst][1] == (rows, width), 'RoPE actual source/destination shape')
++        jobs[pc] = dict(kind='Rope', tag=(fixture.config.epoch << 16) | pc,
++            a=specs[src][0], b=specs['rope'][0], dst=specs[dst][0], m=rows, n=width, k=width,
++            write_bytes=rows * width * 4, c=specs['rope'][0] + 1024 * 64 * 4,
++            weight_bf16=False, activation_bf16=False, output_bf16=False)
++    return jobs
++
++
++def require_whole_terminal(terminal, registry, *, terminal_type, owner, physical, rows):
++    need(type(terminal) is terminal_type and terminal.consumed is True,
++         'original consumed registry terminal token required')
++    need(terminal.execution.prefix_owner is owner and terminal.physical is physical and physical.pending is None,
++         'terminal belongs to another owner or memory')
++    need(terminal.memory.physical_memory is physical and terminal.memory.workspace.finished is True,
++         'whole physical workspace not retired')
++    need(owner.state == 'idle' and owner.poison is False and owner.program is None,
++         'actual prefix owner did not retire cleanly')
++    need(type(registry) is dict and registry.get('status') == 'COMPLETE_ACTUAL_INVENTORY_NUMERIC_TEMP'
++         and registry.get('rows') == rows and registry.get('whole_terminal') is True
++         and registry.get('resources_clean') is True and registry.get('public_completions') == 21
++         and registry.get('actual_owner_jobs') == 17 and registry.get('launch_results') == 1,
++         'whole sealed registry required, not pc12/prefix completion')
++    report = terminal.report
++    need(report.get('reference_arithmetic_executed') is False and report.get('full_block_executed') is True,
++         'actual whole block evidence required')
++    host = report['host']
++    result = host['launch_result']
++    need(type(result) is dict and 'status' in result and result['status'] is None
++         and result.get('completed') == 21 and result.get('jobs') == 17
++         and [entry['pc'] for entry in host['completions']] == list(range(21))
++         and all(entry['status'] is None for entry in host['completions']), 'exact whole21 completion evidence')
++
++
++class RopeOperandCapture:
++    """Normal-runtime only. Use during prefix, seal only after whole registry."""
++    def __init__(self, *, owner, fixture, physical, rows, terminal_type):
++        need(type(rows) is int and rows in (16, 128), 'rows must be M16 or M128')
++        module = sys.modules.get(PINS['sources']['official_owner']['module'])
++        need(module is not None and type(owner) is module.__dict__.get('OfficialPrefixOwner'),
++             'exact normally loaded OfficialPrefixOwner required')
++        need(owner.head_dim == 128 and owner.hidden == 1536 and owner.kv == 256
++             and owner.max_tokens == 1024, 'original owner geometry')
++        need(not set(('_rope', '_op', '_read')) & set(owner.__dict__), 'instance method substitution forbidden')
++        self.owner, self.fixture, self.physical, self.rows = owner, fixture, physical, rows
++        self.terminal_type = terminal_type
++        self.bindings = {'rope': binding(owner._rope, 'official_owner', 'OfficialPrefixOwner', '_rope'),
++                         'op': binding(owner._op, 'prefix_owner', 'PrefixOwner', '_op'),
++                         'read': binding(owner._read, 'prefix_owner', 'PrefixOwner', '_read')}
++        self.line = capture_line()
++        self.data = OperandData(rows, jobs_from_fixture(fixture, physical, rows))
++        self.probe = ScopedLineProbe(self.bindings['rope'], self.line, self._consume)
++        self.error = None
++        self.sealed = False
++
++    def _check_binding(self):
++        for name, method, role, cls, member in (
++                ('rope', self.owner._rope, 'official_owner', 'OfficialPrefixOwner', '_rope'),
++                ('op', self.owner._op, 'prefix_owner', 'PrefixOwner', '_op'),
++                ('read', self.owner._read, 'prefix_owner', 'PrefixOwner', '_read')):
++            need(binding(method, role, cls, member) is self.bindings[name], 'live function code identity changed')
++        need(jobs_from_fixture(self.fixture, self.physical, self.rows) == self.data.jobs, 'fixture changed')
++
++    def __enter__(self):
++        need(self.owner.state == 'idle' and self.owner.poison is False and self.owner.program is None,
++             'original idle owner required before prefix')
++        # Source/code/fixture admission errors above remain hard refusals.
++        # Only after that admission may monitoring-resource failure degrade
++        # to unobserved original execution with sticky later capture FAIL.
++        self._check_binding()
++        try:
++            self.probe.__enter__()
++        except Exception as error:
++            self._capture_failure('monitor installation failed; original prefix continues without capture', error)
++            self.probe._cleanup_safely()
++        return self
++
++    def _capture_failure(self, label, error):
++        message = label + ': ' + type(error).__name__ + ': ' + str(error)
++        self.error = message if self.error is None else self.error + '; ' + message
++
++    def _consume(self, frame):
++        local = frame.f_locals
++        # Another instance using the same class is outside this capture, not a
++        # reason to attribute its values to the selected DUT.
++        if local.get('self') is not self.owner:
++            return
++        need(self.owner.program is not None and self.owner.program.gi_frame is frame,
++             'not the actual selected owner generator frame')
++        job = local.get('j')
++        need(job is self.owner.job and self.owner.poison is False, 'actual live job binding or poison changed')
++        record = job_record(job)
++        self.data.observe(pc=record['tag'] & 0xFFFF, job=record, token=local['token'], head=local['head'],
++            col=local['col'], half=local['half'], index=local['index'], trig_index=local['trig_index'],
++            cosine=local['cosine'], sine=local['sine'])
++
++    def __exit__(self, *exception):
++        try:
++            self.probe.__exit__(*exception)
++        except BaseException as error:
++            # Even a defective cleanup wrapper cannot replace the original
++            # driver's return or exception. Acceptance remains sticky FAIL.
++            self._capture_failure('monitor cleanup failed', error)
++        try:
++            self._check_binding()
++        except Exception as error:
++            self._capture_failure('post-execution source/fixture binding changed', error)
++        return False
++
++    def seal(self, *, terminal, registry):
++        need(not self.sealed and self.probe.started and self.probe.closed and self.probe.tool is None
++             and self.probe.cleanup_complete is True and not self.probe.cleanup_errors,
++             'observation must have finished before one-use whole seal')
++        need(self.error is None and self.probe.error is None, 'passive observer failed: ' + str(self.error or self.probe.error))
++        self._check_binding()
++        require_whole_terminal(terminal, registry, terminal_type=self.terminal_type,
++            owner=self.owner, physical=self.physical, rows=self.rows)
++        report, payloads = self.data.finish()
++        report.update(status='COMPLETE_ACTUAL_ROPE_OPERANDS_SOFTWARE_ONLY', rows=self.rows,
++            execution_provenance='NORMAL_LOADED_SOURCE_SOFTWARE', source_pins=PINS['sources'],
++            capture_line=self.line, whole_registry_terminal=True,
++            observed_after_original_bf16=True, replacement_arithmetic=False,
++            tensor_reconstruction=False, full_29_numeric_acceptance='NOT_READY',
++            numeric_comparison_performed=False, hardware_acceptance=False,
++            noninterference_proven=False,
++            noninterference_scope='observer contains no DUT writes/calls; actual baseline/observed numerical equivalence not run')
++        self.sealed = True
++        return report, payloads
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/runner.py b/candidates/qwen2_ordered_fullgraph_entry/runner.py
+--- a/candidates/qwen2_ordered_fullgraph_entry/runner.py
++++ b/candidates/qwen2_ordered_fullgraph_entry/runner.py
+@@ -19,7 +19,7 @@
+ 
+ 
+ def run_actual(runtime, providers, profile, out, *, enabled=False,
+-               admission=None, compare_after_terminal=None):
++               admission=None, compare_after_terminal=None, oracle_gate=None):
+     """Execute real original prefix/suffix only under a future admitted caller.
+ 
+     runtime attributes: original, fixtures, public, prefix, scalar, suffix,
+@@ -36,8 +36,10 @@
+                  'runtime_manifest_sha256', 'input_manifest_sha256', 'run_id'):
+         need(isinstance(admission.get(name), str) and bool(admission[name]),
+              'missing independently verified admission identity: ' + name)
+-    need(profile['rows'] == 16 and type(profile['rows']) is int,
+-         'this preparation exposes M16 only; M128 needs a separate budget/profile')
++    rows = profile['rows']
++    need(type(rows) is int and rows == 128 and
++         profile.get('profile_id') == 'ordered_fullgraph_m128_terminal_capture_v1',
++         'new independently reviewed M128 profile required; this patch grants no execution')
+     need(profile['qk_profile'] == 2 and profile['pv_profile'] == 0 and
+          profile['raw_kv_transport'] is False, 'QK2 / legacy PV0 profile required')
+     need(type(profile['wall_budget']) in (int, float) and
+@@ -51,10 +53,17 @@
+     # Import only our lightweight bridge/registry here. Target module loading and
+     # ELF mapping belong to the source-bound caller, not this control API.
+     from . import bridge, registry
+-    dispatch, observation = bridge.make_dispatch(profile, enabled=True)
++    from .oracle_path_gate import ExactOraclePathGate
++    from .rope_operand_capture.rope_capture import RopeOperandCapture
++    need(type(oracle_gate) is ExactOraclePathGate and oracle_gate.installed and
++         oracle_gate.state == 'SEALED' and not oracle_gate.comparison_attempted,
++         'caller must install exact reviewed oracle-root guard before loading DUT')
++    from . import stream
++    dispatch, observation = bridge.make_dispatch(profile, enabled=True,
++        event_stream_path=out / 'attention_service_events.q2evt')
+     out.mkdir(parents=True)
+     report = dict(status='PREPARED_NOT_EXECUTED', admission=dict(admission),
+-                  rows=16, numeric_acceptance='TEMP', hardware_cycles=None,
++                  rows=rows, numeric_acceptance='TEMP', hardware_cycles=None,
+                   hardware_acceptance=False, fixed_physical_macs=4096,
+                   legacy_pv_upper_bound_percent=63.57, phases=[])
+ 
+@@ -97,11 +106,8 @@
+         if raw_events is None:
+             raw_events = observation.get('service_events')
+         if raw_events is not None:
+-            raw = (json.dumps(raw_events, separators=(',', ':')) + '\n').encode()
+-            (folder / 'raw_service_events.json').write_bytes(raw)
+-            evidence['raw_service_events'] = dict(file='raw_service_events.json', bytes=len(raw),
+-                sha256=hashlib.sha256(raw).hexdigest(), policy='actual events; no ticket normalization',
+-                sealed=observation.get('service_events') is not None and observation.get('service_error') is None)
++            evidence['raw_service_events'] = stream.artifact_evidence(
++                raw_events, out / 'attention_service_events.q2evt', evidence_directory=folder)
+         (folder / 'EVIDENCE.json').write_text(json.dumps(evidence, sort_keys=True, indent=2) + '\n')
+         report['capture_evidence'] = evidence
+         retained = True
+@@ -109,7 +115,7 @@
+     started = time.monotonic()
+     try:
+         with runtime.policy.reference_gate(profile['input_spec']) as gate:
+-            f = runtime.fixtures.make_qwen2_21_fixture(16, profile['epoch'])
++            f = runtime.fixtures.make_qwen2_21_fixture(rows, profile['epoch'])
+             physical = runtime.prefix.PhysicalMemory(f, providers)
+             memory = runtime.physical_adapter.FullGraphMemory(physical)
+             n, region = runtime.original.numeric, f.config.regions[3]
+@@ -131,11 +137,14 @@
+                 prefix_owner=runtime.policy.OfficialPrefixOwner(shared_scalar),
+                 attention_owner=runtime.policy.OfficialAttentionOwner(service, shared_scalar),
+                 matrix_service=service)
+-            silu = runtime.policy.ObservedSiluLibrary(runtime.selected, 16)
++            silu = runtime.policy.ObservedSiluLibrary(runtime.selected, rows)
+             guarded = gate.library(silu)
+             phase('ORIGINAL_RESOURCES_CONSTRUCTED')
+-            report['prefix_execution'] = runtime.execution.execute_public_prefix(
+-                x, physical, guarded, out)
++            rope_capture = RopeOperandCapture(owner=x.prefix_owner, fixture=f,
++                physical=physical, rows=rows, terminal_type=registry._TerminalEvidence)
++            with rope_capture:
++                report['prefix_execution'] = runtime.execution.execute_public_prefix(
++                    x, physical, guarded, out)
+             phase('ORIGINAL_PREFIX_COMPLETE')
+             actual, execution_report = runtime.suffix.execute_public_suffix(
+                 x, physical, guarded, out, memory=memory, attention_dispatch=dispatch)
+@@ -155,25 +164,59 @@
+             need(observation['capture_error'] is None and observation['service_error'] is None
+                  and observation['service_events'] is not None,
+                  'passive observation failed after real suffix retirement')
+-            report['registry'] = registry.seal_registry(rows=16, actual=actual,
++            oracle_gate.require_clean()
++            sealed_payloads = {}
++            report['registry'] = registry.seal_registry(rows=rows, actual=actual,
+                 execution_report=execution_report, capture_report=observation['capture_report'],
+                 capture_fields=observation['capture'].data.fields, silu_library=silu,
+-                terminal=terminal)
++                terminal=terminal, sealed_payloads=sealed_payloads)
+             report['attention_observation'] = observation['capture_report']
+-            report['service_event_count'] = len(observation['service_events'])
++            report['service_event_count'] = observation['service_events']['count']
+             phase('ACTUAL_REGISTRY_SEALED')
+             # Opening the original isolation gate happens only here, not at
+             # pc12 completion and not before the original FFN suffix terminal.
++            # The original live terminal was consumed by the complete registry.
++            # This seal only exports actual observed BF16 half-domain operands.
++            rope_report, rope_payloads = rope_capture.seal(
++                terminal=terminal, registry=report['registry'])
++            report['rope_operand_observation'] = rope_report
++            # Read the ORIGINAL readonly x allocation after complete registry seal.
++            # Provider provenance and pre/post payload identities belong to the
++            # new worker admission; this snapshot alone is not temporal proof.
++            input_region = physical.regions['x']
++            need(input_region['readonly'] is True and input_region['provider'] is providers['x'],
++                 'original readonly x provider identity changed')
++            input_x = physical.raw(input_region['base'], input_region['extent'])
++            expected_x = profile['input_views']['x']
++            need(type(input_x) is bytes and expected_x['shape'] == [rows, 1536] and
++                 len(input_x) == expected_x['bytes'] == rows * 1536 * 4 and
++                 hashlib.sha256(input_x).hexdigest() == expected_x['sha256'],
++                 'terminal original x allocation differs from independently pinned input')
++            terminal_values = dict(readonly_x=input_x, sealed_silu=sealed_payloads['silu'],
++                x_shape=[rows, 1536], silu_shape=[rows, 8960],
++                provenance='ORIGINAL_READONLY_ALLOCATION_AND_ORIGINAL_PHASE4_SEAL',
++                rope_operands=rope_payloads, rope_physical_shape=[rows, 64],
++                cos_sin_status='ACTUAL_OPERAND_CAPTURE_PENDING_NUMERIC_COMPARISON',
++                official29_coverage='TEMP_COVERAGE_LIMITED_NO_SYNTHESIS')
++            def verify_live_terminal():
++                # Source-pinned original verifier checks real current backing
++                # state, not a status boolean and not native-backed properties.
++                registry._live_terminal(x, physical, memory, execution_report)
+             gate.opened = True
+             if compare_after_terminal is not None:
+-                report['comparison'] = compare_after_terminal(actual, observation, report['registry'])
++                report['comparison'] = oracle_gate.compare_after_live_terminal(
++                    verify_live_terminal, compare_after_terminal,
++                    actual, observation, report['registry'], terminal_values=terminal_values)
+                 phase('TERMINAL_COMPARISON_RETURNED')
++            oracle_gate.require_clean()
++            report['oracle_isolation'] = oracle_gate.report()
+             report['status'] = 'ACTUAL_INVENTORY_COMPLETE_NUMERIC_TEMP'
+             save()
+             return actual, report
+     except Exception as error:
+         report['status'] = 'FAIL'
+         report['error'] = type(error).__name__ + ': ' + str(error)
++        report['oracle_isolation'] = oracle_gate.report()
+         report['attention_observation_error'] = observation.get('capture_error')
+         report['service_observation_error'] = observation.get('service_error')
+         try:
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/service_trace.py b/candidates/qwen2_ordered_fullgraph_entry/service_trace.py
+--- a/candidates/qwen2_ordered_fullgraph_entry/service_trace.py
++++ b/candidates/qwen2_ordered_fullgraph_entry/service_trace.py
+@@ -25,6 +25,104 @@
+ def need(ok, message):
+     if not ok:
+         raise ValueError(message)
++
++
++def capture_error(instance, error):
++    if instance.error is None:
++        instance.error = type(error).__name__ + ': ' + str(error)
++
++
++def monitoring_enter(instance, label, slots, callbacks, codes, mask):
++    """Install only our private monitor lease; never wrap a frame-sensitive callback."""
++    mon = sys.monitoring
++    need(not instance.closed and instance.tool is None, 'single-use monitor')
++    instance._monitor_label = label + ':' + format(id(instance), 'x')
++    instance._monitor_owned = instance._stop_attempted = instance._foreign_registration = False
++    instance._monitor_callbacks = dict(callbacks)  # retain exact bound callback objects
++    instance._monitor_codes = tuple(codes)
++    instance._monitor_mask = mask
++    instance._callback_attempted = set()
++    instance._callback_installed = set()
++    instance._stale_restored = set()
++    instance._local_attempted = set()
++    for tool in slots:
++        if mon.get_tool(tool) is not None or mon.get_events(tool) or any(
++                mon.get_local_events(tool, code) for code in instance._monitor_codes):
++            continue
++        try:
++            mon.use_tool_id(tool, instance._monitor_label)
++        except BaseException:
++            # Resolve an uncertain claim before cleanup; never free foreign state.
++            if mon.get_tool(tool) == instance._monitor_label:
++                instance.tool, instance._monitor_owned = tool, True
++            raise
++        instance.tool, instance._monitor_owned = tool, True
++        break
++    need(instance.tool is not None, 'monitor tool busy or retains event masks')
++    slot = instance.tool
++    for event, callback in instance._monitor_callbacks.items():
++        need(mon.get_tool(slot) == instance._monitor_label and not mon.get_events(slot), 'monitor lease changed')
++        instance._callback_attempted.add(event)
++        previous = mon.register_callback(slot, event, callback)
++        if previous is not None:
++            replaced = mon.register_callback(slot, event, previous)
++            if replaced is not callback:
++                mon.register_callback(slot, event, replaced)
++                instance._foreign_registration = True
++                raise ValueError('callback changed while restoring foreign registration')
++            instance._stale_restored.add(event)
++            raise ValueError('stale monitor callback restored; not used')
++        instance._callback_installed.add(event)
++    need(mon.get_tool(slot) == instance._monitor_label and not mon.get_events(slot) and
++         not any(mon.get_local_events(slot, code) for code in instance._monitor_codes), 'monitor masks changed')
++    for code in instance._monitor_codes:
++        instance._local_attempted.add(code)
++        mon.set_local_events(slot, code, mask)
++    return instance
++
++
++def monitoring_stop(instance, callbacks, codes):
++    """Once-only cleanup; caller catches errors, never retry uncertain mutations.
++
++    The callbacks/codes arguments name the adapter contract. Actual ownership is
++    checked against exact callback objects and masks retained during installation.
++    """
++    if getattr(instance, '_stop_attempted', False):
++        return
++    instance._stop_attempted = True
++    instance.closed = True
++    if instance.tool is None or not getattr(instance, '_monitor_owned', False):
++        return
++    mon, slot = sys.monitoring, instance.tool
++    need(mon.get_tool(slot) == instance._monitor_label, 'foreign monitor lease; not cleared')
++    global_mask = mon.get_events(slot)
++    local_masks = {code: mon.get_local_events(slot, code) for code in instance._monitor_codes}
++    need(not global_mask and not instance._foreign_registration and all(
++        value in ((0, instance._monitor_mask) if code in instance._local_attempted else (0,))
++        for code, value in local_masks.items()), 'foreign monitor masks/registration; preserved')
++    for event in instance._callback_attempted:
++        if event in instance._stale_restored:
++            continue
++        previous = mon.register_callback(slot, event, None)
++        own = previous is instance._monitor_callbacks[event]
++        absent_failed_install = event not in instance._callback_installed and previous is None
++        if not own and not absent_failed_install:
++            displaced = mon.register_callback(slot, event, previous)
++            if displaced is not None:
++                mon.register_callback(slot, event, displaced)
++            instance._foreign_registration = True
++            raise ValueError('foreign monitor callback restored; masks and lease preserved')
++    need(mon.get_tool(slot) == instance._monitor_label and mon.get_events(slot) == global_mask and all(
++        mon.get_local_events(slot, code) == value for code, value in local_masks.items()),
++        'monitor ownership changed during cleanup; masks and lease preserved')
++    for code, value in local_masks.items():
++        if value:
++            mon.set_local_events(slot, code, 0)
++    # CPython free_tool_id preserves any restored stale callback. No foreign
++    # callback or foreign local/global event mask is cleared by this cleanup.
++    mon.free_tool_id(slot)
++    instance.tool = None
++    instance._monitor_owned = False
+ 
+ 
+ def service_specs(service_class, profile):
+@@ -61,15 +159,15 @@
+     return specs
+ 
+ 
+-def make_trace(runtime_observer, service, profile, bind):
+-    """Reuse old callback/monitoring/seal implementation with exact new bindings."""
++def make_trace(runtime_observer, service, profile, bind, event_stream_path):
++    """Reuse the exact old callback; replace only bounded storage and safe monitoring lifetime."""
++    from .stream import EventWriter, profile_counts
+     specs = service_specs(type(service), profile)
+     need(runtime_observer.ServiceTrace.METHODS == METHODS, 'original trace method contract changed')
+ 
+     class FullgraphServiceTrace(runtime_observer.ServiceTrace):
+         def __init__(self):
+             self.service = service
+-            self.events = []
+             self.error = None
+             self.tool = None
+             self.closed = False
+@@ -83,5 +181,57 @@
+                 code = bind(bound, path, pin, cls, method, False)
+                 need(code not in self.codes, 'duplicate lifecycle code binding')
+                 self.codes[code] = name
++            groups, events = profile_counts(profile['rows'])
++            self.events = EventWriter(event_stream_path, expected_groups=groups,
++                expected_events=events, max_events=profile['event_stream_max_events'],
++                max_bytes=profile['event_stream_max_bytes'])
++            self.stream_receipt = None
++
++        def __enter__(self):
++            try:
++                event = sys.monitoring.events.PY_RETURN
++                return monitoring_enter(self, 'ordered-service-events', (4, 3),
++                    ((event, self._return),), self.codes, event)
++            except BaseException as error:
++                capture_error(self, error)
++                self.stop()
++                self.events.close_incomplete()
++                raise
++
++        def stop(self):
++            # Old _return calls this method on capture errors. It cannot throw
++            # back into the original service frame or clear somebody else's slot.
++            try:
++                monitoring_stop(self, (sys.monitoring.events.PY_RETURN,), self.codes)
++            except BaseException as error:
++                capture_error(self, error)
++                self.closed = True
++                if isinstance(error, KeyboardInterrupt):
++                    raise
++
++        def __exit__(self, kind, value, traceback):
++            self.stop()
++            if kind is not None or self.error is not None:
++                self.events.close_incomplete()
++            else:
++                try:
++                    self.stream_receipt = self.events.seal()
++                except BaseException as error:
++                    # Evidence failure never substitutes a DUT result or ACK.
++                    self.error = type(error).__name__ + ': ' + str(error)
++                    self.events.close_incomplete()
++                    if isinstance(error, KeyboardInterrupt):
++                        raise
++            return False
++
++        def seal(self):
++            need(self.closed and self.error is None and self.stream_receipt is not None,
++                 'stream trace failed or still active: ' + str(self.error))
++            return dict(self.stream_receipt)
++
++        def raw_receipt(self):
++            receipt = self.events.snapshot()
++            receipt.update(monitor_error=self.error, monitor_residual_tool=self.tool, monitor_closed=self.closed)
++            return receipt
+ 
+     return FullgraphServiceTrace()
+diff --git a/candidates/qwen2_ordered_fullgraph_entry/stream.py b/candidates/qwen2_ordered_fullgraph_entry/stream.py
+new file mode 100644
+--- /dev/null
++++ b/candidates/qwen2_ordered_fullgraph_entry/stream.py
+@@ -0,0 +1,437 @@
++"""Bounded raw Matrix lifecycle frames, never a client or arithmetic service.
++
++Only one successful pc12 QK2/PV0 owner in the pinned finite non-wrap ticket
++profile is accepted. Raw native tickets are preserved; canonical ordinals are
++returned transiently by the auditor. No historical ticket/object cache exists.
++"""
++import hashlib
++import json
++import os
++from pathlib import Path
++import struct
++
++MAGIC = b'Q2EVT1\r\n'
++END = 0xffffffff
++MAX_RECORD = 1024
++MAX_EVENTS = 3_000_000
++U64 = (1 << 64) - 1
++NAMES = ('acquire', 'accept_group', 'accept_step', 'retire_result', 'retire_done',
++         'retire_legacy_reply', 'retire_owner_response', 'release', 'abort')
++LENGTHS = (2, 5, 7, 6, 4, 2, 0, 0, 0)
++
++
++def need(ok, message):
++    if not ok:
++        raise ValueError(message)
++
++
++def uint(value, bits=64):
++    return type(value) is int and 0 <= value < 1 << bits
++
++
++def digest_word(value):
++    return type(value) is str and len(value) == 64 and all(c in '0123456789abcdef' for c in value)
++
++
++def profile_counts(rows):
++    need(type(rows) is int and rows in (1, 2, 16, 17, 32, 128), 'finite row profile')
++    groups = 12 * sum((k + 15) // 16 for k in range(1, rows + 1))
++    total_groups = groups + 96 * rows
++    return total_groups, 3 + 11 * groups + 192 * rows + 288 * (rows * (rows + 1) // 2)
++
++
++def validate_shape(event):
++    need(type(event) is tuple and len(event) == 3, 'event tuple')
++    name, edge, values = event
++    need(type(name) is str and name in NAMES and uint(edge), 'event method/edge')
++    need(type(values) is tuple and len(values) == LENGTHS[NAMES.index(name)], 'event payload')
++    if name == 'acquire':
++        need(values[0] == 'normal' and uint(values[1], 32), 'normal owner tag')
++    elif name == 'accept_group':
++        need(all(uint(v, 32) for v in values), 'group integer widths')
++    elif name == 'accept_step':
++        need(all(uint(v, 32) for v in values[:2]) and
++             all(type(v) is bool for v in values[2:6]) and digest_word(values[6]), 'step fields')
++    elif name == 'retire_result':
++        need(uint(values[0], 32) and all(type(v) is bool for v in values[1:3]) and
++             uint(values[3]) and uint(values[4]) and digest_word(values[5]), 'result fields')
++    elif name == 'retire_done':
++        need(uint(values[0], 32) and type(values[1]) is bool and
++             uint(values[2]) and uint(values[3]), 'done fields')
++    elif name == 'retire_legacy_reply':
++        need(all(uint(v) for v in values), 'legacy fields')
++    return event
++
++
++class Lifecycle:
++    """O(1) state for one owner and at most one active original Matrix group.
++
++    Native beginGroup uses ticket=nextTicket++, td_reset deliberately does not
++    reset nextTicket, and release/abort do not assign it. This candidate rejects
++    abort, reset-epoch changes, multiple owners and any uint64 wrap. It is NOT a
++    generic lifecycle auditor for other services or reusable ticket domains.
++    """
++    def __init__(self, expected_groups):
++        need(type(expected_groups) is int and 1 <= expected_groups <= 19200, 'group budget')
++        self.expected_groups = expected_groups
++        self.active = None
++        self.owned = self.terminal = self.released = False
++        self.last_edge = -1
++        self.last_ticket = None
++        self.epoch = None
++        self.ordinal = self.groups = self.events = 0
++
++    def accept(self, event):
++        name, edge, raw = validate_shape(event)
++        need(edge >= self.last_edge and not self.released, 'edge order/event after release')
++        self.last_edge = edge
++        values = list(raw)
++        if name == 'acquire':
++            need(not self.owned and not self.terminal and self.events == 0, 'duplicate/noninitial acquire')
++            self.owned = True
++        else:
++            need(self.owned, 'event without owner')
++        a = self.active
++        if name == 'accept_group':
++            need(a is None and not self.terminal, 'overlapping group')
++            op, steps, tag, mask, profile = values
++            need((op, profile, mask) in ((0x23, 2, 255), (0x24, 0, 1)) and
++                 ((profile == 2 and steps == 8) or (profile == 0 and 1 <= steps <= 128)),
++                 'QK2/PV0 finite group profile')
++            self.groups += 1
++            need(self.groups <= self.expected_groups, 'too many groups')
++            self.active = dict(steps=steps, tag=tag, profile=profile, index=0,
++                               pending=None, reply=False, done=False, ticket=None, epoch=None)
++        elif name == 'accept_step':
++            need(a is not None and not a['done'] and a['pending'] is None and not a['reply'], 'step overlaps debt')
++            index, context, clear, last, finish, emit, packet_hash = values
++            need(context == 0 and index == a['index'] < a['steps'] and clear == (index == 0) and
++                 last == (index + 1 == a['steps']) and finish == last and
++                 emit == (last if a['profile'] == 2 else True), 'step order/boundary')
++            a['index'] += 1
++            if emit:
++                a['pending'] = (context, last)
++        elif name == 'retire_result':
++            need(a is not None and a['pending'] is not None and not a['done'], 'duplicate/foreign result')
++            context, last, error, ticket, epoch, result_hash = values
++            need((context, last) == a['pending'] and error is False and ticket > 0, 'result metadata/error')
++            if a['ticket'] is None:
++                need(self.last_ticket is None or ticket > self.last_ticket, 'ticket collision/reuse/order')
++                if self.last_ticket is None:
++                    need(ticket <= U64 - self.expected_groups + 1, 'ticket domain may wrap')
++                need(self.epoch is None or epoch == self.epoch, 'reset epoch changed inside owner')
++                self.epoch = epoch
++                self.ordinal += 1
++                self.last_ticket = a['ticket'] = ticket
++                a['epoch'] = epoch
++            need(ticket == a['ticket'] and epoch == a['epoch'], 'foreign result ticket/epoch')
++            values[3] = self.ordinal
++            a['pending'] = None
++            a['reply'] = a['profile'] == 0
++        elif name == 'retire_done':
++            need(a is not None and not a['done'] and a['index'] == a['steps'] and a['pending'] is None, 'early/duplicate done')
++            tag, error, ticket, epoch = values
++            need(ticket == a['ticket'] and epoch == a['epoch'] and tag == a['tag'] and error is False, 'foreign done')
++            values[2] = self.ordinal
++            a['done'] = True
++            if a['profile'] == 2:
++                self.active = None
++        elif name == 'retire_legacy_reply':
++            need(a is not None and a['profile'] == 0 and a['reply'] and a['pending'] is None, 'duplicate/foreign legacy reply')
++            ticket, epoch = values
++            need(ticket == a['ticket'] and epoch == a['epoch'], 'foreign legacy ticket/epoch')
++            need(a['index'] < a['steps'] or a['done'], 'final reply before done')
++            values[0] = self.ordinal
++            a['reply'] = False
++            if a['done']:
++                self.active = None
++        elif name == 'retire_owner_response':
++            need(a is None and not self.terminal, 'terminal before debt/duplicate')
++            self.terminal = True
++        elif name == 'release':
++            need(a is None and self.terminal, 'release before terminal')
++            self.released, self.owned = True, False
++        elif name == 'abort':
++            raise ValueError('aborted stream is not accepted')
++        self.events += 1
++        return name, edge, tuple(values)
++
++    def finish(self):
++        need(self.released and self.terminal and not self.owned and self.active is None and
++             self.groups == self.ordinal == self.expected_groups, 'incomplete lifecycle/groups')
++
++
++def _encode(event):
++    # Structural encoding is deliberately separate from lifecycle validation.
++    # An invalid integer width/order/ticket must remain in raw evidence.
++    need(type(event) is tuple and len(event) == 3 and type(event[0]) is str and
++         event[0] in NAMES and (type(event[1]) is int or event[1] is None) and
++         type(event[2]) is tuple and all(type(v) in (int, bool, str, type(None))
++                                      for v in event[2]), 'raw record structure')
++    raw = json.dumps(event, separators=(',', ':'), ensure_ascii=True, allow_nan=False).encode('ascii')
++    need(0 < len(raw) <= MAX_RECORD, 'record extent')
++    return struct.pack('<I', len(raw)) + raw
++
++
++def _decode(raw):
++    value = json.loads(raw)
++    need(type(value) is list and len(value) == 3 and type(value[2]) is list, 'record structure')
++    event = value[0], value[1], tuple(value[2])
++    need(_encode(event)[4:] == raw, 'noncanonical/corrupt record encoding')
++    return event
++
++
++class EventWriter:
++    """Append-only evidence sink, with separate raw capture and acceptance state.
++
++    Lifecycle errors are sticky but do not raise into the old callback. Thus the
++    remaining abort/ACK/cleanup events are still recorded. Only storage/encoding
++    exhaustion stops capture. No method returns a service response or ACK.
++    """
++    def __init__(self, path, *, expected_groups, expected_events, max_events, max_bytes):
++        need(type(expected_events) is int and 1 <= expected_events <= MAX_EVENTS, 'event budget')
++        need(type(max_events) is int and expected_events <= max_events <= MAX_EVENTS, 'raw event capacity')
++        need(type(max_bytes) is int and 52 <= max_bytes <= 1024**3, 'byte budget')
++        self.path = Path(path).absolute()
++        self.audit = Lifecycle(expected_groups)
++        self.expected_groups, self.expected_events = expected_groups, expected_events
++        self.max_events, self.max_bytes = max_events, max_bytes
++        self.count = self.bytes = self.event_attempts = 0
++        self.first_event_sha256 = self.last_event_sha256 = self.failed_event_sha256 = None
++        self.raw_hash = hashlib.sha256()
++        self.file_hash = hashlib.sha256()
++        self.error = self.audit_error = None
++        self.closed = self.sealed = self.raw_complete = self.created = False
++        self.file = None
++        try:
++            self.file = self.path.open('xb', buffering=0)
++            self.created = True
++            self._write(MAGIC)
++        except BaseException as error:
++            # Disk setup failure is evidence failure, not a driver exception.
++            self.error = type(error).__name__ + ': ' + str(error)
++            self.close_incomplete()
++            if isinstance(error, KeyboardInterrupt):
++                raise
++
++    def __iter__(self):
++        raise TypeError('EventWriter cannot be materialized; replay its framed file explicitly')
++
++    def _write(self, raw):
++        need(self.bytes + len(raw) <= self.max_bytes, 'event stream byte budget')
++        written = self.file.write(raw)
++        if written != len(raw):
++            raise OSError('short event stream write; partial bytes preserved')
++        self.bytes += written
++        self.file_hash.update(raw)
++
++    def append(self, event):
++        self.event_attempts += 1
++        frame = None
++        try:
++            frame = _encode(event)
++            need(not self.closed and not self.sealed and self.error is None, 'closed/failed event stream: ' + str(self.error))
++            need(self.count < self.max_events, 'raw event capacity exhausted')
++            need(self.bytes + len(frame) + 44 <= self.max_bytes, 'event stream footer reserve')
++            self._write(frame)
++            self.raw_hash.update(frame)
++            self.count += 1
++            self.last_event_sha256 = hashlib.sha256(frame).hexdigest()
++            if self.first_event_sha256 is None:
++                self.first_event_sha256 = self.last_event_sha256
++        except BaseException as error:
++            if frame is not None:
++                self.failed_event_sha256 = hashlib.sha256(frame).hexdigest()
++            if self.error is None:
++                self.error = type(error).__name__ + ': ' + str(error)
++            if isinstance(error, KeyboardInterrupt):
++                raise
++            if isinstance(error, Exception):
++                raise
++            raise OSError('capture storage failure: ' + self.error) from error
++        if self.audit_error is None:
++            try:
++                self.audit.accept(event)
++                need(self.count <= self.expected_events, 'successful event count exceeded')
++            except BaseException as error:
++                self.audit_error = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt):
++                    raise
++
++    def close_incomplete(self):
++        if not self.closed:
++            try:
++                if self.file is not None:
++                    self.file.close()
++            except BaseException as error:
++                if self.error is None:
++                    self.error = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt):
++                    raise
++            finally:
++                self.closed = True
++
++    def seal(self):
++        need(not self.closed and not self.sealed and self.error is None, 'failed/closed event stream')
++        if self.audit_error is None:
++            try:
++                self.audit.finish()
++                need(self.count == self.expected_events, 'incomplete successful event count')
++            except BaseException as error:
++                self.audit_error = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt):
++                    raise
++        try:
++            # Footer means raw recording completed, NOT lifecycle acceptance.
++            self._write(struct.pack('<IQ', END, self.count) + self.raw_hash.digest())
++            self.file.flush()
++            os.fsync(self.file.fileno())
++            self.file.close()
++            self.closed = self.raw_complete = True
++        except BaseException as error:
++            self.error = type(error).__name__ + ': ' + str(error)
++            self.close_incomplete()
++            raise
++        need(self.audit_error is None, 'raw recording complete but lifecycle rejected: ' + str(self.audit_error))
++        self.sealed = True
++        return self.snapshot()
++
++    def snapshot(self):
++        return dict(format='qwen2-raw-event-frames-v1', path=str(self.path),
++                    count=self.count, event_attempts=self.event_attempts,
++                    first_event_sha256=self.first_event_sha256, last_event_sha256=self.last_event_sha256,
++                    failed_event_sha256=self.failed_event_sha256,
++                    expected_events=self.expected_events,
++                    expected_groups=self.expected_groups, max_events=self.max_events,
++                    max_bytes=self.max_bytes, complete=self.sealed,
++                    raw_complete=self.raw_complete, created=self.created,
++                    writer_error=self.error, audit_error=self.audit_error,
++                    fully_written_bytes=self.bytes, fully_written_sha256=self.file_hash.hexdigest(),
++                    raw_frame_sha256=self.raw_hash.hexdigest())
++
++
++def replay_raw(path, *, max_bytes, max_events):
++    """Replay raw tuples including invalid lifecycle values; NOT an acceptance gate.
++
++    Consume through EOF to prove the complete recording footer/count/hash. The
++    generator return value contains the SHA of these same bytes and same FD.
++    """
++    need(type(max_events) is int and 1 <= max_events <= MAX_EVENTS, 'raw event capacity')
++    need(type(max_bytes) is int and 52 <= max_bytes <= 1024**3, 'byte budget')
++    digest, file_digest = hashlib.sha256(), hashlib.sha256()
++    count = total = 0
++    with Path(path).open('rb') as f:
++        need(os.fstat(f.fileno()).st_size <= max_bytes, 'file byte budget')
++        header = f.read(len(MAGIC))
++        need(header == MAGIC, 'stream header')
++        file_digest.update(header)
++        total += len(header)
++        while True:
++            prefix = f.read(4)
++            need(len(prefix) == 4, 'truncated stream/no terminal footer')
++            file_digest.update(prefix)
++            size, = struct.unpack('<I', prefix)
++            total += 4
++            if size == END:
++                tail = f.read(40)
++                need(len(tail) == 40, 'truncated footer')
++                stored_count, = struct.unpack('<Q', tail[:8])
++                need(stored_count == count and tail[8:] == digest.digest(), 'footer count/hash')
++                total += 40
++                need(total <= max_bytes and f.read(1) == b'', 'trailing bytes/budget')
++                file_digest.update(tail)
++                return dict(format='qwen2-raw-event-frames-v1', raw_complete=True,
++                            count=count, bytes=total, sha256=file_digest.hexdigest())
++            need(0 < size <= MAX_RECORD and total + size + 44 <= max_bytes, 'record size/budget')
++            raw = f.read(size)
++            need(len(raw) == size, 'truncated event')
++            total += size
++            count += 1
++            need(count <= max_events, 'raw event capacity exhausted')
++            digest.update(prefix + raw)
++            file_digest.update(raw)
++            yield _decode(raw)
++
++
++def replay(path, *, expected_groups, expected_events, max_events, max_bytes, canonical=False):
++    """Acceptance replay. Consume through EOF before accepting any yielded prefix."""
++    need(type(canonical) is bool, 'canonical flag')
++    need(type(expected_events) is int and 1 <= expected_events <= max_events, 'event budget')
++    audit = Lifecycle(expected_groups)
++    raw = replay_raw(path, max_events=max_events, max_bytes=max_bytes)
++    try:
++        while True:
++            try:
++                event = next(raw)
++            except StopIteration as stop:
++                result = stop.value
++                need(result['count'] == expected_events, 'incomplete event count')
++                audit.finish()
++                result['complete'] = True
++                return result
++            normalized = audit.accept(event)
++            yield normalized if canonical else event
++    finally:
++        raw.close()
++
++
++def _consume(iterator):
++    while True:
++        try:
++            next(iterator)
++        except StopIteration as stop:
++            return stop.value
++
++
++def verify(path, **limits):
++    return _consume(replay(path, **limits))
++
++
++def equal(left, right, *, limits, canonical=False):
++    """Bounded comparison, consuming both verified trailers even on mismatch."""
++    from itertools import zip_longest
++    sentinel = object()
++    same = True
++    for a, b in zip_longest(replay(left, canonical=canonical, **limits),
++                          replay(right, canonical=canonical, **limits), fillvalue=sentinel):
++        same = (a == b) and same
++    return same
++
++
++def artifact_evidence(receipt, expected_path, *, evidence_directory=None):
++    """Hash partial/complete evidence without materializing events or claiming PASS."""
++    need(type(receipt) is dict and receipt.get('format') == 'qwen2-raw-event-frames-v1', 'stream receipt')
++    path = Path(expected_path).absolute()
++    need(Path(receipt['path']).absolute() == path, 'exact local stream file')
++    limits = {key: receipt[key] for key in ('expected_groups', 'expected_events', 'max_events', 'max_bytes')}
++    if not receipt['created']:
++        return dict(format=receipt['format'], complete=False, raw_complete=False,
++                    file=None, created=False, writer_error=receipt['writer_error'], limits=limits)
++    need(path.is_file() and not path.is_symlink(), 'exact local regular stream file')
++    need(path.stat().st_size <= receipt['max_bytes'], 'artifact byte bound')
++    if receipt['raw_complete']:
++        if receipt['complete']:
++            result = verify(path, **limits)
++        else:
++            result = _consume(replay_raw(path, max_events=limits['max_events'], max_bytes=limits['max_bytes']))
++            result['complete'] = False
++        need(result['sha256'] == receipt['fully_written_sha256'] and
++             result['bytes'] == receipt['fully_written_bytes'] and result['count'] == receipt['count'],
++             'recorded stream changed')
++    else:
++        digest, total = hashlib.sha256(), 0
++        with path.open('rb') as f:
++            for block in iter(lambda: f.read(65536), b''):
++                total += len(block)
++                need(total <= limits['max_bytes'], 'artifact grew beyond budget')
++                digest.update(block)
++        result = dict(complete=False, raw_complete=False, count=receipt['count'],
++                      bytes=total, sha256=digest.hexdigest())
++    result.update(file=os.path.relpath(path, evidence_directory or path.parent),
++                  path_base='evidence_directory', format=receipt['format'], created=True,
++                  writer_error=receipt['writer_error'], audit_error=receipt['audit_error'],
++                  monitor_error=receipt.get('monitor_error'), monitor_residual_tool=receipt.get('monitor_residual_tool'),
++                  event_attempts=receipt['event_attempts'], first_event_sha256=receipt['first_event_sha256'],
++                  last_event_sha256=receipt['last_event_sha256'], failed_event_sha256=receipt['failed_event_sha256'],
++                  raw_values_preserved=True, policy='all recorded raw values; no sampling or ticket rewriting', limits=limits)
++    return result

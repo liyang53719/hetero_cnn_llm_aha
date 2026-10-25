@@ -1,0 +1,91 @@
+{
+  "historical_private_suite": {
+    "all_passed": true,
+    "logs": {
+      "TEST_NORMAL.log": {
+        "bytes": 4689,
+        "sha256": "72300a19e312376eeeff66793b86536025e1d859fd51dd7beaaa2446f6b60d78"
+      },
+      "TEST_OPTIMIZED.log": {
+        "bytes": 4689,
+        "sha256": "660eedd38b0925286cc9ee14b33dfcbf8ad421bbd65a082fde476a64e7754b60"
+      },
+      "TEST_RUNNER_NORMAL.log": {
+        "bytes": 1543,
+        "sha256": "e37a9c208a081f1fdf3271640f1b8aec03258d339aa537a902db6674675b562e"
+      },
+      "TEST_RUNNER_OPTIMIZED.log": {
+        "bytes": 1543,
+        "sha256": "d2f6d3b9446fc2d96a116265406f99c7c529cbe3e927071768f861fc4dacf3b4"
+      }
+    },
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "original_sources": {
+      "test_runner_seam.py": {
+        "bytes": 12349,
+        "sha256": "345a47f34965c45d722a804d9c8416ffe8699630be6e1e83b7a2995f8658c26e"
+      },
+      "test_source_seams.py": {
+        "bytes": 11786,
+        "sha256": "3dd2a4a4d88135913cacfa338afe1780cc31426427c6fbbde5331df9e23477e4"
+      }
+    },
+    "original_test_sources_are_unmodified_but_not_standalone": true,
+    "reexecuted_for_public_package": false,
+    "reproduction_gaps": [
+      "Original relative overlay/helper layout differs in this public package.",
+      "SourceSeamTests.test_manifest_15_roles_9_methods reads external composed source files and private interface metadata.",
+      "SourceSeamTests.test_merged_closure_exact_counts and test_no_component_inputs_copied require unpublished full closure metadata.",
+      "SourceSeamTests.test_no_execution_in_generator requires unpublished private-path preparation generators.",
+      "Trace pin and source-helper layout metadata is not published as a fake private runtime config."
+    ],
+    "source_path_cases_per_mode": 47,
+    "synthetic_runner_cases_per_mode": 11
+  },
+  "public_adapter": {
+    "bounds": {
+      "cpu_seconds": 15,
+      "flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "optimized_extra": "-O",
+      "wall_seconds": 30
+    },
+    "cases_per_mode": 6,
+    "interpreter": {
+      "executable_sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]"
+    },
+    "logs": {
+      "PUBLIC_SMOKE_NORMAL.stderr": {
+        "bytes": 906,
+        "sha256": "913b7805277582d73ebaa26399e74c127b63741492f7b2b49c59a9ced484fafe"
+      },
+      "PUBLIC_SMOKE_NORMAL.stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "PUBLIC_SMOKE_OPTIMIZED.stderr": {
+        "bytes": 906,
+        "sha256": "913b7805277582d73ebaa26399e74c127b63741492f7b2b49c59a9ced484fafe"
+      },
+      "PUBLIC_SMOKE_OPTIMIZED.stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "original58_reexecuted": false,
+    "scope": "New independent public-package smoke cases only; no original58 rerun and no normal target binding or ML/native/task execution.",
+    "status": "SIX_NEW_SMOKE_CASES_PASS_NORMAL_AND_OPTIMIZED",
+    "test_source": {
+      "bytes": 4038,
+      "sha256": "29ba2cf678fb2c50daaabd11aab0d956c1794290fab37e095d65498595f1fc6f"
+    }
+  },
+  "schema": "separate-historical-and-public-tests-v1"
+}

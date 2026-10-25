@@ -1,0 +1,27 @@
+{
+  "ast_definition_runtime_allowed": false,
+  "notice": "Not placed beside rope_capture.py. That unchanged module reads SOURCE_PINS.json at import and cannot normally import from this unbound package. Future local exact-source binding must generate a new actual path config, hash it and receive new review; private original hash does not admit that new config.",
+  "private_original_identity": {
+    "bytes": 913,
+    "sha256": "9ce11987fd0519d240f58d76bf83fd24a5f368a5ac33cae44a7eb4741d733546"
+  },
+  "runtime_allowed": false,
+  "schema": 1,
+  "source_mode": "FULL_MODULE_NORMAL_IMPORT_ONLY",
+  "source_rewrite_allowed": false,
+  "sources": {
+    "official_owner": {
+      "bytes": 9514,
+      "logical_source": "COMPOSED_SOURCE/candidates/qwen2_resident_matrix/official_bf16/owners.py",
+      "module": "candidates.qwen2_resident_matrix.official_bf16.owners",
+      "sha256": "0c87797587281b4e7f23663242e947ffe4157db9a644e788d67eb5c9045c50c1"
+    },
+    "prefix_owner": {
+      "bytes": 19134,
+      "logical_source": "COMPOSED_SOURCE/candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+      "module": "candidates.qwen2_resident_matrix.ffn_public.prefix_owners",
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+    }
+  },
+  "status": "UNBOUND_TEMPLATE_NOT_RUNTIME_CONFIG"
+}

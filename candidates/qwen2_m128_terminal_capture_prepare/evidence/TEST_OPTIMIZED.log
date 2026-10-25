@@ -1,0 +1,52 @@
+test_ancestor_dirfd_does_not_make_relative_safe (__main__.PathGateTests.test_ancestor_dirfd_does_not_make_relative_safe) ... ok
+test_anonymous_map_not_oracle (__main__.PathGateTests.test_anonymous_map_not_oracle) ... ok
+test_boolean_terminal_rejected (__main__.PathGateTests.test_boolean_terminal_rejected) ... ok
+test_bytes_root_denied (__main__.PathGateTests.test_bytes_root_denied) ... ok
+test_caught_oracle_read_is_sticky (__main__.PathGateTests.test_caught_oracle_read_is_sticky) ... ok
+test_caught_relative_open_is_sticky (__main__.PathGateTests.test_caught_relative_open_is_sticky) ... ok
+test_comparison_failure_reseals (__main__.PathGateTests.test_comparison_failure_reseals) ... ok
+test_duplicate_root_file_rejected (__main__.PathGateTests.test_duplicate_root_file_rejected) ... ok
+test_empty_payload_enumeration_rejected (__main__.PathGateTests.test_empty_payload_enumeration_rejected) ... ok
+test_exact_new_root_denied (__main__.PathGateTests.test_exact_new_root_denied) ... ok
+test_existing_fd_denied (__main__.PathGateTests.test_existing_fd_denied) ... ok
+test_fd_inventory_denied (__main__.PathGateTests.test_fd_inventory_denied) ... ok
+test_hardlink_inode_denied (__main__.PathGateTests.test_hardlink_inode_denied) ... ok
+test_incomplete_root_enumeration_rejected (__main__.PathGateTests.test_incomplete_root_enumeration_rejected) ... ok
+test_live_check_then_compare_then_closed (__main__.PathGateTests.test_live_check_then_compare_then_closed) ... ok
+test_live_failure_does_not_open (__main__.PathGateTests.test_live_failure_does_not_open) ... ok
+test_maps_inventory_denied (__main__.PathGateTests.test_maps_inventory_denied) ... ok
+test_mmap_fd_denied (__main__.PathGateTests.test_mmap_fd_denied) ... ok
+test_normalized_dotdot_denied (__main__.PathGateTests.test_normalized_dotdot_denied) ... ok
+test_path_object_denied (__main__.PathGateTests.test_path_object_denied) ... ok
+test_payload_outside_declared_root_rejected (__main__.PathGateTests.test_payload_outside_declared_root_rejected) ... ok
+test_proc_fd_alias_denied (__main__.PathGateTests.test_proc_fd_alias_denied) ... ok
+test_relative_open_rejected_unknown_dirfd (__main__.PathGateTests.test_relative_open_rejected_unknown_dirfd) ... ok
+test_report_terminal_rejected (__main__.PathGateTests.test_report_terminal_rejected) ... ok
+test_second_compare_rejected (__main__.PathGateTests.test_second_compare_rejected) ... ok
+test_second_install_rejected (__main__.PathGateTests.test_second_install_rejected) ... ok
+test_sibling_prefix_is_not_root (__main__.PathGateTests.test_sibling_prefix_is_not_root) ... ok
+test_symlink_alias_denied (__main__.PathGateTests.test_symlink_alias_denied) ... ok
+test_uninstalled_comparison_denied (__main__.PathGateTests.test_uninstalled_comparison_denied) ... ok
+test_unrelated_input_not_oracle (__main__.PathGateTests.test_unrelated_input_not_oracle) ... ok
+test_coverage_still_temp (__main__.SourceSeamTests.test_coverage_still_temp) ... ok
+test_default_off_preserved (__main__.SourceSeamTests.test_default_off_preserved) ... ok
+test_helper_exact_overlay (__main__.SourceSeamTests.test_helper_exact_overlay) ... ok
+test_manifest_15_roles_9_methods (__main__.SourceSeamTests.test_manifest_15_roles_9_methods) ... ok
+test_merged_closure_exact_counts (__main__.SourceSeamTests.test_merged_closure_exact_counts) ... ok
+test_no_component_inputs_copied (__main__.SourceSeamTests.test_no_component_inputs_copied) ... ok
+test_no_execution_in_generator (__main__.SourceSeamTests.test_no_execution_in_generator) ... ok
+test_no_ml_import (__main__.SourceSeamTests.test_no_ml_import) ... ok
+test_profile_budget_not_increased (__main__.SourceSeamTests.test_profile_budget_not_increased) ... ok
+test_retention_uses_raw_stream_receipt_not_tuple_json (__main__.SourceSeamTests.test_retention_uses_raw_stream_receipt_not_tuple_json) ... ok
+test_rope_same_source_and_prefix_scope (__main__.SourceSeamTests.test_rope_same_source_and_prefix_scope) ... ok
+test_runner_only_new_m128_profile (__main__.SourceSeamTests.test_runner_only_new_m128_profile) ... ok
+test_single_original_silu_seal_return (__main__.SourceSeamTests.test_single_original_silu_seal_return) ... ok
+test_source_order_registry_before_oracle_compare (__main__.SourceSeamTests.test_source_order_registry_before_oracle_compare) ... ok
+test_sources_parse_without_import (__main__.SourceSeamTests.test_sources_parse_without_import) ... ok
+test_trace_dependency_exact_copies (__main__.SourceSeamTests.test_trace_dependency_exact_copies) ... ok
+test_x_from_original_allocation (__main__.SourceSeamTests.test_x_from_original_allocation) ... ok
+
+----------------------------------------------------------------------
+Ran 47 tests in 0.024s
+
+OK

@@ -1,0 +1,37 @@
+{
+  "frozen_originals_modified": false,
+  "initial_count_test_failure": {
+    "logs": {
+      "TEST_NORMAL_v0_count_failure.log": {
+        "bytes": 4210,
+        "sha256": "4b368ef605e683d1bbf9f6c1b3fd4876a12bf6e1677e0aecad14a99320c6f881"
+      },
+      "TEST_OPTIMIZED_v0_count_failure.log": {
+        "bytes": 4210,
+        "sha256": "714514b10bb8564289b413a18f4b8b805c2a7e73a6a9684ccb4d63b657f20f6c"
+      }
+    },
+    "reason": "Initial merged-file assertion incorrectly expected725 instead of723; Git/libpcre2 were already in normal722. Failure evidence retained privately."
+  },
+  "r1": {
+    "manifest_sha256": "d91287dc7803130dfce73d9330684c76649dd4d6c36c0c69950c88d98013dcd2",
+    "reasons": [
+      "RoPE monitor slot ownership/restoration/cleanup faults",
+      "Caught early oracle denial was not sticky; relative rejection not recorded"
+    ],
+    "status": "BLOCKED_PRESERVED"
+  },
+  "r2": {
+    "manifest_sha256": "cb7425f9ea2e0ef4393e5dfed85dd534da0eec936ebe3722b627b585db2993f9",
+    "reasons": [
+      "Trace r1 monitor cleanup/receipt BaseException could replace original driver exception"
+    ],
+    "status": "BLOCKED_PRESERVED"
+  },
+  "r3": {
+    "manifest_sha256": "b029f4a642e2b4abb98c35dba1c32ea4c5d9e4dca3918287359dca57aa3182f1",
+    "review_sha256": "7bb4b3194eaf1b64e0169edff21ba383310e7c260f8ee96664f28eafcb88cc9d",
+    "status": "SOURCE_MOCK_INDEPENDENT_REVIEW_GO_ONLY"
+  },
+  "schema": "source-preparation-history-v1"
+}

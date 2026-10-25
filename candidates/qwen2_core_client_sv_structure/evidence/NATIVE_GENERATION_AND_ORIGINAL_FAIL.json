@@ -1,0 +1,153 @@
+{
+  "original": {
+    "bytes": 7215,
+    "sha256": "7c2caedb647c43b17de72dbfc9e69c03ffcd6eebc0bab4239159b495f7148cb4"
+  },
+  "projection_policy": "Private paths/stat/placement removed; original historical pending-PASS wording remains at its original review time, not overwritten by later R3 result. No SV excerpts.",
+  "review": {
+    "MAC_reason": "No hardware run/fullblock cycle denominator or effective-MAC observations exist; compiler CPU timings and declarations cannot substitute.",
+    "accepted_public_statement": "The fixed original selected-on CHIRRTL was processed by official firtool1.62.1 to a retained26.25MB SV file with native exit0 and clean termination. The original gate remains FAIL due to an independently identified checker grammar false rejection; complete independent SV structure acceptance is pending.",
+    "all_original_inputs_and_outputs_retained_unchanged": true,
+    "artifact_inventory": {
+      "bytes": 8061,
+      "sha256": "ab5c0a4791267bd2aad5301a844643c895d1b6b800d4aa4461d70e5079b3bff3"
+    },
+    "attempt_status": "FAIL_FIRTOOL_SV_RETAINED",
+    "auditor_native_JVM_or_EDA_execution": false,
+    "candidate_checker": {
+      "bytes": 14329,
+      "sha256": "6597ef5ed151fecfce9111d8199b4ae861c06b87b5dfad6442608848be024ac1"
+    },
+    "candidate_freeze": {
+      "bytes": 5112,
+      "sha256": "a8917a0b205558dfa2d87eb30c7bf08967108c46a1036914e59d3dfb68445d65"
+    },
+    "cleanup_complete": true,
+    "context_evidence": {
+      "bytes": 7347,
+      "sha256": "6d7e406779b25ad8b374eac7cd5454d1c8fb82dc15a6c00df4d24f5117dbeaa6"
+    },
+    "error": "ValueError: unsupported split declaration/call",
+    "error_origin": "postflight Python structural checker, not native firtool process failure or resource exhaustion",
+    "forbidden_upgrades": [
+      "Do not rewrite original receipt/claim or erase the FAIL.",
+      "Do not call this an independently verified complete SV structural PASS yet.",
+      "Do not claim RTL behavior/numerical/fullblock/full29/90%MAC acceptance from compiler exit0 or source generation.",
+      "Do not rerun firtool/JVM to repair a checker grammar issue."
+    ],
+    "hardware_MAC_duty": null,
+    "hardware_MAC_utilization": null,
+    "identity_check_count": 6904,
+    "identity_freeze": {
+      "bytes": 2197,
+      "sha256": "bcde22bc196b57e6ed40edbdfa4e4084f79d562f06691977117ab7cb688d0e15"
+    },
+    "identity_review": {
+      "bytes": 8476,
+      "sha256": "3a9b1984668c0143cf141848018566eae1f25a99b2e623c0a60ee57f99e95c12"
+    },
+    "loader_absence_slots": {
+      "before_and_after_and_current_absent": true,
+      "continuous_isolation": false,
+      "count": 22
+    },
+    "log_review": {
+      "bytes": 15680,
+      "sha256": "a2e8f6deac3162ea13775cdcfd3e98ffed05136e74b194b0ba283cd2a7230c6f"
+    },
+    "native_exit_code": 0,
+    "native_generation_fact": {
+      "SV_bytes": 26251369,
+      "SV_materialized": true,
+      "SV_sha256": "77f61549b4aebd109362d30164f95422b9192d0a8b2b1599942a9360852f9225",
+      "independent_full_structure_accepted": false,
+      "original_receipt_systemverilog_generation_pass": false,
+      "worker_returned_zero": true
+    },
+    "native_pass_log": {
+      "all_pairs_closed": true,
+      "annotation_output_present": false,
+      "completed_start_done_pairs": 64,
+      "non_timer_warning_or_error_lines": 0,
+      "timing_limit": "Firtool rounded compiler pass timers; not hardware clocks, complete independent profiler or sum including overlapping nested records.",
+      "top_level_pairs": 23,
+      "top_level_reported_seconds_sum": 28.898
+    },
+    "next_action": {
+      "bytes": 2912,
+      "sha256": "cc38e524a7f91b6edf37934061d1499a9da472f9e88016843ca6fd3103cf2f57"
+    },
+    "old_failures_retained": true,
+    "original20_classes_bytes": 670644,
+    "original20_not_nocse_composite": true,
+    "original_receipt": {
+      "bytes": 11062,
+      "sha256": "533771381f61a5b4355fb5d685567bba6904bc5be06c03d76d959741daa88d1b"
+    },
+    "postflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 729
+    },
+    "prefix_evidence": {
+      "bytes": 501,
+      "sha256": "a633fa653a8426815c9a3702eb622dee7f7fe6b97f6238182ae6c3f4a346f144"
+    },
+    "preflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 729
+    },
+    "rejection": {
+      "bytes_read_for_reproduction": 391897,
+      "explanation": "Old checker treats a bare RHS identifier as unsupported standalone split declaration because no open-expression statement state is tracked.",
+      "kind": "multiline ternary RHS of an admitted wire [8:0] declaration initializer",
+      "line": 2790,
+      "module": "BlockScalarFloat",
+      "statement_line_range": [
+        2789,
+        2792
+      ]
+    },
+    "reproduction": {
+      "actual_SV_not_modified": true,
+      "elapsed_seconds": 0.022203180007636547,
+      "full_SV_qualification_parse": false,
+      "only_need_hook_observes_failure_context": true,
+      "original_checker_prefix_replayed_once": true
+    },
+    "resource_scope": "Child hard limits, sampled native process group RSS/tree and aggregate parent+child CPU, not whole-system/cgroup isolation; original total deadline not restarted.",
+    "resources": {
+      "all_qualified_caps_satisfied": true,
+      "caps": {
+        "address_space_bytes": 4294967296,
+        "affinity_count": 1,
+        "cleanup_phase_seconds": 10,
+        "cleanup_reserve_seconds": 30,
+        "cpu_seconds": 420,
+        "log_hard_bytes": 2097152,
+        "output_tree_sampled_bytes": 268435456,
+        "postflight_reserve_seconds": 20,
+        "rss_sampled_bytes": 2147483648,
+        "sample_seconds": 0.1,
+        "single_file_hard_bytes": 201326592,
+        "total_wall_seconds": 510,
+        "work_wall_seconds": 480
+      },
+      "final_aggregate_cpu_seconds": 29.336009772,
+      "inner_elapsed_seconds": 29.369799387990497,
+      "max_sample_gap_seconds": 0.03981189301703125,
+      "outer_timeout": false,
+      "root_wall_seconds": 29.468828517012298,
+      "sampled_aggregate_cpu_seconds": 29.153963755000003,
+      "sampled_peak_rss_bytes": 545742848
+    },
+    "root_receipt": {
+      "bytes": 177,
+      "sha256": "e9b47064cf9c638097c67bdce2a3e142e66dd0584d7eacedf9746293dd4913c6"
+    },
+    "root_returncode": 1,
+    "schema": "actual-native-sv-failure-independent-review-v1",
+    "status": "PASS_FAILURE_EVIDENCE_REVIEW_ORIGINAL_ATTEMPT_REMAINS_FAIL"
+  }
+}

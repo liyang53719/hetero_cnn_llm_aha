@@ -1,0 +1,124 @@
+{
+  "native": {
+    "supervisor": {
+      "bytes": 28643,
+      "sha256": "ad6177ab840aca868c9f2596da381cfe2e3866ba966401b226d9eaa817e92f6c"
+    },
+    "manifest": {
+      "bytes": 1561564,
+      "sha256": "993c6a1dbf70c6fb592f434c126d4dff783e4937bb79bd044730eb16364975a8"
+    },
+    "freeze": {
+      "bytes": 5112,
+      "sha256": "a8917a0b205558dfa2d87eb30c7bf08967108c46a1036914e59d3dfb68445d65"
+    },
+    "firtool": {
+      "bytes": 25009456,
+      "sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee"
+    },
+    "CHIRRTL_input": {
+      "bytes": 13164852,
+      "sha256": "908602bb6ed83012f5b37628108832f7d9f81ae72767308c52a9dff90dc3fc8c"
+    },
+    "role_argv": [
+      "${NEW_RUN_ROOT}/tool/firtool",
+      "-format=fir",
+      "${NEW_RUN_ROOT}/inputs/ordered_on.fir",
+      "-o",
+      "${NEW_RUN_ROOT}/rtl/OrderedQkBehaviorCore.sv",
+      "-warn-on-unprocessed-annotations",
+      "-output-annotation-file",
+      "${NEW_RUN_ROOT}/rtl/circt.anno.json",
+      "--preserve-values=all",
+      "-disable-all-randomization",
+      "--verbose-pass-executions",
+      "--mlir-disable-threading"
+    ],
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 420,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 510,
+      "work_wall_seconds": 480
+    },
+    "old20_original_not_NoCSE_composite": true,
+    "no_new_Scala_compile_or_elaboration": true,
+    "loader_scope": {
+      "before_and_after_and_current_absent": true,
+      "continuous_isolation": false,
+      "count": 22
+    },
+    "official_distribution": {
+      "coordinates": "org.chipsalliance:llvm-firtool:1.62.1:linux-x64",
+      "archive": {
+        "bytes": 8763451,
+        "sha256": "63acdcb58ed12d4c1aa0ecdedc6e2425a252e94eefb75df9253c118d7d222039"
+      },
+      "binary_archive_member": "org.chipsalliance/llvm-firtool/linux-x64/bin/firtool",
+      "source_inventory_metadata": {
+        "bytes": 30320,
+        "sha256": "81f9b1d665e03b220910799c1f12024c5c1a92086d34f4e790c25a5db15382da"
+      },
+      "archive_and_ELF_payloads_not_uploaded": true
+    }
+  },
+  "R3_offline": {
+    "supervisor": {
+      "bytes": 25650,
+      "sha256": "324ab82a6ffe98f4bfe0df8a92c0d2a0e42084e8b2aca32fea9e7191124a9cdb"
+    },
+    "worker": {
+      "bytes": 5866,
+      "sha256": "a8fc4182146e18035f20b7f608ff98a280cbddd2021413bc00be61496e6de149"
+    },
+    "manifest": {
+      "bytes": 1609576,
+      "sha256": "b7d0f4e513e68ecb4c3d6ed598d29c064288a6f439b2d9e44481cfcae117deec"
+    },
+    "freeze": {
+      "bytes": 4098,
+      "sha256": "71c1d6917e9ee25edc53266e5a0941d02fe908abed551c8d814862bcbb023f8b"
+    },
+    "caps": {
+      "address_space_bytes": 536870912,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 60,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 8388608,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 268435456,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 4194304,
+      "total_wall_seconds": 120,
+      "work_wall_seconds": 90
+    },
+    "role_argv": [
+      "${PYTHON}",
+      "-I",
+      "-S",
+      "-B",
+      "${PACKAGE}/worker.py",
+      "--manifest",
+      "${PRIVATE_MANIFEST}",
+      "--manifest-sha256",
+      "${MANIFEST_SHA256}"
+    ],
+    "expected_input": {
+      "bytes": 26251369,
+      "sha256": "77f61549b4aebd109362d30164f95422b9192d0a8b2b1599942a9360852f9225"
+    },
+    "runtime_pins": 854
+  },
+  "native_or_private_runtime_configs_not_uploaded": true,
+  "no_auto_execution_or_new_GO": true
+}

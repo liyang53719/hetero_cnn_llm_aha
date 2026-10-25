@@ -1,0 +1,236 @@
+{
+  "offline_R1_review": {
+    "bytes": 6989,
+    "sha256": "b56e822e10fe727341f10eb9acecd8fce7ce4132b8cc3551adc2c4564885db41"
+  },
+  "offline_R1": {
+    "status": "PASS_FAILURE_ACCOUNTING_ORIGINAL_NATIVE_AND_OFFLINE_ATTEMPTS_REMAIN_FAIL",
+    "attempt_status": "FAIL_RETAINED_SV_OFFLINE_RECHECK",
+    "identity_check_count": 11239,
+    "preflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 810
+    },
+    "postflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 810
+    },
+    "original_native_FAIL_unchanged": true,
+    "original_offline_FAIL_unchanged": true,
+    "resource_exhaustion": false,
+    "resources": {
+      "elapsed_seconds": 0.5087635209783912,
+      "final_aggregate_cpu_seconds": 0.474442483,
+      "maximum_sample_interval_seconds": 0.024290326982736588,
+      "sampled_peak_cpu_seconds": 0.28809959,
+      "sampled_peak_rss_bytes": 21757952
+    },
+    "root_returncode": 1,
+    "worker_exit_code": 1,
+    "cleanup_complete": true,
+    "result_present": false,
+    "next_acceptance_boundary": "The inventory omitted all post-loop module reachability/port ABI/selected memory checks.25 modules/88 instances/17908 ports are seen counts only, not independent structural PASS. A future qualification can still fail those unchanged gates.",
+    "sole_inventory_summary": {
+      "bytes_read": 26251369,
+      "context_signatures": 2,
+      "cpu_seconds": 1.5581176209999998,
+      "declared_modules_seen": 25,
+      "diagnostic_detail_truncated": false,
+      "eof_reached": true,
+      "final_lexical_state": {
+        "block": false,
+        "conditional_depth": 0,
+        "header": false,
+        "open_module": null,
+        "pending_expression": false,
+        "pending_instance": false
+      },
+      "handled_expression_continuations_seen": 12224,
+      "instances_seen": 88,
+      "lines": 173199,
+      "maxrss_kib": 22676,
+      "ports_seen": 17908,
+      "post_loop_graph_checks_performed": false,
+      "recovery_resets": 0,
+      "sha256": "77f61549b4aebd109362d30164f95422b9192d0a8b2b1599942a9360852f9225",
+      "structure_pass": false,
+      "total_rejections": 10,
+      "wall_seconds": 1.5593301660264842
+    },
+    "scanner_timing_limit": "Metrics captured by diagnostic before bounded JSON encoding, not independent whole-process reaped metrics. One root-authorized author scan; this reviewer inspected only small source/summary, not actual SV/prefix again.",
+    "RTL_behavior_pass": false,
+    "numerical_pass": false,
+    "full29_pass": false,
+    "hardware_MAC_utilization": null,
+    "hardware_MAC_duty": null
+  },
+  "offline_R1_failure_reason": "Known procedural assignment RHS wrapping was outside first successor continuation recognizer. Not native compilation error, resource timeout, or established hardware numerical failure.",
+  "R2_STOP_original": {
+    "bytes": 1291,
+    "sha256": "decebc0f0f0285243a1b09731ba22e0efd3e8c80fa0685246ec4789620ee3169"
+  },
+  "R2_STOP": {
+    "status": "STOP_SOURCE_NEGATIVE_FALSE_ACCEPTANCE_NOT_ROOT_GO",
+    "candidate_freeze": {
+      "bytes": 2922,
+      "sha256": "c6ebc481c8608d47250037efbbce6267aa2097d3a696453c19409028060f360a"
+    },
+    "checker": {
+      "bytes": 20691,
+      "sha256": "0b03b82181d9b2aff046e6633cab5fecb7ecde6b6da1a2a3aaf062a215f8c7e1"
+    },
+    "candidate_actual_root_absent": true,
+    "blocker": "New procedural head accepts SV reserved words signed/unsigned/posedge/negedge/default as plain nonreserved lvalues; seven tiny controls reproduced under normal/-O, five unexpectedly accepted.",
+    "scope": "This is a claimed guard-contract defect in synthetic negative admission, not a finding that fixed retained SV contains these invalid assignments. No retained SV read or target execution.",
+    "required_action": "Preserve r2 freeze and STOP; new candidate must bind appropriate fixed-exporter reserved-keyword set and exhaustively test each reserved LHS. Preserve plain-identifier positive forms and old context/post-loop gates.",
+    "original_native_and_offline_failures_preserved": true
+  },
+  "R3_source_review_original": {
+    "bytes": 9612,
+    "sha256": "cb98eba7d81bfbbbd56e7088e22031e799245c33abb33535276d9b259954385c"
+  },
+  "R3_source_review": {
+    "RTL_behavior_pass": false,
+    "actual_R3_root_absent_at_review": true,
+    "candidate_freeze": {
+      "bytes": 4098,
+      "sha256": "71c1d6917e9ee25edc53266e5a0941d02fe908abed551c8d814862bcbb023f8b"
+    },
+    "command": {
+      "bytes": 1233,
+      "sha256": "43847829b7999e76d9542fa2e535a8e47ca74944129aff8044cfbcdafba57843"
+    },
+    "context_limits": {
+      "bytes": 900,
+      "sha256": "f420eda130e716daf6e677430fb7c50798a8f289aafe2a20f2ab258d7631037a"
+    },
+    "context_review": {
+      "bytes": 7318,
+      "sha256": "f7df650c58d8cd1aaa0a18025e7d00817bc9b2bc28c3753473675fc8144afa19"
+    },
+    "controls": {
+      "all_pass": true,
+      "author_legacy_per_mode": 46,
+      "author_procedural_per_mode": 20,
+      "author_rerun_total": 626,
+      "author_reserved_per_mode": 247,
+      "carried_forward_not_counted_as_new": "Unchanged engine/worker40permode prior controls and context15permode source-limit controls retained by exact-byte/source identity.",
+      "exhaustive_names": "All242 fixed names rejected separately for both= and<=; all242 suffixed neighbor names admitted. Includes originalfive R2 false-accept names.",
+      "independent_per_mode": 806,
+      "independent_total": 1612,
+      "modes": [
+        "normal",
+        "-O"
+      ],
+      "new_total": 2238
+    },
+    "declared_pins": 852,
+    "exact_inventories": 4,
+    "execution_authorized": false,
+    "full29_pass": false,
+    "hardware_MAC_duty": null,
+    "hardware_MAC_utilization": null,
+    "identity_checks": 14671,
+    "identity_freeze": {
+      "bytes": 2456,
+      "sha256": "e0ba7e0f00a5b37f06ff85e839bbb9ca8709265ac645f5c583ba1a545b95717b"
+    },
+    "identity_review": {
+      "bytes": 12855,
+      "sha256": "d750cba50070d83a090e40d8056d4f861eb5d25a2837129df68fd991cfb14112"
+    },
+    "input_identity_method": "Reuse previously frozen actual fullSHA with current complete stat stability; do not silently call this a new content hash. Runtime pre/post will read and verify input anew.",
+    "manifest": {
+      "bytes": 1609576,
+      "sha256": "b7d0f4e513e68ecb4c3d6ed598d29c064288a6f439b2d9e44481cfcae117deec"
+    },
+    "metric_reason": "No hardware run/fullblock-cycle denominator or measured effective MACs. Compiler/parser CPU and structure counts cannot establish90%MAC utilization/duty.",
+    "numerical_pass": false,
+    "outer_wall_seconds": 150,
+    "preserved_outcomes": {
+      "R2_SOURCE_STOP": true,
+      "R2_actual_not_executed": true,
+      "original_R1_offline_FAIL": true,
+      "original_native_outer_FAIL": true
+    },
+    "proposed_execution": "Exactly one new isolated Python offline worker semantic parse; multiple integrity hash reads are distinct from semantic parses. No native firtool/JVM/EDA/DUT/reference, no regeneration/scanner/retry/stage chain.",
+    "r2_stop_retained": {
+      "bytes": 1291,
+      "sha256": "decebc0f0f0285243a1b09731ba22e0efd3e8c80fa0685246ec4789620ee3169"
+    },
+    "reserved_source_proof": {
+      "bytes": 5075,
+      "sha256": "439ef6bf3246253b4b1cc90d4f367306bd586f1f0aecec0be8afcb91f71afe74"
+    },
+    "resource_caps": {
+      "address_space_bytes": 536870912,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 60,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 8388608,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 268435456,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 4194304,
+      "total_wall_seconds": 120,
+      "work_wall_seconds": 90
+    },
+    "resource_scope": "60aggregateCPU/90work/100cleanup/120total/150outer,1CPU,childAS512MiB/RSS256MiBsampled,log2MiB/tree8MiBsampled/file4MiB. Parser runs in limited child. Parent onlypins/boundedRESULT, not covered by child hardAS/RSS. Not whole-system disk/cgroup confinement and not a fit guarantee.",
+    "retained_SV_read_or_parsed_by_this_preparation": false,
+    "retained_input": {
+      "bytes": 26251369,
+      "sha256": "77f61549b4aebd109362d30164f95422b9192d0a8b2b1599942a9360852f9225"
+    },
+    "root_explicit_new_GO_required": true,
+    "root_required": {
+      "bytes": 1688,
+      "sha256": "9067468cf65fdb6bba12cc99e55eef5f5192d080d89c5877c7932f1eee0d086e"
+    },
+    "runtime_pin_checks_expected": 854,
+    "schema": "retained-sv-offline-r3-independent-admission-v1",
+    "scopes_not_proved": [
+      "Not a complete SystemVerilog grammar/parser/typechecker or equivalence proof.",
+      "Independent begin/end and paren counters are lexical balances, not a full mutually nested procedural grammar.",
+      "LHS declaration/type and actual ownership by always/initial are not established. Module-level/generate/arbitrary balanced-block assignment text can be treated as an expression; fixed prior native exit0 is separate compiler evidence.",
+      "Some valid unobserved formats such as inline if/always/case-label assignment heads and multiline for initializer remain conservative rejects; no new support invented.",
+      "Fixed exporter243entries/242unique names includes macros and duplicatePRINTF_COND. It is not every IEEE edition reserved-name semantics.",
+      "Allpost-loop gates still require a real new offline run and may fail; prior inventory25modules/88instances was only a diagnostic count."
+    ],
+    "source_blockers": [],
+    "source_delta_review": {
+      "bytes": 383,
+      "sha256": "ea6bc29d8dbe8f118a22f61ab718dd49025facb0de0509ce4420eee0dfe01bf3"
+    },
+    "source_pins": {
+      "STRUCTURE_EXPECTATION.json": {
+        "bytes": 1055045,
+        "sha256": "5bdfb398ac02c250ff40cb092dcbbb326b42236acae6da5cd4a059d8ed4e1e1a"
+      },
+      "check_sv.py": {
+        "bytes": 22866,
+        "sha256": "db346828ef410e2e9a66033256c0236dcd7b4cf4fdad634c44d75ff29df31ce0"
+      },
+      "supervisor.py": {
+        "bytes": 25650,
+        "sha256": "324ab82a6ffe98f4bfe0df8a92c0d2a0e42084e8b2aca32fea9e7191124a9cdb"
+      },
+      "worker.py": {
+        "bytes": 5866,
+        "sha256": "a8fc4182146e18035f20b7f608ff98a280cbddd2021413bc00be61496e6de149"
+      }
+    },
+    "source_qualification": [
+      "R3 is literal242 fixed exporter exclusion names plus one union at PROC lhs gate; reversing those exact changes reproduces frozen R2 bytes.",
+      "R2 underlying extension admits only plain named <= or =(not==) multiline RHS, with reserved exclusions and outer normal-body paren depth0. Shape-like heads inside if/for parentheses explicitly reject.",
+      "Module begin/end and parenthesis balances cannot go negative or exceed256 and must close at endmodule; no mandatory begin invented for valid single-statement always/if.",
+      "RHS keeps1MiB/4096rawlines/depth256 limits, one terminal semicolon and lexical containment; unknown standalone split declarations/calls and unadmitted lhs forms remain fail-close.",
+      "Every post-loop graph/reachability/ABI/selected-module/memory gate is byte-identical to R1; same worker/supervisor/expectation and budget."
+    ],
+    "status": "PASS_SOURCE_MOCK_PREPARATION_FOR_ONE_OFFLINE_R3_ATTEMPT_NOT_EXECUTED"
+  },
+  "no_prior_receipt_or_failure_rewritten": true
+}

@@ -1,0 +1,211 @@
+{
+  "original": {
+    "bytes": 10035,
+    "sha256": "2d1e55e3a58e9a065b6e0645353d602a40756241a2095eca4aae7f419766376d"
+  },
+  "review_freeze": {
+    "bytes": 2013,
+    "sha256": "c6db521a76f8587c5f96d8d11feceaed815d212d8ac40a2857916c16057cfca8"
+  },
+  "projection_policy": "All original fields retained except private paths/stat/placement and two literal absence paths; those are represented by logical roles below. Original report acceptance scope unchanged.",
+  "absence_roles": [
+    "original annotation sidecar",
+    "system loader preload slot"
+  ],
+  "review": {
+    "actual_receipt": {
+      "bytes": 12690,
+      "sha256": "9ff89137d4106f3f71b289cd34396b338c226de296d3cf513cd801a92c3ad0c5"
+    },
+    "actual_result": {
+      "bytes": 1913,
+      "sha256": "7288d8d9cb0515e38bd714719b5954414d7e8deb54a6cd956db8d976bf0379b3"
+    },
+    "actual_status": "PASS_RETAINED_SV_STRUCTURE_ONLY",
+    "candidate_checker": {
+      "bytes": 22866,
+      "sha256": "db346828ef410e2e9a66033256c0236dcd7b4cf4fdad634c44d75ff29df31ce0"
+    },
+    "candidate_freeze": {
+      "bytes": 4098,
+      "sha256": "71c1d6917e9ee25edc53266e5a0941d02fe908abed551c8d814862bcbb023f8b"
+    },
+    "candidate_manifest": {
+      "bytes": 1609576,
+      "sha256": "b7d0f4e513e68ecb4c3d6ed598d29c064288a6f439b2d9e44481cfcae117deec"
+    },
+    "claim_boundaries": {
+      "continued_expression_count": 12387,
+      "continued_expression_count_meaning": "Lexical continuation count only; not runtime cycles, completed transactions, useful MAC operations or progress percentage.",
+      "mac_duty_cycle": null,
+      "mac_utilization": null,
+      "not_proved": [
+        "general SV grammar/type correctness",
+        "RHS arithmetic or connection expression width/equivalence",
+        "top intermediate-net alias equivalence",
+        "ROM contents or memory/register initialization",
+        "memory read/write timing or latency equivalence",
+        "RTL simulation or synthesis",
+        "M1 or full128 hardware behavior",
+        "final numerical/full29 comparison",
+        "physical area/timing/power or 90-percent utilization"
+      ],
+      "permitted": "Fixed retained firtool-generated SV passed this bounded source-informed declaration, exact top ABI, named-instance closure and declared storage-capacity gate; original native generation exit0 separately preserved.",
+      "rtl_false_semantics": "Receipt rtl:false denotes acceptance/simulation scope; it does not deny that retained .sv text was emitted by the earlier native worker.",
+      "why_MAC_unknown": "No hardware execution, complete-block hardware-cycle denominator, valid MAC-lane activation trace, or algorithm-effective MAC observations. Parser/compiler CPU and declaration/counter totals cannot supply utilization or duty cycle."
+    },
+    "independent_structure": {
+      "bytes": 1517,
+      "sha256": "630e99dfe10566f6bf7ed1a98d73b2d7e21b907d42c1b2e84431901d58d09640"
+    },
+    "independent_work_performed": {
+      "cpu_seconds": 2.765888563,
+      "limits": {
+        "address_space_bytes": 536870912,
+        "affinity_count": 1,
+        "alarm_wall_seconds": 45,
+        "cpu_seconds": 30
+      },
+      "method": "Independent stdlib streaming extraction of module ANSI declarations, complete named instance connection lists, unpacked memory declarations, graph closure; independent recursive flatten of five original CHIRRTL top-port type strings. No assignment-RHS grammar replay or behavior evaluation.",
+      "native_JVM_EDA_or_DUT_invoked": false,
+      "one_actual_SV_full_byte_pass": true,
+      "original_checker_imported": false,
+      "original_checker_reexecuted": false,
+      "peak_rss_bytes": 23203840,
+      "scope_caveat": "Extractor intentionally ignores ordinary expression/statement bodies. Full exporter-tail lexical guard remains supported by the separately source-reviewed actual checker execution. Neither is a complete SystemVerilog compiler or equivalence checker.",
+      "source": {
+        "bytes": 14345,
+        "sha256": "ac4f56e063a60c2c5b395c3e81e1b39bf96811e0a5a9731b64a3c4add65f60e5"
+      },
+      "source_preexecution": {
+        "bytes": 550,
+        "sha256": "72a652be253395d24ce82284e395469d50159cc132f192f9cc8bce23e81405b5"
+      },
+      "tiny_normal_optimized_controls": 20,
+      "wall_seconds": 2.769051064038649
+    },
+    "metadata_freeze": {
+      "bytes": 2394,
+      "sha256": "0a85f6ae106fbdce0b45196fd271386f3f878090adba62871fa38423044e7c74"
+    },
+    "metadata_review": {
+      "bytes": 13490,
+      "sha256": "7c90838966f66139b9cce125abea245a271e647146f8c4593516e1ff87e031a2"
+    },
+    "module_instance_storage_inventory": {
+      "bytes": 25011,
+      "sha256": "78bf8eace7f076471c0ee26804f16c490c97aae987c3274faddeca4a514fefdb"
+    },
+    "next_action_authorized": false,
+    "next_action_condition": "Any simulation/synthesis/behavior stage requires a separately reviewed bounded plan and fresh root approval; no automatic target execution or retry.",
+    "preserved_prior_attempts": {
+      "R2_source_STOP_and_absent_actual": true,
+      "evidence": "Metadata audit rechecked prior 729/808 contexts, original native six-file and offline three-file inventories/fullstats, original 20 classes, blocked R2 STOP. No original receipt/artifact edited or upgraded.",
+      "native_original_FAIL_FIRTOOL_SV_RETAINED": true,
+      "native_worker_exit0_and_SV_materialization_are_separate_valid_facts": true,
+      "offline_R1_FAIL_RETAINED_SV_OFFLINE_RECHECK": true,
+      "original_and_NoCSE_Treadle_CPU_FAILURES": true,
+      "prior_Chisel_compile_and_CHIRRTL_PASS": true
+    },
+    "schema": "independent-retained-sv-r3-actual-review-v1",
+    "selected_connections": {
+      "bytes": 686112,
+      "sha256": "6da19e7b3800e02a0ae6fa5d06d907f3d8ec390a9e25dc47c3ac29e9f932710a"
+    },
+    "small_summary": {
+      "bytes": 1319,
+      "sha256": "22e20feb0a19855d3306711f2dedada6f75587abf8fc3fd87f1036effc5a934c"
+    },
+    "source_review": {
+      "bytes": 9612,
+      "sha256": "cb98eba7d81bfbbbd56e7088e22031e799245c33abb33535276d9b259954385c"
+    },
+    "status": "PASS_RETAINED_SV_DECLARATION_ABI_INSTANCE_STORAGE_STRUCTURE_ONLY",
+    "terminal_identity_and_resources": {
+      "anchored_zombie_barrier_scans": 2,
+      "caps": {
+        "address_space_bytes": 536870912,
+        "affinity_count": 1,
+        "cleanup_phase_seconds": 10,
+        "cleanup_reserve_seconds": 30,
+        "cpu_seconds": 60,
+        "log_hard_bytes": 2097152,
+        "output_tree_sampled_bytes": 8388608,
+        "postflight_reserve_seconds": 20,
+        "rss_sampled_bytes": 268435456,
+        "sample_seconds": 0.1,
+        "single_file_hard_bytes": 4194304,
+        "total_wall_seconds": 120,
+        "work_wall_seconds": 90
+      },
+      "cleanup_complete": true,
+      "cleanup_saved_bytes": 1548,
+      "cleanup_saved_records": 8,
+      "errors": [],
+      "final_aggregate_cpu_seconds": 1.7562658240000002,
+      "inventories": 4,
+      "isolation_limit": "Anchored process and sampled resource evidence; absence checks are endpoints, not continuous global exclusion; sampled RSS/tree and child AS are not a universal machine sandbox.",
+      "manifest_declared_pins": 852,
+      "maximum_sample_interval_seconds": 0.02459444000851363,
+      "no_new_native_or_JVM": true,
+      "original20classbytes": 670644,
+      "original20classes": 20,
+      "original_SV_bytes": 26251369,
+      "original_SV_sha256": "77f61549b4aebd109362d30164f95422b9192d0a8b2b1599942a9360852f9225",
+      "root_exit": 0,
+      "root_outer_timeout": false,
+      "root_wall_seconds": 1.869317336997483,
+      "runtime_pins": 854,
+      "sampled_aggregate_cpu_seconds": 1.5493891229999999,
+      "sampled_peak_rss_bytes": 29134848,
+      "supervisor_wall_seconds": 1.7864727239939384,
+      "worker_exit": 0
+    },
+    "useful_result": {
+      "additional_reachable_storage": [
+        {
+          "count": 16,
+          "depth": 48,
+          "width": 128
+        }
+      ],
+      "all_25_modules_reachable": true,
+      "all_module_port_declarations": 17908,
+      "fabric_storage": [
+        {
+          "count": 16,
+          "depth": 2240,
+          "width": 128
+        }
+      ],
+      "hierarchy_depth": 5,
+      "initial_blocks_observed": 0,
+      "module_definitions": 25,
+      "module_dependency_cycles": 0,
+      "named_input_connections_nonempty": 4921,
+      "omitted_or_empty_output_connections_observed": 0,
+      "score_probability_storage": [
+        {
+          "count": 2,
+          "depth": 1024,
+          "width": 32
+        }
+      ],
+      "selected_direct_instances": {
+        "BlockScalarFloat": 1,
+        "BlockWritebackFence": 1,
+        "ElementwiseMemoryEngine": 1,
+        "HeteroFP32Alu": 16,
+        "PackedAttentionStreamClient": 1,
+        "SharedL2Fabric": 1,
+        "probs_1024x32": 1,
+        "scores_1024x32": 1
+      },
+      "syntactic_instance_sites": 88,
+      "top_inputs": 8250,
+      "top_outputs": 609,
+      "top_ports": 8859,
+      "unresolved_modules_or_named_ports": 0
+    }
+  }
+}

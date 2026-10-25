@@ -1,0 +1,42 @@
+{
+  "original": {
+    "bytes": 5075,
+    "sha256": "439ef6bf3246253b4b1cc90d4f367306bd586f1f0aecec0be8afcb91f71afe74"
+  },
+  "commit": "ba60dced20cae0ff5e9553bf5f530853c9534995",
+  "repository": "https://github.com/llvm/circt",
+  "proof": {
+    "status": "PASS_OFFICIAL_FIXED_TREE_SOURCE_ONLY",
+    "files": [
+      {
+        "path": "lib/Dialect/SV/ReservedWords.def",
+        "bytes": 3496,
+        "git_blob_sha1": "8fbe0b3bff690cb82b778d03267daeee1a6fc71e",
+        "sha256": "89748ba4e954377bc72962b5f2cf56802e007589b0ca82d3c430229a4361b09a"
+      },
+      {
+        "path": "lib/Dialect/SV/SVDialect.cpp",
+        "bytes": 6328,
+        "git_blob_sha1": "a5d5164737df7fe02b3ce00040560ee302e4a646",
+        "sha256": "95763131b9b1ffe416e66c5d7431db24699361854ad3c6680fbd9c004d087d8c"
+      },
+      {
+        "path": "lib/Conversion/ExportVerilog/LegalizeNames.cpp",
+        "bytes": 13788,
+        "git_blob_sha1": "debd220ec494d58e1d5c003c8ac1ab206c3b325d",
+        "sha256": "e9c26f15c9b234e6e6e4cf435e8c6c8b048f58f4241858999fc495f6ecf08c92"
+      }
+    ],
+    "source_table_occurrences": 243,
+    "source_StringSet_unique_count": 242,
+    "construction": "SVDialect.cpp ReservedWordsCreator52–67 inserts every ReservedWords.def item into StringSet; isNameValid rejects contains(name or lower(name)) according to caseInsensitiveKeywords; LegalizeNames.cpp calls isNameValid.",
+    "scope": "Fixed firtool exporter collision-avoidance set including macro names, not a claim of every IEEE SystemVerilog version keyword or complete legal identifier/context/value semantics."
+  },
+  "source_urls": {
+    "lib/Dialect/SV/ReservedWords.def": "https://github.com/llvm/circt/blob/ba60dced20cae0ff5e9553bf5f530853c9534995/lib/Dialect/SV/ReservedWords.def",
+    "lib/Dialect/SV/SVDialect.cpp": "https://github.com/llvm/circt/blob/ba60dced20cae0ff5e9553bf5f530853c9534995/lib/Dialect/SV/SVDialect.cpp",
+    "lib/Conversion/ExportVerilog/LegalizeNames.cpp": "https://github.com/llvm/circt/blob/ba60dced20cae0ff5e9553bf5f530853c9534995/lib/Conversion/ExportVerilog/LegalizeNames.cpp"
+  },
+  "complete_names_in": "RESERVED_NAMES.json",
+  "names_are_fixed_exporter_exclusions_not_general_SV_grammar": true
+}

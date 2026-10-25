@@ -1,0 +1,83 @@
+{
+  "original_source_freeze": {
+    "bytes": 4098,
+    "sha256": "71c1d6917e9ee25edc53266e5a0941d02fe908abed551c8d814862bcbb023f8b"
+  },
+  "files": [
+    {
+      "public_path": "check_sv.py",
+      "bytes": 22866,
+      "sha256": "db346828ef410e2e9a66033256c0236dcd7b4cf4fdad634c44d75ff29df31ce0",
+      "transformation": "exact_original_bytes"
+    },
+    {
+      "public_path": "worker.py",
+      "bytes": 5866,
+      "sha256": "a8fc4182146e18035f20b7f608ff98a280cbddd2021413bc00be61496e6de149",
+      "transformation": "exact_original_bytes"
+    },
+    {
+      "public_path": "test_check_sv.py",
+      "bytes": 5718,
+      "sha256": "7d638497113edaab57f4cd10425e0b0566b1bfd296520f807e5f0f346942896f",
+      "transformation": "exact_original_bytes"
+    },
+    {
+      "public_path": "test_reserved.py",
+      "bytes": 1662,
+      "sha256": "e15ace3250ccf1c94042a07a31bdeffe4056302b312af19913841b32f2b6a00e",
+      "transformation": "exact_original_bytes"
+    },
+    {
+      "public_path": "RESERVED_NAMES.json",
+      "bytes": 4212,
+      "sha256": "8a0e53ff5bdc0e9c294030e86809fefcb846b13d5bb107fe848adea53ead6f20",
+      "transformation": "exact_original_bytes"
+    },
+    {
+      "public_path": "source/ReservedWords.def",
+      "bytes": 3496,
+      "sha256": "89748ba4e954377bc72962b5f2cf56802e007589b0ca82d3c430229a4361b09a",
+      "transformation": "exact_original_bytes"
+    },
+    {
+      "public_path": "derive_ports.py",
+      "bytes": 3965,
+      "sha256": "4681d82e85bc8b8b1cefd1c5d5542fd7ec0d7a05bb3a4c7507601330a04c4c58",
+      "public_identity": {
+        "bytes": 2242,
+        "sha256": "7426a3062c677e33e203be70ec4c7f98c02153b85ea5ddb5840d91488cf90274"
+      },
+      "transformation": "Exact original module prefix only; private absolute-path __main__ entry removed. Parsing/flatten/derive functions unchanged."
+    },
+    {
+      "public_path": "test_procedural.py",
+      "bytes": 2555,
+      "sha256": "bafe0ffc26ffd606eb51f7a6e7d554056cae14e7b314d9f800138633254433a5",
+      "public_identity": {
+        "bytes": 2440,
+        "sha256": "b5db56dd9f24e6507aef3861fdc07ba365da0bea304baa3a30bfca71f7154cfb"
+      },
+      "transformation": "Portable sibling fixture reference; two retained-SV excerpt dependencies replaced by explicit synthetic forms; docstring/result label corrected. Remaining negatives unchanged; no raw SV excerpts published."
+    }
+  ],
+  "expectation": {
+    "original": {
+      "bytes": 1055045,
+      "sha256": "5bdfb398ac02c250ff40cb092dcbbb326b42236acae6da5cd4a059d8ed4e1e1a"
+    },
+    "template": {
+      "bytes": 1481,
+      "sha256": "f705ca0dea01824eae8fee7059ff53224b82239ad75c6462b19498d6a86fa1e2"
+    },
+    "top_types_public_reference": {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/CHIRRTL_FINAL_REVIEW.json",
+      "bytes": 6774,
+      "sha256": "c6736dfbf9794d87d094569ff55fa1c376e8c7348b1a557e24194c8aa2567a3d",
+      "git_blob_sha": "3118b7c08002312cf85c5722c30e565dcc60499c"
+    },
+    "output_serialization": "json.dumps(expectation,indent=2,sort_keys=True)+newline",
+    "no_actual_SV_or_IR_read_needed": true
+  },
+  "source_programs_not_actual_generated_payloads": true
+}

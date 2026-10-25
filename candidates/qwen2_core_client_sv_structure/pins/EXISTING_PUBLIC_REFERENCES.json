@@ -1,0 +1,48 @@
+{
+  "base_commit": "fd7d1a60ee058b90a2a49b169759b73244fa61b1",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/CHIRRTL_FINAL_REVIEW.json",
+      "bytes": 6774,
+      "sha256": "c6736dfbf9794d87d094569ff55fa1c376e8c7348b1a557e24194c8aa2567a3d",
+      "git_blob_sha": "3118b7c08002312cf85c5722c30e565dcc60499c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/NEW_SOURCE_PINS.json",
+      "bytes": 1971,
+      "sha256": "56b44669c54b7cb2962d9a4ca0c05aab9424b53047c56d480ee33b092e8cefc3",
+      "git_blob_sha": "f4fa6a797f6ce650d453a5296cc90f64c952076c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/BASELINE_REFERENCES.json",
+      "bytes": 2817,
+      "sha256": "689762dea85f5bbf695578d9aa5852df24bfc167f44447c7df761ca81c475e4d",
+      "git_blob_sha": "dbd3b479531464dd92a4de4b39de586e1e1110da"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/NEW_CLASS_HASHES.json",
+      "bytes": 10025,
+      "sha256": "6491db38b14efae96b40ee615852b2343cccc761e4589bcec49120d73aaaaa63",
+      "git_blob_sha": "f1ae8051a8a8d5367f6cfe007eb23fd801bd183c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/probe/PROVENANCE.json",
+      "bytes": 966,
+      "sha256": "c302fd15c97aed3b5057bd0884b1818147fa85393eddee18016ca2df30be64c2",
+      "git_blob_sha": "155d53893c3ee0dee59d635f9802fccc2077a57a"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_nocse_m1_failure/evidence/ACTUAL_FAILURE_REVIEW.json",
+      "bytes": 5415,
+      "sha256": "14d64a22d080c44946c86a4037ced4b3651c8a2cb577a1b8dd09dd760cc63c66",
+      "git_blob_sha": "a4c4e74ba179b5de40a4320526ac735fad691b15"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_nocse_m1_failure/evidence/READ_ONLY_BACKEND_ROUTE.json",
+      "bytes": 3465,
+      "sha256": "94b7c4e03a04129d6af9bb292f7e7af6ffeaa3edfe1b5b965f020f62e911263b",
+      "git_blob_sha": "ba443d8e44466eec2be653e10d770e9d96ad26e2"
+    }
+  ],
+  "reuse": "Original selected-on CHIRRTL metadata/five top types, original20 classes and Scala/probe provenance; no NoCSE composite used by native generation. Prior failures remain unchanged."
+}

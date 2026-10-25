@@ -1,0 +1,38 @@
+{
+  "assembly_controls_normal": 8,
+  "assembly_controls_optimized": 8,
+  "status": "PASS_PACKAGE_SOURCE_BYTES_PORTABLE_ASSEMBLY_PROJECTIONS_AND_SYNTHETIC_ONLY",
+  "checks": 96,
+  "unique_hashed_files": 33,
+  "existing_public_references": 7,
+  "original_SV_IR_native_binary_or_actual_log_reopened": false,
+  "actual_artifact_root_stat_checks": 31,
+  "actual_inventories": [
+    {
+      "role": "qwen2_core_client_sv",
+      "files": 6,
+      "bytes": 64445533
+    },
+    {
+      "role": "qwen2_core_client_sv_offline",
+      "files": 3,
+      "bytes": 12358
+    },
+    {
+      "role": "qwen2_core_client_sv_offline_r3",
+      "files": 4,
+      "bytes": 15509
+    }
+  ],
+  "reconstructed_expectation_bytes": 1055045,
+  "reconstructed_expectation_sha256": "5bdfb398ac02c250ff40cb092dcbbb326b42236acae6da5cd4a059d8ed4e1e1a",
+  "top_port_count": 8859,
+  "fixed_exporter_names": 242,
+  "normal_synthetic_controls": 313,
+  "optimized_synthetic_controls": 313,
+  "synthetic_guard": "fixture/stdlib reads, small temp prefix only; CPU20/AS256MiB/1CPU; process/native/socket/signal loading denied",
+  "JVM_EDA_DUT_reference_or_signals_executed": false,
+  "native_outer_FAIL_R1_FAIL_R2_STOP_preserved": true,
+  "R3_PASS_limited_to_declaration_ABI_instance_storage": true,
+  "unexecuted_Verilator_harness_excluded": true
+}

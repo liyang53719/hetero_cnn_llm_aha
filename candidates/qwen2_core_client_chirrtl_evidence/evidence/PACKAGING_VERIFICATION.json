@@ -1,0 +1,40 @@
+{
+  "status": "PASS_SOURCE_PINS_AND_SYNTHETIC_STRUCTURE_ONLY",
+  "identity_comparisons": 927,
+  "unique_files_hashed": 900,
+  "preparation_freezes_verified": 3,
+  "baseline_sources": 92,
+  "retained_classes": 550,
+  "official_jars": 106,
+  "new_classes": 20,
+  "exact_public_source_files": 6,
+  "exact_public_expectation_files": 1,
+  "existing_public_refs": 7,
+  "probe_reverse_and_forward_byte_exact": true,
+  "actual_fir_stat_chain_unchanged": true,
+  "actual_fir_not_reopened_rehashed_or_reparsed": true,
+  "synthetic_unique_tests": 21,
+  "synthetic_executions": 42,
+  "test_results": [
+    {
+      "mode": "normal",
+      "tests": 21,
+      "exit": 0,
+      "log": {
+        "bytes": 2161,
+        "sha256": "6a20d83b0385b933beb8ac7a70a2d25c78b7ace82725515ddba25092e0159c03"
+      }
+    },
+    {
+      "mode": "optimized",
+      "tests": 21,
+      "exit": 0,
+      "log": {
+        "bytes": 2161,
+        "sha256": "4548f972a5fc04111929a27a2006b2a44e1d175ced37be9898ca00ec6ce11786"
+      }
+    }
+  ],
+  "JVM_compile_Chisel_DUT_reference_behavior_executed": false,
+  "old_sources_and_evidence_mutated": false
+}

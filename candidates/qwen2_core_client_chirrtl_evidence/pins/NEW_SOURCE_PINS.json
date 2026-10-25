@@ -1,0 +1,57 @@
+{
+  "source_preparation_freeze": {
+    "bytes": 3820,
+    "sha256": "b12af4e0cf1d633572d64f4214e2771103734ba0319aa41af2e797aeca208b89"
+  },
+  "structure_preparation_freeze": {
+    "bytes": 8475,
+    "sha256": "ff07f8008906ebd3009901241147e54c726b42894db2cafab6e5b9f59f356591"
+  },
+  "files": [
+    {
+      "path": "source/OrderedQkBehaviorCore.scala",
+      "bytes": 2409,
+      "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c",
+      "source_kind": "unchanged-reviewed-original-bytes"
+    },
+    {
+      "path": "source/OrderedQkBehaviorElaborate.scala",
+      "bytes": 779,
+      "sha256": "4486d4bf9c74dd18e78f0077ea7a7e46fa67bbde9c9cfbdb6fc97a647e398f72",
+      "source_kind": "unchanged-reviewed-original-bytes"
+    },
+    {
+      "path": "source/OrderedQkBehaviorSpec.scala",
+      "bytes": 16701,
+      "sha256": "ab0f832c033dec56daee3ad0d98e9b7e37a1d9189b692556d22dc3fea8ac66f9",
+      "source_kind": "unchanged-reviewed-original-bytes"
+    },
+    {
+      "path": "source/Qwen2Block.scala",
+      "bytes": 57361,
+      "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd",
+      "source_kind": "unchanged-reviewed-original-bytes"
+    },
+    {
+      "path": "structure/check_chirrtl.py",
+      "bytes": 11534,
+      "sha256": "8de2a7eae3cf8377208dd4c1d48bfac405d7665e8b65e4a8fa2fcbd43f7e2569",
+      "source_kind": "unchanged-reviewed-original-bytes"
+    },
+    {
+      "path": "structure/test_check_chirrtl.py",
+      "bytes": 8242,
+      "sha256": "bdbd2d0675e46ba69369fe7baa1e2cbd0dcd5170cc247edf54514e007b9524ea",
+      "source_kind": "unchanged-reviewed-original-bytes"
+    },
+    {
+      "path": "structure/STRUCTURE_EXPECTATION.json",
+      "bytes": 2490,
+      "sha256": "213a0e7e0559a24ab0506832780466eb646ffab8c2c3f0f76c81cf4fa7d643bc",
+      "source_kind": "unchanged-reviewed-original-bytes"
+    }
+  ],
+  "scala_units": 4,
+  "source_adaptation": false,
+  "test_harness_execution_not_claimed": true
+}

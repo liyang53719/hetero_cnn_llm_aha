@@ -1,0 +1,112 @@
+{
+  "original": {
+    "bytes": 6653,
+    "sha256": "12d55f8cd00f48c80d972a02d4e84e571b7a03c088793a865ca323e5e91412bf"
+  },
+  "projection_policy": "Private paths/resolved paths/stat/process placement removed; every retained value unchanged. No generated binary or FIRRTL contents.",
+  "review": {
+    "actual_artifact_bytes": 13891585,
+    "actual_artifact_count": 24,
+    "actual_chisel_hardware_ir_generated": true,
+    "actual_receipt_sha256": "232feca521d4ae3771542a45d74a12360bda13acd43f2499e420b56f1de9cc36",
+    "auditor_jvm_emitter_original_checker_executed": false,
+    "automatic_next_stage": false,
+    "behavior_executed": false,
+    "class_bytes": 670644,
+    "class_count": 20,
+    "cleanup_complete": true,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "client_unconditional_port_pairs": 9,
+    "direct_instance_counts": {
+      "BlockScalarFloat": 1,
+      "BlockWritebackFence": 1,
+      "ElementwiseMemoryEngine": 1,
+      "HeteroFP32Alu": 16,
+      "PackedAttentionStreamClient": 1,
+      "SharedL2Fabric": 1
+    },
+    "firrtl_bytes": 13164852,
+    "firrtl_lines": 112270,
+    "firrtl_sha256": "908602bb6ed83012f5b37628108832f7d9f81ae72767308c52a9dff90dc3fc8c",
+    "fullblock_or_full29_pass": false,
+    "hardware_MAC_duty_cycle": "UNKNOWN_NOT_MEASURED",
+    "hardware_MAC_utilization": "UNKNOWN_NOT_MEASURED",
+    "hierarchy_depth": 5,
+    "independent_structure_report": {
+      "checks": 499526,
+      "sha256": "f5f309bf7155d79c035df6a77a189a5a0d20c388e2dd78428c275b650d955075"
+    },
+    "instance_count": 344,
+    "low_firrtl_lowering_verified": false,
+    "memory_declaration_count": 34,
+    "metadata_review": {
+      "checks": 9514,
+      "freeze_sha256": "e4f33df60c0483c33d76df4b3bccaa2fc7e9df6fd1e3aa2e04fa7c8ce91d67fa",
+      "sha256": "a24c0b0380468d5c81a3b8dd06ed71d8de294c41ddfc861437a53634bbde0e68",
+      "supplemental_checks": 14
+    },
+    "module_count": 345,
+    "normal_m1_requires_new_reviewed_supervisor_and_root_approval": true,
+    "numerical_pass": false,
+    "outer_timeout": false,
+    "outer_wall_seconds": 10.797524068970233,
+    "postflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 1148
+    },
+    "preflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 1148
+    },
+    "probe_index_boundary": "logical16-bit index, physical scores memory uses low10 bits; do not claim full-width identity outside valid range",
+    "probe_two_write_sites_static_binding": true,
+    "reachable_module_count": 345,
+    "register_declaration_count": 164,
+    "resources": {
+      "elapsed_seconds": 10.737593911006115,
+      "final_aggregate_cpu_seconds": 10.688666565,
+      "maximum_sample_interval_seconds": 0.0319840949960053,
+      "sampled_peak_output_bytes": 13853613,
+      "sampled_peak_rss_bytes": 322498560
+    },
+    "root_exit_confirmed": 0,
+    "rtl_simulation_pass": false,
+    "schema": "actual-selected-on-chirrtl-final-independent-review-v1",
+    "static_warnings": {
+      "W005_count": 4,
+      "location": "Qwen2Block.scala:629:57",
+      "meaning": "4/5/6/7-bit dynamic index into Vec256 (8-bit expected); warning retained; no behavior conclusion"
+    },
+    "status": "PASS_ACTUAL_SELECTED_ON_CHIRRTL_STRUCTURE_ONLY",
+    "systemverilog_generated_by_this_stage": false,
+    "top_ports": {
+      "clock": {
+        "direction": "input",
+        "line": 86069,
+        "type": "Clock"
+      },
+      "io": {
+        "direction": "output",
+        "line": 86071,
+        "type": "{ flip launch : { flip ready : UInt<1>, valid : UInt<1>, bits : { base : UInt<64>, limit : UInt<64>, tokens : UInt<16>, epoch : UInt<16>}}, result : { flip ready : UInt<1>, valid : UInt<1>, bits : { status : UInt<8>, phase : UInt<5>, epoch : UInt<16>, cycles : UInt<64>, macs : UInt<64>, executedMacs : UInt<64>}}, matrixRequest : { flip ready : UInt<1>, valid : UInt<1>, bits : { a : UInt<16>[16], b : UInt<16>[256], clear : UInt<1>, last : UInt<1>, opcode : UInt<8>, sliceMask : UInt<8>}}, flip matrixResult : { flip ready : UInt<1>, valid : UInt<1>, bits : { value : UInt<32>[256][16], error : UInt<1>}}, flip matrixAcceptedSteps : UInt<64>, packedQk : { group : { flip ready : UInt<1>, valid : UInt<1>, bits : { opcode : UInt<8>, sliceMask : UInt<8>, tag : UInt<32>}}, step : { flip ready : UInt<1>, valid : UInt<1>, bits : { a : UInt<16>[16], b : UInt<16>[256], context : UInt<3>, clear : UInt<1>, last : UInt<1>, finish : UInt<1>, emit : UInt<1>}}, flip result : { flip ready : UInt<1>, valid : UInt<1>, bits : { value : UInt<32>[256][16], context : UInt<3>, last : UInt<1>, error : UInt<1>}}, flip done : { flip ready : UInt<1>, valid : UInt<1>, bits : { tag : UInt<32>, error : UInt<1>}}, abort : UInt<1>}, packedQkActive : UInt<1>, flip packedQkStepsDrained : UInt<1>, flip ownerJob : { flip ready : UInt<1>, valid : UInt<1>, bits : { kind : UInt<4>, m : UInt<16>, n : UInt<16>, k : UInt<16>, a : UInt<64>, b : UInt<64>, c : UInt<64>, dst : UInt<64>, weightBf16 : UInt<1>, activationBf16 : UInt<1>, materializeDenseOutput : UInt<1>, outputBf16 : UInt<1>, writeBytes : UInt<64>, tag : UInt<32>, historyOut : UInt<64>, expectedGeneration : UInt<32>, currentGeneration : UInt<32>, cold : UInt<1>, cacheCapacity : UInt<32>, cacheLength : UInt<32>, expectedCacheLength : UInt<32>, queryStart : UInt<32>, qkRole : UInt<2>, qkPositionBase : UInt<32>, qkTrigTokens : UInt<32>, gdnALog : UInt<64>, gdnDtBias : UInt<64>, gdnStateOut : UInt<64>, gdnRecurrentMode : UInt<1>, gdnElementwiseOp : UInt<2>}}, memory : { flip ready : UInt<1>, valid : UInt<1>, bits : { write : UInt<1>, address : UInt<64>, data : UInt<512>, mask : UInt<64>, tag : UInt<64>}}, flip response : { flip ready : UInt<1>, valid : UInt<1>, bits : { data : UInt<512>, tag : UInt<64>, error : UInt<1>}}, phase : UInt<5>, stageCommit : UInt<1>, committedPhase : UInt<5>, resetRequired : UInt<1>, readBytes : UInt<64>, writeBytes : UInt<64>, acknowledgedWriteBytes : UInt<64>}"
+      },
+      "observation": {
+        "direction": "output",
+        "line": 86073,
+        "type": "{ state : UInt<7>, vectorPhase : UInt<3>, token : UInt<16>, head : UInt<8>, key : UInt<16>, lane : UInt<4>, selected : UInt<4>, faults : UInt<16>, maxScore : UInt<32>, committed : UInt<1>, owned : UInt<1>, memoryDebt : UInt<1>, localDebt : UInt<1>, scalarDebt : UInt<1>, selectedFault : UInt<1>, resultReady : UInt<1>, completionValid : UInt<1>, completionReady : UInt<1>, scalarIssue : UInt<1>}"
+      },
+      "reset": {
+        "direction": "input",
+        "line": 86070,
+        "type": "UInt<1>"
+      },
+      "testScoreWrite": {
+        "direction": "output",
+        "line": 86072,
+        "type": "{ valid : UInt<1>, bits : { index : UInt<16>, data : UInt<32>}}"
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "original": {
+    "bytes": 6821,
+    "sha256": "a24c0b0380468d5c81a3b8dd06ed71d8de294c41ddfc861437a53634bbde0e68"
+  },
+  "review": {
+    "schema": "actual-selected-on-chirrtl-metadata-independent-review-v1",
+    "status": "PASS_ACTUAL_SELECTED_ON_CHIRRTL_METADATA_ONLY",
+    "checks": 9514,
+    "pins": 1146,
+    "runtime_extra_pins": 2,
+    "artifact_count": 24,
+    "artifact_bytes": 13891585,
+    "independently_hashed_actual_artifacts": 23,
+    "inventory_counts": [
+      92,
+      550,
+      4,
+      20
+    ],
+    "original_inputs_unchanged_during_review": true,
+    "old1613_block_preserved": true,
+    "old_compile_results_preserved": true,
+    "worker_exit": 0,
+    "outer_returncode": 0,
+    "outer_timeout": false,
+    "outer_wall_seconds": 10.797524068970233,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "cleanup_complete": true,
+    "cleanup_saved_proof_consistent": true,
+    "cleanup_actual_process_state_not_monitored": true,
+    "cleanup_live_authority_not_recreated": true,
+    "reviewer_opened_or_hashed_fir": false,
+    "reviewer_JVM_Scala_Chisel_DUT_reference_executed": false,
+    "reviewer_process_control_or_proc_inspection": false,
+    "runtime_preflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 1148
+    },
+    "runtime_postflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 1148
+    },
+    "resources": {
+      "elapsed_seconds": 10.737593911006115,
+      "final_aggregate_cpu_seconds": 10.688666565,
+      "maximum_sample_interval_seconds": 0.0319840949960053,
+      "sampled_peak_cpu_seconds": 9.885225854,
+      "sampled_peak_output_bytes": 13853613,
+      "sampled_peak_rss_bytes": 322498560
+    },
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 120,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 67108864,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 50331648,
+      "total_wall_seconds": 150,
+      "work_wall_seconds": 120
+    },
+    "deadlines_from_single_start_seconds": {
+      "cleanup": 130,
+      "outer": 180,
+      "total": 150,
+      "work": 120
+    },
+    "enforcement_scope": {
+      "child_hard_rlimit": [
+        "CPU120s",
+        "AS4GiB",
+        "single_file48MiB"
+      ],
+      "engine_wall": "single-origin work120 cleanup130 total150; external outer180 includes CLI overhead",
+      "final_aggregate_CPU": "supervisor CPU plus waited child rusage; recorded final check",
+      "no_cgroup_or_escaped_process_confinement": true,
+      "no_global_disk_quota": true,
+      "one_CPU_affinity": true,
+      "parent_hard_log": "2MiB",
+      "sample_gap_max_seconds": 0.1,
+      "sampled": [
+        "anchored group RSS2GiB",
+        "anchored aggregate CPU120s with supervisor CPU",
+        "run_root tree64MiB"
+      ]
+    },
+    "warning_count": 4
+  },
+  "fir_digest_provenance": "Metadata auditor stat-only; final structure reviewer separately opened/hash/parsed actual FIR. Package does not repeat the large parser.",
+  "warnings": {
+    "count": 4,
+    "code": "W005",
+    "source": "source/Qwen2Block.scala",
+    "line": 629,
+    "column": 57,
+    "dynamic_index_bits": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "expected_index_bits": 8,
+    "vector_size": 256,
+    "retained_not_fixed_or_dismissed": true
+  }
+}

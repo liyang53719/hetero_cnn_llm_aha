@@ -1,0 +1,109 @@
+{
+  "client_port_connections": [
+    [
+      "io.packedQk.abort",
+      "$CLIENT.io.port.abort"
+    ],
+    [
+      "$CLIENT.io.port.done",
+      "io.packedQk.done"
+    ],
+    [
+      "$CLIENT.io.port.result",
+      "io.packedQk.result"
+    ],
+    [
+      "io.packedQk.step.bits",
+      "$CLIENT.io.port.step.bits"
+    ],
+    [
+      "io.packedQk.step.valid",
+      "$CLIENT.io.port.step.valid"
+    ],
+    [
+      "$CLIENT.io.port.step.ready",
+      "io.packedQk.step.ready"
+    ],
+    [
+      "io.packedQk.group.bits",
+      "$CLIENT.io.port.group.bits"
+    ],
+    [
+      "io.packedQk.group.valid",
+      "$CLIENT.io.port.group.valid"
+    ],
+    [
+      "$CLIENT.io.port.group.ready",
+      "io.packedQk.group.ready"
+    ]
+  ],
+  "core_fabric_rows_per_bank": 2240,
+  "direct_instances": {
+    "BlockScalarFloat": 1,
+    "BlockWritebackFence": 1,
+    "ElementwiseMemoryEngine": 1,
+    "HeteroFP32Alu": 16,
+    "PackedAttentionStreamClient": 1,
+    "SharedL2Fabric": 1
+  },
+  "firrtl_version": "3.3.0",
+  "forbidden_io_fields": [
+    "scalarService",
+    "elementwiseLoan",
+    "resident",
+    "rmsBorrowerControl"
+  ],
+  "forbidden_module_families": [
+    "RetainedMatrixEndpoint",
+    "RetainedMatrixBlackBox",
+    "MatrixPipelineService",
+    "QwenOwnerKernel",
+    "HostBlockTop",
+    "HostBlockCollection",
+    "OrderedQkBehaviorSpec",
+    "Qwen2ContinuousBlock"
+  ],
+  "interpretation": "Source-informed structure guard, not full FIRRTL parser/equivalence proof or behavior. Synthetic controls exercise checker only.",
+  "max_bytes": 50331648,
+  "max_hierarchy_depth": 64,
+  "max_instances": 16384,
+  "max_instances_per_module": 1024,
+  "max_line_bytes": 1048576,
+  "max_lines": 500000,
+  "max_modules": 4096,
+  "max_registers": 32768,
+  "memories": [
+    [
+      "scores",
+      32,
+      1024
+    ],
+    [
+      "probs",
+      32,
+      1024
+    ]
+  ],
+  "ordered_state_codes": [
+    103,
+    104,
+    105,
+    106
+  ],
+  "required_io_fields": [
+    "ownerJob",
+    "matrixRequest",
+    "matrixResult",
+    "matrixAcceptedSteps",
+    "packedQk",
+    "packedQkActive",
+    "packedQkStepsDrained",
+    "memory",
+    "response",
+    "result"
+  ],
+  "schema": "selected-on-chirrtl-structure-expectation-v1",
+  "top": "OrderedQkBehaviorCore",
+  "top_reset_basis": "Default plain Module top uses Bool serialized UInt<1>; nested child modules use abstract Reset. No RequireAsyncReset/RequireSyncReset/resetType override in tested class inheritance.",
+  "top_reset_firrtl_type": "UInt<1>"
+}

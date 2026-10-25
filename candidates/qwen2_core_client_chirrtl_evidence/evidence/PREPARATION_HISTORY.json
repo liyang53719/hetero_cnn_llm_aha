@@ -1,0 +1,181 @@
+{
+  "source_preparation": {
+    "r1_freeze": {
+      "bytes": 3262,
+      "sha256": "84a8fcbad89261b3c71dde6a77f32cbf9738341bf1179f4879fe9c964eac5509"
+    },
+    "r2_freeze": {
+      "bytes": 3544,
+      "sha256": "33141218e8281349c869d30d0a4de163c12730e8795c81d1ecc5db56645d1dc8"
+    },
+    "r3_freeze": {
+      "bytes": 3820,
+      "sha256": "b12af4e0cf1d633572d64f4214e2771103734ba0319aa41af2e797aeca208b89"
+    },
+    "r1_to_r2_patch": {
+      "bytes": 9583,
+      "sha256": "13d3458c7ba312653da3d1633db2818218b6c58a2705afda6d08005ea3212de8"
+    },
+    "r2_to_r3_patch": {
+      "bytes": 857,
+      "sha256": "6bc9dec128fba205293e083ed14f589971fe7b70bdcb91e915ef1eb21a007cd9"
+    },
+    "r2_changes": "Stable matching early-done tag/error through fire; foreign pulse explicitly adversarial withdrawal, not legal held terminal; independent normalPV and owner/hold counters. No source-stage JVM execution.",
+    "r3_changes": "Only test-body loop cap99998 ->99997: pinned framework automatic reset1 + explicit reset2 + body99997 <=100000. No DUT timing/source arithmetic change."
+  },
+  "source_review": {
+    "original": {
+      "bytes": 2689,
+      "sha256": "f84374e4a540f24c8465940149cb0ebae3697ef52f554afb3eeef2cc243d29bc"
+    },
+    "review": {
+      "Chisel_elaborated": false,
+      "FIRRTL_interpreted": false,
+      "JVM_executed": false,
+      "SystemVerilog_RTL_executed": false,
+      "actual_Matrix_FMA_verified": false,
+      "all11_cases_authorized": false,
+      "candidate_freeze_sha256": "b12af4e0cf1d633572d64f4214e2771103734ba0319aa41af2e797aeca208b89",
+      "commands": {
+        "bytes": 86246,
+        "sha256": "f31dbea395c269ea5556a43d22dabf8d9e8de81efe5004f540714115ca12cfd3"
+      },
+      "compile_executed": false,
+      "framework_reset_bytecode": {
+        "bytes": 1377,
+        "sha256": "0ff0cf8ba9a418ad83cf15fb9cb2c4b88356814e2ffc0f3d19cd6b0ef43ef034"
+      },
+      "full29_pass": false,
+      "hardware_MAC_active_duty": null,
+      "hardware_MAC_utilization": null,
+      "identity": {
+        "jar_bytes": 77940074,
+        "jars": 106,
+        "original_sources": 92,
+        "retained_classes": 550
+      },
+      "minimum_future_case": "normal_m1",
+      "plan": {
+        "bytes": 8622,
+        "sha256": "00ab287ed3fe242e6f0b3ac6221a08d2c524258445c5c7707072dd6f790896b0"
+      },
+      "remaining_admission_requirements": [
+        "new compile-only supervisor independent review and exact three launcher deltas",
+        "full314 tool closure immediately before/after execution",
+        "root owned-task inventory and explicit single compile authorization",
+        "actual compile exit0/newclass allowlist/pin closure",
+        "separate explicit structural and normal_m1 admission after prior stage success"
+      ],
+      "report": {
+        "bytes": 11739,
+        "sha256": "44565c1302150c55cda94fc4c1a633ee4213e284bd3e0fe20f44b7a20841acce"
+      },
+      "resolved_findings": [
+        "matching early done payload held stable",
+        "foreign done explicitly adversarial pulse; recovery after actual abort drain",
+        "owner/QK/PV workload counters and four-channel outgoing request hold checks",
+        "accepted transaction counts separated from accounting512Steps",
+        "pinned framework implicit reset1 + explicit reset2 + body99997 <=100000 clocks"
+      ],
+      "source_units": {
+        "OrderedQkBehaviorCore.scala": {
+          "bytes": 2409,
+          "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c"
+        },
+        "OrderedQkBehaviorElaborate.scala": {
+          "bytes": 779,
+          "sha256": "4486d4bf9c74dd18e78f0077ea7a7e46fa67bbde9c9cfbdb6fc97a647e398f72"
+        },
+        "OrderedQkBehaviorSpec.scala": {
+          "bytes": 16701,
+          "sha256": "ab0f832c033dec56daee3ad0d98e9b7e37a1d9189b692556d22dc3fea8ac66f9"
+        },
+        "Qwen2Block.scala": {
+          "bytes": 57361,
+          "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd"
+        }
+      },
+      "status": "PASS_R3_SOURCE_STDLIB_REVIEW_NOT_JVM_OR_BEHAVIOR_GO",
+      "synthetic_tests": {
+        "hardware_behavior_proof": false,
+        "normal": 28,
+        "optimized": 28,
+        "total": 56
+      }
+    }
+  },
+  "old1613_stop": {
+    "original": {
+      "bytes": 2053,
+      "sha256": "92ebc55ab882abef63c239b942b1ed44e823e8ef34db8f599b1b09a83563491a"
+    },
+    "status": "BLOCKED_DO_NOT_EXECUTE_FROZEN_1613",
+    "reason": "Frozen checker requires top reset Reset, but same pinned serializer emits actual top default reset UInt<1>; prior basis mistakenly used child module Reset. Synthetic tests were contract-consistent only and did not prove actual top reset assumption.",
+    "jvm_or_elaboration_executed": false,
+    "original_candidate_and_review_modified": false,
+    "prior_source_only_pass_superseded": true,
+    "candidate_freeze_sha256": "0e0281497a5782cfc86cf88b973bdb96ab423f1773ee79ab4a046ffff6ae1a24",
+    "candidate_manifest_sha256": "370f33a4b688c0e8b64a96712ffc5fc97bcaf3eecc69eafe3e7437251a11c26c"
+  },
+  "reset_corrected_r2_review": {
+    "original": {
+      "bytes": 2438,
+      "sha256": "7d002cb88c90293cef0e6ac761780796cdc611ac4a7a622ddb9a3cb5f98d72ee"
+    },
+    "review": {
+      "actual_chirrtl_pass": false,
+      "actual_run_root_absent": true,
+      "behavior_pass": false,
+      "candidate_freeze_sha256": "ff07f8008906ebd3009901241147e54c726b42894db2cafab6e5b9f59f356591",
+      "checker_sha256": "8de2a7eae3cf8377208dd4c1d48bfac405d7665e8b65e4a8fa2fcbd43f7e2569",
+      "cleanup_stop_seconds": 130,
+      "command_proposal_sha256": "2636c05a61887763008b51ac7dc95102bbe380bfc65559b3f63a39f6a7ba34d9",
+      "control_count": 138,
+      "controls": {
+        "author_checker.normal": 21,
+        "author_checker.optimized": 21,
+        "author_supervisor.normal": 31,
+        "author_supervisor.optimized": 31,
+        "reviewer.normal": 17,
+        "reviewer.optimized": 17
+      },
+      "execution_approved_by_this_review": false,
+      "hardware_MAC_duty_cycle": "UNKNOWN_NOT_MEASURED",
+      "hardware_MAC_utilization": "UNKNOWN_NOT_MEASURED",
+      "input_identity_checks": 7722,
+      "inventory_count": 4,
+      "jvm_or_elaboration_executed_during_review": false,
+      "manifest_sha256": "9eb062df0705de600f726e74f7e02dbdd29b806b676dc2ef4d0cd12fa1d82b43",
+      "no_remaining_source_review_blockers": true,
+      "numerical_pass": false,
+      "original_1613_candidate_still_blocked": true,
+      "original_1613_stop_sha256": "92ebc55ab882abef63c239b942b1ed44e823e8ef34db8f599b1b09a83563491a",
+      "outer_wall_seconds": 180,
+      "pin_records": 1146,
+      "post_controls_identity_checks": 1201,
+      "r2_top_reset_blocker_resolved_by_pinned_bytecode_and_exact_source_delta": true,
+      "resources": {
+        "address_space_bytes": 4294967296,
+        "affinity_count": 1,
+        "cleanup_phase_seconds": 10,
+        "cleanup_reserve_seconds": 30,
+        "cpu_seconds": 120,
+        "log_hard_bytes": 2097152,
+        "output_tree_sampled_bytes": 67108864,
+        "postflight_reserve_seconds": 20,
+        "rss_sampled_bytes": 2147483648,
+        "sample_seconds": 0.1,
+        "single_file_hard_bytes": 50331648,
+        "total_wall_seconds": 150,
+        "work_wall_seconds": 120
+      },
+      "root_approval_required": true,
+      "rtl_numerical_or_simulation_pass": false,
+      "runtime_expected_pin_checks": 1148,
+      "schema": "selected-on-chirrtl-r2-independent-preparation-review-v1",
+      "status": "PASS_R2_SOURCE_SYNTHETIC_REVIEW_FOR_ROOT_SINGLE_SELECTED_ON_DECISION",
+      "supervisor_sha256": "20c5def17807419b795dfcaad2e4e1c05c6b75da0896cca3a95791bb6fb97534"
+    }
+  },
+  "reset_resolution": "Exact selected top default Bool serializes UInt<1>; child Reset was incorrectly used as top basis. R2 requires exactly UInt<1>, not either type; no Scala/class/argv/resource change. Old1613 stays STOP, never executed."
+}

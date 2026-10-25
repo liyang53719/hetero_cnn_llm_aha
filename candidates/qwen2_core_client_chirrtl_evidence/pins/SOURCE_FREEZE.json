@@ -1,0 +1,106 @@
+{
+  "original": {
+    "bytes": 3820,
+    "sha256": "b12af4e0cf1d633572d64f4214e2771103734ba0319aa41af2e797aeca208b89"
+  },
+  "files": {
+    "BASE_FREEZE.json": {
+      "bytes": 3262,
+      "sha256": "84a8fcbad89261b3c71dde6a77f32cbf9738341bf1179f4879fe9c964eac5509"
+    },
+    "COMMAND_TEMPLATES.json": {
+      "bytes": 86246,
+      "sha256": "f31dbea395c269ea5556a43d22dabf8d9e8de81efe5004f540714115ca12cfd3"
+    },
+    "FINAL_CHECK.json": {
+      "bytes": 1819,
+      "sha256": "ade3d1c0db02a326e0b016b45cc34f4c77000034c72cc56620d4e9358c6c4f4d"
+    },
+    "PLAN.json": {
+      "bytes": 8622,
+      "sha256": "00ab287ed3fe242e6f0b3ac6221a08d2c524258445c5c7707072dd6f790896b0"
+    },
+    "PREPARATION.normal.log": {
+      "bytes": 1808,
+      "sha256": "04250d6a372992108d80ab145a509271b7bb3ccb74007692225474b793084864"
+    },
+    "PREPARATION.optimized.log": {
+      "bytes": 1808,
+      "sha256": "348adf1caf482b759aa96447355fe886b860c992263bb72f0cb005131a282352"
+    },
+    "R1_TO_R2_SOURCE.patch": {
+      "bytes": 9583,
+      "sha256": "13d3458c7ba312653da3d1633db2818218b6c58a2705afda6d08005ea3212de8"
+    },
+    "R2_FREEZE.json": {
+      "bytes": 3544,
+      "sha256": "33141218e8281349c869d30d0a4de163c12730e8795c81d1ecc5db56645d1dc8"
+    },
+    "R2_TO_R3_SOURCE.patch": {
+      "bytes": 857,
+      "sha256": "6bc9dec128fba205293e083ed14f589971fe7b70bdcb91e915ef1eb21a007cd9"
+    },
+    "README_ZH.md": {
+      "bytes": 7548,
+      "sha256": "c8c789d22fe787794b501f4359a620766dc0ef87d322c43772c58e7f72972ce2"
+    },
+    "REUSE_AUDIT.json": {
+      "bytes": 192198,
+      "sha256": "09c8e4148adb149910fb1a73c0ba90795a52bbc2f0879e86ef9d7152d66f5b17"
+    },
+    "audit_firrtl.py": {
+      "bytes": 1649,
+      "sha256": "6878e005a5410c9468b99c2e959dbae0ca6a7133a80836c42f94cdb92e0efd4e"
+    },
+    "backend_audit/BACKEND_AUDIT.json": {
+      "bytes": 381634,
+      "sha256": "9a9bfb4cbceec39a71a695be652ac1691b3fd89051654f8efcd9d2670fee3d80"
+    },
+    "backend_audit/COMPLETE_TEST_CLASSPATH.json": {
+      "bytes": 135365,
+      "sha256": "c1e1cb7fac737bc548aaec9f113b83cb01d0f6d5b6b100fb4e6a73b80e9dff3d"
+    },
+    "backend_audit/MISSING_TEST_DEPENDENCIES.json": {
+      "bytes": 31853,
+      "sha256": "74acf75746a7c98e24184d81bc28b4dd2128e032531237b0ff1a6e5b6dd0d021"
+    },
+    "backend_audit/SOURCE_API.json": {
+      "bytes": 9201,
+      "sha256": "f933f5a81b8d12f8da104a350ea944ab0182b4ec0f1bbd4e30e7f81a87649ccb"
+    },
+    "backend_audit/readonly_audit.py": {
+      "bytes": 7770,
+      "sha256": "9768f5744b5feaf8e6b350a18b8cc854d5075091bd35a3f7333177ec4202b2ed"
+    },
+    "check_preparation.py": {
+      "bytes": 3720,
+      "sha256": "d9a012c9d1f625ab760b007474166b6047e5df202d3f609f4f060309fbd87c97"
+    },
+    "score_write_probe.patch": {
+      "bytes": 2613,
+      "sha256": "89a5a33a85d890bf95fc078d50e6652847249c34470ab1b3181bb9399e3b6e95"
+    },
+    "source/OrderedQkBehaviorCore.scala": {
+      "bytes": 2409,
+      "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c"
+    },
+    "source/OrderedQkBehaviorElaborate.scala": {
+      "bytes": 779,
+      "sha256": "4486d4bf9c74dd18e78f0077ea7a7e46fa67bbde9c9cfbdb6fc97a647e398f72"
+    },
+    "source/OrderedQkBehaviorSpec.scala": {
+      "bytes": 16701,
+      "sha256": "ab0f832c033dec56daee3ad0d98e9b7e37a1d9189b692556d22dc3fea8ac66f9"
+    },
+    "source/Qwen2Block.scala": {
+      "bytes": 57361,
+      "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd"
+    },
+    "test_preparation.py": {
+      "bytes": 5431,
+      "sha256": "50f5ea29ee9997066acffb45680dd2d3081e45f800a3fef271c4a12425871690"
+    }
+  },
+  "historical_preparation_stage_only": true,
+  "frozen_original_not_edited": true
+}

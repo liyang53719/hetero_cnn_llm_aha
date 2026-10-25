@@ -1,0 +1,23 @@
+{
+  "original_patch": {
+    "bytes": 2613,
+    "sha256": "89a5a33a85d890bf95fc078d50e6652847249c34470ab1b3181bb9399e3b6e95"
+  },
+  "public_patch": {
+    "bytes": 2471,
+    "sha256": "2269bf289d43dd2c10b817b2f3882c2e374deb78d8b2486091ba6b6f551e1600"
+  },
+  "transformation": "Only first two diff labels replaced; all hunks unchanged. Independent test copy; not original core bytes.",
+  "baseline_source_role": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala",
+  "baseline_sha256": "9120b040016116ae400389fe027bdb26e4b6d450faeeef6dba058108d32ba48c",
+  "postimage": {
+    "bytes": 57361,
+    "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd"
+  },
+  "probe_insertions": 3,
+  "actual_score_write_sites": 2,
+  "formal_noninterference_proven": false,
+  "logical_index_bits": 16,
+  "physical_scores_index_bits": 10,
+  "valid_range_caveat": "Outside valid physical range do not claim full-width address identity."
+}

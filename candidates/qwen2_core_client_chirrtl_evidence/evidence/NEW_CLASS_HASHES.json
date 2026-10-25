@@ -1,0 +1,297 @@
+{
+  "original": {
+    "bytes": 14667,
+    "sha256": "abe1d70c050273600a6a56c1d3c128be33e04c33958531aafadcb562872c72a1"
+  },
+  "class_count": 20,
+  "class_bytes": 670644,
+  "source_class_counts": {
+    "OrderedQkBehaviorCore.scala": 3,
+    "OrderedQkBehaviorElaborate.scala": 3,
+    "OrderedQkBehaviorSpec.scala": 3,
+    "Qwen2Block.scala": 11
+  },
+  "packed_client_override": false,
+  "classes": [
+    {
+      "bytes": 3988,
+      "field_count": 4,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/BlockLaunch",
+      "major": 52,
+      "method_count": 13,
+      "minor": 0,
+      "relative": "heteronpu/continuous/BlockLaunch.class",
+      "sha256": "5adddd43dfe11e2061907ece334ffb9a4736fa21e1f2f07949e41f8710d9993d",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "chisel3/Bundle"
+    },
+    {
+      "bytes": 2538,
+      "field_count": 1,
+      "interfaces": [
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/BlockRegion$",
+      "major": 52,
+      "method_count": 7,
+      "minor": 0,
+      "relative": "heteronpu/continuous/BlockRegion$.class",
+      "sha256": "8caa1196042289a77ae5f72d4cd896b3bd7333abdf6a41c465ea489c7c34b30b",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "scala/runtime/AbstractFunction4"
+    },
+    {
+      "bytes": 6587,
+      "field_count": 4,
+      "interfaces": [
+        "scala/Product",
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/BlockRegion",
+      "major": 52,
+      "method_count": 24,
+      "minor": 0,
+      "relative": "heteronpu/continuous/BlockRegion.class",
+      "sha256": "89ff9f4859a140c05728b6510ce20a44e6d49714be7bf2ef5302c0a90aee86ef",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 4612,
+      "field_count": 6,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/BlockResult",
+      "major": 52,
+      "method_count": 17,
+      "minor": 0,
+      "relative": "heteronpu/continuous/BlockResult.class",
+      "sha256": "ee3238267eeed5937a8e1136a0371b1d7e1cd675961499241a8002f0fdfb6a78",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "chisel3/Bundle"
+    },
+    {
+      "bytes": 8020,
+      "field_count": 20,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorCore$$anon$1",
+      "major": 52,
+      "method_count": 43,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorCore$$anon$1.class",
+      "sha256": "d74a8cf2e5315929c7ba4d46e52967de04cecc2d30e1c5903f8970b0cf6237e9",
+      "source_file": "OrderedQkBehaviorCore.scala",
+      "superclass": "chisel3/Bundle"
+    },
+    {
+      "bytes": 572,
+      "field_count": 1,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorCore$",
+      "major": 52,
+      "method_count": 3,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorCore$.class",
+      "sha256": "62a5d79a204d1122f785dff50eca3b98b879a53a53a8ed808e4a9fc48e6ac47b",
+      "source_file": "OrderedQkBehaviorCore.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 24851,
+      "field_count": 2,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorCore",
+      "major": 52,
+      "method_count": 70,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorCore.class",
+      "sha256": "6619a1946695603d9a9591ec39e916970de00bb4d5e2e24bcbc19e34cdee9875",
+      "source_file": "OrderedQkBehaviorCore.scala",
+      "superclass": "heteronpu/continuous/Qwen2ContinuousBlock"
+    },
+    {
+      "bytes": 6100,
+      "field_count": 7,
+      "interfaces": [
+        "scala/App"
+      ],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorElaborate$",
+      "major": 52,
+      "method_count": 19,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorElaborate$.class",
+      "sha256": "46d6b9cc603c16b7ccf42f0ec4ade26f6b20ea19c83c6bedc2acd24b033f0ee2",
+      "source_file": "OrderedQkBehaviorElaborate.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 963,
+      "field_count": 1,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorElaborate$delayedInit$body",
+      "major": 52,
+      "method_count": 2,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorElaborate$delayedInit$body.class",
+      "sha256": "11a00d4ed24e382a4ed0f355940bcc49e68f69d785ce339d48c62770503357a8",
+      "source_file": "OrderedQkBehaviorElaborate.scala",
+      "superclass": "scala/runtime/AbstractFunction0"
+    },
+    {
+      "bytes": 1537,
+      "field_count": 0,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorElaborate",
+      "major": 52,
+      "method_count": 6,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorElaborate.class",
+      "sha256": "4ea0555b20687a26ced0ad2fa911a5f84191b0f32cf43ce909d9bf80048d51b0",
+      "source_file": "OrderedQkBehaviorElaborate.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 3975,
+      "field_count": 4,
+      "interfaces": [
+        "scala/Product",
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$1",
+      "major": 52,
+      "method_count": 18,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$1.class",
+      "sha256": "088d57db495a58e358b4e1b2bfecd344348b185f5e5927725bb3acb62e691f88",
+      "source_file": "OrderedQkBehaviorSpec.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 2639,
+      "field_count": 1,
+      "interfaces": [
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$2$",
+      "major": 52,
+      "method_count": 5,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$2$.class",
+      "sha256": "88b95d7458b4cc98333d1adefbbb1a04cc2513a12bc43baade1065b755ab75a0",
+      "source_file": "OrderedQkBehaviorSpec.scala",
+      "superclass": "scala/runtime/AbstractFunction3"
+    },
+    {
+      "bytes": 124815,
+      "field_count": 1,
+      "interfaces": [
+        "chiseltest/ChiselScalatestTester"
+      ],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorSpec",
+      "major": 52,
+      "method_count": 157,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorSpec.class",
+      "sha256": "f586f6f1056a7599689523be0ca7c3ee2ab5e31544a196b9f58cbd6dbf705b77",
+      "source_file": "OrderedQkBehaviorSpec.scala",
+      "superclass": "org/scalatest/flatspec/AnyFlatSpec"
+    },
+    {
+      "bytes": 15892,
+      "field_count": 24,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/Qwen2ContinuousBlock$$anon$1",
+      "major": 52,
+      "method_count": 69,
+      "minor": 0,
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock$$anon$1.class",
+      "sha256": "b797928a934b455496b49eb419e684bb331c4f63ca6c642e76d8740e77c9f8d6",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "chisel3/Bundle"
+    },
+    {
+      "bytes": 3403,
+      "field_count": 3,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/Qwen2ContinuousBlock$$anon$2",
+      "major": 52,
+      "method_count": 9,
+      "minor": 0,
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock$$anon$2.class",
+      "sha256": "92a828baf85b926e0f7e3181ef8de2ed4fae5b0ce312b4f23929b0be40450ca9",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "chisel3/Bundle"
+    },
+    {
+      "bytes": 2221,
+      "field_count": 1,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/Qwen2ContinuousBlock$",
+      "major": 52,
+      "method_count": 11,
+      "minor": 0,
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock$.class",
+      "sha256": "b3922d5e591168054d325694e0c9018285fc4df51e7beaffcf80e3921f5e4f01",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 423890,
+      "field_count": 131,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/Qwen2ContinuousBlock",
+      "major": 52,
+      "method_count": 1870,
+      "minor": 0,
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock.class",
+      "sha256": "a73e4921812920afa4e9a30e195b5d809553c95cd4ad46daf5fcd632cb86be2f",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "chisel3/Module"
+    },
+    {
+      "bytes": 10107,
+      "field_count": 6,
+      "interfaces": [],
+      "internal_name": "heteronpu/continuous/QwenBlockLayout",
+      "major": 52,
+      "method_count": 24,
+      "minor": 0,
+      "relative": "heteronpu/continuous/QwenBlockLayout.class",
+      "sha256": "f9af4ac5d874365e45e459afa07a346ca44198f13b7fb184d8934c3324b89b4f",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 6029,
+      "field_count": 1,
+      "interfaces": [
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/QwenBlockShape$",
+      "major": 52,
+      "method_count": 37,
+      "minor": 0,
+      "relative": "heteronpu/continuous/QwenBlockShape$.class",
+      "sha256": "0ec6ee80624ef2d980e3d81687a696782c8ef67d0604653dd474393dfbf9d340",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 17905,
+      "field_count": 19,
+      "interfaces": [
+        "scala/Product",
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/QwenBlockShape",
+      "major": 52,
+      "method_count": 85,
+      "minor": 0,
+      "relative": "heteronpu/continuous/QwenBlockShape.class",
+      "sha256": "de6f76762f990382057214bed9080fc1e7d353493f1e253a284c6f40b9da4837",
+      "source_file": "Qwen2Block.scala",
+      "superclass": "java/lang/Object"
+    }
+  ],
+  "classes_not_uploaded": true
+}

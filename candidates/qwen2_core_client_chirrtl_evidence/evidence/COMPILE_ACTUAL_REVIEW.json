@@ -1,0 +1,67 @@
+{
+  "original": {
+    "bytes": 2853,
+    "sha256": "7ef54844cb2d152419ede5139213f739266ad2a32f371950821cfba5147b14cc"
+  },
+  "projection_policy": "Private paths/resolved paths/stat/process placement removed; every retained value unchanged. No generated binary or FIRRTL contents.",
+  "review": {
+    "actual_compiler_JVM_executed_by_root": true,
+    "artifact_bytes": 752527,
+    "artifact_count": 23,
+    "auditor_JVM_or_compiler_executed": false,
+    "automatic_next_stage": false,
+    "behavior_executed": false,
+    "checks": 7649,
+    "class_bytes": 670644,
+    "class_count": 20,
+    "class_parser_byte_negative_controls": 3,
+    "classes_internal_name_sourcefile_and_complete_container_checked": true,
+    "cleanup_complete": true,
+    "cleanup_live_handle_not_recreated": true,
+    "cleanup_proof_persisted_consistency": true,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "compile_receipt": {
+      "bytes": 47592,
+      "sha256": "057e19f732399ab3ac88fe5e5031f1892ff412bd2a2396ec8c41ed0de1094124"
+    },
+    "compiler_exit": 0,
+    "elaboration_executed": false,
+    "hardware_MAC_utilization": "UNKNOWN_NOT_MEASURED",
+    "independent_inventories": 3,
+    "independent_postflight_pin_records": 1098,
+    "numerical_pass": false,
+    "observed_resources": {
+      "elapsed_seconds": 24.661326156987343,
+      "final_aggregate_cpu_seconds": 24.605639536,
+      "maximum_sample_interval_seconds": 0.037556393013801426,
+      "sampled_peak_output_bytes": 704935,
+      "sampled_peak_rss_bytes": 342331392
+    },
+    "outer_timeout": false,
+    "outer_wall_seconds": 24.737272515019868,
+    "review_wall_seconds": 0.42565002100309357,
+    "root_receipt": {
+      "bytes": 85,
+      "sha256": "0566e40cc9d5336272b8e0ff300d1af9372a2f155c62c9692439657d76d4ab6f"
+    },
+    "rtl_pass": false,
+    "runtime_postflight": {
+      "inventory_checks": 3,
+      "pass_all": true,
+      "pin_checks": 1098
+    },
+    "runtime_preflight": {
+      "inventory_checks": 3,
+      "pass_all": true,
+      "pin_checks": 1098
+    },
+    "schema": "actual-compile-independent-review-v1",
+    "source_class_counts": {
+      "OrderedQkBehaviorCore.scala": 3,
+      "OrderedQkBehaviorElaborate.scala": 3,
+      "OrderedQkBehaviorSpec.scala": 3,
+      "Qwen2Block.scala": 11
+    },
+    "status": "PASS_ACTUAL_FOUR_SOURCE_SCALA_COMPILE_ONLY"
+  }
+}

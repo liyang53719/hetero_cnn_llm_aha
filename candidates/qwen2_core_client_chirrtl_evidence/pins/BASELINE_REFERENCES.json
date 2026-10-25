@@ -1,0 +1,58 @@
+{
+  "base_commit": "6cc4b1ce380b77058a74a608d7258642888ec1dd",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/README_CN.md",
+      "bytes": 7205,
+      "sha256": "67b44bf1bf9a89a27cfd93279fab81679a3e94669246abc47a8246a9e756bac6",
+      "git_blob_sha": "e514e82e8c20c5609f932d6d396245e2d5e724c1"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+      "bytes": 13746,
+      "sha256": "ce68505557a0c50fc9e5dfbfac531d3e13b8abb99d6e3f167392a645a0e693df",
+      "git_blob_sha": "6c61653b0d4435ad90a84e86dab6964668540f86"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/stage_inputs.py",
+      "bytes": 2262,
+      "sha256": "ae8a6fded719ab4d6641ec9e4377aea1d159271f60a526eb4998f05cc5d28c05",
+      "git_blob_sha": "29f32337a8f32557341b77cecfc493f8bfa3f466"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/TOOL_IDENTITY.json",
+      "bytes": 67186,
+      "sha256": "3495a0a94f56a58f8f8035ac909007774d603c8df9d032ddb70797dcbf77081a",
+      "git_blob_sha": "600dbc2deacff760f96141cb2ce02beab57460cd"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/DEPENDENCY_PINS.json",
+      "bytes": 12370,
+      "sha256": "cb1b5f534bacd4ed929d11d95e1ae5894296181a2c3cab4efc950533e36da01b",
+      "git_blob_sha": "506112784c6d428ee5d0b59c56099d437f075ef6"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/RUNNER_PINS.json",
+      "bytes": 465,
+      "sha256": "b42363f4e4eb619a30961a0353ff1588cca345729d8bcce7f3c49698670858c7",
+      "git_blob_sha": "6c0b62110adb8baa895f95e41630e7590201bc9e"
+    },
+    {
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_stream/PackedAttentionStreamClient.scala",
+      "bytes": 5469,
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0",
+      "git_blob_sha": "2bc8190779eb409a7c9a48f56e4f91eee042c884"
+    }
+  ],
+  "baseline_source_count": 92,
+  "baseline_source_pins_reference": "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+  "baseline_recipe_reference": "candidates/qwen2_ordered_vector_compile_evidence/README_CN.md",
+  "baseline_sources_direct_blob_matches": 60,
+  "baseline_sources_recipe_or_external_inputs": 32,
+  "not_claimed_all92_direct_public_blobs": true,
+  "baseline_classes_reused": 550,
+  "baseline_class_bytes": 9588880,
+  "packed_client_source_unchanged": true,
+  "packed_client_recompiled_or_overridden": false,
+  "scope": "Reuse existing published92-source recipe, pins and compiler support; its exact20 external HardFloat inputs remain prerequisites. Do not substitute arbitrary main sources, regenerate classes silently or claim this small package bundles a full runtime."
+}

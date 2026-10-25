@@ -1,0 +1,29 @@
+--- baseline/Qwen2Block.scala
++++ source/Qwen2Block.scala
+@@ -135,6 +135,9 @@
+   val f=fabric.io;f.rd_valid_i:=0.U;f.rd_addr_i:=0.U;f.rd_resp_ready_i:=0.U;f.wr_valid_i:=false.B;f.wr_addr_i:=0.U;f.wr_data_i:=0.U;f.wr_be_i:=0.U
+   val localIndex=Reg(UInt(15.W));val localData=Reg(UInt(512.W))
+   val scores=SyncReadMem(s.maxTokens,UInt(32.W));val probs=SyncReadMem(s.maxTokens,UInt(32.W))
++  // TEST-ONLY READ-ONLY OBSERVATION: same write guards/data, no DUT feedback.
++  val testScoreWrite=IO(Output(Valid(new Bundle {val index=UInt(16.W);val data=UInt(32.W)})))
++  testScoreWrite.valid:=false.B;testScoreWrite.bits.index:=0.U;testScoreWrite.bits.data:=0.U
+   val scoreOut=scores.read(key,state===st("attExpRead"));val probOut=probs.read(key,state===st("attProbRead"))
+   val vectorA=Wire(Vec(16,UInt(32.W)));val vectorB=Wire(Vec(16,UInt(32.W)));val vectorMul=WireDefault(false.B)
+   vectorA:=av;vectorB:=bv
+@@ -657,6 +660,7 @@
+       .otherwise{
+         val score=acc(packedSelected.get)
+         scores.write(key+packedSelected.get,score)
++        testScoreWrite.valid:=true.B;testScoreWrite.bits.index:=key+packedSelected.get;testScoreWrite.bits.data:=score
+         when(F32.less(maxScore,score)){maxScore:=score}
+         when(packedSelected.get+&1.U===packedKeys){
+           packedCommitted.get:=true.B;state:=st("attNextKey")
+@@ -673,7 +677,7 @@
+   when(state===st("attScore") && (!enableProductionPackedQk16.B || (!poisoned && !packedQk.map(_.io.resetRequired).getOrElse(false.B) && !packedQk.map(_.io.port.done.valid).getOrElse(false.B)))){
+     val score=materialize(scalarValue)
+     when(enableProductionPackedQk16.B && !TensorMath.finite(score)){packedSelectedFault:=true.B}
+-    .otherwise{if(enableProductionPackedQk16){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),score);when(F32.less(maxScore,score)){maxScore:=score};state:=st("attNextKey")}
++    .otherwise{if(enableProductionPackedQk16){packedCommitted.get:=packedSelected.get+&1.U===packedKeys};scores.write(key+packedSelected.getOrElse(0.U),score);testScoreWrite.valid:=true.B;testScoreWrite.bits.index:=key+packedSelected.getOrElse(0.U);testScoreWrite.bits.data:=score;when(F32.less(maxScore,score)){maxScore:=score};state:=st("attNextKey")}
+   }
+   if(!enableProductionPackedQk16){
+   when(state===st("attNextKey") && !packedBusy){when(key<token){key:=key+1.U;state:=st("attKey")}.otherwise{key:=0.U;sum:=0.U;state:=st("attExpRead")}}

@@ -1,0 +1,129 @@
+{
+  "original": {
+    "bytes": 5542,
+    "sha256": "0adee57482351a52e4e4128fb10837f2b38e6f47588f90ea8392d846edf7d854"
+  },
+  "status": "COMPLETE_UNAPPLIED_SOURCE_POSTIMAGES_NOT_ADMITTED",
+  "observation_contract": "normalization-helper-active-chain-v1",
+  "files": [
+    {
+      "name": "monitor.py",
+      "source": {
+        "path": "retained-source-or-evidence:full128_mask_integration_20261025T0900/overlay/qwen2_ordered_observer/monitor.py",
+        "bytes": 14705,
+        "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/monitor.py.postimage",
+        "bytes": 22217,
+        "sha256": "4dc5e911d9ef5f5c007e7f15945b52390a19c4d199e5d726e943e55f43ee8369"
+      },
+      "changed": true
+    },
+    {
+      "name": "attention_owner.py",
+      "source": {
+        "path": "model-baseline:candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+        "bytes": 19215,
+        "sha256": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/attention_owner.py.postimage",
+        "bytes": 19498,
+        "sha256": "5f551f9eda0196113dc55aa246011413d3d7addb59b5dd9c85df92dda8aaacad"
+      },
+      "changed": true
+    },
+    {
+      "name": "capture.py",
+      "source": {
+        "path": "retained-source-or-evidence:full128_mask_integration_20261025T0900/overlay/qwen2_ordered_observer/capture.py",
+        "bytes": 5596,
+        "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/capture.py.postimage",
+        "bytes": 5596,
+        "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+      },
+      "changed": false
+    },
+    {
+      "name": "SOURCE_PINS.json",
+      "source": {
+        "path": "retained-source-or-evidence:full128_mask_integration_20261025T0900/overlay/qwen2_ordered_observer/SOURCE_PINS.json",
+        "bytes": 1159,
+        "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/SOURCE_PINS.json.postimage",
+        "bytes": 1346,
+        "sha256": "834c0abd4bb44d360213196d58bc3729d6501bc635d74e9079e04c8048d4969e"
+      },
+      "changed": true
+    },
+    {
+      "name": "runtime_observer.py",
+      "source": {
+        "path": "retained-source-or-evidence:qwen2_runtime_observer_r2c_20261024T2335/overlay/candidates/qwen2_runtime_observer_r2/runtime_observer.py",
+        "bytes": 10544,
+        "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/runtime_observer.py.postimage",
+        "bytes": 10675,
+        "sha256": "e07cc088d022768f8210eca6cc9321c88f0df695ad2f4c4ca81b34c51e90f269"
+      },
+      "changed": true
+    },
+    {
+      "name": "service_trace.py",
+      "source": {
+        "path": "retained-source-or-evidence:full128_mask_integration_20261025T0900/overlay/qwen2_ordered_fullgraph_entry/service_trace.py",
+        "bytes": 12079,
+        "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/service_trace.py.postimage",
+        "bytes": 13777,
+        "sha256": "0fbb07984f7d5e9e804e954b03785240cbc4046a6336da503fa8b9bc73e70d21"
+      },
+      "changed": true
+    },
+    {
+      "name": "bridge.py",
+      "source": {
+        "path": "retained-source-or-evidence:full128_mask_integration_20261025T0900/overlay/qwen2_ordered_fullgraph_entry/bridge.py",
+        "bytes": 11713,
+        "sha256": "a69dba9bd111260d8d04a03f3bbe722f579f6d7d3556cb3030ed0b370459831c"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/bridge.py.postimage",
+        "bytes": 13193,
+        "sha256": "bc1bf8741c1e6a994b80cd6185f25890fd4a817bcf979c3d6c3b87cc41b3f57e"
+      },
+      "changed": true
+    },
+    {
+      "name": "registry.py",
+      "source": {
+        "path": "retained-source-or-evidence:full128_mask_integration_20261025T0900/overlay/qwen2_ordered_fullgraph_entry/registry.py",
+        "bytes": 23885,
+        "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+      },
+      "postimage": {
+        "path": "helper-source:postimages/registry.py.postimage",
+        "bytes": 24201,
+        "sha256": "2ed9fc85735a03bc5954f4706cc1da1447fed14cfb002de295cd1a30663432ee"
+      },
+      "changed": true
+    }
+  ],
+  "target_imported": false,
+  "target_bytecode_compiled": false,
+  "target_executed": false,
+  "native_or_reference_executed": false,
+  "runnable_DUT_configuration_created": false,
+  "current_session_or_outputs_accessed": false,
+  "projection": "Original source and postimage locators converted to logical roles. Historical unapplied/pre-admission status kept; actual M2 deployment is separately evidenced. Seven changed files include model owner structure; unchanged capture retained."
+}

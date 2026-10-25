@@ -1,0 +1,21 @@
+{
+  "base_commit": "039bef44e37062e317af705ac8569db9809d7e3c",
+  "scope": "new normalization-helper source-bound observer contract; SOURCE_ONLY_NOT_ADMITTED",
+  "roles": {
+    "run": "4cd2609d2fe1ffffd5d14b9398c45c108b9382c0097d5316502b41486f37cf1b",
+    "work": "505651c4452f07743e6c59e0457d5e955624a05f343bf7d7869a3e99b2ec9e61",
+    "consume": "505651c4452f07743e6c59e0457d5e955624a05f343bf7d7869a3e99b2ec9e61",
+    "matrix": "5f551f9eda0196113dc55aa246011413d3d7addb59b5dd9c85df92dda8aaacad",
+    "op": "5f551f9eda0196113dc55aa246011413d3d7addb59b5dd9c85df92dda8aaacad",
+    "tick": "5f551f9eda0196113dc55aa246011413d3d7addb59b5dd9c85df92dda8aaacad",
+    "client": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1",
+    "normalization": "5f551f9eda0196113dc55aa246011413d3d7addb59b5dd9c85df92dda8aaacad"
+  },
+  "buffer_sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f",
+  "test_bootstrap": {
+    "owner/test_owner.py": "1ef38429db2ad5cd536a14143e051e16a8318df17e4d0dd9f853487e26d1a243",
+    "owner/SOURCE_PINS.json": "5f80e1b2a0d5f392c4e1ae776c9da7ca0c9b0ddb5696aadc6a83274472b9064b",
+    "source/candidates/qwen2_selected_scala_model/routing_test_support.py": "a45b79fe1fe94eee007222e5820d2c7ace570a887c4244a5aeaf7c585cdd80dc"
+  },
+  "observation_contract": "normalization-helper-active-chain-v1"
+}

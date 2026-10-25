@@ -1,0 +1,152 @@
+{
+  "scope": "Actual durable order and relative/delta timing; process ID and absolute monotonic/process-CPU origins omitted. Source-bound durability, not independent syscall history.",
+  "stages": [
+    {
+      "relative_file": "metadata/stages/000_PREFLIGHT_ENTER.json",
+      "original": {
+        "bytes": 231,
+        "sha256": "a902fe03a1763940750b6768988594153fb0ac8bff75f702e8cba16ab86387ff"
+      },
+      "content": {
+        "delta_cpu_ns": 0,
+        "delta_wall_ns": 1872,
+        "details": null,
+        "elapsed_cpu_ns": 0,
+        "elapsed_wall_ns": 1872,
+        "index": 0,
+        "stage": "PREFLIGHT_ENTER"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/001_BEFORE_REAL_M2_OWNER.json",
+      "original": {
+        "bytes": 414,
+        "sha256": "ecb91398d0c703c8b0cd418556c834362086d55f38cb2c4781a08e35aec57668"
+      },
+      "content": {
+        "delta_cpu_ns": 335588920,
+        "delta_wall_ns": 337501035,
+        "details": {
+          "arm": "normalization_helper",
+          "source_root": "m2-diagnostic:model_candidate"
+        },
+        "elapsed_cpu_ns": 335588920,
+        "elapsed_wall_ns": 337502907,
+        "index": 1,
+        "stage": "BEFORE_REAL_M2_OWNER"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/002_REAL_M2_TERMINAL_EVIDENCE_RETAINED.json",
+      "original": {
+        "bytes": 281,
+        "sha256": "599d59b22485251b1434433a6064097e5c3c7f22528e1eb7f634316096301296"
+      },
+      "content": {
+        "delta_cpu_ns": 977071578,
+        "delta_wall_ns": 1004085244,
+        "details": null,
+        "elapsed_cpu_ns": 1312660498,
+        "elapsed_wall_ns": 1341588151,
+        "index": 2,
+        "stage": "REAL_M2_TERMINAL_EVIDENCE_RETAINED"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/003_POST_TERMINAL_SCALAR_PROBES_COMPLETE.json",
+      "original": {
+        "bytes": 278,
+        "sha256": "3c35340b1b6ca6bd86978bfc6079ecd8ccb96dc3f44a2f909896943d39be7ba4"
+      },
+      "content": {
+        "delta_cpu_ns": 2969854,
+        "delta_wall_ns": 4960012,
+        "details": null,
+        "elapsed_cpu_ns": 1315630352,
+        "elapsed_wall_ns": 1346548163,
+        "index": 3,
+        "stage": "POST_TERMINAL_SCALAR_PROBES_COMPLETE"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/004_OWN_TERMINAL_AUDITED.json",
+      "original": {
+        "bytes": 266,
+        "sha256": "3f5f5c273f26218b2e8d7a4ec8f369e1c9585cbd1883f36f3d8129c6bee013f0"
+      },
+      "content": {
+        "delta_cpu_ns": 808565393,
+        "delta_wall_ns": 826579904,
+        "details": null,
+        "elapsed_cpu_ns": 2124195745,
+        "elapsed_wall_ns": 2173128067,
+        "index": 4,
+        "stage": "OWN_TERMINAL_AUDITED"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/005_BOTH_TERMINALS_BEFORE_RETAINED_REFERENCE_QUALIFICATION.json",
+      "original": {
+        "bytes": 295,
+        "sha256": "0506b57c6140c1d2a37cc5bd59dc993715121380de20f6203db793b0d8f14d1e"
+      },
+      "content": {
+        "delta_cpu_ns": 467337,
+        "delta_wall_ns": 2929975,
+        "details": null,
+        "elapsed_cpu_ns": 2124663082,
+        "elapsed_wall_ns": 2176058042,
+        "index": 5,
+        "stage": "BOTH_TERMINALS_BEFORE_RETAINED_REFERENCE_QUALIFICATION"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/006_RETAINED_RECIPE_SUCCESS_QUALIFIED_NO_REEXECUTION.json",
+      "original": {
+        "bytes": 292,
+        "sha256": "db6c983a2a0435abecccf72ae99d12027b8a12c6bebcca9667a514aa5df6492e"
+      },
+      "content": {
+        "delta_cpu_ns": 12321871,
+        "delta_wall_ns": 11860125,
+        "details": null,
+        "elapsed_cpu_ns": 2136984953,
+        "elapsed_wall_ns": 2187918167,
+        "index": 6,
+        "stage": "RETAINED_RECIPE_SUCCESS_QUALIFIED_NO_REEXECUTION"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/007_COMPARISON_COMPLETE.json",
+      "original": {
+        "bytes": 263,
+        "sha256": "fb68aa48a1481630dbd04979ce038359127994e8ba7ae0c29e9ac7185b74eced"
+      },
+      "content": {
+        "delta_cpu_ns": 24778993,
+        "delta_wall_ns": 29899962,
+        "details": null,
+        "elapsed_cpu_ns": 2161763946,
+        "elapsed_wall_ns": 2217818129,
+        "index": 7,
+        "stage": "COMPARISON_COMPLETE"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/008_POSTFLIGHT_COMPLETE.json",
+      "original": {
+        "bytes": 265,
+        "sha256": "d462a293459b51d358ae8caa6eeb606a7595f2a02614552d649f37581c7101ea"
+      },
+      "content": {
+        "delta_cpu_ns": 837807249,
+        "delta_wall_ns": 856564862,
+        "details": null,
+        "elapsed_cpu_ns": 2999571195,
+        "elapsed_wall_ns": 3074382991,
+        "index": 8,
+        "stage": "POSTFLIGHT_COMPLETE"
+      }
+    }
+  ]
+}

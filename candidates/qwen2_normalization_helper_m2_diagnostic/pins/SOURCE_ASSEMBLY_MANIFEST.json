@@ -1,0 +1,224 @@
+{
+  "schema": "source-only-byte-assembly-v1",
+  "base_commit": "1db7f0a0f0fd17c0feb8691319ee417be09fb360",
+  "source_scope": "31 original-byte source/metadata files:13 wrapper executables,16 reused profile/gate/buffer roles,2 model owner variants. Source reconstruction only, not all316 runtime model files/private data/config admission.",
+  "files": [
+    {
+      "target": "code/admission.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/admission.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 1909,
+      "sha256": "87e7e2fd05019c099cff9992159461413ce86bb86833fb0e06c2a0972b272717"
+    },
+    {
+      "target": "code/artifacts.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/artifacts.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 1202,
+      "sha256": "a89080e62dd62f63cdad5980bffe7bab2e4bb2a37ba75d82e1e6fdebd84ca3b4"
+    },
+    {
+      "target": "code/binding.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/binding.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 7600,
+      "sha256": "7ab95e1649ad5ccce9128bc393de29a8ccc1d711b5f12ed396a19d9a6f42a94d"
+    },
+    {
+      "target": "code/comparison.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/comparison.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 15328,
+      "sha256": "272540f0cb0838eac986f4bb633fa1088dc104625889b41dfcb1233bfe67d969"
+    },
+    {
+      "target": "code/durable.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/durable.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1853,
+      "sha256": "12c9a6cc139f4ebfa9ad1028f95c217efc9871af1acd301ed79d05d072033cb2"
+    },
+    {
+      "target": "code/harness.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/harness.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 10882,
+      "sha256": "60908187fe493d484efb4d043c0f68c315b19b190783edbb5963dacfe8b68eed"
+    },
+    {
+      "target": "code/launch.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/launch.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 18209,
+      "sha256": "ffa0698eb7fb470f988e0e389f5ccba6aee9582f5f627836af56aa03866d9f36"
+    },
+    {
+      "target": "code/module_inventory.py",
+      "repo_path": "candidates/qwen2_runtime_observer_r2/module_inventory.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1"
+    },
+    {
+      "target": "code/policy.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/policy.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 872,
+      "sha256": "54de1467f81730697aa1cc95551547d3f8d0fddf0d63490ae3b9d37d00591cc2"
+    },
+    {
+      "target": "code/runtime_closure.py",
+      "repo_path": "candidates/qwen2_ordered_native_r2/runtime_closure.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+    },
+    {
+      "target": "code/stage_clock.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/stage_clock.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 493,
+      "sha256": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065"
+    },
+    {
+      "target": "code/support.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/support.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 6929,
+      "sha256": "e70c0ad0524d40cf637faf8a5a36f4081123fcc2165ed571e03e27baedaccea6"
+    },
+    {
+      "target": "code/worker.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/code/worker.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 11894,
+      "sha256": "9058fbca227834f6117f0217701a60ab00d59068e4024aaf6eac383c790fc6e9"
+    },
+    {
+      "target": "profiles/baseline/bridge/bridge.py",
+      "repo_path": "candidates/qwen2_full128_identity_failure/delta/qwen2_ordered_fullgraph_entry/bridge.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 11713,
+      "sha256": "a69dba9bd111260d8d04a03f3bbe722f579f6d7d3556cb3030ed0b370459831c"
+    },
+    {
+      "target": "profiles/baseline/bridge/registry.py",
+      "repo_path": "candidates/qwen2_m128_terminal_capture_prepare/postimage/candidates/qwen2_ordered_fullgraph_entry/registry.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 23885,
+      "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+    },
+    {
+      "target": "profiles/baseline/bridge/service_trace.py",
+      "repo_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/service_trace.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    {
+      "target": "profiles/baseline/observer/SOURCE_PINS.json",
+      "repo_path": "candidates/qwen2_ordered_observer/SOURCE_PINS.json",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1159,
+      "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+    },
+    {
+      "target": "profiles/baseline/observer/capture.py",
+      "repo_path": "candidates/qwen2_ordered_observer/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "target": "profiles/baseline/observer/monitor.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/postimage/monitor.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 14705,
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+    },
+    {
+      "target": "profiles/baseline/runtime/runtime_observer.py",
+      "repo_path": "candidates/qwen2_runtime_observer_r2/runtime_observer.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+    },
+    {
+      "target": "profiles/normalization_helper/bridge/bridge.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/profiles/normalization_helper/bridge/bridge.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 13193,
+      "sha256": "bc1bf8741c1e6a994b80cd6185f25890fd4a817bcf979c3d6c3b87cc41b3f57e"
+    },
+    {
+      "target": "profiles/normalization_helper/bridge/registry.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/profiles/normalization_helper/bridge/registry.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 24201,
+      "sha256": "2ed9fc85735a03bc5954f4706cc1da1447fed14cfb002de295cd1a30663432ee"
+    },
+    {
+      "target": "profiles/normalization_helper/bridge/service_trace.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/profiles/normalization_helper/bridge/service_trace.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 13777,
+      "sha256": "0fbb07984f7d5e9e804e954b03785240cbc4046a6336da503fa8b9bc73e70d21"
+    },
+    {
+      "target": "profiles/normalization_helper/observer/SOURCE_PINS.json",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/profiles/normalization_helper/observer/SOURCE_PINS.json",
+      "source_kind": "new-original-byte-file",
+      "bytes": 1346,
+      "sha256": "834c0abd4bb44d360213196d58bc3729d6501bc635d74e9079e04c8048d4969e"
+    },
+    {
+      "target": "profiles/normalization_helper/observer/capture.py",
+      "repo_path": "candidates/qwen2_ordered_observer/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "target": "profiles/normalization_helper/observer/monitor.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/profiles/normalization_helper/observer/monitor.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 22217,
+      "sha256": "4dc5e911d9ef5f5c007e7f15945b52390a19c4d199e5d726e943e55f43ee8369"
+    },
+    {
+      "target": "profiles/normalization_helper/runtime/runtime_observer.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/profiles/normalization_helper/runtime/runtime_observer.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 10675,
+      "sha256": "e07cc088d022768f8210eca6cc9321c88f0df695ad2f4c4ca81b34c51e90f269"
+    },
+    {
+      "target": "reused/runtime_binding.py",
+      "repo_path": "candidates/qwen2_ordered_fullgraph_entry/runtime_binding.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    {
+      "target": "reused/buffer_capture.py",
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 10280,
+      "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f"
+    },
+    {
+      "target": "models/baseline/attention_owner.py",
+      "repo_path": "candidates/qwen2_ordered_owner/postimage/ffn_attention/attention_owner.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 19215,
+      "sha256": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c"
+    },
+    {
+      "target": "models/normalization_helper/attention_owner.py",
+      "repo_path": "candidates/qwen2_normalization_helper_m2_diagnostic/delta/models/normalization_helper/attention_owner.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 19498,
+      "sha256": "5f551f9eda0196113dc55aa246011413d3d7addb59b5dd9c85df92dda8aaacad"
+    }
+  ]
+}

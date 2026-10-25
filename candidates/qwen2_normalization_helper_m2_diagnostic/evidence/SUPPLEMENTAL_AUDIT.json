@@ -1,0 +1,27 @@
+{
+  "original": {
+    "bytes": 684,
+    "sha256": "68588836d98c6167e02de571be04561c85338bbd122034c22db5714cde5346db"
+  },
+  "status": "PASS_SUPPLEMENTAL_READ_ONLY_ACTUAL_AUDIT",
+  "checks": 147,
+  "saved_output_partitions": {
+    "parent_metadata_bytes": 21562,
+    "worker_metadata_bytes": 354807,
+    "log_bytes": 0,
+    "audit_bytes": 1808674,
+    "artifact_bytes": 787562
+  },
+  "saved_total_bytes": 2972605,
+  "parent_sample_total": 2971745,
+  "sample_difference_reason": "Parent receipt records pre-final-save sample; exact current total includes expanded final PARENT.json. Both below every limit.",
+  "negatives": [
+    "duplicate_result",
+    "terminal_with_group_debt",
+    "negative_epoch",
+    "duplicate_release",
+    "out_of_order_step"
+  ],
+  "DUT_rerun": false,
+  "recipe_rerun": false
+}

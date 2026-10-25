@@ -1,0 +1,124 @@
+{
+  "original": {
+    "bytes": 3786,
+    "sha256": "5c1dadaad920e212d7556635f944934f474d3bdb1a8fe8108e702179ec8a8de3"
+  },
+  "status": "INDEPENDENT_STATIC_SYNTHETIC_REVIEW_ONLY_NO_EXECUTION_GO",
+  "files": [
+    {
+      "name": "CALLSITE_INVENTORY.json",
+      "bytes": 36917,
+      "sha256": "cc4134e00afde3b2205d0e0f7b6020e8eb3f5d8833eb32cc158d7469a9d6abe9"
+    },
+    {
+      "name": "CALLSITE_INVENTORY_01.json",
+      "bytes": 34649,
+      "sha256": "5b6bdb2695ea7610b31549ffa9a689453321e72e9caa928cce2ec29e5de90b12"
+    },
+    {
+      "name": "INDEPENDENT_CONTROLS.json",
+      "bytes": 12745,
+      "sha256": "7dd58783ee0bd7919eef5aec074f51ad2653d45dd3165cf2bff9b365fa12dde3"
+    },
+    {
+      "name": "INDEPENDENT_CONTROLS_01.json",
+      "bytes": 7162,
+      "sha256": "5cbe55d2f77e01d9cbe5936175c68ce787e850755b3d9293b64bef982603af31"
+    },
+    {
+      "name": "INDEPENDENT_CONTROLS_02.json",
+      "bytes": 12745,
+      "sha256": "1e8f37b7a5097c7a1d077f1915c28da6e3932f6255bf13dab2990b45f355e88f"
+    },
+    {
+      "name": "INTEGRITY_AND_LINES.json",
+      "bytes": 9262,
+      "sha256": "b59cc2159c43d9f47d3a838095d6e879db6280cbc2714814884c7899db7c0a05"
+    },
+    {
+      "name": "REVIEW.md",
+      "bytes": 10560,
+      "sha256": "419b570129bdf2afba203aa882a99adc874f7f43fa7b30d177d297163f547085"
+    },
+    {
+      "name": "STATIC_EVIDENCE.json",
+      "bytes": 7923,
+      "sha256": "810934e5021a8857f3578224fdfe0f4ef2c1f8bd910cf5cea77599bc7fcc7753"
+    },
+    {
+      "name": "callsite_inventory_controls.py",
+      "bytes": 5272,
+      "sha256": "07ec9d12e4e71d83121bb001c4da88b58a51515059bc70a858bde5b1dafeab46"
+    },
+    {
+      "name": "callsites.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "callsites.stdout",
+      "bytes": 261,
+      "sha256": "641be0a09f8cd8637cb6bd5ab1ba5abfc5e7c7e0c0a41775c45224c19fa9fe1b"
+    },
+    {
+      "name": "independent.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "independent.stdout",
+      "bytes": 132,
+      "sha256": "93f3b0ae38f8e7e2c57b66ae7978ea48e76d03b3574df1d9eadc62af40215ade"
+    },
+    {
+      "name": "independent_controls.py",
+      "bytes": 12334,
+      "sha256": "26b16e20cd2059afb3393258f7f1cab291ad7a1fba0653c4ea96c1e12920d989"
+    },
+    {
+      "name": "independent_synthetic.fixture",
+      "bytes": 1126,
+      "sha256": "71a422eb44fba0eec00d2ef08fe733df123147a64c2b8ff4864cc46ca658250a"
+    },
+    {
+      "name": "integrity.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "integrity.stdout",
+      "bytes": 537,
+      "sha256": "4d4d4a5e95f63d1cd6d6412ac44d1483fb9aa3d578a637cbf848d70dcdba68c3"
+    },
+    {
+      "name": "integrity_review.py",
+      "bytes": 4820,
+      "sha256": "029e53a20d1ca7d29ce60e0835dad21da371070da70101d6ace5c5a9f10eafb3"
+    },
+    {
+      "name": "test_stdlib_mocks.py.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "test_stdlib_mocks.py.stdout",
+      "bytes": 143,
+      "sha256": "d8fb72e3ef519d47dfd07c61ce7acd627be06f010b1bab767f6bb2d01b3830ea"
+    },
+    {
+      "name": "verify_source_only.py.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "verify_source_only.py.stdout",
+      "bytes": 81,
+      "sha256": "cb174e39d59545c6ad3c8ad8304ff887dcc8ac6fb3f63160c332f859160d6ce9"
+    }
+  ],
+  "candidate_modified": false,
+  "numerical_qualification": false,
+  "scala_correspondence_qualification": false,
+  "publication": false,
+  "projection": "Only private review/config location omitted; nested source locators converted to roles. These retained historical static statuses are not actual numerical qualification or execution authorization."
+}

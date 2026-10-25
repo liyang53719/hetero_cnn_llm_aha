@@ -1,0 +1,183 @@
+{
+  "original": {
+    "bytes": 8465,
+    "sha256": "4cf90e1491d5dbb24e2187d3b8b577131f6a7d2589c27d565a771458398b40cc"
+  },
+  "status": "EXITED",
+  "m": 2,
+  "config_sha256": "dd0558dc6f85d6fc7184fea744f28dfcc37b90b20bbefafc278a149b5efb1a51",
+  "review_sha256": "18b348d32f899ea0037fa6ecdef89731632d4b089e8d12ac4d7aaddfb26eba5f",
+  "limits": {
+    "cpu_seconds": 45,
+    "wall_seconds": 60,
+    "cpus": 1,
+    "address_space_bytes": 1073741824,
+    "tree_rss_bytes": 1073741824,
+    "child_cpu_seconds": 18,
+    "child_wall_seconds": 26,
+    "cleanup_cpu_reserve": 3,
+    "cleanup_wall_reserve": 5,
+    "parent_cpu_work": 4,
+    "parent_cpu_abort_hard": 6,
+    "fresh_processes": 2,
+    "file_bytes": 4194304,
+    "output_bytes": 33554432,
+    "trace_pair_bytes": 1048576,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "log_bytes": 1048576,
+    "worker_metadata_bytes": 2097152,
+    "parent_metadata_bytes": 2097152
+  },
+  "arm_order": [
+    "baseline",
+    "normalization_helper"
+  ],
+  "automatic_retry": false,
+  "result_sha256": "1ea9bbd5a497e2f71e837b35a25c831b3cc88381c98b13fee9a2bc809c14d614",
+  "aggregate_usage": {
+    "cpu_seconds": 5.451501314,
+    "wall_seconds": 5.7672747790347785,
+    "rss_bytes": 14540800,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 63787008,
+      "at_elapsed_seconds": 5.150022311019711,
+      "live_tree_bytes": 49246208,
+      "samples": 44,
+      "live_samples": 30,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 49246208,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "output_usage": {
+    "trace_pair_bytes": 0,
+    "artifact_bytes": 787562,
+    "audit_bytes": 1808674,
+    "log_bytes": 0,
+    "worker_metadata_bytes": 354807,
+    "parent_metadata_bytes": 20702,
+    "total_bytes": 2971745,
+    "sampled_not_atomic": true
+  },
+  "children": [
+    {
+      "status": "EXITED",
+      "cpu_seconds_limit": 18,
+      "wall_seconds_limit": 26,
+      "aggregate_before": {
+        "cpu_seconds": 0.077648664,
+        "wall_seconds": 0.04785995604470372,
+        "rss_bytes": 14278656,
+        "sampled_rss_high_water": {
+          "combined_parent_tree_bytes": 14278656,
+          "at_elapsed_seconds": 0.046476082992739975,
+          "live_tree_bytes": 0,
+          "samples": 4,
+          "live_samples": 0,
+          "sampling_interval_seconds": 0.2,
+          "not_exact_continuous_peak": true
+        },
+        "reaped_children_maxrss_bytes": 0,
+        "reaped_maxrss_is_aggregate_tree": false
+      },
+      "last_live_usage": {
+        "cpu_seconds": 2.3147092750000002,
+        "wall_seconds": 2.480231937021017,
+        "rss_bytes": 14409728,
+        "sampled_rss_high_water": {
+          "combined_parent_tree_bytes": 62877696,
+          "at_elapsed_seconds": 1.6642975530121475,
+          "live_tree_bytes": 48467968,
+          "samples": 17,
+          "live_samples": 13,
+          "sampling_interval_seconds": 0.2,
+          "not_exact_continuous_peak": true
+        },
+        "reaped_children_maxrss_bytes": 0,
+        "reaped_maxrss_is_aggregate_tree": false
+      },
+      "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+      "returncode": 0,
+      "group_remaining": false,
+      "wall_seconds": 2.4346670740051195,
+      "aggregate_after": {
+        "cpu_seconds": 2.330118495,
+        "wall_seconds": 2.482529745029751,
+        "rss_bytes": 14409728,
+        "sampled_rss_high_water": {
+          "combined_parent_tree_bytes": 62877696,
+          "at_elapsed_seconds": 1.6642975530121475,
+          "live_tree_bytes": 48467968,
+          "samples": 20,
+          "live_samples": 13,
+          "sampling_interval_seconds": 0.2,
+          "not_exact_continuous_peak": true
+        },
+        "reaped_children_maxrss_bytes": 48467968,
+        "reaped_maxrss_is_aggregate_tree": false
+      },
+      "logical_arm": "baseline"
+    },
+    {
+      "status": "EXITED",
+      "cpu_seconds_limit": 18,
+      "wall_seconds_limit": 26,
+      "aggregate_before": {
+        "cpu_seconds": 2.337389005,
+        "wall_seconds": 2.490446553041693,
+        "rss_bytes": 14540800,
+        "sampled_rss_high_water": {
+          "combined_parent_tree_bytes": 62877696,
+          "at_elapsed_seconds": 1.6642975530121475,
+          "live_tree_bytes": 48467968,
+          "samples": 23,
+          "live_samples": 13,
+          "sampling_interval_seconds": 0.2,
+          "not_exact_continuous_peak": true
+        },
+        "reaped_children_maxrss_bytes": 48467968,
+        "reaped_maxrss_is_aggregate_tree": false
+      },
+      "last_live_usage": {
+        "cpu_seconds": 5.438194482,
+        "wall_seconds": 5.761898241995368,
+        "rss_bytes": 14540800,
+        "sampled_rss_high_water": {
+          "combined_parent_tree_bytes": 63787008,
+          "at_elapsed_seconds": 5.150022311019711,
+          "live_tree_bytes": 49246208,
+          "samples": 40,
+          "live_samples": 30,
+          "sampling_interval_seconds": 0.2,
+          "not_exact_continuous_peak": true
+        },
+        "reaped_children_maxrss_bytes": 48467968,
+        "reaped_maxrss_is_aggregate_tree": false
+      },
+      "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+      "returncode": 0,
+      "group_remaining": false,
+      "wall_seconds": 3.2760303289978765,
+      "aggregate_after": {
+        "cpu_seconds": 5.45073848,
+        "wall_seconds": 5.766481048020069,
+        "rss_bytes": 14540800,
+        "sampled_rss_high_water": {
+          "combined_parent_tree_bytes": 63787008,
+          "at_elapsed_seconds": 5.150022311019711,
+          "live_tree_bytes": 49246208,
+          "samples": 43,
+          "live_samples": 30,
+          "sampling_interval_seconds": 0.2,
+          "not_exact_continuous_peak": true
+        },
+        "reaped_children_maxrss_bytes": 49246208,
+        "reaped_maxrss_is_aggregate_tree": false
+      },
+      "logical_arm": "normalization_helper"
+    }
+  ],
+  "projection": "Parent/child runtime identifiers and argv omitted, children identified by arm order. Aggregate parent+children CPU/RSS accounting retained, not parent-self timing; sampled RSS not continuous peak; pre-final-save output snapshot not final ledger total."
+}

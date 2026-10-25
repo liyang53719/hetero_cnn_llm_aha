@@ -1,0 +1,158 @@
+{
+  "original": {
+    "bytes": 8743,
+    "sha256": "18b348d32f899ea0037fa6ecdef89731632d4b089e8d12ac4d7aaddfb26eba5f"
+  },
+  "GO": false,
+  "Scala_correspondence_proved": false,
+  "actual_reference_payload_read": false,
+  "config_sha256": "dd0558dc6f85d6fc7184fea744f28dfcc37b90b20bbefafc278a149b5efb1a51",
+  "evidence": {
+    "FINAL_FROZEN_INTEGRITY.json": {
+      "bytes": 380,
+      "sha256": "a64479e59e38ce5f91061a27a1335c7f4eee8de22c6121256fbcdbaca4b18409"
+    },
+    "INDEPENDENT_STATIC.json": {
+      "bytes": 66628,
+      "sha256": "cc077cf669ec6f8a80dbfaa84b3cd96859bffbcbe3abbd7ac47c1251a060c9f0"
+    },
+    "PRELIMINARY_FINDINGS.md": {
+      "bytes": 2036,
+      "sha256": "4e4d1d632d1995c59232712c458fff322f7686f23ecdb608b29b5059eefc1d49"
+    },
+    "REVIEW.md": {
+      "bytes": 9673,
+      "sha256": "34532232987a9d53c2bf448c2f6188c8da2f553973d63269d690939cea610e07"
+    },
+    "SYNTHETIC_COMPARISON.json": {
+      "bytes": 602,
+      "sha256": "db5e8ccd9d9b9c02cf05c14058ec3a333a02999cf5dfc13f9fe7d7bf4085de56"
+    },
+    "independent_static.py": {
+      "bytes": 9132,
+      "sha256": "313d7343561d5ae07f0085bdc8173ce772480ab2e29e1941d3ed8ee33141855e"
+    },
+    "independent_static.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "independent_static.stdout": {
+      "bytes": 206,
+      "sha256": "52c6d621f85b99ad9c185fa22da4804674f4053949ad946b45ebf30b3dd97b76"
+    },
+    "synthetic_compare.py": {
+      "bytes": 7363,
+      "sha256": "7044a2aebd9c0ee0ad5bf92a00ffa50400d1165c65c34e83dd583722812ab77b"
+    },
+    "synthetic_compare.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "synthetic_compare.stdout": {
+      "bytes": 603,
+      "sha256": "caa6015823d5ad5a15e9d814709b99c468e8bced3d34e5cac33bfd6cea766a63"
+    },
+    "test_integration.O.stderr": {
+      "bytes": 1622,
+      "sha256": "173d0adb25a0b76ddf9273f4bf685fe7e1896a916273931278b160c4a4ca9bc8"
+    },
+    "test_integration.O.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "test_integration.normal.stderr": {
+      "bytes": 1622,
+      "sha256": "d1c3176f435e56775b2eef45dc1fd8b4c6bbd78a308a5d5c48e9a83a7e58e157"
+    },
+    "test_integration.normal.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "test_source_config.O.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "test_source_config.O.stdout": {
+      "bytes": 1038,
+      "sha256": "1c5433150bd25671d1bec8b862e78cdc9b19d01b9df8af71648c1e142b4f61ef"
+    },
+    "test_source_config.normal.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "test_source_config.normal.stdout": {
+      "bytes": 1038,
+      "sha256": "163a4652ff9a5af901c646e2e09b8fce12d0000d02932d17087fb504741a9997"
+    }
+  },
+  "executable_sources": {
+    "admission.py": "87e7e2fd05019c099cff9992159461413ce86bb86833fb0e06c2a0972b272717",
+    "artifacts.py": "a89080e62dd62f63cdad5980bffe7bab2e4bb2a37ba75d82e1e6fdebd84ca3b4",
+    "binding.py": "7ab95e1649ad5ccce9128bc393de29a8ccc1d711b5f12ed396a19d9a6f42a94d",
+    "comparison.py": "272540f0cb0838eac986f4bb633fa1088dc104625889b41dfcb1233bfe67d969",
+    "durable.py": "12c9a6cc139f4ebfa9ad1028f95c217efc9871af1acd301ed79d05d072033cb2",
+    "harness.py": "60908187fe493d484efb4d043c0f68c315b19b190783edbb5963dacfe8b68eed",
+    "launch.py": "ffa0698eb7fb470f988e0e389f5ccba6aee9582f5f627836af56aa03866d9f36",
+    "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+    "policy.py": "54de1467f81730697aa1cc95551547d3f8d0fddf0d63490ae3b9d37d00591cc2",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+    "stage_clock.py": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065",
+    "support.py": "e70c0ad0524d40cf637faf8a5a36f4081123fcc2165ed571e03e27baedaccea6",
+    "worker.py": "9058fbca227834f6117f0217701a60ab00d59068e4024aaf6eac383c790fc6e9"
+  },
+  "execution_authorized": false,
+  "findings_open": [],
+  "freeze_sha256": "537d929c106c2c8dcfd54b6bf1845a913671598fe8c9dad7d2b88fa92b29b3f4",
+  "hardware_acceptance": false,
+  "limits": {
+    "address_space_bytes": 1073741824,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "child_cpu_seconds": 18,
+    "child_wall_seconds": 26,
+    "cleanup_cpu_reserve": 3,
+    "cleanup_wall_reserve": 5,
+    "cpu_seconds": 45,
+    "cpus": 1,
+    "file_bytes": 4194304,
+    "fresh_processes": 2,
+    "log_bytes": 1048576,
+    "output_bytes": 33554432,
+    "parent_cpu_abort_hard": 6,
+    "parent_cpu_work": 4,
+    "parent_metadata_bytes": 2097152,
+    "trace_pair_bytes": 1048576,
+    "tree_rss_bytes": 1073741824,
+    "wall_seconds": 60,
+    "worker_metadata_bytes": 2097152
+  },
+  "native_executed": false,
+  "numerical_qualification": false,
+  "preparation_findings_resolved": 6,
+  "publication": false,
+  "reference_recipe_executed": false,
+  "reused_executable_sources": {
+    "m2-diagnostic:profiles/baseline/bridge/bridge.py": "a69dba9bd111260d8d04a03f3bbe722f579f6d7d3556cb3030ed0b370459831c",
+    "m2-diagnostic:profiles/baseline/bridge/registry.py": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6",
+    "m2-diagnostic:profiles/baseline/bridge/service_trace.py": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba",
+    "m2-diagnostic:profiles/baseline/observer/SOURCE_PINS.json": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a",
+    "m2-diagnostic:profiles/baseline/observer/capture.py": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+    "m2-diagnostic:profiles/baseline/observer/monitor.py": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84",
+    "m2-diagnostic:profiles/baseline/runtime/runtime_observer.py": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+    "m2-diagnostic:profiles/normalization_helper/bridge/bridge.py": "bc1bf8741c1e6a994b80cd6185f25890fd4a817bcf979c3d6c3b87cc41b3f57e",
+    "m2-diagnostic:profiles/normalization_helper/bridge/registry.py": "2ed9fc85735a03bc5954f4706cc1da1447fed14cfb002de295cd1a30663432ee",
+    "m2-diagnostic:profiles/normalization_helper/bridge/service_trace.py": "0fbb07984f7d5e9e804e954b03785240cbc4046a6336da503fa8b9bc73e70d21",
+    "m2-diagnostic:profiles/normalization_helper/observer/SOURCE_PINS.json": "834c0abd4bb44d360213196d58bc3729d6501bc635d74e9079e04c8048d4969e",
+    "m2-diagnostic:profiles/normalization_helper/observer/capture.py": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+    "m2-diagnostic:profiles/normalization_helper/observer/monitor.py": "4dc5e911d9ef5f5c007e7f15945b52390a19c4d199e5d726e943e55f43ee8369",
+    "m2-diagnostic:profiles/normalization_helper/runtime/runtime_observer.py": "e07cc088d022768f8210eca6cc9321c88f0df695ad2f4c4ca81b34c51e90f269",
+    "retained-source-or-evidence:qwen2_m128_native_init_prepare_20261025T0443/candidate/qwen2_ordered_fullgraph_entry/runtime_binding.py": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100",
+    "retained-source-or-evidence:qwen35_full_candidate_20261024T0930/candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f"
+  },
+  "root_execution_authorization_required": true,
+  "scope": "independent static/source/stdlib/synthetic review only; actual numerical/runtime/Scala/hardware qualification not established",
+  "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+  "target_executed": false,
+  "target_imported": false,
+  "projection": "Only private review/config location omitted; nested source locators converted to roles. These retained historical static statuses are not actual numerical qualification or execution authorization."
+}

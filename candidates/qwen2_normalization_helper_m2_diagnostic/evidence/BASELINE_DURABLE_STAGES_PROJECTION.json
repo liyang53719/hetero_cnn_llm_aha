@@ -1,0 +1,88 @@
+{
+  "scope": "Actual durable order and relative/delta timing; process ID and absolute monotonic/process-CPU origins omitted. Source-bound durability, not independent syscall history.",
+  "stages": [
+    {
+      "relative_file": "metadata/stages/000_PREFLIGHT_ENTER.json",
+      "original": {
+        "bytes": 231,
+        "sha256": "d26b4c05f6987101ad4b2b01037071047032d47e350870df8f316963a7f5ce26"
+      },
+      "content": {
+        "delta_cpu_ns": 0,
+        "delta_wall_ns": 1602,
+        "details": null,
+        "elapsed_cpu_ns": 0,
+        "elapsed_wall_ns": 1602,
+        "index": 0,
+        "stage": "PREFLIGHT_ENTER"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/001_BEFORE_REAL_M2_OWNER.json",
+      "original": {
+        "bytes": 378,
+        "sha256": "a28ccdb2f5aa3188238d558f4c1ff0681e6d1fc7c9fbf83a564aec26b75efa74"
+      },
+      "content": {
+        "delta_cpu_ns": 336010005,
+        "delta_wall_ns": 342397431,
+        "details": {
+          "arm": "baseline",
+          "source_root": "retained-source-or-evidence:qwen2_m128_native_init_prepare_20261025T0443/source"
+        },
+        "elapsed_cpu_ns": 336010005,
+        "elapsed_wall_ns": 342399033,
+        "index": 1,
+        "stage": "BEFORE_REAL_M2_OWNER"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/002_REAL_M2_TERMINAL_EVIDENCE_RETAINED.json",
+      "original": {
+        "bytes": 282,
+        "sha256": "012b9ed507708e95a5c9f60ba7dc0a23dac2ad75d94ce8c7577537b5b25ee668"
+      },
+      "content": {
+        "delta_cpu_ns": 1057240998,
+        "delta_wall_ns": 1074910354,
+        "details": null,
+        "elapsed_cpu_ns": 1393251003,
+        "elapsed_wall_ns": 1417309387,
+        "index": 2,
+        "stage": "REAL_M2_TERMINAL_EVIDENCE_RETAINED"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/003_POST_TERMINAL_SCALAR_PROBES_COMPLETE.json",
+      "original": {
+        "bytes": 278,
+        "sha256": "c1c5b14ce2e3a4dd9f3a587eb49c216faed88eb60764c492adc2628ef0a8485a"
+      },
+      "content": {
+        "delta_cpu_ns": 2833053,
+        "delta_wall_ns": 4364762,
+        "details": null,
+        "elapsed_cpu_ns": 1396084056,
+        "elapsed_wall_ns": 1421674149,
+        "index": 3,
+        "stage": "POST_TERMINAL_SCALAR_PROBES_COMPLETE"
+      }
+    },
+    {
+      "relative_file": "metadata/stages/004_OWN_TERMINAL_AUDITED.json",
+      "original": {
+        "bytes": 266,
+        "sha256": "b5361911f2f7224b63d9f147a13181d195d3a4ab37a722cf4167188e54749b4c"
+      },
+      "content": {
+        "delta_cpu_ns": 776553444,
+        "delta_wall_ns": 791255519,
+        "details": null,
+        "elapsed_cpu_ns": 2172637500,
+        "elapsed_wall_ns": 2212929668,
+        "index": 4,
+        "stage": "OWN_TERMINAL_AUDITED"
+      }
+    }
+  ]
+}

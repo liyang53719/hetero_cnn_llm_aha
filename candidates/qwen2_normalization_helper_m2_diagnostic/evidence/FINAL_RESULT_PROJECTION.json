@@ -1,0 +1,28 @@
+{
+  "original": {
+    "bytes": 30920,
+    "sha256": "1ea9bbd5a497e2f71e837b35a25c831b3cc88381c98b13fee9a2bc809c14d614"
+  },
+  "arm": "normalization_helper",
+  "config_sha256": "dd0558dc6f85d6fc7184fea744f28dfcc37b90b20bbefafc278a149b5efb1a51",
+  "fullblock": false,
+  "hardware_cycles": false,
+  "m": 2,
+  "model_Scala_correspondence_proved": false,
+  "performance_adopted": false,
+  "reference_recipe_reexecuted": false,
+  "reference_reexecuted": false,
+  "reference_values_loaded_after_current_terminals": true,
+  "status": "PASS_TWO_FRESH_M2_HELPER_DIAGNOSTIC_ONLY",
+  "comparison_projection": {
+    "public_file": "COMPARISON_PROJECTION.json",
+    "bytes": 20018,
+    "sha256": "052ab23897f70c65e94cabc51a6a62a95e449f416aacdc40be9143188f771e43"
+  },
+  "durable_stages_projection": {
+    "public_file": "NORMALIZATION_HELPER_DURABLE_STAGES_PROJECTION.json",
+    "bytes": 4766,
+    "sha256": "a29f4c24dd766953cf84953438dce42c4cd499e97c43d197700d2d5690b38cbe"
+  },
+  "projection": "Repeated comparison/stages replaced with exact public projection identities; status/negative scopes/current reference-order flags unchanged."
+}

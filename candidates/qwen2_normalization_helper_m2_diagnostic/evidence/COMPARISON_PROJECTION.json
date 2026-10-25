@@ -1,0 +1,284 @@
+{
+  "original": {
+    "bytes": 26842,
+    "sha256": "5d9da6ff6615f827508eddd92e11998ec2b1a292bca55a25bc8e3556f319c48e"
+  },
+  "Scala_correspondence_proved": false,
+  "field_artifacts": {
+    "baseline": {
+      "dot_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_dot_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_dot_bf16.u32le",
+        "raw_sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+      },
+      "dot_parts": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "216b6b8b497ebf4362dd6b5cdaac27a92b6b0c87158001edd2dab2f8d8bea70d",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_dot_parts.binmeta",
+        "presence_sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_dot_parts.u32le",
+        "raw_sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+      },
+      "normalizer": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "220f5298bdc9a6c90e3bd97e52ebc2c187de1f5abf69a75bdf24e9a683308855",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_normalizer.binmeta",
+        "presence_sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_normalizer.u32le",
+        "raw_sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+      },
+      "prob_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "21e94ea91b7588b6405db33ad627672c78c764d3471bc8c50e41163e5baf1196",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_prob_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_prob_bf16.u32le",
+        "raw_sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+      },
+      "pv_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "24ccfa01d8d448ddac46819262920537601e1649fbed74f91fcb945dd0caadeb",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_pv_bf16.binmeta",
+        "presence_sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_pv_bf16.u32le",
+        "raw_sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+      },
+      "pv_raw": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "24ccfa01d8d448ddac46819262920537601e1649fbed74f91fcb945dd0caadeb",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_pv_raw.binmeta",
+        "presence_sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_pv_raw.u32le",
+        "raw_sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+      },
+      "scores_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_scores_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_scores_bf16.u32le",
+        "raw_sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+      },
+      "softmax_exp": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_softmax_exp.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_softmax_exp.u32le",
+        "raw_sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+      },
+      "softmax_fp32": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "21e94ea91b7588b6405db33ad627672c78c764d3471bc8c50e41163e5baf1196",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_softmax_fp32.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_softmax_fp32.u32le",
+        "raw_sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+      },
+      "unrounded_dot_sum": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_PRESENCE_unrounded_dot_sum.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/baseline/artifacts/CAPTURE_unrounded_dot_sum.u32le",
+        "raw_sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+      }
+    },
+    "normalization_helper": {
+      "dot_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_dot_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_dot_bf16.u32le",
+        "raw_sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+      },
+      "dot_parts": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "216b6b8b497ebf4362dd6b5cdaac27a92b6b0c87158001edd2dab2f8d8bea70d",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_dot_parts.binmeta",
+        "presence_sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_dot_parts.u32le",
+        "raw_sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+      },
+      "normalizer": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "220f5298bdc9a6c90e3bd97e52ebc2c187de1f5abf69a75bdf24e9a683308855",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_normalizer.binmeta",
+        "presence_sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_normalizer.u32le",
+        "raw_sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+      },
+      "prob_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "21e94ea91b7588b6405db33ad627672c78c764d3471bc8c50e41163e5baf1196",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_prob_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_prob_bf16.u32le",
+        "raw_sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+      },
+      "pv_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "24ccfa01d8d448ddac46819262920537601e1649fbed74f91fcb945dd0caadeb",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_pv_bf16.binmeta",
+        "presence_sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_pv_bf16.u32le",
+        "raw_sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+      },
+      "pv_raw": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "24ccfa01d8d448ddac46819262920537601e1649fbed74f91fcb945dd0caadeb",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_pv_raw.binmeta",
+        "presence_sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_pv_raw.u32le",
+        "raw_sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+      },
+      "scores_bf16": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_scores_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_scores_bf16.u32le",
+        "raw_sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+      },
+      "softmax_exp": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_softmax_exp.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_softmax_exp.u32le",
+        "raw_sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+      },
+      "softmax_fp32": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "21e94ea91b7588b6405db33ad627672c78c764d3471bc8c50e41163e5baf1196",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_softmax_fp32.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_softmax_fp32.u32le",
+        "raw_sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+      },
+      "unrounded_dot_sum": {
+        "frequency_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_PRESENCE_unrounded_dot_sum.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "m2-diagnostic:M2_HELPER_PAIR01/normalization_helper/artifacts/CAPTURE_unrounded_dot_sum.u32le",
+        "raw_sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+      }
+    },
+    "reference": {
+      "dot_bf16": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_dot_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "retained-reference:REFERENCE_dot_bf16.u32le",
+        "raw_sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+      },
+      "dot_parts": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "216b6b8b497ebf4362dd6b5cdaac27a92b6b0c87158001edd2dab2f8d8bea70d",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_dot_parts.binmeta",
+        "presence_sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b",
+        "raw_file": "retained-reference:REFERENCE_dot_parts.u32le",
+        "raw_sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+      },
+      "normalizer": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "614e0375f7afd7ba0f6a8ce9397b384e9bf8ac116ad60e464a19a8273630c37e",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_normalizer.binmeta",
+        "presence_sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e",
+        "raw_file": "retained-reference:REFERENCE_normalizer.u32le",
+        "raw_sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+      },
+      "prob_bf16": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "21e94ea91b7588b6405db33ad627672c78c764d3471bc8c50e41163e5baf1196",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_prob_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "retained-reference:REFERENCE_prob_bf16.u32le",
+        "raw_sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+      },
+      "pv_bf16": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "24ccfa01d8d448ddac46819262920537601e1649fbed74f91fcb945dd0caadeb",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_pv_bf16.binmeta",
+        "presence_sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c",
+        "raw_file": "retained-reference:REFERENCE_pv_bf16.u32le",
+        "raw_sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+      },
+      "pv_raw": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "24ccfa01d8d448ddac46819262920537601e1649fbed74f91fcb945dd0caadeb",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_pv_raw.binmeta",
+        "presence_sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c",
+        "raw_file": "retained-reference:REFERENCE_pv_raw.u32le",
+        "raw_sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+      },
+      "scores_bf16": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_scores_bf16.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "retained-reference:REFERENCE_scores_bf16.u32le",
+        "raw_sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+      },
+      "softmax_exp": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_softmax_exp.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "retained-reference:REFERENCE_softmax_exp.u32le",
+        "raw_sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+      },
+      "softmax_fp32": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "21e94ea91b7588b6405db33ad627672c78c764d3471bc8c50e41163e5baf1196",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_softmax_fp32.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "retained-reference:REFERENCE_softmax_fp32.u32le",
+        "raw_sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+      },
+      "unrounded_dot_sum": {
+        "frequency_file": "retained-reference:REFERENCE_FIELDS.json",
+        "frequency_sha256": "7fc5e10f109f4081d280d3c1fc757804289bea2be6c510d79ec21d90c8e8cf90",
+        "presence_file": "retained-reference:REFERENCE_PRESENCE_unrounded_dot_sum.binmeta",
+        "presence_sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720",
+        "raw_file": "retained-reference:REFERENCE_unrounded_dot_sum.u32le",
+        "raw_sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+      }
+    }
+  },
+  "field_cells_checked": 21816,
+  "fields": 10,
+  "fullblock": false,
+  "output_sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+  "output_words": 3072,
+  "performance_adopted": false,
+  "reference_executed_now": false,
+  "reference_qualification": {
+    "payload_decode_permission_granted": false,
+    "recipe_executed_now": false,
+    "reference_directory": "retained-source-or-evidence:real_cost_compare_recovery_20261025T0703/identity_stability_r2_20261025T0750/M2_stability_01/trio_0",
+    "reference_result_pin": {
+      "bytes": 58110,
+      "sha256": "2f02a2570728c903be8b3747f73519f9b518127053ccc12e611485c6c02b87ba"
+    },
+    "rows": 2,
+    "same_input_prefixes": true,
+    "same_reference_sources": true,
+    "status": "QUALIFIED_RETAINED_INDEPENDENT_M2_REFERENCE_METADATA",
+    "tensor_values_read": false
+  },
+  "rows": 2,
+  "scalar_probe_comparison": "return words or exception category/message and separate counts, not traceback",
+  "score_words": 36,
+  "scores_sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+  "service_events": 1515,
+  "status": "PASS_TRUE_M2_MODEL_OBSERVER_EQUIVALENCE_WITH_RETAINED_INDEPENDENT_REFERENCE",
+  "ticket_policy": "original lifecycle validator; native ticket first-appearance alpha-renaming only",
+  "projection": "Only physical artifact/reference paths converted to logical roles. Raw field/event/value payloads not included; hash/shape/count comparison metadata only. reference_qualification tensor_values_read=false is its metadata stage, not denial of later completed comparison."
+}

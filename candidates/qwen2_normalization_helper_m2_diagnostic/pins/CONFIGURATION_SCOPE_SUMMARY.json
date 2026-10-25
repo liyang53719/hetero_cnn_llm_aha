@@ -1,0 +1,111 @@
+{
+  "original_config": {
+    "bytes": 396618,
+    "sha256": "dd0558dc6f85d6fc7184fea744f28dfcc37b90b20bbefafc278a149b5efb1a51"
+  },
+  "original_freeze": {
+    "bytes": 71597,
+    "sha256": "537d929c106c2c8dcfd54b6bf1845a913671598fe8c9dad7d2b88fa92b29b3f4"
+  },
+  "actual_execution_authorized": false,
+  "arm_order": [
+    "baseline",
+    "normalization_helper"
+  ],
+  "attention_owner_jobs_per_worker": 1,
+  "commit": "e8375f64d861c45fea3fbd6d445e5c213ff895a6",
+  "fullblock": false,
+  "helper_source_review_sha256": "5c1dadaad920e212d7556635f944934f474d3bdb1a8fe8108e702179ec8a8de3",
+  "input_prefixes": {
+    "kr": {
+      "bytes": 2048,
+      "offset_bytes": 0,
+      "sha256": "eae23932aa36b47618e70c1950900e1eda0d022a8def40f2d2f971eaae869b88",
+      "shape": [
+        2,
+        256
+      ]
+    },
+    "qr": {
+      "bytes": 12288,
+      "offset_bytes": 0,
+      "sha256": "4c4f8b4573683c445f1842ba680ff883da15487827bc262ccc1bfc83f3a799a9",
+      "shape": [
+        2,
+        1536
+      ]
+    },
+    "v": {
+      "bytes": 2048,
+      "offset_bytes": 0,
+      "sha256": "76aa0d1dac2f6cc1238d44c32eec17c73254ce2fa8f9d827bbce9c115e8ccea3",
+      "shape": [
+        2,
+        256
+      ]
+    }
+  },
+  "limits": {
+    "address_space_bytes": 1073741824,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "child_cpu_seconds": 18,
+    "child_wall_seconds": 26,
+    "cleanup_cpu_reserve": 3,
+    "cleanup_wall_reserve": 5,
+    "cpu_seconds": 45,
+    "cpus": 1,
+    "file_bytes": 4194304,
+    "fresh_processes": 2,
+    "log_bytes": 1048576,
+    "output_bytes": 33554432,
+    "parent_cpu_abort_hard": 6,
+    "parent_cpu_work": 4,
+    "parent_metadata_bytes": 2097152,
+    "trace_pair_bytes": 1048576,
+    "tree_rss_bytes": 1073741824,
+    "wall_seconds": 60,
+    "worker_metadata_bytes": 2097152
+  },
+  "model_Scala_correspondence_proved": false,
+  "old_references_modified": false,
+  "performance_adopted": false,
+  "profile": "normalization_helper_two_fresh_m2_v1",
+  "reference_reexecuted": false,
+  "reference_values_loaded_after_current_terminals_required": true,
+  "rows": 2,
+  "runtime_graph_sha256": "dc49c1f8e0288f38811db9b56d47c6dabe87dc4746030eeed11f37e912bfe436",
+  "scalar_probe_count_per_worker": 6,
+  "shared_exact_foundation_disclosed": true,
+  "source_review_only": true,
+  "profiles": {
+    "baseline": {
+      "observer_roles": 7,
+      "owner_source_sha256": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c",
+      "selective_lines": true,
+      "source_manifest_sha256": "97bbae97b22b6e1f66592ce5260bce2467e8fefeccf383c45bb640af0cc57191"
+    },
+    "normalization_helper": {
+      "observer_roles": 8,
+      "owner_source_sha256": "5f551f9eda0196113dc55aa246011413d3d7addb59b5dd9c85df92dda8aaacad",
+      "selective_lines": true,
+      "source_manifest_sha256": "cb2891e237748dfa3d0ebe1c4ba3301c0926e9600a38ceb9c2094bd4733cdaa8"
+    }
+  },
+  "inputs": {
+    "kr": {
+      "bytes": 131072,
+      "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+    },
+    "qr": {
+      "bytes": 786432,
+      "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+    },
+    "v": {
+      "bytes": 131072,
+      "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+    }
+  },
+  "reference_artifact_count": 23,
+  "projection": "Selected scopes, limits, prefix hashes and profile identities only. Historical source_review_only/authorization flags unchanged; actual outcome is separate. Private namespaces/roots/runtime configs/approval/attempt payload omitted."
+}

@@ -1,0 +1,44 @@
+{
+  "original": {
+    "bytes": 1675,
+    "sha256": "84c9f868b1928ff7beed53e0da56eef864f677b7cfe8710dd07b6071fddcc9a3"
+  },
+  "Scala_correspondence": false,
+  "actual_execution_by_reviewer": false,
+  "authorizes_new_execution": false,
+  "baseline_actual_selective_identity_7_roles": true,
+  "checks": 27487,
+  "config_sha256": "dd0558dc6f85d6fc7184fea744f28dfcc37b90b20bbefafc278a149b5efb1a51",
+  "evidence": {
+    "ACTUAL_EVIDENCE_MANIFEST.json": {
+      "bytes": 16566,
+      "sha256": "e9f7a4fd076fc17efe92ff0e204ac2e47dba3725730ee6765ff501b029717fb6"
+    },
+    "ACTUAL_REVIEW.json": {
+      "bytes": 37811,
+      "sha256": "5ea082e33704b15f244f264f03ea8408bdf126298a815284a4b488566a7a301c"
+    },
+    "REVIEW.md": {
+      "bytes": 10170,
+      "sha256": "3444cda3c691fac79c12779040faf8dea4bf2f2bb7be85a7c43d305ebc8e9024"
+    },
+    "REVIEWER_CHECK_CORRECTION.md": {
+      "bytes": 616,
+      "sha256": "0a17fa1d356a9b8c25be6441bd42d2170dc045b9a85b4a02b2c9b0b95fcaee91"
+    },
+    "SUPPLEMENTAL_AUDIT.json": {
+      "bytes": 684,
+      "sha256": "68588836d98c6167e02de571be04561c85338bbd122034c22db5714cde5346db"
+    }
+  },
+  "hardware_acceptance": false,
+  "helper_actual_8_roles_op_identity_only": true,
+  "numerical_qualification": "EXACT_ONE_M2_PAIR_VS_RETAINED_INDEPENDENT_RECIPE_WITH_DISCLOSED_SHARED_PRIMITIVES",
+  "open_findings": [],
+  "original_full128_FAIL_unchanged": true,
+  "performance_adopted": false,
+  "reference_recipe_reexecuted": false,
+  "review_type": "POST_EXECUTION_READ_ONLY_ACTUAL_EVIDENCE_NOT_STATIC_MOCK",
+  "status": "PASS_ACTUAL_SAVED_M2_EVIDENCE_REVIEW",
+  "projection": "Private evidence directory and internal root approval hash omitted; complete actual status/check count/scope/evidence hashes unchanged. This is separate from historical static/mock review."
+}

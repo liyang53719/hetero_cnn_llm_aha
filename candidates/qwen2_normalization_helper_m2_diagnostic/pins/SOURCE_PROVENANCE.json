@@ -1,0 +1,72 @@
+{
+  "new_original_python_files": 15,
+  "new_original_metadata_files": 1,
+  "source_files": 31,
+  "source_adaptation": false,
+  "postimages_freeze": {
+    "bytes": 819,
+    "sha256": "bfe81a231e9f9e03fac172726c2bdc5a0f7f50544b2075415b8b1280ac9356c0"
+  },
+  "source_profile_manifest": {
+    "bytes": 10065,
+    "sha256": "b30b4a6ac9ad282cddc6b90a157f0fdb506a05feda5bb8cc9dbec5ea525fc315"
+  },
+  "executable_manifest": {
+    "bytes": 1630,
+    "sha256": "e3ac8046486fd8ffed0b47d30ec7d9ec7d1f60398d13996839857b1367c82393"
+  },
+  "reused_manifest": {
+    "bytes": 3797,
+    "sha256": "6d70301b1099b61ffc94acf3d7e5054a4287144c3b3ca7660554ba5c37b7ee55"
+  },
+  "omitted_private_tools": [
+    {
+      "role": "prepare_config.py",
+      "bytes": 4913,
+      "sha256": "e46f8286bf47c5f3972ae2a6b6c10d3cda52da268d920e90a6904ff7771a58bb",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    },
+    {
+      "role": "prepare_sources.py",
+      "bytes": 6288,
+      "sha256": "be80d6feb38d2db22132214dc9882c1b1826cd8e7a0f6e08c66b0cff65e7824b",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    },
+    {
+      "role": "test_compare.py",
+      "bytes": 4061,
+      "sha256": "bd95ee78333a66ef1054aca1878c007d5772f52d6f9aa23b4ee052df735a2eab",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    },
+    {
+      "role": "test_integration.py",
+      "bytes": 14616,
+      "sha256": "03aa31a33e4ec8deb4daa57620907f8793a54921ee6603890c5e8a94703dd0bf",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    },
+    {
+      "role": "test_source_config.py",
+      "bytes": 7848,
+      "sha256": "3255ee9a406f1570c51d4ff5c75bcfe9818cb9016ee98a17d2a52e9c5985765b",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    },
+    {
+      "role": "helper-preparation:prepare_postimages.py",
+      "bytes": 21279,
+      "sha256": "13a28dbd75594e141c02841c16114fdf001fc56e4b8052bab02d293eb9196fb8",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    },
+    {
+      "role": "helper-preparation:test_stdlib_mocks.py",
+      "bytes": 20300,
+      "sha256": "cf65b799c8c37d1a00dbe0466ab2b0b26e5dafa3783525c47bc457ad27f8fad4",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    },
+    {
+      "role": "helper-preparation:verify_source_only.py",
+      "bytes": 7923,
+      "sha256": "9ca11e7651e3c4e18d49ca2151d604b8e70f0b523e600b5813140752c7abf2a7",
+      "reason": "Private-path preparation/mock tool; hash-only, no silent adaptation or execution."
+    }
+  ]
+}

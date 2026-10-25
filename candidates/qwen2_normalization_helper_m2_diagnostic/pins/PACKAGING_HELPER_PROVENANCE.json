@@ -1,0 +1,13 @@
+{
+  "base_commit": "1db7f0a0f0fd17c0feb8691319ee417be09fb360",
+  "prior_public_root": "candidates/qwen2_full128_identity_failure",
+  "assembler": {
+    "bytes": 2816,
+    "sha256": "a68ee55143f679ed91292a837758a12d120811c18d002fe48eb7125721f2c080"
+  },
+  "tests": {
+    "bytes": 4043,
+    "sha256": "6d1cc2ad910ba25f1e2df478993ab71e9721d95ab0c1aa0d1cd15442cfb39280"
+  },
+  "change": "None; identical nonexecuting source-byte assembly helper and inert tests."
+}

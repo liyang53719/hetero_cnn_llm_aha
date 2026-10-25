@@ -1,0 +1,301 @@
+{
+  "original": {
+    "bytes": 37811,
+    "sha256": "5ea082e33704b15f244f264f03ea8408bdf126298a815284a4b488566a7a301c"
+  },
+  "actual_execution_by_reviewer": false,
+  "checks": 27340,
+  "config_sha256": "dd0558dc6f85d6fc7184fea744f28dfcc37b90b20bbefafc278a149b5efb1a51",
+  "failures": [],
+  "limitations": [
+    "M2 combined model+observer diagnostic only",
+    "No causal speedup/performance adoption, Scala proof, full128 or RTL acceptance",
+    "Chronology follows pinned executed worker source plus durable stages and guards; no exhaustive per-open access log retained",
+    "Raw service event packet/result payloads are SHA256 witnesses, not full raw service matrices",
+    "No per-primitive call-order trace; fixed scalar aggregates plus six probes and static direct forwarding",
+    "RSS is sampled peak, not exact continuous aggregate ceiling"
+  ],
+  "original_full128_FAIL_unchanged": true,
+  "reference_reexecution": false,
+  "review_cpu_seconds": 0.699373706,
+  "status": "PASS_ACTUAL_SAVED_M2_EVIDENCE_REVIEW",
+  "details": {
+    "field_statistics": {
+      "baseline": {
+        "dot_bf16": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b",
+          "repeats": 0
+        },
+        "dot_parts": {
+          "cells": 768,
+          "frequency_sum": 576,
+          "present": 576,
+          "raw_sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972",
+          "repeats": 0
+        },
+        "normalizer": {
+          "cells": 72,
+          "frequency_sum": 72,
+          "present": 72,
+          "raw_sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89",
+          "repeats": 0
+        },
+        "prob_bf16": {
+          "cells": 48,
+          "frequency_sum": 288,
+          "present": 36,
+          "raw_sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09",
+          "repeats": 252
+        },
+        "pv_bf16": {
+          "cells": 3072,
+          "frequency_sum": 3072,
+          "present": 3072,
+          "raw_sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c",
+          "repeats": 0
+        },
+        "pv_raw": {
+          "cells": 3072,
+          "frequency_sum": 3072,
+          "present": 3072,
+          "raw_sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147",
+          "repeats": 0
+        },
+        "scores_bf16": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778",
+          "repeats": 0
+        },
+        "softmax_exp": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19",
+          "repeats": 0
+        },
+        "softmax_fp32": {
+          "cells": 48,
+          "frequency_sum": 288,
+          "present": 36,
+          "raw_sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0",
+          "repeats": 252
+        },
+        "unrounded_dot_sum": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64",
+          "repeats": 0
+        }
+      },
+      "normalization_helper": {
+        "dot_bf16": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b",
+          "repeats": 0
+        },
+        "dot_parts": {
+          "cells": 768,
+          "frequency_sum": 576,
+          "present": 576,
+          "raw_sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972",
+          "repeats": 0
+        },
+        "normalizer": {
+          "cells": 72,
+          "frequency_sum": 72,
+          "present": 72,
+          "raw_sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89",
+          "repeats": 0
+        },
+        "prob_bf16": {
+          "cells": 48,
+          "frequency_sum": 288,
+          "present": 36,
+          "raw_sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09",
+          "repeats": 252
+        },
+        "pv_bf16": {
+          "cells": 3072,
+          "frequency_sum": 3072,
+          "present": 3072,
+          "raw_sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c",
+          "repeats": 0
+        },
+        "pv_raw": {
+          "cells": 3072,
+          "frequency_sum": 3072,
+          "present": 3072,
+          "raw_sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147",
+          "repeats": 0
+        },
+        "scores_bf16": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778",
+          "repeats": 0
+        },
+        "softmax_exp": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19",
+          "repeats": 0
+        },
+        "softmax_fp32": {
+          "cells": 48,
+          "frequency_sum": 288,
+          "present": 36,
+          "raw_sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0",
+          "repeats": 252
+        },
+        "unrounded_dot_sum": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64",
+          "repeats": 0
+        }
+      },
+      "reference": {
+        "dot_bf16": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b",
+          "repeats": 0
+        },
+        "dot_parts": {
+          "cells": 768,
+          "frequency_sum": 576,
+          "present": 576,
+          "raw_sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972",
+          "repeats": 0
+        },
+        "normalizer": {
+          "cells": 72,
+          "frequency_sum": 864,
+          "present": 72,
+          "raw_sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89",
+          "repeats": 792
+        },
+        "prob_bf16": {
+          "cells": 48,
+          "frequency_sum": 288,
+          "present": 36,
+          "raw_sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09",
+          "repeats": 252
+        },
+        "pv_bf16": {
+          "cells": 3072,
+          "frequency_sum": 3072,
+          "present": 3072,
+          "raw_sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c",
+          "repeats": 0
+        },
+        "pv_raw": {
+          "cells": 3072,
+          "frequency_sum": 3072,
+          "present": 3072,
+          "raw_sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147",
+          "repeats": 0
+        },
+        "scores_bf16": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778",
+          "repeats": 0
+        },
+        "softmax_exp": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19",
+          "repeats": 0
+        },
+        "softmax_fp32": {
+          "cells": 48,
+          "frequency_sum": 288,
+          "present": 36,
+          "raw_sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0",
+          "repeats": 252
+        },
+        "unrounded_dot_sum": {
+          "cells": 48,
+          "frequency_sum": 36,
+          "present": 36,
+          "raw_sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64",
+          "repeats": 0
+        }
+      }
+    },
+    "runtime_audits": [
+      {
+        "arm": "baseline",
+        "distinct_mapping_files": 19,
+        "map_rows": 105,
+        "modules": 260,
+        "phase": "RUNTIME_ARM_TERMINAL"
+      },
+      {
+        "arm": "normalization_helper",
+        "distinct_mapping_files": 19,
+        "map_rows": 105,
+        "modules": 260,
+        "phase": "RUNTIME_ARM_TERMINAL"
+      },
+      {
+        "arm": "normalization_helper",
+        "distinct_mapping_files": 19,
+        "map_rows": 105,
+        "modules": 261,
+        "phase": "RUNTIME_POSTFLIGHT"
+      }
+    ],
+    "raw_event_summaries": {
+      "baseline": {
+        "counts": {
+          "accept_group": 216,
+          "accept_step": 480,
+          "acquire": 1,
+          "release": 1,
+          "retire_done": 216,
+          "retire_legacy_reply": 288,
+          "retire_owner_response": 1,
+          "retire_result": 312
+        },
+        "rows": 1515,
+        "writes": 192
+      },
+      "normalization_helper": {
+        "counts": {
+          "accept_group": 216,
+          "accept_step": 480,
+          "acquire": 1,
+          "release": 1,
+          "retire_done": 216,
+          "retire_legacy_reply": 288,
+          "retire_owner_response": 1,
+          "retire_result": 312
+        },
+        "rows": 1515,
+        "writes": 192
+      }
+    },
+    "comparison_projection": {
+      "public_file": "COMPARISON_PROJECTION.json",
+      "bytes": 20018,
+      "sha256": "052ab23897f70c65e94cabc51a6a62a95e449f416aacdc40be9143188f771e43"
+    }
+  },
+  "projection": "Private evidence root omitted; raw two-event terminal-tail arrays omitted while retaining counts/rows/writes. Exact saved comparison is projected in the separately pinned public file. All numerical field statistics, runtime counts and limitations preserved."
+}

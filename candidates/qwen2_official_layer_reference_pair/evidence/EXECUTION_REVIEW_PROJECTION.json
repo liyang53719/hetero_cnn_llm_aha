@@ -1,0 +1,55 @@
+{
+  "capture_binary_identities_bound": 60,
+  "checks_count": 121,
+  "failures": [],
+  "full_pin_rehash": {
+    "actual_raw13_payload_read_as_opaque_hash_stream_only": true,
+    "bytes": 1016137382,
+    "files": 18648,
+    "passed": true,
+    "tensor_decode_or_arithmetic": false,
+    "wall_seconds": 0.9812217790167779
+  },
+  "full_private_review_published": false,
+  "limitations": [
+    "This audit rehashes bytes and checks JSON evidence; it does not independently decode tensors or recompute the numeric all29 gates. The numeric gate results are attributable to the exact reviewed, sealed worker/validator execution.",
+    "Pair evidence applies to actual y/prob return equality and three-boundary original input/parameter/buffer state for this exact instance/profile/inputs. It does not prove all29 unobserved intermediate equivalence or general observer noninterference.",
+    "Full module/maps snapshots preserve dynamic/no-file entries and do not prove every live code object or lifetime native/process/network isolation.",
+    "Cleanup is evidenced by the sealed launcher wait/returncode/remaining records. Numeric PIDs are local to the execution namespace and are not reinterpreted as identities in this separate audit process.",
+    "The current full-pin rehash corroborates integrity now; it does not recreate historical bytes between the recorded preflight/postflight instants.",
+    "Sampled RSS is not a hard cap; RLIMIT_CPU is the worker process total including its threads, not a kernel aggregate descendant-tree quota."
+  ],
+  "model_or_tensor_work_run_for_this_projection": false,
+  "passed": true,
+  "passed_checks": 121,
+  "receipt_artifacts_rehashed": 87,
+  "results": {
+    "all29_captured": true,
+    "baseline_and_observed_y_prob_native_hashes_equal": true,
+    "baseline_then_observed": true,
+    "bf16_prob_rowsum_abs_max_diagnostic_only": 0.00279998779296875,
+    "dut_comparison": "NOT_RUN",
+    "forward_calls": 2,
+    "layer_instances": 1,
+    "numeric_acceptance": "NOT_RUN",
+    "same_input_parameter_buffer_objects_and_boundary_bytes_recorded": true,
+    "softmax_fp32_rowsum_abs_max_recorded": 1.30385160446167e-07,
+    "softmax_fp32_rowsum_limit": 2e-05
+  },
+  "run_files_rehashed": 89,
+  "schema": 1,
+  "scope": "Read-only independent artifact integrity, full current source/runtime/raw13 stream rehash and recorded execution-contract reconciliation. No import/forward rerun, binary tensor decoding or numerical recomputation.",
+  "source_review_identity": {
+    "bytes": 30123,
+    "sha256": "de23a34de2c5b4ca42840e6afc63acf0198869d9b78bf563d5d239f233aa5a85"
+  },
+  "status": "VERIFIED_COMPLETE_OFFICIAL_M16_REFERENCE_PAIR_NOT_DUT_PASS",
+  "work_repeated": {
+    "DUT_or_RTL": false,
+    "ML_import": false,
+    "forward": false,
+    "model_construction": false,
+    "numerical_tensor_operation": false,
+    "socket_operation": false
+  }
+}

@@ -1,0 +1,9 @@
+# Qwen2 M16 官方两-arm参考里程碑
+
+已完成：原官方32768/rope1e6配置下，单一DecoderLayer实例执行baseline与observed两arm。实际y/prob native bytes逐字相同，原inputs/parameters/buffers三边界身份与hash不变；observed全29自检通过，121项独立执行审查通过。
+
+本包在candidates/qwen2_official_layer_reference_pair提供原字节源码、逻辑pins、仅输出hash/shape/dtype、脱敏审查摘要和portable纯mock。portable是原68项中的66项，另外2项公开身份检查单列；不是原68全部复现。没有任何tensor/weights/rawoutputs/maps或完整私有CONFIG。
+
+保留旧r1问题与r2被single-arm新scope替代的事实。fresh checkout缺外部runtime/raw13/config，数值参考不自包含；不能复用已消耗的一次授权。
+
+尚未完成：DUT比较、项目rotary256与官方32768对照、M128、RTL及全29无observer中间量等价。下一步只有在参考和DUT各自完整终态封存后，按原比较门开展另行授权的比较。当前不是DUT或项目整体PASS。

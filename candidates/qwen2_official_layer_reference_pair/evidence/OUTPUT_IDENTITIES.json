@@ -1,0 +1,493 @@
+{
+  "baseline_native": {
+    "prob": {
+      "bytes": 6144,
+      "sha256": "756c7ba98634e9071b5d3626f4afaad5bc060ab6e6cefeb3204671c28567009a"
+    },
+    "y": {
+      "bytes": 49152,
+      "sha256": "064883de2fc5e9cc67bb9faab6a226ede26bb0644a4eb761af8ffa052777a292"
+    }
+  },
+  "expected_prior_oracle_hashes": null,
+  "fields": {
+    "act": {
+      "fp32": {
+        "bytes": 573440,
+        "sha256": "a24d878676fe64b1dbac3f7638dfc3e0e4d39b6f03c1b3eade4380370851d0f3"
+      },
+      "native": {
+        "bytes": 286720,
+        "sha256": "3bfb3946c06b83c80112434f418a0b5104bbc85cbca9cc31d98eb6d42a74a088"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "att": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "39c0801956f002c78669d571104694e48a488b91863eaca4dee47fa35128344a"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "6d6a92db3a013bbb15300f98c8d7534fed00f2bc4dc48cb57a2d805833987c6d"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "cache_k": {
+      "fp32": {
+        "bytes": 16384,
+        "sha256": "d8013ced92babfe6a099fdad23a817e8d9de5d0a78e6d411c566bd0a0710ce77"
+      },
+      "native": {
+        "bytes": 8192,
+        "sha256": "3815d23560563ff28fdf556bcafee2ac9d52a93f283a506b2c47fbc7a4398554"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        16,
+        128
+      ]
+    },
+    "cache_v": {
+      "fp32": {
+        "bytes": 16384,
+        "sha256": "d0dbeb215e7ee21485881aad2c85d524d5a04310c8e096d39efe83670c140c3d"
+      },
+      "native": {
+        "bytes": 8192,
+        "sha256": "6d4343136b915eb7732a7f1dd57404f96f225ed115aa104e551682b0436ee6ba"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        16,
+        128
+      ]
+    },
+    "cos": {
+      "fp32": {
+        "bytes": 8192,
+        "sha256": "0de6a559c6e4fbce57ef2b20078d812ef0a8f11629d5c2bc04ae03df7cc6651c"
+      },
+      "native": {
+        "bytes": 4096,
+        "sha256": "317099ac03b2bba6c86b7937d732afd5bd9c71d936fa3f2323a79f5af30cec3e"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        16,
+        128
+      ]
+    },
+    "down": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "9ca5893558627d4849845c0bff17162c7d6925c757cc21a4af8be257a2fb1461"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "05bee37ab62b33f033bcd628357f4e25c9ec01c0bc9a4c245bfb711823a3274b"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "gate": {
+      "fp32": {
+        "bytes": 573440,
+        "sha256": "c97edcfec798722a75d49e764dfbe5bb202a715d276db4fba2f6ccdcf0c0f315"
+      },
+      "native": {
+        "bytes": 286720,
+        "sha256": "6734f4cb7be81eb7c392fc8405983732d70790c158364e3fa3fb47a52d41616d"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "k": {
+      "fp32": {
+        "bytes": 16384,
+        "sha256": "d8013ced92babfe6a099fdad23a817e8d9de5d0a78e6d411c566bd0a0710ce77"
+      },
+      "native": {
+        "bytes": 8192,
+        "sha256": "3815d23560563ff28fdf556bcafee2ac9d52a93f283a506b2c47fbc7a4398554"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        16,
+        128
+      ]
+    },
+    "kr": {
+      "fp32": {
+        "bytes": 16384,
+        "sha256": "1e2deaa6f989fc7f1ac2a9a20668d763544a1dc8cd954be80cbc8f729b0da087"
+      },
+      "native": {
+        "bytes": 8192,
+        "sha256": "dcc62255700ddbb4327b9b7c4dd3595de9df1a3cb1f3e7ad18dfe1e42c2a2142"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        256
+      ]
+    },
+    "logits": {
+      "fp32": {
+        "bytes": 12288,
+        "sha256": "261c89b61f912021b03d204124abd1ee24606561aada3a435fa6f76556632054"
+      },
+      "native": {
+        "bytes": 6144,
+        "sha256": "f4e82679fcd4da916ef2ac29c57c6a69c7649038d6d5d79a1618470177b52c79"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "mask": {
+      "fp32": {
+        "bytes": 1024,
+        "sha256": "246f0fd8682c15336917c1bd30f720b960fa35adf66355c967cfab0995550c57"
+      },
+      "native": {
+        "bytes": 512,
+        "sha256": "6c86c7d414502bcdf73725a51cdc1bf18e3e7b93fdacb7e118ab72bef13080ca"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        1,
+        16,
+        16
+      ]
+    },
+    "n0": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "706c9743135c5a9fdbcaf1a8a59f9d01601521246249bb602e7e9d67ba98e2ce"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "8a2c343fba5c68100785c0ad3c2c3cf03b195db776f5bff88a3e4790514b2e14"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "n1": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "166642e7b98ce53d7dbb0c4884b1337eac0a7d0a64520ba0e8d7fe2a7bb26b5a"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "a2d93566b1a4bdf96f8e30d69531001d4b08daed029636acb6ef4f4052fa83f3"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "o": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "f57c6cb4ad8a2cc360119fc56c5650a43b3a7c5969be6f858ce9cc2a3ea72eea"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "80958240dcc5b3f42d7208cd60092e9c7ea0a2478146ae1566a21598c0792852"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "prob": {
+      "fp32": {
+        "bytes": 12288,
+        "sha256": "e4c25526d396549245c8c2e4469e0ea3fe546f029e5f1abe619980fbfe20e20d"
+      },
+      "native": {
+        "bytes": 6144,
+        "sha256": "756c7ba98634e9071b5d3626f4afaad5bc060ab6e6cefeb3204671c28567009a"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "pv": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "80f6f9685e25e185d203f95d6a08e07b447cd9ce5870c7374550b934232ba54e"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "ffd5db64ffcac7c8ada174b69f045830db89feb93098fc34a407f16fd6e4d940"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "q": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "32ae28bab050ccbed9f29e1b8ed0af88435e46a6d37363b0864dcb8ee8065790"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "f23e4e3e7ebe97904937b12d912edb2165daf16c5af792fecc1516c0fd030950"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "qr": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "d38ef6210a2b933fb51beb4040bcae988748942c4ad86f57aab439f288a89977"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "83d0f3dd0d63fa318c1e384a9b6df69e07621692631ae37341a45bb3ba62bde9"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "r": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "40bd90a41c87dcead146fbd213dbcfc24d6a9c3e90fa24f963be4511472331b8"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "7cb16677f78117f44d04519d5b3592888a92d794786df67f8803f8577cbd5b65"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "repeat_k": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "df3fa8c8ab5e9af3e61315e8badbe1fa320a0cfb1b0d4ad478a8de5b3164fc4c"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "5a3dadbb977f42e60c571c9ff04201ad5b2028cbc92dfd794ddab3457bec45b1"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "repeat_v": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "ab74ec3e4e10a081e691b8d906083ca87d5c23ac2b8fcb6e8f57ef804d9fda35"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "4943e65dc8d7be140cec318e0f5ea43b4a5e40777969dc9ed3da7c0fa9350343"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "scores": {
+      "fp32": {
+        "bytes": 12288,
+        "sha256": "0490e3c418710a4521b450a7e72688c379ee394e4cd54a96d120c559aa13c28e"
+      },
+      "native": {
+        "bytes": 6144,
+        "sha256": "647d87aa260ea9c08ffc7c44b39508d23f2dde656e4b58df0b2fb7d08b7a3e89"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "silu": {
+      "fp32": {
+        "bytes": 573440,
+        "sha256": "0911c639cdffebe14edcba20acd4bbdc07570021570995308bdc9dfc20ed7bf1"
+      },
+      "native": {
+        "bytes": 286720,
+        "sha256": "ca02399969d44a1e36082474616c0c13b36018adb18a69ad9d2dade397ca9dfa"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "sin": {
+      "fp32": {
+        "bytes": 8192,
+        "sha256": "be646a40c78fa2e19848919e9ea0db27b1a5b10edd12c039c8baf330db3b12ad"
+      },
+      "native": {
+        "bytes": 4096,
+        "sha256": "cc58b7d7ebfc830649ee204dead579b5fa4af748dd922065bfbd06b0236929a8"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        16,
+        128
+      ]
+    },
+    "softmax_fp32": {
+      "fp32": {
+        "bytes": 12288,
+        "sha256": "1a409f998759964a59953bf8e225cfaaafc5566027903429e65eed85b58e3646"
+      },
+      "native": {
+        "bytes": 12288,
+        "sha256": "1a409f998759964a59953bf8e225cfaaafc5566027903429e65eed85b58e3646"
+      },
+      "native_dtype": "float32",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "up": {
+      "fp32": {
+        "bytes": 573440,
+        "sha256": "05766af86dcaf8d50118c96bab97a03fcf0c7e367766264f162a7864d81c8ddb"
+      },
+      "native": {
+        "bytes": 286720,
+        "sha256": "95e7bc11101ca5ee6d63eb7fcd4e4092396b2da559da7e8c27ea424585a79d4f"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "v": {
+      "fp32": {
+        "bytes": 16384,
+        "sha256": "60d899f89157b6e7f86c3f11b023addb22fdf008ca72aca8076bb12817d7fe10"
+      },
+      "native": {
+        "bytes": 8192,
+        "sha256": "3183f64a3042ed3a280ec2c6f3bc2055af475bf929532719546b1fd88a461062"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        256
+      ]
+    },
+    "x": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "e034d9468507a1a5a6521308f0379eda917ccd828066ef571c0c8d21f18f8d63"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "y": {
+      "fp32": {
+        "bytes": 98304,
+        "sha256": "ff9eae9551855940bb0dc280713cff6509df26ae6ac41636501cbf0aa434614e"
+      },
+      "native": {
+        "bytes": 49152,
+        "sha256": "064883de2fc5e9cc67bb9faab6a226ede26bb0644a4eb761af8ffa052777a292"
+      },
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    }
+  },
+  "hash_meaning": "Actual newly observed content identities only, not independently known expected answers or inherited prior PASS.",
+  "payloads_included": false,
+  "schema": 1,
+  "y_prob_observer_off_on_native_bytes_identical": true
+}

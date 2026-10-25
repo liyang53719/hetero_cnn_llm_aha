@@ -1,0 +1,30 @@
+{
+  "explicitly_excluded_original_tests": {
+    "SourceContractTests.test_frozen_capture_is_unchanged_and_public_disabled": "Historical full_layer_capture/capture.py is not included; unchanged paired public-entry disabled test remains in selected original methods.",
+    "SourceContractTests.test_network_helper_is_exact_frozen_source_region": "Historical import_gate_r2/worker.py and its private path provenance mapping are not included."
+  },
+  "legacy_pins_fixture": "full_layer_capture/pins.json is the unchanged historical pins file also identical to the paired pins; present only for original test fixture compatibility, not a second implementation.",
+  "numeric_reproduction": "Not self-contained. External exact runtime/raw13/config and newly reviewed local execution controls are required; private one-use approval cannot be reused.",
+  "original_68_fully_reproduced": false,
+  "original_authored_test_source_modified": false,
+  "original_test_methods": 68,
+  "original_test_source_identity": {
+    "bytes": 37628,
+    "sha256": "8cb65991ab1f87c34e9c7da036b28b4b304d47820e9ee024138c0c22cc125abe"
+  },
+  "portable_adapter_identity": {
+    "bytes": 4368,
+    "sha256": "3a073e592dd86a1d85f2d4ab02c0705040f2384006c76c810f9ca7a098268525"
+  },
+  "portable_original_methods_run": 66,
+  "running_sources_modified": false,
+  "schema": 1,
+  "supplemental_public_tests": {
+    "count": 2,
+    "not_part_of_original_68": true,
+    "purpose": [
+      "all published source identities",
+      "exact network helper-region identity"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "excluded": [
+    "all tensor/weight/raw output payloads",
+    "all full module/map inventories",
+    "complete private CONFIG",
+    "private approval/capability/claim records",
+    "private absolute paths",
+    "process IDs and object/storage addresses"
+  ],
+  "full_private_config_identity": {
+    "bytes": 4788996,
+    "sha256": "364f39b2996fa4af4c55bcb6561b5dfc667efe75983cd66ca76528c34bfc84a4"
+  },
+  "method": "Whitelist projection of JSON metadata; all private paths, process/object addresses and full maps/modules/manifest omitted. Original source bytes copied unchanged.",
+  "not_authorization": "This publication preparation neither repeats nor authorizes numerical execution or external publication.",
+  "numeric_imports_or_forwards_run_for_publication": false,
+  "schema": 1,
+  "source_metadata_identities": {
+    "ALL29_VALIDATION.json": {
+      "bytes": 14540,
+      "sha256": "903a24412e1d4bbb4d61e5ddfb29d1ec0c48efe49dca2a2778aa3de6f0d6e7f0"
+    },
+    "COMPLETION_SEAL.json": {
+      "bytes": 13641,
+      "sha256": "2f89260e59171f42196507a73e7a1c8e47cecd08322a34a066bddabc291f3846"
+    },
+    "RECEIPT.json": {
+      "bytes": 15695,
+      "sha256": "c56e8dfc407b3899ee9678c36056d770befa0f1b308277df1a3e88d7f0ec5659"
+    },
+    "RUNTIME_IDENTITY.json": {
+      "bytes": 2872,
+      "sha256": "3c1746725adf05192718539c99f93b4cb813d1cc6116a7cc039a245aa8d88f7a"
+    },
+    "WORKER_RESULT.json": {
+      "bytes": 4103,
+      "sha256": "8c2f7b77a9e2a275975b889980b6dee6d6e45a417c9632510be09fab84a3aaf7"
+    }
+  },
+  "tensor_payloads_read_for_publication": false
+}

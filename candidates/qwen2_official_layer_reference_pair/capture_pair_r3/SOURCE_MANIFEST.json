@@ -1,0 +1,49 @@
+{
+  "actual_forward_executed": false,
+  "capture_profile": {
+    "all29_intermediate_noninterference_claimed": false,
+    "arm_order": [
+      "baseline_no_capture_observer",
+      "observed_all29"
+    ],
+    "baseline_outputs": [
+      "y",
+      "prob"
+    ],
+    "comparison": "native_bytes_exact",
+    "forward_calls": 2,
+    "layer_instances": 1,
+    "name": "same_layer_baseline_then_observed_v1",
+    "same_input_objects": [
+      "x",
+      "mask",
+      "positions"
+    ],
+    "state_checkpoints": [
+      "before_baseline",
+      "after_baseline",
+      "after_observed"
+    ],
+    "unchanged_state": [
+      "inputs",
+      "parameters",
+      "buffers"
+    ]
+  },
+  "files": {
+    "capture_pair.py": {
+      "bytes": 41885,
+      "sha256": "1ad27d9c77c9071286ea0689a3c4e814e1a248f7dafec950094b5158fb6e1fef"
+    },
+    "pins.json": {
+      "bytes": 10501,
+      "sha256": "0a129018f3c82d959014a0d7a205d736ea0d589d958e970cc96f7ecf2899fa13"
+    }
+  },
+  "numerical_import_executed": false,
+  "original_frozen_capture_modified": false,
+  "predecessor_capture_sha256": "4fe8428c8ae2a1d96a900b0fc26e9a34cb98663f037c029595a5e51d4fc9bfc4",
+  "predecessor_pins_sha256": "0a129018f3c82d959014a0d7a205d736ea0d589d958e970cc96f7ecf2899fa13",
+  "schema": 1,
+  "status": "PAIR_SOURCE_PREPARED_NOT_EXECUTED"
+}

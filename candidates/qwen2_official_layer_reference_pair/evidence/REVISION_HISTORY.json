@@ -1,0 +1,38 @@
+{
+  "earlier_approvals_results_claims_reused": false,
+  "earlier_frozen_sources_or_findings_modified": false,
+  "history": [
+    {
+      "config_sha256": "ba58e202fc49f034faf1b449f1c0345e9850a4d2a786d45136db9d2eecbef3e8",
+      "findings": [
+        "lexical payload path/symlink escape",
+        "stale tracked PID could hide a newly owned process identity"
+      ],
+      "forward_executed": false,
+      "review_sha256": "cd2ab16e25ab05b55c26d656d1b267209e302fd3d1beabc93678d0deeab75dd4",
+      "revision": "full_reference_gate r1",
+      "status": "BLOCKED_PRESERVED"
+    },
+    {
+      "config_sha256": "f4a287f42c3e01e508c3a5019026676418ccd879bc35c662a2fc511b441c6081",
+      "fixes": [
+        "canonical payload path checking and read-only raw13",
+        "current-ownership-backed PID identity rebinding and signal-time recheck"
+      ],
+      "forward_executed": false,
+      "review_sha256": "1b15e440173b0f6e0f7d30a32cfe280bd3e91b1a59b791e06f1ba22011010d21",
+      "revision": "full_reference_gate r2",
+      "status": "SINGLE_OBSERVED_ARM_STATIC_REVIEW_PASSED_BUT_SUPERSEDED"
+    },
+    {
+      "config_sha256": "364f39b2996fa4af4c55bcb6561b5dfc667efe75983cd66ca76528c34bfc84a4",
+      "execution_review_sha256": "de23a34de2c5b4ca42840e6afc63acf0198869d9b78bf563d5d239f233aa5a85",
+      "forward_calls": 2,
+      "layer_instances": 1,
+      "revision": "full_reference_gate r3 + capture_pair r3",
+      "static_review_sha256": "85987e77716678a118af8821d4c20fa27f2ff82dba7c9f16f6ceb520f6ec9ec3",
+      "status": "VERIFIED_COMPLETE_OFFICIAL_M16_REFERENCE_PAIR_NOT_DUT_PASS"
+    }
+  ],
+  "schema": 1
+}

@@ -1,0 +1,148 @@
+{
+  "DUT_comparison": "NOT_RUN",
+  "M128": "NOT_RUN",
+  "Qwen2Model_or_ForCausalLM_forward": false,
+  "RTL": "NOT_RUN",
+  "all29_baseline_intermediates_observed": false,
+  "all29_finite": true,
+  "all29_observed_fields": 29,
+  "baseline_observed_y_prob_native_bytes_identical": true,
+  "bf16_prob_rowsum_abs_max_diagnostic_only": 0.00279998779296875,
+  "bf16_prob_rowsum_hard_gate_added": false,
+  "capture_profile": {
+    "all29_intermediate_noninterference_claimed": false,
+    "arm_order": [
+      "baseline_no_capture_observer",
+      "observed_all29"
+    ],
+    "baseline_outputs": [
+      "y",
+      "prob"
+    ],
+    "comparison": "native_bytes_exact",
+    "forward_calls": 2,
+    "layer_instances": 1,
+    "name": "same_layer_baseline_then_observed_v1",
+    "same_input_objects": [
+      "x",
+      "mask",
+      "positions"
+    ],
+    "state_checkpoints": [
+      "before_baseline",
+      "after_baseline",
+      "after_observed"
+    ],
+    "unchanged_state": [
+      "inputs",
+      "parameters",
+      "buffers"
+    ]
+  },
+  "comparison_tolerances_retained_not_applied": {
+    "block_y": {
+      "combine": "AND",
+      "max_abs_lte": 0.05,
+      "mean_abs_lte": 0.01
+    },
+    "nonfinite_allowed": false,
+    "operator_bf16": {
+      "combine": "AND",
+      "max_abs_lte": 0.03125,
+      "mean_abs_lte": 0.005
+    },
+    "rowsum_abs_error_lte": 2e-05,
+    "softmax_fp32": "DIAGNOSTIC_NO_APPROVED_COMPARISON_TOLERANCE"
+  },
+  "complete_official_layer_forward": true,
+  "completion_seal_identity": {
+    "bytes": 13641,
+    "sha256": "2f89260e59171f42196507a73e7a1c8e47cecd08322a34a066bddabc291f3846"
+  },
+  "config_identity": {
+    "bytes": 4788996,
+    "sha256": "364f39b2996fa4af4c55bcb6561b5dfc667efe75983cd66ca76528c34bfc84a4"
+  },
+  "cpu_seconds": 27.708761,
+  "execution_review_identity": {
+    "bytes": 30123,
+    "sha256": "de23a34de2c5b4ca42840e6afc63acf0198869d9b78bf563d5d239f233aa5a85"
+  },
+  "execution_review_status": "VERIFIED_COMPLETE_OFFICIAL_M16_REFERENCE_PAIR_NOT_DUT_PASS",
+  "forward_calls": 2,
+  "future_DUT_comparison_rule": "Only after both runs have final completed, sealed terminal states; never compare an active/partial output stream.",
+  "future_probability_positive_zero_count": 1440,
+  "inputs_parameters_buffers_three_boundary_identity_and_native_hashes_unchanged": true,
+  "layer_instances": 1,
+  "limit_reason": null,
+  "limitations": [
+    "Module/maps snapshots are not a lifetime trace or all-code identity proof.",
+    "Python audit/profile guards are not kernel isolation or native/unprofiled-thread bypass proof.",
+    "Sampled tree RSS is not a hard memory cap; RLIMIT_CPU is per process including threads.",
+    "Two-arm evidence concerns only actual y/prob native bytes and original input/parameter/buffer boundary state; all29 baseline intermediate noninterference is not claimed.",
+    "Internal capture/SEAL.json is not wrapper completion; only parent terminal COMPLETION_SEAL.json qualifies."
+  ],
+  "limits": {
+    "address_space_limit_changed": false,
+    "affinity_count": 4,
+    "cleanup_seconds": 2,
+    "cpu_seconds_hard": 60,
+    "deterministic_algorithms": true,
+    "interop_threads": 1,
+    "log_bytes_each": 1048576,
+    "output_bytes": 67108864,
+    "poll_seconds": 0.02,
+    "rss_is_hard_cap": false,
+    "sampled_tree_rss_bytes": 1610612736,
+    "threads_env": 4,
+    "wall_seconds": 90
+  },
+  "noninterference_scope": "Actual y/prob native return equality and boundary original input/parameter/buffer state only, not all29 internal baseline values.",
+  "official_config": {
+    "attention_backend": "eager explicitly selected by wrapper",
+    "bytes": 660,
+    "logical_role": "source-B original Qwen2-1.5B-Instruct config.json",
+    "max_position_embeddings": 32768,
+    "rope_theta": 1000000.0,
+    "sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+    "use_sliding_window": false
+  },
+  "peak_sampled_tree_rss_bytes": 574599168,
+  "postflight": {
+    "bytes_checked": 1016137382,
+    "differences": {},
+    "files_checked": 18648,
+    "passed": true,
+    "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+    "wall_seconds": 0.9393913210369647
+  },
+  "preflight": {
+    "bytes_checked": 1016137382,
+    "files_checked": 18648,
+    "wall_seconds": 1.0027597380103543,
+    "worker_started": false
+  },
+  "prior_reference_pass_inherited": false,
+  "project_rotary256_comparison": "NOT_RUN",
+  "project_rotary256_equivalence_claimed": false,
+  "receipt_identity": {
+    "bytes": 15695,
+    "sha256": "c56e8dfc407b3899ee9678c36056d770befa0f1b308277df1a3e88d7f0ec5659"
+  },
+  "rlimit_as_changed": false,
+  "rss_is_hard_cap": false,
+  "same_layer_and_original_input_objects": true,
+  "schema": 1,
+  "softmax_fp32_rows": 192,
+  "softmax_fp32_rowsum_abs_max": 1.30385160446167e-07,
+  "softmax_fp32_rowsum_tolerance": 2e-05,
+  "static_review_identity": {
+    "bytes": 22336,
+    "sha256": "85987e77716678a118af8821d4c20fa27f2ff82dba7c9f16f6ceb520f6ec9ec3"
+  },
+  "status": "VERIFIED_COMPLETE_OFFICIAL_M16_REFERENCE_PAIR_NOT_DUT_PASS",
+  "tracked_live_processes_at_terminal_scan": 0,
+  "worker_reaped": true,
+  "worker_returncode": 0,
+  "worker_wall_seconds": 25.463470489019528
+}

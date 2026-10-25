@@ -1,0 +1,91 @@
+{
+  "ML_imported": false,
+  "adapter_identity": {
+    "bytes": 4368,
+    "sha256": "3a073e592dd86a1d85f2d4ab02c0705040f2384006c76c810f9ca7a098268525"
+  },
+  "historical_original_suite": {
+    "normal": 68,
+    "optimized": 68,
+    "passed": true,
+    "repeated_in_full_by_public_adapter": false
+  },
+  "interpreter": {
+    "executable_identity": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "logical_name": "python3.12",
+    "version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]"
+  },
+  "logs": {
+    "ORIGINAL_TESTS_NORMAL.log": {
+      "bytes": 8966,
+      "sha256": "8ba161fe951afcd53dedc6cae29b25310f7fdfd33667619bdcb02a4ecc85098c"
+    },
+    "ORIGINAL_TESTS_OPTIMIZED.log": {
+      "bytes": 8966,
+      "sha256": "0f7f8a4fb4a5ab29f73a66e530403997d38c99133ad0cc7c3bc414bd9ab1b237"
+    },
+    "PORTABLE_MOCK_NORMAL.log": {
+      "bytes": 11533,
+      "sha256": "719ed92347c1547137e29fbb8975745b54c2e134ce04b3aa5cb7e032a607fd31"
+    },
+    "PORTABLE_MOCK_OPTIMIZED.log": {
+      "bytes": 11533,
+      "sha256": "9a062ff71d50542da97302f4d1d7c1af52f4a9aea4c74a0869a66aed8d303ef6"
+    }
+  },
+  "only_synthetic_temporary_binary_test_data": true,
+  "original_raw_payload_read": false,
+  "preserved_original_test_identity": {
+    "bytes": 37628,
+    "sha256": "8cb65991ab1f87c34e9c7da036b28b4b304d47820e9ee024138c0c22cc125abe"
+  },
+  "reference_forward_executed": false,
+  "runs": [
+    {
+      "argv_logical": [
+        "python3.12",
+        "-I",
+        "-S",
+        "-B",
+        "run_portable_mock.py"
+      ],
+      "cpu_seconds_hard": 15,
+      "ended_utc": "2026-10-25T02:09:10.035413+00:00",
+      "label": "NORMAL",
+      "original_68_fully_reproduced": false,
+      "original_methods_excluded": 2,
+      "original_methods_run": 66,
+      "original_methods_total": 68,
+      "returncode": 0,
+      "started_utc": "2026-10-25T02:09:08.065671+00:00",
+      "supplemental_identity_checks": 2,
+      "wall_timeout_seconds": 30
+    },
+    {
+      "argv_logical": [
+        "python3.12",
+        "-I",
+        "-S",
+        "-B",
+        "-O",
+        "run_portable_mock.py"
+      ],
+      "cpu_seconds_hard": 15,
+      "ended_utc": "2026-10-25T02:09:12.255933+00:00",
+      "label": "OPTIMIZED",
+      "original_68_fully_reproduced": false,
+      "original_methods_excluded": 2,
+      "original_methods_run": 66,
+      "original_methods_total": 68,
+      "returncode": 0,
+      "started_utc": "2026-10-25T02:09:10.035443+00:00",
+      "supplemental_identity_checks": 2,
+      "wall_timeout_seconds": 30
+    }
+  ],
+  "schema": 1,
+  "status": "PORTABLE_SELECTED_ORIGINAL_66_AND_SEPARATE_PUBLIC_2_PASS"
+}

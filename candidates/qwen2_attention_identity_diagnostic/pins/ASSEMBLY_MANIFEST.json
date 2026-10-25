@@ -1,0 +1,147 @@
+{
+  "schema": "source-only-byte-assembly-v1",
+  "base_commit": "2a898bb742d0b71beeae9115933054e27952a5ef",
+  "source_scope": "13 wrapper executables, one binding mock, four observer modules, one source gate, one observer pin file. No runtime/config/input closure or new admission.",
+  "files": [
+    {
+      "target": "wrapper/admission.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/admission.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 1962,
+      "sha256": "9467e75f9056a5fd5bbfdf4953687c9ad1d1ddb687e367bb13a3648370bb8888"
+    },
+    {
+      "target": "wrapper/artifacts.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/artifacts.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1038,
+      "sha256": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf"
+    },
+    {
+      "target": "wrapper/cold_import.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/cold_import.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 30697,
+      "sha256": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580"
+    },
+    {
+      "target": "wrapper/harness.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/harness.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 12311,
+      "sha256": "7d8b06655615cfc397fc4b369e5523ac8e9164cec07d2f185e8e80c0163e4b5b"
+    },
+    {
+      "target": "wrapper/launch.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/launch.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 5151,
+      "sha256": "6c1ce83b33edef7a847cb3814a6241cb21b3e1046cfbe1d43a49fed9a00c52fc"
+    },
+    {
+      "target": "wrapper/module_inventory.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/module_inventory.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1"
+    },
+    {
+      "target": "wrapper/reference_capture.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reference_capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 18962,
+      "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b"
+    },
+    {
+      "target": "wrapper/run_cold.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/run_cold.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 4218,
+      "sha256": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870"
+    },
+    {
+      "target": "wrapper/runtime_closure.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/runtime_closure.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+    },
+    {
+      "target": "wrapper/runtime_observer.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/runtime_observer.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+    },
+    {
+      "target": "wrapper/selective_binding.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/selective_binding.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 6485,
+      "sha256": "88671278b37df02d7afc5a862801305bdd531b295d60cdb35b486dd01f7beb23"
+    },
+    {
+      "target": "wrapper/stage_clock.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/stage_clock.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 493,
+      "sha256": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065"
+    },
+    {
+      "target": "wrapper/test_binding_mock.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/test_binding_mock.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 16918,
+      "sha256": "0ceb04272a936c26d9d06b4f545ea668168c6ddbb0286b973f9fcb23393a9d78"
+    },
+    {
+      "target": "wrapper/worker.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/worker.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 17334,
+      "sha256": "bc9a69668a374c23f2bd9fe4fb5870310da59f9e433a70098c45c545c616f867"
+    },
+    {
+      "target": "postimage/monitor.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/postimage/monitor.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 14705,
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+    },
+    {
+      "target": "postimage/capture.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "target": "postimage/service_trace.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/service_trace.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    {
+      "target": "postimage/bridge.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/bridge.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 8627,
+      "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652"
+    },
+    {
+      "target": "helper/runtime_binding.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/source_gate/runtime_binding.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    {
+      "target": "postimage/SOURCE_PINS.json",
+      "repo_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/SOURCE_PINS.json",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1159,
+      "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+    }
+  ]
+}

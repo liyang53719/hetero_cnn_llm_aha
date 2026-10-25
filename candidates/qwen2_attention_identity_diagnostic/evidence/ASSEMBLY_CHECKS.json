@@ -1,0 +1,31 @@
+{
+  "scope": "New packaging-only utility: stdlib copy/hash/path tests and exact source reconstruction. Not target/model/mock/native correctness.",
+  "runs": [
+    {
+      "optimized": false,
+      "packaging_utility_tests": 10,
+      "source_assembly": {
+        "bytes": 210822,
+        "files": 20,
+        "target_executed": false
+      },
+      "exact_original_bytes_verified": 20,
+      "target_imported_or_executed": false
+    },
+    {
+      "optimized": true,
+      "packaging_utility_tests": 10,
+      "source_assembly": {
+        "bytes": 210822,
+        "files": 20,
+        "target_executed": false
+      },
+      "exact_original_bytes_verified": 20,
+      "target_imported_or_executed": false
+    }
+  ],
+  "assembler_sha256": "56bb3670642e7c7270fcfde0487c2f5889ff6fafd54372f1b1ec56bec3cde0aa",
+  "tests_sha256": "6d1cc2ad910ba25f1e2df478993ab71e9721d95ab0c1aa0d1cd15442cfb39280",
+  "new_original_files": 7,
+  "pinned_existing_files": 13
+}

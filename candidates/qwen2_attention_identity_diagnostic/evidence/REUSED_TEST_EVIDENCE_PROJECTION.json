@@ -1,0 +1,35 @@
+{
+  "original": {
+    "bytes": 1586,
+    "sha256": "bd3330c495cf5d1c38df97f1988525017de90cd970e1c889cf83ac910f31f100"
+  },
+  "previous_config": {
+    "bytes": 282264,
+    "sha256": "142f344eb54b8ad3656243f5a454f9629e676ad232429bfdad779a8d3c465c48"
+  },
+  "previous_result": {
+    "bytes": 5419,
+    "sha256": "987dcb5ae72ffbc6f8f3c540166b41ca7461c1ea41e110ec87cfeb538ddbf233"
+  },
+  "previous_test_closure": {
+    "bytes": 2498,
+    "sha256": "3946e8f344ef0f7b0f632e655d58a0e3fe1ac503cd02f4ef5919c161f1afa8b4"
+  },
+  "candidate_fixture_result": {
+    "bytes": 890,
+    "sha256": "eff658c505b29bb67290038f33be422cfbbc5af780867e6e7964181199d964eb"
+  },
+  "candidate_freeze": {
+    "bytes": 2129,
+    "sha256": "45407b007aa019bddb3360481e89bce3df82fb9d245d706eeea52ba82d552987"
+  },
+  "reused_original_lease_resource_tests": 84,
+  "reused_candidate_cases": 112,
+  "new_delta_binding_tests": 44,
+  "not_reexecuted": [
+    "original_lease_resource_suites",
+    "candidate_112_cases"
+  ],
+  "reason": "Unchanged content hashes; only changed binding/admission/metadata tests rerun",
+  "projection": "Only physical path keys omitted; original distinct evidence identities and non-rerun scope retained."
+}

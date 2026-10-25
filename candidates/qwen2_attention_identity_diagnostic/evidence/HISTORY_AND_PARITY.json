@@ -1,0 +1,103 @@
+{
+  "successor_static_parity": {
+    "original": {
+      "bytes": 929,
+      "sha256": "8e78f4a960e1a31c84cf3200b70466535297bd499e0446e1b7b3690d39c20d94"
+    },
+    "content": {
+      "status": "PASS_SOURCE_CONFIG_DELTA_ONLY_NO_NATIVE",
+      "config": {
+        "bytes": 284096,
+        "sha256": "afd476a17fa0fc7ab0b5209510b212056cde76520c17adb330f3b84459b8e4e8"
+      },
+      "current_file_pins": 1026,
+      "unchanged_wrapper_sources": [
+        "runtime_observer.py",
+        "run_cold.py",
+        "runtime_closure.py",
+        "cold_import.py",
+        "reference_capture.py",
+        "stage_clock.py",
+        "artifacts.py",
+        "module_inventory.py"
+      ],
+      "actual_source_runtime_elf_input_reference_equal": true,
+      "prior_R2_freeze": {
+        "bytes": 10277,
+        "sha256": "e0e09bb7d25452c45b9fc7b34a1cf0b8b5302f9a1ff3416f56a9660598a3b22a"
+      },
+      "candidate_freeze": {
+        "bytes": 2129,
+        "sha256": "45407b007aa019bddb3360481e89bce3df82fb9d245d706eeea52ba82d552987"
+      },
+      "prior_actual_readonly_receipt": {
+        "bytes": 627,
+        "sha256": "10e93deac6bb77b6b0c4f14a505541b58da5455514e1b362bdd0ce2994ed3405"
+      },
+      "old_R4_result_unchanged": true
+    }
+  },
+  "source_candidate_manifest": {
+    "original": {
+      "bytes": 1690,
+      "sha256": "ad8d3edbe8bd059a9cdb8ef97eb25f7184e107c07c94e68883b96326b3d920c4"
+    },
+    "content": {
+      "status": "SOURCE_ONLY_CANDIDATE_NOT_NATIVE_REVIEWED",
+      "parent_monitor": {
+        "bytes": 13575,
+        "sha256": "b76c48e24963b5219307cda776e1409e1e3c923f6d034f85c87e6f4e95041c16"
+      },
+      "postimage": {
+        "monitor.py": {
+          "bytes": 14705,
+          "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+        },
+        "capture.py": {
+          "bytes": 5596,
+          "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+        },
+        "bridge.py": {
+          "bytes": 8627,
+          "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652"
+        },
+        "service_trace.py": {
+          "bytes": 12079,
+          "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+        },
+        "SOURCE_PINS.json": {
+          "bytes": 1159,
+          "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+        }
+      },
+      "unchanged": [
+        "capture.py",
+        "bridge.py",
+        "service_trace.py",
+        "SOURCE_PINS.json"
+      ],
+      "actual_worker_modified": false,
+      "global_cache": false,
+      "hot_key": "id(code) plus row[0] is code",
+      "official_code_hash_url": "https://github.com/python/cpython/blob/v3.12.14/Objects/codeobject.c#L1761-L1798",
+      "local_version_header": {
+        "bytes": 1301,
+        "sha256": "66ff726e200a2eba15cfedee752bf6a59e20d6741a7c45f7a2c424dea649f473"
+      },
+      "tests": {
+        "top_level_per_mode": 30,
+        "nested_per_mode": 26,
+        "total_cases": 112,
+        "status": "PASS_AST_FIXTURE_NOT_REAL_NATIVE"
+      }
+    }
+  },
+  "prior_selective_actual_commit": "2a898bb742d0b71beeae9115933054e27952a5ef",
+  "prior_four_arm_actual_commit": "bafb12b4cc0a14ad233602004e27adf65ad820cc",
+  "fixture_negative_evidence": "candidates/qwen2_attention_selective_diagnostic/evidence/FIXTURE_NEGATIVE_TIMING.json",
+  "r1_blocked_evidence": "candidates/qwen2_attention_selective_diagnostic/evidence/HISTORY.json",
+  "prior_actual_results_unchanged": true,
+  "full_m128_cpu_fail_unchanged": true,
+  "no_adoption": true,
+  "no_stability_study_in_this_package": true
+}

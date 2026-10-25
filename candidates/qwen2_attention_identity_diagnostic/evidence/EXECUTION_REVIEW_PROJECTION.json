@@ -1,0 +1,162 @@
+{
+  "original": {
+    "bytes": 6131,
+    "sha256": "d6716929fea40684cfe079cf666562305c2ea35f89625803c4899085717591e7"
+  },
+  "projection": "Private approval/claim and reviewer script identities omitted; prior reviewer-script physical path omitted, its hash and schema method retained. Original scope typo identity_identity_r1 retained verbatim; actual RESULT observer_variant is selective_identity_r1.",
+  "status": "PASS_READ_ONLY_M2_IDENTITY_EXECUTION_CLOSURE_LIMITED",
+  "checks": 22314,
+  "errors": [],
+  "config_sha256": "afd476a17fa0fc7ab0b5209510b212056cde76520c17adb330f3b84459b8e4e8",
+  "static_review_sha256": "f3f96622fe5c7a9194ed03bd490e0daa34e86d31b7b47b51920a8430c087f925",
+  "result_sha256": "df4698289b4912890d579de8cc5fb8fc277c45b31e75851a53439980b67f7455",
+  "parent_sha256": "2bbfc7a86913e4e9e9390ec6cb8767cb7c9efb8e4d0f8863374aac08f87fd8c2",
+  "artifacts": 115,
+  "artifact_bytes": 4239385,
+  "artifact_manifest_sha256": "4ce2231e5121e5677b349781ee08aa5d1dbd9204ffa01fc28c35630e3548f6e0",
+  "checks_receipt_sha256": "e1ff25bac20925c5927445420007c69fa852da859fa19e5e223c61d2e6971309",
+  "pins_rehashed": 1026,
+  "events": [
+    {
+      "arm": 0,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 1,
+      "last_ticket": 216
+    },
+    {
+      "arm": 1,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 217,
+      "last_ticket": 432
+    },
+    {
+      "arm": 2,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 433,
+      "last_ticket": 648
+    }
+  ],
+  "runtime": [
+    {
+      "phase": "AFTER_NATIVE_LOAD",
+      "modules": 109,
+      "unique_mappings": 11,
+      "unique_ELF": 9
+    },
+    {
+      "phase": "ARM_0_TERMINAL",
+      "modules": 253,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "ARM_1_TERMINAL",
+      "modules": 253,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "ARM_2_TERMINAL",
+      "modules": 259,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "POSTFLIGHT",
+      "modules": 279,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    }
+  ],
+  "worker_cpu_seconds": 6.226902891,
+  "parent_wall_seconds": 6.283986124966759,
+  "clean_owner_intervals": [
+    {
+      "stage": "actual_owner_job_through_terminal_ack_and_monitor_exit",
+      "cpu_ns": 147838387,
+      "wall_ns": 147789040
+    },
+    {
+      "stage": "actual_owner_job_through_terminal_ack_and_monitor_exit",
+      "cpu_ns": 647338533,
+      "wall_ns": 646294913
+    },
+    {
+      "stage": "actual_owner_job_through_terminal_ack_and_monitor_exit",
+      "cpu_ns": 471684661,
+      "wall_ns": 472082797
+    }
+  ],
+  "identity_vs_original_cpu_difference_seconds": -0.175653872,
+  "identity_vs_original_cpu_relative_difference": -0.2713477771606715,
+  "raw_evidence": {
+    "three_outputs_and_reference_byte_equal": true,
+    "three_scores_and_reference_byte_equal": true,
+    "three_writes_equal_and_complete": true,
+    "both_observed_arms_ten_fields_and_reference_byte_presence_shape_equal": true,
+    "original_identity_observation_frequencies_equal": true,
+    "reference_normalizer_frequency_distinction": "DUT original/identity normalizer observed once each; independent reference captures 8/16 identical repetitions. Values/presence match; reference write frequency is intentionally not claimed equal."
+  },
+  "selective_masks": {
+    "installed_and_cleaned": true,
+    "slot": 3,
+    "role_masks": {
+      "run": 36,
+      "work": 36,
+      "consume": 4,
+      "matrix": 36,
+      "op": 4,
+      "tick": 4,
+      "client": 36
+    },
+    "full_normal_module_code_hashes_recomputed_without_execution": 4
+  },
+  "scope": "Single actual M2 fixed-order off/original/identity_identity_r1 trio, no adoption or full-block/RTL/hardware acceptance",
+  "limitations": [
+    "No target/native rerun or independent arithmetic calculation by reviewer; only persisted byte/hash, source, event lifecycle and metadata consistency checks.",
+    "Reference remains original AST recipe with shared exact RNE primitives, not full official Transformers forward. Causal cells only; unobserved padding/sentinels are not measured values.",
+    "One fixed-order trio is not a causal/statistical speedup benchmark; the observed identity/original interval reduction is a single same-run pair, not stable speedup, causal hashing time-share, or M128 extrapolation; R4 is a different prior run and may not be used as a same-run speedup denominator.",
+    "Parent exit0/group_remaining=false plus source-bound cleanup checks attest cleanup; runtime maps/module lists are snapshots, not complete OS event history. AS1GiB is a cap, no measured peak RSS.",
+    "No standalone native final seal/pre-post complete ledger; external artifact manifest is appended by this independent review, not retroactively a run-native seal.",
+    "Full M128 CPU-limit FAIL preserved. No new run, retry, larger budget, hardware utilization/cycles, or80/90% claim."
+  ],
+  "target_executed_by_reviewer": false,
+  "python_sources_compiled_for_identity_only_not_executed": true,
+  "reviewer_method_reuse": {
+    "prior_script_sha256": "7075eac3470edf597fd522287916bdad0b4c1459aad6bba097d9b16da3d7d569",
+    "schema": "Prior corrected u16 frequency serialization and provenance-specific first-write vs all-event counters retained; no new schema correction or target rerun."
+  }
+}

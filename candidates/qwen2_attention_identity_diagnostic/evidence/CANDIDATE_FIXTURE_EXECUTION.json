@@ -1,0 +1,44 @@
+{
+  "original": {
+    "bytes": 890,
+    "sha256": "eff658c505b29bb67290038f33be422cfbbc5af780867e6e7964181199d964eb"
+  },
+  "result": {
+    "status": "PASS_BOUNDED_AST_FIXTURE_ONLY",
+    "runs": [
+      {
+        "optimized": false,
+        "returncode": 0,
+        "wall_seconds": 8.693861803971231,
+        "cpu_seconds": 8.686247,
+        "log": "normal.log",
+        "sha256": "c257500686c6c2a256f8a796a79390e2fdb681fed67a4c4b9559f976a5a03f18"
+      },
+      {
+        "optimized": true,
+        "returncode": 0,
+        "wall_seconds": 9.093408568995073,
+        "cpu_seconds": 9.085022,
+        "log": "optimized.log",
+        "sha256": "911f9f158fc5ddfdedefa6df319801b9f0b80c468644e065779d876b85070e9a"
+      }
+    ],
+    "native_executed": false,
+    "actual_real_owner_executed": false,
+    "benchmark_run": false,
+    "limits": {
+      "cpus": 1,
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "wall_seconds": 45
+    },
+    "wall_seconds": 17.790125601983164,
+    "total_cpu_seconds": 17.771269,
+    "original_timing_and_count_tests_excluded": true
+  },
+  "top_level_tests_each_mode": 30,
+  "nested_cases_each_mode": 26,
+  "total_executions": 112,
+  "this_packaging_target_reruns": 0,
+  "scope": "Historical AST fixture only, timing/instrumentation tests deliberately not rerun; incidental fixture helper clock samples are not a benchmark."
+}

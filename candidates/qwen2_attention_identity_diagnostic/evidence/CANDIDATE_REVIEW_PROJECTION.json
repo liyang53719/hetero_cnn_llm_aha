@@ -1,0 +1,61 @@
+{
+  "original": {
+    "bytes": 2144,
+    "sha256": "9ef07c2d7dda599d0c3f3aa1a275c8fa14c613ff7aaf366c771f0c5321037833"
+  },
+  "status": "PASS_SOURCE_AND_AST_FIXTURE_ONLY",
+  "candidate_monitor_sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84",
+  "candidate_freeze_sha256": "45407b007aa019bddb3360481e89bce3df82fb9d245d706eeea52ba82d552987",
+  "all_static_checks_pass": true,
+  "normal_and_optimized_pass": true,
+  "test_executions": 126,
+  "native_executed": false,
+  "actual_real_owner_executed": false,
+  "performance_claim": false,
+  "launch_go": false,
+  "findings": [],
+  "limitations": [
+    "AST fixture only, not real native correctness or performance evidence",
+    "Arbitrary live mutation of private observer attributes is unsupported as before",
+    "Original repeated-timing and instrumented-copy tests preserved, not rerun"
+  ],
+  "artifacts": {
+    "INPUT_FREEZE_COPY.json": {
+      "bytes": 2129,
+      "sha256": "45407b007aa019bddb3360481e89bce3df82fb9d245d706eeea52ba82d552987"
+    },
+    "INPUT_MANIFEST_BEFORE.json": {
+      "bytes": 3673,
+      "sha256": "0ae33be77a39c806918309cb3c3de3d7f9e83bff46c55b5e9c72d358cb670891"
+    },
+    "RESULTS.json": {
+      "bytes": 1075,
+      "sha256": "7cb7eb98f4228a61e594365ad7b2f808920e089befc2d4afb72f8cef92b57039"
+    },
+    "REVIEW.md": {
+      "bytes": 5054,
+      "sha256": "ea1fc97b5420ea3acb9dddec5c2b75bb382527216f57f31f2c8ba34003c23954"
+    },
+    "STATIC_CHECKS.json": {
+      "bytes": 624,
+      "sha256": "07c5f64c58c65ceb9293f636069edfc9f18fea9587ac860bd214ddcf25ef2aab"
+    },
+    "independent_controls.py": {
+      "bytes": 3873,
+      "sha256": "b689e14b659ff833037a0a016bc67a1d1601b3e263645bb4773dcb20f973cecc"
+    },
+    "normal.log": {
+      "bytes": 4754,
+      "sha256": "40b3b9ce00d1d44bb8456ca0956232dedee3efca3d2c62254c7f27ead8edcdb3"
+    },
+    "optimized.log": {
+      "bytes": 4753,
+      "sha256": "e91ab5261447852be3076d9d2a0df9b3d17dbee10d0626348db906ff1078f0e6"
+    },
+    "run_independent.py": {
+      "bytes": 2434,
+      "sha256": "a0e28b62165c7a0707fc4907251519640a7ef365ddf0a508ce386886cacaf0df"
+    }
+  },
+  "projection": "Only private candidate_root physical locator omitted. Historical source/AST review is not current actual-run status."
+}

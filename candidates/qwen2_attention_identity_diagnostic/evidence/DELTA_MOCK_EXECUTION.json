@@ -1,0 +1,61 @@
+{
+  "original": {
+    "bytes": 1701,
+    "sha256": "606f9c862515d0b69578b4bc9cae9c6382e765044be6da39656370c33f75a22f"
+  },
+  "result": {
+    "status": "PASS_CHANGED_BINDING_ADMISSION_METADATA_ONLY",
+    "runs": [
+      {
+        "script": "test_binding_mock.py",
+        "optimized": false,
+        "returncode": 0,
+        "cpu_seconds": 0.395389,
+        "wall_seconds": 0.41598243900807574,
+        "log": "normal_test_binding_mock.py.log",
+        "sha256": "fdf49d6b30f284e0f7b57859e8807edde0d0c8a8f3db9539b94c794deb96759c"
+      },
+      {
+        "script": "test_successor_config.py",
+        "optimized": false,
+        "returncode": 0,
+        "cpu_seconds": 0.271672,
+        "wall_seconds": 0.31668374995933846,
+        "log": "normal_test_successor_config.py.log",
+        "sha256": "8a87d5bb9114670bc4e28a5ecf45972251eb15c87ea338894ccd0615524e9190"
+      },
+      {
+        "script": "test_binding_mock.py",
+        "optimized": true,
+        "returncode": 0,
+        "cpu_seconds": 0.620305,
+        "wall_seconds": 0.6673543839715421,
+        "log": "optimized_test_binding_mock.py.log",
+        "sha256": "6ba9edd00308d2b3804b131648138567d82674454b5db21dd85ee85dedf5eaba"
+      },
+      {
+        "script": "test_successor_config.py",
+        "optimized": true,
+        "returncode": 0,
+        "cpu_seconds": 0.4233779999999999,
+        "wall_seconds": 0.4667231169878505,
+        "log": "optimized_test_successor_config.py.log",
+        "sha256": "5f95ecc3f3cae05822b8e4d73d235bfc0dc4fc448dd99eaf7e01087545c5f919"
+      }
+    ],
+    "cases_per_mode": 30,
+    "total_cases": 60,
+    "total_cpu_seconds": 1.710744,
+    "wall_seconds": 1.8683607029961422,
+    "limits": {
+      "cpus": 1,
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "wall_seconds": 45
+    },
+    "native_or_DUT_executed": false,
+    "candidate_arithmetic_fixture_rerun": false,
+    "original_lease_resource_suites_rerun": false
+  },
+  "this_packaging_target_reruns": 0
+}

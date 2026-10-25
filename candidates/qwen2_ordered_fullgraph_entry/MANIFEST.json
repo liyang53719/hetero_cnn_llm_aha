@@ -1,0 +1,195 @@
+{
+  "actual_service_method_bindings": 0,
+  "base_commit": "8b3c5a2ea6e9615f5a2a8c37ad5392c6d4a7941a",
+  "control_modes": 4,
+  "control_tests_per_mode": 193,
+  "default_enabled": false,
+  "expected_service_method_bindings": 9,
+  "files_excluding_this_manifest": [
+    {
+      "bytes": 6610,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/README.md",
+      "sha256": "0e02ac9258bdf3febf2fc780848794e8cae385b514785d94d4a8d56d95f99935"
+    },
+    {
+      "bytes": 1453,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/RESOURCE_PLAN.json",
+      "sha256": "32c3ce525e53d884b4ea915b0efd59efcb371f9bbb8693aad17359e6229e82d0"
+    },
+    {
+      "bytes": 57291,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/SOURCE_PINS.json",
+      "sha256": "129291eb1a837c9c0fe698b2bcd4bfc027281d914f42c7dc59bc0058694b137e"
+    },
+    {
+      "bytes": 84,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/__init__.py",
+      "sha256": "dac2807ea7d89bb043d25edc9cf9675db2b9ef739495af19892b453d8899d1cd"
+    },
+    {
+      "bytes": 7196,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/admission.py",
+      "sha256": "40187e61ae88cd696b1402fa86bc50120ab0aea136e0796622c937df579f317d"
+    },
+    {
+      "bytes": 4850,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/bridge.py",
+      "sha256": "2868d0bca85eb15349430827b0cb8d1d9300f69619f8417a693c680a61e6cc19"
+    },
+    {
+      "bytes": 6866,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/cold_binding.py",
+      "sha256": "62b4cd798c9764ea242268a939014590742e522165549eab2e40efc77a23a598"
+    },
+    {
+      "bytes": 7935,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/cold_policy.py",
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    {
+      "bytes": 16927,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/compose.py",
+      "sha256": "9c5c3c8eb73f5861fa382228fe9da25b40c14b88dfa67678152cb6d1ff18efdf"
+    },
+    {
+      "bytes": 4031,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/launch_cold.py",
+      "sha256": "a1ef56fb37d43a747e2e94d63f266d0e3ac8975560c85fa18c18b564ec41f2c3"
+    },
+    {
+      "bytes": 23548,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/registry.py",
+      "sha256": "218f41b2a4fa625653acf060c64a8aad02b6fc95eeef733dc4a764fb902ae1cb"
+    },
+    {
+      "bytes": 3229,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/run_control_tests.py",
+      "sha256": "0542a93807e8fb864d32d1f201eb17863d939d25ff651715fd4501c94a3c811a"
+    },
+    {
+      "bytes": 11086,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/runner.py",
+      "sha256": "6f2fc1167beec4bdff6528cade244245d77499a6226b7c3c9129e63d929286da"
+    },
+    {
+      "bytes": 6714,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/runtime_binding.py",
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    {
+      "bytes": 3908,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/service_trace.py",
+      "sha256": "7c94bf513875cb2eeec76eca0d3f3353e729c3dbf00c0598129c7b8d0f6ad049"
+    },
+    {
+      "bytes": 1829,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/suffix_dispatch.patch",
+      "sha256": "1a00f42764cc329788ffa8ab1dc79857afb618606411ede00cf6f609ad795a2b"
+    },
+    {
+      "bytes": 6294,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_admission.py",
+      "sha256": "8a3fcc5d74d0a482d271cc3d85b6b48f0ef9e4c48b18841f6204a941d4adadab"
+    },
+    {
+      "bytes": 5581,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_bridge.py",
+      "sha256": "059ab0515c890c11e7953e392be19cc597e53200c2b7dab4463468e2e804bb7c"
+    },
+    {
+      "bytes": 2292,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_cold_binding.py",
+      "sha256": "c33eab83b4aed8759f5b52c03bcb0292dd91157e19813f79459ffc66e7f84922"
+    },
+    {
+      "bytes": 5612,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_cold_policy.py",
+      "sha256": "d78e31a2489dadaf296a249a1bcc85d47879154455c86637e9389e795119feab"
+    },
+    {
+      "bytes": 17665,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_compose.py",
+      "sha256": "c76786fe92d32b4d4db17685113ac30a238ca87ed2155d4843f0222b3f1782d0"
+    },
+    {
+      "bytes": 17539,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_registry.py",
+      "sha256": "01a083795a1acc9040545ba4c79416b216c7796c10c511aa8ceee3f937972e9a"
+    },
+    {
+      "bytes": 14981,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_runner.py",
+      "sha256": "f7609daf8cc61e46cf0503429f7aa3da69eef7f1595831bae97f7ee69d746224"
+    },
+    {
+      "bytes": 6518,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_runtime_binding.py",
+      "sha256": "66caa462f9cee8a782edb3b81a8302f6733eb4d4588c53d502d94bc11d2b81fa"
+    },
+    {
+      "bytes": 8898,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/test_service_trace.py",
+      "sha256": "56eef8c2994166bebb2ddc9f36afc8036a1ff592d204e7956405d2e912231c6a"
+    },
+    {
+      "bytes": 7696,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/COLD_BINDING_V3_INDEPENDENT_REVIEW.json",
+      "sha256": "5907d310837f12c863537ae741bd6fb3d76e4fbd2533793ae2b0f2ad67fe37dc"
+    },
+    {
+      "bytes": 1523,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/COLD_PROFILE_PROJECTION.json",
+      "sha256": "646077a5699ff6beaa3077339f402533336e1ba7d255eaf364732ec3f3922567"
+    },
+    {
+      "bytes": 18117,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/CONTROL_TESTS.json",
+      "sha256": "79a6a3ced3b9ffd2deeb7c9519027f781ca7c4016ad7d159f8ec393e6f94908f"
+    },
+    {
+      "bytes": 2682,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/FAILURES_PRESERVED.json",
+      "sha256": "514fea90f1c1924276f51a097ce8941885d12dc9700fbe7504e5cae2536a1938"
+    },
+    {
+      "bytes": 12989,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/INDEPENDENT_CANDIDATE_CORE_REVIEW.json",
+      "sha256": "10ffae133d88fbe7be34821e36ccf3aa53ce5cda198403b9905156f2819b5a5d"
+    },
+    {
+      "bytes": 11209,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/INDEPENDENT_NORMAL_COLD_FINAL_REVIEW.json",
+      "sha256": "ecac70f2956a317766ffe0625f76269e5cb2d0f8b4ca6a77294aae5a0e8c105e"
+    },
+    {
+      "bytes": 4220,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/NORMAL_IMPORT_OUTCOME.json",
+      "sha256": "61df3eb3385723a70cb0ad79e5332a534f007a33dda78219ada15683abef3083"
+    },
+    {
+      "bytes": 74992,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/PREPARATION_MANIFEST.json",
+      "sha256": "dc72bd66c8fed89306dc79a6bf81325596abef8bb443ddb69a0d4c1830f062b0"
+    },
+    {
+      "bytes": 16248,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/READONLY_REFERENCE_INPUT_CHECK.json",
+      "sha256": "735c05f0a9301aadc88c469e556f528ba9f26e06a2d3cc285e5b75d6f744f3c8"
+    },
+    {
+      "bytes": 1594,
+      "path": "candidates/qwen2_ordered_fullgraph_entry/validation/SOURCE_COMPOSITION.json",
+      "sha256": "9d0d59ffc920432366a5c11b9342185047000e597c1937372d01ae70af24f45d"
+    },
+    {
+      "bytes": 1747,
+      "path": "plans/qwen2_ordered_fullgraph_entry_plan_cn.md",
+      "sha256": "48a8508343b5913918f690385757f3db7bd4061b1cbe960d720dca708c197b17"
+    }
+  ],
+  "fullgraph_numeric_executed": false,
+  "hardware_executed": false,
+  "normal_import_status": "FAIL_MISSING_YAML",
+  "reference_closure_status": "INCOMPLETE",
+  "status": "TEMP_FULLGRAPH_PREPARATION_ONLY"
+}

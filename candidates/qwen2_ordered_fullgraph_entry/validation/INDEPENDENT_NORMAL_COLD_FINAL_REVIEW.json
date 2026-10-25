@@ -1,0 +1,284 @@
+{
+  "actual_attempt": {
+    "child_group_exists_after_exit": false,
+    "child_status": "FAIL_NORMAL_BINDING",
+    "config_sha256": "88694c06b3083645395afb8d9d334168fd099ba6d38031c02ce2d76bbde5ed51",
+    "directory": "local_attempt/cold_binding_v3",
+    "error": {
+      "error": "No module named 'yaml'",
+      "gate": "normal_import",
+      "type": "ModuleNotFoundError"
+    },
+    "exit_code": 1,
+    "launcher_sha256": "a1ef56fb37d43a747e2e94d63f266d0e3ac8975560c85fa18c18b564ec41f2c3",
+    "parent_status": "FAIL_COLD_WRAPPER",
+    "resource_limits": {
+      "address_space_bytes": 268435456,
+      "cpu_seconds": 20,
+      "cpus": 1,
+      "wall_seconds": 25
+    },
+    "timed_out": false,
+    "wall_seconds": 3.5258485979866236
+  },
+  "binding_results": {
+    "actual_pc12_executed": false,
+    "binding_receipt": null,
+    "complete_normal_project_binding": false,
+    "fullgraph_noninterference_proven": false,
+    "normal_nine_method_service_binding": false,
+    "real_whole_terminal_retirement_witness": false,
+    "service_binding_receipt": null
+  },
+  "evidence_files": {
+    "CLAIM.json": {
+      "bytes": 1174,
+      "sha256": "83094863aa92d3c655caf9b317f4e688a98a5b546cbad7f71de2ec6e984493b7"
+    },
+    "IDENTITY.json": {
+      "bytes": 883,
+      "sha256": "e8af9f15447264847f600355e76233ac1130f5d0c8ada856c8472cb1b5cbd0b8"
+    },
+    "PARENT_RESULT.json": {
+      "bytes": 337,
+      "sha256": "efe82048747b0384c4673182b5aed406d4d79da0728320596213e860d34f1b97"
+    },
+    "child/00_before_import/MAPS.txt": {
+      "bytes": 5997,
+      "sha256": "45c84619a9c03ef7e4f35eb53f6ebee6a815d4b43072c8088438f1b180a7e6c1"
+    },
+    "child/00_before_import/MAP_AUDIT.json": {
+      "bytes": 24613,
+      "sha256": "6e0a07f7d320bcb44baa18ed36e41183f141becb142f5fd7e9435289d39957c8"
+    },
+    "child/00_before_import/MODULES_RAW.json": {
+      "bytes": 33355,
+      "sha256": "0ae33ac7af373ea97d4924e6806f2b5904db75e7db70a1c9c5ea2f292e31e307"
+    },
+    "child/00_before_import/MODULE_AUDIT.json": {
+      "bytes": 134431,
+      "sha256": "761bfd211e97cbe7dc1c3c020357a0eb6479ff79401c430c8aece0d79431105e"
+    },
+    "child/00_before_import/MODULE_QUALIFICATION.json": {
+      "bytes": 394,
+      "sha256": "b37440fa999c55cd139ba283f639fb08668193605be064f1521ffdbfb7a185e9"
+    },
+    "child/00_before_import/NAMESPACE_REPETITIONS.json": {
+      "bytes": 24,
+      "sha256": "87716f4918b7e05425b6b3596da2fb561cf87ed039f7b5fe8e358e8ac089cb94"
+    },
+    "child/00_before_import/VALIDATION.json": {
+      "bytes": 39,
+      "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+    },
+    "child/01_after_import_or_failure/MAPS.txt": {
+      "bytes": 16723,
+      "sha256": "2861d781f4367ee4463fea0b082107805d097ef0804a841ad39ba19b14ac0bab"
+    },
+    "child/01_after_import_or_failure/MAP_AUDIT.json": {
+      "bytes": 65912,
+      "sha256": "32a5b4cf4eae09e13b117e12f2bd13f4f4662ecfdfa52d0165bd71fac6d564e1"
+    },
+    "child/01_after_import_or_failure/MODULES_RAW.json": {
+      "bytes": 102672,
+      "sha256": "bc10a542f53c6994272810b3084d83330d92b4b368ce7a60fe9c7c4c298fef6b"
+    },
+    "child/01_after_import_or_failure/MODULE_AUDIT.json": {
+      "bytes": 532713,
+      "sha256": "af83db08e8cffadcbc60ff707b724698e27470c56dd54fce6d9af0a1495093ce"
+    },
+    "child/01_after_import_or_failure/MODULE_QUALIFICATION.json": {
+      "bytes": 505,
+      "sha256": "d54a61ff3230f44e9e1b50b36ad0d8ab4e5794fbe9ad93ce1d5be81d55acd76f"
+    },
+    "child/01_after_import_or_failure/NAMESPACE_REPETITIONS.json": {
+      "bytes": 1391,
+      "sha256": "ebf551243c27de63e781d0f43741dac53b58b0bf0d53884e5d23b5eda9f282bf"
+    },
+    "child/01_after_import_or_failure/VALIDATION.json": {
+      "bytes": 162,
+      "sha256": "a6a810ff36b122c13c4d205d4b031cae986bd70add513f0e3e633148ea109e7f"
+    },
+    "child/INITIALIZATION_SITES.json": {
+      "bytes": 76873,
+      "sha256": "8483f2fb619c6a00df277b7177bd9196e243d65c51095f549282e9793990c3f0"
+    },
+    "child/PIN_AUDIT.json": {
+      "bytes": 424779,
+      "sha256": "4feb8d684e806ce4369362c4c3eb68ed67984a41cd6aa45aed3b4f8307f64f49"
+    },
+    "child/RESULT.json": {
+      "bytes": 191841,
+      "sha256": "cece2da965e61d25d50465d4827332baa303ecd71a0465edb96453b410edbf00"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "exact_private_receipt_sha256": "3744f0421efc305778fe8c294497b1134d9140ef548f0393ceb272bd61276904",
+  "exact_reviewed_source_sha256": {
+    "admission.py": {
+      "bytes": 7196,
+      "sha256": "40187e61ae88cd696b1402fa86bc50120ab0aea136e0796622c937df579f317d"
+    },
+    "bridge.py": {
+      "bytes": 4850,
+      "sha256": "2868d0bca85eb15349430827b0cb8d1d9300f69619f8417a693c680a61e6cc19"
+    },
+    "cold_binding.py": {
+      "bytes": 6866,
+      "sha256": "62b4cd798c9764ea242268a939014590742e522165549eab2e40efc77a23a598"
+    },
+    "cold_policy.py": {
+      "bytes": 7935,
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    "launch_cold.py": {
+      "bytes": 4031,
+      "sha256": "a1ef56fb37d43a747e2e94d63f266d0e3ac8975560c85fa18c18b564ec41f2c3"
+    },
+    "registry.py": {
+      "bytes": 23548,
+      "sha256": "218f41b2a4fa625653acf060c64a8aad02b6fc95eeef733dc4a764fb902ae1cb"
+    },
+    "runner.py": {
+      "bytes": 11086,
+      "sha256": "6f2fc1167beec4bdff6528cade244245d77499a6226b7c3c9129e63d929286da"
+    },
+    "runtime_binding.py": {
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    "service_trace.py": {
+      "bytes": 3908,
+      "sha256": "7c94bf513875cb2eeec76eca0d3f3353e729c3dbf00c0598129c7b8d0f6ad049"
+    }
+  },
+  "failure_interpretation": "The exact isolated cold environment cannot import yaml. This is a missing Python dependency in the admitted normal-import closure, not a task numerical failure. Full runtime binding did not complete and the nine-method normal-source bind was not reached.",
+  "frozen_delivery": "PREPARATION_ONLY_NO_NUMERICAL_LAUNCH_AUTHORIZATION",
+  "full_numeric_status": "TEMP_NOT_EXECUTED",
+  "guard_observations": {
+    "blocked_by_kind": {
+      "bytecode_cache_not_admitted": 133
+    },
+    "bytecode_note": "133 attempted .pyc reads were refused; imports used source fallback. They are retained, not converted into permitted cache reads.",
+    "dependency_initialization_events": [
+      "ctypes.dlopen(None): pinned dependency initialization"
+    ],
+    "other_task_violation_records": []
+  },
+  "historical_failures": {
+    "no_failed_result_upgraded": true,
+    "v2_child_result_sha256": "55fa424af69d09665024370f8b85441c8cb551da39f1ba65b356ebe99c57fa19",
+    "v2_original_failure_unchanged": true,
+    "v2_preserved_config_review_and_implementation_files": 7,
+    "v2_preserved_files_all_match": true
+  },
+  "part": "B_normal_cold_actual_result",
+  "part_A_review": {
+    "composer_self_review_excluded": true,
+    "core_code_hashes_still_identical": true,
+    "path": "local_attempt/INDEPENDENT_CANDIDATE_CORE_REVIEW.json",
+    "sha256": "862d2ad1682c1243c9873fd7bb35a6ac0a82cfe6e81cb5ea4e6a3c900ff2c9c8"
+  },
+  "read_pin_audit": {
+    "evidence_sha256": "4feb8d684e806ce4369362c4c3eb68ed67984a41cd6aa45aed3b4f8307f64f49",
+    "files": 698,
+    "mismatches": 0
+  },
+  "recorded_final_controls": {
+    "instances_excluding_reviewer_authored_composer": 616,
+    "logs_and_test_code_hashes_verified": true,
+    "not_evidence_of_normal_import_or_numerical_success": true,
+    "path": "local_attempt/all_control_v3/RESULTS.json",
+    "runs": 36,
+    "sha256": "79a6a3ced3b9ffd2deeb7c9519027f781ca7c4016ad7d159f8ec393e6f94908f",
+    "tests_per_mode": 193,
+    "tests_rerun_by_reviewer": false,
+    "total_instances": 772
+  },
+  "reviewer_native_execution": false,
+  "reviewer_target_normal_imports": false,
+  "schema": "qwen2-ordered-fullgraph-independent-normal-cold-final-review-v1",
+  "scope_limits": {
+    "explicit_task_cdll": false,
+    "hardware_acceptance": false,
+    "native_acceptance": false,
+    "note": "Pinned NumPy/runtime dependency initialization is distinct from task Matrix native execution.",
+    "numeric_executed": false,
+    "task_matrix_elf_loaded": false,
+    "task_services_constructed": false,
+    "task_tensor_read": false
+  },
+  "snapshots": {
+    "00_before_import": {
+      "mapped_file_records": 44,
+      "mapping_status": "PASS_PINNED_COLD_MAPPINGS",
+      "matrix_elf_loaded": false,
+      "module_count": 93,
+      "original_module_audit_status": "PASS_MODULE_IDENTITY",
+      "original_module_failures": [],
+      "separate_namespace_qualification": {
+        "accepted_repetition_names": [],
+        "live_snapshot_checked": true,
+        "namespace_objects_modified": false,
+        "ordered_paths_deduplicated": false,
+        "original_audit_modified": false,
+        "original_status": "PASS_MODULE_IDENTITY",
+        "remaining_failures": [],
+        "scope": "Module identity only; no numeric or execution qualification.",
+        "status": "PASS_PINNED_MODULES_WITH_RECORDED_REPETITIONS"
+      }
+    },
+    "01_after_import_or_failure": {
+      "mapped_file_records": 100,
+      "mapping_status": "PASS_PINNED_COLD_MAPPINGS",
+      "matrix_elf_loaded": false,
+      "module_count": 246,
+      "original_module_audit_status": "FAIL_MODULE_IDENTITY",
+      "original_module_failures": [
+        {
+          "code": "namespace_path_mismatch",
+          "detail": "actual path differs from registered ordered path list",
+          "name": "candidates"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "detail": "actual path differs from registered ordered path list",
+          "name": "candidates.qwen2_resident_matrix"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "detail": "actual path differs from registered ordered path list",
+          "name": "candidates.qwen2_resident_matrix.ffn_public"
+        }
+      ],
+      "separate_namespace_qualification": {
+        "accepted_repetition_names": [
+          "candidates",
+          "candidates.qwen2_resident_matrix",
+          "candidates.qwen2_resident_matrix.ffn_public"
+        ],
+        "live_snapshot_checked": true,
+        "namespace_objects_modified": false,
+        "ordered_paths_deduplicated": false,
+        "original_audit_modified": false,
+        "original_status": "FAIL_MODULE_IDENTITY",
+        "remaining_failures": [],
+        "scope": "Module identity only; no numeric or execution qualification.",
+        "status": "PASS_PINNED_MODULES_WITH_RECORDED_REPETITIONS"
+      }
+    }
+  },
+  "source_context": {
+    "claim_scope": "Static import site only; no dependency installation or new attempt performed by this review.",
+    "yaml_import": "src/heteronpu/config.py:7"
+  },
+  "status": "FAIL_NORMAL_BINDING_DEPENDENCY_CLOSURE_INCOMPLETE",
+  "stop_condition": "Freeze this preparation at FAIL/TEMP. Dependency closure repair and any subsequent cold attempt belong to a separately scoped task; no further execution or source edits are performed here."
+}

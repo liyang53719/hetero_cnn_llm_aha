@@ -1,0 +1,277 @@
+{
+  "control_evidence": {
+    "logs_rehashed": true,
+    "path": "local_attempt/all_control_v2/RESULTS.json",
+    "recorded_core_test_instances": 520,
+    "runs": [
+      {
+        "exit_code": 0,
+        "mode": "normal",
+        "stderr_sha256": "e0cb0d40d2d644a7380cc20595a746a1795b89d1af81efb44fe3670e5457919b",
+        "test": "test_admission.py",
+        "test_sha256": "8a3fcc5d74d0a482d271cc3d85b6b48f0ef9e4c48b18841f6204a941d4adadab",
+        "tests": 28
+      },
+      {
+        "exit_code": 0,
+        "mode": "normal",
+        "stderr_sha256": "4c3b3b2f85f7f81206f2731efca1a5c61f58b2f6c54d820b4003b988757b84ec",
+        "test": "test_bridge.py",
+        "test_sha256": "059ab0515c890c11e7953e392be19cc597e53200c2b7dab4463468e2e804bb7c",
+        "tests": 11
+      },
+      {
+        "exit_code": 0,
+        "mode": "normal",
+        "stderr_sha256": "08e6cc02bc98c2045ffe008689f620d133b277c937e6cbc298d8a2d44c6790ec",
+        "test": "test_registry.py",
+        "test_sha256": "01a083795a1acc9040545ba4c79416b216c7796c10c511aa8ceee3f937972e9a",
+        "tests": 34
+      },
+      {
+        "exit_code": 0,
+        "mode": "normal",
+        "stderr_sha256": "5dff172626b13aa6f13aab34a42d1d5a75db8d8d18ceb4a35b55a26f45cf57af",
+        "test": "test_runner.py",
+        "test_sha256": "f7609daf8cc61e46cf0503429f7aa3da69eef7f1595831bae97f7ee69d746224",
+        "tests": 21
+      },
+      {
+        "exit_code": 0,
+        "mode": "normal",
+        "stderr_sha256": "8c045ab677caeeb30ddfc0affc95f6cfe0d4470f310af9f6ecdcda3c06dc8119",
+        "test": "test_runtime_binding.py",
+        "test_sha256": "66caa462f9cee8a782edb3b81a8302f6733eb4d4588c53d502d94bc11d2b81fa",
+        "tests": 20
+      },
+      {
+        "exit_code": 0,
+        "mode": "normal",
+        "stderr_sha256": "3e22fab1b3114babdc36e0460ef16652ca43f42d69582ef67453ce9fa40e4d63",
+        "test": "test_service_trace.py",
+        "test_sha256": "56eef8c2994166bebb2ddc9f36afc8036a1ff592d204e7956405d2e912231c6a",
+        "tests": 16
+      },
+      {
+        "exit_code": 0,
+        "mode": "optimized",
+        "stderr_sha256": "b04e2650ad7885a070861919a563fe5e9f655f2b40f5788b306d87c3f5797df0",
+        "test": "test_admission.py",
+        "test_sha256": "8a3fcc5d74d0a482d271cc3d85b6b48f0ef9e4c48b18841f6204a941d4adadab",
+        "tests": 28
+      },
+      {
+        "exit_code": 0,
+        "mode": "optimized",
+        "stderr_sha256": "4c3b3b2f85f7f81206f2731efca1a5c61f58b2f6c54d820b4003b988757b84ec",
+        "test": "test_bridge.py",
+        "test_sha256": "059ab0515c890c11e7953e392be19cc597e53200c2b7dab4463468e2e804bb7c",
+        "tests": 11
+      },
+      {
+        "exit_code": 0,
+        "mode": "optimized",
+        "stderr_sha256": "f2dffc8ad904962280af888039c84ab73ac2a36367c5d76fd4c9e845cb162cf8",
+        "test": "test_registry.py",
+        "test_sha256": "01a083795a1acc9040545ba4c79416b216c7796c10c511aa8ceee3f937972e9a",
+        "tests": 34
+      },
+      {
+        "exit_code": 0,
+        "mode": "optimized",
+        "stderr_sha256": "5dff172626b13aa6f13aab34a42d1d5a75db8d8d18ceb4a35b55a26f45cf57af",
+        "test": "test_runner.py",
+        "test_sha256": "f7609daf8cc61e46cf0503429f7aa3da69eef7f1595831bae97f7ee69d746224",
+        "tests": 21
+      },
+      {
+        "exit_code": 0,
+        "mode": "optimized",
+        "stderr_sha256": "10a866d088c98e6d44e75b2313d408cfdcd2175dd81a06de5aa3ae6fe17e7135",
+        "test": "test_runtime_binding.py",
+        "test_sha256": "66caa462f9cee8a782edb3b81a8302f6733eb4d4588c53d502d94bc11d2b81fa",
+        "tests": 20
+      },
+      {
+        "exit_code": 0,
+        "mode": "optimized",
+        "stderr_sha256": "d76c87d843ef6f4ae3c269be2211c484ab62bfa603d8a794e659dda647c4aad4",
+        "test": "test_service_trace.py",
+        "test_sha256": "56eef8c2994166bebb2ddc9f36afc8036a1ff592d204e7956405d2e912231c6a",
+        "tests": 16
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated",
+        "stderr_sha256": "89e3061f2e88ac374eafb90ddbcd2e2a9c9025514923aead858ca51dd658b3ae",
+        "test": "test_admission.py",
+        "test_sha256": "8a3fcc5d74d0a482d271cc3d85b6b48f0ef9e4c48b18841f6204a941d4adadab",
+        "tests": 28
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated",
+        "stderr_sha256": "4c3b3b2f85f7f81206f2731efca1a5c61f58b2f6c54d820b4003b988757b84ec",
+        "test": "test_bridge.py",
+        "test_sha256": "059ab0515c890c11e7953e392be19cc597e53200c2b7dab4463468e2e804bb7c",
+        "tests": 11
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated",
+        "stderr_sha256": "d589aab538a8dd585c1ff8d7f0bf799251b79d5cd6b85f75591b78fb2379f84d",
+        "test": "test_registry.py",
+        "test_sha256": "01a083795a1acc9040545ba4c79416b216c7796c10c511aa8ceee3f937972e9a",
+        "tests": 34
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated",
+        "stderr_sha256": "5dff172626b13aa6f13aab34a42d1d5a75db8d8d18ceb4a35b55a26f45cf57af",
+        "test": "test_runner.py",
+        "test_sha256": "f7609daf8cc61e46cf0503429f7aa3da69eef7f1595831bae97f7ee69d746224",
+        "tests": 21
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated",
+        "stderr_sha256": "2ffd7985716b2e09b1f0ff6ece102745b256c3dfebc0891c03dbb315dd164b39",
+        "test": "test_runtime_binding.py",
+        "test_sha256": "66caa462f9cee8a782edb3b81a8302f6733eb4d4588c53d502d94bc11d2b81fa",
+        "tests": 20
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated",
+        "stderr_sha256": "b0a08a295b0eb95350538bdd949c7b42d30e4d0416988b205e6ac6c20a4a26b5",
+        "test": "test_service_trace.py",
+        "test_sha256": "56eef8c2994166bebb2ddc9f36afc8036a1ff592d204e7956405d2e912231c6a",
+        "tests": 16
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "b04e2650ad7885a070861919a563fe5e9f655f2b40f5788b306d87c3f5797df0",
+        "test": "test_admission.py",
+        "test_sha256": "8a3fcc5d74d0a482d271cc3d85b6b48f0ef9e4c48b18841f6204a941d4adadab",
+        "tests": 28
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "4c3b3b2f85f7f81206f2731efca1a5c61f58b2f6c54d820b4003b988757b84ec",
+        "test": "test_bridge.py",
+        "test_sha256": "059ab0515c890c11e7953e392be19cc597e53200c2b7dab4463468e2e804bb7c",
+        "tests": 11
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "49d2786a2c2bee4fa28bc2dc9e01f6ac89484b466498650554220e09fb25ae8b",
+        "test": "test_registry.py",
+        "test_sha256": "01a083795a1acc9040545ba4c79416b216c7796c10c511aa8ceee3f937972e9a",
+        "tests": 34
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "c19ca0ffad382c7ff4dee6c7db7087aa50b58dd4255b7e3b8696b85c13dc038d",
+        "test": "test_runner.py",
+        "test_sha256": "f7609daf8cc61e46cf0503429f7aa3da69eef7f1595831bae97f7ee69d746224",
+        "tests": 21
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "89c6ebca6d40cc3e28eca2051b0a86e47dc08eef207f88e9b03f277cbfad1d7a",
+        "test": "test_runtime_binding.py",
+        "test_sha256": "66caa462f9cee8a782edb3b81a8302f6733eb4d4588c53d502d94bc11d2b81fa",
+        "tests": 20
+      },
+      {
+        "exit_code": 0,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "96a785a02c5a40c662497b4005d9db3666ab278db6b0817c83c2fb42a8fa26bd",
+        "test": "test_service_trace.py",
+        "test_sha256": "56eef8c2994166bebb2ddc9f36afc8036a1ff592d204e7956405d2e912231c6a",
+        "tests": 16
+      }
+    ],
+    "sha256": "160fb8d90e6ae0f4c9e1e9812c15aebeb304e7811a71465e76731345cf290c17",
+    "test_runs": 24,
+    "tests_rerun_by_reviewer": false
+  },
+  "exact_private_receipt_sha256": "862d2ad1682c1243c9873fd7bb35a6ac0a82cfe6e81cb5ea4e6a3c900ff2c9c8",
+  "excluded_from_independent_review": {
+    "cold_binding.py": "Historical 28 preparation-control instances predate v3 changes; v3 normal-cold evidence is separate.",
+    "compose.py": "Reviewer authored this component; no self-review claim.",
+    "test_compose.py": "156 recorded test instances are not independently endorsed here."
+  },
+  "fixed_physical_macs": 4096,
+  "full_numeric_status": "TEMP_NOT_EXECUTED",
+  "legacy_pv_fullblock_upper_bound_percent": 63.57,
+  "measured_hardware_cycles": null,
+  "measured_hardware_utilization": null,
+  "part": "A_candidate_core",
+  "part_B_normal_cold_status": "PENDING_NEW_EXACT_V3_REVIEW_AND_ATTEMPT",
+  "readiness_boundaries": [
+    "The admission dictionary in run_actual is a caller contract, not a standalone identity/security gate.",
+    "No real pc12 or full block was executed by this review. No native, numeric, or hardware acceptance.",
+    "Fullgraph observer off/on noninterference is not demonstrated by component M1/M2 evidence or control fixtures.",
+    "Whole-block ACK/retirement checks are implemented, not yet witnessed in a real admitted fullgraph run.",
+    "Official nodes x/repeat_k/repeat_v/logits/cos/sin/mask remain missing, unregistered, or nonmaterialized; scores/prob/softmax_fp32 are causal-only.",
+    "No complete independent M16 full reference closure or M128 execution budget has been admitted."
+  ],
+  "resolved_defect": {
+    "evidence": "Source comparison and unchanged-core control tests; actual normal-loaded binding is part B, not this result.",
+    "fix": "Exact MRO/method source binding in service_trace.py with one wrapper-return observation.",
+    "kind": "actual_service_method_origin_mismatch",
+    "original": "Component ServiceTrace incorrectly expected MatrixService.acquire for a ProfiledMatrixService whose actual method is OfficialMatrixService.acquire."
+  },
+  "reviewed_sources": {
+    "admission.py": {
+      "bytes": 7196,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/admission.py",
+      "sha256": "40187e61ae88cd696b1402fa86bc50120ab0aea136e0796622c937df579f317d"
+    },
+    "bridge.py": {
+      "bytes": 4850,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/bridge.py",
+      "sha256": "2868d0bca85eb15349430827b0cb8d1d9300f69619f8417a693c680a61e6cc19"
+    },
+    "registry.py": {
+      "bytes": 23548,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/registry.py",
+      "sha256": "218f41b2a4fa625653acf060c64a8aad02b6fc95eeef733dc4a764fb902ae1cb"
+    },
+    "runner.py": {
+      "bytes": 11086,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/runner.py",
+      "sha256": "6f2fc1167beec4bdff6528cade244245d77499a6226b7c3c9129e63d929286da"
+    },
+    "runtime_binding.py": {
+      "bytes": 6714,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/runtime_binding.py",
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    "service_trace.py": {
+      "bytes": 3908,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/service_trace.py",
+      "sha256": "7c94bf513875cb2eeec76eca0d3f3353e729c3dbf00c0598129c7b8d0f6ad049"
+    }
+  },
+  "reviewer_native_execution": false,
+  "reviewer_target_normal_imports": false,
+  "schema": "qwen2-ordered-fullgraph-independent-candidate-review-v1",
+  "static_findings": [
+    "Default-off bridge returns without loading target/runtime; runner requires explicit enabled flag and its CLI offers describe only.",
+    "The sole suffix dispatch invokes the real requested pc12 job; existing direct bind and original ACK-driven Attention driver are reused, not a synthetic owner or arithmetic replacement.",
+    "QK routes to existing packed profile2; PV retains legacy profile0. RawKV mixing is rejected. Existing single shared Matrix and Scalar resources remain the execution objects.",
+    "Actual ProfiledMatrixService MRO is now source-checked. Official acquire return is observed once, other eight methods resolve to original Matrix source; original trace callbacks and seal are reused.",
+    "Reference gate remains closed until original whole-launch terminal, live clean-state check, preserved actual capture, and registry seal. Observer seal failure remains an acceptance failure rather than a replacement owner result.",
+    "Registry distinguishes 32 storage/diagnostic entries from 29 official semantic nodes; Gate/Up are real tile-read audits, cache_k/cache_v metadata views, and causal future positions remain unobserved sentinels.",
+    "Admission always returns NOT_READY_PREPARATION_ONLY and cannot promote reference freeze, payload identities, source-code load receipts, or historical component PASS into full-block acceptance.",
+    "runtime_binding attests complete imported project code against source hashes; it deliberately requires a separate pinned interpreter/NumPy/maps gate and exposes no configured native library handle."
+  ],
+  "status": "PASS_STATIC_AND_RECORDED_CONTROL_SCOPE_ONLY"
+}

@@ -1,0 +1,30 @@
+{
+  "status": "FULL_NUMERICAL_BUDGET_NOT_ADMITTED",
+  "current_cold_tests": {"cpus": 1, "address_space_mib": 256, "cpu_seconds": 20, "wall_seconds": 25, "task_native_calls": false},
+  "future_rows": 16,
+  "future_m128_enabled": false,
+  "fixed_physical_macs": 4096,
+  "qk_profile": 2,
+  "pv_profile": 0,
+  "legacy_pv_fullblock_upper_bound_percent": 63.57,
+  "memory_estimates_not_measured_rss": {
+    "readonly_provider14_total_bytes_m128": 94916608,
+    "m16_x_view_bytes": 98304,
+    "attention_buffer_bytes_formula": "7 * 12 * (22*M*M + 259*M)",
+    "attention_buffer_bytes_m16": 821184,
+    "attention_buffer_bytes_m128": 33062400,
+    "service_events_per_arm_estimate_m16": 44355,
+    "service_events_per_arm_estimate_m128": 2478339,
+    "python_objects_reference_outputs_and_canonical_event_copies_included": false
+  },
+  "future_numeric_limits": null,
+  "component_1GiB_45wall_budget_reused": false,
+  "hardware_cycle_evidence": null,
+  "measured_mac_utilization": null,
+  "notes": [
+    "The new runner accepts an admitted wall deadline, but this preparation authorizes no numeric launch.",
+    "A full process-tree CPU/memory/wall launcher and unique attempt ledger require independent review before M16.",
+    "M128 raw event retention and canonical copies need a separate capacity review; no global tensor cache is introduced.",
+    "Host wall time, model steps and ticks are not hardware cycles or proof of 80/90 percent utilization."
+  ]
+}

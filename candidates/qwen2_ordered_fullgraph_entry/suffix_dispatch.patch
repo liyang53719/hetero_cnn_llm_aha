@@ -1,0 +1,31 @@
+--- a/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py
+@@ -180,7 +180,8 @@
+     physical.check_coexistence(unpublished_pristine=True)
+ 
+ 
+-def execute_public_suffix(x, physical, lib, output, *, memory=None, enable_raw_kv=False):
++def execute_public_suffix(x, physical, lib, output, *, memory=None, enable_raw_kv=False,
++                          attention_dispatch=None):
+     """Continue pc10 through pc20 in the caller's original public21 launch.
+ 
+     Return (actual_outputs, report) only after its whole-launch terminal.
+@@ -189,6 +190,8 @@
+     the same addressed PhysicalMemory, including acknowledged act and Down.
+     """
+     require(type(enable_raw_kv) is bool, 'canonical raw KV enable')
++    require(attention_dispatch is None or (callable(attention_dispatch) and not enable_raw_kv),
++            'explicit direct Attention dispatch cannot mix raw KV transport')
+     # Check the launch before allocating the optional names-only adapter.
+     require(len(x.host.program) == 21 and x.host.pc == x.host.completed == x.host.jobs == 10,
+             'fullgraph continuation requires ten actual public prefix completions at pc10')
+@@ -200,7 +203,8 @@
+                   id(x.prefix_owner.scalar), id(physical), id(memory.act.data), id(memory.workspace.data))
+     reports = []
+     job = _request(x, 12, 'Attention')
+-    report = execute_attention_owner(x, physical, job, enable_raw_kv=enable_raw_kv)
++    report = (execute_attention_owner(x, physical, job, enable_raw_kv=enable_raw_kv)
++              if attention_dispatch is None else attention_dispatch(x, physical, job))
+     x.publish_completions((10, 11, 12))
+     physical.publish(job, x.host)
+     reports.append(dict(pcs=[10, 11, 12], kind='Attention', report=report))

@@ -1,0 +1,166 @@
+{
+  "actual_pc12_execution_proven": false,
+  "allowed_next_action": "One new exact v3 bounded normal-import/9-method-binding attempt after parent scheduling approval; stop on failure. No actual numerical task.",
+  "attempt_consumed": true,
+  "blas_omp_mkl_threads": 1,
+  "child_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ],
+  "config_delta_from_failed_v2": {
+    "added_pins": [
+      "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/cold_policy.py"
+    ],
+    "changed_pins": [
+      "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/cold_binding.py"
+    ],
+    "other_696_file_records_unchanged": true,
+    "removed_pins": [],
+    "runtime_graph_and_resource_bounds_unchanged": true,
+    "source_manifest_unchanged": true,
+    "total_read_pins": 698
+  },
+  "config_path": "local_attempt/COLD_BINDING_CONFIG_v3.json",
+  "config_sha256": "88694c06b3083645395afb8d9d334168fd099ba6d38031c02ce2d76bbde5ed51",
+  "exact_private_receipt_sha256": "63e2049ada7fe4c8cbd9f3a6fbd54128c5ec919c165132127f025334b09924ab",
+  "forbidden": [
+    "Task Matrix ELF mapping or explicit CDLL.",
+    "Service/owner/Observation construction, job, actual arithmetic, tensor/reference payload.",
+    "Compilation, RTL, network, or subprocess within cold worker."
+  ],
+  "full_numeric_status": "TEMP_NOT_EXECUTED",
+  "fullgraph_noninterference_proven": false,
+  "launcher_delta": "Only EXPECTED_CONFIG_SHA changed from reviewed v2. Replacing it reconstructs exact 682d6ef1a3f819aa215eb823e4476a9545efe1d7f9c95b553849b3ceda83b909 launcher bytes.",
+  "offline_replay": {
+    "after_failure_rows": 122,
+    "before_rows": 92,
+    "path": "local_attempt/COLD_V3_OFFLINE_REPLAY.json",
+    "sha256": "8ae44d870ef252a1c0cc9d29de3bcb1f185e99b484b31b00a5e049396256691e",
+    "status": "PASS_OFFLINE_ONLY_NOT_LIVE"
+  },
+  "policy_review": [
+    "Specific task entrypoints and non-metadata constructors remain forbidden; ordinary pinned source/metadata helpers are no longer treated as a generic Python-function sandbox.",
+    "Frozen dataclass metadata default construction requires exact generated method/class/globals, a non-function definition caller, pinned origin/caller, and an inventoried source path/qualname/line/class call site.",
+    "Static inventory covers 213 eager calls including four Services defaults and one ReductionProfile constant. No attribute-form constructor calls occur in any source function defaults.",
+    "Exact source/code, read allowlist, explicit CDLL, process/network, mapping and module inventory gates remain independent and intact.",
+    "Namespace repeats retain actual ordered paths and unmodified objects. Every location must already be declared and canonical; foreign or noncanonical paths are not admitted.",
+    "Original module audit is preserved as produced, including its FAIL. Separate qualification accepts only a sole namespace_path_mismatch after exact namespace object/name/loader/spec/path/directory ledger checks; all other failures remain fatal.",
+    "Offline namespace replay is not a successful cold import; live snapshot identity remains required in the actual attempt."
+  ],
+  "preserved_failed_v2": {
+    "child_result_path": "local_attempt/cold_binding_v2/child/RESULT.json",
+    "child_result_sha256": "55fa424af69d09665024370f8b85441c8cb551da39f1ba65b356ebe99c57fa19",
+    "child_status": "FAIL_NORMAL_BINDING",
+    "no_result_upgraded": true,
+    "preserved_7_file_manifest": "local_attempt/historical_cold_v2_failure/PRESERVED_FILES.json",
+    "preserved_files_all_match": true,
+    "status": "FAIL_COLD_WRAPPER"
+  },
+  "projection_notice": "Historical pre-execution review, not current run eligibility. Its unique cold attempt completed FAIL missing yaml; no remaining launch authorization.",
+  "recorded_control_evidence": {
+    "path": "local_attempt/all_control_v3/RESULTS.json",
+    "relevant_instances": 96,
+    "rerun_by_reviewer": false,
+    "runs": [
+      {
+        "count": 7,
+        "mode": "normal",
+        "stderr_sha256": "670a39115e7523a8984e4842e16547cb2094b03fad392b037b4b9dc8b2656e62",
+        "test": "test_cold_binding.py"
+      },
+      {
+        "count": 17,
+        "mode": "normal",
+        "stderr_sha256": "9eb929715e09dab33093165c3270151a1a39b215b1f2fde18923d4ace385fd8d",
+        "test": "test_cold_policy.py"
+      },
+      {
+        "count": 7,
+        "mode": "optimized",
+        "stderr_sha256": "670a39115e7523a8984e4842e16547cb2094b03fad392b037b4b9dc8b2656e62",
+        "test": "test_cold_binding.py"
+      },
+      {
+        "count": 17,
+        "mode": "optimized",
+        "stderr_sha256": "9eb929715e09dab33093165c3270151a1a39b215b1f2fde18923d4ace385fd8d",
+        "test": "test_cold_policy.py"
+      },
+      {
+        "count": 7,
+        "mode": "isolated",
+        "stderr_sha256": "670a39115e7523a8984e4842e16547cb2094b03fad392b037b4b9dc8b2656e62",
+        "test": "test_cold_binding.py"
+      },
+      {
+        "count": 17,
+        "mode": "isolated",
+        "stderr_sha256": "9eb929715e09dab33093165c3270151a1a39b215b1f2fde18923d4ace385fd8d",
+        "test": "test_cold_policy.py"
+      },
+      {
+        "count": 7,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "670a39115e7523a8984e4842e16547cb2094b03fad392b037b4b9dc8b2656e62",
+        "test": "test_cold_binding.py"
+      },
+      {
+        "count": 17,
+        "mode": "isolated_optimized",
+        "stderr_sha256": "a7273d30d00a27894dfcdfa3e001a09677dd34c09dfb1f5d225b3169d62bfcef",
+        "test": "test_cold_policy.py"
+      }
+    ],
+    "scope": "17 policy and 7 cold-preparation tests in four modes; no target import.",
+    "sha256": "79a6a3ced3b9ffd2deeb7c9519027f781ca7c4016ad7d159f8ec393e6f94908f"
+  },
+  "resource_limits": {
+    "address_space_bytes": 268435456,
+    "cpu_seconds": 20,
+    "cpus": 1,
+    "wall_seconds": 25
+  },
+  "reviewer_native_execution": false,
+  "reviewer_target_normal_imports": false,
+  "schema": "qwen2-fullgraph-independent-preexec-review-v1",
+  "source_identities": {
+    "cold_binding.py": {
+      "bytes": 6866,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/cold_binding.py",
+      "sha256": "62b4cd798c9764ea242268a939014590742e522165549eab2e40efc77a23a598"
+    },
+    "cold_policy.py": {
+      "bytes": 7935,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/cold_policy.py",
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    "launch_cold.py": {
+      "bytes": 4031,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/launch_cold.py",
+      "sha256": "a1ef56fb37d43a747e2e94d63f266d0e3ac8975560c85fa18c18b564ec41f2c3"
+    },
+    "runtime_binding.py": {
+      "bytes": 6714,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/runtime_binding.py",
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    "service_trace.py": {
+      "bytes": 3908,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/service_trace.py",
+      "sha256": "7c94bf513875cb2eeec76eca0d3f3353e729c3dbf00c0598129c7b8d0f6ad049"
+    },
+    "test_cold_binding.py": {
+      "bytes": 2292,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/test_cold_binding.py",
+      "sha256": "c33eab83b4aed8759f5b52c03bcb0292dd91157e19813f79459ffc66e7f84922"
+    },
+    "test_cold_policy.py": {
+      "bytes": 5612,
+      "path": "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/test_cold_policy.py",
+      "sha256": "d78e31a2489dadaf296a249a1bcc85d47879154455c86637e9389e795119feab"
+    }
+  },
+  "status": "PASS_PREEXEC_COLD_IMPORT_ONLY",
+  "version": 3
+}

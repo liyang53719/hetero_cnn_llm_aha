@@ -1,0 +1,100 @@
+{
+  "child_sha256": "cece2da965e61d25d50465d4827332baa303ecd71a0465edb96453b410edbf00",
+  "config_sha256": "88694c06b3083645395afb8d9d334168fd099ba6d38031c02ce2d76bbde5ed51",
+  "custom_matrix_task_executed": false,
+  "dependency_initialization_allowed": true,
+  "errors": [
+    {
+      "error": "No module named 'yaml'",
+      "gate": "normal_import",
+      "type": "ModuleNotFoundError"
+    }
+  ],
+  "expected_method_count": 9,
+  "fullgraph_numerical_status": "TEMP_NOT_EXECUTED",
+  "limits": {
+    "address_space_mib": 256,
+    "cpu_seconds": 20,
+    "cpus": 1,
+    "wall_seconds": 25
+  },
+  "next_step": "Separate source/runtime closure repair; no retry or installation included.",
+  "parent": {
+    "child_result_sha256": "cece2da965e61d25d50465d4827332baa303ecd71a0465edb96453b410edbf00",
+    "child_status": "FAIL_NORMAL_BINDING",
+    "exit_code": 1,
+    "group_exists": false,
+    "native_task_executed": false,
+    "numeric_acceptance": false,
+    "status": "FAIL_COLD_WRAPPER",
+    "timed_out": false,
+    "wall_seconds": 3.5258485979866236
+  },
+  "parent_sha256": "efe82048747b0384c4673182b5aed406d4d79da0728320596213e860d34f1b97",
+  "phase_inventory": [
+    {
+      "map_failures": 0,
+      "map_segments": 44,
+      "matrix_elf_loaded": false,
+      "module_entries": 93,
+      "module_qualification": "PASS_PINNED_MODULES_WITH_RECORDED_REPETITIONS",
+      "original_module_failures": [],
+      "original_module_status": "PASS_MODULE_IDENTITY",
+      "qualified_duplicate_names": [],
+      "raw_inventory_modified": false,
+      "receipt_hashes": {
+        "MAPS.txt": "45c84619a9c03ef7e4f35eb53f6ebee6a815d4b43072c8088438f1b180a7e6c1",
+        "MAP_AUDIT.json": "6e0a07f7d320bcb44baa18ed36e41183f141becb142f5fd7e9435289d39957c8",
+        "MODULES_RAW.json": "0ae33ac7af373ea97d4924e6806f2b5904db75e7db70a1c9c5ea2f292e31e307",
+        "MODULE_AUDIT.json": "761bfd211e97cbe7dc1c3c020357a0eb6479ff79401c430c8aece0d79431105e",
+        "MODULE_QUALIFICATION.json": "b37440fa999c55cd139ba283f639fb08668193605be064f1521ffdbfb7a185e9",
+        "NAMESPACE_REPETITIONS.json": "87716f4918b7e05425b6b3596da2fb561cf87ed039f7b5fe8e358e8ac089cb94",
+        "VALIDATION.json": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+      },
+      "stage": "00_before_import",
+      "unique_mapped_files": 10
+    },
+    {
+      "map_failures": 0,
+      "map_segments": 100,
+      "matrix_elf_loaded": false,
+      "module_entries": 246,
+      "module_qualification": "PASS_PINNED_MODULES_WITH_RECORDED_REPETITIONS",
+      "original_module_failures": [
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.ffn_public"
+        }
+      ],
+      "original_module_status": "FAIL_MODULE_IDENTITY",
+      "qualified_duplicate_names": [
+        "candidates",
+        "candidates.qwen2_resident_matrix",
+        "candidates.qwen2_resident_matrix.ffn_public"
+      ],
+      "raw_inventory_modified": false,
+      "receipt_hashes": {
+        "MAPS.txt": "2861d781f4367ee4463fea0b082107805d097ef0804a841ad39ba19b14ac0bab",
+        "MAP_AUDIT.json": "32a5b4cf4eae09e13b117e12f2bd13f4f4662ecfdfa52d0165bd71fac6d564e1",
+        "MODULES_RAW.json": "bc10a542f53c6994272810b3084d83330d92b4b368ce7a60fe9c7c4c298fef6b",
+        "MODULE_AUDIT.json": "af83db08e8cffadcbc60ff707b724698e27470c56dd54fce6d9af0a1495093ce",
+        "MODULE_QUALIFICATION.json": "d54a61ff3230f44e9e1b50b36ad0d8ab4e5794fbe9ad93ce1d5be81d55acd76f",
+        "NAMESPACE_REPETITIONS.json": "ebf551243c27de63e781d0f43741dac53b58b0bf0d53884e5d23b5eda9f282bf",
+        "VALIDATION.json": "a6a810ff36b122c13c4d205d4b031cae986bd70add513f0e3e633148ea109e7f"
+      },
+      "stage": "01_after_import_or_failure",
+      "unique_mapped_files": 18
+    }
+  ],
+  "root_cause": "Normal complete fixture imports src/heteronpu/config.py, which requires yaml; PyYAML is not in this admitted runtime closure.",
+  "service_method_binding_reached": false,
+  "status": "FAIL_NORMAL_IMPORT_DEPENDENCY_CLOSURE"
+}

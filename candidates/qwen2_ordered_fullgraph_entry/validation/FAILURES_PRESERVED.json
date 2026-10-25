@@ -1,0 +1,63 @@
+{
+  "failures": [
+    {
+      "effect": "child not launched",
+      "name": "runner test launcher invalid executable",
+      "preserved": true
+    },
+    {
+      "effect": "one fixture error; no actual module/native execution",
+      "name": "service trace AST test used wrong SOURCE_PINS key",
+      "preserved": true
+    },
+    {
+      "effect": "argument parsing rejected before service tests; other seven suites passed",
+      "exit_code": 2,
+      "name": "aggregate launcher omitted required source-root for service trace test",
+      "preserved": true,
+      "receipt_sha256": "fc27d79004173e13bf26b328e0a8a05622ec373d279b6dd053e0e9d2f7834c26"
+    },
+    {
+      "actual_numerics_executed": false,
+      "cause": "frozen Services() signal snapshot in a method default argument was omitted from the static initialization list; not a MatrixService",
+      "child_receipt_sha256": "55fa424af69d09665024370f8b85441c8cb551da39f1ba65b356ebe99c57fa19",
+      "cold_config_sha256": "cea45be039dcdbb9e85cff62fbca0b7341089cfb99b7f7a5204a0a3d3b79319d",
+      "exit_code": 1,
+      "inventory_differences": "three namespace inventories contained duplicate copies of the same pinned canonical source paths, no foreign paths",
+      "map_differences": 0,
+      "map_segments_per_phase": 44,
+      "module_counts": [
+        92,
+        122
+      ],
+      "name": "first actual normal import cold gate rejected metadata initialization",
+      "parent_receipt_sha256": "3f16211235446cc4e7b75d5e2e9c934ae91c784964551a92088a9d5b3ac12ded",
+      "pins_matched": 697,
+      "preserved": true,
+      "process_group_remaining": false,
+      "service_binding_reached": false,
+      "timeout": false,
+      "wall_seconds": 2.0233486969955266
+    },
+    {
+      "actual_numerics_executed": false,
+      "child_receipt_sha256": "cece2da965e61d25d50465d4827332baa303ecd71a0465edb96453b410edbf00",
+      "config_sha256": "88694c06b3083645395afb8d9d334168fd099ba6d38031c02ce2d76bbde5ed51",
+      "exit_code": 1,
+      "name": "second normal import cold reached missing yaml dependency",
+      "parent_receipt_sha256": "efe82048747b0384c4673182b5aed406d4d79da0728320596213e860d34f1b97",
+      "preserved": true,
+      "process_group_remaining": false,
+      "service_binding_reached": false,
+      "timeout": false,
+      "wall_seconds": 3.5258485979866236
+    }
+  ],
+  "scope": "Preparation and software tests only; no fullgraph native attempt",
+  "static_defect": {
+    "discovered_by": "independent source review",
+    "fix": "new exact MRO/method binder; old observer immutable",
+    "name": "OfficialMatrixService.acquire was not the component tracer base acquire",
+    "native_attempt": false
+  }
+}

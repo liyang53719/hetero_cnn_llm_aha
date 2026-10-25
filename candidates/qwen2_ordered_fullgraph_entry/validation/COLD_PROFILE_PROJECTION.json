@@ -1,0 +1,37 @@
+{
+  "actual_numeric_authorized": false,
+  "candidate_files": {
+    "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/__init__.py": {
+      "bytes": 84,
+      "sha256": "dac2807ea7d89bb043d25edc9cf9675db2b9ef739495af19892b453d8899d1cd"
+    },
+    "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/cold_binding.py": {
+      "bytes": 6866,
+      "sha256": "62b4cd798c9764ea242268a939014590742e522165549eab2e40efc77a23a598"
+    },
+    "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/cold_policy.py": {
+      "bytes": 7935,
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/runtime_binding.py": {
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    "local_attempt/overlay/candidates/qwen2_ordered_fullgraph_entry/service_trace.py": {
+      "bytes": 3908,
+      "sha256": "7c94bf513875cb2eeec76eca0d3f3353e729c3dbf00c0598129c7b8d0f6ad049"
+    }
+  },
+  "config_sha256": "88694c06b3083645395afb8d9d334168fd099ba6d38031c02ce2d76bbde5ed51",
+  "private_path_config_included": false,
+  "read_pins": 698,
+  "relocation_requires_new_config_and_review": true,
+  "resource": {
+    "address_space_bytes": 268435456,
+    "cpu_seconds": 20,
+    "cpus": 1,
+    "wall_seconds": 25
+  },
+  "source_manifest_sha256": "4ac834617f8566a9467f702faf81c730f2e23dcb1b97dbdd5ebdd33821a8d923",
+  "status": "FAILED_NORMAL_IMPORT_NOT_READY"
+}

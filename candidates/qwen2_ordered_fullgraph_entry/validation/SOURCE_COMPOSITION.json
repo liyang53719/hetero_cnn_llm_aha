@@ -1,0 +1,30 @@
+{
+  "changed_relative_paths": [
+    "candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py"
+  ],
+  "composer_sha256": "9c5c3c8eb73f5861fa382228fe9da25b40c14b88dfa67678152cb6d1ff18efdf",
+  "composition_status": "SOURCE_ONLY_COMPOSED",
+  "default_enabled": false,
+  "execution": {
+    "native_build_or_run": false,
+    "numpy_imported": false,
+    "rtl_executed": false,
+    "target_modules_imported": false
+  },
+  "full_numeric_status": "TEMP_NOT_EXECUTED",
+  "historical_receipts": "Copied only as pinned inert provenance; no M16/PV2 acceptance is inherited.",
+  "inherited_runtime_pass": false,
+  "patch_sha256": "1a00f42764cc329788ffa8ab1dc79857afb618606411ede00cf6f609ad795a2b",
+  "payload_policy": "No tensor payloads, ELF, or user data. One exact header-only safetensors metadata file is pinned.",
+  "private_receipt_sha256": "ea4cfca7b198f214a6c58f673b3bd14ffa141ad186fc8f7ca19c6b65eec105a7",
+  "schema": "qwen2-ordered-fullgraph-compose-receipt-v1",
+  "source_file_count": 316,
+  "source_manifest_relative": "SOURCE_MANIFEST.json",
+  "source_manifest_sha256": "4ac834617f8566a9467f702faf81c730f2e23dcb1b97dbdd5ebdd33821a8d923",
+  "source_pins_sha256": "129291eb1a837c9c0fe698b2bcd4bfc027281d914f42c7dc59bc0058694b137e",
+  "source_total_bytes_after": 4457711,
+  "source_total_bytes_before": 4457398,
+  "suffix_post_sha256": "2d339c994f1fb24d4938448d3dc21ceb46bee6e36b875aa585b0a8cf68e5ddd1",
+  "suffix_pre_sha256": "bdc4218fcc6136c1c1c2b6d9c15338b539e4b6abe46b96bd6baeb93379a6e9ab",
+  "suffix_relative": "candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py"
+}

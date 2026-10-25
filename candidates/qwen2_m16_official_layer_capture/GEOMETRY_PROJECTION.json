@@ -1,0 +1,334 @@
+{
+  "original_plan_sha256": "c79358ec06986d31b303acbb9bf58a50863a921f43c5fb7b33a37af4e7e2b132",
+  "geometry": {
+    "act": {
+      "export_bytes": 573440,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "att": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "cache_k": {
+      "export_bytes": 16384,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "cold_semantic_alias",
+      "shape": [
+        1,
+        2,
+        16,
+        128
+      ]
+    },
+    "cache_v": {
+      "export_bytes": 16384,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "cold_semantic_alias",
+      "shape": [
+        1,
+        2,
+        16,
+        128
+      ]
+    },
+    "cos": {
+      "export_bytes": 8192,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        16,
+        128
+      ]
+    },
+    "down": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "gate": {
+      "export_bytes": 573440,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "k": {
+      "export_bytes": 16384,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        2,
+        16,
+        128
+      ]
+    },
+    "kr": {
+      "export_bytes": 16384,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        256
+      ]
+    },
+    "logits": {
+      "export_bytes": 12288,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "mask": {
+      "export_bytes": 1024,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "wrapper_argument",
+      "shape": [
+        1,
+        1,
+        16,
+        16
+      ]
+    },
+    "n0": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "n1": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "o": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "prob": {
+      "export_bytes": 12288,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "pv": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "q": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "qr": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "r": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "repeat_k": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "repeat_v": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        128
+      ]
+    },
+    "scores": {
+      "export_bytes": 12288,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "silu": {
+      "export_bytes": 573440,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "sin": {
+      "export_bytes": 8192,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        16,
+        128
+      ]
+    },
+    "softmax_fp32": {
+      "export_bytes": 12288,
+      "export_dtype": "float32-le",
+      "native_dtype": "float32",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        12,
+        16,
+        16
+      ]
+    },
+    "up": {
+      "export_bytes": 573440,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        8960
+      ]
+    },
+    "v": {
+      "export_bytes": 16384,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        256
+      ]
+    },
+    "x": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "wrapper_argument",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    },
+    "y": {
+      "export_bytes": 98304,
+      "export_dtype": "float32-le",
+      "native_dtype": "bfloat16",
+      "origin": "actual_forward_observation",
+      "shape": [
+        1,
+        16,
+        1536
+      ]
+    }
+  }
+}

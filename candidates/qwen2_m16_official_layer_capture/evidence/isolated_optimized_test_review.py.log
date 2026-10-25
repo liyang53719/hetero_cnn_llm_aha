@@ -1,0 +1,37 @@
+test_bad_rotary_and_decoder_outputs_do_not_change_control (reviewee_capture_tests.CaptureTests.test_bad_rotary_and_decoder_outputs_do_not_change_control) ... ok
+test_chunked_actual_parameter_hash_uses_all_bytes (reviewee_capture_tests.CaptureTests.test_chunked_actual_parameter_hash_uses_all_bytes) ... ok
+test_code_digest_binds_locations_constants_and_full_code (reviewee_capture_tests.CaptureTests.test_code_digest_binds_locations_constants_and_full_code) ... ok
+test_complete_29_geometry_and_13_original_inputs (reviewee_capture_tests.CaptureTests.test_complete_29_geometry_and_13_original_inputs) ... ok
+test_complete_observation_validation_is_not_numeric_pass (reviewee_capture_tests.CaptureTests.test_complete_observation_validation_is_not_numeric_pass) ... ok
+test_duplicate_observation_fails_without_replacing_first (reviewee_capture_tests.CaptureTests.test_duplicate_observation_fails_without_replacing_first) ... ok
+test_exact_bf16_widening_including_sign_and_nonfinite (reviewee_capture_tests.CaptureTests.test_exact_bf16_widening_including_sign_and_nonfinite) ... ok
+test_export_is_native_and_exact_widening_not_provider (reviewee_capture_tests.CaptureTests.test_export_is_native_and_exact_widening_not_provider) ... ok
+test_fixed_source_line_boundaries_compile_without_import (reviewee_capture_tests.CaptureTests.test_fixed_source_line_boundaries_compile_without_import) ... ok
+test_mask_is_exact_cold_wrapper_input (reviewee_capture_tests.CaptureTests.test_mask_is_exact_cold_wrapper_input) ... ok
+test_module_import_is_stdlib_only (reviewee_capture_tests.CaptureTests.test_module_import_is_stdlib_only) ... ok
+test_no_numerical_import_at_top_level_or_dynamic_download_route (reviewee_capture_tests.CaptureTests.test_no_numerical_import_at_top_level_or_dynamic_download_route) ... ok
+test_public_execution_gate_closed_without_side_effect (reviewee_capture_tests.CaptureTests.test_public_execution_gate_closed_without_side_effect) ... ok
+test_raw_hashes_verify_shape_bytes_and_payload_not_receipt (reviewee_capture_tests.CaptureTests.test_raw_hashes_verify_shape_bytes_and_payload_not_receipt) ... ok
+test_snapshot_error_does_not_escape_hook (reviewee_capture_tests.CaptureTests.test_snapshot_error_does_not_escape_hook) ... ok
+test_snapshot_is_immediate_clone_and_hook_returns_none (reviewee_capture_tests.CaptureTests.test_snapshot_is_immediate_clone_and_hook_returns_none) ... ok
+test_softmax_actual_return_only_and_parent_bound (reviewee_capture_tests.CaptureTests.test_softmax_actual_return_only_and_parent_bound) ... ok
+test_trace_error_is_observational_and_fail_closed_at_validation (reviewee_capture_tests.CaptureTests.test_trace_error_is_observational_and_fail_closed_at_validation) ... ok
+test_trace_records_original_cold_aliases (reviewee_capture_tests.CaptureTests.test_trace_records_original_cold_aliases) ... ok
+test_trace_requires_exact_code_object (reviewee_capture_tests.CaptureTests.test_trace_requires_exact_code_object) ... ok
+test_unrelated_softmax_ignored (reviewee_capture_tests.CaptureTests.test_unrelated_softmax_ignored) ... ok
+test_all_fp32_nonfinite_classes_detected (__main__.IndependentReviewTests.test_all_fp32_nonfinite_classes_detected) ... ok
+test_export_never_overwrites_existing_data (__main__.IndependentReviewTests.test_export_never_overwrites_existing_data) ... ok
+test_geometry_and_original_gates_unchanged (__main__.IndependentReviewTests.test_geometry_and_original_gates_unchanged) ... ok
+test_missing_and_duplicate_line_events_rejected (__main__.IndependentReviewTests.test_missing_and_duplicate_line_events_rejected) ... ok
+test_nonfinite_export_adds_terminal_validation_error (__main__.IndependentReviewTests.test_nonfinite_export_adds_terminal_validation_error) ... ok
+test_pin_metadata_matches_prior_audit_all13 (__main__.IndependentReviewTests.test_pin_metadata_matches_prior_audit_all13) ... ok
+test_public_entry_is_literal_unconditional_disabled (__main__.IndependentReviewTests.test_public_entry_is_literal_unconditional_disabled) ... ok
+test_softmax_wrong_original_input_does_not_replace_flow (__main__.IndependentReviewTests.test_softmax_wrong_original_input_does_not_replace_flow) ... ok
+test_trace_never_assigns_frame_state (__main__.IndependentReviewTests.test_trace_never_assigns_frame_state) ... ok
+test_valid_aliases_then_v_storage_change_rejected (__main__.IndependentReviewTests.test_valid_aliases_then_v_storage_change_rejected) ... ok
+test_wrong_shape_and_device_rejected (__main__.IndependentReviewTests.test_wrong_shape_and_device_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.031s
+
+OK

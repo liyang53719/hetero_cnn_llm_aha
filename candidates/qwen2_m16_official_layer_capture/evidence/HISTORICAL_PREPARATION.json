@@ -1,0 +1,67 @@
+{
+  "original_sha256": "b2b2844ef322d974e8ca9f00ede79dbbc806bed70d5183d82e2206e3a278461a",
+  "projection": {
+    "actual_forward_executed": false,
+    "actual_model_instantiated": false,
+    "actual_runtime_profile_verified": false,
+    "dut_or_native_or_rtl_executed": false,
+    "files": {
+      "README_ZH.md": {
+        "bytes": 9046,
+        "sha256": "ef04a78af31848cc20c4b66f4187f703c47bf1bb56b5765b54b928bce7595d1f"
+      },
+      "TESTS_NORMAL.log": {
+        "bytes": 2872,
+        "sha256": "1c123f2f26646c82a2502326fcaa0d7dd01302384f39c9fff08a322f4544698c"
+      },
+      "TESTS_OPTIMIZED.log": {
+        "bytes": 2872,
+        "sha256": "80633e3ab31c1f0afedec8120d0e27d52692efce708a0f3ccb97c95cdc489c5d"
+      },
+      "capture.py": {
+        "bytes": 32305,
+        "sha256": "4fe8428c8ae2a1d96a900b0fc26e9a34cb98663f037c029595a5e51d4fc9bfc4"
+      },
+      "pins.json": {
+        "bytes": 10501,
+        "sha256": "0a129018f3c82d959014a0d7a205d736ea0d589d958e970cc96f7ecf2899fa13"
+      },
+      "test_capture.py": {
+        "bytes": 12876,
+        "sha256": "85dfbca4d2be02edc82a93d5e118077d9b25483d402a3104bb02e64d55118a0e"
+      }
+    },
+    "full_import_maps_gate_completed": false,
+    "launch_authority_connected": false,
+    "new_reference_generated": false,
+    "numerical_imports_performed": false,
+    "numerical_observation_noninterference_proven": false,
+    "numpy_imported": false,
+    "outstanding": [
+      "independent one-use launcher authorization and exact source review",
+      "dual-root normal-import module/native maps closure",
+      "actual reviewed CPU/build/thread/affinity/environment identity",
+      "resource enforcement and terminal cleanup ownership",
+      "future authorized full raw13 rehash and actual official M16 forward",
+      "actual 29-field hook/trace observations and numerical noninterference evidence"
+    ],
+    "prior_numeric_results_inherited": false,
+    "private_implementation": "_capture_impl is not authorized to call; no security sandbox claim",
+    "public_entry": "run_capture(raw_root, output_new, context) always raises ExecutionDisabled",
+    "raw13_actual_payloads_read_this_task": false,
+    "scope": "pure stdlib and mock tests only",
+    "status": "SOURCE_IMPLEMENTED_EXECUTION_DISABLED_NOT_READY",
+    "tests": {
+      "normal": {
+        "count": 21,
+        "passed": true
+      },
+      "optimized": {
+        "count": 21,
+        "passed": true
+      }
+    },
+    "torch_imported": false,
+    "transformers_imported": false
+  }
+}

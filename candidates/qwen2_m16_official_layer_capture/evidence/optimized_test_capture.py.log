@@ -1,0 +1,26 @@
+test_bad_rotary_and_decoder_outputs_do_not_change_control (__main__.CaptureTests.test_bad_rotary_and_decoder_outputs_do_not_change_control) ... ok
+test_chunked_actual_parameter_hash_uses_all_bytes (__main__.CaptureTests.test_chunked_actual_parameter_hash_uses_all_bytes) ... ok
+test_code_digest_binds_locations_constants_and_full_code (__main__.CaptureTests.test_code_digest_binds_locations_constants_and_full_code) ... ok
+test_complete_29_geometry_and_13_original_inputs (__main__.CaptureTests.test_complete_29_geometry_and_13_original_inputs) ... ok
+test_complete_observation_validation_is_not_numeric_pass (__main__.CaptureTests.test_complete_observation_validation_is_not_numeric_pass) ... ok
+test_duplicate_observation_fails_without_replacing_first (__main__.CaptureTests.test_duplicate_observation_fails_without_replacing_first) ... ok
+test_exact_bf16_widening_including_sign_and_nonfinite (__main__.CaptureTests.test_exact_bf16_widening_including_sign_and_nonfinite) ... ok
+test_export_is_native_and_exact_widening_not_provider (__main__.CaptureTests.test_export_is_native_and_exact_widening_not_provider) ... ok
+test_fixed_source_line_boundaries_compile_without_import (__main__.CaptureTests.test_fixed_source_line_boundaries_compile_without_import) ... ok
+test_mask_is_exact_cold_wrapper_input (__main__.CaptureTests.test_mask_is_exact_cold_wrapper_input) ... ok
+test_module_import_is_stdlib_only (__main__.CaptureTests.test_module_import_is_stdlib_only) ... ok
+test_no_numerical_import_at_top_level_or_dynamic_download_route (__main__.CaptureTests.test_no_numerical_import_at_top_level_or_dynamic_download_route) ... ok
+test_public_execution_gate_closed_without_side_effect (__main__.CaptureTests.test_public_execution_gate_closed_without_side_effect) ... ok
+test_raw_hashes_verify_shape_bytes_and_payload_not_receipt (__main__.CaptureTests.test_raw_hashes_verify_shape_bytes_and_payload_not_receipt) ... ok
+test_snapshot_error_does_not_escape_hook (__main__.CaptureTests.test_snapshot_error_does_not_escape_hook) ... ok
+test_snapshot_is_immediate_clone_and_hook_returns_none (__main__.CaptureTests.test_snapshot_is_immediate_clone_and_hook_returns_none) ... ok
+test_softmax_actual_return_only_and_parent_bound (__main__.CaptureTests.test_softmax_actual_return_only_and_parent_bound) ... ok
+test_trace_error_is_observational_and_fail_closed_at_validation (__main__.CaptureTests.test_trace_error_is_observational_and_fail_closed_at_validation) ... ok
+test_trace_records_original_cold_aliases (__main__.CaptureTests.test_trace_records_original_cold_aliases) ... ok
+test_trace_requires_exact_code_object (__main__.CaptureTests.test_trace_requires_exact_code_object) ... ok
+test_unrelated_softmax_ignored (__main__.CaptureTests.test_unrelated_softmax_ignored) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.022s
+
+OK

@@ -1,0 +1,199 @@
+{
+  "original_sha256": "a56ae3f5d01b6be04eae2b7c7077d794fedcdd07a33892c6831a5274393d4cba",
+  "projection": {
+    "schema": 1,
+    "reviewer": "independent review_full_layer_capture worker, not the implementation author",
+    "review_scope": "Frozen v1 capture.py, pins.json, test_capture.py, README_ZH.md, STATIC_PREPARATION.json; static source and stdlib/mock only.",
+    "status": "PASS_STATIC_SOURCE_AND_MOCKS_EXECUTION_DISABLED_NOT_READY",
+    "execution_ready": false,
+    "numeric_acceptance": "NOT_RUN",
+    "dut_comparison": "NOT_RUN",
+    "launch_authority_granted": false,
+    "reviewed_files": {
+      "capture.py": {
+        "bytes": 32305,
+        "sha256": "4fe8428c8ae2a1d96a900b0fc26e9a34cb98663f037c029595a5e51d4fc9bfc4"
+      },
+      "pins.json": {
+        "bytes": 10501,
+        "sha256": "0a129018f3c82d959014a0d7a205d736ea0d589d958e970cc96f7ecf2899fa13"
+      },
+      "test_capture.py": {
+        "bytes": 12876,
+        "sha256": "85dfbca4d2be02edc82a93d5e118077d9b25483d402a3104bb02e64d55118a0e"
+      },
+      "README_ZH.md": {
+        "bytes": 9046,
+        "sha256": "ef04a78af31848cc20c4b66f4187f703c47bf1bb56b5765b54b928bce7595d1f"
+      },
+      "STATIC_PREPARATION.json": {
+        "bytes": 2281,
+        "sha256": "b2b2844ef322d974e8ca9f00ede79dbbc806bed70d5183d82e2206e3a278461a"
+      },
+      "REVIEW_TESTS.py": {
+        "bytes": 6622,
+        "sha256": "f1f04ac6cb49c538f0e01f0bf926484693d60eaff0096ad29e750d6bfeee15f9"
+      },
+      "REVIEW_TESTS_NORMAL.log": {
+        "bytes": 4625,
+        "sha256": "b26254473484333a94998ff4757b96acd472abbf688c33aba3121b28ad28ed64"
+      },
+      "REVIEW_TESTS_OPTIMIZED.log": {
+        "bytes": 4625,
+        "sha256": "3fbd88e09da22768368d96012961e42b21cc3b52ab277ef787e64059b15ea01a"
+      }
+    },
+    "frozen_author_hashes_rechecked_after_all_tests": true,
+    "source_bytes_independently_verified": {
+      "transformers/activations.py": {
+        "path": "$OFFICIAL_TARGET/transformers/activations.py",
+        "sha256": "10c37e915ce2b52d539a5b52ecaaf644e2b0c56d282db00778098d74342ebeee",
+        "bytes": 8177,
+        "matched": true
+      },
+      "transformers/models/qwen2/configuration_qwen2.py": {
+        "path": "$OFFICIAL_TARGET/transformers/models/qwen2/configuration_qwen2.py",
+        "sha256": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+        "bytes": 6729,
+        "matched": true
+      },
+      "transformers/models/qwen2/modeling_qwen2.py": {
+        "path": "$OFFICIAL_TARGET/transformers/models/qwen2/modeling_qwen2.py",
+        "sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+        "bytes": 63883,
+        "matched": true
+      },
+      "torch/nn/functional.py": {
+        "path": "$NUMERICAL_RUNTIME/torch/nn/functional.py",
+        "sha256": "f6335e443ce93ddf21ecf9d94bbb4d4a4d92e128c5bfb59826f35495c9c28703",
+        "bytes": 258350,
+        "matched": true
+      },
+      "config.json": {
+        "path": "$SELECTED_SOURCE/config/upstream/weight_headers/qwen2_1p5b/config.json",
+        "sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+        "bytes": 660,
+        "matched": true
+      }
+    },
+    "actions_not_performed": [
+      "No torch, numpy, or transformers import; meta-path and import hooks forbid those packages in the independent test process.",
+      "No official class execution or layer instantiation; only source compile for inspection.",
+      "No _capture_impl call, official forward, actual tensor computation, native/DUT/M16/RTL run, or normal-import gate.",
+      "No actual raw13 payload read or rehash; only prior raw13 metadata reconciliation and temporary tiny mock fixtures.",
+      "No author file modification, authority/launch gate wiring, threshold change, or runtime profile change."
+    ],
+    "tests": {
+      "normal": {
+        "command": "python -I -S -B full_layer_capture/REVIEW_TESTS.py",
+        "passed": 32,
+        "failed": 0
+      },
+      "optimized": {
+        "command": "python -I -S -B -O full_layer_capture/REVIEW_TESTS.py",
+        "passed": 32,
+        "failed": 0
+      },
+      "composition": "21 original tests plus 11 independent static/mock tests in each process.",
+      "independent_coverage": [
+        "All 13 prior raw pin metadata records match exactly.",
+        "All 29 shapes, native dtypes and FP32 export byte counts match prior preparation.",
+        "Original operator/block/finite/rowsum/softmax diagnostic gates preserved.",
+        "Valid cold aliases accepted; changed cache_v storage pointer rejected.",
+        "Missing/repeated attention line events rejected.",
+        "Wrong observation shape and non-CPU device rejected.",
+        "Positive/negative infinity and quiet/signaling NaN bit patterns counted.",
+        "Nonfinite export records errors rather than a numeric pass.",
+        "Existing output bytes never overwritten by exporter.",
+        "Wrong softmax original input rejected observationally.",
+        "Public run_capture AST contains only the unconditional ExecutionDisabled raise after its docstring.",
+        "Trace contains no writes to frame state."
+      ]
+    },
+    "requirement_review": [
+      {
+        "requirement": "True complete official layer path",
+        "result": "PASS_STATIC_ONLY",
+        "evidence": "capture.py normal importlib.import_module of complete configuration_qwen2 and modeling_qwen2; complete Qwen2DecoderLayer is instantiated and called through layer(...). No source extraction or rewritten arithmetic path exists. Full file SHA and method-set/code/filename identity checks precede the proposed call."
+      },
+      {
+        "requirement": "Original configuration and explicit eager choice",
+        "result": "PASS_STATIC_ONLY",
+        "evidence": "Original config.json hash independently matches. Qwen2Config(**config_data), actual PretrainedConfig parent check, max_position_embeddings=32768, rope_theta=1e6, use_sliding_window=False, and config.to_dict disclosure. Only eager is chosen explicitly; no rotary256 substitution."
+      },
+      {
+        "requirement": "raw13 and complete twelve BF16 parameters",
+        "result": "PASS_STATIC_ONLY",
+        "evidence": "13 fixed pins sum to 94,382,080 bytes and match prior input audit records. Exact 12 named_parameter set, BF16 shape checks, full file hashing, second-read hash check, actual bound parameter byte hashing, and raw embedding first sixteen rows are present. No provider/reference output input exists."
+      },
+      {
+        "requirement": "29 original observations without recomputation",
+        "result": "PASS_STATIC_AND_MOCK_ONLY",
+        "evidence": "Exact FIELD_ORDER matches official call/evaluation order. Original attention source lines 280/283/285/300/302/304 inspected and compiled without execution. Hook outputs/prehook arguments and actual softmax return are cloned, not recomputed; frame/code/self/caller/input/dim/dtype bindings constrain the trace. Ordinary observation exceptions accumulate, hooks return None, and no original frame locals/tensor writes were found."
+      },
+      {
+        "requirement": "Cold mask and cache alias disclosure",
+        "result": "PASS_STATIC_AND_MOCK_ONLY",
+        "evidence": "Mask is explicitly wrapper-built BF16 0x0000/0xff7f with 136 allowed and 120 future entries, 16 diagonal. cache_k aliases actual k object; cache_v audits original transposed v storage. Documentation expressly excludes official mask helper and DynamicCache execution."
+      },
+      {
+        "requirement": "Complete code and filename binding",
+        "result": "PASS_STATIC_AND_MOCK_ONLY",
+        "evidence": "Recursive code-tree digest covers constants, bytecode, arguments, locals/names, closure cells, source filename and locations, exception table and flags. Imported functions are compared with complete pinned-file compilation at the same path and optimization level. The runtime trace uses exact bound code objects, not line numbers alone."
+      },
+      {
+        "requirement": "Geometry, finite exports and failure behavior",
+        "result": "PASS_STATIC_AND_MOCK_ONLY",
+        "evidence": "Exact 29 field/order/shape/dtype/CPU/call/line validation; immediate detached clones; native logical-contiguous bytes; exact BF16 bit widening; real FP32 return bytes; exponent-bit nonfinite scan; new output directory and exclusive files. Any accumulated observation/export error prevents capture success. RESULT and SEAL semantics are not numeric acceptance; receipt-write/process failures are correctly delegated to external launcher in README."
+      },
+      {
+        "requirement": "No hidden execution authority",
+        "result": "PASS_STATIC_AND_MOCK",
+        "evidence": "Public run_capture is an unconditional ExecutionDisabled raise with no environment/boolean/CLI override. _capture_impl is private source for future integration, explicitly not authorized to call and not a security sandbox. Context dictionaries bind audit data only."
+      },
+      {
+        "requirement": "No overclaim of full model, comparison or noninterference",
+        "result": "PASS_STATIC",
+        "evidence": "Report and README explicitly distinguish complete single DecoderLayer from Qwen2Model/ForCausalLM; unselected backends, DynamicCache and official mask helper not executed. observation_noninterference_proven remains false, numeric_acceptance and dut_comparison remain NOT_RUN, legacy results are not inherited."
+      }
+    ],
+    "open_code_defects": [],
+    "nonblocking_hardening_notes": [
+      {
+        "severity": "P3",
+        "subject": "Runtime globals are not made immutable by a function-code hash.",
+        "detail": "The current code hashes complete activations.py but does not explicitly assert model.ACT2FN identity or exact nn.SiLU instance type. This is not a detected defect under the required clean normal-import launcher precondition. Before enabling execution, independently verify fresh, unmodified module/runtime namespace and true nn.Module paths; optional ACT2FN/SiLU identity assertions would make accidental contamination fail earlier. Do not interpret static method hashes as proof against arbitrary monkeypatching.",
+        "evidence": "capture.py bind_official_module and _capture_impl; official_dependencies/target/transformers/activations.py ACT2FN silu mapping."
+      }
+    ],
+    "remaining_execution_blockers": [
+      {
+        "status": "NOT_IMPLEMENTED_OR_NOT_CONNECTED",
+        "item": "Independently reviewed exact-source one-use authorization launcher and resource enforcement; public entry must remain disabled until separately approved."
+      },
+      {
+        "status": "NOT_RUN_IN_THIS_REVIEW",
+        "item": "Dual-root complete Python/native normal-import and module/maps closure with no system fallback; exact process profile admission."
+      },
+      {
+        "status": "NOT_RUN",
+        "item": "Fresh real raw13 payload hashes, actual twelve bound BF16 tensor hashes and complete official M16 layer call."
+      },
+      {
+        "status": "NOT_RUN",
+        "item": "Actual 29-field hooks/trace behavior and numerical off/on noninterference evidence."
+      },
+      {
+        "status": "NOT_RUN",
+        "item": "Original-gate numerical/DUT comparison, full model, RTL and QoR verification."
+      }
+    ],
+    "separate_conclusions": {
+      "functional_correctness": "Static implementation and mocks pass; actual numerical behavior has not been executed or accepted.",
+      "protocol_correctness": "Public fail-closed preparation interface passes. Real one-use execution/termination ownership remains outside this implementation and unclosed.",
+      "physical_implementation": "Not assessed; no hardware/RTL work was authorized or run.",
+      "qor": "Not assessed; no latency, area, clock, memory/RSS or native performance measurement was run."
+    },
+    "final_statement": "Source preparation is independently reviewed with no open blocking code defect found in the frozen scope. This report is not permission to run _capture_impl, not proof of runtime readiness, and not a numerical or DUT PASS."
+  }
+}

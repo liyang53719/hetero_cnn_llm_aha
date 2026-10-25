@@ -1,0 +1,76 @@
+{
+  "status": "PASS_PORTABLE_STATIC_MOCKS_ONLY",
+  "source_capture_sha256": "4fe8428c8ae2a1d96a900b0fc26e9a34cb98663f037c029595a5e51d4fc9bfc4",
+  "pins_sha256": "0a129018f3c82d959014a0d7a205d736ea0d589d958e970cc96f7ecf2899fa13",
+  "test_capture_sha256": "a08f4ad6aa69ff6eb215cbc059206026f042003bb8e9f4f554df6db14907b958",
+  "test_review_sha256": "250e3fc8abb74dc9cd3bba15072db5354bd04801a388be6fd45d33abe29f1028",
+  "modes": [
+    "normal",
+    "optimized",
+    "isolated",
+    "isolated_optimized"
+  ],
+  "runs": [
+    {
+      "log": "isolated_optimized_test_capture.py.log",
+      "tests": 21,
+      "status": "PASS",
+      "sha256": "6c1d252493773aba78b57d14d2e26496b813b421b0f135f28705456f108fa75c"
+    },
+    {
+      "log": "isolated_optimized_test_review.py.log",
+      "tests": 32,
+      "status": "PASS",
+      "sha256": "bc7f09643b5ef87967018a558f50aecbfb3df9763c91ac51748e1d84135d7586"
+    },
+    {
+      "log": "isolated_test_capture.py.log",
+      "tests": 21,
+      "status": "PASS",
+      "sha256": "aa9e8bdb449a83b44f8d5863082a2879d8dd2f377343def27dcce12839d4315b"
+    },
+    {
+      "log": "isolated_test_review.py.log",
+      "tests": 32,
+      "status": "PASS",
+      "sha256": "b26254473484333a94998ff4757b96acd472abbf688c33aba3121b28ad28ed64"
+    },
+    {
+      "log": "normal_test_capture.py.log",
+      "tests": 21,
+      "status": "PASS",
+      "sha256": "83decdedd5570a7a32478e18f89ab240489504a6d4bbb1080f3d3b81a32324c0"
+    },
+    {
+      "log": "normal_test_review.py.log",
+      "tests": 32,
+      "status": "PASS",
+      "sha256": "bae852d7082dac8a71910facf54eb03b79512d7413380c7309fd0ea445c1eb23"
+    },
+    {
+      "log": "optimized_test_capture.py.log",
+      "tests": 21,
+      "status": "PASS",
+      "sha256": "1edff471c2306b8507fec040bb6130967bcac9d7d2bd9a4f795a9c4fcb819f13"
+    },
+    {
+      "log": "optimized_test_review.py.log",
+      "tests": 32,
+      "status": "PASS",
+      "sha256": "f9649b117c72becb249e47fcbc9e3a9f7e3d9528ba2281a46bcdfee9c5d5ae22"
+    }
+  ],
+  "actual_model_import": false,
+  "actual_forward": false,
+  "actual_raw13_payload_read": false,
+  "dut_native_rtl": false,
+  "source_for_compile_only_sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+  "public_entry": "EXECUTION_DISABLED",
+  "total_test_executions": 212,
+  "suite_overlap": "original21 is a subset of extended32; four modes repeat these suites, not 212 unique cases",
+  "unique_logical_test_identities": 32,
+  "unique_identity_composition": {
+    "original": 21,
+    "independent_added": 11
+  }
+}

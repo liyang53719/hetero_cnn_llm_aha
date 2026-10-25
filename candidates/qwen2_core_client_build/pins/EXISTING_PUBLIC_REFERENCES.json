@@ -1,0 +1,66 @@
+{
+  "base_commit": "c707bcf5aec027fcffd0ae7633098c50f1e1e4e4",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/m1_main.cpp",
+      "bytes": 10693,
+      "sha256": "675e75e1939afb7e77f40fde0baf2eeeddb01819812d2ba4ea38bcfcbc913f54",
+      "git_blob_sha": "664a6f9f2a300f911179e458d3ec8f46b7e5a3e4"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/generate_abi.py",
+      "bytes": 4060,
+      "sha256": "396bda736a78adb7cf4dab18342a4149d77934ba0fde26b2bfbff92cd5ea9ab8",
+      "git_blob_sha": "5b819cb6663284f277d5e3f86ba1f469ba61a448"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/check_m1_log.py",
+      "bytes": 4914,
+      "sha256": "2c6ccffb45308745e73372a31904606f8fc1b9ef97589753369bc7b0e4814f09",
+      "git_blob_sha": "d6793fee44c49b1556e5af35c74b4be8a24fb59b"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/check_generated.py",
+      "bytes": 11613,
+      "sha256": "af781e77a03b7f7bb9fc6bd311274b90f8d7b9ede04355ec08f591c8524b8cd2",
+      "git_blob_sha": "39907ef81cc8521ed018d22cbf01b7d8d43ad9da"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/rebuild_harness_metadata.py",
+      "bytes": 3960,
+      "sha256": "653b0fdfec621d7799b47135a6260476c959b71704a87fe1aa6283db323d7ed9",
+      "git_blob_sha": "7111ab34db542e40ecb7cef54ae15fa37bd383d1"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/pins/SOURCE_PINS.json",
+      "bytes": 3442,
+      "sha256": "e9df47dfaef0135f50decdc2e04250fb3ed697c779668e5e299de208cf9d0028",
+      "git_blob_sha": "3056b11fdf84293d41c8facc5483fcfb98ae8f8b"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/pins/EXISTING_PUBLIC_REFERENCES.json",
+      "bytes": 2316,
+      "sha256": "656ccd1a174c1ef765ca9b5704fa461167b9764ed8d3a4aeefcfc7d6b1aa2e60",
+      "git_blob_sha": "c6d6859f02bf3f7b6f184e4b48c0c074db253743"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/evidence/GENERATED_MODEL_HASHES.json",
+      "bytes": 10045,
+      "sha256": "421ca693ac26dd96f30292a1a89926774b1bf4f09715caed56981ebb465c3422",
+      "git_blob_sha": "5832332c35e4bb4c34898254a851a1b314f951a2"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/evidence/ACTUAL_CODEGEN_REVIEW.json",
+      "bytes": 8448,
+      "sha256": "408b3c3b5b0e2ea081cae62b21112358e5dbebdfba806fd99032963dbebafd65",
+      "git_blob_sha": "0b9027ff8cf9ec8553587610376051baafc819b0"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/evidence/HARNESS_SOURCE_REVIEW.json",
+      "bytes": 4002,
+      "sha256": "83a29a53272f0fb88b7d5a06c5c9f6070e71ab98ab5c5182b41e9d836a632218",
+      "git_blob_sha": "421710d91fefff13dc12ea53e78ace28839a723e"
+    }
+  ],
+  "transitive_reconstruction_note": "Use the previous codegen package plus its own pinned public references for symbolic ABI reconstruction; this build package neither duplicates nor reruns that assembly."
+}

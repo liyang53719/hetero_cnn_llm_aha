@@ -1,0 +1,203 @@
+{
+  "schema": "qwen2-actual-frozen-generated-model-build-independent-review-v1",
+  "status": "PASS_ACTUAL_FROZEN_MODEL_CPP_COMPILE_LINK_AND_STATIC_ELF_CLOSURE_ONLY_NOT_EXECUTION",
+  "claims": {
+    "M1_behavior_pass": false,
+    "can_say": "Original selected core/PackedClient generated model and frozen normal_m1 harness compiled and linked under the approved bound; independent artifact/ELF static closure passed.",
+    "cannot_say": [
+      "normal_m1 behavior, reset/handshake/probe/output numerical PASS",
+      "full128 RTL numerical or full29 observed tensors PASS",
+      "Matrix real FMA or complete DDR transaction timing proof",
+      "synthesis/timing closure or hardware throughput",
+      "90-percent4096-MAC utilization/duty target met"
+    ],
+    "hardware_MAC_duty": "UNKNOWN",
+    "hardware_MAC_utilization": "UNKNOWN",
+    "model_executed": false,
+    "numerical_pass": false,
+    "prior_software_observed_domain_PASS_and_all_Treadle_FAIL_records_retained": true,
+    "reason": "Build time is not hardware block-cycle count; no executed case or effective hardware MAC numerator/complete-block denominator measured."
+  },
+  "identity": {
+    "aliases": 1129,
+    "automatic_helpers_and_loaded_metadata_checked": true,
+    "automatic_pre_post_pin_records": 5365,
+    "legacy_inventory_count": 12,
+    "lstat_inventory_count": 7,
+    "negative_endpoint_count": 275,
+    "original_generated_source_bytes_verified": true,
+    "original_source_AST_or_SV_reexecution": false
+  },
+  "terminal": {
+    "claim_retained": true,
+    "cleanup_complete": true,
+    "errors": [],
+    "original_sources_preserved": true,
+    "postflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5365
+    },
+    "preflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5365
+    },
+    "supervisor_status": "PASS_FROZEN_MODEL_BUILD_ONLY",
+    "worker_exit_code": 0
+  },
+  "independent_method": {
+    "ABI_and_Make": "Original45 staged source bytes exactly match already independently audited8859-port header and Make artifacts; actual producer inherited content gate also returned PASS.",
+    "ELF_ar_MMD_PCH_parser": "Independent Python struct/bytes parser, no DUT or production checker import.",
+    "all129_artifact_content_hashes_matched_producer": true,
+    "binary_and_libraries": "Independent static ELF64/program/symbol/dynamic/version tables and recursive fixed5-file DT_NEEDED closure; actual binary entry uniquely file-backed executable. No ldd or model execution.",
+    "final129_fullstat_matched": true,
+    "known_scope_limits": [
+      "No syscall/exec trace proving arbitrary host activity absence; exact approved argv, source recipes, emitted compiler/link log, closed outputs and source identities support no Verilator regeneration/model invocation in this stage.",
+      "Static known loader dependencies/versions are not a dynamic loader trace, exhaustive dlopen/file-read inventory, signed host-package provenance or a runtime execution approval.",
+      "GCH completed magic/equal checksum does not prove full GCC validity fields or PCH-use at each ordinary compilation."
+    ],
+    "production_checker_reused": false,
+    "reviewer_only_checkpoint": "First read-only reviewer attempt required -c on two valid -x c++-header commands, after artifact checks. Preserved failure/script; corrected only reviewer classifier and performed second bounded read-only pass to freeze durable output results. Target producer PASS and bytes unchanged; no build retry.",
+    "second_pass_CPU_seconds": 0.281035017,
+    "second_pass_checks": 55192,
+    "second_pass_peak_RSS_KiB": 38464,
+    "second_pass_wall_seconds": 0.278854310978204,
+    "whole_Cpp_semantics_reparsed": false
+  },
+  "resources": {
+    "actual_build_files_bytes": 204109468,
+    "actual_inner_wall_seconds": 186.0574619040126,
+    "actual_outer_wall_seconds": 186.32318790903082,
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 40,
+      "cpu_seconds": 1800,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 1073741824,
+      "postflight_reserve_seconds": 30,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 402653184,
+      "total_wall_seconds": 2140,
+      "work_wall_seconds": 2100
+    },
+    "final_aggregate_CPU_seconds": 185.996499036,
+    "maximum_sample_gap_seconds": 0.08219158597057685,
+    "outer_timeout": false,
+    "sampled_original_group_RSS_bytes": 544808960,
+    "sampled_peak_CPU_seconds": 184.766967923,
+    "sampled_peak_run_tree_bytes": 204163390,
+    "scope": "Resource values are this compilation/link attempt, not model cycles/throughput. Group RSS/tree are sampled, not cgroup/all-system bounds; child AS/CPU/file limits inherited; exact cleanup original-owner evidence independently checked.",
+    "worker_log_bytes": 33462
+  },
+  "actual_build": {
+    "GNU_build_id": [
+      "14978d44056ca9a9f063da8112737ad9bebe06f1"
+    ],
+    "MMD_count": 41,
+    "MMD_dependency_records": 182,
+    "MMD_not_complete_system_header_closure": true,
+    "MMD_unique_literal_paths": 58,
+    "PCH_count": 2,
+    "PCH_format_identity_only_not_actual_use_proof": true,
+    "actual_Make_job_limit": 1,
+    "actual_header_language_compile_commands": 2,
+    "actual_link_commands": 1,
+    "actual_object_compile_commands": 39,
+    "archive_members": 36,
+    "artifact_count": 129,
+    "compiled_original_model_and_harness": true,
+    "direct_needed": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "object_count": 39,
+    "original_native_d_dat_parked_separately": true,
+    "recursive_static_runtime_files": 5,
+    "role_counts": {
+      "MMD": 41,
+      "PCH": 2,
+      "archive": 1,
+      "executable": 1,
+      "object": 39,
+      "unchanged_generated_source": 45
+    },
+    "source_unchanged_count": 45,
+    "stock_nine_warning_suppressions_preserved": true,
+    "temporary_archive_depfiles_and_temp_directory_empty": true,
+    "visible_compiler_warning_error_lines": 0,
+    "warning_free_or_all_warnings_enabled_claim": false
+  },
+  "origin_review": {
+    "bytes": 14970,
+    "sha256": "cdb2e48e499a223740c4e3b24868bae906387131ae1e6932cd1d63d1b56a2e92"
+  },
+  "origin_freeze": {
+    "bytes": 4124,
+    "sha256": "f2289636037133861bc10a24762b582b2c6f21b26efa11ef4c171e749cf20cb7"
+  },
+  "producer_receipt": {
+    "bytes": 148422,
+    "sha256": "9034586d185d05df27801b2d344a3d68483d238657835364cca9bae95df36ece"
+  },
+  "worker_log": {
+    "bytes": 33462,
+    "sha256": "0e3e9f1e8fa8da5f91c2ad1b171a2df8bf2dcb4921cdbbe187031bc3f023b651"
+  },
+  "candidate_freeze": {
+    "bytes": 6987,
+    "sha256": "7df5e4786423d4a1147deee87fd4ac7125a0449e904cee2c968e6688dead2e34"
+  },
+  "candidate_manifest": {
+    "bytes": 4238022,
+    "sha256": "8cedc60ac12d6fff9c04d718128e25cf8088c70dd317a688bb66be77f69e94e1"
+  },
+  "evidence": {
+    "MMD": {
+      "bytes": 44077,
+      "sha256": "d403ec821e449c09b91f75468947db182e1323d1341aabfc4171c7d64f080bcb"
+    },
+    "actual_identity": {
+      "bytes": 423976,
+      "sha256": "d4ed401c065ab27324e749bd4721ffb46ca47b2960069cbc371d024af8b4903d"
+    },
+    "actual_identity_freeze": {
+      "bytes": 3113,
+      "sha256": "f048ba5e7bec294c8c797d8bf0bee1f81464d073c1ab64bef15eb88e68a20cf3"
+    },
+    "binary_and_runtime_manifest": {
+      "bytes": 18534,
+      "sha256": "2ac22c23315d3871607dc9a94b87f6dfb3f81564a16b168422c3b3f633391c7a"
+    },
+    "binary_entry_review": {
+      "bytes": 473,
+      "sha256": "6215b0ef2793ce13cba81d123e8c72cb59bafbafabd32bc48a16f1d3d21d0f30"
+    },
+    "build_artifact_manifest": {
+      "bytes": 75530,
+      "sha256": "ea74d2c9fe1f0544c811081d31090888e54e96daeac6c7cddcc16fbd002a4ff0"
+    },
+    "objects_and_archive": {
+      "bytes": 53446,
+      "sha256": "b26e5fc9d1fe33775f72b44bff365a58e6888741c525a250e091292159c488bd"
+    },
+    "output_freeze": {
+      "bytes": 3380,
+      "sha256": "b626448c9121f6313b11b1d12d791067cc414585c32895f07fe5a2c3bf07910b"
+    },
+    "output_review": {
+      "bytes": 3573,
+      "sha256": "032523585cca730105a3ce5905b71d013c690de0673e5a862f767d4a3bb589df"
+    },
+    "reviewer_checkpoint": {
+      "bytes": 991,
+      "sha256": "c4a048c2fdbcaddf982333a01eccb4eaac7e14712d3efe63b6690a2f87a68203"
+    }
+  },
+  "projection_note": "Private paths/process identity and exact CPU affinity index omitted; one-CPU cap retained. ELF binary bytes/addresses not published; static runtime declaration separate."
+}

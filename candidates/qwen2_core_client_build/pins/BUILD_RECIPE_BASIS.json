@@ -1,0 +1,97 @@
+{
+  "actual_classes": {
+    "VM_CLASSES_FAST": [
+      "VOrderedQkBehaviorCore",
+      "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0",
+      "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1",
+      "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2",
+      "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5",
+      "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0",
+      "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0"
+    ],
+    "VM_CLASSES_SLOW": [
+      "VOrderedQkBehaviorCore__ConstPool_0",
+      "VOrderedQkBehaviorCore___024root__Slow",
+      "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow",
+      "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow",
+      "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__Slow",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow",
+      "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow",
+      "VOrderedQkBehaviorCore_banks_bank_2240x128__Slow",
+      "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow",
+      "VOrderedQkBehaviorCore_banks_bank_48x128__Slow",
+      "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow"
+    ],
+    "VM_GLOBAL_FAST": [
+      "verilated",
+      "verilated_threads"
+    ],
+    "VM_GLOBAL_SLOW": [],
+    "VM_SUPPORT_FAST": [],
+    "VM_SUPPORT_SLOW": [
+      "VOrderedQkBehaviorCore__Syms"
+    ]
+  },
+  "all_generated_sources_immutable": true,
+  "archive_members": 36,
+  "fixed_conditions": {
+    "OPT_FAST": "-Os",
+    "OPT_GLOBAL": "-Os",
+    "OPT_SLOW": "",
+    "USER_CFLAGS": "-std=c++17",
+    "VM_PARALLEL_BUILDS": 1,
+    "VM_PROFC": 0,
+    "VM_SC": 0,
+    "VM_TIMING": 0,
+    "VM_TRACE": 0
+  },
+  "make_builtin_rules_variables_disabled": true,
+  "no_compiler_invocation": true,
+  "no_make_invocation": true,
+  "no_model_invocation": true,
+  "old_d_absolute_targets": 46,
+  "old_d_does_not_enter_active_make": true,
+  "parked_original_metadata": 2,
+  "pch": 2,
+  "schema": "frozen-original-make-build-recipe-basis-v1",
+  "source_freshness": "No previous objects/archive/exe/gch/d in initial build dir; explicit frozen source/make targets and user pattern rules determine build. Old .d/.dat are evidence-only; no recipe invokes Verilator or model.",
+  "source_locations": {
+    "verilated.mk": {
+      "aggregates": "177-201",
+      "archive_recipe": "227-262",
+      "compile_and_pch_rules": "268-300",
+      "dependency_include": "358-361",
+      "non_parallel_includer_unselected": "208-225"
+    }
+  },
+  "source_review": {
+    "bytes": 24234,
+    "sha256": "c550d7de33676f5ed8d7f68779377b3ab4debf2b7d01f5db63daea3239f79709"
+  },
+  "staged_active_files": 45,
+  "status": "STATIC_ONLY_NO_MAKE_EXPANSION",
+  "stock_warning_suppression_retained": true,
+  "successful_active_file_count": 129,
+  "translation_units": 39,
+  "origin_record": {
+    "bytes": 4101,
+    "sha256": "f1034efdd21f99855b87c115c70e34e45df9883be5799bbda8143b0d58704024"
+  }
+}

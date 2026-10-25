@@ -1,0 +1,407 @@
+{
+  "schema": "hash-only-static-ELF-runtime-declaration-v1",
+  "origin_manifest": {
+    "bytes": 18534,
+    "sha256": "2ac22c23315d3871607dc9a94b87f6dfb3f81564a16b168422c3b3f633391c7a"
+  },
+  "status": "PASS_STATIC_BINARY_IDENTITY_AND_KNOWN_DT_NEEDED_VERSION_CLOSURE_NOT_EXECUTION",
+  "binary": {
+    "bytes": 3338824,
+    "sha256": "728664bc753d91099d20e9ce2ea4625cc6c971f518b8494290a486015d532b76",
+    "elf": {
+      "elf_type": 3,
+      "machine": 62,
+      "needed": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "soname": null,
+      "sections": 34,
+      "symbol_count": 1540,
+      "defined_model_function_count": 198,
+      "defined_model_functions_sha256": "e837a3b232211fefc8d22709a9b9835ce5a3347b089613b9f4adff61ff666bde",
+      "version_definitions": [],
+      "version_requirements": {
+        "libc.so.6": [
+          "GLIBC_2.32",
+          "GLIBC_2.17",
+          "GLIBC_2.38",
+          "GLIBC_2.34",
+          "GLIBC_2.2.5"
+        ],
+        "libgcc_s.so.1": [
+          "GCC_3.0"
+        ],
+        "libm.so.6": [
+          "GLIBC_2.29"
+        ],
+        "libstdc++.so.6": [
+          "CXXABI_1.3.7",
+          "GLIBCXX_3.4.32",
+          "CXXABI_1.3.8",
+          "GLIBCXX_3.4.17",
+          "GLIBCXX_3.4.18",
+          "CXXABI_1.3.9",
+          "CXXABI_1.3.2",
+          "GLIBCXX_3.4.29",
+          "GLIBCXX_3.4.26",
+          "GLIBCXX_3.4.9",
+          "GLIBCXX_3.4.11",
+          "CXXABI_1.3",
+          "GLIBCXX_3.4.14",
+          "GLIBCXX_3.4.30",
+          "CXXABI_1.3.11",
+          "GLIBCXX_3.4.22",
+          "GLIBCXX_3.4.15",
+          "GLIBCXX_3.4.21",
+          "GLIBCXX_3.4"
+        ]
+      },
+      "build_ids": [
+        "14978d44056ca9a9f063da8112737ad9bebe06f1"
+      ]
+    },
+    "interpreter_role": "linux_x86_64_dynamic_loader",
+    "interpreter_basename": "ld-linux-x86-64.so.2",
+    "entry_mapping_review": {
+      "origin_review": {
+        "bytes": 473,
+        "sha256": "6215b0ef2793ce13cba81d123e8c72cb59bafbafabd32bc48a16f1d3d21d0f30"
+      },
+      "unique_file_backed_executable_entry": true,
+      "model_executed": false
+    }
+  },
+  "runtime_files": [
+    {
+      "role": "libstdc++.so.6",
+      "bytes": 2497768,
+      "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00",
+      "elf": {
+        "elf_type": 3,
+        "machine": 62,
+        "needed": [
+          "libm.so.6",
+          "libc.so.6",
+          "ld-linux-x86-64.so.2",
+          "libgcc_s.so.1"
+        ],
+        "soname": "libstdc++.so.6",
+        "sections": 33,
+        "symbol_count": 6278,
+        "defined_model_function_count": 0,
+        "defined_model_functions_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version_definitions": [
+          "libstdc++.so.6",
+          "GLIBCXX_3.4",
+          "GLIBCXX_3.4.1",
+          "GLIBCXX_3.4.2",
+          "GLIBCXX_3.4.3",
+          "GLIBCXX_3.4.4",
+          "GLIBCXX_3.4.5",
+          "GLIBCXX_3.4.6",
+          "GLIBCXX_3.4.7",
+          "GLIBCXX_3.4.8",
+          "GLIBCXX_3.4.9",
+          "GLIBCXX_3.4.10",
+          "GLIBCXX_3.4.11",
+          "GLIBCXX_3.4.12",
+          "GLIBCXX_3.4.13",
+          "GLIBCXX_3.4.14",
+          "GLIBCXX_3.4.15",
+          "GLIBCXX_3.4.16",
+          "GLIBCXX_3.4.17",
+          "GLIBCXX_3.4.18",
+          "GLIBCXX_3.4.19",
+          "GLIBCXX_3.4.20",
+          "GLIBCXX_3.4.21",
+          "GLIBCXX_3.4.22",
+          "GLIBCXX_3.4.23",
+          "GLIBCXX_3.4.24",
+          "GLIBCXX_3.4.25",
+          "GLIBCXX_3.4.26",
+          "GLIBCXX_3.4.27",
+          "GLIBCXX_3.4.28",
+          "GLIBCXX_3.4.29",
+          "GLIBCXX_3.4.30",
+          "GLIBCXX_3.4.31",
+          "GLIBCXX_3.4.32",
+          "GLIBCXX_3.4.33",
+          "CXXABI_1.3",
+          "CXXABI_1.3.1",
+          "CXXABI_1.3.2",
+          "CXXABI_1.3.3",
+          "CXXABI_1.3.4",
+          "CXXABI_1.3.5",
+          "CXXABI_1.3.6",
+          "CXXABI_1.3.7",
+          "CXXABI_1.3.8",
+          "CXXABI_1.3.9",
+          "CXXABI_1.3.10",
+          "CXXABI_1.3.11",
+          "CXXABI_1.3.12",
+          "CXXABI_1.3.13",
+          "CXXABI_1.3.14",
+          "CXXABI_1.3.15",
+          "CXXABI_TM_1",
+          "CXXABI_FLOAT128"
+        ],
+        "version_requirements": {
+          "ld-linux-x86-64.so.2": [
+            "GLIBC_2.3"
+          ],
+          "libc.so.6": [
+            "GLIBC_2.14",
+            "GLIBC_2.38",
+            "GLIBC_2.6",
+            "GLIBC_2.26",
+            "GLIBC_2.25",
+            "GLIBC_2.18",
+            "GLIBC_2.32",
+            "GLIBC_2.4",
+            "GLIBC_2.33",
+            "GLIBC_2.17",
+            "GLIBC_2.3",
+            "GLIBC_2.36",
+            "GLIBC_2.3.2",
+            "GLIBC_2.34",
+            "GLIBC_2.2.5"
+          ],
+          "libgcc_s.so.1": [
+            "GCC_4.2.0",
+            "GCC_3.3",
+            "GCC_4.3.0",
+            "GCC_3.0"
+          ],
+          "libm.so.6": [
+            "GLIBC_2.2.5"
+          ]
+        },
+        "build_ids": [
+          "133b71e0013695cc7832680a74edb51008c4fc4c"
+        ]
+      }
+    },
+    {
+      "role": "libm.so.6",
+      "bytes": 977112,
+      "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3",
+      "elf": {
+        "elf_type": 3,
+        "machine": 62,
+        "needed": [
+          "libc.so.6",
+          "ld-linux-x86-64.so.2"
+        ],
+        "soname": "libm.so.6",
+        "sections": 30,
+        "symbol_count": 1315,
+        "defined_model_function_count": 0,
+        "defined_model_functions_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version_definitions": [
+          "libm.so.6",
+          "GLIBC_2.2.5",
+          "GLIBC_2.4",
+          "GLIBC_2.15",
+          "GLIBC_2.18",
+          "GLIBC_2.23",
+          "GLIBC_2.24",
+          "GLIBC_2.25",
+          "GLIBC_2.26",
+          "GLIBC_2.27",
+          "GLIBC_2.28",
+          "GLIBC_2.29",
+          "GLIBC_2.31",
+          "GLIBC_2.32",
+          "GLIBC_2.35",
+          "GLIBC_2.38",
+          "GLIBC_2.39",
+          "GLIBC_2.40",
+          "GLIBC_2.41"
+        ],
+        "version_requirements": {
+          "ld-linux-x86-64.so.2": [
+            "GLIBC_PRIVATE"
+          ],
+          "libc.so.6": [
+            "GLIBC_2.36",
+            "GLIBC_ABI_DT_RELR",
+            "GLIBC_2.4",
+            "GLIBC_2.2.5",
+            "GLIBC_PRIVATE"
+          ]
+        },
+        "build_ids": [
+          "befc0308f899f79b901d4e738992787368cf70f7"
+        ]
+      }
+    },
+    {
+      "role": "libgcc_s.so.1",
+      "bytes": 182856,
+      "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af",
+      "elf": {
+        "elf_type": 3,
+        "machine": 62,
+        "needed": [
+          "libc.so.6",
+          "ld-linux-x86-64.so.2"
+        ],
+        "soname": "libgcc_s.so.1",
+        "sections": 29,
+        "symbol_count": 225,
+        "defined_model_function_count": 0,
+        "defined_model_functions_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version_definitions": [
+          "libgcc_s.so.1",
+          "GCC_3.0",
+          "GCC_3.3",
+          "GCC_3.3.1",
+          "GCC_3.4",
+          "GCC_3.4.2",
+          "GCC_3.4.4",
+          "GCC_4.0.0",
+          "GCC_4.2.0",
+          "GCC_4.3.0",
+          "GCC_4.7.0",
+          "GCC_4.8.0",
+          "GCC_7.0.0",
+          "GCC_12.0.0",
+          "GCC_13.0.0",
+          "GCC_14.0.0"
+        ],
+        "version_requirements": {
+          "ld-linux-x86-64.so.2": [
+            "GLIBC_2.3"
+          ],
+          "libc.so.6": [
+            "GLIBC_2.35",
+            "GLIBC_2.14",
+            "GLIBC_2.34",
+            "GLIBC_2.3.2",
+            "GLIBC_2.2.5"
+          ]
+        },
+        "build_ids": [
+          "12eddb764a9c4e3c9ad99b3e645cbd206521af07"
+        ]
+      }
+    },
+    {
+      "role": "libc.so.6",
+      "bytes": 1995216,
+      "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92",
+      "elf": {
+        "elf_type": 3,
+        "machine": 62,
+        "needed": [
+          "ld-linux-x86-64.so.2"
+        ],
+        "soname": "libc.so.6",
+        "sections": 61,
+        "symbol_count": 3162,
+        "defined_model_function_count": 0,
+        "defined_model_functions_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version_definitions": [
+          "libc.so.6",
+          "GLIBC_2.2.5",
+          "GLIBC_2.2.6",
+          "GLIBC_2.3",
+          "GLIBC_2.3.2",
+          "GLIBC_2.3.3",
+          "GLIBC_2.3.4",
+          "GLIBC_2.4",
+          "GLIBC_2.5",
+          "GLIBC_2.6",
+          "GLIBC_2.7",
+          "GLIBC_2.8",
+          "GLIBC_2.9",
+          "GLIBC_2.10",
+          "GLIBC_2.11",
+          "GLIBC_2.12",
+          "GLIBC_2.13",
+          "GLIBC_2.14",
+          "GLIBC_2.15",
+          "GLIBC_2.16",
+          "GLIBC_2.17",
+          "GLIBC_2.18",
+          "GLIBC_2.22",
+          "GLIBC_2.23",
+          "GLIBC_2.24",
+          "GLIBC_2.25",
+          "GLIBC_2.26",
+          "GLIBC_2.27",
+          "GLIBC_2.28",
+          "GLIBC_2.29",
+          "GLIBC_2.30",
+          "GLIBC_2.31",
+          "GLIBC_2.32",
+          "GLIBC_2.33",
+          "GLIBC_2.34",
+          "GLIBC_2.35",
+          "GLIBC_2.36",
+          "GLIBC_2.38",
+          "GLIBC_2.39",
+          "GLIBC_2.41",
+          "GLIBC_ABI_DT_RELR",
+          "GLIBC_ABI_DT_X86_64_PLT",
+          "GLIBC_ABI_GNU2_TLS",
+          "GLIBC_PRIVATE"
+        ],
+        "version_requirements": {
+          "ld-linux-x86-64.so.2": [
+            "GLIBC_2.2.5",
+            "GLIBC_2.3",
+            "GLIBC_2.35",
+            "GLIBC_PRIVATE"
+          ]
+        },
+        "build_ids": [
+          "5e5b51f4c39af9ac589408c1dc432ba390a273cc"
+        ]
+      }
+    },
+    {
+      "role": "ld-linux-x86-64.so.2",
+      "bytes": 225672,
+      "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307",
+      "elf": {
+        "elf_type": 3,
+        "machine": 62,
+        "needed": [],
+        "soname": "ld-linux-x86-64.so.2",
+        "sections": 21,
+        "symbol_count": 39,
+        "defined_model_function_count": 0,
+        "defined_model_functions_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "version_definitions": [
+          "ld-linux-x86-64.so.2",
+          "GLIBC_2.2.5",
+          "GLIBC_2.3",
+          "GLIBC_2.4",
+          "GLIBC_2.34",
+          "GLIBC_2.35",
+          "GLIBC_PRIVATE"
+        ],
+        "version_requirements": {},
+        "build_ids": [
+          "86f7eb4ff495ed3f2831c6d3d662e4321762a2a3"
+        ]
+      }
+    }
+  ],
+  "loader_cache_hash": {
+    "bytes": 140683,
+    "sha256": "ecab8af67128833f7a08b5fff3fbf5de0e785d226f62fd145f2cb890e6941660"
+  },
+  "source_dependency_manifest_hash": {
+    "bytes": 2443705,
+    "sha256": "b999f73fb953b7425866c531574b42b0f63fae04679a1ef84ff7d376d6ca5951"
+  },
+  "actual_runtime_resolution_trace": false,
+  "additional_runtime_file_io_or_dlopen_exhaustive": false,
+  "execute_authorized": false,
+  "scope": "Known static5-file DT_NEEDED/version closure only, no signed host-package provenance, dynamic loader trace or runtime approval. ELF entry/symbol virtual addresses and host file identities omitted."
+}

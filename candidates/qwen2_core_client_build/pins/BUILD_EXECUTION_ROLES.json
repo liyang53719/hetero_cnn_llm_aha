@@ -1,0 +1,681 @@
+{
+  "schema": "build-only-role-command-and-plan-v1",
+  "worker_argv": [
+    "${TOOL_MAKE}",
+    "-rR",
+    "-j1",
+    "--no-print-directory",
+    "-C",
+    "${NEW_RUN_ROOT}/build",
+    "-f",
+    "VOrderedQkBehaviorCore.mk",
+    "VOrderedQkBehaviorCore",
+    "CXX=${TOOL_X86_64_LINUX_GNU_GPP_14}",
+    "LINK=${TOOL_X86_64_LINUX_GNU_GPP_14}",
+    "AR=${TOOL_X86_64_LINUX_GNU_AR}",
+    "RM=${TOOL_RM}",
+    "SHELL=${TOOL_SH}",
+    "PERL=${TOOL_PERL}",
+    "PYTHON3=${TOOL_PYTHON3}",
+    "OBJCACHE="
+  ],
+  "environment": {
+    "COMPILER_PATH": "${NEW_RUN_ROOT}/tools:${GCC_LIBEXEC}",
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "${NEW_RUN_ROOT}/tools",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+  },
+  "build_plan": {
+    "archive": {
+      "members": [
+        {
+          "name": "VOrderedQkBehaviorCore.o",
+          "object": "build/VOrderedQkBehaviorCore.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore__ConstPool_0.o",
+          "object": "build/VOrderedQkBehaviorCore__ConstPool_0.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore__Syms.o",
+          "object": "build/VOrderedQkBehaviorCore__Syms.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore___024root__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore___024root__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.o",
+          "object": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.o",
+          "object": "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.o"
+        },
+        {
+          "name": "VOrderedQkBehaviorCore_banks_bank_48x128__Slow.o",
+          "object": "build/VOrderedQkBehaviorCore_banks_bank_48x128__Slow.o"
+        }
+      ],
+      "path": "build/VOrderedQkBehaviorCore__ALL.a"
+    },
+    "dependency_cwd": "build",
+    "executable": "build/VOrderedQkBehaviorCore",
+    "model_symbol_prefix": "VOrderedQkBehaviorCore",
+    "pch": [
+      {
+        "dependency": "build/VOrderedQkBehaviorCore__pch.h.fast.d",
+        "path": "build/VOrderedQkBehaviorCore__pch.h.fast.gch",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore__pch.h",
+        "target": "VOrderedQkBehaviorCore__pch.h.fast.gch"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore__pch.h.slow.d",
+        "path": "build/VOrderedQkBehaviorCore__pch.h.slow.gch",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore__pch.h",
+        "target": "VOrderedQkBehaviorCore__pch.h.slow.gch"
+      }
+    ],
+    "staged_dependency_files": [
+      "build/VOrderedQkBehaviorCore.cpp",
+      "build/VOrderedQkBehaviorCore.h",
+      "build/VOrderedQkBehaviorCore.mk",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu.h",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.cpp",
+      "build/VOrderedQkBehaviorCore__ConstPool_0.cpp",
+      "build/VOrderedQkBehaviorCore__Syms.cpp",
+      "build/VOrderedQkBehaviorCore__Syms.h",
+      "build/VOrderedQkBehaviorCore___024root.h",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.cpp",
+      "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.cpp",
+      "build/VOrderedQkBehaviorCore___024root__Slow.cpp",
+      "build/VOrderedQkBehaviorCore__pch.h",
+      "build/VOrderedQkBehaviorCore_banks_bank_2240x128.h",
+      "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.cpp",
+      "build/VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_banks_bank_48x128.h",
+      "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.cpp",
+      "build/VOrderedQkBehaviorCore_banks_bank_48x128__Slow.cpp",
+      "build/VOrderedQkBehaviorCore_classes.mk"
+    ],
+    "translation_units": [
+      {
+        "dependency": "build/VOrderedQkBehaviorCore.d",
+        "object": "build/VOrderedQkBehaviorCore.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore__ConstPool_0.d",
+        "object": "build/VOrderedQkBehaviorCore__ConstPool_0.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore__ConstPool_0.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore__Syms.d",
+        "object": "build/VOrderedQkBehaviorCore__Syms.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore__Syms.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore___024root__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore___024root__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore___024root__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.d",
+        "object": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.d",
+        "object": "build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.cpp"
+      },
+      {
+        "dependency": "build/VOrderedQkBehaviorCore_banks_bank_48x128__Slow.d",
+        "object": "build/VOrderedQkBehaviorCore_banks_bank_48x128__Slow.o",
+        "source": "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore_banks_bank_48x128__Slow.cpp"
+      },
+      {
+        "dependency": "build/verilated.d",
+        "object": "build/verilated.o",
+        "source": "${VERILATOR_ROOT}/include/verilated.cpp"
+      },
+      {
+        "dependency": "build/verilated_threads.d",
+        "object": "build/verilated_threads.o",
+        "source": "${VERILATOR_ROOT}/include/verilated_threads.cpp"
+      },
+      {
+        "dependency": "build/m1_main.d",
+        "object": "build/m1_main.o",
+        "source": "${FROZEN_HARNESS}/m1_main.cpp"
+      }
+    ]
+  },
+  "allowed_dependency_pins_count": 4226,
+  "full_private_manifest_hash": {
+    "bytes": 4238022,
+    "sha256": "8cedc60ac12d6fff9c04d718128e25cf8088c70dd317a688bb66be77f69e94e1"
+  },
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 40,
+    "cpu_seconds": 1800,
+    "log_hard_bytes": 4194304,
+    "output_tree_sampled_bytes": 1073741824,
+    "postflight_reserve_seconds": 30,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 402653184,
+    "total_wall_seconds": 2140,
+    "work_wall_seconds": 2100
+  },
+  "outer_wall_seconds": 2170,
+  "tools": [
+    {
+      "role": "${TOOL_MAKE}",
+      "name": "make",
+      "bytes": 278448,
+      "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7"
+    },
+    {
+      "role": "${TOOL_X86_64_LINUX_GNU_GPP_14}",
+      "name": "x86_64-linux-gnu-g++-14",
+      "bytes": 1166360,
+      "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d"
+    },
+    {
+      "role": "${TOOL_AS}",
+      "name": "x86_64-linux-gnu-as",
+      "bytes": 795184,
+      "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9"
+    },
+    {
+      "role": "${TOOL_LD}",
+      "name": "x86_64-linux-gnu-ld",
+      "bytes": 1861256,
+      "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b"
+    },
+    {
+      "role": "${TOOL_X86_64_LINUX_GNU_AR}",
+      "name": "x86_64-linux-gnu-ar",
+      "bytes": 52480,
+      "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb"
+    },
+    {
+      "role": "${TOOL_SH}",
+      "name": "sh",
+      "bytes": 129736,
+      "sha256": "a6f559e00b69a4aa4d8cb607be18d9386c5aee55c509e2c075549dcf00e00fc7"
+    },
+    {
+      "role": "${TOOL_MAKE}",
+      "name": "make",
+      "bytes": 278448,
+      "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7"
+    },
+    {
+      "role": "${TOOL_X86_64_LINUX_GNU_GPP_14}",
+      "name": "x86_64-linux-gnu-g++-14",
+      "bytes": 1166360,
+      "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d"
+    },
+    {
+      "role": "${TOOL_AS}",
+      "name": "x86_64-linux-gnu-as",
+      "bytes": 795184,
+      "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9"
+    },
+    {
+      "role": "${TOOL_LD}",
+      "name": "x86_64-linux-gnu-ld",
+      "bytes": 1861256,
+      "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b"
+    },
+    {
+      "role": "${TOOL_X86_64_LINUX_GNU_AR}",
+      "name": "x86_64-linux-gnu-ar",
+      "bytes": 52480,
+      "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb"
+    },
+    {
+      "role": "${TOOL_SH}",
+      "name": "sh",
+      "bytes": 129736,
+      "sha256": "a6f559e00b69a4aa4d8cb607be18d9386c5aee55c509e2c075549dcf00e00fc7"
+    }
+  ],
+  "forwarding_wrappers": [
+    {
+      "name": "uname",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_UNAME} \"$@\"\n",
+      "source": {
+        "bytes": 35,
+        "sha256": "92e8e756b997dc539a3407c67d2525dd18be974200fa49789c61d506b22bc4f1"
+      },
+      "exec_target": {
+        "name": "uname",
+        "bytes": 43464,
+        "sha256": "458ea035850a5802a46ceb931e2864f9649a9030f43342156c54768f7ffddb3e"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/uname"
+    },
+    {
+      "name": "cat",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_CAT} \"$@\"\n",
+      "source": {
+        "bytes": 33,
+        "sha256": "dab5532c400d9858b476d066e9028b9dc2677fb5013c0ab657d112bd8217f705"
+      },
+      "exec_target": {
+        "name": "cat",
+        "bytes": 47592,
+        "sha256": "8a5c20c3400a4058a487cd806111cc5138ef4d0fbc6714ff67c9432e38c2705a"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/cat"
+    },
+    {
+      "name": "xargs",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_XARGS} \"$@\"\n",
+      "source": {
+        "bytes": 35,
+        "sha256": "dc778949a39953cb45e7b0859549d2270ad66e6a356766cd9463844ab1d56712"
+      },
+      "exec_target": {
+        "name": "xargs",
+        "bytes": 76232,
+        "sha256": "5f8c5f3f051d73fbeeae248e1d3e819e5feeb1b0265b903385193a2b183ab370"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/xargs"
+    },
+    {
+      "name": "rm",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_RM} \"$@\"\n",
+      "source": {
+        "bytes": 32,
+        "sha256": "5a3dc8a1de008ec2a461ff0ebd04c9912c0a57e18726726a00b3c8f6d46a98d1"
+      },
+      "exec_target": {
+        "name": "rm",
+        "bytes": 76232,
+        "sha256": "c959a237e7b95d229eea44764b2246fcb61a95dc679a10ad0cc97ad84c2316c1"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/rm"
+    },
+    {
+      "name": "mkdir",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_MKDIR} \"$@\"\n",
+      "source": {
+        "bytes": 35,
+        "sha256": "49cb94e8f1a1a367fbfde616e3075ef8dce06ef213ea863986ee02d0b158f177"
+      },
+      "exec_target": {
+        "name": "mkdir",
+        "bytes": 88488,
+        "sha256": "bd3d9b36a1cc1c63b8dca7967003f4e5b0bb8556c87cbb7c1916aa358bf3f053"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/mkdir"
+    },
+    {
+      "name": "basename",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_BASENAME} \"$@\"\n",
+      "source": {
+        "bytes": 38,
+        "sha256": "2ead20f3a006d422b6c74da27d06cab4c1e2036f3df9c47139c394e0b9a15b2c"
+      },
+      "exec_target": {
+        "name": "basename",
+        "bytes": 43432,
+        "sha256": "b4f6fa4b123e1c2e77964d803e5d80837c41b03c6cc870d1619cd3560193f7e1"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/basename"
+    },
+    {
+      "name": "as",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_AS} \"$@\"\n",
+      "source": {
+        "bytes": 49,
+        "sha256": "887c02275189980f95038960abf37ca044f53702870812fe7c73b31326ad345f"
+      },
+      "exec_target": {
+        "name": "x86_64-linux-gnu-as",
+        "bytes": 795184,
+        "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/as"
+    },
+    {
+      "name": "ld",
+      "interpreter_role": "${TOOL_SH}",
+      "body_role_projection": "#!${TOOL_SH}\nexec ${TOOL_LD} \"$@\"\n",
+      "source": {
+        "bytes": 49,
+        "sha256": "37c07af7af30778e47d095ad324c7362ae102149d591da7584745e38af862686"
+      },
+      "exec_target": {
+        "name": "x86_64-linux-gnu-ld",
+        "bytes": 1861256,
+        "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b"
+      },
+      "staged_mode": "0o700",
+      "staged_path": "${NEW_RUN_ROOT}/tools/ld"
+    }
+  ],
+  "deltas": [
+    "new build-only schema/root/caps",
+    "45 byte-identical active sources and 2 old metadata copied to evidence, never included by Make",
+    "-rR -j1 --no-print-directory and explicit CXX/LINK/AR/RM/SHELL/PERL/PYTHON3/OBJCACHE",
+    "private eight regular exec wrappers PATH; explicit COMPILER_PATH; no compiler relocation",
+    "exact dependency aliases/absence/lstat inventories, full frozen harness directory shadow gate",
+    "new bounded object/archive/PCH/dependency/final ELF checker; unchanged full header/Make content checker",
+    "stock Make nine -Wno categories retained, no extra suppression, not warning-free or -Werror"
+  ],
+  "limits": [
+    "Role projection is descriptive, not the full private manifest or a launcher/GO. Complete host dependency/search roots must be re-qualified before new build.",
+    "Keep45 source/cpp/header/Make bytes unchanged, park2 native metadata outside active build; do not regenerate Verilator or execute model.",
+    "Single make job can spawn different compiler/helper processes; not a one-process or dynamic exec trace claim."
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "original-build-checker-and-inventory-guard-pins-v1",
+  "source_files": [
+    {
+      "name": "check_build.py",
+      "public_path": "source/check_build.py",
+      "bytes": 15869,
+      "sha256": "aae034e81cff9542c82333826e2bee6acebcace28a103a6b29224e389b2d278b",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_build.py",
+      "public_path": "source/test_build.py",
+      "bytes": 11655,
+      "sha256": "119e79ee8758045e6b4c7dc385a3da82fe924751f6ed5c1d8ca3173fc17ff143",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "inventory_guard.py",
+      "public_path": "source/inventory_guard.py",
+      "bytes": 1934,
+      "sha256": "f8a16016f42a207551ae0735c171a425e5b6ef7c8c79ef7814cd0470a052cb37",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_inventory_guard.py",
+      "public_path": "source/test_inventory_guard.py",
+      "bytes": 3357,
+      "sha256": "222eb35a3f8a8bd83e8a63fd7a6f62c13a12311a1ad11f748cddcb94367eed40",
+      "exact_original_bytes": true
+    }
+  ],
+  "private_sources_hash_only": {
+    "supervisor.py": {
+      "bytes": 33516,
+      "sha256": "808d6fbda50b5168cd727f8da80e8988b645cdccde129f732ab1699db45e69ad"
+    },
+    "assemble_candidate.py": {
+      "bytes": 8337,
+      "sha256": "15dbc093006a4d79b58309723422457722fb75e6b1e56414d33767d9e1806f61"
+    },
+    "derive_supervisor.py": {
+      "bytes": 3300,
+      "sha256": "156bd5b3f37df5455ea7e9d0f04fb8bcb4860d77b927d87d49f022109e24d331"
+    }
+  },
+  "candidate_manifest": {
+    "bytes": 4238022,
+    "sha256": "8cedc60ac12d6fff9c04d718128e25cf8088c70dd317a688bb66be77f69e94e1"
+  },
+  "candidate_freeze": {
+    "bytes": 6987,
+    "sha256": "7df5e4786423d4a1147deee87fd4ac7125a0449e904cee2c968e6688dead2e34"
+  },
+  "guard_freeze": {
+    "bytes": 1767,
+    "sha256": "22a516a38c49c22a889582e7ce80b75bdd62c85509acffdeee9bb3cc5b01a410"
+  },
+  "source_qualification": {
+    "bytes": 18602,
+    "sha256": "62613bd4249837787276e5a91796d8241e8c38bdf266ec427d862dd3b9b7197d"
+  },
+  "source_policy": "No supervisor launch or real artifact parsing in publication; tests create tiny synthetic ELF/ar/PCH/text fixtures, never execute their bytes."
+}

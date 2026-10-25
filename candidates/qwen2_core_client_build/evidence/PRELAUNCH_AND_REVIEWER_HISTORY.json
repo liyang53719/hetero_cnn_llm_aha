@@ -1,0 +1,27 @@
+{
+  "schema": "separate-nonexecution-and-review-only-checkpoints-v1",
+  "retained_root_prelaunch": {
+    "record": {
+      "bytes": 330,
+      "sha256": "3341d6bac3e6d61c8c30b34d1bf50f9120c95c33d2355ce9a855d9ce68d1cb89"
+    },
+    "scope": "Wrong requirement-file SHA comparison in root prelaunch before Popen; no worker/approval/claim in that attempt, not a compiler or numerical failure; retained unchanged."
+  },
+  "reviewer_checkpoint": {
+    "bounded_read_passes": 2,
+    "cause": "Reviewer log classifier incorrectly required -c for all41 compiler invocations. Actual unchanged Make correctly invokes2 PCH jobs using -x c++-header without -c;39 ordinary jobs have -c.",
+    "correction": "Count39 -c jobs plus2 exact -x c++-header jobs, require41 exact object/PCH targets and one exact final link. No candidate/Make/source/target bytes were modified.",
+    "final_result": "AUDIT.log exit0 after correction;55192 independent checks;0.2811 CPU/0.2793wall/38464KiB peak,60CPU90wall512MiBAS one-affinity wrapper.",
+    "first_attempt": "ATTEMPT1_AUDIT.stderr",
+    "native_or_model_rerun": false,
+    "original_build_PASS_unchanged": true,
+    "second_pass_reason": "First reviewer process exited before persisting independently parsed artifact rows; repeat bounded read-only parse/hash was necessary to freeze durable output proof after fixing this review-only classifier.",
+    "status": "REVIEWER_ONLY_CHECKPOINT_RETAINED_NOT_TARGET_FAILURE",
+    "origin_record": {
+      "bytes": 991,
+      "sha256": "c4a048c2fdbcaddf982333a01eccb4eaac7e14712d3efe63b6690a2f87a68203"
+    }
+  },
+  "not_target_compile_or_numerical_FAILURE": true,
+  "prior_original_NoCSE_Treadle_FAILURE_and_SV_FAIL_STOP_preserved": true
+}

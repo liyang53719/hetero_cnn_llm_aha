@@ -1,0 +1,289 @@
+{
+  "schema": "sanitized-official-source-format-basis-v1",
+  "format": {
+    "MMD": {
+      "PCH_dependencies": [
+        "VOrderedQkBehaviorCore__pch.h.fast.d",
+        "VOrderedQkBehaviorCore__pch.h.slow.d"
+      ],
+      "PCH_dependencies_count": 2,
+      "default_with_explicit_o": "replace last suffix of -o output with .d",
+      "dependency_file_can_exist_even_when_compile_errors": true,
+      "explicit_target": "-MQ output path in driver spec",
+      "normal_dependencies": 39,
+      "not_complete_system_header_closure": true,
+      "ranges": {
+        "gcc/c-family/c-opts.cc": [
+          [
+            361,
+            366
+          ],
+          [
+            1339,
+            1360
+          ]
+        ],
+        "gcc/gcc.cc": [
+          [
+            529,
+            532
+          ],
+          [
+            1240,
+            1247
+          ],
+          [
+            6818,
+            6827
+          ],
+          [
+            7628,
+            7654
+          ]
+        ]
+      },
+      "style": "DEPS_USER",
+      "total_expected_dependency_files": 41
+    },
+    "host_distribution_bit_reproducible_source_equivalence_not_claimed": true,
+    "no_gcc_make_target_or_native_executed": true,
+    "pch": {
+      "CXX_language_index": 2,
+      "executable_checksum_actual_bytes_not_extracted_here": true,
+      "following_checksum_bytes": 16,
+      "magic_ascii": "gpch+014",
+      "magic_bytes": 8,
+      "magic_only_does_not_prove_full_validity_or_use": true,
+      "partial_magic_ascii": "gpcWrite",
+      "partial_magic_must_reject": true,
+      "ranges": {
+        "gcc/c-family/c-common.h": [
+          [
+            532,
+            538
+          ]
+        ],
+        "gcc/c-family/c-pch.cc": [
+          [
+            49,
+            81
+          ],
+          [
+            94,
+            128
+          ],
+          [
+            164,
+            187
+          ],
+          [
+            200,
+            242
+          ]
+        ]
+      },
+      "read_and_validate_other_flags_target_state_required_by_GCC": true
+    },
+    "schema": "gcc14-source-only-PCH-and-MMD-format-basis-v1",
+    "status": "OFFICIAL_SOURCE_FORMAT_BASIS_NOT_COMPILER_EXECUTION",
+    "version": "releases/gcc-14.2.0",
+    "sources": [
+      {
+        "path": "gcc/c-family/c-pch.cc",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/gcc/c-family/c-pch.cc",
+        "sha": "9bcfdc80421548888ab9b7e2d18a86483462916f",
+        "bytes": 11704,
+        "encoding": "utf-8",
+        "local_pin": {
+          "bytes": 11704,
+          "sha256": "92046cf6a2862e7ecf7900110e64cf54c3db17ccbab23cbdff995eb510832732"
+        }
+      },
+      {
+        "path": "gcc/c-family/c-opts.cc",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/gcc/c-family/c-opts.cc",
+        "sha": "f4dced8d826a1add863b51eb9a21ebce113ab7f5",
+        "bytes": 58741,
+        "encoding": "utf-8",
+        "local_pin": {
+          "bytes": 58741,
+          "sha256": "6154707d45166894af696f211d1ce518c7dd8f1b9d32aaecf1226a652dd925f1"
+        }
+      },
+      {
+        "path": "gcc/gcc.cc",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/gcc/gcc.cc",
+        "sha": "728332b81538f7252e19e96c8699e3f69b698e2b",
+        "bytes": 326466,
+        "encoding": "utf-8",
+        "local_pin": {
+          "bytes": 326466,
+          "sha256": "08ef22040e29b5e38945a101139782ce1e65d3ae1b54c6826e53a1f39717ff01"
+        }
+      },
+      {
+        "path": "gcc/c-family/c-common.h",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/gcc/c-family/c-common.h",
+        "sha": "2d5f53998855ea9c538a72f4ddad3b450b7d95a8",
+        "bytes": 62165,
+        "encoding": "utf-8",
+        "local_pin": {
+          "bytes": 62165,
+          "sha256": "edc512e42b80972ebe2ca23bec8fd2ba4fa05a9493fe03eb110f9db6ce5fe3be"
+        }
+      }
+    ],
+    "origin_record": {
+      "bytes": 4100,
+      "sha256": "aebf38b96b291d7eb7265c90573cf12404b4ad9d57e520c9aff068720f6c1ca7"
+    }
+  },
+  "valid_PCH_dependency_path": {
+    "interpretation": [
+      "The fixed selected Make recipes do not pass -fpch-deps.",
+      "cpp_reader starts zero-initialized; inspected initialization and GCC driver do not imply restore_pch_deps.",
+      "For a valid .gch, the PCH callback returns before ordinary include dependency insertion.",
+      "Without restore_pch_deps, saved dependencies are read/skipped rather than appended.",
+      "Thus do not require an object .d to list a PCH logical base or actual .gch; a source-only dependency line is possible.",
+      "Do not grant absent logical .fast/.slow aliases based only on guesswork; any actual dep token must meet the pinned or staged existing-file contract.",
+      "A header that is actually opened after PCH handling still follows normal dependency logic.",
+      "This is source-derived expectation, not observed host GCC output or a proof that the GCC package is bit-reproducible upstream."
+    ],
+    "line_basis": {
+      "gcc/c-family/c-opts.cc": [
+        [
+          517,
+          519
+        ]
+      ],
+      "gcc/c-family/c-pch.cc": [
+        [
+          310,
+          316
+        ],
+        [
+          353,
+          355
+        ]
+      ],
+      "libcpp/files.cc": [
+        [
+          280,
+          351
+        ],
+        [
+          830,
+          837
+        ],
+        [
+          920,
+          925
+        ],
+        [
+          971,
+          978
+        ],
+        [
+          1883,
+          1910
+        ]
+      ],
+      "libcpp/init.cc": [
+        [
+          191,
+          205
+        ]
+      ],
+      "libcpp/mkdeps.cc": [
+        [
+          662,
+          699
+        ]
+      ],
+      "libcpp/pch.cc": [
+        [
+          860,
+          866
+        ]
+      ]
+    },
+    "no_native_or_make_or_PCH_execution": true,
+    "no_old_2152_proof_modified": true,
+    "schema": "gcc14-valid-PCH-MMD-dependency-static-route-v1",
+    "status": "PINNED_UPSTREAM_SOURCE_INFERENCE_NOT_ACTUAL_BUILD_TRACE",
+    "sources": [
+      {
+        "path": "libcpp/files.cc",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/libcpp/files.cc",
+        "sha": "c61df339e2072fe623e6dc4e548e8ef70cecf550",
+        "encoding": "utf-8",
+        "pin": {
+          "bytes": 63661,
+          "sha256": "d9ff08dcb1e7999807552399096ddd2bcaabbf1c2a4c6d4b75ce911ee306b169"
+        }
+      },
+      {
+        "path": "libcpp/pch.cc",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/libcpp/pch.cc",
+        "sha": "f2f74ed6ea9ab545a865fd54b04344440e58d252",
+        "encoding": "utf-8",
+        "pin": {
+          "bytes": 23597,
+          "sha256": "f6e5be5c9379284ffb74787e5267bf887de688b9d1279bbc506489040904cd88"
+        }
+      },
+      {
+        "path": "libcpp/mkdeps.cc",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/libcpp/mkdeps.cc",
+        "sha": "4cf0cf09178c7b80cd8468b4c4d3fd30eb819f44",
+        "encoding": "utf-8",
+        "pin": {
+          "bytes": 16842,
+          "sha256": "a329261f53e0cfaa194be637610117ab4190e63d9b0176487194950167a777c5"
+        }
+      },
+      {
+        "path": "libcpp/init.cc",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/libcpp/init.cc",
+        "sha": "54fc9236d3801da9a0789bf402bae521f8a7a2fc",
+        "encoding": "utf-8",
+        "pin": {
+          "bytes": 33360,
+          "sha256": "ea17ab7504cbce6f480bf8c3ee012baf13e67f284b63be7253fe79e0f3d35d83"
+        }
+      },
+      {
+        "path": "gcc/c-family/c.opt",
+        "url": "https://github.com/gcc-mirror/gcc/blob/releases/gcc-14.2.0/gcc/c-family/c.opt",
+        "sha": "b310b40d8577b77f4778dd3466b8af87baa8196f",
+        "encoding": "utf-8",
+        "pin": {
+          "bytes": 86877,
+          "sha256": "3f6d4360fafceaa56207cd9a6b50604153c2000b2514c87f276b5e1bdfc07425"
+        }
+      }
+    ],
+    "inherited_sources": [
+      {
+        "role": "gcc__c-family__c-opts.cc",
+        "bytes": 58741,
+        "sha256": "6154707d45166894af696f211d1ce518c7dd8f1b9d32aaecf1226a652dd925f1"
+      },
+      {
+        "role": "gcc__c-family__c-pch.cc",
+        "bytes": 11704,
+        "sha256": "92046cf6a2862e7ecf7900110e64cf54c3db17ccbab23cbdff995eb510832732"
+      },
+      {
+        "role": "gcc__gcc.cc",
+        "bytes": 326466,
+        "sha256": "08ef22040e29b5e38945a101139782ce1e65d3ae1b54c6826e53a1f39717ff01"
+      }
+    ],
+    "origin_record": {
+      "bytes": 5062,
+      "sha256": "bdcc62f07835543a550b4ea0644d3000f77fd2f22344ec51d7b032319dda7232"
+    }
+  },
+  "scope": "Version-matched upstream source evidence, not bit-reproducible host GCC build or actual PCH-use trace."
+}

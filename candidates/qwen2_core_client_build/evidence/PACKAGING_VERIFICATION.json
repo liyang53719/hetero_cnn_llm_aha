@@ -1,0 +1,15 @@
+{
+  "status": "PASS_EXACT_ORIGINAL_SOURCES_SAFE_PROJECTIONS_AND_SYNTHETIC_ONLY",
+  "checks": 4296,
+  "errors": 0,
+  "exact_original_sources": 4,
+  "exact_existing_public_references": 10,
+  "normal_build_synthetic_controls": 50,
+  "optimized_build_synthetic_controls": 50,
+  "normal_guard_synthetic_controls": 12,
+  "optimized_guard_synthetic_controls": 12,
+  "retained_actual_and_root_stat_checks": 147,
+  "raw129_ELF_CPP_header_objects_PCH_ar_MMD_SV_IR_log_tool_cache_not_reopened": true,
+  "native_network_target_or_signal_actions": 0,
+  "scope": "Tiny synthetic parser/guard fixtures only, not target compiler/link/model execution. Actual independent review remains separate original evidence. All real binary/runtime metadata projections omit absolute host paths and observed virtual addresses."
+}

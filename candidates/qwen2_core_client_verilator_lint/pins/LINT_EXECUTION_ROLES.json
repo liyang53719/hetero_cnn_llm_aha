@@ -1,0 +1,55 @@
+{
+  "schema": "exact-lint-command-role-projection-v1",
+  "argv": [
+    "${PERL_EXECUTABLE}",
+    "${VERILATOR_PACKAGE_ROOT}/usr/bin/verilator",
+    "--no-unlimited-stack",
+    "--lint-only",
+    "-sv",
+    "--top-module",
+    "OrderedQkBehaviorCore",
+    "--verilate-jobs",
+    "1",
+    "--threads",
+    "1",
+    "--no-timing",
+    "--Mdir",
+    "${NEW_RUN_ROOT}/lint",
+    "${RETAINED_SV}"
+  ],
+  "environment": {
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "${NEW_RUN_ROOT}/empty-path",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp",
+    "VERILATOR_ROOT": "${VERILATOR_PACKAGE_ROOT}/usr/share/verilator"
+  },
+  "cwd_role": "${NEW_RUN_ROOT}",
+  "cwd_source_only_not_independently_serialized": true,
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 300,
+    "log_hard_bytes": 4194304,
+    "output_tree_sampled_bytes": 134217728,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 67108864,
+    "total_wall_seconds": 390,
+    "work_wall_seconds": 360
+  },
+  "root_outer_wall_seconds": 420,
+  "external_cleanup_helper_before_after_required": true,
+  "no_inherited_environment": true,
+  "no_automatic_retry_or_stage_chaining": true,
+  "source_review_constraints": [
+    "Use fixed safe package paths without shell metacharacters. Original Perl scalar system(command) remains; backend path concatenation is not a general arbitrary-path escape proof.",
+    "Omit inherited loader/Perl/Verilator/compiler/make overrides. Keep exact original --no-unlimited-stack / --lint-only / --no-timing, one configured job/thread.",
+    "No -Wno suppression was selected; -Wall was not selected. Native default warning acceptance only.",
+    "This role command omits private supervisor configuration and root approval: it is a reproducibility description, not authority to launch or a replacement for supervision."
+  ]
+}

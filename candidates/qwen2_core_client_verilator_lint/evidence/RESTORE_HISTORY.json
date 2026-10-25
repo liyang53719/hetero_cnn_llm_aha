@@ -1,0 +1,59 @@
+{
+  "schema": "original-restore-failure-and-recovery-summary-v1",
+  "original_restore": {
+    "automatic_retry": false,
+    "declared_content_length": "7565144",
+    "elapsed_seconds": 5.935412355989683,
+    "error": "ValueError('archive link stays in extracted tree and targets member')",
+    "execution": false,
+    "expected_bytes": 7565144,
+    "expected_sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2",
+    "final_url": "https://deb.debian.org/debian/pool/main/v/verilator/verilator_5.032-1+b2_amd64.deb",
+    "http_status": 200,
+    "observed_sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2",
+    "received_bytes": 7565144,
+    "schema": "official-debian-verilator-restore-v1",
+    "status": "FAIL_RESTORE_RETAINED_NO_AUTOMATIC_RETRY",
+    "system_install": false,
+    "url": "https://deb.debian.org/debian/pool/main/v/verilator/verilator_5.032-1+b2_amd64.deb",
+    "origin_receipt": {
+      "bytes": 806,
+      "sha256": "06e3b941ec0c4ae5028ce956634c4463fb75f242b0697d98a76b7a8bf2b35a69"
+    }
+  },
+  "second_extraction": {
+    "status": "PASS_OFFICIAL_PACKAGE_STDLIB_EXTRACTION_NO_EXECUTION",
+    "no_download": true,
+    "prior_failure_retained": "RESTORE_RECEIPT.json",
+    "execution": false,
+    "system_install": false,
+    "elapsed_seconds": 0.6617047640029341,
+    "package_bytes": 7565144,
+    "package_sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2",
+    "regular_count": 173,
+    "regular_bytes": 33804795,
+    "absent_documentation_link_targets_count": 22,
+    "origin_receipt": {
+      "bytes": 8811,
+      "sha256": "e786bfe8b6c345597469d66b7b07853643f4ec5c62e4561625303bbd41a8553a"
+    }
+  },
+  "static_dependency_review": {
+    "origin_review": {
+      "bytes": 17193,
+      "sha256": "3a05660a8da4b9e7776f5f1d8f381287c412baa2e48bcd065be19bbd500adc86"
+    },
+    "status": "PASS_STATIC_FRONTEND_AND_DECLARED_PROVENANCE_REVIEW_WITH_OPEN_LAUNCH_GATES",
+    "not_actual_lint": true,
+    "limited_source_metadata_checks": 175,
+    "did_not_freshly_hash_all_6926_host_build_pins": true
+  },
+  "recovery_boundary": [
+    "First download matched exact official bytes/hash but strict extraction rejected in-tree documentation symlinks to unprovided members; original FAIL/partial tree retained.",
+    "Second extraction reused the already verified archive without another download. Only documentation symlinks were allowed to refer to unprovided in-tree targets; hardlinks and non-documentation symlinks still require existing members.",
+    "No package install, maintainer scripts, tool execution or system directory modification by the recovery scripts.",
+    "Exact original scripts are for this one hash-locked official archive in a fresh private directory; not a general arbitrary/untrusted archive extractor certification."
+  ],
+  "later_execution_is_separate_lint_only": true,
+  "old_native_FAIL_offline_R1_FAIL_R2_STOP_Treadle_CPU_failures_unchanged": true
+}

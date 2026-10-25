@@ -1,0 +1,114 @@
+{
+  "schema": "independent-actual-official-verilator-lint-review-v1",
+  "status": "PASS_ACTUAL_OFFICIAL_VERILATOR_LINT_ONLY_NOT_CODEGEN_BUILD_OR_BEHAVIOR",
+  "actual_gate_status": "PASS_OFFICIAL_VERILATOR_LINT_ONLY",
+  "precise_scope": {
+    "MAC_duty_cycle": null,
+    "MAC_utilization": null,
+    "model_cpp_generated_false_qualification": "No persisted usable generated model C++ artifacts; not denial of internal AST conversion/emission to null.",
+    "native_30cpp_files_qualification": "Source emitter still performs checks and writes to null under lintOnly; ordinary model/header/makefile outputs are skipped. Actual four output directories are empty.",
+    "not_claimed": [
+      "Persisted C++ model generation",
+      "C++ compilation or linking",
+      "Executable model or hardware-clock simulation",
+      "M1 protocol behavior",
+      "Matrix FMA implementation or arithmetic numerical comparison",
+      "Full128 RTL numerical acceptance",
+      "Full29 observed tensors",
+      "Initialization/read-latency/equivalence/synthesis/physical QoR",
+      "90-percent MAC utilization"
+    ],
+    "permitted": "Fixed original retained SV was accepted by the official pinned Verilator lint-only invocation, with default enabled warnings and explicit no-timing mode, within bounded resources; input identity and prior declaration/ABI/storage proof preserved.",
+    "why_MAC_unknown": "No model clock execution/full-block cycle denominator or valid effective MAC activation records. Native parser CPU/counters do not represent hardware MAC utilization."
+  },
+  "resources": {
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 134217728,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 67108864,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "final_aggregate_cpu_seconds": 17.708661163,
+    "maximum_sample_interval_seconds": 0.024904973048251122,
+    "native_statistics_not_resource_acceptance_authority": true,
+    "outer_timeout": false,
+    "root_wall_seconds": 17.92034880304709,
+    "sampled_aggregate_cpu_seconds": 17.255054782,
+    "sampled_peak_group_rss_bytes": 435056640,
+    "supervisor_wall_seconds": 17.74753245402826
+  },
+  "identity_and_cleanup": {
+    "absence_endpoint_prepost": 24,
+    "actual_inputs_not_rehashed_by_this_main_audit": "Metadata child reused frozen hashes only after complete stat identity match, plus fresh small-artifact hashes. Main read305B log/small metadata and upstream source only; no target SV parse/read or native rerun.",
+    "alias_prepost": 13,
+    "anchored_Z_barrier_scans": 2,
+    "automatic_prepost_pins": 3662,
+    "cleanup_saved_bytes": 1547,
+    "cleanup_saved_records": 8,
+    "direct_leader_reaped": true,
+    "exact_inventories": 12,
+    "external_helper_prepost_actual_verified": true,
+    "helper_not_miscounted_as_automatic_pin": true,
+    "original_SV_and_prior_failures_STOPs_and_structure_PASS_retained_unchanged": true
+  },
+  "origin_review": {
+    "bytes": 7515,
+    "sha256": "70a8d60b6d2f816a0dd147b07342b6a03795818a3f0004c91283d934c1f9d2ed"
+  },
+  "origin_freeze": {
+    "bytes": 1864,
+    "sha256": "d63e00ea8813e48b068befc4edd4fa7fa4c6d4ef7e36cafe3d77dc07a44e9879"
+  },
+  "actual_result": {
+    "all_warning_categories_enabled": false,
+    "cleanup_complete": true,
+    "errors": [],
+    "four_empty_output_directories": true,
+    "no_warning_suppression": true,
+    "official_Debian_Verilator": "5.032-1+b2",
+    "only_three_metadata_log_files_bytes": 12692,
+    "persisted_cpp_or_build_or_model_artifacts": 0,
+    "reported_warning_lines": 0,
+    "retained_SV_bytes": 26251369,
+    "retained_SV_sha256": "77f61549b4aebd109362d30164f95422b9192d0a8b2b1599942a9360852f9225",
+    "worker_root_cleanup_exit_zero": true
+  },
+  "receipts": {
+    "actual_claim": {
+      "bytes": 1130,
+      "sha256": "71e2da1f0505c315f76ade761edaea008a67173fa2649180c8421e9989013587"
+    },
+    "actual_receipt": {
+      "bytes": 11257,
+      "sha256": "3085621c9c9e289ecf04019911ffa11cc0abb048eabace25da11696d473523c6"
+    },
+    "actual_log": {
+      "bytes": 305,
+      "sha256": "19000c128039f00c9c4d570c0988bce785956174e2bd6d027b7001086134d388"
+    }
+  },
+  "independent_identity_scope": {
+    "checks": 30079,
+    "continuous_isolation_claim": false,
+    "executed_cwd_independently_serialized": false,
+    "indirect_backend_exit_not_separately_serialized": true,
+    "automatic_runtime_count_excludes_cleanup_helper": true,
+    "external_helper_prepost_SHA_requirement_satisfied": true,
+    "original20_provenance_only": true,
+    "original20_class_count": 20,
+    "original20_class_bytes": 670644,
+    "cleanup_direct_exit_code": 0,
+    "root_returncode": 0,
+    "worker_original_Perl_frontend_exit_code": 0
+  },
+  "projection_note": "Original path/argv/environment/process metadata omitted. Exact role command is separate. Semantic and identity reviews remain distinct; no native execution by publication checks."
+}

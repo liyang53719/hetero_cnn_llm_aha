@@ -1,0 +1,61 @@
+{
+  "schema": "lint-recovery-source-hash-pins-v1",
+  "scripts": [
+    {
+      "role": "download_and_original_extract",
+      "name": "restore_package.py",
+      "bytes": 6194,
+      "sha256": "d35671769f73a7749aa4c26b06899d1ef50327817cb6c84a73509abe1c1447c1",
+      "published_exact_original_bytes": true,
+      "public_path": "source/restore_package.py"
+    },
+    {
+      "role": "reuse_locked_archive_extract_r2",
+      "name": "extract_verified_package_r2.py",
+      "bytes": 5197,
+      "sha256": "0e69d25b797818e32fb7c6c6b6d06f8709f32e34743cc94d74c4e6f25da99e2d",
+      "published_exact_original_bytes": true,
+      "public_path": "source/extract_verified_package_r2.py"
+    },
+    {
+      "role": "private_lint_supervisor",
+      "name": "supervisor.py",
+      "bytes": 27288,
+      "sha256": "97fcd0472a169dc53511cab042dd75f5e5d10b8057894e49ec1d4e5bad547df0",
+      "published_exact_original_bytes": false,
+      "public_path": null
+    },
+    {
+      "role": "private_candidate_assembler",
+      "name": "assemble_candidate.py",
+      "bytes": 6880,
+      "sha256": "48fa84b5ccc2d136271e0a0d8fa9dbe02fefeb9eef5c723a1ff05fa5ebf940c8",
+      "published_exact_original_bytes": false,
+      "public_path": null
+    },
+    {
+      "role": "private_dependency_auditor_r2",
+      "name": "audit_dependencies_r2.py",
+      "bytes": 12802,
+      "sha256": "623b8da57ad490c82f377b9a35e75ae0ecfd588a6e5c804019790d41ca051de4",
+      "published_exact_original_bytes": false,
+      "public_path": null
+    },
+    {
+      "role": "private_Perl_runtime_appendix_builder",
+      "name": "build_appendix.py",
+      "bytes": 11233,
+      "sha256": "b4fa0701990a8391879acd6ffccea68132f4dc088df2069d29be5e8fcc98c3ed",
+      "published_exact_original_bytes": false,
+      "public_path": null
+    }
+  ],
+  "private_script_disclosure": "Hash/role only where source contains machine-specific configuration; not a standalone reproduction of the private supervisor/runtime manifest. No private absolute paths or executable runtime payloads are published.",
+  "external_cleanup_helper": {
+    "role": "strict_cleanup_helper",
+    "bytes": 23204,
+    "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "not_in_automatic_3662_pins": true,
+    "externally_verified_before_after": true
+  }
+}

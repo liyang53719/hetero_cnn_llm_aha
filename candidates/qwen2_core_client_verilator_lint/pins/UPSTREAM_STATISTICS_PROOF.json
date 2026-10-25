@@ -1,0 +1,134 @@
+{
+  "schema": "version-matched-upstream-lint-statistics-proof-v1",
+  "qualification": "Official version-matched upstream blobs, not a bit-reproducible Debian build proof or claim of zero downstream patches. Independent actual inventory, exact argv and package identity establish this run output scope.",
+  "relevant_ranges": [
+    {
+      "fact": "lintOnly still processes emitter checks; creates CFile and V3OutCFile with VL_DEV_NULL.",
+      "file": "V3EmitCImp.cpp",
+      "lines": [
+        165,
+        178
+      ]
+    },
+    {
+      "fact": "Non-Windows VL_DEV_NULL is /dev/null.",
+      "file": "verilatedos.h",
+      "lines": [
+        425,
+        429
+      ]
+    },
+    {
+      "fact": "Output writer counts bytes even when destination is null.",
+      "file": "V3File.h",
+      "lines": [
+        224,
+        234
+      ]
+    },
+    {
+      "fact": "Summary prints source/cpp counters and native timers; MB values divide by1024 twice; thread count is max configured verilate/build jobs, not observed OS-thread census.",
+      "file": "V3StatsReport.cpp",
+      "lines": [
+        246,
+        271
+      ]
+    },
+    {
+      "fact": "Lint skips ordinary model/header/makefile emission but still invokes emitcImp for lint checks; codegen enables additional branches.",
+      "file": "Verilator.cpp",
+      "lines": [
+        610,
+        681
+      ]
+    }
+  ],
+  "origin_review": {
+    "bytes": 4563,
+    "sha256": "1c0fdf481d3886a925eff421e960c1507a08946737b79fbbfe1a8d7165162661"
+  },
+  "sources": [
+    {
+      "path": "src/Verilator.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/Verilator.cpp",
+      "git_blob_sha": "002994745f5137352d978edf7c9a2daa29101c8d",
+      "encoding": "utf-8",
+      "file_pin": {
+        "bytes": 33358,
+        "sha256": "a60d7b0a11170e7a97a85982d5486b66e114403fa2d044d3ca5f2a3ed1a228c4"
+      }
+    },
+    {
+      "path": "src/V3EmitCImp.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCImp.cpp",
+      "git_blob_sha": "ef8ec9241301bda822ab6eef6902879a65a9b49d",
+      "encoding": "utf-8",
+      "file_pin": {
+        "bytes": 42569,
+        "sha256": "87a97e7ccbb685c90968481ae4dbfd7a7af4027bf3be3488a7c8f354eee0c844"
+      }
+    },
+    {
+      "path": "src/V3File.h",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3File.h",
+      "git_blob_sha": "b76dad9b1fd8cc3f18b4fdfe61b1f2fe81666eb4",
+      "encoding": "utf-8",
+      "file_pin": {
+        "bytes": 12335,
+        "sha256": "34f752eb0316c11f13cb1e34efbe0caf4311d8d66997173e6612b119b2ea3ed6"
+      }
+    },
+    {
+      "path": "src/V3StatsReport.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3StatsReport.cpp",
+      "git_blob_sha": "ec62aa3da6db35de14eb2d5fbe6703612c769b92",
+      "encoding": "utf-8",
+      "file_pin": {
+        "bytes": 10125,
+        "sha256": "06f1d53e173574b07fdb6452563f3c8f81623c6833b98492a45ca379a70aef15"
+      }
+    },
+    {
+      "path": "include/verilatedos.h",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/include/verilatedos.h",
+      "git_blob_sha": "4022ac2b09617ecbfa46ae809020728a8f569e58",
+      "encoding": "utf-8",
+      "file_pin": {
+        "bytes": 26863,
+        "sha256": "a741a0b58f747a0eb4db2cab692ab403395672aec2f8dac50ccbe9fb568b8c23"
+      }
+    }
+  ],
+  "corrected_public_locator": {
+    "origin_range_retained": [
+      610,
+      681
+    ],
+    "origin_range_limitation": "The retained actual proof locator did not include the model/header lintOnly gate or emitcImp call; its mechanism conclusion remains correct. This is a publication locator correction, not modification of the frozen actual review.",
+    "source": "src/Verilator.cpp",
+    "git_blob_sha": "002994745f5137352d978edf7c9a2daa29101c8d",
+    "precise_ranges": [
+      {
+        "lines": [
+          586,
+          595
+        ],
+        "fact": "lintOnly skips the ordinary model/header emission branch."
+      },
+      {
+        "lines": [
+          602,
+          604
+        ],
+        "fact": "emitcImp still runs for lint-only checks."
+      },
+      {
+        "lines": [
+          625,
+          637
+        ],
+        "fact": "lintOnly skips ordinary makefile emission."
+      }
+    ]
+  }
+}

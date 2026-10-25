@@ -1,0 +1,54 @@
+{
+  "all_warning_categories_enabled": false,
+  "filesystem": {
+    "all_directories_empty": true,
+    "directories": [
+      "empty-path",
+      "home",
+      "lint",
+      "tmp"
+    ],
+    "files": {
+      "CLAIM.json": 1130,
+      "RECEIPT.json": 11257,
+      "worker.log": 305
+    },
+    "persisted_CXX_headers_objects_libraries_models": [],
+    "total_bytes": 12692
+  },
+  "interpretation": [
+    "30 C++ files/22.763 MB are emitter statistics compatible with lint-to-null; no30 persistent files, no object compilation or executable model.",
+    "8.618 MB/26 internal modules must not replace physical input26,251,369 bytes or independently parsed25 emitted SV module declarations; exact counter source attribution beyond summary is not rederived here.",
+    "Printed MB units in this source use1024^2 divisors; alloced is native self-report, not substituted for monitored group peakRSS.",
+    "Printed0.000 CPU does not establish zero computation. Use independently supervised17.708661163 aggregate CPU seconds; exact reason for native zero timer was not diagnosed.",
+    "Native rounded wall/phase timers do not exhaustively partition root total; no causal attribution of residual time.",
+    "Native reported1 threads is configured-job max in source, not proof of one OS thread."
+  ],
+  "log_pin": {
+    "bytes": 305,
+    "sha256": "19000c128039f00c9c4d570c0988bce785956174e2bd6d027b7001086134d388"
+  },
+  "model_cpp_generated_false_scope": "No persisted usable generated model C++ artifacts; not denial of internal AST conversion/emission to null.",
+  "native_self_reported_rounded": {
+    "alloced_MB_label": 401.449,
+    "build_seconds": 0.0,
+    "configured_jobs_reported": 1,
+    "conversion_seconds": 13.068,
+    "cpp_MB_label": 22.763,
+    "cpp_file_counter": 30,
+    "cpu_seconds_not_used_as_actual_CPU": 0.0,
+    "elab_seconds": 2.254,
+    "internal_module_counter": 26,
+    "model_MB_label": 0.0,
+    "source_MB_label": 8.618,
+    "wall_seconds": 16.778
+  },
+  "no_reported_warning_or_error": true,
+  "schema": "actual-native-lint-log-review-v1",
+  "version_line": "- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1+b2)",
+  "warning_suppression_flags": false,
+  "origin_review": {
+    "bytes": 2324,
+    "sha256": "437143673297f1c948a8cb1fbd21eab66e66bf7be15727d773f731abe36849d4"
+  }
+}

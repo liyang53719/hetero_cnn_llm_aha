@@ -1,0 +1,24 @@
+{
+  "base_commit": "a79eccbdb28e1eee97f687e167ee5e6d286ba1bc",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/evidence/NATIVE_GENERATION_AND_ORIGINAL_FAIL.json",
+      "bytes": 6421,
+      "sha256": "57bd7b54183472f6d27331567fc6b55eb09af091ff1b149e8058d32322532ec7",
+      "git_blob_sha": "fd07f9912df817b846ba3a1d35ebe4e4de3b928a"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/evidence/R3_ACTUAL_STRUCTURE_REVIEW.json",
+      "bytes": 9017,
+      "sha256": "2d17a95a6f4ab950f318ba596f8858792474653be5722316ac013224b0db50d1",
+      "git_blob_sha": "f177d6b98b1ce4e9e6aa8776330355f1c848de25"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/evidence/FAIL_STOP_HISTORY_AND_SOURCE_SCOPE.json",
+      "bytes": 11352,
+      "sha256": "2ae1439b85c2c0dd2b8107117c5dff7ccc8f572766a921b681b5af9321caa096",
+      "git_blob_sha": "97cdadc4c9228b2c61398be02de41a1f77afe12b"
+    }
+  ],
+  "use": "Retained original SV identity, declaration-only R3 scope and original failure history; no SV bytes duplicated."
+}

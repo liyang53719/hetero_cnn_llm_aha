@@ -1,0 +1,13 @@
+{
+  "status": "PASS_EXACT_SOURCE_HASH_ROLE_PROJECTIONS_AND_SYNTHETIC_ONLY",
+  "checks": 161,
+  "errors": 0,
+  "exact_original_sources": 2,
+  "normal_synthetic_controls": 24,
+  "optimized_synthetic_controls": 24,
+  "actual_root_and_selected_input_stat_checks": 13,
+  "actual_SV_ELF_deb_Perl_runtime_logs_not_reopened": true,
+  "native_network_target_or_signal_actions": 0,
+  "synthetic_scope": "Only tiny in-memory ar/tar extraction; no actual archive download/read or tool execution. Not a general arbitrary-archive safety certificate.",
+  "local_test_preparation_history": "Initial guard forwarded its own argv to unittest, then a synthetic directory had non-searchable0644 mode. Both local fixture errors corrected; original scripts/evidence unchanged; initial logs retained privately."
+}

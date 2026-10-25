@@ -1,0 +1,156 @@
+{
+  "schema": "official-verilator-debian-and-selected-runtime-summary-v1",
+  "package": {
+    "url": "https://deb.debian.org/debian/pool/main/v/verilator/verilator_5.032-1+b2_amd64.deb",
+    "package": "verilator",
+    "version": "5.032-1+b2",
+    "architecture": "amd64",
+    "bytes": 7565144,
+    "sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2"
+  },
+  "selected_tools": {
+    "frontend": {
+      "bytes": 26226,
+      "sha256": "672a1ccf3468902f66387049f001b04f254bbcece7d5e816e3861715889bf252"
+    },
+    "backend": {
+      "bytes": 13920736,
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703"
+    },
+    "perl_executable": {
+      "bytes": 3935376,
+      "sha256": "b85210f03baeb859ee20b1324e59497f27f319eda9e2d3d1ecd163a79d884a7d"
+    },
+    "python_executable": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    }
+  },
+  "verilator_share_files": 108,
+  "runtime_counts": {
+    "declared_manifest_roles": 3660,
+    "automatic_prepost_pins": 3662,
+    "extra_manifest_supervisor_pins": 2,
+    "roles": {
+      "input": 1,
+      "perl_source": 2561,
+      "provenance": 831,
+      "runtime": 155,
+      "source": 1,
+      "tool": 111
+    },
+    "exact_inventories": 12,
+    "absence_endpoint_slots": 24,
+    "alias_records": 13
+  },
+  "inventory_role_counts": [
+    {
+      "role": "perl_vendor_arch",
+      "count": 7,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "perl_vendor_share",
+      "count": 207,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "perl_core_arch",
+      "count": 380,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "perl_core_share",
+      "count": 1332,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "perl_configuration",
+      "count": 1,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "perl_base",
+      "count": 615,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "perl_site_share",
+      "count": 19,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "verilator_share",
+      "count": 108,
+      "suffix": "",
+      "pass_all": true
+    },
+    {
+      "role": "retained_Scala_sources",
+      "count": 92,
+      "suffix": ".scala",
+      "pass_all": true
+    },
+    {
+      "role": "retained_baseline_classes",
+      "count": 550,
+      "suffix": ".class",
+      "pass_all": true
+    },
+    {
+      "role": "four_new_Scala_sources",
+      "count": 4,
+      "suffix": ".scala",
+      "pass_all": true
+    },
+    {
+      "role": "twenty_original_classes",
+      "count": 20,
+      "suffix": ".class",
+      "pass_all": true
+    }
+  ],
+  "hash_only_private_metadata": {
+    "lint_manifest": {
+      "bytes": 1435009,
+      "sha256": "121540787c6ba8822327c9ff16254b6817b6b671874ee5fd3d20541a59fa9307"
+    },
+    "lint_candidate_freeze": {
+      "bytes": 3144,
+      "sha256": "ec30c86f29f68c0ccb84bc37dfb86d6e476af203a81a204a0a744d23b861a7df"
+    },
+    "runtime_appendix": {
+      "bytes": 954532,
+      "sha256": "ebc4f05095f6d1a7951a12dc1d6ef121666529bb7d6e6cad9ddb4a7a0769fb2a"
+    },
+    "source_review": {
+      "bytes": 11932,
+      "sha256": "8d9fbbf6b228e4fee03b879be4905498723b541af402426bf4f1b56e10ee8e8a"
+    },
+    "source_identity_review": {
+      "bytes": 15844,
+      "sha256": "d8b4901ee7df955a81366ad67d31bc0c5203d431ceea7d03074b400e9242c1e5"
+    },
+    "actual_identity_review": {
+      "bytes": 18999,
+      "sha256": "6387231597b740f82fb049258a3ec485b8d35e51ebe93f16c1ba268bb123b081"
+    },
+    "actual_identity_freeze": {
+      "bytes": 2487,
+      "sha256": "6a0eb916eaf9429148c0ce527dd6410a3641c59623d7a08e020c3bdd1e31c091"
+    }
+  },
+  "provenance_limits": [
+    "Official Debian origin and exact package bytes/hash; not independently validated Debian Release signature or bit-reproducible build/no downstream patches.",
+    "Selected conservative Perl candidate roots/aliases and pre/post absent endpoints are not continuous isolation or a measured dynamic import/INC/dlopen trace.",
+    "Full private runtime list is hash-bound, not duplicated or reconstructible from this count summary. A new environment requires its own complete role mapping and independent admission.",
+    "Original 20-class provenance only, not NoCSE replacement classes or another Scala compile."
+  ]
+}

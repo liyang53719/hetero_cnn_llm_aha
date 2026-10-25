@@ -1,0 +1,37 @@
+{
+  "original": {
+    "bytes": 788,
+    "sha256": "8825e7125ca79936d8d6603ee8bb85ec54b06d698994ea0c6e9c7e405dd704ed"
+  },
+  "result": {
+    "status": "PASS_FOCUSED_STDLIB_ORDER_SUPERVISOR_ONLY",
+    "runs": [
+      {
+        "optimized": false,
+        "returncode": 0,
+        "cpu_seconds": 0.365974,
+        "wall_seconds": 1.017256376973819,
+        "log": "normal.log",
+        "sha256": "01cb8cae798918387a64330e32a570dda77c18c386d75359ac0bac81d8d43a3e"
+      },
+      {
+        "optimized": true,
+        "returncode": 0,
+        "cpu_seconds": 0.6526919999999998,
+        "wall_seconds": 1.3188586340402253,
+        "log": "optimized.log",
+        "sha256": "43e53d74f608e2334a13c72d6154bdbcc751aa36a2a00fb6c63629d1cb9d75fb"
+      }
+    ],
+    "total_cpu_seconds": 1.0186659999999998,
+    "wall_seconds": 2.3365850070258602,
+    "native_executed": false,
+    "actual_worker_imported": false,
+    "synthetic_fixture_only": true,
+    "real_DUT_budget_used": false
+  },
+  "author_case_executions": 52,
+  "unique_cases_each_mode": 26,
+  "this_packaging_target_reruns": 0,
+  "scope": "Historical pure stdlib synthetic-order and supervisor mocks; not native, target arithmetic or a performance benchmark."
+}

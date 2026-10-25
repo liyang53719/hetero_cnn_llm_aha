@@ -1,0 +1,28 @@
+{
+  "original": {
+    "bytes": 1584,
+    "sha256": "1725610e7aead6657d8ffc38d00a9bae75736bfaf91edff5f58aade414801c5a"
+  },
+  "status": "EXITED",
+  "cpu_seconds_limit": 18,
+  "wall_seconds_limit": 27,
+  "aggregate_before": {
+    "cpu_seconds": 6.369266487,
+    "wall_seconds": 6.468611464020796,
+    "rss_bytes": 14274560
+  },
+  "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+  "returncode": 0,
+  "group_remaining": false,
+  "wall_seconds": 6.029909139033407,
+  "aggregate_after": {
+    "cpu_seconds": 12.324855197,
+    "wall_seconds": 12.498520973022096,
+    "rss_bytes": 14274560
+  },
+  "projection_omissions": [
+    "private launch argv",
+    "child process identity"
+  ],
+  "rss_sample_scope": "Before/after supervisor-only point samples, not live combined RSS or peak."
+}

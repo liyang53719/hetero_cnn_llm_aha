@@ -1,0 +1,82 @@
+{
+  "original": {
+    "bytes": 2362,
+    "sha256": "694df83f6443e5ca4b401175cc6a890893907a76c1c240fb51f023740445592a"
+  },
+  "status": "EXITED",
+  "m": 2,
+  "config_sha256": "e853890d4606bb68328dd055bc89b9036d59f3f613a4a72c1c066be53a3e1fde",
+  "review_sha256": "cf5d439755677299acaeec1c34f2960d37ff68a113191e72fc7ba44824b31f60",
+  "limits": {
+    "cpu_seconds": 60,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 90,
+    "cpus": 1,
+    "child_cpu_seconds": 18,
+    "child_wall_seconds": 27,
+    "cleanup_cpu_reserve": 2,
+    "cleanup_wall_reserve": 3,
+    "fresh_processes": 3
+  },
+  "orders": [
+    [
+      "off",
+      "original",
+      "selective_identity_r1"
+    ],
+    [
+      "original",
+      "selective_identity_r1",
+      "off"
+    ],
+    [
+      "selective_identity_r1",
+      "off",
+      "original"
+    ]
+  ],
+  "automatic_retry": false,
+  "result_sha256": "89162e7032c8c857483804c97b0f65870b682d58829c49dfed91c6101273ea47",
+  "aggregate_usage": {
+    "cpu_seconds": 18.79356525,
+    "wall_seconds": 19.15878644003533,
+    "rss_bytes": 16633856
+  },
+  "children": [
+    {
+      "order_index": 0,
+      "execution_order": [
+        "off",
+        "original",
+        "selective_identity_r1"
+      ],
+      "parent_sha256": "91c5bfcf4a761308803c71b332e643e15548f5e634b7c04f64b442b9223e4c83",
+      "status": "EXITED",
+      "logical_directory": "trio_0"
+    },
+    {
+      "order_index": 1,
+      "execution_order": [
+        "original",
+        "selective_identity_r1",
+        "off"
+      ],
+      "parent_sha256": "1725610e7aead6657d8ffc38d00a9bae75736bfaf91edff5f58aade414801c5a",
+      "status": "EXITED",
+      "logical_directory": "trio_1"
+    },
+    {
+      "order_index": 2,
+      "execution_order": [
+        "selective_identity_r1",
+        "off",
+        "original"
+      ],
+      "parent_sha256": "c65658ee0d400d7987f91f6bc16b98f2ba3dd31ed3018b64f2fa98c8e621534b",
+      "status": "EXITED",
+      "logical_directory": "trio_2"
+    }
+  ],
+  "projection": "Parent identity omitted; physical child directories replaced with logical names. All receipt status/limits/usage/order preserved.",
+  "final_rss_sample_scope": "Supervisor only after all children reaped; not peak. No persisted live combined RSS samples."
+}

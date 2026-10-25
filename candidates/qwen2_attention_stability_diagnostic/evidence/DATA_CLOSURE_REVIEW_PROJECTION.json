@@ -1,0 +1,362 @@
+{
+  "original": {
+    "bytes": 10101,
+    "sha256": "4e9ea6c92cd3d44597f3fc9d00fd05a9f2f386c7c8a6860716b73eed8e16bddf"
+  },
+  "status": "PASS_READ_ONLY_THREE_ROTATED_M2_DATA_AND_PIN_CLOSURE_ONLY",
+  "checks": 64472,
+  "errors": [],
+  "config_sha256": "e853890d4606bb68328dd055bc89b9036d59f3f613a4a72c1c066be53a3e1fde",
+  "freeze_sha256": "0b076c6e36e8fddeb943a5f0d03b861ead195ce34e0af8f4ee37d9d6579c123f",
+  "static_review_sha256": "cf5d439755677299acaeec1c34f2960d37ff68a113191e72fc7ba44824b31f60",
+  "result_sha256": "89162e7032c8c857483804c97b0f65870b682d58829c49dfed91c6101273ea47",
+  "parent_sha256": "694df83f6443e5ca4b401175cc6a890893907a76c1c240fb51f023740445592a",
+  "artifacts": 347,
+  "artifact_bytes": 12835774,
+  "artifact_manifest_sha256": "c363da9295d036b00cc02b8cff04b1a3a207e00c0a6fca72853eb3ddc6f772bb",
+  "checks_receipt_sha256": "ac089af0c855aa9ac1577591fa56fbf6481522811678112a8dbee80e8a0c36f8",
+  "pins_rehashed": 1026,
+  "rounds": [
+    {
+      "order_index": 0,
+      "execution_order": [
+        "off",
+        "original",
+        "selective_identity_r1"
+      ],
+      "events": [
+        {
+          "arm": 0,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 1,
+          "last_ticket": 216
+        },
+        {
+          "arm": 1,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 217,
+          "last_ticket": 432
+        },
+        {
+          "arm": 2,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 433,
+          "last_ticket": 648
+        }
+      ],
+      "runtime": [
+        {
+          "phase": "AFTER_NATIVE_LOAD",
+          "modules": 110,
+          "unique_mappings": 11,
+          "unique_ELF": 9
+        },
+        {
+          "phase": "ARM_0_TERMINAL",
+          "modules": 254,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "ARM_1_TERMINAL",
+          "modules": 254,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "ARM_2_TERMINAL",
+          "modules": 260,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "POSTFLIGHT",
+          "modules": 280,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        }
+      ],
+      "costs": {
+        "off": {
+          "cpu_ns": 159542826,
+          "wall_ns": 157718133
+        },
+        "original": {
+          "cpu_ns": 646809977,
+          "wall_ns": 646280125
+        },
+        "selective_identity_r1": {
+          "cpu_ns": 407252657,
+          "wall_ns": 408287942
+        }
+      },
+      "identity_over_original_cpu_ratio": 0.6296326146496655,
+      "paired_reduction_percent": 37.03673853503345,
+      "worker_total_process_cpu_ns": 6260909321
+    },
+    {
+      "order_index": 1,
+      "execution_order": [
+        "original",
+        "selective_identity_r1",
+        "off"
+      ],
+      "events": [
+        {
+          "arm": 0,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 1,
+          "last_ticket": 216
+        },
+        {
+          "arm": 1,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 217,
+          "last_ticket": 432
+        },
+        {
+          "arm": 2,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 433,
+          "last_ticket": 648
+        }
+      ],
+      "runtime": [
+        {
+          "phase": "AFTER_NATIVE_LOAD",
+          "modules": 110,
+          "unique_mappings": 11,
+          "unique_ELF": 9
+        },
+        {
+          "phase": "ARM_0_TERMINAL",
+          "modules": 254,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "ARM_1_TERMINAL",
+          "modules": 260,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "ARM_2_TERMINAL",
+          "modules": 260,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "POSTFLIGHT",
+          "modules": 280,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        }
+      ],
+      "costs": {
+        "original": {
+          "cpu_ns": 602959193,
+          "wall_ns": 604875619
+        },
+        "selective_identity_r1": {
+          "cpu_ns": 347227548,
+          "wall_ns": 346638675
+        },
+        "off": {
+          "cpu_ns": 155633034,
+          "wall_ns": 157243284
+        }
+      },
+      "identity_over_original_cpu_ratio": 0.5758723841200312,
+      "paired_reduction_percent": 42.41276158799688,
+      "worker_total_process_cpu_ns": 5911197506
+    },
+    {
+      "order_index": 2,
+      "execution_order": [
+        "selective_identity_r1",
+        "off",
+        "original"
+      ],
+      "events": [
+        {
+          "arm": 0,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 1,
+          "last_ticket": 216
+        },
+        {
+          "arm": 1,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 217,
+          "last_ticket": 432
+        },
+        {
+          "arm": 2,
+          "events": 1515,
+          "counts": {
+            "acquire": 1,
+            "accept_group": 216,
+            "accept_step": 480,
+            "retire_result": 312,
+            "retire_done": 216,
+            "retire_legacy_reply": 288,
+            "retire_owner_response": 1,
+            "release": 1
+          },
+          "tickets": 216,
+          "first_ticket": 433,
+          "last_ticket": 648
+        }
+      ],
+      "runtime": [
+        {
+          "phase": "AFTER_NATIVE_LOAD",
+          "modules": 110,
+          "unique_mappings": 11,
+          "unique_ELF": 9
+        },
+        {
+          "phase": "ARM_0_TERMINAL",
+          "modules": 260,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "ARM_1_TERMINAL",
+          "modules": 260,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "ARM_2_TERMINAL",
+          "modules": 260,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        },
+        {
+          "phase": "POSTFLIGHT",
+          "modules": 280,
+          "unique_mappings": 19,
+          "unique_ELF": 17
+        }
+      ],
+      "costs": {
+        "selective_identity_r1": {
+          "cpu_ns": 398697880,
+          "wall_ns": 397993559
+        },
+        "off": {
+          "cpu_ns": 183638306,
+          "wall_ns": 183462653
+        },
+        "original": {
+          "cpu_ns": 742407933,
+          "wall_ns": 741816316
+        }
+      },
+      "identity_over_original_cpu_ratio": 0.5370334317265438,
+      "paired_reduction_percent": 46.296656827345615,
+      "worker_total_process_cpu_ns": 6392434206
+    }
+  ],
+  "all_nine_full_control_events_and_numerics_equal": true,
+  "all_six_observed_ten_fields_and_frequencies_equal": true,
+  "all_three_own_references_equal": true,
+  "all_actual_artifacts_unchanged_during_review": true,
+  "raw_traces_rewritten": false,
+  "normalizer_provenance": "DUT original/identity normalizer observed once; independent reference captures 8/16 identical repetitions. Values/presence/shape equal; reference frequency intentionally differs.",
+  "method": "Persisted only, reusing prior lifecycle and u16 frequency audit; no worker/native import, execution or arithmetic recomputation. compile/marshal only for full module identity.",
+  "prior_corrected_audit_sha256": "2b8575725ada776be742a8a6ff2db15de196221b76d5e74652f0f6856f777d90",
+  "target_executed_by_reviewer": false,
+  "python_sources_compiled_for_identity_only_not_executed": true,
+  "projection": "Only private root-approval and reviewer-script identities omitted; exact physical round order, event counts, timing and provenance retained."
+}

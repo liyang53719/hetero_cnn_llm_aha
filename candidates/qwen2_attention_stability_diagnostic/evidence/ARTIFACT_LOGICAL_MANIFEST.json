@@ -1,0 +1,2091 @@
+{
+  "original": {
+    "bytes": 51904,
+    "sha256": "c363da9295d036b00cc02b8cff04b1a3a207e00c0a6fca72853eb3ddc6f772bb"
+  },
+  "scope": "External independent post-run preservation ledger, NOT a run-native standalone final seal. All payloads excluded. Relative names retain physical trio and arm indices.",
+  "files": [
+    {
+      "ordinal": 0,
+      "logical_role": "EXPERIMENT_RESULT.json",
+      "bytes": 7686,
+      "sha256": "89162e7032c8c857483804c97b0f65870b682d58829c49dfed91c6101273ea47"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "PARENT.json",
+      "bytes": 2362,
+      "sha256": "694df83f6443e5ca4b401175cc6a890893907a76c1c240fb51f023740445592a"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "trio_0/CAPTURE_1_FIELDS.json",
+      "bytes": 69380,
+      "sha256": "877c09935d9d2a59c16a2c17629abfe3a128db25d2539279880a312d8b890e3d"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 10,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 11,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 12,
+      "logical_role": "trio_0/CAPTURE_1_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 13,
+      "logical_role": "trio_0/CAPTURE_1_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 14,
+      "logical_role": "trio_0/CAPTURE_1_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 15,
+      "logical_role": "trio_0/CAPTURE_1_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 16,
+      "logical_role": "trio_0/CAPTURE_1_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 17,
+      "logical_role": "trio_0/CAPTURE_1_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 18,
+      "logical_role": "trio_0/CAPTURE_1_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 19,
+      "logical_role": "trio_0/CAPTURE_1_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 20,
+      "logical_role": "trio_0/CAPTURE_1_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 21,
+      "logical_role": "trio_0/CAPTURE_1_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 22,
+      "logical_role": "trio_0/CAPTURE_1_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 23,
+      "logical_role": "trio_0/CAPTURE_2_FIELDS.json",
+      "bytes": 69380,
+      "sha256": "f529fddb1b8039d42300c197502203eca1ac1fec8a171adce75f2e1a9689de79"
+    },
+    {
+      "ordinal": 24,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 25,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 26,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 27,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 28,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 29,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 30,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 31,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 32,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 33,
+      "logical_role": "trio_0/CAPTURE_2_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 34,
+      "logical_role": "trio_0/CAPTURE_2_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 35,
+      "logical_role": "trio_0/CAPTURE_2_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 36,
+      "logical_role": "trio_0/CAPTURE_2_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 37,
+      "logical_role": "trio_0/CAPTURE_2_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 38,
+      "logical_role": "trio_0/CAPTURE_2_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 39,
+      "logical_role": "trio_0/CAPTURE_2_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 40,
+      "logical_role": "trio_0/CAPTURE_2_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 41,
+      "logical_role": "trio_0/CAPTURE_2_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 42,
+      "logical_role": "trio_0/CAPTURE_2_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 43,
+      "logical_role": "trio_0/CAPTURE_2_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 44,
+      "logical_role": "trio_0/CAPTURE_REPORT_1.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "ordinal": 45,
+      "logical_role": "trio_0/CAPTURE_REPORT_2.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "ordinal": 46,
+      "logical_role": "trio_0/IDENTITY.json",
+      "bytes": 121,
+      "sha256": "49535909b95548d01c96baae7f51571c5212155f292940c1e2a342a988ea95b8"
+    },
+    {
+      "ordinal": 47,
+      "logical_role": "trio_0/MAPS_AFTER_CDLL.txt",
+      "bytes": 6997,
+      "sha256": "79e7cbfb8e633438b074d7cbd3339a1358070ba4fc055e6644e8ef731eef7f4c"
+    },
+    {
+      "ordinal": 48,
+      "logical_role": "trio_0/OUTPUT_0.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 49,
+      "logical_role": "trio_0/OUTPUT_1.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 50,
+      "logical_role": "trio_0/OUTPUT_2.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 51,
+      "logical_role": "trio_0/PARENT.json",
+      "bytes": 1584,
+      "sha256": "91c5bfcf4a761308803c71b332e643e15548f5e634b7c04f64b442b9223e4c83"
+    },
+    {
+      "ordinal": 52,
+      "logical_role": "trio_0/REFERENCE_FIELDS.json",
+      "bytes": 69416,
+      "sha256": "be830b91017bd66559cece191080637efee3754fbbcb02538082bcaab775e563"
+    },
+    {
+      "ordinal": 53,
+      "logical_role": "trio_0/REFERENCE_OUTPUT.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 54,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 55,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 56,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 57,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 58,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 59,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 60,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 61,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 62,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 63,
+      "logical_role": "trio_0/REFERENCE_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 64,
+      "logical_role": "trio_0/REFERENCE_SCORES.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 65,
+      "logical_role": "trio_0/REFERENCE_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 66,
+      "logical_role": "trio_0/REFERENCE_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 67,
+      "logical_role": "trio_0/REFERENCE_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 68,
+      "logical_role": "trio_0/REFERENCE_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 69,
+      "logical_role": "trio_0/REFERENCE_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 70,
+      "logical_role": "trio_0/REFERENCE_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 71,
+      "logical_role": "trio_0/REFERENCE_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 72,
+      "logical_role": "trio_0/REFERENCE_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 73,
+      "logical_role": "trio_0/REFERENCE_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 74,
+      "logical_role": "trio_0/REFERENCE_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 75,
+      "logical_role": "trio_0/RESULT.json",
+      "bytes": 58110,
+      "sha256": "2f02a2570728c903be8b3747f73519f9b518127053ccc12e611485c6c02b87ba"
+    },
+    {
+      "ordinal": 76,
+      "logical_role": "trio_0/RUNTIME_AFTER_NATIVE_LOAD/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 6997,
+      "sha256": "9f918e4b70e2742804e60798cfbfa4616ab19e176711a31ba46330e7c188abb1"
+    },
+    {
+      "ordinal": 77,
+      "logical_role": "trio_0/RUNTIME_AFTER_NATIVE_LOAD/MAPS_RAW.txt",
+      "bytes": 6997,
+      "sha256": "9f918e4b70e2742804e60798cfbfa4616ab19e176711a31ba46330e7c188abb1"
+    },
+    {
+      "ordinal": 78,
+      "logical_role": "trio_0/RUNTIME_AFTER_NATIVE_LOAD/MAP_AUDIT.json",
+      "bytes": 16114,
+      "sha256": "93f34ad43cddb8109da3cda51009b1f602c4b45abd5d10dd0cdb27c9e64063fe"
+    },
+    {
+      "ordinal": 79,
+      "logical_role": "trio_0/RUNTIME_AFTER_NATIVE_LOAD/MODULES_RAW.json",
+      "bytes": 33864,
+      "sha256": "e7866cdbf60a3b4afe8f60b83de796368727e27185510bdefc3381a2ed580673"
+    },
+    {
+      "ordinal": 80,
+      "logical_role": "trio_0/RUNTIME_AFTER_NATIVE_LOAD/MODULE_AUDIT.json",
+      "bytes": 164961,
+      "sha256": "1d9b639f5964984e85c2d6fd1a7886e9607301c0e4c523c85b4cfaf43dccf503"
+    },
+    {
+      "ordinal": 81,
+      "logical_role": "trio_0/RUNTIME_AFTER_NATIVE_LOAD/SUMMARY.json",
+      "bytes": 96,
+      "sha256": "5124e034723ea7dd17c7f6b34a6aa710663cce7aff2ba6f8167ef404fda32e23"
+    },
+    {
+      "ordinal": 82,
+      "logical_role": "trio_0/RUNTIME_ARM_0_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "a1c3ed81c47197d974b6d1f83d2989bef3035a39f49e3868f5e6fd07a104d7ed"
+    },
+    {
+      "ordinal": 83,
+      "logical_role": "trio_0/RUNTIME_ARM_0_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "a1c3ed81c47197d974b6d1f83d2989bef3035a39f49e3868f5e6fd07a104d7ed"
+    },
+    {
+      "ordinal": 84,
+      "logical_role": "trio_0/RUNTIME_ARM_0_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "804c93a69ca72ebd923d79c2b8d494041729213d557e6e55ad52abe2b33ce1ff"
+    },
+    {
+      "ordinal": 85,
+      "logical_role": "trio_0/RUNTIME_ARM_0_TERMINAL/MODULES_RAW.json",
+      "bytes": 93962,
+      "sha256": "94d4cd7737d887be8eeaab9dcb6389b92dd4ee8368016beaa7da9bd255bfb600"
+    },
+    {
+      "ordinal": 86,
+      "logical_role": "trio_0/RUNTIME_ARM_0_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 509832,
+      "sha256": "eedc53ce32b795285377d8fd986e1f3b80dba5ee8056e6314e85c52c600634fa"
+    },
+    {
+      "ordinal": 87,
+      "logical_role": "trio_0/RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab"
+    },
+    {
+      "ordinal": 88,
+      "logical_role": "trio_0/RUNTIME_ARM_1_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "282592ca5997f6ddc9ebfca9ffb17fa0515fff200e0e3b210b8488b3b17019ab"
+    },
+    {
+      "ordinal": 89,
+      "logical_role": "trio_0/RUNTIME_ARM_1_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "282592ca5997f6ddc9ebfca9ffb17fa0515fff200e0e3b210b8488b3b17019ab"
+    },
+    {
+      "ordinal": 90,
+      "logical_role": "trio_0/RUNTIME_ARM_1_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "804c93a69ca72ebd923d79c2b8d494041729213d557e6e55ad52abe2b33ce1ff"
+    },
+    {
+      "ordinal": 91,
+      "logical_role": "trio_0/RUNTIME_ARM_1_TERMINAL/MODULES_RAW.json",
+      "bytes": 93962,
+      "sha256": "94d4cd7737d887be8eeaab9dcb6389b92dd4ee8368016beaa7da9bd255bfb600"
+    },
+    {
+      "ordinal": 92,
+      "logical_role": "trio_0/RUNTIME_ARM_1_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 509832,
+      "sha256": "04d58a427cbb2c6f6bf9430bdec5907cb33b3e8f0b4df93ef8422518cb0c1021"
+    },
+    {
+      "ordinal": 93,
+      "logical_role": "trio_0/RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48"
+    },
+    {
+      "ordinal": 94,
+      "logical_role": "trio_0/RUNTIME_ARM_2_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "51818b781b63f0dcae95b74041a6bae121e8770593a83aee679fbd39b29b4419"
+    },
+    {
+      "ordinal": 95,
+      "logical_role": "trio_0/RUNTIME_ARM_2_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "51818b781b63f0dcae95b74041a6bae121e8770593a83aee679fbd39b29b4419"
+    },
+    {
+      "ordinal": 96,
+      "logical_role": "trio_0/RUNTIME_ARM_2_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "804c93a69ca72ebd923d79c2b8d494041729213d557e6e55ad52abe2b33ce1ff"
+    },
+    {
+      "ordinal": 97,
+      "logical_role": "trio_0/RUNTIME_ARM_2_TERMINAL/MODULES_RAW.json",
+      "bytes": 96801,
+      "sha256": "a47e71e7456407c25387227da365571d7ea2a73bcab554fef403f595a685c155"
+    },
+    {
+      "ordinal": 98,
+      "logical_role": "trio_0/RUNTIME_ARM_2_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 525549,
+      "sha256": "524322973a6b1ee2877c5dcc9fc5ed5f79e5c6d7ab6fea62f4777b6a0b355450"
+    },
+    {
+      "ordinal": 99,
+      "logical_role": "trio_0/RUNTIME_ARM_2_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "c1115ab69ced9244a0a3b4381a22f7c7379698090cc1f347540cf13347e3c2d2"
+    },
+    {
+      "ordinal": 100,
+      "logical_role": "trio_0/RUNTIME_POSTFLIGHT/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17870,
+      "sha256": "61709307439e6c795016749dcb1e027d593be5b4cb2a307db0f6b62d19b55f81"
+    },
+    {
+      "ordinal": 101,
+      "logical_role": "trio_0/RUNTIME_POSTFLIGHT/MAPS_RAW.txt",
+      "bytes": 17870,
+      "sha256": "61709307439e6c795016749dcb1e027d593be5b4cb2a307db0f6b62d19b55f81"
+    },
+    {
+      "ordinal": 102,
+      "logical_role": "trio_0/RUNTIME_POSTFLIGHT/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "804c93a69ca72ebd923d79c2b8d494041729213d557e6e55ad52abe2b33ce1ff"
+    },
+    {
+      "ordinal": 103,
+      "logical_role": "trio_0/RUNTIME_POSTFLIGHT/MODULES_RAW.json",
+      "bytes": 103533,
+      "sha256": "918aeb7630a005c9c9a56d7f58313980508c4423da0465769e13d82e2842400a"
+    },
+    {
+      "ordinal": 104,
+      "logical_role": "trio_0/RUNTIME_POSTFLIGHT/MODULE_AUDIT.json",
+      "bytes": 560391,
+      "sha256": "d523363edc5dccbe5b200f9c66348e951db1cdbf0dd688bbdd2e5422bf49d174"
+    },
+    {
+      "ordinal": 105,
+      "logical_role": "trio_0/RUNTIME_POSTFLIGHT/SUMMARY.json",
+      "bytes": 89,
+      "sha256": "7b67f351afec714a99c2d03f484bc70d35c97143839335f1e6fb21a78f8f5415"
+    },
+    {
+      "ordinal": 106,
+      "logical_role": "trio_0/SCORES_0.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 107,
+      "logical_role": "trio_0/SCORES_1.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 108,
+      "logical_role": "trio_0/SCORES_2.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 109,
+      "logical_role": "trio_0/SERVICE_EVENTS_0.json",
+      "bytes": 210399,
+      "sha256": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+    },
+    {
+      "ordinal": 110,
+      "logical_role": "trio_0/SERVICE_EVENTS_1.json",
+      "bytes": 210711,
+      "sha256": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+    },
+    {
+      "ordinal": 111,
+      "logical_role": "trio_0/SERVICE_EVENTS_2.json",
+      "bytes": 210711,
+      "sha256": "c61917e0c82e1f8903e9a9e20871da34588b1e0d201548fd2c84de240933c97b"
+    },
+    {
+      "ordinal": 112,
+      "logical_role": "trio_0/STAGES.jsonl",
+      "bytes": 40099,
+      "sha256": "9aea4e109c628d5f177681700c87f7b0d7b76ac5baaa3d226d14c27a8179b121"
+    },
+    {
+      "ordinal": 113,
+      "logical_role": "trio_0/WRITES_0.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 114,
+      "logical_role": "trio_0/WRITES_1.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 115,
+      "logical_role": "trio_0/WRITES_2.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 116,
+      "logical_role": "trio_0/worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "ordinal": 117,
+      "logical_role": "trio_1/CAPTURE_0_FIELDS.json",
+      "bytes": 69380,
+      "sha256": "0968b6b1880e6332048516380cdc9d3c884efc4d933aab6377250bb94575321e"
+    },
+    {
+      "ordinal": 118,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 119,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 120,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 121,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 122,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 123,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 124,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 125,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 126,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 127,
+      "logical_role": "trio_1/CAPTURE_0_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 128,
+      "logical_role": "trio_1/CAPTURE_0_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 129,
+      "logical_role": "trio_1/CAPTURE_0_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 130,
+      "logical_role": "trio_1/CAPTURE_0_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 131,
+      "logical_role": "trio_1/CAPTURE_0_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 132,
+      "logical_role": "trio_1/CAPTURE_0_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 133,
+      "logical_role": "trio_1/CAPTURE_0_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 134,
+      "logical_role": "trio_1/CAPTURE_0_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 135,
+      "logical_role": "trio_1/CAPTURE_0_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 136,
+      "logical_role": "trio_1/CAPTURE_0_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 137,
+      "logical_role": "trio_1/CAPTURE_0_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 138,
+      "logical_role": "trio_1/CAPTURE_1_FIELDS.json",
+      "bytes": 69380,
+      "sha256": "877c09935d9d2a59c16a2c17629abfe3a128db25d2539279880a312d8b890e3d"
+    },
+    {
+      "ordinal": 139,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 140,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 141,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 142,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 143,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 144,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 145,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 146,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 147,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 148,
+      "logical_role": "trio_1/CAPTURE_1_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 149,
+      "logical_role": "trio_1/CAPTURE_1_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 150,
+      "logical_role": "trio_1/CAPTURE_1_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 151,
+      "logical_role": "trio_1/CAPTURE_1_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 152,
+      "logical_role": "trio_1/CAPTURE_1_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 153,
+      "logical_role": "trio_1/CAPTURE_1_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 154,
+      "logical_role": "trio_1/CAPTURE_1_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 155,
+      "logical_role": "trio_1/CAPTURE_1_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 156,
+      "logical_role": "trio_1/CAPTURE_1_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 157,
+      "logical_role": "trio_1/CAPTURE_1_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 158,
+      "logical_role": "trio_1/CAPTURE_1_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 159,
+      "logical_role": "trio_1/CAPTURE_REPORT_0.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "ordinal": 160,
+      "logical_role": "trio_1/CAPTURE_REPORT_1.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "ordinal": 161,
+      "logical_role": "trio_1/IDENTITY.json",
+      "bytes": 121,
+      "sha256": "8caae3c736ed28187f53b9d7d1cf57835a0219b87b96241187e832ca53a2ab90"
+    },
+    {
+      "ordinal": 162,
+      "logical_role": "trio_1/MAPS_AFTER_CDLL.txt",
+      "bytes": 6997,
+      "sha256": "6e47aaca574a312ceda8d680b9eebfabcf8e489cf1aae30db34df98f0cfcfcb6"
+    },
+    {
+      "ordinal": 163,
+      "logical_role": "trio_1/OUTPUT_0.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 164,
+      "logical_role": "trio_1/OUTPUT_1.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 165,
+      "logical_role": "trio_1/OUTPUT_2.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 166,
+      "logical_role": "trio_1/PARENT.json",
+      "bytes": 1584,
+      "sha256": "1725610e7aead6657d8ffc38d00a9bae75736bfaf91edff5f58aade414801c5a"
+    },
+    {
+      "ordinal": 167,
+      "logical_role": "trio_1/REFERENCE_FIELDS.json",
+      "bytes": 69416,
+      "sha256": "be830b91017bd66559cece191080637efee3754fbbcb02538082bcaab775e563"
+    },
+    {
+      "ordinal": 168,
+      "logical_role": "trio_1/REFERENCE_OUTPUT.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 169,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 170,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 171,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 172,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 173,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 174,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 175,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 176,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 177,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 178,
+      "logical_role": "trio_1/REFERENCE_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 179,
+      "logical_role": "trio_1/REFERENCE_SCORES.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 180,
+      "logical_role": "trio_1/REFERENCE_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 181,
+      "logical_role": "trio_1/REFERENCE_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 182,
+      "logical_role": "trio_1/REFERENCE_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 183,
+      "logical_role": "trio_1/REFERENCE_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 184,
+      "logical_role": "trio_1/REFERENCE_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 185,
+      "logical_role": "trio_1/REFERENCE_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 186,
+      "logical_role": "trio_1/REFERENCE_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 187,
+      "logical_role": "trio_1/REFERENCE_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 188,
+      "logical_role": "trio_1/REFERENCE_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 189,
+      "logical_role": "trio_1/REFERENCE_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 190,
+      "logical_role": "trio_1/RESULT.json",
+      "bytes": 58121,
+      "sha256": "8137ec5444d246a9c74fade1521dbb01b3bf89d65b948fc424ca0b0e1d189631"
+    },
+    {
+      "ordinal": 191,
+      "logical_role": "trio_1/RUNTIME_AFTER_NATIVE_LOAD/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 6997,
+      "sha256": "64d13b40def7165a441e5b56ec13ecd0537cb13ddfc804f8fef5c6462a2c7c79"
+    },
+    {
+      "ordinal": 192,
+      "logical_role": "trio_1/RUNTIME_AFTER_NATIVE_LOAD/MAPS_RAW.txt",
+      "bytes": 6997,
+      "sha256": "64d13b40def7165a441e5b56ec13ecd0537cb13ddfc804f8fef5c6462a2c7c79"
+    },
+    {
+      "ordinal": 193,
+      "logical_role": "trio_1/RUNTIME_AFTER_NATIVE_LOAD/MAP_AUDIT.json",
+      "bytes": 16114,
+      "sha256": "93f34ad43cddb8109da3cda51009b1f602c4b45abd5d10dd0cdb27c9e64063fe"
+    },
+    {
+      "ordinal": 194,
+      "logical_role": "trio_1/RUNTIME_AFTER_NATIVE_LOAD/MODULES_RAW.json",
+      "bytes": 33864,
+      "sha256": "e7866cdbf60a3b4afe8f60b83de796368727e27185510bdefc3381a2ed580673"
+    },
+    {
+      "ordinal": 195,
+      "logical_role": "trio_1/RUNTIME_AFTER_NATIVE_LOAD/MODULE_AUDIT.json",
+      "bytes": 164961,
+      "sha256": "e6129177d7f5314c18f3ca6699e243b7fbe8f3186467ae0b05438ff722e0e22e"
+    },
+    {
+      "ordinal": 196,
+      "logical_role": "trio_1/RUNTIME_AFTER_NATIVE_LOAD/SUMMARY.json",
+      "bytes": 96,
+      "sha256": "5124e034723ea7dd17c7f6b34a6aa710663cce7aff2ba6f8167ef404fda32e23"
+    },
+    {
+      "ordinal": 197,
+      "logical_role": "trio_1/RUNTIME_ARM_0_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "d6879507065d78252d2c0b3d7c16b527493db5f71dd22ea2cc840808a177925b"
+    },
+    {
+      "ordinal": 198,
+      "logical_role": "trio_1/RUNTIME_ARM_0_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "d6879507065d78252d2c0b3d7c16b527493db5f71dd22ea2cc840808a177925b"
+    },
+    {
+      "ordinal": 199,
+      "logical_role": "trio_1/RUNTIME_ARM_0_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 200,
+      "logical_role": "trio_1/RUNTIME_ARM_0_TERMINAL/MODULES_RAW.json",
+      "bytes": 93962,
+      "sha256": "94d4cd7737d887be8eeaab9dcb6389b92dd4ee8368016beaa7da9bd255bfb600"
+    },
+    {
+      "ordinal": 201,
+      "logical_role": "trio_1/RUNTIME_ARM_0_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 509832,
+      "sha256": "6f29c419c67a3fe9deebc7707b88d047aecf478d7dc6b555604e72c33325257c"
+    },
+    {
+      "ordinal": 202,
+      "logical_role": "trio_1/RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab"
+    },
+    {
+      "ordinal": 203,
+      "logical_role": "trio_1/RUNTIME_ARM_1_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "b5bc966701ee48bb80e0d455ee9bd08906e6297347c505cbbd89a425f64289dd"
+    },
+    {
+      "ordinal": 204,
+      "logical_role": "trio_1/RUNTIME_ARM_1_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "b5bc966701ee48bb80e0d455ee9bd08906e6297347c505cbbd89a425f64289dd"
+    },
+    {
+      "ordinal": 205,
+      "logical_role": "trio_1/RUNTIME_ARM_1_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 206,
+      "logical_role": "trio_1/RUNTIME_ARM_1_TERMINAL/MODULES_RAW.json",
+      "bytes": 96801,
+      "sha256": "a47e71e7456407c25387227da365571d7ea2a73bcab554fef403f595a685c155"
+    },
+    {
+      "ordinal": 207,
+      "logical_role": "trio_1/RUNTIME_ARM_1_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 525549,
+      "sha256": "f30c972e2ef7c0c5b5bb1075ab45b3cb104acfd0d205dfc39939d062dc880b45"
+    },
+    {
+      "ordinal": 208,
+      "logical_role": "trio_1/RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48"
+    },
+    {
+      "ordinal": 209,
+      "logical_role": "trio_1/RUNTIME_ARM_2_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "7e2db8f6ccb287db1e07a5067ce5cf04530964ec09b6bee6228c5faca9324758"
+    },
+    {
+      "ordinal": 210,
+      "logical_role": "trio_1/RUNTIME_ARM_2_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "7e2db8f6ccb287db1e07a5067ce5cf04530964ec09b6bee6228c5faca9324758"
+    },
+    {
+      "ordinal": 211,
+      "logical_role": "trio_1/RUNTIME_ARM_2_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 212,
+      "logical_role": "trio_1/RUNTIME_ARM_2_TERMINAL/MODULES_RAW.json",
+      "bytes": 96801,
+      "sha256": "a47e71e7456407c25387227da365571d7ea2a73bcab554fef403f595a685c155"
+    },
+    {
+      "ordinal": 213,
+      "logical_role": "trio_1/RUNTIME_ARM_2_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 525549,
+      "sha256": "99cd5b9c5e2494bce896bbac7ac5be06e87692d42a70a15b82a0a6b3f1a72aed"
+    },
+    {
+      "ordinal": 214,
+      "logical_role": "trio_1/RUNTIME_ARM_2_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "c1115ab69ced9244a0a3b4381a22f7c7379698090cc1f347540cf13347e3c2d2"
+    },
+    {
+      "ordinal": 215,
+      "logical_role": "trio_1/RUNTIME_POSTFLIGHT/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17772,
+      "sha256": "3050b9dcbe4810cb51a7afc45f37cd196e6679366ea3738013a9c03bd8e2a611"
+    },
+    {
+      "ordinal": 216,
+      "logical_role": "trio_1/RUNTIME_POSTFLIGHT/MAPS_RAW.txt",
+      "bytes": 17772,
+      "sha256": "3050b9dcbe4810cb51a7afc45f37cd196e6679366ea3738013a9c03bd8e2a611"
+    },
+    {
+      "ordinal": 217,
+      "logical_role": "trio_1/RUNTIME_POSTFLIGHT/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 218,
+      "logical_role": "trio_1/RUNTIME_POSTFLIGHT/MODULES_RAW.json",
+      "bytes": 103533,
+      "sha256": "918aeb7630a005c9c9a56d7f58313980508c4423da0465769e13d82e2842400a"
+    },
+    {
+      "ordinal": 219,
+      "logical_role": "trio_1/RUNTIME_POSTFLIGHT/MODULE_AUDIT.json",
+      "bytes": 560391,
+      "sha256": "aec18bee8aa746185bdf91d6d25cb803a5c3cb5898c96b95e91fa9a727b40fdd"
+    },
+    {
+      "ordinal": 220,
+      "logical_role": "trio_1/RUNTIME_POSTFLIGHT/SUMMARY.json",
+      "bytes": 89,
+      "sha256": "7b67f351afec714a99c2d03f484bc70d35c97143839335f1e6fb21a78f8f5415"
+    },
+    {
+      "ordinal": 221,
+      "logical_role": "trio_1/SCORES_0.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 222,
+      "logical_role": "trio_1/SCORES_1.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 223,
+      "logical_role": "trio_1/SCORES_2.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 224,
+      "logical_role": "trio_1/SERVICE_EVENTS_0.json",
+      "bytes": 210399,
+      "sha256": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+    },
+    {
+      "ordinal": 225,
+      "logical_role": "trio_1/SERVICE_EVENTS_1.json",
+      "bytes": 210711,
+      "sha256": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+    },
+    {
+      "ordinal": 226,
+      "logical_role": "trio_1/SERVICE_EVENTS_2.json",
+      "bytes": 210711,
+      "sha256": "c61917e0c82e1f8903e9a9e20871da34588b1e0d201548fd2c84de240933c97b"
+    },
+    {
+      "ordinal": 227,
+      "logical_role": "trio_1/STAGES.jsonl",
+      "bytes": 40107,
+      "sha256": "0f8a1d5d2c92b452298dfe79575d596b52e5c210dc271f9fc5697aa4ed37b669"
+    },
+    {
+      "ordinal": 228,
+      "logical_role": "trio_1/WRITES_0.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 229,
+      "logical_role": "trio_1/WRITES_1.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 230,
+      "logical_role": "trio_1/WRITES_2.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 231,
+      "logical_role": "trio_1/worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "ordinal": 232,
+      "logical_role": "trio_2/CAPTURE_0_FIELDS.json",
+      "bytes": 69380,
+      "sha256": "0968b6b1880e6332048516380cdc9d3c884efc4d933aab6377250bb94575321e"
+    },
+    {
+      "ordinal": 233,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 234,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 235,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 236,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 237,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 238,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 239,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 240,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 241,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 242,
+      "logical_role": "trio_2/CAPTURE_0_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 243,
+      "logical_role": "trio_2/CAPTURE_0_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 244,
+      "logical_role": "trio_2/CAPTURE_0_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 245,
+      "logical_role": "trio_2/CAPTURE_0_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 246,
+      "logical_role": "trio_2/CAPTURE_0_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 247,
+      "logical_role": "trio_2/CAPTURE_0_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 248,
+      "logical_role": "trio_2/CAPTURE_0_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 249,
+      "logical_role": "trio_2/CAPTURE_0_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 250,
+      "logical_role": "trio_2/CAPTURE_0_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 251,
+      "logical_role": "trio_2/CAPTURE_0_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 252,
+      "logical_role": "trio_2/CAPTURE_0_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 253,
+      "logical_role": "trio_2/CAPTURE_2_FIELDS.json",
+      "bytes": 69380,
+      "sha256": "f529fddb1b8039d42300c197502203eca1ac1fec8a171adce75f2e1a9689de79"
+    },
+    {
+      "ordinal": 254,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 255,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 256,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 257,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 258,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 259,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 260,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 261,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 262,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 263,
+      "logical_role": "trio_2/CAPTURE_2_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 264,
+      "logical_role": "trio_2/CAPTURE_2_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 265,
+      "logical_role": "trio_2/CAPTURE_2_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 266,
+      "logical_role": "trio_2/CAPTURE_2_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 267,
+      "logical_role": "trio_2/CAPTURE_2_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 268,
+      "logical_role": "trio_2/CAPTURE_2_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 269,
+      "logical_role": "trio_2/CAPTURE_2_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 270,
+      "logical_role": "trio_2/CAPTURE_2_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 271,
+      "logical_role": "trio_2/CAPTURE_2_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 272,
+      "logical_role": "trio_2/CAPTURE_2_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 273,
+      "logical_role": "trio_2/CAPTURE_2_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 274,
+      "logical_role": "trio_2/CAPTURE_REPORT_0.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "ordinal": 275,
+      "logical_role": "trio_2/CAPTURE_REPORT_2.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "ordinal": 276,
+      "logical_role": "trio_2/IDENTITY.json",
+      "bytes": 121,
+      "sha256": "75c4cdea1d261cb22b0afe627f873162520ba7bf140c08bddb79366b86d76d12"
+    },
+    {
+      "ordinal": 277,
+      "logical_role": "trio_2/MAPS_AFTER_CDLL.txt",
+      "bytes": 6997,
+      "sha256": "69ce0d7ae4201a6436e39710f05ab4b4af6669938eb4019a874b664d2326b070"
+    },
+    {
+      "ordinal": 278,
+      "logical_role": "trio_2/OUTPUT_0.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 279,
+      "logical_role": "trio_2/OUTPUT_1.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 280,
+      "logical_role": "trio_2/OUTPUT_2.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 281,
+      "logical_role": "trio_2/PARENT.json",
+      "bytes": 1585,
+      "sha256": "c65658ee0d400d7987f91f6bc16b98f2ba3dd31ed3018b64f2fa98c8e621534b"
+    },
+    {
+      "ordinal": 282,
+      "logical_role": "trio_2/REFERENCE_FIELDS.json",
+      "bytes": 69416,
+      "sha256": "be830b91017bd66559cece191080637efee3754fbbcb02538082bcaab775e563"
+    },
+    {
+      "ordinal": 283,
+      "logical_role": "trio_2/REFERENCE_OUTPUT.u32le",
+      "bytes": 12288,
+      "sha256": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b"
+    },
+    {
+      "ordinal": 284,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_dot_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 285,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_dot_parts.binmeta",
+      "bytes": 768,
+      "sha256": "7659247351a8d0e026dacb6d7bbbbb63ab8f2a67ae8308e9dcee8e4c57345d1b"
+    },
+    {
+      "ordinal": 286,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_normalizer.binmeta",
+      "bytes": 72,
+      "sha256": "c8bed0af5473e956f38c0def7c0b5047ff756a6a7e666f5f3fb956c5c1652b1e"
+    },
+    {
+      "ordinal": 287,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_prob_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 288,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_pv_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 289,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_pv_raw.binmeta",
+      "bytes": 3072,
+      "sha256": "f40ae0b5c3ef9b289d6ae6643c8432e77994ad72118031aa7a28aa1357efd88c"
+    },
+    {
+      "ordinal": 290,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_scores_bf16.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 291,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_softmax_exp.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 292,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 293,
+      "logical_role": "trio_2/REFERENCE_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 48,
+      "sha256": "414c2d04811a3ba925c132871d02e755aee50a01f68b81a98db24dfc7be2b720"
+    },
+    {
+      "ordinal": 294,
+      "logical_role": "trio_2/REFERENCE_SCORES.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 295,
+      "logical_role": "trio_2/REFERENCE_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 296,
+      "logical_role": "trio_2/REFERENCE_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 297,
+      "logical_role": "trio_2/REFERENCE_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 298,
+      "logical_role": "trio_2/REFERENCE_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 299,
+      "logical_role": "trio_2/REFERENCE_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 300,
+      "logical_role": "trio_2/REFERENCE_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 301,
+      "logical_role": "trio_2/REFERENCE_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 302,
+      "logical_role": "trio_2/REFERENCE_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 303,
+      "logical_role": "trio_2/REFERENCE_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 304,
+      "logical_role": "trio_2/REFERENCE_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 305,
+      "logical_role": "trio_2/RESULT.json",
+      "bytes": 58110,
+      "sha256": "1af6947e2f8005a20bdba69427e714c7cb4e3188726d3c5f06c6444f91cf2a2d"
+    },
+    {
+      "ordinal": 306,
+      "logical_role": "trio_2/RUNTIME_AFTER_NATIVE_LOAD/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 6997,
+      "sha256": "3b4aadb72743962a71b0fcdf966de615c4db67d74cf67de9e50e0d9c77ff7651"
+    },
+    {
+      "ordinal": 307,
+      "logical_role": "trio_2/RUNTIME_AFTER_NATIVE_LOAD/MAPS_RAW.txt",
+      "bytes": 6997,
+      "sha256": "3b4aadb72743962a71b0fcdf966de615c4db67d74cf67de9e50e0d9c77ff7651"
+    },
+    {
+      "ordinal": 308,
+      "logical_role": "trio_2/RUNTIME_AFTER_NATIVE_LOAD/MAP_AUDIT.json",
+      "bytes": 16114,
+      "sha256": "93f34ad43cddb8109da3cda51009b1f602c4b45abd5d10dd0cdb27c9e64063fe"
+    },
+    {
+      "ordinal": 309,
+      "logical_role": "trio_2/RUNTIME_AFTER_NATIVE_LOAD/MODULES_RAW.json",
+      "bytes": 33864,
+      "sha256": "e7866cdbf60a3b4afe8f60b83de796368727e27185510bdefc3381a2ed580673"
+    },
+    {
+      "ordinal": 310,
+      "logical_role": "trio_2/RUNTIME_AFTER_NATIVE_LOAD/MODULE_AUDIT.json",
+      "bytes": 164961,
+      "sha256": "0e8928349d0c14746e29848676fa172ba1ef7ddbc120e57c372e9f472d054e45"
+    },
+    {
+      "ordinal": 311,
+      "logical_role": "trio_2/RUNTIME_AFTER_NATIVE_LOAD/SUMMARY.json",
+      "bytes": 96,
+      "sha256": "5124e034723ea7dd17c7f6b34a6aa710663cce7aff2ba6f8167ef404fda32e23"
+    },
+    {
+      "ordinal": 312,
+      "logical_role": "trio_2/RUNTIME_ARM_0_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "8ba6cb3df541550037f71fea6cb7799b767be8ef3fa68d9d2d864bb5332cbad4"
+    },
+    {
+      "ordinal": 313,
+      "logical_role": "trio_2/RUNTIME_ARM_0_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "8ba6cb3df541550037f71fea6cb7799b767be8ef3fa68d9d2d864bb5332cbad4"
+    },
+    {
+      "ordinal": 314,
+      "logical_role": "trio_2/RUNTIME_ARM_0_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 315,
+      "logical_role": "trio_2/RUNTIME_ARM_0_TERMINAL/MODULES_RAW.json",
+      "bytes": 96801,
+      "sha256": "a47e71e7456407c25387227da365571d7ea2a73bcab554fef403f595a685c155"
+    },
+    {
+      "ordinal": 316,
+      "logical_role": "trio_2/RUNTIME_ARM_0_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 525549,
+      "sha256": "de955f4ef0a9fc098f898530db4e19bc80b27dad34ea24152f115d7334f0e8e1"
+    },
+    {
+      "ordinal": 317,
+      "logical_role": "trio_2/RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab"
+    },
+    {
+      "ordinal": 318,
+      "logical_role": "trio_2/RUNTIME_ARM_1_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "98097a3972bfa337dca54f37a420f8d361084357eae4be10151f3522e22e5cd4"
+    },
+    {
+      "ordinal": 319,
+      "logical_role": "trio_2/RUNTIME_ARM_1_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "98097a3972bfa337dca54f37a420f8d361084357eae4be10151f3522e22e5cd4"
+    },
+    {
+      "ordinal": 320,
+      "logical_role": "trio_2/RUNTIME_ARM_1_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 321,
+      "logical_role": "trio_2/RUNTIME_ARM_1_TERMINAL/MODULES_RAW.json",
+      "bytes": 96801,
+      "sha256": "a47e71e7456407c25387227da365571d7ea2a73bcab554fef403f595a685c155"
+    },
+    {
+      "ordinal": 322,
+      "logical_role": "trio_2/RUNTIME_ARM_1_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 525549,
+      "sha256": "f1520a04595e34e12e74c697885c8fd46f81b7c4024a5179d3589e95cd50534e"
+    },
+    {
+      "ordinal": 323,
+      "logical_role": "trio_2/RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48"
+    },
+    {
+      "ordinal": 324,
+      "logical_role": "trio_2/RUNTIME_ARM_2_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "2339e683e3c311dc1a9dd8d2875685627cfa4d66a0745c15523d703281619053"
+    },
+    {
+      "ordinal": 325,
+      "logical_role": "trio_2/RUNTIME_ARM_2_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "2339e683e3c311dc1a9dd8d2875685627cfa4d66a0745c15523d703281619053"
+    },
+    {
+      "ordinal": 326,
+      "logical_role": "trio_2/RUNTIME_ARM_2_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 327,
+      "logical_role": "trio_2/RUNTIME_ARM_2_TERMINAL/MODULES_RAW.json",
+      "bytes": 96801,
+      "sha256": "a47e71e7456407c25387227da365571d7ea2a73bcab554fef403f595a685c155"
+    },
+    {
+      "ordinal": 328,
+      "logical_role": "trio_2/RUNTIME_ARM_2_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 525549,
+      "sha256": "d79a466e65dd470a2890ff087cd9405b393bc153ab0b4a916ff1e1ea42da0064"
+    },
+    {
+      "ordinal": 329,
+      "logical_role": "trio_2/RUNTIME_ARM_2_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "c1115ab69ced9244a0a3b4381a22f7c7379698090cc1f347540cf13347e3c2d2"
+    },
+    {
+      "ordinal": 330,
+      "logical_role": "trio_2/RUNTIME_POSTFLIGHT/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17821,
+      "sha256": "50513a254805035fb1dbaf6aa4a12509acbff31c4390690df3e6778b73c81a6c"
+    },
+    {
+      "ordinal": 331,
+      "logical_role": "trio_2/RUNTIME_POSTFLIGHT/MAPS_RAW.txt",
+      "bytes": 17821,
+      "sha256": "50513a254805035fb1dbaf6aa4a12509acbff31c4390690df3e6778b73c81a6c"
+    },
+    {
+      "ordinal": 332,
+      "logical_role": "trio_2/RUNTIME_POSTFLIGHT/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 333,
+      "logical_role": "trio_2/RUNTIME_POSTFLIGHT/MODULES_RAW.json",
+      "bytes": 103533,
+      "sha256": "918aeb7630a005c9c9a56d7f58313980508c4423da0465769e13d82e2842400a"
+    },
+    {
+      "ordinal": 334,
+      "logical_role": "trio_2/RUNTIME_POSTFLIGHT/MODULE_AUDIT.json",
+      "bytes": 560391,
+      "sha256": "15dea7d8a4274137f503eb024dcae08fc871e091074b3c3953ec65ddb9c14b96"
+    },
+    {
+      "ordinal": 335,
+      "logical_role": "trio_2/RUNTIME_POSTFLIGHT/SUMMARY.json",
+      "bytes": 89,
+      "sha256": "7b67f351afec714a99c2d03f484bc70d35c97143839335f1e6fb21a78f8f5415"
+    },
+    {
+      "ordinal": 336,
+      "logical_role": "trio_2/SCORES_0.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 337,
+      "logical_role": "trio_2/SCORES_1.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 338,
+      "logical_role": "trio_2/SCORES_2.u32le",
+      "bytes": 144,
+      "sha256": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610"
+    },
+    {
+      "ordinal": 339,
+      "logical_role": "trio_2/SERVICE_EVENTS_0.json",
+      "bytes": 210399,
+      "sha256": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+    },
+    {
+      "ordinal": 340,
+      "logical_role": "trio_2/SERVICE_EVENTS_1.json",
+      "bytes": 210711,
+      "sha256": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+    },
+    {
+      "ordinal": 341,
+      "logical_role": "trio_2/SERVICE_EVENTS_2.json",
+      "bytes": 210711,
+      "sha256": "c61917e0c82e1f8903e9a9e20871da34588b1e0d201548fd2c84de240933c97b"
+    },
+    {
+      "ordinal": 342,
+      "logical_role": "trio_2/STAGES.jsonl",
+      "bytes": 40100,
+      "sha256": "74e9a8dafd9157a98739d97a783183ae40781f9fd106e6ca9748e12f30ae3fd4"
+    },
+    {
+      "ordinal": 343,
+      "logical_role": "trio_2/WRITES_0.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 344,
+      "logical_role": "trio_2/WRITES_1.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 345,
+      "logical_role": "trio_2/WRITES_2.json",
+      "bytes": 42208,
+      "sha256": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471"
+    },
+    {
+      "ordinal": 346,
+      "logical_role": "trio_2/worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

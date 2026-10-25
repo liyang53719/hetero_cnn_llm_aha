@@ -1,0 +1,29 @@
+{
+  "status": "PASS_SOURCE_BYTE_ASSEMBLY_AND_PACKAGING_UTILITY_ONLY",
+  "assembled_files": 22,
+  "assembled_bytes": 224447,
+  "original_python_source_files": 21,
+  "new_original_python_files": 6,
+  "existing_public_references": 16,
+  "source_bytes_exact_each_mode": true,
+  "packaging_unique_cases": 10,
+  "packaging_test_executions_normal": 10,
+  "packaging_test_executions_optimized": 10,
+  "target_native_original_mock_reruns": 0,
+  "runtime_source_input_pins_rehashed": 1026,
+  "frozen_members_rehashed": 32,
+  "actual_artifacts_rehashed": 347,
+  "actual_artifact_bytes": 12835774,
+  "checks": 1451,
+  "tests": {
+    "normal": {
+      "bytes": 109,
+      "sha256": "643c7cfc3921e5830e047bed28578bc933677c101c9c5a9f6610b6207052d03c"
+    },
+    "optimized": {
+      "bytes": 109,
+      "sha256": "38eeff1237d74275801617a271eced659e08b1cad8069897d18e659ae40641d8"
+    }
+  },
+  "scope": "New tests exercise packaging utility only with inert source bytes. Original target test sources are not executed. Rehashing retained evidence is not an arithmetic rerun or new numerical proof."
+}

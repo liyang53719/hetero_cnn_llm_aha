@@ -1,0 +1,18 @@
+{
+  "scope": "Two previously reviewed packaging-only utilities copied byte-for-byte for a standalone manifest-relative CLI. No original target runtime source adapted.",
+  "base_commit": "e4e97a4e81b52b751129cde8a3932ee28503354d",
+  "files": [
+    {
+      "path": "candidates/qwen2_attention_stability_diagnostic/assemble_sources.py",
+      "prior_public_path": "candidates/qwen2_attention_identity_diagnostic/assemble_sources.py",
+      "bytes": 2809,
+      "sha256": "56bb3670642e7c7270fcfde0487c2f5889ff6fafd54372f1b1ec56bec3cde0aa"
+    },
+    {
+      "path": "candidates/qwen2_attention_stability_diagnostic/test_assemble_sources.py",
+      "prior_public_path": "candidates/qwen2_attention_identity_diagnostic/test_assemble_sources.py",
+      "bytes": 4043,
+      "sha256": "6d1cc2ad910ba25f1e2df478993ab71e9721d95ab0c1aa0d1cd15442cfb39280"
+    }
+  ]
+}

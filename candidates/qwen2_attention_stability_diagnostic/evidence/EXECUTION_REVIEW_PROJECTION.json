@@ -1,0 +1,216 @@
+{
+  "original": {
+    "bytes": 11293,
+    "sha256": "c3908010a31b2926e9da9d352a328f53d06faceddac36443a9f779b192076778"
+  },
+  "status": "PASS_READ_ONLY_ACTUAL_THREE_ROTATED_M2_CLOSURE_LIMITED",
+  "checks_passed": 64530,
+  "data_and_source_checks": 64472,
+  "supervisor_receipt_checks": 58,
+  "errors": [],
+  "config_sha256": "e853890d4606bb68328dd055bc89b9036d59f3f613a4a72c1c066be53a3e1fde",
+  "freeze_sha256": "0b076c6e36e8fddeb943a5f0d03b861ead195ce34e0af8f4ee37d9d6579c123f",
+  "static_review_sha256": "cf5d439755677299acaeec1c34f2960d37ff68a113191e72fc7ba44824b31f60",
+  "parent_sha256": "694df83f6443e5ca4b401175cc6a890893907a76c1c240fb51f023740445592a",
+  "experiment_result_sha256": "89162e7032c8c857483804c97b0f65870b682d58829c49dfed91c6101273ea47",
+  "source_runtime_input_pins_rehashed": 1026,
+  "actual_orders": [
+    [
+      "off",
+      "original",
+      "selective_identity_r1"
+    ],
+    [
+      "original",
+      "selective_identity_r1",
+      "off"
+    ],
+    [
+      "selective_identity_r1",
+      "off",
+      "original"
+    ]
+  ],
+  "evidence": {
+    "nine_arms_each_output_words": 3072,
+    "nine_arms_each_causal_scores": 36,
+    "nine_arms_each_complete_output_packets": 192,
+    "nine_arms_each_service_events": 1515,
+    "nine_arms_each_native_tickets": 216,
+    "nine_arms_native_fmas_each": 933888,
+    "nine_arms_owner_clock_each": 5042,
+    "all_nine_outputs_scores_writes_control_counters_equal": true,
+    "all_nine_complete_service_lifecycles_equal_after_ticket_bijection_only": true,
+    "raw_traces_retained_and_physical_order_preserved": true,
+    "all_six_observed_arms_ten_fields_bytes_shape_presence_equal_to_own_reference": true,
+    "all_six_observed_field_frequencies_equal": true,
+    "all_three_references_bytes_shape_presence_and_frequency_equal": true,
+    "normalizer_frequency_distinction": "DUT original/identity normalizer observed once; independent reference captures 8/16 identical repetitions. Values/presence/shape equal; reference frequency intentionally differs.",
+    "fifteen_runtime_snapshots_raw_and_audited_module_mapping_coverage_checked": true,
+    "selective_slots_and_full_source_module_bindings_checked_each_process": true,
+    "reference_starts_only_after_each_process_three_actual_terminals": true,
+    "prior_identity_R4_and_M128_CPU_failure_evidence_unchanged": true
+  },
+  "clean_owner_interval_samples": [
+    {
+      "order_index": 0,
+      "execution_order": [
+        "off",
+        "original",
+        "selective_identity_r1"
+      ],
+      "cpu_seconds": {
+        "off": 0.159542826,
+        "original": 0.646809977,
+        "selective_identity_r1": 0.407252657
+      },
+      "wall_seconds": {
+        "off": 0.157718133,
+        "original": 0.646280125,
+        "selective_identity_r1": 0.408287942
+      },
+      "identity_over_original_cpu_ratio": 0.6296326146496655,
+      "paired_reduction_percent": 37.03673853503345
+    },
+    {
+      "order_index": 1,
+      "execution_order": [
+        "original",
+        "selective_identity_r1",
+        "off"
+      ],
+      "cpu_seconds": {
+        "original": 0.602959193,
+        "selective_identity_r1": 0.347227548,
+        "off": 0.155633034
+      },
+      "wall_seconds": {
+        "original": 0.604875619,
+        "selective_identity_r1": 0.346638675,
+        "off": 0.157243284
+      },
+      "identity_over_original_cpu_ratio": 0.5758723841200312,
+      "paired_reduction_percent": 42.41276158799688
+    },
+    {
+      "order_index": 2,
+      "execution_order": [
+        "selective_identity_r1",
+        "off",
+        "original"
+      ],
+      "cpu_seconds": {
+        "selective_identity_r1": 0.39869788,
+        "off": 0.183638306,
+        "original": 0.742407933
+      },
+      "wall_seconds": {
+        "selective_identity_r1": 0.397993559,
+        "off": 0.183462653,
+        "original": 0.741816316
+      },
+      "identity_over_original_cpu_ratio": 0.5370334317265438,
+      "paired_reduction_percent": 46.296656827345615
+    }
+  ],
+  "observed_all_three_identity_cpu_lower": true,
+  "paired_reduction_percent_summary": {
+    "minimum": 37.03673853503345,
+    "median": 42.41276158799688,
+    "maximum": 46.296656827345615
+  },
+  "interpretation": "Three fresh-process cyclic-order M2 trios show lower combined selective-LINE-plus-identity-cache candidate CPU in all three same-process pairs versus original. Each variant occupies each ordinal position once. This is a bounded small-sample diagnostic, not performance adoption or statistical/causal proof.",
+  "performance_adopted": false,
+  "hardware_claim": false,
+  "new_execution_by_reviewer": false,
+  "limitations": [
+    "No worker/native rerun, imports, or independent arithmetic recomputation by either reviewer. Persisted byte/hash/event/reference/source review only; Python module compilation was identity-only, never execution.",
+    "Three cyclic rotations are not all six permutations, randomized trials, statistical significance, broad workload validation, or full carryover balancing. Ratios describe only these three paired intervals.",
+    "Comparator is original observer; candidate combines selective LINE filtering with identity lookup. This does not isolate cache-only speedup or quantify time spent hashing. Prior R4 and prior identity single-trio runs are separate experiments, not same-run denominators.",
+    "Independent reference uses the unchanged AST recipe with shared exact RNE primitives, not a complete official Transformers forward. Causal observed cells only; padding/sentinels are not measurements.",
+    "Final RSS 16,633,856 bytes and six before/after RSS records are supervisor-only point samples. No combined-live RSS history or peak exists; absence of sampled memory rejection is not an independently verified peak bound.",
+    "No parent-launch argv/approval hash or raw wait/reap/syscall trace was persisted. Exact supplied root GO/config/review/output coherence verified; gate execution and cleanup enforcement rely on source-bound supervisor outcomes. Parent and three children EXITED/0, verified-group cleanup, and no group remaining are receipt evidence, not a complete OS event history.",
+    "No larger M, full-block, RTL, hardware cycles/utilization, 80/90 percent utilization, M128 acceptance, or adoption follows. Prior M128 CPU-limit FAIL remains unchanged.",
+    "External reviewer artifact manifest is newly appended evidence, not a retroactive run-native standalone final seal."
+  ],
+  "resources": {
+    "authorized_limits": {
+      "cpu_seconds": 60,
+      "address_space_bytes": 1073741824,
+      "wall_seconds": 90,
+      "cpus": 1,
+      "child_cpu_seconds": 18,
+      "child_wall_seconds": 27,
+      "cleanup_cpu_reserve": 2,
+      "cleanup_wall_reserve": 3,
+      "fresh_processes": 3
+    },
+    "policy": "One serial child plus lightweight supervisor; 1 GiB RLIMIT_AS per process and sampled combined RSS rejection at 1 GiB, not aggregate-AS hard cap or cgroup containment.",
+    "recorded_aggregate_cpu_seconds": 18.79356525,
+    "recorded_aggregate_wall_seconds": 19.15878644003533,
+    "memory": {
+      "final_rss_mib": 15.86328125,
+      "final_sample_scope": "supervisor only after all children reaped; NOT peak",
+      "stored_rss_samples": 7,
+      "stored_combined_live_rss_samples": 0,
+      "stored_peak_rss": false,
+      "interpretation": "All seven persisted RSS values are supervisor-only point samples. Pinned source checks combined live RSS but discards those samples; no sampled rejection is recorded. Peak or maximum combined RSS cannot be independently reconstructed from these receipts.",
+      "telemetry_files": [
+        "PARENT.json",
+        "trio_0/PARENT.json",
+        "trio_1/PARENT.json",
+        "trio_2/PARENT.json"
+      ],
+      "files_scanned": 347
+    },
+    "runtime_limits_attestation": "Limits and one-CPU selection verified in pinned launcher source and receipt configuration. No separate live affinity/RLIMIT snapshot, complete CPU schedule, or memory high-water attestation is stored.",
+    "round_receipts": [
+      {
+        "order_index": 0,
+        "returncode": 0,
+        "group_remaining": false,
+        "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+        "recorded_wall_seconds": 6.430611922987737,
+        "aggregate_cpu_delta_seconds": 6.303200467,
+        "cpu_delta_interpretation": "includes supervisor CPU; not isolated worker measurement",
+        "rss_before_parent_only_bytes": 14143488,
+        "rss_after_parent_only_bytes": 14274560
+      },
+      {
+        "order_index": 1,
+        "returncode": 0,
+        "group_remaining": false,
+        "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+        "recorded_wall_seconds": 6.029909139033407,
+        "aggregate_cpu_delta_seconds": 5.95558871,
+        "cpu_delta_interpretation": "includes supervisor CPU; not isolated worker measurement",
+        "rss_before_parent_only_bytes": 14274560,
+        "rss_after_parent_only_bytes": 14274560
+      },
+      {
+        "order_index": 2,
+        "returncode": 0,
+        "group_remaining": false,
+        "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+        "recorded_wall_seconds": 6.628392829967197,
+        "aggregate_cpu_delta_seconds": 6.436922088999999,
+        "cpu_delta_interpretation": "includes supervisor CPU; not isolated worker measurement",
+        "rss_before_parent_only_bytes": 14274560,
+        "rss_after_parent_only_bytes": 14274560
+      }
+    ]
+  },
+  "data_review": {
+    "sha256": "4e9ea6c92cd3d44597f3fc9d00fd05a9f2f386c7c8a6860716b73eed8e16bddf"
+  },
+  "supervisor_review": {
+    "sha256": "017e098d0417009684a3003ef32a1837c5aa919502a0d164d1a5cce27ea15ae8"
+  },
+  "artifact_manifest": {
+    "sha256": "c363da9295d036b00cc02b8cff04b1a3a207e00c0a6fca72853eb3ddc6f772bb",
+    "files": 347,
+    "bytes": 12835774,
+    "all_unchanged_during_read_only_review": true
+  },
+  "projection": "Private actual/reviewer physical directories and root-approval identity omitted; per-round process identities, parent PIDs and absolute monotonic timestamps omitted. All audit outcomes, relative costs, counts, resource/telemetry limitations preserved."
+}

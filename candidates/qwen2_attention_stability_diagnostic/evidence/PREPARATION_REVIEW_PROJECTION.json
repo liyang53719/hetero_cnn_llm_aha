@@ -1,0 +1,138 @@
+{
+  "original": {
+    "bytes": 6147,
+    "sha256": "cf5d439755677299acaeec1c34f2960d37ff68a113191e72fc7ba44824b31f60"
+  },
+  "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+  "config_sha256": "e853890d4606bb68328dd055bc89b9036d59f3f613a4a72c1c066be53a3e1fde",
+  "freeze_sha256": "0b076c6e36e8fddeb943a5f0d03b861ead195ce34e0af8f4ee37d9d6579c123f",
+  "limits": {
+    "cpu_seconds": 60,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 90,
+    "cpus": 1,
+    "child_cpu_seconds": 18,
+    "child_wall_seconds": 27,
+    "cleanup_cpu_reserve": 2,
+    "cleanup_wall_reserve": 3,
+    "fresh_processes": 3
+  },
+  "executable_sources": {
+    "launch.py": "e69b58057f03154b36c985a369ffeef0d6f64325304d1b51305b726da2b04b17",
+    "runtime_observer.py": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+    "worker.py": "1554af558f1af42c2909e4f3030cbe9f6488d7bf074582beb382fd7441bd1900",
+    "admission.py": "496db1ca11559fcb5b519ff59c39a5dc92db19d60f5c5832b03a03d620dc1941",
+    "run_cold.py": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870",
+    "harness.py": "7d8b06655615cfc397fc4b369e5523ac8e9164cec07d2f185e8e80c0163e4b5b",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+    "cold_import.py": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+    "reference_capture.py": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+    "selective_binding.py": "88671278b37df02d7afc5a862801305bdd531b295d60cdb35b486dd01f7beb23",
+    "stage_clock.py": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065",
+    "artifacts.py": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+    "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+    "stability.py": "6c37924ccd4cba725364bf46b8e8bd27bdbe2b556ce0b52d32ad4f517016a163"
+  },
+  "resolved_findings": [
+    "exited_leader_owned_group_cleanup",
+    "all_task_child_accounting",
+    "fallback_guards_even_when_owned_cleanup_raises"
+  ],
+  "blockers": [],
+  "scope": {
+    "source_review": true,
+    "pure_stdlib_mock_review": true,
+    "native_executed_by_reviewer": false,
+    "worker_executed_by_reviewer": false,
+    "launcher_main_executed_by_reviewer": false,
+    "actual_execution_authorized": false
+  },
+  "memory_contract": "RLIMIT_AS 1GiB per process, one serial worker plus lightweight parent; sampled combined RSS 1GiB, NOT hard aggregate address-space/cgroup cap",
+  "required_orders": [
+    [
+      "off",
+      "original",
+      "selective_identity_r1"
+    ],
+    [
+      "original",
+      "selective_identity_r1",
+      "off"
+    ],
+    [
+      "selective_identity_r1",
+      "off",
+      "original"
+    ]
+  ],
+  "limitations": [
+    "Fresh root GO and current CI/concurrency checks are still required; review is not execution authorization.",
+    "Three cyclic position-balanced samples are not randomized or fully carryover-balanced, do not prove stable speedup, and do not authorize adoption.",
+    "Original-to-identity compares combined selective-LINE plus integer-key cache, not isolated hashing cost.",
+    "No M128 restart, extrapolation, hardware cycles or utilization inference.",
+    "Actual outputs require separate persisted-artifact/runtime/reference/cleanup audit.",
+    "Memory contract is per-process AS plus sampled combined RSS, not aggregate hard AS."
+  ],
+  "independent_checks": {
+    "static_checks": 1654,
+    "file_pins": 1026,
+    "frozen_members": 32,
+    "author_focused_tests": 52,
+    "independent_admission_tests": 14,
+    "independent_supervisor_mock_tests": 12,
+    "normal_and_optimized": true,
+    "unchanged_full_suites_reused_not_rerun": true,
+    "checks_receipt": {
+      "bytes": 261563,
+      "sha256": "a4426336e5dd855f01ae34bc016e805e9b0ba1810465b7c30dea08760f883010"
+    },
+    "admission_normal_log": {
+      "bytes": 741,
+      "sha256": "95de6326120b6b76c71b8d9a403f1b33be351ab88c57a8403e7335bc812c7600"
+    },
+    "admission_optimized_log": {
+      "bytes": 741,
+      "sha256": "9743fcd30fd1a5f2430f1b0f4880f68a6242259f3c0106d36e4e40d05526a022"
+    },
+    "supervisor_normal_log": {
+      "bytes": 846,
+      "sha256": "bb41b4516d418e2c225aa81af3abe357c49f38557fa13b1302c349fffe37a970"
+    },
+    "supervisor_optimized_log": {
+      "bytes": 846,
+      "sha256": "bb41b4516d418e2c225aa81af3abe357c49f38557fa13b1302c349fffe37a970"
+    },
+    "supervisor_review": {
+      "bytes": 885,
+      "sha256": "a817ca9464f3d193a26b8abfd07e6fa2dab062342a962ed87cf4aeb42696cb6c"
+    }
+  },
+  "reused_executable_sources": [
+    {
+      "ordinal": 0,
+      "logical_role": "identity-observer:monitor.py",
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "identity-observer:capture.py",
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "identity-observer:service_trace.py",
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "identity-observer:bridge.py",
+      "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "source:runtime_binding.py",
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    }
+  ],
+  "projection": "Physical reused-source keys converted to logical roles; private supervisor-review locator, approval action and reviewer script/test/notes identities omitted. Historical pre-execution scope retained."
+}

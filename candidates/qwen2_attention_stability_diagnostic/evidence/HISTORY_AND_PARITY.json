@@ -1,0 +1,107 @@
+{
+  "static_parity": {
+    "original": {
+      "bytes": 636,
+      "sha256": "eb22010dff2ee7a30c4db688701ee0225c73932169e41a63d2939bc8d1e1c6a6"
+    },
+    "content": {
+      "status": "PASS_1026_PINS_AND_UNCHANGED_REAL_DRIVER_DEPENDENCIES",
+      "config": {
+        "bytes": 284591,
+        "sha256": "e853890d4606bb68328dd055bc89b9036d59f3f613a4a72c1c066be53a3e1fde"
+      },
+      "files": 1026,
+      "unchanged_runtime_sources": [
+        "runtime_observer.py",
+        "run_cold.py",
+        "harness.py",
+        "runtime_closure.py",
+        "cold_import.py",
+        "reference_capture.py",
+        "selective_binding.py",
+        "stage_clock.py",
+        "artifacts.py",
+        "module_inventory.py"
+      ],
+      "source_elf_input_services_reference_unchanged": true,
+      "memory_policy": "RLIMIT_AS1GiB per process; sampled combinedRSS1GiB; NOT hard aggregateAS"
+    }
+  },
+  "preserved_r1": {
+    "original": {
+      "bytes": 377,
+      "sha256": "8ba84056acd83da3e3581af7658efacedb58d8bc7b99ca9acae4563bda47dacb"
+    },
+    "freeze": {
+      "bytes": 5226,
+      "sha256": "b548730685c95d203347e048912cb291e43517001873cc7a3c2b1fed9a8ed29f"
+    },
+    "all_members_unchanged": true,
+    "reason": "reviewed signal-fallback exception edge fixed only in new r2",
+    "projection": "Private freeze physical locator omitted."
+  },
+  "reused_frozen_evidence": {
+    "original": {
+      "bytes": 1827,
+      "sha256": "0eb89b1ed5461db2ad5e5c1b4315c00a47bb0c874cccde64b53c857a4cc58d50"
+    },
+    "files": [
+      {
+        "ordinal": 0,
+        "logical_role": "prior-identity-freeze",
+        "bytes": 5629,
+        "sha256": "2cfac8f619a0ed17a96431604026bdf06a15b3f7496de32b9a805eb45cbdb9c3"
+      },
+      {
+        "ordinal": 1,
+        "logical_role": "prior-identity-mock-receipt",
+        "bytes": 1701,
+        "sha256": "606f9c862515d0b69578b4bc9cae9c6382e765044be6da39656370c33f75a22f"
+      },
+      {
+        "ordinal": 2,
+        "logical_role": "prior-identity-result",
+        "bytes": 57114,
+        "sha256": "df4698289b4912890d579de8cc5fb8fc277c45b31e75851a53439980b67f7455"
+      },
+      {
+        "ordinal": 3,
+        "logical_role": "prior-identity-parent",
+        "bytes": 744,
+        "sha256": "2bbfc7a86913e4e9e9390ec6cb8767cb7c9efb8e4d0f8863374aac08f87fd8c2"
+      },
+      {
+        "ordinal": 4,
+        "logical_role": "identity-candidate-freeze",
+        "bytes": 2129,
+        "sha256": "45407b007aa019bddb3360481e89bce3df82fb9d245d706eeea52ba82d552987"
+      },
+      {
+        "ordinal": 5,
+        "logical_role": "identity-candidate-review",
+        "bytes": 2144,
+        "sha256": "9ef07c2d7dda599d0c3f3aa1a275c8fa14c613ff7aaf366c771f0c5321037833"
+      },
+      {
+        "ordinal": 6,
+        "logical_role": "identity-successor-review",
+        "bytes": 5101,
+        "sha256": "f3f96622fe5c7a9194ed03bd490e0daa34e86d31b7b47b51920a8430c087f925"
+      },
+      {
+        "ordinal": 7,
+        "logical_role": "prior-identity-actual-audit",
+        "bytes": 6131,
+        "sha256": "d6716929fea40684cfe079cf666562305c2ea35f89625803c4899085717591e7"
+      }
+    ]
+  },
+  "prior_identity_actual_commit": "e4e97a4e81b52b751129cde8a3932ee28503354d",
+  "prior_selective_actual_commit": "2a898bb742d0b71beeae9115933054e27952a5ef",
+  "prior_four_arm_actual_commit": "bafb12b4cc0a14ad233602004e27adf65ad820cc",
+  "fixture_negative_evidence": "candidates/qwen2_attention_selective_diagnostic/evidence/FIXTURE_NEGATIVE_TIMING.json",
+  "r1_blocked_evidence": "candidates/qwen2_attention_selective_diagnostic/evidence/HISTORY.json",
+  "prior_actual_results_unchanged": true,
+  "full_m128_cpu_fail_unchanged": true,
+  "no_adoption": true
+}

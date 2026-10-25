@@ -1,0 +1,216 @@
+{
+  "original": {
+    "bytes": 7686,
+    "sha256": "89162e7032c8c857483804c97b0f65870b682d58829c49dfed91c6101273ea47"
+  },
+  "status": "PASS_THREE_FRESH_ROTATED_M2_CONTROL_REFERENCE_ONLY",
+  "spread": {
+    "off": {
+      "cpu_ns": {
+        "samples": [
+          159542826,
+          155633034,
+          183638306
+        ],
+        "minimum": 155633034,
+        "maximum": 183638306,
+        "median": 159542826
+      },
+      "wall_ns": {
+        "samples": [
+          157718133,
+          157243284,
+          183462653
+        ],
+        "minimum": 157243284,
+        "maximum": 183462653,
+        "median": 157718133
+      }
+    },
+    "original": {
+      "cpu_ns": {
+        "samples": [
+          646809977,
+          602959193,
+          742407933
+        ],
+        "minimum": 602959193,
+        "maximum": 742407933,
+        "median": 646809977
+      },
+      "wall_ns": {
+        "samples": [
+          646280125,
+          604875619,
+          741816316
+        ],
+        "minimum": 604875619,
+        "maximum": 741816316,
+        "median": 646280125
+      }
+    },
+    "selective_identity_r1": {
+      "cpu_ns": {
+        "samples": [
+          407252657,
+          347227548,
+          398697880
+        ],
+        "minimum": 347227548,
+        "maximum": 407252657,
+        "median": 398697880
+      },
+      "wall_ns": {
+        "samples": [
+          408287942,
+          346638675,
+          397993559
+        ],
+        "minimum": 346638675,
+        "maximum": 408287942,
+        "median": 397993559
+      }
+    }
+  },
+  "identity_cpu_lower_in_all_three": true,
+  "raw_traces_rewritten": false,
+  "only_comparison_ticket_normalization": true,
+  "performance_adopted": false,
+  "small_sample_not_statistical_proof": true,
+  "hardware_claim": false,
+  "rounds": [
+    {
+      "order_index": 0,
+      "execution_order": [
+        "off",
+        "original",
+        "selective_identity_r1"
+      ],
+      "result_sha256": "2f02a2570728c903be8b3747f73519f9b518127053ccc12e611485c6c02b87ba",
+      "artifact_hashes": {
+        "off": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+        },
+        "original": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+        },
+        "selective_identity_r1": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "c61917e0c82e1f8903e9a9e20871da34588b1e0d201548fd2c84de240933c97b"
+        }
+      },
+      "costs": {
+        "off": {
+          "cpu_ns": 159542826,
+          "wall_ns": 157718133
+        },
+        "original": {
+          "cpu_ns": 646809977,
+          "wall_ns": 646280125
+        },
+        "selective_identity_r1": {
+          "cpu_ns": 407252657,
+          "wall_ns": 408287942
+        }
+      },
+      "identity_over_original_cpu_ratio": 0.6296326146496655
+    },
+    {
+      "order_index": 1,
+      "execution_order": [
+        "original",
+        "selective_identity_r1",
+        "off"
+      ],
+      "result_sha256": "8137ec5444d246a9c74fade1521dbb01b3bf89d65b948fc424ca0b0e1d189631",
+      "artifact_hashes": {
+        "original": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+        },
+        "selective_identity_r1": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+        },
+        "off": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "c61917e0c82e1f8903e9a9e20871da34588b1e0d201548fd2c84de240933c97b"
+        }
+      },
+      "costs": {
+        "original": {
+          "cpu_ns": 602959193,
+          "wall_ns": 604875619
+        },
+        "selective_identity_r1": {
+          "cpu_ns": 347227548,
+          "wall_ns": 346638675
+        },
+        "off": {
+          "cpu_ns": 155633034,
+          "wall_ns": 157243284
+        }
+      },
+      "identity_over_original_cpu_ratio": 0.5758723841200312
+    },
+    {
+      "order_index": 2,
+      "execution_order": [
+        "selective_identity_r1",
+        "off",
+        "original"
+      ],
+      "result_sha256": "1af6947e2f8005a20bdba69427e714c7cb4e3188726d3c5f06c6444f91cf2a2d",
+      "artifact_hashes": {
+        "selective_identity_r1": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+        },
+        "off": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+        },
+        "original": {
+          "output": "b31139f9b1584b52c51508e4ec452b68da1f6f452045a53e3db003b3e380f23b",
+          "scores": "411be984cabc6824bbf479e5d36d9e91acd9e8499484fd4f4e99120ce33d5610",
+          "writes": "9f8e205f115631b6fe0b386d9b780c48993332ccb9b44ab238ebcb70b2beb471",
+          "service_events": "c61917e0c82e1f8903e9a9e20871da34588b1e0d201548fd2c84de240933c97b"
+        }
+      },
+      "costs": {
+        "selective_identity_r1": {
+          "cpu_ns": 398697880,
+          "wall_ns": 397993559
+        },
+        "off": {
+          "cpu_ns": 183638306,
+          "wall_ns": 183462653
+        },
+        "original": {
+          "cpu_ns": 742407933,
+          "wall_ns": 741816316
+        }
+      },
+      "identity_over_original_cpu_ratio": 0.5370334317265438
+    }
+  ],
+  "projection": "Only per-round private process identities omitted; physical execution orders, cost samples and spread retained."
+}

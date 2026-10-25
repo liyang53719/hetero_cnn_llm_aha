@@ -1,0 +1,197 @@
+{
+  "source_files": [
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/launch.py",
+      "repo_path": "candidates/qwen2_attention_stability_diagnostic/delta/overlay/candidates/qwen2_attention_selective_compare/launch.py",
+      "bytes": 13968,
+      "sha256": "e69b58057f03154b36c985a369ffeef0d6f64325304d1b51305b726da2b04b17",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/runtime_observer.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/runtime_observer.py",
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/worker.py",
+      "repo_path": "candidates/qwen2_attention_stability_diagnostic/delta/overlay/candidates/qwen2_attention_selective_compare/worker.py",
+      "bytes": 18115,
+      "sha256": "1554af558f1af42c2909e4f3030cbe9f6488d7bf074582beb382fd7441bd1900",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/admission.py",
+      "repo_path": "candidates/qwen2_attention_stability_diagnostic/delta/overlay/candidates/qwen2_attention_selective_compare/admission.py",
+      "bytes": 2083,
+      "sha256": "496db1ca11559fcb5b519ff59c39a5dc92db19d60f5c5832b03a03d620dc1941",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/run_cold.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/run_cold.py",
+      "bytes": 4218,
+      "sha256": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/harness.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/harness.py",
+      "bytes": 12311,
+      "sha256": "7d8b06655615cfc397fc4b369e5523ac8e9164cec07d2f185e8e80c0163e4b5b",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/runtime_closure.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/runtime_closure.py",
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/cold_import.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/cold_import.py",
+      "bytes": 30697,
+      "sha256": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/reference_capture.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reference_capture.py",
+      "bytes": 18962,
+      "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/selective_binding.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/selective_binding.py",
+      "bytes": 6485,
+      "sha256": "88671278b37df02d7afc5a862801305bdd531b295d60cdb35b486dd01f7beb23",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/stage_clock.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/stage_clock.py",
+      "bytes": 493,
+      "sha256": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/artifacts.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/artifacts.py",
+      "bytes": 1038,
+      "sha256": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/module_inventory.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/module_inventory.py",
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+      "adapted": false
+    },
+    {
+      "logical_role": "wrapper-executable",
+      "assembly_target": "overlay/candidates/qwen2_attention_selective_compare/stability.py",
+      "repo_path": "candidates/qwen2_attention_stability_diagnostic/delta/overlay/candidates/qwen2_attention_selective_compare/stability.py",
+      "bytes": 6089,
+      "sha256": "6c37924ccd4cba725364bf46b8e8bd27bdbe2b556ce0b52d32ad4f517016a163",
+      "adapted": false
+    },
+    {
+      "logical_role": "identity-observer:monitor.py",
+      "assembly_target": "postimage/monitor.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/postimage/monitor.py",
+      "bytes": 14705,
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84",
+      "adapted": false
+    },
+    {
+      "logical_role": "identity-observer:capture.py",
+      "assembly_target": "postimage/capture.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/capture.py",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+      "adapted": false
+    },
+    {
+      "logical_role": "identity-observer:service_trace.py",
+      "assembly_target": "postimage/service_trace.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/service_trace.py",
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba",
+      "adapted": false
+    },
+    {
+      "logical_role": "identity-observer:bridge.py",
+      "assembly_target": "postimage/bridge.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/bridge.py",
+      "bytes": 8627,
+      "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652",
+      "adapted": false
+    },
+    {
+      "logical_role": "source:runtime_binding.py",
+      "assembly_target": "helper/runtime_binding.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/source_gate/runtime_binding.py",
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100",
+      "adapted": false
+    },
+    {
+      "logical_role": "historical-focused-stdlib-test-source",
+      "assembly_target": "test_stability.py",
+      "repo_path": "candidates/qwen2_attention_stability_diagnostic/delta/test_stability.py",
+      "bytes": 13000,
+      "sha256": "e35572067db829aeeb064be983e3fdf769e94e90c581ed6e923405362186db9c",
+      "adapted": false
+    },
+    {
+      "logical_role": "historical-focused-stdlib-test-source",
+      "assembly_target": "run_tests.py",
+      "repo_path": "candidates/qwen2_attention_stability_diagnostic/delta/run_tests.py",
+      "bytes": 1735,
+      "sha256": "65323bc48b5b220a0a17fd8b80f2e796864ebcff217587948ff7b8b5f72f215f",
+      "adapted": false
+    }
+  ],
+  "new_original_python_files": 6,
+  "unchanged_public_python_references": 15,
+  "unchanged_public_metadata_references": 1,
+  "original_executable_manifest": {
+    "bytes": 1790,
+    "sha256": "4f4843c318dc350fee1349768282ca3e670c31b6a8e24af95d65eed8308c5d2a"
+  },
+  "original_reused_executable_manifest": {
+    "bytes": 1228,
+    "sha256": "d354009d164600dc752bfc8b2036abbaf2c2a8f1c748198030ebc00b6d02a97f"
+  },
+  "original_config": {
+    "bytes": 284591,
+    "sha256": "e853890d4606bb68328dd055bc89b9036d59f3f613a4a72c1c066be53a3e1fde"
+  },
+  "original_freeze": {
+    "bytes": 5363,
+    "sha256": "0b076c6e36e8fddeb943a5f0d03b861ead195ce34e0af8f4ee37d9d6579c123f"
+  },
+  "original_test_manifest": {
+    "bytes": 477,
+    "sha256": "2852fbc6823dd1b19007d6caba502375942da718c72618957d3a64be74905ba6"
+  },
+  "source_adaptation": false,
+  "source_assembly_only_not_runtime_reproduction": true
+}

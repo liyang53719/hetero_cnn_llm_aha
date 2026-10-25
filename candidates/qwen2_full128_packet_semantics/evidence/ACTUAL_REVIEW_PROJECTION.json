@@ -1,0 +1,134 @@
+{
+  "original": {
+    "bytes": 23048,
+    "sha256": "74e961566cbc5d93b332dc9532b54cf007d414e492c0e1ed8941557d00c0bb9f"
+  },
+  "RTL_pass": false,
+  "actual_artifacts": [
+    {
+      "bytes": 0,
+      "path": "packet-actual:stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1551,
+      "path": "packet-actual:ROOT_APPROVAL.json",
+      "sha256": "18dc35a875a4fa8b83964781250ba8bc66745f6e699ed7c6adb30cb7ad70f18e"
+    },
+    {
+      "bytes": 1390,
+      "path": "packet-actual:REPORT.json",
+      "sha256": "9049533161ec985d26a1947a09e8227a0546e450e1e8338d0c9b19f6045ee3bf"
+    },
+    {
+      "bytes": 0,
+      "path": "packet-actual:stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1304,
+      "path": "packet-actual:RECEIPT.json",
+      "sha256": "223f51c5f8fcf2d63c555694235495d1649a76735e2b9d1a7139015a0c3e4f4a"
+    }
+  ],
+  "actual_full_public21_software_terminal_not_downgraded": true,
+  "checks": 664,
+  "complete_result_tile_verified": false,
+  "contextual_metadata_pins": [
+    {
+      "bytes": 4674,
+      "path": "original-M128-archive:actual_terminal/MANIFEST.json",
+      "sha256": "4d8411fb514c925be1cad28cd91167596e7b6febe13d0cc149f7878e929346f4"
+    },
+    {
+      "bytes": 639,
+      "path": "original-M128-archive:SERVICE_PROTOCOL.json",
+      "sha256": "d5d6888bbede481ee03710e1db3724e2e8a520ea864c07494d1445c48b7f367e"
+    },
+    {
+      "bytes": 13202,
+      "path": "original-M128-archive:TERMINAL_COMPARISON.json",
+      "sha256": "0c754ba7d4c99aacb88e037357055544929d313d3279b8e6e9196e0210ea4184"
+    },
+    {
+      "bytes": 226534,
+      "path": "original-M128-archive:WORKER_RESULT.json",
+      "sha256": "051d342df561fab00a75d01ff820a5d81d83aa205f48b26a2a84fffbb8597bef"
+    },
+    {
+      "bytes": 717564,
+      "path": "original-M128-archive:dut/orchestration.json",
+      "sha256": "ec045e14a8f809802ecf6eacc1263748f49466b4cb7d83169390ecab8c61004c"
+    }
+  ],
+  "ddr_handshake_trace_verified": false,
+  "events": 2478339,
+  "events_evidence": "Complete frozen checker requires observed frame count == expected and footer before PASS; not re-parsed by this review",
+  "exact_real_report_sha256": "9049533161ec985d26a1947a09e8227a0546e450e1e8338d0c9b19f6045ee3bf",
+  "full29_numeric_pass": false,
+  "groups": 19200,
+  "hardware_MAC_active_duty": null,
+  "hardware_MAC_temporal_utilization": null,
+  "interpreter_pin": {
+    "bytes": 30894944,
+    "path": "python3.12:interpreter",
+    "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+  },
+  "no_DUT_native_reference_import_or_execution": true,
+  "original_141_artifact_stat_identities_unchanged": true,
+  "original_artifacts_modified_by_reviewer": false,
+  "original_stat_inventory_sha256": "82ab56271a9b9016aed2febf738f395964a1a447ecc417621b16f1731ab3ad01",
+  "original_stream_rehashed_by_this_review": false,
+  "original_stream_reopened": false,
+  "original_stream_reparsed": false,
+  "original_stream_reported_hash_matches_prior_seal": true,
+  "outer_timeout": false,
+  "packets": 847872,
+  "pv_packets": 792576,
+  "qk_packets": 55296,
+  "receipt_returncode": 0,
+  "resources": {
+    "all_declared_caps_satisfied": true,
+    "inner_cpu_seconds": 31.205254672,
+    "inner_wall_seconds": 31.212121172982734,
+    "outer_wall_seconds": 31.260075226949994,
+    "reaped_cpu_seconds": 31.24908,
+    "reaped_peak_rss_bytes": 41680896
+  },
+  "root_terminal_confirmed": true,
+  "small_input_pins": {
+    "frequency": {
+      "bytes": 393216,
+      "path": "original-M128-archive:dut/actual_attention_capture/6_frequency.bin",
+      "sha256": "4c90b100dbe25f58e42a7703e9842ca5427e98a5ea9bb8294c95544516629729"
+    },
+    "kv": {
+      "bytes": 262144,
+      "path": "original-M128-archive:actual_terminal/kv.bin",
+      "sha256": "96582171b7fd790f56131cf60189a7df0b503bf3b182e4c806012c5a87405e02"
+    },
+    "presence": {
+      "bytes": 196608,
+      "path": "original-M128-archive:dut/actual_attention_capture/6_observed.bin",
+      "sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c"
+    },
+    "probability": {
+      "bytes": 786432,
+      "path": "original-M128-archive:dut/actual_attention_capture/6_words.bin",
+      "sha256": "b539505db4a8e5dc79e08babb748652c1a8b91a85384baaceff151238cb717a2"
+    },
+    "q": {
+      "bytes": 786432,
+      "path": "original-M128-archive:actual_terminal/q.bin",
+      "sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88"
+    }
+  },
+  "status": "PASS_ACTUAL_OFFLINE_ACCEPTED_OPERAND_CONTENT_INDEX_REVIEW",
+  "original_stream_size_only": 237446391,
+  "omitted_preparation_pin_counts": {
+    "packet-source-review": 13,
+    "packet-source": 21
+  },
+  "omitted_source_map_pin_count": 30,
+  "projection": "All outcome/resource/limitation fields retained; physical paths become roles, raw stat/process identifiers and reviewer usage omitted. Duplicate preparation/source-map ledgers are represented by original review hash and separate source/pin projections.664checks independently verify immutable sources/receipts/report and141artifact stat chain; this actual reviewer DID NOT reopen/reparse/rehash the original stream or recompute operand hashes."
+}

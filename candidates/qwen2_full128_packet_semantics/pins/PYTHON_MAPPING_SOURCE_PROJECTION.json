@@ -1,0 +1,329 @@
+{
+  "original": {
+    "bytes": 13875,
+    "sha256": "d40c58e362e42743d86f150e68ce55b9329c79d396530956b21e8c4a07f2f750"
+  },
+  "scope": "read-only source references; no imported DUT code",
+  "files": [
+    {
+      "lines": [
+        [
+          31,
+          54
+        ],
+        [
+          90,
+          106
+        ]
+      ],
+      "pin": {
+        "bytes": 6218,
+        "path": "original-source:candidates/qwen2_resident_matrix/production_qk16_model/schedule.py",
+        "sha256": "4cd2609d2fe1ffffd5d14b9398c45c108b9382c0097d5316502b41486f37cf1b"
+      },
+      "role": "actual source QK/PV expected wire layout"
+    },
+    {
+      "lines": [
+        [
+          151,
+          188
+        ]
+      ],
+      "pin": {
+        "bytes": 8361,
+        "path": "original-source:candidates/qwen2_resident_matrix/production_qk16_model/ordered_work.py",
+        "sha256": "505651c4452f07743e6c59e0457d5e955624a05f343bf7d7869a3e99b2ec9e61"
+      },
+      "role": "actual ordered fold arithmetic/control"
+    },
+    {
+      "lines": [
+        [
+          98,
+          126
+        ]
+      ],
+      "pin": {
+        "bytes": 7915,
+        "path": "original-source:candidates/qwen2_resident_matrix/production_qk16_model/direct_transport.py",
+        "sha256": "f9c199ff33607d1295fb672f69c549d512aea07b83c9697743b3562f3663b509"
+      },
+      "role": "original public dispatch identity"
+    },
+    {
+      "lines": [
+        [
+          327,
+          350
+        ]
+      ],
+      "pin": {
+        "bytes": 17894,
+        "path": "original-source:candidates/qwen2_resident_matrix/attention_packed_owner/client.py",
+        "sha256": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1"
+      },
+      "role": "actual accepted original A/B forwarding"
+    },
+    {
+      "lines": [
+        [
+          333,
+          369
+        ]
+      ],
+      "pin": {
+        "bytes": 29102,
+        "path": "original-source:candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+        "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+      },
+      "role": "actual step fields and retirement"
+    },
+    {
+      "lines": [
+        [
+          83,
+          89
+        ],
+        [
+          247,
+          283
+        ]
+      ],
+      "pin": {
+        "bytes": 19215,
+        "path": "original-source:candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+        "sha256": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c"
+      },
+      "role": "legacy PV wire padding and memory consumption"
+    },
+    {
+      "lines": [
+        [
+          65,
+          79
+        ],
+        [
+          197,
+          202
+        ]
+      ],
+      "pin": {
+        "bytes": 16825,
+        "path": "original-source:candidates/qwen2_resident_matrix/ffn_public/prefix_execution.py",
+        "sha256": "08092c8d316f353ab93b179e6ee633f5af4a04e85dbf519696e9e279c32495f3"
+      },
+      "role": "ACK/published read and missing per-address evidence"
+    },
+    {
+      "lines": [
+        [
+          22,
+          111
+        ],
+        [
+          265,
+          314
+        ]
+      ],
+      "pin": {
+        "bytes": 18376,
+        "path": "original-source:candidates/qwen2_resident_matrix/ffn_public/fullgraph_execution.py",
+        "sha256": "2d339c994f1fb24d4938448d3dc21ceb46bee6e36b875aa585b0a8cf68e5ddd1"
+      },
+      "role": "real driver and full21 terminal"
+    },
+    {
+      "lines": [
+        [
+          24,
+          112
+        ]
+      ],
+      "pin": {
+        "bytes": 9514,
+        "path": "original-source:candidates/qwen2_resident_matrix/official_bf16/owners.py",
+        "sha256": "0c87797587281b4e7f23663242e947ffe4157db9a644e788d67eb5c9045c50c1"
+      },
+      "role": "Norm Bias RoPE Add recipe"
+    },
+    {
+      "lines": [
+        [
+          109,
+          112
+        ],
+        [
+          169,
+          214
+        ],
+        [
+          230,
+          240
+        ]
+      ],
+      "pin": {
+        "bytes": 15064,
+        "path": "original-source:candidates/qwen2_resident_matrix/official_bf16/dense_silu.py",
+        "sha256": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699"
+      },
+      "role": "Dense/SiLU selected boundaries"
+    },
+    {
+      "lines": [
+        [
+          27,
+          30
+        ]
+      ],
+      "pin": {
+        "bytes": 1354,
+        "path": "original-source:candidates/qwen2_resident_matrix/dense_block_reduce/profile.py",
+        "sha256": "1b2b558317d18f3e5218ad83368556628aec7c0012211050c91888ac563514f2"
+      },
+      "role": "original K two-block geometry"
+    },
+    {
+      "lines": [
+        [
+          50,
+          69
+        ]
+      ],
+      "pin": {
+        "bytes": 3501,
+        "path": "original-source:candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py",
+        "sha256": "33ea0786d537aa7de59b19ff55cb515f2afeaee780f4a9f1faeb42402da19593"
+      },
+      "role": "real accepted partial binding"
+    },
+    {
+      "lines": [
+        [
+          18,
+          44
+        ]
+      ],
+      "pin": {
+        "bytes": 2243,
+        "path": "original-source:candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+        "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d"
+      },
+      "role": "original ExpNegative recipe"
+    },
+    {
+      "lines": [
+        [
+          55,
+          74
+        ]
+      ],
+      "pin": {
+        "bytes": 10544,
+        "path": "reviewed-source:candidates/qwen2_runtime_observer_r2/runtime_observer.py",
+        "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+      },
+      "role": "accepted packet SHA wire contract"
+    },
+    {
+      "lines": [
+        [
+          138,
+          187
+        ]
+      ],
+      "pin": {
+        "bytes": 14705,
+        "path": "original-observer:qwen2_ordered_observer/monitor.py",
+        "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+      },
+      "role": "real source-bound passive observer"
+    },
+    {
+      "lines": [
+        [
+          10,
+          15
+        ],
+        [
+          23,
+          45
+        ],
+        [
+          50,
+          73
+        ]
+      ],
+      "pin": {
+        "bytes": 5596,
+        "path": "original-observer:qwen2_ordered_observer/capture.py",
+        "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+      },
+      "role": "causal presence and eight PV repetitions"
+    },
+    {
+      "lines": [
+        [
+          104,
+          126
+        ],
+        [
+          140,
+          197
+        ]
+      ],
+      "pin": {
+        "bytes": 13556,
+        "path": "original-M128-candidate:qwen2_ordered_fullgraph_entry/terminal_comparator.py",
+        "sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d"
+      },
+      "role": "archive invariants and no FP32 tolerance"
+    },
+    {
+      "lines": [
+        [
+          35,
+          128
+        ]
+      ],
+      "pin": {
+        "bytes": 23885,
+        "path": "original-M128-candidate:qwen2_ordered_fullgraph_entry/registry.py",
+        "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+      },
+      "role": "historical source coverage plan, not terminal comparison"
+    },
+    {
+      "lines": [
+        [
+          274,
+          309
+        ]
+      ],
+      "pin": {
+        "bytes": 21232,
+        "path": "original-M128-candidate:qwen2_ordered_fullgraph_entry/stream.py",
+        "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+      },
+      "role": "original framing/footer source, not imported"
+    },
+    {
+      "lines": [
+        [
+          154,
+          199
+        ]
+      ],
+      "pin": {
+        "bytes": 13789,
+        "path": "retained-evidence:qwen2_official_m128_pair_finalprofile_20261025T0252/full_reference_gate/validate_outputs.py",
+        "sha256": "35e8d821111ae407a76ec44b6d99861d91e0946873685362696bd17495efd070"
+      },
+      "role": "reference-side relations only, not reexecuted"
+    }
+  ],
+  "original_record_count": 30,
+  "published_python_record_count": 20,
+  "omitted_historical_Scala_and_plan_record_count": 10,
+  "projection": "Only Python model/observer/reference-side source witnesses relevant to this mapping are projected, paths role-converted. Ten historical Scala/compile/next-step records omitted; no unexecuted Chisel candidate or hardware claim added. No source imported or reference executed."
+}

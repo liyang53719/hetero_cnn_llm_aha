@@ -1,0 +1,53 @@
+{
+  "original": {
+    "bytes": 1574,
+    "sha256": "2e852b26511d513eb6489a2a7dc38687bebbe5a6167e4861524b95e8f9e258d2"
+  },
+  "DUT_executed": false,
+  "FMA_executed": false,
+  "RTL_executed": false,
+  "author_test_logs": {
+    "IO.final.normal.log": {
+      "bytes": 752,
+      "sha256": "837d7afea0f96fc178591112a23d2b2f2c41c5aa75b3e806c29d0c37b18eae20"
+    },
+    "IO.final.optimized.log": {
+      "bytes": 752,
+      "sha256": "d184cfb8c67428485d7f5c5e2e3a5c3d1948c379f80a7b16ce47e0e8b792b14a"
+    },
+    "PACKETS.final.normal.log": {
+      "bytes": 2235,
+      "sha256": "daa4b4155eaede171d34858235350ac9979a76b1ca44a86872126a7d3897e17c"
+    },
+    "PACKETS.final.optimized.log": {
+      "bytes": 2235,
+      "sha256": "051d6b898c15ec9dc7ce9e2c8cbcf73c78c14da01becf06dd0f56f67ce61ab5a"
+    }
+  },
+  "authority_boundary": "explicit root approval+exact candidate/plan hashes external; CLI is not admission sandbox",
+  "claim_written": false,
+  "historical_regex_test_failure_retained": true,
+  "native_backend_loaded": false,
+  "real_stream_opened": false,
+  "real_stream_parse_performed": false,
+  "real_stream_sha_recomputed": false,
+  "reference_executed": false,
+  "resources": {
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 180,
+    "cpus": 1,
+    "input_events": 2478339,
+    "input_stream_bytes": 237446391,
+    "report_bytes": 65536,
+    "sampled_rss_bytes": 268435456,
+    "wall_seconds": 240
+  },
+  "root_approval_written": false,
+  "small_inputs_bytes": 2424832,
+  "small_inputs_preparation_rehashed": 5,
+  "source_reference_pins": 30,
+  "status": "PASS_SOURCE_SYNTHETIC_ONLY",
+  "synthetic_tests": 56,
+  "synthetic_tests_breakdown": "22 packet+6 IO in each normal/-O",
+  "projection": "Unchanged historical source-only 22packet+6IO per mode and hashes; original regex expectation failure retained, not converted to target failure or erased. This is not the later offline actual result."
+}

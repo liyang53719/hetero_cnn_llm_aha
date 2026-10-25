@@ -1,0 +1,41 @@
+{
+  "original": {
+    "bytes": 1304,
+    "sha256": "223f51c5f8fcf2d63c555694235495d1649a76735e2b9d1a7139015a0c3e4f4a"
+  },
+  "returncode": 0,
+  "outer_timeout": false,
+  "wall_seconds": 31.260075226949994,
+  "reaped_cpu_user": 31.049376,
+  "reaped_cpu_system": 0.199704,
+  "ru_maxrss_bytes_linux": 41680896,
+  "artifacts": {
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ROOT_APPROVAL.json": {
+      "bytes": 1551,
+      "sha256": "18dc35a875a4fa8b83964781250ba8bc66745f6e699ed7c6adb30cb7ad70f18e"
+    },
+    "REPORT.json": {
+      "bytes": 1390,
+      "sha256": "9049533161ec985d26a1947a09e8227a0546e450e1e8338d0c9b19f6045ee3bf"
+    },
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "invocation_contract": {
+    "isolated_flags": [
+      "-I",
+      "-S",
+      "-B"
+    ],
+    "explicit_offline_switch": true,
+    "checker_sha256": "3d4b41e1cd7df876014f72c1152a75a15fd70f8a8412a5a330a0dda44e17c76d",
+    "plan_sha256": "eab4fc477acf7b4afd68fa9315545139feee8593654329ab731c20ed71afe8f1"
+  },
+  "projection": "Original exit/resource/artifact hashes retained; actual private argv removed and reduced to non-executable flags/hash contract. No approval contents. ru_maxrss is reaped process high-water evidence, not full-tree continuous sampled history."
+}

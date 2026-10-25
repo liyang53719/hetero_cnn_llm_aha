@@ -1,0 +1,78 @@
+{
+  "input_source_checks": {
+    "status": "PASS_ORIGINAL_INPUT_PINS_AND_PUBLIC_BYTES",
+    "identity_comparisons": 117,
+    "unique_files_hashed": 86,
+    "original_141_artifact_stat_chain_unchanged": true,
+    "original_stream_not_reopened_rehashed_or_reparsed": true,
+    "small_actual_inputs_hashed_opaque_not_decoded": 5,
+    "new_actual_artifact_hashes": 5,
+    "original_preparation_freeze_files": 21,
+    "source_witnesses": 12,
+    "exact_existing_public_source_references": 11,
+    "hash_only_unpublished_original_MatrixService_witness": 1,
+    "original_source_and_mapping_files_byte_equal": 4,
+    "source_adaptation": false,
+    "packaging_only_synthetic_test_executions": 56,
+    "DUT_native_reference_RTL_executed": false
+  },
+  "synthetic_tests": {
+    "status": "PASS_BOUNDED_SYNTHETIC_CHECKER_AND_IO_ONLY",
+    "unique_test_cases": 28,
+    "executions": 56,
+    "per_mode": 28,
+    "suites": [
+      {
+        "suite": "test_independent_packets.py",
+        "mode": "normal",
+        "tests": 22,
+        "returncode": 0,
+        "log": {
+          "bytes": 2235,
+          "sha256": "ccb0bca93b9c7da09f8779368d8fcf1285f90a2e4c837bf1673285bf09fb2617"
+        }
+      },
+      {
+        "suite": "test_io_contract.py",
+        "mode": "normal",
+        "tests": 6,
+        "returncode": 0,
+        "log": {
+          "bytes": 752,
+          "sha256": "51f56f6513b8918c0ff50a2205a16a6dfc7094c8a43f1958dd8f38ee66c37ab4"
+        }
+      },
+      {
+        "suite": "test_independent_packets.py",
+        "mode": "optimized",
+        "tests": 22,
+        "returncode": 0,
+        "log": {
+          "bytes": 2235,
+          "sha256": "8ca11e219edd49552c78394f92f70f0aaef70b09d2fc7985251598e902e635fd"
+        }
+      },
+      {
+        "suite": "test_io_contract.py",
+        "mode": "optimized",
+        "tests": 6,
+        "returncode": 0,
+        "log": {
+          "bytes": 752,
+          "sha256": "489acdce53de538f038fcf051038a5b71a8c6fd66757721079afc3943e11968c"
+        }
+      }
+    ],
+    "real_archive_stream_or_tensor_opened": false,
+    "DUT_native_reference_or_RTL_executed": false,
+    "only_source_synthetic_fixtures_and_temporary_tiny_files": true,
+    "per_process_bounds": {
+      "CPU_soft_seconds": 20,
+      "CPU_hard_seconds": 21,
+      "wall_timeout_seconds": 30,
+      "address_space_bytes": 268435456,
+      "cpus": 1
+    }
+  },
+  "scope": "Current public3-source checker/IO tests only; 28 unique cases normal/-O,56 executions. Historical source-review70 executions are not added as new unique tests; actual full stream was never repeated for publication."
+}

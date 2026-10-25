@@ -1,0 +1,87 @@
+{
+  "original": {
+    "bytes": 2934,
+    "sha256": "4d26856c9b371a0a379ba37ee7dd4ead01af58f0a4be801853bf824b85eb803d"
+  },
+  "author_frozen_files_rechecked_before_and_after": 21,
+  "author_package_freeze": {
+    "bytes": 3175,
+    "path": "packet-source:FREEZE.json",
+    "sha256": "8e69df6b8a1ef6684014d0f14bf5915ad7b4baeb6583821956463e739ad771d6"
+  },
+  "blocking_findings": [],
+  "candidate": {
+    "bytes": 16978,
+    "path": "packet-source:check_packets.py",
+    "sha256": "3d4b41e1cd7df876014f72c1152a75a15fd70f8a8412a5a330a0dda44e17c76d"
+  },
+  "execution_conditions": [
+    "root explicit approval for exact candidate/plan/package hashes",
+    "new external output directory and retained stdout/stderr/exit/resource evidence",
+    "use exact -I -S -B CLI template and --execute-offline",
+    "outer wall/cleanup supervision",
+    "single immutable stream pass; preserve any failure/no report; no input edits",
+    "exit0 plus complete exact-hash report required"
+  ],
+  "plan": {
+    "bytes": 4037,
+    "path": "packet-source:PLAN.json",
+    "sha256": "eab4fc477acf7b4afd68fa9315545139feee8593654329ab731c20ed71afe8f1"
+  },
+  "plan_pins_match_prior_artifact_inventory": 11,
+  "recommended_bounded_attempt": {
+    "address_space_bytes": 536870912,
+    "automatic_budget_increase_or_retry": false,
+    "budget_guarantees_completion": false,
+    "cpu_seconds": 180,
+    "cpus": 1,
+    "report_bytes": 65536,
+    "sampled_peak_rss_bytes": 268435456,
+    "wall_seconds": 240
+  },
+  "report": {
+    "bytes": 9870,
+    "path": "packet-source-review:REPORT.md",
+    "sha256": "b793b88e412d0ea0ace75cfa4859d4c218a7b1f6597f3882e74fb4383a049c35"
+  },
+  "scope": {
+    "DUT_imported_or_executed": false,
+    "RTL_pass": false,
+    "accepted_packet_semantics_for_real_run_established": false,
+    "actual_payloads_opened": false,
+    "full29_numeric_pass": false,
+    "hardware_MAC_utilization": null,
+    "hardware_active_duty": null,
+    "native_backend_loaded": false,
+    "original_artifacts_modified": false,
+    "real_stream_opened": false,
+    "real_stream_rehashed": false,
+    "reference_imported_or_executed": false,
+    "root_execution_authority_granted_by_this_review": false
+  },
+  "source_witness_pins": 12,
+  "status": "PASS_SOURCE_SYNTHETIC_REVIEW_READY_FOR_ROOT_SINGLE_OFFLINE_ATTEMPT_NOT_EXECUTED",
+  "synthetic_resources": {
+    "aggregate_CPU_seconds": 2.9875920000000002,
+    "aggregate_child_peak_rss_bytes": 47099904
+  },
+  "synthetic_tests": {
+    "author_suite_independent_reruns": 56,
+    "complete_synthetic_stream_rows": [
+      1,
+      2
+    ],
+    "full_M128_real_stream_executed": false,
+    "local_synthetic_packet_rows": [
+      15,
+      16,
+      126,
+      127
+    ],
+    "normal": 35,
+    "optimized": 35,
+    "reviewer_independent": 14,
+    "total": 70
+  },
+  "projection": "Original source/synthetic review, predating actual offline pass. Paths replaced by roles; NOT_EXECUTED and false actual fields retain historical stage meaning. The70 executions are35 per mode (28 author+7 independent), not70 unique tests or real stream replay."
+}

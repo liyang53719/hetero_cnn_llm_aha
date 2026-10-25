@@ -1,0 +1,48 @@
+{
+  "base_commit": "20c87f39da815a8e5adc6f9268622be0c8066695",
+  "files": {
+    "check_packets.py": {
+      "bytes": 16978,
+      "sha256": "3d4b41e1cd7df876014f72c1152a75a15fd70f8a8412a5a330a0dda44e17c76d"
+    },
+    "test_independent_packets.py": {
+      "bytes": 15019,
+      "sha256": "aae759e1e3dd399273d77b5ff196cf7f02123fc88c48e03a78af2bb1150f1dfb"
+    },
+    "test_io_contract.py": {
+      "bytes": 3216,
+      "sha256": "69b3688385027f228a74dfd112e6688c23265f45b3177897a2730d04b519255d"
+    },
+    "MAPPING_CONTRACT_ZH.md": {
+      "bytes": 6425,
+      "sha256": "f9ac4b7161de9a8c113035cda4c782db24538305c9e0cc8e10e427336c3f4751"
+    }
+  },
+  "original_preparation_freeze": {
+    "bytes": 3175,
+    "sha256": "8e69df6b8a1ef6684014d0f14bf5915ad7b4baeb6583821956463e739ad771d6"
+  },
+  "original_SOURCE_MAP": {
+    "bytes": 13875,
+    "sha256": "d40c58e362e42743d86f150e68ce55b9329c79d396530956b21e8c4a07f2f750"
+  },
+  "source_adaptation": false,
+  "mapping_contract_is_historical_preparation_document": true,
+  "mapping_contract_job_addresses": "Original modeled DDR job metadata, not operating-system process addresses or an archived DDR transaction trace. Preserve source contract verbatim; actual result is separately projected.",
+  "omitted_private_deployment_files": [
+    "PLAN.json",
+    "COMMAND_TEMPLATE.json"
+  ],
+  "omitted_original_docs": [
+    "READ_ONLY_FINDINGS_ZH.md",
+    "RESOURCE_AND_EXECUTION_ZH.md"
+  ],
+  "original_review_controls": {
+    "original": {
+      "bytes": 8040,
+      "sha256": "2ed941ad2d5e30e1c9e65fa92c51582733e71a6ba75064f312b0f22a2551aa83"
+    },
+    "reason_not_republished": "Reviewer-only hard-coded workspace-path guard and private relative source layout; do not rewrite as original source. Seven independent controls/mode are retained as historical review evidence, not rerun here."
+  },
+  "no_Scala_Chisel_candidate_included": true
+}

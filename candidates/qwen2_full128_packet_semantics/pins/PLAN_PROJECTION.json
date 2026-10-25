@@ -1,0 +1,93 @@
+{
+  "original": {
+    "bytes": 4037,
+    "sha256": "eab4fc477acf7b4afd68fa9315545139feee8593654329ab731c20ed71afe8f1"
+  },
+  "evidence": [
+    {
+      "bytes": 4674,
+      "path": "original-M128-archive:actual_terminal/MANIFEST.json",
+      "sha256": "4d8411fb514c925be1cad28cd91167596e7b6febe13d0cc149f7878e929346f4"
+    },
+    {
+      "bytes": 639,
+      "path": "original-M128-archive:SERVICE_PROTOCOL.json",
+      "sha256": "d5d6888bbede481ee03710e1db3724e2e8a520ea864c07494d1445c48b7f367e"
+    },
+    {
+      "bytes": 13202,
+      "path": "original-M128-archive:TERMINAL_COMPARISON.json",
+      "sha256": "0c754ba7d4c99aacb88e037357055544929d313d3279b8e6e9196e0210ea4184"
+    },
+    {
+      "bytes": 226534,
+      "path": "original-M128-archive:WORKER_RESULT.json",
+      "sha256": "051d342df561fab00a75d01ff820a5d81d83aa205f48b26a2a84fffbb8597bef"
+    },
+    {
+      "bytes": 717564,
+      "path": "original-M128-archive:dut/orchestration.json",
+      "sha256": "ec045e14a8f809802ecf6eacc1263748f49466b4cb7d83169390ecab8c61004c"
+    }
+  ],
+  "execution_authorized": false,
+  "input_preparation_identity": "Five small actual-archive files rehashed only; no FMA or reference used",
+  "inputs": {
+    "frequency": {
+      "bytes": 393216,
+      "path": "original-M128-archive:dut/actual_attention_capture/6_frequency.bin",
+      "sha256": "4c90b100dbe25f58e42a7703e9842ca5427e98a5ea9bb8294c95544516629729"
+    },
+    "kv": {
+      "bytes": 262144,
+      "path": "original-M128-archive:actual_terminal/kv.bin",
+      "sha256": "96582171b7fd790f56131cf60189a7df0b503bf3b182e4c806012c5a87405e02"
+    },
+    "presence": {
+      "bytes": 196608,
+      "path": "original-M128-archive:dut/actual_attention_capture/6_observed.bin",
+      "sha256": "2ccb253649b407107b085243584c9717f3b9072d1e0a7cb97338c94c157fa06c"
+    },
+    "probability": {
+      "bytes": 786432,
+      "path": "original-M128-archive:dut/actual_attention_capture/6_words.bin",
+      "sha256": "b539505db4a8e5dc79e08babb748652c1a8b91a85384baaceff151238cb717a2"
+    },
+    "q": {
+      "bytes": 786432,
+      "path": "original-M128-archive:actual_terminal/q.bin",
+      "sha256": "3d14160db305afd99ac0641d98f2e19e2a7a2edf061c0db53001c9099a051e88"
+    }
+  },
+  "owner_tag": 458764,
+  "preparation_status": "SOURCE_AND_SYNTHETIC_ONLY_PENDING_INDEPENDENT_REVIEW",
+  "resources": {
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 180,
+    "cpus": 1,
+    "input_events": 2478339,
+    "input_stream_bytes": 237446391,
+    "report_bytes": 65536,
+    "sampled_rss_bytes": 268435456,
+    "wall_seconds": 240
+  },
+  "rows": 128,
+  "schema": "qwen2-offline-packet-semantics-v1",
+  "scope": {
+    "ddr_handshake_claim": false,
+    "dut_executed": false,
+    "full_stream_parse_performed": false,
+    "native_backend_loaded": false,
+    "reference_executed": false,
+    "result_tile_reconstruction": false,
+    "rtl_executed": false
+  },
+  "stream": {
+    "bytes": 237446391,
+    "events": 2478339,
+    "path": "original-M128-archive:dut/attention_service_events.q2evt",
+    "sha256": "67e4a6ac0374ddb3b283397b5d827ab99d26d62c5293cad1d9b36e2d9225530d"
+  },
+  "stream_preparation_identity": "Declared from retained sealed SERVICE_PROTOCOL receipt; stream not opened or hashed in this preparation",
+  "projection": "All original scalar/resource/domain/source/hash plan fields retained; every private file locator replaced by a role. Historical preparation execution_authorized=false and pending review status are unchanged. This projection is not an executable plan or execution permission."
+}

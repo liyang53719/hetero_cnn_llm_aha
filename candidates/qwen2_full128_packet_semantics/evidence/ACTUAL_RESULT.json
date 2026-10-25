@@ -1,0 +1,47 @@
+{
+  "original": {
+    "bytes": 1390,
+    "sha256": "9049533161ec985d26a1947a09e8227a0546e450e1e8338d0c9b19f6045ee3bf"
+  },
+  "accepted_pv_packets_per_causal_probability_cell": 8,
+  "byte_order": "little-endian <272H: A16 then B256",
+  "execution_kind": "OFFLINE_ARCHIVE_CHECK_ONLY",
+  "expected": {
+    "events": 2478339,
+    "groups": 19200,
+    "packets": 847872,
+    "pv_groups": 12288,
+    "pv_packets": 792576,
+    "qk_groups": 6912,
+    "qk_packets": 55296
+  },
+  "observed": {
+    "groups": 19200,
+    "pv_packets": 792576,
+    "qk_packets": 55296
+  },
+  "plan_sha256": "eab4fc477acf7b4afd68fa9315545139feee8593654329ab731c20ed71afe8f1",
+  "process_cpu_seconds": 31.205254672,
+  "rows": 128,
+  "schema": "qwen2-offline-packet-semantics-v1",
+  "scope": {
+    "accepted_operand_hashes_verified": true,
+    "complete_result_tile_verified": false,
+    "ddr_address_handshake_trace_verified": false,
+    "expected_causal_work_sequence": true,
+    "expected_padding_verified": true,
+    "full29_numeric_pass": false,
+    "hardware_cycles": null,
+    "logits_tensor_observed": false,
+    "mask_tensor_created": false,
+    "numerical_kernel_executed": false,
+    "official_reference_executed": false,
+    "repeated_tensor_created": false,
+    "rtl_pass": false,
+    "source_bound_gqa6_expected_content": true
+  },
+  "status": "PASS_ACCEPTED_MATRIX_OPERAND_CONTENT_AND_INDEX_SEMANTICS",
+  "stream_sha256": "67e4a6ac0374ddb3b283397b5d827ab99d26d62c5293cad1d9b36e2d9225530d",
+  "wall_seconds": 31.212121172982734,
+  "projection": "Entire original scalar/count/hash/scope result retained. No accepted operand bytes or input tensor payload. Saved report status derives from one root-authorized immutable archive pass, not a new DUT or reference execution."
+}

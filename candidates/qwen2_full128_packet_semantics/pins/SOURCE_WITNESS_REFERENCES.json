@@ -1,0 +1,97 @@
+{
+  "original": {
+    "bytes": 3868,
+    "sha256": "e312f4b0b7463cb818af12901dffee168dd6c94f2149b45ad87599962aac80b9"
+  },
+  "base_commit": "20c87f39da815a8e5adc6f9268622be0c8066695",
+  "status": "PASS_FROZEN_SOURCE_IDENTITIES_FOR_READ_ONLY_MAPPING_REVIEW",
+  "sources": [
+    {
+      "logical_role": "original-source:candidates/qwen2_resident_matrix/production_qk16_model/schedule.py",
+      "repo_path": "candidates/qwen2_ordered_schedule/schedule.py",
+      "bytes": 6218,
+      "sha256": "4cd2609d2fe1ffffd5d14b9398c45c108b9382c0097d5316502b41486f37cf1b",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-source:candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+      "repo_path": "candidates/qwen2_ordered_owner/postimage/ffn_attention/attention_owner.py",
+      "bytes": 19215,
+      "sha256": "6113f8fe832b1e01793877b5e47e2e217b7a1146490e5caef84a6f7269a4751c",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-source:candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "source_availability": "hash-only-unpublished-original-witness",
+      "reason": "No byte-identical public blob in exact base; preserve hash witness without substituting a different implementation or copying unrelated model code.",
+      "bytes": 29102,
+      "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-source:candidates/qwen2_resident_matrix/attention_packed_owner/client.py",
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_owner/client.py",
+      "bytes": 17894,
+      "sha256": "ff31e9ed78ee857dd6d80670dbc0ff906f238d8b5f6deb7821e72f68108d89a1",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-observer:qwen2_ordered_observer/monitor.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/postimage/monitor.py",
+      "bytes": 14705,
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-observer:qwen2_ordered_observer/capture.py",
+      "repo_path": "candidates/qwen2_ordered_observer/capture.py",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-M128-candidate:qwen2_ordered_fullgraph_entry/service_trace.py",
+      "repo_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/service_trace.py",
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-M128-candidate:qwen2_ordered_fullgraph_entry/bridge.py",
+      "repo_path": "candidates/qwen2_full128_identity_failure/delta/qwen2_ordered_fullgraph_entry/bridge.py",
+      "bytes": 11713,
+      "sha256": "a69dba9bd111260d8d04a03f3bbe722f579f6d7d3556cb3030ed0b370459831c",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-M128-candidate:qwen2_ordered_fullgraph_entry/registry.py",
+      "repo_path": "candidates/qwen2_m128_terminal_capture_prepare/postimage/candidates/qwen2_ordered_fullgraph_entry/registry.py",
+      "bytes": 23885,
+      "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-M128-candidate:qwen2_ordered_fullgraph_entry/terminal_comparator.py",
+      "repo_path": "candidates/qwen2_m128_normal_cold_comparator/comparator/comparator.py",
+      "bytes": 13556,
+      "sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "original-M128-candidate:qwen2_ordered_fullgraph_entry/stream.py",
+      "repo_path": "candidates/qwen2_ordered_event_stream/stream.py",
+      "bytes": 21232,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5",
+      "matches_actual_config_pin": true
+    },
+    {
+      "logical_role": "reviewed-source:candidates/qwen2_runtime_observer_r2/runtime_observer.py",
+      "repo_path": "candidates/qwen2_runtime_observer_r2/runtime_observer.py",
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+      "matches_actual_config_pin": true
+    }
+  ],
+  "source_contents_imported_or_executed": false,
+  "scope": "Eleven exact existing public byte references plus one explicitly hash-only unpublished MatrixService witness for original actual schedule/client/service/passive observation/archive contracts. Checker expectation is independently implemented; these are provenance witnesses, not runtime imports or a full private execution closure."
+}

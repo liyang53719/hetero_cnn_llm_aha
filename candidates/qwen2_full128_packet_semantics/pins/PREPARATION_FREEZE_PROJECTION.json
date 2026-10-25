@@ -1,0 +1,95 @@
+{
+  "original": {
+    "bytes": 3175,
+    "sha256": "8e69df6b8a1ef6684014d0f14bf5915ad7b4baeb6583821956463e739ad771d6"
+  },
+  "files": {
+    "COMMAND_TEMPLATE.json": {
+      "bytes": 1596,
+      "sha256": "6d2fb11290bb98e2dde9ae1bbc5c5825359ac73473409cd5ea2495a6a8b443d0"
+    },
+    "FINAL_CHECK.json": {
+      "bytes": 1574,
+      "sha256": "2e852b26511d513eb6489a2a7dc38687bebbe5a6167e4861524b95e8f9e258d2"
+    },
+    "INDEPENDENT_SYNTHETIC.normal.log": {
+      "bytes": 3264,
+      "sha256": "fea86271192fe5ebf1109c2288739fd9fce11e18e0583f697f98212b3548bbb8"
+    },
+    "INDEPENDENT_SYNTHETIC.r2.normal.log": {
+      "bytes": 2235,
+      "sha256": "04583460742fdb0d5b9a12eeecf1dee5c992c7e3219ee92f61cf09cd15c9888d"
+    },
+    "INDEPENDENT_SYNTHETIC.r2.optimized.log": {
+      "bytes": 2235,
+      "sha256": "423c05f6ed783c981836939c023c27159af031e7c251c154b50c7cd5d98a8e72"
+    },
+    "IO.final.normal.log": {
+      "bytes": 752,
+      "sha256": "837d7afea0f96fc178591112a23d2b2f2c41c5aa75b3e806c29d0c37b18eae20"
+    },
+    "IO.final.optimized.log": {
+      "bytes": 752,
+      "sha256": "d184cfb8c67428485d7f5c5e2e3a5c3d1948c379f80a7b16ce47e0e8b792b14a"
+    },
+    "IO.normal.log": {
+      "bytes": 752,
+      "sha256": "489acdce53de538f038fcf051038a5b71a8c6fd66757721079afc3943e11968c"
+    },
+    "IO.optimized.log": {
+      "bytes": 752,
+      "sha256": "ffd55f3220958ef144a5f3f2ed07ca5a5105ebfb26e42c965989e04f483af340"
+    },
+    "MAPPING_CONTRACT_ZH.md": {
+      "bytes": 6425,
+      "sha256": "f9ac4b7161de9a8c113035cda4c782db24538305c9e0cc8e10e427336c3f4751"
+    },
+    "PACKETS.final.normal.log": {
+      "bytes": 2235,
+      "sha256": "daa4b4155eaede171d34858235350ac9979a76b1ca44a86872126a7d3897e17c"
+    },
+    "PACKETS.final.optimized.log": {
+      "bytes": 2235,
+      "sha256": "051d6b898c15ec9dc7ce9e2c8cbcf73c78c14da01becf06dd0f56f67ce61ab5a"
+    },
+    "PLAN.json": {
+      "bytes": 4037,
+      "sha256": "eab4fc477acf7b4afd68fa9315545139feee8593654329ab731c20ed71afe8f1"
+    },
+    "READ_ONLY_FINDINGS_ZH.md": {
+      "bytes": 10407,
+      "sha256": "7b65cdabf22c0ac7bb83671b5c987fca389f03526267dfe2979aa2020579754d"
+    },
+    "RESOURCE_AND_EXECUTION_ZH.md": {
+      "bytes": 3076,
+      "sha256": "aacd7b20d97852aa048b84c6b393a0b3798a9d8bd0c0db87a449bc8fcf3169b7"
+    },
+    "SOURCE_MAP.json": {
+      "bytes": 13875,
+      "sha256": "d40c58e362e42743d86f150e68ce55b9329c79d396530956b21e8c4a07f2f750"
+    },
+    "SYNTHETIC.final.normal.log": {
+      "bytes": 2235,
+      "sha256": "624ec33533a5af0d94e5f66be6e7a2ff9a6150ccac72e5c32affbe1f1879ac2b"
+    },
+    "SYNTHETIC.final.optimized.log": {
+      "bytes": 2235,
+      "sha256": "56f5991e28841a449c99d15dfcb79fd31afbbc7bd63e033e0030e6743822d0e6"
+    },
+    "check_packets.py": {
+      "bytes": 16978,
+      "sha256": "3d4b41e1cd7df876014f72c1152a75a15fd70f8a8412a5a330a0dda44e17c76d"
+    },
+    "test_independent_packets.py": {
+      "bytes": 15019,
+      "sha256": "aae759e1e3dd399273d77b5ff196cf7f02123fc88c48e03a78af2bb1150f1dfb"
+    },
+    "test_io_contract.py": {
+      "bytes": 3216,
+      "sha256": "69b3688385027f228a74dfd112e6688c23265f45b3177897a2730d04b519255d"
+    }
+  },
+  "schema": "qwen2-offline-packet-source-freeze-v1",
+  "scope": "source+small synthetic only; no real full stream or target execution",
+  "projection": "Hash/size-only preparation metadata; no raw logs, executable private plan/argv or original input payload. Historical source-only scope retained."
+}

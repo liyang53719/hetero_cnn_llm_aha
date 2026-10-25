@@ -1,0 +1,55 @@
+{
+  "all_four_request_hold_ports_observed": true,
+  "all_scores_observed_zero": true,
+  "analysis_CPU_seconds": 0.043979929,
+  "analysis_peak_RSS_KiB": 24256,
+  "analysis_wall_seconds": 0.04420784197282046,
+  "checks": 12749,
+  "diagnostic_score_data_values": [
+    0
+  ],
+  "execution_provenance_and_cleanup_separately_reviewed": true,
+  "head_count": 12,
+  "line_count": 411,
+  "log": {
+    "bytes": 57776,
+    "sha256": "82106371e2f28c0e5da50910394b466cc99433fcd33869de6baf41d31a381329"
+  },
+  "max_bits_observed": "0xff800000",
+  "max_post_retirement_observation": false,
+  "model_or_DUT_executed": false,
+  "observation_count": 408,
+  "original_checker_imported": false,
+  "phase_counts": {
+    "1": 192,
+    "2": 192,
+    "3": 12,
+    "4": 12
+  },
+  "phase_sequence_independently_recomputed": true,
+  "raw_memory_or_owner_payload_trace_available": false,
+  "read_only_log_parse_count": 1,
+  "source_harness_checks_inferred_from_exact_binary_execution_and_success": true,
+  "status": "PASS_ACTUAL_NORMAL_M1_OBS_SEQUENCE_AND_TERMINAL_LOG_SEMANTICS_ONLY",
+  "terminal_counts": {
+    "accounting512Steps": 864,
+    "cycles": 4939,
+    "dones": 12,
+    "groups": 12,
+    "m": 1,
+    "memoryAccepted": 384,
+    "memoryReturned": 384,
+    "outputBytes": 6144,
+    "ownerAccepts": 1,
+    "pvRequests": 96,
+    "pvReturns": 96,
+    "qkAcceptedSteps": 96,
+    "requestHoldChecks": 113,
+    "results": 12,
+    "scoreWrites": 12
+  },
+  "origin_review": {
+    "bytes": 1686,
+    "sha256": "bcd3ada90dec7429dba5fe94ef18fd7011cbb0ba83983f443c612e76adce1e62"
+  }
+}

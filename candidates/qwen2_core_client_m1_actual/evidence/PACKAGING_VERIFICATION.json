@@ -1,0 +1,17 @@
+{
+  "status": "PASS_EXACT_SAFE_ACTUAL_PROJECTIONS_REFS_AND_SYNTHETIC_ONLY",
+  "checks": 3082,
+  "errors": 0,
+  "public_refs": 13,
+  "new_public_control_sources": 1,
+  "normal_synthetic_controls": 25,
+  "optimized_synthetic_controls": 25,
+  "original_EventContract_controls_each": 20,
+  "new_diagnostic_boundary_controls_each": 5,
+  "declared_pins": 135,
+  "automatic_pins": 137,
+  "retained_stat_checks": 139,
+  "real_log_events_ELF_SV_IR_cache_CPP_bulk_not_reopened": true,
+  "packaging_native_model_compiler_or_signal_actions": 0,
+  "scope": "Original pinned log checker and tiny synthetic text only; actual clocked normal_m1 acceptance is separately bound independent evidence, never inferred from these synthetic controls. New M2/harness absent."
+}

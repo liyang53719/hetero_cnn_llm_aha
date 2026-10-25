@@ -1,0 +1,105 @@
+{
+  "actual_values": [
+    {
+      "IEEE754_class": "negative infinity",
+      "bits_hex": "0xff800000",
+      "observed_count": 408,
+      "unsigned": 4286578688
+    }
+  ],
+  "frozen_source_less_result_for_words": true,
+  "limits": [
+    "The actual log contains no post-retire phase0 maxScore observation; do not claim its final zero value was independently observed.",
+    "The original checker only width-checks this diagnostic; this explanation does not silently add finalmax or allsoftmax numeric coverage.",
+    "Retire scoreIndex/data are independently observed expected0; memory/owner payload contracts remain source/harness assertions rather than full raw packet replay."
+  ],
+  "post_retire_max_directly_observed": false,
+  "reason": [
+    "Qwen2Block attQStored resets maxScore to0xff800000 before each head key traversal.",
+    "Read-only observation.maxScore directly exposes the maxScore register; phase1..4 are Scan/Fold/Scale/Retire.",
+    "Frozen C++ captures phase/max and emits OBS before clock() advances the rising edge.",
+    "During Retire, scoreWrite combinational probe is asserted with zero score, while maxScore still shows its old register value before that edge.",
+    "Source schedules maxScore:=score if F32.less; fixed comparator predicts -Inf<0 for these words. The retiring edge transitions to attNextKey/phase0, not included in the OBS stream.",
+    "M1 has one causal key per head; next head reinitializes maxScore. Thus all recorded pre-edge max fields staying -Inf is compatible with intended timing and not alone a numerical failure."
+  ],
+  "status": "CONSISTENT_WITH_PRE_RETIRE_EDGE_OBSERVATION_NOT_POST_EDGE_NUMERICAL_PROOF",
+  "source_evidence": [
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/OrderedQkBehaviorCore.scala",
+      "pin": {
+        "bytes": 2409,
+        "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c"
+      },
+      "ranges": [
+        {
+          "first": 25,
+          "last": 35
+        }
+      ]
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/Qwen2Block.scala",
+      "pin": {
+        "bytes": 57361,
+        "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd"
+      },
+      "ranges": [
+        {
+          "first": 568,
+          "last": 571
+        },
+        {
+          "first": 607,
+          "last": 618
+        },
+        {
+          "first": 650,
+          "last": 670
+        }
+      ]
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/m1_main.cpp",
+      "pin": {
+        "bytes": 10693,
+        "sha256": "675e75e1939afb7e77f40fde0baf2eeeddb01819812d2ba4ea38bcfcbc913f54"
+      },
+      "ranges": [
+        {
+          "first": 30,
+          "last": 36
+        },
+        {
+          "first": 48,
+          "last": 58
+        },
+        {
+          "first": 86,
+          "last": 98
+        },
+        {
+          "first": 106,
+          "last": 126
+        }
+      ]
+    },
+    {
+      "repo_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "pin": {
+        "bytes": 8313,
+        "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+      },
+      "ranges": [
+        {
+          "first": 8,
+          "last": 14
+        }
+      ]
+    }
+  ],
+  "origin_review": {
+    "bytes": 20704,
+    "sha256": "02e4d263c7d54f45db59806b6ec0e01a48aee9545110b2e63b256761960ff1e6"
+  },
+  "projection_note": "Exact original source byte hash + inclusive line locator only; source text available at pinned refs. Source-predicted post-edge update is not a direct post-retire measurement."
+}

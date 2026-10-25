@@ -1,0 +1,303 @@
+{
+  "actual_execution": true,
+  "case": {
+    "acknowledged_write_bytes_asserted": 6144,
+    "body_clock_edges": 4939,
+    "complete_log_lines": 411,
+    "counter_values": {
+      "accounting512Steps": 864,
+      "cycles": 4939,
+      "dones": 12,
+      "groups": 12,
+      "m": 1,
+      "memoryAccepted": 384,
+      "memoryReturned": 384,
+      "outputBytes": 6144,
+      "ownerAccepts": 1,
+      "pvRequests": 96,
+      "pvReturns": 96,
+      "qkAcceptedSteps": 96,
+      "requestHoldChecks": 113,
+      "results": 12,
+      "scoreWrites": 12
+    },
+    "covered_request_hold_ports": [
+      "group",
+      "memory",
+      "pv",
+      "step"
+    ],
+    "m": 1,
+    "name": "normal_m1",
+    "observation_lines": 408,
+    "owner_result_asserted_resetRequired": false,
+    "owner_result_asserted_status": 0,
+    "phase_counts": {
+      "1": 192,
+      "2": 192,
+      "3": 12,
+      "4": 12
+    },
+    "request_hold_rechecks": {
+      "group": 1,
+      "memory": 73,
+      "pv": 16,
+      "step": 23
+    },
+    "reset_clock_edges": 3,
+    "total_rising_edges": 4942,
+    "uncovered_request_hold_ports": []
+  },
+  "identity_and_cleanup": {
+    "aliases": 6,
+    "automatic_pre_post_pin_records": 137,
+    "cleanup": "Savedoriginal-owner identity proof independently replayed:two Z-leader barrier observations,8 records1547bytes,directleader reaped;no live process signaling or resampling by reviewer.",
+    "cleanup_scan_sha256": "31ef65b918013a3c8de8f1c6838bd2f6a23bf6ecb65c62ad81bf65d00df674ef",
+    "known_absent_paths": 52,
+    "known_runtime_version_closure_source_bound": true,
+    "model_canonical_static_runtime_objects": 5,
+    "original129_build_artifacts_unchanged_fullstat": true,
+    "scope": "Knownruntime/cache/config/alias/absenceprepost identity,not dynamicloader/syscall trace or whole-system sandbox.",
+    "staged_ELF_actual_single_hash_matches": true
+  },
+  "independent_direct_log_observations": {
+    "body_sequence": "One exact READY,12 heads each16 Scan+16 Fold+1 Scale+1 Retire,one CASE_PASS,final DONE; monotonic event cycles and consecutive within-head sequences.",
+    "causal_state": "All408 token0/selected0/faultmask0, expectedhead/lane/phase and resultReadyfalse.",
+    "counter_agreement": "Printed endpoint/hold/owner/output aggregates independently checked against known M1 formulas and originalreceipt; not a replay of raw memory/result packets.",
+    "diagnostic_values": "All408 max fields0xff800000; observed non-retire scoreData also0, but its expected numerical value was not a gate.",
+    "method": "One complete bounded ASCII token/field parse without importing production checker or executing DUT/reference; 12749 independent checks;411 exact ordered lines.",
+    "retire_sites": "12 directly logged scoreWrite=true retirement sites; eachindex0,scoreData0. Every other observed phase scoreWrite=false."
+  },
+  "max_field_conclusion": {
+    "checker_contract": "max remains diagnostic width-only; no retrospective upgrade to a complete max/softmax numerical comparison.",
+    "explanation": "Eachhead initializesmaxScore to-Infinity. Harness emitsOBS before the rising edge. InRetire,the combinational scoreWrite0 is visible while maxScore still hasoldvalue;source condition schedules maxScore update atthat edge,then state leaves observed phases. M1 hasonecausalkey and nexthead reinitializesmaxScore.",
+    "observed": "0xff800000,IEEE754 negativeInfinity,all408 pre-edge OBS samples",
+    "post_retire_max_directly_observed": false,
+    "predicted_source_update_not_claimed_measured": true,
+    "status": "CONSISTENT_WITH_FROZEN_SOURCE_OBSERVATION_TIMING_NOT_NUMERICAL_FAIL_BY_ITSELF"
+  },
+  "next_step_authority": "No automatic M2/M3,rerun,rebuild,optimizingchange or full128acceptance; each new engineering gate needs a separate scoped plan/review/rootapproval.",
+  "pass_scope": {
+    "can_say": "This first actual run passed clockedVerilator RTL behavior for the original selected Core/PackedClient normal_m1 with frozen scriptedMatrix/externalmemory endpoints and explicitreset/initialization contract; actual observations and source-backed runtime assertions above completed.",
+    "full128_rtl_pass": false,
+    "full29": false,
+    "initialization_limit": "2-state Verilated model:8250inputszero,randReset0,3explicitresetedges beforeREADY;not claimed bitwise identical tooldTreadlefirst-uninitialized reset or physicalpowerup.",
+    "matrix_FMA_verified": false,
+    "not_claimed": [
+      "complete128-token/fullblock RTL numerical acceptance",
+      "full29 observed tensor coverage",
+      "actual external4096-MAC MatrixFMA correctness",
+      "complete nonzero/NaN/fault/arithmetic inputcoverage",
+      "M2/M3 or j1..7 W005 coverage",
+      "physicalDDR/realSRAM powerup/synthesis/timing/frequency closure",
+      "all terminalpayload fields or intermediate tensor numeric equivalence",
+      "90percent effectiveMACutilization or fullsystemduty"
+    ],
+    "not_merely_source_or_Python_mock_PASS": true,
+    "official_numerical_reference_run": false
+  },
+  "resources": {
+    "actual_output_bytes": 3410151,
+    "actual_output_files": 4,
+    "final_aggregate_CPU_seconds": 13.755799213,
+    "inner_wall_seconds": 13.802895744040143,
+    "log_bytes": 57776,
+    "maximum_sample_interval_seconds": 0.031773063994478434,
+    "observed_output": "Only stagedbinary,CLAIM,worker.log,RECEIPT;home/tmp/empty-path empty.",
+    "original_caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "outer_wall_seconds": 13.863346743048169,
+    "sampled_peak_CPU_seconds": 13.647779196999998,
+    "sampled_peak_RSS_bytes": 7745536,
+    "sampled_peak_run_tree_bytes": 3396985,
+    "scope": "OneCPU affinity,childAS4GiB/CPU300/file8MiB/CORE0,groupRSS2GiB/tree16MiB/log2MiB sampled/streamed gates,original360work390total420outer. These hostresource measurements are not hardware clocks/frequency/MACthroughput. Pipedcore caveat remains; no globalcore settings changed."
+  },
+  "review_process": {
+    "independent_event_CPU_seconds": 0.043979929,
+    "independent_event_peak_RSS_KiB": 24256,
+    "independent_event_wall_seconds": 0.04420784197282046,
+    "log_parse_count": 1,
+    "metadata_reviewer_only_checkpoint": "Retained optional resolved_path dictionary-shape correction; exact path/bytes/SHA and sourcecache preserved. Not a candidate or nativeexecutionfailure.",
+    "no_binary_reexecution": true,
+    "no_native_or_JVM_tools": true,
+    "no_rebuild": true,
+    "prior_all_PASS_FAIL_prelaunch_and_review_checkpoints_retained": true
+  },
+  "schema": "qwen2-actual-normal-m1-clocked-RTL-simulation-independent-review-v1",
+  "status": "PASS_ACTUAL_VERILATED_ORIGINAL_CORE_CLIENT_NORMAL_M1_WITH_SCRIPTED_MATRIX_MEMORY_ONLY",
+  "terminal": {
+    "cleanup_complete": true,
+    "errors": [],
+    "no_retry_or_recompile_or_regeneration": true,
+    "outer_timeout": false,
+    "postflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 137
+    },
+    "preflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 137
+    },
+    "root_exit_code": 0,
+    "status": "PASS_VERILATED_CORE_NORMAL_M1_SCRIPTED_ENDPOINTS",
+    "worker_exit_code": 0
+  },
+  "utilization": {
+    "MAC_utilization": null,
+    "effective_MAC_duty": null,
+    "full_system_utilization": null,
+    "hold_count_caveat": "113 is sum ofpayloadrechecks acrossports and mayoverlap;includes releaseedges,not113 unique stalledcycles.",
+    "observed_ordered_phase_body_duty": {
+      "denominator": 4939,
+      "fraction": 0.08260781534723628,
+      "numerator": 408,
+      "percent": 8.260781534723629
+    },
+    "observed_ordered_phase_reset_inclusive_duty": {
+      "denominator": 4942,
+      "fraction": 0.08255766895993524,
+      "numerator": 408,
+      "percent": 8.255766895993524
+    },
+    "protocol_rates": {
+      "PV_request_accepts": {
+        "accepted_count": 96,
+        "body_edges": 4939,
+        "per_edge": 0.019437133022879124,
+        "percent_of_one_per_edge": 1.9437133022879125
+      },
+      "QK_step_accepts": {
+        "accepted_count": 96,
+        "body_edges": 4939,
+        "per_edge": 0.019437133022879124,
+        "percent_of_one_per_edge": 1.9437133022879125
+      },
+      "memory_request_accepts": {
+        "accepted_count": 384,
+        "body_edges": 4939,
+        "per_edge": 0.0777485320915165,
+        "percent_of_one_per_edge": 7.77485320915165
+      },
+      "score_write_retirements": {
+        "accepted_count": 12,
+        "body_edges": 4939,
+        "per_edge": 0.0024296416278598906,
+        "percent_of_one_per_edge": 0.24296416278598906
+      }
+    },
+    "reason": "408/4939=8.2607815347percent is sampled ordered-vector control-phase occupancy only. Other4531bodyedges include other compute/I/O/owner handling,not provenidle. ExternalMatrix is scripted,accounting864 is interfacebookkeeping,and no effectivehardwareMAC numerator/full4096-MAC block denominator exists. Do not treat phase percentage as achieving or failing the90percent MACtarget.",
+    "target90percent_met": null
+  },
+  "binary": {
+    "bytes": 3338824,
+    "sha256": "728664bc753d91099d20e9ce2ea4625cc6c971f518b8494290a486015d532b76"
+  },
+  "staged_binary": {
+    "bytes": 3338824,
+    "sha256": "728664bc753d91099d20e9ce2ea4625cc6c971f518b8494290a486015d532b76"
+  },
+  "candidate_freeze": {
+    "bytes": 4767,
+    "sha256": "be085cd9024e3a83b47b0da09cc7637c6f30c210ab3f51c91a0a65b57eab9d5b"
+  },
+  "producer_receipt": {
+    "bytes": 13166,
+    "sha256": "c6cc1ea0ddbd49cfcf672e6fb9ce637b9e4ad1ff468036fd808018151ec6de06"
+  },
+  "root_approval": {
+    "bytes": 3011,
+    "sha256": "3f7297e67748b8656e55ac93373a937bc31c3028a48ee3329e08b6a92dc011a0"
+  },
+  "root_receipt": {
+    "bytes": 85,
+    "sha256": "fbd8d7e0905f77ef15945e531ace9a2bc25184d7d11c4465f1a89c8db3ca45f8"
+  },
+  "source_qualification": {
+    "bytes": 19327,
+    "sha256": "b2f81d3ef41dfd44ee04357a5132ce535cc2ea78e69410d6dc1ba51ad5605078"
+  },
+  "source_assertion_backed_results": {
+    "checks": [
+      "8250 initialized inputs and3 explicit reset edges;body cap99997/total cap100000.",
+      "One accepted owner job,12 group/results/dones,96QKstep accepts with first/last/clear/finish/emit/context checks,96PV accepts/returns and no endpoint/core debt at owner result.",
+      "384memory accepts/returns with bounded alignedaddress/fullwrite mask/zero-output data checks;96 unique64-byte outputbeats cover6144bytes.",
+      "Request payload stability rechecked after stalls on allfour ports in this actualcase,counts1/73/16/23.",
+      "Owner completionstatus0/resetRequiredfalse; snapshot payloadheld stable8 bodyedges,then ready release and3 quiet edges.",
+      "Ordered phase excludes Scalar issue/early commitment; held Matrix result and final retire/write count checks."
+    ],
+    "harness_identity": {
+      "bytes": 5774,
+      "sha256": "a19d9459629e93d49ef15d5d5c156004e7837ff7d49a4ab3e0380428b1276e06"
+    },
+    "interpretation": "Exact approved compiled harness reached CASE_PASS and DONE with exit0; its runtime checks support the following facts, separately from independently replayed observation lines.",
+    "not_independently_raw_replayed": [
+      "all accepted memory addresses/tags/data and intermediate probability tensor values",
+      "all owner completion payload expected values",
+      "post-retire maxScore register value",
+      "every internal ALU arithmetic result or all assertion branches"
+    ]
+  },
+  "evidence": {
+    "actual_identity_freeze": {
+      "bytes": 2213,
+      "sha256": "a1aad9bfe928b5a6f2bd7616aace88958a0c368e53f7f4a80102e885b55d6b33"
+    },
+    "actual_identity_review": {
+      "bytes": 89089,
+      "sha256": "563b7fbbcc56831b69e6899f7bee6bf0bf81e94f2277b84729a95672f5f93f4e"
+    },
+    "binary_runtime": {
+      "bytes": 18534,
+      "sha256": "2ac22c23315d3871607dc9a94b87f6dfb3f81564a16b168422c3b3f633391c7a"
+    },
+    "case_metrics": {
+      "bytes": 2827,
+      "sha256": "cc20a5b87c50a2e3c9c9d8ec400b5932f040ae9ce16b1ca87efcd15e31d61a1a"
+    },
+    "event_review": {
+      "bytes": 1686,
+      "sha256": "bcd3ada90dec7429dba5fe94ef18fd7011cbb0ba83983f443c612e76adce1e62"
+    },
+    "independent_actual_observations": {
+      "bytes": 114109,
+      "sha256": "01c3d4a51479170e53f564fbb78dad78a4171e961fc87d69234863c9b9b29692"
+    },
+    "log": {
+      "bytes": 57776,
+      "sha256": "82106371e2f28c0e5da50910394b466cc99433fcd33869de6baf41d31a381329"
+    },
+    "max_diagnostic_source_review": {
+      "bytes": 20704,
+      "sha256": "02e4d263c7d54f45db59806b6ec0e01a48aee9545110b2e63b256761960ff1e6"
+    },
+    "runtime_manifest": {
+      "bytes": 43463,
+      "sha256": "e5abd4cae1f8cce4051470bb4e3f08ad40d1cfa68dab2e425fe9e36604c1243b"
+    }
+  },
+  "origin_review": {
+    "bytes": 16128,
+    "sha256": "ac4917c0aee8ee2ef70742d9e955c7c0997434f6af10079c164501fec5c191fd"
+  },
+  "origin_freeze": {
+    "bytes": 2385,
+    "sha256": "169c947065a2201a4b9b4c3e7411066a7c0813bd73c9da26d93ec604549ba33b"
+  },
+  "projection_scope": "Private paths/process metadata omitted; independently parsed observations separated from frozen-harness runtime assertions. No raw log/events, packet data, ELF or generated model payload published."
+}

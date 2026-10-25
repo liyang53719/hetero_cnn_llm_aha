@@ -1,0 +1,173 @@
+{
+  "schema": "qwen2-core-client-normal-m1-run-independent-source-review-v1",
+  "status": "PASS_SOURCE_AND_MOCK_QUALIFICATION_FOR_ONE_SEPARATELY_APPROVED_NORMAL_M1_RTL_SIMULATION_WITH_SCRIPTED_ENDPOINTS",
+  "acceptance_boundary": {
+    "MAC_duty": "UNKNOWN",
+    "MAC_utilization": "UNKNOWN",
+    "W005": "M1 exercises active j0 only; does not cover j1..7 dynamic-index warning range.",
+    "all_original_PASS_FAIL_and_prelaunch_checkpoints_retained": true,
+    "current": "Only source/mock eligibility; no model run or new behavior PASS occurred in this review.",
+    "initialization": "C++ zeros8250 inputs,randReset0,three explicit reset edges beforeREADY; not bitwise equivalence to old Scala framework firstreset before explicit input initialization.",
+    "not_claimed": [
+      "complete original128-token block RTL numerical PASS",
+      "full29 materialized tensor observation",
+      "real external Matrix FMA/effective MAC count",
+      "physicalDDR or realSRAM power-up semantics",
+      "all numerical inputs/ALU arithmetic coverage, M2/M3/fault cases",
+      "whole-block4096-MAC utilization, pipeline efficiency or90-percent goal"
+    ],
+    "not_collapsed_to_plain_software_contract": true,
+    "possible_future_claim": "If actual independently reviewed run passes, original unchanged generated Core/PackedClient RTL clocked Verilator behavior for one normal_m1 with scripted Matrix/external-memory endpoints, under explicit2-state/reset initialization contract.",
+    "separate_allowed_future_metrics": "Only after actual PASS report408/C observed ordered-vector phase occupancy and specified protocol accepts per model edge, with reset-inclusive denominator shown separately; not effectiveMAC/system utilization."
+  },
+  "identity_summary": {
+    "aliases": 6,
+    "automatic_with_manifest_and_supervisor": 137,
+    "cache_semantics": "106 prior stable cached digests +52 fresh small metadata;158 final stat records stable. Two reviewer-only wrong cache-magic-length assertions preserved and corrected to exact20-byte17+3 magic/version. Not target failures.",
+    "candidate_frozen_members": 18,
+    "declared_pin_records": 135,
+    "declared_roles": {
+      "input": 1,
+      "provenance": 51,
+      "runtime": 80,
+      "source": 3
+    },
+    "inventory_count": 0,
+    "loader_cache_entries": 2027,
+    "model_child_canonical_ELF_objects": 5,
+    "model_version_requirement_pairs": 13,
+    "negative_paths": 52,
+    "original129_build_artifact_fullstat_stable": true,
+    "original_ELF_or_SV_reread_during_identity_review": false,
+    "parent_and_child_roles_distinct": true,
+    "runtime_frozen_members": 15,
+    "selected_SONAMEs": 9
+  },
+  "result_gate": {
+    "OBS_sequence": "12 heads, each16 scan+16 fold+1 scale+1 retire; consecutive within-head body cycles; token0/selected0/fault0; resultReadyfalse; scoreWrite exactlyretire and retire index/data0.",
+    "clock_contract": "3 explicit reset rising edges then C<=99997 body edges; DONE total T=C+3<=100000; raw CPU/wall never substituted for model clock count.",
+    "diagnostics": "maxScore and non-retire score fields width-checked only; no expected maxScore numeric claim.",
+    "expected": {
+      "OBS": 408,
+      "accounting512Steps": 864,
+      "dones": 12,
+      "groups": 12,
+      "memoryAccepted": 384,
+      "memoryReturned": 384,
+      "outputBytes": 6144,
+      "ownerAccepts": 1,
+      "pvRequests": 96,
+      "pvReturns": 96,
+      "qkAcceptedSteps": 96,
+      "results": 12,
+      "scoreWrites": 12
+    },
+    "memory_and_owner_scope": "Memory/descriptor/address/data/queue debt/output checks occur in frozen harness; outer log checker does not independently reconstruct every memory packet. Owner status/resetRequired,8 held-payload steps and3 quiet release steps are asserted; not all owner payload fields expected-value-proven.",
+    "nonzero_or_signal_exit_even_with_complete_log_rejected": true,
+    "original_checker_unchanged": true,
+    "ready": "VERILATOR_CORE_SIM_READY case=normal_m1 m=1 scripted_matrix=true reset_clocks=3",
+    "request_hold_scope": "Per-port counts each0..C, total>0 and sum exact. Explicit covered/uncovered port sets; zero-count ports not called covered.",
+    "requires": [
+      "actual exact staged model process exit0 under original-owner anchored cleanup proof",
+      "all pre/post pins/runtime boundaries and unchanged stage bytes",
+      "captured stdout+stderr entire bounded log; unknown or assertion/error line rejected",
+      "one READY then exact408 OBS then one CASE_PASS then final DONE",
+      "counts from fixed harness assertions and exact independent expected constants, linked to observed log SHA/bytes and actual execution provenance"
+    ]
+  },
+  "source_delta": {
+    "admission": "Hard-bound current actual build FINAL, independent binary manifest and producer receipt, frozen runtime schema/hash, original harness proof, ELF path/size/hash, one no-arg argv,5-key environment, original result checker, normal_m1 reset3/cap100000, no retry/chaining.",
+    "changed_functions": [
+      "_child_limits",
+      "_execute",
+      "main",
+      "output_scope",
+      "save_receipt",
+      "stage_inputs",
+      "structure_check",
+      "validate_manifest",
+      "verify_inputs",
+      "verify_runtime_boundaries",
+      "verify_staging"
+    ],
+    "child_limit_delta": "Only RLIMIT_CORE=(0,0) insertion; inherited affinity/CPU/AS/FSIZE/signal handling unchanged; no global security setting modified.",
+    "new_functions": [],
+    "phase_delta": "Replace compile staging/expected object plan/content parser with one exact ELF stage and original normal_m1 log contract. Original owner anchoring/retained leader sampling/gap/resource checks/cleanup/postflight/receipt ordering retained.",
+    "removed_functions": [
+      "copy_exact",
+      "expected_argv",
+      "expected_build_plan"
+    ],
+    "resource_delta_explicit": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "unchanged_functions": [
+      "digest",
+      "exact_inventory",
+      "group_sample",
+      "load_cleanup",
+      "load_pinned_module",
+      "need",
+      "pin",
+      "render_worker_argv",
+      "sample_gap",
+      "tree_sample",
+      "verify_pin",
+      "walk_output"
+    ]
+  },
+  "resources": {
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "cleanup_absolute_offset_seconds": 370,
+    "fit_guaranteed": false,
+    "outer_wall_seconds": 420,
+    "prior_build_cost_not_runtime_prediction": true,
+    "scope": "1-affinity CPU, child CPU/AS/FSIZE/CORE hard limits; aggregateCPU sampled+reaped final gate. GroupRSS/run-tree sampled with actual maxgap<=0.1s; not cgroup/all-machine disk or parent AS/RSS hard cap. Child core-file restriction can leave system piped-core handling outside this claimed group/tree scope."
+  },
+  "source_blockers": [],
+  "controls": {
+    "independent_current": 306,
+    "normal_and_optimized": true,
+    "replayed_author_current": 106,
+    "scope": "Source/log arithmetic/ABI metadata, tiny copied non-ELF data never executed, synthetic logs and short Python resource/cleanup children only. No linked model/native target run or actual clocked behavior; synthetic gate PASS is not behavior evidence.",
+    "total_current": 412
+  },
+  "origin_review": {
+    "bytes": 19327,
+    "sha256": "b2f81d3ef41dfd44ee04357a5132ce535cc2ea78e69410d6dc1ba51ad5605078"
+  },
+  "origin_freeze": {
+    "bytes": 6883,
+    "sha256": "dd8ad1eb464cc445b2069e0cbdb6b7979784758cee212870b4da92545a478deb"
+  },
+  "historical_source_qualification_only": true,
+  "actual_later_execution_review_separate": true
+}

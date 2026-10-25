@@ -1,0 +1,113 @@
+{
+  "schema": "single-frozen-normal-m1-run-role-projection-v1",
+  "origin_manifest": {
+    "bytes": 56927,
+    "sha256": "042f03feeabe4a5c4820a3effe3ae17f2c43fa42fb046a4bea0bb89634052d62"
+  },
+  "worker_argv": [
+    "${NEW_RUN_ROOT}/bin/VOrderedQkBehaviorCore"
+  ],
+  "environment": {
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "${NEW_RUN_ROOT}/empty-path",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+  },
+  "case": "normal_m1",
+  "reset_rising_edges": 3,
+  "total_rising_edges_cap": 100000,
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "core_bytes": 0,
+    "cpu_seconds": 300,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 16777216,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 8388608,
+    "total_wall_seconds": 390,
+    "work_wall_seconds": 360
+  },
+  "automatic_retry": false,
+  "automatic_stage_chaining": false,
+  "scope": {
+    "case_chain": false,
+    "compiler_make_codegen_invoked": false,
+    "full128_rtl_numeric": false,
+    "matrix_FMA_numerics": false,
+    "original_core_client_real_verilated_rtl_behavior": true,
+    "physical_MAC_utilization": null,
+    "scripted_matrix_external_memory": true
+  },
+  "scope_limits": [
+    "real compiled original RTL core with scripted Matrix/memory, not full Matrix FMA",
+    "explicit zero-input +3reset startup, not bitwise same as old Treadle framework initial unspecified inputs",
+    "original result payload8cycle stability/status checks do not verify every expected payload field",
+    "per-port zero hold coverage is reported, not silently accepted as covered",
+    "accounting512Steps864 is normalized bookkeeping, not MAC count/utilization",
+    "default assertOn source path is enabled; no assertion branch coverage measurement",
+    "RLIMIT_CORE0 only child; piped system core mechanisms may ignore this limit",
+    "known static loader resolution endpoints, not full syscall/dlopen/file-access isolation"
+  ],
+  "model_executable": {
+    "bytes": 3338824,
+    "sha256": "728664bc753d91099d20e9ce2ea4625cc6c971f518b8494290a486015d532b76"
+  },
+  "log_checker": {
+    "bytes": 4914,
+    "sha256": "2c6ccffb45308745e73372a31904606f8fc1b9ef97589753369bc7b0e4814f09"
+  },
+  "outer_wall_seconds": 420,
+  "stage": {
+    "allowed_regular_files": [
+      "CLAIM.json",
+      "worker.log",
+      "RECEIPT.json",
+      "bin/VOrderedQkBehaviorCore"
+    ],
+    "closed_environment": {
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "${NEW_RUN_ROOT}/empty-path",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "directories": [
+      "bin",
+      "home",
+      "tmp",
+      "empty-path"
+    ],
+    "exact_bin_and_empty_home_tmp_PATH_pre_and_post": true,
+    "loader_qualification": "Exact selected cache entries flags0x303/hwcap0, aliases/config/cache and known absent hwcap/preload/search slots; no live loader trace, arbitrary dlopen/syscall isolation or signed host-package provenance claimed.",
+    "model_required_libs": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "no_original_files_modified": true,
+    "runtime_assertion_and_thread_scope": "Pinned VerilatedContext source initializes assertOn enabled; actual compiled harness does not call commandArgs/assertOn(false), requires argc1, sets threads(1) before model constructor and randReset(0). Source inference supports intended setup; no actual assertion activation/coverage or live thread census yet.",
+    "staged_binary_mode": "0500",
+    "staged_bytes": 3338824,
+    "staged_original_sha256": "728664bc753d91099d20e9ce2ea4625cc6c971f518b8494290a486015d532b76",
+    "static_runtime_scope": "5 canonical model ELF objects including loader; 25 selected alias/config/cache/parent-compat endpoint pins are not an exhaustive Python or all-system runtime claim. Parent Python closure remains separately bound within80 runtime-role pins.",
+    "unknown_outputs_or_waves_rejected": true
+  },
+  "interpreter_basename": "ld-linux-x86-64.so.2",
+  "interpreter_role": "linux_x86_64_dynamic_loader",
+  "supervisor_hash": {
+    "bytes": 29422,
+    "sha256": "c3e1b39114d111a10cdbf0253c3a9930ef4d40a90681a87fc996ec649a4ba5e9"
+  },
+  "runtime_qualification": {
+    "bytes": 1644,
+    "sha256": "dce5ab91a4c5f347b572f889b7a03ed074180fc74cd14a8db0097e6eac393139"
+  },
+  "no_launch_script_or_new_GO": true
+}

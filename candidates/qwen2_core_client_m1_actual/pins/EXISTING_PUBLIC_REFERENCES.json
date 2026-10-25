@@ -1,0 +1,84 @@
+{
+  "base_commit": "9ba57b9545bc2e49e33b9cab8a9f1ac2829169d2",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/check_m1_log.py",
+      "bytes": 4914,
+      "sha256": "2c6ccffb45308745e73372a31904606f8fc1b9ef97589753369bc7b0e4814f09",
+      "git_blob_sha": "d6793fee44c49b1556e5af35c74b4be8a24fb59b"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/generate_abi.py",
+      "bytes": 4060,
+      "sha256": "396bda736a78adb7cf4dab18342a4149d77934ba0fde26b2bfbff92cd5ea9ab8",
+      "git_blob_sha": "5b819cb6663284f277d5e3f86ba1f469ba61a448"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/test_source_contract.py",
+      "bytes": 6412,
+      "sha256": "c1db395d0f899e0c0e7c1ec2ce7dae8c3343b1d9387bf012a279a206a8c4e123",
+      "git_blob_sha": "0f3e36b7ab280321b3d2af18ee21f87e8b93aa94"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/source/m1_main.cpp",
+      "bytes": 10693,
+      "sha256": "675e75e1939afb7e77f40fde0baf2eeeddb01819812d2ba4ea38bcfcbc913f54",
+      "git_blob_sha": "664a6f9f2a300f911179e458d3ec8f46b7e5a3e4"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/evidence/HARNESS_SOURCE_REVIEW.json",
+      "bytes": 4002,
+      "sha256": "83a29a53272f0fb88b7d5a06c5c9f6070e71ab98ab5c5182b41e9d836a632218",
+      "git_blob_sha": "421710d91fefff13dc12ea53e78ace28839a723e"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/pins/SOURCE_PINS.json",
+      "bytes": 3442,
+      "sha256": "e9df47dfaef0135f50decdc2e04250fb3ed697c779668e5e299de208cf9d0028",
+      "git_blob_sha": "3056b11fdf84293d41c8facc5483fcfb98ae8f8b"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/evidence/ACTUAL_BUILD_REVIEW.json",
+      "bytes": 8567,
+      "sha256": "832c0faea01b6741a36b027dc38591190b8f9afa77b562254ac3e26341da0706",
+      "git_blob_sha": "03bb2ba775713a154b71087671bf7323b48fcd52"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/evidence/BINARY_RUNTIME_DECLARATION.json",
+      "bytes": 11245,
+      "sha256": "23574ba42df8b622b7aa70ea56ca1ec83f814f1a198b706282e8a1c7d051c96d",
+      "git_blob_sha": "f70950242d21dd99c26d102f5054d24138b308d8"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/evidence/BUILD_ARTIFACT_HASHES.json",
+      "bytes": 30609,
+      "sha256": "abeec2c225be8b4f3a2594f65f28116b4d551e6debcd50e74e699ddd676216e0",
+      "git_blob_sha": "e7031ce569a423001758edb5f7ce65b8f9f28774"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/pins/EXISTING_PUBLIC_REFERENCES.json",
+      "bytes": 3003,
+      "sha256": "41b87816f15ded2d0d29cbd73b40f5f8c0107d3bfe7eea97e9b067b8bb55f4eb",
+      "git_blob_sha": "1bc4c88d2a4d58ea97a8a539a09475a5d6e9143c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/OrderedQkBehaviorCore.scala",
+      "bytes": 2409,
+      "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c",
+      "git_blob_sha": "9cc9895ad7ee0c79bf25405068a12bb03e363f13"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/Qwen2Block.scala",
+      "bytes": 57361,
+      "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd",
+      "git_blob_sha": "eb44a8bb281e544b4bb3b20e7a1aab881bd50d43"
+    },
+    {
+      "repo_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+    }
+  ],
+  "scope": "Existing unchanged log checker/synthetic source/harness/Scala/build evidence. This package does not duplicate codegen/binary or need real model execution for packaging controls."
+}

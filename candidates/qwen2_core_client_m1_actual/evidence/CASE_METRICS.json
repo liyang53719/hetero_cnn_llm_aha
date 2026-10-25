@@ -1,0 +1,95 @@
+{
+  "MAC_utilization": null,
+  "body_clock_edges": 4939,
+  "case": "normal_m1",
+  "effective_MAC_duty": null,
+  "full_system_utilization": null,
+  "hold_interpretation": "A hold counter increments when a previously stalled request is rechecked, including a releasing-ready edge. Counts across ports may overlap;113 is not113 unique idle/stalled cycles.",
+  "non_observed_cycles_interpretation": "Includes scalar/other compute, I/O, scheduling, result hold and quiet; not evidence that91.7percent of hardware was idle.",
+  "non_observed_ordered_phase_body_cycles": 4531,
+  "observed_ordered_vector_phase_cycles": 408,
+  "observed_per_phase_body_duty": {
+    "Fold": {
+      "body_edges": 4939,
+      "cycles": 192,
+      "fraction": 0.03887426604575825,
+      "percent": 3.887426604575825
+    },
+    "Retire": {
+      "body_edges": 4939,
+      "cycles": 12,
+      "fraction": 0.0024296416278598906,
+      "percent": 0.24296416278598906
+    },
+    "Scale": {
+      "body_edges": 4939,
+      "cycles": 12,
+      "fraction": 0.0024296416278598906,
+      "percent": 0.24296416278598906
+    },
+    "Scan": {
+      "body_edges": 4939,
+      "cycles": 192,
+      "fraction": 0.03887426604575825,
+      "percent": 3.887426604575825
+    }
+  },
+  "observed_phase_body_duty": {
+    "denominator": 4939,
+    "fraction": 0.08260781534723628,
+    "numerator": 408,
+    "percent": 8.260781534723629
+  },
+  "observed_phase_reset_inclusive_duty": {
+    "denominator": 4942,
+    "fraction": 0.08255766895993524,
+    "numerator": 408,
+    "percent": 8.255766895993524
+  },
+  "per_body_edge_protocol_rates": {
+    "PV_request_accepts": {
+      "accepted_count": 96,
+      "body_edges": 4939,
+      "per_edge": 0.019437133022879124,
+      "percent_of_one_per_edge": 1.9437133022879125
+    },
+    "QK_step_accepts": {
+      "accepted_count": 96,
+      "body_edges": 4939,
+      "per_edge": 0.019437133022879124,
+      "percent_of_one_per_edge": 1.9437133022879125
+    },
+    "memory_request_accepts": {
+      "accepted_count": 384,
+      "body_edges": 4939,
+      "per_edge": 0.0777485320915165,
+      "percent_of_one_per_edge": 7.77485320915165
+    },
+    "score_write_retirements": {
+      "accepted_count": 12,
+      "body_edges": 4939,
+      "per_edge": 0.0024296416278598906,
+      "percent_of_one_per_edge": 0.24296416278598906
+    }
+  },
+  "phase_counts": {
+    "1": 192,
+    "2": 192,
+    "3": 12,
+    "4": 12
+  },
+  "reason": "Scripted external Matrix, no measured algorithm-effective full4096-MAC numerator or complete-block denominator.408/C is only sampled control-phase occupancy.864 accounting units are neitherMACs nor measuredhardwarecycles.",
+  "request_hold_recheck_counts": {
+    "group": 1,
+    "memory": 73,
+    "pv": 16,
+    "step": 23
+  },
+  "reset_clock_edges": 3,
+  "target90percent_met": null,
+  "total_clock_edges": 4942,
+  "origin_review": {
+    "bytes": 2827,
+    "sha256": "cc20a5b87c50a2e3c9c9d8ec400b5932f040ae9ce16b1ca87efcd15e31d61a1a"
+  }
+}

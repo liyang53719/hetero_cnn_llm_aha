@@ -7,7 +7,7 @@
 - to do
 - ongoing
 - done
-说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。 2026-10-24当前证据见本文件末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。 2026-10-24最新导航：既有dated说明为各时点快照，本段仅更新当前导航，不改历史结果。后续已发布局部进展见doc/block_checklist.yaml中的“Qwen2有序归约已发布里程碑20261024”：selected默认关闭候选scalac编译、Python行为参考、M1/M2生成器调度、owner/direct控制、native Attention组件R2及observer AST软件fixture分别在各自有限范围PASS；observer原AST片的正常source-loaded TEMP保留为历史；后续正常模块加载/code-binding有限范围PASS，真实runtime Observation/capture及无干扰资格仍TEMP，开发与环境FAIL全部保留。各里程碑只补来源和导航，不关闭P03/C05/C08.2等任务，也不赋予M128/fullblock/Chisel/RTL/周期或利用率资格；完整block RTL仍0/5，固定4096-MAC的90%目标未达/未实测。 2026-10-25最新导航：后续十四项已发布证据见doc/block_checklist.yaml中的“Qwen2参考与DUT准备已发布证据增量20261025”。Attention M1/M2 Observation、正常source/code绑定、官方M16与fresh coldM128单层reference、metadata-only及首PC前native初始化各自仅有限范围PASS，source/mock准备分列且旧UNBOUND/NOT_READY保持历史。最新真实M128 DUT虽完成原prefix PC0..9，采样CPU3600.03超过3600预算，整体FAIL/INCOMPLETE；无wholeterminal、final inventory、数值比较或成功seal，run外41文件hash仅保全证据。raw stream结构计数和绿色payload guard不代表数值、生命周期、性能或DUT通过。官方pair仅reference，29 observed自检不等于全部29 baseline中间值无干扰；全模型、RTL及硬件90%验收未通过。全部旧dated FAIL/TEMP、任务状态、冻结plan与原门限不变。 2026-10-25观测成本诊断导航：累计五组限定证据见“Qwen2观测成本诊断已发布证据增量20261025”：buffer/LINE负结果不采用；M2四臂、original/R4三臂、original/identity三臂及三fresh-process循环移位三臂均非全block验收。三循环中candidate/original CPU比0.6296/0.5759/0.5370只描述本次小样本；selective-LINE+cache组合非cache-only因果收益、统计证明或稳定加速，仍default-off、不采用。七个RSS样本全为supervisor-only，不能证明combined peak≤1GiB。reference normalizer频率与writes口径区别保留；完整M128 CPU FAIL、五block RTL0/5、4096-MAC/90%目标及全部任务状态历史不变。最终合批CI另按最终提交核验，不沿用旧guard成功。
+说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。 2026-10-24当前证据见本文件末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。 2026-10-24最新导航：既有dated说明为各时点快照，本段仅更新当前导航，不改历史结果。后续已发布局部进展见doc/block_checklist.yaml中的“Qwen2有序归约已发布里程碑20261024”：selected默认关闭候选scalac编译、Python行为参考、M1/M2生成器调度、owner/direct控制、native Attention组件R2及observer AST软件fixture分别在各自有限范围PASS；observer原AST片的正常source-loaded TEMP保留为历史；后续正常模块加载/code-binding有限范围PASS，真实runtime Observation/capture及无干扰资格仍TEMP，开发与环境FAIL全部保留。各里程碑只补来源和导航，不关闭P03/C05/C08.2等任务，也不赋予M128/fullblock/Chisel/RTL/周期或利用率资格；完整block RTL仍0/5，固定4096-MAC的90%目标未达/未实测。 2026-10-25最新导航：后续十四项已发布证据见doc/block_checklist.yaml中的“Qwen2参考与DUT准备已发布证据增量20261025”。Attention M1/M2 Observation、正常source/code绑定、官方M16与fresh coldM128单层reference、metadata-only及首PC前native初始化各自仅有限范围PASS，source/mock准备分列且旧UNBOUND/NOT_READY保持历史。最新真实M128 DUT虽完成原prefix PC0..9，采样CPU3600.03超过3600预算，整体FAIL/INCOMPLETE；无wholeterminal、final inventory、数值比较或成功seal，run外41文件hash仅保全证据。raw stream结构计数和绿色payload guard不代表数值、生命周期、性能或DUT通过。官方pair仅reference，29 observed自检不等于全部29 baseline中间值无干扰；全模型、RTL及硬件90%验收未通过。全部旧dated FAIL/TEMP、任务状态、冻结plan与原门限不变。 2026-10-25观测成本诊断导航：累计五组限定证据见“Qwen2观测成本诊断已发布证据增量20261025”：buffer/LINE负结果不采用；M2四臂、original/R4三臂、original/identity三臂及三fresh-process循环移位三臂均非全block验收。三循环中candidate/original CPU比0.6296/0.5759/0.5370只描述本次小样本；selective-LINE+cache组合非cache-only因果收益、统计证明或稳定加速，仍default-off、不采用。七个RSS样本全为supervisor-only，不能证明combined peak≤1GiB。reference normalizer频率与writes口径区别保留；完整M128 CPU FAIL、五block RTL0/5、4096-MAC/90%目标及全部任务状态历史不变。最终合批CI另按最终提交核验，不沿用旧guard成功。 2026-10-25完整M128扩时验证最新导航：上述“最新”均保留为各历史时点快照；新独立9000CPU/10800wall身份已完成原模型公开21命令的真正128-token软件计算，21 completions/17 jobs/1 result，实际观测域原门与完整2478339帧协议经两类独审通过。24批准BF16域、softmax FP32无批准比较容差诊断及mask/repeat_k/repeat_v/logits四非物化节点分列；full29、observer noninterference、RTL/硬件90%仍未建立。原模型/输入/硬件/数学/阈值不变，未采用normalization helper；旧3600CPU FAIL和startup/数值FAIL/TEMP不改。软件useful/nativeFMA约90.83%及accepted-slot算术比约69.98%均不是MAC周期利用率或占空比；硬件周期分母/active timeline仍unknown。详见“Qwen2原模型完整M128扩时观测域证据20261025”；五block RTL仍0/5、固定4096-MAC/90%目标及全部任务状态不变，最终批次CI另按最终head核验。
 任务:
 - 编号: C00
   名称: 重建最新源码与证据基线
@@ -3099,3 +3099,188 @@ Qwen2观测成本诊断已发布证据增量20261025:
   本次批次证据树: d9c1eded021dc6e92835a96a1b4d2c9a3d23d825
   内存与监督证据边界: aggregate18.79356525CPU/19.15878644003533wall记录含supervisor；每进程1GiB RLIMIT_AS加采样combined RSS策略不是aggregate-AS硬上限/cgroup。七个留存RSS均supervisor-only
     point samples，final16633856bytes非peak；无live combined history/peak，不能独立证明峰值≤1GiB。cleanup/EXITED/0为源码绑定receipt结论，无完整OS事件史。
+
+Qwen2原模型完整M128扩时观测域证据20261025:
+  核对main: 693ed26cdd3a2f4da0e495780e569b998aba3616
+  核对Git树: 76799399a56ac05bc46af1dc49cbf510bd67a84c
+  本次批次证据提交: 5f038dab10f4f975d24dfcc230da1d3c72083cc7
+  本次批次证据树: 167713a9ad3ba2baa8bc7b4c0c96ceb34076c0e2
+  状态: PASS_SOFTWARE_OBSERVED_DOMAIN_AND_COMPLETE_PROTOCOL_ONLY
+  里程碑:
+  - 里程碑: original_m128_extended9000_observed_domain_and_protocol
+    设计提交: 5f038dab10f4f975d24dfcc230da1d3c72083cc7
+    来源基线: 693ed26cdd3a2f4da0e495780e569b998aba3616
+    关联既有任务:
+    - C08.2
+    - C08.3
+    - Q21.3
+    - Q22
+    - U00.2
+    - U01
+    关联含义: 仅追加来源与限定范围导航；不改任务状态、负责人、依赖、完成边界、冻结计划或旧证据。
+    范围: PASS仅完整原模型M128 public21软件实际终态、原已批准观测域与完整记录协议。21 completions/17 jobs/1 result，24批准BF16域；softmax FP32比较仍诊断、四非物化节点不作数值PASS，future未观测不填零。全29张量、observer
+      noninterference、RTL与90%硬件利用率未建立；时间预算变化不证明加速，旧失败保留。
+    文件: candidates/qwen2_full128_extended_observed_validation/evidence/ACTUAL_SEMANTIC_REVIEW_PROJECTION.json
+    SHA256: 5ae9de6a6602e73a710431425e339816bab174be66832a09a5d280aa05670083
+    关联文件:
+    - 文件: candidates/qwen2_full128_extended_observed_validation/README.md
+      SHA256: 42b77bd620c7d758005ef4fecd215d131636f7874d0494387132801938ed9f66
+    - 文件: candidates/qwen2_full128_extended_observed_validation/assemble_sources.py
+      SHA256: a68ee55143f679ed91292a837758a12d120811c18d002fe48eb7125721f2c080
+    - 文件: candidates/qwen2_full128_extended_observed_validation/delta/qwen2_ordered_fullgraph_entry/runner.py
+      SHA256: 795d4aa129815971242d11071cad6868add45d60b6752a410d637981d803a165
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/ACTUAL_METADATA_REVIEW_PROJECTION.json
+      SHA256: 8289c24f4e002a5f4e7805bfa12809245ef73d6be32a280738df87b78b960618
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/ARTIFACT_LOGICAL_MANIFEST.json
+      SHA256: f2e1a6c9d4415b64f1476ff21952c4ee20eb77a0a135a5a00c7c635e0710fbd3
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/CASE_MAC_ACCOUNTING_PROJECTION.json
+      SHA256: 0d126fd2f14ea68bbe0478df7eff5222fc1bfcbc886205aeb57a6f45389e7f10
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/COMPARISON_PROVENANCE_PROJECTION.json
+      SHA256: 1c2567c59f6c0d357ce4268097937e1fbb7a3f054b01391b6193ee1bbe064e2c
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/COMPLETE_STREAM_REVIEW_PROJECTION.json
+      SHA256: 5a8fc6b3c5c0f404f1399b5a9da5f5bb73f72199c2a1d75baab0c783fbca777e
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/COMPLETION_SEAL_PROJECTION.json
+      SHA256: b6ac6a546e82b688b964418941803c3168863eae5732dc730eb229f1d3c4ccd0
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/INDEPENDENT_NUMERIC_REVIEW_PROJECTION.json
+      SHA256: 594d37a83fc81d1b2551e487052e31c32e867829677f27a7ae9f7c2512974826
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/PACKAGING_VERIFICATION.json
+      SHA256: 551eab1a5b1eae9bbeb621d67067bb6ba1fe9070587197e0ff925447781290e0
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/SERVICE_PROTOCOL_PROJECTION.json
+      SHA256: 6f1b1f269a8d8a48c0703b41772e22e2c1e85807f5276154e0a34f269fed111a
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/SOURCE_CONFIG_REVIEW_PROJECTION.json
+      SHA256: 36e39861516744d5625641baa591a398744eaa575152d9e46d046ec2716c94f6
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/TERMINAL_COMPARISON_PROJECTION.json
+      SHA256: 6b384f51409fad7bc12aaadc8201df38cfe18043034b01277469123f5e0147e5
+    - 文件: candidates/qwen2_full128_extended_observed_validation/evidence/TERMINAL_RECEIPT_PROJECTION.json
+      SHA256: 4baab59b90f18f3944aa34628430c02f5748a91f045375699f52d4db41b95f5b
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/CONFIGURATION_SCOPE_SUMMARY.json
+      SHA256: d30cf28dca041e0d2490e81769831179420a17750466b942404bd2b9c3b8c032
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/EXACT_TIME_VERSION_SOURCE_DELTA.json
+      SHA256: d8a80e1696b9060d879a81c4306352d94308f8cb900b3e07149cb4bb7fd1d0ec
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/EXTENDED_LOGICAL_FILES_DELTA.json
+      SHA256: d9908b7fa3ebe08909e65bb164ca5a8548dbf114a5671e8104600094b8e5c5ca
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/FREEZE_PROJECTION.json
+      SHA256: 735cc449926347febe9bec2dbcddc781a9453746940c20057cbe9ecedd1feb75
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/PACKAGING_HELPER_PROVENANCE.json
+      SHA256: 133cd0cc9ad9293c7cc26fc438caaed98c19ba4db97d3d877ec0fbf48eb2630a
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/SOURCE_ASSEMBLY_MANIFEST.json
+      SHA256: 2c054545ef05482dfe16a9e95fd8533c6a978a694f3736026e78b8107ef7eb51
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/SOURCE_PROVENANCE.json
+      SHA256: 24a2892656c960e4782a3f816edbdffb5fa9a0deeeb68d1add295f03bb2d2354
+    - 文件: candidates/qwen2_full128_extended_observed_validation/pins/TIME_DELTA.json
+      SHA256: 875a9707378183c1986a48d23fc795827c2959ee3b1cb8149a72770285b41e0d
+    - 文件: candidates/qwen2_full128_extended_observed_validation/test_assemble_sources.py
+      SHA256: 6d1cc2ad910ba25f1e2df478993ab71e9721d95ab0c1aa0d1cd15442cfb39280
+    - 文件: topplans/QWEN2_FULL128_EXTENDED_OBSERVED_VALIDATION.md
+      SHA256: fc75f2ace22911789a1d7a5bf97b329e3e337a68667aaa0a0789c9d40d86e8c5
+    原始与公开身份: 设计提交固定安全源码/hash/摘要；实际身份由原config/input/source/runtime/ELF/review pins限定，不等于公开Git HEAD或可执行私有配置。
+    发布与CI关系: 先创建已独审证据对象，不单独更新main；与本索引两对象合批一次fast-forward。最终main精确head另验CI；本索引不声称尚未运行的CI成功。
+    CI终态: NOT_CLAIMED_IN_THIS_INDEX_VERIFY_FINAL_BATCH_HEAD_SEPARATELY
+    CI范围: 仅既有goal/guard/qwen2-prefill-model-contract自动门；后者含bounded native/CPU模型回归，不是本M128重跑或RTL验收；不手动dispatch。
+  原配置SHA256: 96677e454767ad8e10cb95701dfdf010484de3334b10afc75e8e11f40dcd44a2
+  原receiptSHA256: af87387fd9b9b1c3f07417bd2afdebc7b14aa77ef2d7b7b073382162e43bfcad
+  独立metadata审查SHA256: c85cef5a856a7b63097e7e974e094de8688fe605e4f290748aa54435a1a72034
+  独立逐值协议审查SHA256: 5d0760ab66a134bcfbc7848ed8e48b23115cc69d84fe06db79e8b9f5bcc16a32
+  实际完整终态:
+    public_completions: 21
+    owner_jobs: 17
+    launch_results: 1
+    worker_returncode: 0
+    complete_protocol_frames: 2478339
+    QK2_groups: 6912
+    PV0_groups: 12288
+    actual_terminal_payloads: 23
+    capture_fields: 10
+    physical_capture_cells: 4723200
+    observed_capture_cells: 2577408
+    compared_pinned_official_payloads: 25
+    approved_BF16_node_domains: 24
+    softmax_FP32_diagnostic_domains: 1
+    full29_numeric_pass: false
+    observer_noninterference_proven: false
+    hardware_RTL_acceptance: false
+  数值:
+    final_y:
+      compared_elements: 196608
+      domain: FULL_LOGICAL_VIEW
+      full_elements: 196608
+      max_abs: 0.03125
+      mean_abs: 7.282360456883907e-06
+      status: WITHIN_LIMITS
+      unobserved_elements: 0
+      within_limits: true
+    thresholds:
+      block_y:
+        combine: AND
+        max_abs_lte: 0.05
+        mean_abs_lte: 0.01
+      operator_bf16:
+        combine: AND
+        max_abs_lte: 0.03125
+        mean_abs_lte: 0.005
+      rowsum_abs_error_lte: 2.0e-05
+      softmax_fp32: DIAGNOSTIC_NO_APPROVED_COMPARISON_TOLERANCE
+    softmax_rowsum_max_abs_error: 7.248891051858664e-07
+  观测边界:
+  - scores/prob/softmax各99072因果元素、97536未观测future；不以零或oracle补实际值。
+  - mask/repeat_k/repeat_v/logits物理未物化，协议语义不等于独立完整张量。
+  - prob/softmax_FP32每因果cell频次8，另7次重复值相同；其余已观测字段频次1，future presence/frequency0且sentinel未变。
+  - Gate/Up为真实resident tile审计值而非DDR写回；scores/prob为被动观察，KV拼接和PV/ACKed Attention逐值对应。
+  - 早期registry TEMP/missing-source与raw module审计例外保持历史，后置实际资格/比较不改原件。
+  - 没有fresh off/original/identity full128非干扰对照，不证明observer noninterference或加速。
+  时间与资源:
+    configured:
+      address_space_bytes: 3221225472
+      cleanup_seconds: 30
+      cpu_seconds: 9000
+      cpus: 1
+      event_limit: 2478403
+      log_bytes: 16777216
+      output_bytes: 805306368
+      trace_bytes: 402653184
+      tree_rss_bytes: 2147483648
+      wall_seconds: 10800
+    sampled_cpu_seconds: 5960.8
+    reaped_child_user_seconds: 5943.950198
+    reaped_child_system_seconds: 16.853962
+    reaped_child_total_cpu_seconds: 5960.80416
+    worker_wall_seconds: 5961.600773993006
+    parent_elapsed_before_finalization_seconds: 5962.696884498
+    cleanup_seconds: 0.0004902369691990316
+    sampled_tree_RSS_high_water_bytes: 550350848
+    reaped_maxrss_bytes: 550350848
+    sampled_RSS_not_continuous_tree_peak: true
+    reaped_maxrss_not_aggregate_tree: true
+    AS_is_not_RSS: true
+    parent_prepost_hashing_cleanup_separate_worker_wall: true
+    actual_AS_peak_not_recorded: true
+    final_output_bytes: 330635481
+    stream_bytes: 237446391
+    log_bytes: 0
+    limit_reason: null
+  只变更时间预算及身份:
+    old_CPU: 3600
+    old_wall: 4200
+    new_CPU: 9000
+    new_wall: 10800
+    other_caps_inputs_math_thresholds_hardware_unchanged: true
+    normalization_helper_adopted: false
+  MAC账与缺口:
+    observed_owner_useful_macs: 6014828544
+    native_FMA_calls: 6621757440
+    useful_over_native_FMA: 0.9083432304038005
+    accepted_slot_arithmetic_ratio: 0.6998005319148937
+    both_ratios_are_not_hardware_temporal_utilization_or_duty: true
+    hardware_cycles: null
+    hardware_MAC_active_duty: null
+    hardware_MAC_temporal_utilization: null
+    utilization_90percent_acceptance: false
+    说明: 软件分母不含完整硬件时钟/空闲间隔，不由软件CPU/wall、host ticks或service edges推硬件利用率；4096声明不等于综合物理容量证明。
+  不可扩大的证据边界:
+  - metadata6315检查、2221 pins、141 artifacts330635481B；数值checker52448739条件检查不是独立case数量。
+  - sampled RSS high-water550350848B不是连续tree峰值，reaped maxrss不是aggregate tree；AS不等于RSS，实际AS peak未保存。
+  - mask cleaned记录role_masks是预期安装map；实际local/global zero和lease释放由精确源码谓词检查，callback getter不可用。
+  - oracle顺序由源码和终态/前后policy支持，不是kernel sandbox或完整successful-open/wait syscall轨迹。
+  - 旧3600CPU FAIL和startup argv FAIL、其他数值FAIL/TEMP全部保留；本次不改变原硬件/输入/数学/阈值，不采用helper模型。
+  - 五block RTL仍0/5，总目标和全部todo/ongoing/done保持；其他block、full29/RTL/90%目标未关闭。
+  禁止发布: 不含raw输入、权重、local.npz/remote.npz、可重构权重编码、张量/原始事件或私有配置/路径/授权内容。

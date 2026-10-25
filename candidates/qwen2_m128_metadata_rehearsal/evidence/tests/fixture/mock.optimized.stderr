@@ -1,0 +1,28 @@
+test_ancestor_symlink_rejected (__main__.Controls.test_ancestor_symlink_rejected) ... ok
+test_composer_roundtrip (__main__.Controls.test_composer_roundtrip) ... ok
+test_composer_wrong_baseline_rejected (__main__.Controls.test_composer_wrong_baseline_rejected) ... ok
+test_dangling_parent_symlink_rejected (__main__.Controls.test_dangling_parent_symlink_rejected) ... ok
+test_dotdot_root_rejected (__main__.Controls.test_dotdot_root_rejected) ... ok
+test_duplicate_call_rejected_without_cleanup (__main__.Controls.test_duplicate_call_rejected_without_cleanup) ... ok
+test_existing_parent_dir_rejected (__main__.Controls.test_existing_parent_dir_rejected) ... ok
+test_existing_parent_file_rejected (__main__.Controls.test_existing_parent_file_rejected) ... ok
+test_exit_and_finalizer_do_not_rmtree (__main__.Controls.test_exit_and_finalizer_do_not_rmtree) ... ok
+test_failed_body_retains_metadata (__main__.Controls.test_failed_body_retains_metadata) ... ok
+test_fixture_numeric_metadata_body_ast_unchanged (__main__.Controls.test_fixture_numeric_metadata_body_ast_unchanged) ... ok
+test_foreign_parent_rejected (__main__.Controls.test_foreign_parent_rejected) ... ok
+test_legacy_default_factory_unchanged (__main__.Controls.test_legacy_default_factory_unchanged) ... ok
+test_missing_root_rejected (__main__.Controls.test_missing_root_rejected) ... ok
+test_only_one_keyword_rejected (__main__.Controls.test_only_one_keyword_rejected) ... ok
+test_parent_symlink_rejected (__main__.Controls.test_parent_symlink_rejected) ... ok
+test_persistent_absolute_child (__main__.Controls.test_persistent_absolute_child) ... ok
+test_relative_parent_rejected (__main__.Controls.test_relative_parent_rejected) ... ok
+test_relative_root_rejected (__main__.Controls.test_relative_root_rejected) ... ok
+test_root_file_rejected (__main__.Controls.test_root_file_rejected) ... ok
+test_root_symlink_rejected (__main__.Controls.test_root_symlink_rejected) ... ok
+test_runner_only_explicit_metadata_keywords (__main__.Controls.test_runner_only_explicit_metadata_keywords) ... ok
+test_wrong_child_name_rejected (__main__.Controls.test_wrong_child_name_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.025s
+
+OK

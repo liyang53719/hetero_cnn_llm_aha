@@ -1,0 +1,36 @@
+{
+  "files": {
+    "fixture": {
+      "baseline": {
+        "bytes": 15492,
+        "sha256": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208"
+      },
+      "destination_relative": "source/candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "postimage": {
+        "bytes": 17341,
+        "sha256": "48afd9fffea455d60a386287107f01ac4965354b41a4ef363fdfa6e8d307d71d"
+      }
+    },
+    "runner": {
+      "baseline": {
+        "bytes": 13995,
+        "sha256": "7d745865a7dcab9e213414f8afd9fefb1bab038ee221c3f0ec363784d735c527"
+      },
+      "destination_relative": "candidate/qwen2_ordered_fullgraph_entry/runner.py",
+      "postimage": {
+        "bytes": 14064,
+        "sha256": "4cdbe5231f31962f70d7820aa01c4812a7ecd6ccb9fa0cd5211a289872299c9d"
+      }
+    }
+  },
+  "interface": {
+    "default_None_None": "original TemporaryDirectory cleanup unchanged",
+    "metadata_parent": "exact fresh metadata_root/metadata; helper creates it",
+    "metadata_root": "source-bound runner fresh absolute out; existing canonical non-symlink directory",
+    "selected_explicit": "TemporaryDirectory dir=parent, delete=False; retain metadata"
+  },
+  "original_manifest": {
+    "bytes": 2028,
+    "sha256": "6e22371d8aa236c7bcb9c419062c20e8ee2f79d674e550585bbc36a6b093f079"
+  }
+}

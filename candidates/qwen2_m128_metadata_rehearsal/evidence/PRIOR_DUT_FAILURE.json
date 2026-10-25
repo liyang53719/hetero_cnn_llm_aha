@@ -1,0 +1,50 @@
+{
+  "acceptance": {
+    "M16_DUT_pass": false,
+    "full_M128_DUT_pass": false,
+    "hardware_or_performance_pass": false,
+    "legacy_PV_upper_bound_percent": 63.57,
+    "utilization_claim": false
+  },
+  "cache_secondary_summary": "Pinned-source bytecode-cache probes were rejected and remained policy denials. New classifier preserves rejection and qualifies exact same-loader source-open/compile/exec fallback; no cache content allowed.",
+  "completion_seal_absent": true,
+  "new_metadata_pass_is_not_dut_retry": true,
+  "original_failure_unchanged": true,
+  "original_review": {
+    "bytes": 9188,
+    "sha256": "38c6cbd8b7a0fab5a15f85b5e58766c95e027b59d20c213700e64c3e1657e683"
+  },
+  "primary_failure": {
+    "class": "OracleAccessDenied",
+    "dynamic_call_chain": [
+      "runner.run_actual line118",
+      "fixture.make_qwen2_21_fixture TemporaryDirectory block line231",
+      "tempfile.TemporaryDirectory.__exit__/cleanup/_rmtree",
+      "shutil.rmtree/_rmtree_safe_fd",
+      "os.open(name=fp32, O_RDONLY|O_NONBLOCK, dir_fd=dirfd)",
+      "oracle_path_gate.audit sealed-relative-path rejection"
+    ],
+    "effect": "Context exit raises before fixture function returns and before runner assigns f. Metadata files retained. Oracle remains SEALED and comparison_attempted=false.",
+    "message": "relative open forbidden while oracle is sealed; dir_fd is not audited",
+    "precision": "Traceback proves fd-relative open call and metadata scope. Raw audit records name fp32 but not numeric dir_fd; its actual fd value cannot be reconstructed from the saved audit event. No broad relative-path allowance is justified.",
+    "target_role": "Temporary public metadata directory child fp32, not an observed oracle payload access"
+  },
+  "reached_scope": {
+    "Matrix_ELF_CDLL_and_signature_configuration": "Reached and hash/symbol/inode/math library qualified; not a numerical service PASS.",
+    "final_modules": 342,
+    "mapping_failures": 0,
+    "metadata_pack_convert": "Reached and produced command/descriptor/manifest/header files, no tensor producer.",
+    "native_final_map_segments": 110,
+    "native_final_unique_mapped_files": 20,
+    "native_loaded_modules": 340,
+    "normal_map_segments": 105,
+    "normal_modules": 339,
+    "normal_unique_mapped_files": 19,
+    "oracle": "SEALED, comparison not attempted; no terminal comparison artifact; full29 and observed-domain false.",
+    "provider14": "Loaded immutable bytes and checked identity; reviewer rehashed opaquely only.",
+    "raw_module_exceptions": "Original namespace repetitions plus exact two Cython no-file objects remain in raw FAIL; existing qualification and dependency association resolve their stated bounded scope without rewriting raw audit.",
+    "reset_service_job_arithmetic": "The exact runner source places td_reset/sf_reset and service construction after fixture return; observed exception precedes return, therefore those task-level calls are unreachable in this attempt. This is traceback plus exact-source control-flow evidence, not an independent native-call instrumentation counter or claim of zero normal dependency initialization activity.",
+    "runner_resource_phase": "Not reached; orchestration phases=[] and capture fields={}."
+  },
+  "review_gap_accountability": "Earlier source/cold/mock qualification did not execute the complete metadata fixture lifecycle under the combined final oracle/phase hooks. Pure supervisor and projection mocks did not reveal fd-relative TemporaryDirectory cleanup, nor classify source-fallback cache denials in the NATIVE phase. This attempt exposes those compatibility gaps; prior limited tests are not retroactively numerical PASS."
+}

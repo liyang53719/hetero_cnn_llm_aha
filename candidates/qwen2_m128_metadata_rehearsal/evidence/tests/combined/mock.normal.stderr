@@ -1,0 +1,47 @@
+test_approval_exact_one_use (__main__.AdmissionControls.test_approval_exact_one_use) ... ok
+test_boolean_resource_reject (__main__.AdmissionControls.test_boolean_resource_reject) ... ok
+test_config_mutations_reject (__main__.AdmissionControls.test_config_mutations_reject) ... ok
+test_exact_metadata_scope (__main__.AdmissionControls.test_exact_metadata_scope) ... ok
+test_limits_are_not_dut_budget (__main__.AdmissionControls.test_limits_are_not_dut_budget) ... ok
+test_missing_guard_pin_reject (__main__.AdmissionControls.test_missing_guard_pin_reject) ... ok
+test_resource_mutations_reject (__main__.AdmissionControls.test_resource_mutations_reject) ... ok
+test_review_exact_and_independent (__main__.AdmissionControls.test_review_exact_and_independent) ... ok
+test_actual_fixture_error_retained (__main__.ExecutionOrderControls.test_actual_fixture_error_retained) ... ok
+test_final_profile_failure_cannot_pass (__main__.ExecutionOrderControls.test_final_profile_failure_cannot_pass) ... ok
+test_final_snapshot_failure_cannot_pass (__main__.ExecutionOrderControls.test_final_snapshot_failure_cannot_pass) ... ok
+test_oracle_opened_rejects_before_providers (__main__.ExecutionOrderControls.test_oracle_opened_rejects_before_providers) ... ok
+test_order_and_real_call_arguments (__main__.ExecutionOrderControls.test_order_and_real_call_arguments) ... ok
+test_original_error_not_overwritten_by_snapshot (__main__.ExecutionOrderControls.test_original_error_not_overwritten_by_snapshot) ... ok
+test_every_delete_blocked (__main__.RuntimeGuardControls.test_every_delete_blocked) ... ok
+test_foreign_unrelated_code_not_sandboxed (__main__.RuntimeGuardControls.test_foreign_unrelated_code_not_sandboxed) ... ok
+test_matrix_cdll_blocked (__main__.RuntimeGuardControls.test_matrix_cdll_blocked) ... ok
+test_matrix_hardlink_cdll_blocked (__main__.RuntimeGuardControls.test_matrix_hardlink_cdll_blocked) ... ok
+test_matrix_hardlink_read_blocked (__main__.RuntimeGuardControls.test_matrix_hardlink_read_blocked) ... ok
+test_matrix_open_blocked (__main__.RuntimeGuardControls.test_matrix_open_blocked) ... ok
+test_metadata_construction_allowed (__main__.RuntimeGuardControls.test_metadata_construction_allowed) ... ok
+test_metadata_pack_convert_allowed (__main__.RuntimeGuardControls.test_metadata_pack_convert_allowed) ... ok
+test_normal_none_load_allowed (__main__.RuntimeGuardControls.test_normal_none_load_allowed) ... ok
+test_post_normal_every_cdll_blocked (__main__.RuntimeGuardControls.test_post_normal_every_cdll_blocked) ... ok
+test_post_normal_symbols_blocked (__main__.RuntimeGuardControls.test_post_normal_symbols_blocked) ... ok
+test_profile_install_finish (__main__.RuntimeGuardControls.test_profile_install_finish) ... ok
+test_profile_tamper_detected (__main__.RuntimeGuardControls.test_profile_tamper_detected) ... ok
+test_sticky_denial (__main__.RuntimeGuardControls.test_sticky_denial) ... ok
+test_target_construction_blocked (__main__.RuntimeGuardControls.test_target_construction_blocked) ... ok
+test_task_calls_blocked (__main__.RuntimeGuardControls.test_task_calls_blocked) ... ok
+test_failure_attribution_not_unconditional_false (__main__.WrapperControls.test_failure_attribution_not_unconditional_false) ... ok
+test_foreign_provider_wrapper_reject (__main__.WrapperControls.test_foreign_provider_wrapper_reject) ... ok
+test_immutable_provider_exact (__main__.WrapperControls.test_immutable_provider_exact) ... ok
+test_launcher_success_is_only_metadata (__main__.WrapperControls.test_launcher_success_is_only_metadata) ... ok
+test_no_target_imported (__main__.WrapperControls.test_no_target_imported) ... ok
+test_plain_metadata (__main__.WrapperControls.test_plain_metadata) ... ok
+test_plain_rejects_payload (__main__.WrapperControls.test_plain_rejects_payload) ... ok
+test_provider_identity_rejects (__main__.WrapperControls.test_provider_identity_rejects) ... ok
+test_provider_scope_rejects (__main__.WrapperControls.test_provider_scope_rejects) ... ok
+test_real_fixture_explicit_persistent_args (__main__.WrapperControls.test_real_fixture_explicit_persistent_args) ... ok
+test_source_has_no_native_runner_call (__main__.WrapperControls.test_source_has_no_native_runner_call) ... ok
+test_supervisor_unchanged (__main__.WrapperControls.test_supervisor_unchanged) ... ok
+
+----------------------------------------------------------------------
+Ran 42 tests in 0.022s
+
+OK

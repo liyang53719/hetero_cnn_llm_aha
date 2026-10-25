@@ -1,0 +1,248 @@
+{
+  "base_commit": "9a639053f797b19fba5b6d9cfe830dc8c3009730",
+  "files": [
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 3999,
+        "sha256": "3ca213c1b1c8fc626991a7fd251942d5b8056affd52cdd7ec36d2ab37f1077cb"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/patches/PERSISTENT_METADATA.patch"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 17703,
+        "sha256": "75508afcf28d52a8adbd08eca4440f9175db7affa02e9706fbd8bbdcedfe4b38"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/patches/CACHE_FALLBACK.patch"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 17341,
+        "sha256": "48afd9fffea455d60a386287107f01ac4965354b41a4ef363fdfa6e8d307d71d"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/metadata_postimage/fixture.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 14064,
+        "sha256": "4cdbe5231f31962f70d7820aa01c4812a7ecd6ccb9fa0cd5211a289872299c9d"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/metadata_postimage/runner.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1107,
+        "sha256": "525864434d3e6315382075a40bbd9a18173649ef57e546414e426838bc14afe5"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/cache_postimage/common.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 20319,
+        "sha256": "32f610cdea1bfe79caeafd7dcf473447ca8b4ba78cbf8dc0e362d354ed27bedc"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/cache_postimage/runtime_admission.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 14305,
+        "sha256": "1e87179b88578c64ffe5290dca423d7e4ab40486530214d8e9adaf4ffa16dad3"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/cache_postimage/worker.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 16142,
+        "sha256": "e131b0b017aefb2d4ad70ae55c3f2dfae7f2428585a5600a034729d2be680763"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/cache_postimage/test_cache_fallback.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 5261,
+        "sha256": "1eb75809537e0232d1746099acbc27b04109d84806dc35a885120216d936a3f1"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/cache_postimage/test_worker_policy.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 15750,
+        "sha256": "6a7fa58ef8dcece67356b2e60f897b027ea6d8ba6da7801aaa57a2162b39eeb0"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/metadata_cold_source/worker.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 6150,
+        "sha256": "96175765f42805c3b777ca0211b56c7acfdd9d78afb932691b80a4d3dd9bb2b2"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/metadata_cold_source/metadata_guard.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 15530,
+        "sha256": "221910e3580a84ba47f3e1b32bf6550b5e5156d37dd95fdf78c20479e10b8251"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/metadata_cold_source/run_gate.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 15274,
+        "sha256": "d4799e0f9a1707d95c66529134cf17102a7997697bcf2e8665b4c77429c9a53d"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/metadata_cold_source/supervisor.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1107,
+        "sha256": "525864434d3e6315382075a40bbd9a18173649ef57e546414e426838bc14afe5"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/metadata_cold_source/common.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2242,
+        "sha256": "81d7f76b1f2c39028b7d6a2ee8261d63c9c10b00ab6d0b6f32071b06468c65ef"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/fixture/mock.normal.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/fixture/mock.normal.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2242,
+        "sha256": "16ffe3456698e9f3556efdbe785edd9c02d3061c871551cc31c6ae0513dd6508"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/fixture/mock.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/fixture/mock.optimized.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 3401,
+        "sha256": "bcf2028b20ca1879e14ccedf9f4a9a62bdb8c94e6e9dfbaef87f991e1b1f6cc9"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/TEST.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/TEST.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 3401,
+        "sha256": "bcf2028b20ca1879e14ccedf9f4a9a62bdb8c94e6e9dfbaef87f991e1b1f6cc9"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/TEST.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/TEST.optimized.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 451,
+        "sha256": "3cd90a28ad86c7dd6910dbba0ea10a0e647ddcf74210b823b22d127be405a8f5"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/WORKER_TEST.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/WORKER_TEST.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 451,
+        "sha256": "a2e0b383a366a47db8030e2d6aaf3d2b3cebcd3468ade7a00f888f291ce3dccf"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/WORKER_TEST.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/cache/WORKER_TEST.optimized.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 4383,
+        "sha256": "3e26fd03bd2e0bfcb9803fd69c327341610fde700dcf97853104bf76fc7ebf95"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/combined/mock.normal.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/combined/mock.normal.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 4383,
+        "sha256": "b6e41780d9e7ea67088c6378ee1cdb1b9880e1ca37584bdcdc7a6982e512a1e3"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/combined/mock.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_metadata_rehearsal/evidence/tests/combined/mock.optimized.stdout"
+    }
+  ],
+  "no_target_reruns": true,
+  "public_sources_are_evidence_not_self_contained_runtime": true,
+  "source_transformation_performed": false
+}

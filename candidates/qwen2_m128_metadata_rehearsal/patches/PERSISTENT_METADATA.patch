@@ -1,0 +1,65 @@
+--- a/source/candidates/qwen2_resident_matrix/ffn_public/fixture.py
++++ b/source/candidates/qwen2_resident_matrix/ffn_public/fixture.py
+@@ -205,7 +205,35 @@
+     return modules[0].pack, modules[1].convert
+ 
+ 
+-def make_qwen2_21_fixture(rows=16, epoch=7, relocate=0, max_tokens=1024):
++def _metadata_temporary_directory(metadata_parent, metadata_root):
++    """Legacy cleanup by default; explicitly bounded metadata is retained.
++
++    The source-bound caller supplies its fresh output root. These path arguments
++    are not execution authority, and do not replace the worker's output gate.
++    No shutil/tempfile globals or relative-open audit rules are changed.
++    """
++    if metadata_parent is None and metadata_root is None:
++        return TemporaryDirectory(prefix='qwen2_21_metadata_')
++    if not isinstance(metadata_parent, (str, Path)) or not isinstance(metadata_root, (str, Path)):
++        raise ValueError('persistent metadata requires both explicit path arguments')
++    parent, root = Path(metadata_parent), Path(metadata_root)
++    if not root.is_absolute() or not parent.is_absolute():
++        raise ValueError('persistent metadata paths must be absolute')
++    if not root.is_dir() or root.is_symlink() or root.resolve(strict=True) != root:
++        raise ValueError('persistent metadata root must be an existing canonical directory')
++    if parent != root / 'metadata' or parent.is_symlink() or parent.exists():
++        raise ValueError('persistent metadata parent must be the fresh exact output child')
++    if parent.resolve(strict=False) != parent:
++        raise ValueError('persistent metadata parent must be canonical')
++    parent.mkdir(mode=0o700)
++    if parent.resolve(strict=True) != parent or parent.is_symlink():
++        raise ValueError('persistent metadata parent changed')
++    # Python 3.12 __exit__ and the weakref finalizer both skip rmtree when
++    # delete=False. Retain the eight small metadata files even on failure.
++    return TemporaryDirectory(prefix='qwen2_21_metadata_', dir=str(parent), delete=False)
++
++
++def make_qwen2_21_fixture(rows=16, epoch=7, relocate=0, max_tokens=1024, *, metadata_parent=None, metadata_root=None):
+     """Reuse the unchanged public21 command/descriptor packing, metadata only.
+ 
+     No weight bytes, initial inputs or writable intermediates are materialized.
+@@ -226,9 +254,10 @@
+         raise ValueError('physical fixture relocation exceeds the 56-bit address space')
+     pack, convert = _qwen2_21_packers()
+     shape = dict(H=1536, F=8960, HEADS=12, KVHEADS=2, HD=128, MAX_TOKENS=max_tokens)
+-    # Both helpers write only public metadata. Temporary directories are removed
+-    # before returning; convert() never calls its separate pack_words() helper.
+-    with TemporaryDirectory(prefix='qwen2_21_metadata_') as temporary:
++    # Both helpers write only public metadata. Legacy defaults remove temporary
++    # directories; explicit metadata_parent retains them. convert() never calls
++    # its separate pack_words() helper.
++    with _metadata_temporary_directory(metadata_parent, metadata_root) as temporary:
+         source, output = Path(temporary) / 'fp32', Path(temporary) / 'bf16'
+         original = pack(shape, rows, source, relocate)
+         if original['limit'] + QWEN2_21_WORKSPACE_BYTES > LIMIT:
+--- a/candidate/qwen2_ordered_fullgraph_entry/runner.py
++++ b/candidate/qwen2_ordered_fullgraph_entry/runner.py
+@@ -115,7 +115,8 @@
+     started = time.monotonic()
+     try:
+         with runtime.policy.reference_gate(profile['input_spec']) as gate:
+-            f = runtime.fixtures.make_qwen2_21_fixture(rows, profile['epoch'])
++            f = runtime.fixtures.make_qwen2_21_fixture(rows, profile['epoch'],
++                metadata_parent=out / 'metadata', metadata_root=out)
+             physical = runtime.prefix.PhysicalMemory(f, providers)
+             memory = runtime.physical_adapter.FullGraphMemory(physical)
+             n, region = runtime.original.numeric, f.config.regions[3]

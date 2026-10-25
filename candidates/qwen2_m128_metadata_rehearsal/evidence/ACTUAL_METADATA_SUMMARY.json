@@ -1,0 +1,129 @@
+{
+  "all_cache_events_expected": true,
+  "expected_cache_fallback_count": 208,
+  "normal_initialization_includes_pinned_numpy_yaml": true,
+  "oracle_comparison_attempted": false,
+  "oracle_state": "SEALED",
+  "original_receipt": {
+    "bytes": 11306,
+    "sha256": "46816e069170ca7cf9352c8b5edfed58098687cafda249160766ffaf6656abad"
+  },
+  "original_seal": {
+    "bytes": 7905,
+    "sha256": "c5bae8f0871debd9c589b1d2b7b64ff008202a16a6891b3051479d894dab9c28"
+  },
+  "original_worker_result": {
+    "bytes": 210816,
+    "sha256": "be7e78b340ef2ab5e615eed378689bd478697f9cf462eb8f442c0a9d5ba43b7b"
+  },
+  "receipt_projection": {
+    "action": "single_m128_metadata_cold",
+    "cleanup_complete": true,
+    "cleanup_seconds": 0.0003611730062402785,
+    "cold_provenance_is_native_or_numeric_pass": false,
+    "config_sha256": "6fda0ae933ca24bcee3ec2af3018b4d2d579f71c42775f62896d72b50f7ffe21",
+    "cpu_usage_children": {
+      "post_exit_reaped_aggregate_budget_checked": true,
+      "reaped_aggregate_limit_seconds": 20,
+      "ru_maxrss_bytes_linux": 150667264,
+      "ru_maxrss_is_aggregate_tree": false,
+      "system_seconds": 0.659273,
+      "user_seconds": 9.000978
+    },
+    "full29_numeric_pass": false,
+    "hardware_acceptance": false,
+    "legacy_results_inherited": false,
+    "no_retry": true,
+    "observed_domain_passed": false,
+    "output_after_postflight": {
+      "log_bytes": {
+        "stderr.log": 0,
+        "stdout.log": 0
+      },
+      "output_bytes": 3004578,
+      "trace_bytes": 0
+    },
+    "parent_elapsed_before_finalization_seconds": 10.381976040021982,
+    "parent_terminal_output_projection": {
+      "actual_staged_bytes_checked_before_success_seal": true,
+      "before_parent_terminal_files": {
+        "log_bytes": {
+          "stderr.log": 0,
+          "stdout.log": 0
+        },
+        "output_bytes": 3004578,
+        "trace_bytes": 0
+      },
+      "exact_receipt_and_seal_projection_required": true,
+      "exclusive_directory_assumption": "Launcher-owned directory; worker and tracked descendants are terminal; no external writers during finalization.",
+      "failure_diagnostics_may_exceed_success_limit": true,
+      "limit_bytes": 33554432,
+      "success_seal_publication": "Byte-preserving atomic rename after complete staged-file size/hash/log checks; no later output-directory writes."
+    },
+    "passed": true,
+    "peak_sampled_tree_rss_bytes": 150667264,
+    "per_process_limits": {
+      "address_space_bytes": 1073741824,
+      "address_space_is_rss": false,
+      "cpu_seconds": 20,
+      "includes_threads": true,
+      "kernel_aggregate_tree_cpu_hard_cap": false
+    },
+    "postflight": {
+      "bytes_checked": 423753872,
+      "differences": {},
+      "files_checked": 1303,
+      "passed": true,
+      "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+      "wall_seconds": 0.3227463070070371
+    },
+    "preflight": {
+      "bytes_checked": 423753872,
+      "differences": {},
+      "files_checked": 1303,
+      "passed": true,
+      "scope": "opaque complete manifest hash before any worker spawn; outside worker timer",
+      "wall_seconds": 0.32836412999313325
+    },
+    "resources": {
+      "address_space_bytes": 1073741824,
+      "cleanup_seconds": 3,
+      "cpu_seconds": 20,
+      "cpus": 1,
+      "event_limit": 0,
+      "log_bytes": 2097152,
+      "output_bytes": 33554432,
+      "trace_bytes": 1048576,
+      "tree_rss_bytes": 536870912,
+      "wall_seconds": 25
+    },
+    "review_sha256": "b3a7a7c93b444303739e4a7367ac66fea3fc3e080e4de03b44dbf111d97dfbf3",
+    "sampled_tree_cpu_seconds": 9.65,
+    "scope": "single_normal_initialize_provider14_persistent_public21_metadata_only",
+    "status": "PASS_M128_METADATA_COLD_ONLY",
+    "tree_rss_is_hard_cap": false,
+    "worker_reaped": true,
+    "worker_result_status": "PASS_M128_METADATA_COLD_ONLY",
+    "worker_returncode": 0,
+    "worker_wall_scope": "Immediately before Popen through exit/failure observation; cleanup separate; opaque parent pre/post hashes excluded.",
+    "worker_wall_seconds": 9.71555973100476
+  },
+  "worker_projection": {
+    "actual_terminal_verified": false,
+    "commands": 21,
+    "descriptors": 215,
+    "event_protocol_passed": false,
+    "full29_numeric_pass": false,
+    "hardware_acceptance": false,
+    "matrix_elf_loaded": false,
+    "metadata_persisted": true,
+    "observed_domain_passed": false,
+    "observer_factory_rehearsed": true,
+    "oracle_values_read": false,
+    "owner_constructed": false,
+    "pc_arithmetic_executed": false,
+    "provider_bytes": 94916608,
+    "provider_count": 14,
+    "resets_executed": false
+  }
+}

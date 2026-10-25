@@ -1,0 +1,174 @@
+{
+  "original_review_identity": {
+    "bytes": 15280,
+    "sha256": "5f9308e7e472f6de23b24322fc759c7eae5cb8ca75fbfe748238459953b3f4d3"
+  },
+  "projection_omits": "all process/object identities, full module/map lists and private locations; original immutable review retained",
+  "review": {
+    "actual_scope": {
+      "Matrix_ABI_or_numerical_pass": false,
+      "Matrix_ELF_mapping_absent": true,
+      "actual_observer_factory_called": true,
+      "all8_metadata_hashes_equal_original_failed_attempt": true,
+      "command_table_bytes": 384,
+      "commands": 21,
+      "descriptor_table_bytes": 3456,
+      "descriptors": 215,
+      "epoch": 7,
+      "immutable_provider_bytes": 94916608,
+      "metadata_context_returned": true,
+      "metadata_not_deleted": true,
+      "monitor_and_capture_reused": true,
+      "normal_service_methods_bound": 9,
+      "normal_source_roles": 15,
+      "observer_package_recreated": true,
+      "oracle_comparison_attempted": false,
+      "oracle_denials": [],
+      "oracle_state": "SEALED",
+      "persistent_metadata_files": 8,
+      "provider_count": 14,
+      "provider_wrappers_created": true,
+      "provider_wrappers_invoked": false,
+      "rows": 128,
+      "task_guard_denials": []
+    },
+    "artifact_bytes": 3023789,
+    "artifact_count": 44,
+    "attempt_files_modified": false,
+    "cache_qualification": {
+      "all_hashes_recomputed_compile_only_with_named_local_code": true,
+      "all_recorded_compiled_and_exec_hashes_equal": true,
+      "all_source_pins_and_actual_files_rehashed": true,
+      "cache_bytes_admitted": false,
+      "events": 208,
+      "module_body_completion_not_inferred_from_exec_audit": true,
+      "phases": {
+        "METADATA_ONLY": 4,
+        "NORMAL": 204
+      },
+      "serializer_caveat": "marshal representation is not generally process-independent: named local code object ownership matches reviewed runtime serializer. All208 event hashes reproduced here under the same pinned interpreter/filename/flags and named-local lifetime; temporary-expression serialization differs due root reference encoding.",
+      "unique_source_files": 205,
+      "unknown_unresolved_sticky_denials": []
+    },
+    "combined_pins": 1303,
+    "freeze_files": 351,
+    "hash_checks": 1696,
+    "inventory_interpretation": "Raw module errors remain unchanged; exact namespace repetition qualification plus bounded Cython extension/object association resolve only those known failures. Final complete mappings contain pinned dependency ELF/locale files and no custom Matrix ELF. These are recorded inventories with exact source verification, not OS-level proof against unaudited native syscalls.",
+    "limits": [
+      "PASS is actual normal import/provider-wrapper/real public21 metadata lifecycle only. No full M128 DUT, arithmetic, observer-capture numerical, event-protocol, full29, hardware or utilization PASS.",
+      "No target reset/service/owner/PC execution was allowed or requested; exact worker code and narrow guard report support this scope. No independent native per-symbol call instrumentation is claimed.",
+      "The old numerical attempt remains FAIL and its immutable claim remains consumed. All old evidence is included in the verified1303-pin closure. No authorization to rerun that attempt or launch new long DUT follows from this review.",
+      "Full output3023789B includes11306B receipt and7905B seal, below32MiB; RSS sampling is not hardcap. Parent pre/post hash times remain outsideworkerbudget.",
+      "Provider/oracle payloads were only opaquely hashed in independent review; no numeric values were decoded. Compile-only codehash validation did not execute target modules."
+    ],
+    "preserved_reviewer_failure": {
+      "diagnosis": {
+        "bytes": 505,
+        "sha256": "649fd90ff686c7578ec7ea94aea01a4fd4f91628c63ff353fe021ce942b2fbac"
+      },
+      "meaning": "Reviewer-only compile-expression lifetime mismatch; not a cold run failure. Initial direct marshal.dumps(compile(...)) root reference serialization differs. Named local compiled code, as used by the reviewed runtime, reproduces every recorded hash. No target code exec/import or cold retry occurred.",
+      "script": {
+        "bytes": 5586,
+        "sha256": "8e18b146d2b0bb70545cdb6f6267839df671ad58bf5e1f2bcbcb7274a035ebf7"
+      }
+    },
+    "qualification_upgrade": {
+      "DUT_numerical": false,
+      "Matrix_native_ABI": false,
+      "full29": false,
+      "hardware": false,
+      "longrun_authorized": false,
+      "metadata_cold": true
+    },
+    "readiness_description_correction": {
+      "actual_prelaunch_utc": "2026-10-25T04:20:02Z",
+      "actual_run_prefight_scope": "opaque complete manifest hash before any worker spawn; outside worker timer",
+      "issue": "Nested preflight.scope says after worker/descendant terminal state because the prelaunch helper reused manifest_postflight. This describes the helper default, not actual ordering.",
+      "ordering_basis": "Preserved prelaunch timestamp, exact launcher control flow places its own PREFLIGHT and opaque check before Popen, recorded LAUNCH and worker live-parent capability; no original evidence rewritten.",
+      "original": {
+        "bytes": 687,
+        "sha256": "6420b31efc1bd193261f3940120bc104deacc06d46bdecd6875c12e97a5311a6"
+      },
+      "original_preserved": true
+    },
+    "receipt": {
+      "bytes": 11306,
+      "sha256": "46816e069170ca7cf9352c8b5edfed58098687cafda249160766ffaf6656abad"
+    },
+    "resource_projection": {
+      "all_success_output_including_receipt_seal_counted": true,
+      "cleanup": {
+        "killed": [],
+        "reaped": [],
+        "remaining": {},
+        "seconds": 0.0003611730062402785,
+        "timed_out": false
+      },
+      "logs_empty": true,
+      "peak_sampled_tree_rss_bytes": 150667264,
+      "postflight": {
+        "bytes_checked": 423753872,
+        "differences": {},
+        "files_checked": 1303,
+        "passed": true,
+        "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+        "wall_seconds": 0.3227463070070371
+      },
+      "preflight": {
+        "bytes_checked": 423753872,
+        "differences": {},
+        "files_checked": 1303,
+        "passed": true,
+        "scope": "opaque complete manifest hash before any worker spawn; outside worker timer",
+        "wall_seconds": 0.32836412999313325
+      },
+      "reaped_cpu_seconds": 9.660251,
+      "resources": {
+        "address_space_bytes": 1073741824,
+        "cleanup_seconds": 3,
+        "cpu_seconds": 20,
+        "cpus": 1,
+        "event_limit": 0,
+        "log_bytes": 2097152,
+        "output_bytes": 33554432,
+        "trace_bytes": 1048576,
+        "tree_rss_bytes": 536870912,
+        "wall_seconds": 25
+      },
+      "sampled_RSS_not_hard_cap": true,
+      "trace_bytes": 0,
+      "worker_reaped": true,
+      "worker_returncode": 0,
+      "worker_wall_seconds": 9.71555973100476
+    },
+    "retry_performed": false,
+    "reviewer_native_execution": false,
+    "reviewer_target_import": false,
+    "reviewer_tensor_value_decoding": false,
+    "runtime_summary": {
+      "METADATA_FINAL": {
+        "final_status": "PASS_NORMAL_RUNTIME_IDENTITIES_ONLY",
+        "map_segments": 105,
+        "modules": 341,
+        "unique_map_files": 19
+      },
+      "NORMAL_FINAL": {
+        "final_status": "PASS_NORMAL_RUNTIME_IDENTITIES_ONLY",
+        "map_segments": 105,
+        "modules": 339,
+        "unique_map_files": 19
+      }
+    },
+    "schema": "qwen2-independent-metadata-cold-execution-review-v1",
+    "seal": {
+      "bytes": 7905,
+      "sha256": "c5bae8f0871debd9c589b1d2b7b64ff008202a16a6891b3051479d894dab9c28"
+    },
+    "status": "PASS_SINGLE_ACTUAL_METADATA_COLD_ONLY",
+    "unique_attempt": true,
+    "worker_result": {
+      "bytes": 210816,
+      "sha256": "be7e78b340ef2ab5e615eed378689bd478697f9cf462eb8f442c0a9d5ba43b7b"
+    }
+  }
+}

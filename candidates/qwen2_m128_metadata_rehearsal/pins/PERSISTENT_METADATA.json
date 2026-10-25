@@ -1,0 +1,81 @@
+{
+  "entries": [
+    {
+      "bytes": 2917,
+      "logical_name": "README_ZH.md",
+      "pin_id": "files-0000",
+      "sha256": "c0bd68271e467e064a231e2b8e621e116ea1d26029c0c997171a1258d8e5166c"
+    },
+    {
+      "bytes": 3999,
+      "logical_name": "SOURCE_DIFF.patch",
+      "pin_id": "files-0001",
+      "sha256": "3ca213c1b1c8fc626991a7fd251942d5b8056affd52cdd7ec36d2ab37f1077cb"
+    },
+    {
+      "bytes": 2028,
+      "logical_name": "SOURCE_PINS.json",
+      "pin_id": "files-0002",
+      "sha256": "6e22371d8aa236c7bcb9c419062c20e8ee2f79d674e550585bbc36a6b093f079"
+    },
+    {
+      "bytes": 1319,
+      "logical_name": "TEST_EVIDENCE.json",
+      "pin_id": "files-0003",
+      "sha256": "0ec0438646b09e9fe5184eb9038bf5bfc29cb7de754897b13ef6f4333a8a8ac7"
+    },
+    {
+      "bytes": 4516,
+      "logical_name": "compose.py",
+      "pin_id": "files-0004",
+      "sha256": "0482e19c638a75d5cb83661c18926c94a719a726c536d5c521043b7751b6699b"
+    },
+    {
+      "bytes": 2242,
+      "logical_name": "mock.normal.stderr",
+      "pin_id": "files-0005",
+      "sha256": "81d7f76b1f2c39028b7d6a2ee8261d63c9c10b00ab6d0b6f32071b06468c65ef"
+    },
+    {
+      "bytes": 0,
+      "logical_name": "mock.normal.stdout",
+      "pin_id": "files-0006",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2242,
+      "logical_name": "mock.optimized.stderr",
+      "pin_id": "files-0007",
+      "sha256": "16ffe3456698e9f3556efdbe785edd9c02d3061c871551cc31c6ae0513dd6508"
+    },
+    {
+      "bytes": 0,
+      "logical_name": "mock.optimized.stdout",
+      "pin_id": "files-0008",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 17341,
+      "logical_name": "postimage/fixture.py",
+      "pin_id": "files-0009",
+      "sha256": "48afd9fffea455d60a386287107f01ac4965354b41a4ef363fdfa6e8d307d71d"
+    },
+    {
+      "bytes": 14064,
+      "logical_name": "postimage/runner.py",
+      "pin_id": "files-0010",
+      "sha256": "4cdbe5231f31962f70d7820aa01c4812a7ecd6ccb9fa0cd5211a289872299c9d"
+    },
+    {
+      "bytes": 7109,
+      "logical_name": "test_controls.py",
+      "pin_id": "files-0011",
+      "sha256": "476bd32b1a0dd5ddbccd61fdd7cd863d25bdb1c4fad18d5d69e48e97838e5cc1"
+    }
+  ],
+  "logical_names_not_local_config": true,
+  "original_freeze": {
+    "bytes": 1842,
+    "sha256": "cddc98e104a0d54b12c990d9e422d70f4ab74d143f59f9a642b587da94909114"
+  }
+}

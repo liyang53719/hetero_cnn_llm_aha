@@ -1,0 +1,98 @@
+{
+  "count": 14,
+  "immutable_bytes": true,
+  "oracle_not_read": true,
+  "original_record": {
+    "bytes": 8180,
+    "sha256": "d0351b553916a59df314b5b66f9804628b7caffdd0861af2afcd761f1b736ef2"
+  },
+  "pins": [
+    {
+      "bytes": 1024,
+      "pin_id": "provider-00",
+      "role": "bk",
+      "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d"
+    },
+    {
+      "bytes": 6144,
+      "pin_id": "provider-01",
+      "role": "bq",
+      "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d"
+    },
+    {
+      "bytes": 1024,
+      "pin_id": "provider-02",
+      "role": "bv",
+      "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70"
+    },
+    {
+      "bytes": 6144,
+      "pin_id": "provider-03",
+      "role": "gamma0",
+      "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180"
+    },
+    {
+      "bytes": 6144,
+      "pin_id": "provider-04",
+      "role": "gamma1",
+      "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a"
+    },
+    {
+      "bytes": 524288,
+      "pin_id": "provider-05",
+      "role": "rope",
+      "sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af"
+    },
+    {
+      "bytes": 27525120,
+      "pin_id": "provider-06",
+      "role": "wd",
+      "sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec"
+    },
+    {
+      "bytes": 27525120,
+      "pin_id": "provider-07",
+      "role": "wg",
+      "sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f"
+    },
+    {
+      "bytes": 786432,
+      "pin_id": "provider-08",
+      "role": "wk",
+      "sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344"
+    },
+    {
+      "bytes": 4718592,
+      "pin_id": "provider-09",
+      "role": "wo",
+      "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c"
+    },
+    {
+      "bytes": 4718592,
+      "pin_id": "provider-10",
+      "role": "wq",
+      "sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72"
+    },
+    {
+      "bytes": 27525120,
+      "pin_id": "provider-11",
+      "role": "wu",
+      "sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040"
+    },
+    {
+      "bytes": 786432,
+      "pin_id": "provider-12",
+      "role": "wv",
+      "sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a"
+    },
+    {
+      "bytes": 786432,
+      "pin_id": "provider-13",
+      "role": "x",
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df"
+    }
+  ],
+  "raw13_not_supplied": true,
+  "total_bytes": 94916608,
+  "wrappers_read": false
+}

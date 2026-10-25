@@ -1,0 +1,188 @@
+{
+  "original": {
+    "bytes": 8042,
+    "sha256": "c85cef5a856a7b63097e7e974e094de8688fe605e4f290748aa54435a1a72034"
+  },
+  "status": "PASS_ACTUAL_FULL128_OBSERVED_SCOPE_METADATA_RUNTIME_MASK_RESOURCE_ARTIFACT_CLOSURE_ONLY",
+  "actual_run_status": "PASS_OBSERVED_DOMAIN_M128_DUT_NOT_FULL29",
+  "checks": 6315,
+  "checks_sha256": "e698bc817d7080d547a110862eec0699cd1be3ef481937c61d065a4aa78b2e70",
+  "receipt": {
+    "bytes": 144035,
+    "sha256": "af87387fd9b9b1c3f07417bd2afdebc7b14aa77ef2d7b7b073382162e43bfcad"
+  },
+  "worker_result": {
+    "bytes": 226534,
+    "sha256": "051d342df561fab00a75d01ff820a5d81d83aa205f48b26a2a84fffbb8597bef"
+  },
+  "completion_seal": {
+    "bytes": 22815,
+    "sha256": "f29174586c2b8b0ef80d4e2e53dde44f0b3016b93a1ce868637513792fad9196"
+  },
+  "approval": {
+    "bytes": 1941,
+    "sha256": "88b8a72446dddbaec83b715e1b0d33921c3d4bd56b7aafb66ccd3459f4393338"
+  },
+  "claim": {
+    "bytes": 800,
+    "sha256": "f56743fc34e07ac64488902a80c9ff177ad44cfb1c4bc95d519fff34853852b9"
+  },
+  "config": {
+    "bytes": 964551,
+    "sha256": "96677e454767ad8e10cb95701dfdf010484de3334b10afc75e8e11f40dcd44a2"
+  },
+  "review": {
+    "bytes": 129892,
+    "sha256": "abf0693f24ba51410765881b769fb6ce845eca2fbdcecf4b086af2c7b7d54102"
+  },
+  "artifact_manifest": {
+    "path": "retained-evidence:full128_extended_actual_metadata_review_20261025T1454/ARTIFACT_MANIFEST.json",
+    "pin": {
+      "bytes": 39265,
+      "sha256": "82ab56271a9b9016aed2febf738f395964a1a447ecc417621b16f1731ab3ad01"
+    },
+    "files": 141,
+    "bytes": 330635481,
+    "exact_run_native139_artifact_seal_coverage_verified": true
+  },
+  "source_input_runtime_pins_rehashed": 2221,
+  "source_input_runtime_declared_bytes": 455168677,
+  "stream": {
+    "bytes": 237446391,
+    "sha256": "67e4a6ac0374ddb3b283397b5d827ab99d26d62c5293cad1d9b36e2d9225530d",
+    "hashed_once_not_parsed_by_this_reviewer": true
+  },
+  "resources": {
+    "configured": {
+      "address_space_bytes": 3221225472,
+      "cleanup_seconds": 30,
+      "cpu_seconds": 9000,
+      "cpus": 1,
+      "event_limit": 2478403,
+      "log_bytes": 16777216,
+      "output_bytes": 805306368,
+      "trace_bytes": 402653184,
+      "tree_rss_bytes": 2147483648,
+      "wall_seconds": 10800
+    },
+    "sampled_cpu_seconds": 5960.8,
+    "reaped_child_user_seconds": 5943.950198,
+    "reaped_child_system_seconds": 16.853962,
+    "reaped_child_total_cpu_seconds": 5960.80416,
+    "worker_wall_seconds": 5961.600773993006,
+    "parent_elapsed_before_finalization_seconds": 5962.696884498,
+    "cleanup_seconds": 0.0004902369691990316,
+    "sampled_tree_RSS_high_water_bytes": 550350848,
+    "reaped_maxrss_bytes": 550350848,
+    "sampled_RSS_not_continuous_tree_peak": true,
+    "reaped_maxrss_not_aggregate_tree": true,
+    "AS_is_not_RSS": true,
+    "parent_prepost_hashing_cleanup_separate_worker_wall": true,
+    "actual_AS_peak_not_recorded": true,
+    "final_output_bytes": 330635481,
+    "stream_bytes": 237446391,
+    "log_bytes": 0,
+    "limit_reason": null
+  },
+  "cleanup": {
+    "killed": [],
+    "reaped": [],
+    "remaining": {},
+    "seconds": 0.0004902369691990316,
+    "timed_out": false
+  },
+  "worker_returncode": 0,
+  "worker_reaped": true,
+  "preflight_postflight_full_manifest_pass": true,
+  "runtime_snapshots": [
+    {
+      "phase": "NORMAL_FINAL",
+      "modules": 339,
+      "file_mapping_rows": 105,
+      "unique_file_mappings": 19,
+      "known_raw_namespace_and_dependency_exceptions_preserved": true
+    },
+    {
+      "phase": "NATIVE_LOADED",
+      "modules": 340,
+      "file_mapping_rows": 110,
+      "unique_file_mappings": 20,
+      "known_raw_namespace_and_dependency_exceptions_preserved": true
+    },
+    {
+      "phase": "WORKER_FINAL",
+      "modules": 344,
+      "file_mapping_rows": 110,
+      "unique_file_mappings": 20,
+      "known_raw_namespace_and_dependency_exceptions_preserved": true
+    }
+  ],
+  "normal55_module_codes_and_final207_cache_fallback_codes_compiled_not_executed": true,
+  "all9service_bindings_and14providers_source_pinned": true,
+  "masks": {
+    "phases": [
+      "installed",
+      "cleaned"
+    ],
+    "slot": 3,
+    "role_masks": {
+      "client": 36,
+      "consume": 4,
+      "matrix": 36,
+      "op": 4,
+      "run": 36,
+      "tick": 4,
+      "work": 36
+    },
+    "role_code_locations_source_verified": true,
+    "cleaned_role_masks_is_expected_install_map_not_live_remaining_events": true,
+    "actual_zero_local_global_masks_and_freed_lease_checked_by_source_pinned_cleaned_predicate": true,
+    "callback_getter_available": false,
+    "direct_callback_identity_checked_at_install": true
+  },
+  "oracle": {
+    "initial": "SEALED",
+    "final": "CLOSED",
+    "comparison_attempted": true,
+    "denied": [],
+    "inherited_FD_maps_checked": true,
+    "final_runtime_policy_clean": true,
+    "source_bound_whole_terminal_before_compare": true,
+    "not_kernel_sandbox_or_native_syscall_isolation": true,
+    "no_per_successful_open_history": true
+  },
+  "persisted_phases": [
+    "ORIGINAL_RESOURCES_CONSTRUCTED",
+    "ORIGINAL_PREFIX_COMPLETE",
+    "ORIGINAL_SUFFIX_RETURNED",
+    "WHOLE_TERMINAL_CONFIRMED",
+    "ACTUAL_REGISTRY_SEALED",
+    "TERMINAL_COMPARISON_RETURNED"
+  ],
+  "capture_files_pinned_fields": 10,
+  "actual_terminal_binary_files": 23,
+  "prior_FAILs_claims_and_M16_component_evidence_preserved": true,
+  "publishable_scope": "One real original M128 public21 run completed under fresh9000CPU/10800wall policy with actual scoped observed-domain acceptance receipts, final runtime/policy closure, selective-mask install/cleanup and complete native output seal. Independent large-stream/numerical semantic verification is separately assigned; this metadata review alone does not independently recompute metrics.",
+  "full29_numeric_pass": false,
+  "hardware_acceptance": false,
+  "new_target_native_reference_execution": false,
+  "raw_event_reparse": false,
+  "raw_tensor_values_decoded": false,
+  "limits": [
+    "Observed-domain acceptance only, not full29, hardware/RTL, utilization, or observer noninterference acceptance.",
+    "No fresh off/original/identity full128 pair was run; no full128 observer speedup or isolated-cache performance attribution follows.",
+    "Runtime raw namespace/dependency exceptions are retained and separately source-qualified; not every raw module audit says PASS.",
+    "Oracle order is supported by exact source, initial/final policy and actual terminal artifacts, not kernel syscall tracing or an independent successful-open timeline.",
+    "Cleaned mask role_masks repeats expected install mask metadata; actual zero-local/global and released tool state was checked in the exact source predicate. CPython callback getter is unavailable.",
+    "Cleanup/reap are receipt/source-bound with no raw wait syscall history. PID numbers are not globally meaningful after the original execution environment exits.",
+    "AS hard cap is configured/claim-verified; actual AS peak is not saved. RSS is sampled tree high water; reaped maxrss is not aggregate-tree peak.",
+    "Runner/registry TEMP and historical missing-source labels are intentionally pre-comparison inventory scope; final comparison/worker result are separate. Do not rewrite either or infer full29 coverage."
+  ],
+  "review_script_sha256": "0bed42adbee1d723226b25c34a0f3e1a74ae68e1db5416524c5ba32d20ebc8c8",
+  "execution_identity_checks": {
+    "actual_parent_correct_flags_persisted": true,
+    "worker_passed_one_use_claim": true,
+    "fresh_root_approval_bound": true
+  },
+  "projection": "Read-only metadata/runtime/mask/resource/pin review. Raw process records, filesystem locators and reviewer resource bookkeeping omitted; source/hash identity and all outcome/limitation fields retained. This reviewer did not decode tensors or parse events; independent semantic review is separate."
+}

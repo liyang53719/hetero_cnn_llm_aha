@@ -1,0 +1,82 @@
+{
+  "original": {
+    "bytes": 32247,
+    "sha256": "75314880249384e525a379f4b4e169dd3957b93ee16efaca4b6f5b1d968c6d33"
+  },
+  "active_group": null,
+  "complete_records": 2478339,
+  "event_counts": {
+    "accept_group": 19200,
+    "accept_step": 847872,
+    "acquire": 1,
+    "release": 1,
+    "retire_done": 19200,
+    "retire_legacy_reply": 792576,
+    "retire_owner_response": 1,
+    "retire_result": 799488
+  },
+  "expected_whole_pc12": {
+    "PV_groups": 12288,
+    "QK_groups": 6912,
+    "events": 2478339,
+    "groups": 19200
+  },
+  "file_bytes": 237446391,
+  "file_sha256": "67e4a6ac0374ddb3b283397b5d827ab99d26d62c5293cad1d9b36e2d9225530d",
+  "footer": {
+    "count": 2478339,
+    "count_matches": true,
+    "frame_hash_matches": true
+  },
+  "frame_sha256": "dc7c65ec57dd64ce29fcac31f99bbd2b254f88c20ecf20e3235f7fdf6bc254c8",
+  "framing": {
+    "kind": "FOOTER_FOUND",
+    "offset": 237446347,
+    "trailing_bytes_present": false
+  },
+  "group_stats": {
+    "PV": {
+      "done_retired": 12288,
+      "groups_completed": 12288,
+      "groups_started": 12288,
+      "legacy_replies_retired": 792576,
+      "results_retired": 792576,
+      "steps_accepted": 792576
+    },
+    "QK": {
+      "done_retired": 6912,
+      "groups_completed": 6912,
+      "groups_started": 6912,
+      "results_retired": 6912,
+      "steps_accepted": 55296
+    }
+  },
+  "groups_completed": {
+    "PV": 12288,
+    "QK": 6912
+  },
+  "groups_started": 19200,
+  "hardware_acceptance": false,
+  "max_record_payload": 121,
+  "numerical_acceptance": false,
+  "owner_state": {
+    "acquired": false,
+    "epoch": 0,
+    "last_edge": 8172957,
+    "last_ticket": 19228,
+    "released": true,
+    "terminal_response": true
+  },
+  "protocol_acceptance": true,
+  "schedule_validation": {
+    "all_complete_retained_records_matched": true,
+    "complete_terminal_debt_checks_performed": true,
+    "events_do_not_prove_unrecorded_execution": true,
+    "first_errors": [],
+    "source_schedule": "ProductionQk16Schedule.run nested token/head/QK-block/PV-col loops"
+  },
+  "schema": "independent-complete-stream-review-v1",
+  "scope": "read-only complete frame/footer/lifecycle/schedule validation; no DUT/native/reference execution or oracle read",
+  "stat_unchanged": true,
+  "projection": "Only aggregate complete-frame/footer/lifecycle/schedule outcomes retained. Raw event excerpts, per-token table, recent-group records, trace path and reviewer resource bookkeeping omitted. No event replay or raw event arrays. The full reviewer hash binds omitted evidence; software event edges are not hardware cycles."
+}

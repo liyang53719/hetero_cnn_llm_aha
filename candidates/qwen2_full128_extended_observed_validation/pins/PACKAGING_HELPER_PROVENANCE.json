@@ -1,0 +1,16 @@
+{
+  "base_commit": "693ed26cdd3a2f4da0e495780e569b998aba3616",
+  "unchanged_existing_public_helpers": {
+    "assemble_sources.py": {
+      "path": "candidates/qwen2_full128_identity_failure/assemble_sources.py",
+      "bytes": 2816,
+      "sha256": "a68ee55143f679ed91292a837758a12d120811c18d002fe48eb7125721f2c080"
+    },
+    "test_assemble_sources.py": {
+      "path": "candidates/qwen2_full128_identity_failure/test_assemble_sources.py",
+      "bytes": 4043,
+      "sha256": "6d1cc2ad910ba25f1e2df478993ab71e9721d95ab0c1aa0d1cd15442cfb39280"
+    }
+  },
+  "utility_only": "Inert exact byte/path/hash assembly; does not import or execute target code."
+}

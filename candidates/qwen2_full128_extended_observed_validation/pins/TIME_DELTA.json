@@ -1,0 +1,59 @@
+{
+  "changed_resource_keys": [
+    "cpu_seconds",
+    "wall_seconds"
+  ],
+  "cleanup_seconds_unchanged": 30,
+  "hardware_4096_unchanged": true,
+  "internal_deadline": "unchanged started + profile.wall_budget; now10800 for explicitv2",
+  "new_numeric_profile": "ordered_fullgraph_m128_extended_validation_v2",
+  "new_resources": {
+    "address_space_bytes": 3221225472,
+    "cleanup_seconds": 30,
+    "cpu_seconds": 9000,
+    "cpus": 1,
+    "event_limit": 2478403,
+    "log_bytes": 16777216,
+    "output_bytes": 805306368,
+    "trace_bytes": 402653184,
+    "tree_rss_bytes": 2147483648,
+    "wall_seconds": 10800
+  },
+  "no_auto_retry_or_mid_run_time_extension": true,
+  "no_success_guarantee": true,
+  "not_environment_override": true,
+  "numeric_scope_inputs_math_thresholds_non_time_limits_unchanged": true,
+  "old_numeric_profile": "ordered_fullgraph_m128_exact_dut_v1",
+  "old_resources": {
+    "address_space_bytes": 3221225472,
+    "cleanup_seconds": 30,
+    "cpu_seconds": 3600,
+    "cpus": 1,
+    "event_limit": 2478403,
+    "log_bytes": 16777216,
+    "output_bytes": 805306368,
+    "trace_bytes": 402653184,
+    "tree_rss_bytes": 2147483648,
+    "wall_seconds": 4200
+  },
+  "parent_prepost_hashing_and_cleanup_timer_boundary_unchanged": true,
+  "profile_wall_seconds": {
+    "new": 10800,
+    "old": 4200
+  },
+  "runner_wall_guard": {
+    "new": 10800,
+    "old": 4200
+  },
+  "status": "EXPLICIT_VALIDATION_TIME_EXPANSION_NOT_HARDWARE_CHANGE",
+  "supervisor_CPU": "unchanged RLIMIT_CPU, sampled treeCPU, reaped childCPU code all read v2 RESOURCES.cpu_seconds=9000",
+  "supervisor_wall": "unchanged elapsed since before Popen read v2 RESOURCES.wall_seconds=10800",
+  "version_identities": {
+    "action": "single_m128_extended_validation_v2",
+    "completion_schema": "qwen2-m128-extended-validation-completion-v2",
+    "config_schema": "qwen2-m128-extended-validation-config-v2",
+    "receipt_schema": "qwen2-m128-extended-validation-receipt-v2",
+    "review_status": "GO_SINGLE_M128_EXTENDED_VALIDATION_V2",
+    "scope": "single_original_public21_m128_qk2_pv0_extended_time_observed_domain_terminal_comparison_v2"
+  }
+}

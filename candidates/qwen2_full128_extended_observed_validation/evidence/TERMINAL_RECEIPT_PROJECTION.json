@@ -1,0 +1,117 @@
+{
+  "original": {
+    "bytes": 144035,
+    "sha256": "af87387fd9b9b1c3f07417bd2afdebc7b14aa77ef2d7b7b073382162e43bfcad"
+  },
+  "action": "single_m128_extended_validation_v2",
+  "approval_sha256": "88b8a72446dddbaec83b715e1b0d33921c3d4bd56b7aafb66ccd3459f4393338",
+  "claim_sha256": "f56743fc34e07ac64488902a80c9ff177ad44cfb1c4bc95d519fff34853852b9",
+  "cleanup": {
+    "killed": [],
+    "reaped": [],
+    "remaining": {},
+    "seconds": 0.0004902369691990316,
+    "timed_out": false
+  },
+  "cold_provenance_is_native_or_numeric_pass": false,
+  "config_sha256": "96677e454767ad8e10cb95701dfdf010484de3334b10afc75e8e11f40dcd44a2",
+  "cpu_usage_children": {
+    "post_exit_reaped_aggregate_budget_checked": true,
+    "reaped_aggregate_limit_seconds": 9000,
+    "ru_maxrss_bytes_linux": 550350848,
+    "ru_maxrss_is_aggregate_tree": false,
+    "system_seconds": 16.853962,
+    "user_seconds": 5943.950198
+  },
+  "full29_numeric_pass": false,
+  "hardware_acceptance": false,
+  "legacy_results_inherited": false,
+  "limit_reason": null,
+  "log_limit_scope": "stdout.log plus stderr.log combined",
+  "no_retry": true,
+  "observed_domain_passed": true,
+  "output_after_postflight": {
+    "log_bytes": {
+      "stderr.log": 0,
+      "stdout.log": 0
+    },
+    "output_bytes": 330468631,
+    "trace_bytes": 237446391
+  },
+  "parent_elapsed_before_finalization_seconds": 5962.696884498,
+  "passed": true,
+  "peak_sampled_tree_rss_bytes": 550350848,
+  "per_process_limits": {
+    "address_space_bytes": 3221225472,
+    "address_space_is_rss": false,
+    "cpu_seconds": 9000,
+    "includes_threads": true,
+    "kernel_aggregate_tree_cpu_hard_cap": false
+  },
+  "postflight": {
+    "bytes_checked": 455168677,
+    "differences": {},
+    "files_checked": 2221,
+    "passed": true,
+    "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+    "wall_seconds": 0.39536629000212997
+  },
+  "preflight": {
+    "bytes_checked": 455168677,
+    "differences": {},
+    "files_checked": 2221,
+    "passed": true,
+    "scope": "opaque complete manifest hash before any worker spawn; outside worker timer",
+    "wall_seconds": 0.4056799719692208
+  },
+  "resources": {
+    "address_space_bytes": 3221225472,
+    "cleanup_seconds": 30,
+    "cpu_seconds": 9000,
+    "cpus": 1,
+    "event_limit": 2478403,
+    "log_bytes": 16777216,
+    "output_bytes": 805306368,
+    "trace_bytes": 402653184,
+    "tree_rss_bytes": 2147483648,
+    "wall_seconds": 10800
+  },
+  "review_sha256": "abf0693f24ba51410765881b769fb6ce845eca2fbdcecf4b086af2c7b7d54102",
+  "run_id": "extended_m128_01",
+  "schema": "qwen2-m128-extended-validation-receipt-v2",
+  "scope": "single_original_public21_m128_qk2_pv0_extended_time_observed_domain_terminal_comparison_v2",
+  "status": "PASS_OBSERVED_DOMAIN_M128_DUT_NOT_FULL29",
+  "terminal_output_budget": {
+    "actual_staged_bytes_checked_before_success_seal": true,
+    "before_parent_terminal_files": {
+      "log_bytes": {
+        "stderr.log": 0,
+        "stdout.log": 0
+      },
+      "output_bytes": 330468631,
+      "trace_bytes": 237446391
+    },
+    "exact_receipt_and_seal_projection_required": true,
+    "exclusive_directory_assumption": "Launcher-owned directory; worker and tracked descendants are terminal; no external writers during finalization.",
+    "failure_diagnostics_may_exceed_success_limit": true,
+    "limit_bytes": 805306368,
+    "success_seal_publication": "Byte-preserving atomic rename after complete staged-file size/hash/log checks; no later output-directory writes."
+  },
+  "tree_rss_is_hard_cap": false,
+  "worker_reaped": true,
+  "worker_result_status": "PASS_OBSERVED_DOMAIN_M128_DUT_NOT_FULL29",
+  "worker_returncode": 0,
+  "worker_wall_scope": "Immediately before Popen through exit/failure observation; cleanup separate; opaque parent pre/post hashes excluded.",
+  "worker_wall_seconds": 5961.600773993006,
+  "sampled_tree_cpu": {
+    "clock_ticks_per_second": 100,
+    "kernel_aggregate_tree_cpu_hard_cap": false,
+    "sampled_aggregate_cpu_seconds": 5960.8,
+    "short_lived_unsampled_processes_may_be_missing": true
+  },
+  "tracked_identity_rebinding_count": 0,
+  "independent_actual_review_status": "PASS_SCOPED_ACTUAL_METADATA_AND_SEMANTIC_REVIEWS",
+  "projection": "Exact saved receipt scalar/resource/cleanup outcomes and hash identities. Omitted artifact map (separate metadata ledger), duplicated cold source map and private process identities/ticks. Original PASS token is run-native; two independent actual reviews are bound separately, not package approval. Sampled RSS is not continuous peak or a hard tree cap.",
+  "actual_metadata_review_sha256": "c85cef5a856a7b63097e7e974e094de8688fe605e4f290748aa54435a1a72034",
+  "actual_semantic_review_sha256": "5d0760ab66a134bcfbc7848ed8e48b23115cc69d84fe06db79e8b9f5bcc16a32"
+}

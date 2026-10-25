@@ -1,0 +1,281 @@
+{
+  "original": {
+    "bytes": 7192,
+    "sha256": "731767ea80ef33514b02c6b991c2fabb6cfff78f14e4e9f842234446b263ca37"
+  },
+  "accepted_issue_slot_cell_opportunities": 9462349824,
+  "case": "extended_m128_01",
+  "config_sha256": "96677e454767ad8e10cb95701dfdf010484de3334b10afc75e8e11f40dcd44a2",
+  "declared_not_synthesis_proven_array_cells": 4096,
+  "evidence_layer": "complete original public21 software DUT",
+  "full29_numeric_pass": false,
+  "full_block_hardware_denominator_available": false,
+  "hardware_MAC_active_duty": null,
+  "hardware_MAC_temporal_utilization": null,
+  "hardware_acceptance": false,
+  "hardware_active_MAC_cycles": null,
+  "hardware_cycles": null,
+  "host_model_ticks_not_used_as_denominator": 14403442,
+  "independent_algorithmic_crosscheck": {
+    "attention_causal_QK_plus_PV": 25362432,
+    "attention_formula": "2 * 12 heads * sum(1..128) causal keys * 128 width",
+    "counters_match_shape_demands": true,
+    "dense_jobs_MxNxK": [
+      {
+        "algorithmic_MxNxK": 301989888,
+        "k": 1536,
+        "m": 128,
+        "n": 1536,
+        "role": "q_raw"
+      },
+      {
+        "algorithmic_MxNxK": 50331648,
+        "k": 1536,
+        "m": 128,
+        "n": 256,
+        "role": "k_raw"
+      },
+      {
+        "algorithmic_MxNxK": 50331648,
+        "k": 1536,
+        "m": 128,
+        "n": 256,
+        "role": "v_raw"
+      },
+      {
+        "algorithmic_MxNxK": 301989888,
+        "k": 1536,
+        "m": 128,
+        "n": 1536,
+        "role": "dense_o"
+      },
+      {
+        "algorithmic_MxNxK": 1761607680,
+        "k": 1536,
+        "m": 128,
+        "n": 8960,
+        "role": "gate"
+      },
+      {
+        "algorithmic_MxNxK": 1761607680,
+        "k": 1536,
+        "m": 128,
+        "n": 8960,
+        "role": "up"
+      },
+      {
+        "algorithmic_MxNxK": 1761607680,
+        "k": 8960,
+        "m": 128,
+        "n": 1536,
+        "role": "down"
+      }
+    ],
+    "dense_total": 5989466112,
+    "future_masked_keys_excluded": true,
+    "nonmatrix_norm_rope_bias_silu_softmax_scalar_ops_excluded": true,
+    "padded_lanes_excluded": true,
+    "shape_demands_are_not_measured_counters": true,
+    "valid_zero_operands_included": true
+  },
+  "missing_hardware_evidence": [
+    "complete RTL numerical run",
+    "validated physical MAC capacity",
+    "complete block hardware cycle denominator",
+    "active-MAC/issue/busy-cycle census"
+  ],
+  "native_FMA_includes_zero_padding_and_unselected_cells": true,
+  "nonoverlapping_original_stage_results": [
+    {
+      "executed_macs": 0,
+      "kind": "Norm",
+      "pcs": [
+        0
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/0/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 301989888,
+      "kind": "Dense",
+      "pcs": [
+        1
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/1/report/terminal",
+      "status": null,
+      "useful_macs": 301989888
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Bias",
+      "pcs": [
+        2
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/2/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Rope",
+      "pcs": [
+        3
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/3/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 50331648,
+      "kind": "Dense",
+      "pcs": [
+        4
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/4/report/terminal",
+      "status": null,
+      "useful_macs": 50331648
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Bias",
+      "pcs": [
+        5
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/5/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Rope",
+      "pcs": [
+        6
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/6/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 50331648,
+      "kind": "Dense",
+      "pcs": [
+        7
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/7/report/terminal",
+      "status": null,
+      "useful_macs": 50331648
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Bias",
+      "pcs": [
+        8
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/8/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 0,
+      "kind": "KvAppend",
+      "pcs": [
+        9
+      ],
+      "source_pointer": "dut/orchestration.json#/prefix_execution/9/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 632291328,
+      "kind": "Attention",
+      "pcs": [
+        10,
+        11,
+        12
+      ],
+      "source_pointer": "dut/orchestration.json#/execution/reports/0/report/result",
+      "status": null,
+      "useful_macs": 25362432
+    },
+    {
+      "executed_macs": 301989888,
+      "kind": "Dense",
+      "pcs": [
+        13
+      ],
+      "source_pointer": "dut/orchestration.json#/execution/reports/1/report",
+      "status": null,
+      "useful_macs": 301989888
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Add",
+      "pcs": [
+        14
+      ],
+      "source_pointer": "dut/orchestration.json#/execution/reports/2/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Norm",
+      "pcs": [
+        15
+      ],
+      "source_pointer": "dut/orchestration.json#/execution/reports/3/report/result",
+      "status": null,
+      "useful_macs": 0
+    },
+    {
+      "executed_macs": 3523215360,
+      "kind": "FFN",
+      "pcs": [
+        16,
+        17,
+        18
+      ],
+      "source_pointer": "dut/orchestration.json#/execution/reports/4/report/coordinator/terminal",
+      "status": null,
+      "useful_macs": 3523215360
+    },
+    {
+      "executed_macs": 1761607680,
+      "kind": "Dense",
+      "pcs": [
+        19
+      ],
+      "source_pointer": "dut/orchestration.json#/execution/reports/5/report",
+      "status": null,
+      "useful_macs": 1761607680
+    },
+    {
+      "executed_macs": 0,
+      "kind": "Add",
+      "pcs": [
+        20
+      ],
+      "source_pointer": "dut/orchestration.json#/execution/reports/6/report/result",
+      "status": null,
+      "useful_macs": 0
+    }
+  ],
+  "observed_accepted_dense_steps": 1462272,
+  "observed_accepted_normal_steps": 847872,
+  "observed_cpp_fma_calls": 6621757440,
+  "observed_dense_fma_calls": 5989466112,
+  "observed_normal_fma_calls": 632291328,
+  "observed_owner_useful_mac_counter": 6014828544,
+  "selected_software_work_fraction_of_executed_FMA_calls": 0.9083432304038005,
+  "software_accepted_slot_arithmetic_operation_ratio": 0.6998005319148937,
+  "source_normal_FMA_loop_crosscheck": {
+    "PV0_accepted_steps792576_cells512": 405798912,
+    "QK2_groups6912_steps8_cells4096": 226492416,
+    "observed_normal_FMA_matches": true
+  },
+  "status": "PASS_SOFTWARE_MAC_COUNTER_RECONCILIATION_NOT_UTILIZATION_ACCEPTANCE",
+  "these_ratios_are_not_hardware_temporal_utilization": true,
+  "utilization_90percent_acceptance": false,
+  "projection": "Original software counters, algorithmic crosschecks and explicit denominator limitations retained. These ratios are NOT hardware temporal utilization or duty; full-cycle denominator and active-cycle measurements remain absent."
+}

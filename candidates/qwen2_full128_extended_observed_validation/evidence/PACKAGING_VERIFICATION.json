@@ -1,0 +1,35 @@
+{
+  "original_checks": {
+    "bytes": 750,
+    "sha256": "ee60217d0fb86eb4d1a2a0a804ba927ecb0dcc416c9ee5eb0dbb657d84cba91e"
+  },
+  "status": "PASS_BYTE_INPUT_FREEZE_ASSEMBLY_AND_ARTIFACT_STAT_CHECKS",
+  "combined_pins": 2221,
+  "freeze_pins": 45,
+  "identity_comparisons": 2268,
+  "unique_files_hashed": 2237,
+  "actual_artifact_stat_count": 141,
+  "raw_actual_stream_or_tensor_not_reopened": true,
+  "sealed_inputs_hashed_opaque_not_decoded": true,
+  "logical_pin_delta_reconstructed": 2221,
+  "assembly": [
+    {
+      "mode": "normal",
+      "files": 16,
+      "bytes": 176747,
+      "all_original_bytes": true
+    },
+    {
+      "mode": "optimized",
+      "files": 16,
+      "bytes": 176747,
+      "all_original_bytes": true
+    }
+  ],
+  "packaging_tests": {
+    "normal": 10,
+    "optimized": 10
+  },
+  "native_target_reference_original_tests_or_parser_executed": false,
+  "scope": "Inert packaging utility tests and original byte identities only; no extra model/native/reference/event-parser execution. Two modes are separate executions of ten unique packaging tests, not twenty numerical cases."
+}

@@ -1,0 +1,36 @@
+{
+  "original": {
+    "bytes": 639,
+    "sha256": "d5d6888bbede481ee03710e1db3724e2e8a520ea864c07494d1445c48b7f367e"
+  },
+  "counts": {
+    "abort": 0,
+    "accept_group": 19200,
+    "accept_step": 847872,
+    "acquire": 1,
+    "release": 1,
+    "retire_done": 19200,
+    "retire_legacy_reply": 792576,
+    "retire_owner_response": 1,
+    "retire_result": 799488
+  },
+  "expected_success_events": 2478339,
+  "groups": {
+    "0": 12288,
+    "2": 6912
+  },
+  "hardware_cycles": null,
+  "receipt": {
+    "bytes": 237446391,
+    "complete": true,
+    "count": 2478339,
+    "format": "qwen2-raw-event-frames-v1",
+    "raw_complete": true,
+    "sha256": "67e4a6ac0374ddb3b283397b5d827ab99d26d62c5293cad1d9b36e2d9225530d"
+  },
+  "resource_event_capacity": 2478403,
+  "independent_actual_review_status": "PASS_SCOPED_ACTUAL_METADATA_AND_SEMANTIC_REVIEWS",
+  "projection": "Original scalar metrics, masks/domain cardinalities, thresholds and source/hash provenance only; private physical paths replaced by roles. No tensor, weight, raw event or reference payload. Original run-native status is retained, separately independently reviewed.",
+  "actual_metadata_review_sha256": "c85cef5a856a7b63097e7e974e094de8688fe605e4f290748aa54435a1a72034",
+  "actual_semantic_review_sha256": "5d0760ab66a134bcfbc7848ed8e48b23115cc69d84fe06db79e8b9f5bcc16a32"
+}

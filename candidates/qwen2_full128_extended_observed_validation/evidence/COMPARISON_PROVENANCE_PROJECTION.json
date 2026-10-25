@@ -1,0 +1,56 @@
+{
+  "original": {
+    "bytes": 1660,
+    "sha256": "bc53da3f697f95522b7cdd48c26473032ef295a5faa1b0f96296a76c2628e019"
+  },
+  "active_rows": 128,
+  "actual_DUT_public_table_capacity": 1024,
+  "actual_provider_pin": {
+    "bytes": 524288,
+    "path": "retained-evidence:candidate_fixed93_fullblock_startup_successor_20261020T1255/source/work/qwen2_recovered_inputs/typed/rope.bin",
+    "sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af",
+    "shape": [
+      2,
+      1024,
+      64
+    ]
+  },
+  "canonical_generated_positions": 128,
+  "comparator_label_interpretation": "Unmodified comparator configuration_difference.project_rotary_positions=256 is historical project reference diagnostic metadata, NOT actual DUT provider table capacity or newly verified numerical identity",
+  "generated_position_range": [
+    0,
+    127
+  ],
+  "historical_project_reference_rotary_positions": 256,
+  "inactive_zero_position_range": [
+    128,
+    1023
+  ],
+  "official_max_position_embeddings": 32768,
+  "official_rope_theta": 1000000.0,
+  "provider_generation_reexecuted": false,
+  "provider_generation_source_contract": "double math.pow/cos/sin then one FP32 rounding; not powf",
+  "provider_metadata_source": "retained-evidence:qwen2_m128_dut_exact_prepare_20261025T0315/INPUT_MANIFEST.json#/provider14/rope",
+  "source": {
+    "path": "source-root:candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py",
+    "prepare_metadata_lines": [
+      458,
+      460
+    ],
+    "rope_bytes_lines": [
+      337,
+      346
+    ],
+    "sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
+  },
+  "table_bytes": 524288,
+  "table_shape": [
+    2,
+    1024,
+    64
+  ],
+  "independent_actual_review_status": "PASS_SCOPED_ACTUAL_METADATA_AND_SEMANTIC_REVIEWS",
+  "projection": "Original scalar metrics, masks/domain cardinalities, thresholds and source/hash provenance only; private physical paths replaced by roles. No tensor, weight, raw event or reference payload. Original run-native status is retained, separately independently reviewed.",
+  "actual_metadata_review_sha256": "c85cef5a856a7b63097e7e974e094de8688fe605e4f290748aa54435a1a72034",
+  "actual_semantic_review_sha256": "5d0760ab66a134bcfbc7848ed8e48b23115cc69d84fe06db79e8b9f5bcc16a32"
+}

@@ -1,0 +1,41 @@
+{
+  "original": {
+    "bytes": 1206,
+    "sha256": "5d0760ab66a134bcfbc7848ed8e48b23115cc69d84fe06db79e8b9f5bcc16a32"
+  },
+  "actual_complete_public21": true,
+  "actual_owner_jobs": 17,
+  "approved_BF16_node_domains": 24,
+  "case": "extended_m128_01",
+  "diagnostic_softmax_domain": 1,
+  "full29_numeric_pass": false,
+  "hardware_MAC_active_duty": null,
+  "hardware_MAC_temporal_utilization": null,
+  "hardware_acceptance": false,
+  "independent_complete_event_stream": true,
+  "independent_every_capture_cell_checked": true,
+  "independent_original_numeric_metrics_reproduced_exactly": true,
+  "launch_results": 1,
+  "metadata_review_sha256": "c85cef5a856a7b63097e7e974e094de8688fe605e4f290748aa54435a1a72034",
+  "no_DUT_native_reference_code_import_or_execution": true,
+  "noninterference_proven": false,
+  "old_CPU_failures_preserved": true,
+  "original_artifacts_modified": false,
+  "original_run_returncode": 0,
+  "physically_nonmaterialized_nodes": [
+    "mask",
+    "repeat_k",
+    "repeat_v",
+    "logits"
+  ],
+  "primary_report_sha256": "3b8bd4dfe2fccf2df5ac69c9c0faddf675647144602ab4ca6d7ba1bf493e669d",
+  "public_completions": 21,
+  "readonly_reference_payload_comparison": true,
+  "status": "PASS_ORIGINAL_M128_PUBLIC21_SOFTWARE_OBSERVED_DOMAIN_AND_COMPLETE_PROTOCOL",
+  "utilization_90percent_acceptance": false,
+  "original_review_freeze": {
+    "bytes": 2110,
+    "sha256": "91f0bd0754de565c1cdb780199a456f95062127db84c59d03c8cd20b05d65d30"
+  },
+  "projection": "All original final review scalar outcome fields retained unchanged; no raw data or private locators were present. This is observed-domain/full-protocol software acceptance, not full29, observer noninterference or hardware acceptance."
+}

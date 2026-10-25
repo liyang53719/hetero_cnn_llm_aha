@@ -1,0 +1,191 @@
+{
+  "original": {
+    "bytes": 129892,
+    "sha256": "abf0693f24ba51410765881b769fb6ce845eca2fbdcecf4b086af2c7b7d54102"
+  },
+  "schema": "qwen2-m128-extended-validation-independent-static-review-v2",
+  "status": "GO_SINGLE_M128_EXTENDED_VALIDATION_V2",
+  "action": "single_m128_extended_validation_v2",
+  "scope": "single_original_public21_m128_qk2_pv0_extended_time_observed_domain_terminal_comparison_v2",
+  "config_sha256": "96677e454767ad8e10cb95701dfdf010484de3334b10afc75e8e11f40dcd44a2",
+  "blockers": [],
+  "resources": {
+    "address_space_bytes": 3221225472,
+    "cleanup_seconds": 30,
+    "cpu_seconds": 9000,
+    "cpus": 1,
+    "event_limit": 2478403,
+    "log_bytes": 16777216,
+    "output_bytes": 805306368,
+    "trace_bytes": 402653184,
+    "tree_rss_bytes": 2147483648,
+    "wall_seconds": 10800
+  },
+  "numeric_or_native_executed": false,
+  "review_scope": "EXACT_V2_9000_CPU_10800_WALL_SOURCE_CONFIG_AND_OPAQUE_PIN_REVIEW_ONLY",
+  "required_status_token_is_not_root_execution_authorization": true,
+  "root_execution_authorized_by_this_review": false,
+  "reviewed_config_bytes": 964551,
+  "freeze": {
+    "path": "extended-preparation:FREEZE.json",
+    "pin": {
+      "bytes": 7438,
+      "sha256": "c72076659eff72e5ddd01bfb9f212f81bfce85ff9a9626572d941ccc6444a4c0"
+    }
+  },
+  "static_checks": {
+    "path": "retained-evidence:full128_extended_validation_review_20261025T1304/STATIC_CHECKS.json",
+    "pin": {
+      "bytes": 2081467,
+      "sha256": "f479844ec2246450d7738bae6fda19377be1785ff81ee8bdcda92e2bb8be77c4"
+    },
+    "count": 10091
+  },
+  "resource_review": {
+    "path": "retained-evidence:full128_extended_validation_review_20261025T1304/RESOURCE_REVIEW.json",
+    "pin": {
+      "bytes": 6511,
+      "sha256": "906a3221634b8477048d74803d91aec3eb7236541ce59bf8a4615f524b5b74e2"
+    },
+    "count": 39
+  },
+  "independent_controls": {
+    "normal": {
+      "path": "retained-evidence:full128_extended_validation_review_20261025T1304/normal.log",
+      "pin": {
+        "bytes": 3450,
+        "sha256": "8102e7cccb97d74a31cd5e8746ef4e5ba66200948147546b034ab9fc6a8e4057"
+      },
+      "tests": 31
+    },
+    "optimized": {
+      "path": "retained-evidence:full128_extended_validation_review_20261025T1304/optimized.log",
+      "pin": {
+        "bytes": 3450,
+        "sha256": "62e9713772506ae6afb26268c4542f0766b0919685cbf82dfd7e76c4ef528a77"
+      },
+      "tests": 31
+    },
+    "method": "AST-extracted actual admission/predicates/functions with stdlib-only dictionaries and doubles; positive approval-shaped fixture only in process memory; no claim/launch/target imports",
+    "author_focused_tests_reused": 58,
+    "unchanged_tests_reused_by_source_pins": true
+  },
+  "predecessor_independent_review": {
+    "path": "retained-evidence:full128_argv_recovery_review_20261025T0941/successor/REVIEW.json",
+    "pin": {
+      "bytes": 126822,
+      "sha256": "a18aaafbf3149f109fd7264328228cf57deac025b8d7ad0588206f41d292df3c"
+    },
+    "unchanged_semantics_runtime_isolation_and_controls_reused": true
+  },
+  "source_mask_review": {
+    "path": "retained-evidence:full128_mask_review_20261025T0905/REVIEW.json",
+    "pin": {
+      "bytes": 13564,
+      "sha256": "1aea8c1b3c55df573d5ac239a8a9ecf516fe55c5fd3bec9ae736c11b5355f4b4"
+    }
+  },
+  "latest_actual_CPU_failure_review": {
+    "path": "retained-evidence:full128_terminal_metadata_review_20261025T1053/FAILURE_METADATA_REVIEW.json",
+    "pin": {
+      "bytes": 6525,
+      "sha256": "ec25c5f2cb19ae5fd9c841104d9a917bfe10c1ff9d661adceb9d81f35922e0f0"
+    },
+    "actual_status_remains": "FAIL_EXACT_M128_DUT_RETAINED"
+  },
+  "M16_prerequisite_review": {
+    "path": "retained-evidence:production_attention_review_20261025T0807/reference_recovery_r2_actual/ACTUAL_REFERENCE_REVIEW.json",
+    "pin": {
+      "bytes": 360161,
+      "sha256": "d5bdbd43fd10c4146a0064dd21ee20f003d84fd787d59093b47b8961e899d64d"
+    },
+    "scope": "Independent postterminal reference closure of two archived actual M16 Attention component arms only; not fullblock or official full-layer/hardware acceptance",
+    "prior_independent_actual_review_reused_without_rerunning_arithmetic": true
+  },
+  "closure": {
+    "combined_pins": 2221,
+    "combined_declared_bytes": 455168677,
+    "runtime_pins": 746,
+    "production_sources": 316,
+    "candidate_files": 14,
+    "gate_files": 7,
+    "active_path_remaps": 21,
+    "changed_executable_contents": [
+      "gate/admission.py: exact v2 identity and two time constants",
+      "gate/run_gate.py: receipt and completion schema labels only",
+      "candidate/runner.py: numeric profile identity and wall ceiling only"
+    ],
+    "all_other_executable_contents_byte_identical": true,
+    "all_old2206_pins_still_identical": true,
+    "observer_root_and_selective_true_unchanged": true,
+    "original_arithmetic_source_input14_native_ELF_reference29_thresholds_hardware_loops_unchanged": true,
+    "no_helper_model": true,
+    "no_new_phase_metadata": true,
+    "normal_source_loading_roles_remap_exact": true,
+    "old_runtime_executable_aliases_not_admitted": true,
+    "source_bindings_field_masks_MRO_stream_oracle_terminal_gates_unchanged": true
+  },
+  "explicit_time_change": {
+    "prior_cpu_seconds": 3600,
+    "prior_wall_seconds": 4200,
+    "new_cpu_seconds": 9000,
+    "new_wall_seconds": 10800,
+    "new_profile_wall_budget": 10800,
+    "new_runner_wall_ceiling": 10800,
+    "unchanged_internal_deadline_formula": "started + profile['wall_budget']",
+    "per_process_RLIMIT_CPU_sampled_tree_CPU_and_reaped_CPU_all_use_new9000": true,
+    "outer_worker_wall_uses10800": true,
+    "prior_initialization_only_branch_still_exact25_seconds": true,
+    "old_v1_schema_source_resource_limits_unchanged_and_bidirectionally_isolated": true,
+    "prior7200_assessment": {
+      "path": "retained-evidence:fullrun_extended_budget_assessment_20261025T1233/ASSESSMENT_ZH.md",
+      "pin": {
+        "bytes": 12336,
+        "sha256": "b00479098704388859effde94b252798d7a271fb4b7d3fc3143e06001333bf2e"
+      },
+      "unmodified_historical_proposal": true
+    },
+    "root_preparation_resource_decision": {
+      "path": "extended-preparation:ROOT_RESOURCE_DECISION.json",
+      "pin": {
+        "bytes": 1351,
+        "sha256": "1cec647d74da34db38d0ad872bb36bda2d3cc0548e14a414f23efc472ab85d23"
+      },
+      "not_GO": true
+    },
+    "scenario_margin_not_completion_guarantee": true
+  },
+  "resource_assessment": {
+    "judgment": "Evidence supports one separately authorized bounded extended validation attempt; no mathematical completion guarantee is required or claimed.",
+    "basis": "Two retained3600CPU failures; unchanged scoped M16 Attention numerical closure; sensitivity scenarios about5665-7730CPU with unmeasured tail factors and600/1200suffix reserves; root9000 choice has about16.4percent margin above adverse7730scenario. This is not acceleration and does not budget helper benefit.",
+    "successful_trace_valid_schema_bound_bytes": 348868042,
+    "trace_cap_bytes": 402653184,
+    "nontrace_output_residual_bytes": 456438326,
+    "unknowns": [
+      "No current fullworker phase-separated CPU timings",
+      "Tail factor and suffix/closure CPU reserve are scenarios, not measured upper bounds",
+      "Full suffix/terminal AS/RSS peaks, nontrace aggregate output and final result JSON size not proved to fit"
+    ],
+    "enforcement": "Same per-process CPU/AS hard limits; sampled treeCPU/RSS with poll cadence0.05s; reapedCPU check; worker wall; output/trace/log/event limits; cleanup30s. Tree sampling is not a kernel aggregate quota and can overshoot between samples.",
+    "timing_boundary": "Parent preflight/postflight opaque hashing and cleanup remain outside worker wall timer;10800 is not a guaranteed end-to-end process-tree wall bound.",
+    "non_time_guard_scan": "Same real M128 terminal-driven loops and propagated deadline;56x160covers8960 FFN width;4096metadata and8/16localhandshake guards are not global arithmetic ceilings. No identified deterministic M128 truncation. Real protocol/resource failures still reject."
+  },
+  "preserved_evidence": {
+    "old_failures_claims_approvals_and0900_0911_0941_freezes_unchanged": true,
+    "old_CPU_FAILs_not_upgraded": true,
+    "old7200_unfrozen_draft_archived_not_active": true,
+    "no_old_claim_deleted_reused_or_replaced": true
+  },
+  "limitations": [
+    "This static-review status token is required by v2 admission but supplies no root approval and authorizes no execution. Missing root approval is rejected.",
+    "Source/config/mocks are not new actual normal/native/mask/wholeterminal or numerical evidence. Existing actual evidence keeps its original scoped meaning.",
+    "The goal remains observed physical numerical domains plus genuine full128 public21 terminal/protocol, not full29 numeric, hardware/RTL, noninterference or90percent utilization acceptance.",
+    "No model, target, native ELF, independent reference arithmetic or raw-event replay was run by this review. Opaque byte hashes do not prove numerical content.",
+    "No optional new stage metadata is part of this freeze; current orchestration phases do not supply complete phase timing.",
+    "Strong kill and cancellation cannot guarantee capture/mask cleanup/final evidence files; absence must never be promoted to PASS."
+  ],
+  "new_root_approval_or_claim_created": false,
+  "new_execution_authorized": false,
+  "frozen_inputs_modified": false,
+  "projection": "Source/config review before actual execution. Duplicated cold provenance, reviewer label, executable command template and root admission instructions omitted; paths replaced by roles. Historical no-execution flags retained. This is not actual review or execution authority."
+}

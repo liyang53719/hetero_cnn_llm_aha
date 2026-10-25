@@ -1,0 +1,22 @@
+{
+  "base_commit": "693ed26cdd3a2f4da0e495780e569b998aba3616",
+  "prior_public_manifest": "candidates/qwen2_full128_identity_failure/pins/SOURCE_ASSEMBLY_MANIFEST.json",
+  "prior_public_manifest_identity": {
+    "bytes": 5718,
+    "sha256": "7e419a9b0d82342fc7b6399340a02aaf80ea0d6128332163c532f1bc30efc8ac"
+  },
+  "changed_original_byte_sources": [
+    "candidates/qwen2_full128_extended_observed_validation/delta/qwen2_ordered_fullgraph_entry/runner.py"
+  ],
+  "omitted_private_rope_metadata": {
+    "original": {
+      "bytes": 877,
+      "sha256": "3f4b249a7549dfcd740eb760bd3c2bde0c873637906e7dd3b7454e7c9c61d973"
+    },
+    "unchanged_public_projection": "candidates/qwen2_full128_identity_failure/pins/ROPE_SOURCE_PINS_PROJECTION.json"
+  },
+  "source_adaptation": false,
+  "no_helper_model": true,
+  "gate_and_runtime_reconstruction_included": false,
+  "raw_inputs_weights_reference_outputs_fields_events_included": false
+}

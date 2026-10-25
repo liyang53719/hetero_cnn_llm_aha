@@ -1,0 +1,49 @@
+{
+  "original": {
+    "bytes": 22815,
+    "sha256": "f29174586c2b8b0ef80d4e2e53dde44f0b3016b93a1ce868637513792fad9196"
+  },
+  "action": "single_m128_extended_validation_v2",
+  "actual_terminal_verified": true,
+  "approval_sha256": "88b8a72446dddbaec83b715e1b0d33921c3d4bd56b7aafb66ccd3459f4393338",
+  "claim_sha256": "f56743fc34e07ac64488902a80c9ff177ad44cfb1c4bc95d519fff34853852b9",
+  "cold_provenance_is_native_or_numeric_pass": false,
+  "config_sha256": "96677e454767ad8e10cb95701dfdf010484de3334b10afc75e8e11f40dcd44a2",
+  "event_protocol_passed": true,
+  "full29_numeric_pass": false,
+  "hardware_acceptance": false,
+  "legacy_results_inherited": false,
+  "observed_domain_passed": true,
+  "receipt": {
+    "bytes": 144035,
+    "sha256": "af87387fd9b9b1c3f07417bd2afdebc7b14aa77ef2d7b7b073382162e43bfcad"
+  },
+  "review_sha256": "abf0693f24ba51410765881b769fb6ce845eca2fbdcecf4b086af2c7b7d54102",
+  "schema": "qwen2-m128-extended-validation-completion-v2",
+  "scope": "single_original_public21_m128_qk2_pv0_extended_time_observed_domain_terminal_comparison_v2",
+  "status": "PASS_OBSERVED_DOMAIN_M128_DUT_NOT_FULL29",
+  "terminal_output_budget": {
+    "actual_staged_bytes_checked_before_success_seal": true,
+    "base_output_bytes": 330468631,
+    "completion_seal_bytes": 22815,
+    "final_output_bytes": 330635481,
+    "limit_bytes": 805306368,
+    "receipt_bytes": 144035,
+    "terminal_log_bytes": {
+      "stderr.log": 0,
+      "stdout.log": 0
+    },
+    "terminal_trace_bytes": 237446391
+  },
+  "cleanup": {
+    "killed": [],
+    "reaped": [],
+    "remaining": {},
+    "seconds": 0.0004902369691990316,
+    "timed_out": false
+  },
+  "independent_actual_review_status": "PASS_SCOPED_ACTUAL_METADATA_AND_SEMANTIC_REVIEWS",
+  "projection": "Original completion summary and scalar/hash fields only; artifact metadata separately projected, process locators omitted. This public projection is not a live execution capability or full original seal.",
+  "actual_metadata_review_sha256": "c85cef5a856a7b63097e7e974e094de8688fe605e4f290748aa54435a1a72034",
+  "actual_semantic_review_sha256": "5d0760ab66a134bcfbc7848ed8e48b23115cc69d84fe06db79e8b9f5bcc16a32"
+}

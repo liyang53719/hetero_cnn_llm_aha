@@ -1,0 +1,23 @@
+{
+  "records": [
+    {
+      "failure": "One test expected four integer16 bit-shift literals; actual validator has three. Test expectation corrected; production source unchanged for that correction.",
+      "original_log_identity_only": {
+        "bytes": 11244,
+        "sha256": "dd054955c6bd140f91906fdc156dc0c81d6853a80cc1e960ad4ab695bfe47ea7"
+      },
+      "phase": "author_initial_M128_mock",
+      "preserved_original_privately": true
+    },
+    {
+      "failure": "Worker polling alone omitted late worker output and parent postflight/receipt/seal overhead from final successful-output qualification. This was a static source finding, not a numerical-run failure.",
+      "failure_id": "FINAL_OUTPUT_BUDGET",
+      "original_review_sha256": "663a55ca050aec1099502c801126250480da9a4d946e4a097bbe37eb0a9c6688",
+      "phase": "independent_r1_source_review",
+      "preserved_original_privately": true,
+      "resolution": "r2 source/mock review closed the finding with exact terminal projection and staged-byte checks.",
+      "resolution_review_sha256": "100c8ded4dbfe6472716dee7e025d0759c7fc01ab0922cf541fe1adf6a55426e"
+    }
+  ],
+  "scope": "Sanitized historical source/mock failures only; no private original logs, tensors or execution outputs included."
+}

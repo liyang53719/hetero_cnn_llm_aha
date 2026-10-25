@@ -1,0 +1,98 @@
+{
+  "DUT_acceptance": "NOT_RUN",
+  "action": "single_official_m128_full_layer_reference_pair",
+  "actual_M128_forward": false,
+  "capture_profile": {
+    "all29_intermediate_noninterference_claimed": false,
+    "arm_order": [
+      "baseline_no_capture_observer",
+      "observed_all29"
+    ],
+    "baseline_outputs": [
+      "y",
+      "prob"
+    ],
+    "chunk_count": 1,
+    "comparison": "native_bytes_exact",
+    "forward_calls": 2,
+    "geometry": "fresh_cold_chunk128_v1",
+    "layer_instances": 1,
+    "name": "fresh_m128_same_layer_baseline_then_observed_v1",
+    "same_input_objects": [
+      "x",
+      "mask",
+      "positions"
+    ],
+    "state_checkpoints": [
+      "before_baseline",
+      "after_baseline",
+      "after_observed"
+    ],
+    "tokens": 128,
+    "unchanged_state": [
+      "inputs",
+      "parameters",
+      "buffers"
+    ]
+  },
+  "execution_authority": false,
+  "expected_output_hashes": null,
+  "geometry": {
+    "batch": 1,
+    "cache": false,
+    "chunk_count": 1,
+    "embedding_rows": [
+      0,
+      128
+    ],
+    "head_dim": 128,
+    "hidden_size": 1536,
+    "intermediate_size": 8960,
+    "kv_heads": 2,
+    "name": "fresh_cold_chunk128_v1",
+    "positions": [
+      0,
+      127
+    ],
+    "q_heads": 12,
+    "tokens": 128
+  },
+  "launch_ready": false,
+  "output_budget_contract": {
+    "actual_staged_file_size_hash_and_log_checks_before_publication": true,
+    "after_cleanup_and_after_postflight_actual_size_checks": true,
+    "failed_diagnostic_evidence_may_exceed_success_budget": true,
+    "failed_output_has_no_successful_parent_seal": true,
+    "no_artifacts_deleted_to_fit_budget": true,
+    "no_directory_writes_after_successful_seal_publication": true,
+    "ownership_precondition": "Exclusive launcher-owned output directory; worker and tracked descendants reaped/terminal; no external writers during finalization.",
+    "parent_receipt_and_completion_seal_in_exact_encoded_projection": true,
+    "qualification": "Only final RECEIPT passed=true together with exact bound COMPLETION_SEAL and terminal budget consistency can qualify. .pending and .REJECTED candidates never qualify.",
+    "successful_each_worker_log_bytes_lte": 1048576,
+    "successful_final_directory_bytes_lte": 83886080,
+    "successful_seal_is_last_byte_preserving_directory_rename": true,
+    "worker_poll_gate_retained": true
+  },
+  "private_draft_sha256_only": "656a95c28e702757320761cac3592a1eded9a35f8597c0c8a8d65f2d943b10ce",
+  "raw13_payload_provided": false,
+  "resource_limits_unapproved_r2_proposal": {
+    "address_space_limit_changed": false,
+    "affinity_count": 4,
+    "cleanup_seconds": 2,
+    "cpu_seconds_hard": 60,
+    "deterministic_algorithms": true,
+    "interop_threads": 1,
+    "log_bytes_each": 1048576,
+    "output_bytes": 83886080,
+    "poll_seconds": 0.02,
+    "rss_is_hard_cap": false,
+    "sampled_tree_rss_bytes": 1610612736,
+    "threads_env": 4,
+    "wall_seconds": 90
+  },
+  "resource_selection_note": "This frozen r2 source/mock proposal remains 60 CPU seconds and 90 wall seconds. A later separately frozen final execution profile requires its own exact review and one-use root GO; no r2 review inheritance.",
+  "root_GO": false,
+  "runtime_closure_provided": false,
+  "schema": 1,
+  "status": "PUBLIC_SOURCE_MOCK_PROJECTION_NOT_LAUNCH_CONFIG"
+}

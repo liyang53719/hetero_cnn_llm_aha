@@ -1,0 +1,24 @@
+test_all29_logical_geometry_and_precision (__main__.PortableSourceTests.test_all29_logical_geometry_and_precision) ... ok
+test_eight_operational_sources_are_exact_frozen_bytes (__main__.PortableSourceTests.test_eight_operational_sources_are_exact_frozen_bytes) ... ok
+test_m128_causal_mask_counts_and_last_row (__main__.PortableSourceTests.test_m128_causal_mask_counts_and_last_row) ... ok
+test_original_config_requirements_remain_in_source (__main__.PortableSourceTests.test_original_config_requirements_remain_in_source) ... ok
+test_original_thresholds_and_geometry_byte_projection (__main__.PortableSourceTests.test_original_thresholds_and_geometry_byte_projection) ... ok
+test_pair_bytes_reject_changed_second_output_without_all29_claim (__main__.PortableSourceTests.test_pair_bytes_reject_changed_second_output_without_all29_claim) ... ok
+test_public_entry_and_projection_are_execution_disabled (__main__.PortableSourceTests.test_public_entry_and_projection_are_execution_disabled) ... ok
+test_single_layer_two_identical_calls_baseline_before_observer (__main__.PortableSourceTests.test_single_layer_two_identical_calls_baseline_before_observer) ... ok
+test_changed_output_after_staging_preserves_both_candidates_and_fails (__main__.TerminalOutputBudgetTests.test_changed_output_after_staging_preserves_both_candidates_and_fails) ... ok
+test_cleanup_postflight_rechecks_precede_parent_terminal_projection (__main__.TerminalOutputBudgetTests.test_cleanup_postflight_rechecks_precede_parent_terminal_projection) ... ok
+test_exact_80mib_final_output_is_accepted_and_sealed_last (__main__.TerminalOutputBudgetTests.test_exact_80mib_final_output_is_accepted_and_sealed_last) ... ok
+test_exact_projection_uses_actual_encoded_receipt_and_seal_bytes (__main__.TerminalOutputBudgetTests.test_exact_projection_uses_actual_encoded_receipt_and_seal_bytes) ... ok
+test_late_log_growth_after_last_poll_is_caught_at_terminal (__main__.TerminalOutputBudgetTests.test_late_log_growth_after_last_poll_is_caught_at_terminal) ... ok
+test_late_worker_output_after_last_poll_is_caught_at_terminal (__main__.TerminalOutputBudgetTests.test_late_worker_output_after_last_poll_is_caught_at_terminal) ... ok
+test_one_byte_above_final_80mib_has_fail_receipt_and_no_seal (__main__.TerminalOutputBudgetTests.test_one_byte_above_final_80mib_has_fail_receipt_and_no_seal) ... ok
+test_oversized_output_after_staging_has_no_success_seal (__main__.TerminalOutputBudgetTests.test_oversized_output_after_staging_has_no_success_seal) ... ok
+test_parent_receipt_seal_overhead_cannot_escape_worker_payload_gate (__main__.TerminalOutputBudgetTests.test_parent_receipt_seal_overhead_cannot_escape_worker_payload_gate) ... ok
+test_previous_gate_failure_cannot_get_success_seal (__main__.TerminalOutputBudgetTests.test_previous_gate_failure_cannot_get_success_seal) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.027s
+
+OK
+Portable 18-case lightweight subset only: 10 preserved terminal mocks + 8 new source/logical checks. Not the original 92-case suite, not independent9 reproduction, not execution approval.

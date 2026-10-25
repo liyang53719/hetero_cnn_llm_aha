@@ -1,0 +1,99 @@
+{
+  "DUT_acceptance": "NOT_RUN",
+  "actual_forward": false,
+  "closed_findings": [
+    {
+      "evidence": [
+        "run_gate.py:409-424 checks total output and both worker logs after cleanup and after POSTFLIGHT, before success qualification.",
+        "run_gate.py:144-176 projects exact encoded final receipt and seal bytes, reaches a self-size fixed point, and includes existing complete output-directory byte count.",
+        "run_gate.py:219-236 rejects preexisting over-limit snapshots or projected over-limit total, then rechecks actual staged total/log sizes and both candidate file identities.",
+        "run_gate.py:237-240 publishes COMPLETION_SEAL.json through the last byte-preserving rename only after exact checks.",
+        "run_gate.py:179-202 retains rejected candidates and worker evidence, writes a final FAIL receipt, and does not publish a successful parent seal."
+      ],
+      "id": "FINAL_OUTPUT_BUDGET",
+      "mechanical_acceptance": "Exact 80MiB succeeds including parent receipt/seal; final +1B, late worker/log growth, parent overhead, staged drift, same-size terminal candidate corruption, write failure and publish failure cannot qualify.",
+      "prior_review_sha256": "663a55ca050aec1099502c801126250480da9a4d946e4a097bbe37eb0a9c6688",
+      "resolution": "CLOSED_FOR_SOURCE_MOCK_SCOPE"
+    }
+  ],
+  "confirmed_invariants": [
+    "Fresh cold one-chunk128 from original raw13 embedding rows [0,128); no tiled16 or legacy-output input.",
+    "Same original complete official Qwen2DecoderLayer instance, baseline first and observed second, same x/mask/positions objects, exactly two complete forwards in source.",
+    "Baseline before capture Observer/hooks/trace; safety profile remains active. Actual baseline y/prob bytes frozen immediately.",
+    "Three fresh original input/parameter/buffer identity-and-native-hash checkpoints. Claim only y/prob equality and boundary-state equality, not all29 intermediate noninterference.",
+    "Original input config identity verified; max_position_embeddings32768, rope_theta1e6, eager attention, use_cache false, no shortened rotary cache.",
+    "All29 M128 shapes preserve original dtypes, head geometry and MLP geometry. 1536 softmax rows, 99072 causal and 97536 future positions.",
+    "Capture source has no integer16 geometry literals; validator retains exactly three BF16 bit-shift16 literals.",
+    "Original FP32 softmax rowsum tolerance2e-5 and all other comparison thresholds preserved; DUT tolerances are not applied to a DUT here.",
+    "Old M16 action/review rejected, missing or false launch_ready rejected; draft launch_ready false remains. No review/approval/claim/completion artifacts created in source package.",
+    "R1-to-r2 capture/pins/gate_common/prepare_gate/worker/network_policy/validator byte-identical. Only run_gate operational source changed.",
+    "Normalized r1-to-r2 config differences limited to file-manifest bindings, terminal output contract, predecessor provenance and preparation scope.",
+    "Frozen M16 CONFIG/REVIEW/EXECUTION_REVIEW/receipt identities remain unchanged; no M16 PASS or one-use permission inherited."
+  ],
+  "exact_launcher": {
+    "bytes": 27554,
+    "sha256": "32ca37b622591de55b2fc4c833c9a0900a2c70730ffbddbc09b6a015574721e5"
+  },
+  "execution_authority": false,
+  "launch_ready": false,
+  "model_construction": false,
+  "model_import_executed": false,
+  "native": false,
+  "original_independent_test_summary": {
+    "independent_faults_normal": {
+      "cases": 9,
+      "exit_code": 0,
+      "log_identity_only": {
+        "bytes": 1406,
+        "sha256": "0e4b86b54e649ce2a4b2fb23b2f3f8f4fd1e8e049ebf1a2e54f51efec4e45543"
+      }
+    },
+    "independent_faults_optimized": {
+      "cases": 9,
+      "exit_code": 0,
+      "log_identity_only": {
+        "bytes": 1406,
+        "sha256": "0e4b86b54e649ce2a4b2fb23b2f3f8f4fd1e8e049ebf1a2e54f51efec4e45543"
+      }
+    },
+    "normal": {
+      "cases": 92,
+      "exit_code": 0,
+      "log_identity_only": {
+        "bytes": 12495,
+        "sha256": "f861f3ca8f566762014dcd062ba68fe8b8c033b760e06fec30bf029f64701182"
+      }
+    },
+    "optimized": {
+      "cases": 92,
+      "exit_code": 0,
+      "log_identity_only": {
+        "bytes": 12495,
+        "sha256": "f5f197098b921b0048f8650c4408254288f0123901d36e0a2f42cd9b5b1c5827"
+      }
+    }
+  },
+  "original_review_not_published": true,
+  "original_review_sha256": "100c8ded4dbfe6472716dee7e025d0759c7fc01ab0922cf541fe1adf6a55426e",
+  "remaining_before_any_actual_execution": [
+    "Root explicitly selects M128 compute, wall, sampled-memory and output-contract controls.",
+    "Prepare a new final launch-ready exact config with the selected controls; do not mutate this frozen draft.",
+    "Obtain fresh independent review bound to that final config and runtime profile, not this draft-only source/mock report.",
+    "Obtain one-use exact-scope root GO/approval and an exclusive reference slot; no automatic retry."
+  ],
+  "root_GO": false,
+  "schema": 1,
+  "source_mock_blockers": [],
+  "status": "SOURCE_MOCK_REVIEW_PASSED_NOT_EXECUTION_APPROVAL",
+  "terminal_qualification_contract": {
+    "failure_evidence_may_exceed_success_budget": true,
+    "not_a_hard_disk_quota": true,
+    "not_claimed": "General adversarial concurrent-writer isolation or crash-persistence guarantees.",
+    "ownership_assumption": "Exclusive launcher-owned output directory, worker and tracked descendants terminal, and no external writers during finalization.",
+    "pending_and_rejected_files_never_qualify": true,
+    "requires_exact_bound_final_completion_seal": true,
+    "requires_final_receipt_passed_true": true,
+    "success_each_worker_log_bytes_lte": 1048576,
+    "success_final_directory_bytes_lte": 83886080
+  }
+}

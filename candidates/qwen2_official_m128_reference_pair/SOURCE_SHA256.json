@@ -1,0 +1,38 @@
+{
+  "files": {
+    "capture_pair/capture_pair.py": {
+      "bytes": 42040,
+      "sha256": "9d53546b3331f844dd0f5b9a3d1356b86f82f816bb50db5bfe4798e4e692ddcc"
+    },
+    "capture_pair/pins.json": {
+      "bytes": 10910,
+      "sha256": "2ef96d86a0e7df7f5a79031dfc451cdfd0ada466219b3fc65b2561e80bac3b49"
+    },
+    "full_reference_gate/gate_common.py": {
+      "bytes": 21953,
+      "sha256": "4ca447b287072aebd103187efdf7594eceee35bd00acd64f769544188690d304"
+    },
+    "full_reference_gate/network_policy.py": {
+      "bytes": 11218,
+      "sha256": "e9d64b0372172233f1fcc7c374b79f9b5441ee728723868d996c09ca13e13f74"
+    },
+    "full_reference_gate/prepare_gate.py": {
+      "bytes": 562,
+      "sha256": "0844b2f5d456570282e0aa6f4526afd27b74683f6511db72b671558339ace669"
+    },
+    "full_reference_gate/run_gate.py": {
+      "bytes": 27554,
+      "sha256": "32ca37b622591de55b2fc4c833c9a0900a2c70730ffbddbc09b6a015574721e5"
+    },
+    "full_reference_gate/validate_outputs.py": {
+      "bytes": 13789,
+      "sha256": "35e8d821111ae407a76ec44b6d99861d91e0946873685362696bd17495efd070"
+    },
+    "full_reference_gate/worker.py": {
+      "bytes": 20735,
+      "sha256": "484b22ef83ae230cc571c1056fb4973c6b3331d3ce7d8a36d04cf6e6b77be371"
+    }
+  },
+  "schema": 1,
+  "scope": "Eight byte-identical r2 operational source/pin files, not a runnable private closure."
+}

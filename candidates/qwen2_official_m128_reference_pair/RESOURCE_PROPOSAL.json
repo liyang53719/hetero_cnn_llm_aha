@@ -1,0 +1,474 @@
+{
+  "M16_frozen_output_limit_bytes": 67108864,
+  "M16_observation_context_only": {
+    "CPU_seconds": 27.71,
+    "sampled_RSS_approx_MB": 575,
+    "wall_seconds": 25.46
+  },
+  "M16_successful_output_stat_context_only": {
+    "basis": "Only file stat of frozen successful M16 run; no tensor bytes read. Not an upper bound for M128 JSON/maps/modules or a claim of complete-run output budget sufficiency.",
+    "binary_bytes": 5641728,
+    "nonbinary_bytes": 16315364,
+    "projected_remaining_under_64MiB_bytes": 756764,
+    "same_metadata_plus_M128_binary_projection_bytes": 66352100,
+    "total_bytes": 21957092,
+    "total_files": 89
+  },
+  "all_60_binary_files_bytes": 50036736,
+  "baseline_y_prob_native_bytes": 786432,
+  "basis": "Exact integer shape-only accounting; not tensor reads or execution.",
+  "candidate_limits_not_approved": {
+    "address_space_limit_changed": false,
+    "affinity_count": 4,
+    "cleanup_seconds": 2,
+    "cpu_seconds_hard": 60,
+    "deterministic_algorithms": true,
+    "interop_threads": 1,
+    "log_bytes_each": 1048576,
+    "output_bytes": 83886080,
+    "poll_seconds": 0.02,
+    "rss_is_hard_cap": false,
+    "sampled_tree_rss_bytes": 1610612736,
+    "threads_env": 4,
+    "wall_seconds": 90
+  },
+  "candidate_output_limit_bytes": 83886080,
+  "claims": {
+    "CPU_budget_sufficient": false,
+    "M16_budget_inherited_as_approved": false,
+    "RSS_budget_sufficient": false,
+    "output_budget_sufficient_for_complete_run": false,
+    "sampled_RSS_is_hard_cap": false,
+    "wall_budget_sufficient": false
+  },
+  "fixed_costs": [
+    "Imports and source/runtime closure hashing do not scale with token rows.",
+    "Layer parameter initialization/binding and all three full-parameter state hashes have unchanged geometry.",
+    "Original 32768-entry RoPE buffers remain unchanged; boundary hashes do not become 128-entry cache hashes."
+  ],
+  "growing_costs": [
+    "Projection/MLP row count rises 8x, but CPU time is not a known 8x multiplier.",
+    "Attention score/probability elements rise 64x; kernel and cache behavior may change.",
+    "Observed exports, Python byte-list conversion, scalar validator loops and memory peaks increase by field shape.",
+    "Validator materializes raw and f32 dictionaries plus Python scalar lists; payload bytes alone do not bound RSS."
+  ],
+  "metadata_total_is_bounded_by_existing_runtime_closure": false,
+  "observed_f32_bytes": 32571392,
+  "observed_native_bytes": 16678912,
+  "observed_native_plus_f32_bytes": 49250304,
+  "output_limit_proposal_change": "Explicit new M128 proposal 80 MiB, accepted for source/config preparation only. Frozen M16 64 MiB unchanged. NOT execution approval or proof sufficient.",
+  "parameter_native_bytes_per_state_boundary": 93595648,
+  "per_field": [
+    {
+      "elements": 1146880,
+      "f32_bytes": 4587520,
+      "field": "act",
+      "native_bytes": 2293760,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "att",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 32768,
+      "f32_bytes": 131072,
+      "field": "cache_k",
+      "native_bytes": 65536,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 32768,
+      "f32_bytes": 131072,
+      "field": "cache_v",
+      "native_bytes": 65536,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 16384,
+      "f32_bytes": 65536,
+      "field": "cos",
+      "native_bytes": 32768,
+      "native_dtype": "bfloat16",
+      "shape": [
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "down",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 1146880,
+      "f32_bytes": 4587520,
+      "field": "gate",
+      "native_bytes": 2293760,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    {
+      "elements": 32768,
+      "f32_bytes": 131072,
+      "field": "k",
+      "native_bytes": 65536,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 32768,
+      "f32_bytes": 131072,
+      "field": "kr",
+      "native_bytes": 65536,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        256
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "logits",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 16384,
+      "f32_bytes": 65536,
+      "field": "mask",
+      "native_bytes": 32768,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "n0",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "n1",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "o",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "prob",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "pv",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "q",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "qr",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "r",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "repeat_k",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "repeat_v",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "scores",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 1146880,
+      "f32_bytes": 4587520,
+      "field": "silu",
+      "native_bytes": 2293760,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    {
+      "elements": 16384,
+      "f32_bytes": 65536,
+      "field": "sin",
+      "native_bytes": 32768,
+      "native_dtype": "bfloat16",
+      "shape": [
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "softmax_fp32",
+      "native_bytes": 786432,
+      "native_dtype": "float32",
+      "shape": [
+        1,
+        12,
+        128,
+        128
+      ]
+    },
+    {
+      "elements": 1146880,
+      "f32_bytes": 4587520,
+      "field": "up",
+      "native_bytes": 2293760,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        8960
+      ]
+    },
+    {
+      "elements": 32768,
+      "f32_bytes": 131072,
+      "field": "v",
+      "native_bytes": 65536,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        256
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "x",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    },
+    {
+      "elements": 196608,
+      "f32_bytes": 786432,
+      "field": "y",
+      "native_bytes": 393216,
+      "native_dtype": "bfloat16",
+      "shape": [
+        1,
+        128,
+        1536
+      ]
+    }
+  ],
+  "raw13_total_bytes": 94382080,
+  "remaining_under_M16_64MiB_bytes_for_metadata": 17072128,
+  "remaining_under_proposed_80MiB_bytes_for_metadata": 33849344,
+  "root_decision_needed": "Confirm M128 compute/memory controls and final exact 80 MiB output proposal, then freeze config and obtain new independent review plus one-use root GO. launch_ready remains false.",
+  "same_M16_metadata_plus_M128_binary_remaining_under_proposed_80MiB_bytes": 17533980,
+  "schema": 1,
+  "shape_only_compute_and_storage_accounting": {
+    "M128": {
+      "QK_plus_PV_MAC_per_forward": 50331648,
+      "input_native_bytes": 427008,
+      "linear_MAC_per_forward": 5989466112,
+      "three_boundary_state_hash_bytes": 332400000
+    },
+    "M16": {
+      "QK_plus_PV_MAC_per_forward": 786432,
+      "input_native_bytes": 49792,
+      "linear_MAC_per_forward": 748683264,
+      "three_boundary_state_hash_bytes": 331268352
+    },
+    "MAC_definition": "One multiply-accumulate counted as one MAC; descriptive geometry only, no CPU-time estimate.",
+    "attention_formula": "2 * 12 * M * M * 128",
+    "boundary_hash_formula": "3 * (93595648 + 16777344 + 2*M*1536 + 2*M*M + 8*M)",
+    "interpretation": "Dense layer arithmetic scales 8x and score/PV attention arithmetic 64x, but unchanged setup/closure/weight hashing prevent a valid 8x end-to-end time extrapolation. M128 actual time and peak RSS are unknown.",
+    "linear_formula": "M * (2*1536*1536 + 2*1536*256 + 3*1536*8960)",
+    "not_included_in_MAC_counts": [
+      "RMSNorm, RoPE, softmax, SiLU and elementwise operations",
+      "Tensor copies, serialization, state hash and validation",
+      "Imports, initial parameter creation, original 32768 rotary construction",
+      "Official backend dispatch, cache/memory bandwidth and thread scheduling"
+    ],
+    "shared": {
+      "learned_parameter_native_bytes": 93595648,
+      "rotary_dimension": 128,
+      "rotary_native_buffer_bytes_after_layer_bf16_conversion": 16777344,
+      "rotary_positions": 32768
+    }
+  },
+  "status": "RESOURCE_PROPOSAL_NOT_APPROVED_NOT_MEASURED",
+  "terminal_output_budget_contract": {
+    "actual_staged_file_size_hash_and_log_checks_before_publication": true,
+    "after_cleanup_and_after_postflight_actual_size_checks": true,
+    "failed_diagnostic_evidence_may_exceed_success_budget": true,
+    "failed_output_has_no_successful_parent_seal": true,
+    "no_artifacts_deleted_to_fit_budget": true,
+    "no_directory_writes_after_successful_seal_publication": true,
+    "ownership_precondition": "Exclusive launcher-owned output directory; worker and tracked descendants reaped/terminal; no external writers during finalization.",
+    "parent_receipt_and_completion_seal_in_exact_encoded_projection": true,
+    "qualification": "Only final RECEIPT passed=true together with exact bound COMPLETION_SEAL and terminal budget consistency can qualify. .pending and .REJECTED candidates never qualify.",
+    "successful_each_worker_log_bytes_lte": 1048576,
+    "successful_final_directory_bytes_lte": 83886080,
+    "successful_seal_is_last_byte_preserving_directory_rename": true,
+    "worker_poll_gate_retained": true
+  }
+}

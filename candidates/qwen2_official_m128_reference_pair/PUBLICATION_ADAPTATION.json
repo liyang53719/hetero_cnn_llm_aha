@@ -1,0 +1,34 @@
+{
+  "absolute_personal_workspace_paths_removed_by_exclusion_not_source_edit": true,
+  "excluded": [
+    "runtime closures and payloads",
+    "weights and raw13 input payloads",
+    "tensor outputs",
+    "raw process maps",
+    "private absolute paths",
+    "private launch config and manifest",
+    "approvals, claims and root GO",
+    "private original test logs"
+  ],
+  "frozen_M16_package_modified": false,
+  "generic_system_literals_retained_in_exact_original_source": [
+    "/",
+    "/missing-script",
+    "/proc",
+    "/proc/%d/cmdline",
+    "/proc/%d/cwd",
+    "/proc/%d/exe",
+    "/proc/%d/stat",
+    "/proc/self/cmdline",
+    "/proc/self/maps",
+    "/usr/bin:/bin"
+  ],
+  "operational_sources_and_pins_byte_identical": true,
+  "original_full_tests_not_included": true,
+  "portable_test_scope": "A new lightweight subset, not reproduction of the original 92-case private-history suite or independent 9-case suite.",
+  "private_config_and_manifest_not_included": true,
+  "private_history_dependent_original_test_source_sha256": "7aa594504be62eeee3829f3530c78eda475a689243024c5af0bd7125773365e1",
+  "private_original_logs_not_included": true,
+  "schema": 1,
+  "source_identity_manifest": "SOURCE_SHA256.json"
+}

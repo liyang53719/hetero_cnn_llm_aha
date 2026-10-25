@@ -1,0 +1,71 @@
+{
+  "candidate_files": {
+    "__init__.py": {
+      "bytes": 84,
+      "sha256": "dac2807ea7d89bb043d25edc9cf9675db2b9ef739495af19892b453d8899d1cd"
+    },
+    "bridge.py": {
+      "bytes": 8510,
+      "sha256": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+    },
+    "cold_binding.py": {
+      "bytes": 6866,
+      "sha256": "62b4cd798c9764ea242268a939014590742e522165549eab2e40efc77a23a598"
+    },
+    "cold_policy.py": {
+      "bytes": 7935,
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    "oracle_path_gate.py": {
+      "bytes": 7529,
+      "sha256": "d59b811c31e4f8d98f928a189036e6754387ee4e6d4ab532ee8fd7a7f748cc36"
+    },
+    "registry.py": {
+      "bytes": 23885,
+      "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+    },
+    "rope_operand_capture/SOURCE_PINS.json": {
+      "bytes": 873,
+      "sha256": "0b06eeec70dc89bb06e0fbe15c9efd278df12d942dcd77bd7cb019b0634f3337"
+    },
+    "rope_operand_capture/__init__.py": {
+      "bytes": 72,
+      "sha256": "53cc4e964d14a483f9fecc56b32a9935f10e76f757f27de97eb1bfa15c108567"
+    },
+    "rope_operand_capture/rope_capture.py": {
+      "bytes": 25848,
+      "sha256": "25d31af4bc242344f6c545aaa56ebd32d8babd5490efa43b22508292e7bbc5d2"
+    },
+    "runner.py": {
+      "bytes": 13995,
+      "sha256": "7d745865a7dcab9e213414f8afd9fefb1bab038ee221c3f0ec363784d735c527"
+    },
+    "runtime_binding.py": {
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    "service_trace.py": {
+      "bytes": 11473,
+      "sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+    },
+    "stream.py": {
+      "bytes": 21232,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    "terminal_comparator.py": {
+      "bytes": 13556,
+      "sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d"
+    }
+  },
+  "default_enabled": false,
+  "normal_loading": "Qualified by separate actual cold execution, not inferred from composition",
+  "original_identity": {
+    "bytes": 23729,
+    "sha256": "072e1f8416f0c33388a5d19f7ff51699dd47203595d9aa04e5ea8e87cbfe97a7"
+  },
+  "original_source_manifest": {
+    "bytes": 57345,
+    "sha256": "4ac834617f8566a9467f702faf81c730f2e23dcb1b97dbdd5ebdd33821a8d923"
+  },
+  "source_only": true
+}

@@ -1,0 +1,175 @@
+{
+  "omitted": "private locations, process identifiers, approval/claim contents; original retained privately unchanged",
+  "original_identity": {
+    "bytes": 6167,
+    "sha256": "cf42890b05835f6a0c4028c85ca866928bf8e8aba1b148a281b1a13b28451307"
+  },
+  "projection_schema": "public_review_projection_v1",
+  "review": {
+    "artifacts": {
+      "ALL_ROUTES.json": {
+        "bytes": 2254,
+        "sha256": "1392716c9f26a73b6a15f2cc37779e2e5ef324fa940e355541822ae3235a334c"
+      },
+      "check_all_routes.py": {
+        "bytes": 1164,
+        "sha256": "27ad54a7671fd62a1e27a1b8fae85865ead25b4826c80b8f155375e9aae5dc34"
+      },
+      "test_comparator_NORMAL.log": {
+        "bytes": 124,
+        "sha256": "21d0ceac4e062ada93cd6e0a15ea28bcadb9e308151d41b1e2aa5adb04498d8a"
+      },
+      "test_comparator_OPTIMIZED.log": {
+        "bytes": 124,
+        "sha256": "410340808feb474e668a5f0ed03ffa37d65aa6af540181df9eab528d305d7c21"
+      },
+      "test_inventory_NORMAL.log": {
+        "bytes": 109,
+        "sha256": "18e17055e0d9ddd2d2f2fe6fb3ed4300de88eab845837a329f901c06f55e6bb9"
+      },
+      "test_inventory_OPTIMIZED.log": {
+        "bytes": 109,
+        "sha256": "796ac3b722d1a109fcaba1756b78ad7d85b2412a088b1ca96ce25876d6382666"
+      }
+    },
+    "author_full_shape_test_verified": {
+      "log": {
+        "bytes": 99,
+        "sha256": "77937acb3d883e8b58c2dad35133e6a8b1d1aa123c16365c073a80e193b2c4c9"
+      },
+      "meaning": "full M128 shape synthetic callback only; not real DUT/reference numerical acceptance",
+      "seconds": 17.403,
+      "tests": 1
+    },
+    "blockers": [],
+    "both_frozen_packages_unchanged": true,
+    "execution_GO": false,
+    "frozen_r1_file_count": 13,
+    "frozen_r2_file_count": 21,
+    "independent_tests": {
+      "actual_validate_inventory_fault_routes": 43,
+      "full_m128_synthetic_callback_rerun_by_reviewer": false,
+      "helpers_normal": 25,
+      "helpers_optimized": 25,
+      "inventory_normal": 10,
+      "inventory_optimized": 10
+    },
+    "prior_blocked_review": {
+      "bytes": 6521,
+      "sha256": "4415ab0452be9b08b062ad7318548220f3d3a79a27833cca336cb823edee298e"
+    },
+    "required_worker_obligations": [
+      "exact source/guard binding; genuine live-terminal callback window not arbitrary boolean",
+      "readonly x original provider pin and no preterminal oracle values",
+      "authentic original SiLU/RoPE observation sources and shapes",
+      "all observed_domain_passed failures must fail overall acceptance",
+      "nonmaterialized protocol/index validation separately source-bound; never claim full29_numeric_pass",
+      "normal import/new fullgraph worker/runtime/ELF/inputs/budget must receive independent admission before root actual execution GO"
+    ],
+    "resolved": [
+      {
+        "evidence": "actual KV halves checked word-for-word against actual k/v before reference reads. Both smallest BF16 subnormal differences and signed-zero differences reject; equal negative zero accepts.",
+        "id": "KV_EXACT_READBACK_MISSING"
+      },
+      {
+        "evidence": "All19 actual arrays and all10 diagnostic fields now identity-bound and observed finite-checked; BF16 fields enforce low16zero, FP32 raw allows nonzero low bits. Remaining SiLU immutable seal checked by existing digest and metric finite gate, cache_k/cache_v alias verified KV. Full before/after actual/diagnostic words/presence/frequency hashes guard callback integrity.",
+        "id": "INCOMPLETE_HIDDEN_FINITE_VALIDATION"
+      }
+    ],
+    "reviewed_freeze": {
+      "bytes": 3057,
+      "sha256": "35a450e3f010c81d200d9243aba7dd6785f7340648fd98ba2b4cfec2b414e1cb"
+    },
+    "reviewed_source": {
+      "bytes": 13556,
+      "sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d"
+    },
+    "scope_limits": [
+      "Not DUT numerical PASS, full29 numerical PASS, whole-run observer noninterference, hardware or utilization qualification.",
+      "All32 registry entries are covered by actual buffers, diagnostic fields, SiLU seal and KV aliases; not32 independent physical tensors.",
+      "Registry/source-bound worker remains needed for original ACK/done/owner/lifecycle and presence-accounting authenticity."
+    ],
+    "semantics_preserved": [
+      "original BF16 operator max0.03125 AND mean0.005, block y max0.05 AND mean0.01, FP32 rowsum2e-5",
+      "25 numerical observed source views comprise22full logical views and3causal domains; four nonmaterialized nodes not numerically invented",
+      "No scalar/vector arithmetic implementation or operator schedule changed",
+      "Official original32768 configuration unchanged; rotary256 difference not dismissed or causally isolated",
+      "No real tensor payload reads or target native/module executions by review"
+    ],
+    "source_pin_checks": [
+      {
+        "match": true,
+        "observed": {
+          "bytes": 2256,
+          "sha256": "5cf7f538577e171ad42d70de60a24907b27e59991cc4d3895c42885fec962bb5"
+        },
+        "role": "threshold_contract"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 14002,
+          "sha256": "fcd47fb619f174be3eebad0d51fa1d6f36e17e934aa0855fb3270bc537860fcc"
+        },
+        "role": "runner"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 23885,
+          "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+        },
+        "role": "registry"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 12373,
+          "sha256": "33281f2bbf217dcf43b54763b4072c51e9d74b4e7b61e4b3a5ed6316536609be"
+        },
+        "role": "mapping"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 25848,
+          "sha256": "25d31af4bc242344f6c545aaa56ebd32d8babd5490efa43b22508292e7bbc5d2"
+        },
+        "role": "rope_capture"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 85243,
+          "sha256": "29050849d6449cb921b5a370a53fa7b693f2e17c16cf41b621ae8c41df7d21e7"
+        },
+        "role": "official_metadata"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 16827,
+          "sha256": "cb1646e227fa3b36664fa4bb59e47769a3da61735d94179c4ceaaca5f1764bf7"
+        },
+        "role": "official_receipt"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 11802,
+          "sha256": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87"
+        },
+        "role": "actual_monitor"
+      },
+      {
+        "match": true,
+        "observed": {
+          "bytes": 6521,
+          "sha256": "4415ab0452be9b08b062ad7318548220f3d3a79a27833cca336cb823edee298e"
+        },
+        "role": "r1_review"
+      }
+    ],
+    "status": "GO_TERMINAL_COMPARATOR_SOURCE_MOCK_ONLY"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "actual_tasks_reexecuted": false,
+  "additional_projection_removals": [
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/4/metadata/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/4/record/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/6/metadata/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/6/record/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/7/metadata/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/7/record/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/9/metadata/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/9/record/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/11/metadata/address"
+    },
+    {
+      "file": "pins/INPUT_MANIFEST.json",
+      "json_pointer": "/projection/provider14/11/record/address"
+    },
+    {
+      "file": "pins/ORACLE_MANIFEST.json",
+      "json_pointer": "/projection/result_metadata/baseline_exports/prob/original_return_object_id"
+    },
+    {
+      "file": "pins/ORACLE_MANIFEST.json",
+      "json_pointer": "/projection/result_metadata/baseline_exports/y/original_return_object_id"
+    }
+  ],
+  "allocation_address_semantics_inferred": false,
+  "connector_action": "create_tree",
+  "old_evidence_preserved": true,
+  "outcome": "DENIED_BEFORE_REMOTE_WRITE",
+  "prior_delivery_identity": {
+    "bytes": 1243,
+    "sha256": "4bb02fa429599b49278a1bf811f845b9f8c26fef945a7493e9eaad9f5541c3a9"
+  },
+  "prior_privacy_result_valid": false,
+  "private_original_manifests_unchanged": true,
+  "r3_review_identity": {
+    "bytes": 5287,
+    "sha256": "3a4b60f33d3519e8d084576c65572eb82494866c4f15eeb26d7492af9291143b"
+  },
+  "r3_review_outcome": "BLOCKED_BEFORE_RETRY: two process-object address fields and ten allocation-address metadata fields were unnecessary for public reproduction.",
+  "removed_values_included": false,
+  "revision": "r4",
+  "root_cause": "Absolute installation locators escaped a prefix-only privacy scan;144 interpreter paths and14 system paths in logical IDs, plus2 non-ELF mapping labels",
+  "safer_projection": "158 runtime labels converted,2 mapping labels logical,736 ordinal/bytes/hash/order entries preserved without deduplication",
+  "scope": "Publication metadata correction only. No source, test, original log, tensor, numeric gate or execution result changed; no target execution repeated.",
+  "source_test_log_bytes_changed": false
+}

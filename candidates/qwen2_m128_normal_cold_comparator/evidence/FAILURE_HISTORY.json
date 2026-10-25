@@ -1,0 +1,34 @@
+{
+  "cold_review_helper": {
+    "actual_cold_failed": false,
+    "cause": "review helper incorrectly required identical module-list ordering; corrected to exact multiset/count",
+    "identity": {
+      "bytes": 291,
+      "sha256": "69494410914488731209f265d39d00e47af4c6e989261ef2c70fdcdc855d5231"
+    },
+    "target_rerun": false
+  },
+  "r1_comparator_review": {
+    "identity": {
+      "bytes": 6521,
+      "sha256": "4415ab0452be9b08b062ad7318548220f3d3a79a27833cca336cb823edee298e"
+    },
+    "issues": [
+      "KV tolerance allowed one BF16 subnormal/signed-zero readback change",
+      "nine diagnostic classes omitted finite validation"
+    ],
+    "resolution": "R2 bit-exact KV, all32 inventory finite/lowbits/hash gates; independent reviewer closure",
+    "status": "BLOCKED_SOURCE_VALIDATOR_NOT_ACTUAL_DUT_FAILURE"
+  },
+  "raw_module_ledgers": {
+    "count": 11,
+    "qualified_later": "nine canonical namespace repetitions and two pinned Cython extension-associated no-file modules; not erased",
+    "status": "Original FAIL_MODULE_IDENTITY retained"
+  },
+  "test_launch": {
+    "cause": "optional /usr/bin/time executable absent",
+    "following_action": "One bounded target invocation using available timeout; no actual numerical job",
+    "preserved_log": "comparator/TEST_CALLBACK.log",
+    "status": "EXIT127_TARGET_NOT_EXECUTED"
+  }
+}

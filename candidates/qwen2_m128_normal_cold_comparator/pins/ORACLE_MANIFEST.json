@@ -1,0 +1,1131 @@
+{
+  "not_self_contained": true,
+  "original_identity": {
+    "bytes": 57041,
+    "sha256": "5830d98ca8e8d08b571d53aaaba3276622c8d5700439757bf9aa37aca8f15c23"
+  },
+  "payloads_included": false,
+  "projection": {
+    "capture_result": {
+      "bytes": 85243,
+      "sha256": "29050849d6449cb921b5a370a53fa7b693f2e17c16cf41b621ae8c41df7d21e7"
+    },
+    "completion_seal": {
+      "bytes": 14140,
+      "sha256": "8e027f3969a1df8871297f2b35fe7ab8f089c121b6ce5df07327c873509b260b"
+    },
+    "dut_execution_performed": false,
+    "execution_authorized": false,
+    "execution_review": {
+      "bytes": 5947,
+      "sha256": "1899aa66eebd49dde597197280b9511cc7fbbdf91a8dd74089ee4e0357806545"
+    },
+    "export_count": 29,
+    "exports": {
+      "act": {
+        "device": "cpu",
+        "fp32_bytes": 4587520,
+        "fp32_file": "act.f32.bin",
+        "fp32_sha256": "3e28760d480baead196ed6584a39b9a4d27b24abc9e4baa46a9660e19518fc60",
+        "native_bytes": 2293760,
+        "native_dtype": "bfloat16",
+        "native_file": "act.native.bin",
+        "native_sha256": "948a5cf6179529ae95fbb01c2c475c82c6a95f990d1a277f55cdfa10560ce7f6",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 2293760,
+        "shape": [
+          1,
+          128,
+          8960
+        ],
+        "storage_offset": 0,
+        "stride": [
+          1146880,
+          8960,
+          1
+        ]
+      },
+      "att": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "att.f32.bin",
+        "fp32_sha256": "5f6346a92d9f7f1bc639c8c754eba47a6f8e214e6c14ca3134040842de1ce969",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "att.native.bin",
+        "native_sha256": "de0f8a7dd441065c5ad87fd0345e9b96eed999374aebdbde329b5c24a0ab3bb5",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "cache_k": {
+        "device": "cpu",
+        "fp32_bytes": 131072,
+        "fp32_file": "cache_k.f32.bin",
+        "fp32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+        "native_bytes": 65536,
+        "native_dtype": "bfloat16",
+        "native_file": "cache_k.native.bin",
+        "native_sha256": "39c3834f8ff4d9296de43fd794d1e5e2af19f975e7255942e8f90d86c051dcd6",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 65536,
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          32768,
+          128,
+          256,
+          1
+        ]
+      },
+      "cache_v": {
+        "device": "cpu",
+        "fp32_bytes": 131072,
+        "fp32_file": "cache_v.f32.bin",
+        "fp32_sha256": "387cdb6381e59c4b68753c3f7d7be19279f569aa2cb5efea0cf3c0a3432fbfb4",
+        "native_bytes": 65536,
+        "native_dtype": "bfloat16",
+        "native_file": "cache_v.native.bin",
+        "native_sha256": "131c2ecc2366ccf26766df71cbd168e70954f182e2a570c1f329515c820a65a1",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 65536,
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          32768,
+          128,
+          256,
+          1
+        ]
+      },
+      "cos": {
+        "device": "cpu",
+        "fp32_bytes": 65536,
+        "fp32_file": "cos.f32.bin",
+        "fp32_sha256": "53c6402c1052c7f30f1785b97682317f4fcc0dbc8f29bb87118c6c3a03d45547",
+        "native_bytes": 32768,
+        "native_dtype": "bfloat16",
+        "native_file": "cos.native.bin",
+        "native_sha256": "415e4f5c48f9ce716ee49c7532c44d38ce7615cd5785890021fcb1c4f9db6249",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 8388608,
+        "shape": [
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          128,
+          1
+        ]
+      },
+      "down": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "down.f32.bin",
+        "fp32_sha256": "7090bf38f6e732b6f8adabfe94723fc60310c4e4c27d3cfa6058f6dd1c40d4a1",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "down.native.bin",
+        "native_sha256": "f313c49ed557052ab1c2f614a44d80da2d3eaa30971db076b01fe00cbe7d337c",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "gate": {
+        "device": "cpu",
+        "fp32_bytes": 4587520,
+        "fp32_file": "gate.f32.bin",
+        "fp32_sha256": "ac90b955e05b01d44165ac02ca77f695805c3e0b4f340e72e877c47bc88d7c3c",
+        "native_bytes": 2293760,
+        "native_dtype": "bfloat16",
+        "native_file": "gate.native.bin",
+        "native_sha256": "208918e1f4f079fdfe67de9cf79510c3576c101e3216a5dd1e6d87fc1feb0eed",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 2293760,
+        "shape": [
+          1,
+          128,
+          8960
+        ],
+        "storage_offset": 0,
+        "stride": [
+          1146880,
+          8960,
+          1
+        ]
+      },
+      "k": {
+        "device": "cpu",
+        "fp32_bytes": 131072,
+        "fp32_file": "k.f32.bin",
+        "fp32_sha256": "702c438d1a083c4f51837d656f9a7a2bce9737e6b4c58b5ad9071be3fd4d078c",
+        "native_bytes": 65536,
+        "native_dtype": "bfloat16",
+        "native_file": "k.native.bin",
+        "native_sha256": "39c3834f8ff4d9296de43fd794d1e5e2af19f975e7255942e8f90d86c051dcd6",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 65536,
+        "shape": [
+          1,
+          2,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          32768,
+          128,
+          256,
+          1
+        ]
+      },
+      "kr": {
+        "device": "cpu",
+        "fp32_bytes": 131072,
+        "fp32_file": "kr.f32.bin",
+        "fp32_sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8",
+        "native_bytes": 65536,
+        "native_dtype": "bfloat16",
+        "native_file": "kr.native.bin",
+        "native_sha256": "72337ba037e58649dd6a426c35d86de1d618a6aebed35cf1228f1b0cc6c0ce15",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 65536,
+        "shape": [
+          1,
+          128,
+          256
+        ],
+        "storage_offset": 0,
+        "stride": [
+          32768,
+          256,
+          1
+        ]
+      },
+      "logits": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "logits.f32.bin",
+        "fp32_sha256": "f921ecd80625822e3279987f209596e656ac642f932ac96a87e84615a55e56c5",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "logits.native.bin",
+        "native_sha256": "37671b73501c878f4b2f6f379ca1368e21c2db3069226d9dc40bd72ea2027f7e",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          128,
+          1
+        ]
+      },
+      "mask": {
+        "device": "cpu",
+        "fp32_bytes": 65536,
+        "fp32_file": "mask.f32.bin",
+        "fp32_sha256": "a9f72e2719df06a4bc7cb364c8a61dcb0fd33750eaa6a242922b001b7471ec9c",
+        "native_bytes": 32768,
+        "native_dtype": "bfloat16",
+        "native_file": "mask.native.bin",
+        "native_sha256": "e867bc6f62d8ec12f687265532d551c7fe92cc53360a2196ebefbcff74901cdd",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 32768,
+        "shape": [
+          1,
+          1,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          16384,
+          16384,
+          128,
+          1
+        ]
+      },
+      "n0": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "n0.f32.bin",
+        "fp32_sha256": "3c25077e0b7aa5819df6fb93cbaba6a0d5379ac06b9df468beecd0f259b5cc3f",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "n0.native.bin",
+        "native_sha256": "bd41672e6ea7d12746b41e56d21b3309369ecfd87cc26319ae6adbf0874e5cf2",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "n1": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "n1.f32.bin",
+        "fp32_sha256": "ea3084dd5b5886680df816e6e2465ab330500faba411b169992bb766d0fa6b55",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "n1.native.bin",
+        "native_sha256": "5bb6ff866beb0e47e86d5cec61ecc767172e8fbf8f4cf5ed0ad5bb1f76753cda",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "o": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "o.f32.bin",
+        "fp32_sha256": "6435b52b67aa684f348a46c8d7e8f70dfc1a85d0f983da870c6d0e3b24229550",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "o.native.bin",
+        "native_sha256": "3b8cb543c2a8ee66b3716cf7f06f53174c8eabae5d7bf0a6f3f942bdac1fd8d7",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "prob": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "prob.f32.bin",
+        "fp32_sha256": "d9c02d605505ee1f3a78ad719f70a03227f7ee66f54f6f39be0fe63ee14612ca",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "prob.native.bin",
+        "native_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          128,
+          1
+        ]
+      },
+      "pv": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "pv.f32.bin",
+        "fp32_sha256": "032f30d280e06537f4065374fce768acd5098ee171cc6ef6354e50aad01590ee",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "pv.native.bin",
+        "native_sha256": "f5d250263553a063e753e4f7dd76d1755df87e5dfab75cda82029708981b0556",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          128,
+          1
+        ]
+      },
+      "q": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "q.f32.bin",
+        "fp32_sha256": "81b052044f875631b6e6217eb5f51c107da003f3211f07e43fb033b9c27ec910",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "q.native.bin",
+        "native_sha256": "e58005e1119948b53bcec128e5e99f09e51441c3a9c59e7441731a60d7e1aa62",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          128,
+          1536,
+          1
+        ]
+      },
+      "qr": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "qr.f32.bin",
+        "fp32_sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "qr.native.bin",
+        "native_sha256": "5e2d4a612d2179cbe25c09de4d15204b5ec0f6f9ac2a7a5f79cdb006efd08184",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "r": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "r.f32.bin",
+        "fp32_sha256": "9c1b28179e491367b7affa0e4e274a431376b5184b362a7f1d56ac3bb3286e6f",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "r.native.bin",
+        "native_sha256": "8c8d34497ac6c84b1f78aca09b9f317380d496c569e89baf754e5b381683dc3d",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "repeat_k": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "repeat_k.f32.bin",
+        "fp32_sha256": "1413470174fabb71186c0aeaf2e3ba46e8916d9bf8a64d3cc812043ef9d9e93d",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "repeat_k.native.bin",
+        "native_sha256": "5391703c16f9aa95a213ca5042499e8ebccc209e54fb0747bfe5ecdca9246961",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          128,
+          1
+        ]
+      },
+      "repeat_v": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "repeat_v.f32.bin",
+        "fp32_sha256": "a33381d622fa8201956437d44a1ec8de42ecc1c11e84a0bee54a37741ce0877d",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "repeat_v.native.bin",
+        "native_sha256": "d6edded23a0459a2cbf44f694841633851c95e185ff88ec352ec6118319c2ecf",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          128,
+          1
+        ]
+      },
+      "scores": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "scores.f32.bin",
+        "fp32_sha256": "7c23a57269a0062e61c946475d4fa0edfae6cc39d6e589f9127cae2b87489350",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "scores.native.bin",
+        "native_sha256": "b20e22725941e00f5702d73bdf2c9f723cad55eed37e3eca263861257eb6c110",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          128,
+          1
+        ]
+      },
+      "silu": {
+        "device": "cpu",
+        "fp32_bytes": 4587520,
+        "fp32_file": "silu.f32.bin",
+        "fp32_sha256": "4a822c6732e83edff63e23449cb16b682ef2c655ad8f5509bfc37f0f4f86c3db",
+        "native_bytes": 2293760,
+        "native_dtype": "bfloat16",
+        "native_file": "silu.native.bin",
+        "native_sha256": "2ddd98c82aaa3caea6aa196817b4f90075a89ceabe8f7054d082e7ceb9bdca09",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 2293760,
+        "shape": [
+          1,
+          128,
+          8960
+        ],
+        "storage_offset": 0,
+        "stride": [
+          1146880,
+          8960,
+          1
+        ]
+      },
+      "sin": {
+        "device": "cpu",
+        "fp32_bytes": 65536,
+        "fp32_file": "sin.f32.bin",
+        "fp32_sha256": "3a2b389f5a89caafc598cc5f6e6491d96ef783daf1b57cc1c2ef959a6b47779e",
+        "native_bytes": 32768,
+        "native_dtype": "bfloat16",
+        "native_file": "sin.native.bin",
+        "native_sha256": "a84e52cca7fcaeb1f20a5238aee97f37a1a005828af43f85472a8ceecfa102dc",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 8388608,
+        "shape": [
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          128,
+          1
+        ]
+      },
+      "softmax_fp32": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "softmax_fp32.f32.bin",
+        "fp32_sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8",
+        "native_bytes": 786432,
+        "native_dtype": "float32",
+        "native_file": "softmax_fp32.native.bin",
+        "native_sha256": "d2db7ddfb3112f0d82a43878791088f34b1ebe7aee6beb26f7543bb02c184da8",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 786432,
+        "shape": [
+          1,
+          12,
+          128,
+          128
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          16384,
+          128,
+          1
+        ]
+      },
+      "up": {
+        "device": "cpu",
+        "fp32_bytes": 4587520,
+        "fp32_file": "up.f32.bin",
+        "fp32_sha256": "2c4cf209cc620972744bb26e40fd8aa97f3c51bc98cf771603fbaac97d40bd95",
+        "native_bytes": 2293760,
+        "native_dtype": "bfloat16",
+        "native_file": "up.native.bin",
+        "native_sha256": "a5d105e355584f68de938ffafc89eac986d439c3edddffc96e63853c913cd805",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 2293760,
+        "shape": [
+          1,
+          128,
+          8960
+        ],
+        "storage_offset": 0,
+        "stride": [
+          1146880,
+          8960,
+          1
+        ]
+      },
+      "v": {
+        "device": "cpu",
+        "fp32_bytes": 131072,
+        "fp32_file": "v.f32.bin",
+        "fp32_sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995",
+        "native_bytes": 65536,
+        "native_dtype": "bfloat16",
+        "native_file": "v.native.bin",
+        "native_sha256": "9ab1b2551af4fcb7ca5e6eb7ccca6168269f0b78ac6308961b72abee3d61af2d",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 65536,
+        "shape": [
+          1,
+          128,
+          256
+        ],
+        "storage_offset": 0,
+        "stride": [
+          32768,
+          256,
+          1
+        ]
+      },
+      "x": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "x.f32.bin",
+        "fp32_sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "x.native.bin",
+        "native_sha256": "aef53bb116207509ae8c98f9fafea7ab296a0d917835810b39d7b2290863b85c",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      },
+      "y": {
+        "device": "cpu",
+        "fp32_bytes": 786432,
+        "fp32_file": "y.f32.bin",
+        "fp32_sha256": "7c0a8ceee1ff2800b5deb2d4c901eef51a64acb25d6f5cf82a284763932932ef",
+        "native_bytes": 393216,
+        "native_dtype": "bfloat16",
+        "native_file": "y.native.bin",
+        "native_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa",
+        "nonfinite_count": 0,
+        "original_storage_bytes": 393216,
+        "shape": [
+          1,
+          128,
+          1536
+        ],
+        "storage_offset": 0,
+        "stride": [
+          196608,
+          1536,
+          1
+        ]
+      }
+    },
+    "file_count": 89,
+    "hash_method": "OPAQUE_STREAMING_SHA256_1MIB_CHUNKS_DISCARDED",
+    "input_manifest": {
+      "bytes": 37111,
+      "sha256": "db93506223c322b639698c417685913c4cc8b97764f20063f831e51460e571ea"
+    },
+    "limitations": [
+      "Recorded y/prob baseline equivalence is not all29 intermediate noninterference.",
+      "Hash identity is not numerical acceptance or live execution admission.",
+      "Future authorized worker must keep this entire oracle root sealed until real terminal."
+    ],
+    "numeric_comparison_performed": false,
+    "payloads_decoded": false,
+    "raw13_identity_matches_current_inputs": true,
+    "receipt": {
+      "bytes": 16827,
+      "sha256": "cb1646e227fa3b36664fa4bb59e47769a3da61735d94179c4ceaaca5f1764bf7"
+    },
+    "receipt_seal_artifact_count": 87,
+    "receipt_seal_artifact_hashes_match": true,
+    "receipt_seal_exact_closure": true,
+    "result_metadata": {
+      "actual_runtime_profile": {
+        "cpu_capability": "AVX512",
+        "deterministic_algorithms": true,
+        "interop_threads": 1,
+        "intraop_threads": 4,
+        "python_major_minor": [
+          3,
+          12
+        ],
+        "torch_build_sha256": "4f3cd65dc58472ed223329fa5ab743d0a360e777accb4001b511fc418c78128b",
+        "torch_git_version": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0"
+      },
+      "baseline_exports": {
+        "prob": {
+          "file": "baseline/prob.native.bin",
+          "native_bytes": 393216,
+          "native_dtype": "bfloat16",
+          "native_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c",
+          "shape": [
+            1,
+            12,
+            128,
+            128
+          ]
+        },
+        "y": {
+          "file": "baseline/y.native.bin",
+          "native_bytes": 393216,
+          "native_dtype": "bfloat16",
+          "native_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa",
+          "shape": [
+            1,
+            128,
+            1536
+          ]
+        }
+      },
+      "baseline_state_unchanged": {
+        "compared_sections": [
+          "attention_dropout",
+          "buffers",
+          "inputs",
+          "layer_object_id",
+          "module_object_ids",
+          "module_training",
+          "parameters",
+          "rotary_max_seq_len_cached"
+        ],
+        "native_hashes_compared": true,
+        "original_object_identities_compared": true,
+        "passed": true
+      },
+      "capture_profile": {
+        "all29_intermediate_noninterference_claimed": false,
+        "arm_order": [
+          "baseline_no_capture_observer",
+          "observed_all29"
+        ],
+        "baseline_outputs": [
+          "y",
+          "prob"
+        ],
+        "chunk_count": 1,
+        "comparison": "native_bytes_exact",
+        "forward_calls": 2,
+        "geometry": "fresh_cold_chunk128_v1",
+        "layer_instances": 1,
+        "name": "fresh_m128_same_layer_baseline_then_observed_v1",
+        "same_input_objects": [
+          "x",
+          "mask",
+          "positions"
+        ],
+        "state_checkpoints": [
+          "before_baseline",
+          "after_baseline",
+          "after_observed"
+        ],
+        "tokens": 128,
+        "unchanged_state": [
+          "inputs",
+          "parameters",
+          "buffers"
+        ]
+      },
+      "comparison_gates_not_applied": {
+        "block_y": {
+          "combine": "AND",
+          "max_abs_lte": 0.05,
+          "mean_abs_lte": 0.01
+        },
+        "nonfinite_allowed": false,
+        "operator_bf16": {
+          "combine": "AND",
+          "max_abs_lte": 0.03125,
+          "mean_abs_lte": 0.005
+        },
+        "rowsum_abs_error_lte": 2e-05,
+        "softmax_fp32": "DIAGNOSTIC_NO_APPROVED_COMPARISON_TOLERANCE"
+      },
+      "config": {
+        "actual_attn_implementation": "eager",
+        "eager_is_explicit_wrapper_choice": true,
+        "rotary_256_profile_executed": false,
+        "to_dict": {
+          "_name_or_path": "",
+          "add_cross_attention": false,
+          "architectures": [
+            "Qwen2ForCausalLM"
+          ],
+          "attention_dropout": 0.0,
+          "bad_words_ids": null,
+          "begin_suppress_tokens": null,
+          "bos_token_id": 151643,
+          "chunk_size_feed_forward": 0,
+          "cross_attention_hidden_size": null,
+          "decoder_start_token_id": null,
+          "diversity_penalty": 0.0,
+          "do_sample": false,
+          "early_stopping": false,
+          "encoder_no_repeat_ngram_size": 0,
+          "eos_token_id": 151645,
+          "exponential_decay_length_penalty": null,
+          "finetuning_task": null,
+          "forced_bos_token_id": null,
+          "forced_eos_token_id": null,
+          "hidden_act": "silu",
+          "hidden_size": 1536,
+          "id2label": {
+            "0": "LABEL_0",
+            "1": "LABEL_1"
+          },
+          "initializer_range": 0.02,
+          "intermediate_size": 8960,
+          "is_decoder": false,
+          "is_encoder_decoder": false,
+          "label2id": {
+            "LABEL_0": 0,
+            "LABEL_1": 1
+          },
+          "length_penalty": 1.0,
+          "max_length": 20,
+          "max_position_embeddings": 32768,
+          "max_window_layers": 28,
+          "min_length": 0,
+          "model_type": "qwen2",
+          "no_repeat_ngram_size": 0,
+          "num_attention_heads": 12,
+          "num_beam_groups": 1,
+          "num_beams": 1,
+          "num_hidden_layers": 28,
+          "num_key_value_heads": 2,
+          "num_return_sequences": 1,
+          "output_attentions": false,
+          "output_hidden_states": false,
+          "output_scores": false,
+          "pad_token_id": null,
+          "prefix": null,
+          "problem_type": null,
+          "pruned_heads": {},
+          "remove_invalid_values": false,
+          "repetition_penalty": 1.0,
+          "return_dict": true,
+          "return_dict_in_generate": false,
+          "rms_norm_eps": 1e-06,
+          "rope_theta": 1000000.0,
+          "sep_token_id": null,
+          "sliding_window": 32768,
+          "suppress_tokens": null,
+          "task_specific_params": null,
+          "temperature": 1.0,
+          "tf_legacy_loss": false,
+          "tie_encoder_decoder": false,
+          "tie_word_embeddings": true,
+          "tokenizer_class": null,
+          "top_k": 50,
+          "top_p": 1.0,
+          "torch_dtype": "bfloat16",
+          "torchscript": false,
+          "transformers_version": "4.40.1",
+          "typical_p": 1.0,
+          "use_bfloat16": false,
+          "use_cache": true,
+          "use_sliding_window": false,
+          "vocab_size": 151936
+        }
+      },
+      "dut_comparison": "NOT_RUN",
+      "forward_call_count": 2,
+      "layer_instance_count": 1,
+      "legacy_results_inherited": false,
+      "numeric_acceptance": "NOT_RUN",
+      "observation_noninterference_proven": false,
+      "observed_state_unchanged": {
+        "compared_sections": [
+          "attention_dropout",
+          "buffers",
+          "inputs",
+          "layer_object_id",
+          "module_object_ids",
+          "module_training",
+          "parameters",
+          "rotary_max_seq_len_cached"
+        ],
+        "native_hashes_compared": true,
+        "original_object_identities_compared": true,
+        "passed": true
+      },
+      "origin_disclosures": {
+        "cache_k": "cold semantic alias of post-RoPE k before repeat_kv; no Cache.update",
+        "cache_v": "cold semantic alias of original transposed v before repeat_kv; no Cache.update",
+        "fp32_export": "exact BF16 bit widening, or actual FP32 softmax return bytes unchanged",
+        "mask": "explicit caller-side BF16 causal argument, not official mask helper and not DUT capture",
+        "mask_counts": {
+          "allowed": 8256,
+          "diagonal": 128,
+          "future": 8128
+        },
+        "mask_words": {
+          "allowed": "0x0000",
+          "future": "0xff7f"
+        },
+        "native_hash_layout": "logical row-major contiguous serialization; original strides/offset recorded",
+        "past_key_value": null,
+        "position_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96,
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "scope": "complete Qwen2DecoderLayer.__call__/forward only; not Qwen2Model/ForCausalLM.forward",
+        "scores_domain_counts": {
+          "causal": 99072,
+          "future": 97536
+        },
+        "unselected_backends_executed": false,
+        "use_cache": false,
+        "x": "original raw embedding rows 0:128; token IDs 0..127; no embedding module call"
+      },
+      "pair_output_comparison": {
+        "all29_intermediate_noninterference_claimed": false,
+        "claim_scope": "y/prob only; no claim that all29 baseline intermediates were observed",
+        "outputs": {
+          "prob": {
+            "baseline_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c",
+            "byte_identical": true,
+            "native_bytes": 393216,
+            "observed_sha256": "c3aead2990d08411846aa95cf9c60daa584ded4db092fa831eb22752a5a2234c"
+          },
+          "y": {
+            "baseline_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa",
+            "byte_identical": true,
+            "native_bytes": 393216,
+            "observed_sha256": "ca8c148fc9d89fa516054a3bd2b4ea310b88545234fc70023a601151842a8daa"
+          }
+        },
+        "passed": true
+      },
+      "source_rewritten": false,
+      "status": "PAIR_CAPTURE_COMPLETE_NOT_NUMERIC_PASS"
+    },
+    "schema": "qwen2-m128-exact-dut-oracle-manifest-v1",
+    "status": "OFFICIAL_ORACLE_HASH_CLOSURE_VERIFIED_NOT_DUT_PASS",
+    "tensor_decode_performed": false,
+    "total_bytes": 66356782,
+    "whole_m128_x_identity_matches": true
+  },
+  "projection_omissions": {
+    "description": "Omit original Python process object addresses for the two returned baseline objects. Preserve output identities and observed equality claims; original_identity identifies the unchanged private original, not this projection.",
+    "removed_fields": 2,
+    "revision": "r4"
+  }
+}

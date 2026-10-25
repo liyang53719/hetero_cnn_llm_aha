@@ -1,0 +1,73 @@
+{
+  "cold_source_files": {
+    "admission.py": {
+      "bytes": 3750,
+      "sha256": "043af03dcfc97912fbdb877e5ee22398a20e27d262e3a427128b0490e3806397"
+    },
+    "cold_worker.py": {
+      "bytes": 6116,
+      "sha256": "e97e9b1408d8734ec6c59e50cb3fc127f25a28d9d45f49d5b6c216069362f73c"
+    },
+    "prepare_cold.py": {
+      "bytes": 4295,
+      "sha256": "ec7302d56f9b003b79a79827fc80b27749a6b289d5e532c0d05dbbf9cd80e9b8"
+    },
+    "prepare_supervisor.py": {
+      "bytes": 948,
+      "sha256": "97539ae3c68136669c4f928662e2ccf3afc0c2a2e489de63ebe12beecfaf79d4"
+    },
+    "qwen2_fullgraph_normal_binding/DEPENDENCY_PINS.json": {
+      "bytes": 3223,
+      "sha256": "0f367aacb8d258366e2d965c62568ef48e4a140c88b7fe76be010d4dc48707e8"
+    },
+    "qwen2_fullgraph_normal_binding/__init__.py": {
+      "bytes": 72,
+      "sha256": "abc0392a4e82f67d72410cb2d35bc31d913a7f59ff28db1ef868c48fb641ee2d"
+    },
+    "qwen2_fullgraph_normal_binding/adapter.py": {
+      "bytes": 5605,
+      "sha256": "e6d9c9f22b11eff8f506e2412f691c24faf07acee1211a0b5e547aade758a0a3"
+    },
+    "qwen2_fullgraph_normal_binding/dependency.py": {
+      "bytes": 3020,
+      "sha256": "c91dd6173e1f4a5120019dd9e2d5e4903ec985b427e3b36b72f07f58b3aa1983"
+    },
+    "qwen2_fullgraph_normal_binding/initialization.py": {
+      "bytes": 6867,
+      "sha256": "2060f6c122a4e969fc538b636f442b51c0a97f0f7758d723252de2a91bc5762b"
+    },
+    "qwen2_fullgraph_normal_binding/safe_metadata.py": {
+      "bytes": 1861,
+      "sha256": "5b29261c99d15a09ab8578121b6d2b32a223b8c2b16cde70f0bcd89b1c717d6a"
+    },
+    "run_cold.py": {
+      "bytes": 5832,
+      "sha256": "3dc2510de6adde5347a56eeae3c948cbcc8af3b12eb88960b19748067ced1298"
+    },
+    "supervisor_common.py": {
+      "bytes": 6118,
+      "sha256": "64163865f8ea08c93dcd59349357d5b4eddc03d3c7ee10997f0f2f8b2f6a8b71"
+    },
+    "test_cold_preparation.py": {
+      "bytes": 5276,
+      "sha256": "c007aace38ae99d66c38ca03125f52406e8b6847077b01765d19393b85574cbd"
+    }
+  },
+  "config": {
+    "bytes": 215841,
+    "sha256": "c971c8ca87cea05469ce06165ba8675b5be4484abb868ef59e88d33ca4c6af44"
+  },
+  "original_freeze": {
+    "bytes": 3902,
+    "sha256": "df3499c3349a531d1338cbc0b83193a7f4becbb753e152bd18a2cc97ed7d813c"
+  },
+  "private_configuration_not_distributed": true,
+  "source_composition_r2": {
+    "bytes": 23729,
+    "sha256": "072e1f8416f0c33388a5d19f7ff51699dd47203595d9aa04e5ea8e87cbfe97a7"
+  },
+  "source_manifest": {
+    "bytes": 57345,
+    "sha256": "4ac834617f8566a9467f702faf81c730f2e23dcb1b97dbdd5ebdd33821a8d923"
+  }
+}

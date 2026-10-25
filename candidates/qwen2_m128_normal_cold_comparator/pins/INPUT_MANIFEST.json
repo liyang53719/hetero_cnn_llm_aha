@@ -1,0 +1,1121 @@
+{
+  "not_self_contained": true,
+  "original_identity": {
+    "bytes": 37111,
+    "sha256": "db93506223c322b639698c417685913c4cc8b97764f20063f831e51460e571ea"
+  },
+  "payloads_included": false,
+  "projection": {
+    "active_x": {
+      "bytes": 786432,
+      "dtype": "float32",
+      "role": "x",
+      "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+      "shape": [
+        128,
+        1536
+      ]
+    },
+    "execution_authorized": false,
+    "hash_method": "OPAQUE_STREAMING_SHA256_1MIB_CHUNKS_DISCARDED",
+    "input_bytes_hashed": 189298688,
+    "input_file_count": 27,
+    "input_spec": null,
+    "metadata_is_not_tensor_validation": true,
+    "provider14": [
+      {
+        "bytes": 1024,
+        "dtype": "float32",
+        "metadata": {
+          "bytes": 1024,
+          "dtype": "float32",
+          "file": "bk.bin",
+          "materialization": "BF16 words widened exactly by u32 shift-left 16",
+          "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d",
+          "shape": [
+            256
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 1024,
+          "dtype": "float32",
+          "file": "bk.bin",
+          "materialization": "BF16 words widened exactly by u32 shift-left 16",
+          "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d",
+          "shape": [
+            256
+          ]
+        },
+        "role": "bk",
+        "sha256": "c77424743b1f69c60e2de1b4780666973af58831169c3ee02d7443701bc6d03d",
+        "shape": [
+          256
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 6144,
+        "dtype": "float32",
+        "metadata": {
+          "bytes": 6144,
+          "dtype": "float32",
+          "file": "bq.bin",
+          "materialization": "BF16 words widened exactly by u32 shift-left 16",
+          "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d",
+          "shape": [
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 6144,
+          "dtype": "float32",
+          "file": "bq.bin",
+          "materialization": "BF16 words widened exactly by u32 shift-left 16",
+          "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d",
+          "shape": [
+            1536
+          ]
+        },
+        "role": "bq",
+        "sha256": "47506ca51cfd69119a774c09466b718c0b400b84b9a392bc1e9bcb691f28b72d",
+        "shape": [
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 1024,
+        "dtype": "float32",
+        "metadata": {
+          "bytes": 1024,
+          "dtype": "float32",
+          "file": "bv.bin",
+          "materialization": "BF16 words widened exactly by u32 shift-left 16",
+          "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70",
+          "shape": [
+            256
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 1024,
+          "dtype": "float32",
+          "file": "bv.bin",
+          "materialization": "BF16 words widened exactly by u32 shift-left 16",
+          "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70",
+          "shape": [
+            256
+          ]
+        },
+        "role": "bv",
+        "sha256": "e0ba90f0d591f0266f0140802b6e4ccc24a9961ef26e96ee00f5b1567f8b2f70",
+        "shape": [
+          256
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 6144,
+        "dtype": "float32",
+        "metadata": {
+          "bytes": 6144,
+          "dtype": "float32",
+          "file": "gamma0.bin",
+          "materialization": "Original direct Qwen2 gamma widened exactly; no 1+weight",
+          "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+          "shape": [
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 6144,
+          "dtype": "float32",
+          "file": "gamma0.bin",
+          "materialization": "Original direct Qwen2 gamma widened exactly; no 1+weight",
+          "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+          "shape": [
+            1536
+          ]
+        },
+        "role": "gamma0",
+        "sha256": "320e4ac88269676897cf9c3b4996f966a6100ced2bc0f684216c200bc82b7180",
+        "shape": [
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 6144,
+        "dtype": "float32",
+        "metadata": {
+          "byte_strides": [
+            6144,
+            4
+          ],
+          "bytes": 6144,
+          "descriptor_dtype": 7,
+          "descriptor_shape4": [
+            1,
+            1536,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            1536,
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "element_strides": [
+            1536,
+            1
+          ],
+          "file": "gamma1.bin",
+          "readonly": true,
+          "reserved_bytes": 6144,
+          "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+          "shape": [
+            1,
+            1536
+          ],
+          "source_local_name": "post_attention_layernorm.weight",
+          "source_shape": [
+            1536
+          ],
+          "storage_encoding": "IEEE754_FP32_LE",
+          "transposed": false,
+          "unused_guard_bytes": 0,
+          "virtual": false,
+          "widened": true
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "byte_strides": [
+            6144,
+            4
+          ],
+          "bytes": 6144,
+          "descriptor_dtype": 7,
+          "descriptor_shape4": [
+            1,
+            1536,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            1536,
+            1,
+            1
+          ],
+          "dtype": "float32",
+          "element_strides": [
+            1536,
+            1
+          ],
+          "file": "gamma1.bin",
+          "readonly": true,
+          "reserved_bytes": 6144,
+          "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+          "shape": [
+            1,
+            1536
+          ],
+          "source_local_name": "post_attention_layernorm.weight",
+          "source_shape": [
+            1536
+          ],
+          "storage_encoding": "IEEE754_FP32_LE",
+          "transposed": false,
+          "unused_guard_bytes": 0,
+          "virtual": false,
+          "widened": true
+        },
+        "role": "gamma1",
+        "sha256": "e8e9d18c28e26e06d89fbb591b749cb77617e32cc17607f2b92e4b6a1828c70a",
+        "shape": [
+          1,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 524288,
+        "dtype": "float32",
+        "metadata": {
+          "bytes": 524288,
+          "dtype": "float32",
+          "file": "rope.bin",
+          "materialization": "Pinned raw FP32 cos/sin positions 0..127; positions 128..1023 zero",
+          "sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af",
+          "shape": [
+            2,
+            1024,
+            64
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 524288,
+          "dtype": "float32",
+          "file": "rope.bin",
+          "materialization": "Pinned raw FP32 cos/sin positions 0..127; positions 128..1023 zero",
+          "sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af",
+          "shape": [
+            2,
+            1024,
+            64
+          ]
+        },
+        "role": "rope",
+        "sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af",
+        "shape": [
+          2,
+          1024,
+          64
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 27525120,
+        "dtype": "uint16",
+        "metadata": {
+          "byte_strides": [
+            3072,
+            2
+          ],
+          "bytes": 27525120,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            8960,
+            1536,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            1536,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            1536,
+            1
+          ],
+          "file": "wd.bin",
+          "readonly": true,
+          "reserved_bytes": 55050240,
+          "sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec",
+          "shape": [
+            8960,
+            1536
+          ],
+          "source_local_name": "mlp.down_proj.weight",
+          "source_shape": [
+            1536,
+            8960
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 27525120,
+          "virtual": false,
+          "widened": false
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "byte_strides": [
+            3072,
+            2
+          ],
+          "bytes": 27525120,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            8960,
+            1536,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            1536,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            1536,
+            1
+          ],
+          "file": "wd.bin",
+          "readonly": true,
+          "reserved_bytes": 55050240,
+          "sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec",
+          "shape": [
+            8960,
+            1536
+          ],
+          "source_local_name": "mlp.down_proj.weight",
+          "source_shape": [
+            1536,
+            8960
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 27525120,
+          "virtual": false,
+          "widened": false
+        },
+        "role": "wd",
+        "sha256": "90b75c3a30d975516e17cc61ba0fe2e41eff5b7d98c1cc9361b25f0d172a53ec",
+        "shape": [
+          8960,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 27525120,
+        "dtype": "uint16",
+        "metadata": {
+          "byte_strides": [
+            17920,
+            2
+          ],
+          "bytes": 27525120,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            1536,
+            8960,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            8960,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            8960,
+            1
+          ],
+          "file": "wg.bin",
+          "readonly": true,
+          "reserved_bytes": 55050240,
+          "sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f",
+          "shape": [
+            1536,
+            8960
+          ],
+          "source_local_name": "mlp.gate_proj.weight",
+          "source_shape": [
+            8960,
+            1536
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 27525120,
+          "virtual": false,
+          "widened": false
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "byte_strides": [
+            17920,
+            2
+          ],
+          "bytes": 27525120,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            1536,
+            8960,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            8960,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            8960,
+            1
+          ],
+          "file": "wg.bin",
+          "readonly": true,
+          "reserved_bytes": 55050240,
+          "sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f",
+          "shape": [
+            1536,
+            8960
+          ],
+          "source_local_name": "mlp.gate_proj.weight",
+          "source_shape": [
+            8960,
+            1536
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 27525120,
+          "virtual": false,
+          "widened": false
+        },
+        "role": "wg",
+        "sha256": "be5cdf567f7ac2f91f63bfad26194336f4f857596716b3c365986b4ad1e5a44f",
+        "shape": [
+          1536,
+          8960
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 786432,
+        "dtype": "uint16",
+        "metadata": {
+          "bytes": 786432,
+          "dtype": "uint16",
+          "file": "wk.bin",
+          "materialization": "Original output-major BF16 words transposed to contiguous input-major BF16 words, unchanged values",
+          "sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344",
+          "shape": [
+            1536,
+            256
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 786432,
+          "dtype": "uint16",
+          "file": "wk.bin",
+          "materialization": "Original output-major BF16 words transposed to contiguous input-major BF16 words, unchanged values",
+          "sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344",
+          "shape": [
+            1536,
+            256
+          ]
+        },
+        "role": "wk",
+        "sha256": "313f8c46dec3be020734db5647f124467f86b0f637c1e80a5c85814971413344",
+        "shape": [
+          1536,
+          256
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 4718592,
+        "dtype": "uint16",
+        "metadata": {
+          "byte_strides": [
+            3072,
+            2
+          ],
+          "bytes": 4718592,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            1536,
+            1536,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            1536,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            1536,
+            1
+          ],
+          "file": "wo.bin",
+          "readonly": true,
+          "reserved_bytes": 9437184,
+          "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c",
+          "shape": [
+            1536,
+            1536
+          ],
+          "source_local_name": "self_attn.o_proj.weight",
+          "source_shape": [
+            1536,
+            1536
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 4718592,
+          "virtual": false,
+          "widened": false
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "byte_strides": [
+            3072,
+            2
+          ],
+          "bytes": 4718592,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            1536,
+            1536,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            1536,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            1536,
+            1
+          ],
+          "file": "wo.bin",
+          "readonly": true,
+          "reserved_bytes": 9437184,
+          "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c",
+          "shape": [
+            1536,
+            1536
+          ],
+          "source_local_name": "self_attn.o_proj.weight",
+          "source_shape": [
+            1536,
+            1536
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 4718592,
+          "virtual": false,
+          "widened": false
+        },
+        "role": "wo",
+        "sha256": "69532da7bcc69b44b0bb627a4c0142f83b6713833d8ec08d6f73926eae80722c",
+        "shape": [
+          1536,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 4718592,
+        "dtype": "uint16",
+        "metadata": {
+          "bytes": 4718592,
+          "dtype": "uint16",
+          "file": "wq.bin",
+          "materialization": "Original output-major BF16 words transposed to contiguous input-major BF16 words, unchanged values",
+          "sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72",
+          "shape": [
+            1536,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 4718592,
+          "dtype": "uint16",
+          "file": "wq.bin",
+          "materialization": "Original output-major BF16 words transposed to contiguous input-major BF16 words, unchanged values",
+          "sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72",
+          "shape": [
+            1536,
+            1536
+          ]
+        },
+        "role": "wq",
+        "sha256": "ad7ce2dae58deb01656348a6ee2bd6919ed6c2bc83f31b88eed75381cd718b72",
+        "shape": [
+          1536,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 27525120,
+        "dtype": "uint16",
+        "metadata": {
+          "byte_strides": [
+            17920,
+            2
+          ],
+          "bytes": 27525120,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            1536,
+            8960,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            8960,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            8960,
+            1
+          ],
+          "file": "wu.bin",
+          "readonly": true,
+          "reserved_bytes": 55050240,
+          "sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040",
+          "shape": [
+            1536,
+            8960
+          ],
+          "source_local_name": "mlp.up_proj.weight",
+          "source_shape": [
+            8960,
+            1536
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 27525120,
+          "virtual": false,
+          "widened": false
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "byte_strides": [
+            17920,
+            2
+          ],
+          "bytes": 27525120,
+          "descriptor_dtype": 5,
+          "descriptor_shape4": [
+            1536,
+            8960,
+            1,
+            1
+          ],
+          "descriptor_stride3": [
+            8960,
+            1,
+            1
+          ],
+          "dtype": "uint16",
+          "element_strides": [
+            8960,
+            1
+          ],
+          "file": "wu.bin",
+          "readonly": true,
+          "reserved_bytes": 55050240,
+          "sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040",
+          "shape": [
+            1536,
+            8960
+          ],
+          "source_local_name": "mlp.up_proj.weight",
+          "source_shape": [
+            8960,
+            1536
+          ],
+          "storage_encoding": "BF16_LE",
+          "transposed": true,
+          "unused_guard_bytes": 27525120,
+          "virtual": false,
+          "widened": false
+        },
+        "role": "wu",
+        "sha256": "59f200f6eb3b67e947248d6f5f0308c28ec0256b93893342e2f27d028c80a040",
+        "shape": [
+          1536,
+          8960
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 786432,
+        "dtype": "uint16",
+        "metadata": {
+          "bytes": 786432,
+          "dtype": "uint16",
+          "file": "wv.bin",
+          "materialization": "Original output-major BF16 words transposed to contiguous input-major BF16 words, unchanged values",
+          "sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a",
+          "shape": [
+            1536,
+            256
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 786432,
+          "dtype": "uint16",
+          "file": "wv.bin",
+          "materialization": "Original output-major BF16 words transposed to contiguous input-major BF16 words, unchanged values",
+          "sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a",
+          "shape": [
+            1536,
+            256
+          ]
+        },
+        "role": "wv",
+        "sha256": "a00fd3873f1d0ab098694b6003fd27f464e769c3395e227c729bb856246de84a",
+        "shape": [
+          1536,
+          256
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 786432,
+        "dtype": "float32",
+        "metadata": {
+          "bytes": 786432,
+          "dtype": "float32",
+          "file": "x.bin",
+          "materialization": "Original token rows 0..127, BF16 words widened exactly",
+          "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+          "shape": [
+            128,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "record": {
+          "bytes": 786432,
+          "dtype": "float32",
+          "file": "x.bin",
+          "materialization": "Original token rows 0..127, BF16 words widened exactly",
+          "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+          "shape": [
+            128,
+            1536
+          ]
+        },
+        "role": "x",
+        "sha256": "ddcdcca67cb3e26007880a78074ea3eb70bf83e8d8060fa2258bb2c7644695df",
+        "shape": [
+          128,
+          1536
+        ],
+        "tensor_decode_performed": false
+      }
+    ],
+    "provider_file_count": 14,
+    "raw13": [
+      {
+        "bytes": 786432,
+        "dtype": "BF16",
+        "local_name": "embed_tokens.rows_0_255",
+        "metadata": {
+          "bytes": 786432,
+          "dtype": "BF16",
+          "local_name": "embed_tokens.rows_0_255",
+          "sha256": "3cdd8eecf1d0948c6ebf40ca947875b7b706521733fa3107e934d3815e45c014",
+          "shape": [
+            256,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "3cdd8eecf1d0948c6ebf40ca947875b7b706521733fa3107e934d3815e45c014",
+        "shape": [
+          256,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 3072,
+        "dtype": "BF16",
+        "local_name": "input_layernorm.weight",
+        "metadata": {
+          "bytes": 3072,
+          "dtype": "BF16",
+          "local_name": "input_layernorm.weight",
+          "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e",
+          "shape": [
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e",
+        "shape": [
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 512,
+        "dtype": "BF16",
+        "local_name": "self_attn.k_proj.bias",
+        "metadata": {
+          "bytes": 512,
+          "dtype": "BF16",
+          "local_name": "self_attn.k_proj.bias",
+          "sha256": "56a716f9fd535d659a918afc9b7d25ad1d159dc0e9bd6da68549a155bb62ada0",
+          "shape": [
+            256
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "56a716f9fd535d659a918afc9b7d25ad1d159dc0e9bd6da68549a155bb62ada0",
+        "shape": [
+          256
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 786432,
+        "dtype": "BF16",
+        "local_name": "self_attn.k_proj.weight",
+        "metadata": {
+          "bytes": 786432,
+          "dtype": "BF16",
+          "local_name": "self_attn.k_proj.weight",
+          "sha256": "addac2eb287cc8d8caa24178c94156c67bab35bc6a9f76927f50a4f0be0ade47",
+          "shape": [
+            256,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "addac2eb287cc8d8caa24178c94156c67bab35bc6a9f76927f50a4f0be0ade47",
+        "shape": [
+          256,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 3072,
+        "dtype": "BF16",
+        "local_name": "self_attn.q_proj.bias",
+        "metadata": {
+          "bytes": 3072,
+          "dtype": "BF16",
+          "local_name": "self_attn.q_proj.bias",
+          "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+          "shape": [
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+        "shape": [
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 4718592,
+        "dtype": "BF16",
+        "local_name": "self_attn.q_proj.weight",
+        "metadata": {
+          "bytes": 4718592,
+          "dtype": "BF16",
+          "local_name": "self_attn.q_proj.weight",
+          "sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4",
+          "shape": [
+            1536,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "142ece1271ee9eb6b1e91055e2a6293a5572bf9b5395c56c77f9584728ee89d4",
+        "shape": [
+          1536,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 512,
+        "dtype": "BF16",
+        "local_name": "self_attn.v_proj.bias",
+        "metadata": {
+          "bytes": 512,
+          "dtype": "BF16",
+          "local_name": "self_attn.v_proj.bias",
+          "sha256": "4ed960cd1895ac1bcc5012a0948f9b73e50b411b9b8015e9941d28e8d45fd29d",
+          "shape": [
+            256
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "4ed960cd1895ac1bcc5012a0948f9b73e50b411b9b8015e9941d28e8d45fd29d",
+        "shape": [
+          256
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 786432,
+        "dtype": "BF16",
+        "local_name": "self_attn.v_proj.weight",
+        "metadata": {
+          "bytes": 786432,
+          "dtype": "BF16",
+          "local_name": "self_attn.v_proj.weight",
+          "sha256": "e99b01559f13e11a0c96309f5b4e11664223aa31a2f318e49597ad8e66b0ea32",
+          "shape": [
+            256,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "e99b01559f13e11a0c96309f5b4e11664223aa31a2f318e49597ad8e66b0ea32",
+        "shape": [
+          256,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 4718592,
+        "dtype": "BF16",
+        "local_name": "self_attn.o_proj.weight",
+        "metadata": {
+          "bytes": 4718592,
+          "dtype": "BF16",
+          "local_name": "self_attn.o_proj.weight",
+          "sha256": "7613bde8e47278a40bbf05222cd0799ed873194e56a96f2f6167d4580bb1a735",
+          "shape": [
+            1536,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "7613bde8e47278a40bbf05222cd0799ed873194e56a96f2f6167d4580bb1a735",
+        "shape": [
+          1536,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 3072,
+        "dtype": "BF16",
+        "local_name": "post_attention_layernorm.weight",
+        "metadata": {
+          "bytes": 3072,
+          "dtype": "BF16",
+          "local_name": "post_attention_layernorm.weight",
+          "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a",
+          "shape": [
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a",
+        "shape": [
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 27525120,
+        "dtype": "BF16",
+        "local_name": "mlp.gate_proj.weight",
+        "metadata": {
+          "bytes": 27525120,
+          "dtype": "BF16",
+          "local_name": "mlp.gate_proj.weight",
+          "sha256": "0219acbf1f5bc38fc55ee56fa6b55c82150a1a4279915090e857beb382cc0d7e",
+          "shape": [
+            8960,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "0219acbf1f5bc38fc55ee56fa6b55c82150a1a4279915090e857beb382cc0d7e",
+        "shape": [
+          8960,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 27525120,
+        "dtype": "BF16",
+        "local_name": "mlp.up_proj.weight",
+        "metadata": {
+          "bytes": 27525120,
+          "dtype": "BF16",
+          "local_name": "mlp.up_proj.weight",
+          "sha256": "a403942b0dc208a543e8434d091564cfd4b7a091c291d02d7a62ae46884e61ed",
+          "shape": [
+            8960,
+            1536
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "a403942b0dc208a543e8434d091564cfd4b7a091c291d02d7a62ae46884e61ed",
+        "shape": [
+          8960,
+          1536
+        ],
+        "tensor_decode_performed": false
+      },
+      {
+        "bytes": 27525120,
+        "dtype": "BF16",
+        "local_name": "mlp.down_proj.weight",
+        "metadata": {
+          "bytes": 27525120,
+          "dtype": "BF16",
+          "local_name": "mlp.down_proj.weight",
+          "sha256": "8a9657234cffb29cec816483e03454846d80d3a1f4171e6bc40479f3ba73ce5a",
+          "shape": [
+            1536,
+            8960
+          ]
+        },
+        "opaque_sha256_verified": true,
+        "sha256": "8a9657234cffb29cec816483e03454846d80d3a1f4171e6bc40479f3ba73ce5a",
+        "shape": [
+          1536,
+          8960
+        ],
+        "tensor_decode_performed": false
+      }
+    ],
+    "raw_file_count": 13,
+    "reviewed_interface_manifest": {
+      "bytes": 44310,
+      "sha256": "4c06897410a4054a32d43e608e3cda54cf6567d429ad65dd54cb8f2327ecdf63"
+    },
+    "schema": "qwen2-m128-exact-dut-input-manifest-v1",
+    "status": "OPAQUE_INPUT_IDENTITIES_VERIFIED_NOT_DECODED",
+    "tensor_decode_performed": false,
+    "upstream_metadata": {
+      "artifacts_manifest": {
+        "bytes": 262601,
+        "sha256": "efbceff500d0acc35941bd492c75018d9e9815d1da4f9dbbe6b3b88329c03ede"
+      },
+      "factory": "runtime.base.bytes_provider(raw_bytes); raw uint16 K-major weights or exact widened FP32 readonly bytes; no reference outputs",
+      "historical_producer_manifest": {
+        "bytes": 154690,
+        "sha256": "48e20d380cfc6ac0ab5b9e1690bb507e37cf99468b0df8e79a1d37da0f16110f"
+      },
+      "input_audit": {
+        "bytes": 49271,
+        "sha256": "61433a10d1cd41aa6adfdbb25bf1ea3052b8d8301843f3482cc19d0014813fc6"
+      },
+      "m128_active_x": "whole typed x [128,1536], original producer identity; fresh run pre/post hash still required",
+      "m16_active_x_prior_identity": {
+        "bytes": 98304,
+        "matches_original_M16_input": true,
+        "sha256": "271b8498d6c764d48a7f63fb3f314a49b3bafb7b8f62e15bf70fb2595777349c"
+      },
+      "payloads_read_or_rehashed": false,
+      "raw_factory_source": {
+        "bytes": 42761,
+        "sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
+      }
+    }
+  },
+  "projection_omissions": {
+    "description": "Omit duplicated allocation-address metadata for five provider roles. No physical-versus-process meaning is inferred. Preserve logical roles, shapes, sizes and hashes; original_identity identifies the unchanged private original, not this projection.",
+    "removed_fields": 10,
+    "revision": "r4"
+  }
+}

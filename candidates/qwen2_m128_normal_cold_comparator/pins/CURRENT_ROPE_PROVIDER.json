@@ -1,0 +1,40 @@
+{
+  "actual_payload_decoded": false,
+  "code_and_tests_changed": false,
+  "legacy256": "old reference diagnostic label; not actual provider capacity",
+  "official_max_position_embeddings": 32768,
+  "provider": {
+    "active_rows": 128,
+    "bytes": 524288,
+    "canonical_positions": 128,
+    "dtype": "float32",
+    "inactive_rows_inclusive": [
+      128,
+      1023
+    ],
+    "public_capacity": 1024,
+    "recipe": "Python math.pow/cos/sin double then one FP32 storage rounding",
+    "role": "rope",
+    "sha256": "f6c6e15e3f480afe2e9ebfb05719ff8d20a77a5a5551aa8a44bf2a49870d77af",
+    "shape": [
+      2,
+      1024,
+      64
+    ]
+  },
+  "source": {
+    "bytes": 42761,
+    "lines": [
+      [
+        337,
+        345
+      ],
+      [
+        458,
+        460
+      ]
+    ],
+    "repository_path": "candidates/qwen2_resident_matrix/ffn_public/check_prefix_numeric.py",
+    "sha256": "edb9c89cff4f26734587ea691e201cb9f458acdef410ebc6185ae7037ca3a699"
+  }
+}

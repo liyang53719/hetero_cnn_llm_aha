@@ -1,0 +1,163 @@
+{
+  "omitted": "private locations, process identifiers, approval/claim contents; original retained privately unchanged",
+  "original_identity": {
+    "bytes": 7429,
+    "sha256": "e3f6657955a35504d0f4c9069ed4d4869bdbc6a63d40237d429f870d09774d0d"
+  },
+  "projection_revision": "r3 replaces absolute non-ELF paths with logical roles; original_identity remains original review hash, not projection hash",
+  "projection_schema": "public_review_projection_v1",
+  "review": {
+    "admission_review": {
+      "bytes": 8165,
+      "sha256": "720cfe027c3b8f5a374062a39f31ab44093e453d44ab6879ed0247c7c4e25209"
+    },
+    "blockers": [],
+    "child_result": {
+      "bytes": 6551,
+      "sha256": "b38c6bef0888e35262a0695f9f520f7c391791986f75404e7f198919ed049f04"
+    },
+    "config": {
+      "bytes": 215841,
+      "sha256": "c971c8ca87cea05469ce06165ba8675b5be4484abb868ef59e88d33ca4c6af44"
+    },
+    "evidence": {
+      "ARTIFACT_CHECKS.json": {
+        "bytes": 6382,
+        "sha256": "f88eb19f7ebd15725469265872dcde8606a8b6edfbae46d026162e85da961fd4"
+      },
+      "REVIEW_SCRIPT_FAILURE.json": {
+        "bytes": 291,
+        "sha256": "69494410914488731209f265d39d00e47af4c6e989261ef2c70fdcdc855d5231"
+      },
+      "review_artifacts.py": {
+        "bytes": 8960,
+        "sha256": "0da82bc9e41a1f1735c3c8339e57418489b9fddda21e3f6b58c6f589c1a4bd8a"
+      },
+      "review_artifacts_v1_preserved.py": {
+        "bytes": 8948,
+        "sha256": "386e69d14280899cc7affe23ec26b576ddef74b04982b263dd9d523e3bbbde11"
+      }
+    },
+    "findings": [
+      "Parent/claim/capability/worker match the exact config, independent admission review, approval and parent/child birth identities.",
+      "Full preflight and postflight both report736 pins/158235944 bytes with zero differences; independent current full rehash agrees.",
+      "All55 original runtime module execution hashes and each observer/extra module code hash recompute by compile-only from pinned full source, without executing those modules.",
+      "All15 runtime role targets and nine inherited service-method filenames/source hashes match exact copied source.",
+      "Original raw module FAIL ledgers were not rewritten. Nine namespace repetition cases preserve every canonical ordered path; only the two exact native-created Cython no-file modules remain, qualified by saved live-object/extension-type association under pinned PyYAML.",
+      "Both raw module lists and complete maps were retained. Original raw list ordering is alphabetical while audit preserves insertion order; exact multiset/count equality is the correct offline comparison.",
+      "Extra imports completed with no task-profile errors/blocked calls; original audit permits only source/runtime reads and new-output writes and rejects explicit Matrix library loading.",
+      "All36 run artifacts remain byte-stable, regular, singly linked and without symlinks; stdout/stderr are empty.",
+      "The reviewer performed read-only metadata/source hashing and compilation identity checks, not another import/native/numerical execution."
+    ],
+    "inventory_qualification": {
+      "accepted_cython_module_count": 2,
+      "accepted_namespace_repetition_count": 9,
+      "actual_yaml_extension_mapping": true,
+      "all_paths_canonical_and_exact_declared_locations": true,
+      "cyaml_enabled": true,
+      "cython_live_object_ids_equal_saved_qualification": true,
+      "descriptors_evaluated": false,
+      "final_matrix_elf_loaded": false,
+      "internal_c_module_creation_call_claimed": false,
+      "namespace_paths_not_deduplicated_or_objects_modified": true,
+      "non_elf_mappings": [
+        "system-locale:LC_CTYPE",
+        "system-gconv-cache:gconv-modules.cache"
+      ],
+      "raw_failure_count": 11,
+      "raw_final_status": "FAIL_MODULE_IDENTITY",
+      "raw_original_failures_preserved": true,
+      "stages": {
+        "00_before_import": {
+          "mapped_files": 10,
+          "mapping_records": 44,
+          "modules": 103,
+          "raw_failures_preserved": 0
+        },
+        "01_after_import_or_failure": {
+          "mapped_files": 19,
+          "mapping_records": 105,
+          "modules": 323,
+          "raw_failures_preserved": 11
+        },
+        "final_normal_inventory": {
+          "mapped_files": 19,
+          "mapping_records": 105,
+          "modules": 331,
+          "raw_failures_preserved": 11
+        }
+      }
+    },
+    "lifecycle": {
+      "affinity": [
+        0
+      ],
+      "caps_evidence": "Frozen launcher installs hard per-process RLIMIT_CPU/AS and affinity; worker claim is written only after checking live /proc/self/limits and sched_getaffinity against exact config/capability. There is no separate archived raw limits text and no measured CPU/RSS usage claim.",
+      "cleanup_evidence": "Parent source verifies owned PID/start identity, reaps worker, records remaining{}; this review reads that terminal evidence and does not query/reuse ended process handles.",
+      "maximum_invocations": 1,
+      "no_retry": true,
+      "parent_failure": null,
+      "remaining_owned_processes": {},
+      "resource": {
+        "address_space_bytes": 268435456,
+        "cpu_seconds": 20,
+        "cpus": 1,
+        "wall_seconds": 25
+      },
+      "spawn_timer_to_cleanup_seconds": 6.405191730998922,
+      "spawn_timer_to_postflight_seconds": 6.527706308988854,
+      "wall_semantics": "Monitor timer begins immediately before spawn setup; 25s check ends at worker exit; cleanup and opaque postflight are separately reported",
+      "worker_returncode": 0
+    },
+    "parent_result": {
+      "bytes": 1080,
+      "sha256": "670b06544cc12937951233bdba82857bea4969348c92f543d02b360df3c69d55"
+    },
+    "passed": true,
+    "qualification_not_granted": [
+      "Matrix/native ABI execution",
+      "fullgraph DUT M128 numerical acceptance",
+      "project rotary256 versus official32768 numerical comparison",
+      "observation runtime noninterference across fullgraph",
+      "RTL, physical timing, cycles or utilization"
+    ],
+    "reviewer_check_failure_preserved": {
+      "kind": "Review helper initially overconstrained module list order; fixed to exact multiset with unchanged counts. Not an actual cold failure.",
+      "original_script": {
+        "bytes": 8948,
+        "sha256": "386e69d14280899cc7affe23ec26b576ddef74b04982b263dd9d523e3bbbde11"
+      },
+      "record": {
+        "bytes": 291,
+        "sha256": "69494410914488731209f265d39d00e47af4c6e989261ef2c70fdcdc855d5231"
+      },
+      "target_rerun": false
+    },
+    "run_scope": "One normal module/class/service-method binding invocation. NumPy/PyYAML native dependency initialization allowed; no custom Matrix ELF, service construction, jobs, user tensor or oracle payload arithmetic. Not fullgraph DUT acceptance.",
+    "schema": "independent-exact-m128-normal-cold-execution-review-v1",
+    "source_freeze": {
+      "bytes": 3902,
+      "sha256": "df3499c3349a531d1338cbc0b83193a7f4becbb753e152bd18a2cc97ed7d813c"
+    },
+    "status": "PASS_EXACT_M128_NORMAL_COLD_EXECUTION_ONLY",
+    "utc": "2026-10-25T03:33:55Z",
+    "verified_counts": {
+      "artifact_bytes": 3269419,
+      "artifact_files": 36,
+      "consistency_checks": 1505,
+      "current_source_runtime_bytes": 158235944,
+      "current_source_runtime_file_rehashes": 736,
+      "extra_actual_module_exec_events": 8,
+      "extra_normal_module_requests": 7,
+      "final_mapped_elf_files": 17,
+      "final_mapped_files": 19,
+      "final_mapped_non_elf_files": 2,
+      "final_mapping_records": 105,
+      "final_module_count": 331,
+      "inherited_service_methods": 9,
+      "normal_runtime_roles": 15,
+      "original_full_module_exec_events": 55,
+      "original_observer_module_exec_events": 2
+    }
+  }
+}

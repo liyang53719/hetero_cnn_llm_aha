@@ -1,0 +1,199 @@
+{
+  "files": [
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/admission.py",
+      "source_identity": {
+        "bytes": 3750,
+        "sha256": "043af03dcfc97912fbdb877e5ee22398a20e27d262e3a427128b0490e3806397"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/cold_worker.py",
+      "source_identity": {
+        "bytes": 6116,
+        "sha256": "e97e9b1408d8734ec6c59e50cb3fc127f25a28d9d45f49d5b6c216069362f73c"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/run_cold.py",
+      "source_identity": {
+        "bytes": 5832,
+        "sha256": "3dc2510de6adde5347a56eeae3c948cbcc8af3b12eb88960b19748067ced1298"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/supervisor_common.py",
+      "source_identity": {
+        "bytes": 6118,
+        "sha256": "64163865f8ea08c93dcd59349357d5b4eddc03d3c7ee10997f0f2f8b2f6a8b71"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/qwen2_fullgraph_normal_binding/DEPENDENCY_PINS.json",
+      "source_identity": {
+        "bytes": 3223,
+        "sha256": "0f367aacb8d258366e2d965c62568ef48e4a140c88b7fe76be010d4dc48707e8"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/qwen2_fullgraph_normal_binding/__init__.py",
+      "source_identity": {
+        "bytes": 72,
+        "sha256": "abc0392a4e82f67d72410cb2d35bc31d913a7f59ff28db1ef868c48fb641ee2d"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/qwen2_fullgraph_normal_binding/adapter.py",
+      "source_identity": {
+        "bytes": 5605,
+        "sha256": "e6d9c9f22b11eff8f506e2412f691c24faf07acee1211a0b5e547aade758a0a3"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/qwen2_fullgraph_normal_binding/dependency.py",
+      "source_identity": {
+        "bytes": 3020,
+        "sha256": "c91dd6173e1f4a5120019dd9e2d5e4903ec985b427e3b36b72f07f58b3aa1983"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/qwen2_fullgraph_normal_binding/initialization.py",
+      "source_identity": {
+        "bytes": 6867,
+        "sha256": "2060f6c122a4e969fc538b636f442b51c0a97f0f7758d723252de2a91bc5762b"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/cold/qwen2_fullgraph_normal_binding/safe_metadata.py",
+      "source_identity": {
+        "bytes": 1861,
+        "sha256": "5b29261c99d15a09ab8578121b6d2b32a223b8c2b16cde70f0bcd89b1c717d6a"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/comparator/comparator.py",
+      "source_identity": {
+        "bytes": 13556,
+        "sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/comparator/test_comparator.py",
+      "source_identity": {
+        "bytes": 4587,
+        "sha256": "a1198aea83d3e9626b76718aca510075efb082698bfbce803edabd0ae741b78b"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/comparator/test_inventory.py",
+      "source_identity": {
+        "bytes": 3422,
+        "sha256": "61dcacbbd3c05929fdbf555e38550382a82a03e6fc0fb19125816500f1c119d0"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/comparator/test_callback.py",
+      "source_identity": {
+        "bytes": 3946,
+        "sha256": "20dae9989f767b023fa1f7d7efa8fe71d2cd2c225350bf2216c8ac61ca9ae71c"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/comparator/R2_CALLBACK_NORMAL.log",
+      "source_identity": {
+        "bytes": 99,
+        "sha256": "77937acb3d883e8b58c2dad35133e6a8b1d1aa123c16365c073a80e193b2c4c9"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/comparator/R2_HELPER_NORMAL.log",
+      "source_identity": {
+        "bytes": 124,
+        "sha256": "849fceb067e34d7a063646308861addfee75baa71509b9aa2c3ada396f01eb82"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/comparator/R2_HELPER_OPTIMIZED.log",
+      "source_identity": {
+        "bytes": 124,
+        "sha256": "410340808feb474e668a5f0ed03ffa37d65aa6af540181df9eab528d305d7c21"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/comparator/R2_INVENTORY_NORMAL.log",
+      "source_identity": {
+        "bytes": 109,
+        "sha256": "d158fadf28b9db4593377a82b467be430e9cff3ef69666842ae6fc8e69f03f9b"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/comparator/R2_INVENTORY_OPTIMIZED.log",
+      "source_identity": {
+        "bytes": 109,
+        "sha256": "2e47ba6be368f1a0d79043f71d1c8db614983d15a329956506df87be3d9a92fc"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/comparator/TEST_CALLBACK.log",
+      "source_identity": {
+        "bytes": 78,
+        "sha256": "edbe47204943cdd0e2c73b656876576a393789ba9a090b2cef9ce504500c3189"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/cold_mock/TEST_NORMAL.stderr",
+      "source_identity": {
+        "bytes": 2016,
+        "sha256": "72bda0f00018b4fc7ff9366d27b75efb3ac1e6d5f8612f1d39e52abbc62605bc"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/cold_mock/TEST_NORMAL.stdout",
+      "source_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/cold_mock/TEST_OPTIMIZED.stderr",
+      "source_identity": {
+        "bytes": 2016,
+        "sha256": "72bda0f00018b4fc7ff9366d27b75efb3ac1e6d5f8612f1d39e52abbc62605bc"
+      }
+    },
+    {
+      "byte_exact": true,
+      "public_path": "candidates/qwen2_m128_normal_cold_comparator/evidence/cold_mock/TEST_OPTIMIZED.stdout",
+      "source_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "public_base_commit": "6e2a47127d0a9f39bbb892cb361c9c5a7fc1aee2",
+  "schema": "byte_exact_sources_and_logical_projections_v1",
+  "scope": "Normal import and comparator source/mock only; no DUT execution"
+}

@@ -1,0 +1,22 @@
+test_blocker_rejected (__main__.ColdPreparationTests.test_blocker_rejected) ... ok
+test_complete_raw_inventories_precede_validation (__main__.ColdPreparationTests.test_complete_raw_inventories_precede_validation) ... ok
+test_config_drift_rejected (__main__.ColdPreparationTests.test_config_drift_rejected) ... ok
+test_exact_current_config_source_only_pins (__main__.ColdPreparationTests.test_exact_current_config_source_only_pins) ... ok
+test_extra_failure_retains_raw_before_validation (__main__.ColdPreparationTests.test_extra_failure_retains_raw_before_validation) ... ok
+test_extra_modules_have_normal_import_not_ast_alias (__main__.ColdPreparationTests.test_extra_modules_have_normal_import_not_ast_alias) ... ok
+test_helper_supervisor_ast_matches_reviewed_source (__main__.ColdPreparationTests.test_helper_supervisor_ast_matches_reviewed_source) ... ok
+test_missing_root_go_rejected (__main__.ColdPreparationTests.test_missing_root_go_rejected) ... ok
+test_no_ml_or_targets_loaded_by_tests (__main__.ColdPreparationTests.test_no_ml_or_targets_loaded_by_tests) ... ok
+test_numeric_mode_rejected (__main__.ColdPreparationTests.test_numeric_mode_rejected) ... ok
+test_original_256_is_as_not_rss (__main__.ColdPreparationTests.test_original_256_is_as_not_rss) ... ok
+test_resource_increase_rejected (__main__.ColdPreparationTests.test_resource_increase_rejected) ... ok
+test_retry_rejected (__main__.ColdPreparationTests.test_retry_rejected) ... ok
+test_same_authorizer_reviewer_rejected (__main__.ColdPreparationTests.test_same_authorizer_reviewer_rejected) ... ok
+test_valid_synthetic_review_does_not_execute (__main__.ColdPreparationTests.test_valid_synthetic_review_does_not_execute) ... ok
+test_worker_claim_precedes_original_adapter (__main__.ColdPreparationTests.test_worker_claim_precedes_original_adapter) ... ok
+test_wrong_action_rejected (__main__.ColdPreparationTests.test_wrong_action_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.018s
+
+OK

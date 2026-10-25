@@ -1,0 +1,106 @@
+{
+  "original": {
+    "bytes": 4562,
+    "sha256": "eb304e3c3e264f01af59cb5234f866bfb5055114e1644c539770758b5372aee1"
+  },
+  "projection": "Reused executable physical keys replaced with ordered logical roles; review script identity omitted. Historical pre-execution limitations remain historical, not current run outcome.",
+  "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+  "config_sha256": "142f344eb54b8ad3656243f5a454f9629e676ad232429bfdad779a8d3c465c48",
+  "freeze_sha256": "e0e09bb7d25452c45b9fc7b34a1cf0b8b5302f9a1ff3416f56a9660598a3b22a",
+  "limits": {
+    "cpu_seconds": 30,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 45,
+    "cpus": 1
+  },
+  "executable_sources": {
+    "launch.py": "6386f4c631df37898fcbe4a764b18b916ac919f7bcc9597f15a3928853396c4b",
+    "runtime_observer.py": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+    "worker.py": "0bc52e38fe9f31b1fb94a657bc8566ad1fc6b7494941478a53ff936f7c998a9e",
+    "admission.py": "ff0dff8bd24394e3aa65d1359b2d14c499acbddbab765e3be3252ed1d3a61953",
+    "run_cold.py": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870",
+    "harness.py": "965973782c1b952ec4b77bfe51ee07b64a138a0847613dff1482fc0a09b0ef96",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+    "cold_import.py": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+    "reference_capture.py": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+    "selective_binding.py": "2e8870a36e1864eaa402e86ec1e8c985072a19fe3a9f830eb562d1bf7d1ac37c",
+    "stage_clock.py": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065",
+    "artifacts.py": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+    "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1"
+  },
+  "independent_checks": {
+    "count": 1747,
+    "full_pins": 1026,
+    "freeze_files": 58,
+    "historical_preserved": 160,
+    "assembled_source_files": 316,
+    "author_mock_executions": 128,
+    "independent_mock_executions": 128,
+    "unique_logical_mock_tests": 64,
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "suite_counts_each_mode": [
+      28,
+      14,
+      22
+    ],
+    "all_six_subprocesses_exit_zero": true,
+    "independent_mock_receipt": {
+      "bytes": 2514,
+      "sha256": "66859e5fb73d59de4b349c658b9ad6c5e8601e5952e62e71ee952a4dbec8198b"
+    },
+    "checks_receipt": {
+      "bytes": 282592,
+      "sha256": "b9b9154eed881c77ac69de9e0013a34da0b798273950d7686907365b170fbb1b"
+    }
+  },
+  "resolved_blocker": "R1 installed-mask non-cancellation failure is recorded, original shared driver terminal ACK/release continues, then actual post-terminal acceptance rejects; tested using exact real drive AST and unchanged candidate bridge. KeyboardInterrupt remains cancellation.",
+  "blockers": [],
+  "scope": {
+    "static_source": true,
+    "stdlib_mock": true,
+    "normal_R4_helper_definitions_loaded_in_mocks": true,
+    "target_cold": false,
+    "native": false,
+    "numerical": false,
+    "fullblock": false,
+    "rtl": false,
+    "actual_execution_authorized": false
+  },
+  "limitations": [
+    "One fixed-order M2 trio is diagnostic only, not a reliable statistical or causal speedup benchmark.",
+    "Exact real owner constructor + selective normal binding combination has not yet run; independent actual execution review remains mandatory after fresh bounded GO.",
+    "Full M128 CPU-limit FAIL and synthetic R4 timing regression preserved; no M128 restart or budget increase authorized.",
+    "No hardware utilization, cycles, 80%/90% inference from Python timings.",
+    "Launcher receipt is not a standalone independently sealed final artifact ledger; retain and externally audit all per-arm raw evidence after execution."
+  ],
+  "reused_executable_sources": [
+    {
+      "ordinal": 0,
+      "logical_role": "selective-r4:monitor.py",
+      "sha256": "b76c48e24963b5219307cda776e1409e1e3c923f6d034f85c87e6f4e95041c16"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "selective-r4:capture.py",
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "selective-r4:service_trace.py",
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "selective-r4:bridge.py",
+      "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "source:runtime_binding.py",
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    }
+  ]
+}

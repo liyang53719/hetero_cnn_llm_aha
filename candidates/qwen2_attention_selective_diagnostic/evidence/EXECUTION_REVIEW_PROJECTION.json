@@ -1,0 +1,162 @@
+{
+  "original": {
+    "bytes": 6145,
+    "sha256": "f8b17dd17aab0a63ffb251521863cf74df15e797caca38d92a302138b433b681"
+  },
+  "projection": "All original review fields retained except private approval/claim identities and reviewer script identity. Reviewer schema-correction history and all scope limits retained.",
+  "status": "PASS_READ_ONLY_M2_SELECTIVE_EXECUTION_CLOSURE_LIMITED",
+  "checks": 22101,
+  "errors": [],
+  "config_sha256": "142f344eb54b8ad3656243f5a454f9629e676ad232429bfdad779a8d3c465c48",
+  "static_review_sha256": "eb304e3c3e264f01af59cb5234f866bfb5055114e1644c539770758b5372aee1",
+  "result_sha256": "f7e6ce6de8c33a339b01b46742ef723765ab735d160fd1fab9abfa75d2e1065c",
+  "parent_sha256": "d4920f509810eafc2d5897e551c8e5368040105bb471e6f0d246641b4634a609",
+  "artifacts": 115,
+  "artifact_bytes": 4222415,
+  "artifact_manifest_sha256": "b3317a5d66daf1223d792a480389e8f04ec689c4d7c41c227259d1a73f92c186",
+  "checks_receipt_sha256": "2fca42ae0176f3ace957db50b5a4245d6ac21982128062a461cc0f1ed389f5e3",
+  "pins_rehashed": 1026,
+  "events": [
+    {
+      "arm": 0,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 1,
+      "last_ticket": 216
+    },
+    {
+      "arm": 1,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 217,
+      "last_ticket": 432
+    },
+    {
+      "arm": 2,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 433,
+      "last_ticket": 648
+    }
+  ],
+  "runtime": [
+    {
+      "phase": "AFTER_NATIVE_LOAD",
+      "modules": 109,
+      "unique_mappings": 11,
+      "unique_ELF": 9
+    },
+    {
+      "phase": "ARM_0_TERMINAL",
+      "modules": 253,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "ARM_1_TERMINAL",
+      "modules": 253,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "ARM_2_TERMINAL",
+      "modules": 259,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "POSTFLIGHT",
+      "modules": 279,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    }
+  ],
+  "worker_cpu_seconds": 6.150630126,
+  "parent_wall_seconds": 6.23116281197872,
+  "clean_owner_intervals": [
+    {
+      "stage": "actual_owner_job_through_terminal_ack_and_monitor_exit",
+      "cpu_ns": 168004826,
+      "wall_ns": 168346021
+    },
+    {
+      "stage": "actual_owner_job_through_terminal_ack_and_monitor_exit",
+      "cpu_ns": 589193066,
+      "wall_ns": 590991806
+    },
+    {
+      "stage": "actual_owner_job_through_terminal_ack_and_monitor_exit",
+      "cpu_ns": 563943544,
+      "wall_ns": 563169788
+    }
+  ],
+  "selective_vs_original_cpu_difference_seconds": -0.025249522,
+  "selective_vs_original_cpu_relative_difference": -0.04285441132465739,
+  "raw_evidence": {
+    "three_outputs_and_reference_byte_equal": true,
+    "three_scores_and_reference_byte_equal": true,
+    "three_writes_equal_and_complete": true,
+    "both_observed_arms_ten_fields_and_reference_byte_presence_shape_equal": true,
+    "original_selective_observation_frequencies_equal": true,
+    "reference_normalizer_frequency_distinction": "DUT original/selective normalizer observed once each; independent reference captures 8/16 identical repetitions. Values/presence match; reference write frequency is intentionally not claimed equal."
+  },
+  "selective_masks": {
+    "installed_and_cleaned": true,
+    "slot": 3,
+    "role_masks": {
+      "run": 36,
+      "work": 36,
+      "consume": 4,
+      "matrix": 36,
+      "op": 4,
+      "tick": 4,
+      "client": 36
+    },
+    "full_normal_module_code_hashes_recomputed_without_execution": 4
+  },
+  "scope": "Single actual M2 fixed-order off/original/selective_r4 trio, no adoption or full-block/RTL/hardware acceptance",
+  "limitations": [
+    "No target/native rerun or independent arithmetic calculation by reviewer; only persisted byte/hash, source, event lifecycle and metadata consistency checks.",
+    "Reference remains original AST recipe with shared exact RNE primitives, not full official Transformers forward. Causal cells only; unobserved padding/sentinels are not measured values.",
+    "One fixed-order trio is not a causal/statistical speedup benchmark; approximately4.285% less selective interval CPU here does not overturn the preserved synthetic R4 regression or justify adoption/M128 extrapolation.",
+    "Parent exit0/group_remaining=false plus source-bound cleanup checks attest cleanup; runtime maps/module lists are snapshots, not complete OS event history. AS1GiB is a cap, no measured peak RSS.",
+    "No standalone native final seal/pre-post complete ledger; external artifact manifest is appended by this independent review, not retroactively a run-native seal.",
+    "Full M128 CPU-limit FAIL preserved. No new run, retry, larger budget, hardware utilization/cycles, or80/90% claim."
+  ],
+  "target_executed_by_reviewer": false,
+  "python_sources_compiled_for_identity_only_not_executed": true,
+  "reviewer_schema_correction": {
+    "initial_attempt_sha256": "daf3f82554a4d9b4368697786d59bc04ab1b2e29ccf1b91f47eccbadcb4381d3",
+    "reason": "Reviewer first assumed u32 frequencies. Source capture._bytes uses little-endian unsigned short H for frequencies. Corrected to u16; additionally DUT report writes counts unique first writes, while reference report writes counts all collector events. Corrected provenance-specific counters, preserving audit error reports; no target evidence changed."
+  }
+}

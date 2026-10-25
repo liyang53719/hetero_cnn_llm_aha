@@ -1,0 +1,221 @@
+{
+  "source_files": [
+    {
+      "role": "wrapper-executable",
+      "public_path": "admission.py",
+      "bytes": 1954,
+      "sha256": "ff0dff8bd24394e3aa65d1359b2d14c499acbddbab765e3be3252ed1d3a61953",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "artifacts.py",
+      "bytes": 1038,
+      "sha256": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "cold_import.py",
+      "bytes": 30697,
+      "sha256": "d5c6c45387aa2f3bd94286a57344a93fc76d5151937ce5cb3eaa433245f5f580",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "harness.py",
+      "bytes": 12293,
+      "sha256": "965973782c1b952ec4b77bfe51ee07b64a138a0847613dff1482fc0a09b0ef96",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "launch.py",
+      "bytes": 5145,
+      "sha256": "6386f4c631df37898fcbe4a764b18b916ac919f7bcc9597f15a3928853396c4b",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "module_inventory.py",
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "reference_capture.py",
+      "bytes": 18962,
+      "sha256": "76563d089a796a9c08fbf354cc83c8b196a6eadc58f12ffc12edaceb5ba9814b",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "run_cold.py",
+      "bytes": 4218,
+      "sha256": "58f96d8d4eba7669610add400c800c00c31b5f21e1412cd3e92c51ec04b71870",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "runtime_closure.py",
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "runtime_observer.py",
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "selective_binding.py",
+      "bytes": 6426,
+      "sha256": "2e8870a36e1864eaa402e86ec1e8c985072a19fe3a9f830eb562d1bf7d1ac37c",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "stage_clock.py",
+      "bytes": 493,
+      "sha256": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065",
+      "adapted": false
+    },
+    {
+      "role": "preparation-mock-test",
+      "public_path": "test_binding_mock.py",
+      "bytes": 16861,
+      "sha256": "fe78d7dd83f42b93fc5cce8743ffde2e4e59a0ef902f93702edc720b23378398",
+      "adapted": false
+    },
+    {
+      "role": "wrapper-executable",
+      "public_path": "worker.py",
+      "bytes": 17323,
+      "sha256": "0bc52e38fe9f31b1fb94a657bc8566ad1fc6b7494941478a53ff936f7c998a9e",
+      "adapted": false
+    },
+    {
+      "role": "selective-r4:monitor.py",
+      "public_path": "reused/selective_r4/monitor.py",
+      "bytes": 13575,
+      "sha256": "b76c48e24963b5219307cda776e1409e1e3c923f6d034f85c87e6f4e95041c16",
+      "adapted": false
+    },
+    {
+      "role": "selective-r4:capture.py",
+      "public_path": "reused/selective_r4/capture.py",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144",
+      "adapted": false
+    },
+    {
+      "role": "selective-r4:service_trace.py",
+      "public_path": "reused/selective_r4/service_trace.py",
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba",
+      "adapted": false
+    },
+    {
+      "role": "selective-r4:bridge.py",
+      "public_path": "reused/selective_r4/bridge.py",
+      "bytes": 8627,
+      "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652",
+      "adapted": false
+    },
+    {
+      "role": "source:runtime_binding.py",
+      "public_path": "reused/source_gate/runtime_binding.py",
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100",
+      "adapted": false
+    }
+  ],
+  "wrapper_executable_count": 13,
+  "preparation_test_source_count": 1,
+  "reused_executable_count": 5,
+  "original_executable_manifest": {
+    "bytes": 1664,
+    "sha256": "e3a4e165af2003914b620894caed9175b20a3ee3a2bcad8d856fd422a86e0602"
+  },
+  "original_reused_executable_manifest": {
+    "bytes": 1040,
+    "sha256": "c0dada47832dc4958a55d4c78c3332f4747aab63806ebbd06a0ebc54231597e1"
+  },
+  "required_external_test_closure": [
+    {
+      "ordinal": 0,
+      "logical_role": "source:test_service_trace.py",
+      "bytes": 15866,
+      "sha256": "6086149ad001bfcc56ce437385781de5ae97b383c5b5852a462bd2ad198fa250"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "source:test_resource_faults.py",
+      "bytes": 8281,
+      "sha256": "d446f2e6e92dc4ddaa79d4709f7628dbb12765eef0da8f5a494cdca9a9e80935"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "source:test_bridge.py",
+      "bytes": 8111,
+      "sha256": "0c3cc3ad0c1f51282e761b7b6dd3471fa6e9dfcbc1936021028551cb861b55ca"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "source:test_stream.py",
+      "bytes": 14405,
+      "sha256": "d81fab933eee362fc757a43d252138d826762415020058997160a044ea59693c"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "source:service_trace.py",
+      "bytes": 11473,
+      "sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "source:bridge.py",
+      "bytes": 8510,
+      "sha256": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "source:stream.py",
+      "bytes": 21232,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "source:reference_functions.py",
+      "bytes": 5745,
+      "sha256": "9d16d949cb39a302250c1563c61b97ff94bb3146407574a97968132d4df109cc"
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "source:harness.py",
+      "bytes": 10396,
+      "sha256": "f727a42bf81b0a1f1ef16c39fed6964cfae88659bde366dbd5571b104b7a86af"
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "source:test_binding_mock.py",
+      "bytes": 16861,
+      "sha256": "fe78d7dd83f42b93fc5cce8743ffde2e4e59a0ef902f93702edc720b23378398"
+    }
+  ],
+  "original_config": {
+    "bytes": 282264,
+    "sha256": "142f344eb54b8ad3656243f5a454f9629e676ad232429bfdad779a8d3c465c48"
+  },
+  "original_freeze": {
+    "bytes": 10277,
+    "sha256": "e0e09bb7d25452c45b9fc7b34a1cf0b8b5302f9a1ff3416f56a9660598a3b22a"
+  },
+  "selective_freeze_sha256": "1b32a63dc1b6c62e53ed1ad7c9af3ec6c69e1639a272968edb15a2669c43e815",
+  "public_adapter_created": false,
+  "standalone_reproduction_claimed": false
+}

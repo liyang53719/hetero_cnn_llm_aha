@@ -1,0 +1,95 @@
+{
+  "original": {
+    "bytes": 5419,
+    "sha256": "987dcb5ae72ffbc6f8f3c540166b41ca7461c1ea41e110ec87cfeb538ddbf233"
+  },
+  "result": {
+    "status": "PASS_BOUNDED_STDLIB_MOCK_ONLY",
+    "total_cpu_seconds": 1.968371,
+    "total_wall_seconds": 2.1490507450071163,
+    "limits": {
+      "cpus": 1,
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "wall_seconds": 45
+    },
+    "unchanged_reviewed_suites_required": [
+      "test_service_trace.py",
+      "test_resource_faults.py"
+    ],
+    "native_or_dut_executed": false,
+    "actual_cold_run": false,
+    "fixture_negative_rerun": false,
+    "tests": [
+      {
+        "test": "test_service_trace.py",
+        "optimized": false,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.215842300967779,
+        "cpu_seconds": 0.170019,
+        "log": "normal_test_service_trace.py.log",
+        "log_sha256": "f3e8c046ea202e3ed8de8a9bcf59e1fb866e1ec7cb4133dcfb9495ba8567cc0a"
+      },
+      {
+        "test": "test_resource_faults.py",
+        "optimized": false,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.16562674898887053,
+        "cpu_seconds": 0.129125,
+        "log": "normal_test_resource_faults.py.log",
+        "log_sha256": "0bfe520772d610b488e917e177d885356306f6941122fbbf796849bef0e19fc0"
+      },
+      {
+        "test": "test_binding_mock.py",
+        "optimized": false,
+        "unchanged_reviewed_suite": false,
+        "returncode": 0,
+        "wall_seconds": 0.36606426700018346,
+        "cpu_seconds": 0.33828199999999997,
+        "log": "normal_test_binding_mock.py.log",
+        "log_sha256": "0259ec0bcff2c111ac8cbca0ff3c0b305dee067e5647ecea670f7143a0fd7ad8"
+      },
+      {
+        "test": "test_service_trace.py",
+        "optimized": true,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.41619335202267393,
+        "cpu_seconds": 0.39194799999999985,
+        "log": "optimized_test_service_trace.py.log",
+        "log_sha256": "2721b9c51286aaacfc5fa05b17afe3e508247e984d7ed50eb6cc6501b80ab01e"
+      },
+      {
+        "test": "test_resource_faults.py",
+        "optimized": true,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.3661425680038519,
+        "cpu_seconds": 0.359978,
+        "log": "optimized_test_resource_faults.py.log",
+        "log_sha256": "b52502e107e47c12ade55744e35f7f0ab726600cba16104a05d81ffb5acd75a5"
+      },
+      {
+        "test": "test_binding_mock.py",
+        "optimized": true,
+        "unchanged_reviewed_suite": false,
+        "returncode": 0,
+        "wall_seconds": 0.6168730320059694,
+        "cpu_seconds": 0.5790190000000002,
+        "log": "optimized_test_binding_mock.py.log",
+        "log_sha256": "4e46f28b32955c5796d855b8bc00af247ef273e2d0b5f2574f319c7a1bb87ee7"
+      }
+    ]
+  },
+  "unique_logical_test_identities": 64,
+  "test_executions": 128,
+  "suite_counts_each_mode": [
+    28,
+    14,
+    22
+  ],
+  "this_packaging_reruns": 0,
+  "projection": "Physical argv omitted; test names, mode, exact original log hashes, CPU/wall and outcomes retained."
+}

@@ -1,0 +1,22 @@
+{
+  "original_r1_preservation": {
+    "bytes": 606,
+    "sha256": "97f96a99903b6f269e0b465f0df7efb25d7eda21db7d07b20b97d1893b0f9ca5"
+  },
+  "status": "PASS_FROZEN_R1_UNCHANGED",
+  "r1_freeze": {
+    "bytes": 9945,
+    "sha256": "309f97a891fcb37b91d0f71342582b2d7fba2fb9e207f835d2a1e0bf58882592"
+  },
+  "r1_file_count": 56,
+  "resolution": "Installed mask failure retained in state and receipt before original driver starts; rejection is post-terminal, explicit KeyboardInterrupt cancellation still escapes.",
+  "blocked_review": {
+    "bytes": 1871,
+    "sha256": "20f423be179e5dbaf5beea3d14653c9c40ae97e09af1b7cfa184c6f1797e7df7"
+  },
+  "r4_fixture_negative_preserved": true,
+  "full_m128_cpu_fail_unchanged": true,
+  "prior_four_arm_diagnostic_commit": "bafb12b4cc0a14ad233602004e27adf65ad820cc",
+  "prior_negative_diagnostic_commit": "0e11a9979843eda86463a8b8a41d708c3125fc8e",
+  "no_runtime_adoption": true
+}

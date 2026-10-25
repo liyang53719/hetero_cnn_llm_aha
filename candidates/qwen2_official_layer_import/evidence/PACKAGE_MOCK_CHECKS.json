@@ -1,0 +1,69 @@
+{
+  "launcher_called": false,
+  "numeric_workload_executed": false,
+  "python_major_minor": [
+    3,
+    12
+  ],
+  "real_socket_operations_executed": false,
+  "results": [
+    {
+      "bytes": 7972,
+      "flags": [
+        "-B"
+      ],
+      "log": "PACKAGE_MOCK_NORMAL.log",
+      "mode": "NORMAL",
+      "ok": true,
+      "returncode": 0,
+      "sha256": "d9edb3c0e18a4dfea3f5a0d24087c58a51ba595b0d57e20fdab87ee6ff6c3f94",
+      "tests": 70
+    },
+    {
+      "bytes": 7972,
+      "flags": [
+        "-B",
+        "-O"
+      ],
+      "log": "PACKAGE_MOCK_OPTIMIZED.log",
+      "mode": "OPTIMIZED",
+      "ok": true,
+      "returncode": 0,
+      "sha256": "b822fe19155a8b84b70931365fb36351aaa229af45abc4e69fe5d3be3eb7e44b",
+      "tests": 70
+    },
+    {
+      "bytes": 7972,
+      "flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "log": "PACKAGE_MOCK_ISOLATED.log",
+      "mode": "ISOLATED",
+      "ok": true,
+      "returncode": 0,
+      "sha256": "62e5deeb7fbea38b56a93c6dcb1556840e4e11911d0fc533d0d9cb798ca96dca",
+      "tests": 70
+    },
+    {
+      "bytes": 7972,
+      "flags": [
+        "-I",
+        "-S",
+        "-B",
+        "-O"
+      ],
+      "log": "PACKAGE_MOCK_ISOLATED_OPTIMIZED.log",
+      "mode": "ISOLATED_OPTIMIZED",
+      "ok": true,
+      "returncode": 0,
+      "sha256": "8dcb1bb0776df027e7dfbc9de201a093143b6fe92a208cb9125c0800c09747a8",
+      "tests": 70
+    }
+  ],
+  "status": "PASS",
+  "target_imports_executed": false,
+  "test_kind": "pure stdlib static synthetic mock only",
+  "worker_run_called": false
+}

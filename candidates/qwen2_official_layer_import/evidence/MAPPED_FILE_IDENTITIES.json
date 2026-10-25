@@ -1,0 +1,278 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "count": 29,
+  "files": [
+    {
+      "actual_identity": {
+        "bytes": 30894944,
+        "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "PINNED_PYTHON_HOME/bin/python3.12"
+    },
+    {
+      "actual_identity": {
+        "bytes": 367708,
+        "sha256": "1257597210f43630e7c8a745ae95127e96b93a43515ac5163cab459ddc1664b3"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/LC_CTYPE"
+    },
+    {
+      "actual_identity": {
+        "bytes": 27028,
+        "sha256": "52c227df9d53248238602c1ddaccd2c8ddc4cc6a61aa45d7c425af590b8806a5"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/gconv-modules.cache"
+    },
+    {
+      "actual_identity": {
+        "bytes": 225672,
+        "sha256": "c8438e4fde1934e61c88311633f00949ff645d5c04cdb8671fa3d78164d2f307"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/ld-linux-x86-64.so.2"
+    },
+    {
+      "actual_identity": {
+        "bytes": 1995216,
+        "sha256": "9792e3cbb541c8f44c7acf5f14f4022ea62998ecc787d326bed4d8b6547dfd92"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libc.so.6"
+    },
+    {
+      "actual_identity": {
+        "bytes": 14408,
+        "sha256": "295fa521a03cd2faa99974f378c9e23dd622021ec7d32bcad4f8ea61aec8a872"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libdl.so.2"
+    },
+    {
+      "actual_identity": {
+        "bytes": 182856,
+        "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libgcc_s.so.1"
+    },
+    {
+      "actual_identity": {
+        "bytes": 977112,
+        "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libm.so.6"
+    },
+    {
+      "actual_identity": {
+        "bytes": 14408,
+        "sha256": "85e21f7dba0394411d00959176fd18b470e575b0b05f1f4f41e5636802ce0500"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libpthread.so.0"
+    },
+    {
+      "actual_identity": {
+        "bytes": 14552,
+        "sha256": "7b7b84d1aedda0e0b2bdfc68844362782132180b8f02be1300e21e77572e514b"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/librt.so.1"
+    },
+    {
+      "actual_identity": {
+        "bytes": 2497768,
+        "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libstdc++.so.6.0.33"
+    },
+    {
+      "actual_identity": {
+        "bytes": 14408,
+        "sha256": "e3981d10efd152a53f083e38f5f9ddde7a049c85d0ab388a5eec91b52fc98a11"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libutil.so.1"
+    },
+    {
+      "actual_identity": {
+        "bytes": 125376,
+        "sha256": "85590dd58edf5445e18bc7193e5ebc01ac5841f1ae187e97705a662e90c6421e"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "SYSTEM_LIB/libz.so.1.3.1"
+    },
+    {
+      "actual_identity": {
+        "bytes": 2833617,
+        "sha256": "c6090048eccc763522c12ef016f81da6b627cb3a044f55cf0479a839c41c0980"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/numpy.libs/libgfortran-040039e1-0352e75f.so.5.0.0"
+    },
+    {
+      "actual_identity": {
+        "bytes": 250985,
+        "sha256": "6ed5137f412781ad7863439fb543613f620b43c32b63292a0029246162f5bbc6"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/numpy.libs/libquadmath-96973f99-934c22de.so.0.0.0"
+    },
+    {
+      "actual_identity": {
+        "bytes": 25034001,
+        "sha256": "ee2039cf13a45e1e89f04d0cea9585657d93ffaa425594e1935161013fdf4e12"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/numpy.libs/libscipy_openblas64_-fdde5778.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 10808937,
+        "sha256": "ba96467ae494babaf7c3458b09cc03c4200c2e10010860d80e452ffb8b01c8cd"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 231833,
+        "sha256": "64bfb8bb8a1a09ca31f7a6e307a87b4c78a75f3489aaf3c61ed8aa4ffada9845"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/numpy/linalg/_umath_linalg.cpython-312-x86_64-linux-gnu.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 25137,
+        "sha256": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/_C.cpython-312-x86_64-linux-gnu.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 1403600,
+        "sha256": "7dc289cfb287f751eb8586c275022dba56979dd9e769cd01b73b2993f3442c84"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/lib/libc10.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 253849,
+        "sha256": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/lib/libgomp.so.1"
+    },
+    {
+      "actual_identity": {
+        "bytes": 41880,
+        "sha256": "6705cdaa351819a15bdbd9688734a658dbf88bbd14224e59eeeaceec081658b3"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/lib/libshm.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 8032,
+        "sha256": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/lib/libtorch.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 443509856,
+        "sha256": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/lib/libtorch_cpu.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 8264,
+        "sha256": "2e5d497259a62960d95f4a7719abaeb24745429b49ffdf58e67672140205eb99"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/lib/libtorch_global_deps.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 30844552,
+        "sha256": "3c30b9ce8bc80e1a58f6c2288309439831b319d5af074bcbdb7c6c9f9d4e0c44"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "FIXED_RUNTIME/torch/lib/libtorch_python.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 1016176,
+        "sha256": "9e4132a8e1ca7f6253a168574c093097fc400b81e9dbe89ff84f30a85a2dece0"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "OFFICIAL_TARGET/safetensors/_safetensors_rust.cpython-312-x86_64-linux-gnu.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 11835024,
+        "sha256": "a7e267dd80940fd3d138b2b9b5518816a01b5ca0c87559c13a539cb993914165"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "OFFICIAL_TARGET/tokenizers/tokenizers.cpython-312-x86_64-linux-gnu.so"
+    },
+    {
+      "actual_identity": {
+        "bytes": 2679264,
+        "sha256": "957a099a4521c1f7669306fb6f79ca63fa4b9a0b4c463f7cac833a65a5c5c0cb"
+      },
+      "exact_mapped_file_pin": true,
+      "exact_sealed_file_pin": true,
+      "logical_file_role": "OFFICIAL_TARGET/yaml/_yaml.cpython-312-x86_64-linux-gnu.so"
+    }
+  ],
+  "scope": "Only distinct file-backed mapped objects at the retained snapshot. Private prefixes replaced by logical roles; mapping addresses, offsets, inode/device fields and raw maps omitted. Hashes link to the local sealed originals; this is not executable content or a lifetime mapping trace.",
+  "source_identities": {
+    "FILE_CLOSURE.json": {
+      "bytes": 1450165,
+      "sha256": "1887dc2a125e520630a334a64017b5025edbff44d39f697998a130651b0dd335"
+    },
+    "MAPS.json": {
+      "bytes": 98046,
+      "sha256": "8d67fa081d8512adc6603fde22fdf9f512efef3430d7bb1897c6af1605db0cf7"
+    }
+  }
+}

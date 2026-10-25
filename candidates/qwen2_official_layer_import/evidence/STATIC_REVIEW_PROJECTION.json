@@ -1,0 +1,304 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "checks": {
+      "RLIMIT_AS_unchanged": true,
+      "all_other_socket_audit_events_except_construction_denied": true,
+      "caller_exact_code_object_and_same_module_globals_required": true,
+      "exact_config_and_artifact_manifest_reverified": true,
+      "exact_loopback_policy_independently_recompiled": true,
+      "foreign_caller_address_and_repeated_probe_denied": true,
+      "full_code_marshal_v2_not_bytecode_only": true,
+      "live_parent_pid_start_ticks_fifo_argv_executable_capability_preserved": true,
+      "module_exact_type_and_metadata_required": true,
+      "no_claim_or_launch_approval_present_at_review": true,
+      "observed_thread_native_socket_listen_send_accept_recv_guarded": true,
+      "one_cpu_30_cpu_45_wall_sampled_1_5_GiB_rss_20ms_and_2s_cleanup_unchanged": true,
+      "original_31_file_baseline_and_cold_FAIL_preserved": true,
+      "original_HAS_IPV6_consistent_with_original_return_required": true,
+      "original_boolean_return_same_socket_and_closed_native_fileno_required": true,
+      "original_launcher_bytes_preserved": true,
+      "owned_pid_start_ticks_cleanup_and_terminal_receipt_preserved": true,
+      "parent_preflight_and_postflight_rehash_all_pins": true,
+      "prebind_allowance_never_asserted_as_syscall_success": true,
+      "profile_presence_checked_at_import_end": true,
+      "python_child_process_spawn_fork_exec_system_denied": true,
+      "raw_network_and_probe_terminal_evidence_written_before_file_closure_validation": true,
+      "review_and_approval_sha_bound_and_different_issuer_required": true,
+      "selected_model_constructor_and_forward_guards_preserved": true,
+      "single_exact_AF_INET6_SOCK_STREAM_proto0_ipv6_loopback_port0_bind_only": true,
+      "single_exclusive_claim_and_fresh_output_required": true,
+      "socket_native_descriptors_and_live_socket_fd_required_at_bind": true,
+      "source_whole_file_and_function_lines_hashes_bound": true
+    },
+    "config_identity": {
+      "bytes": 4759429,
+      "path": "<IMPORT_R2_GATE>/CONFIG.json",
+      "sha256": "fee441468e6a9201a7c604428934309c3140ad8ecf80f8c06f74d240a0be2651"
+    },
+    "config_sha256": "fee441468e6a9201a7c604428934309c3140ad8ecf80f8c06f74d240a0be2651",
+    "declared_limits": [
+      "Python audit plus this worker thread c_call profile are not OS/kernel network isolation. Native code, unprofiled threads, fd passing, and uncovered syscalls are not exhaustively proven absent.",
+      "socket.__new__ construction is permitted without consuming the bind allowance; construction grants no bind/connect/listen/send/accept permission. The only network operation exception is the exact one-shot loopback bind.",
+      "The bind audit event precedes the syscall. It proves authorization of that event, not bind success. False is an allowed unmodified dependency return when all required evidence closes.",
+      "1.5 GiB tree RSS is sampled at 20 ms, not a kernel-enforced memory hard cap. RLIMIT_CPU=30 applies to the worker process including threads, not a kernel aggregate process-tree quota. RLIMIT_AS remains unchanged.",
+      "Module/map collection is a retained post-import snapshot, not a complete lifetime trace. File provenance and selected own-method identities do not prove all live code, transitive graphs, native-generated code or inherited methods.",
+      "No real socket operation, target import, cold launch or numeric workload was executed by this reviewer; runtime success remains unknown."
+    ],
+    "immutable_predecessor": {
+      "baseline": {
+        "bytes": 4414,
+        "path": "<LOCAL_EVIDENCE>/COLD01_IMMUTABLE_BASELINE.json",
+        "sha256": "5c2e5ad24818b90d571144c80dd62ceba0d987b2e2321046d0db070726e9f1cf"
+      },
+      "cold_passed": false,
+      "cold_receipt": {
+        "bytes": 5044,
+        "path": "<PREDECESSOR_GATE>/cold01/RECEIPT.json",
+        "sha256": "78ffbeefd4d88f56f6033dfb3320e67267a6cb6ab4ea601cbee897d171f3a7cf"
+      },
+      "cold_status": "FAIL_IMPORT_ONLY_GATE",
+      "file_count": 31,
+      "mismatches": [],
+      "retrospective_attribution_limit": "Original cold01 logged a denied socket.bind event without caller/address evidence. Source attribution to urllib3._has_ipv6 is a high-confidence static explanation, not retroactive direct proof. The original FAIL remains FAIL."
+    },
+    "independent_full_manifest_hash": {
+      "added_pins": [
+        "<IMPORT_R2_GATE>/gate_common.py",
+        "<IMPORT_R2_GATE>/prepare_gate.py",
+        "<IMPORT_R2_GATE>/run_gate.py",
+        "<IMPORT_R2_GATE>/worker.py"
+      ],
+      "artifact": "<IMPORT_R2_GATE>/REVIEW_STATIC_HASHES.json",
+      "bytes_checked": 916804325,
+      "changed_reused_pins": [],
+      "full_rehash_scope": "Independent static reviewer streamed every file in CONFIG.json; no import, ELF execution, socket, or cold launch.",
+      "identity": {
+        "bytes": 1376,
+        "sha256": "6b82e8041041fd9380c6ebcb1523bb904f3af90db8700c4ea0c0af69f5387a10"
+      },
+      "limits_identical": true,
+      "mapped_manifest_identical": true,
+      "mismatches": {},
+      "native_closure_identical": true,
+      "pins_checked": 18622,
+      "removed_pins": [
+        "<PREDECESSOR_GATE>/gate_common.py",
+        "<PREDECESSOR_GATE>/prepare_gate.py",
+        "<PREDECESSOR_GATE>/run_gate.py",
+        "<PREDECESSOR_GATE>/worker.py"
+      ],
+      "selected_classes_identical": true,
+      "status": "PASS",
+      "unchanged_reused_pins": 18618,
+      "upstream_identical": true,
+      "wall_seconds": 1.0073181549669243
+    },
+    "independent_tests": {
+      "extra_mock_normal": {
+        "identity": {
+          "bytes": 1023,
+          "sha256": "3a74b1716946f70cabd0f9cab5c3034a499a8e7cdd4c07836da5db6286adb8be"
+        },
+        "result": {
+          "actual_socket_operations_executed": false,
+          "automatic_profile_cases": [
+            {
+              "actual_passed": true,
+              "close_result": true,
+              "expected_passed": true,
+              "outcome": true,
+              "probe_return_count": 1,
+              "replace_socket": false
+            },
+            {
+              "actual_passed": true,
+              "close_result": true,
+              "expected_passed": true,
+              "outcome": false,
+              "probe_return_count": 1,
+              "replace_socket": false
+            },
+            {
+              "actual_passed": false,
+              "close_result": false,
+              "expected_passed": false,
+              "outcome": true,
+              "probe_return_count": 1,
+              "replace_socket": false
+            },
+            {
+              "actual_passed": false,
+              "close_result": true,
+              "expected_passed": false,
+              "outcome": true,
+              "probe_return_count": 1,
+              "replace_socket": true
+            }
+          ],
+          "dependency_source_executed": false,
+          "exact_source_policy_reproduced": true,
+          "status": "PASS",
+          "target_imports_executed": false,
+          "unchanged_bytecode_changed_constants_detected": true
+        }
+      },
+      "extra_mock_optimized": {
+        "identity": {
+          "bytes": 1023,
+          "sha256": "3a74b1716946f70cabd0f9cab5c3034a499a8e7cdd4c07836da5db6286adb8be"
+        },
+        "result": {
+          "actual_socket_operations_executed": false,
+          "automatic_profile_cases": [
+            {
+              "actual_passed": true,
+              "close_result": true,
+              "expected_passed": true,
+              "outcome": true,
+              "probe_return_count": 1,
+              "replace_socket": false
+            },
+            {
+              "actual_passed": true,
+              "close_result": true,
+              "expected_passed": true,
+              "outcome": false,
+              "probe_return_count": 1,
+              "replace_socket": false
+            },
+            {
+              "actual_passed": false,
+              "close_result": false,
+              "expected_passed": false,
+              "outcome": true,
+              "probe_return_count": 1,
+              "replace_socket": false
+            },
+            {
+              "actual_passed": false,
+              "close_result": true,
+              "expected_passed": false,
+              "outcome": true,
+              "probe_return_count": 1,
+              "replace_socket": true
+            }
+          ],
+          "dependency_source_executed": false,
+          "exact_source_policy_reproduced": true,
+          "status": "PASS",
+          "target_imports_executed": false,
+          "unchanged_bytecode_changed_constants_detected": true
+        }
+      },
+      "extra_mock_source": {
+        "bytes": 3480,
+        "sha256": "616f8b46e5ac89e519d17a562c9146969dfb96dd6a07af2b005ad2c29b701223"
+      },
+      "normal": {
+        "identity": {
+          "bytes": 7972,
+          "sha256": "1be184c1064a1f432cf3f122939590a9e9ef92c0a054f0857f8051b78310d41e"
+        },
+        "passed": true,
+        "tests": 70
+      },
+      "optimized": {
+        "identity": {
+          "bytes": 7972,
+          "sha256": "dcdd21d4367a8b04ae1f79048977d2cd0fecfe5db20a5ff88f504a0009317508"
+        },
+        "passed": true,
+        "tests": 70
+      }
+    },
+    "limits": {
+      "address_space_limit_changed": false,
+      "affinity_count": 1,
+      "cleanup_seconds": 2,
+      "cpu_seconds_hard": 30,
+      "log_bytes_each": 1048576,
+      "output_bytes": 67108864,
+      "poll_seconds": 0.02,
+      "rss_is_hard_cap": false,
+      "sampled_tree_rss_bytes": 1610612736,
+      "threads_env": 1,
+      "wall_seconds": 45
+    },
+    "loopback_probe": {
+      "address": [
+        "::1",
+        0
+      ],
+      "audit_allowance_is_not_syscall_success": true,
+      "function": {
+        "code": {
+          "bytecode_sha256": "fefabb53d9960c671c9607944209704e9f413ef11540e2c030c6df68f043dd7b",
+          "complete_marshal_sha256": "f8983eb56c20d8ae2cdc7fb267a2c65a03157e4ebf390b63e4687c7066405809",
+          "filename": "<OFFICIAL_TARGET>/urllib3/util/connection.py",
+          "firstlineno": 114,
+          "marshal_version": 2,
+          "name": "_has_ipv6",
+          "nested": [],
+          "qualname": "_has_ipv6"
+        },
+        "file_bytes": 4458,
+        "file_sha256": "d28efdfb935b45fa410f2a1e8463cb982039e38b024a25efc74985f71cb7186d",
+        "filename": "<OFFICIAL_TARGET>/urllib3/util/connection.py",
+        "lines": [
+          114,
+          134
+        ],
+        "name": "_has_ipv6",
+        "source_sha256": "d8ab130d2b780c9623eebffb295089e34150fa55636d9398c1b0f9340a2b09cf",
+        "static_diagnostic_marshal_v4_sha256": "112bc486b6ff69685d18fa3955d44a23163ce9e88a5dcc45880879b2e41c33b7"
+      },
+      "maximum_allowed_bind_events": 1,
+      "module": "urllib3.util.connection",
+      "require_normal_boolean_return_and_closed_socket": true,
+      "require_same_module_globals_and_function_code": true,
+      "required_allowed_bind_events": 1,
+      "scope": "one exact dependency IPv6 loopback port-zero bind; no connect/listen/send/accept permission",
+      "socket_family": 10,
+      "socket_proto": 0,
+      "socket_type": 1
+    },
+    "reviewed_at_utc": "2026-10-25T01:40:09.116007+00:00",
+    "reviewer": "independent_review_loopback_probe_gate_20261025",
+    "schema": 1,
+    "scope": "Independent static source review, pure stdlib/synthetic/mock tests, and streaming hashes only. Approves review gate eligibility for one separately authorized cold import-only attempt. Does not itself launch or grant any model/config construction, forward, numerical reference, matrix or DUT execution.",
+    "source_files": {
+      "gate_common.py": {
+        "bytes": 21835,
+        "path": "<IMPORT_R2_GATE>/gate_common.py",
+        "sha256": "70e283c477c2999ec75e842c5b5a037f1fe984144b974729a0571b314527817f"
+      },
+      "prepare_gate.py": {
+        "bytes": 12436,
+        "path": "<IMPORT_R2_GATE>/prepare_gate.py",
+        "sha256": "086db984dbbe60d7a108b1dfdc33bace81422d1ddce32b7aee35d4d23d9596ef"
+      },
+      "run_gate.py": {
+        "bytes": 16719,
+        "path": "<IMPORT_R2_GATE>/run_gate.py",
+        "sha256": "8f274ef9fa1ef99d2f49e694523e02c2b0d05851cdc064736a55036aec4d7de8"
+      },
+      "test_gate.py": {
+        "bytes": 30656,
+        "path": "<IMPORT_R2_GATE>/test_gate.py",
+        "sha256": "ab54ea7b3dd7c201f9d5f0e4cf19680cdde4946047a412475527c6eb00910269"
+      },
+      "worker.py": {
+        "bytes": 25355,
+        "path": "<IMPORT_R2_GATE>/worker.py",
+        "sha256": "ffb01601c088fbe2ad211576bffe853bc7f39cab8d2d7695bcbe4f1ad93de61e"
+      }
+    },
+    "status": "APPROVED_FOR_SINGLE_IMPORT_ONLY"
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 14311,
+    "sha256": "c7df3d3079c2105eea8a29a194e42246cd78f5492746ec88d4db9ea5cebb3379"
+  }
+}

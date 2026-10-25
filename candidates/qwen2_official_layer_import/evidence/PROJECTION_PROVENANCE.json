@@ -1,0 +1,198 @@
+{
+  "files": {
+    "evidence/CONFIG_SUMMARY.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 4759429,
+        "sha256": "fee441468e6a9201a7c604428934309c3140ad8ecf80f8c06f74d240a0be2651"
+      },
+      "source_role": "import_gate_r2/CONFIG.json"
+    },
+    "evidence/DEPENDENCY_REQUIREMENTS.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 35698,
+        "sha256": "ea7d4556e25cc7beac02978f9ef496c68645cc54a6eee25a5eae2b2c4d8437bb"
+      },
+      "source_role": "official_dependencies/PLAN.json"
+    },
+    "evidence/EXECUTION_REVIEW_PROJECTION.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 16834,
+        "sha256": "b0f18a0060e46b6f4575dd6315826f748365e47ab14443775a4cf820c83e6451"
+      },
+      "source_role": "IMPORT_R2_EXECUTION_REVIEW.json"
+    },
+    "evidence/LOOPBACK_PROBE_OBSERVATIONS.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 15661,
+        "sha256": "af99c9e76984222ba56173e370efe9b94a82928f299984f6c001cc731634c302"
+      },
+      "source_role": "import_gate_r2/cold01/NETWORK_EVENTS.json"
+    },
+    "evidence/MAPPED_FILE_IDENTITIES.json": {
+      "operation": "29_unique_file_identities_with_logical_roles_only",
+      "source_identities": {
+        "FILE_CLOSURE.json": {
+          "bytes": 1450165,
+          "sha256": "1887dc2a125e520630a334a64017b5025edbff44d39f697998a130651b0dd335"
+        },
+        "MAPS.json": {
+          "bytes": 98046,
+          "sha256": "8d67fa081d8512adc6603fde22fdf9f512efef3430d7bb1897c6af1605db0cf7"
+        }
+      },
+      "source_roles": [
+        "import_gate_r2/cold01/MAPS.json",
+        "import_gate_r2/cold01/FILE_CLOSURE.json"
+      ]
+    },
+    "evidence/OFFICIAL_WHEEL_PINS.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 4082,
+        "sha256": "71e3f6bf89254b641ef4472cb26428df26e255379f31e70322faad50fc9bfd94"
+      },
+      "source_role": "official_dependencies/WHEEL_DOWNLOAD_PINS.json"
+    },
+    "evidence/PREDECESSOR_FAILURE_PRESERVED.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 16834,
+        "sha256": "b0f18a0060e46b6f4575dd6315826f748365e47ab14443775a4cf820c83e6451"
+      },
+      "source_role": "IMPORT_R2_EXECUTION_REVIEW.json"
+    },
+    "evidence/PYYAML_PROVENANCE.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 35698,
+        "sha256": "ea7d4556e25cc7beac02978f9ef496c68645cc54a6eee25a5eae2b2c4d8437bb"
+      },
+      "source_role": "official_dependencies/PLAN.json"
+    },
+    "evidence/REAL_IMPORT_RESULT.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 5406,
+        "sha256": "d810b6bac96f3e8bc44332e6ce74b7b9b81f5b9621860c95fce8d675d9a26d62"
+      },
+      "source_role": "import_gate_r2/cold01/RECEIPT.json"
+    },
+    "evidence/REVIEW_TESTS_NORMAL.log": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 7972,
+        "sha256": "1be184c1064a1f432cf3f122939590a9e9ef92c0a054f0857f8051b78310d41e"
+      },
+      "source_role": "import_gate_r2/REVIEW_TESTS_NORMAL.log"
+    },
+    "evidence/REVIEW_TESTS_OPTIMIZED.log": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 7972,
+        "sha256": "dcdd21d4367a8b04ae1f79048977d2cd0fecfe5db20a5ff88f504a0009317508"
+      },
+      "source_role": "import_gate_r2/REVIEW_TESTS_OPTIMIZED.log"
+    },
+    "evidence/SELECTED_BINDINGS.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 569,
+        "sha256": "f96ac6d71127ce6678156e999d63be22e86b6760e8eccea7f73672225e0bf737"
+      },
+      "source_role": "import_gate_r2/cold01/BINDINGS.json"
+    },
+    "evidence/SELECTED_CLASS_IDENTITIES.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 12251,
+        "sha256": "bf56e52f543177f0bd67ebaa74975931ddbb9b9ae02761e51e27f9ebcac865c5"
+      },
+      "source_role": "import_gate_r2/cold01/CLASS_IDENTITIES.json"
+    },
+    "evidence/SOURCE_TOOL_DEPENDENCY_PINS.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 4759429,
+        "sha256": "fee441468e6a9201a7c604428934309c3140ad8ecf80f8c06f74d240a0be2651"
+      },
+      "source_role": "import_gate_r2/CONFIG.json"
+    },
+    "evidence/STATIC_REVIEW_PROJECTION.json": {
+      "operation": "selected_and_sanitized_projection",
+      "source_identity": {
+        "bytes": 14311,
+        "sha256": "c7df3d3079c2105eea8a29a194e42246cd78f5492746ec88d4db9ea5cebb3379"
+      },
+      "source_role": "import_gate_r2/REVIEW.json"
+    },
+    "evidence/TESTS_NORMAL.log": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 7972,
+        "sha256": "ded2f2ef9022f0de6b9482c9480b9467f04996082da020aa16574101f135db8a"
+      },
+      "source_role": "import_gate_r2/TESTS_NORMAL.log"
+    },
+    "evidence/TESTS_OPTIMIZED.log": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 7972,
+        "sha256": "1be184c1064a1f432cf3f122939590a9e9ef92c0a054f0857f8051b78310d41e"
+      },
+      "source_role": "import_gate_r2/TESTS_OPTIMIZED.log"
+    },
+    "gate_common.py": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 21835,
+        "sha256": "70e283c477c2999ec75e842c5b5a037f1fe984144b974729a0571b314527817f"
+      },
+      "source_role": "import_gate_r2/gate_common.py"
+    },
+    "prepare_gate.py": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 12436,
+        "sha256": "086db984dbbe60d7a108b1dfdc33bace81422d1ddce32b7aee35d4d23d9596ef"
+      },
+      "source_role": "import_gate_r2/prepare_gate.py"
+    },
+    "run_gate.py": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 16719,
+        "sha256": "8f274ef9fa1ef99d2f49e694523e02c2b0d05851cdc064736a55036aec4d7de8"
+      },
+      "source_role": "import_gate_r2/run_gate.py"
+    },
+    "test_gate.py": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 30656,
+        "sha256": "ab54ea7b3dd7c201f9d5f0e4cf19680cdde4946047a412475527c6eb00910269"
+      },
+      "source_role": "import_gate_r2/test_gate.py"
+    },
+    "worker.py": {
+      "operation": "byte_exact_copy",
+      "source_identity": {
+        "bytes": 25355,
+        "sha256": "ffb01601c088fbe2ad211576bffe853bc7f39cab8d2d7695bcbe4f1ad93de61e"
+      },
+      "source_role": "import_gate_r2/worker.py"
+    }
+  },
+  "redaction_policy": [
+    "Source Python and historical mock logs are byte-exact.",
+    "JSON projections select necessary fields, replace private host roots with logical role tokens, and remove process-local object addresses.",
+    "Every projection records the original source SHA and byte length; its own bytes are different and cannot be passed off as the original signed/approved/launchable input.",
+    "Raw module dictionaries, maps, 18,622-file manifests, runtime/dependency binaries, wheels, model tensors and user inputs are excluded.",
+    "A retained marshal/code hash was measured against the original source filename and interpreter; replacing a displayed path with a role does not recompute the hash or establish relocation equivalence."
+  ],
+  "schema": 1,
+  "status": "CANDIDATE_NOT_FROZEN_NOT_PUBLISHED"
+}

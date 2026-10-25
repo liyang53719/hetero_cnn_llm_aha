@@ -1,0 +1,87 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "qualification": "Exact historical acquisition metadata. No wheel payload is included; no network request or download occurred while packaging.",
+    "total_bytes": 14847885,
+    "wheel_count": 12,
+    "wheels": [
+      {
+        "bytes": 8998636,
+        "filename": "transformers-4.40.1-py3-none-any.whl",
+        "sha256": "9d5ee0c8142a60501faf9e49a0b42f8e9cb8611823bce4f195a9325a6816337e",
+        "url": "https://files.pythonhosted.org/packages/cf/90/2596ac2ab49c4df6ff1fceaf7f5afb18401ba2f326348ce1a6261a65e7ed/transformers-4.40.1-py3-none-any.whl"
+      },
+      {
+        "bytes": 402757,
+        "filename": "huggingface_hub-0.23.5-py3-none-any.whl",
+        "sha256": "d7a7d337615e11a45cc14a0ce5a605db6b038dc24af42866f731684825226e90",
+        "url": "https://files.pythonhosted.org/packages/2a/6e/46c71094566fe58663bd661a8ce11c26b25d717a11ed8289f6b94ad72a3b/huggingface_hub-0.23.5-py3-none-any.whl"
+      },
+      {
+        "bytes": 3610961,
+        "filename": "tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "sha256": "7c9d5b6c0e7a1e979bec10ff960fae925e947aab95619a6fdb4c1d8ff3708ce3",
+        "url": "https://files.pythonhosted.org/packages/80/54/12047a69f5b382d7ee72044dc89151a2dd0d13b2c9bdcc22654883704d31/tokenizers-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      },
+      {
+        "bytes": 434769,
+        "filename": "safetensors-0.4.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "sha256": "3685ce7ed036f916316b567152482b7e959dc754fcc4a8342333d222e05f407c",
+        "url": "https://files.pythonhosted.org/packages/d9/40/a6f75ea449a9647423ec8b6f72c16998d35aa4b43cb38536ac060c5c7bf5/safetensors-0.4.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      },
+      {
+        "bytes": 53985,
+        "filename": "packaging-24.1-py3-none-any.whl",
+        "sha256": "5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124",
+        "url": "https://files.pythonhosted.org/packages/08/aa/cc0199a5f0ad350994d660967a8efb233fe0416e4639146c089643407ce6/packaging-24.1-py3-none-any.whl"
+      },
+      {
+        "bytes": 790854,
+        "filename": "regex-2024.7.24-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "sha256": "d55588cba7553f0b6ec33130bc3e114b355570b45785cebdc9daed8c637dd440",
+        "url": "https://files.pythonhosted.org/packages/f9/ae/5f23e64f6cf170614237c654f3501a912dfb8549143d4b91d1cd13dba319/regex-2024.7.24-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      },
+      {
+        "bytes": 64928,
+        "filename": "requests-2.32.3-py3-none-any.whl",
+        "sha256": "70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6",
+        "url": "https://files.pythonhosted.org/packages/f9/9b/335f9764261e915ed497fcdeb11df5dfd6f7bf257d4a6a2a686d80da4d54/requests-2.32.3-py3-none-any.whl"
+      },
+      {
+        "bytes": 78351,
+        "filename": "tqdm-4.66.5-py3-none-any.whl",
+        "sha256": "90279a3770753eafc9194a0364852159802111925aa30eb3f9d85b0e805ac7cd",
+        "url": "https://files.pythonhosted.org/packages/48/5d/acf5905c36149bbaec41ccf7f2b68814647347b72075ac0b1fe3022fdc73/tqdm-4.66.5-py3-none-any.whl"
+      },
+      {
+        "bytes": 48543,
+        "filename": "charset_normalizer-3.3.2-py3-none-any.whl",
+        "sha256": "3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc",
+        "url": "https://files.pythonhosted.org/packages/28/76/e6222113b83e3622caa4bb41032d0b1bf785250607392e1b778aca0b8a7d/charset_normalizer-3.3.2-py3-none-any.whl"
+      },
+      {
+        "bytes": 70442,
+        "filename": "idna-3.10-py3-none-any.whl",
+        "sha256": "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3",
+        "url": "https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl"
+      },
+      {
+        "bytes": 126338,
+        "filename": "urllib3-2.2.3-py3-none-any.whl",
+        "sha256": "ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac",
+        "url": "https://files.pythonhosted.org/packages/ce/d9/5f4c13cecde62396b0d3fe530a50ccea91e7dfc1ccf0e09c228841bb5ba8/urllib3-2.2.3-py3-none-any.whl"
+      },
+      {
+        "bytes": 167321,
+        "filename": "certifi-2024.8.30-py3-none-any.whl",
+        "sha256": "922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8",
+        "url": "https://files.pythonhosted.org/packages/12/90/3c9ff0512038035f59d279fddeb79f5f1eccd8859f06d6163c58798b9487/certifi-2024.8.30-py3-none-any.whl"
+      }
+    ]
+  },
+  "projection_note": "The 12 original filename, official URL, SHA256 and byte-count records are retained exactly inside a wrapper; this is metadata, not bundled wheels.",
+  "source_identity": {
+    "bytes": 4082,
+    "sha256": "71e3f6bf89254b641ef4472cb26428df26e255379f31e70322faad50fc9bfd94"
+  }
+}

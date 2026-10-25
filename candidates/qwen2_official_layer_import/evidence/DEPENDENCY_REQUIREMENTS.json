@@ -1,0 +1,265 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "closure_static_findings": {
+      "all_active_base_edges_have_selected_version": true,
+      "all_selected_requires_python_allow_3_12": true,
+      "all_selected_wheels_non_yanked": true,
+      "charset_normalizer_pure_python_chosen": true,
+      "extras_not_selected": true,
+      "linux_skipped_requirement": "colorama; platform_system == \"Windows\"",
+      "new_native_extension_packages": [
+        "tokenizers",
+        "safetensors",
+        "regex"
+      ],
+      "reused_native_extension_packages": [
+        "torch",
+        "numpy",
+        "MarkupSafe",
+        "PyYAML"
+      ],
+      "torch_is_not_transformers_base_dependency": "Torch is explicitly supplied by unchanged fixed11 for the requested Qwen2 PyTorch module. Do not install transformers[torch], accelerate, datasets, torchvision, flash-attn, sentencepiece, scipy or other extras."
+    },
+    "expected_runtime_versions": {
+      "numpy": "2.3.5",
+      "torch": "2.10.0+cpu",
+      "transformers": "4.40.1"
+    },
+    "fixed_runtime_distributions": [
+      {
+        "metadata_sha256": "aed783f71f21438a0fe5adbfefe066081e719c262094cf38c493e5bf2529c96b",
+        "name": "filelock",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.11",
+        "version": "4.2.0"
+      },
+      {
+        "metadata_sha256": "68f5a262767510638e9b1933b1493f2baadc9616fe1e696f62aedd59c8c0a37c",
+        "name": "fsspec",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.10",
+        "version": "2026.9.0"
+      },
+      {
+        "metadata_sha256": "68c5548fb67c4132a13898d9b31ec50c6bea2abdd915d921f214355c3a6499c8",
+        "name": "Jinja2",
+        "requires_dist_without_extras": [
+          "MarkupSafe>=2.0"
+        ],
+        "requires_python": ">=3.7",
+        "version": "3.1.6"
+      },
+      {
+        "metadata_sha256": "66767d76388ece15d49d50dafb655891ef5d868715e7128e7f7d737a70b353c4",
+        "name": "MarkupSafe",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.9",
+        "version": "3.0.4"
+      },
+      {
+        "metadata_sha256": "44b66ea444b9c0d19ae94815d356bf047ae6b680c19268b5c265687cd6a81406",
+        "name": "mpmath",
+        "requires_dist_without_extras": [],
+        "requires_python": null,
+        "version": "1.3.0"
+      },
+      {
+        "metadata_sha256": "ffcf42a343af6ffc54ff9cc4c09cf9638cd73b131370f395abd11b630186c90c",
+        "name": "networkx",
+        "requires_dist_without_extras": [],
+        "requires_python": "!=3.14.1,>=3.12",
+        "version": "3.7"
+      },
+      {
+        "metadata_sha256": "6002f29765e5bc1a3be4a1b92ed56b64968a0fecba73e7f81cd536d0c40f4fa3",
+        "name": "numpy",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.11",
+        "version": "2.3.5"
+      },
+      {
+        "metadata_sha256": "3ef2975718dd31cabdd5829455e9b868ca14dbf79ed8fed2de0af4e87347006e",
+        "name": "setuptools",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.10",
+        "version": "84.0.0"
+      },
+      {
+        "metadata_sha256": "b756c2fbfd5be05ac5bdb0ebca61f55618f30f633ed92d88a5687429313a7595",
+        "name": "sympy",
+        "requires_dist_without_extras": [
+          "mpmath<1.4,>=1.1.0"
+        ],
+        "requires_python": ">=3.9",
+        "version": "1.14.0"
+      },
+      {
+        "metadata_sha256": "d6031f9f56089c835e78a75875c1be87a34bcfdf5a79ef9f069084ed9244a5d4",
+        "name": "torch",
+        "requires_dist_without_extras": [
+          "filelock",
+          "typing-extensions>=4.10.0",
+          "setuptools; python_version >= \"3.12\"",
+          "sympy>=1.13.3",
+          "networkx>=2.5.1",
+          "jinja2",
+          "fsspec>=0.8.5"
+        ],
+        "requires_python": ">=3.10",
+        "version": "2.10.0+cpu"
+      },
+      {
+        "metadata_sha256": "b05084ca1d50879865178d9fff9fabeab61bdfb1f361bfbde95421ffc8f9be46",
+        "name": "typing_extensions",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.9",
+        "version": "4.16.0"
+      }
+    ],
+    "new_wheels": [
+      {
+        "metadata_url": "https://pypi.org/pypi/transformers/4.40.1/json",
+        "name": "transformers",
+        "requires_dist_without_extras": [
+          "filelock",
+          "huggingface-hub<1.0,>=0.19.3",
+          "numpy>=1.17",
+          "packaging>=20.0",
+          "pyyaml>=5.1",
+          "regex!=2019.12.17",
+          "requests",
+          "tokenizers<0.20,>=0.19",
+          "safetensors>=0.4.1",
+          "tqdm>=4.27"
+        ],
+        "requires_python": ">=3.8.0",
+        "sha256": "9d5ee0c8142a60501faf9e49a0b42f8e9cb8611823bce4f195a9325a6816337e",
+        "version": "4.40.1"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/huggingface-hub/0.23.5/json",
+        "name": "huggingface-hub",
+        "requires_dist_without_extras": [
+          "filelock",
+          "fsspec>=2023.5.0",
+          "packaging>=20.9",
+          "pyyaml>=5.1",
+          "requests",
+          "tqdm>=4.42.1",
+          "typing-extensions>=3.7.4.3"
+        ],
+        "requires_python": ">=3.8.0",
+        "sha256": "d7a7d337615e11a45cc14a0ce5a605db6b038dc24af42866f731684825226e90",
+        "version": "0.23.5"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/tokenizers/0.19.1/json",
+        "name": "tokenizers",
+        "requires_dist_without_extras": [
+          "huggingface-hub<1.0,>=0.16.4"
+        ],
+        "requires_python": ">=3.7",
+        "sha256": "7c9d5b6c0e7a1e979bec10ff960fae925e947aab95619a6fdb4c1d8ff3708ce3",
+        "version": "0.19.1"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/safetensors/0.4.5/json",
+        "name": "safetensors",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.7",
+        "sha256": "3685ce7ed036f916316b567152482b7e959dc754fcc4a8342333d222e05f407c",
+        "version": "0.4.5"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/packaging/24.1/json",
+        "name": "packaging",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.8",
+        "sha256": "5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124",
+        "version": "24.1"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/regex/2024.7.24/json",
+        "name": "regex",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.8",
+        "sha256": "d55588cba7553f0b6ec33130bc3e114b355570b45785cebdc9daed8c637dd440",
+        "version": "2024.7.24"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/requests/2.32.3/json",
+        "name": "requests",
+        "requires_dist_without_extras": [
+          "charset-normalizer<4,>=2",
+          "idna<4,>=2.5",
+          "urllib3<3,>=1.21.1",
+          "certifi>=2017.4.17"
+        ],
+        "requires_python": ">=3.8",
+        "sha256": "70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6",
+        "version": "2.32.3"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/tqdm/4.66.5/json",
+        "name": "tqdm",
+        "requires_dist_without_extras": [
+          "colorama; platform_system == \"Windows\""
+        ],
+        "requires_python": ">=3.7",
+        "sha256": "90279a3770753eafc9194a0364852159802111925aa30eb3f9d85b0e805ac7cd",
+        "version": "4.66.5"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/charset-normalizer/3.3.2/json",
+        "name": "charset-normalizer",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.7.0",
+        "sha256": "3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc",
+        "version": "3.3.2"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/idna/3.10/json",
+        "name": "idna",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.6",
+        "sha256": "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3",
+        "version": "3.10"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/urllib3/2.2.3/json",
+        "name": "urllib3",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.8",
+        "sha256": "ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac",
+        "version": "2.2.3"
+      },
+      {
+        "metadata_url": "https://pypi.org/pypi/certifi/2024.8.30/json",
+        "name": "certifi",
+        "requires_dist_without_extras": [],
+        "requires_python": ">=3.6",
+        "sha256": "922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8",
+        "version": "2024.8.30"
+      }
+    ],
+    "platform": {
+      "arch": "x86_64",
+      "current_fixed_runtime_must_remain_unchanged": true,
+      "os": "Linux",
+      "python": "CPython 3.12.14",
+      "selected_binary_tags": "cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64"
+    },
+    "pyyaml": {
+      "requires_dist_without_extras": [],
+      "requires_python": ">=3.8",
+      "version": "6.0.3"
+    },
+    "scope_note": "24 named distributions: 12 new official wheels + 11 preexisting fixed-runtime distributions + authentic PyYAML 6.0.3. Requirements are the historical reviewed base-only Linux selection, not a claim that these pins are current or suitable elsewhere."
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 35698,
+    "sha256": "ea7d4556e25cc7beac02978f9ef496c68645cc54a6eee25a5eae2b2c4d8437bb"
+  }
+}

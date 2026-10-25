@@ -1,0 +1,246 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "classes": {
+      "Qwen2Attention": {
+        "class_module_exact": true,
+        "class_name_exact": true,
+        "expected": {
+          "ast_sha256": "9a5c5a09e61b5ebc5ca652b591ec8b6eeb9e96a2ecdc836c69e77ceb38723dc0",
+          "file_sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+          "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+          "lines": [
+            196,
+            318
+          ],
+          "methods": {
+            "__init__": {
+              "bytecode_sha256": "ba3b5eca2d05098ffb9f861865c17a9d3783d0b550e4664c079b33c2df71f394",
+              "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+              "firstlineno": 202,
+              "marshal_sha256": "54a76a8817bc657362cbf22517a41cf64b120806745b25d54d316d7fc33a8dc3",
+              "name": "__init__",
+              "nested": [],
+              "qualname": "Qwen2Attention.__init__"
+            },
+            "forward": {
+              "bytecode_sha256": "d4e7a9ba30e03702780a7e6a52eddb214119d31969124a1fc362882c39709c72",
+              "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+              "firstlineno": 239,
+              "marshal_sha256": "d041932bddad46e20a8322aad2d0525a20a1cc468c30a9f2cd878eab81ea998a",
+              "name": "forward",
+              "nested": [],
+              "qualname": "Qwen2Attention.forward"
+            }
+          },
+          "name": "Qwen2Attention",
+          "scope": "complete own class source and own method code trees; inherited methods are not selected-class code",
+          "source_sha256": "a0a101b1881544a1c7db1ab03131826f7edb86d74f727c20c8f7993161f3ce18"
+        },
+        "methods": {
+          "__init__": {
+            "bytecode_sha256": "ba3b5eca2d05098ffb9f861865c17a9d3783d0b550e4664c079b33c2df71f394",
+            "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+            "firstlineno": 202,
+            "marshal_sha256": "54a76a8817bc657362cbf22517a41cf64b120806745b25d54d316d7fc33a8dc3",
+            "name": "__init__",
+            "nested": [],
+            "qualname": "Qwen2Attention.__init__"
+          },
+          "forward": {
+            "bytecode_sha256": "d4e7a9ba30e03702780a7e6a52eddb214119d31969124a1fc362882c39709c72",
+            "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+            "firstlineno": 239,
+            "marshal_sha256": "d041932bddad46e20a8322aad2d0525a20a1cc468c30a9f2cd878eab81ea998a",
+            "name": "forward",
+            "nested": [],
+            "qualname": "Qwen2Attention.forward"
+          }
+        },
+        "module": "transformers.models.qwen2.modeling_qwen2",
+        "module_file": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+        "module_file_exact": true,
+        "name": "Qwen2Attention",
+        "own_method_code_exact": true
+      },
+      "Qwen2Config": {
+        "class_module_exact": true,
+        "class_name_exact": true,
+        "expected": {
+          "ast_sha256": "7db50f8d0c01a6ba7f31f6c1881385b32b76ec07d19aae819ed9ff35693de95c",
+          "file_sha256": "71aa00c48b4b586e283033afe11ce9df8c3e9bbc51613e11cd0617b103c5582b",
+          "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/configuration_qwen2.py",
+          "lines": [
+            27,
+            143
+          ],
+          "methods": {
+            "__init__": {
+              "bytecode_sha256": "58c461d72d27fc0e6dba0829fabc95a8332bef09ce85bc786f0a19373f4873fc",
+              "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/configuration_qwen2.py",
+              "firstlineno": 97,
+              "marshal_sha256": "713f086c41043631e30671d988665477c0797568a291cd518953c4721bf6d27c",
+              "name": "__init__",
+              "nested": [],
+              "qualname": "Qwen2Config.__init__"
+            }
+          },
+          "name": "Qwen2Config",
+          "scope": "complete own class source and own method code trees; inherited methods are not selected-class code",
+          "source_sha256": "2daf144870fa4b233ef1246cca1376d6a9519ae8b20cd213018ba8ad4af4aca4"
+        },
+        "methods": {
+          "__init__": {
+            "bytecode_sha256": "58c461d72d27fc0e6dba0829fabc95a8332bef09ce85bc786f0a19373f4873fc",
+            "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/configuration_qwen2.py",
+            "firstlineno": 97,
+            "marshal_sha256": "713f086c41043631e30671d988665477c0797568a291cd518953c4721bf6d27c",
+            "name": "__init__",
+            "nested": [],
+            "qualname": "Qwen2Config.__init__"
+          }
+        },
+        "module": "transformers.models.qwen2.configuration_qwen2",
+        "module_file": "<OFFICIAL_TARGET>/transformers/models/qwen2/configuration_qwen2.py",
+        "module_file_exact": true,
+        "name": "Qwen2Config",
+        "own_method_code_exact": true
+      },
+      "Qwen2DecoderLayer": {
+        "class_module_exact": true,
+        "class_name_exact": true,
+        "expected": {
+          "ast_sha256": "80a91e60df4f20581ef0dba106a46e3abddfb3acd0230aef9b81fa617953523a",
+          "file_sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+          "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+          "lines": [
+            718,
+            792
+          ],
+          "methods": {
+            "__init__": {
+              "bytecode_sha256": "52b7f3f4d5fb3f9c4c2c061f374a7ae05ac681e154560f31e2db9a40796822d3",
+              "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+              "firstlineno": 719,
+              "marshal_sha256": "3b4202776f2e0a0421d1769161f73fb6811dd39fa747ea4bd45821e442aaaad1",
+              "name": "__init__",
+              "nested": [],
+              "qualname": "Qwen2DecoderLayer.__init__"
+            },
+            "forward": {
+              "bytecode_sha256": "ce4dbc3583c8e9a30c05a75a99b5478b368b3fa5d4dbddd57cfaa4dd1c6a53ac",
+              "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+              "firstlineno": 734,
+              "marshal_sha256": "30ee3132584713712a065466873ee10514e3fb8d49bf2e365628675c8ae526b5",
+              "name": "forward",
+              "nested": [],
+              "qualname": "Qwen2DecoderLayer.forward"
+            }
+          },
+          "name": "Qwen2DecoderLayer",
+          "scope": "complete own class source and own method code trees; inherited methods are not selected-class code",
+          "source_sha256": "49adda045edd6a7a7a6ed495de358fbb84a98601db0ca0faaa3c86cad84e2e82"
+        },
+        "methods": {
+          "__init__": {
+            "bytecode_sha256": "52b7f3f4d5fb3f9c4c2c061f374a7ae05ac681e154560f31e2db9a40796822d3",
+            "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+            "firstlineno": 719,
+            "marshal_sha256": "3b4202776f2e0a0421d1769161f73fb6811dd39fa747ea4bd45821e442aaaad1",
+            "name": "__init__",
+            "nested": [],
+            "qualname": "Qwen2DecoderLayer.__init__"
+          },
+          "forward": {
+            "bytecode_sha256": "ce4dbc3583c8e9a30c05a75a99b5478b368b3fa5d4dbddd57cfaa4dd1c6a53ac",
+            "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+            "firstlineno": 734,
+            "marshal_sha256": "30ee3132584713712a065466873ee10514e3fb8d49bf2e365628675c8ae526b5",
+            "name": "forward",
+            "nested": [],
+            "qualname": "Qwen2DecoderLayer.forward"
+          }
+        },
+        "module": "transformers.models.qwen2.modeling_qwen2",
+        "module_file": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+        "module_file_exact": true,
+        "name": "Qwen2DecoderLayer",
+        "own_method_code_exact": true
+      },
+      "Qwen2MLP": {
+        "class_module_exact": true,
+        "class_name_exact": true,
+        "expected": {
+          "ast_sha256": "4bf022fcce3f3b62885dda35fcea64d207ac71e2d42483ae90ca7f038056fef6",
+          "file_sha256": "f1c7a117ced20ee632e4c17d09982863304d6e30bb44f0ccdebd4b27dde259ad",
+          "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+          "lines": [
+            168,
+            180
+          ],
+          "methods": {
+            "__init__": {
+              "bytecode_sha256": "d82b7e48a46a68c8be3436c9beeef6d384379802ecc0ed12de6237145e3dc395",
+              "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+              "firstlineno": 169,
+              "marshal_sha256": "2b83fb24328a0a5263f3a0913f5ebf10e8e26d641abb1ddc8262c62d554becb9",
+              "name": "__init__",
+              "nested": [],
+              "qualname": "Qwen2MLP.__init__"
+            },
+            "forward": {
+              "bytecode_sha256": "db22a3fb8b6f70f6bd63c11e28cff068434a9d4d7cbb695161b875c6594c401b",
+              "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+              "firstlineno": 179,
+              "marshal_sha256": "9add35aa95dc4165405e8375f07a5a4094ddd286d0f0912cfe0a2c764c4194e0",
+              "name": "forward",
+              "nested": [],
+              "qualname": "Qwen2MLP.forward"
+            }
+          },
+          "name": "Qwen2MLP",
+          "scope": "complete own class source and own method code trees; inherited methods are not selected-class code",
+          "source_sha256": "b5ba2be7c93a3a0cc38d4554c340f01905aaa6dde4f3047a015248ff5a9e633a"
+        },
+        "methods": {
+          "__init__": {
+            "bytecode_sha256": "d82b7e48a46a68c8be3436c9beeef6d384379802ecc0ed12de6237145e3dc395",
+            "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+            "firstlineno": 169,
+            "marshal_sha256": "2b83fb24328a0a5263f3a0913f5ebf10e8e26d641abb1ddc8262c62d554becb9",
+            "name": "__init__",
+            "nested": [],
+            "qualname": "Qwen2MLP.__init__"
+          },
+          "forward": {
+            "bytecode_sha256": "db22a3fb8b6f70f6bd63c11e28cff068434a9d4d7cbb695161b875c6594c401b",
+            "filename": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+            "firstlineno": 179,
+            "marshal_sha256": "9add35aa95dc4165405e8375f07a5a4094ddd286d0f0912cfe0a2c764c4194e0",
+            "name": "forward",
+            "nested": [],
+            "qualname": "Qwen2MLP.forward"
+          }
+        },
+        "module": "transformers.models.qwen2.modeling_qwen2",
+        "module_file": "<OFFICIAL_TARGET>/transformers/models/qwen2/modeling_qwen2.py",
+        "module_file_exact": true,
+        "name": "Qwen2MLP",
+        "own_method_code_exact": true
+      }
+    },
+    "errors": {},
+    "requested": [
+      "Qwen2Config",
+      "Qwen2DecoderLayer",
+      "Qwen2Attention",
+      "Qwen2MLP"
+    ],
+    "truncated": false
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 12251,
+    "sha256": "bf56e52f543177f0bd67ebaa74975931ddbb9b9ae02761e51e27f9ebcac865c5"
+  }
+}

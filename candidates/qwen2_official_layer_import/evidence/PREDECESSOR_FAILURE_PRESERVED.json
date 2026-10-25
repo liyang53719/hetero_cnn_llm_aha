@@ -1,0 +1,40 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "added_gate_pins": [
+      "<IMPORT_R2_GATE>/gate_common.py",
+      "<IMPORT_R2_GATE>/prepare_gate.py",
+      "<IMPORT_R2_GATE>/run_gate.py",
+      "<IMPORT_R2_GATE>/worker.py"
+    ],
+    "baseline_identity": {
+      "bytes": 4414,
+      "sha256": "5c2e5ad24818b90d571144c80dd62ceba0d987b2e2321046d0db070726e9f1cf"
+    },
+    "passed": false,
+    "receipt_identity": {
+      "bytes": 5044,
+      "sha256": "78ffbeefd4d88f56f6033dfb3320e67267a6cb6ab4ea601cbee897d171f3a7cf"
+    },
+    "removed_predecessor_gate_pins": [
+      "<PREDECESSOR_GATE>/gate_common.py",
+      "<PREDECESSOR_GATE>/prepare_gate.py",
+      "<PREDECESSOR_GATE>/run_gate.py",
+      "<PREDECESSOR_GATE>/worker.py"
+    ],
+    "retrospective_attribution_limit": "Original cold01 logged a denied socket.bind event without caller/address evidence. Source attribution to urllib3._has_ipv6 is a high-confidence static explanation, not retroactive direct proof. The original FAIL remains FAIL.",
+    "reused_unchanged_pins": 18618,
+    "status": "FAIL_IMPORT_ONLY_GATE",
+    "verification": {
+      "bytes_checked": 11421788,
+      "files_checked": 31,
+      "mismatches": {},
+      "wall_seconds": 0.008722894999664277
+    }
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 16834,
+    "sha256": "b0f18a0060e46b6f4575dd6315826f748365e47ab14443775a4cf820c83e6451"
+  }
+}

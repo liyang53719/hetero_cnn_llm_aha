@@ -1,0 +1,162 @@
+{
+  "additional_source_identities": {
+    "official_dependencies/PYYAML_COPY_RECEIPT.json": {
+      "bytes": 3900,
+      "sha256": "afef3a778ea5818610a4ba515631e604b3fa46139d4466fac8450d24ad00b821"
+    }
+  },
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "copied_file_pins": [
+      {
+        "bytes": 1402,
+        "relative": "_yaml/__init__.py",
+        "sha256": "d3801eff9a2cc5a8692476b75c165401fe308ba5d7df6811f03e97ea9eb81840"
+      },
+      {
+        "bytes": 4,
+        "relative": "pyyaml-6.0.3.dist-info/INSTALLER",
+        "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+      },
+      {
+        "bytes": 2351,
+        "relative": "pyyaml-6.0.3.dist-info/METADATA",
+        "sha256": "03c3b415ed38d09faedc49360e930769b40c58f68585e6de00e2e4916a858d34"
+      },
+      {
+        "bytes": 0,
+        "relative": "pyyaml-6.0.3.dist-info/REQUESTED",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 190,
+        "relative": "pyyaml-6.0.3.dist-info/WHEEL",
+        "sha256": "0f1467590cfe2a9f7ee1ae217431ec4afd0a502dc7eec37d35b79fdfef118d75"
+      },
+      {
+        "bytes": 1101,
+        "relative": "pyyaml-6.0.3.dist-info/licenses/LICENSE",
+        "sha256": "8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4"
+      },
+      {
+        "bytes": 11,
+        "relative": "pyyaml-6.0.3.dist-info/top_level.txt",
+        "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+      },
+      {
+        "bytes": 12311,
+        "relative": "yaml/__init__.py",
+        "sha256": "b19dfcc333d6a75dfd73073901164507252f271b41d3b5f7d85510033a0547a7"
+      },
+      {
+        "bytes": 2679264,
+        "relative": "yaml/_yaml.cpython-312-x86_64-linux-gnu.so",
+        "sha256": "957a099a4521c1f7669306fb6f79ca63fa4b9a0b4c463f7cac833a65a5c5c0cb"
+      },
+      {
+        "bytes": 4883,
+        "relative": "yaml/composer.py",
+        "sha256": "fcaa37d16afa783594794a5ab94193dcb720f503c19ce3d59539c8311189f453"
+      },
+      {
+        "bytes": 28639,
+        "relative": "yaml/constructor.py",
+        "sha256": "90d8247da78b524c10618fd0e857f54f3d97570fe91b5c5513d024ef3faf88b0"
+      },
+      {
+        "bytes": 3851,
+        "relative": "yaml/cyaml.py",
+        "sha256": "e99ac01bd7c062f7557b614aff0d21997a06ed962ca185306a91bc0a20bbd87d"
+      },
+      {
+        "bytes": 2837,
+        "relative": "yaml/dumper.py",
+        "sha256": "3cb72d66563064ba7b5e679477046ebf89d8399d940670c8532f3e94a7cb17ea"
+      },
+      {
+        "bytes": 43006,
+        "relative": "yaml/emitter.py",
+        "sha256": "8e086d694ede170837d5b1b407b45979aff6f40762f422a65eafd08e04290a44"
+      },
+      {
+        "bytes": 2533,
+        "relative": "yaml/error.py",
+        "sha256": "021f73fada072546c4f63f8cf18a7181244ce4280b09cc15cc980b2d1176171a"
+      },
+      {
+        "bytes": 2445,
+        "relative": "yaml/events.py",
+        "sha256": "e74fd392c810884e2ea7e94aa3f57e9c1cbeb402319083d0c58e6a0e1282787c"
+      },
+      {
+        "bytes": 2061,
+        "relative": "yaml/loader.py",
+        "sha256": "5156becc8aa6905482218abf3e04869b835226db4763645fff3438fdbd5f1cdd"
+      },
+      {
+        "bytes": 1440,
+        "relative": "yaml/nodes.py",
+        "sha256": "80f28d8fca4a09d87677882bde021820d9cf39a3b11a12405226211919cf13ce"
+      },
+      {
+        "bytes": 25495,
+        "relative": "yaml/parser.py",
+        "sha256": "8a55a9e6fbe0a07146cef3990c8b45a068c3e83e369e1959ad9ca30306b4a09a"
+      },
+      {
+        "bytes": 6794,
+        "relative": "yaml/reader.py",
+        "sha256": "d1d9b38ab3a20c6e17a38d519ee412ecaf6b918df18c78956ac7c330d4ea08dc"
+      },
+      {
+        "bytes": 14190,
+        "relative": "yaml/representer.py",
+        "sha256": "22e58ff9c016f6c1ca1274b4802a926bcf78935060e1c813c5a0f021c6d143e6"
+      },
+      {
+        "bytes": 9004,
+        "relative": "yaml/resolver.py",
+        "sha256": "f4bf9561f9b89961f1503d558385fbae30d12bfed565de9bf76c33abb63620a6"
+      },
+      {
+        "bytes": 51279,
+        "relative": "yaml/scanner.py",
+        "sha256": "60433788b652690c17710460da5d91e0c753d3318fd85f5e1e42862a71f25906"
+      },
+      {
+        "bytes": 4165,
+        "relative": "yaml/serializer.py",
+        "sha256": "0a1b85826854d35863e31808f0668abfabdf33606e8f06bd8bb7761401e3edc0"
+      },
+      {
+        "bytes": 2573,
+        "relative": "yaml/tokens.py",
+        "sha256": "953408cd2570f0c83dc2fe39f7e4e388e41eeb05738aa69196a5f6ffcf6ba79e"
+      },
+      {
+        "bytes": 2793,
+        "relative": "pyyaml-6.0.3.dist-info/RECORD",
+        "sha256": "a9c0ccbc49ef1a683ce5d972601d050cc0ebcc4ce6b4163fa574b7acdf8479a3"
+      }
+    ],
+    "copy_receipt_identity": {
+      "bytes": 3900,
+      "sha256": "afef3a778ea5818610a4ba515631e604b3fa46139d4466fac8450d24ad00b821"
+    },
+    "metadata_origin_note": "The earlier 18-file YAML-only root lacked dist-info. Real installed pyyaml-6.0.3.dist-info, original RECORD, and _yaml compatibility shim supplied distribution provenance; no fabricated metadata. Existing unhashed pyc entries were deliberately omitted under -B/no-compile.",
+    "metadata_sha256": "03c3b415ed38d09faedc49360e930769b40c58f68585e6de00e2e4916a858d34",
+    "name": "PyYAML",
+    "not_a_new_wheel_pin": true,
+    "record_hashed_entries_verified": 25,
+    "record_sha256": "a9c0ccbc49ef1a683ce5d972601d050cc0ebcc4ce6b4163fa574b7acdf8479a3",
+    "requires_dist_without_extras": [],
+    "requires_python": ">=3.8",
+    "source_role": "authentic preexisting installed distribution metadata plus reviewed YAML payload, copied into the separate official target",
+    "version": "6.0.3"
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 35698,
+    "sha256": "ea7d4556e25cc7beac02978f9ef496c68645cc54a6eee25a5eae2b2c4d8437bb"
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "additional_source_identities": {
+    "IMPORT_R2_EXECUTION_REVIEW.json": {
+      "bytes": 16834,
+      "sha256": "b0f18a0060e46b6f4575dd6315826f748365e47ab14443775a4cf820c83e6451"
+    }
+  },
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "address": [
+      "::1",
+      0
+    ],
+    "allowed_bind": {
+      "audit_event_is_pre_operation": true,
+      "caller": {
+        "bound_function": {
+          "builtin_kind": "python_function"
+        },
+        "bound_function_code_is_frame_code": true,
+        "bound_function_globals_is_frame_globals": true,
+        "code": {
+          "bytecode_sha256": "fefabb53d9960c671c9607944209704e9f413ef11540e2c030c6df68f043dd7b",
+          "complete_marshal_sha256": "f8983eb56c20d8ae2cdc7fb267a2c65a03157e4ebf390b63e4687c7066405809",
+          "filename": "<OFFICIAL_TARGET>/urllib3/util/connection.py",
+          "firstlineno": 114,
+          "marshal_version": 2,
+          "name": "_has_ipv6",
+          "nested": [],
+          "qualname": "_has_ipv6"
+        },
+        "code_exact": true,
+        "evidence_complete": true,
+        "filename_exact": true,
+        "frame": {
+          "builtin_kind": "other"
+        },
+        "module_dict_is_frame_globals": true,
+        "module_file": {
+          "builtin_kind": "str",
+          "scalar": "<OFFICIAL_TARGET>/urllib3/util/connection.py"
+        },
+        "module_metadata_exact": true,
+        "module_name": {
+          "builtin_kind": "str",
+          "scalar": "urllib3.util.connection"
+        },
+        "module_object": {
+          "builtin_kind": "module"
+        },
+        "source_actual": {
+          "bytes": 4458,
+          "sha256": "d28efdfb935b45fa410f2a1e8463cb982039e38b024a25efc74985f71cb7186d"
+        },
+        "source_exact": true,
+        "source_expected": {
+          "bytes": 4458,
+          "sha256": "d28efdfb935b45fa410f2a1e8463cb982039e38b024a25efc74985f71cb7186d"
+        }
+      },
+      "checks": {
+        "caller_exact": true,
+        "exact_address": true,
+        "exact_socket": true,
+        "unused_allowance": true
+      },
+      "decision": "allowed",
+      "event": "socket.bind",
+      "origin": "audit",
+      "reason": "single exact sealed dependency loopback capability probe"
+    },
+    "allowed_bind_count": 1,
+    "audit_allowance_is_not_syscall_success": true,
+    "collection_errors": [],
+    "coverage": "Python socket audit events and observed native socket c_call operations on this profiled thread; not OS isolation or native/unprofiled-thread bypass proof",
+    "denied_events": [],
+    "event_types": [
+      "socket.__new__",
+      "socket.bind"
+    ],
+    "interpretation": "The audit record is a pre-operation authorization event and alone is not syscall-success evidence. Separately retained original full-code function return True, matching original HAS_IPV6=True, and same-socket closed native fileno=-1 complete this reviewed dependency probe. Source control flow supports successful bind under these Python-level observations; there is no independent kernel syscall trace or OS-wide network-isolation proof.",
+    "original_return": {
+      "caller": {
+        "bound_function": {
+          "builtin_kind": "python_function"
+        },
+        "bound_function_code_is_frame_code": true,
+        "bound_function_globals_is_frame_globals": true,
+        "code": {
+          "bytecode_sha256": "fefabb53d9960c671c9607944209704e9f413ef11540e2c030c6df68f043dd7b",
+          "complete_marshal_sha256": "f8983eb56c20d8ae2cdc7fb267a2c65a03157e4ebf390b63e4687c7066405809",
+          "filename": "<OFFICIAL_TARGET>/urllib3/util/connection.py",
+          "firstlineno": 114,
+          "marshal_version": 2,
+          "name": "_has_ipv6",
+          "nested": [],
+          "qualname": "_has_ipv6"
+        },
+        "code_exact": true,
+        "evidence_complete": true,
+        "filename_exact": true,
+        "frame": {
+          "builtin_kind": "other"
+        },
+        "module_dict_is_frame_globals": true,
+        "module_file": {
+          "builtin_kind": "str",
+          "scalar": "<OFFICIAL_TARGET>/urllib3/util/connection.py"
+        },
+        "module_metadata_exact": true,
+        "module_name": {
+          "builtin_kind": "str",
+          "scalar": "urllib3.util.connection"
+        },
+        "module_object": {
+          "builtin_kind": "module"
+        },
+        "source_actual": {
+          "bytes": 4458,
+          "sha256": "d28efdfb935b45fa410f2a1e8463cb982039e38b024a25efc74985f71cb7186d"
+        },
+        "source_exact": true,
+        "source_expected": {
+          "bytes": 4458,
+          "sha256": "d28efdfb935b45fa410f2a1e8463cb982039e38b024a25efc74985f71cb7186d"
+        }
+      },
+      "closed_fd_at_return": true,
+      "exact_bool_return": true,
+      "passed": true,
+      "same_bound_socket": true
+    },
+    "original_return_value": true,
+    "probe_return_count": 1,
+    "socket_at_bind": {
+      "exact_socket_type": true,
+      "family": 10,
+      "fileno": 3,
+      "proto": 0,
+      "type": 1
+    },
+    "socket_at_original_return": {
+      "exact_socket_type": true,
+      "family": 10,
+      "fileno": -1,
+      "proto": 0,
+      "type": 1
+    }
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 15661,
+    "sha256": "af99c9e76984222ba56173e370efe9b94a82928f299984f6c001cc731634c302"
+  }
+}

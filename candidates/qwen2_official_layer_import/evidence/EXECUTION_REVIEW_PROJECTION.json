@@ -1,0 +1,362 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "actual_bindings": {
+      "checks": {
+        "ACT2FN_raw_silu_class_is_torch_nn_SiLU": true,
+        "MLP_global_binding_identity": true,
+        "Qwen2Config_base_is_PretrainedConfig": true,
+        "Qwen2DecoderLayer_base_is_torch_nn_Module": true,
+        "attention_registry_exact_keys": true,
+        "eager_registry_identity": true,
+        "flash_registry_identity": true,
+        "modeling_ACT2FN_is_activations_mapping": true,
+        "sdpa_registry_identity": true
+      },
+      "passed": true,
+      "scope": "listed direct bases and registry identities only; no construction and no complete dynamic globals identity claim"
+    },
+    "actual_bindings_qualification": "These nine checks are actual object-identity checks on module dictionaries, bases, registry targets and raw ACT2FN silu. They are not a complete globals attestation. In particular, this selected-class evidence does not attest every selected method __globals__ to the module dictionary, inherited method code, the full transitive globals/object graph, or all live code. The loopback function alone has explicit function-code/frame-globals/module-dictionary identity evidence.",
+    "bound_inputs": {
+      "CONFIG.json": {
+        "bytes": 4759429,
+        "sha256": "fee441468e6a9201a7c604428934309c3140ad8ecf80f8c06f74d240a0be2651"
+      },
+      "REVIEW.json": {
+        "bytes": 14311,
+        "sha256": "c7df3d3079c2105eea8a29a194e42246cd78f5492746ec88d4db9ea5cebb3379"
+      },
+      "cold01/RECEIPT.json": {
+        "bytes": 5406,
+        "sha256": "d810b6bac96f3e8bc44332e6ce74b7b9b81f5b9621860c95fce8d675d9a26d62"
+      }
+    },
+    "checks": {
+      "18618_original_reused_pins_unchanged": true,
+      "all_31_original_failure_baseline_files_unchanged": true,
+      "all_maps_independently_parse_exact": true,
+      "all_observed_non_gate_files_use_original_pins": true,
+      "all_receipt_artifacts_exact": true,
+      "approval_bound_and_copy_semantically_exact": true,
+      "bind_and_return_full_code_source_caller_module_globals_identity": true,
+      "bind_audit_event_exactly_retained": true,
+      "dynamic_47_entries_remain_diagnostic_not_proven": true,
+      "exact_ipv6_socket_address_and_live_fd": true,
+      "exact_nonoptimized_isolated_argv_chain": true,
+      "exact_parent_supplied_config_review_receipt_hashes": true,
+      "exactly_four_selected_classes": true,
+      "exactly_one_bind_one_return_and_no_denials": true,
+      "independent_all_18622_pins_exact": true,
+      "independent_module_map_references_and_file_pins_exact": true,
+      "launcher_completed_with_exit_zero": true,
+      "live_parent_pid_start_chain_consistent": true,
+      "mapped_manifest_unchanged": true,
+      "nine_actual_module_dictionary_binding_checks_pass": true,
+      "no_original_identity_or_target_argv_in_current_proc_namespace": true,
+      "normal_import_success_without_numeric_claim": true,
+      "one_use_no_retry_independent_issuer": true,
+      "only_four_gate_path_pins_replaced": true,
+      "original_failure_not_reinterpreted": true,
+      "original_true_bool_return_same_socket_closed_native_fd": true,
+      "probe_independent_whole_source_lines_and_complete_code_exact": true,
+      "receipt_manifest_exhausts_run_files_except_receipt": true,
+      "recorded_resource_limits_respected": true,
+      "runtime_full_preflight_and_postflight_consistent": true,
+      "sealed_total_byte_count_consistent": true,
+      "selected_own_source_and_recorded_recursive_method_code_exact:Qwen2Attention": true,
+      "selected_own_source_and_recorded_recursive_method_code_exact:Qwen2Config": true,
+      "selected_own_source_and_recorded_recursive_method_code_exact:Qwen2DecoderLayer": true,
+      "selected_own_source_and_recorded_recursive_method_code_exact:Qwen2MLP": true,
+      "single_claim_output_matches": true,
+      "snapshot_counts_not_truncated": true,
+      "terminal_original_HAS_IPV6_matches_return_and_module": true,
+      "three_upstream_files_exact": true,
+      "worker_exit_zero_reaped_no_tracked_residue": true,
+      "worker_pid_start_group_chain_consistent": true
+    },
+    "dynamic_diagnostics": {
+      "all_live_code_identity_proven": false,
+      "code_origin_proven": false,
+      "diagnostic_entries": 47,
+      "direct_class_own_method_inventories": 91,
+      "direct_python_function_code_trees": 0,
+      "member_collection_errors": [],
+      "module_dictionary_inventories": 45,
+      "opaque_nonmodule_entries": [
+        "typing.io",
+        "typing.re"
+      ],
+      "qualification": "45 no-file dynamic module dictionaries retain all observed member names/types and directly inspectable Python function/class-own-method code trees. typing.io and typing.re are non-module entries and retain metadata, not dictionary inventories. None of these is elevated to file provenance or complete live-code identity; native-generated code, opaque metatypes, transitive graphs and inherited methods remain unproven.",
+      "retained_dictionary_members": 1067
+    },
+    "independent_full_manifest": {
+      "bytes_checked": 916804325,
+      "files_checked": 18622,
+      "mismatches": {},
+      "wall_seconds": 1.0838079680106603
+    },
+    "issues": [],
+    "loopback_probe": {
+      "allowed_bind_count": 1,
+      "caller_complete_marshal_sha256": "f8983eb56c20d8ae2cdc7fb267a2c65a03157e4ebf390b63e4687c7066405809",
+      "caller_module": "urllib3.util.connection",
+      "coverage": "Python socket audit events and observed native socket c_call operations on this profiled thread; not OS isolation or native/unprofiled-thread bypass proof",
+      "event_types": [
+        "socket.__new__",
+        "socket.bind"
+      ],
+      "fd_at_original_return": -1,
+      "fd_at_prebind_audit": 3,
+      "interpretation": "The audit record is a pre-operation authorization event and alone is not syscall-success evidence. Separately retained original full-code function return True, matching original HAS_IPV6=True, and same-socket closed native fileno=-1 complete this reviewed dependency probe. Source control flow supports successful bind under these Python-level observations; there is no independent kernel syscall trace or OS-wide network-isolation proof.",
+      "original_HAS_IPV6": true,
+      "original_boolean_return": true,
+      "policy": {
+        "address": [
+          "::1",
+          0
+        ],
+        "audit_allowance_is_not_syscall_success": true,
+        "function": {
+          "code": {
+            "bytecode_sha256": "fefabb53d9960c671c9607944209704e9f413ef11540e2c030c6df68f043dd7b",
+            "complete_marshal_sha256": "f8983eb56c20d8ae2cdc7fb267a2c65a03157e4ebf390b63e4687c7066405809",
+            "filename": "<OFFICIAL_TARGET>/urllib3/util/connection.py",
+            "firstlineno": 114,
+            "marshal_version": 2,
+            "name": "_has_ipv6",
+            "nested": [],
+            "qualname": "_has_ipv6"
+          },
+          "file_bytes": 4458,
+          "file_sha256": "d28efdfb935b45fa410f2a1e8463cb982039e38b024a25efc74985f71cb7186d",
+          "filename": "<OFFICIAL_TARGET>/urllib3/util/connection.py",
+          "lines": [
+            114,
+            134
+          ],
+          "name": "_has_ipv6",
+          "source_sha256": "d8ab130d2b780c9623eebffb295089e34150fa55636d9398c1b0f9340a2b09cf",
+          "static_diagnostic_marshal_v4_sha256": "112bc486b6ff69685d18fa3955d44a23163ce9e88a5dcc45880879b2e41c33b7"
+        },
+        "maximum_allowed_bind_events": 1,
+        "module": "urllib3.util.connection",
+        "require_normal_boolean_return_and_closed_socket": true,
+        "require_same_module_globals_and_function_code": true,
+        "required_allowed_bind_events": 1,
+        "scope": "one exact dependency IPv6 loopback port-zero bind; no connect/listen/send/accept permission",
+        "socket_family": 10,
+        "socket_proto": 0,
+        "socket_type": 1
+      },
+      "probe_return_count": 1
+    },
+    "module_checks": {
+      "module_metadata_errors_absent:": {
+        "checked": 1671,
+        "passed": true
+      },
+      "module_origin_absolute:": {
+        "checked": 3237,
+        "passed": true
+      }
+    },
+    "observed_origins": {
+      "independent_closure_mismatches": [],
+      "map_kinds": {
+        "anonymous": 22,
+        "file": 145,
+        "named_nonfile": 5
+      },
+      "map_lines": 172,
+      "module_kinds": {
+        "built-in": 65,
+        "dynamic_no_file_unproven": 45,
+        "file_backed": 1559,
+        "non_module_entry": 2
+      },
+      "nonexistent_cached_metadata_entries": 1102,
+      "observed_new_gate_paths": [
+        "<IMPORT_R2_GATE>/gate_common.py",
+        "<IMPORT_R2_GATE>/worker.py"
+      ],
+      "observed_paths_with_original_reused_pins": 1693,
+      "scope": "Every retained file/spec/cache origin that exists and each file-backed map resolves to the exact sealed per-file pin; all file-backed maps also match the unchanged mapped-file manifest. Nonexistent __cached__ metadata is not claimed to have been loaded. Anonymous/named nonfile mappings and transient lifetime state are not source-attested.",
+      "sys_modules_entries": 1671,
+      "unique_file_backed_map_paths": 29,
+      "unique_observed_file_paths": 1695
+    },
+    "passed": true,
+    "predecessor": {
+      "added_gate_pins": [
+        "<IMPORT_R2_GATE>/gate_common.py",
+        "<IMPORT_R2_GATE>/prepare_gate.py",
+        "<IMPORT_R2_GATE>/run_gate.py",
+        "<IMPORT_R2_GATE>/worker.py"
+      ],
+      "baseline_identity": {
+        "bytes": 4414,
+        "sha256": "5c2e5ad24818b90d571144c80dd62ceba0d987b2e2321046d0db070726e9f1cf"
+      },
+      "passed": false,
+      "receipt_identity": {
+        "bytes": 5044,
+        "sha256": "78ffbeefd4d88f56f6033dfb3320e67267a6cb6ab4ea601cbee897d171f3a7cf"
+      },
+      "removed_predecessor_gate_pins": [
+        "<PREDECESSOR_GATE>/gate_common.py",
+        "<PREDECESSOR_GATE>/prepare_gate.py",
+        "<PREDECESSOR_GATE>/run_gate.py",
+        "<PREDECESSOR_GATE>/worker.py"
+      ],
+      "retrospective_attribution_limit": "Original cold01 logged a denied socket.bind event without caller/address evidence. Source attribution to urllib3._has_ipv6 is a high-confidence static explanation, not retroactive direct proof. The original FAIL remains FAIL.",
+      "reused_unchanged_pins": 18618,
+      "status": "FAIL_IMPORT_ONLY_GATE",
+      "verification": {
+        "bytes_checked": 11421788,
+        "files_checked": 31,
+        "mismatches": {},
+        "wall_seconds": 0.008722894999664277
+      }
+    },
+    "process_evidence": {
+      "cleanup_signaled_pids": [],
+      "launcher_exit": "0",
+      "limits": "Retained launcher/worker evidence establishes PID plus start-time consistency, wait/reap, and no tracked live residue at receipt. Later proc inspection is only the reviewer namespace snapshot; it is not a machine-wide lifetime trace and does not turn PID reuse into residue.",
+      "reaped_descendants": [],
+      "remaining_tracked_live_processes": {},
+      "worker_reaped": true,
+      "worker_returncode": 0
+    },
+    "receipt_artifacts": {
+      "bytes_checked": 6591472,
+      "files_checked": 21,
+      "mismatches": {},
+      "wall_seconds": 0.005435342027340084
+    },
+    "recorded_postflight": {
+      "bytes_checked": 916804325,
+      "differences": {},
+      "files_checked": 18622,
+      "passed": true,
+      "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+      "wall_seconds": 0.9055280330358073
+    },
+    "recorded_preflight": {
+      "bytes_checked": 916804325,
+      "files_checked": 18622,
+      "wall_seconds": 0.8735723300487734,
+      "worker_started": false
+    },
+    "remaining_qualification": {
+      "full_live_code_identity_proven": false,
+      "not_granted_or_proven": [
+        "No new import attempt or retry is authorized; the claim is consumed.",
+        "No config/model construction, user tensor computation, forward, numerical reference, DUT/matrix comparison or native numeric workload was executed or qualified by this review.",
+        "This import-only PASS is not a numerical PASS, equivalence result, performance/QoR result, or proof of all live code and all dynamic globals.",
+        "Any later execution requires its own bounded scope, applicable authorization/review and terminal evidence; existing identity and resource limits must not be silently widened."
+      ],
+      "numeric_pass": false,
+      "satisfied": "The separately authorized single normal import-only attempt succeeded and its retained process, source-file, map, selected-class, selected-binding and exact one-shot probe evidence is consistent and unchanged."
+    },
+    "resources": {
+      "cpu_usage_children": {
+        "ru_maxrss_bytes_linux": 299376640,
+        "ru_maxrss_note": "RUSAGE_CHILDREN high-water counter; not summed tree RSS",
+        "system_cpu_seconds": 0.310691,
+        "user_cpu_seconds": 4.764286
+      },
+      "limits": {
+        "address_space_limit_changed": false,
+        "affinity_count": 1,
+        "cleanup_seconds": 2,
+        "cpu_seconds_hard": 30,
+        "log_bytes_each": 1048576,
+        "output_bytes": 67108864,
+        "poll_seconds": 0.02,
+        "rss_is_hard_cap": false,
+        "sampled_tree_rss_bytes": 1610612736,
+        "threads_env": 1,
+        "wall_seconds": 45
+      },
+      "overall_wall_seconds": 7.0480508679756895,
+      "peak_sampled_tree_rss_bytes": 294002688,
+      "qualifications": [
+        "RSS is sampled every 20 ms, not a kernel hard memory cap.",
+        "RLIMIT_CPU=30 is per worker process including threads, not an aggregate process-tree quota.",
+        "Parent full-manifest preflight/postflight are outside the worker wall budget."
+      ],
+      "rlimit_as_unchanged": [
+        -1,
+        -1
+      ],
+      "worker_wall_seconds": 5.2409047280089
+    },
+    "reviewed_at_utc": "2026-10-25T01:44:27.637447+00:00",
+    "reviewer": "independent_verify_normal_import_receipt_20261025",
+    "reviewer_execution": {
+      "dependency_source_executed": false,
+      "forward": false,
+      "model_or_config_construction": false,
+      "native_workload": false,
+      "numeric_workload": false,
+      "predecessor_files_modified": false,
+      "run_files_modified": false,
+      "socket_operations": false,
+      "static_probe_compile_only": true,
+      "target_imports": false
+    },
+    "schema": 1,
+    "scope": "Independent read-only review of the already completed r2 cold01 import-only run. Read JSON/source/proc metadata, independently stream-hashed the full sealed manifest and all retained artifacts, parsed map/module evidence, and statically compiled the exact probe source without executing it. Did not import target dependencies, rerun the worker, create a socket, construct a config/model, call forward, run numerical work, run an ELF/ldd/native workload, or alter either run directory.",
+    "selected_classes": {
+      "Qwen2Attention": {
+        "method_names": [
+          "__init__",
+          "forward"
+        ],
+        "passed": true,
+        "source_lines": [
+          196,
+          318
+        ]
+      },
+      "Qwen2Config": {
+        "method_names": [
+          "__init__"
+        ],
+        "passed": true,
+        "source_lines": [
+          27,
+          143
+        ]
+      },
+      "Qwen2DecoderLayer": {
+        "method_names": [
+          "__init__",
+          "forward"
+        ],
+        "passed": true,
+        "source_lines": [
+          718,
+          792
+        ]
+      },
+      "Qwen2MLP": {
+        "method_names": [
+          "__init__",
+          "forward"
+        ],
+        "passed": true,
+        "source_lines": [
+          168,
+          180
+        ]
+      }
+    },
+    "status": "PASS_IMPORT_ONLY_EXECUTION_EVIDENCE_WITH_DECLARED_LIMITS"
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 16834,
+    "sha256": "b0f18a0060e46b6f4575dd6315826f748365e47ab14443775a4cf820c83e6451"
+  }
+}

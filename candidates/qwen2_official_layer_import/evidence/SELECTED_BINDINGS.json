@@ -1,0 +1,23 @@
+{
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "checks": {
+      "ACT2FN_raw_silu_class_is_torch_nn_SiLU": true,
+      "MLP_global_binding_identity": true,
+      "Qwen2Config_base_is_PretrainedConfig": true,
+      "Qwen2DecoderLayer_base_is_torch_nn_Module": true,
+      "attention_registry_exact_keys": true,
+      "eager_registry_identity": true,
+      "flash_registry_identity": true,
+      "modeling_ACT2FN_is_activations_mapping": true,
+      "sdpa_registry_identity": true
+    },
+    "passed": true,
+    "scope": "listed direct bases and registry identities only; no construction and no complete dynamic globals identity claim"
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 569,
+    "sha256": "f96ac6d71127ce6678156e999d63be22e86b6760e8eccea7f73672225e0bf737"
+  }
+}

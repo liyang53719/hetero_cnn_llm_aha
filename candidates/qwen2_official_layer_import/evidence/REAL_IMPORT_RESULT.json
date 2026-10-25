@@ -1,0 +1,120 @@
+{
+  "additional_source_identities": {
+    "import_gate_r2/cold01/WORKER_RESULT.json": {
+      "bytes": 4777,
+      "sha256": "be9afadcf381f0b10a4ace299e74fe241e3cf5b52905c011c18cf10d1b2c5571"
+    }
+  },
+  "artifact_kind": "SANITIZED_READ_ONLY_EVIDENCE_PROJECTION",
+  "evidence": {
+    "approval_sha256": "a2df261327102565659643402c9707da98df53e60ed974605556cf22c1965cd8",
+    "claim_consumed": true,
+    "config_sha256": "fee441468e6a9201a7c604428934309c3140ad8ecf80f8c06f74d240a0be2651",
+    "cpu_usage_children": {
+      "ru_maxrss_bytes_linux": 299376640,
+      "ru_maxrss_note": "RUSAGE_CHILDREN high-water counter; not summed tree RSS",
+      "system_cpu_seconds": 0.310691,
+      "user_cpu_seconds": 4.764286
+    },
+    "diagnostic_counts": {
+      "no_file_module_dictionary_entries": 45,
+      "opaque_nonmodule_metadata_entries": 2,
+      "opaque_nonmodule_names": [
+        "typing.io",
+        "typing.re"
+      ],
+      "total_unproven_diagnostic_entries": 47
+    },
+    "dut_or_matrix_executed": false,
+    "forward_executed": false,
+    "full_live_code_identity_proven": false,
+    "limit_reason": null,
+    "limits": {
+      "address_space_limit_changed": false,
+      "affinity_count": 1,
+      "cleanup_seconds": 2,
+      "cpu_seconds_hard": 30,
+      "log_bytes_each": 1048576,
+      "output_bytes": 67108864,
+      "poll_seconds": 0.02,
+      "rss_is_hard_cap": false,
+      "sampled_tree_rss_bytes": 1610612736,
+      "threads_env": 1,
+      "wall_seconds": 45
+    },
+    "model_instance_created": false,
+    "no_retry": true,
+    "numeric_pass": false,
+    "overall_wall_seconds": 7.0480508679756895,
+    "passed": true,
+    "peak_sampled_tree_rss_bytes": 294002688,
+    "postflight": {
+      "bytes_checked": 916804325,
+      "differences": {},
+      "files_checked": 18622,
+      "passed": true,
+      "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+      "wall_seconds": 0.9055280330358073
+    },
+    "preflight": {
+      "bytes_checked": 916804325,
+      "files_checked": 18622,
+      "wall_seconds": 0.8735723300487734,
+      "worker_started": false
+    },
+    "remaining_tracked_live_processes": {},
+    "review_sha256": "c7df3d3079c2105eea8a29a194e42246cd78f5492746ec88d4db9ea5cebb3379",
+    "rlimit_as_changed": false,
+    "rlimit_cpu_scope": "worker process including threads; Python subprocess/fork/spawn/exec/system audit events are denied; not a kernel aggregate tree CPU quota",
+    "rss_is_hard_cap": false,
+    "status": "PASS_IMPORT_ONLY_WITH_DECLARED_IDENTITY_LIMITS",
+    "worker_observations": {
+      "all_live_code_objects_identity_proven": false,
+      "diagnostic_limits": [
+        "Every sys.modules entry and every process-map line at this snapshot is retained; this is not a lifetime trace of transient modules or mappings.",
+        "All observed file origins are individually checked against the presealed file manifest. File provenance is not proof of every live code object.",
+        "No-file dynamic modules retain all dictionary-member names/types and directly reachable Python function/class-method code trees. Transitive object graphs and native-generated code origins are not proven.",
+        "Built-in/frozen module labels are recorded under the pinned interpreter. Anonymous/native dynamic executable mappings are not attested as source code.",
+        "Selected upstream classes verify complete own source and own recursive method code trees; inherited methods rely on file provenance, not complete code-object identity.",
+        "Only one source/code/module/socket/address-bound loopback bind may be allowed. All other socket audit operations except construction are denied. Profile c_call guards cover observed native listen/send/accept/receive calls on this thread where CPython has no audit event. These are not OS isolation or proof about native/unprofiled-thread bypasses.",
+        "RLIMIT_CPU is per worker process including its threads, not an aggregate process-tree CPU quota; guarded Python child creation is denied."
+      ],
+      "dynamic_code_origin_proven": false,
+      "file_closure_passed": true,
+      "normal_import_succeeded": true,
+      "numerical_pass": false,
+      "profile_remained_installed_until_import_end": true,
+      "scope": {
+        "full_live_code_identity_claimed": false,
+        "instantiate_config": false,
+        "instantiate_layer": false,
+        "matrix_or_dut": false,
+        "model_forward": false,
+        "network": false,
+        "normal_import_only": true,
+        "ordinary_torch_numpy_initialization_allowed": true,
+        "raw_inputs": false,
+        "single_exact_dependency_loopback_probe": true,
+        "user_tensors": false
+      },
+      "selected_bindings_passed": true,
+      "selected_classes_exact": true,
+      "user_model_execution": false,
+      "versions": {
+        "numpy": "2.3.5",
+        "torch": "2.10.0+cpu",
+        "transformers": "4.40.1"
+      }
+    },
+    "worker_reaped": true,
+    "worker_result_status": "PASS_IMPORT_FILES_AND_SELECTED_CLASSES_WITH_DIAGNOSTIC_LIMITS",
+    "worker_returncode": 0,
+    "worker_wall_scope": "Popen through worker exit and cleanup, including import and observed-file hashing; excludes parent manifest preflight",
+    "worker_wall_seconds": 5.2409047280089
+  },
+  "projection_note": "Explicit field selection; private host roots replaced by logical roles and process-local object addresses omitted. No execution or approval is granted by this projection.",
+  "source_identity": {
+    "bytes": 5406,
+    "sha256": "d810b6bac96f3e8bc44332e6ce74b7b9b81f5b9621860c95fce8d675d9a26d62"
+  }
+}

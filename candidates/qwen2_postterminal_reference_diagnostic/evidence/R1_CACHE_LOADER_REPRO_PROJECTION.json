@@ -1,0 +1,13 @@
+{
+  "original": {
+    "bytes": 395,
+    "sha256": "06f87203c3429d0f033bcf87c1d54b6fb5f04219e086a1207069ea48f28b95af"
+  },
+  "loaded": false,
+  "error": "ValueError: source-only runtime, no cache reads",
+  "open_roles": [
+    "synthetic-source",
+    "synthetic-bytecode-cache"
+  ],
+  "projection": "Physical synthetic temporary paths replaced with ordered source/cache roles. Harmless loader fixture only, not oracle/DUT execution."
+}

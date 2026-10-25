@@ -1,0 +1,489 @@
+{
+  "new_original_python_files": 9,
+  "source_files": [
+    {
+      "revision": "r1",
+      "target": "code/admission.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/admission.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1898,
+      "sha256": "1abbba26600c4594e0ed49f4ab683dceae1da8e27b92aa6caeb345fae866c511",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/artifacts.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/artifacts.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1038,
+      "sha256": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/boundary.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/boundary.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 5243,
+      "sha256": "53eb32c021e389711c89564866e9d1f25e04b17c3ec98d44506dc171210cbd49",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/durable.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/durable.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 1853,
+      "sha256": "12c9a6cc139f4ebfa9ad1028f95c217efc9871af1acd301ed79d05d072033cb2",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/launch.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/launch.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 17186,
+      "sha256": "ce94cb00dd85c2cbc720090a07c13a187c30ab97bd1e527aa5d7931f0f31d436",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/module_inventory.py",
+      "repo_path": "candidates/qwen2_runtime_observer_r2/module_inventory.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/policy.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/policy.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 940,
+      "sha256": "0cefe2be2a1c2e26d6adb34b299a32b69f6a23896ecf18013f516ebb64ed281d",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/primitives.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/primitives.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 2347,
+      "sha256": "cf1ec9d2efaa57c9eeb36f8f15db8875efa29472f1d591a45788f77427d42790",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/reference_capture.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/reference_capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 18977,
+      "sha256": "01d95a310a464b7047f6c648ac68df3392d17507267840f89088483d038f7853",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/runtime_closure.py",
+      "repo_path": "candidates/qwen2_ordered_native_r2/runtime_closure.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "code/worker.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/worker.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 10003,
+      "sha256": "14907b45f153bfbffa921cb5d04214d807d5a43638430c75d1d719684e857248",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py",
+      "repo_path": "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 35767,
+      "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 18144,
+      "sha256": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 2243,
+      "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 19134,
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 25923,
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/official_bf16/owners.py",
+      "repo_path": "candidates/qwen2_resident_matrix/official_bf16/owners.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 9394,
+      "sha256": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_selected_scala_model/schedule.py",
+      "repo_path": "candidates/qwen2_selected_scala_model/schedule.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5105,
+      "sha256": "b6b313dbba17f581025447208d375ad923976bf57a3787ce678a78bde4088e4e",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_selected_scala_model/test_schedule_numeric.py",
+      "repo_path": "candidates/qwen2_selected_scala_model/test_schedule_numeric.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 26242,
+      "sha256": "6f9655c3eac6811d9d9a4328c95492d7bbc4b0a72c81b23f0af6c92940ba206b",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py",
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 10280,
+      "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/official_bf16/observation.py",
+      "repo_path": "candidates/qwen2_resident_matrix/official_bf16/observation.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 23902,
+      "sha256": "13ec64d2f8985256d4bdf78595a628eb106a79117e62c728ac3e486d09e4f627",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "oracle_source/scripts/observe_qwen2_attention_model.py",
+      "repo_path": "scripts/observe_qwen2_attention_model.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 29330,
+      "sha256": "18446e01900f81c6bbf9cf211c1df6b9a86b06013e6d7ef8ae8609eea2309a45",
+      "adapted": false
+    },
+    {
+      "revision": "r1",
+      "target": "test_recovery.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/test_recovery.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 9016,
+      "sha256": "1a3dd038ff78df17c576e2749ad13ad664a899857a53307119473ecafb019abd",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/admission.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/admission.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1898,
+      "sha256": "1abbba26600c4594e0ed49f4ab683dceae1da8e27b92aa6caeb345fae866c511",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/artifacts.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/artifacts.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1038,
+      "sha256": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/boundary.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r2/code/boundary.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 5263,
+      "sha256": "9c01c8420dd4f87c0b966fbbaf8b1540068f5b04c26b684f049a1a3e1559a63d",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/durable.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/durable.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 1853,
+      "sha256": "12c9a6cc139f4ebfa9ad1028f95c217efc9871af1acd301ed79d05d072033cb2",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/launch.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/launch.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 17186,
+      "sha256": "ce94cb00dd85c2cbc720090a07c13a187c30ab97bd1e527aa5d7931f0f31d436",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/module_inventory.py",
+      "repo_path": "candidates/qwen2_runtime_observer_r2/module_inventory.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/policy.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r2/code/policy.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 940,
+      "sha256": "f4f9709908b06a986c69f4ba1b5416c51d2f1b9b75a0a53e962ce00807fce917",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/primitives.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/primitives.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 2347,
+      "sha256": "cf1ec9d2efaa57c9eeb36f8f15db8875efa29472f1d591a45788f77427d42790",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/reference_capture.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/reference_capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 18977,
+      "sha256": "01d95a310a464b7047f6c648ac68df3392d17507267840f89088483d038f7853",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/runtime_closure.py",
+      "repo_path": "candidates/qwen2_ordered_native_r2/runtime_closure.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "code/worker.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r1/code/worker.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 10003,
+      "sha256": "14907b45f153bfbffa921cb5d04214d807d5a43638430c75d1d719684e857248",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py",
+      "repo_path": "candidates/qwen2_resident_matrix/attention_matrix_batch/test_model.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 35767,
+      "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_attention/attention_owner.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 18144,
+      "sha256": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_attention/scalar_recipe.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 2243,
+      "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_public/prefix_owners.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 19134,
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py",
+      "repo_path": "candidates/qwen2_resident_matrix/ffn_public/test_prefix_owners.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 25923,
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/official_bf16/owners.py",
+      "repo_path": "candidates/qwen2_resident_matrix/official_bf16/owners.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 9394,
+      "sha256": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_selected_scala_model/schedule.py",
+      "repo_path": "candidates/qwen2_selected_scala_model/schedule.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5105,
+      "sha256": "b6b313dbba17f581025447208d375ad923976bf57a3787ce678a78bde4088e4e",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_selected_scala_model/test_schedule_numeric.py",
+      "repo_path": "candidates/qwen2_selected_scala_model/test_schedule_numeric.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 26242,
+      "sha256": "6f9655c3eac6811d9d9a4328c95492d7bbc4b0a72c81b23f0af6c92940ba206b",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py",
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 10280,
+      "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/candidates/qwen2_resident_matrix/official_bf16/observation.py",
+      "repo_path": "candidates/qwen2_resident_matrix/official_bf16/observation.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 23902,
+      "sha256": "13ec64d2f8985256d4bdf78595a628eb106a79117e62c728ac3e486d09e4f627",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "oracle_source/scripts/observe_qwen2_attention_model.py",
+      "repo_path": "scripts/observe_qwen2_attention_model.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 29330,
+      "sha256": "18446e01900f81c6bbf9cf211c1df6b9a86b06013e6d7ef8ae8609eea2309a45",
+      "adapted": false
+    },
+    {
+      "revision": "r2",
+      "target": "test_recovery.py",
+      "repo_path": "candidates/qwen2_postterminal_reference_diagnostic/delta/r2/test_recovery.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 10926,
+      "sha256": "bc9df37be8080b3616f1c666c21befabe7f66a5070481b5156be73cf3d67cf50",
+      "adapted": false
+    }
+  ],
+  "original_manifests": {
+    "r1": {
+      "PRIVATE_CONFIG.json": {
+        "bytes": 308876,
+        "sha256": "4a3168b0dfc520e83d1f07564405c1fa78b4c2cf1347dc1eb3d25a73e9506ab5"
+      },
+      "FREEZE.json": {
+        "bytes": 8396,
+        "sha256": "f49177d1c677ee25ff11c23f9e1326db9bce468be6185acee2f22c3cdcf6c3a8"
+      },
+      "EXECUTABLE_SOURCE_MANIFEST.json": {
+        "bytes": 1391,
+        "sha256": "892acc463584f021b7f3f776cf9a6a72642286b50cdab4f888b059882c1f7645"
+      },
+      "REUSED_EXECUTABLE_SOURCE_MANIFEST.json": {
+        "bytes": 2820,
+        "sha256": "c8d4dedf310ed039a01ff41cbc6f1a1a8e04a7d13996c5babf15d7a74ea5b1c3"
+      }
+    },
+    "r2": {
+      "PRIVATE_CONFIG.json": {
+        "bytes": 308876,
+        "sha256": "78e828818a239e1a570cef189cf230d3a0a0eb9a08c8c201aa36c6b60df474d4"
+      },
+      "FREEZE.json": {
+        "bytes": 5363,
+        "sha256": "88d7c5118304f030124929e20c01c7c84da0f2a22af29ecb395145cff60367d2"
+      },
+      "EXECUTABLE_SOURCE_MANIFEST.json": {
+        "bytes": 1391,
+        "sha256": "936456d64a36fad9373d86230ba54735dcde2fec1af113ebdd9da593e2e9ec01"
+      },
+      "REUSED_EXECUTABLE_SOURCE_MANIFEST.json": {
+        "bytes": 2820,
+        "sha256": "c8d4dedf310ed039a01ff41cbc6f1a1a8e04a7d13996c5babf15d7a74ea5b1c3"
+      }
+    }
+  },
+  "omitted_generators": [
+    {
+      "revision": "r1",
+      "role": "prepare_config.py",
+      "bytes": 3573,
+      "sha256": "c0dbd2cbc02173240fdc57c7710228eb7fe1f4172a0a9d1d23e3bfee73126952",
+      "reason": "Private physical literals; hash only, no silent source adaptation."
+    },
+    {
+      "revision": "r1",
+      "role": "seal_inputs.py",
+      "bytes": 4796,
+      "sha256": "a1d82e797b994514d36da46e97ccd57210f649e59e534fd72a29b6e9ae1cab05",
+      "reason": "Private physical literals; hash only, no silent source adaptation."
+    },
+    {
+      "revision": "r2",
+      "role": "prepare_config.py",
+      "bytes": 3573,
+      "sha256": "c0dbd2cbc02173240fdc57c7710228eb7fe1f4172a0a9d1d23e3bfee73126952",
+      "reason": "Private physical literals; hash only, no silent source adaptation."
+    },
+    {
+      "revision": "r2",
+      "role": "seal_inputs.py",
+      "bytes": 4796,
+      "sha256": "a1d82e797b994514d36da46e97ccd57210f649e59e534fd72a29b6e9ae1cab05",
+      "reason": "Private physical literals; hash only, no silent source adaptation."
+    }
+  ],
+  "source_adaptation": false,
+  "source_assembly_only_not_runtime_reproduction": true
+}

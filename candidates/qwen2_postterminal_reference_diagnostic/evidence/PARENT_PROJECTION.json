@@ -1,0 +1,69 @@
+{
+  "original": {
+    "bytes": 2235,
+    "sha256": "4809f455df30c91b0880410f79f02f22110a1b27a395f31df883b26df853aeb6"
+  },
+  "status": "EXITED",
+  "m": 16,
+  "config_sha256": "78e828818a239e1a570cef189cf230d3a0a0eb9a08c8c201aa36c6b60df474d4",
+  "review_sha256": "7a0d187de60c22f38823e5081e479152c060d2ef4df304c6029daddbe59f195e",
+  "limits": {
+    "cpu_seconds": 180,
+    "wall_seconds": 240,
+    "cpus": 1,
+    "address_space_bytes": 2147483648,
+    "tree_rss_bytes": 1073741824,
+    "child_cpu_seconds": 160,
+    "child_wall_seconds": 200,
+    "cleanup_cpu_reserve": 10,
+    "cleanup_wall_reserve": 30,
+    "fresh_processes": 1,
+    "parent_cpu_work": 15,
+    "parent_cpu_abort_hard": 20,
+    "file_bytes": 50331648,
+    "output_bytes": 134217728,
+    "trace_pair_bytes": 100663296,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "log_bytes": 4194304,
+    "worker_metadata_bytes": 2097152,
+    "parent_metadata_bytes": 2097152
+  },
+  "execution_order": [
+    "postterminal_reference_only"
+  ],
+  "automatic_retry": false,
+  "result_sha256": "136719d6c5b7ae59c3c07794b87a4f2100a8f5b9d3dd6c122b1175319e24de76",
+  "aggregate_usage": {
+    "cpu_seconds": 43.305812157999995,
+    "wall_seconds": 43.31756578601198,
+    "rss_bytes": 14065664,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 332771328,
+      "at_elapsed_seconds": 42.49669716600329,
+      "live_tree_bytes": 318705664,
+      "samples": 224,
+      "live_samples": 215,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 319229952,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "output_usage": {
+    "trace_pair_bytes": 0,
+    "artifact_bytes": 1751848,
+    "audit_bytes": 455585,
+    "log_bytes": 0,
+    "worker_metadata_bytes": 15004,
+    "parent_metadata_bytes": 4178,
+    "total_bytes": 2226615,
+    "sampled_not_atomic": true
+  },
+  "child": {
+    "parent_sha256": "943939a3b8cca7931b05e6d6820b0014bda33cd78d9ff46feeaeb0c5abb76c65",
+    "status": "EXITED",
+    "logical_directory": "pair"
+  },
+  "projection": "Physical process identity/argv/child-directory omitted or converted to logical role. Sampled high-water is not continuous peak; final parent RSS and reaped-child maxrss are distinct. Output usage is sampled before final parent write."
+}

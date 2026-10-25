@@ -1,0 +1,206 @@
+{
+  "original": {
+    "bytes": 8075,
+    "sha256": "7a0d187de60c22f38823e5081e479152c060d2ef4df304c6029daddbe59f195e"
+  },
+  "checks": {
+    "admission_normal": 11,
+    "admission_optimized": 11,
+    "author_suite_replayed_normal": 14,
+    "author_suite_replayed_optimized": 14,
+    "independent_boundary_reused_normal": 12,
+    "independent_boundary_reused_optimized": 12,
+    "original_actual_artifacts": 89,
+    "pins": 1327
+  },
+  "config_sha256": "78e828818a239e1a570cef189cf230d3a0a0eb9a08c8c201aa36c6b60df474d4",
+  "dataflow_isolation": "PINNED_SOURCE_AND_ARGUMENT_DATAFLOW_NOT_ARBITRARY_MALICIOUS_PYTHON_SANDBOX",
+  "executable_sources": {
+    "admission.py": "1abbba26600c4594e0ed49f4ab683dceae1da8e27b92aa6caeb345fae866c511",
+    "artifacts.py": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+    "boundary.py": "9c01c8420dd4f87c0b966fbbaf8b1540068f5b04c26b684f049a1a3e1559a63d",
+    "durable.py": "12c9a6cc139f4ebfa9ad1028f95c217efc9871af1acd301ed79d05d072033cb2",
+    "launch.py": "ce94cb00dd85c2cbc720090a07c13a187c30ab97bd1e527aa5d7931f0f31d436",
+    "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+    "policy.py": "f4f9709908b06a986c69f4ba1b5416c51d2f1b9b75a0a53e962ce00807fce917",
+    "primitives.py": "cf1ec9d2efaa57c9eeb36f8f15db8875efa29472f1d591a45788f77427d42790",
+    "reference_capture.py": "01d95a310a464b7047f6c648ac68df3392d17507267840f89088483d038f7853",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+    "worker.py": "14907b45f153bfbffa921cb5d04214d807d5a43638430c75d1d719684e857248"
+  },
+  "freeze": {
+    "bytes": 5363,
+    "sha256": "88d7c5118304f030124929e20c01c7c84da0f2a22af29ecb395145cff60367d2"
+  },
+  "full_M128_status_unchanged": true,
+  "limits": {
+    "address_space_bytes": 2147483648,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "child_cpu_seconds": 160,
+    "child_wall_seconds": 200,
+    "cleanup_cpu_reserve": 10,
+    "cleanup_wall_reserve": 30,
+    "cpu_seconds": 180,
+    "cpus": 1,
+    "file_bytes": 50331648,
+    "fresh_processes": 1,
+    "log_bytes": 4194304,
+    "output_bytes": 134217728,
+    "parent_cpu_abort_hard": 20,
+    "parent_cpu_work": 15,
+    "parent_metadata_bytes": 2097152,
+    "trace_pair_bytes": 100663296,
+    "tree_rss_bytes": 1073741824,
+    "wall_seconds": 240,
+    "worker_metadata_bytes": 2097152
+  },
+  "old_DUT_rerun": false,
+  "old_attempt_read_until_recipe_success": "DENIED_EVEN_WITH_INTEGRITY_FLAG",
+  "original_attempt_state": "FAILED_RETAINED",
+  "performance_adoption": false,
+  "profile": "production_attention_m16_postterminal_reference_r2",
+  "reference_only": true,
+  "reference_parameters_only": [
+    "qr",
+    "kr",
+    "v"
+  ],
+  "remaining_source_blockers": [],
+  "reviewer_DUT_executed": false,
+  "reviewer_recipe_executed": false,
+  "reviewer_target_native_loaded": false,
+  "root_execution_authorized": false,
+  "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+  "reused_executable_sources": [
+    {
+      "ordinal": 0,
+      "logical_role": "source:test_model.py",
+      "sha256": "f1c2ceb795f3c2d6ff5eb878d0453083858c0c474c107a11e505c1457824e90a"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "source:attention_owner.py",
+      "sha256": "65d823ebebdb50cae98c0ff8c9c1c5631ebc298595cc5c28c71ba7a22890f6d8"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "source:scalar_recipe.py",
+      "sha256": "a58c7e32d509a368a5127a87165f0a9c8a4f0df6a58a0c78f031d4e337ef580d"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "source:prefix_owners.py",
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "source:test_prefix_owners.py",
+      "sha256": "daf80d7d6273e9818e63aa030be8ec1ead07324ddcafc82ef8d165ed55065d4e"
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "source:owners.py",
+      "sha256": "0256c3ad3a90874bb032e39b5bdf28014a05f4ab08960c5bcf952cd5fdd5d05a"
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "runtime-input-or-evidence:INPUT_PINS.json",
+      "sha256": "87b03874543f4b9f7accee77d03bc0b983157185f6c518e9f77cc9484571beeb"
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "source:schedule.py",
+      "sha256": "b6b313dbba17f581025447208d375ad923976bf57a3787ce678a78bde4088e4e"
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "source:test_schedule_numeric.py",
+      "sha256": "6f9655c3eac6811d9d9a4328c95492d7bbc4b0a72c81b23f0af6c92940ba206b"
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "source:capture.py",
+      "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f"
+    },
+    {
+      "ordinal": 10,
+      "logical_role": "source:observation.py",
+      "sha256": "13ec64d2f8985256d4bdf78595a628eb106a79117e62c728ac3e486d09e4f627"
+    },
+    {
+      "ordinal": 11,
+      "logical_role": "source:observe_qwen2_attention_model.py",
+      "sha256": "18446e01900f81c6bbf9cf211c1df6b9a86b06013e6d7ef8ae8609eea2309a45"
+    }
+  ],
+  "review_evidence": [
+    {
+      "ordinal": 0,
+      "logical_role": "review:reference_recovery_r1/INDEPENDENT_NORMAL.log",
+      "bytes": 1735,
+      "sha256": "e3bb088d7a0f322ea19757e5f9e6a06d70141595151849378d72c0f825a33e38"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "review:reference_recovery_r1/INDEPENDENT_OPTIMIZED.log",
+      "bytes": 1735,
+      "sha256": "176627a87f033ee94314d56c95157151c34fa5dd69ed19113aeceea922970495"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "review:reference_recovery_r1/REVIEW_BLOCKED.json",
+      "bytes": 1486,
+      "sha256": "79223238117630d52943e71f545ad5d6428d828250d248cc8952665370f71aca"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "review:reference_recovery_r1/test_independent_boundary.py",
+      "bytes": 5997,
+      "sha256": "558a8f31bcae294f43f33701a047ab269c3411c715f11b57ece7ad3defe3fd8e"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "review:reference_recovery_r2/ADMISSION_NORMAL.log",
+      "bytes": 1140,
+      "sha256": "82b173963afc35d338edc9ab6c531b8d9b2711b3758f34e69afb5ea7104171cd"
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "review:reference_recovery_r2/ADMISSION_OPTIMIZED.log",
+      "bytes": 1140,
+      "sha256": "425f8f3547ca236b46eaa98181a0087724658c1557f20ff0fad574bf6db4ffd3"
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "review:reference_recovery_r2/AUTHOR_NORMAL.log",
+      "bytes": 2724,
+      "sha256": "cd229556618976808de363321168e18c64c22d9f0f3df86a19a1e4c6e2270ceb"
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "review:reference_recovery_r2/AUTHOR_OPTIMIZED.log",
+      "bytes": 2724,
+      "sha256": "e7bca075e3c29cbbe1b51439930ba1fdd48bd9baa500618dec52768ae5d1ef96"
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "review:reference_recovery_r2/PIN_DELTA_REVIEW.json",
+      "bytes": 394687,
+      "sha256": "25f1056e66075ac95d2375934c9d353bc33256369c0f06dd853f3012f9f5ea02"
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "review:reference_recovery_r2/REVIEW.md",
+      "bytes": 5723,
+      "sha256": "e3123dfa560c7d2ed52a0d10c295c60a78a5977090e54cb148c4a8f9c53ad685"
+    },
+    {
+      "ordinal": 10,
+      "logical_role": "review:reference_recovery_r2/SOURCE_CACHE_GATE_REPRO.json",
+      "bytes": 610,
+      "sha256": "2cce8c1b95fa872856994a0dee5476f1baee9a0256dad89a004e17979352e34b"
+    }
+  ],
+  "projection": "Reused-source/review-evidence physical keys replaced by logical roles; internal pending approval list omitted. Historical source-only/pre-execution scope is preserved, separate from later actual execution."
+}

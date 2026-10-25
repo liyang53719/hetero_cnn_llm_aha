@@ -1,0 +1,95 @@
+{
+  "original": {
+    "bytes": 3152,
+    "sha256": "e032203fc7852d742aaa6b77d40a29b270e51d4eca121a95ed23f635c9fcf279"
+  },
+  "DUT_jobs": 0,
+  "Dense_jobs": 0,
+  "Matrix_native_loads": 0,
+  "aggregate_work_threshold": 170,
+  "automatic_retry": false,
+  "child_cpu_hard": 160,
+  "cleanup_cpu_reserve": 10,
+  "estimate_is_not_completion_guarantee": true,
+  "exact_reference_scalar_FMAs": {
+    "M16": 417792,
+    "M2": 9216
+  },
+  "limits": {
+    "address_space_bytes": 2147483648,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "child_cpu_seconds": 160,
+    "child_wall_seconds": 200,
+    "cleanup_cpu_reserve": 10,
+    "cleanup_wall_reserve": 30,
+    "cpu_seconds": 180,
+    "cpus": 1,
+    "file_bytes": 50331648,
+    "fresh_processes": 1,
+    "log_bytes": 4194304,
+    "output_bytes": 134217728,
+    "parent_cpu_abort_hard": 20,
+    "parent_cpu_work": 15,
+    "parent_metadata_bytes": 2097152,
+    "trace_pair_bytes": 100663296,
+    "tree_rss_bytes": 1073741824,
+    "wall_seconds": 240,
+    "worker_metadata_bytes": 2097152
+  },
+  "memory": "2 GiB per-process AS, 1 GiB sampled combined RSS; not hard aggregate AS or continuous exact RSS",
+  "new_task_cpu_seconds": 180,
+  "new_task_wall_seconds": 240,
+  "original_attempts_cpu_seconds": 170.664200952,
+  "original_attempts_wall_seconds": 170.73780864,
+  "parent_cpu_abort_hard": 20,
+  "reference_causal_pairs": {
+    "M16": 1632,
+    "M2": 36
+  },
+  "reference_legacy_packets": {
+    "M16": 26112,
+    "M2": 576
+  },
+  "reference_only": true,
+  "rough_linear_reference_cpu_range": [
+    60.623873264,
+    66.117839424
+  ],
+  "scale_factor": 45.333333333333336,
+  "status": "PROPOSED_NEW_SEPARATE_TASK_NOT_AUTHORIZED",
+  "total_of_r2_r3_and_full_new_cap_seconds": 350.664200952,
+  "total_wall_sequential_bound_seconds": 410.73780864,
+  "unattributed_includes": "setup, parent supervision, pair checks, any recipe work; no saved exact interruption stack",
+  "unattributed_r3_cpu_seconds": 72.770680806,
+  "M2_reference_stage_costs": [
+    {
+      "cpu_ns": 1458481752,
+      "pin": {
+        "bytes": 58110,
+        "sha256": "2f02a2570728c903be8b3747f73519f9b518127053ccc12e611485c6c02b87ba"
+      },
+      "stage": "terminal_only_original_reference_compare",
+      "wall_ns": 1464136229
+    },
+    {
+      "cpu_ns": 1337291322,
+      "pin": {
+        "bytes": 58121,
+        "sha256": "8137ec5444d246a9c74fade1521dbb01b3bf89d65b948fc424ca0b0e1d189631"
+      },
+      "stage": "terminal_only_original_reference_compare",
+      "wall_ns": 1344044189
+    },
+    {
+      "cpu_ns": 1394689775,
+      "pin": {
+        "bytes": 58110,
+        "sha256": "1af6947e2f8005a20bdba69427e714c7cb4e3188726d3c5f06c6444f91cf2a2d"
+      },
+      "stage": "terminal_only_original_reference_compare",
+      "wall_ns": 1400866672
+    }
+  ],
+  "projection": "Only private historical result locators omitted. This original pre-execution proposal/estimate is not the actual timing or an enlarged original-attempt budget."
+}

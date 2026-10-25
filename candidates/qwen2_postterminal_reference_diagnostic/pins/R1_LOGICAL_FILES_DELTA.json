@@ -1,0 +1,77 @@
+{
+  "schema": "ordered-logical-pin-index-replacement-v1",
+  "original_config": {
+    "bytes": 308876,
+    "sha256": "4a3168b0dfc520e83d1f07564405c1fa78b4c2cf1347dc1eb3d25a73e9506ab5"
+  },
+  "base_public_file": "R2_LOGICAL_FILES.json",
+  "base_file_identity": {
+    "bytes": 262533,
+    "sha256": "9032b3afa2acaa3b5e878a663d0bc11b3a465eb27cb5e5d33697cb42c83715f5"
+  },
+  "record_count": 1210,
+  "instruction": "Copy base pins array, then replace each listed zero-based index with its record. This exactly reconstructs the ordered sanitized r1 pin metadata, not a private executable config.",
+  "replacements": [
+    {
+      "index": 286,
+      "record": {
+        "pin_id": "pin-0286",
+        "logical_role": "recovery:code/boundary.py",
+        "bytes": 5243,
+        "sha256": "53eb32c021e389711c89564866e9d1f25e04b17c3ec98d44506dc171210cbd49"
+      }
+    },
+    {
+      "index": 290,
+      "record": {
+        "pin_id": "pin-0290",
+        "logical_role": "recovery:code/policy.py",
+        "bytes": 940,
+        "sha256": "0cefe2be2a1c2e26d6adb34b299a32b69f6a23896ecf18013f516ebb64ed281d"
+      }
+    }
+  ],
+  "inputs": {
+    "kr": {
+      "bytes": 131072,
+      "sha256": "6be3ff6ca0e97042d0ddecca76078f5c47a22fdaddc92e306a7cb723025042a8"
+    },
+    "qr": {
+      "bytes": 786432,
+      "sha256": "3199882c641e63695f6925dcc87b40b765ddfa4b1cc6058482fb72fe5ab06043"
+    },
+    "v": {
+      "bytes": 131072,
+      "sha256": "c15d3d006fcbc00de07eafeac5e2da8f3f6be3f5f27cd423bdcd4bf199404995"
+    }
+  },
+  "input_prefixes": {
+    "kr": {
+      "bytes": 16384,
+      "offset_bytes": 0,
+      "sha256": "1e2deaa6f989fc7f1ac2a9a20668d763544a1dc8cd954be80cbc8f729b0da087",
+      "shape": [
+        16,
+        256
+      ]
+    },
+    "qr": {
+      "bytes": 98304,
+      "offset_bytes": 0,
+      "sha256": "d38ef6210a2b933fb51beb4040bcae988748942c4ad86f57aab439f288a89977",
+      "shape": [
+        16,
+        1536
+      ]
+    },
+    "v": {
+      "bytes": 16384,
+      "offset_bytes": 0,
+      "sha256": "60d899f89157b6e7f86c3f11b023addb22fdf008ca72aca8076bb12817d7fe10",
+      "shape": [
+        16,
+        256
+      ]
+    }
+  }
+}

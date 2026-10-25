@@ -1,0 +1,156 @@
+{
+  "scope": "Eight individually persisted stage files; process identifiers and absolute time origins omitted. Durability policy is source-bound fsync(file)+same-directory rename+fsync(directory), not an independent syscall trace.",
+  "stages": [
+    {
+      "logical_file": "pair/metadata/stages/000_PREFLIGHT_ENTER.json",
+      "original": {
+        "bytes": 231,
+        "sha256": "7a5384c9d86f70e436cb22eaf88ecb4fdc3f5737c6a1a7760f819a008eec44e8"
+      },
+      "content": {
+        "delta_cpu_ns": 0,
+        "delta_wall_ns": 1763,
+        "details": null,
+        "elapsed_cpu_ns": 0,
+        "elapsed_wall_ns": 1763,
+        "index": 0,
+        "stage": "PREFLIGHT_ENTER"
+      }
+    },
+    {
+      "logical_file": "pair/metadata/stages/001_SEALED_TERMINALS_ADMITTED.json",
+      "original": {
+        "bytes": 410,
+        "sha256": "e225fcbf8f0ec6d4300c25035e226c8f337857808c19b3f1d770e88a5d637d6f"
+      },
+      "content": {
+        "delta_cpu_ns": 228290664,
+        "delta_wall_ns": 230405963,
+        "details": {
+          "original_attempt_state": "FAILED_RETAINED",
+          "reference_values_loaded": false,
+          "status": "BOTH_SAVED_PUBLIC3_TERMINALS_ADMITTED"
+        },
+        "elapsed_cpu_ns": 228290664,
+        "elapsed_wall_ns": 230407726,
+        "index": 1,
+        "stage": "SEALED_TERMINALS_ADMITTED"
+      }
+    },
+    {
+      "logical_file": "pair/metadata/stages/002_BEFORE_REFERENCE_IMPORT.json",
+      "original": {
+        "bytes": 362,
+        "sha256": "35351b0632c71d294019677d0e54e503039c853564f7eaf349eb116d29249fd3"
+      },
+      "content": {
+        "delta_cpu_ns": 243882,
+        "delta_wall_ns": 3146776,
+        "details": {
+          "dut_values_loaded": false,
+          "input_sources_only": [
+            "qr",
+            "kr",
+            "v"
+          ]
+        },
+        "elapsed_cpu_ns": 228534546,
+        "elapsed_wall_ns": 233554502,
+        "index": 2,
+        "stage": "BEFORE_REFERENCE_IMPORT"
+      }
+    },
+    {
+      "logical_file": "pair/metadata/stages/003_BEFORE_RECIPE.json",
+      "original": {
+        "bytes": 315,
+        "sha256": "76b0364cb53048406c962317ecb2d035a33aa2f2a0f10414e0c52dc21a28163c"
+      },
+      "content": {
+        "delta_cpu_ns": 332456604,
+        "delta_wall_ns": 336688833,
+        "details": {
+          "dut_values_loaded": false,
+          "terminal_gate": true
+        },
+        "elapsed_cpu_ns": 560991150,
+        "elapsed_wall_ns": 570243335,
+        "index": 3,
+        "stage": "BEFORE_RECIPE"
+      }
+    },
+    {
+      "logical_file": "pair/metadata/stages/004_RECIPE_COMPLETE.json",
+      "original": {
+        "bytes": 373,
+        "sha256": "f3c1d41855945c49aad1eba25173fe680c538e59685557d629302ef74bf10ed1"
+      },
+      "content": {
+        "delta_cpu_ns": 41472475776,
+        "delta_wall_ns": 41727316716,
+        "details": {
+          "fields": 10,
+          "output_words": 24576,
+          "status": "COMPLETE_EXISTING_REFERENCE_RECIPE_CAPTURE"
+        },
+        "elapsed_cpu_ns": 42033466926,
+        "elapsed_wall_ns": 42297560051,
+        "index": 4,
+        "stage": "RECIPE_COMPLETE"
+      }
+    },
+    {
+      "logical_file": "pair/metadata/stages/005_REFERENCE_ARTIFACTS_SAVED.json",
+      "original": {
+        "bytes": 272,
+        "sha256": "fc263abfd3ecfb8640c918535890332ba883854b54cbc5e14a689ba27759c809"
+      },
+      "content": {
+        "delta_cpu_ns": 40776376,
+        "delta_wall_ns": 47825339,
+        "details": null,
+        "elapsed_cpu_ns": 42074243302,
+        "elapsed_wall_ns": 42345385390,
+        "index": 5,
+        "stage": "REFERENCE_ARTIFACTS_SAVED"
+      }
+    },
+    {
+      "logical_file": "pair/metadata/stages/006_COMPARISON_COMPLETE.json",
+      "original": {
+        "bytes": 517,
+        "sha256": "b8d26f65c67a21a10d7f84af50c1ed994df9ebf4cecaf449e6bb80b757016316"
+      },
+      "content": {
+        "delta_cpu_ns": 103416832,
+        "delta_wall_ns": 107770443,
+        "details": {
+          "original_attempt_state": "FAILED_RETAINED",
+          "output_sha256": "2102578a00ea782cd1f6210bc74f03bd8e267147e321f07b636da8ff2ff91034",
+          "status": "PASS_TWO_ARCHIVED_ARMS_AGAINST_INDEPENDENT_ATTENTION_RECIPE",
+          "ten_fields_bit_exact": true
+        },
+        "elapsed_cpu_ns": 42177660134,
+        "elapsed_wall_ns": 42453155833,
+        "index": 6,
+        "stage": "COMPARISON_COMPLETE"
+      }
+    },
+    {
+      "logical_file": "pair/metadata/stages/007_POSTFLIGHT_COMPLETE.json",
+      "original": {
+        "bytes": 268,
+        "sha256": "77f5ce3fb0fbc1fe9448e869d12c357206696b65356f5aac2a01acce07bda460"
+      },
+      "content": {
+        "delta_cpu_ns": 445763057,
+        "delta_wall_ns": 453966087,
+        "details": null,
+        "elapsed_cpu_ns": 42623423191,
+        "elapsed_wall_ns": 42907121920,
+        "index": 7,
+        "stage": "POSTFLIGHT_COMPLETE"
+      }
+    }
+  ]
+}

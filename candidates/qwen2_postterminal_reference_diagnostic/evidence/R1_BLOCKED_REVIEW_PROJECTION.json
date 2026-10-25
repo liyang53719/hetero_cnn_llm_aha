@@ -1,0 +1,42 @@
+{
+  "original": {
+    "bytes": 1486,
+    "sha256": "79223238117630d52943e71f545ad5d6428d828250d248cc8952665370f71aca"
+  },
+  "config": {
+    "bytes": 308876,
+    "sha256": "4a3168b0dfc520e83d1f07564405c1fa78b4c2cf1347dc1eb3d25a73e9506ab5"
+  },
+  "config_pin_count": 1210,
+  "execution_authorized": false,
+  "existing_stdlib_tests": {
+    "admission_normal": 11,
+    "admission_optimized": 11,
+    "author_normal": 12,
+    "author_optimized": 12,
+    "independent_boundary_normal": 12,
+    "independent_boundary_optimized": 12
+  },
+  "freeze": {
+    "bytes": 8396,
+    "sha256": "f49177d1c677ee25ff11c23f9e1326db9bce468be6185acee2f22c3cdcf6c3a8"
+  },
+  "frozen_member_count": 47,
+  "native_or_DUT_or_reference_executed": false,
+  "original_failed_attempt_unchanged": true,
+  "pins_all_match": true,
+  "status": "BLOCKED_STATIC_REVIEW_SOURCE_CACHE_EXCEPTION_TYPE",
+  "blocker": {
+    "detail": "A denied .pyc open raises ValueError, which normal SourceFileLoader does not catch to fall back to source; -B does not disable cache reads.",
+    "function": "Boundary.audit",
+    "minimal_fix": "Preserve frozen r1; successor raises PermissionError for cache reads, maintaining source-only policy, and tests actual source loader fallback with real audit hook.",
+    "repro": {
+      "bytes": 395,
+      "sha256": "06f87203c3429d0f033bcf87c1d54b6fb5f04219e086a1207069ea48f28b95af"
+    },
+    "synthetic_source_only": true,
+    "target_or_oracle_imported": false,
+    "logical_source": "r1:code/boundary.py"
+  },
+  "projection": "Only blocker physical source locator converted to logical role. R1 remains blocked, not executed."
+}

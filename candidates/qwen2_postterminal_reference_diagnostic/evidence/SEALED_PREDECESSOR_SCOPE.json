@@ -1,0 +1,31 @@
+{
+  "envelope": {
+    "bytes": 294238,
+    "sha256": "a1d598ef462d48930ce3f0f87d132033d551658d2e718a0e3a01925d2b0fd7b7"
+  },
+  "receipt": {
+    "bytes": 304,
+    "sha256": "6cb3a37e9efb901570cbccd2f58ef60c09f5cd669828042b9545e578f4a169b1"
+  },
+  "original_receipt": {
+    "dut_or_reference_executed": false,
+    "envelope": {
+      "bytes": 294238,
+      "sha256": "a1d598ef462d48930ce3f0f87d132033d551658d2e718a0e3a01925d2b0fd7b7"
+    },
+    "input_prefixes_hashed_not_decoded": true,
+    "original_artifact_files": 89,
+    "original_frozen_members": 42,
+    "source_input_pins": 1102
+  },
+  "original_state": "FAILED_RETAINED",
+  "original_files_modified": false,
+  "historical_seal_status": "SEALED_TERMINAL_ARTIFACTS_ORIGINAL_ATTEMPT_REMAINS_FAILED",
+  "original_artifact_count": 89,
+  "source_and_input_pins": 1102,
+  "reference_source_count": 10,
+  "terminal_arm_count": 2,
+  "sealed_predecessor_public_commit": "56f4f9017e01962e5a68e8368b73a682ce03badb",
+  "artifact_metadata_public_path": "candidates/qwen2_production_attention_diagnostic/evidence/R3_ARTIFACT_LOGICAL_MANIFEST.json",
+  "projection": "The private envelope body, original parent identities/paths, internal GO/ledger provenance and captured terminal control payload are excluded. Hash/scope metadata only; original failed state remains."
+}

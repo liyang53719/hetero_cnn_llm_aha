@@ -1,0 +1,124 @@
+{
+  "original": {
+    "bytes": 4185,
+    "sha256": "136719d6c5b7ae59c3c07794b87a4f2100a8f5b9d3dd6c122b1175319e24de76"
+  },
+  "DUT_reexecuted": false,
+  "comparison": {
+    "original_attempt_state": "FAILED_RETAINED",
+    "output_sha256": "2102578a00ea782cd1f6210bc74f03bd8e267147e321f07b636da8ff2ff91034",
+    "status": "PASS_TWO_ARCHIVED_ARMS_AGAINST_INDEPENDENT_ATTENTION_RECIPE",
+    "ten_fields_bit_exact": true
+  },
+  "fullblock": false,
+  "hardware_cycles": false,
+  "official_full_layer_executed": false,
+  "official_m16_pair_used_as_acceptance": false,
+  "original_attempt_state": "FAILED_RETAINED",
+  "performance_adopted": false,
+  "profile": "production_attention_m16_postterminal_reference_r2",
+  "reference_after_both_component_terminals": true,
+  "reference_values_from_frozen_inputs_only": true,
+  "rows": 16,
+  "shared_exact_primitives_disclosed": true,
+  "status": "PASS_POSTTERMINAL_REFERENCE_REVALIDATION_ONLY",
+  "original_attempt_public_evidence": "candidates/qwen2_production_attention_diagnostic/evidence/R3_ACTUAL_FAILURE_REVIEW_PROJECTION.json",
+  "stages": [
+    {
+      "delta_cpu_ns": 0,
+      "delta_wall_ns": 1763,
+      "details": null,
+      "elapsed_cpu_ns": 0,
+      "elapsed_wall_ns": 1763,
+      "index": 0,
+      "stage": "PREFLIGHT_ENTER"
+    },
+    {
+      "delta_cpu_ns": 228290664,
+      "delta_wall_ns": 230405963,
+      "details": {
+        "original_attempt_state": "FAILED_RETAINED",
+        "reference_values_loaded": false,
+        "status": "BOTH_SAVED_PUBLIC3_TERMINALS_ADMITTED"
+      },
+      "elapsed_cpu_ns": 228290664,
+      "elapsed_wall_ns": 230407726,
+      "index": 1,
+      "stage": "SEALED_TERMINALS_ADMITTED"
+    },
+    {
+      "delta_cpu_ns": 243882,
+      "delta_wall_ns": 3146776,
+      "details": {
+        "dut_values_loaded": false,
+        "input_sources_only": [
+          "qr",
+          "kr",
+          "v"
+        ]
+      },
+      "elapsed_cpu_ns": 228534546,
+      "elapsed_wall_ns": 233554502,
+      "index": 2,
+      "stage": "BEFORE_REFERENCE_IMPORT"
+    },
+    {
+      "delta_cpu_ns": 332456604,
+      "delta_wall_ns": 336688833,
+      "details": {
+        "dut_values_loaded": false,
+        "terminal_gate": true
+      },
+      "elapsed_cpu_ns": 560991150,
+      "elapsed_wall_ns": 570243335,
+      "index": 3,
+      "stage": "BEFORE_RECIPE"
+    },
+    {
+      "delta_cpu_ns": 41472475776,
+      "delta_wall_ns": 41727316716,
+      "details": {
+        "fields": 10,
+        "output_words": 24576,
+        "status": "COMPLETE_EXISTING_REFERENCE_RECIPE_CAPTURE"
+      },
+      "elapsed_cpu_ns": 42033466926,
+      "elapsed_wall_ns": 42297560051,
+      "index": 4,
+      "stage": "RECIPE_COMPLETE"
+    },
+    {
+      "delta_cpu_ns": 40776376,
+      "delta_wall_ns": 47825339,
+      "details": null,
+      "elapsed_cpu_ns": 42074243302,
+      "elapsed_wall_ns": 42345385390,
+      "index": 5,
+      "stage": "REFERENCE_ARTIFACTS_SAVED"
+    },
+    {
+      "delta_cpu_ns": 103416832,
+      "delta_wall_ns": 107770443,
+      "details": {
+        "original_attempt_state": "FAILED_RETAINED",
+        "output_sha256": "2102578a00ea782cd1f6210bc74f03bd8e267147e321f07b636da8ff2ff91034",
+        "status": "PASS_TWO_ARCHIVED_ARMS_AGAINST_INDEPENDENT_ATTENTION_RECIPE",
+        "ten_fields_bit_exact": true
+      },
+      "elapsed_cpu_ns": 42177660134,
+      "elapsed_wall_ns": 42453155833,
+      "index": 6,
+      "stage": "COMPARISON_COMPLETE"
+    },
+    {
+      "delta_cpu_ns": 445763057,
+      "delta_wall_ns": 453966087,
+      "details": null,
+      "elapsed_cpu_ns": 42623423191,
+      "elapsed_wall_ns": 42907121920,
+      "index": 7,
+      "stage": "POSTFLIGHT_COMPLETE"
+    }
+  ],
+  "projection": "Private original-attempt physical path and per-stage PID/absolute monotonic/process-CPU origins omitted. Stage sequence, elapsed/delta clocks and all details retained; later independent review is separate."
+}

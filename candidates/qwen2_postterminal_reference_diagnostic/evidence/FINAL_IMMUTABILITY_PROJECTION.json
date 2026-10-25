@@ -1,0 +1,20 @@
+{
+  "original": {
+    "bytes": 642,
+    "sha256": "25eb88c7d7d448b139f637fdc75ea85ed1eb8698bc48f935261f6ce6f97a5b10"
+  },
+  "human_review": {
+    "bytes": 3398,
+    "sha256": "23cfe1b2949adb716df94affae9800d4fb977882a4dd06983c33444dc251d1b4"
+  },
+  "new_artifacts": 46,
+  "no_rerun": true,
+  "original_artifacts": 89,
+  "original_state": "FAILED_RETAINED",
+  "review": {
+    "bytes": 360161,
+    "sha256": "d5bdbd43fd10c4146a0064dd21ee20f003d84fd787d59093b47b8961e899d64d"
+  },
+  "status": "PASS_POST_REVIEW_IMMUTABILITY",
+  "projection": "Internal approval/one-use ledger metadata omitted; review, immutable old/new artifact counts and original FAILED_RETAINED status retained."
+}

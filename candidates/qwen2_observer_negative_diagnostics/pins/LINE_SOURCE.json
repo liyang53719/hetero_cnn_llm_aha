@@ -1,0 +1,24 @@
+{
+  "original_freeze": {
+    "bytes": 2663,
+    "sha256": "1b32a63dc1b6c62e53ed1ad7c9af3ec6c69e1639a272968edb15a2669c43e815"
+  },
+  "original_source_pins": {
+    "bytes": 952,
+    "sha256": "b62c40dd28982b1020680f7a6b61675bbf54e8a3ef5ecb2447cbca83ef33cb6b"
+  },
+  "pins": {
+    "bridge.py": {
+      "after": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652",
+      "before": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+    },
+    "monitor.py": {
+      "after": "b76c48e24963b5219307cda776e1409e1e3c923f6d034f85c87e6f4e95041c16",
+      "before": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87"
+    },
+    "service_trace.py": {
+      "after": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba",
+      "before": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+    }
+  }
+}

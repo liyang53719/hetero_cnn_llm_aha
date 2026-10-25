@@ -1,0 +1,143 @@
+{
+  "adopted_in_dut": false,
+  "base_commit": "28bbcf3f3678bb8fb2fd3cca6297463b149e08f2",
+  "default_off": true,
+  "files": [
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2562,
+        "sha256": "a7615f71e69b48aa8782f064101e74e2757ec276090daf18b5d9e78f1bec5208"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/buffer/buffer_sink.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 15039,
+        "sha256": "7609a0293c69f939ca58270af4ef0d0ff506009db1fd699859fff8ac81d9d6fb"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/buffer/original_writer_closure.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 18846,
+        "sha256": "ceeccc195c53f5dea0db3c3b074d0fee6df79ef42d1667e81743896a14a438a0"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/buffer/candidate_writer_closure.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 5790,
+        "sha256": "57b7cdfc2de4f90b686e0d6a5e411c6f558d83d4d95f9053de0eae4edfa06999"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/buffer/default_off_buffer.patch"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1820,
+        "sha256": "a98124ee04b0c9dd87a7c3c7ef514b7fb6ccec8f8d18956ecf0f8603fa41adc7"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/buffer/run_cases.py"
+    },
+    {
+      "byte_exact": false,
+      "change": "Only private input path constants replaced with explicit caller-supplied environment/config locations; import-time path configuration added; no test body/math/schedule changes",
+      "original_identity": {
+        "bytes": 13815,
+        "sha256": "f9fd96a465a39e3e6d733658b383cec10867553165879839f065efd7597bfd60"
+      },
+      "public_identity": {
+        "bytes": 13717,
+        "sha256": "2bfb0bc43f42e4d3ca6a5e385b008bcde163007a154a6cc75ec5e80707894fc1"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/buffer/diagnostic.py",
+      "transformed_adapter_executed": false
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1159,
+        "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/SOURCE_PINS.json"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 12079,
+        "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/service_trace.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 8627,
+        "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/bridge.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 13575,
+        "sha256": "b76c48e24963b5219307cda776e1409e1e3c923f6d034f85c87e6f4e95041c16"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/monitor.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 5596,
+        "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/capture.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 8564,
+        "sha256": "6ba995008dde298122feadee9386108909b46c8771402ff12f98f120492a4ff9"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/candidate.patch"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1048,
+        "sha256": "d39e1f236211834aa19ca5270e380d3174bd116dca8ba1aaf1831393930722fe"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/run_bounded.py"
+    },
+    {
+      "byte_exact": false,
+      "change": "Only private input path constants replaced with explicit caller-supplied environment/config locations; import-time path configuration added; no test body/math/schedule changes",
+      "original_identity": {
+        "bytes": 9082,
+        "sha256": "fa4e3aa18fa226a57410806c64b3e4c4fb532aef758c3ea98d8818a518791874"
+      },
+      "public_identity": {
+        "bytes": 8866,
+        "sha256": "d7f726ad34c263d330f6af687aff4d837c2a18b14c134145793519629306d700"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/line/test_selective.py",
+      "transformed_adapter_executed": false
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2590,
+        "sha256": "404474e27c4850c69c838fc938c99200872312e6d22f708be6473d51c62095cb"
+      },
+      "public_path": "candidates/qwen2_observer_negative_diagnostics/evidence/LINE_AUTHOR_TIMING.json"
+    }
+  ],
+  "no_target_tests_rerun": true,
+  "normal_runtime_qualified": false,
+  "original_measurements_bind_original_harness_only": true,
+  "path_adapters_not_executed": true
+}

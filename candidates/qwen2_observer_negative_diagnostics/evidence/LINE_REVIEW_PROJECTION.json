@@ -1,0 +1,237 @@
+{
+  "original_review": {
+    "bytes": 8562,
+    "sha256": "4a2c3a9be7111bfaa2ae5411fa9961f000726ef22f77e3e43ae92109c3254735"
+  },
+  "projection_omits": "private source/reviewer locators only; no raw artifact bytes",
+  "review": {
+    "actual_native_or_dut_executed": false,
+    "blockers_for_limited_fixture_publication": [],
+    "findings": [
+      "Seven exact code identities map to immutable frozensets; three no-LINE roles are op/consume/tick and four roles retain seven required capture points. Install revalidates points before direct monitor lease side effects.",
+      "Foreign code rejection retained; callback only cached membership before frame access. No wrapper around _line/_return, no monitoring.DISABLE, original callback frame source preserved.",
+      "Original _return/context/capture/retirement bodies AST-identical; _line remainder exactly AST-identical after removing new filter. No arithmetic/service/owner scheduler source changed.",
+      "Fullgraph monitoring_enter accepts exact positive uniform int or exact per-code int map, verifies event callback coverage and uses same code mask for cleanup ownership. Existing foreign callback/lease preservation remains.",
+      "Default off M1 fixture result/fields/control matches original. Selective M1/M2 full fields, writes, clocks, scalar/matrix counts, raw service/fold events and seal match original in all paired samples.",
+      "Missing/duplicate/drift code/point, bool option, foreign mask/slot, capture failure and direct enter leak negative controls passed; original26 suite remains nested and explicitly counted.",
+      "Timing uses uninstrumented exact callback source; counts use separately labelled inserted-Counter copies, neither claimed as production runtime code identity qualification.",
+      "Independent interleaved 3-per-arm samples retained. Reduction in callback/frame counts does not establish wall improvement; slower candidate remains off and is not selected for DUT."
+    ],
+    "freeze": {
+      "bytes": 2663,
+      "sha256": "1b32a63dc1b6c62e53ed1ad7c9af3ec6c69e1639a272968edb15a2669c43e815"
+    },
+    "independent_tests": {
+      "aggregate_in_top_level": 1,
+      "bounds_per_child": {
+        "address_space_bytes": 268435456,
+        "cpu_seconds": 30,
+        "cpus": 1,
+        "wall_seconds": 45
+      },
+      "distinct_substantive_cases": 44,
+      "modes": [
+        "normal",
+        "optimized"
+      ],
+      "nested_original_per_mode": 26,
+      "top_level_per_mode": 19,
+      "total_unittest_executions": 90
+    },
+    "limitations": [
+      "No normal source-loaded owner/Matrix runtime, real tensor arithmetic, native, oracle, full M16/M128 or RTL execution occurred.",
+      "Fixture endpoints are synthetic; small fixture time samples do not predict production auditing cost or complete long-run budget sufficiency.",
+      "No new DUT profile authorization or retest of the failed3600CPU run. No r5 optimization pursuit.",
+      "Prior r1 test measurement failure, r2 counting caveat and r3 slower timings remain preserved; this review does not rewrite them.",
+      "Current package contains local fixture dependencies and is not standalone public execution closure. Any later normal-runtime profile needs new exact source/import/observer binding and review."
+    ],
+    "line_body_after_filter_ast_equal": true,
+    "measurements": {
+      "normal": [
+        {
+          "baseline": {
+            "getframe": 129747,
+            "line_callbacks": 117989
+          },
+          "rows": 1,
+          "scope": "TEST_INSTRUMENTED_CALLBACK_COPIES",
+          "selective": {
+            "getframe": 13169,
+            "line_callbacks": 39232
+          }
+        },
+        {
+          "baseline": {
+            "getframe": 306629,
+            "line_callbacks": 276991
+          },
+          "rows": 2,
+          "scope": "TEST_INSTRUMENTED_CALLBACK_COPIES",
+          "selective": {
+            "getframe": 32957,
+            "line_callbacks": 87066
+          }
+        }
+      ],
+      "optimized": [
+        {
+          "baseline": {
+            "getframe": 129747,
+            "line_callbacks": 117989
+          },
+          "rows": 1,
+          "scope": "TEST_INSTRUMENTED_CALLBACK_COPIES",
+          "selective": {
+            "getframe": 13169,
+            "line_callbacks": 39232
+          }
+        },
+        {
+          "baseline": {
+            "getframe": 306629,
+            "line_callbacks": 276991
+          },
+          "rows": 2,
+          "scope": "TEST_INSTRUMENTED_CALLBACK_COPIES",
+          "selective": {
+            "getframe": 32957,
+            "line_callbacks": 87066
+          }
+        }
+      ]
+    },
+    "normal_runtime_qualified": false,
+    "patch": {
+      "bytes": 8564,
+      "sha256": "6ba995008dde298122feadee9386108909b46c8771402ff12f98f120492a4ff9"
+    },
+    "performance_improvement_claimed": false,
+    "review_script": {
+      "bytes": 5236,
+      "sha256": "77eb617ad0751c6a73dc0539f1078226656f6d9aa35884b0c8d6f5403c2f23e1"
+    },
+    "scope": "Three independent default-off source postimages; existing AST owner/client fixture, not normal source runtime qualification",
+    "source_pins": {
+      "bridge.py": {
+        "after": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652",
+        "before": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+      },
+      "monitor.py": {
+        "after": "b76c48e24963b5219307cda776e1409e1e3c923f6d034f85c87e6f4e95041c16",
+        "before": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87"
+      },
+      "service_trace.py": {
+        "after": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba",
+        "before": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+      }
+    },
+    "status": "PASS_LIMITED_SOURCE_AND_AST_FIXTURE_REVIEW_PERFORMANCE_NOT_ADOPTED",
+    "tests": {
+      "bytes": 1122,
+      "sha256": "89ecb356ce91f456cdebeb24d61865e289ef4d82dab505766651fcf821301829"
+    },
+    "timing": {
+      "normal": {
+        "1": {
+          "old": {
+            "maximum": 0.1500829600263387,
+            "median": 0.13840787397930399,
+            "minimum": 0.1363371890038252,
+            "samples": [
+              0.13840787397930399,
+              0.1363371890038252,
+              0.1500829600263387
+            ]
+          },
+          "selective": {
+            "maximum": 0.21885103802196681,
+            "median": 0.19831475504906848,
+            "minimum": 0.1874178479774855,
+            "samples": [
+              0.1874178479774855,
+              0.19831475504906848,
+              0.21885103802196681
+            ]
+          }
+        },
+        "2": {
+          "old": {
+            "maximum": 0.3453042929759249,
+            "median": 0.32904080796288326,
+            "minimum": 0.32132189703406766,
+            "samples": [
+              0.32132189703406766,
+              0.32904080796288326,
+              0.3453042929759249
+            ]
+          },
+          "selective": {
+            "maximum": 0.4201346689951606,
+            "median": 0.41702232701936737,
+            "minimum": 0.4128096550120972,
+            "samples": [
+              0.4128096550120972,
+              0.41702232701936737,
+              0.4201346689951606
+            ]
+          }
+        }
+      },
+      "optimized": {
+        "1": {
+          "old": {
+            "maximum": 0.13555287098279223,
+            "median": 0.1347625619964674,
+            "minimum": 0.1340989230084233,
+            "samples": [
+              0.1347625619964674,
+              0.13555287098279223,
+              0.1340989230084233
+            ]
+          },
+          "selective": {
+            "maximum": 0.1864368129754439,
+            "median": 0.1761001289705746,
+            "minimum": 0.1750597829814069,
+            "samples": [
+              0.1864368129754439,
+              0.1750597829814069,
+              0.1761001289705746
+            ]
+          }
+        },
+        "2": {
+          "old": {
+            "maximum": 0.33448499301448464,
+            "median": 0.32673183298902586,
+            "minimum": 0.31774606299586594,
+            "samples": [
+              0.32673183298902586,
+              0.31774606299586594,
+              0.33448499301448464
+            ]
+          },
+          "selective": {
+            "maximum": 0.41971017699688673,
+            "median": 0.407308280991856,
+            "minimum": 0.40080796100664884,
+            "samples": [
+              0.40080796100664884,
+              0.407308280991856,
+              0.41971017699688673
+            ]
+          }
+        }
+      }
+    },
+    "unchanged_observation_methods": [
+      "context",
+      "bind_work",
+      "stop",
+      "__exit__",
+      "fail",
+      "_return",
+      "seal"
+    ]
+  }
+}

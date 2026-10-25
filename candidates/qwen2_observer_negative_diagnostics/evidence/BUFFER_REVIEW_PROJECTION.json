@@ -1,0 +1,375 @@
+{
+  "original_review": {
+    "bytes": 10354,
+    "sha256": "c1645da6353a569f01ca559636f479c54ec11596486551eb39fdebb0d2386450"
+  },
+  "projection_omits": "private source/reviewer locators only; no raw artifact bytes",
+  "review": {
+    "all_existing_helper_and_unmodified_writer_method_AST_equal": true,
+    "all_five_checkpoints_independently_derived": true,
+    "artifact_bytes_rehashed": 55651224,
+    "benchmark_storage_write_calls": [
+      120001,
+      171,
+      12,
+      120001
+    ],
+    "benchmark_timed_CPU_seconds": [
+      1.310727159,
+      1.247857769,
+      1.303903368,
+      1.375904545
+    ],
+    "candidate_default_off": true,
+    "checks": 242091,
+    "declared_unique_case_records": 35,
+    "existing_case_exit_codes": {
+      "0": 32,
+      "73": 3
+    },
+    "files_rehashed": 153,
+    "freeze": {
+      "bytes": 22382,
+      "sha256": "43ae4972f2976fa3f29d011b89327cc75aefb18fc511d7e0da335e7630c4f1fc"
+    },
+    "negative_artifact_checks": [
+      {
+        "actual_bytes": 1266,
+        "buffer_bytes": 0,
+        "case": "clean_seal",
+        "complete": true,
+        "has_end": true,
+        "known_persisted_bytes": 1266,
+        "raw_complete": true,
+        "whole_frames": 14
+      },
+      {
+        "actual_bytes": 1266,
+        "buffer_bytes": 65536,
+        "case": "clean_seal",
+        "complete": true,
+        "has_end": true,
+        "known_persisted_bytes": 1266,
+        "raw_complete": true,
+        "whole_frames": 14
+      },
+      {
+        "actual_bytes": 1266,
+        "buffer_bytes": 1048576,
+        "case": "clean_seal",
+        "complete": true,
+        "has_end": true,
+        "known_persisted_bytes": 1266,
+        "raw_complete": true,
+        "whole_frames": 14
+      },
+      {
+        "actual_bytes": 1240,
+        "buffer_bytes": 0,
+        "case": "abort_close",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 1240,
+        "raw_complete": false,
+        "whole_frames": 15
+      },
+      {
+        "actual_bytes": 1240,
+        "buffer_bytes": 65536,
+        "case": "abort_close",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 1240,
+        "raw_complete": false,
+        "whole_frames": 15
+      },
+      {
+        "actual_bytes": 1240,
+        "buffer_bytes": 1048576,
+        "case": "abort_close",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 1240,
+        "raw_complete": false,
+        "whole_frames": 15
+      },
+      {
+        "actual_bytes": 1284,
+        "buffer_bytes": 0,
+        "case": "audit_invalid_seal",
+        "complete": false,
+        "has_end": true,
+        "known_persisted_bytes": 1284,
+        "raw_complete": true,
+        "whole_frames": 15
+      },
+      {
+        "actual_bytes": 1284,
+        "buffer_bytes": 65536,
+        "case": "audit_invalid_seal",
+        "complete": false,
+        "has_end": true,
+        "known_persisted_bytes": 1284,
+        "raw_complete": true,
+        "whole_frames": 15
+      },
+      {
+        "actual_bytes": 1284,
+        "buffer_bytes": 1048576,
+        "case": "audit_invalid_seal",
+        "complete": false,
+        "has_end": true,
+        "known_persisted_bytes": 1284,
+        "raw_complete": true,
+        "whole_frames": 15
+      },
+      {
+        "actual_bytes": 15,
+        "buffer_bytes": 0,
+        "case": "short_write",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 15,
+        "buffer_bytes": 65536,
+        "case": "short_write",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 15,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 15,
+        "buffer_bytes": 1048576,
+        "case": "short_write",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 15,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 8,
+        "buffer_bytes": 0,
+        "case": "ioerror",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 8,
+        "buffer_bytes": 65536,
+        "case": "ioerror",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 8,
+        "buffer_bytes": 1048576,
+        "case": "ioerror",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 15,
+        "buffer_bytes": 0,
+        "case": "partial_ioerror",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 15,
+        "buffer_bytes": 65536,
+        "case": "partial_ioerror",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 15,
+        "buffer_bytes": 1048576,
+        "case": "partial_ioerror",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 77,
+        "buffer_bytes": 0,
+        "case": "byte_capacity",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 77,
+        "raw_complete": false,
+        "whole_frames": 2
+      },
+      {
+        "actual_bytes": 77,
+        "buffer_bytes": 65536,
+        "case": "byte_capacity",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 77,
+        "raw_complete": false,
+        "whole_frames": 2
+      },
+      {
+        "actual_bytes": 77,
+        "buffer_bytes": 1048576,
+        "case": "byte_capacity",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 77,
+        "raw_complete": false,
+        "whole_frames": 2
+      },
+      {
+        "actual_bytes": 1260,
+        "buffer_bytes": 0,
+        "case": "event_capacity",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 1260,
+        "raw_complete": false,
+        "whole_frames": 16
+      },
+      {
+        "actual_bytes": 1260,
+        "buffer_bytes": 65536,
+        "case": "event_capacity",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 1260,
+        "raw_complete": false,
+        "whole_frames": 16
+      },
+      {
+        "actual_bytes": 1260,
+        "buffer_bytes": 1048576,
+        "case": "event_capacity",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 1260,
+        "raw_complete": false,
+        "whole_frames": 16
+      },
+      {
+        "actual_bytes": 194,
+        "buffer_bytes": 0,
+        "case": "encode_failure",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 194,
+        "raw_complete": false,
+        "whole_frames": 3
+      },
+      {
+        "actual_bytes": 194,
+        "buffer_bytes": 65536,
+        "case": "encode_failure",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 194,
+        "raw_complete": false,
+        "whole_frames": 3
+      },
+      {
+        "actual_bytes": 194,
+        "buffer_bytes": 1048576,
+        "case": "encode_failure",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 194,
+        "raw_complete": false,
+        "whole_frames": 3
+      },
+      {
+        "actual_bytes": 1222,
+        "buffer_bytes": 0,
+        "case": "unexpected_exit",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 1222,
+        "raw_complete": false,
+        "whole_frames": 14
+      },
+      {
+        "actual_bytes": 8,
+        "buffer_bytes": 65536,
+        "case": "unexpected_exit",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      },
+      {
+        "actual_bytes": 8,
+        "buffer_bytes": 1048576,
+        "case": "unexpected_exit",
+        "complete": false,
+        "has_end": false,
+        "known_persisted_bytes": 8,
+        "raw_complete": false,
+        "whole_frames": 0
+      }
+    ],
+    "observations": [
+      "Writer timing includes input JSON decode, original JSON encode, lifecycle auditing, frame/raw/file hashes and final close. It excludes computing or hashing original DUT packet/result payloads; digest strings are replayed as data.",
+      "One fixed-order sample per arm, with original first, cannot establish a stable CPU benefit or full-DUT speedup. Write-call reduction is established by retained counters and source mechanism.",
+      "Accepted bytes/events/hashes can describe only RAM; persisted counters/hash describe a known OS-acknowledged prefix, not fsync or power-loss durability. Raised writes correctly retain a lower-bound prefix and do not retry.",
+      "The two buffered sudden-exit controls retain only the header, losing 1214 accepted bytes. This is a material weakening of failed-run evidence retention; do not present buffered/unbuffered crash evidence as equivalent.",
+      "Original real-prefix files remain without END. The successful footer control is a synthetic one-group sequence, not DUT lifecycle or numerical PASS.",
+      "Existing diagnostics do not cover failed-drain-during-append, fsync failure, actual SIGKILL or signal delivery. No extra tests were performed in this review.",
+      "35 unique declared records and preserved outputs support one execution per declared case in the harness; they are not a system-wide proof that no other process ran."
+    ],
+    "original_source_and_failure_trace_unchanged": true,
+    "real_prefix": {
+      "DUT_acceptance": false,
+      "bytes": 11089071,
+      "frames": 120000,
+      "has_end": false,
+      "sha256": "580343e92ade5f34e311c606f80887f5f8a103c2aebd3482022073ad6dad0fc6"
+    },
+    "recommendation": "KEEP_DEFAULT_OFF_DO_NOT_INTEGRATE_IN_DUT",
+    "review_actions": {
+      "artifact_hashing": true,
+      "candidate_code_execution": false,
+      "independent_existing_data_parsing": true,
+      "oracle_read": false,
+      "production_modification": false,
+      "static_AST_and_patch_review": true,
+      "target_native_execution": false,
+      "timing_rerun": false
+    },
+    "review_script_sha256": "bd5aa14a64ce38495c5892211c76442c4916f7da5d112ee9d0d22a81b8a0fe9a",
+    "schema": "read-only-buffer-diagnostic-independent-review-v1",
+    "source_closure_exact": true,
+    "status": "PASS_READONLY_DIAGNOSTIC_REVIEW_NOT_DUT_APPROVAL",
+    "unexpected_exit_lost_accepted_bytes": {
+      "1048576": 1214,
+      "65536": 1214,
+      "unbuffered": 0
+    }
+  }
+}

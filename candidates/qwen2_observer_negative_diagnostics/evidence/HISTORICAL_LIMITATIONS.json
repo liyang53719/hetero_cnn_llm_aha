@@ -1,0 +1,20 @@
+{
+  "buffer_sudden_exit": "os._exit(73) controls, not actual SIGKILL; buffered arms lose1214 accepted bytes relative to unbuffered; no reliable CPU benefit",
+  "line_r2_counting": "audit hook plus explicit instrumentation double-counted; not final getframe numbers",
+  "line_r3": {
+    "freeze": {
+      "bytes": 2423,
+      "sha256": "bc1bb7234870e5c184ebb1cff05b136265af2b58692880ca7cdff9d8a70da672"
+    },
+    "result": "slower exact uninstrumented fixture timing retained; r4 cached code-line sets remained slower"
+  },
+  "line_r4": "two final mode suites passed limited synthetic controls, performance not adopted; original26 nested overlap retained",
+  "line_run01": {
+    "original_log": {
+      "bytes": 1773,
+      "sha256": "1b4f1c1ff513a45789c127988ccb22b9d158d776dc8bf34b382205ba9f0dde16"
+    },
+    "result": "fixture counter KeyError line_callbacks, exit1; sys.setprofile did not expose monitoring callback nested events; not DUT result/field failure"
+  },
+  "no_historical_evidence_modified": true
+}

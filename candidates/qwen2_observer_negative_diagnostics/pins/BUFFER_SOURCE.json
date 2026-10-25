@@ -1,0 +1,25 @@
+{
+  "manifest": {
+    "candidate_default": "buffer_bytes=0; no production wiring or environment opt-in",
+    "candidate_sha256": "ceeccc195c53f5dea0db3c3b074d0fee6df79ef42d1667e81743896a14a438a0",
+    "closure_bytes": 15039,
+    "closure_sha256": "7609a0293c69f939ca58270af4ef0d0ff506009db1fd699859fff8ac81d9d6fb",
+    "limits_per_case": {
+      "address_space_bytes": 268435456,
+      "affinity_cpus": 1,
+      "cpu_seconds": 30,
+      "wall_seconds": 45
+    },
+    "original_source_size": 21232,
+    "scope": "Pure stdlib isolated writer closure only; no native/DUT/task-module import; no rerun; no publish.",
+    "source_sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+  },
+  "original_freeze": {
+    "bytes": 22382,
+    "sha256": "43ae4972f2976fa3f29d011b89327cc75aefb18fc511d7e0da335e7630c4f1fc"
+  },
+  "original_manifest": {
+    "bytes": 788,
+    "sha256": "c4a61bb1b557e83fab771ad23d4026382017f83744099dfb5976476b9c65a4ec"
+  }
+}

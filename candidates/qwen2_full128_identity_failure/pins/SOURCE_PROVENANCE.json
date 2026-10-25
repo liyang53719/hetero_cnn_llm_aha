@@ -1,0 +1,45 @@
+{
+  "source_manifest": {
+    "bytes": 16237,
+    "sha256": "a6632a6ae29f00973e81f6ec617e2344e190842020ec6210fbbdb93a06d72feb"
+  },
+  "source_freeze": {
+    "bytes": 4710,
+    "sha256": "57f21278f57a35247b28239f184d276f6c5602045af5efa994320a927a882421"
+  },
+  "changed_original_byte_sources": [
+    "candidates/qwen2_full128_identity_failure/delta/qwen2_ordered_fullgraph_entry/bridge.py",
+    "candidates/qwen2_full128_identity_failure/delta/qwen2_ordered_fullgraph_entry/runner.py"
+  ],
+  "borrowed_identity_monitor_and_service_byte_exact": true,
+  "source_adaptation": false,
+  "omitted_private_source_files": [
+    {
+      "logical_role": "rope-source-pins",
+      "bytes": 877,
+      "sha256": "3f4b249a7549dfcd740eb760bd3c2bde0c873637906e7dd3b7454e7c9c61d973",
+      "reason": "Private physical source locators; role-only projection, not original byte reconstruction."
+    }
+  ],
+  "omitted_private_tools": [
+    {
+      "logical_role": "prepare_source.py",
+      "bytes": 1989,
+      "sha256": "b54ff903ee50c5d07a53fb4948d4d54c16c05daa3e11da764ac5fb26c598b143",
+      "reason": "Preparation/mock path literals; original hash only; not silently rewritten or executed."
+    },
+    {
+      "logical_role": "run_source_mocks.py",
+      "bytes": 2016,
+      "sha256": "97c2ced0e44fde526016439348a88c2d37add9405aa6d1b3f65d660354758c18",
+      "reason": "Preparation/mock path literals; original hash only; not silently rewritten or executed."
+    },
+    {
+      "logical_role": "test_mask_drain_ast.py",
+      "bytes": 13357,
+      "sha256": "6d71f0cc183d4f3b86f1a6abe084386968bbdd49ac39fe897c5125e0064143bf",
+      "reason": "Preparation/mock path literals; original hash only; not silently rewritten or executed."
+    }
+  ],
+  "gate_sources_not_republished": "Unchanged private deployment files represented by exact source hashes/config provenance; no fabricated portable executable admission."
+}

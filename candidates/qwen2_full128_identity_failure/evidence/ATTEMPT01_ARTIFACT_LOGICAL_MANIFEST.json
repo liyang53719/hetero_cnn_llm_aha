@@ -1,0 +1,43 @@
+{
+  "original": {
+    "bytes": 1001,
+    "sha256": "f2dfc09eaab255d4571b7e70b874991b9156a96d18bdd014b0464cf5435273ed"
+  },
+  "scope": "Opaque relative artifact names/hashes/sizes only. External failure inventory, not a retroactive run-native success seal. No raw payload or process/file identities.",
+  "files": {
+    "APPROVAL.json": {
+      "bytes": 1587,
+      "sha256": "0d099047c993fb9b7f41b9f188b2f26e0669ae84bb68bbf2e2695d4b05e2bc9a"
+    },
+    "LAUNCH.json": {
+      "bytes": 2117,
+      "sha256": "1a4d51e9b47657d3690b077a8e9fe9e971fe40c04f863311193729438ab8fbdf"
+    },
+    "POSTFLIGHT.json": {
+      "bytes": 238,
+      "sha256": "ca7333034e609839590ab2e671d07c85efea6b5f1b9e8019959cd06fc77dce2c"
+    },
+    "PREFLIGHT.json": {
+      "bytes": 225,
+      "sha256": "8747d9fd086d6086915e7c79fc170755cebc4b409aefba83226a8a121a3ca9e9"
+    },
+    "RECEIPT.json": {
+      "bytes": 122509,
+      "sha256": "cf9be681ec3ee1751f59f4dccda98785f6ea3bf18af1e72420b800435e6bdc8a"
+    },
+    "REVIEW.json": {
+      "bytes": 126150,
+      "sha256": "2d366d27c811a1eb9d6c48f528b7a83bb3bfcf871c42fcfa760560c36170da12"
+    },
+    "stderr.log": {
+      "bytes": 884,
+      "sha256": "fa9ab8a7e0529a7e0500ee053190f917f80ce90adeeff9db063ae91a4d9aedf5"
+    },
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "file_count": 8,
+  "bytes": 253710
+}

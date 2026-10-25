@@ -1,0 +1,170 @@
+{
+  "original": {
+    "bytes": 4238,
+    "sha256": "e03c215ffab0e41524975426236b11c77cbe5e5d06729c3d2b63fcc2f97b2996"
+  },
+  "causal_optimization_speedup_attribution": false,
+  "current": {
+    "active_group": {
+      "accepted_steps": 3,
+      "done": false,
+      "epoch": null,
+      "first_event": 1766009,
+      "last_event": 1766012,
+      "legacy_replies": 0,
+      "ordinal": 15382,
+      "pending": null,
+      "position": {
+        "active_keys": 16,
+        "first_key": 48,
+        "head": 10,
+        "kind": "QK",
+        "kv_head": 1,
+        "mask": 255,
+        "opcode": 35,
+        "profile": 2,
+        "steps": 8,
+        "token": 107
+      },
+      "reply": false,
+      "retired_results": 0,
+      "tag": 5030,
+      "ticket": null
+    },
+    "complete_records": 1766012,
+    "event_counts": {
+      "accept_group": 15382,
+      "accept_step": 603563,
+      "acquire": 1,
+      "retire_done": 15381,
+      "retire_legacy_reply": 563328,
+      "retire_result": 568357
+    },
+    "file_bytes": 168738143,
+    "file_sha256": "fb792f566cea3d27640507cd6dfd1f0c3e9e446dcbc12bf3145a4e89d3af26f0",
+    "framing": {
+      "kind": "EOF_AT_RECORD_BOUNDARY_NO_FOOTER",
+      "offset": 168738143,
+      "tail_bytes": 0
+    },
+    "group_stats": {
+      "PV": {
+        "done_retired": 10352,
+        "groups_completed": 10352,
+        "groups_started": 10352,
+        "legacy_replies_retired": 563328,
+        "results_retired": 563328,
+        "steps_accepted": 563328
+      },
+      "QK": {
+        "done_retired": 5029,
+        "groups_completed": 5029,
+        "groups_started": 5030,
+        "results_retired": 5029,
+        "steps_accepted": 40235
+      }
+    },
+    "groups_completed": {
+      "PV": 10352,
+      "QK": 5029
+    },
+    "groups_started": 15382,
+    "owner_state": {
+      "acquired": true,
+      "epoch": 0,
+      "last_edge": 5822096,
+      "last_ticket": 15409,
+      "released": false,
+      "terminal_response": false
+    }
+  },
+  "delta_completed_PV_groups": 1136,
+  "delta_completed_QK_groups": 990,
+  "delta_observed_complete_records": 362161,
+  "full29_numeric_pass": false,
+  "group_completion_definition": {
+    "PV": "all token+1 accepts/results, matching done, and final legacy reply retired",
+    "QK": "all eight accepts plus matching result and done retired"
+  },
+  "hardware_acceptance": false,
+  "hardware_cycles": null,
+  "numeric_acceptance": false,
+  "prior": {
+    "active_group": {
+      "accepted_steps": 20,
+      "done": false,
+      "epoch": 0,
+      "first_event": 1403791,
+      "last_event": 1403851,
+      "legacy_replies": 20,
+      "ordinal": 13256,
+      "pending": null,
+      "position": {
+        "col": 0,
+        "head": 0,
+        "kind": "PV",
+        "kv_head": 0,
+        "mask": 1,
+        "opcode": 36,
+        "profile": 0,
+        "steps": 97,
+        "token": 96
+      },
+      "reply": false,
+      "retired_results": 20,
+      "tag": 9217,
+      "ticket": 13284
+    },
+    "complete_records": 1403851,
+    "event_counts": {
+      "accept_group": 13256,
+      "accept_step": 479308,
+      "acquire": 1,
+      "retire_done": 13255,
+      "retire_legacy_reply": 446996,
+      "retire_result": 451035
+    },
+    "file_bytes": 133834196,
+    "file_sha256": "9b821d7a5dc032b9c8f10232a96f51e639b2c6ad3cfaf8c2dccfe198c499e1b7",
+    "framing": {
+      "kind": "EOF_AT_RECORD_BOUNDARY_NO_FOOTER",
+      "offset": 133834196,
+      "tail_bytes": 0
+    },
+    "group_stats": {
+      "PV": {
+        "done_retired": 9216,
+        "groups_completed": 9216,
+        "groups_started": 9217,
+        "legacy_replies_retired": 446996,
+        "results_retired": 446996,
+        "steps_accepted": 446996
+      },
+      "QK": {
+        "done_retired": 4039,
+        "groups_completed": 4039,
+        "groups_started": 4039,
+        "results_retired": 4039,
+        "steps_accepted": 32312
+      }
+    },
+    "groups_completed": {
+      "PV": 9216,
+      "QK": 4039
+    },
+    "groups_started": 13256,
+    "owner_state": {
+      "acquired": true,
+      "epoch": 0,
+      "last_edge": 4626894,
+      "last_ticket": 13284,
+      "released": false,
+      "terminal_response": false
+    }
+  },
+  "ratio_or_runtime_completion_percentage_claimed": false,
+  "reference_values_read": false,
+  "schema": "same-method-retained-prefix-comparison-v1",
+  "status": "DIAGNOSTIC_PREFIX_COMPARISON_NOT_ACCEPTANCE",
+  "projection": "Physical source/review/stream locators converted to logical roles; all comparative quantities and negative acceptance claims retained. Prior prefix was read, not reparsed; no raw event payload included."
+}

@@ -1,0 +1,20 @@
+{
+  "original": {
+    "bytes": 718,
+    "sha256": "f87c9ffd1d85c96fcc2da7d00cd2346752ec908614aed15929e355934e68004b"
+  },
+  "changes": [
+    "input/output root only",
+    "fail-terminal receipt check",
+    "exclusive one-attempt marker",
+    "cross-check external artifact inventory hash/size during sole pass",
+    "add ctime to fd stability check"
+  ],
+  "method": "same independent canonical frame/lifecycle-prefix/schedule parser as 0613; no complete acceptance or DUT imports",
+  "new_script_sha256": "af2c59c92286affd8d40d8fbfbade5d02967c199795ab70839582c13b5b7dd9b",
+  "original_stream_untouched": true,
+  "prior_script": "retained-evidence:qwen2_m128_retained_prefix_analysis_20261025T0613/parse_retained.py",
+  "prior_script_sha256": "89b076e87056c8635a14366fdda2d2503d331c0a1f70e2fac6cb1ac7e262a14d",
+  "syntax_checked": true,
+  "projection": "Physical source/review/stream locators converted to logical roles; all comparative quantities and negative acceptance claims retained. Prior prefix was read, not reparsed; no raw event payload included."
+}

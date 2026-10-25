@@ -1,0 +1,55 @@
+{
+  "original": {
+    "bytes": 2456,
+    "sha256": "ad0abd9a66fb81c16c5a2f0dc7e67f0d4a573d8827dbf4ef17d6ae7ba374178f"
+  },
+  "external_inventory": "retained-evidence:full128_terminal_metadata_review_20261025T1053/ARTIFACT_MANIFEST.json",
+  "external_stream_digest_agreed": true,
+  "full_stream_hash_computed_in_same_parse": true,
+  "missing_terminal_artifacts": {
+    "COMPLETION_SEAL.json": true,
+    "SERVICE_PROTOCOL.json": true,
+    "TERMINAL_COMPARISON.json": true,
+    "WORKER_RESULT.json": true,
+    "actual_terminal/MANIFEST.json": true,
+    "dut/actual_attention_capture/EVIDENCE.json": true
+  },
+  "original_stream_edited": false,
+  "original_stream_reads_for_this_analysis": 1,
+  "schema": "prefix-analysis-source-evidence-v1",
+  "source_pins": {
+    "config-0941:gate/identity_m128_02/RECEIPT.json": {
+      "bytes": 122218,
+      "sha256": "43104ac3e6ddf552e95b23a7ca47da79179c3e12cd026b473992b96f6d4aeffa"
+    },
+    "config-0941:gate/identity_m128_02/dut/orchestration.json": {
+      "bytes": 41636,
+      "sha256": "94eb831786b1ac84cba3274470c17be3ae67d3c21f78e1aaa346dc11a082fac4"
+    },
+    "config-0941:gate/run_gate.py": {
+      "bytes": 15125,
+      "sha256": "d81e660cc2154341f0b4897cef7e17ea5ccd2dd71803354cd4a074c939e6dbda"
+    },
+    "config-0941:gate/supervisor.py": {
+      "bytes": 15274,
+      "sha256": "d4799e0f9a1707d95c66529134cf17102a7997697bcf2e8665b4c77429c9a53d"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/stream.py": {
+      "bytes": 21232,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    "source-root:candidates/qwen2_resident_matrix/production_qk16_model/schedule.py": {
+      "bytes": 6218,
+      "sha256": "4cd2609d2fe1ffffd5d14b9398c45c108b9382c0097d5316502b41486f37cf1b"
+    },
+    "retained-evidence:qwen2_m128_retained_prefix_analysis_20261025T0613/TRACE_PREFIX.json": {
+      "bytes": 28679,
+      "sha256": "2eedcf4c747abaa2e2d914f368e433fad897ea41e4bb4efd636e647626f4016d"
+    },
+    "retained-evidence:qwen2_m128_retained_prefix_analysis_20261025T0613/parse_retained.py": {
+      "bytes": 10742,
+      "sha256": "89b076e87056c8635a14366fdda2d2503d331c0a1f70e2fac6cb1ac7e262a14d"
+    }
+  },
+  "projection": "Physical source/review/stream locators converted to logical roles; all comparative quantities and negative acceptance claims retained. Prior prefix was read, not reparsed; no raw event payload included."
+}

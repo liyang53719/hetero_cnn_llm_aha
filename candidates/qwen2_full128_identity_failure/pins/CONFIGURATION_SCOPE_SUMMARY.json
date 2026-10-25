@@ -1,0 +1,253 @@
+{
+  "revisions": {
+    "0911": {
+      "original_config": {
+        "bytes": 952566,
+        "sha256": "3abc8af6c128391fd2ec3ee4e11ea2a7f0c4c96af8eb574e896a2bbe52d382eb"
+      },
+      "original_freeze": {
+        "bytes": 3871,
+        "sha256": "f4265ab8dea30c7f76dfdb99123504d7404d42360f40d970b1b15fd94b2212aa"
+      },
+      "schema": "qwen2-m128-exact-dut-config-v1",
+      "scope": "single_original_public21_m128_qk2_pv0_observed_domain_terminal_comparison",
+      "acceptance_scope": "Observed physical numerical domains plus original whole terminal and protocol; full29 numeric/hardware/noninterference acceptance remain false",
+      "resources": {
+        "address_space_bytes": 3221225472,
+        "cleanup_seconds": 30,
+        "cpu_seconds": 3600,
+        "cpus": 1,
+        "event_limit": 2478403,
+        "log_bytes": 16777216,
+        "output_bytes": 805306368,
+        "trace_bytes": 402653184,
+        "tree_rss_bytes": 2147483648,
+        "wall_seconds": 4200
+      },
+      "expected_groups": {
+        "all": 19200,
+        "pv": 12288,
+        "qk": 6912
+      },
+      "expected_steps": 847872,
+      "expected_legacy_replies": 792576,
+      "expected_success_events": 2478339,
+      "profile_sha256": "e12c1b5323b7c9ef4b4d16fe26ddcd8858ea0b087d5c63989dd8cd9e4db2470a",
+      "source_manifest_sha256": "97bbae97b22b6e1f66592ce5260bce2467e8fefeccf383c45bb640af0cc57191",
+      "dependency_manifest_sha256": "0f367aacb8d258366e2d965c62568ef48e4a140c88b7fe76be010d4dc48707e8",
+      "input_manifest_sha256": "db93506223c322b639698c417685913c4cc8b97764f20063f831e51460e571ea",
+      "runtime_manifest_sha256": "a44331134eab889410645d553e1751946579a5515caf4498e398f4d787f80c6e",
+      "comparator_source_sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d",
+      "comparator_review_sha256": "cf42890b05835f6a0c4028c85ca866928bf8e8aba1b148a281b1a13b28451307",
+      "comparator_scope": "Independent r2 source/mock qualified; future actual observed-domain comparison after original live whole terminal only",
+      "source_payload_note": "One exact 8+JSON header-only source metadata .bin, no tensor payload.",
+      "service_binding_methods": 9,
+      "no_budget_scope_or_threshold_expansion": true,
+      "function_internal_globals_identity_claimed": false,
+      "unknown_descriptor_evaluation": false,
+      "actual_numeric_authorized": false,
+      "execution_authorized": false,
+      "initialization_qualification_only": true,
+      "no_M16_DUT_PASS_claim": true,
+      "reason_skip_M16": "Fixed128 Dense physical loops make M16 approximately same cost; this is independently scoped M128, not inherited M16 qualification",
+      "identity_observer_integration": {
+        "actual_integrated_runtime_PASS": false,
+        "gate_control7_unchanged": true,
+        "mask_evidence_required": true,
+        "production_source316_unchanged": true,
+        "selective_observer_lines": true,
+        "source_directory": "retained-evidence:full128_mask_integration_20261025T0900",
+        "source_freeze": {
+          "bytes": 4710,
+          "sha256": "57f21278f57a35247b28239f184d276f6c5602045af5efa994320a927a882421"
+        },
+        "source_review": {
+          "path": "retained-evidence:full128_mask_review_20261025T0905/REVIEW.json",
+          "pin": {
+            "bytes": 13564,
+            "sha256": "1aea8c1b3c55df573d5ac239a8a9ecf516fe55c5fd3bec9ae736c11b5355f4b4"
+          }
+        },
+        "variant": "selective_identity_r1"
+      },
+      "pin_count": 2192,
+      "runtime_pin_count": 746,
+      "gate_source_count": 7,
+      "profile_selective_observer_lines": true,
+      "gate_executable_files": {
+        "config-0911:gate/admission.py": {
+          "bytes": 8453,
+          "sha256": "d48e74d998f83ced15c5aa2278614099f0326ed0294259c642661cadc6940f52"
+        },
+        "config-0911:gate/common.py": {
+          "bytes": 1107,
+          "sha256": "525864434d3e6315382075a40bbd9a18173649ef57e546414e426838bc14afe5"
+        },
+        "config-0911:gate/native_binding.py": {
+          "bytes": 1745,
+          "sha256": "762d6c12089c9386f9660ade58817a9248ce167c556f0a3254ced70ac312c25b"
+        },
+        "config-0911:gate/run_gate.py": {
+          "bytes": 15125,
+          "sha256": "d81e660cc2154341f0b4897cef7e17ea5ccd2dd71803354cd4a074c939e6dbda"
+        },
+        "config-0911:gate/runtime_admission.py": {
+          "bytes": 20319,
+          "sha256": "32f610cdea1bfe79caeafd7dcf473447ca8b4ba78cbf8dc0e362d354ed27bedc"
+        },
+        "config-0911:gate/supervisor.py": {
+          "bytes": 15274,
+          "sha256": "d4799e0f9a1707d95c66529134cf17102a7997697bcf2e8665b4c77429c9a53d"
+        },
+        "config-0911:gate/worker.py": {
+          "bytes": 14305,
+          "sha256": "1e87179b88578c64ffe5290dca423d7e4ab40486530214d8e9adaf4ffa16dad3"
+        }
+      }
+    },
+    "0941": {
+      "original_config": {
+        "bytes": 956964,
+        "sha256": "8fd61f7fcadd5bf0ce3a044420da380b8fe69722021f8df629079e803fdf6f58"
+      },
+      "original_freeze": {
+        "bytes": 3642,
+        "sha256": "3d06b28ead5de74285403bcd4b4ddc23cab5654edd5bc787d70f09914435ff74"
+      },
+      "schema": "qwen2-m128-exact-dut-config-v1",
+      "scope": "single_original_public21_m128_qk2_pv0_observed_domain_terminal_comparison",
+      "acceptance_scope": "Observed physical numerical domains plus original whole terminal and protocol; full29 numeric/hardware/noninterference acceptance remain false",
+      "resources": {
+        "address_space_bytes": 3221225472,
+        "cleanup_seconds": 30,
+        "cpu_seconds": 3600,
+        "cpus": 1,
+        "event_limit": 2478403,
+        "log_bytes": 16777216,
+        "output_bytes": 805306368,
+        "trace_bytes": 402653184,
+        "tree_rss_bytes": 2147483648,
+        "wall_seconds": 4200
+      },
+      "expected_groups": {
+        "all": 19200,
+        "pv": 12288,
+        "qk": 6912
+      },
+      "expected_steps": 847872,
+      "expected_legacy_replies": 792576,
+      "expected_success_events": 2478339,
+      "profile_sha256": "e12c1b5323b7c9ef4b4d16fe26ddcd8858ea0b087d5c63989dd8cd9e4db2470a",
+      "source_manifest_sha256": "97bbae97b22b6e1f66592ce5260bce2467e8fefeccf383c45bb640af0cc57191",
+      "dependency_manifest_sha256": "0f367aacb8d258366e2d965c62568ef48e4a140c88b7fe76be010d4dc48707e8",
+      "input_manifest_sha256": "db93506223c322b639698c417685913c4cc8b97764f20063f831e51460e571ea",
+      "runtime_manifest_sha256": "14e824e859b71f41dce1a26ab9a2422be0c572260ccabc1aade31e363d8f82de",
+      "comparator_source_sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d",
+      "comparator_review_sha256": "cf42890b05835f6a0c4028c85ca866928bf8e8aba1b148a281b1a13b28451307",
+      "comparator_scope": "Independent r2 source/mock qualified; future actual observed-domain comparison after original live whole terminal only",
+      "source_payload_note": "One exact 8+JSON header-only source metadata .bin, no tensor payload.",
+      "service_binding_methods": 9,
+      "no_budget_scope_or_threshold_expansion": true,
+      "function_internal_globals_identity_claimed": false,
+      "unknown_descriptor_evaluation": false,
+      "actual_numeric_authorized": false,
+      "execution_authorized": false,
+      "initialization_qualification_only": true,
+      "no_M16_DUT_PASS_claim": true,
+      "reason_skip_M16": "Fixed128 Dense physical loops make M16 approximately same cost; this is independently scoped M128, not inherited M16 qualification",
+      "identity_observer_integration": {
+        "actual_integrated_runtime_PASS": false,
+        "gate_control7_unchanged": true,
+        "mask_evidence_required": true,
+        "production_source316_unchanged": true,
+        "selective_observer_lines": true,
+        "source_directory": "retained-evidence:full128_mask_integration_20261025T0900",
+        "source_freeze": {
+          "bytes": 4710,
+          "sha256": "57f21278f57a35247b28239f184d276f6c5602045af5efa994320a927a882421"
+        },
+        "source_review": {
+          "path": "retained-evidence:full128_mask_review_20261025T0905/REVIEW.json",
+          "pin": {
+            "bytes": 13564,
+            "sha256": "1aea8c1b3c55df573d5ac239a8a9ecf516fe55c5fd3bec9ae736c11b5355f4b4"
+          }
+        },
+        "variant": "selective_identity_r1"
+      },
+      "parent_argv_order_repair": {
+        "contract": {
+          "path": "config-0941:ARGV_CONTRACT.json",
+          "pin": {
+            "bytes": 1265,
+            "sha256": "1457dcbbca3dfe554841ae444085c4476705b10a0b27049bcd90b6ec032ccdb1"
+          }
+        },
+        "failure_receipt": {
+          "path": "config-0911:gate/identity_m128_01/RECEIPT.json",
+          "pin": {
+            "bytes": 122509,
+            "sha256": "cf9be681ec3ee1751f59f4dccda98785f6ea3bf18af1e72420b800435e6bdc8a"
+          }
+        },
+        "new_attempt_authorized": false,
+        "predecessor_config": {
+          "path": "config-0911:gate/CONFIG.json",
+          "pin": {
+            "bytes": 952566,
+            "sha256": "3abc8af6c128391fd2ec3ee4e11ea2a7f0c4c96af8eb574e896a2bbe52d382eb"
+          }
+        },
+        "predecessor_consumed_claim": {
+          "path": "config-0911:gate/EXACT_DUT_CLAIM.json",
+          "pin": {
+            "bytes": 761,
+            "sha256": "565a59db2c3ef400bdd53e186e860fb644a00c897112380d6a19b8a32fb3a567"
+          }
+        },
+        "required_flags": [
+          "-I",
+          "-S",
+          "-B"
+        ],
+        "scope": "FRESH_GATE_PATH_AND_PINS_ONLY_NO_SOURCE_RULE_CHANGE"
+      },
+      "pin_count": 2206,
+      "runtime_pin_count": 746,
+      "gate_source_count": 7,
+      "profile_selective_observer_lines": true,
+      "gate_executable_files": {
+        "config-0941:gate/admission.py": {
+          "bytes": 8453,
+          "sha256": "d48e74d998f83ced15c5aa2278614099f0326ed0294259c642661cadc6940f52"
+        },
+        "config-0941:gate/common.py": {
+          "bytes": 1107,
+          "sha256": "525864434d3e6315382075a40bbd9a18173649ef57e546414e426838bc14afe5"
+        },
+        "config-0941:gate/native_binding.py": {
+          "bytes": 1745,
+          "sha256": "762d6c12089c9386f9660ade58817a9248ce167c556f0a3254ced70ac312c25b"
+        },
+        "config-0941:gate/run_gate.py": {
+          "bytes": 15125,
+          "sha256": "d81e660cc2154341f0b4897cef7e17ea5ccd2dd71803354cd4a074c939e6dbda"
+        },
+        "config-0941:gate/runtime_admission.py": {
+          "bytes": 20319,
+          "sha256": "32f610cdea1bfe79caeafd7dcf473447ca8b4ba78cbf8dc0e362d354ed27bedc"
+        },
+        "config-0941:gate/supervisor.py": {
+          "bytes": 15274,
+          "sha256": "d4799e0f9a1707d95c66529134cf17102a7997697bcf2e8665b4c77429c9a53d"
+        },
+        "config-0941:gate/worker.py": {
+          "bytes": 14305,
+          "sha256": "1e87179b88578c64ffe5290dca423d7e4ab40486530214d8e9adaf4ffa16dad3"
+        }
+      }
+    }
+  },
+  "projection": "Selected scopes/resources/counters/source identities only. Omitted actual argv, private locators, executable config and approval/claim values. Historical preparation flags are retained unchanged, not current actual outcomes. 0911 composes 0900 mask sources; 0941 only relocates gate identity/pins and fixes root parent invocation order; seven gate source bytes and profile/interface bytes are identical.",
+  "source_assembly_only": true
+}

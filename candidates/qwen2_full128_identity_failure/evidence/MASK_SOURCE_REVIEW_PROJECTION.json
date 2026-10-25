@@ -1,0 +1,230 @@
+{
+  "original": {
+    "bytes": 13564,
+    "sha256": "1aea8c1b3c55df573d5ac239a8a9ecf516fe55c5fd3bec9ae736c11b5355f4b4"
+  },
+  "status": "PASS_INDEPENDENT_FULL128_SOURCE_MOCK_REVIEW_ONLY_NOT_EXECUTION_ADMISSION",
+  "source_freeze_sha256": "57f21278f57a35247b28239f184d276f6c5602045af5efa994320a927a882421",
+  "source_manifest_sha256": "a6632a6ae29f00973e81f6ec617e2344e190842020ec6210fbbdb93a06d72feb",
+  "prior_freeze_sha256": "8f4d6771e79b1d3e87baed7315c988c30e33e56d9a3013089f674c2ff4f9965c",
+  "source_files": {
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/__init__.py": {
+      "bytes": 84,
+      "sha256": "dac2807ea7d89bb043d25edc9cf9675db2b9ef739495af19892b453d8899d1cd"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/bridge.py": {
+      "bytes": 11713,
+      "sha256": "a69dba9bd111260d8d04a03f3bbe722f579f6d7d3556cb3030ed0b370459831c"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/cold_binding.py": {
+      "bytes": 6866,
+      "sha256": "62b4cd798c9764ea242268a939014590742e522165549eab2e40efc77a23a598"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/cold_policy.py": {
+      "bytes": 7935,
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/oracle_path_gate.py": {
+      "bytes": 7529,
+      "sha256": "d59b811c31e4f8d98f928a189036e6754387ee4e6d4ab532ee8fd7a7f748cc36"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/registry.py": {
+      "bytes": 23885,
+      "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/rope_operand_capture/SOURCE_PINS.json": {
+      "bytes": 877,
+      "sha256": "3f4b249a7549dfcd740eb760bd3c2bde0c873637906e7dd3b7454e7c9c61d973"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/rope_operand_capture/__init__.py": {
+      "bytes": 72,
+      "sha256": "53cc4e964d14a483f9fecc56b32a9935f10e76f757f27de97eb1bfa15c108567"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/rope_operand_capture/rope_capture.py": {
+      "bytes": 25848,
+      "sha256": "25d31af4bc242344f6c545aaa56ebd32d8babd5490efa43b22508292e7bbc5d2"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/runner.py": {
+      "bytes": 17763,
+      "sha256": "ec2627602b4264b8996e77e21304297c914192cca93570d031ae8f6e814197c5"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/runtime_binding.py": {
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/service_trace.py": {
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/stream.py": {
+      "bytes": 21232,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    "mask-source:overlay/qwen2_ordered_fullgraph_entry/terminal_comparator.py": {
+      "bytes": 13556,
+      "sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d"
+    },
+    "mask-source:overlay/qwen2_ordered_observer/monitor.py": {
+      "bytes": 14705,
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+    },
+    "mask-source:overlay/qwen2_ordered_observer/capture.py": {
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    "mask-source:overlay/qwen2_ordered_observer/SOURCE_PINS.json": {
+      "bytes": 1159,
+      "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+    }
+  },
+  "source_and_pin_checks": 499,
+  "production_sources_rehashed": 316,
+  "frozen_new_artifacts_verified": 28,
+  "prior_frozen_artifacts_verified": 31,
+  "tests": {
+    "reused_author_AST_dummy_fake_monitor_normal": 28,
+    "reused_author_AST_dummy_fake_monitor_optimized": 28,
+    "independent_AST_dummy_normal": 18,
+    "independent_AST_dummy_optimized": 18,
+    "author_tests_rerun": false,
+    "actual_monitor_or_runtime_evidence": false
+  },
+  "findings": {
+    "changed_executable_files_vs_original": [
+      "monitor.py",
+      "service_trace.py",
+      "bridge.py",
+      "runner.py"
+    ],
+    "monitor_capture_sourcepins_and_service_lease_identity_candidate_exact": true,
+    "capture_fields_frequency_shapes_unchanged_source": true,
+    "frame_sensitive_callbacks_inherited_without_wrapper": true,
+    "bridge_new_mask_snapshot_AST_matches_M16_source": true,
+    "installed_and_cleaned_role_masks_and_ownership_checked_by_new_route": true,
+    "runner_exactly_one_mask_evidence_line_added": true,
+    "driver_call_arguments_AST_unchanged": true,
+    "observe_driver_AST_unchanged": true,
+    "service_MRO_and_nine_method_contract_unchanged": true,
+    "arithmetic_driver_stream_registry_comparator_oracle_source_unchanged": true,
+    "normal_monitor_mask_errors_recorded_and_original_driver_report_returned": true,
+    "whole_suffix_and_live_terminal_before_observer_failure_rejection": true,
+    "driver_exception_and_cancellation_identity_preserved_in_independent_mocks": true,
+    "terminal_only_reference_transition_unchanged": true,
+    "original_M128_CPU_failure_preserved": true,
+    "all_reviewed_source_and_prior_evidence_unchanged": true
+  },
+  "profile_boundary": {
+    "current_directory_has_executable_profile_or_config": false,
+    "prior_draft_selective_observer_lines": true,
+    "prior_draft_observer_root": "retained-evidence:full128_observer_integration_20261025T0852/overlay/qwen2_ordered_observer",
+    "required_current_observer_root": "mask-source:overlay/qwen2_ordered_observer",
+    "required_current_candidate_root": "mask-source:overlay/qwen2_ordered_fullgraph_entry",
+    "future_requirement": "Recompose and pin exact current roots and explicit selective_observer_lines=true in a fresh independently admitted profile/config. The prior source-only draft is not current executable admission; omission/false flag does not qualify as this candidate."
+  },
+  "resource_boundary": {
+    "original_limits": {
+      "address_space_bytes": 3221225472,
+      "cleanup_seconds": 30,
+      "cpu_seconds": 3600,
+      "cpus": 1,
+      "event_limit": 2478403,
+      "log_bytes": 16777216,
+      "output_bytes": 805306368,
+      "trace_bytes": 402653184,
+      "tree_rss_bytes": 2147483648,
+      "wall_seconds": 4200
+    },
+    "unchanged": true,
+    "evidence_estimate": {
+      "path": "retained-evidence:full128_observer_integration_20261025T0852/RESOURCE_ESTIMATE.json",
+      "sha256": "20c29ed7901f0935e7805d2e3358b54de67359c43aeb80d2358805a181a29620"
+    },
+    "fit_proven": false,
+    "admission_rule": "Before any run: evidence-supported resource estimate, disclosed uncertainty, and enforcement of original 3600 CPU s/4200 wall s and all other caps. A mathematical guarantee of completion is not required. This source/mock review neither expands caps nor grants execution."
+  },
+  "nonblocking_limitations": [
+    {
+      "issue": "Cancellation evidence preservation",
+      "detail": "If cleaned mask verification raises KeyboardInterrupt after a successful driver return, it propagates before tracer.raw_receipt(); that cancellation path may omit the partial raw receipt from state/runner evidence. Active driver errors retain identity and the outer finally continues raw-receipt capture. No cancellation/kill path is promised successful mask evidence or acceptance."
+    },
+    {
+      "issue": "Setup versus observation failures",
+      "detail": "Constructor/source-binding failures before drive remain fatal, as in the original bridge. KeyboardInterrupt is explicit cancellation, not a drain promise. Ordinary entered-monitor/mask failures are deferred through original driver and suffix terminal before acceptance rejects."
+    },
+    {
+      "issue": "No actual mask qualification",
+      "detail": "All new execution is AST-selected definitions with dummy driver/tracer/owner or fake monitoring. No production/native module imports, tensor reads, actual owner/suffix runs, reference arithmetic or real CPython monitoring evidence were performed. Source equality carries previous semantic review only, not runtime acceptance."
+    },
+    {
+      "issue": "Evidence can be absent",
+      "detail": "SIGKILL or cancellation before normal preservation can leave no installed/cleaned artifacts. Missing future actual snapshots must fail qualification; configuration intent and other M2/M16 receipts cannot replace full128 evidence."
+    }
+  ],
+  "remaining_execution_gates": [
+    "Separate independently reviewed M16 postterminal numerical reference closure; do not promote its prior aggregate-budget failure or two retained terminals to numerical PASS.",
+    "Fresh complete full128 source/runtime/profile/input/ELF/oracle provenance and config admission for these exact new source roots; preserve original service/MRO/counter/threshold contracts.",
+    "Evidence-supported whole-worker resource assessment with uncertainty and all original hard/sampled policy caps enforced; no component-time extrapolation as fit proof.",
+    "Fresh one-use root execution authorization and concurrency check. No actual launch or automatic retry is authorized by this review.",
+    "Any later actual qualification requires true original full suffix terminal, complete field/frequency/shape evidence and installed/cleaned masks, full protocol stream replay, postflight/policy/runtime closure, and terminal-only numerical acceptance within original bounds."
+  ],
+  "evidence_pins": {
+    "mask-source:FREEZE.json": {
+      "bytes": 4710,
+      "sha256": "57f21278f57a35247b28239f184d276f6c5602045af5efa994320a927a882421"
+    },
+    "mask-source:SOURCE_MANIFEST.json": {
+      "bytes": 16237,
+      "sha256": "a6632a6ae29f00973e81f6ec617e2344e190842020ec6210fbbdb93a06d72feb"
+    },
+    "mask-source:MOCK_RESULTS.json": {
+      "bytes": 674,
+      "sha256": "9861957f618223be6a3c8f2b931d46f84388a50f31a90cf079dcc37013ccb820"
+    },
+    "mask-source:normal.log": {
+      "bytes": 2949,
+      "sha256": "3269164486c6e02890270c0348e94a6b5a52aedee1c397349cf96e0ee1c4df93"
+    },
+    "mask-source:optimized.log": {
+      "bytes": 2949,
+      "sha256": "402ee7df4ff7be1bc6507d7699c798214410e595472baa8f17a07ea96edbfbc0"
+    },
+    "retained-evidence:full128_observer_integration_20261025T0852/FREEZE.json": {
+      "bytes": 5244,
+      "sha256": "8f4d6771e79b1d3e87baed7315c988c30e33e56d9a3013089f674c2ff4f9965c"
+    },
+    "retained-evidence:full128_observer_integration_20261025T0852/RESOURCE_ESTIMATE.json": {
+      "bytes": 4555,
+      "sha256": "20c29ed7901f0935e7805d2e3358b54de67359c43aeb80d2358805a181a29620"
+    },
+    "retained-evidence:full128_mask_review_20261025T0905/STATIC_CHECKS.json": {
+      "bytes": 74940,
+      "sha256": "dde47ba3318590b61a9d1aefca5d82ee027bf4f7ae561022f97ee256806f413c"
+    },
+    "retained-evidence:full128_mask_review_20261025T0905/review_source.py": {
+      "bytes": 8497,
+      "sha256": "1858d31fae59c2ac18a4ff01b75beda21ee5ae93a29fb88006bbca5fc932fdb0"
+    },
+    "retained-evidence:full128_mask_review_20261025T0905/test_independent.py": {
+      "bytes": 8082,
+      "sha256": "480f86cdea24d136fcf084a96b4b7f42fcd10dc5bf475be7139a4686854517d1"
+    },
+    "retained-evidence:full128_mask_review_20261025T0905/normal.log": {
+      "bytes": 2346,
+      "sha256": "84c6e1f0fafabb3003f67d7a56798405a4e875d02b63c3da1b6b3cca8da40ef1"
+    },
+    "retained-evidence:full128_mask_review_20261025T0905/optimized.log": {
+      "bytes": 2346,
+      "sha256": "c86c52b01b4c4cea26990c4c5b14fbba8a2fd3268c6d90fe1e4a35944a5e1fab"
+    }
+  },
+  "M16_numerical_PASS_established_by_this_review": false,
+  "full128_runtime_or_numerical_PASS": false,
+  "actual_execution_authorized": false,
+  "new_GO_or_launch_config_created": false,
+  "native_or_DUT_executed": false,
+  "production_source_imported": false,
+  "tensor_read": false,
+  "all_old_evidence_retained": true,
+  "blocking_source_defects": [],
+  "projection": "Physical locators converted to stable role labels; reviewer filesystem directory and internal approval/consumed-claim metadata omitted. Large duplicated cold provenance map omitted, with exact original review hash and configuration pins retained. Historical review statuses are not root authorization or current numerical PASS."
+}

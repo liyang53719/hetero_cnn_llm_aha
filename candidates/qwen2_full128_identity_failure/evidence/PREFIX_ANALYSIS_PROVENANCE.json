@@ -1,0 +1,21 @@
+{
+  "analysis_freeze": {
+    "bytes": 1265,
+    "sha256": "43560b0d968f787c128b348b28883c1a34f14ad4d48e254f0caa6cb57bd2de20"
+  },
+  "report": {
+    "bytes": 8091,
+    "sha256": "d67e9f55f240c66b640827bcff778ef001af5920d1f4f53749f1522732f5f57f"
+  },
+  "parser": {
+    "bytes": 12143,
+    "sha256": "af2c59c92286affd8d40d8fbfbade5d02967c199795ab70839582c13b5b7dd9b"
+  },
+  "parser_source_included": false,
+  "reason": "Parser contains private physical source paths. Hash/method provenance only; no silent adaptation and no new parse or target execution for publication.",
+  "metadata_review": {
+    "bytes": 6525,
+    "sha256": "ec25c5f2cb19ae5fd9c841104d9a917bfe10c1ff9d661adceb9d81f35922e0f0"
+  },
+  "scope": "Retained prefix diagnosis and separate metadata failure audit; await final exact package independent review."
+}

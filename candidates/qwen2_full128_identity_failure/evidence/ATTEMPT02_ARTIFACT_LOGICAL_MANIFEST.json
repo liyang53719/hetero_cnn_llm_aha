@@ -1,0 +1,175 @@
+{
+  "original": {
+    "bytes": 11570,
+    "sha256": "fd3c41302cfdb03820138bcad297758eaaa8accf963215f2bb216d6cfb0de54f"
+  },
+  "scope": "Opaque relative artifact names/hashes/sizes only. External failure inventory, not a retroactive run-native success seal. No raw payload or process/file identities.",
+  "files": {
+    "APPROVAL.json": {
+      "bytes": 1677,
+      "sha256": "3b4342a1a689f9fceae45a5bd275f2aaafeafd3f61eecf815646975f3a41585c"
+    },
+    "LAUNCH.json": {
+      "bytes": 2112,
+      "sha256": "33ae077e503b727e78079cba0d06d21a29cdd51f3d43989f0b4e8e938fb78a23"
+    },
+    "MAPS_AFTER_CDLL.txt": {
+      "bytes": 18713,
+      "sha256": "5d36f7ec4dcb02ce162a2c8d28a79c93bab56d6f5174463a2f5690241d520d3e"
+    },
+    "NATIVE_BINDING.json": {
+      "bytes": 332,
+      "sha256": "bde8c2e8ea5a8da1599162db849785f51a0a39780c09d0e9a05f0c867879ed69"
+    },
+    "NATIVE_LOADED/DEPENDENCY_OBJECTS_RAW.json": {
+      "bytes": 86600,
+      "sha256": "67d218aca49db2c5cbf86dfc28607135c83febac575678c2b2d08ba0c0ca3ee7"
+    },
+    "NATIVE_LOADED/MAPS_RAW.txt": {
+      "bytes": 18713,
+      "sha256": "45ccabf7ce7ae7de1dfa4f8682357435f91e30a01eb95c31b3f6e76356c99929"
+    },
+    "NATIVE_LOADED/MAP_AUDIT.json": {
+      "bytes": 73652,
+      "sha256": "e41bc8a5c4592c664f06335de96e51167985155522c9a1ee472a3591430e6b37"
+    },
+    "NATIVE_LOADED/MODULES_RAW.json": {
+      "bytes": 150720,
+      "sha256": "763c3c8d5b30f730340f4b2c4f1bec3cc081f29c3931dc7cc211277f66e4ff6d"
+    },
+    "NATIVE_LOADED/MODULE_AUDIT.json": {
+      "bytes": 754034,
+      "sha256": "c14038108889d522b5ef6da04bc1c3ff5e4a39793355817432561a63869e7c78"
+    },
+    "NATIVE_LOADED/NAMESPACE_QUALIFICATION.json": {
+      "bytes": 1082,
+      "sha256": "dcea5d65b99d891fb0342a17ddf27c2c694549154afff8a19f5c377506c408d2"
+    },
+    "NATIVE_LOADED/RESULT.json": {
+      "bytes": 1516,
+      "sha256": "de1648d576b5efce2db586c30a6af7728ed849449b9aef40fd7a316f3d59d2ea"
+    },
+    "NORMAL_FINAL/DEPENDENCY_OBJECTS_RAW.json": {
+      "bytes": 86600,
+      "sha256": "67d218aca49db2c5cbf86dfc28607135c83febac575678c2b2d08ba0c0ca3ee7"
+    },
+    "NORMAL_FINAL/MAPS_RAW.txt": {
+      "bytes": 17664,
+      "sha256": "beefb0730cf1005402ae60dc0ba0e216d506a954901a43af07042b2b61227b40"
+    },
+    "NORMAL_FINAL/MAP_AUDIT.json": {
+      "bytes": 69777,
+      "sha256": "e05aa4eb141d995b1ddf06818ea265ff0c75d340a3c3cb62e722ab89c337aa0b"
+    },
+    "NORMAL_FINAL/MODULES_RAW.json": {
+      "bytes": 150234,
+      "sha256": "e17a35eefd26e0c987bd3811cff4fdfa657426158bd250d1dd619529a4d4b5a4"
+    },
+    "NORMAL_FINAL/MODULE_AUDIT.json": {
+      "bytes": 751835,
+      "sha256": "488009787f31a9db2e12ea8e6b20742ab02526f34dd906c76fdbaacfd830d873"
+    },
+    "NORMAL_FINAL/NAMESPACE_QUALIFICATION.json": {
+      "bytes": 1082,
+      "sha256": "dcea5d65b99d891fb0342a17ddf27c2c694549154afff8a19f5c377506c408d2"
+    },
+    "NORMAL_FINAL/RESULT.json": {
+      "bytes": 1513,
+      "sha256": "c96dd12726aedf7c379e3c8a589b48c8e5779c466331b681bd4c32dd1c8c1966"
+    },
+    "NORMAL_LOAD_STATUS.json": {
+      "bytes": 279444,
+      "sha256": "5cc45a5aef29e3b1d81303bf74404ab90ed0a6ee1cfcafb3073dd24d75303000"
+    },
+    "NORMAL_POLICY_FINAL.json": {
+      "bytes": 194710,
+      "sha256": "771e069c1e0047b0e110d539acc2d28829c0f4907b9b13c9534351561658891c"
+    },
+    "ORACLE_ACTIVATION.json": {
+      "bytes": 407,
+      "sha256": "46e097dfbe238cc852f6f1487d3527627283dab8b445b568a1392701f7d0051d"
+    },
+    "POSTFLIGHT.json": {
+      "bytes": 238,
+      "sha256": "68ebb8db9b58b3c93df1d2dc092f142a9916805fb27349fb9771f07b2fc6969a"
+    },
+    "PREFLIGHT.json": {
+      "bytes": 225,
+      "sha256": "1349c798fa969b91b44b4e46bcc6a595ff17a47256f3b13d473840ead69ff4b9"
+    },
+    "PROVIDER_ADMISSION.json": {
+      "bytes": 1883,
+      "sha256": "3374f3da46d3a9bada20f2e144d6d0dc3f4dbbe4c678705238ca1ac200257245"
+    },
+    "RECEIPT.json": {
+      "bytes": 122218,
+      "sha256": "43104ac3e6ddf552e95b23a7ca47da79179c3e12cd026b473992b96f6d4aeffa"
+    },
+    "REVIEW.json": {
+      "bytes": 126822,
+      "sha256": "a18aaafbf3149f109fd7264328228cf57deac025b8d7ad0588206f41d292df3c"
+    },
+    "STARTUP_FDS_RAW.json": {
+      "bytes": 439,
+      "sha256": "40e6a37a6951ff260ffc8c47579c76cadaa91893ffe477779f42f11a128f105d"
+    },
+    "STARTUP_MAPS_RAW.txt": {
+      "bytes": 5997,
+      "sha256": "bef6ce71af3cf47ed155990025ed52d74664d577ee646e6c7dcf64200a8c8001"
+    },
+    "WORKER_CLAIM.json": {
+      "bytes": 2247,
+      "sha256": "e91798f57938c383f9c8720e62fd92ffb051307e4d48cde3be6e8ea567f0bac2"
+    },
+    "dut/attention_service_events.q2evt": {
+      "bytes": 168738143,
+      "sha256": "fb792f566cea3d27640507cd6dfd1f0c3e9e446dcbc12bf3145a4e89d3af26f0"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/bf16/host_commands.bin": {
+      "bytes": 384,
+      "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/bf16/host_descriptors.bin": {
+      "bytes": 3456,
+      "sha256": "1e4d35da18b21a4d9de05d2f3129e5bd9717cd923837c83c8d5eb320bfcddb02"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/bf16/manifest.json": {
+      "bytes": 14931,
+      "sha256": "c5fcd45a4cee53b084a0915753186b06540342bb0620a783f528fefb83b9b561"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/bf16/owner_fixture.h": {
+      "bytes": 4053,
+      "sha256": "9ba68b5653b011c5fca83eb3bcbe23a1480fc3d0ae934e1a1c0dd7af778d2304"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/fp32/host_commands.bin": {
+      "bytes": 384,
+      "sha256": "618cd4db94fbc5f0e3829182a72d5e298b5a42d2a3840ec2b9f9be639cd884c4"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/fp32/host_descriptors.bin": {
+      "bytes": 3456,
+      "sha256": "d5ef2c75f7c8f790993a9aef04ff0af96209365af3df85b33fae9ff8d8cb3086"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/fp32/manifest.json": {
+      "bytes": 13424,
+      "sha256": "109072c5710e59c7855d778c22fbf697e6983f9ac1e6b4f686c22e0eda3adf22"
+    },
+    "dut/metadata/qwen2_21_metadata_39kd7enx/fp32/owner_fixture.h": {
+      "bytes": 4023,
+      "sha256": "63d688d5f299748ed095d225aedf1d4495641247e391eb556999ba5fa0949052"
+    },
+    "dut/orchestration.json": {
+      "bytes": 41636,
+      "sha256": "94eb831786b1ac84cba3274470c17be3ae67d3c21f78e1aaa346dc11a082fac4"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "file_count": 41,
+  "bytes": 171746376
+}

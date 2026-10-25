@@ -1,0 +1,13 @@
+{
+  "base_commit": "d768435ae9c9e02f82e076051d9b373e6a2d4caa",
+  "prior_path": "candidates/qwen2_postterminal_reference_diagnostic/assemble_sources.py",
+  "prior_identity": {
+    "bytes": 2915,
+    "sha256": "66d65842a87cb2b88e3caa3323f799ff1c696d089db814af2cb2836b8d2dbea6"
+  },
+  "change": "Remove revision option and select single SOURCE_ASSEMBLY_MANIFEST; byte/path/hash copier unchanged.",
+  "unchanged_tests": {
+    "bytes": 4043,
+    "sha256": "6d1cc2ad910ba25f1e2df478993ab71e9721d95ab0c1aa0d1cd15442cfb39280"
+  }
+}

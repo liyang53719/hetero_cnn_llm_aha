@@ -1,0 +1,25 @@
+{
+  "original": {
+    "bytes": 877,
+    "sha256": "3f4b249a7549dfcd740eb760bd3c2bde0c873637906e7dd3b7454e7c9c61d973"
+  },
+  "ast_definition_runtime_allowed": false,
+  "schema": 1,
+  "source_mode": "FULL_MODULE_NORMAL_IMPORT_ONLY",
+  "source_rewrite_allowed": false,
+  "sources": {
+    "official_owner": {
+      "bytes": 9514,
+      "module": "candidates.qwen2_resident_matrix.official_bf16.owners",
+      "sha256": "0c87797587281b4e7f23663242e947ffe4157db9a644e788d67eb5c9045c50c1",
+      "logical_role": "official_owner"
+    },
+    "prefix_owner": {
+      "bytes": 19134,
+      "module": "candidates.qwen2_resident_matrix.ffn_public.prefix_owners",
+      "sha256": "9001c58559d10a0f72aea1c00f85a0da6508a3c729dd2469433f831a0da5ea8b",
+      "logical_role": "prefix_owner"
+    }
+  },
+  "projection": "Only physical private path members removed and replaced by source roles. This is not the original executable SOURCE_PINS.json; it is excluded from exact source assembly."
+}

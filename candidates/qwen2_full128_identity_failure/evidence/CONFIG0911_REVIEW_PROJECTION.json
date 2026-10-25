@@ -1,0 +1,128 @@
+{
+  "original": {
+    "bytes": 126150,
+    "sha256": "2d366d27c811a1eb9d6c48f528b7a83bb3bfcf871c42fcfa760560c36170da12"
+  },
+  "status": "GO_SINGLE_M128_EXACT_DUT",
+  "action": "single_m128_exact_dut",
+  "scope": "single_original_public21_m128_qk2_pv0_observed_domain_terminal_comparison",
+  "config_sha256": "3abc8af6c128391fd2ec3ee4e11ea2a7f0c4c96af8eb574e896a2bbe52d382eb",
+  "blockers": [],
+  "resources": {
+    "address_space_bytes": 3221225472,
+    "cleanup_seconds": 30,
+    "cpu_seconds": 3600,
+    "cpus": 1,
+    "event_limit": 2478403,
+    "log_bytes": 16777216,
+    "output_bytes": 805306368,
+    "trace_bytes": 402653184,
+    "tree_rss_bytes": 2147483648,
+    "wall_seconds": 4200
+  },
+  "numeric_or_native_executed": false,
+  "review_scope": "STATIC_EXACT_CONFIG_SOURCE_PINS_AND_STDLIB_ADMISSION_ONLY; legacy required status is NOT root execution authorization",
+  "root_execution_authorized_by_this_review": false,
+  "config_freeze_sha256": "f4265ab8dea30c7f76dfdb99123504d7404d42360f40d970b1b15fd94b2212aa",
+  "source_review": {
+    "path": "retained-evidence:full128_mask_review_20261025T0905/REVIEW.json",
+    "pin": {
+      "bytes": 13564,
+      "sha256": "1aea8c1b3c55df573d5ac239a8a9ecf516fe55c5fd3bec9ae736c11b5355f4b4"
+    }
+  },
+  "M16_prerequisite_review": {
+    "path": "retained-evidence:production_attention_review_20261025T0807/reference_recovery_r2_actual/ACTUAL_REFERENCE_REVIEW.json",
+    "pin": {
+      "bytes": 360161,
+      "sha256": "d5bdbd43fd10c4146a0064dd21ee20f003d84fd787d59093b47b8961e899d64d"
+    },
+    "actual_artifacts_rehashed": 46,
+    "component_only": true
+  },
+  "M16_prerequisite_interpretation": "Later completed independent M16 Attention-component numerical closure receipt d5bdbd43 supersedes historical pending preparation metadata only for this new review. No frozen preparation field is modified, no automatic M16 gate was added, and no fullblock/numerical128 result is inferred. Root must bind/recheck this exact prerequisite with fresh authorization.",
+  "static_checks": {
+    "path": "retained-evidence:full128_config_review_20261025T0923/STATIC_CHECKS.json",
+    "sha256": "350a17c7d1460518bcaa1c622ac408e363b9841799719ea9b0683561cff67747",
+    "count": 3533
+  },
+  "closure": {
+    "config_bytes": 952566,
+    "combined_pins": 2192,
+    "opaque_combined_bytes": 452435773,
+    "runtime_pins": 746,
+    "production_sources": 316,
+    "candidate_files": 14,
+    "observer_files": 3,
+    "unchanged_gate_files": 7,
+    "expected_candidate_and_observer_module_origins": 15,
+    "normal_runtime_roles": 15,
+    "exact_active_path_replacements": 24,
+    "active_old_roots": false,
+    "actual_0900_roots": true,
+    "exact_boolean_selective_observer_lines": true,
+    "normal_source_module_paths_and_full_code_binding": true,
+    "input14_ELF_runtime_graph_official128_reference29_unchanged": true,
+    "original_thresholds_and_all_caps_unchanged": true,
+    "original_M128_CPU_failure_unchanged": true,
+    "historical_cold_native_init_evidence_entries_rehashed": 480,
+    "historical_evidence_is_new_integrated_runtime_PASS": false
+  },
+  "resource_assessment": {
+    "path": "config-0911:RESOURCE_ESTIMATE.json",
+    "sha256": "a0c972e33f65f2f8af84379cd98e2ab250c1ecefeb0e61a1ed33c9a5e683b56d",
+    "decision_basis": "Measured M16 component intervals, exact source workload/storage bounds, unknown full-worker terms, preserved original caps and retained failure outcomes support a bounded root decision. No mathematical guarantee of completion is required or claimed.",
+    "full_worker_cpu_wall_interval_known": false,
+    "per_process_hard_CPU_AS_limits": true,
+    "tree_CPU_RSS_output_limits_sampled": true,
+    "terminal_reaped_child_CPU_checked": true,
+    "parent_pre_postflight_hashing_outside_worker_timer": true,
+    "whole_parent_3600_CPU_claim": false,
+    "no_budget_increase": true,
+    "automatic_retry": false
+  },
+  "limitations": [
+    "This is not a normal-load/native/CPython-monitor execution test; every target/runtime/native load plan was source/manifest reviewed, never executed. Inputs/reference/native files were read only as opaque bytes for SHA256, not decoded or used for arithmetic.",
+    "The original unchanged admission schema requires status GO_SINGLE_M128_EXACT_DUT but still independently demands an exact fresh root-issued approval, one use/no retry and claim. No such approval or claim was created by this reviewer.",
+    "M16 reference closure establishes the archived two-arm Attention component values only: 24576 output words,1632 causal scores,ten fields; normalizer frequency provenance differs intentionally. Original aggregate-budget failure remains FAILED_RETAINED. No full128/fullblock/official full-layer/RTL/hardware acceptance follows.",
+    "Historical480 cold/initialization provenance records remain exact and are explicitly reviewed only in their original scope. They are not integrated0900 normal/native runtime PASS; future actual startup/final runtime attestations remain mandatory.",
+    "Resource caps are not all kernel aggregate caps: RLIMIT_CPU/AS are per process; treeCPU/RSS/output are sampled and reaped CPU checked at exit. Worker wall4200 excludes original30s cleanup and parent pre/post opaque hashing. No exact continuous peak or guaranteed budget fit is claimed.",
+    "Strong kill/cancellation can leave no complete mask/capture evidence; missing actual installed/cleaned receipts must not be reconstructed or promoted. Existing cancellation-path partial raw-receipt limitation is retained from the source review."
+  ],
+  "root_conditions_before_any_launch": [
+    "Read this exact review and the completed M16 actual review d5bdbd43; confirm original failed attempts remain preserved.",
+    "Make an explicit evidence/uncertainty/resource decision under unchanged caps, and recheck no conflicting native/CI/EDA execution.",
+    "Create a fresh root approval for the exact config/review hashes, original action/scope, unique fresh output/run ID, maximum_invocations=1 and no_retry=true.",
+    "Use unchanged one-use launcher; no expansion/retry without separate authorization. Missing actual whole terminal, observed-domain comparison, masks, full stream replay, runtime/policy or cleanup evidence must remain failure."
+  ],
+  "no_frozen_source_or_config_mutation": true,
+  "no_root_approval_or_attempt_created": true,
+  "no_target_import_or_run": true,
+  "no_reference_recipe_rerun": true,
+  "independent_tests": {
+    "scope": "Actual unchanged admission.validate and read_checked only; in-memory mock root object never written, no launch/claim/approval",
+    "normal": 18,
+    "optimized": 18,
+    "source": {
+      "path": "retained-evidence:full128_config_review_20261025T0923/test_admission.py",
+      "sha256": "858860420c3124c2410be76a3bc943f8f8f3af1129efaef180b0fb298ae61cf4"
+    },
+    "logs": {
+      "normal": {
+        "path": "retained-evidence:full128_config_review_20261025T0923/normal.log",
+        "sha256": "e0b9c5d9b421a381f65c800d8da8ed1bd831a14cf5ef887f33ebeebb33d526b7"
+      },
+      "optimized": {
+        "path": "retained-evidence:full128_config_review_20261025T0923/optimized.log",
+        "sha256": "79c2a9a6338b5a83976ce501513560de330f474472d637178a54463171584c05"
+      }
+    },
+    "reused_author_config_mock_tests": 64,
+    "no_target_import_or_launch": true
+  },
+  "review_scripts": {
+    "retained-evidence:full128_config_review_20261025T0923/verify_config.py": "c5f22217b91777adfaf25101dfdb149ac16c1a0cfeae5d9d03bfe564a0f4da4b",
+    "retained-evidence:full128_config_review_20261025T0923/test_admission.py": "858860420c3124c2410be76a3bc943f8f8f3af1129efaef180b0fb298ae61cf4"
+  },
+  "projection": "Physical locators converted to stable role labels; reviewer filesystem directory and internal approval/consumed-claim metadata omitted. Large duplicated cold provenance map omitted, with exact original review hash and configuration pins retained. Historical review statuses are not root authorization or current numerical PASS."
+}

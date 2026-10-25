@@ -1,0 +1,59 @@
+{
+  "original": {
+    "bytes": 3330,
+    "sha256": "dece6397debe1c7840cf3255739a09c9a90a52c2a1167ab9d89fc2ce65d1ee27"
+  },
+  "status": "PASS_RETAINED_STARTUP_ADMISSION_FAILURE_CLOSURE_ONLY",
+  "checks_passed": 2252,
+  "receipt": {
+    "bytes": 122509,
+    "sha256": "cf9be681ec3ee1751f59f4dccda98785f6ea3bf18af1e72420b800435e6bdc8a"
+  },
+  "config": {
+    "bytes": 952566,
+    "sha256": "3abc8af6c128391fd2ec3ee4e11ea2a7f0c4c96af8eb574e896a2bbe52d382eb"
+  },
+  "review": {
+    "bytes": 126150,
+    "sha256": "2d366d27c811a1eb9d6c48f528b7a83bb3bfcf871c42fcfa760560c36170da12"
+  },
+  "actual_artifact_files": 8,
+  "actual_artifact_bytes": 253710,
+  "artifact_manifest_sha256": "f2dfc09eaab255d4571b7e70b874991b9156a96d18bdd014b0464cf5435273ed",
+  "checks_sha256": "655c6f6785a22b64b0035a3c277118ed9df391e98976cc8cf4bc95065e1c7dbd",
+  "independently_observed_failure": "worker traceback at admission.claim strict parent argv compound check; final wrapper fails because WORKER_RESULT is absent",
+  "root_reported_cause": "Root supplied parent flags -B -I -S rather than required -I -S -B; consistent with persisted check failure. Actual child command itself has correct order.",
+  "cause_evidence_limit": "Raw parent argv and capability-pipe bytes were not persisted because claim failed before WORKER_CLAIM; receipts alone cannot uniquely distinguish each conjunct of the parent-argv guard. Root command history supplies exact wrong-order attribution.",
+  "execution_boundary": "Pinned main calls claim before execute. Traceback plus no passed worker claim/target startup/DUT artifacts show this stopped before normal target loading, Matrix native binding, initialization or numerical execution. No new live maps/syscall audit was available; statement is source-bound. Launcher libc/subreaper is not DUT native arithmetic.",
+  "worker": {
+    "returncode": 1,
+    "reaped": true,
+    "sampled_cpu_seconds": 0.05,
+    "reaped_cpu_seconds": 0.05047,
+    "wall_seconds": 0.055217379005625844,
+    "peak_sampled_tree_rss_bytes": 1441792,
+    "reaped_maxrss_bytes": 15433728,
+    "memory_note": "Sampled high water and reaped maxrss differ during very short startup; neither is an independently verified continuous aggregate peak."
+  },
+  "cleanup": {
+    "killed": [],
+    "reaped": [],
+    "remaining": {},
+    "seconds": 0.00050592195475474,
+    "timed_out": false
+  },
+  "postflight": {
+    "bytes_checked": 452435773,
+    "differences": {},
+    "files_checked": 2192,
+    "passed": true,
+    "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+    "wall_seconds": 0.41199537500506267
+  },
+  "current_pins_rehashed": 2192,
+  "all_old_evidence_preserved": true,
+  "new_execution_by_reviewer": false,
+  "retry_or_fresh_GO_authorized": false,
+  "required_repair_scope": "Fresh reviewed gate/config identity and exact parent argv template only; preserve consumed claim/failure, unchanged seven gate sources, native/driver/arithmetic/reference/budgets, and require new root approval. No numerical rerun needed to diagnose startup rejection.",
+  "projection": "Physical locators converted to stable role labels; reviewer filesystem directory and internal approval/consumed-claim metadata omitted. Large duplicated cold provenance map omitted, with exact original review hash and configuration pins retained. Historical review statuses are not root authorization or current numerical PASS."
+}

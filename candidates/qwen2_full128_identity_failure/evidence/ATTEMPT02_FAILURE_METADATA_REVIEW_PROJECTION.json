@@ -1,0 +1,135 @@
+{
+  "original": {
+    "bytes": 6525,
+    "sha256": "ec25c5f2cb19ae5fd9c841104d9a917bfe10c1ff9d661adceb9d81f35922e0f0"
+  },
+  "status": "PASS_RETAINED_FULL128_CPU_LIMIT_FAILURE_METADATA_CLOSURE_ONLY",
+  "actual_run_status": "FAIL_EXACT_M128_DUT_RETAINED",
+  "checks": 4510,
+  "receipt": {
+    "bytes": 122218,
+    "sha256": "43104ac3e6ddf552e95b23a7ca47da79179c3e12cd026b473992b96f6d4aeffa"
+  },
+  "config": {
+    "bytes": 956964,
+    "sha256": "8fd61f7fcadd5bf0ce3a044420da380b8fe69722021f8df629079e803fdf6f58"
+  },
+  "review": {
+    "bytes": 126822,
+    "sha256": "a18aaafbf3149f109fd7264328228cf57deac025b8d7ad0588206f41d292df3c"
+  },
+  "artifact_manifest": {
+    "path": "retained-evidence:full128_terminal_metadata_review_20261025T1053/ARTIFACT_MANIFEST.json",
+    "pin": {
+      "bytes": 11570,
+      "sha256": "fd3c41302cfdb03820138bcad297758eaaa8accf963215f2bb216d6cfb0de54f"
+    },
+    "files": 41,
+    "bytes": 171746376,
+    "external_not_run_native_success_seal": true
+  },
+  "checks_sha256": "38981423e78211d032e9db7d19d0f4f8499ec26847867643f355efa0364bfccb",
+  "source_input_runtime_pins_rehashed": 2206,
+  "budget": {
+    "reason": "sampled_tree_cpu_exceeded",
+    "sampled_cpu_seconds": 3600.02,
+    "reaped_child_cpu_seconds": 3600.035657,
+    "worker_wall_seconds": 3600.4580106029753,
+    "cleanup_seconds": 0.016309604048728943,
+    "sampled_tree_RSS_high_water_bytes": 337203200,
+    "reaped_maxrss_bytes": 337203200,
+    "RSS_MiB": 321.58203125,
+    "original_caps": {
+      "address_space_bytes": 3221225472,
+      "cleanup_seconds": 30,
+      "cpu_seconds": 3600,
+      "cpus": 1,
+      "event_limit": 2478403,
+      "log_bytes": 16777216,
+      "output_bytes": 805306368,
+      "trace_bytes": 402653184,
+      "tree_rss_bytes": 2147483648,
+      "wall_seconds": 4200
+    },
+    "sampled_RSS_not_continuous_peak": true,
+    "reaped_maxrss_not_aggregate_tree": true,
+    "per_process_hard_limits_not_kernel_aggregate_tree_cap": true,
+    "parent_prepost_hashing_and_cleanup_separate_worker_timer": true
+  },
+  "worker_returncode": -9,
+  "worker_reaped": true,
+  "preflight_postflight_full_manifest_pass": true,
+  "runtime_startup_snapshots": [
+    {
+      "phase": "NORMAL_FINAL",
+      "modules": 339,
+      "file_mapping_rows": 105,
+      "unique_file_mappings": 19,
+      "known_raw_namespace_and_dependency_exceptions_preserved": true
+    },
+    {
+      "phase": "NATIVE_LOADED",
+      "modules": 340,
+      "file_mapping_rows": 110,
+      "unique_file_mappings": 20,
+      "known_raw_namespace_and_dependency_exceptions_preserved": true
+    }
+  ],
+  "normal55_module_codes_compiled_for_identity_only": 55,
+  "normal201_cache_denials_qualified_without_admitting_cache_bytes": true,
+  "all9service_bindings_and14providers_source_pinned": true,
+  "normal_native_startup_not_full_run_qualification": true,
+  "persisted_phases": [
+    "ORIGINAL_RESOURCES_CONSTRUCTED",
+    "ORIGINAL_PREFIX_COMPLETE"
+  ],
+  "missing_completion_evidence": [
+    "WORKER_RESULT.json",
+    "COMPLETION_SEAL.json",
+    "TERMINAL_COMPARISON.json",
+    "SERVICE_PROTOCOL.json",
+    "FINAL_RUNTIME",
+    "RUNTIME_POLICY_FINAL.json",
+    "dut/actual_attention_capture/EVIDENCE.json"
+  ],
+  "orchestration_status_note": "PREPARED_NOT_EXECUTED is the initial report status left by SIGKILL; phase records and native/claim artifacts prove actual execution began. It is not evidence that no DUT ran.",
+  "old_argv_failure_and_older_CPU_failure_retained": true,
+  "M16_component_review_preserved": true,
+  "all_actual_artifacts_stat_identical_since_once_only_full_hash": true,
+  "new_native_DUT_or_reference_execution_by_reviewer": false,
+  "raw_event_parsing_by_reviewer": false,
+  "retry_or_budget_extension_authorized": false,
+  "limits": [
+    "PASS applies only to independent integrity/identity/recorded-failure closure; actual full128 remains FAIL without numerical or full terminal acceptance.",
+    "SIGKILL return and owned kill/reap receipts do not independently identify whether kernel RLIMIT_CPU or supervisor SIGKILL delivered first; sampled and reaped CPU both establish budget violation.",
+    "Cleanup is receipt/source-bound without a raw wait/reap syscall history or new live PID probing. No lingering owned identities are reported.",
+    "Only normal-load and native-load runtime snapshots survived; no full-worker final runtime/policy audit. Parent source/input postflight hashes are not a substitute.",
+    "Oracle activation was sealed and source enforces terminal-only access, but no final oracle-policy receipt or per-open/native-syscall history survived. No reference comparison completion is claimed.",
+    "No installed/cleaned mask or full capture qualification artifacts survived; source opt-in/normal module origin does not substitute for actual mask evidence.",
+    "The event stream is incomplete evidence pending separate retained-prefix parser; byte size or saved progress cannot be converted into execution-time completion percentage, speedup, or a required new budget.",
+    "Original FAIL receipt is unmodified. External manifest is not a retroactive success seal; failure artifacts are retained even if beyond success-diagnostic accounting."
+  ],
+  "review_usage": {
+    "cpu_seconds": 0.599963988,
+    "wall_seconds": 0.6002236439962871
+  },
+  "review_script_sha256": "54c6ab4008a702cd4335be82a3390c680624defdd8a21b3de15bc8899725f383",
+  "claim_binding_summary": {
+    "actual_parent_correct_flags_persisted": true,
+    "worker_passed_one_use_claim": true,
+    "fresh_root_approval_bound": true
+  },
+  "cleanup": {
+    "seconds": 0.016309604048728943,
+    "timed_out": false,
+    "killed_owned_count": 1,
+    "reaped_descendant_count": 0,
+    "remaining_owned_count": 0
+  },
+  "stream": {
+    "bytes": 168738143,
+    "sha256": "fb792f566cea3d27640507cd6dfd1f0c3e9e446dcbc12bf3145a4e89d3af26f0",
+    "hashed_once_not_parsed_by_this_reviewer": true
+  },
+  "projection": "Actual private run directory, approval/claim metadata and parent/worker runtime identities omitted; cleanup PID lists replaced by counts. Other source locators converted to roles; retained startup/failure/resource/missing-completion distinctions preserved. Prefix parsing is separately projected, not performed by this metadata reviewer."
+}

@@ -1,0 +1,146 @@
+{
+  "original": {
+    "bytes": 126822,
+    "sha256": "a18aaafbf3149f109fd7264328228cf57deac025b8d7ad0588206f41d292df3c"
+  },
+  "status": "GO_SINGLE_M128_EXACT_DUT",
+  "action": "single_m128_exact_dut",
+  "scope": "single_original_public21_m128_qk2_pv0_observed_domain_terminal_comparison",
+  "config_sha256": "8fd61f7fcadd5bf0ce3a044420da380b8fe69722021f8df629079e803fdf6f58",
+  "blockers": [],
+  "resources": {
+    "address_space_bytes": 3221225472,
+    "cleanup_seconds": 30,
+    "cpu_seconds": 3600,
+    "cpus": 1,
+    "event_limit": 2478403,
+    "log_bytes": 16777216,
+    "output_bytes": 805306368,
+    "trace_bytes": 402653184,
+    "tree_rss_bytes": 2147483648,
+    "wall_seconds": 4200
+  },
+  "numeric_or_native_executed": false,
+  "review_scope": "EXACT_FRESH_GATE_IDENTITY_AND_PARENT_ARGV_TEMPLATE_STATIC_REVIEW_ONLY",
+  "legacy_status_is_not_root_authorization": true,
+  "root_execution_authorized_by_this_review": false,
+  "freeze_sha256": "3d06b28ead5de74285403bcd4b4ddc23cab5654edd5bc787d70f09914435ff74",
+  "reviewed_config_bytes": 956964,
+  "predecessor_independent_config_review": {
+    "path": "retained-evidence:full128_config_review_20261025T0923/REVIEW.json",
+    "sha256": "2d366d27c811a1eb9d6c48f528b7a83bb3bfcf871c42fcfa760560c36170da12",
+    "unchanged_semantics_and_controls_reused": true
+  },
+  "predecessor_failure_review": {
+    "path": "retained-evidence:full128_argv_recovery_review_20261025T0941/failed_attempt/FAILURE_REVIEW.json",
+    "sha256": "dece6397debe1c7840cf3255739a09c9a90a52c2a1167ab9d89fc2ce65d1ee27",
+    "status": "PASS_RETAINED_STARTUP_ADMISSION_FAILURE_CLOSURE_ONLY",
+    "actual_failure_and_consumed_claim_preserved": true,
+    "reported_cause_vs_persisted_guard_boundary": "Raw parent argv and capability-pipe bytes were not persisted because claim failed before WORKER_CLAIM; receipts alone cannot uniquely distinguish each conjunct of the parent-argv guard. Root command history supplies exact wrong-order attribution."
+  },
+  "M16_prerequisite_review": {
+    "path": "retained-evidence:production_attention_review_20261025T0807/reference_recovery_r2_actual/ACTUAL_REFERENCE_REVIEW.json",
+    "pin": {
+      "bytes": 360161,
+      "sha256": "d5bdbd43fd10c4146a0064dd21ee20f003d84fd787d59093b47b8961e899d64d"
+    },
+    "actual_artifacts_rehashed": 46,
+    "component_only": true
+  },
+  "source_review": {
+    "path": "retained-evidence:full128_mask_review_20261025T0905/REVIEW.json",
+    "pin": {
+      "bytes": 13564,
+      "sha256": "1aea8c1b3c55df573d5ac239a8a9ecf516fe55c5fd3bec9ae736c11b5355f4b4"
+    }
+  },
+  "static_checks": {
+    "path": "retained-evidence:full128_argv_recovery_review_20261025T0941/successor/STATIC_CHECKS.json",
+    "sha256": "f170638a0081aa060c9e1228bbd232f6cff30f7aca90634908ca9368719cc4e9",
+    "count": 2409
+  },
+  "closure": {
+    "combined_pins": 2206,
+    "combined_declared_bytes": 453659044,
+    "runtime_pins": 746,
+    "only_runtime_path_changes": 7,
+    "gate_sources_byte_identical": true,
+    "profile_and_interface_bytes_identical": true,
+    "non_gate_runtime_config_and_source_contract_unchanged": true,
+    "actual0900_roots_and_selective_true_unchanged": true,
+    "input14_ELF_dependencies_original_official128_reference29_thresholds_caps_unchanged": true,
+    "original_M128_CPU_failure_and_M16_aggregate_failure_unchanged": true,
+    "predecessor_argv_failure_claim_and_all8_actual_files_preserved": true,
+    "no_old_gate_path_as_active_runtime": true,
+    "no_fresh_gate_claim_or_output_created": true
+  },
+  "command_contract": {
+    "template_json": {
+      "path": "config-0941:COMMAND_TEMPLATE.json",
+      "sha256": "9ae9e33bac7d0fcdadf93ebb04054b00fe3d0593b49b55678d23ee9493df2382"
+    },
+    "template_text": {
+      "path": "config-0941:COMMAND_TEMPLATE.txt",
+      "sha256": "7f3c2cbe24ab95450bc601c0dbd0933a38a9c0eea51659e27e13735c16add514"
+    },
+    "exact_parent_prefix": [
+      "python3.12:interpreter",
+      "-I",
+      "-S",
+      "-B",
+      "config-0941:gate/run_gate.py"
+    ],
+    "all_template_placeholders_require_new_review_new_root_approval_new_run_id": true,
+    "do_not_reorder_or_combine_flags": true,
+    "old_parent_command_reported_flags": [
+      "-B",
+      "-I",
+      "-S"
+    ],
+    "old_child_command_was_already_correct": true,
+    "original_admission_rule_not_changed": true,
+    "independent_AST_predicate_and_original_parser_controls": {
+      "normal": 12,
+      "optimized": 12,
+      "all6flag_permutations_tested_only_correct_order_accepted": true,
+      "source_sha256": "9173f3c6147055b9590db773ba338bea29d63143169d563aa7daff34b6f9b89f",
+      "log_sha256": {
+        "normal": "4d31f9ba5e3e70b7be9c9d64edd77bf4c1b8b8d61c1e458154800b2dfc3b82be",
+        "optimized": "02dee3d18d1d6fb136931e71944e21ebb89d7b14fa321ce4a447fbf189cc347a"
+      }
+    },
+    "author_small_stdlib_contract_controls_reused_by_frozen_hash": 11,
+    "no_main_claim_launcher_worker_or_target_invoked_by_reviewer": true
+  },
+  "resource_assessment_reused": {
+    "path": "config-0911:RESOURCE_ESTIMATE.json",
+    "sha256": "a0c972e33f65f2f8af84379cd98e2ab250c1ecefeb0e61a1ed33c9a5e683b56d",
+    "decision_basis": "Measured M16 component intervals, exact source workload/storage bounds, unknown full-worker terms, preserved original caps and retained failure outcomes support a bounded root decision. No mathematical guarantee of completion is required or claimed.",
+    "full_worker_cpu_wall_interval_known": false,
+    "per_process_hard_CPU_AS_limits": true,
+    "tree_CPU_RSS_output_limits_sampled": true,
+    "terminal_reaped_child_CPU_checked": true,
+    "parent_pre_postflight_hashing_outside_worker_timer": true,
+    "whole_parent_3600_CPU_claim": false,
+    "no_budget_increase": true,
+    "automatic_retry": false
+  },
+  "limitations": [
+    "Legacy GO_SINGLE_M128_EXACT_DUT is a required independent static-review token; it does not supply root APPROVAL, a run ID, or permission to launch. The old approval/claim is consumed and must never be reused or deleted.",
+    "This minimal repair only relocates exact seven gate files, updates their path pins/manifest/config identity, retains old failure evidence, and supplies the strict -I -S -B parent template. No admission rule, driver, numerical source, reference, threshold or resource limit is weakened.",
+    "Prior failure was source-bound pre-execute claim rejection. Persisted stderr identifies the compound parent argv guard; root command history attributes it to -B -I -S order. Raw parent argv/capability was not persisted and is not fabricated. Correct child LAUNCH argv does not prove parent argv.",
+    "All hashes are opaque byte verification and all reviewer tests are pure AST expression/argparse or stdlib admission schema checks. No production/native/numerical execution or reference rerun occurred.",
+    "Completed M16 component numerical closure remains a separate exact reviewed prerequisite, not full128/fullblock/hardware acceptance. The unchanged runtime normal-load/monitor/terminal/reference/stream/cleanup evidence must still be generated by any later authorized actual worker.",
+    "All original worker/tree3600CPU and worker4200wall, per-process3GiBAS, sampled2GiBtreeRSS, output/log/trace/event caps and30s cleanup remain unchanged. Parent pre/post hashes and cleanup retain original distinct scope; no completion guarantee or aggregate-kernel-hard-cap claim is made."
+  ],
+  "root_conditions_before_any_launch": [
+    "Confirm this exact config/review and M16 prerequisite; preserve the0911 startup failure and all previous numerical failures.",
+    "Review remaining fullworker resource uncertainty and current concurrency; no budget expansion or automatic retry is authorized.",
+    "Issue a NEW exact one-use no-retry root approval and fresh run_id/output under the0941gate; never reuse0911 approval or claim.",
+    "Run only the reviewed parent interpreter prefix -I -S -B and exact new run_gate.py, matching the pinned template; fill only new review/approval/output identities."
+  ],
+  "new_execution_authorized": false,
+  "new_approval_or_claim_created": false,
+  "frozen_input_mutations": false,
+  "projection": "Physical locators converted to stable role labels; reviewer filesystem directory and internal approval/consumed-claim metadata omitted. Large duplicated cold provenance map omitted, with exact original review hash and configuration pins retained. Historical review statuses are not root authorization or current numerical PASS."
+}

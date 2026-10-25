@@ -1,0 +1,33 @@
+{
+  "original": {
+    "bytes": 1265,
+    "sha256": "1457dcbbca3dfe554841ae444085c4476705b10a0b27049bcd90b6ec032ccdb1"
+  },
+  "admission_source": {
+    "path": "config-0941:gate/admission.py",
+    "pin": {
+      "bytes": 8453,
+      "sha256": "d48e74d998f83ced15c5aa2278614099f0326ed0294259c642661cadc6940f52"
+    }
+  },
+  "exact_original_predicate": "len(argv)>=5 and argv==cap.parent_argv and argv[1:4]==[-I,-S,-B] and resolved(argv[4])==gate_directory/run_gate.py",
+  "fresh_independent_review_and_root_approval_required": true,
+  "interpreter": "python3.12:interpreter",
+  "old_claim_must_never_be_reused_or_deleted": true,
+  "parent_script": "config-0941:gate/run_gate.py",
+  "rejected_reported_parent_flags": [
+    "-B",
+    "-I",
+    "-S"
+  ],
+  "reported_wrong_parent_order_source": "Root task report; terminated parent proc argv no longer readable. stderr independently records exact parent argv rejection. Child LAUNCH argv was already correct and is not substituted for parent evidence.",
+  "required_exact_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ],
+  "rule_modified": false,
+  "semantically_equivalent_flag_sets_are_not_equivalent_contracts": true,
+  "status": "COMMAND_CONTRACT_NOT_AUTHORIZATION",
+  "projection": "Interpreter and script/admission physical locators converted to roles. Strict ordered flags and original rule retained. This is a non-executable command contract, not authorization."
+}

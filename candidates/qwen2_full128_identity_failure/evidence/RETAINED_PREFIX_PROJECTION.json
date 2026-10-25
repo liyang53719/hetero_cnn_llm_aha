@@ -1,0 +1,113 @@
+{
+  "original": {
+    "bytes": 30716,
+    "sha256": "2b0a69d529837ab3f1a96f2521c36a4cd4642630609ca2480359091bae8ddb8c"
+  },
+  "acceptance": false,
+  "active_group": {
+    "accepted_steps": 3,
+    "done": false,
+    "epoch": null,
+    "first_event": 1766009,
+    "last_event": 1766012,
+    "legacy_replies": 0,
+    "ordinal": 15382,
+    "pending": null,
+    "position": {
+      "active_keys": 16,
+      "first_key": 48,
+      "head": 10,
+      "kind": "QK",
+      "kv_head": 1,
+      "mask": 255,
+      "opcode": 35,
+      "profile": 2,
+      "steps": 8,
+      "token": 107
+    },
+    "reply": false,
+    "retired_results": 0,
+    "tag": 5030,
+    "ticket": null
+  },
+  "analysis_resources": {
+    "bounds": {
+      "AS_bytes": 268435456,
+      "CPU_seconds": 45,
+      "max_output_bytes": 4194304,
+      "max_read_frame_bytes": 1024,
+      "retained_tail_records": 20,
+      "wall_seconds_checked": 60
+    },
+    "cpu_seconds": 17.011212,
+    "peak_rss_bytes": 12058624,
+    "wall_seconds": 16.997217590978835
+  },
+  "complete_records": 1766012,
+  "event_counts": {
+    "accept_group": 15382,
+    "accept_step": 603563,
+    "acquire": 1,
+    "retire_done": 15381,
+    "retire_legacy_reply": 563328,
+    "retire_result": 568357
+  },
+  "expected_whole_pc12": {
+    "PV_groups": 12288,
+    "QK_groups": 6912,
+    "events": 2478339,
+    "groups": 19200
+  },
+  "file_bytes": 168738143,
+  "file_sha256": "fb792f566cea3d27640507cd6dfd1f0c3e9e446dcbc12bf3145a4e89d3af26f0",
+  "footer": null,
+  "frame_sha256": "409adc17139e81c189e61aee85b6261248a08d90e484d2d0ae33d4a4fb909012",
+  "framing": {
+    "kind": "EOF_AT_RECORD_BOUNDARY_NO_FOOTER",
+    "offset": 168738143,
+    "tail_bytes": 0
+  },
+  "group_stats": {
+    "PV": {
+      "done_retired": 10352,
+      "groups_completed": 10352,
+      "groups_started": 10352,
+      "legacy_replies_retired": 563328,
+      "results_retired": 563328,
+      "steps_accepted": 563328
+    },
+    "QK": {
+      "done_retired": 5029,
+      "groups_completed": 5029,
+      "groups_started": 5030,
+      "results_retired": 5029,
+      "steps_accepted": 40235
+    }
+  },
+  "groups_completed": {
+    "PV": 10352,
+    "QK": 5029
+  },
+  "groups_started": 15382,
+  "max_record_payload": 121,
+  "owner_state": {
+    "acquired": true,
+    "epoch": 0,
+    "last_edge": 5822096,
+    "last_ticket": 15409,
+    "released": false,
+    "terminal_response": false
+  },
+  "schedule_validation": {
+    "all_complete_retained_records_matched": true,
+    "events_do_not_prove_unrecorded_execution": true,
+    "finish_not_called": true,
+    "first_errors": [],
+    "source_schedule": "ProductionQk16Schedule.run nested token/head/QK-block/PV-col loops"
+  },
+  "schema": "independent-retained-prefix-analysis-v1",
+  "scope": "read-only partial evidence; not replay acceptance, no target/native execution or oracle read",
+  "stat_unchanged": true,
+  "logical_stream": "attempt02:dut/attention_service_events.q2evt",
+  "projection": "Raw bounded first/last event record arrays, repeated per-token/recent-group tables and private stream locator omitted. Aggregate counts, active source-schedule position, owner-prefix state, hash/framing/method limits retained. Not complete protocol replay or numerical acceptance."
+}

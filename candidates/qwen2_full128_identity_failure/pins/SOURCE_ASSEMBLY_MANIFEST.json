@@ -1,0 +1,119 @@
+{
+  "schema": "source-only-byte-assembly-v1",
+  "base_commit": "d768435ae9c9e02f82e076051d9b373e6a2d4caa",
+  "source_scope": "16 original-byte source/metadata files: all 15 executable Python files plus observer SOURCE_PINS. One private-path rope SOURCE_PINS omitted and projected separately; this is not executable runtime reconstruction/admission.",
+  "files": [
+    {
+      "target": "qwen2_ordered_fullgraph_entry/__init__.py",
+      "repo_path": "candidates/qwen2_ordered_fullgraph_entry/__init__.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 84,
+      "sha256": "dac2807ea7d89bb043d25edc9cf9675db2b9ef739495af19892b453d8899d1cd"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/bridge.py",
+      "repo_path": "candidates/qwen2_full128_identity_failure/delta/qwen2_ordered_fullgraph_entry/bridge.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 11713,
+      "sha256": "a69dba9bd111260d8d04a03f3bbe722f579f6d7d3556cb3030ed0b370459831c"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/cold_binding.py",
+      "repo_path": "candidates/qwen2_ordered_fullgraph_entry/cold_binding.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 6866,
+      "sha256": "62b4cd798c9764ea242268a939014590742e522165549eab2e40efc77a23a598"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/cold_policy.py",
+      "repo_path": "candidates/qwen2_ordered_fullgraph_entry/cold_policy.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 7935,
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/oracle_path_gate.py",
+      "repo_path": "candidates/qwen2_m128_terminal_capture_prepare/postimage/candidates/qwen2_ordered_fullgraph_entry/oracle_path_gate.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 7529,
+      "sha256": "d59b811c31e4f8d98f928a189036e6754387ee4e6d4ab532ee8fd7a7f748cc36"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/registry.py",
+      "repo_path": "candidates/qwen2_m128_terminal_capture_prepare/postimage/candidates/qwen2_ordered_fullgraph_entry/registry.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 23885,
+      "sha256": "9c73a76784dc67e66420ef55c6b427873f90cd35ee13ecd5e0b058a805e0c3f6"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/rope_operand_capture/__init__.py",
+      "repo_path": "candidates/qwen2_m128_terminal_capture_prepare/postimage/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/__init__.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 72,
+      "sha256": "53cc4e964d14a483f9fecc56b32a9935f10e76f757f27de97eb1bfa15c108567"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/rope_operand_capture/rope_capture.py",
+      "repo_path": "candidates/qwen2_m128_terminal_capture_prepare/postimage/candidates/qwen2_ordered_fullgraph_entry/rope_operand_capture/rope_capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 25848,
+      "sha256": "25d31af4bc242344f6c545aaa56ebd32d8babd5490efa43b22508292e7bbc5d2"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/runner.py",
+      "repo_path": "candidates/qwen2_full128_identity_failure/delta/qwen2_ordered_fullgraph_entry/runner.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 17763,
+      "sha256": "ec2627602b4264b8996e77e21304297c914192cca93570d031ae8f6e814197c5"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/runtime_binding.py",
+      "repo_path": "candidates/qwen2_ordered_fullgraph_entry/runtime_binding.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/service_trace.py",
+      "repo_path": "candidates/qwen2_observer_negative_diagnostics/line/postimage/service_trace.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/stream.py",
+      "repo_path": "candidates/qwen2_ordered_event_stream/stream.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 21232,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    {
+      "target": "qwen2_ordered_fullgraph_entry/terminal_comparator.py",
+      "repo_path": "candidates/qwen2_m128_normal_cold_comparator/comparator/comparator.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 13556,
+      "sha256": "531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d"
+    },
+    {
+      "target": "qwen2_ordered_observer/SOURCE_PINS.json",
+      "repo_path": "candidates/qwen2_ordered_observer/SOURCE_PINS.json",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1159,
+      "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+    },
+    {
+      "target": "qwen2_ordered_observer/capture.py",
+      "repo_path": "candidates/qwen2_ordered_observer/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "target": "qwen2_ordered_observer/monitor.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/postimage/monitor.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 14705,
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+    }
+  ]
+}

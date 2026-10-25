@@ -1,0 +1,27 @@
+# 一次完整 M128 尝试的有界 FAIL 证据
+
+这次默认关闭的新profile曾获一次有界运行授权，实际已执行native资源构造和原prefix PC0..9，随后在后续任务阶段触发sampled_tree_cpu_exceeded。原orchestration中的PREPARED_NOT_EXECUTED是初始遗留标签，不能用来声称任务未执行，也不能把prefix完成升级完整block PASS。
+
+## 实际终态
+
+1 CPU预算3600 CPU秒、4200wall；AS硬限3GiB，tree RSS采样2GiB非硬cap，trace384MiB、总输出768MiB，cleanup30秒。采样累计CPU达到3600.03秒，reaped累计3600.053966秒；实际wall3600.448889583秒、sampled RSS326561792 bytes。记录的限额原因是CPU，不是wall/RSS/trace。worker -9终止并由父进程reap，清理0.016318106秒，无剩余自有进程。2179 pins和45冻结文件独立重核，原源码与历史FAIL/PASS不改。
+
+没有WORKER_RESULT、最终module/maps/policy inventory、whole terminal、SERVICE_PROTOCOL、actual_terminal输出、TERMINAL_COMPARISON或COMPLETION_SEAL。算术比较未形成执行/结果证据，整个DUT不合格。启动时oracle SEALED及source gate禁止提前读已有证据，但SIGKILL后最终oracle/policy receipt缺失，不能从activation snapshot追认最终无读或最终运行资格PASS。
+
+## 部分stream仅为INCOMPLETE
+
+原本地stream133834196 bytes，SHA9b821d7a5dc032b9c8f10232a96f51e639b2c6ad3cfaf8c2dccfe198c499e1b7。有1403851个完整frame，无end marker/footer；原片末未发现半frame不等于整个stream完整。结构事件统计为：acquire1、accept_group13256、accept_step479308、retire_done13255、retire_result451035、retire_legacy_reply446996。group profile0共9217、profile2共4039。
+
+451035结果和446996 legacy PV回复只表示保留frame的结构进度，未完成ticket生命周期重放，也没有完整所有者ACK/done清债封印。因此不能称QK/PV算术PASS、协议PASS、完整block周期分母或利用率证据。此次小包不混入尚未完成的性能归因或优化结论，不推算剩余运行时间，不提高预算或自动重试。
+
+## 原receipt缺口与外置清单
+
+原launcher在worker被杀后无法读取缺失的WORKER_RESULT，导致原RECEIPT.artifacts={}且output_after_postflight=null。原receipt原样保留，绝不补写清单或伪造成功seal。独审在run目录之外追加41文件完整hash ledger，共136842449 bytes；本包只投影逻辑角色、唯一ordinal、bytes/hash，原清单hash单列。外置清单补充保全证据，不把原receipt升级成完整自封闭receipt。
+
+原receipt SHA38363bdaf1e50a9ea047c3a1d9f04529ca026daad050b77c46fec1000e159c3c；独审SHA df5c24651c8c674e27b2c5a48d9c201b40c8c9042f729e463693251fec911602；公开投影是另一个文件，其hash不冒充原件。完整private config不上传，仅绑定947711B／SHAb356697971aa6e404d28bee689b75ed6a15d171e587ceadb7b99eddc3a6aefdd，以及source/候选/资源逻辑pins。
+
+## 边界和后续
+
+本包仅发布默认关闭profile/source身份与不可变FAIL摘要，无源码改动或target/test/import/native重跑。本次打包及发布审未重读原stream/tensor；结构计数来自已保留的原failure独审，其历史partial-stream结构检查记录保持不变。私有路径、原trace事件、maps/modules、运行地址、APPROVAL/claim内容、provider/权重/oracle tensor不发布。ledger中授权与claim只保留opaque identity，不包含内容。公开证据不提供可直接重跑的config，不授权复用原已消费账本。
+
+后续如按既有用户维护授权安排新运行，须另立精确profile、独审和资源决策及单次技术准入，不复用原已消费claim；本包不构成现在重跑的技术准入，也不能把这次失败继承为PASS。原阈值和四非物化／三因果范围不改；旧M16 DUT未通过。固定4096 MAC完整block分母尚无成功运行证据，legacy PV63.57%理论上界仍在，不能声称80/90%、硬件cycle、频率或RTL验收。全部原失败、部分stream及唯一证据保持本地不删。

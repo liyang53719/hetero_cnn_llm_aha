@@ -1,0 +1,120 @@
+{
+  "original_review_identity": {
+    "bytes": 4785,
+    "sha256": "df5c24651c8c674e27b2c5a48d9c201b40c8c9042f729e463693251fec911602"
+  },
+  "projection_omits": "parent/worker identities, exact event fragment and runtime locations; original review retained",
+  "review": {
+    "artifact_count": 41,
+    "artifact_manifest": {
+      "bytes": 5921,
+      "sha256": "d466be709ebad3a7b5f15eddd2b9ff4990bfe9131b5dff0c7a00e5c3c1402b91"
+    },
+    "artifact_manifest_limitation": "Original launcher could not read missing WORKER_RESULT after kill, so original artifacts={} and output_after_postflight=null; independent complete file ledger appended outside original run, not rewritten.",
+    "checks": 5617659,
+    "cleanup": {
+      "killed_owned_process_count": 1,
+      "remaining_owned_process_count": 0,
+      "seconds": 0.016318106034304947,
+      "timed_out": false
+    },
+    "config": {
+      "bytes": 947711,
+      "sha256": "b356697971aa6e404d28bee689b75ed6a15d171e587ceadb7b99eddc3a6aefdd"
+    },
+    "freeze": {
+      "bytes": 7444,
+      "sha256": "d541d3dc2322294105074cc02599237175359cb2132c8eb963fcd3bc2c8de362"
+    },
+    "freeze_rehashed": 45,
+    "missing": [
+      "WORKER_RESULT",
+      "WORKER_FINAL module/maps/policy inventory",
+      "whole terminal",
+      "complete trace trailer/lifecycle",
+      "SERVICE_PROTOCOL",
+      "actual_terminal outputs",
+      "TERMINAL_COMPARISON",
+      "COMPLETION_SEAL"
+    ],
+    "notes": [
+      "Necessary native constructors and actual prefix completed; initialization-only scope no longer describes this failed task run.",
+      "1CPU total budget exceeded at sampled3600.03 and reaped3600.053966 seconds; wall/RSS/trace caps were not the recorded limiting reason.",
+      "Partial frame counts are structural progress only, never QK/PV arithmetic or ticket lifecycle PASS; no fullblock denominator/performance proof.",
+      "Original two FAILs, successful metadata/init and source pins remain unchanged within full2179 opaque rehash.",
+      "No retries, target imports, native calls, tensor decoding or oracle-value reads were performed by reviewer.",
+      "Raw data, trace and failure evidence remain local and unchanged. No success seal or final worker audit manufactured."
+    ],
+    "oracle_qualification": "Startup SEALED recorded and source gates prohibit early values; no final oracle/policy receipt survived SIGKILL, so final absence-of-read certification is unavailable. No comparator/artifact indicates values were compared; do not upgrade to final gate PASS.",
+    "orchestration_status_note": "PREPARED_NOT_EXECUTED is stale initial label; actual phase records and prefix reports prove execution occurred, but not suffix terminal or numeric qualification.",
+    "original_receipt_artifacts_count": 0,
+    "original_receipt_output_after_postflight": null,
+    "output_bytes": 136842449,
+    "phases": [
+      "ORIGINAL_RESOURCES_CONSTRUCTED",
+      "ORIGINAL_PREFIX_COMPLETE"
+    ],
+    "pins_rehashed": 2179,
+    "prefix_report_pcs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "reaped_cpu_seconds": 3600.053966,
+    "reason": "sampled_tree_cpu_exceeded",
+    "receipt": {
+      "bytes": 122217,
+      "sha256": "38363bdaf1e50a9ea047c3a1d9f04529ca026daad050b77c46fec1000e159c3c"
+    },
+    "resources": {
+      "address_space_bytes": 3221225472,
+      "cleanup_seconds": 30,
+      "cpu_seconds": 3600,
+      "cpus": 1,
+      "event_limit": 2478403,
+      "log_bytes": 16777216,
+      "output_bytes": 805306368,
+      "trace_bytes": 402653184,
+      "tree_rss_bytes": 2147483648,
+      "wall_seconds": 4200
+    },
+    "sampled_cpu_seconds": 3600.03,
+    "sampled_tree_rss_bytes": 326561792,
+    "scope": "Read-only failure closure; structural partial event inventory is not stream lifecycle acceptance",
+    "status": "FAIL_RETAINED_INDEPENDENTLY_VERIFIED",
+    "stream": {
+      "acceptance": false,
+      "complete": false,
+      "complete_frames": 1403851,
+      "counts": {
+        "accept_group": 13256,
+        "accept_step": 479308,
+        "acquire": 1,
+        "retire_done": 13255,
+        "retire_legacy_reply": 446996,
+        "retire_result": 451035
+      },
+      "end_marker_present": false,
+      "group_profiles": {
+        "0": 9217,
+        "2": 4039
+      },
+      "lifecycle_replayed": false,
+      "pin": {
+        "bytes": 133834196,
+        "sha256": "9b821d7a5dc032b9c8f10232a96f51e639b2c6ad3cfaf8c2dccfe198c499e1b7"
+      },
+      "trailing_partial": null
+    },
+    "wall_seconds": 3600.448889583,
+    "worker_reaped": true,
+    "worker_returncode": -9
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "actual_geometry": {
+    "epoch": 7,
+    "event_stream_max_bytes": 402653184,
+    "event_stream_max_events": 2478403,
+    "profile_id": "ordered_fullgraph_m128_exact_dut_v1",
+    "pv_profile": 0,
+    "qk_profile": 2,
+    "raw_kv_transport": false,
+    "rows": 128,
+    "wall_budget": 4200
+  },
+  "default_off": true,
+  "oracle_payload_not_public": true,
+  "original_profile": {
+    "bytes": 8328,
+    "sha256": "473dbfdd19d26589a04f832adad60a0d936a1cd9db5a3cd97f35c7a3ec28a125"
+  },
+  "provider_bindings_external": true,
+  "source_root_not_public": true,
+  "thresholds_unchanged": true
+}

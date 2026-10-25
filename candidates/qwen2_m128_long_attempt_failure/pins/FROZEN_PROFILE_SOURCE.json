@@ -1,0 +1,295 @@
+{
+  "actual_config": {
+    "bytes": 947711,
+    "sha256": "b356697971aa6e404d28bee689b75ed6a15d171e587ceadb7b99eddc3a6aefdd"
+  },
+  "candidate_files": 14,
+  "config_pins": 2179,
+  "entries": [
+    {
+      "bytes": 3364,
+      "logical_role": "COMPOSITION.json",
+      "pin_id": "frozen-000",
+      "sha256": "a66853a580a6ee2da47c71adf1add98323b47faa644b8cb934109fbdf77203fe"
+    },
+    {
+      "bytes": 794,
+      "logical_role": "EXACT_COMMAND.txt",
+      "pin_id": "frozen-001",
+      "sha256": "b965d278a238d2e11ebdd77878108a94ad7c67f761d9df291a712e8d74b422c2"
+    },
+    {
+      "bytes": 448845,
+      "logical_role": "LAZY_IMPORT_AUDIT.json",
+      "pin_id": "frozen-002",
+      "sha256": "4773fe4610c595cbe3fce2e1135bbbcf3a5d1e63032296dd633783da21a1625b"
+    },
+    {
+      "bytes": 4903,
+      "logical_role": "README_ZH.md",
+      "pin_id": "frozen-003",
+      "sha256": "71a7e653f337de36b35a96539dc94ee60aa0c2a3d6fe88f236f4b22328b4ff5c"
+    },
+    {
+      "bytes": 5307,
+      "logical_role": "audit_lazy_imports.py",
+      "pin_id": "frozen-004",
+      "sha256": "39a008b6f2ca46ac385160077f430d068e98feba492682c8af61aa966a2d42cf"
+    },
+    {
+      "bytes": 9038,
+      "logical_role": "compose.py",
+      "pin_id": "frozen-005",
+      "sha256": "0cc9fc6d99760b7df8a3c6e95dd2dcf346c944539991893ed1266c1a6cf1e609"
+    },
+    {
+      "bytes": 947711,
+      "logical_role": "gate/CONFIG.json",
+      "pin_id": "frozen-006",
+      "sha256": "b356697971aa6e404d28bee689b75ed6a15d171e587ceadb7b99eddc3a6aefdd"
+    },
+    {
+      "bytes": 7432,
+      "logical_role": "gate/MOCK_EVIDENCE.json",
+      "pin_id": "frozen-007",
+      "sha256": "7d6e4e3261ef0c0f842b1c1e5de8f3330c397319058ca00abeaf49d40461a323"
+    },
+    {
+      "bytes": 390,
+      "logical_role": "gate/PREPARATION_HASH_CHECK.json",
+      "pin_id": "frozen-008",
+      "sha256": "7617871a231a638d37161ea33ec1d26628f1b28dd989a74fb930eec55ff46c14"
+    },
+    {
+      "bytes": 8328,
+      "logical_role": "gate/PROFILE.json",
+      "pin_id": "frozen-009",
+      "sha256": "473dbfdd19d26589a04f832adad60a0d936a1cd9db5a3cd97f35c7a3ec28a125"
+    },
+    {
+      "bytes": 201933,
+      "logical_role": "gate/RUNTIME_MANIFEST.json",
+      "pin_id": "frozen-010",
+      "sha256": "0ccd223f63056b9f673132c79ced9135e4c6e02242b4d3ac3bcf96e7cb2648a9"
+    },
+    {
+      "bytes": 3100,
+      "logical_role": "gate/SOURCE_INTERFACE_MANIFEST.json",
+      "pin_id": "frozen-011",
+      "sha256": "d73295af37879de07677b4cb07e54d9cdf89a68db8a7086f1d2716a14009ec42"
+    },
+    {
+      "bytes": 8453,
+      "logical_role": "gate/admission.py",
+      "pin_id": "frozen-012",
+      "sha256": "d48e74d998f83ced15c5aa2278614099f0326ed0294259c642661cadc6940f52"
+    },
+    {
+      "bytes": 1107,
+      "logical_role": "gate/common.py",
+      "pin_id": "frozen-013",
+      "sha256": "525864434d3e6315382075a40bbd9a18173649ef57e546414e426838bc14afe5"
+    },
+    {
+      "bytes": 1745,
+      "logical_role": "gate/native_binding.py",
+      "pin_id": "frozen-014",
+      "sha256": "762d6c12089c9386f9660ade58817a9248ce167c556f0a3254ced70ac312c25b"
+    },
+    {
+      "bytes": 15125,
+      "logical_role": "gate/run_gate.py",
+      "pin_id": "frozen-015",
+      "sha256": "d81e660cc2154341f0b4897cef7e17ea5ccd2dd71803354cd4a074c939e6dbda"
+    },
+    {
+      "bytes": 20319,
+      "logical_role": "gate/runtime_admission.py",
+      "pin_id": "frozen-016",
+      "sha256": "32f610cdea1bfe79caeafd7dcf473447ca8b4ba78cbf8dc0e362d354ed27bedc"
+    },
+    {
+      "bytes": 15274,
+      "logical_role": "gate/supervisor.py",
+      "pin_id": "frozen-017",
+      "sha256": "d4799e0f9a1707d95c66529134cf17102a7997697bcf2e8665b4c77429c9a53d"
+    },
+    {
+      "bytes": 3401,
+      "logical_role": "gate/test_cache_fallback.normal.stderr",
+      "pin_id": "frozen-018",
+      "sha256": "3b8fd11846224a12066e4ddaaa60d762a72728f302c89796c512cb43ec9709c6"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_cache_fallback.normal.stdout",
+      "pin_id": "frozen-019",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 3401,
+      "logical_role": "gate/test_cache_fallback.optimized.stderr",
+      "pin_id": "frozen-020",
+      "sha256": "bcf2028b20ca1879e14ccedf9f4a9a62bdb8c94e6e9dfbaef87f991e1b1f6cc9"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_cache_fallback.optimized.stdout",
+      "pin_id": "frozen-021",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 16142,
+      "logical_role": "gate/test_cache_fallback.py",
+      "pin_id": "frozen-022",
+      "sha256": "e131b0b017aefb2d4ad70ae55c3f2dfae7f2428585a5600a034729d2be680763"
+    },
+    {
+      "bytes": 2781,
+      "logical_role": "gate/test_initqualified_profile.normal.stderr",
+      "pin_id": "frozen-023",
+      "sha256": "1f2f16a651c1c5a938d49b77702122feb19f50a781b8598b62677f92b7f0d3e6"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_initqualified_profile.normal.stdout",
+      "pin_id": "frozen-024",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2781,
+      "logical_role": "gate/test_initqualified_profile.optimized.stderr",
+      "pin_id": "frozen-025",
+      "sha256": "1f2f16a651c1c5a938d49b77702122feb19f50a781b8598b62677f92b7f0d3e6"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_initqualified_profile.optimized.stdout",
+      "pin_id": "frozen-026",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 10921,
+      "logical_role": "gate/test_initqualified_profile.py",
+      "pin_id": "frozen-027",
+      "sha256": "fc57763dc952cfedd4f8b93453609cc8492956ddbaa30ac1b8609524940d5a71"
+    },
+    {
+      "bytes": 4072,
+      "logical_role": "gate/test_supervisor.normal.stderr",
+      "pin_id": "frozen-028",
+      "sha256": "cde0997cde3a91126fe7d4d5ad14c629ee05bbfbf3edc3225a9c306661eb5dc5"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_supervisor.normal.stdout",
+      "pin_id": "frozen-029",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 4072,
+      "logical_role": "gate/test_supervisor.optimized.stderr",
+      "pin_id": "frozen-030",
+      "sha256": "cde0997cde3a91126fe7d4d5ad14c629ee05bbfbf3edc3225a9c306661eb5dc5"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_supervisor.optimized.stdout",
+      "pin_id": "frozen-031",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 24894,
+      "logical_role": "gate/test_supervisor.py",
+      "pin_id": "frozen-032",
+      "sha256": "d1887d8a5b6c3a582baa040dc154646e98dab3670da4f3bd89bdca1550a7d1e5"
+    },
+    {
+      "bytes": 3216,
+      "logical_role": "gate/test_worker.normal.stderr",
+      "pin_id": "frozen-033",
+      "sha256": "f678709f589c6f1129237357240ca3ec83232e6c74d74b208a2838de3d3c59a1"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_worker.normal.stdout",
+      "pin_id": "frozen-034",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 3216,
+      "logical_role": "gate/test_worker.optimized.stderr",
+      "pin_id": "frozen-035",
+      "sha256": "31cc061ef5d425f35faafcddd447289b06787858f77a7482905b5c2737726da9"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_worker.optimized.stdout",
+      "pin_id": "frozen-036",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 10068,
+      "logical_role": "gate/test_worker.py",
+      "pin_id": "frozen-037",
+      "sha256": "a5e3ed4661391664138501956e7d63b44be9b22c455f993ed7d88b5a0fc91030"
+    },
+    {
+      "bytes": 451,
+      "logical_role": "gate/test_worker_policy.normal.stderr",
+      "pin_id": "frozen-038",
+      "sha256": "3cd90a28ad86c7dd6910dbba0ea10a0e647ddcf74210b823b22d127be405a8f5"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_worker_policy.normal.stdout",
+      "pin_id": "frozen-039",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 451,
+      "logical_role": "gate/test_worker_policy.optimized.stderr",
+      "pin_id": "frozen-040",
+      "sha256": "a2e0b383a366a47db8030e2d6aaf3d2b3cebcd3468ade7a00f888f291ce3dccf"
+    },
+    {
+      "bytes": 0,
+      "logical_role": "gate/test_worker_policy.optimized.stdout",
+      "pin_id": "frozen-041",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 5261,
+      "logical_role": "gate/test_worker_policy.py",
+      "pin_id": "frozen-042",
+      "sha256": "1eb75809537e0232d1746099acbc27b04109d84806dc35a885120216d936a3f1"
+    },
+    {
+      "bytes": 14305,
+      "logical_role": "gate/worker.py",
+      "pin_id": "frozen-043",
+      "sha256": "1e87179b88578c64ffe5290dca423d7e4ab40486530214d8e9adaf4ffa16dad3"
+    },
+    {
+      "bytes": 2146,
+      "logical_role": "run_mock_controls.py",
+      "pin_id": "frozen-044",
+      "sha256": "d048ac490a1b1d977c3c6530ddbb5dc4c092abe573c46c4a0f26b9c3cab33cbe"
+    }
+  ],
+  "no_full_config_supplied": true,
+  "original_freeze": {
+    "bytes": 7444,
+    "sha256": "d541d3dc2322294105074cc02599237175359cb2132c8eb963fcd3bc2c8de362"
+  },
+  "preparation_labels_are_historical_not_actual_outcome": true,
+  "profile": {
+    "bytes": 8328,
+    "sha256": "473dbfdd19d26589a04f832adad60a0d936a1cd9db5a3cd97f35c7a3ec28a125"
+  },
+  "source_files": 316,
+  "source_manifest": {
+    "bytes": 57536,
+    "sha256": "97bbae97b22b6e1f66592ce5260bce2467e8fefeccf383c45bb640af0cc57191"
+  }
+}

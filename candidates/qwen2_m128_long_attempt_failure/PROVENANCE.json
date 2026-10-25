@@ -1,0 +1,15 @@
+{
+  "all_existing_source_claim_failure_pass_records_unchanged": true,
+  "base_commit": "745cd4d3b673d26c1ed21e8a3a8c793c2ac5d645",
+  "independent_failure_review": {
+    "bytes": 4785,
+    "sha256": "df5c24651c8c674e27b2c5a48d9c201b40c8c9042f729e463693251fec911602"
+  },
+  "no_target_tests_imports_or_numerical_reexecution": true,
+  "run_receipt": {
+    "bytes": 122217,
+    "sha256": "38363bdaf1e50a9ea047c3a1d9f04529ca026daad050b77c46fec1000e159c3c"
+  },
+  "scope": "one bounded long-DUT failure evidence; no PASS upgrade",
+  "trace_performance_attribution_outside_this_failure_summary": true
+}

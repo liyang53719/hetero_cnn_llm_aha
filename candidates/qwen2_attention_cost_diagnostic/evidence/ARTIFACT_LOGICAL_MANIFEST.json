@@ -1,0 +1,351 @@
+{
+  "original": {
+    "bytes": 8259,
+    "sha256": "e03679f49d601af8fca9c918dbf83d4b9bc55a6db79f8887967579ea48b29323"
+  },
+  "scope": "External post-run ledger, NOT a native receipt or seal. Artifact payloads excluded.",
+  "files": [
+    {
+      "ordinal": 0,
+      "logical_role": "CAPTURE_REPORT.json",
+      "bytes": 4994,
+      "sha256": "30ebc11af6f1e21b3851bef8d73cb6a4c99626cc767ee0bf76aff8cccc56b5f7"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "CAPTURE_dot_bf16.u32le",
+      "bytes": 192,
+      "sha256": "fed9aab3dbf443f16c451e4bd197fd9b8d27209f63a210161a8eba8e0257c72b"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "CAPTURE_dot_parts.u32le",
+      "bytes": 3072,
+      "sha256": "7f0514348420ec26a14d122f1f98793631ef87ed33f323ac4e221fc0532b3972"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "CAPTURE_normalizer.u32le",
+      "bytes": 288,
+      "sha256": "1973963751142f2afd5a9f87fd61ea6459e48aea8510ceb53f32c40de73bfa89"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "CAPTURE_prob_bf16.u32le",
+      "bytes": 192,
+      "sha256": "a15715f715b1a2102cc425eea8bd0e0d68379a4c729d0e692da9fe2e17507a09"
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "CAPTURE_pv_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "b3081dad0542b885b053e0a469a7e47f45b1039b29d76e0c4b94e80a2565a03c"
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "CAPTURE_pv_raw.u32le",
+      "bytes": 12288,
+      "sha256": "cb556d26b69e1803f9abb3703f8b34b21414c1b0092731364b0d90fd11765147"
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "CAPTURE_scores_bf16.u32le",
+      "bytes": 192,
+      "sha256": "1f75c727fbd176fc10e72ab6cd15fe1b40affcd09621352f8bd9198ab0192778"
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "CAPTURE_softmax_exp.u32le",
+      "bytes": 192,
+      "sha256": "6388d523972531d85c6dca433b2fa8dc3b782609eb91bc32757a89a73d999a19"
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "CAPTURE_softmax_fp32.u32le",
+      "bytes": 192,
+      "sha256": "bdd6e88470c2bb4c7388f0c5ff917519cffb7383a5cb59b97f58a82ccafb8ec0"
+    },
+    {
+      "ordinal": 10,
+      "logical_role": "CAPTURE_unrounded_dot_sum.u32le",
+      "bytes": 192,
+      "sha256": "28fc8b4e620bb0d193cd62a164890b50a12bd12acfc86cff07c57808cc783d64"
+    },
+    {
+      "ordinal": 11,
+      "logical_role": "IDENTITY.json",
+      "bytes": 121,
+      "sha256": "88fd5544796e0225f847671d5086146b3c84805e12482e74987789697f1b7f1b"
+    },
+    {
+      "ordinal": 12,
+      "logical_role": "MAPS_AFTER_CDLL.txt",
+      "bytes": 6997,
+      "sha256": "2a8638a57b3b4740fd8c6856fa05d18567906e283570f720d8d05df697cca019"
+    },
+    {
+      "ordinal": 13,
+      "logical_role": "PARENT.json",
+      "bytes": 744,
+      "sha256": "f56e4404b263d01d387f303061d37eb391bcff1ddd200e96c3d6ab8ebd244072"
+    },
+    {
+      "ordinal": 14,
+      "logical_role": "RESULT.json",
+      "bytes": 73790,
+      "sha256": "750e9b15557afc27db3ddc0a199dbe20a18d0050f01dda1bcccb12ac0105d71b"
+    },
+    {
+      "ordinal": 15,
+      "logical_role": "RUNTIME_AFTER_NATIVE_LOAD/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 6997,
+      "sha256": "09187ce7d777c5dbb7f3c4d890c33e8d4afe165d8cae9588ac4d053c1d515d77"
+    },
+    {
+      "ordinal": 16,
+      "logical_role": "RUNTIME_AFTER_NATIVE_LOAD/MAPS_RAW.txt",
+      "bytes": 6997,
+      "sha256": "09187ce7d777c5dbb7f3c4d890c33e8d4afe165d8cae9588ac4d053c1d515d77"
+    },
+    {
+      "ordinal": 17,
+      "logical_role": "RUNTIME_AFTER_NATIVE_LOAD/MAP_AUDIT.json",
+      "bytes": 16114,
+      "sha256": "93f34ad43cddb8109da3cda51009b1f602c4b45abd5d10dd0cdb27c9e64063fe"
+    },
+    {
+      "ordinal": 18,
+      "logical_role": "RUNTIME_AFTER_NATIVE_LOAD/MODULES_RAW.json",
+      "bytes": 31479,
+      "sha256": "6910a0e18925d233fda22283e91bb5963800c8695e12dfc689d6d2dbc156f130"
+    },
+    {
+      "ordinal": 19,
+      "logical_role": "RUNTIME_AFTER_NATIVE_LOAD/MODULE_AUDIT.json",
+      "bytes": 155168,
+      "sha256": "81021353ca4afeca1826b73583427e81ac5545461c5c137152702bc1ce6b7e8d"
+    },
+    {
+      "ordinal": 20,
+      "logical_role": "RUNTIME_AFTER_NATIVE_LOAD/SUMMARY.json",
+      "bytes": 96,
+      "sha256": "5124e034723ea7dd17c7f6b34a6aa710663cce7aff2ba6f8167ef404fda32e23"
+    },
+    {
+      "ordinal": 21,
+      "logical_role": "RUNTIME_ARM_0_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "2729729227de09df54b8951aa21b1aa9aa4415ff9c2db040d6d1fbef103e21e3"
+    },
+    {
+      "ordinal": 22,
+      "logical_role": "RUNTIME_ARM_0_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "2729729227de09df54b8951aa21b1aa9aa4415ff9c2db040d6d1fbef103e21e3"
+    },
+    {
+      "ordinal": 23,
+      "logical_role": "RUNTIME_ARM_0_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 24,
+      "logical_role": "RUNTIME_ARM_0_TERMINAL/MODULES_RAW.json",
+      "bytes": 91577,
+      "sha256": "f91437387c7a45e0fcc62f6af3b703c0275703e370e5f5ec7c3e0890047a91d3"
+    },
+    {
+      "ordinal": 25,
+      "logical_role": "RUNTIME_ARM_0_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 499837,
+      "sha256": "f0efd82f3cae9ecc810160eeab2fafe14fc58ce964f1c2228c0215b83f9c6293"
+    },
+    {
+      "ordinal": 26,
+      "logical_role": "RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab"
+    },
+    {
+      "ordinal": 27,
+      "logical_role": "RUNTIME_ARM_1_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "41fc1e8ebd316781f9b9caa1ea3fbc2bd2bea9a73ba23a4c0d166576709c3a93"
+    },
+    {
+      "ordinal": 28,
+      "logical_role": "RUNTIME_ARM_1_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "41fc1e8ebd316781f9b9caa1ea3fbc2bd2bea9a73ba23a4c0d166576709c3a93"
+    },
+    {
+      "ordinal": 29,
+      "logical_role": "RUNTIME_ARM_1_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 30,
+      "logical_role": "RUNTIME_ARM_1_TERMINAL/MODULES_RAW.json",
+      "bytes": 91577,
+      "sha256": "f91437387c7a45e0fcc62f6af3b703c0275703e370e5f5ec7c3e0890047a91d3"
+    },
+    {
+      "ordinal": 31,
+      "logical_role": "RUNTIME_ARM_1_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 499837,
+      "sha256": "385fae0a09e30c729e09a9b52e278c369970cd09373c1c3decce7c3a3af958f5"
+    },
+    {
+      "ordinal": 32,
+      "logical_role": "RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48"
+    },
+    {
+      "ordinal": 33,
+      "logical_role": "RUNTIME_ARM_2_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "b2e9116b4436d9d3b896e02ddc22d7e715901ee91f15b1b1375f30817fa111b3"
+    },
+    {
+      "ordinal": 34,
+      "logical_role": "RUNTIME_ARM_2_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "b2e9116b4436d9d3b896e02ddc22d7e715901ee91f15b1b1375f30817fa111b3"
+    },
+    {
+      "ordinal": 35,
+      "logical_role": "RUNTIME_ARM_2_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 36,
+      "logical_role": "RUNTIME_ARM_2_TERMINAL/MODULES_RAW.json",
+      "bytes": 92084,
+      "sha256": "1cd82bbf84055b491d9f0289e49b4801e41e676b9db5a54b3860ee820bc2b7d6"
+    },
+    {
+      "ordinal": 37,
+      "logical_role": "RUNTIME_ARM_2_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 502114,
+      "sha256": "cc975260e5a7a0043cc298e664a06f7ab4b9a6970b5ebb07559d2b226931a284"
+    },
+    {
+      "ordinal": 38,
+      "logical_role": "RUNTIME_ARM_2_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "c1115ab69ced9244a0a3b4381a22f7c7379698090cc1f347540cf13347e3c2d2"
+    },
+    {
+      "ordinal": 39,
+      "logical_role": "RUNTIME_ARM_3_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17723,
+      "sha256": "39a9ccdd6f4138917edc897d34e2d72fbd03f83a0ddc8c832e9c50cff7871c72"
+    },
+    {
+      "ordinal": 40,
+      "logical_role": "RUNTIME_ARM_3_TERMINAL/MAPS_RAW.txt",
+      "bytes": 17723,
+      "sha256": "39a9ccdd6f4138917edc897d34e2d72fbd03f83a0ddc8c832e9c50cff7871c72"
+    },
+    {
+      "ordinal": 41,
+      "logical_role": "RUNTIME_ARM_3_TERMINAL/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 42,
+      "logical_role": "RUNTIME_ARM_3_TERMINAL/MODULES_RAW.json",
+      "bytes": 92084,
+      "sha256": "1cd82bbf84055b491d9f0289e49b4801e41e676b9db5a54b3860ee820bc2b7d6"
+    },
+    {
+      "ordinal": 43,
+      "logical_role": "RUNTIME_ARM_3_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 502114,
+      "sha256": "27810365af28a383151f390e3db26d3506321d88a9e8a9abe8ccff49b3c82af5"
+    },
+    {
+      "ordinal": 44,
+      "logical_role": "RUNTIME_ARM_3_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "66b40a7640d981a7f6ad060e5b2f7c33e7f1d6ba746ce284c10a0d63c909de1d"
+    },
+    {
+      "ordinal": 45,
+      "logical_role": "RUNTIME_POSTFLIGHT/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 17772,
+      "sha256": "76d391a4dfe74be6c42cef63b5e1c46d22d3a2f31326b009529ca8ba904cd9a4"
+    },
+    {
+      "ordinal": 46,
+      "logical_role": "RUNTIME_POSTFLIGHT/MAPS_RAW.txt",
+      "bytes": 17772,
+      "sha256": "76d391a4dfe74be6c42cef63b5e1c46d22d3a2f31326b009529ca8ba904cd9a4"
+    },
+    {
+      "ordinal": 47,
+      "logical_role": "RUNTIME_POSTFLIGHT/MAP_AUDIT.json",
+      "bytes": 37278,
+      "sha256": "b19ecbb5814ccbab388901f6a0da74786fd6b533ea2fced67ce03c4bdd2a36d8"
+    },
+    {
+      "ordinal": 48,
+      "logical_role": "RUNTIME_POSTFLIGHT/MODULES_RAW.json",
+      "bytes": 98816,
+      "sha256": "38ad9aaf2b6a8c051724b74068adb6260196c9c0ef5edf0ead4a5a3d6c07bf25"
+    },
+    {
+      "ordinal": 49,
+      "logical_role": "RUNTIME_POSTFLIGHT/MODULE_AUDIT.json",
+      "bytes": 536956,
+      "sha256": "9e30ded4e76df828c2d4a4537ea6a3def80cc075b2a1b81f15066c28b5f70ef4"
+    },
+    {
+      "ordinal": 50,
+      "logical_role": "RUNTIME_POSTFLIGHT/SUMMARY.json",
+      "bytes": 89,
+      "sha256": "7b67f351afec714a99c2d03f484bc70d35c97143839335f1e6fb21a78f8f5415"
+    },
+    {
+      "ordinal": 51,
+      "logical_role": "SERVICE_EVENTS_0.json",
+      "bytes": 210399,
+      "sha256": "d82381401da85a8389a4e02a3c1176fa53e0151b585ff299949aed786ac69cbe"
+    },
+    {
+      "ordinal": 52,
+      "logical_role": "SERVICE_EVENTS_1.json",
+      "bytes": 210711,
+      "sha256": "058466abb0f3c40fb669b441dfd96719061e9d00cb3cc9ab6fbbe327f53d1ce1"
+    },
+    {
+      "ordinal": 53,
+      "logical_role": "SERVICE_EVENTS_2.json",
+      "bytes": 210711,
+      "sha256": "c61917e0c82e1f8903e9a9e20871da34588b1e0d201548fd2c84de240933c97b"
+    },
+    {
+      "ordinal": 54,
+      "logical_role": "SERVICE_EVENTS_3.json",
+      "bytes": 210711,
+      "sha256": "e71888237cfd8393da19f0b05ca1f50f6a651c445f71ef3d9358f26a2c9e60a2"
+    },
+    {
+      "ordinal": 55,
+      "logical_role": "STAGES.jsonl",
+      "bytes": 52812,
+      "sha256": "288469691374123f6bac7afffc99e8f760d540dc03a8fcb48c5d907981e1bef1"
+    },
+    {
+      "ordinal": 56,
+      "logical_role": "worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

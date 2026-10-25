@@ -1,0 +1,144 @@
+{
+  "original": {
+    "bytes": 5105,
+    "sha256": "95d6343d381c80af28ef63c2401d3265848080131e50b35b1b698647a960c21c"
+  },
+  "projection": "Exact fields except approval/claim identities and reviewer script hashes omitted.",
+  "status": "PASS_READ_ONLY_M2_COST_EXECUTION_CLOSURE_LIMITED",
+  "checks": 27450,
+  "result_sha256": "750e9b15557afc27db3ddc0a199dbe20a18d0050f01dda1bcccb12ac0105d71b",
+  "parent_sha256": "f56e4404b263d01d387f303061d37eb391bcff1ddd200e96c3d6ab8ebd244072",
+  "config_sha256": "2a9e078d7413254d3c7834491d85083445750992eee55944673d41a99cbf7f19",
+  "artifacts": 57,
+  "artifact_bytes": 4599104,
+  "artifact_manifest_sha256": "e03679f49d601af8fca9c918dbf83d4b9bc55a6db79f8887967579ea48b29323",
+  "pins_rehashed": 1019,
+  "events": [
+    {
+      "arm": 0,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 1,
+      "last_ticket": 216
+    },
+    {
+      "arm": 1,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 217,
+      "last_ticket": 432
+    },
+    {
+      "arm": 2,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 433,
+      "last_ticket": 648
+    },
+    {
+      "arm": 3,
+      "events": 1515,
+      "counts": {
+        "acquire": 1,
+        "accept_group": 216,
+        "accept_step": 480,
+        "retire_result": 312,
+        "retire_done": 216,
+        "retire_legacy_reply": 288,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "tickets": 216,
+      "first_ticket": 649,
+      "last_ticket": 864
+    }
+  ],
+  "runtime": [
+    {
+      "phase": "AFTER_NATIVE_LOAD",
+      "modules": 107,
+      "unique_mappings": 11,
+      "unique_ELF": 9
+    },
+    {
+      "phase": "ARM_0_TERMINAL",
+      "modules": 251,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "ARM_1_TERMINAL",
+      "modules": 251,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "ARM_2_TERMINAL",
+      "modules": 252,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "ARM_3_TERMINAL",
+      "modules": 252,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    },
+    {
+      "phase": "POSTFLIGHT",
+      "modules": 272,
+      "unique_mappings": 19,
+      "unique_ELF": 17
+    }
+  ],
+  "worker_cpu_seconds": 8.210441282,
+  "parent_wall_seconds": 8.297031357011292,
+  "probe_callbacks_per_count_arm": 140862,
+  "scope": "Actual M2 Attention four-arm diagnostic only; not full block, RTL, cycles or performance benchmark",
+  "limitations": [
+    "No native/target replay or tensor decode performed by reviewer. Independent audit validates retained hashes, event lifecycles, report consistency and source-bound runtime checks, not a second numerical calculation.",
+    "Ten clean-on raw fields retained and rehashed; count-on field hashes/presence agree. Off/count raw outputs are not retained separately; output/writes equality is proved by fixed in-process comparator and stage digests rather than independent numerical replay.",
+    "Original launcher supplies PARENT/RESULT but no standalone final seal or pre/post complete hash ledger. Worker source performs complete checks before work and after reference; completion attests these, and this audit independently rehashes all pins now and binds all run artifacts externally.",
+    "Native mapped list includes 17 ELF and two locale/cache files; maps are snapshots, not a complete OS event history. Memory hard limit is AS1GiB; no measured peak RSS artifact exists.",
+    "Fixed arm order timing is diagnostic. Instrumented inclusive times overlap and must not be added or extrapolated to M128/80%/90%.",
+    "Reference is original independent AST recipe with shared exact primitives, not complete official Transformers forward. Causal-only attention cells are observed; padded unobserved cells are not measurements.",
+    "V1 BLOCKED and full M128 CPU-limit failure receipts and frozen v1 sources remain unchanged."
+  ],
+  "target_executed_by_reviewer": false,
+  "stage_hash_crosschecks": {
+    "four_outputs_identical": true,
+    "four_scores_identical": true,
+    "four_writes_identical": true,
+    "output_and_scores_match_terminal_reference_digest": true
+  }
+}

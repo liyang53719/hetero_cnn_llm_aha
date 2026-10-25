@@ -1,0 +1,18 @@
+{
+  "original": {
+    "bytes": 5747,
+    "sha256": "13419184a5132b6eea42804e34201c4564831a5a3aa050a11452a6f283abd0da"
+  },
+  "v1_freeze": {
+    "bytes": 5394,
+    "sha256": "92d963b5650d738ce1eb19c107efca9c1131ea71175dda1ac58447c356779322"
+  },
+  "v1_config": {
+    "bytes": 278070,
+    "sha256": "33091946db899630a0f8d2a4604d67020af3aa3956472e3d1ad99b08102540c3"
+  },
+  "v1_status": "BLOCKED, no actual v1 attempt",
+  "cause": "Original local-PY_UNWIND mock failure and lease/cleanup review blockers preserved; the 13 original mock identities did not establish required lease safety. R2 directly reuses reviewed lease helper and full 28+14 suites plus 13+22 controls.",
+  "prior_artifacts_modified": false,
+  "m128_full_dut_failure_unchanged": true
+}

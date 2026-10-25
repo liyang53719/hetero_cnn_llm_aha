@@ -1,0 +1,48 @@
+{
+  "original": {
+    "bytes": 5671,
+    "sha256": "995d298f7b551a765c3e5b47895ba28ca2683f8ffe3b9ca9ce807a36ee0d9d97"
+  },
+  "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+  "config_sha256": "2a9e078d7413254d3c7834491d85083445750992eee55944673d41a99cbf7f19",
+  "freeze_sha256": "337c35fff16a87ea891fa4f72681e7a6546450580ec105960e2508b433303fc7",
+  "limits": {
+    "cpu_seconds": 30,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 45,
+    "cpus": 1
+  },
+  "independent_checks": {
+    "opaque_pins": 1019,
+    "freeze_files": 38,
+    "total_hash_checks": 1057,
+    "test_executions": 154,
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "suites_per_mode": [
+      28,
+      14,
+      13,
+      22
+    ],
+    "eight_subprocesses_exit_zero": true,
+    "test_evidence_sha256": "bd6e77dc69205661d7e7574fef488e52ac50424ca5a346b026ea9193b41d6e93",
+    "aggregate_test_wall_seconds": 2.1363185509690084,
+    "v1_freeze_and_blocked_receipt_unchanged": true
+  },
+  "blockers": [],
+  "scope": {
+    "static_source": true,
+    "stdlib_mock": true,
+    "helper_normal_definition_import_in_tests": true,
+    "target_cold": false,
+    "native": false,
+    "numerical": false,
+    "fullblock": false,
+    "rtl": false,
+    "actual_execution_authorized": false
+  },
+  "historical_blocked_review_sha256": "0c55983c34bc82d8280cb0eb2256f91bd7dcd6b51e17c627000cb4ca67a2ee30"
+}

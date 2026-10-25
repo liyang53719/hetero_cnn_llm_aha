@@ -1,0 +1,115 @@
+{
+  "original": {
+    "bytes": 3446,
+    "sha256": "614e6e252d820aba9f4daa42ddf32c35d388343ec479df5cb553ee25f507fcdf"
+  },
+  "result": {
+    "status": "PASS_BOUNDED_STDLIB_MOCK_ONLY",
+    "tests": [
+      {
+        "test": "test_service_trace.py",
+        "optimized": false,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.1659931459580548,
+        "cpu_seconds": 0.159815,
+        "log": "normal_test_service_trace.py.log",
+        "log_sha256": "b04e2650ad7885a070861919a563fe5e9f655f2b40f5788b306d87c3f5797df0"
+      },
+      {
+        "test": "test_resource_faults.py",
+        "optimized": false,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.16628733702236786,
+        "cpu_seconds": 0.13230599999999995,
+        "log": "normal_test_resource_faults.py.log",
+        "log_sha256": "3b82a5edb3bd49215f35f4dc7214845621b4788fb7d7ded298f1465ff900db15"
+      },
+      {
+        "test": "test_cost_probe_mock.py",
+        "optimized": false,
+        "unchanged_reviewed_suite": false,
+        "returncode": 0,
+        "wall_seconds": 0.11559159395983443,
+        "cpu_seconds": 0.07388500000000003,
+        "log": "normal_test_cost_probe_mock.py.log",
+        "log_sha256": "1b54e7bd3e4f0557cdf06d1076b6ef63ce21d6c17ecec62d2881ac93eafe1fed"
+      },
+      {
+        "test": "test_cost_probe_lease.py",
+        "optimized": false,
+        "unchanged_reviewed_suite": false,
+        "returncode": 0,
+        "wall_seconds": 0.16556615295121446,
+        "cpu_seconds": 0.11749599999999999,
+        "log": "normal_test_cost_probe_lease.py.log",
+        "log_sha256": "24a63c6503c5e070adbb89751be5e57ceab526e2a28cf85012eb48835c26bab5"
+      },
+      {
+        "test": "test_service_trace.py",
+        "optimized": true,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.41619262902531773,
+        "cpu_seconds": 0.3669779999999999,
+        "log": "optimized_test_service_trace.py.log",
+        "log_sha256": "3f57e9dd08ba475eb014ca0ecbb5ecc04b362993922cf24cf372921e9200d9d3"
+      },
+      {
+        "test": "test_resource_faults.py",
+        "optimized": true,
+        "unchanged_reviewed_suite": true,
+        "returncode": 0,
+        "wall_seconds": 0.36651195102604106,
+        "cpu_seconds": 0.3559669999999999,
+        "log": "optimized_test_resource_faults.py.log",
+        "log_sha256": "b52502e107e47c12ade55744e35f7f0ab726600cba16104a05d81ffb5acd75a5"
+      },
+      {
+        "test": "test_cost_probe_mock.py",
+        "optimized": true,
+        "unchanged_reviewed_suite": false,
+        "returncode": 0,
+        "wall_seconds": 0.21587960398755968,
+        "cpu_seconds": 0.21070000000000005,
+        "log": "optimized_test_cost_probe_mock.py.log",
+        "log_sha256": "0d5f8346517fbbc9f8c76001a173ca4ace78dc0d43bc08446621d0299d7dcd04"
+      },
+      {
+        "test": "test_cost_probe_lease.py",
+        "optimized": true,
+        "unchanged_reviewed_suite": false,
+        "returncode": 0,
+        "wall_seconds": 0.3666160069988109,
+        "cpu_seconds": 0.3385710000000001,
+        "log": "optimized_test_cost_probe_lease.py.log",
+        "log_sha256": "86eaa534cabf5cc8150a0ba91a7d2161ec2a13b9e72dc739d6d21705209efd4b"
+      }
+    ],
+    "total_cpu_seconds": 1.755718,
+    "total_wall_seconds": 1.9811181710101664,
+    "limits": {
+      "cpus": 1,
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "wall_seconds": 45
+    },
+    "unchanged_reviewed_suites_required": [
+      "test_service_trace.py",
+      "test_resource_faults.py"
+    ],
+    "reviewed_helper_sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172",
+    "native_or_dut_executed": false,
+    "actual_cold_run": false
+  },
+  "unique_logical_test_identities": 77,
+  "test_executions": 154,
+  "suite_counts_each_mode": [
+    28,
+    14,
+    13,
+    22
+  ],
+  "this_packaging_reruns": 0
+}

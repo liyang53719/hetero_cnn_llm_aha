@@ -1,0 +1,51 @@
+{
+  "reviews": [
+    {
+      "role": "actual_failure",
+      "bytes": 6075,
+      "sha256": "eace997e8905627d197150c349eb60ff99df8ea1d6498609434c9306675148c0"
+    },
+    {
+      "role": "actual_freeze",
+      "bytes": 1404,
+      "sha256": "44ab3c8ca2dcdbdd2b2c4ef2a47cfe0ec1b6fce5997d30114345bc4dcaf5b63f"
+    },
+    {
+      "role": "small_terminal_semantics",
+      "bytes": 4885,
+      "sha256": "588bc226356d90bcb6e54d5bdda97c5b686d89b5653acf1be0a2dcd161af85de"
+    },
+    {
+      "role": "actual_identity",
+      "bytes": 10139,
+      "sha256": "e4af2209a24b1fdfa1991fdc99b2d49d84ade1c30939a76a2d9df3e87679cd72"
+    },
+    {
+      "role": "actual_identity_freeze",
+      "bytes": 2386,
+      "sha256": "603631f8d0727c870a36c42d13a5acdeda4941b461f3205ba24a4a2841bd107d"
+    },
+    {
+      "role": "actual_artifact_ledger",
+      "bytes": 22828,
+      "sha256": "cf4a36be5d6759914cc1c2ab184dae40afed51c788407efbcf6810e1e6f1c56c"
+    },
+    {
+      "role": "source_review",
+      "bytes": 6870,
+      "sha256": "6d8a719d19d67d1ff150389ff0ecbb52a1626c09e1fe42df74bf715931d3d890"
+    },
+    {
+      "role": "source_freeze",
+      "bytes": 4448,
+      "sha256": "04102906666666ff62da51207f6a68da8ce4393413e6975d717cf094b3ba2ef2"
+    },
+    {
+      "role": "source_delta",
+      "bytes": 2261,
+      "sha256": "d8de265a7e59ce7ba5c3a96de03d519f511ec05ddc42eb562de003d5b276451c"
+    }
+  ],
+  "hash_only_private_review_artifacts_not_public_retrievability_claim": true,
+  "actual_process_control_or_new_native_execution": false
+}

@@ -1,0 +1,64 @@
+{
+  "status": "READ_ONLY_SOURCE_BOUND_ROUTE_PLAN_NOT_EXECUTED",
+  "original_report": {
+    "bytes": 10167,
+    "sha256": "dde4712b3463f063aae03683ae46177e9fb6995bc01f41fa6f98762dc18c9809"
+  },
+  "original_freeze": {
+    "bytes": 4164,
+    "sha256": "4fc5552b958ac74c6bffdf7724a9b93abe55c2640c3dbc6ad409a922cfc155b6"
+  },
+  "tool_inventory_report": {
+    "bytes": 4372,
+    "sha256": "63e21ee3c8f725cec16e0b59427f77c588c842dc82426251cc59a001438f4cfa"
+  },
+  "tool_inventory_metadata": {
+    "bytes": 30320,
+    "sha256": "81f9b1d665e03b220910799c1f12024c5c1a92086d34f4e790c25a5db15382da"
+  },
+  "source_bound_limits": [
+    "Retained initial low IR is not a runnable backend cache or prepared graph snapshot; typed Scala bench also depends on live DUT/annotation context.",
+    "Pinned ChiselTest6 Verilator path still emits SystemVerilog through Scala FIRRTL2, not CIRCT/firtool; merely switching annotation is not the proposed standalone firtool path.",
+    "The report records a cached official pinned firtool distribution and ELF, not current-Core executable compatibility or an already-generated current-Core SV result. Existing other-design SV is not an identity-compatible substitute.",
+    "FIRRTL header version source checks are not complete current-file parse/verification proof; lowering, annotation semantics, memory/reset/assertions/ports and closed instances still need actual later review."
+  ],
+  "minimal_next_boundary": "Prepare a separately reviewed, bounded, isolated SV emission-only stage from the already-reviewed current-Core CHIRRTL and exact tool pins before any native simulation integration. No execution, fit guarantee, behavior acceptance or tool availability without qualification is granted by this publication.",
+  "original_report_limited_cache_search": "Report found no exact current top SV filename in the checked workspace/shared locations and known archive; not an exhaustive all-name search.",
+  "future_native_integration": "Independent pinning and port/clock/reset/handshake/stimulus mapping remain required after actual SV qualification; no adapter/driver implementation or simulation is in this package.",
+  "excluded": [
+    "Unexecuted SV candidate/source/config/argv/GO",
+    "Proposed future CPU/wall budgets",
+    "Native compilation or simulation results",
+    "Unconditional tool compatibility or performance claims",
+    "Model/hardware pruning or changed mathematics"
+  ],
+  "source_pins": [
+    {
+      "archive_relative": "chiseltest/internal/TesterUtils.scala",
+      "bytes": 4698,
+      "sha256": "97d4b5940cfb5be5c70bc147295a15d5608680c3fb28034ce61f613da56148f8"
+    },
+    {
+      "archive_relative": "chiseltest/simulator/Caching.scala",
+      "bytes": 3169,
+      "sha256": "492d905f9e47f5feb979ebf424133639dfda0abd5ba13d1027b56345eec2903c"
+    },
+    {
+      "archive_relative": "chiseltest/simulator/Compiler.scala",
+      "bytes": 2654,
+      "sha256": "a5eb6dfc9258815ec0086026ede05e6db27bc4b96b02639d14169614f4ea7549"
+    },
+    {
+      "archive_relative": "chiseltest/simulator/TreadleSimulator.scala",
+      "bytes": 3460,
+      "sha256": "33e10985ec734d78eeb68a9247d404cf7085368c465b3a78e254e94d8828aeba"
+    },
+    {
+      "archive_relative": "chiseltest/simulator/VerilatorSimulator.scala",
+      "bytes": 15991,
+      "sha256": "575036655e65a21d329c33a44e0ce554c1ec756bc131110b6a2cde826cfba2f2"
+    }
+  ],
+  "all_prior_failure_scopes_preserved": true,
+  "new600_hotspot_still_unknown": true
+}

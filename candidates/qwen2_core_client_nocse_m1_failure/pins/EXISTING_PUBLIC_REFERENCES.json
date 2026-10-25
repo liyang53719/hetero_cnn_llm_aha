@@ -1,0 +1,60 @@
+{
+  "base_commit": "5951b85b1d7a91d1fd0859c7e40b628048de4f98",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_failure/check_behavior.py",
+      "bytes": 11689,
+      "sha256": "b27de0dfeba345b0a62207441bac2beb8e53e2a0507ad45ec4b8943968767a2c",
+      "git_blob_sha": "9b7842317dbacc54fa6d7698870dccfc274933a4"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_failure/BEHAVIOR_EXPECTATION.json",
+      "bytes": 1714,
+      "sha256": "438afb85a42afb3bcafa39d8b97a46bebb65358f51d0d918d43656b5064b4c89",
+      "git_blob_sha": "208bf5a27fdd7e6b187c66f48701c988a7e9f5a1"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_failure/pins/NEW_SOURCE_PINS.json",
+      "bytes": 2494,
+      "sha256": "5f9ac0dbd5011dc827214f4c96b364c40d867f1bae42acdc34dd6d4a9cf7dd15",
+      "git_blob_sha": "2e99aa81d084a189035932f57f40e8d57a8c94ed"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_failure/pins/SUPERVISOR_ROLE_PROJECTION.json",
+      "bytes": 12343,
+      "sha256": "c16dc31169f51e52beba69f83348f2bd0f200e948dbe7560ea8fdd523b56dc8d",
+      "git_blob_sha": "3462e9926963db8fb7f1a0867de1a054db81b76f"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_failure/evidence/ACTUAL_FAILURE_REVIEW.json",
+      "bytes": 3768,
+      "sha256": "dc9420c2d1afd790410a28527c4a0a864d5812c2d72904b619a169016cf1e940",
+      "git_blob_sha": "3a4974754923397a409c00a0b2a97435f7e0cda5"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_nocse_diagnostic/pins/SOURCE_AND_CLASS_DELTA.json",
+      "bytes": 4821,
+      "sha256": "1263628fa67f83baa0fdc0b5022e1569212a40c1420bd06c113a3fa3b7270a52",
+      "git_blob_sha": "c4bbc9efa28f96dc67d7ec52b4f3ee41aa2a49bc"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_nocse_diagnostic/pins/EXISTING_PUBLIC_REFERENCES.json",
+      "bytes": 3392,
+      "sha256": "5e090bd8bfd3a560c25f3c6eeb975e4717cb3a980bc11cae8b1f3c8e89ff4528",
+      "git_blob_sha": "eefe49ebe3ef86a7fbfd87d123aa3e8dc18239b9"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_nocse_diagnostic/evidence/COMPILE_ACTUAL_REVIEW.json",
+      "bytes": 3913,
+      "sha256": "bb4e16ca6dbaafd011d33a17b225db2a231f17dc6cb4a6f1a2b0146818bd2437",
+      "git_blob_sha": "13ef0b492c52b107042a7515f474a8ee7daaf699"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_nocse_diagnostic/evidence/DIAGNOSTIC_ACTUAL_REVIEW.json",
+      "bytes": 6978,
+      "sha256": "52150c59c8b1145b6f4130168da2edb0d1fa97ca47c1ef39b29d7cee8b68944b",
+      "git_blob_sha": "4233aa50bba3bbbd14f1488c1ee25bf41b869d34"
+    }
+  ],
+  "reuse": "Exact existing checker, original source/Spec/class/dependency chains and prior failures. Public BEHAVIOR_EXPECTATION is the existing portable synthetic fixture, not the private executable runtime expectation or authorization. No payload/source copies here."
+}

@@ -1,0 +1,132 @@
+{
+  "original": {
+    "bytes": 6075,
+    "sha256": "eace997e8905627d197150c349eb60ff99df8ea1d6498609434c9306675148c0"
+  },
+  "review_freeze": {
+    "bytes": 1404,
+    "sha256": "44ab3c8ca2dcdbdd2b2c4ef2a47cfe0ec1b6fce5997d30114345bc4dcaf5b63f"
+  },
+  "projection_policy": "All original fields preserved except private paths/stat and CPU placement. Actual raw log/IR bytes omitted; hash/length metadata only. Current stat continuity, not a second parser or complete runtime audit.",
+  "review": {
+    "Matrix_MAC_utilization": null,
+    "NoCSE_effect_or_speedup_proven": false,
+    "Spec_or_MemoryReply_CodeSource_logged": false,
+    "W005_count": 4,
+    "actual_file_bytes": 59625776,
+    "actual_file_count": 24,
+    "actual_run_status": "FAIL_NORMAL_M1_TREADLE_RETAINED",
+    "all_originals_unchanged": true,
+    "artifact_inventory": {
+      "bytes": 22828,
+      "sha256": "cf4a36be5d6759914cc1c2ab184dae40afed51c788407efbcf6810e1e6f1c56c"
+    },
+    "artifact_stat_endpoint_checks": 30,
+    "audit_JVM_Treadle_DUT_reference_or_signal_execution": false,
+    "behavior_result_missing": true,
+    "body_and_framework_clock_counts": null,
+    "cleanup_complete": true,
+    "cleanup_direct_exit_code": -9,
+    "cleanup_final_two_only_barrier": true,
+    "cleanup_four_scans_states": [
+      "R",
+      "Z",
+      "Z",
+      "Z"
+    ],
+    "cleanup_proof_not_new_live_proc_observation": true,
+    "cleanup_saved_evidence_bytes": 3094,
+    "cleanup_saved_evidence_records": 16,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "continuous_isolation_proven": false,
+    "current_actual_and_root_files_single_opaque_hash_each": true,
+    "exact_original17_plus_NoCSE_new3": true,
+    "full_IR_opaque_identity": {
+      "bytes": 58897360,
+      "hash_read_count": 1,
+      "relative": "normal_m1/simulation/OrderedQkBehaviorCore.lo.fir",
+      "sha256": "71a27f80112970011761ffe361e6466a57a53f4eae95a816a252bc162ec4ea56",
+      "verification_method": "fresh_SHA256_once_actual_hash_pass"
+    },
+    "full_IR_read_or_parsed": false,
+    "hardware_behavior_or_numeric_or_full29_or_full128_RTL_PASS": false,
+    "identity_checks": 10557,
+    "identity_freeze": {
+      "bytes": 2386,
+      "sha256": "603631f8d0727c870a36c42d13a5acdeda4941b461f3205ba24a4a2841bd107d"
+    },
+    "identity_review": {
+      "bytes": 10139,
+      "sha256": "e4af2209a24b1fdfa1991fdc99b2d49d84ade1c30939a76a2d9df3e87679cd72"
+    },
+    "implicit_slots_pre_post_review_absent": true,
+    "independent_small_terminal_checks": 49,
+    "independent_small_terminal_review": {
+      "bytes": 4885,
+      "sha256": "588bc226356d90bcb6e54d5bdda97c5b686d89b5653acf1be0a2dcd161af85de"
+    },
+    "inventories": 6,
+    "log_lines": 15,
+    "marker_counts": {
+      "All tests passed.": 0,
+      "CORE_CASE_PASS": 0,
+      "CORE_SIM_READY": 0,
+      "FOREIGN_RECOVERY": 0,
+      "Full thread dump ": 0,
+      "INJECT": 0,
+      "OBS": 0,
+      "Total number of tests run:": 0
+    },
+    "new_run_thread_samples": 0,
+    "next": "No automatic retry, budget raise or diagnostic signal. Only read-only analysis is within this completed review; any new execution or source/backend change needs separate root authority and frozen proposal.",
+    "no_READY_not_proof_of_zero_framework_reset_clock": true,
+    "no_rerun_or_modification": true,
+    "normal_exit_code_field": null,
+    "normal_m1_case_completion_observed": false,
+    "old20_and_new3_original_roots_not_runtime_classpath": true,
+    "old600_comparison": {
+      "no_specific_phase_or_hotspot_or_performance_conclusion": true,
+      "normalized_visible_log_sha256": "5caa97ec6bc6088989b1427afa58550a4d6fceb4cd319e04a2cea44189cb54de",
+      "old_receipt": {
+        "bytes": 38036,
+        "sha256": "48e1288f2003239f3a8905495bb8ccad59b2c963020c0df2ff2d0e5e5a042edc"
+      },
+      "old_small_log": {
+        "bytes": 2329,
+        "sha256": "9d6c7f018a735ddb09c5301231ffbc0cd1641ae0838f4ffba32e28294956e22e"
+      },
+      "processes_reached_failure_terminal_but_neither_observed_completed_case": true,
+      "same600_budget_and_failure_category": true,
+      "visible_log_identical_after_run_root_normalization": true
+    },
+    "old_large_IR_only_frozen_hash_fullstat_reused": true,
+    "origin_count": 7,
+    "outer_timeout": false,
+    "outer_wall_seconds": 600.8715823919629,
+    "previous150s_samples_not_profile_of_this600s_run": true,
+    "prior600_150_NoCSE150_FAILs_and_compile_CHIRRTL_software_observed_domain_scopes_preserved": true,
+    "prior_failure_lowIR_same_bytes": true,
+    "receipt_elapsed_seconds_missing": true,
+    "resources": {
+      "final_aggregate_cpu_seconds": 600.516278779,
+      "maximum_sample_interval_seconds": 0.08297278598183766,
+      "sampled_peak_cpu_seconds": 600.0100445639999,
+      "sampled_peak_output_bytes": 59587674,
+      "sampled_peak_rss_bytes": 1251176448
+    },
+    "root_records": 6,
+    "root_returncode": 1,
+    "runtime_pin_checks": 1266,
+    "same_byte_MemoryReply_new_source_paths_verified": true,
+    "schema": "actual-nocse600-m1-failure-independent-review-v1",
+    "source_log": {
+      "bytes": 2335,
+      "sha256": "0dbf2efc0b0adff25572e7a76ed66020a75ddc277aa08d88dd68235ab8af553e"
+    },
+    "specific_600second_hotspot_unknown": true,
+    "staged_class_bytes": 670791,
+    "staged_class_count": 20,
+    "status": "ACTUAL_NOCSE600_M1_CPU_FAIL_AUDITED_NO_CASE_TERMINAL",
+    "system_duty": null
+  }
+}

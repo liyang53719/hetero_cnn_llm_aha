@@ -1,0 +1,190 @@
+{
+  "original_supervisor": {
+    "bytes": 32684,
+    "sha256": "301b99d573ee1187c3322b269a4a7cc4eb5468a7fcf206bb857ba4e7aa5c8f4e"
+  },
+  "original_manifest": {
+    "bytes": 676537,
+    "sha256": "ced3f37a44b21f4edc6041aa6e0b91696b63b8896a6c70b5e3bf5b21ba714c8d"
+  },
+  "original_freeze": {
+    "bytes": 4448,
+    "sha256": "04102906666666ff62da51207f6a68da8ce4393413e6975d717cf094b3ba2ef2"
+  },
+  "source_delta_original": {
+    "bytes": 2261,
+    "sha256": "d8de265a7e59ce7ba5c3a96de03d519f511ec05ddc42eb562de003d5b276451c"
+  },
+  "source_delta": {
+    "base_freeze": {
+      "bytes": 6763,
+      "sha256": "7d2982610362392514ffc6224966462f98c9430c1a8f1e21e099f80b485e6bc1"
+    },
+    "base_supervisor": {
+      "bytes": 29064,
+      "sha256": "3dc28752855be9f0865d1fd2d2609403c75efd046ea0ff487d8ecdfc0f90c1b2"
+    },
+    "changed_definitions": [
+      "validate_manifest"
+    ],
+    "composite_validation_block_byte_identical_to_1830": true,
+    "composite_validation_donor": {
+      "bytes": 43139,
+      "sha256": "5371560a735ab94cce5437b8ccf66b3feeed6ec9bb897481389c6ac7b4022bc8"
+    },
+    "controls": {
+      "actual_claim": false,
+      "actual_jvm": false,
+      "actual_reviewed_composite_static_checked": true,
+      "actual_signals": false,
+      "composite_class_bytes": 670791,
+      "normal": 21,
+      "optimized": 21,
+      "production_manifest_not_created": true
+    },
+    "engine_cleanup_staging_behavior_checker_byte_identical": true,
+    "no_sigquit_or_pidfd_code": true,
+    "resource_delta": null,
+    "schema_delta": [
+      "qwen2-core-client-normal-m1-treadle-supervisor-v1",
+      "qwen2-core-client-nocse-normal-m1-treadle-supervisor-v1"
+    ],
+    "status": "SOURCE_STDLIB_MOCK_ONLY_NOT_FROZEN_NO_GO",
+    "supervisor": {
+      "bytes": 32684,
+      "sha256": "301b99d573ee1187c3322b269a4a7cc4eb5468a7fcf206bb857ba4e7aa5c8f4e"
+    },
+    "tests": {
+      "bytes": 9582,
+      "sha256": "7c25b33319e978e5a7a77e8351a7b8897479ad2f957176e1a5f734ac6f07248d"
+    },
+    "unchanged_definitions": [
+      "_child_limits",
+      "_execute",
+      "behavior_check",
+      "digest",
+      "exact_inventory",
+      "group_sample",
+      "load_cleanup",
+      "main",
+      "need",
+      "output_scope",
+      "pin",
+      "sample_gap",
+      "save_receipt",
+      "staged_classes",
+      "tree_sample",
+      "verify_inputs",
+      "verify_pin"
+    ]
+  },
+  "original_checker": {
+    "bytes": 11689,
+    "sha256": "b27de0dfeba345b0a62207441bac2beb8e53e2a0507ad45ec4b8943968767a2c"
+  },
+  "original_runtime_expectation": {
+    "bytes": 2009,
+    "sha256": "6de49939631fd3e3b713075c67fd7939b982041cbdd3f037a1686eff6b9901cf"
+  },
+  "original600_caps_exact_equal": true,
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 600,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 268435456,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 201326592,
+    "total_wall_seconds": 750,
+    "work_wall_seconds": 720
+  },
+  "outer_wall_seconds": 780,
+  "worker_argv_template_exact_equal_to_original600": true,
+  "classpath_roles": [
+    "exact staged original17 plus actual NoCSE new3",
+    "original550",
+    "same106 official JARs"
+  ],
+  "case_name": "normal_m1",
+  "stage": "normal-m1-treadle-only",
+  "runtime_pin_checks": 1266,
+  "manifest_pin_records": 1264,
+  "role_counts": {
+    "baseline_compiled_class": 20,
+    "baseline_spec_source": 1,
+    "class": 550,
+    "compiled_class": 20,
+    "dependency": 106,
+    "metadata": 157,
+    "new_source": 4,
+    "original_source": 92,
+    "tool": 314
+  },
+  "source_review_original": {
+    "bytes": 6870,
+    "sha256": "6d8a719d19d67d1ff150389ff0ecbb52a1626c09e1fe42df74bf715931d3d890"
+  },
+  "source_review_status_historical": "PASS_SOURCE_STDLIB_SINGLE_M1_600CPU_PREPARATION_PENDING_ROOT_GO",
+  "source_review_source_contract": {
+    "all_other17_functions_and_top_level_nodes_byte_identical_to_1646": true,
+    "exact_original17_plus_actual_newSpec3": true,
+    "no_M2_M3_off_fault_chaining": true,
+    "no_SIGQUIT_diagnostic_path": true,
+    "no_hardware_source_stimulus_threshold_or_clock_change": true,
+    "no_recompile": true,
+    "only_schema_and_validate_manifest_changed": true,
+    "original_check_behavior_and_expectation_byte_identical": true
+  },
+  "source_review_claim_limits": [
+    "Actual Chisel/FIRRTL/Treadle core/client behavior under scripted external Matrix/memory endpoints only if later qualified. Not full Matrix FMA or official-reference numerical acceptance.",
+    "M1 uses active j=0; W005 and untested j=1..7/general M>1 coverage are not resolved.",
+    "Terminal status/resetRequired and held-payload stability are not proof of every owner payload expected value; aggregate memory totals are harness assertions, not independent full traffic replay.",
+    "NoCSE stage difference in two old snapshots is not a performance result or guarantee this run completes.",
+    "Seven origin records omit Spec and MemoryReply; actual class provenance depends on exact staged hashes/paths and classpath closure."
+  ],
+  "source_review_resources": {
+    "AS_bytes": 4294967296,
+    "NoCSE_may_increase_graph_and_clock_cost": true,
+    "RSS_sampled_bytes": 2147483648,
+    "affinity": 1,
+    "cleanup_deadline_seconds": 730,
+    "clock_cap_including_framework1_and_explicit2_resets": 100000,
+    "cpu_seconds": 600,
+    "file_hard_bytes": 201326592,
+    "fit_guaranteed": false,
+    "heap_bytes": 1073741824,
+    "log_hard_bytes": 2097152,
+    "max_qualified_sample_gap_seconds": 0.1,
+    "new_budget_does_not_modify_any_old_run_or_claim": true,
+    "no_linear_runtime_or_memory_extrapolation": true,
+    "not_cgroup_RSS_or_global_disk_hard_isolation": true,
+    "old_NoCSE150_sampled_peak_RSS_bytes": 1201958912,
+    "outer_wall_seconds": 780,
+    "remaining_graph_allocation_expression_compiler_first_eval_reset_and_body_peak_unknown": true,
+    "resource_caps_scope": "child RLIMIT_AS/CPU/FSIZE plus sampled anchored group RSS/aggregate CPU; not global isolation",
+    "total_wall_seconds": 750,
+    "tree_sampled_bytes": 268435456,
+    "work_wall_seconds": 720
+  },
+  "source_review_controls_historical": {
+    "all_pass": true,
+    "author_composite_per_mode": 21,
+    "independent_composite_per_mode": 50,
+    "modes": [
+      "normal",
+      "-O"
+    ],
+    "original35_checker_controls_replayed_against_new_checker_per_mode": 35,
+    "synthetic_proof_not_behavior_or_hardware_PASS": true,
+    "total": 212
+  },
+  "no_SIGQUIT_or_pidfd_diagnostic_path": true,
+  "no_recompile_or_new_Spec_or_hardware_change": true,
+  "no_auto_retry_or_stage_chaining": true,
+  "not_executable_runtime_config_or_fresh_GO": true,
+  "private_argv_process_anchors_and_paths_not_uploaded": true
+}

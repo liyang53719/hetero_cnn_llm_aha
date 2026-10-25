@@ -1,0 +1,64 @@
+{
+  "original": {
+    "bytes": 2795,
+    "sha256": "29ef65e9923fdeb9ab8dcd286535b29e351036ac8f4e8982a02461d9a5d414d9"
+  },
+  "status": "FAILED_RETAINED",
+  "cpu_seconds_limit": 160,
+  "wall_seconds_limit": 200,
+  "aggregate_before": {
+    "cpu_seconds": 0.071104685,
+    "wall_seconds": 0.04388334497343749,
+    "rss_bytes": 13803520,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 13803520,
+      "at_elapsed_seconds": 0.04222337802639231,
+      "live_tree_bytes": 0,
+      "samples": 4,
+      "live_samples": 0,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 0,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "last_live_usage": {
+    "cpu_seconds": 169.810092093,
+    "wall_seconds": 169.8531711039832,
+    "rss_bytes": 283992064,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 283992064,
+      "at_elapsed_seconds": 169.8531711039832,
+      "live_tree_bytes": 269983744,
+      "samples": 835,
+      "live_samples": 831,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 0,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "exception": "TimeoutError: aggregate work budget exhausted; cleanup reserve retained",
+  "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+  "returncode": -9,
+  "group_remaining": false,
+  "wall_seconds": 170.04076857800828,
+  "aggregate_after": {
+    "cpu_seconds": 170.038231605,
+    "wall_seconds": 170.08465520699974,
+    "rss_bytes": 14008320,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 284516352,
+      "at_elapsed_seconds": 170.0616072419798,
+      "live_tree_bytes": 270508032,
+      "samples": 839,
+      "live_samples": 832,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 270508032,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "projection": "Private process identities, argv and physical child directory omitted/replaced; all retained statuses, limits, resource snapshots and exceptions unchanged. Output-usage is pre-final-parent-write sampled snapshot, not final artifact ledger.",
+  "numerical_acceptance": false
+}

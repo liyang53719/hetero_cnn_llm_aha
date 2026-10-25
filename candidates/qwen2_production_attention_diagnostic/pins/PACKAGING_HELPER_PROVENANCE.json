@@ -1,0 +1,14 @@
+{
+  "source_public_path": "candidates/qwen2_attention_stability_diagnostic/assemble_sources.py",
+  "source_commit": "8c6311401b1fb57e924dbd841e2dc406c904d57a",
+  "source_identity": {
+    "bytes": 2809,
+    "sha256": "56bb3670642e7c7270fcfde0487c2f5889ff6fafd54372f1b1ec56bec3cde0aa"
+  },
+  "only_packaging_change": "Add argparse revision choices r2/r3 (default r3) selecting the corresponding local manifest. Byte-copy/path/hash checks unchanged. Does not import target code.",
+  "unchanged_test_source_public_path": "candidates/qwen2_attention_stability_diagnostic/test_assemble_sources.py",
+  "unchanged_test_source_identity": {
+    "bytes": 4043,
+    "sha256": "6d1cc2ad910ba25f1e2df478993ab71e9721d95ab0c1aa0d1cd15442cfb39280"
+  }
+}

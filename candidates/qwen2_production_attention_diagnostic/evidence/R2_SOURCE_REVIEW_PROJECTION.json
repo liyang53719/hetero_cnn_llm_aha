@@ -1,0 +1,148 @@
+{
+  "original": {
+    "bytes": 7396,
+    "sha256": "5ba0a9b4177ed025b3325611bf809c866a62b845807d4ec494892785063741ff"
+  },
+  "config_pins_checked": 1101,
+  "config_sha256": "9f1728aebce4fadd7d0c2b02152fd726bc1a256998a0110b2f18b7551a0d197f",
+  "executable_sources": {
+    "admission.py": "1abbba26600c4594e0ed49f4ab683dceae1da8e27b92aa6caeb345fae866c511",
+    "artifacts.py": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf",
+    "binding.py": "2c18a6911ff11daaa14e9950580620f1f451b89d797697ea7ba21076a47630f8",
+    "component.py": "410248c3a2cf4165a8b8dbaf292b9a1dbceb88627a5d832a623ea5fe1fe29ccf",
+    "launch.py": "576937a7248fd2c0f41a7db0f7cfe35a99ec095575b70ab96d8429fc1fb1503e",
+    "module_inventory.py": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1",
+    "policy.py": "3ec3490434e04e53d84e6fac8b8f992e5ba2341091eb0552b94be2e25c9d8e5a",
+    "primitives.py": "cf1ec9d2efaa57c9eeb36f8f15db8875efa29472f1d591a45788f77427d42790",
+    "reference_capture.py": "01d95a310a464b7047f6c648ac68df3392d17507267840f89088483d038f7853",
+    "runtime_closure.py": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16",
+    "runtime_observer.py": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+    "selective_binding.py": "88671278b37df02d7afc5a862801305bdd531b295d60cdb35b486dd01f7beb23",
+    "stage_clock.py": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065",
+    "support.py": "65eb247e2b807b2d4b30b0fa4dabd9fa713d68e2140f25d317c807ea5a5f62f7",
+    "worker.py": "211cd748e3612c946df97280a5e2cfd4a9cfaae238c8c53dbdc27214a03ba375"
+  },
+  "execution_authorized": false,
+  "freeze": {
+    "bytes": 10445,
+    "sha256": "f11a14aa4ca65abb7f577d9a11e386a86af7d57e08da4960b2ff538ae2395c74"
+  },
+  "frozen_files_rechecked": 34,
+  "fullblock": false,
+  "independent_tests": {
+    "admission_normal": 11,
+    "admission_optimized": 11,
+    "source_normal": 22,
+    "source_optimized": 22
+  },
+  "limits": {
+    "address_space_bytes": 2147483648,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "child_cpu_seconds": 160,
+    "child_wall_seconds": 200,
+    "cleanup_cpu_reserve": 10,
+    "cleanup_wall_reserve": 30,
+    "cpu_seconds": 180,
+    "cpus": 1,
+    "file_bytes": 50331648,
+    "fresh_processes": 1,
+    "log_bytes": 4194304,
+    "output_bytes": 134217728,
+    "parent_cpu_abort_hard": 20,
+    "parent_cpu_work": 15,
+    "parent_metadata_bytes": 2097152,
+    "trace_pair_bytes": 100663296,
+    "tree_rss_bytes": 1073741824,
+    "wall_seconds": 240,
+    "worker_metadata_bytes": 2097152
+  },
+  "m128_fail_preserved": true,
+  "native_executed": false,
+  "performance_adopted": false,
+  "qualifications": {
+    "memory": "per-process AS 2GiB plus sampled combined RSS 1GiB, not hard aggregate AS or exact RSS peak",
+    "output": "sampled aggregate partitions; 48MiB per-file hard cap; retain failures",
+    "reference_domain_change": "M1/M2 to exact M16 only",
+    "source_only_not_actual_initialization": true,
+    "timing": "production EventWriter footer inside owner cleanup interval"
+  },
+  "source_blockers": [],
+  "status": "PASS_STATIC_REVIEW_REQUIRES_ROOT_EXECUTION_AUTHORIZATION",
+  "target_imported": false,
+  "tensors_decoded": false,
+  "worker_or_launcher_invoked": false,
+  "reused_executable_sources": [
+    {
+      "ordinal": 0,
+      "logical_role": "identity-observer:bridge.py",
+      "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "identity-observer:capture.py",
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "identity-observer:monitor.py",
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "identity-observer:service_trace.py",
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "dependency-qualification:initialization.py",
+      "sha256": "2060f6c122a4e969fc538b636f442b51c0a97f0f7758d723252de2a91bc5762b"
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "dependency-qualification:safe_metadata.py",
+      "sha256": "5b29261c99d15a09ab8578121b6d2b32a223b8c2b16cde70f0bcd89b1c717d6a"
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "production-entry:bridge.py",
+      "sha256": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "production-entry:cold_policy.py",
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "production-entry:runtime_binding.py",
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "production-entry:service_trace.py",
+      "sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+    },
+    {
+      "ordinal": 10,
+      "logical_role": "production-entry:stream.py",
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    {
+      "ordinal": 11,
+      "logical_role": "original-observer:capture.py",
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "ordinal": 12,
+      "logical_role": "original-observer:monitor.py",
+      "sha256": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87"
+    },
+    {
+      "ordinal": 13,
+      "logical_role": "source:capture.py",
+      "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f"
+    }
+  ],
+  "projection": "Private proposal/path/review-artifact locators and internal execution prerequisites omitted; reused-source physical keys converted to ordered logical roles. Historical source-only/pre-execution statements remain historical, not actual success."
+}

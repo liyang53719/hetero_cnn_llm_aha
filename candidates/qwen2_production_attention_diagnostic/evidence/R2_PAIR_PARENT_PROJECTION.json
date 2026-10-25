@@ -1,0 +1,63 @@
+{
+  "original": {
+    "bytes": 2696,
+    "sha256": "f3bc2f5325643f1822748876e9023c426757ecb694c6e3432412f05b39993214"
+  },
+  "status": "FAILED_RETAINED",
+  "cpu_seconds_limit": 160,
+  "wall_seconds_limit": 200,
+  "aggregate_before": {
+    "cpu_seconds": 0.069526052,
+    "wall_seconds": 0.04178054997464642,
+    "rss_bytes": 13795328,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 13795328,
+      "at_elapsed_seconds": 0.040151269000489265,
+      "live_tree_bytes": 0,
+      "samples": 4,
+      "live_samples": 0,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 0,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "last_live_usage": {
+    "cpu_seconds": 0.6141285040000001,
+    "wall_seconds": 0.650736205978319,
+    "rss_bytes": 13926400,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 35467264,
+      "at_elapsed_seconds": 0.4493596939719282,
+      "live_tree_bytes": 21540864,
+      "samples": 8,
+      "live_samples": 4,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 0,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+  "returncode": 1,
+  "group_remaining": false,
+  "wall_seconds": 0.6103221320081502,
+  "aggregate_after": {
+    "cpu_seconds": 0.624957462,
+    "wall_seconds": 0.652106316993013,
+    "rss_bytes": 13926400,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 35467264,
+      "at_elapsed_seconds": 0.4493596939719282,
+      "live_tree_bytes": 21540864,
+      "samples": 11,
+      "live_samples": 4,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 21540864,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "projection": "Private process identities, argv and physical child directory omitted/replaced; all retained statuses, limits, resource snapshots and exceptions unchanged. Output-usage is pre-final-parent-write sampled snapshot, not final artifact ledger.",
+  "numerical_acceptance": false
+}

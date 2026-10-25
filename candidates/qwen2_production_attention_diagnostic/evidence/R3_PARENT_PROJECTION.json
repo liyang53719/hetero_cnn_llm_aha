@@ -1,0 +1,71 @@
+{
+  "original": {
+    "bytes": 2218,
+    "sha256": "302933e709c0293522770fc6d1c70db9b906309c082e7ce9e4ec824c5324706c"
+  },
+  "status": "FAILED_RETAINED",
+  "m": 16,
+  "config_sha256": "8a17ffd4e7802bdab3794323fe17959c328ff348b981550ffd63438bd060785c",
+  "review_sha256": "0b5788f633530418b7c84bbf5565745ed508427ab05c34faa510157e270a145b",
+  "limits": {
+    "cpu_seconds": 180,
+    "wall_seconds": 240,
+    "cpus": 1,
+    "address_space_bytes": 2147483648,
+    "tree_rss_bytes": 1073741824,
+    "child_cpu_seconds": 160,
+    "child_wall_seconds": 200,
+    "cleanup_cpu_reserve": 10,
+    "cleanup_wall_reserve": 30,
+    "fresh_processes": 1,
+    "parent_cpu_work": 15,
+    "parent_cpu_abort_hard": 20,
+    "file_bytes": 50331648,
+    "output_bytes": 134217728,
+    "trace_pair_bytes": 100663296,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "log_bytes": 4194304,
+    "worker_metadata_bytes": 2097152,
+    "parent_metadata_bytes": 2097152
+  },
+  "execution_order": [
+    "original",
+    "selective_identity_r1"
+  ],
+  "automatic_retry": false,
+  "exception": "ValueError: failed/uncertain pair worker; no retry",
+  "aggregate_usage": {
+    "cpu_seconds": 170.038666752,
+    "wall_seconds": 170.08509365702048,
+    "rss_bytes": 14008320,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 284516352,
+      "at_elapsed_seconds": 170.0616072419798,
+      "live_tree_bytes": 270508032,
+      "samples": 840,
+      "live_samples": 832,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 270508032,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "output_usage": {
+    "trace_pair_bytes": 8029338,
+    "artifact_bytes": 6103385,
+    "audit_bytes": 3393997,
+    "log_bytes": 0,
+    "worker_metadata_bytes": 665410,
+    "parent_metadata_bytes": 4148,
+    "total_bytes": 18196278,
+    "sampled_not_atomic": true
+  },
+  "child": {
+    "parent_sha256": "29ef65e9923fdeb9ab8dcd286535b29e351036ac8f4e8982a02461d9a5d414d9",
+    "status": "FAILED_RETAINED",
+    "logical_directory": "pair"
+  },
+  "projection": "Private process identities, argv and physical child directory omitted/replaced; all retained statuses, limits, resource snapshots and exceptions unchanged. Output-usage is pre-final-parent-write sampled snapshot, not final artifact ledger.",
+  "numerical_acceptance": false
+}

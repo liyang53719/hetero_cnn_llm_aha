@@ -1,0 +1,32 @@
+{
+  "status": "PASS_SOURCE_BYTE_ASSEMBLY_AND_PACKAGING_TESTS_ONLY",
+  "revisions": [
+    {
+      "revision": "r2",
+      "files": 30,
+      "bytes": 276599,
+      "source_kinds": {
+        "new-original-byte-file": 9,
+        "pinned-existing-public-file": 21
+      },
+      "exact_original_bytes_both_modes": true
+    },
+    {
+      "revision": "r3",
+      "files": 31,
+      "bytes": 289089,
+      "source_kinds": {
+        "same-package-original-byte-file": 5,
+        "pinned-existing-public-file": 21,
+        "new-original-byte-file": 5
+      },
+      "exact_original_bytes_both_modes": true
+    }
+  ],
+  "packaging_unique_tests": 10,
+  "normal_test_executions": 10,
+  "optimized_test_executions": 10,
+  "target_native_original_test_reruns": 0,
+  "source_mode": "Original-byte copy only. Historical source test with private config dependency is retained but not executed. This supplies neither header nor tensor/config/runtime closure.",
+  "candidate_source_pin_metadata_included": true
+}

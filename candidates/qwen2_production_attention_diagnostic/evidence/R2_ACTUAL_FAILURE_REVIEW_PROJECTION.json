@@ -1,0 +1,137 @@
+{
+  "original": {
+    "bytes": 322680,
+    "sha256": "4bfdc90c6622f256a68186f0861d309f446ea4d69f7fcc8b85be854a43c3adda"
+  },
+  "actual_artifact_bytes": 280922,
+  "actual_artifact_count": 14,
+  "artifact_pins": {
+    "PARENT.json": {
+      "bytes": 2203,
+      "sha256": "5b2182a224f5d14c993b86cc8d3a53e2ba7b863c7ca5f11d038760fd6f57dc9b"
+    },
+    "pair/PARENT.json": {
+      "bytes": 2696,
+      "sha256": "f3bc2f5325643f1822748876e9023c426757ecb694c6e3432412f05b39993214"
+    },
+    "pair/audits/RUNTIME_FAILURE/DEPENDENCY_OBJECTS_RAW.json": {
+      "bytes": 1214,
+      "sha256": "9a7429227125f8deeb9a8bd46e4567b58398f6f7b583f2c95e9ec5b3ac8b0ec4"
+    },
+    "pair/audits/RUNTIME_FAILURE/MAPS_BEFORE_AUDIT.txt": {
+      "bytes": 6046,
+      "sha256": "9708d99aed37f658f4a25e85df57466ee762bdfad6c6a7730dc51e2732f2ed4c"
+    },
+    "pair/audits/RUNTIME_FAILURE/MAPS_RAW.txt": {
+      "bytes": 6046,
+      "sha256": "9708d99aed37f658f4a25e85df57466ee762bdfad6c6a7730dc51e2732f2ed4c"
+    },
+    "pair/audits/RUNTIME_FAILURE/MAP_AUDIT.json": {
+      "bytes": 14174,
+      "sha256": "dafa4dad21a1c3578ddcf7ee3afe356fb27177e985dc7b48250262526c5cff84"
+    },
+    "pair/audits/RUNTIME_FAILURE/MODULES_RAW.json": {
+      "bytes": 40263,
+      "sha256": "612c33c0b122fbfef1d85ae8a8cc4b3856ebd7c807aa7a16b37b5f2e41c69ace"
+    },
+    "pair/audits/RUNTIME_FAILURE/MODULE_AUDIT.json": {
+      "bytes": 204717,
+      "sha256": "b537be3c936a2316eac860858454740d200c066c344179e63192abba6bd1612f"
+    },
+    "pair/audits/RUNTIME_FAILURE/NAMESPACE_QUALIFICATION.json": {
+      "bytes": 394,
+      "sha256": "b37440fa999c55cd139ba283f639fb08668193605be064f1521ffdbfb7a185e9"
+    },
+    "pair/audits/RUNTIME_FAILURE/SUMMARY.json": {
+      "bytes": 211,
+      "sha256": "af39fd933cbb4fd2ae6f645ff0c69e884888b5382c34f66e4165b56b63fc7881"
+    },
+    "pair/audits/STAGES.jsonl": {
+      "bytes": 252,
+      "sha256": "3584ee63dcca8051d7a1e246f0c87212c116c99b8a0ea335eb2e87ac4aef6d61"
+    },
+    "pair/metadata/FAILED_RETAINED.json": {
+      "bytes": 100,
+      "sha256": "87029391505116b854045c4783f852203c7c80ba38242195911ca8914c041bca"
+    },
+    "pair/metadata/IDENTITY.json": {
+      "bytes": 121,
+      "sha256": "52b249060c5ed4f0a055cb443911e92454f898a37fff658bbe9101bef884fd54"
+    },
+    "pair/worker.log": {
+      "bytes": 2485,
+      "sha256": "72cd7ce1b810b4bcab25911b26810d9abd5687c85ee166976382e13831c94fbe"
+    }
+  },
+  "cleanup": {
+    "basis": "frozen parent receipt and reviewed WNOWAIT/birth-identity supervisor; no foreign PID probing",
+    "child_returncode": 1,
+    "group_remaining": false,
+    "verified_owned_group_cleanup": "SIGKILL_OWN_VERIFIED_GROUP"
+  },
+  "config_sha256": "9f1728aebce4fadd7d0c2b02152fd726bc1a256998a0110b2f18b7551a0d197f",
+  "freeze": {
+    "bytes": 10445,
+    "sha256": "f11a14aa4ca65abb7f577d9a11e386a86af7d57e08da4960b2ff538ae2395c74"
+  },
+  "numerical_job_started": false,
+  "numerical_pass": false,
+  "observed_usage": {
+    "cpu_seconds": 0.6255341999999999,
+    "reaped_children_maxrss_bytes": 21540864,
+    "reaped_maxrss_is_aggregate_tree": false,
+    "rss_bytes": 13926400,
+    "sampled_rss_high_water": {
+      "at_elapsed_seconds": 0.4493596939719282,
+      "combined_parent_tree_bytes": 35467264,
+      "live_samples": 4,
+      "live_tree_bytes": 21540864,
+      "not_exact_continuous_peak": true,
+      "samples": 12,
+      "sampling_interval_seconds": 0.2
+    },
+    "wall_seconds": 0.6527149829780683
+  },
+  "original_failure_modified": false,
+  "output_usage_receipt_is_prefinal_parent_write_snapshot": true,
+  "retry_executed": false,
+  "reviewer_native_executed": false,
+  "reviewer_target_imported": false,
+  "reviewer_tensor_decoded": false,
+  "root_attempt_input_prefixes_read_and_unpacked": true,
+  "root_attempt_matrix_elf_loaded": false,
+  "root_attempt_project_modules_imported": false,
+  "source_and_inputs_unchanged": true,
+  "status": "PASS_INDEPENDENT_FAILED_ATTEMPT_CLOSURE_NOT_NUMERICAL_SUCCESS",
+  "failure": {
+    "exact_path_basis": "unique restricted suffix in exact manifest iteration order and preserved stack; original error did not log path",
+    "header_json_length": 38528,
+    "http_receipt": {
+      "bytes": 683,
+      "sha256": "d0bc2eefae42de0d0657e8fe86139cebf4200bb1c541919e64f8129a3780104c"
+    },
+    "manifest_iteration_index_zero_based": 285,
+    "pin": {
+      "bytes": 38536,
+      "sha256": "124516afba769374e2b948e185dd3e9203e2412daaef3f2ccf7bdbaca0f88987"
+    },
+    "source_file_count": 316,
+    "stage": "first complete-source verify_sources checksum pass, before target project imports or Matrix ELF load",
+    "tensor_metadata_entries": 338,
+    "tensor_payload_bytes_present": 0,
+    "total_header_bytes": 38536,
+    "upstream_manifest": {
+      "bytes": 5109,
+      "sha256": "46818a6fde79b4bff4615abc38cca7d8cb9386cdd0298bc07c403cb3d2ceab25"
+    },
+    "logical_resource": "production-source:config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin"
+  },
+  "check_record_count": 1138,
+  "check_record_kinds": {
+    "config_pin": 1101,
+    "frozen_member": 34,
+    "input_prefix": 3
+  },
+  "projection": "Detailed check rows containing physical paths omitted; complete ordered config pin metadata is retained separately. Failure physical path replaced with logical role. Private root-approval and one-use ledger identities omitted. No header body or numeric payload is included.",
+  "interpretation": "Independent failure-closure PASS is NOT numerical success; the r2 actual attempt remains FAILED_RETAINED before project imports, Matrix load or numerical job."
+}

@@ -1,0 +1,71 @@
+{
+  "original": {
+    "bytes": 2203,
+    "sha256": "5b2182a224f5d14c993b86cc8d3a53e2ba7b863c7ca5f11d038760fd6f57dc9b"
+  },
+  "status": "FAILED_RETAINED",
+  "m": 16,
+  "config_sha256": "9f1728aebce4fadd7d0c2b02152fd726bc1a256998a0110b2f18b7551a0d197f",
+  "review_sha256": "5ba0a9b4177ed025b3325611bf809c866a62b845807d4ec494892785063741ff",
+  "limits": {
+    "cpu_seconds": 180,
+    "wall_seconds": 240,
+    "cpus": 1,
+    "address_space_bytes": 2147483648,
+    "tree_rss_bytes": 1073741824,
+    "child_cpu_seconds": 160,
+    "child_wall_seconds": 200,
+    "cleanup_cpu_reserve": 10,
+    "cleanup_wall_reserve": 30,
+    "fresh_processes": 1,
+    "parent_cpu_work": 15,
+    "parent_cpu_abort_hard": 20,
+    "file_bytes": 50331648,
+    "output_bytes": 134217728,
+    "trace_pair_bytes": 100663296,
+    "artifact_bytes": 8388608,
+    "audit_bytes": 16777216,
+    "log_bytes": 4194304,
+    "worker_metadata_bytes": 2097152,
+    "parent_metadata_bytes": 2097152
+  },
+  "execution_order": [
+    "original",
+    "selective_identity_r1"
+  ],
+  "automatic_retry": false,
+  "exception": "ValueError: failed/uncertain pair worker; no retry",
+  "aggregate_usage": {
+    "cpu_seconds": 0.6255341999999999,
+    "wall_seconds": 0.6527149829780683,
+    "rss_bytes": 13926400,
+    "sampled_rss_high_water": {
+      "combined_parent_tree_bytes": 35467264,
+      "at_elapsed_seconds": 0.4493596939719282,
+      "live_tree_bytes": 21540864,
+      "samples": 12,
+      "live_samples": 4,
+      "sampling_interval_seconds": 0.2,
+      "not_exact_continuous_peak": true
+    },
+    "reaped_children_maxrss_bytes": 21540864,
+    "reaped_maxrss_is_aggregate_tree": false
+  },
+  "output_usage": {
+    "trace_pair_bytes": 0,
+    "artifact_bytes": 0,
+    "audit_bytes": 273317,
+    "log_bytes": 2485,
+    "worker_metadata_bytes": 221,
+    "parent_metadata_bytes": 4049,
+    "total_bytes": 280072,
+    "sampled_not_atomic": true
+  },
+  "child": {
+    "parent_sha256": "f3bc2f5325643f1822748876e9023c426757ecb694c6e3432412f05b39993214",
+    "status": "FAILED_RETAINED",
+    "logical_directory": "pair"
+  },
+  "projection": "Private process identities, argv and physical child directory omitted/replaced; all retained statuses, limits, resource snapshots and exceptions unchanged. Output-usage is pre-final-parent-write sampled snapshot, not final artifact ledger.",
+  "numerical_acceptance": false
+}

@@ -1,0 +1,543 @@
+{
+  "review_original": {
+    "bytes": 350057,
+    "sha256": "5ffa412c4050a422dfddfca3b97dd9fa2ea696dc08fd5eb2566fdcd360086718"
+  },
+  "scope": "External independent preservation metadata for unchanged failed attempt; not a run-native success seal. No artifact body is public.",
+  "files": [
+    {
+      "ordinal": 0,
+      "logical_role": "PARENT.json",
+      "bytes": 2218,
+      "sha256": "302933e709c0293522770fc6d1c70db9b906309c082e7ce9e4ec824c5324706c"
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "pair/PARENT.json",
+      "bytes": 2795,
+      "sha256": "29ef65e9923fdeb9ab8dcd286535b29e351036ac8f4e8982a02461d9a5d414d9"
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "pair/artifacts/ARM_0_EVIDENCE.json",
+      "bytes": 1304822,
+      "sha256": "710c3a6df0b6837cc8634f12c8a39a80a707f2f104b547ee40b36a6c94e0545c"
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "pair/artifacts/ARM_1_EVIDENCE.json",
+      "bytes": 1309291,
+      "sha256": "2f3b72e27864f763ecb5da5de5a1c0be4d511cf112f0443ba86a9ed08a00f5a3"
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "pair/artifacts/CAPTURE_0_FIELDS.json",
+      "bytes": 1059772,
+      "sha256": "e778548553c7f1dbcfff5e21e3eec654c6ef291f4b71b23deefb70de19c65646"
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_dot_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_dot_parts.binmeta",
+      "bytes": 49152,
+      "sha256": "a8dfdb3c87dba779e82fa3faba3290a6072a317a31cdd9835490354aecdd26e6"
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_normalizer.binmeta",
+      "bytes": 576,
+      "sha256": "6c6897240943a4e1218c0016a09d07f5ce5f57fe99c390cad571e4c2adb30015"
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_prob_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_pv_bf16.binmeta",
+      "bytes": 24576,
+      "sha256": "68947a67d211698c75dab7e054a1972ad5fe400dfa18b156ab9960a2c4bc8817"
+    },
+    {
+      "ordinal": 10,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_pv_raw.binmeta",
+      "bytes": 24576,
+      "sha256": "68947a67d211698c75dab7e054a1972ad5fe400dfa18b156ab9960a2c4bc8817"
+    },
+    {
+      "ordinal": 11,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_scores_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 12,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_softmax_exp.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 13,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 14,
+      "logical_role": "pair/artifacts/CAPTURE_0_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 15,
+      "logical_role": "pair/artifacts/CAPTURE_0_dot_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "cee4ed83203d314925382f7ddd8fad719c33fe3ed5e0281c5e7373fdf6b2ca46"
+    },
+    {
+      "ordinal": 16,
+      "logical_role": "pair/artifacts/CAPTURE_0_dot_parts.u32le",
+      "bytes": 196608,
+      "sha256": "7265292cb568bfa4659917e8ab1c932eb92c1e814161865614c7d7ede5b9a0fb"
+    },
+    {
+      "ordinal": 17,
+      "logical_role": "pair/artifacts/CAPTURE_0_normalizer.u32le",
+      "bytes": 2304,
+      "sha256": "7355ffd2a161b1e35d1f29785301bb126f11a7b616c0c9c2141a24a03ccb3ef7"
+    },
+    {
+      "ordinal": 18,
+      "logical_role": "pair/artifacts/CAPTURE_0_prob_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "cf163ec1118ccc2939754579e374b52898cadec9d56e8555a889dd9efcca7235"
+    },
+    {
+      "ordinal": 19,
+      "logical_role": "pair/artifacts/CAPTURE_0_pv_bf16.u32le",
+      "bytes": 98304,
+      "sha256": "2afb56f461de5ae47ecf408a5e39519cb96bd5d653ebf0b707a36e17f0c9ba6a"
+    },
+    {
+      "ordinal": 20,
+      "logical_role": "pair/artifacts/CAPTURE_0_pv_raw.u32le",
+      "bytes": 98304,
+      "sha256": "6fe6cde9495b93ecd34024187ae6eefd552b1ab8dde3bd8a9221a390921ea988"
+    },
+    {
+      "ordinal": 21,
+      "logical_role": "pair/artifacts/CAPTURE_0_scores_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "f9f68f5833765e677fc3d9e920de5aa6ea66df803609f963a2f31316d65f2007"
+    },
+    {
+      "ordinal": 22,
+      "logical_role": "pair/artifacts/CAPTURE_0_softmax_exp.u32le",
+      "bytes": 12288,
+      "sha256": "f10fba741d8cf910bea9576c37ca95a20e7a7cd9b8fc553d9814360e6111720b"
+    },
+    {
+      "ordinal": 23,
+      "logical_role": "pair/artifacts/CAPTURE_0_softmax_fp32.u32le",
+      "bytes": 12288,
+      "sha256": "b46e4169c400f9b9ab08b3c4d2d737cb90c5cebcc7fe7b739b0aa61e27801aa7"
+    },
+    {
+      "ordinal": 24,
+      "logical_role": "pair/artifacts/CAPTURE_0_unrounded_dot_sum.u32le",
+      "bytes": 12288,
+      "sha256": "6f8a45b1f804a459a571f0bed6289ea6a2099bee2bfada0348a444c4ef91ecfb"
+    },
+    {
+      "ordinal": 25,
+      "logical_role": "pair/artifacts/CAPTURE_1_FIELDS.json",
+      "bytes": 1059772,
+      "sha256": "29d6bd9baeeb82c9925c5dc2af53a1e274ed91aa04c59dc300a46aedf49421a7"
+    },
+    {
+      "ordinal": 26,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_dot_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 27,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_dot_parts.binmeta",
+      "bytes": 49152,
+      "sha256": "a8dfdb3c87dba779e82fa3faba3290a6072a317a31cdd9835490354aecdd26e6"
+    },
+    {
+      "ordinal": 28,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_normalizer.binmeta",
+      "bytes": 576,
+      "sha256": "6c6897240943a4e1218c0016a09d07f5ce5f57fe99c390cad571e4c2adb30015"
+    },
+    {
+      "ordinal": 29,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_prob_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 30,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_pv_bf16.binmeta",
+      "bytes": 24576,
+      "sha256": "68947a67d211698c75dab7e054a1972ad5fe400dfa18b156ab9960a2c4bc8817"
+    },
+    {
+      "ordinal": 31,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_pv_raw.binmeta",
+      "bytes": 24576,
+      "sha256": "68947a67d211698c75dab7e054a1972ad5fe400dfa18b156ab9960a2c4bc8817"
+    },
+    {
+      "ordinal": 32,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_scores_bf16.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 33,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_softmax_exp.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 34,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_softmax_fp32.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 35,
+      "logical_role": "pair/artifacts/CAPTURE_1_PRESENCE_unrounded_dot_sum.binmeta",
+      "bytes": 3072,
+      "sha256": "b7630467540e6e6115640cd623b9fbb4beb30991cc4e7e2ea380c8b7dcd47467"
+    },
+    {
+      "ordinal": 36,
+      "logical_role": "pair/artifacts/CAPTURE_1_dot_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "cee4ed83203d314925382f7ddd8fad719c33fe3ed5e0281c5e7373fdf6b2ca46"
+    },
+    {
+      "ordinal": 37,
+      "logical_role": "pair/artifacts/CAPTURE_1_dot_parts.u32le",
+      "bytes": 196608,
+      "sha256": "7265292cb568bfa4659917e8ab1c932eb92c1e814161865614c7d7ede5b9a0fb"
+    },
+    {
+      "ordinal": 38,
+      "logical_role": "pair/artifacts/CAPTURE_1_normalizer.u32le",
+      "bytes": 2304,
+      "sha256": "7355ffd2a161b1e35d1f29785301bb126f11a7b616c0c9c2141a24a03ccb3ef7"
+    },
+    {
+      "ordinal": 39,
+      "logical_role": "pair/artifacts/CAPTURE_1_prob_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "cf163ec1118ccc2939754579e374b52898cadec9d56e8555a889dd9efcca7235"
+    },
+    {
+      "ordinal": 40,
+      "logical_role": "pair/artifacts/CAPTURE_1_pv_bf16.u32le",
+      "bytes": 98304,
+      "sha256": "2afb56f461de5ae47ecf408a5e39519cb96bd5d653ebf0b707a36e17f0c9ba6a"
+    },
+    {
+      "ordinal": 41,
+      "logical_role": "pair/artifacts/CAPTURE_1_pv_raw.u32le",
+      "bytes": 98304,
+      "sha256": "6fe6cde9495b93ecd34024187ae6eefd552b1ab8dde3bd8a9221a390921ea988"
+    },
+    {
+      "ordinal": 42,
+      "logical_role": "pair/artifacts/CAPTURE_1_scores_bf16.u32le",
+      "bytes": 12288,
+      "sha256": "f9f68f5833765e677fc3d9e920de5aa6ea66df803609f963a2f31316d65f2007"
+    },
+    {
+      "ordinal": 43,
+      "logical_role": "pair/artifacts/CAPTURE_1_softmax_exp.u32le",
+      "bytes": 12288,
+      "sha256": "f10fba741d8cf910bea9576c37ca95a20e7a7cd9b8fc553d9814360e6111720b"
+    },
+    {
+      "ordinal": 44,
+      "logical_role": "pair/artifacts/CAPTURE_1_softmax_fp32.u32le",
+      "bytes": 12288,
+      "sha256": "b46e4169c400f9b9ab08b3c4d2d737cb90c5cebcc7fe7b739b0aa61e27801aa7"
+    },
+    {
+      "ordinal": 45,
+      "logical_role": "pair/artifacts/CAPTURE_1_unrounded_dot_sum.u32le",
+      "bytes": 12288,
+      "sha256": "6f8a45b1f804a459a571f0bed6289ea6a2099bee2bfada0348a444c4ef91ecfb"
+    },
+    {
+      "ordinal": 46,
+      "logical_role": "pair/artifacts/OUTPUT_0.u32le",
+      "bytes": 98304,
+      "sha256": "2102578a00ea782cd1f6210bc74f03bd8e267147e321f07b636da8ff2ff91034"
+    },
+    {
+      "ordinal": 47,
+      "logical_role": "pair/artifacts/OUTPUT_1.u32le",
+      "bytes": 98304,
+      "sha256": "2102578a00ea782cd1f6210bc74f03bd8e267147e321f07b636da8ff2ff91034"
+    },
+    {
+      "ordinal": 48,
+      "logical_role": "pair/audits/MAPS_AFTER_CDLL.txt",
+      "bytes": 18713,
+      "sha256": "53044d43860496ce151f8a5eb60eea8796d9dd0a4e43cbf7bd0410ed21653a52"
+    },
+    {
+      "ordinal": 49,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/DEPENDENCY_OBJECTS_RAW.json",
+      "bytes": 86740,
+      "sha256": "b3c653b19453da97e1b921ee7b3331d1558b9ed9ddf4d8a67951291a45f6315d"
+    },
+    {
+      "ordinal": 50,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/DEPENDENCY_QUALIFICATION.json",
+      "bytes": 1262,
+      "sha256": "6924c84ae221f8fe74f7c6c90ca9e901549c5c68808bc7f3e400924567e3bd0b"
+    },
+    {
+      "ordinal": 51,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 18762,
+      "sha256": "84eeadc23f1a808c1c5b57a146afbe9234abf5767b1f6e5ca1f9c9389086374d"
+    },
+    {
+      "ordinal": 52,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/MAPS_RAW.txt",
+      "bytes": 18762,
+      "sha256": "84eeadc23f1a808c1c5b57a146afbe9234abf5767b1f6e5ca1f9c9389086374d"
+    },
+    {
+      "ordinal": 53,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/MAP_AUDIT.json",
+      "bytes": 39223,
+      "sha256": "58b9c25420091e8dac0f381442aed1120ac2298422e2fe627cdc3d6ffc165a03"
+    },
+    {
+      "ordinal": 54,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/MODULES_RAW.json",
+      "bytes": 131842,
+      "sha256": "04c1b0ccce403cb0bd9a07bd857d4ba4bf535757e82a3ac0973cb3ff7018f5fd"
+    },
+    {
+      "ordinal": 55,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 830375,
+      "sha256": "028e2104abc73dadf70bd4b9baf5bb718b864192ae9695e553957bcad6a3fb8f"
+    },
+    {
+      "ordinal": 56,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/NAMESPACE_QUALIFICATION.json",
+      "bytes": 1097,
+      "sha256": "86fb6aacadeec134e9c49439a10dee135943337e0af268e806efb934a18e4da8"
+    },
+    {
+      "ordinal": 57,
+      "logical_role": "pair/audits/RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab"
+    },
+    {
+      "ordinal": 58,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/DEPENDENCY_OBJECTS_RAW.json",
+      "bytes": 86740,
+      "sha256": "b3c653b19453da97e1b921ee7b3331d1558b9ed9ddf4d8a67951291a45f6315d"
+    },
+    {
+      "ordinal": 59,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/DEPENDENCY_QUALIFICATION.json",
+      "bytes": 1262,
+      "sha256": "6924c84ae221f8fe74f7c6c90ca9e901549c5c68808bc7f3e400924567e3bd0b"
+    },
+    {
+      "ordinal": 60,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 18811,
+      "sha256": "c0e7e459813d7156c8b1aafa569d33abf0e6a63e4b5f6df106242ddc349fdab2"
+    },
+    {
+      "ordinal": 61,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/MAPS_RAW.txt",
+      "bytes": 18811,
+      "sha256": "c0e7e459813d7156c8b1aafa569d33abf0e6a63e4b5f6df106242ddc349fdab2"
+    },
+    {
+      "ordinal": 62,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/MAP_AUDIT.json",
+      "bytes": 39223,
+      "sha256": "58b9c25420091e8dac0f381442aed1120ac2298422e2fe627cdc3d6ffc165a03"
+    },
+    {
+      "ordinal": 63,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/MODULES_RAW.json",
+      "bytes": 131842,
+      "sha256": "04c1b0ccce403cb0bd9a07bd857d4ba4bf535757e82a3ac0973cb3ff7018f5fd"
+    },
+    {
+      "ordinal": 64,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/MODULE_AUDIT.json",
+      "bytes": 830375,
+      "sha256": "028e2104abc73dadf70bd4b9baf5bb718b864192ae9695e553957bcad6a3fb8f"
+    },
+    {
+      "ordinal": 65,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/NAMESPACE_QUALIFICATION.json",
+      "bytes": 1097,
+      "sha256": "86fb6aacadeec134e9c49439a10dee135943337e0af268e806efb934a18e4da8"
+    },
+    {
+      "ordinal": 66,
+      "logical_role": "pair/audits/RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "bytes": 93,
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48"
+    },
+    {
+      "ordinal": 67,
+      "logical_role": "pair/audits/RUNTIME_SETUP/DEPENDENCY_OBJECTS_RAW.json",
+      "bytes": 86740,
+      "sha256": "b3c653b19453da97e1b921ee7b3331d1558b9ed9ddf4d8a67951291a45f6315d"
+    },
+    {
+      "ordinal": 68,
+      "logical_role": "pair/audits/RUNTIME_SETUP/DEPENDENCY_QUALIFICATION.json",
+      "bytes": 1262,
+      "sha256": "6924c84ae221f8fe74f7c6c90ca9e901549c5c68808bc7f3e400924567e3bd0b"
+    },
+    {
+      "ordinal": 69,
+      "logical_role": "pair/audits/RUNTIME_SETUP/MAPS_BEFORE_AUDIT.txt",
+      "bytes": 18713,
+      "sha256": "53044d43860496ce151f8a5eb60eea8796d9dd0a4e43cbf7bd0410ed21653a52"
+    },
+    {
+      "ordinal": 70,
+      "logical_role": "pair/audits/RUNTIME_SETUP/MAPS_RAW.txt",
+      "bytes": 18713,
+      "sha256": "53044d43860496ce151f8a5eb60eea8796d9dd0a4e43cbf7bd0410ed21653a52"
+    },
+    {
+      "ordinal": 71,
+      "logical_role": "pair/audits/RUNTIME_SETUP/MAP_AUDIT.json",
+      "bytes": 39223,
+      "sha256": "58b9c25420091e8dac0f381442aed1120ac2298422e2fe627cdc3d6ffc165a03"
+    },
+    {
+      "ordinal": 72,
+      "logical_role": "pair/audits/RUNTIME_SETUP/MODULES_RAW.json",
+      "bytes": 131202,
+      "sha256": "9ba03a43c4f5c4cba451fb9eca0285939e685dec20b2d3529e6cc52ae4b9c080"
+    },
+    {
+      "ordinal": 73,
+      "logical_role": "pair/audits/RUNTIME_SETUP/MODULE_AUDIT.json",
+      "bytes": 821442,
+      "sha256": "2f6dc9f123d83ecce2942f3ace7fa0391a1d2587888207a2d454bd7848bd6bf0"
+    },
+    {
+      "ordinal": 74,
+      "logical_role": "pair/audits/RUNTIME_SETUP/NAMESPACE_QUALIFICATION.json",
+      "bytes": 1082,
+      "sha256": "dcea5d65b99d891fb0342a17ddf27c2c694549154afff8a19f5c377506c408d2"
+    },
+    {
+      "ordinal": 75,
+      "logical_role": "pair/audits/RUNTIME_SETUP/SUMMARY.json",
+      "bytes": 84,
+      "sha256": "a9ba93604225bf4704088cd403ccaeb3623e46edae96fd55a112525d7a7e7592"
+    },
+    {
+      "ordinal": 76,
+      "logical_role": "pair/audits/STAGES.jsonl",
+      "bytes": 413,
+      "sha256": "4f1a133fca48ea58992a7af24ad00b7b46624bedc003b56c1b68a6e7f8bf0ca4"
+    },
+    {
+      "ordinal": 77,
+      "logical_role": "pair/metadata/CANDIDATE_BINDING.json",
+      "bytes": 1944,
+      "sha256": "5a9500fa50837c0828da8d5c8bf9fbf15d4abab8470b35eeba9a0c0ed5428ccf"
+    },
+    {
+      "ordinal": 78,
+      "logical_role": "pair/metadata/CONTROL_0.json",
+      "bytes": 307637,
+      "sha256": "02c06d7b2c84e7993e723b60eb6664cce15fd579a4b3f9a85e7ab4b251d12f9f"
+    },
+    {
+      "ordinal": 79,
+      "logical_role": "pair/metadata/CONTROL_1.json",
+      "bytes": 307637,
+      "sha256": "02c06d7b2c84e7993e723b60eb6664cce15fd579a4b3f9a85e7ab4b251d12f9f"
+    },
+    {
+      "ordinal": 80,
+      "logical_role": "pair/metadata/IDENTITY.json",
+      "bytes": 121,
+      "sha256": "1326b63cf8fbdbe2a5e22a64a996488fa17116644eb4a333db4b583d96d53570"
+    },
+    {
+      "ordinal": 81,
+      "logical_role": "pair/metadata/SOURCE_BINDING.json",
+      "bytes": 45459,
+      "sha256": "fecf9c6458fa8a79bdb62d2831bdf975a44a473669d1bdcd9b1da298f94142df"
+    },
+    {
+      "ordinal": 82,
+      "logical_role": "pair/metadata/STREAM_0.json",
+      "bytes": 206,
+      "sha256": "6673f0b5c64e9311c3944dcc1ed79fa69cff6379029bcae7581ada9335bc8cde"
+    },
+    {
+      "ordinal": 83,
+      "logical_role": "pair/metadata/STREAM_1.json",
+      "bytes": 206,
+      "sha256": "5e045900fdcbcb4f7e1a7128b50bcfa8acd7bdc6ed95e76d60159dda74b76c53"
+    },
+    {
+      "ordinal": 84,
+      "logical_role": "pair/metadata/TIMING_0.json",
+      "bytes": 1096,
+      "sha256": "0345021bd09f64d78ed2eb8040c3c32e7ba79f6354aac7073d9d1275bec4f740"
+    },
+    {
+      "ordinal": 85,
+      "logical_role": "pair/metadata/TIMING_1.json",
+      "bytes": 1104,
+      "sha256": "4423ab09b8b0ccf186f21aa2007d8b07ba4a0eb5efc0d164881dd0604199da7e"
+    },
+    {
+      "ordinal": 86,
+      "logical_role": "pair/streams/original.q2evt",
+      "bytes": 4009398,
+      "sha256": "0a49f222d3fe22d485263787c26b9380bbdd95403ef325671e86066f254b912a"
+    },
+    {
+      "ordinal": 87,
+      "logical_role": "pair/streams/selective_identity_r1.q2evt",
+      "bytes": 4019940,
+      "sha256": "5dbbf054fdea2bb57d5cd7788e7e5a9de7f870d71e5e083f7c7353a8251c8fa9"
+    },
+    {
+      "ordinal": 88,
+      "logical_role": "pair/worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

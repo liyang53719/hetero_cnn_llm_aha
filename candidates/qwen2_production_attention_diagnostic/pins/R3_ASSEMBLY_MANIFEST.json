@@ -1,0 +1,225 @@
+{
+  "schema": "source-only-byte-assembly-v1",
+  "base_commit": "8c6311401b1fb57e924dbd841e2dc406c904d57a",
+  "revision": "r3",
+  "source_scope": "Exact 15 component executables, 14 external reused executable roles and one candidate source-pin metadata file; r3 additionally retains one original file-only boundary-test source. No runtime/config/input/header payload closure or execution admission. Duplicate content may serve distinct original roles.",
+  "files": [
+    {
+      "target": "code/admission.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/admission.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 1898,
+      "sha256": "1abbba26600c4594e0ed49f4ab683dceae1da8e27b92aa6caeb345fae866c511"
+    },
+    {
+      "target": "code/artifacts.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/artifacts.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1038,
+      "sha256": "002d99c30f8c5efc9b3092f68a44cbedddeed319549a880b1edbfd6ccf7ec8cf"
+    },
+    {
+      "target": "code/binding.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r3/code/binding.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 4628,
+      "sha256": "d1c9a76eedf7ab4becc45e2f4ed30f629a4ca6ef26d22c8bbd5214661adba6b4"
+    },
+    {
+      "target": "code/component.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/component.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 13866,
+      "sha256": "410248c3a2cf4165a8b8dbaf292b9a1dbceb88627a5d832a623ea5fe1fe29ccf"
+    },
+    {
+      "target": "code/launch.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/launch.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 17057,
+      "sha256": "576937a7248fd2c0f41a7db0f7cfe35a99ec095575b70ab96d8429fc1fb1503e"
+    },
+    {
+      "target": "code/module_inventory.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/module_inventory.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 32326,
+      "sha256": "62f2de460f19b57dfe9fcf1b76a0286eaa8a993d4ae7859df28a03a398ee5cd1"
+    },
+    {
+      "target": "code/policy.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r3/code/policy.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 1043,
+      "sha256": "d51a748e5ae0b4f0aa8afe1378c17194313642c8cf79a982b249366a16e7e0e5"
+    },
+    {
+      "target": "code/primitives.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/primitives.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 2347,
+      "sha256": "cf1ec9d2efaa57c9eeb36f8f15db8875efa29472f1d591a45788f77427d42790"
+    },
+    {
+      "target": "code/reference_capture.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r2/code/reference_capture.py",
+      "source_kind": "same-package-original-byte-file",
+      "bytes": 18977,
+      "sha256": "01d95a310a464b7047f6c648ac68df3392d17507267840f89088483d038f7853"
+    },
+    {
+      "target": "code/runtime_closure.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/runtime_closure.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 3503,
+      "sha256": "70cfb107ab8fa8220af80ae2de163f22adebbecc3624a91f1b2e77926a6a0d16"
+    },
+    {
+      "target": "code/runtime_observer.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/runtime_observer.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 10544,
+      "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+    },
+    {
+      "target": "code/selective_binding.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/wrapper/selective_binding.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 6485,
+      "sha256": "88671278b37df02d7afc5a862801305bdd531b295d60cdb35b486dd01f7beb23"
+    },
+    {
+      "target": "code/stage_clock.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/stage_clock.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 493,
+      "sha256": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065"
+    },
+    {
+      "target": "code/support.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r3/code/support.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 17307,
+      "sha256": "971e90eb86eea901e86db2839e82754b87d918742d06078b2e7e69005011b6c6"
+    },
+    {
+      "target": "code/worker.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r3/code/worker.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 14724,
+      "sha256": "d76285a3742d991a4b6be33bd1ee930fa0bce7cbc72066f1c28f00f26dc97657"
+    },
+    {
+      "target": "identity_observer/bridge.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/bridge.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 8627,
+      "sha256": "34d12d22b92f67dbb40eba6736f03c68ca5454db65670848f71c831ea8442652"
+    },
+    {
+      "target": "identity_observer/capture.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "target": "identity_observer/monitor.py",
+      "repo_path": "candidates/qwen2_attention_identity_diagnostic/delta/postimage/monitor.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 14705,
+      "sha256": "c1b2660cfa11eceb9cf5f9a9d5694fa132dc1e917150a8a76a910631c4fc4e84"
+    },
+    {
+      "target": "identity_observer/service_trace.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/service_trace.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 12079,
+      "sha256": "d4ce4d6a55d535d7f3dcc35b38161f961c7860b5ced0433125ec4e5f2ca4c9ba"
+    },
+    {
+      "target": "dependency_qualification/initialization.py",
+      "repo_path": "candidates/qwen2_fullgraph_normal_binding/initialization.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 6867,
+      "sha256": "2060f6c122a4e969fc538b636f442b51c0a97f0f7758d723252de2a91bc5762b"
+    },
+    {
+      "target": "dependency_qualification/safe_metadata.py",
+      "repo_path": "candidates/qwen2_fullgraph_normal_binding/safe_metadata.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1861,
+      "sha256": "5b29261c99d15a09ab8578121b6d2b32a223b8c2b16cde70f0bcd89b1c717d6a"
+    },
+    {
+      "target": "production_entry/bridge.py",
+      "repo_path": "candidates/qwen2_ordered_event_stream/bridge.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 8510,
+      "sha256": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+    },
+    {
+      "target": "production_entry/cold_policy.py",
+      "repo_path": "candidates/qwen2_ordered_fullgraph_entry/cold_policy.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 7935,
+      "sha256": "61719ea2dc944ff8893d63ae50bd707e5a98dd2191be6374977fbd5e54641ff9"
+    },
+    {
+      "target": "production_entry/runtime_binding.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/source_gate/runtime_binding.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 6714,
+      "sha256": "be47ef663ebe38a97053b554450490fe7181a14b3762d712f4b0c987f9b61100"
+    },
+    {
+      "target": "production_entry/service_trace.py",
+      "repo_path": "candidates/qwen2_ordered_event_stream/service_trace.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 11473,
+      "sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+    },
+    {
+      "target": "production_entry/stream.py",
+      "repo_path": "candidates/qwen2_ordered_event_stream/stream.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 21232,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    {
+      "target": "original_observer/capture.py",
+      "repo_path": "candidates/qwen2_attention_selective_diagnostic/reused/selective_r4/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 5596,
+      "sha256": "46346b3e27e54314b93e978a8abe75630a064196c7a3f241be8d347a4eb16144"
+    },
+    {
+      "target": "original_observer/monitor.py",
+      "repo_path": "candidates/qwen2_ordered_observer/monitor.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 11802,
+      "sha256": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87"
+    },
+    {
+      "target": "field_capture/capture.py",
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_tiled_observation/capture.py",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 10280,
+      "sha256": "1b9d249efa9fba12c8956b4eeba3a7639f896434a239beb3e68dd95b7b2b9e9f"
+    },
+    {
+      "target": "identity_observer/SOURCE_PINS.json",
+      "repo_path": "candidates/qwen2_ordered_observer/SOURCE_PINS.json",
+      "source_kind": "pinned-existing-public-file",
+      "bytes": 1159,
+      "sha256": "080338b50c448002f87595d40b47248684e6a739115d1bf8af4c12cc8230ad6a"
+    },
+    {
+      "target": "test_source_boundary.py",
+      "repo_path": "candidates/qwen2_production_attention_diagnostic/delta/r3/test_source_boundary.py",
+      "source_kind": "new-original-byte-file",
+      "bytes": 8417,
+      "sha256": "f9bf5e0d67690c98ce3f2c82938e6371d8a0fe3969840c3f2187dc74f8a6669e"
+    }
+  ]
+}

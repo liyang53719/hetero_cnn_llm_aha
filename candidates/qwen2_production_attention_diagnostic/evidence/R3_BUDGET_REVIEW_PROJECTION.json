@@ -1,0 +1,140 @@
+{
+  "original": {
+    "bytes": 5743,
+    "sha256": "f9d0c03c10bba3be1576c5911ca0c79b05787345dc5618482a8614e6df13290f"
+  },
+  "status": "PURE_SOURCE_METADATA_BUDGET_AUDIT_COMPLETE_NO_EXECUTION",
+  "scope": "Read source text, small control/timing/audit JSON and file metadata only; no payload tensors read, no target imports, no launcher/worker/reference/native execution, no evidence changes.",
+  "receipt_link_verified": true,
+  "recorded_cause": "TimeoutError: aggregate work budget exhausted; cleanup reserve retained",
+  "aggregate_work_cpu_threshold_seconds": 170,
+  "aggregate_final_cpu_seconds": "170.038666752",
+  "aggregate_final_wall_seconds": "170.08509365702048",
+  "remaining_to_aggregate_cpu_cap_seconds": "9.961333248",
+  "remaining_to_aggregate_wall_cap_seconds": "69.91490634297952",
+  "observed_cleanup": {
+    "cleanup_signal": "SIGKILL_OWN_VERIFIED_GROUP",
+    "returncode": -9,
+    "group_remaining": false
+  },
+  "arm_stage_sums": [
+    {
+      "arm": 0,
+      "cpu_ns": 58228568023,
+      "wall_ns": 58662940209
+    },
+    {
+      "arm": 1,
+      "cpu_ns": 39039417923,
+      "wall_ns": 39581420470
+    }
+  ],
+  "total_arm_cpu_ns": 97267985946,
+  "aggregate_minus_recorded_arm_cpu_seconds": "72.770680806",
+  "unallocated_time_warning": "Not reference CPU: includes parent, worker setup/imports, inter-arm work, post-arm comparison/reference work, cleanup, and any charged descendants. No exact split persisted.",
+  "failure_phase": "After both recorded arm stage lists and terminal audits; no RESULT or REFERENCE artifacts. Exact later phase unproven because global Stages rows are persisted only at RESULT.",
+  "cpu_accounting": "Parent process_time + RUSAGE_CHILDREN utime/stime + currently visible worker-tree utime/stime/cutime/cstime while unreaped. Final has no live term. Correct main-worker handoff with WNOWAIT; descendant wait races may conservatively overcount live samples.",
+  "child_160_vs_aggregate_170": "No contradiction: child RLIMIT_CPU is per process, aggregate includes parent and descendants. Receipts do not persist the constituent CPU terms; exact child/parent split and exact terminating signal origin cannot be recovered.",
+  "frozen_output_metadata_totals": {
+    "trace_pair_bytes": 8029338,
+    "artifact_bytes": 6103385,
+    "audit_bytes": 3393997,
+    "log_bytes": 0,
+    "worker_metadata_bytes": 665410,
+    "parent_metadata_bytes": 5013,
+    "total_bytes": 18197143
+  },
+  "all_frozen_output_partitions_below_caps": true,
+  "caveats": [
+    "Last live usage is the preceding successful snapshot; the failed RHS snapshot was not assigned to last_live_usage.",
+    "Cleanup receipts prove the recorded same-group check, not a new current /proc inspection or exclusion of arbitrary group escape.",
+    "No retry, cap change, or acceptance of a passing end-to-end pair is authorized by this audit."
+  ],
+  "source_and_metadata_sha256": [
+    {
+      "ordinal": 0,
+      "logical_role": "r3-source:code/launch.py",
+      "sha256": "576937a7248fd2c0f41a7db0f7cfe35a99ec095575b70ab96d8429fc1fb1503e",
+      "bytes": 17057
+    },
+    {
+      "ordinal": 1,
+      "logical_role": "r3-source:code/worker.py",
+      "sha256": "d76285a3742d991a4b6be33bd1ee930fa0bce7cbc72066f1c28f00f26dc97657",
+      "bytes": 14724
+    },
+    {
+      "ordinal": 2,
+      "logical_role": "r3-source:code/policy.py",
+      "sha256": "d51a748e5ae0b4f0aa8afe1378c17194313642c8cf79a982b249366a16e7e0e5",
+      "bytes": 1043
+    },
+    {
+      "ordinal": 3,
+      "logical_role": "r3-source:code/stage_clock.py",
+      "sha256": "c8daa0ab3e5b9287beb21476477d7711b56f07c414e3e57c645e331450756065",
+      "bytes": 493
+    },
+    {
+      "ordinal": 4,
+      "logical_role": "r3-source:code/support.py",
+      "sha256": "971e90eb86eea901e86db2839e82754b87d918742d06078b2e7e69005011b6c6",
+      "bytes": 17307
+    },
+    {
+      "ordinal": 5,
+      "logical_role": "r3-source:code/reference_capture.py",
+      "sha256": "01d95a310a464b7047f6c648ac68df3392d17507267840f89088483d038f7853",
+      "bytes": 18977
+    },
+    {
+      "ordinal": 6,
+      "logical_role": "artifact:PARENT.json",
+      "sha256": "302933e709c0293522770fc6d1c70db9b906309c082e7ce9e4ec824c5324706c",
+      "bytes": 2218
+    },
+    {
+      "ordinal": 7,
+      "logical_role": "artifact:pair/PARENT.json",
+      "sha256": "29ef65e9923fdeb9ab8dcd286535b29e351036ac8f4e8982a02461d9a5d414d9",
+      "bytes": 2795
+    },
+    {
+      "ordinal": 8,
+      "logical_role": "artifact:pair/metadata/IDENTITY.json",
+      "sha256": "1326b63cf8fbdbe2a5e22a64a996488fa17116644eb4a333db4b583d96d53570",
+      "bytes": 121
+    },
+    {
+      "ordinal": 9,
+      "logical_role": "artifact:pair/metadata/TIMING_0.json",
+      "sha256": "0345021bd09f64d78ed2eb8040c3c32e7ba79f6354aac7073d9d1275bec4f740",
+      "bytes": 1096
+    },
+    {
+      "ordinal": 10,
+      "logical_role": "artifact:pair/metadata/TIMING_1.json",
+      "sha256": "4423ab09b8b0ccf186f21aa2007d8b07ba4a0eb5efc0d164881dd0604199da7e",
+      "bytes": 1104
+    },
+    {
+      "ordinal": 11,
+      "logical_role": "artifact:pair/audits/STAGES.jsonl",
+      "sha256": "4f1a133fca48ea58992a7af24ad00b7b46624bedc003b56c1b68a6e7f8bf0ca4",
+      "bytes": 413
+    },
+    {
+      "ordinal": 12,
+      "logical_role": "artifact:pair/audits/RUNTIME_ARM_0_TERMINAL/SUMMARY.json",
+      "sha256": "3646590d4075fb874c82a6279b469cda6576b0a644c49a7dadfbb8c5e4016aab",
+      "bytes": 93
+    },
+    {
+      "ordinal": 13,
+      "logical_role": "artifact:pair/audits/RUNTIME_ARM_1_TERMINAL/SUMMARY.json",
+      "sha256": "212ab682db08320c1ca7b94009969289e38b072f1e3bcb7069fb22c0298dec48",
+      "bytes": 93
+    }
+  ],
+  "projection": "Private evidence root omitted; private workspace-relative source/artifact keys converted to ordered logical roles. All accounting, stage uncertainty, cleanup and caveats retained."
+}

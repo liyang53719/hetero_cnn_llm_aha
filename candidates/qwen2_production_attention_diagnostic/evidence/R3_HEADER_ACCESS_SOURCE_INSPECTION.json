@@ -1,0 +1,43 @@
+{
+  "original": {
+    "bytes": 1747,
+    "sha256": "7fb766d99bd87f3743076746c96661a4d6408a994caa0080ef623dece082ec67"
+  },
+  "content": {
+    "component_shape_source": "unchanged component.fixture constructs explicit QK/Softmax/PV metadata from fixed M16 dimensions; production fixture packers/Host parse command/descriptor memory, not the safetensors header",
+    "literal_header_references": [
+      {
+        "line": 165,
+        "path": "candidates/qwen2_live_attention_model_m128/gates.py",
+        "text": "self.header=ROOT/'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'"
+      },
+      {
+        "line": 164,
+        "path": "candidates/qwen2_live_attention_model_m16/gates.py",
+        "text": "self.header=ROOT/'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'"
+      },
+      {
+        "line": 27,
+        "path": "candidates/qwen2_live_attention_reference_m16/tests/test_recipe.py",
+        "text": "header = root / 'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'"
+      },
+      {
+        "line": 142,
+        "path": "candidates/qwen2_live_qkv_model_m128/gates.py",
+        "text": "self.header=ROOT/'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'"
+      },
+      {
+        "line": 27,
+        "path": "candidates/qwen2_live_tail_inputs_m128/tests/test_recipe.py",
+        "text": "header=root/'config/upstream/weight_headers/qwen2_1p5b/model.safetensors.header.bin'"
+      }
+    ],
+    "load_runtime_access": "original verify_sources reads all 316 source files before and after imports; project_inventory and ProjectCodeGate inspect Python code only",
+    "native_loaded": false,
+    "other_reads": "new qualification parses only this exact header JSON during full preflight and postflight integrity checks",
+    "production_resident_literal_references": [],
+    "runtime_imported": false,
+    "status": "STATIC_SOURCE_INSPECTION_ONLY"
+  },
+  "scope": "Original static source syntax/locations only; not header body data or actual runtime-success proof."
+}

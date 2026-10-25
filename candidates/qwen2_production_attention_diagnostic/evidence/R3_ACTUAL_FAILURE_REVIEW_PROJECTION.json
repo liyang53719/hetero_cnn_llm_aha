@@ -1,0 +1,51 @@
+{
+  "original": {
+    "bytes": 2023,
+    "sha256": "449b9de70c32b89c8d7cae887640324ddb6a1dc6d88ec3be4bf8b21f20ded047"
+  },
+  "actual_artifact_bytes": 18197143,
+  "actual_artifact_count": 89,
+  "artifacts_rechecked_after_review": true,
+  "causal_field_cell_checks": 234624,
+  "cleanup": "VERIFIED_OWN_GROUP_SIGKILL_NO_REMAINING_GROUP",
+  "config": {
+    "bytes": 310061,
+    "sha256": "8a17ffd4e7802bdab3794323fe17959c328ff348b981550ffd63438bd060785c"
+  },
+  "evidence": {
+    "actual_binding": {
+      "bytes": 28857,
+      "sha256": "cc26837d8b74ae7caea054c9542d9591287733bc5561202d09f23681e13af168"
+    },
+    "budget_subreview": {
+      "bytes": 5743,
+      "sha256": "f9d0c03c10bba3be1576c5911ca0c79b05787345dc5618482a8614e6df13290f"
+    },
+    "human_review": {
+      "bytes": 5910,
+      "sha256": "1b72fbad877cc6463ed3d4d5cede1cf3b5544057f734e8f623af53a922af410e"
+    },
+    "saved_pair": {
+      "bytes": 350057,
+      "sha256": "5ffa412c4050a422dfddfca3b97dd9fa2ea696dc08fd5eb2566fdcd360086718"
+    }
+  },
+  "exact_interruption_phase": "UNPROVEN_POST_BOTH_TERMINAL_AUDITS",
+  "execution_code_hash_checks": 67,
+  "freeze": {
+    "bytes": 8169,
+    "sha256": "87a79e54424a84823cdc987bf04ca722556f13578a038ea2a739e8893e91698a"
+  },
+  "full_M128_status_unchanged": true,
+  "full_source_and_input_pin_checks": 1147,
+  "native_or_DUT_or_reference_rerun": false,
+  "original_failure_modified": false,
+  "persisted_pair_comparison": "PASS",
+  "recorded_numerical_mismatch": false,
+  "reference_acceptance": "NOT_COMPLETED",
+  "root_status_unchanged": "FAILED_RETAINED",
+  "status": "PASS_INDEPENDENT_FAILED_ATTEMPT_CLOSURE_WITH_RECOVERABLE_COMPLETE_DUT_ARMS_NOT_NUMERICAL_SUCCESS",
+  "projection": "Private attempt path, one-use approval/ledger identities and internal recovery authorization/proposal metadata omitted. No recovery outcome is included. All actual failure/equality/reference/code/resource evidence scope retained.",
+  "numerical_acceptance": false,
+  "recovery_result_included": false
+}

@@ -1,0 +1,102 @@
+{
+  "revisions": {
+    "r2": {
+      "freeze": {
+        "bytes": 10445,
+        "sha256": "f11a14aa4ca65abb7f577d9a11e386a86af7d57e08da4960b2ff538ae2395c74"
+      },
+      "frozen_members": 34,
+      "source_review": {
+        "bytes": 7396,
+        "sha256": "5ba0a9b4177ed025b3325611bf809c866a62b845807d4ec494892785063741ff"
+      },
+      "config": {
+        "bytes": 308848,
+        "sha256": "9f1728aebce4fadd7d0c2b02152fd726bc1a256998a0110b2f18b7551a0d197f"
+      },
+      "historical_test_sources_hash_only": {
+        "test_component_r2.py": {
+          "bytes": 9380,
+          "sha256": "39ad808fcb24fe211fbc8a1e5ccbef7f3e6e9469b379880e0fe0d72b6c716951"
+        },
+        "test_source_r2.py": {
+          "bytes": 12497,
+          "sha256": "99c382ff031a34eb283afc7c710695f7a4e5219d3bc13f2286dacf3b9c4bf56b"
+        }
+      },
+      "mock_logs": {
+        "MOCK_NORMAL_R2.log": {
+          "bytes": 3267,
+          "sha256": "98d874ad546175d6c55775baecb5532c79cef05cc4fa22828208fc107927da46"
+        },
+        "MOCK_OPTIMIZED_R2.log": {
+          "bytes": 3267,
+          "sha256": "e25ccd27bb1415f883a909171d63946de43d71ce93b51a1170dced2de413105c"
+        }
+      }
+    },
+    "r3": {
+      "freeze": {
+        "bytes": 8169,
+        "sha256": "87a79e54424a84823cdc987bf04ca722556f13578a038ea2a739e8893e91698a"
+      },
+      "frozen_members": 42,
+      "source_review": {
+        "bytes": 9284,
+        "sha256": "0b5788f633530418b7c84bbf5565745ed508427ab05c34faa510157e270a145b"
+      },
+      "config": {
+        "bytes": 310061,
+        "sha256": "8a17ffd4e7802bdab3794323fe17959c328ff348b981550ffd63438bd060785c"
+      },
+      "historical_test_sources_hash_only": {
+        "test_component_r2.py": {
+          "bytes": 9380,
+          "sha256": "39ad808fcb24fe211fbc8a1e5ccbef7f3e6e9469b379880e0fe0d72b6c716951"
+        },
+        "test_source_r2.py": {
+          "bytes": 12484,
+          "sha256": "7c0939cea21e7d04c956b00dfc69aad6e6c27f55f090b380cbd88687b0cbed34"
+        }
+      },
+      "mock_logs": {
+        "MOCK_NORMAL.log": {
+          "bytes": 3267,
+          "sha256": "a1df8e59656a6238f9bc3f4145afa6f86ac5b3aba718d6e63d9999e6c2d8c7d3"
+        },
+        "MOCK_OPTIMIZED.log": {
+          "bytes": 3267,
+          "sha256": "1a3df7a187b30e406d81f168b048f4ab85974979289644198c6cddd6630e74ef"
+        }
+      }
+    }
+  },
+  "r2_failure_review": {
+    "bytes": 322680,
+    "sha256": "4bfdc90c6622f256a68186f0861d309f446ea4d69f7fcc8b85be854a43c3adda"
+  },
+  "r3_failure_review": {
+    "bytes": 2023,
+    "sha256": "449b9de70c32b89c8d7cae887640324ddb6a1dc6d88ec3be4bf8b21f20ded047"
+  },
+  "r3_only_changed_executables": [
+    "binding.py",
+    "policy.py",
+    "support.py",
+    "worker.py"
+  ],
+  "r3_predecessor_recheck": {
+    "bytes": 4844,
+    "sha256": "5679718e059504f3d17a6a56e170d95d7c28ede97e8b0a4292ba0ea0253a3a2e"
+  },
+  "prior_stability_public_commit": "6ca5230da94ea2bb99e6a67fd6e2f6b1074bed46",
+  "prior_canonical_public_commit": "8c6311401b1fb57e924dbd841e2dc406c904d57a",
+  "r2_original_failure_preserved": true,
+  "r3_original_failure_preserved": true,
+  "prior_M128_CPU_FAIL_preserved": true,
+  "official_M16_reference_history_unchanged": true,
+  "original_test_or_target_native_reruns_for_packaging": 0,
+  "reference_recovery_result_included": false,
+  "source_only_helper_checks_not_numerical_acceptance": true,
+  "canonical_task_statuses_edited": false
+}

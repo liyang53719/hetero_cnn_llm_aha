@@ -1,0 +1,226 @@
+{
+  "actual_project_module_exec_events": 55,
+  "actual_service_bindings": {
+    "abort": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "abort",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    },
+    "accept_group": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "accept_group",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    },
+    "accept_step": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "accept_step",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    },
+    "acquire": {
+      "class": "OfficialMatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/official_bf16/dense_silu.py",
+      "method": "acquire",
+      "normal_source_bound": true,
+      "source_sha256": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699"
+    },
+    "release": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "release",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    },
+    "retire_done": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "retire_done",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    },
+    "retire_legacy_reply": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "retire_legacy_reply",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    },
+    "retire_owner_response": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "retire_owner_response",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    },
+    "retire_result": {
+      "class": "MatrixService",
+      "co_filename": "assembled_source/candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py",
+      "method": "retire_result",
+      "normal_source_bound": true,
+      "source_sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+    }
+  },
+  "adapter_sha256": "048a5bb403905ef8d1226aca5c78a724ee078f215278d4a942149ec4941dd5d0",
+  "all_pre_post_file_pins": 722,
+  "config_sha256": "c9da94d12ab2a85e28bd31576ec633df86ec8ecf04cb2f8110a85c48e63fda60",
+  "cython_names_before_native_import": {
+    "_cython_3_1_4": false,
+    "cython_runtime": false
+  },
+  "dependency_qualification": {
+    "actual_extension_mapping": true,
+    "association": "Exact native module dictionary exports share the exact Cython common type object.",
+    "cyaml_enabled": true,
+    "extension_exports_linked": [
+      "get_version",
+      "get_version_string"
+    ],
+    "function_globals_descriptor_evaluated": false,
+    "function_internal_globals_identity_claimed": false,
+    "internal_c_creation_call_observed": false,
+    "original_audit_modified": false,
+    "status": "PASS_BOUNDED_DEPENDENCY_INITIALIZATION_ASSOCIATION"
+  },
+  "full29_verified": false,
+  "fullgraph_numeric_status": "TEMP_NOT_EXECUTED",
+  "hardware_verified": false,
+  "native_event_origins": [
+    {
+      "module": "yaml._yaml",
+      "origin": null
+    },
+    {
+      "module": "yaml._yaml",
+      "origin": "runtime_yaml/yaml/_yaml.cpython-312-x86_64-linux-gnu.so"
+    }
+  ],
+  "old_wrapper_errors_preserved": true,
+  "old_wrapper_status": "FAIL_NORMAL_BINDING",
+  "original_wrapper_sha256": "2ab2a1d5a3d5a09c27f4a4ed9ff1addde78cb6d372154e41cc042d76e4f57730",
+  "parent": {
+    "child_result_sha256": "048a5bb403905ef8d1226aca5c78a724ee078f215278d4a942149ec4941dd5d0",
+    "child_status": "PASS_NORMAL_FULLGRAPH_BINDING_ONLY",
+    "exit_code": 0,
+    "group_exists": false,
+    "native_task_executed": false,
+    "numeric_acceptance": false,
+    "status": "PASS_NORMAL_BINDING_ADAPTER_WRAPPER",
+    "timed_out": false,
+    "wall_seconds": 5.131606597977225
+  },
+  "parent_sha256": "458f8e5d8ffb2d942d27890a90e543208113dab7dc61eeedb5ecbb5d8a264920",
+  "pc12_execution_verified": false,
+  "phase_inventory": [
+    {
+      "distinct_mapped_files": 10,
+      "distinct_module_objects": 96,
+      "map_failures": 0,
+      "map_segments": 44,
+      "matrix_elf_loaded": false,
+      "module_entries": 99,
+      "namespace_qualification_status": "PASS_PINNED_MODULES_WITH_RECORDED_REPETITIONS",
+      "namespace_repetitions": [],
+      "original_failure_codes": [],
+      "original_module_status": "PASS_MODULE_IDENTITY",
+      "stage": "00_before_import"
+    },
+    {
+      "distinct_mapped_files": 19,
+      "distinct_module_objects": 317,
+      "map_failures": 0,
+      "map_segments": 105,
+      "matrix_elf_loaded": false,
+      "module_entries": 320,
+      "namespace_qualification_status": "FAIL_NAMESPACE_QUALIFICATION",
+      "namespace_repetitions": [
+        "candidates",
+        "candidates.qwen2_resident_matrix",
+        "candidates.qwen2_resident_matrix.ffn_public",
+        "candidates.qwen2_resident_matrix.dense_block_reduce",
+        "candidates.qwen2_resident_matrix.official_bf16",
+        "candidates.qwen2_resident_matrix.ffn_attention",
+        "candidates.qwen2_resident_matrix.transposed_down",
+        "candidates.qwen2_resident_matrix.attention_packed_owner",
+        "candidates.qwen2_resident_matrix.production_qk16_model"
+      ],
+      "original_failure_codes": [
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.ffn_public"
+        },
+        {
+          "code": "unregistered_no_file_module",
+          "name": "cython_runtime"
+        },
+        {
+          "code": "unregistered_no_file_module",
+          "name": "_cython_3_1_4"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.dense_block_reduce"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.official_bf16"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.ffn_attention"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.transposed_down"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.attention_packed_owner"
+        },
+        {
+          "code": "namespace_path_mismatch",
+          "name": "candidates.qwen2_resident_matrix.production_qk16_model"
+        }
+      ],
+      "original_module_status": "FAIL_MODULE_IDENTITY",
+      "stage": "01_after_import_or_failure"
+    }
+  ],
+  "post_pin_mismatches": [],
+  "retirement_noninterference_verified": false,
+  "review_sha256": "4b59d6a698f633cbfd9fd1c7ef9abde23fd4aa276d8297ad646381497f2eca4c",
+  "runtime_targets": {
+    "base": "candidates.qwen2_resident_matrix.ffn_public.check_prefix_numeric",
+    "binding": "candidates.qwen2_resident_matrix.dense_block_reduce.matrix_binding",
+    "dense": "candidates.qwen2_resident_matrix.official_bf16.dense_silu",
+    "execution": "candidates.qwen2_resident_matrix.dense_block_reduce.public_execution",
+    "fixtures": "candidates.qwen2_resident_matrix.ffn_public.fixture",
+    "matrix": "candidates.qwen2_resident_matrix.ffn_attention.matrix_service",
+    "original": "candidates.qwen2_resident_matrix.ffn_public.execute_numeric",
+    "owner_module": "candidates.qwen2_resident_matrix.dense_block_reduce.dense_drain",
+    "physical_adapter": "candidates.qwen2_resident_matrix.ffn_public.fullgraph_memory",
+    "policy": "candidates.qwen2_resident_matrix.official_bf16.execution",
+    "prefix": "candidates.qwen2_resident_matrix.ffn_public.prefix_execution",
+    "profiles": "candidates.qwen2_resident_matrix.dense_block_reduce.profile",
+    "public": "candidates.qwen2_resident_matrix.ffn_public.model",
+    "scalar": "candidates.qwen2_resident_matrix.ffn_public.prefix_arithmetic",
+    "suffix": "candidates.qwen2_resident_matrix.ffn_public.fullgraph_execution"
+  },
+  "safe_raw_sha256": "99d942e4202880d20d149d5e33b39c917d143e15af55ccd12ca7588ab5294c47",
+  "services_constructed": false,
+  "source_or_runtime_modified": false,
+  "status": "PASS_NORMAL_FULLGRAPH_BINDING_ONLY",
+  "user_tensor_read": false
+}

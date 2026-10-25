@@ -1,0 +1,803 @@
+{
+  "edges": [
+    {
+      "line": 9,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import argparse"
+    },
+    {
+      "line": 11,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import copy"
+    },
+    {
+      "line": 12,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import hashlib"
+    },
+    {
+      "line": 13,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import json"
+    },
+    {
+      "line": 14,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "from pathlib import Path"
+    },
+    {
+      "line": 15,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import re"
+    },
+    {
+      "line": 16,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import shutil"
+    },
+    {
+      "line": 17,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import struct"
+    },
+    {
+      "line": 18,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "import sys"
+    },
+    {
+      "line": 22,
+      "resolved_project_files": [
+        "src/heteronpu/command.py"
+      ],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "from heteronpu.command import Command128"
+    },
+    {
+      "line": 23,
+      "resolved_project_files": [
+        "src/heteronpu/descriptor_chain.py"
+      ],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py",
+      "statement": "from heteronpu.descriptor_chain import DescriptorRecord, validate_descriptor_chain"
+    },
+    {
+      "line": 2,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/descriptor_chain.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/descriptor_chain.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 5,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/descriptor_chain.py",
+      "statement": "from collections.abc import Mapping"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/descriptor_chain.py",
+      "statement": "from enum import IntEnum"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [
+        "src/heteronpu/abi_validation.py"
+      ],
+      "source": "src/heteronpu/descriptor_chain.py",
+      "statement": "from .abi_validation import bit, enum_value, uint"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/abi_validation.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/abi_validation.py",
+      "statement": "from enum import IntEnum"
+    },
+    {
+      "line": 9,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/abi_validation.py",
+      "statement": "from numbers import Integral"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/abi_validation.py",
+      "statement": "from typing import TypeVar"
+    },
+    {
+      "line": 1,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/command.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/command.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/command.py",
+      "statement": "from enum import IntEnum"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [
+        "src/heteronpu/abi_validation.py"
+      ],
+      "source": "src/heteronpu/command.py",
+      "statement": "from .abi_validation import enum_value, uint, word_bytes"
+    },
+    {
+      "line": 9,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "import argparse, hashlib, json, re, sys"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "import argparse, hashlib, json, re, sys"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "import argparse, hashlib, json, re, sys"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "import argparse, hashlib, json, re, sys"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "import argparse, hashlib, json, re, sys"
+    },
+    {
+      "line": 11,
+      "resolved_project_files": [],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "from pathlib import Path"
+    },
+    {
+      "line": 14,
+      "resolved_project_files": [
+        "src/heteronpu/command.py"
+      ],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "from heteronpu.command import Command128, Engine, Opcode, NULL_INDEX"
+    },
+    {
+      "line": 15,
+      "resolved_project_files": [
+        "src/heteronpu/descriptor_chain.py"
+      ],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "from heteronpu.descriptor_chain import DescriptorRecord, RecordType, MatrixAux, SfuProgram, TensorDType, validate_descriptor_chain"
+    },
+    {
+      "line": 16,
+      "resolved_project_files": [
+        "src/heteronpu/gemmini_descriptor_v2.py"
+      ],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "from heteronpu.gemmini_descriptor_v2 import tensor_base_record, shape4_record, stride3_record, matrix_op_record"
+    },
+    {
+      "line": 17,
+      "resolved_project_files": [
+        "src/heteronpu/l9_transport_contract.py"
+      ],
+      "source": "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+      "statement": "from heteronpu.l9_transport_contract import EXPECTED_LAYER0"
+    },
+    {
+      "line": 7,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 9,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "from collections import Counter"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "from dataclasses import asdict, dataclass"
+    },
+    {
+      "line": 11,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "import hashlib"
+    },
+    {
+      "line": 12,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "import json"
+    },
+    {
+      "line": 13,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "from pathlib import Path"
+    },
+    {
+      "line": 14,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "from typing import Any, Iterable, Mapping, Sequence"
+    },
+    {
+      "line": 16,
+      "resolved_project_files": [
+        "src/heteronpu/command.py"
+      ],
+      "source": "src/heteronpu/l9_transport_contract.py",
+      "statement": "from .command import Command128, Engine, NULL_INDEX, Opcode"
+    },
+    {
+      "line": 2,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 5,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from math import ceil"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from collections.abc import Mapping"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [
+        "src/heteronpu/abi_validation.py"
+      ],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from .abi_validation import bit, enum_value, sint, uint"
+    },
+    {
+      "line": 9,
+      "resolved_project_files": [
+        "src/heteronpu/command.py"
+      ],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from .command import Command128, Opcode"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [
+        "src/heteronpu/descriptor_chain.py"
+      ],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from .descriptor_chain import DescriptorRecord, MatrixAux, NULL_INDEX, RecordType, TensorDType, validate_descriptor_chain"
+    },
+    {
+      "line": 13,
+      "resolved_project_files": [
+        "src/heteronpu/gemmini_rocc_lowering.py"
+      ],
+      "source": "src/heteronpu/gemmini_descriptor_v2.py",
+      "statement": "from .gemmini_rocc_lowering import ConvWsDescriptor, GemminiDataflow, Int8OsTilesDescriptor, LoopWsDescriptor, RoCCMicroOp, config_ex, config_load, config_store, lower_int8_os_tiles, lower_loop_conv_ws, lower_loop_ws"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/gemmini_rocc_lowering.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/gemmini_rocc_lowering.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 11,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/gemmini_rocc_lowering.py",
+      "statement": "from enum import IntEnum"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [
+        "src/heteronpu/cgra_sfu.py"
+      ],
+      "source": "src/heteronpu/__init__.py",
+      "statement": "from .cgra_sfu import CgraSfuModel"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [
+        "src/heteronpu/command.py"
+      ],
+      "source": "src/heteronpu/__init__.py",
+      "statement": "from .command import Command128, Engine, Opcode"
+    },
+    {
+      "line": 5,
+      "resolved_project_files": [
+        "src/heteronpu/config.py"
+      ],
+      "source": "src/heteronpu/__init__.py",
+      "statement": "from .config import ArchitectureConfig, load_config"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [
+        "src/heteronpu/kv_engine.py"
+      ],
+      "source": "src/heteronpu/__init__.py",
+      "statement": "from .kv_engine import KVPageEngine"
+    },
+    {
+      "line": 7,
+      "resolved_project_files": [
+        "src/heteronpu/matrix_engine.py"
+      ],
+      "source": "src/heteronpu/__init__.py",
+      "statement": "from .matrix_engine import MatrixEngineModel, QuantizedW4"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [
+        "src/heteronpu/scheduler.py"
+      ],
+      "source": "src/heteronpu/__init__.py",
+      "statement": "from .scheduler import CycleEstimator, ScheduledTask, Task"
+    },
+    {
+      "line": 1,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/scheduler.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/scheduler.py",
+      "statement": "from dataclasses import dataclass, field"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/scheduler.py",
+      "statement": "from math import ceil"
+    },
+    {
+      "line": 5,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/scheduler.py",
+      "statement": "from typing import Dict, Iterable, Mapping"
+    },
+    {
+      "line": 7,
+      "resolved_project_files": [
+        "src/heteronpu/config.py"
+      ],
+      "source": "src/heteronpu/scheduler.py",
+      "statement": "from .config import ArchitectureConfig"
+    },
+    {
+      "line": 1,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/config.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/config.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/config.py",
+      "statement": "from pathlib import Path"
+    },
+    {
+      "line": 5,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/config.py",
+      "statement": "from typing import Any, Mapping"
+    },
+    {
+      "line": 7,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/config.py",
+      "statement": "import yaml"
+    },
+    {
+      "line": 1,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/matrix_engine.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/matrix_engine.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/matrix_engine.py",
+      "statement": "from typing import Literal"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/matrix_engine.py",
+      "statement": "import numpy as np"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [
+        "src/heteronpu/dtypes.py"
+      ],
+      "source": "src/heteronpu/matrix_engine.py",
+      "statement": "from .dtypes import W4Tensor, bf16_round, dequantize_w4_grouped, quantize_int8_symmetric, quantize_w4_grouped"
+    },
+    {
+      "line": 1,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/dtypes.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/dtypes.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/dtypes.py",
+      "statement": "from typing import Tuple"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/dtypes.py",
+      "statement": "import numpy as np"
+    },
+    {
+      "line": 1,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/kv_engine.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/kv_engine.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/kv_engine.py",
+      "statement": "from typing import Dict, Iterable, Tuple"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/kv_engine.py",
+      "statement": "import numpy as np"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [
+        "src/heteronpu/dtypes.py"
+      ],
+      "source": "src/heteronpu/kv_engine.py",
+      "statement": "from .dtypes import bf16_round, quantize_int8_symmetric"
+    },
+    {
+      "line": 1,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/cgra_sfu.py",
+      "statement": "from __future__ import annotations"
+    },
+    {
+      "line": 3,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/cgra_sfu.py",
+      "statement": "import math"
+    },
+    {
+      "line": 4,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/cgra_sfu.py",
+      "statement": "from typing import Literal"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "src/heteronpu/cgra_sfu.py",
+      "statement": "import numpy as np"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [
+        "src/heteronpu/dtypes.py"
+      ],
+      "source": "src/heteronpu/cgra_sfu.py",
+      "statement": "from .dtypes import bf16_round"
+    },
+    {
+      "line": 14,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_group/model.py",
+      "statement": "from dataclasses import dataclass"
+    },
+    {
+      "line": 15,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_group/model.py",
+      "statement": "from math import prod"
+    },
+    {
+      "line": 11,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/model.py",
+      "statement": "from dataclasses import dataclass, replace"
+    },
+    {
+      "line": 12,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/model.py",
+      "statement": "import importlib.util"
+    },
+    {
+      "line": 13,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/model.py",
+      "statement": "from math import prod"
+    },
+    {
+      "line": 14,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/model.py",
+      "statement": "from pathlib import Path"
+    },
+    {
+      "line": 15,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/model.py",
+      "statement": "import sys"
+    },
+    {
+      "line": 6,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from dataclasses import dataclass, field"
+    },
+    {
+      "line": 7,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "import hashlib"
+    },
+    {
+      "line": 8,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "import importlib.util"
+    },
+    {
+      "line": 9,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from math import prod"
+    },
+    {
+      "line": 10,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from pathlib import Path"
+    },
+    {
+      "line": 11,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "import sys"
+    },
+    {
+      "line": 12,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from tempfile import TemporaryDirectory"
+    },
+    {
+      "line": 13,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from types import MappingProxyType"
+    },
+    {
+      "line": 17,
+      "resolved_project_files": [
+        "src/heteronpu/command.py"
+      ],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from heteronpu.command import Command128, Engine, Opcode"
+    },
+    {
+      "line": 18,
+      "resolved_project_files": [
+        "src/heteronpu/descriptor_chain.py"
+      ],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from heteronpu.descriptor_chain import DescriptorRecord, MatrixAux, SfuProgram, TensorDType"
+    },
+    {
+      "line": 19,
+      "resolved_project_files": [
+        "src/heteronpu/gemmini_descriptor_v2.py"
+      ],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from heteronpu.gemmini_descriptor_v2 import tensor_base_record, shape4_record, stride3_record, matrix_op_record"
+    },
+    {
+      "line": 22,
+      "resolved_project_files": [
+        "candidates/qwen2_resident_matrix/ffn_public/model.py"
+      ],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from .model import LaunchConfig, MetadataMemory, NULL, LIMIT, Region, Table, align64"
+    },
+    {
+      "line": 24,
+      "resolved_project_files": [],
+      "source": "candidates/qwen2_resident_matrix/ffn_public/fixture.py",
+      "statement": "from model import LaunchConfig, MetadataMemory, NULL, LIMIT, Region, Table, align64"
+    }
+  ],
+  "external_top_level": [
+    "numpy",
+    "yaml"
+  ],
+  "fallback_bare_model": "Not selected when normal package relative import succeeds",
+  "metadata_packer_modules_deferred_until_fixture_call": [
+    "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py",
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py"
+  ],
+  "source_files": {
+    "candidates/qwen2_resident_matrix/ffn_group/model.py": {
+      "bytes": 41413,
+      "sha256": "fba06b79e849ff595fe92831c1e77da0dc0e39a999cabf396170917dfe7da004"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/fixture.py": {
+      "bytes": 15492,
+      "sha256": "95468cc6ea51d90fe8aa11e27457f4f4403435486b4198e420aca7136987e208"
+    },
+    "candidates/qwen2_resident_matrix/ffn_public/model.py": {
+      "bytes": 18460,
+      "sha256": "698921993b6ec080e34e22def8b2b443ea0bcb310f09641474a30243676c4d96"
+    },
+    "chisel/continuous_prefill/scripts/pack_owner_bf16_weights.py": {
+      "bytes": 5759,
+      "sha256": "17347fccdf73f54692b4e1c8047a26154f55348f06dca87c5c2db7def515c692"
+    },
+    "chisel/continuous_prefill/scripts/pack_owner_block_fixture.py": {
+      "bytes": 8316,
+      "sha256": "3efc7bb21b66bd16f757b8aac99c779ad3efe9289115e6ea7d5628a4ff6c2154"
+    },
+    "src/heteronpu/__init__.py": {
+      "bytes": 611,
+      "sha256": "b31349a2323dbe0166c707b21d198a5bc1f891ab524a0a6ca87e26ac11e7f0be"
+    },
+    "src/heteronpu/abi_validation.py": {
+      "bytes": 1941,
+      "sha256": "a7f79519db51154dd50a1e5382ce114eee76bdfd68e97b3ad13b457694aaa590"
+    },
+    "src/heteronpu/cgra_sfu.py": {
+      "bytes": 5246,
+      "sha256": "5879bbf756c08f2befa3bfe17fcd4d71a74b75c76ee808c816d83af03a4da854"
+    },
+    "src/heteronpu/command.py": {
+      "bytes": 5667,
+      "sha256": "7b324e5977d52d10548a12b5050c983f10cee998310ac5bc18f5be8be3d9e44b"
+    },
+    "src/heteronpu/config.py": {
+      "bytes": 2438,
+      "sha256": "55397dad1d93f9896afe10eab2e6ffa9f01b694aa5848ade3808292f57bb7fb4"
+    },
+    "src/heteronpu/descriptor_chain.py": {
+      "bytes": 14352,
+      "sha256": "bedf5d138e0fdf26fb5b2a09421172a261d5f029911166bc97f8e0b8c229da89"
+    },
+    "src/heteronpu/dtypes.py": {
+      "bytes": 3686,
+      "sha256": "b60bc8851c3cf6cc201417be69a96203b45641e7df4b051a003db1e349ef6e34"
+    },
+    "src/heteronpu/gemmini_descriptor_v2.py": {
+      "bytes": 13907,
+      "sha256": "6802790c4aa91406a289f3da2990b35acba25f2a3a096ccb071ece12fbd0ac60"
+    },
+    "src/heteronpu/gemmini_rocc_lowering.py": {
+      "bytes": 23050,
+      "sha256": "842aaa8ef916a993d6b58f82529bbc9ef57221c47cd4e8d659d27141d28cc485"
+    },
+    "src/heteronpu/kv_engine.py": {
+      "bytes": 10586,
+      "sha256": "f2e2807760ff50a9eb125e2f3be795f4dc9cddc696a7e2f3db895c64c8ffba9a"
+    },
+    "src/heteronpu/l9_transport_contract.py": {
+      "bytes": 11707,
+      "sha256": "d672178bd13511e6f3bbed821fef570f79c83e7c314e4040903d98e5d8729a4c"
+    },
+    "src/heteronpu/matrix_engine.py": {
+      "bytes": 6094,
+      "sha256": "a13c981d497cd84c12b4f14d6304ead682d6042936e96265d28e4fb5459b24a8"
+    },
+    "src/heteronpu/scheduler.py": {
+      "bytes": 11133,
+      "sha256": "601376bc1629b6e67d5f933881ff83b5cbf967a1f6db1969b20fc95b3bbccb55"
+    }
+  },
+  "status": "STATIC_IMPORT_GRAPH_NOT_EXECUTED",
+  "task_constructors_called": false
+}

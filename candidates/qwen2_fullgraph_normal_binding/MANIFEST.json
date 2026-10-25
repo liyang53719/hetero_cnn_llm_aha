@@ -1,0 +1,128 @@
+{
+  "file_pins_rechecked": 722,
+  "files_excluding_this_manifest": [
+    {
+      "bytes": 3223,
+      "path": "candidates/qwen2_fullgraph_normal_binding/DEPENDENCY_PINS.json",
+      "sha256": "0f367aacb8d258366e2d965c62568ef48e4a140c88b7fe76be010d4dc48707e8"
+    },
+    {
+      "bytes": 25236,
+      "path": "candidates/qwen2_fullgraph_normal_binding/FIXTURE_IMPORT_PINS.json",
+      "sha256": "653aeea67a1840680c0ee0df725b8b4b42bef09935281d28303525619aa930e4"
+    },
+    {
+      "bytes": 173073,
+      "path": "candidates/qwen2_fullgraph_normal_binding/PROFILE_PROJECTION.json",
+      "sha256": "1efbfbba2d2fac07c1272aeeefdd194e5e9a8910e30038f0465c08ea6aa7686d"
+    },
+    {
+      "bytes": 4708,
+      "path": "candidates/qwen2_fullgraph_normal_binding/README.md",
+      "sha256": "f77382a4c85e915d8c37ead64d44249c61c149779f4cf51bcd7cf04a72658018"
+    },
+    {
+      "bytes": 72,
+      "path": "candidates/qwen2_fullgraph_normal_binding/__init__.py",
+      "sha256": "abc0392a4e82f67d72410cb2d35bc31d913a7f59ff28db1ef868c48fb641ee2d"
+    },
+    {
+      "bytes": 5605,
+      "path": "candidates/qwen2_fullgraph_normal_binding/adapter.py",
+      "sha256": "e6d9c9f22b11eff8f506e2412f691c24faf07acee1211a0b5e547aade758a0a3"
+    },
+    {
+      "bytes": 3020,
+      "path": "candidates/qwen2_fullgraph_normal_binding/dependency.py",
+      "sha256": "c91dd6173e1f4a5120019dd9e2d5e4903ec985b427e3b36b72f07f58b3aa1983"
+    },
+    {
+      "bytes": 6867,
+      "path": "candidates/qwen2_fullgraph_normal_binding/initialization.py",
+      "sha256": "2060f6c122a4e969fc538b636f442b51c0a97f0f7758d723252de2a91bc5762b"
+    },
+    {
+      "bytes": 4070,
+      "path": "candidates/qwen2_fullgraph_normal_binding/launch.py",
+      "sha256": "6e76ac6c9910162bb8c931de61313449f224826649ac7905a9af7a61cb996ecd"
+    },
+    {
+      "bytes": 1861,
+      "path": "candidates/qwen2_fullgraph_normal_binding/safe_metadata.py",
+      "sha256": "5b29261c99d15a09ab8578121b6d2b32a223b8c2b16cde70f0bcd89b1c717d6a"
+    },
+    {
+      "bytes": 4535,
+      "path": "candidates/qwen2_fullgraph_normal_binding/test_dependency.py",
+      "sha256": "3fc1e1207cf3a33faa8463d32a3741de3aa143070436b9a3a8d992a3076015bb"
+    },
+    {
+      "bytes": 7540,
+      "path": "candidates/qwen2_fullgraph_normal_binding/test_initialization.py",
+      "sha256": "bf64c618d1b92d2f64cb6b071aafed9069a0a63adcb3981cfca071ea2a621a78"
+    },
+    {
+      "bytes": 3868,
+      "path": "candidates/qwen2_fullgraph_normal_binding/test_preparation.py",
+      "sha256": "f3135f62fbdc6fc9437765d0aec23738c342d285ba508061b929313eed7307c8"
+    },
+    {
+      "bytes": 4600,
+      "path": "candidates/qwen2_fullgraph_normal_binding/test_safe_metadata.py",
+      "sha256": "c79297d51af8bac340f1f2b5f5c4553cb890da573d9e60821c8427486ce60f09"
+    },
+    {
+      "bytes": 9317,
+      "path": "candidates/qwen2_fullgraph_normal_binding/validation/EXECUTION_SUMMARY.json",
+      "sha256": "8f7bbf039b71d60d4055c6f7bc301e11657d9b723dbdc3e8f0c72037771d6fa0"
+    },
+    {
+      "bytes": 692,
+      "path": "candidates/qwen2_fullgraph_normal_binding/validation/FAILURES_PRESERVED.json",
+      "sha256": "230aae2d2c9e5fd8725aa50fb90e9ba38dc98bfe778922570548ad6ccac6d709"
+    },
+    {
+      "bytes": 7078,
+      "path": "candidates/qwen2_fullgraph_normal_binding/validation/INDEPENDENT_EXACT_REVIEW.json",
+      "sha256": "3e0bf30b5a810932e2155f15c1d221adcfa7c359b54d301c0d6b6edd09b971b6"
+    },
+    {
+      "bytes": 14233,
+      "path": "candidates/qwen2_fullgraph_normal_binding/validation/INDEPENDENT_EXECUTION_REVIEW.json",
+      "sha256": "1c5bd03e3bb984b9d93415baa973caad1b32a8cc4948491a251c3dcf07caa245"
+    },
+    {
+      "bytes": 3203,
+      "path": "candidates/qwen2_fullgraph_normal_binding/validation/POSTRUN_RECHECK.json",
+      "sha256": "758d98870c0732cc8736f597b22204b7380fdf110417c6ac49da963d296f42a1"
+    },
+    {
+      "bytes": 7516,
+      "path": "candidates/qwen2_fullgraph_normal_binding/validation/PURE_TESTS.json",
+      "sha256": "d527bc962a7074ed03d843c07a109dd6144824192b8ad069bc6fae0d0e7983d7"
+    },
+    {
+      "bytes": 12753,
+      "path": "candidates/qwen2_fullgraph_normal_binding/validation/R1_FAILURE_REVIEW.json",
+      "sha256": "853959bedd644e494e52223943440cb9d67f2b1fc661dd7f9b76e51d9462f877"
+    },
+    {
+      "bytes": 1579,
+      "path": "plans/qwen2_fullgraph_normal_binding_plan_cn.md",
+      "sha256": "ada7cbcbe473e8634ab3d05a5247e9d73b1b7d110455943bb5fe03da5d401beb"
+    }
+  ],
+  "full29_acceptance": false,
+  "full_m16_oracle_closed": false,
+  "fullgraph_observer_noninterference": false,
+  "hardware_acceptance": false,
+  "numeric_acceptance": false,
+  "original_failures_preserved": true,
+  "parent_commit": "5e703311d62ab05ae7679d17d7ba101c1e201525",
+  "pc12_actual_execution": false,
+  "runtime_roles": 15,
+  "status": "PASS_NORMAL_FULLGRAPH_BINDING_ONLY",
+  "strict_method_bindings": 9,
+  "test_cases_per_mode": 68,
+  "test_modes": 4
+}

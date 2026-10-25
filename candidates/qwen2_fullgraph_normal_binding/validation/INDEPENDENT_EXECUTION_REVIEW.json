@@ -1,0 +1,376 @@
+{
+  "adapter_result": {
+    "bytes": 2319,
+    "path": "local_attempt_r2/normal_binding_run01/child/ADAPTER_RESULT.json",
+    "sha256": "048a5bb403905ef8d1226aca5c78a724ee078f215278d4a942149ec4941dd5d0"
+  },
+  "artifact_inventory": {
+    "CLAIM.json": {
+      "bytes": 1179,
+      "sha256": "65fc9df281e8a4bccdf18b551ecb558a989bce0385c72d41912beda8aa4301a1"
+    },
+    "IDENTITY.json": {
+      "bytes": 888,
+      "sha256": "12e38abc75b9b44cff01224f3416a34afc58f583d2ffca88f740920a32a9ba40"
+    },
+    "PARENT_RESULT.json": {
+      "bytes": 369,
+      "sha256": "458f8e5d8ffb2d942d27890a90e543208113dab7dc61eeedb5ecbb5d8a264920"
+    },
+    "child/00_before_import/MAPS.txt": {
+      "bytes": 6046,
+      "sha256": "00af5bfaf9785a58b8379e4e7b2245f5bc91237daface1a2049afc8fecec9271"
+    },
+    "child/00_before_import/MAP_AUDIT.json": {
+      "bytes": 24613,
+      "sha256": "15a05afa995862832da7e168e6298d9938c51b935b8f4c96298c8d01e168f11b"
+    },
+    "child/00_before_import/MODULES_RAW.json": {
+      "bytes": 36775,
+      "sha256": "0e1e2d984f13a3247c5fa61ef0612d80db55da0b99466e2f7809420cca55939c"
+    },
+    "child/00_before_import/MODULE_AUDIT.json": {
+      "bytes": 148347,
+      "sha256": "38bb57a9f747d195d118d7340d14c972e2ebe306be411a10b7d904dafd4a4fa8"
+    },
+    "child/00_before_import/MODULE_QUALIFICATION.json": {
+      "bytes": 394,
+      "sha256": "b37440fa999c55cd139ba283f639fb08668193605be064f1521ffdbfb7a185e9"
+    },
+    "child/00_before_import/NAMESPACE_REPETITIONS.json": {
+      "bytes": 24,
+      "sha256": "87716f4918b7e05425b6b3596da2fb561cf87ed039f7b5fe8e358e8ac089cb94"
+    },
+    "child/00_before_import/VALIDATION.json": {
+      "bytes": 39,
+      "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+    },
+    "child/01_after_import_or_failure/MAPS.txt": {
+      "bytes": 17664,
+      "sha256": "13c5bb74c8efe319b0e51e26dc29a3ef19fe35d34ba4d1aaba685ac9780f985a"
+    },
+    "child/01_after_import_or_failure/MAP_AUDIT.json": {
+      "bytes": 69777,
+      "sha256": "a5a4768c6458c2f7b6379c156e5267f1a629b9af517d249d1630dfd55b53f67f"
+    },
+    "child/01_after_import_or_failure/MODULES_RAW.json": {
+      "bytes": 143294,
+      "sha256": "8da4e92931062de8567ae3d0ddaa7ab5a218914c93ae8d4cf1f8576b3b7abcf5"
+    },
+    "child/01_after_import_or_failure/MODULE_AUDIT.json": {
+      "bytes": 730588,
+      "sha256": "e42948de76bd234f30cf2e4cdee40fde49e540b293d74a3d32e6f7c2ed58924b"
+    },
+    "child/01_after_import_or_failure/MODULE_QUALIFICATION.json": {
+      "bytes": 1082,
+      "sha256": "dcea5d65b99d891fb0342a17ddf27c2c694549154afff8a19f5c377506c408d2"
+    },
+    "child/01_after_import_or_failure/NAMESPACE_REPETITIONS.json": {
+      "bytes": 4511,
+      "sha256": "76a2fbd8f45e26e863d127ac7b90bce71aa0d26e8c8b63ba454f673f4d15d3e0"
+    },
+    "child/01_after_import_or_failure/VALIDATION.json": {
+      "bytes": 1415,
+      "sha256": "f524594fb2e58944d5e839861d72ba6cdb33826f1f04df260696e4759c099349"
+    },
+    "child/ADAPTER_RESULT.json": {
+      "bytes": 2319,
+      "sha256": "048a5bb403905ef8d1226aca5c78a724ee078f215278d4a942149ec4941dd5d0"
+    },
+    "child/DEPENDENCY_OBJECTS_RAW.json": {
+      "bytes": 93455,
+      "sha256": "99d942e4202880d20d149d5e33b39c917d143e15af55ccd12ca7588ab5294c47"
+    },
+    "child/INITIALIZATION_SITES.json": {
+      "bytes": 76873,
+      "sha256": "8483f2fb619c6a00df277b7177bd9196e243d65c51095f549282e9793990c3f0"
+    },
+    "child/PIN_AUDIT.json": {
+      "bytes": 438525,
+      "sha256": "c283ee11ac0fc458efc140ecea3328d0811405dc8bdf2cea5469003dab5629a9"
+    },
+    "child/RESULT.json": {
+      "bytes": 414018,
+      "sha256": "2ab2a1d5a3d5a09c27f4a4ed9ff1addde78cb6d372154e41cc042d76e4f57730"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "config": {
+    "bytes": 215871,
+    "path": "local_attempt_r2/PRIVATE_CONFIG.json",
+    "sha256": "c9da94d12ab2a85e28bd31576ec633df86ec8ecf04cb2f8110a85c48e63fda60"
+  },
+  "exact_private_receipt_sha256": "4b59d6a698f633cbfd9fd1c7ef9abde23fd4aa276d8297ad646381497f2eca4c",
+  "execution": {
+    "child_result_sha256": "048a5bb403905ef8d1226aca5c78a724ee078f215278d4a942149ec4941dd5d0",
+    "child_status": "PASS_NORMAL_FULLGRAPH_BINDING_ONLY",
+    "exit_code": 0,
+    "group_exists": false,
+    "native_task_executed": false,
+    "numeric_acceptance": false,
+    "status": "PASS_NORMAL_BINDING_ADAPTER_WRAPPER",
+    "timed_out": false,
+    "wall_seconds": 5.131606597977225
+  },
+  "fullgraph_numeric_status": "TEMP_NOT_EXECUTED",
+  "guard_observations": {
+    "bytecode_cache_reads_rejected": 187,
+    "definition_codegen_events": 833,
+    "dependency_initialization_events": [
+      "ctypes.dlopen(None): pinned dependency initialization"
+    ],
+    "matrix_elf_loaded": false,
+    "numerical_executed": false,
+    "other_guard_rejections": 0,
+    "services_constructed": false,
+    "user_tensor_read": false
+  },
+  "independent_record_crosscheck": {
+    "all_raw_members_saved_without_errors": true,
+    "cyaml_flag_true": true,
+    "exact_yaml_loader_and_mapping_present": true,
+    "export_type_ids_equal_shared_type_id": true,
+    "five_raw_objects_match_original_audit_ids": true,
+    "native_exports": {
+      "get_version": {
+        "builtin_kind": "other",
+        "object_id": "process_object_1",
+        "type_object_id": "process_object_2"
+      },
+      "get_version_string": {
+        "builtin_kind": "other",
+        "object_id": "process_object_3",
+        "type_object_id": "process_object_2"
+      }
+    },
+    "native_import_origins_match_config": true,
+    "shared_function_type": {
+      "builtin_kind": "other",
+      "object_id": "process_object_2",
+      "type_object_id": "process_object_4"
+    },
+    "shared_metatype": {
+      "builtin_kind": "builtin_type",
+      "object_id": "process_object_4",
+      "type_object_id": "process_object_5"
+    },
+    "shared_type_type_id_equals_metatype_id": true,
+    "two_cython_names_absent_before_import": true
+  },
+  "normal_binding_evidence": {
+    "acquire_class": "OfficialMatrixService",
+    "method_bodies_called": false,
+    "other_methods_class": "MatrixService",
+    "post_run_all_pins_match": true,
+    "project_module_entries": 55,
+    "roles": 15,
+    "safe_metadata_in_both_complete_module_audits": true,
+    "source_code_attestation_events": 55,
+    "source_read_pins": 722,
+    "stages": {
+      "00_before_import": {
+        "map_status": "PASS_PINNED_COLD_MAPPINGS",
+        "mapped_files": 10,
+        "mapped_segments": 44,
+        "matrix_elf_loaded": false,
+        "module_entries": 99,
+        "namespace_qualification": {
+          "accepted_repetition_names": [],
+          "live_snapshot_checked": true,
+          "namespace_objects_modified": false,
+          "ordered_paths_deduplicated": false,
+          "original_audit_modified": false,
+          "original_status": "PASS_MODULE_IDENTITY",
+          "remaining_failures": [],
+          "scope": "Module identity only; no numeric or execution qualification.",
+          "status": "PASS_PINNED_MODULES_WITH_RECORDED_REPETITIONS"
+        },
+        "original_module_failures": [],
+        "original_module_status": "PASS_MODULE_IDENTITY",
+        "unique_objects": 96
+      },
+      "01_after_import_or_failure": {
+        "map_status": "PASS_PINNED_COLD_MAPPINGS",
+        "mapped_files": 19,
+        "mapped_segments": 105,
+        "matrix_elf_loaded": false,
+        "module_entries": 320,
+        "namespace_qualification": {
+          "accepted_repetition_names": [
+            "candidates",
+            "candidates.qwen2_resident_matrix",
+            "candidates.qwen2_resident_matrix.ffn_public",
+            "candidates.qwen2_resident_matrix.dense_block_reduce",
+            "candidates.qwen2_resident_matrix.official_bf16",
+            "candidates.qwen2_resident_matrix.ffn_attention",
+            "candidates.qwen2_resident_matrix.transposed_down",
+            "candidates.qwen2_resident_matrix.attention_packed_owner",
+            "candidates.qwen2_resident_matrix.production_qk16_model"
+          ],
+          "live_snapshot_checked": true,
+          "namespace_objects_modified": false,
+          "ordered_paths_deduplicated": false,
+          "original_audit_modified": false,
+          "original_status": "FAIL_MODULE_IDENTITY",
+          "remaining_failures": [
+            {
+              "code": "unregistered_no_file_module",
+              "detail": "cython_runtime",
+              "name": "cython_runtime"
+            },
+            {
+              "code": "unregistered_no_file_module",
+              "detail": "_cython_3_1_4",
+              "name": "_cython_3_1_4"
+            }
+          ],
+          "scope": "Module identity only; no numeric or execution qualification.",
+          "status": "FAIL_NAMESPACE_QUALIFICATION"
+        },
+        "original_module_failures": [
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.ffn_public"
+          },
+          {
+            "code": "unregistered_no_file_module",
+            "detail": "cython_runtime",
+            "name": "cython_runtime"
+          },
+          {
+            "code": "unregistered_no_file_module",
+            "detail": "_cython_3_1_4",
+            "name": "_cython_3_1_4"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.dense_block_reduce"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.official_bf16"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.ffn_attention"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.transposed_down"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.attention_packed_owner"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.production_qk16_model"
+          }
+        ],
+        "original_module_status": "FAIL_MODULE_IDENTITY",
+        "unique_objects": 317
+      }
+    },
+    "strict_service_methods": 9,
+    "yaml_normal_modules_loaded": 18
+  },
+  "not_established": [
+    "actual pc12 execution",
+    "whole fullgraph ACK/retirement or abort path",
+    "observer off/on noninterference",
+    "full29 node coverage",
+    "M16/M128 numerical acceptance",
+    "cycles/utilization or 80/90 percent target",
+    "RTL or timing"
+  ],
+  "numerical_launch_authorized": false,
+  "original_wrapper_result": {
+    "bytes": 414018,
+    "path": "local_attempt_r2/normal_binding_run01/child/RESULT.json",
+    "sha256": "2ab2a1d5a3d5a09c27f4a4ed9ff1addde78cb6d372154e41cc042d76e4f57730"
+  },
+  "parent_result": {
+    "bytes": 369,
+    "path": "local_attempt_r2/normal_binding_run01/PARENT_RESULT.json",
+    "sha256": "458f8e5d8ffb2d942d27890a90e543208113dab7dc61eeedb5ecbb5d8a264920"
+  },
+  "post_run_pin_recheck": {
+    "bytes": 201486,
+    "path": "local_attempt_r2/INDEPENDENT_POST_RUN_PIN_RECHECK.json",
+    "sha256": "31771f264331978bc58b1043adc0290413b3330c7f1769be1c9e38ca64044dac"
+  },
+  "preexecution_review": {
+    "bytes": 8084,
+    "path": "local_attempt_r2/INDEPENDENT_EXACT_REVIEW.json",
+    "sha256": "9d125f8961105fc723e966df88e896554c2aad590a6a5a86a69292647e0b7cb3"
+  },
+  "preservation": {
+    "failed_attempt_not_rewritten_or_upgraded": true,
+    "namespace_repetitions_explained_without_mutation": true,
+    "original_37_delivery_files_unchanged": true,
+    "original_raw_module_audit_status": "FAIL_MODULE_IDENTITY",
+    "original_wrapper_status": "FAIL_NORMAL_BINDING",
+    "prior_r1_run_artifacts_and_sources_unchanged": true,
+    "two_no_file_entries_qualified_separately": true
+  },
+  "projection": "Absolute host paths removed; process addresses replaced with stable labels when present.",
+  "qualification_limits": {
+    "accepted_no_file_names": [
+      "cython_runtime",
+      "_cython_3_1_4"
+    ],
+    "function_globals_descriptor_evaluated": false,
+    "function_internal_globals_identity_claimed": false,
+    "internal_c_creation_call_observed": false,
+    "no_other_unknown_module_accepted": true,
+    "observed_from": "Child live checks and independent cross-checks of persisted IDs; reviewer did not import target."
+  },
+  "resource_and_termination": {
+    "bounds": {
+      "address_space_bytes": 268435456,
+      "cpu_seconds": 20,
+      "cpus": 1,
+      "wall_seconds": 25
+    },
+    "claim_hashes_match_preexecution_review": true,
+    "exit_code": 0,
+    "independent_process_group_scan": [],
+    "reported_group_exists": false,
+    "stderr_empty": true,
+    "stdout_empty": true,
+    "timed_out": false,
+    "wall_seconds": 5.131606597977225
+  },
+  "reviewer_actions": {
+    "cold_launched_or_retried": false,
+    "only_stdlib_readonly_evidence_checks_executed": true,
+    "production_source_modified": false,
+    "target_imported": false
+  },
+  "schema": 1,
+  "status": "PASS_NORMAL_BINDING_ONLY"
+}

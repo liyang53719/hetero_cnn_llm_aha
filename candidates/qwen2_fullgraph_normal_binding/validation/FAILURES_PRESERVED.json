@@ -1,0 +1,12 @@
+{
+  "old_fullgraph_failures_unchanged": true,
+  "original_r2_wrapper_audit_not_rewritten": true,
+  "parent_public_commit": "5e703311d62ab05ae7679d17d7ba101c1e201525",
+  "r1_parent_sha256": "83950dc34daff734ee8209a7b1bd25757d7cd891af242c169eae2c009d92b9e6",
+  "r1_reason": "Unsafe Cython metatype diagnostic formatting raised TypeError before raw and final adapter receipts; actual 15 roles/9 binds did not make the overall run PASS.",
+  "r1_review_sha256": "de562a05cc2eeee3ead29f318b9fa1ae70f4a1473951d9f78991d7507a24c78b",
+  "r1_source_config_outputs_unchanged": true,
+  "r1_status": "FAIL_COLD_WRAPPER",
+  "r2_distinct_profile": true,
+  "r2_status": "PASS_NORMAL_FULLGRAPH_BINDING_ONLY"
+}

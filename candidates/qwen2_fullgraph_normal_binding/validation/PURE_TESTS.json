@@ -1,0 +1,174 @@
+{
+  "config_sha256": "c9da94d12ab2a85e28bd31576ec633df86ec8ecf04cb2f8110a85c48e63fda60",
+  "exact_private_receipt_sha256": "f43c865f27d9acef8ac8671a186f8b4e41d75490df3697b95245d2e9919c6b43",
+  "modes": 4,
+  "native_task_executed": false,
+  "processes": [
+    {
+      "exit_code": 0,
+      "log": "normal_test_dependency.log",
+      "log_sha256": "104f82d7145cd0638db3f7aa39d5df50b08d80edc2481f25d8257a53f4daec5c",
+      "mode": "normal",
+      "script": "test_dependency.py",
+      "script_sha256": "3fc1e1207cf3a33faa8463d32a3741de3aa143070436b9a3a8d992a3076015bb",
+      "wall_seconds": 0.11116047203540802
+    },
+    {
+      "exit_code": 0,
+      "log": "normal_test_initialization.log",
+      "log_sha256": "dca4de4665f3bb51719819f69ce884c4c400ba573b81bd4322a8bbd5684f8278",
+      "mode": "normal",
+      "script": "test_initialization.py",
+      "script_sha256": "bf64c618d1b92d2f64cb6b071aafed9069a0a63adcb3981cfca071ea2a621a78",
+      "wall_seconds": 0.07679690700024366
+    },
+    {
+      "exit_code": 0,
+      "log": "normal_test_safe_metadata.log",
+      "log_sha256": "432e764160c5b06b41e1864e05386aaf72bcdcdfe2465d19c35fe57144567754",
+      "mode": "normal",
+      "script": "test_safe_metadata.py",
+      "script_sha256": "c79297d51af8bac340f1f2b5f5c4553cb890da573d9e60821c8427486ce60f09",
+      "wall_seconds": 0.061907277966383845
+    },
+    {
+      "exit_code": 0,
+      "log": "normal_test_preparation.log",
+      "log_sha256": "2d6603fa9f5000144e76e400c77dd7540642ffd9e3ba07e69618a92fee4d406c",
+      "mode": "normal",
+      "script": "test_preparation.py",
+      "script_sha256": "f3135f62fbdc6fc9437765d0aec23738c342d285ba508061b929313eed7307c8",
+      "wall_seconds": 0.15577930602012202
+    },
+    {
+      "exit_code": 0,
+      "log": "optimized_test_dependency.log",
+      "log_sha256": "d3aecf55185a8258560a790c86b89a5e006bd8ba99b8482007d814c7efbceb36",
+      "mode": "optimized",
+      "script": "test_dependency.py",
+      "script_sha256": "3fc1e1207cf3a33faa8463d32a3741de3aa143070436b9a3a8d992a3076015bb",
+      "wall_seconds": 0.2530694880406372
+    },
+    {
+      "exit_code": 0,
+      "log": "optimized_test_initialization.log",
+      "log_sha256": "779a57e6e2be9422e9f24115d6cb8d60efe6ef7843cbacc44695b88183b5a6f6",
+      "mode": "optimized",
+      "script": "test_initialization.py",
+      "script_sha256": "bf64c618d1b92d2f64cb6b071aafed9069a0a63adcb3981cfca071ea2a621a78",
+      "wall_seconds": 0.21116441302001476
+    },
+    {
+      "exit_code": 0,
+      "log": "optimized_test_safe_metadata.log",
+      "log_sha256": "f70c5e12f81e6ca2a27c5a58d268b60f9b9764c638cc0c6fbef9bce3d25bd541",
+      "mode": "optimized",
+      "script": "test_safe_metadata.py",
+      "script_sha256": "c79297d51af8bac340f1f2b5f5c4553cb890da573d9e60821c8427486ce60f09",
+      "wall_seconds": 0.1977885509841144
+    },
+    {
+      "exit_code": 0,
+      "log": "optimized_test_preparation.log",
+      "log_sha256": "e1f812f21ec14829e38225ec47971f3cb7b16086c18b5500726bb408c88c46b6",
+      "mode": "optimized",
+      "script": "test_preparation.py",
+      "script_sha256": "f3135f62fbdc6fc9437765d0aec23738c342d285ba508061b929313eed7307c8",
+      "wall_seconds": 0.280222756031435
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_test_dependency.log",
+      "log_sha256": "3f45aabdbfde3adb656e778e76682b1df807a235156fe35401a55ad20f671b5e",
+      "mode": "isolated",
+      "script": "test_dependency.py",
+      "script_sha256": "3fc1e1207cf3a33faa8463d32a3741de3aa143070436b9a3a8d992a3076015bb",
+      "wall_seconds": 0.09804906498175114
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_test_initialization.log",
+      "log_sha256": "822c5bfdaab1ca9871ab2b281516fe3027106a241f86b5b19eeeda28937c66b9",
+      "mode": "isolated",
+      "script": "test_initialization.py",
+      "script_sha256": "bf64c618d1b92d2f64cb6b071aafed9069a0a63adcb3981cfca071ea2a621a78",
+      "wall_seconds": 0.07218818803085014
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_test_safe_metadata.log",
+      "log_sha256": "f70c5e12f81e6ca2a27c5a58d268b60f9b9764c638cc0c6fbef9bce3d25bd541",
+      "mode": "isolated",
+      "script": "test_safe_metadata.py",
+      "script_sha256": "c79297d51af8bac340f1f2b5f5c4553cb890da573d9e60821c8427486ce60f09",
+      "wall_seconds": 0.06070803297916427
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_test_preparation.log",
+      "log_sha256": "8ee47bb126a7e7ffd50843a94fd48247280922cbe8016003a00612dc04df34d8",
+      "mode": "isolated",
+      "script": "test_preparation.py",
+      "script_sha256": "f3135f62fbdc6fc9437765d0aec23738c342d285ba508061b929313eed7307c8",
+      "wall_seconds": 0.13475023000501096
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_optimized_test_dependency.log",
+      "log_sha256": "e49c07ae220356172b77eeac911ac6504c334a270ad1245e7651b8b5baa2cb95",
+      "mode": "isolated_optimized",
+      "script": "test_dependency.py",
+      "script_sha256": "3fc1e1207cf3a33faa8463d32a3741de3aa143070436b9a3a8d992a3076015bb",
+      "wall_seconds": 0.23679230798734352
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_optimized_test_initialization.log",
+      "log_sha256": "40c333e8dd3758e33ff7e10e08c136217d357fe3f4db4c24fb6f6ab278306999",
+      "mode": "isolated_optimized",
+      "script": "test_initialization.py",
+      "script_sha256": "bf64c618d1b92d2f64cb6b071aafed9069a0a63adcb3981cfca071ea2a621a78",
+      "wall_seconds": 0.20113617298193276
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_optimized_test_safe_metadata.log",
+      "log_sha256": "f70c5e12f81e6ca2a27c5a58d268b60f9b9764c638cc0c6fbef9bce3d25bd541",
+      "mode": "isolated_optimized",
+      "script": "test_safe_metadata.py",
+      "script_sha256": "c79297d51af8bac340f1f2b5f5c4553cb890da573d9e60821c8427486ce60f09",
+      "wall_seconds": 0.21978927898453549
+    },
+    {
+      "exit_code": 0,
+      "log": "isolated_optimized_test_preparation.log",
+      "log_sha256": "61fb5b13fbf23f1c27be69fe2587cc4ae28aa7db2a52925a1eb4335b168a12d0",
+      "mode": "isolated_optimized",
+      "script": "test_preparation.py",
+      "script_sha256": "f3135f62fbdc6fc9437765d0aec23738c342d285ba508061b929313eed7307c8",
+      "wall_seconds": 0.30201544298324734
+    }
+  ],
+  "projection": "Absolute host paths removed; process addresses replaced with stable labels when present.",
+  "real_yaml_imported": false,
+  "resource_per_child": {
+    "address_space_bytes": 268435456,
+    "cpu_seconds": 20,
+    "cpus": 1,
+    "wall_seconds": 25
+  },
+  "source_pins": {
+    "__init__.py": "abc0392a4e82f67d72410cb2d35bc31d913a7f59ff28db1ef868c48fb641ee2d",
+    "adapter.py": "e6d9c9f22b11eff8f506e2412f691c24faf07acee1211a0b5e547aade758a0a3",
+    "dependency.py": "c91dd6173e1f4a5120019dd9e2d5e4903ec985b427e3b36b72f07f58b3aa1983",
+    "initialization.py": "2060f6c122a4e969fc538b636f442b51c0a97f0f7758d723252de2a91bc5762b",
+    "launch.py": "6e76ac6c9910162bb8c931de61313449f224826649ac7905a9af7a61cb996ecd",
+    "safe_metadata.py": "5b29261c99d15a09ab8578121b6d2b32a223b8c2b16cde70f0bcd89b1c717d6a",
+    "test_dependency.py": "3fc1e1207cf3a33faa8463d32a3741de3aa143070436b9a3a8d992a3076015bb",
+    "test_initialization.py": "bf64c618d1b92d2f64cb6b071aafed9069a0a63adcb3981cfca071ea2a621a78",
+    "test_preparation.py": "f3135f62fbdc6fc9437765d0aec23738c342d285ba508061b929313eed7307c8",
+    "test_safe_metadata.py": "c79297d51af8bac340f1f2b5f5c4553cb890da573d9e60821c8427486ce60f09"
+  },
+  "status": "PASS_PURE_FIXTURE_STATIC_TESTS_ONLY",
+  "tests_per_mode": 68
+}

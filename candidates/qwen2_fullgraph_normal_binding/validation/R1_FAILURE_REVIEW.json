@@ -1,0 +1,313 @@
+{
+  "actual_bounded_results": {
+    "acquire_bound_class": "OfficialMatrixService",
+    "actual_strict_service_method_binds": 9,
+    "all_721_pins_matched": true,
+    "bytecode_read_rejections": {
+      "bytecode_cache_not_admitted": 187
+    },
+    "definition_codegen_events": 833,
+    "dependency_initialization_events": [
+      "ctypes.dlopen(None): pinned dependency initialization"
+    ],
+    "module_maps_snapshots": {
+      "00_before_import": {
+        "map_segments": 44,
+        "map_status": "PASS_PINNED_COLD_MAPPINGS",
+        "mapped_files": 10,
+        "matrix_elf_loaded": false,
+        "modules": 98,
+        "namespace_qualification": {
+          "accepted_repetition_names": [],
+          "live_snapshot_checked": true,
+          "namespace_objects_modified": false,
+          "ordered_paths_deduplicated": false,
+          "original_audit_modified": false,
+          "original_status": "PASS_MODULE_IDENTITY",
+          "remaining_failures": [],
+          "scope": "Module identity only; no numeric or execution qualification.",
+          "status": "PASS_PINNED_MODULES_WITH_RECORDED_REPETITIONS"
+        },
+        "original_failures": [],
+        "original_status": "PASS_MODULE_IDENTITY",
+        "unique_objects": 95
+      },
+      "01_after_import_or_failure": {
+        "map_segments": 105,
+        "map_status": "PASS_PINNED_COLD_MAPPINGS",
+        "mapped_files": 19,
+        "matrix_elf_loaded": false,
+        "modules": 319,
+        "namespace_qualification": {
+          "accepted_repetition_names": [
+            "candidates",
+            "candidates.qwen2_resident_matrix",
+            "candidates.qwen2_resident_matrix.ffn_public",
+            "candidates.qwen2_resident_matrix.dense_block_reduce",
+            "candidates.qwen2_resident_matrix.official_bf16",
+            "candidates.qwen2_resident_matrix.ffn_attention",
+            "candidates.qwen2_resident_matrix.transposed_down",
+            "candidates.qwen2_resident_matrix.attention_packed_owner",
+            "candidates.qwen2_resident_matrix.production_qk16_model"
+          ],
+          "live_snapshot_checked": true,
+          "namespace_objects_modified": false,
+          "ordered_paths_deduplicated": false,
+          "original_audit_modified": false,
+          "original_status": "FAIL_MODULE_IDENTITY",
+          "remaining_failures": [
+            {
+              "code": "unregistered_no_file_module",
+              "detail": "cython_runtime",
+              "name": "cython_runtime"
+            },
+            {
+              "code": "unregistered_no_file_module",
+              "detail": "_cython_3_1_4",
+              "name": "_cython_3_1_4"
+            }
+          ],
+          "scope": "Module identity only; no numeric or execution qualification.",
+          "status": "FAIL_NAMESPACE_QUALIFICATION"
+        },
+        "original_failures": [
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.ffn_public"
+          },
+          {
+            "code": "unregistered_no_file_module",
+            "detail": "cython_runtime",
+            "name": "cython_runtime"
+          },
+          {
+            "code": "unregistered_no_file_module",
+            "detail": "_cython_3_1_4",
+            "name": "_cython_3_1_4"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.dense_block_reduce"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.official_bf16"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.ffn_attention"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.transposed_down"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.attention_packed_owner"
+          },
+          {
+            "code": "namespace_path_mismatch",
+            "detail": "actual path differs from registered ordered path list",
+            "name": "candidates.qwen2_resident_matrix.production_qk16_model"
+          }
+        ],
+        "original_status": "FAIL_MODULE_IDENTITY",
+        "unique_objects": 316
+      }
+    },
+    "native_dependency_initialization_is_not_task_execution": true,
+    "normal_runtime_roles": 15,
+    "normal_yaml_elf_mapping_observed": true,
+    "other_eight_bound_class": "MatrixService",
+    "project_modules_and_exec_events": 55,
+    "service_method_bodies_invoked": false
+  },
+  "artifact_inventory": {
+    "CLAIM.json": {
+      "bytes": 1168,
+      "sha256": "e6f8a63ca6c96aed9bac4d232c369ced91921c5703dffd6ec897f2df8ce9e1d2"
+    },
+    "IDENTITY.json": {
+      "bytes": 879,
+      "sha256": "715779479944bd2dc6588d3a7e516d3822fbfc380a1a58ef2636e8d53809c249"
+    },
+    "PARENT_RESULT.json": {
+      "bytes": 257,
+      "sha256": "83950dc34daff734ee8209a7b1bd25757d7cd891af242c169eae2c009d92b9e6"
+    },
+    "child/00_before_import/MAPS.txt": {
+      "bytes": 6046,
+      "sha256": "e4ffe459c9444804cecdec276e5c9921bd0b8b0d9a79a4d0d0514b9ffab2f41c"
+    },
+    "child/00_before_import/MAP_AUDIT.json": {
+      "bytes": 24613,
+      "sha256": "00f60948dd8100d5ac04162d66b437e50c9d6a99f7c040390767191d2af28ba6"
+    },
+    "child/00_before_import/MODULES_RAW.json": {
+      "bytes": 36187,
+      "sha256": "931c4dc73d9b385859f546cbf649540c78cad3b34dc8ae45a3f1433de41128e5"
+    },
+    "child/00_before_import/MODULE_AUDIT.json": {
+      "bytes": 145909,
+      "sha256": "349a2e12b3bf7d972d9f52b379a671f874acdc842809c22a8c1e6b9507c46620"
+    },
+    "child/00_before_import/MODULE_QUALIFICATION.json": {
+      "bytes": 394,
+      "sha256": "b37440fa999c55cd139ba283f639fb08668193605be064f1521ffdbfb7a185e9"
+    },
+    "child/00_before_import/NAMESPACE_REPETITIONS.json": {
+      "bytes": 24,
+      "sha256": "87716f4918b7e05425b6b3596da2fb561cf87ed039f7b5fe8e358e8ac089cb94"
+    },
+    "child/00_before_import/VALIDATION.json": {
+      "bytes": 39,
+      "sha256": "63329c246310f84fae7bf56d94b411a6825e37082c99ebeaa0d2e59b50860426"
+    },
+    "child/01_after_import_or_failure/MAPS.txt": {
+      "bytes": 17713,
+      "sha256": "14d559ff64089203724c702cb8a1e300daa04c090057173d325df0b71521d776"
+    },
+    "child/01_after_import_or_failure/MAP_AUDIT.json": {
+      "bytes": 69777,
+      "sha256": "b977e8eb0caa91a2df153cdcb99afc67190dc9e43cd986f7477193e9aa78c377"
+    },
+    "child/01_after_import_or_failure/MODULES_RAW.json": {
+      "bytes": 142705,
+      "sha256": "28d6e90144b3bcbf4489c8de3b94fa01d06e45d765341d2aee9a2df5a6baf943"
+    },
+    "child/01_after_import_or_failure/MODULE_AUDIT.json": {
+      "bytes": 728150,
+      "sha256": "7866761735791a3f2e46daaf863b83e56e63be801851b701bf0a99b2af7043bd"
+    },
+    "child/01_after_import_or_failure/MODULE_QUALIFICATION.json": {
+      "bytes": 1082,
+      "sha256": "dcea5d65b99d891fb0342a17ddf27c2c694549154afff8a19f5c377506c408d2"
+    },
+    "child/01_after_import_or_failure/NAMESPACE_REPETITIONS.json": {
+      "bytes": 4511,
+      "sha256": "76a2fbd8f45e26e863d127ac7b90bce71aa0d26e8c8b63ba454f673f4d15d3e0"
+    },
+    "child/01_after_import_or_failure/VALIDATION.json": {
+      "bytes": 1415,
+      "sha256": "f524594fb2e58944d5e839861d72ba6cdb33826f1f04df260696e4759c099349"
+    },
+    "child/INITIALIZATION_SITES.json": {
+      "bytes": 76873,
+      "sha256": "8483f2fb619c6a00df277b7177bd9196e243d65c51095f549282e9793990c3f0"
+    },
+    "child/PIN_AUDIT.json": {
+      "bytes": 437872,
+      "sha256": "12902c1600336e1ed68012cde708bbd627047a7282ba564382b02c9632290dd3"
+    },
+    "child/RESULT.json": {
+      "bytes": 414018,
+      "sha256": "bfbb7a71d0e774f1943bf73864c840fa7ad3608dc0bcb61c35fb75bee21c64de"
+    },
+    "stderr.log": {
+      "bytes": 656,
+      "sha256": "fabe1f9674da5ee276497a0408332927415bfb758889bb7055706d1e833db973"
+    },
+    "stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "config_pin": {
+    "bytes": 215118,
+    "sha256": "c6ce80e65a1c3641a421985271dcc95506eda2151bdf5e2721df272310b11429"
+  },
+  "exact_private_receipt_sha256": "de562a05cc2eeee3ead29f318b9fa1ae70f4a1473951d9f78991d7507a24c78b",
+  "failure": {
+    "adapter_result_persisted": false,
+    "cause": "Raw member inventory assumed type(value).__module__ is always a string. A Cython common metaclass exposes a getset descriptor at that lookup.",
+    "dependency_objects_raw_persisted": false,
+    "detail": "unsupported operand type(s) for +: 'getset_descriptor' and 'str'",
+    "exception": "TypeError",
+    "file": "local_attempt_r1/overlay/candidates/qwen2_fullgraph_normal_binding/adapter.py",
+    "final_cython_object_association_evaluated": false,
+    "line": 70,
+    "related_unexecuted_risk": "initialization.qualify also assumes meta_type.__module__ equals a string; this is the same unsafe metaclass-metadata assumption and needs correction in a new separately reviewed postimage.",
+    "review_gap": "The preexecution static review and synthetic Cython fixtures did not expose this metaclass descriptor case. Their PASS is not live qualification."
+  },
+  "next_slice_review_requirements": [
+    "New independent directory and postimage; preserve this run and its FAIL.",
+    "Descriptor-safe raw inventory without invoking descriptors or assuming class metadata strings; preserve IDs and static type names.",
+    "Remove the unsafe metaclass __module__ string premise without relaxing native source/loader/map/import-event/object/type/function-globals associations.",
+    "Persist complete diagnostic artifacts on validation failure.",
+    "Pure descriptor/non-string negative fixtures and exact review before any separately authorized new cold."
+  ],
+  "original_child_result_pin": {
+    "bytes": 414018,
+    "sha256": "bfbb7a71d0e774f1943bf73864c840fa7ad3608dc0bcb61c35fb75bee21c64de"
+  },
+  "parent_result": {
+    "child_result_sha256": null,
+    "child_status": null,
+    "exit_code": 1,
+    "group_exists": false,
+    "native_task_executed": false,
+    "numeric_acceptance": false,
+    "status": "FAIL_COLD_WRAPPER",
+    "timed_out": false,
+    "wall_seconds": 5.231169975013472
+  },
+  "parent_result_pin": {
+    "bytes": 257,
+    "sha256": "83950dc34daff734ee8209a7b1bd25757d7cd891af242c169eae2c009d92b9e6"
+  },
+  "preexecution_review_pin": {
+    "bytes": 10246,
+    "sha256": "c17ca266e7402177d66bb25f1fbddf7d370accfcd0485f58bcafa225b9a130fa"
+  },
+  "preservation": {
+    "attempt_retried": false,
+    "executed_candidate_and_config_unchanged": true,
+    "old_v3_failure_unchanged": true,
+    "original_reports_not_rewritten": true,
+    "parent_37_files_unchanged": true,
+    "preexecution_review_not_rewritten": true
+  },
+  "projection": "Absolute host paths removed; process addresses replaced with stable labels when present.",
+  "remaining_status": {
+    "actual_pc12": "NOT_EXECUTED",
+    "full29_or_M16_M128_acceptance": "NOT_ESTABLISHED",
+    "fullgraph_numeric_status": "TEMP_NOT_EXECUTED",
+    "live_cython_association": "NOT_REACHED",
+    "normal_role_and_method_code_binding": "OBSERVED_ONLY_NOT_OVERALL_ACCEPTANCE",
+    "numerical_launch_authorized": false,
+    "observer_noninterference": "NOT_EXECUTED",
+    "overall_normal_binding_qualification": "FAIL"
+  },
+  "reviewer_actions": {
+    "cold_launched": false,
+    "only_read_existing_result_and_write_review_receipt": true,
+    "source_modified": false,
+    "target_imported": false
+  },
+  "run": "local_attempt_r1/normal_binding_run01",
+  "schema": 1,
+  "status": "FAIL_ADAPTER_RECORDING_AND_FINAL_QUALIFICATION_NOT_REACHED",
+  "termination": {
+    "exit_code": 1,
+    "independent_current_proc_group_scan": [],
+    "reported_group_exists": false,
+    "timed_out": false,
+    "wall_seconds": 5.231169975013472
+  }
+}

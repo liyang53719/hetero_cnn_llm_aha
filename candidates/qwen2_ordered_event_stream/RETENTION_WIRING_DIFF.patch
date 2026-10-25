@@ -1,0 +1,365 @@
+--- baseline/candidates/qwen2_ordered_fullgraph_entry/service_trace.py
++++ candidate/candidates/qwen2_ordered_event_stream/service_trace.py
+@@ -25,6 +25,104 @@
+ def need(ok, message):
+     if not ok:
+         raise ValueError(message)
++
++
++def capture_error(instance, error):
++    if instance.error is None:
++        instance.error = type(error).__name__ + ': ' + str(error)
++
++
++def monitoring_enter(instance, label, slots, callbacks, codes, mask):
++    """Install only our private monitor lease; never wrap a frame-sensitive callback."""
++    mon = sys.monitoring
++    need(not instance.closed and instance.tool is None, 'single-use monitor')
++    instance._monitor_label = label + ':' + format(id(instance), 'x')
++    instance._monitor_owned = instance._stop_attempted = instance._foreign_registration = False
++    instance._monitor_callbacks = dict(callbacks)  # retain exact bound callback objects
++    instance._monitor_codes = tuple(codes)
++    instance._monitor_mask = mask
++    instance._callback_attempted = set()
++    instance._callback_installed = set()
++    instance._stale_restored = set()
++    instance._local_attempted = set()
++    for tool in slots:
++        if mon.get_tool(tool) is not None or mon.get_events(tool) or any(
++                mon.get_local_events(tool, code) for code in instance._monitor_codes):
++            continue
++        try:
++            mon.use_tool_id(tool, instance._monitor_label)
++        except BaseException:
++            # Resolve an uncertain claim before cleanup; never free foreign state.
++            if mon.get_tool(tool) == instance._monitor_label:
++                instance.tool, instance._monitor_owned = tool, True
++            raise
++        instance.tool, instance._monitor_owned = tool, True
++        break
++    need(instance.tool is not None, 'monitor tool busy or retains event masks')
++    slot = instance.tool
++    for event, callback in instance._monitor_callbacks.items():
++        need(mon.get_tool(slot) == instance._monitor_label and not mon.get_events(slot), 'monitor lease changed')
++        instance._callback_attempted.add(event)
++        previous = mon.register_callback(slot, event, callback)
++        if previous is not None:
++            replaced = mon.register_callback(slot, event, previous)
++            if replaced is not callback:
++                mon.register_callback(slot, event, replaced)
++                instance._foreign_registration = True
++                raise ValueError('callback changed while restoring foreign registration')
++            instance._stale_restored.add(event)
++            raise ValueError('stale monitor callback restored; not used')
++        instance._callback_installed.add(event)
++    need(mon.get_tool(slot) == instance._monitor_label and not mon.get_events(slot) and
++         not any(mon.get_local_events(slot, code) for code in instance._monitor_codes), 'monitor masks changed')
++    for code in instance._monitor_codes:
++        instance._local_attempted.add(code)
++        mon.set_local_events(slot, code, mask)
++    return instance
++
++
++def monitoring_stop(instance, callbacks, codes):
++    """Once-only cleanup; caller catches errors, never retry uncertain mutations.
++
++    The callbacks/codes arguments name the adapter contract. Actual ownership is
++    checked against exact callback objects and masks retained during installation.
++    """
++    if getattr(instance, '_stop_attempted', False):
++        return
++    instance._stop_attempted = True
++    instance.closed = True
++    if instance.tool is None or not getattr(instance, '_monitor_owned', False):
++        return
++    mon, slot = sys.monitoring, instance.tool
++    need(mon.get_tool(slot) == instance._monitor_label, 'foreign monitor lease; not cleared')
++    global_mask = mon.get_events(slot)
++    local_masks = {code: mon.get_local_events(slot, code) for code in instance._monitor_codes}
++    need(not global_mask and not instance._foreign_registration and all(
++        value in ((0, instance._monitor_mask) if code in instance._local_attempted else (0,))
++        for code, value in local_masks.items()), 'foreign monitor masks/registration; preserved')
++    for event in instance._callback_attempted:
++        if event in instance._stale_restored:
++            continue
++        previous = mon.register_callback(slot, event, None)
++        own = previous is instance._monitor_callbacks[event]
++        absent_failed_install = event not in instance._callback_installed and previous is None
++        if not own and not absent_failed_install:
++            displaced = mon.register_callback(slot, event, previous)
++            if displaced is not None:
++                mon.register_callback(slot, event, displaced)
++            instance._foreign_registration = True
++            raise ValueError('foreign monitor callback restored; masks and lease preserved')
++    need(mon.get_tool(slot) == instance._monitor_label and mon.get_events(slot) == global_mask and all(
++        mon.get_local_events(slot, code) == value for code, value in local_masks.items()),
++        'monitor ownership changed during cleanup; masks and lease preserved')
++    for code, value in local_masks.items():
++        if value:
++            mon.set_local_events(slot, code, 0)
++    # CPython free_tool_id preserves any restored stale callback. No foreign
++    # callback or foreign local/global event mask is cleared by this cleanup.
++    mon.free_tool_id(slot)
++    instance.tool = None
++    instance._monitor_owned = False
+ 
+ 
+ def service_specs(service_class, profile):
+@@ -61,15 +159,15 @@
+     return specs
+ 
+ 
+-def make_trace(runtime_observer, service, profile, bind):
+-    """Reuse old callback/monitoring/seal implementation with exact new bindings."""
++def make_trace(runtime_observer, service, profile, bind, event_stream_path):
++    """Reuse the exact old callback; replace only bounded storage and safe monitoring lifetime."""
++    from .stream import EventWriter, profile_counts
+     specs = service_specs(type(service), profile)
+     need(runtime_observer.ServiceTrace.METHODS == METHODS, 'original trace method contract changed')
+ 
+     class FullgraphServiceTrace(runtime_observer.ServiceTrace):
+         def __init__(self):
+             self.service = service
+-            self.events = []
+             self.error = None
+             self.tool = None
+             self.closed = False
+@@ -83,5 +181,57 @@
+                 code = bind(bound, path, pin, cls, method, False)
+                 need(code not in self.codes, 'duplicate lifecycle code binding')
+                 self.codes[code] = name
++            groups, events = profile_counts(profile['rows'])
++            self.events = EventWriter(event_stream_path, expected_groups=groups,
++                expected_events=events, max_events=profile['event_stream_max_events'],
++                max_bytes=profile['event_stream_max_bytes'])
++            self.stream_receipt = None
++
++        def __enter__(self):
++            try:
++                event = sys.monitoring.events.PY_RETURN
++                return monitoring_enter(self, 'ordered-service-events', (4, 3),
++                    ((event, self._return),), self.codes, event)
++            except BaseException as error:
++                capture_error(self, error)
++                self.stop()
++                self.events.close_incomplete()
++                raise
++
++        def stop(self):
++            # Old _return calls this method on capture errors. It cannot throw
++            # back into the original service frame or clear somebody else's slot.
++            try:
++                monitoring_stop(self, (sys.monitoring.events.PY_RETURN,), self.codes)
++            except BaseException as error:
++                capture_error(self, error)
++                self.closed = True
++                if isinstance(error, KeyboardInterrupt):
++                    raise
++
++        def __exit__(self, kind, value, traceback):
++            self.stop()
++            if kind is not None or self.error is not None:
++                self.events.close_incomplete()
++            else:
++                try:
++                    self.stream_receipt = self.events.seal()
++                except BaseException as error:
++                    # Evidence failure never substitutes a DUT result or ACK.
++                    self.error = type(error).__name__ + ': ' + str(error)
++                    self.events.close_incomplete()
++                    if isinstance(error, KeyboardInterrupt):
++                        raise
++            return False
++
++        def seal(self):
++            need(self.closed and self.error is None and self.stream_receipt is not None,
++                 'stream trace failed or still active: ' + str(self.error))
++            return dict(self.stream_receipt)
++
++        def raw_receipt(self):
++            receipt = self.events.snapshot()
++            receipt.update(monitor_error=self.error, monitor_residual_tool=self.tool, monitor_closed=self.closed)
++            return receipt
+ 
+     return FullgraphServiceTrace()
+--- baseline/candidates/qwen2_ordered_fullgraph_entry/bridge.py
++++ candidate/candidates/qwen2_ordered_event_stream/bridge.py
+@@ -3,7 +3,6 @@
+ No replacement owner/client/service, no arithmetic implementation, no payload
+ provider and no whole-block acceptance. Called only by the real suffix dispatch.
+ """
+-from contextlib import ExitStack
+ from pathlib import Path
+ import hashlib
+ import importlib
+@@ -34,20 +33,82 @@
+     return helper, observer
+ 
+ 
+-def make_service_trace(observer, service, profile, bind):
++def make_service_trace(observer, service, profile, bind, event_stream_path):
+     from .service_trace import make_trace
+-    return make_trace(observer, service, profile, bind)
++    return make_trace(observer, service, profile, bind, event_stream_path)
+ 
+ 
+-def make_dispatch(profile, *, enabled=False):
++def make_observation(monitor, owner, rows, base_fields, bindings):
++    from .service_trace import capture_error, monitoring_enter, monitoring_stop
++    class FullgraphObservation(monitor.Observation):
++        # No _line/_return wrapper: sys._getframe(1) still sees the original DUT.
++        def __enter__(self):
++            try:
++                need(not self.closed and self.tool is None and self.owner.state == 'idle' and
++                     not self.owner.poison and sys.gettrace() is None, 'single-use idle observation')
++                mon = sys.monitoring
++                return monitoring_enter(self, 'ordered-fold-observer', (3, 4),
++                    ((mon.events.LINE, self._line), (mon.events.PY_RETURN, self._return)),
++                    self.codes.values(), mon.events.LINE | mon.events.PY_RETURN)
++            except BaseException as error:
++                capture_error(self, error)
++                self.stop()
++                raise
++        def stop(self):
++            try:
++                mon = sys.monitoring
++                monitoring_stop(self, (mon.events.LINE, mon.events.PY_RETURN), self.codes.values())
++            except BaseException as error:
++                capture_error(self, error)
++                self.closed = True
++                if isinstance(error, KeyboardInterrupt):
++                    raise
++    # Original constructor/source binding errors intentionally remain fatal.
++    return FullgraphObservation(owner, rows, base_fields, bindings)
++
++
++def observe_driver(tracer, capture, run, state):
++    """Only monitor lifetime failures fall back; original driver exceptions escape."""
++    entered = []
++    try:
++        for context, key in ((tracer, 'service_error'), (capture, 'capture_error')):
++            try:
++                context.__enter__()
++                entered.append((context, key))
++            except KeyboardInterrupt:
++                raise  # Explicit cancellation is not a monitor fallback promise.
++            except BaseException as error:
++                state[key] = type(error).__name__ + ': ' + str(error)
++        return run()
++    finally:
++        original_error = sys.exc_info()
++        cancellation = None
++        for context, key in reversed(entered):
++            try:
++                context.__exit__(*original_error)
++            except BaseException as error:
++                if state[key] is None:
++                    state[key] = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt) and original_error[0] is None and cancellation is None:
++                    cancellation = error
++        # Finish other distinct cleanup operations, then preserve cancellation.
++        # An already active original driver/setup error always keeps its identity.
++        if cancellation is not None:
++            raise cancellation
++
++
++def make_dispatch(profile, *, enabled=False, event_stream_path=None):
+     """Return a pc12 callable and evidence holder; default does not bind anything."""
+     need(type(enabled) is bool, 'explicit ordered fullgraph enable')
+     state = {'invocations': 0, 'capture': None, 'capture_report': None,
+-             'capture_error': None, 'service_events': None, 'service_events_raw': (), 'service_error': None}
++             'capture_error': None, 'service_events': None, 'service_events_raw': None, 'service_error': None}
+     if not enabled:
+         return None, state
+     need(profile['qk_profile'] == 2 and profile['pv_profile'] == 0 and
+          profile['raw_kv_transport'] is False, 'QK-only profile2 / legacy PV0 / uncached direct required')
++    need(event_stream_path is not None and 'event_stream_max_bytes' in profile and
++         'event_stream_max_events' in profile,
++         'independently admitted raw stream destination and byte budget required')
+     helper, observer = load_observer_runtime(profile)
+     from candidates.qwen2_resident_matrix.production_qk16_model import direct_transport, ordered_work
+     exact = helper.load_exact(profile['exact_helper'])
+@@ -63,29 +124,37 @@
+         binding = direct_transport.bind(x, physical, job, ordered_fold=True, ordered_lanes=lanes)
+         owner = x.attention_owner
+         monitor, base = observer.load_observer(profile)
+-        capture = monitor.Observation(owner, job.m, base.PackedFields, observer.bindings(owner, profile))
+-        tracer = make_service_trace(observer, x.matrix_service, profile, monitor.bind)
++        capture = make_observation(monitor, owner, job.m, base.PackedFields, observer.bindings(owner, profile))
++        tracer = make_service_trace(observer, x.matrix_service, profile, monitor.bind, event_stream_path)
+         state['capture'] = capture
+         try:
+-            with ExitStack() as stack:
+-                stack.enter_context(tracer)
+-                stack.enter_context(capture)
+-                report = direct_transport.execute_attention_owner(x, physical, job,
+-                    final_ack_stall=5, enable_raw_kv=False)
++            report = observe_driver(tracer, capture,
++                lambda: direct_transport.execute_attention_owner(x, physical, job,
++                    final_ack_stall=5, enable_raw_kv=False), state)
+         finally:
+             # Keep partial raw evidence even if the original driver raises.
+             # This is NOT a successful lifecycle seal or acceptance result.
+-            state['service_events_raw'] = tuple(getattr(tracer, 'events', ()))
++            original_error = sys.exc_info()
++            try:
++                state['service_events_raw'] = tracer.raw_receipt()
++            except BaseException as error:
++                state['service_events_raw_error'] = type(error).__name__ + ': ' + str(error)
++                if state['service_error'] is None:
++                    state['service_error'] = state['service_events_raw_error']
++                if isinstance(error, KeyboardInterrupt) and original_error[0] is None:
++                    raise
+         # These are the original DirectBinding postconditions, not an abstract
+         # drain set. Original driver accepted final memory and owner ACKs.
+         binding.check(x)
+         need(physical.pending is None and x.matrix_service.owner is None,
+              'direct pc12 terminal before physical/service retirement')
+         try:
++            need(state['capture_error'] is None, 'monitor lifetime failed: ' + str(state['capture_error']))
+             state['capture_report'] = capture.seal()
+         except Exception as error:
+             state['capture_error'] = type(error).__name__ + ': ' + str(error)
+         try:
++            need(state['service_error'] is None, 'monitor lifetime failed: ' + str(state['service_error']))
+             state['service_events'] = tracer.seal()
+         except Exception as error:
+             state['service_error'] = type(error).__name__ + ': ' + str(error)
+--- baseline/candidates/qwen2_ordered_fullgraph_entry/runner.py
++++ candidate/candidates/qwen2_ordered_event_stream/runner.py
+@@ -50,8 +50,10 @@
+     need(not out.exists(), 'fresh unique output required')
+     # Import only our lightweight bridge/registry here. Target module loading and
+     # ELF mapping belong to the source-bound caller, not this control API.
+-    from . import bridge, registry
+-    dispatch, observation = bridge.make_dispatch(profile, enabled=True)
++    from . import bridge, stream
++    from candidates.qwen2_ordered_fullgraph_entry import registry
++    dispatch, observation = bridge.make_dispatch(profile, enabled=True,
++        event_stream_path=out / 'attention_service_events.q2evt')
+     out.mkdir(parents=True)
+     report = dict(status='PREPARED_NOT_EXECUTED', admission=dict(admission),
+                   rows=16, numeric_acceptance='TEMP', hardware_cycles=None,
+@@ -97,11 +99,8 @@
+         if raw_events is None:
+             raw_events = observation.get('service_events')
+         if raw_events is not None:
+-            raw = (json.dumps(raw_events, separators=(',', ':')) + '\n').encode()
+-            (folder / 'raw_service_events.json').write_bytes(raw)
+-            evidence['raw_service_events'] = dict(file='raw_service_events.json', bytes=len(raw),
+-                sha256=hashlib.sha256(raw).hexdigest(), policy='actual events; no ticket normalization',
+-                sealed=observation.get('service_events') is not None and observation.get('service_error') is None)
++            evidence['raw_service_events'] = stream.artifact_evidence(
++                raw_events, out / 'attention_service_events.q2evt', evidence_directory=folder)
+         (folder / 'EVIDENCE.json').write_text(json.dumps(evidence, sort_keys=True, indent=2) + '\n')
+         report['capture_evidence'] = evidence
+         retained = True
+@@ -160,7 +159,7 @@
+                 capture_fields=observation['capture'].data.fields, silu_library=silu,
+                 terminal=terminal)
+             report['attention_observation'] = observation['capture_report']
+-            report['service_event_count'] = len(observation['service_events'])
++            report['service_event_count'] = observation['service_events']['count']
+             phase('ACTUAL_REGISTRY_SEALED')
+             # Opening the original isolation gate happens only here, not at
+             # pc12 completion and not before the original FFN suffix terminal.

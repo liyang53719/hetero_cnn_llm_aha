@@ -1,0 +1,349 @@
+--- r1/candidates/qwen2_ordered_event_stream/stream.py
++++ r2/candidates/qwen2_ordered_event_stream/stream.py
+@@ -207,10 +207,12 @@
+             self.file = self.path.open('xb', buffering=0)
+             self.created = True
+             self._write(MAGIC)
+-        except Exception as error:
++        except BaseException as error:
+             # Disk setup failure is evidence failure, not a driver exception.
+             self.error = type(error).__name__ + ': ' + str(error)
+             self.close_incomplete()
++            if isinstance(error, KeyboardInterrupt):
++                raise
+ 
+     def __iter__(self):
+         raise TypeError('EventWriter cannot be materialized; replay its framed file explicitly')
+@@ -237,27 +239,35 @@
+             self.last_event_sha256 = hashlib.sha256(frame).hexdigest()
+             if self.first_event_sha256 is None:
+                 self.first_event_sha256 = self.last_event_sha256
+-        except Exception as error:
++        except BaseException as error:
+             if frame is not None:
+                 self.failed_event_sha256 = hashlib.sha256(frame).hexdigest()
+             if self.error is None:
+                 self.error = type(error).__name__ + ': ' + str(error)
+-            raise
++            if isinstance(error, KeyboardInterrupt):
++                raise
++            if isinstance(error, Exception):
++                raise
++            raise OSError('capture storage failure: ' + self.error) from error
+         if self.audit_error is None:
+             try:
+                 self.audit.accept(event)
+                 need(self.count <= self.expected_events, 'successful event count exceeded')
+-            except Exception as error:
++            except BaseException as error:
+                 self.audit_error = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt):
++                    raise
+ 
+     def close_incomplete(self):
+         if not self.closed:
+             try:
+                 if self.file is not None:
+                     self.file.close()
+-            except Exception as error:
++            except BaseException as error:
+                 if self.error is None:
+                     self.error = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt):
++                    raise
+             finally:
+                 self.closed = True
+ 
+@@ -267,8 +277,10 @@
+             try:
+                 self.audit.finish()
+                 need(self.count == self.expected_events, 'incomplete successful event count')
+-            except Exception as error:
++            except BaseException as error:
+                 self.audit_error = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt):
++                    raise
+         try:
+             # Footer means raw recording completed, NOT lifecycle acceptance.
+             self._write(struct.pack('<IQ', END, self.count) + self.raw_hash.digest())
+@@ -276,7 +288,7 @@
+             os.fsync(self.file.fileno())
+             self.file.close()
+             self.closed = self.raw_complete = True
+-        except Exception as error:
++        except BaseException as error:
+             self.error = type(error).__name__ + ': ' + str(error)
+             self.close_incomplete()
+             raise
+--- r1/candidates/qwen2_ordered_event_stream/service_trace.py
++++ r2/candidates/qwen2_ordered_event_stream/service_trace.py
+@@ -51,7 +51,7 @@
+             continue
+         try:
+             mon.use_tool_id(tool, instance._monitor_label)
+-        except Exception:
++        except BaseException:
+             # Resolve an uncertain claim before cleanup; never free foreign state.
+             if mon.get_tool(tool) == instance._monitor_label:
+                 instance.tool, instance._monitor_owned = tool, True
+@@ -192,7 +192,7 @@
+                 event = sys.monitoring.events.PY_RETURN
+                 return monitoring_enter(self, 'ordered-service-events', (4, 3),
+                     ((event, self._return),), self.codes, event)
+-            except Exception as error:
++            except BaseException as error:
+                 capture_error(self, error)
+                 self.stop()
+                 self.events.close_incomplete()
+@@ -203,9 +203,11 @@
+             # back into the original service frame or clear somebody else's slot.
+             try:
+                 monitoring_stop(self, (sys.monitoring.events.PY_RETURN,), self.codes)
+-            except Exception as error:
++            except BaseException as error:
+                 capture_error(self, error)
+                 self.closed = True
++                if isinstance(error, KeyboardInterrupt):
++                    raise
+ 
+         def __exit__(self, kind, value, traceback):
+             self.stop()
+@@ -214,9 +216,12 @@
+             else:
+                 try:
+                     self.stream_receipt = self.events.seal()
+-                except Exception as error:
++                except BaseException as error:
+                     # Evidence failure never substitutes a DUT result or ACK.
+                     self.error = type(error).__name__ + ': ' + str(error)
++                    self.events.close_incomplete()
++                    if isinstance(error, KeyboardInterrupt):
++                        raise
+             return False
+ 
+         def seal(self):
+--- r1/candidates/qwen2_ordered_event_stream/bridge.py
++++ r2/candidates/qwen2_ordered_event_stream/bridge.py
+@@ -50,7 +50,7 @@
+                 return monitoring_enter(self, 'ordered-fold-observer', (3, 4),
+                     ((mon.events.LINE, self._line), (mon.events.PY_RETURN, self._return)),
+                     self.codes.values(), mon.events.LINE | mon.events.PY_RETURN)
+-            except Exception as error:
++            except BaseException as error:
+                 capture_error(self, error)
+                 self.stop()
+                 raise
+@@ -58,9 +58,11 @@
+             try:
+                 mon = sys.monitoring
+                 monitoring_stop(self, (mon.events.LINE, mon.events.PY_RETURN), self.codes.values())
+-            except Exception as error:
++            except BaseException as error:
+                 capture_error(self, error)
+                 self.closed = True
++                if isinstance(error, KeyboardInterrupt):
++                    raise
+     # Original constructor/source binding errors intentionally remain fatal.
+     return FullgraphObservation(owner, rows, base_fields, bindings)
+ 
+@@ -68,23 +70,31 @@
+ def observe_driver(tracer, capture, run, state):
+     """Only monitor lifetime failures fall back; original driver exceptions escape."""
+     entered = []
+-    for context, key in ((tracer, 'service_error'), (capture, 'capture_error')):
+-        try:
+-            context.__enter__()
+-            entered.append((context, key))
+-        except Exception as error:
+-            state[key] = type(error).__name__ + ': ' + str(error)
+-            # The bounded adapters already attempted their own safe cleanup.
+     try:
++        for context, key in ((tracer, 'service_error'), (capture, 'capture_error')):
++            try:
++                context.__enter__()
++                entered.append((context, key))
++            except KeyboardInterrupt:
++                raise  # Explicit cancellation is not a monitor fallback promise.
++            except BaseException as error:
++                state[key] = type(error).__name__ + ': ' + str(error)
+         return run()
+     finally:
+         original_error = sys.exc_info()
++        cancellation = None
+         for context, key in reversed(entered):
+             try:
+                 context.__exit__(*original_error)
+-            except Exception as error:
++            except BaseException as error:
+                 if state[key] is None:
+                     state[key] = type(error).__name__ + ': ' + str(error)
++                if isinstance(error, KeyboardInterrupt) and original_error[0] is None and cancellation is None:
++                    cancellation = error
++        # Finish other distinct cleanup operations, then preserve cancellation.
++        # An already active original driver/setup error always keeps its identity.
++        if cancellation is not None:
++            raise cancellation
+ 
+ 
+ def make_dispatch(profile, *, enabled=False, event_stream_path=None):
+@@ -124,7 +134,15 @@
+         finally:
+             # Keep partial raw evidence even if the original driver raises.
+             # This is NOT a successful lifecycle seal or acceptance result.
+-            state['service_events_raw'] = tracer.raw_receipt()
++            original_error = sys.exc_info()
++            try:
++                state['service_events_raw'] = tracer.raw_receipt()
++            except BaseException as error:
++                state['service_events_raw_error'] = type(error).__name__ + ': ' + str(error)
++                if state['service_error'] is None:
++                    state['service_error'] = state['service_events_raw_error']
++                if isinstance(error, KeyboardInterrupt) and original_error[0] is None:
++                    raise
+         # These are the original DirectBinding postconditions, not an abstract
+         # drain set. Original driver accepted final memory and owner ACKs.
+         binding.check(x)
+--- r1/candidates/qwen2_ordered_event_stream/test_resource_faults.py
++++ r2/candidates/qwen2_ordered_event_stream/test_resource_faults.py
+@@ -0,0 +1,141 @@
++"""R2 cancellation/monitor-failure delta tests, stdlib control fixtures only."""
++import importlib.util
++from pathlib import Path
++import tempfile
++import types
++import unittest
++from unittest.mock import patch
++HERE=Path(__file__).resolve().parent
++
++def load(name,file):
++    spec=importlib.util.spec_from_file_location(name,HERE/file)
++    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
++fixture=load('_r2_bridge_control','test_bridge.py');bridge=fixture.b
++raw_fixture=load('_r2_raw_control','test_stream.py');stream=raw_fixture.stream
++
++class Context:
++    def __init__(self,enter=None,leave=None):self.enter_error=enter;self.leave_error=leave;self.closed=False
++    def __enter__(self):
++        if self.enter_error is not None:raise self.enter_error
++        return self
++    def __exit__(self,*args):
++        self.closed=True
++        if self.leave_error is not None:raise self.leave_error
++
++class ResourceFaults(unittest.TestCase):
++    def state(self):return {'service_error':None,'capture_error':None}
++    def test_cleanup_systemexit_never_replaces_original_driver_error(self):
++        for kind in (RuntimeError,SystemExit,KeyboardInterrupt):
++            original=kind('original driver');state=self.state();a=Context(leave=SystemExit('monitor cleanup'));b=Context(leave=MemoryError('receipt cleanup'))
++            def driver():raise original
++            try:bridge.observe_driver(a,b,driver,state)
++            except BaseException as actual:self.assertIs(actual,original)
++            else:self.fail('original driver exception suppressed')
++            self.assertTrue(a.closed and b.closed);self.assertTrue(state['service_error'] and state['capture_error'])
++    def test_cleanup_keyboardinterrupt_preserves_existing_driver_error(self):
++        original=RuntimeError('original');state=self.state()
++        def driver():raise original
++        try:bridge.observe_driver(Context(leave=KeyboardInterrupt()),Context(),driver,state)
++        except BaseException as actual:self.assertIs(actual,original)
++        else:self.fail('original lost')
++    def test_cleanup_keyboardinterrupt_without_original_error_is_cancellation(self):
++        cancel=KeyboardInterrupt('cancel');a=Context();b=Context(leave=cancel);state=self.state()
++        try:bridge.observe_driver(a,b,lambda:17,state)
++        except BaseException as actual:self.assertIs(actual,cancel)
++        else:self.fail('cancellation swallowed')
++        self.assertTrue(a.closed and b.closed)
++    def test_monitor_systemexit_cleanup_preserves_successful_driver_return(self):
++        state=self.state();self.assertEqual(bridge.observe_driver(Context(leave=SystemExit('monitor')),Context(),lambda:17,state),17)
++        self.assertIn('SystemExit',state['service_error'])
++    def test_monitor_systemexit_setup_falls_back(self):
++        state=self.state();called=[]
++        self.assertEqual(bridge.observe_driver(Context(enter=SystemExit('monitor')),Context(),lambda:called.append('driver_ack') or 17,state),17)
++        self.assertEqual(called,['driver_ack']);self.assertIn('SystemExit',state['service_error'])
++    def test_monitor_keyboardinterrupt_setup_cancels_and_closes_prior_context(self):
++        cancel=KeyboardInterrupt('cancel');a=Context();state=self.state()
++        try:bridge.observe_driver(a,Context(enter=cancel),lambda:self.fail('driver after cancel'),state)
++        except BaseException as actual:self.assertIs(actual,cancel)
++        else:self.fail('cancel swallowed')
++        self.assertTrue(a.closed)
++    def test_driver_systemexit_and_keyboardinterrupt_without_monitor_failure_propagate(self):
++        for kind in (SystemExit,KeyboardInterrupt):
++            original=kind('driver');state=self.state()
++            def driver():raise original
++            try:bridge.observe_driver(Context(),Context(),driver,state)
++            except BaseException as actual:self.assertIs(actual,original)
++            else:self.fail('driver BaseException swallowed')
++    def test_raw_receipt_failure_preserves_driver_failure_and_success(self):
++        for failed in (False,True):
++            d,s,x,p,j,e=fixture.BridgeTests().fixture(driver_fail=failed)
++            make=bridge.make_service_trace
++            def broken(*args):
++                trace=make(*args)
++                def receipt():raise MemoryError('receipt snapshot failed')
++                trace.raw_receipt=receipt;return trace
++            with patch.object(bridge,'make_service_trace',new=broken):
++                if failed:
++                    with self.assertRaisesRegex(ValueError,'fixture driver failed'):d(x,p,j)
++                else:self.assertEqual(d(x,p,j),{'original_driver':True})
++            self.assertIn('MemoryError',s['service_events_raw_error']);self.assertIn('MemoryError',s['service_error'])
++            self.assertIsNone(s['service_events'])
++    def test_raw_receipt_keyboardinterrupt_keeps_original_driver_error(self):
++        d,s,x,p,j,e=fixture.BridgeTests().fixture(driver_fail=True);make=bridge.make_service_trace
++        def broken(*args):
++            trace=make(*args)
++            def receipt():raise KeyboardInterrupt('receipt cancel')
++            trace.raw_receipt=receipt;return trace
++        with patch.object(bridge,'make_service_trace',new=broken):
++            with self.assertRaisesRegex(ValueError,'fixture driver failed'):d(x,p,j)
++    def test_raw_receipt_keyboardinterrupt_without_driver_error_propagates(self):
++        d,s,x,p,j,e=fixture.BridgeTests().fixture();make=bridge.make_service_trace;cancel=KeyboardInterrupt('cancel')
++        def broken(*args):
++            trace=make(*args)
++            def receipt():raise cancel
++            trace.raw_receipt=receipt;return trace
++        with patch.object(bridge,'make_service_trace',new=broken):
++            try:d(x,p,j)
++            except BaseException as actual:self.assertIs(actual,cancel)
++            else:self.fail('cancellation lost')
++    def test_monitor_stop_systemexit_sticky_not_service_exception(self):
++        service_fixture=load('_r2_service_control','test_service_trace.py')
++        case=service_fixture.BindingFixture();case.setUp()
++        try:
++            trace=case.make();trace.__enter__()
++            with patch.object(case.monitor,'get_tool',side_effect=SystemExit('monitor cleanup')):trace.stop()
++            self.assertIn('SystemExit',trace.error);self.assertTrue(trace.closed)
++        finally:case.tearDown()
++    def test_monitor_stop_keyboardinterrupt_is_explicit_cancellation(self):
++        service_fixture=load('_r2_service_control_cancel','test_service_trace.py')
++        case=service_fixture.BindingFixture();case.setUp();cancel=KeyboardInterrupt('cancel')
++        try:
++            trace=case.make();trace.__enter__()
++            with patch.object(case.monitor,'get_tool',side_effect=cancel):
++                try:trace.stop()
++                except BaseException as actual:self.assertIs(actual,cancel)
++                else:self.fail('cancellation swallowed')
++        finally:case.tearDown()
++    def test_storage_systemexit_converts_to_capturable_exception(self):
++        with tempfile.TemporaryDirectory() as directory:
++            w=stream.EventWriter(Path(directory)/'events',**raw_fixture.limits());real=w.file
++            class File:
++                def write(self,data):raise SystemExit('storage hook fault')
++                def close(self):real.close()
++            w.file=File()
++            try:
++                with self.assertRaisesRegex(OSError,'capture storage failure'):w.append(next(raw_fixture.fixture()))
++            finally:w.close_incomplete()
++            self.assertIn('SystemExit',w.error);self.assertFalse(w.raw_complete)
++    def test_storage_keyboardinterrupt_remains_cancellation(self):
++        with tempfile.TemporaryDirectory() as directory:
++            w=stream.EventWriter(Path(directory)/'events',**raw_fixture.limits());real=w.file;cancel=KeyboardInterrupt('cancel')
++            class File:
++                def write(self,data):raise cancel
++                def close(self):real.close()
++            w.file=File()
++            try:
++                try:w.append(next(raw_fixture.fixture()))
++                except BaseException as actual:self.assertIs(actual,cancel)
++                else:self.fail('cancellation swallowed')
++            finally:w.close_incomplete()
++
++if __name__=='__main__':unittest.main()

@@ -1,0 +1,77 @@
+{
+  "all_python_sources_exact_author_bytes": true,
+  "author_freeze_sha256": "e2e182d75fbb058c077d14d0c5a837848611aa1b1e084afc3117f1ac299f6f06",
+  "author_freeze_status": "FROZEN_R2_PENDING_INDEPENDENT_DELTA_REVIEW",
+  "blocked_r1_freeze_sha256": "e3bcf01e8689493a3bfe4adca53e08e43428ad2bce4e1a245aa45000ba982cb2",
+  "capacity_measurement_revision": "R1 original measurement hashes retained; no R2 capacity rerun",
+  "independent_review_status": "PENDING_SEPARATE_RECEIPT",
+  "metadata_changes": [
+    "Private reference/source input locators replaced with logical repository paths.",
+    "Test command paths normalized; no tests rerun."
+  ],
+  "native_or_reference_or_rtl_included": false,
+  "numerical_acceptance": "NOT_EVALUATED",
+  "python_sources": {
+    "candidates/qwen2_ordered_event_stream/__init__.py": {
+      "author_sha256": "8a1512819394560d8747b10834c75e071224d61dd6b2dc0347974f70cdd3445c",
+      "exact_bytes": true,
+      "sha256": "8a1512819394560d8747b10834c75e071224d61dd6b2dc0347974f70cdd3445c"
+    },
+    "candidates/qwen2_ordered_event_stream/bridge.py": {
+      "author_sha256": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d",
+      "exact_bytes": true,
+      "sha256": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d"
+    },
+    "candidates/qwen2_ordered_event_stream/measure_capacity.py": {
+      "author_sha256": "1463d6243495dc3f163b93b6897f18eef7afe6cae77898693a6cd60de9fe75f0",
+      "exact_bytes": true,
+      "sha256": "1463d6243495dc3f163b93b6897f18eef7afe6cae77898693a6cd60de9fe75f0"
+    },
+    "candidates/qwen2_ordered_event_stream/reference_functions.py": {
+      "author_sha256": "9d16d949cb39a302250c1563c61b97ff94bb3146407574a97968132d4df109cc",
+      "exact_bytes": true,
+      "sha256": "9d16d949cb39a302250c1563c61b97ff94bb3146407574a97968132d4df109cc"
+    },
+    "candidates/qwen2_ordered_event_stream/runner.py": {
+      "author_sha256": "625d9b015cc1707cc979c96aa7177610b97f1a5dc318f1316ac6c264caa3be2b",
+      "exact_bytes": true,
+      "sha256": "625d9b015cc1707cc979c96aa7177610b97f1a5dc318f1316ac6c264caa3be2b"
+    },
+    "candidates/qwen2_ordered_event_stream/service_trace.py": {
+      "author_sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172",
+      "exact_bytes": true,
+      "sha256": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172"
+    },
+    "candidates/qwen2_ordered_event_stream/stream.py": {
+      "author_sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5",
+      "exact_bytes": true,
+      "sha256": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5"
+    },
+    "candidates/qwen2_ordered_event_stream/test_bridge.py": {
+      "author_sha256": "0c3cc3ad0c1f51282e761b7b6dd3471fa6e9dfcbc1936021028551cb861b55ca",
+      "exact_bytes": true,
+      "sha256": "0c3cc3ad0c1f51282e761b7b6dd3471fa6e9dfcbc1936021028551cb861b55ca"
+    },
+    "candidates/qwen2_ordered_event_stream/test_resource_faults.py": {
+      "author_sha256": "d446f2e6e92dc4ddaa79d4709f7628dbb12765eef0da8f5a494cdca9a9e80935",
+      "exact_bytes": true,
+      "sha256": "d446f2e6e92dc4ddaa79d4709f7628dbb12765eef0da8f5a494cdca9a9e80935"
+    },
+    "candidates/qwen2_ordered_event_stream/test_runner.py": {
+      "author_sha256": "faf2a40a8714addeb5f32c967614bf772541840fbd777aa4c2dbb7d62a7306f3",
+      "exact_bytes": true,
+      "sha256": "faf2a40a8714addeb5f32c967614bf772541840fbd777aa4c2dbb7d62a7306f3"
+    },
+    "candidates/qwen2_ordered_event_stream/test_service_trace.py": {
+      "author_sha256": "6086149ad001bfcc56ce437385781de5ae97b383c5b5852a462bd2ad198fa250",
+      "exact_bytes": true,
+      "sha256": "6086149ad001bfcc56ce437385781de5ae97b383c5b5852a462bd2ad198fa250"
+    },
+    "candidates/qwen2_ordered_event_stream/test_stream.py": {
+      "author_sha256": "d81fab933eee362fc757a43d252138d826762415020058997160a044ea59693c",
+      "exact_bytes": true,
+      "sha256": "d81fab933eee362fc757a43d252138d826762415020058997160a044ea59693c"
+    }
+  },
+  "r1_blocking_review_sha256": "503ed5315c1bf8778e9dc366b5a142c3702cdca6c4fdaf93c11864d07cfc9e7c"
+}

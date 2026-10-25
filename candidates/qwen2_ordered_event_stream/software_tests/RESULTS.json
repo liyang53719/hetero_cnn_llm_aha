@@ -1,0 +1,101 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "revision": "R2",
+  "scope": "109 isolated optimized +14 normal delta; not a rerun of R1 four-mode380",
+  "source_sha256": {
+    "stream.py": "487510234a0a7c06f4c0cbb066ea4c03d65b5323d5faec0c0569c8908697f1c5",
+    "service_trace.py": "e7c078e6235adc02b762243e407d8830a9401b2c9638e01608ea0923622bd172",
+    "bridge.py": "80caf2b4f3a877dc70e54c44b8e917a382fededf5fe81789c1aa5bd99864ff1d",
+    "runner.py": "625d9b015cc1707cc979c96aa7177610b97f1a5dc318f1316ac6c264caa3be2b"
+  },
+  "results": [
+    {
+      "returncode": 0,
+      "elapsed": 1.4384109170059673,
+      "stdout": "isolated_optimized_test_stream.py.stdout",
+      "stderr": "isolated_optimized_test_stream.py.stderr",
+      "reproduction_command": [
+        "python",
+        "-I",
+        "-S",
+        "-O",
+        "-B",
+        "candidates/qwen2_ordered_event_stream/test_stream.py"
+      ],
+      "private_command_paths_removed": true
+    },
+    {
+      "returncode": 0,
+      "elapsed": 0.3741966570378281,
+      "stdout": "isolated_optimized_test_service_trace.py.stdout",
+      "stderr": "isolated_optimized_test_service_trace.py.stderr",
+      "reproduction_command": [
+        "python",
+        "-I",
+        "-S",
+        "-O",
+        "-B",
+        "candidates/qwen2_ordered_event_stream/test_service_trace.py"
+      ],
+      "private_command_paths_removed": true
+    },
+    {
+      "returncode": 0,
+      "elapsed": 0.30232465302105993,
+      "stdout": "isolated_optimized_test_bridge.py.stdout",
+      "stderr": "isolated_optimized_test_bridge.py.stderr",
+      "reproduction_command": [
+        "python",
+        "-I",
+        "-S",
+        "-O",
+        "-B",
+        "candidates/qwen2_ordered_event_stream/test_bridge.py"
+      ],
+      "private_command_paths_removed": true
+    },
+    {
+      "returncode": 0,
+      "elapsed": 0.4848308140062727,
+      "stdout": "isolated_optimized_test_runner.py.stdout",
+      "stderr": "isolated_optimized_test_runner.py.stderr",
+      "reproduction_command": [
+        "python",
+        "-I",
+        "-S",
+        "-O",
+        "-B",
+        "candidates/qwen2_ordered_event_stream/test_runner.py"
+      ],
+      "private_command_paths_removed": true
+    },
+    {
+      "returncode": 0,
+      "elapsed": 0.3542900920147076,
+      "stdout": "isolated_optimized_test_resource_faults.py.stdout",
+      "stderr": "isolated_optimized_test_resource_faults.py.stderr",
+      "reproduction_command": [
+        "python",
+        "-I",
+        "-S",
+        "-O",
+        "-B",
+        "candidates/qwen2_ordered_event_stream/test_resource_faults.py"
+      ],
+      "private_command_paths_removed": true
+    },
+    {
+      "returncode": 0,
+      "elapsed": 0.14359919802518561,
+      "stdout": "normal_delta_test_resource_faults.py.stdout",
+      "stderr": "normal_delta_test_resource_faults.py.stderr",
+      "reproduction_command": [
+        "python",
+        "-B",
+        "candidates/qwen2_ordered_event_stream/test_resource_faults.py"
+      ],
+      "private_command_paths_removed": true
+    }
+  ],
+  "publication_tests_rerun": false
+}

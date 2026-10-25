@@ -1,0 +1,76 @@
+{
+  "kind": "STATIC_SUCCESS_SCHEMA_UPPER_BOUND_NOT_RSS",
+  "record_sizes_including_u32_framing": {
+    "acquire": 58,
+    "accept_group": 67,
+    "accept_step": 139,
+    "retire_result": 167,
+    "retire_done": 101,
+    "retire_legacy_reply": 92,
+    "retire_owner_response": 53,
+    "release": 39
+  },
+  "assumptions": [
+    "Exact candidate successful profile widths: edge/ticket/epoch uint64, tags uint32, step index <=127, context0, 64-character SHA256.",
+    "False chosen where Boolean length maximizes bytes; per-type maxima need not co-occur.",
+    "Only a successful lifecycle schema has this bound. Invalid long strings/widths can hit independent raw byte/count/record caps."
+  ],
+  "rows": {
+    "1": {
+      "method_counts": {
+        "acquire": 1,
+        "accept_group": 108,
+        "accept_step": 192,
+        "retire_result": 108,
+        "retire_done": 108,
+        "retire_legacy_reply": 96,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "events": 615,
+      "upper_bytes_header_frames_footer": 71902
+    },
+    "16": {
+      "method_counts": {
+        "acquire": 1,
+        "accept_group": 1728,
+        "accept_step": 14592,
+        "retire_result": 13248,
+        "retire_done": 1728,
+        "retire_legacy_reply": 13056,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "events": 44355,
+      "upper_bytes_header_frames_footer": 5732362
+    },
+    "32": {
+      "method_counts": {
+        "acquire": 1,
+        "accept_group": 3648,
+        "accept_step": 55296,
+        "retire_result": 51264,
+        "retire_done": 3648,
+        "retire_legacy_reply": 50688,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "events": 164547,
+      "upper_bytes_header_frames_footer": 21523594
+    },
+    "128": {
+      "method_counts": {
+        "acquire": 1,
+        "accept_group": 19200,
+        "accept_step": 847872,
+        "retire_result": 799488,
+        "retire_done": 19200,
+        "retire_legacy_reply": 792576,
+        "retire_owner_response": 1,
+        "release": 1
+      },
+      "events": 2478339,
+      "upper_bytes_header_frames_footer": 327511498
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "candidates/qwen2_ordered_fullgraph_entry/bridge.py": {
+    "bytes": 4850,
+    "sha256": "2868d0bca85eb15349430827b0cb8d1d9300f69619f8417a693c680a61e6cc19"
+  },
+  "candidates/qwen2_ordered_fullgraph_entry/registry.py": {
+    "bytes": 23548,
+    "sha256": "218f41b2a4fa625653acf060c64a8aad02b6fc95eeef733dc4a764fb902ae1cb"
+  },
+  "candidates/qwen2_ordered_fullgraph_entry/runner.py": {
+    "bytes": 11086,
+    "sha256": "6f2fc1167beec4bdff6528cade244245d77499a6226b7c3c9129e63d929286da"
+  },
+  "candidates/qwen2_ordered_fullgraph_entry/service_trace.py": {
+    "bytes": 3908,
+    "sha256": "7c94bf513875cb2eeec76eca0d3f3353e729c3dbf00c0598129c7b8d0f6ad049"
+  },
+  "candidates/qwen2_ordered_observer/monitor.py": {
+    "bytes": 11802,
+    "sha256": "43590341215be4fab8771dd3a2c9341b81bd06f558c7abe2cce2be697e2ded87"
+  },
+  "candidates/qwen2_resident_matrix/dense_block_reduce/matrix_binding.py": {
+    "bytes": 3501,
+    "sha256": "33ea0786d537aa7de59b19ff55cb515f2afeaee780f4a9f1faeb42402da19593"
+  },
+  "candidates/qwen2_resident_matrix/ffn_attention/matrix_numeric.cpp": {
+    "bytes": 11918,
+    "sha256": "0d8790446c1d4b30c06dfcfd35fcc21faf6a8cd63e415412444f4e38a95f8fcb"
+  },
+  "candidates/qwen2_resident_matrix/ffn_attention/matrix_service.py": {
+    "bytes": 29102,
+    "sha256": "d3cc6f8ddbe08617c1c476d3b15e2033031e3e42b121233baa9c1b5835250698"
+  },
+  "candidates/qwen2_resident_matrix/official_bf16/dense_silu.py": {
+    "bytes": 15064,
+    "sha256": "dfd44e15f274090ba7d1eca4fa6c59248e11029dad3c5fcfc0b45693c6267699"
+  },
+  "candidates/qwen2_runtime_observer_r2/runtime_observer.py": {
+    "bytes": 10544,
+    "sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "author_freeze_sha256": "e2e182d75fbb058c077d14d0c5a837848611aa1b1e084afc3117f1ac299f6f06",
+  "historical_source_provenance_pending": "Preserved author-stage status; this later projection identifies the bounded independent source/control review. Neither grants numerical or execution authority.",
+  "independent_r2_synthetic_capacity_sample": {
+    "bytes": 3988979,
+    "events": 44355,
+    "independent_r2_sample_rows": 16,
+    "m128_conservative_success_file_bytes": 327511498,
+    "m128_static_events": 2478339,
+    "m128_storage_execution_performed": false,
+    "raw_file_sha256": "dc76f0a44c4dd44de992cbe8d9caaa0ff7a81f5064ae1d1d9d8f53738b588462",
+    "sample_is_not_full_dut_rss_or_hard_cap": true,
+    "synthetic_process_maxrss_kib": 16372,
+    "writer_recursive_python_bytes": 3489,
+    "writer_tracemalloc_peak_bytes": 14773
+  },
+  "independent_test_executions": {
+    "additional_exception_cases": 13,
+    "additional_monitor_cases": 6,
+    "executions": 436,
+    "modes": 4,
+    "suite_logical_cases": 109
+  },
+  "original_evidence_preserved": true,
+  "original_private_review": {
+    "bytes": 6754,
+    "sha256": "82dc68d28c9c6feb1c97965d94d1c430f87c2debe5908d0a33682a2ac1de0cf9"
+  },
+  "original_r1_blocked_review_sha256": "503ed5315c1bf8778e9dc366b5a142c3702cdca6c4fdaf93c11864d07cfc9e7c",
+  "projection_not_byte_identical_to_original": true,
+  "schema": 1,
+  "scope": "SOURCE_SYNTHETIC_ONLY_NOT_DUT_NUMERIC_OR_M128_ADMISSION",
+  "source_blockers": [],
+  "target_import_or_native_executed": false
+}

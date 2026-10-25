@@ -1,0 +1,17 @@
+{
+  "source": "candidates/qwen2_runtime_observer_r2/runtime_observer.py",
+  "source_sha256": "b3136f4efc85eb6bcacc2cae451e7ebc952594518abb1697253abbc6c3f0c83e",
+  "functions": {
+    "_return": {
+      "first_line": 55,
+      "last_line": 76,
+      "original_fragment_sha256": "88b49f26172d4d3e09242e6e8940df77c9bd537afee6f0b82e95fc0dda74240d"
+    },
+    "canonical_events": {
+      "first_line": 91,
+      "last_line": 147,
+      "original_fragment_sha256": "e6394759d2193556bfe084040a6cf561b5069212851ffd2d543f62d563e555d6"
+    }
+  },
+  "extracted_sha256": "9d16d949cb39a302250c1563c61b97ff94bb3146407574a97968132d4df109cc"
+}

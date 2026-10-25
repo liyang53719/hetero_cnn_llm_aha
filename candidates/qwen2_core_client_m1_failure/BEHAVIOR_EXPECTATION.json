@@ -1,0 +1,40 @@
+{
+  "allowed_backend_files": [
+    "normal_m1/simulation/OrderedQkBehaviorCore.lo.fir",
+    "normal_m1/simulation/OrderedQkBehaviorCore.anno.json"
+  ],
+  "case": "normal_m1",
+  "class_origins": {
+    "chisel3.RawModule": "${NEW_RUN_ROOT}/synthetic-dependencies/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+    "firrtl2.stage.FirrtlStage": "${NEW_RUN_ROOT}/synthetic-dependencies/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+    "heteronpu.continuous.PackedAttentionStreamClient": "${NEW_RUN_ROOT}/synthetic-baseline-classes",
+    "heteronpu.continuous.Qwen2ContinuousBlock": "${NEW_RUN_ROOT}/newclasses",
+    "org.scalatest.tools.Runner": "${NEW_RUN_ROOT}/synthetic-dependencies/org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar",
+    "scala.Predef$": "${NEW_RUN_ROOT}/synthetic-dependencies/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+    "treadle2.TreadleTester": "${NEW_RUN_ROOT}/synthetic-dependencies/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar"
+  },
+  "expected_counts": {
+    "accounting512Steps": 864,
+    "dones": 12,
+    "groups": 12,
+    "memoryAccepted": 384,
+    "memoryReturned": 384,
+    "outputBytes": 6144,
+    "ownerAccepts": 1,
+    "pvRequests": 96,
+    "pvReturns": 96,
+    "qkAcceptedSteps": 96,
+    "results": 12,
+    "scoreWrites": 12
+  },
+  "max_annotation_bytes": 201326592,
+  "max_ir_line_bytes": 1048576,
+  "max_ir_lines": 2000000,
+  "max_ir_modules": 4096,
+  "max_log_bytes": 2097152,
+  "max_log_line_bytes": 16384,
+  "max_log_lines": 20000,
+  "max_low_ir_bytes": 201326592,
+  "required_low_ir": "normal_m1/simulation/OrderedQkBehaviorCore.lo.fir",
+  "schema": "qwen2-normal-m1-evidence-v1"
+}

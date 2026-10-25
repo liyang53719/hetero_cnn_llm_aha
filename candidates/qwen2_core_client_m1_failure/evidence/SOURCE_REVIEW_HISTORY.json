@@ -1,0 +1,106 @@
+{
+  "original": {
+    "bytes": 5044,
+    "sha256": "f8c98332d674088cfd8fbb2cb9a150c51d050acc47320c9d1fe48557ec60b92c"
+  },
+  "review": {
+    "JVM_Scala_Chisel_Treadle_DUT_reference_executed": false,
+    "actual_execution_authorized": false,
+    "actual_run_root_absent": true,
+    "candidate": {
+      "checker": {
+        "bytes": 11689,
+        "sha256": "b27de0dfeba345b0a62207441bac2beb8e53e2a0507ad45ec4b8943968767a2c"
+      },
+      "command_proposal": {
+        "bytes": 1180,
+        "sha256": "7780ff762392ed1bafea54943a8117f4a373b89541d15fe7e44399908c058d18"
+      },
+      "freeze": {
+        "bytes": 6763,
+        "sha256": "7d2982610362392514ffc6224966462f98c9430c1a8f1e21e099f80b485e6bc1"
+      },
+      "manifest": {
+        "bytes": 641926,
+        "sha256": "f3522fcd0539068be74eeac73eb912c1d4d96db38d9ae7c397bdee4d4f0d6e8f"
+      },
+      "supervisor": {
+        "bytes": 29064,
+        "sha256": "3dc28752855be9f0865d1fd2d2609403c75efd046ea0ff487d8ecdfc0f90c1b2"
+      }
+    },
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 600,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 750,
+      "work_wall_seconds": 720
+    },
+    "controls": {
+      "bytes": 3667,
+      "sha256": "531cca2117130e5db64d0bc037bd2bef524a63e1d42ae709c15be6025f340961"
+    },
+    "created_utc": "2026-10-25T17:14:34.655586+00:00",
+    "full128_or_full29_upgrade": false,
+    "identity_checks": 9715,
+    "identity_freeze": {
+      "bytes": 2535,
+      "sha256": "e96047033102d593db85b8c0631cf6c1d6b6e909aae69c8d5b4761bf11f573d6"
+    },
+    "identity_review": {
+      "bytes": 31962,
+      "sha256": "2f24db75d03257409e4c3907fd9f9544e1eae4b0c8352260590f278250cc90a1"
+    },
+    "interpreted_behavior_result": null,
+    "inventories": 4,
+    "mac_utilization": null,
+    "only_fake_python_children": true,
+    "original_files_modified": false,
+    "outer_wall_seconds": 780,
+    "post_control_identity": {
+      "bytes": 1472,
+      "sha256": "9eea242fba155e71ec5d55959e55526079885da5a0013e954cb6049de187240f"
+    },
+    "preparation_pins": 1189,
+    "production_runtime_pins_including_manifest_and_self": 1191,
+    "reviewer_first_fixture_failure_retained": true,
+    "root_decision_eligibility": "CONDITIONAL_ON_EXPLICIT_ROOT_APPROVAL_EXACT_IDENTITIES_AND_EXTERNAL_ABSENT_SLOT_GATE",
+    "root_required_checks": {
+      "bytes": 1747,
+      "sha256": "70299c99bf8b7ca15ac2fb18521e1e3a83a43ba7363fd3a91f66e60e1f517b32"
+    },
+    "rtl_or_full_matrix_numerical_pass": false,
+    "scala_test_format_evidence": {
+      "bytes": 830,
+      "sha256": "37a486ca979ded70e9ce5e4b540f9a6aea49bec86a1bccc8c868411a7c293441"
+    },
+    "schema": "normal-m1-independent-source-review-v1",
+    "source_semantics_report": {
+      "bytes": 7332,
+      "sha256": "462e2fe6988448ee11a14b2fda7c4aabb9a3edae02253fc5d1a0048c6737daf4"
+    },
+    "status": "PASS_SOURCE_AND_SYNTHETIC_NORMAL_M1_PREPARATION_ONLY",
+    "synthetic_controls": 328,
+    "system_duty_cycle": null,
+    "uncovered": [
+      "real Matrix FMA and complete tile numerical verification",
+      "full owner terminal payload expected-value check",
+      "per-transaction external memory/GQA address reconstruction",
+      "normal_m1 uncovered zero-count stall ports",
+      "early done/foreign/fault/drain cases not selected",
+      "W005 j1..7 and longer causal sequences",
+      "full lowered FIRRTL graph/type correctness by external checker",
+      "complete dynamic classloader or process-global confinement",
+      "full-block or full128 RTL numerical/90percent utilization acceptance"
+    ]
+  },
+  "stage_meaning": "Historical source/synthetic qualification, not actual M1 success. Actual CPU failure is retained separately."
+}

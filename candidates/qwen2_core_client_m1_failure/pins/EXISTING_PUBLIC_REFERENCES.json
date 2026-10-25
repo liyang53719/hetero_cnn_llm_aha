@@ -1,0 +1,60 @@
+{
+  "base_commit": "7d1a5d775624b860caccde16bde35f93ce84daa6",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/NEW_SOURCE_PINS.json",
+      "bytes": 1971,
+      "sha256": "56b44669c54b7cb2962d9a4ca0c05aab9424b53047c56d480ee33b092e8cefc3",
+      "git_blob_sha": "f4fa6a797f6ce650d453a5296cc90f64c952076c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/RETAINED_CLASS_PINS.json",
+      "bytes": 100678,
+      "sha256": "fe2de42ce53456699ff97780073b1d7f8f1ee53e1c7b9c5d94a6a14621743aef",
+      "git_blob_sha": "e54559830b00e2218bee0cba0ff2f94c9985baa8"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/BASELINE_REFERENCES.json",
+      "bytes": 2817,
+      "sha256": "689762dea85f5bbf695578d9aa5852df24bfc167f44447c7df761ca81c475e4d",
+      "git_blob_sha": "dbd3b479531464dd92a4de4b39de586e1e1110da"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/NEW_CLASS_HASHES.json",
+      "bytes": 10025,
+      "sha256": "6491db38b14efae96b40ee615852b2343cccc761e4589bcec49120d73aaaaa63",
+      "git_blob_sha": "f1ae8051a8a8d5367f6cfe007eb23fd801bd183c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/COMPILE_ACTUAL_REVIEW.json",
+      "bytes": 2364,
+      "sha256": "54d69ed559810b3b1a8aafa011f65e4fc8cfda2abbc63364bd11768a7365b769",
+      "git_blob_sha": "49ffa9892a202addc99c6b319b46c6140f9c96f3"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/CHIRRTL_FINAL_REVIEW.json",
+      "bytes": 6774,
+      "sha256": "c6736dfbf9794d87d094569ff55fa1c376e8c7348b1a557e24194c8aa2567a3d",
+      "git_blob_sha": "3118b7c08002312cf85c5722c30e565dcc60499c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/OrderedQkBehaviorSpec.scala",
+      "bytes": 16701,
+      "sha256": "ab0f832c033dec56daee3ad0d98e9b7e37a1d9189b692556d22dc3fea8ac66f9",
+      "git_blob_sha": "a8c8793d1c6092867ea05c6c93ffad89e283c0e5"
+    }
+  ],
+  "reused_original_Scala_sources": 4,
+  "reused_baseline_sources": 92,
+  "reused_old_classes": 550,
+  "reused_compiled_classes": 20,
+  "reused_official_JARs": 106,
+  "duplicated_JAR_class_IR_payloads": false,
+  "scope": "Existing exact public source/class/dependency identities are reused, not new execution. No new source model, weights or lowering output is uploaded."
+}

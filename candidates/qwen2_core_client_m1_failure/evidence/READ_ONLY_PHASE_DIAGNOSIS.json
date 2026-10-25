@@ -1,0 +1,60 @@
+{
+  "original": {
+    "bytes": 7456,
+    "sha256": "2fa42fdd13583c13d5981647099223170152a176ce6ae934ac5b8bc30f05462d"
+  },
+  "original_report": {
+    "bytes": 7938,
+    "sha256": "3130eefa0bbfa538ca13237e11fe05f2683e56710a5f258e82d5ab51a6c8fb16"
+  },
+  "original_freeze": {
+    "bytes": 420,
+    "sha256": "44da09e16d59b8d56ee04080b9c05ed5707a557e11fa00ab27dab83e88aae4b7"
+  },
+  "status": "READ_ONLY_PHASE_DIAGNOSIS_NO_EXACT_HOTSPOT_PROVEN",
+  "observed_and_filesystem_chronology": {
+    "approximate_root_wall_after_last_low_file_mtime_seconds": 554.2648955190261,
+    "cleanup_complete": true,
+    "cpu_seconds": 600.437616799,
+    "log_bytes": 2329,
+    "low_ir_bytes": 58897360,
+    "low_ir_last_mtime_minus_claim_mtime_seconds": 46.39577955,
+    "obs_marker_present": false,
+    "pass_marker_present": false,
+    "ready_marker_present": false,
+    "root_outer_timeout": false,
+    "root_returncode": 1,
+    "root_wall_seconds": 600.6606750690262,
+    "supervisor_exit_code": null,
+    "supervisor_status": "FAIL_NORMAL_M1_TREADLE_RETAINED",
+    "sampled_rss_high_water_bytes": 1244446720
+  },
+  "renamed_original_peak_rss_field": "sampled_rss_high_water_bytes; source value unchanged, no continuous peak claim",
+  "timestamp_boundary": "Filesystem last-mtime chronology, not monotonic stage instrumentation or CPU attribution. No clock-adjustment proof; claim write also follows supervisor start. Stable final 58MB file and plausible tail do not certify complete IR parse/semantics or toLowFirrtl return.",
+  "qualified_phase_boundary": "IR emitted. No CORE_SIM_READY/body telemetry, owner/OBS/terminal or ScalaTest success observed. Body marker follows framework automatic reset1, so zero interpreted clock steps is NOT proven.",
+  "not_supported": [
+    "specific hot function",
+    "deadlock versus progress",
+    "1GiB heap OOM",
+    "zero clocks",
+    "Matrix FMA or bench per-tile poke cost as observed cause"
+  ],
+  "plausible_unmeasured_costs": [
+    "residual FIRRTL stage/coverage after emission",
+    "Treadle PrepareAst optimized low transforms/memory-delay transform",
+    "SymbolTable/DataStore/ExpressionCompiler/Scheduler initialization",
+    "ChiselTest port/combinational-path mapping",
+    "initial combinational evaluation or framework reset step1",
+    "JVM GC/JIT under 1GiB heap; peakRSS alone cannot establish GC pressure"
+  ],
+  "jvm_or_target_executed_by_diagnosis": false,
+  "scope": "Author read-only diagnosis layered on independent terminal FAIL review. Filesystem chronology is not stage CPU instrumentation, function-return or lowerer completion proof.",
+  "omitted_sections": [
+    "raw source/IR head/tail snippets",
+    "private paths/absolute mtime/process identities",
+    "native alternative local tool-presence audit",
+    "unexecuted next diagnostic budget/signaling proposal",
+    "new artifact-reuse launcher proposal"
+  ],
+  "no_new150s_candidate_or_GO_published": true
+}

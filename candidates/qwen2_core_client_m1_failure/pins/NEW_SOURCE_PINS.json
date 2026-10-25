@@ -1,0 +1,67 @@
+{
+  "source_freeze": {
+    "bytes": 6763,
+    "sha256": "7d2982610362392514ffc6224966462f98c9430c1a8f1e21e099f80b485e6bc1"
+  },
+  "files": [
+    {
+      "path": "check_behavior.py",
+      "bytes": 11689,
+      "sha256": "b27de0dfeba345b0a62207441bac2beb8e53e2a0507ad45ec4b8943968767a2c",
+      "source_kind": "unchanged-original-reviewed-source"
+    },
+    {
+      "path": "test_behavior_checker.py",
+      "bytes": 7617,
+      "sha256": "e5c96d81f59d204d1637b8cfdb01dfb1810a666d6d4b27439983f236dc0f3cf1",
+      "source_kind": "unchanged-original-reviewed-source"
+    }
+  ],
+  "Python_source_adaptation": false,
+  "original_expectation": {
+    "bytes": 2009,
+    "sha256": "6de49939631fd3e3b713075c67fd7939b982041cbdd3f037a1686eff6b9901cf"
+  },
+  "public_expectation": {
+    "bytes": 1714,
+    "sha256": "438afb85a42afb3bcafa39d8b97a46bebb65358f51d0d918d43656b5064b4c89"
+  },
+  "class_origin_path_projection": [
+    {
+      "class_name": "chisel3.RawModule",
+      "logical_origin": "${NEW_RUN_ROOT}/synthetic-dependencies/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+      "changed": true
+    },
+    {
+      "class_name": "firrtl2.stage.FirrtlStage",
+      "logical_origin": "${NEW_RUN_ROOT}/synthetic-dependencies/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+      "changed": true
+    },
+    {
+      "class_name": "heteronpu.continuous.PackedAttentionStreamClient",
+      "logical_origin": "${NEW_RUN_ROOT}/synthetic-baseline-classes",
+      "changed": true
+    },
+    {
+      "class_name": "heteronpu.continuous.Qwen2ContinuousBlock",
+      "logical_origin": "${NEW_RUN_ROOT}/newclasses",
+      "changed": false
+    },
+    {
+      "class_name": "org.scalatest.tools.Runner",
+      "logical_origin": "${NEW_RUN_ROOT}/synthetic-dependencies/org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar",
+      "changed": true
+    },
+    {
+      "class_name": "scala.Predef$",
+      "logical_origin": "${NEW_RUN_ROOT}/synthetic-dependencies/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+      "changed": true
+    },
+    {
+      "class_name": "treadle2.TreadleTester",
+      "logical_origin": "${NEW_RUN_ROOT}/synthetic-dependencies/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar",
+      "changed": true
+    }
+  ],
+  "scope": "Public expectation is a synthetic-only fixture template with same non-path values. It is not the actual private expectation/config; no source edits and no actual checker invocation claim."
+}

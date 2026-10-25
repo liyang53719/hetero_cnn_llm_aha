@@ -1,0 +1,94 @@
+{
+  "original_supervisor": {
+    "bytes": 29064,
+    "sha256": "3dc28752855be9f0865d1fd2d2609403c75efd046ea0ff487d8ecdfc0f90c1b2"
+  },
+  "original_manifest": {
+    "bytes": 641926,
+    "sha256": "f3522fcd0539068be74eeac73eb912c1d4d96db38d9ae7c397bdee4d4f0d6e8f"
+  },
+  "original_supervisor_patch": {
+    "bytes": 19342,
+    "sha256": "cebd5612b7006e35fe5811292cf53bf1c3e641c2e7f068048a03ef7d7ff0dfec"
+  },
+  "source_freeze": {
+    "bytes": 6763,
+    "sha256": "7d2982610362392514ffc6224966462f98c9430c1a8f1e21e099f80b485e6bc1"
+  },
+  "base_supervisor": {
+    "bytes": 26253,
+    "sha256": "20c5def17807419b795dfcaad2e4e1c05c6b75da0896cca3a95791bb6fb97534"
+  },
+  "role_delta": {
+    "old_stage": "selected-on-chirrtl-only",
+    "new_stage": "normal-m1-treadle-only",
+    "new_case": "normal_m1",
+    "old_caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 120,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 67108864,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 50331648,
+      "total_wall_seconds": 150,
+      "work_wall_seconds": 120
+    },
+    "new_caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 600,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 750,
+      "work_wall_seconds": 720
+    },
+    "no_compiler_or_ordered_off": true,
+    "no_automatic_retry_or_chaining": true,
+    "result_checker_only_after_exit0_cleanup_and_no_prior_errors": true
+  },
+  "resource_boundary": "New M1 stage: CPU600/work720/cleanup730/total750/outer780. Heap1GiB/AS4GiB/RSS2GiB/1CPU unchanged;tree256MiB/file192MiB for unknown low-IR expansion. Hard child RLIMITs plus sampled aggregate/RSS/tree and final CPU qualification, not cgroup/global disk isolation. No completion guarantee or automatic retry.",
+  "original_executed_receipt": {
+    "bytes": 38036,
+    "sha256": "48e1288f2003239f3a8905495bb8ccad59b2c963020c0df2ff2d0e5e5a042edc"
+  },
+  "executed_argv_role_projection": [
+    "${JAVA}",
+    "-Duser.home=${M1_RUN}/home",
+    "-Djava.io.tmpdir=${M1_RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1024m",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-Dqwen.case=normal_m1",
+    "-cp",
+    "${M1_RUN}/newclasses:${BASELINE_CLASSES}:${DEPENDENCY_CACHE}/com/eed3si9n/shaded-apache-httpasyncclient/0.7.0/shaded-apache-httpasyncclient-0.7.0.jar:${DEPENDENCY_CACHE}/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar:${DEPENDENCY_CACHE}/com/github/luben/zstd-jni/1.5.5-10/zstd-jni-1.5.5-10.jar:${DEPENDENCY_CACHE}/com/github/mwiede/jsch/0.2.17/jsch-0.2.17.jar:${DEPENDENCY_CACHE}/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar:${DEPENDENCY_CACHE}/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.13/2.13.5.2/jsoniter-scala-core_2.13-2.13.5.2.jar:${DEPENDENCY_CACHE}/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar:${DEPENDENCY_CACHE}/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar:${DEPENDENCY_CACHE}/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar:${DEPENDENCY_CACHE}/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar:${DEPENDENCY_CACHE}/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar:${DEPENDENCY_CACHE}/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar:${DEPENDENCY_CACHE}/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar:${DEPENDENCY_CACHE}/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar:${DEPENDENCY_CACHE}/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar:${DEPENDENCY_CACHE}/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar:${DEPENDENCY_CACHE}/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar:${DEPENDENCY_CACHE}/com/outr/moduload_2.13/1.1.7/moduload_2.13-1.1.7.jar:${DEPENDENCY_CACHE}/com/outr/perfolation_2.13/1.2.9/perfolation_2.13-1.2.9.jar:${DEPENDENCY_CACHE}/com/outr/scribe_2.13/3.13.0/scribe_2.13-3.13.0.jar:${DEPENDENCY_CACHE}/com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar:${DEPENDENCY_CACHE}/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar:${DEPENDENCY_CACHE}/com/typesafe/config/1.4.2/config-1.4.2.jar:${DEPENDENCY_CACHE}/commons-io/commons-io/2.15.0/commons-io-2.15.0.jar:${DEPENDENCY_CACHE}/dev/dirs/directories/26/directories-26.jar:${DEPENDENCY_CACHE}/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar:${DEPENDENCY_CACHE}/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar:${DEPENDENCY_CACHE}/io/get-coursier/coursier-cache_2.13/2.1.8/coursier-cache_2.13-2.1.8.jar:${DEPENDENCY_CACHE}/io/get-coursier/coursier-core_2.13/2.1.8/coursier-core_2.13-2.1.8.jar:${DEPENDENCY_CACHE}/io/get-coursier/coursier-proxy-setup/2.1.8/coursier-proxy-setup-2.1.8.jar:${DEPENDENCY_CACHE}/io/get-coursier/coursier-util_2.13/2.1.8/coursier-util_2.13-2.1.8.jar:${DEPENDENCY_CACHE}/io/get-coursier/coursier_2.13/2.1.8/coursier_2.13-2.1.8.jar:${DEPENDENCY_CACHE}/io/get-coursier/jniutils/windows-jni-utils/0.3.3/windows-jni-utils-0.3.3.jar:${DEPENDENCY_CACHE}/io/github/alexarchambault/concurrent-reference-hash-map/1.1.0/concurrent-reference-hash-map-1.1.0.jar:${DEPENDENCY_CACHE}/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar:${DEPENDENCY_CACHE}/io/github/alexarchambault/windows-ansi/windows-ansi/0.0.5/windows-ansi-0.0.5.jar:${DEPENDENCY_CACHE}/io/github/java-diff-utils/java-diff-utils/4.15/java-diff-utils-4.15.jar:${DEPENDENCY_CACHE}/javax/inject/javax.inject/1/javax.inject-1.jar:${DEPENDENCY_CACHE}/jline/jline/2.14.6/jline-2.14.6.jar:${DEPENDENCY_CACHE}/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar:${DEPENDENCY_CACHE}/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar:${DEPENDENCY_CACHE}/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar:${DEPENDENCY_CACHE}/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar:${DEPENDENCY_CACHE}/net/openhft/zero-allocation-hashing/0.16/zero-allocation-hashing-0.16.jar:${DEPENDENCY_CACHE}/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar:${DEPENDENCY_CACHE}/org/apache/commons/commons-compress/1.24.0/commons-compress-1.24.0.jar:${DEPENDENCY_CACHE}/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar:${DEPENDENCY_CACHE}/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar:${DEPENDENCY_CACHE}/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar:${DEPENDENCY_CACHE}/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar:${DEPENDENCY_CACHE}/org/apache/logging/log4j/log4j-slf4j-impl/2.17.1/log4j-slf4j-impl-2.17.1.jar:${DEPENDENCY_CACHE}/org/apache/xbean/xbean-reflect/3.7/xbean-reflect-3.7.jar:${DEPENDENCY_CACHE}/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar:${DEPENDENCY_CACHE}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar:${DEPENDENCY_CACHE}/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar:${DEPENDENCY_CACHE}/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar:${DEPENDENCY_CACHE}/org/codehaus/plexus/plexus-archiver/4.9.0/plexus-archiver-4.9.0.jar:${DEPENDENCY_CACHE}/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar:${DEPENDENCY_CACHE}/org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar:${DEPENDENCY_CACHE}/org/codehaus/plexus/plexus-io/3.4.1/plexus-io-3.4.1.jar:${DEPENDENCY_CACHE}/org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar:${DEPENDENCY_CACHE}/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar:${DEPENDENCY_CACHE}/org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar:${DEPENDENCY_CACHE}/org/iq80/snappy/snappy/0.4/snappy-0.4.jar:${DEPENDENCY_CACHE}/org/jline/jline-builtins/3.24.1/jline-builtins-3.24.1.jar:${DEPENDENCY_CACHE}/org/jline/jline-native/3.24.1/jline-native-3.24.1.jar:${DEPENDENCY_CACHE}/org/jline/jline-reader/3.24.1/jline-reader-3.24.1.jar:${DEPENDENCY_CACHE}/org/jline/jline-style/3.24.1/jline-style-3.24.1.jar:${DEPENDENCY_CACHE}/org/jline/jline-terminal-jansi/3.24.1/jline-terminal-jansi-3.24.1.jar:${DEPENDENCY_CACHE}/org/jline/jline-terminal-jna/3.24.1/jline-terminal-jna-3.24.1.jar:${DEPENDENCY_CACHE}/org/jline/jline-terminal/3.24.1/jline-terminal-3.24.1.jar:${DEPENDENCY_CACHE}/org/jline/jline/3.27.1/jline-3.27.1-jdk8.jar:${DEPENDENCY_CACHE}/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar:${DEPENDENCY_CACHE}/org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar:${DEPENDENCY_CACHE}/org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar:${DEPENDENCY_CACHE}/org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar:${DEPENDENCY_CACHE}/org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar:${DEPENDENCY_CACHE}/org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar:${DEPENDENCY_CACHE}/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar:${DEPENDENCY_CACHE}/org/scala-lang/modules/scala-collection-compat_2.13/2.11.0/scala-collection-compat_2.13-2.11.0.jar:${DEPENDENCY_CACHE}/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar:${DEPENDENCY_CACHE}/org/scala-lang/modules/scala-xml_2.13/2.2.0/scala-xml_2.13-2.2.0.jar:${DEPENDENCY_CACHE}/org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar:${DEPENDENCY_CACHE}/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar:${DEPENDENCY_CACHE}/org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar:${DEPENDENCY_CACHE}/org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16.jar:${DEPENDENCY_CACHE}/org/scalactic/scalactic_2.13/3.2.19/scalactic_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-compatible/3.2.19/scalatest-compatible-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-diagrams_2.13/3.2.19/scalatest-diagrams_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-featurespec_2.13/3.2.19/scalatest-featurespec_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-flatspec_2.13/3.2.19/scalatest-flatspec_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-freespec_2.13/3.2.19/scalatest-freespec_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-funspec_2.13/3.2.19/scalatest-funspec_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-funsuite_2.13/3.2.19/scalatest-funsuite_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-matchers-core_2.13/3.2.19/scalatest-matchers-core_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-mustmatchers_2.13/3.2.19/scalatest-mustmatchers_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-propspec_2.13/3.2.19/scalatest-propspec_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-refspec_2.13/3.2.19/scalatest-refspec_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-shouldmatchers_2.13/3.2.19/scalatest-shouldmatchers_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest-wordspec_2.13/3.2.19/scalatest-wordspec_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/scalatest/scalatest_2.13/3.2.19/scalatest_2.13-3.2.19.jar:${DEPENDENCY_CACHE}/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:${DEPENDENCY_CACHE}/org/tukaani/xz/1.9/xz-1.9.jar:${DEPENDENCY_CACHE}/org/virtuslab/scala-cli/config_2.13/0.2.1/config_2.13-0.2.1.jar:${DEPENDENCY_CACHE}/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar",
+    "org.scalatest.tools.Runner",
+    "-R",
+    "${M1_RUN}/newclasses",
+    "-oW",
+    "-s",
+    "heteronpu.continuous.OrderedQkBehaviorSpec"
+  ],
+  "executed_cwd_role": "${M1_RUN}/normal_m1",
+  "executed_environment_roles": {
+    "HOME": "${M1_RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "${M1_RUN}/empty-path",
+    "TMPDIR": "${M1_RUN}/tmp"
+  },
+  "prerequisite_actual_CHIRRTL": "PASS_ACTUAL_SELECTED_ON_CHIRRTL_STRUCTURE_ONLY",
+  "private_original_supervisor_and_runtime_config_not_uploaded": true,
+  "not_a_portable_supervisor_or_authorization": true
+}

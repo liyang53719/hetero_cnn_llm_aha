@@ -1,0 +1,63 @@
+{
+  "original": {
+    "bytes": 38036,
+    "sha256": "48e1288f2003239f3a8905495bb8ccad59b2c963020c0df2ff2d0e5e5a042edc"
+  },
+  "retained": {
+    "schema": "qwen2-core-client-normal-m1-treadle-supervisor-v1",
+    "status": "FAIL_NORMAL_M1_TREADLE_RETAINED",
+    "case_name": "normal_m1",
+    "worker_started": true,
+    "exit_code": null,
+    "errors": [
+      "ValueError: sampled aggregate CPU cap exceeded",
+      "RuntimeError: normal_m1 worker did not exit zero",
+      "ValueError: final aggregate CPU cap exceeded"
+    ],
+    "final_aggregate_cpu_seconds": 600.437616799,
+    "sampled_peak_cpu_seconds": 600.0102720120001,
+    "sampled_peak_output_bytes": 59587515,
+    "sampled_peak_rss_bytes": 1244446720,
+    "maximum_sample_interval_seconds": 0.05539007700281218,
+    "log_bytes": 2329,
+    "preflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 1191
+    },
+    "postflight": {
+      "inventory_checks": 4,
+      "pass_all": true,
+      "pin_checks": 1191
+    },
+    "cleanup_complete": true,
+    "process_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "receipt_saved": true,
+    "original_failure_retained": true,
+    "hardware_behavior_pass": false,
+    "interpreted_core_behavior_pass": false,
+    "numerical_pass": false,
+    "rtl": false,
+    "utilization": "UNKNOWN_NOT_MEASURED",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 600,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 750,
+      "work_wall_seconds": 720
+    }
+  },
+  "cleanup_direct_exit_code": -9,
+  "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+  "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+  "normal_exit_code_not_replaced_with_cleanup_code": true,
+  "monotonic_deadline_and_process_identities_not_published": true
+}

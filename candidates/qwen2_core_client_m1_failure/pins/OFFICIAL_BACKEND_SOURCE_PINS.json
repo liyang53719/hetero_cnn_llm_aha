@@ -1,0 +1,151 @@
+{
+  "original": {
+    "bytes": 38365,
+    "sha256": "241aafa3d5056ddbea64411f0aa348f1de6c0fa7d60ffb893a41efcc2750e8fb"
+  },
+  "source_index": {
+    "bytes": 6046,
+    "sha256": "aae15e25bbcf8de113d08b7ff57439e8e835b20405f47029be663c12ba9d60e3"
+  },
+  "sources": [
+    {
+      "bytes": 4698,
+      "sha256": "97d4b5940cfb5be5c70bc147295a15d5608680c3fb28034ce61f613da56148f8",
+      "git_blob": "3c61f853df061c4dd3a8237fdba656e70d7b8459",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/chiseltest/internal/TesterUtils.scala"
+    },
+    {
+      "bytes": 3460,
+      "sha256": "33e10985ec734d78eeb68a9247d404cf7085368c465b3a78e254e94d8828aeba",
+      "git_blob": "c894454170130989b899af5efe2e491282895722",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/chiseltest/simulator/TreadleSimulator.scala"
+    },
+    {
+      "bytes": 17220,
+      "sha256": "1794e0728beff8bb88b9860e2835ab672ad8a9f90216f9728461f8549b339274",
+      "git_blob": "d94b665079463468035534dc6f5546948fde0eca",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/chiseltest/simulator/ChiselBridge.scala"
+    },
+    {
+      "bytes": 2654,
+      "sha256": "a5eb6dfc9258815ec0086026ede05e6db27bc4b96b02639d14169614f4ea7549",
+      "git_blob": "fabb0840785276f785fc76cc4dfb5968c7265985",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/chiseltest/simulator/Compiler.scala"
+    },
+    {
+      "bytes": 577,
+      "sha256": "c8335b1ebe7cbd8ff1f23084b517534aa4a3d0b0cd2f200bec543e247534d34b",
+      "git_blob": "5f12fb0fc34149335101e06456f989b60f94e439",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/stage/TreadleTesterPhase.scala"
+    },
+    {
+      "bytes": 1358,
+      "sha256": "4889b2a14ee811f69981d543b65ec48db4adff63d17ffeab4bb31bf32307496c",
+      "git_blob": "c850ef7e844800fdb4dacf51b3dadd024ef2f630",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/stage/phases/PrepareAst.scala"
+    },
+    {
+      "bytes": 8852,
+      "sha256": "fc714ef56186cf4689cc195114a73928d895e0f4e22f535a6b82b3c2dce92d11",
+      "git_blob": "cab6517f2b9524dfb28387845c8e5cb159e4f606",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/chiseltest/simulator/Simulator.scala"
+    },
+    {
+      "bytes": 682,
+      "sha256": "efde4b187a80a11f3330fb023d914abfdc92c1d634fd8ccbb349c02e9346d0ec",
+      "git_blob": "7ad8e3e9d5b8c255b1925d7c2ce7da8d63081d4d",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/stage/phases/CreateTester.scala"
+    },
+    {
+      "bytes": 2022,
+      "sha256": "b228c35eadd511f24526f9a45a551d34a4ae5a869a3e66244de97bfe3fd3a1bc",
+      "git_blob": "ed856f9902fc6156183a983ce1916dc838bc75e0",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/stage/phases/GetFirrtlAst.scala"
+    },
+    {
+      "bytes": 14593,
+      "sha256": "c69f70d1158ad1a68f3fe74cc30a66a5780f93783bebfcad8cea17bd897158b1",
+      "git_blob": "0cbfa97ae054466c9741993107ad22bf85f1382d",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/TreadleTester.scala"
+    },
+    {
+      "bytes": 19550,
+      "sha256": "546d98a46f32bc04a109a3112bd9ef230fd8e86f30e0d27b967e48249af30ea0",
+      "git_blob": "172ca06a5ae86b5804860a939d8d235d80504833",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/executable/ExecutionEngine.scala"
+    },
+    {
+      "bytes": 1333,
+      "sha256": "3afe018311faf6b689500c9bad5685576ebce9c51a6e1cf6597aaa05f58c13d5",
+      "git_blob": "d1bd3720412a9bde8b7e401a31045f7377d13c67",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/stage/phases/SetImplicitOutputInfo.scala"
+    },
+    {
+      "bytes": 44098,
+      "sha256": "4ca8f2a335e2901673a198517f36603247aaa3c7f8666ae52dff51fc0422173b",
+      "git_blob": "605e84314d05062775c177af9ef5b564b205c966",
+      "url": "https://github.com/ucb-bar/chiseltest/blob/d764fdf74652426b57c6eae00d71eac19effd224/src/main/scala/treadle2/executable/ExpressionCompiler.scala"
+    }
+  ],
+  "binary_metadata": [
+    {
+      "entry": "firrtl2/LowFirrtlEmitter.class",
+      "bytes": 746,
+      "sha256": "0adcea1257e3544f113feadc98ff3ede7294a785e45ae05606f3217b5e8de200",
+      "jar": {
+        "bytes": 4510129,
+        "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b"
+      }
+    },
+    {
+      "entry": "firrtl2/stage/phases/AddImplicitOutputFile.class",
+      "bytes": 8669,
+      "sha256": "2b8e68c1c6ea75057ca576a15b9b5b2e9d90fd3701bd9a5ea929ac60f3ea4a35",
+      "jar": {
+        "bytes": 4510129,
+        "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b"
+      }
+    },
+    {
+      "entry": "firrtl2/options/phases/WriteOutputAnnotations.class",
+      "bytes": 13462,
+      "sha256": "e6fdea51807192c456b7bc80c2a234c1e63b1c2fdc689d4ad948f2c1400dc1a1",
+      "jar": {
+        "bytes": 4510129,
+        "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b"
+      }
+    },
+    {
+      "entry": "chiseltest/simulator/Compiler$.class",
+      "bytes": 9845,
+      "sha256": "2920579b80a584254b85e5f66c0abb28436ddc910dc5414c54df44fdab43c0bc",
+      "jar": {
+        "bytes": 2707568,
+        "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5"
+      }
+    },
+    {
+      "entry": "chiseltest/simulator/TreadleSimulator$.class",
+      "bytes": 6453,
+      "sha256": "cc8e788cc30de59346a738d736b77a060e0ebaf20c1dd1cbb8f84c021c3f15fc",
+      "jar": {
+        "bytes": 2707568,
+        "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5"
+      }
+    },
+    {
+      "entry": "treadle2/TreadleTester.class",
+      "bytes": 34824,
+      "sha256": "1d4394889da81be44200c21f966e939c9688153ebe35f0764b4a0d733b5d60e5",
+      "jar": {
+        "bytes": 2707568,
+        "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5"
+      }
+    }
+  ],
+  "boundary": "Actual Chisel elaboration and in-process FIRRTL lowering/interpretation. VerilogMemDelays is an IR memory transform; no selected SystemVerilog/native simulator/tool route. No-extmodule prerequisite applies to this exact actual selected circuit, not to arbitrary Treadle circuits.",
+  "limits": "Constant-pool evidence is not a complete bytecode call-graph proof; selected route relies on independently reviewed archived official source, exact binary closure, and explicit backend annotation. New target lowering/runtime still untested.",
+  "original_status": "PASS_PINNED_SOURCE_AND_BINARY_METADATA_ONLY",
+  "historical_source_stage_jvm_executed": false,
+  "binary_payloads_not_published": true
+}

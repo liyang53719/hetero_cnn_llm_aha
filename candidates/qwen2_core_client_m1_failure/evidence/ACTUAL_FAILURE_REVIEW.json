@@ -1,0 +1,93 @@
+{
+  "original": {
+    "bytes": 4675,
+    "sha256": "17b44c89f165e8b0ff52572921fbb3d0532f041d3a230cf24011f3160c42e8da"
+  },
+  "review_freeze": {
+    "bytes": 1159,
+    "sha256": "ec090afcc1b60498c60f6834b4eefffe9943ffb4dc1c1544fed02cbd63f91692"
+  },
+  "projection_policy": "Omit private paths/stat/root-process locators only; every retained field unchanged. LOW IR is hash/length metadata, never payload.",
+  "review": {
+    "MAC_utilization": null,
+    "actual_JVM_worker_started": true,
+    "actual_behavior_checker_called": false,
+    "actual_clock_count": null,
+    "bounded_ir_edge_review": {
+      "bytes": 2764,
+      "sha256": "e08dfeb375d55b8607f54aa26b01521603fd2f308f9b5f9c7d0063d7acc6c515"
+    },
+    "cleanup_complete": true,
+    "cleanup_direct_exit_code": -9,
+    "continuous_classloader_or_global_process_isolation_claim": false,
+    "created_utc": "2026-10-25T17:32:00.096839+00:00",
+    "exact_stall_function": null,
+    "failure_cause_claim": "Frozen aggregate CPU qualification exceeded600s; no arithmetic/protocol root cause established",
+    "final_aggregate_cpu_seconds": 600.437616799,
+    "final_original_stat_checks": 30,
+    "full29_upgrade": false,
+    "full_IR_parsed": false,
+    "full_IR_validated": false,
+    "identity_checks": 9484,
+    "identity_freeze": {
+      "bytes": 2037,
+      "sha256": "0c1d76e10b33b732449c96199f0c9225ecc67eb55e18da645b6e025ae3b7f473"
+    },
+    "identity_review": {
+      "bytes": 6775,
+      "sha256": "ef4d015bdcefe34de09141922b5bb1ebf3301186c3051b8ad9364e76a41926ba"
+    },
+    "implicit_manifest_slots_absent_at_pre_post_and_review": true,
+    "input_pins_including_manifest_and_self": 1191,
+    "inventories": 4,
+    "maximum_sample_interval_seconds": 0.05539007700281218,
+    "next_step": "No execution chained; any new bounded diagnostic, instrumentation or budget proposal requires separate root authorization/freeze",
+    "no_rerun_or_retry": true,
+    "normal_exit_code_field": null,
+    "original_artifacts": {
+      "bytes": 59625551,
+      "count": 24,
+      "low_ir": {
+        "bytes": 58897360,
+        "hash_read_count": 1,
+        "relative": "normal_m1/simulation/OrderedQkBehaviorCore.lo.fir",
+        "sha256": "71a27f80112970011761ffe361e6466a57a53f4eae95a816a252bc162ec4ea56"
+      },
+      "opaque_manifest": {
+        "bytes": 22462,
+        "sha256": "f8b34ec012e20910c752dc66f5dd27b82adb10394a0f86ff5ed55902ed7b9e23"
+      },
+      "unchanged": true
+    },
+    "original_compile_CHIRRTL_and_preparation_PASS_preserved": true,
+    "phase_timing": null,
+    "postmortem_audit_executed_JVM_DUT_reference": false,
+    "postmortem_process_control": false,
+    "report": {
+      "bytes": 4678,
+      "sha256": "e5492762152267a2af5bc7e84304d5e166ffee23ad5e2aa880a3ac661a8814c5"
+    },
+    "retained_case_pass_count": 0,
+    "retained_obs_count": 0,
+    "retained_ready_count": 0,
+    "root_outer_timeout": false,
+    "root_returncode": 1,
+    "root_wall_seconds": 600.6606750690262,
+    "rtl_numerical_pass": false,
+    "sampled_aggregate_cpu_seconds": 600.0102720120001,
+    "sampled_rss_bytes": 1244446720,
+    "schema": "normal-m1-actual-terminal-failure-review-v1",
+    "semantic_checks": 72,
+    "semantic_review": {
+      "bytes": 9994,
+      "sha256": "7c3bab7003ec37a3eb4a6adce82a13add79c37717e6462701b950e3eceb35ce7"
+    },
+    "software_full128_observed_domain_result_not_upgraded_or_revoked": true,
+    "stage_claim": "Observed class-origin records, elaboration warnings and low-IR materialization only; no ready/body/clock completion evidence",
+    "staged_class_count": 20,
+    "status": "CONFIRMED_ACTUAL_NORMAL_M1_CPU_BUDGET_FAIL",
+    "supervisor_status": "FAIL_NORMAL_M1_TREADLE_RETAINED",
+    "system_duty_cycle": null,
+    "verified_identity_freeze_members": 10
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "status": "PASS_PACKAGE_BYTES_PINS_AND_SYNTHETIC_CHECKER_ONLY",
+  "identity_comparisons": 102,
+  "unique_files_hashed": 98,
+  "original_source_files_byte_exact": 2,
+  "expectation_only_six_private_paths_replaced_by_synthetic_roles": true,
+  "existing_public_refs": 8,
+  "official_backend_sources": 13,
+  "binary_metadata_entries": 6,
+  "original24_artifacts_stat_unchanged": true,
+  "small_actual_artifacts_rehashed": 23,
+  "actual_low_IR_not_reopened_rehashed_or_reparsed": true,
+  "original_actual_failure_and_diagnosis_freezes_verified": true,
+  "synthetic_unique_cases": 35,
+  "synthetic_executions": 70,
+  "tests": [
+    {
+      "mode": "normal",
+      "tests": 35,
+      "exit": 0,
+      "log": {
+        "bytes": 2227,
+        "sha256": "e20d09226a74b14cb0a1a9929fbb3b751463c0c6e26e44557f4b41ae67591bf2"
+      }
+    },
+    {
+      "mode": "optimized",
+      "tests": 35,
+      "exit": 0,
+      "log": {
+        "bytes": 2227,
+        "sha256": "2d0319430c88e479f0336c677f861b54ac76d87b370f19fce0b318948b26a881"
+      }
+    }
+  ],
+  "actual_M1_checker_not_invoked": true,
+  "JVM_DUT_native_reference_IR_compiler_executed": false,
+  "old_evidence_changed": false
+}

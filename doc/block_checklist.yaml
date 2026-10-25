@@ -7,7 +7,7 @@
 - to do
 - ongoing
 - done
-说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。 2026-10-24当前证据见本文件末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。 2026-10-24最新导航：既有dated说明为各时点快照，本段仅更新当前导航，不改历史结果。后续已发布局部进展见doc/block_checklist.yaml中的“Qwen2有序归约已发布里程碑20261024”：selected默认关闭候选scalac编译、Python行为参考、M1/M2生成器调度、owner/direct控制、native Attention组件R2及observer AST软件fixture分别在各自有限范围PASS；observer原AST片的正常source-loaded TEMP保留为历史；后续正常模块加载/code-binding有限范围PASS，真实runtime Observation/capture及无干扰资格仍TEMP，开发与环境FAIL全部保留。各里程碑只补来源和导航，不关闭P03/C05/C08.2等任务，也不赋予M128/fullblock/Chisel/RTL/周期或利用率资格；完整block RTL仍0/5，固定4096-MAC的90%目标未达/未实测。
+说明: 此文件是唯一执行状态来源。plan保持原始验收定义；其待执行为编制时快照，不用于派工。父项状态由子项汇总，部分done不等于父项done。2026-10-11按用户新顺序先Qwen2完整L0，再0.8B与35B的L0/L3；先完整M128软件模型，再冻结激励硬件回放，详见QWEN2_PREFILL_MODEL_FIRST_20261011_CN.md。2026-10-15完整M128软件链实际终态已执行，但原数值门4项失败；当前小链隔离与后续范围见本文件末尾20261015节。 2026-10-24当前证据见本文件末尾“当前证据索引20261024”：Qwen2历史真正cold M128仅27项已分配门PASS；Qwen3.5-0.8B L0 fresh cold128→carried128完整typed-software原门数值PASS（修正后的独立后置比较，原导入失败保留）。新Qwen2 selected/direct/fold profile整体INCOMPLETE，旧PASS不继承；五block完整RTL为0/5，90%目标未达，U00/U01及全部任务状态不变。 2026-10-24最新导航：既有dated说明为各时点快照，本段仅更新当前导航，不改历史结果。后续已发布局部进展见doc/block_checklist.yaml中的“Qwen2有序归约已发布里程碑20261024”：selected默认关闭候选scalac编译、Python行为参考、M1/M2生成器调度、owner/direct控制、native Attention组件R2及observer AST软件fixture分别在各自有限范围PASS；observer原AST片的正常source-loaded TEMP保留为历史；后续正常模块加载/code-binding有限范围PASS，真实runtime Observation/capture及无干扰资格仍TEMP，开发与环境FAIL全部保留。各里程碑只补来源和导航，不关闭P03/C05/C08.2等任务，也不赋予M128/fullblock/Chisel/RTL/周期或利用率资格；完整block RTL仍0/5，固定4096-MAC的90%目标未达/未实测。 2026-10-25最新导航：后续十四项已发布证据见doc/block_checklist.yaml中的“Qwen2参考与DUT准备已发布证据增量20261025”。Attention M1/M2 Observation、正常source/code绑定、官方M16与fresh coldM128单层reference、metadata-only及首PC前native初始化各自仅有限范围PASS，source/mock准备分列且旧UNBOUND/NOT_READY保持历史。最新真实M128 DUT虽完成原prefix PC0..9，采样CPU3600.03超过3600预算，整体FAIL/INCOMPLETE；无wholeterminal、final inventory、数值比较或成功seal，run外41文件hash仅保全证据。raw stream结构计数和绿色payload guard不代表数值、生命周期、性能或DUT通过。官方pair仅reference，29 observed自检不等于全部29 baseline中间值无干扰；全模型、RTL及硬件90%验收未通过。全部旧dated FAIL/TEMP、任务状态、冻结plan与原门限不变。
 任务:
 - 编号: C00
   名称: 重建最新源码与证据基线
@@ -2265,3 +2265,420 @@ Qwen2有序归约已发布里程碑20261024:
     CI范围: payload guard（38普通+38优化），不是正常绑定或native数值重跑
     CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
   设计与执行身份说明: 设计提交标识被索引候选/证据包的固定源码快照（可能为发布提交），不自动等于实际runtime HEAD；执行身份以各报告精确config/source/ELF pins为准。native R2继承owner源码基线a672a56feef9b661f6682bedfcbd702d1ddbc3fa，observer继承039bef44e37062e317af705ac8569db9809d7e3c；本次正常绑定以c8de5739b68e7cfc3489cbe677681a5af6009442为来源基线。
+
+Qwen2参考与DUT准备已发布证据增量20261025:
+  更新时间: '2026-10-25'
+  核对main: 28bbcf3f3678bb8fb2fd3cca6297463b149e08f2
+  核对Git树: 6cea76b1e06e189fe007845bf10be94c8ec1cf51
+  上次canonical发布: e3c596f61941ab015de719cc143b245400c1c2ca
+  性质: 十四项已发布的有限范围证据索引；只追加导航，非任务状态变更、新执行许可或完整DUT准入。实际DUT预算失败与source/mock、reference、正常绑定、metadata和初始化证据分列。
+  历史保持: 此前所有dated节、七里程碑、FAIL/TEMP/UNKNOWN及原文保持不变；后来的独立有限PASS不回写旧失败或旧提案。
+  任务与验收边界: 46父项/62叶项、负责人、依赖、证据及完成边界不变；C05/C08.2/C08.3/Q22/P03/U01保持to do，Q21.3/U00.2保持ongoing。五block完整RTL为0/5，固定4096-MAC完整周期90%目标仍未达/未实测。
+  参考与DUT分界: 官方M16和fresh coldM128单层pair仅reference generation；y/prob与原边界状态一致不等于全部29 baseline中间值无干扰。早期terminal capture公开包仍保留UNBOUND/NOT_READY历史；后续正常绑定、metadata-only及首PC前初始化各自仅有限PASS。最新真实M128
+    DUT执行原prefix PC0..9后CPU超预算，整体FAIL/INCOMPLETE，无wholeterminal或完整新profile数值比较。
+  设计与执行身份说明: 设计提交固定公开证据包，不自动等于runtime HEAD。实际执行身份以该包source/config/input/tool pins为准；公开逻辑投影不等于私有原件或可执行准入配置。
+  检验说明: 标准validate不检查任意dated节；本次对旧七项及新十四项里程碑和每个主/关联文件显式check_proof，并核Git blob/SHA256，普通与-O模式及故意破坏的负例另留冷校验记录。文档校验不重跑任何所引用的任务/数值执行。
+  自动CI边界: 各证据包现存自动CI仅payload guard，绿色不代表DUT通过。canonical两文件发布会触发既有三个CI，包含20分钟上限的native prefill model-contract；只由一次发布触发现存有界CI，不手动重复dispatch，workflow/trigger原字节不变。本次本地仅checklist冷校验，不执行native/import/model。
+  里程碑:
+  - 里程碑: runtime_observation_m1_m2
+    发布提交: 8b3c5a2ea6e9615f5a2a8c37ad5392c6d4a7941a
+    设计提交: 8b3c5a2ea6e9615f5a2a8c37ad5392c6d4a7941a
+    来源基线: e3c596f61941ab015de719cc143b245400c1c2ca
+    关联既有任务:
+    - C08.2
+    - C08.3
+    - Q21.3
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅同profile Attention组件一次M1及条件M2：observed/off两臂相同ordered fold，返回输出、scores、十实际字段、控制trace及完整ticket生命周期对应；保留原M1与cold-import失败。125项四模式软件测试是历史证据，不是本次重跑。不是完整block/M16/M128/RTL或硬件性能。
+    文件: candidates/qwen2_runtime_observer_r2/validation/EXECUTION_REVIEW_SUMMARY.json
+    SHA256: 0dabd228f1799e0dcd2265d3305105b031fe9fdb93b1857d8488a175498b71b7
+    关联文件:
+    - 文件: candidates/qwen2_runtime_observer_r2/validation/M1_OBSERVATION_SUMMARY.json
+      SHA256: aed0a4a1fd71438c187b7a7d9b9fc4ba849f70bb8aae145f25bd3512fa96edc2
+    - 文件: candidates/qwen2_runtime_observer_r2/validation/M2_OBSERVATION_SUMMARY.json
+      SHA256: 092e3b703fd97a290c152b8faaea1f35e4a313b20da8d0d3402a314435fccda8
+    - 文件: candidates/qwen2_runtime_observer_r2/validation/PRESERVED_FAILURES_SUMMARY.json
+      SHA256: 86b2818290d332017766d742a7ab97daa5f8d5775a5cbe0b37b7b90a27aa6023
+    - 文件: candidates/qwen2_runtime_observer_r2/MANIFEST.json
+      SHA256: c201eaaa34261f146f73855322a0d9678e936508cde1a40e209ac17fa20060c7
+    - 文件: candidates/qwen2_runtime_observer_r2/PROFILE_PROJECTION.json
+      SHA256: 71d5cdce2da508eae0a3c92213147a7277bb7e06deb3dead96a40c1267fa94a8
+    - 文件: candidates/qwen2_runtime_observer_r2/REFERENCE_SOURCE_IDENTITIES.json
+      SHA256: 33668fc3c17e74f26b712979ece02aec353c8eabe64ac7992aaad252195ecc95
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40144854246
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: fullgraph_entry_source_control
+    发布提交: 5e703311d62ab05ae7679d17d7ba101c1e201525
+    设计提交: 5e703311d62ab05ae7679d17d7ba101c1e201525
+    来源基线: 8b3c5a2ea6e9615f5a2a8c37ad5392c6d4a7941a
+    关联既有任务:
+    - C05
+    - C08.2
+    - Q21.3
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅default-off完整图入口源码组合与控制fixture，193项四模式；该包当时正常导入失败、九方法绑定未达及M16参考未齐的NOT_READY保持历史。不能由后续绑定或参考包追认该包runtime/fullblock数值通过。
+    文件: candidates/qwen2_ordered_fullgraph_entry/validation/CONTROL_TESTS.json
+    SHA256: 79a6a3ced3b9ffd2deeb7c9519027f781ca7c4016ad7d159f8ec393e6f94908f
+    关联文件:
+    - 文件: candidates/qwen2_ordered_fullgraph_entry/validation/SOURCE_COMPOSITION.json
+      SHA256: 9d0d59ffc920432366a5c11b9342185047000e597c1937372d01ae70af24f45d
+    - 文件: candidates/qwen2_ordered_fullgraph_entry/validation/NORMAL_IMPORT_OUTCOME.json
+      SHA256: 61df3eb3385723a70cb0ad79e5332a534f007a33dda78219ada15683abef3083
+    - 文件: candidates/qwen2_ordered_fullgraph_entry/validation/FAILURES_PRESERVED.json
+      SHA256: 514fea90f1c1924276f51a097ce8941885d12dc9700fbe7504e5cae2536a1938
+    - 文件: candidates/qwen2_ordered_fullgraph_entry/MANIFEST.json
+      SHA256: 40e0d4014fde2d7ff858f18eb2e0462ea14461daddda604e5df813826ad6849a
+    - 文件: candidates/qwen2_ordered_fullgraph_entry/SOURCE_PINS.json
+      SHA256: 129291eb1a837c9c0fe698b2bcd4bfc027281d914f42c7dc59bc0058694b137e
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40146983014
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: fullgraph_normal_source_binding
+    发布提交: 74fa592972eb47d9fadcb14ff0ac22374bd8329a
+    设计提交: 74fa592972eb47d9fadcb14ff0ac22374bd8329a
+    来源基线: 5e703311d62ab05ae7679d17d7ba101c1e201525
+    关联既有任务:
+    - C08.2
+    - U00.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅一次正常冷加载15角色/九真实方法绑定、PyYAML身份及722 pins保持，68项四模式软件fixture；披露17 ELF+2 locale与依赖native初始化。未执行任务Matrix service、Observation或全block数值/无干扰验收，所有前次失败保留。
+    文件: candidates/qwen2_fullgraph_normal_binding/validation/EXECUTION_SUMMARY.json
+    SHA256: 8f7bbf039b71d60d4055c6f7bc301e11657d9b723dbdc3e8f0c72037771d6fa0
+    关联文件:
+    - 文件: candidates/qwen2_fullgraph_normal_binding/validation/INDEPENDENT_EXECUTION_REVIEW.json
+      SHA256: 1c5bd03e3bb984b9d93415baa973caad1b32a8cc4948491a251c3dcf07caa245
+    - 文件: candidates/qwen2_fullgraph_normal_binding/validation/FAILURES_PRESERVED.json
+      SHA256: 230aae2d2c9e5fd8725aa50fb90e9ba38dc98bfe778922570548ad6ccac6d709
+    - 文件: candidates/qwen2_fullgraph_normal_binding/validation/POSTRUN_RECHECK.json
+      SHA256: 758d98870c0732cc8736f597b22204b7380fdf110417c6ac49da963d296f42a1
+    - 文件: candidates/qwen2_fullgraph_normal_binding/DEPENDENCY_PINS.json
+      SHA256: 0f367aacb8d258366e2d965c62568ef48e4a140c88b7fe76be010d4dc48707e8
+    - 文件: candidates/qwen2_fullgraph_normal_binding/MANIFEST.json
+      SHA256: 5a177eb9c2d884e11b46b173c809f6482a668062368d9940d85d0d002bf91936
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40149254974
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: official_m16_capture_source_mock
+    发布提交: 6f0867b4635072b0990f230975eaac67e7def0df
+    设计提交: 6f0867b4635072b0990f230975eaac67e7def0df
+    来源基线: 74fa592972eb47d9fadcb14ff0ac22374bd8329a
+    关联既有任务:
+    - Q21.3
+    - C08.2
+    - U00.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅官方完整层capture源码/mock，四模式各21原例+32扩展例，存在重叠不计为53独立覆盖；公开run_capture无条件禁用。该包没有官方import、forward或实际reference，后续独立M16/M128结果不回写此历史TEMP。
+    文件: candidates/qwen2_m16_official_layer_capture/VALIDATION.json
+    SHA256: 4a87509751a353350446c6c43033ea257a7e2344aed41bab0cfd2284000220fc
+    关联文件:
+    - 文件: candidates/qwen2_m16_official_layer_capture/evidence/PACKAGE_REVIEW.json
+      SHA256: e5c87f3c60ad5590a39cf85e0c83bef6c44463035ff8f456ae7637ca0121fac9
+    - 文件: candidates/qwen2_m16_official_layer_capture/evidence/HISTORICAL_REVIEW_PROJECTION.json
+      SHA256: 38657d2556c83c6d44455a48b9303b6ba9ed5420d0481aba0e41e3a74b8643bd
+    - 文件: candidates/qwen2_m16_official_layer_capture/PUBLICATION_ADAPTATION.json
+      SHA256: 462d3d5c0d39a3058f306467dc6da62c6e61448bb8242a5c18ad41790de24edb
+    - 文件: candidates/qwen2_m16_official_layer_capture/pins.json
+      SHA256: 0a129018f3c82d959014a0d7a205d736ea0d589d958e970cc96f7ecf2899fa13
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40151898695
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: official_import_limited_r2
+    发布提交: 8c5274aa302415fcca93d8f7cc8fc12d916ebfcf
+    设计提交: 8c5274aa302415fcca93d8f7cc8fc12d916ebfcf
+    来源基线: 6f0867b4635072b0990f230975eaac67e7def0df
+    关联既有任务:
+    - Q21.3
+    - U00.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅r2正常官方import：三包版本、四selected own-class代码身份、九模块字典对象绑定及一个源/stack/address钉定IPv6 loopback probe；70独立pure mock四模式。旧FAIL保留；45无文件模块/两typing对象仅诊断，不证明所有live
+      code。未实例化model、forward或生成reference。
+    文件: candidates/qwen2_official_layer_import/evidence/REAL_IMPORT_RESULT.json
+    SHA256: 586c25e8582a5e26d8431bba8fb2ce144c121762edc28c4ce9af2d8663b668c5
+    关联文件:
+    - 文件: candidates/qwen2_official_layer_import/evidence/EXECUTION_REVIEW_PROJECTION.json
+      SHA256: ed7795aef3257183ee1a753f6d466e8166dde11b6af94932169a6058a36a0738
+    - 文件: candidates/qwen2_official_layer_import/evidence/PREDECESSOR_FAILURE_PRESERVED.json
+      SHA256: 8c0ac0a43f4f1dc20c7a4559bb3705f7ac150f9356280288b8ac5164c9190ffb
+    - 文件: candidates/qwen2_official_layer_import/evidence/LOOPBACK_PROBE_OBSERVATIONS.json
+      SHA256: c20d00df6fb077769f44fa3fe7c7870b24e9744a32301f0ccbf77741340dd893
+    - 文件: candidates/qwen2_official_layer_import/evidence/SOURCE_TOOL_DEPENDENCY_PINS.json
+      SHA256: 7f33a14d5cf4d2aa11e32305a8d5a5a440901bf02a5e7af8d078b2f07e0db367
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40152602922
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: official_m16_actual_reference_pair
+    发布提交: b41b8dc064194791ebb153b773c3ad3f45511724
+    设计提交: b41b8dc064194791ebb153b773c3ad3f45511724
+    来源基线: 8c5274aa302415fcca93d8f7cc8fc12d916ebfcf
+    关联既有任务:
+    - Q21.3
+    - C08.2
+    - U00.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅官方config M16单个DecoderLayer同实例baseline→observed完整层reference：实际y/prob原字节相同，三个原输入/参数/buffer边界不变，29 observed字段自检通过。不是DUT/project rotary256、全部29
+      baseline中间值无干扰、M128或完整模型/RTL/性能验收；portable覆盖66原例+2新增hash例，不冒称历史68全复现。
+    文件: candidates/qwen2_official_layer_reference_pair/evidence/EXECUTION_SUMMARY.json
+    SHA256: 519fd41775410d9c4203bbfbcff25e86c671f40c4294afc97e755a49125f49d3
+    关联文件:
+    - 文件: candidates/qwen2_official_layer_reference_pair/evidence/EXECUTION_REVIEW_PROJECTION.json
+      SHA256: 0fb98ed6836520203fc67ec484363dcc728c147eab4603d8a714071c292c1d65
+    - 文件: candidates/qwen2_official_layer_reference_pair/evidence/OUTPUT_IDENTITIES.json
+      SHA256: d6e8677103a807c214c3bde085ea90e7282bf970e30d3c6f1580df178c96619f
+    - 文件: candidates/qwen2_official_layer_reference_pair/evidence/SOURCE_INPUT_TOOL_PINS.json
+      SHA256: 3c8b25d2902f30056c575a031d295b59c5b0a6251b1e46b399dc1a52bc2c8b90
+    - 文件: candidates/qwen2_official_layer_reference_pair/evidence/REVISION_HISTORY.json
+      SHA256: d648a98c8cdcd1181b00de266a7ffa65ecd17d5a9b5c58b3d0f016d210862cef
+    - 文件: candidates/qwen2_official_layer_reference_pair/PUBLICATION_ADAPTATION.json
+      SHA256: 2e05316c8adc95fea444964b4d0213bddd236d761524b5736dbf6ef4fb2ab215
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40153842184
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: bounded_event_retention_r2
+    发布提交: 98d73a892d93c5f3b7b0b190b5255a6b82d2b781
+    设计提交: 98d73a892d93c5f3b7b0b190b5255a6b82d2b781
+    来源基线: b41b8dc064194791ebb153b773c3ad3f45511724
+    关联既有任务:
+    - C08.3
+    - C08.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅有界原始service-event保留/异常优先级的软件及合成验证：driver异常与显式取消优先，非取消monitor故障sticky FAIL；完整保留不等于生命周期验收。作者109 isolated-optimized+14 normal delta；独审109四模式+13异常+6
+      monitor controls分别归属，旧R1 BLOCKED及M1/M16/M32历史样本保留。不是真实DUT RSS/吞吐、M128数值或硬件性能；两个pins指向已组合preimage，不代表raw-main兼容。
+    文件: candidates/qwen2_ordered_event_stream/INDEPENDENT_REVIEW_PROJECTION.json
+    SHA256: dec139ad2eadc6dba5ec8c0451ef393be4fbc51cc414d36804cccfb8ff92e21f
+    关联文件:
+    - 文件: candidates/qwen2_ordered_event_stream/software_tests/RESULTS.json
+      SHA256: df36461b0857c6772505f80b5af0cace9518a773fd2dfc91115bbf13ca7e81a3
+    - 文件: candidates/qwen2_ordered_event_stream/SOURCE_PROVENANCE.json
+      SHA256: c071baaa26b71c41d870346b30061a70adce28008e7f13775b6869613bbf1354
+    - 文件: candidates/qwen2_ordered_event_stream/SOURCE_LOGICAL_PINS.json
+      SHA256: bf48e0b88097b3fb73c810cfcf4fd5d45ea4cf693ee12c292e48107018074093
+    - 文件: candidates/qwen2_ordered_event_stream/synthetic_evidence/CAPACITY_PROVENANCE.json
+      SHA256: 5b4f1a02b9eb2771db8acb37dc019d96ebc63389aecd667c6fb8af40a5bb3f71
+    - 文件: candidates/qwen2_ordered_event_stream/synthetic_evidence/SCHEMA_BOUND.json
+      SHA256: 64ef41eda0e26d614b30a513680a87058f5e5d2ae8390697fff0d25b8ecb2f42
+    - 文件: candidates/qwen2_ordered_event_stream/R2_DELTA.patch
+      SHA256: 3ee3d40dffe227981b2973e298d7d5bc3876906af527e302e5f2451cc1094a5a
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40156491005
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: official_m128_source_mock_r2
+    发布提交: 9e4d51f1acf8f5ac62326c6dd3ec54d2ab8fc9ff
+    设计提交: 9e4d51f1acf8f5ac62326c6dd3ec54d2ab8fc9ff
+    来源基线: 98d73a892d93c5f3b7b0b190b5255a6b82d2b781
+    关联既有任务:
+    - Q21.3
+    - C08.2
+    - U00.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅fresh M128完整官方层reference准备的source/mock子集：10保留terminal mocks+8新增source/logic，normal/-O；不复现历史私有92或独审9例全套。60 CPU秒/90 wall秒仍是冻结提案且launch_ready=false，不是准入或实际预算PASS。保留r1晚输出/父receipt预算失败；后续120/180实际pair独立列示。
+    文件: candidates/qwen2_official_m128_reference_pair/evidence/SOURCE_MOCK_REVIEW_PROJECTION.json
+    SHA256: 6bcff778d2b37bde41a6db3bc875d8969da0810e3135c4fca7e8e675b417b960
+    关联文件:
+    - 文件: candidates/qwen2_official_m128_reference_pair/evidence/PORTABLE_TEST_SCOPE.json
+      SHA256: 8237c7a17df10cb3cea6a1e83956982dc524d01599d6333e72950226371ff681
+    - 文件: candidates/qwen2_official_m128_reference_pair/evidence/FAILURE_HISTORY_SUMMARY.json
+      SHA256: c5b0fbc8ac47f884335307b3574f2ef6f476776d53f1a313846a4ff987545a3a
+    - 文件: candidates/qwen2_official_m128_reference_pair/SOURCE_SHA256.json
+      SHA256: 8688c7cab8c095144e95f46ba94fd3056c558c22f5a46480e1ec701c2871e391
+    - 文件: candidates/qwen2_official_m128_reference_pair/PROFILE_DRAFT.json
+      SHA256: 84b1393017b77d3246f11a4bf3ce401caf2bba2c1fb385019f42d075b0ef2356
+    - 文件: candidates/qwen2_official_m128_reference_pair/RESOURCE_PROPOSAL.json
+      SHA256: ad34b4aeccf224651f9eb20a49f8bf0f3ae4254649394e8fbda4e4701ac97266
+    - 文件: candidates/qwen2_official_m128_reference_pair/PUBLICATION_ADAPTATION.json
+      SHA256: b708593c17cf3df81708b848ac6ef0f919aa2b96b25a3020051352fc571e5c28
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40156750375
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: m128_terminal_capture_source_adapter
+    发布提交: 210f948b26acaf7d35b5762a6f89d99fd85ee5a4
+    设计提交: 210f948b26acaf7d35b5762a6f89d99fd85ee5a4
+    来源基线: 9e4d51f1acf8f5ac62326c6dd3ec54d2ab8fc9ff
+    关联既有任务:
+    - C08.2
+    - C08.3
+    - Q21.3
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅八个combined r3原字节postimage/source-only composer与adapter审查：prefix/pc12/suffix单次终态边界、readonly x/原SiLU、RoPE observed half-domain、sticky
+      oracle拒绝与原driver异常语义。公开6-case两模式和独立8组adapter验证，与历史47+11/12负例分列。UNBOUND/NOT_READY/default-off；私有RoPE SOURCE_PINS未发布，无正常目标import或可执行准入，不能报DUT/full-M128数值/无干扰通过。
+    文件: candidates/qwen2_m128_terminal_capture_prepare/REVIEW_PROJECTION.json
+    SHA256: f6b483e7ddfbe13d88694df91185810bd83efd21cf68fcc26589c0ce5a9017e0
+    关联文件:
+    - 文件: candidates/qwen2_m128_terminal_capture_prepare/TEST_EVIDENCE.json
+      SHA256: f0f60241a0379eba83ca48a4155a628c2d796a9a4865ead9601ab26faca8601f
+    - 文件: candidates/qwen2_m128_terminal_capture_prepare/PUBLIC_MANIFEST.json
+      SHA256: fa4ddde7b1d75b6e07e3fa8f2daf93bca175c16f4234f362298b5844eef1f889
+    - 文件: candidates/qwen2_m128_terminal_capture_prepare/COMPOSITION_PINS.json
+      SHA256: 27bb0405f7c61afd7fee0a96d0c535e459e13b2a8e1841e5ba640f5b5031e6be
+    - 文件: candidates/qwen2_m128_terminal_capture_prepare/LOGICAL_SOURCE_INTERFACES.json
+      SHA256: f5e7ccd5998dd428feed6fe7e4d0f01ffcae70f9a5f7029ead9778f6f81f58f0
+    - 文件: candidates/qwen2_m128_terminal_capture_prepare/ROPE_SOURCE_PINS_UNBOUND.json
+      SHA256: a02c05feda6d604db54286deb70e3eb0b94b0165ca80c37903a056ea3486356e
+    - 文件: candidates/qwen2_m128_terminal_capture_prepare/REVISION_HISTORY.json
+      SHA256: 9eb214b270733c1ef5d34306f9d888c85614fa0800b49d8b7e69c160fc337d78
+    - 文件: candidates/qwen2_m128_terminal_capture_prepare/SOURCE_COMPOSER_ROUNDTRIP.json
+      SHA256: d4e329ffd70cf7477a6bd4827a465308086f841b1bff07d391c1d498f9ba800d
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40157763997
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: official_m128_actual_reference_pair01
+    发布提交: 6e2a47127d0a9f39bbb892cb361c9c5a7fc1aee2
+    设计提交: 6e2a47127d0a9f39bbb892cb361c9c5a7fc1aee2
+    来源基线: 210f948b26acaf7d35b5762a6f89d99fd85ee5a4
+    关联既有任务:
+    - Q21.3
+    - C08.2
+    - U00.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: PASS仅fresh cold128官方config32768完整单层reference pair01：同一Qwen2DecoderLayer baseline→observed，两次实际y/prob native bytes一致，三个原输入/参数/buffer边界不变，29
+      observed字段自检已记录。独审16724项/0失败仅metadata、opaque hash及y/prob字节比较，未独立数值重算29字段。实际120 CPU秒/180 wall轮询阈值独立于旧60/90提案；48.158秒worker+cleanup、50.368
+      CPU秒、采样RSS568340480 B不是硬memory cap/严格最终deadline。不是DUT/project rotary256比较、全29 baseline中间值无干扰、全模型、RTL或90%硬件验收。
+    文件: candidates/qwen2_official_m128_reference_actual_pair01/EXECUTION_REVIEW_PROJECTION.json
+    SHA256: 60c04369fb9765613c4c4c9b9360ca2030f1e2889c0a22eb4d35ac37b04514d2
+    关联文件:
+    - 文件: candidates/qwen2_official_m128_reference_actual_pair01/SELF_CHECKS_SUMMARY.json
+      SHA256: 5af6964564ce604bf33b25f0892fe5b08ef7aae2ee6bd67622f48f984442bc7e
+    - 文件: candidates/qwen2_official_m128_reference_actual_pair01/OUTPUT_IDENTITIES.json
+      SHA256: 02c65f2d292a894877b49f22e27df9a07b15948b50d169fc99cd1189a9b291d0
+    - 文件: candidates/qwen2_official_m128_reference_actual_pair01/SOURCE_BINDINGS.json
+      SHA256: c03dd7fa9a1366b5b76ec732d6a15e1fd79b815205bd3f309fad34a5caf9db55
+    - 文件: candidates/qwen2_official_m128_reference_actual_pair01/PROFILE_LOGICAL.json
+      SHA256: 6768bc62fc77948f54bae3c39c45c0257e5e9983e4e53b52b4ff5f3c3871b376
+    - 文件: candidates/qwen2_official_m128_reference_actual_pair01/RESOURCE_OUTCOME.json
+      SHA256: 863818323ba60db742beb32a39229192465f5b0aecc747b5e59287a9464dac3d
+    - 文件: candidates/qwen2_official_m128_reference_actual_pair01/EVIDENCE_BINDINGS.json
+      SHA256: e112423dd46357d97987bef02a906c5fa0015d6fafdadaca667ccab2c419b229
+    - 文件: candidates/qwen2_official_m128_reference_actual_pair01/FAILURE_HISTORY_DELTA.json
+      SHA256: 63a6d6669ecee787d551d1095fb1a7671c892142b539fb5f0bb9d8ed66052756
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40157867917
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；不是上述任务/数值执行重跑。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: m128_normal_cold_binding_comparator_source_mock
+    发布提交: 9a639053f797b19fba5b6d9cfe830dc8c3009730
+    设计提交: 9a639053f797b19fba5b6d9cfe830dc8c3009730
+    来源基线: 6e2a47127d0a9f39bbb892cb361c9c5a7fc1aee2
+    关联既有任务:
+    - C08.2
+    - Q21.3
+    - U00.2
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: 新增正常 source 加载与 terminal 比较器有限证据索引：一次 cold 15角色/9方法绑定，331 modules、17 ELF+2 locale，依赖 native 初始化已披露；比较器仅 source/mock，不是完整 DUT 数值。256 只为历史参考诊断参数，当前
+      provider 容量1024、active128、其余零、double→FP32。公开投影去除安装路径及12非必要地址字段，保留原SHA、736 pins身份/顺序/重复及历史拒绝；不追认旧privacy PASS。此索引不涵盖后续DUT尝试结果，不升级全block/RTL/性能或任务状态。
+    文件: candidates/qwen2_m128_normal_cold_comparator/evidence/cold_execution_projection.json
+    SHA256: 92c898d46553e7acaec29dab130182e05f62ad067ee1eef74b6a8f3b517be8c8
+    关联文件:
+    - 文件: candidates/qwen2_m128_normal_cold_comparator/comparator/comparator.py
+      SHA256: 531810d04e347ccc7b30196a656706e357672f46021f9fa68e635ae0ae85d97d
+    - 文件: candidates/qwen2_m128_normal_cold_comparator/evidence/PUBLICATION_PRIVACY_CORRECTION.json
+      SHA256: 36d9bd429503807468781e04d159f13c531027486cdabf701df6a81fb9f452f4
+    - 文件: candidates/qwen2_m128_normal_cold_comparator/evidence/comparator_r2_projection.json
+      SHA256: e938b867aa8d80e57901cd1953675bf13dfc0f77a839954ae2f0f2c9452aaaff
+    - 文件: candidates/qwen2_m128_normal_cold_comparator/pins/CURRENT_ROPE_PROVIDER.json
+      SHA256: e42520251614737a64b5f047c05d8cdbce9c7f9d462b89e90b0b5d6401f7cff6
+    - 文件: candidates/qwen2_m128_normal_cold_comparator/pins/INPUT_MANIFEST.json
+      SHA256: 43baa0d758b72a5fbe5f5737722e43d73294c59c3f29f921a5352d6ff22c9f99
+    - 文件: candidates/qwen2_m128_normal_cold_comparator/pins/ORACLE_MANIFEST.json
+      SHA256: 047900332f6d35f764fe0caec00a13903e4cbd2cdd97d8c3b2d4afd7f049e6fb
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40160874939
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；仅发布载荷检查，不是上述任务重跑或DUT PASS。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: m128_metadata_only_rehearsal
+    发布提交: 6a14ccba98ac67db2c08e05e1d5c5e5c9fda6a98
+    设计提交: 6a14ccba98ac67db2c08e05e1d5c5e5c9fda6a98
+    来源基线: 9a639053f797b19fba5b6d9cfe830dc8c3009730
+    关联既有任务:
+    - C08.2
+    - C08.3
+    - Q21.3
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: 一次metadata-only cold的有限PASS：14 provider immutable bytes hash包装，真实21 commands/215 descriptors/8持久metadata文件与原失败同hash，208 pinned-source
+      cache fallback且cache字节仍被拒绝。1303 pins/44产物核验、cleanup已独审；NumPy/PyYAML native依赖初始化披露，未Matrix ELF/服务/reset/PC/数值。此结果不追认第一DUT FAIL；本包冻结后DUT尝试另存，不由本片覆盖。源码默认旧路径不变；公开cache30+3为portable测试，历史23/42仅保留证据而非自包含复现。
+    文件: candidates/qwen2_m128_metadata_rehearsal/evidence/ACTUAL_METADATA_SUMMARY.json
+    SHA256: b7387a45453dea6c6e1848a18bb43c4f242013643d34f9874cdc0f9c5f6c393a
+    关联文件:
+    - 文件: candidates/qwen2_m128_metadata_rehearsal/evidence/INDEPENDENT_EXECUTION_REVIEW_PROJECTION.json
+      SHA256: 4b74a869a11342dfd8c48e74890f249f8276e8c74f8fa4b73d6767608952ddc6
+    - 文件: candidates/qwen2_m128_metadata_rehearsal/evidence/PRIOR_DUT_FAILURE.json
+      SHA256: a45973c1a125553ca941efcb2ace0bfff337a6324ce47967a3dea4eea74aaabb
+    - 文件: candidates/qwen2_m128_metadata_rehearsal/patches/CACHE_FALLBACK.patch
+      SHA256: 75508afcf28d52a8adbd08eca4440f9175db7affa02e9706fbd8bbdcedfe4b38
+    - 文件: candidates/qwen2_m128_metadata_rehearsal/patches/PERSISTENT_METADATA.patch
+      SHA256: 3ca213c1b1c8fc626991a7fd251942d5b8056affd52cdd7ec36d2ab37f1077cb
+    - 文件: candidates/qwen2_m128_metadata_rehearsal/pins/TWO_FILE_SOURCE_RELATIONS.json
+      SHA256: bad4102c169119610db101b0486d32d50b3f93309e0a57921beff0f1fa37f690
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40162580444
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；仅发布载荷检查，不是上述任务重跑或DUT PASS。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: m128_pre_first_pc_native_initialization
+    发布提交: 745cd4d3b673d26c1ed21e8a3a8c793c2ac5d645
+    设计提交: 745cd4d3b673d26c1ed21e8a3a8c793c2ac5d645
+    来源基线: 6a14ccba98ac67db2c08e05e1d5c5e5c9fda6a98
+    关联既有任务:
+    - C08.2
+    - C08.3
+    - Q21.3
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: 一次真实首PC前初始化有限PASS，沿原构造链真实reset/Matrix guard/5个Scalar FP32环境探针、host decode pc0及Rope monitor进入退出；不能称无native或无浮点。task计数0、未首PC/任务算术/传输/比较，不升级完整DUT或硬件。默认None保留旧Git路径；opt-in见证来源已由commit→tree→path→blob及字节核验，不伪造本地HEAD。两次旧long
+      FAIL与所有源码/证据不改；本片不涵盖后续long结果。
+    文件: candidates/qwen2_m128_native_initialization/evidence/ACTUAL_INITIALIZATION_SUMMARY.json
+    SHA256: cad74417a5b1d0f6572551c1e6c729851af5b7d27f620fb0cf0590de921366a9
+    关联文件:
+    - 文件: candidates/qwen2_m128_native_initialization/evidence/COUNTER_CHECKPOINT_PROJECTION.json
+      SHA256: 0bbe2bc856e2bfe26ab025e27e9f0d6ee5055928fa65bbb329e39dff8d9a10d3
+    - 文件: candidates/qwen2_m128_native_initialization/evidence/INDEPENDENT_EXECUTION_REVIEW_PROJECTION.json
+      SHA256: d0bc36e2babdc16ed77bbf3ec7ea9a0f91f0b37a80c6cd7d4e2641c893629bc8
+    - 文件: candidates/qwen2_m128_native_initialization/evidence/OLD_FAILURES_UNCHANGED.json
+      SHA256: 29770565b58053fa552c53c5374cfc43e17e8e5624bb65f7de390424caddd35a
+    - 文件: candidates/qwen2_m128_native_initialization/patches/COMMITTED_SOURCE_WITNESS.patch
+      SHA256: 88ca58682ec52ad8e0abe44a6f6af992ab228e123407c8447440da669728d6d3
+    - 文件: candidates/qwen2_m128_native_initialization/patches/INITIALIZATION_ONLY_RUNNER.patch
+      SHA256: 7430838926092fc66e20f21618a7bf192856db7a13f194f5135583f42beb468e
+    - 文件: candidates/qwen2_m128_native_initialization/witness/IDENTITY.json
+      SHA256: 0652c9a94fc1e3498ed925e0f73116634a2c2f73fcc81eb7dc2211fdd5305286
+    - 文件: candidates/qwen2_m128_native_initialization/witness/qwen2_block.cpp
+      SHA256: d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40164833145
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；仅发布载荷检查，不是上述任务重跑或DUT PASS。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  - 里程碑: m128_actual_long_attempt_cpu_limit_failure
+    发布提交: 28bbcf3f3678bb8fb2fd3cca6297463b149e08f2
+    设计提交: 28bbcf3f3678bb8fb2fd3cca6297463b149e08f2
+    来源基线: 745cd4d3b673d26c1ed21e8a3a8c793c2ac5d645
+    关联既有任务:
+    - C08.2
+    - C08.3
+    - Q21.3
+    - Q22
+    关联含义: 只追加来源/范围导航，不改变任务状态、负责人、依赖、完成边界或既有证据。
+    范围: 一次新M128完整尝试已执行原prefix PC0..9，因采样累计CPU3600.03超过3600预算终止，整体FAIL/INCOMPLETE。无WORKER_RESULT/final inventory/wholeterminal/oracle数值比较/成功seal；不能由启动SEALED追认最终无读资格。1403851完整frame无footer，仅结构进度，未生命周期重放或QK/PV数值验收。原receipt
+      artifacts={}与output_after_postflight=null保持，新增run外41文件hash清单仅保全证据，非补写成功seal。保留所有旧失败/metadata和init有限PASS，不升级task/硬件状态、性能或4096MAC完整block验收。
+    文件: candidates/qwen2_m128_long_attempt_failure/evidence/FAILURE_REVIEW_PROJECTION.json
+    SHA256: b3b261b32661bb5f0499ce404066a36309b1d511c50e3a5270238994afc84219
+    关联文件:
+    - 文件: candidates/qwen2_m128_long_attempt_failure/PROVENANCE.json
+      SHA256: e9d2cc706af989b4b6b57c142356ddeb4bd10302396089cd2cf2c66e6e491ea4
+    - 文件: candidates/qwen2_m128_long_attempt_failure/pins/EXECUTION_PROFILE_PROJECTION.json
+      SHA256: 87a0d155aa7ed54b1de506ba8eb59f825300d3206dbee4a5a5af5b24fb0491e0
+    - 文件: candidates/qwen2_m128_long_attempt_failure/pins/FROZEN_PROFILE_SOURCE.json
+      SHA256: 5d3066536b9bacb3113c1339eeec6833dd73ca39763240031b481a0c4eb6c6cf
+    - 文件: candidates/qwen2_m128_long_attempt_failure/pins/OUTSIDE_RUN_ARTIFACT_LEDGER.json
+      SHA256: df94c2168e46dd6c31b4b87a2126db43f770e4dc78386695fc814e5373dd74e9
+    自动CI: https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40168938343
+    CI范围: 该精确发布提交的自动payload guard，38普通+38优化；仅发布载荷检查，不是上述任务重跑或DUT PASS。
+    CI终态: SUCCESS_EXACT_COMMIT_VERIFIED
+    README与URL用途: 导航与解释，不作为任务完成证明。
+  最新实际DUT失败边界: 3600 CPU秒预算在采样3600.03时超限，reaped CPU3600.053966；无WORKER_RESULT、final inventory、wholeterminal、oracle数值比较或成功seal。原receipt artifacts={}与output_after_postflight=null保持；run外41文件hash保全不是补写成功seal。1403851完整frame无footer只记结构进度，不证明数值、ticket生命周期或性能。启动oracle
+    SEALED不代表缺失终态inventory后的最终无读资格。

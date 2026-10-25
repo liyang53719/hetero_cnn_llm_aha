@@ -1,0 +1,36 @@
+test_authority_and_scope_negative_controls (__main__.AdmissionTests.test_authority_and_scope_negative_controls) ... ok
+test_boolean_is_not_exact_one_cpu_resource (__main__.AdmissionTests.test_boolean_is_not_exact_one_cpu_resource) ... ok
+test_each_resource_mismatch_rejected (__main__.AdmissionTests.test_each_resource_mismatch_rejected) ... ok
+test_full_mock_pipe_claim_and_duplicate_rejection (__main__.AdmissionTests.test_full_mock_pipe_claim_and_duplicate_rejection) ... ok
+test_gate_pin_mismatch_rejected (__main__.AdmissionTests.test_gate_pin_mismatch_rejected) ... ok
+test_interpreter_pin_cannot_change (__main__.AdmissionTests.test_interpreter_pin_cannot_change) ... ok
+test_missing_native_binding_pin_rejected (__main__.AdmissionTests.test_missing_native_binding_pin_rejected) ... ok
+test_one_claim_exclusive_creation (__main__.AdmissionTests.test_one_claim_exclusive_creation) ... ok
+test_pipe_wrong_action_rejected_before_parent_access (__main__.AdmissionTests.test_pipe_wrong_action_rejected_before_parent_access) ... ok
+test_regular_file_not_a_capability (__main__.AdmissionTests.test_regular_file_not_a_capability) ... ok
+test_valid_static_review_does_not_run (__main__.AdmissionTests.test_valid_static_review_does_not_run) ... ok
+test_child_resource_setup_only_mocked (__main__.LauncherTests.test_child_resource_setup_only_mocked) ... ok
+test_cleanup_final_sampled_cpu_exceeded_prevents_success (__main__.LauncherTests.test_cleanup_final_sampled_cpu_exceeded_prevents_success) ... ok
+test_entire_parent_mock_never_starts_any_process (__main__.LauncherTests.test_entire_parent_mock_never_starts_any_process) ... ok
+test_final_reaped_aggregate_cpu_limit_includes_user_and_system (__main__.LauncherTests.test_final_reaped_aggregate_cpu_limit_includes_user_and_system) ... ok
+test_nonfinite_or_negative_reaped_cpu_deltas_rejected (__main__.LauncherTests.test_nonfinite_or_negative_reaped_cpu_deltas_rejected) ... ok
+test_spawn_and_target_entry_absent_from_tests (__main__.LauncherTests.test_spawn_and_target_entry_absent_from_tests) ... ok
+test_cpu_accounting_keeps_exited_identity_and_separates_reuse (__main__.OwnershipTests.test_cpu_accounting_keeps_exited_identity_and_separates_reuse) ... ok
+test_kill_rechecks_birth_before_signalling (__main__.OwnershipTests.test_kill_rechecks_birth_before_signalling) ... ok
+test_live_descendants_and_adopted_orphans_are_owned (__main__.OwnershipTests.test_live_descendants_and_adopted_orphans_are_owned) ... ok
+test_owned_pid_can_rebind_only_via_current_ancestry (__main__.OwnershipTests.test_owned_pid_can_rebind_only_via_current_ancestry) ... ok
+test_reused_leader_does_not_own_strangers (__main__.OwnershipTests.test_reused_leader_does_not_own_strangers) ... ok
+test_reviewed_ownership_core_ast_retained (__main__.OwnershipTests.test_reviewed_ownership_core_ast_retained) ... ok
+test_earlier_failure_never_gets_success_seal (__main__.TerminalTests.test_earlier_failure_never_gets_success_seal) ... ok
+test_exact_trace_budget (__main__.TerminalTests.test_exact_trace_budget) ... ok
+test_hardlink_is_failure_not_external_writer_assumption (__main__.TerminalTests.test_hardlink_is_failure_not_external_writer_assumption) ... ok
+test_log_budget_is_combined (__main__.TerminalTests.test_log_budget_is_combined) ... ok
+test_oversized_receipt_or_seal_prevents_success_no_deletion (__main__.TerminalTests.test_oversized_receipt_or_seal_prevents_success_no_deletion) ... ok
+test_receipt_and_seal_exact_final_byte_accounting (__main__.TerminalTests.test_receipt_and_seal_exact_final_byte_accounting) ... ok
+test_staged_race_retains_rejected_candidates_and_evidence (__main__.TerminalTests.test_staged_race_retains_rejected_candidates_and_evidence) ... ok
+test_symlink_is_failure_not_silent_budget_bypass (__main__.TerminalTests.test_symlink_is_failure_not_silent_budget_bypass) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 0.033s
+
+OK

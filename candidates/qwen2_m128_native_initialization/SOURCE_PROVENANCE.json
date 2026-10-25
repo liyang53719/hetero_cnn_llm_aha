@@ -1,0 +1,256 @@
+{
+  "base_commit": "6a14ccba98ac67db2c08e05e1d5c5e5c9fda6a98",
+  "copied_files": [
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 7711,
+        "sha256": "88ca58682ec52ad8e0abe44a6f6af992ab228e123407c8447440da669728d6d3"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/patches/COMMITTED_SOURCE_WITNESS.patch"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 42774,
+        "sha256": "fb8a576e3dc19b39a2af684d27828365842bfdac0b33a50b5f741907552fd87b"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/witness_postimage/scripts/qwen2_block_recipe_model.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 9168,
+        "sha256": "477044346e4b40663afd4ea0c0eae3f70f51c0b5ba594e59254a73c7121f549c"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/witness_postimage/candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 23995,
+        "sha256": "d757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/witness/qwen2_block.cpp"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 699,
+        "sha256": "0652c9a94fc1e3498ed925e0f73116634a2c2f73fcc81eb7dc2211fdd5305286"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/witness/IDENTITY.json"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1107,
+        "sha256": "525864434d3e6315382075a40bbd9a18173649ef57e546414e426838bc14afe5"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/init_gate_source/common.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 16461,
+        "sha256": "90cc7e66cdc95dbd092e5a2df0ed8c93143e7f0d7734c5c3091f7a4e2badbe86"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/init_gate_source/worker.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 26809,
+        "sha256": "35f10919d223d7d3aebc86773f801ddd74a2a39cfe12b4863b7341708dd6d5c3"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/init_gate_source/init_state.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 15859,
+        "sha256": "747734625e22676cd199c1a5373c11b6b97f43252b8850e3ceac4de6fea14767"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/init_gate_source/run_gate.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 15274,
+        "sha256": "d4799e0f9a1707d95c66529134cf17102a7997697bcf2e8665b4c77429c9a53d"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/init_gate_source/supervisor.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1745,
+        "sha256": "762d6c12089c9386f9660ade58817a9248ce167c556f0a3254ced70ac312c25b"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/init_gate_source/native_binding.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 20319,
+        "sha256": "32f610cdea1bfe79caeafd7dcf473447ca8b4ba78cbf8dc0e362d354ed27bedc"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/init_gate_source/runtime_admission.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 17690,
+        "sha256": "4ebcb651f03bfc3da8be2260fe54d91c5d46fe9e7fd373e522f7997b26a10a29"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/candidate_postimage/runner.py"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2356,
+        "sha256": "185a1dfd4047f0b60c41226261aefb75f4b9232be7537fce7d62bab1eeea1f3b"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/witness/mock.normal.log"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2356,
+        "sha256": "41897c60f286284895cb5b027f64106f32dd0000756513c5dd17b3d7bb83692c"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/witness/mock.optimized.log"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 3401,
+        "sha256": "3b8fd11846224a12066e4ddaaa60d762a72728f302c89796c512cb43ec9709c6"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_cache_fallback.normal.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_cache_fallback.normal.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 3401,
+        "sha256": "8039104bf58ea3806ddf8c750b62750d647ad2bfb93a4093f6ed5cf18cd15493"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_cache_fallback.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_cache_fallback.optimized.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1722,
+        "sha256": "8e3bcd8f9097f3699714c95da19527001033af8d894afe3ec7452e94085892b7"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_init_state.normal.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_init_state.normal.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 1722,
+        "sha256": "28789ea4192af96ae72f5211262e12b009f36dea7e51fbfb0db7ac442aa18abb"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_init_state.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_init_state.optimized.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2580,
+        "sha256": "74bf36b105b6bac0f4a32bcbcf838bcc0f004f478efeb96f3fd938d62e80351c"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_initialization.normal.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_initialization.normal.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 2580,
+        "sha256": "69a883dd7318ccd1412f734193bc7bf2dd5ddf9e94e39833dbf7fbe867185030"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_initialization.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_initialization.optimized.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 3930,
+        "sha256": "e37b04fc07125fdb3b15b1b63cbccf131482911aaf187d28b28b7e36bd71468e"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_supervisor.normal.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_supervisor.normal.stdout"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 3930,
+        "sha256": "e37b04fc07125fdb3b15b1b63cbccf131482911aaf187d28b28b7e36bd71468e"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_supervisor.optimized.stderr"
+    },
+    {
+      "byte_exact": true,
+      "original_identity": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "public_path": "candidates/qwen2_m128_native_initialization/evidence/tests/initialization/test_supervisor.optimized.stdout"
+    }
+  ],
+  "new_source_adapter": false,
+  "public_source_requires_exact_external_closure": true,
+  "target_tests_rerun": false
+}

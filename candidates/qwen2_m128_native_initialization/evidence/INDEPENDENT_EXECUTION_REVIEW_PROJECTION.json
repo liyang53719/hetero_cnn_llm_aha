@@ -1,0 +1,114 @@
+{
+  "original_review_identity": {
+    "bytes": 3880,
+    "sha256": "54e6a29d195e889d75b658cabe30877350affec67bee139bee08b97e29a09e31"
+  },
+  "projection_omits": "private reviewer identity only; no raw states/maps/process addresses included",
+  "review": {
+    "actual_execution_by_reviewer": false,
+    "all_cache_named_local_compile_hashes_reproduced": true,
+    "artifact_count": 70,
+    "audit_script": {
+      "bytes": 9740,
+      "sha256": "6239c9b421c7ce81eb9c7efe170c64c19256c54ca19bf68f26b2c24729438407"
+    },
+    "blockers": [],
+    "cache_events": 205,
+    "cache_phase_counts": {
+      "NATIVE": 5,
+      "NORMAL": 200
+    },
+    "cache_unique_sources": 203,
+    "checks": 3760,
+    "cleanup": {
+      "killed": [],
+      "reaped": [],
+      "remaining": {},
+      "seconds": 0.0003545139916241169,
+      "timed_out": false
+    },
+    "config": {
+      "bytes": 909431,
+      "sha256": "7bc46c0b59c14862f47e93bc25d237f4c7e02ebe9c5572fde2c84023e30e557d"
+    },
+    "freeze": {
+      "bytes": 67497,
+      "sha256": "8211ed70bb8a43d3cd3404c0c3269ac6159b11f21b3c6903848dcb8fe7bbfb24"
+    },
+    "freeze_files": 367,
+    "imports_replayed": false,
+    "notes": [
+      "Actual original native initialization and five fixed FP32 probes passed; not no-native/no-arithmetic.",
+      "Genuine host decode pc0/events0, shared services/owners and zero task counters match before/after normal Rope cleanup. No first PC or task/terminal/numerical acceptance.",
+      "Raw namespace/Cython FAILs preserved; exact later qualification discharges only expected duplicates and two pinned Cython associations.",
+      "All cache source bytes and named-local compile/marshal digests independently reproduced without executing compiled code. Module-body completion is not inferred from cache events.",
+      "Parent/child identity and cleanup verified from preserved receipts/source, not live resurrection or PID probing.",
+      "Source-bound absence of task calls plus recorded state is not universal syscall interception. Hard AS/CPU are per process; tree RSS sampled.",
+      "Both old failed runs and metadata PASS remain pinned unchanged within complete config. No re-execution or old FAIL rewrite."
+    ],
+    "output_bytes": 6595226,
+    "pins": 2091,
+    "reaped_cpu_seconds": 9.571732999999998,
+    "receipt": {
+      "bytes": 115122,
+      "sha256": "d449df74e15d9fa589a0bc6b712863aad2f5c5678e7f31c1a0b7ca70e49aa97c"
+    },
+    "resources": {
+      "address_space_bytes": 1073741824,
+      "cleanup_seconds": 3,
+      "cpu_seconds": 20,
+      "cpus": 1,
+      "event_limit": 0,
+      "log_bytes": 2097152,
+      "output_bytes": 33554432,
+      "trace_bytes": 1048576,
+      "tree_rss_bytes": 536870912,
+      "wall_seconds": 25
+    },
+    "sample_rss_bytes": 195698688,
+    "scope": "single_native_constructor_chain_provider14_public21_stop_before_first_pc",
+    "seal": {
+      "bytes": 12091,
+      "sha256": "11d4cbab23ffc65327aea9038fba2154f4733ba52e27677a59dbdcafec0b4fc9"
+    },
+    "stages": {
+      "INITIALIZATION_CLEANUP": {
+        "modules": 345,
+        "raw_failures_preserved": 12,
+        "result": "PASS_CURRENT_NATIVE_RUNTIME_IDENTITIES",
+        "unique_mapping_files": 20
+      },
+      "INITIALIZATION_ENTRY": {
+        "modules": 345,
+        "raw_failures_preserved": 12,
+        "result": "PASS_CURRENT_NATIVE_RUNTIME_IDENTITIES",
+        "unique_mapping_files": 20
+      },
+      "INITIALIZATION_FINAL": {
+        "modules": 345,
+        "raw_failures_preserved": 12,
+        "result": "PASS_CURRENT_NATIVE_RUNTIME_IDENTITIES",
+        "unique_mapping_files": 20
+      },
+      "NATIVE_LOADED": {
+        "modules": 341,
+        "raw_failures_preserved": 11,
+        "result": "PASS_CURRENT_NATIVE_RUNTIME_IDENTITIES",
+        "unique_mapping_files": 20
+      },
+      "NORMAL_FINAL": {
+        "modules": 340,
+        "raw_failures_preserved": 11,
+        "result": "PASS_NORMAL_RUNTIME_IDENTITIES_ONLY",
+        "unique_mapping_files": 19
+      }
+    },
+    "status": "PASS_INDEPENDENT_PRE_FIRST_PC_EXECUTION_CLOSURE",
+    "tensor_values_decoded": false,
+    "worker": {
+      "bytes": 207977,
+      "sha256": "b91af3179b1f2aa3427e03a88c3292e8adb0a0fa4e6038ff093b5e51d279343d"
+    },
+    "worker_wall_seconds": 9.634212359029334
+  }
+}

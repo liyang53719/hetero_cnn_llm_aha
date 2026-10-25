@@ -1,0 +1,131 @@
+--- a/scripts/qwen2_block_recipe_model.py
++++ b/scripts/qwen2_block_recipe_model.py
+@@ -33,6 +33,23 @@
+     'helpers': 'd1890cd7d8e2d3bc0af780d35c7a1f1fcf9f6e0c59fa655178c427bb93f1e15b',
+     'math': '4507a74bffa481584038713e2bc7de4c675d291176fc22a5c4c2a10fba732ee8',
+     'layout': 'c30d7484172db263712900cc2d43b2962227ae16266e0085eca7d156bbd4396f',
++}
++# DEFAULT-OFF witness for the reviewed immutable public source export. These
++# constants are source-closure pins, never caller-supplied trust anchors.
++COMMITTED_WITNESS_MANIFEST_SHA256 = '0652c9a94fc1e3498ed925e0f73116634a2c2f73fcc81eb7dc2211fdd5305286'
++COMMITTED_WITNESS_IDENTITY = {
++    'commit': '9a639053f797b19fba5b6d9cfe830dc8c3009730',
++    'tree': '78752201929029bc6b084d5e89ae82ec8c7e1575',
++    'path': SOURCE,
++    'mode': '100644',
++    'bytes': 23995,
++    'sha256': 'd757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5',
++    'git_blob': 'e40538df77611f10e39e70d5520397886a5607c8',
++    'readback': 'exact immutable commit GitHub contents UTF8 bytes; SHA1 blob equals full reconstructed tree entry',
++    'assembled_sha256_claim': 'd757e1271210e260ca320cddf4175c306d3cf52835ea45f20ca9dfb56ac34db5',
++    'assembled_byte_equal': True,
++    'checked_utc': '2026-10-25T04:33:07.737499+00:00',
++    'native_execution_or_frozen_repo_mutation': False,
+ }
+ FLAGS = ['-O2', '-std=c++17', '-ffp-contract=off', '-fno-fast-math']
+ WEIGHTS = {
+@@ -72,7 +89,28 @@
+     return text[first:last]
+ 
+ 
+-def extract_sources(root: Path) -> tuple[str, str, dict]:
++def _read_committed_source_witness(witness_path: Path, manifest_path: Path) -> tuple[str, dict]:
++    """Validate exact exported bytes; no Git, subprocess, or identity injection."""
++    manifest_raw = Path(manifest_path).read_bytes()
++    require(sha(manifest_raw) == COMMITTED_WITNESS_MANIFEST_SHA256,
++            'committed witness manifest changed; explicit review required')
++    manifest = json.loads(manifest_raw.decode('utf-8'))
++    require(type(manifest) is dict and set(manifest) == set(COMMITTED_WITNESS_IDENTITY)
++            and all(type(manifest[key]) is type(value) and manifest[key] == value
++                    for key, value in COMMITTED_WITNESS_IDENTITY.items()),
++            'committed witness manifest schema or fixed identity mismatch')
++    raw = Path(witness_path).read_bytes()
++    require(len(raw) == manifest['bytes'] and sha(raw) == manifest['sha256'],
++            'committed witness byte count or SHA256 mismatch')
++    blob = hashlib.sha1(b'blob ' + str(len(raw)).encode('ascii') + b'\0' + raw).hexdigest()
++    require(blob == manifest['git_blob'], 'committed witness Git blob mismatch')
++    return raw.decode('utf-8'), dict(manifest, manifest_sha256=sha(manifest_raw))
++
++
++def extract_sources(root: Path, *, committed_source_witness: Path | None = None,
++                    committed_source_manifest: Path | None = None) -> tuple[str, str, dict]:
++    require((committed_source_witness is None) == (committed_source_manifest is None),
++            'committed witness and manifest must be supplied together')
+     original = (root / SOURCE).read_text()
+     layout_source = (root / LAYOUT_SOURCE).read_text()
+     fragments = {
+@@ -83,8 +121,15 @@
+     for name, fragment in fragments.items():
+         require(sha(fragment.encode()) == SECTION_SHA256[name], f'canonical {name} section changed; explicit review required')
+     # Pin the arithmetic to a committed source, even in a dirty working tree.
+-    committed = subprocess.run(['git', 'show', 'HEAD:' + SOURCE], cwd=root, check=True,
+-                               capture_output=True, text=True, timeout=15).stdout
++    witness_identity = None
++    if committed_source_witness is None:
++        committed = subprocess.run(['git', 'show', 'HEAD:' + SOURCE], cwd=root, check=True,
++                                   capture_output=True, text=True, timeout=15).stdout
++    else:
++        committed, witness_identity = _read_committed_source_witness(
++            committed_source_witness, committed_source_manifest)
++        require(sha((root / SOURCE).read_bytes()) == witness_identity['sha256'],
++                'working source differs from reviewed committed witness')
+     require(section(committed, '#include "block_layout.h"', 'struct Pending') == fragments['helpers']
+             and section(committed, '  void norm(', '  void compareStage(') == fragments['math'],
+             'recipe arithmetic is not identical to committed HEAD')
+@@ -92,9 +137,16 @@
+         'source_sha256': {SOURCE: sha(original.encode()), LAYOUT_SOURCE: sha(layout_source.encode())},
+         'committed_cpp_sha256': sha(committed.encode()),
+         'section_sha256': {name: sha(text.encode()) for name, text in fragments.items()},
+-        'git_head': subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=root, check=True,
+-                                   capture_output=True, text=True, timeout=15).stdout.strip(),
++        'git_head': (subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=root, check=True,
++                                    capture_output=True, text=True, timeout=15).stdout.strip()
++                     if witness_identity is None else None),
+     }
++    if witness_identity is not None:
++        identity.update(committed_source_resolution='reviewed-immutable-export-v1',
++                        committed_source_commit=witness_identity['commit'],
++                        committed_source_tree=witness_identity['tree'],
++                        committed_source_blob=witness_identity['git_blob'],
++                        committed_source_witness=witness_identity)
+     return fragments['helpers'], fragments['math'], identity
+ 
+ 
+--- a/candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py
++++ b/candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py
+@@ -34,13 +34,18 @@
+ 
+ 
+ def source_identity(root=ROOT, *, enable_h2048_rms_borrower=False,
+-                    external_elementwise_loan=False):
++                    external_elementwise_loan=False, committed_source_witness=None,
++                    committed_source_manifest=None):
+     """Use the existing extraction guard; refuse drift in either arithmetic or IO."""
+     if enable_h2048_rms_borrower is not False or external_elementwise_loan is not False:
+         raise ValueError('source review requires the original default-disabled borrower/loan profile')
+     from scripts.qwen2_block_recipe_model import extract_sources
+     root = Path(root)
+-    _, _, recipe = extract_sources(root)
++    if committed_source_witness is None and committed_source_manifest is None:
++        _, _, recipe = extract_sources(root)
++    else:
++        _, _, recipe = extract_sources(root, committed_source_witness=committed_source_witness,
++                                       committed_source_manifest=committed_source_manifest)
+     found = {}
+     for name, expected in SOURCE_HASHES.items():
+         relative = SCALA_DIR + name
+@@ -114,8 +119,12 @@
+     arrays and allocated physical SRAM banks. Counters are observed software
+     primitive calls and carry no hardware throughput or clock implication.
+     """
+-    def __init__(self):
+-        self.identity = source_identity()
++    def __init__(self, *, committed_source_witness=None, committed_source_manifest=None):
++        if committed_source_witness is None and committed_source_manifest is None:
++            self.identity = source_identity()
++        else:
++            self.identity = source_identity(committed_source_witness=committed_source_witness,
++                                            committed_source_manifest=committed_source_manifest)
+         self.client = None
+         self.calls = Counter()
+         self._check_environment()

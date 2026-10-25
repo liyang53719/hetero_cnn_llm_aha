@@ -1,0 +1,128 @@
+{
+  "no_task_result_claim": true,
+  "oracle": {
+    "comparison_attempted": false,
+    "denied": [],
+    "state": "SEALED"
+  },
+  "original_receipt": {
+    "bytes": 115122,
+    "sha256": "d449df74e15d9fa589a0bc6b712863aad2f5c5678e7f31c1a0b7ca70e49aa97c"
+  },
+  "original_seal": {
+    "bytes": 12091,
+    "sha256": "11d4cbab23ffc65327aea9038fba2154f4733ba52e27677a59dbdcafec0b4fc9"
+  },
+  "original_worker": {
+    "bytes": 207977,
+    "sha256": "b91af3179b1f2aa3427e03a88c3292e8adb0a0fa4e6038ff093b5e51d279343d"
+  },
+  "receipt_projection": {
+    "action": "single_m128_pre_first_pc_initialization",
+    "config_sha256": "7bc46c0b59c14862f47e93bc25d237f4c7e02ebe9c5572fde2c84023e30e557d",
+    "cpu_usage_children": {
+      "post_exit_reaped_aggregate_budget_checked": true,
+      "reaped_aggregate_limit_seconds": 20,
+      "ru_maxrss_bytes_linux": 195698688,
+      "ru_maxrss_is_aggregate_tree": false,
+      "system_seconds": 0.979463,
+      "user_seconds": 8.59227
+    },
+    "full29_numeric_pass": false,
+    "hardware_acceptance": false,
+    "legacy_results_inherited": false,
+    "no_retry": true,
+    "observed_domain_passed": false,
+    "output_after_postflight": {
+      "log_bytes": {
+        "stderr.log": 0,
+        "stdout.log": 0
+      },
+      "output_bytes": 6468013,
+      "trace_bytes": 0
+    },
+    "passed": true,
+    "peak_sampled_tree_rss_bytes": 195698688,
+    "per_process_limits": {
+      "address_space_bytes": 1073741824,
+      "address_space_is_rss": false,
+      "cpu_seconds": 20,
+      "includes_threads": true,
+      "kernel_aggregate_tree_cpu_hard_cap": false
+    },
+    "postflight": {
+      "bytes_checked": 442941136,
+      "differences": {},
+      "files_checked": 2091,
+      "passed": true,
+      "scope": "full sealed file manifest after worker/descendant terminal state; outside worker budget",
+      "wall_seconds": 0.3538260380155407
+    },
+    "preflight": {
+      "bytes_checked": 442941136,
+      "differences": {},
+      "files_checked": 2091,
+      "passed": true,
+      "scope": "opaque complete manifest hash before any worker spawn; outside worker timer",
+      "wall_seconds": 0.3493631499586627
+    },
+    "resources": {
+      "address_space_bytes": 1073741824,
+      "cleanup_seconds": 3,
+      "cpu_seconds": 20,
+      "cpus": 1,
+      "event_limit": 0,
+      "log_bytes": 2097152,
+      "output_bytes": 33554432,
+      "trace_bytes": 1048576,
+      "tree_rss_bytes": 536870912,
+      "wall_seconds": 25
+    },
+    "review_sha256": "4ceedd842975d782cae2b929d7cfa28ea5fe495a2492f64a98f47304a5ad4b74",
+    "scope": "single_native_constructor_chain_provider14_public21_stop_before_first_pc",
+    "status": "PASS_PRE_FIRST_PC_INITIALIZATION_ONLY",
+    "tree_rss_is_hard_cap": false,
+    "worker_reaped": true,
+    "worker_returncode": 0,
+    "worker_wall_scope": "Immediately before Popen through exit/failure observation; cleanup separate; opaque parent pre/post hashes excluded.",
+    "worker_wall_seconds": 9.634212359029334
+  },
+  "worker_projection": {
+    "actual_terminal_verified": false,
+    "additional_cleanup_reset_or_abort": false,
+    "commands": 21,
+    "completed_checkpoints": [
+      false,
+      true
+    ],
+    "config_sha256": "7bc46c0b59c14862f47e93bc25d237f4c7e02ebe9c5572fde2c84023e30e557d",
+    "descriptors": 215,
+    "environment_probes_are_not_user_tensor_work": true,
+    "event_protocol_passed": false,
+    "execution_attribution": "QUALIFIED_PRE_FIRST_PC_INITIALIZATION_ONLY",
+    "first_pc_entered": false,
+    "fixed_scalar_environment_probes": 5,
+    "full29_numeric_pass": false,
+    "hardware_acceptance": false,
+    "initialization_verified": true,
+    "matrix_elf_loaded": true,
+    "metadata_persisted": true,
+    "monitor_cleanup_verified": true,
+    "no_retry": true,
+    "observed_domain_passed": false,
+    "oracle_comparator_factory_only": true,
+    "oracle_values_read": false,
+    "owner_constructed": true,
+    "passed": true,
+    "pc_arithmetic_executed": false,
+    "provider_bytes": 94916608,
+    "provider_count": 14,
+    "reached_stage": "INITIALIZATION_CLEANUP_QUALIFIED",
+    "resets_executed": true,
+    "run_id": "native_init01",
+    "services_constructed": true,
+    "status": "PASS_PRE_FIRST_PC_INITIALIZATION_ONLY",
+    "workload_numerical_execution": false,
+    "zero_task_counters_verified": true
+  }
+}

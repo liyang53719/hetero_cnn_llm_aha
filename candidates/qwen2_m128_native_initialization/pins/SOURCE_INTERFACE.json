@@ -1,0 +1,45 @@
+{
+  "interface": {
+    "abi_symbols_are_bindings_not_calls": true,
+    "allowed_extra_readonly_getters": [
+      "matrix_state",
+      "matrix_ticket",
+      "matrix_dense_fmas",
+      "matrix_normal_fmas",
+      "sf_bf16_v1_calls",
+      "sf_bf16_v1_failures"
+    ],
+    "extra_cleanup_reset": false,
+    "fixed_scalar_probes": 5,
+    "host_state": "decode pc0 events{0}; no tick/readcmd/job",
+    "initializer": "runtime_admission.normal_initialize",
+    "native_initialization_calls": [
+      "td_reset",
+      "sf_reset_bf16_v1",
+      "matrix_guard_enable",
+      "matrix_accumulator_address",
+      "matrix_accumulator_bytes"
+    ],
+    "oracle_gate_unchanged": true,
+    "prohibited": [
+      "first PC body",
+      "host/owner tick",
+      "metadata-port read",
+      "job submission",
+      "scalar workload op",
+      "Matrix task ABI",
+      "SiLU task ABI",
+      "reference ABI",
+      "oracle values",
+      "longrun"
+    ],
+    "real_constructor_path": "runner.run_actual(initialization_only=True)",
+    "schema": "pre-first-pc-init-interface-v1",
+    "scope": "single_native_constructor_chain_provider14_public21_stop_before_first_pc",
+    "stop": "After genuine Rope enter, before execute_public_prefix body; normal monitor cleanup then return"
+  },
+  "original_identity": {
+    "bytes": 1805,
+    "sha256": "2705ee935babf4501b1c1b5749067475f2057b23694b65a1c9bd8e4a75ec4ac1"
+  }
+}

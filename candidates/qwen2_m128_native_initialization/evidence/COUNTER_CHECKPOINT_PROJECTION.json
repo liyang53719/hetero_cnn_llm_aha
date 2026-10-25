@@ -1,0 +1,188 @@
+{
+  "checkpoints": {
+    "INITIALIZATION_CLEANUP_STATE.json": {
+      "accumulator_contents_read": false,
+      "after_cleanup": true,
+      "attention_zero_counters": {
+        "executed_macs": 0,
+        "matrix_counts": {},
+        "scalar_counts": {},
+        "useful_macs": 0
+      },
+      "host_zero_task_counters": {
+        "completed": 0,
+        "events": [
+          0
+        ],
+        "executed": 0,
+        "jobs": 0,
+        "pc": 0,
+        "state": "decode",
+        "useful": 0,
+        "written": 0
+      },
+      "monitor_lifecycle": {
+        "cleanup_complete": true,
+        "closed": true,
+        "started": true
+      },
+      "monitor_tool_absent": true,
+      "native_readonly_counters": {
+        "matrix_accumulator_bytes": 81920,
+        "matrix_dense_fmas": 0,
+        "matrix_normal_fmas": 0,
+        "matrix_state": 0,
+        "matrix_ticket": 0,
+        "sf_calls": 0,
+        "sf_failures": 0
+      },
+      "original_identity": {
+        "bytes": 12620,
+        "sha256": "8cce293fd4af5d84cc2ddfe5b300081c3b11a7f85b4d73ab7e99f131d2222a76"
+      },
+      "owner_zero_counters": {
+        "a_fences": 0,
+        "accepted_steps": 0,
+        "adapter_index": 0,
+        "chunk_index": 0,
+        "clock": 0,
+        "committed_prefix_end": 0,
+        "completed_prefix_sweeps": 0,
+        "drain_column": 0,
+        "drain_consumed": 0,
+        "drain_started": 0,
+        "group_accepted_steps": 0,
+        "group_sequence": 0,
+        "k_a_fences": 0,
+        "loaded_a_bytes": 0,
+        "max_reserved": 0,
+        "prefix_bytes": 0,
+        "prefix_saved_contexts": 0,
+        "read_sequence": 0,
+        "responses": 0,
+        "restored_contexts": 0,
+        "results_received": 0,
+        "rmw_commits": 0,
+        "seed_context": 0,
+        "seed_index": 0,
+        "write_bytes": 0,
+        "write_row": 0,
+        "write_row_beat": 0,
+        "write_sequence": 0,
+        "written": 0
+      },
+      "prefix_zero_counters": {
+        "ack_bytes": 0,
+        "clock": 0,
+        "peak_add_words": 0,
+        "peak_copy_words": 0,
+        "peak_row_words": 0,
+        "row_words": 0,
+        "serial": 0,
+        "start_clock": 0,
+        "tag_prefix": 0
+      },
+      "residual_tool_absent": true,
+      "scope": "snapshot; not universal historical proof or numerical/hardware acceptance",
+      "task_provider_calls_by_verifier": 0,
+      "trace_zero_counters": {
+        "records": 0,
+        "saved": 0,
+        "total": 0
+      }
+    },
+    "INITIALIZATION_ENTRY_STATE.json": {
+      "accumulator_contents_read": false,
+      "after_cleanup": false,
+      "attention_zero_counters": {
+        "executed_macs": 0,
+        "matrix_counts": {},
+        "scalar_counts": {},
+        "useful_macs": 0
+      },
+      "host_zero_task_counters": {
+        "completed": 0,
+        "events": [
+          0
+        ],
+        "executed": 0,
+        "jobs": 0,
+        "pc": 0,
+        "state": "decode",
+        "useful": 0,
+        "written": 0
+      },
+      "monitor_lifecycle": {
+        "cleanup_complete": false,
+        "closed": false,
+        "started": true
+      },
+      "monitor_tool_absent": false,
+      "native_readonly_counters": {
+        "matrix_accumulator_bytes": 81920,
+        "matrix_dense_fmas": 0,
+        "matrix_normal_fmas": 0,
+        "matrix_state": 0,
+        "matrix_ticket": 0,
+        "sf_calls": 0,
+        "sf_failures": 0
+      },
+      "original_identity": {
+        "bytes": 12620,
+        "sha256": "c77e076f1d81927141ead92a6f45bf52065c5d5d080a8d3d844bee4064c4c6d8"
+      },
+      "owner_zero_counters": {
+        "a_fences": 0,
+        "accepted_steps": 0,
+        "adapter_index": 0,
+        "chunk_index": 0,
+        "clock": 0,
+        "committed_prefix_end": 0,
+        "completed_prefix_sweeps": 0,
+        "drain_column": 0,
+        "drain_consumed": 0,
+        "drain_started": 0,
+        "group_accepted_steps": 0,
+        "group_sequence": 0,
+        "k_a_fences": 0,
+        "loaded_a_bytes": 0,
+        "max_reserved": 0,
+        "prefix_bytes": 0,
+        "prefix_saved_contexts": 0,
+        "read_sequence": 0,
+        "responses": 0,
+        "restored_contexts": 0,
+        "results_received": 0,
+        "rmw_commits": 0,
+        "seed_context": 0,
+        "seed_index": 0,
+        "write_bytes": 0,
+        "write_row": 0,
+        "write_row_beat": 0,
+        "write_sequence": 0,
+        "written": 0
+      },
+      "prefix_zero_counters": {
+        "ack_bytes": 0,
+        "clock": 0,
+        "peak_add_words": 0,
+        "peak_copy_words": 0,
+        "peak_row_words": 0,
+        "row_words": 0,
+        "serial": 0,
+        "start_clock": 0,
+        "tag_prefix": 0
+      },
+      "residual_tool_absent": true,
+      "scope": "snapshot; not universal historical proof or numerical/hardware acceptance",
+      "task_provider_calls_by_verifier": 0,
+      "trace_zero_counters": {
+        "records": 0,
+        "saved": 0,
+        "total": 0
+      }
+    }
+  },
+  "physical_allocations_roots_shared_object_ids_omitted": true,
+  "raw_states_not_included": true
+}

@@ -1,0 +1,51 @@
+{
+  "changes": {
+    "candidates/qwen2_resident_matrix/ffn_public/prefix_arithmetic.py": {
+      "after": {
+        "bytes": 9168,
+        "sha256": "477044346e4b40663afd4ea0c0eae3f70f51c0b5ba594e59254a73c7121f549c"
+      },
+      "before": {
+        "bytes": 8445,
+        "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+      }
+    },
+    "scripts/qwen2_block_recipe_model.py": {
+      "after": {
+        "bytes": 42774,
+        "sha256": "fb8a576e3dc19b39a2af684d27828365842bfdac0b33a50b5f741907552fd87b"
+      },
+      "before": {
+        "bytes": 39490,
+        "sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6"
+      }
+    }
+  },
+  "historical_preparation_scope_only": true,
+  "interface": {
+    "both_required_for_optin": true,
+    "constructor": "ScalarService",
+    "default": null,
+    "git_head_in_witness_mode": null,
+    "kwargs": [
+      "committed_source_witness",
+      "committed_source_manifest"
+    ]
+  },
+  "original_manifest": {
+    "bytes": 2631,
+    "sha256": "b1df4dfaf77b8b6892669da317fb39e4ccdc9f2d57f25d0790bf3c5a593ad368"
+  },
+  "patch": {
+    "bytes": 7711,
+    "sha256": "88ca58682ec52ad8e0abe44a6f6af992ab228e123407c8447440da669728d6d3"
+  },
+  "retained": {
+    "arithmetic_bodies_changed": false,
+    "historical_results_inherited": false,
+    "native_acceptance": "UNCHANGED_FAIL_POLICY_PENDING",
+    "original_alu_full_hashes": 1,
+    "original_scala_full_hashes": 7,
+    "original_section_hashes": 3
+  }
+}

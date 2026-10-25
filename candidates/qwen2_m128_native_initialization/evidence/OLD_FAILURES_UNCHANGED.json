@@ -1,0 +1,134 @@
+{
+  "both_claims_still_consumed": true,
+  "first_original_review": {
+    "bytes": 9188,
+    "sha256": "38c6cbd8b7a0fab5a15f85b5e58766c95e027b59d20c213700e64c3e1657e683"
+  },
+  "new_initialization_is_not_full_dut_retry": true,
+  "projection_note": "Old absolute source-guard keys replaced by exact repository-relative paths; original review hashes above refer to immutable originals, not this projection.",
+  "second_original_review": {
+    "bytes": 16643,
+    "sha256": "c019fecea84ed37d523202b76490144b7d4eac320e15923b46ca89ba583f58a4"
+  },
+  "second_projection": {
+    "acceptance": {
+      "actual_retry_authorized_by_review": false,
+      "full29": false,
+      "full_M128_DUT_pass": false,
+      "hardware": false,
+      "legacy_PV_upper_bound_percent": 63.57,
+      "numeric_thresholds_changed": false,
+      "utilization": false
+    },
+    "attempt_files_modified": false,
+    "completion_seal_absent": true,
+    "primary_failure": {
+      "attempted_command_from_exact_source": [
+        "git",
+        "show",
+        "HEAD:chisel/continuous_prefill/tests/qwen2_block.cpp"
+      ],
+      "audit_record_limitation": "Sticky record stores event name, not argv/cwd. Command/cwd are reconstructed from exact pinned caller and traceback, not claimed as separately recorded subprocess audit arguments.",
+      "cwd_from_exact_source": "The new assembled source root, not an independently verified Git checkout",
+      "detail": "network_or_child_process_forbidden: subprocess.Popen",
+      "dynamic_stack": [
+        "runner.run_actual line132: shared_scalar = runtime.scalar.ScalarService()",
+        "prefix_arithmetic.ScalarService.__init__ line118: self.identity = source_identity()",
+        "prefix_arithmetic.source_identity line43: extract_sources(root)",
+        "scripts/qwen2_block_recipe_model.py extract_sources line86: subprocess.run",
+        "pinned Python subprocess.Popen._execute_child audit event before process launch",
+        "runtime_admission.PhaseAudit.reject"
+      ],
+      "process_spawn_outcome": "Rejected by pinned subprocess audit before spawn. No Git output or Git HEAD observed. Worker tracked/reaped; no remaining owned children.",
+      "secondary_error": "Final runtime policy error is the same retained sticky subprocess denial, not an unrelated new failure.",
+      "type": "PermissionError"
+    },
+    "reached_scope": {
+      "Matrix_service_constructor": "Completed superclass source_identity/configure_library, matrix_guard_enable()==0, matrix_accumulator_address(), matrix_accumulator_bytes()==5*16*256*4, and profile setup. No acquisition/job transaction proven or claimed.",
+      "ScalarService": "Constructor entered but failed on first identity assignment; client/counters initialization and _check_environment fegetround/NumPy scalar probes not reached.",
+      "comparison_attempted": false,
+      "metadata_repair": "Persistent fixture fully returned; retained8metadata files and no relative-open oracle denial.",
+      "native_reset": "Both td_reset() and selected sf_reset() executed and returned0, inferred from exact chained comparison completing before line132. Not a native per-symbol recording claim.",
+      "not_reached": [
+        "ReducedPublicExecution construction",
+        "PublicFrontend and original execution phase",
+        "PC0 prefix execution",
+        "Matrix/Dense/Attention jobs",
+        "PC12 ordered fold",
+        "FFN suffix",
+        "whole terminal",
+        "observer numerical capture",
+        "oracle comparison",
+        "service stream completion"
+      ],
+      "objects_constructed_before_failure": [
+        "PhysicalMemory",
+        "FullGraphMemory",
+        "PrefixWorkspace",
+        "DenseReductionOwner",
+        "ProfiledMatrixService"
+      ],
+      "oracle_denied": [],
+      "oracle_state": "SEALED",
+      "phase_log": "Empty phases does not mean no owner/service/reset activity: phase marker follows ReducedPublicExecution construction, after the failed ScalarService line.",
+      "trace_bytes": 0
+    },
+    "review_gap_accountability": "The metadata-only test intentionally forbade ScalarService construction, and static lazy coverage was classified as module-definition evidence rather than function execution. However the prior preparation review did not catch the original ScalarService\u2192extract_sources\u2192Git dependency before a native attempt. This is an uncovered source-identity interface requirement, not evidence that metadata/caches failed or permission to relax the runtime subprocess gate.",
+    "source_identity_contract": {
+      "Git_semantics": "Original guard requires helper/math equality to git show HEAD:C++ and then records full committed_cpp_sha256 plus git rev-parse HEAD. HEAD means the repository Git discovers for cwd, not automatically current main or the published composed source.",
+      "all8_static_control_pins": {
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala": {
+          "bytes": 8313,
+          "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+        },
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockWritebackFence.scala": {
+          "bytes": 2436,
+          "sha256": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054"
+        },
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala": {
+          "bytes": 10756,
+          "sha256": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+        },
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostBlockCommands.scala": {
+          "bytes": 88647,
+          "sha256": "68749c376fffeaed47a2b2965ec7e3af594b5409c7cd08d31c16535d75073757"
+        },
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": {
+          "bytes": 3123,
+          "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+        },
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Qwen2Block.scala": {
+          "bytes": 41013,
+          "sha256": "9572763a636e77362f82d9fb6d8d9bc823be2ef1beda88929e227abd78a4b2d4"
+        },
+        "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala": {
+          "bytes": 32821,
+          "sha256": "7f2b4a623b61b6e68478b2310d441ed04ccde1cd5490cb22205113f907b7974d"
+        },
+        "integration/gemmini/EmitHeteroFP32Alu.scala": {
+          "bytes": 1130,
+          "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+        }
+      },
+      "ambient_repository_HEAD_not_evaluated": true,
+      "executed_before_failure": "extract_sources reads assembled C++ and Scala source, extracts unique helpers/math/layout sections, and checks all three fixed SECTION_SHA256 constants before attempting Git. These checks completed, consistent with failure at line86.",
+      "no_history_repin": "No old pins, Git HEAD, fixture code, arithmetic order or thresholds changed by this audit.",
+      "recipe_source": {
+        "bytes": 39490,
+        "sha256": "2b7a4384bc619d39546714b251f286708646029eea172de8c28fb4946b69a2f6"
+      },
+      "root_has_own_dot_git": false,
+      "scalar_source": {
+        "bytes": 8445,
+        "sha256": "5391f807b8164511d6e3e5af156f1fb3dd5f298bb0dca66504c6b818d135f880"
+      },
+      "three_sections_independently_rehashed": {
+        "helpers": "d1890cd7d8e2d3bc0af780d35c7a1f1fcf9f6e0c59fa655178c427bb93f1e15b",
+        "layout": "c30d7484172db263712900cc2d43b2962227ae16266e0085eca7d156bbd4396f",
+        "math": "4507a74bffa481584038713e2bc7de4c675d291176fc22a5c4c2a10fba732ee8"
+      },
+      "unreached_guard_checks": "prefix source_identity subsequently validates7Scala sources plusFP32 ALU and records default-disabled borrower/loan flags. Those later runtime checks were not reached; reviewer independently rehashed their8fixed pins and all match."
+    },
+    "status": "FAIL_CLOSED_ARTIFACTS_VERIFIED_NO_DUT_NUMERICAL_PASS"
+  }
+}

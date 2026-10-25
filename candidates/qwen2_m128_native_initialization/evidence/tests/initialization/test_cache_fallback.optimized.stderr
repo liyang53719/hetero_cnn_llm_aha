@@ -1,0 +1,35 @@
+test_cache_symlink_to_source_not_admitted (__main__.Tests.test_cache_symlink_to_source_not_admitted) ... ok
+test_cache_under_output_is_still_denied (__main__.Tests.test_cache_under_output_is_still_denied) ... ok
+test_code_with_future_nested_functions_and_classes (__main__.Tests.test_code_with_future_nested_functions_and_classes) ... ok
+test_compile_actual_bytes_not_earlier_hash (__main__.Tests.test_compile_actual_bytes_not_earlier_hash) ... ok
+test_compile_hashing_does_not_reopen_source (__main__.Tests.test_compile_hashing_does_not_reopen_source) ... ok
+test_compile_without_exec_unresolved (__main__.Tests.test_compile_without_exec_unresolved) ... ok
+test_direct_cache_symlink_not_admitted (__main__.Tests.test_direct_cache_symlink_not_admitted) ... ok
+test_drifted_source_sticky (__main__.Tests.test_drifted_source_sticky) ... ok
+test_dynamic_qualified_runtime_fields_loader (__main__.Tests.test_dynamic_qualified_runtime_fields_loader) ... ok
+test_exact_source_loader_subclass_not_admitted (__main__.Tests.test_exact_source_loader_subclass_not_admitted) ... ok
+test_existing_sticky_denial_survives_valid_fallback (__main__.Tests.test_existing_sticky_denial_survives_valid_fallback) ... ok
+test_hashing_not_fallback_source_open_or_self_recursion (__main__.Tests.test_hashing_not_fallback_source_open_or_self_recursion) ... ok
+test_loader_method_replacement_not_admitted (__main__.Tests.test_loader_method_replacement_not_admitted) ... ok
+test_module_body_failure_not_claimed_success (__main__.Tests.test_module_body_failure_not_claimed_success) ... ok
+test_no_fallback_open_sticky (__main__.Tests.test_no_fallback_open_sticky) ... ok
+test_no_unbounded_provider_or_network_permission (__main__.Tests.test_no_unbounded_provider_or_network_permission) ... ok
+test_normal_raw_denial_is_retained_and_exact (__main__.Tests.test_normal_raw_denial_is_retained_and_exact) ... ok
+test_normal_then_native_multiple_loader_invocations (__main__.Tests.test_normal_then_native_multiple_loader_invocations) ... ok
+test_normal_unresolved_never_transitions (__main__.Tests.test_normal_unresolved_never_transitions) ... ok
+test_oracle_first_cache_denial_never_reclassified (__main__.Tests.test_oracle_first_cache_denial_never_reclassified) ... ok
+test_oracle_first_denial_never_reclassified (__main__.Tests.test_oracle_first_denial_never_reclassified) ... ok
+test_pinned_source_exec_and_cache_bytes_never_read (__main__.Tests.test_pinned_source_exec_and_cache_bytes_never_read) ... ok
+test_prior_success_does_not_qualify_direct_cache_read (__main__.Tests.test_prior_success_does_not_qualify_direct_cache_read) ... ok
+test_source_open_not_completed_read (__main__.Tests.test_source_open_not_completed_read) ... ok
+test_unknown_cache_direct_open_sticky (__main__.Tests.test_unknown_cache_direct_open_sticky) ... ok
+test_unknown_source_loader_sticky (__main__.Tests.test_unknown_source_loader_sticky) ... ok
+test_unwitnessed_old_normal_cache_denial_not_excused (__main__.Tests.test_unwitnessed_old_normal_cache_denial_not_excused) ... ok
+test_worker_final_policy_refresh_order (__main__.Tests.test_worker_final_policy_refresh_order) ... ok
+test_wrong_executed_code_sticky (__main__.Tests.test_wrong_executed_code_sticky) ... ok
+test_wrong_pinned_source_sticky (__main__.Tests.test_wrong_pinned_source_sticky) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.020s
+
+OK

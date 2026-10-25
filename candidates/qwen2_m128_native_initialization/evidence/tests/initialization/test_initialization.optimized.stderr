@@ -1,0 +1,28 @@
+test_approval_scope (__main__.AdmissionTests.test_approval_scope) ... ok
+test_boolean_resources (__main__.AdmissionTests.test_boolean_resources) ... ok
+test_config_scope (__main__.AdmissionTests.test_config_scope) ... ok
+test_exact (__main__.AdmissionTests.test_exact) ... ok
+test_missing_gate_pin (__main__.AdmissionTests.test_missing_gate_pin) ... ok
+test_resource_drift (__main__.AdmissionTests.test_resource_drift) ... ok
+test_result_predicate (__main__.AdmissionTests.test_result_predicate) ... ok
+test_review_scope (__main__.AdmissionTests.test_review_scope) ... ok
+test_comparator_callback_is_forbidden (__main__.ClosureTests.test_comparator_callback_is_forbidden) ... ok
+test_complete_constructor_order_stop_cleanup (__main__.ClosureTests.test_complete_constructor_order_stop_cleanup) ... ok
+test_each_constructor_failure_cannot_fallthrough (__main__.ClosureTests.test_each_constructor_failure_cannot_fallthrough) ... ok
+test_initialization_profile_mutations (__main__.ClosureTests.test_initialization_profile_mutations) ... ok
+test_initialization_rejects_numeric_admission (__main__.ClosureTests.test_initialization_rejects_numeric_admission) ... ok
+test_missing_probe_is_forbidden (__main__.ClosureTests.test_missing_probe_is_forbidden) ... ok
+test_single_stop_branch_dominates_first_pc (__main__.ClosureTests.test_single_stop_branch_dominates_first_pc) ... ok
+test_true_native_reset_errors_reject (__main__.ClosureTests.test_true_native_reset_errors_reject) ... ok
+test_worker_has_no_task_or_reset_call (__main__.ClosureTests.test_worker_has_no_task_or_reset_call) ... ok
+test_control_sources_unchanged_and_patch_exact (__main__.StaticProfileTests.test_control_sources_unchanged_and_patch_exact) ... ok
+test_default_numeric_ast_unchanged_after_explicit_mode_projection (__main__.StaticProfileTests.test_default_numeric_ast_unchanged_after_explicit_mode_projection) ... ok
+test_final_config_actual_reader_bound_and_identity (__main__.StaticProfileTests.test_final_config_actual_reader_bound_and_identity) ... ok
+test_final_snapshot_failure_downgrades_without_false_attribution (__main__.WorkerFinalTests.test_final_snapshot_failure_downgrades_without_false_attribution) ... ok
+test_original_checkpoint_error_survives_final_snapshot_error (__main__.WorkerFinalTests.test_original_checkpoint_error_survives_final_snapshot_error) ... ok
+test_worker_success_source_snapshot_precedes_state (__main__.WorkerFinalTests.test_worker_success_source_snapshot_precedes_state) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.129s
+
+OK

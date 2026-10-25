@@ -1,0 +1,25 @@
+test_alu_full_hash_drift (__main__.GuardTests.test_alu_full_hash_drift) ... ok
+test_blob_check_independent_mock (__main__.GuardTests.test_blob_check_independent_mock) ... ok
+test_constructor_isolated_mock_routing_no_actual_service_or_probe (__main__.GuardTests.test_constructor_isolated_mock_routing_no_actual_service_or_probe) ... ok
+test_default_git_calls_and_identity_equal_original (__main__.GuardTests.test_default_git_calls_and_identity_equal_original) ... ok
+test_default_git_failure_not_replaced_with_witness (__main__.GuardTests.test_default_git_failure_not_replaced_with_witness) ... ok
+test_disabled_borrower_loan_policy_remains (__main__.GuardTests.test_disabled_borrower_loan_policy_remains) ... ok
+test_every_scala_full_hash_drift (__main__.GuardTests.test_every_scala_full_hash_drift) ... ok
+test_exact_witness_all_guards_and_no_subprocess (__main__.GuardTests.test_exact_witness_all_guards_and_no_subprocess) ... ok
+test_incomplete_optin_rejected (__main__.GuardTests.test_incomplete_optin_rejected) ... ok
+test_manifest_checksum_rejects_same_json_different_bytes (__main__.GuardTests.test_manifest_checksum_rejects_same_json_different_bytes) ... ok
+test_manifest_fixed_fields_drift (__main__.GuardTests.test_manifest_fixed_fields_drift) ... ok
+test_manifest_schema_independently_rejects_even_if_digest_bypassed_in_mock (__main__.GuardTests.test_manifest_schema_independently_rejects_even_if_digest_bypassed_in_mock) ... ok
+test_missing_manifest_or_witness_and_no_fallback (__main__.GuardTests.test_missing_manifest_or_witness_and_no_fallback) ... ok
+test_witness_length_drift (__main__.GuardTests.test_witness_length_drift) ... ok
+test_witness_same_length_byte_drift (__main__.GuardTests.test_witness_same_length_byte_drift) ... ok
+test_working_cpp_drift_outside_sections (__main__.GuardTests.test_working_cpp_drift_outside_sections) ... ok
+test_working_section_drifts (__main__.GuardTests.test_working_section_drifts) ... ok
+test_no_target_imports_in_test_process (__main__.StaticTests.test_no_target_imports_in_test_process) ... ok
+test_numeric_bodies_all_unchanged (__main__.StaticTests.test_numeric_bodies_all_unchanged) ... ok
+test_only_two_source_postimages_change (__main__.StaticTests.test_only_two_source_postimages_change) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.221s
+
+OK

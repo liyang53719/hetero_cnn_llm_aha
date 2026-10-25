@@ -1,0 +1,29 @@
+{
+  "identities": {
+    "admission": {
+      "bytes": 8934,
+      "sha256": "2ab3fc46efae781e0fee377644ee8428c6c7bf15d9158a06b1152c97c8dbc569"
+    },
+    "test_init_state": {
+      "bytes": 22738,
+      "sha256": "82b83ca2df986d845733466744097286c5103772ef97ea5a135670fe355eab23"
+    },
+    "test_initialization": {
+      "bytes": 18640,
+      "sha256": "aefda43f11d1e3dd1266260fd9d9dbd495d25052e80691411c0382185ae54cbb"
+    },
+    "test_supervisor": {
+      "bytes": 24576,
+      "sha256": "91129ba990f42e7d4bc1aa8c14eaf31b73c0d729a8bfd05727b748a747834b41"
+    },
+    "witness_review_helper": {
+      "bytes": 2672,
+      "sha256": "4465d65cd4c98f0800d525a134c97b7b5d7f7384c2ecd5ed84ea8cc5cf970ad8"
+    },
+    "witness_test": {
+      "bytes": 14593,
+      "sha256": "405796f72db87ca6f9a2ac4f0d994ed80a3f5e5a4380291d9d773d5a0f1c9e1b"
+    }
+  },
+  "reason": "No replacement public adapter; original private-location-bound admission/tests/config are retained privately with hashes. Historical tests are not advertised as standalone public reproductions."
+}

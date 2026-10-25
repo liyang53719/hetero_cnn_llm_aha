@@ -1,0 +1,86 @@
+{
+  "original_supervisor": {
+    "bytes": 39519,
+    "sha256": "54ac590470acb7bd34168c9dbf84732e88b76c0043ccdab91a0a166e37e9c0c0"
+  },
+  "original_manifest": {
+    "bytes": 663538,
+    "sha256": "673759b0121948470a834f59220dc50696c94cd48d15b3b8bdbafb0d15ce5496"
+  },
+  "original_source_freeze": {
+    "bytes": 4364,
+    "sha256": "4a72e07f488127e969708ba3c69131aed00f4e7e7aecac120f5aa2c24b390fcb"
+  },
+  "previous600_supervisor": {
+    "bytes": 29064,
+    "sha256": "3dc28752855be9f0865d1fd2d2609403c75efd046ea0ff487d8ecdfc0f90c1b2"
+  },
+  "old_stage": "normal-m1-treadle-only",
+  "new_stage": "normal-m1-diagnostic-only",
+  "old_caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 600,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 268435456,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 201326592,
+    "total_wall_seconds": 750,
+    "work_wall_seconds": 720
+  },
+  "new_caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 150,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 268435456,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 201326592,
+    "total_wall_seconds": 210,
+    "work_wall_seconds": 180
+  },
+  "schedule": {
+    "maximum_lateness_seconds": 0.5,
+    "maximum_requests": 2,
+    "signal": "SIGQUIT",
+    "target": "EXACT_UNREAPED_LIVE_POPEN_LEADER_PIDFD_ONLY",
+    "work_elapsed_seconds": [
+      60.0,
+      120.0
+    ]
+  },
+  "resource_boundary": "New diagnostic150CPU/180work/190cleanup/210total/240outer; original non-time caps unchanged. One run only; no automatic retry or cap increase. Same original20classes, no compilation. Two optional bounded SIGQUIT requests may produce zero/partial/full text and perturb timing.",
+  "old600_source_argv_template_byte_equal": true,
+  "actual_Java_argv_equal_after_only_run_root_substitution": true,
+  "signal_evidence_scope": "Receipt records one shared diagnostic anchor and success-return metadata; fixed source gates were audited. No per-send raw /proc identity/cmdline/exe/pidfd snapshots or syscall trace are retained; two thread dumps corroborate diagnostics but are not a formally one-to-one send acknowledgement.",
+  "request_slots": [
+    {
+      "aggregate_cpu_seconds": 59.985192176999995,
+      "call_return_success_recorded": true,
+      "complete_delivery_proven_by_record": false,
+      "handler_caught_bit_recorded": true,
+      "process_cpu_seconds": 57.23,
+      "send_work_seconds": 60.01703250099672,
+      "target_work_seconds": 60.0
+    },
+    {
+      "aggregate_cpu_seconds": 119.965353561,
+      "call_return_success_recorded": true,
+      "complete_delivery_proven_by_record": false,
+      "handler_caught_bit_recorded": true,
+      "process_cpu_seconds": 114.96,
+      "send_work_seconds": 120.00894445297308,
+      "target_work_seconds": 120.0
+    }
+  ],
+  "raw_private_supervisor_config_process_anchor_not_published": true,
+  "not_executable_authorization_or_signal_launcher": true
+}

@@ -1,0 +1,87 @@
+{
+  "original_source_review": {
+    "bytes": 5618,
+    "sha256": "27aa9133185c5294191a602b67a5528b6334b1951237835c34ad03fd8a473341"
+  },
+  "review": {
+    "status": "PASS_DIAGNOSTIC_R2_SOURCE_AND_MOCK_ONLY",
+    "schema": "normal-m1-diagnostic-r2-independent-source-review-v1",
+    "identity_checks": 11314,
+    "fixed_JDK_checks": 58,
+    "preparation_pins": 1246,
+    "expected_runtime_pins": 1248,
+    "inventories": 4,
+    "synthetic_controls": 318,
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 150,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 210,
+      "work_wall_seconds": 180
+    },
+    "schedule": {
+      "maximum_lateness_seconds": 0.5,
+      "maximum_requests": 2,
+      "signal": "SIGQUIT",
+      "target": "EXACT_UNREAPED_LIVE_POPEN_LEADER_PIDFD_ONLY",
+      "work_elapsed_seconds": [
+        60.0,
+        120.0
+      ]
+    },
+    "signal_target_contract": "pidfd exact new owned direct leader, no numeric kill fallback; handler/readiness rechecks do not eliminate all TOCTOU",
+    "actual_execution_authorized": false,
+    "JVM_DUT_reference_executed": false,
+    "real_SIGQUIT_sent": false,
+    "old_candidate_not_executed": true,
+    "request_success_is_not_dump_success": true,
+    "diagnostic_completion_is_not_behavior_acceptance": true,
+    "early_exit_stops_no_restart": true
+  },
+  "original_stop": {
+    "bytes": 1914,
+    "sha256": "41245d0095e5e981c99b5c5bd295021c138dfe90f180762a3d7c6a9ed5ad0129"
+  },
+  "stop": {
+    "candidate": {
+      "COMMAND_PROPOSAL.json": {
+        "bytes": 1210,
+        "sha256": "9b0a7a5e4e1c21b6387951234722e495b99c7cdbe144cd26eeca80473f8c079d"
+      },
+      "FREEZE.json": {
+        "bytes": 5553,
+        "sha256": "c74fb51ed4e35503573c164daa3afa5bf4584c996c2abb2ff5e308cc1679242e"
+      },
+      "check_diagnostic.py": {
+        "bytes": 4853,
+        "sha256": "85ea7e5dc9d1cac62c4240666699b7c4193c6b9d20d3cdfd037e0c4f987c7a8c"
+      },
+      "manifest.json": {
+        "bytes": 657108,
+        "sha256": "4994deff0f53cc84759de901425fd0c14fdfc3b30d660cb886b0b6e49f4a4b8f"
+      },
+      "supervisor.py": {
+        "bytes": 39519,
+        "sha256": "6a3c7267e986a132a8ff7526610dc6de55292d399a74183d699d97f7339d8f3c"
+      }
+    },
+    "pidfd_target_safety_breach": false,
+    "reason": "Observed low_file_snapshot output nonregular/symlink/OSError/ValueError is caught as sampling skip outside guard propagation; it can disappear before next tree sample, so observed output qualification violation need not force terminal FAIL.",
+    "required_successor": "Move snapshot into resource/evidence guard exception propagation; add mock negative proving no SIGQUIT and terminal FAIL; preserve frozen1734 and no argv/class/budget changes.",
+    "status": "STOP_1734_EXECUTION_ELIGIBILITY_PENDING_MINIMAL_SUCCESSOR",
+    "target_execution_started": false
+  },
+  "r2_note": {
+    "bytes": 673,
+    "sha256": "8a145c87f0ea1cc6d121deabad059a3e58b3ab9dff5543d8efb11952776b700a"
+  },
+  "r2_scope": "Only observed low-file snapshot output error now propagates through resource/evidence guard to cleanup/FAIL rather than sampling skip. No target/argv/class/cap/number-of-signals expansion. Frozen1734 remains unexecuted STOP."
+}

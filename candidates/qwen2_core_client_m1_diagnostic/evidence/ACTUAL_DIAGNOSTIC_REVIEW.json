@@ -1,0 +1,156 @@
+{
+  "original": {
+    "bytes": 7065,
+    "sha256": "48f2972b14e5b8fff0685ba496643d038a00130a4dae5ca791a788f28d3d94cb"
+  },
+  "review_freeze": {
+    "bytes": 1170,
+    "sha256": "bd5053612535e6f46e0bcda2e1be2838d8ee1fd4a1e528d313d52c7752f6680e"
+  },
+  "projection_policy": "Private paths, stat and CPU placement removed; all retained values unchanged. Hash/length only for rawdump/IR; no process identities or native addresses.",
+  "review": {
+    "MAC_utilization": null,
+    "RTL_fullblock_full29_numerical_acceptance": false,
+    "actual_artifact_bytes": 59680922,
+    "actual_artifact_count": 24,
+    "actual_artifact_inventory": {
+      "bytes": 23211,
+      "sha256": "993fba950228a09e958a73e2ae8ff4bbfe87b1ce5e69c6ca3a5b3d8a8658f5c4"
+    },
+    "actual_clock_count": null,
+    "actual_run_status": "FAIL_DIAGNOSTIC_RETAINED",
+    "artifact_stat_endpoint_checks": 30,
+    "audit_JVM_DUT_reference_or_signal_execution": false,
+    "cleanup_complete": true,
+    "cleanup_direct_exit_code": -9,
+    "complete_looking_thread_blocks": 2,
+    "continuous_classloader_or_global_process_isolation_proven": false,
+    "created_utc": "2026-10-25T18:10:14.508879+00:00",
+    "diagnostic_checker_result_did_not_upgrade_actual_FAIL": true,
+    "dump_blocks": [
+      {
+        "byte_end": 16825,
+        "byte_start": 2363,
+        "classification": "COMPLETE_LOOKING_THREAD_TEXT_WITH_JNI_TERMINATOR",
+        "full_JVM_dump_grammar_proven": false,
+        "heap_summary_sections_present": true,
+        "index": 1,
+        "line_end": 213,
+        "line_start": 17,
+        "sampled_main_path": "PrepareAst / InferResets",
+        "sha256": "2fed65835475383d1d4a0bb60b9441faa8759b6ec6dad55b7497cfdde0b8b0f3",
+        "thread_count": 13
+      },
+      {
+        "byte_end": 34622,
+        "byte_start": 17593,
+        "classification": "COMPLETE_LOOKING_THREAD_TEXT_WITH_JNI_TERMINATOR",
+        "full_JVM_dump_grammar_proven": false,
+        "heap_summary_sections_present": true,
+        "index": 2,
+        "line_end": 463,
+        "line_start": 226,
+        "sampled_main_path": "PrepareAst / CommonSubexpressionElimination",
+        "sha256": "d6ad12c8aee0b13d57f58c4e6e0a72e377db8279e159fd80b06748a45d340ec8",
+        "thread_count": 13
+      }
+    ],
+    "full_IR_parsed": false,
+    "full_JVM_dump_grammar_or_syscall_trace_proven": false,
+    "heap_summary_sections_present": [
+      true,
+      true
+    ],
+    "identity_checks": 11155,
+    "identity_freeze": {
+      "bytes": 3260,
+      "sha256": "84aa8f01cbf823f92c742b2b081c234c516b274f9dc3d1cfc08592278c7dd49b"
+    },
+    "identity_review": {
+      "bytes": 8988,
+      "sha256": "4515cf8bfe317b3d07272f00ba4ac26a269488965db46ce8d0e33d1427cb9916"
+    },
+    "implicit_slots_absent_at_pre_post_and_review": true,
+    "independent_dump_checks": 99,
+    "independent_dump_review": {
+      "bytes": 7583,
+      "sha256": "235320667659d382791f41467a5a7f376387c78983e2d59aeb2b775d824a7f73"
+    },
+    "inventories": 4,
+    "low_IR_identical_bytes_to_previous600CPU_failure": true,
+    "low_IR_opaque_identity": {
+      "bytes": 58897360,
+      "hash_read_count": 1,
+      "relative": "normal_m1/simulation/OrderedQkBehaviorCore.lo.fir",
+      "sha256": "71a27f80112970011761ffe361e6466a57a53f4eae95a816a252bc162ec4ea56"
+    },
+    "next_step": "Only read-only source analysis may use sanitized samples now; any source/flag/budget change or new execution requires separate root authority/freeze",
+    "no_rerun_or_input_modification": true,
+    "normal_exit_code_field": null,
+    "observed_dump_count": 2,
+    "outer_timeout": false,
+    "phase_inference_scope": "At the two captured main-thread instants, PrepareAst transform chains are observed. Not proof that those functions consumed the whole150s, caused old600s FAIL, or are the unique bottleneck.",
+    "previous1734STOP_preserved": true,
+    "previous600CPU_FAIL_and_compile_CHIRRTL_PASS_preserved": true,
+    "report": {
+      "bytes": 5379,
+      "sha256": "01736add4b603be0168e0c4d5a5206a215504ac0220b27651b0768b505d1f644"
+    },
+    "request_evidence_scope": "Receipt records one shared diagnostic anchor and success-return metadata; fixed source gates were audited. No per-send raw /proc identity/cmdline/exe/pidfd snapshots or syscall trace are retained; two thread dumps corroborate diagnostics but are not a formally one-to-one send acknowledgement.",
+    "request_slots": [
+      {
+        "aggregate_cpu_seconds": 59.985192176999995,
+        "call_return_success_recorded": true,
+        "complete_delivery_proven_by_record": false,
+        "handler_caught_bit_recorded": true,
+        "process_cpu_seconds": 57.23,
+        "send_work_seconds": 60.01703250099672,
+        "target_work_seconds": 60.0
+      },
+      {
+        "aggregate_cpu_seconds": 119.965353561,
+        "call_return_success_recorded": true,
+        "complete_delivery_proven_by_record": false,
+        "handler_caught_bit_recorded": true,
+        "process_cpu_seconds": 114.96,
+        "send_work_seconds": 120.00894445297308,
+        "target_work_seconds": 120.0
+      }
+    ],
+    "resources": {
+      "final_aggregate_cpu_seconds": 150.46189109,
+      "maximum_sample_interval_seconds": 0.05552178097423166,
+      "sampled_peak_cpu_seconds": 150.00205305999998,
+      "sampled_peak_output_bytes": 59620563,
+      "sampled_peak_rss_bytes": 1211338752
+    },
+    "retained_OBS_count": 0,
+    "retained_body_ready_count": 0,
+    "retained_case_pass_count": 0,
+    "retained_successful_ScalaTest_completion_count": 0,
+    "root_returncode": 1,
+    "runtime_pin_checks": 1248,
+    "sampled_main_phase_paths": [
+      "Treadle PrepareAst / FIRRTL InferResets",
+      "Treadle PrepareAst / FIRRTL CommonSubexpressionElimination"
+    ],
+    "sanitized_stacks": {
+      "bytes": 58808,
+      "sha256": "40262f05194386a522eb40a69398594d2ce613ddb22072e593e61f27031b86ca"
+    },
+    "schema": "actual-two-slot-diagnostic-review-v1",
+    "shared_stack_frames_remove_native_addresses_PIDs_and_absolute_original_paths": true,
+    "source_log": {
+      "bytes": 35371,
+      "sha256": "8a10077de1f5c3cbfef8835c159de2ee42550f348b65063963381e2061db6cc1"
+    },
+    "staged_classes": 20,
+    "status": "ACTUAL_DIAGNOSTIC_CPU_FAIL_AUDITED_WITH_TWO_THREAD_SAMPLES",
+    "system_duty_cycle": null,
+    "thread_records_per_block": [
+      13,
+      13
+    ],
+    "wall_seconds": 150.59583115798887
+  }
+}

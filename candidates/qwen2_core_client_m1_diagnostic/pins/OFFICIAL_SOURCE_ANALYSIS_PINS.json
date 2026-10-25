@@ -1,0 +1,260 @@
+{
+  "original_source_binding": {
+    "bytes": 8852,
+    "sha256": "05a03e0c24971f646755dec2406926717cc6ab0aa581e55c2fc894725ad5801a"
+  },
+  "original_source_report": {
+    "bytes": 10248,
+    "sha256": "99394007f932f05c37a64c7b2244e48f2661186e6fcdd1598892dc16ef79e1cd"
+  },
+  "original_analysis_freeze": {
+    "bytes": 9811,
+    "sha256": "43b3191c46c00cf445991d902fb2e4e759cb7f0ee89521ad36c1a093e7be87b7"
+  },
+  "official_distribution_downloads": [
+    {
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0-sources.jar",
+      "bytes": 478521,
+      "sha256": "4c89186b7e0657b132c9d0309db2537edf7efa2fb320fecb1291eec200546ebf",
+      "purpose": "read-only source inspection; not runtime classpath; no JVM"
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0-sources.jar",
+      "bytes": 478521,
+      "sha256": "4c89186b7e0657b132c9d0309db2537edf7efa2fb320fecb1291eec200546ebf",
+      "official_sha1": "adc0c8cc1dcc53bacf05504645dac49dd29eeb7e",
+      "matched": true,
+      "executed": false
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0-sources.jar",
+      "bytes": 247086,
+      "sha256": "08265b0fc39783871edffd9ab53d5b08d1b3907079109d6b522b7bb84bf37268",
+      "official_sha1": "480c0c8c3000e9fbad83676671c99af1c5a6881e",
+      "matched": true,
+      "executed": false
+    }
+  ],
+  "prior_source_comparison": [
+    {
+      "relative": "treadle2/stage/TreadleTesterPhase.scala",
+      "same_as_prior_fixed_commit_source": true
+    },
+    {
+      "relative": "treadle2/stage/phases/PrepareAst.scala",
+      "same_as_prior_fixed_commit_source": true
+    },
+    {
+      "relative": "treadle2/stage/phases/CreateTester.scala",
+      "same_as_prior_fixed_commit_source": true
+    },
+    {
+      "relative": "treadle2/stage/phases/GetFirrtlAst.scala",
+      "same_as_prior_fixed_commit_source": true
+    },
+    {
+      "relative": "chiseltest/simulator/ChiselBridge.scala",
+      "same_as_prior_fixed_commit_source": true
+    },
+    {
+      "relative": "chiseltest/simulator/Compiler.scala",
+      "same_as_prior_fixed_commit_source": true
+    },
+    {
+      "relative": "chiseltest/simulator/TreadleSimulator.scala",
+      "same_as_prior_fixed_commit_source": true
+    },
+    {
+      "relative": "chiseltest/internal/TesterUtils.scala",
+      "same_as_prior_fixed_commit_source": true
+    }
+  ],
+  "sources": [
+    {
+      "archive_relative": "chiseltest/internal/SimController.scala",
+      "bytes": 7991,
+      "sha256": "1548c1350e0292b56ddfb750d95c9977f85bf205b420aab55e87714d6aa704ed"
+    },
+    {
+      "archive_relative": "chiseltest/internal/TesterUtils.scala",
+      "bytes": 4698,
+      "sha256": "97d4b5940cfb5be5c70bc147295a15d5608680c3fb28034ce61f613da56148f8"
+    },
+    {
+      "archive_relative": "chiseltest/simulator/ChiselBridge.scala",
+      "bytes": 17220,
+      "sha256": "1794e0728beff8bb88b9860e2835ab672ad8a9f90216f9728461f8549b339274"
+    },
+    {
+      "archive_relative": "chiseltest/simulator/Compiler.scala",
+      "bytes": 2654,
+      "sha256": "a5eb6dfc9258815ec0086026ede05e6db27bc4b96b02639d14169614f4ea7549"
+    },
+    {
+      "archive_relative": "chiseltest/simulator/TreadleSimulator.scala",
+      "bytes": 3460,
+      "sha256": "33e10985ec734d78eeb68a9247d404cf7085368c465b3a78e254e94d8828aeba"
+    },
+    {
+      "archive_relative": "firrtl2/Compiler.scala",
+      "bytes": 7511,
+      "sha256": "748572d50c3ae367b6719d78ea846a2833df862c52412f4f7ac2c5b0f0fd932c"
+    },
+    {
+      "archive_relative": "firrtl2/Emitter.scala",
+      "bytes": 8100,
+      "sha256": "374085b99e7e12ff57a092f66942fb0869321c8934ea3a35e08371906be53b08"
+    },
+    {
+      "archive_relative": "firrtl2/Utils.scala",
+      "bytes": 41186,
+      "sha256": "506d5cf8069af191d15c42bd5c1c5a1a39e6931298f7f30ec54542970db128bd"
+    },
+    {
+      "archive_relative": "firrtl2/backends/experimental/rtlil/RtlilEmitter.scala",
+      "bytes": 44920,
+      "sha256": "627d7a0bafe75f11352619893747a57e011325dfb7f333f04e8a4ab5fe9e2581"
+    },
+    {
+      "archive_relative": "firrtl2/backends/experimental/smt/SMTEmitter.scala",
+      "bytes": 3540,
+      "sha256": "69824b2dc7aab713512278807aa79235916149c6230569bff758770a182ff699"
+    },
+    {
+      "archive_relative": "firrtl2/backends/firrtl/FirrtlEmitter.scala",
+      "bytes": 2430,
+      "sha256": "7ed3ff1111522a0f2d5bc456f99687de9a81f659fdfc3d7ac85af018bc5b28b3"
+    },
+    {
+      "archive_relative": "firrtl2/backends/verilog/MinimumVerilogEmitter.scala",
+      "bytes": 381,
+      "sha256": "b52d46eab8beab11c3167399b8dd13613983c2c7aacb10b38c2aa8009abd6474"
+    },
+    {
+      "archive_relative": "firrtl2/backends/verilog/SystemVerilogEmitter.scala",
+      "bytes": 839,
+      "sha256": "40fbbd79c4cd685e898513847b6b12e236df1a9c0c09cba3fa8b16ee925db243"
+    },
+    {
+      "archive_relative": "firrtl2/backends/verilog/VerilogEmitter.scala",
+      "bytes": 58862,
+      "sha256": "53dc5bd72c023dac38d4c0fa824db11a6496588499dbb78963eb84a6a65344cf"
+    },
+    {
+      "archive_relative": "firrtl2/ir/IR.scala",
+      "bytes": 44024,
+      "sha256": "76be21c94765b665e1eb4cbedc44220cbb82802ab02275b4878295c2a9a0acd4"
+    },
+    {
+      "archive_relative": "firrtl2/passes/CommonSubexpressionElimination.scala",
+      "bytes": 2259,
+      "sha256": "8f4c84dbe6e41665e71de9193e99c02d4f76dae02dc7933c0ac59f480fbb116f"
+    },
+    {
+      "archive_relative": "firrtl2/stage/Forms.scala",
+      "bytes": 4987,
+      "sha256": "2929c9a7df1f58bb1b3375e33ac42c4b67d3654be1132a1c4b4aa4ad509b2f50"
+    },
+    {
+      "archive_relative": "firrtl2/stage/phases/AddImplicitEmitter.scala",
+      "bytes": 1007,
+      "sha256": "f3b697a29966ad0e423af1356c06002426e4e50ab942ee4db5a292b4a815d795"
+    },
+    {
+      "archive_relative": "firrtl2/stage/phases/Compiler.scala",
+      "bytes": 5933,
+      "sha256": "ec769872d83d81bf615706ca02175f9f804fd6f585c2511813ec8d97e7c9eeb6"
+    },
+    {
+      "archive_relative": "firrtl2/stage/transforms/Compiler.scala",
+      "bytes": 1719,
+      "sha256": "8bb267eb72b000fe2b6dcc84273aa9024757fbf00e89272676d94fa1b9b83450"
+    },
+    {
+      "archive_relative": "firrtl2/transforms/InferResets.scala",
+      "bytes": 13518,
+      "sha256": "34e1a4cf4592ec05bd906654a37dcd2be0cfae1903e5a8580b296abfe0dcbd8f"
+    },
+    {
+      "archive_relative": "treadle2/stage/TreadleTesterPhase.scala",
+      "bytes": 577,
+      "sha256": "c8335b1ebe7cbd8ff1f23084b517534aa4a3d0b0cd2f200bec543e247534d34b"
+    },
+    {
+      "archive_relative": "treadle2/stage/phases/CreateTester.scala",
+      "bytes": 682,
+      "sha256": "efde4b187a80a11f3330fb023d914abfdc92c1d634fd8ccbb349c02e9346d0ec"
+    },
+    {
+      "archive_relative": "treadle2/stage/phases/GetFirrtlAst.scala",
+      "bytes": 2022,
+      "sha256": "b228c35eadd511f24526f9a45a551d34a4ae5a869a3e66244de97bfe3fd3a1bc"
+    },
+    {
+      "archive_relative": "treadle2/stage/phases/PrepareAst.scala",
+      "bytes": 1358,
+      "sha256": "4889b2a14ee811f69981d543b65ec48db4adff63d17ffeab4bb31bf32307496c"
+    }
+  ],
+  "note": "Official same-coordinate sources; relevant runtime guard/currentState directly checked in class bytes, stack line numbers correspond. Not a whole-JAR reproducible build proof.",
+  "binary_evidence_original": {
+    "bytes": 42082,
+    "sha256": "9309040b66278a91fe1d371fcd842608796d36ccb02b0adfe01cfed9317bdfaf"
+  },
+  "binary_evidence_mode": "static byte parsing only; no javap/JVM",
+  "source_to_binary_recompiled": false,
+  "runtime_class_witnesses": [
+    {
+      "jar": {
+        "bytes": 4510129,
+        "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b"
+      },
+      "class": "firrtl2/passes/CommonSubexpressionElimination$.class",
+      "class_sha256": "7f301f9ce78f365d712f3acdf89bd0323823af6c157514bf5c030622e08ad1c5",
+      "method_signatures": [
+        {
+          "name": "execute",
+          "descriptor": "(Lfirrtl2/CircuitState;)Lfirrtl2/CircuitState;"
+        },
+        {
+          "name": "eliminateNodeRef$1",
+          "descriptor": "(Lfirrtl2/ir/Expression;Lscala/collection/mutable/HashMap;Lscala/collection/mutable/HashMap;)Lfirrtl2/ir/Expression;"
+        }
+      ]
+    },
+    {
+      "jar": {
+        "bytes": 4510129,
+        "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b"
+      },
+      "class": "firrtl2/MemoizedHash$.class",
+      "class_sha256": "8dc8f78200bc22673c39396070a2b5152803e58f8994345ae8f710fe1e5f9ead",
+      "method_signatures": [
+        {
+          "name": "convertTo",
+          "descriptor": "(Ljava/lang/Object;)Lfirrtl2/MemoizedHash;"
+        }
+      ]
+    },
+    {
+      "jar": {
+        "bytes": 2707568,
+        "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5"
+      },
+      "class": "treadle2/stage/phases/PrepareAst.class",
+      "class_sha256": "8296f250758abb66c154106fa7b02eb59b2bae7087539b9de18a38ba47d95fbb",
+      "method_signatures": [
+        {
+          "name": "compiler",
+          "descriptor": "()Lfirrtl2/stage/transforms/Compiler;"
+        },
+        {
+          "name": "<init>",
+          "descriptor": "()V"
+        }
+      ]
+    }
+  ],
+  "source_and_binary_archives_not_uploaded": true,
+  "NoCSE_candidate_source_not_included": true
+}

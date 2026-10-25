@@ -1,0 +1,52 @@
+{
+  "original_report": {
+    "bytes": 10248,
+    "sha256": "99394007f932f05c37a64c7b2244e48f2661186e6fcdd1598892dc16ef79e1cd"
+  },
+  "original_readonly_analysis": {
+    "bytes": 27567,
+    "sha256": "d52f381bda513e906caa8b5685fab69379f3013db65fc20712b1b45d9336104a"
+  },
+  "observed_instants": [
+    "PrepareAst -> InferResets recursive statement traversal",
+    "PrepareAst -> CSE -> MemoizedHash -> recursive IR structural hash/HashMap lookup"
+  ],
+  "source_order_inference": "The captured PrepareAst stacks occur inside TreadleSimulator.createContext after initial Compiler.toLowFirrtl returns; this inference uses actual frames plus pinned source order, not the lo-file extension alone.",
+  "not_inferred": "No proof that final PrepareAst/low pipeline completed, or what happened after the second sample, or actual totalclock count. Two samples cannot assign whole150CPU or old600CPU cost to CSE.",
+  "mechanism_scope": "Pinned source and runtime class bytes show PrepareAst schedules LowFormOptimized with currentState Nil, and each MemoizedHash.convertTo constructs a wrapper with wrapper-local lazy hash. No quantified node frequency/hash collision/complexity or whole-runtime source-to-binary reproducible-build proof.",
+  "thread_cumulative_cpu_summary": [
+    {
+      "thread_role": "ScalaTest-main-running-OrderedQkBehaviorSpec",
+      "dump1_cumulative_cpu_ms": 29533.82,
+      "dump2_cumulative_cpu_ms": 69155.0,
+      "difference_ms": 39621.18
+    },
+    {
+      "thread_role": "C2 CompilerThread0",
+      "dump1_cumulative_cpu_ms": 11319.41,
+      "dump2_cumulative_cpu_ms": 14290.13,
+      "difference_ms": 2970.7199999999993
+    },
+    {
+      "thread_role": "C1 CompilerThread0",
+      "dump1_cumulative_cpu_ms": 2062.39,
+      "dump2_cumulative_cpu_ms": 2249.06,
+      "difference_ms": 186.67000000000007
+    },
+    {
+      "thread_role": "VM Thread",
+      "dump1_cumulative_cpu_ms": 14300.88,
+      "dump2_cumulative_cpu_ms": 29240.27,
+      "difference_ms": 14939.390000000001
+    }
+  ],
+  "thread_cpu_difference_scope": "JVM cumulative per-thread counters at dump instants, not same clock/scope as supervisor. VM Thread delta is not identified GC CPU/pause; JIT thread totals are not all attributed to displayed method.",
+  "limits": [
+    "not a full CPU profile",
+    "VM Thread CPU is not identified GC CPU",
+    "no first-clock proof after second snapshot",
+    "does not retroactively locate old 600CPU run"
+  ],
+  "next_step_plan_only": "Official NoCommonSubexpressionEliminationAnnotation exists as an optional CSE gate; no new candidate/argv/class/config/GO or actual experiment is in this package. Disabling CSE may increase graph/clock costs; no speedup, behavior or numerical claim.",
+  "raw_heap_addresses_or_thread_headers_not_published": true
+}

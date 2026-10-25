@@ -1,0 +1,28 @@
+{
+  "source_freeze": {
+    "bytes": 4364,
+    "sha256": "4a72e07f488127e969708ba3c69131aed00f4e7e7aecac120f5aa2c24b390fcb"
+  },
+  "files": [
+    {
+      "path": "check_diagnostic.py",
+      "bytes": 4853,
+      "sha256": "85ea7e5dc9d1cac62c4240666699b7c4193c6b9d20d3cdfd037e0c4f987c7a8c",
+      "source_kind": "unchanged-original-reviewed-bytes"
+    },
+    {
+      "path": "test_diagnostic_checker.py",
+      "bytes": 3708,
+      "sha256": "3ef85182664c25ca4dada7e54b19c2213ccc41c4c3350c59488dbc0a7b4c1ea9",
+      "source_kind": "unchanged-original-reviewed-bytes"
+    },
+    {
+      "path": "DIAGNOSTIC_EXPECTATION.json",
+      "bytes": 124,
+      "sha256": "87a1d76c9bd9f842485035ab22858bc4d9f5c655ac66554f6377dac176826ef5",
+      "source_kind": "unchanged-original-reviewed-bytes"
+    }
+  ],
+  "source_adaptation": false,
+  "source_does_not_automatically_sanitize_actual_output": true
+}

@@ -1,0 +1,41 @@
+{
+  "status": "PASS_PACKAGE_BYTES_AND_SYNTHETIC_DIAGNOSTIC_READER_ONLY",
+  "identity_comparisons": 133,
+  "unique_files_hashed": 104,
+  "original_source_files_byte_exact": 2,
+  "original_expectation_byte_exact": true,
+  "existing_public_refs": 6,
+  "official_analysis_sources": 25,
+  "runtime_binary_class_witnesses": 3,
+  "selected_exact_address_free_java_frames": 50,
+  "two_actual_stack_summaries_bound_without_rawdump_publication": true,
+  "original24_artifacts_stat_unchanged": true,
+  "small_actual_artifacts_rehashed": 23,
+  "actual_low_IR_not_reopened_rehashed_or_reparsed": true,
+  "actual_log_only_opaque_hash_not_reclassified": true,
+  "synthetic_unique_cases": 16,
+  "synthetic_executions": 32,
+  "tests": [
+    {
+      "mode": "normal",
+      "tests": 16,
+      "exit": 0,
+      "log": {
+        "bytes": 1173,
+        "sha256": "c50b5567e0db02a750254b8a9aa04774e14fcbf383ad4a18f46cefc32feef039"
+      }
+    },
+    {
+      "mode": "optimized",
+      "tests": 16,
+      "exit": 0,
+      "log": {
+        "bytes": 1173,
+        "sha256": "22ad53a7ad1331223119a7c1fa5fe37af111ec8b4f60da724aaeefd74e06cb47"
+      }
+    }
+  ],
+  "JVM_DUT_native_reference_real_signal_or_IR_compiler_executed": false,
+  "old_evidence_changed": false,
+  "unexecuted_NoCSE_candidate_excluded": true
+}

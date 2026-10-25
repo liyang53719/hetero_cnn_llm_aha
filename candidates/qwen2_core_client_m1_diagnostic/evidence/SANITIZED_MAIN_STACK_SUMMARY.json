@@ -1,0 +1,241 @@
+{
+  "original_independent_sanitized_stacks": {
+    "bytes": 58808,
+    "sha256": "40262f05194386a522eb40a69398594d2ce613ddb22072e593e61f27031b86ca"
+  },
+  "original_worker_log": {
+    "bytes": 35371,
+    "sha256": "8a10077de1f5c3cbfef8835c159de2ee42550f348b65063963381e2061db6cc1"
+  },
+  "dumps": [
+    {
+      "index": 1,
+      "sampled_main_path": "PrepareAst / InferResets",
+      "thread_count": 13,
+      "dump_text_hash": "2fed65835475383d1d4a0bb60b9441faa8759b6ec6dad55b7497cfdde0b8b0f3",
+      "cumulative_main_thread_cpu_ms": 29533.82,
+      "main_thread_elapsed_seconds": 59.58,
+      "main_thread_state": "RUNNABLE",
+      "original_main_java_frame_count": 113,
+      "selected_java_frames": [
+        {
+          "line": 32,
+          "text": "at firrtl2.transforms.InferResets.onStmt$1(InferResets.scala:188)"
+        },
+        {
+          "line": 33,
+          "text": "at firrtl2.transforms.InferResets.$anonfun$analyze$12(InferResets.scala:188)"
+        },
+        {
+          "line": 34,
+          "text": "at firrtl2.transforms.InferResets.$anonfun$analyze$12$adapted(InferResets.scala:188)"
+        },
+        {
+          "line": 37,
+          "text": "at firrtl2.ir.Block.foreachStmt(IR.scala:655)"
+        },
+        {
+          "line": 40,
+          "text": "at firrtl2.transforms.InferResets.onStmt$1(InferResets.scala:188)"
+        },
+        {
+          "line": 41,
+          "text": "at firrtl2.transforms.InferResets.$anonfun$analyze$14(InferResets.scala:191)"
+        },
+        {
+          "line": 42,
+          "text": "at firrtl2.transforms.InferResets.$anonfun$analyze$14$adapted(InferResets.scala:191)"
+        },
+        {
+          "line": 44,
+          "text": "at firrtl2.ir.Module.foreachStmt(IR.scala:1049)"
+        },
+        {
+          "line": 47,
+          "text": "at firrtl2.transforms.InferResets.onMod$1(InferResets.scala:191)"
+        },
+        {
+          "line": 48,
+          "text": "at firrtl2.transforms.InferResets.$anonfun$analyze$16(InferResets.scala:195)"
+        },
+        {
+          "line": 51,
+          "text": "at firrtl2.transforms.InferResets.analyze(InferResets.scala:195)"
+        },
+        {
+          "line": 52,
+          "text": "at firrtl2.transforms.InferResets.execute(InferResets.scala:314)"
+        },
+        {
+          "line": 55,
+          "text": "at firrtl2.transforms.InferResets.runTransform(InferResets.scala:102)"
+        },
+        {
+          "line": 56,
+          "text": "at treadle2.stage.phases.PrepareAst.$anonfun$transform$2(PrepareAst.scala:34)"
+        },
+        {
+          "line": 61,
+          "text": "at treadle2.stage.phases.PrepareAst.$anonfun$transform$1(PrepareAst.scala:33)"
+        },
+        {
+          "line": 65,
+          "text": "at treadle2.stage.phases.PrepareAst.transform(PrepareAst.scala:30)"
+        },
+        {
+          "line": 66,
+          "text": "at treadle2.stage.phases.PrepareAst.transform(PrepareAst.scala:15)"
+        },
+        {
+          "line": 73,
+          "text": "at chiseltest.simulator.TreadleSimulator$.createContext(TreadleSimulator.scala:38)"
+        },
+        {
+          "line": 74,
+          "text": "at chiseltest.internal.TesterUtils$.createTester(TesterUtils.scala:51)"
+        },
+        {
+          "line": 75,
+          "text": "at chiseltest.internal.TesterUtils$.startController(TesterUtils.scala:95)"
+        }
+      ],
+      "selection": "Only exact address-free source-relevant Java frames in original order; hidden-address frames and unrelated frames omitted. Not a full stack/dump."
+    },
+    {
+      "index": 2,
+      "sampled_main_path": "PrepareAst / CommonSubexpressionElimination",
+      "thread_count": 13,
+      "dump_text_hash": "d6ad12c8aee0b13d57f58c4e6e0a72e377db8279e159fd80b06748a45d340ec8",
+      "cumulative_main_thread_cpu_ms": 69155.0,
+      "main_thread_elapsed_seconds": 119.56,
+      "main_thread_state": "RUNNABLE",
+      "original_main_java_frame_count": 153,
+      "selected_java_frames": [
+        {
+          "line": 241,
+          "text": "at firrtl2.ir.UIntType.hashCode(IR.scala:937)"
+        },
+        {
+          "line": 246,
+          "text": "at firrtl2.ir.Field.hashCode(IR.scala:855)"
+        },
+        {
+          "line": 257,
+          "text": "at firrtl2.ir.BundleType.hashCode(IR.scala:946)"
+        },
+        {
+          "line": 262,
+          "text": "at firrtl2.ir.Reference.hashCode(IR.scala:367)"
+        },
+        {
+          "line": 267,
+          "text": "at firrtl2.ir.SubField.hashCode(IR.scala:380)"
+        },
+        {
+          "line": 272,
+          "text": "at firrtl2.ir.Mux.hashCode(IR.scala:417)"
+        },
+        {
+          "line": 273,
+          "text": "at firrtl2.MemoizedHash.hashCode$lzycompute(Utils.scala:1005)"
+        },
+        {
+          "line": 275,
+          "text": "at firrtl2.MemoizedHash.hashCode(Utils.scala:1005)"
+        },
+        {
+          "line": 277,
+          "text": "at scala.collection.mutable.HashMap.get(HashMap.scala:78)"
+        },
+        {
+          "line": 278,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.eliminateNodeRef$1(CommonSubexpressionElimination.scala:38)"
+        },
+        {
+          "line": 279,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.$anonfun$cse$1(CommonSubexpressionElimination.scala:45)"
+        },
+        {
+          "line": 281,
+          "text": "at firrtl2.ir.Mux.mapExpr(IR.scala:420)"
+        },
+        {
+          "line": 284,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.eliminateNodeRef$1(CommonSubexpressionElimination.scala:45)"
+        },
+        {
+          "line": 285,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.$anonfun$cse$3(CommonSubexpressionElimination.scala:49)"
+        },
+        {
+          "line": 287,
+          "text": "at firrtl2.ir.DefNode.mapExpr(IR.scala:597)"
+        },
+        {
+          "line": 290,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.eliminateNodeRefs$1(CommonSubexpressionElimination.scala:49)"
+        },
+        {
+          "line": 291,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.$anonfun$cse$6(CommonSubexpressionElimination.scala:54)"
+        },
+        {
+          "line": 293,
+          "text": "at firrtl2.ir.Block.mapStmt(IR.scala:643)"
+        },
+        {
+          "line": 296,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.eliminateNodeRefs$1(CommonSubexpressionElimination.scala:54)"
+        },
+        {
+          "line": 297,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.cse(CommonSubexpressionElimination.scala:58)"
+        },
+        {
+          "line": 298,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.$anonfun$execute$1(CommonSubexpressionElimination.scala:67)"
+        },
+        {
+          "line": 302,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.execute(CommonSubexpressionElimination.scala:65)"
+        },
+        {
+          "line": 305,
+          "text": "at firrtl2.passes.CommonSubexpressionElimination$.runTransform(CommonSubexpressionElimination.scala:14)"
+        },
+        {
+          "line": 306,
+          "text": "at treadle2.stage.phases.PrepareAst.$anonfun$transform$2(PrepareAst.scala:34)"
+        },
+        {
+          "line": 311,
+          "text": "at treadle2.stage.phases.PrepareAst.$anonfun$transform$1(PrepareAst.scala:33)"
+        },
+        {
+          "line": 315,
+          "text": "at treadle2.stage.phases.PrepareAst.transform(PrepareAst.scala:30)"
+        },
+        {
+          "line": 316,
+          "text": "at treadle2.stage.phases.PrepareAst.transform(PrepareAst.scala:15)"
+        },
+        {
+          "line": 323,
+          "text": "at chiseltest.simulator.TreadleSimulator$.createContext(TreadleSimulator.scala:38)"
+        },
+        {
+          "line": 324,
+          "text": "at chiseltest.internal.TesterUtils$.createTester(TesterUtils.scala:51)"
+        },
+        {
+          "line": 325,
+          "text": "at chiseltest.internal.TesterUtils$.startController(TesterUtils.scala:95)"
+        }
+      ],
+      "selection": "Only exact address-free source-relevant Java frames in original order; hidden-address frames and unrelated frames omitted. Not a full stack/dump."
+    }
+  ],
+  "native_addresses_PIDs_locks_raw_headers_original_absolute_paths_absent": true,
+  "two_samples_not_profile_or_unique_old600CPU_cause": true,
+  "scope": "These are the two captured main-thread instants only. No claim that the whole run stayed in these phases or that later graph/reset did not occur."
+}

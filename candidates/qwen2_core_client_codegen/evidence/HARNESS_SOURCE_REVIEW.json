@@ -1,0 +1,70 @@
+{
+  "schema": "independent-frozen-M1-harness-source-review-v1",
+  "status": "PASS_STATIC_SOURCE_LOG_CONTRACT_ONLY_NOT_CPP_COMPILED_NOT_EXECUTED",
+  "MAC_duty_cycle": null,
+  "MAC_utilization": null,
+  "author_contract_tests_rerun": 52,
+  "independent_controls": 196,
+  "behavior_PASS": false,
+  "full128_RTL_numerical_PASS": false,
+  "inputs_explicitly_zeroed": 8250,
+  "limitations": [
+    "No C++ syntax/API/type compilation yet; generated top public-header ABI must be checked at codegen and compiler verdict comes later.",
+    "Scripted Matrix outputs are not an FMA implementation or numerical Matrix verification.",
+    "Zero-data normalM1 only; no M2/M3/fault/early-done/foreign-tag cases.",
+    "W005 j1..7 concerns remain uncovered: M1 active keyj0 only.",
+    "Verilator two-state initialization/unknown handling and no-timing are not hardware initialization/timing equivalence proof.",
+    "accounting512Steps864=96*8+96 is bookkeeping, distinct from96QK/96PV and no effective-MAC or utilization evidence."
+  ],
+  "log_contract": {
+    "all_event_order_positions_and_zero_score_retire_checked": true,
+    "expected_OBS": 408,
+    "heads": 12,
+    "hold_ports_zero_allowed_and_reported_uncovered": true,
+    "maxScore_diagnostic_only_rangechecked": true,
+    "memory_addresses_and_payloads": "Harness live assertions plus terminal counters; log checker does not reconstruct every memory transaction.",
+    "owner_terminal_payload": "Status/reset expected and8held-cycle stability then1accept+3quiet; not independent expected values for all owner-result fields.",
+    "phases_per_head": [
+      16,
+      16,
+      1,
+      1
+    ],
+    "requires_external_actual_execution_identity_exit0_cleanup": true,
+    "unknown_lines_and_errors_failclose": true
+  },
+  "reset_and_clock_boundary": {
+    "DONE_after_final_and_model_destruction_with_actual_edgecount": true,
+    "explicit_reset_rising_edges": 3,
+    "max_body_steps": 99997,
+    "max_total_rising_edges": 100000,
+    "new_READY_after_reset": true,
+    "startup_difference": "All external inputs zero before3edges and randReset0 is new explicit start convention; original framework reset1 ran before test zeroing, original READY then preceded explicitreset2. No bitwise initial-state equivalence to old backend claimed.",
+    "timeInc_is_not_cycle_denominator": true
+  },
+  "stimulus_correspondence": [
+    "normal_m1 only, owner Attention4/m1/n1536/k128/tag0x7000c and fixed memory regions match original source.",
+    "Settle/read phase; drive external responses/readies; settle; sample all handshakes/hold/probe before rising edge; clock once; update queued debts and next payload after edge.",
+    "Memory reply due=preedge cycle+2+cycle%3, PV reply due=postedge cycle+2; one debt each.",
+    "QK eighth accepted step offers stable scripted16x256 result; accepted result then offers matching done; expected12groups,96QK steps,96PV,384memory,6144write bytes and408vector observations.",
+    "Address bounds fixed to at>=base && at<=end-64 with64byte alignment, avoiding U64 wrap unlike old at+64 while matching original BigInt ranges.",
+    "Top-level ports only; complete5 request/result snapshot sets; all8250 external inputs explicitly initialized; no hidden state access or DUT/reference calls."
+  ],
+  "tile_ports_row_major": 4096,
+  "top_member_references": 77,
+  "top_ports": 8859,
+  "origin_review": {
+    "bytes": 5774,
+    "sha256": "a19d9459629e93d49ef15d5d5c156004e7837ff7d49a4ab3e0380428b1276e06"
+  },
+  "origin_review_freeze": {
+    "bytes": 2340,
+    "sha256": "ae36d758b6318ce660750983744a87e774a37d3ff4f529ed62f1fbd7250b7cec"
+  },
+  "combined_source_controls": 248,
+  "original_spec": {
+    "bytes": 16701,
+    "sha256": "ab0f832c033dec56daee3ad0d98e9b7e37a1d9189b692556d22dc3fea8ac66f9"
+  },
+  "scope": "Frozen2044 source contract only;52author+196independent controls, not248 hardware experiments. Later codegen did not execute this harness. Historical not-compiled flags stay at their original source-review time."
+}

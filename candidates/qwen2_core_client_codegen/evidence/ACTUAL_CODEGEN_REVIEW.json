@@ -1,0 +1,209 @@
+{
+  "schema": "qwen2-core-client-official-verilator-actual-codegen-independent-review-v1",
+  "status": "PASS_ACTUAL_OFFICIAL_CPP_CODEGEN_PUBLIC_ABI_AND_MAKE_CLOSURE_ONLY_NOT_BUILD_OR_BEHAVIOR",
+  "actual_status": "PASS_OFFICIAL_VERILATOR_CPP_CODEGEN_ONLY",
+  "ABI_and_make": {
+    "Make_variables_and_two_TAB_recipes_independently_matched": true,
+    "VM_PARALLEL_BUILDS": 1,
+    "all_generated_include_targets_exist": true,
+    "all_names_unsigned_widths_direction_storage_macros_and_reference_form_exact": true,
+    "class_group_counts": {
+      "VM_CLASSES_FAST": 19,
+      "VM_CLASSES_SLOW": 16,
+      "VM_GLOBAL_FAST": 2,
+      "VM_GLOBAL_SLOW": 0,
+      "VM_SUPPORT_FAST": 0,
+      "VM_SUPPORT_SLOW": 1
+    },
+    "context_constructor_eval_eval_step_final_public": true,
+    "full_Cpp_preprocessor_system_header_closure_not_proved": true,
+    "generated_cpp_listed_once": 36,
+    "inputs": 8250,
+    "literal_include_edges": 109,
+    "metadata_parallel_build_choice_not_worker_thread_measurement": true,
+    "only_direct_external_generated_include": "pinned private include/verilated.h",
+    "outputs": 609,
+    "ports": 8859,
+    "runtime_sources": [
+      "verilated.cpp",
+      "verilated_threads.cpp"
+    ],
+    "selected_class_closed_and_guard_bound": true,
+    "unique_user_source": "original frozen2044/m1_main.cpp",
+    "user_CFLAGS": [
+      "-std=c++17"
+    ],
+    "user_extra_LDLIBS": []
+  },
+  "artifact_summary": {
+    "all47_independent_hashes_agree_receipt": true,
+    "claim_bytes": 1495,
+    "cpp_files": 36,
+    "dependency_files": 1,
+    "empty_work_directories": [
+      "home",
+      "tmp",
+      "empty-path"
+    ],
+    "header_files": 7,
+    "log_bytes": 306,
+    "make_files": 2,
+    "model_bytes": 27712886,
+    "model_files": 47,
+    "no_objects_archives_or_executables_in_actual_tree": true,
+    "receipt_bytes": 41476,
+    "timestamp_metadata_files": 1,
+    "total_actual_bytes": 27756163,
+    "total_actual_files": 50
+  },
+  "assertion_boundary": {
+    "VL_STOP_MT_sites": 6,
+    "exact_assert_option_verified": true,
+    "no_claim_of_complete_assertion_enumeration_or_runtime_execution": true,
+    "selected_spelling_occurrences": 0,
+    "selected_spelling_scan_patterns": [
+      "assertOn()",
+      "VL_ASSERT"
+    ]
+  },
+  "actual_resources": {
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 134217728,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 67108864,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "final_aggregate_CPU_seconds": 19.796118074000002,
+    "fit_for_future_compile_or_simulation_guaranteed": false,
+    "inner_wall_seconds": 19.82035985996481,
+    "maximum_sample_gap_seconds": 0.0270256630028598,
+    "root_outer_wall_seconds": 19.975004745996557,
+    "root_timeout": false,
+    "sampled_aggregate_CPU_seconds": 19.221358146,
+    "sampled_group_peak_RSS_bytes": 862093312,
+    "sampled_tree_peak_bytes": 27714687
+  },
+  "cleanup": {
+    "complete": true,
+    "complete_absence_barriers": 2,
+    "direct_leader_reaped": true,
+    "no_post_reap_signals": true,
+    "not_global_process_absence_claim": true,
+    "original_leader_exit0": true,
+    "retained_observation_bytes": 1546,
+    "retained_observation_records": 8,
+    "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY"
+  },
+  "identity_scope": {
+    "aliases": 13,
+    "automatic_pins": 3754,
+    "cleanup_helper_automatic_pre_post": true,
+    "fresh_cwd_slots": 3,
+    "global_absent_endpoints": 21,
+    "header_and_make_small_bounded_preliminary_inspection_also_performed": true,
+    "inventories": 12,
+    "model_full_content_read_once_per_file_for_hash_and_literal_include_scan": true,
+    "old_FAIL_and_old_PASS_evidence_preserved": true,
+    "retained_SV_not_reopened_by_review": true,
+    "root_external_before_and_after_pass": true
+  },
+  "invocation_scope": {
+    "assert_flag_present_in_exact_root_claim_executed_argv_and_native_dat": true,
+    "no_SV_regeneration": true,
+    "no_Wall_all_categories_claim": true,
+    "no_build_flag": true,
+    "no_make_or_compiler_or_simulator_invocation_authorized": true,
+    "no_warning_suppression": true,
+    "scripted_M1_harness_not_executed": true
+  },
+  "limitations": [
+    "C++ bodies were hashed and literal includes inventoried, not parsed/compiled/executed. Header and selected Make content qualify declarations/source graph only.",
+    "Literal generated includes are not a full preprocessor, standard-library, compiler, assembler, linker or dynamic-loader build closure.",
+    "Actual --assert option is proven. Six STOP call sites and zero occurrences of two selected assertion spellings do not prove a complete semantic assertion inventory, coverage or successful behavior.",
+    "Source/harness stimulus, physical initialization, timing/unknown equivalence and all owner-result expected fields remain separately bounded by the frozen source review. No stimulus ran here.",
+    "Current --threads1/--verilate-jobs1 and VM_PARALLEL_BUILDS1 have distinct meanings. A later make-j1 must be explicitly proposed and supervised; no CPU/RSS fit follows automatically.",
+    "RSS/tree are sampled; child AS/FSIZE and aggregate CPU accounting are not a global filesystem/process sandbox.",
+    "Old original and NoCSE M1 CPU failures, diagnostics and old SV checker failures are retained; actual codegen PASS does not override them.",
+    "No hardware cycles, accepted MAC operations or end-to-end block duty were measured. Utilization and MAC duty remain unknown, not zero or90percent."
+  ],
+  "native_summary_interpretation": {
+    "Cpp_stat_MB": 26.405,
+    "Cpp_stat_files": 36,
+    "actual_Cpp_plus_headers_MiB": 26.405268669128418,
+    "actual_Cpp_plus_headers_bytes": 27687931,
+    "model_needing_is_static_stack_plus_VarScope_size_prediction_not_runtime_RSS": true,
+    "no_warning_or_error_lines": true,
+    "physical_input_SV_bytes": 26251369,
+    "previous_independent_SV_module_declarations": 25,
+    "reported_alloced_MB": 808.605,
+    "reported_alloced_not_monitored_group_RSS": true,
+    "reported_model_needing_MB": 11.579,
+    "reported_threads_1_is_configured_job_stat_not_OS_census": true,
+    "source_stat_MB": 8.618,
+    "source_stat_modules": 26,
+    "source_stats_not_substitute_for_physical_file_or_module_manifest": true,
+    "tool_CPU_seconds": 0.0,
+    "tool_CPU_zero_not_actual_CPU": true,
+    "tool_build_seconds": 0.0,
+    "tool_cvt_seconds": 14.866,
+    "tool_elab_seconds": 2.284,
+    "tool_wall_seconds": 18.698
+  },
+  "CPP_build_PASS": false,
+  "MAC_duty_cycle": null,
+  "MAC_utilization": null,
+  "RTL_behavior_PASS": false,
+  "full128_RTL_numerical_PASS": false,
+  "full29_PASS": false,
+  "model_execution_PASS": false,
+  "origin_review": {
+    "bytes": 15479,
+    "sha256": "b62f892583bed0211e2c61e62cf81fbad6e63e34dfcb5cc2c0dd883a64dddfd0"
+  },
+  "origin_freeze": {
+    "bytes": 2677,
+    "sha256": "78906d845af949b5071d5c76b88648f9513248bf4368a24f74c8b8a826313566"
+  },
+  "actual_receipt": {
+    "bytes": 41476,
+    "sha256": "92c200dde663432383f09161332f3caa4bfa42bff6ae0b97b22f69b03b84430e"
+  },
+  "worker_log": {
+    "bytes": 306,
+    "sha256": "0639f87bbde0f5a83e8e505fbacc10d75345d9b7724de8ab5e5dedf11571d76a"
+  },
+  "metadata_review": {
+    "bytes": 79337,
+    "sha256": "d11fa175da10eb870ee236eb7adc205fcf03d858f98bda6074cff48ae6d133ea"
+  },
+  "metadata_freeze": {
+    "bytes": 3396,
+    "sha256": "5bbedef2bf4d47f4db084cda65bd471ca8e517279b66ce20b8d140c1c37d4f24"
+  },
+  "output_review": {
+    "bytes": 24234,
+    "sha256": "c550d7de33676f5ed8d7f68779377b3ab4debf2b7d01f5db63daea3239f79709"
+  },
+  "output_freeze": {
+    "bytes": 1894,
+    "sha256": "6b1b1b8ec3440ddb31d9c842b3098b383860409b82cd9ccb09f5c1a624916779"
+  },
+  "generated_public_ABI": {
+    "bytes": 1467899,
+    "sha256": "60bd5089c79edcc5ec8ef6cda5d02b4ae3169d2dd95debe12f78969ec6ad0c50"
+  },
+  "generated_literal_include_graph": {
+    "bytes": 36023,
+    "sha256": "0db18026ce7942c3b70ec2bdadfccb30c6a51f4edba16d7bdd126e49697c9de1"
+  },
+  "projection_note": "Path/argv/environment/process metadata omitted; role invocation and47-file hash-only manifest are separate. No generated C++ body or original SV reread by publication."
+}

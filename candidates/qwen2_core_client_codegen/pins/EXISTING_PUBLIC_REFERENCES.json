@@ -1,0 +1,53 @@
+{
+  "base_commit": "af3afc4bae399811310219180f421f5a035606fb",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/derive_ports.py",
+      "bytes": 2242,
+      "sha256": "7426a3062c677e33e203be70ec4c7f98c02153b85ea5ddb5840d91488cf90274",
+      "git_blob_sha": "d5ec2dc9f82ac707b1cf0b1f3c95566f1af52fca"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/EXPECTATION_TEMPLATE.json",
+      "bytes": 1481,
+      "sha256": "f705ca0dea01824eae8fee7059ff53224b82239ad75c6462b19498d6a86fa1e2",
+      "git_blob_sha": "d4324f69301b933a6dc04d79a8706cfbf159fc19"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/pins/SOURCE_PINS.json",
+      "bytes": 3169,
+      "sha256": "de964a1108d06257489c31aac7ab1a43cf4261d64f323b88926b3c9605c4a0fe",
+      "git_blob_sha": "87b8fb7ea3692d97d025a62b3f1cba83547862e1"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/evidence/R3_ACTUAL_STRUCTURE_REVIEW.json",
+      "bytes": 9017,
+      "sha256": "2d17a95a6f4ab950f318ba596f8858792474653be5722316ac013224b0db50d1",
+      "git_blob_sha": "f177d6b98b1ce4e9e6aa8776330355f1c848de25"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/CHIRRTL_FINAL_REVIEW.json",
+      "bytes": 6774,
+      "sha256": "c6736dfbf9794d87d094569ff55fa1c376e8c7348b1a557e24194c8aa2567a3d",
+      "git_blob_sha": "3118b7c08002312cf85c5722c30e565dcc60499c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_verilator_lint/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 4416,
+      "sha256": "4b7fffebe07effc89052765132531ca206c4b5d695ad42a28b7b82b3d009c49e",
+      "git_blob_sha": "662ab3e625a29dfe435a5c5df2285d7aa7185bf9"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_verilator_lint/pins/UPSTREAM_STATISTICS_PROOF.json",
+      "bytes": 4251,
+      "sha256": "046c1cad792d4ebef51f104f7ce4f5b6ab491515face753c9c58b13a3a1f22bd",
+      "git_blob_sha": "e759f7d4462d50cc4f758252ebc1e48be1525ae9"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_verilator_lint/evidence/ACTUAL_LINT_REVIEW.json",
+      "bytes": 5199,
+      "sha256": "5600dc4b0c5267d4e8b896654caaa2766d21ae9b2d5edf312dd58f3829ad882c",
+      "git_blob_sha": "c98e3ac7363011495376eafa818a7c1eec442962"
+    }
+  ]
+}

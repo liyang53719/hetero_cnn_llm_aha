@@ -1,0 +1,138 @@
+{
+  "schema": "version-matched-emitter-source-pins-v1",
+  "version": "v5.032",
+  "source_files": [
+    {
+      "path": "src/V3EmitCBase.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCBase.cpp",
+      "git_blob_sha": "547a178841239ce35232c344b7340ee74b70df2b",
+      "file_pin": {
+        "bytes": 12165,
+        "sha256": "f9bdabb8cd9d6fcd59b6c7cb71e8c5349a0954710cf279b852671189ba6bdabc"
+      }
+    },
+    {
+      "path": "src/V3EmitCBase.h",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCBase.h",
+      "git_blob_sha": "ff2305aaff5f3ba0535ce7c4df9afa62f925e1e3",
+      "file_pin": {
+        "bytes": 7530,
+        "sha256": "ebdbb5bd21278316e755b9a15b1bb02652e913371da685aeecca54bce73e01ca"
+      }
+    },
+    {
+      "path": "src/V3EmitCConstPool.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCConstPool.cpp",
+      "git_blob_sha": "b94dbc6aa6eebb747e8e7b204eb96209efd76956",
+      "file_pin": {
+        "bytes": 4378,
+        "sha256": "31dad80d90948c89e0b1c9e93ae531d0c161b7b9bcfaa97bced0ae1640e467d8"
+      }
+    },
+    {
+      "path": "src/V3EmitCHeaders.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCHeaders.cpp",
+      "git_blob_sha": "5abde202eba297c11cc8543f78742b663589a8f3",
+      "file_pin": {
+        "bytes": 24689,
+        "sha256": "55c56b4f12180fe93805ff107fe87a68c5e1ac1c038c986fb05187ae253e66a8"
+      }
+    },
+    {
+      "path": "src/V3EmitCModel.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCModel.cpp",
+      "git_blob_sha": "41c1574c79ad324b76104d6d53e47f642d22a241",
+      "file_pin": {
+        "bytes": 31218,
+        "sha256": "4a20c09c70e42692f4aa7bfb63f86d40abef078f72734ae9eb5ed331f07fa562"
+      }
+    },
+    {
+      "path": "src/V3EmitCPch.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCPch.cpp",
+      "git_blob_sha": "ca56694de7083523253c8b2cdab55358b14b4093",
+      "file_pin": {
+        "bytes": 2698,
+        "sha256": "cd9147000dc2ef15844c9ba4cd5a6eea4c6e778a11ac0a6b6ef2ff85ffa2d138"
+      }
+    },
+    {
+      "path": "src/V3EmitCSyms.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitCSyms.cpp",
+      "git_blob_sha": "9263422570046cad3ea4f9b029fa981468291f70",
+      "file_pin": {
+        "bytes": 47075,
+        "sha256": "75e036779227ffc6d26049bb0a44537a599bdfd0f9b5b7782adfe2b78767fd03"
+      }
+    },
+    {
+      "path": "src/V3EmitMk.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3EmitMk.cpp",
+      "git_blob_sha": "f87463f342010c6c8d77849bf09531e8af0fe9ed",
+      "file_pin": {
+        "bytes": 44683,
+        "sha256": "55325e7e0bb6ec06586f34f723ca3d8be22daa19bd1026764505fa341237b1c6"
+      }
+    },
+    {
+      "path": "src/V3Options.h",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3Options.h",
+      "git_blob_sha": "eb3d14194e642c9d01cac72cb7ef90610f14bf85",
+      "file_pin": {
+        "bytes": 40035,
+        "sha256": "308a452b8ed5a208b7ba901b29cc47b6c08453ae82f6c6cde075807eda613b8e"
+      }
+    },
+    {
+      "path": "src/V3Os.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3Os.cpp",
+      "git_blob_sha": "cd38daf44ac1ed26a95c5d34564b47ff8c892c70",
+      "file_pin": {
+        "bytes": 18566,
+        "sha256": "839390f1f5cb0b2c89e6f02097369837e06b0d82b65e5e79fb8403c4d4337222"
+      }
+    },
+    {
+      "path": "src/V3File.cpp",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3File.cpp",
+      "git_blob_sha": "49a4e032bc6149400174218d183323408440db86",
+      "file_pin": {
+        "bytes": 39260,
+        "sha256": "95f9d5164af84a72632fc6a3c2d0125822824ca49dbf8038b0cc3bd42c3ce771"
+      }
+    }
+  ],
+  "origin_final_fetch": {
+    "bytes": 9663,
+    "sha256": "b284ebd5e875291cb5a31d990edbb747945a320708f8915452cf45f3977ec5e1"
+  },
+  "origin_ranges": {
+    "bytes": 104930,
+    "sha256": "bd98a7537c1c395e9980c8c6f1ad36f8170c940fdee2879a180f48f2a401f3f2"
+  },
+  "origin_grammar": {
+    "bytes": 6249,
+    "sha256": "fc7911c23fef0e8f8cccae7444086caa17d7fe313e4b0966bb91a2e5b1d310e9"
+  },
+  "statistics_source": [
+    {
+      "role": "V3StatsReport.cpp",
+      "bytes": 10125,
+      "sha256": "06f1d53e173574b07fdb6452563f3c8f81623c6833b98492a45ca379a70aef15",
+      "lines": [
+        246,
+        271
+      ]
+    },
+    {
+      "role": "V3EmitCSyms.cpp",
+      "bytes": 47075,
+      "sha256": "75e036779227ffc6d26049bb0a44537a599bdfd0f9b5b7782adfe2b78767fd03",
+      "lines": [
+        813,
+        822
+      ]
+    }
+  ],
+  "qualification": "Official version-matched upstream blobs, not a bit-reproducible Debian binary proof. Hash/source references only, no full upstream/binary payload."
+}

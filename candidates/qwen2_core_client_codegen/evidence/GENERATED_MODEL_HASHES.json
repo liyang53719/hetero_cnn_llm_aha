@@ -1,0 +1,259 @@
+{
+  "schema": "sanitized-generated-model-hash-only-manifest-v1",
+  "origin_manifest": {
+    "bytes": 26887,
+    "sha256": "e5efc1c228e84f8760670b5db0951a75b979e413c4971a77ff64f38fc32b2199"
+  },
+  "file_count": 47,
+  "total_bytes": 27712886,
+  "status": "EXACT_GENERATED_TEXT_SET_NO_COMPILE_OR_LINK",
+  "suffix_counts": {
+    ".cpp": 36,
+    ".d": 1,
+    ".dat": 1,
+    ".h": 7,
+    ".mk": 2
+  },
+  "source_receipt": {
+    "sha256": "92c200dde663432383f09161332f3caa4bfa42bff6ae0b97b22f69b03b84430e"
+  },
+  "files": [
+    {
+      "relative_path": "VOrderedQkBehaviorCore.cpp",
+      "bytes": 789904,
+      "sha256": "6d05dcd4f251a051f6e923c05cce0365cf2f17b7204de247a39a7905561ffc42"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore.h",
+      "bytes": 472240,
+      "sha256": "6b9169a0300937681507d6202ea31640ccd046f0c5107a91a8309cde535bfc06"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore.mk",
+      "bytes": 2305,
+      "sha256": "1757ffbd2013d0c92606e608f5b5538edca1f65d067886f87f2ef144f7ce443a"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu.h",
+      "bytes": 3124,
+      "sha256": "7c6bf68fe951f2ab4e4e061e2f32c421e824a0e7e6f9c9e9138830ee42276ca9"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.cpp",
+      "bytes": 663858,
+      "sha256": "761c724e506eb16641f53656729dcc712510468584e88535b36929c14a9ac8a8"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.cpp",
+      "bytes": 656726,
+      "sha256": "50202d93b780459915db8da2fbd5d12e6ec87c945d1bb00bed27f38854bceaf7"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.cpp",
+      "bytes": 664090,
+      "sha256": "a8373e6ef1678d77716acc4a609e9196c9d65e7a680b195d6cd2b8d64f58292b"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.cpp",
+      "bytes": 657190,
+      "sha256": "3722efa8de9836098bf10323572af9a58e991087d1556c2ffe287cbeb117abf3"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.cpp",
+      "bytes": 679925,
+      "sha256": "940781c6e0e1ce6d12146c896a21e80c07232320d4026aec47f667dc305b4fb1"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.cpp",
+      "bytes": 438836,
+      "sha256": "a4edef26d68c8640c5d54da00739a4ccfecc8bb7cf04d12b38018a3f55f061a8"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.cpp",
+      "bytes": 656736,
+      "sha256": "65802b33f19d337a64d63edef782b05255ca58fd74705f00616eb4a3e28642cb"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.cpp",
+      "bytes": 657426,
+      "sha256": "0da46e1c450f17d5f629c7f8ae5b73f54b84d5b2c8d5b0b6d6bf8151ed914dde"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.cpp",
+      "bytes": 329202,
+      "sha256": "cf466919f201124bb3bd344fd1c3f6b902d7e91d82249e8d443def85d8f9deee"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.cpp",
+      "bytes": 3442,
+      "sha256": "db889550c61a6bf4a66a7d017b90d17a206388c3a39916e6441187d92c38254e"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.cpp",
+      "bytes": 890,
+      "sha256": "99bc1a5a57562c699f4c6794952131f4214e59ce95ce6bc78eb07fff7207dcf0"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__ConstPool_0.cpp",
+      "bytes": 799,
+      "sha256": "9978e76f49cd2282933e0c7531fb735aae6c670ea72cf4554ef15f399c7abadc"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__Syms.cpp",
+      "bytes": 24609,
+      "sha256": "14cb480b9029e0888af2e39f7f4fa0c9a6319d2f0ec798312e875760ea431553"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__Syms.h",
+      "bytes": 8061,
+      "sha256": "30c627a193cdb61a20c7aec3e24374d4f5b64ea6699631a3ce0416952b9d7781"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root.h",
+      "bytes": 1291968,
+      "sha256": "ec699bfe38f5f8e205b4c8473f68000bec8a64bba5a55d61592e9082b3cdfbd0"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.cpp",
+      "bytes": 1281858,
+      "sha256": "f6de5ae35027f4b726da95d424094733f7f86d617b81fc83de57261bf6ccacc4"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.cpp",
+      "bytes": 1905677,
+      "sha256": "d0f057170ae29958c335f4a962fdcaded3e5eedc8dd97f7fbb338a42944089f1"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.cpp",
+      "bytes": 3063809,
+      "sha256": "6bfd97d57f7f4e45a8485b3871cafd5fd555a9a0e60e44fe3184b2cd6cd90e1d"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.cpp",
+      "bytes": 1151979,
+      "sha256": "c2ec9a8312bf29088e83a2b4ddfb612f88ca6e39dbace51a06e231424d0dc7e0"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.cpp",
+      "bytes": 848435,
+      "sha256": "4c7aa11d117d873fd34000a62d3d1f27e837dfada2041be789805f4afe7e43ce"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.cpp",
+      "bytes": 1456266,
+      "sha256": "3da650b300cd9733fb95f641fc64470aab02b68fedef4b4e5e17b9311ef3a1f2"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.cpp",
+      "bytes": 1271076,
+      "sha256": "427cc011bbfa1e89021eff1a6dc75046f9002dfcf18bd531097ef86e5de9e400"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.cpp",
+      "bytes": 913708,
+      "sha256": "aa5b9c3ce32b52881a283cc90bf6eefa9097768bd3befa86d6d3f470c801ed69"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.cpp",
+      "bytes": 10038,
+      "sha256": "cd2e149e0f4cc109a9c2767f3c55508462ee6aee37208ad1a8de907973a8bec0"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.cpp",
+      "bytes": 1036926,
+      "sha256": "c93462a0a940c5f0ee3cb9bd0c54e5c79c1a020958295dc362af9fdb8bf78879"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.cpp",
+      "bytes": 1188492,
+      "sha256": "938fe394829b0b3792158d334ca69518f598db7337d51b09bf06f83c89872646"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.cpp",
+      "bytes": 2510392,
+      "sha256": "d3386f4268c00023276af5e25001e3595aa96c5650b641580f92781e4f05c506"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.cpp",
+      "bytes": 582234,
+      "sha256": "c8481bf309622a205d6e9765f2cd4d3fed14ca45373804477954f2e1ade2b37c"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.cpp",
+      "bytes": 1219307,
+      "sha256": "409b882811a3786611d5bd9419727c4ab7042bc5d59ac1b92f8482229fdc32cb"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.cpp",
+      "bytes": 596820,
+      "sha256": "a5be6fb10e7bc17f9655c6f622e728a6f8e3991e45ee819bdfb084bb23a39aa5"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root__Slow.cpp",
+      "bytes": 854,
+      "sha256": "034e09dc836b08fe28676a4b870f945bb58b3c788d8a4a5339cbf82f197499a2"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__pch.h",
+      "bytes": 836,
+      "sha256": "baa32de033dce31227cbc49e4596845348be616c262709b8706c0562148ee7a2"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__ver.d",
+      "bytes": 7475,
+      "sha256": "6cd77900c1290518596c1140a923c2f05d0fd044578f4e9c757fa4e282243b8b"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__verFiles.dat",
+      "bytes": 11668,
+      "sha256": "0332b7278bc7c1cb6ff8d56e2b2365958628cc37e447f439fb119f035593c05b"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_2240x128.h",
+      "bytes": 1932,
+      "sha256": "6e1a01680bd4b1edf8227cf000a8ca508f790753d17dc1d3207a1f3f32cbc2f5"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.cpp",
+      "bytes": 2226,
+      "sha256": "13e5d8d85297877c06301ec17a9fe1e3629b2af7f594ac136fc671f6f979ccf3"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.cpp",
+      "bytes": 266934,
+      "sha256": "b873d1007edc7636996d1bf34685f9a5a27e3fd2faa99328fbfe3c274c4e18f8"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.cpp",
+      "bytes": 944,
+      "sha256": "cb03d788053ed1069cad97853b71f46a0922207cddae8c822125c194563b86c8"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_48x128.h",
+      "bytes": 1913,
+      "sha256": "d6bd20c4a3de5e62ce80647b65eb5b8988f86b431723e1d5301a6fe7fbb2bce2"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.cpp",
+      "bytes": 2215,
+      "sha256": "29fe42ffd15d41c8b6d98a72c9e79ec7c62c6c1dd061599cde7cfdaace736328"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.cpp",
+      "bytes": 373108,
+      "sha256": "cc945b7853e091e6666efcb92b51bff3469eef65ca770f06ffa13e79b0cfaaa3"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_48x128__Slow.cpp",
+      "bytes": 926,
+      "sha256": "e88312e1288d1c8d33b021c7a772ad3df50ff0bbbd6a944aaa6d861348a57844"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_classes.mk",
+      "bytes": 3507,
+      "sha256": "415e5a31872ae6b0a9ce1eef6e45200d77e3f142f66621a907ec7121cddd3831"
+    }
+  ],
+  "raw_generated_contents_published": false,
+  "not_portable_model_payload": "Generated make/dependency metadata contains original private paths; hashes bind original bytes, not a portable regenerated file set. No raw generated text uploaded."
+}

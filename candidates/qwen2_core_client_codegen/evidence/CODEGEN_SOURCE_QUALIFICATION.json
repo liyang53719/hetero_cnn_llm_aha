@@ -1,0 +1,149 @@
+{
+  "schema": "qwen2-core-client-official-verilator-codegen-independent-static-review-v1",
+  "status": "PASS_SOURCE_MOCK_QUALIFICATION_FOR_ONE_ROOT_APPROVED_CODEGEN_ONLY",
+  "controls": {
+    "actual_SV_read": false,
+    "actual_generator_or_compiler_called": false,
+    "author_content_and_engine_rerun": 204,
+    "combined_static_and_mock_total": 626,
+    "current_codegen_total": 378,
+    "independent_metadata_and_AST": 64,
+    "independent_output_text": 110,
+    "normal_and_python_optimized_both_pass": true,
+    "previous_frozen_harness_author_rerun": 52,
+    "previous_frozen_harness_independent": 196
+  },
+  "engine": {
+    "CAPS_HELPER_HELPER_SHA_SIGNALS_unchanged": true,
+    "changed_functions": [
+      "_execute",
+      "main",
+      "output_scope",
+      "save_receipt",
+      "structure_check",
+      "validate_manifest"
+    ],
+    "checker_source_verified_then_loaded_without_cwd_import": true,
+    "cleanup_helper_now_automatically_pinned_preflight_and_postflight": true,
+    "content_file_hashes_bound_to_full_output_inventory": true,
+    "content_gate_only_after_exit0_cleanup_postflight_and_no_prior_errors": true,
+    "unchanged_functions": [
+      "_child_limits",
+      "digest",
+      "exact_inventory",
+      "group_sample",
+      "load_cleanup",
+      "need",
+      "pin",
+      "render_worker_argv",
+      "sample_gap",
+      "tree_sample",
+      "verify_inputs",
+      "verify_pin",
+      "verify_runtime_boundaries"
+    ]
+  },
+  "harness_static_scope": {
+    "PV_requests_returns": 96,
+    "QK_accepted_steps": 96,
+    "QK_groups_results_dones": 12,
+    "W005_j1_through_j7_not_covered": true,
+    "accounting512Steps": 864,
+    "accounting_not_MAC": true,
+    "all_inputs_zeroed": 8250,
+    "expected_OBS": 408,
+    "explicit_reset_rising_edges": 3,
+    "fixed_case": "normal_m1",
+    "maxScore_diagnostic_range_only": true,
+    "max_body_edges": 99997,
+    "max_total_edges": 100000,
+    "memory_accepted_returned": 384,
+    "no_M2_M3_fault_or_foreign_cases": true,
+    "output_bytes": 6144,
+    "owner_requests": 1,
+    "owner_result_all_field_expected_values_not_proved": true,
+    "reset_contract_not_bitwise_original_framework_initialization_equivalence": true,
+    "row_major_tile_cells": 4096,
+    "score_writes": 12,
+    "scripted_matrix_not_FMA": true,
+    "unsigned_address_bounds_use_subtract_no_wrap": true,
+    "zero_hold_count_ports_report_uncovered": true
+  },
+  "explicit_limitations": [
+    "This is only source/mock qualification. CLI execute-approved-once is not independent root authorization.",
+    "Actual codegen PASS requires exact runtime identity, exit0, resource limits, anchored cleanup, pre/post pins, output inventory and the content gate; these remain unobserved until root executes.",
+    "Header and selected Make declarations are a bounded fixed-exporter contract, not a generic C++ parser, full Make expansion interpreter, dependency-file parser, compiler or linker proof.",
+    "Opaque C++ function bodies are deliberately accepted by the source-list gate; synthetic control demonstrates this limit. A later compiler is necessary, not implied.",
+    "Official v5.032 Git-blob source explains syntax and default options; it is not a bit-reproducible proof of the Debian package build.",
+    "The existing lint PASS did not persist C++ and its null-output file/byte statistics cannot predict codegen count, storage or fit.",
+    "Resource RSS/tree limits are sampled; AS and FSIZE are child hard limits, not parent limits or whole-system disk isolation. CPU is RLIMIT plus anchored aggregate observations, not cgroup confinement.",
+    "Perl candidate-root inventories, aliases and absence endpoints do not establish exact live @INC order or a universal locale/NSS/dlopen sandbox.",
+    "No hardware clocks or arithmetic execute in this review/codegen stage. Scripted Matrix/zero-data normalM1 is not effective-MAC, full128 numerical, full29 or90percent utilization proof."
+  ],
+  "output_contract": {
+    "all_actual_generated_cpp_listed_once_in_four_model_groups": true,
+    "all_files_regular_nonexec_nonempty_hash_and_bytes": true,
+    "all_names_widths_directions_unsigned_macros_wideword_counts_and_references_checked": true,
+    "allowed_suffixes": [
+      "cpp",
+      "h",
+      "mk",
+      "d",
+      "dat"
+    ],
+    "cpp_type_or_function_body_compilation": false,
+    "dependencies_dat_d_required_nonempty_but_opaque_hashed_metadata": true,
+    "each_make_limit_bytes": 262144,
+    "general_Cpp_or_Make_interpretation": false,
+    "header_limit_bytes": 2097152,
+    "inputs": 8250,
+    "make_flags_only": "-std=c++17",
+    "make_private_VERILATOR_ROOT_bound": true,
+    "make_recipe_tabs_preserved": true,
+    "make_user_directories_only": [
+      "frozen harness directory",
+      "fresh actual cwd"
+    ],
+    "make_user_source_only": "frozen2044/m1_main.cpp",
+    "max_generated_files": 512,
+    "outputs": 609,
+    "public_header_full_port_count": 8859,
+    "required_files": [
+      "VOrderedQkBehaviorCore.h",
+      "VOrderedQkBehaviorCore.cpp",
+      "VOrderedQkBehaviorCore.mk",
+      "VOrderedQkBehaviorCore_classes.mk",
+      "VOrderedQkBehaviorCore___024root.h",
+      "VOrderedQkBehaviorCore__Syms.h",
+      "VOrderedQkBehaviorCore__Syms.cpp",
+      "VOrderedQkBehaviorCore__ver.d",
+      "VOrderedQkBehaviorCore__verFiles.dat"
+    ],
+    "runtime_global_cpp_only": [
+      "verilated",
+      "verilated_threads"
+    ],
+    "selected_class_public_scope_guard_and_constructor_eval_eval_step_final_checked": true,
+    "symlinks_subdirectories_objects_archives_and_executables_rejected": true
+  },
+  "identity_summary": {
+    "aliases": 13,
+    "checks": 58823,
+    "declared_pins": 3752,
+    "final_stable_paths": 3698,
+    "fresh_cwd_absent_slots": 3,
+    "global_absent_endpoints": 21,
+    "inventories": 12,
+    "new_metadata_or_source_sha256_paths": 103,
+    "old_lint_pins_preserved": 3660,
+    "prior_independent_full_stat_cache_reused_paths": 3595,
+    "retained_SV_reopened_or_rehashed": false,
+    "runtime_extra_pins": 2
+  },
+  "origin_review": {
+    "bytes": 13830,
+    "sha256": "e88ded3aaee97f9a1cc7c1909ccbafdcc74783028902ac01c78631ebdcf7d407"
+  },
+  "source_only_historical": true,
+  "actual_result_is_separate": true
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "original-harness-and-codegen-checker-pins-v1",
+  "source_files": [
+    {
+      "name": "m1_main.cpp",
+      "public_path": "source/m1_main.cpp",
+      "exact_original_bytes": true,
+      "bytes": 10693,
+      "sha256": "675e75e1939afb7e77f40fde0baf2eeeddb01819812d2ba4ea38bcfcbc913f54"
+    },
+    {
+      "name": "generate_abi.py",
+      "public_path": "source/generate_abi.py",
+      "exact_original_bytes": true,
+      "bytes": 4060,
+      "sha256": "396bda736a78adb7cf4dab18342a4149d77934ba0fde26b2bfbff92cd5ea9ab8"
+    },
+    {
+      "name": "check_m1_log.py",
+      "public_path": "source/check_m1_log.py",
+      "exact_original_bytes": true,
+      "bytes": 4914,
+      "sha256": "2c6ccffb45308745e73372a31904606f8fc1b9ef97589753369bc7b0e4814f09"
+    },
+    {
+      "name": "test_source_contract.py",
+      "public_path": "source/test_source_contract.py",
+      "exact_original_bytes": true,
+      "bytes": 6412,
+      "sha256": "c1db395d0f899e0c0e7c1ec2ce7dae8c3343b1d9387bf012a279a206a8c4e123"
+    },
+    {
+      "name": "check_generated.py",
+      "public_path": "source/check_generated.py",
+      "exact_original_bytes": true,
+      "bytes": 11613,
+      "sha256": "af781e77a03b7f7bb9fc6bd311274b90f8d7b9ede04355ec08f591c8524b8cd2"
+    },
+    {
+      "name": "synthetic_generated.py",
+      "public_path": "source/synthetic_generated.py",
+      "exact_original_bytes": true,
+      "bytes": 3202,
+      "sha256": "243bc5e81630ebed7626fe9f9a1c2b2fbcf4a0c33ea6c11c9ebf2eec6607e360"
+    },
+    {
+      "name": "test_generated.py",
+      "public_path": "source/test_generated.py",
+      "exact_original_bytes": true,
+      "bytes": 6675,
+      "sha256": "e11942cc7089569913f46c7012b579cab5543d02e414eb69efb86f7d9a508029"
+    }
+  ],
+  "reconstructed": {
+    "STRUCTURE_EXPECTATION.json": {
+      "bytes": 1055045,
+      "sha256": "5bdfb398ac02c250ff40cb092dcbbb326b42236acae6da5cd4a059d8ed4e1e1a"
+    },
+    "TOP_ABI.json": {
+      "bytes": 1053988,
+      "sha256": "0d8ebf7cd5316a4897709444ffa3b0acf88da90623cf08498c596570ea04ef73"
+    },
+    "generated_abi.hpp": {
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    },
+    "ABI_MAPPING.json": {
+      "bytes": 557967,
+      "sha256": "e4c308674b30081ee1ae3ffcfd01e6b994f3ce24e16a615faa29c4e2a3e577e6"
+    }
+  },
+  "top_abi_template": {
+    "bytes": 428,
+    "sha256": "f476ed51a48da6671f88f8bcb3e55d6fc5dc448bb3600341002fd41f110fcc6f"
+  },
+  "private_scripts_hash_only": {
+    "supervisor.py": {
+      "bytes": 31596,
+      "sha256": "689c5ba3d98cc012be16867e81b507c5ad18660e304d9e25cecae3b2e1928273"
+    },
+    "assemble_candidate.py": {
+      "bytes": 6806,
+      "sha256": "07fd8d120389b1b66a83a506145d4de6428b4d24dd31a9a822a675f4a741f770"
+    }
+  },
+  "candidate_manifest": {
+    "bytes": 1475624,
+    "sha256": "d01d0a858fa7852edadfb48e34c9c80bcc2fae0d8dfbe67ac862d09fdaef75a4"
+  },
+  "candidate_freeze": {
+    "bytes": 4931,
+    "sha256": "61fe7b49ceb66f05779f61268883dfcf1e63389f7e9446eed80b81d023823ffb"
+  },
+  "harness_freeze": {
+    "bytes": 2513,
+    "sha256": "7a0155a30d8065dd8922271f38f055ebd90713bf7f8446754731804d5a69c586"
+  },
+  "disclosure": "Original harness/generator/checkers and pure small controls only. Reconstruct bulky symbolic ABI metadata from previous public types, not real generated model C++/headers, weights or runtime inputs. Private supervisor/config remains hash/role only."
+}

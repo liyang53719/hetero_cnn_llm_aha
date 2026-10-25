@@ -1,0 +1,19 @@
+{
+  "status": "PASS_EXACT_ORIGINAL_SOURCES_SYMBOLIC_RECONSTRUCTION_PROJECTIONS_AND_SYNTHETIC_ONLY",
+  "checks": 240,
+  "errors": 0,
+  "exact_original_sources": 7,
+  "normal_harness_source_controls": 26,
+  "optimized_harness_source_controls": 26,
+  "normal_codegen_synthetic_controls": 47,
+  "optimized_codegen_synthetic_controls": 47,
+  "normal_rebuild_negative_controls": 8,
+  "optimized_rebuild_negative_controls": 8,
+  "symbolic_metadata_files_reconstructed_per_mode": 4,
+  "symbolic_metadata_bytes_per_mode": 3228755,
+  "actual_root_model_and_selected_input_stat_checks": 60,
+  "model_47_contents_SV_IR_ELF_deb_log_not_reopened": true,
+  "native_network_target_or_signal_actions": 0,
+  "scope": "Source-only/hypothetical text controls and deterministic symbolic ABI assembly, not actual model or compiler execution. Original source review248 controls is separate historical evidence.",
+  "local_test_preparation_history": "Initial codegen synthetic invocation lacked reconstructed sibling TOP_ABI layout; original test unchanged, new helper now copies all7 exact sources into the assembled fixture. Initial local error logs retained."
+}

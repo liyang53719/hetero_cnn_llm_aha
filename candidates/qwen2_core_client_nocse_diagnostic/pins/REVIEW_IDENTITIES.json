@@ -1,0 +1,61 @@
+{
+  "reviews": [
+    {
+      "role": "single_spec_source_freeze",
+      "bytes": 3020,
+      "sha256": "7177c03490a3ee47ac4bc57830f0801a40cc36a33af033f2acdfeeff6091896a"
+    },
+    {
+      "role": "compile_actual",
+      "bytes": 6121,
+      "sha256": "8b7573e6bbe116a2a1278b24c2e22883ebff9a1491e69cc3e66094b0eda88c44"
+    },
+    {
+      "role": "compile_freeze",
+      "bytes": 3663,
+      "sha256": "c571640608ea61f8292a5d2f43804ed1ab550d50e9a6a8921764ee360b102e4b"
+    },
+    {
+      "role": "compile_class_manifest",
+      "bytes": 3638,
+      "sha256": "b8fb24e500ecd0bf56a1bc99cade449690371352ac09b643d7b9c31197b31d8d"
+    },
+    {
+      "role": "compile_symbolic_bytecode_review",
+      "bytes": 107188,
+      "sha256": "e0f089d1640b99e488ffe5550b942ab0e0c4072eec0772bb260c362140b5e652"
+    },
+    {
+      "role": "diagnostic_actual",
+      "bytes": 7149,
+      "sha256": "7680269825da4443d6cc210fbe0ac0c1e419bb2eedf3afc52b2d5b84dae485c0"
+    },
+    {
+      "role": "diagnostic_freeze",
+      "bytes": 2618,
+      "sha256": "78f3f00eb47d37782b6cc23b7a750cbc024a12df43d06c8c36522a77190ca319"
+    },
+    {
+      "role": "diagnostic_identity",
+      "bytes": 12109,
+      "sha256": "030aba6559d9470a7d0ac9f4c02d599bfb050f8f1a4b4eaa7203a7f05dc853df"
+    },
+    {
+      "role": "diagnostic_artifact_ledger",
+      "bytes": 23247,
+      "sha256": "61e16ba990972fe8d8f54cc6978a166e96504c357c1be6f999b71f65c4422db9"
+    },
+    {
+      "role": "diagnostic_dump_review",
+      "bytes": 7919,
+      "sha256": "84827bdf41d54e57a060557e090c8c17dffccf92cc802942222bcec2232a601b"
+    },
+    {
+      "role": "diagnostic_source_review",
+      "bytes": 6005,
+      "sha256": "437878b8f0159beb073221a082c72b4a740b8935e6869e730c243c2e3235a8cf"
+    }
+  ],
+  "hash_only_private_review_artifacts_not_public_retrievability_claim": true,
+  "raw_class_bytecode_record_hex_not_published": true
+}

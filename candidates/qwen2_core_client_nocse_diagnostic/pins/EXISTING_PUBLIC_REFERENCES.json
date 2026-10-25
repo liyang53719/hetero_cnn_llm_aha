@@ -1,0 +1,72 @@
+{
+  "base_commit": "b42e3ed9e583d76bb2fc513d84e22df52d6ad751",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/OrderedQkBehaviorSpec.scala",
+      "bytes": 16701,
+      "sha256": "ab0f832c033dec56daee3ad0d98e9b7e37a1d9189b692556d22dc3fea8ac66f9",
+      "git_blob_sha": "a8c8793d1c6092867ea05c6c93ffad89e283c0e5"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/NEW_CLASS_HASHES.json",
+      "bytes": 10025,
+      "sha256": "6491db38b14efae96b40ee615852b2343cccc761e4589bcec49120d73aaaaa63",
+      "git_blob_sha": "f1ae8051a8a8d5367f6cfe007eb23fd801bd183c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/NEW_SOURCE_PINS.json",
+      "bytes": 1971,
+      "sha256": "56b44669c54b7cb2962d9a4ca0c05aab9424b53047c56d480ee33b092e8cefc3",
+      "git_blob_sha": "f4fa6a797f6ce650d453a5296cc90f64c952076c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/RETAINED_CLASS_PINS.json",
+      "bytes": 100678,
+      "sha256": "fe2de42ce53456699ff97780073b1d7f8f1ee53e1c7b9c5d94a6a14621743aef",
+      "git_blob_sha": "e54559830b00e2218bee0cba0ff2f94c9985baa8"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/BASELINE_REFERENCES.json",
+      "bytes": 2817,
+      "sha256": "689762dea85f5bbf695578d9aa5852df24bfc167f44447c7df761ca81c475e4d",
+      "git_blob_sha": "dbd3b479531464dd92a4de4b39de586e1e1110da"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/REPRODUCE_ZH.md",
+      "bytes": 3579,
+      "sha256": "26a0424e8368e5a8765dadb3ee4fcef989dc49777ec2478844e60d34a486e304",
+      "git_blob_sha": "690fbac14dc4444570f7364e283482cb4475f909"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_diagnostic/evidence/ACTUAL_DIAGNOSTIC_REVIEW.json",
+      "bytes": 6372,
+      "sha256": "40e597540a4e2a2cf1af0f16cf8abb3caaf6ef790b0a7960a3f4d1e397c426c6",
+      "git_blob_sha": "6152a1179b3c2471a6f7ec3156ecd7b93c9fbb09"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_diagnostic/evidence/SANITIZED_MAIN_STACK_SUMMARY.json",
+      "bytes": 8646,
+      "sha256": "d75995a28981f18c68b3d7e732f66612f2877f4a07e503e76882914fb478648c",
+      "git_blob_sha": "2302a2a810937ad08c64fdcf7b7e1833456f3606"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_diagnostic/pins/OFFICIAL_SOURCE_ANALYSIS_PINS.json",
+      "bytes": 9353,
+      "sha256": "8f793848f191eb17067fb4f3a6effda7429e6dee739ee10611dc52e6fe1da4bc",
+      "git_blob_sha": "629ead687941f1c8647ec516791cb1cdf9acc6fa"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_diagnostic/pins/SUPERVISOR_STAGE_DELTA.json",
+      "bytes": 3296,
+      "sha256": "17033b978a7ec8b84924c23ddbce66ecf13a53af6c3452adb6baf44dd0118cea",
+      "git_blob_sha": "959d6dfa07f307bfbb6d0fe1c9bfbd2453c5727e"
+    }
+  ],
+  "reuse": "Exact original Spec, original20/550 class hash manifests,106 official dependency pins, source/recipe refs and prior150 diagnostic evidence; referenced payloads are not duplicated."
+}

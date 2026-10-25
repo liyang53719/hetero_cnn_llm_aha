@@ -1,0 +1,166 @@
+{
+  "original": {
+    "bytes": 7149,
+    "sha256": "7680269825da4443d6cc210fbe0ac0c1e419bb2eedf3afc52b2d5b84dae485c0"
+  },
+  "review_freeze": {
+    "bytes": 2618,
+    "sha256": "78f3f00eb47d37782b6cc23b7a750cbc024a12df43d06c8c36522a77190ca319"
+  },
+  "projection_policy": "All original review values retained except private path and affinity placement fields. Raw logs/IR only length+hash; no raw process snapshots or addresses.",
+  "review": {
+    "MAC_utilization": null,
+    "NoCSE_actual_backend_consumer_activation_instrumented": false,
+    "RTL_fullblock_full29_numerical_acceptance": false,
+    "Spec_or_MemoryReply_runtime_CodeSource_logged": false,
+    "actual_artifact_bytes": 59677419,
+    "actual_artifact_count": 24,
+    "actual_artifact_inventory": {
+      "bytes": 23247,
+      "sha256": "61e16ba990972fe8d8f54cc6978a166e96504c357c1be6f999b71f65c4422db9"
+    },
+    "actual_clock_count": null,
+    "actual_run_status": "FAIL_DIAGNOSTIC_RETAINED",
+    "artifact_stat_endpoint_checks": 30,
+    "audit_JVM_DUT_reference_or_signal_execution": false,
+    "class_selection": "exact original17 + actual NoCSE new3; old20 separately preserved but not runtime classpath",
+    "cleanup_complete": true,
+    "cleanup_direct_exit_code": -9,
+    "complete_looking_thread_blocks": 2,
+    "continuous_isolation_proven": false,
+    "controlled_speedup_or_causal_NoCSE_effect_proven": false,
+    "diagnostic_classification_did_not_upgrade_FAIL": true,
+    "dump_blocks": [
+      {
+        "byte_end": 17248,
+        "byte_start": 2363,
+        "classification": "COMPLETE_LOOKING_THREAD_TEXT_WITH_JNI_TERMINATOR",
+        "full_JVM_dump_grammar_proven": false,
+        "heap_summary_sections_present": true,
+        "index": 1,
+        "line_end": 226,
+        "line_start": 17,
+        "sampled_main_path": "PrepareAst / InferResets / InferTypes",
+        "sha256": "d3daadaec1bee6e2e9b1e6cdac162e8d08815674e50703b45ebbc1f0994abfa9",
+        "thread_count": 13
+      },
+      {
+        "byte_end": 31050,
+        "byte_start": 18017,
+        "classification": "COMPLETE_LOOKING_THREAD_TEXT_WITH_JNI_TERMINATOR",
+        "full_JVM_dump_grammar_proven": false,
+        "heap_summary_sections_present": true,
+        "index": 2,
+        "line_end": 416,
+        "line_start": 239,
+        "sampled_main_path": "TreadleTester construction / ExecutionEngine.apply / SymbolTable dependencies",
+        "sha256": "04cf8512c615b6d8b8b4c605ca1d3bd3aa7d85751ffccafc76f1810e003393ff",
+        "thread_count": 13
+      }
+    ],
+    "full_IR_parsed": false,
+    "full_JVM_dump_grammar_or_syscall_trace_proven": false,
+    "heap_summary_sections_present": [
+      true,
+      true
+    ],
+    "identity_checks": 9713,
+    "identity_freeze": {
+      "bytes": 3258,
+      "sha256": "590b4448cecd5b73fb255d470406449ef515a9c0c9bd33c53dd2e3f4a539d8a9"
+    },
+    "identity_review": {
+      "bytes": 12109,
+      "sha256": "030aba6559d9470a7d0ac9f4c02d599bfb050f8f1a4b4eaa7203a7f05dc853df"
+    },
+    "implicit_slots_pre_post_and_review_absent": true,
+    "independent_dump_checks": 103,
+    "independent_dump_review": {
+      "bytes": 7919,
+      "sha256": "84827bdf41d54e57a060557e090c8c17dffccf92cc802942222bcec2232a601b"
+    },
+    "inventories": 6,
+    "low_IR_identical_bytes_to_old150_and600_FAILUREs": true,
+    "low_IR_opaque_identity": {
+      "bytes": 58897360,
+      "sha256": "71a27f80112970011761ffe361e6466a57a53f4eae95a816a252bc162ec4ea56"
+    },
+    "main_java_frames_per_block": [
+      126,
+      94
+    ],
+    "next_step": "Read-only pinned-source analysis of sanitized samples only; any new flag/source/budget/run requires separate authority and frozen review. No automatic behavior/performance rerun.",
+    "no_rerun_or_input_modification": true,
+    "normal_exit_code_field": null,
+    "observed_dump_count": 2,
+    "origin_count": 7,
+    "outer_timeout": false,
+    "outer_wall_seconds": 150.6548317069537,
+    "phase_inference_scope": "At60s main is in PrepareAst InferResets/InferTypes; at120s it is in ExecutionEngine.apply/SymbolTable construction, not a simulation clock step. Only those instants are observed; no phase-duration profile, whole-run zero-clock proof, old600s root cause, unique bottleneck or speedup ratio follows.",
+    "previous150_and600_FAIL_and_compile_CHIRRTL_PASS_preserved": true,
+    "request_evidence_scope": "Receipt records one shared diagnostic anchor and success-return metadata; fixed source gates were audited. No per-send raw /proc identity/cmdline/exe/pidfd snapshots or syscall trace are retained; two thread dumps corroborate diagnostics but are not a formally one-to-one send acknowledgement.",
+    "request_slots": [
+      {
+        "aggregate_cpu_seconds": 59.950239994,
+        "call_return_success_recorded": true,
+        "complete_delivery_proven_by_record": false,
+        "handler_caught_bit_recorded": true,
+        "process_cpu_seconds": 57.32,
+        "send_work_seconds": 60.005850874003954,
+        "target_work_seconds": 60.0
+      },
+      {
+        "aggregate_cpu_seconds": 119.93490305099999,
+        "call_return_success_recorded": true,
+        "complete_delivery_proven_by_record": false,
+        "handler_caught_bit_recorded": true,
+        "process_cpu_seconds": 114.95,
+        "send_work_seconds": 120.00479559699306,
+        "target_work_seconds": 120.0
+      }
+    ],
+    "resources": {
+      "elapsed_seconds": null,
+      "final_aggregate_cpu_seconds": 150.49159626,
+      "maximum_sample_interval_seconds": 0.031855890003498644,
+      "sampled_peak_cpu_seconds": 150.01972185,
+      "sampled_peak_output_bytes": 59617143,
+      "sampled_peak_rss_bytes": 1201958912
+    },
+    "retained_OBS_count": 0,
+    "retained_ScalaTest_success_count": 0,
+    "retained_W005_count": 4,
+    "retained_body_ready_count": 0,
+    "retained_case_pass_count": 0,
+    "root_returncode": 1,
+    "runtime_pin_checks": 1319,
+    "same_byte_MemoryReply_new_source_path_bound": true,
+    "sampled_comparison": {
+      "bytes": 2913,
+      "sha256": "607e6ff26c294c0101ff1a3b86116effb3829a51c93af8f70fd1af3a1689166f"
+    },
+    "sampled_main_phase_paths": [
+      "PrepareAst / InferResets / InferTypes",
+      "TreadleTester construction / ExecutionEngine.apply / SymbolTable dependency construction"
+    ],
+    "sampling_request_window_not_exact_dump_capture_time": true,
+    "sanitized_stacks": {
+      "bytes": 51900,
+      "sha256": "5cfda9eda1a687c43c21179c76a9aa98cbea47e7e090cb873f0a38e2b4d5605d"
+    },
+    "schema": "actual-nocse-two-slot-diagnostic-review-v1",
+    "shared_derivative_removes_native_addresses_PIDs_and_absolute_original_paths": true,
+    "source_log": {
+      "bytes": 31798,
+      "sha256": "2e80e23c8443e3b5106376cb874af3e1fa8b0297949d6e8edad0db9418ef7e8e"
+    },
+    "staged_class_bytes": 670791,
+    "staged_classes": 20,
+    "status": "ACTUAL_NOCSE_DIAGNOSTIC_CPU_FAIL_AUDITED_WITH_TWO_THREAD_SAMPLES",
+    "system_duty_cycle": null,
+    "thread_records_per_block": [
+      13,
+      13
+    ]
+  }
+}

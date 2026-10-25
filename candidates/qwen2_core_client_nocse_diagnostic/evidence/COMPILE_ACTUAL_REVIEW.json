@@ -1,0 +1,95 @@
+{
+  "original": {
+    "bytes": 6121,
+    "sha256": "8b7573e6bbe116a2a1278b24c2e22883ebff9a1491e69cc3e66094b0eda88c44"
+  },
+  "review_freeze": {
+    "bytes": 3663,
+    "sha256": "c571640608ea61f8292a5d2f43804ed1ab550d50e9a6a8921764ee360b102e4b"
+  },
+  "projection_policy": "Selected original fields unchanged; private paths, CPU placement and future-stage instructions omitted. Method record comparison covers all three classes, not a claim of 180 methods in the main class.",
+  "review": {
+    "schema": "actual-single-spec-nocse-compile-independent-review-v1",
+    "status": "PASS_ACTUAL_SINGLE_SPEC_NOCSE_SCALA_COMPILE_ONLY",
+    "scope": "Actual root-owned scalac completed one new Spec into three isolated classes; independent container, exact annotation-construction bytecode, identities/resources/saved cleanup verified. Not NoCSE runtime activation, elaboration, Treadle/behavior, numerical or performance acceptance.",
+    "checks": {
+      "class_semantics": 588,
+      "initial_locator_is_not_final_operand_comparison": true,
+      "metadata_identity": 10998,
+      "reviewer_tautological_self_assertion_removed_before_freeze": true
+    },
+    "compiler_exit": 0,
+    "compiler_log_bytes": 0,
+    "class_count": 3,
+    "class_bytes": 131576,
+    "actual_artifact_count": 6,
+    "actual_artifact_bytes": 209806,
+    "cleanup": {
+      "direct_exit_code": 0,
+      "empty_complete_scans": 2,
+      "evidence_bytes": 1547,
+      "live_handle_or_actual_proc_replay": false,
+      "records": 8,
+      "saved_proof_consistent": true,
+      "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY"
+    },
+    "cleanup_complete": true,
+    "outer_timeout": false,
+    "outer_wall_seconds": 11.657691419997718,
+    "resources": {
+      "elapsed_seconds": 11.603475930984132,
+      "final_aggregate_cpu_seconds": 11.574924921,
+      "maximum_sample_interval_seconds": 0.03747345297597349,
+      "sampled_peak_cpu_seconds": 11.175884357000001,
+      "sampled_peak_output_bytes": 165607,
+      "sampled_peak_rss_bytes": 273018880
+    },
+    "acceptance": {
+      "MAC_utilization": "UNKNOWN_NOT_MEASURED",
+      "NoCSE_runtime_effect_observed": false,
+      "Treadle_behavior": false,
+      "compile_only": true,
+      "elaboration": false,
+      "full128_RTL": false,
+      "full29": false,
+      "numerical": false,
+      "speedup_proven": false,
+      "system_duty": "UNKNOWN_NOT_MEASURED"
+    },
+    "retained": {
+      "original150CPU_diagnostic_FAIL": true,
+      "original600CPU_FAIL": true,
+      "original_compile_and_CHIRRTL_PASS_unchanged": true
+    },
+    "nocse_annotation_construction_verified": true
+  },
+  "annotation_construction": {
+    "all_literal_branch_switch_local_invoke_operands_preserved": true,
+    "only_one_code_record_changed": true,
+    "ordered_annotations": [
+      "TreadleBackendAnnotation",
+      "firrtl2.options.TargetDirAnnotation(simulation)",
+      "firrtl2.passes.NoCommonSubexpressionEliminationAnnotation"
+    ],
+    "other_179_code_records_unchanged_under_symbolic_CP_comparison": true,
+    "removed_ops_restore_exact_old_normalized_code": true,
+    "second_independent_container_parser_agrees": true,
+    "single_getstatic_site": true,
+    "static_construction_not_actual_backend_activation": true,
+    "two_memory_reply_classes_byte_identical": true,
+    "JVM_bytecode_verification_or_formal_equivalence_claim": false
+  },
+  "identity_summary": {
+    "cwd_independently_recorded": false,
+    "cwd_source_configuration": "root",
+    "implicit_classpath_saved_pre_post_and_review_absent": true,
+    "implicit_continuous_isolation": false,
+    "inventories": 5,
+    "original20_and_all_sources_unchanged": true,
+    "preflight_and_postflight_match": true,
+    "production_and_runtime_pins": 1149,
+    "root_approval_and_exact_argv_verified": true,
+    "source_count": 1
+  },
+  "compile_review_historical_runtime_activation_false_not_retroactively_changed": true
+}

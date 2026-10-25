@@ -1,0 +1,112 @@
+{
+  "original": {
+    "bytes": 2913,
+    "sha256": "607e6ff26c294c0101ff1a3b86116effb3829a51c93af8f70fd1af3a1689166f"
+  },
+  "comparison": {
+    "absolute_capture_times_independently_synchronized_to_signal": false,
+    "controlled_benchmark": false,
+    "does_not_prove": [
+      "NoCSE causally produced the phase difference",
+      "NoCSE actually reached every scheduled CSE consumer",
+      "speedup ratio or completion percentage",
+      "phase durations or complete CPU profile",
+      "whole-run absence of any clocks",
+      "last stopping function at CPU150",
+      "old600CPU failure unique cause",
+      "numerical/RTL or MAC utilization acceptance"
+    ],
+    "formal_one_dump_per_signal_ack": false,
+    "new_no_READY_OBS_or_CASE_PASS": true,
+    "new_sanitized": {
+      "bytes": 51900,
+      "sha256": "5cfda9eda1a687c43c21179c76a9aa98cbea47e7e090cb873f0a38e2b4d5605d"
+    },
+    "observed": "Earlier run second main sample: PrepareAst/CSE. New run second main sample: TreadleTester construction / ExecutionEngine.apply / SymbolTable dependencies. First samples both occur under PrepareAst/InferResets, at different inner frames.",
+    "old_sanitized": {
+      "bytes": 58808,
+      "sha256": "40262f05194386a522eb40a69398594d2ce613ddb22072e593e61f27031b86ca"
+    },
+    "retained_terminal_result_both": "FAIL_DIAGNOSTIC_RETAINED",
+    "same150CPU_budget": true,
+    "samples": [
+      {
+        "new_dump_block_sha256": "d3daadaec1bee6e2e9b1e6cdac162e8d08815674e50703b45ebbc1f0994abfa9",
+        "new_dump_phase": "PrepareAst / InferResets / InferTypes",
+        "new_main_cumulative_cpu_ms": 31648.33,
+        "new_main_elapsed_seconds": 59.52,
+        "new_main_frames": 126,
+        "old_dump_block_sha256": "2fed65835475383d1d4a0bb60b9441faa8759b6ec6dad55b7497cfdde0b8b0f3",
+        "old_dump_phase": "PrepareAst / InferResets",
+        "old_main_cumulative_cpu_ms": 29533.82,
+        "old_main_elapsed_seconds": 59.58,
+        "old_main_frames": 113,
+        "opportunity_target_seconds": 60
+      },
+      {
+        "new_dump_block_sha256": "04cf8512c615b6d8b8b4c605ca1d3bd3aa7d85751ffccafc76f1810e003393ff",
+        "new_dump_phase": "TreadleTester construction / ExecutionEngine.apply / SymbolTable dependencies",
+        "new_main_cumulative_cpu_ms": 70600.06,
+        "new_main_elapsed_seconds": 120.37,
+        "new_main_frames": 94,
+        "old_dump_block_sha256": "d6ad12c8aee0b13d57f58c4e6e0a72e377db8279e159fd80b06748a45d340ec8",
+        "old_dump_phase": "PrepareAst / CommonSubexpressionElimination",
+        "old_main_cumulative_cpu_ms": 69155.0,
+        "old_main_elapsed_seconds": 119.56,
+        "old_main_frames": 153,
+        "opportunity_target_seconds": 120
+      }
+    ],
+    "schema": "two-opportunity-sampled-stage-comparison-only-v1",
+    "status": "OBSERVED_STAGE_DIFFERENCE_NOT_PERFORMANCE_RESULT",
+    "thread_cpu_counters_are_not_MAC_or_system_utilization": true
+  },
+  "same_low_IR_hash_does_not_prove_same_post_PrepareAst_graph_size": true,
+  "author_report": {
+    "bytes": 8805,
+    "sha256": "e8aa0aa496cc9eb76d4379e6d4830013b837b3970c81275fb24b401a500a1b7e"
+  },
+  "author_freeze": {
+    "bytes": 4672,
+    "sha256": "db7bb4513c3c65c4a5c6a9d33eb3001158a4ff1480bdcca328db0c94c7aaa2e6"
+  },
+  "source_order_inference": "Actual120 sample is in SymbolTable pass1 gather under ExecutionEngine.apply, downstream of PrepareAst. At that instant SymbolTable completion, data allocation, expression compilation, initial evaluation and framework first reset were still ahead in the pinned source order. No inference about the unsampled interval after120 or whole-run clock count.",
+  "annotation_activation_limit": "Static annotation construction and exact staged17+3 support configuration identity; no per-pass annotation object, guard hit count or Spec/MemoryReply runtime CodeSource log. NoCSE may affect scheduled CSE in initial lowering and PrepareAst; runTransform remapping still occurs.",
+  "excluded_from_publication": [
+    "future600 proposal/config/source/GO",
+    "unimplemented graph algorithm observations and algebra model",
+    "raw dumps/IR/class/JAR/input payloads"
+  ],
+  "official_source_analysis_pins": [
+    {
+      "archive_relative": "firrtl2/graph/DiGraph.scala",
+      "bytes": 16635,
+      "sha256": "22228e20d0978a09e6ae048fa63310ea44dd815c0557e6a3b27d16670e7c6c24"
+    },
+    {
+      "archive_relative": "firrtl2/passes/InferTypes.scala",
+      "bytes": 5640,
+      "sha256": "ae1df73058330033d42e46ea7822e1790ea136ae6984a516f6e599e22782b0f2"
+    },
+    {
+      "archive_relative": "treadle2/TreadleTester.scala",
+      "bytes": 14593,
+      "sha256": "c69f70d1158ad1a68f3fe74cc30a66a5780f93783bebfcad8cea17bd897158b1"
+    },
+    {
+      "archive_relative": "treadle2/executable/ExecutionEngine.scala",
+      "bytes": 19550,
+      "sha256": "546d98a46f32bc04a109a3112bd9ef230fd8e86f30e0d27b967e48249af30ea0"
+    },
+    {
+      "archive_relative": "treadle2/executable/SensitivityGraphBuilder.scala",
+      "bytes": 1538,
+      "sha256": "58ddff3878b689bf11c259d9ac479f179dfa4e0c7fbd15d051ac278e47b126c4"
+    },
+    {
+      "archive_relative": "treadle2/executable/SymbolTable.scala",
+      "bytes": 27152,
+      "sha256": "9d8cf72aa1efb8c7ebd3e174da99e509bd7d44aec60a1c391b0dfc6f7b453bab"
+    }
+  ]
+}

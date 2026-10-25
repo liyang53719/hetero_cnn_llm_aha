@@ -1,0 +1,122 @@
+{
+  "original_source_identity": {
+    "bytes": 1387,
+    "sha256": "74f22b50bcdfc19cbbe181974939bfb83895421e59bdf7dcd278c71ec175fa2b"
+  },
+  "source_freeze": {
+    "bytes": 3020,
+    "sha256": "7177c03490a3ee47ac4bc57830f0801a40cc36a33af033f2acdfeeff6091896a"
+  },
+  "baseline": {
+    "bytes": 16701,
+    "sha256": "ab0f832c033dec56daee3ad0d98e9b7e37a1d9189b692556d22dc3fea8ac66f9"
+  },
+  "candidate": {
+    "repo_path": "candidates/qwen2_core_client_nocse_diagnostic/source/OrderedQkBehaviorSpec.scala",
+    "bytes": 16760,
+    "sha256": "8b959b05c055f150de12a28e3983b7ef714ef42a0446d13dcb9cd8cb935c6d36"
+  },
+  "line_changed": 33,
+  "one_insertion": ", firrtl2.passes.NoCommonSubexpressionEliminationAnnotation",
+  "inserted_bytes": 59,
+  "rest_of_file_byte_identical": true,
+  "public_patch_headers_only_portabilized": true,
+  "original_private_patch": {
+    "bytes": 950,
+    "sha256": "ad1c5ab21846a7b421c776d27ecc3eb5d08b6fbe7836b81c2a772dc766d6e7f5"
+  },
+  "new_class_manifest": {
+    "bytes": 3638,
+    "sha256": "b8fb24e500ecd0bf56a1bc99cade449690371352ac09b643d7b9c31197b31d8d"
+  },
+  "new_class_count": 3,
+  "new_class_bytes": 131576,
+  "new_classes": [
+    {
+      "bytes": 3975,
+      "field_count": 4,
+      "interfaces": [
+        "scala/Product",
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$1",
+      "major": 52,
+      "method_count": 18,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$1.class",
+      "sha256": "088d57db495a58e358b4e1b2bfecd344348b185f5e5927725bb3acb62e691f88",
+      "source_file": "OrderedQkBehaviorSpec.scala",
+      "staged_relative": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$1.class",
+      "superclass": "java/lang/Object"
+    },
+    {
+      "bytes": 2639,
+      "field_count": 1,
+      "interfaces": [
+        "java/io/Serializable"
+      ],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$2$",
+      "major": 52,
+      "method_count": 5,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$2$.class",
+      "sha256": "88b95d7458b4cc98333d1adefbbb1a04cc2513a12bc43baade1065b755ab75a0",
+      "source_file": "OrderedQkBehaviorSpec.scala",
+      "staged_relative": "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$2$.class",
+      "superclass": "scala/runtime/AbstractFunction3"
+    },
+    {
+      "bytes": 124962,
+      "field_count": 1,
+      "interfaces": [
+        "chiseltest/ChiselScalatestTester"
+      ],
+      "internal_name": "heteronpu/continuous/OrderedQkBehaviorSpec",
+      "major": 52,
+      "method_count": 157,
+      "minor": 0,
+      "relative": "heteronpu/continuous/OrderedQkBehaviorSpec.class",
+      "sha256": "94c4752dc08797ed63833f69196d0899dfca275b5f4580b97979d929680db41e",
+      "source_file": "OrderedQkBehaviorSpec.scala",
+      "staged_relative": "heteronpu/continuous/OrderedQkBehaviorSpec.class",
+      "superclass": "org/scalatest/flatspec/AnyFlatSpec"
+    }
+  ],
+  "original20_hash_manifest_reference": "candidates/qwen2_core_client_chirrtl_evidence/evidence/NEW_CLASS_HASHES.json",
+  "selection": {
+    "original17": [
+      "heteronpu/continuous/BlockLaunch.class",
+      "heteronpu/continuous/BlockRegion$.class",
+      "heteronpu/continuous/BlockRegion.class",
+      "heteronpu/continuous/BlockResult.class",
+      "heteronpu/continuous/OrderedQkBehaviorCore$$anon$1.class",
+      "heteronpu/continuous/OrderedQkBehaviorCore$.class",
+      "heteronpu/continuous/OrderedQkBehaviorCore.class",
+      "heteronpu/continuous/OrderedQkBehaviorElaborate$.class",
+      "heteronpu/continuous/OrderedQkBehaviorElaborate$delayedInit$body.class",
+      "heteronpu/continuous/OrderedQkBehaviorElaborate.class",
+      "heteronpu/continuous/Qwen2ContinuousBlock$$anon$1.class",
+      "heteronpu/continuous/Qwen2ContinuousBlock$$anon$2.class",
+      "heteronpu/continuous/Qwen2ContinuousBlock$.class",
+      "heteronpu/continuous/Qwen2ContinuousBlock.class",
+      "heteronpu/continuous/QwenBlockLayout.class",
+      "heteronpu/continuous/QwenBlockShape$.class",
+      "heteronpu/continuous/QwenBlockShape.class"
+    ],
+    "new3": [
+      "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$1.class",
+      "heteronpu/continuous/OrderedQkBehaviorSpec$MemoryReply$2$.class",
+      "heteronpu/continuous/OrderedQkBehaviorSpec.class"
+    ],
+    "staged_count": 20,
+    "staged_bytes": 670791,
+    "original_Spec3_excluded": true,
+    "same_byte_MemoryReply_must_use_new_origin": true,
+    "expected_mapping_metadata": {
+      "bytes": 15795,
+      "sha256": "146d5bce06e35109c03e0966996afc96bc2400a8e29e671a72502942026ce853"
+    }
+  },
+  "packed_client_core_hardware_stimulus_thresholds_unchanged": true,
+  "class_bytes_not_published": true
+}

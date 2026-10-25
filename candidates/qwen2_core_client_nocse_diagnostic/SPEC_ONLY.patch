@@ -1,0 +1,11 @@
+--- a/OrderedQkBehaviorSpec.scala
++++ b/OrderedQkBehaviorSpec.scala
+@@ -30,7 +30,7 @@
+     val v=BigInt("300000",16);val dst=BigInt("400000",16)
+     val tag=BigInt("7000c",16)
+     val cap=99997L
+-    test(new OrderedQkBehaviorCore(true)).withAnnotations(Seq(TreadleBackendAnnotation, firrtl2.options.TargetDirAnnotation("simulation"))){d=>
++    test(new OrderedQkBehaviorCore(true)).withAnnotations(Seq(TreadleBackendAnnotation, firrtl2.options.TargetDirAnnotation("simulation"), firrtl2.passes.NoCommonSubexpressionEliminationAnnotation)){d=>
+       println(s"CORE_SIM_READY case=$name m=$m backend=treadle2 scripted_matrix=true")
+       d.clock.setTimeout(0) // Framework reset1 + explicit reset2 + <=99997 body steps = <=100000.
+       def zero(x:Data):Unit=x match {

@@ -1,0 +1,195 @@
+{
+  "original_independent_sanitized_stacks": {
+    "bytes": 51900,
+    "sha256": "5cfda9eda1a687c43c21179c76a9aa98cbea47e7e090cb873f0a38e2b4d5605d"
+  },
+  "selection": "Exact address-free source-relevant main Java frames, ordered subset only; not complete stacks. Omit hidden-address and unrelated frames, all raw headers/locks/native addresses/process identities.",
+  "dumps": [
+    {
+      "index": 1,
+      "sampled_main_path": "PrepareAst / InferResets / InferTypes",
+      "dump_text_sha256": "d3daadaec1bee6e2e9b1e6cdac162e8d08815674e50703b45ebbc1f0994abfa9",
+      "thread_count": 13,
+      "cumulative_main_cpu_ms": 31648.33,
+      "main_elapsed_seconds": 59.52,
+      "state": "RUNNABLE",
+      "original_main_java_frames": 126,
+      "selected_frames": [
+        {
+          "line": 30,
+          "text": "at firrtl2.passes.InferTypes$.infer_types_e$1(InferTypes.scala:48)"
+        },
+        {
+          "line": 31,
+          "text": "at firrtl2.passes.InferTypes$.$anonfun$run$9(InferTypes.scala:46)"
+        },
+        {
+          "line": 36,
+          "text": "at firrtl2.passes.InferTypes$.infer_types_e$1(InferTypes.scala:46)"
+        },
+        {
+          "line": 37,
+          "text": "at firrtl2.passes.InferTypes$.$anonfun$run$11(InferTypes.scala:67)"
+        },
+        {
+          "line": 42,
+          "text": "at firrtl2.passes.InferTypes$.infer_types_s$1(InferTypes.scala:67)"
+        },
+        {
+          "line": 43,
+          "text": "at firrtl2.passes.InferTypes$.$anonfun$run$15(InferTypes.scala:80)"
+        },
+        {
+          "line": 48,
+          "text": "at firrtl2.passes.InferTypes$.infer_types_s$1(InferTypes.scala:80)"
+        },
+        {
+          "line": 49,
+          "text": "at firrtl2.passes.InferTypes$.$anonfun$run$21(InferTypes.scala:91)"
+        },
+        {
+          "line": 54,
+          "text": "at firrtl2.passes.InferTypes$.infer_types$1(InferTypes.scala:91)"
+        },
+        {
+          "line": 55,
+          "text": "at firrtl2.passes.InferTypes$.$anonfun$run$23(InferTypes.scala:94)"
+        },
+        {
+          "line": 59,
+          "text": "at firrtl2.passes.InferTypes$.run(InferTypes.scala:94)"
+        },
+        {
+          "line": 60,
+          "text": "at firrtl2.transforms.InferResets.$anonfun$execute$2(InferResets.scala:317)"
+        },
+        {
+          "line": 65,
+          "text": "at firrtl2.transforms.InferResets.execute(InferResets.scala:317)"
+        },
+        {
+          "line": 68,
+          "text": "at firrtl2.transforms.InferResets.runTransform(InferResets.scala:102)"
+        },
+        {
+          "line": 69,
+          "text": "at treadle2.stage.phases.PrepareAst.$anonfun$transform$2(PrepareAst.scala:34)"
+        },
+        {
+          "line": 74,
+          "text": "at treadle2.stage.phases.PrepareAst.$anonfun$transform$1(PrepareAst.scala:33)"
+        },
+        {
+          "line": 78,
+          "text": "at treadle2.stage.phases.PrepareAst.transform(PrepareAst.scala:30)"
+        },
+        {
+          "line": 79,
+          "text": "at treadle2.stage.phases.PrepareAst.transform(PrepareAst.scala:15)"
+        },
+        {
+          "line": 80,
+          "text": "at treadle2.stage.TreadleTesterPhase.$anonfun$transform$1(TreadleTesterPhase.scala:20)"
+        },
+        {
+          "line": 85,
+          "text": "at treadle2.stage.TreadleTesterPhase.transform(TreadleTesterPhase.scala:20)"
+        },
+        {
+          "line": 86,
+          "text": "at chiseltest.simulator.TreadleSimulator$.createContext(TreadleSimulator.scala:38)"
+        },
+        {
+          "line": 87,
+          "text": "at chiseltest.internal.TesterUtils$.createTester(TesterUtils.scala:51)"
+        },
+        {
+          "line": 88,
+          "text": "at chiseltest.internal.TesterUtils$.startController(TesterUtils.scala:95)"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "sampled_main_path": "TreadleTester construction / ExecutionEngine.apply / SymbolTable dependencies",
+      "dump_text_sha256": "04cf8512c615b6d8b8b4c605ca1d3bd3aa7d85751ffccafc76f1810e003393ff",
+      "thread_count": 13,
+      "cumulative_main_cpu_ms": 70600.06,
+      "main_elapsed_seconds": 120.37,
+      "state": "RUNNABLE",
+      "original_main_java_frames": 94,
+      "selected_frames": [
+        {
+          "line": 250,
+          "text": "at treadle2.executable.SymbolTable$.$anonfun$apply$1(SymbolTable.scala:212)"
+        },
+        {
+          "line": 251,
+          "text": "at treadle2.executable.SymbolTable$.$anonfun$apply$1$adapted(SymbolTable.scala:211)"
+        },
+        {
+          "line": 254,
+          "text": "at treadle2.executable.SymbolTable$.addDependency$1(SymbolTable.scala:211)"
+        },
+        {
+          "line": 255,
+          "text": "at treadle2.executable.SymbolTable$.processDependencyStatements$1(SymbolTable.scala:346)"
+        },
+        {
+          "line": 256,
+          "text": "at treadle2.executable.SymbolTable$.$anonfun$apply$4(SymbolTable.scala:263)"
+        },
+        {
+          "line": 257,
+          "text": "at treadle2.executable.SymbolTable$.$anonfun$apply$4$adapted(SymbolTable.scala:262)"
+        },
+        {
+          "line": 260,
+          "text": "at treadle2.executable.SymbolTable$.processDependencyStatements$1(SymbolTable.scala:262)"
+        },
+        {
+          "line": 261,
+          "text": "at treadle2.executable.SymbolTable$.processModule$1(SymbolTable.scala:543)"
+        },
+        {
+          "line": 262,
+          "text": "at treadle2.executable.SymbolTable$.apply(SymbolTable.scala:602)"
+        },
+        {
+          "line": 263,
+          "text": "at treadle2.executable.ExecutionEngine$.$anonfun$apply$8(ExecutionEngine.scala:596)"
+        },
+        {
+          "line": 266,
+          "text": "at treadle2.executable.ExecutionEngine$.apply(ExecutionEngine.scala:596)"
+        },
+        {
+          "line": 267,
+          "text": "at treadle2.TreadleTester.<init>(TreadleTester.scala:38)"
+        },
+        {
+          "line": 270,
+          "text": "at treadle2.stage.TreadleTesterPhase.$anonfun$transform$1(TreadleTesterPhase.scala:20)"
+        },
+        {
+          "line": 275,
+          "text": "at treadle2.stage.TreadleTesterPhase.transform(TreadleTesterPhase.scala:20)"
+        },
+        {
+          "line": 276,
+          "text": "at chiseltest.simulator.TreadleSimulator$.createContext(TreadleSimulator.scala:38)"
+        },
+        {
+          "line": 277,
+          "text": "at chiseltest.internal.TesterUtils$.createTester(TesterUtils.scala:51)"
+        },
+        {
+          "line": 278,
+          "text": "at chiseltest.internal.TesterUtils$.startController(TesterUtils.scala:95)"
+        }
+      ]
+    }
+  ],
+  "two_samples_not_a_profile": true,
+  "sampling_request_window_not_exact_capture_time": true
+}

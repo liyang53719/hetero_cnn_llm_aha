@@ -1,0 +1,181 @@
+{
+  "compile": {
+    "source_supervisor": {
+      "bytes": 24598,
+      "sha256": "8ea759064c031892c128bfad1c40a0e5d8284b738278870fcb5e71fe9b3b928c"
+    },
+    "manifest": {
+      "bytes": 653565,
+      "sha256": "2fa3d38bd4d8950ae6bf1dbf5f9c59db264e540904f6e36354e1f018c0b8e347"
+    },
+    "freeze": {
+      "bytes": 3315,
+      "sha256": "c5abcd164ff8b9dc174fd02a1007cf99cd623613e7b3f11ac14ba04d4f4ec2fa"
+    },
+    "stage": "compile-only",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 120,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 67108864,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 50331648,
+      "total_wall_seconds": 150,
+      "work_wall_seconds": 120
+    },
+    "classpath_roles": [
+      "106 fixed official JARs for compiler JVM",
+      "original20 + original550 + same106 for scalac classpath"
+    ],
+    "input_role": "Only the new Spec; isolated new3 output",
+    "outer_wall_cap_seconds": 180,
+    "automatic_retry": false,
+    "automatic_stage_chaining": false
+  },
+  "diagnostic": {
+    "source_supervisor": {
+      "bytes": 43139,
+      "sha256": "5371560a735ab94cce5437b8ccf66b3feeed6ec9bb897481389c6ac7b4022bc8"
+    },
+    "manifest": {
+      "bytes": 696304,
+      "sha256": "0e4606f4bdae95d7951daffc237211c53aaf62f1c19513115a6040335b3fdabc"
+    },
+    "freeze": {
+      "bytes": 4860,
+      "sha256": "28a3ca3b2660abcede8b87727a147ba79f78336e271167f20ee962955bffc3d9"
+    },
+    "source_delta": {
+      "base_freeze": {
+        "bytes": 4364,
+        "sha256": "4a72e07f488127e969708ba3c69131aed00f4e7e7aecac120f5aa2c24b390fcb"
+      },
+      "base_supervisor": {
+        "bytes": 39519,
+        "sha256": "54ac590470acb7bd34168c9dbf84732e88b76c0043ccdab91a0a166e37e9c0c0"
+      },
+      "changed_definitions": [
+        "validate_manifest"
+      ],
+      "controls": {
+        "actual_claim": false,
+        "actual_jvm": false,
+        "actual_signals": false,
+        "normal": 19,
+        "optimized": 19,
+        "production_manifest_not_created": true
+      },
+      "engine_cleanup_staging_pidfd_checker_byte_identical": true,
+      "replacement_actual_review_pins": "PARENT MUST BIND FINAL FROZEN ACTUAL REVIEW; synthetic tests not actual review evidence",
+      "resource_delta": null,
+      "schema_delta": [
+        "qwen2-core-client-normal-m1-diagnostic-supervisor-v1",
+        "qwen2-core-client-nocse-normal-m1-diagnostic-supervisor-v1"
+      ],
+      "status": "SOURCE_STDLIB_MOCK_ONLY_NOT_FROZEN_NO_GO",
+      "supervisor": {
+        "bytes": 43139,
+        "sha256": "5371560a735ab94cce5437b8ccf66b3feeed6ec9bb897481389c6ac7b4022bc8"
+      },
+      "tests": {
+        "bytes": 8217,
+        "sha256": "117d04e84b2d00213087148faff596d58006c617b2dd3c362b4b554a089d1bcb"
+      },
+      "unchanged_definitions": [
+        "DiagnosticSignalAPI",
+        "_child_limits",
+        "_execute",
+        "caught_quit",
+        "diagnostic_check",
+        "diagnostic_signal_sample",
+        "digest",
+        "exact_inventory",
+        "group_sample",
+        "load_cleanup",
+        "low_file_snapshot",
+        "main",
+        "need",
+        "output_scope",
+        "pin",
+        "sample_gap",
+        "save_receipt",
+        "staged_classes",
+        "tree_sample",
+        "verify_inputs",
+        "verify_pin"
+      ]
+    },
+    "stage": "normal-m1-diagnostic-only",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 150,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 210,
+      "work_wall_seconds": 180
+    },
+    "sampling_schedule": {
+      "maximum_lateness_seconds": 0.5,
+      "maximum_requests": 2,
+      "signal": "SIGQUIT",
+      "target": "EXACT_UNREAPED_LIVE_POPEN_LEADER_PIDFD_ONLY",
+      "work_elapsed_seconds": [
+        60.0,
+        120.0
+      ]
+    },
+    "classpath_roles": [
+      "exact staged original17 + new3",
+      "original550",
+      "same106 fixed official JARs"
+    ],
+    "outer_wall_cap_seconds": 240,
+    "runtime_pin_checks": 1319,
+    "manifest_pin_records": 1317,
+    "role_counts": {
+      "baseline_compiled_class": 20,
+      "baseline_spec_source": 1,
+      "class": 550,
+      "compiled_class": 20,
+      "dependency": 106,
+      "metadata": 210,
+      "new_source": 4,
+      "original_source": 92,
+      "tool": 314
+    },
+    "source_review": {
+      "bytes": 6005,
+      "sha256": "437878b8f0159beb073221a082c72b4a740b8935e6869e730c243c2e3235a8cf"
+    },
+    "source_review_caveats": [
+      "Frozen manifest.resource_boundary has stale human-only phrase Same original20classes. Actual controlling class tuples and validation explicitly require original17+new3; this review corrects the narrative, does not reinterpret the controls or modify the frozen manifest.",
+      "NoCSE can affect CSE scheduled during initial lowering and PrepareAst; required reset/loop checks and PrepareAst remain. runTransform still remaps; no complete generic transform-mutation closure/runtime propagation guarantee.",
+      "NoCSE may increase graph/IR size or slow runtime. Same CPU/wall cap and two thread snapshots are not controlled performance evidence or whole profile.",
+      "7 existing origin records do not dynamically attest Spec/MemoryReply.",
+      "Independent identity audit reused one stable old large-IR digest; does not claim every input freshly rehashed during this review."
+    ],
+    "actual_origin_scope": {
+      "identity_support": "exact staging path+hash, sole classpath priority, no old20 runtime root, pinned Runner -s and unchanged runtime classes",
+      "newSpec_CodeSource_not_independently_logged": true,
+      "not_actual_annotation_activation_proof": true,
+      "original_harness_seven_origin_lines_do_not_include_Spec_or_MemoryReply": true
+    },
+    "implicit_slots_pre_post_and_review_absent": true,
+    "continuous_isolation": false,
+    "request_evidence_scope": "Receipt records one shared diagnostic anchor and success-return metadata; fixed source gates were audited. No per-send raw /proc identity/cmdline/exe/pidfd snapshots or syscall trace are retained; two thread dumps corroborate diagnostics but are not a formally one-to-one send acknowledgement.",
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY"
+  },
+  "not_executable_runtime_configuration": true,
+  "raw_private_supervisor_config_argv_anchors_omitted": true,
+  "source_preparation_flags_are_historical_not_current_actual_status": true
+}

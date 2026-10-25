@@ -1,0 +1,266 @@
+{
+  "approval_scope": {
+    "MAC_utilization": null,
+    "actual_build_pass": false,
+    "behavior_pass": false,
+    "execution_authorized_by_this_report": false,
+    "model_run_authorized": false,
+    "native_started": false,
+    "ninety_percent_target_pass": false,
+    "numerical_pass": false,
+    "source_admissible": true
+  },
+  "artifact_gate": {
+    "copied_helpers": [
+      "need",
+      "regular",
+      "local",
+      "signature",
+      "Reader",
+      "symbol_rows",
+      "elf",
+      "normalized",
+      "mmd"
+    ],
+    "copied_helpers_byte_equal": true,
+    "exact_flat_files": 16,
+    "input_archive_runtime": "New checker hashes retained archive/runtime bytes only, relying on original actual36member/object audit; does not rerun broad archive/member parser.",
+    "mmd": "One bounded ASCII rule, exact m2_main.o target and stagedm2_main.cpp first dependency; remaining resolved paths must be allowed pinned/staged realfiles; no absent logical PCH aliases or Make expressions. -MMD does not enumerate all systemheaders.",
+    "needed": "Unique subset of libstdc++.so.6/libm.so.6/libgcc_s.so.1/libc.so.6, requiring stdc++ andc. libatomic.so.1 rejected here despite inherited helper generic allowance. Exact future observed set and GNU version needs require actual ELF review.",
+    "new_executable": "ET_DYN, mapped nonzero entry, positive-sized defined main and model function in executable allocated sections/file-backed X load, fixedPT_INTERP, noRWX, non-exec GNU_STACK, noRPATH/RUNPATH/extra loader tags; static parse only.",
+    "new_files": [
+      "build/m2_main.o",
+      "build/m2_main.d",
+      "build/VOrderedQkBehaviorCore_m2"
+    ],
+    "new_object": "ELF64 little endian x86_64 ET_REL, no entry/PH, bounded sections/symbol references; not full relocation semantics.",
+    "not_proven": "No full C++/machine-code semantics, dynamicloader execution, simulation, behavioral/numerical acceptance, or utilization.",
+    "only_limit_change_in_copied_parser_globals": "MAX_FILE384MiB ->128MiB",
+    "stable_inventory": "Reader lstat/fstat dev/ino/mode/size/mtime/ctime/nlink before/after, streaming SHA, finalstatmatch of all16; only finalELF xbit. Exact flat regular file set, empty tmp on success, no symlinks.",
+    "staged_unchanged": 13,
+    "status": "PASS_FIXED_M2_SINGLE_TU_LINK_ONLY"
+  },
+  "controls": {
+    "all_normal_and_optimized_pass": true,
+    "author_methods_each_mode": {
+      "artifact": 33,
+      "engine": 23,
+      "metadata": 4
+    },
+    "author_methods_total": 120,
+    "independent_checks_each_mode": 98,
+    "independent_checks_total": 196,
+    "independent_negative_cases_each_mode": 39,
+    "logs": [
+      {
+        "bytes": 2877,
+        "sha256": "600d6b646ddda6ed06caba8757f50d21e348a10f2164e2f94f4b06bc55312615"
+      },
+      {
+        "bytes": 2877,
+        "sha256": "1547f262233b5a5ba1330697a68955122b23b74a9133aab7aea3ed5deae6cf65"
+      },
+      {
+        "bytes": 102,
+        "sha256": "2933c7def67451190a7790d5bd5000e8513c6004fcd78474baaeddf0b5b3f438"
+      },
+      {
+        "bytes": 102,
+        "sha256": "0bab8a22c4154aa17833f8ea8a8aa58af3057d2853f97d8613b696cf71fb6267"
+      },
+      {
+        "bytes": 122,
+        "sha256": "4b56294fbbb210d4074e9fcfb6c474bbf8c8462a649d8b27fc813abb2f23c33c"
+      },
+      {
+        "bytes": 122,
+        "sha256": "a76009d6b99102c8411d016861b997214e536d5460307201183dc3e10c5eea77"
+      },
+      {
+        "bytes": 1200,
+        "sha256": "d25810b1060869f4aa5057a494d4075c11c7c818e21d2ddad52d91d2aa7e754b"
+      },
+      {
+        "bytes": 1199,
+        "sha256": "f6fb9706705720970258ae6a62825b2a83ad529b85986f2d69f7a67993039d4a"
+      }
+    ],
+    "metadata_mutation_subcases_each_mode": 26,
+    "synthetic_ELF_fixture": "Explicit inert bytes from author tiny fixture builder; only parsed, never executed. Reviewer adds argv/source delta and independent mutations; no claim this is a compiler or behavioral test."
+  },
+  "engine_review": {
+    "claim": "Atomic fresh top-level run mkdir; CLAIM consumed and preserved on failure, no restart/overwrite/retry/stage chaining.",
+    "cleanup": "Original process-group leader identity anchored before monitoring and not reaped until strict cleanup proof; linker exec preserves leader PID/start identity. Group proof not cgroup or whole-host confinement.",
+    "execute_delta": "Only stage label frozen-generated-model-build-only -> fixed-m2-single-tu-link-only. Original absolute deadlines/claim/pre-post/monitor/cleanup/receipt sequence unchanged.",
+    "new_source_validation": "Exact fixed schema, caps, six environment keys, two-command launcher and13 staged files; exact original actual build manifest/review and fixedM2 source freeze + ccbbc360 source review schema/status.",
+    "original_supervisor": "qwen2_core_client_verilator_build_prepare_20261025T2143/supervisor.py",
+    "source_helpers": "All production cleanup/checker/inventory-guard/launcher/supervisor are automatically pinned pre/post; metadata loaded by validation likewise pinned.",
+    "success_gate": "exit0, no errors, successful postflight, cleanup proof, exact staged files/output scope and content checker before supervisor PASS; original final aggregateCPU/tree/log/deadline/receipt caps apply.",
+    "unchanged_definition_count": 18,
+    "unchanged_definitions": [
+      "_child_limits",
+      "copy_exact",
+      "digest",
+      "exact_inventory",
+      "group_sample",
+      "load_cleanup",
+      "load_pinned_module",
+      "main",
+      "need",
+      "pin",
+      "render_worker_argv",
+      "sample_gap",
+      "save_receipt",
+      "tree_sample",
+      "verify_inputs",
+      "verify_pin",
+      "verify_runtime_boundaries",
+      "walk_output"
+    ]
+  },
+  "exact_execution_scope": {
+    "assertions": "Retained generated model/archive already came from --assert codegen; compiling/linking it does not measure runtime assertion coverage.",
+    "compile_argv_evidence": "shlex token comparison to immutable original actual worker.log: identical flags, only m1_main.o -> m2_main.o and old absolute m1 source -> new staged m2_main.cpp.",
+    "environment_template": {
+      "COMPILER_PATH": "${NEW_RUN_ROOT}/tools:${GCC_LIBEXEC}",
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "PATH": "${NEW_RUN_ROOT}/tools",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "excluded": [
+      "oldm1_main.o",
+      "old.d/.dat",
+      "oldMakefiles",
+      "old.gch",
+      "PCH generation",
+      "make",
+      "Verilator/codegen",
+      "JVM",
+      "model execution",
+      "M1/M3 autochain"
+    ],
+    "flags": "Original C++17, -Os, -MMD, include paths and VM_* macros; stock9 -Wno-* flags unchanged. Not warning-free or Werror.",
+    "launcher_lines": [
+      "#!${SH}",
+      "set -eu",
+      "cd build",
+      "${CXX} -I. -MMD -I${VERILATOR_ROOT}/include -I${VERILATOR_ROOT}/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17 -Os -c -o m2_main.o m2_main.cpp",
+      "exec ${CXX} m2_main.o verilated.o verilated_threads.o VOrderedQkBehaviorCore__ALL.a -pthread -lpthread -latomic -o VOrderedQkBehaviorCore_m2"
+    ],
+    "link_argv_evidence": "Same original g++ link tokens, only m1_main.o -> m2_main.o and final output -> VOrderedQkBehaviorCore_m2; prefix exec is the explicit shell transition.",
+    "normal_pch_header": "__pch.h is retained ordinary text among7 headers, not a .gch/PCH compilation/use claim.",
+    "staging": "13 exact immutable inputs0444:7 old generated text headers, same36-member archive and2 runtime objects, new fixedM2 TU+unchanged ABI header+passive expected header.",
+    "supervisor_argv": [
+      "${PARENT_PYTHON}",
+      "-I",
+      "-S",
+      "-B",
+      "${FROZEN_BUILD_CONFIG}/supervisor.py",
+      "--manifest",
+      "${FROZEN_BUILD_CONFIG}/manifest.json",
+      "--manifest-sha256",
+      "b525ed3deef8e557431e9feb90a84a5260424a03064aa711965ad0f6b60fc468",
+      "--execute-approved-once"
+    ],
+    "worker_argv_template": [
+      "${SH}",
+      "${NEW_RUN_ROOT}/tools/compile_link.sh"
+    ]
+  },
+  "identities": {
+    "COMMAND_PROPOSAL.json": {
+      "bytes": 1282,
+      "sha256": "5db760be8fd1ac9887fd8deac30123d19374e4156f9fe9784e7f3026b7ca45be"
+    },
+    "FREEZE.json": {
+      "bytes": 5508,
+      "sha256": "3c224ce46c1887dfe87b9ba851c85d625ed1bcc48d8d6d8b2f61527e296f4167"
+    },
+    "ROOT_REQUIRED_CHECKS.json": {
+      "bytes": 1394,
+      "sha256": "f3e0f7cca4ec00fa7ed122a8ce97b11ba9238e5a68cced42e52c94a7fa35e61b"
+    },
+    "check_m2_build.py": {
+      "bytes": 13014,
+      "sha256": "4fc6aa043b5dee895484c3a5f15e5b03012b9ef496a42e3e16e757664c076fe7"
+    },
+    "compile_link.sh": {
+      "bytes": 865,
+      "sha256": "08bce9bda8badcd8d00dbda439a7bdbe1c0892ea53d61c4bacbd07c53b999245"
+    },
+    "manifest.json": {
+      "bytes": 4146661,
+      "sha256": "b525ed3deef8e557431e9feb90a84a5260424a03064aa711965ad0f6b60fc468"
+    },
+    "supervisor.py": {
+      "bytes": 32172,
+      "sha256": "a652c8ae43af2d364f03ca27ceb4be88f335e68c3423c23217e6de849f7d3ddc"
+    }
+  },
+  "identity_freeze": {
+    "bytes": 1458,
+    "sha256": "90e7e0b37d93a190234d4969832f497f53f05d0f4f13c7a38c0a10ce19fa92b8"
+  },
+  "identity_review": {
+    "bytes": 255985,
+    "sha256": "245a11d2c345b1a8601dbeb8cc6685f184deccd420c192ae9775f76dce4dbcef"
+  },
+  "remaining_source_blockers": [],
+  "resource_assessment": {
+    "absolute_deadlines_from_one_start": {
+      "cleanup": 160,
+      "total": 180,
+      "work": 150
+    },
+    "basis": "One new header-heavyTU+one link replaces old39TU+2PCH build; original185.996CPU build and13.76CPU M1run do not guarantee this stage fits.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 120,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 134217728,
+      "total_wall_seconds": 180,
+      "work_wall_seconds": 150
+    },
+    "failure": "Retain every artifact/claim/log/receipt possible, no deletion/retry/increasedbudget; incomplete receipt remains failure.",
+    "fit_guaranteed": false,
+    "limits": "Child CPU120/AS4GiB/file128MiB are hard per-process inheritedrlimits. Aggregate group+parentCPU sampled and finalrusage; groupRSS2GiB and tree256MiB sampled; observedgap>0.1s rejects. Log4MiB retained hard cap. Parent content parser uses bounded inputs/totalwall, not a claimed parent AS/RSS hardlimit or whole-systemdisk quota.",
+    "no_linear_timing_prediction": true,
+    "outer_seconds": 210
+  },
+  "runtime_and_identity": {
+    "aliases": 1129,
+    "closure": "Inherited4177 compiler/linker/header/dependency role records and156 parentPython records. Over-inclusive original make/Perl etc pins are retained provenance, not evidence those programs run. Minimal PATH private wrappers, explicitCOMPILER_PATH, no inheritedLD/compiler overrides. Known closure static endpoints, not hermetic host isolation.",
+    "expected_actual_checks_with_manifest_self": 5338,
+    "inventories": 19,
+    "negative_slots": 275,
+    "old_M1_and_failures": "Read-only identity preserved; no original output/source changes or regeneration.",
+    "role_pins": {
+      "dependencies": 4177,
+      "input": 13,
+      "provenance": 985,
+      "runtime": 156,
+      "source": 5
+    },
+    "role_total": 5336
+  },
+  "schema": "qwen2-fixed-m2-single-tu-build-independent-source-review-v1",
+  "source_review": {
+    "bytes": 12325,
+    "sha256": "ccbbc360d14f5ee21fc71b830173a7695154ba42773e22eeb8e3b8c908e6ecc7"
+  },
+  "status": "PASS_SOURCE_MOCK_ADMISSION_FIXED_M2_SINGLE_TU_LINK_ONLY_REQUIRES_NEW_ROOT_GO",
+  "origin_review": {
+    "bytes": 15565,
+    "sha256": "09d8296085a997f722c2483c55e7ee39970922470177b6270fa300e6757fca30"
+  },
+  "historical_source_only": true
+}

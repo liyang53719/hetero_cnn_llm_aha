@@ -1,0 +1,29 @@
+{
+  "status": "PASS_EXACT_SOURCE_RECONSTRUCTION_PROJECTIONS_AND_SYNTHETIC_ONLY",
+  "checks": 2202,
+  "errors": 0,
+  "original_sources": 8,
+  "new_source_assembly_helper": 1,
+  "public_references": 12,
+  "source_tests_each_mode": {
+    "M2_contract": 12,
+    "reference": 11,
+    "tiny_build_containers": 33,
+    "assembly_positive_negative": 8
+  },
+  "reconstructed_headers_each_mode": {
+    "expected_m2.hpp": {
+      "bytes": 81256,
+      "sha256": "762b8c5bb03df534238c6129ed97cb1b388195f3cfbc34cd4205c967049e2852"
+    },
+    "generated_abi.hpp": {
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    }
+  },
+  "reversible_source_patch_exact": true,
+  "retained_actual_old_build_and_M1_stat_checks": 169,
+  "actual16_ELF_objects_archives_headers_SV_rawlogs_cache_not_reopened": true,
+  "packaging_native_compiler_model_or_signal_actions": 0,
+  "scope": "Only source/text and explicitly tiny synthetic containers. The real build proves compile/link/static tables, never M2 execution. Parent-Python existing pyc coverage gap retained; no evidence backfill."
+}

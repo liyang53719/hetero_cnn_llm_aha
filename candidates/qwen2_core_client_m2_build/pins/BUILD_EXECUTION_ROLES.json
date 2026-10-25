@@ -1,0 +1,210 @@
+{
+  "schema": "single-M2-TU-link-role-recipe-v1",
+  "manifest": {
+    "bytes": 4146661,
+    "sha256": "b525ed3deef8e557431e9feb90a84a5260424a03064aa711965ad0f6b60fc468"
+  },
+  "compile_launcher": {
+    "bytes": 865,
+    "sha256": "08bce9bda8badcd8d00dbda439a7bdbe1c0892ea53d61c4bacbd07c53b999245"
+  },
+  "compile_link_role_text": "#!${SH}\nset -eu\ncd build\n${CXX} -I. -MMD -I${VERILATOR_ROOT}/include -I${VERILATOR_ROOT}/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17 -Os -c -o m2_main.o m2_main.cpp\nexec ${CXX} m2_main.o verilated.o verilated_threads.o VOrderedQkBehaviorCore__ALL.a -pthread -lpthread -latomic -o VOrderedQkBehaviorCore_m2\n",
+  "worker_argv": [
+    "${SH}",
+    "${NEW_RUN_ROOT}/tools/compile_link.sh"
+  ],
+  "environment": {
+    "COMPILER_PATH": "${NEW_RUN_ROOT}/tools:${GCC_LIBEXEC}",
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "${NEW_RUN_ROOT}/tools",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+  },
+  "build_plan": {
+    "dependency_cwd": "build",
+    "executable": "build/VOrderedQkBehaviorCore_m2",
+    "model_symbol_prefix": "VOrderedQkBehaviorCore",
+    "translation_unit": {
+      "dependency": "build/m2_main.d",
+      "object": "build/m2_main.o",
+      "source": "${NEW_RUN_ROOT}/build/m2_main.cpp",
+      "target": "m2_main.o"
+    }
+  },
+  "staged_inputs": [
+    {
+      "relative": "build/VOrderedQkBehaviorCore.h",
+      "bytes": 472240,
+      "sha256": "6b9169a0300937681507d6202ea31640ccd046f0c5107a91a8309cde535bfc06"
+    },
+    {
+      "relative": "build/VOrderedQkBehaviorCore_HeteroFP32Alu.h",
+      "bytes": 3124,
+      "sha256": "7c6bf68fe951f2ab4e4e061e2f32c421e824a0e7e6f9c9e9138830ee42276ca9"
+    },
+    {
+      "relative": "build/VOrderedQkBehaviorCore__ALL.a",
+      "bytes": 4312084,
+      "sha256": "7d7010555c894080c942a964700f706725429f046c82cd9b107a43c187ac82a1"
+    },
+    {
+      "relative": "build/VOrderedQkBehaviorCore__Syms.h",
+      "bytes": 8061,
+      "sha256": "30c627a193cdb61a20c7aec3e24374d4f5b64ea6699631a3ce0416952b9d7781"
+    },
+    {
+      "relative": "build/VOrderedQkBehaviorCore___024root.h",
+      "bytes": 1291968,
+      "sha256": "ec699bfe38f5f8e205b4c8473f68000bec8a64bba5a55d61592e9082b3cdfbd0"
+    },
+    {
+      "relative": "build/VOrderedQkBehaviorCore__pch.h",
+      "bytes": 836,
+      "sha256": "baa32de033dce31227cbc49e4596845348be616c262709b8706c0562148ee7a2"
+    },
+    {
+      "relative": "build/VOrderedQkBehaviorCore_banks_bank_2240x128.h",
+      "bytes": 1932,
+      "sha256": "6e1a01680bd4b1edf8227cf000a8ca508f790753d17dc1d3207a1f3f32cbc2f5"
+    },
+    {
+      "relative": "build/VOrderedQkBehaviorCore_banks_bank_48x128.h",
+      "bytes": 1913,
+      "sha256": "d6bd20c4a3de5e62ce80647b65eb5b8988f86b431723e1d5301a6fe7fbb2bce2"
+    },
+    {
+      "relative": "build/verilated.o",
+      "bytes": 212352,
+      "sha256": "5d543065e92fb077ef3f29ae59bb030d1f6a9c3a259188f74afadb88f7d5fac5"
+    },
+    {
+      "relative": "build/verilated_threads.o",
+      "bytes": 29608,
+      "sha256": "90eeb17702692a2ecb1dbbf4044871f1bd906053abbb458c951b61e223d5971c"
+    },
+    {
+      "relative": "build/expected_m2.hpp",
+      "bytes": 81256,
+      "sha256": "762b8c5bb03df534238c6129ed97cb1b388195f3cfbc34cd4205c967049e2852"
+    },
+    {
+      "relative": "build/generated_abi.hpp",
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    },
+    {
+      "relative": "build/m2_main.cpp",
+      "bytes": 12525,
+      "sha256": "5ee32a75788337ea38d0a1fc5705f6d620b0f50dff1bacaebb219acf231ae42b"
+    }
+  ],
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 120,
+    "log_hard_bytes": 4194304,
+    "output_tree_sampled_bytes": 268435456,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 134217728,
+    "total_wall_seconds": 180,
+    "work_wall_seconds": 150
+  },
+  "outer_wall_seconds": 210,
+  "declared_pin_role_counts": {
+    "dependencies": 4177,
+    "input": 13,
+    "provenance": 985,
+    "runtime": 156,
+    "source": 5
+  },
+  "automatic_total": 5338,
+  "runtime_pyc_pin_count": 0,
+  "allowed_dependency_pin_count": 4190,
+  "tools": [
+    {
+      "name": "make",
+      "bytes": 278448,
+      "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7"
+    },
+    {
+      "name": "x86_64-linux-gnu-g++-14",
+      "bytes": 1166360,
+      "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d"
+    },
+    {
+      "name": "x86_64-linux-gnu-as",
+      "bytes": 795184,
+      "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9"
+    },
+    {
+      "name": "x86_64-linux-gnu-ld",
+      "bytes": 1861256,
+      "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b"
+    },
+    {
+      "name": "x86_64-linux-gnu-ar",
+      "bytes": 52480,
+      "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb"
+    },
+    {
+      "name": "sh",
+      "bytes": 129736,
+      "sha256": "a6f559e00b69a4aa4d8cb607be18d9386c5aee55c509e2c075549dcf00e00fc7"
+    },
+    {
+      "name": "make",
+      "bytes": 278448,
+      "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7"
+    },
+    {
+      "name": "x86_64-linux-gnu-g++-14",
+      "bytes": 1166360,
+      "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d"
+    },
+    {
+      "name": "x86_64-linux-gnu-as",
+      "bytes": 795184,
+      "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9"
+    },
+    {
+      "name": "x86_64-linux-gnu-ld",
+      "bytes": 1861256,
+      "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b"
+    },
+    {
+      "name": "x86_64-linux-gnu-ar",
+      "bytes": 52480,
+      "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb"
+    },
+    {
+      "name": "sh",
+      "bytes": 129736,
+      "sha256": "a6f559e00b69a4aa4d8cb607be18d9386c5aee55c509e2c075549dcf00e00fc7"
+    }
+  ],
+  "scope": {
+    "behavior_pass": false,
+    "mac_utilization": "unknown",
+    "make_invoked": false,
+    "model_executed": false,
+    "model_recompiled": false,
+    "model_regenerated": false,
+    "new_translation_units": 1,
+    "new_warning_suppression_added": false,
+    "numerical_pass": false,
+    "pch_regenerated": false,
+    "retained_generated_objects": 36,
+    "retained_runtime_objects": 2,
+    "single_fixed_m2_harness_compile_and_link": true,
+    "stock_compiler_warning_suppression_retained": true,
+    "verilator_invoked": false
+  },
+  "resource_boundary": "1CPU affinity; aggregate sampled CPU plus final rusage; child hard CPU/AS/file; group sampled RSS/tree and0.1s gap failclose; parent parser bounded inputs, not process-wide hard AS; original anchored group cleanup not cgroup/whole-machine confinement. No automatic retry or model run.",
+  "full_private_runtime_config_published": false,
+  "no_execution_permission": true
+}

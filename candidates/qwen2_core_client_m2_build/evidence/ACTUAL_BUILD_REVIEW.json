@@ -1,0 +1,358 @@
+{
+  "acceptance": {
+    "actual_Cpp_compile_link": true,
+    "actual_M2_behavior": false,
+    "duty_cycle": null,
+    "full128_RTL": false,
+    "full29": false,
+    "full_FMA_numerical": false,
+    "mac_utilization": null,
+    "ninety_percent_target": false,
+    "scripted_Matrix_numerical": false
+  },
+  "audit_coverage_limitations": [
+    "parent Python .pyc closure qualified above",
+    "native ELF static knownclosure is not dynamicloadertrace",
+    "compiledconstant tables are not executedassertion evidence"
+  ],
+  "binary": {
+    "bytes": 3392368,
+    "elf": {
+      "build_ids": [
+        "254e7083038acbbc4c0095dff9f87ed4792298cd"
+      ],
+      "defined_model_function_count": 200,
+      "defined_model_functions_sha256": "584af90baa17723f6690dfc9f5d65283ef6edc90d226fea0073027ad66969d94",
+      "dynamic_tags": [
+        1,
+        1,
+        1,
+        1,
+        12,
+        13,
+        25,
+        27,
+        26,
+        28,
+        1879047925,
+        5,
+        6,
+        10,
+        11,
+        21,
+        3,
+        2,
+        20,
+        23,
+        7,
+        8,
+        9,
+        1879048187,
+        1879048190,
+        1879048191,
+        1879048176,
+        1879048185
+      ],
+      "elf_type": 3,
+      "interpreter": "${DYNAMIC_LOADER}",
+      "machine": 62,
+      "main": [
+        {
+          "bytes": 803,
+          "name": "main"
+        }
+      ],
+      "needed": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "sections": 34,
+      "soname": null,
+      "symbol_count": 1545,
+      "version_definitions": [],
+      "version_requirements": {
+        "libc.so.6": [
+          "GLIBC_2.32",
+          "GLIBC_2.17",
+          "GLIBC_2.38",
+          "GLIBC_2.34",
+          "GLIBC_2.2.5"
+        ],
+        "libgcc_s.so.1": [
+          "GCC_3.0"
+        ],
+        "libm.so.6": [
+          "GLIBC_2.29"
+        ],
+        "libstdc++.so.6": [
+          "CXXABI_1.3.7",
+          "GLIBCXX_3.4.32",
+          "CXXABI_1.3.8",
+          "GLIBCXX_3.4.17",
+          "GLIBCXX_3.4.18",
+          "CXXABI_1.3.9",
+          "CXXABI_1.3.2",
+          "GLIBCXX_3.4.29",
+          "GLIBCXX_3.4.26",
+          "GLIBCXX_3.4.9",
+          "GLIBCXX_3.4.11",
+          "CXXABI_1.3",
+          "GLIBCXX_3.4.14",
+          "GLIBCXX_3.4.30",
+          "CXXABI_1.3.11",
+          "GLIBCXX_3.4.22",
+          "GLIBCXX_3.4.15",
+          "GLIBCXX_3.4.21",
+          "GLIBCXX_3.4"
+        ]
+      }
+    },
+    "mode": "0o755",
+    "relative_path": "build/VOrderedQkBehaviorCore_m2",
+    "role": "executable",
+    "sha256": "bd6c2879bab1ae6d09f0e39640edc4f781d81a24ce7ac376d484020dbba3e03e"
+  },
+  "binary_runtime_manifest": {
+    "bytes": 23239,
+    "sha256": "13b73ccc28d219411413f4eddcf740dab5778b48cdae46b070ca7b6e9290c074"
+  },
+  "binary_source_freeze": {
+    "bytes": 1374,
+    "sha256": "790957caee9b4007aec7e59c8404adfd5d763129305acc691254d1685601600b"
+  },
+  "cleanup_saved_proof_review": {
+    "bytes": 1397,
+    "sha256": "602ba342c5cc04f9378e536837f530d90cbf7ead895a6b22fb17feda3eba9b29"
+  },
+  "harness_source_review": {
+    "bytes": 12325,
+    "sha256": "ccbbc360d14f5ee21fc71b830173a7695154ba42773e22eeb8e3b8c908e6ecc7"
+  },
+  "identity_freeze": {
+    "bytes": 2819,
+    "sha256": "35da9c8b24098be6d0dad7360705a3d62451d3acba82e88a2406bb879cbdac5b"
+  },
+  "identity_review": {
+    "bytes": 34768,
+    "sha256": "1d7cb8740a3c805be05beccd4f07e0e22f1e9e38893f00bee45ef085fbdf8f86"
+  },
+  "independent_semantics": {
+    "MMD": {
+      "all_literal_pinned_or_staged_real_paths": true,
+      "bytes": 821,
+      "complete_system_header_trace": false,
+      "count": 9,
+      "dependencies": [
+        "${NEW_RUN_ROOT}/build/m2_main.cpp",
+        "${NEW_RUN_ROOT}/build/generated_abi.hpp",
+        "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore.h",
+        "${VERILATOR_ROOT}/include/verilated.h",
+        "${VERILATOR_ROOT}/include/verilatedos.h",
+        "${VERILATOR_ROOT}/include/verilated_config.h",
+        "${VERILATOR_ROOT}/include/verilated_types.h",
+        "${VERILATOR_ROOT}/include/verilated_funcs.h",
+        "${NEW_RUN_ROOT}/build/expected_m2.hpp"
+      ],
+      "first_source": "staged m2_main.cpp",
+      "target": "m2_main.o"
+    },
+    "binary_type": "ET_DYN",
+    "checks": 11806,
+    "constants_scope": "Actual object and linked ELF both contain all960memory/288PV/828vector frozen passive expectation rows. This proves compiled constant content, not that runtime branches executed or assertions passed.",
+    "direct_NEEDED": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "entry_filebacked_executable": true,
+    "interpreter": "${DYNAMIC_LOADER}",
+    "known_native_runtime_files": 5,
+    "main_defined": true,
+    "model_symbol_count_scope": "200 defined function names match model marker; this is a name filter, not a regeneratedhardware-module count. Header-inline/helper instantiations may differ with harness; original36 generated objects/archive remain unchanged.",
+    "native_runtime_proof": "Current newELF dynamic/version requirements parsed independently; original five runtime ELFs reuse prior independent metadata/SHA plus complete current7fieldstat and current declared dependency identity audit. Not actual runtime loader trace or exhaustive future dlopen/fileIO.",
+    "object_type": "ET_REL",
+    "old_independent_parser_reused_not_production_checker": true,
+    "read_only_expected_constant_tables": [
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 23040,
+        "read_only": true,
+        "rows": 960,
+        "symbol": "_ZN9reference6memoryE",
+        "table": "memory"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 1152,
+        "read_only": true,
+        "rows": 288,
+        "symbol": "_ZN9reference2pvE",
+        "table": "pv"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 23184,
+        "read_only": true,
+        "rows": 828,
+        "symbol": "_ZN9reference6vectorE",
+        "table": "vector"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 23040,
+        "read_only": true,
+        "rows": 960,
+        "symbol": "_ZN9reference6memoryE",
+        "table": "memory"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 1152,
+        "read_only": true,
+        "rows": 288,
+        "symbol": "_ZN9reference2pvE",
+        "table": "pv"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 23184,
+        "read_only": true,
+        "rows": 828,
+        "symbol": "_ZN9reference6vectorE",
+        "table": "vector"
+      }
+    ],
+    "report": {
+      "bytes": 10947,
+      "sha256": "54688fe15fec6d41e8267714c81c92472182c303ba95a04360843b2fd3726b19"
+    },
+    "verified_version_edges": 13
+  },
+  "no_extra_execution": {
+    "codegen_requested": false,
+    "compiler_and_linker_actually_executed": true,
+    "evidence": "Exact approved/stagedscript contains only compileoneM2TU then execlink; immutablearchive2objects and exact16outputclosure confirm scope. No per-exec trace is claimed from emptylog. Staging.no_native_execution refers only to source-copyhelper, not actualwholebuild.",
+    "generated_model_TUs_recompiled": false,
+    "make_requested": false,
+    "model_executed": false,
+    "new_PCH_requested": false
+  },
+  "outputs": {
+    "all_actual_run_bytes": 10666285,
+    "all_actual_run_files": 28,
+    "artifact_identity_method": "Child hashed every16 actual output once and compared producerSHA/completefileidentity; parent parsed newobject/ELF/MMD once without another fullcontenthash, compared childmanifest and finalstat. Old modelarchive/runtime inputs retain earlier exact36member/object review through identity, not new memberparse.",
+    "artifact_manifest": {
+      "bytes": 15699,
+      "sha256": "bc3c57a8a51bcdf2d450936dce16f1541d18d5c23ffc3f396f5570c558ea82ee"
+    },
+    "bytes": 10643235,
+    "empty_log_scope": "No text warnings or commands observed; fixed shell launcher intentionally not echoing commands. This is not warning-free/Werror proof; original9 compiler suppression flags retained.",
+    "file_count": 16,
+    "new_ELF_count": 1,
+    "new_MMD_count": 1,
+    "new_object_count": 1,
+    "old_evidence": "Original129build files and prior M1actual/root8 files fullstat unchanged; no original artifact edited or deleted.",
+    "staged_inputs": "7 old generated text headers, old36-generated-member archive+2runtime objects, fixedM2 source+ABI+expected header. All source/retainedSHA exact original; no oldm1.o/gch/d/mk or generatedTUoutputs inbuild.",
+    "staged_unchanged_inputs": 13,
+    "tool_copies": 9,
+    "worker_log_bytes": 0
+  },
+  "pins_and_runtime_coverage": {
+    "absence_paths": 275,
+    "aliases": 1129,
+    "claim_boundary": "Known frozen declared identities were checked; no wholehost/cgroup or continuous isolation claim.",
+    "declared_postflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5338
+    },
+    "declared_preflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5338
+    },
+    "independent_identity_checks": 37586,
+    "parent_Python_complete_bytecode_closure_proven": false,
+    "qualification": {
+      "bytes": 2546,
+      "sha256": "ea7e40f46423630170f0b72238da0816293eb26114cda826ae5c154da232c09f"
+    }
+  },
+  "producer_generic_status": "PASS_FROZEN_MODEL_BUILD_ONLY",
+  "producer_receipt": {
+    "bytes": 21488,
+    "sha256": "aa77383451a31b25d12deea89fd351dc8eb0aaea869f49d30e1e525f4e778fea"
+  },
+  "producer_schema": "qwen2-core-client-fixed-m2-single-tu-link-supervisor-v1",
+  "producer_stage": "fixed-m2-single-tu-link-only",
+  "remaining_actual_artifact_blockers": [],
+  "resource_terminal": {
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 120,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 134217728,
+      "total_wall_seconds": 180,
+      "work_wall_seconds": 150
+    },
+    "cleanup_complete": true,
+    "cleanup_evidence_scope": "Saved original owner/group proof with2 complete pre-reap scans, no nonleader atbarrier, original leaderZ then directreap; no current processpoll/signals in this review.",
+    "errors": [],
+    "final_aggregate_cpu_seconds": 24.925332959,
+    "inner_wall_seconds": 24.971964764001314,
+    "max_observed_sample_gap_seconds": 0.02566510403994471,
+    "observed_fit_only": "This one actual build fit its120CPU/150work/180total and210outer budgets. No timing extrapolation forM2simulation/othercase.",
+    "outer_timeout": false,
+    "outer_wall_seconds": 25.23725252004806,
+    "root_returncode": 0,
+    "sampled_peak_RSS_bytes": 472801280,
+    "sampled_peak_cpu_seconds": 24.004116786,
+    "sampled_peak_tree_bytes": 10644797,
+    "worker_exit_code": 0
+  },
+  "review_actions": "Readonly actualpostterminal files/metadata, no native/ldd/model/JVM/build/EDA rerun; externalreviewfiles only.",
+  "root_approval": {
+    "bytes": 3080,
+    "sha256": "20f1e01e18288bc8351bf92f7cf0f4369a92b7bf12ee84cf798d0a536b8525e5"
+  },
+  "root_receipt": {
+    "bytes": 84,
+    "sha256": "2e983dcc6448ac1139e3f056f061de5aad70b1eb4941697a173d0c612521ab0a"
+  },
+  "schema": "qwen2-actual-fixed-M2-single-TU-build-independent-review-v1",
+  "source_admission_freeze": {
+    "bytes": 3958,
+    "sha256": "e6e188d140fad8b447caba38b62bad4516839196e9ea39ce94c828b32c061255"
+  },
+  "source_admission_review": {
+    "bytes": 15565,
+    "sha256": "09d8296085a997f722c2483c55e7ee39970922470177b6270fa300e6757fca30"
+  },
+  "specific_content_status": "PASS_FIXED_M2_SINGLE_TU_LINK_ONLY",
+  "status": "PASS_ACTUAL_FIXED_M2_SINGLE_TU_COMPILE_LINK_AND_STATIC_MODEL_ELF_CLOSURE_ONLY_NOT_EXECUTION",
+  "origin_review": {
+    "bytes": 16118,
+    "sha256": "e11b43ad9600f405094ededa33381e7e6465a0e9168285f3c7db4c4d16364d6b"
+  },
+  "origin_freeze": {
+    "bytes": 2972,
+    "sha256": "5166703c538da31517782cd40d96ecc2070fccfd23cae259e040c3ddb0c9d5a0"
+  },
+  "projection_note": "Absolute locators and process/file identities removed; MMD/ABI interpreter paths role-projected. Observed ELF virtual addresses omitted, symbol names/counts remain static only. Actual compiled table row counts are not executed events."
+}

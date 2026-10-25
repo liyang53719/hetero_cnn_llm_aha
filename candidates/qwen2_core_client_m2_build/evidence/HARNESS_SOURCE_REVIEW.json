@@ -1,0 +1,195 @@
+{
+  "acceptance": {
+    "actual_M2_pass": false,
+    "cpp_compiled": false,
+    "duty_cycle": null,
+    "full128_rtl_pass": false,
+    "full29_pass": false,
+    "linked": false,
+    "mac_utilization": null,
+    "matrix_fma_numeric_pass": false,
+    "model_executed": false,
+    "ninety_percent_target_pass": false,
+    "physical_memory_pass": false,
+    "source_eligibility": true
+  },
+  "authority": "No compiler/native/JVM/EDA/model execution occurred in this review. Only stdlib source parsing, exact integer/text synthetic controls, frozen small identity reads and external review writes.",
+  "candidate_freeze": {
+    "bytes": 4888,
+    "sha256": "fc8328bfe40ae3bc23dc6af2acb30f84af486db5fccdab6c6f4f68396088fc32"
+  },
+  "controls": {
+    "author_logs": [
+      {
+        "bytes": 111,
+        "sha256": "f4d3ac6800b863502d43d93d11c3082f5da393146c12a3280bf5f03bb5f1b956"
+      },
+      {
+        "bytes": 111,
+        "sha256": "d32e122ffe790748a6fb1382a6a573b63904f2cadcea19c168e4a7e3c3139334"
+      },
+      {
+        "bytes": 110,
+        "sha256": "6e2c2e2d0c5d4f2445feb5005937a4d47635379f8adf4113de6f692d171b2766"
+      },
+      {
+        "bytes": 110,
+        "sha256": "6e2c2e2d0c5d4f2445feb5005937a4d47635379f8adf4113de6f692d171b2766"
+      }
+    ],
+    "author_methods_total": 46,
+    "author_subcases_additional_not_counted_as_methods": true,
+    "author_test_methods_each_mode": 23,
+    "independent_each_mode": 2187,
+    "independent_prior_trace_checks_each_mode": 3526,
+    "independent_total_checks": 4374,
+    "negative_log_controls_each_mode": 44,
+    "normal": {
+      "bytes": 1331,
+      "sha256": "522939919437887ec59daf41def80a12411b16d13260e3a52cacf3f195544cae"
+    },
+    "optimized": {
+      "bytes": 1330,
+      "sha256": "cd14769e645da6f248971522e9ca7cae0c49a8aa12e79085c76624f7c4e3296f"
+    },
+    "prior_trace_checks_rerun_here": false
+  },
+  "independent_expected_contract": {
+    "accounting512Steps": 1824,
+    "derivation": "Independent child read frozen original RTL scheduling/protocol source, not new driver. Separate hierarchical and counter-state enumeration agreed. Parent parsed static C++ tables and compared every row, then built synthetic log from child retire table plus fixed scan/fold/scale counts, not author vector generator.",
+    "dones": 24,
+    "first_tag": "0x700000000",
+    "groups": 24,
+    "kv_head": "floor(head/6), heads 0..11",
+    "last_tag": "0x7000003bf",
+    "max_observation": "pre-edge: scan/fold/scale and first retirement -Inf (0xff800000); second retirement token1 sees +0. Source schedules max update on preceding retirement edge; not a separate post-edge max trace or general softmax proof.",
+    "memory_epoch": 7,
+    "memory_fields": [
+      "address",
+      "direction",
+      "tag",
+      "read mask=0/write mask=2^64-1",
+      "all data bits=0"
+    ],
+    "memory_order": "token -> head -> Q depth; K depth outer/causal key inner; each output column -> causal V keys -> write",
+    "memory_reads": {
+      "K": 288,
+      "Q": 192,
+      "V": 288
+    },
+    "memory_rows": 960,
+    "new_supported_key_path": "Within a single packed group, active j0 and j1. Does not cross 16-key chunk boundary; M17 would be separate.",
+    "output_bytes": 12288,
+    "owner_accepts": 1,
+    "phase_counts": {
+      "fold": 384,
+      "retire": 36,
+      "scale": 24,
+      "scan": 384
+    },
+    "pv_fields": "opcode0x24, sliceMask1, clear=(key==0), last=(key==token), A0 probability, A1..15/B0..255 allzero",
+    "pv_probabilities_m2": {
+      "token0": "0x3f80 (1)",
+      "token1": "0x3f00 (1/2)"
+    },
+    "pv_rows": 288,
+    "qk_steps": 192,
+    "reference_rounding": "Author uses exact rational -> FP32 RNE -> BF16 RNE. Independent direct 7-mantissa-bit BF16 integer RNE agrees for only the closed 1,1/2,1/3 values; explicit tie-even controls 257/512->0x3f00,259/512->0x3f02. No general no-double-rounding claim.",
+    "results": 24,
+    "table_indices": "Independent accepted/event ordinal only; no observed DUT token/head used to form expected addresses/probability/phase.",
+    "vector_rows": 828,
+    "write_beats": 192
+  },
+  "independent_trace_freeze": {
+    "bytes": 1322,
+    "sha256": "9b2cbd86167f567146bf65b6c4032f6612830e95d7935515935af1a97ba84429"
+  },
+  "independent_trace_review": {
+    "bytes": 11450,
+    "sha256": "527fe1058e0c188086c3948fd39408f5bf87c4b3728e4231b82f4b067a6b1907"
+  },
+  "log_checker": {
+    "bytes": 5491,
+    "sha256": "d875cabd39804dc35e9468b3d06eb8733246e9de404a87cbdd2f23b0b7daae6f"
+  },
+  "log_gate": {
+    "bounded": "2MiB log,10000 lines,65536-byte line,100000 inclusive total edges",
+    "holds": "Each port count between0 and body cycles, sum agrees and positive total. Individual zero ports disclosed as uncovered, not falsely covered.",
+    "memory_pv_evidence_layer": "Exact fields are asserted by future frozen executed C++ harness and counted to exhaustion, not externally replayed raw transaction traces (none emitted). OBS is externally per-event checked.",
+    "nonretire_score_fields": "scoreIndex/scoreData remain bounded diagnostics, not required zero when write=false.",
+    "observations": "token/head/phase/lane/selection/fault/resultReady/write/index/retired-data/max checked independently per row; consecutive per head, monotonic globally",
+    "strict_single_case": "one READY, 828 ordered OBS, one exact CASE_PASS, final DONE; no unknown/fatal tail or duplicate/missing markers",
+    "synthetic_status": "PASS_LOG_CONTRACT_ONLY_CALLER_EXECUTION_PROOF_REQUIRED; does not prove model execution, exit0, cleanup, runtime identity, numerical matrix pass or utilization."
+  },
+  "metrics_boundary": "If actual M2 passes, 828/body_cycles is only observed vector-phase occupancy (reset-inclusive denominator must be separate). QK accepted steps,PV requests and1824 accounting512Steps are protocol/bookkeeping, not measured effective MACs. Actual FMA operations and complete block hardware cycle denominator absent: MAC utilization unknown.",
+  "passive_expected_header": {
+    "bytes": 81256,
+    "sha256": "762b8c5bb03df534238c6129ed97cb1b388195f3cfbc34cd4205c967049e2852"
+  },
+  "previous_actual_m1_review": {
+    "bytes": 16128,
+    "sha256": "ac4917c0aee8ee2ef70742d9e955c7c0997434f6af10079c164501fec5c191fd"
+  },
+  "previous_actual_max_review": {
+    "bytes": 20704,
+    "sha256": "02e4d263c7d54f45db59806b6ec0e01a48aee9545110b2e63b256761960ff1e6"
+  },
+  "reference_generator": {
+    "bytes": 2912,
+    "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7"
+  },
+  "remaining_source_blockers": [],
+  "reuse_plan": {
+    "approved_resource_status": "Root separately accepted proposed120CPU/150work/180total/210outer for ensuing preparation; no build command is authorized by this source report.",
+    "excluded": [
+      "old m1_main.o",
+      "old .d/.dat",
+      "old .gch",
+      "model regeneration",
+      "make",
+      "model execution"
+    ],
+    "fit_guaranteed": false,
+    "inputs": "old36-generated-object archive + original2 runtime objects +7 original generated text headers; new M2 oneTU + ABI and expected header",
+    "status": "PROPOSAL_ONLY_SEPARATE_BUILD_REVIEW_AND_ROOT_GO_REQUIRED"
+  },
+  "schema": "qwen2-fixed-m2-harness-source-independent-review-v1",
+  "source": {
+    "bytes": 12525,
+    "sha256": "5ee32a75788337ea38d0a1fc5705f6d620b0f50dff1bacaebb219acf231ae42b"
+  },
+  "source_identity_freeze": {
+    "bytes": 876,
+    "sha256": "25e50601ef3caaf00031a09b4ebfbcd0f8601fe204f942cf6db4d97fb4afbd6c"
+  },
+  "source_identity_review": {
+    "bytes": 16422,
+    "sha256": "546f29abc007a907beaa76d5e74096f53c78c9238acdd47ce67f23d8dbe7e481"
+  },
+  "source_review": {
+    "address_bounds": "Subtract-before-bound <= end-64 preserved; fixed small bases/shapes exclude uint64 end overflow.",
+    "argv_argc_required": 1,
+    "body_edge_cap": 99997,
+    "case_or_environment_override": false,
+    "driver_clock_settle_offerTile_ready_queue_postedge_updates_unchanged": true,
+    "fixed_m": 2,
+    "full_cpp_diff_reproduced": true,
+    "new_passive_blocks_do_not_write_inputs_or_call_clock_or_drive": true,
+    "only_enabled_case": "normal_m2",
+    "original_abi_generated_header_mapping_generator_byteidentical": true,
+    "original_generated_sv_or_model_objects_changed": false,
+    "owner_dimensions_and_output_bytes_extended_for_M2": true,
+    "owner_payload_expected_value_scope": "Status/resetRequired and payload stability only; not every owner payload field independently expected.",
+    "physical_edge_cap": 100000,
+    "reset": "three explicit rising edges; inputs zero; randReset(0); context threads(1)",
+    "reset_equivalence_scope": "Matches chosen 1+2 count contract, not bitwise startup equivalence with Treadle implicit initialization.",
+    "terminal": "Original endpoint debts, status/resetRequired, 8-edge valid/payload hold, release handshake, 3-edge quiet checks unchanged.",
+    "zero_data_inputs_and_scripted_matrix_tile": "Original zero external read responses and PV results; QK active diagonal zero, inactive/offdiagonal NaN; not an FMA model."
+  },
+  "status": "PASS_FIXED_M2_HARNESS_SOURCE_AND_SYNTHETIC_ONLY_NOT_COMPILED_OR_RUN",
+  "origin_review": {
+    "bytes": 12325,
+    "sha256": "ccbbc360d14f5ee21fc71b830173a7695154ba42773e22eeb8e3b8c908e6ecc7"
+  },
+  "historical_source_only": true
+}

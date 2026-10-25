@@ -1,0 +1,114 @@
+{
+  "schema": "exact-M2-harness-and-build-checker-source-v1",
+  "source_files": [
+    {
+      "name": "m2_main.cpp",
+      "public_path": "source/m2_main.cpp",
+      "bytes": 12525,
+      "sha256": "5ee32a75788337ea38d0a1fc5705f6d620b0f50dff1bacaebb219acf231ae42b",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "reference_events.py",
+      "public_path": "source/reference_events.py",
+      "bytes": 2912,
+      "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "generate_reference.py",
+      "public_path": "source/generate_reference.py",
+      "bytes": 1705,
+      "sha256": "9fe6c961e25661a1352568446b86b8c364b214229e7e93224c21b581d72dab5f",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "check_m2_log.py",
+      "public_path": "source/check_m2_log.py",
+      "bytes": 5491,
+      "sha256": "d875cabd39804dc35e9468b3d06eb8733246e9de404a87cbdd2f23b0b7daae6f",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_m2_contract.py",
+      "public_path": "source/test_m2_contract.py",
+      "bytes": 5130,
+      "sha256": "924057e5923a37bff7cc6f2472b977c8f326c9c34f773a0c37bb982104abda89",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_reference_events.py",
+      "public_path": "source/test_reference_events.py",
+      "bytes": 2704,
+      "sha256": "f065cffd5b021e53995ca9cf76d0adc88179de6ea18ad62216b6a4c794b6e926",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "check_m2_build.py",
+      "public_path": "source/check_m2_build.py",
+      "bytes": 13014,
+      "sha256": "4fc6aa043b5dee895484c3a5f15e5b03012b9ef496a42e3e16e757664c076fe7",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_m2_build.py",
+      "public_path": "source/test_m2_build.py",
+      "bytes": 10455,
+      "sha256": "c2ab568080f17d277e2cdcd7bbe8fc7f715e1b49ed8e8bb8ee0062fa74cfc0c6",
+      "exact_original_bytes": true
+    }
+  ],
+  "reconstructed": {
+    "expected_m2.hpp": {
+      "bytes": 81256,
+      "sha256": "762b8c5bb03df534238c6129ed97cb1b388195f3cfbc34cd4205c967049e2852"
+    },
+    "generated_abi.hpp": {
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    }
+  },
+  "m2_source_freeze": {
+    "bytes": 4888,
+    "sha256": "fc8328bfe40ae3bc23dc6af2acb30f84af486db5fccdab6c6f4f68396088fc32"
+  },
+  "build_source_freeze": {
+    "bytes": 5508,
+    "sha256": "3c224ce46c1887dfe87b9ba851c85d625ed1bcc48d8d6d8b2f61527e296f4167"
+  },
+  "source_qualification": {
+    "bytes": 12325,
+    "sha256": "ccbbc360d14f5ee21fc71b830173a7695154ba42773e22eeb8e3b8c908e6ecc7"
+  },
+  "build_qualification": {
+    "bytes": 15565,
+    "sha256": "09d8296085a997f722c2483c55e7ee39970922470177b6270fa300e6757fca30"
+  },
+  "private_build_sources_hash_only": {
+    "compile_link.sh": {
+      "bytes": 865,
+      "sha256": "08bce9bda8badcd8d00dbda439a7bdbe1c0892ea53d61c4bacbd07c53b999245"
+    },
+    "supervisor.py": {
+      "bytes": 32172,
+      "sha256": "a652c8ae43af2d364f03ca27ceb4be88f335e68c3423c23217e6de849f7d3ddc"
+    },
+    "assemble_candidate.py": {
+      "bytes": 6253,
+      "sha256": "f706636a817a3b080da91c06b7ba3153d603aca6e43ddfa8fd1c05af5a8b3bce"
+    },
+    "derive_supervisor.py": {
+      "bytes": 12135,
+      "sha256": "f59b052a9484fb9db5a6657048b0c0d21dbe9ebf354a46cc5a2b21cde1a75bbe"
+    },
+    "test_manifest.py": {
+      "bytes": 3308,
+      "sha256": "ed7a85f379e0b4b7fc8218a46375db7daf96d87410d19d8a6cc458fc67b4cb05"
+    },
+    "test_supervisor.py": {
+      "bytes": 7336,
+      "sha256": "9ba995be71b65149b242f58412b0c08b1195504a205a4794ba947256fb106c26"
+    }
+  },
+  "scope": "Closed-form zero-input scripted expectation source is not model weights, real packets or hidden tensors. Reference M3 formulas do not enable M3 execution or cross a 16-key packed boundary."
+}

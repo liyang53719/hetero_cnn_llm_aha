@@ -1,0 +1,57 @@
+{
+  "CPU_warning": "final wait-rusage lower than observed sampled group/parent CPU; do not report2.045 as totalcost",
+  "actual_compiler_phase_unknown": true,
+  "auditor_native_or_child_executed": false,
+  "candidate_freeze_sha256": "de562ecc7fff9cceea5cbdb57780a1a3c825098fe8abd4516be6be91086f5523",
+  "checks": 642,
+  "cleanup_complete": true,
+  "cleanup_direct_leader_exit_code": -9,
+  "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+  "complete_final_CPU_cost_known": false,
+  "current_retained_model_files": 0,
+  "final_file_count": 20,
+  "final_tree_bytes": 48395635,
+  "fresh_staged_bytes": 48320357,
+  "fresh_staged_file_hashes": 17,
+  "full8x512_fit": false,
+  "historical_cpp_generation_unknown": true,
+  "inventories": 12,
+  "maximum_sample_interval_seconds": 0.07181506900815293,
+  "native_error_headers": 0,
+  "next_execution_authorized": false,
+  "normal_worker_exit_code": null,
+  "outer_timeout": false,
+  "outer_wall_seconds": 21.288634550001007,
+  "plan_files": 0,
+  "prepost_source_bound_pin_checks": 3867,
+  "provider_numeric_PASS": false,
+  "receipt_final_parent_waited_child_CPU_seconds": 2.0453717319999996,
+  "root_exit_code": 1,
+  "root_external_source_bound_checks": {
+    "absent": 31,
+    "aliases": 13,
+    "freshcwd": 3,
+    "pins": 56
+  },
+  "rss_limit_bytes": 2147483648,
+  "rss_overshoot_bytes": 1511424,
+  "rss_sampled_peak_bytes": 2148995072,
+  "sampled_group_plus_parent_CPU_peak_seconds": 20.50099467,
+  "schema": "independent-terminal-cmake-hierarchy-resource-failure-review-v1",
+  "status": "CONFIRMED_ACTUAL_SAMPLED_RSS_RESOURCE_FAIL_NO_PLAN",
+  "structure_checker_run": false,
+  "supervisor_elapsed_seconds": 21.136820401996374,
+  "warning_classes": [
+    "TIMESCALEMOD"
+  ],
+  "warning_headers": 48,
+  "origin_review": {
+    "bytes": 1768,
+    "sha256": "05085f645cf7868960af97179e7f5f7c1df149c697a69d7a303f2cd26f580745"
+  },
+  "origin_freeze": {
+    "bytes": 1568,
+    "sha256": "2d2da8b2228afc3f7be00f4a5be02918c57e0fa44a5a065285c701beb24a1955"
+  },
+  "projection": "All original actual review fields retained exactly; no private paths or process identities present."
+}

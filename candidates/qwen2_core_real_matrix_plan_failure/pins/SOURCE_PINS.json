@@ -1,0 +1,53 @@
+{
+  "files": [
+    {
+      "public_path": "source/check_plan.py",
+      "bytes": 12692,
+      "sha256": "376310167b0037a4eac7977a8b5733dcb3afd6af8cc5f04fd3e599456046b8e4",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "source/test_plan.py",
+      "bytes": 9041,
+      "sha256": "336f2d7d47233a6d3390c4caa8cd6c8c7624928cfa52ae8c7e041f7e32ebf76d",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "source/qwen2_matrix_command_endpoint.sv",
+      "bytes": 2342,
+      "sha256": "94aab9408b70d0f7ed00c1acccba44724eaac54f31c08679d580fa76db7938ef",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "source/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+      "bytes": 4203,
+      "sha256": "a9a2d79fc5497b431dab56478ac0a98b7ee846212380db75d8e70b8112c05e96",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "config/hierarchy.vlt",
+      "bytes": 262,
+      "sha256": "ccecd0829803c2f175da8bce149f29505a5dc5ed68ff1d502787f774fc60783a",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "config/raw_qk_m1.vlt",
+      "bytes": 475,
+      "sha256": "beff77b599683c675c26e7ca29a03d6ff2f51e8a458f9075d0285fa4d6cb78b0",
+      "exact_original_bytes": true
+    }
+  ],
+  "candidate_freeze": {
+    "bytes": 9096,
+    "sha256": "de562ecc7fff9cceea5cbdb57780a1a3c825098fe8abd4516be6be91086f5523"
+  },
+  "adapter_freeze": {
+    "bytes": 2011,
+    "sha256": "fc29a3a61a3304dec3d5b2b27464a189ff2d9db3f818c1e20cdabf7c90240966"
+  },
+  "probe_freeze": {
+    "bytes": 3362,
+    "sha256": "e69f81df99e38d5cf97aabff796ca9ce52b1b971f8f94f860de6ee8c470e40f7"
+  },
+  "scope": "Exact small sources/configs used or qualified for actual failed plan attempt. Original comments about intended state/probes are source intent, NOT actual8-state/accessor/numerical proof. Plan checker was not reached on actual failure."
+}

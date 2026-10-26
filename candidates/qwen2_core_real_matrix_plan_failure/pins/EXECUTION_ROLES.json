@@ -1,0 +1,517 @@
+{
+  "schema": "hierarchy-plan-failure-role-projection-v1",
+  "manifest": {
+    "bytes": 1554690,
+    "sha256": "331a3f2e77d7f3043accdd3aabb53799f939f4a4eb18f561d994f220a66b32a3"
+  },
+  "supervisor": {
+    "bytes": 33243,
+    "sha256": "9da2f5c8f7c42c1b62e7f2366bbb6c08266eae1a4c0b66ca11d17c608f279b23"
+  },
+  "candidate_freeze": {
+    "bytes": 9096,
+    "sha256": "de562ecc7fff9cceea5cbdb57780a1a3c825098fe8abd4516be6be91086f5523"
+  },
+  "root_required_checks": {
+    "bytes": 26839,
+    "sha256": "875c933e108eb9b338e1db04ae98855d087b04622edac9a6ca58c29629269717"
+  },
+  "tools": {
+    "backend": {
+      "bytes": 13920736,
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703"
+    },
+    "frontend": {
+      "bytes": 26226,
+      "sha256": "672a1ccf3468902f66387049f001b04f254bbcece7d5e816e3861715889bf252"
+    },
+    "perl_executable": {
+      "bytes": 3935376,
+      "sha256": "b85210f03baeb859ee20b1324e59497f27f319eda9e2d3d1ecd163a79d884a7d"
+    },
+    "python_executable": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "package": {
+      "bytes": 7565144,
+      "sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2"
+    },
+    "cleanup": {
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
+    }
+  },
+  "worker_argv_template": [
+    "${PERL}",
+    "${VERILATOR_FRONTEND}",
+    "--no-unlimited-stack",
+    "--cc",
+    "--hierarchical",
+    "--make",
+    "cmake",
+    "-sv",
+    "--top-module",
+    "OrderedQkRealMatrixCore",
+    "--prefix",
+    "VOrderedQkRealMatrixCorePlan",
+    "--assert",
+    "--verilate-jobs",
+    "1",
+    "--threads",
+    "1",
+    "--no-timing",
+    "--Mdir",
+    "${NEW_RUN_ROOT}/plan",
+    "${NEW_RUN_ROOT}/inputs/config/hierarchy.vlt",
+    "${NEW_RUN_ROOT}/inputs/config/raw_qk_m1.vlt",
+    "${NEW_RUN_ROOT}/inputs/common.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/tc_clk.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_glue512.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv"
+  ],
+  "plan_contract_template": {
+    "backend": "${VERILATOR_BACKEND}",
+    "config_paths": [
+      "${NEW_RUN_ROOT}/inputs/config/hierarchy.vlt",
+      "${NEW_RUN_ROOT}/inputs/config/raw_qk_m1.vlt"
+    ],
+    "dependency_paths": [
+      "${NEW_RUN_ROOT}/inputs/common.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/tc_clk.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_glue512.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/config/hierarchy.vlt",
+      "${NEW_RUN_ROOT}/inputs/config/raw_qk_m1.vlt",
+      "${VERILATOR_BACKEND}",
+      "${VERILATOR_ROOT}/include/verilated_std.sv",
+      "${VERILATOR_ROOT}/include/verilated_std_waiver.vlt"
+    ],
+    "full_sv": "${NEW_RUN_ROOT}/inputs/common.sv",
+    "library_paths": [],
+    "line_args": [
+      "--cc",
+      "--hierarchical",
+      "--make",
+      "cmake",
+      "-sv",
+      "--top-module",
+      "OrderedQkRealMatrixCore",
+      "--prefix",
+      "VOrderedQkRealMatrixCorePlan",
+      "--assert",
+      "--verilate-jobs",
+      "1",
+      "--threads",
+      "1",
+      "--no-timing",
+      "--Mdir",
+      "${NEW_RUN_ROOT}/plan",
+      "${NEW_RUN_ROOT}/inputs/config/hierarchy.vlt",
+      "${NEW_RUN_ROOT}/inputs/config/raw_qk_m1.vlt",
+      "${NEW_RUN_ROOT}/inputs/common.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/tc_clk.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_glue512.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv"
+    ],
+    "original_module": "qwen2_matrix_command_endpoint_seed_disabled_impl",
+    "perl": "perl",
+    "prefix": "VOrderedQkRealMatrixCorePlan",
+    "python3": "python3",
+    "source_paths": [
+      "${NEW_RUN_ROOT}/inputs/common.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/tc_clk.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_glue512.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+      "${NEW_RUN_ROOT}/inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv"
+    ],
+    "threads": 1,
+    "top": "OrderedQkRealMatrixCore",
+    "verilator_root": "${VERILATOR_ROOT}"
+  },
+  "environment": {
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "${NEW_RUN_ROOT}/empty-path",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp",
+    "VERILATOR_ROOT": "${VERILATOR_ROOT}"
+  },
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 300,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 134217728,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 67108864,
+    "total_wall_seconds": 390,
+    "work_wall_seconds": 360
+  },
+  "outer_wall_seconds": 420,
+  "declared_pin_counts": {
+    "input": 17,
+    "perl_source": 2561,
+    "provenance": 954,
+    "runtime": 219,
+    "source": 3,
+    "tool": 111
+  },
+  "declared_total": 3865,
+  "automatic_total": 3867,
+  "inventories": 12,
+  "root_endpoints": [
+    {
+      "phase": "before",
+      "receipt": {
+        "bytes": 25265,
+        "sha256": "c9637ede003279308fcf89e5f16c5e07d7cde304d3606a46727629bddb1df7bf"
+      },
+      "counts": {
+        "pins": 56,
+        "absent": 31,
+        "passed": true,
+        "locale": {
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8"
+        }
+      },
+      "endpoint56_exact_role_hashes_reused_from": "candidates/qwen2_core_real_matrix_sv/pins/SV_EXECUTION_ROLES.json",
+      "required_absence_roles": [
+        "system_loader/ld.so.preload",
+        "system_lib/glibc-hwcaps",
+        "system_lib/x86_64-linux-gnu/glibc-hwcaps",
+        "system_lib64/glibc-hwcaps",
+        "parent_prefix/lib/glibc-hwcaps",
+        "parent_prefix/lib/ld-linux-x86-64.so.2",
+        "parent_prefix/lib/libc.so.6",
+        "parent_prefix/lib/libdl.so.2",
+        "parent_prefix/lib/libm.so.6",
+        "parent_prefix/lib/libpthread.so.0",
+        "parent_prefix/lib/librt.so.1",
+        "parent_prefix/lib/libutil.so.1",
+        "parent_prefix/lib/tls",
+        "parent_prefix/lib/x86_64",
+        "system_usr/lib/glibc-hwcaps",
+        "system_usr/lib/x86_64-linux-gnu/glibc-hwcaps",
+        "system_usr/lib/x86_64-linux-gnu/perl/5.40.0",
+        "system_usr/lib/x86_64-linux-gnu/perl5/5.40.0",
+        "system_usr/local/lib/perl",
+        "system_usr/local/lib/perl5",
+        "system_usr/local/lib/site_perl",
+        "system_usr/local/lib/x86_64-linux-gnu/perl/5.40.0",
+        "system_usr/local/lib/x86_64-linux-gnu/perl/5.40.0/x86_64-linux-gnu-thread-multi",
+        "system_usr/local/lib/x86_64-linux-gnu/perl/5.40.1",
+        "system_usr/local/share/perl/5.40.0",
+        "system_usr/local/share/perl/5.40.0/x86_64-linux-gnu-thread-multi",
+        "system_usr/local/share/perl/5.40.1",
+        "system_usr/share/perl/5.40.0",
+        "system_usr/share/perl5/5.40.0",
+        "system_usr/share/perl5/5.40.0/x86_64-linux-gnu-thread-multi",
+        "retained_SV_run/rtl/circt.anno.json"
+      ],
+      "aliases": [
+        {
+          "role": "system_alias/bin",
+          "resolved_role": "system_usr/bin",
+          "literal_relative_target": "usr/bin"
+        },
+        {
+          "role": "system_bin/sh",
+          "resolved_role": "system_usr/bin/dash",
+          "literal_relative_target": "dash"
+        },
+        {
+          "role": "system_alias/lib",
+          "resolved_role": "system_usr/lib",
+          "literal_relative_target": "usr/lib"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libbz2.so.1.0",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+          "literal_relative_target": "libbz2.so.1.0.4"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libcrypt.so.1",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libcrypt.so.1.1.0",
+          "literal_relative_target": "libcrypt.so.1.1.0"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libgdbm.so.6",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libgdbm.so.6.0.0",
+          "literal_relative_target": "libgdbm.so.6.0.0"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libgdbm_compat.so.4",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libgdbm_compat.so.4.0.0",
+          "literal_relative_target": "libgdbm_compat.so.4.0.0"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libz.so.1",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libz.so.1.3.1",
+          "literal_relative_target": "libz.so.1.3.1"
+        },
+        {
+          "role": "system_alias/lib64",
+          "resolved_role": "system_usr/lib64",
+          "literal_relative_target": "usr/lib64"
+        },
+        {
+          "role": "system_lib64/ld-linux-x86-64.so.2",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "literal_relative_target": "../lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+        },
+        {
+          "role": "system_usr/bin/sh",
+          "resolved_role": "system_usr/bin/dash",
+          "literal_relative_target": "dash"
+        },
+        {
+          "role": "system_usr/lib/x86_64-linux-gnu/perl/5.40",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/perl/5.40.1",
+          "literal_relative_target": "5.40.1"
+        },
+        {
+          "role": "system_usr/share/perl/5.40",
+          "resolved_role": "system_usr/share/perl/5.40.1",
+          "literal_relative_target": "5.40.1"
+        }
+      ],
+      "fresh_cwd_absent": [
+        "5.40.0",
+        "5.40.0/x86_64-linux-gnu-thread-multi",
+        "sitecustomize.pl"
+      ]
+    },
+    {
+      "phase": "after",
+      "receipt": {
+        "bytes": 25265,
+        "sha256": "58572a19c8ac17b4b795eaffdd67be4687652a26fd2b43e0d4907535035d8ce9"
+      },
+      "counts": {
+        "pins": 56,
+        "absent": 31,
+        "passed": true,
+        "locale": {
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8"
+        }
+      },
+      "endpoint56_exact_role_hashes_reused_from": "candidates/qwen2_core_real_matrix_sv/pins/SV_EXECUTION_ROLES.json",
+      "required_absence_roles": [
+        "system_loader/ld.so.preload",
+        "system_lib/glibc-hwcaps",
+        "system_lib/x86_64-linux-gnu/glibc-hwcaps",
+        "system_lib64/glibc-hwcaps",
+        "parent_prefix/lib/glibc-hwcaps",
+        "parent_prefix/lib/ld-linux-x86-64.so.2",
+        "parent_prefix/lib/libc.so.6",
+        "parent_prefix/lib/libdl.so.2",
+        "parent_prefix/lib/libm.so.6",
+        "parent_prefix/lib/libpthread.so.0",
+        "parent_prefix/lib/librt.so.1",
+        "parent_prefix/lib/libutil.so.1",
+        "parent_prefix/lib/tls",
+        "parent_prefix/lib/x86_64",
+        "system_usr/lib/glibc-hwcaps",
+        "system_usr/lib/x86_64-linux-gnu/glibc-hwcaps",
+        "system_usr/lib/x86_64-linux-gnu/perl/5.40.0",
+        "system_usr/lib/x86_64-linux-gnu/perl5/5.40.0",
+        "system_usr/local/lib/perl",
+        "system_usr/local/lib/perl5",
+        "system_usr/local/lib/site_perl",
+        "system_usr/local/lib/x86_64-linux-gnu/perl/5.40.0",
+        "system_usr/local/lib/x86_64-linux-gnu/perl/5.40.0/x86_64-linux-gnu-thread-multi",
+        "system_usr/local/lib/x86_64-linux-gnu/perl/5.40.1",
+        "system_usr/local/share/perl/5.40.0",
+        "system_usr/local/share/perl/5.40.0/x86_64-linux-gnu-thread-multi",
+        "system_usr/local/share/perl/5.40.1",
+        "system_usr/share/perl/5.40.0",
+        "system_usr/share/perl5/5.40.0",
+        "system_usr/share/perl5/5.40.0/x86_64-linux-gnu-thread-multi",
+        "retained_SV_run/rtl/circt.anno.json"
+      ],
+      "aliases": [
+        {
+          "role": "system_alias/bin",
+          "resolved_role": "system_usr/bin",
+          "literal_relative_target": "usr/bin"
+        },
+        {
+          "role": "system_bin/sh",
+          "resolved_role": "system_usr/bin/dash",
+          "literal_relative_target": "dash"
+        },
+        {
+          "role": "system_alias/lib",
+          "resolved_role": "system_usr/lib",
+          "literal_relative_target": "usr/lib"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libbz2.so.1.0",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+          "literal_relative_target": "libbz2.so.1.0.4"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libcrypt.so.1",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libcrypt.so.1.1.0",
+          "literal_relative_target": "libcrypt.so.1.1.0"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libgdbm.so.6",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libgdbm.so.6.0.0",
+          "literal_relative_target": "libgdbm.so.6.0.0"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libgdbm_compat.so.4",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libgdbm_compat.so.4.0.0",
+          "literal_relative_target": "libgdbm_compat.so.4.0.0"
+        },
+        {
+          "role": "system_lib/x86_64-linux-gnu/libz.so.1",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/libz.so.1.3.1",
+          "literal_relative_target": "libz.so.1.3.1"
+        },
+        {
+          "role": "system_alias/lib64",
+          "resolved_role": "system_usr/lib64",
+          "literal_relative_target": "usr/lib64"
+        },
+        {
+          "role": "system_lib64/ld-linux-x86-64.so.2",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "literal_relative_target": "../lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+        },
+        {
+          "role": "system_usr/bin/sh",
+          "resolved_role": "system_usr/bin/dash",
+          "literal_relative_target": "dash"
+        },
+        {
+          "role": "system_usr/lib/x86_64-linux-gnu/perl/5.40",
+          "resolved_role": "system_usr/lib/x86_64-linux-gnu/perl/5.40.1",
+          "literal_relative_target": "5.40.1"
+        },
+        {
+          "role": "system_usr/share/perl/5.40",
+          "resolved_role": "system_usr/share/perl/5.40.1",
+          "literal_relative_target": "5.40.1"
+        }
+      ],
+      "fresh_cwd_absent": [
+        "5.40.0",
+        "5.40.0/x86_64-linux-gnu-thread-multi",
+        "sitecustomize.pl"
+      ]
+    }
+  ],
+  "root_launcher": {
+    "bytes": 3238,
+    "sha256": "4999ca82f3e2ecf3039f85f16cda5a5703e95f1500dcfd414bf141ce2a211532"
+  },
+  "pre_Popen_launcher_hash": "4999ca82f3e2ecf3039f85f16cda5a5703e95f1500dcfd414bf141ce2a211532",
+  "root_approval": {
+    "bytes": 999,
+    "sha256": "d9836a8f697f97579670a44ee6bcab0d0e97fccb4dc5942c5dd7408efb8e8167"
+  },
+  "source_delta": {
+    "absent": 31,
+    "added": [
+      "render_contract",
+      "stage_inputs",
+      "walk_bounded"
+    ],
+    "changed": [
+      "exact_inventory",
+      "validate_manifest",
+      "tree_sample",
+      "structure_check",
+      "output_scope",
+      "save_receipt",
+      "_execute",
+      "main"
+    ],
+    "declared_pins": 3865,
+    "inventories": 12,
+    "native_executed": false,
+    "original": {
+      "bytes": 27288,
+      "sha256": "97fcd0472a169dc53511cab042dd75f5e5d10b8057894e49ec1d4e5bad547df0"
+    },
+    "parent_endpoints": 56,
+    "retained_sv_not_reread_by_assembly": true,
+    "staged_inputs": 17,
+    "unchanged": [
+      "need",
+      "digest",
+      "pin",
+      "verify_pin",
+      "verify_inputs",
+      "verify_runtime_boundaries",
+      "load_cleanup",
+      "sample_gap",
+      "group_sample",
+      "_child_limits",
+      "render_worker_argv"
+    ],
+    "candidate_identity": {
+      "bytes": 33243,
+      "sha256": "9da2f5c8f7c42c1b62e7f2366bbb6c08266eae1a4c0b66ca11d17c608f279b23"
+    },
+    "origin": {
+      "bytes": 1431,
+      "sha256": "13353bbd5ede7e41c4022dd65b93920b1b069d7a21862b551d7bf02b72b1d9a5"
+    }
+  },
+  "scope": "Explicit source-bound expected+passed root records, not independent observed-hash/syscall/dynamic loader trace. Exact role-bound argv+pins, not complete private executable runtime. Old coverage gaps retained. No next-stage authorization."
+}

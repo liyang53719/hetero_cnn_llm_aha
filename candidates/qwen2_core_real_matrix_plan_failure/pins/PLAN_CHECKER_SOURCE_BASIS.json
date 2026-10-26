@@ -1,0 +1,182 @@
+{
+  "schema": "fixed-verilator-5032-cmake-plan-checker-source-basis-v1",
+  "status": "SOURCE_AND_SYNTHETIC_ONLY_NO_NATIVE_OR_ACTUAL_PLAN",
+  "source_pins": [
+    {
+      "role": "V3Options.cpp",
+      "bytes": 87368,
+      "sha256": "cbabd2b609b4cf41d2da3be87910fd94e8fc0e0d2803db76502f4a6b2ad67a30",
+      "git_blob": "7a7714b1e8f16da22c2f2c15b26333063d786195",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Options.cpp?ref=v5.032",
+      "official_tag": "v5.032"
+    },
+    {
+      "role": "V3HierBlock.cpp",
+      "bytes": 21011,
+      "sha256": "1463ff316c8efcc3e6b29e3b20807c4beb26bcee4fdc5c833929bc30a13cffe2",
+      "git_blob": "bc6c0f6fc925ea5778adad10b9754f526faa14c1",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3HierBlock.cpp?ref=v5.032",
+      "official_tag": "v5.032"
+    },
+    {
+      "role": "V3EmitCMake.cpp",
+      "bytes": 12124,
+      "sha256": "876e43459b95cf8581a02279118578b987fcab062db8699f9239096fedb58041",
+      "git_blob": "6744098e834cff9891c1a37d8e24eaaa1316c110",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3EmitCMake.cpp?ref=v5.032",
+      "official_tag": "v5.032"
+    },
+    {
+      "role": "V3Options.h",
+      "bytes": 40035,
+      "sha256": "308a452b8ed5a208b7ba901b29cc47b6c08453ae82f6c6cde075807eda613b8e",
+      "git_blob": "eb3d14194e642c9d01cac72cb7ef90610f14bf85",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Options.h?ref=v5.032",
+      "official_tag": "v5.032"
+    },
+    {
+      "role": "V3Param.cpp",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Param.cpp?ref=v5.032",
+      "git_blob": "17ecb785b14af5f9f7f8d8634db63d7091549c2a",
+      "bytes": 76090,
+      "sha256": "ee7fb4a5b902df67d791d022bfbf0b37cef483f66402e25104c29be03bfb893f"
+    },
+    {
+      "role": "V3Number.cpp",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Number.cpp?ref=v5.032",
+      "git_blob": "cb5fc9bd426b9fad322ee4695c90ff47c269b45b",
+      "bytes": 92821,
+      "sha256": "7edf3aceafd1382ff2cb1af058d509972c3ba63b0b61e3c862338f7b4195d2dc"
+    },
+    {
+      "role": "V3File.cpp",
+      "bytes": 39260,
+      "sha256": "95f9d5164af84a72632fc6a3c2d0125822824ca49dbf8038b0cc3bd42c3ce771",
+      "git_blob": "49a4e032bc6149400174218d183323408440db86",
+      "url": "https://github.com/verilator/verilator/blob/v5.032/src/V3File.cpp"
+    }
+  ],
+  "seed_adapter_pins": [
+    {
+      "role": "ADAPTER_PLAN.json",
+      "bytes": 11118,
+      "sha256": "540f19174ce345e2082b847c968c7893df89f22e5b86ed601bfef90551b0a3f9"
+    },
+    {
+      "role": "FREEZE.json",
+      "bytes": 2011,
+      "sha256": "fc29a3a61a3304dec3d5b2b27464a189ff2d9db3f818c1e20cdabf7c90240966"
+    },
+    {
+      "role": "qwen2_matrix_command_endpoint.sv",
+      "bytes": 2342,
+      "sha256": "94aab9408b70d0f7ed00c1acccba44724eaac54f31c08679d580fa76db7938ef"
+    },
+    {
+      "role": "qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+      "bytes": 4203,
+      "sha256": "a9a2d79fc5497b431dab56478ac0a98b7ee846212380db75d8e70b8112c05e96"
+    }
+  ],
+  "source_checks": 14,
+  "routes": [
+    {
+      "file": "V3Param.cpp",
+      "lines": [
+        501,
+        584
+      ],
+      "meaning": "All declared GParam defaults (one bit seed parameter here) enter hierarchical hashed longname; empty map only would return original. Name is original + underscore + 1..63 hex digest-prefix characters, shortest collision-free prefix; no guessed actual suffix."
+    },
+    {
+      "file": "V3Param.cpp",
+      "lines": [
+        674,
+        683
+      ],
+      "meaning": "Explicit same-default 1bit zero yields overriddenParam=false after cloning; no -G or parameter pair should be serialized."
+    },
+    {
+      "file": "V3Param.cpp",
+      "lines": [
+        881,
+        916
+      ],
+      "meaning": "Hierarchical-specific branch calculates parameterized name even for same-default; ordinary no-override expansion rule does not short-circuit this path."
+    },
+    {
+      "file": "V3HierBlock.cpp",
+      "lines": [
+        121,
+        143,
+        169,
+        206,
+        235,
+        255,
+        351,
+        449,
+        486
+      ],
+      "meaning": "Only overridden GParams collected; hierarchy args bind original,mangled and zero pairs; child CMake args still call commandArgs(false), hence include prefix/mod-prefix/top; top file repeats cc and filtered original flags."
+    },
+    {
+      "file": "V3EmitCMake.cpp",
+      "lines": [
+        66,
+        242
+      ],
+      "meaning": "Exact constants/variables/ordered add_library,target_link_libraries,verilate text checked; all source files on SOURCES lines; no evaluation."
+    },
+    {
+      "file": "V3Options.cpp",
+      "lines": [
+        415,
+        456,
+        550,
+        565,
+        1832,
+        1835
+      ],
+      "meaning": "Passthrough strips original SV file arguments and selected parent flags, retains config .vlt paths, make cmake, assertion/timing flags."
+    },
+    {
+      "file": "V3File.cpp",
+      "lines": [
+        69,
+        136,
+        147,
+        215
+      ],
+      "meaning": "Sorted filename dependency set; .d one rule (no --MP); .dat adds itself as T, uses six integer stat columns and opaque command-string framing. Self size may0; this is not file-identity proof."
+    }
+  ],
+  "seed_zero_evidence": "Pinned wrapper explicit 1'b0 and original implementation default 1'b0, plus static same-default route. Plan itself expected empty override vector, not an explicit -G0 record.",
+  "hierarchy_cardinality": "One module-level plan is not eight runtime-state proof. Existing source graph has eight wrappers/implementations; later child/top model generation must independently check eight state instances.",
+  "unknowns": [
+    "Actual generated mangled suffix not known or hard-coded",
+    "No generated plan yet; exact format is fixed-source prediction, actual mismatch must retain FAIL, not be ignored",
+    "Opaque bounded solver default is metadata only; future CMake/solver execution requires separate review",
+    "Timestamp C string/stat values not treated as syscall or executed-argv proof",
+    "No semantic CMake evaluation, full SV lint, numerical proof, provider arithmetic verification, or actual 8-state demonstration"
+  ],
+  "bounds": {
+    "file_bytes": 2097152,
+    "aggregate_bytes": 8388608,
+    "file_count": 8,
+    "exact_success_file_count": 5,
+    "total_lines": 10000,
+    "line_bytes": 65536
+  },
+  "imports": [
+    "hashlib",
+    "os",
+    "re",
+    "stat"
+  ],
+  "checker_api": "check_tree(plan_root, manifest_or_plan_contract)",
+  "origin": {
+    "bytes": 7750,
+    "sha256": "e44daec485d9a1dc9f845897415465130d699cd80898080d4f73f34326ef5866"
+  },
+  "historical_source_only_record": true
+}

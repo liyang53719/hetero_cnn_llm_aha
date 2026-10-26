@@ -1,0 +1,59 @@
+{
+  "origin_freeze": {
+    "bytes": 1568,
+    "sha256": "2d2da8b2228afc3f7be00f4a5be02918c57e0fa44a5a065285c701beb24a1955"
+  },
+  "records": [
+    {
+      "role": "ACTUAL_REVIEW.json",
+      "bytes": 1768,
+      "sha256": "05085f645cf7868960af97179e7f5f7c1df149c697a69d7a303f2cd26f580745"
+    },
+    {
+      "role": "ARTIFACT_MANIFEST.json",
+      "bytes": 53687,
+      "sha256": "822d027446a46c1f22f8898d8411a8ae60f8fe556a8b768cc3928733ebee4de8"
+    },
+    {
+      "role": "CLEANUP_EVIDENCE.json",
+      "bytes": 15970,
+      "sha256": "388578a0d3295c75c3e7a561051eea7cd28b3f090eea6d1e7acf311175a7d310"
+    },
+    {
+      "role": "RECEIPT.snapshot.json",
+      "bytes": 38758,
+      "sha256": "14559ec6f8922dcc14180c77cfcfdb6fc34662dfb1e4e40d24e5da04a21dca3a"
+    },
+    {
+      "role": "REPORT_ZH.md",
+      "bytes": 7350,
+      "sha256": "a314a8aae1e57b95bf35ee2a7884af7f351d8400d9d3dedefbc8c68f3007278f"
+    },
+    {
+      "role": "ROOT_APPROVAL.snapshot.json",
+      "bytes": 999,
+      "sha256": "d9836a8f697f97579670a44ee6bcab0d0e97fccb4dc5942c5dd7408efb8e8167"
+    },
+    {
+      "role": "ROOT_RECEIPT.snapshot.json",
+      "bytes": 128,
+      "sha256": "5045d2f47440cbac6587b0d8c229bb7ab2f6247219d075fd3a9787eeaa8f303b"
+    },
+    {
+      "role": "WARNING_HEADERS.json",
+      "bytes": 16570,
+      "sha256": "1328006b0d694ede28bfbc51f822b4320086b96d05a364bc04283b87ab54da9c"
+    },
+    {
+      "role": "audit.log",
+      "bytes": 1660,
+      "sha256": "d470dda093e987ae9bf992d053032f7fc51439a27da12bd090842b8a0a7dc04e"
+    },
+    {
+      "role": "audit_actual.py",
+      "bytes": 14910,
+      "sha256": "a1a3e7c9f59bf806af1c60d1eb0723acfe788d8613d4ccd65ff2182c29fa11e7"
+    }
+  ],
+  "scope": "10 audit member hashes only, no original log/cleanup process identities/raw runtime snapshots published. Actual audit642 checks+5 small proof negatives in normal mode only; no invented -O actual rehash."
+}

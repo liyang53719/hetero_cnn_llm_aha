@@ -1,0 +1,21 @@
+{
+  "status": "PASS_EXACT_MINIMAL_RSS_FAILURE_PACKAGE_SOURCE_AND_PROJECTION_ONLY",
+  "checks": 4067,
+  "errors": 0,
+  "original_small_source_config_files": 6,
+  "existing_public_references": 6,
+  "actual_terminal_status": "CONFIRMED_ACTUAL_SAMPLED_RSS_RESOURCE_FAIL_NO_PLAN",
+  "synthetic_plan_checks_normal_optimized_each": 54,
+  "synthetic_negatives_each": 51,
+  "actual_review_checks": 642,
+  "actual_review_small_negatives": 5,
+  "actual_review_mode": "normal only, no invented -O bulk reread",
+  "small_audit_members_hashed": 10,
+  "official_small_format_sources_hashed": 7,
+  "actual_retained_stat_identities_checked": 73,
+  "stage_metadata_rows": 17,
+  "target_executions_or_signals": 0,
+  "no_explicit_actual_SV_ELF_log_input_bulk_or_system_pyc_content_reads": true,
+  "ordinary_packaging_stdlib_IO_not_globally_audited": true,
+  "scope": "Package/static/synthetic qualification PASS only; actual RSS FAIL/no plan unchanged. Sampled20.501 CPU vs waited-child2.045 retained, full final CPU unknown;48warnings/unknown phase/root gate limitations preserved."
+}

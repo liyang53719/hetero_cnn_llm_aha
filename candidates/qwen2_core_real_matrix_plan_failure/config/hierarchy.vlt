@@ -1,0 +1,4 @@
+`verilator_config
+// Plan-only candidate. Entire original 512-lane endpoint remains one hierarchical block type.
+// Eight actual instances retain separate state; this is not physical pruning.
+hier_block -module "qwen2_matrix_command_endpoint_seed_disabled_impl"

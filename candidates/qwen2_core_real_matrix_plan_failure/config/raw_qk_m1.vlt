@@ -1,0 +1,8 @@
+`verilator_config
+// Candidate only: exact five readonly wires/registers in one selected Core instance.
+// No wildcard, no public_flat_rw, no simulation execution.
+public_flat_rd -module "OrderedQkBehaviorCore" -var "acc_0"
+public_flat_rd -module "OrderedQkBehaviorCore" -var "vectorA_0"
+public_flat_rd -module "OrderedQkBehaviorCore" -var "vectorB_0"
+public_flat_rd -module "OrderedQkBehaviorCore" -var "vout_0"
+public_flat_rd -module "OrderedQkBehaviorCore" -var "_T_2079"

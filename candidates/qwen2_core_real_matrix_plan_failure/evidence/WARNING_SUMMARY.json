@@ -1,0 +1,19 @@
+{
+  "origin": {
+    "bytes": 16570,
+    "sha256": "1328006b0d694ede28bfbc51f822b4320086b96d05a364bc04283b87ab54da9c"
+  },
+  "warning_headers": 48,
+  "classes": [
+    "TIMESCALEMOD"
+  ],
+  "by_source_basename": {
+    "common.sv": 38,
+    "qwen2_matrix_command_endpoint.sv": 1,
+    "qwen2_matrix_command_endpoint_seed_disabled_impl.sv": 1,
+    "tc_clk.sv": 8
+  },
+  "message": "Timescale missing on this module as other modules have it (IEEE 1800-2023 3.14.2.3)",
+  "native_error_headers": 0,
+  "scope": "Observed interrupted log headers only, not completed lint/no-error proof.48TIMESCALEMOD not the observed abort cause; RSS supervision was first. No suppression/no harmlessness conclusion merely because no-timing. OldDedupGroup/W005 not fixed."
+}

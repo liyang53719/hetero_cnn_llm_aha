@@ -1,0 +1,42 @@
+{
+  "base_commit": "82489db9fa3f005137e73cf3b4d451244e666427",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_sv/evidence/ACTUAL_SV_REVIEW.json",
+      "bytes": 3295,
+      "sha256": "751ef669c11e3bd0a26bf4bcc0113eb2530838d8dbb8ad7cf3d52e1a2347e825",
+      "git_blob_sha": "1f7145b21e10453079ae0d63c85fdedc83ca334e"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_sv/evidence/ARTIFACT_SUMMARY.json",
+      "bytes": 1432,
+      "sha256": "8b229eaa2a4245285fd3019958cbf8d417bc4938a3a943825b9cd8f10fe0698c",
+      "git_blob_sha": "1cf6b862c94864120a2cfa6797e6043b5de979bf"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_sv/pins/SV_EXECUTION_ROLES.json",
+      "bytes": 28526,
+      "sha256": "b1b0d3b8381a448835e48c84a0ac0dadccd56fe4cb3355eca27088116125d52b",
+      "git_blob_sha": "ec0c4e9f8e41cfe3c7da0726cfd389551f23ecb1"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/pins/PROVIDER_SOURCE_ABI.json",
+      "bytes": 10182,
+      "sha256": "3d0a8032c37d84c246f36475f8dbf7366eb0876396317b6c721ce3b7cf4fb4af",
+      "git_blob_sha": "b3e01423e19f1b7f4e33c53fd375bb8d1eb65bbe"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_verilator_lint/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 4416,
+      "sha256": "4b7fffebe07effc89052765132531ca206c4b5d695ad42a28b7b82b3d009c49e",
+      "git_blob_sha": "662ab3e625a29dfe435a5c5df2285d7aa7185bf9"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_verilator_lint/pins/LINT_EXECUTION_ROLES.json",
+      "bytes": 2039,
+      "sha256": "af8cf1a083a18a3144d37028748424845a7c164bcd9ff75cd41659be6d5c6f41",
+      "git_blob_sha": "8183e48ca0cd42350a922e34f0427e987ad88c8e"
+    }
+  ],
+  "scope": "Reuse actual common SV identity, prior root56 expected pin roles, original provider ABI/hash and official Verilator package/runtime pins. No prior bulk sources or generated target duplicated."
+}

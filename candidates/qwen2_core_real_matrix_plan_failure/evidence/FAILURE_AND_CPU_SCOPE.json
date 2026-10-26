@@ -1,0 +1,32 @@
+{
+  "receipt_snapshot": {
+    "bytes": 38758,
+    "sha256": "14559ec6f8922dcc14180c77cfcfdb6fc34662dfb1e4e40d24e5da04a21dca3a"
+  },
+  "actual_report": {
+    "bytes": 7350,
+    "sha256": "a314a8aae1e57b95bf35ee2a7884af7f351d8400d9d3dedefbc8c68f3007278f"
+  },
+  "original_errors": [
+    "ValueError: sampled RSS cap exceeded",
+    "RuntimeError: Verilator hierarchy plan frontend did not exit zero"
+  ],
+  "receipt_fields": {
+    "exit_code": null,
+    "final_aggregate_cpu_seconds": 2.0453717319999996,
+    "sampled_peak_cpu_seconds": 20.50099467,
+    "sampled_peak_rss_bytes": 2148995072,
+    "model_cpp_generated": null,
+    "hierarchy_plan_pass": false,
+    "model_built": false,
+    "model_simulated": false,
+    "numerical_pass": false,
+    "hardware_behavior_pass": false,
+    "cleanup_complete": true
+  },
+  "actual_abort": "First error sampled RSS cap exceeded. Follow-on frontend did not exit zero is supervisor-added while exit_code=null, NOT native normal exit1 or a tool error header.",
+  "cpu_scope": "Final2.045371732 is parent plus waited-child rusage coverage, not full-tree cost. Backend reparenting and direct-child-only reap may omit backend cost. Observed sampled group+parent peak20.50099467 is larger. Complete final CPU unknown; even max is only observed bound, not complete integration. Original receipt unchanged.",
+  "phase_scope": "Plan directory empty and checker not called. Current no retained C++/headers/ELF does not prove historical phase/fallback/transient output absence. Actual compiler phase unknown.",
+  "cleanup_scope": "Persisted anchored original group/observed identities only; cleanup leader -9, normal exit null. No new wait/kill/live handle reconstruction, no whole-host claim.",
+  "future_CPU_meter_correction": "Only a prospective separately reviewed naming/coverage correction; not implemented or executed by this package. Do not rerun to fill historical gaps."
+}

@@ -1,0 +1,227 @@
+{
+  "alias_boundary": "Actual chunk16/local0/global16/control ordering does not distinguish aliases among equalactive+0 values. GeneralW005/lanealias risk not eliminated; NaNtail only supplies narrower constraints.",
+  "direct_external_log_observations": {
+    "actual_printed_prefix": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "gap_interpretation": "All12 token16 base0-last tobase16-first observed vector-event gaps are80 rising-edge differences; intervening work not independently decomposed into memory/MAC/idle cycles.",
+    "hold_counts": {
+      "group": 114,
+      "memory": 7074,
+      "pv": 2740,
+      "step": 359
+    },
+    "max_bits": {
+      "0x00000000": 2028,
+      "0xff800000": 6936
+    },
+    "max_interpretation": "Eachhead firstglobalkey preedge probe is -Inf; original retirement edge updates max. Later causal retirements see+0. All33pre-retire phases and thetailretire in secondchunk inherit+0. Not a missing update or postedge fulltensor observation.",
+    "observations": 8964,
+    "per_chunk_pipeline": "All216groups have consecutive scan16/fold16/scale1/retire count1..16. There are12 extra tailchunks of34events for token16.",
+    "phase_counts": {
+      "1": 3456,
+      "2": 3456,
+      "3": 216,
+      "4": 1836
+    },
+    "score_write_count": 1836,
+    "terminal_counts": {
+      "accounting512Steps": 28512,
+      "checkedGroups": 216,
+      "checkedMemory": 32640,
+      "checkedPv": 14688,
+      "checkedVector": 8964,
+      "cycles": 404951,
+      "dones": 216,
+      "groups": 216,
+      "memoryAccepted": 32640,
+      "memoryReturned": 32640,
+      "outputBytes": 104448,
+      "ownerAccepts": 1,
+      "pvRequests": 14688,
+      "pvReturns": 14688,
+      "qkAcceptedSteps": 1728,
+      "requestHoldChecks": 10287,
+      "results": 216,
+      "scoreWrites": 1836
+    },
+    "valid_score_data_bits": "All valid writes0x00000000 (+0)."
+  },
+  "excluded": [
+    "Not realMatrixservice/FMA numerical acceptance.",
+    "Only attentionownerjobkind4,not wholeblock21computations/17jobs orfullprefill.",
+    "No full128/full29RTL tensor verification.",
+    "No physicalDDR/frequency/STA/resource/90%MAC acceptance.",
+    "No automatic M18/realMatrix execution or capextension."
+  ],
+  "old_evidence": "M1/M2/M3 actualPASS, full128observed-domain softwarePASS and all retainedFAIL remain separate, unchanged.",
+  "schema": "actual-fixed-M17-evidence-layer-boundary-v1",
+  "scripted_endpoints": {
+    "PV": "Zero scripted replies, not verified Matrix multiplication.",
+    "QK": "Active diagonal key values+0, inactive/offdiagonal qNaN; resulttiles are scripted, not actualMatrixFMA.",
+    "memory": "Zero responses and bounded softwarehandshake queues, not physicalDDR timing/initialization."
+  },
+  "source_bound_executed_harness_assertions": {
+    "HDL_assertions": "Preserved --assert-generated model and no disablingplusargs. No exhaustivebranch/assertioncoverage claim.",
+    "PV": {
+      "accepted": 14688,
+      "clear": "globalkey==0",
+      "last": "globalkey==token",
+      "opcode": "0x24",
+      "other_operands": "A1..15 andB0..255 zero.",
+      "per_token_probability": [
+        {
+          "expected_A0_BF16": "0x3f80",
+          "expected_FP32": "0x3f800000",
+          "requests": 96,
+          "token": 0
+        },
+        {
+          "expected_A0_BF16": "0x3f00",
+          "expected_FP32": "0x3f000000",
+          "requests": 192,
+          "token": 1
+        },
+        {
+          "expected_A0_BF16": "0x3eab",
+          "expected_FP32": "0x3eaaaaab",
+          "requests": 288,
+          "token": 2
+        },
+        {
+          "expected_A0_BF16": "0x3e80",
+          "expected_FP32": "0x3e800000",
+          "requests": 384,
+          "token": 3
+        },
+        {
+          "expected_A0_BF16": "0x3e4d",
+          "expected_FP32": "0x3e4ccccd",
+          "requests": 480,
+          "token": 4
+        },
+        {
+          "expected_A0_BF16": "0x3e2b",
+          "expected_FP32": "0x3e2aaaab",
+          "requests": 576,
+          "token": 5
+        },
+        {
+          "expected_A0_BF16": "0x3e12",
+          "expected_FP32": "0x3e124925",
+          "requests": 672,
+          "token": 6
+        },
+        {
+          "expected_A0_BF16": "0x3e00",
+          "expected_FP32": "0x3e000000",
+          "requests": 768,
+          "token": 7
+        },
+        {
+          "expected_A0_BF16": "0x3de4",
+          "expected_FP32": "0x3de38e39",
+          "requests": 864,
+          "token": 8
+        },
+        {
+          "expected_A0_BF16": "0x3dcd",
+          "expected_FP32": "0x3dcccccd",
+          "requests": 960,
+          "token": 9
+        },
+        {
+          "expected_A0_BF16": "0x3dba",
+          "expected_FP32": "0x3dba2e8c",
+          "requests": 1056,
+          "token": 10
+        },
+        {
+          "expected_A0_BF16": "0x3dab",
+          "expected_FP32": "0x3daaaaab",
+          "requests": 1152,
+          "token": 11
+        },
+        {
+          "expected_A0_BF16": "0x3d9e",
+          "expected_FP32": "0x3d9d89d9",
+          "requests": 1248,
+          "token": 12
+        },
+        {
+          "expected_A0_BF16": "0x3d92",
+          "expected_FP32": "0x3d924925",
+          "requests": 1344,
+          "token": 13
+        },
+        {
+          "expected_A0_BF16": "0x3d89",
+          "expected_FP32": "0x3d888889",
+          "requests": 1440,
+          "token": 14
+        },
+        {
+          "expected_A0_BF16": "0x3d80",
+          "expected_FP32": "0x3d800000",
+          "requests": 1536,
+          "token": 15
+        },
+        {
+          "expected_A0_BF16": "0x3d71",
+          "expected_FP32": "0x3d70f0f1",
+          "requests": 1632,
+          "token": 16
+        }
+      ],
+      "probability_scope": "Eachcausalprefix1/n for n1..17 rational->FP32RNE->BF16RNE;1/17 is3d70f0f1->3d71. Finite fixedcase, notgeneralsoftmax/double-roundingproof.",
+      "probability_source": {
+        "bytes": 733,
+        "sha256": "72b3c4725f26dbbb908a27d2040355df173d37318417f82cc82a9fc50bb8bd02"
+      },
+      "returned": 14688,
+      "sliceMask": 1
+    },
+    "groups": {
+      "checked": 216,
+      "ordinal_stimulus": "Driver closedacceptedordinal mapping first192groups token0..15/head,then24groups token16/head pairs. Reference group table independenthierarchical expectations; actualcompiled216rows verified."
+    },
+    "memory": {
+      "K_reads": 14688,
+      "Q_reads": 1632,
+      "V_reads": 14688,
+      "accepted": 32640,
+      "cross_boundary": "Token16 Ktail key16 fetched after base0chunk, not depth-major interleaving ofkey16 into firstchunk.",
+      "fields": "Every accepted request exact address/direction/tag=(7<<32)+ordinal/readmask0/writemaskallones/all512databitszero.",
+      "kv_head": "head//6",
+      "output_bytes": 104448,
+      "output_writes": 1632,
+      "returned": 32640,
+      "schedule": "Q depth once/token-head; K chunk then depth then causalkey; V all causalkeys for each outputcolumn thenwrite."
+    },
+    "proof_chain": "Frozen reviewed C++ passive need() checks, independently parsed actual object/ELF four tables, exact executed ELF identity, checkedGroups216/Memory32640/Pv14688/Vector8964 and exit0. These are throwing checks, not NDEBUG-elided C assertions.",
+    "raw_trace_limit": "No external rawper-memory/PV transaction trace. Outer audit cannot replayspecific actual addresses/BF16operands/handshakes independently from rawlog; classifies these as source-bound executed assertions.",
+    "terminal": "Owner1,status0,resetRequired=false,endpoints/core debts drained;8-edge stable ownerpayload hold,release handshake,3quiet. Not expectedvalue proof ofeverypayloadfield."
+  },
+  "status": "NARROW_ACTUAL_GENERATED_SV_CROSS_CHUNK_CORE_CLIENT_CASE_NOT_FULL_BLOCK",
+  "origin_record": {
+    "bytes": 15627,
+    "sha256": "a9c43deafeef933836723fc0887bdff9c17916336a3959416ec6dcdb402d6725"
+  },
+  "projection_note": "Per-event/head cycle/line rows omitted: actual_token16_head0_retire, chunk_transitions, last_group. Aggregate prefix/gap interpretation and histogram retained. Full original record hash binds omissions."
+}

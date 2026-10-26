@@ -1,0 +1,66 @@
+{
+  "base_commit": "ccebf248c9597a489ff36f38d45c379b20aab00a",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/source/check_m17_log.py",
+      "bytes": 5709,
+      "sha256": "e379a79163c3cf6807861cb46f445b2261ec455d34208f49299ddfc58a810d58",
+      "git_blob_sha": "09b36fdce3d38ccdc30cd4d0355d28f61331143d"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/source/reference_events.py",
+      "bytes": 3229,
+      "sha256": "d3a8c8ffe1b8e6f81955a19f5945cb1c65f6c831630fa7dc23ff724b2182a0af",
+      "git_blob_sha": "41b7cfbd317f35396400a87984743619b8333871"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/source/generate_reference.py",
+      "bytes": 2111,
+      "sha256": "595fa8fc9a5ae11e87a86253ca2a765b1e73821148233239de4805a17231f677",
+      "git_blob_sha": "0386c4f6ea0c65713c2179e2f182ad8d14c1f4b3"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/source/test_m17_contract.py",
+      "bytes": 8845,
+      "sha256": "0b28af87de22ee08016524ce63574be5853e535464088da039d57420a94307c2",
+      "git_blob_sha": "646814c45df8262f52890c80ac322cd6a4ffd149"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/pins/SOURCE_PINS.json",
+      "bytes": 4326,
+      "sha256": "b67a8edd27f385162bbea045093c031e27cb8cd74c87e60cfe29e3ff0a1559fa",
+      "git_blob_sha": "e3feac44ab75cdfc91c5ac0f22aac5b0ce9b23c9"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/M3_TO_M17_SOURCE.patch",
+      "bytes": 13814,
+      "sha256": "2494f04a83c09dd7112377a8c84593bace2e146abdc83817ec21ad1830432cc2",
+      "git_blob_sha": "c72705f2694ee588ded4e1e923e2158320c3fe53"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/evidence/ACTUAL_BUILD_REVIEW.json",
+      "bytes": 18229,
+      "sha256": "db8b45104eb1a604746b84e22fa746efb7157acfd9192b3244a326e2984bd434",
+      "git_blob_sha": "06cef3f478808d9da333179e5311661ede52c209"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/evidence/PYTHON_COVERAGE_QUALIFICATION.json",
+      "bytes": 2008,
+      "sha256": "57d746632c882b10939dfa417ca2f4c62c423435c8328a34f1c6a59c419d201f",
+      "git_blob_sha": "15d876a3f34658d3c75daf3c0a8a17c16dc13b06"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m17_build/evidence/CONDITIONAL_BODY_LOWER_BOUND.json",
+      "bytes": 7672,
+      "sha256": "17fd949610ad33d4ca2d40d40be612fdc50a56ae712573775000e6ea0f854676",
+      "git_blob_sha": "e88172ab109d7147f62bf0c1cb330b1f9135d541"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_actual/evidence/ACTUAL_M3_REVIEW.json",
+      "bytes": 9782,
+      "sha256": "5355fd88df97ad97065e330067b094ac1219d121f15551a21928b3b8b2eac058",
+      "git_blob_sha": "f33a16c6ccda14b3c71aeeba4723516ccb1db737"
+    }
+  ],
+  "scope": "Reuse exact published M17 source/build/conditional bound and M3 prior actual; no duplication or realMatrix candidate."
+}

@@ -1,0 +1,251 @@
+{
+  "schema": "qwen2-fixed-m17-run-independent-source-review-v1",
+  "status": "PASS_SOURCE_MOCK_ADMISSION_SINGLE_NORMAL_M17_REQUIRES_NEW_ROOT_GO",
+  "acceptance": {
+    "MAC_duty": null,
+    "MAC_utilization": null,
+    "actual_M17_pass": false,
+    "actual_cross16_pass": false,
+    "execution_authorized_by_this_report": false,
+    "full128_RTL": false,
+    "full29": false,
+    "full_matrix_FMA": false,
+    "full_prefill": false,
+    "model_executed": false,
+    "ninety_percent_target": false,
+    "real_Matrix_service_connected": false,
+    "source_admissible": true
+  },
+  "execution_contract": {
+    "argc": 1,
+    "case": "normal_m17",
+    "child_argv": [
+      "${NEW_RUN_ROOT}/bin/VOrderedQkBehaviorCore_m17"
+    ],
+    "empty_directories": [
+      "tmp",
+      "home",
+      "empty-path"
+    ],
+    "engine": "Fresh atomic claim; one absolute deadline origin; immutable copy; pre/post identities; group monitor/finalCPU; retained leader identity cleanup/reap before success log gate. No retry or stage chain.",
+    "environment": {
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "${NEW_RUN_ROOT}/empty-path",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "failure": "Retain available claim/log/artifacts/receipt; no new budget,oldrun replacement,automaticM18/realMatrix/build.",
+    "fresh_root": "${NEW_RUN_ROOT}",
+    "input": "Only actual4514920B ELF1eefdc81df6505cbd6f42fd1eda643adaf2d07687c40a56733ec88ed2b1b5075; copy0500 in freshbin.",
+    "no_overrides": "No case arg,plusarg,noassert or loader/tool environment overrides. Fixed one-owner M17,contextthreads1/randReset0,3resetedges andtotal500000maximum.",
+    "output_set": [
+      "CLAIM.json",
+      "worker.log",
+      "RECEIPT.json",
+      "bin/VOrderedQkBehaviorCore_m17"
+    ],
+    "retained_build_root": "${RETAINED_M17_BUILD}",
+    "supervisor_argv": [
+      "${PARENT_PYTHON}",
+      "-I",
+      "-S",
+      "-B",
+      "${FROZEN_RUN_CONFIG}/supervisor.py",
+      "--manifest",
+      "${FROZEN_RUN_CONFIG}/manifest.json",
+      "--manifest-sha256",
+      "13834478d24d3e576dd5d05762084f46bce370a5cdacb6c66ae7e83423d2f172",
+      "--execute-approved-once"
+    ]
+  },
+  "log_acceptance": {
+    "OBS": "Ordered token/head/keyBase/phase/lane/local-selected/fault0/result-held and actual retire write-site. Monotonic globally; consecutive within a token/head/chunk, interchunk K-read gaps allowed.",
+    "clock_bound": "Leaf enforces12<=body<=499997 andtotal=body+3<=500000. It is not the independent106884 success-lower-bound proof; terminal independent audit separately checks that lower bound if success is claimed.",
+    "counts": {
+      "accounting512Steps": 28512,
+      "checkedGroups": 216,
+      "checkedMemory": 32640,
+      "checkedPv": 14688,
+      "checkedVector": 8964,
+      "dones": 216,
+      "groups": 216,
+      "memoryAccepted": 32640,
+      "memoryReturned": 32640,
+      "outputBytes": 104448,
+      "ownerAccepts": 1,
+      "pvRequests": 14688,
+      "pvReturns": 14688,
+      "qkAcceptedSteps": 1728,
+      "results": 216,
+      "scoreWrites": 1836,
+      "targetPrefix": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    "cross16": "Token16 eachhead base0/count16 ->base16/count1. Tail local-selected0 and global scoreIndex16. Actual targetPrefix0..16 recorded at token16/head0 from validscorewrites, not just printed constant.",
+    "execution_binding": "Leaf synthetic PASS only log contract. Actual parent requires originalprocess exit0,cleanupcomplete,resources,postflight,stagedELF unchanged,output scope and exact raw log SHA/bytes.",
+    "hold_metrics": "Eachport0..body,sumpositive<=4body; zeroportcoverage reported. Counts may overlap, not unique stallcycles.",
+    "max_observation_counts": {
+      "negative_infinity": 6936,
+      "positive_zero": 2028
+    },
+    "max_scope": "Pre-edge max-Infinity through first globalkey retire; then+0. Secondchunk max+0 throughout. Validretire scoreData+0; nonwrite score fields only diagnostic width checks. Not post-edge fulltensor numeric observation.",
+    "memory_PV_layer": "Fixed executed-harness passive assertions and actual compiled tables check every accepted address/tag/direction/mask/data/PVoperands/opcode/sliceMask/clear/last plus exhaustive counts. Outer log contains counts, not raw memory/PV transactions for independent payload replay.",
+    "order": "Exactly READY ->8964 OBS ->CASE_PASS ->DONE last; strict unknown/error/fatal rejection.",
+    "owner_terminal": "Original status/resetRequired,8-edge payload hold then handshake and3quiet; not independent expected value proof of every owner payload field.",
+    "phase_counts": {
+      "fold": 3456,
+      "retire": 1836,
+      "scale": 216,
+      "scan": 3456
+    },
+    "probability": "Causal prefix1/n BF16 via independently reviewed rational->FP32RNE->BF16RNE, n<=17 including1/17=0x3d71. Other A/B payload zeros in scripted test; not a general softmax/FMA benchmark.",
+    "success_status": "PASS_VERILATED_CORE_NORMAL_M17_SCRIPTED_ENDPOINTS"
+  },
+  "resources": {
+    "CORE0": "Only child RLIMIT_CORE. Piped systemcore handler may still execute; core_pattern unchanged.",
+    "absolute_deadlines_from_one_start": {
+      "cleanup": 1510,
+      "total": 1530,
+      "work": 1500
+    },
+    "basis": "Static lowerbound rejects old100000clocks; new500000doesnot guarantee completion. M3actual39.48s/M17compile25.6CPU are not linear runtime forecasts.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 1200,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 1530,
+      "work_wall_seconds": 1500
+    },
+    "cleanup": "Original PID/start/group anchored originalleader retained untilproof andwait; not allescaped-descendant/cgroup confinement.",
+    "fit_guaranteed": false,
+    "limits": "1CPU affinity; childCPU1200/AS4GiB/FSIZE8MiB/CORE0 hardlimits,aggregateCPU sampled/final,groupRSS2GiB/tree16MiB sampled,0.1s maxobservedgap rejection,log2MiB. ParentnotfullyhardAS/RSSisolated; nofullhostdisk/cgroup promise.",
+    "log_cap_bytes": 2097152,
+    "lower_bound_body": 106884,
+    "lower_bound_review": {
+      "bytes": 12593,
+      "sha256": "a18a2b1241c44e602992bf54ac929ca1b66421e91b7ca1a68efe21e6aa93e69b"
+    },
+    "lower_bound_total": 106887,
+    "new_independent_version": "This new fixed M17 run has explicit root-approved proposed1200CPU resources and500000totalclocks. No oldM3run or TreadleFAIL is extended or rerun. Compile240CPU is a different completedstage.",
+    "outer_seconds": 1560,
+    "source_bounds": {
+      "bytes": 3406,
+      "sha256": "ce0bf786fe3d9db3caf4bb0fdb22b8eca51bbb98231270cbc71c50dbf6d3042d"
+    },
+    "success_log_lines": 8967,
+    "success_log_upper_bytes": 1515614
+  },
+  "runtime": {
+    "absences": 63,
+    "aliases": 6,
+    "cache_scope": "Historical46 run candidates+1 conservative struct do not mean47 currentM17 observed cache imports. Prior code-source association inherited; not executing decodedbytecode as proof.",
+    "declared_total": 194,
+    "expected_actual_with_manifest_self": 196,
+    "external_root_gate": {
+      "bytes": 23954,
+      "sha256": "e624455fb2a1c71dfca063285e81e4a3b12e2315ced26f47d7b6e07205194eea"
+    },
+    "inventories": 0,
+    "limits": "Known endpoints/importreuse, not arbitrary conditional import/dlopen/NSS/host isolation or continuousTOCTOU protection. No retroactive historicalcache upgrade.",
+    "native": "Four exactNEEDED+loader five knownELF provider/version closure,original loadercache/aliases/52absence endpoints and actual newbinary. Static closure, not live loader/dlopen trace.",
+    "parent": "136 runtime pins;56 specifically external endpoints=47normalcache+7source+2locale. Build-stage202 pins not substituted for run-specific Fraction/reference imports.",
+    "parent_locale": "Only C.UTF-8 three-variable tuple; childC env does not constrain parent.",
+    "reuse_basis": "No new live import probe. Current supervisor/checker importAST matches qualifiedM3,referenceFraction importAST equal while source logic separately reviewed. Fresh endpoint identities under child identity audit.",
+    "role_pins": {
+      "input": 1,
+      "provenance": 53,
+      "runtime": 136,
+      "source": 4
+    },
+    "source_fallback": "Exact newM17 reference source pinned; newM17 siblingnormalcache must remain absent. OldM3 cache slot cannot replace this path."
+  },
+  "source_delta": {
+    "baseline": "qwen2_core_client_verilator_m3_run_prepare_20261026T0021/supervisor.py",
+    "case_only_count": 6,
+    "case_only_definitions": [
+      "_execute",
+      "main",
+      "output_scope",
+      "save_receipt",
+      "stage_inputs",
+      "verify_staging"
+    ],
+    "leaf": "Unmodified5709B source-frozen check_m17_log and3229B reference_events. M17 reference loop changed from M3 but independently source-reviewed; only its Fraction import AST reused for parent closure.",
+    "model_harness": "Original model SV/archive and actual linked M17 ELF source/driver/thresholds unchanged. RealMatrix draft is separate and absent from this argv/input.",
+    "remaining_definitions": "validate_manifest exact new artifact/evidence/source/runtime/case/clock identity; structure_check8964observations/500000clock and labels.",
+    "same_definitions": 15,
+    "whole_source_proof": "Whole source byte-equal after independently enumerated closed case/hash/ELFsize/count changes and cpu300->1200/work360->1500/total390->1530. No new imports/monitor/signal/cleanup algorithm."
+  },
+  "scope_limits": [
+    "Even actualM17PASS is one originalattentioncore/client case withscriptedMatrix/memory;not full21 calculations/17jobs Qwen block.",
+    "AllactiveQK+0 preservesactivekey/lanealias ambiguity andW005 generalrisk. Crosschunk control coverage is not nonzero data disambiguation.",
+    "Compiled reference constants and synthetictext do not establish actual assertion/branchcoverage.",
+    "Scriptaccounting512Steps28512 is not measured completed/usefulMAC. No completeblock hardwarecycle denominator; utilization90% remainsunknown."
+  ],
+  "remaining_source_blockers": [],
+  "controls": {
+    "author_methods_rerun_each_mode": 45,
+    "author_methods_rerun_total": 90,
+    "independent_checks_each_mode": 150,
+    "independent_synthetic_OBS": 8964,
+    "independent_synthetic_log_bytes": 1340249,
+    "independent_total": 300,
+    "negative_cases_each_mode": 36,
+    "negative_highlights": [
+      "old ELF/build proof",
+      "oldM3/compile240 budget",
+      "old100000 clock cap",
+      "M18/caseargs/noassert/compiler/LD overrides",
+      "missing cache/source/absence",
+      "tail max reset rather than inheritance",
+      "tail globalindex0 rather than16",
+      "tail selected16 rather than0",
+      "tail wrongkeyBase",
+      "within-chunk gap",
+      "clock/reset overrun",
+      "missing passive counts",
+      "fatal/unknown lines",
+      "wave output"
+    ],
+    "normal_optimized_pass": true,
+    "positive_highlights": [
+      "inter-chunk gaps permitted",
+      "exact total500000 boundary",
+      "zero hold ports disclosed uncovered"
+    ],
+    "row_basis": "Frozen independent source review VECTOR_EXPECTED_M17 ordinal rows, not candidate reference generator or DUT functions."
+  },
+  "origin_review": {
+    "bytes": 19350,
+    "sha256": "d80f333be35f8df8c5906ea5e32adab84769b9702c6222b202d1f6a52dced978"
+  },
+  "historical_preexecution_source_qualification": true,
+  "actual_later_M17_review_separate": true
+}

@@ -1,0 +1,268 @@
+{
+  "acceptance_scope": {
+    "actual_generated_SV_core_client_clocked_behavior": true,
+    "chunk16_to17": true,
+    "direct_or_source_bound_fields": "Precisely classified inEVIDENCE_LAYERS.",
+    "fixed_M17_cross16_control_and_qualified_zero_stimulus_fields": true,
+    "full128_RTL_numerical": false,
+    "full29_RTL_tensor": false,
+    "full_Matrix_FMA_numeric": false,
+    "fullprefill_allstages": false,
+    "generic_tile_lane_index_alias_proof": false,
+    "physical_DDR": false
+  },
+  "actual_build_review": {
+    "bytes": 23599,
+    "sha256": "31dcefc8f2d21f0461796b4ef857088d52352dbffbb7c10baac2cfb6f50440f9"
+  },
+  "actual_result": {
+    "PV_requests_and_returns": [
+      14688,
+      14688
+    ],
+    "QK_accepted_steps": 1728,
+    "all12_tail_local0_global16_maxPlusZero_observed": true,
+    "all12_token16_base0_then16_observed": true,
+    "all_four_hold_ports_covered": true,
+    "body_clock_edges": 404951,
+    "checked_PV": 14688,
+    "checked_groups": 216,
+    "checked_memory": 32640,
+    "checked_vector": 8964,
+    "direct_numeric_scope": "1836 validscorewrites+0, firstglobalretire preedge-Infinity then+0; tailchunk maxinherits+0. Nonwrite scoreData/index remaindiagnostics.",
+    "dones": 216,
+    "errors": [],
+    "groups": 216,
+    "hold_total": 10287,
+    "holds": {
+      "group": 114,
+      "memory": 7074,
+      "pv": 2740,
+      "step": 359
+    },
+    "max_histogram": {
+      "0x00000000": 2028,
+      "0xff800000": 6936
+    },
+    "memory_requests_and_returns": [
+      32640,
+      32640
+    ],
+    "native_exit_code": 0,
+    "ordered_OBS": 8964,
+    "outer_timeout": false,
+    "output_bytes": 104448,
+    "owner_accepts": 1,
+    "passive_numeric_scope": "PV BF16causal1/n throughn17 andcomplete acceptedaddress/operand/control assertions inexecutedharness, not externalpacketreplay orfullFMA.",
+    "phase_counts": {
+      "1": 3456,
+      "2": 3456,
+      "3": 216,
+      "4": 1836
+    },
+    "pipeline_scope": "Within everychunk orderedphases andretiretails consecutive. Interchunk gaps80 edge differences measured, no MACduty inferred.",
+    "producer_status": "PASS_VERILATED_CORE_NORMAL_M17_SCRIPTED_ENDPOINTS",
+    "reset_edges": 3,
+    "results": 216,
+    "root_returncode": 0,
+    "score_writes": 1836,
+    "script_bookkeeping512Steps": 28512,
+    "source_success_lower_body": 106884,
+    "targetPrefix": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "token_heads": 204,
+    "total_clock_cap": 500000,
+    "total_clock_edges": 404954
+  },
+  "artifact_manifest": {
+    "bytes": 8916,
+    "sha256": "c98005fe84fbdd75c13d06e8f0d367ad4439cc0dd01cf5fc63386f00e6f65860"
+  },
+  "binary": {
+    "bytes": 4514920,
+    "sha256": "1eefdc81df6505cbd6f42fd1eda643adaf2d07687c40a56733ec88ed2b1b5075"
+  },
+  "case": "normal_m17",
+  "case_metrics": {
+    "bytes": 2322,
+    "sha256": "b0189779b9b1540129d42c251cd7825f54d1b0e5ac390f2397371db8e73307b6"
+  },
+  "event_review": {
+    "bytes": 998624,
+    "sha256": "99874f34523d0f9b26fa50151ff0d9a971962771f675c5f4f605c1fc7bda8f0d"
+  },
+  "events": {
+    "bytes": 2765048,
+    "sha256": "769e7f08df80747edacf262f8f7c18cff0818a6e7117a321d6134fff5fd6be0a"
+  },
+  "evidence_layers": {
+    "bytes": 15627,
+    "sha256": "a9c43deafeef933836723fc0887bdff9c17916336a3959416ec6dcdb402d6725"
+  },
+  "identity_freeze": {
+    "bytes": 1832,
+    "sha256": "bb85299793585924f1aa0250257611fb4303e5d2c9844c1d95f7741b226f57ec"
+  },
+  "identity_review": {
+    "bytes": 30764,
+    "sha256": "16fc775229fc3f280444ea249dc5ecced1abd69091e016e3db02795cff31bf17"
+  },
+  "independent_audit": {
+    "actual_log_parse_passes": 1,
+    "additional_original_build_stat_checks": 17,
+    "event_checks": 190348,
+    "expectation": "Frozen independentordinal vectorrows crosschecked against explicit independentchunk/phaseformulas; rawlog grammar andterminal countersparsed separately.",
+    "final_identity_stat_checks": 250,
+    "identity_checks": 2279,
+    "new_actual_and_root_files_opaque_hashed_once": 10,
+    "no_ELF_or_oldSV_reparse_by_main": true,
+    "no_model_execution_by_reviewer": true,
+    "production_checker_or_reference_imported": false,
+    "same_parse_buffer_digest_computed": true
+  },
+  "log": {
+    "bytes": 1350374,
+    "digest_from_same_buffer_no_second_file_read": true,
+    "read_parse_passes": 1,
+    "sha256": "04c016fd7681943eed5f5867cd2a858b73544184ba66ac1d455dbdfef264ba86"
+  },
+  "metrics": {
+    "MAC_utilization": null,
+    "claim90percent_pass": false,
+    "effective_MAC_duty": null,
+    "full_system_utilization": null,
+    "label": "Observed vector-phase occupancy of this fixed scripted-endpoint attention-core simulation only",
+    "reason": "External arithmetic is scripted; no measuredFMA numerator orfullblockhardwarecycle denominator. Acceptedprotocol/bookkeepingcounts are not usefulMAC.",
+    "target90percent_met": null,
+    "vector_phase_body_percent": 2.213601151744285,
+    "vector_phase_reset_inclusive_percent": 2.2135847528361245
+  },
+  "next_scope": "A realMatrixservice/nonzero arithmetic integration needs independent newsource/build/run qualification androotGO; not M18samezero repetition orautomatic acceptanceextension.",
+  "passed_case_metrics": {
+    "bytes": 3245,
+    "sha256": "fbd298e4af222e12a1d1fd5cba09222f2aaa8c5c8964b0c3746dcae88936b1f0"
+  },
+  "producer_receipt": {
+    "bytes": 13483,
+    "sha256": "c3809e95ee8bc69f415df88b1051fb911fb6af113d083e5c4d916a622c23620b"
+  },
+  "remaining_actual_acceptance_blockers_for_this_narrow_case": [],
+  "resource_cleanup": {
+    "CORE0_boundary": "ChildCORE0 doesnot guarantee no systempipedcorehandler.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 1200,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 1530,
+      "work_wall_seconds": 1500
+    },
+    "cleanup_complete": true,
+    "cleanup_scope": "Saved originalPID/session/group/start,2completepre-reap scans,8records1548B,leaderZthenreap,no nonleaderatbarrier. No reviewerprocesspoll/signals; notwholehost/cgroup confinement.",
+    "final_actual_tree_bytes": 5879173,
+    "final_aggregate_CPU_seconds": 686.463916637,
+    "inner_wall_seconds": 686.6007166079944,
+    "maximum_observed_sample_gap_seconds": 0.044505625031888485,
+    "outer_wall_seconds": 686.6752345440327,
+    "sampled_peak_CPU_seconds": 686.3188365929999,
+    "sampled_peak_RSS_bytes": 8855552,
+    "sampled_peak_tree_bytes": 5865690,
+    "timing_scope": "Host CPU/wall is resourceevidence, not RTL clockfrequency or computationalutilization."
+  },
+  "retained_originals": "OriginalM17build17, oldM1/M2/M3actual/root andolderPASS/FAIL evidence unchanged; nooriginalmodel/SV/archive/source mutation, rebuild or repeatedmodel execution.",
+  "root_approval": {
+    "bytes": 3197,
+    "sha256": "99231be74937ea2120e01e2e46cc99df6ed7fa819c8c08a6e1282b569d1aba4d"
+  },
+  "root_receipt": {
+    "bytes": 120,
+    "sha256": "1b35a84db2950d245e0702effca910e3b1cc73a40ecc86c996bc96e0abf403e9"
+  },
+  "run_admission_review": {
+    "bytes": 19350,
+    "sha256": "d80f333be35f8df8c5906ea5e32adab84769b9702c6222b202d1f6a52dced978"
+  },
+  "runtime_identity": {
+    "absence_slots": 63,
+    "aliases": 6,
+    "cache_coverage": "No newliveM17importprobe. CurrentimportsAST and56endpoints reusequalifiedM3proof; historical46candidatepaths+1struct are not47M17observedimportopens. ExactM17reference-siblingnormalcache remainsabsent.",
+    "child_environment": {
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "${NEW_RUN_ROOT}/empty-path",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "external_after": {
+      "bytes": 11537,
+      "sha256": "dc06747ddf5243aa1db9eef891d13ef24bf1a0ffb0977e93344dc4d08d73efaa"
+    },
+    "external_before": {
+      "bytes": 11537,
+      "sha256": "dc06747ddf5243aa1db9eef891d13ef24bf1a0ffb0977e93344dc4d08d73efaa"
+    },
+    "external_gate": "Root beforePopen andafterterminal checked56knownparentpins=47normalcache+7sources+2locale,11absence andexactCUTF8 triple. Automaticpreflightafterimports doesnotreplaceprePopen gate.",
+    "historical_limit": "No backward completion ofolderunqualifiedcache scopes orchangedoldnative/eventfacts.",
+    "known_endpoint_limit": "No arbitraryconditionalimport/dlopen/wholehost/continuousTOCTOU isolation claim.",
+    "native_closure": "Known5ELFproviders/13versionedges fromactualM17build, currentidentities stable. Not live loadertrace.",
+    "parent_locale": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    "postflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 196
+    },
+    "preflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 196
+    }
+  },
+  "saved_cleanup_review": {
+    "bytes": 1401,
+    "sha256": "2ad401c8b393eb4dd73b50a17db2b2fa221d1cdc1d643c4b3e67c1af096a838e"
+  },
+  "schema": "qwen2-actual-normal-M17-original-core-client-independent-review-v1",
+  "source_review": {
+    "bytes": 18110,
+    "sha256": "f761dddee216484b251f1630b44e081e54e5655f335e01a0717fb50f11b36f96"
+  },
+  "status": "PASS_ACTUAL_VERILATED_ORIGINAL_CORE_CLIENT_NORMAL_M17_CROSS16_WITH_SCRIPTED_MATRIX_MEMORY_ONLY",
+  "origin_review": {
+    "bytes": 13116,
+    "sha256": "7d23a13ab960474919c3196dffd3d2974dfce42cacf142180198a1d574c6e9f9"
+  },
+  "origin_freeze": {
+    "bytes": 2878,
+    "sha256": "e8340a89251e2a95e97577628ea2a5e00f45618f85d50a08adb8a3aacf3f433a"
+  },
+  "projection_note": "Private locators, file/process identities and one per-event last-retirement row omitted. Aggregates/claims unchanged. No raw log/events/ELF/packets published."
+}

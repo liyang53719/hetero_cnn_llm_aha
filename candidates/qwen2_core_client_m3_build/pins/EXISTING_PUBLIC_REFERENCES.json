@@ -1,0 +1,78 @@
+{
+  "base_commit": "0658c17a68b1ddf38933df6d37424df9f90ee98d",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/m2_main.cpp",
+      "bytes": 12525,
+      "sha256": "5ee32a75788337ea38d0a1fc5705f6d620b0f50dff1bacaebb219acf231ae42b",
+      "git_blob_sha": "5082c076ffdde1e3d7cb6911448fcfca74df230d"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/reference_events.py",
+      "bytes": 2912,
+      "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7",
+      "git_blob_sha": "031fe1b1ec7e031f0ff7ae25313ea92232012221"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/test_reference_events.py",
+      "bytes": 2704,
+      "sha256": "f065cffd5b021e53995ca9cf76d0adc88179de6ea18ad62216b6a4c794b6e926",
+      "git_blob_sha": "aaca13b6992bcdc6acc9443f5741249276e01627"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/pins/SOURCE_PINS.json",
+      "bytes": 3904,
+      "sha256": "9427e69ac9ddc3a009fe25f650020809e9ff1e7e1cbc1eb87a2a4d77ababfec1",
+      "git_blob_sha": "864e3c962a41ccd60be4824467c95e8810d01f68"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/evidence/ACTUAL_BUILD_REVIEW.json",
+      "bytes": 12617,
+      "sha256": "1d823bbdcb63d025bb01659442457a03f9c4396e890e67fc054c86f3ac32aacf",
+      "git_blob_sha": "a730fbe3a82a7dd31ae4af7041368facba794040"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/evidence/PYTHON_COVERAGE_QUALIFICATION.json",
+      "bytes": 2565,
+      "sha256": "9b63db90485243583dcf123fe777742e47bc522a9e231c3563da5a44a6a93e24",
+      "git_blob_sha": "00d3931b7468cff7a5c2802c2b886b61ac316675"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_actual/evidence/ACTUAL_M2_REVIEW.json",
+      "bytes": 9025,
+      "sha256": "2e2b86dbd4986ba659de22091be362f7f5cb2f9db95aa50e86aa5f5ea307a816",
+      "git_blob_sha": "1725ed53a0a72ad72e09a6842c951cedd0b93dfd"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/source/check_build.py",
+      "bytes": 15869,
+      "sha256": "aae034e81cff9542c82333826e2bee6acebcace28a103a6b29224e389b2d278b",
+      "git_blob_sha": "5932981b0a39edf97b1372772120edc69238663c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/pins/GCC14_FORMAT_AND_MMD_SOURCE.json",
+      "bytes": 8678,
+      "sha256": "ed53320a8ddc3703d315c69e377b7eb76245b14348d535968bce506dc8742c8a",
+      "git_blob_sha": "53a8a915f5e993371f0ea2afd45b5cb6a7cd2597"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/rebuild_harness_metadata.py",
+      "bytes": 3960,
+      "sha256": "653b0fdfec621d7799b47135a6260476c959b71704a87fe1aa6283db323d7ed9",
+      "git_blob_sha": "7111ab34db542e40ecb7cef54ae15fa37bd383d1"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/pins/SOURCE_PINS.json",
+      "bytes": 3442,
+      "sha256": "e9df47dfaef0135f50decdc2e04250fb3ed697c779668e5e299de208cf9d0028",
+      "git_blob_sha": "3056b11fdf84293d41c8facc5483fcfb98ae8f8b"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/pins/EXISTING_PUBLIC_REFERENCES.json",
+      "bytes": 2316,
+      "sha256": "656ccd1a174c1ef765ca9b5704fa461167b9764ed8d3a4aeefcfc7d6b1aa2e60",
+      "git_blob_sha": "c6d6859f02bf3f7b6f184e4b48c0c074db253743"
+    }
+  ],
+  "reconstruction_scope": "Exact M2 source refs plus reversible C++ patch and five original changed Python files reconstruct M3. ABI is hash-verified prior public symbolic reconstruction; use codegen helper with transitive refs first. No real SV/bulk model/native needed."
+}

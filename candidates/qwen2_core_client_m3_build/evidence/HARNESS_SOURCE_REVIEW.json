@@ -1,0 +1,224 @@
+{
+  "acceptance": {
+    "actual_M3_pass": false,
+    "cpp_compiled": false,
+    "effective_mac_duty": null,
+    "full128_rtl_pass": false,
+    "full29_pass": false,
+    "linked": false,
+    "mac_utilization": null,
+    "matrix_fma_numeric_pass": false,
+    "model_executed": false,
+    "ninety_percent_target_pass": false,
+    "physical_memory_pass": false,
+    "source_eligibility": true,
+    "system_utilization": null
+  },
+  "authority": "Only source/static stdlib integer and synthetic-text controls. No compiler,make,JVM,Verilator,firtool,ELF/model,DUT/native/reference numeric implementation executed. Original artifacts unchanged. No GO or claim.",
+  "candidate_freeze": {
+    "bytes": 4630,
+    "sha256": "51a8acc16c098240c2f13fc448f5172b5c6947fbf4137bd56e90574df9879765"
+  },
+  "controls": {
+    "author_logs": [
+      {
+        "bytes": 114,
+        "sha256": "6462c561077ba56fc0731ccf766e0b9c5c948807cd33564f810d1b4991d4e0d7"
+      },
+      {
+        "bytes": 114,
+        "sha256": "f92c8717b7c2d285937b11d59574412e02a4fd7a912a1aafc257d1043299cfc8"
+      },
+      {
+        "bytes": 110,
+        "sha256": "86957db5acea453befd84038ccd284de12918f41b981b0ffd1b398a8e6e3eb5c"
+      },
+      {
+        "bytes": 110,
+        "sha256": "6e2c2e2d0c5d4f2445feb5005937a4d47635379f8adf4113de6f692d171b2766"
+      }
+    ],
+    "author_methods_total": 52,
+    "author_subcases_additional": true,
+    "author_test_methods_each_mode": 26,
+    "earlier_successful_small_control_checkpoint": "Initial4269checks eachmodepassed; after addingwholechecker/countJSON/formula identity3assertions,final4272passed. Initiallogsretained;notcandidatefailure.",
+    "identity_checks": 303,
+    "independent_each_mode": 4272,
+    "independent_modes": [
+      {
+        "bytes": 2463,
+        "sha256": "35bdec44e5d60de57e7ded7a90f1735b78ff4444ebf67514285f694cc8b4dfc4"
+      },
+      {
+        "bytes": 2462,
+        "sha256": "12a2a527f8c3fd767f38c963724be816d379fe21f1a5b80287e0f49413438efa"
+      }
+    ],
+    "independent_total": 8544,
+    "negative_log_controls_each_mode": 52,
+    "no_target_executed": true
+  },
+  "independent_expected_contract": {
+    "accounting512Steps": 2880,
+    "accounting_not_mac": true,
+    "address_formula": {
+      "K": "0x200000+1024*key+512*(h//6)+64*chunk",
+      "Q": "0x100000+6144*t+512*h+64*chunk",
+      "V": "0x300000+1024*key+512*(h//6)+64*chunk",
+      "W": "0x400000+6144*t+512*h+64*chunk"
+    },
+    "derivation": "Original frozen Scala scheduling/tag/phase source plus previous independent2305 source proof; new integer ordinal/divmod decomposition, no DUT function or candidate generator used to generate expected rows. Every C++ table tuple compared. Synthetic log constructed from independently derived rows, not author reference.",
+    "dones": 36,
+    "groups": 36,
+    "independent_tables": [
+      {
+        "bytes": 401821,
+        "sha256": "4e7a8b521958ca8879f6d1008fda723117410cef3ebb0bd0ceb7e644a663615d"
+      },
+      {
+        "bytes": 140549,
+        "sha256": "fbe9e49be7ad10d6521eeeb34d8c7952cc28a1a3ec627580e6e7ba337357f6e5"
+      },
+      {
+        "bytes": 111375,
+        "sha256": "e8a64ef515206af7f5627c18ffb164862a0953c5c435ba84e92ae65afac1bc95"
+      }
+    ],
+    "max_expected_counts": {
+      "negative_infinity": 1224,
+      "positive_zero": 36
+    },
+    "max_preedge": "scan/fold/scale plus first retirement eachhead -Inf; later retiredkey1/2 +0; no separate post-edge trace",
+    "memory_fields": "address,direction,tag,mask(read0/write2^64-1),all512databits0",
+    "memory_order": "token/head;8Q;K depth outer and causalkey inner; eachoutputcol8:Vcausalkeys thenW",
+    "memory_reads": {
+      "K": 576,
+      "Q": 288,
+      "V": 576
+    },
+    "memory_rows": 1728,
+    "memory_tag": "(7<<32)+global ordinal0..1727, not owner tag0x7000c",
+    "one_third": "Exact1/3 -> FP32RNE0x3eaaaaab -> BF16RNE0x3eab. Independent7bitdirectRNE agrees for only1,1/2,1/3; tie-even controls257/512 and259/512. Not universal two-stage/direct equivalence.",
+    "output_bytes": 18432,
+    "owner_accepts": 1,
+    "phase_counts": {
+      "fold": 576,
+      "retire": 72,
+      "scale": 36,
+      "scan": 576
+    },
+    "pv_order": "token/head/outputcol/key, aligned one-for-one with V addresses",
+    "pv_other_fields": "opcode0x24,sliceMask1,clear(key0),last(key==token),A1..15 andB0..255zero",
+    "pv_probabilities": {
+      "token0": {
+        "A0": "0x3f80 (1)",
+        "rows": 96
+      },
+      "token1": {
+        "A0": "0x3f00 (1/2)",
+        "rows": 192
+      },
+      "token2": {
+        "A0": "0x3eab (rounded 1/3)",
+        "rows": 288
+      }
+    },
+    "pv_rows": 576,
+    "qk_steps": 288,
+    "results": 36,
+    "source_ranges": {
+      "Qwen2Block.scala": [
+        "302-306 memory tag/masks",
+        "313-320 owner pointers",
+        "337 head//6",
+        "568-595 Q and depth-major K",
+        "607-669 scan/fold/scale/retire max",
+        "697-707 column-major PV/read/write"
+      ],
+      "prior_independent_source_proof": "prior_M2_expected_trace/REVIEW.json"
+    },
+    "target_prefix": "token2/head0 exactly0,1,2, expected72retireglobal",
+    "vector_rows": 1260,
+    "write_beats": 288
+  },
+  "log_checker": {
+    "bytes": 5503,
+    "sha256": "8ecf9295b0c9659a114d76efe311dc35696b52eacb423364746636dc89f8ae54"
+  },
+  "log_gate": {
+    "bounds": "2MiB,10000lines,65536byte line,100000 totaledge cap",
+    "cycles": "strictlymonotonic globally and consecutive withinhead; actualwall/bodycounts unknown until run",
+    "evidence_layer": "OBS externally per-eventchecked. Memory/PV actualfields wouldbe executed frozenharness assertions andcomplete consumption, not externallylogged rawtransactionreplay.",
+    "holds": "individual0..body,sumpositive<=4body; zeroport explicitlyuncovered, countsnotunique stallcycles",
+    "runtime_provenance_required": "log leaf returns PASS_LOG_CONTRACT_ONLY_CALLER_EXECUTION_PROOF_REQUIRED; separate actualexit0,cleanup,exactELF/source/runtime required",
+    "score_scope": "onlyvalidretiredata+0/indexcausalkey;nonretire data/indexboundeddiagnosticsnotvalidscore samples",
+    "strict": "single READY,1260 exact ordered OBS,exactCASE_PASS withprefix0,1,2,finalDONE; unknown/fatal/duplicate/truncation refused"
+  },
+  "metrics_boundary": "If futureactualM3passes,1260/bodyedges onlyobservedvector-phaseoccupancy; resetinclusive denominatorseparate. 288QKsteps,576PVrequests,2880scriptaccounting not effectiveMACs. No measuredMatrixFMA numerator/fullblockhardwarecycles => MACduty/utilization and90%target UNKNOWN.",
+  "passive_expected_header": {
+    "bytes": 131382,
+    "sha256": "c389365468754674b980dde161830b1439b25e7cd4192d2ed812a8369b2a5129"
+  },
+  "previous_actual_m2_freeze": {
+    "bytes": 3410,
+    "sha256": "551e41cd07090fa4c3b13fcc02876c2473e122cff54cfec2dae60731d67db0da"
+  },
+  "previous_actual_m2_review": {
+    "bytes": 11636,
+    "sha256": "8f88ac3fadb1ee49f5c7f8ea4709bb209aebf7836fe13d87e4e9a4f5d199cbd8"
+  },
+  "reference_generator": {
+    "bytes": 2912,
+    "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7"
+  },
+  "remaining_source_blockers": [],
+  "resource_scope": "No executable supervisor/budget/command admitted here. Author suggested singleTU120CPU andrun300CPU routes require independent exact build and run reviews plus rootGOs; nofitguarantee.",
+  "schema": "qwen2-fixed-m3-harness-source-independent-review-v1",
+  "scope_limits": [
+    "M3 not yet compiled/run; normal/-O Python controls are not hardware behavior evidence.",
+    "Maximum3keys stays within first16keypackedgroup; no16-to17boundary orM17qualification.",
+    "ActiveQKdiagonal values all+0. Selectedj1/j2 andorderedretirecontrol may be covered if runpasses, but equalvalues cannot exclude active-keydataaliasing or resolve generalW005indexnumericrisk.",
+    "Onlyoneattentionownerjobkind4 andscriptedexternalMatrix/memory; notwhole21calculations/17jobs/Qwen2prefill/full128/full29.",
+    "Scalar probability expectation is frozenzero-score specialcase; not generalsoftmax/randominputs/FMA proof.",
+    "PreviousM1/M2actualPASS and priorfailures unchanged; oldparentPythoncachecoveragegap not retroactively erased.",
+    "AdjacentM17lowerbound plan is explicitly outside this source review; no endorsement of nonoverlap argument or runtimefit."
+  ],
+  "source": {
+    "bytes": 12929,
+    "sha256": "7c3b280683a1d66dfee704d902e743377b48eaf6db43a7ce2c4ef849bae7f9f5"
+  },
+  "source_identity_freeze": {
+    "bytes": 907,
+    "sha256": "798269b1c151db8941cc5cbd9261c14cb9c7f29593f19fe8878c0e0ee754e213"
+  },
+  "source_identity_review": {
+    "bytes": 11483,
+    "sha256": "4a6e606fa4350e3b4bbb802beccc781718f3ccd95e57225e214c64ace2886d3c"
+  },
+  "source_review": {
+    "additional_passive_prefix": "Only pushes actual testScoreWrite_bits_index on valid token2/head0. Bounded<3 before push, complete [0,1,2] equality before indexing/logging. No model input write, clock, settle or drive call.",
+    "address_bounds": "unchanged subtract-before-end bounds and fixedsmallbase/shape",
+    "argv_argc_required": 1,
+    "body_edge_cap": 99997,
+    "case_or_environment_override": false,
+    "driver_clock_settle_hold_offerTile_ready_queues_postedge_updates_byteunchanged": true,
+    "fixed_m": 3,
+    "matrix_stimulus": "external QK scripted active diagonal+0,offdiagonal/inactiveqNaN;PVresultzero;memoryzero with deterministic debt/delay. Not a Matrix FMA model.",
+    "only_enabled_case": "normal_m3",
+    "original_abi_mapping_header_generator_byteequal": true,
+    "original_sv_archive_unchanged_complete_identity_reuse": true,
+    "physical_edge_cap": 100000,
+    "prefix_semantics": "Control/retirement site and ordered indices; not data disambiguation of equal-valued active keys.",
+    "reference_events_byteequal": true,
+    "reset": "same3explicit rising edges, all inputs zero, context threads1/randReset0; countcontract not full Treadle initialization equivalence",
+    "terminal": "unchanged debts/status/resetRequired,8edgepayloadhold,release handshake,3quiet edges; not every owner payload independently expected",
+    "whole_checker_unchanged_except_exact_fixed_case_counts_prefix": true,
+    "whole_cpp_reversibly_restored_to_frozen_M2": true
+  },
+  "status": "PASS_FIXED_M3_HARNESS_SOURCE_AND_SYNTHETIC_ONLY_NOT_COMPILED_OR_RUN",
+  "origin_review": {
+    "bytes": 13148,
+    "sha256": "495070c223f395bf63a143cea2f25733919be2af82b9e54c7767ed1454721002"
+  },
+  "historical_source_only": true
+}

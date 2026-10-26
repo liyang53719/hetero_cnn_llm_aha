@@ -1,0 +1,34 @@
+{
+  "status": "PASS_EXACT_SOURCE_RECONSTRUCTION_PROJECTIONS_AND_SYNTHETIC_ONLY",
+  "checks": 3020,
+  "errors": 0,
+  "original_source_files_reconstructed": 8,
+  "new_original_python_sources": 5,
+  "referenced_unchanged_sources": 2,
+  "new_source_assembly_helper": 1,
+  "public_references": 12,
+  "source_tests_each_mode": {
+    "M3_contract": 15,
+    "reference": 11,
+    "tiny_build_containers": 34,
+    "assembly_positive_negative": 12
+  },
+  "reconstructed_headers_each_mode": {
+    "expected_m3.hpp": {
+      "bytes": 131382,
+      "sha256": "c389365468754674b980dde161830b1439b25e7cd4192d2ed812a8369b2a5129"
+    },
+    "generated_abi.hpp": {
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    }
+  },
+  "reversible_source_patch_exact": true,
+  "retained_actual_and_prior_stat_checks": 197,
+  "no_explicit_target_artifact_content_reads": [
+    "actual ELF/object/archive/generated headers/SV/raw logs",
+    "actual system cache contents"
+  ],
+  "packaging_native_compiler_model_or_signal_actions": 0,
+  "scope": "Source/text, role metadata and tiny synthetic containers only. Ordinary packaging Python stdlib imports not audited as whole-process IO exclusion. Actual build is compile/link/static tables only, not M3 model execution. New known cache endpoints do not backfill historical gap."
+}

@@ -1,0 +1,296 @@
+{
+  "schema": "M3-build-new-known-cache-source-endpoints-v1",
+  "delta_origin": {
+    "bytes": 22774,
+    "sha256": "4e6232d8f4f1b700b7f98b58fd5a6c7a4be44cf54f5513ad57040f96e3037709"
+  },
+  "source_association_origin": {
+    "bytes": 37317,
+    "sha256": "a5ea20fa299dcb1df3309748187716436f0b672d3d058314bce4bd82daa57e22"
+  },
+  "required_gate_origin": {
+    "bytes": 21023,
+    "sha256": "c59af2fc0077cf66ad961123394e21bfce8fc8cbe0e03614f26d478b0d0331b8"
+  },
+  "baseline_runtime_count": 156,
+  "new_normal_caches": 42,
+  "new_stdlib_source_roles": [
+    "parent_prefix/lib/python3.12/_compression.py",
+    "parent_prefix/lib/python3.12/bz2.py",
+    "parent_prefix/lib/python3.12/lzma.py",
+    "parent_prefix/lib/python3.12/shutil.py"
+  ],
+  "recommended_runtime_count": 202,
+  "runtime_pins": [
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/_compression.cpython-312.pyc",
+      "bytes": 7582,
+      "sha256": "476fb73eb291cf72890dcb4350721c68f8ee8661dc35935a1aaaf054c1897355"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/_weakrefset.cpython-312.pyc",
+      "bytes": 11841,
+      "sha256": "b8c1738e18fc9aa878a43ca3c80fcbca63b82d79dbc0fd4d20d0f1d752d13f5d"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/argparse.cpython-312.pyc",
+      "bytes": 101159,
+      "sha256": "be5995c40bdd9c61143427a22d65fe7f29a65d1cb2cdc42b4d1faef003b29967"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/bz2.cpython-312.pyc",
+      "bytes": 15237,
+      "sha256": "e0748d7e935173230bddb8aee90a682358d4c1646878fc4d0f4d93139ccc3674"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/contextlib.cpython-312.pyc",
+      "bytes": 30454,
+      "sha256": "040c809f5a4982b8d59b9aa79d99cb70ab1ac7dc1e6dfdf8dbf98ed906636b34"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/copyreg.cpython-312.pyc",
+      "bytes": 7503,
+      "sha256": "c02e5dd1f76cef814b493b6fed52bda4c3b8035d00dc096eb1db06e86c582e17"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/enum.cpython-312.pyc",
+      "bytes": 80448,
+      "sha256": "e5d62969820a6a4bde1412666389fe4ffdab1a8b30b91bb61e4346b8fcf41f44"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/fnmatch.cpython-312.pyc",
+      "bytes": 6584,
+      "sha256": "c2af22a392d9341dcbd06e457247111acea57a2a46fcbdc09b3794bc62501215"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/functools.cpython-312.pyc",
+      "bytes": 40446,
+      "sha256": "c29e06a125632d6a8812ee7f9617f6ab4964ec5e2b0385893ba9d2d102f4ab0a"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/gettext.cpython-312.pyc",
+      "bytes": 21887,
+      "sha256": "04009d9f1c86fb9edbc6849402c69929a7ff97c54a02c66889795a685a29445d"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/hashlib.cpython-312.pyc",
+      "bytes": 8184,
+      "sha256": "2f4be82e1c5ab1985ecc0f58dd62539076ecf9bef63736310b454fcad6dafcfd"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/ipaddress.cpython-312.pyc",
+      "bytes": 93880,
+      "sha256": "40d174aaaab98cc406334a0f652df258a2ce3774d177a95626f75c67a86dcfd0"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/keyword.cpython-312.pyc",
+      "bytes": 1145,
+      "sha256": "7477191d8f7b324d9d73b1c5b5269a57beaddebddea8e83ba2eb9d5af8fe15c9"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/locale.cpython-312.pyc",
+      "bytes": 59592,
+      "sha256": "8e6dd36dc8deac5cd6c68671f2b6ca9f45eb1ca501a347e8ce45ea7dddc29e61"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/lzma.cpython-312.pyc",
+      "bytes": 15959,
+      "sha256": "def0171ad4c9b810f6843b07bf939e4b410ea28162472cd901878b2ddfa81e7e"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/operator.cpython-312.pyc",
+      "bytes": 17456,
+      "sha256": "41270fd01b6fdda1fd31f5b74cbfeae6c48a26296a54439ac208a50248a730ec"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/pathlib.cpython-312.pyc",
+      "bytes": 61802,
+      "sha256": "e7d9282a4411c3c101193c7cae2a0e48863d35441d83369cd778240f2893071e"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/reprlib.cpython-312.pyc",
+      "bytes": 10330,
+      "sha256": "946cea8a0bb080f5460af84bb54681fde88fdd1a704acd554e2d40c45b36f7ff"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/selectors.cpython-312.pyc",
+      "bytes": 26207,
+      "sha256": "74eb4444b43eabe3f78ed10da45013b9cbcfaa34fc85f31b6a5a7a0f04455293"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/shutil.cpython-312.pyc",
+      "bytes": 65419,
+      "sha256": "24c024c1fa7a877f4ed307348635bcea4fef943702a57a48cdfb41ad7c912c57"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/signal.cpython-312.pyc",
+      "bytes": 4561,
+      "sha256": "56a19f07dae46c588b55b223eb302166aa1fdb5271f5b7833d63504e718f08f0"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/struct.cpython-312.pyc",
+      "bytes": 429,
+      "sha256": "d305b28ac3f0f63fcc9dac105c8b59c4f0cacebdef31f5a491f2f3bc57a9ae66"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/subprocess.cpython-312.pyc",
+      "bytes": 79158,
+      "sha256": "2c164844fa89e26c53287649fd699fff18812b38e955720f6e321750c13cfe6c"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/threading.cpython-312.pyc",
+      "bytes": 65320,
+      "sha256": "2106fe3a91c4aa511cd8c2ab25d4b05f3780e7931bc067745b09075c8240bd15"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/types.cpython-312.pyc",
+      "bytes": 15049,
+      "sha256": "7ae745cad83252e109157ddf1bc0a0e1732db76e13ced2111fe75b56b8e7ab03"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/__pycache__/warnings.cpython-312.pyc",
+      "bytes": 23931,
+      "sha256": "04547639c24e83aeabd35df478c65d0307631656a18469a069a8066643455e33"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/_compression.py",
+      "bytes": 5681,
+      "sha256": "3ad5d60627477a60939ee44fc1bb3a05dbe8fb52f0f75039b8f5d8f1a278b981"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/bz2.py",
+      "bytes": 11847,
+      "sha256": "76ab3252924e71e859d7d90e8d3db13b6554975cfcac0fdadced4de7f8779330"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 73041,
+      "sha256": "d8af5f65d6f50cf1f60d70010b47d66499b24b60f4b551dad35da6de27151a2b"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/collections/__pycache__/abc.cpython-312.pyc",
+      "bytes": 353,
+      "sha256": "20dd5114ae2a2cffe4cb9144c2688745a163622385a4129a972f7f5eac3c5bb7"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 5879,
+      "sha256": "e54127b3e3e39845fcec734db7246ed41a8261b5afff9ddfe44c5514035a7094"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc",
+      "bytes": 12512,
+      "sha256": "c158cab0522c8c785196c50d3230c84dfe93e8ac4337ccc18f944b8bbc6f08c9"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc",
+      "bytes": 2251,
+      "sha256": "c33fa7315ec3376b3f2ad6bffbba27844ac7c631d13fcb3eee0459041fd5836e"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/json/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 13719,
+      "sha256": "57f572d2e154bce8642a5ee8c352ed0f0b883edbb2a2949ca983f213f696948c"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/json/__pycache__/decoder.cpython-312.pyc",
+      "bytes": 14017,
+      "sha256": "96492a65623d36258b0408dead7921d2cf9f431476ab2dc071664f8db8cae549"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/json/__pycache__/encoder.cpython-312.pyc",
+      "bytes": 15192,
+      "sha256": "7df3d596aa56a94c72e115797207d86178b882674c98e05f1c9cbfdc0e78f0cf"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/json/__pycache__/scanner.cpython-312.pyc",
+      "bytes": 3434,
+      "sha256": "c418fb0b9f90f6c742e7e71786fd86b605edea944dd3571d92d3ef8ceee3e24d"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/lzma.py",
+      "bytes": 13277,
+      "sha256": "58fb9d2fdc8a8af7b25e218f17ea3b51bdfa53bdf40f440ab33c605974ca5c2e"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 18034,
+      "sha256": "013b5a21cf75be671621c283b394646cc9f313b6377456d86302e8f931a464a3"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc",
+      "bytes": 1920,
+      "sha256": "e727f6e09d5d39f727d70ec4236ba9af5fae998456c110cc5cfe9e135d893ff2"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc",
+      "bytes": 26598,
+      "sha256": "47405d5ce863b084d7c758ba7d746d23a9ab19fd8b63b55a26f21473ff2ee948"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc",
+      "bytes": 5407,
+      "sha256": "36c3f373351f739d5c448fc312ddc582b3010bedf4b880ce3019f235282df7f7"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc",
+      "bytes": 42051,
+      "sha256": "47981e50108d4ef4e3e5abd6d55259c7e4aada08ac28c8fd4cf7f47eb5df07d2"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/shutil.py",
+      "bytes": 56198,
+      "sha256": "53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/urllib/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 239,
+      "sha256": "e88d78a96b45bfda7f645480bfb28a690d7dff2ec248662753930d257969de9d"
+    },
+    {
+      "role": "parent_prefix/lib/python3.12/urllib/__pycache__/parse.cpython-312.pyc",
+      "bytes": 50717,
+      "sha256": "a4b34df2109c0ee861510e392fc07b7d85d63185288fe4cd1e9a014e20fa30ea"
+    }
+  ],
+  "absent_roles": [
+    "parent_prefix/lib/libpthread.so.0",
+    "parent_prefix/lib/libdl.so.2",
+    "parent_prefix/lib/libutil.so.1",
+    "parent_prefix/lib/libm.so.6",
+    "parent_prefix/lib/librt.so.1",
+    "parent_prefix/lib/libc.so.6",
+    "parent_prefix/lib/ld-linux-x86-64.so.2",
+    "parent_prefix/lib/glibc-hwcaps",
+    "parent_prefix/lib/tls",
+    "parent_prefix/lib/x86_64"
+  ],
+  "parent_environment": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8"
+  },
+  "built_in_modules": {
+    "_bz2": "built-in",
+    "_lzma": "built-in",
+    "_struct": "built-in",
+    "zlib": "built-in"
+  },
+  "external_before": {
+    "bytes": 9707,
+    "sha256": "398f417b2843ae65a130ce23934fd653868ec961188aa013efb4f9f77d6bb4ca"
+  },
+  "external_after": {
+    "bytes": 9707,
+    "sha256": "398f417b2843ae65a130ce23934fd653868ec961188aa013efb4f9f77d6bb4ca"
+  },
+  "external_record_bytes_identical": true,
+  "limits": [
+    "Exactly -I -S -B without -O; -B prevents writes not reads.",
+    "Raw exec loaders for supervisor/checker/cleanup/inventory do not select sibling source caches.",
+    "Observed top-level/argparse import closure plus known primary-loader negative endpoints, not all conditional runtime accesses or host sandbox.",
+    "Root must hash these exact cache/source endpoints and check absent slots before launching the parent Python, then after terminal; automatic pre/post checks cannot retroactively prove already-imported bytes.",
+    "Only this new candidate gains these pins; old M1/M2 build qualifications remain historically limited."
+  ],
+  "scope": "New known endpoints only:42 module.cached candidates+4source pins. Probe audit includes identity reads, not42 independently observed import opens; no live import trace/continuous isolation. Original M1/M2 historical gap unchanged; child native five-library closure separate."
+}

@@ -1,0 +1,301 @@
+{
+  "approval_scope": {
+    "MAC_utilization": null,
+    "actual_build_pass": false,
+    "behavior_pass": false,
+    "execution_authorized_by_this_report": false,
+    "model_run_authorized": false,
+    "native_started": false,
+    "ninety_percent_target_pass": false,
+    "numerical_pass": false,
+    "source_admissible": true
+  },
+  "artifact_gate": {
+    "dependency": "SingleboundedASCII MMD exactm3_main.o target/stagedm3_main.cpp firstsource; everydepallowedpinned/stagedrealfile. NoMakeexpressions/logicalPCHaliases. MMDnotall systemheaders.",
+    "exact_flat_files": 16,
+    "executable": "ET_DYN,fixedPT_INTERP,mappedentry,definedpositive-sizedmain/modelcode inallocatedexecutablefilebackedranges;noRWX,nonexecstack,noRPATH/RUNPATH/extraloaderobjects. Staticparseonly.",
+    "inventory": "Reader7fieldlstat/fstat stability,streaminghash,finalall16statmatch;onlynewELFxbit;flatregularfilesnoextra/symlink;tmpemptyonsuccess.",
+    "needed": "Unique subset ofstdc++/m/gcc_s/c withstdc++andc required. Atomicnotallowedhere. ExactobservedNEEDED/GNUversions/newlibraryclosure requireactualaudit.",
+    "new_files": [
+      "build/m3_main.o",
+      "build/m3_main.d",
+      "build/VOrderedQkBehaviorCore_m3"
+    ],
+    "not_proven": "No machinecode equivalence,generalC++semantics,dynamicloaderexecution,behavior,numerical/wholeblock/FMA/MAC.",
+    "object": "ELF64littleendianx86_64ET_REL,noentry/PH,boundedsections/symbolrefs; notfullrelocationsemantics.",
+    "retained_archive": "Hash/identityonly; reliesonoriginal36memberactualaudit,no repeat fullmemberparser.",
+    "staged_inputs": 13,
+    "status": "PASS_FIXED_M3_SINGLE_TU_LINK_ONLY",
+    "whole_checker": "Entire frozen M2checker identicalafterM2/m2->M3/m3 only. 10helperdefinitionsbyteequal,checkonlyfixedcase."
+  },
+  "authority": "Only frozen-source/static review, stdlib metadata, short Python resource controls and inert synthetic ELF/MMD parsing. No compiler/linker/make/Verilator/JVM/native binary/model execution. No real claim or GO.",
+  "controls": {
+    "additional_finalizer_top_level_AST_equality": true,
+    "author_methods_rerun_each_mode": {
+      "artifact": 34,
+      "engine": 23,
+      "metadata": 4
+    },
+    "author_recorded_new_delta_methods_total": 54,
+    "independent_checks_each_mode": 93,
+    "independent_checks_total": 186,
+    "independent_negative_cases_each_mode": 47,
+    "logs": [
+      {
+        "bytes": 2957,
+        "sha256": "e8b37c3ae77e5b122f3c38b39e658c70752f332e51d27a20831929887531930d"
+      },
+      {
+        "bytes": 2957,
+        "sha256": "faa88586c2c058ffd756880e6bca2bc1d02e85dcbbf6ac613f568de3eebf7a0c"
+      },
+      {
+        "bytes": 102,
+        "sha256": "61f6661ab4f533beb5bba1488589bc338b0a61442b4630222c40dacb874d5f52"
+      },
+      {
+        "bytes": 102,
+        "sha256": "4244ea0b5de5a406097830c1f3dc64d39bfbee6ed92378d157da9ed1aab5ba95"
+      },
+      {
+        "bytes": 122,
+        "sha256": "fddf7986fbca043b7a15813b530fb108203547c3bd364d1c611054c0f0984d9e"
+      },
+      {
+        "bytes": 122,
+        "sha256": "b8d2b2a5a9f835073c8c44ec45c94362635f402e6fa420c1c3880a3899b1ef0b"
+      },
+      {
+        "bytes": 1406,
+        "sha256": "233152591b9083b4430f7a4410a7a91a9c16688622491ea85523e16851903265"
+      },
+      {
+        "bytes": 1405,
+        "sha256": "b6495361da3559469c2c111cd15f2d009da0f0a2e0d700666db825d52e06b108"
+      }
+    ],
+    "metadata_mutation_subcases_each_mode": 30,
+    "normal_optimized_allpass": true,
+    "reviewer_rerun_author_methods_total": 122,
+    "scope": "Inert synthetic bytes never executed; short child Python only for resource/cleanup controls. No actual M3 artifact exists yet."
+  },
+  "engine_review": {
+    "baseline": {
+      "bytes": 32172,
+      "sha256": "a652c8ae43af2d364f03ca27ceb4be88f335e68c3423c23217e6de849f7d3ddc"
+    },
+    "case_label_only_count": 5,
+    "case_label_only_definitions": [
+      "structure_check",
+      "output_scope",
+      "_execute",
+      "expected_build_plan",
+      "expected_launcher"
+    ],
+    "cleanup": "Original strict_cleanup pinned rawsource, original pid/start/session group identity retained until terminal proof/reap. Linkexec preserves leaderPID/start. Not cgroup/escaped-tree/wholehost confinement.",
+    "execute": "Original engine flow unchanged except fixed stage label: one start/deadlines, atomic fresh root/consumedCLAIM,preflight/staging,originalleader monitor,strictcleanup,postflight/content/receipt. No retry/stagechain.",
+    "global_AST": "Imports/top-level effects/constants equal after only M2->M3 labels.",
+    "success": "Only actualexit0,noerrors,postflight,cleanupcomplete,exactstaging/outputscope and ELF/MMDcontentgate permit genericPASS. All failures retainclaim/log/artifacts; no budgetincrease or destructive retry.",
+    "unchanged_definition_count": 21,
+    "unchanged_definitions": [
+      "need",
+      "digest",
+      "pin",
+      "verify_pin",
+      "exact_inventory",
+      "verify_inputs",
+      "verify_runtime_boundaries",
+      "load_cleanup",
+      "tree_sample",
+      "sample_gap",
+      "save_receipt",
+      "group_sample",
+      "_child_limits",
+      "render_worker_argv",
+      "load_pinned_module",
+      "expected_argv",
+      "copy_exact",
+      "stage_inputs",
+      "verify_staging",
+      "walk_output",
+      "main"
+    ],
+    "validate_delta": "M3 freeze/source review schema+status pins; new fixed build-specific parentruntime metadata, known caches/sources automatic pre/post and known absence union. Other admission logic retained."
+  },
+  "exact_execution_scope": {
+    "assertion_scope": "Original model camefrom--assertcodegen, preservedarchiveidentity; buildgate doesnot prove assertion execution/coverage.",
+    "compile": "One m3_main.cpp -> m3_main.o only; originalC++17,-Os,-MMD,VMflags and9stock-Wno unchanged. Not warningfree/Werror.",
+    "environment_template": {
+      "COMPILER_PATH": "${NEW_RUN_ROOT}/tools:${GCC_LIBEXEC}",
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "PATH": "${NEW_RUN_ROOT}/tools",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "excluded": [
+      "oldM1/M2harnessobjects",
+      "old.d/.dat",
+      "oldMakefiles",
+      "old.gch",
+      "PCHgeneration",
+      "make",
+      "codegen",
+      "JVM",
+      "modelrun",
+      "M1/M2/M17chaining"
+    ],
+    "launcher_equivalence": "Whole shellscript byteequal oldM2 after only m2->m3 basename substitution. Two shlex argv exact. set-eu compile success precedes exec link; no shell user substitution or model execution.",
+    "launcher_lines": [
+      "#!${SH}",
+      "set -eu",
+      "cd build",
+      "${CXX} -I. -MMD -I${VERILATOR_ROOT}/include -I${VERILATOR_ROOT}/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17 -Os -c -o m3_main.o m3_main.cpp",
+      "exec ${CXX} m3_main.o verilated.o verilated_threads.o VOrderedQkBehaviorCore__ALL.a -pthread -lpthread -latomic -o VOrderedQkBehaviorCore_m3"
+    ],
+    "link": "Onlym3_main.o +retainedverilated.o +verilated_threads.o +36modelobjectarchive -> newVOrderedQkBehaviorCore_m3; no modelrecompile.",
+    "ordinary_pch_header": "__pch.h retained ordinary text, no .gch or -include compilation flag.",
+    "staging": "13immutable0444 inputs:7originalgeneratedtextheaders +originalarchive +runtime2 +newM3TU/unchangedABI/passiveexpectedtable. Source495070c exact.",
+    "supervisor_argv": [
+      "${PARENT_PYTHON_PREFIX}/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "${FROZEN_BUILD_CONFIG}/supervisor.py",
+      "--manifest",
+      "${FROZEN_BUILD_CONFIG}/manifest.json",
+      "--manifest-sha256",
+      "be05f37176151ddb77969dbb111c75d9cbd9fd3c3dc5a42b91ff0b3b8ed05957",
+      "--execute-approved-once"
+    ],
+    "worker_argv_template": [
+      "${SH}",
+      "${NEW_RUN_ROOT}/tools/compile_link.sh"
+    ]
+  },
+  "identities": {
+    "CACHE_SOURCE_ASSOCIATION.json": {
+      "bytes": 37317,
+      "sha256": "a5ea20fa299dcb1df3309748187716436f0b672d3d058314bce4bd82daa57e22"
+    },
+    "COMMAND_PROPOSAL.json": {
+      "bytes": 1281,
+      "sha256": "812bea08c8219e30e90587fabc559aab6c88f36e69634595cc30777debee1549"
+    },
+    "FREEZE.json": {
+      "bytes": 6857,
+      "sha256": "b60a757396128f512792fd3fca7f2194151c97fa42f1c2f713a06b8c74abcbcc"
+    },
+    "PARENT_RUNTIME_DELTA.json": {
+      "bytes": 22774,
+      "sha256": "4e6232d8f4f1b700b7f98b58fd5a6c7a4be44cf54f5513ad57040f96e3037709"
+    },
+    "ROOT_REQUIRED_CHECKS.json": {
+      "bytes": 21023,
+      "sha256": "c59af2fc0077cf66ad961123394e21bfce8fc8cbe0e03614f26d478b0d0331b8"
+    },
+    "check_m3_build.py": {
+      "bytes": 13014,
+      "sha256": "d751878dcf05f283f3cb2915e5c7dab71d4630f4d6b1ccd579981b4823926bb6"
+    },
+    "compile_link.sh": {
+      "bytes": 865,
+      "sha256": "d92fbb0df23228a144361939dc76a59bb94a87f5d6f8ee5319081e578cd35be1"
+    },
+    "manifest.json": {
+      "bytes": 4171339,
+      "sha256": "be05f37176151ddb77969dbb111c75d9cbd9fd3c3dc5a42b91ff0b3b8ed05957"
+    },
+    "supervisor.py": {
+      "bytes": 33009,
+      "sha256": "f4cc512ca1188d8111549421446a5497b13071dba7bb7ca95b322ac14a0a3967"
+    }
+  },
+  "identity_checks": 51002,
+  "identity_final_stat_checks": 5335,
+  "identity_freeze": {
+    "bytes": 1805,
+    "sha256": "01649ec14a213b19e6232aef9319574d6728ca136065dcd1617f288dbc9bdc7f"
+  },
+  "identity_review": {
+    "bytes": 272533,
+    "sha256": "12104a258bbb931fdbc3806a747874520f1e213b88e63c81f100978c94db89cc"
+  },
+  "remaining_source_blockers": [],
+  "resource_assessment": {
+    "absolute_deadlines_from_one_start": {
+      "cleanup": 160,
+      "total": 180,
+      "work": 150
+    },
+    "basis": "Same120CPU singleTU+link budget asM2. ActualM2~24.925CPU,472801280BsampledRSS providecontext,notfitpromise forlargerM3table.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 120,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 134217728,
+      "total_wall_seconds": 180,
+      "work_wall_seconds": 150
+    },
+    "failure": "Retainallclaim/log/outputandreceiptevidencepossible;nooverride,retry,extension.",
+    "fit_guaranteed": false,
+    "limits": "1CPUaffinity. ChildperprocessCPU120/AS4GiB/file128MiBhardrlimits. AggregateCPU sampled/final;groupRSS2GiB/tree256MiBsampled,observedgap>0.1reject;log4MiBhardcap. NotparentAS/RSS hardlimit,fullsystemdiskquota orcgroupconfinement.",
+    "no_linear_timing_prediction": true,
+    "outer_seconds": 210
+  },
+  "reviewer_checkpoint": "Identity reviewer first assumed global absence-list sort; corrected to required original275ordered+new10. Retained failed reviewer attempt; no candidate or target failure. Some small metadata/newcache hash reads repeated; oldbiginputs0newhash.",
+  "runtime_and_identity": {
+    "aliases": 1129,
+    "compiler": "Original4177dependencyroles/19inventories,knowncompiler/header/linker/startup/wrapper/loaderclosure. Overinclusiveoldmake/Perlpinsnotinvocationevidence.",
+    "expected_actual_checks_with_manifest_self": 5397,
+    "inventories": 19,
+    "negative_slots": 285,
+    "old_records": "OriginalSV/archive/M1M2actual+FAIL records unchanged.",
+    "parent_python": {
+      "M2run_comparison": "37overlap/5newcache candidates (_compression,bz2,lzma,shutil,struct); notFraction/decimal/referencepath.",
+      "automatic_gate": "All46newpins in202runtime and10newabsences in285pre/post. Exactlynormal-I-S-B without-O.",
+      "baseline156_retained": true,
+      "builtins": "_struct/_bz2/_lzma/zlib builtin exactprimaryPython;8parentELF+2locale knownmaps remainoriginalpins,notnative-modelruntimeproof.",
+      "candidate_basis": "Current module.__cached__ filesafterbuildstage imports+argparseconstruction; source/code-equality proof. Auditcontainscollectorhashreads,so42isNOT42independentlyobservedimportopens.",
+      "external_gate": "Root MUST beforePopen andafterterminal hash46explicit cache/sourcepins +lexistsfalse10private-loaderpaths +exactparentLANG/LC_ALL/LC_CTYPE allC.UTF-8. Parentimports precedeautomaticvalidation;cannotretroactivelyprovealreadyimportedbytes.",
+      "historical_limit": "OldM1/M2build156runtime hadno.pyccachepins. This newqualificationdoesnot retroactivelyremoveoldgap orchangeactualnativefacts.",
+      "limit": "Knownstageimport/argparse/cache/loaderendpointqualification,not everyconditionalexceptionbranch orhostfilesystem/importsandbox.",
+      "new_cache_candidates": 42,
+      "new_source_names": [
+        "_compression.py",
+        "bz2.py",
+        "lzma.py",
+        "shutil.py"
+      ],
+      "new_sources": 4,
+      "raw_source_loaders": "Supervisor script and pinned rawexeccompile helpers; no candidate sibling pyc imported. M3logchecker/reference notloaded at buildstage.",
+      "runtime": 202
+    },
+    "role_pins": {
+      "dependencies": 4177,
+      "input": 13,
+      "provenance": 998,
+      "runtime": 202,
+      "source": 5
+    },
+    "role_total": 5395
+  },
+  "schema": "qwen2-fixed-m3-single-tu-build-independent-source-review-v1",
+  "source_review": {
+    "bytes": 13148,
+    "sha256": "495070c223f395bf63a143cea2f25733919be2af82b9e54c7767ed1454721002"
+  },
+  "status": "PASS_SOURCE_MOCK_ADMISSION_FIXED_M3_SINGLE_TU_LINK_ONLY_REQUIRES_NEW_ROOT_GO",
+  "origin_review": {
+    "bytes": 17702,
+    "sha256": "b12774d25e86cb7af312732c62d450696214007454697b70c1d5293034dc81b3"
+  },
+  "historical_source_only": true
+}

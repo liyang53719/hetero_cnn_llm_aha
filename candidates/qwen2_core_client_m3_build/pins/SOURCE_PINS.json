@@ -1,0 +1,114 @@
+{
+  "schema": "M3-source-delta-and-build-checker-v1",
+  "source_files": [
+    {
+      "name": "generate_reference.py",
+      "public_path": "source/generate_reference.py",
+      "bytes": 1707,
+      "sha256": "997f9380fc34460fb3e50205cd178d1a6c96455f9c4693b7daf507230d02d893",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "check_m3_log.py",
+      "public_path": "source/check_m3_log.py",
+      "bytes": 5503,
+      "sha256": "8ecf9295b0c9659a114d76efe311dc35696b52eacb423364746636dc89f8ae54",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_m3_contract.py",
+      "public_path": "source/test_m3_contract.py",
+      "bytes": 6267,
+      "sha256": "04289d947ede2b2907dc1bbc1bbe4fcb97f3c6dbf5b41646c4871d344c1f16c5",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "check_m3_build.py",
+      "public_path": "source/check_m3_build.py",
+      "bytes": 13014,
+      "sha256": "d751878dcf05f283f3cb2915e5c7dab71d4630f4d6b1ccd579981b4823926bb6",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_m3_build.py",
+      "public_path": "source/test_m3_build.py",
+      "bytes": 10552,
+      "sha256": "61a74b63102426e63adddb7489de1daa818615b7b29140d63e862dd685e69431",
+      "exact_original_bytes": true
+    }
+  ],
+  "referenced_source_files": [
+    {
+      "name": "reference_events.py",
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/reference_events.py",
+      "bytes": 2912,
+      "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7"
+    },
+    {
+      "name": "test_reference_events.py",
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/test_reference_events.py",
+      "bytes": 2704,
+      "sha256": "f065cffd5b021e53995ca9cf76d0adc88179de6ea18ad62216b6a4c794b6e926"
+    }
+  ],
+  "cpp_delta": {
+    "baseline_repo_path": "candidates/qwen2_core_client_m2_build/source/m2_main.cpp",
+    "patch": "M2_TO_M3_SOURCE.patch",
+    "patch_identity": {
+      "bytes": 7477,
+      "sha256": "315921914453ac149fbc7ec9505337593570b974dc105974d8c426ec2e61649d"
+    },
+    "output_name": "m3_main.cpp",
+    "bytes": 12929,
+    "sha256": "7c3b280683a1d66dfee704d902e743377b48eaf6db43a7ce2c4ef849bae7f9f5"
+  },
+  "reconstructed": {
+    "expected_m3.hpp": {
+      "bytes": 131382,
+      "sha256": "c389365468754674b980dde161830b1439b25e7cd4192d2ed812a8369b2a5129"
+    },
+    "generated_abi.hpp": {
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    }
+  },
+  "m3_source_freeze": {
+    "bytes": 4630,
+    "sha256": "51a8acc16c098240c2f13fc448f5172b5c6947fbf4137bd56e90574df9879765"
+  },
+  "build_source_freeze": {
+    "bytes": 6857,
+    "sha256": "b60a757396128f512792fd3fca7f2194151c97fa42f1c2f713a06b8c74abcbcc"
+  },
+  "source_qualification": {
+    "bytes": 13148,
+    "sha256": "495070c223f395bf63a143cea2f25733919be2af82b9e54c7767ed1454721002"
+  },
+  "build_qualification": {
+    "bytes": 17702,
+    "sha256": "b12774d25e86cb7af312732c62d450696214007454697b70c1d5293034dc81b3"
+  },
+  "private_build_sources_hash_only": {
+    "compile_link.sh": {
+      "bytes": 865,
+      "sha256": "d92fbb0df23228a144361939dc76a59bb94a87f5d6f8ee5319081e578cd35be1"
+    },
+    "supervisor.py": {
+      "bytes": 33009,
+      "sha256": "f4cc512ca1188d8111549421446a5497b13071dba7bb7ca95b322ac14a0a3967"
+    },
+    "assemble_candidate.py": {
+      "bytes": 8627,
+      "sha256": "e38305fdabcd83df50da6df1a8d46d2200933ddaebbe04ba835eec69314961e2"
+    },
+    "test_manifest.py": {
+      "bytes": 3525,
+      "sha256": "d788bb7791fe2fb7e1b24e6c0559fd136902eee9524e678a11926dc3d87431ee"
+    },
+    "test_supervisor.py": {
+      "bytes": 7336,
+      "sha256": "fcac4b402a40156d0e8057af808d480531b516c44bab563079b1d97ecf6d0416"
+    }
+  },
+  "scope": "No generated ABI/expected bulk or actual table data uploaded. Small closed zero-input formula generates scripted descriptors, not user tensors/model weights. 1/3 oracle is scalar integer RNE only."
+}

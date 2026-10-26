@@ -1,0 +1,42 @@
+{
+  "actual_external_after": {
+    "bytes": 9707,
+    "sha256": "398f417b2843ae65a130ce23934fd653868ec961188aa013efb4f9f77d6bb4ca"
+  },
+  "actual_external_before": {
+    "bytes": 9707,
+    "sha256": "398f417b2843ae65a130ce23934fd653868ec961188aa013efb4f9f77d6bb4ca"
+  },
+  "actual_facts": [
+    "Parent exact LANG/LC_ALL/LC_CTYPE allC.UTF-8 at externalchecks.",
+    "Root beforePopen andafterterminal verified46newpins=42module.cached cachecandidates+4stdlibsources,10knownprivate-loaderabsences.",
+    "Producer automaticpre/post5397pins includesruntime202(old156+46);independent currentposthocidentity verified;19inventories1129aliases285absences.",
+    "42cache/current sourcecompile-code equality fromfrozenproof withknownnormal-I-S-B/no-O;builtins_struct/_bz2/_lzma/zlib notadditional.so."
+  ],
+  "cache_source_association": {
+    "bytes": 37317,
+    "sha256": "a5ea20fa299dcb1df3309748187716436f0b672d3d058314bce4bd82daa57e22"
+  },
+  "candidate_root_requirements": {
+    "bytes": 21023,
+    "sha256": "c59af2fc0077cf66ad961123394e21bfce8fc8cbe0e03614f26d478b0d0331b8"
+  },
+  "candidate_runtime_delta": {
+    "bytes": 22774,
+    "sha256": "4e6232d8f4f1b700b7f98b58fd5a6c7a4be44cf54f5513ad57040f96e3037709"
+  },
+  "limits": [
+    "42iscurrentmodule.cached candidatecount;probeauditcontainsidentity hashreads,not42independentlyobservedimportopens.",
+    "Original parent live import/readtrace notrecorded bybuild;endpointpre/post doesnotprovecontinuousisolation orallconditionalimports.",
+    "Parent known8ELF/locale qualification distinctfromnewnativebinary5runtimeclosure.",
+    "OnlythisnewM3build gainscachepins;oldM1/M2build declaredruntime156 hadno cachepins andhistoricalcoverage remainsqualified.",
+    "No rebuild,cachedeletion ororiginalevidencemodification used to close thisnewstage."
+  ],
+  "schema": "actual-M3-build-parent-Python-known-endpoint-qualification-v1",
+  "status": "PASS_NEW_BUILD_KNOWN_CACHE_SOURCE_ENDPOINTS_NOT_GENERAL_IMPORT_ISOLATION",
+  "origin_review": {
+    "bytes": 2619,
+    "sha256": "42db9c3bb8c5ef57858d953cf8eecd290639a294dae52562f86a1e8f0a117426"
+  },
+  "historical_source_only": false
+}

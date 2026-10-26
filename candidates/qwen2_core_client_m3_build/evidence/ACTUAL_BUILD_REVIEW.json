@@ -1,0 +1,422 @@
+{
+  "acceptance": {
+    "actual_Cpp_compile_link": true,
+    "actual_M3_behavior": false,
+    "duty_cycle": null,
+    "full128_RTL": false,
+    "full29": false,
+    "full_FMA_numerical": false,
+    "mac_utilization": null,
+    "ninety_percent_target": false,
+    "scripted_Matrix_numerical": false
+  },
+  "audit_coverage_limitations": [
+    "Knownnewparentcacheendpointsnotallconditionalimportsorcontinuousisolation",
+    "NativeELFstaticknownclosure notruntime loadertrace",
+    "Compiledconstanttables notexecutedassertions",
+    "NoM3behaviorrunyet"
+  ],
+  "binary": {
+    "bytes": 3425088,
+    "elf": {
+      "build_ids": [
+        "bf7246d5adbdbc5ec44c09194b9ff9239fc5055a"
+      ],
+      "defined_model_function_count": 200,
+      "defined_model_functions_sha256": "584af90baa17723f6690dfc9f5d65283ef6edc90d226fea0073027ad66969d94",
+      "dynamic_tags": [
+        1,
+        1,
+        1,
+        1,
+        12,
+        13,
+        25,
+        27,
+        26,
+        28,
+        1879047925,
+        5,
+        6,
+        10,
+        11,
+        21,
+        3,
+        2,
+        20,
+        23,
+        7,
+        8,
+        9,
+        1879048187,
+        1879048190,
+        1879048191,
+        1879048176,
+        1879048185
+      ],
+      "elf_type": 3,
+      "interpreter": "${DYNAMIC_LOADER}",
+      "machine": 62,
+      "main": [
+        {
+          "bytes": 833,
+          "name": "main"
+        }
+      ],
+      "needed": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "sections": 34,
+      "soname": null,
+      "symbol_count": 1544,
+      "version_definitions": [],
+      "version_requirements": {
+        "libc.so.6": [
+          "GLIBC_2.32",
+          "GLIBC_2.17",
+          "GLIBC_2.38",
+          "GLIBC_2.34",
+          "GLIBC_2.2.5"
+        ],
+        "libgcc_s.so.1": [
+          "GCC_3.0"
+        ],
+        "libm.so.6": [
+          "GLIBC_2.29"
+        ],
+        "libstdc++.so.6": [
+          "CXXABI_1.3.7",
+          "GLIBCXX_3.4.32",
+          "CXXABI_1.3.8",
+          "GLIBCXX_3.4.17",
+          "GLIBCXX_3.4.18",
+          "CXXABI_1.3.9",
+          "CXXABI_1.3.2",
+          "GLIBCXX_3.4.29",
+          "GLIBCXX_3.4.26",
+          "GLIBCXX_3.4.9",
+          "GLIBCXX_3.4.11",
+          "CXXABI_1.3",
+          "GLIBCXX_3.4.14",
+          "GLIBCXX_3.4.30",
+          "CXXABI_1.3.11",
+          "GLIBCXX_3.4.22",
+          "GLIBCXX_3.4.15",
+          "GLIBCXX_3.4.21",
+          "GLIBCXX_3.4"
+        ]
+      }
+    },
+    "mode": "0o755",
+    "relative_path": "build/VOrderedQkBehaviorCore_m3",
+    "role": "executable",
+    "sha256": "f89687b5593c242325d88bba17048351cc9fde8d7fcb3662b666c1d4c0ada745"
+  },
+  "binary_runtime_manifest": {
+    "bytes": 23243,
+    "sha256": "8cec0287f5bf4fa6c4ca152c9fab35555152b818dfa39580353bf510884c3187"
+  },
+  "binary_source_freeze": {
+    "bytes": 1565,
+    "sha256": "176597684f1c60cfaa687f1b888736f34819204b1f458d3785d102544de0b6a9"
+  },
+  "binary_source_freeze_time_scope": "Earlystaticbinarycheckpoint saidmetadataFINALpending atcreation;thisFINALclosesmetadata,doesnotrewritecheckpoint.",
+  "cleanup_saved_proof_review": {
+    "bytes": 1398,
+    "sha256": "fbc872c1de018fb5e0d8551ba3cb4d38911123f7d9e40876c322d6ad496176dc"
+  },
+  "harness_source_review": {
+    "bytes": 13148,
+    "sha256": "495070c223f395bf63a143cea2f25733919be2af82b9e54c7767ed1454721002"
+  },
+  "identity_freeze": {
+    "bytes": 2099,
+    "sha256": "26143eebb2db26ede8690c3834d3166d27a05ae049826bfe94ba1cf2037ecc22"
+  },
+  "identity_review": {
+    "bytes": 37332,
+    "sha256": "9d1a15eba89173d6d1a19099806ad5b314ffca09d84950cee8f56841e0073417"
+  },
+  "independent_semantics": {
+    "M3special_probability": "Token0/1/2 tableA0=0x3f80/0x3f00/0x3eab. ActualruntimeDiv/softmax/PVacceptance notyettested.",
+    "MMD": {
+      "bytes": 821,
+      "complete_system_header_trace": false,
+      "count": 9,
+      "dependencies": [
+        "${NEW_RUN_ROOT}/build/m3_main.cpp",
+        "${NEW_RUN_ROOT}/build/generated_abi.hpp",
+        "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore.h",
+        "${VERILATOR_ROOT}/include/verilated.h",
+        "${VERILATOR_ROOT}/include/verilatedos.h",
+        "${VERILATOR_ROOT}/include/verilated_config.h",
+        "${VERILATOR_ROOT}/include/verilated_types.h",
+        "${VERILATOR_ROOT}/include/verilated_funcs.h",
+        "${NEW_RUN_ROOT}/build/expected_m3.hpp"
+      ],
+      "first_source": "stagedm3_main.cpp",
+      "literal_pinned_or_staged_real_paths": true,
+      "target": "m3_main.o"
+    },
+    "binary_bytes": 3425088,
+    "binary_type": "ET_DYN",
+    "checks": 14880,
+    "constants_scope": "Actualobject ANDlinkedELF containall1728memory/576PV/1260vectorrowfields matchingindependentordinalderivedM3sourceexpectations. Static compiledconstantcontent,notruntimebranches/assertionexecution.",
+    "direct_NEEDED": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "entry_filebacked_executable": true,
+    "interpreter": "${DYNAMIC_LOADER}",
+    "known_native_runtime_files": 5,
+    "main_defined": [
+      {
+        "bytes": 833,
+        "name": "main"
+      }
+    ],
+    "model_symbol_count_scope": "200definedmangledfunctionnames matchmodelmarker;namefilter nothardwaremodulecount/regeneratedmodelclaim. Originalarchive36unchanged.",
+    "native_runtime_proof": "NewELF independentdynamic/versionparse;fiveknownruntimeELFs reuseoriginalindependentmetadata/SHA pluscurrentcomplete7fieldstat anddeclareddependencyidentityaudit. Notloadertrace/exhaustivefuture dlopenorfileIO.",
+    "object_bytes": 293784,
+    "object_type": "ET_REL",
+    "old_independent_parser_reused_not_production_checker": true,
+    "read_only_expected_constant_tables": [
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 41472,
+        "read_only": true,
+        "rows": 1728,
+        "symbol": "_ZN9reference6memoryE",
+        "table": "memory"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 2304,
+        "read_only": true,
+        "rows": 576,
+        "symbol": "_ZN9reference2pvE",
+        "table": "pv"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 35280,
+        "read_only": true,
+        "rows": 1260,
+        "symbol": "_ZN9reference6vectorE",
+        "table": "vector"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 41472,
+        "read_only": true,
+        "rows": 1728,
+        "symbol": "_ZN9reference6memoryE",
+        "table": "memory"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 2304,
+        "read_only": true,
+        "rows": 576,
+        "symbol": "_ZN9reference2pvE",
+        "table": "pv"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 35280,
+        "read_only": true,
+        "rows": 1260,
+        "symbol": "_ZN9reference6vectorE",
+        "table": "vector"
+      }
+    ],
+    "report": {
+      "bytes": 13850,
+      "sha256": "50ba9c3945d4364de8032b56434d3dc7d7819b65ee8ced8a5c6d1e72883affbd"
+    },
+    "source_file_markers": {
+      "binary": [
+        "Scrt1.o",
+        "VOrderedQkBehaviorCore.cpp",
+        "m3_main.cpp",
+        "verilated.cpp",
+        "crtstuff.c",
+        "verilated_threads.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.cpp",
+        "VOrderedQkBehaviorCore__Syms.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.cpp",
+        "VOrderedQkBehaviorCore__ConstPool_0.cpp",
+        "VOrderedQkBehaviorCore___024root__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_48x128__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.cpp",
+        "crtstuff.c",
+        ""
+      ],
+      "object": [
+        "m3_main.cpp"
+      ],
+      "scope": "static STT_FILE strings, not independent runtime source execution trace"
+    },
+    "verified_version_edges": 13
+  },
+  "no_extra_execution": {
+    "codegen_requested": false,
+    "compiler_and_linker_actually_executed": true,
+    "evidence": "Exactapproved/stagedscriptonlycompileoneM3TU thenexeclink;immutablearchive/runtime2 andexact16outputclosurebindscope. Emptylog notper-exec trace. staging.no_native_execution appliesonlycopyhelper,notwholeactualbuild.",
+    "generated_model_TUs_recompiled": false,
+    "make_requested": false,
+    "model_executed": false,
+    "new_PCH_requested": false
+  },
+  "outputs": {
+    "all_actual_run_bytes": 10782937,
+    "all_actual_run_files": 28,
+    "artifact_identity_method": "Child hashed actual16outputs once andmatchedproducerSHA/fullidentity;parent staticreadnewobject/ELFonce,formalMMDonce plusoneearlier tiny821Bdisplay,withoutsecondfullcontenthash. Manifestcopybyteidentical. No oldSV/archivecontentreparse.",
+    "artifact_manifest": {
+      "bytes": 15703,
+      "sha256": "8c4989a6ab6a6af970dd7575cde5b9a8e8e563a45b92e20f34df8ffafe671553"
+    },
+    "bytes": 10759877,
+    "empty_log_scope": "Fixedshell doesnot echo commands. No textwarnings observed inemptylog,notwarningfree/Werror;9originalstock-Wno flags preserved.",
+    "file_count": 16,
+    "new_ELF_count": 1,
+    "new_MMD_count": 1,
+    "new_object_count": 1,
+    "old_evidence": "Original129buildfiles,M2build16,M1actual/root8,M2actual/root10 remainunchangedcompleteidentities;no originalsmodified.",
+    "staged_inputs": "7originalgeneratedtextheaders,original36generatedobjectarchive+2runtimeobjects,newm3main+sameABI+expectedtable;noM1/M2harnessobjects/gch/d/mk ornewmodelTUs.",
+    "staged_unchanged_inputs": 13,
+    "tool_copies": 9,
+    "worker_log_bytes": 0
+  },
+  "pins_and_runtime_coverage": {
+    "absence_paths": 285,
+    "aliases": 1129,
+    "claim_boundary": "Knownpin/cache/loaderendpoints checked pre/post; no wholehost/cgroup/continuousimportisolation claim.",
+    "declared_postflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5397
+    },
+    "declared_preflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5397
+    },
+    "identity_final_stat_checks": 5390,
+    "independent_identity_checks": 38124,
+    "new_root_external46pins10absence_locale_verified": true,
+    "parent_Python_complete_bytecode_closure_proven": false,
+    "parent_known_endpoint_qualification": {
+      "bytes": 2619,
+      "sha256": "42db9c3bb8c5ef57858d953cf8eecd290639a294dae52562f86a1e8f0a117426"
+    },
+    "runtime202": true
+  },
+  "producer_generic_status": "PASS_FROZEN_MODEL_BUILD_ONLY",
+  "producer_receipt": {
+    "bytes": 21498,
+    "sha256": "bb1b76977723d114f32673aaba983512330c5fc1e904571f6895b3fd4b0a699a"
+  },
+  "producer_schema": "qwen2-core-client-fixed-m3-single-tu-link-supervisor-v1",
+  "producer_stage": "fixed-m3-single-tu-link-only",
+  "remaining_actual_artifact_blockers": [],
+  "resource_terminal": {
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 120,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 134217728,
+      "total_wall_seconds": 180,
+      "work_wall_seconds": 150
+    },
+    "cleanup_complete": true,
+    "cleanup_evidence_scope": "Savedoriginalowner/group proof:2completepre-reap scans,leaderZ,no nonleaderatbarrier,thenoriginalleaderdirectreap.8records1546B. No reviewer livepoll/processsignal.",
+    "errors": [],
+    "final_aggregate_cpu_seconds": 25.199429894999998,
+    "fit_scope": "Thisoneactualbuildfit120CPU/150work/160cleanup/180total/210outer; no promise forfutureM3simulation orothercase.",
+    "inner_wall_seconds": 25.246132343017962,
+    "max_observed_sample_gap_seconds": 0.02972174499882385,
+    "outer_timeout": false,
+    "outer_wall_seconds": 25.493011227983516,
+    "root_returncode": 0,
+    "sampled_peak_RSS_bytes": 474587136,
+    "sampled_peak_cpu_seconds": 24.245748172,
+    "sampled_peak_tree_bytes": 10761439,
+    "worker_exit_code": 0
+  },
+  "review_actions": "Readonlyterminalactualfiles/metadata; externalreviewfilesonly. No native,ldd,model,JVM,build orEDA rerun.",
+  "root_approval": {
+    "bytes": 3497,
+    "sha256": "251989c8aa42b81dc21e83615bb6348cf30417d04bae9ac34a396ef8bf94a890"
+  },
+  "root_receipt": {
+    "bytes": 121,
+    "sha256": "7290526630b2b3572554bf4e54f55879094d55c8c48041ceef59b7964c9b9933"
+  },
+  "schema": "qwen2-actual-fixed-M3-single-TU-build-independent-review-v1",
+  "source_admission_freeze": {
+    "bytes": 4530,
+    "sha256": "352b0bb0e2f3fcf820433ce8a69816c53c052a385a949ed4f0e792a0119d0a86"
+  },
+  "source_admission_review": {
+    "bytes": 17702,
+    "sha256": "b12774d25e86cb7af312732c62d450696214007454697b70c1d5293034dc81b3"
+  },
+  "specific_content_status": "PASS_FIXED_M3_SINGLE_TU_LINK_ONLY",
+  "status": "PASS_ACTUAL_FIXED_M3_SINGLE_TU_COMPILE_LINK_AND_STATIC_MODEL_ELF_CLOSURE_ONLY_NOT_EXECUTION",
+  "origin_review": {
+    "bytes": 19372,
+    "sha256": "986bafece15d11e3a45426377d565fbca5e04c4dcc1a359d3d2afcba335abff4"
+  },
+  "origin_freeze": {
+    "bytes": 2972,
+    "sha256": "91f9869504fd35402e9b616a63280d9444674004c56d77346c6fee3504bdc1a1"
+  },
+  "projection_note": "Private locators and process/file identities removed; interpreter/MMD paths role-projected; actual virtual addresses removed. Static compiled tables are not executed assertions. Historical source/actual statements are scoped to this build, no later run included."
+}

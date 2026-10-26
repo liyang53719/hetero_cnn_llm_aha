@@ -1,0 +1,102 @@
+{
+  "status": "PASS_PINNED_PREPARED_LAYOUT_CONTRACT",
+  "checks": 1993,
+  "layout_id": 0,
+  "layout_version": 1,
+  "format": "FP32 prepared [Q[valueHeads,128],K[valueHeads,128],V[valueHeads,128],gate[valueHeads,16]]; gate=[g,beta,zero14]",
+  "official_repeat_source": {
+    "source_sha256": {
+      "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+      "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944"
+    },
+    "repeat_ast_sha256": "967f6ef189bffa9a7ab5606d1ef36cac1065e70532355b5d36055414caf0f085",
+    "model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+    "transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+    "key_heads": 16,
+    "value_heads": 32,
+    "source_head": "value_head//2",
+    "official_forward_executed": false,
+    "production_chisel_supports_grouped_heads": false,
+    "native_acceptance": false
+  },
+  "profiles": [
+    {
+      "key_heads": 16,
+      "value_heads": 16,
+      "prepared_row_bytes": 25600,
+      "raw_conv_bf16_row_bytes": 12288,
+      "prepared_role_offsets": [
+        0,
+        8192,
+        16384
+      ],
+      "prepared_gate_offset": 24576,
+      "state_bytes": 1048576,
+      "output_bf16_row_bytes": 4096,
+      "scratch_m128_bytes": 26869760
+    },
+    {
+      "key_heads": 16,
+      "value_heads": 32,
+      "prepared_row_bytes": 51200,
+      "raw_conv_bf16_row_bytes": 16384,
+      "prepared_role_offsets": [
+        0,
+        16384,
+        32768
+      ],
+      "prepared_gate_offset": 49152,
+      "state_bytes": 2097152,
+      "output_bf16_row_bytes": 8192,
+      "scratch_m128_bytes": 53739520
+    },
+    {
+      "key_heads": 16,
+      "value_heads": 16,
+      "prepared_row_bytes": 25600,
+      "raw_conv_bf16_row_bytes": 12288,
+      "prepared_role_offsets": [
+        0,
+        8192,
+        16384
+      ],
+      "prepared_gate_offset": 24576,
+      "state_bytes": 1048576,
+      "output_bf16_row_bytes": 4096,
+      "scratch_m128_bytes": 26869760
+    }
+  ],
+  "producer_mapping": "compact Conv Q/K source=valueHead//(valueHeads/16); prepared output slot=valueHead",
+  "consumer_mapping": "direct valueHead; NEVER apply head//2 a second time",
+  "source_pins": {
+    "candidates/qwen35_gdn_prefill/prep/layout.py": {
+      "bytes": 3797,
+      "sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29"
+    },
+    "candidates/qwen35_gdn_prefill/prep/model.py": {
+      "bytes": 29633,
+      "sha256": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11"
+    },
+    "candidates/qwen35_gdn_prefill/chunk/model.py": {
+      "bytes": 47272,
+      "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40"
+    },
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py": {
+      "bytes": 103891,
+      "sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30"
+    },
+    "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json": {
+      "bytes": 3544,
+      "sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944"
+    },
+    "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala": {
+      "bytes": 10591,
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85"
+    },
+    "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala": {
+      "bytes": 3420,
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c"
+    }
+  },
+  "scope": "Read-only pinned recipe/layout and independent address formula checks; not actual producer, scalar, Matrix, block or RTL numerical qualification"
+}

@@ -1,0 +1,177 @@
+--- a/candidates/gdn_runtime_chunk_loadprep/source/GdnRuntimeChunkLoadPrepOwner.scala
++++ b/candidates/gdn_runtime_chunk_loadprep/source/GdnRuntimeChunkLoadPrepOwner.scala
+@@ -10,7 +10,7 @@
+   * prep result alone does not carry these fields. All roots, receipts and input
+   * bytes must remain exclusively owned and stable for the entire stage job.
+   */
+-class GdnChunkPreparedReceipt extends Bundle {
++class GdnRuntimeChunkPreparedReceipt extends Bundle {
+   val tag = UInt(32.W)
+   val expectedGeneration = UInt(32.W)
+   val tokens = UInt(16.W)
+@@ -20,19 +20,28 @@
+   val preparedComplete = Bool()
+   val drained = Bool()
+   val recurrentMode = Bool()
+-}
+-
+-class GdnChunkLoadPrepJob extends Bundle {
++  // Layout 0 is the existing prepared FP32 [Q[valueHead], K[valueHead],
++  // V[valueHead], gates[valueHead,16]] row, NOT compact raw Conv/QKV.
++  val layoutId = UInt(2.W)
++  val layoutVersion = UInt(8.W)
++  val rowBytes = UInt(32.W)
++  val keyHeads = UInt(6.W)
++  val valueHeads = UInt(6.W)
++}
++
++class GdnRuntimeChunkLoadPrepJob extends Bundle {
+   val context = new GdnChunkJob
+-  val head = UInt(16.W)
+-  val chunk = UInt(16.W)
+-  val prepReady = new GdnChunkPreparedReceipt
++  val keyHeads = UInt(6.W) // admitted pinned key-head count is 16
++  val valueHeads = UInt(6.W) // runtime 16 or 32; no elaboration parameter
++  val head = UInt(5.W) // fixed physical maximum 32
++  val chunk = UInt(1.W)
++  val prepReady = new GdnRuntimeChunkPreparedReceipt
+   val initialReady = new GdnChunkStageReceipt
+   val previousStateReady = new GdnChunkStageReceipt
+   val previousOutputReady = new GdnChunkStageReceipt
+ }
+ 
+-class GdnChunkLoadPrepResult extends Bundle {
++class GdnRuntimeChunkLoadPrepResult extends Bundle {
+   val receipt = new GdnChunkStageReceipt
+   val readBytes = UInt(64.W)
+   val addRequests = UInt(7.W)
+@@ -41,13 +50,13 @@
+   val stageComplete = Bool()
+ }
+ 
+-class GdnChunkLoadPrepPort extends Bundle {
+-  val job = Flipped(Decoupled(new GdnChunkLoadPrepJob))
++class GdnRuntimeChunkLoadPrepPort extends Bundle {
++  val job = Flipped(Decoupled(new GdnRuntimeChunkLoadPrepJob))
+   val committed = Input(new GdnChunkCommittedState)
+   val memory = Decoupled(new MemoryRequest)
+   val response = Flipped(Decoupled(new MemoryResponse))
+   val scalar = new GdnScalarClient
+-  val done = Decoupled(new GdnChunkLoadPrepResult)
++  val done = Decoupled(new GdnRuntimeChunkLoadPrepResult)
+   val resetRequired = Output(Bool())
+ }
+ 
+@@ -55,6 +64,10 @@
+   * No scalar/vector unit is instantiated; uses the existing shared scalar Add
+   * (RNE, after-rounding tininess, legacy error policy). Exact subnormals/zero
+   * are not rejected merely for their exponent. Q is already scaled in prep.
++  * Fixed maximum32 interface, runtime16/32 value heads, keyHeads always16.
++  * Prepared row bytes are 25600/51200, matching the existing grouped recipe
++  * and unified state-transfer owner's complete-span checks. No compact layout
++  * is accepted. Q/K repetition belongs to the prepared producer, not here.
+   * No exp, derived QK, Matrix, solve, state-update or root publication exists.
+   *
+   * One memory OR scalar request is outstanding at a time. MemoryResponse has
+@@ -65,7 +78,7 @@
+   * Errors lock after held done; partial private writes are not rolled back.
+   * Reset recovery must also reset/drain shared scalar and memory transport.
+   */
+-class GdnChunkLoadPrepOwner extends Module {
++class GdnRuntimeChunkLoadPrepOwner extends Module {
+   import GdnChunkGeometry._
+   private val stateBytes = GdnChunkAddressPlan.PerHeadStateBytes
+   private val chunkBytes = GdnChunkAddressPlan.PerHeadChunkBytes
+@@ -73,18 +86,19 @@
+   private val stride128 = stateBytes + 2 * chunkBytes
+   private val phaseBytes = 102400
+   private val qkvOffsets = Seq(4096, 36864, 69632)
+-  require(Heads == 16 && KeyDim == 128 && ValueDim == 128 && ChunkRows == 64 && BeatBytes == 64)
++  require(KeyDim == 128 && ValueDim == 128 && ChunkRows == 64 && BeatBytes == 64)
+   require(stateBytes == 65536 && chunkBytes == 806912 && stride16 == 872448 && stride128 == 1679360)
+   require(GdnChunkAddressPlan.Shapes.take(4).map(_.name) == Vector("gates", "q", "k", "v"))
+   require(GdnChunkAddressPlan.Shapes.take(4).map(_.bytes).sum == phaseBytes)
+   require((1 to 3).map(i => GdnChunkAddressPlan.Shapes.take(i).map(_.bytes).sum) == qkvOffsets)
+ 
+-  val io = IO(new GdnChunkLoadPrepPort)
++  val io = IO(new GdnRuntimeChunkLoadPrepPort)
+   val idle :: issueRead :: waitRead :: issueAdd :: waitAdd :: issueWrite :: waitWrite :: finish :: locked :: Nil = Enum(9)
+   val state = RegInit(idle)
+   val tag = RegInit(0.U(32.W))
+   val generation = RegInit(0.U(32.W))
+-  val head = RegInit(0.U(4.W))
++  val head = RegInit(0.U(5.W))
++  val activeValueHeads = RegInit(16.U(6.W))
+   val chunk = RegInit(0.U(1.W))
+   val tokens = RegInit(0.U(16.W))
+   val inputBase = RegInit(0.U(64.W))
+@@ -105,10 +119,14 @@
+   val cycles = RegInit(0.U(64.W))
+   val token = Cat(chunk, row)
+   val validRow = token.pad(16) < tokens
+-  val roleInputOffset = MuxLookup(role, 0.U(66.W))(Seq(1.U -> 0.U(66.W), 2.U -> 8192.U(66.W), 3.U -> 16384.U(66.W)))
++  // Prepared producer already applies official Q/K repeat_interleave ordering.
++  // All three role sections therefore have valueHeads * 128 FP32 words.
++  val roleBytes = (activeValueHeads.pad(66) << 9)
++  val preparedRowBytes = (activeValueHeads.pad(66) * 1600.U)
++  val roleInputOffset = MuxLookup(role, 0.U(66.W))(Seq(1.U -> 0.U(66.W), 2.U -> roleBytes, 3.U -> (roleBytes << 1)))
+   val roleScratchOffset = MuxLookup(role, 0.U(66.W))(Seq(1.U -> 4096.U(66.W), 2.U -> 36864.U(66.W), 3.U -> 69632.U(66.W)))
+-  val inputRow = inputBase.pad(66) + (token * PreparedRowBytes.U).pad(66)
+-  val gateReadAddress = inputRow + 24576.U + (head.pad(66) << 6)
++  val inputRow = inputBase.pad(66) + (token * preparedRowBytes).pad(66)
++  val gateReadAddress = inputRow + roleBytes * 3.U + (head.pad(66) << 6)
+   val vectorReadAddress = inputRow + roleInputOffset + (head.pad(66) << 9) + (beat.pad(66) << 6)
+   val gateWriteAddress = chunkBase.pad(66) + (row.pad(66) << 6)
+   val vectorWriteAddress = chunkBase.pad(66) + roleScratchOffset + (row.pad(66) << 9) + (beat.pad(66) << 6)
+@@ -154,7 +172,8 @@
+   when(io.job.fire) {
+     val j = io.job.bits
+     val c = j.context
+-    tag := c.tag; generation := c.expectedGeneration; head := j.head(3, 0); chunk := j.chunk(0)
++    tag := c.tag; generation := c.expectedGeneration; head := j.head; chunk := j.chunk
++    activeValueHeads := j.valueHeads
+     tokens := c.tokens; inputBase := c.input
+     row := 0.U; role := 0.U; beat := 0.U; sequence := 0.U; payload := 0.U; cumulative := 0.U
+     memoryOutstanding := false.B; scalarOutstanding := false.B
+@@ -163,11 +182,12 @@
+     val stride = Mux(is128, stride128.U, stride16.U)
+     val selectedChunk = c.scratch.pad(66) + (j.head * stride).pad(66) + stateBytes.U + (j.chunk * chunkBytes.U).pad(66)
+     chunkBase := selectedChunk(63, 0)
+-    val inputBytes = (c.tokens * PreparedRowBytes.U).pad(66)
+-    val outputBytes = (c.tokens * OutputRowBytes.U).pad(66)
+-    val scratchBytes = Mux(is128, GdnChunkAddressPlan.scratchBytes(128).U(66.W), GdnChunkAddressPlan.scratchBytes(16).U(66.W))
+-    val spans = Seq((c.input, inputBytes), (c.stateIn, StateBytes.U(66.W)),
+-      (c.stateOut, StateBytes.U(66.W)), (c.output, outputBytes), (c.scratch, scratchBytes))
++    val inputBytes = (c.tokens * j.valueHeads * 1600.U).pad(66)
++    val outputBytes = (c.tokens * j.valueHeads * 256.U).pad(66)
++    val totalStateBytes = (j.valueHeads * 65536.U).pad(66)
++    val scratchBytes = (j.valueHeads * stride).pad(66)
++    val spans = Seq((c.input, inputBytes), (c.stateIn, totalStateBytes),
++      (c.stateOut, totalStateBytes), (c.output, outputBytes), (c.scratch, scratchBytes))
+     def badSpan(base: UInt, size: UInt): Bool =
+       base(5, 0) =/= 0.U || size === 0.U || base.pad(66) + size > (BigInt(1) << AddressBits).U
+     def overlap(a: UInt, na: UInt, b: UInt, nb: UInt): Bool =
+@@ -181,9 +201,11 @@
+     val p = j.prepReady
+     val prepReady = p.tag === c.tag && p.expectedGeneration === c.expectedGeneration && p.tokens === c.tokens &&
+       p.input === c.input && p.status === Status.Ok.U && p.writeBytes === inputBytes &&
+-      p.preparedComplete && p.drained && !p.recurrentMode
++      p.preparedComplete && p.drained && !p.recurrentMode && p.layoutId === 0.U &&
++      p.layoutVersion === 1.U && p.rowBytes === j.valueHeads * 1600.U &&
++      p.keyHeads === j.keyHeads && p.valueHeads === j.valueHeads
+     def sameReceipt(r: GdnChunkStageReceipt, phase: Int): Bool =
+-      r.tag === c.tag && r.expectedGeneration === c.expectedGeneration && r.head.pad(16) === j.head &&
++      r.tag === c.tag && r.expectedGeneration === c.expectedGeneration && r.head === j.head &&
+         r.chunk === 0.U && r.phase === phase.U && r.status === Status.Ok.U && r.drained
+     val initialReady = sameReceipt(j.initialReady, 0) && j.initialReady.scratchAckBytes === stateBytes.U &&
+       j.initialReady.outputAckBytes === 0.U && j.initialReady.stateAckBytes === 0.U
+@@ -192,7 +214,8 @@
+     val previousOutputReady = sameReceipt(j.previousOutputReady, 17) && j.previousOutputReady.outputAckBytes === 16384.U &&
+       j.previousOutputReady.scratchAckBytes === 0.U && j.previousOutputReady.stateAckBytes === 0.U
+     when(rootBad) { fail(Status.Dependency.U) }
+-      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) || j.head >= Heads.U ||
++      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) || j.keyHeads =/= 16.U ||
++        (j.valueHeads =/= 16.U && j.valueHeads =/= 32.U) || j.head >= j.valueHeads ||
+         j.chunk >= Mux(is128, 2.U, 1.U) || c.expectedGeneration === "hffffffff".U || badAddress || aliases) { fail(Status.Bounds.U) }
+       .elsewhen(c.vectorPolicy =/= GdnChunkVectorPolicy.LegacyFatalUnderflow.U) { fail(Status.Unsupported.U) }
+       .elsewhen(!prepReady || !Mux(j.chunk === 0.U, initialReady, previousStateReady && previousOutputReady)) { fail(Status.Dependency.U) }

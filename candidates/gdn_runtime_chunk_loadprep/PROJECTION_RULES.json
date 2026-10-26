@@ -1,0 +1,26 @@
+{
+  "review_retained_sections": [
+    "schema",
+    "status",
+    "actual_control_evidence",
+    "authorization_scope",
+    "closure_limitations",
+    "independent_pure_controls",
+    "original_owner_sha256",
+    "overall_not_claimed",
+    "resources_and_cleanup",
+    "review_actions",
+    "runtime_command_evidence",
+    "source_blocking_findings_for_this_narrow_scope",
+    "source_findings"
+  ],
+  "review_omitted_fields_within_sections": [
+    "resources_and_cleanup.CPU",
+    "resources_and_cleanup.original_absolute_deadlines"
+  ],
+  "other_review_sections": "Private local paths/session identity omitted; artifact digests/sizes bound separately. All retained review fields unchanged.",
+  "layout_transform": "Only source_pins keys map private staged source roots to exact public repository paths; all values/other layout fields unchanged.",
+  "source_transform": "Two exact original Scala bytes; source delta applies after copying the pinned original owner to the new candidate path; same original postimage. No original owner/root source mutation.",
+  "command_transform": "Shell argv projected to roles; exact inverse against original compile and test argv verified without invoking them; ordered106 dependency hash/size/path identities match existing public lock.",
+  "historical_environment": "No new historical JAVA_* or Python flags receipt invented; original gap retained."
+}

@@ -1,0 +1,96 @@
+{
+  "public_commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307",
+  "files": [
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "git_blob_sha": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+    },
+    {
+      "path": "integration/gemmini/EmitHeteroFP32Alu.scala",
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "git_blob_sha": "d7e8191988456d32d6e9e90d58ca19dba2b2427e"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala",
+      "bytes": 1854,
+      "sha256": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+      "git_blob_sha": "e3903d30bdee7e041e9aa124275c20f6955990e9"
+    },
+    {
+      "path": "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+      "bytes": 3420,
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c",
+      "git_blob_sha": "e4f1ce39d41d4722936ca71097436a5fe2cb917d"
+    },
+    {
+      "path": "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+      "bytes": 9520,
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+      "git_blob_sha": "bdb64b8b07cb79dd5730d987d9412469642f8893"
+    },
+    {
+      "path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+      "git_blob_sha": "98d221a4c2426b16ebcb80b8153b2f9d31805a02"
+    },
+    {
+      "path": "candidates/qwen35_gdn_prefill/prep/layout.py",
+      "bytes": 3797,
+      "sha256": "f73902bbea6158fe5acae689a336d048c64f0064a48f5d2e7f0e0491aef49a29",
+      "git_blob_sha": "9224eaa5376e92e23c596a4d0e79c27a7a82320a"
+    },
+    {
+      "path": "candidates/qwen35_gdn_prefill/prep/model.py",
+      "bytes": 29633,
+      "sha256": "10c282860dbc63ba3937a03b1c334bd7908fbc0af9fe7064e835b58f716eef11",
+      "git_blob_sha": "c5a3a945e804c6c2dc8ac2a217cd29b62f11e20e"
+    },
+    {
+      "path": "candidates/qwen35_gdn_prefill/chunk/model.py",
+      "bytes": 47272,
+      "sha256": "122d68f1a92004be28cf3180c4ab61e00aa5effc9b38152e9644c4ee04f83a40",
+      "git_blob_sha": "9d2e3feaed73e0c0151f04d920da38c47bff77c1"
+    },
+    {
+      "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+      "bytes": 103891,
+      "sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+      "git_blob_sha": "b1707c7b70f5d0357915f82a1bae674925c7dc9f"
+    },
+    {
+      "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json",
+      "bytes": 3544,
+      "sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+      "git_blob_sha": "2fd92bfc9ee58bd0274ad207d4120c3e7458dde8"
+    },
+    {
+      "path": "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+      "bytes": 10591,
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+      "git_blob_sha": "884531df8479edb783d50d0dbf54065ada992bbc"
+    },
+    {
+      "path": "candidates/qwen35_chunk_loadprep/source/GdnChunkLoadPrepOwner.scala",
+      "bytes": 13190,
+      "sha256": "d0f9885b029eebc57f98f40cce03926ae424bba6d03a43023f63ca912767fecf",
+      "git_blob_sha": "6c967f7799e49a86955853b34ef3d356a2e6b39f"
+    }
+  ],
+  "scope": "Existing exact public sources/config/cleanup/dependency metadata reused unchanged. External20 HardFloat remain pinned dependencies. No target execution by packager."
+}

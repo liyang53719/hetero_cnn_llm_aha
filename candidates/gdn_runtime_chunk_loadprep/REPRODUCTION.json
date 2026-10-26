@@ -1,0 +1,77 @@
+{
+  "schema": "role_based_exact_argv_projection_v1",
+  "original_shell": {
+    "bytes": 55559,
+    "sha256": "f55d18b3388e1527845a2d44051036f9260a1673a08e32c963271c4e5f782ac7"
+  },
+  "roles": {
+    "REPOSITORY": "Exact public repository tree at SOURCE_REFERENCES commit, with this package overlay applied",
+    "HARDFLOAT_SOURCE": "Separately restored original20 pinned HardFloat Scala source directory; not published by this package",
+    "DEPENDENCIES": "Separately restored106 exact official Maven relative paths in referenced dependency lock",
+    "JAVA21": "Exact declared Java executable pin; this alone is not full JDK closure",
+    "RUN_ROOT": "Fresh private output root; do not overwrite original evidence",
+    "PINNED_CLASSPATH": "Colon join DEPENDENCIES plus all106 lock entries in exact order",
+    "ORDERED_SCALA_SOURCES": "Expand source_order entries in order as28 distinct argv elements"
+  },
+  "commands": {
+    "compile": [
+      "${JAVA21}",
+      "-Duser.home=${RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${PINNED_CLASSPATH}",
+      "scala.tools.nsc.Main",
+      "-classpath",
+      "${PINNED_CLASSPATH}",
+      "-Xplugin:${DEPENDENCIES}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "-language:reflectiveCalls",
+      "-d",
+      "${RUN_ROOT}/classes",
+      "${ORDERED_SCALA_SOURCES}"
+    ],
+    "test": [
+      "${JAVA21}",
+      "-Duser.home=${RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${RUN_ROOT}/classes:${PINNED_CLASSPATH}",
+      "org.scalatest.tools.Runner",
+      "-R",
+      "${RUN_ROOT}/classes",
+      "-oD",
+      "-s",
+      "heteronpu.continuous.GdnRuntimeChunkLoadPrepSpec"
+    ]
+  },
+  "directory_setup": [
+    "Create fresh RUN_ROOT/home, RUN_ROOT/tmp and RUN_ROOT/classes; preserve test working directory under fresh RUN_ROOT."
+  ],
+  "supervision": "Original command used a source-bound nonoptimized Python supervisor and anchored cleanup; shell flags set -euo pipefail. This role projection is not the original launcher, a hermetic runtime, or execution GO. A new run requires separately qualified bounded supervision. Do not use assert-only supervisor with -O.",
+  "budgets": {
+    "cleanup_stop_seconds": 170,
+    "cpu_hard_per_process_seconds": 120,
+    "group_cpu_sampled_seconds": 120,
+    "heap_mib": 512,
+    "log_sampled_bytes": 10485760,
+    "rss_sampled_bytes": 1073741824,
+    "total_wall_seconds": 180,
+    "work_wall_seconds": 160
+  },
+  "historical_environment_limits": {
+    "Python_flags_or_inherited_java_option_env_snapshot_persisted": false,
+    "assert_based_launcher_not_safe_reusable_optimized_gate": true,
+    "author_confirms_actual_CPU2_nonoptimized": true,
+    "do_not_infer_empty_java_options_from_log": true,
+    "no_new_generic_admission_or_execution_authorization": true,
+    "published_command_template": "python -I -S -B, no -O; HETERO_CPU assigned externally"
+  },
+  "exact_compile_and_test_argv_inverse_verified_without_execution": true
+}

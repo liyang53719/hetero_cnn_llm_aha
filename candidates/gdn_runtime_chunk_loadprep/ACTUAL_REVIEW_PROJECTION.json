@@ -1,0 +1,221 @@
+{
+  "schema": "independent-gdn-runtime-loadprep-source-actual-control-review-v1",
+  "status": "PASS_FIXED_MAX32_PHASE1_SOURCE_AND_ACTUAL_SELECTED_HEAD_CONTROL_TESTS_ONLY",
+  "actual_control_evidence": {
+    "busy_job_input_mutation_ignored": true,
+    "classes_reviewer_current_size_inventory_only": true,
+    "compile_start_and_success_log_markers": true,
+    "dynamic_loaded_class_origin_recorded": false,
+    "fresh_class_output_directory_first_testclasspath": true,
+    "fresh_explicit_Scala_sources": 28,
+    "held_memory_requests_and_held_done_exercised": true,
+    "last_write_error_ACK_bytes": 102336,
+    "no_independent_pertransaction_trace_replay": true,
+    "per_successful_phase": {
+      "Add_requests": 64,
+      "Add_results": 64,
+      "QKV_writes": 1536,
+      "gate_writes": 64,
+      "successful_write_ACK_bytes": 102400,
+      "write_requests": 1600
+    },
+    "physical_DDR_executed": false,
+    "pinned_jar_entries": 106,
+    "real_ScalaTest_Treadle_tests_passed": 4,
+    "real_ScalaTest_tests_failed": 0,
+    "reported_new_class_hash_count": 140,
+    "same_DUT_primary_test": {
+      "chunks_each_profile": [
+        0,
+        1
+      ],
+      "entire_all_head_blocks_executed": false,
+      "reelaboration_between6jobs": false,
+      "resets": 1,
+      "selected_head_sequence": [
+        15,
+        31,
+        15
+      ],
+      "successful_single_head_chunk_phase1_jobs": 6,
+      "value_heads_sequence": [
+        16,
+        32,
+        16
+      ]
+    },
+    "scalar_service": "deterministic test responder; no HardFloat arithmetic executed by this DUT",
+    "scope_of_transaction_counts": "Executed test assertions/source + aggregate actual4/4 log, not a separate raw transaction dump",
+    "separate_tests": [
+      "M16 selected head31 padded to64 rows without nonexistent-token reads",
+      "14 pre-I/O invalid head/layout/dependency/expanded-span admission cases",
+      "error on last of1600 write responses withholds completion and locks"
+    ],
+    "test_fail_cancel_ignore_pending_zero": true
+  },
+  "authorization_scope": "Root exact manifest one-shot GO provided in task history. Not a machine signature or new execution authorization.",
+  "closure_limitations": [
+    "Inherited os.environ; original JAVA_TOOL_OPTIONS/_JAVA_OPTIONS/JDK_JAVA_OPTIONS snapshot not saved. Absence of log injection message is not absence proof.",
+    "Original approved python command no -O per COMMAND/author/root supplied history; supervisor asserts are not safe general -O admission and no flags receipt persisted.",
+    "140 pins=106 JAR+28 Scala+3 Python+1 shell+2 executable, not full JDK/runtime/loader dynamic closure. Python executable/JDK libs not enumerated here.",
+    "Original pre/post source-bound aggregate counts, not per-item persisted PASS. Compiled class hashes are author postrun index/current size inventory, no reviewer classbyte rehash or dynamic origin trace.",
+    "Tests assert selected single-head/chunk transport, control and mock scalar requests; not trusted producer integration, actual HardFloat arithmetic, physical DDR, Matrix/full4096, PPA or fullblock qualification."
+  ],
+  "independent_pure_controls": {
+    "address_entries_enumerated_per_mode": 403200,
+    "all_legal_head_formula_enumeration_not_actual_allhead_coverage": true,
+    "normal_checks": 1033,
+    "optimized_checks": 1033,
+    "profiles": [
+      {
+        "heads": 16,
+        "input_bytes": 409600,
+        "output_bytes": 65536,
+        "prepared_row_bytes": 25600,
+        "scratch_bytes": 13959168,
+        "state_bytes": 1048576,
+        "tokens": 16
+      },
+      {
+        "heads": 16,
+        "input_bytes": 3276800,
+        "output_bytes": 524288,
+        "prepared_row_bytes": 25600,
+        "scratch_bytes": 26869760,
+        "state_bytes": 1048576,
+        "tokens": 128
+      },
+      {
+        "heads": 32,
+        "input_bytes": 819200,
+        "output_bytes": 131072,
+        "prepared_row_bytes": 51200,
+        "scratch_bytes": 27918336,
+        "state_bytes": 2097152,
+        "tokens": 16
+      },
+      {
+        "heads": 32,
+        "input_bytes": 6553600,
+        "output_bytes": 1048576,
+        "prepared_row_bytes": 51200,
+        "scratch_bytes": 53739520,
+        "state_bytes": 2097152,
+        "tokens": 128
+      }
+    ],
+    "reviewer_initial_control_error": "Final gate-end control initially used vector stride512 instead of gate stride64; failed logs retained, corrected standalone assertion. Main complete address enumeration already used correct64 and candidate never changed.",
+    "three_expanded_span_counterexamples": "32head state overlap at old16 boundary; scratch alias at30MiB; input exceeds56bit at old16 extent"
+  },
+  "original_owner_sha256": "d0f9885b029eebc57f98f40cce03926ae424bba6d03a43023f63ca912767fecf",
+  "overall_not_claimed": [
+    "Prepared producer-to-phase1 trusted integration or public dispatch path",
+    "Full chunk coordinator, persistent-root commit fence, complete GDN block or carried numerical qualification",
+    "All16 or32 heads executed, arbitrary shape support, or hardware equivalence to five unified profiles",
+    "HardFloat scalar arithmetic, Matrix provider behavior, full4096-MAC numerical qualification",
+    "Physical DDR traffic, frequency, area/power or useful MAC utilization",
+    "Same global top-level RTL hash across five models implemented",
+    "Complete JDK/Python/native loader closure or hermetic environment"
+  ],
+  "resources_and_cleanup": {
+    "CPU_hard_perprocess_not_total_tree": true,
+    "SIGKILL_cleanup_of_retained_zombie_not_resource_failure": true,
+    "actual_sampled_group_CPU_peak_seconds": 99.83,
+    "actual_sampled_group_RSS_peak_bytes": 376115200,
+    "actual_wall_seconds": 100.15538698690943,
+    "before_original_cleanup_deadline": true,
+    "caps": {
+      "cleanup_stop_seconds": 170,
+      "cpu_hard_per_process_seconds": 120,
+      "group_cpu_sampled_seconds": 120,
+      "heap_mib": 512,
+      "log_sampled_bytes": 10485760,
+      "rss_sampled_bytes": 1073741824,
+      "total_wall_seconds": 180,
+      "work_wall_seconds": 160
+    },
+    "cleanup_complete": true,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "direct_reap_exit_code": 0,
+    "final_wait4_CPU_not_saved": true,
+    "heap_limit_not_total_RSS_limit": true,
+    "maximum_sampling_gap_not_saved": true,
+    "no_RLIMIT_AS_claim": true,
+    "no_post_reap_signal": true,
+    "postflight_pins": 140,
+    "preflight_pins": 140,
+    "prepost_receipt_layer": "Source-bound aggregate completion counts, no per-item PASS result saved",
+    "pure_offline_cleanup_proof_predicate_pass": true,
+    "retained_leader_before2complete_empty_nonleader_scans": true,
+    "strict_cleanup_source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "unobserved_session_or_group_escape_not_ruled_out": true
+  },
+  "review_actions": {
+    "JVM_native_model_compiler_executed": false,
+    "candidate_or_actual_evidence_modified": false,
+    "currentstat_endpoints": 280,
+    "remote_write_or_GO": false,
+    "small_source_metadata_hashes": 64,
+    "source_checks": 573,
+    "weights_arrays_runtime_JAR_ELF_class_contents_read": false
+  },
+  "runtime_command_evidence": {
+    "Python_flags_or_inherited_java_option_env_snapshot_persisted": false,
+    "assert_based_launcher_not_safe_reusable_optimized_gate": true,
+    "author_confirms_actual_CPU2_nonoptimized": true,
+    "do_not_infer_empty_java_options_from_log": true,
+    "no_new_generic_admission_or_execution_authorization": true,
+    "published_command_template": "python -I -S -B, no -O; HETERO_CPU assigned externally"
+  },
+  "source_blocking_findings_for_this_narrow_scope": [],
+  "source_findings": {
+    "56bit_address_limit_via66bit_extended_sum": true,
+    "QKV_each_section_valuehead_expanded": true,
+    "accepted_key_heads": [
+      16
+    ],
+    "accepted_value_heads": [
+      16,
+      32
+    ],
+    "chunk0_dependency": "same head/tag/generation phase0 initial scratch ACK65536",
+    "chunk1_dependencies": "same head/tag/generation chunk0 phase16 state scratch ACK65536 + phase17 output ACK16384; other receipt byte counters zero",
+    "complete_input_stateIn_stateOut_output_scratch_alias_guards": true,
+    "consumer_QK_mapping": "direct latched value_head; never second //2",
+    "cumulative_register_bits": 32,
+    "error_held_done_then_locked": true,
+    "fixed_maximum_same_leaf_instance_switches_profiles": true,
+    "head_width_bits": 5,
+    "invalid_receipts_rejected_before_external_requests": true,
+    "last_ACK_and_transport_scalar_suffix_exact_old_source": true,
+    "last_successful_ACK_required_for_102400bytes_and_complete": true,
+    "legacy_immutable_AddressPlan_unchanged": true,
+    "no_constructor_profile_parameters": true,
+    "no_submodule_scalar_vector_matrix_SRAM_MAC_instantiation": true,
+    "official_repeat_interleave_source_only_AST_bound": true,
+    "partial_writes_not_rolled_back": true,
+    "prepared_FP32_rows_bytes": [
+      25600,
+      51200
+    ],
+    "prepared_layout_id": 0,
+    "prepared_layout_version": 1,
+    "private_prepared_receipt_not_origin_authentication": true,
+    "producer_QK_source_mapping": "value_head // (value_heads/16), then expanded prepared slot value_head",
+    "raw_compact_Conv_rows_not_equivalent_prepared_layout": true,
+    "runtime_control_latched_on_job_fire": true,
+    "runtime_head_count_width_bits": 6,
+    "scratch_M128_bytes_by_valueheads": {
+      "16": 26869760,
+      "32": 53739520
+    },
+    "shared_stateowner_spans_match": true,
+    "single_payload_register_bits": 512,
+    "state_bytes_by_valueheads": {
+      "16": 1048576,
+      "32": 2097152
+    },
+    "transport_identity": "tag32 || sequence32 with exclusive/no-stale service; no transaction epoch or replay defense",
+    "trusted_producer_or_scheduler_receipt_integration_implemented": false
+  }
+}

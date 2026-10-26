@@ -1,0 +1,67 @@
+{
+  "actual_review": {
+    "bytes": 14167,
+    "sha256": "46df8ba2e30282454b98ba814ac2f856514fdac274c77eb54648ec3111300c2b"
+  },
+  "actual_review_freeze": {
+    "bytes": 1879,
+    "sha256": "e15fcbd6f7035da394ecc71b29e005a348503622863078603a6abc17949e5aba"
+  },
+  "original_packet_manifest": {
+    "bytes": 2312,
+    "sha256": "5f1b5bdb42c1bc7408463b2693d5d2b9288a1adce0229cfc3ecad5f86364a5e0"
+  },
+  "original_packet_metadata": {
+    "LAUNCH_MANIFEST.json": {
+      "bytes": 46102,
+      "sha256": "363a2a69140453cd03288c79b3cbcfb40899e01639dc72f63fd4137f4898b89e"
+    },
+    "BASE_PIN.json": {
+      "bytes": 618,
+      "sha256": "413de9255d8a357319e52ad3ed1964ce8a0a51c0a871f217bee8e670fcd745ca"
+    },
+    "SOURCE_DELTA.patch": {
+      "bytes": 10009,
+      "sha256": "57cbba78b6bfa5536480a0c8ca69e24baf92b71db3e6a5b384fb0bdd00629040"
+    },
+    "COMPILED_CLASS_HASHES.json": {
+      "bytes": 22853,
+      "sha256": "6b25edc67e3afa39b50eb789b9d4a2b3d4ea25f4bad5475cb9e31d25269fd04b"
+    },
+    "SUMMARY.json": {
+      "bytes": 1688,
+      "sha256": "8f14ce3da6f020304a478fb27750a4ff267423229d5f691ac5d61886453f6d39"
+    },
+    "INTEGRATION.md": {
+      "bytes": 3445,
+      "sha256": "5d0cb90de4d60b4979201b85e779ff95fdce518b774a666c7993c5de5dbc2d5d"
+    },
+    "LAYOUT_CONTRACT.json": {
+      "bytes": 4271,
+      "sha256": "9b6d47ddcc0e5016b3e6f7814bac9ba56f31c265d7f4d2acde8bae7c5e043d43"
+    },
+    "compile_and_test.sh": {
+      "bytes": 55559,
+      "sha256": "f55d18b3388e1527845a2d44051036f9260a1673a08e32c963271c4e5f782ac7"
+    },
+    "supervise_jvm.py": {
+      "bytes": 5296,
+      "sha256": "11138db559888f7fc5512a6a00651326360f1fd353690746f45bf6f10aa67870"
+    }
+  },
+  "actual_metadata": {
+    "actual_launch_manifest": {
+      "bytes": 46102,
+      "sha256": "363a2a69140453cd03288c79b3cbcfb40899e01639dc72f63fd4137f4898b89e"
+    },
+    "actual_log": {
+      "bytes": 868,
+      "sha256": "2404390dac4e464bc5cd3a95e5ce7e317754853292d2c3b3d649b8cbbb6597be"
+    },
+    "actual_receipt": {
+      "bytes": 7339,
+      "sha256": "37d0a1c424f866447670e5615afa973f3d768de5a011ba34c1e26d9c34c1840d"
+    }
+  },
+  "disclosure": "Only metadata digests/sizes; no raw log/classes/JAR/IR/ELF/runtime bytes. Class index is author hash/current size layer, not new reviewer bytecode rehash."
+}

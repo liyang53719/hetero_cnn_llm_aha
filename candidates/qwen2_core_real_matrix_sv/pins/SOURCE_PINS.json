@@ -1,0 +1,49 @@
+{
+  "schema": "real-matrix-common-SV-source-pins-v1",
+  "files": [
+    {
+      "public_path": "structure/check_sv.py",
+      "bytes": 24952,
+      "sha256": "69a5336de4209630681fba19396f6316f6088e8397c64888e6bfc32edc116f02",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "structure/test_check_sv.py",
+      "bytes": 10309,
+      "sha256": "6f679a3bd31a5ff63234a48d81db47155b1082578d9c799e745687e0d917edae",
+      "exact_original_bytes": true
+    }
+  ],
+  "candidate_freeze": {
+    "bytes": 6942,
+    "sha256": "47ae3eb4fe033bae770980f6f8a638ad04ce590b23ca3a2cc3eb1bde50a3a9f9"
+  },
+  "type_input_original": {
+    "bytes": 15422,
+    "sha256": "ef24211727d0b2846742d3d8e1a7e072e36cd3fe53f28f46829d6eeb6d05e45e"
+  },
+  "type_projection": "components ports+instances and external_canonical_ABI exactly; other original fields omitted. Declarative type/hash metadata only, not signal values.",
+  "type_input_published": {
+    "bytes": 13659,
+    "sha256": "d013f01e0b3d53c2cdc1629df97ae4f8e50519171362f67688f296222b74f869"
+  },
+  "original_expectation": {
+    "bytes": 1181883,
+    "sha256": "4d37efd440a98dc4ee3955305936f4df235eb1693a7377c3162bb65e038d850e"
+  },
+  "template": {
+    "bytes": 2553,
+    "sha256": "6749257befe5b215b38b4096d2be8a4c43d7bda28b21d7908b978935e3dd1c92"
+  },
+  "unchanged_derive_ports_reference": "candidates/qwen2_core_client_sv_structure/derive_ports.py",
+  "exact_derive_ports": {
+    "bytes": 2242,
+    "sha256": "7426a3062c677e33e203be70ec4c7f98c02153b85ea5ddb5840d91488cf90274"
+  },
+  "serialization": "json.dumps(expectation,indent=2,sort_keys=True)+newline",
+  "original_checker_patch": {
+    "bytes": 12615,
+    "sha256": "1636159c5be285687d93c3139347945c96360739e982d20c9907cbd4d7ba6ddf"
+  },
+  "original_patch_not_published_private_headers": true
+}

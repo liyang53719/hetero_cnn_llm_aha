@@ -1,0 +1,375 @@
+{
+  "components": {
+    "HeteroBF16FmaMul": {
+      "ports": {
+        "io": [
+          "output",
+          "{ flip mulAddA : UInt<24>, flip mulAddB : UInt<24>, flip mulAddC : UInt<48>, mulAddResult : UInt<49>}"
+        ]
+      },
+      "instances": []
+    },
+    "HeteroBF16FmaPost": {
+      "ports": {
+        "io": [
+          "output",
+          "{ flip meta : UInt<54>, flip mulAddResult : UInt<49>, raw : UInt<41>, invalid : UInt<1>}"
+        ]
+      },
+      "instances": [
+        [
+          "post",
+          "MulAddRecFNToRaw_postMul_e8_s24"
+        ]
+      ]
+    },
+    "HeteroBF16FmaPre": {
+      "ports": {
+        "io": [
+          "output",
+          "{ flip a : UInt<16>, flip b : UInt<16>, flip c : UInt<32>, mulAddA : UInt<24>, mulAddB : UInt<24>, mulAddC : UInt<48>, meta : UInt<54>}"
+        ]
+      },
+      "instances": [
+        [
+          "pre",
+          "MulAddRecFNToRaw_preMul_e8_s24"
+        ]
+      ]
+    },
+    "HeteroBF16FmaRound": {
+      "ports": {
+        "io": [
+          "output",
+          "{ flip raw : UInt<41>, flip invalid : UInt<1>, out : UInt<32>, exceptionFlags : UInt<5>}"
+        ]
+      },
+      "instances": [
+        [
+          "round",
+          "RoundRawFNToRecFN_e8_s24_67"
+        ]
+      ]
+    },
+    "OrderedQkBehaviorCore": {
+      "ports": {
+        "clock": [
+          "input",
+          "Clock"
+        ],
+        "io": [
+          "output",
+          "{ flip launch : { flip ready : UInt<1>, valid : UInt<1>, bits : { base : UInt<64>, limit : UInt<64>, tokens : UInt<16>, epoch : UInt<16>}}, result : { flip ready : UInt<1>, valid : UInt<1>, bits : { status : UInt<8>, phase : UInt<5>, epoch : UInt<16>, cycles : UInt<64>, macs : UInt<64>, executedMacs : UInt<64>}}, matrixRequest : { flip ready : UInt<1>, valid : UInt<1>, bits : { a : UInt<16>[16], b : UInt<16>[256], clear : UInt<1>, last : UInt<1>, opcode : UInt<8>, sliceMask : UInt<8>}}, flip matrixResult : { flip ready : UInt<1>, valid : UInt<1>, bits : { value : UInt<32>[256][16], error : UInt<1>}}, flip matrixAcceptedSteps : UInt<64>, packedQk : { group : { flip ready : UInt<1>, valid : UInt<1>, bits : { opcode : UInt<8>, sliceMask : UInt<8>, tag : UInt<32>}}, step : { flip ready : UInt<1>, valid : UInt<1>, bits : { a : UInt<16>[16], b : UInt<16>[256], context : UInt<3>, clear : UInt<1>, last : UInt<1>, finish : UInt<1>, emit : UInt<1>}}, flip result : { flip ready : UInt<1>, valid : UInt<1>, bits : { value : UInt<32>[256][16], context : UInt<3>, last : UInt<1>, error : UInt<1>}}, flip done : { flip ready : UInt<1>, valid : UInt<1>, bits : { tag : UInt<32>, error : UInt<1>}}, abort : UInt<1>}, packedQkActive : UInt<1>, flip packedQkStepsDrained : UInt<1>, flip ownerJob : { flip ready : UInt<1>, valid : UInt<1>, bits : { kind : UInt<4>, m : UInt<16>, n : UInt<16>, k : UInt<16>, a : UInt<64>, b : UInt<64>, c : UInt<64>, dst : UInt<64>, weightBf16 : UInt<1>, activationBf16 : UInt<1>, materializeDenseOutput : UInt<1>, outputBf16 : UInt<1>, writeBytes : UInt<64>, tag : UInt<32>, historyOut : UInt<64>, expectedGeneration : UInt<32>, currentGeneration : UInt<32>, cold : UInt<1>, cacheCapacity : UInt<32>, cacheLength : UInt<32>, expectedCacheLength : UInt<32>, queryStart : UInt<32>, qkRole : UInt<2>, qkPositionBase : UInt<32>, qkTrigTokens : UInt<32>, gdnALog : UInt<64>, gdnDtBias : UInt<64>, gdnStateOut : UInt<64>, gdnRecurrentMode : UInt<1>, gdnElementwiseOp : UInt<2>}}, memory : { flip ready : UInt<1>, valid : UInt<1>, bits : { write : UInt<1>, address : UInt<64>, data : UInt<512>, mask : UInt<64>, tag : UInt<64>}}, flip response : { flip ready : UInt<1>, valid : UInt<1>, bits : { data : UInt<512>, tag : UInt<64>, error : UInt<1>}}, phase : UInt<5>, stageCommit : UInt<1>, committedPhase : UInt<5>, resetRequired : UInt<1>, readBytes : UInt<64>, writeBytes : UInt<64>, acknowledgedWriteBytes : UInt<64>}"
+        ],
+        "observation": [
+          "output",
+          "{ state : UInt<7>, vectorPhase : UInt<3>, token : UInt<16>, head : UInt<8>, key : UInt<16>, lane : UInt<4>, selected : UInt<4>, faults : UInt<16>, maxScore : UInt<32>, committed : UInt<1>, owned : UInt<1>, memoryDebt : UInt<1>, localDebt : UInt<1>, scalarDebt : UInt<1>, selectedFault : UInt<1>, resultReady : UInt<1>, completionValid : UInt<1>, completionReady : UInt<1>, scalarIssue : UInt<1>}"
+        ],
+        "reset": [
+          "input",
+          "Reset"
+        ],
+        "testScoreWrite": [
+          "output",
+          "{ valid : UInt<1>, bits : { index : UInt<16>, data : UInt<32>}}"
+        ]
+      },
+      "instances": [
+        [
+          "scalar",
+          "BlockScalarFloat"
+        ],
+        [
+          "fabric",
+          "SharedL2Fabric"
+        ],
+        [
+          "vectorAlus_0",
+          "HeteroFP32Alu_1"
+        ],
+        [
+          "vectorAlus_1",
+          "HeteroFP32Alu_2"
+        ],
+        [
+          "vectorAlus_2",
+          "HeteroFP32Alu_3"
+        ],
+        [
+          "vectorAlus_3",
+          "HeteroFP32Alu_4"
+        ],
+        [
+          "vectorAlus_4",
+          "HeteroFP32Alu_5"
+        ],
+        [
+          "vectorAlus_5",
+          "HeteroFP32Alu_6"
+        ],
+        [
+          "vectorAlus_6",
+          "HeteroFP32Alu_7"
+        ],
+        [
+          "vectorAlus_7",
+          "HeteroFP32Alu_8"
+        ],
+        [
+          "vectorAlus_8",
+          "HeteroFP32Alu_9"
+        ],
+        [
+          "vectorAlus_9",
+          "HeteroFP32Alu_10"
+        ],
+        [
+          "vectorAlus_10",
+          "HeteroFP32Alu_11"
+        ],
+        [
+          "vectorAlus_11",
+          "HeteroFP32Alu_12"
+        ],
+        [
+          "vectorAlus_12",
+          "HeteroFP32Alu_13"
+        ],
+        [
+          "vectorAlus_13",
+          "HeteroFP32Alu_14"
+        ],
+        [
+          "vectorAlus_14",
+          "HeteroFP32Alu_15"
+        ],
+        [
+          "vectorAlus_15",
+          "HeteroFP32Alu_16"
+        ],
+        [
+          "packedQk",
+          "PackedAttentionStreamClient"
+        ],
+        [
+          "elem",
+          "ElementwiseMemoryEngine"
+        ],
+        [
+          "writeback",
+          "BlockWritebackFence"
+        ]
+      ]
+    },
+    "OrderedQkRealMatrixCollection": {
+      "ports": {
+        "clock": [
+          "input",
+          "Clock"
+        ],
+        "mulPort": [
+          "output",
+          "{ flip mulAddA : UInt<24>, flip mulAddB : UInt<24>, flip mulAddC : UInt<48>, mulAddResult : UInt<49>}"
+        ],
+        "observation": [
+          "output",
+          "{ state : UInt<7>, vectorPhase : UInt<3>, token : UInt<16>, head : UInt<8>, key : UInt<16>, lane : UInt<4>, selected : UInt<4>, faults : UInt<16>, maxScore : UInt<32>, committed : UInt<1>, owned : UInt<1>, memoryDebt : UInt<1>, localDebt : UInt<1>, scalarDebt : UInt<1>, selectedFault : UInt<1>, resultReady : UInt<1>, completionValid : UInt<1>, completionReady : UInt<1>, scalarIssue : UInt<1>}"
+        ],
+        "port": [
+          "output",
+          "{ flip ownerJob : { flip ready : UInt<1>, valid : UInt<1>, bits : { kind : UInt<4>, m : UInt<16>, n : UInt<16>, k : UInt<16>, a : UInt<64>, b : UInt<64>, c : UInt<64>, dst : UInt<64>, weightBf16 : UInt<1>, activationBf16 : UInt<1>, materializeDenseOutput : UInt<1>, outputBf16 : UInt<1>, writeBytes : UInt<64>, tag : UInt<32>, historyOut : UInt<64>, expectedGeneration : UInt<32>, currentGeneration : UInt<32>, cold : UInt<1>, cacheCapacity : UInt<32>, cacheLength : UInt<32>, expectedCacheLength : UInt<32>, queryStart : UInt<32>, qkRole : UInt<2>, qkPositionBase : UInt<32>, qkTrigTokens : UInt<32>, gdnALog : UInt<64>, gdnDtBias : UInt<64>, gdnStateOut : UInt<64>, gdnRecurrentMode : UInt<1>, gdnElementwiseOp : UInt<2>}}, result : { flip ready : UInt<1>, valid : UInt<1>, bits : { status : UInt<8>, phase : UInt<5>, epoch : UInt<16>, cycles : UInt<64>, macs : UInt<64>, executedMacs : UInt<64>}}, memory : { flip ready : UInt<1>, valid : UInt<1>, bits : { write : UInt<1>, address : UInt<64>, data : UInt<512>, mask : UInt<64>, tag : UInt<64>}}, flip response : { flip ready : UInt<1>, valid : UInt<1>, bits : { data : UInt<512>, tag : UInt<64>, error : UInt<1>}}, resetRequired : UInt<1>, acknowledgedWriteBytes : UInt<64>, issuedSliceSteps : UInt<64>, wideSteps : UInt<64>, stallCycles : UInt<64>}"
+        ],
+        "postPort": [
+          "output",
+          "{ flip meta : UInt<54>, flip mulAddResult : UInt<49>, raw : UInt<41>, invalid : UInt<1>}"
+        ],
+        "prePort": [
+          "output",
+          "{ flip a : UInt<16>, flip b : UInt<16>, flip c : UInt<32>, mulAddA : UInt<24>, mulAddB : UInt<24>, mulAddC : UInt<48>, meta : UInt<54>}"
+        ],
+        "reset": [
+          "input",
+          "UInt<1>"
+        ],
+        "roundPort": [
+          "output",
+          "{ flip raw : UInt<41>, flip invalid : UInt<1>, out : UInt<32>, exceptionFlags : UInt<5>}"
+        ],
+        "scoreWrite": [
+          "output",
+          "{ valid : UInt<1>, bits : { index : UInt<16>, data : UInt<32>}}"
+        ]
+      },
+      "instances": [
+        [
+          "top",
+          "OrderedQkRealMatrixCore"
+        ],
+        [
+          "pre",
+          "HeteroBF16FmaPre"
+        ],
+        [
+          "mul",
+          "HeteroBF16FmaMul"
+        ],
+        [
+          "post",
+          "HeteroBF16FmaPost"
+        ],
+        [
+          "round",
+          "HeteroBF16FmaRound"
+        ]
+      ]
+    },
+    "OrderedQkRealMatrixCore": {
+      "ports": {
+        "clock": [
+          "input",
+          "Clock"
+        ],
+        "io": [
+          "output",
+          "{ flip ownerJob : { flip ready : UInt<1>, valid : UInt<1>, bits : { kind : UInt<4>, m : UInt<16>, n : UInt<16>, k : UInt<16>, a : UInt<64>, b : UInt<64>, c : UInt<64>, dst : UInt<64>, weightBf16 : UInt<1>, activationBf16 : UInt<1>, materializeDenseOutput : UInt<1>, outputBf16 : UInt<1>, writeBytes : UInt<64>, tag : UInt<32>, historyOut : UInt<64>, expectedGeneration : UInt<32>, currentGeneration : UInt<32>, cold : UInt<1>, cacheCapacity : UInt<32>, cacheLength : UInt<32>, expectedCacheLength : UInt<32>, queryStart : UInt<32>, qkRole : UInt<2>, qkPositionBase : UInt<32>, qkTrigTokens : UInt<32>, gdnALog : UInt<64>, gdnDtBias : UInt<64>, gdnStateOut : UInt<64>, gdnRecurrentMode : UInt<1>, gdnElementwiseOp : UInt<2>}}, result : { flip ready : UInt<1>, valid : UInt<1>, bits : { status : UInt<8>, phase : UInt<5>, epoch : UInt<16>, cycles : UInt<64>, macs : UInt<64>, executedMacs : UInt<64>}}, memory : { flip ready : UInt<1>, valid : UInt<1>, bits : { write : UInt<1>, address : UInt<64>, data : UInt<512>, mask : UInt<64>, tag : UInt<64>}}, flip response : { flip ready : UInt<1>, valid : UInt<1>, bits : { data : UInt<512>, tag : UInt<64>, error : UInt<1>}}, resetRequired : UInt<1>, acknowledgedWriteBytes : UInt<64>, issuedSliceSteps : UInt<64>, wideSteps : UInt<64>, stallCycles : UInt<64>}"
+        ],
+        "observation": [
+          "output",
+          "{ state : UInt<7>, vectorPhase : UInt<3>, token : UInt<16>, head : UInt<8>, key : UInt<16>, lane : UInt<4>, selected : UInt<4>, faults : UInt<16>, maxScore : UInt<32>, committed : UInt<1>, owned : UInt<1>, memoryDebt : UInt<1>, localDebt : UInt<1>, scalarDebt : UInt<1>, selectedFault : UInt<1>, resultReady : UInt<1>, completionValid : UInt<1>, completionReady : UInt<1>, scalarIssue : UInt<1>}"
+        ],
+        "reset": [
+          "input",
+          "Reset"
+        ],
+        "scoreWrite": [
+          "output",
+          "{ valid : UInt<1>, bits : { index : UInt<16>, data : UInt<32>}}"
+        ]
+      },
+      "instances": [
+        [
+          "core",
+          "OrderedQkBehaviorCore"
+        ],
+        [
+          "matrix",
+          "MatrixPipelineService"
+        ],
+        [
+          "legacy",
+          "LegacyMatrixStreamClient"
+        ]
+      ]
+    }
+  },
+  "external_canonical_ABI": {
+    "qwen2_matrix_command_endpoint": {
+      "clk_i": [
+        "input",
+        "Clock"
+      ],
+      "cmd_i": [
+        "input",
+        "UInt<128>"
+      ],
+      "cmd_ready_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "cmd_valid_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "command_last_tile_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "completion_data_o": [
+        "output",
+        "UInt<56>"
+      ],
+      "completion_ready_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "completion_valid_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "out_acc_o": [
+        "output",
+        "UInt<16384>"
+      ],
+      "out_context_o": [
+        "output",
+        "UInt<3>"
+      ],
+      "out_last_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "out_ready_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "out_valid_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "protocol_error_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "rst_ni": [
+        "input",
+        "UInt<1>"
+      ],
+      "step_a_i": [
+        "input",
+        "UInt<256>"
+      ],
+      "step_b_i": [
+        "input",
+        "UInt<512>"
+      ],
+      "step_clear_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "step_context_i": [
+        "input",
+        "UInt<3>"
+      ],
+      "step_last_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "step_ready_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "step_valid_i": [
+        "input",
+        "UInt<1>"
+      ]
+    },
+    "tc_clk_gating": {
+      "clk_i": [
+        "input",
+        "Clock"
+      ],
+      "clk_o": [
+        "output",
+        "Clock"
+      ],
+      "en_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "test_en_i": [
+        "input",
+        "UInt<1>"
+      ]
+    }
+  }
+}

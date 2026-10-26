@@ -1,0 +1,93 @@
+{
+  "ELF": {
+    "RPATH_RUNPATH": [
+      [
+        29,
+        "$ORIGIN/../lib"
+      ]
+    ],
+    "interpreter": [
+      "${SYSTEM_PT_INTERP}/ld-linux-x86-64.so.2"
+    ],
+    "needed": [
+      "libpthread.so.0",
+      "librt.so.1",
+      "libdl.so.2",
+      "libm.so.6",
+      "libz.so.1",
+      "libgcc_s.so.1",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2"
+    ]
+  },
+  "absence_slots": 32,
+  "actual_target_SV_or_FIR_parsed": false,
+  "approved_by_this_report": false,
+  "author_pure_methods": 68,
+  "candidate_blocker_found": false,
+  "candidate_freeze_sha256": "47ae3eb4fe033bae770980f6f8a638ad04ce590b23ca3a2cc3eb1bde50a3a9f9",
+  "candidate_manifest_sha256": "6f39cb737381cdc3c76ac2a38ee8b33f587ef98190fb2bd5bb94536aa3bf4d47",
+  "candidate_members": 23,
+  "candidate_supervisor_sha256": "846d00ce220e16b3a41bc6c468fe886894f7793802ce49baa38d3ad471f982d1",
+  "changed_supervisor_functions": [
+    "_execute",
+    "exact_inventory",
+    "main",
+    "output_scope",
+    "stage_native_inputs",
+    "tree_sample",
+    "validate_manifest",
+    "verify_inputs"
+  ],
+  "checks": 243,
+  "declared_pin_entries": 947,
+  "declared_unique_paths": 927,
+  "empty_private_directory_presence_required": false,
+  "full_ABI_fixture_ports": {
+    "HeteroBF16FmaMul": 4,
+    "HeteroBF16FmaPost": 4,
+    "HeteroBF16FmaPre": 7,
+    "HeteroBF16FmaRound": 4,
+    "OrderedQkBehaviorCore": 8859,
+    "OrderedQkRealMatrixCollection": 100,
+    "OrderedQkRealMatrixCore": 81
+  },
+  "independent_full_ABI_mutations": 12,
+  "native_or_JVM_or_child_executed": false,
+  "no_actual_tool_execution": true,
+  "pins": {
+    "inventory_checks": 5,
+    "pass_all": true,
+    "pin_checks": 949
+  },
+  "production_run_root_absent": true,
+  "read_pin_bytes": 190968047,
+  "report": "REPORT_ZH.md",
+  "root_directory_allowlist_clarification": "home/tmp/empty-path may be absent at terminal; when present they must remain empty; root accepted this exact scope",
+  "root_external_pins": 56,
+  "root_new_GO_required": true,
+  "same_supervisor_functions": [
+    "_child_limits",
+    "digest",
+    "group_sample",
+    "load_cleanup",
+    "need",
+    "pin",
+    "sample_gap",
+    "save_receipt",
+    "structure_check",
+    "verify_pin"
+  ],
+  "scope": "Source/static identity and synthetic declaration graph only; no emitted SV, provider implementation, numerical/behavior/resource-fit acceptance",
+  "status": "PASS_STATIC_MOCK_ADMISSION_REQUIRES_NEW_ROOT_GO",
+  "origin": {
+    "bytes": 2514,
+    "sha256": "d32328b542db9f5c798505b0e6319441d7ac8ff45191235e7bfba75c3ba72f1f"
+  },
+  "origin_freeze": {
+    "bytes": 1566,
+    "sha256": "c78464a0e62494ed049e457d647dfa9cb7ea3af5275dbe56ba3ed58ac62fc075"
+  },
+  "historical_source_only_record": true,
+  "projection": "Candidate/private paths omitted; PT_INTERP system directory role substituted, basename/NEEDED/RUNPATH retained. Original preexecution facts not rewritten as actual results."
+}

@@ -1,0 +1,62 @@
+{
+  "origin": {
+    "bytes": 1982,
+    "sha256": "05991b86682c717531b375d3422e2744bc5ed4d7c13036cf6798174e590f6ce6"
+  },
+  "source_delta": {
+    "caps_exact_unchanged": true,
+    "changed_functions": [
+      "exact_inventory",
+      "verify_inputs",
+      "validate_manifest",
+      "tree_sample",
+      "stage_native_inputs",
+      "output_scope",
+      "_execute",
+      "main"
+    ],
+    "declared_pins": 947,
+    "inventories": 5,
+    "native_executed": false,
+    "new_functions": [
+      "walk_bounded"
+    ],
+    "original": {
+      "bytes": 28643,
+      "sha256": "ad6177ab840aca868c9f2596da381cfe2e3866ba966401b226d9eaa817e92f6c"
+    },
+    "roles": {
+      "checker": 2,
+      "direct_runtime": 19,
+      "input": 1,
+      "native_tool": 1,
+      "production_source": 2,
+      "provenance": 670,
+      "provider_source": 13,
+      "runtime": 136,
+      "source": 103
+    },
+    "unchanged_functions": [
+      "need",
+      "digest",
+      "pin",
+      "verify_pin",
+      "load_cleanup",
+      "structure_check",
+      "sample_gap",
+      "save_receipt",
+      "group_sample",
+      "_child_limits"
+    ],
+    "walk_delta": "Reuse reviewed failclosed os.walk(onerror raise,no-follow,lstat,count10000);reject unexpected stage/output subdirs.",
+    "walk_source": {
+      "bytes": 31208,
+      "sha256": "5f90057038cf836525e687c04730c1c16365ad38769b664b3a4c68fcad063a64"
+    },
+    "candidate": {
+      "bytes": 29650,
+      "sha256": "846d00ce220e16b3a41bc6c468fe886894f7793802ce49baa38d3ad471f982d1"
+    }
+  },
+  "source_only_history_not_actual_result": true
+}

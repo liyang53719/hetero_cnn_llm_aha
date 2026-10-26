@@ -1,0 +1,141 @@
+{
+  "schema": "real-matrix-common-sv-checker-source-provenance-v1",
+  "status": "SOURCE_AND_SYNTHETIC_ONLY_NOT_TARGET_EXECUTED",
+  "source_pins": [
+    {
+      "role": "source_00/check_sv.py",
+      "bytes": 22866,
+      "sha256": "db346828ef410e2e9a66033256c0236dcd7b4cf4fdad634c44d75ff29df31ce0"
+    },
+    {
+      "role": "source_01/derive_ports.py",
+      "bytes": 3965,
+      "sha256": "4681d82e85bc8b8b1cefd1c5d5542fd7ec0d7a05bb3a4c7507601330a04c4c58"
+    },
+    {
+      "role": "source_02/STRUCTURE_EXPECTATION.json",
+      "bytes": 1055045,
+      "sha256": "5bdfb398ac02c250ff40cb092dcbbb326b42236acae6da5cd4a059d8ed4e1e1a"
+    },
+    {
+      "role": "source_03/FINAL_REVIEW.json",
+      "bytes": 9612,
+      "sha256": "cb98eba7d81bfbbbd56e7088e22031e799245c33abb33535276d9b259954385c"
+    },
+    {
+      "role": "source_04/FINAL_REVIEW.json",
+      "bytes": 10035,
+      "sha256": "2d1e55e3a58e9a065b6e0645353d602a40756241a2095eca4aae7f419766376d"
+    },
+    {
+      "role": "source_05/SELECTED_PORTS.json",
+      "bytes": 15422,
+      "sha256": "ef24211727d0b2846742d3d8e1a7e072e36cd3fe53f28f46829d6eeb6d05e45e"
+    },
+    {
+      "role": "source_06/MODULE_MANIFEST.json",
+      "bytes": 294453,
+      "sha256": "6a64f9d3474e1bbd901ba6935c37b910cfe56254b2aa64cb907a570dafef6f12"
+    },
+    {
+      "role": "source_07/FREEZE.json",
+      "bytes": 3758,
+      "sha256": "948097719cf91969f06702dfdf2413140b6ceb041e36e7dfbbb909b1609c7b7e"
+    },
+    {
+      "role": "source_08/ExportVerilog.cpp",
+      "bytes": 235220,
+      "sha256": "e35ce1ab803b15ae2871a3d131b3818045476472541ea5ade321e176a64f7623"
+    },
+    {
+      "role": "source_09/OrderedQkRealMatrixCore.scala",
+      "bytes": 3837,
+      "sha256": "3028d699326dea639b696294d5721fa62d3838e3d05780d42f0eaa94cfb7474c"
+    }
+  ],
+  "unchanged_functions": [
+    "validate_expression",
+    "need",
+    "clean_line",
+    "regular",
+    "parse_connections"
+  ],
+  "unchanged_lexer_and_stream_parse_prefix_sha256": "8aa285a3e5bfd9df2d4363d2951e2efcbc27b057f66e680f0b138383d5221145",
+  "unchanged_lexer_and_stream_parse_prefix_bytes": 16809,
+  "changed_functions": {
+    "parse_sv": "Only post-parse selected ABI and graph logic replaced; preexisting full lexical/statement prefix exact. Known provider leaves are separate map, not injected module definitions.",
+    "check_tree": "Explicit common input/output names, exact directories, bounded os.walk onerror/no-follow/lstat. Optional annotation read is size bounded. The exact empty private directories home/tmp/empty-path created by supervisor are allowed; no child names are allowed.",
+    "check_retained": "Removed: new stage is emission, not a retained-SV offline recheck."
+  },
+  "flatten_reuse": "Old parse_type/flatten/derive function text exact; only __main__ block omitted. Small SELECTED_PORTS/MODULE_MANIFEST JSON inputs only. No actual FIRRTL or SV reads.",
+  "expected_port_counts": {
+    "OrderedQkRealMatrixCollection": 100,
+    "OrderedQkRealMatrixCore": 81,
+    "OrderedQkBehaviorCore": 8859,
+    "HeteroBF16FmaPre": 7,
+    "HeteroBF16FmaMul": 4,
+    "HeteroBF16FmaPost": 4,
+    "HeteroBF16FmaRound": 4
+  },
+  "known_external_abi": {
+    "qwen2_matrix_command_endpoint": {
+      "ports": 22,
+      "hierarchical_occurrences": 8
+    },
+    "tc_clk_gating": {
+      "ports": 4,
+      "hierarchical_occurrences": 8
+    }
+  },
+  "source_basis": [
+    {
+      "role": "ExportVerilog.cpp",
+      "lines": [
+        4945,
+        4948
+      ],
+      "claim": "Instance target emitted using getVerilogModuleName(referencedModule); parameter # emitted only when parameters exist, 4950ff. Current unseeded sources/actual IR have no parameter override; unknown # remains rejected."
+    },
+    {
+      "role": "ExportVerilog.cpp",
+      "lines": [
+        5554,
+        5562
+      ],
+      "claim": "HW extern exported only as // external module <verilogName>, not fabricated implementation module."
+    },
+    {
+      "role": "SELECTED_PORTS.json",
+      "claim": "Actual terminal audit records collection+selected core/shell/FMA typed ports and exact direct instances."
+    },
+    {
+      "role": "MODULE_MANIFEST.json",
+      "claim": "Actual terminal audit records 16 CHIRRTL external declarations with 2 defnames, matching 22/4 ABI. 375 CHIRRTL modules is NOT fixed emitted SV count."
+    }
+  ],
+  "limits": {
+    "input_bytes": 201326592,
+    "line_bytes": 1048576,
+    "lines": 2000000,
+    "modules": 2048,
+    "instances": 16384,
+    "ports_total": 100000,
+    "scope": "Parent parser limits bound input/counts; child RLIMIT_AS/RSS do not hard-limit parent Python memory. No claim of whole-machine isolation."
+  },
+  "controls": {
+    "methods_per_mode": 40,
+    "modes": [
+      "normal",
+      "optimized"
+    ],
+    "status": "PASS_TINY_SYNTHETIC_ONLY",
+    "initial_failure": "Preserved CONTROLS.fixture_draft_failure.log: fixture took ordered dictionary values()[1:] after key sorting and duplicated shell, not candidate target/native failure; fixture changed to explicit FMA-name selection.",
+    "production_tree_delta": "All six production directories home/tmp/empty-path/tool/inputs/rtl included in fixture. Exactly home/tmp/empty-path may be empty; child file and child directory reject controls cover all three."
+  },
+  "qualification": "Known external ABI references remain unresolved implementations until provider-SV qualification. Not RTL numerical/behavior/equivalence/latency/physical FMA closure or useful MAC proof. Existing source/compiler/CPU FAIL evidence unchanged.",
+  "origin": {
+    "bytes": 6718,
+    "sha256": "3b772b53ffd43e4fe880750c8c95d320080547424c9cbfe08b7c80378ebf6f4a"
+  },
+  "historical_source_only_record": true
+}

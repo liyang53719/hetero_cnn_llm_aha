@@ -1,0 +1,95 @@
+{
+  "origin_freeze": {
+    "bytes": 2558,
+    "sha256": "38cb25bec6e1e30a33805895bd3df9fbf37ace8f8fcfb263191309a0f23a4ee1"
+  },
+  "status": "FROZEN_ACTUAL_DECLARATIONS_AND_SELECTED_WIRING_ONLY",
+  "records": [
+    {
+      "role": "ACTUAL_REVIEW.json",
+      "bytes": 3581,
+      "sha256": "545c58fbcfb09ffbcc5ea4f3ae2bcfb9ed479b6fc4b073041ebcf4b5a3f0d276"
+    },
+    {
+      "role": "ARTIFACT_MANIFEST.json",
+      "bytes": 20919,
+      "sha256": "0fb694abc58ec58831491fd64283fcd93f8028d6a1093e96def390d619521efc"
+    },
+    {
+      "role": "NAMESPACE_MANIFEST.json",
+      "bytes": 29160,
+      "sha256": "2e43af68d269b7e0ad3f51867514f96aef0a0afe4906bb0416dcce1285c56b46"
+    },
+    {
+      "role": "PARSED_ASSIGNMENTS.json",
+      "bytes": 1378414,
+      "sha256": "5eb91955dc0548e04e6c99b21a02369362b6cdc195374a8be00003742589c31a"
+    },
+    {
+      "role": "PARSED_MODULES.json",
+      "bytes": 8224758,
+      "sha256": "97968d960d9619710fb581b63a812a14f12350384c8ee4f16bb07ebd4120af83"
+    },
+    {
+      "role": "REPORT_ZH.md",
+      "bytes": 8201,
+      "sha256": "09d3dcef3d202c33f6a06508165718909fff655d4c5056060465bf89f6e80df3"
+    },
+    {
+      "role": "RESULT_normal.json",
+      "bytes": 1783,
+      "sha256": "56a3e68d1cfc0a96a4fc7c58fcb709fcb4b26e2a3933d92ee24b505658975f45"
+    },
+    {
+      "role": "RESULT_optimized.json",
+      "bytes": 1783,
+      "sha256": "56a3e68d1cfc0a96a4fc7c58fcb709fcb4b26e2a3933d92ee24b505658975f45"
+    },
+    {
+      "role": "SELECTED_ABI.json",
+      "bytes": 1168837,
+      "sha256": "f94b17c48fb29b48d14bb46b01da7b1a74ff57b675d3712f01a7815a78698fec"
+    },
+    {
+      "role": "SELECTED_CONNECTIONS.json",
+      "bytes": 31725,
+      "sha256": "48624f4b530496947b486e8bb6caf67ed7f162bfea37dc2dd7a7a5c1208e63d7"
+    },
+    {
+      "role": "audit.normal.log",
+      "bytes": 1637,
+      "sha256": "744b869f608c793688e7109d6290500dd31b9dfc84aa787eaab378ce4b3a635d"
+    },
+    {
+      "role": "audit.optimized.log",
+      "bytes": 1637,
+      "sha256": "744b869f608c793688e7109d6290500dd31b9dfc84aa787eaab378ce4b3a635d"
+    },
+    {
+      "role": "audit_actual.py",
+      "bytes": 18110,
+      "sha256": "2af84c36d14e59f137800bdb97c4ce0d41209a7262818c301ee6fc6f4692b283"
+    },
+    {
+      "role": "auditor_reader_attempt1.log",
+      "bytes": 1200,
+      "sha256": "a576dd8a28af86d9331fc1e57e1680605db9b105801824324e1c108ba2cd829a"
+    },
+    {
+      "role": "auditor_reader_attempt2.log",
+      "bytes": 670,
+      "sha256": "136484e27e2a5f279ee1ca3a7d4fc72261f4847001c78b7d7597f9716d7d90bf"
+    },
+    {
+      "role": "scan.normal.log",
+      "bytes": 207,
+      "sha256": "c18f91d7180bee149cccf25aca03c3d979e8356a0c9fe5da4fa4798f0782f454"
+    },
+    {
+      "role": "scan_actual.py",
+      "bytes": 3972,
+      "sha256": "25026504894dfe9a398c0f6baefd9335913663998a609f7f583b9421450c6428"
+    }
+  ],
+  "scope": "Hash identities only. Parsed modules/assignments/expanded ABI are not published or re-read for this packaging. Actual review normal/-O each10338 checks. No target rerun."
+}

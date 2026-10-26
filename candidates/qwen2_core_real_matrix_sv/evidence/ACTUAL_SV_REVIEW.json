@@ -1,0 +1,79 @@
+{
+  "CPU_seconds": 42.287860058999996,
+  "admission_freeze_sha256": "c78464a0e62494ed049e457d647dfa9cb7ea3af5275dbe56ba3ed58ac62fc075",
+  "annotation_file_present": false,
+  "auditor_native_or_child_executed": false,
+  "candidate_freeze_sha256": "47ae3eb4fe033bae770980f6f8a638ad04ce590b23ca3a2cc3eb1bde50a3a9f9",
+  "checks": 10338,
+  "cleanup_complete": true,
+  "cleanup_persisted_evidence_consistent": true,
+  "collection_is_simulation_top": false,
+  "current_pins": {
+    "inventory_checks": 5,
+    "pass_all": true,
+    "pin_checks": 949
+  },
+  "final_tree_bytes": 92858544,
+  "instance_declarations": 118,
+  "module_count": 38,
+  "namespace_manifest": {
+    "bytes": 29160,
+    "sha256": "2e43af68d269b7e0ad3f51867514f96aef0a0afe4906bb0416dcce1285c56b46"
+  },
+  "next_execution_authorized": false,
+  "numerical_behavior_or_4096fit_pass": false,
+  "outer_wall_seconds": 42.39203403296415,
+  "provider_implementation_qualified": false,
+  "qualified_external_occurrences": {
+    "qwen2_matrix_command_endpoint": 8,
+    "tc_clk_gating": 8
+  },
+  "report": "REPORT_ZH.md",
+  "root_absent_slots": 32,
+  "root_endpoint_evidence": "Per-item expected pin/absence lists with source-bound ck completion receipts, not a separately saved observed-hash trace; fresh-current recheck passed",
+  "root_exit": 0,
+  "root_external_pins": 56,
+  "root_launcher_actual_argv_confirmation": "root tool history: LANG=C.UTF-8 LC_ALL=C.UTF-8 LC_CTYPE=C.UTF-8 python -I -S -B ${ROOT_LAUNCHER}; no -O; assertions enabled",
+  "sampled_peak_RSS_bytes": 728567808,
+  "schema": "real-matrix-common-sv-actual-independent-review-v1",
+  "selected_ABI": {
+    "bytes": 1168837,
+    "sha256": "f94b17c48fb29b48d14bb46b01da7b1a74ff57b675d3712f01a7815a78698fec"
+  },
+  "selected_connections": {
+    "bytes": 31725,
+    "sha256": "48624f4b530496947b486e8bb6caf67ed7f162bfea37dc2dd7a7a5c1208e63d7"
+  },
+  "selected_future_simulation_top": "OrderedQkRealMatrixCore",
+  "selected_shell_defined_modules": 31,
+  "status": "PASS_ACTUAL_COMMON_SV_NAMESPACE_DECLARATIONS_AND_SELECTED_WIRING_ONLY",
+  "sv": {
+    "bytes": 48274540,
+    "sha256": "c117e75ae97fb0a978e7cebe8e942a652bf1fbe927505d66092fa39b87380181"
+  },
+  "warning_count_is_not_annotation_count": true,
+  "warning_lines": [
+    "scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala:10:7: warning: unprocessed annotation:'firrtl.transforms.DedupGroupAnnotation' still remaining after LowerToHW"
+  ],
+  "wire": {
+    "behavior_or_timing_proved": false,
+    "forward_mux_leaves": 282,
+    "io_alias_links": 77,
+    "legacy_constant_folded_leaves": 3,
+    "legacy_request_links": 278,
+    "per_slice_ICG_pairs": 8,
+    "real_legacy_result_words": 4096,
+    "result_storage_FP32_words": 8192,
+    "reverse_lease_gates": 8,
+    "service_result_words_broadcast": 4096
+  },
+  "origin_review": {
+    "bytes": 3581,
+    "sha256": "545c58fbcfb09ffbcc5ea4f3ae2bcfb9ed479b6fc4b073041ebcf4b5a3f0d276"
+  },
+  "origin_freeze": {
+    "bytes": 2558,
+    "sha256": "38cb25bec6e1e30a33805895bd3df9fbf37ace8f8fcfb263191309a0f23a4ee1"
+  },
+  "projection": "Omit path/actual_directory/root_directory fields. Replace only original private launcher pathname in tool-history confirmation with ${ROOT_LAUNCHER}; retain all actual checks, warnings and limitations."
+}

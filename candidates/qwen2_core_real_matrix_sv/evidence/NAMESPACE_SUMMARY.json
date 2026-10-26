@@ -1,0 +1,282 @@
+{
+  "origin": {
+    "bytes": 29160,
+    "sha256": "2e43af68d269b7e0ad3f51867514f96aef0a0afe4906bb0416dcce1285c56b46"
+  },
+  "module_count": 38,
+  "instance_declarations": 118,
+  "external_comments": [
+    {
+      "line": 214233,
+      "name": "qwen2_matrix_command_endpoint"
+    },
+    {
+      "line": 214235,
+      "name": "tc_clk_gating"
+    }
+  ],
+  "selected_shell_defined_modules": [
+    "AddRawFN",
+    "AddRecFN",
+    "BlockScalarFloat",
+    "BlockWritebackFence",
+    "DivSqrtRawFN_small_e8_s24",
+    "DivSqrtRecFMToRaw_small_e8_s24",
+    "DivSqrtRecFM_small_e8_s24",
+    "ElementwiseMemoryEngine",
+    "HeteroFP32Alu",
+    "INToRecFN_i32_e8_s24",
+    "LegacyMatrixStreamClient",
+    "MatrixPipelineService",
+    "MatrixResultFifo",
+    "MulFullRawFN",
+    "MulRawFN",
+    "MulRecFN",
+    "OrderedQkBehaviorCore",
+    "OrderedQkRealMatrixCore",
+    "PackedAttentionStreamClient",
+    "Queue8_Meta",
+    "RecFNToIN_e8_s24_i32",
+    "RoundAnyRawFNToRecFN_ie6_is32_oe8_os24",
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24",
+    "RoundRawFNToRecFN_e8_s24",
+    "SharedL2Fabric",
+    "SharedL2Fabric_1",
+    "banks_bank_2240x128",
+    "banks_bank_48x128",
+    "probs_1024x32",
+    "ram_8x6",
+    "scores_1024x32"
+  ],
+  "modules": {
+    "AddRawFN": {
+      "first_line": 22,
+      "last_line": 448,
+      "port_count": 19,
+      "sha256": "3b3bdd4c954bc80c3b41570704fd38c8faca1c7273618254b200e96da0d861bf"
+    },
+    "AddRecFN": {
+      "first_line": 771,
+      "last_line": 887,
+      "port_count": 4,
+      "sha256": "dd2071c4051ac5575f5ce557ddb7e796262bf299ec98f9cb4f2c9281a611e632"
+    },
+    "BlockScalarFloat": {
+      "first_line": 2620,
+      "last_line": 3604,
+      "port_count": 11,
+      "sha256": "9ee43bdf47429f35cc747fd54ca77411b3aed7390da401a49c73597fe3dc78ad"
+    },
+    "BlockWritebackFence": {
+      "first_line": 34352,
+      "last_line": 34646,
+      "port_count": 17,
+      "sha256": "2660484a89af8420b787f482a30090951e7b3ebdeb5ba549e393ccfc4eff3c27"
+    },
+    "DivSqrtRawFN_small_e8_s24": {
+      "first_line": 1481,
+      "last_line": 1961,
+      "port_count": 27,
+      "sha256": "0bf29c1c7312ac41a16b04a4455e75129c3739dfaf88e4c0bcfb173a0624fdef"
+    },
+    "DivSqrtRecFMToRaw_small_e8_s24": {
+      "first_line": 1963,
+      "last_line": 2100,
+      "port_count": 17,
+      "sha256": "0505e5be11c16a214bc53c5269d889dc65822faa147476d3ecf201c66db6c799"
+    },
+    "DivSqrtRecFM_small_e8_s24": {
+      "first_line": 2102,
+      "last_line": 2171,
+      "port_count": 11,
+      "sha256": "9ac211b6fc711c27faf5887aad6fe6b1735cd692248aac2c74dc3a47e85ac874"
+    },
+    "ElementwiseMemoryEngine": {
+      "first_line": 31661,
+      "last_line": 34350,
+      "port_count": 29,
+      "sha256": "e4370f001c485ee2064bc43ef5c2d62d03b98db4eed9ce81b751ea84d4faf26c"
+    },
+    "HeteroBF16FmaMul": {
+      "first_line": 317765,
+      "last_line": 317780,
+      "port_count": 4,
+      "sha256": "7fc24e2abf4eafa180503bd1d8a67036273b5a9926d08c060e6a1328f33c2540"
+    },
+    "HeteroBF16FmaPost": {
+      "first_line": 318404,
+      "last_line": 318505,
+      "port_count": 4,
+      "sha256": "43ae2102c0b9e1b44f4533c497bb2aa418e27cbb1bd46657decd76b941daf15e"
+    },
+    "HeteroBF16FmaPre": {
+      "first_line": 317312,
+      "last_line": 317763,
+      "port_count": 7,
+      "sha256": "610e71ed899ac45175bf74798ef2d75cc5b935cb84399669ee221cbc00f32c78"
+    },
+    "HeteroBF16FmaRound": {
+      "first_line": 318507,
+      "last_line": 318603,
+      "port_count": 4,
+      "sha256": "75aad672937c94fbd806f3e9841f5c7acfc3cd6b0a424caf42dee2ed361ae1c0"
+    },
+    "HeteroFP32Alu": {
+      "first_line": 1165,
+      "last_line": 1479,
+      "port_count": 5,
+      "sha256": "b89659e0687a2085272fe8092cd7b18975903752b2bd30c59923dbd20f92613d"
+    },
+    "INToRecFN_i32_e8_s24": {
+      "first_line": 2481,
+      "last_line": 2618,
+      "port_count": 2,
+      "sha256": "7422fc722405c56fd856eb0745a0a4a0f9c3a59dec3efd8efeb1f101e2c3f84c"
+    },
+    "LegacyMatrixStreamClient": {
+      "first_line": 253850,
+      "last_line": 284593,
+      "port_count": 8767,
+      "sha256": "2d34c1c6332c4cd9f7de396e3645299c12c42f41642957fa27e8dd72f6022ec2"
+    },
+    "MatrixPipelineService": {
+      "first_line": 214237,
+      "last_line": 253848,
+      "port_count": 4397,
+      "sha256": "d647cb1b25721d34e5c0933b78795b11a2573f40a355dcf9b5d7bcc96fbd99bb"
+    },
+    "MatrixResultFifo": {
+      "first_line": 173292,
+      "last_line": 214231,
+      "port_count": 8204,
+      "sha256": "1888bdd50f00b785284405d25423337c54682d18127c0a2d8a41d1d7c276a7d2"
+    },
+    "MulAddRecFNToRaw_postMul_e8_s24": {
+      "first_line": 317782,
+      "last_line": 318402,
+      "port_count": 24,
+      "sha256": "d89974d7536f1b04ba244c4cc88d2989dbb34a7e1f7b8b6f81dbfe323139f167"
+    },
+    "MulAddRecFNToRaw_preMul_e8_s24": {
+      "first_line": 317014,
+      "last_line": 317310,
+      "port_count": 22,
+      "sha256": "26d954b81e0eb87c0f186034136658628e090658b4a030d629734f0b481e6f6e"
+    },
+    "MulFullRawFN": {
+      "first_line": 889,
+      "last_line": 969,
+      "port_count": 19,
+      "sha256": "b168e6ec74ecda0cbec183f2fb27d9b772362cc12dadc4f5c99357743e26fd8c"
+    },
+    "MulRawFN": {
+      "first_line": 971,
+      "last_line": 1046,
+      "port_count": 19,
+      "sha256": "4a61bd56c6dbb8223a32dc35d0ba9e89507fc158834b1c223fb5a7496c87344e"
+    },
+    "MulRecFN": {
+      "first_line": 1048,
+      "last_line": 1163,
+      "port_count": 4,
+      "sha256": "af4d76823179dc94c6f8c75687b2606d8412db3f9162849b5a453c13f785944e"
+    },
+    "OrderedQkBehaviorCore": {
+      "first_line": 34706,
+      "last_line": 173172,
+      "port_count": 8859,
+      "sha256": "0a130d62e2ba07eacbb971e558d7183276ead385dbcf631e91c54171b02119e3"
+    },
+    "OrderedQkRealMatrixCollection": {
+      "first_line": 318605,
+      "last_line": 318974,
+      "port_count": 100,
+      "sha256": "5f5cb5ea1c4a94f5f5ce7d04df560727b5b813e9749ce1d8073af495d9d94de8"
+    },
+    "OrderedQkRealMatrixCore": {
+      "first_line": 284595,
+      "last_line": 317012,
+      "port_count": 81,
+      "sha256": "9d913f82c1210b0162f5f601ef4ea6e5b314619917b94bdcd7207522f4b21f32"
+    },
+    "PackedAttentionStreamClient": {
+      "first_line": 6412,
+      "last_line": 28853,
+      "port_count": 8772,
+      "sha256": "248f9c061cc49e23ea55e1d73270ea66a290bd83cdedd5a811c004406f6e2c0a"
+    },
+    "Queue8_Meta": {
+      "first_line": 173194,
+      "last_line": 173290,
+      "port_count": 14,
+      "sha256": "94390b2b6b96d37a20e59b0de3eaeaa7360e1b3d806f2c5aaf43c664e08a1bde"
+    },
+    "RecFNToIN_e8_s24_i32": {
+      "first_line": 2173,
+      "last_line": 2315,
+      "port_count": 2,
+      "sha256": "eb256b517458a3c0fe07a0b6cf453d8a9dfb08d617c3d495ffc2280713a694ce"
+    },
+    "RoundAnyRawFNToRecFN_ie6_is32_oe8_os24": {
+      "first_line": 2317,
+      "last_line": 2479,
+      "port_count": 5,
+      "sha256": "4f05157eb8feaded56a6e1b5c049c91fffb1bee883e13d7462f0cd17dac5a0e6"
+    },
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24": {
+      "first_line": 450,
+      "last_line": 728,
+      "port_count": 10,
+      "sha256": "287be46a7095eb7db9e3de50648f427f9f38be87549e1fa4aa89c05cdc6e4b68"
+    },
+    "RoundRawFNToRecFN_e8_s24": {
+      "first_line": 730,
+      "last_line": 769,
+      "port_count": 10,
+      "sha256": "06b396e7222088924648427a128f99e639151e423d5a64a77a69cdb9929f1f27"
+    },
+    "SharedL2Fabric": {
+      "first_line": 3663,
+      "last_line": 6410,
+      "port_count": 14,
+      "sha256": "bec60e78d29af2d94e09e311a0e979c525806ef969d06925d3e4b2bd2ad5f369"
+    },
+    "SharedL2Fabric_1": {
+      "first_line": 28912,
+      "last_line": 31659,
+      "port_count": 14,
+      "sha256": "bb5e1823e9a5b553e90d6c564e6b9aa95d782e210e2fe0727fb1004494ea625b"
+    },
+    "banks_bank_2240x128": {
+      "first_line": 3607,
+      "last_line": 3661,
+      "port_count": 9,
+      "sha256": "e034310155be7aa3e4c87a6768ae6aa46119b6b775ad09a39eae589255ad5c80"
+    },
+    "banks_bank_48x128": {
+      "first_line": 28856,
+      "last_line": 28910,
+      "port_count": 9,
+      "sha256": "228aaf29a0caf2ffacbe6bfebd832ad623f29a28f6df439969266aa67eb1ec80"
+    },
+    "probs_1024x32": {
+      "first_line": 34681,
+      "last_line": 34704,
+      "port_count": 8,
+      "sha256": "0ce22acf8e61fbbf06eb784c5775949a7689d283314c7d407bafd2621dcb27ef"
+    },
+    "ram_8x6": {
+      "first_line": 173175,
+      "last_line": 173192,
+      "port_count": 8,
+      "sha256": "34b24c25b8a683ac351aa2e4f6c30ea583b61a597c01e54aa5285e3078b2c545"
+    },
+    "scores_1024x32": {
+      "first_line": 34649,
+      "last_line": 34678,
+      "port_count": 12,
+      "sha256": "8d77d1c6674e907b8d83976568f581fbae759a24e62b468c9e65a529d8ec2b2b"
+    }
+  },
+  "scope": "Definition/instance declaration counts and exact module-text hashes only, not hierarchical expanded hardware or resource savings from375CHIRRTL definitions. Four FMA siblings outside selected shell remain separate."
+}

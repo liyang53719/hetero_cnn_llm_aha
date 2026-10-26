@@ -1,0 +1,33 @@
+{
+  "actual_review": {
+    "bytes": 3581,
+    "sha256": "545c58fbcfb09ffbcc5ea4f3ae2bcfb9ed479b6fc4b073041ebcf4b5a3f0d276"
+  },
+  "report": {
+    "bytes": 8201,
+    "sha256": "09d3dcef3d202c33f6a06508165718909fff655d4c5056060465bf89f6e80df3"
+  },
+  "prelaunch_wrapper": {
+    "bytes": 2655,
+    "sha256": "e450f9284640db2180feb04ef820e3c88fab60c3d7dc0e0eb62b83b357115ea0"
+  },
+  "actual_wrapper": {
+    "bytes": 2761,
+    "sha256": "0c26f037376ed839d016825207aad7bb193dcd7d98e5cdb986cbbd3e4a27c3b6"
+  },
+  "root_approval": {
+    "bytes": 958,
+    "sha256": "0a88db580362f3f71a8ee31d9109874a59a7747ddae0cbac2781dc9b971ef5fe"
+  },
+  "actual_launcher_pre_Popen_hash": "0c26f037376ed839d016825207aad7bb193dcd7d98e5cdb986cbbd3e4a27c3b6",
+  "schema_only_wrapper_diff": "--- prelaunch-wrapper\n+++ schema-qualified-wrapper\n@@ -10,7 +10,9 @@\n  if 'symlink_target' in i: assert os.readlink(q)==i['symlink_target']\n for d,h in [(p,'47ae3eb4fe033bae770980f6f8a638ad04ce590b23ca3a2cc3eb1bde50a3a9f9'),(a,'c78464a0e62494ed049e457d647dfa9cb7ea3af5275dbe56ba3ed58ac62fc075')]:\n  assert sha(d/'FREEZE.json')==h\n- for item in json.loads((d/'FREEZE.json').read_text())['files']: ck(item)\n+ members=json.loads((d/'FREEZE.json').read_text())['files']\n+ if isinstance(members,dict): members=[dict(v,path=str(d/k)) for k,v in members.items()]\n+ for item in members: ck(item)\n r=json.loads((p/'ROOT_REQUIRED_CHECKS.json').read_text()); c=json.loads((p/'COMMAND_PROPOSAL.json').read_text())\n assert not os.path.lexists(r['run_root_must_not_lexist'])\n assert c['argv'][1:4]==['-I','-S','-B'] and c['outer_wall_seconds']==540\n",
+  "prelaunch_failure_scope": "Previous wrapper FREEZE list/dict schema TypeError before root/claim/target Popen. Schema conversion only; no second target run, budget reset or candidate change.",
+  "endpoint_scope": "This run saves per-item expected pins/absence lists plus source-bound ck completion pass. Not a separate observed-hash trace; actual auditor fresh-current checks are separate. Previous CHIRRTL counts-only/postarchived source history is not upgraded.",
+  "annotation_warning_scope": "One logged DedupGroup warning line is class-deduplicated, not number or identity of remaining annotations. No anno output file is not proof all annotations processed. Source-based possible external-group explanation is not an actual intermediate annotation trace or proof of harmlessness. No automatic rerun or suppression.",
+  "actual_auditor_reader_corrections": [
+    "Initial atime-change assumption corrected; no target mutation.",
+    "Initial resetRequired direct-connect assumption corrected to three-source OR; complete normal/-O audit repeated."
+  ],
+  "old_FAILs_and_prior_4_W005_preserved": true,
+  "future_candidates_excluded": true
+}

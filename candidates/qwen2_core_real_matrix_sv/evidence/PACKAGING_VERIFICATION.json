@@ -1,0 +1,25 @@
+{
+  "status": "PASS_EXACT_COMMON_SV_SOURCE_METADATA_AND_ISOLATED_CONTROLS",
+  "source_static_conditions": 2653,
+  "actual_projection_conditions": 978,
+  "errors": 0,
+  "public_references": 12,
+  "exact_original_sources": 2,
+  "reused_pure_flattener": true,
+  "reconstructed_expectation_bytes": 1181883,
+  "synthetic_controls_normal_optimized_each": 40,
+  "helper_controls_normal_optimized_each": 9,
+  "small_actual_audit_files_hashed": 14,
+  "audit_bulk_metadata_hash_only": [
+    "PARSED_ASSIGNMENTS.json",
+    "PARSED_MODULES.json",
+    "SELECTED_ABI.json"
+  ],
+  "current_stat_endpoints": 57,
+  "stat_scope": "Current size/kind plus6actual modes and packaging before/after only, not historical inode continuity. No target bulk content read.",
+  "temporary_directory_isolation": "Original generic /tmp test root redirected to packaging scratch by guard; original test bytes unchanged.",
+  "target_executions_or_signals": 0,
+  "no_explicit_actual_SV_FIR_ELF_log_parsed_bulk_metadata_or_system_pyc_content_reads": true,
+  "ordinary_packaging_stdlib_IO_not_globally_audited": true,
+  "scope": "Actual SV-generation/namespace/ABI/selected wiring PASS only; one DedupGroup warning and old FAILs retained, root expected+ckpass not observed-hash trace. No provider execution/numerical behavior/4096fit/MAC."
+}

@@ -1,0 +1,48 @@
+{
+  "origin_manifest": {
+    "bytes": 20919,
+    "sha256": "0fb694abc58ec58831491fd64283fcd93f8028d6a1093e96def390d619521efc"
+  },
+  "files": [
+    {
+      "role": "CLAIM.json",
+      "bytes": 552,
+      "sha256": "30fc7f4f3ec75ad9ddb9d34924823e19fa4b5908b5c72ee97ee79488b2c6f829",
+      "mode": "0o644"
+    },
+    {
+      "role": "RECEIPT.json",
+      "bytes": 13711,
+      "sha256": "51ca9c8d1028d3d03367053e7679360e2d08ba3cb3faedd06abf1ca5222fdf09",
+      "mode": "0o644"
+    },
+    {
+      "role": "worker.log",
+      "bytes": 8506,
+      "sha256": "bd9af01946b06942e464e5f8e1341a3ef48babeeaf90aee3efc5b4ff030b6a9d",
+      "mode": "0o644"
+    },
+    {
+      "role": "inputs/common.fir",
+      "bytes": 19551779,
+      "sha256": "bdfbf223cc8c1c8de8a8d21450272878d1422842bc17a452bcef45e9878573bc",
+      "mode": "0o444"
+    },
+    {
+      "role": "rtl/OrderedQkRealMatrixCollection.sv",
+      "bytes": 48274540,
+      "sha256": "c117e75ae97fb0a978e7cebe8e942a652bf1fbe927505d66092fa39b87380181",
+      "mode": "0o644"
+    },
+    {
+      "role": "tool/firtool",
+      "bytes": 25009456,
+      "sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+      "mode": "0o700"
+    }
+  ],
+  "actual_files": 6,
+  "actual_bytes": 92858544,
+  "annotation_file_present": false,
+  "scope": "Only6 actual artifact hash/size/mode identities, not payload bytes; absent anno file does not prove annotations all processed."
+}

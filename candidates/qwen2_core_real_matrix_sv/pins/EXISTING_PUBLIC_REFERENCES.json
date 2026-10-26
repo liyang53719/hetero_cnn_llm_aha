@@ -1,0 +1,78 @@
+{
+  "base_commit": "7f4b684ea1d9c2ece62b15ba740f55425b233e7a",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/check_sv.py",
+      "bytes": 22866,
+      "sha256": "db346828ef410e2e9a66033256c0236dcd7b4cf4fdad634c44d75ff29df31ce0",
+      "git_blob_sha": "664184daa0861c131b54f20027ed1a780f7c382d"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/derive_ports.py",
+      "bytes": 2242,
+      "sha256": "7426a3062c677e33e203be70ec4c7f98c02153b85ea5ddb5840d91488cf90274",
+      "git_blob_sha": "d5ec2dc9f82ac707b1cf0b1f3c95566f1af52fca"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/pins/GENERATION_AND_OFFLINE_ROLES.json",
+      "bytes": 3879,
+      "sha256": "9e4e6e99f991b18f6167a4ac581909f612392c5d1d43b3db13515707854144fb",
+      "git_blob_sha": "750045edf6082ee94c06618a2180381db8d52f78"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/pins/FIXED_EXPORTER_KEYWORD_PROOF.json",
+      "bytes": 2203,
+      "sha256": "a1eaf3b732a956939de5e3b8939971493826be442c6ff681604872cff45c3e58",
+      "git_blob_sha": "f95397037b691d68ab4a27fb6f1fc07add0a46ac"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_sv_structure/RESERVED_NAMES.json",
+      "bytes": 4212,
+      "sha256": "8a0e53ff5bdc0e9c294030e86809fefcb846b13d5bb107fe848adea53ead6f20",
+      "git_blob_sha": "527749d9353db6a40c18cc6ba1f9a21f599cf8ac"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/source/OrderedQkRealMatrixCore.scala",
+      "bytes": 3837,
+      "sha256": "3028d699326dea639b696294d5721fa62d3838e3d05780d42f0eaa94cfb7474c",
+      "git_blob_sha": "ed8dbebef89b95880cfb0b0f98ed5aa384c21d73"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/source/OrderedQkRealMatrixCollection.scala",
+      "bytes": 1530,
+      "sha256": "98f3105e42419f2f773ec6d55fc2374678bcce2fbc6f814de24ff95d6e273791",
+      "git_blob_sha": "7a5d2520fde6de022aac906d4886a18cd22aed06"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/pins/PROVIDER_SOURCE_ABI.json",
+      "bytes": 10182,
+      "sha256": "3d0a8032c37d84c246f36475f8dbf7366eb0876396317b6c721ce3b7cf4fb4af",
+      "git_blob_sha": "b3e01423e19f1b7f4e33c53fd375bb8d1eb65bbe"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/pins/COMPILE_EXECUTION_ROLES.json",
+      "bytes": 23147,
+      "sha256": "cd842723219cd8a9469e095ee8bd8c15e6776773d407292d97127f5d83af8cdd",
+      "git_blob_sha": "cfee3e9c1f9a1fa030076daf46c528e9ff2d7029"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_chirrtl/evidence/ACTUAL_CHIRRTL_REVIEW.json",
+      "bytes": 3451,
+      "sha256": "161f53d0ef4e110acbc80ff1004c2dc5e7e7ec5bbbc10514bd940c98f7afccaf",
+      "git_blob_sha": "97baf7cb025948c8a4835007bae9206977566f22"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_chirrtl/evidence/STRUCTURE_SUMMARY.json",
+      "bytes": 1148,
+      "sha256": "612cc2c5b367c6f2002dce16c0242e8fe219b08ebdf29778501cf22ccf60487f",
+      "git_blob_sha": "8fa76cc6cd228d063ccc772cea71c7d9974eedc8"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_chirrtl/pins/CHIRRTL_EXECUTION_ROLES.json",
+      "bytes": 5912,
+      "sha256": "67c6de69f8ca24b11f4185cff44cfe4d7b6ded98fcd58352aa393dcc4451ec5c",
+      "git_blob_sha": "e8b8d0c7017eeb45cf440b89fcf3da876e00b1fa"
+    }
+  ],
+  "scope": "Reuse fixed exporter keyword/source qualification, exact old lexer, unchanged type flattener, firtool distribution/caps, compiled shell and actual CHIRRTL summaries. No real generated payloads."
+}

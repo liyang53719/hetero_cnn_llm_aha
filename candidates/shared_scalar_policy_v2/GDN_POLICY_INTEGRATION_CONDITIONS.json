@@ -1,0 +1,28 @@
+{
+  "status": "FINITE_SCALAR_ACTUAL_SUPPORTS_NEW_EXPLICIT_OWNER_INTEGRATION_REVIEW_NOT_AUTOMATIC_DUAL_ADMISSION",
+  "actual_sources": {
+    "implementation_r2_sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+    "protocol_sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+    "Spec_sha256": "cf92d048460a167fee5e1955616a2c48f02adfb1c842dc5c8d8799f6024ad60e"
+  },
+  "finite_supported_evidence": "Actual HardFloat/Treadle success for41 fixed positive public requests,15 rejection requests,5 primitive flag/status/results. Source recipe has1109 rational nodes but DUT node values were not individually recorded.",
+  "explicit_mapping_for_a_future_reviewed_DUAL_bridge": {
+    "biased_Softplus": "policy2/op7; retain finite input and x>-80 restriction, strict x>20 passthrough; no clipping/filtering of unsupported model values.",
+    "negative_abs_ALog_decay": "policy1/op4; finite a<=0 and finite b; do not silently substitute in other legacy exponent paths.",
+    "beta_exp": "policy0/op4; legacy80zero/order retained.",
+    "ordinary_primitive_operations": "policy0 with exact original opcode and UF/error semantics; op6 remains explicit UF/NX-accepting multiply."
+  },
+  "required_before_owner_numeric_or_domain_admission": [
+    "Freeze/review the exact owner/client per-request policy wiring; verify echoed policy and preserve existing FP32/BF16 materialization and reduction order.",
+    "Use one selected actual Scalar implementation/one primitive in eventual common hardware; explicitly deduplicate the5 identical protocol classes from Scalar and GDN builds, no uncontrolled classpath shadow.",
+    "Retain exclusive/exactly-once/no-stale request ownership and common-router current-fault priority; no new epoch/untagged replay proof is supplied by these tests.",
+    "Check actual owner inputs/domain and compare whole owner/block against admitted reference under unchanged tolerances. Known1ULP candidate exp result cannot be renamed Torch-exact.",
+    "Any encountered Softplus x<=-80, nonfinite, severe flags or unsupported policy must remain explicit failure; no dropping inputs or widening tolerances.",
+    "GDN RawPrep gate2 remains Unsupported in existing frozen source. Removing it requires a distinct exact source/integration/test admission; this receipt is not that approval."
+  ],
+  "not_proven": [
+    "Allfinite/allIEEE or universally correctly-rounded exp/Softplus",
+    "FullGDN M128/numerical closure, allfiveblock full4096/sameRTL qualification",
+    "Topintegration, RTL/SV replay, synthesis/timing/area/PPA/MACutilization"
+  ]
+}

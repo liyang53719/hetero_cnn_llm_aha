@@ -1,0 +1,17 @@
+[
+  {
+    "suite": "BlockScalarFloatPolicyV2Spec",
+    "name": "switch legacy decay and dual Softplus on one DUT without reset and retain every result field",
+    "reported_duration": "35 seconds, 20 milliseconds"
+  },
+  {
+    "suite": "BlockScalarFloatPolicyV2Spec",
+    "name": "reject unknown policy opcode domains and preserve the pinned Softplus domain",
+    "reported_duration": "3 seconds, 676 milliseconds"
+  },
+  {
+    "suite": "BlockScalarFloatPolicyV2Spec",
+    "name": "retain primitive Add Mul op6 Div and Sqrt legacy flags and results",
+    "reported_duration": "3 seconds, 486 milliseconds"
+  }
+]

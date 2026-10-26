@@ -1,0 +1,78 @@
+{
+  "status": "PASS_FINITE_SCALAR_POLICY_3_OF_3_61_REQUESTS_INDEPENDENTLY_REVIEWED",
+  "original_tool_session": 12469,
+  "outer_exit_code": 0,
+  "native_exit_code": 0,
+  "sampled_cpu_seconds": 42.97,
+  "sampled_rss_bytes": 217194496,
+  "owned_inner_wall_seconds": 43.52305115794297,
+  "sampled_output_bytes": 1928856,
+  "case_reporter_wall_seconds": [
+    35.02,
+    3.676,
+    3.486
+  ],
+  "case_scope": [
+    {
+      "requests": 41,
+      "scope": "One DUT no reset across Legacy/GradualDecay/DualInnerSoftplus finite fixed node-recipe output witnesses; changes live input/policy after fire, all result fields held 4cycles"
+    },
+    {
+      "requests": 15,
+      "scope": "Rejected unknown policy/op/domain/nonfinite input and pinned Softplus unsupported <=-80"
+    },
+    {
+      "requests": 5,
+      "scope": "Legacy Add,Mul UF fatal,op6 UF allowed,Div,Sqrt; finite primitive flags/output cases"
+    }
+  ],
+  "same_hardware_lowfir_hash": "ef531507153e8340b5e74544e4a9c96f0670a8f2cc89d8e5dd12389391c8f4f3",
+  "inputs_unchanged": true,
+  "cleanup_complete": true,
+  "limits": [
+    "Three cases instantiate separately; first41 requests share same DUT withoutreset.",
+    "1109 rational node values were not individually observed in this DUT run; only61 public request outputs/status/flags/handshakes asserted.",
+    "Known c2a00001 ->05bfec5b differs archivedTorch05bfec5a by1ULP; no tolerance changed.",
+    "Policy0 compares original enableSoftplus=true only, not defaultfalse configuration.",
+    "Rational oracle signedzero generality limit remains; fixed1109 nodes exclude double-negative-zero add.",
+    "No perrequest log; completion follows frozen Spec success, not independent raw handshake trace.",
+    "Treadle lowFIR only; no new RTL, GDN owner, fullM128, full4096, allIEEE or fullblock PASS.",
+    "Original53558 compileFAIL and Enum-only fix retained, not erased."
+  ],
+  "review": {
+    "sha256": "44bef6be194ed41539407180e1753883adf2f329917c24ab319ffa4f97c98e1e",
+    "freeze_sha256": "af8d71990ee401d92a993e894e18a052443f9f42d634418e94abe3ead2cd2d72"
+  },
+  "actual_pins": {
+    "PLAN.json": "7c6dcb8124b20807c2bde4c9b1814c9657c3ddf665b2d3f3ff017372ccfcc013",
+    "TEST_RESULT.json": "03c88b158e2fc0b7cbffab6441a699c3f3b43da5b7d0c10e694ad3a80901816c",
+    "NATIVE_TEST_RESULT.json": "0f7d783d092f21445b78149247f310bc665080367e5215e6041168b7ba04efe1",
+    "CASE_LINES.json": "80eb168fd4ea85f7d68eb00e9df5a69237d52d4f9747240ca13b120ac0947204",
+    "GENERATED_IR.json": "fd77eb5f2ece855f0504d68fff8215f3c71659aca3032188b7fcd331f7c42279",
+    "test.log": "b01e12a3043a129e0fe9132c0605ffa87ab679c70a2c3c2ad7a43d0599aa7007",
+    "external_freeze": "b2a6a00ad4db288ccc732c10291fbf6cad8899347107f6134f7651ec36a1f175",
+    "external_launch": "9463ecf91681713f32005745c271de24cfb518da49a9ffa14cff1fca6bfae6ba",
+    "original_terminal": "b74316523c469da446a00da5e3cf22b13e3e53b8eb0dd91a67ab8861f75fe644"
+  },
+  "new_resource_scope": "Replacementofone original enabledSoftplusScalar, not parallel extraSFU. Same oneFP32ALU/oneDivSqrt/2conversionmodules; new6states,FP32reducedreg+policy2reg+roundmode/constantmux are real control/format increments. Fulltop not integrated.",
+  "compile_history": {
+    "original_attempt": {
+      "native_exit_code": 1,
+      "class_count": 0,
+      "compiler_error": "object <none> is not a member of package scala at24-state Enum list pattern",
+      "source_sha256": "fbde1a3ec9f23186a32fdfa4be0a51ea95e79de12963df1fbd428702b4b01171",
+      "actual_freeze_sha256": "9964633d87eef3fa1d2088e736b017dc451b246c21e0f7ba21da935274899a7b",
+      "interpretation": "Compiler failure, not arithmetic failure; exact plugin rootcause not proved."
+    },
+    "enum_only_successor": {
+      "source_sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+      "source_count": 3,
+      "native_exit_code": 0,
+      "class_count": 8,
+      "class_bytes": 185128,
+      "result_sha256": "c76e98da04e01b7421762d05f94d7681563a2244ed8efc0d898e50c5ee8fe6e5",
+      "classes_sha256": "e705ec46a25224d0df3d0440f985fc05dc7d273a37463a617b3f4ae1c0e01583",
+      "actual_review_sha256": "3e649c4c69f6f150723872272ed06e9a2f6af79da81ffb3b281d4b6d032d2984"
+    }
+  }
+}

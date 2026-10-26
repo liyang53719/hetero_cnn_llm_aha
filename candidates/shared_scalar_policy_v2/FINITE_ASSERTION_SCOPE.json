@@ -1,0 +1,75 @@
+{
+  "status": "EXACT_41_SPEC_EXPECTATIONS_MATCH_PREVIOUSLY_INDEPENDENTLY_REVIEWED_RECIPE",
+  "count": 41,
+  "recipe_nodes": 1109,
+  "requests_by_policy": {
+    "0": 16,
+    "1": 15,
+    "2": 10
+  },
+  "known_torch_difference": {
+    "a": "c2a00001",
+    "candidate": "05bfec5b",
+    "archived_torch": "05bfec5a"
+  },
+  "current_audit_did_not_recompute_recipe_nodes": true,
+  "previous_independent_source_review_sha256": "16b5a085a8084b4f870acbf9cc074d33ef79603d27d0b57758965d0fd798fe43",
+  "actual_source_bound_counts": {
+    "same_DUT_positive": 41,
+    "rejected": 15,
+    "primitive": 5
+  },
+  "not_raw_per_request_trace": true,
+  "primitive_assertions": [
+    {
+      "policy": 0,
+      "op": 0,
+      "a": "3f800000",
+      "b": "40000000",
+      "out": "40400000",
+      "error": false,
+      "flags": 0,
+      "primitiveFlagsValid": true
+    },
+    {
+      "policy": 0,
+      "op": 1,
+      "a": "00000001",
+      "b": "3f000000",
+      "out": "00000000",
+      "error": true,
+      "flags": 3,
+      "primitiveFlagsValid": true
+    },
+    {
+      "policy": 0,
+      "op": 6,
+      "a": "00000001",
+      "b": "3f000000",
+      "out": "00000000",
+      "error": false,
+      "flags": 3,
+      "primitiveFlagsValid": true
+    },
+    {
+      "policy": 0,
+      "op": 2,
+      "a": "40800000",
+      "b": "40000000",
+      "out": "40000000",
+      "error": false,
+      "flags": 0,
+      "primitiveFlagsValid": false
+    },
+    {
+      "policy": 0,
+      "op": 3,
+      "a": "40800000",
+      "b": "00000000",
+      "out": "40000000",
+      "error": false,
+      "flags": 0,
+      "primitiveFlagsValid": false
+    }
+  ]
+}

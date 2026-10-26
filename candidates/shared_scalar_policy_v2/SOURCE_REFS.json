@@ -1,0 +1,91 @@
+{
+  "baseline_28_source_closure": {
+    "commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307",
+    "path": "candidates/moe_bf16_scalar_consumer/SOURCE_PINS.json",
+    "sha256": "1f370db3bae779820c4cd0422c854d97d7d4db2cc8b32defb8e3344eb33985bc",
+    "historical_derived_classes": 168,
+    "historical_class_manifest_sha256": "534f5843a60e6ea925c4284fc1c2e7404437f7cdcf880d7d4c44eda5aff8606b"
+  },
+  "jar_classpath_reference": {
+    "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+    "key": "ordered_classpath",
+    "count": 106,
+    "commit": "43801d4043ef49524b93dbccb5c1f0bf4bb8f258"
+  },
+  "strict_cleanup": {
+    "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+    "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "commit": "43801d4043ef49524b93dbccb5c1f0bf4bb8f258"
+  },
+  "source_count": 3,
+  "new_sources": [
+    {
+      "relative_path": "source/BlockScalarFloatPolicyV2.scala",
+      "bytes": 10944,
+      "sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03"
+    },
+    {
+      "relative_path": "source/UnifiedScalarPolicyV2.scala",
+      "bytes": 858,
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "relative_path": "tests/BlockScalarFloatPolicyV2Spec.scala",
+      "bytes": 6532,
+      "sha256": "cf92d048460a167fee5e1955616a2c48f02adfb1c842dc5c8d8799f6024ad60e"
+    }
+  ],
+  "dependency_classes": 168,
+  "new_classes": 8,
+  "test_class_count": 176,
+  "test_class_bytes": 2410237,
+  "class_scope": "No classes/runtime uploaded. Rebuild or use exactqualified8+168 classes; no class shadow or automatic inheritedexecution.",
+  "fixed_tool_versions": {
+    "Scala": "2.13.16",
+    "Chisel": "6.7.0",
+    "chiseltest": "6.0.0",
+    "ScalaTest": "3.2.19",
+    "JDK": "21"
+  },
+  "recipe": {
+    "generator_sha256": "8d72d50285fb67554aa7f9c6bf92c4678cb55922872661bff1d355698e8fe000",
+    "generated_fixture_sha256": "97d7a1677d1a8b21507d885060c22c7346b353c84bace9a5331f15ac9a1fe2fc",
+    "generated_fixture_bytes": 146481,
+    "cases": 41,
+    "nodes": 1109,
+    "included_fixture": false,
+    "scope": "Spec embeds expected outputs. PureFractions generator reconstructs node recipe; not correctlyrounded exp/stdexp/Torch oracle. Known node(add,-0,-0) returns+0 instead of-0; noneof1109frozen nodes hasthisinput."
+  },
+  "supervision": {
+    "actual_private_source_sha256": "aa3eece5c7681d0c6d6f824716292c499c1d16f8936e43b95b9baf953abd9fdf",
+    "public_library_template_sha256": "2247fa32521b91558d8a27fb590f2d5df74b6a0b68d6a39f05a7bf7bfe18488b",
+    "transformation": "Exact imports/helpers/owned_run prefix, one HELPER role substitution; unused historicalmain omitted. Template is not the original actual launcher and has not executed a target."
+  },
+  "reviews": {
+    "source": {
+      "review_sha256": "16b5a085a8084b4f870acbf9cc074d33ef79603d27d0b57758965d0fd798fe43",
+      "freeze_sha256": "229947ee84ec6a64e7e03bfaaf622e5ceaa39270f911ab6f81905df12debb632"
+    },
+    "original_fail_enum_r2": {
+      "review_sha256": "6d5b21401718406ac4e3d27e02ab49d41c49a46519611159cc52a266c92902ec",
+      "freeze_sha256": "4b90d0ee572ae0373856c08cc00865df6dd7d06f7f6f79506cba5a460bd91bd0"
+    },
+    "r2_compile_binding": {
+      "review_sha256": "8d0bcc3d17eb7e9af165c497550644039d5a77dd8c9d0714a45bd915e1a403df",
+      "freeze_sha256": "85be9a029469db42c5f085abfbf9f5ed37542d07245bf535f88ea80b94f9254e"
+    },
+    "r2_compile_actual": {
+      "review_sha256": "3e649c4c69f6f150723872272ed06e9a2f6af79da81ffb3b281d4b6d032d2984",
+      "freeze_sha256": "2e95d8343ac3a758f5f80bfdc06b3538ada5d764b042c3516d378a6ce4bc64d8"
+    },
+    "test_admission": {
+      "review_sha256": "b40e065c1d7dca4c7f0a79ca464e02aa351063ff80aa2f2ebb62e15ec7343589",
+      "freeze_sha256": "143ba5d7c8446c72dab68400e3eb367714753a0d5e6bc7608b005189cd5ab450"
+    },
+    "test_actual": {
+      "review_sha256": "44bef6be194ed41539407180e1753883adf2f329917c24ab319ffa4f97c98e1e",
+      "freeze_sha256": "af8d71990ee401d92a993e894e18a052443f9f42d634418e94abe3ead2cd2d72"
+    }
+  }
+}

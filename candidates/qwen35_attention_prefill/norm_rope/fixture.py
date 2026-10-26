@@ -226,13 +226,14 @@ def select_norm_weights(manifest, payload):
     return selected
 
 
-def build_trig_table(case_rows, rows):
+def build_trig_table(case_rows, rows, *, windows=('cold', 'carried')):
     """Pack captured BF16 constants into one 256-position absolute-index table."""
-    require(type(rows) is int and rows in (16, 128) and set(case_rows) ==
-            {'cold' + str(rows), 'carried' + str(rows)}, 'two complete trig windows')
+    names = input_fixture.requested_case_names(rows, windows)
+    require(set(case_rows) == set(names), 'exact selected complete trig windows')
     table = np.zeros((256, 64), dtype='<u2')
     loaded = []
-    for name, base in (('cold' + str(rows), 0), ('carried' + str(rows), 128)):
+    for name in names:
+        base = 0 if name.startswith('cold') else 128
         trig = []
         for label in ('cos', 'sin'):
             raw = case_rows[name][label]
@@ -243,15 +244,22 @@ def build_trig_table(case_rows, rows):
             trig.append(words[:, :32])
         table[base:base + rows] = np.concatenate(trig, axis=1)
         loaded.append([base, base + rows])
+    unread, cursor = [], 0
+    for begin, end in loaded:
+        if cursor < begin:
+            unread.append([cursor, begin])
+        cursor = end
+    if cursor < 256:
+        unread.append([cursor, 256])
     return table.tobytes(), dict(bytes_per_position=128, trig_tokens=256,
-        captured_position_spans=loaded, zero_filled_unread_spans=[] if rows == 128 else [[16, 128], [144, 256]],
+        captured_position_spans=loaded, zero_filled_unread_spans=unread,
         provenance='original captured BF16 cos/sin; duplicate halves checked; absent rows are explicit unread zeros',
         independent_trig_generation=False)
 
 
-def load_fixture(directory, payload_directory, root=ROOT):
+def load_fixture(directory, payload_directory, root=ROOT, *, windows=('cold', 'carried')):
     """Return prefix fixture's four values plus raw norm weights/trig metadata."""
-    manifest, prefix_weights, inputs, identity = input_fixture.load_fixture(directory, payload_directory, root)
+    manifest, prefix_weights, inputs, identity = input_fixture.load_fixture(directory, payload_directory, root, windows=windows)
     contract = load_contract(root)
     payload_directory = Path(payload_directory)
     payload = json.loads((payload_directory / 'manifest.json').read_text())
@@ -264,7 +272,7 @@ def load_fixture(directory, payload_directory, root=ROOT):
         weights[role] = raw
         weight_files[role] = dict(sha256=sha(raw), bytes=len(raw), original_bf16_weight=True, one_plus_precomputed=False)
     cases, captured = {}, {}
-    for case in manifest['cases']:
+    for case in input_fixture.select_windows(manifest, windows):
         name, rows = case['name'], manifest['query_tokens']
         refs = select_case_references(manifest, case, contract)
         base = case['position_span'][0]
@@ -277,7 +285,7 @@ def load_fixture(directory, payload_directory, root=ROOT):
                           for label in ('cos', 'sin')}
         cases[name] = dict(position_base=base, trig_tokens=256, references=refs,
                            captured_trig_sha256={label: sha(raw) for label, raw in captured[name].items()})
-    table, provenance = build_trig_table(captured, manifest['query_tokens'])
+    table, provenance = build_trig_table(captured, manifest['query_tokens'], windows=windows)
     for case in cases.values():
         case['trig'] = table
         case['trig_provenance'] = {**provenance, 'table_sha256': sha(table)}

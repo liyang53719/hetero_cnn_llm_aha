@@ -43,9 +43,9 @@ def select_tail_references(manifest, case):
     return refs
 
 
-def load_fixture(directory, payload_directory, root=prefix.ROOT):
+def load_fixture(directory, payload_directory, root=prefix.ROOT, *, windows=('cold', 'carried')):
     from heteronpu.pinned_block_payload import load_payload
-    manifest, weights, inputs, identity, extra = prefix.load_fixture(directory, payload_directory, root)
+    manifest, weights, inputs, identity, extra = prefix.load_fixture(directory, payload_directory, root, windows=windows)
     payload, all_weights = load_payload(root, payload_directory)
     records = {record['local_name']: record for record in payload['tensors']}
     tail = {}
@@ -61,6 +61,6 @@ def load_fixture(directory, payload_directory, root=prefix.ROOT):
                 'tail checkpoint bytes: ' + role)
     identity['tail_weight_sha256'] = {role: sha(raw) for role, raw in tail.items()}
     identity['tail_references'] = {case['name']: select_tail_references(manifest, case)
-                                   for case in manifest['cases']}
+                                   for case in prefix.input_fixture.select_windows(manifest, windows)}
     extra['tail_weights'] = tail
     return manifest, weights, inputs, identity, extra

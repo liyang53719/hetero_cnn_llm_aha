@@ -322,6 +322,132 @@ def run(root, payload0, payload3, payload_extra, runtime, output, m, variant="ba
         signal.alarm(0)
 
 
+
+# Exact external provenance records from the already qualified recovered runtime.
+# They are not replaced, omitted or rewritten; the original per-file hash gate
+# below still reads every item after this closed placement/metadata check.
+_RECOVERED_RUNTIME_EXTERNAL = {
+    'acquisition_provenance:source_ledger': ('runtime_parent', 'runtime_dependency_recovery/network.jsonl', 28683, '3814be9f5b4e39fd25772b61f3cdedf44fd32bfa47d871b8eccc0959b5e21928'),
+    'acquisition_provenance:source_lock': ('runtime_parent', 'runtime_dependency_recovery/official_runtime.lock.json', 78695, '806f6a7f409e85965261bf864fcc8de4558aaedf9f3da26759323625ca131497'),
+    'acquisition_provenance:window_extension': ('runtime_parent', 'runtime_dependency_recovery/window_extension.json', 453, 'a81e1a768dc344b2dd5dda56ad85f26439de15ef99166e2f32f765b2b78cebed'),
+    'backend_runner_source': ('repository', 'scripts/qwen35_backend_runner.py', 2141, '43a4c91380fc9ad6e3ca2d7780e623e2780a5c69126983d93c40b653a8e309e4'),
+    'installer_source': ('repository', 'scripts/install_qwen35_official_runtime.py', 20695, '517a64fe24b195e8a469a388284292a23e4cabd91361613b4076cc2f57601642'),
+    'pip_driver_source': ('repository', 'scripts/pip_qwen35_offline_driver.py', 7752, 'd6b5953062250492f5fcb457b58704f4ed0122ac2e54f277c00b3b2cf569d193'),
+    'qualifier_source': ('repository', 'scripts/qualify_qwen35_official_runtime.py', 50210, '7686d0da3a220607b91f73934a22df7a949eda2ab74d6c89c20a82fdfe6e74f4'),
+    'transformers_archive': ('runtime_parent', 'runtime_dependency_recovery/transformers-14e738b5d0cc69aa27a95dde272aea41fde44f2f.zip', 28738230, '15a8ff42ef4fba57ff51034e1cd7d3672dec2bf1cf080134eb69d13c69ee6a2d'),
+    'wheel:annotated-doc': ('runtime_parent', 'runtime_dependency_recovery/wheels/annotated_doc-0.0.5-py3-none-any.whl', 5302, '117bac03a25ede5df5440e855b32d556049ca169ead221505badf432fed4b101'),
+    'wheel:anyio': ('runtime_parent', 'runtime_dependency_recovery/wheels/anyio-4.14.2-py3-none-any.whl', 125813, '9f505dda5ac9f0c8309b5e8bd445a8c2bf7246f3ce950121e45ea15bc41d1494'),
+    'wheel:certifi': ('runtime_parent', 'runtime_dependency_recovery/wheels/certifi-2026.7.22-py3-none-any.whl', 136983, '62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775'),
+    'wheel:click': ('runtime_parent', 'runtime_dependency_recovery/wheels/click-8.4.2-py3-none-any.whl', 119243, 'e6f9f66136c816745b9d65817da91d61d957fb16e02e4dcd0552553c5a197b76'),
+    'wheel:filelock': ('runtime_parent', 'runtime_dependency_recovery/wheels/filelock-3.20.0-py3-none-any.whl', 16054, '339b4732ffda5cd79b13f4e2711a31b0365ce445d95d243bb996273d072546a2'),
+    'wheel:fsspec': ('runtime_parent', 'runtime_dependency_recovery/wheels/fsspec-2025.12.0-py3-none-any.whl', 201422, '8bf1fe301b7d8acfa6e8571e3b1c3d158f909666642431cc78a1b7b4dbc5ec5b'),
+    'wheel:h11': ('runtime_parent', 'runtime_dependency_recovery/wheels/h11-0.16.0-py3-none-any.whl', 37515, '63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86'),
+    'wheel:hf-xet': ('runtime_parent', 'runtime_dependency_recovery/wheels/hf_xet-1.7.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl', 4212180, '2814a6e999d13464c4d679b788cc5d784eb5a4edfc638a31f10e9a11ab531ef8'),
+    'wheel:httpcore': ('runtime_parent', 'runtime_dependency_recovery/wheels/httpcore-1.0.9-py3-none-any.whl', 78784, '2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55'),
+    'wheel:httpx': ('runtime_parent', 'runtime_dependency_recovery/wheels/httpx-0.28.1-py3-none-any.whl', 73517, 'd909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad'),
+    'wheel:huggingface-hub': ('runtime_parent', 'runtime_dependency_recovery/wheels/huggingface_hub-1.33.0-py3-none-any.whl', 846435, '04e434b06e100eddbce9a6e817d72693a7884b10a79bd67ab48080d5c07eb899'),
+    'wheel:idna': ('runtime_parent', 'runtime_dependency_recovery/wheels/idna-3.18-py3-none-any.whl', 65455, '7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2'),
+    'wheel:iniconfig': ('runtime_parent', 'runtime_dependency_recovery/wheels/iniconfig-2.3.1-py3-none-any.whl', 7552, '9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7'),
+    'wheel:jinja2': ('runtime_parent', 'runtime_dependency_recovery/wheels/jinja2-3.1.6-py3-none-any.whl', 134899, '85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67'),
+    'wheel:markdown-it-py': ('runtime_parent', 'runtime_dependency_recovery/wheels/markdown_it_py-4.2.0-py3-none-any.whl', 91687, '9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a'),
+    'wheel:markupsafe': ('runtime_parent', 'runtime_dependency_recovery/wheels/markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl', 22947, 'd6dd0be5b5b189d31db7cda48b91d7e0a9795f31430b7f271219ab30f1d3ac9d'),
+    'wheel:mdurl': ('runtime_parent', 'runtime_dependency_recovery/wheels/mdurl-0.1.2-py3-none-any.whl', 9979, '84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8'),
+    'wheel:mpmath': ('runtime_parent', 'runtime_dependency_recovery/wheels/mpmath-1.3.0-py3-none-any.whl', 536198, 'a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c'),
+    'wheel:networkx': ('runtime_parent', 'runtime_dependency_recovery/wheels/networkx-3.6.1-py3-none-any.whl', 2068504, 'd47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762'),
+    'wheel:numpy': ('runtime_parent', 'runtime_dependency_recovery/wheels/numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl', 16606086, '0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28'),
+    'wheel:packaging': ('runtime_parent', 'runtime_dependency_recovery/wheels/packaging-26.3-py3-none-any.whl', 129956, 'd7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c'),
+    'wheel:pip': ('runtime_parent', 'runtime_dependency_recovery/wheels/pip-26.2.1-py3-none-any.whl', 1816632, '71138adf1f4ca900cdb7d289c21b7494329f2332b6d85f0e1c42108c0384ed3e'),
+    'wheel:pluggy': ('runtime_parent', 'runtime_dependency_recovery/wheels/pluggy-1.6.0-py3-none-any.whl', 20538, 'e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746'),
+    'wheel:pygments': ('runtime_parent', 'runtime_dependency_recovery/wheels/pygments-2.21.0-py3-none-any.whl', 1250147, '2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9'),
+    'wheel:pytest': ('runtime_parent', 'runtime_dependency_recovery/wheels/pytest-8.4.2-py3-none-any.whl', 365750, '872f880de3fc3a5bdc88a11b39c9710c3497a547cfa9320bc3c5e62fbf272e79'),
+    'wheel:pyyaml': ('runtime_parent', 'runtime_dependency_recovery/wheels/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl', 807870, 'ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc'),
+    'wheel:regex': ('runtime_parent', 'runtime_dependency_recovery/wheels/regex-2025.11.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl', 803501, 'a12ab1f5c29b4e93db518f5e3872116b7e9b1646c9f9f426f777b50d44a09e8c'),
+    'wheel:rich': ('runtime_parent', 'runtime_dependency_recovery/wheels/rich-15.0.0-py3-none-any.whl', 310654, '33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb'),
+    'wheel:safetensors': ('runtime_parent', 'runtime_dependency_recovery/wheels/safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl', 516040, 'fd6f3f93c9a0a7cc2788ee63fb763353d4bd2e89b0751bc78fcf7dda00bea774'),
+    'wheel:setuptools': ('runtime_parent', 'runtime_dependency_recovery/wheels/setuptools-84.0.0-py3-none-any.whl', 818216, '51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670'),
+    'wheel:shellingham': ('runtime_parent', 'runtime_dependency_recovery/wheels/shellingham-1.5.4-py2.py3-none-any.whl', 9755, '7ecfff8f2fd72616f7481040475a65b2bf8af90a56c89140852d1120324e8686'),
+    'wheel:sympy': ('runtime_parent', 'runtime_dependency_recovery/wheels/sympy-1.14.0-py3-none-any.whl', 6299353, 'e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5'),
+    'wheel:tokenizers': ('runtime_parent', 'runtime_dependency_recovery/wheels/tokenizers-0.23.2-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl', 3386843, '41c2f84d172449b4dadb9cdc508e3e364076613c35b16e76ecfe47a60d1e3305'),
+    'wheel:torch': ('runtime_parent', 'runtime_dependency_recovery/wheels/torch-2.10.0+cpu-cp312-cp312-manylinux_2_28_x86_64.whl', 188943803, 'ee40b8a4b4b2cf0670c6fd4f35a7ef23871af956fecb238fbf5da15a72650b1d'),
+    'wheel:tqdm': ('runtime_parent', 'runtime_dependency_recovery/wheels/tqdm-4.70.1-py3-none-any.whl', 80199, 'c293e525e6fef9c20e8728fd4612df02a0aa31bb5fe91ecd93e123b1b7bffa73'),
+    'wheel:typer': ('runtime_parent', 'runtime_dependency_recovery/wheels/typer-0.27.3-py3-none-any.whl', 123312, 'e50022f28b82a86313e54501317a1db64bf8f8d036ff8cfe5ca7e47675454aff'),
+    'wheel:typing-extensions': ('runtime_parent', 'runtime_dependency_recovery/wheels/typing_extensions-4.15.0-py3-none-any.whl', 44614, 'f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548'),
+    'wheel:wheel': ('runtime_parent', 'runtime_dependency_recovery/wheels/wheel-0.48.0-py3-none-any.whl', 33320, '3217dcc807155e45db462d7ef2431f5ddda0d7273b700d05a67b271ceb1287ab'),
+}
+
+
+# Seven exact installed/provenance aliases in the same sealed receipt.
+_RECOVERED_RUNTIME_ALIASES = {'acquisition.json': (('acquisition_report', 'install_provenance:acquisition_report'),
+                      884,
+                      '91491ed72d80fc1f28bd725450286c0e5604e5c04e49e9d1c898a922f0ab064d'),
+ 'dependency_lock.json': (('dependency_lock', 'install_provenance:dependency_lock'),
+                          78695,
+                          '806f6a7f409e85965261bf864fcc8de4558aaedf9f3da26759323625ca131497'),
+ 'guard/sitecustomize.py': (('install_provenance:guard_installed', 'network_guard_source'),
+                            3226,
+                            'adf905304fe32c34ccb07892f2627fcb76417178d36058270b74a4666b28c2c5'),
+ 'install_transformers.json': (('install_provenance:transformers_install_report', 'pip_transformers_report'),
+                               34416,
+                               'e75a371bbeca700e685dd34425d57b6646db9f41fff054f7179278ffcbcb3fa7'),
+ 'install_wheels.json': (('install_provenance:wheel_install_report', 'pip_wheels_report'),
+                         451056,
+                         '872884caa096ef9131a101a7c11664ba514e9ab73e1223ff078538e7df80d788'),
+ 'python.sh': (('install_provenance:python_wrapper', 'python_wrapper'),
+               750,
+               'ed58028b1d356fce9209f46ad26da5a3c7e3dbf8b57206a3692dd9fc73f8aa71'),
+ 'site-packages/transformers-5.19.0.dev0.dist-info/direct_url.json': (('install_provenance:transformers_direct_url',
+                                                                       'installed:transformers-5.19.0.dev0.dist-info/direct_url.json'),
+                                                                      298,
+                                                                      '468b1813bda036ec8e12393b5fcaea28e48d49a1347031fb50e080c06a8f1f6a')}
+
+def runtime_artifact_path(root, runtime, name, record):
+    """Accept installed runtime files or exactly the 46 sealed recovery items."""
+    root, runtime = Path(root).resolve(strict=True), Path(runtime).resolve(strict=True)
+    require(runtime.is_relative_to(root), 'runtime outside explicit repository')
+    relative = Path(record['path'])
+    require(not relative.is_absolute() and '..' not in relative.parts and str(relative) == record['path'],
+            'runtime artifact relative path escape')
+    unresolved = root / relative
+    require(all(not (root / Path(*relative.parts[:i])).is_symlink()
+                for i in range(1, len(relative.parts) + 1)), 'runtime artifact symlink refused')
+    path = unresolved.resolve(strict=True)
+    require(path.is_file() and path.is_relative_to(root), 'runtime artifact path escape')
+    if path.is_relative_to(runtime):
+        require(name not in _RECOVERED_RUNTIME_EXTERNAL, 'external provenance relabelled as installed runtime')
+        return path
+    require(name in _RECOVERED_RUNTIME_EXTERNAL, 'unknown external runtime artifact category: ' + str(name))
+    scope, suffix, size, digest = _RECOVERED_RUNTIME_EXTERNAL[name]
+    allowed = (root if scope == 'repository' else runtime.parent) / suffix
+    require(path == allowed and type(record.get('bytes')) is int and record['bytes'] == size and
+            record.get('sha256') == digest, 'runtime provenance path/metadata mismatch: ' + name)
+    return path
+
+
+def validate_runtime_layout(root, runtime, receipt):
+    """Require all-or-none recovery provenance; reject missing/extra records."""
+    artifacts = receipt['artifacts']
+    require(type(artifacts) is dict and artifacts, 'nonempty runtime artifact map required')
+    paths = {name: runtime_artifact_path(root, runtime, name, record) for name, record in artifacts.items()}
+    external = {name for name, path in paths.items() if not path.is_relative_to(Path(runtime).resolve())}
+    recovered = receipt.get('package_dependency_closure_verified') is True or bool(external)
+    require(not recovered or external == set(_RECOVERED_RUNTIME_EXTERNAL),
+            'complete 46-item recovered provenance inventory required')
+    aliases = {}
+    for name, path in paths.items():
+        aliases.setdefault(path, []).append(name)
+    for path, names in aliases.items():
+        if len(names) == 1:
+            continue
+        require(path.is_relative_to(Path(runtime).resolve()), 'duplicate external runtime artifact path')
+        suffix = str(path.relative_to(Path(runtime).resolve()))
+        require(suffix in _RECOVERED_RUNTIME_ALIASES, 'unknown duplicate runtime artifact path')
+        expected_names, size, digest = _RECOVERED_RUNTIME_ALIASES[suffix]
+        require(set(names) == set(expected_names) and all(type(artifacts[n].get('bytes')) is int and
+                artifacts[n]['bytes'] == size and artifacts[n].get('sha256') == digest for n in names),
+                'runtime provenance alias metadata drift')
+    return paths
+
+
 def _run(root, payload0, payload3, payload_extra, runtime, output, m, variant, start):
     contract_path = root / CONTRACT
     require(sha(contract_path.read_bytes()) == CONTRACT_SHA256, "original BF16 contract drift")
@@ -353,9 +479,9 @@ def _run(root, payload0, payload3, payload_extra, runtime, output, m, variant, s
     require(receipt.get("status") == "PASS_ISOLATED_PINNED_RUNTIME_READY" and receipt.get("checks") and
             all(v is True for v in receipt["checks"].values()), "isolated runtime is not verified ready")
     runtime_files = {"runtime_receipt": file_record(receipt_path)}
+    runtime_paths = validate_runtime_layout(root, runtime, receipt)
     for name, record in receipt["artifacts"].items():
-        path = (root / record["path"]).resolve()
-        require(path.is_relative_to(runtime), "runtime artifact path escape")
+        path = runtime_paths[name]
         actual = file_record(path)
         require(actual["bytes"] == record["bytes"] and actual["sha256"] == record["sha256"], "runtime artifact drift: " + name)
         runtime_files[name] = actual

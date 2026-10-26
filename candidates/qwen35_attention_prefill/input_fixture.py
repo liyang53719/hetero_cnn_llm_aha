@@ -69,7 +69,29 @@ def read_tensor(directory, manifest, key):
     return (Path(directory) / record['file']).read_bytes()
 
 
-def load_fixture(directory, payload_directory, root=ROOT):
+
+def requested_case_names(rows, windows=('cold', 'carried')):
+    """Closed cold-prefix selections; a carried window cannot run without cold."""
+    require(type(rows) is int and rows in (16, 128), 'complete M16/M128 only')
+    require(type(windows) is tuple and all(type(w) is str for w in windows) and
+            windows in (('cold',), ('cold', 'carried')), 'cold-only or ordered cold/carried windows required')
+    return tuple(window + str(rows) for window in windows)
+
+
+def select_windows(manifest, windows=('cold', 'carried')):
+    """Select execution/compare cases after authenticating the complete capture.
+
+    This does not relax capture sealing: both original windows remain mandatory
+    in the manifest, even when only cold inputs/trig and comparisons are used.
+    """
+    names = requested_case_names(manifest['query_tokens'], windows)
+    complete = requested_case_names(manifest['query_tokens'])
+    require(tuple(case['name'] for case in manifest['cases']) == complete,
+            'complete ordered cold/carried capture required')
+    return tuple(case for case in manifest['cases'] if case['name'] in names)
+
+
+def load_fixture(directory, payload_directory, root=ROOT, *, windows=('cold', 'carried')):
     from heteronpu.pinned_block_payload import load_payload
     directory, payload_directory, root = map(Path, (directory, payload_directory, root))
     manifest_path = directory / 'manifest.json'
@@ -95,6 +117,8 @@ def load_fixture(directory, payload_directory, root=ROOT):
             'complete durable tensor journal differs from manifest')
     payload, all_weights = load_payload(root, payload_directory)
     selections = select_prefix_tensors(manifest, payload)
+    names = tuple(case['name'] for case in select_windows(manifest, windows))
+    selections = [case for case in selections if case['name'] in names]
     inputs = {case['name']: read_tensor(directory, manifest, case['hidden']) for case in selections}
     weights = {role: all_weights[name] for role, name in WEIGHTS.items()}
     identity = dict(capture_directory=str(directory.resolve()), capture_manifest_sha256=sha(manifest_path.read_bytes()),
@@ -102,5 +126,6 @@ def load_fixture(directory, payload_directory, root=ROOT):
         model_id=manifest['model_id'], revision=manifest['revision'], rows=manifest['query_tokens'],
         case_identity=manifest['case_identity'], backend=manifest['environment'],
         input_sha256={k: sha(v) for k, v in inputs.items()}, weight_sha256={k: sha(v) for k, v in weights.items()},
-        selections=selections, execution_input_is_original_hidden=True, native_intermediates_injected=False)
+        selections=selections, requested_windows=list(windows), selected_case_names=list(names),
+        complete_capture_seal_validated=True, execution_input_is_original_hidden=True, native_intermediates_injected=False)
     return manifest, weights, inputs, identity

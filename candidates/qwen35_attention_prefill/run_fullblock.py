@@ -20,6 +20,7 @@ import traceback
 import numpy as np
 
 from . import full_fixture as fixture
+from .input_fixture import requested_case_names, select_windows
 from . import run_norm_rope as prefix_runner
 from .full_compare import FullObservations, compare_case
 from .full_driver import L3FullBlockCoordinator, L3FullBlockPlan, ORDER
@@ -110,7 +111,28 @@ def save_observations(output, phase, norms, observations, *, partial=False):
     return records
 
 
-def run(capture_directory, payload_directory, output, *, budget_seconds):
+
+def compare_selected_windows(cases, manifest, capture_directory, output, actual, norms, observed,
+                             *, started, budget_seconds):
+    """Compare every selected complete window under the original run clock."""
+    names = tuple(case['name'] for case in cases)
+    require(names and len(set(names)) == len(names) and
+            all(set(values) == set(names) for values in (actual, norms, observed)),
+            'exact nonempty selected comparison inputs required')
+    comparisons = {}
+    for case in cases:
+        require(time.monotonic() - started < budget_seconds, 'comparison software wall budget exceeded')
+        name = case['name']
+        comparisons[name] = compare_case(case, manifest, capture_directory,
+                                         actual[name], norms[name], observed[name])
+        persist(output / (name + '.comparison.json'), comparisons[name])
+        require(time.monotonic() - started < budget_seconds, 'comparison software wall budget exceeded')
+    return comparisons
+
+
+def run(capture_directory, payload_directory, output, *, budget_seconds, windows=('cold', 'carried')):
+    requested_case_names(128, windows)  # Reject illegal selection before any output/native work.
+    cold_only = windows == ('cold',)
     output = Path(output)
     require(not output.exists() and type(budget_seconds) is int and 1 <= budget_seconds <= 7200,
             'fresh output and explicit software wall budget 1..7200')
@@ -120,18 +142,23 @@ def run(capture_directory, payload_directory, output, *, budget_seconds):
     observed = norms = active_outputs = active_name = None
     report = dict(status='RUNNING', scope='QWEN35_L3_COMPLETE_TYPED_SOFTWARE_COORDINATOR',
         budget_seconds=budget_seconds, windows=[], actual_outputs={}, observations={},
+        requested_windows=list(windows), execution_window_scope='COLD_ONLY' if cold_only else 'COLD_THEN_CARRIED',
+        carried_window_executed=False, complete_capture_seal_required=True,
         rtl_executed=False, chisel_executed=False, public_command128_executed=False,
         full_block_executed=False, original_57_producer_contract_accepted=False,
         hardware_cycles=None, hardware_mac_utilization=None,
         source_initialization='raw_hidden_weights_trig_only_before_any_launch',
-        carried_dependency='preceding_actual_committed_KV_roots_and_generation')
+        carried_dependency='NOT_EXECUTED_COLD_ONLY' if cold_only else 'preceding_actual_committed_KV_roots_and_generation')
     persist(output / 'summary.json', report)
     try:
         sources = {p: (ROOT / p).read_bytes() for p in SOURCE_FILES}
         report['source_sha256'] = {p: sha(raw) for p, raw in sources.items()}
         for name, raw in sources.items(): snapshot_bytes(output, 'source_snapshot/' + name, raw)
-        manifest, weights, inputs, identity, extra = fixture.load_fixture(capture_directory, payload_directory)
+        manifest, weights, inputs, identity, extra = fixture.load_fixture(capture_directory, payload_directory, windows=windows)
         require_loaded_source_closure()
+        selected_cases = select_windows(manifest, windows)
+        require(tuple(inputs) == tuple(case['name'] for case in selected_cases), 'selected input order/identity')
+        report['selected_case_names'] = list(inputs)
         rows = identity['rows']
         library = prior.d.library_from_environment(ROOT)
         vector = prior.Vector16(os.environ['GDN_VECTOR16_LIBRARY'], exception_policy=prior.IEEE_POLICY)
@@ -281,23 +308,22 @@ def run(capture_directory, payload_directory, output, *, budget_seconds):
             all_actual[name] = {role: memory.regions[base].raw() for role, base in active_outputs.items()}
             all_norms[name], all_observed[name] = norms, observed
         report.update(status='ACTUAL_COMPLETE_UNCOMPARED', full_block_executed=True,
+                      carried_window_executed=not cold_only,
                       terminal_count=sum(len(w['commands']) for w in report['windows']),
                       roots=asdict(fence.state), elapsed_seconds=time.monotonic() - started)
         persist(output / 'actual_terminal.json', report)
-        comparisons = {}
-        for case in manifest['cases']:
-            require(time.monotonic() - started < budget_seconds, 'comparison software wall budget exceeded')
-            name = case['name']
-            comparisons[name] = compare_case(case, manifest, capture_directory, all_actual[name], all_norms[name], all_observed[name])
-            persist(output / (name + '.comparison.json'), comparisons[name])
+        comparisons = compare_selected_windows(selected_cases, manifest, capture_directory, output,
+            all_actual, all_norms, all_observed, started=started, budget_seconds=budget_seconds)
         report['comparisons'] = comparisons
         require_loaded_source_closure()
         report['seals'] = dict(source=all((ROOT / p).read_bytes() == raw for p, raw in sources.items()),
             libraries=all(sha(Path(p).read_bytes()) == h for p, h in identity['libraries'].items()),
             capture_manifest=sha((Path(capture_directory) / 'manifest.json').read_bytes()) == identity['capture_manifest_sha256'],
             outputs=all(sha((output / r['file']).read_bytes()) == r['sha256'] for r in report['actual_outputs'].values()))
+        require(time.monotonic() - started < budget_seconds, 'final sealing software wall budget exceeded')
         passed = all(report['seals'].values()) and all(c['all_computed_stages_pass'] for c in comparisons.values())
-        report.update(status='PASS_COMPLETE_CHAIN_COMPUTED_GATES_ONLY' if passed else 'FAILED_NATIVE_OR_IDENTITY_GATE',
+        success = 'PASS_COLD_CHAIN_COMPUTED_GATES_ONLY' if cold_only else 'PASS_COMPLETE_CHAIN_COMPUTED_GATES_ONLY'
+        report.update(status=success if passed else 'FAILED_NATIVE_OR_IDENTITY_GATE',
                       elapsed_seconds=time.monotonic() - started)
         persist(output / 'summary.json', report)
         return report
@@ -329,10 +355,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('capture', 'payload', 'out'): parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--budget-seconds', type=int, required=True)
+    parser.add_argument('--cold-only', action='store_true',
+                        help='Run/compare only cold; still verify the complete two-window capture seal')
     args = parser.parse_args()
-    report = run(args.capture, args.payload, args.out, budget_seconds=args.budget_seconds)
+    report = run(args.capture, args.payload, args.out, budget_seconds=args.budget_seconds,
+                 windows=('cold',) if args.cold_only else ('cold', 'carried'))
     print(json.dumps({key: report[key] for key in ('status', 'elapsed_seconds', 'terminal_count')}))
-    raise SystemExit(0 if report['status'] == 'PASS_COMPLETE_CHAIN_COMPUTED_GATES_ONLY' else 1)
+    raise SystemExit(0 if report['status'] in ('PASS_COMPLETE_CHAIN_COMPUTED_GATES_ONLY',
+                                            'PASS_COLD_CHAIN_COMPUTED_GATES_ONLY') else 1)
 
 
 if __name__ == '__main__': main()

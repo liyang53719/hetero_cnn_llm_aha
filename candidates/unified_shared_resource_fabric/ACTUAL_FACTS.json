@@ -1,0 +1,105 @@
+{
+  "chirrtl_offline_successor": {
+    "clock_reset": 2,
+    "dedup_group_annotations": 212,
+    "dont_touch_targets": 4616,
+    "instances": 211,
+    "modules": 212,
+    "not_a_repeat_JVM_run": true,
+    "passthrough_leaves": 4616,
+    "same_original_FIR": true,
+    "status": "PASS_OFFLINE_RETAINED_UNIFIED_CHIRRTL_STRUCTURE_ONLY_NOT_SV_OR_FULLBLOCK",
+    "typed_connect_statements": 46
+  },
+  "chirrtl_original": {
+    "artifact": {
+      "bytes": 8865236,
+      "sha256": "04e92c44f35fea123d5c577ef211b9a7ef17553de1a1f8e9045af4b7a5a5a39c"
+    },
+    "emitter_exit": 0,
+    "original_failure_retained": true,
+    "reason": "one exact collection direct bulk passthrough mulPort",
+    "supervisor_status": "FAIL_COMMON_CHIRRTL_ONLY_RETAINED"
+  },
+  "compile": {
+    "class_bytes": 568515,
+    "compile_exit": 0,
+    "elaboration_not_implied_by_compile": true,
+    "fresh_classes": 68,
+    "nine_sources": 9
+  },
+  "diagnostic_resources_only": {
+    "ROM16_words_index_mapping": "Observed equal fixed baseline; not formal equivalence",
+    "collection_FMA_siblings_counted_as_physical_product": false,
+    "collection_is_product": false,
+    "external_clock_gates": 8,
+    "external_endpoints": 8,
+    "full_physical_provider_closure_verified": false,
+    "matrix_result_FIFO_bytes": 32768,
+    "matrix_services": 1,
+    "provider_defined_endpoint_MAC_slots": 512,
+    "required_total_MAC_slots": 4096,
+    "scalar_services": 1,
+    "selected_top": "UnifiedSharedResourceTop",
+    "state_owner_max_heads": 32,
+    "state_owner_payload_bits": 512,
+    "vector_lanes": 16
+  },
+  "execution_limits": {
+    "DDR_transport": "Exactly-once/no-stale assumed; current internal tag=userTag32+perjob sequence32, no across-job epoch isolation",
+    "bad_matrix_completion": "drained=false and poison/resetRequired",
+    "bad_state_identity": "ackBytes0/drainedfalse",
+    "five_block_numerical_PASS": false,
+    "mode0_fullblock": "UNSUPPORTED",
+    "no_response_watchdog": true,
+    "single_global_resource_lease": "Serial resource qualification, NOT final overlapping fullblock scheduler",
+    "useful_MAC_utilization": null
+  },
+  "later_versions_excluded": "1108 dontTouch source,1117 new68 compile and1127 pending CHIRRTL are not packaged, and cannot upgrade this retained ABI FAIL.",
+  "schema": "unified-shared-fabric-source-and-limited-actual-facts-v1",
+  "scope": "Actual compiler/emitter and bounded declarations, NOT complete five-block execution, provider execution, synthesis, PPA or numerical PASS",
+  "source_version": "Original r3 fabric/top and collection used by actual1020; NOT later dontTouch successor",
+  "sv_actual": {
+    "CPU_accounting_not_total_tree_proof": true,
+    "artifact": {
+      "bytes": 22112546,
+      "sha256": "f5d0e53fdcbc1ec643bbf1baf40e33cd6fd84f8e12330654b23f857cc5270830"
+    },
+    "changed_ports": [],
+    "cleanup": true,
+    "collection_port_count": 4618,
+    "constant_fold_explanation": "Missing product outputs become internal/parent constants0 and1; this does NOT satisfy the independent physical product4599 ABI. Strict checker remains failing.",
+    "extra_ports": [],
+    "final_parent_waited_child_CPU_seconds": 13.450811118,
+    "firtool_version": "1.62.1",
+    "instances": 65,
+    "lowering_options": [
+      "disallowPackedArrays",
+      "disallowLocalVariables"
+    ],
+    "missing_ports": [
+      {
+        "direction": "output",
+        "name": "io_completeBlockImplemented",
+        "signed": false,
+        "width": 1
+      },
+      {
+        "direction": "output",
+        "name": "io_result_bits_version",
+        "signed": false,
+        "width": 8
+      }
+    ],
+    "module_definitions": 31,
+    "native_exit": 0,
+    "other_six_selected_ABIs_match": true,
+    "outer_seconds": 13.641769767,
+    "product_ports_actual": 4597,
+    "product_ports_expected": 4599,
+    "sampled_CPU_seconds": 12.052602242,
+    "sampled_peak_RSS_bytes": 265015296,
+    "supervisor_status": "FAIL_FIRTOOL_SV_RETAINED",
+    "warning": "Unprocessed DedupGroupAnnotation remains after LowerToHW; not warning-free or all annotations consumed."
+  }
+}

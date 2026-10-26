@@ -1,0 +1,37 @@
+{
+  "author_overlay": {
+    "bytes": 7335,
+    "sha256": "430edc1dd0498156a28ab55691eeb84b33b3037c3e43f46dc70fb22ca7c4900b"
+  },
+  "unchanged": "All3 Scala, original2 checkers, derive_ports,3 original control sources, fixed15KB declaration excerpt, CHIRRTL expectation and actual/source-role summaries unchanged.",
+  "changed_metadata": "COPY_IDENTITIES identifies materialized originals, README includes reconstruction and compile-review qualification; new refs/reproduction/qualification added.",
+  "expectation_transform": {
+    "removed_original_fields": [
+      "selected_module_ports",
+      "top_ports"
+    ],
+    "template": {
+      "bytes": 6110,
+      "sha256": "86b2a3fba8b11932724a8df7217e972a3975fa6533e7c73a5fd710ef902f02b9"
+    },
+    "type_metadata": {
+      "bytes": 10523,
+      "sha256": "5d06b11d881e4cfcf3605216a7fde9c71ab4e39dd074efddd6fee073fefcd0cc"
+    },
+    "original_flattener": {
+      "bytes": 2242,
+      "sha256": "7426a3062c677e33e203be70ec4c7f98c02153b85ea5ddb5840d91488cf90274"
+    },
+    "original_reconstructed": {
+      "bytes": 1868089,
+      "sha256": "7ec0344b8ddfe1a2e31203b30001285dbc7d031f7e9948f0cb3d5a3ffce71813"
+    },
+    "new_helper": {
+      "bytes": 4118,
+      "sha256": "466c2826b1c63e40db17ab931cc87aa8399644f56d456ffb955fa09df51a9e97"
+    },
+    "normal_and_optimized_exact": true,
+    "strict_product4599_unchanged": true
+  },
+  "no_target_bulk_read_or_execution": true
+}

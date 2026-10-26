@@ -1,0 +1,19 @@
+{
+  "original_receipt": {
+    "bytes": 25925,
+    "sha256": "349e5bb77d407f48c21816acd8ebbf769758859ff05bbb5bc96a067749635ad9"
+  },
+  "root_freeze": {
+    "bytes": 493,
+    "sha256": "f8f23079a7370d8f46415ace764cb695c26b799e5391773f76668494676c1443"
+  },
+  "independent_next_stage_admission_review": {
+    "bytes": 9242,
+    "sha256": "e161bd72ca07d8ced15260e59801f0a6f55114e163bacef45c85d29f4b3900a1"
+  },
+  "class_container_summary": {
+    "bytes": 640,
+    "sha256": "ddf5344612d024ca591a4c17800ed6b8338936565a4a071a44142114b8dc80a8"
+  },
+  "qualification": "No separate standalone full compile-actual audit is claimed. Original compiler receipt reports exit0/68 classes; following CHIRRTL source admission independently fresh-hashed these actual classes and checked SourceFile/container/no-arg entry. This is not full runtime origin/bytecode verification."
+}

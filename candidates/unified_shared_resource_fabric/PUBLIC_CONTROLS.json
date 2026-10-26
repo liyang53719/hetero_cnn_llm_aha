@@ -1,0 +1,41 @@
+{
+  "scope": "Only copied-source synthetic/excerpt control replay; not actual target rerun",
+  "runs": [
+    {
+      "mode": "normal",
+      "test": "test_check_chirrtl",
+      "terminal": "PASS",
+      "log": "............................................\n----------------------------------------------------------------------\nRan 44 tests in 1.588s\n\nOK\n"
+    },
+    {
+      "mode": "normal",
+      "test": "test_passthrough_r2",
+      "terminal": "PASS",
+      "log": "..............................................\n----------------------------------------------------------------------\nRan 46 tests in 0.603s\n\nOK\n"
+    },
+    {
+      "mode": "normal",
+      "test": "test_check_sv",
+      "terminal": "PASS",
+      "log": "..............................................\n----------------------------------------------------------------------\nRan 46 tests in 0.268s\n\nOK\n"
+    },
+    {
+      "mode": "optimized",
+      "test": "test_check_chirrtl",
+      "terminal": "PASS",
+      "log": "............................................\n----------------------------------------------------------------------\nRan 44 tests in 1.670s\n\nOK\n"
+    },
+    {
+      "mode": "optimized",
+      "test": "test_passthrough_r2",
+      "terminal": "PASS",
+      "log": "..............................................\n----------------------------------------------------------------------\nRan 46 tests in 0.517s\n\nOK\n"
+    },
+    {
+      "mode": "optimized",
+      "test": "test_check_sv",
+      "terminal": "PASS",
+      "log": "..............................................\n----------------------------------------------------------------------\nRan 46 tests in 0.265s\n\nOK\n"
+    }
+  ]
+}

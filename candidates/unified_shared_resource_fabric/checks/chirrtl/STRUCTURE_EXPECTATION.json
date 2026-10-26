@@ -1,0 +1,280 @@
+{
+  "collection_instances": {
+    "mul": "HeteroBF16FmaMul",
+    "post": "HeteroBF16FmaPost",
+    "pre": "HeteroBF16FmaPre",
+    "round": "HeteroBF16FmaRound",
+    "top": "UnifiedSharedResourceTop"
+  },
+  "dont_touch_roots": [
+    "port",
+    "prePort",
+    "mulPort",
+    "postPort",
+    "roundPort"
+  ],
+  "expected_counts": {
+    "BlockScalarFloat": 1,
+    "GdnChunkStateTransferOwner": 1,
+    "HeteroFP32Alu": 17,
+    "MatrixPipelineService": 1,
+    "UnifiedBlockAdmission": 1,
+    "UnifiedPhysicalFabric": 1,
+    "UnifiedVectorBank": 1
+  },
+  "external_definition_names": [
+    "qwen2_matrix_command_endpoint",
+    "qwen2_matrix_command_endpoint_1",
+    "qwen2_matrix_command_endpoint_2",
+    "qwen2_matrix_command_endpoint_3",
+    "qwen2_matrix_command_endpoint_4",
+    "qwen2_matrix_command_endpoint_5",
+    "qwen2_matrix_command_endpoint_6",
+    "qwen2_matrix_command_endpoint_7",
+    "tc_clk_gating",
+    "tc_clk_gating_1",
+    "tc_clk_gating_2",
+    "tc_clk_gating_3",
+    "tc_clk_gating_4",
+    "tc_clk_gating_5",
+    "tc_clk_gating_6",
+    "tc_clk_gating_7"
+  ],
+  "external_ports": {
+    "qwen2_matrix_command_endpoint": {
+      "clk_i": [
+        "input",
+        "Clock"
+      ],
+      "cmd_i": [
+        "input",
+        "UInt<128>"
+      ],
+      "cmd_ready_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "cmd_valid_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "command_last_tile_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "completion_data_o": [
+        "output",
+        "UInt<56>"
+      ],
+      "completion_ready_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "completion_valid_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "out_acc_o": [
+        "output",
+        "UInt<16384>"
+      ],
+      "out_context_o": [
+        "output",
+        "UInt<3>"
+      ],
+      "out_last_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "out_ready_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "out_valid_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "protocol_error_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "rst_ni": [
+        "input",
+        "UInt<1>"
+      ],
+      "step_a_i": [
+        "input",
+        "UInt<256>"
+      ],
+      "step_b_i": [
+        "input",
+        "UInt<512>"
+      ],
+      "step_clear_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "step_context_i": [
+        "input",
+        "UInt<3>"
+      ],
+      "step_last_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "step_ready_o": [
+        "output",
+        "UInt<1>"
+      ],
+      "step_valid_i": [
+        "input",
+        "UInt<1>"
+      ]
+    },
+    "tc_clk_gating": {
+      "clk_i": [
+        "input",
+        "Clock"
+      ],
+      "clk_o": [
+        "output",
+        "Clock"
+      ],
+      "en_i": [
+        "input",
+        "UInt<1>"
+      ],
+      "test_en_i": [
+        "input",
+        "UInt<1>"
+      ]
+    }
+  },
+  "fabric": "UnifiedPhysicalFabric",
+  "fabric_instances": {
+    "matrix": "MatrixPipelineService",
+    "scalar": "BlockScalarFloat",
+    "stateOwner": "GdnChunkStateTransferOwner",
+    "vector": "UnifiedVectorBank"
+  },
+  "firrtl_version": "3.3.0",
+  "fma_abi": {
+    "HeteroBF16FmaMul": {
+      "io_mulAddA": {
+        "direction": "input",
+        "width": 24
+      },
+      "io_mulAddB": {
+        "direction": "input",
+        "width": 24
+      },
+      "io_mulAddC": {
+        "direction": "input",
+        "width": 48
+      },
+      "io_mulAddResult": {
+        "direction": "output",
+        "width": 49
+      }
+    },
+    "HeteroBF16FmaPost": {
+      "io_invalid": {
+        "direction": "output",
+        "width": 1
+      },
+      "io_meta": {
+        "direction": "input",
+        "width": 54
+      },
+      "io_mulAddResult": {
+        "direction": "input",
+        "width": 49
+      },
+      "io_raw": {
+        "direction": "output",
+        "width": 41
+      }
+    },
+    "HeteroBF16FmaPre": {
+      "io_a": {
+        "direction": "input",
+        "width": 16
+      },
+      "io_b": {
+        "direction": "input",
+        "width": 16
+      },
+      "io_c": {
+        "direction": "input",
+        "width": 32
+      },
+      "io_meta": {
+        "direction": "output",
+        "width": 54
+      },
+      "io_mulAddA": {
+        "direction": "output",
+        "width": 24
+      },
+      "io_mulAddB": {
+        "direction": "output",
+        "width": 24
+      },
+      "io_mulAddC": {
+        "direction": "output",
+        "width": 48
+      }
+    },
+    "HeteroBF16FmaRound": {
+      "io_exceptionFlags": {
+        "direction": "output",
+        "width": 5
+      },
+      "io_invalid": {
+        "direction": "input",
+        "width": 1
+      },
+      "io_out": {
+        "direction": "output",
+        "width": 32
+      },
+      "io_raw": {
+        "direction": "input",
+        "width": 41
+      }
+    }
+  },
+  "forbidden_module_families": [
+    "Qwen2ContinuousBlock",
+    "OrderedQkBehaviorCore",
+    "OrderedQkRealMatrixCore",
+    "OrderedQkRealMatrixCollection",
+    "QwenOwnerKernel",
+    "HostBlockTop",
+    "HostBlockCollection",
+    "SharedL2Fabric",
+    "RetainedMatrix16Adapter",
+    "RetainedMatrixTileAdapter",
+    "MatrixAccumulatorSeedController",
+    "LegacyMatrixStreamClient",
+    "PackedAttentionStreamClient"
+  ],
+  "interpretation": "Only common CHIRRTL declaration/ABI/connected instance graph and explicit unsupported/fullblock=false evidence; no lowering, provider SV, useful MAC, behavior or numeric proof. The product recursion excludes namespace FMA siblings. Same physical resource instances for runtime profile values, not separate per-profile elaborations.",
+  "max_bytes": 67108864,
+  "max_hierarchy_depth": 64,
+  "max_instances": 16384,
+  "max_instances_per_module": 1024,
+  "max_line_bytes": 1048576,
+  "max_lines": 1000000,
+  "max_modules": 4096,
+  "max_registers": 32768,
+  "product": "UnifiedSharedResourceTop",
+  "product_instances": {
+    "admission": "UnifiedBlockAdmission",
+    "fabric": "UnifiedPhysicalFabric"
+  },
+  "schema": "unified-shared-resource-common-chirrtl-expectation-v1",
+  "top": "UnifiedSharedResourceCollection",
+  "top_io_type": "{ flip launch : { flip ready : UInt<1>, valid : UInt<1>, bits : { block : { version : UInt<8>, opcode : UInt<8>, profileId : UInt<3>, tag : UInt<32>, tokens : UInt<16>, positionBase : UInt<32>, cacheCapacity : UInt<32>, cacheLength : UInt<32>, expectedGeneration : UInt<32>, cold : UInt<1>, input : UInt<64>, weights : UInt<64>, output : UInt<64>, scratch : UInt<64>, stateIn : UInt<64>, stateOut : UInt<64>, kvK : UInt<64>, kvV : UInt<64>}, resourceMode : UInt<3>}}, result : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, version : UInt<8>, profileId : UInt<3>, tag : UInt<32>, status : UInt<8>, controlCycles : UInt<64>, acknowledgedWriteBytes : UInt<64>, issuedSliceSteps : UInt<64>, resetRequired : UInt<1>}}, context : { transactionId : UInt<64>, launch : { version : UInt<8>, opcode : UInt<8>, profileId : UInt<3>, tag : UInt<32>, tokens : UInt<16>, positionBase : UInt<32>, cacheCapacity : UInt<32>, cacheLength : UInt<32>, expectedGeneration : UInt<32>, cold : UInt<1>, input : UInt<64>, weights : UInt<64>, output : UInt<64>, scratch : UInt<64>, stateIn : UInt<64>, stateOut : UInt<64>, kvK : UInt<64>, kvV : UInt<64>}, profile : { profileId : UInt<3>, mixer : UInt<2>, mlp : UInt<2>, hidden : UInt<16>, ffn : UInt<16>, attentionHeads : UInt<6>, kvHeads : UInt<6>, headDim : UInt<9>, rotaryDim : UInt<9>, gdnKeyHeads : UInt<6>, gdnValueHeads : UInt<6>, gdnKeyDim : UInt<9>, gdnValueDim : UInt<9>, convKernel : UInt<3>, expertCount : UInt<9>, expertsPerToken : UInt<4>, expertFfn : UInt<16>, sharedFfn : UInt<16>, maxPosition : UInt<32>}}, contextValid : UInt<1>, flip matrixGroup : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { opcode : UInt<8>, sliceMask : UInt<8>, tag : UInt<32>}}}, flip matrixStep : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { a : UInt<16>[16], b : UInt<16>[256], context : UInt<3>, clear : UInt<1>, last : UInt<1>, finish : UInt<1>, emit : UInt<1>}}}, matrixResult : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { value : UInt<32>[256][16], context : UInt<3>, last : UInt<1>, error : UInt<1>}}}, flip vectorRequest : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { multiply : UInt<1>, a : UInt<32>[16], b : UInt<32>[16]}}}, vectorResult : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { value : UInt<32>[16], flags : UInt<5>[16], error : UInt<1>}}}, flip scalarRequest : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { op : UInt<3>, a : UInt<32>, b : UInt<32>}}}, scalarResult : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { value : UInt<32>, flags : UInt<5>, primitiveFlagsValid : UInt<1>, error : UInt<1>}}}, flip stateJob : { flip ready : UInt<1>, valid : UInt<1>, bits : { transactionId : UInt<64>, payload : { activeHeads : UInt<6>, context : { tag : UInt<32>, tokens : UInt<16>, cold : UInt<1>, expectedGeneration : UInt<32>, vectorPolicy : UInt<1>, input : UInt<64>, stateIn : UInt<64>, stateOut : UInt<64>, output : UInt<64>, scratch : UInt<64>}, head : UInt<16>, operation : UInt<2>, nextStateReady : { tag : UInt<32>, expectedGeneration : UInt<32>, head : UInt<5>, chunk : UInt<1>, phase : UInt<5>, status : UInt<8>, scratchAckBytes : UInt<64>, outputAckBytes : UInt<64>, stateAckBytes : UInt<64>, drained : UInt<1>}, outputReady : { tag : UInt<32>, expectedGeneration : UInt<32>, head : UInt<5>, chunk : UInt<1>, phase : UInt<5>, status : UInt<8>, scratchAckBytes : UInt<64>, outputAckBytes : UInt<64>, stateAckBytes : UInt<64>, drained : UInt<1>}}}}, flip committed : { valid : UInt<1>, generation : UInt<32>, state : UInt<64>}, memory : { flip ready : UInt<1>, valid : UInt<1>, bits : { write : UInt<1>, address : UInt<64>, data : UInt<512>, mask : UInt<64>, tag : UInt<64>}}, flip response : { flip ready : UInt<1>, valid : UInt<1>, bits : { data : UInt<512>, tag : UInt<64>, error : UInt<1>}}, resetRequired : UInt<1>, completeBlockImplemented : UInt<1>}",
+  "vector_io_type": "{ flip request : { flip ready : UInt<1>, valid : UInt<1>, bits : { multiply : UInt<1>, a : UInt<32>[16], b : UInt<32>[16]}}, result : { flip ready : UInt<1>, valid : UInt<1>, bits : { value : UInt<32>[16], flags : UInt<5>[16], error : UInt<1>}}}"
+}

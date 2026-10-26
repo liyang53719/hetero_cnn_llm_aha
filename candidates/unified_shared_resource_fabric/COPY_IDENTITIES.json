@@ -1,0 +1,78 @@
+{
+  "files": [
+    {
+      "bytes": 12376,
+      "original_role": "actual0856_nine_source/UnifiedPhysicalFabric.scala",
+      "relative": "source/UnifiedPhysicalFabric.scala",
+      "sha256": "53715b5a84b33fcb02338d27a1a8da22d686051c70d5926a05ede508395dd7fc"
+    },
+    {
+      "bytes": 4526,
+      "original_role": "actual0856_nine_source/UnifiedSharedResourceTop.scala",
+      "relative": "source/UnifiedSharedResourceTop.scala",
+      "sha256": "f1bb55d392e2c9fd0c4a4de14c3b44a581b59dc48d80eb8ba754c891514cc09e"
+    },
+    {
+      "bytes": 1283,
+      "original_role": "actual0856_nine_source/UnifiedSharedResourceCollection.scala",
+      "relative": "source/UnifiedSharedResourceCollection.scala",
+      "sha256": "6d3152078126d22d731beb5bd75b8dd170627cc36c339879df1a6f0940a9fe64"
+    },
+    {
+      "bytes": 35090,
+      "original_role": "approved1004/check_chirrtl.py",
+      "relative": "checks/chirrtl/check_chirrtl.py",
+      "sha256": "6ea591db01e54cbe05b1a86bdc0330f1fd2dee07fc79969756f6bdfaa4f5ba2b"
+    },
+    {
+      "bytes": 10523,
+      "original_role": "approved1004/STRUCTURE_EXPECTATION.json",
+      "relative": "checks/chirrtl/STRUCTURE_EXPECTATION.json",
+      "sha256": "5d06b11d881e4cfcf3605216a7fde9c71ab4e39dd074efddd6fee073fefcd0cc"
+    },
+    {
+      "bytes": 13260,
+      "original_role": "approved1004/test_check_chirrtl.py",
+      "relative": "checks/chirrtl/test_check_chirrtl.py",
+      "sha256": "a1d7dfe724235b7e0c2354fe51a36f3dffb08d92c40b6f9ab7c5a66a54ef1042"
+    },
+    {
+      "bytes": 9827,
+      "original_role": "approved1004/test_passthrough_r2.py",
+      "relative": "checks/chirrtl/test_passthrough_r2.py",
+      "sha256": "93b05fe5d9a4a9db43353e03b61b25e8e5ffb5afb2252b971133ebc52d47d198"
+    },
+    {
+      "bytes": 15094,
+      "original_role": "approved1004/ACTUAL_COLLECTION_EXCERPT.fir.txt",
+      "relative": "checks/chirrtl/ACTUAL_COLLECTION_EXCERPT.fir.txt",
+      "sha256": "5c82676da956319c795a67cc819f91c7dcdec53ccdfbd15def77f887e4768a6f"
+    },
+    {
+      "bytes": 26474,
+      "original_role": "strict1020/check_sv.py",
+      "relative": "checks/sv/check_sv.py",
+      "sha256": "f42ce97714f237e6d044ddc7baf23681c994e33d3a407a802cb6a1e931137aab"
+    },
+    {
+      "bytes": 1868089,
+      "original_role": "strict1020/STRUCTURE_EXPECTATION.json",
+      "relative": "checks/sv/STRUCTURE_EXPECTATION.json",
+      "sha256": "7ec0344b8ddfe1a2e31203b30001285dbc7d031f7e9948f0cb3d5a3ffce71813"
+    },
+    {
+      "bytes": 10129,
+      "original_role": "strict1020/test_check_sv.py",
+      "relative": "checks/sv/test_check_sv.py",
+      "sha256": "25354175e1101807064b77941f2b498dda75e03aaa0980d62c276a65cd3cf432"
+    },
+    {
+      "bytes": 2242,
+      "original_role": "strict1020/derive_ports.py",
+      "relative": "checks/sv/derive_ports.py",
+      "sha256": "7426a3062c677e33e203be70ec4c7f98c02153b85ea5ddb5840d91488cf90274"
+    }
+  ],
+  "listed_original_members_exact_when_materialized": true,
+  "expanded_sv_expectation_reconstructed_not_stored": true
+}

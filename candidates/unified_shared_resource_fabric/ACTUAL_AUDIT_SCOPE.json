@@ -1,0 +1,73 @@
+{
+  "original_chirrtl_wrapper_failure": "Root wrapper FREEZE-schema KeyError before any claim/Popen, target_launched false. Separate failed wrapper and record retained; schema fix not a second target attempt. Archived root launcher has no self-hash entry in ROOT_APPROVAL.fixed, so this review does not claim prelaunch self-hash binding.",
+  "original_chirrtl_resource_observations": {
+    "elapsed_seconds": 10.55542184994556,
+    "final_aggregate_cpu_seconds": 10.500694405,
+    "maximum_sample_interval_seconds": 0.08067712211050093,
+    "sampled_peak_cpu_seconds": 9.702331341,
+    "sampled_peak_output_bytes": 19145877,
+    "sampled_peak_rss_bytes": 244756480
+  },
+  "original_chirrtl_resource_scope": "All observed values below fixed120CPU/120work/130cleanup/150total/180outer, sampleRSS2GiB/AS4GiB/heap1GiB. Sampling is not a hard RSS/cgroup measurement or future fit guarantee.",
+  "sv_root_endpoints": {
+    "absent": 32,
+    "attribution": "Archived source-bound ck() performs per-file actual SHA/resolve/type checks before saving expected rows with passed flag. This reviewer did not rehash runtime/ELF/FIR bulk.",
+    "exact_expected_rows_equal": true,
+    "pins": 56,
+    "separately_observed_hash_map_saved": false
+  },
+  "sv_root_launcher_evidence": {
+    "archive_checked": true,
+    "prelaunch_self_hash_in_approval_fixed_map": false,
+    "sha256": "9ef44b9e56e3f60c0f5045502dee8ae6cd52ee36169facc9c13987f1dde6376b"
+  },
+  "sv_identity_scope": "1052 pins/6 inventories and staged firtool/FIR are original source-bound pre/post receipts; not independent replay of all bulk hashes this round. Exact retained SV fresh full hash, 49 small source/metadata hashes and current actual file inventory are reviewer observations.",
+  "sv_historical_production_prepost": {
+    "inventory_checks": 6,
+    "pass_all": true,
+    "pin_checks": 1052
+  },
+  "sv_staged_before_after_equal": true,
+  "sv_resources": {
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 420,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 510,
+      "work_wall_seconds": 480
+    },
+    "elapsed_seconds": 13.501996858045459,
+    "final_aggregate_cpu_seconds": 13.450811118,
+    "maximum_sample_interval_seconds": 0.02612566901370883,
+    "sampled_peak_cpu_seconds": 12.052602242,
+    "sampled_peak_output_bytes": 55996293,
+    "sampled_peak_rss_bytes": 265015296
+  },
+  "sv_cleanup": {
+    "complete": true,
+    "ordering_verified": true,
+    "scope": "Anchored original group and observed identities, two complete nonleader-absence scans before unique direct leader reap; not cgroup/escaped descendant proof. Normal completion, no outer timeout exercised."
+  },
+  "all_original_acceptance_limits": {
+    "4096_resource_fit_or_utilization_PASS": false,
+    "RTL_simulation_PASS": false,
+    "five_profile_complete_blocks_PASS": false,
+    "formal_equivalence": false,
+    "full_original_structure_gate_PASS": false,
+    "mode0_fullblock_implemented": false,
+    "numeric_PASS": false,
+    "previous_full4096_resource_failures_unchanged": true,
+    "provider_implementation_PASS": false,
+    "selected_product_ABI_PASS": false,
+    "synthesis_PASS": false
+  },
+  "projection": "Exact selected small review fields; omit original absolute paths/process/boot/session identities and raw payloads. No new bulk rehash or target execution by packager."
+}

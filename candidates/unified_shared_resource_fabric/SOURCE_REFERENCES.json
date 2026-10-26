@@ -1,0 +1,89 @@
+{
+  "public_commit": "f60c32bf0ceed0f50ff389c6ff2c1dcf8f9f29d8",
+  "selected_source_paths": {
+    "UnifiedPhysicalFabric.scala": "candidates/unified_shared_resource_fabric/source/UnifiedPhysicalFabric.scala",
+    "UnifiedSharedResourceTop.scala": "candidates/unified_shared_resource_fabric/source/UnifiedSharedResourceTop.scala",
+    "GdnChunkProtocol.scala": "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+    "GdnChunkStateTransferOwner.scala": "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+    "UnifiedBlockAdmission.scala": "candidates/unified_4096_runtime_admission/source/UnifiedBlockAdmission.scala",
+    "UnifiedBlockProtocol.scala": "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+    "UnifiedRuntimeProfile.scala": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+    "GdnChunkAddressPlan.scala": "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+    "UnifiedSharedResourceCollection.scala": "candidates/unified_shared_resource_fabric/source/UnifiedSharedResourceCollection.scala"
+  },
+  "files": [
+    {
+      "path": "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+      "bytes": 3420,
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c",
+      "git_blob_sha": "e4f1ce39d41d4722936ca71097436a5fe2cb917d"
+    },
+    {
+      "path": "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+      "bytes": 10591,
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+      "git_blob_sha": "884531df8479edb783d50d0dbf54065ada992bbc"
+    },
+    {
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedBlockAdmission.scala",
+      "bytes": 4698,
+      "sha256": "e626a328d5b4adec704d76b217437c36217c57ae5bb38864fef51cea862aea03",
+      "git_blob_sha": "7cb8e951128822b4cad343d987a51ac53bb29643"
+    },
+    {
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+      "bytes": 2690,
+      "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3",
+      "git_blob_sha": "91f2899067b392974d9dfc01a157d7999cd2ff61"
+    },
+    {
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+      "git_blob_sha": "f3f5267da29db59cc09e3021d7ad5fad35cd82d8"
+    },
+    {
+      "path": "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+      "bytes": 9520,
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+      "git_blob_sha": "bdb64b8b07cb79dd5730d987d9412469642f8893"
+    },
+    {
+      "path": "candidates/qwen2_ordered_vector_compile_evidence/README_CN.md",
+      "bytes": 7205,
+      "sha256": "67b44bf1bf9a89a27cfd93279fab81679a3e94669246abc47a8246a9e756bac6",
+      "git_blob_sha": "e514e82e8c20c5609f932d6d396245e2d5e724c1"
+    },
+    {
+      "path": "candidates/qwen2_core_client_chirrtl_evidence/REPRODUCE_ZH.md",
+      "bytes": 3579,
+      "sha256": "26a0424e8368e5a8765dadb3ee4fcef989dc49777ec2478844e60d34a486e304",
+      "git_blob_sha": "690fbac14dc4444570f7364e283482cb4475f909"
+    },
+    {
+      "path": "candidates/qwen2_core_client_chirrtl_evidence/pins/BASELINE_REFERENCES.json",
+      "bytes": 2817,
+      "sha256": "689762dea85f5bbf695578d9aa5852df24bfc167f44447c7df761ca81c475e4d",
+      "git_blob_sha": "dbd3b479531464dd92a4de4b39de586e1e1110da"
+    },
+    {
+      "path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "path": "candidates/qwen2_core_real_matrix_compile/pins/PROVIDER_SOURCE_ABI.json",
+      "bytes": 10182,
+      "sha256": "3d0a8032c37d84c246f36475f8dbf7366eb0876396317b6c721ce3b7cf4fb4af",
+      "git_blob_sha": "b3e01423e19f1b7f4e33c53fd375bb8d1eb65bbe"
+    },
+    {
+      "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+      "git_blob_sha": "98d221a4c2426b16ebcb80b8153b2f9d31805a02"
+    }
+  ],
+  "scope": "Exact existing source/recipe/lock references. Source roles plus external dependencies are required; no complete self-contained runtime claim."
+}

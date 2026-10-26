@@ -1,0 +1,231 @@
+{
+  "admission": "UnifiedBlockAdmission",
+  "alu_direct_families": {
+    "add": "AddRecFN",
+    "mul": "MulRecFN"
+  },
+  "annotation_output": "rtl/circt.anno.json",
+  "exact_direct_instances": {
+    "UnifiedPhysicalFabric": {
+      "matrix": "MatrixPipelineService",
+      "scalar": "BlockScalarFloat",
+      "stateOwner": "GdnChunkStateTransferOwner",
+      "vector": "UnifiedVectorBank"
+    },
+    "UnifiedSharedResourceCollection": {
+      "mul": "HeteroBF16FmaMul",
+      "post": "HeteroBF16FmaPost",
+      "pre": "HeteroBF16FmaPre",
+      "round": "HeteroBF16FmaRound",
+      "top": "UnifiedSharedResourceTop"
+    },
+    "UnifiedSharedResourceTop": {
+      "admission": "UnifiedBlockAdmission",
+      "fabric": "UnifiedPhysicalFabric"
+    }
+  },
+  "expected_product_resource_counts": {
+    "BlockScalarFloat": 1,
+    "GdnChunkStateTransferOwner": 1,
+    "HeteroFP32Alu": 17,
+    "MatrixPipelineService": 1,
+    "UnifiedBlockAdmission": 1,
+    "UnifiedPhysicalFabric": 1,
+    "UnifiedVectorBank": 1
+  },
+  "external_occurrences": {
+    "qwen2_matrix_command_endpoint": 8,
+    "tc_clk_gating": 8
+  },
+  "external_ports": {
+    "qwen2_matrix_command_endpoint": {
+      "clk_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "cmd_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 128
+      },
+      "cmd_ready_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 1
+      },
+      "cmd_valid_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "command_last_tile_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "completion_data_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 56
+      },
+      "completion_ready_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "completion_valid_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 1
+      },
+      "out_acc_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 16384
+      },
+      "out_context_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 3
+      },
+      "out_last_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 1
+      },
+      "out_ready_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "out_valid_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 1
+      },
+      "protocol_error_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 1
+      },
+      "rst_ni": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "step_a_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 256
+      },
+      "step_b_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 512
+      },
+      "step_clear_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "step_context_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 3
+      },
+      "step_last_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "step_ready_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 1
+      },
+      "step_valid_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      }
+    },
+    "tc_clk_gating": {
+      "clk_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "clk_o": {
+        "direction": "output",
+        "signed": false,
+        "width": 1
+      },
+      "en_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      },
+      "test_en_i": {
+        "direction": "input",
+        "signed": false,
+        "width": 1
+      }
+    }
+  },
+  "fabric": "UnifiedPhysicalFabric",
+  "fir_input": "inputs/common.fir",
+  "forbidden_module_families": [
+    "HostBlockCollection",
+    "HostBlockTop",
+    "LegacyMatrixStreamClient",
+    "MatrixAccumulatorSeedController",
+    "OrderedQkBehaviorCore",
+    "OrderedQkBehaviorSpec",
+    "OrderedQkRealMatrixCollection",
+    "OrderedQkRealMatrixCore",
+    "PackedAttentionStreamClient",
+    "Qwen2ContinuousBlock",
+    "QwenOwnerKernel",
+    "RetainedMatrix16Adapter",
+    "RetainedMatrixBlackBox",
+    "RetainedMatrixEndpoint",
+    "RetainedMatrixTileAdapter",
+    "SharedL2Fabric"
+  ],
+  "interpretation": "Source-derived selected ABI and recursive resource declarations only. Collection has four namespace FMA siblings, is not simulation/product top. Two qualified unresolved provider canonical ABIs remain, not fabricated module implementations. No fixed total emitted module count, physical FMA closure, complete block/behavior/numeric/MAC acceptance. Exact source CHIRRTL qualification remains prerequisite.",
+  "max_annotation_bytes": 4194304,
+  "max_annotation_count": 20000,
+  "max_directives": 10000,
+  "max_expression_bytes": 1048576,
+  "max_expression_depth": 256,
+  "max_expression_lines": 4096,
+  "max_hierarchy_depth": 64,
+  "max_instance_text_bytes": 4194304,
+  "max_instances": 16384,
+  "max_instances_per_module": 2048,
+  "max_line_bytes": 1048576,
+  "max_lines": 2000000,
+  "max_modules": 2048,
+  "max_ports_per_module": 20000,
+  "max_sv_bytes": 201326592,
+  "max_total_ports": 100000,
+  "product": "UnifiedSharedResourceTop",
+  "scalar": "BlockScalarFloat",
+  "scalar_direct_families": {
+    "alu": "HeteroFP32Alu",
+    "conv": "RecFNToIN_e8_s24_i32",
+    "div": "DivSqrtRecFM_small_e8_s24",
+    "integer": "INToRecFN_i32_e8_s24"
+  },
+  "schema": "unified-common-sv-source-derived-expectation-v1",
+  "service": "MatrixPipelineService",
+  "service_required_instances": {
+    "tags": "Queue8_Meta",
+    "values": "MatrixResultFifo"
+  },
+  "state_owner": "GdnChunkStateTransferOwner",
+  "sv_output": "rtl/UnifiedSharedResourceCollection.sv",
+  "top": "UnifiedSharedResourceCollection",
+  "vector": "UnifiedVectorBank"
+}

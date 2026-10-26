@@ -1,0 +1,42 @@
+{
+  "exact_hashes_not_replaced_by_reworded_summary": true,
+  "review_texts_omitted": true,
+  "reviews": [
+    {
+      "bytes": 3532,
+      "role": "r3_source",
+      "sha256": "375dc73126005bf89653d496474e6a002ef23da94c50727eef8ecfbb78a54303"
+    },
+    {
+      "bytes": 695,
+      "role": "collection_source",
+      "sha256": "c8f425d0f922787bcfae93f2696d434f35c9fdeac9955a2a78f83fd40df0fb6a"
+    },
+    {
+      "bytes": 6530,
+      "role": "original_chirrtl_fail",
+      "sha256": "3db28a08e94bb8a8e0e65f2d04dd8f736f704e15111d62c885ffe8ad69ea9043"
+    },
+    {
+      "bytes": 4939,
+      "role": "corrected_chirrtl_source",
+      "sha256": "000ca27c97b5d87b8506731ffcb0f80593eea2f841ad9927b204fbcb66c3da2b"
+    },
+    {
+      "bytes": 9097,
+      "role": "offline_chirrtl_pass",
+      "sha256": "79446c61ac89adce025bd31060234ae455edbe904b1def2225c5146f5cce6d3c"
+    },
+    {
+      "bytes": 12316,
+      "role": "sv_admission_source",
+      "sha256": "833a11d9f3cd4bdf8ff0396f19a62292f1ef45a109c70dc84da4f98927c9d7c4"
+    },
+    {
+      "bytes": 14084,
+      "role": "actual_sv_abi_fail",
+      "sha256": "8a29a7b6d633c3340f86dc5125850852c48e4a4cab3964c6f25fc0bb4ac446bc"
+    }
+  ],
+  "schema": "review-role-pin-reference-v1"
+}

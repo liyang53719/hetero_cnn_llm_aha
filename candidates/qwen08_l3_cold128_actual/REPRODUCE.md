@@ -1,0 +1,9 @@
+# Reproduction and evidence boundary
+
+1. Use the exact public commit and all 91 path/blob/SHA256 identities in SOURCE_REFERENCES.json. They match the executed selected sources; five capture/cold-selection files were already published separately. The private selected snapshot is not an upstream commit and must not be substituted for the current Git tree.
+2. The existing `candidates/qwen35_attention_prefill/run_fullblock.py`, fixture modules and native capture source are referenced, not copied or modified. Consult those exact source CLI contracts. This package is an evidence delta, not a complete ready-to-run environment or a new execution approval.
+3. Authorized local reproduction additionally needs the official model/revision, privately retained capture/input/weight seals, exact separately restored Python/native runtime and libraries, and a newly reviewed bounded supervisor. None of their data bytes or private deployment manifests is distributed here. The original 24,335-pin closure is hash-bound, not silently reconstructed from this smaller source list.
+4. Require the complete two-window capture seal even for cold-only selection. Run only the selected cold window; do not reset the original budget or silently run carry. Comparison follows the real 19-owner terminal and uses unchanged thresholds. Missing causal-mask-add keeps the original 57-producer contract unaccepted.
+5. EVIDENCE_BINDINGS.json pins original private metadata and independent review. ACTUAL_REVIEW_PROJECTION.json preserves its qualified outcomes/limitations; PROJECTION_RULES.json states every projection rule. Aggregates and hashes do not let a reader regenerate inputs/weights or prove unseen traces.
+
+No target, reference arithmetic, Torch, JVM or native job was rerun to prepare this publication. Packaging/CI success is not new model or RTL execution. Historical environment gaps, failures and task states stay unchanged.

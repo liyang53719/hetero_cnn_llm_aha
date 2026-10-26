@@ -1,0 +1,77 @@
+{
+  "actual_review": {
+    "bytes": 18443,
+    "sha256": "c898b61fb55ac8d836e9f3a09fefa7fac71462c3ad38ef6678a296660c8c7d09"
+  },
+  "actual_review_freeze": {
+    "bytes": 3037,
+    "sha256": "e6e96c652e3aa362f9de1fac4f9be573bdebf68083b83a3582db748b9fbd2323"
+  },
+  "actual_packet_manifest": {
+    "bytes": 2035,
+    "sha256": "7749240be7c330def0a20338c466c329e97b1bd100505dbd3ec9bc137b8e8c13"
+  },
+  "actual_packet_members": {
+    "OWNER_SCHEDULE_AND_CACHE.json": {
+      "bytes": 51841,
+      "sha256": "5ab26a46b43640c972207a1ec25f19e46accb5af8530c2b21eb00e1061fbfb00"
+    },
+    "ACTUAL_COLD128_SUMMARY.json": {
+      "bytes": 7218,
+      "sha256": "07a12f057e1d35fdcfe3252feccbb64ac530bd1bcd9d30e6edd61c89565064eb"
+    },
+    "SCOPE.txt": {
+      "bytes": 1098,
+      "sha256": "f1ca6cbe0018f05676af28d76fe6998a13ddfc868742199945b95035e5f35901"
+    },
+    "COMPARISONS.json": {
+      "bytes": 64565,
+      "sha256": "af1065aa38a5ae8907fce8fdbecdab357e67e8e0af20eeb315257db8c79a1f45"
+    },
+    "ARTIFACT_HASHES_ONLY.json": {
+      "bytes": 96351,
+      "sha256": "7cd02eebbf81391a71e91512f7928644f6eed68ce67c9ee074e68a4a4e7f6506"
+    },
+    "SUPERVISOR_RESULT.json": {
+      "bytes": 11033,
+      "sha256": "2aefd61bde1942cf7b84c4f18b7fe80fe73b54d88536754a9c3aab22abd05eef"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 51460,
+      "sha256": "1f70937bd6e39c81a0c6a6c75ec2d6d88a11b145efc6872573832b1f0932e16d"
+    }
+  },
+  "review_metadata_members": {
+    "METADATA_AUDIT.json": {
+      "bytes": 67852,
+      "sha256": "ecbc9c1bd6ed385b298cec0df826553b9dd033ab7f77629bd6295844a8b7f924"
+    },
+    "NUMERICAL_AUDIT.json": {
+      "bytes": 86337,
+      "sha256": "6e898d94be4d91d595d338d96d66df2ac9e962603070f2bf1d74cf8ef304b639"
+    },
+    "SUPPLEMENTAL_AUDIT.json": {
+      "bytes": 4881,
+      "sha256": "b37c2f3cd2bdd4984593b3c86c33f3031614e1f6e0d261c39f4d99582be31752"
+    },
+    "ARTIFACT_INVENTORY.json": {
+      "bytes": 184804,
+      "sha256": "64c061cdd26c6d7d6da1b2c32cf269f235cb42f296950323d2b59292014823ca"
+    }
+  },
+  "actual_primary_artifacts": {
+    "actual_model_summary": {
+      "bytes": 1824667,
+      "sha256": "c3c15394a97c27f1b9e399fc414ac7a52b8aa36d6960ab17c2a5b3ad7a122849"
+    },
+    "actual_supervisor_receipt": {
+      "bytes": 11033,
+      "sha256": "2aefd61bde1942cf7b84c4f18b7fe80fe73b54d88536754a9c3aab22abd05eef"
+    },
+    "actual_terminal": {
+      "bytes": 474377,
+      "sha256": "b8189c8c6e31c3e669926ea32f3c3beaba8942b00d50ed2fc96f7898a061ea3b"
+    }
+  },
+  "disclosure": "Hash/size bindings only; originals retained privately. No input/weight/NPZ/tensor/trace payload, address, process identity or runtime library bytes included."
+}

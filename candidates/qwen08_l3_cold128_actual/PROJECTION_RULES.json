@@ -1,0 +1,51 @@
+{
+  "review_retained_sections": [
+    "schema",
+    "status",
+    "actual_control_and_fence",
+    "artifact_integrity",
+    "audit_cost",
+    "authorization",
+    "cleanup",
+    "identity_and_closure",
+    "independent_numerical_results",
+    "limitations",
+    "reference_separation",
+    "resources",
+    "reviewer_corrections",
+    "source_admission_freeze_sha256",
+    "source_admission_review_sha256"
+  ],
+  "review_omitted_fields_within_sections": [
+    "actual_control_and_fence.initial_roots.k_root",
+    "actual_control_and_fence.initial_roots.v_root",
+    "actual_control_and_fence.final_roots.k_root",
+    "actual_control_and_fence.final_roots.v_root",
+    "resources.CPU_affinity",
+    "resources.single_absolute_deadlines"
+  ],
+  "review_authorization": "Reworded only to omit original tool session number; retains root supplied terminal and non-machine-signed approval limits.",
+  "other_review_sections": "Omitted private paths/session/reviewer identity and local file paths; artifact hash/size bindings moved to EVIDENCE_BINDINGS. Review corrections retained, not candidate failures.",
+  "comparison_metric_allowlist": [
+    "actual_sha256",
+    "expected_sha256",
+    "elements",
+    "max_abs",
+    "mean_abs",
+    "max_abs_limit",
+    "mean_abs_limit",
+    "max_bf16_ulp",
+    "bit_mismatches",
+    "mismatches_over_max",
+    "passed",
+    "ulp_gate",
+    "comparison_domain",
+    "actual_subnormal_count",
+    "native_subnormal_count",
+    "signed_zero_only_mismatches",
+    "thresholds"
+  ],
+  "comparison_omissions": "No raw BF16/FP32 witness words, numerical witness values, tensor names/paths, input or weight bytes. Only aggregate errors/counts and SHA256.",
+  "source_projection": "91 public path/content hash bindings from audited SOURCE_PINS; exact current blobs independently rechecked, not the whole24335 runtime/input pin set.",
+  "all_other_retained_values_exact": true
+}

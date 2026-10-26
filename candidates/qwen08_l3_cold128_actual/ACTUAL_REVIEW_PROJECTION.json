@@ -1,0 +1,347 @@
+{
+  "schema": "independent-qwen08-cold128-actual-review-v1",
+  "status": "PASS_COLD128_SOFTWARE_56_COMPUTED_PRODUCER_GATES_AND_REAL19_OWNER_TERMINALS_ONLY",
+  "actual_control_and_fence": {
+    "KV_append_external_commit": false,
+    "KV_append_generation_advanced": false,
+    "acknowledged_write_bytes": 8781824,
+    "all_job_tokens_or_m": 128,
+    "commit_proof": "real_final_TypedElementwiseDriver_Add",
+    "fence_evidence_scope": "Original source + 19 complete command reports, raw output hashes and ACK counters; no independent per-tick event replay; final Add happens before committed root assignment per exact source.",
+    "final_Add": {
+      "bytes": 262144,
+      "inputs": "actual attention residual + actual down projection",
+      "owner_results": 1,
+      "real_typed_driver_before_fence_assignment": true,
+      "write_acks": 4096,
+      "write_requests": 4096
+    },
+    "final_roots": {
+      "capacity": 256,
+      "dtype": "bf16",
+      "generation": 1,
+      "valid_tokens": 128
+    },
+    "full_original_command_canonical_hashes_verified": 19,
+    "hardware_MAC_utilization": null,
+    "hardware_cycles": null,
+    "initial_roots": {
+      "capacity": 256,
+      "generation": 0,
+      "valid_tokens": 0
+    },
+    "matching_original_stdout_terminal_messages": 19,
+    "model_raw_per_tick_trace_independently_replayed": false,
+    "one_shared_Matrix_reset": 1,
+    "ordered_roles": [
+      "input_norm",
+      "packed_q_gate",
+      "k",
+      "v",
+      "q_norm",
+      "k_norm",
+      "q_rope",
+      "k_rope",
+      "kv_append",
+      "gqa",
+      "sigmoid_mul",
+      "o",
+      "attention_residual",
+      "post_norm",
+      "gate",
+      "up",
+      "silu_mul",
+      "down",
+      "output"
+    ],
+    "owner_commands": 19,
+    "precomparison_terminal_elapsed_seconds": 3056.1791946329176,
+    "precomparison_terminal_saved": true,
+    "same_memory_owner_matrix_vector_scalar_source_bound_checks": true,
+    "software_recipe_FMA_calls": {
+      "after": [
+        2348810240,
+        67108864
+      ],
+      "before": [
+        0,
+        0
+      ],
+      "dense": 2348810240,
+      "normal_qk_pv": 67108864,
+      "scope": "actual shared C++ recipe FMA call counters; not hardware cycles or useful MAC utilization",
+      "total": 2415919104
+    },
+    "software_ticks": 3382041,
+    "tags": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ]
+  },
+  "artifact_integrity": {
+    "all_actual_outputs_observations_used_in56_domains_fresh_hash": true,
+    "capture_file_inventory": 231,
+    "combined_current_endpoint_checks": 408,
+    "counts_overlap_not_additive": true,
+    "inventory_hash_scope_counts": {
+      "author artifact hash + source-bound original seals/prepost; reviewer current stat only": 180,
+      "fresh metadata/source read": 94,
+      "fresh numerical read reused": 129,
+      "fresh small source/metadata hash": 5
+    },
+    "model_file_inventory": 177,
+    "numeric_fresh_bytes": 56914837,
+    "numeric_fresh_file_reads": 129,
+    "original_artifacts_modified": false,
+    "remaining_artifacts_inherited_actual_seal_or_prepost_hash_and_current_stat_scope_explicit": true,
+    "small_source_metadata_unique_hashes": 228
+  },
+  "audit_cost": {
+    "actual_numeric_pass_executed_once": true,
+    "metadata_checks": 3250,
+    "numeric_checks": 4514,
+    "numerical_CPU_seconds": 9.514880042,
+    "numerical_caps_AS_bytes": 536870912,
+    "numerical_caps_CPU_seconds": 90,
+    "numerical_caps_wall_seconds": 120,
+    "numerical_maxRSS_KiB": 141260,
+    "numerical_wall_seconds": 9.517007206915878,
+    "pure_kernel_controls_normal": 33,
+    "pure_kernel_controls_optimized": 33,
+    "pure_kernel_negative_rejections_per_mode": 8,
+    "supplemental_checks": 65861,
+    "supplemental_count_includes_65280_pure_finite_word_controls": true
+  },
+  "authorization": "Root one-shot GO recorded in conversation, not machine-signed or persisted approval gate. Original tool terminal exit0 supplied by root; local START/RESULT independently bound.",
+  "cleanup": {
+    "SIGKILL_record_was_cleanup_signal_to_retained_zombie_not_failure_or_resource_cap": true,
+    "before_original_cleanup_deadline": true,
+    "complete": true,
+    "direct_exit_code": 0,
+    "exact_offline_persisted_proof_predicate_pass": true,
+    "helper_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "no_post_reap_signals": true,
+    "reap_after_barrier": true,
+    "retained_leader_until_two_complete_nonleader_empty_scans": true,
+    "root_process_not_live_censused_across_tool_namespace": true,
+    "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "unobserved_group_session_escape_not_proven_absent": true
+  },
+  "identity_and_closure": {
+    "all_reference_role_hashes_equal": true,
+    "fresh_capture_reference_identity_sha256": "fc6d1b3da1270ea9fedb9a5a6ae73ca944d327cdb30d22b8b6350a753754737a",
+    "full_launch_pin_count": 24335,
+    "groups": {
+      "inputs": 288,
+      "launch_library_provenance": 16,
+      "runtime_unique": 23575,
+      "sources": 456
+    },
+    "historically_different_base_files": 8,
+    "local_selected_snapshot": "17a31bedf95bbbffa597f0fe0987cd504da67705",
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "native_libraries_not_loaded_or_run_by_reviewer": true,
+    "original_7_legal_runtime_aliases_not_general_duplicate_whitelist": true,
+    "postflight": {
+      "checked_pins": 24335,
+      "runtime_receipt_sha256": "2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d",
+      "status": "PASS_ACTUAL_INPUT_SOURCE_RUNTIME_HASHES"
+    },
+    "preflight": {
+      "checked_pins": 24335,
+      "runtime_receipt_sha256": "2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d",
+      "status": "PASS_ACTUAL_INPUT_SOURCE_RUNTIME_HASHES"
+    },
+    "prepost_evidence_limit": "Original launcher source-bound aggregate PASS after full24335 checks; no persisted per-item PASS receipt; runtime/weight bulk not rehashed by reviewer. Fresh91 current+snapshot source hashes and selected persisted numbers independently verified.",
+    "reference_old_fresh_hash_roles": 120,
+    "reviewed_capture_selection_wrapper_files_in_model_freeze": 5,
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "runtime_1_24GB_and_weights_not_reread": true,
+    "snapshot_not_upstream_or_latest_main": true,
+    "source_base": "c590179c4c3424ded9997ba8f15f27821df304c9",
+    "source_files_fresh_hashed_current_and_persisted": 91
+  },
+  "independent_numerical_results": {
+    "all_original_operator_limits_pass": true,
+    "all_saved_comparison_metrics_and_raw_word_witnesses_reproduced": true,
+    "block_limits": {
+      "max_abs": 0.05,
+      "mean_abs": 0.01
+    },
+    "block_output": {
+      "actual_sha256": "7f53adea2fe1c27d06fa38b496ebc56be469f2d84528a667b36bcba72839ed2b",
+      "actual_subnormal_count": 0,
+      "bit_mismatches": 1420,
+      "elements": 131072,
+      "expected_sha256": "8a9b6ebbaa53590c79e17d04588d8452d0feff777704f5a949472e57c337534b",
+      "first_bit_mismatch": 9259,
+      "max_abs": 0.0009765625,
+      "max_bf16_ulp": 28672,
+      "mean_abs": 1.5411936828968464e-06,
+      "mismatches_over_max": 0,
+      "native_subnormal_count": 0,
+      "numerical_mismatches": 1420,
+      "signed_zero_only_mismatches": 0,
+      "worst_index": 9370
+    },
+    "domains": 56,
+    "final_KV": {
+      "cache_k": {
+        "actual_sha256": "9d464fd24d5830ba878d2572111e1be452e9c6882dfed71350f8b5fdcf958f05",
+        "actual_subnormal_count": 0,
+        "bit_mismatches": 0,
+        "elements": 65536,
+        "expected_sha256": "9d464fd24d5830ba878d2572111e1be452e9c6882dfed71350f8b5fdcf958f05",
+        "first_bit_mismatch": null,
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "mismatches_over_max": 0,
+        "native_subnormal_count": 0,
+        "numerical_mismatches": 0,
+        "signed_zero_only_mismatches": 0,
+        "worst_index": null
+      },
+      "cache_v": {
+        "actual_sha256": "a6fb6e812125690a49830ead1b4ff57b39e9c855dfbadf46b72ac2d3bd4e0cff",
+        "actual_subnormal_count": 0,
+        "bit_mismatches": 0,
+        "elements": 65536,
+        "expected_sha256": "a6fb6e812125690a49830ead1b4ff57b39e9c855dfbadf46b72ac2d3bd4e0cff",
+        "first_bit_mismatch": null,
+        "max_abs": 0.0,
+        "max_bf16_ulp": 0,
+        "mean_abs": 0.0,
+        "mismatches_over_max": 0,
+        "native_subnormal_count": 0,
+        "numerical_mismatches": 0,
+        "signed_zero_only_mismatches": 0,
+        "worst_index": null
+      }
+    },
+    "finite_only": true,
+    "full_KV_token_major_to_head_major_layout_checked": true,
+    "full_cold_reference_files_fresh_read": 58,
+    "full_computed_57_producer_contract_pass": false,
+    "full_observer_writeback_checks": [
+      "all four RMS output arrays",
+      "Q/K RoPE output and64-element rotated prefix",
+      "all192-element unrotated RoPE tails",
+      "GQA context head/token layout",
+      "packed projection gate half",
+      "complete repeated gamma rows"
+    ],
+    "mask_add_values_not_fabricated": true,
+    "maximum_operator_abs_error": 0.015625,
+    "maximum_operator_mean_error": 3.0327917102113133e-06,
+    "method": "Reviewer stdlib-only decoding of persisted words; manually bound producer roles and chronological original57 dispatch events; complete each tensor, not spot samples. No original comparator imports or arithmetic execution. BF16 decode uses exact binary64 exponent/significand, with raw-word layout transforms; FP32 values finite checked.",
+    "metric_mean_reproduction_tolerance_only": {
+      "absolute": 1e-20,
+      "original_acceptance_thresholds_unchanged": true,
+      "relative": 2e-13
+    },
+    "missing_producer": "self_attn|aten.add.Tensor|2",
+    "operator_limits": {
+      "max_abs": 0.03125,
+      "mean_abs": 0.005
+    },
+    "producer_domains_with_bit_differences": 19,
+    "producer_elements": 6937600,
+    "reference_arithmetic_rerun": false,
+    "softmax_row_sum_limit": 2e-05,
+    "softmax_row_sum_max_abs": 3.6049095797352493e-07,
+    "softmax_rows": 1024,
+    "storage_domains": {
+      "BF16": 27,
+      "F32": 29
+    }
+  },
+  "limitations": [
+    "Only fresh cold128 complete19-owner Python/C++ typed software model. No carried128 execution.",
+    "56 implemented producer gates; missing native causal-mask-add means original57-producer contract remains unaccepted.",
+    "Original software cache capacity256; not new unified five-block full4096 hardware numeric acceptance.",
+    "No Chisel/RTL/Command128 hardware execution, formal equivalence, physical traffic validation, PPA, frequency or MAC utilization conclusion.",
+    "Source-bound runtime, counters, ACK/fence ordering and original seals are not an independent raw per-cycle execution replay.",
+    "Official capture uses captured trig constants; no independent trig generation claim.",
+    "Old failures, old L0 identity/source drift and earlier historical results remain unchanged; fresh current selected source was tested rather than inherited historical PASS."
+  ],
+  "reference_separation": {
+    "captured_trig_constants_used": true,
+    "comparison_only_after_actual19_terminal_snapshot": true,
+    "full_two_window_capture_integrity_checked_by_original_loader": true,
+    "independent_trig_generation": false,
+    "native_intermediate_execution_injection": false,
+    "original_hidden_and_weights_used": true,
+    "reference_integrity_bytes_may_be_read_before_model": true,
+    "reference_separation_is_source_bound_not_OS_read_sandbox": true
+  },
+  "resources": {
+    "CPU_hard_scope": "per process, not aggregate process-tree",
+    "RSS_scope": "sampled anchored original group, not exact highwater or aggregate address-space hardcap",
+    "actual_model_wall_seconds": 3057.8420788209187,
+    "actual_sampled_group_CPU_peak_seconds": 3038.82,
+    "actual_sampled_group_RSS_peak_bytes": 557010944,
+    "actual_supervisor_wall_seconds": 3070.2519433249254,
+    "address_space_hard_scope": "worker process",
+    "caps": {
+      "address_space_hard_bytes": 2147483648,
+      "cleanup_stop_seconds": 3640,
+      "cpu_per_process_seconds": 3600,
+      "group_cpu_sampled_seconds": 3600,
+      "log_sampled_bytes": 8388608,
+      "rss_sampled_bytes": 1610612736,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 134217728,
+      "total_wall_seconds": 3660,
+      "work_wall_seconds": 3630
+    },
+    "final_wait4_CPU_total_saved": false,
+    "maximum_sample_gap_seconds": 0.151368377963081,
+    "no_budget_reset_retry_or_other_window": true
+  },
+  "reviewer_corrections": {
+    "candidate_failure": false,
+    "exploration": [
+      "Read-only schema exploration assumed every observation had shape; q/k records actually use rows+widths; corrected before numerical audit.",
+      "Read-only exploration assumed all owner_report objects contain owner; dense reports instead expose direct completion/response. No actual failure or rerun."
+    ],
+    "initial_logs_preserved": true,
+    "metadata_schema": [
+      "Prior freeze members is a filename mapping, not a list; preserved metadata_attempt1.log.",
+      "First8 prefix commands carry tag in job only; checked all19 job.tag instead; preserved metadata_attempt2.log."
+    ],
+    "negative_zero": {
+      "actual_numbers_rerun": false,
+      "affected_numeric_values": "only float presentation sign of -0.0; arithmetic compares treat +/-0 equal; raw-word hashes/bit mismatch/ULP/signed-zero metrics were already correct",
+      "all_65280_finite_BF16_words_mathematical_decode_equal": true,
+      "candidate_sources_or_actual_artifacts_changed": false,
+      "corrected_script_sha256": "470562a1953eb096bd9846dff435188c2ffb2e78819be393ec2991000077bb5e",
+      "first_pure_test_caught_negative_zero_sign_loss": true,
+      "initial_numeric_script_sha256": "b13947509ec4ab7b4e6dbe6879008c193d1dde480f7e045584722864e95ed239",
+      "only_word_with_changed_sign_presentation": [
+        "0x80000000"
+      ],
+      "original_actual_word_audit_run_only_once": true,
+      "reported_metrics_exactly_invariant_on18_zero/nonzero_pair_controls": true
+    }
+  },
+  "source_admission_freeze_sha256": "dd2eb25777d19f64b52899c60ff913ca50c1f74a2bf0dda336903d4e58d84bb2",
+  "source_admission_review_sha256": "84616ff7eb4609e81bdbcd68d6111af20699e11c344f5a1c73bdf86ea3f8b9d2"
+}

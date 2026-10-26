@@ -1,0 +1,136 @@
+{
+  "origin": {
+    "bytes": 6806,
+    "sha256": "050f95d384f50da085f39e6bbadf1d619ad1a3c92afcd1fb0115462d655932cb"
+  },
+  "files": [
+    {
+      "role": "V3Global.cpp",
+      "bytes": 6939,
+      "sha256": "9b966fd221653df2feee9f86e19718768f26cd49d627f80b92e1158fd403c8c6",
+      "git_blob": "08bab7a2d8e8210754db08ac15ad9fd14fd585f9",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Global.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3ParseImp.cpp",
+      "bytes": 29551,
+      "sha256": "4c3da4f6748e267b6692e55581c2f9266f3b7ed1cbb41f26a33356f53a43e160",
+      "git_blob": "c2cc2cf6fcbf52b8d74d003a9417b5e79bf4dd4d",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3ParseImp.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3LinkParse.cpp",
+      "bytes": 42287,
+      "sha256": "8078004ac20d31b9f3d25b643cb2ef848898a89e500e1cb289280ebf42ea2cc2",
+      "git_blob": "ebd9c98f1919967cdaf22185322f6154b11e635d",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3LinkParse.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3LinkDot.cpp",
+      "bytes": 223750,
+      "sha256": "fa3b9b426a1b6f602a786fda281d972d92355454999690cb51f4a3291cfdc80e",
+      "git_blob": "c747239f4fb714414bbde18e3a0aee9dc3e81d9f",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3LinkDot.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3Dead.cpp",
+      "bytes": 23272,
+      "sha256": "28e272e2fc4c56e8c780e4a06f3f0d78471ef710ddebe321cc1e6bc9b6d12219",
+      "git_blob": "d96a7d54cc81c2f53bc86cfb224f43c8c3a77fda",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Dead.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3Ast.cpp",
+      "bytes": 67506,
+      "sha256": "cc9c45d008994306747e021cdc940c6a1c3fb44f4e00f1e218f2a2e1095f5c05",
+      "git_blob": "c7d926a3e3f7d99a3d8c14b693794d61edd7ecd8",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Ast.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3Width.cpp",
+      "bytes": 423093,
+      "sha256": "487c8d4d05b6229813e3aadbdf1f8ad8d1a734bfeb545c824aa9c4e805639511",
+      "git_blob": "969209609d0a645184aecb9d209fcd08ead81eae",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Width.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3Error.cpp",
+      "bytes": 11996,
+      "sha256": "2e4619f87129bd27fd00862778363e35e569be2ff5df0924e99bb5f525465393",
+      "git_blob": "23c70a0131782bd40188dfd9eac5b68dd76f451e",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Error.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3Error.h",
+      "bytes": 33265,
+      "sha256": "570253edd818518f13ca431c00f833b4e8ea604b190f76984a088ca924da8815",
+      "git_blob": "c381ddfe76dc7340db521c255c4317777888ebfd",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Error.h?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3LinkCells.cpp",
+      "bytes": 32035,
+      "sha256": "420e1f7d950e5184ee7d92751e9cc5e0ace545ca83653ae4d09956ea26a63191",
+      "git_blob": "6e3d13fe368390a7de7a2aed693c8cb5da11a711",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3LinkCells.cpp?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3Options.cpp",
+      "bytes": 87368,
+      "sha256": "cbabd2b609b4cf41d2da3be87910fd94e8fc0e0d2803db76502f4a6b2ad67a30",
+      "git_blob": "7a7714b1e8f16da22c2f2c15b26333063d786195",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Options.cpp?ref=v5.032",
+      "official_tag": "v5.032"
+    },
+    {
+      "role": "V3HierBlock.cpp",
+      "bytes": 21011,
+      "sha256": "1463ff316c8efcc3e6b29e3b20807c4beb26bcee4fdc5c833929bc30a13cffe2",
+      "git_blob": "bc6c0f6fc925ea5778adad10b9754f526faa14c1",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3HierBlock.cpp?ref=v5.032",
+      "official_tag": "v5.032"
+    },
+    {
+      "role": "V3Options.h",
+      "bytes": 40035,
+      "sha256": "308a452b8ed5a208b7ba901b29cc47b6c08453ae82f6c6cde075807eda613b8e",
+      "git_blob": "eb3d14194e642c9d01cac72cb7ef90610f14bf85",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Options.h?ref=v5.032",
+      "official_tag": "v5.032"
+    },
+    {
+      "role": "V3Param.cpp",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3Param.cpp?ref=v5.032",
+      "git_blob": "17ecb785b14af5f9f7f8d8634db63d7091549c2a",
+      "bytes": 76090,
+      "sha256": "ee7fb4a5b902df67d791d022bfbf0b37cef483f66402e25104c29be03bfb893f"
+    },
+    {
+      "role": "V3OptionParser.h",
+      "bytes": 6872,
+      "sha256": "b83ee2b16bf628464ae144e295169d5dd56c246adad17c437430810e9c0dd00e",
+      "git_blob": "b7bcc60b93e98d61cc6804c51c1e2d415a9ba75e",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3OptionParser.h?ref=v5.032",
+      "ref": "v5.032"
+    },
+    {
+      "role": "V3OptionParser.cpp",
+      "bytes": 12051,
+      "sha256": "30183bd175118d30974534841a10ed5b8fadc69ebba47224c27cc0c294b9062f",
+      "git_blob": "701c0219e637b16733c989754f470ea214bd0edd",
+      "url": "https://api.github.com/repos/verilator/verilator/contents/src/V3OptionParser.cpp?ref=v5.032",
+      "ref": "v5.032"
+    }
+  ],
+  "scope": "Official source references/hash only; no bulk source or release binary copied. Exact source admission performed independently before actual run; packaging does not re-execute binary inspection."
+}

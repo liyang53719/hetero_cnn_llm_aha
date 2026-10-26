@@ -1,0 +1,94 @@
+{
+  "exact_original_sources": [
+    {
+      "public_path": "source/phase_observer.py",
+      "bytes": 11061,
+      "sha256": "ac7b49755a7789ca38224e9f6d38d2dc3bca47e0b97ffe53306b9a031906ecb5"
+    },
+    {
+      "public_path": "source/test_phase_observer.py",
+      "bytes": 8569,
+      "sha256": "615875d313bd2ac0d6926c8dd1fe3a215b4adc12f7273213646b24e0276ae92f"
+    }
+  ],
+  "supervisor_template": {
+    "public_path": "source/supervisor_role_template.py",
+    "original": {
+      "bytes": 35517,
+      "sha256": "77624611b201f694d6aee353fe63c21868cf6d854f1a710dcf10692632b24549"
+    },
+    "published": {
+      "bytes": 35450,
+      "sha256": "1a03e37d384f1aba3e6733902601cc792d316e0c8ce3bc36e743aa1f900280d7"
+    },
+    "transformation": "Exactly one HELPER absolute-path string literal is replaced with ${STRICT_CLEANUP_SOURCE}; all other UTF-8 bytes preserved. Original path intentionally withheld. No automatic environment substitution. Template is not a runnable portable manifest/runtime or execution authorization.",
+    "strict_cleanup_source": {
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
+    },
+    "original_line": 22,
+    "withheld_original_literal_utf8": {
+      "bytes": 93,
+      "sha256": "5abea54baae8255477988f49c1d02780230c32e9093bac3e8fa80df30d628884"
+    },
+    "replacement_literal": "'${STRICT_CLEANUP_SOURCE}'"
+  },
+  "candidate_freeze": {
+    "bytes": 14008,
+    "sha256": "f09a63725cb28d87b5bec3aa206f417684a2b0b4c57ce24959f29f15037bfc1c"
+  },
+  "observer_freeze": {
+    "bytes": 1924,
+    "sha256": "c3835d6fdb287cd880dce39dc1d17403339da1ff85c8b7fe8a676753da7a4cd3"
+  },
+  "source_delta": {
+    "absence": 31,
+    "added": [
+      "load_phase_observer",
+      "save_phase_observation"
+    ],
+    "baseline": {
+      "bytes": 33243,
+      "sha256": "9da2f5c8f7c42c1b62e7f2366bbb6c08266eae1a4c0b66ca11d17c608f279b23"
+    },
+    "candidate": {
+      "bytes": 35517,
+      "sha256": "77624611b201f694d6aee353fe63c21868cf6d854f1a710dcf10692632b24549"
+    },
+    "changed": [
+      "validate_manifest",
+      "structure_check",
+      "output_scope",
+      "save_receipt",
+      "_execute",
+      "main"
+    ],
+    "immutable_input17_same": true,
+    "inventories": 12,
+    "native_executed": false,
+    "pins": 3950,
+    "root_endpoints": 56,
+    "same": [
+      "need",
+      "digest",
+      "pin",
+      "verify_pin",
+      "walk_bounded",
+      "exact_inventory",
+      "verify_inputs",
+      "verify_runtime_boundaries",
+      "load_cleanup",
+      "tree_sample",
+      "stage_inputs",
+      "render_contract",
+      "sample_gap",
+      "group_sample",
+      "_child_limits",
+      "render_worker_argv"
+    ]
+  },
+  "source_delta_origin": {
+    "bytes": 1448,
+    "sha256": "6cfa7b878d66c5decb70bab6bc985a916595fb4b53707fc128aee026bafca64b"
+  }
+}

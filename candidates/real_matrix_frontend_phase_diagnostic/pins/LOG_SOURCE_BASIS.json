@@ -1,0 +1,245 @@
+{
+  "schema": "verilator-5032-per-source-debug-log-static-qualification-v1",
+  "status": "PASS_SOURCE_AND_STATIC_RELEASE_CALLSITE_QUALIFICATION_NOT_EXECUTED",
+  "candidate_debug_flags": [
+    "--debugi-V3LinkCells",
+    "4",
+    "--debugi-V3LinkParse",
+    "4",
+    "--debugi-V3LinkDot",
+    "2",
+    "--debugi-V3Param",
+    "2",
+    "--debugi-V3Dead",
+    "2",
+    "--debugi-V3HierBlock",
+    "3",
+    "--debugi-V3Width",
+    "2"
+  ],
+  "rejected_initial_flag": {
+    "flag": [
+      "--debugi-V3ParseImp",
+      "2"
+    ],
+    "source": "V3ParseImp.cpp:354-379",
+    "reason": "debug()!=0 invokes dumpInputsFile for ordinary files and writes preprocessed .vpp; not log-only. Replaced explicitly by LinkCells level4."
+  },
+  "source_pins": {
+    "bytes": 6806,
+    "sha256": "050f95d384f50da085f39e6bbadf1d619ad1a3c92afcd1fb0115462d655932cb"
+  },
+  "fixed_source_count": 16,
+  "package_aux_pins": [
+    {
+      "bytes": 26226,
+      "sha256": "672a1ccf3468902f66387049f001b04f254bbcece7d5e816e3861715889bf252"
+    },
+    {
+      "bytes": 26863,
+      "sha256": "a741a0b58f747a0eb4db2cab692ab403395672aec2f8dac50ccbe9fb568b8c23"
+    }
+  ],
+  "release_proof": {
+    "bytes": 16116,
+    "sha256": "2e77066b8a24e84ca1e754eb9b20a527282e0c23a9267e6b4660efda7d688f65"
+  },
+  "release_binary": {
+    "bytes": 13920736,
+    "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703"
+  },
+  "release_callsite_count": 9,
+  "release_support": "All seven chosen tags have source-line/message anchored callsites in actual release .text, dynamic CALL getter/CMP/signed-JG guards and cached getter initialization. No reliance on literal-only evidence. Minimal recognized opcodes and unwind ranges are not a full CFG/source-binary equivalence proof; internal stripped callees are numeric and not asserted debugSrcLevel symbols.",
+  "option_route": [
+    {
+      "file": "V3OptionParser.cpp",
+      "lines": [
+        198,
+        210
+      ],
+      "fact": "A double-leading dash is normalized to one before exact/partial matching; value callback consumes the following argument."
+    },
+    {
+      "file": "V3OptionParser.cpp",
+      "lines": [
+        150,
+        171,
+        276,
+        281
+      ],
+      "fact": "Exact registered option is preferred; permitted partial -debugi- removes that prefix then supplies tag and value."
+    },
+    {
+      "file": "V3Options.cpp",
+      "lines": [
+        1237,
+        1241,
+        2070,
+        2098
+      ],
+      "fact": "Only global -debug/-debugi call setDebugMode; per-source callback writes m_debugLevel[tag]. Source filename stem maps to exact V3* tag. dump map remains separate."
+    },
+    {
+      "file": "V3Error.h",
+      "lines": [
+        581,
+        590,
+        648,
+        690
+      ],
+      "fact": "UINFO is outside VL_DEBUG condition. Dynamic cached max(tag, source-stem) guards std::cout. Dump getters are independent."
+    },
+    {
+      "file": "verilatedos.h",
+      "lines": [
+        191,
+        191
+      ],
+      "fact": "VL_UNCOVERABLE is a branch hint (VL_UNLIKELY), not compile-time removal."
+    },
+    {
+      "file": "verilator",
+      "lines": [
+        43,
+        56,
+        159,
+        178
+      ],
+      "fact": "no_auto_abbrev + pass_through; only exact debug callback switches release to *_dbg. No VERILATOR_BIN or VERILATOR_TEST_FLAGS environment injection is permitted by caller."
+    }
+  ],
+  "markers": [
+    {
+      "file": "V3LinkCells.cpp",
+      "line": 633,
+      "function": "V3LinkCells::link",
+      "interpretation": "After explicit file reads, before cell linking; autoload during linking is still possible.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3LinkParse.cpp",
+      "line": 917,
+      "function": "V3LinkParse::linkParse",
+      "interpretation": "Entry only; no completion claim.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3LinkDot.cpp",
+      "line": 4353,
+      "function": "V3LinkDot::linkDotPrimary",
+      "interpretation": "Primary name-link entry.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3LinkDot.cpp",
+      "line": 4359,
+      "function": "V3LinkDot::linkDotParamed",
+      "interpretation": "Post-parameter name-link entry.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3Param.cpp",
+      "line": 1534,
+      "function": "V3Param::param",
+      "interpretation": "Parameter-pass entry, not completion.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3Dead.cpp",
+      "line": 542,
+      "function": "V3Dead::deadifyModules",
+      "interpretation": "Dead module removal entry.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3HierBlock.cpp",
+      "line": 366,
+      "function": "V3HierBlockPlan::add",
+      "interpretation": "A block insertion progressed; NOT a createPlan entry banner.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3HierBlock.cpp",
+      "line": 378,
+      "function": "V3HierBlockPlan::registerUsage",
+      "interpretation": "A usage relation was found; absence does not prove createPlan was never entered.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    },
+    {
+      "file": "V3Width.cpp",
+      "line": 8024,
+      "function": "V3Width::width",
+      "interpretation": "Full width entry; partial width work can happen earlier without this banner.",
+      "flush": "Source std::endl at the logged statement; runtime/kernel/pipe delivery remains unobserved."
+    }
+  ],
+  "default_global_flags": {
+    "global_debug_default": 0,
+    "dump_level_default": 0,
+    "debug_check": false,
+    "stats": false,
+    "stats_vars": false,
+    "source": "V3Error.h:332; V3Options.h:216,237,286-287; V3Options.cpp:2070-2098; V3Global.cpp:137-155"
+  },
+  "selected_low_level_side_effects": [
+    {
+      "tag": "V3LinkCells",
+      "level": 4,
+      "detail": "Entry plus Module/Cell/Bind/Interface/recursive-node log lines (194,215,233,260,296,330,336,527). Count is design-dependent; node stream output may contain addresses. Graph file dump at171 is independent dumpGraphLevel=0."
+    },
+    {
+      "tag": "V3LinkParse",
+      "level": 4,
+      "detail": "Active low-level entry at917; dumpCheckGlobalTree uses independent dump/check flags."
+    },
+    {
+      "tag": "V3LinkDot",
+      "level": 2,
+      "detail": "Entry markers and some error/type-parameter messages. Explicit debug>=5 output files at4311/4318/4326/4337 disabled. state.dumpSelf is independently dumpLevel>=6 gated."
+    },
+    {
+      "tag": "V3Param",
+      "level": 2,
+      "detail": "Entry1534 on normal path. Error branch749 can emit pinp->dumpTree to stdout when constification fails. Therefore no blanket no-AST-text-on-error claim; external bounded log must fail-close."
+    },
+    {
+      "tag": "V3Dead",
+      "level": 2,
+      "detail": "Entries deadifyModules/DTypes/DTypesScoped/All/AllScoped at542/550/556/562/568; node messages at4 disabled."
+    },
+    {
+      "tag": "V3HierBlock",
+      "level": 3,
+      "detail": "Add366/usage378 logs only after corresponding visitor action; no guaranteed createPlan start marker."
+    },
+    {
+      "tag": "V3Width",
+      "level": 2,
+      "detail": "Entry8024 plus low-level error details. UINFO(0) at7002 for string-to-byte-array loop is also present at default0 (not newly enabled). Higher debug dump paths remain disabled."
+    }
+  ],
+  "execution_conditions": [
+    "Exact seven flags/levels only; no global --debug/--debugi, --dump*/--stats/--debug-check or --debug-emitv.",
+    "Pinned Perl wrapper and release binary; minimal environment excludes VERILATOR_BIN, VERILATOR_TEST_FLAGS and debugger injection.",
+    "Existing explicit bounded log/tree/resource supervisor remains mandatory. Source cannot promise <=2MiB debug output; exceeding cap is retained failure, not grounds to silently discard lines.",
+    "Per-file debug can perturb CPU/memory/timing and output volume. This is one new diagnostic, not acceptance, not comparable benchmark, not original-failure function attribution.",
+    "Before first LinkCells marker, parsing/preprocessing and earlier work are not distinguished. Missing later marker does not prove its phase was not entered; source line ordering and flushing are not full runtime tracing.",
+    "No target/native/JVM/EDA executed in this proof. Static binary evidence does not prove every selected marker will be reached or printed."
+  ],
+  "scope": {
+    "source_static_only": true,
+    "native_executed": false,
+    "model_changed": false,
+    "hardware_cycles_or_utilization": false,
+    "runtime_GO": false
+  },
+  "origin": {
+    "bytes": 9873,
+    "sha256": "131b39845dabd422f39c3ead389a971f809c7a7ac1e8e85ed3275c98bd3ab3eb"
+  },
+  "release_proof_hash": {
+    "bytes": 16116,
+    "sha256": "2e77066b8a24e84ca1e754eb9b20a527282e0c23a9267e6b4660efda7d688f65"
+  },
+  "scope_note": "Historical source/static release qualification only. No raw ELF bytes, machine addresses or disassembly included. Full CFG/source-binary reproducibility not established. Current actual only received5markers."
+}

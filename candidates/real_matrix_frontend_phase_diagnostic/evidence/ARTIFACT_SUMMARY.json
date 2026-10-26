@@ -1,0 +1,117 @@
+{
+  "origin": {
+    "bytes": 66548,
+    "sha256": "acad50531c5b4290b9bf72fbad7bc0b05dae121f2c5e161386bb5c0e3eb47f2c"
+  },
+  "files": [
+    {
+      "role": "inputs/common.sv",
+      "bytes": 48274540,
+      "sha256": "c117e75ae97fb0a978e7cebe8e942a652bf1fbe927505d66092fa39b87380181"
+    },
+    {
+      "role": "inputs/providers/qwen2_matrix_command_endpoint.sv",
+      "bytes": 2342,
+      "sha256": "94aab9408b70d0f7ed00c1acccba44724eaac54f31c08679d580fa76db7938ef"
+    },
+    {
+      "role": "inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+      "bytes": 4203,
+      "sha256": "a9a2d79fc5497b431dab56478ac0a98b7ee846212380db75d8e70b8112c05e96"
+    },
+    {
+      "role": "inputs/providers/tc_clk.sv",
+      "bytes": 3318,
+      "sha256": "93e9747504fa1da6473560341febbfae6c5e917768633a84fc9ef12299293207"
+    },
+    {
+      "role": "inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "bytes": 3588,
+      "sha256": "33cf6bbd37ef1d2b537e948a29cf642f51ce4d8b34fa2483294c4f604b925ac0"
+    },
+    {
+      "role": "inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "bytes": 4582,
+      "sha256": "6d276382a0e3e1b7145b381c700e895806e6f382bcb044d53c2279c98757d19c"
+    },
+    {
+      "role": "inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "bytes": 8809,
+      "sha256": "41d801167ff90547cde5d2a1784f964920873d5f3ba0d1c9654b79eebc2c6a27"
+    },
+    {
+      "role": "inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "bytes": 9088,
+      "sha256": "a37dd8069258614d620031c03733016aa69c496c7bfb0b8a8fbcc8f1721f63c4"
+    },
+    {
+      "role": "inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "bytes": 2775,
+      "sha256": "c7fd146302112613515e6fa86af152496cb8d753ef9a425eb0cdbe0252ef073e"
+    },
+    {
+      "role": "inputs/providers/bf16_outer_product_array_glue512.sv",
+      "bytes": 503,
+      "sha256": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9"
+    },
+    {
+      "role": "inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv",
+      "bytes": 1900,
+      "sha256": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471"
+    },
+    {
+      "role": "inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+      "bytes": 1662,
+      "sha256": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2"
+    },
+    {
+      "role": "inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+      "bytes": 981,
+      "sha256": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0"
+    },
+    {
+      "role": "inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+      "bytes": 323,
+      "sha256": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f"
+    },
+    {
+      "role": "inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+      "bytes": 1006,
+      "sha256": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b"
+    },
+    {
+      "role": "inputs/config/hierarchy.vlt",
+      "bytes": 262,
+      "sha256": "ccecd0829803c2f175da8bce149f29505a5dc5ed68ff1d502787f774fc60783a"
+    },
+    {
+      "role": "inputs/config/raw_qk_m1.vlt",
+      "bytes": 475,
+      "sha256": "beff77b599683c675c26e7ca29a03d6ff2f51e8a458f9075d0285fa4d6cb78b0"
+    },
+    {
+      "role": "CLAIM.json",
+      "bytes": 5372,
+      "sha256": "206d58f37769600578c8047d7d365a4bb83c77966e721672c429ad4e11713267"
+    },
+    {
+      "role": "RECEIPT.json",
+      "bytes": 38837,
+      "sha256": "b3644a91b38ae9faaad48da71518b4d60a3d9b906ceb674fc387062fbba8a222"
+    },
+    {
+      "role": "worker.log",
+      "bytes": 51806,
+      "sha256": "75f92e19d2be39fe491fd304aae03ef11e2b550f4096990586f3b43fd7a15f23"
+    },
+    {
+      "role": "PHASE_OBSERVATION.json",
+      "bytes": 10515,
+      "sha256": "fbdce14d85d05cdfa517f0ae882b983734e269d51828c11ea8bdb38e18eacd32"
+    }
+  ],
+  "files_count": 21,
+  "bytes": 48426887,
+  "plan_files": 0,
+  "scope": "17unchanged input copies+CLAIM/log/observation/receipt. Hash metadata only; no payload content copied or read for packaging."
+}

@@ -1,0 +1,110 @@
+{
+  "automatic_chaining": false,
+  "automatic_retry": false,
+  "candidate_freeze": {
+    "bytes": 14008,
+    "sha256": "f09a63725cb28d87b5bec3aa206f417684a2b0b4c57ce24959f29f15037bfc1c"
+  },
+  "conditions": [
+    "New independent run root/claim; frozen candidate and this full review plus identity members hash-bound before root Popen.",
+    "Exact COMMAND_PROPOSAL and minimal child environment only; no global debug/ParseImp/dump/stats/build or silent warning override.",
+    "120CPU/150work/160cleanup/180total/210outer and original RSS2GiB/log2MiB/tree128MiB/file64MiB/oneCPU bounds.",
+    "Fresh automatic3952/12inventory plus root56endpoint/31absence/13alias/3freshcwd and C.UTF-8 pre/post.",
+    "Source macro plus fixed partial release bytes is static qualification, not runtime/CFG/reproducibility proof.",
+    "Record received markers against exact rawlog offsets/source lines; do not attribute exact current function, phase CPU integral, or absence-of-phase from missing markers.",
+    "Any diagnostic failure retains original evidence, no retry or budget increase by this admission.",
+    "Terminal actual must be independently reviewed before any successor execution."
+  ],
+  "controls": [
+    {
+      "checks": 705,
+      "child_executed": false,
+      "native_executed": false,
+      "optimized": false,
+      "own_negative_controls": 13,
+      "production_engine_called": false,
+      "pure_test_methods": 35,
+      "release_excerpt_bytes": 20671,
+      "release_excerpt_count": 33,
+      "source_read_pins": 57,
+      "status": "PASS_SOURCE_MOCK_ONLY_NO_TARGET_EXECUTION"
+    },
+    {
+      "checks": 705,
+      "child_executed": false,
+      "native_executed": false,
+      "optimized": true,
+      "own_negative_controls": 13,
+      "production_engine_called": false,
+      "pure_test_methods": 35,
+      "release_excerpt_bytes": 20671,
+      "release_excerpt_count": 33,
+      "source_read_pins": 57,
+      "status": "PASS_SOURCE_MOCK_ONLY_NO_TARGET_EXECUTION"
+    }
+  ],
+  "identity_reviews": [
+    {
+      "all_member_hashes_reverified": true,
+      "freeze": {
+        "bytes": 1331,
+        "sha256": "ad4736cd407d0bf844cf9f84fd32e43570112d4586fcb929308370bf50c19ae7"
+      },
+      "member_count": 9,
+      "review": {
+        "bytes": 12590,
+        "sha256": "6a9c16ec4fb387fd6c3db547de564982bb8e64c45cae3fdbbcd0284701221a7a"
+      }
+    },
+    {
+      "all_member_hashes_reverified": true,
+      "freeze": {
+        "bytes": 153,
+        "sha256": "8572042fd5ff91be694775e0da31337f2c78d172032bc99a5981e5151faf8276"
+      },
+      "member_count": 1,
+      "review": {
+        "bytes": 11029,
+        "sha256": "c8d3ebd7a41b5bfe026c82531216124b5930dec8150c04b3b6719a3898e9aa7d"
+      }
+    }
+  ],
+  "manifest": {
+    "bytes": 1585880,
+    "sha256": "3700470d9e1e13c18ba64b0e80d64225993b72caaf08e9bd5ebb8d67ba55f31a"
+  },
+  "production_engine_called": false,
+  "report": {
+    "bytes": 10020,
+    "sha256": "e1b291ec1ca65e4e31a94c94296f6ce118f9db69fdb1ab374bf2ac09dd41a73a"
+  },
+  "root_new_exact_GO_required": true,
+  "schema": "independent-bounded-original-frontend-phase-diagnostic-source-admission-v1",
+  "scope": {
+    "complete_cpu_profile": false,
+    "diagnostic_only": true,
+    "full4096_fit": false,
+    "full_lint": false,
+    "hierarchy_plan_pass": false,
+    "model_built": false,
+    "model_simulated": false,
+    "numerical_pass": false,
+    "rtl": false
+  },
+  "source_blockers": [],
+  "status": "PASS_SOURCE_MOCK_ADMISSION_FOR_ONE_BOUNDED_FRONTEND_PHASE_DIAGNOSTIC_ONLY",
+  "supervisor": {
+    "bytes": 35517,
+    "sha256": "77624611b201f694d6aee353fe63c21868cf6d854f1a710dcf10692632b24549"
+  },
+  "target_execution_performed": false,
+  "origin": {
+    "bytes": 4642,
+    "sha256": "693cc698f07b6fc13284330d00fb74a8f5ef26fa8dc8c21169abf60aaf5c4190"
+  },
+  "origin_freeze": {
+    "bytes": 2639,
+    "sha256": "0309dba39b0751e49b76f2a8d59846ae86bef29b4ffc9fd3b3c7b4f820e5c207"
+  },
+  "historical_source_only": true
+}

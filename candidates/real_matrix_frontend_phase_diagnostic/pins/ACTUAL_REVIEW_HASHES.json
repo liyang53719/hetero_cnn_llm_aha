@@ -1,0 +1,79 @@
+{
+  "origin_freeze": {
+    "bytes": 2082,
+    "sha256": "c3d607b6691eeddbf60b4cb199a67ff8e89f7dba65ba1591f105cdc42c81dab0"
+  },
+  "records": [
+    {
+      "role": "ACTUAL_REVIEW.json",
+      "bytes": 1948,
+      "sha256": "5f324f0a3cd0659aca71eda8d0b6227a96b36c3f66f50e263195ffa4563650af"
+    },
+    {
+      "role": "ARTIFACT_MANIFEST.json",
+      "bytes": 66548,
+      "sha256": "acad50531c5b4290b9bf72fbad7bc0b05dae121f2c5e161386bb5c0e3eb47f2c"
+    },
+    {
+      "role": "CLEANUP_EVIDENCE.json",
+      "bytes": 15807,
+      "sha256": "8b1e972b01534e828729c61041e9598e93be549c1c26d94104bd5fd4845c0274"
+    },
+    {
+      "role": "PHASE_OBSERVATION.snapshot.json",
+      "bytes": 10515,
+      "sha256": "fbdce14d85d05cdfa517f0ae882b983734e269d51828c11ea8bdb38e18eacd32"
+    },
+    {
+      "role": "PHASE_SUMMARY.json",
+      "bytes": 7924,
+      "sha256": "f5fad4621dacf91557f6fc9ae2ff8bd718274a5602f596e8389f8804e314e8a9"
+    },
+    {
+      "role": "RECEIPT.snapshot.json",
+      "bytes": 38837,
+      "sha256": "b3644a91b38ae9faaad48da71518b4d60a3d9b906ceb674fc387062fbba8a222"
+    },
+    {
+      "role": "REPORT_ZH.md",
+      "bytes": 9284,
+      "sha256": "a95fd7268be2bc59d4696e1ab318edfc7e51ba57d5a2145a6b66de3df37a7602"
+    },
+    {
+      "role": "ROOT_APPROVAL.snapshot.json",
+      "bytes": 993,
+      "sha256": "a6c3f431ba0203aa8fd4c143afd8cc8d0e191d6cb24401874ec7c781ec685579"
+    },
+    {
+      "role": "ROOT_RECEIPT.snapshot.json",
+      "bytes": 128,
+      "sha256": "fa91f98c6e7942bdee57af36a6e5d8f098a90e5e48c8f3fdf708b9188f57914e"
+    },
+    {
+      "role": "audit.log",
+      "bytes": 1836,
+      "sha256": "20aec88f2ae3f799fee37ea6c510b7e52e3937aa2160ee728bf31bff1e9adf84"
+    },
+    {
+      "role": "audit_actual.py",
+      "bytes": 22818,
+      "sha256": "0bb657d698eebb9f626c3434e0ba5d17c3bbcc0a27dee0ea10113359b3f50f87"
+    },
+    {
+      "role": "derive_actual_audit.py",
+      "bytes": 3106,
+      "sha256": "3c4a29182ade6b8221fdf796ece4cc2e330039a647ee13647b625702bdf262cc"
+    },
+    {
+      "role": "phase_block.py.txt",
+      "bytes": 8096,
+      "sha256": "6644f05ae64087dc02d2bfa24f530a191ba1d2da80ebf8bb9212f9d9b015c8d4"
+    },
+    {
+      "role": "summary_block.py.txt",
+      "bytes": 2996,
+      "sha256": "cabc5eeebf24f98ce0c86560377e4746d87c1317c68931cdb50ebf317c6ac5ec"
+    }
+  ],
+  "scope": "14small audit member identities only, not raw logs/process identities/cache. Actual audit read17fresh staged files once, publication does not repeat actualbulk hashing."
+}

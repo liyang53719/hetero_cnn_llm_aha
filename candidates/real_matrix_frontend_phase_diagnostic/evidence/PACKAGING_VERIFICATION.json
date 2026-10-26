@@ -1,0 +1,19 @@
+{
+  "status": "PASS_EXACT_PHASE_DIAGNOSTIC_RSS_FAIL_PACKAGE_SOURCE_AND_PROJECTION_ONLY",
+  "checks": 3496,
+  "errors": 0,
+  "exact_original_sources": 2,
+  "single_literal_role_templates": 1,
+  "template_reverse_bytes_and_AST_pass": true,
+  "actual_small_audit_members_hashed": 14,
+  "official_source_text_hashes": 16,
+  "retained_stat_checks": 96,
+  "synthetic_observer_tests_each_normal_optimized": 30,
+  "public_references": 8,
+  "actual_target_executions": 0,
+  "actual_bulk_log_ELF_FIR_SV_cache_reads": 0,
+  "actual_review_checks_normal_only": 2257,
+  "actual_review_cleanup_negative_checks_included": 5,
+  "phase_scope": "5receivedmarkers/586sourceboundcalls/120saved+latest;notprofiler,completeCPUunknown;targetRSSFAILnoplan",
+  "packaging_interpreter_ordinary_stdlib_IO_not_globally_audited": true
+}

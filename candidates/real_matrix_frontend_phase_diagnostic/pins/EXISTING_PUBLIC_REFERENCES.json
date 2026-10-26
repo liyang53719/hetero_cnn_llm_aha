@@ -1,0 +1,54 @@
+{
+  "base_commit": "8275135b3e5f3e498a43d9563daa18a4961b6e12",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_plan_failure/pins/STAGED_INPUTS.json",
+      "bytes": 3468,
+      "sha256": "43f81d72df25959e7090d5cc7806d56615a1cb4757a6793acb427d17aeda200b",
+      "git_blob_sha": "76ac751dd80e6f1cccd07f9317895cf53cf6720a"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_plan_failure/pins/EXECUTION_ROLES.json",
+      "bytes": 20332,
+      "sha256": "87e014db8daafea704c1fa15c1616d7ce0f24963cb58b5707f8f2bf4e5922712",
+      "git_blob_sha": "d89edd646aed1111397337c7ba2ccec33fcde7a4"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_plan_failure/evidence/ACTUAL_FAILURE_REVIEW.json",
+      "bytes": 2139,
+      "sha256": "13a91f7a8f34db0ab10bd0bdc81de09ea912bcf9b10523cf74c2afb9180e6fe4",
+      "git_blob_sha": "fe1bb687a82daf33a0f20d5935eb6ac12b7191f3"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_plan_failure/source/qwen2_matrix_command_endpoint.sv",
+      "bytes": 2342,
+      "sha256": "94aab9408b70d0f7ed00c1acccba44724eaac54f31c08679d580fa76db7938ef",
+      "git_blob_sha": "dc093ed5f188209a57dc17e0a146825439135b46"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_plan_failure/source/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+      "bytes": 4203,
+      "sha256": "a9a2d79fc5497b431dab56478ac0a98b7ee846212380db75d8e70b8112c05e96",
+      "git_blob_sha": "93f13a55a1c46ab62eb8e5b33170163197594dfe"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_plan_failure/config/hierarchy.vlt",
+      "bytes": 262,
+      "sha256": "ccecd0829803c2f175da8bce149f29505a5dc5ed68ff1d502787f774fc60783a",
+      "git_blob_sha": "42c99cac731dc6a1cec8d12e271be8260f8cc60f"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_plan_failure/config/raw_qk_m1.vlt",
+      "bytes": 475,
+      "sha256": "beff77b599683c675c26e7ca29a03d6ff2f51e8a458f9075d0285fa4d6cb78b0",
+      "git_blob_sha": "ac1433c34b7b77e2bbccd99fd2483035f65d7fe0"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_sv/pins/SV_EXECUTION_ROLES.json",
+      "bytes": 28526,
+      "sha256": "b1b0d3b8381a448835e48c84a0ac0dadccd56fe4cb3355eca27088116125d52b",
+      "git_blob_sha": "ec0c4e9f8e41cfe3c7da0726cfd389551f23ecb1"
+    }
+  ],
+  "scope": "Reuse unchanged17 hardware/config identities,2adapter+2config bytes,originalFAIL and official tool/root56 role pins. No retained generated SV/provider bulk repeated."
+}

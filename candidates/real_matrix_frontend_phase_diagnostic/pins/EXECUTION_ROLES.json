@@ -1,0 +1,231 @@
+{
+  "schema": "frontend-phase-diagnostic-role-contract-v1",
+  "manifest": {
+    "bytes": 1585880,
+    "sha256": "3700470d9e1e13c18ba64b0e80d64225993b72caaf08e9bd5ebb8d67ba55f31a"
+  },
+  "supervisor_original": {
+    "bytes": 35517,
+    "sha256": "77624611b201f694d6aee353fe63c21868cf6d854f1a710dcf10692632b24549"
+  },
+  "root_required": {
+    "bytes": 26890,
+    "sha256": "13b15b1df81a6d69c97d49e1b0b4aa72bbac5113779f093345f3c35f724f4017"
+  },
+  "root_launcher": {
+    "bytes": 3271,
+    "sha256": "1e619be51033308335e5dfdbf07720b1fb8f6770ec405fffe04725131ca2afe5"
+  },
+  "pre_Popen_launcher_sha256": "1e619be51033308335e5dfdbf07720b1fb8f6770ec405fffe04725131ca2afe5",
+  "root_approval": {
+    "bytes": 993,
+    "sha256": "a6c3f431ba0203aa8fd4c143afd8cc8d0e191d6cb24401874ec7c781ec685579"
+  },
+  "root_endpoints": [
+    {
+      "phase": "before",
+      "receipt": {
+        "bytes": 25264,
+        "sha256": "e79a85e93d19aab4d9fa9fc6cf564fda2852230c1b46b76095f9b72f79faeebc"
+      },
+      "counts": {
+        "pins": 56,
+        "absent": 31,
+        "passed": true,
+        "locale": {
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8"
+        }
+      },
+      "expected56_roles_reference": "candidates/qwen2_core_real_matrix_sv/pins/SV_EXECUTION_ROLES.json",
+      "absence31_alias13_freshcwd3_reference": "candidates/qwen2_core_real_matrix_plan_failure/pins/EXECUTION_ROLES.json"
+    },
+    {
+      "phase": "after",
+      "receipt": {
+        "bytes": 25266,
+        "sha256": "1cf267df7fc1c2b3b0989a5d33221dacccb0b89ed21bd1de4240f3ce00a60045"
+      },
+      "counts": {
+        "pins": 56,
+        "absent": 31,
+        "passed": true,
+        "locale": {
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8"
+        }
+      },
+      "expected56_roles_reference": "candidates/qwen2_core_real_matrix_sv/pins/SV_EXECUTION_ROLES.json",
+      "absence31_alias13_freshcwd3_reference": "candidates/qwen2_core_real_matrix_plan_failure/pins/EXECUTION_ROLES.json"
+    }
+  ],
+  "tools": {
+    "backend": {
+      "bytes": 13920736,
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703"
+    },
+    "frontend": {
+      "bytes": 26226,
+      "sha256": "672a1ccf3468902f66387049f001b04f254bbcece7d5e816e3861715889bf252"
+    },
+    "perl_executable": {
+      "bytes": 3935376,
+      "sha256": "b85210f03baeb859ee20b1324e59497f27f319eda9e2d3d1ecd163a79d884a7d"
+    },
+    "python_executable": {
+      "bytes": 30894944,
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7"
+    },
+    "package": {
+      "bytes": 7565144,
+      "sha256": "238ab4ca84cddd371f113cd549f16f2d65c43e7b4962a763bea1d259158dd3b2"
+    },
+    "cleanup": {
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
+    }
+  },
+  "worker_argv_template": [
+    "${PERL}",
+    "${VERILATOR_FRONTEND}",
+    "--no-unlimited-stack",
+    "--cc",
+    "--hierarchical",
+    "--make",
+    "cmake",
+    "-sv",
+    "--top-module",
+    "OrderedQkRealMatrixCore",
+    "--prefix",
+    "VOrderedQkRealMatrixCorePlan",
+    "--assert",
+    "--verilate-jobs",
+    "1",
+    "--threads",
+    "1",
+    "--no-timing",
+    "--timescale",
+    "1ns/1ps",
+    "--debugi-V3LinkCells",
+    "4",
+    "--debugi-V3LinkParse",
+    "4",
+    "--debugi-V3LinkDot",
+    "2",
+    "--debugi-V3Param",
+    "2",
+    "--debugi-V3Dead",
+    "2",
+    "--debugi-V3HierBlock",
+    "3",
+    "--debugi-V3Width",
+    "2",
+    "--Mdir",
+    "${NEW_RUN_ROOT}/plan",
+    "${NEW_RUN_ROOT}/inputs/config/hierarchy.vlt",
+    "${NEW_RUN_ROOT}/inputs/config/raw_qk_m1.vlt",
+    "${NEW_RUN_ROOT}/inputs/common.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/tc_clk.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_glue512.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+    "${NEW_RUN_ROOT}/inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv"
+  ],
+  "environment": {
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "${NEW_RUN_ROOT}/empty-path",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp",
+    "VERILATOR_ROOT": "${VERILATOR_ROOT}"
+  },
+  "diagnostic_flags": [
+    "--timescale",
+    "1ns/1ps",
+    "--debugi-V3LinkCells",
+    "4",
+    "--debugi-V3LinkParse",
+    "4",
+    "--debugi-V3LinkDot",
+    "2",
+    "--debugi-V3Param",
+    "2",
+    "--debugi-V3Dead",
+    "2",
+    "--debugi-V3HierBlock",
+    "3",
+    "--debugi-V3Width",
+    "2"
+  ],
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 120,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 134217728,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 67108864,
+    "total_wall_seconds": 180,
+    "work_wall_seconds": 150
+  },
+  "outer_wall_seconds": 210,
+  "observation_limits": {
+    "max_events": 128,
+    "max_json_bytes": 1048576,
+    "max_line_bytes": 65536,
+    "max_log_bytes": 2097152,
+    "max_samples": 4000,
+    "sample_period_seconds": 0.1
+  },
+  "declared_pin_counts": {
+    "input": 17,
+    "perl_source": 2561,
+    "provenance": 1039,
+    "runtime": 219,
+    "source": 3,
+    "tool": 111
+  },
+  "declared_total": 3950,
+  "automatic_total": 3952,
+  "inventories": 12,
+  "immutable_input17_identical": true,
+  "input17_reference": "candidates/qwen2_core_real_matrix_plan_failure/pins/STAGED_INPUTS.json",
+  "source_scope": {
+    "Cplusplus_compile": false,
+    "automatic_child_verilator": false,
+    "automatic_cmake": false,
+    "automatic_make": false,
+    "collection_is_simulation_top": false,
+    "cpp_model_codegen": false,
+    "diagnostic_only": true,
+    "full512_resources_each": true,
+    "full_lint": false,
+    "hierarchy_plan_acceptance": false,
+    "memory_allocation_site_proven": false,
+    "model_regeneration": false,
+    "native_plan_frontend": true,
+    "numeric_acceptance": false,
+    "numerical_pass": false,
+    "observed_phase_is_last_received_entry": true,
+    "physical_MAC_utilization": null,
+    "physical_endpoint_occurrences": 8,
+    "selected_top": "OrderedQkRealMatrixCore",
+    "simulation": false
+  },
+  "scope": "Expected+source-bound ckpass root receipts, not independent observed-hash/syscall trace. Launcher prebound this attempt. Prior CHIRRTL historical gap not backfilled. Private complete runtime/manifest withheld; this role contract is not automatic execution authority."
+}

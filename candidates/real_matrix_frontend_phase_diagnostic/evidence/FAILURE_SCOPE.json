@@ -1,0 +1,22 @@
+{
+  "origin_receipt": {
+    "bytes": 38837,
+    "sha256": "b3644a91b38ae9faaad48da71518b4d60a3d9b906ceb674fc387062fbba8a222"
+  },
+  "actual_report": {
+    "bytes": 9284,
+    "sha256": "a95fd7268be2bc59d4696e1ab318edfc7e51ba57d5a2145a6b66de3df37a7602"
+  },
+  "errors": [
+    "ValueError: sampled RSS cap exceeded",
+    "RuntimeError: diagnostic frontend did not exit zero"
+  ],
+  "first_error": "RSS sampled cap exceeded; diagnostic frontend did not exit zero is a supervisor follow-on with normalexit null, not observed native exit1.",
+  "CPU": "13.467568583 sampled group+parent versus1.832441821 final parent+waited-child; complete tree CPU unknown. Reparent/direct-wait coverage gap. Neither difference nor max is exact phase/total integration.",
+  "phase": "Last received label is not current stack, allocating function or hotspot. No later marker does not prove absence of that phase. Parent elapsed includes staging/preflight and delivery delay.",
+  "comparison": "Changed missing-timescale default+seven per-file log flags/observer perturb workload. Do not compare14.32s against previous21.29s as speedup or RAM improvement.",
+  "warnings": "0Warning/0Error headers in retained interrupted log only, not complete lint or warning-free. Old48TIMESCALEMOD/oldDedupGroup/W005 history remains.",
+  "cleanup": "Anchored original group+observed identities, direct leader-9 separate from null normalexit, not whole-host/cgroup guarantee. No signals/reap issued by publication.",
+  "prelaunch_schema_fix": "Initial root wrapper selected FREEZE.files but candidate uses members; KeyError occurred before root.mkdir/claim/Popen. Two-line schema fix only, not native retry; original candidate unchanged.",
+  "next_stage": "No next execution, retry, budget increase, provider/numeric/full4096fit/full128RTL/full29/MAC acceptance."
+}

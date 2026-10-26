@@ -1,0 +1,289 @@
+{
+  "all586_samples_recomputable": false,
+  "errors": [],
+  "events": [
+    {
+      "byte_end_exclusive": 29,
+      "byte_start": 0,
+      "event_index": 0,
+      "log_line": 1,
+      "observed_elapsed": 2.9710900300415233,
+      "phase": "module_cell_link_entry",
+      "source_file": "V3LinkCells.cpp",
+      "source_line": 633
+    },
+    {
+      "byte_end_exclusive": 51698,
+      "byte_start": 51664,
+      "event_index": 1,
+      "log_line": 332,
+      "observed_elapsed": 3.3789841160178185,
+      "phase": "link_parse_entry",
+      "source_file": "V3LinkParse.cpp",
+      "source_line": 917
+    },
+    {
+      "byte_end_exclusive": 51737,
+      "byte_start": 51698,
+      "event_index": 2,
+      "log_line": 333,
+      "observed_elapsed": 4.968318368017208,
+      "phase": "link_dot_primary_entry",
+      "source_file": "V3LinkDot.cpp",
+      "source_line": 4353
+    },
+    {
+      "byte_end_exclusive": 51767,
+      "byte_start": 51737,
+      "event_index": 3,
+      "log_line": 334,
+      "observed_elapsed": 7.281121144013014,
+      "phase": "parameterization_entry",
+      "source_file": "V3Param.cpp",
+      "source_line": 1534
+    },
+    {
+      "byte_end_exclusive": 51806,
+      "byte_start": 51767,
+      "event_index": 4,
+      "log_line": 335,
+      "observed_elapsed": 7.9540666390093975,
+      "phase": "post_parameter_link_entry",
+      "source_file": "V3LinkDot.cpp",
+      "source_line": 4359
+    }
+  ],
+  "log_pin": {
+    "bytes": 51806,
+    "sha256": "75f92e19d2be39fe491fd304aae03ef11e2b550f4096990586f3b43fd7a15f23"
+  },
+  "observation_pin": {
+    "bytes": 10515,
+    "sha256": "fbdce14d85d05cdfa517f0ae882b983734e269d51828c11ea8bdb38e18eacd32"
+  },
+  "phase_groups": [
+    {
+      "event_index": -1,
+      "first_retained_row": [
+        0.5932835090206936,
+        0,
+        0.59042847,
+        48325729,
+        -1
+      ],
+      "label": "before_first_received_marker",
+      "last_retained_row": [
+        2.926553681027144,
+        679501824,
+        2.902758532,
+        48325729,
+        -1
+      ],
+      "received_marker_elapsed": null,
+      "retained_rows_including_latest": 22,
+      "source_bound_all_call_summary": {
+        "cpu_peak_seconds": 2.92380718,
+        "first_observed_elapsed": 0.5932835090206936,
+        "last_observed_elapsed": 2.9475546030444093,
+        "rss_peak_bytes": 686448640,
+        "sample_calls": 106,
+        "tree_peak_bytes": 48325729
+      }
+    },
+    {
+      "event_index": 0,
+      "first_retained_row": [
+        2.9747717220452614,
+        693100544,
+        2.9475439550000004,
+        48338971,
+        0
+      ],
+      "label": "module_cell_link_entry",
+      "last_retained_row": [
+        3.3147260540281422,
+        694149120,
+        3.289560724,
+        48377393,
+        0
+      ],
+      "received_marker_elapsed": 2.9710900300415233,
+      "retained_rows_including_latest": 4,
+      "source_bound_all_call_summary": {
+        "cpu_peak_seconds": 3.333915587,
+        "first_observed_elapsed": 2.9747717220452614,
+        "last_observed_elapsed": 3.3587983199977316,
+        "rss_peak_bytes": 694149120,
+        "sample_calls": 18,
+        "tree_peak_bytes": 48377393
+      }
+    },
+    {
+      "event_index": 1,
+      "first_retained_row": [
+        3.3800203450373374,
+        693944320,
+        3.3550867269999998,
+        48377427,
+        1
+      ],
+      "label": "link_parse_entry",
+      "last_retained_row": [
+        4.923499972035643,
+        706166784,
+        4.899667335,
+        48377427,
+        1
+      ],
+      "received_marker_elapsed": 3.3789841160178185,
+      "retained_rows_including_latest": 15,
+      "source_bound_all_call_summary": {
+        "cpu_peak_seconds": 4.920640210999999,
+        "first_observed_elapsed": 3.3800203450373374,
+        "last_observed_elapsed": 4.94814683299046,
+        "rss_peak_bytes": 711823360,
+        "sample_calls": 72,
+        "tree_peak_bytes": 48377427
+      }
+    },
+    {
+      "event_index": 2,
+      "first_retained_row": [
+        4.969275787996594,
+        694587392,
+        4.942014845,
+        48377466,
+        2
+      ],
+      "label": "link_dot_primary_entry",
+      "last_retained_row": [
+        7.1738333710236475,
+        800624640,
+        7.152140889,
+        48377466,
+        2
+      ],
+      "received_marker_elapsed": 4.968318368017208,
+      "retained_rows_including_latest": 21,
+      "source_bound_all_call_summary": {
+        "cpu_peak_seconds": 7.236137119,
+        "first_observed_elapsed": 4.969275787996594,
+        "last_observed_elapsed": 7.260970103030559,
+        "rss_peak_bytes": 800624640,
+        "sample_calls": 105,
+        "tree_peak_bytes": 48377466
+      }
+    },
+    {
+      "event_index": 3,
+      "first_retained_row": [
+        7.281982851040084,
+        800768000,
+        7.2570962759999995,
+        48377496,
+        3
+      ],
+      "label": "parameterization_entry",
+      "last_retained_row": [
+        7.933908817998599,
+        803553280,
+        7.905827618,
+        48377496,
+        3
+      ],
+      "received_marker_elapsed": 7.281121144013014,
+      "retained_rows_including_latest": 7,
+      "source_bound_all_call_summary": {
+        "cpu_peak_seconds": 7.905827618,
+        "first_observed_elapsed": 7.281982851040084,
+        "last_observed_elapsed": 7.933908817998599,
+        "rss_peak_bytes": 803553280,
+        "sample_calls": 31,
+        "tree_peak_bytes": 48377496
+      }
+    },
+    {
+      "event_index": 4,
+      "first_retained_row": [
+        7.95491672900971,
+        803553280,
+        7.926779714,
+        48377535,
+        4
+      ],
+      "label": "post_parameter_link_entry",
+      "last_retained_row": [
+        13.504707562038675,
+        2149695488,
+        13.467568582999998,
+        48377535,
+        4
+      ],
+      "received_marker_elapsed": 7.9540666390093975,
+      "retained_rows_including_latest": 52,
+      "source_bound_all_call_summary": {
+        "cpu_peak_seconds": 13.467568582999998,
+        "first_observed_elapsed": 7.95491672900971,
+        "last_observed_elapsed": 13.504707562038675,
+        "rss_peak_bytes": 2149695488,
+        "sample_calls": 254,
+        "tree_peak_bytes": 48377535
+      }
+    }
+  ],
+  "reason": "120 saved rows plus latest; per-label all-call peaks/counts source-bound to frozen observer, not a saved586row trace",
+  "scope": "LAST_RECEIVED_LABELS_AND_RETAINED_SAMPLES_NOT_PROFILER",
+  "source_log_counts": [
+    {
+      "line_count": 1,
+      "source_file": "V3LinkCells.cpp",
+      "source_line": 633
+    },
+    {
+      "line_count": 63,
+      "source_file": "V3LinkCells.cpp",
+      "source_line": 194
+    },
+    {
+      "line_count": 133,
+      "source_file": "V3LinkCells.cpp",
+      "source_line": 330
+    },
+    {
+      "line_count": 133,
+      "source_file": "V3LinkCells.cpp",
+      "source_line": 527
+    },
+    {
+      "line_count": 1,
+      "source_file": "V3LinkCells.cpp",
+      "source_line": 215
+    },
+    {
+      "line_count": 1,
+      "source_file": "V3LinkParse.cpp",
+      "source_line": 917
+    },
+    {
+      "line_count": 1,
+      "source_file": "V3LinkDot.cpp",
+      "source_line": 4353
+    },
+    {
+      "line_count": 1,
+      "source_file": "V3Param.cpp",
+      "source_line": 1534
+    },
+    {
+      "line_count": 1,
+      "source_file": "V3LinkDot.cpp",
+      "source_line": 4359
+    }
+  ],
+  "warnings": [],
+  "origin": {
+    "bytes": 7924,
+    "sha256": "f5fad4621dacf91557f6fc9ae2ff8bd718274a5602f596e8389f8804e314e8a9"
+  },
+  "projection": "Only path/stat members removed from log_pin/observation_pin; all events,phase_groups,counts,scope and uncertainty unchanged. No raw log text/addresses/full120row trace copied."
+}

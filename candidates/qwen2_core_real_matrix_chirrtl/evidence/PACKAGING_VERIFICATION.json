@@ -1,0 +1,20 @@
+{
+  "status": "PASS_EXACT_COMMON_CHIRRTL_SOURCE_METADATA_AND_SYNTHETIC_CONTROLS",
+  "source_static_conditions": 9827,
+  "actual_projection_conditions": 18375,
+  "errors": 0,
+  "original_source_files": 4,
+  "public_refs": 12,
+  "source_tests_normal_optimized_each": 25,
+  "hash_helper_controls_normal_optimized_each": 8,
+  "derived_stage_hashes_each": 557,
+  "actual_fresh_audit_pins": 1398,
+  "actual_inventory_checks": 5,
+  "current_regular_file_size_stats": 568,
+  "current_class_mode0444_checks": 557,
+  "stat_scope": "Current file kind/size/mode and packaging before/after snapshots only. Actual audit manifest did not publish stat identities; no claimed historical stat identity continuity. Original actual hash validation belongs to pinned independent actual audit.",
+  "no_explicit_actual_FIR_class_JAR_SV_ELF_emitter_log_or_system_pyc_content_reads": true,
+  "ordinary_packaging_stdlib_IO_not_globally_audited": true,
+  "target_executions_or_signals": 0,
+  "scope": "Exact source/projections/hash metadata only plus small isolated synthetic tests. CHIRRTL actual limited structure/ABI PASS, no SV/provider execution/realFMA/numerics/MAC. Root count receipts+postarchived source not historical per-item maps."
+}

@@ -1,0 +1,29 @@
+{
+  "ICG_to_endpoint_clock_connections": 8,
+  "annotation_count": 9330,
+  "collection_is_simulation_top": false,
+  "collection_reachable_modules": 375,
+  "dedup_count": 375,
+  "dont_touch_count": 8955,
+  "external_modules": 16,
+  "firrtl_full_semantics_or_numeric_equivalence_checked": false,
+  "forward_lease_muxes_checked": 9,
+  "full_result_payload_broadcasts": {
+    "legacy_client_words": 4096,
+    "packed_client_words": 4096
+  },
+  "header_bytes": 1546274,
+  "instance_count": 374,
+  "module_count": 375,
+  "normal_modules": 359,
+  "reverse_lease_gates_checked": 8,
+  "selected_future_simulation_top": "OrderedQkRealMatrixCore",
+  "selected_shell_direct_connections_checked": 13,
+  "selected_shell_reachable_modules": 366,
+  "source_stripe_range_checks": 256,
+  "origin": {
+    "bytes": 36952,
+    "sha256": "965497a9d670d278f9f38a2948ff240a225834a6d82d8f279c38735a46b1a971"
+  },
+  "projection": "Selected declaration dump omitted; all other independent structure aggregate fields retained exactly. Definition counts are CHIRRTL, not post-dedup SV or physical instances. Text connections are not dynamic behavior or numerical validation."
+}

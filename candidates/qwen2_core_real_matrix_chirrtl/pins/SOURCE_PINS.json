@@ -1,0 +1,35 @@
+{
+  "schema": "common-collection-CHIRRTL-structure-source-v1",
+  "files": [
+    {
+      "public_path": "structure/check_chirrtl.py",
+      "bytes": 28729,
+      "sha256": "e58dc97e76270138311cff1682f1eb0870c0384af99b09f3345f7b0679969e5e",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "structure/test_check_chirrtl.py",
+      "bytes": 16038,
+      "sha256": "4d99293a5a52aa01e1f0749b995eca1db8c86a15cd4cc5330741b8a3d2b8c345",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "structure/STRUCTURE_EXPECTATION.json",
+      "bytes": 7323,
+      "sha256": "704f2e3c8cc55899981e7585114c4af36912658b6d1565d86668ce868e7d2c7a",
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "structure/CORE_VALIDATION_DELTA.diff",
+      "bytes": 1245,
+      "sha256": "7a2b52b36cc0565cebe85df5a784817fe801c0a65026c1f50056ce5064683b37",
+      "exact_original_bytes": true
+    }
+  ],
+  "candidate_freeze": {
+    "bytes": 9497,
+    "sha256": "749b30dcf6acff7edf7e0cec91988085046ba3d7f64218d786c522fe1f163f4f"
+  },
+  "fragment_delta_scope": "CORE_VALIDATION_DELTA.diff applies to the extracted original core gate, not the whole checker. Only selected root becomes nested core and reset type+diagnostic; remaining gate bytes preserved.",
+  "no_new_Scala_or_emitter_source": true
+}

@@ -1,0 +1,95 @@
+{
+  "FIRRTL_semantic_or_lowering_validation": false,
+  "FMA_namespace_roots": 4,
+  "ICG_count": 8,
+  "MAC_utilization": "UNKNOWN_NOT_MEASURED",
+  "actual_CHIRRTL_serialization": true,
+  "actual_Chisel_construction_executed_by_root": true,
+  "annotation_count": 9330,
+  "artifact_bytes": 29300912,
+  "artifact_count": 561,
+  "auditor_JVM_or_child_executed": false,
+  "automatic_next_stage": false,
+  "checks": 39792,
+  "cleanup_complete": true,
+  "cleanup_live_handle_not_recreated": true,
+  "collection_is_simulation_top": false,
+  "dedup_group_count": 375,
+  "dont_touch_count": 8955,
+  "endpoint_count": 8,
+  "external_module_count": 16,
+  "external_provider_families": 2,
+  "external_root_gate_evidence": "counts/pass/locale receipts plus root-confirmed original launcher source, not persisted historical per-item hash maps",
+  "fir": {
+    "bytes": 19551779,
+    "sha256": "bdfbf223cc8c1c8de8a8d21450272878d1422842bc17a452bcef45e9878573bc"
+  },
+  "firtool_or_SV_or_model_executed": false,
+  "fresh_inventory_checks": 5,
+  "fresh_pin_checks": 1398,
+  "inherited_W005_warnings": 4,
+  "module_count": 375,
+  "normal_module_count": 359,
+  "numerical_pass": false,
+  "observed_resources": {
+    "elapsed_seconds": 12.041842219012324,
+    "final_aggregate_cpu_seconds": 11.995029048000001,
+    "maximum_sample_interval_seconds": 0.09219273796770722,
+    "sampled_peak_output_bytes": 29264821,
+    "sampled_peak_rss_bytes": 323686400
+  },
+  "outer_timeout": false,
+  "outer_wall_seconds": 12.151900938013569,
+  "persisted_cleanup_proof_consistent": true,
+  "physical_FMA_closed": false,
+  "postflight": {
+    "inventory_checks": 5,
+    "pass_all": true,
+    "pin_checks": 1398
+  },
+  "preflight": {
+    "inventory_checks": 5,
+    "pass_all": true,
+    "pin_checks": 1398
+  },
+  "provider_SV_linted_or_executed": false,
+  "receipt": {
+    "bytes": 36091,
+    "sha256": "cabe1d819dac251e815f380f06b427e8e5bf429996e4a4de540a222848cb0893"
+  },
+  "root_assertions_enabled_evidence": "Root tool-history confirmation: LANG=C.UTF-8 LC_ALL=C.UTF-8 LC_CTYPE=C.UTF-8 python -I -S -B ${ROOT_LAUNCHER}; no -O, and -I ignores PYTHONOPTIMIZE. Confirmation is not a newly fabricated historical log.",
+  "root_exit": 0,
+  "root_launcher_pre_execution_hash_binding_claimed": false,
+  "root_launcher_source": {
+    "bytes": 2551,
+    "sha256": "0d49ace99e513a0ac8c876646fee91e9b0add67313bf2e0edf81acda75fd0fb0"
+  },
+  "root_receipt": {
+    "bytes": 128,
+    "sha256": "2efc92bb15b03f709bea0ee9996764a9cdd82d09d699090f03d24f2d16bf62be"
+  },
+  "schema": "actual-real-matrix-common-chirrtl-independent-review-v1",
+  "selected_future_simulation_top": "OrderedQkRealMatrixCore",
+  "staged_class_bytes": 9695031,
+  "staged_class_count": 557,
+  "staged_classes_exact_and_mode0444": true,
+  "status": "PASS_ACTUAL_COMMON_NAMESPACE_CHIRRTL_STRUCTURE_AND_DECLARED_ABI_ONLY",
+  "origin_review": {
+    "bytes": 3381,
+    "sha256": "7fe7471f67fdfeeb70a51d11214e72b471e9b8f11853597917425cdeef8ca903"
+  },
+  "origin_freeze": {
+    "bytes": 3758,
+    "sha256": "948097719cf91969f06702dfdf2413140b6ceb041e36e7dfbbb909b1609c7b7e"
+  },
+  "projection": {
+    "omitted_keys": [
+      "path",
+      "root",
+      "affinity_cpu"
+    ],
+    "string_replacement": "Only original private root launcher location replaced with ${ROOT_LAUNCHER}; original tool-history assertion-evidence wording otherwise unchanged.",
+    "one_affined_CPU": true,
+    "not_historical_per_item_root_mapping": true
+  }
+}

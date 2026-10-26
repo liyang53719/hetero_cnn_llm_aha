@@ -1,0 +1,78 @@
+{
+  "base_commit": "42b7bdd6b5a70f05b385c227344ce71e92413033",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/source/OrderedQkRealMatrixCore.scala",
+      "bytes": 3837,
+      "sha256": "3028d699326dea639b696294d5721fa62d3838e3d05780d42f0eaa94cfb7474c",
+      "git_blob_sha": "ed8dbebef89b95880cfb0b0f98ed5aa384c21d73"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/source/OrderedQkRealMatrixCollection.scala",
+      "bytes": 1530,
+      "sha256": "98f3105e42419f2f773ec6d55fc2374678bcce2fbc6f814de24ff95d6e273791",
+      "git_blob_sha": "7a5d2520fde6de022aac906d4886a18cd22aed06"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/pins/STAGED_CLASS_DELTA.json",
+      "bytes": 4086,
+      "sha256": "d3c6f0271515f61b84794a357d07cc8880bfa373967e43249dca8d373de501b4",
+      "git_blob_sha": "502349d5403447d8d4b173fb87d9461b1e81b0d8"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/evidence/NEW_CLASS_SUMMARY.json",
+      "bytes": 3446,
+      "sha256": "7ddb867cb49d132bd782ddf82580ce1b9b22e6021fa055f58855a88b8942eff5",
+      "git_blob_sha": "ea7babaf8ef10caf8adae1cd84174d6bbc90e500"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/pins/PROVIDER_SOURCE_ABI.json",
+      "bytes": 10182,
+      "sha256": "3d0a8032c37d84c246f36475f8dbf7366eb0876396317b6c721ce3b7cf4fb4af",
+      "git_blob_sha": "b3e01423e19f1b7f4e33c53fd375bb8d1eb65bbe"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/pins/COMPILE_EXECUTION_ROLES.json",
+      "bytes": 23147,
+      "sha256": "cd842723219cd8a9469e095ee8bd8c15e6776773d407292d97127f5d83af8cdd",
+      "git_blob_sha": "cfee3e9c1f9a1fa030076daf46c528e9ff2d7029"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/evidence/ACTUAL_COMPILE_REVIEW.json",
+      "bytes": 2373,
+      "sha256": "47a4bc7e554ae877f5fa7a0a2868248fa688df59a8aba31f6a70480a7556e4da",
+      "git_blob_sha": "52b69075bedc75ee36e867462d9ef3ad0dc59b53"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/structure/check_chirrtl.py",
+      "bytes": 11534,
+      "sha256": "8de2a7eae3cf8377208dd4c1d48bfac405d7665e8b65e4a8fa2fcbd43f7e2569",
+      "git_blob_sha": "3323bf46a0e77eb396b9e7c3a5a00634c0262e77"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/structure/STRUCTURE_EXPECTATION.json",
+      "bytes": 2490,
+      "sha256": "213a0e7e0559a24ab0506832780466eb646ffab8c2c3f0f76c81cf4fa7d643bc",
+      "git_blob_sha": "0e924ca058c1e15742980ad96ddf922295e2c8bb"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/RETAINED_CLASS_PINS.json",
+      "bytes": 100678,
+      "sha256": "fe2de42ce53456699ff97780073b1d7f8f1ee53e1c7b9c5d94a6a14621743aef",
+      "git_blob_sha": "e54559830b00e2218bee0cba0ff2f94c9985baa8"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/NEW_CLASS_HASHES.json",
+      "bytes": 10025,
+      "sha256": "6491db38b14efae96b40ee615852b2343cccc761e4589bcec49120d73aaaaa63",
+      "git_blob_sha": "f1ae8051a8a8d5367f6cfe007eb23fd801bd183c"
+    }
+  ],
+  "scope": "Reuse published two-source compile,554-class delta,new3class summaries,13provider sourceABI and106dependency pins; no actual class/JAR/provider payloads or earlier model/source duplication."
+}

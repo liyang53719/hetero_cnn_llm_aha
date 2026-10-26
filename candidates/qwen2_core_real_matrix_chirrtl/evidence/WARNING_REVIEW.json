@@ -1,0 +1,41 @@
+{
+  "W005_count": 4,
+  "actual_FIR_first_line": 110964,
+  "actual_log": {
+    "bytes": 924,
+    "sha256": "f2c8343341f04c43ee6ce588069e81df3f95384b549006ca16aa34d4612dea31"
+  },
+  "bounded_index_value_checks": 256,
+  "identical_prefix_bytes": 924,
+  "lane_width": 4,
+  "out_of_range_or_truncation_at_this_expression": false,
+  "previous_core_log": {
+    "bytes": 989,
+    "sha256": "5f3f86172cf91a11ca6e3d7f83be9cee15b6a348596b0981af235021ce6c684d"
+  },
+  "scope": "Static index expression evidence only; warnings retained, not global numerical correctness",
+  "sixteen_stripe_constants": [
+    0,
+    16,
+    32,
+    48,
+    64,
+    80,
+    96,
+    112,
+    128,
+    144,
+    160,
+    176,
+    192,
+    208,
+    224,
+    240
+  ],
+  "source": "Qwen2Block.scala:629",
+  "origin": {
+    "bytes": 994,
+    "sha256": "3534602d5d091054cb8ce6a7ba277d31b6cca683df0985696e78313da1bffde9"
+  },
+  "scope_addendum": "Four inherited W005 retained. Only this column-index expression enumerated; not suppression, global warning-freedom or numerical acceptance."
+}

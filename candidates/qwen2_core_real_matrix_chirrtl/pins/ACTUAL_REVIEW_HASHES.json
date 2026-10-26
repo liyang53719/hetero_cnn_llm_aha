@@ -1,0 +1,70 @@
+{
+  "origin_freeze": {
+    "bytes": 3758,
+    "sha256": "948097719cf91969f06702dfdf2413140b6ceb041e36e7dfbbb909b1609c7b7e"
+  },
+  "status": "PASS_ACTUAL_COMMON_NAMESPACE_CHIRRTL_STRUCTURE_AND_DECLARED_ABI_ONLY",
+  "records": [
+    {
+      "role": "ACTUAL_REVIEW.json",
+      "bytes": 3381,
+      "sha256": "7fe7471f67fdfeeb70a51d11214e72b471e9b8f11853597917425cdeef8ca903"
+    },
+    {
+      "role": "ARTIFACT_MANIFEST.json",
+      "bytes": 198743,
+      "sha256": "187c9e9ce9eb31dc3cf8b88c8b62be9c3aec8c0b3b0a204bc25a2a9128887a90"
+    },
+    {
+      "role": "INDEPENDENT_STRUCTURE.json",
+      "bytes": 36952,
+      "sha256": "965497a9d670d278f9f38a2948ff240a225834a6d82d8f279c38735a46b1a971"
+    },
+    {
+      "role": "MODULE_MANIFEST.json",
+      "bytes": 294453,
+      "sha256": "6a64f9d3474e1bbd901ba6935c37b910cfe56254b2aa64cb907a570dafef6f12"
+    },
+    {
+      "role": "PIN_REVIEW.json",
+      "bytes": 1044897,
+      "sha256": "f70252dae9f0717f73977aa5ecc75ddaa27fc5066e5e7c933ff75d319073236f"
+    },
+    {
+      "role": "REPORT_ZH.md",
+      "bytes": 7236,
+      "sha256": "7d7ea379669054eb22fd79e861697931f5259d950d43a56c5a034fd9e5bca585"
+    },
+    {
+      "role": "SELECTED_PORTS.json",
+      "bytes": 15422,
+      "sha256": "ef24211727d0b2846742d3d8e1a7e072e36cd3fe53f28f46829d6eeb6d05e45e"
+    },
+    {
+      "role": "STAGED_CLASS_MANIFEST.json",
+      "bytes": 349177,
+      "sha256": "32b557e6e24341b3fab7a14565c350d276d883f225a057b183ca45356e3e3650"
+    },
+    {
+      "role": "WARNING_REVIEW.json",
+      "bytes": 994,
+      "sha256": "3534602d5d091054cb8ce6a7ba277d31b6cca683df0985696e78313da1bffde9"
+    },
+    {
+      "role": "audit.normal.log",
+      "bytes": 3381,
+      "sha256": "7fe7471f67fdfeeb70a51d11214e72b471e9b8f11853597917425cdeef8ca903"
+    },
+    {
+      "role": "audit.optimized.log",
+      "bytes": 3381,
+      "sha256": "7fe7471f67fdfeeb70a51d11214e72b471e9b8f11853597917425cdeef8ca903"
+    },
+    {
+      "role": "audit_actual.py",
+      "bytes": 24704,
+      "sha256": "3820217117de8d98178c2adac161370de6da01fd1943dc4b32a89bab968d45bd"
+    }
+  ],
+  "scope": "Hash identities only; no audit script/logs/bulk manifest copied. Audit normal and -O each reported 39792 checks. Audit correction of cleanup canonical-JSON newline was reviewer formatting, not an actual-run failure."
+}

@@ -1,0 +1,200 @@
+{
+  "schema": "common-CHIRRTL-cli-role-projection-v1",
+  "manifest": {
+    "bytes": 922384,
+    "sha256": "acd976033b7a836b8d4ecaa81f3d0933375df68ad424b03ed7b870187b6ca105"
+  },
+  "supervisor": {
+    "bytes": 31208,
+    "sha256": "5f90057038cf836525e687c04730c1c16365ad38769b664b3a4c68fcad063a64"
+  },
+  "candidate_freeze": {
+    "bytes": 9497,
+    "sha256": "749b30dcf6acff7edf7e0cec91988085046ba3d7f64218d786c522fe1f163f4f"
+  },
+  "original_exact_argv_sha256": "c5b869d56138ac1257fa0ace58affdbf7bed1ab608a1d56d905ac50e7b0d0457",
+  "hash_encoding": "utf8 json compact list ensure_ascii=False",
+  "emitter_argv_template": [
+    "${JAVA21}",
+    "-Duser.home=${NEW_RUN_ROOT}/home",
+    "-Djava.io.tmpdir=${NEW_RUN_ROOT}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1024m",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "${NEW_RUN_ROOT}/classes:${JARS106_COLON_IN_ORDER}",
+    "circt.stage.ChiselMain",
+    "--module",
+    "heteronpu.continuous.OrderedQkRealMatrixCollection",
+    "--target",
+    "chirrtl",
+    "--target-dir",
+    "${NEW_RUN_ROOT}/ir"
+  ],
+  "classpath_order_reuse_ref": "candidates/qwen2_core_real_matrix_compile/pins/COMPILE_EXECUTION_ROLES.json",
+  "classpath_106_order_exact_prior": true,
+  "java": {
+    "bytes": 14384,
+    "sha256": "6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba"
+  },
+  "environment": {
+    "CHISEL_ARGUMENT_EXTENSIONS": "DISABLE",
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "${NEW_RUN_ROOT}/empty-path",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+  },
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "cpu_seconds": 120,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 134217728,
+    "postflight_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 67108864,
+    "total_wall_seconds": 150,
+    "work_wall_seconds": 120
+  },
+  "outer_wall_seconds": 180,
+  "declared_pin_counts": {
+    "baseline_candidate_source": 4,
+    "class": 550,
+    "compiled_class": 20,
+    "dependency": 106,
+    "metadata": 153,
+    "new_source": 2,
+    "original_source": 92,
+    "production_source": 3,
+    "provider_source": 13,
+    "runtime": 136,
+    "shell_class": 3,
+    "tool": 314
+  },
+  "declared_total": 1396,
+  "automatic_total": 1398,
+  "inventory_count": 5,
+  "stage_count": 557,
+  "stage_bytes": 9695031,
+  "required_output_files": [
+    "OrderedQkRealMatrixCollection.fir"
+  ],
+  "parent_runtime_qualification": {
+    "bytes": 73486,
+    "sha256": "0ecbd114e9256eee254364f3e74603a64b3ae6daf7e2d0635c0d08a73d3dfa88"
+  },
+  "known_endpoint56_roles_hashes_exact_prior_compile_ref": true,
+  "root_external_before": {
+    "pins": 56,
+    "absent": 12,
+    "passed": true,
+    "locale": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    "origin": {
+      "bytes": 174,
+      "sha256": "d6414b710edf4a2a59f2f8e522da404a8ac8e879fd5d2aa16f9e3f713bbe8bf9"
+    }
+  },
+  "root_external_after": {
+    "pins": 56,
+    "absent": 12,
+    "passed": true,
+    "locale": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    "origin": {
+      "bytes": 174,
+      "sha256": "1e5d3a6ff78955e82ca22ec911f86e9a8cec6b3b867c709a7b6c98a93d402afa"
+    }
+  },
+  "root_gate_receipt_scope": "Source-bound checks against frozen ROOT_REQUIRED_CHECKS then saved counts/pass/locale only. NOT historical per-endpoint observed hash/absence mapping and not a syscall replay. Fresh independent audit is a separate layer.",
+  "root_launcher_archive": {
+    "bytes": 2551,
+    "sha256": "0d49ace99e513a0ac8c876646fee91e9b0add67313bf2e0edf81acda75fd0fb0",
+    "archived_after_execution_not_prebound": true
+  },
+  "root_required_checks": {
+    "bytes": 24788,
+    "sha256": "2a752c3f4169e4a161466f0f367bca8719485f32b3f3177db2e1edccb034a137"
+  },
+  "source_delta": {
+    "JVM_executed": false,
+    "changed_functions": [
+      "validate_manifest",
+      "output_scope",
+      "save_receipt",
+      "class_composition",
+      "_execute",
+      "main"
+    ],
+    "inventories": 5,
+    "new_functions": [
+      "structure_outputs"
+    ],
+    "new_supervisor": {
+      "bytes": 31208,
+      "sha256": "5f90057038cf836525e687c04730c1c16365ad38769b664b3a4c68fcad063a64"
+    },
+    "old_supervisor": {
+      "bytes": 29125,
+      "sha256": "79dcf5a9cf481e73ee2bc13e2a1edd36aa92c6775eb172a8da504ff2aa479c2e"
+    },
+    "removed_functions": [
+      "class_outputs"
+    ],
+    "resource_delta": {
+      "cleanup145_to130": true,
+      "cpu120_work120_total150_unchanged": true,
+      "file48_to64MiB": true,
+      "postflight5_to20": true,
+      "tree64_to128MiB": true
+    },
+    "roles": {
+      "baseline_candidate_source": 4,
+      "class": 550,
+      "compiled_class": 20,
+      "dependency": 106,
+      "metadata": 153,
+      "new_source": 2,
+      "original_source": 92,
+      "production_source": 3,
+      "provider_source": 13,
+      "runtime": 136,
+      "shell_class": 3,
+      "tool": 314
+    },
+    "stage557": true,
+    "total_pins": 1396,
+    "unchanged_functions": [
+      "need",
+      "digest",
+      "pin",
+      "verify_pin",
+      "exact_inventory",
+      "verify_inputs",
+      "load_cleanup",
+      "tree_sample",
+      "sample_gap",
+      "group_sample",
+      "_child_limits",
+      "walk_bounded",
+      "stage_classes",
+      "verify_staging"
+    ],
+    "origin": {
+      "bytes": 1879,
+      "sha256": "50c3df632d17e2f4d1cabcd2243f00590b2b5acd32059b7697df6e472ad4c50b"
+    }
+  },
+  "scope": "One ChiselMain child common collection constructor+CHIRRTL only; no Scala compiler/firtool/provider SV/model execution. Child-local CHISEL_ARGUMENT_EXTENSIONS=DISABLE, not global environment setting. Parser byte/count bounds are not hard parent AS/RSS. Old coverage gaps unchanged."
+}

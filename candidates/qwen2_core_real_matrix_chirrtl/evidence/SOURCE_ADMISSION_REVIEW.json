@@ -1,0 +1,86 @@
+{
+  "status": "PASS_STATIC_MOCK_ADMISSION_ONLY_REQUIRES_ROOT_NEW_GO",
+  "candidate_freeze": "749b30dcf6acff7edf7e0cec91988085046ba3d7f64218d786c522fe1f163f4f",
+  "manifest_sha256": "acd976033b7a836b8d4ecaa81f3d0933375df68ad424b03ed7b870187b6ca105",
+  "pin_checks": {
+    "pin_checks": 1396,
+    "inventory_checks": 5,
+    "pass_all": true
+  },
+  "freeze_members": 31,
+  "checks": 360,
+  "no_child_control_methods": 36,
+  "independent_manifest_mutations": 5,
+  "stage_count": 557,
+  "stage_bytes": 9695031,
+  "unchanged_supervisor_functions": [
+    "_child_limits",
+    "digest",
+    "exact_inventory",
+    "group_sample",
+    "load_cleanup",
+    "need",
+    "pin",
+    "sample_gap",
+    "stage_classes",
+    "tree_sample",
+    "verify_inputs",
+    "verify_pin",
+    "verify_staging",
+    "walk_bounded"
+  ],
+  "reviewed_changed_supervisor_functions": [
+    "_execute",
+    "class_composition",
+    "main",
+    "output_scope",
+    "save_receipt",
+    "validate_manifest"
+  ],
+  "parent_external_pins": 56,
+  "absence_slots": 12,
+  "JVM_executed": false,
+  "child_executed": false,
+  "official_cli_annotation_classes_unique_in_classpath": 70,
+  "actual_claim_absent": true,
+  "new_candidate_fir_generated_or_read": false,
+  "root_GO_given_by_audit": false,
+  "review_scope": "Independent source/static/stdlib mocks only; no child/JVM/current candidate IR",
+  "remaining_blockers": [],
+  "corrected_blocker": "Old0152 separate anno.json expectation STOP; successor0152_anno fixed writeable early exit",
+  "control_methods_per_mode": 81,
+  "control_modes": [
+    "normal",
+    "-O"
+  ],
+  "raw_bytecode_checks_per_mode": 149620,
+  "root_extra_pin_count_expected": 1398,
+  "provider_source_count": 13,
+  "source_runtime_numerical_transfer": false,
+  "candidate_files": {
+    "FREEZE.json": "749b30dcf6acff7edf7e0cec91988085046ba3d7f64218d786c522fe1f163f4f",
+    "manifest.json": "acd976033b7a836b8d4ecaa81f3d0933375df68ad424b03ed7b870187b6ca105",
+    "supervisor.py": "5f90057038cf836525e687c04730c1c16365ad38769b664b3a4c68fcad063a64",
+    "COMMAND_PROPOSAL.json": "979013e5adb03a0c06fa112c19fe0b1c82cbdf67f279a6ac34938cc069e68430",
+    "ROOT_REQUIRED_CHECKS.json": "2a752c3f4169e4a161466f0f367bca8719485f32b3f3177db2e1edccb034a137",
+    "structure/check_chirrtl.py": "e58dc97e76270138311cff1682f1eb0870c0384af99b09f3345f7b0679969e5e"
+  },
+  "preserved_limits": [
+    "old4096resourceFAIL",
+    "no current actual FIR",
+    "no provider RTL compile/execution",
+    "no complete returned tile probe",
+    "nonzero reference not frozen",
+    "issued counts not completed/useful MAC",
+    "90percent area frequency unknown"
+  ],
+  "origin_review": {
+    "bytes": 2622,
+    "sha256": "fb6dde01638fd2ac111b78adf65e730aa60162a0d3e399cc4ac0bf2e414e16e0"
+  },
+  "origin_freeze": {
+    "bytes": 6712,
+    "sha256": "64a3678e758b403c08ec23e4e7f79bc850dc30dcbd0e1038d7e36ce097bcb812"
+  },
+  "historical_source_admission_only": true
+}

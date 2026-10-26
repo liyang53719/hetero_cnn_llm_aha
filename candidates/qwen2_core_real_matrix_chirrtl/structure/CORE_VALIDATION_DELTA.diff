@@ -1,0 +1,17 @@
+--- 1633/core-validation
++++ 0156/nested-core-validation
+@@ -1,4 +1,4 @@
+-    core=modules[expected['top']];body=core['text'];direct=core['instances']
++    core=modules[expected['core']];body=core['text'];direct=core['instances']
+     counts={base:sum(family(child,base) for _,child in direct) for base in expected['direct_instances']}
+     need(counts==expected['direct_instances'], 'direct selected instance counts')
+     need(len(direct)==sum(expected['direct_instances'].values()), 'extra direct core instance')
+@@ -7,7 +7,7 @@
+     need(clocks==['clock'], 'exactly one top input clock')
+     ports=re.findall(r'^\s+(input|output) ('+ID+r')\s*:',body,re.M)
+     need(set(ports)=={('input','clock'),('input','reset'),('output','io'),('output','testScoreWrite'),('output','observation')} and len(ports)==5, 'exact selected top port set')
+-    need(re.search(r'^\s+input reset\s*:\s*UInt<1>\s*$',body,re.M), 'default top-level Bool reset port')
++    need(re.search(r'^\s+input reset\s*:\s*Reset\s*$',body,re.M), 'nested original core abstract Reset port')
+     io=next((line for line in core['lines'] if re.match(r'^\s+output io\s*:',line)),None)
+     need(io is not None, 'original core ABI')
+     for field in expected['required_io_fields']:

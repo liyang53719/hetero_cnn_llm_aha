@@ -1,0 +1,84 @@
+{
+  "cli": {
+    "scope": "static raw classfile comparison only; no JVM, semantic verifier or elaboration",
+    "author_bytecode_sha256": "2dea2850d50b7a1ab90ad7f891c7adcddf51fdecfee4bba578d130274df27f40",
+    "checks": 95580,
+    "chisel_constructor_zeroarg": true,
+    "all_author_code_bytes_and_cp_refs_verified": true,
+    "origin": {
+      "bytes": 8978,
+      "sha256": "376e48a833af400620234552901397fb7503154f5b66d4439fdef07c4db12f89"
+    },
+    "early_return_precedes_resolver": true
+  },
+  "annotation": {
+    "scope": "static classfile/reference verification and helper source identity only; no JVM or actual IR",
+    "checks": 54040,
+    "bytecode_sha256": "0d13f1c9e065a48b25c02e021ddb4c3036a274623859b8878e86df8de389377d",
+    "inline_functions": [
+      "_need",
+      "_pairs",
+      "_constant",
+      "_shape",
+      "extract_header",
+      "validate_annotations"
+    ],
+    "inline_constants": [
+      "MAX_HEADER_BYTES",
+      "MAX_ANNOTATIONS",
+      "_CIRCUIT",
+      "_DONT",
+      "_DEDUP",
+      "_IDENT",
+      "_REFERENCE",
+      "_MODULE"
+    ],
+    "annotation_helper_sha256": "daeb2204ba5d21bc35c73a57d62bf69385a1baaa974975727161315332526352",
+    "structure_checker_sha256": "e58dc97e76270138311cff1682f1eb0870c0384af99b09f3345f7b0679969e5e",
+    "corrected_output_standard": "one .fir with embedded annotations",
+    "origin": {
+      "bytes": 7268,
+      "sha256": "9a9f8155b6bf15a7d05cb2ec503768a7a54c80a4fdd84b6a460d80b1cb5379d5"
+    }
+  },
+  "classpath": {
+    "scope": "Static ZIP membership only; no class loading",
+    "jar_count": 106,
+    "classes_verified": 70,
+    "staged_shadow_count": 0,
+    "all_unique_exact_pinned_chisel_bytes": true,
+    "origin": {
+      "bytes": 23210,
+      "sha256": "804b166188a7d0ba25e8277b047ca77ec476c67ebe2952fa3fdf7dc35d42f806"
+    }
+  },
+  "old_output_stop": {
+    "status": "STOP_STATIC_OUTPUT_EXPECTATION_ONLY",
+    "frozen_proof_sha256": "e8f61e04df7f8616dfe652f2e5ea81fe94ea7a11a6fa30d028ffa09a25789996",
+    "static_proof_sha256": "5c2cc3b918a265b90381c3b3c014cbaea1e8423a7355f93ac7fa1f4b0b377601",
+    "bytecode_sha256": "2dea2850d50b7a1ab90ad7f891c7adcddf51fdecfee4bba578d130274df27f40",
+    "finding": "A present WriteableCircuitAnnotation takes writeToFile at129 then goto296 at138; annotationFileOut/anno.json branch is entered only for None. Current CircuitSerializationAnnotation implements that interface. Standard output in this route is .fir with inline annotation serialization, not mandatory separate .anno.json. Other CustomFileEmission side files still require rejection/review.",
+    "minimum_fix": "Preserve old frozen proof as STOP; successor corrects output branch. Bind bounded inline annotation inspection and exact output tree in future new supervisor. No change to early CHIRRTL return or zeroarg reflection conclusions.",
+    "jvm_executed": false,
+    "origin": {
+      "bytes": 6111,
+      "sha256": "0590942b486edceb25e9f74f95ff6a29c1db0d64e212cf675237d39cd5575baf"
+    }
+  },
+  "source_corrections": {
+    "scope": "Preparation-only corrections, no target attempted",
+    "old_0152_frozen_preserved": true,
+    "corrections": [
+      "Two standard files prediction was disproved by WriteOutputAnnotations mutually exclusive WriteableCircuit branch; successor proof binds one .fir with embedded annotations.",
+      "Two provider families do not mean two external definitions: same-version serializer allocates eight endpoint and eight clock-gate extmodule declarations.",
+      "Old seed-enabled 45-port endpoint excerpt provides syntax only; current unseeded 22-port ABI comes from actual source/class qualification."
+    ],
+    "old_failures_and_claims_unchanged": true,
+    "JVM_or_emitter_executed": false,
+    "origin": {
+      "bytes": 694,
+      "sha256": "e196c91e804dd06b265872c3c7ff4a10365a6eaaa444d0da3c2af638be3449e1"
+    }
+  },
+  "scope": "Source/static bytecode and classpath qualification, not a syscall trace or unrestricted JVM loading proof. Raw class bytecode/instructions and provider files not published. Original separate anno.json expectation STOP preserved."
+}

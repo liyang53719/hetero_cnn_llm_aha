@@ -1,0 +1,228 @@
+{
+  "baseline": {
+    "bytes": 11534,
+    "sha256": "8de2a7eae3cf8377208dd4c1d48bfac405d7665e8b65e4a8fa2fcbd43f7e2569"
+  },
+  "bindings": [
+    {
+      "role": "binding_00/check_chirrtl.py",
+      "bytes": 11534,
+      "sha256": "8de2a7eae3cf8377208dd4c1d48bfac405d7665e8b65e4a8fa2fcbd43f7e2569"
+    },
+    {
+      "role": "binding_01/STRUCTURE_EXPECTATION.json",
+      "bytes": 2490,
+      "sha256": "213a0e7e0559a24ab0506832780466eb646ffab8c2c3f0f76c81cf4fa7d643bc"
+    },
+    {
+      "role": "binding_02/SYNTAX_BASIS.json",
+      "bytes": 13981,
+      "sha256": "62565dfa27c92d4eb07120b22873826673906f99893939473f19a0178ca3ee5f"
+    },
+    {
+      "role": "binding_03/STATIC_CHECKS.json",
+      "bytes": 14390,
+      "sha256": "3a587ae137acaab20ec3df58516f2eb0a695c08350411d1f1c57823f33e97dd8"
+    },
+    {
+      "role": "binding_04/FREEZE.json",
+      "bytes": 1606,
+      "sha256": "fb0eb945a21d4830ee3049c79b37b5a39c573ab653076ff5d9697fbf30074450"
+    },
+    {
+      "role": "binding_05/OrderedQkRealMatrixCore.scala",
+      "bytes": 3837,
+      "sha256": "3028d699326dea639b696294d5721fa62d3838e3d05780d42f0eaa94cfb7474c"
+    },
+    {
+      "role": "binding_06/OrderedQkRealMatrixCollection.scala",
+      "bytes": 1530,
+      "sha256": "98f3105e42419f2f773ec6d55fc2374678bcce2fbc6f814de24ff95d6e273791"
+    },
+    {
+      "role": "binding_07/MatrixPipeline.scala",
+      "bytes": 15711,
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc"
+    },
+    {
+      "role": "binding_08/RetainedMatrix.scala",
+      "bytes": 11938,
+      "sha256": "8c475372817104f7eee349a96f589d97dba94b6e7a17b5b88cfb2538f40bf7e9"
+    },
+    {
+      "role": "binding_09/BurstProtocol.scala",
+      "bytes": 3789,
+      "sha256": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91"
+    },
+    {
+      "role": "binding_10/EmitHeteroBF16Fma.scala",
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"
+    },
+    {
+      "role": "binding_11/Serializer.scala",
+      "bytes": 25434,
+      "sha256": "30960fb2d2b6013228db1004a1804b7318e403a53906f6db2a240ccc75e5d784"
+    },
+    {
+      "role": "binding_12/FETCH_METADATA.json",
+      "bytes": 317,
+      "sha256": "e333603fac21506faca6d14d02ddcaca162c4baa1f375e2cbae50e2892f76bbd"
+    },
+    {
+      "role": "binding_13/MANIFEST.json",
+      "bytes": 705,
+      "sha256": "caec6b7b1e8c9a77840904b0949e289a45ae2631f1dfbd16b35a2268a1ac7b02"
+    },
+    {
+      "role": "binding_14/OLD_EXTMODULE_SYNTAX.json",
+      "bytes": 23928,
+      "sha256": "10b2e7e3275048311f515880e9e003e15980f2ed4fc3316e27b1f7c060827bb2"
+    },
+    {
+      "role": "binding_15/check_annotations.py",
+      "bytes": 5017,
+      "sha256": "daeb2204ba5d21bc35c73a57d62bf69385a1baaa974975727161315332526352"
+    },
+    {
+      "role": "binding_16/extract_structure_once.py",
+      "bytes": 14345,
+      "sha256": "ac4f56e063a60c2c5b395c3e81e1b39bf96811e0a5a9731b64a3c4add65f60e5"
+    },
+    {
+      "role": "binding_17/FREEZE.json",
+      "bytes": 3938,
+      "sha256": "6f1f37e978ade85c9fa41695812d225164e513db2f83b216b3c65778db4d352c"
+    },
+    {
+      "role": "binding_18/STRUCTURE_REVIEW.json",
+      "bytes": 17308,
+      "sha256": "f5f309bf7155d79c035df6a77a189a5a0d20c388e2dd78428c275b650d955075"
+    }
+  ],
+  "bounds": {
+    "max_annotations": 100000,
+    "max_bytes": 67108864,
+    "max_embedded_annotation_header_bytes": 8388608,
+    "max_hierarchy_depth": 64,
+    "max_instances": 16384,
+    "max_instances_per_module": 1024,
+    "max_line_bytes": 1048576,
+    "max_line_bytes_scope": "module/body only; header separately exact8MiB strict JSON cap",
+    "max_lines": 1000000,
+    "max_modules": 4096,
+    "max_registers": 32768
+  },
+  "control_results": {
+    "normal": {
+      "log": {
+        "bytes": 2313,
+        "sha256": "c2d8b89643ee0d1109390cc5aa8f82196b2fe0bb2d4c18c927def536cf725c8b"
+      },
+      "methods": 25,
+      "status": "PASS"
+    },
+    "not_actual_IR": true,
+    "optimized": {
+      "log": {
+        "bytes": 2313,
+        "sha256": "9eb0d54be76f5e705f5131a4a9fa549aaa623dbce169442ae9b12110fcb48fc2"
+      },
+      "methods": 25,
+      "status": "PASS"
+    }
+  },
+  "exact_core_validation_reversible_delta": [
+    "modules[expected.top] -> modules[expected.core]",
+    "reset UInt<1> -> Reset in nested core check",
+    "reset diagnostic label only; all remaining original core gate statements byte-identical"
+  ],
+  "header_size_basis": {
+    "bytes": 1560,
+    "sha256": "43e417004e02e5877de0792492e579f5f627794b2072fb5c25d4c613de5ca851"
+  },
+  "inline_annotation_helper": {
+    "bytes": 5017,
+    "markers": [
+      "# BEGIN EXACT INLINE ANNOTATION HELPER",
+      "# END EXACT INLINE ANNOTATION HELPER"
+    ],
+    "sha256": "daeb2204ba5d21bc35c73a57d62bf69385a1baaa974975727161315332526352"
+  },
+  "limitations": [
+    "General FIRRTL statements/expressions are not fully parsed; embedded annotation JSON is explicitly validated to two classes/exact keys/exact target sets. Dedup group identifiers are syntax-checked, not full dedup-equivalence semantics.",
+    "no claim of runtime dynamic loaded providers or implementation arithmetic closure",
+    "byte/count limits bound parent parser objects but are not hard parent AS/RSS resource enforcement",
+    "source-informed exact names/syntax can conservatively reject unexpected emitted formatting; failure must be preserved and diagnosed without automatic rerun"
+  ],
+  "not_performed": [
+    "actual/new IR or SV read/parse",
+    "JVM/Chisel/elaboration/native/compiler",
+    "firtool/provider SV lint",
+    "behavior/numerical/FMA/MAC validation"
+  ],
+  "official_v670_sources": [
+    {
+      "bytes": 22780,
+      "git_blob_sha1": "b6957bbdf8bbc0c69fd6b5682a0978b6a5532b76",
+      "official_url": "https://github.com/chipsalliance/chisel/blob/v6.7.0/core/src/main/scala/chisel3/internal/firrtl/Converter.scala",
+      "relevant_line_range": [
+        436,
+        472
+      ],
+      "sha256": "7949c269ea2a919e9da3bc3d85ae32f8bfd1643c63ab2bd8e715343094473fa5",
+      "verified_git_blob_sha1": "b6957bbdf8bbc0c69fd6b5682a0978b6a5532b76"
+    },
+    {
+      "bytes": 6342,
+      "git_blob_sha1": "0d3841a08c9466f6b7acedf8a6e29c28275518a7",
+      "official_url": "https://github.com/chipsalliance/chisel/blob/v6.7.0/core/src/main/scala/chisel3/BlackBox.scala",
+      "relevant_line_range": [
+        140,
+        168
+      ],
+      "sha256": "c6535caf6e077912fa9e533abf7fb6b78e2c58bb684ad40c45895bfcfd56a8b5",
+      "verified_git_blob_sha1": "0d3841a08c9466f6b7acedf8a6e29c28275518a7"
+    },
+    {
+      "bytes": 14553,
+      "git_blob_sha1": "cc29aab614951f620eed33b7a479a0fbbd1a28fb",
+      "official_url": "https://github.com/chipsalliance/chisel/blob/v6.7.0/src/main/scala/chisel3/util/Decoupled.scala",
+      "relevant_line_range": [
+        243,
+        324
+      ],
+      "sha256": "b827b45c089636e726eae5a12bec2f2e2736d0bec9b9b5d8bcbb31afa7e40173",
+      "verified_git_blob_sha1": "cc29aab614951f620eed33b7a479a0fbbd1a28fb"
+    },
+    {
+      "bytes": 12300,
+      "fact": "serializeTry uses json4s writePretty(annos,out), not compact writer",
+      "git_blob_sha1": "3b55fd9c60ed67fe84ec1650b3958cfdc510e966",
+      "lines": [
+        179,
+        184
+      ],
+      "official_url": "https://github.com/chipsalliance/chisel/blob/v6.7.0/firrtl/src/main/scala/firrtl/annotations/JsonProtocol.scala",
+      "sha256": "9e56d0f5ef74b80d70f578599ed4e9343fc34541242d885f5328f6daa56282c1"
+    }
+  ],
+  "schema": "real-matrix-chirrtl-structure-source-provenance-v1",
+  "status": "FINAL_SOURCE_AND_SYNTHETIC_PREPARATION_READY_FOR_PARENT_FREEZE_NOT_EXECUTED",
+  "syntax_evidence": {
+    "annotations": "Official Serializer484-494 emits %[ plus serialized JSON array plus ]. New0152_anno helper validates bounded header and exact DontTouch leaves/Dedup module sets; previous0152 independent anno file hypothesis stopped and not reused. Fixed JsonProtocol179-184 uses writePretty. Current core + collection source-derived DontTouch8955 targets total compact JSON1340789B (indent2 estimate1501980B), excluding unknown future Dedup count. Hence header is exempt from body1MiB line cap but not8MiB total header bound; valid compact1.4MiB synthetic header exercises this explicitly.",
+    "blackbox": "BlackBox.scala 153-168 reverses named io fields into individually named ModuleIO and DefBlackBox ports; Converter.scala maps each port and desiredName to ExtModule defname. Eight endpoint instantiations generate distinct definition names with same defname; historical syntax JSON shows exact suffix family.",
+    "external_limits": "Historical endpoint has seeded45 ports/parameter; used ONLY for naming/port/defname syntax. Current unseeded22/no parameter follows current pinned shell false parameter and RetainedMatrix source +0119 audited source ABI. There are exactly16 namespace definitions, eight suffix-distinct per two canonical defnames, not two definitions.",
+    "fma": "Four unchanged RawModule classes have sole io output aggregate with input fields flipped. Collection exposures same type; no clock/reset expected on RawModule leaves.",
+    "queue": "Pinned official Queue desiredName Queue${entries}_${gen.typeName}, default useSyncReadMem=false=>Mem(entries,gen); current service Queue(Meta,8,pipe=true) => Queue8_Meta/8-row cmem ram. Source-defined field ordering is preserved through Converter reverse ListMap extraction.",
+    "reset": "1633 syntax source topUInt1/childReset; collection root Module defaultUInt1 while nested original core/shellReset. No reset override in pinned source.",
+    "serializer": "official Serializer.scala 427-458: port direction/type; module/extmodule; defname and params. Types: 398-405 Bundle/Vec/Clock/Reset; Field flip serialization 366-373.",
+    "type_leaf_paths": "Limited UInt/SInt/Clock/Reset/AsyncReset + bundle/Vec parser mirrors old2040 flatten tree wrapping. All Vec suffixes wrap left-to-right, so final suffix is outer array. Explicit32 depth/100k leaf caps; no general type aliases/probes."
+  },
+  "origin_record": {
+    "bytes": 12995,
+    "sha256": "b7fb20d4fbe803db156b56bedccd921192167bcb9486c93f2f383dcc7511054f"
+  },
+  "historical_source_preexecution_metadata": true,
+  "projection_note": "Original source-preparation status and not_performed preserved as history. Paths replaced by role/hash; exact actual result is separately audited. Official URLs and blob/range metadata retained; original official source files not bundled."
+}

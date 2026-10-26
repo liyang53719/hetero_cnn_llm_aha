@@ -1,0 +1,71 @@
+{
+  "origin": {
+    "bytes": 198743,
+    "sha256": "187c9e9ce9eb31dc3cf8b88c8b62be9c3aec8c0b3b0a204bc25a2a9128887a90"
+  },
+  "actual_files": 561,
+  "actual_bytes": 29300912,
+  "class_files": 557,
+  "class_bytes": 9695031,
+  "nonclass_records": [
+    {
+      "role": "CLAIM.json",
+      "bytes": 17087,
+      "sha256": "ed8aba54cf835e0fcbf85ac28b1892053892eb31335c0bbe566d396c3296d0e4"
+    },
+    {
+      "role": "RECEIPT.json",
+      "bytes": 36091,
+      "sha256": "cabe1d819dac251e815f380f06b427e8e5bf429996e4a4de540a222848cb0893"
+    },
+    {
+      "role": "emitter.log",
+      "bytes": 924,
+      "sha256": "f2c8343341f04c43ee6ce588069e81df3f95384b549006ca16aa34d4612dea31"
+    },
+    {
+      "role": "ir/OrderedQkRealMatrixCollection.fir",
+      "bytes": 19551779,
+      "sha256": "bdfbf223cc8c1c8de8a8d21450272878d1422842bc17a452bcef45e9878573bc"
+    }
+  ],
+  "root_records": [
+    {
+      "role": "EXTERNAL_AFTER.json",
+      "bytes": 174,
+      "sha256": "1e5d3a6ff78955e82ca22ec911f86e9a8cec6b3b867c709a7b6c98a93d402afa"
+    },
+    {
+      "role": "EXTERNAL_BEFORE.json",
+      "bytes": 174,
+      "sha256": "d6414b710edf4a2a59f2f8e522da404a8ac8e879fd5d2aa16f9e3f713bbe8bf9"
+    },
+    {
+      "role": "ROOT_APPROVAL.json",
+      "bytes": 903,
+      "sha256": "6b00eaefaf63bd8542062736134fc45b7057d35470cdbd082a911311d95d4dbd"
+    },
+    {
+      "role": "ROOT_RECEIPT.json",
+      "bytes": 128,
+      "sha256": "2efc92bb15b03f709bea0ee9996764a9cdd82d09d699090f03d24f2d16bf62be"
+    },
+    {
+      "role": "root_launcher.py",
+      "bytes": 2551,
+      "sha256": "0d49ace99e513a0ac8c876646fee91e9b0add67313bf2e0edf81acda75fd0fb0"
+    },
+    {
+      "role": "stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "role": "stdout.log",
+      "bytes": 166,
+      "sha256": "4ca7c79a32fca58cac8065a1674bfedc2caddaa0fd67fc61c5bc531fef75b650"
+    }
+  ],
+  "class_metadata_reconstruction": "rebuild_stage_hashes.py combines existing 550 base + 14 overrides -> 554, then three published compiled shell classes -> 557. Produces hashes, not class bytes.",
+  "no_bulk_payloads": true
+}

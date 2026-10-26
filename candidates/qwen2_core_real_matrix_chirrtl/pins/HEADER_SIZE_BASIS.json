@@ -1,0 +1,36 @@
+{
+  "body_line_gate_bytes": 1048576,
+  "collection_donttouch_leaves": 98,
+  "core_donttouch_leaves": 8857,
+  "dedup_count_unknown_until_actual_output": true,
+  "donttouch_only_compact_json_bytes": 1340789,
+  "donttouch_only_python_indent2_estimate_bytes": 1501980,
+  "header_gate_bytes": 8388608,
+  "header_line_exception": "Embedded header is governed by independent8MiB strict JSON gate rather than body1MiB-line gate. Entire file64MiB and1Mline limits remain.",
+  "longest_target_characters": 102,
+  "max_module_names": 4096,
+  "maximum_identifier_characters": 256,
+  "not_exact_json4s_format_emulation": true,
+  "official_jsonprotocol": {
+    "bytes": 12300,
+    "fact": "serializeTry uses json4s writePretty(annos,out), not compact writer",
+    "git_blob_sha1": "3b55fd9c60ed67fe84ec1650b3958cfdc510e966",
+    "lines": [
+      179,
+      184
+    ],
+    "official_url": "https://github.com/chipsalliance/chisel/blob/v6.7.0/firrtl/src/main/scala/firrtl/annotations/JsonProtocol.scala",
+    "sha256": "9e56d0f5ef74b80d70f578599ed4e9343fc34541242d885f5328f6daa56282c1"
+  },
+  "old_review": {
+    "bytes": 17308,
+    "sha256": "f5f309bf7155d79c035df6a77a189a5a0d20c388e2dd78428c275b650d955075"
+  },
+  "status": "STATIC_HEADER_SIZE_ESTIMATE_NOT_ACTUAL_NEW_IR",
+  "total_donttouch_leaves": 8955,
+  "origin_record": {
+    "bytes": 1560,
+    "sha256": "43e417004e02e5877de0792492e579f5f627794b2072fb5c25d4c613de5ca851"
+  },
+  "historical_estimate_not_actual_header": true
+}

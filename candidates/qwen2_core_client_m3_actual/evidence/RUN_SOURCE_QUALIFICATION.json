@@ -1,0 +1,203 @@
+{
+  "schema": "qwen2-fixed-m3-run-independent-source-review-v1",
+  "status": "PASS_SOURCE_MOCK_ADMISSION_SINGLE_NORMAL_M3_REQUIRES_NEW_ROOT_GO",
+  "acceptance": {
+    "MAC_duty": null,
+    "MAC_utilization": null,
+    "actual_M3_pass": false,
+    "execution_authorized_by_this_report": false,
+    "full128_RTL": false,
+    "full29": false,
+    "full_matrix_FMA": false,
+    "full_prefill": false,
+    "model_executed": false,
+    "ninety_percent_target": false,
+    "source_admitted": true
+  },
+  "execution_contract": {
+    "argc": 1,
+    "case": "normal_m3",
+    "environment_template": {
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "${NEW_RUN_ROOT}/empty-path",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "failure": "Noautomaticretry/stagechain/budgetextension;retainallactualevidencepossible;nooriginaldeletion.",
+    "fresh_run_root": "${NEW_RUN_ROOT}",
+    "no_override": "Noargv/plusargs/runtimecase orenvironmentloader/tooloverride;ownerfixedM3,contextthreads1/randReset0,3resetedges,total<=100000.",
+    "only_execution_input": "oneactualM3ELF3425088Bf89687b5593c242325d88bba17048351cc9fde8d7fcb3662b666c1d4c0ada745",
+    "output_set": [
+      "CLAIM.json",
+      "worker.log",
+      "RECEIPT.json",
+      "bin/VOrderedQkBehaviorCore_m3"
+    ],
+    "retained_build_root": "${RETAINED_M3_BUILD}",
+    "retained_engine": "Atomicfreshrootclaim,originalabsolute deadlines,oneCPU,pre/postpins,immutablecopiedbinary,strictoutputset,leaderpid/startanchoredcleanupandfinalrusage remainunchanged.",
+    "staging": "CopyexactELFtofreshbin/VOrderedQkBehaviorCore_m3 chmod0500;nooldbinaryreplacement,home/tmp/empty-pathmustremainempty.",
+    "supervisor_argv": [
+      "${PARENT_PYTHON}",
+      "-I",
+      "-S",
+      "-B",
+      "${FROZEN_RUN_CONFIG}/supervisor.py",
+      "--manifest",
+      "${FROZEN_RUN_CONFIG}/manifest.json",
+      "--manifest-sha256",
+      "988f482621b4d3020518b38b4e9235bf819e32593cc6ee0860cfc86868fcae3e",
+      "--execute-approved-once"
+    ],
+    "worker_argv": [
+      "${NEW_RUN_ROOT}/bin/VOrderedQkBehaviorCore_m3"
+    ]
+  },
+  "log_acceptance": {
+    "expected": {
+      "accounting512Steps": 2880,
+      "checkedMemory": 1728,
+      "checkedPv": 576,
+      "checkedVector": 1260,
+      "dones": 36,
+      "groups": 36,
+      "memoryAccepted": 1728,
+      "memoryReturned": 1728,
+      "outputBytes": 18432,
+      "ownerAccepts": 1,
+      "pvRequests": 576,
+      "pvReturns": 576,
+      "qkAcceptedSteps": 288,
+      "results": 36,
+      "scoreWrites": 72,
+      "targetPrefix": [
+        0,
+        1,
+        2
+      ]
+    },
+    "holds": "Individualport0..body,sumpositiveandbounded;zerocountdiscloseduncovered. Holdcountsnotdistinctstallcyclecount.",
+    "independent_fixture": "Rows fromfrozen0001independentordinal/divmod VECTOR_EXPECTED_M3,notcandidate reference function;integratedstructurechecker testedonfakeNOTELFbytesneverexecuted.",
+    "max_scope": "Preedgeeachheadscan/fold/scale+firstretire -Inf;second/thirdretire +0. NonwriteScoreData/indexwidth-onlydiagnostics. Notpostedgeorallnodesnumericproof.",
+    "memory_pv_layer": "Futureactualfrozenharnessassertions checkeachacceptedmemoryaddress/tag/direction/mask/512data andPVall272operands/opcode/sliceMask/clear/last,withcompletecountedconsumption. Noexternalrawmemory/PVtransactionlog;outercannotreplayunloggedpayloads.",
+    "obs_fields": "Externalper-eventtoken/head/phase/lane/causalselection/fault0/resultheld/write-site/index/validscore+0/max;consecutivewithinhead,monotonicglobal.",
+    "order": "oneREADY ->1260orderedOBS ->oneCASE_PASS ->finalDONE,unknown/error/fatal/extralinesrejected",
+    "phase_counts": {
+      "fold": 576,
+      "retire": 72,
+      "scale": 36,
+      "scan": 576
+    },
+    "prefix": "Actualboundedtoken2/head0validscorewriteindices accumulatedandprinted0,1,2;notahardcodedlogprefixwithoutrecording.",
+    "probabilities": "Token0/1/2A0 BF16 3f80/3f00/3eab;thirdrational1/3->FP32RNE3eaaaaab->BF16RNE3eab. OtherA/Bzero.ScriptedMatrixnotFMA.",
+    "producer_binding": "ActualPASSrequiresoriginalprocess exit0+cleanupcomplete+postflight+resource/byteclosure+loggate. Leaf/source/syntheticPASSaloneneverexecutionproof.",
+    "success_status": "PASS_VERILATED_CORE_NORMAL_M3_SCRIPTED_ENDPOINTS",
+    "terminal": "Originaldebt/status/resetRequired,8edgevalidpayloadhold,releasehandshakeand3quiet;notallownerpayloadexpectedvalues."
+  },
+  "resources": {
+    "absolute_deadlines_from_one_start": {
+      "cleanup": 370,
+      "total": 390,
+      "work": 360
+    },
+    "basis": "SameindependentM2runbudget. PriorM2elapsed/bodycounter notlinearM3timingorfit guarantee.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "cleanup": "Originalanchoredprocessgroup/observedidentities,leaderretaineduntilproof/reap;notcgroupallescapeddescendantconfinement.",
+    "core": "ChildRLIMIT_CORE0doesnotguaranteenosystempipedcorehandler;globalcore_patternnotmodified.",
+    "fit_guaranteed": false,
+    "limits": "1CPUaffinity;childCPU300/AS4GiB/file8MiBrlimits,aggregateCPU sampled/final;groupRSS2GiB andtree16MiBsampled,0.1sgapfailclosed;log2MiB. Parentpostcheckswithsamewall/CPU notparenthardAS/RSS orwholehostdiskquota.",
+    "outer_seconds": 420
+  },
+  "runtime": {
+    "absence_paths": 63,
+    "aliases": 6,
+    "cache_code_association": "Currentnormalcache bytes associatedwithpinnedsource/codeusing priorindependentM2run/M3buildproofunionpluscurrentidentity;noexecutionofdecodedcode.",
+    "cache_evidence": "46runmodule.cached currentcandidates incl3startup;44uniqueaudit-windowpyclookups=43existing+1absentM3reference. Auditcutoffbeforeidentityreads;struct1conservativebuildreuse,notobservedthisrun. Do notsay47dynamicimportreads.",
+    "expected_actual_pin_checks_with_manifest_self": 191,
+    "external_root_gate": {
+      "bytes": 23890,
+      "sha256": "5e61892c6b84cd05478ee708b25fcee461b7ed1eac1bddb2c2bcf52740733e9c"
+    },
+    "history": "New9runtimefilesnotpartofoldM2run127;oldM2actualendpoint/eventfactsremainbutnopastcacheclosurebackfill. Olderbuild156likewisequalifiedhistorically.",
+    "inventories": 0,
+    "local_reference": "NewM3siblingreferencecacheabsent,exactsource919f4bf retained. OldM2cacheabsencecannotstandinfornewpath.",
+    "native": "SamefourNEEDED+loader5ELFknownhash/versionclosure,loadercache/aliases/52negativeendpoints,currentactualnewbinaryidentity.Staticnotlive loadertrace.",
+    "parent": "136runtime=oldM2run127+4shutilchainsources+4shutilchaincache+conservativestructcache.56deltaendpoints47cache+7source+2locale. Fullknownparent8ELF distinctchild5.",
+    "parent_locale": "OnlyLANG=LC_ALL=LC_CTYPE=C.UTF-8;childLANG/LC_ALL=Cdoesnotconstrainparent.",
+    "role_pins": {
+      "input": 1,
+      "provenance": 48,
+      "runtime": 136,
+      "source": 4
+    },
+    "role_total": 189,
+    "scope": "Knownimports/argparse/cache/source/loaderendpointsnotallconditionalimports,dynamicfileIO,hostisolation orcontinuousTOCTOUprotection."
+  },
+  "source_delta": {
+    "baseline": "qwen2_core_client_verilator_m2_run_prepare_20261025T2331/supervisor.py",
+    "case_name_only_count": 6,
+    "case_name_only_functions": [
+      "_execute",
+      "main",
+      "output_scope",
+      "save_receipt",
+      "stage_inputs",
+      "verify_staging"
+    ],
+    "leaf": "Same5503Bcheck_m3_log8ecf9295… and2912Breference919f4bf… fromfrozenM3source;nofreshmathimplementation.",
+    "original_driver_model": "Originalcore/client SV/archive andfrozenM3driver unchanged. M3harness itselfwas source-reviewedM2fixedm/table/prefixdelta,actualcompiledELFalreadyreviewed.",
+    "other_functions": "validate_manifest exactnewidentityliterals/labels;structure_check exact1260observationbound/labels",
+    "unchanged_functions": 15,
+    "whole_source_proof": "Fullsupervisorbyteequal afterindependentlyenumerated M2->M3labels,actualELFsize/hash,build/source/runtime/checkerproofhashes,and828->1260constant. No new algorithm/imports/signals/caps."
+  },
+  "scope_limits": [
+    "M3maximum3keysdoesnotcross16->17chunk;noM17routeorboundapprovalhere.",
+    "AllactiveQKdiagonalvalues+0;selected2andorderedretirementcontroldoesnotdisambiguateactivekeydataaliasorremovegeneralW005risk.",
+    "Onlyoneattentionownerjobkind4withscriptedexternalMatrix/memory,notfull21calculations/17jobsorallnodeQwen2numericvalidation.",
+    "Compiledreadonlytablesandmocklogsnotactualassertion/branchcoverage.",
+    "NoMACnumerator/fullblockhardwarecycles;2880scriptaccountingnotmeasuredMAC."
+  ],
+  "remaining_source_blockers": [],
+  "identity_reviewer_checkpoint": {
+    "bytes": 638,
+    "sha256": "10b71d7fbd03f56cc4fb881af8b83b129220ef3fff681a74f478eed04e38e43c"
+  },
+  "controls": {
+    "author_methods_rerun_each_mode": {
+      "engine": 22,
+      "metadata": 27
+    },
+    "author_methods_rerun_total": 98,
+    "author_recorded_delta_subset_methods_total": 80,
+    "checkpoint_scope": "Only reviewerexpectedtransform key828 mistakenlyself-replacedwhenconstructingfixture. Exactallowedone-line1260delta confirmed,reviewerfixedandreran;failedattemptretained,candidateunchanged,notmodel failure.",
+    "independent_each_mode": 132,
+    "independent_total": 264,
+    "negative_cases_each_mode": 23,
+    "reviewer_checkpoint": {
+      "bytes": 439,
+      "sha256": "21ae3d97b2035af8d9e12f490311ea24a706f703fddb1a398a4f0e7491e4cfe5"
+    },
+    "source_leaf_fullcontrols_reused": "Frozen0001source4272checks+52negative/modeandactual0021compiledtables;notrerunentiresource/generalframework."
+  },
+  "origin_review": {
+    "bytes": 18162,
+    "sha256": "f5454d2bd3b4510955bfdd9ee27ef177fbf2a128dd2b543139e89844c38177ac"
+  },
+  "historical_preexecution_source_qualification": true,
+  "actual_later_M3_review_separate": true
+}

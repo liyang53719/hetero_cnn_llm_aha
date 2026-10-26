@@ -1,0 +1,245 @@
+{
+  "acceptance_scope": {
+    "M17": false,
+    "actual_generated_SV_core_client_clocked_behavior": true,
+    "chunk16_to17": false,
+    "fixed_M3_zero_stimulus_fields": "Direct log or source-bound executed assertions as classified",
+    "full128_RTL_numerical": false,
+    "full29_RTL_tensor": false,
+    "full_Matrix_FMA_numeric": false,
+    "fullprefill_allstages": false,
+    "generic_tile_index_alias_proof": false,
+    "physical_DDR_memory": false
+  },
+  "actual_build_review": {
+    "bytes": 19372,
+    "sha256": "986bafece15d11e3a45426377d565fbca5e04c4dcc1a359d3d2afcba335abff4"
+  },
+  "actual_result": {
+    "PV_requests_and_returns": [
+      576,
+      576
+    ],
+    "QK_accepted_steps": 288,
+    "all_four_request_hold_ports_covered": true,
+    "body_clock_edges": 21689,
+    "checked_PV": 576,
+    "checked_memory": 1728,
+    "checked_vector": 1260,
+    "direct_log_numeric_scope": "72 valid score writes +0; first retirement max -Inf, subsequent key1/key2 max +0 across all applicable heads. Nonwrite scoreData/index are width-only diagnostics.",
+    "dones": 36,
+    "errors": [],
+    "groups": 36,
+    "holds": {
+      "group": 12,
+      "memory": 351,
+      "pv": 148,
+      "step": 73
+    },
+    "max_histogram": {
+      "0x00000000": 36,
+      "0xff800000": 1224
+    },
+    "memory_requests_and_returns": [
+      1728,
+      1728
+    ],
+    "native_exit_code": 0,
+    "ordered_OBS": 1260,
+    "outer_timeout": false,
+    "output_bytes": 18432,
+    "owner_accepts": 1,
+    "passive_numeric_scope": "PV A0=1, 1/2, or 1/3 BF16 and zero other operands are source-bound executed passive assertion facts, not externally logged transactions or full FMA acceptance.",
+    "phase_counts": {
+      "1": 576,
+      "2": 576,
+      "3": 36,
+      "4": 72
+    },
+    "pipeline_scope": "All per-head ordered phases and 1/2/3-key retirement tails are consecutive; no global MAC pipeline utilization inferred.",
+    "producer_status": "PASS_VERILATED_CORE_NORMAL_M3_SCRIPTED_ENDPOINTS",
+    "reset_edges": 3,
+    "results": 36,
+    "root_returncode": 0,
+    "score_writes": 72,
+    "script_bookkeeping512Steps": 2880,
+    "targetPrefix": [
+      0,
+      1,
+      2
+    ],
+    "total_clock_edges": 21692,
+    "uncovered_hold_ports": []
+  },
+  "artifact_manifest": {
+    "bytes": 8878,
+    "sha256": "c6c545dd58795e0a1390c34a95cfd4dd275913421939213dead9003d1377b812"
+  },
+  "binary": {
+    "bytes": 3425088,
+    "sha256": "f89687b5593c242325d88bba17048351cc9fde8d7fcb3662b666c1d4c0ada745"
+  },
+  "case": "normal_m3",
+  "case_metrics": {
+    "bytes": 2249,
+    "sha256": "0d7ad9491e7c595951cf6d645a89478897e42dcc8c5cf06f280efe45d5f0d7cb"
+  },
+  "event_review": {
+    "bytes": 20939,
+    "sha256": "78af41afb6f055605cc829c29756a236646a396bb555aab2f282b5ce0015d905"
+  },
+  "events": {
+    "bytes": 362716,
+    "sha256": "e87ca37feb38f6a96874931ffcf492da821b502204de5743e072caa049df0233"
+  },
+  "evidence_layers": {
+    "bytes": 5534,
+    "sha256": "57cc0609050e46e26ed2d6a31b7ea2195e4e4a67a60872bd1a6bd98b6d3bf099"
+  },
+  "identity_freeze": {
+    "bytes": 1830,
+    "sha256": "419a3e8006f328e274578694808a2f794cd104b00f1711dcf36313a36ca53da5"
+  },
+  "identity_review": {
+    "bytes": 29981,
+    "sha256": "62bcbee2d25bd33910d7dae93827d3ce274bc7ea110cde70228dcbe5c3786713"
+  },
+  "independent_audit": {
+    "actual_and_root_files_hashed_once_by_identity_auditor": 10,
+    "actual_log_parse_passes": 1,
+    "event_checks": 25285,
+    "expectations": "Independent frozen 0001 ordinal/divmod trace cross-checked against explicit phase/causal formulas; raw events and counters parsed separately from production checker.",
+    "final_identity_stat_checks": 260,
+    "identity_checks": 2283,
+    "no_ELF_reparse_by_main_reviewer": true,
+    "no_model_execution_by_reviewer": true,
+    "parsed_log_digest_also_computed_from_same_single_read": true,
+    "production_checker_or_reference_imported": false
+  },
+  "log": {
+    "bytes": 177792,
+    "digest_computed_from_same_parse_buffer_no_second_file_read": true,
+    "read_parse_passes": 1,
+    "sha256": "3fcb9c238bd618a62d4c284dce0d72a943b92195001a25af89a5435f6c6f8c65"
+  },
+  "metrics": {
+    "MAC_utilization": null,
+    "claim90percent_pass": false,
+    "effective_MAC_duty": null,
+    "full_system_utilization": null,
+    "label": "Observed vector-phase occupancy of this scripted-endpoint simulated case only",
+    "reason": "No measured external FMA numerator, and this limited harness-delayed core case is not a complete block hardware-cycle denominator. Protocol/bookkeeping counts are not useful MAC counts.",
+    "target90percent_met": null,
+    "vector_phase_body_percent": 5.809396468255798,
+    "vector_phase_reset_inclusive_percent": 5.808593029688365
+  },
+  "next_scope": "Any asymmetric active-key tile or larger M/chunk-boundary test requires separately frozen source/build/run approval; no automatic chaining, cap extension or acceptance upgrade.",
+  "passed_case_metrics": {
+    "bytes": 2643,
+    "sha256": "936eef9b74b5abae1cf158102107cd04736b8d5e4e6153c3034856b424a54b77"
+  },
+  "producer_receipt": {
+    "bytes": 13386,
+    "sha256": "f12ad1d03cd94367d0d9e43180311ce8ec1d9ceb7b4681aab45cbb210aa357fe"
+  },
+  "remaining_actual_acceptance_blockers_for_this_narrow_case": [],
+  "resource_cleanup": {
+    "CORE0_boundary": "Child core limit0 does not guarantee no system piped-core handler.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "cleanup_complete": true,
+    "cleanup_scope": "Saved original PID/session/group/start proof: 2 complete pre-reap scans, 8 records/1548 B, retained leader Z then reap, no nonleader at barrier. No reviewer process polling/signalling. Not whole-host/cgroup confinement.",
+    "final_aggregate_CPU_seconds": 39.401106874,
+    "inner_wall_seconds": 39.42709427699447,
+    "maximum_observed_sample_gap_seconds": 0.025422887003514916,
+    "outer_wall_seconds": 39.48238628299441,
+    "sampled_peak_CPU_seconds": 39.309879817,
+    "sampled_peak_RSS_bytes": 7790592,
+    "sampled_peak_tree_bytes": 3603271
+  },
+  "retained_originals": "Original M3 build16 and M1/M2 actual evidence checked unchanged by identity review. No old source/model/SV/archive mutation, no rebuilding or repeated model execution.",
+  "root_approval": {
+    "bytes": 3323,
+    "sha256": "8c5048fcc861e49c1768b2b90e61fef6ada3276973f374c2eaaf7f325b6bf777"
+  },
+  "root_receipt": {
+    "bytes": 120,
+    "sha256": "a526382eaaed3b778d4eaf7893e6b3382f28a5ec79a5dca32b87c71daf66993b"
+  },
+  "run_admission_review": {
+    "bytes": 18162,
+    "sha256": "f5454d2bd3b4510955bfdd9ee27ef177fbf2a128dd2b543139e89844c38177ac"
+  },
+  "runtime_identity": {
+    "absence_slots": 63,
+    "aliases": 6,
+    "cache_coverage": "47 cache =46 current candidate paths including 3 startup +1 conservatively inherited struct. Audit lookup attempts, candidate presence, code/source association and actual loading are distinct claims.",
+    "child_environment": {
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "${NEW_RUN_ROOT}/empty-path",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "external_after": {
+      "bytes": 11536,
+      "sha256": "518e488ab477cba29bbeba9048df739df31e773f31df9f20f73a77453ed96605"
+    },
+    "external_before": {
+      "bytes": 11536,
+      "sha256": "518e488ab477cba29bbeba9048df739df31e773f31df9f20f73a77453ed96605"
+    },
+    "external_gate": "Root before Popen and after original terminal: all 56 parent pins (47 normal cache, 7 source, 2 locale), 11 absences, exact C.UTF-8 tuple. Parent automatic preflight after imports does not replace the external gate.",
+    "historical_limit": "New runtime136 includes 9 files absent from old M2 runtime127. This does not retroactively upgrade old M2/M1/build cache audit coverage or invalidate separately observed native/event facts.",
+    "known_endpoint_limit": "No exhaustive arbitrary conditional imports, dynamic loading, host isolation or continuous TOCTOU guarantee.",
+    "native_closure": "Known 5 ELF providers and 13 version edges from actual M3 build; parent 8 ELF /15 edges qualified separately. Not live loader trace.",
+    "parent_locale": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    "postflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 191
+    },
+    "preflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 191
+    }
+  },
+  "saved_cleanup_review": {
+    "bytes": 1400,
+    "sha256": "494d72dc9f90a357d962b407af1439bb007a69c7a348fc2ccbcc3e2a21e82104"
+  },
+  "schema": "qwen2-actual-normal-M3-original-core-client-independent-review-v1",
+  "source_review": {
+    "bytes": 13148,
+    "sha256": "495070c223f395bf63a143cea2f25733919be2af82b9e54c7767ed1454721002"
+  },
+  "status": "PASS_ACTUAL_VERILATED_ORIGINAL_CORE_CLIENT_NORMAL_M3_WITH_SCRIPTED_MATRIX_MEMORY_ONLY",
+  "origin_review": {
+    "bytes": 12613,
+    "sha256": "882d8c839e174d74762f1ee5e097cedef9e6a962392ce667f0009f70b1059cf2"
+  },
+  "origin_freeze": {
+    "bytes": 2854,
+    "sha256": "988aede5a7f3e830bba9b29aa1586698c806af400b60028e94cb0f9f4bcbccc2"
+  },
+  "projection_note": "Private locators and file/process identities omitted. Direct observations, executed-harness assertions and static/source claims remain separate. No raw log/events/ELF/packets published."
+}

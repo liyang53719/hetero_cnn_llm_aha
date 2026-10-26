@@ -1,0 +1,457 @@
+{
+  "schema": "current-M3-role-runtime-and-external-endpoints-v1",
+  "manifest": {
+    "bytes": 81375,
+    "sha256": "988f482621b4d3020518b38b4e9235bf819e32593cc6ee0860cfc86868fcae3e"
+  },
+  "supervisor": {
+    "bytes": 30772,
+    "sha256": "a8e44d4ea50fca7a604b10bfe89b1750b001837651dc52e8583992fe4080d998"
+  },
+  "candidate_freeze": {
+    "bytes": 5846,
+    "sha256": "a86eb0af8b684c2bdff880697997027bfa10490f220626531b3674305be97845"
+  },
+  "parent_runtime_delta": {
+    "bytes": 27374,
+    "sha256": "f32401865eefe2af54d44f0779a60b2445eb2f4a87cc98fc100b32245415eeee"
+  },
+  "prelaunch_requirement": {
+    "bytes": 23890,
+    "sha256": "5e61892c6b84cd05478ee708b25fcee461b7ed1eac1bddb2c2bcf52740733e9c"
+  },
+  "declared_pin_role_counts": {
+    "input": 1,
+    "provenance": 48,
+    "runtime": 136,
+    "source": 4
+  },
+  "declared_count": 189,
+  "automatic_count": 191,
+  "runtime_old127_plus_added9_equals136": true,
+  "new_vs_M2_run": [
+    "four shutil-chain sources",
+    "four shutil-chain caches",
+    "one conservative struct cache"
+  ],
+  "current_external_endpoint56": [
+    {
+      "role": "parent_stdlib/__pycache__/_compression.cpython-312.pyc",
+      "bytes": 7582,
+      "sha256": "476fb73eb291cf72890dcb4350721c68f8ee8661dc35935a1aaaf054c1897355"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/_weakrefset.cpython-312.pyc",
+      "bytes": 11841,
+      "sha256": "b8c1738e18fc9aa878a43ca3c80fcbca63b82d79dbc0fd4d20d0f1d752d13f5d"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/argparse.cpython-312.pyc",
+      "bytes": 101159,
+      "sha256": "be5995c40bdd9c61143427a22d65fe7f29a65d1cb2cdc42b4d1faef003b29967"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/bz2.cpython-312.pyc",
+      "bytes": 15237,
+      "sha256": "e0748d7e935173230bddb8aee90a682358d4c1646878fc4d0f4d93139ccc3674"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/contextlib.cpython-312.pyc",
+      "bytes": 30454,
+      "sha256": "040c809f5a4982b8d59b9aa79d99cb70ab1ac7dc1e6dfdf8dbf98ed906636b34"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/copyreg.cpython-312.pyc",
+      "bytes": 7503,
+      "sha256": "c02e5dd1f76cef814b493b6fed52bda4c3b8035d00dc096eb1db06e86c582e17"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/decimal.cpython-312.pyc",
+      "bytes": 3035,
+      "sha256": "dcf9b35ee3125a0cdad713393688d0db8135644455f97ec4b1088c4332efedc7"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/enum.cpython-312.pyc",
+      "bytes": 80448,
+      "sha256": "e5d62969820a6a4bde1412666389fe4ffdab1a8b30b91bb61e4346b8fcf41f44"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/fnmatch.cpython-312.pyc",
+      "bytes": 6584,
+      "sha256": "c2af22a392d9341dcbd06e457247111acea57a2a46fcbdc09b3794bc62501215"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/fractions.cpython-312.pyc",
+      "bytes": 36859,
+      "sha256": "9bd229fb7d37bd82edf4d9fc8f6b64a16a3203b5962296074a9ad06b1d531c20"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/functools.cpython-312.pyc",
+      "bytes": 40446,
+      "sha256": "c29e06a125632d6a8812ee7f9617f6ab4964ec5e2b0385893ba9d2d102f4ab0a"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/gettext.cpython-312.pyc",
+      "bytes": 21887,
+      "sha256": "04009d9f1c86fb9edbc6849402c69929a7ff97c54a02c66889795a685a29445d"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/hashlib.cpython-312.pyc",
+      "bytes": 8184,
+      "sha256": "2f4be82e1c5ab1985ecc0f58dd62539076ecf9bef63736310b454fcad6dafcfd"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/ipaddress.cpython-312.pyc",
+      "bytes": 93880,
+      "sha256": "40d174aaaab98cc406334a0f652df258a2ce3774d177a95626f75c67a86dcfd0"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/keyword.cpython-312.pyc",
+      "bytes": 1145,
+      "sha256": "7477191d8f7b324d9d73b1c5b5269a57beaddebddea8e83ba2eb9d5af8fe15c9"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/locale.cpython-312.pyc",
+      "bytes": 59592,
+      "sha256": "8e6dd36dc8deac5cd6c68671f2b6ca9f45eb1ca501a347e8ce45ea7dddc29e61"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/lzma.cpython-312.pyc",
+      "bytes": 15959,
+      "sha256": "def0171ad4c9b810f6843b07bf939e4b410ea28162472cd901878b2ddfa81e7e"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/numbers.cpython-312.pyc",
+      "bytes": 14071,
+      "sha256": "2cfac33db9cde9a77a912f3c4fd30e47a71f5493367e219fb67327336a857955"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/operator.cpython-312.pyc",
+      "bytes": 17456,
+      "sha256": "41270fd01b6fdda1fd31f5b74cbfeae6c48a26296a54439ac208a50248a730ec"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/pathlib.cpython-312.pyc",
+      "bytes": 61802,
+      "sha256": "e7d9282a4411c3c101193c7cae2a0e48863d35441d83369cd778240f2893071e"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/reprlib.cpython-312.pyc",
+      "bytes": 10330,
+      "sha256": "946cea8a0bb080f5460af84bb54681fde88fdd1a704acd554e2d40c45b36f7ff"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/selectors.cpython-312.pyc",
+      "bytes": 26207,
+      "sha256": "74eb4444b43eabe3f78ed10da45013b9cbcfaa34fc85f31b6a5a7a0f04455293"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/shutil.cpython-312.pyc",
+      "bytes": 65419,
+      "sha256": "24c024c1fa7a877f4ed307348635bcea4fef943702a57a48cdfb41ad7c912c57"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/signal.cpython-312.pyc",
+      "bytes": 4561,
+      "sha256": "56a19f07dae46c588b55b223eb302166aa1fdb5271f5b7833d63504e718f08f0"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/struct.cpython-312.pyc",
+      "bytes": 429,
+      "sha256": "d305b28ac3f0f63fcc9dac105c8b59c4f0cacebdef31f5a491f2f3bc57a9ae66"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/subprocess.cpython-312.pyc",
+      "bytes": 79158,
+      "sha256": "2c164844fa89e26c53287649fd699fff18812b38e955720f6e321750c13cfe6c"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/threading.cpython-312.pyc",
+      "bytes": 65320,
+      "sha256": "2106fe3a91c4aa511cd8c2ab25d4b05f3780e7931bc067745b09075c8240bd15"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/types.cpython-312.pyc",
+      "bytes": 15049,
+      "sha256": "7ae745cad83252e109157ddf1bc0a0e1732db76e13ced2111fe75b56b8e7ab03"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/warnings.cpython-312.pyc",
+      "bytes": 23931,
+      "sha256": "04547639c24e83aeabd35df478c65d0307631656a18469a069a8066643455e33"
+    },
+    {
+      "role": "parent_stdlib/_compression.py",
+      "bytes": 5681,
+      "sha256": "3ad5d60627477a60939ee44fc1bb3a05dbe8fb52f0f75039b8f5d8f1a278b981"
+    },
+    {
+      "role": "parent_stdlib/bz2.py",
+      "bytes": 11847,
+      "sha256": "76ab3252924e71e859d7d90e8d3db13b6554975cfcac0fdadced4de7f8779330"
+    },
+    {
+      "role": "parent_stdlib/collections/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 73041,
+      "sha256": "d8af5f65d6f50cf1f60d70010b47d66499b24b60f4b551dad35da6de27151a2b"
+    },
+    {
+      "role": "parent_stdlib/collections/__pycache__/abc.cpython-312.pyc",
+      "bytes": 353,
+      "sha256": "20dd5114ae2a2cffe4cb9144c2688745a163622385a4129a972f7f5eac3c5bb7"
+    },
+    {
+      "role": "parent_stdlib/decimal.py",
+      "bytes": 2805,
+      "sha256": "c3e37c55ef72b3dd6cb7b466a907b966467b6a9c58d85302193e64cbb5fd53d0"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 5879,
+      "sha256": "e54127b3e3e39845fcec734db7246ed41a8261b5afff9ddfe44c5514035a7094"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/aliases.cpython-312.pyc",
+      "bytes": 12512,
+      "sha256": "c158cab0522c8c785196c50d3230c84dfe93e8ac4337ccc18f944b8bbc6f08c9"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/utf_8.cpython-312.pyc",
+      "bytes": 2251,
+      "sha256": "c33fa7315ec3376b3f2ad6bffbba27844ac7c631d13fcb3eee0459041fd5836e"
+    },
+    {
+      "role": "parent_stdlib/fractions.py",
+      "bytes": 38147,
+      "sha256": "d52d1ab9d5be26924e4914a5e40069c992bbfa68f773694c2e5ee8452d0766a0"
+    },
+    {
+      "role": "parent_stdlib/importlib/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 4663,
+      "sha256": "d4e2e8c2d9638c62f070a873a7604d8b6f1bba454b343d9d1dde8170b98254db"
+    },
+    {
+      "role": "parent_stdlib/importlib/__pycache__/_abc.cpython-312.pyc",
+      "bytes": 1747,
+      "sha256": "1ee7b72eb05e19daff0ff568591aff21bc03af868c0cdede76477ee657b73c72"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 13719,
+      "sha256": "57f572d2e154bce8642a5ee8c352ed0f0b883edbb2a2949ca983f213f696948c"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/decoder.cpython-312.pyc",
+      "bytes": 14017,
+      "sha256": "96492a65623d36258b0408dead7921d2cf9f431476ab2dc071664f8db8cae549"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/encoder.cpython-312.pyc",
+      "bytes": 15192,
+      "sha256": "7df3d596aa56a94c72e115797207d86178b882674c98e05f1c9cbfdc0e78f0cf"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/scanner.cpython-312.pyc",
+      "bytes": 3434,
+      "sha256": "c418fb0b9f90f6c742e7e71786fd86b605edea944dd3571d92d3ef8ceee3e24d"
+    },
+    {
+      "role": "parent_stdlib/lzma.py",
+      "bytes": 13277,
+      "sha256": "58fb9d2fdc8a8af7b25e218f17ea3b51bdfa53bdf40f440ab33c605974ca5c2e"
+    },
+    {
+      "role": "parent_stdlib/numbers.py",
+      "bytes": 11467,
+      "sha256": "ac381960a3dc1db0498b0bd43d8ef278d6599713121a186b153ff09d9552e0db"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 18034,
+      "sha256": "013b5a21cf75be671621c283b394646cc9f313b6377456d86302e8f931a464a3"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_casefix.cpython-312.pyc",
+      "bytes": 1920,
+      "sha256": "e727f6e09d5d39f727d70ec4236ba9af5fae998456c110cc5cfe9e135d893ff2"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_compiler.cpython-312.pyc",
+      "bytes": 26598,
+      "sha256": "47405d5ce863b084d7c758ba7d746d23a9ab19fd8b63b55a26f21473ff2ee948"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_constants.cpython-312.pyc",
+      "bytes": 5407,
+      "sha256": "36c3f373351f739d5c448fc312ddc582b3010bedf4b880ce3019f235282df7f7"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_parser.cpython-312.pyc",
+      "bytes": 42051,
+      "sha256": "47981e50108d4ef4e3e5abd6d55259c7e4aada08ac28c8fd4cf7f47eb5df07d2"
+    },
+    {
+      "role": "parent_stdlib/shutil.py",
+      "bytes": 56198,
+      "sha256": "53496e06742fe008fee2bccc8caeac77473e69923bec05358bd43eea467db1f8"
+    },
+    {
+      "role": "parent_stdlib/urllib/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 239,
+      "sha256": "e88d78a96b45bfda7f645480bfb28a690d7dff2ec248662753930d257969de9d"
+    },
+    {
+      "role": "parent_stdlib/urllib/__pycache__/parse.cpython-312.pyc",
+      "bytes": 50717,
+      "sha256": "a4b34df2109c0ee861510e392fc07b7d85d63185288fe4cd1e9a014e20fa30ea"
+    },
+    {
+      "role": "parent_locale/C.utf8/LC_CTYPE",
+      "bytes": 367708,
+      "sha256": "1257597210f43630e7c8a745ae95127e96b93a43515ac5163cab459ddc1664b3"
+    },
+    {
+      "role": "parent_locale/gconv-modules.cache",
+      "bytes": 27028,
+      "sha256": "52c227df9d53248238602c1ddaccd2c8ddc4cc6a61aa45d7c425af590b8806a5"
+    }
+  ],
+  "endpoint_counts": {
+    "absence": 11,
+    "cache_candidates47": 47,
+    "conservative_struct_cache": 1,
+    "current_run_module_cached_candidates": 46,
+    "locale": 2,
+    "source_py": 7,
+    "total_pins": 56
+  },
+  "current_root_extra_absence11": [
+    {
+      "role": "frozen_M3_source/__pycache__/reference_events.cpython-312.pyc",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libpthread.so.0",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libdl.so.2",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libutil.so.1",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libm.so.6",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/librt.so.1",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libc.so.6",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/ld-linux-x86-64.so.2",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/glibc-hwcaps",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/tls",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/x86_64",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    }
+  ],
+  "external_before": {
+    "bytes": 11536,
+    "sha256": "518e488ab477cba29bbeba9048df739df31e773f31df9f20f73a77453ed96605"
+  },
+  "external_after": {
+    "bytes": 11536,
+    "sha256": "518e488ab477cba29bbeba9048df739df31e773f31df9f20f73a77453ed96605"
+  },
+  "external_records_equal": true,
+  "parent_locale_actual": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8"
+  },
+  "parent_locale_allowed_source_tuples": [
+    {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    }
+  ],
+  "worker_argv": [
+    "${NEW_RUN_ROOT}/bin/VOrderedQkBehaviorCore_m3"
+  ],
+  "child_environment": {
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "${NEW_RUN_ROOT}/empty-path",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+  },
+  "case": "normal_m3",
+  "reset_edges": 3,
+  "clock_cap": 100000,
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "core_bytes": 0,
+    "cpu_seconds": 300,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 16777216,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 8388608,
+    "total_wall_seconds": 390,
+    "work_wall_seconds": 360
+  },
+  "outer_wall_seconds": 420,
+  "source_checker": {
+    "bytes": 5503,
+    "sha256": "8ecf9295b0c9659a114d76efe311dc35696b52eacb423364746636dc89f8ae54"
+  },
+  "source_reference": {
+    "bytes": 2912,
+    "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7"
+  },
+  "normal_cache_pins": 47,
+  "observed_current_run_cache_candidates": 46,
+  "conservative_struct_cache_count": 1,
+  "source_proof_reuse": "Original M2 Fraction chain plus separately reviewed build argparse/shutil chain; current M3 source-only import check.",
+  "unknowns": [
+    "-B prevents writes not reads; exactly -I -S -B without -O.",
+    "Root must check exact runtime delta endpoints and absent paths before parent launch and after terminal; automatic pre/post cannot prove already-imported bytes retroactively.",
+    "Only parent C.UTF-8/C.UTF-8/C.UTF-8 supported by this proposal; child C environment separate.",
+    "Known imports/argparse/loader endpoints, not all conditional module or host dynamic file access proof.",
+    "Old M1/M2 build/cache evidence is not rewritten or retroactively qualified."
+  ],
+  "normal_cached_pyc_contents_published": false,
+  "scope": "56 external endpoints =47 normal cache candidates+7sources+2locale, not56 caches or47 proven dynamic import reads. New9 runtime files do not backfill old M1/M2/build gaps. No arbitrary conditional import/dlopen/continuous TOCTOU or host isolation guarantee."
+}

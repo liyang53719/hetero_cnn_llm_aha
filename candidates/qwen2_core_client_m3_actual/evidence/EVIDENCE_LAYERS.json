@@ -1,0 +1,114 @@
+{
+  "alias_boundary": "Observed selected key0/1/2 and ordered retirement do not distinguish data aliases among identical active +0 diagonal values. The W005/index-alias risk is not generally eliminated. Off-diagonal/inactive NaNs provide only the narrower checked constraint.",
+  "direct_external_log_observations": {
+    "actual_printed_prefix": [
+      0,
+      1,
+      2
+    ],
+    "hold_counts": {
+      "group": 12,
+      "memory": 351,
+      "pv": 148,
+      "step": 73
+    },
+    "max_bits": {
+      "0x00000000": 36,
+      "0xff800000": 1224
+    },
+    "max_interpretation": "Preedge scan/fold/scale and each head first retirement see -Inf. On the first retirement edge the original source may update maxScore to +0. Subsequent key1/key2 retirement probes see +0. This is consistent with lines 657-669 of frozen Qwen2Block.scala and the harness preedge print site, not a missing update.",
+    "observations": 1260,
+    "per_head_pipeline": "All 36 token/head groups have consecutive scan/fold/scale/retire cycles. Token0/1/2 heads contain 34/35/36 observations; retirement tails last 1/2/3 consecutive edges.",
+    "phase_counts": {
+      "1": 576,
+      "2": 576,
+      "3": 36,
+      "4": 72
+    },
+    "score_data_bits": "Every valid score write is 0x00000000 (+0).",
+    "score_write_count": 72,
+    "terminal_counts": {
+      "accounting512Steps": 2880,
+      "checkedMemory": 1728,
+      "checkedPv": 576,
+      "checkedVector": 1260,
+      "cycles": 21689,
+      "dones": 36,
+      "groups": 36,
+      "memoryAccepted": 1728,
+      "memoryReturned": 1728,
+      "outputBytes": 18432,
+      "ownerAccepts": 1,
+      "pvRequests": 576,
+      "pvReturns": 576,
+      "qkAcceptedSteps": 288,
+      "requestHoldChecks": 584,
+      "results": 36,
+      "scoreWrites": 72
+    }
+  },
+  "excluded": [
+    "No 16-to-17 key chunk boundary: M3 has at most 3 causal keys.",
+    "Only attention owner job kind4, not whole Qwen2 block 21 computations/17 jobs.",
+    "No full128/full29 RTL tensor numerical acceptance or full prefill.",
+    "No real Matrix FMA verification, physical MAC duty, full-system utilization, STA/frequency or 90% acceptance."
+  ],
+  "old_evidence": "M1/M2 actual passes and all older full128 software observed-domain passes and failures remain separately scoped and unchanged.",
+  "schema": "actual-fixed-M3-evidence-layer-boundary-v1",
+  "scripted_endpoints": {
+    "PV": "All-zero scripted results, not a checked matrix multiplication.",
+    "QK": "Active key diagonal lanes are +0; inactive/off-diagonal values are qNaN. Matrix result tiles are scripted, not FMA outputs.",
+    "memory": "Zero read responses and bounded handshake queues, not physical DDR timing or memory initialization proof."
+  },
+  "source_bound_executed_harness_assertions": {
+    "HDL_assertions": "Original codegen used --assert and runtime received no disabling plusargs. No branch-coverage instrumentation or exhaustive assertion coverage is claimed.",
+    "PV": {
+      "accepted": 576,
+      "clear": "key==0",
+      "last": "key==token",
+      "opcode": "0x24",
+      "other_operands": "A1..15 and B0..255 all zero.",
+      "returned": 576,
+      "sliceMask": 1,
+      "third_probability": "Exact 1/3 -> FP32 RNE 0x3eaaaaab -> BF16 RNE 0x3eab. This finite reference case is not a general double-rounding or softmax proof.",
+      "token_probabilities": [
+        {
+          "A0_BF16": "0x3f80",
+          "requests": 96,
+          "token": 0
+        },
+        {
+          "A0_BF16": "0x3f00",
+          "requests": 192,
+          "token": 1
+        },
+        {
+          "A0_BF16": "0x3eab",
+          "requests": 288,
+          "token": 2
+        }
+      ]
+    },
+    "memory": {
+      "K_reads": 576,
+      "Q_reads": 288,
+      "V_reads": 576,
+      "accepted": 1728,
+      "fields": "Each accepted request checks exact address, direction, tag=(7<<32)+ordinal, read mask=0/write mask=all ones, and all 512 data bits zero.",
+      "kv_head": "head//6",
+      "output_bytes": 18432,
+      "output_writes": 288,
+      "returned": 1728,
+      "schedule": "Q depth; K depth outer/causal key inner; V causal keys for each output column then write."
+    },
+    "proof_chain": "Reviewed fixed harness source + independently read actual object/ELF table bytes + actual executed ELF identity + complete checkedMemory1728/checkedPv576/checkedVector1260 + normal exit0. Custom need() throws on mismatch; it is not an NDEBUG-elided C assert.",
+    "raw_trace_limit": "No external per-memory/PV raw packet trace exists. The outer review does not independently replay actual unlogged addresses, BF16 operands, or handshakes. Those are source-bound executed passive assertions, not directly logged values.",
+    "terminal": "Owner1, status0, resetRequired=false, endpoint/core debts clear, 8-edge stable terminal payload hold, release handshake, 3 quiet edges. Stable payload does not establish expected values for every owner-result field."
+  },
+  "status": "NARROW_ACTUAL_GENERATED_SV_CORE_CLIENT_CASE_NOT_FULL_BLOCK",
+  "origin_record": {
+    "bytes": 5534,
+    "sha256": "57cc0609050e46e26ed2d6a31b7ea2195e4e4a67a60872bd1a6bd98b6d3bf099"
+  },
+  "projection_note": "Three per-event line/cycle/score rows omitted, exact printed prefix and aggregate histograms retained; full original evidence-layer record hash binds omitted rows."
+}

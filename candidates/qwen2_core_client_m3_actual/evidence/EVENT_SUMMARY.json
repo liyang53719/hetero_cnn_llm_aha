@@ -1,0 +1,106 @@
+{
+  "actual_token2_head0_prefix": [
+    0,
+    1,
+    2
+  ],
+  "all_retired_scores_plus_zero": true,
+  "body_cycles": 21689,
+  "checks": 25285,
+  "counts": {
+    "accounting512Steps": 2880,
+    "checkedMemory": 1728,
+    "checkedPv": 576,
+    "checkedVector": 1260,
+    "cycles": 21689,
+    "dones": 36,
+    "groups": 36,
+    "memoryAccepted": 1728,
+    "memoryReturned": 1728,
+    "outputBytes": 18432,
+    "ownerAccepts": 1,
+    "pvRequests": 576,
+    "pvReturns": 576,
+    "qkAcceptedSteps": 288,
+    "requestHoldChecks": 584,
+    "results": 36,
+    "scoreWrites": 72
+  },
+  "cpu_seconds": 0.01707323,
+  "expectation_trace": {
+    "bytes": 111375,
+    "sha256": "e8a64ef515206af7f5627c18ffb164862a0953c5c435ba84e92ae65afac1bc95"
+  },
+  "hold_checks_by_port": {
+    "group": 12,
+    "memory": 351,
+    "pv": 148,
+    "step": 73
+  },
+  "log": {
+    "bytes": 177792,
+    "digest_computed_from_same_parse_buffer_no_second_file_read": true,
+    "read_parse_passes": 1,
+    "sha256": "3fcb9c238bd618a62d4c284dce0d72a943b92195001a25af89a5435f6c6f8c65"
+  },
+  "max_histogram": {
+    "0x00000000": 36,
+    "0xff800000": 1224
+  },
+  "memory_PV_actual_raw_transactions_in_log": false,
+  "memory_PV_evidence": "Full passive assertions in executed frozenharness, compiledconstant tables verifiedinactualELF, completeconsumption counters. Not outerrawtransactionreplay.",
+  "model_executed_by_review": false,
+  "nonretire_data_histogram": {
+    "0": 1188
+  },
+  "nonretire_fields_scope": "width-only diagnostics; actualvalues recorded but not validscorewrites",
+  "nonretire_index_histogram": {
+    "0": 1188
+  },
+  "observations": 1260,
+  "phase_counts": {
+    "1": 576,
+    "2": 576,
+    "3": 36,
+    "4": 72
+  },
+  "production_checker_imported": false,
+  "reset_rising_edges": 3,
+  "retire_by_token_max": [
+    {
+      "count": 12,
+      "max": 4286578688,
+      "token": 0
+    },
+    {
+      "count": 12,
+      "max": 0,
+      "token": 1
+    },
+    {
+      "count": 12,
+      "max": 4286578688,
+      "token": 1
+    },
+    {
+      "count": 24,
+      "max": 0,
+      "token": 2
+    },
+    {
+      "count": 12,
+      "max": 4286578688,
+      "token": 2
+    }
+  ],
+  "schema": "independent-actual-normal-M3-event-review-v1",
+  "status": "PASS_ACTUAL_1260_EVENT_AND_TERMINAL_LOG_WITH_EXTERNAL_IDENTITY_REQUIRED",
+  "token1_second_and_token2_second_third_retire_max_plus_zero_observed_for_all12heads": true,
+  "total_rising_edges": 21692,
+  "wall_seconds": 0.01707894803257659,
+  "origin_review": {
+    "bytes": 20939,
+    "sha256": "78af41afb6f055605cc829c29756a236646a396bb555aab2f282b5ce0015d905"
+  },
+  "omission": "Per-head event-cycle rows omitted; original full event review hash retained."
+}

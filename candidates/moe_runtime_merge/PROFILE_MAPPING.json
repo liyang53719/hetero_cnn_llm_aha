@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "physical": {
+    "maxRoutes": 16,
+    "expertBits": 10,
+    "weightBits": 32,
+    "dataBits": 512,
+    "routeTagBits": 4,
+    "resultBufferBytes": 1024,
+    "constructor_model_parameters": false,
+    "mac_instances": 0
+  },
+  "admission": {
+    "mode_source": "latched unified descriptor.mlp == 1; not freely host-selectable",
+    "expertCount": 256,
+    "expertsPerToken": 8,
+    "routed_expert_ids": [
+      0,
+      255
+    ],
+    "shared_identity": {
+      "shared": true,
+      "expert": 256
+    },
+    "legal_route_counts": [
+      8,
+      9
+    ],
+    "duplicate_routes_rejected": true,
+    "routed_count_exactly": 8,
+    "shared_count_maximum": 1,
+    "config_latched": "start && startReady && valid cfg",
+    "route_fields_latched": "each routeIn.fire after admitted start",
+    "result_latched": "resultIn.fire with issued/not-yet-returned routeTag",
+    "merge_consumed_once": "mergeOut.fire clears selected valid bit"
+  },
+  "order": "ascending routed expert ID, then optional shared; legacy ordinal mode is compatibility only",
+  "v1_numeric_gateway_contract_not_implemented_here": {
+    "weightBits_15_0": "raw already-materialized BF16 score; shared uses BF16 sigmoid gate",
+    "weightBits_31_16": 0,
+    "nonzero_upper_half": "must be rejected by typed gateway, not this opaque primitive",
+    "expert_output": "BF16 after official expert down projection",
+    "materializations": [
+      "BF16(expert_output * BF16 weight)",
+      "BF16(accumulator + BF16 weighted_contribution) per expert",
+      "shared weighted contribution added last"
+    ],
+    "host_policy_override_forbidden": true
+  },
+  "identity_integration_not_proven_by_leaf": {
+    "parent_transactionIdBits": 64,
+    "profile_snapshot": true,
+    "single_active_job": true,
+    "drained_fence_before_reuse": true,
+    "leaf_result_has_epoch": false,
+    "routeTag_only": "parent must bind issued responses to the active transaction; stale same-tag response is not detectable in this legacy-shaped leaf"
+  },
+  "not_wired_to_unified_full4096_top": true,
+  "clear_integration_contract_not_tested_as_abort": {
+    "clear_semantics": "destructive priority reset; combinational handshakes are not gated by clear",
+    "allowed_use": "initialization or parent-proven quiescent and fully drained boundary only",
+    "busy_clear_safe_abort": false,
+    "same_cycle_valid_ready_during_clear_safe": false,
+    "actual_clear_test_coverage": "initialization only",
+    "parent_required": "withdraw new dispatch/admission, drain all issued responses and downstream consumed contributions, bind 64-bit transactionId/profile to issued tags, then assert clear only with no active transfers"
+  }
+}

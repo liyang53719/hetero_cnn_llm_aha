@@ -1,0 +1,15 @@
+{
+  "status": "FAIL_RETAINED",
+  "exit_code": 1,
+  "input_role": "initial unchanged Treadle low FIR",
+  "input_sha256": "a768831fc46e8f4e14b06e7f346d419b719479a8ccf958bc5667f28fc24e9270",
+  "line": 272,
+  "column": 19,
+  "tool_diagnostic": "use of unknown declaration 'validif'",
+  "statement_excerpt": "node _GEN_0 = validif(eq(UInt<1>(\"h0\"), dispatch), experts_0)",
+  "private_raw_log_sha256": "9106a0cf8edf00d1385e97b6fa01de31351354486fff89299fc74dd996d31367",
+  "private_raw_log_bytes": 405,
+  "systemverilog_emitted": false,
+  "recovery": "unchanged implementation classes through native ChiselStage.emitCHIRRTL; IR not edited; separate official firtool run",
+  "projection": "Machine-specific diagnostic filename/source-location path is not public; all semantically relevant diagnostic and outcome facts retained."
+}

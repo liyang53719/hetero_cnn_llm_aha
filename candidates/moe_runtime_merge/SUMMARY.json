@@ -1,0 +1,133 @@
+{
+  "status": "PASS_FIXED_RUNTIME_CONTROL_LEAF_ONLY",
+  "tests": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "same_dut_without_reset": [
+      "legacy9",
+      "expert9",
+      "legacy16",
+      "expert8"
+    ],
+    "expert9_observed_experts": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      256
+    ],
+    "shared_route_loaded_first_and_merged_last": true,
+    "accepted_config_pins_perturbed_while_busy": true,
+    "held_dispatch_and_merge_identity_checked": true,
+    "out_of_order_results": true,
+    "config_negative_cases": 6,
+    "route_negative_cases": 6,
+    "response_negative_cases": 2,
+    "same_cycle_issued_results_full16": true,
+    "test_payloads": "opaque arbitrary 512-bit data and 32-bit metadata, not BF16 numeric gateway inputs"
+  },
+  "actual_processes": [
+    {
+      "stage": "compile",
+      "exit_code": 0,
+      "wall_seconds": 24.359973153914325,
+      "peak_rss_bytes": 340287488,
+      "stop_reason": null,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "stage": "test",
+      "exit_code": 0,
+      "wall_seconds": 12.641273482935503,
+      "peak_rss_bytes": 195289088,
+      "stop_reason": null,
+      "log_sha256": "828e73c04e299a5634855a99cdb6c11cf86d9b4f7f03a803d629b566cc28f0c3"
+    }
+  ],
+  "low_fir": {
+    "count": 4,
+    "all_same_sha256": "a768831fc46e8f4e14b06e7f346d419b719479a8ccf958bc5667f28fc24e9270",
+    "bytes": 250429
+  },
+  "first_sv_attempt": {
+    "runtime_profiles": "unified_runtime_merge",
+    "exit_code": 1,
+    "wall_seconds": 0.022091822931542993,
+    "peak_rss_bytes": 94208,
+    "stop_reason": null,
+    "tool_sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+    "source_input_sha256": "a768831fc46e8f4e14b06e7f346d419b719479a8ccf958bc5667f28fc24e9270",
+    "input_unchanged": true,
+    "input_bytes": 250429,
+    "log_sha256": "9106a0cf8edf00d1385e97b6fa01de31351354486fff89299fc74dd996d31367",
+    "log_bytes": 405,
+    "systemverilog": null,
+    "annotations": null,
+    "public_command_projection": "ACTUAL_COMMANDS.json commands.firtool_lowfir_failure"
+  },
+  "format_recovery": {
+    "unchanged_implementation": true,
+    "method": "native ChiselStage.emitCHIRRTL from exact verified classes, fresh tiny emitter; no IR editing",
+    "processes": [
+      {
+        "stage": "compile",
+        "exit_code": 0,
+        "wall_seconds": 4.140327104949392,
+        "peak_rss_bytes": 208470016,
+        "stop_reason": null,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "stage": "emit_chirrtl",
+        "exit_code": 0,
+        "wall_seconds": 2.8283222179161385,
+        "peak_rss_bytes": 163942400,
+        "stop_reason": null,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "chirrtl_sha256": "839dc9d78acfe9d843abdc570cc0272ca0a341191eb82255ecdb2cdbcabb809e"
+  },
+  "successful_sv_emission": {
+    "runtime_profiles": "unified_runtime_merge",
+    "exit_code": 0,
+    "wall_seconds": 0.06295731198042631,
+    "peak_rss_bytes": 17137664,
+    "stop_reason": null,
+    "tool_sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+    "source_input_sha256": "839dc9d78acfe9d843abdc570cc0272ca0a341191eb82255ecdb2cdbcabb809e",
+    "input_unchanged": true,
+    "input_bytes": 73905,
+    "log_sha256": "2e72aaeb23f6706e8f0f7399ffc597a39d4870971a7661fea62f3ae8d12c8dc1",
+    "log_bytes": 8351,
+    "systemverilog": {
+      "bytes": 171498,
+      "sha256": "b42c9ba954fe0c9bb2a94e6367179a01304e50937b061c0f89d0f6d9c1faa9b4"
+    },
+    "annotations": null,
+    "public_command_projection": "ACTUAL_COMMANDS.json commands.firtool_success"
+  },
+  "scope": {
+    "treadle_control_simulation": true,
+    "single_systemverilog_generated": true,
+    "systemverilog_simulation": false,
+    "full4096_array": false,
+    "unified_top_connected": false,
+    "expert_arithmetic_executed": false,
+    "BF16_weight_or_index_add_numeric_pass": false,
+    "full_M128_L0_or_L3_block_pass": false,
+    "producer_provenance_or_epoch_verified": false,
+    "synthesis_timing_or_ppa_pass": false
+  },
+  "old_incompatibility_witness_retained": true,
+  "public_metadata_projection": {
+    "private_original_overlay_sha256": "54bdd63e56c9c7059bc7953fa32d94de7904cdadbd07a4200372ff0710e2113f",
+    "raw_logs_and_argv_retained_privately": true,
+    "no_arithmetic_or_source_changed": true
+  }
+}

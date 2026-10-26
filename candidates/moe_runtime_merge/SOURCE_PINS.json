@@ -1,0 +1,27 @@
+{
+  "original_main": "c590179c4c3424ded9997ba8f15f27821df304c9",
+  "known_descendant_main": "e096dba9220747855223b26d04c2d339c19cb675",
+  "not_claimed_latest_head": true,
+  "baseline": {
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala": {
+      "git_blob_sha": "3c34aefd56c0c8d3a529b97bf1d3f8fd3c15b360",
+      "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+      "bytes": 7073
+    },
+    "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala": {
+      "git_blob_sha": "bfca18bf7b3be1e3c18787bf670c8af1eba11aed",
+      "sha256": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+      "bytes": 33917
+    }
+  },
+  "candidate_sources": {
+    "candidates/moe_runtime_merge/source/EmitRuntimeMoeMerge.scala": "1b963edcae222b4dd436f9bcd7cbe5941299ddf03a2a0f51fb6cc57886015b5a",
+    "candidates/moe_runtime_merge/source/HeteroRuntimeMoeMerge.scala": "7d94ef0fd596c15d46afe661da03b48bfffbc2e72cd97803472c3f199d073489",
+    "candidates/moe_runtime_merge/tests/HeteroRuntimeMoeMergeSpec.scala": "94a90f9b3b552eb58d1195a8445ba074f13d1831c661d76e8e3c56236f399474"
+  },
+  "verified_implementation_unchanged_before_and_after_execution": true,
+  "official_model_revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+  "official_transformers_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+  "official_modeling_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+  "witness_freeze_sha256": "3bad16675e308b490a3da7b05bdf2de14225925cdbf5efad4efd585b6fbbeb0f"
+}

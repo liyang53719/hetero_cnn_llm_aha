@@ -1,0 +1,569 @@
+{
+  "schema": "role_relative_command_projection_v1",
+  "not_raw_argv_claim": true,
+  "private_raw_command_record_sha256": "f71c083cbd7b249098313bacb1b57834eae02459d696b0281b63a23965af1f87",
+  "roles": {
+    "REPOSITORY": "selected exact baseline repository source root verified by SOURCE_PINS",
+    "CANDIDATE": "repository candidates/moe_runtime_merge",
+    "SCALA_CHISEL_DEPS": "read-only restored Scala2.13.16/Chisel6.7.0 dependency root",
+    "CHISELTEST_DEPS": "read-only restored Chiseltest6/ScalaTest3.2.19 dependency root",
+    "JAVA21": "Java21 executable",
+    "FIRTOOL": "official pinned firtool1.62.1 executable",
+    "TEST_OUTPUT": "fresh writable initial compile/test output root",
+    "CHIRRTL_OUTPUT": "separate fresh writable emitter compile/CHIRRTL output root",
+    "SV_OUTPUT": "separate fresh writable successful firtool output root",
+    "FAILED_LOWFIR_OUTPUT": "separate historical failed lowFIR output root; do not overwrite",
+    "PINNED_CLASSPATH": "colon-join the ordered_classpath entries after role expansion"
+  },
+  "ordered_classpath": [
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/eed3si9n/shaded-apache-httpasyncclient/0.7.0/shaded-apache-httpasyncclient-0.7.0.jar",
+      "sha256": "98e96c3720741283e5976938a35b0c617a90af653b1956f99368161f5951dc21"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar",
+      "sha256": "814b15a9bf598e0fa854dd70ba9f6e03a413a97979de0c3f49317295e4352bc8"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/github/luben/zstd-jni/1.5.5-10/zstd-jni-1.5.5-10.jar",
+      "sha256": "9465fb23f4e95630f225d0108dbf9830cd8bf537dd6c63792eb7c9a7014151c1"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/github/mwiede/jsch/0.2.17/jsch-0.2.17.jar",
+      "sha256": "744667315fcaaa1b00d2ef177fb2660036a9733f6ccd93a5c87ce800fde6b832"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar",
+      "sha256": "7fcdf69482982f0dd3f48b7dac27f091e3f1e3cb80eae4c7ac73890d51095c9c"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.13/2.13.5.2/jsoniter-scala-core_2.13-2.13.5.2.jar",
+      "sha256": "86d9f5335dc6418a3b5ac28d2cfb6ed939236541566738df3bc0da2420d0f100"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar",
+      "sha256": "2e5037bda974630b046794274e344273919abf4727acfcd86352617dce68f82b"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar",
+      "sha256": "5f2a0648230a662e8be049df308d583d7369f13af683e44ddf5829b6d741a228"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar",
+      "sha256": "078af5bf405bbf41d6eca6441b2bcd282551d054c47acf4f949b6c983063b117"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar",
+      "sha256": "814edf957545fd952e97a772d850643516acc18000119ad566c03368c43c60f2"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar",
+      "sha256": "0e663be9a6c81e9515bdd07c04831397e38ea648a211e85ad005300fe840a03d"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar",
+      "sha256": "dd34c47a41d005d0e0ca947e208a20fbc136ea02357333392ba9ba6a96beb1c7"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar",
+      "sha256": "95d22fef52254a6ea3ddabec144dd01ed6d9046b02cf5b124b89cf3627e8869a"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar",
+      "sha256": "39c52652da329751ed4bb05c62053ff91b1d86c3b06c9488b7f6bfd0d2e05feb"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar",
+      "sha256": "b504db94ec69487b1460e3e97cc7cfdab7960d219d5724bb62d31c044f29d5df"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar",
+      "sha256": "9c00332462f16ccaf2f49fcd31af2040b28f0329200d02c7817e8c0841d28ebc"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar",
+      "sha256": "f412ecbb235c2460b45e63584109723dea8d94b819c78c9bfc38f50cba8546c0"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/outr/moduload_2.13/1.1.7/moduload_2.13-1.1.7.jar",
+      "sha256": "53bdf91631e018b2cbb3a96151d34576d8c7551288a398444fc4ce6e1fbdbea1"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/outr/perfolation_2.13/1.2.9/perfolation_2.13-1.2.9.jar",
+      "sha256": "cdf192a807103ea0e26d3b16b2fe316bef4cb7f1a4c3d0cc80b9955a93f4eb4f"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/outr/scribe_2.13/3.13.0/scribe_2.13-3.13.0.jar",
+      "sha256": "7ab781667feef71f3da9f9170efea06771e324d7ebcfde5e1e77144550bda4e8"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar",
+      "sha256": "fd7373889b7a92cf3e97db36c920ba272aec158a9387b3259fca9f2dfaeda914"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar",
+      "sha256": "688cb118a6021d819138e855208c956031688be4b47a24bb615becc63acedf07"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/com/typesafe/config/1.4.2/config-1.4.2.jar",
+      "sha256": "0076c249b4387d8369146528fd5dacb3efba098dc02ecf9ac81debdfc2e12fd5"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/commons-io/commons-io/2.15.0/commons-io-2.15.0.jar",
+      "sha256": "a328dad730921d197b6a9b195dffa00e41c974c2dac8fe37e84d31706bca7792"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/dev/dirs/directories/26/directories-26.jar",
+      "sha256": "6d18fe25aa30b7e08b908cd21151d8f96e22965c640acd7751add9bbfe6137d4"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar",
+      "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+      "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/get-coursier/coursier-cache_2.13/2.1.8/coursier-cache_2.13-2.1.8.jar",
+      "sha256": "1074ca0717d743296d8d4eec1206eb9a74cb31aa76abf307931da8fe4ac02067"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/get-coursier/coursier-core_2.13/2.1.8/coursier-core_2.13-2.1.8.jar",
+      "sha256": "0c83986214f80d6ae47c93884b982539feb7d07b0abf4714821d2144ea0e1378"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/get-coursier/coursier-proxy-setup/2.1.8/coursier-proxy-setup-2.1.8.jar",
+      "sha256": "6898f545052f8ca57e21d09edc4e15eefb5c729f7f2e4a726cf3a88478ec5d98"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/get-coursier/coursier-util_2.13/2.1.8/coursier-util_2.13-2.1.8.jar",
+      "sha256": "f98c2a3dedcaf87873990bc0df49cc1c70202211e96dc76813ed50bcc49ad085"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/get-coursier/coursier_2.13/2.1.8/coursier_2.13-2.1.8.jar",
+      "sha256": "530c50e3a81e24e7ff4305ea8f637db378526c31f4d9474836a785da604ecd6e"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/get-coursier/jniutils/windows-jni-utils/0.3.3/windows-jni-utils-0.3.3.jar",
+      "sha256": "ab68efcf162355e20007b238d8108b7ffec0c06b467ee44cbb44ec3f8ac3a7e6"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/github/alexarchambault/concurrent-reference-hash-map/1.1.0/concurrent-reference-hash-map-1.1.0.jar",
+      "sha256": "552707982209afb9feffdccb2e73cc4681a1353e34a47df1bf643d1d2e0a2f61"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar",
+      "sha256": "2ed5882d03653438b52bee6a145bca84a95fe363f49afd06b9b92b5e7117afb5"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/github/alexarchambault/windows-ansi/windows-ansi/0.0.5/windows-ansi-0.0.5.jar",
+      "sha256": "f9acb082199470d4ca9165b36a4544ee9402ba09964476ba9710cd9ca4c41f69"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/io/github/java-diff-utils/java-diff-utils/4.15/java-diff-utils-4.15.jar",
+      "sha256": "964c69e3a23a892db2778ae6806aa1d42f81230032bd8e4982dc8620582ee6b7"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/javax/inject/javax.inject/1/javax.inject-1.jar",
+      "sha256": "91c77044a50c481636c32d916fd89c9118a72195390452c81065080f957de7ff"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/jline/jline/2.14.6/jline-2.14.6.jar",
+      "sha256": "97d1acaac82409be42e622d7a54d3ae9d08517e8aefdea3d2ba9791150c2f02d"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar",
+      "sha256": "d269671656767e05a58dd634cbafc36ed70d417220b058d11c0d88dfd281616d"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar",
+      "sha256": "474d7b88f6e97009b6ec1d98c3024dd95c23187c65dabfbc35331bcac3d173dd"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar",
+      "sha256": "34ed1e1f27fa896bca50dbc4e99cf3732967cec387a7a0d5e3486c09673fe8c6"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar",
+      "sha256": "a304da2389f760f1a36513d8b10ba546d50243cf0b94415ea2a76906114d7197"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/net/openhft/zero-allocation-hashing/0.16/zero-allocation-hashing-0.16.jar",
+      "sha256": "3bc39c640cc8314575de4ebcb1a0bca540516d3c60d49f8de7d638b09868553d"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar",
+      "sha256": "131a6594969bc4f321d652ea2a33bc0e378ca312685ef87791b2c60b29d01ea5"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/apache/commons/commons-compress/1.24.0/commons-compress-1.24.0.jar",
+      "sha256": "fbf2c5d275e513c08f4e4fb539726dbf3ac2142af956ba93efb983244f0c36bd"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
+      "sha256": "d919d904486c037f8d193412da0c92e22a9fa24230b9d67a57855c5c31c7e94e"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar",
+      "sha256": "770cd903fa7b604d1f7ef7ba17f84108667294b2b478be8ed1af3bffb4ae0018"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar",
+      "sha256": "b0d8a4c8ab4fb8b1888d0095822703b0e6d4793c419550203da9e69196161de4"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar",
+      "sha256": "c967f223487980b9364e94a7c7f9a8a01fd3ee7c19bdbf0b0f9f8cb8511f3d41"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/apache/logging/log4j/log4j-slf4j-impl/2.17.1/log4j-slf4j-impl-2.17.1.jar",
+      "sha256": "e9a03720e5d5076009c2530635da9d08485e28a0b0ec20708dadc51afb78e41e"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/apache/xbean/xbean-reflect/3.7/xbean-reflect-3.7.jar",
+      "sha256": "104e5e9bb5a669f86722f32281960700f7ec8e3209ef51b23eb9b6d23d1629cb"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar",
+      "sha256": "bce5c887460542d69c0ffce05919fef8f56f9964a1505a99f6ae69a58351507e"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+      "sha256": "ad3163d1b88094806cfec95fec58b4ebeeaa6af6ec6b2766a9c02becdbe42778"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar",
+      "sha256": "c6cf214fb53b83fff73e082b6752eab53dc67c987bbece87461600e9c0e8ad38"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/codehaus/plexus/plexus-archiver/4.9.0/plexus-archiver-4.9.0.jar",
+      "sha256": "094d7eed03f8610cf149cade0340a5b2a55935dc77864e29f959c9e46a68a03e"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar",
+      "sha256": "52f77c5ec49f787c9c417ebed5d6efd9922f44a202f217376e4f94c0d74f3549"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar",
+      "sha256": "8b65840e41ca669a1a69ec1daedb3426304e560b24172cc93bb02e8c199e1ce7"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/codehaus/plexus/plexus-io/3.4.1/plexus-io-3.4.1.jar",
+      "sha256": "ac3be07c2968f98656604ddb8fdf08f1cfc560bc7b329fd17847f151510dc2c4"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar",
+      "sha256": "270cd703b48c6e5c8c691f1875f22d62d22cfe072c73ae2f5814d83d68c1da0b"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar",
+      "sha256": "109e64fc65767c7a1a3bd654709d76f107b0a3b39db32cbf11139e13a6f5229b"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar",
+      "sha256": "2e5e775a9dc58ffa6bbd6aa6f099d62f8b62dcdeb4c3c3bbbe5cf2301bc2dcc1"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/iq80/snappy/snappy/0.4/snappy-0.4.jar",
+      "sha256": "46a0c87d504ce9d6063e1ff6e4d20738feb49d8abf85b5071a7d18df4f11bac9"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline-builtins/3.24.1/jline-builtins-3.24.1.jar",
+      "sha256": "a621bc48d38a12aed37b567d13407d389bc5dce935d187a01c19eaec969467d1"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline-native/3.24.1/jline-native-3.24.1.jar",
+      "sha256": "4337237502d3b647b981b007e14e75d79ec51497f52e9871baf6e2c6c9dfbd17"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline-reader/3.24.1/jline-reader-3.24.1.jar",
+      "sha256": "8263bdab9bf5be07e2324e98246c94d34cc7e0d451e527e8b08e410900c3b9db"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline-style/3.24.1/jline-style-3.24.1.jar",
+      "sha256": "1403880e2fa8426e9395585a4526b67a3f799b949488008fed2ab5063a11d4a1"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline-terminal-jansi/3.24.1/jline-terminal-jansi-3.24.1.jar",
+      "sha256": "1e53923725972413765093aac3cc5eb7d4690eaf758f4067a4972bd59d9e85a5"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline-terminal-jna/3.24.1/jline-terminal-jna-3.24.1.jar",
+      "sha256": "ec59d38160b0faa720472ff3f168564d22af4d991316ba30bffe2c163ae4040c"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline-terminal/3.24.1/jline-terminal-3.24.1.jar",
+      "sha256": "d9e32b47e134718eec9adcfaebf838130a163999ced820fc32795d4420f159e2"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/jline/jline/3.27.1/jline-3.27.1-jdk8.jar",
+      "sha256": "9d165aff3d714a455de2e711dc90df09fdb0a0969a1cd4d52aa72a44cb545db0"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar",
+      "sha256": "6d9c8050943dce3e6e6cfb028a7cbd5fd46555c7edf89bf0d829061ff5d2ade6"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar",
+      "sha256": "2b84fb7bf25f2e4b51bd8cca802fb0bc0ec4c528c88c35cdeb8087349bb154b5"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar",
+      "sha256": "63d7610f4aa092cdc9401a338aada587792df6f1512e7b93bf365b7c07ffeb9f"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar",
+      "sha256": "7f7b8396cd29455e0a3653ae831e3c73b344ac6e1f37ba20d159ec13e7e2d6d3"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar",
+      "sha256": "a36d3e807bfe872972d55b6f80c883418b1d715f738f329c84d3678205398c7b"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar",
+      "sha256": "496ff9d3f423ac96e47d7a08136d1f7dbafa2ccbc228af553e7d1d90a2bc8224"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar",
+      "sha256": "1dee0481072d19c929b623e155e14d2f6085dc011529a0a0dbefc84cf571d865"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/scala-lang/modules/scala-collection-compat_2.13/2.11.0/scala-collection-compat_2.13-2.11.0.jar",
+      "sha256": "0c1108883b7b97851750e8932f9584346ccb23f1260c197f97295ac2e6c56cec"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar",
+      "sha256": "68f266c4fa37cb20a76e905ad940e241190ce288b7e4a9877f1dd1261cd1a9a7"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/scala-lang/modules/scala-xml_2.13/2.2.0/scala-xml_2.13-2.2.0.jar",
+      "sha256": "0d9d63091a73cf837cd5412671a30abecad460dc254aeb43a2b18f4910af6a09"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar",
+      "sha256": "f59982714591e321ba9c087af2c8666e2f5fb92b11a0cef72c2c5e9b342152d3"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+      "sha256": "1ebb2b6f9e4eb4022497c19b1e1e825019c08514f962aaac197145f88ed730f1"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar",
+      "sha256": "fb49ccd9cac7464486ab993cda20a3c1569d8ef26f052e897577ad2a4970fb1d"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16.jar",
+      "sha256": "776ef74d8bc1222f4b6e7b5dc5dd1f0abfc97ab853cb4932292dee0b32111906"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalactic/scalactic_2.13/3.2.19/scalactic_2.13-3.2.19.jar",
+      "sha256": "c27c33de17d450e29e66c16c5af4cfa33e8ffcf03c124f0a3d249d848cccd4af"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-compatible/3.2.19/scalatest-compatible-3.2.19.jar",
+      "sha256": "5dc6b8fa5396fe9e1a7c2b72df174a8eb3e92770cdc3e70636d3eba673cd0da3"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar",
+      "sha256": "30230081d029f6341b83fe7f157d336113e1c97497fe950169293d28a5bf2936"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-diagrams_2.13/3.2.19/scalatest-diagrams_2.13-3.2.19.jar",
+      "sha256": "a77294d3d5a564e1d8cd6550d4ac795ac042fa90efa91d139da123d7ec5f3bec"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-featurespec_2.13/3.2.19/scalatest-featurespec_2.13-3.2.19.jar",
+      "sha256": "58a44e6be12409596feab4d4123900ef2af55d3fcb72033412059ce055e91dee"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-flatspec_2.13/3.2.19/scalatest-flatspec_2.13-3.2.19.jar",
+      "sha256": "de4d28423dc69e91fdc8f3a03a4fb6b443c5626b819c896e5fbe4a73a375654a"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-freespec_2.13/3.2.19/scalatest-freespec_2.13-3.2.19.jar",
+      "sha256": "f3e463422cca38117bb48665602543474fbc2c37427b1133a9c34332f895b08a"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-funspec_2.13/3.2.19/scalatest-funspec_2.13-3.2.19.jar",
+      "sha256": "4c682781b67c5daeeebb9e132a78929b824f88747b963b9aa8bd24a0a7d6893b"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-funsuite_2.13/3.2.19/scalatest-funsuite_2.13-3.2.19.jar",
+      "sha256": "926aeb37193ad79d0b380160765c9ab61d4367b994c1ab715896fe4961241d5e"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-matchers-core_2.13/3.2.19/scalatest-matchers-core_2.13-3.2.19.jar",
+      "sha256": "033f16c1143fbe51675d080b13ac319d98581d0331ba3ccebb121e3904a774a3"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-mustmatchers_2.13/3.2.19/scalatest-mustmatchers_2.13-3.2.19.jar",
+      "sha256": "8ebbd5c12843d75f15283f31c35994b6e733ce737f666b05528fa8b6e67ad32e"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-propspec_2.13/3.2.19/scalatest-propspec_2.13-3.2.19.jar",
+      "sha256": "6c1c7d557485861d920b1c26748a871232b626e93d466a3d9bb8dbbc6e38485d"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-refspec_2.13/3.2.19/scalatest-refspec_2.13-3.2.19.jar",
+      "sha256": "7a4c836cf66c99c1e12ca96e6d94c4f68b7dbb49144f9e13af73ada4df752652"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-shouldmatchers_2.13/3.2.19/scalatest-shouldmatchers_2.13-3.2.19.jar",
+      "sha256": "64658d736039267baae0108af620617e8ce88b2f4683112e2e31e4ad2a603c0f"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest-wordspec_2.13/3.2.19/scalatest-wordspec_2.13-3.2.19.jar",
+      "sha256": "08050f3d05c72575cac29a1483185b443d5f9f34c1fcf80c683083330385ef93"
+    },
+    {
+      "path": "${CHISELTEST_DEPS}/org/scalatest/scalatest_2.13/3.2.19/scalatest_2.13-3.2.19.jar",
+      "sha256": "c37d97f16172d45b2aef0cebbe59dd2174b7d1ff2c2f272516707cf923015a52"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+      "sha256": "d3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/tukaani/xz/1.9/xz-1.9.jar",
+      "sha256": "211b306cfc44f8f96df3a0a3ddaf75ba8c5289eed77d60d72f889bb855f535e5"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/virtuslab/scala-cli/config_2.13/0.2.1/config_2.13-0.2.1.jar",
+      "sha256": "e9567682876d6941b7daac9d995ef241aebe1c1e3dc50e123245a4df53699626"
+    },
+    {
+      "path": "${SCALA_CHISEL_DEPS}/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar",
+      "sha256": "d87d607e500885356c03c1cae61e8c2e05d697df8787d5aba13484c2eb76a844"
+    }
+  ],
+  "source_pins": {
+    "${REPOSITORY}/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+    "${REPOSITORY}/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+    "${CANDIDATE}/source/HeteroRuntimeMoeMerge.scala": "7d94ef0fd596c15d46afe661da03b48bfffbc2e72cd97803472c3f199d073489",
+    "${CANDIDATE}/tests/HeteroRuntimeMoeMergeSpec.scala": "94a90f9b3b552eb58d1195a8445ba074f13d1831c661d76e8e3c56236f399474"
+  },
+  "budgets": {
+    "heap_mb": 512,
+    "rss_bytes": 1073741824,
+    "wall_seconds": 180,
+    "cpu_seconds": 120,
+    "output_bytes": 10485760
+  },
+  "commands": {
+    "compile": [
+      "${JAVA21}",
+      "-Duser.home=${TEST_OUTPUT}/home",
+      "-Djava.io.tmpdir=${TEST_OUTPUT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${PINNED_CLASSPATH}",
+      "scala.tools.nsc.Main",
+      "-classpath",
+      "${PINNED_CLASSPATH}",
+      "-Xplugin:${SCALA_CHISEL_DEPS}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "-language:reflectiveCalls",
+      "-d",
+      "${TEST_OUTPUT}/classes",
+      "${REPOSITORY}/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala",
+      "${REPOSITORY}/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala",
+      "${CANDIDATE}/source/HeteroRuntimeMoeMerge.scala",
+      "${CANDIDATE}/tests/HeteroRuntimeMoeMergeSpec.scala"
+    ],
+    "test": [
+      "${JAVA21}",
+      "-Duser.home=${TEST_OUTPUT}/home",
+      "-Djava.io.tmpdir=${TEST_OUTPUT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${TEST_OUTPUT}/classes:${PINNED_CLASSPATH}",
+      "org.scalatest.tools.Runner",
+      "-R",
+      "${TEST_OUTPUT}/classes",
+      "-oD",
+      "-s",
+      "gemmini.HeteroRuntimeMoeMergeSpec"
+    ],
+    "chirrtl_compile": [
+      "${JAVA21}",
+      "-Duser.home=${CHIRRTL_OUTPUT}/home",
+      "-Djava.io.tmpdir=${CHIRRTL_OUTPUT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${PINNED_CLASSPATH}",
+      "scala.tools.nsc.Main",
+      "-classpath",
+      "${TEST_OUTPUT}/classes:${PINNED_CLASSPATH}",
+      "-Xplugin:${SCALA_CHISEL_DEPS}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "-language:reflectiveCalls",
+      "-d",
+      "${CHIRRTL_OUTPUT}/classes",
+      "${CANDIDATE}/source/EmitRuntimeMoeMerge.scala"
+    ],
+    "chirrtl_test": [
+      "${JAVA21}",
+      "-Duser.home=${CHIRRTL_OUTPUT}/home",
+      "-Djava.io.tmpdir=${CHIRRTL_OUTPUT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${CHIRRTL_OUTPUT}/classes:${TEST_OUTPUT}/classes:${PINNED_CLASSPATH}",
+      "gemmini.EmitRuntimeMoeMerge",
+      "${CHIRRTL_OUTPUT}/HeteroRuntimeMoeMerge.fir"
+    ],
+    "firtool_success": [
+      "${FIRTOOL}",
+      "-format=fir",
+      "${SV_OUTPUT}/unified_runtime_merge.fir",
+      "-o",
+      "${SV_OUTPUT}/unified_runtime_merge.sv",
+      "-warn-on-unprocessed-annotations",
+      "-output-annotation-file",
+      "${SV_OUTPUT}/unified_runtime_merge.anno.json",
+      "--preserve-values=all",
+      "-disable-all-randomization",
+      "--verbose-pass-executions",
+      "--mlir-disable-threading"
+    ],
+    "firtool_lowfir_failure": [
+      "${FIRTOOL}",
+      "-format=fir",
+      "${FAILED_LOWFIR_OUTPUT}/unified_runtime_merge.fir",
+      "-o",
+      "${FAILED_LOWFIR_OUTPUT}/unified_runtime_merge.sv",
+      "-warn-on-unprocessed-annotations",
+      "-output-annotation-file",
+      "${FAILED_LOWFIR_OUTPUT}/unified_runtime_merge.anno.json",
+      "--preserve-values=all",
+      "-disable-all-randomization",
+      "--verbose-pass-executions",
+      "--mlir-disable-threading"
+    ]
+  },
+  "run_cwd": {
+    "compile": "${TEST_OUTPUT}",
+    "test": "${TEST_OUTPUT}",
+    "chirrtl_compile": "${CHIRRTL_OUTPUT}",
+    "chirrtl_emit_chirrtl": "${CHIRRTL_OUTPUT}",
+    "firtool_success": "${SV_OUTPUT}",
+    "firtool_lowfir_failure": "${FAILED_LOWFIR_OUTPUT}"
+  },
+  "directory_setup": "Create each fresh output root and its separate home, tmp, and classes child directories before its stages. Original evidence directories are never overwritten.",
+  "supervision": "single CPU affinity, sampled RSS/output caps and wall timeout; RLIMIT_CPU. Read-only jars and unchanged implementation hash rechecked.",
+  "firtool_sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee"
+}

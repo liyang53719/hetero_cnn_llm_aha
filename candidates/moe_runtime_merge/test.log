@@ -1,0 +1,19 @@
+[36mRun starting. Expected test count is: 4[0m
+[32mHeteroRuntimeMoeMergeSpec:[0m
+[32mfixed runtime MoE contribution order[0m
+RUNTIME_MOE_JOB token=11 expertOrder=false count=9 tags=0,1,2,3,4,5,6,7,8 experts=256,0,2,1,7,4,6,3,5 opaque_data_verified=true
+RUNTIME_MOE_JOB token=12 expertOrder=true count=9 tags=1,3,2,7,5,8,6,4,0 experts=0,1,2,3,4,5,6,7,256 opaque_data_verified=true
+RUNTIME_MOE_JOB token=13 expertOrder=false count=16 tags=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 experts=1023,1022,1021,1020,1019,1018,1017,1016,1015,1014,1013,1012,1011,1010,1009,1008 opaque_data_verified=true
+RUNTIME_MOE_JOB token=14 expertOrder=true count=8 tags=0,2,1,6,4,7,5,3 experts=0,1,2,3,4,5,6,7 opaque_data_verified=true
+[32m- should switch legacy to expert to legacy to expert without reset while locking accepted config and holding opaque identities (7 seconds, 140 milliseconds)[0m
+RUNTIME_MOE_REJECT cfg=6 route=6 valid_recovery=true
+[32m- should reject malformed runtime counts and duplicate or out of range routed and shared experts before dispatch (1 second, 931 milliseconds)[0m
+RUNTIME_MOE_RESPONSE_REJECT duplicate=1 out_of_range=1 valid_drained=8 merge=0
+[32m- should drain valid results after duplicate and invalid result tags without exposing any merge (1 second, 100 milliseconds)[0m
+RUNTIME_MOE_SAME_CYCLE issued=16 returned=16 merged=16
+[32m- should accept same-cycle issued results and preserve the full sixteen-slot legacy boundary (1 second, 420 milliseconds)[0m
+[36mRun completed in 11 seconds, 929 milliseconds.[0m
+[36mTotal number of tests run: 4[0m
+[36mSuites: completed 1, aborted 0[0m
+[36mTests: succeeded 4, failed 0, canceled 0, ignored 0, pending 0[0m
+[32mAll tests passed.[0m

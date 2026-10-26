@@ -1,0 +1,127 @@
+--- /dev/null
++++ b/integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroRuntimeMoeMerge.scala
+@@ -0,0 +1,124 @@
++package gemmini
++
++import chisel3._
++import chisel3.util._
++
++/** Fixed physical route/result buffer shared by both MoE block types.
++  * No model-specific elaboration. The parent maps its latched profile.mlp==1
++  * to mergeByExpert and expertCount=256; host policy is not free-form authority.
++  * Eight distinct routed experts and one optional shared sentinel256 are legal
++  * in that mode. The legacy mode is retained for compatibility, not evidence
++  * of official numerical equivalence. No floating-point arithmetic occurs here.
++  * Each output is an opaque identity-preserving contribution: the real shared
++  * consumer must materialize BF16 after weighting and each per-expert add.
++  */
++class HeteroRuntimeMoeMerge extends Module {
++  private val maxRoutes=16
++  private val routeBits=4
++  private val countBits=5
++  val io=IO(new Bundle {
++    val clear=Input(Bool());val start=Input(Bool());val startReady=Output(Bool())
++    val token=Input(UInt(32.W));val routeCount=Input(UInt(countBits.W))
++    val expertCount=Input(UInt(9.W));val mergeByExpert=Input(Bool())
++    val routeIn=Flipped(Decoupled(new HeteroMoeRoute(10,32)))
++    val dispatchOut=Decoupled(new HeteroMoeDispatchEntry(32,10,32,routeBits))
++    val resultIn=Flipped(Decoupled(new HeteroMoeResult(512,routeBits)))
++    val mergeOut=Decoupled(new HeteroMoeMergeContribution(512,32,routeBits))
++    val busy=Output(Bool());val done=Output(Bool())
++    val invalidConfig=Output(Bool());val protocolError=Output(Bool())
++  })
++  val sIdle::sLoad::sDispatch::sWait::sSelect::sMerge::sReject::Nil=Enum(7)
++  val state=RegInit(sIdle)
++  val token=Reg(UInt(32.W));val routes=Reg(UInt(countBits.W))
++  val load=RegInit(0.U(countBits.W))
++  val dispatch=RegInit(0.U(routeBits.W));val merge=RegInit(0.U(routeBits.W))
++  val returned=RegInit(0.U(countBits.W))
++  val experts=Reg(Vec(maxRoutes,UInt(10.W)))
++  val weights=Reg(Vec(maxRoutes,UInt(32.W)));val shared=Reg(Vec(maxRoutes,Bool()))
++  val issued=RegInit(VecInit(Seq.fill(maxRoutes)(false.B)))
++  val resultValid=RegInit(VecInit(Seq.fill(maxRoutes)(false.B)))
++  val resultData=Reg(Vec(maxRoutes,UInt(512.W)))
++  val error=RegInit(false.B)
++  val expertOrder=RegInit(false.B);val activeExpertCount=RegInit(0.U(9.W))
++  val cfg=io.routeCount=/=0.U && io.routeCount<=maxRoutes.U &&
++    (!io.mergeByExpert || (io.expertCount===256.U && (io.routeCount===8.U || io.routeCount===9.U)))
++  io.startReady:=state===sIdle;io.busy:=state=/=sIdle
++  io.invalidConfig:=io.start&&io.startReady && !cfg
++  io.done:=false.B;io.protocolError:=error;io.routeIn.ready:=state===sLoad
++  io.dispatchOut.valid:=state===sDispatch
++  io.dispatchOut.bits.token:=token;io.dispatchOut.bits.expert:=experts(dispatch)
++  io.dispatchOut.bits.weight:=weights(dispatch);io.dispatchOut.bits.routeTag:=dispatch
++  io.dispatchOut.bits.shared:=shared(dispatch)
++  io.dispatchOut.bits.last:=(dispatch +& 1.U)>=routes
++  val justIssued=io.dispatchOut.fire && io.resultIn.bits.routeTag===dispatch
++  val legal=io.resultIn.bits.routeTag<routes &&
++    (issued(io.resultIn.bits.routeTag)||justIssued) && !resultValid(io.resultIn.bits.routeTag)
++  io.resultIn.ready:=state===sDispatch || state===sWait
++  val response=io.resultIn.fire && legal
++  val badResponse=io.resultIn.fire && !legal
++  // In select/merge, load reuses the no-longer-live load counter as best slot.
++  // dispatch reuses the no-longer-live issue cursor as a sequential scan cursor.
++  val selected=Mux(expertOrder,load(routeBits-1,0),merge)
++  io.mergeOut.valid:=state===sMerge
++  io.mergeOut.bits.routeTag:=selected;io.mergeOut.bits.weight:=weights(selected)
++  io.mergeOut.bits.data:=resultData(selected)
++  io.mergeOut.bits.first:=merge===0.U;io.mergeOut.bits.last:=(merge +& 1.U)>=routes
++  def beginSelection():Unit={dispatch:=0.U;load:=maxRoutes.U;state:=sSelect}
++  when(io.clear){
++    state:=sIdle;error:=false.B;returned:=0.U;expertOrder:=false.B;activeExpertCount:=0.U
++    for(i<-0 until maxRoutes){issued(i):=false.B;resultValid(i):=false.B}
++  }.otherwise{
++    when(badResponse){error:=true.B}
++    when(response){resultData(io.resultIn.bits.routeTag):=io.resultIn.bits.data;resultValid(io.resultIn.bits.routeTag):=true.B;returned:=returned+1.U}
++    switch(state){
++      is(sIdle){when(io.start&&cfg){
++        token:=io.token;routes:=io.routeCount;expertOrder:=io.mergeByExpert;activeExpertCount:=io.expertCount
++        load:=0.U;dispatch:=0.U;merge:=0.U;returned:=0.U;error:=false.B
++        for(i<-0 until maxRoutes){issued(i):=false.B;resultValid(i):=false.B}
++        state:=sLoad
++      }}
++      is(sLoad){when(io.routeIn.fire){
++        val in=io.routeIn.bits
++        val routedLegal= !in.shared && in.expert<activeExpertCount
++        val sharedLegal=in.shared && in.expert===256.U
++        val duplicate=(0 until maxRoutes).map(i=>i.U<load && experts(i)===in.expert && shared(i)===in.shared).reduce(_||_)
++        val bad=expertOrder && ((!routedLegal && !sharedLegal)||duplicate)
++        // During load, returned counts shared entries; reset before dispatch.
++        val sharedCount=returned +& in.shared.asUInt
++        when(bad){error:=true.B}
++        experts(load(routeBits-1,0)):=in.expert;weights(load(routeBits-1,0)):=in.weight;shared(load(routeBits-1,0)):=in.shared
++        returned:=sharedCount
++        when((load +& 1.U)>=routes){
++          val badCount=expertOrder && (sharedCount>1.U || (routes-sharedCount)=/=8.U)
++          when(error||bad||badCount){error:=true.B;state:=sReject}
++            .otherwise{returned:=0.U;state:=sDispatch}
++        }.otherwise{load:=load+1.U}
++      }}
++      is(sDispatch){when(io.dispatchOut.fire){issued(dispatch):=true.B
++        when(io.dispatchOut.bits.last){state:=sWait}.otherwise{dispatch:=dispatch+1.U}
++      }}
++      is(sWait){when((returned +& Mux(response,1.U,0.U))>=routes){
++        merge:=0.U
++        when(error||badResponse){state:=sReject}
++          .elsewhen(expertOrder){beginSelection()}
++          .otherwise{state:=sMerge}
++      }}
++      is(sSelect){
++        val best=load(routeBits-1,0)
++        val earlier=(!shared(dispatch)&&shared(best)) ||
++          (shared(dispatch)===shared(best) && ((experts(dispatch)<experts(best)) ||
++            (experts(dispatch)===experts(best) && dispatch<best)))
++        when(resultValid(dispatch) && (load>=routes || earlier)){load:=dispatch}
++        when((dispatch +& 1.U)>=routes){state:=sMerge}.otherwise{dispatch:=dispatch+1.U}
++      }
++      is(sMerge){when(io.mergeOut.fire){
++        assert(resultValid(selected));resultValid(selected):=false.B
++        when(io.mergeOut.bits.last){state:=sIdle;io.done:=true.B}
++          .otherwise{merge:=merge+1.U;when(expertOrder){beginSelection()}}
++      }}
++      // No dispatch occurs for rejected loads; response errors are reported
++      // only after all otherwise valid issued results have been drained.
++      is(sReject){io.done:=true.B;state:=sIdle}
++    }
++  }
++}

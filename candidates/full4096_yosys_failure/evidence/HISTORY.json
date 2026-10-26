@@ -1,0 +1,61 @@
+{
+  "old_0712_source_status": "BLOCKED_NOT_EXECUTED",
+  "old_source_freeze": {
+    "bytes": 4365,
+    "sha256": "b1aad4c43221e2314b8f620ed52f2803d697433abaf4a1c212f0745886aeb170"
+  },
+  "r2_source_freeze": {
+    "bytes": 5104,
+    "sha256": "103223b47a8681675354cdc7bd400e974b82ec7e28c3775683dfaa8f7d68b671"
+  },
+  "r2_changes": [
+    "root COMMAND adds explicit --execute-approved-once",
+    "reject normalized cell type key collision",
+    "fresh r2 root/self identity only"
+  ],
+  "r2_tool_RTL_script_caps_changed": false,
+  "r2_source_review": {
+    "bytes": 18107,
+    "sha256": "d3a887056bc3d3a11290f125e6030bbde6599c6803f088fc07b7140464d62006"
+  },
+  "concurrency_addendum_review": {
+    "bytes": 7829,
+    "sha256": "42cc59ef4b374b53614243293827c86bc7f55fb056817a5a2668b41cf9dbe5b4"
+  },
+  "actual_review": {
+    "bytes": 14034,
+    "sha256": "9d4fc4fc1743a9f7ec379d538bc887077f2bec1ac7a42636b4ad627618b3550d"
+  },
+  "actual_review_freeze": {
+    "bytes": 2585,
+    "sha256": "44c8c1010840ae175e8cee2fc898a59ddd3821dc07fa1618fab04d818e5d293e"
+  },
+  "original_synthetic_controls": {
+    "status": "PASS_PURE_SOURCE_SYNTHETIC_ONLY",
+    "checks": 35,
+    "same_reviewed_functions": [
+      "need",
+      "digest",
+      "pin",
+      "verify_pin",
+      "walk_bounded",
+      "exact_inventory",
+      "verify_inputs",
+      "load_cleanup",
+      "tree_sample",
+      "stage_inputs",
+      "render_contract",
+      "sample_gap",
+      "group_sample",
+      "_child_limits",
+      "render_worker_argv"
+    ],
+    "native": false,
+    "actual_sv_read": false
+  },
+  "old_single512_candidate": "SUPERSEDED_NOT_EXECUTED_NOT_INCLUDED",
+  "old_hardware_resource_FAILs_preserved": true,
+  "original_review_harness_NameError_preserved_not_target_failure": true,
+  "disallowPackedArrays_successor": "Unexecuted candidate not included or accepted here",
+  "canonical_task_statuses_unchanged": true
+}

@@ -1,0 +1,534 @@
+"""One complete original4096-MAC baseline hierarchy/proc/check attempt.
+No flatten/blackbox/ABC/mapping/simulation. Not the new unified five-profile top.
+"""
+import argparse
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import resource
+import signal
+import stat
+import subprocess
+import sys
+import time
+import types
+
+SCHEMA = 'full4096-yosys-hierarchy-proc-check-supervisor-v1'
+HELPER = '${STRICT_CLEANUP_SOURCE}'
+HELPER_SHA = '30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047'
+CAPS = dict(cpu_seconds=180, work_wall_seconds=240, total_wall_seconds=270,
+            cleanup_reserve_seconds=30, cleanup_phase_seconds=10, postflight_reserve_seconds=20,
+            affinity_count=1, address_space_bytes=4*1024**3,
+            rss_sampled_bytes=2*1024**3, sample_seconds=0.1, log_hard_bytes=2*1024**2,
+            output_tree_sampled_bytes=256*1024**2, single_file_hard_bytes=192*1024**2)
+SIGNALS = {signal.SIGALRM, signal.SIGTERM, signal.SIGINT}
+
+
+def need(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def digest(path):
+    h = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for block in iter(lambda: stream.read(1024*1024), b''):
+            h.update(block)
+    return h.hexdigest()
+
+
+def pin(path):
+    path = Path(path)
+    result = dict(path=str(path), bytes=path.stat().st_size, sha256=digest(path), resolved_path=str(path.resolve()))
+    if path.is_symlink():
+        result['symlink_target'] = os.readlink(path)
+    return result
+
+
+def verify_pin(item):
+    path = Path(item['path'])
+    need(path.is_absolute() and path.is_file(), 'regular absolute pinned file: '+str(path))
+    need(path.is_symlink() == ('symlink_target' in item), 'pinned symlink kind drift')
+    if path.is_symlink():
+        need(os.readlink(path) == item['symlink_target'], 'pinned symlink target drift')
+    if 'resolved_path' in item:
+        need(str(path.resolve()) == item['resolved_path'], 'pinned resolved path drift')
+    need(path.stat().st_size == item['bytes'] and digest(path) == item['sha256'], 'pin drift: '+str(path))
+
+
+def walk_bounded(root):
+    root=Path(root);need(root.is_dir() and not root.is_symlink(),'non-symlink root directory')
+    def onerror(error):raise error
+    count=0
+    for directory,dirs,files in os.walk(root,followlinks=False,onerror=onerror):
+        for name in sorted(dirs+files):
+            path=Path(directory)/name;info=path.lstat();count+=1
+            need(count<=10000,'bounded source/output walk')
+            need(stat.S_ISREG(info.st_mode) or stat.S_ISDIR(info.st_mode),'reject symlink/special walk member')
+            yield path
+
+def exact_inventory(item):
+    root=Path(item['root']);actual=[]
+    for path in walk_bounded(root):
+        if path.is_file() and path.name.endswith(item['suffix']):actual.append(str(path))
+    need(sorted(actual)==sorted(item['files']),'exact immutable inventory drift: '+str(root))
+
+
+def verify_inputs(manifest, extra_pins=()):
+    verify_runtime_boundaries(manifest)
+    count=0
+    for rows in manifest['pins'].values():
+        for item in rows:verify_pin(item);count+=1
+    for item in extra_pins:verify_pin(item);count+=1
+    for inventory in manifest['inventories']:exact_inventory(inventory)
+    return dict(pin_checks=count,inventory_checks=len(manifest['inventories']),pass_all=True)
+
+
+def verify_runtime_boundaries(manifest):
+    for path in manifest['absent_paths']:need(not os.path.lexists(path),'runtime absent slot drift '+path)
+    for item in manifest['runtime_aliases']:
+        p=Path(item['path']);need(p.is_symlink() and os.readlink(p)==item['target'] and str(p.resolve())==item['resolved_path'],'loader alias drift')
+    p=Path(manifest['yosys']['path']);need(p.is_file() and os.access(p,os.X_OK),'fixed Yosys executable')
+
+
+def load_cleanup():
+    data = Path(HELPER).read_bytes()
+    need(hashlib.sha256(data).hexdigest() == HELPER_SHA, 'strict cleanup helper drift')
+    module = types.ModuleType('admitted_strict_cleanup')
+    module.__file__ = HELPER
+    module._ADMITTED_SOURCE_SHA256 = HELPER_SHA
+    exec(compile(data, HELPER, 'exec'), module.__dict__)
+    return module
+
+
+def validate_manifest(manifest):
+    need(manifest['schema']==SCHEMA and manifest['stage']=='full4096-hierarchy-proc-check','exact stage')
+    need(manifest['caps']==CAPS and all(type(manifest['caps'][k]) is type(v) for k,v in CAPS.items()),'exact caps/types')
+    need(manifest['run_root']=='${APPROVED_NEW_RUN_ROOT}' and Path(manifest['run_root']).resolve()==Path(manifest['run_root']),'exact fresh runroot')
+    need(manifest['automatic_retry'] is False and manifest['automatic_stage_chaining'] is False and manifest['external_root_approval_required'] is True,'single root decision')
+    need(manifest['top']=='OrderedQkRealMatrixCore','full eight-endpoint top')
+    need(set(manifest['pins'])=={'tool','runtime','input','provenance','source'},'fixed pin roles')
+    need(manifest['package']['sha256']=='c950e58a1f554546a91602e5124eb05019a92040e57b0aaa43cf33b032ee9c40' and manifest['package']['bytes']==6226136,'official Debian package')
+    need(manifest['yosys']['sha256']=='0e2b5c8f3ba616fa9ac5b05830e86181577ebf60d99401c10993885ff656e3ab','fixed restored executable')
+    for key in ('package','yosys','runtime_manifest','parent_python_runtime','adapter_plan','adapter_review','actual_sv_review','new_sv_receipt','hardware_review','staged_input_manifest','script','version_probe'):
+        p=manifest[key];verify_pin(p);need(any(p in row for row in manifest['pins'].values()),'metadata/source automatic '+key)
+    need(manifest['hardware_review']['sha256']=='8159839a9e4e50c41c6b3057601ae1f55be4f67297b04a4d67eb609bddf40cab','current full hardware identity')
+    need(manifest['adapter_review']['sha256']=='4d8a18f26dd5e2f6fc679fac82583620aa63440a03e5818f73a2fc33d42c0cd0','canonical nonDPI adapter review')
+    need(manifest['actual_sv_review']['sha256']=='545c58fbcfb09ffbcc5ea4f3ae2bcfb9ed479b6fc4b073041ebcf4b5a3f0d276','actual common SV scope')
+    parent=json.loads(Path(manifest['parent_python_runtime']['path']).read_text())
+    need(manifest['parent_python_runtime']['sha256']=='0ecbd114e9256eee254364f3e74603a64b3ae6daf7e2d0635c0d08a73d3dfa88','known parent runtime')
+    need(manifest['parent_runtime_endpoints']==parent['runtime_pins'] and manifest['parent_absent_paths']==parent['absent_paths'],'external parent endpoints')
+    for p in parent['automatic_runtime_pins']:need(p in manifest['pins']['runtime'],'automatic known parent runtime')
+    rt=json.loads(Path(manifest['runtime_manifest']['path']).read_text())
+    need(manifest['runtime_aliases']==rt['aliases'] and manifest['inventories']==rt['inventories'],'exact restored runtime boundaries')
+    need(manifest['absent_paths']==sorted(set(rt['absent_paths']+parent['absent_paths'])),'loader+parent negative endpoints')
+    for p in rt['pins']:need(any(p in row for row in manifest['pins'].values()),'all tool closure pins')
+    need(manifest['cleanup']['path']==HELPER and manifest['cleanup']['sha256']==HELPER_SHA and manifest['cleanup'] in manifest['pins']['source'],'strict cleanup automatic');verify_pin(manifest['cleanup'])
+    inputs=manifest['staged_inputs'];need(inputs==manifest['pins']['input']==json.loads(Path(manifest['staged_input_manifest']['path']).read_text())['staged_inputs'],'exact staged sources')
+    need(len(inputs)==16 and len({p['relative'] for p in inputs})==16 and len({p['path'] for p in inputs})==16,'15 RTL plus one script')
+    need(inputs[0]['sha256']=='c117e75ae97fb0a978e7cebe8e942a652bf1fbe927505d66092fa39b87380181' and inputs[0]['bytes']==48274540 and inputs[0]['relative']=='inputs/common.sv','full current common SV')
+    provider=json.loads(Path(manifest['adapter_plan']['path']).read_text())
+    need([(x['path'],x['bytes'],x['sha256']) for x in inputs[1:15]]==[(x['path'],x['bytes'],x['sha256']) for x in provider['source_files']],'exact14 original providers plus canonical adaptation')
+    need(provider['excluded_original_compilation_source'] not in {x['path'] for x in inputs},'no duplicate canonical endpoint')
+    need(inputs[-1]['sha256']==manifest['script']['sha256'] and inputs[-1]['relative']=='inputs/full4096.ys','script stage identity')
+    expected='# Current original full eight-endpoint core, not a single leaf or five-profile top.\n# No flatten, library/blackbox read, ABC, technology mapping, simulation or tool subprocess.\nread_verilog -sv -defer -DSYNTHESIS inputs/common.sv inputs/providers/qwen2_matrix_command_endpoint.sv inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv inputs/providers/tc_clk.sv inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv inputs/providers/bf16_outer_product_array_glue512.sv inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv\nhierarchy -check -simcheck -top OrderedQkRealMatrixCore\nproc\ncheck -assert\ntee -o reports/stat.json stat -json\nwrite_json reports/design.json\n'
+    need(Path(manifest['script']['path']).read_text()==expected,'fixed complete script no skip/flatten/library/ABC')
+    need(manifest['worker_argv']==[manifest['yosys']['path'],'-T','-Q','-s','${NEW_RUN_ROOT}/inputs/full4096.ys'],'exact one Yosys invocation')
+    need(manifest['environment']==dict(PATH='${NEW_RUN_ROOT}/empty-path',LANG='C.UTF-8',LC_ALL='C.UTF-8',HOME='${NEW_RUN_ROOT}/home',TMPDIR='${NEW_RUN_ROOT}/tmp'),'minimal env no plugin/LD/Python/search overrides')
+    return manifest
+
+
+def tree_sample(root):
+    return sum(p.lstat().st_size for p in walk_bounded(root) if p.is_file())
+
+
+
+
+
+def stage_inputs(root,manifest,*,create=False):
+    root=Path(root);out=[]
+    for p in manifest['staged_inputs']:
+        target=root/p['relative'];need(root in target.parents,'stage path')
+        if create:
+            target.parent.mkdir(exist_ok=True,parents=True)
+            need(all(not q.is_symlink() and q.is_dir() for q in [root,target.parent,target.parent.parent]),'stage parent kind')
+            h=hashlib.sha256();count=0
+            with Path(p['path']).open('rb') as src,target.open('xb') as dst:
+                while True:
+                    b=src.read(min(1048576,p['bytes']+1-count))
+                    if not b:break
+                    count+=len(b);need(count<=p['bytes'],'input growth');h.update(b);dst.write(b)
+            need(count==p['bytes'] and h.hexdigest()==p['sha256'],'input copy exact');target.chmod(0o444)
+        need(target.is_file() and not target.is_symlink() and (target.stat().st_mode&0o777)==0o444,'immutable staged regular')
+        row=pin(target);need(row['bytes']==p['bytes'] and row['sha256']==p['sha256'],'staged bytes drift');out.append(row)
+    actual={x.relative_to(root).as_posix() for x in walk_bounded(root/'inputs') if x.is_file()}
+    need(actual=={p['relative'] for p in manifest['staged_inputs']},'exact staged file set')
+    return out
+
+
+def render_contract(value,root):
+    if type(value) is str:return value.replace('${NEW_RUN_ROOT}',str(root))
+    if type(value) is list:return [render_contract(v,root) for v in value]
+    if type(value) is dict:return {k:render_contract(v,root) for k,v in value.items()}
+    return value
+
+def structure_check(root,manifest):
+    root=Path(root);p=root/'reports/stat.json'
+    need(p.is_file() and not p.is_symlink(),'regular stat JSON')
+    with p.open('rb') as f:raw=f.read(2*1024**2+1)
+    need(len(raw)<=2*1024**2,'small stat JSON cap')
+    def unique(pairs):
+        d={}
+        for k,v in pairs:need(k not in d,'duplicate JSON key');d[k]=v
+        return d
+    data=json.loads(raw,object_pairs_hook=unique)
+    need(type(data) is dict and set(data)=={'creator','invocation','modules','design'},'fixed stat JSON schema')
+    need(data['creator'].startswith('Yosys 0.52 ') and data['invocation']=='stat -json ','fixed stat invocation')
+    rawmods=data['modules'];need(type(rawmods) is dict and 1<=len(rawmods)<=10000,'bounded module statistics')
+    def norm(n):
+        need(type(n) is str and 0<len(n)<=4096,'bounded module/type name')
+        return n[1:] if n.startswith('\\') else n
+    mods={};edges=0
+    for name,row in rawmods.items():
+        name=norm(name);need(name not in mods,'unambiguous normalized module')
+        need(type(row) is dict and row.get('num_processes')==0 and type(row.get('num_processes')) is int,'proc fully converted each declared module')
+        cells=row.get('num_cells_by_type');need(type(cells) is dict,'cell type map')
+        normalized={}
+        for key,value in cells.items():
+            key=norm(key);need(key not in normalized,'ambiguous normalized cell type');normalized[key]=value
+        cells=normalized;edges+=len(cells)
+        need(edges<=100000 and all(type(v) is int and 1<=v<=2**32-1 for v in cells.values()),'bounded counts/edges')
+        need(type(row.get('num_cells')) is int and sum(cells.values())==row['num_cells'],'cell count sum')
+        mods[name]=cells
+    top=manifest['top'];need(top in mods,'exact complete top in statistics')
+    memo={};busy=set()
+    def expand(name,depth=0):
+        need(depth<=100 and name not in busy,'acyclic bounded hierarchy')
+        if name in memo:return memo[name]
+        busy.add(name);result={name:1}
+        for child,count in mods[name].items():
+            if child in mods:
+                for target,n in expand(child,depth+1).items():
+                    result[target]=result.get(target,0)+count*n
+                    need(result[target]<=2**40,'bounded expanded multiplicity')
+            else:need(child.startswith('$'),'unresolved non-internal module '+child)
+        busy.remove(name);memo[name]=result;return result
+    counts=expand(top)
+    need(counts.get('qwen2_matrix_command_endpoint')==8,'full original eight endpoints, not leaf')
+    expected=['HeteroBF16FmaPre','HeteroBF16FmaMul','HeteroBF16FmaPost','HeteroBF16FmaRound']
+    for family in expected:need(counts.get(family)==4096,'full 4096 arithmetic lane stage '+family)
+    endpoint=expand('qwen2_matrix_command_endpoint')
+    for family in expected:need(endpoint.get(family)==512,'each endpoint has512 lane stages')
+    design=root/'reports/design.json';need(design.is_file() and not design.is_symlink() and 0<design.stat().st_size<=manifest['caps']['single_file_hard_bytes'],'retained opaque full JSON')
+    log=root/'worker.log'
+    with log.open('rb') as f:lograw=f.read(manifest['caps']['log_hard_bytes']+1)
+    need(len(lograw)<=manifest['caps']['log_hard_bytes'] and b'ERROR:' not in lograw,'bounded native log without error')
+    return dict(status='PASS_FULL4096_YOSYS_HIERARCHY_PROC_CHECK_ONLY',module_count=len(mods),reachable_types=len(counts),expanded_module_multiplicity=counts,endpoint_count=8,lane_stages_per_endpoint=512,physical_mac_slots_source_bound=4096,stat_pin=pin(p),opaque_design_pin=pin(design),native_check_assert_and_simcheck=True,technology_mapping=False,PPA=False,numerical=False,unified_five_profile_top=False,RTL_arithmetic_modified=False)
+
+
+def output_scope(root,manifest):
+    root=Path(root);fixed={'CLAIM.json','worker.log','RECEIPT.json','reports/stat.json','reports/design.json'}|{p['relative'] for p in manifest['staged_inputs']}
+    dirs={'tmp','home','empty-path','reports','inputs','inputs/providers'}
+    for p in walk_bounded(root):
+        rel=p.relative_to(root).as_posix()
+        if p.is_file():need(rel in fixed,'unexpected output file '+rel)
+        else:need(rel in dirs,'unexpected output directory '+rel)
+
+
+def sample_gap(report, previous, sampled_at, limit):
+    gap = sampled_at-previous
+    report['maximum_sample_interval_seconds'] = max(report['maximum_sample_interval_seconds'],gap)
+    need(0 <= gap <= limit,'RSS/tree sample interval exceeded')
+    return sampled_at
+
+
+def save_receipt(report, root, caps):
+    """Write once only if both parent-written file and final tree fit the limits.
+
+    If evidence cannot fit, retain CLAIM/log/output and expose failure on CLI;
+    do not silently violate a cap to manufacture a complete-looking receipt.
+    """
+    report['receipt_saved'] = True
+    encoded = (json.dumps(report,indent=2,sort_keys=True,allow_nan=False)+'\n').encode()
+    try:
+        need(len(encoded)<=caps['single_file_hard_bytes'],'parent receipt file hard cap exceeded')
+        need(tree_sample(root)+len(encoded)<=caps['output_tree_sampled_bytes'],
+             'output tree including final receipt exceeds sampled cap')
+    except (ValueError,OSError) as error:
+        report['errors'].append(type(error).__name__+': '+str(error))
+        report['status'] = 'FAIL_FULL4096_YOSYS_RETAINED'
+        report['full4096_yosys_pass'] = False
+        report['receipt_saved'] = False
+        report['receipt_not_written_reason'] = str(error)
+        return
+    path = Path(root)/'RECEIPT.json'
+    with path.open('xb') as stream:
+        stream.write(encoded)
+        stream.flush()
+        need(os.fstat(stream.fileno()).st_size==len(encoded),'receipt final file size')
+    need(digest(path)==hashlib.sha256(encoded).hexdigest(),'receipt final content hash')
+    need(tree_sample(root)<=caps['output_tree_sampled_bytes'],'receipt final tree cap')
+
+
+def group_sample(strict, owner):
+    """Sample anchored original process group; not cgroup/escaped-tree confinement."""
+    process = owner['process']
+    cpu = rss = 0
+    members = []
+    names = os.listdir('/proc')
+    need(len(names) <= 100000, 'bounded proc enumeration')
+    for name in names:
+        if not name.isascii() or not name.isdecimal():
+            continue
+        try:
+            raw = (Path('/proc')/name/'stat').read_bytes()
+        except FileNotFoundError:
+            continue
+        row = strict.parse_stat(raw)
+        if row['group'] != process.pid:
+            continue
+        need(row['session'] == process.pid and row['start'] >= owner['identity']['start'], 'ambiguous group member')
+        fields = raw[raw.rindex(b')')+1:].split()
+        cpu += sum(int(fields[i]) for i in (11,12,13,14))/os.sysconf('SC_CLK_TCK')
+        rss += max(0,int(fields[21]))*os.sysconf('SC_PAGE_SIZE')
+        members.append(row)
+    need(any(r['pid'] == process.pid and r['start'] == owner['identity']['start'] for r in members), 'retained leader identity missing')
+    return dict(cpu_seconds=cpu, rss_bytes=rss, members=members)
+
+
+def _child_limits(caps, cpu):
+    os.sched_setaffinity(0, {cpu})
+    resource.setrlimit(resource.RLIMIT_CPU, (math.ceil(caps['cpu_seconds']),)*2)
+    resource.setrlimit(resource.RLIMIT_AS, (caps['address_space_bytes'],)*2)
+    resource.setrlimit(resource.RLIMIT_FSIZE, (caps['single_file_hard_bytes'],)*2)
+    for sig in SIGNALS:
+        signal.signal(sig, signal.SIG_DFL)
+    signal.pthread_sigmask(signal.SIG_UNBLOCK, SIGNALS)
+
+
+def render_worker_argv(manifest):
+    return [value.replace('${NEW_RUN_ROOT}',manifest['run_root']).replace('${MANIFEST_PATH}',manifest.get('_admitted_manifest_path','')).replace('${MANIFEST_SHA256}',manifest.get('_admitted_manifest_sha256','')) for value in manifest['worker_argv']]
+
+
+def _execute(manifest, *, extra_pins=()):
+    """Internal engine; tests pass only explicitly synthetic Python argv/small caps.
+
+    Public CLI always performs production validate_manifest before this function.
+    """
+    caps = manifest['caps']
+    root = Path(manifest['run_root'])
+    start = time.monotonic()
+    parent_cpu_start = time.process_time()
+    before_children = resource.getrusage(resource.RUSAGE_CHILDREN)
+    work_stop = start+caps['work_wall_seconds']
+    absolute_stop = start+caps['total_wall_seconds']
+    # Cleanup and postflight share the original reserve; never start a fresh timer budget.
+    cleanup_stop = work_stop+caps['cleanup_phase_seconds']
+    need(cleanup_stop<=absolute_stop-caps['postflight_reserve_seconds'], 'original cleanup/postflight allocation')
+    strict = load_cleanup()
+    need(signal.getitimer(signal.ITIMER_REAL) == (0.0,0.0), 'no inherited work alarm')
+    # Atomic directory claim is never removed, even on preflight/launch failure.
+    root.mkdir(mode=0o700, parents=False, exist_ok=False)
+    with (root/'CLAIM.json').open('x') as stream:
+        json.dump(dict(schema=SCHEMA, parent_pid=os.getpid(), started_monotonic=start,
+                       stage='full4096-hierarchy-proc-check', argv=render_worker_argv(manifest), argv_template=manifest['worker_argv'], consumed=True), stream)
+    report = dict(schema=SCHEMA, status='FAIL_FULL4096_YOSYS_RETAINED', worker_started=False,
+                  numerical_pass=False, hardware_behavior_pass=False, rtl=False, rtl_simulation=False,
+                  jvm_executed=False, chisel_elaboration_attempted=False, full4096_yosys_pass=False,
+                  wrapper_sv_generation_attempted=False, seqinit_adaptation_performed=False,
+                  synthesis_macro_defined=True, selected_endpoint_count=8, physical_arithmetic_slots=4096, original_hardware_modified=False,
+                  utilization='UNKNOWN_NOT_MEASURED', caps=caps, errors=[],
+                  cleanup_complete=False, original_failure_retained=True,
+                  process_scope='ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY',
+                  preflight=None, postflight=None, offline_only=False, sv_generation_attempted=False, yosys_invocation_attempted=False, model_cpp_generated=None, model_built=False, model_simulated=False, sampled_peak_rss_bytes=0,
+                  sampled_peak_output_bytes=0, sampled_peak_cpu_seconds=0, log_bytes=0,
+                  maximum_sample_interval_seconds=0, exit_code=None, manifest_inputs=list(extra_pins))
+    report['absolute_deadlines'] = dict(work=work_stop,cleanup=cleanup_stop,total=absolute_stop)
+    owner = None
+    log = None
+    previous = {sig:signal.getsignal(sig) for sig in SIGNALS}
+    previous_affinity = os.sched_getaffinity(0)
+    prior_mask = signal.pthread_sigmask(signal.SIG_BLOCK, SIGNALS)
+    def interrupted(sig, frame):
+        raise InterruptedError('supervisor signal/deadline '+str(sig))
+    def fail(error):
+        report['errors'].append(type(error).__name__+': '+str(error))
+    try:
+        for sig in SIGNALS:
+            signal.signal(sig, interrupted)
+        signal.setitimer(signal.ITIMER_REAL, max(.001,work_stop-time.monotonic()))
+        signal.pthread_sigmask(signal.SIG_SETMASK, prior_mask-SIGNALS)
+        cpu = min(previous_affinity)
+        os.sched_setaffinity(0,{cpu})
+        report['preflight'] = verify_inputs(manifest, extra_pins)
+        for name in ('tmp','home','empty-path','reports','inputs'):
+            (root/name).mkdir()
+        report['staged_inputs_before'] = stage_inputs(root,manifest,create=True)
+        argv = render_worker_argv(manifest)
+        env = {k:v.replace('${NEW_RUN_ROOT}',str(root)) for k,v in manifest['environment'].items()}
+        need(os.sched_getaffinity(0)=={cpu}, 'supervisor one-CPU affinity')
+        report.update(executed_argv=argv, executed_environment=env, affinity_cpu=cpu)
+        log = (root/'worker.log').open('xb')
+        signal.pthread_sigmask(signal.SIG_BLOCK, SIGNALS)
+        verify_runtime_boundaries(manifest)
+        process = subprocess.Popen(argv, cwd=root, env=env, stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, start_new_session=True,
+            preexec_fn=lambda:_child_limits(caps,cpu))
+        owner = dict(process=process,identity=None)
+        report['worker_started'] = True
+        report['yosys_invocation_attempted'] = True
+        report['wrapper_sv_generation_attempted'] = False
+        api = strict._Linux()
+        strict._verify_leader(owner,api,None,api.boot())
+        report['owner_identity'] = dict(owner['identity'])
+        os.set_blocking(process.stdout.fileno(),False)
+        signal.pthread_sigmask(signal.SIG_SETMASK, prior_mask-SIGNALS)
+        def collect():
+            while True:
+                need(time.monotonic()<work_stop, 'work deadline while draining log')
+                try:
+                    chunk = os.read(process.stdout.fileno(),65536)
+                except BlockingIOError:
+                    break
+                if not chunk:
+                    break
+                remaining = caps['log_hard_bytes']-report['log_bytes']
+                kept = chunk[:remaining]
+                log.write(kept)
+                report['log_bytes'] += len(kept)
+                if len(chunk)>remaining:
+                    log.flush()
+                    raise ValueError('hard log cap exceeded')
+            log.flush()
+        last_sample = time.monotonic()
+        while True:
+            collect()
+            sample = group_sample(strict,owner)
+            cpu_seconds = sample['cpu_seconds']+time.process_time()-parent_cpu_start
+            size = tree_sample(root)
+            sampled_at = time.monotonic()
+            last_sample = sample_gap(report,last_sample,sampled_at,caps['sample_seconds'])
+            report['sampled_peak_rss_bytes'] = max(report['sampled_peak_rss_bytes'],sample['rss_bytes'])
+            report['sampled_peak_cpu_seconds'] = max(report['sampled_peak_cpu_seconds'],cpu_seconds)
+            report['sampled_peak_output_bytes'] = max(report['sampled_peak_output_bytes'],size)
+            need(sample['rss_bytes'] <= caps['rss_sampled_bytes'],'sampled RSS cap exceeded')
+            need(cpu_seconds <= caps['cpu_seconds'],'sampled aggregate CPU cap exceeded')
+            need(size <= caps['output_tree_sampled_bytes'],'sampled output tree cap exceeded')
+            need(time.monotonic()<work_stop,'Yosys full4096 hierarchy/proc/check work deadline')
+            result = os.waitid(os.P_PID,process.pid,os.WEXITED|os.WNOHANG|os.WNOWAIT)
+            if result is not None:
+                collect()
+                report['exit_code'] = result.si_status if result.si_code==os.CLD_EXITED else -result.si_status
+                break
+            time.sleep(min(.02,caps['sample_seconds']))
+    except BaseException as error:
+        fail(error)
+    finally:
+        signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS)
+        signal.setitimer(signal.ITIMER_REAL,0)
+        for sig in SIGNALS:
+            if sig in signal.sigpending():
+                signal.sigtimedwait({sig},0)
+        try:
+            if owner is not None:
+                try:
+                    proof = strict.cleanup_owned(owner,cleanup_stop)
+                    strict.validate_cleanup_proof(proof,owner=owner,stop=cleanup_stop)
+                    report.update(cleanup_complete=True,cleanup_proof=proof)
+                except BaseException as error:
+                    fail(error)
+                report['cleanup_observation'] = owner.get('strict_cleanup_observation')
+            else:
+                report['cleanup_not_required_no_process_started'] = True
+            if log is not None:
+                log.flush()
+            if owner is not None and owner['process'].stdout is not None:
+                owner['process'].stdout.close()
+            need(time.monotonic()<absolute_stop,'original total deadline before postflight')
+            signal.setitimer(signal.ITIMER_REAL,max(.001,absolute_stop-time.monotonic()))
+            signal.pthread_sigmask(signal.SIG_SETMASK,prior_mask-SIGNALS)
+            try:
+                report['postflight'] = verify_inputs(manifest,extra_pins)
+            except BaseException as error:
+                fail(error)
+            try:
+                size = tree_sample(root)
+                report['sampled_peak_output_bytes'] = max(report['sampled_peak_output_bytes'],size)
+                need(size <= caps['output_tree_sampled_bytes'],'final output tree cap exceeded')
+                output_scope(root,manifest)
+                report['staged_inputs_after'] = stage_inputs(root,manifest)
+                if report['worker_started'] and report['exit_code'] == 0 and not report['cleanup_complete']:
+                    report['structure_check_skipped_due_to_cleanup'] = True
+                if (report['worker_started'] and report['exit_code'] == 0 and report['cleanup_complete']
+                        and report['postflight'] is not None and not report['errors']):
+                    report['structure_check'] = structure_check(root,manifest)
+            except BaseException as error:
+                fail(error)
+            if log is not None:
+                need(os.fstat(log.fileno()).st_size == report['log_bytes'] <= caps['log_hard_bytes'],'final log cap/size')
+            if report['exit_code'] != 0:
+                fail(RuntimeError('Yosys full4096 hierarchy/proc/check frontend did not exit zero'))
+            after_children = resource.getrusage(resource.RUSAGE_CHILDREN)
+            report['final_aggregate_cpu_seconds'] = (time.process_time()-parent_cpu_start +
+                after_children.ru_utime+after_children.ru_stime-before_children.ru_utime-before_children.ru_stime)
+            report['final_parent_and_waited_child_cpu_seconds'] = report['final_aggregate_cpu_seconds']
+            report['sampled_group_plus_parent_cpu_peak_seconds'] = report['sampled_peak_cpu_seconds']
+            report['complete_process_tree_cpu_seconds'] = None
+            need(report['final_aggregate_cpu_seconds'] <= caps['cpu_seconds'],'final aggregate CPU cap exceeded')
+            if not report['errors'] and report['cleanup_complete'] and report['postflight'] is not None:
+                report['status'] = 'PASS_FULL4096_YOSYS_HIERARCHY_PROC_CHECK_ONLY'
+                report['full4096_yosys_pass'] = True
+                report['model_cpp_generated'] = False
+            report['elapsed_seconds'] = time.monotonic()-start
+            need(time.monotonic()<absolute_stop,'original total deadline before receipt')
+        except BaseException as error:
+            fail(error)
+            report['status'] = 'FAIL_FULL4096_YOSYS_RETAINED'
+            report['full4096_yosys_pass'] = False
+        finally:
+            # Receipt creation belongs to the same original total deadline.
+            # An expired deadline/forced kill may leave only CLAIM/log evidence.
+            try:
+                need(time.monotonic()<absolute_stop,'total deadline before final receipt write')
+                signal.setitimer(signal.ITIMER_REAL,max(.001,absolute_stop-time.monotonic()))
+                signal.pthread_sigmask(signal.SIG_SETMASK,prior_mask-SIGNALS)
+                save_receipt(report,root,caps)
+                need(time.monotonic()<absolute_stop,'total deadline after final receipt write')
+            finally:
+                signal.pthread_sigmask(signal.SIG_BLOCK,SIGNALS)
+                signal.setitimer(signal.ITIMER_REAL,0)
+                for sig in SIGNALS:
+                    if sig in signal.sigpending():
+                        signal.sigtimedwait({sig},0)
+                if log is not None:
+                    log.close()
+                os.sched_setaffinity(0,previous_affinity)
+                for sig,handler in previous.items():
+                    signal.signal(sig,handler)
+                signal.pthread_sigmask(signal.SIG_SETMASK,prior_mask)
+    return report
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--manifest',type=Path,required=True)
+    parser.add_argument('--manifest-sha256',required=True)
+    parser.add_argument('--execute-approved-once',action='store_true',required=True)
+    args = parser.parse_args(argv)
+    raw = args.manifest.read_bytes()
+    need(hashlib.sha256(raw).hexdigest()==args.manifest_sha256,'explicit manifest identity')
+    data = json.loads(raw)
+    validate_manifest(data)
+    admitted_manifest_pin = dict(path=str(args.manifest.absolute()),bytes=len(raw),sha256=args.manifest_sha256,
+                                 resolved_path=str(args.manifest.resolve()))
+    data['_admitted_manifest_path']=str(args.manifest.absolute())
+    data['_admitted_manifest_sha256']=args.manifest_sha256
+    result = _execute(data,extra_pins=(admitted_manifest_pin,pin(Path(__file__).resolve())))
+    print(json.dumps({k:result[k] for k in ('status','worker_started','cleanup_complete','exit_code','errors')}))
+    return 0 if result['status']=='PASS_FULL4096_YOSYS_HIERARCHY_PROC_CHECK_ONLY' else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

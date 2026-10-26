@@ -1,0 +1,63 @@
+{
+  "package": {
+    "status": "RESTORED_OFFICIAL_PACKAGE_BYTES_ONLY_NOT_EXECUTED",
+    "url": "https://deb.debian.org/debian/pool/main/y/yosys/yosys_0.52-2_amd64.deb",
+    "bytes": 6226136,
+    "sha256": "c950e58a1f554546a91602e5124eb05019a92040e57b0aaa43cf33b032ee9c40",
+    "source": "https://packages.debian.org/trixie/amd64/yosys/download",
+    "installed": false,
+    "executed": false
+  },
+  "observed_version": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+  "executable_hash_only": {
+    "bytes": 18025912,
+    "sha256": "0e2b5c8f3ba616fa9ac5b05830e86181577ebf60d99401c10993885ff656e3ab"
+  },
+  "official_source_basis": [
+    {
+      "url": "https://raw.githubusercontent.com/YosysHQ/yosys/v0.52/kernel/yosys.cc",
+      "bytes": 32200,
+      "sha256": "7e4a9a8245ed358dfb9e8781ab05c67748f2ab0c745cff9f85b1bfb9cdde74f2"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/YosysHQ/yosys/v0.52/frontends/verilog/verilog_frontend.cc",
+      "bytes": 24379,
+      "sha256": "f7541eeae0f1337b15c48942482ca33e5951ff801a50648b8d9475c7cab04474"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/YosysHQ/yosys/v0.52/passes/cmds/check.cc",
+      "bytes": 15332,
+      "sha256": "8c1843f3ecd6416a724f6c94f6b0a0b8587d1d4c13cb40aa3b82a2167cded308"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/YosysHQ/yosys/v0.52/passes/hierarchy/hierarchy.cc",
+      "bytes": 51326,
+      "sha256": "18a02064bfba1de8f974cf9037247937c4fe71b4a781d7011a7968265dafefc1"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/YosysHQ/yosys/v0.52/backends/json/json.cc",
+      "bytes": 24121,
+      "sha256": "c00a3678ec9ae347dd85f379bcab741d9c39c82f7d9c6336a09374c6c557dcae"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/YosysHQ/yosys/v0.52/passes/cmds/stat.cc",
+      "bytes": 16348,
+      "sha256": "e9938389f34af6166743820db78b2814ccfcb1dae20cdf8143fbf2ecfebdb27e"
+    }
+  ],
+  "source_roles": {
+    "hierarchy.cc": "-simcheck rejects reachable blackbox/whitebox; static link check, not simulation",
+    "check.cc": "-assert makes detected structural problems fatal",
+    "stat.cc": "small JSON schema/invocation used by parser",
+    "kernel/yosys.cc": "restored executable sibling share first, compiled fallback second; no assumed YOSYS_DATDIR environment override"
+  },
+  "runtime_manifest_hash_only": {
+    "bytes": 150928,
+    "sha256": "5f62a1c12b05188b25ff4492a86209f52c12cb079b06f731b994b85f69b2776e"
+  },
+  "declared_tool_pin_records": 286,
+  "declared_parent_pin_records": 136,
+  "runtime_inventory_count": 267,
+  "tool_library_cache_share_bytes_not_uploaded_or_rehashed_by_packager": true,
+  "complete_live_loader_trace_not_claimed": true
+}

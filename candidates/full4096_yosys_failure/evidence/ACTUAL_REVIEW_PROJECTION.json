@@ -1,0 +1,203 @@
+{
+  "schema": "full4096-yosys-public-failure-projection-v1",
+  "original_actual_review": {
+    "bytes": 14034,
+    "sha256": "9d4fc4fc1743a9f7ec379d538bc887077f2bec1ac7a42636b4ad627618b3550d"
+  },
+  "original_actual_review_freeze": {
+    "bytes": 2585,
+    "sha256": "44c8c1010840ae175e8cee2fc898a59ddd3821dc07fa1618fab04d818e5d293e"
+  },
+  "status": "PASS_AUDIT_OF_ACTUAL_FAIL_NOT_DESIGN_PASS",
+  "actual_status": "FAIL_FULL4096_YOSYS_RETAINED",
+  "result": {
+    "bounded_error_locator": {
+      "declaration_line": 2651,
+      "declaration_without_values": "wire [7:0][31:0] _GEN =",
+      "nearest_module": "module BlockScalarFloat",
+      "nearest_module_line": 2620,
+      "prefix_bytes_read_per_file": 371489,
+      "prefix_equal_between_staged_and_original": true,
+      "prefix_line_count": 2654,
+      "prefix_sha256": "4cd27f4e6fc393ca10d01c8ed70e1c588116046fd29a84bffdfdcb38a608048c",
+      "source_line": 2652,
+      "token_at_error": "'{",
+      "whole_common_content_not_rehashed": true
+    },
+    "errors_in_receipt_order": [
+      "ValueError: unexpected output directory home/.local",
+      "RuntimeError: Yosys full4096 hierarchy/proc/check frontend did not exit zero"
+    ],
+    "native_exit_code": 1,
+    "native_first_error": "inputs/common.sv:2652: ERROR: syntax error, unexpected OP_CAST",
+    "no_retry_no_RTL_edits": true,
+    "not_a_resource_kill": true,
+    "outer_timeout": false,
+    "second_failure": "Unexpected output directory home/.local independently violates frozen output_scope. Retained descendants are home/.local/state/yosys/history, with history empty (0 bytes). The first unexpected directory caused the scope rejection.",
+    "source_assessment": "Observed native Yosys Verilog frontend cannot parse the packed-array assignment-pattern token at this location. The common namespace contains BlockScalarFloat here; the requested top had not reached hierarchy selection/check. This does not establish invalid hardware or unsynthesizable SystemVerilog.",
+    "supervisor_exit_code": 1,
+    "worker_started": true,
+    "worker_log_hash_only": {
+      "bytes": 238,
+      "sha256": "54f1ef88f4c6e3f3da49c1d3d1c8b0bb15f7633cb36e4b3f39c1bbd46338387b"
+    }
+  },
+  "phase_scope": {
+    "design_json_exists": false,
+    "does_not_demote_prior_separate_compile_or_SV_evidence": true,
+    "endpoint_count8_and_physical_slots4096_fields": "Configured admission metadata in initial receipt, not graph counts measured by this failed attempt. Original full input identity was preserved, but this run did not establish8x512 graph expansion.",
+    "entered": "First read_verilog frontend on full common.sv",
+    "no_SV_elaboration_simulation_numerical_PPA_unified_top_PASS": true,
+    "reached_check_assert": false,
+    "reached_hierarchy_check": false,
+    "reached_proc": false,
+    "stat_json_exists": false,
+    "structure_check_receipt_present": false
+  },
+  "pins_and_integrity": {
+    "actual_file_bytes": 48338853,
+    "actual_files": 20,
+    "common_hash_label": "Inventory retains expected/admitted staged-before SHA, explicitly not a fresh whole-file digest.",
+    "expected_before_after_mappings_equal_frozen_ROOT_REQUIRED": true,
+    "external_absence_slots": 17,
+    "external_aliases": 8,
+    "external_expected_pin_records": 56,
+    "external_locale": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    "independent_staged_post_checks": "All15 smaller staged provider/script files fully rehashed and match original manifest; common48,274,540B only current size/mode and first371,489B/2654lines independently matched to original. Whole staged common post-run hash not independently established.",
+    "reviewer_current_original_pin_stat_records": 457,
+    "staged_after_field_absent": true,
+    "staged_after_gap_reason": "Frozen output_scope raises on home/.local before stage_inputs(post) is called. Original459 input/source/runtime postflight PASS is not a full staged-copy postflight.",
+    "staged_before_verified": 16,
+    "stats_not_full_hash_or_historical_inode_continuity": true,
+    "these_are_source_runtime_input_original_pins": "457 declared records plus manifest+self2, one all-suffix share inventory; actual production source-bound checker reports all PASS. Reviewer did not rehash large SV, executable, libraries or runtime caches.",
+    "worker_postflight": {
+      "inventory_checks": 1,
+      "pass_all": true,
+      "pin_checks": 459
+    },
+    "worker_preflight": {
+      "inventory_checks": 1,
+      "pass_all": true,
+      "pin_checks": 459
+    }
+  },
+  "resource_actuals": {
+    "CPU_not_misreported_as_exact_entire_tree": true,
+    "RSS_not_complete_run_true_peak_or_aggregate_host_peak": true,
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 180,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 201326592,
+      "total_wall_seconds": 270,
+      "work_wall_seconds": 240
+    },
+    "complete_process_tree_cpu_seconds": null,
+    "final_actual_tree_file_bytes_including_receipt": 48338853,
+    "final_parent_and_waited_child_cpu_seconds": 1.702478607,
+    "inner_elapsed_seconds": 1.7344751530326903,
+    "maximum_sample_interval_seconds": 0.02473795204423368,
+    "outer_wall_seconds": 1.8771014510421082,
+    "resource_limits_not_reached": true,
+    "sampled_group_plus_parent_cpu_peak_seconds": 1.541420108,
+    "sampled_peak_output_file_bytes": 48321681,
+    "sampled_peak_owned_group_RSS_bytes": 355414016
+  },
+  "cleanup": {
+    "SIGKILL_record_meaning": "Strict helper signaled its retained original group during final cleanup. The leader was already terminal; direct exit code remains1, not-9. Do not misclassify as a sampled-limit kill.",
+    "complete": true,
+    "direct_exit_code": 1,
+    "grandchildren_reaped_claimed": false,
+    "independent_offline_validation": "Original helper _validate_proof and source constants replayed purely on persisted proof/scans with a reconstructed record-only owner. Checked seal encoding, exact fields, scan hash, deadlines and barrier-before-reap order. This is not live process authority or fresh cross-namespace census.",
+    "no_post_reap_signals": true,
+    "retained_leader_state": "Z",
+    "scan_evidence_sha256": "d2b8ae4198e338b09034a8c7d8d79dab18518ae8327df9cd9ab184b0ad64515d",
+    "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "two_complete_empty_nonleader_scans": true
+  },
+  "concurrency_exception_observation": {
+    "MemAvailable_after": 8192970752,
+    "MemAvailable_before": 8224321536,
+    "Yosys_actual_affinity_cpu": 1,
+    "cold_CPU0_source_bound_only": true,
+    "cold_not_signaled_or_reconfigured_by_admitted_source": true,
+    "explicitly_adopted": true,
+    "minimum_prelaunch_MemAvailable": 5368709120,
+    "no_claim_of_combined_RSS_or_hard_isolation": true,
+    "not_a_live_cross_namespace_census": true,
+    "outer_parent_affinity": [
+      1
+    ],
+    "root_launcher_affinity_restore_note": "Archived outer launcher records affinity{1} at receipt and exits; it does not explicitly restore previous affinity before exit. This affected only that terminating process, not cold/global settings. Supervisor itself restores inherited{1}.",
+    "root_no_other_authorized_heavy_launch": true
+  },
+  "identity_hashes_only": {
+    "actual_receipt": {
+      "bytes": 17172,
+      "sha256": "1e4f4ef208c5a0634ad7f314819a96b2ffc50be13d2eadefebd407b3ed12313d"
+    },
+    "approval": {
+      "bytes": 1961,
+      "sha256": "1b97347330cd16bdfe84b7cadc1d4d24d598b516050898782b3df83bf0ef5491"
+    },
+    "archived_root_launcher": {
+      "bytes": 3725,
+      "sha256": "155997eb4f6615a14ddc13dc6761442ad85a31df9acccc531ae267ca8d759b71"
+    },
+    "claim": {
+      "bytes": 577,
+      "sha256": "cd67279b85188bdf6b271afb4c8c3b94f0323bb95ff9aa867b1bbe1c8d2de9a2"
+    },
+    "current_tmp_launcher": {
+      "bytes": 3725,
+      "sha256": "155997eb4f6615a14ddc13dc6761442ad85a31df9acccc531ae267ca8d759b71"
+    },
+    "manifest": {
+      "bytes": 254717,
+      "sha256": "b310783a589f1d8ead0fb4243104a7151ed78a68b81002dd1ebf056f336b23f0"
+    },
+    "root_receipt": {
+      "bytes": 186,
+      "sha256": "fb25f3eb49865f36fb5108612fdfc758b805d3bdf16702412619fef97cc05e09"
+    },
+    "supervisor": {
+      "bytes": 32723,
+      "sha256": "a25791aaaf2b2a26bc34625e5f7cbead34b7737236b5d692e1bd019feded1760"
+    }
+  },
+  "outer_monitor_scope_limit": "This run completed normally within1.88s; outer timeout/terminate branch was not exercised. No broader proof of all outer-timeout behavior is inferred.",
+  "remaining_unknowns": [
+    "Whether official Yosys native frontend can process all other legal SV constructs",
+    "Full4096 hierarchy/proc/check resource fit and structural result",
+    "Whole staged common after-run hash, since output_scope prevented stage-after gate",
+    "Numerical correctness, behavior, resource utilization, PPA and completed five-profile unified hardware"
+  ],
+  "review_execution": {
+    "bounded_source_read_bytes_each_of_original_and_staged": 371489,
+    "conditions_include2654line_per_file_bounds_not5932_test_cases": true,
+    "first_review_harness_attempt_retained": "Pure helper predicate initially omitted its _encoded dependency, causing reviewer NameError before actual evidence analysis completed. Added original pure helper dependency and exact source constants; attempt1 script/log preserved. Not target failure or source change.",
+    "independent_conditions": 5932,
+    "no_full48MB_read_or_hash": true,
+    "no_native_tool_or_model_rerun": true,
+    "original_raw_artifacts_not_modified": true
+  },
+  "publishable_conclusion": "One root-authorized full4096 baseline Yosys attempt actually failed in the first common.sv frontend at OP_CAST, and separately failed frozen output-directory admission. Original inputs/limits preserved; clean owned-group teardown and source/runtime pre/post gates verified. No hierarchy/proc/check or numerical/PPA/unified-top PASS.",
+  "projection_omissions": [
+    "Machine absolute paths and raw argv/environment roots",
+    "Process identifiers/session numbers/boot identity and monotonic lifecycle timestamps",
+    "Actual bulk, native binaries, raw logs, model inputs and weights"
+  ],
+  "projection_not_raw_receipt": true
+}

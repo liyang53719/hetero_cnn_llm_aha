@@ -1,0 +1,53 @@
+{
+  "original_supervisor": {
+    "bytes": 32723,
+    "sha256": "a25791aaaf2b2a26bc34625e5f7cbead34b7737236b5d692e1bd019feded1760"
+  },
+  "template": {
+    "bytes": 32610,
+    "sha256": "47e8a7c2e651deaa0a81563ebcef1bf6b28710019b6b3410373ec2add08b5b43"
+  },
+  "literal_replacements": [
+    {
+      "replacement_literal": "${STRICT_CLEANUP_SOURCE}",
+      "old_literal_utf8_bytes": 91,
+      "old_literal_sha256": "a393571c8942ed17c8810aac199550eb19896e0930854d50ebbf44e53bd6ec02",
+      "occurrences": 1
+    },
+    {
+      "replacement_literal": "${APPROVED_NEW_RUN_ROOT}",
+      "old_literal_utf8_bytes": 70,
+      "old_literal_sha256": "c0b77350ba59cdce11999a260df97e3009ca86d69cfbe92b53d20de8b3febcf8",
+      "occurrences": 1
+    }
+  ],
+  "reverse_transform_exact": true,
+  "only_two_AST_string_constants_changed": true,
+  "not_a_runnable_launcher_manifest_or_GO": true,
+  "private_manifest_hash_only": {
+    "bytes": 254717,
+    "sha256": "b310783a589f1d8ead0fb4243104a7151ed78a68b81002dd1ebf056f336b23f0"
+  },
+  "parser_exact_source_functions": [
+    "need",
+    "digest",
+    "pin",
+    "structure_check"
+  ],
+  "parser_original_function_hashes": {
+    "need": "4b3a697e0d6c229d054eb933137631f3eec63797433cf8a40cb5f41231911d04",
+    "digest": "0a85b96d9d9f71b46d4fc24f47734f763fe7fa232da428626f695e7eb4c325da",
+    "pin": "0a65ee750ebf58b25eccba0ec88d528ddecac70990272e8dd701d6a238ec0674",
+    "structure_check": "028375d3da46ee4e89d3a0a799ccafccdbb4e495264b4f10863b44f4969f1cdc"
+  },
+  "original_test_source": {
+    "bytes": 4545,
+    "sha256": "d420d3328cd7c8e0ac96fed5040b104f7d93ed511f614c38b48c9b9d4f8b60de"
+  },
+  "test_projection": "Original synthetic stat-schema fixture/cases only; private manifest qualification and historical engine equality test excluded. Generated test imports only four extracted pure-file parser functions.",
+  "historical_derive_hash_only": {
+    "bytes": 15892,
+    "sha256": "0a5278f2fa023453e71700939df2fb9a68dfba5d5f383488065aef4297fdbc96"
+  },
+  "derive_not_rerun_and_not_successor_generator": true
+}

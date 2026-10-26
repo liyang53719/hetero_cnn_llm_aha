@@ -1,0 +1,8 @@
+# Current original full eight-endpoint core, not a single leaf or five-profile top.
+# No flatten, library/blackbox read, ABC, technology mapping, simulation or tool subprocess.
+read_verilog -sv -defer -DSYNTHESIS inputs/common.sv inputs/providers/qwen2_matrix_command_endpoint.sv inputs/providers/qwen2_matrix_command_endpoint_seed_disabled_impl.sv inputs/providers/tc_clk.sv inputs/providers/bf16_context_scheduler5_rev8b_b_candidate.sv inputs/providers/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv inputs/providers/bf16_outer_product_context_array_rev8b_b_candidate.sv inputs/providers/bf16_context_front_control5_rev8b_b_candidate.sv inputs/providers/bf16_context_lane_cluster16_rev8b_b_candidate.sv inputs/providers/bf16_outer_product_array_glue512.sv inputs/providers/bf16_operand_distribution512_rev8b_a_candidate.sv inputs/providers/bf16_outer_product_array_control5_rev8b_b_candidate.sv inputs/providers/bf16_context_tag_pipeline5_rev8b_b_candidate.sv inputs/providers/bf16_cluster_flags_glue32_rev8b_b_candidate.sv inputs/providers/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv
+hierarchy -check -simcheck -top OrderedQkRealMatrixCore
+proc
+check -assert
+tee -o reports/stat.json stat -json
+write_json reports/design.json

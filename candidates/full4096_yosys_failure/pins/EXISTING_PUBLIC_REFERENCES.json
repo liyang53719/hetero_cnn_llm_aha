@@ -1,0 +1,24 @@
+{
+  "base_commit": "7673a8dd41312170764aed0479a9fadd6068d5b3",
+  "references": [
+    {
+      "path": "candidates/current_hardware_reemission/evidence/SUMMARY.json",
+      "bytes": 7513,
+      "sha256": "8a0ddbbbd4d13382a3c63d5e81ae5d50754df925085a9481968f90bc2fc1f0bc",
+      "git_blob_sha": "36a75fc2721513f1e8de684f379f313abf78b574"
+    },
+    {
+      "path": "candidates/current_hardware_reemission/pins/EVIDENCE_AND_PUBLIC_REFERENCES.json",
+      "bytes": 4981,
+      "sha256": "8f780a0818d5d170e329040201f8293a03270eec3fee06469c5a3219432fc333",
+      "git_blob_sha": "ad3cea02db0d67d5eae6ab39c76bb485af1a4c63"
+    },
+    {
+      "path": "candidates/qwen2_core_real_matrix_sv/pins/EXISTING_PUBLIC_REFERENCES.json",
+      "bytes": 3633,
+      "sha256": "0828a94cb2cd3857a03ac8494311429aad8b51f57dc5e9e88af0e14222c4283f",
+      "git_blob_sha": "ba81e356cce93b2311c659de80cbe71764dde29e"
+    }
+  ],
+  "references_are_prior_source_and_generation_provenance_not_current_Yosys_PASS": true
+}

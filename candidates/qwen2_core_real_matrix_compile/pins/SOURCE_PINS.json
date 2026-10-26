@@ -1,0 +1,66 @@
+{
+  "schema": "real-matrix-two-Scala-and-literal-controls-v1",
+  "files": [
+    {
+      "public_path": "source/OrderedQkRealMatrixCore.scala",
+      "original": {
+        "bytes": 3837,
+        "sha256": "3028d699326dea639b696294d5721fa62d3838e3d05780d42f0eaa94cfb7474c"
+      },
+      "published": {
+        "bytes": 3837,
+        "sha256": "3028d699326dea639b696294d5721fa62d3838e3d05780d42f0eaa94cfb7474c"
+      },
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "source/OrderedQkRealMatrixCollection.scala",
+      "original": {
+        "bytes": 1530,
+        "sha256": "98f3105e42419f2f773ec6d55fc2374678bcce2fbc6f814de24ff95d6e273791"
+      },
+      "published": {
+        "bytes": 1530,
+        "sha256": "98f3105e42419f2f773ec6d55fc2374678bcce2fbc6f814de24ff95d6e273791"
+      },
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "check_source_contract.py",
+      "original": {
+        "bytes": 3616,
+        "sha256": "21d81b3f29f1888f412cc7d0158d1f5ec7177141d00b418274953f093104a643"
+      },
+      "published": {
+        "bytes": 3616,
+        "sha256": "21d81b3f29f1888f412cc7d0158d1f5ec7177141d00b418274953f093104a643"
+      },
+      "exact_original_bytes": true
+    },
+    {
+      "public_path": "test_source_contract.py",
+      "original": {
+        "bytes": 2714,
+        "sha256": "5144318aa760842bac4ad6e4f5e6ab4d00f73d7af9ceeec07dc46dc90dc7c34e"
+      },
+      "published": {
+        "bytes": 2638,
+        "sha256": "d5afaa17da3f8334fff1fd1b2b6589eb9a8fbbf40826357f5b2116e8dcd6bf38"
+      },
+      "exact_original_bytes": false,
+      "transform": {
+        "one_literal_only": true,
+        "old_literal_bytes": 115,
+        "old_literal_sha256": "a5f47cc19ffd4d00b83f4e9e6ed9278069db1fa9fd36ae0bb5635938eb23975e",
+        "new_literal": "(H/'reference_source/Qwen2Block.scala')",
+        "reason": "Private absolute locator replaced by exact prior-public source staged by nonexecuting assembly. Assertions unchanged; original path bytes not published."
+      }
+    }
+  ],
+  "source_candidate_freeze": {
+    "bytes": 3265,
+    "sha256": "d9624af376a4ea3d2336d3f24dd6b0b98a91b202248e8c8e2d2788754237fa6d"
+  },
+  "new_Scala_bytes": 5367,
+  "historical_source_comments_preserved": "Original source says not compiled/elaborated; historical at source freeze, actual compile record is later and separate."
+}

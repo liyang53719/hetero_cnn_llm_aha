@@ -1,0 +1,72 @@
+{
+  "base_commit": "f87b3005d7c1d9f51a86b89d5ad98c2faf675e6b",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/Qwen2Block.scala",
+      "bytes": 57361,
+      "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd",
+      "git_blob_sha": "eb44a8bb281e544b4bb3b20e7a1aab881bd50d43"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/source/OrderedQkBehaviorCore.scala",
+      "bytes": 2409,
+      "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c",
+      "git_blob_sha": "9cc9895ad7ee0c79bf25405068a12bb03e363f13"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/BASELINE_REFERENCES.json",
+      "bytes": 2817,
+      "sha256": "689762dea85f5bbf695578d9aa5852df24bfc167f44447c7df761ca81c475e4d",
+      "git_blob_sha": "dbd3b479531464dd92a4de4b39de586e1e1110da"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/RETAINED_CLASS_PINS.json",
+      "bytes": 100678,
+      "sha256": "fe2de42ce53456699ff97780073b1d7f8f1ee53e1c7b9c5d94a6a14621743aef",
+      "git_blob_sha": "e54559830b00e2218bee0cba0ff2f94c9985baa8"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_chirrtl_evidence/evidence/NEW_CLASS_HASHES.json",
+      "bytes": 10025,
+      "sha256": "6491db38b14efae96b40ee615852b2343cccc761e4589bcec49120d73aaaaa63",
+      "git_blob_sha": "f1ae8051a8a8d5367f6cfe007eb23fd801bd183c"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+      "bytes": 13746,
+      "sha256": "ce68505557a0c50fc9e5dfbfac531d3e13b8abb99d6e3f167392a645a0e693df",
+      "git_blob_sha": "6c61653b0d4435ad90a84e86dab6964668540f86"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/README_CN.md",
+      "bytes": 7205,
+      "sha256": "67b44bf1bf9a89a27cfd93279fab81679a3e94669246abc47a8246a9e756bac6",
+      "git_blob_sha": "e514e82e8c20c5609f932d6d396245e2d5e724c1"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/stage_inputs.py",
+      "bytes": 2262,
+      "sha256": "ae8a6fded719ab4d6641ec9e4377aea1d159271f60a526eb4998f05cc5d28c05",
+      "git_blob_sha": "29f32337a8f32557341b77cecfc493f8bfa3f466"
+    },
+    {
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_stream/PackedAttentionStreamClient.scala",
+      "bytes": 5469,
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0",
+      "git_blob_sha": "2bc8190779eb409a7c9a48f56e4f91eee042c884"
+    },
+    {
+      "repo_path": "integration/gemmini/EmitHeteroBF16Fma.scala",
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+      "git_blob_sha": "ceea8307e92777c5fb3e52243a9b778940ce30c8"
+    }
+  ],
+  "scope": "Exact published probe-Core sources, original PackedClient/FMA ABI source, baseline92-source recipe,550class hashes,20override hashes and106 officialdependency pins. Not all92 direct public blobs; external prerequisites stay explicit."
+}

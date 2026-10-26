@@ -1,0 +1,67 @@
+{
+  "actual_compiler_JVM_executed_by_root": true,
+  "artifact_bytes": 9773450,
+  "artifact_count": 560,
+  "auditor_JVM_compiler_or_child_executed": false,
+  "automatic_next_stage": false,
+  "checks": 18390,
+  "class_byte_parser_negative_controls": 3,
+  "class_bytes": 63834,
+  "class_count": 3,
+  "class_structural_container_CP_Code_boundaries_internal_name_SourceFile_checked": true,
+  "cleanup_complete": true,
+  "cleanup_live_handle_not_recreated": true,
+  "combined_unique_classes_for_future_proposal": 557,
+  "compile_receipt": {
+    "bytes": 44391,
+    "sha256": "e7ea282de0453f7612a1ffaa87b028d40a1bee7a330f0be7caa2c399f0cd9c88"
+  },
+  "compiler_exit": 0,
+  "elaboration_executed": false,
+  "independent_inventories": 5,
+  "independent_pin_checks": 1325,
+  "numerical_pass": false,
+  "observed_resources": {
+    "elapsed_seconds": 10.406169352005236,
+    "final_aggregate_cpu_seconds": 10.378072406000001,
+    "maximum_sample_interval_seconds": 0.06563258997630328,
+    "sampled_peak_output_bytes": 9729059,
+    "sampled_peak_rss_bytes": 254390272
+  },
+  "outer_timeout": false,
+  "outer_wall_seconds": 10.503095433989074,
+  "persisted_cleanup_proof_consistent": true,
+  "provider_RTL_or_DUT_executed": false,
+  "root_receipt": {
+    "bytes": 121,
+    "sha256": "4be242e3a2931ba3031a98c73ed83a4fe214ecaff21be462776e046d3081787c"
+  },
+  "runtime_postflight": {
+    "inventory_checks": 5,
+    "pass_all": true,
+    "pin_checks": 1325
+  },
+  "runtime_preflight": {
+    "inventory_checks": 5,
+    "pass_all": true,
+    "pin_checks": 1325
+  },
+  "schema": "actual-real-matrix-two-source-independent-review-v1",
+  "source_class_counts": {
+    "OrderedQkRealMatrixCollection.scala": 1,
+    "OrderedQkRealMatrixCore.scala": 2
+  },
+  "staged_class_count": 554,
+  "staged_classes_exact_hash_and_modes": true,
+  "status": "PASS_ACTUAL_TWO_SOURCE_SCALA_COMPILE_ONLY",
+  "utilization": "UNKNOWN_NOT_MEASURED",
+  "origin_review": {
+    "bytes": 2858,
+    "sha256": "1939f1b8804b9bbeba32901e5cf1d76aa40a99fa9622e0488178d1dc96dcadfa"
+  },
+  "origin_freeze": {
+    "bytes": 2296,
+    "sha256": "a5add0caa080d8f753240412f0ca44877724eb3af112a64553b8487d937a3047"
+  },
+  "projection_note": "Private paths/file identities and host affinity CPU ordinal omitted; one-CPU count is separately retained in caps. Byte/container parse is not JVM semantic or Chisel elaboration verification."
+}

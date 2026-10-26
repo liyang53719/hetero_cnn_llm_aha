@@ -1,0 +1,21 @@
+{
+  "status": "PASS_EXACT_TWO_SOURCE_COMPILE_METADATA_AND_SOURCE_ONLY_CONTROLS",
+  "checks": 16840,
+  "errors": 0,
+  "public_refs": 11,
+  "exact_original_Scala_sources": 2,
+  "exact_original_literal_checker": 1,
+  "single_private_path_literal_transformed_test": 1,
+  "source_tests_normal_optimized_each": 10,
+  "assembly_controls_normal_optimized_each": 8,
+  "derived_stage_hashes_each": 554,
+  "actual_classes_summarized": 3,
+  "actual_and_root_stat_checks": 566,
+  "source_qualified_provider_hashes": 13,
+  "declared_source_endpoint_ports": 22,
+  "declared_clockgate_ports": 4,
+  "new_target_executions": 0,
+  "no_explicit_actual_class_JAR_provider_SV_ELF_log_or_system_pyc_content_reads": true,
+  "ordinary_packaging_stdlib_IO_not_globally_audited": true,
+  "scope": "Current public source/metadata projections and exact source+554hash assembly only; no new Scala/JVM/Chisel/native/EDA. Actualcompile identity receipt retained, no elaboration or Matrix numerical pass. Old resourceFAIL/runtime gaps unchanged."
+}

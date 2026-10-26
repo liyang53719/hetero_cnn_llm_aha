@@ -1,0 +1,99 @@
+{
+  "JVM_compilation_elaboration_native_DUT_EDA_executed": false,
+  "candidate_freeze_sha256": "d9624af376a4ea3d2336d3f24dd6b0b98a91b202248e8c8e2d2788754237fa6d",
+  "candidate_or_original_inputs_mutated": false,
+  "full_report": "REVIEW_ZH.md",
+  "limits": [
+    "not complete Core/Scalar/Memory formal proof",
+    "literal/boolean controls not Chisel type checks",
+    "same namespace source intent not generated HardFloat name closure",
+    "provider source pins not runtime stage identity",
+    "no all-tile external probe",
+    "nonzero reference not frozen",
+    "issued arithmetic slots not completed/useful MAC",
+    "old full4096 4GiB/6GiB lint resource failure retained"
+  ],
+  "new_source_wiring_blockers": [],
+  "required_future_gates": [
+    {
+      "id": "G1",
+      "required": "new frozen single emitter; 554 unique baseline/override stage; two new source outputs; exact JAR/loader/entry/resource supervision; independent review and root new GO",
+      "scope": "compile"
+    },
+    {
+      "id": "G2",
+      "required": "actual collection namespace; selected shell top; reset type; all eight endpoints; two blackboxes; seed0 22-port subset plus explicit unused-extra-pin accounting; all13 exact providers; no old independently emitted FMA SV",
+      "scope": "elaboration/ABI"
+    },
+    {
+      "id": "G3",
+      "required": "frozen nonzero BF16 inputs and independent sequential-FMA reference; genuine returned-tile readonly probe for any all4096/no-alias claim",
+      "scope": "numeric"
+    },
+    {
+      "id": "G4",
+      "required": "real DDR read/write ACK backpressure; held-result scan; completion-after-result; lease exclusion; operational error drain without synthetic tile/PV/results or forged step count",
+      "scope": "protocol"
+    }
+  ],
+  "resolved_provider_pins": "STATIC_CHECKS.json:resolved_provider_pins",
+  "review_scope": [
+    "new shell and collection source",
+    "original Core packed ownership and memory-debt return",
+    "MatrixPipeline result FIFO drain and issue accounting",
+    "Legacy/Packed clients",
+    "historical providers resolved by exact SHA",
+    "declared source ABI subset"
+  ],
+  "root_execution_approval_granted": false,
+  "schema": "independent-real-matrix-shell-source-review-v1",
+  "scope_risks": [
+    {
+      "id": "R1",
+      "location": "OrderedQkRealMatrixCore.scala:34; Qwen2Block.scala:353-355",
+      "minimum_action": "Constrain authorized test harness to legal Attention jobs; do not advertise production Host validation",
+      "risk": "Attention kind assertion is not a synthesizable general-purpose owner rejection gate"
+    },
+    {
+      "id": "R2",
+      "location": "Qwen2Block.scala:284; MatrixPipeline.scala:196",
+      "minimum_action": "Label inherited ABI field as issued slots in harness/evidence; retain completed/useful unknown",
+      "risk": "inherited executedMacs remains issuedSliceSteps delta times512"
+    },
+    {
+      "id": "R3",
+      "location": "Qwen2Block.scala:339,743,752-755; PackedAttentionStreamClient.scala:64,89-93",
+      "minimum_action": "Exercise matching debt return in real harness; state permanent foreign/missing reply requires environment recovery/reset",
+      "risk": "foreign DDR/done identity is fail-closed, not arbitrary-reorder handling or unconditional error liveness"
+    }
+  ],
+  "static_checker_runs": [
+    "python -B verify_static.py",
+    "python -O -B verify_static.py"
+  ],
+  "static_modes_output_byte_identical": true,
+  "status": "SOURCE_CANDIDATE_NO_NEW_CONFIRMED_WIRING_BLOCKER_NOT_COMPILE_OR_RUNTIME_PASS_NOT_GO",
+  "verified_counts": {
+    "base_class_hashes": 550,
+    "base_source_hashes": 92,
+    "clock_gate_ports": 4,
+    "combined_unique_classes": 554,
+    "direct_class_hashes": 24,
+    "frozen_members": 12,
+    "override_class_hashes": 14,
+    "provider_modules": 20,
+    "resolved_providers": 13,
+    "source_bindings": 17,
+    "unseeded_endpoint_ports": 22
+  },
+  "origin_review": {
+    "bytes": 3921,
+    "sha256": "5000b2ca4958eb62dd3ca4f7d90715ffa6e6aa16b5255cd6ee22b974e1553514"
+  },
+  "origin_freeze": {
+    "bytes": 1606,
+    "sha256": "fb0eb945a21d4830ee3049c79b37b5a39c573ab653076ff5d9697fbf30074450"
+  },
+  "historical_source_only_review": true,
+  "projection_note": "Original source-review future gates retained verbatim as history. Later actual compile closes only two-source compile, not elaboration or runtime."
+}

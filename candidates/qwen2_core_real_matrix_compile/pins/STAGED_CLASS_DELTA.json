@@ -1,0 +1,109 @@
+{
+  "origin_plan": {
+    "bytes": 20629,
+    "sha256": "2672010b3ae8b558e22de629b58f418d6fd0fa2bad5c30c08c4b0c4917af75e4"
+  },
+  "origin_actual_stage_manifest": {
+    "bytes": 347137,
+    "sha256": "9145ee5365f25c0fcafa6c69b827f5d211ff6f119011924e69eedeaccec9002e"
+  },
+  "baseline550_ref": "candidates/qwen2_core_client_chirrtl_evidence/pins/RETAINED_CLASS_PINS.json",
+  "override20_ref": "candidates/qwen2_core_client_chirrtl_evidence/evidence/NEW_CLASS_HASHES.json",
+  "override14": [
+    {
+      "relative": "heteronpu/continuous/BlockLaunch.class",
+      "bytes": 3988,
+      "sha256": "5adddd43dfe11e2061907ece334ffb9a4736fa21e1f2f07949e41f8710d9993d",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/BlockRegion$.class",
+      "bytes": 2538,
+      "sha256": "8caa1196042289a77ae5f72d4cd896b3bd7333abdf6a41c465ea489c7c34b30b",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/BlockRegion.class",
+      "bytes": 6587,
+      "sha256": "89ff9f4859a140c05728b6510ce20a44e6d49714be7bf2ef5302c0a90aee86ef",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/BlockResult.class",
+      "bytes": 4612,
+      "sha256": "ee3238267eeed5937a8e1136a0371b1d7e1cd675961499241a8002f0fdfb6a78",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/OrderedQkBehaviorCore$$anon$1.class",
+      "bytes": 8020,
+      "sha256": "d74a8cf2e5315929c7ba4d46e52967de04cecc2d30e1c5903f8970b0cf6237e9",
+      "source_file": "OrderedQkBehaviorCore.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/OrderedQkBehaviorCore$.class",
+      "bytes": 572,
+      "sha256": "62a5d79a204d1122f785dff50eca3b98b879a53a53a8ed808e4a9fc48e6ac47b",
+      "source_file": "OrderedQkBehaviorCore.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/OrderedQkBehaviorCore.class",
+      "bytes": 24851,
+      "sha256": "6619a1946695603d9a9591ec39e916970de00bb4d5e2e24bcbc19e34cdee9875",
+      "source_file": "OrderedQkBehaviorCore.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock$$anon$1.class",
+      "bytes": 15892,
+      "sha256": "b797928a934b455496b49eb419e684bb331c4f63ca6c642e76d8740e77c9f8d6",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock$$anon$2.class",
+      "bytes": 3403,
+      "sha256": "92a828baf85b926e0f7e3181ef8de2ed4fae5b0ce312b4f23929b0be40450ca9",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock$.class",
+      "bytes": 2221,
+      "sha256": "b3922d5e591168054d325694e0c9018285fc4df51e7beaffcf80e3921f5e4f01",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2ContinuousBlock.class",
+      "bytes": 423890,
+      "sha256": "a73e4921812920afa4e9a30e195b5d809553c95cd4ad46daf5fcd632cb86be2f",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenBlockLayout.class",
+      "bytes": 10107,
+      "sha256": "f9af4ac5d874365e45e459afa07a346ca44198f13b7fb184d8934c3324b89b4f",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenBlockShape$.class",
+      "bytes": 6029,
+      "sha256": "0ec6ee80624ef2d980e3d81687a696782c8ef67d0604653dd474393dfbf9d340",
+      "source_file": "Qwen2Block.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenBlockShape.class",
+      "bytes": 17905,
+      "sha256": "de6f76762f990382057214bed9080fc1e7d353493f1e253a284c6f40b9da4837",
+      "source_file": "Qwen2Block.scala"
+    }
+  ],
+  "exclude_source_files": [
+    "OrderedQkBehaviorSpec.scala",
+    "OrderedQkBehaviorElaborate.scala"
+  ],
+  "actual_stage_count": 554,
+  "actual_stage_bytes": 9631197,
+  "actual_stage_mode0444": true,
+  "baseline550_replaced10_added4": true,
+  "new_compile_outputs3_not_added_to_this_actual_stage": true,
+  "future_unique_combined557_not_elaborated": true,
+  "full_554_manifest_duplicated": false
+}

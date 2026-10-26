@@ -1,0 +1,94 @@
+{
+  "origin_record": {
+    "bytes": 4767,
+    "sha256": "86e08d8560c304aecbeb86217510165b77a9707d1bebe0804f231e908dc989a4"
+  },
+  "bindings": [
+    {
+      "role": "binding_00/QwenOwnerProtocol.scala",
+      "bytes": 50196,
+      "sha256": "5153894739c0c3b68510e1d4ab34ad58071edaa3f248bd7999bcfe10dfe7059e"
+    },
+    {
+      "role": "binding_01/MatrixPipeline.scala",
+      "bytes": 15711,
+      "sha256": "83516358916a6bb4a4816d700f056aae028c62dd0cc8891ea97f0cb9fea958cc"
+    },
+    {
+      "role": "binding_02/RetainedMatrix.scala",
+      "bytes": 11938,
+      "sha256": "8c475372817104f7eee349a96f589d97dba94b6e7a17b5b88cfb2538f40bf7e9"
+    },
+    {
+      "role": "binding_03/PackedAttentionStreamClient.scala",
+      "bytes": 5469,
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0"
+    },
+    {
+      "role": "binding_04/Qwen2Block.scala",
+      "bytes": 57361,
+      "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd"
+    },
+    {
+      "role": "binding_05/OrderedQkBehaviorCore.scala",
+      "bytes": 2409,
+      "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c"
+    },
+    {
+      "role": "binding_06/MATRIX_ROUTE_FINDINGS.json",
+      "bytes": 21812,
+      "sha256": "3f2fe60e56cc666a70b9996502c27dfcedb325ac5ccd6bef37f9eb8ebeb9e116"
+    },
+    {
+      "role": "binding_07/FREEZE.json",
+      "bytes": 2015,
+      "sha256": "8cdea1104a8d84a677bef7490ab15aa85e2ef5346c9d8596c5b0f0531892f201"
+    },
+    {
+      "role": "binding_08/EmitHeteroBF16Fma.scala",
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f"
+    },
+    {
+      "role": "binding_09/FREEZE.json",
+      "bytes": 846,
+      "sha256": "bd935e7e0a039f4fd9377414bdd40a5e7e1eb54b23a0323ad718d721cf4f78e4"
+    },
+    {
+      "role": "binding_10/OrderedQkRealMatrixCore.scala.draft",
+      "bytes": 3773,
+      "sha256": "9b88e98ecf28ff18d47bfa751c1946ad67793f9d1626906f1cbf2ac7a396419d"
+    },
+    {
+      "role": "binding_11/REVIEW.json",
+      "bytes": 16745,
+      "sha256": "460b030c0b3d4776fc00a8de47e6400317347ef6498669bdca50efffd3f73971"
+    },
+    {
+      "role": "binding_12/FREEZE.json",
+      "bytes": 1048,
+      "sha256": "c459ab0cb06bd56f91e4cb227c624ffe837863e7f82525c9247ec8d2d401a314"
+    },
+    {
+      "role": "binding_13/CLASS_MANIFEST.json",
+      "bytes": 14667,
+      "sha256": "abe1d70c050273600a6a56c1d3c128be33e04c33958531aafadcb562872c72a1"
+    },
+    {
+      "role": "binding_14/manifest.json",
+      "bytes": 628640,
+      "sha256": "9e26ab0e4b63d613504ffc0ea3bf67370ef31808f68c2ec0a62bcbb8c78c74ba"
+    },
+    {
+      "role": "binding_15/COMPOSITION.json",
+      "bytes": 14331,
+      "sha256": "59d2d48048284a292b3982e6407655901545a20c740586217ff93fe1d0a219b6"
+    },
+    {
+      "role": "binding_16/INPUT_PINS.json",
+      "bytes": 178691,
+      "sha256": "d9cc7296e6fdb831a0338e50a6654a83cedac6511dbbdcd4eb724afe6b302c39"
+    }
+  ],
+  "scope": "Historical source/plan/review hashes only; no original absolute locators or unused draft contents. Prior plans do not approve later implementation."
+}

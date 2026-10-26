@@ -1,0 +1,330 @@
+{
+  "origin_static_review": {
+    "bytes": 14390,
+    "sha256": "3a587ae137acaab20ec3df58516f2eb0a695c08350411d1f1c57823f33e97dd8"
+  },
+  "origin_historical_plan": {
+    "bytes": 4552,
+    "sha256": "abf2f658b0a34b76e167fed7f936c5122a3bbf4e862fb453b95f67e35305934b"
+  },
+  "providers13": [
+    {
+      "role": "provider_00/tc_clk.sv",
+      "bytes": 3318,
+      "sha256": "93e9747504fa1da6473560341febbfae6c5e917768633a84fc9ef12299293207",
+      "historical_locator_existed_at_source_review": false
+    },
+    {
+      "role": "provider_01/qwen2_matrix_command_endpoint.sv",
+      "bytes": 4184,
+      "sha256": "ea16cf4221b52412a5ba1f3f23efeb198077790e271a6f6a1a51a43e82fad4ac",
+      "historical_locator_existed_at_source_review": false
+    },
+    {
+      "role": "provider_02/bf16_context_scheduler5_rev8b_b_candidate.sv",
+      "bytes": 3588,
+      "sha256": "33cf6bbd37ef1d2b537e948a29cf642f51ce4d8b34fa2483294c4f604b925ac0",
+      "historical_locator_existed_at_source_review": false
+    },
+    {
+      "role": "provider_03/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+      "bytes": 4582,
+      "sha256": "6d276382a0e3e1b7145b381c700e895806e6f382bcb044d53c2279c98757d19c",
+      "historical_locator_existed_at_source_review": false
+    },
+    {
+      "role": "provider_04/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+      "bytes": 8809,
+      "sha256": "41d801167ff90547cde5d2a1784f964920873d5f3ba0d1c9654b79eebc2c6a27",
+      "historical_locator_existed_at_source_review": false
+    },
+    {
+      "role": "provider_05/bf16_context_front_control5_rev8b_b_candidate.sv",
+      "bytes": 9088,
+      "sha256": "a37dd8069258614d620031c03733016aa69c496c7bfb0b8a8fbcc8f1721f63c4",
+      "historical_locator_existed_at_source_review": false
+    },
+    {
+      "role": "provider_06/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+      "bytes": 2775,
+      "sha256": "c7fd146302112613515e6fa86af152496cb8d753ef9a425eb0cdbe0252ef073e",
+      "historical_locator_existed_at_source_review": false
+    },
+    {
+      "role": "provider_07/bf16_outer_product_array_glue512.sv",
+      "bytes": 503,
+      "sha256": "8d02ba89ffa8b32acbd8bf5677906c71bedd698ac6337df0aa0c06dca1c78fa9",
+      "historical_locator_existed_at_source_review": true
+    },
+    {
+      "role": "provider_08/bf16_operand_distribution512_rev8b_a_candidate.sv",
+      "bytes": 1900,
+      "sha256": "e9cdc568bb11f13db3d7653e375e79baa751af4080a9f5bdbc9a3353bbdde471",
+      "historical_locator_existed_at_source_review": true
+    },
+    {
+      "role": "provider_09/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+      "bytes": 1662,
+      "sha256": "e1afd499281df0493f1660bbfe8b1a5f6bfeea9e49899b0368372d23d4c790c2",
+      "historical_locator_existed_at_source_review": true
+    },
+    {
+      "role": "provider_10/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+      "bytes": 981,
+      "sha256": "0271a1627089578a95144fd0cddd4b9d8d39a6cd27ea327eb48ca399c9bc3ac0",
+      "historical_locator_existed_at_source_review": true
+    },
+    {
+      "role": "provider_11/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+      "bytes": 323,
+      "sha256": "4d39ce9f81ceab8853b1d91f757e8d237d891cc8a875a904599726f5c80d6d3f",
+      "historical_locator_existed_at_source_review": true
+    },
+    {
+      "role": "provider_12/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+      "bytes": 1006,
+      "sha256": "991c73df8b263e0a7283e6eb01be85fe283740b450a42a7d1e693114e1bef64b",
+      "historical_locator_existed_at_source_review": true
+    }
+  ],
+  "module_definitions": {
+    "bf16_cluster_flags_glue32_rev8b_b_candidate": "provider_11/bf16_cluster_flags_glue32_rev8b_b_candidate.sv",
+    "bf16_context_fma_pipeline_lane5_rev8b_b_candidate": "provider_03/bf16_context_fma_pipeline_lane5_rev8b_b_candidate.sv",
+    "bf16_context_front_control5_rev8b_b_candidate": "provider_05/bf16_context_front_control5_rev8b_b_candidate.sv",
+    "bf16_context_lane_cluster16_rev8b_b_candidate": "provider_06/bf16_context_lane_cluster16_rev8b_b_candidate.sv",
+    "bf16_context_scheduler5_rev8b_b_candidate": "provider_02/bf16_context_scheduler5_rev8b_b_candidate.sv",
+    "bf16_context_tag_pipeline5_rev8b_b_candidate": "provider_10/bf16_context_tag_pipeline5_rev8b_b_candidate.sv",
+    "bf16_front_to_cluster_broadcast32_rev8b_b_candidate": "provider_12/bf16_front_to_cluster_broadcast32_rev8b_b_candidate.sv",
+    "bf16_operand_distribution512_rev8b_a_candidate": "provider_08/bf16_operand_distribution512_rev8b_a_candidate.sv",
+    "bf16_outer_product_array_control5_rev8b_b_candidate": "provider_09/bf16_outer_product_array_control5_rev8b_b_candidate.sv",
+    "bf16_outer_product_array_glue512": "provider_07/bf16_outer_product_array_glue512.sv",
+    "bf16_outer_product_context_array_rev8b_b_candidate": "provider_04/bf16_outer_product_context_array_rev8b_b_candidate.sv",
+    "qwen2_matrix_command_endpoint": "provider_01/qwen2_matrix_command_endpoint.sv",
+    "tc_clk_and2": "provider_00/tc_clk.sv",
+    "tc_clk_buffer": "provider_00/tc_clk.sv",
+    "tc_clk_delay": "provider_00/tc_clk.sv",
+    "tc_clk_gating": "provider_00/tc_clk.sv",
+    "tc_clk_inverter": "provider_00/tc_clk.sv",
+    "tc_clk_mux2": "provider_00/tc_clk.sv",
+    "tc_clk_or2": "provider_00/tc_clk.sv",
+    "tc_clk_xor2": "provider_00/tc_clk.sv"
+  },
+  "unseeded_endpoint_source_abi": {
+    "clk_i": {
+      "direction": "input",
+      "width": 1
+    },
+    "cmd_i": {
+      "direction": "input",
+      "width": 128
+    },
+    "cmd_ready_o": {
+      "direction": "output",
+      "width": 1
+    },
+    "cmd_valid_i": {
+      "direction": "input",
+      "width": 1
+    },
+    "command_last_tile_i": {
+      "direction": "input",
+      "width": 1
+    },
+    "completion_data_o": {
+      "direction": "output",
+      "width": 56
+    },
+    "completion_ready_i": {
+      "direction": "input",
+      "width": 1
+    },
+    "completion_valid_o": {
+      "direction": "output",
+      "width": 1
+    },
+    "out_acc_o": {
+      "direction": "output",
+      "width": 16384
+    },
+    "out_context_o": {
+      "direction": "output",
+      "width": 3
+    },
+    "out_last_o": {
+      "direction": "output",
+      "width": 1
+    },
+    "out_ready_i": {
+      "direction": "input",
+      "width": 1
+    },
+    "out_valid_o": {
+      "direction": "output",
+      "width": 1
+    },
+    "protocol_error_o": {
+      "direction": "output",
+      "width": 1
+    },
+    "rst_ni": {
+      "direction": "input",
+      "width": 1
+    },
+    "step_a_i": {
+      "direction": "input",
+      "width": 256
+    },
+    "step_b_i": {
+      "direction": "input",
+      "width": 512
+    },
+    "step_clear_i": {
+      "direction": "input",
+      "width": 1
+    },
+    "step_context_i": {
+      "direction": "input",
+      "width": 3
+    },
+    "step_last_i": {
+      "direction": "input",
+      "width": 1
+    },
+    "step_ready_o": {
+      "direction": "output",
+      "width": 1
+    },
+    "step_valid_i": {
+      "direction": "input",
+      "width": 1
+    }
+  },
+  "original_four_fma_declared_abi": {
+    "HeteroBF16FmaMul": {
+      "io_mulAddA": {
+        "direction": "input",
+        "width": 24
+      },
+      "io_mulAddB": {
+        "direction": "input",
+        "width": 24
+      },
+      "io_mulAddC": {
+        "direction": "input",
+        "width": 48
+      },
+      "io_mulAddResult": {
+        "direction": "output",
+        "width": 49
+      }
+    },
+    "HeteroBF16FmaPost": {
+      "io_invalid": {
+        "direction": "output",
+        "width": 1
+      },
+      "io_meta": {
+        "direction": "input",
+        "width": 54
+      },
+      "io_mulAddResult": {
+        "direction": "input",
+        "width": 49
+      },
+      "io_raw": {
+        "direction": "output",
+        "width": 41
+      }
+    },
+    "HeteroBF16FmaPre": {
+      "io_a": {
+        "direction": "input",
+        "width": 16
+      },
+      "io_b": {
+        "direction": "input",
+        "width": 16
+      },
+      "io_c": {
+        "direction": "input",
+        "width": 32
+      },
+      "io_meta": {
+        "direction": "output",
+        "width": 54
+      },
+      "io_mulAddA": {
+        "direction": "output",
+        "width": 24
+      },
+      "io_mulAddB": {
+        "direction": "output",
+        "width": 24
+      },
+      "io_mulAddC": {
+        "direction": "output",
+        "width": 48
+      }
+    },
+    "HeteroBF16FmaRound": {
+      "io_exceptionFlags": {
+        "direction": "output",
+        "width": 5
+      },
+      "io_invalid": {
+        "direction": "input",
+        "width": 1
+      },
+      "io_out": {
+        "direction": "output",
+        "width": 32
+      },
+      "io_raw": {
+        "direction": "input",
+        "width": 41
+      }
+    }
+  },
+  "provider_extra_ports": [
+    "arithmetic_busy_o",
+    "arithmetic_out_valid_o",
+    "seed_abort_i",
+    "seed_ack_context_o",
+    "seed_ack_error_o",
+    "seed_ack_group_sequence_o",
+    "seed_ack_group_tag_o",
+    "seed_ack_ready_i",
+    "seed_ack_source_generation_o",
+    "seed_ack_valid_o",
+    "seed_beat_ready_o",
+    "seed_beat_valid_i",
+    "seed_begin_ready_o",
+    "seed_begin_valid_i",
+    "seed_cluster_i",
+    "seed_commit_ready_o",
+    "seed_commit_valid_i",
+    "seed_context_i",
+    "seed_data_i",
+    "seed_group_sequence_i",
+    "seed_group_tag_i",
+    "seed_reset_required_o",
+    "seed_source_generation_i"
+  ],
+  "counts": {
+    "base_class_hashes": 550,
+    "base_source_hashes": 92,
+    "clock_gate_ports": 4,
+    "combined_unique_classes": 554,
+    "direct_class_hashes": 24,
+    "frozen_members": 12,
+    "override_class_hashes": 14,
+    "provider_modules": 20,
+    "resolved_providers": 13,
+    "source_bindings": 17,
+    "unseeded_endpoint_ports": 22
+  },
+  "provider_recovery_is_read_only_location_not_new_stage": true,
+  "historical_plan_reported_unresolved_preserved": true,
+  "current_source_recovery_qualified_by_independent_review": true,
+  "scope": "13 exact source providers resolved at read-only source audit,20 declared modules. Declared22 endpoint+4clock-gate ports and4FMA sibling ABIs are not generated namespace/runtime closure. No provider files passed to actual Scala compile or copied/uploaded here; old seed1/4096 result not transferred."
+}

@@ -1,0 +1,95 @@
+{
+  "origin_manifest": {
+    "bytes": 43690,
+    "sha256": "ebed94a6c0133684aeb4d23f49b677828bfcb4e06d046b477e44c6fadea294f2"
+  },
+  "classes": [
+    {
+      "relative": "heteronpu/continuous/OrderedQkRealMatrixCollection.class",
+      "bytes": 14225,
+      "sha256": "0b136262bcaeacb8481baa8bac73fa73c14392034c5a24bd832329b1b1d726a2",
+      "access": 33,
+      "major": 52,
+      "minor": 0,
+      "internal_name": "heteronpu/continuous/OrderedQkRealMatrixCollection",
+      "source_file": "OrderedQkRealMatrixCollection.scala",
+      "superclass": "chisel3/Module",
+      "interfaces": [],
+      "field_count": 12,
+      "method_count": 56,
+      "code_attribute_count": 56,
+      "container_consumed_bytes": 14225,
+      "structural_parser_not_bytecode_verifier": true,
+      "selected_referenced_classes": [
+        "gemmini/HeteroBF16FmaMul",
+        "gemmini/HeteroBF16FmaPost",
+        "gemmini/HeteroBF16FmaPre",
+        "gemmini/HeteroBF16FmaRound",
+        "heteronpu/continuous/OrderedQkRealMatrixCore"
+      ]
+    },
+    {
+      "relative": "heteronpu/continuous/OrderedQkRealMatrixCore$$anon$1.class",
+      "bytes": 7508,
+      "sha256": "8d77a4f107e9592451f30416fc9feee06aa5cd9deb2bf0918a2cae26f0e64fd0",
+      "access": 49,
+      "major": 52,
+      "minor": 0,
+      "internal_name": "heteronpu/continuous/OrderedQkRealMatrixCore$$anon$1",
+      "source_file": "OrderedQkRealMatrixCore.scala",
+      "superclass": "chisel3/Bundle",
+      "interfaces": [],
+      "field_count": 10,
+      "method_count": 30,
+      "code_attribute_count": 30,
+      "container_consumed_bytes": 7508,
+      "structural_parser_not_bytecode_verifier": true,
+      "selected_referenced_classes": [
+        "heteronpu/continuous/OrderedQkRealMatrixCore"
+      ]
+    },
+    {
+      "relative": "heteronpu/continuous/OrderedQkRealMatrixCore.class",
+      "bytes": 42101,
+      "sha256": "6d669838d04339f8742347ae22885bfc0986bfe3cdc855f2a9257e52ecfe1f5c",
+      "access": 33,
+      "major": 52,
+      "minor": 0,
+      "internal_name": "heteronpu/continuous/OrderedQkRealMatrixCore",
+      "source_file": "OrderedQkRealMatrixCore.scala",
+      "superclass": "chisel3/Module",
+      "interfaces": [],
+      "field_count": 9,
+      "method_count": 127,
+      "code_attribute_count": 127,
+      "container_consumed_bytes": 42101,
+      "structural_parser_not_bytecode_verifier": true,
+      "selected_referenced_classes": [
+        "heteronpu/continuous/LegacyMatrixStreamClient",
+        "heteronpu/continuous/MatrixPipelineService",
+        "heteronpu/continuous/OrderedQkBehaviorCore",
+        "heteronpu/continuous/OrderedQkRealMatrixCore"
+      ]
+    }
+  ],
+  "class_count": 3,
+  "class_bytes": 63834,
+  "source_class_counts": {
+    "OrderedQkRealMatrixCollection.scala": 1,
+    "OrderedQkRealMatrixCore.scala": 2
+  },
+  "new_executable_main": false,
+  "source_pins": [
+    {
+      "role": "OrderedQkRealMatrixCore.scala",
+      "bytes": 3837,
+      "sha256": "3028d699326dea639b696294d5721fa62d3838e3d05780d42f0eaa94cfb7474c"
+    },
+    {
+      "role": "OrderedQkRealMatrixCollection.scala",
+      "bytes": 1530,
+      "sha256": "98f3105e42419f2f773ec6d55fc2374678bcce2fbc6f814de24ff95d6e273791"
+    }
+  ],
+  "scope": "Projection retains structural container counts, identity and selected class references only; method-signatures/other CP references omitted, full original manifest hash retained. No actual class bytes or semantic verifier execution."
+}

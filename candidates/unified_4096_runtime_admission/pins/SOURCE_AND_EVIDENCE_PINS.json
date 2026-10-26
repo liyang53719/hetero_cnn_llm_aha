@@ -1,0 +1,155 @@
+{
+  "schema": "unified-admission-public-pins-v1",
+  "base_commit": "7bf6fc287ba9e7b5f696c44a691f432a3e3958c4",
+  "existing_public_references": [
+    {
+      "path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "path": "config/upstream/weight_headers/qwen2_1p5b/config.json",
+      "bytes": 660,
+      "sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+      "git_blob_sha": "f48f003b1c5a532e589822b2e5a7420c014c62be"
+    },
+    {
+      "path": "config/upstream/weight_headers/qwen3_5_0p8b/config.json",
+      "bytes": 2907,
+      "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+      "git_blob_sha": "715f0448b9d38103211f0ad88bbb4d6e4f4be8c9"
+    },
+    {
+      "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json",
+      "bytes": 3544,
+      "sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+      "git_blob_sha": "2fd92bfc9ee58bd0274ad207d4120c3e7458dde8"
+    }
+  ],
+  "official_model_config_sources": [
+    {
+      "bytes": 660,
+      "git_blob_sha": "f48f003b1c5a532e589822b2e5a7420c014c62be",
+      "model_id": "Qwen/Qwen2-1.5B-Instruct",
+      "path": "config/upstream/weight_headers/qwen2_1p5b/config.json",
+      "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+      "sha256": "a58e896d2756a7947f23f3db55667c19ca3b8524188a30c8c640cd7ff72a5136",
+      "source_main": "c590179c4c3424ded9997ba8f15f27821df304c9"
+    },
+    {
+      "bytes": 2907,
+      "git_blob_sha": "715f0448b9d38103211f0ad88bbb4d6e4f4be8c9",
+      "model_id": "Qwen/Qwen3.5-0.8B",
+      "path": "config/upstream/weight_headers/qwen3_5_0p8b/config.json",
+      "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+      "source_main": "c590179c4c3424ded9997ba8f15f27821df304c9"
+    },
+    {
+      "bytes": 3544,
+      "git_blob_sha": "2fd92bfc9ee58bd0274ad207d4120c3e7458dde8",
+      "model_id": "Qwen/Qwen3.5-35B-A3B",
+      "path": "config/upstream/weight_headers/qwen3_5_35b_a3b/config.json",
+      "revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+      "sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+      "source_main": "c590179c4c3424ded9997ba8f15f27821df304c9"
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "source/UnifiedBlockAdmission.scala",
+      "bytes": 4698,
+      "sha256": "e626a328d5b4adec704d76b217437c36217c57ae5bb38864fef51cea862aea03"
+    },
+    {
+      "path": "source/UnifiedBlockAdmissionSpec.scala",
+      "bytes": 47025,
+      "sha256": "d8de546133b12b750bf79059cd8a4f7581bfa6f2b3bebe1178ec0a50ce0ab01c"
+    },
+    {
+      "path": "source/UnifiedBlockProtocol.scala",
+      "bytes": 2690,
+      "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3"
+    },
+    {
+      "path": "source/UnifiedRuntimeProfile.scala",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963"
+    }
+  ],
+  "generator": {
+    "path": "tests/make_profile_spec.py",
+    "bytes": 9228,
+    "sha256": "cb1d1bb3e193568ec2b46de37aa3072f3022404449a2be65c958cf1d23e6bc80"
+  },
+  "evidence_hash_only": {
+    "author_export_plan": {
+      "bytes": 4988,
+      "sha256": "d22b90fd533bc27408c6b092378b996babe65e517f3be68e5dac29a12b5e9760"
+    },
+    "r2_source_freeze": {
+      "bytes": 4444,
+      "sha256": "05fff35f4eb1486114d882360f382c95e5d2e8cf731c6b013f929778940dc0a5"
+    },
+    "r2_change": {
+      "bytes": 788,
+      "sha256": "18e942f5b8de99146fa043e6c5e025dab4c9870d952cdb2dda367e7ca10314c0"
+    },
+    "source_and_tool_pins_private_manifest": {
+      "bytes": 146521,
+      "sha256": "8f5ff133aaab7a7ddfdc8f16b479cc3418ad7598998d7d6831dc73f773da6e21"
+    },
+    "original_parser_failure_receipt": {
+      "bytes": 1678,
+      "sha256": "e0c58ad86f995a5c19378f6fb9ab3e39fdba33f712205e5ccd095154dc2363fb"
+    },
+    "r2_compile_receipt": {
+      "bytes": 6942,
+      "sha256": "726fea5aedb526dd9f0072c5154dcae1cf7f82a732d7004fbbd6125d05b0f99d"
+    },
+    "r2_compile_review": {
+      "bytes": 1321,
+      "sha256": "49aeb0361103ba05b3d815056d83ad8a4e2bf3208bf3b7929ca0f72d07cc5960"
+    },
+    "r2_compile_review_freeze": {
+      "bytes": 471,
+      "sha256": "cfa20a380cf6e3557b924afd48e46a302bc650a1f46c79ca6c88a236b2dc9ff6"
+    },
+    "r2_test_receipt": {
+      "bytes": 2918,
+      "sha256": "54eabf86330da27039c9e85ca155c20fa018766962db921917a2cecbd1876cb3"
+    },
+    "r2_test_review": {
+      "bytes": 4788,
+      "sha256": "39823d8c20137e1a68d7a8958e030366a236a0c69da15f2773d6cc6695ef2110"
+    },
+    "r2_test_review_freeze": {
+      "bytes": 322,
+      "sha256": "714b08de927fed01eb360fd1248179f39b8d7ef1eee87e9d717f40b87c80258a"
+    }
+  },
+  "ordered_dependency_closure": {
+    "public_path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+    "count": 106,
+    "all_ordered_relative_names_sizes_hashes_match_reviewed_manifest": true,
+    "classpath": "New empty source classes followed by the public lock order; no original production/model classes"
+  },
+  "compiler_plugin": {
+    "dependency_relative_path": "org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+    "bytes": 79111,
+    "sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb",
+    "explicit_Xplugin_required": true
+  },
+  "observed_java21_launcher_hash_only": {
+    "role": "JDK/bin/java",
+    "bytes": 14384,
+    "sha256": "6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba"
+  },
+  "private_jdk_manifest_identity_hash_only": {
+    "bytes": 942043,
+    "sha256": "4f91dd07cf1fad2fcc31a9703315ed9e4b72a2bdb0d2d2325181acc598699f49"
+  },
+  "runtime_closure_not_republished_or_independently_rehashed_by_packager": true,
+  "raw_classes_ir_runtime_weights_logs_not_included": true
+}

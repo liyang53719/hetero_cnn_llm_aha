@@ -1,0 +1,53 @@
+{
+  "schema": "unified-profile-admission-observed-facts-v1",
+  "original_compile": {
+    "status": "FAIL_SCALA_INT_LITERAL_PARSER",
+    "errors_same_category": 11,
+    "duration_seconds": 3.2459803159581497,
+    "retained": true
+  },
+  "r2_change": {
+    "implementation_source_changed": false,
+    "spec_changes": "11 BigInt(4294967295) changed to BigInt(\"4294967295\"); generator corrected",
+    "arithmetic_changed": false
+  },
+  "r2_compile": {
+    "status": "PASS_TYPECHECK_ONLY",
+    "class_count": 15,
+    "class_bytes": 215756,
+    "duration_seconds": 17.942735009943135,
+    "class_manifest_sha256": "8c82a9c623718f0957e7b9d3dc64319054f99f69d8a049578ee17e7ce5d574ac"
+  },
+  "r2_actual_control_test": {
+    "status": "PASS_SAME_DUT_CONTROL_ONLY",
+    "tests": 1,
+    "profiles": 5,
+    "inter_profile_reset": false,
+    "reject_cases": 13,
+    "independent_boundary_vectors": 74,
+    "explicit_clocks": 541,
+    "framework_reset_clocks": 1,
+    "duration_seconds": 5.218441279954277,
+    "sampled_peak_rss_bytes": 174538752,
+    "log_sha256": "202743e31fe8ce31d26475be836c030bfd3b2621f6ad08a744ae34679ac41d94",
+    "lowered_firrtl_bytes": 106519,
+    "total_clocks_under_framework_one_reset_clock_assumption": 542,
+    "framework_reset_clock_scope": "Source/harness accounting assumption, not independently printed by actual marker"
+  },
+  "independent_actual_review_sha256": "39823d8c20137e1a68d7a8958e030366a236a0c69da15f2773d6cc6695ef2110",
+  "scope": {
+    "shared_4096_execution_top_implemented": false,
+    "complete_block_numerical": false,
+    "SV_generated_here": false,
+    "useful_MAC_utilization": null
+  },
+  "raw_ir_classes_runtime_weights_included": false,
+  "limitations": [
+    "No independent historical continuous resource telemetry; counts/cleanup from original receipt",
+    "one framework reset clock is harness accounting, not printed by actual marker",
+    "Only mismatched profile poison dynamically tested: wrong nonce/tag alone,undrained,backend resetRequired,saturation not tested",
+    "No shared4096 datapath/operators,fullblock numerical result,SV emission,SV simulation,synthesis/PPA/utilization",
+    "Original0648 parserFAIL and0719reviewer erratum retained"
+  ],
+  "resource_scope": "Recorded receipt metadata, not independent historical continuous telemetry or continuous peak proof"
+}

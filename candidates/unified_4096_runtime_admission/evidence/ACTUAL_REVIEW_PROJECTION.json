@@ -1,0 +1,85 @@
+{
+  "projection_rule": "Exact selected fields; private paths, process identities, timestamps and raw runtime/bulk excluded; no reviewer target reexecution. Original reviews and source preparation remain unchanged.",
+  "actual_control_review": {
+    "bytes": 4788,
+    "sha256": "39823d8c20137e1a68d7a8958e030366a236a0c69da15f2773d6cc6695ef2110"
+  },
+  "actual_control_review_freeze": {
+    "bytes": 322,
+    "sha256": "714b08de927fed01eb360fd1248179f39b8d7ef1eee87e9d717f40b87c80258a"
+  },
+  "actual_compile_review": {
+    "bytes": 1321,
+    "sha256": "49aeb0361103ba05b3d815056d83ad8a4e2bf3208bf3b7929ca0f72d07cc5960"
+  },
+  "compile": {
+    "status": "PASS_ACTUAL_R2_SCALA_TYPECHECK_CLASS_IDENTITY_ONLY",
+    "checks": 19830,
+    "class_count": 15,
+    "total_class_bytes": 215756,
+    "class_manifest_sha256": "a26ac8f00ce3b1268b7c8978fbadaa5f9205d4221d76914472dc93412a879310",
+    "recorded_resources": {
+      "wall_seconds": 17.942735009943135,
+      "peak_cpu": 16.94,
+      "peak_rss": 298373120,
+      "preflight_checks": 442,
+      "postflight_checks": 442
+    },
+    "limitations": [
+      "No bytecode execution by reviewer",
+      "No whole dependency rehash;442 is recorded production gate count",
+      "No Chisel elaboration or DUT test conclusion from compilation"
+    ]
+  },
+  "test": {
+    "status": "PASS_ACTUAL_SHARED_ADMISSION_CONTROL_ONLY",
+    "checks": 26,
+    "class_manifest_matches_independent15": true,
+    "tests": {
+      "suite": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "profiles_same_dut": 5,
+      "handwritten_admission_rejects": 13,
+      "oracle_vectors": 74,
+      "explicit_clocks": 541,
+      "reported_framework_reset_clocks": 1,
+      "total_under_framework_one_clock_assumption": 542
+    },
+    "low_fir": {
+      "bytes": 106519,
+      "sha256": "11c008d6015b2847749415dbf94274dc2747cd14e03a9cc44f67bb9ca2950d51",
+      "modules": [
+        "UnifiedBlockAdmission"
+      ]
+    },
+    "recorded_resources": {
+      "wall_seconds": 5.218441279954277,
+      "peak_cpu": 4.44,
+      "peak_rss": 174538752,
+      "preflight_checks": 457,
+      "postflight_checks": 457
+    },
+    "scope_limits": [
+      "No independent historical continuous resource telemetry; counts/cleanup from original receipt",
+      "one framework reset clock is harness accounting, not printed by actual marker",
+      "Only mismatched profile poison dynamically tested: wrong nonce/tag alone,undrained,backend resetRequired,saturation not tested",
+      "No shared4096 datapath/operators,fullblock numerical result,SV emission,SV simulation,synthesis/PPA/utilization",
+      "Original0648 parserFAIL and0719reviewer erratum retained"
+    ],
+    "reviewer_target_execution": false
+  },
+  "cleanup_recorded": {
+    "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "empty_complete_scans": 2,
+    "no_nonleader_identities_at_barrier": true,
+    "direct_leader_reaped": true,
+    "direct_exit_code": 0,
+    "no_post_reap_signals": true,
+    "grandchildren_reaped_by_this_helper": false,
+    "scan_evidence_sha256": "6086563ec6caa1ce5126cff48725e19258218206f6e32a491cc74238e79c8bd9"
+  }
+}

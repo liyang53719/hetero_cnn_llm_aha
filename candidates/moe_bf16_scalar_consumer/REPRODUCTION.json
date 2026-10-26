@@ -1,0 +1,47 @@
+{
+  "template_is_role_projection_not_actual_executed_bytes": true,
+  "original_r5_sha256": "095b729954c57ef2a7e2c62596ea972ee5472f32b2d325cdc4f3e590608b7914",
+  "template_sha256": "154911b6ca2a35ada68e722a33a1720b903f4389f43c028af269fd5910d4accb",
+  "roles": {
+    "STRICT_CLEANUP_HELPER": "verified repository strict cleanup helper from SOURCE_PINS",
+    "VERIFIED_COMPILE_RUN_ROOT": "fresh compile output root containing PLAN.json, RESULTS.json, COMPILED_CLASSES.json and SOURCE_UNCHANGED.json; no prior test attempt",
+    "OFFICIAL_SYNTHETIC_GOLDEN": "included fixtures/official_eager_tile.json"
+  },
+  "compile": {
+    "java": "Java21",
+    "heap": "512MiB",
+    "active_processors": 1,
+    "classpath": "jar-only ordered106 pinned classpath referenced by SOURCE_PINS; not historical compiled classes",
+    "sources": "all28 files pinned in SOURCE_PINS in a fresh classes directory",
+    "plugin": "pinned Chisel6.7.0 Scala2.13.16 plugin from referenced classpath/tool setup",
+    "main_class": "scala.tools.nsc.Main",
+    "actual_exit_code": 0
+  },
+  "test": {
+    "main_class": "org.scalatest.tools.Runner",
+    "suite": "heteronpu.continuous.MoeBf16ScalarConsumerSpec",
+    "argv_tail": [
+      "-R",
+      "${VERIFIED_COMPILE_RUN_ROOT}/classes",
+      "-oD",
+      "-s",
+      "heteronpu.continuous.MoeBf16ScalarConsumerSpec"
+    ],
+    "environment": {
+      "MOE_GOLDEN": "${OFFICIAL_SYNTHETIC_GOLDEN}",
+      "HETERO_CPU": "root-approved single CPU"
+    },
+    "budget": {
+      "heap_MiB": 512,
+      "owned_group_sampled_RSS_bytes": 1073741824,
+      "per_process_CPU_seconds": 120,
+      "sampled_aggregate_CPU_seconds": 120,
+      "work_seconds": 165,
+      "cleanup_seconds_from_original_start": 175,
+      "total_wall_seconds": 180,
+      "output_bytes": 10485760
+    },
+    "result_requirement": "exit0 AND all5 tests AND unchanged sources/jars/classes/golden AND validated strict cleanup proof. Actual attempt FAILED CPU cap; this package does not authorize retry."
+  },
+  "raw_machine_argv_logs_classes_runtime_not_included": true
+}

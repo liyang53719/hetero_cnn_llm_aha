@@ -1,0 +1,38 @@
+{
+  "consumer_count_domain": [
+    1,
+    16
+  ],
+  "moe_gateway_legal_counts": [
+    8,
+    9
+  ],
+  "atomic_admission": true,
+  "identity_fields": {
+    "transactionId": 64,
+    "token": 32,
+    "tileOrdinal": 16
+  },
+  "stale_contribution": "visible rejection pulse, no credit/seen/status change",
+  "bad_current_tag": "Protocol if no earlier fatal status; first error remains sticky; no credit for duplicate/out-of-range tags",
+  "bad_current_unique_canonical_or_marker": "credit for consumed unique current contribution; error followed by drain",
+  "failure_receipt": {
+    "fields": {
+      "identity": "full tuple above",
+      "status": 8,
+      "drained": 1
+    },
+    "valid_status_domain": [
+      2,
+      9
+    ],
+    "producer": "actual order.done && order.protocolError; held pending until consumer accepts",
+    "safe_acceptance": "Load/Drain only, hence no scalar outstanding; no competing contribution.valid",
+    "wrong_identity_undrained_or_invalid_status": "visible rejectedFailure pulse; no credit/status/termination; current legitimate data not consumed by failure",
+    "result": "held error identity/status with invalid zero payload; not numeric publication"
+  },
+  "timeout": "No internal timeout/success fallback. Parent watchdog must bound waits, isolate transaction, drain issued obligations and only then provide authentic failure or safe reset; bareerror cannot flush. Parent watchdog integration not implemented/tested by this unit.",
+  "scalar_service_integration": "Consumer raw scalar port uses one outstanding request. Future tagged fabric wrapper binds transactionId64 per request; parent fabric is per-request lease, not proof of whole-tile lease or whole-block fence.",
+  "test_scope": "5 planned tests: official32lane synthetic end-to-end arithmetic and failed encoding drain; atomic invalidcounts; unique current credit with stale/duplicate tags; actual bad route and bad reply drained terminal. Invalid failure receipts are injected into the numeric test wrapper and must not change legitimate Golden results.",
+  "execution_status": "See SUMMARY: compile succeeded, first synthetic transaction checkpoint reached, suite killed at CPU cap before first spec completion."
+}

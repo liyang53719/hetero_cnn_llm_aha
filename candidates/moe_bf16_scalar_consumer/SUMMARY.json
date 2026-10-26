@@ -1,0 +1,109 @@
+{
+  "status": "TEMP_PARTIAL_SYNTHETIC_TRANSACTION_WITH_CPU_BUDGET_FAIL",
+  "independent_review_bindings": [
+    {
+      "role": "r1_source_STOP",
+      "review_sha256": "af09ace1e7fe5c2a278b35b72b88c944ed605d9f3eefecc7ab7935830e71a4d7",
+      "freeze_sha256": "3423501606e85739af225e307d477e426157be3dce6a15da7241d8917480a417"
+    },
+    {
+      "role": "r2_source_admission",
+      "review_sha256": "ebb468a62d49e02120bf5b075edda974d91b9716c942e4084e4d2170dae007c8",
+      "freeze_sha256": "13b9711decead91d6a356316588cbfb30deff7140158c6e396ac3d7bee2d8c2b"
+    },
+    {
+      "role": "r5_supervisor_admission",
+      "review_sha256": "b8f8839e3e92877b2fc8e28379fe0614ebf974347f057740eed3ef629ae363bc",
+      "freeze_sha256": "3aa812c81a4a935346cfc5f2d1a6017fc80e5a5b27a90a9f323e64662c1de288"
+    },
+    {
+      "role": "actual_CPU_FAIL_review",
+      "review_sha256": "88157b3a2934c1fef1947feec37e2b6e6cf9b45395acccf304ac7e20e1e64535",
+      "freeze_sha256": "79d8187ecf6f303e05d1a953e4f08fcf21c543522322ffcbaef4b33c9f0b5b97"
+    }
+  ],
+  "source_history": {
+    "r1_stop": [
+      "MoE8/9 versus generic1..16 admission not atomic",
+      "stale identity spent current drain credit",
+      "producer error lacked drained consumer terminal"
+    ],
+    "r2_fixes": [
+      "atomic MoE8/9 gateway",
+      "only unique current-identity contribution retires credit",
+      "full identity/status/drained receipt accepted only with no scalar outstanding and no competing contribution"
+    ],
+    "full_unified_top_integrated": false
+  },
+  "compile": {
+    "stage": "compile",
+    "exit_code": 0,
+    "wall_seconds": 38.65526080701966,
+    "peak_rss_bytes": 426848256,
+    "stop_reason": null,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_suite": {
+    "planned_tests": 5,
+    "complete_passed_tests_observed": 0,
+    "first_spec_completed": false,
+    "complete_suite_pass": false,
+    "exit_code": -9,
+    "outer_observed_exit_code": 1,
+    "wall_seconds": 120.39350414392538,
+    "sampled_CPU_seconds": 120.04,
+    "sampled_RSS_bytes": 221483008,
+    "sampled_output_bytes": 3447956,
+    "errors": [
+      "RuntimeError: sampled aggregate CPU cap"
+    ],
+    "qualified": false,
+    "private_actual_receipt_sha256": "fa1c2d2f3eeec6bb51daf3f18bd4a4cf22bd73bb7abbdd571b54eec4c219c0f5",
+    "private_raw_log_sha256": "4bcdab1f8711ee01b0382d944b1470cceb55878a14bc6e720fbbc1f86e4086ce",
+    "pins_unchanged": {
+      "sources": true,
+      "jars": true,
+      "classes": true,
+      "golden": true
+    }
+  },
+  "partial_transaction_checkpoint": {
+    "transaction": 100,
+    "contributions": 9,
+    "lanes": 32,
+    "actual_scalar_requests": 576,
+    "actual_scalar_responses": 576,
+    "numeric_loop_cycles": 2020,
+    "not_end_to_end_cycles": true,
+    "checks_preceding_marker": [
+      "each actual scalar request op/a/b against official fixture materialized BF16 operands",
+      "every scalar response error false",
+      "all32 final BF16 lanes exactly equal official synthetic output",
+      "result identity/status",
+      "held result and final consume",
+      "next job ready"
+    ],
+    "actual_full_per_operation_trace_saved": false,
+    "claim_basis": "Read-only log checkpoint after the listed assertions; no invented per-operation raw trace or benchmark profile."
+  },
+  "uncovered": [
+    "second transaction completion and its exact kill-time phase unknown",
+    "first numeric spec did not return PASS",
+    "remaining4 specs not executed in this attempt",
+    "no complete35B L0/L3 block or actual weights",
+    "no full4096 top, unchanged full-top RTL identity, PPA, or timing acceptance",
+    "official NaN/Inf/overflow semantics remain unsupported; see KNOWN_NUMERICAL_GAPS"
+  ],
+  "cleanup": {
+    "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "empty_complete_scans": 2,
+    "no_nonleader_identities_at_barrier": true,
+    "direct_leader_reaped": true,
+    "no_post_reap_signals": true,
+    "direct_exit_code": -9
+  },
+  "outer_timeout_branch_exercised": false,
+  "scope": "Real shared order -> BF16 consumer -> existing HardFloat scalar circuits for one synthetic32lane tile transaction only; expert/router/projection results were fixture inputs, not computed by the complete4096 array. No dedicated model hardware or reduced fullblock PASS is claimed.",
+  "successor_diagnostic_or_larger_budget_not_part_of_this_package": true
+}

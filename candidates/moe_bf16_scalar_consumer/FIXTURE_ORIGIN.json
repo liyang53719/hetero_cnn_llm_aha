@@ -1,0 +1,80 @@
+{
+  "fixture_sha256": "2b86f02e0fb78343f4bb611cdf796565c35e4ef22c0ceacebb35be3b03a5b9c0",
+  "exact_same_bytes_as_actual": true,
+  "generator_source_sha256": "16285c4105297214312b4b7c96f0278f040a59aa3b694f58b6e709bb0fd2e25c",
+  "generator_source_not_included_because_private_runtime_paths": true,
+  "official_source_relative_path": "config/upstream/weight_headers/qwen3_5_35b_a3b/modeling_qwen3_5_moe.py",
+  "official_source_sha256": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+  "official_class_body_ast_sha256": {
+    "Qwen3_5MoeMLP": "68ff550e0de02c1213c54a9efbd1dfd4de7db2672fa5ac6bd386ee42308500ca",
+    "Qwen3_5MoeExperts": "62fcfbe827db066d38219ca63c9d64461ca9f5c48709b5f1b1aa28d26031c943",
+    "Qwen3_5MoeTopKRouter": "502184fd15fee1fdb54ffa4ca82ce2eb2a34260819b4afd28bce44589b306034",
+    "Qwen3_5MoeSparseMoeBlock": "cd2388e1b2d63ebc360b218b4bdb255a4a20d7f35d7ca244753147582cbfea02"
+  },
+  "method_bodies_unchanged": true,
+  "optional_experts_backend_decorator_executed": false,
+  "torch_version": "2.10.0+cpu",
+  "torch_commit": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+  "runtime_receipt_sha256": "2ce86dceb6b34bf9b9974023e5df9d25b3fe4e27ac3f3ed96dab80e121914c4d",
+  "generation_exit_code": 0,
+  "model_checkpoint_loaded": false,
+  "real_model_parameters_or_user_inputs": false,
+  "random_seed_needed": false,
+  "construction": {
+    "hidden": "ones(1,1,32) BF16",
+    "all_parameters_initialization": "zero before deterministic assignments",
+    "router_column0": "experts0..7 -> 2; others -> -2",
+    "expert_gate_up_column0": "gate16, up1",
+    "expert_down_nonzero": [
+      {
+        "expert": 0,
+        "lane": 0,
+        "value": 128
+      },
+      {
+        "expert": 1,
+        "lane": 0,
+        "value": 0.5
+      },
+      {
+        "expert": 2,
+        "lane": 0,
+        "value": -128
+      },
+      {
+        "expert": 0,
+        "lane": 1,
+        "value": 0.1875
+      },
+      {
+        "expert": 0,
+        "lane": 2,
+        "value": "2^-133"
+      },
+      {
+        "expert": 1,
+        "lane": 2,
+        "value": "2^-133"
+      },
+      {
+        "expert": 0,
+        "lane": 3,
+        "value": 128
+      },
+      {
+        "expert": 1,
+        "lane": 3,
+        "value": 0.5
+      },
+      {
+        "expert": 2,
+        "lane": 3,
+        "value": 0.5
+      }
+    ],
+    "shared_expert": "gate input0=16, up input0=1, down lane4=.125; all other entries0",
+    "shared_gate": "all0 -> sigmoid .5"
+  },
+  "actual_observers": "Native F.linear and index_add_ called once unchanged; read-only result/trace capture; hooks restored finally.",
+  "scope": "Synthetic complete official eager MoE reference at H32/I1 only, not actual35B weights or fullblock. All32-lane inputs/intermediates/output are in fixture."
+}

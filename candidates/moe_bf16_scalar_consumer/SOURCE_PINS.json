@@ -1,0 +1,218 @@
+{
+  "historical_main": "c590179c4c3424ded9997ba8f15f27821df304c9",
+  "not_claimed_latest_main": true,
+  "sources": [
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "AddRecFN.scala",
+      "sha256": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+      "bytes": 8776,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "CompareRecFN.scala",
+      "sha256": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d",
+      "bytes": 3476,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "DivSqrtRecF64.scala",
+      "sha256": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0",
+      "bytes": 4428,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "DivSqrtRecF64_mulAddZ31.scala",
+      "sha256": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776",
+      "bytes": 33929,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "DivSqrtRecFN_small.scala",
+      "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+      "bytes": 20235,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "INToRecFN.scala",
+      "sha256": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb",
+      "bytes": 3417,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "MulAddRecFN.scala",
+      "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b",
+      "bytes": 15353,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "MulRecFN.scala",
+      "sha256": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+      "bytes": 5706,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "RecFNToIN.scala",
+      "sha256": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3",
+      "bytes": 6827,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "RecFNToRecFN.scala",
+      "sha256": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09",
+      "bytes": 3958,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "RoundAnyRawFNToRecFN.scala",
+      "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d",
+      "bytes": 13901,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "classifyRecFN.scala",
+      "sha256": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16",
+      "bytes": 2880,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "common.scala",
+      "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+      "bytes": 3925,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "fNFromRecFN.scala",
+      "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d",
+      "bytes": 2853,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "primitives.scala",
+      "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31",
+      "bytes": 5105,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "rawFloatFromFN.scala",
+      "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+      "bytes": 3037,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "rawFloatFromIN.scala",
+      "sha256": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8",
+      "bytes": 2885,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "rawFloatFromRecFN.scala",
+      "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+      "bytes": 2877,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "recFNFromFN.scala",
+      "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d",
+      "bytes": 2352,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "EXTERNAL_PINNED_HARDFLOAT",
+      "relative_path": "resizeRawFloat.scala",
+      "sha256": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561",
+      "bytes": 3237,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "bytes": 3123,
+      "historical_c590_git_blob": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "bytes": 8313,
+      "historical_c590_git_blob": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "integration/gemmini/EmitHeteroFP32Alu.scala",
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "bytes": 1130,
+      "historical_c590_git_blob": "d7e8191988456d32d6e9e90d58ca19dba2b2427e"
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala",
+      "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+      "bytes": 7073,
+      "historical_c590_git_blob": "3c34aefd56c0c8d3a529b97bf1d3f8fd3c15b360"
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala",
+      "sha256": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+      "bytes": 33917,
+      "historical_c590_git_blob": "bfca18bf7b3be1e3c18787bf670c8af1eba11aed"
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "candidates/moe_runtime_merge/source/HeteroRuntimeMoeMerge.scala",
+      "sha256": "7d94ef0fd596c15d46afe661da03b48bfffbc2e72cd97803472c3f199d073489",
+      "bytes": 6806,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "candidates/moe_bf16_scalar_consumer/source/MoeBf16ScalarConsumer.scala",
+      "sha256": "281f8a8c0d288ae835de263b484f9aee59f45a0d93a9c40c0b8e78e9e666f9e5",
+      "bytes": 7231,
+      "historical_c590_git_blob": null
+    },
+    {
+      "role": "REPOSITORY",
+      "relative_path": "candidates/moe_bf16_scalar_consumer/tests/MoeBf16ScalarConsumerSpec.scala",
+      "sha256": "f468328213e0b4aec419ad1e9e5515f951b4e3d5fdfa7aba61dc5e441dd68a27",
+      "bytes": 20339,
+      "historical_c590_git_blob": null
+    }
+  ],
+  "count": 28,
+  "strict_cleanup": {
+    "role": "REPOSITORY",
+    "relative_path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+    "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
+  },
+  "ordered_jar_classpath_reference": {
+    "role": "REPOSITORY",
+    "relative_path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+    "key": "ordered_classpath",
+    "count": 106
+  },
+  "fixture_sha256": "2b86f02e0fb78343f4bb611cdf796565c35e4ef22c0ceacebb35be3b03a5b9c0",
+  "private_compile_plan_sha256": "08cf43380c4af33bd88f029e211ce6a8bdb23b144e6ba1c0d34d7a2012b22568",
+  "private_compiled_classes_manifest_sha256": "534f5843a60e6ea925c4284fc1c2e7404437f7cdcf880d7d4c44eda5aff8606b"
+}

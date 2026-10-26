@@ -1,6 +1,18 @@
-# 当前硬件 RTL 与五类 block 并行计划（2026-10-26）
+# 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
-## 当前执行顺序
+## 当前执行顺序：先原始 Chisel 数值，再 RTL 回放
+
+按 2026-10-26 15:56:30 / 15:57:17 UTC 的最新用户要求，**五个 block 可以并行；验收顺序是原始 Chisel 完整 128-token prefill 数值回归 → 冻结同源、输入和参考 → 生成 RTL 并回放五块数值回归。** 五个 profile 为 Qwen2 L0、Qwen3.5-0.8B L0/L3、Qwen3.5-35B-A3B L0/L3；不能把单个 leaf、mock 控制测试或独立 Python/C++ 软件模型结果当作原始 Chisel 整块通过。
+
+1. 保留并复用 Qwen2 已修 92 源的既有 prefill 能力：`HostBlockCommands` 的 public21 入口允许 M16/M128，`Qwen2Block` 已有跨 token 的 Norm/RoPE/Attention/SiLU FSM；它并非只有 M1。该代码仍受固定 Qwen2 shape 与内部算术约束，须接入五 profile 统一 runtime / 共享 4096 资源，并保留原 QKV 分段归约语义，不能以普通 dense 求和冒称等价。Qwen3.5 原始 block 适配入口的 M1 限制单独处理。当前补齐原始 `HostBlockTop` / `HostBlockCommands` / `QwenOwnerKernel` 到共享真实数据 owner / Matrix 与公共 runner 的统一接线、完整数值闭环；五 profile 并行且不互借 PASS。
+2. 五块原始 Chisel 数值门通过后，固定同一份源码身份，并冻结各 profile 的输入、权重、官方参考及批准比较合同；不把用户指令或待执行配置记为已完成。
+3. 再生成并固定**同一完整 4096-MAC 硬件、同接口、同 RTL hash**，只切换 runtime 配置与权重，回放同一批五块输入/参考。仍需独立 RTL 数值证据；Chisel PASS 不自动继承为 RTL PASS。
+
+当前公开主线基线为 `56f4e11ed805f96dc2f1e50384cc7f832012bfca`。根 `chisel/continuous_prefill/` 的 455 个文件相对 `c590179c4c3424ded9997ba8f15f27821df304c9` 均为相同 Git blob/mode；这项裸根目录身份事实不等于上述已修 92 源 overlay 已被直接安装到根目录；后者按 [公开来源重组流程](../candidates/qwen2_ordered_vector_compile_evidence/README_CN.md) 复现，72 个公开 recipe 源加 20 个原 pin 的外部 HardFloat 源单独绑定。后来发布的 admission、state、GDN、MoE、共享 fabric/controller 候选也不能冒称已经接回原始完整 block 入口。本段确认既有源码能力，不新增任何 Chisel 数值 PASS。最新结构/ABI/Yosys前端结果只按各自范围收尾归档，不升级完整 block 数值，也不另开 EDA 主线绕过上述顺序。
+
+此处只纠正执行顺序与导航，`doc/block_checklist.yaml` 的 74 条任务及全部 `to do/ongoing/done`、旧 FAIL/TEMP、固定 4096 有效 MAC ≥90% 目标保持不变。五块原始 Chisel/RTL 联合完整数值验收尚未建立；既有软件观测域或有限 leaf PASS 不回填该缺口。
+
+## 历史 06:04 / 06:36 执行导航（顺序已由上节覆盖）
 
 按 2026-10-26 06:04 UTC 的用户新要求：**继续核验当前真实硬件结构能否生成 RTL，同时并行推进其余四类 block；不再让它们等待 Qwen2 主线完成。** 旧文档中的“先 Qwen2、再其余模型”保留为历史时点说明，不再作为当前派工依赖。
 
@@ -54,7 +66,7 @@
 
 有界同步 memory 不等于已绑定技术 SRAM；大 `Reg(Vec)` 也不会自动成为 BRAM。局部组合 ready cone 未见自环不等于完整网表 SCC 通过；有意 ICG latch、时钟停启/复位释放、真实 cell mapping、STA/CTS/目标频率 和物理扇出仍待验证。旧 4096 lint、全图 2 GiB RSS FAIL、no-plan 与 CPU 统计覆盖缺口全部保留。
 
-后续门按固定原算术、完整 4096 配置及统一通用 top 合同推进：完整 provider 层次的前端/结构检查、综合与闭合 SCC、资源/时序，再做五 profile 的非零完整 block 数值和有效 MAC 周期账本。必须分别记录同一 RTL hash、同一接口及 runtime 配置；不能退回单 512 替代完整验证。本片不把这些待执行门写成通过，也不允许通过缩小 lanes、stub/blackbox 或静默更换算术来“通过”。
+历史 06:54 工具门序（已由文首 Chisel 数值先行顺序覆盖，不再用于当前派工）：后续门按固定原算术、完整 4096 配置及统一通用 top 合同推进：完整 provider 层次的前端/结构检查、综合与闭合 SCC、资源/时序，再做五 profile 的非零完整 block 数值和有效 MAC 周期账本。必须分别记录同一 RTL hash、同一接口及 runtime 配置；不能退回单 512 替代完整验证。本片不把这些待执行门写成通过，也不允许通过缩小 lanes、stub/blackbox 或静默更换算术来“通过”。
 
 ## 审核与范围
 

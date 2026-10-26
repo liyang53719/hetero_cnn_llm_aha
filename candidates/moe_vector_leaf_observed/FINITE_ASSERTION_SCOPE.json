@@ -1,0 +1,129 @@
+{
+  "status": "PASS_FOUR_FINITE_TREADLE_CASES_SOURCE_ASSERTION_EVIDENCE_NOT_RAW_LANE_TRACE",
+  "suite": "MoeBf16VectorConsumerV2ObservedSpec",
+  "actual_cases": [
+    {
+      "suite": "MoeBf16VectorConsumerV2ObservedSpec",
+      "name": "match every16-lane materialized Mul/Add and all32 outputs of the official synthetic Golden for two jobs then cover distinct nonzero values in every lane",
+      "reported_duration": "4 minutes, 23 seconds"
+    },
+    {
+      "suite": "MoeBf16VectorConsumerV2ObservedSpec",
+      "name": "reject noncanonical weights and not spend drain credit on stale or duplicate contributions",
+      "reported_duration": "21 seconds, 267 milliseconds"
+    },
+    {
+      "suite": "MoeBf16VectorConsumerV2ObservedSpec",
+      "name": "reject a wrong returned policy echo only after the real operation returns and drain the remaining eight",
+      "reported_duration": "17 seconds, 422 milliseconds"
+    },
+    {
+      "suite": "MoeBf16VectorConsumerV2ObservedSpec",
+      "name": "reject noncomplete contribution counts before any bank operation",
+      "reported_duration": "31 seconds, 983 milliseconds"
+    }
+  ],
+  "positive_jobs": [
+    {
+      "transaction": 100,
+      "contributions": 9,
+      "accepted_bank_requests": 36,
+      "returned_bank_responses": 36,
+      "loop_cycles_observed": 87,
+      "value_flags_lane_assertion_pairs": 576,
+      "expected_final_lane_words": 32,
+      "reference": "same fixed official synthetic fixture"
+    },
+    {
+      "transaction": 101,
+      "contributions": 9,
+      "accepted_bank_requests": 36,
+      "returned_bank_responses": 36,
+      "loop_cycles_observed": 87,
+      "value_flags_lane_assertion_pairs": 576,
+      "expected_final_lane_words": 32,
+      "reference": "same fixed official synthetic fixture"
+    },
+    {
+      "transaction": 102,
+      "contributions": 9,
+      "accepted_bank_requests": 36,
+      "returned_bank_responses": 36,
+      "loop_cycles_observed": 87,
+      "value_flags_lane_assertion_pairs": 576,
+      "expected_final_lane_words": 32,
+      "reference": "distinct nonzero1..32 indexing fixture; not official capture"
+    }
+  ],
+  "positive_total": {
+    "requests": 108,
+    "returns": 108,
+    "lane_response_value_flags_assertion_pairs": 1728,
+    "request_operand_word_assertions": 3456,
+    "packed_final_output_assertions": 3,
+    "represented_final_lane_words": 96
+  },
+  "negative_cases": {
+    "case2": "Noncanonical weight; stale/duplicate contribution credit. Issued=false asserted at selected protocol points, final Numerical status/zero data after real contribution drain. Not a continuous raw no-operation trace.",
+    "case3": "Explicit corrupted policy echo after one real bank request/response; counters1/1, no early result, remaining eight contribution drain then Protocol/zero data. This request is not a valid-numeric-output test.",
+    "case4": "Counts0,1,8,10,16,31 rejected with Malformed/zero data; issued=false checked at designated points, not an all-cycle raw bank monitor."
+  },
+  "reported_bank_count_interpretation": "108 positive counted requests plus1 negative counted request=109 for these source-bound test paths. Do not state109 requests all independently numerically compared:1728 lane value/flags pairs cover positive108 only.",
+  "same_DUT": "One test(newHarness) encloses three positive jobs with no intervening explicit reset; other three cases are separate elaborations. Four identical lowIR hashes do not mean all cases one physical DUT. No waveform proves hidden reset behavior beyond fixed test source.",
+  "held_result": "Full identity is checked initially for positive results. consume checks status/data, advances4 steps with ready false, then checks status/data again before acceptance. It does not recheck identity/status every hold cycle.",
+  "stimulus": "Fixed synthetic nine contributions are source-ordered eight routed experts plus one shared; no real expert producer/owner/order.done bridge, no model checkpoint. sourceFailure is tiedfalse in this numeric harness.102 tests all32 distinct lanes and improves nonzero index coverage without proving arbitrary permutation correctness.",
+  "arithmetic": "Actual16 HeteroFP32Alu bank with AddRecFN/MulRecFN, per-operation BF16 integer output formatting. Not surrogate arithmetic, not fused multiply-add.16 formatter lanes are explicit added logic; no PPA claim.",
+  "reference_identity": {
+    "path": "candidates/moe_bf16_scalar_consumer/fixtures/official_eager_tile.json",
+    "bytes": 13186,
+    "sha256": "2b86f02e0fb78343f4bb611cdf796565c35e4ef22c0ceacebb35be3b03a5b9c0",
+    "commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307"
+  },
+  "expected_consistency_only": {
+    "status": "PASS_PURE_FINITE_EXPECTED_VALUE_CONSISTENCY_NOT_ACTUAL_TRACE_REPLAY",
+    "mode": 0,
+    "conditions": 5955,
+    "expected_lane_ops_total": 1728,
+    "jobs": [
+      {
+        "txn": 100,
+        "expected_lane_ops": 576,
+        "expected_nonzero_final_lane_count": 4,
+        "expected_stream_sha256": "5cfddf8a2fdc62f01aa42ed05551b21f2dad3f4629ef88519d830dde0b275d1b",
+        "source": "existing official synthetic fixture"
+      },
+      {
+        "txn": 101,
+        "expected_lane_ops": 576,
+        "expected_nonzero_final_lane_count": 4,
+        "expected_stream_sha256": "5cfddf8a2fdc62f01aa42ed05551b21f2dad3f4629ef88519d830dde0b275d1b",
+        "source": "existing official synthetic fixture"
+      },
+      {
+        "txn": 102,
+        "expected_lane_ops": 576,
+        "expected_nonzero_final_lane_count": 32,
+        "expected_stream_sha256": "d931d1851e14e81fdd5df9386fea3e7694c8a1be61246b3aad2c58c13841f691",
+        "source": "distinct1..32 indexing identity fixture"
+      }
+    ],
+    "actual_hardware_outputs_read": false,
+    "model_or_reference_executed": false,
+    "boundary": "Checks fixture values and source expected lookups with independent exact rational FP32 RNE then BF16 RNE; actual numeric evidence remains compiled-source assertions plus genuine4case terminal success, not saved raw lane data."
+  },
+  "actual_evidence_limit": "Genuine4case successful ScalaTest log plus fixed source/class identity and source assertions. No stored raw operand/result/flags stream; this independent review does not claim direct replay of actual per-lane values or a new official model capture.",
+  "excluded": [
+    "allIEEE/inputspace coverage",
+    "real35B weights/fullblock",
+    "trusted expert producer wiring",
+    "complete4096 unified top execution",
+    "SV/Verilog simulation",
+    "synthesis/PPA/area equivalence",
+    "MAC utilization or throughput",
+    "negative cases as valid numeric results"
+  ],
+  "public_projection": {
+    "original_independent_scope_sha256": "3e2833b79c8a0489338dc16b4226da29328e92c17de7b196b2e5a63db4a92c89",
+    "changes": "Only reference_identity.path changed from private filesystem to exact public repository path, public commit added; this projection marker added. All substantive assertion scope unchanged."
+  }
+}

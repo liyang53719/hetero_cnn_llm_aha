@@ -1,0 +1,68 @@
+{
+  "new_observed_spec": {
+    "relative_path": "tests/MoeBf16VectorConsumerV2ObservedSpec.scala",
+    "sha256": "d5c1dc923b449738568522f2c3d28447d2c35ac07537ac4c2db2680c1e6211ea",
+    "compiled_classes": 3,
+    "compiled_class_bytes": 127710
+  },
+  "shared_source_reference": {
+    "commit": "d7069a5ecf6c409cb17f7cc7d78b6a3aaa0ba392",
+    "path": "candidates/moe_vector_leaf/SOURCE_REFS.json",
+    "sha256": "c6d802b0728dde1749f9c7eecf375b3661d978f981eee2db78a03c298fbf5d22",
+    "source_count": 6,
+    "frozen_vector_classes_reused_count": 22,
+    "original_test_status_at_that_commit": "B source/typecheck only, not B actual result"
+  },
+  "unchanged_harness_and_original_spec": {
+    "commit": "d7069a5ecf6c409cb17f7cc7d78b6a3aaa0ba392",
+    "path": "candidates/moe_vector_leaf/tests/MoeBf16VectorConsumerV2Spec.scala",
+    "sha256": "8ecb89ec585c6f07a134c4482b488bb1a59a397e769bd9cfef43a4c966911315",
+    "scope": "Original harness classes reused byte-exact; new Spec has renamed class and bounded observations only. No poke/clock/expect/peek/readiness changes."
+  },
+  "provider_closure": {
+    "commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307",
+    "path": "candidates/moe_bf16_scalar_consumer/SOURCE_PINS.json",
+    "sha256": "1f370db3bae779820c4cd0422c854d97d7d4db2cc8b32defb8e3344eb33985bc",
+    "historical_derived_classes": 168,
+    "historical_class_manifest_sha256": "534f5843a60e6ea925c4284fc1c2e7404437f7cdcf880d7d4c44eda5aff8606b"
+  },
+  "golden": {
+    "commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307",
+    "path": "candidates/moe_bf16_scalar_consumer/fixtures/official_eager_tile.json",
+    "sha256": "2b86f02e0fb78343f4bb611cdf796565c35e4ef22c0ceacebb35be3b03a5b9c0",
+    "scope": "Original synthetic fixture used for B jobs100/101. Job102 is explicit source-defined indexing identity, not an official model capture."
+  },
+  "classpath": {
+    "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+    "key": "ordered_classpath",
+    "count": 106,
+    "commit": "43801d4043ef49524b93dbccb5c1f0bf4bb8f258"
+  },
+  "strict_cleanup": {
+    "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+    "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "commit": "43801d4043ef49524b93dbccb5c1f0bf4bb8f258"
+  },
+  "historical_class_count": 193,
+  "historical_class_root_counts": [
+    3,
+    22,
+    168
+  ],
+  "historical_class_bytes": 2835979,
+  "observed_compile_result_sha256": "87c2bad71e49b4af373ae79eb78b7418344dc34d031e746d4e3c9f7c4861f9f2",
+  "observed_compile_class_manifest_sha256": "144345ce55a09eed44e7e633f009a7015104b53df99dacd13953133624f1ff3d",
+  "original_compile_result_sha256": "c35d06490da042f3d274a93a1cedcab835c5f307e611a53c81071281237aa045",
+  "supervision": {
+    "actual_source_sha256": "9fe82dfdc90a12e3b92933c7078a3d107db42794fba69b2cb0287c04114f22e5",
+    "template_sha256": "4298bb60d3869c0c13ede7501b8863a4e795c0b41040d8aff28262307b9050bc",
+    "template_transform": "Exact imported prefix/owned_run, only HELPER path role substituted and unused historical main omitted; public template not separately executed."
+  },
+  "source_delta_scope": {
+    "new_observation_lines_expected_success": 30,
+    "conservative_unconditional_max": 768,
+    "addendum_sha256": "afb2a92ee896e98cdcc6d69a6d03835e1c9e1819475b098c628a678144f9d24c"
+  },
+  "no_uploaded_classes_runtime_IR_or_checkpoint": true
+}

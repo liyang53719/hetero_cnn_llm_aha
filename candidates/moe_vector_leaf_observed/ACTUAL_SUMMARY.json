@@ -1,0 +1,118 @@
+{
+  "status": "PASS_FOUR_FINITE_VECTOR_CONSUMER_CASES_LIMITED_INDEPENDENT_REVIEW",
+  "completed_cases": 4,
+  "completed_suites": 1,
+  "native_exit_code": 0,
+  "outer_tool_exit_code": 0,
+  "sampled_group_CPU_seconds": 329.77,
+  "sampled_group_peak_RSS_bytes": 321105920,
+  "inner_wall_seconds_including_postflight": 335.81806171196513,
+  "cleanup_complete": true,
+  "inputs_unchanged": true,
+  "positive_jobs": [
+    {
+      "transaction": 100,
+      "contributions": 9,
+      "accepted_requests": 36,
+      "accepted_responses": 36,
+      "numeric_loop_cycles": 87,
+      "fixture": "same original official synthetic nine-contribution Golden"
+    },
+    {
+      "transaction": 101,
+      "contributions": 9,
+      "accepted_requests": 36,
+      "accepted_responses": 36,
+      "numeric_loop_cycles": 87,
+      "fixture": "same original official synthetic nine-contribution Golden"
+    },
+    {
+      "transaction": 102,
+      "contributions": 9,
+      "accepted_requests": 36,
+      "accepted_responses": 36,
+      "numeric_loop_cycles": 87,
+      "fixture": "distinct-nonzero32lane indexing fixture, NOT official capture"
+    }
+  ],
+  "positive_jobs_scope": "All3 jobs on one consumer+actual16lane bank DUT without reset in case1; separate DUT instances for the other3 cases.",
+  "request_counts": {
+    "positive108": 108,
+    "wrong_policy_negative1": 1,
+    "other_negative0": 0,
+    "total109": 109
+  },
+  "numeric_assertion_scope": "Each of108 positive selected bank operations checks all16 operand a/b, returned value and flags against original expected materialized intermediate bits;108x16=1728 source-bound lane result/flag pairs, not saved raw lane trace/MAC counting. Packed512-bit outputs check32BF16 lanes/job;96 lanes across3jobs. Extra negative1 checks handshake count then injected policy mismatch/control drain, not another numeric output proof.",
+  "held_output_scope": "Identity checked on initial result. Status/data sampled again after4 held clock steps, not every field on every held cycle.",
+  "per_case_reporter_lines": [
+    "- should match every16-lane materialized Mul/Add and all32 outputs of the official synthetic Golden for two jobs then cover distinct nonzero values in every lane (4 minutes, 23 seconds)",
+    "- should reject noncanonical weights and not spend drain credit on stale or duplicate contributions (21 seconds, 267 milliseconds)",
+    "- should reject a wrong returned policy echo only after the real operation returns and drain the remaining eight (17 seconds, 422 milliseconds)",
+    "- should reject noncomplete contribution counts before any bank operation (31 seconds, 983 milliseconds)"
+  ],
+  "progress_lines": 33,
+  "new_observation_lines": 30,
+  "progress_limits": {
+    "expected_success_path": 30,
+    "conservative_unconditional_added_lines": 768
+  },
+  "IR": {
+    "format": "Treadle lowFIR",
+    "files": 4,
+    "bytes": 3093856,
+    "same_hash": true,
+    "sha256": "7dfc05658c82e5b408c06df3f0c26e7973660a979505a645fe10c50cd8d1719e",
+    "SV_generated": false
+  },
+  "class_count": 193,
+  "class_roots": 3,
+  "shared_source_public_commit": "d7069a5ecf6c409cb17f7cc7d78b6a3aaa0ba392",
+  "DUT_source_changed": false,
+  "resource_scope": "Actual common16 originalFP32ALUs plus explicit16integerBF16formatters/2bitpolicy; no scaled4096 substitute or additional per-model bank.",
+  "not_qualified": [
+    "real expert/router producer and owner parent integration",
+    "real35B checkpoint weights",
+    "M128 L0 or L3 complete block",
+    "same full4096 physical product integration/SV/synthesis",
+    "performance/90percent utilization",
+    "allIEEE domain"
+  ],
+  "old_CPU120_failures_preserved": true,
+  "review_bindings": [
+    {
+      "role": "observed_source_compile_entry",
+      "review_sha256": "08a27bc71894998cb5e458118ba12514449065d6d9f2a932322adaff4b55f73d",
+      "freeze_sha256": "0720854b6bfe2eace859e2004a083c596c05c62eedb59155c79fee7bc43bf975"
+    },
+    {
+      "role": "observed_compile_actual",
+      "review_sha256": "e98c47adb121f3d921057332012333ed308be771f8c6094a60dd42b7f0c177da",
+      "freeze_sha256": "760a62cc2a207ae7266419343e48338a227d6cca2d32a95a1c20a5624aa06ca2"
+    },
+    {
+      "role": "test_entry",
+      "review_sha256": "4a18870472b9bddce6f27b883d22b8d316946526278d5e87c98e7cad88f07d22",
+      "freeze_sha256": "2527a8b5c57e884ec18244a64bc59f3e9970a16c9cc34a45da67c9f9b69effef"
+    },
+    {
+      "role": "test_actual",
+      "review_sha256": "d9056056a3c4a6a3377b2d655548ae854213c523f55586b6116e25dcceb327e3",
+      "freeze_sha256": "f47082f159e819acfaf3449ecd131db3939e72ff23f82ae5489164792dec0543"
+    }
+  ],
+  "request_count_limit": "Positive108 and policy-injection1 are completed source-bound counters/markers. Cases2/4 assert issued=false at specified source checkpoints and protocol forbids work; no separate continuous raw monitor of every cycle is claimed.",
+  "actual_pins": {
+    "PLAN.json": "320a34924def9f2c51d9975db015aec3a3d95f97fe7008758864ba2f2111cb70",
+    "TEST_RESULT.json": "4ee3fdbe52dd7fe77a97a9699f987bab19405f9c8d567e912e7b20e5d7478b06",
+    "NATIVE_TEST_RESULT.json": "087f9ddfabf73e8369208211deb5f65d3ee677675a0700db30894d32954cca8b",
+    "CASE_LINES.json": "a4b6e15440afce662bdea784278c4428302513d3d4571df03517a4d24bbeeebe",
+    "PROGRESS_LINES.json": "003ee24f6233324a43ffc75c8e68602d661710917fbe59d398417e7153e198a6",
+    "GENERATED_IR.json": "e635f397d7657377873c2573474473942f44c2965c30a7fab04616ba98b62bdc",
+    "test.log": "3dd948b355657f4623178bc004db43df3e6f79c5e1ab907f80e081043fb44d15",
+    "external_actual_freeze": "7244594f9147d89553fd38d1e92a1f301654a310dc279e15e331b2875a5a6ce8",
+    "external_launch": "69441ece397e717a89966035739f60dac9f3a7985b32a19d846b85bf6088d92c",
+    "original_tool_session_terminal": "7f3f3833f89a4e51971c9b75f4d9f2230e2b7914e6c7601b1f444c20d4d7b3f0"
+  },
+  "environment_limit": "Closed env-i/Python -I-S-B and exact argv/source binding; no separately captured child-environment snapshot. CPU/RSS are sampled group observations; inner wall includes postflight, not measured full outer duration.",
+  "independent_rational_check": "Reviewer pure rational recomputation checked synthetic expected1728 values/flags against unchanged lookup, not another target run or rerun of official eager reference."
+}

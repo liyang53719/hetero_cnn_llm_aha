@@ -1,0 +1,6 @@
+[
+  "- should match every16-lane materialized Mul/Add and all32 outputs of the official synthetic Golden for two jobs then cover distinct nonzero values in every lane (4 minutes, 23 seconds)",
+  "- should reject noncanonical weights and not spend drain credit on stale or duplicate contributions (21 seconds, 267 milliseconds)",
+  "- should reject a wrong returned policy echo only after the real operation returns and drain the remaining eight (17 seconds, 422 milliseconds)",
+  "- should reject noncomplete contribution counts before any bank operation (31 seconds, 983 milliseconds)"
+]

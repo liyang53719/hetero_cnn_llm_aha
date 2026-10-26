@@ -1,0 +1,110 @@
+{
+  "status": "OVERALL_CPU120_FAIL_WITH_THIRTEEN_FINITE_CONTROL_CASE_COMPLETIONS_NOT_FULL_SUITE_PASS",
+  "actual_review": {
+    "bytes": 11077,
+    "sha256": "ca04ff112a090e83cf81b4e0093864d085dba66600f92f0cdfc5626bed47c900"
+  },
+  "exit_field_interpretation": "ACTUAL_SUMMARY.test.native_exit_code=-9 denotes direct cleanup wait/reap only. Original observed_exit_code key is absent, not explicit null, success or an observed waitid status.",
+  "uncompleted_cases": "Second SharedScalarClient case intends to wait for nine real expert replies and576 explicitly mocked scalar completions before a poisoned fence. Its named lowFIR fixture exists, but no successful completion line. Fixed sequential suite selection and this artifact support an interrupted second case; exact execution phase, cycles, actual requests/responses completed, or time spent in lowering versus simulation are unobserved. Final token/tile-boundary connected case has no completion line and no named fixture in the retained artifact inventory. It is not counted as run/passed. Do not infer that the source boundary checks failed.",
+  "source_counterexample_scope": "The fresh request+unknown response same-edge refusal case and held offer+conflicting intent+unknown response on physical fire case each have a distinct successful actual Chisel/Treadle line. This closes those finite test witnesses, not a formal proof or the entire15-case suite.",
+  "case_reported_duration_scope": "CASE_EVIDENCE preserves reporter per-case duration strings. They are not independently measured whole-invocation duration, cycle counts, comparative speed or actual scalar operation timing.",
+  "test_identity": {
+    "exact_argv": "Original PLAN reconstructed exactly from hash-bound compile PLAN and frozen test_only:199 class files in original24+175 roots,106 ordered JARs, org.scalatest.tools.Runner with four explicit -s suites and no compile/other stage. No class copies or new compile occurred.",
+    "original_loop_evidence": "Native preflight completed before spawn; final inputs_unchanged=true only after verify_inputs again hashes all declared199 classes,9 sources, tool/runtime/metadata/JAR pins and exact two class-root file inventories. This is source-bound completed-loop evidence, not a saved independent per-item PASS map.",
+    "reviewer_read_scope": "Fresh small source/metadata/log hashes, original class-manifest equality and current199 class inventory/size stats. No actual class/JAR/ELF/cache/weight bodies or lowFIR contents reread. Earlier compile independent class qualification is reused by exact hash.",
+    "external_gate_layer": "Persisted exact timeout210 TERM+1s emergencyKILL, taskset CPU2, env-i four-key fixed locale/PATH/HETERO_CPU, Python-I-S-B normal entry and root-confirmed original session6504 terminal1. Environment absence is source-enforced and command-bound, not a separately saved child-environment/syscall snapshot. root_go string records conversation authority, not a machine-signed gate."
+  },
+  "resource_scope": "CPU is sampled group accounting; no independently reaped totalCPU measurement is claimed. RSS is sampled peak, not finalRSS or aggregate address-space hard cap. The stop was CPU, not observed memory/output/wall exhaustion. Original monotonic deadlines and cleanup/postflight order match one budget; external tool polling waits are not whole-process wall measurements.",
+  "compile_evidence_scope": "Successful original verify_originals before Java and after native terminal performs512 list-row hash calls +106 ordered JAR hashes +input manifest hash =619 calls per loop over538 distinct textual paths. Final original_inputs_unchanged/staged_inputs_unchanged/no_dependency_shadowing booleans establish the source-bound completed loops; individual per-item PASS observations were not persisted.",
+  "compile_dynamic_runtime_scope": "This is not a new exhaustive JDK/Python dynamic-loader/cache/syscall closure qualification. Exact declared compiler classpath and source-bound clean environment do not prove every runtime load.",
+  "compile_class_qualification": "No JVM loading, runtime linking, generated hardware semantics, bytecode-to-source formal equivalence or actual control/numeric test.",
+  "cleanup": {
+    "complete": true,
+    "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "source_sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+    "total_scans": 3,
+    "final_complete_empty_nonleader_scans": 2,
+    "first_scan_state": "R",
+    "final_two_scan_leader_state": "Z",
+    "direct_reaped_exit": -9,
+    "no_post_reap_signals": true
+  },
+  "cleanup_limit": "Original anchored group and observed identities only. First live scan is not a completed empty barrier; two later Z-leader/no-nonleader scans precede direct reap. No global escaped-descendant guarantee, no unique kernel/helper kill attribution.",
+  "IR_hash_layer": "Original worker postterminal GENERATED_IR.json hashes plus reviewer current regular-file/size checks; no independent IR byte rehash or semantic parse in this review. Equal hash per module family is a recorded artifact fact, not complete fixed-hardware equivalence.",
+  "author_overlay_bytes_unchanged": true,
+  "publication_reviewer_or_packager_target_execution": false,
+  "history": "Prior source BLOCKED, prior compile PASS and earlier scalar CPU120FAIL/finite numeric evidence remain untouched. This review does not retroactively change any status.",
+  "no_future_vector_or_overlap_content": true,
+  "role_argv_binding": {
+    "compile_argv_tokens": 25,
+    "test_argv_tokens": 21,
+    "exact_after_explicit_role_and_nine_source_path_relocation": true,
+    "source_layout": "Public source/tests hierarchy is relocated to original flat staged sources by nine filename/identity-bound mappings, not by claiming one literal SOURCE_ROOT prefix recovers original argv.",
+    "original_compile_plan_sha256": "082a34d76b8e0c6b39d793c7c727a42ed0d95f6162bf1c809bf358200b4022ca",
+    "original_test_plan_sha256": "86ae2faaa696bc53626b36f4a0e7015a5b014187dd86ef042a0962961c7702b3",
+    "ordered_106_JAR_hashes_and_relative_paths_equal": true,
+    "public_dependency_root_is_relocatable": "Original106 paths span original physical dependency locations; a public consolidated role is not their original absolute layout.",
+    "template_is_not_original_launcher_or_GO": true
+  },
+  "known_single_pending_master_scope": {
+    "author_evidence": {
+      "bytes": 2038,
+      "sha256": "d2b1ca42be5354ee2a4d85f7598f35b122e5f2062b825ebef0fe0e38293a2855"
+    },
+    "author_evidence_freeze": {
+      "bytes": 210,
+      "sha256": "6e568021fc74317d94601cfe459183601f6df743e6d60afe3884f660a105ebc7"
+    },
+    "evidence": {
+      "status": "STATIC_SOURCE_EQUATION_LIMITATION_NOT_NATIVE_FAILURE",
+      "sources": [
+        {
+          "relative_path": "candidates/moe_v2_scalar_transaction/source/UnifiedScalarOwnerArbiterV2.scala",
+          "sha256": "a4b9ea44d691687154d5bdee80d19ec005b1ab8d084140e56273f4fed75dbbd6",
+          "lines": [
+            57,
+            58,
+            59,
+            66,
+            74,
+            77
+          ]
+        },
+        {
+          "relative_path": "candidates/moe_v2_scalar_transaction/source/UnifiedMoeTileScalarBridgeV2.scala",
+          "sha256": "f7909f3edc3b4137c4fdeccc1f3711d85e3b306eeb3a4869691766f243496b7a",
+          "lines": [
+            150,
+            151,
+            155,
+            156,
+            157,
+            169
+          ]
+        }
+      ],
+      "witness": {
+        "state": "running; acceptedserial0 buffered, primitive.ready false; no physical request yet",
+        "offerHeld": true,
+        "issued_physical": 0,
+        "request_next_valid": true,
+        "request_next_serial": 1,
+        "request_identity_matches": true,
+        "request_ready": false,
+        "opSerial": false,
+        "badRequest": true,
+        "result": "False-positive sticky protocol poison for a generic queued Decoupled master holding its next offer under backpressure. No new handshake/credit or unknown-response relabel is asserted."
+      },
+      "current_bridge_exclusion": {
+        "source_condition": "io.scalarRequest.fire sets bridge pending; output valid requires !pending; pending clears only after authenticated consumer scalarResult.fire during active transaction.",
+        "pending_after_capture": true,
+        "next_valid_before_response": false,
+        "scope": "Exact published bridge is single-pending and does not emit this generic queued-master trace. Do not generalize the13completedcase evidence to another master."
+      },
+      "relationship_to_actual": "Original13 successful cases and overall CPU120FAIL retained unchanged. This trace was not a new RTL/Chisel run, not an additional observed assertion failure, and not the cause of the recorded timeout.",
+      "not_fixed_in_this_package": true,
+      "vector_successor_not_part_of_this_evidence": true
+    },
+    "publication_scope": "Only the exact current single-pending bridge and the recorded finite control cases are qualified. This unrepaired queued-master source limitation is disclosed, not a new actual failure, generic Decoupled-master guarantee or vector fix."
+  }
+}

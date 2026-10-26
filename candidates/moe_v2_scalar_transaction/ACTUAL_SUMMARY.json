@@ -1,0 +1,107 @@
+{
+  "status": "TYPECHECK_PASS_AND_13_COMPLETED_CONTROL_CASES_WITH_OVERALL_CPU120_FAIL",
+  "source_history": {
+    "original_candidate": "BLOCKED_SOURCE_REVIEW_NOT_RTL_FAILURE",
+    "original_blockers": [
+      "unknown raw primitive result could be assigned to newly issued pending",
+      "later release intent could withdraw an already-held primitive request"
+    ],
+    "r2_changes": [
+      "one-entry stable offer with distinct accepted/physical issue boundaries",
+      "unknown raw response reset-only quarantine; no new credit/retirement or false release",
+      "buffer/quarantine included in independent release drain"
+    ],
+    "old_blocked_freeze_sha256": "26d1ef8e6bb799c8cfb2dcbff5e5b50160a30b0b5906128a68f239256f0c2049",
+    "r2_source_freeze_sha256": "14368cc50961c432d216a38f49646f84103190bd2ad86d16a1ef56cf2d63dd07"
+  },
+  "review_bindings": [
+    {
+      "role": "original_BLOCKED",
+      "review_sha256": "0e7e8d45b58e8d11d16649cf716b0bf832a2a380e5e1f8b48060ec088eb24050",
+      "freeze_sha256": "c660c1de14f916936f2df611d46c10f14f54a0c1a9b33f0153415264369b4729"
+    },
+    {
+      "role": "r2_source",
+      "review_sha256": "6a0afa3e1d76fba7a631ed83d5e0ab1218b18e91f0e1df608851f5ad00955439",
+      "freeze_sha256": "01f20ce48054fa7f1b202429c7756db5ee9ddc488a576c63480ba9fce918a938"
+    },
+    {
+      "role": "compile_actual",
+      "review_sha256": "8a2108ed18c76f530a56ee74f9c702abbc39cbe42b8e431c56d1cd582bbd3998",
+      "freeze_sha256": "7bf168144f0cf504f7c2bb191df38599831e0da267d6da02d9096d9575b14eed"
+    },
+    {
+      "role": "test_entry",
+      "review_sha256": "86e898997491c9ec39f93f86b4fbe2b55db19f4c11723ba88c6c21170aa5582f",
+      "freeze_sha256": "00705e003b59f8dc24129c24c7bc2e4426656acae18985afead1271986d50850"
+    },
+    {
+      "role": "actual_CPU120_FAIL",
+      "review_sha256": "ca04ff112a090e83cf81b4e0093864d085dba66600f92f0cdfc5626bed47c900",
+      "freeze_sha256": "d79a5565d0d198ad315fcb703d2751e77e580ad55c4a7e35f14efede6c6e2d98"
+    }
+  ],
+  "compile": {
+    "qualified": true,
+    "exit_code": 0,
+    "new_sources": 9,
+    "new_classes": 24,
+    "new_class_bytes": 816837,
+    "dependency_classes": 175,
+    "shadowed_classes": 0,
+    "sampled_group_CPU_seconds": 22.84,
+    "sampled_group_peak_RSS_bytes": 328441856,
+    "inner_wall_seconds_including_postflight": 24.26840615295805,
+    "cleanup_complete": true,
+    "inputs_unchanged": true,
+    "actual_result_sha256": "f9ed83e6af6658f4e5aed4042ac8cf9385eefd4ca1dcae26b6f007cbe3ea03f8",
+    "actual_class_manifest_sha256": "144c9c540ed1eb74517460023c266c996fad0d9127cd7eb6d3bc081f594fd87e"
+  },
+  "test": {
+    "planned_cases": 15,
+    "completed_successful_cases": 13,
+    "by_suite": [
+      7,
+      3,
+      2,
+      1
+    ],
+    "overall_pass": false,
+    "native_exit_code": -9,
+    "outer_tool_exit_code": 1,
+    "observed_exit_code_key_present": false,
+    "sampled_group_CPU_seconds": 120.02,
+    "sampled_group_peak_RSS_bytes": 246005760,
+    "inner_wall_seconds_including_postflight": 123.29114164202474,
+    "actual_result_sha256": "c2bc0a6c1b10ec2cbf382cac03b08cd8a0a7d5affe729b2780d24d4dbc12f175",
+    "raw_log_sha256": "ac96d4733398ca73ce24ea899cce9753b95c7f17b83e6c1c453b58bf60a45bcd",
+    "second_client_case": "Entered; exact phase/cycle/completed operation count at kill unknown. Fixture expects576 mock completions; not claimed observed576.",
+    "third_client_case": "Not observed entered/completed",
+    "failure_cause_record": "sampled aggregate CPU cap; no assertion-failure/deadlock or budget-only functional conclusion inferred",
+    "inputs_unchanged": true,
+    "cleanup_complete": true,
+    "native_receipt_sha256": "2d0e38aeb02d019ef42e1b9260b2b8f2c34c7614127cbb1b8f2e6cf32af1fe7f",
+    "external_launch_receipt_sha256": "252987afbc554466adf939a59eab0b1c540be0bd10a3cc81700741a8892a1e4e",
+    "original_tool_started_receipt_sha256": "913af7740b5925b4a75ee6c0933b41fa970fd9b949d2ba2daddd74be66be682a",
+    "original_tool_terminal_receipt_sha256": "70ba9fd6a58d266ce0f54efbdc9fb176ace1c470b784686a832c0391aac45fd4",
+    "actual_freeze_sha256": "1002beadc7dc3b185c0b519c24ca0ab0d1b3e7f83eaee36c73b62a8ede59e6b6"
+  },
+  "IR": {
+    "files": 14,
+    "bytes": 3762201,
+    "format": "Treadle lowFIR .fir",
+    "inventory_sha256": "fa1cfab1741baec9ed42237d38404f82807156a62f779ed03456215a0507d146",
+    "review_scope": "hash/stat inventory only, no full IR body/synthesis review",
+    "Verilog_simulation": false
+  },
+  "limits": [
+    "All primitive numerical responses in these15 control cases are mocked; no BF16 arithmetic qualification.",
+    "Strict lexicographic owner identity is temporary qualification, not general OoO scheduler.",
+    "Ordinary poison permits current real drain; unknown raw response requires isolation/reset and can wait indefinitely.",
+    "Fixed physical top not wired; no full4096 hash/performance/35B L0 L3 M128 acceptance.",
+    "Scalar bulk path is not final throughput architecture; vector work not part of this package.",
+    "Environment qualified by fixed env-i/I-S-B source and actual launch arguments; no separate child environment snapshot.",
+    "CPU/RSS are sampled group observations; wall is inner run/postflight, not claimed exact outer duration.",
+    "Old BLOCKED and CPU120 FAIL evidence retained; no retry or budget increase."
+  ]
+}

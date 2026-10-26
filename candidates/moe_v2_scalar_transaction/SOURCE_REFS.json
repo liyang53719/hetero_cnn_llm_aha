@@ -1,0 +1,130 @@
+{
+  "source_count": 9,
+  "new_sources": [
+    {
+      "relative_path": "source/UnifiedMoeProducerBindingV2.scala",
+      "sha256": "5f111badb0ec81c1e4821d8cf7180d35eb64f95227ce2cdd90cb90b783965092",
+      "bytes": 6447
+    },
+    {
+      "relative_path": "source/UnifiedMoeSharedScalarClientV2.scala",
+      "sha256": "78d5cff512adb89947dd1a3bd5715c87533dd6c43580cbceed763cf9763689f5",
+      "bytes": 2698
+    },
+    {
+      "relative_path": "source/UnifiedMoeTileScalarBridgeV2.scala",
+      "sha256": "f7909f3edc3b4137c4fdeccc1f3711d85e3b306eeb3a4869691766f243496b7a",
+      "bytes": 13046
+    },
+    {
+      "relative_path": "source/UnifiedScalarOwnerArbiterV2.scala",
+      "sha256": "a4b9ea44d691687154d5bdee80d19ec005b1ab8d084140e56273f4fed75dbbd6",
+      "bytes": 7759
+    },
+    {
+      "relative_path": "tests/UnifiedMoeProducerBindingV2Spec.scala",
+      "sha256": "a8667b7a19fc5ab0061571b4ced23dd62039f28e0cb9c87880e1203508c11ef3",
+      "bytes": 5372
+    },
+    {
+      "relative_path": "tests/UnifiedMoeSharedScalarClientV2Spec.scala",
+      "sha256": "8a5ce176f655386ea9d18142d79870049bf3f95416b0285c71754fbbb8ded7b4",
+      "bytes": 6642
+    },
+    {
+      "relative_path": "tests/UnifiedMoeTileScalarBridgeV2Spec.scala",
+      "sha256": "b2c1c9203bc672a7b617e45b2db65e567c65c6dc6d4b23c9e03d6e86373f14ea",
+      "bytes": 6132
+    },
+    {
+      "relative_path": "tests/UnifiedMoeV2TestData.scala",
+      "sha256": "8009c7d8397d2934e48446ba1a5949f21e2e63a77c6523a4b1868e62ed1b873d",
+      "bytes": 2860
+    },
+    {
+      "relative_path": "tests/UnifiedScalarOwnerArbiterV2Spec.scala",
+      "sha256": "ea849729c124b49490204d46dcb07fc96c68b34e8c4dd9931bf5e5567fcd7dee",
+      "bytes": 10321
+    }
+  ],
+  "baseline_28_source_closure": {
+    "commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307",
+    "path": "candidates/moe_bf16_scalar_consumer/SOURCE_PINS.json",
+    "sha256": "1f370db3bae779820c4cd0422c854d97d7d4db2cc8b32defb8e3344eb33985bc",
+    "historical_derived_classes": 168,
+    "historical_class_manifest_sha256": "534f5843a60e6ea925c4284fc1c2e7404437f7cdcf880d7d4c44eda5aff8606b"
+  },
+  "common_bundle_source_provenance": [
+    {
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_shared_resource_fabric/source/UnifiedPhysicalFabric.scala",
+      "sha256": "53715b5a84b33fcb02338d27a1a8da22d686051c70d5926a05ede508395dd7fc"
+    },
+    {
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+      "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3"
+    },
+    {
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963"
+    }
+  ],
+  "selected_common_classes": [
+    {
+      "relative": "heteronpu/continuous/UnifiedBlockDispatchV1.class",
+      "bytes": 4159,
+      "sha256": "77f2c2adb5ff9cd562c26a5110d67b83fd82f8a93300d75503dd544d507cc1b0"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedBlockLaunchV1.class",
+      "bytes": 8586,
+      "sha256": "0fcf5fbcaa32f8d7e4d021185ac42c77956815000c0ab370a0dba2a337a7587f"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedProfileId$.class",
+      "bytes": 1025,
+      "sha256": "9084ba95f754caadd9b059d37ed409c30f2cb049011f0de4948ca20a9d91af38"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedProfileId.class",
+      "bytes": 1163,
+      "sha256": "394fc96b96017e7f0d2a20291a51d28a26c191c93ed37c3806be7dff4a977263"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedRuntimeProfile$.class",
+      "bytes": 12755,
+      "sha256": "04008a782a8170c61bc0147a20d154cca151c0baf1494de9313e0b70a07872e5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedRuntimeProfile.class",
+      "bytes": 9382,
+      "sha256": "5634c839220155ff03785164f9dcfc1b97e1095c36e91f584baddb0f11134290"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedScalarResult.class",
+      "bytes": 4235,
+      "sha256": "7a03d5880cbf755d2eb7ba0d09ce7e957c06968a88937d9777f70cb80e64c7b5"
+    }
+  ],
+  "common_selection_scope": "Seven bundle/profile classes from the independently reviewed68-class compile, not three standalone compilable source files. Rebuild full prior qualified provider closure or qualify new derived classes; never blindly mix625 classes.",
+  "selected_common_manifest_sha256": "4c361c587ee355b368bf6e46eb572b415c8ac0b99fc0e1c9109d52d5974352b8",
+  "jar_classpath_reference": {
+    "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+    "key": "ordered_classpath",
+    "count": 106
+  },
+  "strict_cleanup": {
+    "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+    "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
+  },
+  "supervisor_template": {
+    "commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307",
+    "path": "candidates/moe_bf16_scalar_consumer/source/supervisor.py.in",
+    "sha256": "154911b6ca2a35ada68e722a33a1720b903f4389f43c028af269fd5910d4accb",
+    "role": "Import only immutable owned_run after explicit role substitution; do not invoke its older five-case main.",
+    "historical_actual_r5_source_sha256": "095b729954c57ef2a7e2c62596ea972ee5472f32b2d325cdc4f3e590608b7914"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "successful_cases": [
+    {
+      "suite": "UnifiedScalarOwnerArbiterV2Spec",
+      "name": "retain each owner across multiple primitive operations and both runtime MoE profiles without reset",
+      "reported_duration": "3 seconds, 862 milliseconds"
+    },
+    {
+      "suite": "UnifiedScalarOwnerArbiterV2Spec",
+      "name": "keep registered held acknowledgments unchanged when poison arrives after commit",
+      "reported_duration": "856 milliseconds"
+    },
+    {
+      "suite": "UnifiedScalarOwnerArbiterV2Spec",
+      "name": "not spend pending credit on a duplicate serial and release only after the genuine primitive result",
+      "reported_duration": "622 milliseconds"
+    },
+    {
+      "suite": "UnifiedScalarOwnerArbiterV2Spec",
+      "name": "reject unknown untagged primitive data instead of relabeling it as a new owner response",
+      "reported_duration": "483 milliseconds"
+    },
+    {
+      "suite": "UnifiedScalarOwnerArbiterV2Spec",
+      "name": "reject reuse and state the current lexicographic qualification constraint explicitly",
+      "reported_duration": "574 milliseconds"
+    },
+    {
+      "suite": "UnifiedScalarOwnerArbiterV2Spec",
+      "name": "block a fresh request when unknown primitive data is already valid on the same acceptance edge",
+      "reported_duration": "458 milliseconds"
+    },
+    {
+      "suite": "UnifiedScalarOwnerArbiterV2Spec",
+      "name": "preserve an already held offer across a conflicting intent and quarantine unknown data on its physical fire edge",
+      "reported_duration": "443 milliseconds"
+    },
+    {
+      "suite": "UnifiedMoeProducerBindingV2Spec",
+      "name": "derive success only after all nine real contribution fires and exact shared-last order on both profiles",
+      "reported_duration": "3 seconds, 349 milliseconds"
+    },
+    {
+      "suite": "UnifiedMoeProducerBindingV2Spec",
+      "name": "reject missing shared without dispatch and never synthesize completion for only eight loaded routes",
+      "reported_duration": "1 second, 46 milliseconds"
+    },
+    {
+      "suite": "UnifiedMoeProducerBindingV2Spec",
+      "name": "not retire a bad or stale reply and wait for all nine genuine current replies before error drain",
+      "reported_duration": "967 milliseconds"
+    },
+    {
+      "suite": "UnifiedMoeTileScalarBridgeV2Spec",
+      "name": "not withdraw an acquisition after a late fault and return only the provably unstarted empty owner",
+      "reported_duration": "927 milliseconds"
+    },
+    {
+      "suite": "UnifiedMoeTileScalarBridgeV2Spec",
+      "name": "freeze the diagnostic intent while fault changes and require a matching drained registered acknowledgment",
+      "reported_duration": "794 milliseconds"
+    },
+    {
+      "suite": "UnifiedMoeSharedScalarClientV2Spec",
+      "name": "propagate canonical weight failure through actual nine-contribution drain and real zero-operation owner fence",
+      "reported_duration": "8 seconds, 302 milliseconds"
+    }
+  ],
+  "uncompleted_expected_cases": [
+    {
+      "suite": "UnifiedMoeSharedScalarClientV2Spec",
+      "name": "wait for real current expert replies and 576 mocked service completions before a poisoned error fence"
+    },
+    {
+      "suite": "UnifiedMoeSharedScalarClientV2Spec",
+      "name": "reject token and final hidden tile boundaries before acquiring or launching any primitive work"
+    }
+  ],
+  "scope": "Original reporter lines mapped to exact frozen declarations; no raw cycle/handshake trace"
+}

@@ -1,0 +1,73 @@
+{
+  "status": "PASS_GROUP_A_THREE_CASES_ONLY",
+  "exact_passed_tests": 3,
+  "suites": 2,
+  "native_exit_code": 0,
+  "outer_tool_exit_code": 0,
+  "sampled_group_CPU_seconds": 74.04,
+  "sampled_group_peak_RSS_bytes": 297156608,
+  "inner_wall_seconds_including_postflight": 75.91550571401604,
+  "case_durations_seconds": [
+    24.577,
+    48.154,
+    1.847
+  ],
+  "case_scopes": [
+    "actual16lane bank legacy/UF/signedzero4requests",
+    "actual16lane bank RNEties/policy/format/nonfinite/overflow12requests",
+    "consumer failure-receipt control with explicit injected error response, not actual arithmetic"
+  ],
+  "bank_requests_total": 16,
+  "raw_bank_flags_checked_finite_cases": [
+    0,
+    3,
+    5
+  ],
+  "cleanup_complete": true,
+  "inputs_unchanged": true,
+  "IR_count": 3,
+  "IR_bytes": 1137001,
+  "bank_IR_identity_equal": true,
+  "bank_IR_sha256": "8c4125f9b194978e04f4336bbb8d15cff66a12a285c7ab2a85caa590ca33a1f4",
+  "bank_lowFIR_direct_HeteroFP32Alu_instances": 16,
+  "scope": "Chisel/Treadle finite directed bank-policy cases and receipt-control case only. Not SV/synthesis, GroupB officialGolden consumer result, full4096 hardware, 35B L0/L3 block or performance.16 integerBF16 formatters+2bit echo are explicit resource increment, original16FP32ALU bank retained.",
+  "output_cap_explicit_MiB": 32,
+  "old_failures_unchanged": true,
+  "selected_lane_input_slots": 256,
+  "slot_count_scope": "16 source-bound selected requests times16 broadcast lanes; not actual MAC accounting or throughput.",
+  "finite_assertion_scope": "Ten numeric vectors check every lane value/flags; six illegal-domain vectors check global error only. All operands broadcast identically across lanes, not mixed-lane exhaustive coverage.",
+  "review": {
+    "path_role": "independent_actual_review",
+    "sha256": "dd574e70c822ad46270e8c59708700eebc7efb6f63727c178726942049ed2c14",
+    "freeze_sha256": "a1e7e8a67486869a11b5958947bf2ef55cb9acf24f0e4871c1bc5e8c8c0d269b"
+  },
+  "compile": {
+    "native_exit_code": 0,
+    "six_source_count": 6,
+    "new_class_count": 22,
+    "new_class_bytes": 483160,
+    "dependency_class_count": 168,
+    "result_sha256": "c35d06490da042f3d274a93a1cedcab835c5f307e611a53c81071281237aa045",
+    "class_manifest_sha256": "6fd5ba6631b9328d41caa415b00ecc603fb98f0d2005e8557790d773a945c895",
+    "review_sha256": "ba9d9e9fdadefd240a1b81596f1bd1c945725c62f3640218e05c15383613c9bb"
+  },
+  "actual_pins": {
+    "PLAN.json": "34ac33eee67b3a10b805801e6e175ee424bc7fcf705b486f404afff38e2d2907",
+    "TEST_RESULT.json": "1cd20ca0f87c513c9b7577f14c2185a799e959dba1bf8b788c5b51e7ce97258f",
+    "NATIVE_TEST_RESULT.json": "e31767f6d725b6a7b73b3a6b5430fd52ec5e979ccb9205ce969c0d3071ee6327",
+    "CASE_LINES.json": "af630fd679ad3c0a8312bd553c1d401fd75bee791b7c4c01d3eea4081c3734db",
+    "GENERATED_IR.json": "bfb816529b03c1f1cae33ac5876f596d7898d5695b500e59d32ce6c40943c087",
+    "test.log": "f95b5dd27a26f7f31c71f2398155639980320578cc3cae6db2476e976d3624e8",
+    "external_freeze": "11292757e16b8b8be5ff699dcd73da581a53a0cd8e21dd782b0e388bda454dbc",
+    "external_launch": "589b79a644884a9c7c13e69e6de0023d8eab777dc7ec6cd0cba3020e3ec369fa",
+    "original_tool_terminal": "84d0e6387a8e4620b60063b3a3ffe9de53a1c9169fd0bfbbc58b2d28eb21af2f"
+  },
+  "limitations": [
+    "Two bank cases use separate Treadle instances with equal lowFIR hash; not same-DUT multi-case run.",
+    "Case reporter wall includes initialization and is not per-request throughput; sampled overall CPU is different.",
+    "Original old CPU120 failures unchanged. GroupB four-case Golden, owner/producer bridge, full4096 and35B L0/L3 not passed by this packet.",
+    "New16 integer BF16 formatters and2-bit policy echo are resource additions;16 original FP32ALUs/II2 retained. Current published fixed full top has not incorporated this bank.",
+    "Environment qualified by fixed env-i launch/source binding, not a separate child-environment snapshot.",
+    "Raw lowFIR retained privately; no Verilog/synthesis/whole-hardware proof."
+  ]
+}

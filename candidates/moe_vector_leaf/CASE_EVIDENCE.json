@@ -1,0 +1,17 @@
+[
+  {
+    "suite": "UnifiedVectorBankV2PolicySpec",
+    "name": "retain legacy raw values and distinguish legal BF16 Mul underflow from legacy fatal underflow",
+    "reported_duration": "24 seconds, 577 milliseconds"
+  },
+  {
+    "suite": "UnifiedVectorBankV2PolicySpec",
+    "name": "round BF16 ties to even and reject policy, format, nonfinite and overflow cases explicitly",
+    "reported_duration": "48 seconds, 154 milliseconds"
+  },
+  {
+    "suite": "MoeBf16VectorFailureReceiptV2Spec",
+    "name": "drop bad receipts without current credit and never abort a held or pending bank operation",
+    "reported_duration": "1 second, 847 milliseconds"
+  }
+]

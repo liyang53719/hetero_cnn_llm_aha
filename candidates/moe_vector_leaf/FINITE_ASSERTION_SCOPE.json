@@ -1,0 +1,126 @@
+{
+  "scope": "Actual successful source-bound Treadle assertions, not saved raw per-lane output trace or new numerical replay. Every listed operand pair is broadcast identically to16 lanes. Expected constants were independently rational-checked in earlier unchanged-source review; no arithmetic/native rerun here.",
+  "columns": [
+    "case",
+    "policy",
+    "selected_operation",
+    "a_FP32_hex",
+    "b_FP32_hex",
+    "expected_result_FP32_hex",
+    "expected_HardFloat_flags",
+    "expected_global_error"
+  ],
+  "ten_value_and_flag_vectors": [
+    [
+      1,
+      0,
+      "Add",
+      "3f800001",
+      "3f800001",
+      "40000001",
+      0,
+      false
+    ],
+    [
+      1,
+      1,
+      "Mul",
+      "00010000",
+      "37000000",
+      "00000000",
+      3,
+      false
+    ],
+    [
+      1,
+      0,
+      "Mul",
+      "00010000",
+      "37000000",
+      "00000000",
+      3,
+      true
+    ],
+    [
+      1,
+      1,
+      "Mul",
+      "80010000",
+      "37000000",
+      "80000000",
+      3,
+      false
+    ],
+    [
+      2,
+      1,
+      "Mul",
+      "3fc00000",
+      "3f810000",
+      "3fc20000",
+      0,
+      false
+    ],
+    [
+      2,
+      1,
+      "Mul",
+      "3fc00000",
+      "3f830000",
+      "3fc40000",
+      0,
+      false
+    ],
+    [
+      2,
+      2,
+      "Add",
+      "3f800000",
+      "3b800000",
+      "3f800000",
+      0,
+      false
+    ],
+    [
+      2,
+      2,
+      "Add",
+      "3f810000",
+      "3b800000",
+      "3f820000",
+      0,
+      false
+    ],
+    [
+      2,
+      2,
+      "Add",
+      "7f7f0000",
+      "7b000000",
+      "7f800000",
+      0,
+      true
+    ],
+    [
+      2,
+      1,
+      "Mul",
+      "7f7f0000",
+      "40000000",
+      "7f800000",
+      5,
+      true
+    ]
+  ],
+  "six_error_only_vectors": [
+    "policy3/Add",
+    "policy1/Add opcode mismatch",
+    "policy2/Mul opcode mismatch",
+    "policy1/Mul noncanonical lowbits",
+    "policy1/Mul quietNaN input",
+    "policy2/Add Inf input"
+  ],
+  "error_only_limit": "Six invalid-domain vectors assert global error=true, not a particular lane value or flag.160 selected lane result/flag assertion pairs across ten arithmetic vectors, plus global errors; not256 fully specified numeric lane outputs.",
+  "UF_NX": "flags3=UF+NX on half-min-FP32-subnormal ties; policy1 accepts materialized signed zero, legacy policy0 reports error. flags5=OF+NX on finite input multiplication overflow.",
+  "receipt": "Third case uses explicit injected error response; never call it numerical validation."
+}

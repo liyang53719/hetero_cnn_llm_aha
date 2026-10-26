@@ -1,0 +1,102 @@
+{
+  "public_commit": "f60c32bf0ceed0f50ff389c6ff2c1dcf8f9f29d8",
+  "files": [
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "git_blob_sha": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+    },
+    {
+      "path": "integration/gemmini/EmitHeteroFP32Alu.scala",
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "git_blob_sha": "d7e8191988456d32d6e9e90d58ca19dba2b2427e"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala",
+      "bytes": 1854,
+      "sha256": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+      "git_blob_sha": "e3903d30bdee7e041e9aa124275c20f6955990e9"
+    },
+    {
+      "path": "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+      "bytes": 3420,
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c",
+      "git_blob_sha": "e4f1ce39d41d4722936ca71097436a5fe2cb917d"
+    },
+    {
+      "path": "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+      "bytes": 9520,
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+      "git_blob_sha": "bdb64b8b07cb79dd5730d987d9412469642f8893"
+    },
+    {
+      "path": "candidates/gdn_runtime_chunk_loadprep/source/GdnRuntimeChunkLoadPrepOwner.scala",
+      "bytes": 14575,
+      "sha256": "c9805d6ad4f6e5a6c280185d889956b5b92f7e180ec267b8dd89436db68b655b",
+      "git_blob_sha": "a13de971459c79cbf29756bc19ad0f3728ab7628"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala",
+      "bytes": 6408,
+      "sha256": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815",
+      "git_blob_sha": "d7d7e7a00d79dd4e9c5ee83518275dcb8563843f"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala",
+      "bytes": 10756,
+      "sha256": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845",
+      "git_blob_sha": "5f5da451e5d0f93cf9d534874fdb787a693209d9"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala",
+      "bytes": 6094,
+      "sha256": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7",
+      "git_blob_sha": "770fb3842c4dfa0954a7634805fab1564ecf200d"
+    },
+    {
+      "path": "chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala",
+      "bytes": 583,
+      "sha256": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+      "git_blob_sha": "a4f62492c0a1e74187ba0f9e7b38b1b3db702d94"
+    },
+    {
+      "path": "chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala",
+      "bytes": 4816,
+      "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+      "git_blob_sha": "745ca950ba5e0eebe9f08ffb7b1a6fa04e67a5db"
+    },
+    {
+      "path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    },
+    {
+      "path": "candidates/qwen35_chunk_derived_r2/source/GdnChunkDerivedAndPairOwner.scala",
+      "bytes": 20232,
+      "sha256": "9b5a9484f5d5ce2e19c4e7b3e9b429a80b939c8a652066541a6eff4b4ea5785f",
+      "git_blob_sha": "69ebdfdcc44e8447f2732e1ee15672a35e015820"
+    },
+    {
+      "path": "candidates/qwen35_chunk_transpose/source/GdnChunkTransposeOwner.scala",
+      "bytes": 11503,
+      "sha256": "293946fc86104c624b109d13e3d59338831a8a4c5a818d64aab8f649c4c026bd",
+      "git_blob_sha": "3c8cacbb59e490d78a03e17e44fea07e7150bf73"
+    },
+    {
+      "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+      "git_blob_sha": "98d221a4c2426b16ebcb80b8153b2f9d31805a02"
+    }
+  ],
+  "scope": "Existing exact public source and dependency metadata reused unchanged; external HardFloat source pins remain separate. No JVM/native/test/model executed by packager."
+}

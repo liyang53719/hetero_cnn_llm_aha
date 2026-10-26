@@ -1,0 +1,87 @@
+{
+  "schema": "gdn-runtime-phase234-cpu240-fail-summary-v1",
+  "source_review_status": "PASS_SOURCE_ONLY",
+  "source_review_sha256": "2931ecd89a982ca83527b76a023a7904a36b7ebb428dbd8e328b1a4071a6f0d2",
+  "compile_status": "PASS_COMPILE_ONLY",
+  "compile_actual_review_sha256": "cf8e867f36c61625a02061e75d66b33f585b36c5a10b35cf2eecf26a48da4cfb",
+  "compiled_sources": 36,
+  "compiled_classes": 174,
+  "test_status": "FAILED_TEST_ONLY_CPU240",
+  "test_cases_planned": 4,
+  "test_cases_completed_passed": 0,
+  "test_case_terminal_records": 0,
+  "test_result_sha256": "2176ff4ae862353e212bd09ae028e0cf6816b56f851d013be4df1d74dfe57036",
+  "sampled_group_cpu_seconds": 240.08,
+  "sampled_group_peak_rss_bytes": 196849664,
+  "supervisor_elapsed_seconds": 242.98692909500096,
+  "supervisor_exit_code": 1,
+  "retained_direct_child_cleanup_exit_code": -9,
+  "cleanup_complete": true,
+  "cleanup_complete_empty_scans": 2,
+  "preflight_and_postflight": {
+    "input_pin_checks_each": 689,
+    "known_absence_checks_each": 12,
+    "class_inventory_each": 174,
+    "passed": true
+  },
+  "parent_owned_flights": {
+    "saved_each": true,
+    "endpoints_each": 56,
+    "known_absences_each": 12,
+    "scope": "already-running parent around Java child, not pre-interpreter full dynamic state"
+  },
+  "leaf_low_firrtl": {
+    "bytes": 313672,
+    "sha256": "6ba0deebecf28aa0b7c8a047684ff064d60aa1a17fb06a5a05b5491bf1b53fb0",
+    "modules": 1,
+    "register_definitions": 51,
+    "nodes": 1175,
+    "instances": 0
+  },
+  "diagnosis": "CPU cap reached before any complete case terminal record. No job/row progress was logged: functional error, deadlock, completed events, and actual cycles per second are undetermined.",
+  "original_budget_preserved": true,
+  "automatic_retry": false,
+  "cap_raise": false,
+  "scope": [
+    "same fixed-max32 runtime16/32 leaf control/address candidate",
+    "mock Exp/loan responders, not HardFloat or Vector arithmetic verification",
+    "finite-bit transpose test was planned but has no complete case result",
+    "not full GDN coordinator, phases5-17, prepared producer binding or full block",
+    "not common full4096 RTL acceptance"
+  ],
+  "first_case_static_nominal_schedule": {
+    "same_dut_jobs": 3,
+    "runtime_value_heads": [
+      16,
+      32,
+      16
+    ],
+    "heads": [
+      15,
+      31,
+      15
+    ],
+    "chunks": [
+      0,
+      1,
+      1
+    ],
+    "rows_per_complete_phase": 64,
+    "per_job_memory_reads": 3681,
+    "per_job_memory_writes": 2816,
+    "per_job_exp_requests": 2209,
+    "per_job_add_loan_requests": 2144,
+    "per_job_mul_loan_requests": 2560,
+    "per_job_successful_channel_events": 13410,
+    "per_job_memory_stall_cycles": 13,
+    "per_job_nominal_cycle_steps_including_launch_and_done": 26838,
+    "first_case_nominal_cycle_steps_including_initial_reset": 80517,
+    "current_while_tick_limit_per_job": 100000,
+    "current_hardware_timeout_setting": 250000,
+    "branch_event_polls_not_cycle_counter": true,
+    "software_event_iterations_first_case_nominal": 40230,
+    "note": "static handshake schedule assuming normal DUT progress. No per-job/row progress was logged, so actual completed event count, achieved cycles/s, hung state or functional fault cannot be inferred."
+  },
+  "later_observed_test_candidate_excluded": true,
+  "audit_status": "AUTHOR_FROZEN_ACTUAL_FAIL_PENDING_INDEPENDENT_REVIEW"
+}

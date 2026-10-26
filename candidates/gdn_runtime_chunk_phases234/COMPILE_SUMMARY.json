@@ -1,0 +1,18 @@
+{
+  "review_sha256": "cf8e867f36c61625a02061e75d66b33f585b36c5a10b35cf2eecf26a48da4cfb",
+  "status": "PASS_ACTUAL_36_SOURCE_FRESH_SCALA_COMPILE_ONLY_NOT_TEST_ELABORATION_OR_RTL",
+  "source_count": 36,
+  "class_count": 174,
+  "class_bytes": 2118083,
+  "direct_compiler_exit_code": 0,
+  "empty_compiler_log_not_all_warning_coverage": true,
+  "sampled_group_cpu_seconds": 38.97,
+  "sampled_peak_rss_bytes": 427978752,
+  "inner_elapsed_seconds": 40.05671059794258,
+  "resources_scope": "Sampled original child group only, not exact CPU total/continuous RSS peak. No final wait4 total or sampling-gap series; parent overhead excluded. Per-process CPU/AS hard bounds distinct from sampled group caps.",
+  "fresh_compile": "New empty classes, exact36 source argv/106 JARs, no old-class fallback; full174 class container/SourceFile metadata independently checked once, not runtime origin/bytecode proof.",
+  "environment": "Original START/RESULT preserve locale, five child variables, ten forbidden variables absent, isolated/no-site/no-bytecode and optimize0. Does not repair older LoadPrep missing snapshots.",
+  "outer_evidence": "Reported original timeout TERM at180s plus5s kill grace; no independent outer duration receipt. External56 prelaunch endpoints+12 absences were in tool stdout/conversation, not a persisted per-item prelaunch receipt. Later postterminal supplement is corroboration only.",
+  "cleanup": "Anchored original group/observed identities; two nonleader-absence scans before direct reap0. Not OS-wide escaped-descendant proof.",
+  "tests_or_RTL_pass": false
+}

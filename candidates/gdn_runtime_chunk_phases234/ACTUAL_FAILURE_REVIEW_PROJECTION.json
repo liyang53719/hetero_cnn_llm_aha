@@ -1,0 +1,55 @@
+{
+  "schema": "gdn-phase234-test-actual-cpu240-failure-review-v1",
+  "status": "AUDITED_ACTUAL_CPU240_FAIL_NO_COMPLETE_CASE_PASS",
+  "audit_integrity_status": "PASS_READONLY_IDENTITY_RESOURCE_CLEANUP_AND_METADATA_AUDIT",
+  "functional_outcome": "UNDETERMINED_NO_COMPLETE_CASE_TERMINAL",
+  "publication_rules": [
+    "Headline must retain actual CPU240 FAIL /0 complete case records; audit integrity PASS is not functional PASS. Keep prior source and compile PASS separately labeled.",
+    "Use absent RESULT.exit_code versus cleanup directwait-9 exactly; no null field fabrication. Report sampled CPU/RSS and inner elapsed with their original meanings.",
+    "Publish only small source/pins/safe aggregates with exact review references; no raw IR/classes/JAR/cache paths or payloads, process addresses or user weights. Do not upload this private raw review/inodes/path maps verbatim.",
+    "Author static nominal plan and IR counts must be marked as such. Do not claim80517 actual cycles, event rate, zero clock, a hotspot or deadlock from the log.",
+    "Later observed-test candidate is excluded from this frozen failure packet and needs separate source/compile/actual authorization. Preserve this sole attempt and every old FAIL."
+  ],
+  "resource_and_scope": {
+    "supervisor_exit_parent_reported": 1,
+    "result_exit_code_field": "ABSENT_NOT_EXPLICIT_NULL",
+    "cleanup_direct_wait": -9,
+    "sampled_group_cpu_seconds": 240.08,
+    "sampled_peak_rss_bytes": 196849664,
+    "inner_elapsed_seconds": 242.98692909500096,
+    "cleanup_total_scans": 3,
+    "cleanup_final_empty_scans": 2,
+    "complete_case_pass_records": 0,
+    "planned_cases": 4,
+    "actual_simulated_cycles": null,
+    "actual_completed_events_or_jobs": null,
+    "actual_hotspot_or_deadlock": null,
+    "current_parent_flight_endpoints_each": 56,
+    "known_absences_each": 12,
+    "automatic_prepost_obligations_each": 689,
+    "class_inventory_each": 174,
+    "static_nominal_workload": {
+      "reads": 3681,
+      "writes": 2816,
+      "memory": 6497,
+      "exp": 2209,
+      "add": 2144,
+      "mul": 2560,
+      "channel_events": 13410,
+      "held_memory_steps": 13,
+      "per_job_fixed_step_nominal": 26838,
+      "first_case_three_job_fixed_step_nominal": 80517
+    },
+    "IR_evidence": "AUTHOR_HASH_AND_TEXT_COUNTS_REUSED; REVIEWER_CURRENT_STAT_ONLY_NO_PAYLOAD_READ"
+  },
+  "additional_evidence_limits": {
+    "signal_sender": "CPU window exhausted; cleanup issued original-group SIGKILL while child RLIMIT_CPU hard limit also active. Whether kernel kill raced cleanup is not uniquely determined; -9 alone is not a DUT fault.",
+    "environment": "Actual parent3/child5 environment, isolated/no-site/no-bytecode/optimize0 and10 forbidden keys absent recorded; no retroactive repair of older LoadPrep snapshots.",
+    "flights": "56 endpoint and12 absence records were saved around the Java child. Parent was already running; not pre-Python full-loader proof. Preflight vs starttick is only consistent at10ms quantization, not exact sub-jiffy birth ordering.",
+    "input_checks": "689 source-bound completed pre/post loops and174 class inventories, not every input independent saved PASS map. Reviewer smallhash/currentstat only; no class/JAR/runtime rehash this audit.",
+    "IR": "Author hash/text counts only, reviewer currentstat; no independently re-parsed IR structure acceptance.",
+    "static_step_accounting": "80517 static successful-path fixed step calls exclude possible idle else steps and host elaboration; no actual cycles/events/throughput or hotspot/deadlock inferred.",
+    "outer": "Root/tool-reported supervisor exit1 distinct from direct wait-9. No separate exact outer wall receipt."
+  },
+  "projection_rules": "Exact selected review sections, omitting tool-session identity; additional limits are paraphrases of bound findings. No original process identities/private paths/inodes/raw payloads."
+}

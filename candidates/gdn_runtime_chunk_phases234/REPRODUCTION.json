@@ -1,0 +1,137 @@
+{
+  "schema": "role_based_compile_then_separately_admitted_test_v1",
+  "commands": {
+    "compile": [
+      "${JAVA21}",
+      "-Duser.home=${COMPILE_RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${COMPILE_RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${PINNED_CLASSPATH}",
+      "scala.tools.nsc.Main",
+      "-classpath",
+      "${PINNED_CLASSPATH}",
+      "-Xplugin:${DEPENDENCIES}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "-language:reflectiveCalls",
+      "-d",
+      "${COMPILE_RUN_ROOT}/classes",
+      "${HARDFLOAT_SOURCE}/AddRecFN.scala",
+      "${HARDFLOAT_SOURCE}/CompareRecFN.scala",
+      "${HARDFLOAT_SOURCE}/DivSqrtRecF64.scala",
+      "${HARDFLOAT_SOURCE}/DivSqrtRecF64_mulAddZ31.scala",
+      "${HARDFLOAT_SOURCE}/DivSqrtRecFN_small.scala",
+      "${HARDFLOAT_SOURCE}/INToRecFN.scala",
+      "${HARDFLOAT_SOURCE}/MulAddRecFN.scala",
+      "${HARDFLOAT_SOURCE}/MulRecFN.scala",
+      "${HARDFLOAT_SOURCE}/RecFNToIN.scala",
+      "${HARDFLOAT_SOURCE}/RecFNToRecFN.scala",
+      "${HARDFLOAT_SOURCE}/RoundAnyRawFNToRecFN.scala",
+      "${HARDFLOAT_SOURCE}/classifyRecFN.scala",
+      "${HARDFLOAT_SOURCE}/common.scala",
+      "${HARDFLOAT_SOURCE}/fNFromRecFN.scala",
+      "${HARDFLOAT_SOURCE}/primitives.scala",
+      "${HARDFLOAT_SOURCE}/rawFloatFromFN.scala",
+      "${HARDFLOAT_SOURCE}/rawFloatFromIN.scala",
+      "${HARDFLOAT_SOURCE}/rawFloatFromRecFN.scala",
+      "${HARDFLOAT_SOURCE}/recFNFromFN.scala",
+      "${HARDFLOAT_SOURCE}/resizeRawFloat.scala",
+      "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "${REPOSITORY}/integration/gemmini/EmitHeteroFP32Alu.scala",
+      "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+      "${REPOSITORY}/candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_chunk_loadprep/source/GdnRuntimeChunkLoadPrepOwner.scala",
+      "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala",
+      "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala",
+      "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala",
+      "${REPOSITORY}/chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala",
+      "${REPOSITORY}/chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkDerivedAndPairOwner.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkLayout.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkTransposeOwner.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/tests/GdnRuntimeChunkPhases234Spec.scala"
+    ],
+    "test": [
+      "${JAVA21}",
+      "-Duser.home=${TEST_RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${TEST_RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx512m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${COMPILE_RUN_ROOT}/classes:${PINNED_CLASSPATH}",
+      "org.scalatest.tools.Runner",
+      "-R",
+      "${COMPILE_RUN_ROOT}/classes",
+      "-oD",
+      "-s",
+      "heteronpu.continuous.GdnRuntimeChunkPhases234Spec"
+    ]
+  },
+  "argv_role_inverse_verified_without_execution": {
+    "compile": true,
+    "test": true
+  },
+  "compile_caps": {
+    "cpu_per_process_seconds": 90,
+    "group_cpu_sampled_seconds": 90,
+    "work_seconds": 120,
+    "cleanup_seconds": 130,
+    "total_seconds": 150,
+    "heap_mib": 512,
+    "rss_sampled_bytes": 1073741824,
+    "address_space_hard_bytes": 4294967296,
+    "output_tree_sampled_bytes": 16777216,
+    "log_sampled_bytes": 2097152,
+    "single_file_hard_bytes": 16777216,
+    "sample_seconds": 0.1
+  },
+  "test_caps": {
+    "cpu_per_process_seconds": 240,
+    "group_cpu_sampled_seconds": 240,
+    "work_seconds": 300,
+    "cleanup_seconds": 310,
+    "total_seconds": 330,
+    "heap_mib": 512,
+    "rss_sampled_bytes": 1073741824,
+    "address_space_hard_bytes": 4294967296,
+    "output_tree_sampled_bytes": 10485760,
+    "log_sampled_bytes": 2097152,
+    "single_file_hard_bytes": 10485760,
+    "sample_seconds": 0.1
+  },
+  "compile_supervisor": {
+    "launcher": {
+      "bytes": 12382,
+      "sha256": "78875ee6db49c1d969c4cf022d4176e2f81eb6944b53cafaeac1c98b69e90bbc"
+    },
+    "support": {
+      "bytes": 29125,
+      "sha256": "79dcf5a9cf481e73ee2bc13e2a1edd36aa92c6775eb172a8da504ff2aa479c2e"
+    },
+    "manifest": {
+      "bytes": 315444,
+      "sha256": "2b56e88d24266f659f51b4b33542d5bab1aff7ea773c8b635783bb16c66df166"
+    }
+  },
+  "test_supervisor": {
+    "launcher": {
+      "bytes": 15265,
+      "sha256": "8a8f20693aaa368349f5a1d33577539653d7d40dcb37edbe81bdd2487008d642"
+    },
+    "support": {
+      "bytes": 29125,
+      "sha256": "79dcf5a9cf481e73ee2bc13e2a1edd36aa92c6775eb172a8da504ff2aa479c2e"
+    },
+    "manifest": {
+      "bytes": 385915,
+      "sha256": "d7cc157990448612f25a53e7f3fb5fceac4d86dd7b826eb1e3266cddd3beb166"
+    }
+  },
+  "scope": "Role argv and hash-bound supervision descriptions, not executable original launcher/private manifest, not new GO or hermetic runtime. Restore exact36 sources/106 dependencies, qualify fresh bounded supervision and obtain separate execution authorization. Original CPU240 FAIL may not be automatically retried. Only fresh output roots; preserve original evidence."
+}

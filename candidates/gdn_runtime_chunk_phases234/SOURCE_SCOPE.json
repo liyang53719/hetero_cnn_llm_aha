@@ -1,0 +1,56 @@
+{
+  "source_review_sha256": "2931ecd89a982ca83527b76a023a7904a36b7ebb428dbd8e328b1a4071a6f0d2",
+  "capacity_table": [
+    {
+      "value_heads": 16,
+      "tokens": 16,
+      "prepared_row_bytes": 25600,
+      "input_bytes": 409600,
+      "state_bytes": 1048576,
+      "output_bytes": 65536,
+      "scratch_bytes": 13959168,
+      "per_head_stride": 872448
+    },
+    {
+      "value_heads": 16,
+      "tokens": 128,
+      "prepared_row_bytes": 25600,
+      "input_bytes": 3276800,
+      "state_bytes": 1048576,
+      "output_bytes": 524288,
+      "scratch_bytes": 26869760,
+      "per_head_stride": 1679360
+    },
+    {
+      "value_heads": 32,
+      "tokens": 16,
+      "prepared_row_bytes": 51200,
+      "input_bytes": 819200,
+      "state_bytes": 2097152,
+      "output_bytes": 131072,
+      "scratch_bytes": 27918336,
+      "per_head_stride": 872448
+    },
+    {
+      "value_heads": 32,
+      "tokens": 128,
+      "prepared_row_bytes": 51200,
+      "input_bytes": 6553600,
+      "state_bytes": 2097152,
+      "output_bytes": 1048576,
+      "scratch_bytes": 53739520,
+      "per_head_stride": 1679360
+    }
+  ],
+  "pure_controls": {
+    "normal_and_optimized": true,
+    "address_cases_per_mode": 147600,
+    "arithmetic_reference_or_native_executed": false,
+    "meaning": "Integer address/span and exact source delta checks only, not hardware formal/type/runtime PASS"
+  },
+  "scope": "Historical source admission only. Later compile PASS and CPU240 test FAIL are separate layers; original proposed tests are not actual passing coverage.",
+  "source_delta": "Only fixed-max32 runtime layout/head ownership/admission changes. Existing memory/loan/scalar/ACK microstate tails remain byte identical; old owners stay unchanged.",
+  "transport_limits": "Private scheduler must authenticate producer receipts, enforce exclusive/no-stale/exactly-once services and joint drain/reset. tag32||per-job-sequence32 is not an epoch; no missing-response watchdog or full coordinator. Partial phase3 receipt is not global drain or phase4 completion.",
+  "not_included": "Full phases5-17/coordinator, full block, same complete full4096 five-profile top, arithmetic correctness or MAC utilization.",
+  "original_check_contract_snapshot_issue": "Original snapshot check_contract.py uses a context-dependent baseline path. It is hash-bound in evidence but intentionally not shipped as a directly runnable public checker; no old control execution is reclassified."
+}

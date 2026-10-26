@@ -1,0 +1,285 @@
+{
+  "public_commit": "f60c32bf0ceed0f50ff389c6ff2c1dcf8f9f29d8",
+  "source_order": [
+    {
+      "index": 0,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/AddRecFN.scala",
+      "bytes": 8776,
+      "sha256": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85"
+    },
+    {
+      "index": 1,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/CompareRecFN.scala",
+      "bytes": 3476,
+      "sha256": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d"
+    },
+    {
+      "index": 2,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/DivSqrtRecF64.scala",
+      "bytes": 4428,
+      "sha256": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0"
+    },
+    {
+      "index": 3,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/DivSqrtRecF64_mulAddZ31.scala",
+      "bytes": 33929,
+      "sha256": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776"
+    },
+    {
+      "index": 4,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/DivSqrtRecFN_small.scala",
+      "bytes": 20235,
+      "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9"
+    },
+    {
+      "index": 5,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/INToRecFN.scala",
+      "bytes": 3417,
+      "sha256": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb"
+    },
+    {
+      "index": 6,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/MulAddRecFN.scala",
+      "bytes": 15353,
+      "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b"
+    },
+    {
+      "index": 7,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/MulRecFN.scala",
+      "bytes": 5706,
+      "sha256": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d"
+    },
+    {
+      "index": 8,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/RecFNToIN.scala",
+      "bytes": 6827,
+      "sha256": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3"
+    },
+    {
+      "index": 9,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/RecFNToRecFN.scala",
+      "bytes": 3958,
+      "sha256": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09"
+    },
+    {
+      "index": 10,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/RoundAnyRawFNToRecFN.scala",
+      "bytes": 13901,
+      "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d"
+    },
+    {
+      "index": 11,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/classifyRecFN.scala",
+      "bytes": 2880,
+      "sha256": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16"
+    },
+    {
+      "index": 12,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/common.scala",
+      "bytes": 3925,
+      "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb"
+    },
+    {
+      "index": 13,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/fNFromRecFN.scala",
+      "bytes": 2853,
+      "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d"
+    },
+    {
+      "index": 14,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/primitives.scala",
+      "bytes": 5105,
+      "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31"
+    },
+    {
+      "index": 15,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/rawFloatFromFN.scala",
+      "bytes": 3037,
+      "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce"
+    },
+    {
+      "index": 16,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/rawFloatFromIN.scala",
+      "bytes": 2885,
+      "sha256": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8"
+    },
+    {
+      "index": 17,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/rawFloatFromRecFN.scala",
+      "bytes": 2877,
+      "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317"
+    },
+    {
+      "index": 18,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/recFNFromFN.scala",
+      "bytes": 2352,
+      "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d"
+    },
+    {
+      "index": 19,
+      "role": "EXTERNAL_HARDFLOAT",
+      "path": "${HARDFLOAT_SOURCE}/resizeRawFloat.scala",
+      "bytes": 3237,
+      "sha256": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561"
+    },
+    {
+      "index": 20,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    },
+    {
+      "index": 21,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5"
+    },
+    {
+      "index": 22,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/integration/gemmini/EmitHeteroFP32Alu.scala",
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1"
+    },
+    {
+      "index": 23,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnOwnerProtocol.scala",
+      "bytes": 1854,
+      "sha256": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90"
+    },
+    {
+      "index": 24,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+      "bytes": 3420,
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c"
+    },
+    {
+      "index": 25,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+      "bytes": 9520,
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943"
+    },
+    {
+      "index": 26,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/candidates/gdn_runtime_chunk_loadprep/source/GdnRuntimeChunkLoadPrepOwner.scala",
+      "bytes": 14575,
+      "sha256": "c9805d6ad4f6e5a6c280185d889956b5b92f7e180ec267b8dd89436db68b655b"
+    },
+    {
+      "index": 27,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseRegisterLoan.scala",
+      "bytes": 6408,
+      "sha256": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815"
+    },
+    {
+      "index": 28,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/ElementwiseMemoryEngine.scala",
+      "bytes": 10756,
+      "sha256": "cb8a338051cce94dda613603df892bd0f43b6ea62423ad1f9d28b24f98b73845"
+    },
+    {
+      "index": 29,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TensorProgram.scala",
+      "bytes": 6094,
+      "sha256": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7"
+    },
+    {
+      "index": 30,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/p0_safety/src/main/scala/heteronpu/p0/LocalSramConfig.scala",
+      "bytes": 583,
+      "sha256": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464"
+    },
+    {
+      "index": 31,
+      "role": "EXISTING_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/chisel/p0_safety/src/main/scala/heteronpu/p0/SharedL2Fabric.scala",
+      "bytes": 4816,
+      "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5"
+    },
+    {
+      "index": 32,
+      "role": "NEW_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkDerivedAndPairOwner.scala",
+      "bytes": 20581,
+      "sha256": "20a36d1f5efe11e15f9e1e254ff58973ff282a63e3930becfcfc35161522a089"
+    },
+    {
+      "index": 33,
+      "role": "NEW_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkLayout.scala",
+      "bytes": 1290,
+      "sha256": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346"
+    },
+    {
+      "index": 34,
+      "role": "NEW_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkTransposeOwner.scala",
+      "bytes": 12184,
+      "sha256": "dd6f61a7ae614695fff96ed20494a4e5a321a4ce0f5fb7092fda5eb0e7b89175"
+    },
+    {
+      "index": 35,
+      "role": "NEW_PUBLIC_SOURCE",
+      "path": "${REPOSITORY}/candidates/gdn_runtime_chunk_phases234/tests/GdnRuntimeChunkPhases234Spec.scala",
+      "bytes": 14848,
+      "sha256": "57d438be02cb995355302e594b2c4f41ce6b89d8ed84c6e9b7c60a78c821a25d"
+    }
+  ],
+  "dependency_lock": {
+    "path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+    "bytes": 74056,
+    "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+    "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+  },
+  "dependency_count": 106,
+  "dependency_layout": "Original physical dependency roots comprise two directories; public dependency role is a relocation of exact ordered relative Maven paths, not original absolute argv bytes.",
+  "compile_declared_pin_categories": {
+    "source": 36,
+    "dependency": 106,
+    "tool": 226,
+    "parent_runtime": 136,
+    "metadata": 7,
+    "parent_executable": 1
+  },
+  "test_declared_pin_categories": {
+    "source": 36,
+    "dependency": 106,
+    "tool": 226,
+    "parent_runtime": 136,
+    "metadata": 10,
+    "parent_executable": 1,
+    "class": 174
+  },
+  "full_runtime_pins_not_uploaded": true,
+  "class_manifest_hash_only": "1bb841a70257e5e237fde4ef27dfa197a855a7763fbd3f5ade63ac5bae27c042",
+  "source_scope": "Four exact original Scala files; remaining32 source roles are12 existing public sources plus20 separately restored HardFloat pins. No runtime/classes/IR/model inputs or weights."
+}

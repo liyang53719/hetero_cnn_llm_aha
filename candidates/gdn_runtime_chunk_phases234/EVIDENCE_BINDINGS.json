@@ -1,0 +1,52 @@
+{
+  "source_packet_manifest": {
+    "bytes": 2196,
+    "sha256": "6ac2dd4df9bac9549a7164604ab8836af750b06e7beeca5c94a317c77c318467"
+  },
+  "source_review": {
+    "bytes": 8560,
+    "sha256": "2931ecd89a982ca83527b76a023a7904a36b7ebb428dbd8e328b1a4071a6f0d2"
+  },
+  "source_review_freeze": {
+    "bytes": 461,
+    "sha256": "5261fddcfdbc8fe7dfd71f0ed00950ce345c940603363d41f11b92f9c6dd1014"
+  },
+  "compile_review": {
+    "bytes": 9460,
+    "sha256": "cf8e867f36c61625a02061e75d66b33f585b36c5a10b35cf2eecf26a48da4cfb"
+  },
+  "compile_review_freeze": {
+    "bytes": 1466,
+    "sha256": "9df63620cc31b1458e0157f30c5bde83b22c35f3de3f3d12bce8efc1394bd02c"
+  },
+  "class_identity_manifest": {
+    "bytes": 147499,
+    "sha256": "1bb841a70257e5e237fde4ef27dfa197a855a7763fbd3f5ade63ac5bae27c042"
+  },
+  "original_source_delta": {
+    "bytes": 15994,
+    "sha256": "caa7ef34da2c280162d759faba2a74b3aa6a03e2cac3cfabb3361ba4092656cb"
+  },
+  "original_check_contract": {
+    "bytes": 3794,
+    "sha256": "66b372616defb54e87442b6b06e70176487a9e2a20a290a28abc6fc0004c41e3"
+  },
+  "author_failure_packet_manifest": {
+    "bytes": 1638,
+    "sha256": "122aab418a9e1cc996967c6b109550dcf480d124efbb5b1ea3f33998b46a10ab"
+  },
+  "author_failure_summary": {
+    "bytes": 3372,
+    "sha256": "56dd321a381c47d672055876e998a354d0246e096082fbaf069cbcf16c69fa39"
+  },
+  "actual_failure_independent_review": {
+    "bytes": 12505,
+    "sha256": "437195b1ac1979425a763bb0635aafc407505c2631317c34e2ba9e66152bee27"
+  },
+  "disclosure": "Digests and necessary counts only; no actual class/JAR/IR/log/runtime/weights/user inputs.",
+  "actual_failure_independent_freeze": {
+    "bytes": 1009,
+    "sha256": "c28899a3e388e5e76fd5bc7a4c625b06f1a4b1f12e043334c67e2a6f78c20572"
+  },
+  "author_failure_summary_historical_status": "Original author summary was frozen before independent review, so its audit_status PENDING is preserved as provenance, not current package status."
+}

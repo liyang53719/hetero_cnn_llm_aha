@@ -1,0 +1,16 @@
+[
+  {
+    "base_path": "candidates/qwen35_chunk_derived_r2/source/GdnChunkDerivedAndPairOwner.scala",
+    "base_commit": "c590179c4c3424ded9997ba8f15f27821df304c9",
+    "base_sha256": "9b5a9484f5d5ce2e19c4e7b3e9b429a80b939c8a652066541a6eff4b4ea5785f",
+    "postimage_path": "candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkDerivedAndPairOwner.scala",
+    "postimage_sha256": "20a36d1f5efe11e15f9e1e254ff58973ff282a63e3930becfcfc35161522a089"
+  },
+  {
+    "base_path": "candidates/qwen35_chunk_transpose/source/GdnChunkTransposeOwner.scala",
+    "base_commit": "c590179c4c3424ded9997ba8f15f27821df304c9",
+    "base_sha256": "293946fc86104c624b109d13e3d59338831a8a4c5a818d64aab8f649c4c026bd",
+    "postimage_path": "candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkTransposeOwner.scala",
+    "postimage_sha256": "dd6f61a7ae614695fff96ed20494a4e5a321a4ce0f5fb7092fda5eb0e7b89175"
+  }
+]

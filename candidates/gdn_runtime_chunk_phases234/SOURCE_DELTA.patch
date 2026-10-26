@@ -1,0 +1,291 @@
+--- a/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkDerivedAndPairOwner.scala
++++ b/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkDerivedAndPairOwner.scala
+@@ -10,29 +10,19 @@
+   * owned and stable through this job and held done. Receipt provenance remains
+   * the scheduler's responsibility; this owner does not authenticate it.
+   */
+-class GdnChunkDerivedAndPairJob extends Bundle {
++class GdnRuntimeChunkDerivedAndPairJob extends Bundle {
+   val context = new GdnChunkJob
+-  val head = UInt(16.W)
+-  val chunk = UInt(16.W)
++  val layout = new GdnRuntimeChunkLayout
++  val head = UInt(5.W)
++  val chunk = UInt(1.W)
+   val phase1Context = new GdnChunkJob
+-  val phase1Ready = new GdnChunkLoadPrepResult
++  val phase1Layout = new GdnRuntimeChunkLayout
++  val phase1Ready = new GdnRuntimeChunkLoadPrepResult
+ }
+ 
+-/** Kept privately by the scheduler until SAME-context/head/chunk phase15.
+-  * No persistent-root publication, generation advance, or new exp policy.
+-  * valid is only asserted with a complete successful phase2 held result.
+-  */
+-class GdnChunkPrivateDecay extends Bundle {
+-  val context = new GdnChunkJob
+-  val head = UInt(4.W)
+-  val chunk = UInt(1.W)
+-  val value = UInt(32.W)
+-  val valid = Bool()
+-}
+-
+-class GdnChunkDerivedAndPairResult extends Bundle {
++class GdnRuntimeChunkDerivedAndPairResult extends Bundle {
+   val receipt = new GdnChunkStageReceipt
+-  val decay = new GdnChunkPrivateDecay
++  val decay = new GdnRuntimeChunkPrivateDecay
+   val readBytes = UInt(64.W)
+   val expRequests = UInt(12.W)
+   val expResults = UInt(12.W)
+@@ -44,14 +34,14 @@
+   val stageComplete = Bool()
+ }
+ 
+-class GdnChunkDerivedAndPairPort extends Bundle {
+-  val job = Flipped(Decoupled(new GdnChunkDerivedAndPairJob))
++class GdnRuntimeChunkDerivedAndPairPort extends Bundle {
++  val job = Flipped(Decoupled(new GdnRuntimeChunkDerivedAndPairJob))
+   val committed = Input(new GdnChunkCommittedState)
+   val memory = Decoupled(new MemoryRequest)
+   val response = Flipped(Decoupled(new MemoryResponse))
+   val scalar = new GdnScalarClient
+   val loan = Flipped(new ElementwiseLoanPort)
+-  val done = Decoupled(new GdnChunkDerivedAndPairResult)
++  val done = Decoupled(new GdnRuntimeChunkDerivedAndPairResult)
+   val resetRequired = Output(Bool())
+ }
+ 
+@@ -77,7 +67,10 @@
+   * recovery must retire any held loan error before using its lLocked/drained/
+   * no-DDR-poison resetLoan path, or coordinate reset of the complete fabric.
+   */
+-class GdnChunkDerivedAndPairOwner extends Module {
++// Fixed maximum32 candidate: one hardware implementation for runtime16/32.
++// Existing payload registers, micro-order and shared service contracts unchanged.
++// Full phases5-17/coordinator/root publication are NOT implemented here.
++class GdnRuntimeChunkDerivedAndPairOwner extends Module {
+   import GdnChunkGeometry._
+   private val stateBytes = GdnChunkAddressPlan.PerHeadStateBytes
+   private val chunkBytes = GdnChunkAddressPlan.PerHeadChunkBytes
+@@ -85,7 +78,7 @@
+   private val stride128 = stateBytes + 2 * chunkBytes
+   private val phaseBytes = 180224
+   private val phaseReadBytes = 235584 // original 3680 reads + one gates[63] read
+-  require(Heads == 16 && KeyDim == 128 && ValueDim == 128 && ChunkRows == 64 && BeatBytes == 64)
++  require(KeyDim == 128 && ValueDim == 128 && ChunkRows == 64 && BeatBytes == 64)
+   require(stateBytes == 65536 && chunkBytes == 806912 && stride16 == 872448 && stride128 == 1679360)
+   private val matrixOffsets = Map("gates" -> 0, "q" -> 4096, "k" -> 36864, "v" -> 69632,
+     "kb" -> 102400, "vb" -> 135168, "kbg" -> 167936, "qg" -> 200704, "ke" -> 233472, "pair" -> 331776)
+@@ -96,7 +89,7 @@
+   require(GdnChunkAddressPlan.Phases(1).writes.map(n =>
+     GdnChunkAddressPlan.Shapes.find(_.name == n).get.bytes).sum == phaseBytes)
+ 
+-  val io = IO(new GdnChunkDerivedAndPairPort)
++  val io = IO(new GdnRuntimeChunkDerivedAndPairPort)
+   val idle :: issueRead :: waitRead :: issueLoan :: waitLoan :: issueExp :: waitExp :: issueWrite :: waitWrite :: finish :: locked :: Nil = Enum(11)
+   val state = RegInit(idle)
+   private val microSteps = Enum(23)
+@@ -125,7 +118,8 @@
+   val pairWrite = microSteps(22)
+   val step = RegInit(finalGate)
+   val context = RegInit(0.U.asTypeOf(new GdnChunkJob))
+-  val head = RegInit(0.U(4.W))
++  val layout = RegInit(0.U.asTypeOf(new GdnRuntimeChunkLayout))
++  val head = RegInit(0.U(5.W))
+   val chunk = RegInit(0.U(1.W))
+   val chunkBase = RegInit(0.U(64.W))
+   val row = RegInit(0.U(6.W))
+@@ -218,6 +212,7 @@
+   io.done.bits.receipt.outputAckBytes := 0.U; io.done.bits.receipt.stateAckBytes := 0.U
+   io.done.bits.receipt.drained := state === finish && status === Status.Ok.U && locallyDrained
+   io.done.bits.decay.context := context
++  io.done.bits.decay.layout := layout
+   io.done.bits.decay.head := head; io.done.bits.decay.chunk := chunk
+   io.done.bits.decay.value := Mux(complete, chunkDecay, 0.U)
+   io.done.bits.decay.valid := complete
+@@ -233,7 +228,7 @@
+ 
+   when(io.job.fire) {
+     val j = io.job.bits; val c = j.context; val r = j.phase1Ready; val p = r.receipt
+-    context := c; head := j.head(3, 0); chunk := j.chunk(0)
++    context := c; layout := j.layout; head := j.head; chunk := j.chunk
+     row := 0.U; beat := 0.U; pairBeat := 0.U; lane := 0.U
+     memorySequence := 0.U; loanSequence := 0.U
+     payload.foreach(_ := 0.U)
+@@ -247,11 +242,14 @@
+     val stride = Mux(is128, stride128.U, stride16.U)
+     val selectedChunk = c.scratch.pad(66) + (j.head * stride).pad(66) + stateBytes.U + (j.chunk * chunkBytes.U).pad(66)
+     chunkBase := selectedChunk(63, 0)
+-    val inputBytes = (c.tokens * PreparedRowBytes.U).pad(66)
+-    val outputBytes = (c.tokens * OutputRowBytes.U).pad(66)
+-    val scratchBytes = Mux(is128, GdnChunkAddressPlan.scratchBytes(128).U(66.W), GdnChunkAddressPlan.scratchBytes(16).U(66.W))
+-    val spans = Seq((c.input, inputBytes), (c.stateIn, StateBytes.U(66.W)),
+-      (c.stateOut, StateBytes.U(66.W)), (c.output, outputBytes), (c.scratch, scratchBytes))
++    // Same expanded prepared allocation as runtime LoadPrep/state-transfer.
++    // This leaf only reads per-head scratch; it never remaps head//2 again.
++    val inputBytes = (c.tokens * j.layout.valueHeads * 1600.U).pad(66)
++    val outputBytes = (c.tokens * j.layout.valueHeads * 256.U).pad(66)
++    val totalStateBytes = (j.layout.valueHeads * 65536.U).pad(66)
++    val scratchBytes = (j.layout.valueHeads * stride).pad(66)
++    val spans = Seq((c.input, inputBytes), (c.stateIn, totalStateBytes),
++      (c.stateOut, totalStateBytes), (c.output, outputBytes), (c.scratch, scratchBytes))
+     def badSpan(base: UInt, size: UInt): Bool =
+       base(5, 0) =/= 0.U || size === 0.U || base.pad(66) + size > (BigInt(1) << AddressBits).U
+     def overlap(a: UInt, na: UInt, b: UInt, nb: UInt): Bool =
+@@ -262,14 +260,16 @@
+     val rootBad = c.expectedGeneration =/= io.committed.generation ||
+       Mux(c.cold, c.expectedGeneration =/= 0.U || io.committed.valid,
+         c.expectedGeneration === 0.U || !io.committed.valid || io.committed.state =/= c.stateIn)
+-    val phase1Qualified = j.phase1Context.asUInt === c.asUInt && r.stageComplete &&
++    val phase1Qualified = j.phase1Context.asUInt === c.asUInt &&
++      j.phase1Layout.asUInt === j.layout.asUInt && r.stageComplete &&
+       p.tag === c.tag && p.expectedGeneration === c.expectedGeneration &&
+-      p.head.pad(16) === j.head && p.chunk.pad(16) === j.chunk && p.phase === 1.U &&
++      p.head === j.head && p.chunk === j.chunk && p.phase === 1.U &&
+       p.status === Status.Ok.U && p.drained && p.scratchAckBytes === 102400.U &&
+       p.outputAckBytes === 0.U && p.stateAckBytes === 0.U &&
+       r.addRequests === 64.U && r.addResults === 64.U && r.readBytes === Mux(is128, 102400.U, 25600.U)
+     when(rootBad) { fail(Status.Dependency.U) }
+-      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) || j.head >= Heads.U ||
++      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) ||
++        !GdnRuntimeChunkLayout.admitted(j.layout) || j.head >= j.layout.valueHeads ||
+         j.chunk >= Mux(is128, 2.U, 1.U) || c.expectedGeneration === "hffffffff".U || badAddress || aliases) { fail(Status.Bounds.U) }
+       .elsewhen(c.vectorPolicy =/= GdnChunkVectorPolicy.LegacyFatalUnderflow.U) { fail(Status.Unsupported.U) }
+       .elsewhen(!phase1Qualified) { fail(Status.Dependency.U) }
+--- a/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkTransposeOwner.scala
++++ b/candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkTransposeOwner.scala
+@@ -9,17 +9,18 @@
+   * binds all roots/policy, not only the transaction tag. The scheduler owns
+   * stable source matrices/roots throughout this job and held terminal result.
+   */
+-class GdnChunkTransposeJob extends Bundle {
++class GdnRuntimeChunkTransposeJob extends Bundle {
+   val context = new GdnChunkJob
+-  val head = UInt(16.W)
+-  val chunk = UInt(16.W)
+-  val phase2Ready = new GdnChunkDerivedAndPairResult
+-}
+-
+-class GdnChunkTransposeResult extends Bundle {
++  val layout = new GdnRuntimeChunkLayout
++  val head = UInt(5.W)
++  val chunk = UInt(1.W)
++  val phase2Ready = new GdnRuntimeChunkDerivedAndPairResult
++}
++
++class GdnRuntimeChunkTransposeResult extends Bundle {
+   val phase3 = new GdnChunkStageReceipt
+   val phase4 = new GdnChunkStageReceipt
+-  val decay = new GdnChunkPrivateDecay
++  val decay = new GdnRuntimeChunkPrivateDecay
+   val phase3ReadBytes = UInt(64.W)
+   val phase4ReadBytes = UInt(64.W)
+   val cycles = UInt(64.W)
+@@ -30,12 +31,12 @@
+   val status = UInt(8.W)
+ }
+ 
+-class GdnChunkTransposePort extends Bundle {
+-  val job = Flipped(Decoupled(new GdnChunkTransposeJob))
++class GdnRuntimeChunkTransposePort extends Bundle {
++  val job = Flipped(Decoupled(new GdnRuntimeChunkTransposeJob))
+   val committed = Input(new GdnChunkCommittedState)
+   val memory = Decoupled(new MemoryRequest)
+   val response = Flipped(Decoupled(new MemoryResponse))
+-  val done = Decoupled(new GdnChunkTransposeResult)
++  val done = Decoupled(new GdnRuntimeChunkTransposeResult)
+   val resetRequired = Output(Bool())
+ }
+ 
+@@ -50,13 +51,16 @@
+   * Recovery requires coordinated transport/owner reset, not owner-only clear.
+   * Accepted responses are assumed unique/no-stale, not replay authenticated.
+   */
+-class GdnChunkTransposeOwner extends Module {
++// Fixed maximum32 candidate: one hardware implementation for runtime16/32.
++// Existing payload registers, micro-order and shared service contracts unchanged.
++// Full phases5-17/coordinator/root publication are NOT implemented here.
++class GdnRuntimeChunkTransposeOwner extends Module {
+   import GdnChunkGeometry._
+   private val stateBytes = GdnChunkAddressPlan.PerHeadStateBytes
+   private val chunkBytes = GdnChunkAddressPlan.PerHeadChunkBytes
+   private val stride16 = stateBytes + chunkBytes
+   private val stride128 = stateBytes + 2 * chunkBytes
+-  require(Heads == 16 && KeyDim == 128 && ValueDim == 128 && ChunkRows == 64 && BeatBytes == 64)
++  require(KeyDim == 128 && ValueDim == 128 && ChunkRows == 64 && BeatBytes == 64)
+   require(stateBytes == 65536 && chunkBytes == 806912 && stride16 == 872448 && stride128 == 1679360)
+   private val offsets = Map("k" -> 36864, "ke" -> 233472, "kt" -> 266240, "ket" -> 299008)
+   offsets.foreach { case (name, offset) =>
+@@ -67,11 +71,12 @@
+   require(GdnChunkAddressPlan.Phases(2).writes == Vector("kt"))
+   require(GdnChunkAddressPlan.Phases(3).writes == Vector("ket"))
+ 
+-  val io = IO(new GdnChunkTransposePort)
++  val io = IO(new GdnRuntimeChunkTransposePort)
+   val idle :: issueRead :: waitRead :: issueWrite :: waitWrite :: finish :: locked :: Nil = Enum(7)
+   val state = RegInit(idle)
+   val context = RegInit(0.U.asTypeOf(new GdnChunkJob))
+-  val head = RegInit(0.U(4.W)); val chunk = RegInit(0.U(1.W))
++  val layout = RegInit(0.U.asTypeOf(new GdnRuntimeChunkLayout))
++  val head = RegInit(0.U(5.W)); val chunk = RegInit(0.U(1.W))
+   val chunkBase = RegInit(0.U(64.W))
+   val decayValue = RegInit(0.U(32.W))
+   val second = RegInit(false.B) // false:phase3, true:phase4
+@@ -117,6 +122,7 @@
+     receipt.drained := (if (p == 0) phase3Done else complete)
+   }
+   io.done.bits.decay.context := context
++  io.done.bits.decay.layout := layout
+   io.done.bits.decay.head := head; io.done.bits.decay.chunk := chunk
+   io.done.bits.decay.value := Mux(complete, decayValue, 0.U)
+   io.done.bits.decay.valid := complete
+@@ -130,7 +136,7 @@
+ 
+   when(io.job.fire) {
+     val j = io.job.bits; val c = j.context; val r = j.phase2Ready; val p = r.receipt; val d = r.decay
+-    context := c; head := j.head(3, 0); chunk := j.chunk(0); decayValue := d.value
++    context := c; layout := j.layout; head := j.head; chunk := j.chunk; decayValue := d.value
+     second := false.B; phase3Done := false.B
+     tileRow := 0.U; tileCol := 0.U; index := 0.U; tile.foreach(_ := 0.U)
+     sequence := 0.U; outstanding := false.B; status := Status.Ok.U
+@@ -139,11 +145,14 @@
+     val stride = Mux(is128, stride128.U, stride16.U)
+     val selectedChunk = c.scratch.pad(66) + (j.head * stride).pad(66) + stateBytes.U + (j.chunk * chunkBytes.U).pad(66)
+     chunkBase := selectedChunk(63, 0)
+-    val inputBytes = (c.tokens * PreparedRowBytes.U).pad(66)
+-    val outputBytes = (c.tokens * OutputRowBytes.U).pad(66)
+-    val scratchBytes = Mux(is128, GdnChunkAddressPlan.scratchBytes(128).U(66.W), GdnChunkAddressPlan.scratchBytes(16).U(66.W))
+-    val spans = Seq((c.input, inputBytes), (c.stateIn, StateBytes.U(66.W)),
+-      (c.stateOut, StateBytes.U(66.W)), (c.output, outputBytes), (c.scratch, scratchBytes))
++    // Same expanded prepared allocation as runtime LoadPrep/state-transfer.
++    // This leaf only reads per-head scratch; it never remaps head//2 again.
++    val inputBytes = (c.tokens * j.layout.valueHeads * 1600.U).pad(66)
++    val outputBytes = (c.tokens * j.layout.valueHeads * 256.U).pad(66)
++    val totalStateBytes = (j.layout.valueHeads * 65536.U).pad(66)
++    val scratchBytes = (j.layout.valueHeads * stride).pad(66)
++    val spans = Seq((c.input, inputBytes), (c.stateIn, totalStateBytes),
++      (c.stateOut, totalStateBytes), (c.output, outputBytes), (c.scratch, scratchBytes))
+     def badSpan(base: UInt, size: UInt): Bool =
+       base(5, 0) =/= 0.U || size === 0.U || base.pad(66) + size > (BigInt(1) << AddressBits).U
+     def overlap(a: UInt, na: UInt, b: UInt, nb: UInt): Bool =
+@@ -155,14 +164,16 @@
+       Mux(c.cold, c.expectedGeneration =/= 0.U || io.committed.valid,
+         c.expectedGeneration === 0.U || !io.committed.valid || io.committed.state =/= c.stateIn)
+     val phase2Qualified = r.stageComplete && p.tag === c.tag && p.expectedGeneration === c.expectedGeneration &&
+-      p.head.pad(16) === j.head && p.chunk.pad(16) === j.chunk && p.phase === 2.U &&
++      p.head === j.head && p.chunk === j.chunk && p.phase === 2.U &&
+       p.status === Status.Ok.U && p.drained && p.scratchAckBytes === 180224.U &&
+       p.outputAckBytes === 0.U && p.stateAckBytes === 0.U && r.readBytes === 235584.U &&
+       r.expRequests === 2209.U && r.expResults === 2209.U && r.addRequests === 2144.U && r.addResults === 2144.U &&
+       r.mulRequests === 2560.U && r.mulResults === 2560.U && d.valid && finite(d.value) &&
+-      d.context.asUInt === c.asUInt && d.head.pad(16) === j.head && d.chunk.pad(16) === j.chunk
++      d.context.asUInt === c.asUInt && d.layout.asUInt === j.layout.asUInt &&
++      d.head === j.head && d.chunk === j.chunk
+     when(rootBad) { fail(Status.Dependency.U) }
+-      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) || j.head >= Heads.U ||
++      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) ||
++        !GdnRuntimeChunkLayout.admitted(j.layout) || j.head >= j.layout.valueHeads ||
+         j.chunk >= Mux(is128, 2.U, 1.U) || c.expectedGeneration === "hffffffff".U || badAddress || aliases) { fail(Status.Bounds.U) }
+       .elsewhen(c.vectorPolicy =/= GdnChunkVectorPolicy.LegacyFatalUnderflow.U) { fail(Status.Unsupported.U) }
+       .elsewhen(!phase2Qualified) { fail(Status.Dependency.U) }

@@ -1,0 +1,485 @@
+{
+  "acceptance": {
+    "actual_Cpp_compile_link": true,
+    "actual_M17_behavior": false,
+    "actual_cross16_behavior": false,
+    "duty_cycle": null,
+    "full128_RTL": false,
+    "full29": false,
+    "full_FMA_numerical": false,
+    "mac_utilization": null,
+    "ninety_percent_target": false,
+    "scripted_Matrix_numerical": false
+  },
+  "actual_execution_scope": {
+    "codegen_requested": false,
+    "compiler_and_linker_actually_executed": true,
+    "evidence": "Exact approved staged launcher compiles oneM17TU then exec-links unchanged archive/runtime2. Output17-file identity/content matches. Empty log is not an independent exec syscall trace; copying-helper no_native_execution does not deny actual compiler execution.",
+    "make_requested": false,
+    "model_TUs_recompiled": false,
+    "model_executed": false,
+    "new_PCH_requested": false
+  },
+  "binary": {
+    "bytes": 4514920,
+    "elf": {
+      "build_ids": [
+        "3cfea2ecaa1c7c791505cef221359aa0d22f6b51"
+      ],
+      "defined_model_function_count": 200,
+      "defined_model_functions_sha256": "584af90baa17723f6690dfc9f5d65283ef6edc90d226fea0073027ad66969d94",
+      "dynamic_tags": [
+        1,
+        1,
+        1,
+        1,
+        12,
+        13,
+        25,
+        27,
+        26,
+        28,
+        1879047925,
+        5,
+        6,
+        10,
+        11,
+        21,
+        3,
+        2,
+        20,
+        23,
+        7,
+        8,
+        9,
+        1879048187,
+        1879048190,
+        1879048191,
+        1879048176,
+        1879048185
+      ],
+      "elf_type": 3,
+      "interpreter": "${DYNAMIC_LOADER}",
+      "machine": 62,
+      "main": [
+        {
+          "bytes": 836,
+          "name": "main"
+        }
+      ],
+      "needed": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "sections": 34,
+      "soname": null,
+      "symbol_count": 1550,
+      "version_definitions": [],
+      "version_requirements": {
+        "libc.so.6": [
+          "GLIBC_2.32",
+          "GLIBC_2.17",
+          "GLIBC_2.38",
+          "GLIBC_2.34",
+          "GLIBC_2.2.5"
+        ],
+        "libgcc_s.so.1": [
+          "GCC_3.0"
+        ],
+        "libm.so.6": [
+          "GLIBC_2.29"
+        ],
+        "libstdc++.so.6": [
+          "CXXABI_1.3.7",
+          "GLIBCXX_3.4.32",
+          "CXXABI_1.3.8",
+          "GLIBCXX_3.4.17",
+          "GLIBCXX_3.4.18",
+          "CXXABI_1.3.9",
+          "CXXABI_1.3.2",
+          "GLIBCXX_3.4.29",
+          "GLIBCXX_3.4.26",
+          "GLIBCXX_3.4.9",
+          "GLIBCXX_3.4.11",
+          "CXXABI_1.3",
+          "GLIBCXX_3.4.14",
+          "GLIBCXX_3.4.30",
+          "CXXABI_1.3.11",
+          "GLIBCXX_3.4.22",
+          "GLIBCXX_3.4.15",
+          "GLIBCXX_3.4.21",
+          "GLIBCXX_3.4"
+        ]
+      }
+    },
+    "mode": "0o755",
+    "relative_path": "build/VOrderedQkBehaviorCore_m17",
+    "role": "executable",
+    "sha256": "1eefdc81df6505cbd6f42fd1eda643adaf2d07687c40a56733ec88ed2b1b5075"
+  },
+  "binary_runtime_manifest": {
+    "bytes": 26268,
+    "sha256": "08143a4c7e1d0d374855308c4aa6a9dff283f759e4ff6363cb2c575e192b7f04"
+  },
+  "binary_source_freeze": {
+    "bytes": 1571,
+    "sha256": "8d5242d2160549ae168e30cf85514d3e5b10eccbabb96617e34ead18e82be805"
+  },
+  "cleanup_saved_proof_review": {
+    "bytes": 1399,
+    "sha256": "9350d3ee8aaf9664d3716e3bc7ea3531e9744d4b2b1453c8abbaadd97826b516"
+  },
+  "early_binary_freeze_scope": "Earlycheckpoint metadataFINALpending was true at creation; this FINAL closes metadata without rewriting that checkpoint.",
+  "harness_source_review": {
+    "bytes": 18110,
+    "sha256": "f761dddee216484b251f1630b44e081e54e5655f335e01a0717fb50f11b36f96"
+  },
+  "identity_freeze": {
+    "bytes": 2249,
+    "sha256": "5ca5a8a75aa501edb5e10b04692e30341169a4b5d2a34bb95005c6990bb5b2ad"
+  },
+  "identity_review": {
+    "bytes": 38986,
+    "sha256": "ad28c50376a0662c4069c66ebf92e0b6cbdbe4b2947969a1058d8b5e93c0bb2b"
+  },
+  "independent_semantics": {
+    "M17_expected_boundary": "Reference token16 groups base0/count16 thenbase16/count1; vector tail globalindex16/max+0; probability1/17 BF16expected0x3d71. Driver ordinal function and DUT behavior are not executed by this static check.",
+    "MMD": {
+      "bytes": 841,
+      "complete_system_header_trace": false,
+      "count": 10,
+      "dependencies": [
+        "${NEW_RUN_ROOT}/build/m17_main.cpp",
+        "${NEW_RUN_ROOT}/build/generated_abi.hpp",
+        "${NEW_RUN_ROOT}/build/VOrderedQkBehaviorCore.h",
+        "${VERILATOR_ROOT}/include/verilated.h",
+        "${VERILATOR_ROOT}/include/verilatedos.h",
+        "${VERILATOR_ROOT}/include/verilated_config.h",
+        "${VERILATOR_ROOT}/include/verilated_types.h",
+        "${VERILATOR_ROOT}/include/verilated_funcs.h",
+        "${NEW_RUN_ROOT}/build/expected_m17.hpp",
+        "${NEW_RUN_ROOT}/build/stimulus_m17.hpp"
+      ],
+      "first_source": "staged m17_main.cpp",
+      "includes_stimulus_m17_hpp": true,
+      "literal_pinned_or_staged_paths": true,
+      "target": "m17_main.o"
+    },
+    "binary_bytes": 4514920,
+    "binary_type": "ET_DYN",
+    "checks": 120871,
+    "constant_scope": "Actual object AND executable contain216 group,32640 memory,14688PV,8964vector semantic rowfields matching independent source expectations. Boolean fields compared as exact bytes0/1; padding excluded. These are compiled reference constants, not observed transactions or executed assertions.",
+    "defined_main": [
+      {
+        "bytes": 836,
+        "name": "main"
+      }
+    ],
+    "direct_NEEDED": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "entry_filebacked_executable": true,
+    "interpreter": "${DYNAMIC_LOADER}",
+    "known_native_runtime_files": 5,
+    "model_symbols": "200 defined model-function marker names, not200 hardware modules or whole machine-code equivalence. Original model archive preserved.",
+    "object_bytes": 1386416,
+    "object_type": "ET_REL",
+    "old_independent_parser_reused_not_production_checker": true,
+    "read_only_expected_constant_tables": [
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 3456,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 216,
+        "source": {
+          "bytes": 8891,
+          "sha256": "2627f5f097bbeb20ed204ee216ab0fed4d401e00c4ec538d1cf480466fba88b6"
+        },
+        "symbol": "_ZN9reference6groupsE",
+        "table": "groups"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 783360,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 32640,
+        "source": {
+          "bytes": 4563365,
+          "sha256": "79890df68d8ae7f5c9b9dae0d037470c0f93370588714a14724b8bb7cff2d5b6"
+        },
+        "symbol": "_ZN9reference6memoryE",
+        "table": "memory"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 58752,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 14688,
+        "source": {
+          "bytes": 2071189,
+          "sha256": "0880c12811b424537cacebd36c510b1d765fd4a1e21050a9d572a75d0d8c6a99"
+        },
+        "symbol": "_ZN9reference2pvE",
+        "table": "pv"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "object",
+        "bytes": 322704,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 8964,
+        "source": {
+          "bytes": 287366,
+          "sha256": "1c6af8a807e52b1c4f9210529aea0385a820f9e347f48dc6851cefe2777a1042"
+        },
+        "symbol": "_ZN9reference6vectorE",
+        "table": "vector"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 3456,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 216,
+        "source": {
+          "bytes": 8891,
+          "sha256": "2627f5f097bbeb20ed204ee216ab0fed4d401e00c4ec538d1cf480466fba88b6"
+        },
+        "symbol": "_ZN9reference6groupsE",
+        "table": "groups"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 783360,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 32640,
+        "source": {
+          "bytes": 4563365,
+          "sha256": "79890df68d8ae7f5c9b9dae0d037470c0f93370588714a14724b8bb7cff2d5b6"
+        },
+        "symbol": "_ZN9reference6memoryE",
+        "table": "memory"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 58752,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 14688,
+        "source": {
+          "bytes": 2071189,
+          "sha256": "0880c12811b424537cacebd36c510b1d765fd4a1e21050a9d572a75d0d8c6a99"
+        },
+        "symbol": "_ZN9reference2pvE",
+        "table": "pv"
+      },
+      {
+        "all_rows_match": true,
+        "artifact": "executable",
+        "bytes": 322704,
+        "padding_values_validated": false,
+        "read_only": true,
+        "rows": 8964,
+        "source": {
+          "bytes": 287366,
+          "sha256": "1c6af8a807e52b1c4f9210529aea0385a820f9e347f48dc6851cefe2777a1042"
+        },
+        "symbol": "_ZN9reference6vectorE",
+        "table": "vector"
+      }
+    ],
+    "report": {
+      "bytes": 17039,
+      "sha256": "c6b4c442076376e708292d7c3bfc816977947d00ad6e5fa16730707ba88ac9de"
+    },
+    "runtime_method": "New ELF dynamic/version metadata parsed independently; existing five runtime ELFs reused from prior independently hashed/parsed manifest plus current complete7-fieldstat and dependency audit. Not runtime loader tracing or every possible future dlopen/fileIO.",
+    "source_file_markers": {
+      "binary": [
+        "Scrt1.o",
+        "VOrderedQkBehaviorCore.cpp",
+        "m17_main.cpp",
+        "verilated.cpp",
+        "crtstuff.c",
+        "verilated_threads.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__5.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2__Slow.cpp",
+        "VOrderedQkBehaviorCore__Syms.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__2.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__3.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__0.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__2.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__3.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__4.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__3.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__4.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__5.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h6e5d16cf__0.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h7547f1ed__0.cpp",
+        "VOrderedQkBehaviorCore__ConstPool_0.cpp",
+        "VOrderedQkBehaviorCore___024root__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__0__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hec94268b__1__Slow.cpp",
+        "VOrderedQkBehaviorCore___024root__DepSet_hb5fa3d69__1__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_hc578e58d__0__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__0__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__1__Slow.cpp",
+        "VOrderedQkBehaviorCore_HeteroFP32Alu__DepSet_h33fa2106__2__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_2240x128__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_2240x128__DepSet_h34316d2d__0__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_48x128__Slow.cpp",
+        "VOrderedQkBehaviorCore_banks_bank_48x128__DepSet_h3f28120b__0__Slow.cpp",
+        "crtstuff.c",
+        ""
+      ],
+      "object": [
+        "m17_main.cpp"
+      ],
+      "scope": "static STT_FILE strings, not independent runtime source execution trace"
+    },
+    "total_reference_table_bytes_each_object_and_ELF": 1168272,
+    "verified_version_edges": 13
+  },
+  "outputs": {
+    "all_actual_run_bytes": 14765656,
+    "all_actual_run_files": 29,
+    "artifact_manifest": {
+      "bytes": 16688,
+      "sha256": "3918625b1ff3a63f64b4a6d27b20e7cc1bd599f56177c0225dcb22f0862178cb"
+    },
+    "audit_method": "Child opaque-hashed17 actual files once. Parent read object/ELF/MMD once each for independent static semantics without second content hash. Old archive/SV/runtime content not reparsed. Source golden JSONs read for exact field comparison.",
+    "bytes": 14742024,
+    "empty_log_scope": "Fixed shell does not echo commands. No diagnostic text observed, not warning-free/Werror;9 original stock-Wno compile flags retained.",
+    "file_count": 17,
+    "new_ELF_count": 1,
+    "new_MMD_count": 1,
+    "new_object_count": 1,
+    "old_evidence": "Original source/SV/archive/runtime and old actual success/failure records preserved; cached hashes combined with complete stable identities, no original rewriting.",
+    "stage": "7 original generated headers + original36-model-object archive +2runtime objects + newM17main + unchangedABI + expectedtable + stimulus header. No old harness object/dependency,Makefile,PCH or new model TU.",
+    "staged_unchanged_inputs": 14,
+    "tool_copies": 9,
+    "worker_log_bytes": 0
+  },
+  "pins_and_runtime_coverage": {
+    "absence_slots": 285,
+    "aliases": 1129,
+    "cached_old_digest_fullstat_reused": 5340,
+    "declared_postflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5408
+    },
+    "declared_preflight": {
+      "inventory_checks": 19,
+      "pass_all": true,
+      "pin_checks": 5408
+    },
+    "external46pins10absence_exactCUTF8_before_after_verified": true,
+    "identity_details": {
+      "bytes": 38986,
+      "sha256": "ad28c50376a0662c4069c66ebf92e0b6cbdbe4b2947969a1058d8b5e93c0bb2b"
+    },
+    "identity_final_stat_checks": 5396,
+    "independent_identity_checks": 38199,
+    "new_actual_root_files_hashed_once": 35,
+    "new_small_metadata_hashes": 21,
+    "parent_Python_complete_bytecode_isolation_proven": false,
+    "parent_qualification": {
+      "bytes": 2635,
+      "sha256": "389bb642f693fbba6a3fb3e89b9fef9059ac6aa759e32b552dd7780ddb0a7aba"
+    },
+    "runtime_pins": 202,
+    "scope": "Known endpoint identity/absence/alias checks, not wholehost/cgroup/continuous isolation."
+  },
+  "producer_generic_status": "PASS_FROZEN_MODEL_BUILD_ONLY",
+  "producer_receipt": {
+    "bytes": 22063,
+    "sha256": "d7b55be37769fb81d0dc52066c26f03c5ebb639bf357b502bf0552722a8eda47"
+  },
+  "producer_schema": "qwen2-core-client-fixed-m17-single-tu-link-supervisor-v1",
+  "producer_stage": "fixed-m17-single-tu-link-only",
+  "remaining_actual_artifact_blockers": [],
+  "resource_terminal": {
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 240,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 134217728,
+      "total_wall_seconds": 330,
+      "work_wall_seconds": 300
+    },
+    "cleanup_complete": true,
+    "cleanup_evidence_scope": "Saved original PID/start/group identity,2 complete pre-reap scans,leaderZ and no nonleader at barrier,then direct leader reap;8records1547B. Reviewer did not poll/signal processes.",
+    "elapsed_seconds": 25.640772967017256,
+    "errors": [],
+    "exit_code": 0,
+    "final_aggregate_cpu_seconds": 25.599190958999998,
+    "fit_scope": "This actual single-TU/link finished inside new240CPU/300work/310cleanup/330total/360outer. No performance or fit claim for M17 simulation.",
+    "maximum_sample_interval_seconds": 0.025841551017947495,
+    "outer_timeout": false,
+    "outer_wall_seconds": 25.89357326697791,
+    "root_returncode": 0,
+    "sampled_peak_cpu_seconds": 24.625773833999997,
+    "sampled_peak_output_bytes": 14743593,
+    "sampled_peak_rss_bytes": 529530880
+  },
+  "review_actions": "Read-only terminal files/metadata and static object/ELF/MMD/table parsing. External review outputs only; no native target,ldd,compiler,JVM,EDA rerun.",
+  "root_approval": {
+    "bytes": 3119,
+    "sha256": "56746815b3ab82db0c8dcb24a77cab218c49dcd25f51c2845a4fb68964cc14c0"
+  },
+  "root_receipt": {
+    "bytes": 120,
+    "sha256": "5ff04243c3506c26fc45066117e0936863183e8c7b07e234fa89bae6ad7f2bf3"
+  },
+  "schema": "qwen2-actual-fixed-M17-single-TU-build-independent-review-v1",
+  "source_admission_freeze": {
+    "bytes": 3264,
+    "sha256": "b62c1e05ce26e5df2b8ed6836b136bce86a79fbedd782aeaa981e33ef4160013"
+  },
+  "source_admission_review": {
+    "bytes": 22995,
+    "sha256": "4149e034ed503e66578634bd19c6e761fedb207140988874721712bb98377ee8"
+  },
+  "specific_content_status": "PASS_FIXED_M17_SINGLE_TU_LINK_ONLY",
+  "status": "PASS_ACTUAL_FIXED_M17_SINGLE_TU_COMPILE_LINK_AND_STATIC_MODEL_ELF_CLOSURE_ONLY_NOT_EXECUTION",
+  "origin_review": {
+    "bytes": 23599,
+    "sha256": "31dcefc8f2d21f0461796b4ef857088d52352dbffbb7c10baac2cfb6f50440f9"
+  },
+  "origin_freeze": {
+    "bytes": 2984,
+    "sha256": "d2e8886dba8129dd4c04c92702f6a13591a2f6a28056559a252024420d5ca721"
+  },
+  "projection_note": "Private locators/file identities/virtual addresses removed; MMD/interpreter paths role-projected. Compiled static table semantics are not executed assertions, cross16 behavior or later run results."
+}

@@ -1,0 +1,350 @@
+{
+  "ABI": {
+    "bytes": 561755,
+    "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+  },
+  "acceptance": {
+    "actual_M17_pass": false,
+    "compile_link_pass": false,
+    "execution_authorized": false,
+    "full128_RTL": false,
+    "full29": false,
+    "fullFMA": false,
+    "model_run": false,
+    "ninety_percent_target": false,
+    "source_review_pass": true
+  },
+  "authority": "Static source and data inspection; bounded stdlib synthetic controls only. No compiler, JVM, RTL elaboration, native simulator or model execution. This report is not a build/run GO.",
+  "candidate_freeze": {
+    "bytes": 5446,
+    "sha256": "9724314f513f949135fca282ba5f49e217b89ef9a4796e86e2bba2596328860f"
+  },
+  "chunk_boundary": {
+    "K_order": "Chunk-major, then depth-major, then causal-key. Token16/head0 first chunk ends 0x203dc0; second chunk is 0x204000 through0x2041c0. Not depth-major across all17 keys.",
+    "max": "Max resets to -Inf at each head Q-load completion, not each chunk. Second chunk all scan/fold/scale/retire max is inherited +0. Every global key0 retirement sees preedge -Inf; later retirements see +0.",
+    "other_memory": "Q loaded once per head; Q/W each1632, K/V each14688. V order remains column-major then all causal keys; K/V head mapping is head//6.",
+    "probabilities": [
+      {
+        "bf16": 16256,
+        "fp32": 1065353216,
+        "keys": 1
+      },
+      {
+        "bf16": 16128,
+        "fp32": 1056964608,
+        "keys": 2
+      },
+      {
+        "bf16": 16043,
+        "fp32": 1051372203,
+        "keys": 3
+      },
+      {
+        "bf16": 16000,
+        "fp32": 1048576000,
+        "keys": 4
+      },
+      {
+        "bf16": 15949,
+        "fp32": 1045220557,
+        "keys": 5
+      },
+      {
+        "bf16": 15915,
+        "fp32": 1042983595,
+        "keys": 6
+      },
+      {
+        "bf16": 15890,
+        "fp32": 1041385765,
+        "keys": 7
+      },
+      {
+        "bf16": 15872,
+        "fp32": 1040187392,
+        "keys": 8
+      },
+      {
+        "bf16": 15844,
+        "fp32": 1038323257,
+        "keys": 9
+      },
+      {
+        "bf16": 15821,
+        "fp32": 1036831949,
+        "keys": 10
+      },
+      {
+        "bf16": 15802,
+        "fp32": 1035611788,
+        "keys": 11
+      },
+      {
+        "bf16": 15787,
+        "fp32": 1034594987,
+        "keys": 12
+      },
+      {
+        "bf16": 15774,
+        "fp32": 1033734617,
+        "keys": 13
+      },
+      {
+        "bf16": 15762,
+        "fp32": 1032997157,
+        "keys": 14
+      },
+      {
+        "bf16": 15753,
+        "fp32": 1032358025,
+        "keys": 15
+      },
+      {
+        "bf16": 15744,
+        "fp32": 1031798784,
+        "keys": 16
+      },
+      {
+        "bf16": 15729,
+        "fp32": 1030811889,
+        "keys": 17
+      }
+    ],
+    "rounding": "Independent integer 1/n -> FP32 RNE -> BF16 RNE for n1..17; direct BF16 nearest happens to agree on this closed set, not a general double-rounding claim. 1/17=FP32 0x3d70f0f1, BF16 0x3d71.",
+    "selected_index": "Local selected0..15 resets to0 at second chunk; only valid scoreWrite index is global base+selected, ending16.",
+    "token16_each_head": [
+      {
+        "base": 0,
+        "count": 16,
+        "observations": 49
+      },
+      {
+        "base": 16,
+        "count": 1,
+        "observations": 34
+      }
+    ],
+    "token16_head0_prefix": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "clock_and_resource": {
+    "independent_lower_bound_freeze": {
+      "bytes": 1047,
+      "sha256": "96e51ec612febb83200dab3cd697903b710dc75b62fde79ea1b66ba336f92511"
+    },
+    "independent_lower_bound_review": {
+      "bytes": 12593,
+      "sha256": "a18a2b1241c44e602992bf54ac929ca1b66421e91b7ca1a68efe21e6aa93e69b"
+    },
+    "limits": "New cap/budget are a separate version, never an extension of a running or prior failed process. Log bound covers successful exact-format output, not arbitrary failure diagnostics. Final ELF size, resource fit and actual completion remain unmeasured.",
+    "new_separate_case_body_cap": 499997,
+    "new_separate_case_total_cap": 500000,
+    "no_fit_guarantee": true,
+    "no_linear_runtime_extrapolation": true,
+    "old_body_cap": 99997,
+    "old_cap_unchanged": true,
+    "old_conservative_body_bound": 106882,
+    "proof": "Each accepted memory request consumes disjoint preedge slots a,a+1,a+2 in memReq/memRsp. Successful completion drains the last request. These FSM slots cannot overlap vector states, so add8964 vector slots. Merely multiplying accept spacing without nonoverlap would not suffice.",
+    "run_budget_proposal": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_stop_seconds": 1510,
+      "core_bytes": 0,
+      "cpu_seconds": 1200,
+      "log_bytes": 2097152,
+      "outer_wall_seconds": 1560,
+      "rss_sampled_bytes": 2147483648,
+      "single_file_bytes": 8388608,
+      "total_wall_seconds": 1530,
+      "tree_sampled_bytes": 16777216,
+      "work_wall_seconds": 1500
+    },
+    "separate_compile_link_gate_required": true,
+    "success_body_lower_bound": 106884,
+    "success_reset_inclusive_lower_bound": 106887
+  },
+  "controls": {
+    "author_methods_each_mode": 20,
+    "author_methods_total": 40,
+    "candidate_draft_corrections": "Before freeze only: an overbroad decimal 100000 replacement had changed Q base to 0x500000; restored original 0x100000 and narrowed replacement. Log continuity originally used (token,head); changed to (token,head,keyBase). Both fixes verified on final bytes. No model attempted or old frozen evidence modified.",
+    "draft_independent_pass_retained": true,
+    "independent_checks_each_mode": 122340,
+    "independent_total": 244680,
+    "logs": [
+      {
+        "bytes": 1477,
+        "sha256": "9e45cd62989ae4eb9413fbf33a14a9b8654068fdc7899caa156fdd412b0dd064"
+      },
+      {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 1476,
+        "sha256": "8174b856cabcc8d6623feaedf1d5e56339503e5925e9fc10cae114206f8f5278"
+      },
+      {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 119,
+        "sha256": "f2eec218bb4747af116dbd94afbd53908e3f9941f9e0638e03b7f6e47c4c89db"
+      },
+      {
+        "bytes": 119,
+        "sha256": "06bf4dc6a933fcaf97eda1fc450dc7a76447383c1d7974dd43dc7f7192557dc4"
+      },
+      {
+        "bytes": 1477,
+        "sha256": "9e45cd62989ae4eb9413fbf33a14a9b8654068fdc7899caa156fdd412b0dd064"
+      },
+      {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "negative_cases_each_mode": 43
+  },
+  "independent_expected_contract": {
+    "accounting512Steps": 28512,
+    "checkedGroups": 216,
+    "checkedMemory": 32640,
+    "checkedPv": 14688,
+    "checkedVector": 8964,
+    "dones": 216,
+    "groups": 216,
+    "max_histogram": {
+      "negative_infinity": 6936,
+      "plus_zero": 2028
+    },
+    "memoryAccepted": 32640,
+    "memoryReturned": 32640,
+    "observations": 8964,
+    "outputBytes": 104448,
+    "ownerAccepts": 1,
+    "phase_counts": {
+      "fold": 3456,
+      "retire": 1836,
+      "scale": 216,
+      "scan": 3456
+    },
+    "pvRequests": 14688,
+    "pvReturns": 14688,
+    "qkAcceptedSteps": 1728,
+    "results": 216,
+    "scoreWrites": 1836,
+    "uniqueOutputBeats": 1632
+  },
+  "log_checker": {
+    "bytes": 5709,
+    "sha256": "e379a79163c3cf6807861cb46f445b2261ec455d34208f49299ddfc58a810d58"
+  },
+  "log_gate": {
+    "conservative_success_log_upper_bound": 1515614,
+    "lines_in_success": 8967,
+    "log_byte_cap": 2097152,
+    "observations": 8964,
+    "scope": "Synthetic log PASS is not execution or numerical proof. Actual producer must also bind binary identity, exit0, cleanup, resource limits and pre/post endpoint pins. Memory/PV payloads are future source-bound executed passive assertions, not externally replayable raw packet logs.",
+    "sequence": "READY, complete ordered OBS, exact CASE_PASS, final DONE; unexpected/duplicate/fatal/unknown lines rejected.",
+    "source_table_bytes": 1168272,
+    "terminal": "Exact 216 groups/result/done,1728QK,14688PV,32640memory,1836writes and recorded token16/head0 prefix0..16. Holds bounded individually with accurate uncovered ports; not a unique stall-cycle measure.",
+    "within_chunk": "Consecutive cycles enforced on (token,head,keyBase); chunk-to-chunk intervals may contain the real K reads/handshakes. Raw actual review must check complete sequence again."
+  },
+  "metrics_boundary": {
+    "MAC_utilization": null,
+    "bookkeeping": "28512 scripted accounting steps are not measured FMA counts. Nominal algorithm dimensions or service issues must not be mixed with actual operation counters.",
+    "effective_MAC_duty": null,
+    "full_system_utilization": null,
+    "phase_occupancy": "Only after actual terminal,8964/observed body edges may be reported as ordered-vector phase occupancy, not MAC duty.",
+    "target90percent_met": null
+  },
+  "original_hardware": {
+    "ABI_unchanged": true,
+    "SV_model_or_archive_changed": false,
+    "Scala_or_original_core_changed": false,
+    "address_bases": {
+      "K": "0x200000",
+      "Q": "0x100000",
+      "V": "0x300000",
+      "output": "0x400000"
+    },
+    "fixed_owner": "Only kind4, m17,n1536,k128,tag0x7000c,writeBytes104448, argc1; no arbitrary case or plusarg.",
+    "original_shape": "hidden1536, ffn8960, heads12, kvHeads2, headDim128, maxTokens1024, matrixColumns256; owner-driven external Matrix, internal Scalar, ordered packed QK.",
+    "owner_m_17_legal": "Core accepts nonzero owner.m <=1024 (Qwen2Block:348,354); old shell comment M1/M2/M3 describes earlier test scope, not an enforced limit. No edit/recompile of Scala is required solely to change this comment."
+  },
+  "passive_expected_header": {
+    "bytes": 1929176,
+    "sha256": "82e4fd8bcd9fa04a800eba0ab9a67ca07b49fc3ecdb0f15599c1ff5538490be2"
+  },
+  "previous_actual_M3_freeze": {
+    "bytes": 2854,
+    "sha256": "988aede5a7f3e830bba9b29aa1586698c806af400b60028e94cb0f9f4bcbccc2"
+  },
+  "previous_actual_M3_review": {
+    "bytes": 12613,
+    "sha256": "882d8c839e174d74762f1ee5e097cedef9e6a962392ce667f0009f70b1059cf2"
+  },
+  "reference_generator": {
+    "bytes": 3229,
+    "sha256": "d3a8c8ffe1b8e6f81955a19f5945cb1c65f6c831630fa7dc23ff724b2182a0af"
+  },
+  "remaining_source_blockers": [],
+  "schema": "qwen2-fixed-m17-harness-source-independent-review-v1",
+  "scope_limits": [
+    "No model execution or actual M17 boundary PASS yet.",
+    "Even a future M17 PASS only covers selected zero-input/scripted endpoints; identical active diagonal zeros cannot exclude active-key data aliasing or generally eliminate W005 risk.",
+    "No full Matrix FMA, whole Qwen2 block/full128/full29/fullprefill/physicalDDR/STA/frequency/90% acceptance.",
+    "No automatic M18/case chain; genuine Matrix integration is the next distinct evidence layer."
+  ],
+  "small_identity_files_hashed": 58,
+  "source": {
+    "bytes": 13888,
+    "sha256": "0ab2697fd24dae3178ad9c2203c494455a2cecccccc24c00763eb2570e9f90f3"
+  },
+  "source_delta": {
+    "driver": "Separate stimulus::descriptor uses only accepted-group ordinal: 0..191 -> token ordinal/12/head ordinal%12/base0/counttoken+1; 192..215 -> token16/head(tail/2), alternating base0/count16 and base16/count1. Never uses DUT observation or reference table to generate tile.",
+    "group_assertions": "At actual group accept, compare original observed token/head/global key to independent group row and exact monotonically increasing tag; 216 complete checkedGroups. The external group packet does not carry the core-local packedKeys value; count correctness is constrained through chunk sequence and bounded retired events.",
+    "new_observations": "Use already present observation_key as keyBase in raw OBS and passive checks; global scoreIndex=base+localSelected. No new RTL probe or feedback.",
+    "oracle": "Separate hierarchical reference iterator and read-only tables; independently checked against reviewer flattened ordinal decomposition and hand-derived address anchors. Driver and oracle do not call a shared index implementation.",
+    "tile": "All 4096 tile positions audited for each local count1..16: active diagonal local keys<count are +0, all other entries qNaN. Tail group count1 ignores 15 inactive key lanes; no nonzero/asymmetric active data is added.",
+    "unchanged_timing": "clock()/reset3, memory one-debt queue and delays, backpressure modulo schedules, PV reply queue, group/step/result/done order, held-payload checks, terminal8hold+release+3quiet and original arithmetic all unchanged.",
+    "whole_harness": "Final m17_main reverses byte-for-byte to frozen M3 under independently enumerated case/count/new clock cap/chunk-aware stimulus and passive-observation deltas."
+  },
+  "source_identity_checks": 460,
+  "source_identity_freeze": {
+    "bytes": 910,
+    "sha256": "ed4a274eb6a30ec07d920b71c45a81b7c7029ec60bd11c86eae05f16bb6150a8"
+  },
+  "source_identity_review": {
+    "bytes": 13041,
+    "sha256": "40b326ca51c14d039e763dd1cbeded5c563d69c660e12e363147dd4eb5663c1b"
+  },
+  "status": "PASS_FIXED_M17_HARNESS_SOURCE_AND_SYNTHETIC_ONLY_NOT_COMPILED_OR_RUN",
+  "stimulus": {
+    "bytes": 910,
+    "sha256": "446299a41f4f528e134c11a2f5fbe9e16deb723fccc37cba6499835bf8147f94"
+  },
+  "origin_review": {
+    "bytes": 18110,
+    "sha256": "f761dddee216484b251f1630b44e081e54e5655f335e01a0717fb50f11b36f96"
+  },
+  "historical_source_only": true
+}

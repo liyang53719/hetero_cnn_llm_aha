@@ -1,0 +1,131 @@
+{
+  "CPU_estimate": false,
+  "actual_M17_completed": false,
+  "body_cap_shortfall_at_least": 6887,
+  "checks": 1232,
+  "conditions": [
+    "M17 must be a fresh correctly adapted source candidate: owner Attention kind4,m17,12heads,128dimension,causal all tokens0..16,16-key chunks, no skipping tokens or internal-state injection.",
+    "Preserve existing one-debt endpoint, due=a+2+a%3, host update-after-clock, !mem acceptance gate, one rising edge per body step and complete drained-success condition.",
+    "Preserve original selected-on core/shell FSM and no early fault/abort/reset/restart. The bound applies to COMPLETE SUCCESS, not time to early FAIL/clock-cap failure.",
+    "The current frozen M3 driver still hardcodes m3 and a single-chunk offerTile rule; it cannot itself establish a valid M17 run. Future base/count-correct M17 tile/oracle adaptation and identity review are separate."
+  ],
+  "counterexample_boundaries": [
+    "Spacing>=3 by itself is insufficient to add vector events: an independent vector FSM could overlap the waiting slots (explicit countermodel saved). The same registered state proof rules this out here.",
+    "A zero/one-cycle response, multiple outstanding memory requests, combinational bypass, asynchronous vector engine, changed clock accounting or an early truncated/failed execution would invalidate these premises.",
+    "A faulty/unsupported M17 can terminate sooner; this is not a guarantee that the model will succeed or finish within any larger cap."
+  ],
+  "interval_control_schedules": 384,
+  "m17": {
+    "K": 14688,
+    "Q": 1632,
+    "V": 14688,
+    "W": 1632,
+    "full_debt_drained_body_lower_bound": 106884,
+    "groups": 216,
+    "m": 17,
+    "memory_requests": 32640,
+    "old_conservative_body_lower_bound": 106882,
+    "physical_edges_including_three_reset_lower_bound": 106887,
+    "score_retirements": 1836,
+    "vector_body_edges_minimum": 8964
+  },
+  "model_native_compiler_JVM_execution": false,
+  "old_106882_valid_but_non_tight": true,
+  "old_body_cap": 99997,
+  "old_cap_definitely_insufficient_for_complete_success": true,
+  "old_total_physical_cap": 100000,
+  "producer_derivation_or_reference_imported": false,
+  "proof": [
+    "Index each body step by its pre-edge cycles c. step() has exactly one rising edge and increments cycles once; reset uses three separate clock() calls.",
+    "On memory fire at a, host computes due=a+2+(a%3) before clock, installs mem only after that edge. At a+1 response_valid is false. Earliest response fire is a+2; mem remains nonempty at the pre-edge sampling of the response itself. memory_ready uses pre-edge !mem, hence no same-edge new acceptance as response.",
+    "For every accepted request in a complete successful run, B_i={a_i,a_i+1,a_i+2} lies inside body edges: success requires empty mem and equal accepted/returned counts. Since a_(i+1)>=response_i+1>=a_i+3, B_i are disjoint.",
+    "For normal Attention, memory fire requires the single core state memReq (resActive is only resIssue/resWait). That edge enters memRsp; with no response at a+1 the registered state remains memRsp, and the response at a+2 still samples memRsp before changing to resume. No normal path leaves this wait without the response. Thus all three slots in each B_i have vectorPhase=0.",
+    "vectorPhase is a pure decode of four distinct states of the SAME registered FSM. Each completed group needs scan lanes0..15 (16 edges), fold lanes0..15 (16), scale(1), then one edge per active key retirement. Transition assignments occur at rising edges, so phases do not collapse into one edge; stalls only add edges.",
+    "The state-machine memory triples and vector event slots are disjoint sets of body edges, so count(union)>=3*N+V. N=32640,V=8964 gives106884. We do not add whole gaps between consecutive memory accepts, which could already contain vector work.",
+    "3*N-2 is a weaker prefix count that could stop immediately after the final request acceptance and omit its last two earliest response-wait edges. Successful completion cannot actually omit these edges. Hence106882 remains conservative, while106884 is justified under completed-debt semantics.",
+    "Minimum106884 body plus3reset is106887 physical edges, above the old100000total/99997body cap. Initialization, scalar, local SRAM, QK/PV handshake waits, response latency residues/backpressure, commit and terminal hold/quiet edges are intentionally not separately added."
+  ],
+  "runtime_or_resource_fit_claim": false,
+  "schema": "independent-m17-scripted-memory-vector-body-lower-bound-v1",
+  "scope": "Only static conditional cardinality/state-nonoverlap/endpoint counting proof and small pure integer controls. No native, model, RTL parsing, compile, reference or producer-code execution; no budget authorization.",
+  "source_bytes_changed": false,
+  "source_scope": "Frozen selected-on core/shell and frozen M3 endpoint timing, hypothetically adapted to a complete successful normal_m17 without changing timing/FSM/reset/counting; current M3 executable is NOT an M17 implementation.",
+  "spacing_only_countermodel": {
+    "accept_cycles": [
+      0,
+      3
+    ],
+    "allowed_by_spacing_only": true,
+    "body_edges": 6,
+    "forbidden_by_this_single_core_state": true,
+    "hypothetical_vector_cycles": [
+      1,
+      2,
+      4
+    ],
+    "naive_added_bound": 9,
+    "response_cycles": [
+      2,
+      5
+    ]
+  },
+  "status": "PASS_STATIC_CONDITIONAL_LOWER_BOUND_106884_IMPLIES_106882_NO_EXECUTION",
+  "stronger_full_drained_body_bound": 106884,
+  "total_with_three_reset_bound": 106887,
+  "source_bindings": [
+    {
+      "role": "lower_bound_input_0/Qwen2Block.scala",
+      "bytes": 57361,
+      "sha256": "123382415344fe5cf3d93a328c6c7ad43e50e6932976a7139b6a960728f08afd"
+    },
+    {
+      "role": "lower_bound_input_1/OrderedQkBehaviorCore.scala",
+      "bytes": 2409,
+      "sha256": "2278b042850933eab415cacbae3e77c93d2b9904b89abf168741e01450a72b1c"
+    },
+    {
+      "role": "lower_bound_input_2/m3_main.cpp",
+      "bytes": 12929,
+      "sha256": "7c3b280683a1d66dfee704d902e743377b48eaf6db43a7ce2c4ef849bae7f9f5"
+    },
+    {
+      "role": "lower_bound_input_3/FREEZE.json",
+      "bytes": 4630,
+      "sha256": "51a8acc16c098240c2f13fc448f5172b5c6947fbf4137bd56e90574df9879765"
+    },
+    {
+      "role": "lower_bound_input_4/FREEZE.json",
+      "bytes": 1267,
+      "sha256": "383cf0c1b89b72cb4b21422cb29401fc3224f40329e824126edd25239b476fe5"
+    },
+    {
+      "role": "lower_bound_input_5/SOURCE_BINDINGS.json",
+      "bytes": 4337,
+      "sha256": "cb50ba10f9570e695e58ab76bd7f59f5a6e8865d5e4dedaa5123ff1c7af99a69"
+    },
+    {
+      "role": "lower_bound_input_6/BOUNDS.normal.json",
+      "bytes": 2362,
+      "sha256": "cc743e2b3ed7e19a29b5037449af79bfadf3bef68ce269c38fadfcdb985ab706"
+    },
+    {
+      "role": "lower_bound_input_7/NEXT_ROUTE_ZH.md",
+      "bytes": 4316,
+      "sha256": "7a834b02d2c2e3df11f94302c523434358ff026c5491e33f132149dec3c1f58f"
+    },
+    {
+      "role": "lower_bound_input_8/derive_bounds.py",
+      "bytes": 2438,
+      "sha256": "b621617d05eed1189a144411837dec8fd08a88e50368eb7b6d3c7abedae4813f"
+    }
+  ],
+  "origin_review": {
+    "bytes": 12593,
+    "sha256": "a18a2b1241c44e602992bf54ac929ca1b66421e91b7ca1a68efe21e6aa93e69b"
+  },
+  "origin_freeze": {
+    "bytes": 1047,
+    "sha256": "96e51ec612febb83200dab3cd697903b710dc75b62fde79ea1b66ba336f92511"
+  },
+  "projection_note": "Only M17 row retained, other-M table omitted. Historical M3 hypothetically adapted conditions preserved; final M17 source review separately verifies new base/count driver and unchanged timing. Static conditional proof, not observed execution or fit guarantee."
+}

@@ -1,0 +1,84 @@
+{
+  "base_commit": "4cac478a7c1fdcba0d60a0acb7af6c71ffce5d32",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_build/pins/SOURCE_PINS.json",
+      "bytes": 3988,
+      "sha256": "dadea5b867c7b31151d9ab3f775f950d436327a3046e4841fc680a2cf9f312b3",
+      "git_blob_sha": "570ca96304ec0f6a8557d2de3b1f100f39671739"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_build/M2_TO_M3_SOURCE.patch",
+      "bytes": 7477,
+      "sha256": "315921914453ac149fbc7ec9505337593570b974dc105974d8c426ec2e61649d",
+      "git_blob_sha": "914e802ec94823a5775344d3e710d90998a2264c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_build/rebuild_sources.py",
+      "bytes": 4696,
+      "sha256": "549523f205053d98e0bed4a345987221053330225818ebc91daad078995f48a6",
+      "git_blob_sha": "971d776b645de7adc005ddd2c6546d81834f131b"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_build/pins/EXISTING_PUBLIC_REFERENCES.json",
+      "bytes": 3627,
+      "sha256": "a2d3e66da50fc72d35ed327f604d7c1090159c896a319c3dac163a547c437732",
+      "git_blob_sha": "263163cbfd312b5deb7af0ffb8fdc056196376e5"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_build/pins/PARENT_RUNTIME_ENDPOINTS.json",
+      "bytes": 11867,
+      "sha256": "ef41cd12ced83f4b9c8496d573a8ff001d333452eb9f0adfbc5ee99b5a43a42a",
+      "git_blob_sha": "71ed2442a8bd249ad1411a57b90adc99e843b2c2"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_build/evidence/PYTHON_COVERAGE_QUALIFICATION.json",
+      "bytes": 2133,
+      "sha256": "0ff2a01cbe9a0eca2b362b1dcc0e5a55f6632dfff06310224a818608948637bd",
+      "git_blob_sha": "43f28583d88e59ca0971fdc88c5c4d06c17740de"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_build/evidence/ACTUAL_BUILD_REVIEW.json",
+      "bytes": 15703,
+      "sha256": "b466b924ea471f7339a98f4d90610d4f3fd4c4eb5458aa498ec5c0725518eede",
+      "git_blob_sha": "a5a393fb507fb0c7d03af6f3e45704d4cf32155e"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m3_actual/evidence/ACTUAL_M3_REVIEW.json",
+      "bytes": 9782,
+      "sha256": "5355fd88df97ad97065e330067b094ac1219d121f15551a21928b3b8b2eac058",
+      "git_blob_sha": "f33a16c6ccda14b3c71aeeba4723516ccb1db737"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/source/check_build.py",
+      "bytes": 15869,
+      "sha256": "aae034e81cff9542c82333826e2bee6acebcace28a103a6b29224e389b2d278b",
+      "git_blob_sha": "5932981b0a39edf97b1372772120edc69238663c"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_build/pins/GCC14_FORMAT_AND_MMD_SOURCE.json",
+      "bytes": 8678,
+      "sha256": "ed53320a8ddc3703d315c69e377b7eb76245b14348d535968bce506dc8742c8a",
+      "git_blob_sha": "53a8a915f5e993371f0ea2afd45b5cb6a7cd2597"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/rebuild_harness_metadata.py",
+      "bytes": 3960,
+      "sha256": "653b0fdfec621d7799b47135a6260476c959b71704a87fe1aa6283db323d7ed9",
+      "git_blob_sha": "7111ab34db542e40ecb7cef54ae15fa37bd383d1"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/pins/SOURCE_PINS.json",
+      "bytes": 3442,
+      "sha256": "e9df47dfaef0135f50decdc2e04250fb3ed697c779668e5e299de208cf9d0028",
+      "git_blob_sha": "3056b11fdf84293d41c8facc5483fcfb98ae8f8b"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_codegen/pins/EXISTING_PUBLIC_REFERENCES.json",
+      "bytes": 2316,
+      "sha256": "656ccd1a174c1ef765ca9b5704fa461167b9764ed8d3a4aeefcfc7d6b1aa2e60",
+      "git_blob_sha": "c6d6859f02bf3f7b6f184e4b48c0c074db253743"
+    }
+  ],
+  "reconstruction_scope": "First reconstruct exact public M3 source via its helper and transitive refs, including prior symbolic ABI; provide hash-verified m3_main.cpp and ABI to this helper. No real SV/model/native needed. Build runtime46 endpoints reuse exact public M3 role pins."
+}

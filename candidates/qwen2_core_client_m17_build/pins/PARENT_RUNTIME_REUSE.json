@@ -1,0 +1,43 @@
+{
+  "additional_original_parser_chain_sources": 4,
+  "base_parent_runtime": {
+    "bytes": 22774,
+    "sha256": "4e6232d8f4f1b700b7f98b58fd5a6c7a4be44cf54f5513ad57040f96e3037709"
+  },
+  "known_scope_not_all_future_accesses": true,
+  "mandatory_root_parent_environment": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8"
+  },
+  "new_Python_imports": false,
+  "no_Fraction_or_reference_loaded_by_build": true,
+  "normal_cache_count": 42,
+  "old_history_not_rewritten": true,
+  "original_build_freeze": {
+    "bytes": 6857,
+    "sha256": "b60a757396128f512792fd3fca7f2194151c97fa42f1c2f713a06b8c74abcbcc"
+  },
+  "root_endpoints": {
+    "bytes": 22774,
+    "sha256": "4e6232d8f4f1b700b7f98b58fd5a6c7a4be44cf54f5513ad57040f96e3037709"
+  },
+  "runtime_pin_count": 202,
+  "status": "SOURCE_AST_IDENTITY_REUSE_OF_REVIEWED_BUILD_IMPORT_ENDPOINTS",
+  "unchanged_import_AST": true,
+  "origin_record": {
+    "bytes": 1689,
+    "sha256": "f543c438d2b6c50c14250fef1be195b0ad40bee183ff4d19a6559ee38b2434a0"
+  },
+  "prior_public_roles": "candidates/qwen2_core_client_m3_build/pins/PARENT_RUNTIME_ENDPOINTS.json",
+  "external_before": {
+    "bytes": 9707,
+    "sha256": "398f417b2843ae65a130ce23934fd653868ec961188aa013efb4f9f77d6bb4ca"
+  },
+  "external_after": {
+    "bytes": 9707,
+    "sha256": "398f417b2843ae65a130ce23934fd653868ec961188aa013efb4f9f77d6bb4ca"
+  },
+  "external_records_equal": true,
+  "scope": "46 existing known endpoints42cache+4source reused unchanged; no new import probe/pyc compilation or whole-process isolation. Current root before/after required; historical old gaps not backfilled."
+}

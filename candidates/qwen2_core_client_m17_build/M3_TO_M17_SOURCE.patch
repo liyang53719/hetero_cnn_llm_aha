@@ -1,0 +1,148 @@
+--- a/m3_main.cpp
++++ b/m3_main.cpp
+@@ -1,8 +1,9 @@
+-// SOURCE-ONLY normal_m3 translation of frozen OrderedQkBehaviorSpec r3.
++// SOURCE-ONLY normal_m17 translation of frozen OrderedQkBehaviorSpec r3.
+ // Direct top ports only. Matrix and external memory are scripted endpoints,
+ // not FMA models; actual ALUs/Scalar/SRAM/PackedClient stay inside unchanged SV.
+ #include "generated_abi.hpp"
+-#include "expected_m3.hpp"
++#include "expected_m17.hpp"
++#include "stimulus_m17.hpp"
+ #include "verilated.h"
+ #include <array>
+ #include <cstdint>
+@@ -19,14 +20,15 @@
+ struct Reply {U tag,due;};
+ struct Bench {
+   abi::D& d; VerilatedContext& ctx;
+-  static constexpr U m=3,cap=99997,q=0x100000,k=0x200000,v=0x300000,dst=0x400000;
+-  U checkedMemory=0,checkedPv=0,checkedVector=0;
++  static constexpr U m=17,cap=499997,q=0x100000,k=0x200000,v=0x300000,dst=0x400000;
++  U checkedMemory=0,checkedPv=0,checkedVector=0,checkedGroups=0;
++  stimulus::Group currentGroup{0,0,0,0};
+   U cycles=0,physicalSteps=0,clockEdges=0,memAccepted=0,memReturned=0,writeBytes=0;
+   U pvDue=0,pvRequests=0,pvReturns=0,steps=0,qkSteps=0,groups=0,results=0,dones=0;
+-  U ownerAccepts=0,allWrites=0,observations=0,targetToken=0,targetHead=0;
++  U ownerAccepts=0,allWrites=0,observations=0;
+   bool pvPending=false,resultPending=false,donePending=false,terminal=false,jobAccepted=false,sawResultHeld=false;
+   std::optional<Reply> mem;std::optional<U> group;std::set<U> stored;
+-  std::vector<U> targetWrites; // passive token2/head0 retirement evidence only
++  std::vector<U> targetWrites; // passive token16/head0 global retirement evidence only
+   std::array<std::optional<std::vector<U>>,4> held;
+   std::array<U,4> holds{{0,0,0,0}}; // memory,group,step,pv
+   std::array<std::uint32_t*,4096> tile;
+@@ -44,10 +46,10 @@
+   void offerTile(){
+     d.io_packedQk_result_bits_context=0;d.io_packedQk_result_bits_last=1;d.io_packedQk_result_bits_error=0;
+     for(unsigned row=0;row<16;++row)for(unsigned col=0;col<256;++col)
+-      *tile[row*256+col]=(col/16>targetToken || col%16!=row)?0x7fc00000u:0u;
++      *tile[row*256+col]=stimulus::tile_word(currentGroup,row,col);
+   }
+   void step(){
+-    need(cycles<cap,"100000 total-clock cap");settle();
++    need(cycles<cap,"500000 total-clock cap");settle();
+     const U phase=d.observation_vectorPhase,selected=d.observation_selected;
+     d.io_memory_ready=!mem && cycles%5!=0 && !terminal;
+     d.io_response_valid=mem && mem->due<=cycles;
+@@ -72,6 +74,7 @@
+     hold(3,d.io_matrixRequest_valid,d.io_matrixRequest_ready,abi::snapshot_pv(d));
+     if(d.io_ownerJob_valid && d.io_ownerJob_ready){need(!jobAccepted,"duplicate owner accept");jobAccepted=true;++ownerAccepts;}
+     std::optional<Reply> nextMem;std::optional<U> nextGroup;
++    std::optional<stimulus::Group> nextStimulus;
+     if(mf){
+       need(checkedMemory<reference::memory.size(),"extra memory request");
+       const auto& e=reference::memory[checkedMemory];
+@@ -85,7 +88,16 @@
+       }else need((at>=q && at<=q+6144*m-64)||(at>=k && at<=k+1024*m-64)||(at>=v && at<=v+1024*m-64),"input address");
+       nextMem=Reply{d.io_memory_bits_tag,cycles+2+cycles%3};
+     }
+-    if(gf){need(!group,"one group debt");need(d.io_packedQk_group_bits_opcode==0x23 && d.io_packedQk_group_bits_sliceMask==255,"QK descriptor");need(d.io_packedQk_group_bits_tag>0,"nonzero QK tag");nextGroup=d.io_packedQk_group_bits_tag;}
++    if(gf){
++      need(!group && checkedGroups<reference::groups.size(),"one bounded group debt");
++      const auto offered=stimulus::descriptor(groups); // driver ordinal, no DUT-index lookup
++      const auto& e=reference::groups[checkedGroups]; // independent loop-generated oracle
++      need(offered.token==e.token && offered.head==e.head && offered.base==e.base && offered.count==e.count,"independent chunk descriptor");
++      need(U(d.observation_token)==e.token && U(d.observation_head)==e.head && U(d.observation_key)==e.base,"actual group token/head/global base");
++      need(d.io_packedQk_group_bits_opcode==0x23 && d.io_packedQk_group_bits_sliceMask==255,"QK descriptor");
++      need(U(d.io_packedQk_group_bits_tag)==checkedGroups+1,"independent monotonic group tag");
++      nextGroup=d.io_packedQk_group_bits_tag;nextStimulus=offered;++checkedGroups;
++    }
+     if(sf){need(group && steps<8,"QK step ownership/count");need(d.io_packedQk_step_bits_context==0,"QK context");
+       need(bool(d.io_packedQk_step_bits_clear)==(steps==0),"QK clear");
+       need(bool(d.io_packedQk_step_bits_last)==(steps==7)&&bool(d.io_packedQk_step_bits_finish)==(steps==7)&&bool(d.io_packedQk_step_bits_emit)==(steps==7),"QK last/finish/emit");need(abi::qk_operands_zero(d),"zero scripted QK operands");}
+@@ -100,23 +112,23 @@
+     if(phase){
+       need(checkedVector<reference::vector.size(),"extra vector event");
+       const auto& e=reference::vector[checkedVector];
+-      need(U(d.observation_token)==e.token && U(d.observation_head)==e.head && phase==e.phase && U(d.observation_lane)==e.lane && selected==e.selected,"independent vector event order");
++      need(U(d.observation_token)==e.token && U(d.observation_head)==e.head && U(d.observation_key)==e.base && phase==e.phase && U(d.observation_lane)==e.lane && selected==e.selected,"independent vector event order");
+       need(!d.observation_faults && bool(d.testScoreWrite_valid)==e.write && U(d.observation_maxScore)==e.max,"pre-edge retirement max and faults");
+-      if(e.write)need(U(d.testScoreWrite_bits_index)==e.selected && d.testScoreWrite_bits_data==0,"ordered zero-score retirement");
++      if(e.write)need(U(d.testScoreWrite_bits_index)==e.index && d.testScoreWrite_bits_data==0,"ordered zero-score retirement");
+       ++checkedVector;
+       need(resultPending,"held real Matrix result head");
+       if(!d.io_packedQk_abort){need(!d.io_packedQk_result_ready,"no early Matrix result release");sawResultHeld=true;}else need(!d.testScoreWrite_valid,"no write while abort");
+       need(!d.observation_committed && !d.observation_scalarIssue,"vector commit/scalar exclusion");
+       ++observations;
+-      std::cout<<"OBS cycle="<<cycles<<" token="<<U(d.observation_token)<<" head="<<U(d.observation_head)<<" phase="<<phase<<" lane="<<U(d.observation_lane)<<" selected="<<selected<<" faults="<<U(d.observation_faults)<<" scoreWrite="<<tf(d.testScoreWrite_valid)<<" scoreIndex="<<U(d.testScoreWrite_bits_index)<<" scoreData="<<U(d.testScoreWrite_bits_data)<<" max="<<U(d.observation_maxScore)<<" resultReady="<<tf(d.io_packedQk_result_ready)<<'\n';
++      std::cout<<"OBS cycle="<<cycles<<" token="<<U(d.observation_token)<<" head="<<U(d.observation_head)<<" keyBase="<<U(d.observation_key)<<" phase="<<phase<<" lane="<<U(d.observation_lane)<<" selected="<<selected<<" faults="<<U(d.observation_faults)<<" scoreWrite="<<tf(d.testScoreWrite_valid)<<" scoreIndex="<<U(d.testScoreWrite_bits_index)<<" scoreData="<<U(d.testScoreWrite_bits_data)<<" max="<<U(d.observation_maxScore)<<" resultReady="<<tf(d.io_packedQk_result_ready)<<'\n';
+     }
+-    if(d.testScoreWrite_valid){need(d.testScoreWrite_bits_index<=d.observation_token,"score causal index");need(d.testScoreWrite_bits_data==0,"zero expected score write");++allWrites;if(d.observation_token==2 && d.observation_head==0){need(targetWrites.size()<3,"bounded target retirement prefix");targetWrites.push_back(d.testScoreWrite_bits_index);}}
++    if(d.testScoreWrite_valid){need(d.testScoreWrite_bits_index<=d.observation_token,"score causal index");need(d.testScoreWrite_bits_data==0,"zero expected score write");++allWrites;if(d.observation_token==16 && d.observation_head==0){need(targetWrites.size()<17,"bounded target retirement prefix");targetWrites.push_back(d.testScoreWrite_bits_index);}}
+     if(terminal)need(!gf&&!sf&&!rf&&!df&&!mf&&!mr&&!pf&&!pr,"traffic after terminal");
+     clock();++cycles;
+     if(mr){mem.reset();++memReturned;}if(mf){mem=nextMem;++memAccepted;}
+     if(pr){pvPending=false;++pvReturns;}
+     if(pf){need(!pvPending,"one PV debt");pvPending=true;pvDue=cycles+2;++pvRequests;++physicalSteps;}
+-    if(gf){group=nextGroup;steps=0;++groups;targetToken=d.observation_token;targetHead=d.observation_head;}
++    if(gf){group=nextGroup;currentGroup=*nextStimulus;steps=0;++groups;}
+     if(sf){++steps;++qkSteps;physicalSteps+=8;if(steps==8){resultPending=true;offerTile();}}
+     if(rf){resultPending=false;++results;donePending=true;}
+     if(df){donePending=false;group.reset();++dones;}
+@@ -126,7 +138,7 @@
+     abi::zero_inputs(d);d.reset=1;
+     // Explicit replacement of framework reset1 + original explicit reset2.
+     clock();clock();clock();d.reset=0;settle();
+-    std::cout<<"VERILATOR_CORE_SIM_READY case=normal_m3 m=3 scripted_matrix=true reset_clocks=3\n";
++    std::cout<<"VERILATOR_CORE_SIM_READY case=normal_m17 m=17 scripted_matrix=true reset_clocks=3\n";
+     step();need(d.io_ownerJob_ready,"owner ready after idle step");
+     d.io_ownerJob_bits_kind=4;d.io_ownerJob_bits_m=m;d.io_ownerJob_bits_n=1536;d.io_ownerJob_bits_k=128;
+     d.io_ownerJob_bits_a=q;d.io_ownerJob_bits_b=k;d.io_ownerJob_bits_c=v;d.io_ownerJob_bits_dst=dst;
+@@ -137,19 +149,21 @@
+     need(!group && !resultPending && !donePending && groups==dones,"packed debts at result");
+     need(!d.observation_owned && !d.observation_memoryDebt && !d.observation_localDebt && !d.observation_scalarDebt,"core debts at result");
+     need(d.io_result_bits_status==0 && !d.io_resetRequired,"normal result status");
+-    need(groups==36 && results==groups && qkSteps==288 && pvRequests==576,"M3 independent endpoint counts");
++    need(groups==216 && results==groups && qkSteps==1728 && pvRequests==14688,"M17 independent endpoint counts");
+     need(holds[0]+holds[1]+holds[2]+holds[3]>0,"some actual request hold evidence");for(const auto& x:held)need(!x,"no outstanding stalled request");
+-    need(allWrites==72 && writeBytes==18432 && stored.size()==288 && d.io_acknowledgedWriteBytes==18432,"M3 score/output counts");
+-    need(memAccepted==1728 && observations==1260,"independent M3 memory/vector counts");
+-    need(checkedMemory==reference::memory.size() && checkedPv==reference::pv.size() && checkedVector==reference::vector.size(),"complete passive reference consumption");
+-    need(targetWrites==std::vector<U>({0,1,2}),"actual token2/head0 retirement prefix");
++    need(allWrites==1836 && writeBytes==104448 && stored.size()==1632 && d.io_acknowledgedWriteBytes==104448,"M17 score/output counts");
++    need(memAccepted==32640 && observations==8964,"independent M17 memory/vector counts");
++    need(checkedMemory==reference::memory.size() && checkedPv==reference::pv.size() && checkedVector==reference::vector.size() && checkedGroups==reference::groups.size(),"complete passive reference consumption");
++    need(targetWrites==std::vector<U>({0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}),"actual token16/head0 global retirement prefix");
+     need(sawResultHeld && jobAccepted && ownerAccepts==1,"owner/result held evidence");terminal=true;
+     const auto result=abi::snapshot_result(d);
+     for(unsigned i=0;i<8;++i){need(d.io_result_valid && abi::snapshot_result(d)==result,"terminal payload hold");step();}
+     d.io_result_ready=1;step();d.io_result_ready=0;settle();
+     for(unsigned i=0;i<3;++i){need(!d.io_result_valid,"post-terminal quiet valid");step();}
+-    need(clockEdges==cycles+3 && clockEdges<=100000,"physical clock edge accounting");
+-    std::cout<<"VERILATOR_CORE_CASE_PASS case=normal_m3 m=3 cycles="<<cycles<<" groups="<<groups<<" qkAcceptedSteps="<<qkSteps<<" accounting512Steps="<<physicalSteps<<" results="<<results<<" dones="<<dones<<" scoreWrites="<<allWrites<<" targetPrefix="<<targetWrites[0]<<','<<targetWrites[1]<<','<<targetWrites[2]<<" ownerAccepts="<<ownerAccepts<<" pvRequests="<<pvRequests<<" pvReturns="<<pvReturns<<" requestHoldChecks="<<(holds[0]+holds[1]+holds[2]+holds[3])<<" holdChecksByPort=(group,"<<holds[1]<<"),(memory,"<<holds[0]<<"),(pv,"<<holds[3]<<"),(step,"<<holds[2]<<") memoryAccepted="<<memAccepted<<" memoryReturned="<<memReturned<<" outputBytes="<<writeBytes<<" checkedMemory="<<checkedMemory<<" checkedPv="<<checkedPv<<" checkedVector="<<checkedVector<<" numerical_matrix_verified=false\n";
++    need(clockEdges==cycles+3 && clockEdges<=500000,"physical clock edge accounting");
++    std::cout<<"VERILATOR_CORE_CASE_PASS case=normal_m17 m=17 cycles="<<cycles<<" groups="<<groups<<" qkAcceptedSteps="<<qkSteps<<" accounting512Steps="<<physicalSteps<<" results="<<results<<" dones="<<dones<<" scoreWrites="<<allWrites<<" targetPrefix=";
++    for(unsigned i=0;i<targetWrites.size();++i){if(i)std::cout<<',';std::cout<<targetWrites[i];}
++    std::cout<<" ownerAccepts="<<ownerAccepts<<" pvRequests="<<pvRequests<<" pvReturns="<<pvReturns<<" requestHoldChecks="<<(holds[0]+holds[1]+holds[2]+holds[3])<<" holdChecksByPort=(group,"<<holds[1]<<"),(memory,"<<holds[0]<<"),(pv,"<<holds[3]<<"),(step,"<<holds[2]<<") memoryAccepted="<<memAccepted<<" memoryReturned="<<memReturned<<" outputBytes="<<writeBytes<<" checkedGroups="<<checkedGroups<<" checkedMemory="<<checkedMemory<<" checkedPv="<<checkedPv<<" checkedVector="<<checkedVector<<" numerical_matrix_verified=false\n";
+   }
+ };
+ int main(int argc,char** argv){
+@@ -160,6 +174,6 @@
+     auto d=std::make_unique<abi::D>(ctx.get());
+     U totalEdges=0;{Bench bench(*d,*ctx);bench.run();totalEdges=bench.clockEdges;}
+     d->final();need(!ctx->gotFinish(),"unexpected HDL final finish");d.reset();
+-    std::cout<<"VERILATOR_CORE_DONE case=normal_m3 completed=true total_rising_edges="<<totalEdges<<" reset_clocks=3\n";return 0;
++    std::cout<<"VERILATOR_CORE_DONE case=normal_m17 completed=true total_rising_edges="<<totalEdges<<" reset_clocks=3\n";return 0;
+   }catch(const std::exception& e){std::cerr<<"VERILATOR_CORE_FAIL "<<e.what()<<'\n';return 1;}
+ }

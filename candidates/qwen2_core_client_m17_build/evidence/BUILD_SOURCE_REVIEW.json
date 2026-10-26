@@ -1,0 +1,360 @@
+{
+  "approval": {
+    "M17_behavior_pass": false,
+    "MAC_utilization": null,
+    "actual_build_pass": false,
+    "execution_authorized_by_this_review": false,
+    "model_run_authorized": false,
+    "ninety_percent_target_pass": false,
+    "numerical_pass": false,
+    "source_admissible": true
+  },
+  "artifact_gate": {
+    "MMD": "One bounded literal rule with exact m17_main.o target and staged m17_main.cpp first source; dependencies must be staged or explicitly pinned regular paths. No Make expressions, unknown paths or logical PCH aliases. MMD is not a complete system-header access trace.",
+    "checker_delta": "Whole old M3 checker equals new after case names + stimulus role + 13/16 -> 14/17 substitutions. Nine existing Reader/ELF/MMD helpers byte-identical.",
+    "exact_flat_files": 17,
+    "immutable_archive_runtime": "Hash-bound original audited archive/runtime inputs only; does not reparse36 archive members or recompile model objects.",
+    "immutable_inputs": 14,
+    "libraries": "Unique NEEDED subset stdc++/m/gcc_s/c; stdc++ and c required; atomic rejected by stage leaf despite -latomic in link command. Actual NEEDED/GNU version requirements/providers require terminal independent audit.",
+    "new_executable": "ET_DYN, fixed interpreter, mapped entry, valid positive-sized defined main/model function ranges, no RWX, nonexecutable stack, no RPATH/RUNPATH or extra loader-object tags.",
+    "new_object": "ELF64 little endian x86_64 ET_REL with bounded sections/symbol refs; not full relocation semantics.",
+    "new_outputs": [
+      "build/m17_main.o",
+      "build/m17_main.d",
+      "build/VOrderedQkBehaviorCore_m17"
+    ],
+    "not_proven": [
+      "general C++ or machine-code equivalence",
+      "dynamic loader execution",
+      "M17 behavior",
+      "FMA numerical correctness",
+      "whole block/full128/full29",
+      "hardware MAC utilization"
+    ],
+    "stability": "Reader lstat/fstat7-field identity and streaming hash, all17 final stat signatures stable, no symlinks/extra files/directories, only final ELF executable; tmp empty.",
+    "stage_status": "PASS_FIXED_M17_SINGLE_TU_LINK_ONLY"
+  },
+  "authority": "Static source, bounded small metadata and inert synthetic ELF/MMD only. No compiler/linker, native binary, JVM, make, Verilator, EDA, actual claim, model run, or full real SV parse. Root must separately approve exactly one compile/link attempt.",
+  "controls": {
+    "author_selected_methods_rerun_each_mode": 32,
+    "author_selected_methods_rerun_total": 64,
+    "full_inherited_engine_suite_repeated": false,
+    "independent_each_mode": 115,
+    "independent_negative_each_mode": 54,
+    "independent_total": 230,
+    "logs": [
+      {
+        "bytes": 2787,
+        "sha256": "5ff28b382dceb41abaefa90f50ef4de0420fdd250b1173ac32d92cb0efa9666f"
+      },
+      {
+        "bytes": 2787,
+        "sha256": "a35730868188b6356f7fd08f3bc5712200e9a3be07af7d5b61199ff08756f9ac"
+      },
+      {
+        "bytes": 1600,
+        "sha256": "17bb96909489dfe0e411c423d6f1e1093123a4f816fc9df32ecaa3c8c1f5e8d6"
+      },
+      {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "bytes": 1599,
+        "sha256": "a414ffa390e621811b293b8b54dc42c8d182123f07f27d7ac4bf1132c786b6c4"
+      },
+      {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "normal_and_optimized_pass": true,
+    "target_or_fixture_elf_executed": false
+  },
+  "engine_delta": {
+    "baseline": "${RETAINED_M3_BUILD_CONFIG}",
+    "cleanup": "Same pinned strict_cleanup and original process group identity until terminal/reap. Not cgroup/wholehost confinement.",
+    "execute": "Original single-start fresh-claim preflight, immutable staging, anchored monitor, cleanup, postflight, content gate, receipt retained; no retry or next stage. Link exec preserves retained leader PID/start identity.",
+    "fixed_case_only_count": 5,
+    "fixed_case_only_definitions": [
+      "structure_check",
+      "output_scope",
+      "_execute",
+      "expected_build_plan",
+      "expected_launcher"
+    ],
+    "globals": "Only explicit schema/case doc labels and CAPS cpu240/work300/total330; all other top-level AST unchanged. Imports unchanged.",
+    "role_identity_definitions": [
+      "validate_manifest",
+      "stage_inputs"
+    ],
+    "roles": "Exact M17 source freeze/review admission and 10 original + 4 source inputs; stage copy algorithm unchanged, returned metadata count14.",
+    "success": "Only exit0 + no errors + cleanup complete + resource/postflight/staged-input/output-scope/content checks permit generic PASS_FROZEN_MODEL_BUILD_ONLY.",
+    "unchanged_count": 20,
+    "unchanged_definitions": [
+      "need",
+      "digest",
+      "pin",
+      "verify_pin",
+      "exact_inventory",
+      "verify_inputs",
+      "verify_runtime_boundaries",
+      "load_cleanup",
+      "tree_sample",
+      "sample_gap",
+      "save_receipt",
+      "group_sample",
+      "_child_limits",
+      "render_worker_argv",
+      "load_pinned_module",
+      "expected_argv",
+      "copy_exact",
+      "verify_staging",
+      "walk_output",
+      "main"
+    ]
+  },
+  "execution_scope": {
+    "assertions": "Preserved original model archive came from --assert codegen. Compile/link does not establish assertion execution or coverage.",
+    "compile": "Only m17_main.cpp -> m17_main.o and m17_main.d. Original C++17/-Os/-MMD/VMflags and 9 stock -Wno flags retained; not warning-free or Werror.",
+    "environment": {
+      "COMPILER_PATH": "${NEW_RUN_ROOT}/tools:${GCC_LIBEXEC}",
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "PATH": "${NEW_RUN_ROOT}/tools",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "launcher_lines": [
+      "#!${SH}",
+      "set -eu",
+      "cd build",
+      "${CXX} -I. -MMD -I${VERILATOR_ROOT}/include -I${VERILATOR_ROOT}/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17 -Os -c -o m17_main.o m17_main.cpp",
+      "exec ${CXX} m17_main.o verilated.o verilated_threads.o VOrderedQkBehaviorCore__ALL.a -pthread -lpthread -latomic -o VOrderedQkBehaviorCore_m17"
+    ],
+    "launcher_proof": "Entire 5-line script equals M3 after m3 -> m17 basenames. Exactly fixed compile then exec link, set -eu.",
+    "link": "New m17_main.o + immutable original verilated.o + verilated_threads.o + original 36-member model archive -> new VOrderedQkBehaviorCore_m17.",
+    "not_invoked": [
+      "model object compilation",
+      "make",
+      "Verilator/codegen",
+      "PCH generation",
+      "JVM",
+      "model ELF execution",
+      "M3 rerun",
+      "M17 behavior run",
+      "case chaining"
+    ],
+    "ordinary_pch_header": "Original __pch.h is retained as ordinary text only; no .gch nor -include flag.",
+    "staged_inputs": [
+      {
+        "bytes": 472240,
+        "relative": "build/VOrderedQkBehaviorCore.h",
+        "sha256": "6b9169a0300937681507d6202ea31640ccd046f0c5107a91a8309cde535bfc06"
+      },
+      {
+        "bytes": 3124,
+        "relative": "build/VOrderedQkBehaviorCore_HeteroFP32Alu.h",
+        "sha256": "7c6bf68fe951f2ab4e4e061e2f32c421e824a0e7e6f9c9e9138830ee42276ca9"
+      },
+      {
+        "bytes": 4312084,
+        "relative": "build/VOrderedQkBehaviorCore__ALL.a",
+        "sha256": "7d7010555c894080c942a964700f706725429f046c82cd9b107a43c187ac82a1"
+      },
+      {
+        "bytes": 8061,
+        "relative": "build/VOrderedQkBehaviorCore__Syms.h",
+        "sha256": "30c627a193cdb61a20c7aec3e24374d4f5b64ea6699631a3ce0416952b9d7781"
+      },
+      {
+        "bytes": 1291968,
+        "relative": "build/VOrderedQkBehaviorCore___024root.h",
+        "sha256": "ec699bfe38f5f8e205b4c8473f68000bec8a64bba5a55d61592e9082b3cdfbd0"
+      },
+      {
+        "bytes": 836,
+        "relative": "build/VOrderedQkBehaviorCore__pch.h",
+        "sha256": "baa32de033dce31227cbc49e4596845348be616c262709b8706c0562148ee7a2"
+      },
+      {
+        "bytes": 1932,
+        "relative": "build/VOrderedQkBehaviorCore_banks_bank_2240x128.h",
+        "sha256": "6e1a01680bd4b1edf8227cf000a8ca508f790753d17dc1d3207a1f3f32cbc2f5"
+      },
+      {
+        "bytes": 1913,
+        "relative": "build/VOrderedQkBehaviorCore_banks_bank_48x128.h",
+        "sha256": "d6bd20c4a3de5e62ce80647b65eb5b8988f86b431723e1d5301a6fe7fbb2bce2"
+      },
+      {
+        "bytes": 212352,
+        "relative": "build/verilated.o",
+        "sha256": "5d543065e92fb077ef3f29ae59bb030d1f6a9c3a259188f74afadb88f7d5fac5"
+      },
+      {
+        "bytes": 29608,
+        "relative": "build/verilated_threads.o",
+        "sha256": "90eeb17702692a2ecb1dbbf4044871f1bd906053abbb458c951b61e223d5971c"
+      },
+      {
+        "bytes": 1929176,
+        "relative": "build/expected_m17.hpp",
+        "sha256": "82e4fd8bcd9fa04a800eba0ab9a67ca07b49fc3ecdb0f15599c1ff5538490be2"
+      },
+      {
+        "bytes": 561755,
+        "relative": "build/generated_abi.hpp",
+        "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+      },
+      {
+        "bytes": 13888,
+        "relative": "build/m17_main.cpp",
+        "sha256": "0ab2697fd24dae3178ad9c2203c494455a2cecccccc24c00763eb2570e9f90f3"
+      },
+      {
+        "bytes": 910,
+        "relative": "build/stimulus_m17.hpp",
+        "sha256": "446299a41f4f528e134c11a2f5fbe9e16deb723fccc37cba6499835bf8147f94"
+      }
+    ],
+    "staged_roles": "14 = 7 original generated headers + archive + 2 runtime objects + M17 C++ + unchanged ABI + expected table + stimulus ordinal header. Stage0444; no old harness objects/deps/PCH/Makefiles.",
+    "supervisor_argv": [
+      "${PARENT_PYTHON_PREFIX}/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "${FROZEN_BUILD_CONFIG}/supervisor.py",
+      "--manifest",
+      "${FROZEN_BUILD_CONFIG}/manifest.json",
+      "--manifest-sha256",
+      "feeca66e51555aed2c6c6df584af76c3a9bf8257255909ceb8d0ef3cc470a32c",
+      "--execute-approved-once"
+    ],
+    "worker_argv_template": [
+      "${SH}",
+      "${NEW_RUN_ROOT}/tools/compile_link.sh"
+    ]
+  },
+  "identities": {
+    "COMMAND_PROPOSAL.json": {
+      "bytes": 1293,
+      "sha256": "8f311262667e85268004c9fcad3d29b1ea0a50880a3567a012c8038f5322c735"
+    },
+    "FREEZE.json": {
+      "bytes": 5387,
+      "sha256": "74e622fb2ba6817a2ca778a3704e11557a137f2466de396dce188865c4cc4ba0"
+    },
+    "ROOT_REQUIRED_CHECKS.json": {
+      "bytes": 21067,
+      "sha256": "536e5401e63c56ab618f4d0109792812d11fb50ca1ea81ef7571085792c0057e"
+    },
+    "check_m17_build.py": {
+      "bytes": 13051,
+      "sha256": "87afe7fc9c8900ebd854fb2f2211eeb0ba110c0f376a9a72b414e11353f05fb3"
+    },
+    "compile_link.sh": {
+      "bytes": 869,
+      "sha256": "186ad8412238ba1fc0c21a9d3ec582702ca9a1bc83a24402c22cc5cfc05a62d9"
+    },
+    "manifest.json": {
+      "bytes": 4177629,
+      "sha256": "feeca66e51555aed2c6c6df584af76c3a9bf8257255909ceb8d0ef3cc470a32c"
+    },
+    "supervisor.py": {
+      "bytes": 33057,
+      "sha256": "2304b4b59a132d42e9161029a66c1a06f8930cf12b188fb61719879138be91c9"
+    }
+  },
+  "identity": {
+    "MMD_allowed_pin_records": 4191,
+    "absence_slots": 285,
+    "aliases": 1129,
+    "cached_digest_plus_complete_stat_reuse": 5315,
+    "declared_role_pins": {
+      "dependencies": 4177,
+      "input": 14,
+      "provenance": 1008,
+      "runtime": 202,
+      "source": 5
+    },
+    "declared_total": 5406,
+    "expected_runtime_prepost_count_with_manifest_and_self": 5408,
+    "final_stat_checks": 5340,
+    "fresh_small_metadata_hashes": 25,
+    "identity_checks": 44721,
+    "inventories": 19,
+    "old_evidence": "Original SV/archive/runtime objects, historical success/failure evidence and old source freezes unchanged. Current cost references include actual M3 compile receipt and independent final; no target was invoked.",
+    "old_large_artifacts_content_reads": 0
+  },
+  "identity_freeze": {
+    "bytes": 1240,
+    "sha256": "b7a6d65ac9493d353a5238de364f67c1c357f4835681becbaf677a6b45657209"
+  },
+  "identity_review": {
+    "bytes": 273148,
+    "sha256": "85bfb06a3db1c70d96ccce4ba5d4d3953e0aa1da9d20ee9561f884c30c2d1cf0"
+  },
+  "parent_python": {
+    "automatic_runtime_pins": 202,
+    "candidate_basis": "42 __cached__ path candidates; original audit also included collector hash reads. Not42 independently witnessed import opens. Code/source association proof inherited from old independent review; no new pyc compile.",
+    "limits": "-B prevents writes, not cache reads. Parent imports precede automatic preflight, so external root pre-Popen gate is required; endpoint checks are not continuous or arbitrary-import isolation. No retroactive upgrade of historical unpinned caches.",
+    "new_probe_performed": false,
+    "reuse": "Build supervisor/leaf imports AST identical to previous qualified M3 build; no M17 behavior checker/reference/Fraction import.",
+    "root_gate": "Before starting parent Python and again after terminal: hash46 endpoints (42 normal cache candidates + 4 source files), lexistsfalse10 private Python loader slots, exact LANG/LC_ALL/LC_CTYPE=C.UTF-8. Production -I -S -B without -O.",
+    "runtime_proof": {
+      "bytes": 22774,
+      "sha256": "4e6232d8f4f1b700b7f98b58fd5a6c7a4be44cf54f5513ad57040f96e3037709"
+    },
+    "source_names": [
+      "_compression.py",
+      "bz2.py",
+      "lzma.py",
+      "shutil.py"
+    ]
+  },
+  "remaining_source_blockers": [],
+  "resources": {
+    "absolute_deadlines_from_one_start": {
+      "cleanup": 310,
+      "total": 330,
+      "work": 300
+    },
+    "basis": "Original M3 one-TU/link actual25.199429895CPU and474587136B sampledRSS are context only. New expected header1929176B, four literal tables1168272B; no recursive constexpr, but larger compiler AST/optimization costs are unknown. No linear byte/time extrapolation.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "cpu_seconds": 240,
+      "log_hard_bytes": 4194304,
+      "output_tree_sampled_bytes": 268435456,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 134217728,
+      "total_wall_seconds": 330,
+      "work_wall_seconds": 300
+    },
+    "failure": "Retain original claim/log/artifacts/available receipt; no implicit retry, resource increase or model execution.",
+    "fit_guaranteed": false,
+    "historical_budget": "Frozen M17 source document120CPU was a former proposal. This root-approved independent compile240CPU version does not modify it. Future run1200CPU /500000clocks is not authorized or evaluated by this build gate.",
+    "limits": "1CPU affinity; child per-process CPU240, AS4GiB, FSIZE128MiB hard limits. AggregateCPU sampled and final; groupRSS2GiB/tree256MiB sampled, observed sample gap>0.1s rejects; log4MiB cap. Not parent AS/RSS hard isolation, cgroup, or wholehost disk quota.",
+    "outer_seconds": 360
+  },
+  "schema": "qwen2-fixed-m17-single-tu-build-independent-source-review-v1",
+  "source_compiled_table_expectations": {
+    "bytes": 2660,
+    "sha256": "2f2a063b13f2b5b4eecdd055c99620bf5638e6d185d2d208e8475c5ed6ecd212"
+  },
+  "source_review": {
+    "bytes": 18110,
+    "sha256": "f761dddee216484b251f1630b44e081e54e5655f335e01a0717fb50f11b36f96"
+  },
+  "status": "PASS_SOURCE_MOCK_ADMISSION_FIXED_M17_SINGLE_TU_LINK_ONLY_REQUIRES_NEW_ROOT_GO",
+  "origin_review": {
+    "bytes": 22995,
+    "sha256": "4149e034ed503e66578634bd19c6e761fedb207140988874721712bb98377ee8"
+  },
+  "historical_source_only": true
+}

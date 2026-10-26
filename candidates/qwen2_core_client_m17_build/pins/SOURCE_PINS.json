@@ -1,0 +1,123 @@
+{
+  "schema": "M17-chunk-aware-source-delta-and-build-checker-v1",
+  "source_files": [
+    {
+      "name": "reference_events.py",
+      "public_path": "source/reference_events.py",
+      "bytes": 3229,
+      "sha256": "d3a8c8ffe1b8e6f81955a19f5945cb1c65f6c831630fa7dc23ff724b2182a0af",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "generate_reference.py",
+      "public_path": "source/generate_reference.py",
+      "bytes": 2111,
+      "sha256": "595fa8fc9a5ae11e87a86253ca2a765b1e73821148233239de4805a17231f677",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "check_m17_log.py",
+      "public_path": "source/check_m17_log.py",
+      "bytes": 5709,
+      "sha256": "e379a79163c3cf6807861cb46f445b2261ec455d34208f49299ddfc58a810d58",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_m17_contract.py",
+      "public_path": "source/test_m17_contract.py",
+      "bytes": 8845,
+      "sha256": "0b28af87de22ee08016524ce63574be5853e535464088da039d57420a94307c2",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "stimulus_m17.hpp",
+      "public_path": "source/stimulus_m17.hpp",
+      "bytes": 910,
+      "sha256": "446299a41f4f528e134c11a2f5fbe9e16deb723fccc37cba6499835bf8147f94",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "check_m17_build.py",
+      "public_path": "source/check_m17_build.py",
+      "bytes": 13051,
+      "sha256": "87afe7fc9c8900ebd854fb2f2211eeb0ba110c0f376a9a72b414e11353f05fb3",
+      "exact_original_bytes": true
+    },
+    {
+      "name": "test_m17_build.py",
+      "public_path": "source/test_m17_build.py",
+      "bytes": 10939,
+      "sha256": "aba8712f14aad6b284944f6be473bd8e281d69bcc03a7b7492d63ecda47b0e67",
+      "exact_original_bytes": true
+    }
+  ],
+  "cpp_delta": {
+    "baseline_reconstructed_source": "m3_main.cpp",
+    "baseline_public_pin_file": "candidates/qwen2_core_client_m3_build/pins/SOURCE_PINS.json",
+    "baseline_identity": {
+      "bytes": 12929,
+      "sha256": "7c3b280683a1d66dfee704d902e743377b48eaf6db43a7ce2c4ef849bae7f9f5"
+    },
+    "patch": "M3_TO_M17_SOURCE.patch",
+    "patch_identity": {
+      "bytes": 13814,
+      "sha256": "2494f04a83c09dd7112377a8c84593bace2e146abdc83817ec21ad1830432cc2"
+    },
+    "output_name": "m17_main.cpp",
+    "bytes": 13888,
+    "sha256": "0ab2697fd24dae3178ad9c2203c494455a2cecccccc24c00763eb2570e9f90f3"
+  },
+  "reconstructed": {
+    "expected_m17.hpp": {
+      "bytes": 1929176,
+      "sha256": "82e4fd8bcd9fa04a800eba0ab9a67ca07b49fc3ecdb0f15599c1ff5538490be2"
+    },
+    "generated_abi.hpp": {
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    }
+  },
+  "m17_source_freeze": {
+    "bytes": 5446,
+    "sha256": "9724314f513f949135fca282ba5f49e217b89ef9a4796e86e2bba2596328860f"
+  },
+  "build_source_freeze": {
+    "bytes": 5387,
+    "sha256": "74e622fb2ba6817a2ca778a3704e11557a137f2466de396dce188865c4cc4ba0"
+  },
+  "source_qualification": {
+    "bytes": 18110,
+    "sha256": "f761dddee216484b251f1630b44e081e54e5655f335e01a0717fb50f11b36f96"
+  },
+  "build_qualification": {
+    "bytes": 22995,
+    "sha256": "4149e034ed503e66578634bd19c6e761fedb207140988874721712bb98377ee8"
+  },
+  "private_build_sources_hash_only": {
+    "compile_link.sh": {
+      "bytes": 869,
+      "sha256": "186ad8412238ba1fc0c21a9d3ec582702ca9a1bc83a24402c22cc5cfc05a62d9"
+    },
+    "supervisor.py": {
+      "bytes": 33057,
+      "sha256": "2304b4b59a132d42e9161029a66c1a06f8930cf12b188fb61719879138be91c9"
+    },
+    "assemble_candidate.py": {
+      "bytes": 8050,
+      "sha256": "0528e38930737e71d501b5a737837aeec3a7bae1afed4b5cbdc9c1d6cf073e68"
+    },
+    "derive_candidate.py": {
+      "bytes": 2430,
+      "sha256": "f3b6d09ca2418f101ec4cee23b6019561bad6c17295994a1d05f8a4bb5c9ece6"
+    },
+    "test_manifest.py": {
+      "bytes": 3963,
+      "sha256": "258d045f2955520f4c22b588f1f3b4276254abda1c10baf1af799a32c153f3ea"
+    },
+    "test_supervisor.py": {
+      "bytes": 7346,
+      "sha256": "a0851b333fde38b0a37a4d4a8d6e981f776d5ebbe57fd7d3a943ef00ddfccf99"
+    }
+  },
+  "scope": "Original910B stimulus header is small control source, not generated modelbulk. 1.9MB expected header is reconstructed only; no real tensors/weights/actual packet data. Chunk-aware driver change is not merely m constant."
+}

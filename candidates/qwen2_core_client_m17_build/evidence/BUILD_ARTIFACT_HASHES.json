@@ -1,0 +1,98 @@
+{
+  "schema": "seventeen-M17-build-files-hash-only-v1",
+  "origin_manifest": {
+    "bytes": 16688,
+    "sha256": "3918625b1ff3a63f64b4a6d27b20e7cc1bd599f56177c0225dcb22f0862178cb"
+  },
+  "file_count": 17,
+  "total_bytes": 14742024,
+  "files": [
+    {
+      "relative_path": "VOrderedQkBehaviorCore.h",
+      "bytes": 472240,
+      "sha256": "6b9169a0300937681507d6202ea31640ccd046f0c5107a91a8309cde535bfc06"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_HeteroFP32Alu.h",
+      "bytes": 3124,
+      "sha256": "7c6bf68fe951f2ab4e4e061e2f32c421e824a0e7e6f9c9e9138830ee42276ca9"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__ALL.a",
+      "bytes": 4312084,
+      "sha256": "7d7010555c894080c942a964700f706725429f046c82cd9b107a43c187ac82a1"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__Syms.h",
+      "bytes": 8061,
+      "sha256": "30c627a193cdb61a20c7aec3e24374d4f5b64ea6699631a3ce0416952b9d7781"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore___024root.h",
+      "bytes": 1291968,
+      "sha256": "ec699bfe38f5f8e205b4c8473f68000bec8a64bba5a55d61592e9082b3cdfbd0"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore__pch.h",
+      "bytes": 836,
+      "sha256": "baa32de033dce31227cbc49e4596845348be616c262709b8706c0562148ee7a2"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_2240x128.h",
+      "bytes": 1932,
+      "sha256": "6e1a01680bd4b1edf8227cf000a8ca508f790753d17dc1d3207a1f3f32cbc2f5"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_banks_bank_48x128.h",
+      "bytes": 1913,
+      "sha256": "d6bd20c4a3de5e62ce80647b65eb5b8988f86b431723e1d5301a6fe7fbb2bce2"
+    },
+    {
+      "relative_path": "VOrderedQkBehaviorCore_m17",
+      "bytes": 4514920,
+      "sha256": "1eefdc81df6505cbd6f42fd1eda643adaf2d07687c40a56733ec88ed2b1b5075"
+    },
+    {
+      "relative_path": "expected_m17.hpp",
+      "bytes": 1929176,
+      "sha256": "82e4fd8bcd9fa04a800eba0ab9a67ca07b49fc3ecdb0f15599c1ff5538490be2"
+    },
+    {
+      "relative_path": "generated_abi.hpp",
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    },
+    {
+      "relative_path": "m17_main.cpp",
+      "bytes": 13888,
+      "sha256": "0ab2697fd24dae3178ad9c2203c494455a2cecccccc24c00763eb2570e9f90f3"
+    },
+    {
+      "relative_path": "m17_main.d",
+      "bytes": 841,
+      "sha256": "ae7baa6394628e878698599d7e25133864850b160081d473087e2a61227453af"
+    },
+    {
+      "relative_path": "m17_main.o",
+      "bytes": 1386416,
+      "sha256": "7cf8bd30dbbe3bed18a2d4046f0c33eeaf9e6919550f7138264c5e62ec9fc995"
+    },
+    {
+      "relative_path": "stimulus_m17.hpp",
+      "bytes": 910,
+      "sha256": "446299a41f4f528e134c11a2f5fbe9e16deb723fccc37cba6499835bf8147f94"
+    },
+    {
+      "relative_path": "verilated.o",
+      "bytes": 212352,
+      "sha256": "5d543065e92fb077ef3f29ae59bb030d1f6a9c3a259188f74afadb88f7d5fac5"
+    },
+    {
+      "relative_path": "verilated_threads.o",
+      "bytes": 29608,
+      "sha256": "90eeb17702692a2ecb1dbbf4044871f1bd906053abbb458c951b61e223d5971c"
+    }
+  ],
+  "contents_published": false,
+  "scope": "17 active build files subset29 run files:14 unchanged staged inputs+new object/MMD/ELF. Original36-member archive+2runtime objects reused."
+}

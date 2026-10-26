@@ -1,0 +1,32 @@
+{
+  "status": "PASS_EXACT_SOURCE_RECONSTRUCTION_PROJECTIONS_AND_SYNTHETIC_ONLY",
+  "checks": 3319,
+  "errors": 0,
+  "original_source_files_reconstructed": 8,
+  "new_original_source_files": 7,
+  "new_source_assembly_helper": 1,
+  "public_references": 13,
+  "source_tests_each_mode": {
+    "M17_contract": 20,
+    "tiny_build_containers": 37,
+    "assembly_positive_negative": 14
+  },
+  "reconstructed_headers_each_mode": {
+    "expected_m17.hpp": {
+      "bytes": 1929176,
+      "sha256": "82e4fd8bcd9fa04a800eba0ab9a67ca07b49fc3ecdb0f15599c1ff5538490be2"
+    },
+    "generated_abi.hpp": {
+      "bytes": 561755,
+      "sha256": "8a6dbe02860dde1033e6a9ad840e44826fca0c43476da0a0b54d553256f16e66"
+    }
+  },
+  "reversible_source_patch_exact": true,
+  "retained_actual_and_prior_stat_checks": 224,
+  "no_explicit_target_artifact_content_reads": [
+    "actual ELF/object/archive/generated model headers/SV/raw logs",
+    "actual system cache contents"
+  ],
+  "packaging_native_compiler_model_or_signal_actions": 0,
+  "scope": "Source/text, role metadata and tiny synthetic containers only. Expected header generated from closed formula, symbolic ABI copied from prior verified reconstruction. Static conditional clock bound not runtime fit. Actual build is compile/link/static table content only, never M17 run/cross16. Ordinary stdlib imports not audited as whole-process IO exclusion; old gaps preserved."
+}

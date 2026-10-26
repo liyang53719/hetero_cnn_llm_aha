@@ -1,0 +1,67 @@
+{
+  "scope": "Pure stdlib metadata reconstruction and synthetic fixtures only; no real IR/SV/native/reference/JVM/EDA read or execution.",
+  "caps_each": {
+    "cpu_seconds": 20,
+    "address_space_bytes": 402653184,
+    "wall_seconds": 40,
+    "affinity_count": 1
+  },
+  "results": [
+    {
+      "name": "reconstruct.normal",
+      "exit_code": 0,
+      "wall_seconds": 0.15569449798204005,
+      "log_sha256": "a84860fa13702a1a00b5457b4c9f0c464ff9162a6ba403a7a8449c031d5212a1"
+    },
+    {
+      "name": "chirrtl_original_synthetic.normal",
+      "exit_code": 0,
+      "wall_seconds": 2.5654548950260505,
+      "log_sha256": "96c0d433a4f96c7f66876b0d1b88e5e2972105836f69bb32d29bf5f524385e67"
+    },
+    {
+      "name": "public_contract.normal",
+      "exit_code": 0,
+      "wall_seconds": 0.3742649869527668,
+      "log_sha256": "46b2829496fc55743bde8d5ad5c6d77a845124f88397c498e81138869e54c78f"
+    },
+    {
+      "name": "sv_original_synthetic.normal",
+      "exit_code": 0,
+      "wall_seconds": 0.427347854943946,
+      "log_sha256": "cd9ce1af05f31e4c4ada14c6a3f1bb8042ff073c3933fdd1f9be5d9417808399"
+    },
+    {
+      "name": "reconstruct.optimized",
+      "exit_code": 0,
+      "wall_seconds": 0.25999067607335746,
+      "log_sha256": "a84860fa13702a1a00b5457b4c9f0c464ff9162a6ba403a7a8449c031d5212a1"
+    },
+    {
+      "name": "chirrtl_original_synthetic.optimized",
+      "exit_code": 0,
+      "wall_seconds": 2.5786579459672794,
+      "log_sha256": "528840a71c6f690f3068fa2cd4fc1d5555066181f90113b7b6b55a6d6c10244a"
+    },
+    {
+      "name": "public_contract.optimized",
+      "exit_code": 0,
+      "wall_seconds": 0.4800168030196801,
+      "log_sha256": "95f2d67dc81ece51fcebf4955380514591e2c7379edd1bd4df28d0afd4f9bd63"
+    },
+    {
+      "name": "sv_original_synthetic.optimized",
+      "exit_code": 0,
+      "wall_seconds": 0.6091875319834799,
+      "log_sha256": "efc91b98ed4480002d8f5deb5915ad2abbc07f680f5e19f64b262ca93b7efc6a"
+    }
+  ],
+  "tests_per_mode": {
+    "original_chirrtl_synthetic": 44,
+    "new_packaging_contract": 20,
+    "original_sv_synthetic_with_new_expected_key": 46
+  },
+  "total_each_mode": 110,
+  "normal_and_optimized_pass": true,
+  "expanded_expectation_not_uploaded": true
+}

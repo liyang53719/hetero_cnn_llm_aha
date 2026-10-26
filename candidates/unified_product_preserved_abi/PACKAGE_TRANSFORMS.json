@@ -1,0 +1,31 @@
+{
+  "original_exact_sources": [
+    {
+      "public_path": "source/UnifiedSharedResourceTop.scala",
+      "bytes": 4542,
+      "sha256": "ce13b35764776c3b136dc17e9aabefa079204ed993aa8d45ad922703045912a9",
+      "original_bytes_unchanged": true
+    },
+    {
+      "public_path": "checks/chirrtl/check_chirrtl.py",
+      "bytes": 35724,
+      "sha256": "9d441324ece7532c647d946af4b30a47319b4d6c7e3532b617f9467af1df5669",
+      "original_bytes_unchanged": true
+    },
+    {
+      "public_path": "checks/chirrtl/test_check_chirrtl.py",
+      "bytes": 13449,
+      "sha256": "de2625df5517baf2118c014b25b28a6776af39295c4998009ca45f7de21eeec9",
+      "original_bytes_unchanged": true
+    }
+  ],
+  "source_patch": "source/TOP_DELTA.patch inverse recovers original published Top exactly",
+  "checker_patch": "checks/chirrtl/CHECKER_DELTA.patch inverse recovers original published checker exactly",
+  "informational_metadata_projection": "checks/chirrtl/EXPECTATION_PROJECTION.json; only private source path becomes role-relative, all operative checker fields unchanged",
+  "sv_expectation": "Compact public baseline reconstruction followed by exactly one integer to integer_0 key replacement. Exact old/new hashes verified; no expanded expectation uploaded.",
+  "new_packaging_only_sources": [
+    "checks/sv/reconstruct_expectation.py",
+    "tests/test_public_contract.py"
+  ],
+  "historical_author_controls": "Source/actual reviews bind original author controls; new packaging controls are reported separately. No target/native/EDA execution by packager."
+}

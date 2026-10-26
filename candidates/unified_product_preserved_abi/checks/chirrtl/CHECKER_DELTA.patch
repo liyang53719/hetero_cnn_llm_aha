@@ -1,0 +1,18 @@
+--- a/check_chirrtl.py
++++ b/check_chirrtl.py
+@@ -299,6 +299,15 @@
+         for ref in type_leaf_paths(modules[expected['top']]['ports'][port][1],port):
+             need(len(result)<100000,'total dontTouch target bound')
+             result.append('~'+expected['top']+'|'+expected['top']+'>'+ref)
++    need(len(result)==4616,'exact prior collection DontTouch leaf count')
++    need(expected['product']=='UnifiedSharedResourceTop' and expected['product_dont_touch_roots']==['io'],'fixed product io DontTouch root only')
++    product=modules[expected['product']]
++    need('io' in product['ports'],'product DontTouch required io')
++    leaves=type_leaf_paths(product['ports']['io'][1],'io')
++    need(len(leaves)==4597,'exact preserved product io leaf count')
++    for ref in leaves:
++        result.append('~'+expected['top']+'|'+expected['product']+'>'+ref)
++    need(len(result)==9213,'exact collection plus product DontTouch leaf count')
+     need(len(result)==len(set(result)),'duplicate expected DontTouch target')
+     return {'circuit':expected['top'],'modules':sorted(modules),'dont_touch_targets':result}
+ 

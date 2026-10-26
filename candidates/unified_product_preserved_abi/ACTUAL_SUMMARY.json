@@ -1,0 +1,343 @@
+{
+  "status": "ACTUAL_LIMITED_PORT_PRESERVATION_AND_SAME_SV_OFFLINE_DECLARATION_PASS_WITH_ORIGINAL_FAILURES_RETAINED",
+  "source_delta": {
+    "new_top": {
+      "bytes": 4542,
+      "sha256": "ce13b35764776c3b136dc17e9aabefa079204ed993aa8d45ad922703045912a9"
+    },
+    "old_top": {
+      "bytes": 4526,
+      "sha256": "f1bb55d392e2c9fd0c4a4de14c3b44a581b59dc48d80eb8ba754c891514cc09e"
+    },
+    "added_bytes": 16,
+    "inverse_exact": true,
+    "other_eight_source_files_unchanged": true,
+    "scope": "Only dontTouch(io) annotation; not a new datapath/fullblock implementation"
+  },
+  "fresh_typecheck": {
+    "status": "PASS_ACTUAL_FRESH_NINE_SOURCE_TYPECHECK_CLASS_IDENTITY_ONLY",
+    "source_count": 9,
+    "classes": 68,
+    "class_bytes": 568634,
+    "unchanged_class_bytes_count": 67,
+    "changed_class": "UnifiedSharedResourceTop.class",
+    "top_class_size_increase_bytes": 119,
+    "native_exit": 0,
+    "sampled_peak_cpu_seconds": 22.2,
+    "sampled_peak_rss_bytes": 320671744,
+    "outer_wall_seconds": 26.234165310044773,
+    "root_launcher_prelaunch_selfhash_bound": false,
+    "root_expected_checks_not_independent_observed_hash_map": true
+  },
+  "chirrtl": {
+    "status": "PASS_ACTUAL_CHIRRTL_EXACT_PRODUCT_ANNOTATIONS_AND_DECLARATION_GRAPH_ONLY",
+    "artifact": {
+      "bytes": 9678877,
+      "sha256": "dccbbf2c257abf60bb4a0096617fcbfff75575672f0a4e8986023115e3450f87"
+    },
+    "modules": 212,
+    "instances": 211,
+    "dont_touch": 9213,
+    "collection_dont_touch": 4616,
+    "product_dont_touch": 4597,
+    "dedup": 212,
+    "module_bodies_equal_after_source_info_strip": 212,
+    "formal_equivalence": false,
+    "emitter_log_bytes": 0,
+    "actual_warning_lines": [],
+    "warning_coverage_proven": false,
+    "root_launcher_prelaunch_selfhash_bound": false,
+    "resources": {
+      "caps": {
+        "address_space_bytes": 4294967296,
+        "affinity_count": 1,
+        "cleanup_phase_seconds": 10,
+        "cleanup_reserve_seconds": 30,
+        "cpu_seconds": 120,
+        "log_hard_bytes": 2097152,
+        "output_tree_sampled_bytes": 134217728,
+        "postflight_seconds": 20,
+        "rss_sampled_bytes": 2147483648,
+        "sample_seconds": 0.1,
+        "single_file_hard_bytes": 67108864,
+        "total_wall_seconds": 150,
+        "work_wall_seconds": 120
+      },
+      "final_aggregate_cpu_seconds": 11.708131968,
+      "inner_wall_seconds": 11.776562421000563,
+      "maximum_sample_interval_seconds": 0.0727013029390946,
+      "outer_wall_seconds": 11.948185721994378,
+      "production_prepost_inventories": 6,
+      "production_prepost_pins": 1319,
+      "record_attribution": "Root endpoints are expected rows plus source-bound ck passed evidence, not a separately saved observed digest map.",
+      "reviewer_class_stage_check": "Current625 exact file names/size/0444/non-symlink only; original runtime production pre/post hashes retained. No repeated class/JAR/runtime/ELF content hash.",
+      "reviewer_fresh_small_source_metadata_files": 47,
+      "reviewer_metadata_conditions": 1337,
+      "root_absence_paths": 12,
+      "root_expected_pin_rows_and_locale_equal_prepost": true,
+      "root_parent_endpoints": 56,
+      "sample_limit": "RSS and sampledCPU are sampled observations; normal path only, timeout fallback not exercised.",
+      "sampled_peak_cpu_seconds": 10.853178797999998,
+      "sampled_peak_output_bytes": 19959637,
+      "sampled_peak_rss_bytes": 243957760,
+      "staged_classes": 625,
+      "staged_postflight_verified": true
+    },
+    "resource_scope": "Exactly8 external512 endpoint contracts, not4096 fully lowered/executed arithmetic instances or completedMAC measurements."
+  },
+  "sv_generation": {
+    "native_exit": 0,
+    "root_exit": 1,
+    "artifact": {
+      "bytes": 22169147,
+      "sha256": "d6eae625aaf4120e31e3e39aa3bbccced3acd8e3856f02e47a33c4bcc33f1fa1"
+    },
+    "original_receipt_status": "FAIL_FIRTOOL_SV_RETAINED",
+    "original_error": [
+      "ValueError: exact resource instance names BlockScalarFloat"
+    ],
+    "strict_ABI_independent": {
+      "all_seven_exact": true,
+      "limits": "Physical product declaration ABI is independently exact now. This does not convert either original 1020 or 1150 production receipt to PASS.",
+      "missing_extra_changed": 0,
+      "product_is_UnifiedSharedResourceTop_not_collection": true,
+      "restored_ports": {
+        "io_completeBlockImplemented": {
+          "actual_assign_line": 135613,
+          "actual_value": "1'h0",
+          "direction": "output",
+          "signed": false,
+          "width": 1
+        },
+        "io_result_bits_version": {
+          "actual_assign_line": 127314,
+          "actual_value": "8'h1",
+          "direction": "output",
+          "signed": false,
+          "width": 8
+        }
+      },
+      "selected_port_counts": {
+        "HeteroBF16FmaMul": 4,
+        "HeteroBF16FmaPost": 4,
+        "HeteroBF16FmaPre": 7,
+        "HeteroBF16FmaRound": 4,
+        "UnifiedSharedResourceCollection": 4618,
+        "UnifiedSharedResourceTop": 4599,
+        "UnifiedVectorBank": 72
+      },
+      "selected_total_ports": 9308
+    },
+    "resource_name_diagnostic": {
+      "expected": "integer",
+      "actual": "integer_0",
+      "actual_same_in_old_and_new_sv": true,
+      "scalar_module_raw_bytes_and_named_connections_identical": true,
+      "unchanged_checker_failed_at_resource_name_gate": true
+    },
+    "defined_modules": 31,
+    "instance_declarations": 65,
+    "raw_module_bytes_equal_to_old_count": 29,
+    "warnings": [
+      {
+        "line": 100,
+        "text": "scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala:10:7: warning: unprocessed annotation:'firrtl.transforms.DedupGroupAnnotation' still remaining after LowerToHW"
+      }
+    ],
+    "warnings_limit": "One actual DedupGroup warning remains; annotation warnings are class-deduplicated, so one line is not proof of one retained annotation. No source-based evidence here establishes a functional error from this warning. Not warning-free.",
+    "resources": {
+      "caps": {
+        "address_space_bytes": 4294967296,
+        "affinity_count": 1,
+        "cleanup_phase_seconds": 10,
+        "cleanup_reserve_seconds": 30,
+        "cpu_seconds": 420,
+        "log_hard_bytes": 2097152,
+        "output_tree_sampled_bytes": 268435456,
+        "postflight_reserve_seconds": 20,
+        "rss_sampled_bytes": 2147483648,
+        "sample_seconds": 0.1,
+        "single_file_hard_bytes": 201326592,
+        "total_wall_seconds": 510,
+        "work_wall_seconds": 480
+      },
+      "final_aggregate_cpu_seconds": 16.838075903,
+      "inner_elapsed_seconds": 16.914347909973003,
+      "maximum_sample_interval_seconds": 0.029348302050493658,
+      "outer_wall_seconds": 17.078996118041687,
+      "sampled_peak_cpu_seconds": 15.296398338,
+      "sampled_peak_output_bytes": 56866579,
+      "sampled_peak_rss_bytes": 343977984,
+      "scope": "Observed sampled RSS/tree/CPU and final wait accounting, not hard measured maxima, synthesis costs or hardware performance. All recorded values are under original stage caps.",
+      "worker_log_bytes": 8489
+    },
+    "root_launcher_prelaunch_selfhash_bound": false,
+    "root_expected_checks_not_independent_observed_hash_map": true
+  },
+  "unchanged_limits": [
+    "Original 0930 checker FAIL and 1020 strict product ABI FAIL stay unchanged. New 1150 native exit 0 has a distinct retained resource-name acceptance FAIL.",
+    "Product remains UnifiedSharedResourceTop; collection and four FMA companions are namespace only.",
+    "8 x 512 external contracts retain full4096 intent, not expanded physical arithmetic implementation, fit, PPA, synthesis or provider execution.",
+    "Mode0 fullblock remains UNSUPPORTED; no five-profile complete-block numerical PASS or RTL simulation.",
+    "One global resource lease is serial qualification, not final Matrix/vector overlap scheduler.",
+    "No across-job epoch isolation or missing-response watchdog; external exactly-once/no-stale/parent-fence/reset contracts remain.",
+    "Software/declaration counts are not useful completed MAC cycles or utilization.",
+    "Cleanup is original-group/observed-identity absence, not global escaped-descendant proof."
+  ],
+  "same_sv_offline": {
+    "status": "PASS_ACTUAL_EXISTING_SV_EXACT_ABI_AND_DECLARED_SHARED_RESOURCE_GRAPH_ONLY",
+    "actual_qualified": {
+      "SV_lines": 164072,
+      "collection": "UnifiedSharedResourceCollection",
+      "collection_is_simulation_top": false,
+      "continued_expression_records": 21647,
+      "declared_endpoint_slots": 4096,
+      "external_ABI_ports": [
+        22,
+        4
+      ],
+      "external_defnames": [
+        "qwen2_matrix_command_endpoint",
+        "tc_clk_gating"
+      ],
+      "external_file_initialization_detected": false,
+      "external_implementation_definitions_emitted": 0,
+      "external_occurrences": {
+        "qwen2_matrix_command_endpoint": 8,
+        "tc_clk_gating": 8
+      },
+      "initial_blocks_detected": 0,
+      "instance_declarations": 65,
+      "module_definitions": 31,
+      "namespace_FMA_siblings": 4,
+      "product": "UnifiedSharedResourceTop",
+      "product_resource_occurrences": {
+        "BlockScalarFloat": 1,
+        "GdnChunkStateTransferOwner": 1,
+        "HeteroFP32Alu": 17,
+        "MatrixPipelineService": 1,
+        "UnifiedBlockAdmission": 1,
+        "UnifiedPhysicalFabric": 1,
+        "UnifiedVectorBank": 1,
+        "qwen2_matrix_command_endpoint": 8,
+        "tc_clk_gating": 8
+      },
+      "product_two_physical_constant_outputs_retained": {
+        "io_completeBlockImplemented": "1-bit0",
+        "io_result_bits_version": "8-bit1"
+      },
+      "reachable_defined_modules": 31,
+      "scalar_ALU_occurrences": 1,
+      "scope": "Bounded emitted declarations, strict named direction/width/signed ABI, acyclic reachable occurrence graph and exactly two known external ABI families. Full source topology8x512 retained; unresolvedprovider declarations are not full physical implementation closure or completed/useful4096 MAC evidence.",
+      "selected_module_port_counts": {
+        "HeteroBF16FmaMul": 4,
+        "HeteroBF16FmaPost": 4,
+        "HeteroBF16FmaPre": 7,
+        "HeteroBF16FmaRound": 4,
+        "UnifiedSharedResourceCollection": 4618,
+        "UnifiedSharedResourceTop": 4599,
+        "UnifiedVectorBank": 72
+      },
+      "seven_exact_ABI_port_tuples": 9308,
+      "vector_ALU_occurrences": 16
+    },
+    "prior_failures": {
+      "1020_receipt_sha256": "e1c4cf6e82ed10e3ff05094894c9b9ee7fa7b9321e235fea5e98a1cdebb7e553",
+      "1020_status": "FAIL_FIRTOOL_SV_RETAINED: earlier product physical ABI4597/4599",
+      "1150_receipt_sha256": "7231b25b7a23efa79d97b93b675511a81639d472a9cb5a2b5fa5370b653a100a",
+      "1150_status": "FAIL_FIRTOOL_SV_RETAINED: exact scalar instance name expectation",
+      "fresh_receipt_hashes_unchanged": true,
+      "interpretation": "This new separately approved offline record adds limited acceptance for identical1150 generated bytes under the corrected exact-name expectation. It does not overwrite or relabel either original failure."
+    },
+    "not_qualified": {
+      "DDR_epoch_safe_transport": true,
+      "RTL_behavior_or_arithmetic": true,
+      "complete_block_mode0": true,
+      "five_full_profiles_numeric": true,
+      "full4096_resource_fit_timing_PPA": true,
+      "full_physical_FMA_closure": true,
+      "memory_initial_contents_or_latency": true,
+      "provider_RTL_implementation": true,
+      "synthesis_legal_latch_comb_loop_formal": true,
+      "useful_completed_MAC_or_utilization": true
+    },
+    "warning_scope": "Original1150 firtool emitted one actual DedupGroup warning, retained in1215 review. Offline Python does not re-emit or erase that warning; not a warning-free RTL claim.",
+    "public_wording": "同一份真实生成 SV，经独立同 SHA 只读离线严格检查，产品4599端口及共享资源声明层次通过；8×512外部endpoint拓扑未缩小，但provider实施、完整五profile block执行、数值、综合/资源fit/时序和MAC利用率仍未通过。原两次生成后验FAIL保留，新离线有限PASS单独记录。",
+    "source_identity": {
+      "change_from_failed1150": "Only exact scalar instance-name expectation integer -> integer_0. Parser, count/type checks, actual RTL and all other expectation bytes unchanged.",
+      "expectation_sha256": "c434688a68bab15900a0f109fd1b75566c4f095c7daa8ef404d02211a8adc31a",
+      "parser_sha256": "f42ce97714f237e6d044ddc7baf23681c994e33d3a407a802cb6a1e931137aab",
+      "scalar_four_children_twenty_named_connections": "Pinned1215 raw-module/connection equality evidence retained; not a new general expression/semantic equivalence proof.",
+      "single_key_source_review_sha256": "d458432b9ace99e90f05724553ec196480d9f769ec5de5bd19e2cfa3f8cf55ab"
+    },
+    "artifact": {
+      "bytes": 22169147,
+      "sha256": "d6eae625aaf4120e31e3e39aa3bbccced3acd8e3856f02e47a33c4bcc33f1fa1",
+      "original_file_reads_in_this_review": 0,
+      "prior_reviewer_cache_full_parses": 1,
+      "cache_replay_all_result_fields_equal_actual": true,
+      "original_bytes_unchanged_evidence": "Original producer/root perform pre/post exact SHA/signature checks; root source-bound before/after152 rows+config preserved, worker153 pins. Reviewer replays its already frozen exact-byte1215 cache and checks same SHA. No fresh original22MB hash by this review."
+    },
+    "execution": {
+      "actualreporttree_files": [
+        "CLAIM.json",
+        "RESULT.json"
+      ],
+      "actualreporttree_total_bytes": 3456,
+      "caps": {
+        "address_space_bytes": 268435456,
+        "affinity_count": 1,
+        "cpu_seconds": 10,
+        "report_bytes": 2097152,
+        "wall_seconds": 30
+      },
+      "complete": true,
+      "errors": [],
+      "exit_code": 0,
+      "forced_kill": false,
+      "no_native_or_EDA_child": true,
+      "no_stage_chaining": true,
+      "outer_limit_seconds": 35,
+      "outer_timeout": false,
+      "outer_wall_seconds": 1.7429658600594848,
+      "scope": "Root launched one Python offline checker, no JVM/firtool/Yosys/provider/native simulation. Process CPU includes Python startup; no RSS measurement saved, AS256MiB is configured limit, not observed RSS.",
+      "whole_worker_process_cpu_seconds": 1.568084982,
+      "worker_elapsed_seconds": 1.5432728229789063
+    },
+    "identity_evidence_level": {
+      "additional_small_system_runtime_endpoint_path_hashes": 24,
+      "extra_hash_scope_note": "The small-pin filter also read24 host loader/library/locale endpoint paths, each <=2MiB (some are aliases of same file). These are explicitly recorded, not a claim to rehash full136 runtime or153 pins; no original SV or Python executable bulk read.",
+      "fresh_path_bytes_sum_including_aliases": 11395830,
+      "review_conditions": 105,
+      "review_fresh_file_paths": 69,
+      "review_source_metadata_paths": 45,
+      "root_Python_flags": [
+        "-I",
+        "-S",
+        "-B"
+      ],
+      "root_affinity": [
+        1
+      ],
+      "root_config_separately_checked": true,
+      "root_external_absence": 12,
+      "root_external_pins": 56,
+      "root_launcher_archived_not_prelaunch_selfhashbound": true,
+      "root_launcher_sha256": "99259149a8fb86200fa403c9741d52c8992cfe5bd77629f8253c7c1f8c875771",
+      "root_locale_CUTF8_trio": true,
+      "root_original_input_pins": 152,
+      "separate_actual_observed_hashmap_saved": false,
+      "source_bound_expected_rows_pass_receipts": true,
+      "worker_automatic_pins_before_after": 153
+    },
+    "result_identity": {
+      "bytes": 3132,
+      "sha256": "e49c44a2da4e1c90d73e8f235cd3489e8b4a54e019568dcb3f3b13da0fcf58f9"
+    },
+    "root_freeze_identity": {
+      "bytes": 2219,
+      "sha256": "6528e3c0d4b3820b1a9026131a2989b37b01d8bfc8e2f6f23fc7d5e31245d710"
+    }
+  },
+  "actual_reviews_not_native_rerun_by_packager": true
+}

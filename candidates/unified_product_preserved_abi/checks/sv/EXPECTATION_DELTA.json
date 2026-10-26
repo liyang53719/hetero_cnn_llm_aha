@@ -1,0 +1,28 @@
+{
+  "schema": "unified-sv-scalar-single-instance-key-successor-v1",
+  "status": "SOURCE_REVIEWED_EXACT_SINGLE_KEY_DELTA_USED_BY_SEPARATELY_REVIEWED_SAME_SV_OFFLINE_ACTUAL",
+  "old_expectation": {
+    "bytes": 1868089,
+    "sha256": "7ec0344b8ddfe1a2e31203b30001285dbc7d031f7e9948f0cb3d5a3ffce71813"
+  },
+  "new_expectation": {
+    "bytes": 1868091,
+    "sha256": "c434688a68bab15900a0f109fd1b75566c4f095c7daa8ef404d02211a8adc31a"
+  },
+  "exact_byte_replacement": {
+    "old": "\"integer\":",
+    "new": "\"integer_0\":",
+    "occurrences": 1
+  },
+  "exact_json_location": "scalar_direct_families",
+  "target_type_unchanged": "INToRecFN_i32_e8_s24",
+  "production_source_unchanged": {
+    "bytes": 26474,
+    "sha256": "f42ce97714f237e6d044ddc7baf23681c994e33d3a407a802cb6a1e931137aab"
+  },
+  "no_new_production_gate_or_literal": true,
+  "all_other_expectation_values_unchanged": true,
+  "product_port_count": 4599,
+  "scalar_children": 4,
+  "dataflow_equality_proved_by_checker": false
+}

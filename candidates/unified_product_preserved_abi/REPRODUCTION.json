@@ -1,0 +1,186 @@
+{
+  "commands": {
+    "compile": [
+      "${JAVA21}",
+      "-Duser.home=${COMPILE_RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${COMPILE_RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx1g",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${PINNED_CLASSPATH}",
+      "scala.tools.nsc.Main",
+      "-classpath",
+      "${COMPILE_RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+      "-Xplugin:${DEPENDENCIES}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "-language:reflectiveCalls",
+      "-d",
+      "${COMPILE_RUN_ROOT}/classes",
+      "${REPOSITORY}/candidates/unified_shared_resource_fabric/source/UnifiedPhysicalFabric.scala",
+      "${REPOSITORY}/candidates/unified_product_preserved_abi/source/UnifiedSharedResourceTop.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+      "${REPOSITORY}/candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+      "${REPOSITORY}/candidates/unified_4096_runtime_admission/source/UnifiedBlockAdmission.scala",
+      "${REPOSITORY}/candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+      "${REPOSITORY}/candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+      "${REPOSITORY}/candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+      "${REPOSITORY}/candidates/unified_shared_resource_fabric/source/UnifiedSharedResourceCollection.scala"
+    ],
+    "chirrtl": [
+      "${JAVA21}",
+      "-Duser.home=${NEW_RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${NEW_RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx1024m",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${NEW_RUN_ROOT}/classes:${PINNED_CLASSPATH}",
+      "circt.stage.ChiselMain",
+      "--module",
+      "heteronpu.continuous.UnifiedSharedResourceCollection",
+      "--target",
+      "chirrtl",
+      "--target-dir",
+      "${NEW_RUN_ROOT}/ir"
+    ],
+    "sv": [
+      "${SV_RUN_ROOT}/tool/firtool",
+      "-format=fir",
+      "${SV_RUN_ROOT}/inputs/common.fir",
+      "-o",
+      "${SV_RUN_ROOT}/rtl/UnifiedSharedResourceCollection.sv",
+      "-warn-on-unprocessed-annotations",
+      "-output-annotation-file",
+      "${SV_RUN_ROOT}/rtl/circt.anno.json",
+      "--preserve-values=all",
+      "-disable-all-randomization",
+      "--verbose-pass-executions",
+      "--mlir-disable-threading",
+      "--lowering-options=disallowPackedArrays,disallowLocalVariables"
+    ]
+  },
+  "role_inverse_exact_against_original_metadata": {
+    "compile": true,
+    "chirrtl": true,
+    "sv": true
+  },
+  "command_sources": {
+    "compile": {
+      "bytes": 36971,
+      "sha256": "457f54e160042f47982c98c42bfd60aaa7fe95fdd8237bd7e82215be38500b02"
+    },
+    "chirrtl": {
+      "bytes": 17972,
+      "sha256": "b8455d9942d5e5b6a83acc666c119915992edbef1c3661338e4a4831ad2b036b"
+    },
+    "sv_actual_review": {
+      "bytes": 13606,
+      "sha256": "58adbc8a91ab87ce5a0831171eba97fb6d5d51f6deb91ad3718ffc04cad18315"
+    }
+  },
+  "ordered_nine_sources": [
+    "candidates/unified_shared_resource_fabric/source/UnifiedPhysicalFabric.scala",
+    "candidates/unified_product_preserved_abi/source/UnifiedSharedResourceTop.scala",
+    "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+    "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+    "candidates/unified_4096_runtime_admission/source/UnifiedBlockAdmission.scala",
+    "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+    "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+    "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+    "candidates/unified_shared_resource_fabric/source/UnifiedSharedResourceCollection.scala"
+  ],
+  "baseline_reconstruction": "Use the pinned ordered-vector README source-only recipe plus external20 HardFloat to recover the exact92 baseline source pins in SOURCE_ROLES. Baseline557 are separately retained actual classes, not fresh-compiled in this nine-source stage. A fresh rebuild must establish their identity independently.",
+  "class_staging": {
+    "baseline557_plus_fresh68": 625,
+    "total_bytes": 10263665,
+    "original_composition_metadata": {
+      "bytes": 228338,
+      "sha256": "8068e11e91b2aac33627b0d602c15b83331249b6cd00396c59a646bbd14a9c84"
+    },
+    "rule": "Fresh nine-source compile classpath=baseline557+106 JARs, no old68 fallback; stage exact disjoint557+68 into fresh NEW_RUN_ROOT/classes, reject duplicate/shadowed paths, then ChiselMain. Prior67-class attempt excluded.",
+    "new68_manifest": {
+      "bytes": 23957,
+      "sha256": "4c361c587ee355b368bf6e46eb572b415c8ac0b99fc0e1c9109d52d5974352b8"
+    }
+  },
+  "dependency_role": "Original106 Maven paths span two physical roots. PINNED_CLASSPATH preserves exact order; relocated DEPENDENCIES is not original absolute layout.",
+  "provider_scope": "14 provider source roles are hash references only; actual generated SV contains unresolved endpoint/ICG declarations, not provider implementation execution.",
+  "firtool": {
+    "version": "1.62.1",
+    "bytes": 25009456,
+    "sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+    "two_official_lowering_options_unchanged": true
+  },
+  "supervision": "Role argv/hash-only reconstruction is not original private launcher, runtime closure or GO. Each stage needs fresh bounded supervision, exact source/runtime closure, independent admission and root execution authorization. No automatic chaining or retry.",
+  "source_identity_delta": {
+    "old_top_sha256": "f1bb55d392e2c9fd0c4a4de14c3b44a581b59dc48d80eb8ba754c891514cc09e",
+    "new_top_sha256": "ce13b35764776c3b136dc17e9aabefa079204ed993aa8d45ad922703045912a9",
+    "only_added_bytes": 16,
+    "ordered_sources": [
+      {
+        "public_path": "candidates/unified_shared_resource_fabric/source/UnifiedPhysicalFabric.scala",
+        "bytes": 12376,
+        "sha256": "53715b5a84b33fcb02338d27a1a8da22d686051c70d5926a05ede508395dd7fc"
+      },
+      {
+        "public_path": "candidates/unified_product_preserved_abi/source/UnifiedSharedResourceTop.scala",
+        "bytes": 4542,
+        "sha256": "ce13b35764776c3b136dc17e9aabefa079204ed993aa8d45ad922703045912a9"
+      },
+      {
+        "public_path": "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+        "bytes": 3420,
+        "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c"
+      },
+      {
+        "public_path": "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+        "bytes": 10591,
+        "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85"
+      },
+      {
+        "public_path": "candidates/unified_4096_runtime_admission/source/UnifiedBlockAdmission.scala",
+        "bytes": 4698,
+        "sha256": "e626a328d5b4adec704d76b217437c36217c57ae5bb38864fef51cea862aea03"
+      },
+      {
+        "public_path": "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+        "bytes": 2690,
+        "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3"
+      },
+      {
+        "public_path": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+        "bytes": 4003,
+        "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963"
+      },
+      {
+        "public_path": "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+        "bytes": 9520,
+        "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943"
+      },
+      {
+        "public_path": "candidates/unified_shared_resource_fabric/source/UnifiedSharedResourceCollection.scala",
+        "bytes": 1283,
+        "sha256": "6d3152078126d22d731beb5bd75b8dd170627cc36c339879df1a6f0940a9fe64"
+      }
+    ]
+  },
+  "offline_recheck": {
+    "parser_public_path": "candidates/unified_shared_resource_fabric/checks/sv/check_sv.py",
+    "function": "parse_sv(Path(existing_sv), json.loads(reconstructed_expectation))",
+    "parser_sha256": "f42ce97714f237e6d044ddc7baf23681c994e33d3a407a802cb6a1e931137aab",
+    "expected_sha256": "c434688a68bab15900a0f109fd1b75566c4f095c7daa8ef404d02211a8adc31a",
+    "sv_hash_required": "d6eae625aaf4120e31e3e39aa3bbccced3acd8e3856f02e47a33c4bcc33f1fa1",
+    "sv_bytes_required": 22169147,
+    "actual_private_offline_runner": {
+      "bytes": 8916,
+      "sha256": "3fd5712e19a0f4254aca725fab5f1dd0a998072e463099644e52f3d77e596455"
+    },
+    "actual_command_metadata": {
+      "bytes": 1007,
+      "sha256": "2efb78709a966dffe2701857690d4833d096b584875c5866ceff16967ea07e10"
+    },
+    "scope": "This states the exact parser entry point, not a clone of original private supervision/GO/runtime closure. Any actual artifact recheck needs separate bounded authorization; packaging controls use synthetic source-derived declarations only."
+  }
+}

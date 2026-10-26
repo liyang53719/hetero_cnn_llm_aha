@@ -1,0 +1,10 @@
+--- a/UnifiedSharedResourceTop.scala
++++ b/UnifiedSharedResourceTop.scala
+@@ -34,6 +34,7 @@
+     val memory=Decoupled(new MemoryRequest);val response=Flipped(Decoupled(new MemoryResponse))
+     val resetRequired=Output(Bool());val completeBlockImplemented=Output(Bool())
+   })
++  dontTouch(io)
+   admission.io.launch.bits:=io.launch.bits.block
+   io.launch.ready:=admission.io.launch.ready && !fabric.io.resetRequired
+   // Never let an external resource poison accept an untracked admission.

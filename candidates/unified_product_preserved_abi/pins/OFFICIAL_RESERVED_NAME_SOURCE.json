@@ -1,0 +1,74 @@
+{
+  "status": "FIXED_OFFICIAL_SOURCE_BASIS_AND_SMALL_METADATA_ONLY",
+  "official_sources": [
+    {
+      "bytes": 13788,
+      "sha256": "e9c26f15c9b234e6e6e4cf435e8c6c8b048f58f4241858999fc495f6ecf08c92",
+      "git_blob_sha1": "debd220ec494d58e1d5c003c8ac1ab206c3b325d",
+      "fetch": {
+        "bytes": 262,
+        "sha256": "3ce264d80e459b2fe41519f21d854d9fe48692bfdb077c2a5120e6cf8b29dc24"
+      },
+      "official_url": "https://github.com/llvm/circt/blob/ba60dced20cae0ff5e9553bf5f530853c9534995/lib/Conversion/ExportVerilog/LegalizeNames.cpp"
+    },
+    {
+      "bytes": 6328,
+      "sha256": "95763131b9b1ffe416e66c5d7431db24699361854ad3c6680fbd9c004d087d8c",
+      "git_blob_sha1": "a5d5164737df7fe02b3ce00040560ee302e4a646",
+      "fetch": {
+        "bytes": 240,
+        "sha256": "7b519fa63622936f9252d0f76ddab070aac92b9a62c96b3c661e45657366f334"
+      },
+      "official_url": "https://github.com/llvm/circt/blob/ba60dced20cae0ff5e9553bf5f530853c9534995/lib/Dialect/SV/SVDialect.cpp"
+    },
+    {
+      "bytes": 3496,
+      "sha256": "89748ba4e954377bc72962b5f2cf56802e007589b0ca82d3c430229a4361b09a",
+      "git_blob_sha1": "8fbe0b3bff690cb82b778d03267daeee1a6fc71e",
+      "fetch": {
+        "bytes": 248,
+        "sha256": "29228baf23a111b0741e3f8d77d87d2fe21d1282c80b0517a8a6f8f7fd6df910"
+      },
+      "official_url": "https://github.com/llvm/circt/blob/ba60dced20cae0ff5e9553bf5f530853c9534995/lib/Dialect/SV/ReservedWords.def"
+    }
+  ],
+  "facts": [
+    {
+      "source": "ReservedWords.def",
+      "lines": [
+        36,
+        36
+      ],
+      "fact": "integer belongs to the fixed reserved keyword table."
+    },
+    {
+      "source": "LegalizeNames.cpp",
+      "lines": [
+        32,
+        36,
+        180,
+        187,
+        212,
+        218
+      ],
+      "fact": "HW instance names join local legalization entries; getLegalName delegates to legalizeName and stores hw.verilogName."
+    },
+    {
+      "source": "SVDialect.cpp",
+      "lines": [
+        75,
+        109,
+        122,
+        135
+      ],
+      "fact": "Reserved integer bypasses unmodified fast path. Initial per-base suffix counter zero yields integer_0 if available; otherwise increments until insertion succeeds."
+    }
+  ],
+  "conditional_prediction": "With no prior integer_0 collision and initial counter0, exact legalized instance name is integer_0; this does not justify accepting arbitrary integer_<digits>.",
+  "actual_context": "Independent reviewer small metadata records exact integer_0 in both old/new Scalar modules; four children and20 named connections are reported identical. This is not dataflow acceptance by the unchanged production checker.",
+  "limits": [
+    "No upstream compiler execution, no new frontend/EDA/native, no actual SV read or full parse.",
+    "Official cached source blob integrity is verified; this is not a reproducible nativebinary build proof.",
+    "Production parser and all structural/numerical scope gates unchanged; only frozen exact expectation key changes."
+  ]
+}

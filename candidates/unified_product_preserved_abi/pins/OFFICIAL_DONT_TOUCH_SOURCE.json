@@ -1,0 +1,111 @@
+{
+  "basis_identity": {
+    "bytes": 5626,
+    "sha256": "f65d5d560de32d2286c44ef273b78068c4ff255f195e5c1d1b6849d875dfb82a"
+  },
+  "basis_freeze_identity": {
+    "bytes": 2151,
+    "sha256": "b8a3a8122fd181ed328727028f0d054453572a9cbaa39e4a3b51695b200807d6"
+  },
+  "sources": [
+    {
+      "bytes": 41579,
+      "fixed_tag": "firtool-1.62.1",
+      "git_blob_sha": "bc19ce417e1d4496ba3cb6cff6e075cc82cc5bd9",
+      "repository": "llvm/circt",
+      "repository_path": "lib/Dialect/FIRRTL/Transforms/IMConstProp.cpp",
+      "sha256": "3b4a260528a7f7f81a2f4c2f1b89e1229f175b4bc3ac5065ed26fa73595a09e6"
+    },
+    {
+      "bytes": 28570,
+      "fixed_tag": "firtool-1.62.1",
+      "git_blob_sha": "5e88cf2915fabe6062d3836ab305ad7e2283fe18",
+      "repository": "llvm/circt",
+      "repository_path": "lib/Dialect/FIRRTL/Transforms/IMDeadCodeElim.cpp",
+      "sha256": "732cef64e2f09aac69a41cbd9e6103f650337fcb9f83d3a527c83c09b1d796a3"
+    },
+    {
+      "bytes": 44509,
+      "fixed_tag": "firtool-1.62.1",
+      "git_blob_sha": "442de73a86012d8ca8bc17766cfa3e662087f85f",
+      "repository": "llvm/circt",
+      "repository_path": "lib/Dialect/FIRRTL/Transforms/LowerAnnotations.cpp",
+      "sha256": "cabf5787c8f1af2cfe51fbc62bd18e6715c4bfb3ed5d7acb5780c79ccb22bde1"
+    },
+    {
+      "bytes": 25137,
+      "fixed_tag": "firtool-1.62.1",
+      "git_blob_sha": "dddfea6f260bdba396f93cd4174f32578077b289",
+      "repository": "llvm/circt",
+      "repository_path": "lib/Dialect/FIRRTL/FIRRTLAnnotations.cpp",
+      "sha256": "73b564440014192cdb72e34cdf4fcb06cea7bb40d83a23b53d2145c8e5f3c1fa"
+    },
+    {
+      "bytes": 63884,
+      "fixed_tag": "firtool-1.62.1",
+      "git_blob_sha": "1143255dccdc5582b30584925a87042578a6c28b",
+      "repository": "llvm/circt",
+      "repository_path": "lib/Dialect/FIRRTL/Transforms/LowerTypes.cpp",
+      "sha256": "a1d0044c3b593a2f3f39d1bf95728504f7dc65bebe4eec0a923e34ff7f4a3973"
+    },
+    {
+      "bytes": 1596,
+      "commit": "8db8c1e063c22440c6fcbc61ea7e8923a969ad15",
+      "fixed_tag": "v6.7.0",
+      "git_blob_sha": "9e554f8543a048faf95ab2ba2fa444b60f6bd4ea",
+      "repository": "chipsalliance/chisel",
+      "repository_path": "core/src/main/scala/chisel3/dontTouch.scala",
+      "sha256": "1a09a21be4040b0b81fc0bf15bee4a0e34590ebd20f57272f4ff9dd8055acf1f"
+    }
+  ],
+  "source_mechanism": {
+    "IMConstProp.cpp": {
+      "claim": "dontTouch block arguments are overdefined, rather than intermodule-constant-propagated",
+      "lines": [
+        452,
+        459
+      ]
+    },
+    "IMDeadCodeElim.cpp": {
+      "claim": "constant outputs forward to caller unless dontTouch; public modules signature cannot change; dontTouch private ports skipped",
+      "constant_forward_lines": [
+        263,
+        299
+      ],
+      "dontTouch_liveness_lines": [
+        235,
+        243
+      ],
+      "public_and_dontTouch_port_signature_lines": [
+        629,
+        646
+      ]
+    },
+    "LowerAnnotations.cpp": {
+      "claim": "standard resolver applies dontTouch to permitted targets including ports",
+      "lines": [
+        445,
+        448
+      ]
+    },
+    "LowerTypes.cpp": {
+      "claim": "field-target annotations filtered/remapped to lowered port attributes",
+      "filter_lines": [
+        538,
+        571
+      ],
+      "port_add_lines": [
+        784,
+        810
+      ]
+    },
+    "dontTouch.scala": {
+      "claim": "recursive aggregate elements each emit DontTouchAnnotation; returns original Data",
+      "lines": [
+        37,
+        46
+      ]
+    }
+  },
+  "scope": "Pinned official source mechanism only, not reproduced native tool build or new execution."
+}

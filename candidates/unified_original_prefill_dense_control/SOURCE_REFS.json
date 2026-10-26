@@ -1,0 +1,81 @@
+{
+  "baseline_classes": 642,
+  "new_classes": 31,
+  "new_sources": [
+    {
+      "bytes": 3658,
+      "path": "source/UnifiedDenseGroupLeaseBridgeV2.scala",
+      "sha256": "dbc460daedb50a57b05a5210ae9beb90b1a13c759628844d1cf2d9b3699a7fe4"
+    },
+    {
+      "bytes": 4277,
+      "path": "source/UnifiedOriginalDenseClientV2.scala",
+      "sha256": "e1d98590660a37a712f4008cd34ba780601b13ffe094ca3f001c9ebe1bfc27cd"
+    },
+    {
+      "bytes": 12551,
+      "path": "tests/UnifiedRuntimeDenseIntegrationV2Spec.scala",
+      "sha256": "3d96439fac54d775ee6e3fc4d02868cc31c5811fe0de0b1a3f28a9bf8feadcca"
+    },
+    {
+      "bytes": 5589,
+      "path": "source/UnifiedRuntimeDensePlanV2.scala",
+      "sha256": "e3aa8c0e876bc0ba166b76367d4139958eec530b13c63b5878156dc7bf196d70"
+    },
+    {
+      "bytes": 2808,
+      "path": "source/Qwen2Public21BoundaryV2.scala",
+      "sha256": "293bfbf8102e8cc8bb64bcec7f23585658c0e18bbe1bd7266b13aafa9aa9eca8"
+    },
+    {
+      "bytes": 2835,
+      "path": "tests/Qwen2Public21BoundaryV2Spec.scala",
+      "sha256": "173af72258a90da7c82281a4ebd86214c2e38a33308db46783d6696c552423d8"
+    },
+    {
+      "bytes": 3557,
+      "path": "source/Qwen2Public21TagAdapterV2.scala",
+      "sha256": "10076154d85ba270da27208f7d6723c52c88db053a86c8bb85a0a85b0b99c6c8"
+    },
+    {
+      "bytes": 6732,
+      "path": "tests/Qwen2Public21TagAdapterV2Spec.scala",
+      "sha256": "6507a11af66b47a5f113cdf88707cc0918bad7e42299664e3a78a39b971b7609"
+    }
+  ],
+  "published_dependencies": [
+    {
+      "bytes": 11999,
+      "commit": "5cb19589214e7e7d32aa1d1126d838d0c7b37b7b",
+      "path": "candidates/unified_matrix_vector_lease_control/source/UnifiedMatrixVectorLeasePortsV2.scala",
+      "sha256": "d60d83aa61adf599230393cecedb8003d0b6af7e92981980fa7fa532e9739885"
+    },
+    {
+      "bytes": 3577,
+      "commit": "5cb19589214e7e7d32aa1d1126d838d0c7b37b7b",
+      "path": "candidates/unified_matrix_vector_lease_control/REPRODUCTION.json",
+      "sha256": "98d9a7fa4b8965bc2f409b18d41e32002d348ebbaf1f5bd839c3268b2083ca89"
+    },
+    {
+      "bytes": 1729,
+      "commit": "5cb19589214e7e7d32aa1d1126d838d0c7b37b7b",
+      "path": "candidates/unified_matrix_vector_lease_control/SOURCE_REFS.json",
+      "sha256": "bb78b319be059c97f50143ab11ab147b7581d9fdc3df83ad1745248a04801314"
+    },
+    {
+      "bytes": 8980,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/REPRODUCTION.json",
+      "sha256": "efccabbff41da64ce61f75586ee83fe0b4f82d9b2d1f5e5e2471a5dfef925a43"
+    },
+    {
+      "bytes": 8940,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/SOURCE_REFERENCES.json",
+      "sha256": "0949f13313e6304149fbed857d4994fb76fdff0398816aa01458cd4db3d32706"
+    }
+  ],
+  "same_8_source_compilation": true,
+  "test_classes": 673,
+  "unchanged_original_feeder": "StreamingDenseOwner remains a source/class dependency; the9case tests do not instantiate the full client SRAM/Matrix."
+}

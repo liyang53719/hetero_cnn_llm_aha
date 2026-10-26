@@ -1,0 +1,91 @@
+{
+  "backend_model_candidate_included": false,
+  "checks_after": 1128,
+  "checks_before": 1128,
+  "cleanup_complete": true,
+  "compile": {
+    "baseline_classes": 642,
+    "new_class_bytes": 567612,
+    "new_classes": 31,
+    "scope": "typecheck only; no old-class shadow",
+    "sources": 8
+  },
+  "emitted_shared_SV_modified_or_replayed": false,
+  "exit_code": 0,
+  "five_complete_M128_blocks": false,
+  "full_feeder_SRAM_or_ACK_path_instantiated": false,
+  "independent_actual_review": {
+    "bytes": 7840,
+    "sha256": "820cd0dcfb416cfc71bc5bc233563db4e046a3dce7d081a38dcac8f50f9ee76b"
+  },
+  "inner_seconds": 21.538762503885664,
+  "late_held_result_fault_parent_final_fence_required": true,
+  "old_B1_B2_STOP_preserved": true,
+  "opaque_IR_files": [
+    {
+      "bytes": 238489,
+      "sha256": "daf52eac74a20f1f71b19346a2658b92477cabaa84cc876454a56a235063b286"
+    },
+    {
+      "bytes": 92641,
+      "sha256": "8924b0fe6d676c6270d534b1df6c9115c1b645391f3182bf6d14e61746e5bc33"
+    },
+    {
+      "bytes": 334273,
+      "sha256": "5635084628c6cbca8dcee70f5ab194821cff2f62e77b94120f9d7dec0d1b44ed"
+    },
+    {
+      "bytes": 2739006,
+      "sha256": "5b43089ae7f447006f497710fab6fb62003b9b58ef308e21bce893dec0243eb9"
+    },
+    {
+      "bytes": 2739006,
+      "sha256": "5b43089ae7f447006f497710fab6fb62003b9b58ef308e21bce893dec0243eb9"
+    },
+    {
+      "bytes": 334273,
+      "sha256": "5635084628c6cbca8dcee70f5ab194821cff2f62e77b94120f9d7dec0d1b44ed"
+    },
+    {
+      "bytes": 1231,
+      "sha256": "89f5f80cb0651fbcdbfd9e676fdb3e357b423ce98744a27b3a4a3606d7c6dc8f"
+    },
+    {
+      "bytes": 334273,
+      "sha256": "5635084628c6cbca8dcee70f5ab194821cff2f62e77b94120f9d7dec0d1b44ed"
+    },
+    {
+      "bytes": 2739006,
+      "sha256": "5b43089ae7f447006f497710fab6fb62003b9b58ef308e21bce893dec0243eb9"
+    }
+  ],
+  "opaque_IR_not_uploaded_or_reinterpreted_as_SV": true,
+  "outer_seconds": 21.63249473902397,
+  "physical_4096_qualification": false,
+  "real_endpoint_arithmetic": false,
+  "sampled_cpu_seconds": 17.92,
+  "sampled_peak_rss_bytes": 285745152,
+  "scope": "Actual9short control assertions across4suites; mock Matrix lease/completion. Qwen2 ordered split and storage are metadata checks, not arithmetic execution.",
+  "status": "PASS_ACTUAL_ORIGINAL_DENSE_NINE_CASE_TREADLE_TEST_ONLY_NOT_PHYSICAL_BANK_OR_MATRIX",
+  "test_result": {
+    "cases": [
+      "decode five profiles in one DUT without changing hardware or Qwen2 numerical boundaries",
+      "retain two real group identities and never turn an undrained error into reusable ownership",
+      "include a present-cycle stray return or abort in terminal drain and new-accept gates",
+      "retain held offers and report error after a prior wrong-identity completion",
+      "retain QKV ordered FP32 reductions and late BF16 materialization",
+      "retain public PC while returning the full external identity under backpressure",
+      "retain an offered job after stray done then reject its apparent success",
+      "keep a held terminal payload stable under a late stray including retirement",
+      "mark the exact nonwrapping epoch boundary"
+    ],
+    "complete_feeder_verified": false,
+    "failed": 0,
+    "numerical_verified": false,
+    "physical_matrix_or_bank_verified": false,
+    "scope": "five-profile control and B1/B2 held/fault fixes only",
+    "succeeded": 9,
+    "suites": 4,
+    "test_count": 9
+  }
+}

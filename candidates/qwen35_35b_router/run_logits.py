@@ -150,6 +150,7 @@ def validate_arguments(args):
                 'fixture paths require --run-actual')
     if args.out is not None:
         require(not args.out.exists() and not args.out.is_symlink() and
+                args.out.resolve() != ROOT / 'work' and
                 args.out.resolve().is_relative_to(ROOT / 'work'), 'fresh ignored work output required')
 
 

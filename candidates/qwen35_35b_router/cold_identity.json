@@ -16,13 +16,13 @@
     },
     "candidates/qwen35_35b_router/run_logits.py": {
       "previous_sha256": "db7a74e6f42378698aab8b71ecc4662f3dc113520dbdbb47c5a6e3d5934a307f",
-      "sha256": "68d9a3d3c8b211177f18e0db09f96bed907475e911ed338cb210d5f4a291ce08",
-      "audit": "Separate current cold audit from unchanged frozen actual source gate. Current actual replay remains source-drift blocked."
+      "sha256": "f70641e3e1c17355820465cb3ad50bad5f3fa9d71566011e8e6e2a962d1a72ce",
+      "audit": "Separate current cold audit from unchanged frozen actual source gate. Current actual replay remains source-drift blocked. Reject the ignored work root itself even when absent; no numerical or frozen actual identity change."
     },
     "candidates/qwen35_35b_router/test_logits.py": {
       "previous_sha256": "22bd73e30a0eee5e729ab710edb320c6e10fb97abda39df8438954945ed91c0a",
-      "sha256": "2658b1a45792da7e842af0ba1824b1aac90f3b31c4710e989c2acc0c7281afc7",
-      "audit": "Cold-only regression and rejection coverage; no actual/native execution."
+      "sha256": "491afd9b66f0701d4e05978928f4bca0f537688d4dcd83c6644087811a3adafe",
+      "audit": "Cold-only regression and rejection coverage; no actual/native execution. Add fresh-checkout output root, normalized path, child and symlink containment controls."
     }
   },
   "additional_sources": {

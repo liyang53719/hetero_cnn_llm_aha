@@ -256,5 +256,54 @@ class LogitsTests(unittest.TestCase):
                 gate.compare_outputs(b'\x80\x7f' + full[2:], full, full, m)
 
 
+class OutputContainmentTests(unittest.TestCase):
+    def check_path(self, root, path, accepted):
+        with patch.object(gate, 'ROOT', root):
+            args = gate.parser().parse_args(['--out', str(path)])
+            if accepted:
+                gate.validate_arguments(args)
+            else:
+                with self.assertRaisesRegex(ValueError, 'fresh ignored'):
+                    gate.validate_arguments(args)
+
+    def test_absent_work_root_is_not_a_fresh_run_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'repo'; root.mkdir()
+            work = root / 'work'
+            self.assertFalse(work.exists())
+            self.check_path(root, work, False)
+            self.assertFalse(work.exists())
+
+    def test_fresh_child_is_admitted_without_creating_work_or_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'repo'; root.mkdir()
+            self.check_path(root, root / 'work' / 'new-run', True)
+            self.assertFalse((root / 'work').exists())
+
+    def test_existing_work_and_existing_child_are_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'repo'; work = root / 'work'; work.mkdir(parents=True)
+            child = work / 'old-run'; child.mkdir()
+            self.check_path(root, work, False)
+            self.check_path(root, child, False)
+            self.check_path(root, work / 'new-run', True)
+
+    def test_normalized_work_root_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'repo'; root.mkdir()
+            self.check_path(root, root / 'work' / 'child' / '..', False)
+            self.assertFalse((root / 'work').exists())
+
+    def test_external_and_symlink_escape_are_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp); root = base / 'repo'; work = root / 'work'; work.mkdir(parents=True)
+            external = base / 'external'; external.mkdir()
+            self.check_path(root, external / 'new-run', False)
+            (work / 'escape').symlink_to(external, target_is_directory=True)
+            self.check_path(root, work / 'escape' / 'new-run', False)
+            (work / 'dangling').symlink_to(base / 'missing')
+            self.check_path(root, work / 'dangling', False)
+
+
 if __name__ == '__main__':
     unittest.main()

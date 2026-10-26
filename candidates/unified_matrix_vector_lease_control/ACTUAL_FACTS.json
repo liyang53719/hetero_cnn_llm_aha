@@ -1,0 +1,73 @@
+{
+  "IR_reviewer_fresh_hash": false,
+  "MAC_utilization_measured": false,
+  "case_coverage_evidence": "Exact compiled source plus complete assertions; no independent raw cycle event transcript",
+  "class_stage": {
+    "bytes": 10633506,
+    "class_count": 642
+  },
+  "cleanup_complete": true,
+  "compile": {
+    "bytes": 369841,
+    "new_classes": 17,
+    "sourcefile_hash_review_role": "compile_actual_review",
+    "sources": 4
+  },
+  "current_emitted_UnifiedSharedResourceTop_unchanged_and_not_connected_to_V2": true,
+  "fullblock": false,
+  "hardware_source_unchanged_after_compile": true,
+  "independent_actual_review": {
+    "bytes": 5168,
+    "sha256": "a04edfc1d0247fd2c2ce91adb697f3a39ca7888135d7711edf6024d8600fbddf"
+  },
+  "independent_review_limits": [
+    "Controller realDUT behavior only. PhysicalMatrix/vector replies/counter andproducerFence are mock inputs; actualbank notinstantiated andphysical4096MAC nottested here.",
+    "No source-specific raw event trace; detailed coverage inferred from exactcompiled source pluscomplete4case assertions, not independentcycleprofiler/transcript. Sourceinitialvectoridentity checks txn/serial only;heldsnapshotscheckfullbits,not exhaustiveallidentitynegativecoverage.",
+    "Mockrequest low16 operands are notcanonicalBF16; no BF16rounding/ALU/weightedMoEvalue or anynumericalmodel qualification.",
+    "Only2runtimeprofiles sourcecase; no all5profile fullblock execution or90%usefulMAC/PPA/clockfrequency proof.",
+    "642class/4IR content notreread byreviewer;production pre/poststage+artifacthash receipts used with exactcurrentinventory/sizes.",
+    "RSS/CPU/tree are sampled metrics;59.07CPU is not completeallprocessaccounting. No resources or budgets increased/retried.",
+    "Parentendpoint receipts preserveexpectedpins+sourceboundpass;rootlauncherarchive beforelaunchbutselfhashnotinROOT_GO fixedmap. Originalsession linkage is frozenrootprojection,notnew fabricatedrawtoolhistory.",
+    "Outer timeout branch not exercised;150s nominal processwindow pluspostflight/lastkillwait is notpromotedtoall-path hardbound."
+  ],
+  "independent_review_scope": "PASS_ACTUAL_FOUR_CASE_CONTROLLER_ONLY_NOT_PHYSICAL_MATRIX_BANK_OR_PRODUCER",
+  "inner_seconds": 70.00022659194656,
+  "native_exit_code": 0,
+  "numerical": false,
+  "old_STOP_and_FAIL_evidence_preserved": true,
+  "opaque_IR": {
+    "all_equal": true,
+    "all_same_sha256": "4644979cf7d6c0d3c3d3d4d5dcf4059455eb8a5bc3736b5ada93a413324e845f",
+    "count": 4,
+    "each_bytes": 3009316,
+    "not_SV_or_full4096_resource_qualification": true,
+    "not_uploaded": true
+  },
+  "outer_seconds": 70.12147763895337,
+  "physical_matrix_and_vector_mocked": true,
+  "postflight_checks": 1088,
+  "preflight_checks": 1088,
+  "private_producer_fence_injected": true,
+  "sampled_group_cpu_seconds": 59.07,
+  "sampled_peak_rss_bytes": 306610176,
+  "status": "PASS_ACTUAL_CONTROLLER_FOUR_CASE_TREADLE_TEST_ONLY_NOT_PHYSICAL_BANK_OR_MATRIX",
+  "test_log": {
+    "bytes": 678,
+    "sha256": "311ec79ca46b7025fcc7d24b4210238c02c8806e78309750c274ed7092da0c34"
+  },
+  "test_result": {
+    "cases": [
+      "own both resources concurrently and close36 credits on two runtime profiles without reset",
+      "reject all three terminal same-cycle new-offer and unknown-return counterexamples",
+      "keep accepted ordinals stable and drain held offers through ordinary poison",
+      "enforce36 accepted offers and quarantine unknown Matrix returns without invented drain"
+    ],
+    "failed": 0,
+    "numerical_verified": false,
+    "physical_matrix_or_bank_verified": false,
+    "producer_origin_verified": false,
+    "scope": "controller mocked-endpoint tests only",
+    "succeeded": 4,
+    "test_count": 4
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "baseline": "Reconstruct 557 fixed baseline classes using the inherited source/dependency references, then independently compile the preserved ABI nine-source version to68 fresh classes; merge exactly625 without shadow. Do not reuse arbitrary downloaded class files. Compile these four sources to17 new classes, then exact625+17 stage642 for one suite.",
+  "baseline_recipe_reference": {
+    "bytes": 8980,
+    "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+    "path": "candidates/unified_product_preserved_abi/REPRODUCTION.json",
+    "sha256": "efccabbff41da64ce61f75586ee83fe0b4f82d9b2d1f5e5e2471a5dfef925a43"
+  },
+  "classpath_role": "Build PINNED_CLASSPATH from exactly the referenced106 ordered dependency hashes. SCALA_CHISEL_DEPS/TEST_DEPS roles may share a restored Maven layout only when every hash/order remains exact.",
+  "commands": {
+    "compile": [
+      "${JAVA21}",
+      "-Duser.home=${COMPILE_RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${COMPILE_RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx1g",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${PINNED_CLASSPATH}",
+      "scala.tools.nsc.Main",
+      "-classpath",
+      "${COMPILE_RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+      "-Xplugin:${DEPENDENCIES}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "-language:reflectiveCalls",
+      "-d",
+      "${COMPILE_RUN_ROOT}/classes",
+      "${REPOSITORY}/candidates/moe_vector_leaf/source/shared/UnifiedOverlapProtocolV2.scala",
+      "${REPOSITORY}/candidates/moe_vector_leaf/source/shared/UnifiedVectorBankV2.scala",
+      "${REPOSITORY}/candidates/unified_matrix_vector_lease_control/source/UnifiedMatrixVectorLeasePortsV2.scala",
+      "${REPOSITORY}/candidates/unified_matrix_vector_lease_control/tests/UnifiedMatrixVectorLeasePortsV2Spec.scala"
+    ],
+    "test": [
+      "${JAVA21}",
+      "-Duser.home=${TEST_RUN_ROOT}/home",
+      "-Djava.io.tmpdir=${TEST_RUN_ROOT}/tmp",
+      "-XX:-UsePerfData",
+      "-Xmx1g",
+      "-Xss4m",
+      "-XX:ActiveProcessorCount=1",
+      "-cp",
+      "${TEST_RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+      "org.scalatest.tools.Runner",
+      "-oW",
+      "-s",
+      "heteronpu.continuous.UnifiedMatrixVectorLeasePortsV2Spec"
+    ]
+  },
+  "compile_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "no_auto_test_or_follow_on": true,
+  "no_execution_authorized_by_document": true,
+  "ordered_106_jars_reference": {
+    "bytes": 27004,
+    "commit": "43801d4043ef49524b93dbccb5c1f0bf4bb8f258",
+    "count": 106,
+    "key": "ordered_classpath",
+    "ordered_hashes_match": true,
+    "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b"
+  },
+  "role_inverse_exact_before_classpath_compression": true,
+  "test_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 100,
+    "cpu_seconds": 60,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 150,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 120,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 90
+  }
+}

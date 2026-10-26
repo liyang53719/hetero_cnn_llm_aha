@@ -1,0 +1,45 @@
+{
+  "bank_scope": "Bank source compiled as the same four-source compilation, but this controller DUT does not instantiate or execute it. Two new sources are original bytes.",
+  "baseline_classes": 625,
+  "compile_sources": 4,
+  "new_classes": 17,
+  "new_sources": [
+    {
+      "bytes": 11999,
+      "path": "source/UnifiedMatrixVectorLeasePortsV2.scala",
+      "sha256": "d60d83aa61adf599230393cecedb8003d0b6af7e92981980fa7fa532e9739885"
+    },
+    {
+      "bytes": 16691,
+      "path": "tests/UnifiedMatrixVectorLeasePortsV2Spec.scala",
+      "sha256": "94186220f11894d3a975e1a5814ba253489369b6200af1888c31e2ae434881eb"
+    }
+  ],
+  "published_dependencies": [
+    {
+      "bytes": 1795,
+      "commit": "d7069a5ecf6c409cb17f7cc7d78b6a3aaa0ba392",
+      "path": "candidates/moe_vector_leaf/source/shared/UnifiedOverlapProtocolV2.scala",
+      "sha256": "7ac3b0c58c666bef4255c018df53ad987ff1ac60f0ef14045215d5bae44aa724"
+    },
+    {
+      "bytes": 2157,
+      "commit": "d7069a5ecf6c409cb17f7cc7d78b6a3aaa0ba392",
+      "path": "candidates/moe_vector_leaf/source/shared/UnifiedVectorBankV2.scala",
+      "sha256": "32bb97ab7ec0f5f09804fe4a6561b2801811d7c98446535e5b1239ac157f3796"
+    },
+    {
+      "bytes": 8980,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/REPRODUCTION.json",
+      "sha256": "efccabbff41da64ce61f75586ee83fe0b4f82d9b2d1f5e5e2471a5dfef925a43"
+    },
+    {
+      "bytes": 8940,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/SOURCE_REFERENCES.json",
+      "sha256": "0949f13313e6304149fbed857d4994fb76fdff0398816aa01458cd4db3d32706"
+    }
+  ],
+  "test_classes": 642
+}

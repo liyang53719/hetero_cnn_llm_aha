@@ -4,7 +4,7 @@
 
 按 2026-10-26 06:04 UTC 的用户新要求：**继续核验当前真实硬件结构能否生成 RTL，同时并行推进其余四类 block；不再让它们等待 Qwen2 主线完成。** 旧文档中的“先 Qwen2、再其余模型”保留为历史时点说明，不再作为当前派工依赖。
 
-**最新硬约束：直接验证完整 4096-MAC 配置。五个 profile（Qwen2 L0、0.8B L0/L3、35B L0/L3）必须使用同一份硬件、同一个接口和同一个 RTL hash，仅 runtime 配置及权重不同。** 不允许分别以 16/32 head 的 elaboration 生成两套电路再声称满足“通用硬件”。固定最大 32-head 容量、5-bit 索引与 runtime heads 的修改是后继待审方案，本片不把它当已实现或已验收结果。
+**最新硬约束：直接验证完整 4096-MAC 配置。五个 profile（Qwen2 L0、0.8B L0/L3、35B L0/L3）必须使用同一份硬件、同一个接口和同一个 RTL hash，仅 runtime 配置及权重不同。** 不允许分别以 16/32 head 的 elaboration 生成两套电路再声称满足“通用硬件”。固定最大 32-head 容量、5-bit 索引与 runtime heads 的共享 state 控制叶已独审并发布（7bf6fc287ba9e7b5f696c44a691f432a3e3958c4）；仅同一叶实例 runtime16/32 控制范围 PASS，不代表完整 4096-MAC 五 profile 通用 top 已接入或数值验收通过。
 
 此前单 512 endpoint 的 lint 候选已撤销且未运行，不能继续作为当前执行计划。旧按 16/32 分别 elaboration 的 state32 九文件方案已暂停，不随本批发布为解决方案；toy/DPI 冻包继续保持未发布。
 

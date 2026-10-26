@@ -1,0 +1,60 @@
+{
+  "new_test_source_sha256": "b5966d9ba3cfd31d823c527959a2fdc1b9cf36170445f9491518a029ccb6d3fd",
+  "original_test_source_sha256": "f468328213e0b4aec419ad1e9e5515f951b4e3d5fdfa7aba61dc5e441dd68a27",
+  "original28source_pins_sha256": "c5a37e4ae66c128d0417cd0e39b4479e93aae20e67b884ea45d308245674e99f",
+  "reused_DUT_classes_manifest_sha256": "534f5843a60e6ea925c4284fc1c2e7404437f7cdcf880d7d4c44eda5aff8606b",
+  "golden_sha256": "2b86f02e0fb78343f4bb611cdf796565c35e4ef22c0ceacebb35be3b03a5b9c0",
+  "test_cases": 5,
+  "unchanged_DUT": true,
+  "new_module_definitions": false,
+  "Golden_or_stimulus_change": false,
+  "observations": "bounded per-op actual request op/a/b and response flags/error, full32lane raw output, phase/cycle/elapsed counts; no raw scalar FP32 response value exposed by old interface, do not claim it recorded",
+  "observation_bounds": {
+    "max_payload_chars_per_line": 384,
+    "max_lines": 4096,
+    "max_total_bytes_including_prefix_and_newlines": 1720320,
+    "positive_requests": 1088,
+    "positive_responses": 1088,
+    "full32lane_output_lines": 2
+  },
+  "no_progress_guard": {
+    "scope": "Only numeric while loop in the first test; no change to other4 tests or any ready/valid stimulus",
+    "cycles": 64,
+    "all_expert_results_buffered_before_loop": true,
+    "route_selector_initial_scan_max": 9,
+    "contribution_load_transition_max_cycles": 2,
+    "request_gate_max_consecutive_block_cycles": 1,
+    "response_gate_max_consecutive_block_cycles": 1,
+    "scalar_ops_allowed": [
+      "Add0",
+      "MulIeeeRne6"
+    ],
+    "scalar_path": "BlockScalarFloat idle->normal->done only, no div/exp/softplus branch; unchanged source",
+    "between_handshakes_conservative_bound_cycles": 16,
+    "does_not_apply_to_other_unbounded_or_long_latency_clients": true
+  },
+  "budget": {
+    "CPU_seconds": 300,
+    "work_seconds": 330,
+    "cleanup_seconds_from_start": 345,
+    "total_seconds": 360,
+    "outer_seconds": 390,
+    "heap_MiB": 512,
+    "RSS_bytes": 1073741824,
+    "output_bytes": 10485760
+  },
+  "scope": "Observer-only source successor; the actual test result is summarized separately.",
+  "stimulus_source_comparison": {
+    "ordered_poke_statements": 120,
+    "ordered_clock_calls": 33,
+    "ordered_expect_calls": 83,
+    "original_cases": 5,
+    "unchanged": true
+  },
+  "actual_observation_lines": 2283,
+  "actual_initial_wait_cycles": {
+    "txn100": 6,
+    "txn101": 5
+  },
+  "actual_max_gap_between_successive_request_or_response_events_cycles": 3
+}

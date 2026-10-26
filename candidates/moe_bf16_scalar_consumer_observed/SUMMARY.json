@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "status": "PASS_5_OF_5_SYNTHETIC_MOE_SCALAR_TREADLE_CASES_ONLY",
+  "original_CPU120_failure_preserved": true,
+  "original_failure_commit": "4bdecb9fd0f119918a37a57c1c23161ceb776307",
+  "backend": "ChiselTest Treadle using original BlockScalarFloat/HardFloat and unchanged order/consumer circuit, not Verilog simulation",
+  "compilation": "Base28 compiled previously; only one observed Spec source newly compiled,171 staged classfiles. Not a fresh29-source compile.",
+  "native_result": {
+    "exit_code": 0,
+    "exact_tests_passed": 5,
+    "wall_seconds": 215.54503720498178,
+    "sampled_CPU_seconds": 215.18,
+    "sampled_peak_RSS_bytes": 259776512,
+    "sampled_peak_output_bytes": 7276824,
+    "cleanup": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "pins_unchanged": {
+      "sources": true,
+      "jars": true,
+      "classes": true,
+      "golden": true
+    }
+  },
+  "native_result_sha256": "f3e3d7401ef2b01d108573621c71bb53c5556e453edc0a3553e1101a865c8cd9",
+  "original_log_sha256": "0888033a41c0dfe7b827f814670737cad426c1b1ab2d157b91c898de0d90e507",
+  "raw_log_bytes": 196408,
+  "actual_review_sha256": "52d67b2ebfcf78edfe2ff28c3a017e88c1690055a01f8556f249fa749d4587e3",
+  "actual_review_freeze_sha256": "23c34c3c85496dde2f6af79b21c71a2688cafd21e68d7e76d2245bbadf8f8864",
+  "source_review_sha256": "f389da4fdc6b92c01a4575a5d64fbc45a93402c3cf1a663f0ba71c57b7dff0b4",
+  "compile_stage_review_sha256": "c51edfde5d240435f9ad343c95b6ee9e8421b888cb87c6c003eb30e2480d8211",
+  "numeric_transactions": [
+    {
+      "transaction": 100,
+      "contributions": 9,
+      "lanes": 32,
+      "requests": 576,
+      "responses": 576,
+      "mul_ops": 288,
+      "add_ops": 288,
+      "numeric_loop_cycles": 2020,
+      "raw512_zero_extended": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f80438000043ec00000",
+      "response_flag_histogram": {
+        "0": 576
+      },
+      "recorded_max_handshake_gap_cycles": 6,
+      "operations_checkpoints": 9,
+      "all_captured_operands_equal_frozen_words": true
+    },
+    {
+      "transaction": 101,
+      "contributions": 8,
+      "lanes": 32,
+      "requests": 512,
+      "responses": 512,
+      "mul_ops": 256,
+      "add_ops": 256,
+      "numeric_loop_cycles": 1796,
+      "raw512_zero_extended": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000438000043ec00000",
+      "response_flag_histogram": {
+        "0": 512
+      },
+      "recorded_max_handshake_gap_cycles": 5,
+      "operations_checkpoints": 8,
+      "all_captured_operands_equal_frozen_words": true
+    }
+  ],
+  "numeric_trace_scope": "1088 actual op/a/b requests and1088 response flags/error observations; no rawFP32 response data exposed. All32 final BF16 lanes equal stored official eager synthetic references. Scalar ops are not MAC utilization counters.",
+  "held_output_coverage": "Identity/status checked at initial result; data rechecked after4 hold cycles, then consumed and next-job ready checked. No claim that all fields were reasserted each hold cycle.",
+  "negative_cases": [
+    "High16-noncanonical BF16 weight rejected; remaining8 drained; no scalar ops",
+    "Counts0,1,7,10,16,17,31 atomically rejected without child launch",
+    "Stale Load/Drain identity and duplicate/out-of-range tags do not spend valid unique credit",
+    "Badroute and badreply converge only via real producer.done drained failure; invalid payload never numerical output"
+  ],
+  "additional_numeric_probes": "Wrongidentity, undrained, Ok-status and255 failure receipts rejected without killing current legitimate numeric result.",
+  "initial_and_steady_progress": "First handshakes after6/5 loop cycles for txn100/101; subsequent arbitrary request-or-response gap at most3; local64 guard never fired.",
+  "IR_identity": {
+    "format": "Treadle low FIRRTL, not emitted SV",
+    "four_MoeNumericTestHarness_lo_fir_sha256": "ca113a1265390a04bea022ed90c3c4c3e5fc129ec6b391832a8af88acff63a2c",
+    "same_as_original_CPU120_attempt": true,
+    "direct_consumer_negative_case_lo_fir_sha256": "af2d7b2bf10cd1a504f428a24e7c50708fdbeb1494c34aff012145f59976e67a",
+    "review_scope": "Author hash check only; rawIR not included."
+  },
+  "evidence_missing": [
+    "Original tool session ID, actual outer argv, raw outer terminal/exit receipt unavailable; native namespace SID is not tool session. Planned outer390 does not establish recorded outer terminal."
+  ],
+  "limitations": [
+    "Synthetic H32/E256/top8 fixture, no checkpoint or user weights",
+    "No expert matrix projections, router computation, chunk128, GDN, attention or fullblock execution in this circuit test",
+    "No complete same4096-MAC top/interface/RTL-hash five-profile qualification or performance/PPA claim",
+    "NaN/Inf/FP32overflow/BF16materializationoverflow remain explicit unsupported domains; no all-legal-BF16 equivalence",
+    "Consumer has no ALU instance; test wrapper connects existing scalar; full unified scheduler/tile lease remains unintegrated"
+  ],
+  "L0_status": "INCOMPLETE_FULLBLOCK",
+  "L3_status": "INCOMPLETE_FULLBLOCK",
+  "private_artifacts_not_included": [
+    "runtime",
+    "classes",
+    "IR",
+    "SV",
+    "rawlog",
+    "private argv",
+    "machine paths",
+    "process identities"
+  ]
+}

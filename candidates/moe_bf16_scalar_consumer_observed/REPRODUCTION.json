@@ -1,0 +1,102 @@
+{
+  "role_projection_only_not_actual_executed_bytes": true,
+  "actual_scripts_sha256": {
+    "compile_moe_bf16_observed.py": "6efbcbf1785fddf0895f887e35c0a749b635b6b8da725f1b9293428bd6461089",
+    "stage_moe_bf16_observed.py": "6475a3d162e05a642659b6863cf0aceb2ee3670dfbc966f738356fe27e5acbfb",
+    "run_moe_bf16_observed_r6.py": "3c404e32a848b8e85792065e0d97f86c6114516d27367e644fbe664eeff95ad9"
+  },
+  "roles": {
+    "JAVA21": "Java21 runtime",
+    "JAR_CP": "ordered106 hash-pinned jar-only classpath referenced by original_source_manifest",
+    "CHISEL_PLUGIN": "hash-pinned Scala2.13.16 Chisel6.7.0 plugin in the same dependency closure",
+    "BASE_CLASSES": "fresh hash-verified classes from original28-source compile, not historical classes presumed current",
+    "OBSERVED_SPEC": "exact new test source in this package",
+    "RUN_ROOT": "fresh empty compile or test output root, appropriate to the stage",
+    "STRICT_CLEANUP_HELPER": "repository pinned30458e67 helper from original_source_manifest",
+    "VERIFIED_OBSERVED_TEST_RUN_ROOT": "fresh171-class staged test root with source/JAR/class/Golden manifest and both actual compile receipts",
+    "OFFICIAL_SYNTHETIC_GOLDEN": "exact Golden ref from source refs; no regeneration required"
+  },
+  "stages": [
+    {
+      "stage": "base_compile_only",
+      "procedure": "Use original reproduction recipe for28 pinned sources and new empty classes output. Qualify native exit0 and source/JAR/class identities; do not invoke old CPU120 tests."
+    },
+    {
+      "stage": "compile_observed_spec_only",
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx512m",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${JAR_CP}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "${BASE_CLASSES}:${JAR_CP}",
+        "-Xplugin:${CHISEL_PLUGIN}",
+        "-language:reflectiveCalls",
+        "-d",
+        "${RUN_ROOT}/classes",
+        "${OBSERVED_SPEC}"
+      ],
+      "budget": {
+        "CPU_s": 120,
+        "work_s": 165,
+        "cleanup_end_s": 175,
+        "owned_end_s": 180,
+        "outer_required_s": 210,
+        "RSS_bytes": 1073741824,
+        "output_bytes": 10485760
+      },
+      "qualification": "Exactly the new Spec class and its two case-class companions; no existing class replacement. Original source and Golden unchanged."
+    },
+    {
+      "stage": "stage_only",
+      "procedure": "Externally bind both successful compile receipts and their manifests before copying. Reject any class-relative-path overlap; copy168 base plus3 observed bytes to fresh output; rehash each destination. Retain separate CLASS_ORIGINS and original raw compile receipts. Build new source/JAR/class/Golden PLAN and bind it externally before test. No JVM/test at this stage."
+    },
+    {
+      "stage": "test_only",
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx512m",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/classes:${JAR_CP}",
+        "org.scalatest.tools.Runner",
+        "-R",
+        "${RUN_ROOT}/classes",
+        "-oD",
+        "-s",
+        "heteronpu.continuous.MoeBf16ScalarConsumerObservedSpec"
+      ],
+      "supervisor": "repro/owned_observed_supervisor.py --test-only",
+      "environment": {
+        "HETERO_CPU": "separately assigned single CPU",
+        "MOE_GOLDEN": "${OFFICIAL_SYNTHETIC_GOLDEN}",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "budget": {
+        "CPU_seconds": 300,
+        "work_seconds": 330,
+        "cleanup_seconds_from_start": 345,
+        "total_seconds": 360,
+        "outer_seconds": 390,
+        "heap_MiB": 512,
+        "RSS_bytes": 1073741824,
+        "output_bytes": 10485760
+      },
+      "qualification": "Native exit0 AND exact5/5 AND unchanged source/JAR/class/Golden hashes AND valid retained-leader cleanup proof; preserve any failure and never auto-retry."
+    }
+  ],
+  "admission_boundary": "The templates trust bound metadata. An external reviewer/supervisor must bind the complete PLAN, both compile receipts/manifests, source/JAR/Golden/runner and strict helper hashes before launch; arbitrary user-authored PLAN files are not evidence. Original outer actual argv/terminal are unavailable; outer390 is a required new-replay budget, not a claimed recorded terminal.",
+  "native_runs_in_this_public_packaging": false,
+  "new_execution_authorized_by_this_package": false
+}

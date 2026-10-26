@@ -1,0 +1,85 @@
+{
+  "baseline": "557 original/provider classes +68 preserved-product classes =625. Backend11 sources add39 =664. Official bridge2 sources add4 =668. No same-name class shadowing.",
+  "binary_payloads_included": false,
+  "published_baseline_references": [
+    {
+      "bytes": 8980,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/REPRODUCTION.json",
+      "sha256": "efccabbff41da64ce61f75586ee83fe0b4f82d9b2d1f5e5e2471a5dfef925a43"
+    },
+    {
+      "bytes": 8940,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/SOURCE_REFERENCES.json",
+      "sha256": "0949f13313e6304149fbed857d4994fb76fdff0398816aa01458cd4db3d32706"
+    }
+  ],
+  "source_files": [
+    {
+      "bytes": 3743,
+      "path": "source/EndpointFmaFixture.scala",
+      "sha256": "f479de933907559fe3de954ebbe2d1db36da96991fb0f727ade22808e443e4cd"
+    },
+    {
+      "bytes": 973,
+      "path": "source/FiniteBackendCostSample.scala",
+      "sha256": "8a79f2794f826cb7b8782641c2d3698c4c2d9dcfba336dacd5f44f8cd45ee2c2"
+    },
+    {
+      "bytes": 2946,
+      "path": "source/FiniteFp32Backend.scala",
+      "sha256": "d6e0a600144b3ac111ed5e070b0d46c39e1ff4f3ad1c3325678d31c0f38ea000"
+    },
+    {
+      "bytes": 4012,
+      "path": "source/RetainedBackendCircuitGate.scala",
+      "sha256": "08a45bf19ff8850aa56678bf8b0b6d9150d3a8f45e26809da2a1191a9426b4fb"
+    },
+    {
+      "bytes": 4489,
+      "path": "tests/RetainedBackendGateSpec.scala",
+      "sha256": "0f1ab33bb1e1b9a6058ecb39dcc7ed850ea5ef49d7ba42db0ea0efeae53bad49"
+    },
+    {
+      "bytes": 1856,
+      "path": "tests/RetainedBackendLaneCrosscheckSpec.scala",
+      "sha256": "6cffb0e64289fb481e41dfeb5b39248028a0a274d7db988c17da7ef7a9cea848"
+    },
+    {
+      "bytes": 5858,
+      "path": "tests/RetainedBackendServiceSpec.scala",
+      "sha256": "7bcf82e895794f87526161fb62a17fe1b8f43cd7f27a4fab77fc05647d2049ef"
+    },
+    {
+      "bytes": 13394,
+      "path": "source/RetainedEndpointFunctionalModel.scala",
+      "sha256": "20653305d4ff192d52633bd551a4188466d23c540eef0fd65342f976244065b9"
+    },
+    {
+      "bytes": 8089,
+      "path": "tests/RetainedEndpointFunctionalModelSpec.scala",
+      "sha256": "c058dffae8017ff3a95059acd311ebdda81b8639397a894576810ee3df17c64f"
+    },
+    {
+      "bytes": 9290,
+      "path": "source/RetainedMatrixModelFactory.scala",
+      "sha256": "1146e3bbcbe719f136258fba08f7da0479880fcda95190bc5127bfdf6254d002"
+    },
+    {
+      "bytes": 6801,
+      "path": "source/StrictFp32MatrixLane.scala",
+      "sha256": "71b2ef457fadd2e3f1bf8c1d603ec0faa4276921b320855cfe85a82a8f6e259b"
+    },
+    {
+      "bytes": 6059,
+      "path": "tests/RetainedBackendServiceOfficialBridgeSpec.scala",
+      "sha256": "a16893f17a5c6488888253289811e0709d7e2119dc7be19a1bd976bf0ce4b7ed"
+    },
+    {
+      "bytes": 3840,
+      "path": "source/RetainedServiceOfficialBridge.scala",
+      "sha256": "62b8d396f4a859d74928552d4cb5daea62dd3460ece15031aa93e489944b7cac"
+    }
+  ]
+}

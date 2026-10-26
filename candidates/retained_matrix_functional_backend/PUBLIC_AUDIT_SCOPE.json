@@ -1,0 +1,136 @@
+{
+  "status": "LIMITED_BACKEND_QUALIFICATION_WITH_BOTH_SERVICE_FAILURES_RETAINED",
+  "author_overlay_original_19_files_preserved": {
+    "bytes": 7931,
+    "sha256": "ac319b8b6e7119a223a7fc6e0c5d2353a056bf37a17414deeca16ba506d91b1b"
+  },
+  "official_reference_inventory_correction": {
+    "file": "OFFICIAL_SOURCE_REFERENCES.json",
+    "scope": "Only entries carrying exact upstream URL and Git blob are attributed to ucb-bar/chiseltest. The following eight entries are local review/source/index identities, not files from its repository or commit. Original inventory retained unchanged.",
+    "local_identity_rows": [
+      {
+        "zero_based_index": 11,
+        "bytes": 6046,
+        "sha256": "aae15e25bbcf8de113d08b7ff57439e8e835b20405f47029be663c12ba9d60e3",
+        "role": "local official-source-index; not an upstream source file",
+        "upstream_source_file": false
+      },
+      {
+        "zero_based_index": 12,
+        "bytes": 8791,
+        "sha256": "c681da921e7c6498e05917b50a0b20a46a4d543ce7b51cf09790d4dedcf7d544",
+        "role": "old_service_parse_FAIL:REVIEW.json",
+        "upstream_source_file": false
+      },
+      {
+        "zero_based_index": 13,
+        "bytes": 1236,
+        "sha256": "e2794dba333fda454aafd64b6e97e919345ab5b153a5286c9c3493e459daba59",
+        "role": "old_service_parse_FAIL:FREEZE.json",
+        "upstream_source_file": false
+      },
+      {
+        "zero_based_index": 14,
+        "bytes": 7856,
+        "sha256": "3c8959ea38139883d9bbe60cbb17cfa80e74701ce25c1f66c22737b04a0653b5",
+        "role": "backend_11_source_compile:REVIEW.json",
+        "upstream_source_file": false
+      },
+      {
+        "zero_based_index": 15,
+        "bytes": 1321,
+        "sha256": "0ccfd3e7c59533515d46b48aadbf659a91f7d19a80b1f578c8574bb29bd5d942",
+        "role": "backend_11_source_compile:FREEZE.json",
+        "upstream_source_file": false
+      },
+      {
+        "zero_based_index": 16,
+        "bytes": 5858,
+        "sha256": "7bcf82e895794f87526161fb62a17fe1b8f43cd7f27a4fab77fc05647d2049ef",
+        "role": "tests/RetainedBackendServiceSpec.scala",
+        "upstream_source_file": false
+      },
+      {
+        "zero_based_index": 17,
+        "bytes": 4012,
+        "sha256": "08a45bf19ff8850aa56678bf8b0b6d9150d3a8f45e26809da2a1191a9426b4fb",
+        "role": "source/RetainedBackendCircuitGate.scala",
+        "upstream_source_file": false
+      },
+      {
+        "zero_based_index": 18,
+        "bytes": 9290,
+        "sha256": "1146e3bbcbe719f136258fba08f7da0479880fcda95190bc5127bfdf6254d002",
+        "role": "source/RetainedMatrixModelFactory.scala",
+        "upstream_source_file": false
+      }
+    ]
+  },
+  "hardfloat74": {
+    "actual_review_sha256": "a7e0dc176eabdf1c7ef508a327991bc54a9235c377ea7714b8861b2bb6a4254c",
+    "finite_input_domain": [
+      "Finite BF16a/b andfinite FP32acc inputs only; this finiteinputset includes expected outputInf onoverflow.",
+      "No fullIEEE coverage ofNaN/Inf inputs, unsupportednonfinite recurrence, allrounding modes orallbitpatterns.",
+      "Does not prove laterreuse ofoverflowInf accumulator is supported.",
+      "Not8x512endpointmodel/service integration orfullmodelM128/5profile numeric acceptance."
+    ],
+    "comparison_layer": "Each boundfixture triple->FiniteFp32Backend.fma result/flags equals independently preparedFraction fixture -> realoriginalHardFloatlane value+all5fmaFlags, status0/fmaFlagsValid/accCommit. Actualcasecompleted, not a sourceBoolean control.",
+    "hold_coverage": "Five-edge result availability checked; twoadditional clocks assertvalue only, not alltag/flags/status stability.",
+    "trace_layer": "Actualcase log and source/class binding prove assertions ran; no pervector rawoutput trace saved. No independent simulator rerun."
+  },
+  "pure_scala_A7": {
+    "qualified_scope": [
+      "Actual finite FMA implementation agrees with74 prebound independent rational vectors and the listed nonfinite-input rejection tests.",
+      "Actual Scala endpoint model8x5x512 accumulator/pipeline/FIFO/refill, seed32beats/ACK/latepoison and illegal-command cases passed.",
+      "Exactport/width/direction/parameter/instance-map tests operate on manually constructed FIRRTL ASTs, not newly emitted Chisel IR.",
+      "ICG pulse and endpoint callback-vs-Q edge-once tests operate directly on Scala objects, not the real Treadle scheduler/service."
+    ],
+    "not_qualified_by_A7": [
+      "Original HardFloat lane comparison",
+      "Actual original MatrixPipelineService fixture and gated-clock scheduler loop",
+      "Seeded real-service feedback or Qwen2 retainedrestore runtime",
+      "Hardware/provider equivalence or RTL generation",
+      "Five full original blocks/M128 numerical acceptance",
+      "End-to-end performance/utilization/PPA"
+    ]
+  },
+  "cost65536": {
+    "numerical_qualified": false,
+    "M128_feasibility_qualified": false,
+    "loop_only_single_cold_JVM": true,
+    "concurrency_exception": "One separately authorized bounded single-Python official-model download was permitted concurrently; this is not an isolated performance benchmark. No downloaded payload is included.",
+    "sample_semantics": "One cold JVM arithmetic loop sample; no warmup/distribution; loop excludes stage/startup/cleanup, sampledCPU is not complete lifetime accounting, RSS is sampled not hard cap."
+  },
+  "service_failure_evidence": {
+    "original_parser_failure_preserved": true,
+    "official_bridge_CPU120_failure_preserved": true,
+    "normal_native_exit_code": null,
+    "cleanup_reap_exit_code": -9,
+    "outer_wrapper_exit": 1,
+    "completed_cases": 0,
+    "planned_cases": 1,
+    "sampled_peak_CPU_seconds": 120.05,
+    "CPU_not_complete_lifetime_accounting": true,
+    "outer_seconds_in_actual_review": 141.15065873099957,
+    "ACTUAL_FACTS_outer_seconds_rounding": "Seven fractional decimal places; not a different measurement.",
+    "source_bound_progress": "Fresh prepared.fir presence, following the fixed synchronous helper source, supports reaching its retain call after official PrepareAst returned, singleton prepared-state check and UnsupportedAnnotation check. Earlier high/low ABI gates and binding equality precede that call. This is causal source-bound inference, not a logged runtime stage marker or independent AST verification.",
+    "not_proven": "No evidence of prepared serialization/write completion status; final prepared ABI/map gate follows retain. Cannot establish finalgate success, factory binding, Treadle engine construction, engine.ast identity check, reset/stimulus progress or any numeric readback.",
+    "unknown_phase": "Could include later finalgate/factory/runtime initialization/stimulus; no exact phase or allocation/compute hotspot inferred from file mtime/size."
+  },
+  "runtime_and_cleanup_limits": {
+    "role_argv_inverse": "Seven argv lists and caps reverse to original small COMMAND metadata; 106 dependency order/hash identities inherited from the fixed public lock. This is not a hermetic launcher or execution authorization.",
+    "parent_endpoints": "Retained expected descriptors plus aggregate source-bound success, not independently retained raw observed-hash dictionaries or complete dynamic execution closure.",
+    "launcher_self_identity": "Archived before worker start and frozen afterward; not separately pre-bound to its own SHA.",
+    "cleanup": "Anchored owned group and observed identities only; raw scan frames were not retained and digest is not independently replayed. No global escaped-process or all-grandchildren proof.",
+    "sampling": "CPU/RSS sampled observations are not complete lifetime CPU or hard aggregate memory proof."
+  },
+  "not_qualified": [
+    "actual complete service feedback",
+    "seeded service",
+    "five original complete M128 blocks",
+    "same4096 full-block numeric regression",
+    "RTL numerical replay",
+    "synthesis/PPA/90-percent utilization"
+  ],
+  "no_new_target_execution_or_private_payload_publication": true
+}

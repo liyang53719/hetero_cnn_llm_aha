@@ -1,0 +1,320 @@
+{
+  "baseline_references": [
+    {
+      "bytes": 8980,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/REPRODUCTION.json",
+      "sha256": "efccabbff41da64ce61f75586ee83fe0b4f82d9b2d1f5e5e2471a5dfef925a43"
+    },
+    {
+      "bytes": 8940,
+      "commit": "72d5308c2631cb2951a8128cbe7d42c87d0842bd",
+      "path": "candidates/unified_product_preserved_abi/SOURCE_REFERENCES.json",
+      "sha256": "0949f13313e6304149fbed857d4994fb76fdff0398816aa01458cd4db3d32706"
+    }
+  ],
+  "classpath_composition": {
+    "A7_cost_hardfloat_old_service": 664,
+    "compile_backend_11": 625,
+    "compile_official_bridge_2": 664,
+    "official_bridge_service": 668
+  },
+  "commands": {
+    "compile_backend_11": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${PINNED_CLASSPATH}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "-Xplugin:${CHISEL_PLUGIN_6_7_0}",
+        "-language:reflectiveCalls",
+        "-d",
+        "${RUN_ROOT}/classes",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/EndpointFmaFixture.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/FiniteBackendCostSample.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/FiniteFp32Backend.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/RetainedBackendCircuitGate.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/tests/RetainedBackendGateSpec.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/tests/RetainedBackendLaneCrosscheckSpec.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/tests/RetainedBackendServiceSpec.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/RetainedEndpointFunctionalModel.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/tests/RetainedEndpointFunctionalModelSpec.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/RetainedMatrixModelFactory.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/StrictFp32MatrixLane.scala"
+      ],
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 160,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 210,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 180,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 150
+      },
+      "command_identity": {
+        "bytes": 37344,
+        "sha256": "85963318c0c0f546061de1512bce65c9ab8bf002716aac42e3fb6c87938aed85"
+      },
+      "execution_is_not_authorized_by_this_document": true,
+      "original_evidence_id": "original_matrix_backend_typecheck_prepare_20261026T1821/COMMAND.json"
+    },
+    "compile_official_bridge_2": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${PINNED_CLASSPATH}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "-Xplugin:${CHISEL_PLUGIN_6_7_0}",
+        "-language:reflectiveCalls",
+        "-d",
+        "${RUN_ROOT}/classes",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/tests/RetainedBackendServiceOfficialBridgeSpec.scala",
+        "${REPOSITORY}/candidates/retained_matrix_functional_backend/source/RetainedServiceOfficialBridge.scala"
+      ],
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 160,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 210,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 180,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 150
+      },
+      "command_identity": {
+        "bytes": 36254,
+        "sha256": "9bd927ff18932c40afb7d2ab427d4adcd048b767948c4ded06676671a7e3029e"
+      },
+      "execution_is_not_authorized_by_this_document": true,
+      "original_evidence_id": "original_matrix_backend_service_bridge_typecheck_prepare_20261026T2204/COMMAND.json"
+    },
+    "cost65536": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx256m",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "heteronpu.continuous.model.FiniteBackendCostSample",
+        "--bounded-65536-fma"
+      ],
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 20,
+        "cpu_seconds": 10,
+        "heap_bytes": 268435456,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 35,
+        "rss_sampled_bytes": 536870912,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 25,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 15
+      },
+      "command_identity": {
+        "bytes": 18900,
+        "sha256": "4c81f56653d765d062278cab396cb0ef962286a30881d353c480834c5047d0ab"
+      },
+      "execution_is_not_authorized_by_this_document": true,
+      "original_evidence_id": "original_matrix_backend_cost65536_prepare_20261026T1841/COMMAND.json"
+    },
+    "hardfloat74": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "org.scalatest.tools.Runner",
+        "-oW",
+        "-s",
+        "heteronpu.continuous.model.RetainedBackendLaneCrosscheckSpec"
+      ],
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 100,
+        "cpu_seconds": 60,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 150,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 120,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 90
+      },
+      "command_identity": {
+        "bytes": 19506,
+        "sha256": "75cf26eaf8661e984a0ae58bf9f40ad4fe77c1073783fd6f03c21a0fc67296dc"
+      },
+      "execution_is_not_authorized_by_this_document": true,
+      "original_evidence_id": "original_matrix_backend_hardfloat74_b_prepare_20261026T2144/COMMAND.json"
+    },
+    "official_bridge_service_CPU_FAIL": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "org.scalatest.tools.Runner",
+        "-oW",
+        "-s",
+        "heteronpu.continuous.model.RetainedBackendServiceOfficialBridgeSpec"
+      ],
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 190,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 240,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 210,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 180
+      },
+      "command_identity": {
+        "bytes": 19682,
+        "sha256": "153434bc12f993187d77f1ccc1a69bb466ea81a7da8303d2cda84991680ce3a1"
+      },
+      "execution_is_not_authorized_by_this_document": true,
+      "original_evidence_id": "original_matrix_backend_service_bridge_test_prepare_20261026T2215/COMMAND.json"
+    },
+    "old_service_parse_FAIL": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "org.scalatest.tools.Runner",
+        "-oW",
+        "-s",
+        "heteronpu.continuous.model.RetainedBackendServiceSpec"
+      ],
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 190,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 240,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 210,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 180
+      },
+      "command_identity": {
+        "bytes": 19519,
+        "sha256": "6dd3b1233f341203994ec099f97939e744a202bd2212723ac63ca61528b09484"
+      },
+      "execution_is_not_authorized_by_this_document": true,
+      "original_evidence_id": "original_matrix_backend_service_b_prepare_20261026T2144/COMMAND.json"
+    },
+    "pure_scala_A7": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "org.scalatest.tools.Runner",
+        "-oW",
+        "-s",
+        "heteronpu.continuous.model.RetainedEndpointFunctionalModelSpec",
+        "-s",
+        "heteronpu.continuous.model.RetainedBackendGateSpec"
+      ],
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 70,
+        "cpu_seconds": 30,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 120,
+        "rss_sampled_bytes": 1073741824,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 90,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 60
+      },
+      "command_identity": {
+        "bytes": 21233,
+        "sha256": "5680423907bc78619f1b53a68f7b7d388c0236f31de400603b17916417e91b32"
+      },
+      "execution_is_not_authorized_by_this_document": true,
+      "original_evidence_id": "original_matrix_backend_scala_a7_prepare_20261026T1841/COMMAND.json"
+    }
+  },
+  "java": "OpenJDK21; Scala2.13.16; Chisel6.7.0 plugin; chiseltest6.0.0/Treadle2",
+  "path_recovery": "540 baseline classes were rebound by exact original SHA to preserved staged copies after the shared path became unavailable. Cleanup helper was rebound to a complete original-SHA copy. This is not proof of continued availability of missing old paths.",
+  "role_inverse_exact_checked_locally": true,
+  "scope": "Role-normalized exact recorded argv, not a self-contained hermetic executable or authorization. Reconstruct the exact baseline and all106 jars from published baseline recipe/lock first, verify class identities and absence of duplicates, and apply original runtime caps/cleanup. Each phase was separately authorized; no automatic chain."
+}

@@ -1,0 +1,65 @@
+{
+  "backend_typecheck": {
+    "class_bytes": 539746,
+    "fresh_classes": 39,
+    "sources": 11,
+    "status": "PASS_CLASS_IDENTITY_ONLY"
+  },
+  "complete_RTL_replay_blocks": 0,
+  "cost65536": {
+    "M128_feasibility": false,
+    "checksum": 1344726054,
+    "count": 65536,
+    "flags": 1,
+    "isolated_benchmark": false,
+    "loop_nanoseconds": 230879664,
+    "numerical_qualified": false,
+    "scope": "One cold-JVM live finite-FMA loop; checksum not independently reference-qualified; no Treadle/owner/DDR/whole-block timing."
+  },
+  "excluded_successors": "Unexecuted phase-observer2228/r22235 and GDN/router drafts are not included; no root hardware/emitted-SV switch.",
+  "five_profile_M128_numerics": false,
+  "full_4096_numerics": false,
+  "hardfloat74": {
+    "cases": 1,
+    "passed": 1,
+    "rtl_replay": false,
+    "service": false,
+    "status": "PASS_FINITE_BF16_FMA_BITS_AND_FLAGS_AGAINST_ORIGINAL_STRICT_LANE",
+    "vectors": 74
+  },
+  "hardware_definition": "Original MatrixPipelineService with8 unseeded512-lane endpoints; backend consumes live inputs and updates actual modeled state, not reference-output replay. Service runtime is NOT qualified by this package.",
+  "official_bridge_service": {
+    "cleanup": true,
+    "completed_cases": 0,
+    "cpu_seconds_observed": 120.05,
+    "outer_seconds": 141.1506587,
+    "planned_cases": 1,
+    "scope": "Prepared FIR was retained before strict final gate in source order; no completed-stage markers. Final ABI gate, factory, engine, reset, feedback and stimulus completion are NOT established. Child natural exit status is unknown after supervisor cap; outer wrapper returned1.",
+    "status": "FAIL_CPU_RESOURCE_CAP"
+  },
+  "official_bridge_typecheck": {
+    "class_bytes": 74915,
+    "fresh_classes": 4,
+    "sources": 2,
+    "status": "PASS_CLASS_IDENTITY_ONLY"
+  },
+  "old_service": {
+    "IR_file_retained": false,
+    "completed_cases": 0,
+    "factory_constructed": false,
+    "planned_cases": 1,
+    "scope": "New CHIRRTL text dialect rejected by firrtl2.Parser before strict AST/factory/runtime; no original string file/hash exists.",
+    "status": "FAIL_PARSE"
+  },
+  "original_failures_preserved": true,
+  "pure_scala_A7": {
+    "cases": 7,
+    "chisel_dut": false,
+    "passed": 7,
+    "real_service": false,
+    "status": "PASS_PURE_SCALA_ONLY",
+    "suites": 2
+  },
+  "scope": "Model-backend source/type/finite tests only; no complete five-block/M128 or RTL acceptance.",
+  "seeded_service_qualified": false
+}

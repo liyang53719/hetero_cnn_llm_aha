@@ -1,0 +1,125 @@
+{
+  "pins": [
+    {
+      "bytes": 10638,
+      "evidence_id": "original_matrix_functional_backend_source_review_20261026T1743/REVIEW.json",
+      "role": "original_factory_STOP:REVIEW.json",
+      "sha256": "a8efef28f53eaf483e37d7840470f89cc1c2bbf8aa3cfc6caed008f34e0fa656"
+    },
+    {
+      "bytes": 1330,
+      "evidence_id": "original_matrix_functional_backend_source_review_20261026T1743/FREEZE.json",
+      "role": "original_factory_STOP:FREEZE.json",
+      "sha256": "471387b82e735337cdf72f5ad69352d4e34b60a53179154b526d0f1831f3e10b"
+    },
+    {
+      "bytes": 8969,
+      "evidence_id": "original_matrix_functional_backend_r2_source_review_20261026T1825/REVIEW.json",
+      "role": "backend_r2_source:REVIEW.json",
+      "sha256": "c82aa06fded8d8319ac567de70bc5f9d7264e3a55ab857862c9fc7b85b94e361"
+    },
+    {
+      "bytes": 1013,
+      "evidence_id": "original_matrix_functional_backend_r2_source_review_20261026T1825/FREEZE.json",
+      "role": "backend_r2_source:FREEZE.json",
+      "sha256": "de84c48b78eb7069298db58b96a8f0781b8edaa09389988f6e1a7e8ac519a746"
+    },
+    {
+      "bytes": 7856,
+      "evidence_id": "original_matrix_backend_typecheck_actual_review_20261026T1845/REVIEW.json",
+      "role": "backend_11_source_compile:REVIEW.json",
+      "sha256": "3c8959ea38139883d9bbe60cbb17cfa80e74701ce25c1f66c22737b04a0653b5"
+    },
+    {
+      "bytes": 1321,
+      "evidence_id": "original_matrix_backend_typecheck_actual_review_20261026T1845/FREEZE.json",
+      "role": "backend_11_source_compile:FREEZE.json",
+      "sha256": "0ccfd3e7c59533515d46b48aadbf659a91f7d19a80b1f578c8574bb29bd5d942"
+    },
+    {
+      "bytes": 7578,
+      "evidence_id": "original_matrix_backend_scala_a7_actual_review_20261026T2143/REVIEW.json",
+      "role": "pure_scala_A7:REVIEW.json",
+      "sha256": "115e09ef0018eaff4dce5fbea6e25c89112c6c5512e0f738b7e95ab91e4166fc"
+    },
+    {
+      "bytes": 1231,
+      "evidence_id": "original_matrix_backend_scala_a7_actual_review_20261026T2143/FREEZE.json",
+      "role": "pure_scala_A7:FREEZE.json",
+      "sha256": "5685a78903bb080f6751273ea898d1a4762d85497a5814f25f72556924327c3a"
+    },
+    {
+      "bytes": 7496,
+      "evidence_id": "original_matrix_backend_cost65536_actual_review_20261026T2144/REVIEW.json",
+      "role": "cost65536:REVIEW.json",
+      "sha256": "7ced78d6a2c338aa09c755fd0a95a77cc76e8aaa36317662a6631ba7d6abff55"
+    },
+    {
+      "bytes": 1762,
+      "evidence_id": "original_matrix_backend_cost65536_actual_review_20261026T2144/FREEZE.json",
+      "role": "cost65536:FREEZE.json",
+      "sha256": "cdcb4409fd97039e0e7474eab48befe20a3b16dc975af8e10f3f8059f3efb062"
+    },
+    {
+      "bytes": 7850,
+      "evidence_id": "original_matrix_backend_hardfloat74_b_actual_review_20261026T2153/REVIEW.json",
+      "role": "hardfloat74:REVIEW.json",
+      "sha256": "a7e0dc176eabdf1c7ef508a327991bc54a9235c377ea7714b8861b2bb6a4254c"
+    },
+    {
+      "bytes": 1765,
+      "evidence_id": "original_matrix_backend_hardfloat74_b_actual_review_20261026T2153/FREEZE.json",
+      "role": "hardfloat74:FREEZE.json",
+      "sha256": "82461c69640c7a0b871b55ceff9db5e3d5067b37f96d1d6b137c7b1dd1a7e1ca"
+    },
+    {
+      "bytes": 8791,
+      "evidence_id": "original_matrix_backend_service_b_actual_review_20261026T2156/REVIEW.json",
+      "role": "old_service_parse_FAIL:REVIEW.json",
+      "sha256": "c681da921e7c6498e05917b50a0b20a46a4d543ce7b51cf09790d4dedcf7d544"
+    },
+    {
+      "bytes": 1236,
+      "evidence_id": "original_matrix_backend_service_b_actual_review_20261026T2156/FREEZE.json",
+      "role": "old_service_parse_FAIL:FREEZE.json",
+      "sha256": "e2794dba333fda454aafd64b6e97e919345ab5b153a5286c9c3493e459daba59"
+    },
+    {
+      "bytes": 3331,
+      "evidence_id": "original_matrix_service_official_bridge_source_review_20261026T2207/REVIEW.json",
+      "role": "official_bridge_source:REVIEW.json",
+      "sha256": "bc0390c292e3741801b88ee57de2d05e60e288fe8461479272e7e837b857a0a5"
+    },
+    {
+      "bytes": 1328,
+      "evidence_id": "original_matrix_service_official_bridge_source_review_20261026T2207/FREEZE.json",
+      "role": "official_bridge_source:FREEZE.json",
+      "sha256": "143c0abb55b615e793c496c45b5399e2d22ff5a29b3da0c4c5fda2935824f38e"
+    },
+    {
+      "bytes": 4506,
+      "evidence_id": "original_matrix_service_bridge_typecheck_actual_review_20261026T2213/REVIEW.json",
+      "role": "official_bridge_two_source_compile:REVIEW.json",
+      "sha256": "d8b7acc581f78526d5948027eebc90c56f9eeda2c60612ff80aecf9d52995da2"
+    },
+    {
+      "bytes": 1303,
+      "evidence_id": "original_matrix_service_bridge_typecheck_actual_review_20261026T2213/FREEZE.json",
+      "role": "official_bridge_two_source_compile:FREEZE.json",
+      "sha256": "447492e7c65733e6c1b4b8952acee9a35f51adf34ae4228aa7372ee1d6f83722"
+    },
+    {
+      "bytes": 7230,
+      "evidence_id": "original_matrix_service_bridge_actual_review_20261026T2229/REVIEW.json",
+      "role": "official_bridge_service_CPU_FAIL:REVIEW.json",
+      "sha256": "44f1b0ae3c32dac1dd267d85f72469257fd491892da2fa6a36a2dac403db0c29"
+    },
+    {
+      "bytes": 681,
+      "evidence_id": "original_matrix_service_bridge_actual_review_20261026T2229/FREEZE.json",
+      "role": "official_bridge_service_CPU_FAIL:FREEZE.json",
+      "sha256": "fb954694f445862d451ff898bdc0769c76d2c79080b3796b66d2224434a59288"
+    }
+  ],
+  "scope": "Small evidence identities only; source/runtime and failures remain separate. Not a copy of bulk evidence."
+}

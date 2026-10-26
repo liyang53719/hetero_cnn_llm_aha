@@ -1,0 +1,111 @@
+{
+  "status": "PASS_SHARED_RUNTIME_STATE_LEAF_ONLY",
+  "tests": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "same_instance_sequence_without_reset": [
+      "16 cold M128 head15",
+      "32 cold M128 head31",
+      "16 warm M128 head15",
+      "32 warm M128 head31",
+      "16 export M128 head15",
+      "32 export M128 head31"
+    ],
+    "busy_config_pin_changes_ignored": true,
+    "pre_memory_rejection_cases": 10,
+    "final_write_ack_error_locked": true,
+    "legacy_m16_trace": {
+      "accepted_beats": 1024,
+      "acknowledged_bytes": 65536,
+      "active_cycles": 6399,
+      "clock_steps": 6412
+    }
+  },
+  "processes": [
+    {
+      "stage": "compile",
+      "exit_code": 0,
+      "wall_seconds": 15.858239077962935,
+      "peak_rss_bytes": 298676224,
+      "stop_reason": null,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "stage": "test",
+      "exit_code": 0,
+      "wall_seconds": 28.71433758502826,
+      "peak_rss_bytes": 189935616,
+      "stop_reason": null,
+      "log_sha256": "8af5f452b0281479d67832454ba3404f5436d5e8f8a7432acc31d3422d0338bc"
+    }
+  ],
+  "hardware_identity": {
+    "constructor_model_or_heads_parameter": false,
+    "interface_fixed": true,
+    "active_heads_runtime_values": [
+      16,
+      32
+    ],
+    "receipt_head_bits": 5,
+    "runtime_active_heads_bits": 6,
+    "staging_completed_head_chunks_bits": 7,
+    "test_elaborations": 4,
+    "all_test_ir_identical": true,
+    "ir_bytes": 95515,
+    "ir_sha256": "7b6d967bb4f411d52626821f98bba755a5d35ff646410a87d276ef2c15af5064",
+    "sv_emissions": 1,
+    "systemverilog": {
+      "bytes": 123114,
+      "sha256": "e93e19158a46dc76db9588310a8e3f462c6162ae7fd218e098f040820d7fec94"
+    },
+    "port_count": 65,
+    "registers": {
+      "state": "UInt<3>",
+      "tag": "UInt<32>",
+      "generation": "UInt<32>",
+      "head": "UInt<16>",
+      "operation": "UInt<2>",
+      "zeroFill": "UInt<1>",
+      "sourceBase": "UInt<64>",
+      "targetBase": "UInt<64>",
+      "beat": "UInt<10>",
+      "sequence": "UInt<32>",
+      "payload": "UInt<512>",
+      "outstanding": "UInt<1>",
+      "status": "UInt<8>",
+      "readBytes": "UInt<64>",
+      "writeBytes": "UInt<64>",
+      "cycles": "UInt<64>"
+    },
+    "local_payload_bytes": 64,
+    "mac_instances_in_this_leaf": 0,
+    "additional_memory_banks": 0
+  },
+  "sv_generation": {
+    "exit_code": 0,
+    "wall_seconds": 0.04425690392963588,
+    "peak_rss_bytes": 16568320,
+    "stop_reason": null,
+    "tool_sha256": "7f52d2a3782d09736895f66e7eb0e5cc4b3b1b18aa1ad0d04fca4cd6e42cd2ee",
+    "source_input_sha256": "7b6d967bb4f411d52626821f98bba755a5d35ff646410a87d276ef2c15af5064",
+    "input_unchanged": true,
+    "log_sha256": "448ddeff11ef1df5fff715b9864f23437c3ab5a50cc02e0a829b62810fbc347d",
+    "annotations": null
+  },
+  "scope": {
+    "scala_chisel_treadle": true,
+    "systemverilog_generated": true,
+    "systemverilog_simulated": false,
+    "synthesis_or_ppa_pass": false,
+    "same_complete4096_hardware_for_five_blocks": false,
+    "unified_fullblock_integration": false,
+    "grouped32_chunk_arithmetic": false,
+    "actual_state_producer_receipts_verified": false,
+    "external_state_roots_committed": false,
+    "real_model_weights_executed": false,
+    "complete_block_pass": false
+  },
+  "source_identity_note": "This leaf does not contain or resize the4096MAC array. Full-top integration and identical full-top RTL acceptance remain separate unfinished work.",
+  "supersedes_for_future_integration": "The previous two-constructor16/32 explorations are historical only, not a same-hardware compatibility result."
+}

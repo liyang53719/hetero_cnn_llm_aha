@@ -1,0 +1,16 @@
+{
+  "scope": "Private state-transfer adapter only; not unified fullblock integration",
+  "profile_fields": {
+    "gdnKeyHeads": {"bits": 6, "legal": [16]},
+    "gdnValueHeads": {"bits": 6, "legal": [16, 32]}
+  },
+  "mapping": "GdnChunkStateTransferJob.activeHeads := latchedUnifiedRuntimeProfile.gdnValueHeads",
+  "head_receipt_bits": 5,
+  "active_heads_bits": 6,
+  "descriptor_version": "Owned by unified profile author; not invented in this adapter",
+  "producer_rule": "Prepare Q/K using original key-head count; valueHeads/keyHeads ratio2 requires repeat_interleave2. This copy owner does not implement or prove that producer.",
+  "latching": "Only job.fire consumes activeHeads; live source/target/head/generation are then private registers. No busy pin change can alter an in-flight copy.",
+  "shared_physical_structure": "One fixed controller, one64B payload register, no constructor model/head parameter, no MAC instance",
+  "full4096_hardware_acceptance": false,
+  "field_alignment": "Confirmed by prepare_full128_observer_integration 2026-10-26 06:48 UTC"
+}

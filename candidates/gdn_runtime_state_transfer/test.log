@@ -1,0 +1,15 @@
+[36mRun starting. Expected test count is: 4[0m
+[32mGdnChunkStateTransferRuntimeSpec:[0m
+[32mfixed-max32 runtime16_32 private state transfer[0m
+[32m- should switch runtime16 and runtime32 cold warm export without reset or re-elaboration (22 seconds, 401 milliseconds)[0m
+[32m- should withhold completion and lock after the final write ACK reports an error (2 seconds, 392 milliseconds)[0m
+[32m- should reject widened-span aliases head overflow and receipt truncation before memory requests (455 milliseconds)[0m
+[32mGdnChunkStateTransferColdSpec:[0m
+[32mGdnChunkStateTransferOwner cold M16/head0[0m
+GDN_CHUNK_COLD_PASS accepted=1024 acknowledged=1024 ackBytes=65536 activeCycles=6399 clockSteps=6412
+[32m- should zero exactly 1024 private beats and hold completion until accepted (2 seconds, 654 milliseconds)[0m
+[36mRun completed in 28 seconds, 161 milliseconds.[0m
+[36mTotal number of tests run: 4[0m
+[36mSuites: completed 2, aborted 0[0m
+[36mTests: succeeded 4, failed 0, canceled 0, ignored 0, pending 0[0m
+[32mAll tests passed.[0m

@@ -1,0 +1,102 @@
+--- a/candidates/qwen35_chunk_contract/source/GdnChunkProtocol.scala
++++ b/candidates/qwen35_chunk_contract/source/GdnChunkProtocol.scala
+@@ -7,6 +7,8 @@
+   * arithmetic resource or publication authority is implemented by this file.
+   * Existing public M1/recurrent contracts are intentionally unchanged.
+   */
++// Legacy immutable AddressPlan constants. The unified state-transfer owner
++// uses only per-head shapes and checks runtime activeHeads itself.
+ object GdnChunkGeometry {
+   val ChunkRows = 64
+   val Heads = 16
+@@ -59,9 +61,10 @@
+   * No port accepts these receipts in this source-only batch.
+   */
+ class GdnChunkStageReceipt extends Bundle {
++  // Fixed maximum-32 interface: runtime activeHeads never changes RTL width.
+   val tag = UInt(32.W)
+   val expectedGeneration = UInt(32.W)
+-  val head = UInt(4.W)
++  val head = UInt(5.W)
+   val chunk = UInt(1.W)
+   val phase = UInt(5.W)
+   val status = UInt(8.W)
+@@ -84,7 +87,7 @@
+   val stagedComplete = Bool()
+   val stateOut = UInt(64.W)
+   val output = UInt(64.W)
+-  val completedHeadChunks = UInt(6.W) // 16 or 32, never a publication count
++  val completedHeadChunks = UInt(7.W) // fixed capacity: up to 32 heads x 2 chunks; not root publication
+   val scratchAckBytes = UInt(64.W)
+   val stateAckBytes = UInt(64.W)
+   val outputAckBytes = UInt(64.W)
+--- a/candidates/qwen35_chunk_state_transfer/source/GdnChunkStateTransferOwner.scala
++++ b/candidates/qwen35_chunk_state_transfer/source/GdnChunkStateTransferOwner.scala
+@@ -8,6 +8,7 @@
+   * come from real producers; these fields alone do not prove their provenance.
+   */
+ class GdnChunkStateTransferJob extends Bundle {
++  val activeHeads = UInt(6.W) // runtime legal values are exactly 16 or 32
+   val context = new GdnChunkJob
+   val head = UInt(16.W)
+   val operation = UInt(2.W) // 0 Initialize; 1 ExportFinal; other values rejected
+@@ -64,7 +65,14 @@
+   private val stride128 = stateBytes + 2 * chunkBytes
+   private val next16 = stateBytes + nextOffset
+   private val next128 = stateBytes + chunkBytes + nextOffset
+-  require(Heads == 16 && KeyDim == 128 && ValueDim == 128 && BeatBytes == 64)
++  require(KeyDim == 128 && ValueDim == 128 && BeatBytes == 64)
++  // Fixed maximum-32 physical controller and receipt interface. activeHeads is
++  // consumed only on job.fire; all live addresses are latched before DMA.
++  // There is no model-specific elaboration, payload bank, or arithmetic unit.
++  private def scratchSpanBytes(tokens: Int, activeHeads: Int): BigInt =
++    BigInt(activeHeads) * (stateBytes + GdnChunkAddressPlan.chunks(tokens) * chunkBytes)
++  require(scratchSpanBytes(16, 16) == GdnChunkAddressPlan.scratchBytes(16))
++  require(scratchSpanBytes(128, 16) == GdnChunkAddressPlan.scratchBytes(128))
+   require(nextIndex == 23 && stateBytes == 65536 && chunkBytes == 806912)
+   require(nextOffset == 741376 && stride16 == 872448 && stride128 == 1679360)
+   require(next16 == 806912 && next128 == 1613824)
+@@ -135,12 +143,17 @@
+     sourceBase := Mux(j.operation === 1.U, lastState(63, 0), stateIn(63, 0))
+     targetBase := Mux(j.operation === 1.U, stateOut(63, 0), initial(63, 0))
+ 
+-    val inputBytes = (c.tokens * PreparedRowBytes.U).pad(66)
+-    val outputBytes = (c.tokens * OutputRowBytes.U).pad(66)
+-    val scratchBytes = Mux(is128, GdnChunkAddressPlan.scratchBytes(128).U(66.W),
+-      GdnChunkAddressPlan.scratchBytes(16).U(66.W))
+-    val spans = Seq((c.input, inputBytes), (c.stateIn, StateBytes.U(66.W)),
+-      (c.stateOut, StateBytes.U(66.W)), (c.output, outputBytes), (c.scratch, scratchBytes))
++    val is32 = j.activeHeads === 32.U
++    val preparedRowBytes = Mux(is32, 51200.U, 25600.U)
++    val outputRowBytes = Mux(is32, 8192.U, 4096.U)
++    val totalStateBytes = Mux(is32, 2097152.U(66.W), 1048576.U(66.W))
++    val inputBytes = (c.tokens * preparedRowBytes).pad(66)
++    val outputBytes = (c.tokens * outputRowBytes).pad(66)
++    val scratchBytes = Mux(is32,
++      Mux(is128, scratchSpanBytes(128, 32).U(66.W), scratchSpanBytes(16, 32).U(66.W)),
++      Mux(is128, scratchSpanBytes(128, 16).U(66.W), scratchSpanBytes(16, 16).U(66.W)))
++    val spans = Seq((c.input, inputBytes), (c.stateIn, totalStateBytes),
++      (c.stateOut, totalStateBytes), (c.output, outputBytes), (c.scratch, scratchBytes))
+     def badSpan(base: UInt, size: UInt): Bool =
+       base(5, 0) =/= 0.U || size === 0.U || base.pad(66) + size > (BigInt(1) << AddressBits).U
+     def overlap(a: UInt, na: UInt, b: UInt, nb: UInt): Bool =
+@@ -162,7 +175,8 @@
+       j.outputReady.outputAckBytes === Mux(is128, 16384.U, 4096.U) &&
+       j.outputReady.scratchAckBytes === 0.U && j.outputReady.stateAckBytes === 0.U
+     when(rootBad) { fail(Status.Dependency.U) }
+-      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) || j.head >= Heads.U ||
++      .elsewhen((c.tokens =/= 16.U && c.tokens =/= 128.U) || (j.activeHeads =/= 16.U && j.activeHeads =/= 32.U) ||
++        j.head >= j.activeHeads ||
+         c.expectedGeneration === "hffffffff".U || badAddress || aliases) { fail(Status.Bounds.U) }
+       .elsewhen(j.operation > 1.U) { fail(Status.Unsupported.U) }
+       .elsewhen(j.operation === 1.U && (!nextReady || !outputReady)) { fail(Status.Dependency.U) }
+--- a/candidates/qwen35_state_transfer_treadle_test/source/GdnChunkStateTransferColdSpec.scala
++++ b/candidates/qwen35_state_transfer_treadle_test/source/GdnChunkStateTransferColdSpec.scala
+@@ -52,6 +52,7 @@
+       d.io.job.valid.poke(false.B)
+       val j = d.io.job.bits
+       val c = j.context
++      j.activeHeads.poke(16.U)
+       c.tag.poke(jobTag.U); c.tokens.poke(16.U); c.cold.poke(true.B)
+       c.expectedGeneration.poke(0.U); c.vectorPolicy.poke(0.U)
+       // Complete, 64-byte-aligned, disjoint spans, including unused cold stateIn.

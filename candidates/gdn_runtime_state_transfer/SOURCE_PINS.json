@@ -1,0 +1,14 @@
+{
+  "base_main": "e096dba9220747855223b26d04c2d339c19cb675",
+  "original_sources_verified_against_main": "c590179c4c3424ded9997ba8f15f27821df304c9",
+  "base_change_note": "e096 changes only the three router output-path files; no source below changed. Main history was verified by publisher.",
+  "source_sha256": {
+    "candidates/gdn_runtime_state_transfer/tests/GdnChunkStateTransferRuntimeSpec.scala": "1d85455bbd0140f89797599783c8997623e6e32f1f50175969a9d03671fbed09",
+    "candidates/gdn_runtime_state_transfer/tests/GdnChunkStateTransferColdSpec.scala": "e08030b75b4ad71f216cc015c3c95fcadb858129f1e528d82484c0046040e034",
+    "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+    "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c",
+    "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+    "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943"
+  },
+  "selection": "Exactly four implementation sources and two tests; no baseline protocol/owner duplicate definitions."
+}

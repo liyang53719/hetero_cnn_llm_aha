@@ -1,0 +1,123 @@
+{
+  "source_base_main": "c590179c4c3424ded9997ba8f15f27821df304c9",
+  "publication_base_main": "e096dba9220747855223b26d04c2d339c19cb675",
+  "independent_audit": {
+    "review": {
+      "bytes": 1562,
+      "sha256": "8159839a9e4e50c41c6b3057601ae1f55be4f67297b04a4d67eb609bddf40cab"
+    },
+    "freeze": {
+      "bytes": 1716,
+      "sha256": "e36f413483370372cf5b9a5dbbc30abb1c35ea87e6d7307bb29394262197358b"
+    },
+    "hardware_report": {
+      "bytes": 10681,
+      "sha256": "4a9720b0fecdcaf0e95e0fa2d2c4991c7db0b786f1f3789789292e85bc45d056"
+    },
+    "actual_reemission": {
+      "bytes": 21663,
+      "sha256": "5549874aeaabe81ab361be67603318851b5a853070fe2f1713b73503e9dee231"
+    },
+    "source_reconstruction_check": {
+      "bytes": 808,
+      "sha256": "3f8d59a35f923d833b26fea5ee88e8229fbf861c832d94f637fac3411e0d1ce5"
+    },
+    "warning_erratum": {
+      "bytes": 3623,
+      "sha256": "3964215f370f9867e99f3786a5dc232a913995aca4416a5ba9b5f1521fdff63b"
+    },
+    "warning_erratum_freeze": {
+      "bytes": 619,
+      "sha256": "0e01f2568ccf4d88be5ba5b8136697b269a3c6dd42d2e641585c8a1ba7c0312f"
+    },
+    "actual_warning_log_hash_only": {
+      "bytes": 924,
+      "sha256": "f2c8343341f04c43ee6ce588069e81df3f95384b549006ca16aa34d4612dea31"
+    }
+  },
+  "source_reconstruction": {
+    "report": {
+      "bytes": 66298,
+      "sha256": "f4157f476950d848dd295f0d9508c26dc092298cbfd267ba7d64840c8a572b43"
+    },
+    "freeze": {
+      "bytes": 87430,
+      "sha256": "a639d4308545c7407c1fb543802f2ca04d2221d461b91dbbdfe1f78ff04382b6"
+    }
+  },
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/README_CN.md",
+      "bytes": 7205,
+      "sha256": "67b44bf1bf9a89a27cfd93279fab81679a3e94669246abc47a8246a9e756bac6",
+      "git_blob_sha": "e514e82e8c20c5609f932d6d396245e2d5e724c1"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+      "bytes": 13746,
+      "sha256": "ce68505557a0c50fc9e5dfbfac531d3e13b8abb99d6e3f167392a645a0e693df",
+      "git_blob_sha": "6c61653b0d4435ad90a84e86dab6964668540f86"
+    },
+    {
+      "repo_path": "candidates/qwen2_composed_handoff/replay_handoff.py",
+      "bytes": 14371,
+      "sha256": "7265521ce1b66f28f6fb01ea24aa5f18821d25854ecc4881e41d3bf1fe473456",
+      "git_blob_sha": "a6edcb230c11a8b821ef6c1c2e010953b143cd1d"
+    },
+    {
+      "repo_path": "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/reproduce_sources.py",
+      "bytes": 1778,
+      "sha256": "98bf5bdae269f42662711cc278110d6239195962cd0e8f48c6ec80c99386f690",
+      "git_blob_sha": "fbcd743029e900e596adb2bd545d98ef103609f5"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_chisel/prepare.py",
+      "bytes": 4532,
+      "sha256": "af28137a8b13d3bdad850dc1a79c261a4be25222d869ed46f1da682ad69532e3",
+      "git_blob_sha": "5b185170f607179e36934e8f08620e3a0e0789d2"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_chisel/ordered_fold.patch",
+      "bytes": 23270,
+      "sha256": "e2325b7d7436a269687ba9fe1d2aaa45ef9a8b109189b2fa815e28aea7e998b8",
+      "git_blob_sha": "73c161cae7df13450bb0880aca8daac6ff99f199"
+    },
+    {
+      "repo_path": "candidates/qwen2_ordered_vector_compile_evidence/stage_inputs.py",
+      "bytes": 2262,
+      "sha256": "ae8a6fded719ab4d6641ec9e4377aea1d159271f60a526eb4998f05cc5d28c05",
+      "git_blob_sha": "29f32337a8f32557341b77cecfc493f8bfa3f466"
+    },
+    {
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_stream/prepare.py",
+      "bytes": 2769,
+      "sha256": "6b3367977b5abe69743ee8987a9f93cad635fb7165c62b0e22b2af283b69bd02",
+      "git_blob_sha": "003af8c8a75d1483772b98199f31e00c7e1d58b0"
+    },
+    {
+      "repo_path": "candidates/qwen2_resident_matrix/attention_packed_stream/pins.json",
+      "bytes": 4815,
+      "sha256": "f3591339e7c109654f9021def6168fdc2abea623ed85f4135549a72465e90122",
+      "git_blob_sha": "8f909006ab1c6c07932ae22283863897047aa7a2"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_compile/README_ZH.md",
+      "bytes": 5862,
+      "sha256": "00870906805c1a280923ad894c04f27400e77debd5232a221969d3c1122cb903",
+      "git_blob_sha": "75550093042161e6a207a92d548a6af4597abdcd"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_chirrtl/README_ZH.md",
+      "bytes": 5382,
+      "sha256": "35f3a0634d0adf2b7834137524370be37b1b6d88c2e808ca4f000ef7a48ddb3b",
+      "git_blob_sha": "224592ef0848b7f456d10f366c0627274e795aa3"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_real_matrix_sv/README_ZH.md",
+      "bytes": 5913,
+      "sha256": "7c7dca5efcbccd222b8d0866c832145060827fbda3cb4dc9c9fecb2052f5f608",
+      "git_blob_sha": "487fe1f8a7dfe71f848d67a53d6296f69bd0001e"
+    }
+  ],
+  "scope": "Existing published source recipe references and safe new audit projections only; no generated FIR/SV, provider bulk, runtime files, source recompilation or full implementation claim."
+}

@@ -1,0 +1,165 @@
+{
+  "schema": "selected-hardware-reemission-and-source-reconstruction-safe-summary-v1",
+  "status": "PASS_SELECTED_FROZEN_HARDWARE_RTL_REEMISSION_IDENTICAL_WITH_SYNTHESIS_AND_QOR_OPEN",
+  "source_base_main": "c590179c4c3424ded9997ba8f15f27821df304c9",
+  "publication_base_main": "e096dba9220747855223b26d04c2d339c19cb675",
+  "selected_top": "OrderedQkRealMatrixCore",
+  "namespace_collection_not_product_top": "OrderedQkRealMatrixCollection",
+  "defined_modules": 38,
+  "unresolved_provider_families": {
+    "qwen2_matrix_command_endpoint": 8,
+    "tc_clk_gating": 8
+  },
+  "original_provider_count": 13,
+  "canonical_nonDPI_provider_file_count": 14,
+  "DPI_or_seqinit_adaptation_in_hardware_sources": false,
+  "reused_qualified_classes": 557,
+  "new_source_tree_compiled": false,
+  "source_reconstruction": {
+    "status": "PASS_FRESH_RECONSTRUCTED_SOURCE_CONTENTS_EQUAL_OLD_EXECUTED_INPUT_PINS",
+    "checks": 395,
+    "source_count": 92,
+    "source_bytes": 999643,
+    "external_hardfloat": 20,
+    "public_main_recipe_sources": 72,
+    "donor_provider_count": 6,
+    "fresh_source_hashes": 98,
+    "recipe_reexecuted_by_auditor": false,
+    "new_tree_recompiled": false,
+    "initial_recipe_exit2_incomplete_retained": true
+  },
+  "stages": {
+    "chirrtl": {
+      "status": "PASS_COMMON_NAMESPACE_CHIRRTL_STRUCTURE_AND_PROVIDER_DECLARATIONS_ONLY",
+      "new_output_independent_one_pass_hash": {
+        "bytes": 19551779,
+        "sha256": "bdfbf223cc8c1c8de8a8d21450272878d1422842bc17a452bcef45e9878573bc"
+      },
+      "same_as_old_frozen_output": true,
+      "old_large_output_rehashed": false,
+      "outer_wall_seconds": 11.905692622996867,
+      "cpu_seconds": 11.722095935,
+      "sampled_peak_rss_bytes": 314572800,
+      "max_sample_interval_seconds": 0.06663317995844409,
+      "pins_before_after": 1398,
+      "inventories_before_after": 5,
+      "root_external": 56,
+      "root_absence": 12,
+      "root_launcher_sha256": "3d9871407a430bbc06b4e1a225b78ee43709d2bd897c7b1b7a0aa8117f7a0bf5",
+      "warnings": [
+        "[warn] reviewed_probe_core/Qwen2Block.scala 629:57: [W005] Dynamic index with width 4 is too narrow for Vec of size 256 (expected index width 8).",
+        "[warn] reviewed_probe_core/Qwen2Block.scala 629:57: [W005] Dynamic index with width 5 is too narrow for Vec of size 256 (expected index width 8).",
+        "[warn] reviewed_probe_core/Qwen2Block.scala 629:57: [W005] Dynamic index with width 6 is too narrow for Vec of size 256 (expected index width 8).",
+        "[warn] reviewed_probe_core/Qwen2Block.scala 629:57: [W005] Dynamic index with width 7 is too narrow for Vec of size 256 (expected index width 8)."
+      ],
+      "cleanup": {
+        "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "direct_exit_code": 0,
+        "direct_leader_reaped": true,
+        "no_post_reap_signals": true,
+        "no_nonleader_identities_at_barrier": true,
+        "empty_complete_scans": 2,
+        "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY"
+      }
+    },
+    "sv": {
+      "status": "PASS_REAL_MATRIX_COMMON_SV_STRUCTURE_ONLY",
+      "new_output_independent_one_pass_hash": {
+        "bytes": 48274540,
+        "sha256": "c117e75ae97fb0a978e7cebe8e942a652bf1fbe927505d66092fa39b87380181"
+      },
+      "same_as_old_frozen_output": true,
+      "old_large_output_rehashed": false,
+      "outer_wall_seconds": 43.056621155003086,
+      "cpu_seconds": 42.896145301,
+      "sampled_peak_rss_bytes": 728838144,
+      "max_sample_interval_seconds": 0.04643048299476504,
+      "pins_before_after": 949,
+      "inventories_before_after": 5,
+      "root_external": 56,
+      "root_absence": 32,
+      "root_launcher_sha256": "3d9871407a430bbc06b4e1a225b78ee43709d2bd897c7b1b7a0aa8117f7a0bf5",
+      "warnings": [
+        "scala/chisel/continuous_prefill/src/main/scala/heteronpu/continuous/RetainedMatrix.scala:10:7: warning: unprocessed annotation:'firrtl.transforms.DedupGroupAnnotation' still remaining after LowerToHW"
+      ],
+      "cleanup": {
+        "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+        "direct_exit_code": 0,
+        "direct_leader_reaped": true,
+        "no_post_reap_signals": true,
+        "no_nonleader_identities_at_barrier": true,
+        "empty_complete_scans": 2,
+        "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY"
+      }
+    }
+  },
+  "data_bit_lower_bound_subtotal": {
+    "lane_accumulator_and_result_FIFO": 1310720,
+    "two_service_result_tiles": 262144,
+    "sum": 1572864,
+    "not_total_synthesized_area_or_FF_report": true
+  },
+  "limits": {
+    "full_provider_synthesis_or_SCC_pass": false,
+    "full4096fit_or_numerical_pass": false,
+    "old_resource_FAILs_preserved": true,
+    "warning_free": false,
+    "full_block_RTL_pass_count": 0,
+    "five_block_target_count": 5,
+    "effective_MAC_90pct_proven": false,
+    "new_four_block_results_included": false,
+    "shared_state32_changes_included": false,
+    "root_endpoints_expected_plus_source_bound_pass_not_independent_observed_digest_trace": true
+  },
+  "latest_user_required_contract": {
+    "full_mac_configuration": 4096,
+    "profiles": [
+      "Qwen2_L0",
+      "Qwen3.5_0.8B_L0",
+      "Qwen3.5_0.8B_L3",
+      "Qwen3.5_35B_A3B_L0",
+      "Qwen3.5_35B_A3B_L3"
+    ],
+    "same_hardware_interface_and_RTL_hash_required": true,
+    "only_runtime_configuration_and_weights_differ": true,
+    "joint_full_top_acceptance_established": false,
+    "current_OrderedQkRealMatrixCore_is_limited_Qwen2_structure_not_universal_full_block_top": true,
+    "single512_lint_candidate_cancelled_unexecuted": true,
+    "separate16_32_elaboration_state32_package_paused_not_a_solution": true,
+    "fixed_max32_5bit_runtime_heads_successor_only_pending_review": true
+  },
+  "warning_erratum": {
+    "status": "CONFIRMED_ACTUAL_CHIRRTL_WARNING_SUMMARY_OMISSION_CORRECTED_EXTERNALLY",
+    "corrected_field": "stages.chirrtl.warnings",
+    "prior_frozen_review_warning_list_was_empty_due_to_summary_omission": true,
+    "new_run_actual_warning_count": 4,
+    "actual_warning_summary": "[warn] There were 4 warning(s) during hardware elaboration.",
+    "actual_log": {
+      "bytes": 924,
+      "sha256": "f2c8343341f04c43ee6ce588069e81df3f95384b549006ca16aa34d4612dea31"
+    },
+    "actual_log_bytes_equal_previous": true,
+    "warnings_present_in_this_actual_run": true,
+    "historical_only": false,
+    "warning_free": false,
+    "root_cause": "Reviewer small-log summary filtered only 'warning:' or 'error:' and missed Chisel '[warn]' format; original log/artifact never lacked these diagnostics.",
+    "responsibility": "independent reviewer summary omission, not emitter/tool failure",
+    "scope_of_prior_index_evidence": "Inherited local 256-value static index range check only, not newly re-proved full elaboration/type/numeric correctness; no old FIR rescan",
+    "old_frozen_report_modified": false,
+    "native_or_target_reexecuted": false,
+    "safe_warning_projection": {
+      "source_locator_role": "reviewed_probe_core/Qwen2Block.scala",
+      "original_locator_utf8_sha256": "53af8392d317dd956dfb85e1b6c89fb7979eec4223c7b0e1de614b5b62358239",
+      "exact_replacements": 4,
+      "all_nonlocator_warning_bytes_unchanged": true
+    },
+    "erratum": {
+      "bytes": 3623,
+      "sha256": "3964215f370f9867e99f3786a5dc232a913995aca4416a5ba9b5f1521fdff63b"
+    },
+    "erratum_freeze": {
+      "bytes": 619,
+      "sha256": "0e01f2568ccf4d88be5ba5b8136697b269a3c6dd42d2e641585c8a1ba7c0312f"
+    }
+  }
+}

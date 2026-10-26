@@ -1,0 +1,90 @@
+{
+  "all_retired_scores_plus_zero": true,
+  "body_cycles": 12143,
+  "checks": 16619,
+  "counts": {
+    "accounting512Steps": 1824,
+    "checkedMemory": 960,
+    "checkedPv": 288,
+    "checkedVector": 828,
+    "cycles": 12143,
+    "dones": 24,
+    "groups": 24,
+    "memoryAccepted": 960,
+    "memoryReturned": 960,
+    "outputBytes": 12288,
+    "ownerAccepts": 1,
+    "pvRequests": 288,
+    "pvReturns": 288,
+    "qkAcceptedSteps": 192,
+    "requestHoldChecks": 369,
+    "results": 24,
+    "scoreWrites": 36
+  },
+  "cpu_seconds": 0.011126018999999997,
+  "expectation_trace": {
+    "bytes": 6998,
+    "sha256": "f75aa34b616439bde1424c27b82207eb0584cc9933aa4da340de95ba26e4e606"
+  },
+  "hold_checks_by_port": {
+    "group": 2,
+    "memory": 234,
+    "pv": 86,
+    "step": 47
+  },
+  "log": {
+    "bytes": 116857,
+    "read_parse_passes": 1,
+    "sha256": "76e327327677356038830643cda68f159b08d57aba4604615a6ecd4a5da4d4b9"
+  },
+  "max_histogram": {
+    "0x00000000": 12,
+    "0xff800000": 816
+  },
+  "memory_PV_actual_raw_transactions_in_log": false,
+  "memory_PV_evidence": "Full passive assertions in executed frozenharness, compiledconstant tables verifiedinactualELF, completeconsumption counters. Not outerrawtransactionreplay.",
+  "model_executed_by_review": false,
+  "nonretire_data_histogram": {
+    "0": 792
+  },
+  "nonretire_fields_scope": "width-only diagnostics; actualvalues recorded but not validscorewrites",
+  "nonretire_index_histogram": {
+    "0": 792
+  },
+  "observations": 828,
+  "phase_counts": {
+    "1": 384,
+    "2": 384,
+    "3": 24,
+    "4": 36
+  },
+  "production_checker_imported": false,
+  "reset_rising_edges": 3,
+  "retire_by_token_max": [
+    {
+      "count": 12,
+      "max": 4286578688,
+      "token": 0
+    },
+    {
+      "count": 12,
+      "max": 0,
+      "token": 1
+    },
+    {
+      "count": 12,
+      "max": 4286578688,
+      "token": 1
+    }
+  ],
+  "schema": "independent-actual-normal-M2-event-review-v1",
+  "status": "PASS_ACTUAL_828_EVENT_AND_TERMINAL_LOG_WITH_EXTERNAL_IDENTITY_REQUIRED",
+  "token1_second_retire_max_plus_zero_observed_for_all12heads": true,
+  "total_rising_edges": 12146,
+  "wall_seconds": 0.011130694998428226,
+  "origin_review": {
+    "bytes": 12527,
+    "sha256": "19241c68970559643ca365b9c7d85787ef7c1608d50019cab5c96a3c6e9ef2ce"
+  },
+  "omission": "Per-head event-cycle/retire rows omitted for minimal summary; original complete event review hash retained."
+}

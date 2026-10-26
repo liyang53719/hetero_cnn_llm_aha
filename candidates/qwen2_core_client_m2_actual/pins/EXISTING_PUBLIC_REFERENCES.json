@@ -1,0 +1,60 @@
+{
+  "base_commit": "c525d9bb76fe8d5253e82725056d77d9bdfd5c54",
+  "references": [
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/check_m2_log.py",
+      "bytes": 5491,
+      "sha256": "d875cabd39804dc35e9468b3d06eb8733246e9de404a87cbdd2f23b0b7daae6f",
+      "git_blob_sha": "b9dd401ea7b1af1f605244be4fdcd437264488cc"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/reference_events.py",
+      "bytes": 2912,
+      "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7",
+      "git_blob_sha": "031fe1b1ec7e031f0ff7ae25313ea92232012221"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/generate_reference.py",
+      "bytes": 1705,
+      "sha256": "9fe6c961e25661a1352568446b86b8c364b214229e7e93224c21b581d72dab5f",
+      "git_blob_sha": "ac9adbe52011545d25692c64dd8155bf60652420"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/test_m2_contract.py",
+      "bytes": 5130,
+      "sha256": "924057e5923a37bff7cc6f2472b977c8f326c9c34f773a0c37bb982104abda89",
+      "git_blob_sha": "d52efe458a90c014b5936182922b797bda726bff"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/source/m2_main.cpp",
+      "bytes": 12525,
+      "sha256": "5ee32a75788337ea38d0a1fc5705f6d620b0f50dff1bacaebb219acf231ae42b",
+      "git_blob_sha": "5082c076ffdde1e3d7cb6911448fcfca74df230d"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/pins/SOURCE_PINS.json",
+      "bytes": 3904,
+      "sha256": "9427e69ac9ddc3a009fe25f650020809e9ff1e7e1cbc1eb87a2a4d77ababfec1",
+      "git_blob_sha": "864e3c962a41ccd60be4824467c95e8810d01f68"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/evidence/ACTUAL_BUILD_REVIEW.json",
+      "bytes": 12617,
+      "sha256": "1d823bbdcb63d025bb01659442457a03f9c4396e890e67fc054c86f3ac32aacf",
+      "git_blob_sha": "a730fbe3a82a7dd31ae4af7041368facba794040"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m2_build/evidence/PYTHON_COVERAGE_QUALIFICATION.json",
+      "bytes": 2565,
+      "sha256": "9b63db90485243583dcf123fe777742e47bc522a9e231c3563da5a44a6a93e24",
+      "git_blob_sha": "00d3931b7468cff7a5c2802c2b886b61ac316675"
+    },
+    {
+      "repo_path": "candidates/qwen2_core_client_m1_actual/evidence/ACTUAL_M1_REVIEW.json",
+      "bytes": 13583,
+      "sha256": "063dac7de26f975234ef289b922576f7ea5c0fe7fd9824db28780222d4814ce0",
+      "git_blob_sha": "1f5fffdc5bd714f67adc665319168eef8d31799d"
+    }
+  ],
+  "scope": "Exact already published M2 source/build and prior M1 evidence; no source/build duplication, binary upload or new M3 candidate."
+}

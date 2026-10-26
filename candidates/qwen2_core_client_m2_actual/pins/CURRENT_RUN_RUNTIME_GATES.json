@@ -1,0 +1,568 @@
+{
+  "schema": "current-M2-role-runtime-and-root-external-gates-v1",
+  "manifest": {
+    "bytes": 79107,
+    "sha256": "87c72d10c9bed099111fe7900d193923ee985e2fcacb31386a363f587cbfbb24"
+  },
+  "supervisor": {
+    "bytes": 30770,
+    "sha256": "2e3534e4e32e506edf3e8721bf883349c3e1e4c8568517a6a1986d6e5a01f742"
+  },
+  "candidate_freeze": {
+    "bytes": 5512,
+    "sha256": "d9a9bdeb86d55a94846179a942c958c6463fc6dbeb69a83d585e1d2e41ce6757"
+  },
+  "parent_runtime_delta": {
+    "bytes": 32395,
+    "sha256": "e85cd521bbf64a962242bc82c64f56489d9a14769610cf501f8d26ac4e6a797f"
+  },
+  "prelaunch_requirement": {
+    "bytes": 18544,
+    "sha256": "f91f0d8a6e3a23b496f48a585977ea6ff28453c10671fddaaf41e434264c6a59"
+  },
+  "declared_pin_role_counts": {
+    "input": 1,
+    "provenance": 52,
+    "runtime": 127,
+    "source": 4
+  },
+  "declared_count": 184,
+  "automatic_count": 186,
+  "runtime_old80_plus_added47_equals127": true,
+  "added_runtime47": [
+    {
+      "role": "parent_stdlib/__pycache__/_weakrefset.cpython-312.pyc",
+      "bytes": 11841,
+      "sha256": "b8c1738e18fc9aa878a43ca3c80fcbca63b82d79dbc0fd4d20d0f1d752d13f5d"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/argparse.cpython-312.pyc",
+      "bytes": 101159,
+      "sha256": "be5995c40bdd9c61143427a22d65fe7f29a65d1cb2cdc42b4d1faef003b29967"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/contextlib.cpython-312.pyc",
+      "bytes": 30454,
+      "sha256": "040c809f5a4982b8d59b9aa79d99cb70ab1ac7dc1e6dfdf8dbf98ed906636b34"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/copyreg.cpython-312.pyc",
+      "bytes": 7503,
+      "sha256": "c02e5dd1f76cef814b493b6fed52bda4c3b8035d00dc096eb1db06e86c582e17"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/decimal.cpython-312.pyc",
+      "bytes": 3035,
+      "sha256": "dcf9b35ee3125a0cdad713393688d0db8135644455f97ec4b1088c4332efedc7"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/enum.cpython-312.pyc",
+      "bytes": 80448,
+      "sha256": "e5d62969820a6a4bde1412666389fe4ffdab1a8b30b91bb61e4346b8fcf41f44"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/fnmatch.cpython-312.pyc",
+      "bytes": 6584,
+      "sha256": "c2af22a392d9341dcbd06e457247111acea57a2a46fcbdc09b3794bc62501215"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/fractions.cpython-312.pyc",
+      "bytes": 36859,
+      "sha256": "9bd229fb7d37bd82edf4d9fc8f6b64a16a3203b5962296074a9ad06b1d531c20"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/functools.cpython-312.pyc",
+      "bytes": 40446,
+      "sha256": "c29e06a125632d6a8812ee7f9617f6ab4964ec5e2b0385893ba9d2d102f4ab0a"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/gettext.cpython-312.pyc",
+      "bytes": 21887,
+      "sha256": "04009d9f1c86fb9edbc6849402c69929a7ff97c54a02c66889795a685a29445d"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/hashlib.cpython-312.pyc",
+      "bytes": 8184,
+      "sha256": "2f4be82e1c5ab1985ecc0f58dd62539076ecf9bef63736310b454fcad6dafcfd"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/ipaddress.cpython-312.pyc",
+      "bytes": 93880,
+      "sha256": "40d174aaaab98cc406334a0f652df258a2ce3774d177a95626f75c67a86dcfd0"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/keyword.cpython-312.pyc",
+      "bytes": 1145,
+      "sha256": "7477191d8f7b324d9d73b1c5b5269a57beaddebddea8e83ba2eb9d5af8fe15c9"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/locale.cpython-312.pyc",
+      "bytes": 59592,
+      "sha256": "8e6dd36dc8deac5cd6c68671f2b6ca9f45eb1ca501a347e8ce45ea7dddc29e61"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/numbers.cpython-312.pyc",
+      "bytes": 14071,
+      "sha256": "2cfac33db9cde9a77a912f3c4fd30e47a71f5493367e219fb67327336a857955"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/operator.cpython-312.pyc",
+      "bytes": 17456,
+      "sha256": "41270fd01b6fdda1fd31f5b74cbfeae6c48a26296a54439ac208a50248a730ec"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/pathlib.cpython-312.pyc",
+      "bytes": 61802,
+      "sha256": "e7d9282a4411c3c101193c7cae2a0e48863d35441d83369cd778240f2893071e"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/reprlib.cpython-312.pyc",
+      "bytes": 10330,
+      "sha256": "946cea8a0bb080f5460af84bb54681fde88fdd1a704acd554e2d40c45b36f7ff"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/selectors.cpython-312.pyc",
+      "bytes": 26207,
+      "sha256": "74eb4444b43eabe3f78ed10da45013b9cbcfaa34fc85f31b6a5a7a0f04455293"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/signal.cpython-312.pyc",
+      "bytes": 4561,
+      "sha256": "56a19f07dae46c588b55b223eb302166aa1fdb5271f5b7833d63504e718f08f0"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/subprocess.cpython-312.pyc",
+      "bytes": 79158,
+      "sha256": "2c164844fa89e26c53287649fd699fff18812b38e955720f6e321750c13cfe6c"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/threading.cpython-312.pyc",
+      "bytes": 65320,
+      "sha256": "2106fe3a91c4aa511cd8c2ab25d4b05f3780e7931bc067745b09075c8240bd15"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/types.cpython-312.pyc",
+      "bytes": 15049,
+      "sha256": "7ae745cad83252e109157ddf1bc0a0e1732db76e13ced2111fe75b56b8e7ab03"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/warnings.cpython-312.pyc",
+      "bytes": 23931,
+      "sha256": "04547639c24e83aeabd35df478c65d0307631656a18469a069a8066643455e33"
+    },
+    {
+      "role": "parent_stdlib/collections/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 73041,
+      "sha256": "d8af5f65d6f50cf1f60d70010b47d66499b24b60f4b551dad35da6de27151a2b"
+    },
+    {
+      "role": "parent_stdlib/collections/__pycache__/abc.cpython-312.pyc",
+      "bytes": 353,
+      "sha256": "20dd5114ae2a2cffe4cb9144c2688745a163622385a4129a972f7f5eac3c5bb7"
+    },
+    {
+      "role": "parent_stdlib/decimal.py",
+      "bytes": 2805,
+      "sha256": "c3e37c55ef72b3dd6cb7b466a907b966467b6a9c58d85302193e64cbb5fd53d0"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 5879,
+      "sha256": "e54127b3e3e39845fcec734db7246ed41a8261b5afff9ddfe44c5514035a7094"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/aliases.cpython-312.pyc",
+      "bytes": 12512,
+      "sha256": "c158cab0522c8c785196c50d3230c84dfe93e8ac4337ccc18f944b8bbc6f08c9"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/utf_8.cpython-312.pyc",
+      "bytes": 2251,
+      "sha256": "c33fa7315ec3376b3f2ad6bffbba27844ac7c631d13fcb3eee0459041fd5836e"
+    },
+    {
+      "role": "parent_stdlib/fractions.py",
+      "bytes": 38147,
+      "sha256": "d52d1ab9d5be26924e4914a5e40069c992bbfa68f773694c2e5ee8452d0766a0"
+    },
+    {
+      "role": "parent_stdlib/importlib/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 4663,
+      "sha256": "d4e2e8c2d9638c62f070a873a7604d8b6f1bba454b343d9d1dde8170b98254db"
+    },
+    {
+      "role": "parent_stdlib/importlib/__pycache__/_abc.cpython-312.pyc",
+      "bytes": 1747,
+      "sha256": "1ee7b72eb05e19daff0ff568591aff21bc03af868c0cdede76477ee657b73c72"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 13719,
+      "sha256": "57f572d2e154bce8642a5ee8c352ed0f0b883edbb2a2949ca983f213f696948c"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/decoder.cpython-312.pyc",
+      "bytes": 14017,
+      "sha256": "96492a65623d36258b0408dead7921d2cf9f431476ab2dc071664f8db8cae549"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/encoder.cpython-312.pyc",
+      "bytes": 15192,
+      "sha256": "7df3d596aa56a94c72e115797207d86178b882674c98e05f1c9cbfdc0e78f0cf"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/scanner.cpython-312.pyc",
+      "bytes": 3434,
+      "sha256": "c418fb0b9f90f6c742e7e71786fd86b605edea944dd3571d92d3ef8ceee3e24d"
+    },
+    {
+      "role": "parent_stdlib/numbers.py",
+      "bytes": 11467,
+      "sha256": "ac381960a3dc1db0498b0bd43d8ef278d6599713121a186b153ff09d9552e0db"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 18034,
+      "sha256": "013b5a21cf75be671621c283b394646cc9f313b6377456d86302e8f931a464a3"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_casefix.cpython-312.pyc",
+      "bytes": 1920,
+      "sha256": "e727f6e09d5d39f727d70ec4236ba9af5fae998456c110cc5cfe9e135d893ff2"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_compiler.cpython-312.pyc",
+      "bytes": 26598,
+      "sha256": "47405d5ce863b084d7c758ba7d746d23a9ab19fd8b63b55a26f21473ff2ee948"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_constants.cpython-312.pyc",
+      "bytes": 5407,
+      "sha256": "36c3f373351f739d5c448fc312ddc582b3010bedf4b880ce3019f235282df7f7"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_parser.cpython-312.pyc",
+      "bytes": 42051,
+      "sha256": "47981e50108d4ef4e3e5abd6d55259c7e4aada08ac28c8fd4cf7f47eb5df07d2"
+    },
+    {
+      "role": "parent_stdlib/urllib/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 239,
+      "sha256": "e88d78a96b45bfda7f645480bfb28a690d7dff2ec248662753930d257969de9d"
+    },
+    {
+      "role": "parent_stdlib/urllib/__pycache__/parse.cpython-312.pyc",
+      "bytes": 50717,
+      "sha256": "a4b34df2109c0ee861510e392fc07b7d85d63185288fe4cd1e9a014e20fa30ea"
+    },
+    {
+      "role": "parent_locale/C.utf8/LC_CTYPE",
+      "bytes": 367708,
+      "sha256": "1257597210f43630e7c8a745ae95127e96b93a43515ac5163cab459ddc1664b3"
+    },
+    {
+      "role": "parent_locale/gconv-modules.cache",
+      "bytes": 27028,
+      "sha256": "52c227df9d53248238602c1ddaccd2c8ddc4cc6a61aa45d7c425af590b8806a5"
+    }
+  ],
+  "current_root_cache42": [
+    {
+      "role": "parent_stdlib/__pycache__/_weakrefset.cpython-312.pyc",
+      "sha256": "b8c1738e18fc9aa878a43ca3c80fcbca63b82d79dbc0fd4d20d0f1d752d13f5d"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/argparse.cpython-312.pyc",
+      "sha256": "be5995c40bdd9c61143427a22d65fe7f29a65d1cb2cdc42b4d1faef003b29967"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/contextlib.cpython-312.pyc",
+      "sha256": "040c809f5a4982b8d59b9aa79d99cb70ab1ac7dc1e6dfdf8dbf98ed906636b34"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/copyreg.cpython-312.pyc",
+      "sha256": "c02e5dd1f76cef814b493b6fed52bda4c3b8035d00dc096eb1db06e86c582e17"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/decimal.cpython-312.pyc",
+      "sha256": "dcf9b35ee3125a0cdad713393688d0db8135644455f97ec4b1088c4332efedc7"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/enum.cpython-312.pyc",
+      "sha256": "e5d62969820a6a4bde1412666389fe4ffdab1a8b30b91bb61e4346b8fcf41f44"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/fnmatch.cpython-312.pyc",
+      "sha256": "c2af22a392d9341dcbd06e457247111acea57a2a46fcbdc09b3794bc62501215"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/fractions.cpython-312.pyc",
+      "sha256": "9bd229fb7d37bd82edf4d9fc8f6b64a16a3203b5962296074a9ad06b1d531c20"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/functools.cpython-312.pyc",
+      "sha256": "c29e06a125632d6a8812ee7f9617f6ab4964ec5e2b0385893ba9d2d102f4ab0a"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/gettext.cpython-312.pyc",
+      "sha256": "04009d9f1c86fb9edbc6849402c69929a7ff97c54a02c66889795a685a29445d"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/hashlib.cpython-312.pyc",
+      "sha256": "2f4be82e1c5ab1985ecc0f58dd62539076ecf9bef63736310b454fcad6dafcfd"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/ipaddress.cpython-312.pyc",
+      "sha256": "40d174aaaab98cc406334a0f652df258a2ce3774d177a95626f75c67a86dcfd0"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/keyword.cpython-312.pyc",
+      "sha256": "7477191d8f7b324d9d73b1c5b5269a57beaddebddea8e83ba2eb9d5af8fe15c9"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/locale.cpython-312.pyc",
+      "sha256": "8e6dd36dc8deac5cd6c68671f2b6ca9f45eb1ca501a347e8ce45ea7dddc29e61"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/numbers.cpython-312.pyc",
+      "sha256": "2cfac33db9cde9a77a912f3c4fd30e47a71f5493367e219fb67327336a857955"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/operator.cpython-312.pyc",
+      "sha256": "41270fd01b6fdda1fd31f5b74cbfeae6c48a26296a54439ac208a50248a730ec"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/pathlib.cpython-312.pyc",
+      "sha256": "e7d9282a4411c3c101193c7cae2a0e48863d35441d83369cd778240f2893071e"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/reprlib.cpython-312.pyc",
+      "sha256": "946cea8a0bb080f5460af84bb54681fde88fdd1a704acd554e2d40c45b36f7ff"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/selectors.cpython-312.pyc",
+      "sha256": "74eb4444b43eabe3f78ed10da45013b9cbcfaa34fc85f31b6a5a7a0f04455293"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/signal.cpython-312.pyc",
+      "sha256": "56a19f07dae46c588b55b223eb302166aa1fdb5271f5b7833d63504e718f08f0"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/subprocess.cpython-312.pyc",
+      "sha256": "2c164844fa89e26c53287649fd699fff18812b38e955720f6e321750c13cfe6c"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/threading.cpython-312.pyc",
+      "sha256": "2106fe3a91c4aa511cd8c2ab25d4b05f3780e7931bc067745b09075c8240bd15"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/types.cpython-312.pyc",
+      "sha256": "7ae745cad83252e109157ddf1bc0a0e1732db76e13ced2111fe75b56b8e7ab03"
+    },
+    {
+      "role": "parent_stdlib/__pycache__/warnings.cpython-312.pyc",
+      "sha256": "04547639c24e83aeabd35df478c65d0307631656a18469a069a8066643455e33"
+    },
+    {
+      "role": "parent_stdlib/collections/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "d8af5f65d6f50cf1f60d70010b47d66499b24b60f4b551dad35da6de27151a2b"
+    },
+    {
+      "role": "parent_stdlib/collections/__pycache__/abc.cpython-312.pyc",
+      "sha256": "20dd5114ae2a2cffe4cb9144c2688745a163622385a4129a972f7f5eac3c5bb7"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "e54127b3e3e39845fcec734db7246ed41a8261b5afff9ddfe44c5514035a7094"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/aliases.cpython-312.pyc",
+      "sha256": "c158cab0522c8c785196c50d3230c84dfe93e8ac4337ccc18f944b8bbc6f08c9"
+    },
+    {
+      "role": "parent_stdlib/encodings/__pycache__/utf_8.cpython-312.pyc",
+      "sha256": "c33fa7315ec3376b3f2ad6bffbba27844ac7c631d13fcb3eee0459041fd5836e"
+    },
+    {
+      "role": "parent_stdlib/importlib/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "d4e2e8c2d9638c62f070a873a7604d8b6f1bba454b343d9d1dde8170b98254db"
+    },
+    {
+      "role": "parent_stdlib/importlib/__pycache__/_abc.cpython-312.pyc",
+      "sha256": "1ee7b72eb05e19daff0ff568591aff21bc03af868c0cdede76477ee657b73c72"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "57f572d2e154bce8642a5ee8c352ed0f0b883edbb2a2949ca983f213f696948c"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/decoder.cpython-312.pyc",
+      "sha256": "96492a65623d36258b0408dead7921d2cf9f431476ab2dc071664f8db8cae549"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/encoder.cpython-312.pyc",
+      "sha256": "7df3d596aa56a94c72e115797207d86178b882674c98e05f1c9cbfdc0e78f0cf"
+    },
+    {
+      "role": "parent_stdlib/json/__pycache__/scanner.cpython-312.pyc",
+      "sha256": "c418fb0b9f90f6c742e7e71786fd86b605edea944dd3571d92d3ef8ceee3e24d"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "013b5a21cf75be671621c283b394646cc9f313b6377456d86302e8f931a464a3"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_casefix.cpython-312.pyc",
+      "sha256": "e727f6e09d5d39f727d70ec4236ba9af5fae998456c110cc5cfe9e135d893ff2"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_compiler.cpython-312.pyc",
+      "sha256": "47405d5ce863b084d7c758ba7d746d23a9ab19fd8b63b55a26f21473ff2ee948"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_constants.cpython-312.pyc",
+      "sha256": "36c3f373351f739d5c448fc312ddc582b3010bedf4b880ce3019f235282df7f7"
+    },
+    {
+      "role": "parent_stdlib/re/__pycache__/_parser.cpython-312.pyc",
+      "sha256": "47981e50108d4ef4e3e5abd6d55259c7e4aada08ac28c8fd4cf7f47eb5df07d2"
+    },
+    {
+      "role": "parent_stdlib/urllib/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "e88d78a96b45bfda7f645480bfb28a690d7dff2ec248662753930d257969de9d"
+    },
+    {
+      "role": "parent_stdlib/urllib/__pycache__/parse.cpython-312.pyc",
+      "sha256": "a4b34df2109c0ee861510e392fc07b7d85d63185288fe4cd1e9a014e20fa30ea"
+    }
+  ],
+  "current_root_extra_absence11": [
+    {
+      "role": "frozen_M2_source/__pycache__/reference_events.cpython-312.pyc",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libpthread.so.0",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libdl.so.2",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libutil.so.1",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libm.so.6",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/librt.so.1",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/libc.so.6",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/ld-linux-x86-64.so.2",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/glibc-hwcaps",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/tls",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    },
+    {
+      "role": "parent_prefix/lib/x86_64",
+      "recorded_presence_value": false,
+      "absence_gate_passed": true
+    }
+  ],
+  "external_before": {
+    "bytes": 9227,
+    "sha256": "72f10e533247f71b15755c25e0e3215c1c40de3665dff3eda97316bd92f45c4b"
+  },
+  "external_after": {
+    "bytes": 9227,
+    "sha256": "72f10e533247f71b15755c25e0e3215c1c40de3665dff3eda97316bd92f45c4b"
+  },
+  "external_records_equal": true,
+  "parent_locale_actual": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8"
+  },
+  "parent_locale_allowed_source_tuples": [
+    {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    {
+      "LANG": "C",
+      "LC_ALL": "C",
+      "LC_CTYPE": "C.UTF-8"
+    }
+  ],
+  "worker_argv": [
+    "${NEW_RUN_ROOT}/bin/VOrderedQkBehaviorCore_m2"
+  ],
+  "child_environment": {
+    "HOME": "${NEW_RUN_ROOT}/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "${NEW_RUN_ROOT}/empty-path",
+    "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+  },
+  "case": "normal_m2",
+  "reset_edges": 3,
+  "clock_cap": 100000,
+  "caps": {
+    "address_space_bytes": 4294967296,
+    "affinity_count": 1,
+    "cleanup_phase_seconds": 10,
+    "cleanup_reserve_seconds": 30,
+    "core_bytes": 0,
+    "cpu_seconds": 300,
+    "log_hard_bytes": 2097152,
+    "output_tree_sampled_bytes": 16777216,
+    "postflight_reserve_seconds": 20,
+    "rss_sampled_bytes": 2147483648,
+    "sample_seconds": 0.1,
+    "single_file_hard_bytes": 8388608,
+    "total_wall_seconds": 390,
+    "work_wall_seconds": 360
+  },
+  "outer_wall_seconds": 420,
+  "source_checker": {
+    "bytes": 5491,
+    "sha256": "d875cabd39804dc35e9468b3d06eb8733246e9de404a87cbdd2f23b0b7daae6f"
+  },
+  "source_reference": {
+    "bytes": 2912,
+    "sha256": "919f4bf7013ad46b0a11b3fe08f274403d18204a7f4c38f658c8b56b0a1b30a7"
+  },
+  "normal_cache_policy": "Production exactly -I -S -B without -O. -B prevents writes, not reads. Pin all 42 current module cache candidates: 39 observed audit open events plus 3 startup encoding caches before audit hook. 2307/reference cache absent endpoint gate; checker/supervisor are raw exec compile and do not select their own cache.",
+  "unknowns": [
+    "Import probe is not an OS sandbox or all future conditional-module proof. Frozen checker/reference have only the reviewed top-level imports; no checker/reference functions were called.",
+    "Existing parent loader identities/cache/negative slots must be retained, not replaced with model five-library shorthand.",
+    "Python bytecode cache pins are current-host artifacts tied by source compilation equality, not independently signed Python distribution provenance."
+  ],
+  "normal_cached_pyc_contents_published": false,
+  "scope": "42 caches+3 stdlib sources+2 locale files are current declared delta, pinned before/after; all roles are portable, not real machine paths. External normal mode source-equivalent cache gate does not retroactively fill older M1/build gaps or prove arbitrary conditional imports/dlopen/continuous isolation. Packaging -O tests are separate and not production runtime evidence."
+}

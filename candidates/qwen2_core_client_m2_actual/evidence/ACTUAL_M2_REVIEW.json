@@ -1,0 +1,228 @@
+{
+  "acceptance_scope": {
+    "M3_or_M17": false,
+    "actual_generated_SV_core_client_clocked_behavior": true,
+    "chunk16_to17": false,
+    "full128_RTL_numerical": false,
+    "full29_RTL_tensor": false,
+    "full_Matrix_FMA_numeric": false,
+    "fullprefill_allstages": false,
+    "generic_tile_index_alias_proof": false,
+    "physical_DDR_memory": false,
+    "specific_zero_input_score_max_and_PV_fields": "Observedlogorsource-boundexecutedassertionsasclassified"
+  },
+  "actual_build_review": {
+    "bytes": 16118,
+    "sha256": "e11b43ad9600f405094ededa33381e7e6465a0e9168285f3c7db4c4d16364d6b"
+  },
+  "actual_result": {
+    "PV_requests_and_returns": [
+      288,
+      288
+    ],
+    "QK_accepted_steps": 192,
+    "allfour_request_hold_ports_covered": true,
+    "body_clock_edges": 12143,
+    "checked_PV": 288,
+    "checked_memory": 960,
+    "checked_vector": 828,
+    "direct_log_numerical_fields": "36validscorewrites+0;all12token1secondretirepreedge max+0;allothers816max-Inf. ThisextendsM1maxobservationwithoutclaimingfullmax/softmax/FMA tensoracceptance.",
+    "dones": 24,
+    "errors": [],
+    "groups": 24,
+    "holds": {
+      "group": 2,
+      "memory": 234,
+      "pv": 86,
+      "step": 47
+    },
+    "memory_requests_and_returns": [
+      960,
+      960
+    ],
+    "native_exit_code": 0,
+    "ordered_OBS": 828,
+    "outer_timeout": false,
+    "output_bytes": 12288,
+    "owner_accepts": 1,
+    "passive_numerical_fields": "Exact PV BF16 A0=1 or1/2 causalprefix andzeroothers passedruntimeharnessassertions; source/actualcompiledtable/terminalconsumption/exitidentitybound,notrawexternalPVtrace.",
+    "phase_counts": {
+      "1": 384,
+      "2": 384,
+      "3": 24,
+      "4": 36
+    },
+    "pipeline_observation": "Orderedscan/fold/scale/retirephasesareconsecutivewithinall24heads;token1two-score-retirementtailis2consecutiveedges. NotglobalMACpipelineutilization.",
+    "producer_status": "PASS_VERILATED_CORE_NORMAL_M2_SCRIPTED_ENDPOINTS",
+    "reset_edges": 3,
+    "results": 24,
+    "root_returncode": 0,
+    "score_writes": 36,
+    "script_bookkeeping512Steps": 1824,
+    "total_clock_edges": 12146,
+    "uncovered_hold_ports": []
+  },
+  "artifact_manifest": {
+    "bytes": 8872,
+    "sha256": "0b6a0f5c7270ad5171c61a50e549831d0f42d72592c1533080af991ee208151b"
+  },
+  "binary": {
+    "bytes": 3392368,
+    "sha256": "bd6c2879bab1ae6d09f0e39640edc4f781d81a24ce7ac376d484020dbba3e03e"
+  },
+  "case": "normal_m2",
+  "case_metrics": {
+    "bytes": 2240,
+    "sha256": "9d84add5f1b8e1e71f8f0e99764a958a684424cbcfa8eb9e08a788f86167aaad"
+  },
+  "event_review": {
+    "bytes": 12527,
+    "sha256": "19241c68970559643ca365b9c7d85787ef7c1608d50019cab5c96a3c6e9ef2ce"
+  },
+  "events": {
+    "bytes": 238026,
+    "sha256": "af53d0f79099cb7e43c7b7f30418ba54c95e3fb742d4f0609e33b7dc647bcf21"
+  },
+  "evidence_layers": {
+    "bytes": 3880,
+    "sha256": "d76d2ed8e0d18a76d3f825354b85e87e7c0d848bc427471e59fd562af7aebe7d"
+  },
+  "identity_freeze": {
+    "bytes": 1682,
+    "sha256": "57136ff056dc921a6ef1bf9c261b374c147182b493bce710e8ce6eb79d21cf76"
+  },
+  "identity_review": {
+    "bytes": 29553,
+    "sha256": "51f721e45fae8d06c209f210b75b561e2fe94cf3c0236df84d6ace4f87544f30"
+  },
+  "independent_audit": {
+    "actual_and_root_files_independently_hashed_once_by_identity_auditor": 10,
+    "actual_log_parse_passes": 1,
+    "actualroot_bytes": 3523010,
+    "actualroot_files": 4,
+    "event_checks": 16619,
+    "expectations": "Independent originalsource-derived2305retiretable + fixedphasecounts; terminalclosedformsnotimportedfromdriver.",
+    "final_identity_stat_checks": 255,
+    "identity_checks": 2233,
+    "old_M2_final_artifact_stats": 16,
+    "parsed_log_hash_also_computed_during_parent_single_read": true,
+    "production_checker_imported": false
+  },
+  "log": {
+    "bytes": 116857,
+    "read_parse_passes": 1,
+    "sha256": "76e327327677356038830643cda68f159b08d57aba4604615a6ecd4a5da4d4b9"
+  },
+  "metrics": {
+    "MAC_utilization": null,
+    "claim90percent_pass": false,
+    "effective_MAC_duty": null,
+    "full_system_utilization": null,
+    "label": "Observedvectorphaseoccupancy ofthissimulatedcaseonly",
+    "reason": "ScriptedexternalMatrixmeansnomeasuredrealFMA numerator;limitedcorecase+harnessdelaysnotfullblockhardwarecycledenominator.1824bookkeepingandphaseoccupancyarenoteffectiveMAC.",
+    "target90percent_met": null,
+    "vector_phase_body_percent": 6.818743308902247,
+    "vector_phase_reset_inclusive_percent": 6.8170591141116414
+  },
+  "next_scope": "Any M3/1/3orM17/asymmetrictilecase requiresseparatefrozenharness+build/runapprovalandindependentreview. Noautomaticcasechainingorretroactiveclaim.",
+  "passed_case_metrics": {
+    "bytes": 1945,
+    "sha256": "3d40c14801277b3596229088b2bcc3c6f5ed5aaa64cd72e2142956c9f81d5d67"
+  },
+  "producer_receipt": {
+    "bytes": 13394,
+    "sha256": "4149b8587b93c7b182f34018f5ddeae0eb6f705857593b4bfa12d1179b6904ec"
+  },
+  "remaining_actual_acceptance_blockers_for_this_narrow_case": [],
+  "resource_cleanup": {
+    "CORE0_boundary": "Normalcorefileslimited; no claimsystempipedcorehandlerabsolutelyprevented.",
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "cleanup_complete": true,
+    "cleanup_scope": "SavedoriginalPID/session/group/startproofconsistent:2completepre-reapscans,8records/1548B,leaderZthenreap,nonleaderabsentatbarrier. No newprocesspoll/signal byreviewer; notwholehost/cgroupconfinement.",
+    "final_aggregate_CPU_seconds": 20.360171046999998,
+    "inner_wall_seconds": 20.400004330964293,
+    "maximum_observed_sample_gap_seconds": 0.026801730040460825,
+    "outer_wall_seconds": 20.472671524970792,
+    "sampled_peak_CPU_seconds": 20.263915137999998,
+    "sampled_peak_RSS_bytes": 7651328,
+    "sampled_peak_tree_bytes": 3509616
+  },
+  "retained_originals": "OldM2build16andM1actual/root8files completefilelists/statunchanged; source/model/SV/archive unchanged. No build/rerun/modelexecution byreviewer.",
+  "root_approval": {
+    "bytes": 2943,
+    "sha256": "93b7b079f00a077aa6357ddc2ce1cfa4dd69dcc6ebf948bee497724f4981068a"
+  },
+  "root_receipt": {
+    "bytes": 160,
+    "sha256": "5ec64a027ae3343bc96854934dc22b9181e74252f41cff15966568f6eb1e6f5e"
+  },
+  "run_admission_review": {
+    "bytes": 17232,
+    "sha256": "da617c08e03ec27536f2e72ac406b17869ca41820c98d527c9c1419ac863ec8e"
+  },
+  "runtime_identity": {
+    "absence_slots": 63,
+    "aliases": 6,
+    "external42_cache_hashes_and11_extra_absences": "BothrootbeforePopenandafterterminalrecords matchfrozenrequirements andruntimepinidentities; byte-identicalexternalrecords.",
+    "external_after": {
+      "bytes": 9227,
+      "sha256": "72f10e533247f71b15755c25e0e3215c1c40de3665dff3eda97316bd92f45c4b"
+    },
+    "external_before": {
+      "bytes": 9227,
+      "sha256": "72f10e533247f71b15755c25e0e3215c1c40de3665dff3eda97316bd92f45c4b"
+    },
+    "known_runtime_scope": "New42normal.pyc/sourceequivalence/3addedstdlib/localeand11absencegapclosedforthedeclaredcurrentprogramprobe; notexhaustivearbitraryconditionalimport/dlopen/wholehost isolation. OlderM1/buildcachecoveragequalification remainsnotretrospectivelyfilled.",
+    "native_runtime": "Known5ELF/13versionedgeclosurefromnewactualbinary;parent8ELF/15edgesseparatelyqualifiedinruntimepreparation.",
+    "parent_locale": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "LC_CTYPE": "C.UTF-8"
+    },
+    "parent_locale_not_childenvironment": "SeparateparentobservedtupleandchildclosedCenv verified.",
+    "postflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 186
+    },
+    "preflight": {
+      "inventory_checks": 0,
+      "pass_all": true,
+      "pin_checks": 186
+    }
+  },
+  "saved_cleanup_review": {
+    "bytes": 1401,
+    "sha256": "845bd452caf16237ac3aa62ef45ec48ce82fadda756fccd9679c90a5582693f6"
+  },
+  "schema": "qwen2-actual-normal-M2-original-core-client-independent-review-v1",
+  "source_review": {
+    "bytes": 12325,
+    "sha256": "ccbbc360d14f5ee21fc71b830173a7695154ba42773e22eeb8e3b8c908e6ecc7"
+  },
+  "status": "PASS_ACTUAL_VERILATED_ORIGINAL_CORE_CLIENT_NORMAL_M2_WITH_SCRIPTED_MATRIX_MEMORY_ONLY",
+  "origin_review": {
+    "bytes": 11636,
+    "sha256": "8f88ac3fadb1ee49f5c7f8ea4709bb209aebf7836fe13d87e4e9a4f5d199cbd8"
+  },
+  "origin_freeze": {
+    "bytes": 3410,
+    "sha256": "551e41cd07090fa4c3b13fcc02876c2473e122cff54cfec2dae60731d67db0da"
+  },
+  "projection_note": "Private paths/file/process identities omitted. Aggregated actual observations, executed-harness assertions and static/source claims remain separate. No raw log/events/ELF/packets published."
+}

@@ -1,0 +1,220 @@
+{
+  "schema": "qwen2-fixed-M2-run-independent-source-review-v1",
+  "status": "PASS_SOURCE_MOCK_ADMISSION_SINGLE_NORMAL_M2_REQUIRES_NEW_ROOT_GO",
+  "admission": {
+    "FMA_pass": false,
+    "actual_M2_pass": false,
+    "automatic_retry": false,
+    "automatic_stage_chaining": false,
+    "duty_cycle": null,
+    "full128_RTL_pass": false,
+    "full29_pass": false,
+    "mac_utilization": null,
+    "model_executed": false,
+    "root_new_approval_required": true,
+    "source_eligible": true
+  },
+  "behavior_acceptance_plan": {
+    "OBS_layer": "Outerchecker fully verifies828observations per token/head/phase/lane/selected/fault0/resultReadyfalse and actualscorewrite/index/data; withinhead consecutivecycle/globalmonotonic. Retiredscore+0, maxpreedge -Inf untilfirstretire, token1 secondretire+0. Nonretiredscoredata/index are width-onlydiagnostics.",
+    "actual_only_after_GO": "Current source/mock success is not modelbehavior. Production success requires exactoriginal childexit0, cleanup, postflight, fullboundedlogcontract, actualELFidentity and resourcecaps.",
+    "clock_contract": "Threeexplicitreset edges + body <=99997 => total<=100000. This C++ startup convention is not asserted bitwise equivalent to Treadle implicit reset startup.",
+    "coverage": "M2 only tokens0/1 and packed activej0/j1. Not 16->17 chunk boundary orM3/M17. No generalsoftmax/tensor threshold proof.",
+    "endpoint_counts": {
+      "PVRequests": 288,
+      "PVReturns": 288,
+      "accounting512Steps": 1824,
+      "dones": 24,
+      "groups": 24,
+      "memoryAccepted": 960,
+      "memoryReturned": 960,
+      "outputBytes": 12288,
+      "ownerAccepts": 1,
+      "qkAcceptedSteps": 192,
+      "results": 24,
+      "scoreWrites": 36
+    },
+    "events": {
+      "CASE_PASS": 1,
+      "DONE": 1,
+      "OBS": 828,
+      "READY": 1,
+      "fold": 384,
+      "retire": 36,
+      "scale": 24,
+      "scan": 384
+    },
+    "hold_layer": "Eachportcount<=bodycycles,sumpositive/exact. Zeroindividualportcounts allowed but reported uncovered. Counts canoverlapports/include a release-edge recheck; not unique stallcycles.",
+    "memory_PV_assertion_layer": "Frozen C++ passively checks everyacceptedmemory address/direction/tag/mask/data (960) and PV A0{1,1/2} BF16/remaining271zerooperands/clear/last/opcode/sliceMask(288), then requires completeconsumption. Outerlog has counters, not rawmemory/PVtrace. Do not call this externaltransactionreplay.",
+    "missing_or_error": "Anyunknownlogline/fatal/assertiontext,missing/duplicateevent,wrongcounts,max,nonzeroexit,resourceorcleanupfailure rejects. Valid syntheticlog cannot overcome a nonzeroexit.",
+    "scope": "Real clocked compiled original core/ALU/scalar/SRAM/PackedClient with frozen scripted Matrix/externalmemory endpoints. Not fullFMA numeric or full128/full29.",
+    "terminal_layer": "Frozenharness asserts endpoint/core debtclear,status/resetRequired,8edgepayloadhold,releasehandshake,3quiet. Not independentexpectedvalue proof of everyownerpayload field."
+  },
+  "candidate_pins": {
+    "COMMAND_PROPOSAL.json": {
+      "bytes": 1156,
+      "sha256": "988070aa8c38a7ab23169c065094ee37530119dedd83b12b1cb0b4dde6c0a9a2"
+    },
+    "FREEZE.json": {
+      "bytes": 5512,
+      "sha256": "d9a9bdeb86d55a94846179a942c958c6463fc6dbeb69a83d585e1d2e41ce6757"
+    },
+    "NATIVE_RUNTIME_MANIFEST.json": {
+      "bytes": 10493,
+      "sha256": "78a5f75ebafe76bacf181e4367adc5aad8856b6c05eba7e357fb3454e5f8f0a1"
+    },
+    "ROOT_REQUIRED_CHECKS.json": {
+      "bytes": 2104,
+      "sha256": "d70b616cca29a3736371900e44f46eeb1b25a3bd4e6daf960cbd87e2ce13835f"
+    },
+    "manifest.json": {
+      "bytes": 79107,
+      "sha256": "87c72d10c9bed099111fe7900d193923ee985e2fcacb31386a363f587cbfbb24"
+    },
+    "supervisor.py": {
+      "bytes": 30770,
+      "sha256": "2e3534e4e32e506edf3e8721bf883349c3e1e4c8568517a6a1986d6e5a01f742"
+    }
+  },
+  "execution_plan": {
+    "M1_M3_or_other_case_chaining": false,
+    "argc": 1,
+    "case": "normal_m2",
+    "child_argv": [
+      "${NEW_RUN_ROOT}/bin/VOrderedQkBehaviorCore_m2"
+    ],
+    "environment_template": {
+      "HOME": "${NEW_RUN_ROOT}/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "${NEW_RUN_ROOT}/empty-path",
+      "TMPDIR": "${NEW_RUN_ROOT}/tmp"
+    },
+    "input_elf": {
+      "bytes": 3392368,
+      "sha256": "bd6c2879bab1ae6d09f0e39640edc4f781d81a24ce7ac376d484020dbba3e03e"
+    },
+    "model_regeneration": false,
+    "new_source_compile": false,
+    "original_SV_model_archive": "No changes; same original36generated-object archive and2runtime were relinked only with new fixedM2harness in earlier reviewedbuild.",
+    "stage": "Single new0500 copy to fresh bin; no native build tools in childPATH; emptyhome/tmp/empty-path enforced.",
+    "supervisor_argv": [
+      "${PARENT_PYTHON}",
+      "-I",
+      "-S",
+      "-B",
+      "${FROZEN_RUN_CONFIG}/supervisor.py",
+      "--manifest",
+      "${FROZEN_RUN_CONFIG}/manifest.json",
+      "--manifest-sha256",
+      "87c72d10c9bed099111fe7900d193923ee985e2fcacb31386a363f587cbfbb24",
+      "--execute-approved-once"
+    ]
+  },
+  "metrics_plan": "For an actualpassedcase reportbodycycles,totaledges,phasecount828and perphasecounts,handshakecounts/holdcoverage.828/bodycycles is only simulatedcorevector-phase occupancy, not MACutilization.1824accounting512Steps is script bookkeeping; no measuredexternalFMA orfullblockhardwarecycle denominator exists. EffectiveMACutilization/duty and90%target remainunknown/notpassed.",
+  "resource_plan": {
+    "CORE0": "Maynotprevent a configuredsystem pipedcorehandler; no globalcore_patternchange orhostsidequota guarantee.",
+    "absolute_single_start_deadlines": {
+      "cleanup": 370,
+      "total": 390,
+      "work": 360
+    },
+    "caps": {
+      "address_space_bytes": 4294967296,
+      "affinity_count": 1,
+      "cleanup_phase_seconds": 10,
+      "cleanup_reserve_seconds": 30,
+      "core_bytes": 0,
+      "cpu_seconds": 300,
+      "log_hard_bytes": 2097152,
+      "output_tree_sampled_bytes": 16777216,
+      "postflight_reserve_seconds": 20,
+      "rss_sampled_bytes": 2147483648,
+      "sample_seconds": 0.1,
+      "single_file_hard_bytes": 8388608,
+      "total_wall_seconds": 390,
+      "work_wall_seconds": 360
+    },
+    "failure": "Originalanchoredcleanup andsingleclaim preserved,no retry,budgetincrease,newcase or deletion ofevidence.",
+    "fit_guaranteed": false,
+    "limits": "OneCPU affinity; childhardCPU300/AS4GiB/file8MiB/CORE0; sampledgroupRSS2GiB/tree16MiB andgap<=0.1s; log2MiB. AggregateCPU plusfinalrusage includesparentprocessing. Parentlogparser bounded,totaldeadline,not claimed parenthardAS/RSS.",
+    "outer_seconds": 420
+  },
+  "runtime_qualification": {
+    "absence_paths": 63,
+    "automatic_inventories": 0,
+    "automatic_pins": 184,
+    "cache_basis": "39present normalcache candidates withaudit-openpath evidence plus3startup encodingcandidates. An additionalreferencecache lookup path is absent; open audit event alone is not success-read proof. Every42cacheheader and codeobject matches freshlycompiled pinnedsourceopt0; all42sources are in runtimeunion. No codeobjectexecuted for thatcomparison.",
+    "flags": "Productionexact-I -S -B, no-O. -B preventscachewrites, notreads. Sibling reference_events normalcache absent causes pinnedsourcefallback.",
+    "known_limits": "No claim everyconditional futureimport,arbitrarydlopen/fileIO or continuoushostfilesystem isolation. EarlierM1/build results keep their declared-pin/pycachecoverage qualification; this newgate doesnotretroactively fill it.",
+    "native_child": "ExactnewELF3392368B bd6c2879...;4directNEEDED,5knownELFruntimeclosure and13versionedges from independentactualreview. NoRPATH/RUNPATH or extra loaderobjecttags. Originalnativealiases/cache/52absence gates retained.",
+    "parent_locale": "Externalroot must confirm/set one exact observedtuple beforelaunch; childLANG/LC_ALL=C does not constrainparent. C.UTF8 locale/gconvfiles pinned; arbitrarylocales notproved.",
+    "parent_python": "Original80runtime union47added=127:3stdlibsources,42normal.pyc,2locale/gconvfiles. _decimal builtin, no guessednew.so.8mappedparentELFs and15knownversionedges statically qualified separately fromchild.",
+    "prelaunch_external_gate": {
+      "bytes": 18544,
+      "sha256": "f91f0d8a6e3a23b496f48a585977ea6ff28453c10671fddaaf41e434264c6a59"
+    },
+    "role_counts": {
+      "input": 1,
+      "provenance": 52,
+      "runtime": 127,
+      "source": 4
+    },
+    "runtime_aliases": 6,
+    "with_manifest_self": 186
+  },
+  "source_delta": {
+    "actual_added_logic": "validation binds newactualM2 ELF/source/runtime/pycache/reference metadata; structure checker substitutes already source-reviewed828OBS loggate. No scheduler/resource/cleanup algorithm change.",
+    "all_Pending_production_constants_removed": true,
+    "baseline": "qwen2_core_client_verilator_m1_run_prepare_20261025T2236/supervisor.py",
+    "caps_exact_M1_equal": true,
+    "case_binary_label_only_functions": [
+      "_execute",
+      "main",
+      "output_scope",
+      "save_receipt",
+      "stage_inputs",
+      "verify_staging"
+    ],
+    "leaf_checker_unchanged": true,
+    "reference_events_unchanged": true,
+    "unchanged_count": 15,
+    "unchanged_functions": [
+      "_child_limits",
+      "digest",
+      "exact_inventory",
+      "group_sample",
+      "load_cleanup",
+      "load_pinned_module",
+      "need",
+      "pin",
+      "render_worker_argv",
+      "sample_gap",
+      "tree_sample",
+      "verify_inputs",
+      "verify_pin",
+      "verify_runtime_boundaries",
+      "walk_output"
+    ]
+  },
+  "remaining_source_blockers": [],
+  "tests": {
+    "author_engine_methods_each_mode": 22,
+    "author_metadata_methods_each_mode": 27,
+    "author_methods_total": 122,
+    "author_parent_runtime_methods_each_mode": 12,
+    "independent_checks_each_mode": 117,
+    "independent_negative_cases_each_mode": 21,
+    "independent_total": 234,
+    "normal_and_O_pass": true,
+    "previous_leaf_controls_not_rerun": true,
+    "previous_leaf_source_control_checks_each_mode": 2187,
+    "previous_leaf_source_status_bound_by_exact_hash": true,
+    "reviewer_checkpoint": "First own static rename control missed hyphenated normal-m1 stage label. Corrected only reviewer expected transform, retainedattempt1 source/log; no candidate change or native run."
+  },
+  "origin_review": {
+    "bytes": 17232,
+    "sha256": "da617c08e03ec27536f2e72ac406b17869ca41820c98d527c9c1419ac863ec8e"
+  },
+  "historical_preexecution_source_qualification": true,
+  "actual_later_M2_review_separate": true
+}

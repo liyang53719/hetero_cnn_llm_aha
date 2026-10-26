@@ -1,0 +1,84 @@
+{
+  "W005_and_alias_limit": "Actualselectedj1 andsecondretirementcontrolobserved. BothactiveQKkeydiagonalvaluesareidenticalzero,so thiscasecannot independentlydistinguishj0/j1dataaliasing or establishgeneralindexedtilecorrectness/eliminateW005risk. Offdiagonal/inactiveNaNchecksareanarrowerconstraint. M3samezeroactivetileswouldretainthealiaslimitation unlessseparatelychangedandreviewed.",
+  "actual_direct_external_log_observations": {
+    "count": 828,
+    "hold_port_counts": {
+      "group": 2,
+      "memory": 234,
+      "pv": 86,
+      "step": 47
+    },
+    "host_timing_not_hardware_period": true,
+    "max_bits": {
+      "0x00000000": 12,
+      "0xff800000": 816
+    },
+    "perhead_sequence": "12token0heads34events and12token1heads35events; everyphaseevent withinhead consecutivesimulatededges. Token1 twoactualscorewrites retireinconsecutiveedges.",
+    "score_data_bits": "all0x00000000(+0)",
+    "score_write_count": 36,
+    "terminal_counts": {
+      "accounting512Steps": 1824,
+      "checkedMemory": 960,
+      "checkedPv": 288,
+      "checkedVector": 828,
+      "cycles": 12143,
+      "dones": 24,
+      "groups": 24,
+      "memoryAccepted": 960,
+      "memoryReturned": 960,
+      "outputBytes": 12288,
+      "ownerAccepts": 1,
+      "pvRequests": 288,
+      "pvReturns": 288,
+      "qkAcceptedSteps": 192,
+      "requestHoldChecks": 369,
+      "results": 24,
+      "scoreWrites": 36
+    },
+    "token1_second_retire": "All12heads actualpreedge+0, firstretire-Inf. token1/head0 key0 cycle5144,line443;key1 cycle5145,line444."
+  },
+  "actual_executed_harness_passive_assertions": {
+    "PV": {
+      "A0_BF16": "96token0requests0x3f80;192token1requests0x3f00",
+      "clear": "key==0",
+      "last": "key==token",
+      "opcode": "0x24",
+      "remaining_operands": "A1..15 andB0..255 allzero for thisstimulus",
+      "requests": 288,
+      "sliceMask": 1
+    },
+    "memory": {
+      "K_reads": 288,
+      "Q_reads": 192,
+      "V_reads": 288,
+      "fields": "exactaddress,direction,tag=(7<<32)+ordinal,readmask0/writemaskallones,all512databitszero",
+      "independent_expected_source": "2305originalRTL/protocol-derived table;actualcompiledtableverified2331",
+      "kvHead": "head//6",
+      "output_bytes": 12288,
+      "output_writes": 192,
+      "requests": 960,
+      "schedule": "token/head;Qdepth;Kdepthouter+causalkeyinner;eachoutputcolumnVcausalkeys thenwrite"
+    },
+    "proof_chain": "Frozenreviewedsource + actualobject/ELF readonlytablebytes + exactexecutedELFhash + completeconsumption counters + exit0 (customneed throws onmismatch). No rawmemory/PVpertransactionexternallog exists; outerchecker doesnot independentlyreplaythose actualpackets.",
+    "terminal": "owner1,status0/resetRequiredfalse,endpoint/coredebtclear,8edgepayloadhold/release/3quiet; stablepayloadnotallfieldsexpectedvalueproof"
+  },
+  "not_materialized_full_block_claims": [
+    "Fixedattentionownerjobkind4 only,notwholeQwen2block21computations/17jobs/full128softwareterminal.",
+    "NoM3/M17 or16->17chunk coverage.",
+    "Nofull29intermediate-tensorRTL numericalproof.",
+    "NophysicalMACutilization/fullblockcyclemeasurement.",
+    "NoSTA/synthesis/clockfrequency/90percentutilizationacceptance."
+  ],
+  "old_evidence": "PreviousM1 actualPASS andearliersoftwarefull128 observed-domainPASS/oldFAILs remainindependentandunchanged; none are upgradedbythiscase.",
+  "schema": "actual-fixed-M2-evidence-layer-boundary-v1",
+  "scripted_not_numerically_validated": {
+    "external_PV_matrix": "Scripted allzeroresults; no Matrix multiplyaccumulatenumericalacceptance.",
+    "external_QK_matrix": "Scripted activekeydiagonal+0,offdiagonal/inactiveqNaN;notrealMatrixFMA output.",
+    "external_memory": "Scriptedzero readresponses andhandshakequeues;notphysicalDDRtiming/initialization/analogmemoryproof."
+  },
+  "status": "NARROW_ACTUAL_SV_CORE_CLIENT_CASE_NOT_FULL_BLOCK",
+  "origin_record": {
+    "bytes": 3880,
+    "sha256": "d76d2ed8e0d18a76d3f825354b85e87e7c0d848bc427471e59fd562af7aebe7d"
+  }
+}

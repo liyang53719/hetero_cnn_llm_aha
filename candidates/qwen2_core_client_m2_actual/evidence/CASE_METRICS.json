@@ -1,0 +1,78 @@
+{
+  "MAC_utilization": null,
+  "all4_request_ports_observed_held": true,
+  "body_rising_edges": 12143,
+  "bookkeeping512Steps": 1824,
+  "bookkeeping_not_executedMAC_count": true,
+  "case": "normal_m2",
+  "effective_MAC_duty": null,
+  "hold_checks": {
+    "group": 2,
+    "memory": 234,
+    "pv": 86,
+    "step": 47
+  },
+  "hold_total": 369,
+  "holdcounts_not_uniquestallcycles": true,
+  "ninety_percent_target_pass": false,
+  "nonphase_body_edges": 11315,
+  "nonphase_edges_not_proven_idle": true,
+  "phase_event_counts": {
+    "1": 384,
+    "2": 384,
+    "3": 24,
+    "4": 36
+  },
+  "phase_events": 828,
+  "protocol_event_densities": {
+    "PV_requests": {
+      "body_edges": 12143,
+      "events": 288,
+      "label": "acceptedprotocol eventdensity; not FMA duty",
+      "percent": 2.371736803096434,
+      "ratio": 0.02371736803096434
+    },
+    "QK_steps": {
+      "body_edges": 12143,
+      "events": 192,
+      "label": "acceptedprotocol eventdensity; not FMA duty",
+      "percent": 1.581157868730956,
+      "ratio": 0.01581157868730956
+    },
+    "memory_requests": {
+      "body_edges": 12143,
+      "events": 960,
+      "label": "acceptedprotocol eventdensity; not FMA duty",
+      "percent": 7.905789343654781,
+      "ratio": 0.0790578934365478
+    },
+    "score_writes": {
+      "body_edges": 12143,
+      "events": 36,
+      "label": "acceptedprotocol eventdensity; not FMA duty",
+      "percent": 0.29646710038705426,
+      "ratio": 0.0029646710038705427
+    }
+  },
+  "reset_edges": 3,
+  "schema": "passed-fixed-M2-core-case-metrics-v1",
+  "total_rising_edges": 12146,
+  "unknown_reason": "External Matrix QK/PV arithmetic is scripted, not measuredFMA. This limitedcase contains harnessbackpressure/reset/terminalprotocol and is not a fullblock hardwarecycle denominator. No 4096-lane efficiency inferred.",
+  "vector_phase_body_ratio": {
+    "denominator": 12143,
+    "label": "observed vector-phase occupancy of this simulated core case, notMAC/systemutilization",
+    "numerator": 828,
+    "percent": 6.818743308902247,
+    "ratio": 0.06818743308902248
+  },
+  "vector_phase_reset_inclusive_ratio": {
+    "denominator": 12146,
+    "numerator": 828,
+    "percent": 6.8170591141116414,
+    "ratio": 0.06817059114111641
+  },
+  "origin_record": {
+    "bytes": 2240,
+    "sha256": "9d84add5f1b8e1e71f8f0e99764a958a684424cbcfa8eb9e08a788f86167aaad"
+  }
+}

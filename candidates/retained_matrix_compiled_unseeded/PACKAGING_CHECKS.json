@@ -1,0 +1,84 @@
+{
+  "scope": "Package-only small source/hash/metadata checks; not a repeat of target/real arithmetic/JVM/EDA/reference",
+  "normal": {
+    "checks": 255,
+    "command_stages": 6,
+    "metadata_classes": 682,
+    "mode": "normal",
+    "negative_controls": [
+      "missing base",
+      "duplicate base",
+      "absolute name",
+      "parent traversal",
+      "backslash",
+      "noncanonical path",
+      "wrong suffix",
+      "bool bytes",
+      "zero bytes",
+      "short hash",
+      "wrong override count",
+      "override provenance",
+      "new count",
+      "missing group",
+      "extra group",
+      "wrong order",
+      "group shadow",
+      "total size"
+    ],
+    "original_sources": 9,
+    "patch_pairs": 4,
+    "references": 58,
+    "status": "PASS_PACKAGING_SOURCE_METADATA_ONLY",
+    "target_jvm_eda_arithmetic_execution": false
+  },
+  "optimized": {
+    "checks": 255,
+    "command_stages": 6,
+    "metadata_classes": 682,
+    "mode": "optimized",
+    "negative_controls": [
+      "missing base",
+      "duplicate base",
+      "absolute name",
+      "parent traversal",
+      "backslash",
+      "noncanonical path",
+      "wrong suffix",
+      "bool bytes",
+      "zero bytes",
+      "short hash",
+      "wrong override count",
+      "override provenance",
+      "new count",
+      "missing group",
+      "extra group",
+      "wrong order",
+      "group shadow",
+      "total size"
+    ],
+    "original_sources": 9,
+    "patch_pairs": 4,
+    "references": 58,
+    "status": "PASS_PACKAGING_SOURCE_METADATA_ONLY",
+    "target_jvm_eda_arithmetic_execution": false
+  },
+  "validator": {
+    "bytes": 6231,
+    "sha256": "63cae7306e9ea31450d849dbfb3cf557e09d7f41405962353a0e944e90a706d2"
+  },
+  "normal_log": {
+    "bytes": 557,
+    "sha256": "5893f6c8700ba91245bf80eb0c8b300a21a741e9d053d1fa875412248e0e30a6"
+  },
+  "optimized_log": {
+    "bytes": 560,
+    "sha256": "eaf2f249f6e3f3fe3bfd2755391498a508ed385e99e66e84e67acff724d0d7c1"
+  },
+  "limits": {
+    "one_cpu": true,
+    "cpu_seconds": 20,
+    "address_space_bytes": 268435456,
+    "wall_timeout_seconds": 30
+  },
+  "no_original_bulk_read": true
+}

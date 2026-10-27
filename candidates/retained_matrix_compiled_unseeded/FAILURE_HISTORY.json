@@ -1,0 +1,74 @@
+{
+  "immutable_history": [
+    {
+      "stage": "0459 emission",
+      "status": "FAIL_JVM1",
+      "cause": "Final DefInstance-only gate did not handle official final connector representation. r2b strict connector projection retained separately."
+    },
+    {
+      "stage": "0552 codegen",
+      "status": "FAIL_WARNINGS",
+      "warnings": 4148,
+      "WIDTH": 4123,
+      "UNOPTFLAT": 25,
+      "successor": "0617 split DPI getter dependency groups and0622 exact finite unsigned width adaptation; not general width normalization."
+    },
+    {
+      "stage": "0643 codegen",
+      "status": "ORIGINAL_WRAPPER_POSTCHECK_FAIL_NATIVE0",
+      "native_warning_result": "Complete303B actual raw native log contains no Warning/Error lines; both prior4123 WIDTHEXPAND and25 UNOPTFLAT absent in this actual run with previously admitted flags. This is lint/codegen observation, not formal absence of hardware cycles or runtime validation.",
+      "independent_postcheck": {
+        "status": "PASS_FROZEN_EXACT_TWO_INCLUDE_POSTCHECK_ONLY",
+        "unchanged_original_failure": true,
+        "no_regeneration_build_or_native": true,
+        "actual_header_make_classes_independently_match": true
+      },
+      "postcheck_result": {
+        "bytes": 5591,
+        "sha256": "756c3443b2b647c1059e356c430f8f6a19bcd857e87dd34a7968eca8fa8dc622"
+      },
+      "cause": "Original generated-header checker rejected exact two svdpi.h includes; separate0657 postcheck only, no regeneration."
+    },
+    {
+      "stage": "0704 build",
+      "status": "ORIGINAL_WRAPPER_FAIL_NATIVE_COMPILE_LINK0",
+      "outer_exit": 1,
+      "native_exit": 0,
+      "errors": [
+        "ValueError: dependency grammar/path"
+      ],
+      "independent_postcheck": {
+        "bytes": 394132,
+        "sha256": "2a6abb9bb71c4c220a54ef8ea2d0b4c533bb9b9406f727ae4cec62c74a1b2541"
+      },
+      "cause": "MD parser rejected duplicate dependency token even when the repeated path/pin is exact.0722 bounded postcheck preserves original FAIL.",
+      "warning_total": 808,
+      "warning_categories": {
+        "-Wmisleading-indentation": 1,
+        "-Wsign-compare": 460,
+        "-Wunused-parameter": 343,
+        "-Wunused-variable": 4
+      },
+      "warning_scope": "Compiler warnings are retained/classified, not warning-free or harmless proof."
+    },
+    {
+      "stage": "0724 run",
+      "status": "FAIL_SIGABRT",
+      "cause": "reset_observed guard aborted before clocked service body. No default-reset/RAM-clear/guard-removal or forced-openICG used for successor."
+    },
+    {
+      "stage": "0741 relink and0749 run",
+      "status": "NEW_RESET_PREAMBLE_SUCCESSOR_FINITE_PASS",
+      "change": "Real clock-low top reset0 eval then1 eval before retained48clockedbody; complete stimulus differs from original. Driver-only compile and20 retained objects relink.",
+      "new_relink_warnings": 42,
+      "new_relink_warning_categories": {
+        "-Wmisleading-indentation": 1,
+        "-Wsign-compare": 23,
+        "-Wunused-parameter": 18
+      },
+      "not_universal_reset_proof": true
+    }
+  ],
+  "all_previous_failures_unchanged": true,
+  "no_new_target_execution_by_packager": true
+}

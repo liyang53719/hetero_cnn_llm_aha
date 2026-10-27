@@ -1,0 +1,50 @@
+--- a/source/qwen2_matrix_command_endpoint_model.sv
++++ b/source/qwen2_matrix_command_endpoint_model.sv
+@@ -15,12 +15,11 @@
+     input bit cv,input bit [127:0] cmd,input bit sv,input int unsigned ctx,input bit clear,
+     input bit last,input bit command_last,input bit [255:0] a,input bit [511:0] b,
+     input bit out_ready,input bit completion_ready);
+-  import "DPI-C" function void retained_endpoint_comb(input chandle handle,input longint unsigned revision,
+-    input bit rst,input bit cv,input bit [127:0] cmd,input bit sv,input int unsigned ctx,
+-    input bit clear,input bit last,input bit command_last,input bit [255:0] a,input bit [511:0] b,
+-    input bit out_ready,input bit completion_ready,output bit cmd_ready,output bit step_ready,
+-    output bit out_valid,output int unsigned out_context,output bit out_last,output bit [16383:0] out_acc,
+-    output bit completion_valid,output longint unsigned completion_data,output bit protocol_error);
++  import "DPI-C" function void retained_endpoint_state_outputs(input chandle handle,input longint unsigned revision,
++    output bit cmd_ready,output bit out_valid,output int unsigned out_context,output bit out_last,
++    output bit [16383:0] out_acc,output bit completion_valid,output longint unsigned completion_data,output bit protocol_error);
++  import "DPI-C" function bit retained_endpoint_step_ready(input chandle handle,input longint unsigned revision,
++    input int unsigned ctx,input bit out_ready);
+   chandle model_handle;
+   bit initialized=0;
+   longint unsigned state_revision=0;
+@@ -46,16 +45,22 @@
+       state_revision<=state_revision+1;
+     end
+   end
+-  // Every real combinational input and state revision appears in this call.
+-  // No ready/valid dependency is dropped; no cached result/reference is used.
++  // State-only outputs have no live input dependency in the original unseeded
++  // model. Keep a distinct process so the opaque DPI call does not create false
++  // ready/valid dependency edges across the full original service handshake.
+   always_comb begin
+-    if(initialized) retained_endpoint_comb(model_handle,state_revision,rst_ni,cmd_valid_i,cmd_i,
+-      step_valid_i,{29'b0,step_context_i},step_clear_i,step_last_i,command_last_tile_i,
+-      step_a_i,step_b_i,out_ready_i,completion_ready_i,cmd_ready_o,step_ready_o,
+-      out_valid_o,context_word,out_last_o,out_acc_o,completion_valid_o,completion_word,protocol_error_o);
++    if(initialized) retained_endpoint_state_outputs(model_handle,state_revision,
++      cmd_ready_o,out_valid_o,context_word,out_last_o,out_acc_o,completion_valid_o,completion_word,protocol_error_o);
+     else begin
+-      cmd_ready_o=0;step_ready_o=0;out_valid_o=0;context_word=0;out_last_o=0;out_acc_o=0;
++      cmd_ready_o=0;out_valid_o=0;context_word=0;out_last_o=0;out_acc_o=0;
+       completion_valid_o=0;completion_word=0;protocol_error_o=0;
+     end
+   end
++  // This ready is NOT state-only: preserve step context and out_ready because
++  // the original hardware permits a same-context pop/refill in the same cycle.
++  always_comb begin
++    if(initialized) step_ready_o=retained_endpoint_step_ready(model_handle,state_revision,
++      {29'b0,step_context_i},out_ready_i);
++    else step_ready_o=0;
++  end
+ endmodule

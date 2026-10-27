@@ -1,0 +1,130 @@
+{
+  "status": "PASS_ACTUAL_COMPILED_FUNCTIONAL_UNSEEDED_8X512_SERVICE_FINITE_FIXTURE_ONLY",
+  "actual_phase_counts": [
+    {
+      "counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "phase": "fixture.begin"
+    },
+    {
+      "counts": [
+        5,
+        2,
+        0,
+        0
+      ],
+      "phase": "transaction.1.begin"
+    },
+    {
+      "counts": [
+        23,
+        20515,
+        1,
+        5
+      ],
+      "phase": "transaction.1.end"
+    },
+    {
+      "counts": [
+        23,
+        20515,
+        1,
+        5
+      ],
+      "phase": "transaction.2.begin"
+    },
+    {
+      "counts": [
+        38,
+        24622,
+        2,
+        7
+      ],
+      "phase": "transaction.2.end"
+    },
+    {
+      "counts": [
+        48,
+        24627,
+        2,
+        7
+      ],
+      "phase": "fixture.end"
+    }
+  ],
+  "binary_prepost": {
+    "bytes": 1529728,
+    "count": 1,
+    "sha256": "296a45b02f987b026634df8cc5a719e81a37aaf7875d0934f8bab6f39282b8df"
+  },
+  "native_exit": 0,
+  "observations": {
+    "arithmetic_literals": 74,
+    "control_expectations": 51,
+    "endpoints": 8,
+    "fp32_expectations": 24576,
+    "groups": 2,
+    "lanes_each": 512,
+    "nonfinite_rejections": 12,
+    "service_cycles": 48,
+    "service_expectations": 24627,
+    "state_contracts": 1,
+    "wide_steps": 7
+  },
+  "outer_exit": 0,
+  "outer_seconds": 6.023710717912763,
+  "reset_conclusion": "With the newly admitted clock-low physical topreset0-eval then1-eval setup, unchanged model reset_observed guards no longer abort, and original full finite48clocked-cycle service fixture completes. This is actual acceptance for the exercised initialization path, not a per-callback waveform or universal reset scheduling proof.",
+  "resources": {
+    "max_tree": 1530887,
+    "peak_cpu": 5.72,
+    "peak_rss": 5648384,
+    "wall_seconds": 5.930475584929809
+  },
+  "runtime_prepost": {
+    "absent": 37,
+    "aliases": 8,
+    "pin_checks": 40
+  },
+  "scope": [
+    "Original Chisel emitted/Verilator compiled unseeded8x512 service functional model:5contexts+transpose twoactualgroups,24576completeFP32 tile values+51otherexpectations,48clockedcycles/7widesteps.",
+    "Inherited74finiteGMPvalues+flags/12nonfiniteinputrejects/statecontract run inside fixture, not fresh HardFloat/DPIunit qualification.",
+    "Held4-cycle checks cover valid/firstword only, not allheldpayload/callbackwaveforms.",
+    "Extra no-clock realreset preamble is explicit new stimulus; following originalclockedbody retained. No softwaredefaultreset/RAMclear/removedguard or ICGforcedopen.",
+    "40runtime prepost and staticactualELF identity are reused without rereading binary/libraries/largeIR.",
+    "5.9304755849s runner/6.0237107179s outer/5.72sampleCPU are thisfinitefixture observations, not isolatedPPA/throughput/M128 extrapolation.",
+    "Not seeded protocol/full128/fullmodelblock/5model/providerRTL/synthesis/IEEEcomplete or generalFIFO formal equivalence.",
+    "Old0724SIGABRT and earlier build/codegen postcheckFAILs remain immutable."
+  ],
+  "actual_review": {
+    "bytes": 14560,
+    "sha256": "fb195675bbc12ed6fdc097acfc9afde1fbd5b12f2708e7073ef85eaad7d2ff60"
+  },
+  "actual_freeze": {
+    "bytes": 1085,
+    "sha256": "0f87fff27024d5bfa1f9bf691d5b1cb1c4934251d5b420ddccc86e66fbf21d58"
+  },
+  "service_result": {
+    "bytes": 4309,
+    "sha256": "9197645923596f0b6e0f007497c775ec4a73b457a5db6efe6487702c9897c5c3"
+  },
+  "cleanup": {
+    "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "direct_exit_code": 0,
+    "direct_leader_reaped": true,
+    "empty_complete_scans": 2,
+    "no_nonleader_identities_at_barrier": true,
+    "no_post_reap_signals": true,
+    "grandchildren_reaped_by_this_helper": false,
+    "scan_evidence_sha256": "78aafb904027fbcdbf0338e153e30e7c4471e555209d94fa18a01bccc068e3f7"
+  },
+  "log_identity": {
+    "bytes": 642,
+    "sha256": "5cdc6031e30d0fc2a065ea90976daa522eefda565bd8af6966db85d0e3fc12cc"
+  },
+  "complete_five_block_numeric": "0/5 unchanged"
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "patch": "RESET_PREAMBLE.patch",
+    "source": "service_fixture.cpp",
+    "old": {
+      "bytes": 9050,
+      "sha256": "82ec3069d85e0caaab0623e3081485a2de1da7caf89f8877963e2780161d89cb"
+    },
+    "new": {
+      "bytes": 9531,
+      "sha256": "370ec4948d666065542997c511afa1adc820fb6418280964e26fa0371fadc189"
+    },
+    "scope": "same source bytes; only public patch headers differ from private original paths"
+  },
+  {
+    "patch": "DPI_CPP.patch",
+    "source": "retained_endpoint_dpi.cpp",
+    "old": {
+      "bytes": 4130,
+      "sha256": "702bff50a42a18ea759d780bd9b6ef2fc635ba2f8f8df5fb3186a8de9b7615ee"
+    },
+    "new": {
+      "bytes": 4679,
+      "sha256": "43ddd3496c623c3204454fd71461260cba7091175b8c5e3ecd847c6a8dd765c5"
+    },
+    "scope": "same source bytes; only public patch headers differ from private original paths"
+  },
+  {
+    "patch": "DPI_SV.patch",
+    "source": "qwen2_matrix_command_endpoint_model.sv",
+    "old": {
+      "bytes": 3736,
+      "sha256": "2f5109cc187070ff60e8ddd95062608828b9b31509109f789ce391e4dc9b5184"
+    },
+    "new": {
+      "bytes": 3882,
+      "sha256": "a81ce546b62474a6fa93bdebc5471afaf37e334500cd8cf0034801c1e277640c"
+    },
+    "scope": "same source bytes; only public patch headers differ from private original paths"
+  },
+  {
+    "patch": "EMITTER_WIDTH.patch",
+    "source": "RetainedServiceCompiledEmitter.scala",
+    "old": {
+      "bytes": 14505,
+      "sha256": "481012be3dc5548d6550fb5e7945b8ab3701757c3505ec26a781a3797b14fab3"
+    },
+    "new": {
+      "bytes": 20578,
+      "sha256": "d06e32bc5049361c29be83f7ba8fd1959aba27666497a416c2ee367cee770db7"
+    },
+    "scope": "same source bytes; only public patch headers differ from private original paths"
+  }
+]

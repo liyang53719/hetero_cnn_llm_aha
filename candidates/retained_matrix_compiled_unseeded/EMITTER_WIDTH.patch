@@ -1,0 +1,144 @@
+--- a/source/RetainedServiceCompiledEmitter.scala
++++ b/source/RetainedServiceCompiledEmitter.scala
+@@ -64,7 +64,8 @@
+     * connector statement. Inspect its complete port/wire relation and make a
+     * read-only hierarchy projection for the unchanged original ABI/path gate.
+     * The projected circuit is NEVER returned to the emitter or serialized as
+-    * the actual final AST; the actual official out.circuit remains untouched.
++    * the actual final AST. Any separately declared width adaptation is applied
++    * before this read-only hierarchy gate; projection itself never mutates it.
+     */
+   private def finalBindings(c: Circuit): Map[String, String] = {
+     require(c.modules.map(_.name).distinct.size==c.modules.size,"unique final modules")
+@@ -125,6 +126,102 @@
+     RetainedBackendCircuitGate.verify(c.copy(modules=projected),seed=false)
+   }
+ 
++  /** Only the 4123 unsigned width-extension sites observed in the frozen
++    * official terminal AST are eligible. No generic/legalize-anything pass,
++    * signed conversion, truncation, arithmetic reassociation, or RTL text edit.
++    * The official renderer will render these explicit typed zero extensions.
++    */
++  private def explicitObservedWidths(c:Circuit):(Circuit,String)={
++    val digest=java.security.MessageDigest.getInstance("SHA-256")
++      .digest(c.serialize.getBytes(StandardCharsets.UTF_8)).map(x=>f"${x & 255}%02x").mkString
++    require(digest=="b5dd87dbf26e2c04504056cbf21aa2989ec01c77732c7bcb90bcef5ede72426a",
++      "exact previously observed official terminal AST before finite width adaptation")
++    val top="MatrixPipelineService"
++    val targets=scala.collection.mutable.Map.empty[(String,String),Seq[String]]
++    for(r<-0 until 16;c<-0 until 256)
++      targets((top,s"values_io_enq_bits_value_${r}_${c}"))=Seq("mux:1:32:0")
++    targets(("MatrixResultFifo","io_deq_valid"))=Seq("neq:1:2:0")
++    for(n<-Seq("enq_ptr_value","deq_ptr_value"))targets(("Queue8_Meta",n))=Seq("mux:1:3:0")
++    for(i<-0 until 8)targets((top,s"_completionBad_T_${7+9*i}"))=Seq("neq:1:8:0","neq:2:3:2")
++    targets((top,"_T_15"))=Seq("neq:6:8:20")
++    targets((top,"_T_16"))=Seq("eq:6:8:20","eq:6:8:21","eq:6:8:23","eq:6:8:24")
++    for(n<-Seq("_GEN_7","_GEN_8"))targets((top,n))=Seq("mux:1:5:0")
++    targets((top,"_steps_T_23"))=Seq("addw:4:64:bits(_steps_T_20, 3, 0)")
++    require(targets.size==4112 && targets.values.map(_.size).sum==4123,"finite observed target set")
++    val seen=scala.collection.mutable.Set.empty[(String,String)]
++    val replacements=new java.util.IdentityHashMap[Expression,Expression]()
++    val rows=scala.collection.mutable.ArrayBuffer.empty[String]
++    def width(e:Expression):BigInt=e.tpe match {
++      case UIntType(IntWidth(w)) if w>0=>w
++      case _=>throw new IllegalArgumentException("observed adaptation requires positive-width unsigned operands")
++    }
++    val modules=c.modules.map {
++      case m:Module=>
++        def visit(s:Statement):Statement={
++          val name=s match {
++            case n:DefNode=>n.name
++            case Connect(_,r:Reference,_)=>r.name
++            case _=>""
++          }
++          val key=(m.name,name)
++          targets.get(key) match {
++            case None=>s.mapStmt(visit)
++            case Some(expected)=>
++              require(!seen(key),"one observed statement per exact target");seen+=key
++              val changes=scala.collection.mutable.ArrayBuffer.empty[String]
++              def extend(e:Expression,to:BigInt,kind:String):Expression={
++                val from=width(e)
++                if(from==to)e else {
++                  require(to>from,"only extension: no truncation or signed conversion")
++                  val (value,result)=e match {
++                    case UIntLiteral(v,IntWidth(w))=>
++                      require(w==from && v>=0 && BigInt(v.bitLength)<=from,"preserve unsigned literal value")
++                      (v.toString(16),UIntLiteral(v,IntWidth(to)):Expression)
++                    case p:DoPrim if key==(top,"_steps_T_23") && kind=="addw" && from==4 && to==64 &&
++                      p.op==firrtl2.PrimOps.Bits && p.serialize=="bits(_steps_T_20, 3, 0)"=>
++                      (p.serialize,DoPrim(firrtl2.PrimOps.Pad,Seq(p),Seq(to),UIntType(IntWidth(to))):Expression)
++                    case _=>throw new IllegalArgumentException("unobserved nonliteral width extension")
++                  }
++                  val signature=s"$kind:$from:$to:$value"
++                  require(expected.contains(signature),"only observed width-extension kind/value")
++                  changes+=signature;rows+=s"${m.name}\t$name\t$kind\t$from\t$to\t$value"
++                  replacements.put(result,e);result
++                }
++              }
++              def fix(e:Expression):Expression=e.mapExpr(fix) match {
++                case x:Mux=>
++                  require(width(x.cond)==1,"unchanged scalar mux predicate")
++                  x.copy(tval=extend(x.tval,width(x),"mux"),fval=extend(x.fval,width(x),"mux"))
++                case x:DoPrim if x.op==firrtl2.PrimOps.Eq || x.op==firrtl2.PrimOps.Neq=>
++                  require(x.args.size==2,"binary comparison")
++                  val n=x.args.map(width).max;val kind=if(x.op==firrtl2.PrimOps.Eq)"eq" else "neq"
++                  x.copy(args=x.args.map(a=>extend(a,n,kind)))
++                case x:DoPrim if x.op==firrtl2.Addw=>
++                  require(key==(top,"_steps_T_23") && width(x)==64 && x.args.size==2 && x.args.map(width)==Seq(BigInt(64),BigInt(4)),
++                    "only observed unsigned64 plus unsigned4, same64-bit modular sum")
++                  x.copy(args=x.args.map(a=>extend(a,BigInt(64),"addw")))
++                case x=>x
++              }
++              val changed=s.mapExpr(fix)
++              require(changes.sorted==expected.sorted,"exact observed per-statement extension multiset")
++              changed
++          }
++        }
++        m.copy(body=visit(m.body))
++      case other=>other
++    }
++    val result=c.copy(modules=modules)
++    require(seen.toSet==targets.keySet.toSet && rows.size==4123,"all and only observed extension sites")
++    def undoExpr(e:Expression):Expression={
++      val old=replacements.get(e)
++      if(old!=null)undoExpr(old) else e.mapExpr(undoExpr)
++    }
++    def undoStmt(s:Statement):Statement=s.mapStmt(undoStmt).mapExpr(undoExpr)
++    val restored=result.copy(modules=result.modules.map{case m:Module=>m.copy(body=undoStmt(m.body));case x=>x})
++    require(restored==c,"whole AST inverse: no changed declarations/connectors/control/order outside exact extensions")
++    (result,rows.mkString("module\ttarget\tkind\tfrom_bits\tto_bits\tvalue_or_original_expression\n","\n","\n"))
++  }
++
+   private def checkAnnotations(state: CircuitState): Unit = {
+     require(!state.annotations.exists(_.isInstanceOf[UnsupportedAnnotation]),
+       "unsupported official Chisel-to-firrtl2 annotation")
+@@ -165,7 +262,10 @@
+         val out = super.runTransforms(in)
+         require(finalCircuit.isEmpty, "one emission transform invocation")
+         // Preserve the real terminal AST even when a structural gate rejects it.
+-        retain("official-emission-ast.fir",out.circuit.serialize)
++        retain("official-pre-width-adaptation-ast.fir",out.circuit.serialize)
++        val (adapted,widthRows)=explicitObservedWidths(out.circuit)
++        retain("official-emission-ast.fir",adapted.serialize)
++        retain("official-emission-width-adaptations.tsv",widthRows)
+         val inventory=out.circuit.modules.flatMap {
+           case m:Module => all(m.body).collect {
+             case i:firrtl2.WDefInstanceConnector => s"${m.name}\tconnector\t${i.name}\t${i.module}\t${i.portCons.size}"
+@@ -175,12 +275,12 @@
+           case other => Seq(s"${other.name}\tunsupported-module\t-\t-\t-1")
+         }
+         retain("official-emission-instances.tsv",inventory.mkString("parent\tkind\tinstance\tmodule\tports\n","\n","\n"))
+-        require(finalBindings(out.circuit)==lowBindings,
++        require(finalBindings(adapted)==lowBindings,
+           "exact eight full512 endpoints/eight original ICG in emission AST")
+-        memoryGate(out.circuit)
++        memoryGate(adapted)
+         checkAnnotations(out);initializationGate(out.annotations)
+-        finalCircuit=Some(out.circuit)
+-        out
++        finalCircuit=Some(adapted)
++        out.copy(circuit=adapted)
+       }
+     }
+     val writer = new java.io.StringWriter

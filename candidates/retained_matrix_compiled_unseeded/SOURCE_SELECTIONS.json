@@ -1,0 +1,155 @@
+{
+  "status": "RECOVERABLE_SOURCE_ROLES_NOT_HERMETIC_EXECUTION",
+  "new_original_sources": [
+    {
+      "path": "source/finite_fp32_gmp.hpp",
+      "bytes": 2862,
+      "sha256": "af3026452d1c78aaa92fe2ae748f6928e082e6d705e3f1d19a6cb71c8b9e9e07",
+      "git_blob_sha": "768fedcc72f0ca144db0dc11ddf416e87f38b4af"
+    },
+    {
+      "path": "source/retained_endpoint_model.hpp",
+      "bytes": 11114,
+      "sha256": "036ff83fc7ccad5fd4ac5015b172a723e05c7ac233a88df49ae51106d5ae4b3e",
+      "git_blob_sha": "37ab9049eea0be6bdd55c33316cce1a19b76f542"
+    },
+    {
+      "path": "source/endpoint_fma_fixture.hpp",
+      "bytes": 3440,
+      "sha256": "f46ba4ffd991d3fd10e3791bd83cb3fe967f3a9c5fa2d5d56d43983dc3345a86",
+      "git_blob_sha": "15cfea2b141de91d8e6258f19243d2122e0ef556"
+    },
+    {
+      "path": "source/endpoint_state_crosscheck.hpp",
+      "bytes": 6290,
+      "sha256": "60fd498e459966af38ec2558ea208a482a02a7d6b006c06fbb3791d9bf855836",
+      "git_blob_sha": "bd7b59baaf6d3531561479442916c922a7c9de51"
+    },
+    {
+      "path": "source/retained_endpoint_dpi.cpp",
+      "bytes": 4679,
+      "sha256": "43ddd3496c623c3204454fd71461260cba7091175b8c5e3ecd847c6a8dd765c5",
+      "git_blob_sha": "2a9a7ecd67c2040b2620d5466169452709ee24f0"
+    },
+    {
+      "path": "source/qwen2_matrix_command_endpoint_model.sv",
+      "bytes": 3882,
+      "sha256": "a81ce546b62474a6fa93bdebc5471afaf37e334500cd8cf0034801c1e277640c",
+      "git_blob_sha": "3a86d64bfe7dc761f534b8361253feb7c23fa067"
+    },
+    {
+      "path": "source/RetainedServiceCompiledEmitter.scala",
+      "bytes": 20578,
+      "sha256": "d06e32bc5049361c29be83f7ba8fd1959aba27666497a416c2ee367cee770db7",
+      "git_blob_sha": "86d74fe37eb1951e2241fe7b51d9412a229f027a"
+    },
+    {
+      "path": "source/service_fixture.cpp",
+      "bytes": 9531,
+      "sha256": "370ec4948d666065542997c511afa1adc820fb6418280964e26fa0371fadc189",
+      "git_blob_sha": "6134fa899f2f374cad84651b107efbabee4a519b"
+    },
+    {
+      "path": "source/RetainedServicePhaseObserver.scala",
+      "bytes": 1647,
+      "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7",
+      "git_blob_sha": "a9069039bd20667c1f51292e5f570440013ea4d5"
+    }
+  ],
+  "stages": [
+    {
+      "name": "baseline557",
+      "rule": "Recover the exact92 published ordered/composed sources (including20 external pinned HardFloat sources), then separately compile4 behavior candidates and2 realMatrix shells. Original550 hash records are overlaid with14 selected probe classes:10 replacements+4 new gives554; add3 realMatrix classes =557 (540+14+3). Do not merge all20 probe outputs or run the historical Specs. CLASS_SELECTION_DELTA and the hash-only helper specify exact selection.",
+      "count": 557,
+      "metadata_rebuild": "rebuild_selection_metadata.py: no class content read/produced or JVM executed"
+    },
+    {
+      "name": "preserved_product68",
+      "source_paths": [
+        "candidates/unified_shared_resource_fabric/source/UnifiedPhysicalFabric.scala",
+        "candidates/unified_product_preserved_abi/source/UnifiedSharedResourceTop.scala",
+        "candidates/gdn_runtime_state_transfer/source/GdnChunkProtocol.scala",
+        "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+        "candidates/unified_4096_runtime_admission/source/UnifiedBlockAdmission.scala",
+        "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+        "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+        "candidates/qwen35_chunk_contract/source/GdnChunkAddressPlan.scala",
+        "candidates/unified_shared_resource_fabric/source/UnifiedSharedResourceCollection.scala"
+      ],
+      "count": 68,
+      "result": 625
+    },
+    {
+      "name": "functional_backend39",
+      "source_paths": [
+        "candidates/retained_matrix_functional_backend/source/EndpointFmaFixture.scala",
+        "candidates/retained_matrix_functional_backend/source/FiniteBackendCostSample.scala",
+        "candidates/retained_matrix_functional_backend/source/FiniteFp32Backend.scala",
+        "candidates/retained_matrix_functional_backend/source/RetainedBackendCircuitGate.scala",
+        "candidates/retained_matrix_functional_backend/tests/RetainedBackendGateSpec.scala",
+        "candidates/retained_matrix_functional_backend/tests/RetainedBackendLaneCrosscheckSpec.scala",
+        "candidates/retained_matrix_functional_backend/tests/RetainedBackendServiceSpec.scala",
+        "candidates/retained_matrix_functional_backend/source/RetainedEndpointFunctionalModel.scala",
+        "candidates/retained_matrix_functional_backend/tests/RetainedEndpointFunctionalModelSpec.scala",
+        "candidates/retained_matrix_functional_backend/source/RetainedMatrixModelFactory.scala",
+        "candidates/retained_matrix_functional_backend/source/StrictFp32MatrixLane.scala"
+      ],
+      "count": 39,
+      "result": 664,
+      "note": "These11 source files include historical Specs for exact class recovery only; rebuilding containers is not permission to execute those Specs."
+    },
+    {
+      "name": "observer2_and_lowering3",
+      "source_paths": [
+        "candidates/retained_matrix_compiled_unseeded/source/RetainedServicePhaseObserver.scala",
+        "candidates/retained_matrix_fifo_model/source/MatrixResultFifoMemoryLowering.scala"
+      ],
+      "selected_classes": [
+        {
+          "relative": "heteronpu/continuous/model/MatrixResultFifoMemoryLowering$$anonfun$1.class",
+          "bytes": 2120,
+          "sha256": "cf5c497811b5f4ec5876bd4b93bfaf18bc2bc38c547079f8454c17769e773515"
+        },
+        {
+          "relative": "heteronpu/continuous/model/MatrixResultFifoMemoryLowering$.class",
+          "bytes": 22424,
+          "sha256": "44f8da52096c840d176e885ad2d56c1886197e9f859862f013cb47e8867ec95c"
+        },
+        {
+          "relative": "heteronpu/continuous/model/MatrixResultFifoMemoryLowering.class",
+          "bytes": 2217,
+          "sha256": "594ac24c7efb0ee0ac745ceb07c92815f3baf015be0b46a2b4aa44919316c8f1"
+        },
+        {
+          "relative": "heteronpu/continuous/model/RetainedServicePhaseObserver$.class",
+          "bytes": 4844,
+          "sha256": "e5c6fa6bed57bb7124dc5d6148254592ac42bea12b0a0b61596c6da1e9686154"
+        },
+        {
+          "relative": "heteronpu/continuous/model/RetainedServicePhaseObserver.class",
+          "bytes": 2346,
+          "sha256": "ee2a79ba9d3750eeb22af1c647ea31b456b86cef9db0c09fff9e6ef4ab02cd76"
+        }
+      ],
+      "result": 669,
+      "excluded": "Other old observed/service bridge/Spec families and officialBridge4 must not be added to669."
+    },
+    {
+      "name": "emitter13",
+      "source_paths": [
+        "candidates/retained_matrix_compiled_unseeded/source/RetainedServiceCompiledEmitter.scala"
+      ],
+      "result": 682,
+      "note": "Separately reviewed main-only emission, no Treadle main or seed variants."
+    }
+  ],
+  "original_669_composition": {
+    "bytes": 234838,
+    "sha256": "af15ad726835ce1fde8206933d69dd025090f103a2211ae533f34f947a622c84"
+  },
+  "original_type_input_pins": {
+    "bytes": 377252,
+    "sha256": "b00212f0f1a62a39bd6ae380421fa4158e9e2acb481e1e8540aaa92e9af62400"
+  },
+  "source_recovery_limit": "Source and exact selection are provided; independently rebuild and qualify class identities. No class bodies, no automatic target invocation and no claim all runtime dependencies are present in this package."
+}

@@ -1,0 +1,39 @@
+--- a/source/retained_endpoint_dpi.cpp
++++ b/source/retained_endpoint_dpi.cpp
+@@ -50,16 +50,29 @@
+   try {auto& m=checked(handle);if(!rst)m.async_reset();else m.rising_edge(inputs(rst,cv,cmd,sv,ctx,clear,last,command_last,a,b,out_ready,completion_ready));}
+   catch(const std::exception& e){failure(e.what());}
+ }
+-extern "C" void retained_endpoint_comb(void* handle,unsigned long long revision,svBit rst,svBit cv,
+-    const svBitVecVal* cmd,svBit sv,unsigned ctx,svBit clear,svBit last,svBit command_last,
+-    const svBitVecVal* a,const svBitVecVal* b,svBit out_ready,svBit completion_ready,
+-    svBit* cmd_ready,svBit* step_ready,svBit* out_valid,unsigned* out_context,svBit* out_last,
++// Unseeded-only dependency partition. These are two independent read-only
++// queries into the unchanged EndpointModel, not a cache or a second model.
++// cmd_ready and every returned state output are independent of all live inputs
++// when seed_enabled=false. The physical edge above still receives ALL inputs.
++extern "C" void retained_endpoint_state_outputs(void* handle,unsigned long long revision,
++    svBit* cmd_ready,svBit* out_valid,unsigned* out_context,svBit* out_last,
+     svBitVecVal* out_acc,svBit* completion_valid,unsigned long long* completion_data,svBit* protocol_error) {
+   try {
+-    (void)revision; // SV state revision is an explicit dependency, never a clock inference.
+-    const auto o=checked(handle).output(inputs(rst,cv,cmd,sv,ctx,clear,last,command_last,a,b,out_ready,completion_ready));
+-    *cmd_ready=o.cmd_ready;*step_ready=o.step_ready;*out_valid=o.out_valid;*out_context=o.out_context;*out_last=o.out_last;
++    (void)revision; // Explicit SV state dependency; never infer a clock here.
++    const auto o=checked(handle).output(EndpointInputs{});
++    *cmd_ready=o.cmd_ready;*out_valid=o.out_valid;*out_context=o.out_context;*out_last=o.out_last;
+     export_packed(o.out_acc,out_acc,512);*completion_valid=o.completion_valid;*completion_data=o.completion_data;*protocol_error=o.protocol_error;
++  } catch(const std::exception& e){failure(e.what());}
++}
++// Keep the real same-context pop/refill combinational dependency: out_ready
++// affects pop, which can release busy[step_context] in the current cycle.
++extern "C" svBit retained_endpoint_step_ready(void* handle,unsigned long long revision,
++    unsigned ctx,svBit out_ready) {
++  try {
++    (void)revision;
++    retained_model::require(ctx<8&&out_ready<=1,"DPI ready input widths");
++    EndpointInputs x;x.step_context=ctx;x.out_ready=out_ready;
++    return checked(handle).output(x).step_ready;
+   } catch(const std::exception& e){failure(e.what());}
+ }
+ extern "C" void retained_endpoint_require_complete() {

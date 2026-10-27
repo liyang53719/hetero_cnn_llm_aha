@@ -1,0 +1,200 @@
+{
+  "scope": "Hash metadata projected from retained producer/reviewer records. No generated artifact payload is published or reread by packager.",
+  "emission12": [
+    {
+      "relative": "compiled-service/EMITTER_SCOPE.txt",
+      "bytes": 95,
+      "sha256": "80ccba4dfedff294034533e445a091dd9807981e9e3a3b62c819f0a653b98327"
+    },
+    {
+      "relative": "compiled-service/MatrixPipelineService.lo.fir",
+      "bytes": 6279341,
+      "sha256": "c7370c3fd24c8bce23cb5afa4185c28d2965b30880e6cdd1add04b590b7cdf37"
+    },
+    {
+      "relative": "compiled-service/MatrixPipelineService.sv",
+      "bytes": 5767303,
+      "sha256": "c2f2a08724af844d92b6673a82747355ef2e99200a558b980a69d459b312cf57"
+    },
+    {
+      "relative": "compiled-service/actual_port_bindings.hpp",
+      "bytes": 429690,
+      "sha256": "c9aa8ae99a024776ec729499e0f0d584ed48fad39cc292aa03c01f0a070746ea"
+    },
+    {
+      "relative": "compiled-service/actual_top_ports.tsv",
+      "bytes": 181611,
+      "sha256": "e6084291a33bcc6c65d99460a5d8b96220748b0f735938f9dd332da26c245e20"
+    },
+    {
+      "relative": "compiled-service/official-bridge-high.fir",
+      "bytes": 4018276,
+      "sha256": "7620ac3ca47f12ae9ee89e972d7eb0023c1f125521c51a81288bf0382c59b3ea"
+    },
+    {
+      "relative": "compiled-service/official-bridge-low.fir",
+      "bytes": 6279341,
+      "sha256": "c7370c3fd24c8bce23cb5afa4185c28d2965b30880e6cdd1add04b590b7cdf37"
+    },
+    {
+      "relative": "compiled-service/official-bridge-memory-high.fir",
+      "bytes": 4470741,
+      "sha256": "61d4297aa09266c5813f7f896232b4f8b1184b25e1bfe12f2efe52b1d11ff913"
+    },
+    {
+      "relative": "compiled-service/official-emission-ast.fir",
+      "bytes": 5898992,
+      "sha256": "786990ec658037703acb00be9364229f7803c8b6519a97a6b420fe4d8b794b52"
+    },
+    {
+      "relative": "compiled-service/official-emission-instances.tsv",
+      "bytes": 1294,
+      "sha256": "7788e23e6dd4f0aa64b973f51a89fb65fa84aefeea27baa21d4cd18b968c0d1a"
+    },
+    {
+      "relative": "compiled-service/official-emission-width-adaptations.tsv",
+      "bytes": 263265,
+      "sha256": "a7f7bb989c80688ff7d950af503037394135024eec16e7dd5deb069a13107531"
+    },
+    {
+      "relative": "compiled-service/official-pre-width-adaptation-ast.fir",
+      "bytes": 5894887,
+      "sha256": "b5dd87dbf26e2c04504056cbf21aa2989ec01c77732c7bcb90bcef5ede72426a"
+    }
+  ],
+  "emission_identity": {
+    "bytes": 3683,
+    "sha256": "6563879b4a30ff4fa81d69f906d38eee0b889a9c68a84f2850a3cd78708d6644"
+  },
+  "codegen25": [
+    {
+      "relative": "VMatrixPipelineService.cpp",
+      "bytes": 367428,
+      "sha256": "71b7ea8a83a9923768fcdeb0d1fb79ff49fc897d1b872a526bb989820336b56c"
+    },
+    {
+      "relative": "VMatrixPipelineService.h",
+      "bytes": 225401,
+      "sha256": "3b90944ba357fef25e3718d97e83eed33598d6602d84b905b1f66e8606b4d1ec"
+    },
+    {
+      "relative": "VMatrixPipelineService.mk",
+      "bytes": 2533,
+      "sha256": "5671f8da0e0453a42c6ea777f5a61aa95ae88cc21e5c53d05226e77d6c88109d"
+    },
+    {
+      "relative": "VMatrixPipelineService__ConstPool_0.cpp",
+      "bytes": 10279,
+      "sha256": "3c38b240e4640a714e0f41c54682265a8929dc3d6612998def4f260a426efcdc"
+    },
+    {
+      "relative": "VMatrixPipelineService__Dpi.cpp",
+      "bytes": 723,
+      "sha256": "b175b81caeee9b809771d9854da160aee80d9add5f7307b2af4bcc357799a649"
+    },
+    {
+      "relative": "VMatrixPipelineService__Dpi.h",
+      "bytes": 2156,
+      "sha256": "f825b8cfd3d35342f90a09588274cc6d4c93e97a85b09772648bd414688b6d3d"
+    },
+    {
+      "relative": "VMatrixPipelineService__Syms.cpp",
+      "bytes": 2340,
+      "sha256": "ab77fd79660aa2e20b2ad37c407bba05a69f442251146492e1ef8fda6999e3bb"
+    },
+    {
+      "relative": "VMatrixPipelineService__Syms.h",
+      "bytes": 1638,
+      "sha256": "56dd62e23e2add34cec1ea67b59cdb657ce5ab60e3fef8702c462577bdd447e1"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root.h",
+      "bytes": 284968,
+      "sha256": "21f97a53815e4d5c1cfda395b9f1c66f0889841b094e80969fd2a8f8cc9989f0"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__0.cpp",
+      "bytes": 532358,
+      "sha256": "0a9d217b96148155a8b588caf0394681abd84fc7d245e03cb18101008ff6d300"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__0__Slow.cpp",
+      "bytes": 1040669,
+      "sha256": "ed1622bc0f9bbe56c9289246c9cc161692ee65e27fc5b75b094201f75e1c0886"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__1.cpp",
+      "bytes": 551638,
+      "sha256": "008febab2bba5daf06d388ca64e549cec3399fd22a062050c9189e566f0730ba"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__1__Slow.cpp",
+      "bytes": 550337,
+      "sha256": "53b6efb177d6e9319c0da96f8a85a3267d41a45bf1ceb1faa0612e68fa32ae32"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__2.cpp",
+      "bytes": 581330,
+      "sha256": "149af47e38cc56e83fee3e2c5e6444cb8b13b9656c84f178f9b8ea2d3f534c15"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__2__Slow.cpp",
+      "bytes": 421078,
+      "sha256": "ea9cb96ed7ee170afb173f45d67940f697a6e7225d92e61f294d0cd89740fe69"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__3.cpp",
+      "bytes": 850998,
+      "sha256": "7b9bf9fd2f5201f1e1fa5328bcb8ec98d569b5a6cc230c11251c764b70b59e83"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__3__Slow.cpp",
+      "bytes": 332421,
+      "sha256": "c0b652070911085871afcc3ad995227016ee4f959e7ebc6948c3b042f6c26ddf"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h39e700ea__4.cpp",
+      "bytes": 7593,
+      "sha256": "e15f5aaee9638d25ef0c411e071f2dc2337256dc0ad0c8b35ca43f35d0811480"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h654599b1__0.cpp",
+      "bytes": 97283,
+      "sha256": "ef3ec7b3225756b8432c794099777226e5984c8aad21d7cd233fcbd8aa65b4f0"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__DepSet_h654599b1__0__Slow.cpp",
+      "bytes": 1094,
+      "sha256": "b63dca004fce85a8875871e09be41097121175efb7a2ad0322eacae5562858ea"
+    },
+    {
+      "relative": "VMatrixPipelineService___024root__Slow.cpp",
+      "bytes": 854,
+      "sha256": "2187342c25c78d86c79bd13a4c78f7fc1c5f6ea089662a79a43ea90fde35a1f5"
+    },
+    {
+      "relative": "VMatrixPipelineService__pch.h",
+      "bytes": 863,
+      "sha256": "ea5a849f73cd3bfe16ba72f0a948fd68db7c8a908f9ff79eaa5bb2c9060611db"
+    },
+    {
+      "relative": "VMatrixPipelineService__ver.d",
+      "bytes": 4272,
+      "sha256": "da9b09e0e08882f02b58d0878603399e554b8a94154fddbb52039dbff8499fd8"
+    },
+    {
+      "relative": "VMatrixPipelineService__verFiles.dat",
+      "bytes": 7445,
+      "sha256": "7a9ec022e2e9af77fda6b30ff92a471bbb633ad1aa029755995e3b6b1804acda"
+    },
+    {
+      "relative": "VMatrixPipelineService_classes.mk",
+      "bytes": 2269,
+      "sha256": "51ca12618e32c34f8be19aacb9a51c212296bb055e315b9132803706d0aca541"
+    }
+  ],
+  "codegen_identity": {
+    "bytes": 15260,
+    "sha256": "41f685615804b5790f89c7a6f9c0edaad92cff032c3043c42aa9494c5aabc9f9"
+  }
+}

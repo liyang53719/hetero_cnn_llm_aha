@@ -1,0 +1,23 @@
+--- a/source/service_fixture.cpp
++++ b/source/service_fixture.cpp
+@@ -65,9 +65,17 @@
+     auto advance=[&](unsigned n=1){for(unsigned i=0;i<n;++i){rawPoke("clock",0);context->timeInc(1);rawPoke("clock",1);context->timeInc(1);rawPoke("clock",0);++steps;}};
+     auto waitFor=[&](const std::string& name){unsigned n=0;while(peek(name)==0&&n<128){advance();++n;}expect(name,1);};
+     auto progress=[&](const char* phase){std::cout<<"SERVICE_PHASE "<<phase<<" steps="<<steps<<" expects="<<expects<<" groups="<<groups<<" wide="<<wide<<"\n"<<std::flush;};
+-    // Set root reset and clock before first eval. All unused input words remain
+-    // Verilator's explicit two-state zero initialization, as the prior fixture.
+-    {auto& c=port("clock");c.set(c.address,0);auto& r=port("reset");r.set(r.address,1);dut->eval();}
++    // Explicit no-clock reset-establishment preamble. Set all handshake inputs
++    // inactive and clock low; settle real reset deassertion at time zero, then
++    // assert the real top reset so every gated endpoint observes rst_ni falling.
++    // No model reset call, clock edge, timeInc, or advance is added here. The
++    // following original two reset clocks and all48 clocked cycles are unchanged.
++    {auto& c=port("clock");c.set(c.address,0);
++      for(const char* name:{"port_group_valid","port_step_valid","port_abort","port_result_ready","port_done_ready"}) {
++        auto& p=port(std::string("io_")+name);p.set(p.address,0);
++      }
++      auto& r=port("reset");r.set(r.address,0);dut->eval();
++      r.set(r.address,1);dut->eval();}
+     retained_endpoint_require_complete();progress("fixture.begin");
+     poke("port_group_valid",0);poke("port_step_valid",0);poke("port_abort",0);
+     poke("port_result_ready",0);poke("port_done_ready",0);

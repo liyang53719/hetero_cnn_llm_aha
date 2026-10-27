@@ -1,0 +1,94 @@
+{
+  "scala_chisel_jars": {
+    "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "commit": "c425c935699d95ab2ccfb83205ca5638e04fe0ec",
+    "bytes": 27004,
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+    "git_blob_sha": "a28ba70c38053b7212787b78ed0ebc8949ece3a8"
+  },
+  "verilator_official_deb_and_restore": {
+    "path": "candidates/qwen2_core_client_verilator_lint/pins/OFFICIAL_DEPENDENCY_PINS.json",
+    "commit": "c425c935699d95ab2ccfb83205ca5638e04fe0ec",
+    "bytes": 4416,
+    "sha256": "4b7fffebe07effc89052765132531ca206c4b5d695ad42a28b7b82b3d009c49e",
+    "git_blob_sha": "662ab3e625a29dfe435a5c5df2285d7aa7185bf9"
+  },
+  "gcc_official_format_basis": {
+    "path": "candidates/qwen2_core_client_build/pins/GCC14_FORMAT_AND_MMD_SOURCE.json",
+    "commit": "c425c935699d95ab2ccfb83205ca5638e04fe0ec",
+    "bytes": 8678,
+    "sha256": "ed53320a8ddc3703d315c69e377b7eb76245b14348d535968bce506dc8742c8a",
+    "git_blob_sha": "53a8a915f5e993371f0ea2afd45b5cb6a7cd2597"
+  },
+  "tool_content_identities": [
+    {
+      "role": "verilator",
+      "bytes": 26226,
+      "sha256": "672a1ccf3468902f66387049f001b04f254bbcece7d5e816e3861715889bf252"
+    },
+    {
+      "role": "verilator_bin",
+      "bytes": 13920736,
+      "sha256": "619464a17a8c212219abceeeee23f529b72801ef594814ae32f4b9747fd38703"
+    },
+    {
+      "role": "svdpi.h",
+      "bytes": 20054,
+      "sha256": "2528c8e529b66dd8e795c8a0fee326166cc51f7dee8fc6a0c6c930534fc780a6"
+    },
+    {
+      "role": "gmpxx.h",
+      "bytes": 129502,
+      "sha256": "b287e1197a745582acb9c4aa0d2f2ffa16fabaeeabd0dee836553771556a00ea"
+    },
+    {
+      "role": "gmp.h",
+      "bytes": 84430,
+      "sha256": "164265d6203c26cc550437b6a50ec21212e4fe99af8657be70a2a900a326ede6"
+    },
+    {
+      "role": "libgmp.so.10.5.0",
+      "bytes": 566080,
+      "sha256": "d15e1585c6c267296459570c8ac217ca9123044bcd4e896d2f686b32333445d2"
+    },
+    {
+      "role": "libgmpxx.so.4.7.0",
+      "bytes": 31072,
+      "sha256": "b00baca634cc83c58e2b80b2abe171d3983f8925e75089f17d0f4fa169a1dd8a"
+    }
+  ],
+  "firrtl2_sources_maven": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0-sources.jar",
+  "firrtl2_archive": {
+    "bytes": 478521,
+    "sha256": "4c89186b7e0657b132c9d0309db2537edf7efa2fb320fecb1291eec200546ebf"
+  },
+  "official_renderer": {
+    "bytes": 58862,
+    "sha256": "53dc5bd72c023dac38d4c0fa824db11a6496588499dbb78963eb84a6a65344cf"
+  },
+  "official_addw_definition": {
+    "bytes": 15478,
+    "sha256": "e5246185a731494a20116426f4849abb70c185438be6d39790f111df3ccbe713"
+  },
+  "width_scope": {
+    "distinct_statements": 4112,
+    "extension_sites": 4123,
+    "fp32_mux_unsigned_zero_1_to_32": 4096,
+    "other_unsigned_literals_only": 26,
+    "selected_statements_found_once_in_independently_retained_cache": 4112,
+    "unsigned_addw_rhs_bits_3_0_zero_pad_4_to_64": 1
+  },
+  "full_system_build_pin_record": {
+    "bytes": 2196926,
+    "sha256": "00576aa7f92eef16583eae529ff1d1bc176e5f902b05e641d3d233803597105f"
+  },
+  "system_pin_counts": {
+    "tools_headers": 4189,
+    "system_source_tools_headers": 4081,
+    "verilator_share": 108,
+    "aliases": 1129,
+    "absence_paths": 275,
+    "inventories": 6
+  },
+  "runtime_limit": "These pins and existing official restore recipes do not supply an exact host distribution/sysroot. Installed GCC14/GMP/loader/system headers must be independently restored and hash-qualified; official GCC source format basis is not proof that a source build matches the host binary. No ELF/JAR/deb/tool/cache is uploaded. GMPxx is an explicit link input but not DT_NEEDED; do not say it loaded."
+}

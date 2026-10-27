@@ -1,0 +1,370 @@
+{
+  "schema": 1,
+  "status": "TEMP_SOURCE_SELECTION_NOT_EXECUTION_ADMISSION",
+  "fixed_reference_commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+  "production19": [
+    {
+      "name": "UnifiedMoeRuntimeExpertLoopV4.scala",
+      "bytes": 22472,
+      "sha256": "93a6b58440beb2e9ae3f0afbbb16e32a235195888743a544db46b960313a33d5",
+      "git_blob_sha": "af6a15a84c964f2181efe98c6b3de194103bdead",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeDownDescriptorV4.scala",
+      "bytes": 1751,
+      "sha256": "6e364485bc7f0b87369253beb696715a0b4fc8aacb6b1d662479f0272f273624",
+      "git_blob_sha": "f9a5a436cb8597e446b2b70bc695287586c702cf",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeDownDescriptorV4.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeRouterDenseV2.scala",
+      "bytes": 5361,
+      "sha256": "22d1db98ec1d888c35ba0b13d82c338752ddc03fdf3a839721e3d2365bc05081",
+      "git_blob_sha": "c94f8eb8553a5e44e13f8eb3c13634b038ada2f2",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeRouterDenseV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeRouterPipelineBindingV2.scala",
+      "bytes": 10958,
+      "sha256": "380b5b7b36fe238d2444ca530e92bd1dabb8852e9d42a42f88392dcd194dae0c",
+      "git_blob_sha": "24088f6dc2e1324e31b1b384a296a8176299e630",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeActivationGatherV2.scala",
+      "bytes": 9172,
+      "sha256": "259e4a09dd4658ab71f940dddacdf6516f5080094b5e10ed672eba624b0576ce",
+      "git_blob_sha": "5be81cc1a017b3e79a8c596b121b93be70ddcddf",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeActivationGatherV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeDenseWritebackV2.scala",
+      "bytes": 6015,
+      "sha256": "cd8606b3769c38e9286557a56a5d0a2db6e31bbdfc2929eead2be65e41177b52",
+      "git_blob_sha": "bb72f3b8b935444f314f9585b54fefb2deeb6ca5",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeDenseWritebackV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "bytes": 10797,
+      "sha256": "ca59cee0fcd8f9e2d4c86f58011faed6faa90c1d46a3ab3bb8a1550b8e3acf6b",
+      "git_blob_sha": "1b1c38d934e1f5fa458febe29e07c6f94a990fee",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeActivationGroupOwnerV3.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeRouteGroupV2.scala",
+      "bytes": 11676,
+      "sha256": "e90d5437119274638aedd862885570e9f0f20e1e30e0ad6bbcebad25553199f1",
+      "git_blob_sha": "85ad736bbc667ca7b15577ff6aefb30bc80e799c",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeRouteGroupV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeRouterLogitReaderV2.scala",
+      "bytes": 4675,
+      "sha256": "88b8e9dcc9795ba5b75dcedfd18e855028b55e6c95b4add151d9a9ef0272c50b",
+      "git_blob_sha": "3d0b84786a5f0fe53e758f78b800d277b3d88fcd",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeRouterLogitReaderV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeRouterNumericalOwnerV2.scala",
+      "bytes": 13055,
+      "sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316",
+      "git_blob_sha": "dd7bf9955f4921c7b590adaacf6393104fd345b8",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeRouterSelectionClientV2.scala",
+      "bytes": 1568,
+      "sha256": "45e1cd72b4f07b436bf469d27d9585c75e463e1f7ee547badf896c43bf211966",
+      "git_blob_sha": "5df86bda4c4ef98bd8ff26770cd183ff42b14d3f",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeRouterSelectionClientV2.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "bytes": 7540,
+      "sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4",
+      "git_blob_sha": "8d357fbb8ca0bf0145bec038e53d71c3afce9d45",
+      "kind": "repository",
+      "path": "candidates/moe_ffn_group_r2/source/UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "reference": {
+        "path": "candidates/moe_ffn_group_r2/source/UnifiedMoeLogical32SwiGluConsumerV3.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 7540,
+        "sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4",
+        "git_blob_sha": "8d357fbb8ca0bf0145bec038e53d71c3afce9d45"
+      }
+    },
+    {
+      "name": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "bytes": 12125,
+      "sha256": "60654e12ae008dbf96515da3dbddaa88b882f588acef916308e3f13118e4a8eb",
+      "git_blob_sha": "3430443d46260b1fb3aeea22386c96a5e6ca8932",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeFfnGroupSequencerV3.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedMoeGatherFfnPlanV3.scala",
+      "bytes": 3230,
+      "sha256": "c1a9095b85ce37343c83ce2411ab7699cc4bb03bc932e6a4defb7857eae872ff",
+      "git_blob_sha": "0ca4e44e779ebd600daf014c9c6746e1e68df158",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/UnifiedMoeGatherFfnPlanV3.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "UnifiedScalarPolicyV2.scala",
+      "bytes": 858,
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+      "git_blob_sha": "90bd0ea5e031c95a34d636206d4f128c405a6e8a",
+      "kind": "repository",
+      "path": "candidates/shared_scalar_policy_v2/source/UnifiedScalarPolicyV2.scala",
+      "reference": {
+        "path": "candidates/shared_scalar_policy_v2/source/UnifiedScalarPolicyV2.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 858,
+        "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+        "git_blob_sha": "90bd0ea5e031c95a34d636206d4f128c405a6e8a"
+      }
+    },
+    {
+      "name": "UnifiedSharedFormatProtocolV3.scala",
+      "bytes": 405,
+      "sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b",
+      "git_blob_sha": "d5147ab3e503d7703a9c5349341c3f320a7667e6",
+      "kind": "repository",
+      "path": "candidates/moe_ffn_group_r2/source/UnifiedSharedFormatProtocolV3.scala",
+      "reference": {
+        "path": "candidates/moe_ffn_group_r2/source/UnifiedSharedFormatProtocolV3.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 405,
+        "sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b",
+        "git_blob_sha": "d5147ab3e503d7703a9c5349341c3f320a7667e6"
+      }
+    },
+    {
+      "name": "HeteroOperatorPrimitiveProtocol.scala",
+      "bytes": 7073,
+      "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+      "git_blob_sha": "3c34aefd56c0c8d3a529b97bf1d3f8fd3c15b360",
+      "kind": "repository",
+      "path": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala",
+      "reference": {
+        "path": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 7073,
+        "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+        "git_blob_sha": "3c34aefd56c0c8d3a529b97bf1d3f8fd3c15b360"
+      }
+    },
+    {
+      "name": "HostMoePhaseContextV4.scala",
+      "bytes": 3227,
+      "sha256": "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4",
+      "git_blob_sha": "8f9e92dacd85340c167ab89f2731ab3ff890e3a4",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/HostMoePhaseContextV4.scala",
+      "new_public_source": true
+    },
+    {
+      "name": "HostMoeRuntimePhaseProtocolV5.scala",
+      "bytes": 3257,
+      "sha256": "d0da902c4adab95554f2b3ee48e989e95b46d08e0ea15a42873d50d748738e6b",
+      "git_blob_sha": "b135fe200c2569468eae8c44cc70e709667773cf",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/source/HostMoeRuntimePhaseProtocolV5.scala",
+      "new_public_source": true
+    }
+  ],
+  "dependency_sources8": [
+    {
+      "name": "Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "git_blob_sha": "4908d7fe3100042341d45abc0e60eca7b7c16726",
+      "kind": "repository",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "reference": {
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 3123,
+        "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+        "git_blob_sha": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+      },
+      "selected_class_files": [
+        "heteronpu/continuous/MemoryRequest.class",
+        "heteronpu/continuous/MemoryResponse.class",
+        "heteronpu/continuous/Status$.class",
+        "heteronpu/continuous/Status.class",
+        "heteronpu/continuous/TensorMath.class",
+        "heteronpu/continuous/TensorMath$.class",
+        "heteronpu/continuous/Tensor.class",
+        "heteronpu/continuous/Region.class"
+      ]
+    },
+    {
+      "name": "QwenOwnerProtocol.scala",
+      "bytes": 50196,
+      "sha256": "5153894739c0c3b68510e1d4ab34ad58071edaa3f248bd7999bcfe10dfe7059e",
+      "git_blob_sha": "c844cb663e14fc8a26e6edea1091d6a0b24b27d4",
+      "kind": "reconstructed",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "recipe_reference": "candidates/moe_ffn_group_r2/DEPENDENCY_RESOLUTION.json",
+      "selection_warning": "515389 recipe output, not bare-root QwenOwnerProtocol; external20 HardFloat pins remain required for baseline class build",
+      "selected_class_files": [
+        "heteronpu/continuous/QwenOwnerJob.class",
+        "heteronpu/continuous/QwenOwnerKind$.class",
+        "heteronpu/continuous/QwenOwnerKind.class",
+        "heteronpu/continuous/QwenOwnerResult.class"
+      ]
+    },
+    {
+      "name": "BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c",
+      "kind": "repository",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "reference": {
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 8313,
+        "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+        "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+      },
+      "selected_class_files": [
+        "heteronpu/continuous/ScalarRequest.class",
+        "heteronpu/continuous/ScalarOp.class",
+        "heteronpu/continuous/ScalarOp$.class"
+      ]
+    },
+    {
+      "name": "TypedTensorReader.scala",
+      "bytes": 4968,
+      "sha256": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+      "git_blob_sha": "0b7132fc7f5b292039ee4aae6185cc9cbd9ecdc2",
+      "kind": "repository",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala",
+      "reference": {
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/TypedTensorReader.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 4968,
+        "sha256": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+        "git_blob_sha": "0b7132fc7f5b292039ee4aae6185cc9cbd9ecdc2"
+      },
+      "selected_class_files": [
+        "heteronpu/continuous/DecodedTensor.class"
+      ]
+    },
+    {
+      "name": "UnifiedRuntimeProfile.scala",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+      "git_blob_sha": "f3f5267da29db59cc09e3021d7ad5fad35cd82d8",
+      "kind": "repository",
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+      "reference": {
+        "path": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 4003,
+        "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+        "git_blob_sha": "f3f5267da29db59cc09e3021d7ad5fad35cd82d8"
+      },
+      "selected_class_files": [
+        "heteronpu/continuous/UnifiedProfileId$.class",
+        "heteronpu/continuous/UnifiedProfileId.class",
+        "heteronpu/continuous/UnifiedRuntimeProfile$.class",
+        "heteronpu/continuous/UnifiedRuntimeProfile.class"
+      ]
+    },
+    {
+      "name": "HeteroOperatorPrimitiveProtocol.scala",
+      "bytes": 7073,
+      "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+      "git_blob_sha": "3c34aefd56c0c8d3a529b97bf1d3f8fd3c15b360",
+      "kind": "repository",
+      "path": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala",
+      "reference": {
+        "path": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroOperatorPrimitiveProtocol.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 7073,
+        "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+        "git_blob_sha": "3c34aefd56c0c8d3a529b97bf1d3f8fd3c15b360"
+      },
+      "selected_class_files": []
+    },
+    {
+      "name": "HostRuntimeLaunchV4.scala",
+      "bytes": 2317,
+      "sha256": "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd",
+      "git_blob_sha": "f9e5cd78c7f5363000dfdd0981549c121e2dc8ab",
+      "kind": "repository",
+      "path": "candidates/moe_phase_context_typecheck/dependency_sources/HostRuntimeLaunchV4.scala",
+      "new_public_source": true,
+      "selected_class_files": [
+        "heteronpu/continuous/HostCommandLaunchV4.class",
+        "heteronpu/continuous/HostCommandLaunchV4$.class",
+        "heteronpu/continuous/HostRuntimeAuthoritySnapshotV4.class"
+      ]
+    },
+    {
+      "name": "HostResidualCommands.scala",
+      "bytes": 10393,
+      "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+      "git_blob_sha": "8f1847b04d77c319bea7f9b8f83b603090acc7b9",
+      "kind": "repository",
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala",
+      "reference": {
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/HostResidualCommands.scala",
+        "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+        "bytes": 10393,
+        "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+        "git_blob_sha": "8f1847b04d77c319bea7f9b8f83b603090acc7b9"
+      },
+      "selected_class_files": [
+        "heteronpu/continuous/HostCommandLaunch.class"
+      ]
+    }
+  ],
+  "dependency_rule": "Eight provenance sources are not eight historical direct compiler inputs. Only seven SourceFile families supply the selected24 symbols; HeteroOperatorPrimitiveProtocol is instead one of production19. Never compile all sources in this prefix or mix same-name historical providers.",
+  "recipe_recovery": {
+    "ordered_steps": [
+      "Use exact fixed checkout and replay_handoff.py --source-root REPOSITORY --output NEW; preserve its designed INCOMPLETE/exit2 and bounded-slice findings.",
+      "Run ordered-vector prepare.py --selected-root NEW/installed --out PATCH3. Its exact patch/profile pins restore QwenOwnerProtocol515389; this output is not bare main.",
+      "For a complete baseline class rebuild follow the pinned compile-evidence README: reproduce_sources with separately pinned external20 HardFloat, apply selected3, stage exact92. No class-only shortcut or automatic target execution is supplied here."
+    ],
+    "source_restore_does_not_need_JVM": true,
+    "full92_class_rebuild_requires_external20_HardFloat": true,
+    "hardfloat_pins_reference": "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+    "current_packager_reran_recipe": false,
+    "prior_source_only_reconstruction_reviewed_output": {
+      "bytes": 66298,
+      "sha256": "f4157f476950d848dd295f0d9508c26dc092298cbfd267ba7d64840c8a572b43"
+    },
+    "prior_recipe_EXIT2_INCOMPLETE_preserved": true
+  },
+  "prior_recipe_source_recovery_only": true
+}

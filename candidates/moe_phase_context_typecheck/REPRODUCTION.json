@@ -1,0 +1,91 @@
+{
+  "status": "ROLE_BASED_RECONSTRUCTION_NOT_HERMETIC_ADMISSION",
+  "original_plan": {
+    "bytes": 38695,
+    "sha256": "07f74dac5e6455dbeabd0f443843c0bf54ff5a9eb86c8b9f93b956fc04c2db43"
+  },
+  "original_command": {
+    "bytes": 7899,
+    "sha256": "b81b30c51cf140d71363f5f02d343ce3bdec65883ded520d5d177710dce2ed26"
+  },
+  "input_pins": {
+    "bytes": 164642,
+    "sha256": "f8fb379fb109fba52341984de0ec58efaea4ebf063ae93adc33a886605f46dac"
+  },
+  "argv": [
+    "${JAVA}",
+    "-Duser.home=${HOME}",
+    "-Djava.io.tmpdir=${TMP}",
+    "-XX:-UsePerfData",
+    "-Xmx512m",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "${PINNED_CLASSPATH}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "${SELECTED24}:${PINNED_CLASSPATH}",
+    "-Xplugin:${CHISEL_PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "${NEW_CLASSES}",
+    "${SOURCES19}/UnifiedMoeRuntimeExpertLoopV4.scala",
+    "${SOURCES19}/UnifiedMoeDownDescriptorV4.scala",
+    "${SOURCES19}/UnifiedMoeRouterDenseV2.scala",
+    "${SOURCES19}/UnifiedMoeRouterPipelineBindingV2.scala",
+    "${SOURCES19}/UnifiedMoeActivationGatherV2.scala",
+    "${SOURCES19}/UnifiedMoeDenseWritebackV2.scala",
+    "${SOURCES19}/UnifiedMoeActivationGroupOwnerV3.scala",
+    "${SOURCES19}/UnifiedMoeRouteGroupV2.scala",
+    "${SOURCES19}/UnifiedMoeRouterLogitReaderV2.scala",
+    "${SOURCES19}/UnifiedMoeRouterNumericalOwnerV2.scala",
+    "${SOURCES19}/UnifiedMoeRouterSelectionClientV2.scala",
+    "${SOURCES19}/UnifiedMoeLogical32SwiGluConsumerV3.scala",
+    "${SOURCES19}/UnifiedMoeFfnGroupSequencerV3.scala",
+    "${SOURCES19}/UnifiedMoeGatherFfnPlanV3.scala",
+    "${SOURCES19}/UnifiedScalarPolicyV2.scala",
+    "${SOURCES19}/UnifiedSharedFormatProtocolV3.scala",
+    "${SOURCES19}/HeteroOperatorPrimitiveProtocol.scala",
+    "${SOURCES19}/HostMoePhaseContextV4.scala",
+    "${SOURCES19}/HostMoeRuntimePhaseProtocolV5.scala"
+  ],
+  "argv_count": 35,
+  "exact_inverse_verified_privately": true,
+  "ordered_classpath_reference": {
+    "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "commit": "688b984fae716dd3d3ad94c4f62baf07bccae746",
+    "bytes": 27004,
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+    "git_blob_sha": "a28ba70c38053b7212787b78ed0ebc8949ece3a8"
+  },
+  "ordered_classpath_key": "ordered_classpath",
+  "ordered_classpath_entries": 106,
+  "chisel_plugin_relative_path": "org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+  "jar_roots": "Original106 entries were split across two private dependency roots. Public role paths may be relocated; exact original token restoration requires the retained private role map. A consolidated root is not the original physical layout.",
+  "historical_budget": {
+    "assigned_cpu": 2,
+    "per_process_and_sampled_aggregate_CPU_s": 120,
+    "work_s": 165,
+    "cleanup_end_s": 175,
+    "owned_total_s": 180,
+    "outer_required_s": 210,
+    "heap_MiB": 512,
+    "sampled_owned_RSS_bytes": 1073741824,
+    "output_bytes": 10485760
+  },
+  "budget_scope": "Per-process CPU hard cap plus sampled owned aggregate CPU/RSS; not hard aggregate memory. No authorization for a new target run.",
+  "java_tool_pin_count": 314,
+  "runtime_limit": "No complete Python/JDK dynamic import/environment closure supplied; original full pin loops are source-bound to qualified receipt, not independently saved per-row observed hash logs.",
+  "source_restore_command": [
+    "python3",
+    "assemble_sources.py",
+    "--repository",
+    "FIXED_CHECKOUT_WITH_THIS_PREFIX",
+    "--reconstructed",
+    "EXACT_ORDERED_RECIPE_OUTPUT_ROOT",
+    "--output",
+    "FRESH_OUTPUT"
+  ],
+  "rebuild_rule": "Restore sources first, then independently rebuild and qualify dependencies using pinned original recipe/toolchain. Select exactly24 names from TYPECHECK_IDENTITIES, excluding old DispatchV1/LaunchV1 and duplicate definitions. Compile exact production19 order only. HostLaunchV4 is dependency provenance, not a twentieth production input or proof of full Host permission/integration.",
+  "not_executed_by_packager": true
+}

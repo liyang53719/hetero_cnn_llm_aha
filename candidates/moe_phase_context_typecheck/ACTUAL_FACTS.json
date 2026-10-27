@@ -1,0 +1,61 @@
+{
+  "status": "TEMP_INCOMPLETE_PARENT_INTEGRATION_WITH_ACTUAL_TYPECHECK_PASS_ONLY",
+  "actual_typecheck_review": {
+    "bytes": 6668,
+    "sha256": "6a92054612366b81dc04a3463138d389ffe797f996d299d234daa4af78918bcb"
+  },
+  "actual_typecheck_freeze": {
+    "bytes": 1777,
+    "sha256": "4876ff5d80b2aac4c36710569bfa18655e32ded13621f83420a3afabe1ba54bf"
+  },
+  "production_sources": 19,
+  "new_class_files": 90,
+  "new_class_bytes": 1454118,
+  "selected_dependencies": 24,
+  "selected_dependency_bytes": 109873,
+  "class_files_combined": 114,
+  "sourcefiles": 19,
+  "spec_sources_compiled": 0,
+  "tests_executed": 0,
+  "emit_executed": false,
+  "five_complete_block_numerical_passes": 0,
+  "five_required_blocks": 5,
+  "observed_native_exit": 0,
+  "direct_reaped_exit": 0,
+  "tool_outer_exit": 0,
+  "qualified": true,
+  "errors": [],
+  "original_inputs_unchanged": true,
+  "staged_inputs_unchanged": true,
+  "no_dependency_shadowing": true,
+  "resources": {
+    "sampled_cpu_seconds": 26.97,
+    "sampled_peak_rss_bytes": 387706880,
+    "sampled_output_bytes": 1745543,
+    "owned_stage_wall_including_postflight_seconds": 27.47176468698308,
+    "preflight_seconds": 0.3249110820470378,
+    "full_outer_wall_independently_measured": false
+  },
+  "cleanup": {
+    "status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "empty_complete_scans": 2,
+    "scan_evidence_sha256": "1053272b1db3d82e0ca84574eaef4ba6e43e3a9f8603ac6b1bfc11c5fa79f7e0",
+    "barrier_before_reap": true,
+    "no_post_reap_signals": true,
+    "grandchildren_reaped_by_helper": false
+  },
+  "pin_evidence_limit": "Original complete pre/post loops are source-bound by exact runner and qualified receipt; per-row PASS logs not saved. Reviewer fresh-read90 new classes once, not106JAR/314JDK/baseline24 again; packager reads metadata only.",
+  "cleanup_interpretation": "Final signal targeted retained already-zombie leader; observed/reaped exit remains0. Scope original owned group and observed identities, not whole-host or escaped-process proof.",
+  "historical_status": [
+    "0533 filter BLOCKED retained",
+    "0538 gate unexecuted retained",
+    "Old MoE r2 wrapper exit1/qualifiedfalse and independent3 shortmock facts retained separately; they are not tests of these19 successor sources."
+  ],
+  "limits": [
+    "Closes actual production19 Scala typecheck only. Six planned RouteGroup cases remain uncompiled/unexecuted; no Spec/test/emit/IR/RTL or arithmetic/numeric observation.",
+    "Does not qualify Host/Guard/allocator authority, same-event physical postnorm sequence, global1281 reservation, stale-response/epoch/reset isolation, real service wiring or final release. Source-review integration boundaries remain mandatory.",
+    "No shared/N1/nine-contribution merge/fullblock completion or five-block common hardware/numerical regression qualification. Logical32 control remains not physical32-lane II1 or utilization.",
+    "Old0533 blocked filter and0538 unexecuted gate retained; this actual binds only0602 successor. No automatic next stage authorization."
+  ]
+}

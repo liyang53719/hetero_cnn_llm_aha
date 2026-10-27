@@ -1,0 +1,113 @@
+{
+  "pins": [
+    {
+      "bytes": 12154,
+      "evidence_id": "original_matrix_fifo_memory_source_review_20261026T2321/REVIEW.json",
+      "role": "original_memory_source:REVIEW.json",
+      "sha256": "f61e690b957df09bfd27e0d7cfc636798ce731935c29e08be89557f3f19f0f9f"
+    },
+    {
+      "bytes": 1659,
+      "evidence_id": "original_matrix_fifo_memory_source_review_20261026T2321/FREEZE.json",
+      "role": "original_memory_source:FREEZE.json",
+      "sha256": "dd738e060d78675f9a9ae687844ad202a5176d33b002b6e08bada2e9f788dace"
+    },
+    {
+      "bytes": 10120,
+      "evidence_id": "original_matrix_fifo_r2_fixture_compile_source_review_20261026T2356/REVIEW.json",
+      "role": "fixture_r2_source:REVIEW.json",
+      "sha256": "c464ff4df0a000bf2f984c995ba2f57df980f2902ee5e78c14138b5823239640"
+    },
+    {
+      "bytes": 718,
+      "evidence_id": "original_matrix_fifo_r2_fixture_compile_source_review_20261026T2356/FREEZE.json",
+      "role": "fixture_r2_source:FREEZE.json",
+      "sha256": "92a11bb71e68536f6bbb0aaa2dbf0266eb162949b0e35bf3f3606bf8f3d97245"
+    },
+    {
+      "bytes": 9700,
+      "evidence_id": "original_matrix_fifo_r2_typecheck_actual_review_20261027T0002/REVIEW.json",
+      "role": "fixture_5source30class:REVIEW.json",
+      "sha256": "31d162b69315f61986c8a7a38abd9df63b5b4fd0b4bb4496184d28a2919bf5c0"
+    },
+    {
+      "bytes": 1014,
+      "evidence_id": "original_matrix_fifo_r2_typecheck_actual_review_20261027T0002/FREEZE.json",
+      "role": "fixture_5source30class:FREEZE.json",
+      "sha256": "3d35a2b475744dc50e5845b53a3afe77c2f3e45029c0f17b3b3dd63291231212"
+    },
+    {
+      "bytes": 10106,
+      "evidence_id": "original_matrix_fifo_differential_actual_review_20261027T0014/REVIEW.json",
+      "role": "first_hash_fail:REVIEW.json",
+      "sha256": "11541e538703142f29959063442b6ee12b8a5feb966ca8f6c526776f3ab9ff5c"
+    },
+    {
+      "bytes": 634,
+      "evidence_id": "original_matrix_fifo_differential_actual_review_20261027T0014/FREEZE.json",
+      "role": "first_hash_fail:FREEZE.json",
+      "sha256": "bffc275b661cdb2065a8d5d83c53c4ba89eafed3e429e8d2d0e58504414c72d1"
+    },
+    {
+      "bytes": 9427,
+      "evidence_id": "original_matrix_fifo_identity_diag_actual_review_20261027T0043/REVIEW.json",
+      "role": "raw_identity_fail:REVIEW.json",
+      "sha256": "f6888b9f51e53b3ab6036543474d1c2eda041bd5976db612d3a40ea43b8b18d0"
+    },
+    {
+      "bytes": 874,
+      "evidence_id": "original_matrix_fifo_identity_diag_actual_review_20261027T0043/FREEZE.json",
+      "role": "raw_identity_fail:FREEZE.json",
+      "sha256": "47a6f13ba9de21747e3fb774c805cfc282d64585d74a3bc1b3b805ab77d93f64"
+    },
+    {
+      "bytes": 9240,
+      "evidence_id": "original_matrix_fifo_exact_typecheck_actual_review_20261027T0058/REVIEW.json",
+      "role": "exact_hash_compile3:REVIEW.json",
+      "sha256": "f6c6f669cb8fe0f6778a26822d9db89c7de8a68f9e54db339e41b25a6d5f16f8"
+    },
+    {
+      "bytes": 1036,
+      "evidence_id": "original_matrix_fifo_exact_typecheck_actual_review_20261027T0058/FREEZE.json",
+      "role": "exact_hash_compile3:FREEZE.json",
+      "sha256": "3b475510108ea73060d78ee7815c27ee7e875dc9d27706d383d5da604a46260b"
+    },
+    {
+      "bytes": 10746,
+      "evidence_id": "original_matrix_fifo_exact_differential_actual_review_20261027T0123/REVIEW.json",
+      "role": "official_form_failure34:REVIEW.json",
+      "sha256": "7cfc96fb4ea9f28337c65142cf0bdba0d0f8b87dc4736ce36f0bc9a1100d59d2"
+    },
+    {
+      "bytes": 573,
+      "evidence_id": "original_matrix_fifo_exact_differential_actual_review_20261027T0123/FREEZE.json",
+      "role": "official_form_failure34:FREEZE.json",
+      "sha256": "c0fd16750118551763449761b70ec360bce6c50ac74a5592410f4c3bb1926dae"
+    },
+    {
+      "bytes": 15571,
+      "evidence_id": "original_matrix_fifo_declaration_order_compile_review_20261027T0127/REVIEW.json",
+      "role": "declaration_order_source:REVIEW.json",
+      "sha256": "0d6b477da5d089d2315faf10fef99bdb49fa3961d4e0aa216cc77826eae834bd"
+    },
+    {
+      "bytes": 574,
+      "evidence_id": "original_matrix_fifo_declaration_order_compile_review_20261027T0127/FREEZE.json",
+      "role": "declaration_order_source:FREEZE.json",
+      "sha256": "81aeaa74f8b57a6df70295acdddd38ecce1953f06fb229aa17b4ae5cb67a786d"
+    },
+    {
+      "bytes": 11254,
+      "evidence_id": "original_matrix_fifo_formcheck_typecheck_actual_review_20261027T0141/REVIEW.json",
+      "role": "declaration_order_compile6:REVIEW.json",
+      "sha256": "8152a6e24b57f05bf4f4728643639adfe4a87391904a49a25bea781f6f15818c"
+    },
+    {
+      "bytes": 820,
+      "evidence_id": "original_matrix_fifo_formcheck_typecheck_actual_review_20261027T0141/FREEZE.json",
+      "role": "declaration_order_compile6:FREEZE.json",
+      "sha256": "958e5d09fd12f99733dc2b6d581430cc2ecf47ccba7349522a4fed18bb9b5865"
+    }
+  ],
+  "scope": "Small review identities; not bulk class/IR payload and not complete runtime closure"
+}

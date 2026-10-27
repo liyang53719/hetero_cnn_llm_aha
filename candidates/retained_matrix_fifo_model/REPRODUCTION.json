@@ -1,0 +1,232 @@
+{
+  "baseline_references": [
+    {
+      "bytes": 11833,
+      "commit": "e600e08012a5454bf2b728d7226250979085992b",
+      "path": "candidates/retained_matrix_functional_backend/REPRODUCTION.json",
+      "sha256": "e5513652ce1cadc2aa407858344cbb1b56f265df33c461e808ac84fda9751ddc"
+    },
+    {
+      "bytes": 3061,
+      "commit": "e600e08012a5454bf2b728d7226250979085992b",
+      "path": "candidates/retained_matrix_functional_backend/SOURCE_REFS.json",
+      "sha256": "2bc72a4f9802041323f7bd2c961201062701e17bee3ed5025589fc306d43dc05"
+    }
+  ],
+  "commands": {
+    "current_declaration_order_compile": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${PINNED_CLASSPATH}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "-Xplugin:${CHISEL_PLUGIN_6_7_0}",
+        "-language:reflectiveCalls",
+        "-d",
+        "${RUN_ROOT}/classes",
+        "${REPOSITORY}/candidates/retained_matrix_fifo_model/source/MatrixFifoHighFormDiagnostic.scala",
+        "${REPOSITORY}/candidates/retained_matrix_fifo_model/source/MatrixResultFifoMemoryLowering.scala"
+      ],
+      "authorizes_execution": false,
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 160,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 210,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 180,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 150
+      },
+      "command_identity": {
+        "bytes": 36211,
+        "sha256": "9f0c18f8b587fd33fed38a4c77a8dcbffd701ac31761349706df25b1a3bdedc2"
+      },
+      "evidence_id": "original_matrix_fifo_formcheck_typecheck_prepare_20261027T0123/COMMAND.json"
+    },
+    "historical_24edge_form_FAIL": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "org.scalatest.tools.Runner",
+        "-oW",
+        "-s",
+        "heteronpu.continuous.model.MatrixFifoMemoryDifferentialSpec"
+      ],
+      "authorizes_execution": false,
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 190,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 240,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 210,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 180
+      },
+      "command_identity": {
+        "bytes": 19953,
+        "sha256": "ddb169024829620e1bc796d4cd87a797d488e341a95758c1cbbb3388333aac71"
+      },
+      "evidence_id": "original_matrix_fifo_exact_differential_prepare_20261027T0058/COMMAND.json"
+    },
+    "historical_exact_hash_compile": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${PINNED_CLASSPATH}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "-Xplugin:${CHISEL_PLUGIN_6_7_0}",
+        "-language:reflectiveCalls",
+        "-d",
+        "${RUN_ROOT}/classes",
+        "${GENERATED_HISTORY}/0045/MatrixResultFifoMemoryLowering.scala"
+      ],
+      "authorizes_execution": false,
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 160,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 210,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 180,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 150
+      },
+      "command_identity": {
+        "bytes": 36040,
+        "sha256": "0c3b9543dcc87badda19966624e87fab55f62a96e8b4bc5b95e1c9efb110c201"
+      },
+      "evidence_id": "original_matrix_fifo_exact_typecheck_prepare_20261027T0047/COMMAND.json"
+    },
+    "historical_fixture5_compile": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${PINNED_CLASSPATH}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "-Xplugin:${CHISEL_PLUGIN_6_7_0}",
+        "-language:reflectiveCalls",
+        "-d",
+        "${RUN_ROOT}/classes",
+        "${REPOSITORY}/candidates/retained_matrix_fifo_model/source/MatrixFifoDifferentialBridge.scala",
+        "${REPOSITORY}/candidates/retained_matrix_fifo_model/tests/MatrixFifoMemoryDifferentialSpec.scala",
+        "${GENERATED_HISTORY}/2308/MatrixResultFifoMemoryLowering.scala",
+        "${REPOSITORY}/candidates/retained_matrix_fifo_model/source/MatrixResultFifoStateModel.scala",
+        "${REPOSITORY}/candidates/retained_matrix_fifo_model/tests/MatrixResultFifoStateModelSpec.scala"
+      ],
+      "authorizes_execution": false,
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 160,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 210,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 180,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 150
+      },
+      "command_identity": {
+        "bytes": 36562,
+        "sha256": "4684d60ffe942d77f3dc9348c60d290dca2dc60c96fd39a7097e2c16d67b26ac"
+      },
+      "evidence_id": "original_matrix_fifo_r2_typecheck_prepare_20261026T2354/COMMAND.json"
+    },
+    "prepared_official_formcheck_NOT_EXECUTED": {
+      "argv": [
+        "${JAVA21}",
+        "-Duser.home=${RUN_ROOT}/home",
+        "-Djava.io.tmpdir=${RUN_ROOT}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "${RUN_ROOT}/baseline_classes:${PINNED_CLASSPATH}",
+        "chiseltest.simulator.MatrixFifoHighFormDiagnostic"
+      ],
+      "authorizes_execution": false,
+      "caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 20,
+        "cpu_seconds": 10,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 35,
+        "rss_sampled_bytes": 536870912,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 25,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 15
+      },
+      "command_identity": {
+        "bytes": 18878,
+        "sha256": "695a8139aebe3cfe29900cb72efddf82fd8927c59af6ef3393f37c270698f850"
+      },
+      "evidence_id": "original_matrix_fifo_formcheck_prepare_20261027T0142/COMMAND.json"
+    }
+  },
+  "roles": {
+    "GENERATED_HISTORY": "new output of restore_historical_lowering.py; exact historical source identities only",
+    "PINNED_CLASSPATH": "same ordered106 JARs; compression alone not dynamic runtime closure"
+  },
+  "scope": "Exact recorded argv role projection, not hermetic executable/automatic authorization. Prepared formcheck has not executed at this package freeze.106 ordered jars and original dependency class closure must be reconstructed and verified via fixed published baseline."
+}

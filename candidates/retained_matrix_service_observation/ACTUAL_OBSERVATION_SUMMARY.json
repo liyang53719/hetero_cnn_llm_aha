@@ -1,0 +1,209 @@
+{
+  "status": "TEMP_CPU120_FAIL_ZERO_OF_ONE_SERVICE_CASES",
+  "scope": "Small documentation-only projection of a completed independent actual audit; no diagnostic source, runtime or raw log is included. Not a standalone runnable reproduction package.",
+  "evidence": {
+    "actual_review": {
+      "bytes": 8803,
+      "sha256": "769f75ae8fa89fd7585bdc06b3cb8d875737cc21dee3a1ff7c6a44202c691020"
+    },
+    "review_freeze": {
+      "bytes": 709,
+      "sha256": "fc03070c70949bd500db976b567280ba5a910a49fbfda6e25719ff4d651b3c79"
+    },
+    "raw_log_hash_only": {
+      "bytes": 8053,
+      "sha256": "479d5f08d0f7feb18d678c3636c8e7e6392e2ee3491203233187f82ea488c791"
+    }
+  },
+  "previous_published_backend": {
+    "commit": "e600e08012a5454bf2b728d7226250979085992b",
+    "prefix": "candidates/retained_matrix_functional_backend/",
+    "old_parser_and_silent_CPU120_failures_preserved": true
+  },
+  "result": {
+    "selected_cases": 1,
+    "completed_cases": 0,
+    "native_normal_exit": null,
+    "cleanup_reaped_exit": -9,
+    "outer_exit": 1,
+    "outer_seconds": 140.7798736790428,
+    "inner_seconds": 140.67243775899988,
+    "sampled_peak_process_cpu_seconds": 120.02,
+    "sampled_peak_rss_bytes": 422174720,
+    "max_tree_bytes": 58455476,
+    "prepost_obligations": 1158,
+    "staged_classes": 670,
+    "staged_bytes": 10893771,
+    "cleanup_complete": true,
+    "parent_prepost_equal": true,
+    "completed_fixture_expect_calls": 0,
+    "driver_group_handshakes": 0,
+    "driver_wide_handshakes": 0
+  },
+  "bounded_phase_evidence": {
+    "markers": 34,
+    "sequence": "exact contiguous1..34, fixed fields/integer counters, monotonic wall and nondecreasing JVM CPU",
+    "completed_source_bound_phases": [
+      "one elaboration",
+      "high serialization and ABI gate",
+      "official low compiler/serialization/ABI gate",
+      "official GetFirrtlAst/SetImplicitOutputInfo/PrepareAst",
+      "prepared serialization and strict final AST gate",
+      "factory constructor",
+      "Treadle constructor",
+      "engine.ast eq gated circuit",
+      "initial factory complete-binding assertion",
+      "first reset-high step(2) returned"
+    ],
+    "completed_interval_samples": [
+      {
+        "phase": "elaborate",
+        "begin_sequence": 2,
+        "end_sequence": 3,
+        "process_cpu_ns": 2110000000,
+        "wall_ns": 2399528415
+      },
+      {
+        "phase": "high.serialize",
+        "begin_sequence": 4,
+        "end_sequence": 5,
+        "process_cpu_ns": 210000000,
+        "wall_ns": 244020645
+      },
+      {
+        "phase": "high.gate",
+        "begin_sequence": 6,
+        "end_sequence": 7,
+        "process_cpu_ns": 40000000,
+        "wall_ns": 50675671
+      },
+      {
+        "phase": "low.compiler",
+        "begin_sequence": 8,
+        "end_sequence": 9,
+        "process_cpu_ns": 26610000000,
+        "wall_ns": 30763404430
+      },
+      {
+        "phase": "low.serialize",
+        "begin_sequence": 10,
+        "end_sequence": 11,
+        "process_cpu_ns": 350000000,
+        "wall_ns": 412193217
+      },
+      {
+        "phase": "low.gate",
+        "begin_sequence": 12,
+        "end_sequence": 13,
+        "process_cpu_ns": 20000000,
+        "wall_ns": 17644248
+      },
+      {
+        "phase": "treadle.get_ast",
+        "begin_sequence": 14,
+        "end_sequence": 15,
+        "process_cpu_ns": 30000000,
+        "wall_ns": 32163824
+      },
+      {
+        "phase": "treadle.output_info",
+        "begin_sequence": 16,
+        "end_sequence": 17,
+        "process_cpu_ns": 0,
+        "wall_ns": 1087988
+      },
+      {
+        "phase": "treadle.prepare",
+        "begin_sequence": 18,
+        "end_sequence": 19,
+        "process_cpu_ns": 14820000000,
+        "wall_ns": 17127795307
+      },
+      {
+        "phase": "prepared.serialize",
+        "begin_sequence": 20,
+        "end_sequence": 21,
+        "process_cpu_ns": 460000000,
+        "wall_ns": 537983417
+      },
+      {
+        "phase": "prepared.gate",
+        "begin_sequence": 22,
+        "end_sequence": 23,
+        "process_cpu_ns": 10000000,
+        "wall_ns": 9292103
+      },
+      {
+        "phase": "factory",
+        "begin_sequence": 24,
+        "end_sequence": 25,
+        "process_cpu_ns": 10000000,
+        "wall_ns": 14387802
+      },
+      {
+        "phase": "treadle.construct",
+        "begin_sequence": 26,
+        "end_sequence": 27,
+        "process_cpu_ns": 48830000000,
+        "wall_ns": 56982088766
+      },
+      {
+        "phase": "engine.identity",
+        "begin_sequence": 29,
+        "end_sequence": 30,
+        "process_cpu_ns": 0,
+        "wall_ns": 230366
+      },
+      {
+        "phase": "factory.bindings.initial",
+        "begin_sequence": 31,
+        "end_sequence": 32,
+        "process_cpu_ns": 0,
+        "wall_ns": 1058340
+      },
+      {
+        "phase": "first_clock.first_batch_return_interval",
+        "begin_sequence": 33,
+        "end_sequence": 34,
+        "process_cpu_ns": 14430000000,
+        "wall_ns": 16867018717
+      }
+    ],
+    "last_record": {
+      "sequence": 34,
+      "phase": "first_clock.first_batch_done",
+      "process_cpu_ns": 108800000000,
+      "elapsed_wall_ns": 125503020824,
+      "completed_step_cycles": 2,
+      "completed_expect_calls": 0,
+      "driver_group_handshakes": 0,
+      "driver_wide_step_handshakes": 0
+    },
+    "last_known_interval": "After receipt of first_clock.first_batch_done and before absent first_clock.end: includes marker tail/return, reset-low poke, step(3), completed-count update and next mark. No dedicated reset-low or step(3)-entry marker; do not claim exact execution location or that step(3) was entered/completed.",
+    "unobserved": [
+      "first_clock.end",
+      "transaction1/2 begin",
+      "any data group/step handshake or numeric expect",
+      "fixture completion",
+      "treadle.finish begin/end",
+      "ScalaTest case/suite success"
+    ],
+    "interpretation": "The first reset-high step(2) call returned and the recorded completed_step_cycles count became2. This is not a per-endpoint gated-edge count. CPU/wall deltas bracket JVM-thread/GC/scheduling activity, not isolated method hotspots or steady per-cycle performance."
+  },
+  "evidence_limits": {
+    "parent_checks": "56 expected runtime pins/10 absences/45 prerequisite descriptors and source-bound aggregate pass, identical PREFLIGHT/POSTFLIGHT. Not separately saved observed hash maps for every endpoint. No reviewer bulk replay.",
+    "IR": "Four retained IR sizes/production hashes equal prior2215; current stat/kind checked only, no new payload read.",
+    "cleanup": "Original fixed30458e proof: two complete empty nonleader scans before unique leader reap-9, no postreap signals, completed before cleanup deadline. Raw scanframes not retained; -9 alone does not distinguish OS CPU kill from cleanup signal timing.",
+    "root_launcher": "Archived before worker execution, sealed afterward; no separately prebound launcher selfSHA is claimed."
+  },
+  "not_qualified": [
+    "service numerical acceptance",
+    "any completed numeric expect or group/wide handshake",
+    "seeded service",
+    "five original complete M128 blocks",
+    "common4096 full-block numerical regression",
+    "RTL replay",
+    "performance/PPA/MAC utilization"
+  ],
+  "no_target_rerun_by_document_packager": true
+}

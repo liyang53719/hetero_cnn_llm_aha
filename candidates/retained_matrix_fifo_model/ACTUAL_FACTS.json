@@ -1,0 +1,37 @@
+{
+  "capacity": "Original depth2x16x256x32bit payload plus37 metadata=262218 storagebits; replacement17 memories keeps same capacity; original Chisel/RTL not edited",
+  "current_24edge_test_executed": false,
+  "current_formcheck_executed": false,
+  "five_profile_M128_numeric_pass": 0,
+  "full_RTL_replay_pass": 0,
+  "history": [
+    {
+      "result": "5source compile30class identity only",
+      "stage": "2354"
+    },
+    {
+      "result": "FAIL original high serialization SHA;0/1; no transform/engine/edges",
+      "stage": "0002 differential"
+    },
+    {
+      "result": "FAIL unchanged old SHA; independently proved5009 actual equals5008 historical plusoneLF, exact8206 ABI",
+      "stage": "0031 identity"
+    },
+    {
+      "result": "3classes only exact fullSHA constant changed",
+      "stage": "0047 compile"
+    },
+    {
+      "result": "FAIL CheckHighFormLike34 undeclaredhead/tail; original prepared gate returned; memory low not complete; noengine/edges",
+      "stage": "0058 differential"
+    },
+    {
+      "result": "6classes40680B from two-source declaration-orderfix+officialmain;691dependencies;CPU8.25s/cleanup passed",
+      "stage": "0123 compile"
+    }
+  ],
+  "memory_equivalence_qualified": false,
+  "old_failures_preserved": true,
+  "scope": "TEMP model-only FIFO lowering source/typecheck, no24-edge equivalence PASS or performance claim",
+  "service_speedup_measured": false
+}

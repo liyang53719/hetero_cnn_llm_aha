@@ -1,0 +1,51 @@
+{
+  "baseline": "Use original625 +39 backend classes=664. FIFO historical5 add30=694; explicitly remove old lowering3 to691, then new two-source compile adds6=697. Full identity main is not part of24-edge test. Never silently shadow duplicate class names.",
+  "historical_sources": "restore_historical_lowering.py exact reconstructs0045/2308 solely for reproducing retained historical failures; not an alternate accepting transform.",
+  "new_source_not_final_rtl": true,
+  "published_baseline_references": [
+    {
+      "bytes": 11833,
+      "commit": "e600e08012a5454bf2b728d7226250979085992b",
+      "path": "candidates/retained_matrix_functional_backend/REPRODUCTION.json",
+      "sha256": "e5513652ce1cadc2aa407858344cbb1b56f265df33c461e808ac84fda9751ddc"
+    },
+    {
+      "bytes": 3061,
+      "commit": "e600e08012a5454bf2b728d7226250979085992b",
+      "path": "candidates/retained_matrix_functional_backend/SOURCE_REFS.json",
+      "sha256": "2bc72a4f9802041323f7bd2c961201062701e17bee3ed5025589fc306d43dc05"
+    }
+  ],
+  "source_files": [
+    {
+      "bytes": 7252,
+      "path": "source/MatrixFifoDifferentialBridge.scala",
+      "sha256": "a397d590daa8ff18ea7dc33520148d64edd2d5fb3f9e374fad1cfc5a955d5567"
+    },
+    {
+      "bytes": 6242,
+      "path": "tests/MatrixFifoMemoryDifferentialSpec.scala",
+      "sha256": "f5a1e13e435db7ab95aadcdf9eef46ad21812b7f08e1334ac2fa9c32e9884332"
+    },
+    {
+      "bytes": 3008,
+      "path": "source/MatrixResultFifoStateModel.scala",
+      "sha256": "230c7de669a6db95f21abdffd8b0827db22a0cd8382ce29b29d45d53eeb542cd"
+    },
+    {
+      "bytes": 2644,
+      "path": "tests/MatrixResultFifoStateModelSpec.scala",
+      "sha256": "7cb5d8669d8dfaa69fd44066c93e4e8848b16e649a8f3110616b2751b4d74e7c"
+    },
+    {
+      "bytes": 5390,
+      "path": "source/MatrixResultFifoMemoryLowering.scala",
+      "sha256": "dcdcc3d9c57cb0435e458ed237c54fbf1abeb4786e7a1e54887afe96c1e0f8c9"
+    },
+    {
+      "bytes": 3295,
+      "path": "source/MatrixFifoHighFormDiagnostic.scala",
+      "sha256": "c6ad8fb3d052e552b7c17d3683bc6b56e4a6cf069474cd11afaf27640b0697a6"
+    }
+  ]
+}

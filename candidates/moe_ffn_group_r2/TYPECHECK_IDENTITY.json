@@ -1,0 +1,432 @@
+{
+  "status": "ACTUAL_TYPECHECK_ONLY",
+  "classes": [
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/MemoryRequest.class",
+      "bytes": 4442,
+      "sha256": "6ec09b6a0df2c6bf7240e49996045c7f677bbc30bd9420292aa20bf13dfba48a"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/MemoryResponse.class",
+      "bytes": 3844,
+      "sha256": "0236d19d9e33578c1670965db16c9a4f22e00c85758d083f5b7959203ac14b03"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/QwenOwnerJob.class",
+      "bytes": 12389,
+      "sha256": "774dc9975bfa53f4b697d8eec703539d808178c568c6012b15167730e64ac577"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/QwenOwnerKind$.class",
+      "bytes": 2049,
+      "sha256": "b38675390b9f7ba3a30b790587e69e2e5bc81503c64207dde2d76539bc316cbb"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/QwenOwnerKind.class",
+      "bytes": 2116,
+      "sha256": "9efd4fa33a05fbb4be6922cd1aa45781a223542a79faaf37d7bd573beb60a9fc"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/QwenOwnerResult.class",
+      "bytes": 4683,
+      "sha256": "a8cecfcece5a4847c35e178e125ba56ca9d10f71ac13735b589295b22edbd32c"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/Status$.class",
+      "bytes": 1325,
+      "sha256": "2594e0188f60aa905bd491480effad7b2a8d01c9fe2a9ccaed29c0dda2d67597"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/Status.class",
+      "bytes": 1359,
+      "sha256": "325112b8fc18f2075b15c5a90d15add0f9faab51623af35beb1fe8bc4943b1c5"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/UnifiedBlockDispatchV1.class",
+      "bytes": 4159,
+      "sha256": "77f2c2adb5ff9cd562c26a5110d67b83fd82f8a93300d75503dd544d507cc1b0"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/UnifiedBlockLaunchV1.class",
+      "bytes": 8586,
+      "sha256": "0fcf5fbcaa32f8d7e4d021185ac42c77956815000c0ab370a0dba2a337a7587f"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/UnifiedProfileId$.class",
+      "bytes": 1025,
+      "sha256": "9084ba95f754caadd9b059d37ed409c30f2cb049011f0de4948ca20a9d91af38"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/UnifiedProfileId.class",
+      "bytes": 1163,
+      "sha256": "394fc96b96017e7f0d2a20291a51d28a26c191c93ed37c3806be7dff4a977263"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/UnifiedRuntimeProfile$.class",
+      "bytes": 12755,
+      "sha256": "04008a782a8170c61bc0147a20d154cca151c0baf1494de9313e0b70a07872e5"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/UnifiedRuntimeProfile.class",
+      "bytes": 9382,
+      "sha256": "5634c839220155ff03785164f9dcfc1b97e1095c36e91f584baddb0f11134290"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/ScalarRequest.class",
+      "bytes": 3652,
+      "sha256": "d367e9393d6febb5198f82d12e0be80edeb3f2ceb0fb846597703e68aa17d32f"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/ScalarOp.class",
+      "bytes": 1134,
+      "sha256": "eeba8f9a388f29722e183a61cf51e6fc83e26723a69176b2e96e62a27f1784cc"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/ScalarOp$.class",
+      "bytes": 1136,
+      "sha256": "4a095575eb8b82fa750c87c2bdb20131933769c6154c3a57ec72ba476387d597"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/TensorMath.class",
+      "bytes": 1560,
+      "sha256": "5d50de44ec859713b792cdb06dc6e61664158aff80d448679b228bc29dd34f9d"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/TensorMath$.class",
+      "bytes": 5905,
+      "sha256": "ee26486a1bec66fcf829759da79311b8a52cfdf2506af99656bb043fe533e12e"
+    },
+    {
+      "role": "selected_dependency",
+      "relative": "heteronpu/continuous/Tensor.class",
+      "bytes": 4458,
+      "sha256": "f1fd71e8dbe93785673c7cd8928337dda26bb28d08f217f10d4a71ef53630b6b"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeActivationDownPlanV3$.class",
+      "bytes": 8619,
+      "sha256": "593acd842b4fa476aee3fdd96b289559aedd80463a863742c86c5151dfd9af9e",
+      "this_class": "heteronpu/continuous/UnifiedMoeActivationDownPlanV3$.class",
+      "SourceFile": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "source_sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeActivationDownPlanV3.class",
+      "bytes": 1588,
+      "sha256": "3ba1da1805aa21e4ba2d34b346dd423a2f9f4edf65c5349c22aee8d66ab2104c",
+      "this_class": "heteronpu/continuous/UnifiedMoeActivationDownPlanV3.class",
+      "SourceFile": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "source_sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeActivationGroupCommitV3.class",
+      "bytes": 7098,
+      "sha256": "004ff234025444a2e48e17cfb591793bbf6f5ccbd833f8af3cb940728e062a0b",
+      "this_class": "heteronpu/continuous/UnifiedMoeActivationGroupCommitV3.class",
+      "SourceFile": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "source_sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeActivationGroupJobV3.class",
+      "bytes": 4624,
+      "sha256": "74ff8ebd569700d36c530a845f671529945f07f38996c0d82cd39320f5949932",
+      "this_class": "heteronpu/continuous/UnifiedMoeActivationGroupJobV3.class",
+      "SourceFile": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "source_sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeActivationGroupOwnerV3$$anon$1.class",
+      "bytes": 10055,
+      "sha256": "4f37e2875a3dc733b09aa6b384340035444581d4e1d16bcb087ef6325a389c20",
+      "this_class": "heteronpu/continuous/UnifiedMoeActivationGroupOwnerV3$$anon$1.class",
+      "SourceFile": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "source_sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeActivationGroupOwnerV3.class",
+      "bytes": 84518,
+      "sha256": "9263c79bfd92566ed87acabc0bcf027dfafa3eaaa7e41d7eeaa31d4c4d9ced90",
+      "this_class": "heteronpu/continuous/UnifiedMoeActivationGroupOwnerV3.class",
+      "SourceFile": "UnifiedMoeActivationGroupOwnerV3.scala",
+      "source_sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeDenseWritebackFenceV2$$anon$1.class",
+      "bytes": 6492,
+      "sha256": "b89e897833bfeb4e6f9c94754f346dbe3f4efa297e311dad6234e44e633d675d",
+      "this_class": "heteronpu/continuous/UnifiedMoeDenseWritebackFenceV2$$anon$1.class",
+      "SourceFile": "UnifiedMoeDenseWritebackV2.scala",
+      "source_sha256": "5d746c8802b7d297d047b273f21b20af9713d309639bcce6b6f7fd7f472e0c20"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeDenseWritebackFenceV2.class",
+      "bytes": 38135,
+      "sha256": "7e04e80a74210aba6a2c649e1248c95fa85694fa104e5679ff3e95f8b5742cf8",
+      "this_class": "heteronpu/continuous/UnifiedMoeDenseWritebackFenceV2.class",
+      "SourceFile": "UnifiedMoeDenseWritebackV2.scala",
+      "source_sha256": "5d746c8802b7d297d047b273f21b20af9713d309639bcce6b6f7fd7f472e0c20"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeDenseWritebackV2.class",
+      "bytes": 5884,
+      "sha256": "e77fbda519b45ae72a62d10e86f6b0aa813a8e2a7c9e8444320ce4391cdd1e30",
+      "this_class": "heteronpu/continuous/UnifiedMoeDenseWritebackV2.class",
+      "SourceFile": "UnifiedMoeDenseWritebackV2.scala",
+      "source_sha256": "5d746c8802b7d297d047b273f21b20af9713d309639bcce6b6f7fd7f472e0c20"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeExpertDenseCommandV2$.class",
+      "bytes": 19239,
+      "sha256": "d4c07702f8cc5babfa29add30a002771fd053a933b3b18741862b671e7edb479",
+      "this_class": "heteronpu/continuous/UnifiedMoeExpertDenseCommandV2$.class",
+      "SourceFile": "UnifiedMoeDenseWritebackV2.scala",
+      "source_sha256": "5d746c8802b7d297d047b273f21b20af9713d309639bcce6b6f7fd7f472e0c20"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeExpertDenseCommandV2.class",
+      "bytes": 6178,
+      "sha256": "6aa921226effb7845b007e619508408eb969c20ff2d90a3c5fd26d2d17b3aaa1",
+      "this_class": "heteronpu/continuous/UnifiedMoeExpertDenseCommandV2.class",
+      "SourceFile": "UnifiedMoeDenseWritebackV2.scala",
+      "source_sha256": "5d746c8802b7d297d047b273f21b20af9713d309639bcce6b6f7fd7f472e0c20"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeFfnGroupJobV3.class",
+      "bytes": 7200,
+      "sha256": "a55a1f835473b7dea4aa9cbac4464dc8d262cd581286e020c7e42c27e00920b0",
+      "this_class": "heteronpu/continuous/UnifiedMoeFfnGroupJobV3.class",
+      "SourceFile": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "source_sha256": "e4c06de0537ca4c80a7ba25f92d76f4f02aa6171ebef8c95ad0592232efdabee"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeFfnGroupPlanV3$.class",
+      "bytes": 19999,
+      "sha256": "073d628541dc2ab881dda6512ebdec63b1aa9694ecba027f5ff4006445ac5c3f",
+      "this_class": "heteronpu/continuous/UnifiedMoeFfnGroupPlanV3$.class",
+      "SourceFile": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "source_sha256": "e4c06de0537ca4c80a7ba25f92d76f4f02aa6171ebef8c95ad0592232efdabee"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeFfnGroupPlanV3.class",
+      "bytes": 1252,
+      "sha256": "0ef19b10b01f1dc6d6f075b9aae93d407378f9c2b87499da252f47f87ed65ac6",
+      "this_class": "heteronpu/continuous/UnifiedMoeFfnGroupPlanV3.class",
+      "SourceFile": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "source_sha256": "e4c06de0537ca4c80a7ba25f92d76f4f02aa6171ebef8c95ad0592232efdabee"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeFfnGroupResultV3.class",
+      "bytes": 5346,
+      "sha256": "cd2c760894ae5e0b7f1c789dfb26dfa638a0880a8f281053923fdea6a84d833f",
+      "this_class": "heteronpu/continuous/UnifiedMoeFfnGroupResultV3.class",
+      "SourceFile": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "source_sha256": "e4c06de0537ca4c80a7ba25f92d76f4f02aa6171ebef8c95ad0592232efdabee"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeFfnGroupSequencerV3$$anon$1.class",
+      "bytes": 9888,
+      "sha256": "6bc9dfe7738de549a1f99db6027d70dcf25c324f6f84b5c111f4e110930c003d",
+      "this_class": "heteronpu/continuous/UnifiedMoeFfnGroupSequencerV3$$anon$1.class",
+      "SourceFile": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "source_sha256": "e4c06de0537ca4c80a7ba25f92d76f4f02aa6171ebef8c95ad0592232efdabee"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeFfnGroupSequencerV3.class",
+      "bytes": 83989,
+      "sha256": "6ec69aa82db10e629f698e4fbd50bfda3d97652ff6a82c79169f1e85be4e44b3",
+      "this_class": "heteronpu/continuous/UnifiedMoeFfnGroupSequencerV3.class",
+      "SourceFile": "UnifiedMoeFfnGroupSequencerV3.scala",
+      "source_sha256": "e4c06de0537ca4c80a7ba25f92d76f4f02aa6171ebef8c95ad0592232efdabee"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeLogical32SwiGluConsumerV3$$anon$1.class",
+      "bytes": 8527,
+      "sha256": "118f0094d24536eb65cb5935aa2416eff02f6600e4e9f31bf65c63bc4265e868",
+      "this_class": "heteronpu/continuous/UnifiedMoeLogical32SwiGluConsumerV3$$anon$1.class",
+      "SourceFile": "UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "source_sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeLogical32SwiGluConsumerV3.class",
+      "bytes": 70799,
+      "sha256": "e7ac7829f1bd4f39ceccc38cb1ca27619dfddc0b85dbd793c179d9a7a270e691",
+      "this_class": "heteronpu/continuous/UnifiedMoeLogical32SwiGluConsumerV3.class",
+      "SourceFile": "UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "source_sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeLogical32SwiGluInputV3.class",
+      "bytes": 3483,
+      "sha256": "9b3a0f1c2a134fb47316beb11b200b8a23dfa81f523704ca16e6f67742dc3333",
+      "this_class": "heteronpu/continuous/UnifiedMoeLogical32SwiGluInputV3.class",
+      "SourceFile": "UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "source_sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeLogical32SwiGluResultV3.class",
+      "bytes": 5991,
+      "sha256": "13a6b6e3c2d744555b0513902ddc4abd2e58826f2bd20241addb303f5cca3728",
+      "this_class": "heteronpu/continuous/UnifiedMoeLogical32SwiGluResultV3.class",
+      "SourceFile": "UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "source_sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedRawFp32FormatRequestV3.class",
+      "bytes": 3180,
+      "sha256": "9188e64bb41287eab7dc2368ee93afda0db54f6d9cd24e5f66a66532189bd002",
+      "this_class": "heteronpu/continuous/UnifiedRawFp32FormatRequestV3.class",
+      "SourceFile": "UnifiedSharedFormatProtocolV3.scala",
+      "source_sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedRawFp32FormatResultV3.class",
+      "bytes": 3626,
+      "sha256": "74d9f2122020858e35d22090f5388a115a66303ebeed54e1c265329ddb89d741",
+      "this_class": "heteronpu/continuous/UnifiedRawFp32FormatResultV3.class",
+      "SourceFile": "UnifiedSharedFormatProtocolV3.scala",
+      "source_sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedScalarClientV2.class",
+      "bytes": 4041,
+      "sha256": "43c1c7cfb16994925f3f8ebf110b969c2198bd0b7b2601fdc74f66453e66ce68",
+      "this_class": "heteronpu/continuous/UnifiedScalarClientV2.class",
+      "SourceFile": "UnifiedScalarPolicyV2.scala",
+      "source_sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedScalarPolicyV2$.class",
+      "bytes": 886,
+      "sha256": "864f2b1e26dd094c98360c6bbb76a0a349fcefab28294a8d6e8503ce534666c5",
+      "this_class": "heteronpu/continuous/UnifiedScalarPolicyV2$.class",
+      "SourceFile": "UnifiedScalarPolicyV2.scala",
+      "source_sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedScalarPolicyV2.class",
+      "bytes": 1003,
+      "sha256": "64d5147b9d8d5d378370425ba0829cedb447310ded2741997dd8f587b575a678",
+      "this_class": "heteronpu/continuous/UnifiedScalarPolicyV2.class",
+      "SourceFile": "UnifiedScalarPolicyV2.scala",
+      "source_sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedScalarRequestV2.class",
+      "bytes": 3604,
+      "sha256": "12041d62edec92bf5713668f0a5a7aac5ffcda3b1f66b0369c342616346cfe32",
+      "this_class": "heteronpu/continuous/UnifiedScalarRequestV2.class",
+      "SourceFile": "UnifiedScalarPolicyV2.scala",
+      "source_sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "role": "production_compile",
+      "relative": "heteronpu/continuous/UnifiedScalarResultV2.class",
+      "bytes": 4543,
+      "sha256": "385eb737d68c386433730de698a917872f1fd128dd4ab765b412a08980b072b3",
+      "this_class": "heteronpu/continuous/UnifiedScalarResultV2.class",
+      "SourceFile": "UnifiedScalarPolicyV2.scala",
+      "source_sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "role": "spec_compile",
+      "relative": "heteronpu/continuous/UnifiedMoeLogical32SwiGluConsumerV3Spec.class",
+      "bytes": 125910,
+      "sha256": "9d095254178bf0ddda8ed5ff0b65af3996524f48f6e6ba8ad82238ad1ae8c8be",
+      "this_class": "heteronpu/continuous/UnifiedMoeLogical32SwiGluConsumerV3Spec.class",
+      "SourceFile": "UnifiedMoeLogical32SwiGluConsumerV3Spec.scala",
+      "source_sha256": "895a582d0aaed41ff541f643ef4db219f54290fb111946f5a07e73cb72330990"
+    }
+  ],
+  "class_count": 49,
+  "total_class_bytes": 642819,
+  "stages": [
+    {
+      "sources": 6,
+      "dependency_classes": 20,
+      "new_classes": 28,
+      "new_bytes": 429787,
+      "native_exit": 0,
+      "cleanup": true,
+      "result": {
+        "bytes": 7714,
+        "sha256": "49a37419d2a0909ca3ee1dd31db3b0421c73651d147a66653b11513d7f4eb42e"
+      },
+      "review": {
+        "bytes": 8789,
+        "sha256": "79d4a430cb7b673e6a3b0d99ea0d5ec8cc5bc4f1f3f8c1c066d7f256a67c6e9c"
+      },
+      "freeze": {
+        "bytes": 1283,
+        "sha256": "1da73074eac77bcaa7bb276f38990613f90b66cff75fcfe50c6c9ab5d7d5058b"
+      }
+    },
+    {
+      "sources": 1,
+      "dependency_classes": 48,
+      "new_classes": 1,
+      "new_bytes": 125910,
+      "native_exit": 0,
+      "cleanup": true,
+      "result": {
+        "bytes": 7708,
+        "sha256": "5ff575df8ee00dfc8e52fc71497e15b8a43d123929ea12a3339bd19777471da8"
+      },
+      "review": {
+        "bytes": 5767,
+        "sha256": "19cb39a0c84685602a37e6f37376f5185f930a8015781dfa187cf76776a58312"
+      },
+      "freeze": {
+        "bytes": 1503,
+        "sha256": "0262e0387877af134cb0e8fea3f6bae6207ab802af20cb1a832f6799ed723472"
+      }
+    }
+  ],
+  "class_bytes_uploaded": false,
+  "scope": "No wholeQwenOwnerProtocol compilation in these invocations. Exact20dependency symbols reused after source/identity closure. Hashes/source identity do not substitute for rebuilding their source dependencies."
+}

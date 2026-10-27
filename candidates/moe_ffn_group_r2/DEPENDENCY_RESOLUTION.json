@@ -1,0 +1,277 @@
+{
+  "status": "PUBLIC_SOURCE_RECOVERY_ROLES_NOT_HERMETIC_RUNTIME",
+  "fixed_repository_commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+  "selected_dependency_source_roles": [
+    {
+      "source_file": "Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "selected_class_files": [
+        "heteronpu/continuous/MemoryRequest.class",
+        "heteronpu/continuous/MemoryResponse.class",
+        "heteronpu/continuous/Status$.class",
+        "heteronpu/continuous/Status.class",
+        "heteronpu/continuous/TensorMath.class",
+        "heteronpu/continuous/TensorMath$.class",
+        "heteronpu/continuous/Tensor.class"
+      ],
+      "recovery": "exact_repository_blob",
+      "reference": {
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+        "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+        "bytes": 3123,
+        "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+        "git_blob_sha": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+      }
+    },
+    {
+      "source_file": "QwenOwnerProtocol.scala",
+      "bytes": 50196,
+      "sha256": "5153894739c0c3b68510e1d4ab34ad58071edaa3f248bd7999bcfe10dfe7059e",
+      "selected_class_files": [
+        "heteronpu/continuous/QwenOwnerJob.class",
+        "heteronpu/continuous/QwenOwnerKind$.class",
+        "heteronpu/continuous/QwenOwnerKind.class",
+        "heteronpu/continuous/QwenOwnerResult.class"
+      ],
+      "recovery": "published_source_recipe_not_bare_repository_file",
+      "recipe_output_path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/QwenOwnerProtocol.scala",
+      "recipe_references": [
+        "candidates/qwen2_ordered_vector_compile_evidence/README_CN.md",
+        "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+        "candidates/qwen2_ordered_vector_compile_evidence/stage_inputs.py",
+        "candidates/qwen2_composed_handoff/replay_handoff.py",
+        "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/reproduce_sources.py",
+        "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/PLANNED_SOURCE_PINS.json",
+        "candidates/qwen2_ordered_vector_chisel/prepare.py",
+        "candidates/qwen2_ordered_vector_chisel/PROFILE_PINS.json",
+        "candidates/qwen2_ordered_vector_chisel/ordered_fold.patch"
+      ],
+      "root_source_not_equivalent": true
+    },
+    {
+      "source_file": "UnifiedRuntimeProfile.scala",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+      "selected_class_files": [
+        "heteronpu/continuous/UnifiedProfileId$.class",
+        "heteronpu/continuous/UnifiedProfileId.class",
+        "heteronpu/continuous/UnifiedRuntimeProfile$.class",
+        "heteronpu/continuous/UnifiedRuntimeProfile.class"
+      ],
+      "recovery": "exact_repository_blob",
+      "reference": {
+        "path": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+        "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+        "bytes": 4003,
+        "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+        "git_blob_sha": "f3f5267da29db59cc09e3021d7ad5fad35cd82d8"
+      }
+    },
+    {
+      "source_file": "UnifiedBlockProtocol.scala",
+      "bytes": 2690,
+      "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3",
+      "selected_class_files": [
+        "heteronpu/continuous/UnifiedBlockDispatchV1.class",
+        "heteronpu/continuous/UnifiedBlockLaunchV1.class"
+      ],
+      "recovery": "exact_repository_blob",
+      "reference": {
+        "path": "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+        "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+        "bytes": 2690,
+        "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3",
+        "git_blob_sha": "91f2899067b392974d9dfc01a157d7999cd2ff61"
+      }
+    },
+    {
+      "source_file": "BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "selected_class_files": [
+        "heteronpu/continuous/ScalarRequest.class",
+        "heteronpu/continuous/ScalarOp.class",
+        "heteronpu/continuous/ScalarOp$.class"
+      ],
+      "recovery": "exact_repository_blob",
+      "reference": {
+        "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+        "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+        "bytes": 8313,
+        "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+        "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+      }
+    }
+  ],
+  "public_references": [
+    {
+      "path": "candidates/shared_scalar_policy_v2/source/UnifiedScalarPolicyV2.scala",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 858,
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+      "git_blob_sha": "90bd0ea5e031c95a34d636206d4f128c405a6e8a"
+    },
+    {
+      "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 27004,
+      "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+      "git_blob_sha": "a28ba70c38053b7212787b78ed0ebc8949ece3a8"
+    },
+    {
+      "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047",
+      "git_blob_sha": "98d221a4c2426b16ebcb80b8153b2f9d31805a02"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Protocol.scala",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "git_blob_sha": "4908d7fe3100042341d45abc0e60eca7b7c16726"
+    },
+    {
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedRuntimeProfile.scala",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+      "git_blob_sha": "f3f5267da29db59cc09e3021d7ad5fad35cd82d8"
+    },
+    {
+      "path": "candidates/unified_4096_runtime_admission/source/UnifiedBlockProtocol.scala",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 2690,
+      "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3",
+      "git_blob_sha": "91f2899067b392974d9dfc01a157d7999cd2ff61"
+    },
+    {
+      "path": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/BlockFloat.scala",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "git_blob_sha": "021c878dcb1106335d8a0cf768fdb862ab00533c"
+    },
+    {
+      "path": "candidates/qwen2_ordered_vector_compile_evidence/README_CN.md",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 7205,
+      "sha256": "67b44bf1bf9a89a27cfd93279fab81679a3e94669246abc47a8246a9e756bac6",
+      "git_blob_sha": "e514e82e8c20c5609f932d6d396245e2d5e724c1"
+    },
+    {
+      "path": "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 13746,
+      "sha256": "ce68505557a0c50fc9e5dfbfac531d3e13b8abb99d6e3f167392a645a0e693df",
+      "git_blob_sha": "6c61653b0d4435ad90a84e86dab6964668540f86"
+    },
+    {
+      "path": "candidates/qwen2_ordered_vector_compile_evidence/stage_inputs.py",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 2262,
+      "sha256": "ae8a6fded719ab4d6641ec9e4377aea1d159271f60a526eb4998f05cc5d28c05",
+      "git_blob_sha": "29f32337a8f32557341b77cecfc493f8bfa3f466"
+    },
+    {
+      "path": "candidates/qwen2_composed_handoff/replay_handoff.py",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 14371,
+      "sha256": "7265521ce1b66f28f6fb01ea24aa5f18821d25854ecc4881e41d3bf1fe473456",
+      "git_blob_sha": "a6edcb230c11a8b821ef6c1c2e010953b143cd1d"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/reproduce_sources.py",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 1778,
+      "sha256": "98bf5bdae269f42662711cc278110d6239195962cd0e8f48c6ec80c99386f690",
+      "git_blob_sha": "fbcd743029e900e596adb2bd545d98ef103609f5"
+    },
+    {
+      "path": "candidates/qwen2_resident_matrix/production_qk16_rebase/classcompile/PLANNED_SOURCE_PINS.json",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 13746,
+      "sha256": "6bb5311a4e48a134c7fd118d70a8760c2fe083158f480dd32b66177f0d27b83d",
+      "git_blob_sha": "81380c14b36cd4546d47b08a4d1e11a06282898b"
+    },
+    {
+      "path": "candidates/qwen2_ordered_vector_chisel/prepare.py",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 4532,
+      "sha256": "af28137a8b13d3bdad850dc1a79c261a4be25222d869ed46f1da682ad69532e3",
+      "git_blob_sha": "5b185170f607179e36934e8f08620e3a0e0789d2"
+    },
+    {
+      "path": "candidates/qwen2_ordered_vector_chisel/PROFILE_PINS.json",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 2236,
+      "sha256": "526a9227de4dfe3a7e674c13164f2767b5a6a388ceb2f6eafc89c4918572c12a",
+      "git_blob_sha": "6524784289bab1691020896937b45fcb286a3a6f"
+    },
+    {
+      "path": "candidates/qwen2_ordered_vector_chisel/ordered_fold.patch",
+      "commit": "d0c8194aec480393dd14d8e79773f729d98e2d41",
+      "bytes": 23270,
+      "sha256": "e2325b7d7436a269687ba9fe1d2aaa45ef9a8b109189b2fa815e28aea7e998b8",
+      "git_blob_sha": "73c161cae7df13450bb0880aca8daac6ff99f199"
+    }
+  ],
+  "recipe": {
+    "ordered_steps": [
+      "Use exact fixed checkout and replay_handoff.py --source-root REPOSITORY --output NEW; preserve its designed INCOMPLETE/exit2 and bounded-slice findings.",
+      "Run ordered-vector prepare.py --selected-root NEW/installed --out PATCH3. Its exact patch/profile pins restore QwenOwnerProtocol515389; this output is not bare main.",
+      "For a complete baseline class rebuild follow the pinned compile-evidence README: reproduce_sources with separately pinned external20 HardFloat, apply selected3, stage exact92. No class-only shortcut or automatic target execution is supplied here."
+    ],
+    "source_restore_does_not_need_JVM": true,
+    "full92_class_rebuild_requires_external20_HardFloat": true,
+    "hardfloat_pins_reference": "candidates/qwen2_ordered_vector_compile_evidence/SOURCE_PINS.json",
+    "current_packager_reran_recipe": false,
+    "prior_source_only_reconstruction_reviewed_output": {
+      "bytes": 66298,
+      "sha256": "f4157f476950d848dd295f0d9508c26dc092298cbfd267ba7d64840c8a572b43"
+    },
+    "prior_recipe_EXIT2_INCOMPLETE_preserved": true
+  },
+  "class_selection_rule": "Restore qualified baseline sources and independently rebuild/qualify exact dependency artifacts, then choose only listed20 class symbols. Do not compile these five whole files as an allegedly self-contained set, substitute bare-main QwenOwnerProtocol, mix duplicate classroots, or treat old opaque class hashes as a public executable bundle. Production stage selected20 plus six sources creates28; Spec stage selected48 plus one unchangedSpec creates1; final49 classes are metadata only.",
+  "definition_selection": {
+    "FormatV3": "Only the copied exact405B source in this candidate is selected. An alternate identical public norm-prefix reference must not be compiled alongside it.",
+    "ScalarV2": "Use exactly one fixed public00e52 protocol reference; no implementation/other scalar module is implicitly selected."
+  },
+  "private_source_association": {
+    "bytes": 13317,
+    "sha256": "04d63c3e26ff1e369770d6d047cfa77c33a986b7fc068867fa87813a5089c348"
+  },
+  "inherited_review_pins": [
+    {
+      "role": "prior_sourcefile_review",
+      "review": {
+        "bytes": 12178,
+        "sha256": "0b743cff875adf2b8000bf8263401ecb77553e7ee117c036d31709b00a3d2749"
+      }
+    },
+    {
+      "role": "production_actual_review",
+      "review": {
+        "bytes": 8789,
+        "sha256": "79d4a430cb7b673e6a3b0d99ea0d5ec8cc5bc4f1f3f8c1c066d7f256a67c6e9c"
+      }
+    },
+    {
+      "role": "spec_actual_review",
+      "review": {
+        "bytes": 5767,
+        "sha256": "19cb39a0c84685602a37e6f37376f5185f930a8015781dfa187cf76776a58312"
+      }
+    },
+    {
+      "role": "r2_source_review",
+      "review": {
+        "bytes": 5536,
+        "sha256": "874c9a47c93e652b070f1339e6535bd48a7d2b11ace1806138a4bfd46a345f5f"
+      }
+    }
+  ],
+  "runtime_limit": "Source recovery does not close historical JDK/Python cache/environment/runtime admission or grant future execution authority. Use separately frozen bounded admission before any target."
+}

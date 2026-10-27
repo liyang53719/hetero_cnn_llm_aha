@@ -1,0 +1,94 @@
+{
+  "local_sources": [
+    {
+      "path": "source/UnifiedSharedFormatProtocolV3.scala",
+      "bytes": 405,
+      "sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b"
+    },
+    {
+      "path": "source/UnifiedMoeDenseWritebackV2.scala",
+      "bytes": 5993,
+      "sha256": "5d746c8802b7d297d047b273f21b20af9713d309639bcce6b6f7fd7f472e0c20"
+    },
+    {
+      "path": "source/UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "bytes": 7540,
+      "sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4"
+    },
+    {
+      "path": "source/UnifiedMoeActivationGroupOwnerV3.scala",
+      "bytes": 10768,
+      "sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c"
+    },
+    {
+      "path": "source/UnifiedMoeFfnGroupSequencerV3.scala",
+      "bytes": 12120,
+      "sha256": "e4c06de0537ca4c80a7ba25f92d76f4f02aa6171ebef8c95ad0592232efdabee"
+    },
+    {
+      "path": "tests/UnifiedMoeLogical32SwiGluConsumerV3Spec.scala",
+      "bytes": 8776,
+      "sha256": "895a582d0aaed41ff541f643ef4db219f54290fb111946f5a07e73cb72330990"
+    }
+  ],
+  "production_source_count": 6,
+  "spec_source_count": 1,
+  "fixed_public_refs": [
+    {
+      "role": "scalar_v2_protocol",
+      "commit": "2c2142db2b69520b92cdb9cf74c95947c3232aef",
+      "path": "candidates/shared_scalar_policy_v2/source/UnifiedScalarPolicyV2.scala",
+      "bytes": 858,
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7"
+    },
+    {
+      "role": "ordered_106_jars",
+      "commit": "43801d4043ef49524b93dbccb5c1f0bf4bb8f258",
+      "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+      "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+      "key": "ordered_classpath"
+    },
+    {
+      "role": "retained_leader_cleanup",
+      "commit": "43801d4043ef49524b93dbccb5c1f0bf4bb8f258",
+      "path": "scripts/idma_source_export_20261017/strict_cleanup.py",
+      "bytes": 23204,
+      "sha256": "30458e67e84c362ff74d69a702624e91bc3c3089600dd36a2469d9ffd6ec4047"
+    }
+  ],
+  "required_selected_dependency_sources": [
+    {
+      "source_file": "Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783"
+    },
+    {
+      "source_file": "QwenOwnerProtocol.scala",
+      "bytes": 50196,
+      "sha256": "5153894739c0c3b68510e1d4ab34ad58071edaa3f248bd7999bcfe10dfe7059e"
+    },
+    {
+      "source_file": "UnifiedRuntimeProfile.scala",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963"
+    },
+    {
+      "source_file": "UnifiedBlockProtocol.scala",
+      "bytes": 2690,
+      "sha256": "7600920609c106f91098ca94be64a8c44207cc7e834e406d544f9ccbca6d73a3"
+    },
+    {
+      "source_file": "BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "selected_symbols": [
+        "ScalarRequest",
+        "ScalarOp",
+        "ScalarOp$"
+      ]
+    }
+  ],
+  "dependency_resolution": "Exact source filenames/SHA are factual; publisher must bind verified repository paths/commit or include missing normal source before closing a public repro. No guessed repository paths or opaque class upload.",
+  "same_name_policy": "Compile only one definition of each class. FormatV3/DenseFence copied exact because no verified public ref was available during author packaging. ScalarV2 protocol must come from the fixed ref once.",
+  "owner_ABI": "QwenOwnerProtocol515389 contains materializeDenseOutput; c590/history labels alone do not establish ABI. Exact source hash mandatory."
+}

@@ -1,0 +1,83 @@
+{
+  "status": "ORIGINAL_WRAPPER_FAIL_PRESERVED_INDEPENDENT_LIMITED_THREE_CONTROL_FACTS_PASS",
+  "original_execution": {
+    "wrapper_exit_code": 1,
+    "original_qualified": false,
+    "native_observed_exit_code": 0,
+    "cleanup_direct_exit_code": 0,
+    "original_errors": [
+      "RuntimeError: exact selected case reporter line: reject unknown raw response before accepting a new logical tile"
+    ],
+    "original_inputs_unchanged": true,
+    "original_exact_three_tests_passed": true,
+    "tool_receipt_layer": "Author archived original tool fields; not a machine-signature approval or separate platform attestation."
+  },
+  "original_result": {
+    "bytes": 7602,
+    "sha256": "e23bfc3843ceb8fc0c95391485dcc81d8c0267c67d545cf73e0f60e1c10295eb"
+  },
+  "native_result": {
+    "bytes": 7226,
+    "sha256": "36bcd8edc4a6ff6df4b8789541b7e2e466207dd40baf83ccb02396224767701d"
+  },
+  "original_log": {
+    "path": "actual/short_control.log",
+    "bytes": 732,
+    "sha256": "e5be95a562a92f310dc279403af2d542c479084a629b474ea9a62b9dea7fc7d1"
+  },
+  "original_actual_freeze": {
+    "bytes": 4440,
+    "sha256": "6031125678c69221ad88cf9f3843f04baa2915dad3849548be6d0dd42e3efee9"
+  },
+  "independent_review": {
+    "bytes": 9690,
+    "sha256": "bceee320387b40fcfe87eee356fd1495a79fd8ce49ef2c938324b5d062783d14"
+  },
+  "independent_review_freeze": {
+    "bytes": 1670,
+    "sha256": "2e3132d22911bffbb69fba61c68eec6afeace0adca3d82a710df64c79029aeeb"
+  },
+  "resources": {
+    "sampled_group_cpu_seconds": 5.17,
+    "sampled_peak_rss_bytes": 191311872,
+    "sampled_output_bytes": 310826,
+    "owned_start_through_postflight_wall_seconds": 5.530808165902272,
+    "reporter_case_seconds": [
+      3.09,
+      0.657,
+      0.572
+    ],
+    "reporter_run_seconds": 4.637,
+    "complete_external_wall_seconds": null,
+    "notes": "Case durations are reporter wall, not per-caseCPU. Terminal poll duration is not complete externalwall. No performance/isolation claim."
+  },
+  "control_scope": [
+    "Case1: separate fresh zeroALU DUT; unknown raw Scalar.valid simultaneous with proposed new tile prevents begin.fire/response.fire, sticky quarantine/resetRequired, no Scalar request or result, remains blocked after bad valid drops.0 mock requests.",
+    "Case2: separate fresh DUT; one policy1 request then policy0 response is consumed but not returned-credit. Protocol/undrained/data0, issued1/returned0, flagsResponses0, formatIssued0, quarantine/resetRequired; selected fields rechecked after4held steps and no re-admission after result.fire. Not a per-cycle/full-bundle trace.",
+    "Case3: separate fresh DUT; matching policy1 mock error=true/flagsValid=false retires one request, Numerical/drainedtrue/data0/issued1returned1/flagsResponses0/formatIssued0/quarantinefalse/resetRequired. Mock arithmetic-error branch, not a real arithmetic error or IEEE qualification.",
+    "Only these3 source-bound assertion paths ran. Long192Scalar+64format positive test was excluded. No full group/sequence owner, sequencer wrong identity, actual Scalar/ALU/formatter, numerical P7/Div/SiLU/BF16, physical32II1, DDR/full4096/fullblock or throughput result."
+  ],
+  "parser_failure": {
+    "cause": "Frozen runner expected reporter \"- <test text>\" whereas AnyFlatSpec produced \"- should <test text>\". Original regex returns0 for all3 actual lines. Failure occurred after input postverification and aggregate-pass assignment, before CASE_LINES/GENERATED_IR writes.",
+    "preserved": "Original TEST_RESULT qualifiedfalse/errors and tool exit1 remain exact. No source/result/log edits or target retry. Own review adds a separate interpretation rather than changing the original qualification.",
+    "review_coverage_gap": "The prior source-gate pure synthetic reporter fixture omitted the same should prefix, so it did not test compatibility with actual AnyFlatSpec output. Prior admission PASS is not retroactively changed; this newly observed wrapper defect and missed synthetic coverage are explicitly recorded here.",
+    "future": "Any future runner reuse needs a separately frozen exact parser correction and gate approval; this actual interpretation does not update or authorize the old runner."
+  },
+  "evidence_layers": [
+    "Exact original env-i entry and Java argv match fixed1suite/3full-t names,49classes two roots and106JAR. No compiler/emit/other suite/fallback invocation. Pre-native119.683398s remained of original120s before one owned90s call; cleanup85/work75 deadlines preserved.",
+    "Original worker full source/class/JAR/JDK pre/post loops completed before parser fault; source-bound success is a completed loop receipt, not independent per-item dynamic import evidence. Author130 before/after rows match; this review fresh-small-hashed nonclass rows and only current-statted49 classes, with no runtime bulk reread.",
+    "Original pinned strict-cleanup helper retained the anchored direct leader until the cleanup barrier. Two complete scans contained only the original unreaped defunct leader and no nonleader; canonical scan-evidence digest was independently recomputed. The barrier preceded direct reap with exit0, no signal was sent after reap, and cleanup finished within its original deadline. This is offline anchored original-group evidence, not a fresh live census. Machine process IDs and clock-origin counters are intentionally omitted from this public projection.",
+    "Original CASE_LINES.json and GENERATED_IR.json do not exist because parser raised. Author postterminal GENERATED_IR_INVENTORY is separate:3\u00d796908B lowFIR, claimed sameSHA be8c4a9b\u2026, only currentstats checked here; no independent IR content/module parse and no SV/RTL claim.",
+    "Author0446 parser explanation is bound as author supplemental evidence, not called an independent third-party review. This reviewer evaluated the original732B log and compiled-source assertions independently."
+  ],
+  "not_claimed": [
+    "original_wrapper_success",
+    "arithmetic",
+    "group_or_sequencer_execution",
+    "real_memory_Dense_Scalar_format",
+    "physical32II1",
+    "full4096",
+    "fullblock_M128",
+    "performance"
+  ]
+}

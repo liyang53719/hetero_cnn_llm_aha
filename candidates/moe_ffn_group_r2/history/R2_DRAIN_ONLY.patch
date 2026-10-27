@@ -1,0 +1,46 @@
+--- blocked/source/UnifiedMoeLogical32SwiGluConsumerV3.scala
++++ r2/source/UnifiedMoeLogical32SwiGluConsumerV3.scala
+@@ -90,11 +90,19 @@
+   when(io.scalar.request.fire){out.scalarIssued:=out.scalarIssued+1.U;state:=waitScalar}
+   when(io.scalar.result.fire){
+     val r=io.scalar.result.bits
+-    out.scalarReturned:=out.scalarReturned+1.U
+-    when(r.primitiveFlagsValid){out.primitiveFlags:=out.primitiveFlags|r.flags
+-      out.primitiveFlagResponses:=out.primitiveFlagResponses+1.U}
+-    val bad=r.policy=/=req.policy || r.error || !TensorMath.finite(r.value)
+-    when(bad||fault){finishError(Mux(bad,Status.Numerical.U,Status.Dependency.U))}.otherwise{
++    when(r.policy=/=req.policy){
++      // A different policy echo is NOT evidence that this pending request
++      // returned. Consume the bad packet, retain issued/returned imbalance,
++      // and expose an invalid UNDRAINED Protocol result until isolation.
++      // Do not attribute its primitive flags or data to the current owner.
++      poison:=true.B;quarantined:=true.B
++      out.status:=Status.Protocol.U;out.data:=0.U;out.drained:=false.B;state:=report
++    }.otherwise{
++      out.scalarReturned:=out.scalarReturned+1.U
++      when(r.primitiveFlagsValid){out.primitiveFlags:=out.primitiveFlags|r.flags
++        out.primitiveFlagResponses:=out.primitiveFlagResponses+1.U}
++      val bad=r.error || !TensorMath.finite(r.value)
++      when(bad||fault){finishError(Mux(bad,Status.Numerical.U,Status.Dependency.U))}.otherwise{
+       state:=prepare
+       switch(phase){
+         is(0.U){expValue:=r.value;phase:=1.U}
+@@ -103,6 +111,7 @@
+         is(3.U){sigmoid:=r.value;phase:=4.U}
+         is(4.U){rawFormat:=r.value;firstFormat:=true.B;state:=prepareFormat}
+         is(5.U){rawFormat:=r.value;firstFormat:=false.B;state:=prepareFormat}
++      }
+       }
+     }
+   }
+--- blocked/source/UnifiedMoeFfnGroupSequencerV3.scala
++++ r2/source/UnifiedMoeFfnGroupSequencerV3.scala
+@@ -181,7 +181,7 @@
+     val exact=out.completedStages===2.U && r.context.asUInt===job.context.asUInt && r.expert===job.expert && r.groupRows===job.groupRows &&
+       r.output===job.activationOutput && r.ownerSequence===job.firstOwnerSequence+2.U
+     when(!exact|| !eligible){
+-      val locallyDrained=r.drained && !quarantine && !unknownDense && !unknownActivation &&
++      val locallyDrained=exact && r.drained && !quarantine && !unknownDense && !unknownActivation &&
+         !dense.io.contextReserved && !dense.io.resetRequired && !activation.io.resetRequired
+       fail(Mux(!exact,Status.Protocol.U,Mux(r.status=/=Status.Ok.U,r.status,Status.Dependency.U)),locallyDrained)
+     }.otherwise{

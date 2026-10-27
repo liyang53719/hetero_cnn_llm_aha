@@ -1,0 +1,47 @@
+{
+  "status": "TEMP_TYPED_MOE_SOURCE_WITH_ORIGINAL_WRAPPER_FAIL",
+  "author_overlay": {
+    "bytes": 4521,
+    "sha256": "23b95d27d091e6caff9a9c0a5a84931ab7f1386f8063ebd0bf9115d5e0edb746"
+  },
+  "original_overlay_retained": {
+    "bytes": 3888,
+    "sha256": "9e198c8c49d0a865371bd8d24392a796c88d28c33e5325a084ad0dc479150833"
+  },
+  "private_process_identity_projection_only": true,
+  "known_first_transaction_zero_integration_limit": {
+    "source_witnesses": [
+      {
+        "path": "source/UnifiedMoeDenseWritebackV2.scala",
+        "bytes": 5993,
+        "sha256": "5d746c8802b7d297d047b273f21b20af9713d309639bcce6b6f7fd7f472e0c20",
+        "line": 38,
+        "source_expression": "c.context.transactionId=/=0.U && c.context.launch.version===1.U && c.context.launch.opcode===0.U &&"
+      },
+      {
+        "path": "source/UnifiedMoeActivationGroupOwnerV3.scala",
+        "bytes": 10768,
+        "sha256": "0e82f844bdfaa07da2cc17f50463cfb2b3617bb18bd72af86f6e0eddcc7ced9c",
+        "line": 84,
+        "source_expression": "c.transactionId=/=0.U && c.launch.version===1.U && c.launch.opcode===0.U &&"
+      }
+    ],
+    "finding": "The copied DenseWriteback and ActivationGroup eligibility predicates reject transactionId0. The actual common Admission parent starts at0; this bundle is not a qualified complete parent/group connection.",
+    "other_family_boundaries": "Author/root additionally identified nonzero-transaction predicates in older RouterDense/Gather/DownReader and a pipeline last-id initialized to0. Those source families and their proposed fixes are not included or qualified by this package.",
+    "evidence_kind": "Static source eligibility finding, not a new target execution and not a cause attributed to the historical three short tests or wrapper parser failure.",
+    "current_three_negative_cases_do_not_cover_first_txn0_complete_chain": true,
+    "future_repair_not_included": true
+  },
+  "qualification_layers": {
+    "production_typecheck": "6 sources ->28 newclasses, selected20 dependency classes, actual type only",
+    "spec_typecheck": "1 unchangedSpec ->1 class, selected48 dependencies, actual type only",
+    "three_short_cases": "3 source-bound mock protocol/negative cases completed; no real arithmetic services or full sequencer/parent execution",
+    "original_wrapper": "FAIL exit1/qualifiedfalse preserved, should-prefix reporter parser defect after nativeexit0; separate log interpretation is not a rerun or silent promotion",
+    "positive_long_case": "192 scalar+64format excluded/unexecuted",
+    "physical_resources": "zeroALU control modules; logical32 != physical32II1; fixed4096 not reduced or qualified",
+    "five_full_blocks": "0/5 full original-Chisel M128 and same-hardware RTL acceptance unchanged"
+  },
+  "no_new_Host_RouteGroup_helper_or_weights": true,
+  "no_runtime_hermetic_claim": true,
+  "old_source_STOP_and_wrapper_FAIL_preserved": true
+}

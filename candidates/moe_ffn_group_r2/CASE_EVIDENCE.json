@@ -1,0 +1,37 @@
+{
+  "status": "THREE_SELECTED_MOCK_PROTOCOL_CASES_COMPLETED",
+  "exact_full_names": [
+    "zeroALU logical32 SwiGLU transaction sequencing should reject unknown raw response before accepting a new logical tile",
+    "zeroALU logical32 SwiGLU transaction sequencing should quarantine a mismatched policy without retiring its pending scalar credit",
+    "zeroALU logical32 SwiGLU transaction sequencing should retire a current-policy arithmetic error without treating it as an identity mismatch"
+  ],
+  "cases": [
+    {
+      "full_test_name": "zeroALU logical32 SwiGLU transaction sequencing should reject unknown raw response before accepting a new logical tile",
+      "reporter_line": "- should reject unknown raw response before accepting a new logical tile (3 seconds, 90 milliseconds)",
+      "duration_reporter_text": "3 seconds, 90 milliseconds"
+    },
+    {
+      "full_test_name": "zeroALU logical32 SwiGLU transaction sequencing should quarantine a mismatched policy without retiring its pending scalar credit",
+      "reporter_line": "- should quarantine a mismatched policy without retiring its pending scalar credit (657 milliseconds)",
+      "duration_reporter_text": "657 milliseconds"
+    },
+    {
+      "full_test_name": "zeroALU logical32 SwiGLU transaction sequencing should retire a current-policy arithmetic error without treating it as an identity mismatch",
+      "reporter_line": "- should retire a current-policy arithmetic error without treating it as an identity mismatch (572 milliseconds)",
+      "duration_reporter_text": "572 milliseconds"
+    }
+  ],
+  "case_lines": 3,
+  "extra_case_lines": 0,
+  "exact_total_tests": 3,
+  "succeeded": 3,
+  "failed": 0,
+  "canceled": 0,
+  "ignored": 0,
+  "pending": 0,
+  "suites_completed": 1,
+  "suites_aborted": 0,
+  "excluded_long_case_seen": false,
+  "parser": "Independent strict11-line grammar: fixed run/suite/behavior headers, three exact should-name lines in order with bounded duration syntax, run-completed and exact aggregates. No substring wildcard/filter relaxation.10 negative fixture mutations reject missing should/duplicate/extra long/failure/abort/pending/wrongcounts/suite/suffixedname."
+}

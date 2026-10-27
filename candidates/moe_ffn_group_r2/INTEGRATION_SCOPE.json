@@ -1,0 +1,33 @@
+{
+  "source_state": "Sixproduction sources typechecked, separateSpec compiled; only rawconsumer3negativecases executed. Sourcegroupsequencer normalpath remains unexecuted.",
+  "source_history": {
+    "r2_source_review": {
+      "bytes": 5536,
+      "sha256": "874c9a47c93e652b070f1339e6535bd48a7d2b11ace1806138a4bfd46a345f5f"
+    },
+    "r2_source_freeze": {
+      "bytes": 2469,
+      "sha256": "3f9b3faaa3d2aed069828ed95bfc27c59bcc3567ae5f13ff5685af949cad34c0"
+    },
+    "old_blocked_retained": true,
+    "changes": [
+      "Unknown policy echo cannot prove current pending ownership: no returned credit,Protocol,stickyquarantine,drainedfalse.",
+      "Wrong activation identity cannot be a localdrain witness: exact included in sequencer predicate."
+    ]
+  },
+  "stale_comments": {
+    "Host_version8": "The frozen sequencer comment says public Host version8. Correct external meaning is an8-bit version FIELD, not version numeric8. Internal DispatchV1.version1 unchanged; actual public adapter must explicitly bind its approved numeric version.",
+    "Spec_prepared_only": "Frozen Spec comment predates compile and selected tests. The exact evidence above updates scope externally without rewriting source bytes."
+  },
+  "numerical_scope": "Logical32 is a64-byte tile served serially by shared rawservices:192scalar+64format per tile, not32physical lanes/II1. P7/Div/SiLU recipe and twoBF16 boundaries are source only here; matching mock replies do not establish Torch/IEEE or fullmodel equality.",
+  "parent_mandatory": [
+    "Actual postnorm/Gather commits tied to accepted destination/fullcontext/ownerSequence and region3authorization.",
+    "Private disjoint allocator workspace grant/lifetime; never hostbase or commitBool.",
+    "One common original Dense/Scalar/format/DDR arbiter with currentpoison,fulltag,stableoffers,truecredit/drain and finalfence.",
+    "Responses registered minimum nextcycle; early/unknown returns quarantine.",
+    "Only issuedcurrentpolicy arithmeticerrors can retire currentdebt under realfulltag isolation; policy mismatch alone cannot.",
+    "No automatic Hostprofile opening; current integration missing trustedMoEallocator/parentconnection.",
+    "N1sharedgateDense and originalTorchtie numerical compatibility remain unresolved, not bypassed."
+  ],
+  "excluded_source": "Uncompiled GatherFFN helper/RouteGrouptxn0successor,32II1physicalhardware,weightmapper/payload and independent fullreference not part of this package."
+}

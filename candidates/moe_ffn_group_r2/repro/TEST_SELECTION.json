@@ -1,0 +1,15 @@
+{
+  "suite": "heteronpu.continuous.UnifiedMoeLogical32SwiGluConsumerV3Spec",
+  "behavior": "zeroALU logical32 SwiGLU transaction sequencing",
+  "selected_full_names": [
+    "zeroALU logical32 SwiGLU transaction sequencing should reject unknown raw response before accepting a new logical tile",
+    "zeroALU logical32 SwiGLU transaction sequencing should quarantine a mismatched policy without retiring its pending scalar credit",
+    "zeroALU logical32 SwiGLU transaction sequencing should retire a current-policy arithmetic error without treating it as an identity mismatch"
+  ],
+  "selected_test_texts": [
+    "reject unknown raw response before accepting a new logical tile",
+    "quarantine a mismatched policy without retiring its pending scalar credit",
+    "retire a current-policy arithmetic error without treating it as an identity mismatch"
+  ],
+  "excluded_test_text": "preserve six separate scalar nodes and two format boundaries for every logical element"
+}

@@ -1,0 +1,72 @@
+{
+  "fixed_tools": {
+    "Scala": "2.13.16",
+    "Chisel": "6.7.0",
+    "chiseltest": "6.0.0",
+    "ScalaTest": "3.2.19",
+    "JDK": "21"
+  },
+  "closed_environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "HETERO_CPU": "assigned_single_cpu"
+  },
+  "python_flags": [
+    "-I",
+    "-S",
+    "-B"
+  ],
+  "target_java_flags": [
+    "-XX:-UsePerfData",
+    "-Xmx512m",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1"
+  ],
+  "test_runner": [
+    "org.scalatest.tools.Runner",
+    "-R",
+    "@SPEC_CLASSES@",
+    "-oD",
+    "-s",
+    "heteronpu.continuous.UnifiedMoeLogical32SwiGluConsumerV3Spec",
+    "-t",
+    "zeroALU logical32 SwiGLU transaction sequencing should reject unknown raw response before accepting a new logical tile",
+    "-t",
+    "zeroALU logical32 SwiGLU transaction sequencing should quarantine a mismatched policy without retiring its pending scalar credit",
+    "-t",
+    "zeroALU logical32 SwiGLU transaction sequencing should retire a current-policy arithmetic error without treating it as an identity mismatch"
+  ],
+  "class_path_order": [
+    "spec1classes",
+    "dependency48classes",
+    "ordered106JARreference"
+  ],
+  "test_budget": {
+    "cpu_seconds": 60,
+    "work_seconds": 75,
+    "cleanup_end_seconds": 85,
+    "owned_seconds": 90,
+    "outer_seconds": 120,
+    "minimum_remaining_before_spawn": 100,
+    "sampled_RSS_bytes": 1073741824,
+    "output_bytes": 10485760
+  },
+  "compile_budget": {
+    "cpu_seconds": 120,
+    "work_seconds": 165,
+    "cleanup_end_seconds": 175,
+    "owned_seconds": 180,
+    "outer_seconds": 210,
+    "minimum_remaining_before_spawn": 190,
+    "heap_MiB": 512,
+    "sampled_RSS_bytes": 1073741824,
+    "output_bytes": 10485760
+  },
+  "template": {
+    "actual_source_sha256": "b8a74d39bccbf8b02cb6a238abdeccc6cbc7e47ce40b4ac422633f2e9bc1af18",
+    "template_sha256": "44d212bcec937fadc1192de5fd5ab50479efde33f9ed1941c367d51b0d350161",
+    "transformation": "Single HELPER path literal replaced by fixed role marker; no other byte changed. Template not actual launch and never target-executed."
+  },
+  "qualification": "Original failed wrapper is NOT patched or reused. Future target execution requires fresh identity/no-shadow/prepost/outer cleanup gates and corrected exact reporter parser; this package gives original selection and caps, not automatic execution approval."
+}

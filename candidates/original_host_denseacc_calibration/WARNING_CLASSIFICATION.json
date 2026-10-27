@@ -1,0 +1,170 @@
+{
+  "bounded_contexts": {
+    "bytes_read_for_saved_samples": 14222,
+    "first_last_per_class": 28
+  },
+  "classes": [
+    {
+      "constant_width": 1,
+      "count": 2,
+      "first_ordinal": 1,
+      "last_ordinal": 2,
+      "operator": "ADD",
+      "operator_width": 8,
+      "side": "RHS"
+    },
+    {
+      "constant_width": 2,
+      "count": 2,
+      "first_ordinal": 3,
+      "last_ordinal": 4,
+      "operator": "ADD",
+      "operator_width": 8,
+      "side": "RHS"
+    },
+    {
+      "constant_width": 3,
+      "count": 4,
+      "first_ordinal": 5,
+      "last_ordinal": 8,
+      "operator": "ADD",
+      "operator_width": 8,
+      "side": "RHS"
+    },
+    {
+      "constant_width": 4,
+      "count": 8,
+      "first_ordinal": 9,
+      "last_ordinal": 16,
+      "operator": "ADD",
+      "operator_width": 8,
+      "side": "RHS"
+    },
+    {
+      "constant_width": 1,
+      "count": 8176,
+      "first_ordinal": 17,
+      "last_ordinal": 62192,
+      "operator": "EQ",
+      "operator_width": 4,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 1,
+      "count": 496,
+      "first_ordinal": 18,
+      "last_ordinal": 65394,
+      "operator": "EQ",
+      "operator_width": 8,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 2,
+      "count": 512,
+      "first_ordinal": 20,
+      "last_ordinal": 65396,
+      "operator": "EQ",
+      "operator_width": 8,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 3,
+      "count": 1024,
+      "first_ordinal": 24,
+      "last_ordinal": 65400,
+      "operator": "EQ",
+      "operator_width": 8,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 4,
+      "count": 2048,
+      "first_ordinal": 32,
+      "last_ordinal": 65408,
+      "operator": "EQ",
+      "operator_width": 8,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 5,
+      "count": 4096,
+      "first_ordinal": 48,
+      "last_ordinal": 65424,
+      "operator": "EQ",
+      "operator_width": 8,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 6,
+      "count": 8192,
+      "first_ordinal": 80,
+      "last_ordinal": 65456,
+      "operator": "EQ",
+      "operator_width": 8,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 7,
+      "count": 16384,
+      "first_ordinal": 144,
+      "last_ordinal": 65520,
+      "operator": "EQ",
+      "operator_width": 8,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 2,
+      "count": 8192,
+      "first_ordinal": 783,
+      "last_ordinal": 62960,
+      "operator": "EQ",
+      "operator_width": 4,
+      "side": "LHS"
+    },
+    {
+      "constant_width": 3,
+      "count": 16384,
+      "first_ordinal": 1551,
+      "last_ordinal": 64496,
+      "operator": "EQ",
+      "operator_width": 4,
+      "side": "LHS"
+    }
+  ],
+  "count_crosscheck": {
+    "EQ4": "16 * (8 * 256 - 1) = 32752",
+    "EQ8": "16 * (16 * 128 - 1) = 32752",
+    "interpretation": "Counts are consistent with 16 selector lanes, narrow row/column constants and one default (0,0) arm per lane; full header lexical classification, not a full second RTL semantic proof."
+  },
+  "counts": {
+    "ADD_8_RHS": 16,
+    "EQ_4_LHS": 32752,
+    "EQ_8_LHS": 32752,
+    "WIDTHEXPAND": 65520
+  },
+  "independent_complete_header_pass": {
+    "all_constant_widths_strictly_narrower_than_operator_width": true,
+    "all_constants_unsigned_hex": true,
+    "all_declared_constant_widths_equal_reported_generated_width": true,
+    "all_literal_values_fit_declared_width": true,
+    "all_regex_matched": true,
+    "all_source_paths_exact": true,
+    "bytes_read_at_exact_indexed_header_offsets": 16605249,
+    "full_raw_log_reread": false,
+    "headers": 65520,
+    "raw_log_rehashed": false
+  },
+  "risk_disposition": "No observed warning-derived blocker to separately reviewed bounded finite-miter C++ compile/link admission: these are value-preserving unsigned constant widening, not narrowing or signed/unknown-literal diagnostics. Runtime equality, initialization contract, protocol and hardware QoR remain unproved.",
+  "source_index": {
+    "bytes": 2583876,
+    "index_cap_bytes": 16777216,
+    "path": "warning-index.tsv",
+    "raw_bytes": 28223182,
+    "raw_log": "worker.log",
+    "raw_sha256": "8702336df389b507db9529229e4623596e2cc1af224c0b75f4872b633d63701d",
+    "records": 65520,
+    "scope": "complete retained log indexing; diagnostic completeness separately requires natural native0 and full artifacts",
+    "sha256": "869b33d032b0b87c583b9d4c2f752d96454df865f46baf9d3c75402c20d986c9"
+  },
+  "status": "COMPLETE_ALL_INDEXED_WARNING_HEADERS_CLASSIFIED"
+}

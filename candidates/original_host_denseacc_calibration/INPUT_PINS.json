@@ -1,0 +1,27 @@
+{
+  "published_parent_recipe": "candidates/original_host_official_lowering/REPRODUCTION.json",
+  "parent": {
+    "filename": "original-high.fir",
+    "bytes": 69399011,
+    "sha256": "38fcdbd7ffba39a28e637e3e2fca99a333472071e6d151be5f1d2fe5da77988f"
+  },
+  "core": {
+    "filename": "Qwen2ContinuousBlock.raw.fir",
+    "bytes": 4429273,
+    "sha256": "bc4dbb1ba1b31c887bb72a48e938dc05592b7c476859b08cf5dea11a42c561d8"
+  },
+  "parsed_module_serialize_sha256": "341ecb4c4ec3ebf04f56ad78e60a5eabb42b5f708c8285cbea56b15222af9cef",
+  "read_only_packaging_crosscheck": "A full streaming SHA of the retained public-recipe parent and the complete extracted Core confirmed both pinned identities and one target module; no target or JVM was executed.",
+  "not_included": [
+    "raw/low/final FIRRTL",
+    "generated SystemVerilog",
+    "generated C++",
+    "ELF",
+    "classes",
+    "jars",
+    "weights",
+    "reference-array data",
+    "NPZ",
+    "bulk logs"
+  ]
+}

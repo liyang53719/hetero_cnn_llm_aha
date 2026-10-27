@@ -1,0 +1,89 @@
+{
+  "schema": "small-public-source-metadata-manifest-v1",
+  "files": {
+    "ACTUAL_FACTS.json": {
+      "bytes": 2385,
+      "sha256": "652efbe9bab28327818f0909ea5b7e164afefc1f1ef7d6d4a82af373314340b5"
+    },
+    "CLASS_RECOVERY.json": {
+      "bytes": 13423,
+      "sha256": "834278950bebb0507c4bfbbbcef48b034916f3c3c66d2efd835dfbbbbb1a7bcd"
+    },
+    "DEPENDENCY_PINS.json": {
+      "bytes": 25563,
+      "sha256": "d6d0aa43b012117a5dc32200ec8c14844d0f74618a6fd50ae29e50096bf5ce88"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 4460,
+      "sha256": "4994a49c43eea1fa4af2c81e81fe6aad02d90b11ff32a1b5ba2344db2d78eb0c"
+    },
+    "FAILURE_HISTORY.json": {
+      "bytes": 2894,
+      "sha256": "322eb00d9c2e5224d55810c5be70a2e11452aaf39b5b42b883d7700677f0dcd6"
+    },
+    "INPUT_PINS.json": {
+      "bytes": 957,
+      "sha256": "52749eeb83fd7f25ebfd57188b6347ce69de28e1c2f0f6d90e44ea21566ca0e7"
+    },
+    "PUBLIC_REFERENCES.json": {
+      "bytes": 6291,
+      "sha256": "afb0026d59bb95b002a90865c7f8ada0268f552477b9cee9a3c104a00623f129"
+    },
+    "README_ZH.md": {
+      "bytes": 5121,
+      "sha256": "4816df3754c4557c62f0cc21247c0210305c3730588d4e47689f3eab16ccaae5"
+    },
+    "REPRODUCTION.json": {
+      "bytes": 13129,
+      "sha256": "1e2a9124bafe1c9e68f2a01f271236c58a7046068e909c58671a049a093780a8"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 3104,
+      "sha256": "0e23a5bbb36b93bfdd45c160ad13382d1ef1b5981fca0f20631bc3944286962b"
+    },
+    "WARNING_CLASSIFICATION.json": {
+      "bytes": 4533,
+      "sha256": "a2b236d99833af5d8a639681d85c252f1041e5f5972565844ccd9ec85b2b73e2"
+    },
+    "check_calibration_output.py": {
+      "bytes": 1528,
+      "sha256": "16210992d310645295cd92722068c2d5aef200491f51fe56f04fcacb79df949f"
+    },
+    "extract_core_input.py": {
+      "bytes": 2938,
+      "sha256": "c0cd667c8d957843fb82527c14a55ed0c6a2324f73eafde3befafc71672e5490"
+    },
+    "reproduction/compile_link.sh.in": {
+      "bytes": 25203,
+      "sha256": "b7d2138d7e3d1cebee89fdf6500e1e6f96adc8bf06e6c4e65b4644aa6bff1ef4"
+    },
+    "source/HostCompiledRawEmitter.scala": {
+      "bytes": 21368,
+      "sha256": "638689f69d57becd8acb999fc2c977bcff3b9a20bc43c4b4843add1a2462eebe"
+    },
+    "source/HostDenseAccCalibrationEmitter.scala": {
+      "bytes": 9091,
+      "sha256": "279326856715ee46e18b593f67d1a6cd83aa1594a3d6de2529953570d333720c"
+    },
+    "source/HostDenseAccMemoryLowering.scala": {
+      "bytes": 7571,
+      "sha256": "151756021d0bdf9b8e1d746a8051d975e7d3b6921d9c844b5f2955cba74a514f"
+    },
+    "source/HostMatrixResultFifoMemoryLowering.scala": {
+      "bytes": 5481,
+      "sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb"
+    },
+    "source/denseacc_calibration_driver.cpp": {
+      "bytes": 4829,
+      "sha256": "59ae3b09364aff011f8349235973a620759c7ab483e69d299c0154e1d50abd35"
+    },
+    "test_public_helpers.py": {
+      "bytes": 2720,
+      "sha256": "d8f5b66960bea34c132d0e82ea7eea62b14ad596326db0bb7c0ddd412c30a249"
+    },
+    "verify_package.py": {
+      "bytes": 5373,
+      "sha256": "7eb48d40314053bda148a58885cb035b2bdc4286e6fc08727c3968f377717d7f"
+    }
+  }
+}

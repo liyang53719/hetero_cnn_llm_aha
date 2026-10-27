@@ -1,0 +1,61 @@
+{
+  "status": "PASS_INDEPENDENT_ACTUAL_DENSEACC_FINITE_STORAGE_CALIBRATION_ONLY",
+  "run_id": "20261027T2159",
+  "independent_review_id": "20261027T2202",
+  "native_exit": 0,
+  "outer_exit": 0,
+  "observed": {
+    "alias_checks": 200704,
+    "beat_domain": 16,
+    "clocked_cycles": 17,
+    "full_word_capacity": 4096,
+    "pair_checks": 401408,
+    "row_domain": 32,
+    "scans": 49,
+    "witness_checks": 401408,
+    "words_per_read": 16,
+    "write_masks": 8
+  },
+  "finite_arithmetic": {
+    "pair_checks": "49*32*16*16=401408",
+    "witness_checks": "49*32*16*16=401408",
+    "alias_checks": "49*16*16*16=200704"
+  },
+  "binary_identity": {
+    "bytes": 640432,
+    "sha256": "8dbc9ea6b0e923d21e48c57bb287c2d2da8ebb55b9254b949ec665ffb7e07e35"
+  },
+  "log_identity": {
+    "bytes": 513,
+    "sha256": "44a0ec2bdcda7914b44191c322437ab3e99d48ddd6d7ca7cbbd01725e6c034b5"
+  },
+  "driver_original_sha256": "59ae3b09364aff011f8349235973a620759c7ab483e69d299c0154e1d50abd35",
+  "resources": {
+    "max_tree": 641746,
+    "peak_cpu": 0.17,
+    "peak_rss": 2281472,
+    "wall_seconds": 0.2987363609718159
+  },
+  "independent_checks": 55,
+  "run_pre_post": {
+    "pin_checks": 46,
+    "aliases": 6,
+    "absent": 32
+  },
+  "storage": "Original 16x256x32 unreset register versus exact transformed 16x8192 memory with 16 simultaneous writers and one asynchronous read; both retain all4096words.",
+  "predicate_abstraction": "Only the original three write predicates are replaced by independent test inputs; real storage/update/index/read AST is mechanically extracted. This is not full Host control equivalence.",
+  "initialization": "Unchanged driver threads(1), randReset(0), clock-low eval then reset prelude: fixed two-state simulation only. Original storage is not hardware-reset or proven zero-initialized.",
+  "cleanup_scope": "Producer validated in-memory strict cleanup seal; this independent audit verifies persisted owner/proof/scanbound consistency, not reconstructing raw live scans.",
+  "five_block_M128_Chisel_RTL": "0/5 unchanged",
+  "not_proved": [
+    "formal or arbitrary-stimulus equivalence",
+    "complete lifetime/reset proof",
+    "Host controller or AXI correctness",
+    "full-Host equivalence",
+    "five-block M128 numerical acceptance",
+    "provider RTL acceptance",
+    "physical SRAM inference",
+    "PPA/QoR or performance"
+  ],
+  "packager_native_tests": 0
+}

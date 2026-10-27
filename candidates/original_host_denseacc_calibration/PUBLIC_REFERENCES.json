@@ -1,0 +1,132 @@
+{
+  "base_commit": "67b8888f46941736a7af759406e37207d8568297",
+  "reference_semantics": "Existing source and reconstruction metadata at this pinned commit; no generated payload fallback. References were checked against exact cached Git blobs from the preceding published tree; the only67b changes are unrelated maintenance paths.",
+  "references": [
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/original_host_official_lowering/README_ZH.md",
+      "git_blob_sha": "5d55a581d7d4428ca93315bc94155093b629ef04",
+      "bytes": 4179,
+      "sha256": "2005998acd244d3ef95bffdf9537206bffde1597aa867dc73713bcfb7b26570b"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/original_host_official_lowering/SOURCE_SELECTIONS.json",
+      "git_blob_sha": "590c3af41abf91f1b05a0b4bd96634c3f5d06fff",
+      "bytes": 30067,
+      "sha256": "97dcb7e273ef0e2910cfa31305337d88e5f3591ea9722a12ea66b7a5cf94def5"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/original_host_official_lowering/CLASS_SELECTIONS.json",
+      "git_blob_sha": "5097f6d1eef9018267d8a25b19c1f11657479032",
+      "bytes": 275415,
+      "sha256": "27f32ef81bb3454f1c0d9fc956ab3bedc976bb9e968f1f6d16028c79da5b225f"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/original_host_official_lowering/REPRODUCTION.json",
+      "git_blob_sha": "9ff7bf796545443da231b58e6af17117ca7f8d2e",
+      "bytes": 12272,
+      "sha256": "adc19f2f82f93e20251bab76f2a5bae07875cf3c340248a191353733ff737961"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/original_host_official_lowering/ACTUAL_FACTS.json",
+      "git_blob_sha": "f808152821054fa55929982264af06a466759793",
+      "bytes": 5938,
+      "sha256": "393f5357795d9a637cfc02076ded0a5c51b4febce1cbc77a902dd56eecf28959"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/original_host_official_lowering/PUBLIC_REFERENCES.json",
+      "git_blob_sha": "e6801b6aec13e44c36ed61c3711cb905926e1e74",
+      "bytes": 9504,
+      "sha256": "81e89fbca6f5b6841cca78f1be187a3eb7260ab3ab65828cafffdf2194e5a2de"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/original_host_official_lowering/rebuild_metadata.py",
+      "git_blob_sha": "ec04bb5fc0383ce2eacae54444d253f4f97d3033",
+      "bytes": 6549,
+      "sha256": "9c817b44c1ef71ef85fd533ea0046dc3839c7d39012354977a0fc3a7ac01c799"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_functional_backend/SOURCE_REFS.json",
+      "git_blob_sha": "0b8b64e07c51de610f1c1983959e6d305b2719a1",
+      "bytes": 3061,
+      "sha256": "2bc72a4f9802041323f7bd2c961201062701e17bee3ed5025589fc306d43dc05"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_functional_backend/REPRODUCTION.json",
+      "git_blob_sha": "c1c5ae9fa637024e61e4020e015c679ed3dde4a8",
+      "bytes": 11833,
+      "sha256": "e5513652ce1cadc2aa407858344cbb1b56f265df33c461e808ac84fda9751ddc"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_compiled_unseeded/SOURCE_SELECTIONS.json",
+      "git_blob_sha": "ea75fc46f595ce29154cc9e5a8bd4234bca36c04",
+      "bytes": 7480,
+      "sha256": "5ab3953fef3745448adc8de1e9c70c142ab492155abf56e452bc2a51dd32f52f"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_compiled_unseeded/CLASS_SELECTION_DELTA.json",
+      "git_blob_sha": "3d8a150cf915b622fd4a888040099a124b0f1b68",
+      "bytes": 31008,
+      "sha256": "5bfc4eb849e758b37b2d152eab72436ae9a6deb99ec82a23076973aac5a74f36"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_compiled_unseeded/source/RetainedServicePhaseObserver.scala",
+      "git_blob_sha": "a9069039bd20667c1f51292e5f570440013ea4d5",
+      "bytes": 1647,
+      "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+      "git_blob_sha": "a28ba70c38053b7212787b78ed0ebc8949ece3a8",
+      "bytes": 27004,
+      "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/qwen2_core_client_verilator_lint/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "git_blob_sha": "662ab3e625a29dfe435a5c5df2285d7aa7185bf9",
+      "bytes": 4416,
+      "sha256": "4b7fffebe07effc89052765132531ca206c4b5d695ad42a28b7b82b3d009c49e"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/qwen2_core_client_build/pins/GCC14_FORMAT_AND_MMD_SOURCE.json",
+      "git_blob_sha": "53a8a915f5e993371f0ea2afd45b5cb6a7cd2597",
+      "bytes": 8678,
+      "sha256": "ed53320a8ddc3703d315c69e377b7eb76245b14348d535968bce506dc8742c8a"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_functional_backend/source/FiniteFp32Backend.scala",
+      "git_blob_sha": "5daf53ba8ebbe294db539850629f98e768e85cd4",
+      "bytes": 2946,
+      "sha256": "d6e0a600144b3ac111ed5e070b0d46c39e1ff4f3ad1c3325678d31c0f38ea000"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_functional_backend/source/RetainedBackendCircuitGate.scala",
+      "git_blob_sha": "ca0a09b86e469dc47b71bd3ceac6782b46e721dc",
+      "bytes": 4012,
+      "sha256": "08a45bf19ff8850aa56678bf8b0b6d9150d3a8f45e26809da2a1191a9426b4fb"
+    },
+    {
+      "commit": "67b8888f46941736a7af759406e37207d8568297",
+      "path": "candidates/retained_matrix_functional_backend/source/RetainedEndpointFunctionalModel.scala",
+      "git_blob_sha": "c90449e5797c777b4e27a87be121af7680ae3100",
+      "bytes": 13394,
+      "sha256": "20653305d4ff192d52633bd551a4188466d23c540eef0fd65342f976244065b9"
+    }
+  ]
+}

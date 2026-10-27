@@ -1,0 +1,58 @@
+{
+  "entries": [
+    {
+      "stage": "1311",
+      "status": "Earlier warning-fatal codegen failure retained",
+      "note": "Do not overwrite or convert to PASS after1335 diagnostic completion."
+    },
+    {
+      "stage": "1335; reviewed2137",
+      "status": "VERIFIED_DIAGNOSTIC_COMPLETE_NOT_NUMERICAL_OR_HARDWARE_ACCEPTANCE",
+      "native_exit": 0,
+      "outer_exit": 0,
+      "warnings": {
+        "ADD_8_RHS": 16,
+        "EQ_4_LHS": 32752,
+        "EQ_8_LHS": 32752,
+        "WIDTHEXPAND": 65520
+      },
+      "flag": "-Wno-fatal only; all65520 WIDTHEXPAND warnings retained and classified, no category suppression.",
+      "warning_review_limit": "Complete indexed headers classified; independent reviewer did not rehash/reread full raw log. Classification is not a second RTL proof."
+    },
+    {
+      "stage": "2141",
+      "status": "FAIL_PRESERVED",
+      "native_exit": 0,
+      "outer_exit": 1,
+      "reason": "The24PCH family prediction incorrectly transferred exact duplicateverilated.h multiplicity2 from DPI-enabledseed0949 to no-DPI calibration. Seed PCH includesverilated_dpi.h afterverilated.h; that runtime header includesverilated.h again and the observed seedMD second occurrence directly followsverilated_dpi.h. Current PCH omits DPI and all28actualMD lists are unique. PCH presence alone was insufficient evidence for multiplicity2. Initial source reviewer verified the family map but did not catch this missing DPI distinction.",
+      "not_compiler_failure": true
+    },
+    {
+      "stage": "2150",
+      "status": "PASS_INDEPENDENT_RETAINED28TU_BUILD_MD_ELF_RUNTIME_POSTCHECK_ORIGINAL_FAIL_PRESERVED_NOT_RUN",
+      "corrected_postcheck": "All28 MD lists have zero duplicate tokens. Exact57 retained products and ELF/runtime closure independently accepted without rebuild/run; original FAIL and outer1 stay retained.",
+      "compiler_warning_counts": {
+        "-Wsign-compare": 644,
+        "-Wunused-parameter": 476,
+        "-Wunused-variable": 4
+      }
+    },
+    {
+      "stage": "2151",
+      "status": "SOURCE_REJECTED_NOT_DUT_EXECUTED",
+      "reason": "Outer selected nonexistent SOURCE_AND_TOOL_PINS.json instead of SOURCE_AND_RUNTIME_PINS.json and did not enforce hard/soft RLIMIT_CORE=0;2157 corrected both. No DUT execution."
+    },
+    {
+      "stage": "2157",
+      "status": "SOURCE_REJECTED_NOT_DUT_EXECUTED",
+      "reason": "Runner still selected prepare2151; successor2159 changes only selected prepare path to2159 and retains core-dump limits."
+    },
+    {
+      "stage": "2159; reviewed2202",
+      "status": "PASS_INDEPENDENT_ACTUAL_DENSEACC_FINITE_STORAGE_CALIBRATION_ONLY",
+      "meaning": "Only the unchanged finite original-versus-transformed storage miter passed. No retroactive historical PASS or full-block qualification."
+    }
+  ],
+  "all_prior_failures_retained": true,
+  "five_block_M128_Chisel_RTL": "0/5 unchanged"
+}

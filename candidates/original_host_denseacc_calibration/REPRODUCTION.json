@@ -1,0 +1,310 @@
+{
+  "status": "PINNED_MANUAL_RECIPE_NOT_EXECUTED_BY_PACKAGER",
+  "base_commit": "67b8888f46941736a7af759406e37207d8568297",
+  "commands": {
+    "typecheck1232": {
+      "original_command": {
+        "bytes": 36402,
+        "sha256": "f29408e9fc288527e52d9f9a0e65b2d6c49599fe3da28352099a8ebfcfa466f1"
+      },
+      "recorded_role_command": {
+        "argv": [
+          "${JAVA21}",
+          "-Duser.home=${RUN_TYPECHECK1232}/home",
+          "-Djava.io.tmpdir=${RUN_TYPECHECK1232}/tmp",
+          "-XX:-UsePerfData",
+          "-Xmx1g",
+          "-Xss4m",
+          "-XX:ActiveProcessorCount=1",
+          "-cp",
+          "${PINNED_CLASSPATH106}",
+          "scala.tools.nsc.Main",
+          "-classpath",
+          "${RUN_TYPECHECK1232}/baseline_classes:${PINNED_CLASSPATH106}",
+          "-Xplugin:${DEPS_PRIMARY}/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+          "-language:reflectiveCalls",
+          "-d",
+          "${RUN_TYPECHECK1232}/classes",
+          "${PACKAGE}/source/HostCompiledRawEmitter.scala",
+          "${PACKAGE}/source/HostDenseAccMemoryLowering.scala",
+          "${PACKAGE}/source/HostDenseAccCalibrationEmitter.scala"
+        ],
+        "cwd": "${RUN_TYPECHECK1232}",
+        "environment": {
+          "HOME": "${RUN_TYPECHECK1232}/home",
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8",
+          "PATH": "/usr/bin:/bin",
+          "TMPDIR": "${RUN_TYPECHECK1232}/tmp"
+        },
+        "caps": {
+          "affinity": [
+            1
+          ],
+          "as_hard_bytes": 4294967296,
+          "cleanup_deadline_seconds": 160,
+          "cpu_seconds": 120,
+          "heap_bytes": 1073741824,
+          "log_bytes": 2097152,
+          "outer_wall_seconds": 210,
+          "rss_sampled_bytes": 2147483648,
+          "single_file_bytes": 50331648,
+          "total_wall_seconds": 180,
+          "tree_bytes": 67108864,
+          "work_wall_seconds": 150
+        }
+      }
+    },
+    "emit1300": {
+      "original_command": {
+        "bytes": 19841,
+        "sha256": "21be61ec3cfe7b33aa392c1abd6027b0a268abd54b71f1e721d6dda209f4f9ff"
+      },
+      "recorded_role_command": {
+        "argv": [
+          "${JAVA21}",
+          "-Duser.home=${RUN_EMIT1300}/home",
+          "-Djava.io.tmpdir=${RUN_EMIT1300}/tmp",
+          "-XX:-UsePerfData",
+          "-Xmx1g",
+          "-Xss4m",
+          "-XX:ActiveProcessorCount=1",
+          "-cp",
+          "${RUN_EMIT1300}/baseline_classes:${PINNED_CLASSPATH106}",
+          "chiseltest.simulator.HostDenseAccCalibrationEmitter"
+        ],
+        "cwd": "${RUN_EMIT1300}",
+        "environment": {
+          "HOME": "${RUN_EMIT1300}/home",
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8",
+          "PATH": "/usr/bin:/bin",
+          "TMPDIR": "${RUN_EMIT1300}/tmp"
+        },
+        "caps": {
+          "affinity": [
+            1
+          ],
+          "as_hard_bytes": 4294967296,
+          "cleanup_deadline_seconds": 100,
+          "cpu_seconds": 60,
+          "heap_bytes": 1073741824,
+          "log_bytes": 2097152,
+          "outer_wall_seconds": 150,
+          "rss_sampled_bytes": 2147483648,
+          "single_file_bytes": 100663296,
+          "total_wall_seconds": 120,
+          "tree_bytes": 268435456,
+          "work_wall_seconds": 90
+        }
+      }
+    },
+    "diagnostic1335": {
+      "original_command": {
+        "bytes": 4933,
+        "sha256": "95bf9c41bc50d0f5f4bcdb3c2d606012ceaa550b3aebd58994fcf5ab20027579"
+      },
+      "recorded_role_command": {
+        "argv": [
+          "${PERL}",
+          "${VERILATOR_BIN}/verilator",
+          "--no-unlimited-stack",
+          "--cc",
+          "--exe",
+          "--assert",
+          "-Wno-fatal",
+          "-sv",
+          "--top-module",
+          "HostDenseAccCalibration",
+          "--prefix",
+          "VHostDenseAccCalibration",
+          "--verilate-jobs",
+          "1",
+          "--threads",
+          "1",
+          "--no-timing",
+          "-CFLAGS",
+          "-std=c++17",
+          "--Mdir",
+          "${RUN_DIAGNOSTIC1335}/model",
+          "${RUN_DIAGNOSTIC1335}/source/denseacc_calibration_driver.cpp",
+          "${RUN_DIAGNOSTIC1335}/source/HostDenseAccCalibration.sv"
+        ],
+        "cwd": "${RUN_DIAGNOSTIC1335}",
+        "environment": {
+          "HOME": "${RUN_DIAGNOSTIC1335}/home",
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "PATH": "${RUN_DIAGNOSTIC1335}/empty-path",
+          "TMPDIR": "${RUN_DIAGNOSTIC1335}/tmp",
+          "VERILATOR_ROOT": "${VERILATOR_ROOT}"
+        },
+        "caps": {
+          "affinity": [
+            1
+          ],
+          "as_hard_bytes": 4294967296,
+          "cleanup_deadline_seconds": 100,
+          "cpu_seconds": 60,
+          "log_bytes": 67108864,
+          "outer_wall_seconds": 150,
+          "rss_sampled_bytes": 2147483648,
+          "single_file_bytes": 67108864,
+          "total_wall_seconds": 120,
+          "tree_bytes": 268435456,
+          "work_wall_seconds": 90
+        }
+      }
+    },
+    "build2141": {
+      "original_command": {
+        "bytes": 95552,
+        "sha256": "5835572509df864ca9298236eb64d8976a004c462e28ef89b0c545d127030377"
+      },
+      "recorded_role_command": {
+        "argv": [
+          "/bin/sh",
+          "${PREPARE_BUILD2141}/compile_link.sh"
+        ],
+        "cwd": "${RUN_BUILD2141}",
+        "environment": {
+          "COMPILER_PATH": "/usr/libexec/gcc/x86_64-linux-gnu/14:/usr/bin",
+          "HOME": "${RUN_BUILD2141}/home",
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8",
+          "PATH": "/usr/bin:/bin",
+          "TMPDIR": "${RUN_BUILD2141}/tmp"
+        },
+        "caps": {
+          "affinity": [
+            1
+          ],
+          "as_hard_bytes": 4294967296,
+          "cleanup_deadline_seconds": 310,
+          "cpu_seconds": 240,
+          "log_bytes": 4194304,
+          "outer_wall_seconds": 360,
+          "rss_sampled_bytes": 2147483648,
+          "single_file_bytes": 134217728,
+          "total_wall_seconds": 330,
+          "tree_bytes": 268435456,
+          "work_wall_seconds": 300
+        }
+      },
+      "link_argv": [
+        "${CXX}",
+        "-std=c++17",
+        "-O1",
+        "-g0",
+        "-fno-fast-math",
+        "-pthread",
+        "${RUN_BUILD2141}/build/denseacc_calibration_driver.o",
+        "${RUN_BUILD2141}/build/verilated.o",
+        "${RUN_BUILD2141}/build/verilated_threads.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration__ConstPool_0.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration__Syms.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__0.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__0__Slow.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__1.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__10.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__11.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__12.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__13.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__14.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__15.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__16.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__17.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__2.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__3.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__4.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__5.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__6.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__7.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__8.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_h3aa09ad1__9.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_hc3ad4171__0.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__DepSet_hc3ad4171__0__Slow.o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration___024root__Slow.o",
+        "/usr/lib/x86_64-linux-gnu/libatomic.so.1.2.0",
+        "-o",
+        "${RUN_BUILD2141}/build/VHostDenseAccCalibration"
+      ]
+    },
+    "run2159": {
+      "original_command": {
+        "bytes": 4943,
+        "sha256": "a26782704b47ed0079cce6b1c9519b5e4aed902b015dc3782ba24ddc5c5348fc"
+      },
+      "recorded_role_command": {
+        "argv": [
+          "${RUN_RUN2159}/bin/VHostDenseAccCalibration"
+        ],
+        "cwd": "${RUN_RUN2159}",
+        "environment": {
+          "HOME": "${RUN_RUN2159}/home",
+          "LANG": "C.UTF-8",
+          "LC_ALL": "C.UTF-8",
+          "LC_CTYPE": "C.UTF-8",
+          "PATH": "${RUN_RUN2159}/empty_path",
+          "TMPDIR": "${RUN_RUN2159}/tmp"
+        },
+        "caps": {
+          "affinity": [
+            1
+          ],
+          "as_hard_bytes": 4294967296,
+          "cleanup_deadline_seconds": 55,
+          "cpu_seconds": 30,
+          "log_bytes": 2097152,
+          "outer_wall_seconds": 90,
+          "rss_sampled_bytes": 1073741824,
+          "single_file_bytes": 16777216,
+          "total_wall_seconds": 70,
+          "tree_bytes": 33554432,
+          "work_wall_seconds": 45
+        }
+      }
+    }
+  },
+  "build_script": "reproduction/compile_link.sh.in",
+  "original_build_script": {
+    "bytes": 46308,
+    "sha256": "d023426c5ad7eaece6314638dd88aa21cd54ff00d6e50e992f71f4cd2ca49fc3"
+  },
+  "build_translation_units": 28,
+  "generated_units": 25,
+  "official_runtime_units": [
+    "verilated.cpp",
+    "verilated_threads.cpp"
+  ],
+  "handwritten_driver_units": 1,
+  "no_make": true,
+  "steps": [
+    "Recover the exact Host sources via the pinned original_host_official_lowering package and its transitive source references. Do not select moving bare-root Host sources. Reproduce its official diagnostic original-high.fir only under fresh bounded runtime admission.",
+    "Run extract_core_input.py against that full high output. Full parent and extracted Core SHA must match INPUT_PINS.json; the extractor never accepts an alternate unpinned Core.",
+    "Recover 883 published classes, remove diagnostic main3, add exact backend/API/observer16 and FIFO3 as CLASS_RECOVERY.json specifies. Compile the actual three sources using ordered106 Maven dependencies. Original 899+37=936 class counts are historical pins; portable path changes require new qualification.",
+    "Place extracted Core at RUN_EMIT1300/inputs/Qwen2ContinuousBlock.raw.fir; the portable calibration emitter uses that relative path. Use a fresh output directory. Full-Host emitter source is provenance only and must not run in the finite calibration replay.",
+    "Apply actual diagnostic1335 flags including -Wno-fatal, not warning suppression. Retain and classify every warning. No injected initialization macros or x-init flags.",
+    "Stage unchanged generated output and driver for the exact 28-TU compile_link.sh.in template; bind approved absolute paths and native tool dependencies, use the recorded build caps. Do not invoke generated Make or execute the full Host.",
+    "Require exact 57 build products, all 28 MD targets/dependencies with zero duplicate tokens, no unknown paths and separately qualified ELF/runtime closure. Do not reproduce the erroneous duplicate=2 expectation. Keep the historical2141 FAIL.",
+    "Only after separate bounded run admission, execute no-argument VHostDenseAccCalibration once using the recorded run limits; check_calibration_output.py must accept all four exact output lines. A fresh replay is new evidence, not the retained2159 run."
+  ],
+  "required_manual_runtime_admission": [
+    "pinned compiler/JDK/Verilator/runtime/header closure",
+    "fresh output trees and exact sources",
+    "recorded CPU, memory, wall, log and tree bounds",
+    "anchored process ownership, no core dumps, terminal cleanup proof",
+    "new actual warnings, MD and ELF/runtime review"
+  ],
+  "not_a_hermetic_launcher": true,
+  "unknown_role_count": 0,
+  "role_notes": {
+    "PREPARE_BUILD2141": "Directory holding the bound compile_link.sh generated from the template; no packaged generator output is supplied.",
+    "PINNED_CLASSPATH106": "Join the ordered dependencies from DEPENDENCY_PINS.json using their two root roles.",
+    "LOCAL_INPUT_roles": "Historical diagnostic/source/runtime evidence roles only; see original command provenance pins. They are not downloadable payloads or executable authority."
+  }
+}

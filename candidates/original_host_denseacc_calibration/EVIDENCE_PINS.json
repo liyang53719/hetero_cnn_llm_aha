@@ -1,0 +1,89 @@
+{
+  "scope": "Original local evidence identities only. No receipt bulk, environment paths, process identities or original logs included.",
+  "pins": {
+    "original_host_denseacc_calibration_run_actual_review_20261027T2202::REVIEW.json": {
+      "bytes": 7800,
+      "sha256": "09d6402e59a93e71eee2a4f6583b3120213d2ec3b7e874fe1bf0cf1433f6297e"
+    },
+    "original_host_denseacc_calibration_run_actual_20261027T2159::RECEIPT.json": {
+      "bytes": 2782,
+      "sha256": "226c6c16d819ae3407da395d7e427236e82625e110818a47c651142007f9123f"
+    },
+    "original_host_denseacc_calibration_build_actual_review_20261027T2150::REVIEW.json": {
+      "bytes": 7230,
+      "sha256": "950e84c9015f057b85ada34e9a4942cac73c707c0dda0515138fe68a240e3cf0"
+    },
+    "original_host_denseacc_calibration_build_actual_review_20261027T2150::ERRATUM.json": {
+      "bytes": 1871,
+      "sha256": "262d70daaca4249252de8084f32ffcd6e55af1ffefeaf54e7de100b521093edb"
+    },
+    "original_host_denseacc_calibration_diagnostic_codegen_actual_review_20261027T2137::REVIEW.json": {
+      "bytes": 11641,
+      "sha256": "8b953b2cff9beb94d5faed797833e6b8db3e076dbb53867cdb1f7f842d9e57db"
+    },
+    "original_host_denseacc_calibration_diagnostic_codegen_actual_review_20261027T2137::CLASSIFICATION.json": {
+      "bytes": 4533,
+      "sha256": "a2b236d99833af5d8a639681d85c252f1041e5f5972565844ccd9ec85b2b73e2"
+    },
+    "original_host_denseacc_calibration_build_actual_20261027T2141::RECEIPT.json": {
+      "bytes": 7371,
+      "sha256": "c417a70bf66326a647a9d80cd3cf9ac731feac74dbeeb665e7c9848d584f5d75"
+    },
+    "original_host_denseacc_calibration_diagnostic_codegen_actual_20261027T1335::RECEIPT.json": {
+      "bytes": 25914,
+      "sha256": "353804287f645db52936054307e500e799cb6dd98d3a9568e7bc878022cd164c"
+    },
+    "original_host_denseacc_calibration_codegen_actual_20261027T1311::RECEIPT.json": {
+      "bytes": 2796,
+      "sha256": "1f30267fbb755d8ae971f29c6881e118b003bf4f3b26c91bd7ce7806160f88e0"
+    },
+    "original_host_denseacc_calibration_typecheck_actual_review_20261027T1246::REVIEW.json": {
+      "bytes": 26782,
+      "sha256": "c649023c530f3be736e5fd5c3bc3641c2dae8f4c649ad868d716d717993a6ce4"
+    },
+    "original_host_denseacc_calibration_retained_emission_actual_review_20261027T1312::REVIEW.json": {
+      "bytes": 4859,
+      "sha256": "639e9a4ebd42b654a8f442b37e837ef0048e9388e3a4dd7e9624b7bd6ecb4d41"
+    },
+    "original_host_denseacc_calibration_emission_actual_review_20261027T1259::REVIEW.json": {
+      "bytes": 5035,
+      "sha256": "1fe3f95745f7eaf21b29336a35e0afa87c98895d29849d837d68290173fa6841"
+    },
+    "original_host_denseacc_calibration_run_runner_20261027T2151::FREEZE.json": {
+      "bytes": 2403,
+      "sha256": "6f1a331616d241a593f984634f696724bc2f8d147a0168d4e3b6df00249303bb"
+    },
+    "original_host_denseacc_calibration_run_runner_20261027T2157::FREEZE.json": {
+      "bytes": 2791,
+      "sha256": "da03e1ce400821bfc4e46a332704e6ca3dacb832a8f13c174f1ea9fb27b59a3b"
+    },
+    "original_host_denseacc_calibration_run_runner_20261027T2159::FREEZE.json": {
+      "bytes": 2792,
+      "sha256": "3040521b450ef88ff08e8b7fb2417975417def31a914e447954f28ab702aa31d"
+    },
+    "original_host_denseacc_calibration_run_source_review_20261027T2200::REVIEW.json": {
+      "bytes": 6032,
+      "sha256": "e730f83a0066b19e7290b72c21e3540a3839acec10042cb822d592adf219bb5e"
+    },
+    "original_host_denseacc_calibration_build_actual_review_20261027T2150::MD_REVIEW.json": {
+      "bytes": 508357,
+      "sha256": "3974e14fa31d3945a91cdaf2ac7944d4a68cf590df25545829dfda214d483753"
+    },
+    "original_host_denseacc_calibration_build_actual_review_20261027T2150::BINARY_RUNTIME_MANIFEST.json": {
+      "bytes": 46133,
+      "sha256": "43d7228e0a79690e4657dd92fba869c3cb12a71189b01a8db234aae97b1b8d17"
+    },
+    "original_host_compiled_emitter_typecheck_prepare_20261027T1058::CLASS_COMPOSITION.json": {
+      "bytes": 318059,
+      "sha256": "4293c0892219b82aa13d6b93bd4116a618236389f6806929467ace91f9de6830"
+    },
+    "original_host_denseacc_calibration_typecheck_prepare_20261027T1232::CLASS_COMPOSITION.json": {
+      "bytes": 318041,
+      "sha256": "6da5e8ae768b44134b90eee52c71ac1c77586e307117162ee9a2d1bc0b149580"
+    },
+    "original_host_denseacc_calibration_typecheck_actual_20261027T1232::CLASS_MANIFEST.json": {
+      "bytes": 14977,
+      "sha256": "14db037d05e3fd3dd268b448cb146a92bb7fc6fde1780a0bb6e9f1095d5d8f5d"
+    }
+  }
+}

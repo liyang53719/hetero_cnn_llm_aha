@@ -1,0 +1,326 @@
+{
+  "status": "METADATA_ONLY_NO_CLASS_PAYLOADS",
+  "base_class_catalog": "candidates/original_host_official_lowering/CLASS_SELECTIONS.json",
+  "base_selection": "final1044",
+  "base_count": 883,
+  "exclude_diagnostic_main3": [
+    {
+      "relative": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5$$anonfun$inventory$33.class",
+      "bytes": 1940,
+      "sha256": "015b5440c2eefc2d19fa61002e679cc90bf32a355e71bb4d4399909a0a2c945f"
+    },
+    {
+      "relative": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5$.class",
+      "bytes": 33011,
+      "sha256": "90f04934fe10519ddce32474e317f47f510c058ae264960892c14dba078e6f74"
+    },
+    {
+      "relative": "chiseltest/simulator/DiagnoseOriginalHostMoePhaseV5.class",
+      "bytes": 1754,
+      "sha256": "ffe41dd9fc3378da767bae27ba0b8c858256c33cbdb387cecc4ac9c811e107d0"
+    }
+  ],
+  "production_count": 880,
+  "add_exact_support16": [
+    {
+      "relative": "heteronpu/continuous/model/FiniteFp32Backend$.class",
+      "bytes": 9197,
+      "sha256": "883fbd29a028cb78a4fb2a751c694e568e3aa0c241bddacbff66da3076d4673a"
+    },
+    {
+      "relative": "heteronpu/continuous/model/FiniteFp32Backend$Rounded$.class",
+      "bytes": 2304,
+      "sha256": "fa9c9c1e705230cd3732e36a46bb1a81b17e50c5a4131d12a0ada27818093124"
+    },
+    {
+      "relative": "heteronpu/continuous/model/FiniteFp32Backend$Rounded.class",
+      "bytes": 3224,
+      "sha256": "1b364decb487ddec4dc0d408923eeb4d9f06bc1a1e808122e506634b763ba470"
+    },
+    {
+      "relative": "heteronpu/continuous/model/FiniteFp32Backend.class",
+      "bytes": 3119,
+      "sha256": "92a9291fd56c67901bd62c0923ec016bd5990233deab5645f6195b55445931ae"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedBackendCircuitGate$.class",
+      "bytes": 17946,
+      "sha256": "c4d0b2d67c9e5ecc311c416a896b96cd60b2c6afe6e44d5afac018de69178cf3"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedBackendCircuitGate.class",
+      "bytes": 1745,
+      "sha256": "a1e6c7389ad6c69ccd4e833bd285158b71fedde279b5ba43bbdb81f66a8719e8"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel$.class",
+      "bytes": 2749,
+      "sha256": "9686ec85dd62f398bc89e6296c5f4b863bd6c6b2afc636406cb060628781cfb5"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel$Comb$.class",
+      "bytes": 1921,
+      "sha256": "6289bee58a5ab7fdee326aa68d23cc8fc83111bb862796dc56cb74a6f0f8b812"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel$Comb.class",
+      "bytes": 10340,
+      "sha256": "fe560550d05e3dd1ed720e7c0bb872616e1d3a33b0d6f5f7989c140137f7c79a"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel$Computed$.class",
+      "bytes": 2848,
+      "sha256": "099077a9cedf18dfd7cbacecc810d76743a0fc28bc7fbde5d0f00bd4c857da84"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel$Computed.class",
+      "bytes": 4420,
+      "sha256": "b08b9a9be9e7f3a8250289755b55d9ac2f3f2a00218fc7252347fc6e0d5bc19c"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel$Issue$.class",
+      "bytes": 2973,
+      "sha256": "9b3c367d0b675bb602c6959cf1834ffa5a00d6da20dd547f7b887ca5f8e4a606"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel$Issue.class",
+      "bytes": 4573,
+      "sha256": "231ccfba918d9e7dec7000dbc49070ab7836b5ca07c8161d892a2a7ea2e81935"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointFunctionalModel.class",
+      "bytes": 41784,
+      "sha256": "1a876ef6a81aae887e323de8c674b7621e61559bfd3ace3b4041bb7af80be43b"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedServicePhaseObserver$.class",
+      "bytes": 4844,
+      "sha256": "e5c6fa6bed57bb7124dc5d6148254592ac42bea12b0a0b61596c6da1e9686154"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedServicePhaseObserver.class",
+      "bytes": 2346,
+      "sha256": "ee2a79ba9d3750eeb22af1c647ea31b456b86cef9db0c09fff9e6ef4ab02cd76"
+    }
+  ],
+  "support_source_recovery": [
+    "candidates/retained_matrix_functional_backend/REPRODUCTION.json",
+    "candidates/retained_matrix_functional_backend/SOURCE_REFS.json",
+    "candidates/retained_matrix_compiled_unseeded/source/RetainedServicePhaseObserver.scala"
+  ],
+  "support_rule": "Compile original backend source recipe, retain only named 14 Gate/API classes plus 2 observer classes; no model constructor, factory, step or Spec execution. Do not substitute seeded or unsigned-fold variants.",
+  "add_fifo3": [
+    {
+      "relative": "heteronpu/continuous/model/HostMatrixResultFifoMemoryLowering$$anonfun$1.class",
+      "bytes": 2136,
+      "sha256": "06055f01bd6b289196e9e06b805df3962e06d0fe06bc8907b88d873fa673c834"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostMatrixResultFifoMemoryLowering$.class",
+      "bytes": 22352,
+      "sha256": "81923778f11f90b09f8b07dc3fabf1b5ece6192762637e6ce3391aaede5c9392"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostMatrixResultFifoMemoryLowering.class",
+      "bytes": 2242,
+      "sha256": "5ba05e055664d2f93886656034151d315ecbee9f80d12b62aceb1582a0ddf3e4"
+    }
+  ],
+  "fifo_source": "source/HostMatrixResultFifoMemoryLowering.scala",
+  "baseline899_bytes": 15062206,
+  "compile_actual_three_sources": [
+    "source/HostCompiledRawEmitter.scala",
+    "source/HostDenseAccMemoryLowering.scala",
+    "source/HostDenseAccCalibrationEmitter.scala"
+  ],
+  "actual_new37": [
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anon$1$$anonfun$$nestedInanonfun$runTransforms$2$1.class",
+      "bytes": 2802,
+      "sha256": "8c84769f617818496a79ac8c05436c0b8df0dccf71a15b69d14a447edc859cd7"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anon$1.class",
+      "bytes": 5583,
+      "sha256": "8639c6aa6794a8ec6c1a873568a9e123d8b4ac2354f4aebaaab164047a819838"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$1.class",
+      "bytes": 2076,
+      "sha256": "bf8c7a6a7460bc5659665fb6ce638d4f16136991b2b52497356a42bd75dadbf6"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$10.class",
+      "bytes": 2180,
+      "sha256": "87d5a13b6a98957de1ff981be4ef949acd9dabacea5a40764c3b3d4c64595415"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$2.class",
+      "bytes": 3667,
+      "sha256": "0181fc109e7defd5fb46aabe4e8fa5ddb6f26aaeac1eeea1eabdabb9c9e67f93"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$3.class",
+      "bytes": 1840,
+      "sha256": "d53a35fef589eb71b0d755c9525231d66ce5cfd58484e8c7e4d3329d56188ebf"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$4.class",
+      "bytes": 2083,
+      "sha256": "0bc60fa82ef10e1f1cdf6e6f26c5fc7d3b82e32ac9867badee444cfc41070790"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$5.class",
+      "bytes": 1844,
+      "sha256": "711163b46a158e3b33905571d109ec680cd4539ab215fa26ce585789bb9f13cc"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$6.class",
+      "bytes": 1867,
+      "sha256": "1ddbdf6bfceaac990decbbe47846452732f436aade65debe93e3e0ac8641483c"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$7.class",
+      "bytes": 1949,
+      "sha256": "3ff1bb1905db8e9cc4fe5a2a6494d20b0103d177133191ca613c0d51b521efdd"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$8.class",
+      "bytes": 1897,
+      "sha256": "0b52de70b24dc84054de6de693b4aa0db577e0333b64e1e4c427ab044be4e1fa"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$$anonfun$9.class",
+      "bytes": 2003,
+      "sha256": "4213be9f40a05e4857679cf4275cf5be1a415e7dc988e1bd7e64e69b8429ab07"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter$.class",
+      "bytes": 72587,
+      "sha256": "327ea2df843b7940cd942892f0c8ef9dd3b96d0f4f81283e2f0973d4a904cde3"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledRawEmitter.class",
+      "bytes": 2124,
+      "sha256": "03d3419495f72346b702adb92f4d8f65929e12d92639ffc93f39e7eba69ec977"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anon$1.class",
+      "bytes": 1658,
+      "sha256": "896f09d490482e687511ecaeb400069768128c0bbc62d6d106b5a33b25c19d18"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$1.class",
+      "bytes": 2439,
+      "sha256": "359a5e33f4be0afc1e2ec398e4f9e8b016df177002dc914f090064c514ef0d39"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$10.class",
+      "bytes": 2891,
+      "sha256": "5d96c54f75003ae2df942f1c213a6a9d40e515ddc67357921bd393e113edb616"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$11.class",
+      "bytes": 2179,
+      "sha256": "35d6bc76d67ee387dc9f206d96c01b55c6f0814dde780b9978bf536395611b1d"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$2.class",
+      "bytes": 2176,
+      "sha256": "9621030f8f34da77e4ad6e0609a8124a8db669924adf7087b0fa333cdf7721cf"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$3.class",
+      "bytes": 2385,
+      "sha256": "d97efcffa92a1263ff81d57c940177be17ee22a3f603f8be9cb519531a5b84fe"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$4.class",
+      "bytes": 2079,
+      "sha256": "d63d24ba5c793d31f75b45ff1ba72e99bf37e75e58d55bd6d6b3ae9f6be933a3"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$5.class",
+      "bytes": 2205,
+      "sha256": "53f47aba5bfdb2fa9f12d6616cee302741c368d054cc1d9808ea2486b9193d63"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$6.class",
+      "bytes": 2131,
+      "sha256": "857957e43b99c9f3350373be1c0cb0f73845864fa154edbdddf77be9c2491e39"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$7.class",
+      "bytes": 3989,
+      "sha256": "0a706073afb4c8c97710b0fde38fbc2c4397b8b2de8c6685c83874cc3119cc8e"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$8.class",
+      "bytes": 4345,
+      "sha256": "17d429f1f37ef6dd10397bc304e5445b9c0a8e09e657a3ab2891f87f3ad0e9d8"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$$anonfun$9.class",
+      "bytes": 2150,
+      "sha256": "1ee2d9ff2f091bbd0f749619fbca5dca950e1708db944c796884616b4c28c606"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter$.class",
+      "bytes": 37173,
+      "sha256": "446ef5c8a9aa9c814e4c7c60a215be1361f66250e77a033a89120f2f47e09974"
+    },
+    {
+      "relative": "chiseltest/simulator/HostDenseAccCalibrationEmitter.class",
+      "bytes": 2222,
+      "sha256": "6df8a4cbc2d9344a591b74663b2704bd7fddd7a1f2c57efeb29ed84cb26d26cd"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$1.class",
+      "bytes": 2247,
+      "sha256": "f12b458c155233dcd33033d91e6fadd34f76642b7a408cfa7d84e9edb859cde6"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$2.class",
+      "bytes": 2106,
+      "sha256": "88eb34a74c64ab39be25e37d3e5ab9ea4a252524cf64590dfd7c16e4f702088a"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$3.class",
+      "bytes": 2231,
+      "sha256": "1f781efa925e151f8dbe3b3748f84ac328aeecdbe20d8dc58ae734ac647da259"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$4.class",
+      "bytes": 1858,
+      "sha256": "57382245e6af72726d38dbdf2e5e40ad9ca8c3c814fac5e31cf8182584f7d3aa"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$5.class",
+      "bytes": 2180,
+      "sha256": "21d2f7aa3983a6e3a04eeb02ace48bf6c4247f26cd4cfde470ac705f25d7636c"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$6.class",
+      "bytes": 2236,
+      "sha256": "d5ac9915cd22d35b23cfa5c4254308ec80345e357db9b73616d8a35a60e7b56b"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$7.class",
+      "bytes": 2239,
+      "sha256": "d4c9afcc57353135acd56967c0139610361c755245349acab39af59016ccc201"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$.class",
+      "bytes": 33382,
+      "sha256": "48ee044e6bb7386f270765d80a7825981fdd4585cd025d10c1d59a0ec043c476"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering.class",
+      "bytes": 2517,
+      "sha256": "d194698cb410b2f7b50840e8d51e218cc48b422f403a0de2c6d477f1e3a555b1"
+    }
+  ],
+  "emission_class_count": 936,
+  "emission_class_bytes": 15287726,
+  "portability_limit": "Original class hashes record the actual run. Path-only source portability can change class bytes; qualify the rebuilt classes afresh rather than claiming identical native provenance."
+}

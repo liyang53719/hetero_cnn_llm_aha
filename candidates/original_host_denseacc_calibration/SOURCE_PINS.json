@@ -1,0 +1,88 @@
+{
+  "status": "ACTUAL_SOURCES_WITH_EXPLICIT_PATH_ONLY_PORTABILITY_DELTA",
+  "sources": [
+    {
+      "path": "source/HostDenseAccMemoryLowering.scala",
+      "original": {
+        "bytes": 7571,
+        "sha256": "151756021d0bdf9b8e1d746a8051d975e7d3b6921d9c844b5f2955cba74a514f"
+      },
+      "published": {
+        "bytes": 7571,
+        "sha256": "151756021d0bdf9b8e1d746a8051d975e7d3b6921d9c844b5f2955cba74a514f"
+      },
+      "path_only_portability_changes": [],
+      "algorithm_driver_or_transform_changed": false
+    },
+    {
+      "path": "source/HostCompiledRawEmitter.scala",
+      "original": {
+        "bytes": 21465,
+        "sha256": "46d830bc36e5e4bba6acb2ac69e92933b1e37ab000657a23b2a75da8b03e58c5"
+      },
+      "published": {
+        "bytes": 21368,
+        "sha256": "638689f69d57becd8acb999fc2c977bcff3b9a20bc43c4b4843add1a2462eebe"
+      },
+      "path_only_portability_changes": [
+        {
+          "replacement": "inputs/original-high.fir",
+          "original_literal_sha256": "02bcca259ec87a0fcbbd691bc3eea06bdf367431885927e556625d34bc7fb4d6",
+          "original_literal_bytes": 121,
+          "occurrences": 1
+        }
+      ],
+      "algorithm_driver_or_transform_changed": false
+    },
+    {
+      "path": "source/HostDenseAccCalibrationEmitter.scala",
+      "original": {
+        "bytes": 9167,
+        "sha256": "1856220be9a16caadca631f73a8ea222ab692aa9ec9fbf3efdadc5834ef4ceab"
+      },
+      "published": {
+        "bytes": 9091,
+        "sha256": "279326856715ee46e18b593f67d1a6cd83aa1594a3d6de2529953570d333720c"
+      },
+      "path_only_portability_changes": [
+        {
+          "replacement": "inputs/Qwen2ContinuousBlock.raw.fir",
+          "original_literal_sha256": "0e601776d424a4b40817d846a53da78045408b40735c565485a22e7612c9a455",
+          "original_literal_bytes": 111,
+          "occurrences": 1
+        }
+      ],
+      "algorithm_driver_or_transform_changed": false
+    },
+    {
+      "path": "source/denseacc_calibration_driver.cpp",
+      "original": {
+        "bytes": 4829,
+        "sha256": "59ae3b09364aff011f8349235973a620759c7ab483e69d299c0154e1d50abd35"
+      },
+      "published": {
+        "bytes": 4829,
+        "sha256": "59ae3b09364aff011f8349235973a620759c7ab483e69d299c0154e1d50abd35"
+      },
+      "path_only_portability_changes": [],
+      "algorithm_driver_or_transform_changed": false
+    },
+    {
+      "path": "source/HostMatrixResultFifoMemoryLowering.scala",
+      "original": {
+        "bytes": 5481,
+        "sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb"
+      },
+      "published": {
+        "bytes": 5481,
+        "sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb"
+      },
+      "path_only_portability_changes": [],
+      "algorithm_driver_or_transform_changed": false
+    }
+  ],
+  "driver_unchanged": true,
+  "transform_unchanged": true,
+  "no_generated_cpp": true,
+  "driver_witness_note": "Unchanged hand-written driver: image/observed arrays are runtime output snapshots; payload is procedural. No weight/input/reference-array data payload is included."
+}

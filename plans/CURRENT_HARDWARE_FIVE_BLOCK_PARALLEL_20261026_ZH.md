@@ -1,5 +1,22 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 当前候选补充：共享 Vector/Element 32-lane（2026-10-27）
+
+**这是用户选择的下一候选方向，不是已实现或已验收的新硬件。** 计划为共享 Vector/Element 32-lane、每周期 issue（32 Add + 32 Mul + 32 RNE）；固定完整 4096-MAC Matrix 不变。五 profile 仍必须共用同一份新硬件、同一接口和同一 RTL hash，旧 16-lane 的有限叶级结果不能自动迁移。
+
+- **速率账本不是性能测量。** 32-lane II=1 与 64-lane II=2 都是名义 32 lane-ops/cycle；资源较省只是选择较窄 bank 的设计目标，不是频率、面积或系统吞吐证明。已有纯理想事件模型假设固定延迟、免费输入/输出及无 DDR/其他 owner 冲突，不等同当前硬件执行。
+- **必须改完整请求链。** 需要 issue/retire 分离、多 outstanding 的 tag/credit/scoreboard、有限结果缓冲及本地跨 tile cache。当前单 pending owner 不能据名义 II 声称持续发射；缓存槽数须按真实流水延迟、backpressure 与事务语义确定，不把模型中的三槽示例当通用充分条件。
+- **算术语义不随位宽规划放宽。** 共享 exact FP32 RNE 流水 Div 需要独立资格，原 sqrt 能力不能删除；各 profile 的逐步 BF16 RNE 和原 FP32 中间值语义分别保留，不能将 Qwen2 FP32 gate/up 压成 Qwen3.5 BF16。统一数据 cache 规划至少 17 B/activation（FP32 gate/up 8 B、两个 FP32 work 8 B、k 1 B），32-lane 每槽数据 544 B；context/tag/flags/scoreboard、DDR ACK 缓冲、Div 流水寄存器及对齐开销另计。旧 13 B/activation 仅属 35B BF16 gate/up 案例，不代表统一五 profile 容量。
+- **重新建立完整验收。** 五块可并行，但仍先在原始 Chisel 完成各自完整 M128 数值门，再冻结同份源码及各自输入/权重/官方参考/比较合同，生成并回放同一新 4096 硬件 RTL；不得借用旧 16-lane PASS，或以 leaf、mock、软件模型和理论 lane-ops 替代完整 block 数值与有效 MAC 周期账本。
+
+### 当前代码与失败导航（不升级状态）
+
+公开基线为 `d16001c4543b75455a0cb36a1fcd0908b9aef725`。最近的 [FIFO 模型小批](../candidates/retained_matrix_fifo_model/README_ZH.md) 只发布原字节候选、类型身份和历史严格 hash/form FAIL；它未给出 FIFO 24-edge 等价或 service 加速资格。[service 阶段观测](../candidates/retained_matrix_service_observation/README_ZH.md) 仍为 CPU120 FAIL、0/1 case：首个 reset-high `step(2)` 返回不证明后续 `step(3)` 已进入或完成，也不能定位热点。后继 formcheck 或修复门须绑定自身实际证据，不能回填旧发布范围。
+
+norm 父链本轮 3/4 是三个协议 case（unsupported/held-memory-abort 与 DDR epoch late-reply 隔离）的局部通过；fullcontext/txn0 探针失败，整体仍 FAIL，不是 norm 数值、完整父链或真实 Admission 集成 PASS。txn0 Boundary 的统一合同修复候选尚待真实独立验收，不凭源码修改或编译成功升级。
+
+本增补仅更新中文候选与派工导航，`doc/block_checklist.yaml` 的 74 条任务及 13 done / 14 ongoing / 47 to do 全部保持，历史证据与 FAIL/TEMP 不删改。完整五块 Chisel/RTL 联合数值资格仍未建立，完整 block RTL 仍 0/5，4096 有效 MAC ≥90% 未证明。下文各日期、当前字样和旧基线保留为历史时点说明；原始 Chisel 数值优先的顺序继续有效。
+
 ## 当前执行顺序：先原始 Chisel 数值，再 RTL 回放
 
 按 2026-10-26 15:56:30 / 15:57:17 UTC 的最新用户要求，**五个 block 可以并行；验收顺序是原始 Chisel 完整 128-token prefill 数值回归 → 冻结同源、输入和参考 → 生成 RTL 并回放五块数值回归。** 五个 profile 为 Qwen2 L0、Qwen3.5-0.8B L0/L3、Qwen3.5-35B-A3B L0/L3；不能把单个 leaf、mock 控制测试或独立 Python/C++ 软件模型结果当作原始 Chisel 整块通过。

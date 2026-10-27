@@ -1,0 +1,679 @@
+{
+  "status": "TEMP_EXACT_SOURCE_RECOVERY_NOT_RUNTIME_ADMISSION",
+  "source_identities": {
+    "cbd5c6457f5e32ba4202b06c30f3cf53356085e021f4369f97c9509e2c0f040a": {
+      "name": "HostMoePhaseControlV5.scala",
+      "bytes": 1950,
+      "sha256": "cbd5c6457f5e32ba4202b06c30f3cf53356085e021f4369f97c9509e2c0f040a",
+      "git_blob_sha": "7ac09f2b210fa7405cc5bfba7744b92d9504389c",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/HostMoePhaseControlV5.scala"
+    },
+    "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19": {
+      "name": "HeldDecoupledOffer.scala",
+      "bytes": 912,
+      "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19",
+      "git_blob_sha": "9781468ad0087432a1791f8315106de1cd2df1be",
+      "stages": [
+        "0735"
+      ],
+      "public_reference": {
+        "path": "candidates/unified_runtime_norm_boundary/reproduction_dependencies/gdn12/source/HeldDecoupledOffer.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 912,
+        "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19",
+        "git_blob_sha": "9781468ad0087432a1791f8315106de1cd2df1be"
+      }
+    },
+    "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd": {
+      "name": "HostRuntimeLaunchV4.scala",
+      "bytes": 2317,
+      "sha256": "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd",
+      "git_blob_sha": "f9e5cd78c7f5363000dfdd0981549c121e2dc8ab",
+      "stages": [
+        "0735"
+      ],
+      "public_reference": {
+        "path": "candidates/moe_phase_context_typecheck/dependency_sources/HostRuntimeLaunchV4.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 2317,
+        "sha256": "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd",
+        "git_blob_sha": "f9e5cd78c7f5363000dfdd0981549c121e2dc8ab"
+      }
+    },
+    "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6": {
+      "name": "HostMoeSharedGatePlanV5.scala",
+      "bytes": 5897,
+      "sha256": "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6",
+      "git_blob_sha": "f2d07f7969b705344f7aee77acdc4791d7425a30",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/HostMoeSharedGatePlanV5.scala"
+    },
+    "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4": {
+      "name": "HostMoePhaseContextV4.scala",
+      "bytes": 3227,
+      "sha256": "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4",
+      "git_blob_sha": "8f9e92dacd85340c167ab89f2731ab3ff890e3a4",
+      "stages": [
+        "0735"
+      ],
+      "public_reference": {
+        "path": "candidates/moe_phase_context_typecheck/source/HostMoePhaseContextV4.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 3227,
+        "sha256": "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4",
+        "git_blob_sha": "8f9e92dacd85340c167ab89f2731ab3ff890e3a4"
+      }
+    },
+    "4096f77846567ba71fa85b3edff76a3af5c9664000718f5ef199e0f645e38f49": {
+      "name": "HostMoeRuntimePhaseProtocolV5.scala",
+      "bytes": 4230,
+      "sha256": "4096f77846567ba71fa85b3edff76a3af5c9664000718f5ef199e0f645e38f49",
+      "git_blob_sha": "aeb9c32ed34ed569314bab1b8eadadde648663c4",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/HostMoeRuntimePhaseProtocolV5.scala"
+    },
+    "332faba01d6b7067b40811d59fd80418112bfb8d8b2687be389c26a7cedd0cf0": {
+      "name": "HostBlockCommandsV4.scala",
+      "bytes": 122491,
+      "sha256": "332faba01d6b7067b40811d59fd80418112bfb8d8b2687be389c26a7cedd0cf0",
+      "git_blob_sha": "83726bdd596e99591b1335b44b7895151888ad8a",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/HostBlockCommandsV4.scala"
+    },
+    "022b87b9d7229f2d1d76adb0f6b686eb4224781b68d96c032778abd2e9af6fd3": {
+      "name": "HostBlockTopV4.scala",
+      "bytes": 12331,
+      "sha256": "022b87b9d7229f2d1d76adb0f6b686eb4224781b68d96c032778abd2e9af6fd3",
+      "git_blob_sha": "1cb2ca4e36c5233f648a058e0da15ff0cad87afd",
+      "stages": [
+        "0735"
+      ],
+      "reconstruction": {
+        "base_source_sha256": "f44242350a4ee7c6b04c606757276d7a80d6ec4813111aa3b04b1b6bdae6b067",
+        "patch": "history/0735_HostBlockTopV4.scala.patch",
+        "patch_identity": {
+          "bytes": 14982,
+          "sha256": "91347e5af83bb43640786eda85a0b1300a59bef842104f9a9742541ff505e3da"
+        },
+        "direction": "final_source_to_exact_historical_source"
+      }
+    },
+    "f5766b089e833be07013a57471dc01a1d29aeb0276446cbbfe07527eec8245a5": {
+      "name": "HostMoeWeightScanV4.scala",
+      "bytes": 10521,
+      "sha256": "f5766b089e833be07013a57471dc01a1d29aeb0276446cbbfe07527eec8245a5",
+      "git_blob_sha": "680b19b57fc550f6a0b1f9c629b90d0610606477",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/HostMoeWeightScanV4.scala"
+    },
+    "c8c5012b3463e64cc0ecd0066d3e0e9ff4df773c2ee40e144d03f0274dbf69c6": {
+      "name": "HostRuntimeMoePhaseAllocatorV5.scala",
+      "bytes": 12974,
+      "sha256": "c8c5012b3463e64cc0ecd0066d3e0e9ff4df773c2ee40e144d03f0274dbf69c6",
+      "git_blob_sha": "5c3b6bf4c59d67d274c00d0e17eb9499a1705266",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/HostRuntimeMoePhaseAllocatorV5.scala"
+    },
+    "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53": {
+      "name": "HostRuntimeOwnerGuardV5.scala",
+      "bytes": 10809,
+      "sha256": "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53",
+      "git_blob_sha": "065cff490065d4d5a27ce72e988fc0c7ef4fc719",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/HostRuntimeOwnerGuardV5.scala"
+    },
+    "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4": {
+      "name": "IdmaWeightBurst.scala",
+      "bytes": 21460,
+      "sha256": "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4",
+      "git_blob_sha": "3782fdc570b97800738a6ce423a533531b2cc7e6",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/IdmaWeightBurst.scala"
+    },
+    "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8": {
+      "name": "MatrixPipeline.scala",
+      "bytes": 19528,
+      "sha256": "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8",
+      "git_blob_sha": "cb198eebc1d1a4ac07d9727b3e4746e78076751c",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/MatrixPipeline.scala"
+    },
+    "be7d494cc5ca5a24bb5eea8db404453101f846fb1fd7137a0d8dd42c8063e95f": {
+      "name": "Qwen2Block.scala",
+      "bytes": 58280,
+      "sha256": "be7d494cc5ca5a24bb5eea8db404453101f846fb1fd7137a0d8dd42c8063e95f",
+      "git_blob_sha": "364c6d7db107dd46d87f7cb2cf3b18ebb1c72c18",
+      "stages": [
+        "0735"
+      ],
+      "reconstruction": {
+        "base_source_sha256": "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9",
+        "patch": "history/0735_Qwen2Block.scala.patch",
+        "patch_identity": {
+          "bytes": 14227,
+          "sha256": "dd5f8c660b713e93ab155d4d7926e4a0379d6bae263b774f9b8b02db0b766ed3"
+        },
+        "direction": "final_source_to_exact_historical_source"
+      }
+    },
+    "e0878a3da46273bcc6b99b536ed5ee38799bb304bc603163a5a4f16db2525dc2": {
+      "name": "QwenOwnerProtocol.scala",
+      "bytes": 51798,
+      "sha256": "e0878a3da46273bcc6b99b536ed5ee38799bb304bc603163a5a4f16db2525dc2",
+      "git_blob_sha": "155d4784399cfee1761dbfddf2044ac9f3dd4611",
+      "stages": [
+        "0735"
+      ],
+      "reconstruction": {
+        "base_source_sha256": "2bdcb87420fcd5e3fc47f9a2e8bfcd10cea5bb00daca22eb7acaac079e450a17",
+        "patch": "history/0735_QwenOwnerProtocol.scala.patch",
+        "patch_identity": {
+          "bytes": 15199,
+          "sha256": "6f7fb8c1cda8eadce96d88327abf324372a268d312ae8506fc8f6e9d9eea30a0"
+        },
+        "direction": "final_source_to_exact_historical_source"
+      }
+    },
+    "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e": {
+      "name": "RetainedIdma.scala",
+      "bytes": 9977,
+      "sha256": "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e",
+      "git_blob_sha": "4f003e75a0f9bfb0960acf633f0c3e3201820bce",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/RetainedIdma.scala"
+    },
+    "7807b0a7d34cbd776e07929b563b8b7269c0fc63c4f083e095bb62755fbff456": {
+      "name": "SharedMemoryArbiter.scala",
+      "bytes": 3570,
+      "sha256": "7807b0a7d34cbd776e07929b563b8b7269c0fc63c4f083e095bb62755fbff456",
+      "git_blob_sha": "49892701270472acd7361566d16907d897353308",
+      "stages": [
+        "0735"
+      ],
+      "package_path": "source/SharedMemoryArbiter.scala"
+    },
+    "35fd81f56e6b40008693f31ed22b306dbb09a8b36fedf68a841497322a13cc3a": {
+      "name": "HostBlockTopV4.scala",
+      "bytes": 18877,
+      "sha256": "35fd81f56e6b40008693f31ed22b306dbb09a8b36fedf68a841497322a13cc3a",
+      "git_blob_sha": "b531d8329681958be48ee10477ba508adefb36eb",
+      "stages": [
+        "0855"
+      ],
+      "reconstruction": {
+        "base_source_sha256": "f44242350a4ee7c6b04c606757276d7a80d6ec4813111aa3b04b1b6bdae6b067",
+        "patch": "history/0855_HostBlockTopV4.scala.patch",
+        "patch_identity": {
+          "bytes": 2543,
+          "sha256": "a382f2e1c747c8ff69341e3bffc7c30d6a664be5d9f7ce84a7e6377f9adca870"
+        },
+        "direction": "final_source_to_exact_historical_source"
+      }
+    },
+    "03c53da52854cef41704b60f31e8e014da58f451a04cea5a4c79d354dcb801eb": {
+      "name": "HostMoeArithmeticLeaseWiringV5.scala",
+      "bytes": 6171,
+      "sha256": "03c53da52854cef41704b60f31e8e014da58f451a04cea5a4c79d354dcb801eb",
+      "git_blob_sha": "f38bb45d9977ecc519730ed5b9bfa94e016a19e8",
+      "stages": [
+        "0855"
+      ],
+      "reconstruction": {
+        "base_source_sha256": "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec",
+        "patch": "history/0855_HostMoeArithmeticLeaseWiringV5.scala.patch",
+        "patch_identity": {
+          "bytes": 3214,
+          "sha256": "11a8e0f30937a9f913f628572a1b934637939cb75fa13742c20924a89a93132f"
+        },
+        "direction": "final_source_to_exact_historical_source"
+      }
+    },
+    "9b2d734137572364a326b44db855eea7751a282093941bed0288658fc7b1db2f": {
+      "name": "HostMoeDenseRoutingV5.scala",
+      "bytes": 3789,
+      "sha256": "9b2d734137572364a326b44db855eea7751a282093941bed0288658fc7b1db2f",
+      "git_blob_sha": "82e5afa0a2dd88318bb44361ad7fd36a74c3078d",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/HostMoeDenseRoutingV5.scala"
+    },
+    "574aba5b0321e49ecba87e5cbd4958410f1728d38b39bfd377740f55de9d01d8": {
+      "name": "HostMoePhaseLifetimeWiringV5.scala",
+      "bytes": 13952,
+      "sha256": "574aba5b0321e49ecba87e5cbd4958410f1728d38b39bfd377740f55de9d01d8",
+      "git_blob_sha": "b7d51bc73965b4eec7eeed3f657d202459751763",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/HostMoePhaseLifetimeWiringV5.scala"
+    },
+    "c52656763eeb2c1649f99cb7ee4b6bcaf2652dfc0260d07e2dbdd8b50e1b4507": {
+      "name": "HostMoeSelectionServiceV5.scala",
+      "bytes": 4657,
+      "sha256": "c52656763eeb2c1649f99cb7ee4b6bcaf2652dfc0260d07e2dbdd8b50e1b4507",
+      "git_blob_sha": "afa13192bb9723d1e076139479c0bf791712169f",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/HostMoeSelectionServiceV5.scala"
+    },
+    "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03": {
+      "name": "BlockScalarFloatPolicyV2.scala",
+      "bytes": 10944,
+      "sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+      "git_blob_sha": "8c281dcb069fdee54f8e79d93c0bf656d170c9ce",
+      "stages": [
+        "0855"
+      ],
+      "public_reference": {
+        "path": "candidates/shared_scalar_policy_v2/source/BlockScalarFloatPolicyV2.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 10944,
+        "sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+        "git_blob_sha": "8c281dcb069fdee54f8e79d93c0bf656d170c9ce"
+      }
+    },
+    "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9": {
+      "name": "Qwen2Block.scala",
+      "bytes": 63652,
+      "sha256": "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9",
+      "git_blob_sha": "4bda62e1f7051e6135e7c9969713c11b8cac4939",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/Qwen2Block.scala"
+    },
+    "2bdcb87420fcd5e3fc47f9a2e8bfcd10cea5bb00daca22eb7acaac079e450a17": {
+      "name": "QwenOwnerProtocol.scala",
+      "bytes": 55938,
+      "sha256": "2bdcb87420fcd5e3fc47f9a2e8bfcd10cea5bb00daca22eb7acaac079e450a17",
+      "git_blob_sha": "7aad04dbe53cb2766a7b4de3b20010d62325c232",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/QwenOwnerProtocol.scala"
+    },
+    "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7": {
+      "name": "UnifiedScalarPolicyV2.scala",
+      "bytes": 858,
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+      "git_blob_sha": "90bd0ea5e031c95a34d636206d4f128c405a6e8a",
+      "stages": [
+        "0855"
+      ],
+      "public_reference": {
+        "path": "candidates/shared_scalar_policy_v2/source/UnifiedScalarPolicyV2.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 858,
+        "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+        "git_blob_sha": "90bd0ea5e031c95a34d636206d4f128c405a6e8a"
+      }
+    },
+    "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063": {
+      "name": "UnifiedSharedOperationProtocolV3.scala",
+      "bytes": 4285,
+      "sha256": "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063",
+      "git_blob_sha": "e1d0df887f9fd5ef1c08b9f2be6259f948895f84",
+      "stages": [
+        "0855"
+      ],
+      "public_reference": {
+        "path": "candidates/unified_runtime_norm_boundary/norm14/source/UnifiedSharedOperationProtocolV3.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 4285,
+        "sha256": "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063",
+        "git_blob_sha": "e1d0df887f9fd5ef1c08b9f2be6259f948895f84"
+      }
+    },
+    "043bfbae3c920bef29c5cdbfba94c4d262f3a21ab40f5929034a268b1b6b4675": {
+      "name": "UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 15130,
+      "sha256": "043bfbae3c920bef29c5cdbfba94c4d262f3a21ab40f5929034a268b1b6b4675",
+      "git_blob_sha": "57f923d65309fd183734a758ec985969b05b23d3",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeSharedArithmeticAdapterV5.scala"
+    },
+    "d3a99f9111128bfeb763055d84a4326c2f54501bd693e5d8097f250bcc6c6742": {
+      "name": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 1673,
+      "sha256": "d3a99f9111128bfeb763055d84a4326c2f54501bd693e5d8097f250bcc6c6742",
+      "git_blob_sha": "c01b0138dc27bc989848167287fb52d5ed6aa2aa",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeSharedArithmeticProtocolV5.scala"
+    },
+    "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d": {
+      "name": "UnifiedVectorElement32ProtocolV4.scala",
+      "bytes": 1682,
+      "sha256": "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d",
+      "git_blob_sha": "00de3a0b4f1c3e6ea7d5c7bbfc359075ff7d9cd6",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedVectorElement32ProtocolV4.scala"
+    },
+    "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28": {
+      "name": "UnifiedVectorElement32BankV4.scala",
+      "bytes": 4361,
+      "sha256": "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28",
+      "git_blob_sha": "1a424de3087e12698cb993dc33e983158fef7f11",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedVectorElement32BankV4.scala"
+    },
+    "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b": {
+      "name": "UnifiedMoeRuntimeExpertLoopV4.scala",
+      "bytes": 26467,
+      "sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+      "git_blob_sha": "dcf87b6124e1d876e4301e9ff4641fbf7f78122d",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeRuntimeExpertLoopV4.scala"
+    },
+    "20072b6e44f5890e570d1fa8df3da8e567d99558cbd8b28e77ab4c2325999f82": {
+      "name": "UnifiedMoeDownTileReaderV5.scala",
+      "bytes": 8836,
+      "sha256": "20072b6e44f5890e570d1fa8df3da8e567d99558cbd8b28e77ab4c2325999f82",
+      "git_blob_sha": "66e4f90d398c3a9a4423606b132ae9e236ca5f4f",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeDownTileReaderV5.scala"
+    },
+    "ee3474e4139400f1db5b216cfca5b643b8739e1ce8cec40ffdfa231627a7992e": {
+      "name": "UnifiedMoeProducerBindingV5.scala",
+      "bytes": 7598,
+      "sha256": "ee3474e4139400f1db5b216cfca5b643b8739e1ce8cec40ffdfa231627a7992e",
+      "git_blob_sha": "0b36590e6a6f765d5b4d07427515f24caa930f63",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeProducerBindingV5.scala"
+    },
+    "06f53cb697518983bcab8cc5ee22b24b850176845bb5b71273e1bd9e515a7689": {
+      "name": "UnifiedMoeRoutedSelectionReaderV5.scala",
+      "bytes": 11377,
+      "sha256": "06f53cb697518983bcab8cc5ee22b24b850176845bb5b71273e1bd9e515a7689",
+      "git_blob_sha": "ab8c7d8295f31eacffd8f1f2c37f4328fddf928d",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeRoutedSelectionReaderV5.scala"
+    },
+    "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b": {
+      "name": "UnifiedMoeSharedFfnPlanV5.scala",
+      "bytes": 4333,
+      "sha256": "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b",
+      "git_blob_sha": "ae5b9ef5981eae61dd6d06559a6083fec5b2c557",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeSharedFfnPlanV5.scala"
+    },
+    "a0c2dd0f5dfc43ae90911b568737901ca2d7de9f24672c5933d188ad4d954387": {
+      "name": "UnifiedMoeLogical32SigmoidConsumerV5.scala",
+      "bytes": 7398,
+      "sha256": "a0c2dd0f5dfc43ae90911b568737901ca2d7de9f24672c5933d188ad4d954387",
+      "git_blob_sha": "02eaa441535f572c9e6ee9f8c4dfa2f48e71f152",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeLogical32SigmoidConsumerV5.scala"
+    },
+    "1bb1591268ad185a5de73aef99f7a59d192dc496283f27073d0975c6e929592d": {
+      "name": "UnifiedMoePhaseTileMergePortsV5.scala",
+      "bytes": 10667,
+      "sha256": "1bb1591268ad185a5de73aef99f7a59d192dc496283f27073d0975c6e929592d",
+      "git_blob_sha": "ec8a81b2e585ca731c390c01a1a27724330a6999",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoePhaseTileMergePortsV5.scala"
+    },
+    "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474": {
+      "name": "UnifiedMoeSharedGateSigmoidOwnerV5.scala",
+      "bytes": 12252,
+      "sha256": "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474",
+      "git_blob_sha": "7e8b2605f437f5990ba76b910f2071d42589b749",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoeSharedGateSigmoidOwnerV5.scala"
+    },
+    "53058c972888e7379c019fadc828cd582259efbe1f543650cafd11301f6c5804": {
+      "name": "UnifiedMoePhaseMergeOwnerV5.scala",
+      "bytes": 13939,
+      "sha256": "53058c972888e7379c019fadc828cd582259efbe1f543650cafd11301f6c5804",
+      "git_blob_sha": "1df1b2ed564e9f4f87c4ce0f3b508cdbd56c3571",
+      "stages": [
+        "0855"
+      ],
+      "reconstruction": {
+        "base_source_sha256": "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb",
+        "patch": "history/0855_UnifiedMoePhaseMergeOwnerV5.scala.patch",
+        "patch_identity": {
+          "bytes": 645,
+          "sha256": "688f2119885a464ad2b1f327f10dfb5518cc2551e7ee1c74c18bffd7b0452730"
+        },
+        "direction": "final_source_to_exact_historical_source"
+      }
+    },
+    "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf": {
+      "name": "UnifiedMoePhaseResidualOwnerV5.scala",
+      "bytes": 11003,
+      "sha256": "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf",
+      "git_blob_sha": "6c7f76549db16cd331aea709a0f9f035695dee5c",
+      "stages": [
+        "0855"
+      ],
+      "package_path": "source/UnifiedMoePhaseResidualOwnerV5.scala"
+    },
+    "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b": {
+      "name": "HeteroSelectionMemoryPrimitives.scala",
+      "bytes": 33917,
+      "sha256": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+      "git_blob_sha": "bfca18bf7b3be1e3c18787bf670c8af1eba11aed",
+      "stages": [
+        "0855"
+      ],
+      "public_reference": {
+        "path": "integration/gemmini/operator_primitives/src/main/scala/gemmini/HeteroSelectionMemoryPrimitives.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 33917,
+        "sha256": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+        "git_blob_sha": "bfca18bf7b3be1e3c18787bf670c8af1eba11aed"
+      }
+    },
+    "2380c88d136fe7ae981db49b2e578d88e0efdd95a96936e79138cc99b4ff2d03": {
+      "name": "DiagnoseOriginalHostMoePhaseV5.scala",
+      "bytes": 7436,
+      "sha256": "2380c88d136fe7ae981db49b2e578d88e0efdd95a96936e79138cc99b4ff2d03",
+      "git_blob_sha": "3ade66ba9c90bc3cc984ce12351870492502ab16",
+      "stages": [
+        "0915"
+      ],
+      "package_path": "source/DiagnoseOriginalHostMoePhaseV5.scala"
+    },
+    "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb": {
+      "name": "UnifiedMoePhaseMergeOwnerV5.scala",
+      "bytes": 13995,
+      "sha256": "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb",
+      "git_blob_sha": "600e12c48fe87197b8ebaf5aaff634ccc9fa3361",
+      "stages": [
+        "0943"
+      ],
+      "package_path": "source/UnifiedMoePhaseMergeOwnerV5.scala"
+    },
+    "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b": {
+      "name": "FfnTileSiluBridge.scala",
+      "bytes": 5032,
+      "sha256": "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b",
+      "git_blob_sha": "59b33a01b7ef0cfb10b663ca4ba0a3269643f743",
+      "stages": [
+        "1012"
+      ],
+      "public_reference": {
+        "path": "candidates/qwen2_resident_matrix/production_qk16_rebase/silu_feedback_fix/source/FfnTileSiluBridge.scala",
+        "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+        "bytes": 5032,
+        "sha256": "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b",
+        "git_blob_sha": "59b33a01b7ef0cfb10b663ca4ba0a3269643f743"
+      }
+    },
+    "f44242350a4ee7c6b04c606757276d7a80d6ec4813111aa3b04b1b6bdae6b067": {
+      "name": "HostBlockTopV4.scala",
+      "bytes": 19083,
+      "sha256": "f44242350a4ee7c6b04c606757276d7a80d6ec4813111aa3b04b1b6bdae6b067",
+      "git_blob_sha": "4cca73f0c348278fe12693f609de0991c3a4cdae",
+      "stages": [
+        "1012"
+      ],
+      "package_path": "source/HostBlockTopV4.scala"
+    },
+    "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec": {
+      "name": "HostMoeArithmeticLeaseWiringV5.scala",
+      "bytes": 7157,
+      "sha256": "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec",
+      "git_blob_sha": "1947fc6cb1df098ef5cb2a4e1fa479b44aad403a",
+      "stages": [
+        "1012"
+      ],
+      "package_path": "source/HostMoeArithmeticLeaseWiringV5.scala"
+    }
+  },
+  "stages": {
+    "0735": {
+      "ordered_source_ids": [
+        "cbd5c6457f5e32ba4202b06c30f3cf53356085e021f4369f97c9509e2c0f040a",
+        "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19",
+        "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd",
+        "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6",
+        "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4",
+        "4096f77846567ba71fa85b3edff76a3af5c9664000718f5ef199e0f645e38f49",
+        "332faba01d6b7067b40811d59fd80418112bfb8d8b2687be389c26a7cedd0cf0",
+        "022b87b9d7229f2d1d76adb0f6b686eb4224781b68d96c032778abd2e9af6fd3",
+        "f5766b089e833be07013a57471dc01a1d29aeb0276446cbbfe07527eec8245a5",
+        "c8c5012b3463e64cc0ecd0066d3e0e9ff4df773c2ee40e144d03f0274dbf69c6",
+        "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53",
+        "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4",
+        "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8",
+        "be7d494cc5ca5a24bb5eea8db404453101f846fb1fd7137a0d8dd42c8063e95f",
+        "e0878a3da46273bcc6b99b536ed5ee38799bb304bc603163a5a4f16db2525dc2",
+        "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e",
+        "7807b0a7d34cbd776e07929b563b8b7269c0fc63c4f083e095bb62755fbff456"
+      ],
+      "source_count": 17
+    },
+    "0855": {
+      "ordered_source_ids": [
+        "35fd81f56e6b40008693f31ed22b306dbb09a8b36fedf68a841497322a13cc3a",
+        "03c53da52854cef41704b60f31e8e014da58f451a04cea5a4c79d354dcb801eb",
+        "9b2d734137572364a326b44db855eea7751a282093941bed0288658fc7b1db2f",
+        "574aba5b0321e49ecba87e5cbd4958410f1728d38b39bfd377740f55de9d01d8",
+        "c52656763eeb2c1649f99cb7ee4b6bcaf2652dfc0260d07e2dbdd8b50e1b4507",
+        "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+        "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9",
+        "2bdcb87420fcd5e3fc47f9a2e8bfcd10cea5bb00daca22eb7acaac079e450a17",
+        "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+        "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063",
+        "043bfbae3c920bef29c5cdbfba94c4d262f3a21ab40f5929034a268b1b6b4675",
+        "d3a99f9111128bfeb763055d84a4326c2f54501bd693e5d8097f250bcc6c6742",
+        "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d",
+        "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28",
+        "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+        "20072b6e44f5890e570d1fa8df3da8e567d99558cbd8b28e77ab4c2325999f82",
+        "ee3474e4139400f1db5b216cfca5b643b8739e1ce8cec40ffdfa231627a7992e",
+        "06f53cb697518983bcab8cc5ee22b24b850176845bb5b71273e1bd9e515a7689",
+        "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b",
+        "a0c2dd0f5dfc43ae90911b568737901ca2d7de9f24672c5933d188ad4d954387",
+        "1bb1591268ad185a5de73aef99f7a59d192dc496283f27073d0975c6e929592d",
+        "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474",
+        "53058c972888e7379c019fadc828cd582259efbe1f543650cafd11301f6c5804",
+        "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf",
+        "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b"
+      ],
+      "source_count": 25
+    },
+    "0915": {
+      "ordered_source_ids": [
+        "2380c88d136fe7ae981db49b2e578d88e0efdd95a96936e79138cc99b4ff2d03"
+      ],
+      "source_count": 1
+    },
+    "0943": {
+      "ordered_source_ids": [
+        "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb"
+      ],
+      "source_count": 1
+    },
+    "1012": {
+      "ordered_source_ids": [
+        "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b",
+        "f44242350a4ee7c6b04c606757276d7a80d6ec4813111aa3b04b1b6bdae6b067",
+        "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec"
+      ],
+      "source_count": 3
+    }
+  },
+  "final_direct27_source_ids": [
+    "2380c88d136fe7ae981db49b2e578d88e0efdd95a96936e79138cc99b4ff2d03",
+    "f44242350a4ee7c6b04c606757276d7a80d6ec4813111aa3b04b1b6bdae6b067",
+    "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec",
+    "9b2d734137572364a326b44db855eea7751a282093941bed0288658fc7b1db2f",
+    "574aba5b0321e49ecba87e5cbd4958410f1728d38b39bfd377740f55de9d01d8",
+    "c52656763eeb2c1649f99cb7ee4b6bcaf2652dfc0260d07e2dbdd8b50e1b4507",
+    "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+    "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9",
+    "2bdcb87420fcd5e3fc47f9a2e8bfcd10cea5bb00daca22eb7acaac079e450a17",
+    "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+    "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063",
+    "043bfbae3c920bef29c5cdbfba94c4d262f3a21ab40f5929034a268b1b6b4675",
+    "d3a99f9111128bfeb763055d84a4326c2f54501bd693e5d8097f250bcc6c6742",
+    "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d",
+    "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28",
+    "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+    "20072b6e44f5890e570d1fa8df3da8e567d99558cbd8b28e77ab4c2325999f82",
+    "ee3474e4139400f1db5b216cfca5b643b8739e1ce8cec40ffdfa231627a7992e",
+    "06f53cb697518983bcab8cc5ee22b24b850176845bb5b71273e1bd9e515a7689",
+    "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b",
+    "a0c2dd0f5dfc43ae90911b568737901ca2d7de9f24672c5933d188ad4d954387",
+    "1bb1591268ad185a5de73aef99f7a59d192dc496283f27073d0975c6e929592d",
+    "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474",
+    "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb",
+    "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf",
+    "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+    "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b"
+  ],
+  "final_direct_source_count": 27,
+  "all_reconstruction_identity_count": 47,
+  "ordinary_new_source_count": 33,
+  "historical_delta_count": 6,
+  "rule": "Compile each listed stage separately. Same-name historical versions are mutually exclusive; never compile all source versions together."
+}

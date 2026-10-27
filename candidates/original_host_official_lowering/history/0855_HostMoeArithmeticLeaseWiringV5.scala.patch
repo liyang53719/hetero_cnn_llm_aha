@@ -1,0 +1,56 @@
+--- a/HostMoeArithmeticLeaseWiringV5.scala
++++ b/HostMoeArithmeticLeaseWiringV5.scala
+@@ -17,7 +17,7 @@
+   def connect(a:UnifiedMoeSharedArithmeticAdapterV5,
+       l:HostMoeRuntimePhaseLeaseV5,phaseOwned:Bool,
+       loop:UnifiedMoeRuntimeExpertLoopV4,sigmoid:UnifiedMoeSharedGateSigmoidOwnerV5,
+-      merge:UnifiedMoePhaseMergeOwnerV5,residual:UnifiedMoePhaseResidualOwnerV5):(Bool,Bool)={
++      merge:UnifiedMoePhaseMergeOwnerV5,residual:UnifiedMoePhaseResidualOwnerV5):Bool={
+     def packet(owner:UInt,stage:Int,resource:Int,expected:UInt):UnifiedMoeArithmeticLeaseV5={
+       val p=WireDefault(0.U.asTypeOf(new UnifiedMoeArithmeticLeaseV5))
+       p.lease.identity.transactionId:=l.context.transactionId
+@@ -74,31 +74,14 @@
+     // Keep the actual accepted lease, never recompute a retirement from changed
+     // child pins or copy an adapter's own echo as evidence of its producer.
+     val accepted=Reg(Vec(8,new UnifiedMoeArithmeticLeaseV5))
+-    // Preserve actual acquire/retire event order through ONE registered stage.
+-    // Only16 event bits+64 status bits are new; accepted is the existing lease
+-    // snapshot. No raw arithmetic payload/result is copied or acknowledged here.
+-    val acquirePending=RegInit(VecInit(Seq.fill(8)(false.B)))
+-    val retirePending=RegInit(VecInit(Seq.fill(8)(false.B)))
+-    val retireStatus=Reg(Vec(8,UInt(8.W)))
+-    val reuseFault=WireDefault(false.B)
+     for(i<-0 until 8){
+-      val acquireEvent=start(i) && phaseOwned && eligible(i) && !poison
+-      val retireEvent=finish(i) && phaseOwned && finishExact(i)
+-      val busy=acquirePending(i) || retirePending(i) ||
+-        a.io.status(i).active || a.io.status(i).retiring
+-      when(acquireEvent && busy){reuseFault:=true.B}
+-      acquirePending(i):=acquireEvent && !busy
+-      retirePending(i):=retireEvent
+-      when(acquireEvent && !busy){accepted(i):=packets(i)}
+-      when(retireEvent){retireStatus(i):=status(i)}
+-      a.io.acquire(i).valid:=acquirePending(i)
+-      a.io.acquire(i).bits:=accepted(i)
+-      a.io.retire(i).valid:=retirePending(i)
++      a.io.acquire(i).valid:=start(i) && phaseOwned && eligible(i) && !poison
++      a.io.acquire(i).bits:=packets(i)
++      when(a.io.acquire(i).valid){accepted(i):=packets(i)}
++      a.io.retire(i).valid:=finish(i) && phaseOwned && finishExact(i)
+       a.io.retire(i).bits.lease:=accepted(i)
+-      a.io.retire(i).bits.status:=retireStatus(i)
++      a.io.retire(i).bits.status:=status(i)
+     }
+-    when(reuseFault){poison:=true.B}
+-    val eventsPending=acquirePending.asUInt.orR || retirePending.asUInt.orR
+     a.io.scalar(0)<>loop.io.routerScalar;a.io.scalar(1)<>loop.io.activationScalar
+     a.io.scalar(2)<>sigmoid.io.scalar
+     a.io.formatRequest(0)<>loop.io.routerFormatRequest;loop.io.routerFormatResult<>a.io.formatResult(0)
+@@ -106,6 +89,6 @@
+     a.io.formatRequest(2)<>sigmoid.io.formatRequest;sigmoid.io.formatResult<>a.io.formatResult(2)
+     a.io.vectorRequest(0)<>merge.io.vectorRequest;merge.io.vectorResult<>a.io.vectorResult(0)
+     a.io.vectorRequest(1)<>residual.io.vectorRequest;residual.io.vectorResult<>a.io.vectorResult(1)
+-    (poison || badEvent || reuseFault,eventsPending)
++    poison || badEvent
+   }
+ }

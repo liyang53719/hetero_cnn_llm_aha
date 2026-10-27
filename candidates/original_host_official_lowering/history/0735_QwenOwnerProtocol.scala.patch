@@ -1,0 +1,187 @@
+--- a/QwenOwnerProtocol.scala
++++ b/QwenOwnerProtocol.scala
+@@ -17,34 +17,6 @@
+       s.heads==12 && s.kvHeads==2 && s.headDim==128 && s.maxTokens==1024),
+       "Qwen2OfficialBf16V2 rejects Qwen3.5 native and non-Qwen2 public21 shapes")
+   }
+-}
+-
+-/** Private fixed Scalar borrowing interface for the common five-profile parent.
+-  * The parent must validate its allocator/whole-group lease BEFORE offering a
+-  * request. Echoing a tag is correlation, not authority or stale-data isolation.
+-  * No host policy/boolean grants a lease. Reset requires joint isolation.
+-  */
+-object QwenSharedScalarContractV3 { val ScalarResource=2 } // UnifiedResourceKind.Scalar ABI
+-class QwenSharedScalarRequestV3 extends Bundle {
+-  val identity=new UnifiedSharedOperationTagV3
+-  val payload=new UnifiedScalarRequestV2
+-}
+-class QwenSharedScalarResultV3 extends Bundle {
+-  val identity=new UnifiedSharedOperationTagV3
+-  val payload=new UnifiedScalarResultV2
+-}
+-class QwenSharedScalarStatusV3 extends Bundle {
+-  // Cumulative private-port counts since isolated reset, NOT a release receipt.
+-  // accepted includes the one held offer; issued is physical request.fire;
+-  // returned is matching consumer result.fire, never primitive valid alone.
+-  val counts=new UnifiedSharedOperationCountsV3
+-  val heldRequest=Bool();val pending=Bool();val heldResult=Bool()
+-  val resourcesDrained=Bool();val resetRequired=Bool()
+-}
+-class QwenSharedScalarServiceV3 extends Bundle {
+-  val request=Flipped(Decoupled(new QwenSharedScalarRequestV3))
+-  val result=Decoupled(new QwenSharedScalarResultV3)
+-  val status=Output(new QwenSharedScalarStatusV3)
+ }
+ 
+ /** Internal, decoded owner job. Never a Host opcode or on-DDR encoding. */
+@@ -80,7 +52,7 @@
+ /** No block launch is exposed. One decoded owner operation per transaction;
+   * the arithmetic implementation must return instead of advancing to a phase.
+   */
+-class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false,enableUnifiedScalarService:Boolean=false) extends Module {
++class QwenOwnerKernel(s:QwenBlockShape,pipelined:Boolean=false,burstWrites:Boolean=false,overlapSilu:Boolean=false,bf16Gdn:Boolean=false,bf16GdnCore:Boolean=false,bf16GdnBlock:Boolean=false,bf16QkNormRope:Boolean=false,bf16AttentionCore:Boolean=false,bf16AttentionBlock:Boolean=false,enableH2048RmsBorrower:Boolean=false,enableTransposedDense:Boolean=false,enableTransposedSeed:Boolean=false,enableTransposedDown:Boolean=false,enableFfnTiles:Boolean=false,enableFfnWindow:Boolean=false,enableFfnDrain:Boolean=false,enableResidentFfn:Boolean=false,enablePublic21QkvReduction:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false) extends Module {
+   require(!enableOrderedVectorQkFold || enableProductionPackedQk16,"ordered vector QK fold requires packed QK16")
+   require(!enableProductionPackedQk16 || (pipelined && Qwen2NumericPolicy.official(numericPolicy) && !bf16Gdn && !bf16QkNormRope && !bf16AttentionCore && !enableH2048RmsBorrower), "production QK16 keeps the official Qwen2 owner profile")
+   require(!enableH2048RmsBorrower || (pipelined && (bf16GdnBlock || bf16AttentionBlock) && s.maxTokens<=128),
+@@ -107,9 +79,6 @@
+   require(!burstWrites || pipelined)
+   require(!overlapSilu || pipelined, "overlapped SiLU requires the pipelined owner path")
+   val io=IO(new Bundle {
+-    // Compatibility switch only: a common five-profile top MUST set this true
+-    // once for every runtime profile, never specialize it by profileId.
+-    val sharedScalar=if(enableUnifiedScalarService)Some(new QwenSharedScalarServiceV3)else None
+     val public21BackendReset=if(enablePublic21QkvReduction)Some(Input(Bool()))else None
+     val resident=if(enableResidentFfn)Some(new FfnResidentPort)else None
+     val residentHandoff=if(enableResidentFfn)Some(Output(Valid(new QwenOwnerJob)))else None
+@@ -149,11 +118,7 @@
+     r.io.residentHandoff:=resident.get.io.handoff;io.residentHandoff.get:=r.io.handoff
+   }
+   if(!pipelined){
+-  val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,numericPolicy=numericPolicy,enableUnifiedScalarService=enableUnifiedScalarService))
+-  if(enableUnifiedScalarService){
+-    io.sharedScalar.get<>core.io.sharedScalar.get
+-    core.io.sharedScalarSchedulerAvailable.get:=true.B
+-  }
++  val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,numericPolicy=numericPolicy))
+   core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+   core.io.ownerJob.get<>ordinaryJob
+   val tag=Reg(UInt(32.W));when(ordinaryJob.fire){tag:=ordinaryJob.bits.tag}
+@@ -167,20 +132,7 @@
+     io.pipelineIssues:=0.U;io.pipelineStalls:=0.U
+   }else{
+     require(s.matrixColumns==256 && s.retainedMatrix)
+-    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold,enableUnifiedScalarService=enableUnifiedScalarService))
+-    val sharedScalarAvailable=WireDefault(false.B)
+-    val sharedScalarOwned=io.sharedScalar.map(p=>p.status.heldRequest || p.status.pending || p.result.valid).getOrElse(false.B)
+-    val sharedScalarExclusive=sharedScalarOwned || io.sharedScalar.map(_.request.valid).getOrElse(false.B)
+-    if(enableUnifiedScalarService){
+-      val parent=io.sharedScalar.get;val service=core.io.sharedScalar.get
+-      // Forward valid/bits unchanged even while Core backpressures. Admission
+-      // is a ready-side interlock, never a withdrawal of an offered request.
+-      service.request.valid:=parent.request.valid
+-      service.request.bits:=parent.request.bits
+-      parent.request.ready:=service.request.ready
+-      core.io.sharedScalarSchedulerAvailable.get:=sharedScalarAvailable
+-      parent.result<>service.result;parent.status:=service.status
+-    }
++    val core=Module(new Qwen2ContinuousBlock(s,ownerDriven=true,externalMatrix=true,externalScalar=bf16Gdn||bf16QkNormRope,enableGdnSoftplus=bf16GdnCore,externalElementwiseLoan=enableH2048RmsBorrower,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold))
+     core.io.launch.valid:=false.B;core.io.launch.bits:=0.U.asTypeOf(new BlockLaunch)
+     // Elaborate one owner and one bank allocation; the common IO is storage-free.
+     val dense:DenseOwnerIO=if(enableTransposedDown)
+@@ -266,17 +218,17 @@
+         n.io.loan.request.valid || loan.busy || loan.result.valid || core.io.elementwiseResetRequired.get ||
+         (!active && (io.response.valid || core.io.scalarService.get.result.valid))
+     }
+-    val canStart= !active && !sharedScalarExclusive && !transportQuarantine && !transportFault && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope||enableTransposedDense).B && sharedPoison) && !rmsBorrowerUnavailable
++    val canStart= !active && !transportQuarantine && !transportFault && !rejected && !gdnPoison && !((bf16Gdn||bf16QkNormRope||enableTransposedDense).B && sharedPoison) && !rmsBorrowerUnavailable
+     if(enableResidentFfn){
+       val g=resident.get.io.group;val host=residentInput.get
+-      val available= !active && !sharedScalarOwned && !rejected && !gdnPoison && !sharedPoison
++      val available= !active && !rejected && !gdnPoison && !sharedPoison
+       g.request.valid:=host.request.valid && available;host.request.ready:=g.request.ready && available
+       // Register aggregate service failure before feeding an abort back into
+       // those same services. The coordinator's local poison is also sticky.
+       g.abort:=host.abort || RegNext(sharedPoison || gdnPoison,false.B)
+     }
+     if(enableFfnTiles){
+-      val available=if(enableFfnDrain)!active && !sharedScalarOwned && !sharedPoison && !rejected && !dense.drain.get.busy && !dense.window.map(_.busy).getOrElse(false.B)else if(enableFfnWindow)!active && !sharedScalarOwned && !sharedPoison && !rejected && !dense.window.get.busy else !active && !sharedScalarOwned && !sharedPoison && !rejected
++      val available=if(enableFfnDrain)!active && !sharedPoison && !rejected && !dense.drain.get.busy && !dense.window.map(_.busy).getOrElse(false.B)else if(enableFfnWindow)!active && !sharedPoison && !rejected && !dense.window.get.busy else !active && !sharedPoison && !rejected
+       dense.tiles.get.control.valid:=ffnTiles.get.control.valid && available
+       ffnTiles.get.control.ready:=dense.tiles.get.control.ready && available
+       dense.tiles.get.write.valid:=ffnTiles.get.write.valid && available
+@@ -290,7 +242,7 @@
+     if(enableFfnWindow){
+       dense.window.get<>ffnWindow.get
+       dense.window.get.invalidateLease:=ffnWindow.get.invalidateLease || ordinaryJob.fire
+-      val available=if(enableFfnDrain)!active && !sharedScalarOwned && !sharedPoison && !rejected && !tileBusy && !dense.drain.get.busy else !active && !sharedScalarOwned && !sharedPoison && !rejected && !tileBusy
++      val available=if(enableFfnDrain)!active && !sharedPoison && !rejected && !tileBusy && !dense.drain.get.busy else !active && !sharedPoison && !rejected && !tileBusy
+       dense.window.get.request.valid:=ffnWindow.get.request.valid && available
+       ffnWindow.get.request.ready:=dense.window.get.request.ready && available
+       // The window shares the poison domain; an upstream service failure must
+@@ -300,7 +252,7 @@
+     }
+     if(enableFfnDrain){
+       dense.drain.get<>ffnDrain.get
+-      val available= !active && !sharedScalarOwned && !sharedPoison && !rejected && !tileBusy && !dense.window.map(_.busy).getOrElse(false.B) && !ffnWindow.map(_.request.valid).getOrElse(false.B)
++      val available= !active && !sharedPoison && !rejected && !tileBusy && !dense.window.map(_.busy).getOrElse(false.B) && !ffnWindow.map(_.request.valid).getOrElse(false.B)
+       dense.drain.get.request.valid:=ffnDrain.get.request.valid && available
+       ffnDrain.get.request.ready:=dense.drain.get.request.ready && available
+       dense.drain.get.abort:=ffnDrain.get.abort || ffnTiles.get.abort || ffnTileSilu.get.abort ||
+@@ -470,31 +422,19 @@
+       a.io.done.ready:=active && mode===13.U && ordinaryDone.ready
+       when(a.io.done.fire && invalidCommit){rejected:=true.B}
+     }
+-    val legacyScalarDebt=WireDefault(false.B)
+-    val legacyScalarFault=WireDefault(false.B)
+     // The accepted owner retains exclusive scalar ownership until done.
+     // All clients use the one existing core ALU/divider/exp service.
+     if(bf16Gdn||bf16QkNormRope){
+       val clients=gdn.toSeq.map(x=>3->x.io.scalar)++prep.toSeq.map(x=>4->x.io.scalar)++recurrent.toSeq.map(x=>5->x.io.scalar)++gatedNorm.toSeq.map(x=>6->x.io.scalar)++rmsNorm.map(x=>8->x.scalar)++elementwise.toSeq.map(x=>9->x.io.scalar)++qkNorm.toSeq.map(x=>10->x.io.scalar)++partialRope.toSeq.map(x=>11->x.io.scalar)++gqa.toSeq.map(x=>13->x.io.scalar)
+       val service=core.io.scalarService.get
+-      val pending=RegInit(false.B);val responseOwner=Reg(UInt(4.W))
+-      // Policy0 is assigned at the one core primitive ingress, not inferred
+-      // from this mode or from a runtime profile. This ABI remains unchanged.
+-      service.request.valid:=active && !pending && MuxLookup(mode,false.B)(clients.map{case(i,c)=>i.U->c.request.valid})
++      service.request.valid:=active && MuxLookup(mode,false.B)(clients.map{case(i,c)=>i.U->c.request.valid})
+       service.request.bits:=MuxLookup(mode,0.U.asTypeOf(new ScalarRequest))(clients.map{case(i,c)=>i.U->c.request.bits})
+-      service.result.ready:=pending && MuxLookup(responseOwner,false.B)(clients.map{case(i,c)=>i.U->c.result.ready})
+-      when(service.request.fire){pending:=true.B;responseOwner:=mode}
+-      when(service.result.fire){pending:=false.B}
+-      legacyScalarDebt:=pending
+-      legacyScalarFault:=(service.result.valid && !pending) ||
+-        (pending && (!active || mode=/=responseOwner))
++      service.result.ready:=active && MuxLookup(mode,false.B)(clients.map{case(i,c)=>i.U->c.result.ready})
+       for((i,c)<-clients){
+-        c.request.ready:=active && !pending && mode===i.U && service.request.ready
+-        // A held reply retains its actual accepting client through mode/fault
+-        // changes. The borrower also sees stray idle data for recovery checks.
+-        val ownedResponse=pending && responseOwner===i.U
+-        val strayBorrower=if(enableH2048RmsBorrower && i==8)(!pending && !active)else false.B
+-        c.result.valid:=(ownedResponse || strayBorrower) && service.result.valid
++        c.request.ready:=active && mode===i.U && service.request.ready
++        // The borrower must see stray idle replies when deciding if clear is safe.
++        val responseSelected=if(enableH2048RmsBorrower && i==8)(!active || mode===8.U)else(active && mode===i.U)
++        c.result.valid:=responseSelected && service.result.valid
+         c.result.bits:=service.result.bits;c.error:=service.error
+       }
+     }
+@@ -644,16 +584,11 @@
+     val rawReturn=io.response.valid || io.burstResponse.get.valid ||
+       io.writeResponse.map(_.valid).getOrElse(false.B) ||
+       core.io.scalarService.map(_.result.valid).getOrElse(false.B)
+-    // This affects only admission-ready, never forwarded valid or held offers.
+-    // Lending is serialized against every actual ordinary/auxiliary owner;
+-    // new requests cannot create a second use of the core's private Scalar.
+-    sharedScalarAvailable:= !active && noAuxOwner && !transportQuarantine &&
+-      !rejected && !gdnPoison && !sharedPoison && !legacyScalarDebt && !rawReturn
+-    transportFault:=( !active && noAuxOwner && rawReturn) || legacyScalarFault
++    transportFault:= !active && noAuxOwner && rawReturn
+     val anyTerminal=core.io.result.valid || dense.done.valid || silu.map(_.io.done.valid).getOrElse(false.B) ||
+       gdnValid || prepValid || recurrentValid || gatedValid || rmsValid || elementValid ||
+       qkNormValid || partialRopeValid || kvAppendValid || gqaValid
+-    io.resourcesDrained:= !active && noAuxOwner && !sharedScalarExclusive && !legacyScalarDebt && !io.resetRequired &&
++    io.resourcesDrained:= !active && noAuxOwner && !io.resetRequired &&
+       core.io.resourcesDrained && matrix.io.resourcesDrained && !anyTerminal &&
+       !memories.map(_._2.valid).reduce(_||_) && !io.memory.valid && !rawReturn &&
+       !io.burst.get.valid && !io.writeRequest.map(_.valid).getOrElse(false.B) &&

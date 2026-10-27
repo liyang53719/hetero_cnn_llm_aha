@@ -1,0 +1,10 @@
+--- a/UnifiedMoePhaseMergeOwnerV5.scala
++++ b/UnifiedMoePhaseMergeOwnerV5.scala
+@@ -87,7 +87,6 @@
+   selection.io.job.bits:=UnifiedMoeRoutedReadJobV5.fromActualRoutedRetirement(job.lease,job.routed,token.pad(32))
+   selection.io.result.ready:=state===waitSelection && !quarantine
+   tile.io.begin.valid:=state===startTile && !fault
+-  tile.io.result.ready:=state===waitTile && !quarantine
+   val proposedTile=WireDefault(0.U.asTypeOf(new UnifiedMoeNineDownReadJobV5))
+   proposedTile.context:=job.lease.context;proposedTile.allocationSequence:=job.lease.allocationSequence
+   proposedTile.identity.transactionId:=job.lease.context.transactionId

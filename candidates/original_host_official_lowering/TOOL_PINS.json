@@ -1,0 +1,50 @@
+{
+  "status": "SELECTED_TOOL_IDENTITIES_AND_PUBLIC106_LOCK_NOT_COMPLETE_RUNTIME_BUNDLE",
+  "java21_selected": [
+    {
+      "role": "JAVA21_HOME/bin/java",
+      "bytes": 14384,
+      "sha256": "6698f6f10143ed8463b06062281c727152d2e0ae2a3569b1716fbb2c6cedf0ba"
+    },
+    {
+      "role": "JAVA21_HOME/lib/modules",
+      "bytes": 140853890,
+      "sha256": "f82ec56fbf7c7b69da09a04d4fb103c74c44e6443c8a1b2744e59c5539e7f781"
+    },
+    {
+      "role": "JAVA21_HOME/lib/server/libjvm.so",
+      "bytes": 27033592,
+      "sha256": "56a71b907446b53ea9ab0f1599d3c22298f150ac2f9530acc62d5e7fc003e564"
+    },
+    {
+      "role": "JAVA21_HOME/release",
+      "bytes": 1212,
+      "sha256": "36b8804939e4f135ac0f7a291fa7b4e8d99fd18dd08d05c9b869463c670cdd37"
+    }
+  ],
+  "full_original_tool_manifest": {
+    "bytes": 476513,
+    "sha256": "809f8d3f9fbf68d2ebe1646dba83bd6c15013604d5f40f6a867944f01e6db40d"
+  },
+  "original_tool_rows": 314,
+  "ordered_dependency_rows": 106,
+  "ordered_dependency_reference": {
+    "path": "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+    "commit": "3f1ec9a8439090ba101bdda775f1f19578b507eb",
+    "bytes": 27004,
+    "sha256": "1daed33152963b4a53db8cca082146d73c9c916183ccb0f463b62d04e94a718b",
+    "git_blob_sha": "a28ba70c38053b7212787b78ed0ebc8949ece3a8"
+  },
+  "plugin": {
+    "maven_path": "org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+    "bytes": 79111,
+    "sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb"
+  },
+  "versions": {
+    "scala": "2.13.16",
+    "chisel": "6.7.0",
+    "firrtl2": "6.0.0",
+    "java_major": 21
+  },
+  "runtime_admission": "A new run must restore and qualify all needed runtime/system files separately. These selected identities do not assert complete dynamic closure; no tool payload is included."
+}

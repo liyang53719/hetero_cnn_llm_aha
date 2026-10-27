@@ -1,0 +1,39 @@
+--- a/HostBlockTopV4.scala
++++ b/HostBlockTopV4.scala
+@@ -59,8 +59,6 @@
+   moeArithmetic.io.coreScalar<>owner.io.sharedScalar.get
+   moeSelection.io.client<>moeLoop.io.selection
+   val phaseRoutingFault=Wire(Bool());val phaseArithmeticLeaseFault=Wire(Bool())
+-  val phaseArithmeticEventsPending=Wire(Bool())
+-  val phaseArithmeticDrained=moeArithmetic.io.resourcesDrained && !phaseArithmeticEventsPending
+   val phaseControlFault=Wire(Bool())
+   val phaseMemoryFault=Wire(Bool());val phaseMemoryPoison=RegInit(false.B)
+   when(phaseMemoryFault){phaseMemoryPoison:=true.B}
+@@ -97,23 +95,21 @@
+   cmd.io.moePhaseFault:=phaseFault || runtimeGuard.io.localFault || phaseAllocator.io.localFault
+   runtimeGuard.io.transportDrained:=physicalDrained && phaseDenseDrained
+   phaseAllocator.io.priorPhaseDrained:=physicalDrained && cmd.io.metadataDrained &&
+-    phaseArithmeticDrained && moeSelection.io.resourcesDrained
++    moeArithmetic.io.resourcesDrained && moeSelection.io.resourcesDrained
+   phaseAllocator.io.physicalDrained:=physicalDrained && phaseDenseDrained &&
+-    phaseArithmeticDrained && moeSelection.io.resourcesDrained
++    moeArithmetic.io.resourcesDrained && moeSelection.io.resourcesDrained
+   phaseAllocator.io.currentFault:=phaseFault
+   val lifetime=HostMoePhaseLifetimeWiringV5.connect(cmd,runtimeGuard,phaseAllocator,
+     moeLoop,moeSigmoid,moeMerge,moeResidual,n1ImageValid,n1PhysicalImage,
+     physicalDrained && phaseDenseDrained,
+-    phaseArithmeticDrained && moeSelection.io.resourcesDrained,
++    moeArithmetic.io.resourcesDrained && moeSelection.io.resourcesDrained,
+     physicalFault || numericalFault)
+   phaseControlFault:=lifetime.localFault
+   val denseRouting=HostMoeDenseRoutingV5.connect(runtimeGuard,moeLoop,moeSigmoid,
+     lifetime.lease,lifetime.active,physicalFault || arithmeticLeasePoison)
+   phaseRoutingFault:=denseRouting.localFault;phaseDenseDrained:=denseRouting.resourcesDrained
+-  val arithmeticEvents=HostMoeArithmeticLeaseWiringV5.connect(moeArithmetic,
++  phaseArithmeticLeaseFault:=HostMoeArithmeticLeaseWiringV5.connect(moeArithmetic,
+     lifetime.lease,lifetime.active,moeLoop,moeSigmoid,moeMerge,moeResidual)
+-  phaseArithmeticLeaseFault:=arithmeticEvents._1
+-  phaseArithmeticEventsPending:=arithmeticEvents._2
+   // Fault feedback to numerical resource adapters is registered. Accepted/held
+   // requests and replies still obey their own exact debt/identity contracts.
+   moeArithmetic.io.externalPoison:=RegNext(physicalFault || lifetime.localFault || phaseRoutingFault,false.B)

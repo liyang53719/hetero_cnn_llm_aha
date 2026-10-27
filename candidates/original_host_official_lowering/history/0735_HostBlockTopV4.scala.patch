@@ -1,0 +1,191 @@
+--- a/HostBlockTopV4.scala
++++ b/HostBlockTopV4.scala
+@@ -47,24 +47,8 @@
+     val memoryAccepted=Output(Vec(2,UInt(64.W)));val memoryReturned=Output(Vec(2,UInt(64.W)))
+   })
+   dontTouch(io)
+-  val cmd=Module(new HostBlockCommandsV4(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold,enableUnifiedScalarService=true))
+-  // Same one physical memory port/arbiter; twelve logical users, not twelve DMA engines.
+-  val hub=Module(new SharedMemoryArbiter(12))
+-  val moeLoop=Module(new UnifiedMoeRuntimeExpertLoopV4)
+-  val moeSigmoid=Module(new UnifiedMoeSharedGateSigmoidOwnerV5)
+-  val moeMerge=Module(new UnifiedMoePhaseMergeOwnerV5)
+-  val moeResidual=Module(new UnifiedMoePhaseResidualOwnerV5)
+-  val moeArithmetic=Module(new UnifiedMoeSharedArithmeticAdapterV5)
+-  val moeSelection=Module(new HostMoeSelectionServiceV5)
+-  moeArithmetic.io.coreScalar<>owner.io.sharedScalar.get
+-  moeSelection.io.client<>moeLoop.io.selection
+-  val phaseRoutingFault=Wire(Bool());val phaseArithmeticLeaseFault=Wire(Bool())
+-  val phaseArithmeticEventsPending=Wire(Bool())
+-  val phaseArithmeticDrained=moeArithmetic.io.resourcesDrained && !phaseArithmeticEventsPending
+-  val phaseControlFault=Wire(Bool())
+-  val phaseMemoryFault=Wire(Bool());val phaseMemoryPoison=RegInit(false.B)
+-  when(phaseMemoryFault){phaseMemoryPoison:=true.B}
+-  val phaseDenseDrained=Wire(Bool())
++  val cmd=Module(new HostBlockCommandsV4(s,bf16Weights=pipelined,bf16V=bf16V,bf16Qkv=bf16Qkv,bf16Gdn=bf16Gdn,bf16GdnCore=bf16GdnCore,bf16GdnBlock=bf16GdnBlock,bf16QkNormRope=bf16QkNormRope,bf16AttentionCore=bf16AttentionCore,bf16AttentionBlock=bf16AttentionBlock,enableTransposedDown=enableTransposedDown,enableResidentFfn=enableResidentFfn,numericPolicy=numericPolicy));val owner=Module(new QwenOwnerKernel(s,pipelined,burstWrites,overlapSilu,bf16Gdn,bf16GdnCore,bf16GdnBlock,bf16QkNormRope,bf16AttentionCore,bf16AttentionBlock,enableTransposedDense=enableTransposedDown,enableTransposedSeed=enableTransposedDown,enableTransposedDown=enableTransposedDown,enableFfnTiles=enableResidentFfn,enableFfnWindow=enableResidentFfn,enableFfnDrain=enableResidentFfn,enableResidentFfn=enableResidentFfn,enablePublic21QkvReduction=enablePublic21QkvReduction,numericPolicy=numericPolicy,enableProductionPackedQk16=enableProductionPackedQk16,enableOrderedVectorQkFold=enableOrderedVectorQkFold))
++  val hub=Module(new SharedMemoryArbiter(2))
+   val dmaPoison=Wire(Bool())
+   val dmaDrained=Wire(Bool())
+   if(enablePublic21QkvReduction){owner.io.public21BackendReset.get:=hub.io.resetRequired || dmaPoison}
+@@ -87,59 +71,40 @@
+ 
+   val physicalFault=owner.io.resetRequired || hub.io.resetRequired || dmaPoison
+   val physicalDrained=owner.io.resourcesDrained && hub.io.resourcesDrained && dmaDrained
+-  // Only registered event-derived lease faults feed admission. This avoids
+-  // begin.fire -> currentFault -> held-offer.valid -> begin.fire cycles.
+-  val arithmeticLeasePoison=RegNext(phaseArithmeticLeaseFault,false.B)
+-  val numericalFault=moeArithmetic.io.resetRequired || moeSelection.io.resetRequired ||
+-    phaseRoutingFault || arithmeticLeasePoison || phaseMemoryPoison
+-  val phaseFault=physicalFault || numericalFault || phaseControlFault || phaseMemoryFault
+-  // No reflected localFault -> authority.currentFault -> same localFault loop.
+-  cmd.io.moePhaseFault:=phaseFault || runtimeGuard.io.localFault || phaseAllocator.io.localFault
+-  runtimeGuard.io.transportDrained:=physicalDrained && phaseDenseDrained
+-  phaseAllocator.io.priorPhaseDrained:=physicalDrained && cmd.io.metadataDrained &&
+-    phaseArithmeticDrained && moeSelection.io.resourcesDrained
+-  phaseAllocator.io.physicalDrained:=physicalDrained && phaseDenseDrained &&
+-    phaseArithmeticDrained && moeSelection.io.resourcesDrained
+-  phaseAllocator.io.currentFault:=phaseFault
+-  val lifetime=HostMoePhaseLifetimeWiringV5.connect(cmd,runtimeGuard,phaseAllocator,
+-    moeLoop,moeSigmoid,moeMerge,moeResidual,n1ImageValid,n1PhysicalImage,
+-    physicalDrained && phaseDenseDrained,
+-    phaseArithmeticDrained && moeSelection.io.resourcesDrained,
+-    physicalFault || numericalFault)
+-  phaseControlFault:=lifetime.localFault
+-  val denseRouting=HostMoeDenseRoutingV5.connect(runtimeGuard,moeLoop,moeSigmoid,
+-    lifetime.lease,lifetime.active,physicalFault || arithmeticLeasePoison)
+-  phaseRoutingFault:=denseRouting.localFault;phaseDenseDrained:=denseRouting.resourcesDrained
+-  val arithmeticEvents=HostMoeArithmeticLeaseWiringV5.connect(moeArithmetic,
+-    lifetime.lease,lifetime.active,moeLoop,moeSigmoid,moeMerge,moeResidual)
+-  phaseArithmeticLeaseFault:=arithmeticEvents._1
+-  phaseArithmeticEventsPending:=arithmeticEvents._2
+-  // Fault feedback to numerical resource adapters is registered. Accepted/held
+-  // requests and replies still obey their own exact debt/identity contracts.
+-  moeArithmetic.io.externalPoison:=RegNext(physicalFault || lifetime.localFault || phaseRoutingFault,false.B)
+-  moeSelection.io.currentFault:=RegNext(physicalFault || lifetime.localFault || phaseRoutingFault,false.B)
+-  val routerAuthority=RegInit(false.B)
+-  when(moeLoop.io.acceptedLeaseFire){routerAuthority:=true.B}
+-  when(moeLoop.io.done.fire){routerAuthority:=false.B}
+-  moeSelection.io.authorityValid:=lifetime.active && routerAuthority
+-  moeSelection.io.authority:=0.U.asTypeOf(new UnifiedSharedOwnerIdentityV3)
+-  moeSelection.io.authority.transactionId:=lifetime.lease.context.transactionId
+-  moeSelection.io.authority.ownerSequence:=lifetime.lease.firstOwnerSequence
+-  moeSelection.io.authority.stage:=HostMoeArithmeticLeaseWiringV5.RouterStage.U
+-  // The N1 typed image remains live through residual/final dual release; no
+-  // internal FFN capture pulse or routed-only result clears it.
+-  when(cmd.io.moePhaseResult.fire && cmd.io.moePhaseResult.bits.resourcesRetired){n1ImageValid:=false.B}
++  // Never reflect resetRequired through authority.currentFault back into itself.
++  // localFault excludes each controller's authority/global combinational input.
++  cmd.io.moePhaseFault:=physicalFault || runtimeGuard.io.localFault || phaseAllocator.io.localFault
++  runtimeGuard.io.transportDrained:=physicalDrained
++  phaseAllocator.io.priorPhaseDrained:=physicalDrained && cmd.io.metadataDrained
++  phaseAllocator.io.physicalDrained:=physicalDrained
++  phaseAllocator.io.currentFault:=physicalFault
++  // Explicit installation boundary: numerical phase consumer and final shared+
++  // eight-routed merge/ACK lifetime producer are NOT installed in this slice.
++  // The original Commands profile1..4 Unsupported gate is unchanged. No fake
++  // grant.fire, retirement, release or numerical completion is generated here.
++  phaseAllocator.io.grant.ready:=false.B
++  runtimeGuard.io.phaseJob.valid:=false.B
++  runtimeGuard.io.phaseJob.bits:=0.U.asTypeOf(new HostMoePhysicalOwnerJobV5)
++  runtimeGuard.io.phaseDone.ready:=false.B
++  runtimeGuard.io.release.valid:=false.B
++  runtimeGuard.io.release.bits:=0.U.asTypeOf(new HostMoeOwnerRangeReleaseV5)
++  runtimeGuard.io.finalPhaseRetired:=false.B
++  phaseAllocator.io.release.valid:=false.B
++  phaseAllocator.io.release.bits:=0.U.asTypeOf(new HostMoePhaseReleaseV5)
++  phaseAllocator.io.finalMergeRetired:=false.B
++  cmd.io.moePhaseResult.valid:=false.B
++  cmd.io.moePhaseResult.bits:=0.U.asTypeOf(new HostMoePhaseRetirementV5)
+   // Every constructor path gets the SAME two-sided launch poison gate. A new
+   // launch may not enter while an earlier owner fault/unknown reply is live.
+   // Held owner offers/results below remain stable and are not cancelled.
+-  val launchPoison=cmd.io.resetRequired||owner.io.resetRequired||hub.io.resetRequired||dmaPoison||runtimeGuard.io.resetRequired||phaseAllocator.io.resetRequired||phaseFault
++  val launchPoison=cmd.io.resetRequired||owner.io.resetRequired||hub.io.resetRequired||dmaPoison||runtimeGuard.io.resetRequired
+   cmd.io.launch.valid:=io.launch.valid && !launchPoison
+   cmd.io.launch.bits:=io.launch.bits
+   io.launch.ready:=cmd.io.launch.ready && !launchPoison
+   if(enableTransposedDown){owner.io.prefixWorkspace.get:=cmd.io.prefixWorkspace.get}
+   io.result<>cmd.io.result;io.completion<>cmd.io.completion
+   runtimeGuard.io.authority:=cmd.io.runtimeAuthority
+-  runtimeGuard.io.globalFault:=cmd.io.resetRequired || owner.io.resetRequired || hub.io.resetRequired || dmaPoison || numericalFault || phaseControlFault
++  runtimeGuard.io.globalFault:=cmd.io.resetRequired || owner.io.resetRequired || hub.io.resetRequired || dmaPoison
+   runtimeGuard.io.job<>cmd.io.job;cmd.io.done<>runtimeGuard.io.done
+   owner.io.job<>runtimeGuard.io.physicalJob;runtimeGuard.io.physicalDone<>owner.io.done
+   if(enableResidentFfn){
+@@ -149,56 +114,6 @@
+   }
+   hub.io.requests(0)<>cmd.io.memory;cmd.io.response<>hub.io.responses(0)
+   hub.io.requests(1)<>owner.io.memory;owner.io.response<>hub.io.responses(1)
+-  // Ten real phase clients use that SAME arbiter. Original client tags can
+-  // repeat locally: the arbiter owns nonreused physical transport tags and
+-  // restores each original tag only to the captured client on real response.
+-  val phaseMemory=Seq(moeLoop.io.routerReadMemory,moeLoop.io.routeMapMemory,
+-    moeLoop.io.gatherMemory,moeLoop.io.activationMemory,moeLoop.io.descriptorMemory,
+-    moeSigmoid.io.memory,moeMerge.io.metadataMemory,moeMerge.io.dataMemory,
+-    moeMerge.io.memory,moeResidual.io.memory)
+-  val phaseResponse=Seq(moeLoop.io.routerReadResponse,moeLoop.io.routeMapResponse,
+-    moeLoop.io.gatherResponse,moeLoop.io.activationResponse,moeLoop.io.descriptorResponse,
+-    moeSigmoid.io.response,moeMerge.io.metadataResponse,moeMerge.io.dataResponse,
+-    moeMerge.io.response,moeResidual.io.response)
+-  // Real accepted region rights AND actual fixed phase views. These checks
+-  // never turn a Host base or matching packet into a lease. The same retained
+-  // lease and leaf-held payload must persist until an exposed request fires.
+-  val memoryLegal=phaseMemory.map{r=>
+-    val address=r.bits.address.pad(80);val end=address+64.U
+-    val l=lifetime.lease
+-    val rights=l.context.host.regions.map(g=>address>=g.base.pad(80) && end<=g.limit.pad(80) &&
+-      Mux(r.bits.write,g.write,g.read)).reduce(_||_)
+-    val scratch=HostMoePhaseLayoutV4.Regions.map{case(o,n)=>
+-      address>=l.allocationBase.pad(80)+o.U && end<=l.allocationBase.pad(80)+(o+n).U}.reduce(_||_)
+-    def within(t:DecodedTensor):Bool=address>=t.address.pad(80) && end<=t.paddedEnd.pad(80)
+-    val liveView=within(l.context.output) || (!r.bits.write &&
+-      (within(l.context.input)||within(l.context.residual)))
+-    lifetime.active && r.bits.address(5,0)===0.U && end<=(BigInt(1)<<56).U && rights && (scratch||liveView)
+-  }
+-  phaseMemoryFault:=phaseMemory.indices.map(i=>phaseMemory(i).valid && !memoryLegal(i)).reduce(_||_)
+-  // Distinguish a real previously published hub offer from a leaf-local
+-  // request created after fault (for example prepareWrite -> offerMemory).
+-  // Ten existing HeldDecoupledOffer bits, no copied payload or new queue:
+-  // current faults veto FIRST visibility, not an already-visible held offer.
+-  val newMemoryFault=phaseFault || phaseArithmeticLeaseFault || phaseMemoryFault ||
+-    runtimeGuard.io.localFault || phaseAllocator.io.localFault ||
+-    cmd.io.runtimeAuthority.currentFault || moeLoop.io.resetRequired ||
+-    moeSigmoid.io.resetRequired || moeMerge.io.resetRequired || moeResidual.io.resetRequired
+-  for(i<-phaseMemory.indices){
+-    val requestOffer=HeldDecoupledOffer(phaseMemory(i).valid && memoryLegal(i),
+-      hub.io.requests(i+2).ready,newMemoryFault)
+-    hub.io.requests(i+2).valid:=requestOffer.valid
+-    hub.io.requests(i+2).bits:=phaseMemory(i).bits
+-    phaseMemory(i).ready:=hub.io.requests(i+2).ready && requestOffer.valid
+-    phaseResponse(i)<>hub.io.responses(i+2)
+-  }
+-  val transportReset=hub.io.resetRequired || dmaPoison
+-  moeLoop.io.routerReadResetRequired:=transportReset;moeLoop.io.routeMapResetRequired:=transportReset
+-  moeLoop.io.gatherResetRequired:=transportReset;moeLoop.io.activationResetRequired:=transportReset
+-  moeLoop.io.descriptorResetRequired:=transportReset;moeSigmoid.io.memoryResetRequired:=transportReset
+-  moeMerge.io.metadataResetRequired:=transportReset;moeMerge.io.dataResetRequired:=transportReset
+-  moeMerge.io.memoryResetRequired:=transportReset;moeResidual.io.memoryResetRequired:=transportReset
+-
+   if(weightReadBeats==1){
+     val dma=Module(new RetainedIdmaMemoryAdapter)
+     dma.io.request<>hub.io.memory;hub.io.response<>dma.io.response;io.axi<>dma.io.axi
+@@ -233,17 +148,9 @@
+     dmaPoison:=dma.io.resetRequired;dmaDrained:=dma.io.resourcesDrained;io.idmaTransfers:=dma.io.transfers
+     io.idmaReadBursts:=dma.io.readBursts;io.idmaReadBeats:=dma.io.readBeats;io.idmaCacheHits:=dma.io.cacheHits
+   }
+-  io.resetRequired:=cmd.io.resetRequired||owner.io.resetRequired||hub.io.resetRequired||dmaPoison||runtimeGuard.io.resetRequired||phaseAllocator.io.resetRequired||phaseFault||phaseArithmeticLeaseFault||phaseMemoryFault
++  io.resetRequired:=cmd.io.resetRequired||owner.io.resetRequired||hub.io.resetRequired||dmaPoison||runtimeGuard.io.resetRequired||phaseAllocator.io.resetRequired
+   io.pc:=cmd.io.pc;io.issuedJobs:=cmd.io.issuedJobs
+   io.usefulMacs:=cmd.io.usefulMacs;io.executedMacs:=cmd.io.executedMacs;io.writeBytes:=cmd.io.writeBytes
+   io.pipelineIssues:=owner.io.pipelineIssues;io.pipelineStalls:=owner.io.pipelineStalls
+-  // Preserve the external two-bucket diagnostic ABI: metadata vs ALL compute.
+-  // Wider sums expose saturation rather than silently wrapping. These are
+-  // diagnostics, never credits, permissions, or a resource-drained proof.
+-  def computeTotal(v:Vec[UInt]):UInt={
+-    val wide=v.drop(1).map(_.pad(68)).reduce(_+_)
+-    Mux(wide>"hffffffffffffffff".U(68.W),"hffffffffffffffff".U(64.W),wide(63,0))
+-  }
+-  io.memoryAccepted(0):=hub.io.accepted(0);io.memoryReturned(0):=hub.io.returned(0)
+-  io.memoryAccepted(1):=computeTotal(hub.io.accepted);io.memoryReturned(1):=computeTotal(hub.io.returned)
++  io.memoryAccepted:=hub.io.accepted;io.memoryReturned:=hub.io.returned
+ }

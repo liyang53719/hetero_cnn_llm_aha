@@ -1,0 +1,141 @@
+{
+  "verdict": "PASS_ACTUAL_ORIGINAL_HOST_OFFICIAL_HIGH_TO_LOW_DIAGNOSTIC_AND_BOUNDED_STRUCTURE_CONTRACT_ONLY",
+  "output_provenance": {
+    "both_low_bytes": 198822491,
+    "both_low_sha256": "de76a73450318c384f4746c6185487826464fe0cd32412b4c234438946726e4a",
+    "both_low_strict_byte_equality": "Established by the exact admitted original production runner on its successful path, plus same complete-file producer hashes. Not independently rerun over398MB here.",
+    "explicit_low_under_unchanged192MiB_main_limit": true,
+    "high_bytes": 69399011,
+    "high_sha256": "38fcdbd7ffba39a28e637e3e2fca99a333472071e6d151be5f1d2fe5da77988f",
+    "independent_small_file_hash_count": 9,
+    "all14_current_stats_equal_receipt_and_frozen_identity_metadata": true,
+    "large_ir_and_annotations_full_hash_recheck_by_this_auditor": false
+  },
+  "bounded_structure_facts": {
+    "high": {
+      "unique_modules": 1040,
+      "reachable_instances": 1040,
+      "endpoints": 8,
+      "clock_gates": 8,
+      "idma": 1,
+      "bank_count": 1,
+      "bank_lanes": 32,
+      "legacy_BlockScalarFloat": 16,
+      "BlockScalarFloatPolicyV2": 1,
+      "MatrixPipelineService": 1,
+      "QwenOwnerKernel": 1
+    },
+    "low": {
+      "unique_modules": 79,
+      "reachable_instances": 1040,
+      "endpoints": 8,
+      "clock_gates": 8,
+      "idma": 1,
+      "bank_count": 1,
+      "bank_lanes": 32,
+      "legacy_BlockScalarFloat": 16,
+      "BlockScalarFloatPolicyV2": 1,
+      "MatrixPipelineService": 1,
+      "QwenOwnerKernel": 1
+    },
+    "launch": {
+      "flattened_fields": 25,
+      "payload_bits": 844
+    },
+    "current_stat": {
+      "payload": 485242729,
+      "control": 7126,
+      "combined": 485249855,
+      "scope": "Includes later small archive metadata; all below selected limits."
+    }
+  },
+  "success_meaning": "The unchanged actual original HostBlockTopV4 fixed public21 constructor completed the official high-to-low pipeline and its normal initialization,width/flow,combinational-loop checks, then saved and identity-checked low. Previous observed missing-ready/two-loop errors do not occur in this successful exact successor lowering. This is structural compiler acceptance, not runtime/numerical proof.",
+  "limits": [
+    "Fixed capacity1024 constructor, not completed M128 prefill; runtime profiles1..4 remain closed and five-block numerical acceptance remains0/5.",
+    "Small hierarchy confirms one shared32-lane bank but also16 legacy BlockScalarFloat plus1 PolicyV2 scalar. Do not relabel whole Top as a soleScalar/uniform all-constructor resource solution.",
+    "Eight logical512-MAC endpoint instances give fixed4096 logical capacity; blackbox declarations/seed widths are not final provider RTL or numerical correctness.",
+    "No SV, simulator/DUT execution, completed MoE workload, reset/stale-epoch recovery proof, physical SRAM/PPA, or all-five hardware/interface acceptance.",
+    "All prior FAIL/INCOMPLETE evidence retained. In particular new complete sidecars do not retrospectively recover1031 missing owner/cleanup/inner-postflight proof.",
+    "This audit is bounded evidence/structure review, not an independent full traversal or second hash of the large emitted low IR."
+  ],
+  "actual": {
+    "native_exit": 0,
+    "outer_exit": 0,
+    "direct_reap_exit": 0,
+    "errors": [],
+    "phase_count": 13,
+    "phase_names": [
+      "elaborate.begin",
+      "elaborate.end",
+      "high.save.begin",
+      "high.save.end",
+      "high.identity.begin",
+      "high.identity.end",
+      "official.low.begin",
+      "official.low.end",
+      "low.save.begin",
+      "low.save.end",
+      "low.identity.begin",
+      "low.identity.end",
+      "PASS_HIGH_AND_LOW_DIAGNOSTIC_ONLY"
+    ],
+    "phase_wall_and_cpu_monotonic": true,
+    "artifact_count": 14,
+    "explicit_artifact_records": 13,
+    "all13_log_records_equal_complete_producer_receipt_rows": true,
+    "exact_flat14_file_set": true,
+    "official_low_returned": true,
+    "low_identity_returned": true,
+    "warnings_retained": 9,
+    "inner_wall_seconds": 173.4908976299921,
+    "outer_wall_seconds": 173.58745102200191,
+    "sampled_cpu_seconds": 143.47,
+    "sampled_rss_bytes": 2534420480,
+    "sampled_max_tree_bytes": 485224795
+  },
+  "control_and_supervision": {
+    "actual_freeze_members_checked": 8,
+    "root_freeze_members_checked": 12,
+    "root_fixed_pins_checked": 9,
+    "claim_argv_matches_command": true,
+    "preflight_checks": 1402,
+    "postflight_checks": 1402,
+    "baseline_pre_and_post": {
+      "class_count": 883,
+      "bytes": 14955848
+    },
+    "external_prepost_byte_equal": true,
+    "parent_pins": 56,
+    "absence_paths": 10,
+    "sidecar_exact_count": 3,
+    "sidecar_total_bytes": 7126,
+    "all_records_below32KiB_and_aggregate_below64KiB": true,
+    "owner_identity_boot_session_and_cleanup_proof_match_all_records": true,
+    "final_report_semantically_equals_receipt": true,
+    "final_report_raw_bytes_equal_receipt": false,
+    "byte_difference_reason": "FINAL_REPORT sorted JSON keys; semantic equality is the agreed criterion.",
+    "cleanup_complete": true,
+    "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+    "two_complete_empty_scans": true,
+    "barrier_before_leader_reap": true,
+    "no_post_reap_signals": true,
+    "cleanup_scope": "ANCHORED_ORIGINAL_GROUP_AND_OBSERVED_IDENTITIES_ONLY",
+    "outer_timeout": false,
+    "outer_forced_kill": false,
+    "current_postarchive_combined_stat": {
+      "payload": 485242729,
+      "control": 7126,
+      "combined": 485249855,
+      "scope": "Includes later small archive metadata; all below selected limits."
+    }
+  },
+  "actual_review": {
+    "bytes": 8387,
+    "sha256": "4d51b3ea72d1d036921a9723f0f98e7d84c11b501c409af70c05c4aa3b0891fe"
+  },
+  "actual_review_freeze": {
+    "bytes": 642,
+    "sha256": "ed4e566247fbbf64e922daed878c9b7175b7d832df6791633650366482d3751c"
+  },
+  "five_block_numerical": "0/5 unchanged"
+}

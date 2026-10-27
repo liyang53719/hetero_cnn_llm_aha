@@ -1,0 +1,170 @@
+--- a/Qwen2Block.scala
++++ b/Qwen2Block.scala
+@@ -51,8 +51,7 @@
+   * Fifteen stages share the DDR request/ack interface. QK uses O(T) score SRAM.
+   * Each successor starts only after the previous stage's final write ACK.
+   */
+-class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false,enableUnifiedScalarService:Boolean=false) extends Module {
+-  require(!enableUnifiedScalarService || ownerDriven,"unified Scalar lending requires owner serialization")
++class Qwen2ContinuousBlock(s:QwenBlockShape=QwenBlockShape(), ownerDriven:Boolean=false, externalMatrix:Boolean=false, externalScalar:Boolean=false, enableGdnSoftplus:Boolean=false, externalElementwiseLoan:Boolean=false,numericPolicy:Qwen2NumericPolicy=Qwen2NumericPolicy.LegacyV0,enableProductionPackedQk16:Boolean=false,enableOrderedVectorQkFold:Boolean=false) extends Module {
+   require(!enableOrderedVectorQkFold || (enableProductionPackedQk16 && s.headDim==128), "ordered vector QK fold requires selected production packed QK16 headDim128")
+   require(!enableProductionPackedQk16 || (ownerDriven && externalMatrix && Qwen2NumericPolicy.official(numericPolicy)), "production QK16 requires the official external-Matrix owner; capacity stays 1024")
+   require(!externalElementwiseLoan || (ownerDriven && externalScalar), "elementwise loan requires owner serialization and the shared Scalar")
+@@ -80,10 +79,6 @@
+     val packedQkActive=if(enableProductionPackedQk16)Some(Output(Bool()))else None
+     val packedQkStepsDrained=if(enableProductionPackedQk16)Some(Input(Bool()))else None
+     val ownerJob=if(ownerDriven)Some(Flipped(Decoupled(new QwenOwnerJob)))else None
+-    val sharedScalar=if(enableUnifiedScalarService)Some(new QwenSharedScalarServiceV3)else None
+-    // Kernel-internal scheduling interlock only; not a Host authority/grant.
+-    // It may revoke ready, never an already accepted physical offer.
+-    val sharedScalarSchedulerAvailable=if(enableUnifiedScalarService)Some(Input(Bool()))else None
+     val scalarService=if(externalScalar)Some(Flipped(new GdnScalarClient))else None
+     val elementwiseLoan=if(externalElementwiseLoan)Some(new ElementwiseLoanPort)else None
+     val elementwiseResetRequired=if(externalElementwiseLoan)Some(Output(Bool()))else None
+@@ -112,94 +107,23 @@
+   val av=Reg(Vec(16,UInt(32.W)));val bv=Reg(Vec(16,UInt(32.W)));val cv=Reg(Vec(16,UInt(32.W)));val dv=Reg(Vec(16,UInt(32.W)))
+   val acc=Reg(Vec(16,UInt(32.W)));val tmp=Reg(Vec(16,UInt(32.W)));val tmp2=Reg(Vec(16,UInt(32.W)))
+   val scalarValue=Reg(UInt(32.W));val scalarRequest=Reg(new ScalarRequest)
+-  // One replacement primitive, including the original sqrt/divider. Runtime
+-  // policy selects equations; never instantiate a second per-profile Scalar.
+-  val scalar=Module(new BlockScalarFloatPolicyV2)
+-  def legacyScalarPayload(request:ScalarRequest):ScalarRequest={
+-    val payload=WireDefault(request)
+-    // V2 has fixed Softplus hardware. Preserve the old disabled-op7 rejection
+-    // through its existing unsupported-op5 path: real request and real error,
+-    // no locally synthesized completion and no expanded legacy opcode domain.
+-    if(!enableGdnSoftplus){payload.op:=Mux(request.op===ScalarOp.Softplus.U,5.U,request.op)}
+-    payload
+-  }
+-  val scalarInFlight=RegInit(false.B);val scalarIssuedPolicy=Reg(UInt(2.W))
+-  val scalarProtocolQuarantine=RegInit(false.B)
+-  val scalarProtocolFault=scalar.io.result.valid &&
+-    (!scalarInFlight || scalar.io.result.bits.policy=/=scalarIssuedPolicy)
+-  when(scalarProtocolFault){scalarProtocolQuarantine:=true.B}
+-  when(scalar.io.request.fire){scalarInFlight:=true.B;scalarIssuedPolicy:=scalar.io.request.bits.policy}
+-  when(scalar.io.result.fire){scalarInFlight:=false.B}
+-  val scalarResponseLegal= !scalarProtocolQuarantine && !scalarProtocolFault
+-  scalar.io.request.valid:=state===st("scalarReq") && scalarResponseLegal
+-  scalar.io.request.bits.policy:=UnifiedScalarPolicyV2.Legacy.U
+-  scalar.io.request.bits.payload:=legacyScalarPayload(scalarRequest)
+-  scalar.io.result.ready:=state===st("scalarRsp") && scalarResponseLegal
++  val scalar=Module(new BlockScalarFloat(enableSoftplus=enableGdnSoftplus));scalar.io.request.valid:=state===st("scalarReq");scalar.io.request.bits:=scalarRequest;scalar.io.result.ready:=state===st("scalarRsp")
+   val scalarExternalExclusive=WireDefault(false.B)
+   val scalarExternalOwned=WireDefault(false.B)
+-  val scalarUnifiedBusy=WireDefault(false.B)
+-  val scalarUnifiedExclusive=WireDefault(false.B)
+-  val scalarUnifiedOwned=WireDefault(false.B)
+-  val scalarUnifiedFault=WireDefault(false.B)
+-  val scalarLendingAllowed=WireDefault(false.B)
+   if(externalScalar){
+-    // Capture ownership at real fire, retain it until real response retirement.
++    // One accepted request owns the existing arithmetic until its result is
++    // consumed. The legacy core must be idle; no second scalar is instantiated.
+     val port=io.scalarService.get;val busy=RegInit(false.B)
+-    val available=state===st("idle") && !poisoned && !busy &&
+-      !scalarUnifiedBusy && scalarResponseLegal
++    val available=state===st("idle") && !poisoned && !busy
+     port.request.ready:=available && scalar.io.request.ready
+-    val legacyExternalPayload=legacyScalarPayload(port.request.bits)
+-    when(available && port.request.valid){
+-      scalar.io.request.valid:=true.B
+-      scalar.io.request.bits.policy:=UnifiedScalarPolicyV2.Legacy.U
+-      scalar.io.request.bits.payload:=legacyExternalPayload
+-    }
+-    port.result.valid:=busy && scalar.io.result.valid && scalarResponseLegal
+-    port.result.bits:=scalar.io.result.bits.value;port.error:=scalar.io.result.bits.error
+-    io.scalarPrimitiveFlags.get:=scalar.io.result.bits.flags
+-    io.scalarPrimitiveFlagsValid.get:=busy && scalar.io.result.bits.primitiveFlagsValid && scalarResponseLegal
+-    when(busy){scalar.io.result.ready:=port.result.ready && scalarResponseLegal}
++    when(available && port.request.valid){scalar.io.request.valid:=true.B;scalar.io.request.bits:=port.request.bits}
++    port.result.valid:=busy && scalar.io.result.valid;port.result.bits:=scalar.io.result.bits;port.error:=scalar.io.error
++    io.scalarPrimitiveFlags.get:=scalar.io.primitiveFlags
++    io.scalarPrimitiveFlagsValid.get:=busy && scalar.io.primitiveFlagsValid
++    when(busy){scalar.io.result.ready:=port.result.ready}
+     when(port.request.fire){busy:=true.B}
+     when(port.result.fire){busy:=false.B}
+     scalarExternalExclusive:=busy || port.request.valid;scalarExternalOwned:=busy
+-  }
+-  if(enableUnifiedScalarService){
+-    val port=io.sharedScalar.get
+-    val offerHeld=RegInit(false.B);val pending=RegInit(false.B)
+-    val offer=Reg(new QwenSharedScalarRequestV3)
+-    val accepted=RegInit(0.U(33.W));val issued=RegInit(0.U(33.W));val returned=RegInit(0.U(33.W))
+-    val ledgerQuarantine=RegInit(false.B)
+-    val countBad=returned>issued || issued>accepted || accepted(32) || issued(32) || returned(32)
+-    // Full-tag authority belongs to the parent lease ledger. Resource2 is the
+-    // one Scalar port; serial ffffffff is reserved for reject-before-wrap.
+-    val malformed=port.request.valid && (port.request.bits.identity.resource=/=QwenSharedScalarContractV3.ScalarResource.U ||
+-      port.request.bits.identity.serial==="hffffffff".U)
+-    val exhausted=port.request.valid && accepted==="hffffffff".U
+-    val fault=countBad || malformed || exhausted
+-    when(fault){ledgerQuarantine:=true.B}
+-    scalarUnifiedFault:=ledgerQuarantine || fault
+-    scalarUnifiedBusy:=offerHeld || pending
+-    scalarUnifiedOwned:=pending
+-    scalarUnifiedExclusive:=offerHeld || pending || port.request.valid
+-    port.request.ready:=state===st("idle") && io.sharedScalarSchedulerAvailable.get && scalarLendingAllowed && !offerHeld && !pending &&
+-      !scalarExternalExclusive && !scalarInFlight && !scalar.io.result.valid &&
+-      scalarResponseLegal && !ledgerQuarantine && !fault
+-    when(port.request.fire){offer:=port.request.bits;offerHeld:=true.B;accepted:=accepted+1.U}
+-    // Once accepted the physical offer is irrevocable even if a later fault
+-    // appears. It must issue/drain or require an externally isolated reset.
+-    when(offerHeld){scalar.io.request.valid:=true.B;scalar.io.request.bits:=offer.payload}
+-    when(offerHeld && scalar.io.request.fire){offerHeld:=false.B;pending:=true.B;issued:=issued+1.U}
+-    port.result.valid:=pending && scalar.io.result.valid && scalarResponseLegal
+-    port.result.bits.identity:=offer.identity;port.result.bits.payload:=scalar.io.result.bits
+-    when(pending){scalar.io.result.ready:=port.result.ready && scalarResponseLegal}
+-    when(port.result.fire){pending:=false.B;returned:=returned+1.U}
+-    port.status.counts.accepted:=accepted;port.status.counts.issued:=issued;port.status.counts.returned:=returned
+-    port.status.heldRequest:=offerHeld;port.status.pending:=pending
+-    port.status.heldResult:=pending && scalar.io.result.valid
+-    port.status.resetRequired:=scalarProtocolQuarantine || scalarProtocolFault || ledgerQuarantine || fault
+-    port.status.resourcesDrained:= !offerHeld && !pending && !scalarInFlight &&
+-      !scalar.io.result.valid && !scalar.io.request.valid && !port.request.valid &&
+-      accepted===issued && issued===returned && !port.status.resetRequired
+   }
+   val denseBase=RegInit(0.U(16.W));val denseRows=RegInit(0.U(5.W))
+   val denseLoadRow=RegInit(0.U(5.W));val denseRow=RegInit(0.U(5.W));val denseWindowRow=RegInit(0.U(5.W))
+@@ -358,20 +282,18 @@
+   elem.io.memory.ready:=io.memory.ready&&resActive;elem.io.response.valid:=io.response.valid&&resActive;elem.io.response.bits:=io.response.bits
+   io.memory.valid:=Mux(resActive,elem.io.memory.valid,state===st("memReq"));io.memory.bits:=Mux(resActive,elem.io.memory.bits,request)
+   io.response.ready:=Mux(resActive,elem.io.response.ready,state===st("memRsp"))
+-  val unexpectedScalarReturn=scalar.io.result.valid && state=/=st("scalarRsp") && !scalarExternalOwned && !scalarUnifiedOwned
++  val unexpectedScalarReturn=scalar.io.result.valid && state=/=st("scalarRsp") && !scalarExternalOwned
+   val idleMemoryOrSramReturn=state===st("idle") && (io.response.valid || f.rd_resp_valid_o.orR)
+-  val transportFault=unexpectedScalarReturn || scalarProtocolFault || scalarProtocolQuarantine || scalarUnifiedFault || unexpectedMatrixReturn || idleMemoryOrSramReturn
++  val transportFault=unexpectedScalarReturn || unexpectedMatrixReturn || idleMemoryOrSramReturn
+   val transportQuarantine=RegInit(false.B);when(transportFault){transportQuarantine:=true.B}
+-  scalarLendingAllowed:= !poisoned && !transportQuarantine && !transportFault &&
+-    !elementwiseExternalExclusive && matrixInternalQuiet && !packedBusy && !packedFeedDebt
+   io.resourcesDrained:=state===st("idle") && !poisoned && !transportQuarantine && !transportFault &&
+-    !scalarExternalExclusive && !scalarUnifiedExclusive && !scalarInFlight && !scalar.io.request.valid && !scalar.io.result.valid &&
++    !scalarExternalExclusive && !scalar.io.request.valid && !scalar.io.result.valid &&
+     !elementwiseExternalExclusive && elem.io.job.ready && !elem.io.done.valid && !elem.io.memory.valid &&
+     !elem.io.resetRequired && !io.memory.valid && !io.response.valid &&
+     !f.rd_valid_i.orR && !f.rd_resp_valid_o.orR && !f.wr_valid_i && !f.address_error_o.orR &&
+     matrixInternalQuiet && !packedBusy && !packedFeedDebt
+   io.launch.ready:=(if(ownerDriven)false.B else state===st("idle")&& !poisoned && !transportQuarantine && !transportFault)
+-  if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !transportQuarantine && !transportFault && !scalarExternalExclusive && !scalarUnifiedExclusive && !elementwiseExternalExclusive}
++  if(ownerDriven){io.ownerJob.get.ready:=state===st("idle")&& !poisoned && !transportQuarantine && !transportFault && !scalarExternalExclusive && !elementwiseExternalExclusive}
+   io.result.valid:=state===st("finish") && !packedBusy && !packedFeedDebt;io.result.bits.status:=status;io.result.bits.phase:=phase;io.result.bits.epoch:=epoch;io.result.bits.cycles:=cycles;io.result.bits.macs:=macs;io.result.bits.executedMacs:=(physicalSteps-(if(s.retainedMatrix)physicalBase else 0.U))*(if(s.retainedMatrix)512.U else 16.U)
+   io.phase:=phase;io.stageCommit:=false.B;io.committedPhase:=phase;io.resetRequired:=poisoned||elem.io.resetRequired||transportQuarantine||transportFault;io.readBytes:=reads;io.writeBytes:=writes
+   // Count memory visibility acknowledgements, not issued stores. The fence
+@@ -432,7 +354,7 @@
+   when(state===st("localRsp")){f.rd_resp_ready_i:=1.U;when(f.rd_resp_valid_o(0)){av:=f.rd_data_o(511,0).asTypeOf(av);state:=localResume}}
+   when(state===st("localWrite")){f.wr_valid_i:=true.B;f.wr_addr_i:=localIndex;f.wr_data_i:=localData;f.wr_be_i:=Fill(64,1.U(1.W));when(f.wr_ready_o){state:=localResume}}
+   when(state===st("scalarReq")&&scalar.io.request.fire){state:=st("scalarRsp")}
+-  when(state===st("scalarRsp")&&scalar.io.result.fire){when(scalar.io.result.bits.error){fail(Status.Numerical.U)}.otherwise{scalarValue:=scalar.io.result.bits.value;state:=scalarResume}}
++  when(state===st("scalarRsp")&&scalar.io.result.fire){when(scalar.io.error){fail(Status.Numerical.U)}.otherwise{scalarValue:=scalar.io.result.bits;state:=scalarResume}}
+   if(ownerDriven){
+     when(start){
+       val j=io.ownerJob.get.bits;owner:=j;kvHalf:=false.B
+@@ -842,7 +764,7 @@
+     when(state===st("finish") && poisoned){
+       io.response.ready:=packedMemDebt.get && io.response.bits.tag===request.tag
+       f.rd_resp_ready_i:=Mux(packedLocalDebt.get,1.U,0.U)
+-      scalar.io.result.ready:=packedScalarDebt.get && scalarResponseLegal
++      scalar.io.result.ready:=packedScalarDebt.get
+     }
+     when((c.io.resetRequired || (c.io.completion.fire && c.io.completion.bits.error)) && state=/=st("finish") && state=/=st("locked")) {fail(Status.Protocol.U)}
+     when(packedSelectedFault){fail(Status.Numerical.U)}

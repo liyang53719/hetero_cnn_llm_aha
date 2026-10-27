@@ -1,0 +1,30 @@
+{
+  "status": "HISTORY_UNCHANGED_NOT_RETROACTIVE_REQUALIFICATION",
+  "stages": [
+    {
+      "stage": "0926",
+      "status": "FAIL",
+      "finding": "Missing ready connection in exact prior source."
+    },
+    {
+      "stage": "0951",
+      "status": "FAIL",
+      "finding": "Two combinational-loop checks failed in exact prior source."
+    },
+    {
+      "stage": "1023",
+      "status": "INCOMPLETE_TIME_CAP",
+      "finding": "Capped diagnostic is not a completed high-to-low acceptance."
+    },
+    {
+      "stage": "1031",
+      "status": "INCOMPLETE_OUTPUT_CAP_AND_EVIDENCE_GAP",
+      "finding": "Output cap and missing owner/cleanup/inner-postflight evidence are retained; later complete sidecars do not reconstruct missing historical evidence."
+    },
+    {
+      "stage": "1044",
+      "status": "PASS_OFFICIAL_HIGH_TO_LOW_BOUNDED_STRUCTURE_ONLY",
+      "finding": "Unchanged source/class hardware identities; supervision output budget changed. No runtime profile or numerical acceptance."
+    }
+  ]
+}

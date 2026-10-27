@@ -1,0 +1,129 @@
+{
+  "providers": [
+    {
+      "role": "CLASS_PROVIDER_01",
+      "kind": "base625",
+      "recovery": "Reconstruct public original557 + preserved68 =625 via retained_matrix_compiled_unseeded source recipe. Select only exact relative/hash records; path label is not an opaque dependency.",
+      "public_recipes": [
+        "candidates/retained_matrix_compiled_unseeded/SOURCE_SELECTIONS.json",
+        "candidates/retained_matrix_compiled_unseeded/CLASS_SELECTION_DELTA.json",
+        "candidates/retained_matrix_compiled_unseeded/rebuild_selection_metadata.py",
+        "candidates/retained_matrix_compiled_unseeded/PUBLIC_REFERENCES.json"
+      ],
+      "selected_catalog_identities": 485
+    },
+    {
+      "role": "CLASS_PROVIDER_02",
+      "kind": "base625",
+      "recovery": "Reconstruct public original557 + preserved68 =625 via retained_matrix_compiled_unseeded source recipe. Select only exact relative/hash records; path label is not an opaque dependency.",
+      "public_recipes": [
+        "candidates/retained_matrix_compiled_unseeded/SOURCE_SELECTIONS.json",
+        "candidates/retained_matrix_compiled_unseeded/CLASS_SELECTION_DELTA.json",
+        "candidates/retained_matrix_compiled_unseeded/rebuild_selection_metadata.py",
+        "candidates/retained_matrix_compiled_unseeded/PUBLIC_REFERENCES.json"
+      ],
+      "selected_catalog_identities": 68
+    },
+    {
+      "role": "CLASS_PROVIDER_03",
+      "kind": "base625",
+      "recovery": "Reconstruct public original557 + preserved68 =625 via retained_matrix_compiled_unseeded source recipe. Select only exact relative/hash records; path label is not an opaque dependency.",
+      "public_recipes": [
+        "candidates/retained_matrix_compiled_unseeded/SOURCE_SELECTIONS.json",
+        "candidates/retained_matrix_compiled_unseeded/CLASS_SELECTION_DELTA.json",
+        "candidates/retained_matrix_compiled_unseeded/rebuild_selection_metadata.py",
+        "candidates/retained_matrix_compiled_unseeded/PUBLIC_REFERENCES.json"
+      ],
+      "selected_catalog_identities": 3
+    },
+    {
+      "role": "CLASS_PROVIDER_04",
+      "kind": "base625",
+      "recovery": "Reconstruct public original557 + preserved68 =625 via retained_matrix_compiled_unseeded source recipe. Select only exact relative/hash records; path label is not an opaque dependency.",
+      "public_recipes": [
+        "candidates/retained_matrix_compiled_unseeded/SOURCE_SELECTIONS.json",
+        "candidates/retained_matrix_compiled_unseeded/CLASS_SELECTION_DELTA.json",
+        "candidates/retained_matrix_compiled_unseeded/rebuild_selection_metadata.py",
+        "candidates/retained_matrix_compiled_unseeded/PUBLIC_REFERENCES.json"
+      ],
+      "selected_catalog_identities": 3
+    },
+    {
+      "role": "CLASS_PROVIDER_05",
+      "kind": "stage_0735",
+      "recovery": "Compile source stage 0735 with its exact baseline selection and commands below.",
+      "public_recipes": [],
+      "selected_catalog_identities": 102
+    },
+    {
+      "role": "CLASS_PROVIDER_06",
+      "kind": "moe90",
+      "recovery": "Rebuild published19 production sources with their exact24 selected providers; select exact75 of actual90, not the whole output root.",
+      "public_recipes": [
+        "candidates/moe_phase_context_typecheck/SOURCE_SELECTIONS.json",
+        "candidates/moe_phase_context_typecheck/REPRODUCTION.json",
+        "candidates/moe_phase_context_typecheck/TYPECHECK_IDENTITIES.json",
+        "candidates/moe_phase_context_typecheck/PUBLIC_REFERENCES.json",
+        "candidates/moe_phase_context_typecheck/assemble_sources.py"
+      ],
+      "selected_catalog_identities": 75
+    },
+    {
+      "role": "CLASS_PROVIDER_07",
+      "kind": "vector_dependency7",
+      "recovery": "Rebuild two HeteroRuntimeMoeMerge and five MoeBf16 protocol classes from the existing published sources and their bound28-source recipe; select exact seven.",
+      "public_recipes": [
+        "candidates/moe_vector_leaf/SOURCE_REFS.json",
+        "candidates/moe_vector_leaf/REPRO.md",
+        "candidates/moe_runtime_merge/ACTUAL_COMMANDS.json",
+        "candidates/moe_runtime_merge/source/HeteroRuntimeMoeMerge.scala",
+        "candidates/moe_bf16_scalar_consumer/source/MoeBf16ScalarConsumer.scala",
+        "candidates/moe_bf16_scalar_consumer/SOURCE_PINS.json"
+      ],
+      "selected_catalog_identities": 7
+    },
+    {
+      "role": "CLASS_PROVIDER_08",
+      "kind": "vector6",
+      "recovery": "Rebuild published vector source groups. Select six consumer/protocol classes by exact identity, not all test/bank outputs.",
+      "public_recipes": [
+        "candidates/moe_vector_leaf/SOURCE_REFS.json",
+        "candidates/moe_vector_leaf/REPRO.md",
+        "candidates/moe_vector_leaf/source/shared/UnifiedOverlapProtocolV2.scala",
+        "candidates/moe_vector_leaf/source/shared/UnifiedVectorBankV2.scala",
+        "candidates/moe_vector_leaf/source/MoeBf16VectorConsumerV2.scala"
+      ],
+      "selected_catalog_identities": 6
+    },
+    {
+      "role": "CLASS_PROVIDER_09",
+      "kind": "stage_0855",
+      "recovery": "Compile source stage 0855 with its exact baseline selection and commands below.",
+      "public_recipes": [],
+      "selected_catalog_identities": 156
+    },
+    {
+      "role": "CLASS_PROVIDER_10",
+      "kind": "stage_0915",
+      "recovery": "Compile source stage 0915 with its exact baseline selection and commands below.",
+      "public_recipes": [],
+      "selected_catalog_identities": 3
+    },
+    {
+      "role": "CLASS_PROVIDER_11",
+      "kind": "stage_0943",
+      "recovery": "Compile source stage 0943 with its exact baseline selection and commands below.",
+      "public_recipes": [],
+      "selected_catalog_identities": 4
+    },
+    {
+      "role": "CLASS_PROVIDER_12",
+      "kind": "stage_1012",
+      "recovery": "Compile source stage 1012 with its exact baseline selection and commands below.",
+      "public_recipes": [],
+      "selected_catalog_identities": 9
+    }
+  ],
+  "external_source_note": "Original92 composition retains20 fixed official HardFloat source dependencies identified in the already-public source recovery recipe. They are ordinary recoverable source, not encoded classes.",
+  "new_rebuild_note": "This package is source recovery material; no new compilation or dynamic hermetic admission was performed by the packager."
+}

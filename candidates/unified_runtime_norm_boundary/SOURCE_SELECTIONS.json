@@ -1,0 +1,121 @@
+{
+  "boundary_control_classes": 745,
+  "boundary_dependencies": 730,
+  "boundary_new_classes": 15,
+  "do_not_compile_all_together": true,
+  "norm_control_classes": 742,
+  "norm_dependencies": 690,
+  "norm_new_classes": 52,
+  "ordered_compile_selections": {
+    "boundary4": [
+      "boundary4/source/Qwen2Public21BoundaryV2.scala",
+      "boundary4/tests/Qwen2Public21BoundaryV2Spec.scala",
+      "boundary4/tests/UnifiedAcceptedContextAndEpochV3Spec.scala",
+      "common/source/UnifiedRuntimeDensePlanV2.scala"
+    ],
+    "norm14": [
+      "norm14/tests/GdnRuntimeRmsNormControlV3Spec.scala",
+      "norm14/source/GdnRuntimeRmsNormOwnerV3.scala",
+      "norm14/tests/UnifiedAcceptedContextAndEpochV3Spec.scala",
+      "norm14/source/UnifiedAcceptedContextV3.scala",
+      "norm14/source/UnifiedGdnPrepChunkConnectionV3.scala",
+      "norm14/source/UnifiedGdnScratchPlanV3.scala",
+      "norm14/source/UnifiedOriginalMemoryEpochFenceV3.scala",
+      "norm14/source/UnifiedOriginalScalarMuxV3.scala",
+      "common/source/UnifiedRuntimeDensePlanV2.scala",
+      "norm14/source/UnifiedGdnRuntimeRouterV3.scala",
+      "norm14/source/GdnRuntimeChunkLeafCollection.scala",
+      "norm14/source/GdnRuntimeInputPrepScalarV2Owner.scala",
+      "norm14/source/UnifiedSharedOperationProtocolV3.scala",
+      "norm14/source/UnifiedSharedFormatProtocolV3.scala"
+    ]
+  },
+  "reason": "Norm historical probe and Boundary successor intentionally declare same Spec/probe names. Compile the exact selected stage; do not classpath-shadow. DensePlan exact bytes are shared once.",
+  "unique_sources": [
+    {
+      "bytes": 5454,
+      "path": "norm14/tests/GdnRuntimeRmsNormControlV3Spec.scala",
+      "sha256": "65c13f2549216ae28a1ad62ecb5183be54354c3e2f8fbf9b86a46aca09cd42cf"
+    },
+    {
+      "bytes": 13932,
+      "path": "norm14/source/GdnRuntimeRmsNormOwnerV3.scala",
+      "sha256": "f469d9fbb4435ff623cc49afa0696245cb0ed3c764b66dac0cd6e564a13667ae"
+    },
+    {
+      "bytes": 5286,
+      "path": "norm14/tests/UnifiedAcceptedContextAndEpochV3Spec.scala",
+      "sha256": "f64e765cd5238e1ff703698b8faeb1bee31680ceae249c0070258033a89eb1c4"
+    },
+    {
+      "bytes": 493,
+      "path": "norm14/source/UnifiedAcceptedContextV3.scala",
+      "sha256": "6207df61897210ed22963b908675d3035de6ceca7d027e10ef76f9dbd549bf39"
+    },
+    {
+      "bytes": 18667,
+      "path": "norm14/source/UnifiedGdnPrepChunkConnectionV3.scala",
+      "sha256": "649905efd7b2c5c5a1005d6a3cfb2cb354cc8cd68c841559400515e8b14621c4"
+    },
+    {
+      "bytes": 2969,
+      "path": "norm14/source/UnifiedGdnScratchPlanV3.scala",
+      "sha256": "c73dd17b43987833aa3ed54aae8dbbb585ea2341269e0183513b0a03ca8f0ef4"
+    },
+    {
+      "bytes": 3426,
+      "path": "norm14/source/UnifiedOriginalMemoryEpochFenceV3.scala",
+      "sha256": "90bf31d34b8a4b0bb674d566646bece72271cf36d6b7c7c79338e47a4b7705a8"
+    },
+    {
+      "bytes": 3045,
+      "path": "norm14/source/UnifiedOriginalScalarMuxV3.scala",
+      "sha256": "c3c728b7b1ee031123c3a2b3a0798022dac38a4a921c6a77f31a2f745d776d55"
+    },
+    {
+      "bytes": 5740,
+      "path": "common/source/UnifiedRuntimeDensePlanV2.scala",
+      "sha256": "c134ead7ae755c3a0df0ef55893bc50c70f57400d8d582e1a00b0b7227bf14d2"
+    },
+    {
+      "bytes": 16655,
+      "path": "norm14/source/UnifiedGdnRuntimeRouterV3.scala",
+      "sha256": "b7ccb3cedb57994a71b8762783a228c19dc826c863352181888e818f88cb3206"
+    },
+    {
+      "bytes": 9687,
+      "path": "norm14/source/GdnRuntimeChunkLeafCollection.scala",
+      "sha256": "8e52017144139161eed37eb8d635b601478ee3372ef1507e850afcbe35e9edaf"
+    },
+    {
+      "bytes": 15976,
+      "path": "norm14/source/GdnRuntimeInputPrepScalarV2Owner.scala",
+      "sha256": "f4a90d717e204535cb1f8db4183af5fcb787c8dc5cb4dcf7033e0293b94f273f"
+    },
+    {
+      "bytes": 4285,
+      "path": "norm14/source/UnifiedSharedOperationProtocolV3.scala",
+      "sha256": "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063"
+    },
+    {
+      "bytes": 405,
+      "path": "norm14/source/UnifiedSharedFormatProtocolV3.scala",
+      "sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b"
+    },
+    {
+      "bytes": 2940,
+      "path": "boundary4/source/Qwen2Public21BoundaryV2.scala",
+      "sha256": "2ff18d68a49171aac141f728589b1d84e73715c2787ccd846f005214d9cfdc93"
+    },
+    {
+      "bytes": 2910,
+      "path": "boundary4/tests/Qwen2Public21BoundaryV2Spec.scala",
+      "sha256": "d0c89cfb44fc8284e557dfc5fe708cc3a264b4bbf76b3867ab95386613bbc079"
+    },
+    {
+      "bytes": 10680,
+      "path": "boundary4/tests/UnifiedAcceptedContextAndEpochV3Spec.scala",
+      "sha256": "f2a95e1eb38749e9f33fa97aebabbc9d272555e4ac76a1aed61562e72b9763de"
+    }
+  ]
+}

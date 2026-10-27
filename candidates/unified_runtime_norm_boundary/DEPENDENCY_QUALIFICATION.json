@@ -1,0 +1,78 @@
+{
+  "scope": "Exact inherited reproduction-source inputs; not newly tested behavior and not the later RawPrepV2 qualification.",
+  "bundled_source_count": 14,
+  "bundled_source_bytes": 142236,
+  "verified_historical_public_reference_available": false,
+  "basis": "Author confirmed no verified public commit/path for these exact14; current complete Git tree has no matching blob. Full all-commit history search was not claimed.",
+  "review_pins": [
+    {
+      "role": "prefix_source",
+      "review_identity": "gdn_runtime_prefix_source_review_20261026T1647",
+      "REVIEW.json": {
+        "bytes": 10958,
+        "sha256": "952b7639c6715bdeb1e33d3dd107b0b4208d828a30e2b30f6ea896e785d2cfa0"
+      },
+      "FREEZE.json": {
+        "bytes": 2425,
+        "sha256": "6e7ef416c95c04bea8a8a80742d93f37ffe19979f1eb5af1f7a2558ea9b2ea84"
+      }
+    },
+    {
+      "role": "prefix_compile_actual",
+      "review_identity": "gdn_runtime_prefix_compile_actual_review_20261026T1709",
+      "REVIEW.json": {
+        "bytes": 9280,
+        "sha256": "4f233f24482c2202f1e863383865d845dcfb2205883d3381a9bc32d92c8c1b26"
+      },
+      "FREEZE.json": {
+        "bytes": 3233,
+        "sha256": "900e71e0af2817f93c62c08d2e81f66593920154e2d67dab04d0ab47f7317091"
+      }
+    },
+    {
+      "role": "gdn_r3_source",
+      "review_identity": "gdn_runtime_chunk_complete_r3_source_review_20261026T1808",
+      "REVIEW.json": {
+        "bytes": 8327,
+        "sha256": "e68a1cb94eba830091e697857481a3d6678f6e4d2638ae694a433121a4f6bb62"
+      },
+      "FREEZE.json": {
+        "bytes": 705,
+        "sha256": "b19b4cd8c10650930182c32dfb05a8160a33e55879d1a0788249356c8b9f405f"
+      }
+    },
+    {
+      "role": "gdn_closurefix_actual",
+      "review_identity": "gdn_chunk_closurefix_compile_actual_review_20261026T1841",
+      "REVIEW.json": {
+        "bytes": 9469,
+        "sha256": "d3600cf0e3f8b7a6df2443ccd97f34095183e4c56b8d4e94c9a013b54b06f629"
+      },
+      "FREEZE.json": {
+        "bytes": 2049,
+        "sha256": "485d3eec8bf576cb2ed170021020599e91cfb0184becd479ea00cc55ea252119"
+      }
+    },
+    {
+      "role": "gdn_1815_missing_type_actual_FAIL",
+      "review_identity": "gdn_chunk_compile_closurefix_review_20261026T1830",
+      "REVIEW.json": {
+        "bytes": 4482,
+        "sha256": "a1aeb5299bb41f8f3f6a89b2d495a8ccb2c6f7a10fce203c31a094e91cc97724"
+      }
+    }
+  ],
+  "preserved_history": [
+    "Earlier GDN r2 source STOP remains.",
+    "1815 compile missing-types FAIL produced0classes. The1826 closure fix only adds the required already-published state owner and then typechecks12sources/46classes.",
+    "The1656 four-source prefix compile is a separate historical typecheck; it does not qualify the later1834 InputPrepScalarV2 implementation behavior.",
+    "The3 GDN Specs compiled in the inherited12-source stage were not run; only selected production classes enter norm690."
+  ],
+  "nonclaims": [
+    "No new GDN/Conv/InputPrep/GatedNorm arithmetic or whole-block control PASS.",
+    "No normal-width norm numeric, completeHost,72MiB authorization,32-lane realization or fullM128 fiveprofile acceptance.",
+    "No fresh JDK/JAR/class/runtime closure replay by this package."
+  ],
+  "source_restore_helper": "reproduce_source_set.py --repo REPO --stage norm14|boundary4|prefix4|gdn12 --out NEW_DIRECTORY_OUTSIDE_REPO",
+  "class_selection_rule": "Use SOURCE_DEPENDENCY_MAP selected class descriptors and remove same-name predecessors before replacement; never add arbitrary old classes to make a build pass."
+}

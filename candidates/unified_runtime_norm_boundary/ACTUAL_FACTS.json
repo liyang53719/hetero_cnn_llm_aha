@@ -1,0 +1,65 @@
+{
+  "arena72MiB_approved": false,
+  "boundary_successor_actual": {
+    "actual_result": {
+      "cases": [
+        "retain QKV ordered FP32 reductions and late BF16 materialization",
+        "accept real admission first transaction zero and later identities only with the entire active context",
+        "map original memory tags through a nonreused physical epoch and quarantine a late prior reply without current credit"
+      ],
+      "complete_feeder_verified": false,
+      "failed": 0,
+      "numerical_verified": false,
+      "physical_matrix_or_bank_verified": false,
+      "scope": "Boundary metadata and actualAdmission dispatch authority plus DDR epoch controls only",
+      "succeeded": 3,
+      "suites": 2,
+      "test_count": 3
+    },
+    "cleanup_complete": true,
+    "cpu_sample_seconds": 7.22,
+    "failed": 0,
+    "norm_two_cases_rerun": false,
+    "passed": 3,
+    "prepost_obligations": 1230,
+    "receipt": {
+      "bytes": 4202,
+      "sha256": "053a3743f5a54389e589c844237bf730845836801385f2a9eae73bf01ea9b403"
+    },
+    "rss_sample_bytes": 198557696,
+    "suites": 2,
+    "total": 3
+  },
+  "boundary_successor_compile": {
+    "new_classes": 15,
+    "passed_typecheck_only": true,
+    "root_native_identity_and_terminal_preserved": true,
+    "sources": 4,
+    "tool_session_field_missing": true
+  },
+  "current_emitted_RTL_replaced": false,
+  "five_complete_chisel_blocks": 0,
+  "five_complete_rtl_blocks": 0,
+  "host_physical_parent_installed": false,
+  "norm_compile": {
+    "new_classes": 52,
+    "passed_typecheck_only": true,
+    "sources": 14
+  },
+  "norm_control_historical": {
+    "failed": 1,
+    "passed": 3,
+    "receipt": {
+      "bytes": 3849,
+      "sha256": "59bbedb976a3d5cfa5095b0d302d30e7208fe3af21b22ae13a60696b88e5c56f"
+    },
+    "scope": "two norm protocol/abort cases and DDR epoch passed; fabricated context probe txn0 failed oldBoundary sentinel; no normalwidth norm arithmetic",
+    "total": 4,
+    "whole_suite_pass": false
+  },
+  "normalwidth_norm_numeric_tested": false,
+  "numerical_qualified": false,
+  "old_STOP_and_FAIL_preserved": true,
+  "shared32lane_implemented": false,
+  "status": "TEMP_PARTIAL_ORIGINAL_CHISEL_INTEGRATION_NOT_FULLBLOCK"
+}

@@ -1,0 +1,687 @@
+{
+  "status": "SOURCE_DEPENDENCY_METADATA_NOT_A_SELF_CONTAINED_RUNTIME",
+  "current_public_base_commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+  "published_baseline_recipe_references": [
+    {
+      "path": "candidates/unified_product_preserved_abi/REPRODUCTION.json",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 8980,
+      "sha256": "efccabbff41da64ce61f75586ee83fe0b4f82d9b2d1f5e5e2471a5dfef925a43",
+      "git_blob_sha": "7d39f6d46e29e61d6330e6b09479ae9872b7ceb2"
+    },
+    {
+      "path": "candidates/unified_product_preserved_abi/SOURCE_REFERENCES.json",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 8940,
+      "sha256": "0949f13313e6304149fbed857d4994fb76fdff0398816aa01458cd4db3d32706",
+      "git_blob_sha": "066ea7b080b85fc764daff7b6e68e16b7a672182"
+    },
+    {
+      "path": "candidates/unified_original_prefill_dense_control/REPRODUCTION.json",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 6227,
+      "sha256": "3a5ef1caced87d837f7d76dc49a740db4e5feb19edbeb7fe2d7888aef0efa4ff",
+      "git_blob_sha": "a0b414b5a10504b209adcd2d402366d5f4763c53"
+    },
+    {
+      "path": "candidates/unified_original_prefill_dense_control/SOURCE_REFS.json",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 3040,
+      "sha256": "c090fea22316cb99bf1560523a49cafc468efea35fda3b195e4a056fcce6f6ed",
+      "git_blob_sha": "084466ca66ae09168770e71bffc326b043d698dd"
+    },
+    {
+      "path": "candidates/gdn_runtime_chunk_phases234/REPRODUCTION.json",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 5817,
+      "sha256": "ab92955117564975aef60cd503aa9303c11dff72c2c506367893505f3a9ada14",
+      "git_blob_sha": "b7130628b1a9139b02468b8b8e4f27d02c22c649"
+    },
+    {
+      "path": "candidates/gdn_runtime_chunk_phases234/SOURCE_REFERENCES.json",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 4647,
+      "sha256": "9359c73e9921ad6458f993ed4e2c8b97b2047674fe2dd4c33568696f6316d6ea",
+      "git_blob_sha": "da073d4f5e3e88dfb58db636500b101da5ece1f5"
+    },
+    {
+      "path": "candidates/qwen2_core_client_chirrtl_evidence/pins/OFFICIAL_DEPENDENCY_PINS.json",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 74056,
+      "sha256": "409c46d339ff040a80d02304326445a326973b672c65b397070fae8dad589168",
+      "git_blob_sha": "c1a4b6d107dd0b50814235f415cab1bc9316305e"
+    }
+  ],
+  "norm690_origin_counts": {
+    "original625_samebytes_rebound1821": 625,
+    "actual1826_gdn41prod": 37,
+    "actual1038_geometry4": 4,
+    "actual1656_prefix17": 17,
+    "actual1637_dense7": 7
+  },
+  "original625_note": "Rebound original625 contains the published preserved-ABI baseline; follow the pinned source recipe, including explicit external HardFloat dependencies. It is not 625 source files and not the raw production-root source tree.",
+  "historical_dense7_source_references": [
+    {
+      "path": "candidates/unified_original_prefill_dense_control/source/Qwen2Public21BoundaryV2.scala",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 2808,
+      "sha256": "293bfbf8102e8cc8bb64bcec7f23585658c0e18bbe1bd7266b13aafa9aa9eca8",
+      "git_blob_sha": "c7c8a23c3f9b3a41b5a279f1797b68def41994ed"
+    },
+    {
+      "path": "candidates/unified_original_prefill_dense_control/source/UnifiedDenseGroupLeaseBridgeV2.scala",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 3658,
+      "sha256": "dbc460daedb50a57b05a5210ae9beb90b1a13c759628844d1cf2d9b3699a7fe4",
+      "git_blob_sha": "f139b00163a411bca3dde300784106626a6fa767"
+    },
+    {
+      "path": "candidates/unified_original_prefill_dense_control/source/UnifiedOriginalDenseClientV2.scala",
+      "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+      "bytes": 4277,
+      "sha256": "e1d98590660a37a712f4008cd34ba780601b13ffe094ca3f001c9ebe1bfc27cd",
+      "git_blob_sha": "acced4bef5f3bc82b218f1157f1c3e9fa89f2a4a"
+    }
+  ],
+  "additional_dependency_groups": [
+    {
+      "role": "prefix17",
+      "compile_input_manifest_hash_only": {
+        "bytes": 386759,
+        "sha256": "6122d66a9be1d215b695148f332e1e9757fba8879b92adbb56c80737e22228a0"
+      },
+      "selected_class_count_in_norm690": 17,
+      "selected_class_descriptors": [
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeConv4Owner.class",
+          "bytes": 80513,
+          "sha256": "a05a83a7aba2ea9bac483e9fb0e923cb30a998876d2c2554f6fca51de7974dec"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeConv4OwnerPort.class",
+          "bytes": 7236,
+          "sha256": "b9b382d7c56915fdc23898b7bd06dabf6af53dbce049b85c8131ccb2cedcd355"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeGatedNormJob.class",
+          "bytes": 4950,
+          "sha256": "96d931f05a534d02f45bac3f0c5a334f966a2655e786644161b4692b3b0c5ba7"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeGatedNormOwner.class",
+          "bytes": 81451,
+          "sha256": "a1444c363efb3c0fd2c4fcb2fa35d5a6df65626b5c7a1f8eccc62bf4ff96f433"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeGatedNormOwnerPort.class",
+          "bytes": 6417,
+          "sha256": "00936375ccaff56c83f009a826a0d381953e9e7ff22b2bf0915021ba2e8b63b7"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeGatedNormResult.class",
+          "bytes": 4584,
+          "sha256": "1df6965871ed84e4c49a17499cd8fa81db3590fb9403b56ac87245728f66f6aa"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeInputPrepJob.class",
+          "bytes": 6084,
+          "sha256": "1275d439961f040bdaff9e07a076485e197d6d40e8029194cc222db7d866e9e5"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeInputPrepOwner.class",
+          "bytes": 122033,
+          "sha256": "9382ee676215998847c6f2a4c89446961bf6e065b71496fa40f230121b439a16"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeInputPrepOwnerPort.class",
+          "bytes": 6417,
+          "sha256": "d8beb9003280759795827a1e7c57f51ce7b3d2b283cb539142bcdd8777a7bc2c"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeInputPrepResult.class",
+          "bytes": 5081,
+          "sha256": "c8eae0ee0557fbb933a71a1c4a979b177ebd88c3d0f4cb173ef7d9bed4303b89"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimePrepPolicy$.class",
+          "bytes": 1030,
+          "sha256": "c0bc6b8e03bf919c61ff2904cfb3a2698bc24ab2fa4449c4bbb6d7f098277e4e"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimePrepPolicy.class",
+          "bytes": 1168,
+          "sha256": "3be2f430f674ced5961c5ca707d17bb99d12fc8544287bfa9b17ee447498b2ea"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedScalarClientV2.class",
+          "bytes": 4041,
+          "sha256": "43c1c7cfb16994925f3f8ebf110b969c2198bd0b7b2601fdc74f66453e66ce68"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedScalarPolicyV2$.class",
+          "bytes": 886,
+          "sha256": "864f2b1e26dd094c98360c6bbb76a0a349fcefab28294a8d6e8503ce534666c5"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedScalarPolicyV2.class",
+          "bytes": 1003,
+          "sha256": "64d5147b9d8d5d378370425ba0829cedb447310ded2741997dd8f587b575a678"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedScalarRequestV2.class",
+          "bytes": 3604,
+          "sha256": "12041d62edec92bf5713668f0a5a7aac5ffcda3b1f66b0369c342616346cfe32"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedScalarResultV2.class",
+          "bytes": 4543,
+          "sha256": "385eb737d68c386433730de698a917872f1fd128dd4ab765b412a08980b072b3"
+        }
+      ],
+      "input_source_pins": [
+        {
+          "source_role": "UnifiedScalarPolicyV2.scala",
+          "bytes": 858,
+          "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+          "available_public_reference": {
+            "path": "candidates/shared_scalar_policy_v2/source/UnifiedScalarPolicyV2.scala",
+            "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+            "bytes": 858,
+            "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+            "git_blob_sha": "90bd0ea5e031c95a34d636206d4f128c405a6e8a"
+          }
+        },
+        {
+          "source_role": "GdnRuntimeConv4Owner.scala",
+          "bytes": 11408,
+          "sha256": "bfafeeb10e8e1e3530c0834b6a9ad14ec7b192257a45540d7eb702ca824321eb",
+          "bundled_reproduction_path": "reproduction_dependencies/prefix4/source/GdnRuntimeConv4Owner.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnRuntimeGatedNormOwner.scala",
+          "bytes": 11281,
+          "sha256": "a933365cb65d462733a32550a50d3c332207026b8e653364ab1b4888733304a0",
+          "bundled_reproduction_path": "reproduction_dependencies/prefix4/source/GdnRuntimeGatedNormOwner.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnRuntimeInputPrepOwner.scala",
+          "bytes": 17229,
+          "sha256": "a60c6683a431872a4cd58a3acf02b2ce12db98474da5f87b09cbdadbf9bb7520",
+          "bundled_reproduction_path": "reproduction_dependencies/prefix4/source/GdnRuntimeInputPrepOwner.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        }
+      ],
+      "selection_note": "These are original compile inputs (some include tests); only the exact class subset listed here was retained. GDN46 compile outputs exclude5 test classes, then4 identical state classes deduplicate to37 additions. No all-output or execution inference."
+    },
+    {
+      "role": "gdn41_minus_identical_state4",
+      "compile_input_manifest_hash_only": {
+        "bytes": 414905,
+        "sha256": "f412deede601230c34b9a57b63f3b1776a4d302b32fd768146c81266fb95127e"
+      },
+      "selected_class_count_in_norm690": 37,
+      "selected_class_descriptors": [
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkCoordinator.class",
+          "bytes": 118500,
+          "sha256": "0456aebebc7824d3ccd6f1a3d81f36bf091bcd7a1709103d312abab38f9063a9"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkCoordinatorJob.class",
+          "bytes": 5028,
+          "sha256": "564d755c746f363e966f4c60ad07b77d556008fd1243aa84b0beb9dbcc57bd77"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkCoordinatorPort.class",
+          "bytes": 15244,
+          "sha256": "1d04d3066d03ebcb93e48c4520b09aea995c180afd0f1c5f04c2bb89c3b4ff7e"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkCoordinatorResult.class",
+          "bytes": 6540,
+          "sha256": "45c1855dfcdd989406bcae359615c8d53530dce0a54a6ac11b9e33b28b784c6e"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Job.class",
+          "bytes": 6142,
+          "sha256": "0d6dbcb7a5cf0caf1fa7901a302159294a8dc9df5aada9a7d933bb89c34e3b64"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Owner.class",
+          "bytes": 140631,
+          "sha256": "79af8f67d29588df9e53675fe40ce43493338f6ec326ffb51ceb29327ededad8"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Port.class",
+          "bytes": 8536,
+          "sha256": "7811ee43e86b74e290adee23393c5b2549f30851a0731dfc4b46cd8989a9c724"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Result.class",
+          "bytes": 7473,
+          "sha256": "a8ec3d5018cc2b665ca3a22d7fb374a0ce2784c700e88320c127d5f2c6d55c5d"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkExecuteJob.class",
+          "bytes": 6387,
+          "sha256": "de36da5d4302910644eb76d6b415ba24e3215ea9e8bbf75a0b710ee3db46eaeb"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkExecuteOwner.class",
+          "bytes": 128645,
+          "sha256": "3986346b8fff8cc30eb6d407dcf9f9d26b49ec5a1e6a68edd3709bb1121a4a11"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkExecutePort.class",
+          "bytes": 7939,
+          "sha256": "2e3494cc3e47705c25cc8d30041d258aa1c4257112bca91269a07cc1b912e835"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkExecuteResult.class",
+          "bytes": 6078,
+          "sha256": "f4381f53f86deb3385bbebe2b2dde76ddd442a77c7cf4b18ed589622e7ed6bbd"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkLoadPrepV2Job.class",
+          "bytes": 6810,
+          "sha256": "7594682c1ba373d98fbe260ffa2d99dce0c93f2b37bd1b3d3b996c021577302d"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkLoadPrepV2Owner.class",
+          "bytes": 113613,
+          "sha256": "93cb605acc3c4d314fde5a21a8a983e768bb9b43b8d174f925c65ea440f4860f"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkLoadPrepV2Port.class",
+          "bytes": 7149,
+          "sha256": "cb488b5b14e4055c6a5391a8a89d29cc5a9a5cf9635419584bb553b04a972857"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkLoadPrepV2Result.class",
+          "bytes": 5650,
+          "sha256": "82e022f9c7c1a90fe2fff4b7ec4d13c84042e9c691d1753c9f9db8f3254eee56"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkNumericPolicy$.class",
+          "bytes": 2212,
+          "sha256": "6bf2412ee4bfeb213f0a69a9dbf95f5bf8ea841c6a679213c8ac5c70b6b5656f"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkNumericPolicy.class",
+          "bytes": 4415,
+          "sha256": "cc30633b0b6e421b70ea0ac4455f0ae860e2234b03950f460ec6262577eddeb1"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkTransposeV2Job.class",
+          "bytes": 5502,
+          "sha256": "3d35ecfb4ebc760d2e00112e0081205846d8b29de19bed197cc74731873117ba"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkTransposeV2Owner.class",
+          "bytes": 82801,
+          "sha256": "32eac2c9fb970d3a24883b0c4c3ba0b11c26291b41659a7bb7cafbc9e6e66471"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkTransposeV2Port.class",
+          "bytes": 6677,
+          "sha256": "00fa4e32e352b2de2b152ea2f28e601d2ec1352bfa57c88e3f8a8c45564614f0"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkTransposeV2Result.class",
+          "bytes": 7426,
+          "sha256": "c011f49ba0689575c9cbd4edad317c679a7397a8b7e568f9faf8f75e680cf3f9"
+        },
+        {
+          "relative": "heteronpu/continuous/HeldDecoupledOffer$.class",
+          "bytes": 5688,
+          "sha256": "3614fc7146cdc68d1ee0eed33dad001ddb39b738e2a9c7d8670731af74f270ea"
+        },
+        {
+          "relative": "heteronpu/continuous/HeldDecoupledOffer.class",
+          "bytes": 980,
+          "sha256": "bcf179a15b928c37c0a5d29964ecdc5ee21c490c56eda5945643967926bbe9c9"
+        },
+        {
+          "relative": "heteronpu/continuous/HeldDecoupledOfferSignals$.class",
+          "bytes": 2307,
+          "sha256": "0e5ee6caca7024261a40623958b682b8f0d79dae2c3f05f76a9d018e4d74b721"
+        },
+        {
+          "relative": "heteronpu/continuous/HeldDecoupledOfferSignals.class",
+          "bytes": 5988,
+          "sha256": "bc22184434d4fa8a9e52edaa4f2c01ee59a13839a7e62af7cbacb0b10c0e4cb7"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedOverlapDoneV2.class",
+          "bytes": 5717,
+          "sha256": "d139b10987128de478fa05e7349bbc0a8a6bb5f211631a0ab2428ad44a2d7d02"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedOverlapLeaseV2.class",
+          "bytes": 4786,
+          "sha256": "2930a08b0ec41e46206119d22d7b2e8946caf280aca468fee8b47769d602ed90"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedOverlapProducerFenceV2.class",
+          "bytes": 4121,
+          "sha256": "954521d2229e4cdc2529f278b4788973522031665a9b02ea941007ca81212c7c"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedOverlapReleaseIntentV2.class",
+          "bytes": 4312,
+          "sha256": "f65fb91909c6975971f2455625e4408359e8b4a8275cd06faf324fa96ec0cb3c"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedOverlapTagV2.class",
+          "bytes": 5040,
+          "sha256": "32f604edbdbf56f83c87dc57e2fb371973e834c66d2fe4d6fb080088701eb968"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedOverlapVectorRequestV2.class",
+          "bytes": 3432,
+          "sha256": "cdf5adeccd035922294b855547c4f79f2341a78173dc01438d57da1756eed14b"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedOverlapVectorResultV2.class",
+          "bytes": 3425,
+          "sha256": "755772dcbc2f20614c176c1e64e80d9a9dd5a82d60aa0db8da64b6fc22fad633"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedVectorPolicyV2$.class",
+          "bytes": 895,
+          "sha256": "6c91c0ab3acd47c125feaff7e65326e126551422c0fbcc80e296e46ba8d508ea"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedVectorPolicyV2.class",
+          "bytes": 1026,
+          "sha256": "1c18fa426ea13a7f288f728d270cb28891e03888241c2836e61af8dbb419a0c4"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedVectorRequestV2.class",
+          "bytes": 4743,
+          "sha256": "79a16c9d1b48d8d8a39ab85580df41b3c5bcafe7bedc513d5d8b58c0dd2de5de"
+        },
+        {
+          "relative": "heteronpu/continuous/UnifiedVectorResultV2.class",
+          "bytes": 4760,
+          "sha256": "44f48b3c2b3b732882f251b1fe014f075581fe812a83df1d9d1b4897a8a38178"
+        }
+      ],
+      "input_source_pins": [
+        {
+          "source_role": "GdnRuntimeChunkCoordinator.scala",
+          "bytes": 17678,
+          "sha256": "1d9e7d1d4b009dca8c902c560dd0ab43a4232457ddac01fbb7bed2983746a5d4",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/GdnRuntimeChunkCoordinator.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+          "bytes": 20354,
+          "sha256": "3fbcec65779eb5ef2d27dfde339efa4980c0e7d03f2ce717afa1a2417b78fa08",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnRuntimeChunkExecuteOwner.scala",
+          "bytes": 16324,
+          "sha256": "77943e63fe0b580192e71be5020f712d4d7234521bd13cce0177fb151b0cfd8c",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/GdnRuntimeChunkExecuteOwner.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnRuntimeChunkLoadPrepV2Owner.scala",
+          "bytes": 17265,
+          "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/GdnRuntimeChunkLoadPrepV2Owner.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnRuntimeChunkNumericPolicy.scala",
+          "bytes": 639,
+          "sha256": "44b5cc96048f92f712c2164f680a43da061dbf8d376982c69d9bdd71f9d675fc",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/GdnRuntimeChunkNumericPolicy.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnRuntimeChunkTransposeV2Owner.scala",
+          "bytes": 12462,
+          "sha256": "839de9dba4d3a39670d8e33744dc9beb56399f9e39c3f7ab9f32d1cbca99a38a",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/GdnRuntimeChunkTransposeV2Owner.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "HeldDecoupledOffer.scala",
+          "bytes": 912,
+          "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/HeldDecoupledOffer.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnChunkCoordinatorFaultSpec.scala",
+          "bytes": 7766,
+          "sha256": "4a90f29f9ae1594a4336394935cd313dd06e30ccdce6f4ae157db488eb060c6b",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/tests/GdnChunkCoordinatorFaultSpec.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnGuardedCumsumCountSpec.scala",
+          "bytes": 5470,
+          "sha256": "e0de7cfd5e5c3248b1fb5c7c85fb28084d87eb62d4d40e99128db227b220e5bc",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/tests/GdnGuardedCumsumCountSpec.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "HeldDecoupledOfferSpec.scala",
+          "bytes": 1626,
+          "sha256": "0198da5439528e6071c3a385631d8eb8f354b57114a0a523dd37715ac673311e",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/tests/HeldDecoupledOfferSpec.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "UnifiedOverlapProtocolV2.scala",
+          "bytes": 1822,
+          "sha256": "55f3deac3fc4c72cd3cab922cda8f32c7f120f24e420663443993574ac76887f",
+          "bundled_reproduction_path": "reproduction_dependencies/gdn12/source/UnifiedOverlapProtocolV2.scala",
+          "availability": "EXACT_INHERITED_SOURCE_BUNDLED_FOR_REPRODUCTION_ONLY_NOT_NEW_BEHAVIOR_PASS"
+        },
+        {
+          "source_role": "GdnChunkStateTransferOwner.scala",
+          "bytes": 10591,
+          "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+          "available_public_reference": {
+            "path": "candidates/gdn_runtime_state_transfer/source/GdnChunkStateTransferOwner.scala",
+            "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+            "bytes": 10591,
+            "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+            "git_blob_sha": "884531df8479edb783d50d0dbf54065ada992bbc"
+          }
+        }
+      ],
+      "selection_note": "These are original compile inputs (some include tests); only the exact class subset listed here was retained. GDN46 compile outputs exclude5 test classes, then4 identical state classes deduplicate to37 additions. No all-output or execution inference."
+    },
+    {
+      "role": "geometry4",
+      "compile_input_manifest_hash_only": {
+        "bytes": 315444,
+        "sha256": "2b56e88d24266f659f51b4b33542d5bab1aff7ea773c8b635783bb16c66df166"
+      },
+      "selected_class_count_in_norm690": 4,
+      "selected_class_descriptors": [
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkLayout$.class",
+          "bytes": 2197,
+          "sha256": "5ce30216ccac897d8c4ef9b15c786664e7c7cf166ffead2051b1875b9086c5e8"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkLayout.class",
+          "bytes": 4867,
+          "sha256": "934bf239adda74e59e391bd0d3879cb67a682e50d632c5848dfe655d64626c8b"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkPreparedReceipt.class",
+          "bytes": 7474,
+          "sha256": "0ad5aa0283062f27ac6abf5d8804c2ef604b96cae7c06643bcdc5b9d23a3260d"
+        },
+        {
+          "relative": "heteronpu/continuous/GdnRuntimeChunkPrivateDecay.class",
+          "bytes": 5149,
+          "sha256": "84eeebae3838b64fd9c682614052ccd38347b53439c29ae4db42a0e3285cccc1"
+        }
+      ],
+      "input_source_pins": [
+        {
+          "source_role": "GdnRuntimeChunkLayout.scala",
+          "bytes": 1290,
+          "sha256": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346",
+          "available_public_reference": {
+            "path": "candidates/gdn_runtime_chunk_phases234/source/GdnRuntimeChunkLayout.scala",
+            "commit": "c3a5de9ebbfb2f759ab1fada9df3efe93c38be6b",
+            "bytes": 1290,
+            "sha256": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346",
+            "git_blob_sha": "e2645c97913fc2667308ae3a3ff712fa266ab793"
+          }
+        }
+      ],
+      "selection_note": "These are original compile inputs (some include tests); only the exact class subset listed here was retained. GDN46 compile outputs exclude5 test classes, then4 identical state classes deduplicate to37 additions. No all-output or execution inference."
+    }
+  ],
+  "identical_state4_dedup": [
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferJob.class",
+      "bytes": 5080,
+      "sha256": "1eb6421890ff2f28a7b43f83de03881615be752d6602aa6ca8d8c44966b46862"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferOwner.class",
+      "bytes": 64182,
+      "sha256": "3168e777b7138089e17e9d19b4750df5eda8eb597f1b2260a87c69b55553cab6"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferPort.class",
+      "bytes": 6615,
+      "sha256": "a672f8166250507c6227efaeedde43a8fa5164f945e89889ae429f2cff121889"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferResult.class",
+      "bytes": 6198,
+      "sha256": "bcbcb31e81f89a15b849a7d04243ee3c8933fc1bb8e34635561ceb4aa2d4ac06"
+    }
+  ],
+  "stage_class_descriptor_identities": [
+    {
+      "stage": "norm_compile",
+      "count": 690,
+      "original_private_manifest_identity": {
+        "bytes": 309084,
+        "sha256": "83738608867e0144c2f6ba97c2c549aaaff0a2c6e6d7f74c55f1363a0ab07ea6"
+      },
+      "ordered_role_descriptors_sha256": "7a079e1961ad6006c21c1c8a7ad116d4ad380b6b3721fcf8f627a8276a94adf5",
+      "descriptor_digest_encoding": "UTF-8 JSON, sorted object keys, compact separators, original list order; relative/bytes/sha256 only"
+    },
+    {
+      "stage": "norm_control_fail",
+      "count": 742,
+      "original_private_manifest_identity": {
+        "bytes": 263898,
+        "sha256": "0519d120ab44f5f56a323f566dada7138e2b5a20af29ece2247153d4286e28ad"
+      },
+      "ordered_role_descriptors_sha256": "5f9ebfd57f0140612df55d1bcc40390cc481ea7bbe30d9f96ad136290d54d6b4",
+      "descriptor_digest_encoding": "UTF-8 JSON, sorted object keys, compact separators, original list order; relative/bytes/sha256 only"
+    },
+    {
+      "stage": "boundary_compile",
+      "count": 730,
+      "original_private_manifest_identity": {
+        "bytes": 263839,
+        "sha256": "b1ab2177964af0de1294ea5c26cec4709cc5d85ce90ce248b5f6d4dc4cd8b458"
+      },
+      "ordered_role_descriptors_sha256": "d0e361c5b520c250ea44d27726a452cac8900e5b39ae07aeaf616eada8da0444",
+      "descriptor_digest_encoding": "UTF-8 JSON, sorted object keys, compact separators, original list order; relative/bytes/sha256 only"
+    },
+    {
+      "stage": "boundary_control",
+      "count": 745,
+      "original_private_manifest_identity": {
+        "bytes": 265048,
+        "sha256": "d734120fe79666c60b082c9ff0fc98d132570444e55d7b5d960e8b0948f71f23"
+      },
+      "ordered_role_descriptors_sha256": "73c46f7b9ffe40a70d07074d208d8ab97ac6ee3b86adda089d02b23b2124fe68",
+      "descriptor_digest_encoding": "UTF-8 JSON, sorted object keys, compact separators, original list order; relative/bytes/sha256 only"
+    }
+  ],
+  "boundary_replacement": {
+    "equation": "742 minus exact12 = 730; compile selected4 sources produces15 new classes; 730 plus15 =745",
+    "removed_before_new_compile": [
+      {
+        "relative": "heteronpu/continuous/Qwen2Public21BoundaryV2$.class",
+        "bytes": 12387,
+        "sha256": "eb3cbd25e91031e18cd23c216ca8ccb60f3647ba40e800d9edff153764f9910b"
+      },
+      {
+        "relative": "heteronpu/continuous/Qwen2Public21BoundaryV2.class",
+        "bytes": 8354,
+        "sha256": "b09b873fbe0bf352378def489d88bcd46ad234d6bd116d879cef783dd82006df"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedAcceptedContextAndEpochV3Spec.class",
+        "bytes": 49082,
+        "sha256": "bee2504d909ec17d5ea5ab8f16ce603887ac9cf792faeaea83192a4dabbfc2e9"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedAcceptedContextDenseProbeV3$$anon$1.class",
+        "bytes": 6713,
+        "sha256": "cd95898c27eba3bc2ef277012e93fccc909e104c37c9ed73b28f88737de8304c"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedAcceptedContextDenseProbeV3.class",
+        "bytes": 17463,
+        "sha256": "1c9cf8b24e82c473c8dc00d270fb50b56152539015b6531adfe45862e64b9b7b"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedDenseRoleV2$.class",
+        "bytes": 1387,
+        "sha256": "c24229b8a6c5d01ddaef6ef3d97767fd7e660e7fbe5eb0067c469e7e262d1acb"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedDenseRoleV2.class",
+        "bytes": 1472,
+        "sha256": "03ec02d22f9c4cc47d843e9ba0f76ce8d1d8db48d8895953fd06d6486735741a"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedDenseRouteV2$.class",
+        "bytes": 689,
+        "sha256": "85533ccbad2633a4ebc9f1bc90f3d62d63aa0810c18f9b8bf827ec84e78ebf2f"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedDenseRouteV2.class",
+        "bytes": 799,
+        "sha256": "f25712cb3785da70450f7aa299576df0ee7855b4e0cff21eceb135fed4eb213c"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedRuntimeDenseCommandV2.class",
+        "bytes": 4920,
+        "sha256": "1c58266b01e48a2aca4479694356ed9dabb01a8d4a9d6693d920020504bda9a9"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedRuntimeDensePlanV2$.class",
+        "bytes": 36625,
+        "sha256": "c3fe4a7e4ec14e1107ddd84a1b4069e5e2970ac5ab55820f062d764c00baeddd"
+      },
+      {
+        "relative": "heteronpu/continuous/UnifiedRuntimeDensePlanV2.class",
+        "bytes": 6935,
+        "sha256": "e5a62f39728984d11c8785a7a4bf1c708ef1734671a4d8a40f9e47349b0db383"
+      }
+    ],
+    "rule": "Remove all twelve old files before staging the new15. The current DensePlan source is shared byte-for-byte across the two source selections, but its resulting class family must be replaced in the Boundary stage; never keep old probe/Boundary/DensePlan classes earlier on the classpath."
+  },
+  "limits": [
+    "The14 inherited source versions without a verified current public blob are included under reproduction_dependencies as ordinary Scala. Their compile qualifications do not establish their control/numerical behavior; the3 inherited GDN Specs were not run by this publication.",
+    "Use the bundled old UnifiedOverlapProtocolV2 as the single provider for the GDN12 stage. Do not substitute a newer same-name protocol or allow multiple same-name class providers.",
+    "Historical and successor UnifiedAcceptedContextAndEpochV3Spec have the same class name but distinct source bytes and different case selection; do not mix them.",
+    "Public source restoration does not establish a ready-to-run hermetic tool/runtime bundle. No JDK/JAR/class/IR payload is uploaded; metadata digests are not fresh bulk payload hashes, dynamic-load closure, execution permission, or behavioral proof."
+  ]
+}

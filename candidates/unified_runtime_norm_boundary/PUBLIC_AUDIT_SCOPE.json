@@ -1,0 +1,39 @@
+{
+  "status": "TEMP_SOURCE_AND_BOUNDED_CONTROL_EVIDENCE_NOT_FULLBLOCK",
+  "original_author_22_files_unchanged": true,
+  "historical_norm_run": {
+    "result": "FAIL_3_OF_4",
+    "passed": "Two norm protocol/abort cases and one DDR epoch control case only.",
+    "failed": "The historical fabricated-context probe hit the old nested Boundary transaction-zero sentinel before later context assertions.",
+    "widths": "1024 and 2048 were reset-separated, quiescent protocol scenarios; no normal-width norm arithmetic or formatter sequence was accepted."
+  },
+  "boundary_successor_run": {
+    "result": "PASS_3_OF_3_LIMITED_BOUNDARY_ADMISSION_EPOCH_CONTROLS",
+    "not_the_same_test_selection": true,
+    "old_norm_two_cases_rerun": false,
+    "coverage_not_claimed": [
+      "Targeted high 32-bit transaction values or sequence saturation",
+      "Exhaustive same-cycle late-fault coverage",
+      "Complete feeder, real physical matrix/vector bank, full-owner drain, or HostBlockTop integration",
+      "Any normal-width norm or whole-block numerical acceptance"
+    ]
+  },
+  "evidence_levels": {
+    "source": "17 unique original Scala byte sequences; compile exactly the stage-specific source list, never all files together.",
+    "classes": "Selected class-manifest metadata and independent actual reviews are bound; no class/JAR/JDK payload is uploaded or re-read by this packager.",
+    "root_checks": "Source-bound historical expected descriptors and successful endpoint reports, not a raw historical per-file observed-hash replay or complete dynamic import closure.",
+    "cleanup": "Inherited independent verification of the original anchored owned-group cleanup summary; not a new process-scan replay or global escape proof.",
+    "resources": "CPU/RSS are sampled values from non-isolated runs with authorized network work; not throughput, hard-RSS proof, or isolated benchmarking.",
+    "IR_and_logs": "Hash-only evidence references; no claim that class metadata or an opaque low-IR hash establishes emitted-SV or numerical behavior."
+  },
+  "dependency_notice": "SOURCE_DEPENDENCY_MAP.json distinguishes historical and successor class selections, available public references, and external source dependencies. Role-based reproduction is not an already-hermetic runtime bundle or authorization to execute.",
+  "unchanged_limits": {
+    "arena72MiB_authorized": false,
+    "shared32lane_implemented_or_qualified": false,
+    "full_chisel_M128_five_profile_acceptance": "0/5",
+    "full_same4096_RTL_five_profile_acceptance": "0/5",
+    "new_Host_or_844bit_ABI_candidate_included": false,
+    "FIFO_candidate_included": false,
+    "historical_STOP_and_FAIL_preserved": true
+  }
+}

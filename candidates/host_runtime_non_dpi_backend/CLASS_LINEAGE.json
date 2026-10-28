@@ -1,0 +1,212 @@
+{
+  "status": "TOOL_CARRIERS_ONLY_NOT_NEW_HARDWARE_CLOSURE",
+  "baseline": {
+    "count": 1001,
+    "bytes": 18628292,
+    "hardware_source_count": 31,
+    "hardware_class_count": 159,
+    "historical_other_classes": 842,
+    "unchanged": true,
+    "requires_parent": true
+  },
+  "new_tool_sources": 7,
+  "new_tool_classes": 32,
+  "new_tool_class_bytes": 212672,
+  "classes": [
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$3.class",
+      "bytes": 2231,
+      "sha256": "1f781efa925e151f8dbe3b3748f84ac328aeecdbe20d8dc58ae734ac647da259",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$7.class",
+      "bytes": 2239,
+      "sha256": "d4c9afcc57353135acd56967c0139610361c755245349acab39af59016ccc201",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$1.class",
+      "bytes": 2247,
+      "sha256": "f12b458c155233dcd33033d91e6fadd34f76642b7a408cfa7d84e9edb859cde6",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedServicePhaseObserver$.class",
+      "bytes": 4844,
+      "sha256": "e5c6fa6bed57bb7124dc5d6148254592ac42bea12b0a0b61596c6da1e9686154",
+      "source_file": "RetainedServicePhaseObserver.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedBackendCircuitGate.class",
+      "bytes": 1745,
+      "sha256": "a1e6c7389ad6c69ccd4e833bd285158b71fedde279b5ba43bbdb81f66a8719e8",
+      "source_file": "RetainedBackendCircuitGate.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointPortContract$.class",
+      "bytes": 2740,
+      "sha256": "6bf0042cd6a1a3f171c8b72ae29cf5d8578f152d18198b8f487ffd81dbca5292",
+      "source_file": "RetainedEndpointPortContract.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering.class",
+      "bytes": 2517,
+      "sha256": "d194698cb410b2f7b50840e8d51e218cc48b422f403a0de2c6d477f1e3a555b1",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedBackendCircuitGate$.class",
+      "bytes": 17940,
+      "sha256": "15ccbdf0f5bb67f280e71eb55614f07e07ac65afaae43ce497eec75744bee004",
+      "source_file": "RetainedBackendCircuitGate.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$4.class",
+      "bytes": 1858,
+      "sha256": "57382245e6af72726d38dbdf2e5e40ad9ca8c3c814fac5e31cf8182584f7d3aa",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedEndpointPortContract.class",
+      "bytes": 965,
+      "sha256": "9525047ed062300622b94915396ca7d5dceff71e2958417169f2aaa6de5b3e08",
+      "source_file": "RetainedEndpointPortContract.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostMatrixResultFifoMemoryLowering.class",
+      "bytes": 2242,
+      "sha256": "5ba05e055664d2f93886656034151d315ecbee9f80d12b62aceb1582a0ddf3e4",
+      "source_file": "HostMatrixResultFifoMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$5.class",
+      "bytes": 2180,
+      "sha256": "21d2f7aa3983a6e3a04eeb02ace48bf6c4247f26cd4cfde470ac705f25d7636c",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$2.class",
+      "bytes": 2106,
+      "sha256": "88eb34a74c64ab39be25e37d3e5ab9ea4a252524cf64590dfd7c16e4f702088a",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostMatrixResultFifoMemoryLowering$.class",
+      "bytes": 22352,
+      "sha256": "81923778f11f90b09f8b07dc3fabf1b5ece6192762637e6ce3391aaede5c9392",
+      "source_file": "HostMatrixResultFifoMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$.class",
+      "bytes": 33382,
+      "sha256": "48ee044e6bb7386f270765d80a7825981fdd4585cd025d10c1d59a0ec043c476",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostDenseAccMemoryLowering$$anonfun$6.class",
+      "bytes": 2236,
+      "sha256": "d5ac9915cd22d35b23cfa5c4254308ec80345e357db9b73616d8a35a60e7b56b",
+      "source_file": "HostDenseAccMemoryLowering.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/RetainedServicePhaseObserver.class",
+      "bytes": 2346,
+      "sha256": "ee2a79ba9d3750eeb22af1c647ea31b456b86cef9db0c09fff9e6ef4ab02cd76",
+      "source_file": "RetainedServicePhaseObserver.scala"
+    },
+    {
+      "relative": "heteronpu/continuous/model/HostMatrixResultFifoMemoryLowering$$anonfun$1.class",
+      "bytes": 2136,
+      "sha256": "06055f01bd6b289196e9e06b805df3962e06d0fe06bc8907b88d873fa673c834",
+      "source_file": "HostMatrixResultFifoMemoryLowering.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$4.class",
+      "bytes": 2095,
+      "sha256": "26fcd670324f609450816ac4a77df2c872d3aab7a44e8d0ac8e400a5bc517fed",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture.class",
+      "bytes": 2141,
+      "sha256": "987008243a2a334ffc715b911bb2b7e144b7fed2ce167d857564681a4acc6e93",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$6.class",
+      "bytes": 1834,
+      "sha256": "3f5abb767f5e8089a6e370204b3c2eebacee026f988b089a7acc2991e64f56b8",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/PhysicalFmaStageLibrary.class",
+      "bytes": 9238,
+      "sha256": "2f72a5c71ad4056c11741cc61e94ae9ea766b322afdcd901eb75fdadaa114ad8",
+      "source_file": "PhysicalFmaStageLibrary.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$5.class",
+      "bytes": 1856,
+      "sha256": "0281a86a63aeb44e83a5371150038d0193359471149f3a75419906a41040b701",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/EmitPhysicalFmaStageLibrary.class",
+      "bytes": 892,
+      "sha256": "d2ce85fc93a4598473dbe2a7812e2ca1c809417218a6c32c47e3147c7181c49b",
+      "source_file": "PhysicalFmaStageLibrary.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$7.class",
+      "bytes": 1916,
+      "sha256": "2a4714cf6ea1d5bcaaab0ef4b343e066bb329fd604d0e6040034dfef05acd6fa",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/EmitPhysicalFmaStageLibrary$.class",
+      "bytes": 6969,
+      "sha256": "473a2821e0f322fdff5b56925983898d7fdff93c71625b34b804d8e4fd061e0c",
+      "source_file": "PhysicalFmaStageLibrary.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$1.class",
+      "bytes": 2088,
+      "sha256": "9ae3cf574d17665720e383633842608ce23c0d869349f6ff1e7161c9ba86d989",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$9.class",
+      "bytes": 2015,
+      "sha256": "69bfeb406897968a77f87e747c8a9fb50ece0d97bd0d6b6f2f95819520a22d82",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$3.class",
+      "bytes": 1852,
+      "sha256": "2fb584aa7e3b99d89f8af6f52405bf50e8e4912d93865d1c867fbd9def7617c3",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$2.class",
+      "bytes": 3685,
+      "sha256": "0dca2e4884b8c4f60949bb21453271dae208f64b13d04e576f61b594947875e8",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$$anonfun$8.class",
+      "bytes": 1864,
+      "sha256": "ac74c360d4109bd019fe93682b7b87cd599c7d7a34d54cfb3def73033c073d0a",
+      "source_file": "HostCompiledLatestCapture.scala"
+    },
+    {
+      "relative": "chiseltest/simulator/HostCompiledLatestCapture$.class",
+      "bytes": 65921,
+      "sha256": "4cb3444fa10a16c73855f0df59793ccdea46811a9919448369777ccef30bc0ce",
+      "source_file": "HostCompiledLatestCapture.scala"
+    }
+  ],
+  "no_shadow": true,
+  "software_functional_model_absent": true,
+  "hardware_recompiled": false
+}

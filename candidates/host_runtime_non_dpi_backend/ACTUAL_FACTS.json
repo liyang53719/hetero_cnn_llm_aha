@@ -1,0 +1,52 @@
+{
+  "status": "TEMP_SOURCE_BYTE_TRANSPORT_AND_SCALA_COMPILATION_ONLY_NOT_DUT",
+  "r1": {
+    "exit_code": 1,
+    "classes": 0,
+    "wall_seconds": 8.370334022911265,
+    "reason": "Four imported helper source families omitted; failure preserved. Hidden static ABI companion dependency then isolated, not replaced with behavioral model."
+  },
+  "r2": {
+    "exit_code": 0,
+    "wall_seconds": 22.076160777010955,
+    "peak_cpu": 17.48,
+    "peak_rss": 288919552,
+    "max_tree": 18876286,
+    "preflight_checks": 1486,
+    "postflight_checks": 1486,
+    "cleanup_complete": true,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compiled_sources": 7,
+    "new_classes": 32,
+    "new_class_bytes": 212672,
+    "baseline_classes": 1001,
+    "baseline_bytes": 18628292,
+    "baseline_unchanged": true
+  },
+  "cpp": {
+    "compiled_scope": "HOST_DRIVER_CONFIG_ONLY plus small byte-memory tests",
+    "simulation_branch_compiled": false,
+    "generated_vhost_header_used": false,
+    "config_profiles": 5,
+    "python_crosscheck_probes": [
+      96,
+      106,
+      90,
+      143,
+      126
+    ],
+    "crosscheck_total": 561,
+    "affine_unit_checks": 208,
+    "affine_negative_cases": 8,
+    "full_same_mmap_evp_sha256": true,
+    "known_sha_wrong_sha_and_fstat_mutation_tests": true
+  },
+  "capture_executed": false,
+  "fma_emission_executed": false,
+  "sv_linked": false,
+  "dut_executed": false,
+  "full_m128_numeric_pass": 0,
+  "full_m128_rtl_pass": 0,
+  "profile_count": 5,
+  "structural_pass_inherited": false
+}

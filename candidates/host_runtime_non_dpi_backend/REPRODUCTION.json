@@ -1,0 +1,85 @@
+{
+  "status": "REQUIRES_PARENT_NOT_FRESH_CHECKOUT_REPRODUCIBLE",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{ORIGINAL_CAPTURE}",
+    "{PACKAGE}/source/PhysicalFmaStageLibrary.scala",
+    "{PACKAGE}/source/HostDenseAccMemoryLowering.scala",
+    "{PACKAGE}/source/HostMatrixResultFifoMemoryLowering.scala",
+    "{PACKAGE}/source/RetainedBackendCircuitGate.scala",
+    "{PACKAGE}/source/RetainedServicePhaseObserver.scala",
+    "{PACKAGE}/source/RetainedEndpointPortContract.scala"
+  ],
+  "actual_argv_tokens": 23,
+  "exact_local_inverse_verified": true,
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "TMPDIR": "{RUN}/tmp",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin"
+  },
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "requirements": [
+    "Exact original capture source required; public redacted template is not the compiled artifact.",
+    "Exact 1001-class baseline and 31-source hardware closure (five sources still requires-parent), 106 ordered dependency jars and full JDK21 tree (314 pins) remain required.",
+    "Strict bounded original supervisor and symlink-aware pre/post checks required; this metadata is not an executable launcher.",
+    "Original four FMA stages and physical endpoint provider RTL remain external exact dependencies; no provider bodies or generated RTL bundled.",
+    "No automatic capture, emission, Verilator build or simulation is enabled.",
+    "Preserve raw R1 failure and original R2 frozen input receipts; later runtime migration does not revalidate historical path bindings."
+  ],
+  "tool_pin_counts": {
+    "sources": 38,
+    "dependencies": 106,
+    "jdk_tool_pins": 314,
+    "baseline_classes": 1001,
+    "extra_pins": 18
+  },
+  "abi": {
+    "static_input_widths": 24,
+    "physical_endpoint_ports": 45,
+    "gate_change": "RetainedEndpointFunctionalModel.InputWidths -> RetainedEndpointPortContract.InputWidths",
+    "functional_model_body_required": false
+  },
+  "libcrypto": {
+    "name": "libcrypto.so.3",
+    "bytes": 6517312,
+    "sha256": "8bb5f3fdffe280d4453eb79a4663c2c47af70b7c247fe2e94e2da703cee1fd3d"
+  }
+}

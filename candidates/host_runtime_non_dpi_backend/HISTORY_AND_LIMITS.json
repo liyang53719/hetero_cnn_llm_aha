@@ -1,0 +1,21 @@
+{
+  "status": "HISTORICAL_FAILURES_AND_UNTESTED_BOUNDARIES_RETAINED",
+  "history": [
+    "R1 Scala compile failed with 14 errors: missing imported helper inputs. R2 adds exact helpers and separates static 24-input ABI metadata, without compiling the software functional-model body.",
+    "Original independent REVIEW.json pins earlier mapper/loader/driver revisions and syntax-only SHA validation; it is historical, not a review of current final hashes. INTEGRITY_REVIEW.json binds final EVP full same-open-mmap SHA validation.",
+    "Initial configuration load failed on allocation naming; repaired load passed five profiles. Both logs remain pinned.",
+    "Invalid Transform enum bypass and comment-separated DPI / automatic module inventory issues were found and repaired; the original reports retain chronology.",
+    "Publication reviewer found that the first public verifier accepted a symlinked MANIFEST. Actual package contained no symlinks; the verifier now rejects symlinked root, manifest, directories and members. The original probe and pre-fix package manifest remain in local audit history."
+  ],
+  "limits": [
+    "The Simulation/full-DUT C++ branch has never compiled in this batch; source protocol inspection is not a bus simulation pass.",
+    "Source specifies single outstanding half-duplex, next-beat response; this is not LPDDR timing or a performance model.",
+    "Sparse writes commit after B handshake in uncompiled Simulation source. Budget is 8388608 64-byte beats (512 MiB payload plus metadata), not a reduction of the logical 2 GiB address window. Exceeding budget rejects; no eviction.",
+    "EVP hashes the same open read-only private mmap before use, with fstat checks. It is not OS immutability: concurrent writes/truncation can race checks, contaminate bytes or SIGBUS. Exclusive external ownership is required.",
+    "Allocation coverage and overlap validation are lazy at reads; no eager whole-image coverage proof.",
+    "assemble_sv.py inventories module definitions only; identical bodies do not prove preprocessor equivalence, authorize deduplication, linking, or DUT correctness.",
+    "Capture contains old unused validators. The latest capture and FMA emitter main functions were not run by this batch. New independent emission work is out of scope.",
+    "No generated SV, IR, class/ELF, memory bytes, sampled weight hex, NPZ or recoverable encoded payload is published.",
+    "No numeric, RTL, QoR, utilization or whole-model support claim; all five M128 numerical/RTL results remain 0/5, MoE tie still pending."
+  ]
+}

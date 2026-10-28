@@ -1,0 +1,297 @@
+{
+  "status": "SIX_EXACT_COMPILED_SCALA_PLUS_ONE_UNCOMPILED_PATH_REDACTED_TEMPLATE",
+  "files": [
+    {
+      "path": "source/HostCompiledLatestCapture.scala",
+      "frozen_relative": "source/HostCompiledLatestCapture.scala",
+      "original": {
+        "bytes": 18177,
+        "sha256": "0d2c1e100c3b913e021dd4ef8af38072b816754d3cfcacb17997b9110f44bb43"
+      },
+      "public": {
+        "bytes": 18085,
+        "sha256": "e56c2770dd7850f69aab0376f4cbc585d061f9880713952310f80daea843f6fa"
+      },
+      "projection": "one_literal_redacted_uncompiled_template",
+      "actual_r2_compiler_input": true
+    },
+    {
+      "path": "source/PhysicalFmaStageLibrary.scala",
+      "frozen_relative": "source/PhysicalFmaStageLibrary.scala",
+      "original": {
+        "bytes": 2131,
+        "sha256": "bf313312faf48c65d26d250d5b5aa59049b3ec006c99fbc3692557dec7661aaf"
+      },
+      "public": {
+        "bytes": 2131,
+        "sha256": "bf313312faf48c65d26d250d5b5aa59049b3ec006c99fbc3692557dec7661aaf"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": true
+    },
+    {
+      "path": "source/HostDenseAccMemoryLowering.scala",
+      "frozen_relative": "original_helper_sources/HostDenseAccMemoryLowering.scala",
+      "original": {
+        "bytes": 7571,
+        "sha256": "151756021d0bdf9b8e1d746a8051d975e7d3b6921d9c844b5f2955cba74a514f"
+      },
+      "public": {
+        "bytes": 7571,
+        "sha256": "151756021d0bdf9b8e1d746a8051d975e7d3b6921d9c844b5f2955cba74a514f"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": true
+    },
+    {
+      "path": "source/HostMatrixResultFifoMemoryLowering.scala",
+      "frozen_relative": "original_helper_sources/HostMatrixResultFifoMemoryLowering.scala",
+      "original": {
+        "bytes": 5481,
+        "sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb"
+      },
+      "public": {
+        "bytes": 5481,
+        "sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": true
+    },
+    {
+      "path": "source/RetainedBackendCircuitGate.scala",
+      "frozen_relative": "repair_source_r2/RetainedBackendCircuitGate.scala",
+      "original": {
+        "bytes": 4009,
+        "sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a"
+      },
+      "public": {
+        "bytes": 4009,
+        "sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": true
+    },
+    {
+      "path": "source/RetainedServicePhaseObserver.scala",
+      "frozen_relative": "original_helper_sources/RetainedServicePhaseObserver.scala",
+      "original": {
+        "bytes": 1647,
+        "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7"
+      },
+      "public": {
+        "bytes": 1647,
+        "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": true
+    },
+    {
+      "path": "source/RetainedEndpointPortContract.scala",
+      "frozen_relative": "repair_source_r2/RetainedEndpointPortContract.scala",
+      "original": {
+        "bytes": 825,
+        "sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6"
+      },
+      "public": {
+        "bytes": 825,
+        "sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": true
+    },
+    {
+      "path": "source/affine_readonly_memory.hpp",
+      "frozen_relative": "source/affine_readonly_memory.hpp",
+      "original": {
+        "bytes": 6362,
+        "sha256": "e98eddb0095a56c6e0a51238d51e222a4ec2aa8d724d898128d70a545def409a"
+      },
+      "public": {
+        "bytes": 6362,
+        "sha256": "e98eddb0095a56c6e0a51238d51e222a4ec2aa8d724d898128d70a545def409a"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "source/affine_tsv_loader.hpp",
+      "frozen_relative": "source/affine_tsv_loader.hpp",
+      "original": {
+        "bytes": 3481,
+        "sha256": "1578973b0dc612be48ec7562b41993e8085646cf649c6f554308c09442ac7211"
+      },
+      "public": {
+        "bytes": 3481,
+        "sha256": "1578973b0dc612be48ec7562b41993e8085646cf649c6f554308c09442ac7211"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "source/host_axi_driver_non_dpi.cpp",
+      "frozen_relative": "source/host_axi_driver_non_dpi.cpp",
+      "original": {
+        "bytes": 20362,
+        "sha256": "8eb75bbd35eae268ba00f663dfbf11ab1cd9801618c213d2ba03b132b2bd7038"
+      },
+      "public": {
+        "bytes": 20362,
+        "sha256": "8eb75bbd35eae268ba00f663dfbf11ab1cd9801618c213d2ba03b132b2bd7038"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "source/sparse_write_memory.hpp",
+      "frozen_relative": "source/sparse_write_memory.hpp",
+      "original": {
+        "bytes": 1979,
+        "sha256": "63206761274600c98352aea72281cee305d33a96e406a74bc51f665484845368"
+      },
+      "public": {
+        "bytes": 1979,
+        "sha256": "63206761274600c98352aea72281cee305d33a96e406a74bc51f665484845368"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "source/test_affine_memory.cpp",
+      "frozen_relative": "source/test_affine_memory.cpp",
+      "original": {
+        "bytes": 1824,
+        "sha256": "6f5ef2c982bc6cee4a00f19345f346d9c5bf291b80684e56044c44168c82edbe"
+      },
+      "public": {
+        "bytes": 1824,
+        "sha256": "6f5ef2c982bc6cee4a00f19345f346d9c5bf291b80684e56044c44168c82edbe"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "source/test_driver_config.cpp",
+      "frozen_relative": "source/test_driver_config.cpp",
+      "original": {
+        "bytes": 984,
+        "sha256": "b9561cf51205cae83d4df2606852ae74daf37d9da3df5789081c16dda152591f"
+      },
+      "public": {
+        "bytes": 984,
+        "sha256": "b9561cf51205cae83d4df2606852ae74daf37d9da3df5789081c16dda152591f"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "source/test_source_integrity.cpp",
+      "frozen_relative": "source/test_source_integrity.cpp",
+      "original": {
+        "bytes": 756,
+        "sha256": "e80949996956ed4d5313a2411967c11917f1e81305496c0070307f6170990783"
+      },
+      "public": {
+        "bytes": 756,
+        "sha256": "e80949996956ed4d5313a2411967c11917f1e81305496c0070307f6170990783"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "source/test_sparse_write_memory.cpp",
+      "frozen_relative": "source/test_sparse_write_memory.cpp",
+      "original": {
+        "bytes": 922,
+        "sha256": "b91fb244962a621d355c17b111c88515753334026b5a5778b5233059c01d66c9"
+      },
+      "public": {
+        "bytes": 922,
+        "sha256": "b91fb244962a621d355c17b111c88515753334026b5a5778b5233059c01d66c9"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "assemble_sv.py",
+      "frozen_relative": "assemble_sv.py",
+      "original": {
+        "bytes": 2775,
+        "sha256": "18c1d9bc93a8e503279c47fa9d3da479ca747d9b0091f699e7501f1f1740f789"
+      },
+      "public": {
+        "bytes": 2775,
+        "sha256": "18c1d9bc93a8e503279c47fa9d3da479ca747d9b0091f699e7501f1f1740f789"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "tests/test_assembler.py",
+      "frozen_relative": "independent_review/test_assembler.py",
+      "original": {
+        "bytes": 1568,
+        "sha256": "481d35d2f8bd284e3d929b2ddd0636158c0099ce72e4845b6cd9c410ee3810d1"
+      },
+      "public": {
+        "bytes": 1568,
+        "sha256": "481d35d2f8bd284e3d929b2ddd0636158c0099ce72e4845b6cd9c410ee3810d1"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    },
+    {
+      "path": "tests/check_layouts.py",
+      "frozen_relative": "independent_review/check_layouts.py",
+      "original": {
+        "bytes": 1210,
+        "sha256": "26aacd7c6adab61523ad596e8be183cc4cec5e15f4f31f0216c3517c902ce59a"
+      },
+      "public": {
+        "bytes": 1210,
+        "sha256": "26aacd7c6adab61523ad596e8be183cc4cec5e15f4f31f0216c3517c902ce59a"
+      },
+      "projection": "exact",
+      "actual_r2_compiler_input": false
+    }
+  ],
+  "hardware_parent": {
+    "path": "../host_runtime_admission/SOURCE_PINS.json",
+    "bytes": 9826,
+    "sha256": "12f9b2955e3c12172a32ab34eff5b57cf511a0eea265cd7da9d69cb158f9310b"
+  },
+  "hardware_sources_unchanged": 31,
+  "hardware_parent_missing_sources": 5,
+  "archival_pin_only": [
+    {
+      "name": "HostCompiledRawEmitter.scala",
+      "bytes": 21465,
+      "sha256": "46d830bc36e5e4bba6acb2ac69e92933b1e37ab000657a23b2a75da8b03e58c5",
+      "role": "not_in_actual_r2_argv"
+    },
+    {
+      "name": "RetainedEndpointFunctionalModel.scala",
+      "bytes": 13394,
+      "sha256": "20653305d4ff192d52633bd551a4188466d23c540eef0fd65342f976244065b9",
+      "role": "not_in_actual_r2_argv"
+    },
+    {
+      "name": "RetainedBackendCircuitGate.scala",
+      "bytes": 4012,
+      "sha256": "08a45bf19ff8850aa56678bf8b0b6d9150d3a8f45e26809da2a1191a9426b4fb",
+      "role": "not_in_actual_r2_argv"
+    },
+    {
+      "name": "EmitHeteroBF16Fma.scala",
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+      "role": "not_in_actual_r2_argv"
+    }
+  ],
+  "redaction": {
+    "field": "originalHighPath",
+    "token": "REQUIRES_PARENT_ORIGINAL_HIGH",
+    "replacements": 1,
+    "reason": "Private path in retained unused historical validator; main is capture-only. No compiled-byte or full behavioral-equivalence claim for public template.",
+    "inverse": "Supply the original literal privately to verify_capture_inverse.py; exact original SHA/bytes must match before claiming historical reproduction."
+  }
+}

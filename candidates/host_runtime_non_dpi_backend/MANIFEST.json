@@ -1,0 +1,145 @@
+{
+  "status": "TEMP_REQUIRES_PARENT_BACKEND_SOURCE_COMPILE_AND_BYTE_MEMORY_ONLY",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 1557,
+      "sha256": "0e1c138d632c2493d0e4592a63d204b9f54f722b034cc2603f2f7c001a1fedfb"
+    },
+    {
+      "path": "CLASS_LINEAGE.json",
+      "bytes": 8784,
+      "sha256": "0e04334e4a43f04a0995a32f03be716cfe6a0a63e79025dfbdf978783b3693a7"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 12531,
+      "sha256": "230e0403d13be5aca931fa46b1150d30f7446e1a0524eabe78ed9e481218256e"
+    },
+    {
+      "path": "HISTORY_AND_LIMITS.json",
+      "bytes": 2565,
+      "sha256": "840b652b5df4b099e866e0e403b3f49fe96c8a2ce94fc11c78bfc92a6c2511c2"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 2256,
+      "sha256": "74fc48379a5e7bbd4f4b9443d092b7f6b34fd5e6552e2ab9323af1116c9cff14"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 3011,
+      "sha256": "b9b64753a2c37b477ecdb8fbfbcb81f2f20edffa29d70818692dfa3862191563"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 10185,
+      "sha256": "1810fa60b1ae3ecb33df67532966675fe52f5eaf6ba94af3d2ea66a2b1777326"
+    },
+    {
+      "path": "assemble_sv.py",
+      "bytes": 2775,
+      "sha256": "18c1d9bc93a8e503279c47fa9d3da479ca747d9b0091f699e7501f1f1740f789"
+    },
+    {
+      "path": "source/HostCompiledLatestCapture.scala",
+      "bytes": 18085,
+      "sha256": "e56c2770dd7850f69aab0376f4cbc585d061f9880713952310f80daea843f6fa"
+    },
+    {
+      "path": "source/HostDenseAccMemoryLowering.scala",
+      "bytes": 7571,
+      "sha256": "151756021d0bdf9b8e1d746a8051d975e7d3b6921d9c844b5f2955cba74a514f"
+    },
+    {
+      "path": "source/HostMatrixResultFifoMemoryLowering.scala",
+      "bytes": 5481,
+      "sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb"
+    },
+    {
+      "path": "source/PhysicalFmaStageLibrary.scala",
+      "bytes": 2131,
+      "sha256": "bf313312faf48c65d26d250d5b5aa59049b3ec006c99fbc3692557dec7661aaf"
+    },
+    {
+      "path": "source/RetainedBackendCircuitGate.scala",
+      "bytes": 4009,
+      "sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a"
+    },
+    {
+      "path": "source/RetainedEndpointPortContract.scala",
+      "bytes": 825,
+      "sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6"
+    },
+    {
+      "path": "source/RetainedServicePhaseObserver.scala",
+      "bytes": 1647,
+      "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7"
+    },
+    {
+      "path": "source/affine_readonly_memory.hpp",
+      "bytes": 6362,
+      "sha256": "e98eddb0095a56c6e0a51238d51e222a4ec2aa8d724d898128d70a545def409a"
+    },
+    {
+      "path": "source/affine_tsv_loader.hpp",
+      "bytes": 3481,
+      "sha256": "1578973b0dc612be48ec7562b41993e8085646cf649c6f554308c09442ac7211"
+    },
+    {
+      "path": "source/host_axi_driver_non_dpi.cpp",
+      "bytes": 20362,
+      "sha256": "8eb75bbd35eae268ba00f663dfbf11ab1cd9801618c213d2ba03b132b2bd7038"
+    },
+    {
+      "path": "source/sparse_write_memory.hpp",
+      "bytes": 1979,
+      "sha256": "63206761274600c98352aea72281cee305d33a96e406a74bc51f665484845368"
+    },
+    {
+      "path": "source/test_affine_memory.cpp",
+      "bytes": 1824,
+      "sha256": "6f5ef2c982bc6cee4a00f19345f346d9c5bf291b80684e56044c44168c82edbe"
+    },
+    {
+      "path": "source/test_driver_config.cpp",
+      "bytes": 984,
+      "sha256": "b9561cf51205cae83d4df2606852ae74daf37d9da3df5789081c16dda152591f"
+    },
+    {
+      "path": "source/test_source_integrity.cpp",
+      "bytes": 756,
+      "sha256": "e80949996956ed4d5313a2411967c11917f1e81305496c0070307f6170990783"
+    },
+    {
+      "path": "source/test_sparse_write_memory.cpp",
+      "bytes": 922,
+      "sha256": "b91fb244962a621d355c17b111c88515753334026b5a5778b5233059c01d66c9"
+    },
+    {
+      "path": "tests/check_layouts.py",
+      "bytes": 1210,
+      "sha256": "26aacd7c6adab61523ad596e8be183cc4cec5e15f4f31f0216c3517c902ce59a"
+    },
+    {
+      "path": "tests/test_assembler.py",
+      "bytes": 1568,
+      "sha256": "481d35d2f8bd284e3d929b2ddd0636158c0099ce72e4845b6cd9c410ee3810d1"
+    },
+    {
+      "path": "verify_capture_inverse.py",
+      "bytes": 1260,
+      "sha256": "4538354e0a42087c228307fba5a9a3b0e819fcb3318df9203c97df848cbb93cf"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1866,
+      "sha256": "19afab45efab487d07477f78925303f4bdd892952e1e1b534785f546c1e896bc"
+    },
+    {
+      "path": "verify_summary.py",
+      "bytes": 3911,
+      "sha256": "4e2ba575daef7e6a3b702cba2e40a4c5d87a49a9686953f8e6e12da4639ce104"
+    }
+  ]
+}

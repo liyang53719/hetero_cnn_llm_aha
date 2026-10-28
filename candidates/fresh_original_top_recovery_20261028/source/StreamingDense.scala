@@ -1,0 +1,330 @@
+// SPDX-License-Identifier: Apache-2.0
+package heteronpu.continuous
+
+import chisel3._
+import chisel3.util._
+
+/** Bounded SRAM tile feeder for the original 4096-MAC arithmetic.
+  * A is cached for at most maxTokenTiles*16 token rows. Two BF16 weight buffers hold 16 K
+  * positions for five independent N tiles. The producer fills the alternate
+  * buffer through validated real-iDMA bursts while the consumer issues the
+  * current one. Each output context receives K=0,1,... without reassociation.
+  * Host completion follows all final typed stores, never the last MAC issue.
+  */
+class DenseCycleProfile extends Bundle {
+  val other=UInt(64.W);val activationFetch=UInt(64.W);val setup=UInt(64.W)
+  val issue=UInt(64.W);val writeback=UInt(64.W);val weightWait=UInt(64.W)
+  val matrixBackpressure=UInt(64.W)
+}
+
+class StreamingDenseOwner(maxK:Int=8960, maxTokenTiles:Int=5, burstWrites:Boolean=false, coalesceWeightReads:Boolean=true) extends Module {
+  require(maxTokenTiles>=1 && maxTokenTiles<=5)
+  // M contexts reuse one DDR weight tile across up to 80 tokens. The old
+  // N-only context schedule remains exactly the real16 compatibility case.
+  private val scratch=DenseScratchGeometry(maxK,maxTokenTiles)
+  require(maxK>0 && maxK%16==0)
+  val io=IO(new DenseOwnerIO(burstWrites))
+
+
+
+
+
+
+
+
+
+
+  val idle::aReq::aWait::setup::execute::finish::locked::Nil=Enum(7)
+  val state=RegInit(idle);val job=Reg(new QwenOwnerJob)
+  val status=RegInit(0.U(8.W));val cycles=RegInit(0.U(64.W));val useful=RegInit(0.U(64.W));val bytes=RegInit(0.U(64.W))
+  val physicalBase=RegInit(0.U(64.W));val issued=RegInit(0.U(64.W));val starved=RegInit(0.U(64.W))
+  val rowBase=RegInit(0.U(16.W));val rows=Reg(UInt(7.W));val nBase=RegInit(0.U(16.W));val contexts=Reg(UInt(3.W))
+  val mTiles=Reg(UInt(3.W));val nContexts=Reg(UInt(3.W))
+  val capacityRows=Reg(UInt(7.W))
+  val aRow=RegInit(0.U(7.W));val aBeat=RegInit(0.U(16.W))
+  val burstCount=Reg(UInt(5.W));val burstIndex=RegInit(0.U(5.W));val sequence=RegInit(0.U(32.W))
+  val burstTag=Reg(UInt(64.W))
+  val aBanks=Seq.fill(16)(SyncReadMem(scratch.aWordsPerBank,UInt(256.W)))
+  // Native BF16 A supplies two existing 256-bit SRAM words per DDR beat.
+  // Drain its upper half through the SAME bank write port on the next cycle;
+  // do not infer a second SRAM port or consume another response meanwhile.
+  val aHighPending=RegInit(false.B);val aHighData=Reg(UInt(256.W))
+  val aHighBank=Reg(UInt(4.W));val aHighAddress=Reg(UInt(32.W))
+  val aWrite=WireDefault(false.B);val aWriteData=WireDefault(0.U(256.W))
+  val aWriteBank=WireDefault(aRow(3,0));val aWriteAddress=WireDefault(0.U(32.W))
+  when(aHighPending){
+    assert(!io.burstResponse.fire,"native A upper-half SRAM write lost ownership")
+    aWrite:=true.B;aWriteData:=aHighData;aWriteBank:=aHighBank;aWriteAddress:=aHighAddress
+    aHighPending:=false.B
+  }
+  for(i<-0 until 16){when(aWrite&&aWriteBank===i.U){aBanks(i).write(aWriteAddress,aWriteData)}}
+  val wBanks=Seq.fill(16)(SyncReadMem(160,UInt(256.W))) // 2 x K16 x contexts5
+  val ready=RegInit(VecInit(Seq.fill(2)(false.B)))
+  val readyK=Reg(Vec(2,UInt(16.W)))
+  val loadIdle::loadReq::loadWait::Nil=Enum(3)
+  val loadState=RegInit(loadIdle);val loadSel=RegInit(false.B);val loadK=Reg(UInt(16.W));val loadDepth=RegInit(0.U(5.W))
+  val loadContext=RegInit(0.U(3.W));val loadBeat=RegInit(0.U(5.W));val nextLoadK=RegInit(0.U(16.W))
+  val issueSel=RegInit(false.B);val issueK=RegInit(0.U(16.W));val issueContext=RegInit(0.U(3.W));val allIssued=RegInit(false.B)
+  val groupStarted=RegInit(false.B);val groupDone=RegInit(false.B)
+  val writeIdle::writeReq::writeWait::writeData::Nil=Enum(4)
+  val writeState=RegInit(writeIdle);val writeContext=Reg(UInt(3.W));val writeRow=RegInit(0.U(5.W));val writeBeat=RegInit(0.U(5.W))
+  val writeCount=Reg(UInt(5.W));val writeIndex=RegInit(0.U(5.W))
+  val written=RegInit(0.U(3.W));val finalValue=Reg(Vec(16,Vec(256,UInt(32.W))))
+  val writeSequence=RegInit(0.U(32.W));val writeTag=Cat(job.tag,writeSequence)
+  def fail(code:UInt):Unit={when(status===0.U){status:=code}}
+  def ctxN(ctx:UInt):UInt=Mux(mTiles===1.U,ctx,Mux(nContexts===2.U,ctx&1.U,0.U))
+  def ctxM(ctx:UInt):UInt=Mux(mTiles===1.U,0.U,Mux(nContexts===2.U,ctx>>1,ctx))
+  def columns(ctx:UInt):UInt={val remaining=job.n-(nBase+(ctxN(ctx).pad(16)<<8));Mux(remaining>256.U,256.U,remaining)}
+  def nColumns(index:UInt):UInt={val remaining=job.n-(nBase+(index.pad(16)<<8));Mux(remaining>256.U,256.U,remaining)}
+  def rowsIn(ctx:UInt):UInt={val remaining=rows-(ctxM(ctx).pad(7)<<4);Mux(remaining>16.U,16.U,remaining)}
+  def countAt(addr:UInt,remaining:UInt):UInt={val page=16.U(6.W)-addr(9,6);Mux(remaining<page,remaining,page)}
+  val activationBytes=Mux(job.activationBf16,2.U(3.W),4.U(3.W))
+  val activationBeats=Mux(job.activationBf16,job.k>>5,job.k>>4)
+  val outputBytes=Mux(job.outputBf16,2.U(3.W),4.U(3.W))
+  val outputElementsPerBeat=Mux(job.outputBf16,32.U(6.W),16.U(6.W))
+  def outputBeats(ctx:UInt):UInt=Mux(job.outputBf16,columns(ctx)>>5,columns(ctx)>>4)
+  val aAddress=job.a+(rowBase.pad(64)+aRow)*job.k*activationBytes+(aBeat.pad(64)<<6)
+  val weightElementsPerBeat=Mux(job.weightBf16,32.U(6.W),16.U(6.W))
+  val weightBytes=Mux(job.weightBf16,2.U(3.W),4.U(3.W))
+  val wAddress=job.b+((loadK.pad(64)+loadDepth)*job.n+nBase+(loadContext.pad(64)<<8)+loadBeat.pad(64)*weightElementsPerBeat)*weightBytes
+  def weightBeats(ctx:UInt):UInt=Mux(job.weightBf16,nColumns(ctx)>>5,nColumns(ctx)>>4)
+  val readPlan=Module(new DenseReadPlanner(coalesceWeightReads))
+  readPlan.io.nativeBf16:=job.weightBf16;readPlan.io.n:=job.n;readPlan.io.nBase:=nBase
+  readPlan.io.contexts:=nContexts
+  readPlan.io.depthCount:=Mux(job.k-loadK<16.U,job.k-loadK,16.U)
+  readPlan.io.depth:=loadDepth;readPlan.io.context:=loadContext;readPlan.io.beat:=loadBeat
+  readPlan.io.address:=wAddress
+  val loadingA=state===aReq||state===aWait
+  io.burst.valid:=status===0.U && ((state===aReq && !aHighPending) || (state===execute&&loadState===loadReq))
+  io.burst.bits.address:=Mux(loadingA,aAddress,wAddress)
+  io.burst.bits.beats:=Mux(loadingA,countAt(aAddress,activationBeats-aBeat),readPlan.io.beats)
+  io.burst.bits.tag:=Cat(job.tag,sequence)
+  io.burstResponse.ready:=(state===aWait && !aHighPending) || (state===execute&&loadState===loadWait)
+  io.job.ready:=state===idle
+  io.done.valid:=state===finish;io.done.bits.tag:=job.tag;io.done.bits.status:=status
+  io.done.bits.cycles:=cycles;io.done.bits.writeBytes:=bytes;io.done.bits.usefulMacs:=useful
+  io.done.bits.executedMacs:=(io.physicalSteps-physicalBase)*512.U
+  io.resetRequired:=status=/=0.U;io.issueCycles:=issued;io.operandStalls:=starved
+  io.matrix.group.valid:=state===execute && !groupStarted && status===0.U
+  io.matrix.group.bits.opcode:=0x20.U;io.matrix.group.bits.tag:=job.tag
+  io.matrix.group.bits.sliceMask:=VecInit((0 until 8).map(i=>(nBase+(i*32).U)<job.n)).asUInt
+  io.matrix.done.ready:=state===execute&&groupStarted && !groupDone
+  io.matrix.abort:=state===execute&&status=/=0.U&&groupStarted && !groupDone
+
+  // A single-cycle SRAM read stage followed by an elastic operand FIFO.
+  // Credit reservation includes the pending synchronous read, so stalls cannot
+  // overwrite an operand which was already accepted by this feeder.
+  class Operand extends Bundle {val step=new MatrixStreamStep}
+  val operands=Module(new Queue(new Operand,4,pipe=true))
+  val pending=RegInit(false.B);val pendingK=Reg(UInt(16.W));val pendingContext=Reg(UInt(3.W))
+  val canRead=state===execute&&groupStarted && !groupDone && !allIssued&&status===0.U&&
+    ready(issueSel)&&readyK(issueSel)===(issueK&"hfff0".U)&&operands.io.count+&pending.asUInt<4.U
+  val readFire=canRead
+  val aRead=aBanks.map(_.read(ctxM(issueContext).pad(16)*(job.k>>4)+(issueK>>4),readFire))
+  // 80 + 15*5 + 4 = 159: an explicit eight-bit sum is required.
+  // A seven-bit Mux(80,0) plus a four-bit K product would wrap at 128.
+  val wAddr=Mux(issueSel,80.U(8.W),0.U(8.W))+(issueK(3,0).pad(8)*5.U)(7,0)+ctxN(issueContext).pad(8)
+  val wRead=wBanks.map(_.read(wAddr,readFire))
+  pending:=readFire
+  when(readFire){pendingK:=issueK;pendingContext:=issueContext}
+  val p=operands.io.enq.bits.step
+  operands.io.enq.valid:=pending&&status===0.U
+  p.context:=pendingContext;p.clear:=pendingK===0.U;p.last:=pendingK+1.U===job.k
+  p.finish:=p.last&&pendingContext+1.U===contexts;p.emit:=p.last
+  for(r<-0 until 16){
+    val lane=aRead(r).asTypeOf(Vec(16,UInt(16.W)))
+    p.a(r):=Mux(r.U<rowsIn(pendingContext),lane(pendingK(3,0)),0.U)
+  }
+  for(c<-0 until 256){p.b(c):=Mux(c.U<columns(pendingContext),wRead(c/16)(16*(c%16)+15,16*(c%16)),0.U)}
+  when(pending&&status===0.U){assert(operands.io.enq.ready,"reserved operand credit lost")}
+  io.matrix.step.valid:=state===execute&&operands.io.deq.valid&&status===0.U
+  io.matrix.step.bits:=operands.io.deq.bits.step
+  operands.io.deq.ready:=Mux(status=/=0.U,true.B,io.matrix.step.ready&&state===execute)
+  when(state===execute&&groupStarted && !allIssued&& !canRead&&status===0.U){starved:=starved+1.U}
+  when(readFire){
+    when(issueContext+1.U===contexts){
+      issueContext:=0.U;issueK:=issueK+1.U
+      when(issueK(3,0)===15.U || issueK+1.U===job.k){ready(issueSel):=false.B;issueSel:= !issueSel}
+      when(issueK+1.U===job.k){allIssued:=true.B}
+    }.otherwise{issueContext:=issueContext+1.U}
+  }
+  when(io.matrix.step.fire){
+    useful:=useful+rowsIn(io.matrix.step.bits.context)*columns(io.matrix.step.bits.context);issued:=issued+1.U
+  }
+
+  // Exclusive cycle attribution. A simultaneous issue wins over overlapping
+  // I/O; these are critical-path buckets, not additive activity counters.
+  val cycleBuckets=RegInit(VecInit(Seq.fill(7)(0.U(64.W))))
+  val cycleClass=WireDefault(0.U(3.W))
+  when(state===aReq||state===aWait){cycleClass:=1.U}
+  .elsewhen(state===setup){cycleClass:=2.U}
+  .elsewhen(state===execute){
+    when(io.matrix.step.fire){cycleClass:=3.U}
+    .elsewhen(writeState=/=writeIdle){cycleClass:=4.U}
+    .elsewhen(!allIssued && (!ready(issueSel)||readyK(issueSel)=/=(issueK&"hfff0".U))){cycleClass:=5.U}
+    .elsewhen(operands.io.deq.valid && !io.matrix.step.ready){cycleClass:=6.U}
+  }
+  when(state=/=idle&&state=/=finish&&state=/=locked){cycleBuckets(cycleClass):=cycleBuckets(cycleClass)+1.U}
+  when(io.job.fire){cycleBuckets:=VecInit(Seq.fill(7)(0.U(64.W)))}
+  io.profile.other:=cycleBuckets(0);io.profile.activationFetch:=cycleBuckets(1)
+  io.profile.setup:=cycleBuckets(2);io.profile.issue:=cycleBuckets(3)
+  io.profile.writeback:=cycleBuckets(4);io.profile.weightWait:=cycleBuckets(5)
+  io.profile.matrixBackpressure:=cycleBuckets(6)
+  when(io.done.valid){assert(cycleBuckets.reduce(_+&_)===cycles,"Dense cycle attribution is not exhaustive")}
+
+  io.matrix.result.ready:=state===execute&&(status=/=0.U || writeState===writeIdle)
+  when(io.matrix.result.fire && status===0.U){
+    val r=io.matrix.result.bits
+    val finite=(0 until 16).flatMap(i=>(0 until 256).map(j=>i.U>=rowsIn(r.context)||j.U>=columns(r.context)||(TensorMath.finite(r.value(i)(j))&&
+      (!job.outputBf16||r.value(i)(j)(30,0)<"h7f7f8000".U(31.W))))).reduce(_&&_)
+    when(r.error || !r.last || r.context>=contexts || r.context=/=written){fail(Status.Protocol.U)}
+    .elsewhen(!finite){fail(Status.Numerical.U)}
+    .otherwise{finalValue:=r.value;writeContext:=r.context;writeRow:=0.U;writeBeat:=0.U;writeState:=writeReq}
+  }
+  val outputAddress=job.dst+((rowBase.pad(64)+(ctxM(writeContext).pad(64)<<4)+writeRow)*job.n+nBase+
+    (ctxN(writeContext).pad(64)<<8)+writeBeat.pad(64)*outputElementsPerBeat)*outputBytes
+  def outputPacket(beat:UInt):UInt={
+    val fp32=VecInit((0 until 16).map(i=>finalValue(writeRow(3,0))(Cat(beat(3,0),i.U(4.W))))).asUInt
+    val bf16=VecInit((0 until 32).map(i=>TensorMath.bf16Rne(finalValue(writeRow(3,0))(Cat(beat(2,0),i.U(5.W)))))).asUInt
+    Mux(job.outputBf16,bf16,fp32)
+  }
+  val responseFire=WireDefault(false.B);val responseBits=WireDefault(0.U.asTypeOf(new MemoryResponse))
+  val committedBeats=WireDefault(1.U(5.W))
+  io.memory.valid:=false.B;io.memory.bits:=0.U.asTypeOf(new MemoryRequest);io.response.ready:=false.B
+  if(burstWrites){
+    io.writeRequest.get.valid:=state===execute && writeState===writeReq && status===0.U
+    io.writeRequest.get.bits.address:=outputAddress
+    io.writeRequest.get.bits.beats:=countAt(outputAddress,outputBeats(writeContext)-writeBeat)
+    io.writeRequest.get.bits.tag:=writeTag
+    // Once a write batch is accepted, drain its data even if a concurrent
+    // operand read fails. The group never publishes that failed output.
+    io.writeData.get.valid:=state===execute && writeState===writeData
+    io.writeData.get.bits.data:=outputPacket(writeBeat+writeIndex)
+    io.writeData.get.bits.last:=writeIndex+1.U===writeCount
+    io.writeResponse.get.ready:=state===execute && writeState===writeWait
+    when(io.writeRequest.get.fire){writeCount:=io.writeRequest.get.bits.beats;writeIndex:=0.U;writeState:=writeData}
+    when(io.writeData.get.fire){writeIndex:=writeIndex+1.U;when(writeIndex+1.U===writeCount){writeState:=writeWait}}
+    responseFire:=io.writeResponse.get.fire;responseBits:=io.writeResponse.get.bits;committedBeats:=writeCount
+  }else{
+    io.memory.valid:=state===execute&&writeState===writeReq&&status===0.U
+    io.memory.bits.write:=true.B;io.memory.bits.address:=outputAddress
+    io.memory.bits.data:=outputPacket(writeBeat)
+    io.memory.bits.mask:=Fill(64,1.U(1.W));io.memory.bits.tag:=writeTag
+    io.response.ready:=state===execute&&writeState===writeWait
+    when(io.memory.fire){writeState:=writeWait}
+    responseFire:=io.response.fire;responseBits:=io.response.bits
+  }
+  when(responseFire){
+    when(responseBits.error){fail(Status.Memory.U);writeState:=writeIdle}
+    .elsewhen(responseBits.tag=/=writeTag){fail(Status.Protocol.U);writeState:=writeIdle}
+    .otherwise{
+      bytes:=bytes+(committedBeats.pad(64)<<6);writeSequence:=writeSequence+1.U
+      when(writeBeat+&committedBeats===outputBeats(writeContext)){
+        writeBeat:=0.U
+        when(writeRow+1.U===rowsIn(writeContext)){written:=written+1.U;writeState:=writeIdle}
+        .otherwise{writeRow:=writeRow+1.U;writeState:=writeReq}
+      }.otherwise{writeBeat:=writeBeat+committedBeats;writeState:=writeReq}
+    }
+  }
+
+  when(state=/=idle&&state=/=finish&&state=/=locked){cycles:=cycles+1.U}
+  when(io.job.fire){
+    val j=io.job.bits;job:=j;status:=0.U;cycles:=0.U;useful:=0.U;bytes:=0.U;physicalBase:=io.physicalSteps
+    rowBase:=0.U;nBase:=0.U;aRow:=0.U;aBeat:=0.U;aHighPending:=false.B;sequence:=0.U;writeSequence:=0.U;issued:=0.U;starved:=0.U
+    val admittedRows=scratch.tokenTiles(j.k).pad(7)<<4
+    capacityRows:=admittedRows
+    rows:=Mux(j.m>admittedRows,admittedRows,j.m)
+    val aEnd=j.a.pad(66)+j.m.pad(66)*j.k*Mux(j.activationBf16,2.U(3.W),4.U(3.W));val bEnd=j.b.pad(66)+j.k.pad(66)*j.n*Mux(j.weightBf16,2.U(3.W),4.U(3.W))
+    val cEnd=j.dst.pad(66)+j.m.pad(66)*j.n*Mux(j.outputBf16,2.U(3.W),4.U(3.W))
+    val aligned=Seq(j.a,j.b,j.dst).map(_(5,0)===0.U).reduce(_&&_)
+    val aliases=(j.a.pad(66)<cEnd && j.dst.pad(66)<aEnd)||(j.b.pad(66)<cEnd && j.dst.pad(66)<bEnd)
+    when(j.kind=/=QwenOwnerKind.Dense.U||j.m===0.U||j.n===0.U||j.k===0.U||j.k>maxK.U||j.k(3,0)=/=0.U||j.n(3,0)=/=0.U||
+      !aligned||(j.activationBf16&&j.k(4,0)=/=0.U)||((j.weightBf16||j.outputBf16)&&j.n(4,0)=/=0.U)||aliases||Seq(aEnd,bEnd,cEnd).map(_>(BigInt(1)<<56).U).reduce(_||_)||j.writeBytes=/=j.m.pad(64)*j.n*Mux(j.outputBf16,2.U(3.W),4.U(3.W))){
+      status:=Status.Bounds.U;state:=finish
+    }.otherwise{state:=aReq}
+  }
+  when(io.burst.fire){burstCount:=io.burst.bits.beats;burstIndex:=0.U;burstTag:=io.burst.bits.tag;sequence:=sequence+1.U
+    when(loadingA){state:=aWait}.otherwise{loadState:=loadWait}
+  }
+  when(io.burstResponse.fire){
+    val r=io.burstResponse.bits;val last=burstIndex+1.U===burstCount
+    val words=r.data.asTypeOf(Vec(16,UInt(32.W)))
+    val native=Mux(state===aWait,job.activationBf16,job.weightBf16)
+    val halves=r.data.asTypeOf(Vec(32,UInt(16.W)))
+    val finite=Mux(native,halves.map(x=>x(14,7)=/="hff".U).reduce(_&&_),words.map(TensorMath.finite).reduce(_&&_))
+    val packed=VecInit(words.map(TensorMath.bf16Rne)).asUInt
+    val bad=r.error||r.tag=/=burstTag||r.last=/=last|| !finite
+    when(bad){fail(Mux(r.error,Status.Memory.U,Mux(!finite,Status.Numerical.U,Status.Protocol.U)))}
+    when(status===0.U && !bad){
+      when(state===aWait){
+        val word=(aRow>>4).pad(32)*(job.k>>4)+Mux(job.activationBf16,
+          (aBeat.pad(32)+burstIndex)<<1,aBeat.pad(32)+burstIndex)
+        aWrite:=true.B;aWriteBank:=aRow(3,0);aWriteAddress:=word
+        aWriteData:=Mux(job.activationBf16,r.data(255,0),packed)
+        when(job.activationBf16){
+          aHighPending:=true.B;aHighData:=r.data(511,256)
+          aHighBank:=aRow(3,0);aHighAddress:=word+1.U
+        }
+      }
+      .otherwise{
+        val wa=Mux(loadSel,80.U(8.W),0.U(8.W))+(loadDepth.pad(8)*5.U)(7,0)+loadContext.pad(8)
+        for(i<-0 until 16){
+          when(Mux(native,(loadBeat.pad(6)<<1)+(i%2).U,loadBeat.pad(6))===i.U){
+            wBanks(i).write(wa,Mux(native,r.data(256*(i%2)+255,256*(i%2)),packed))
+          }
+        }
+      }
+    }
+    // The descriptor and cursor are advanced on accepted data, not on an
+    // assumed one-context request. This also handles a burst crossing K rows.
+    when(state=/=aWait){
+      loadBeat:=readPlan.io.nextBeat;loadContext:=readPlan.io.nextContext;loadDepth:=readPlan.io.nextDepth
+      when(readPlan.io.bufferEnd && !last && status===0.U){fail(Status.Protocol.U)}
+    }
+    burstIndex:=burstIndex+1.U
+    when(last){
+      when(state===aWait){
+        when(bad||status=/=0.U){state:=finish}
+        .elsewhen(aBeat+burstCount===activationBeats){
+          aBeat:=0.U
+          when(aRow+1.U===rows){state:=setup}.otherwise{aRow:=aRow+1.U;state:=aReq}
+        }.otherwise{aBeat:=aBeat+burstCount;state:=aReq}
+      }.otherwise{
+        when(bad||status=/=0.U){loadState:=loadIdle}
+        .elsewhen(readPlan.io.bufferEnd){
+          ready(loadSel):=true.B;readyK(loadSel):=loadK;nextLoadK:=loadK+16.U
+          loadSel:= !loadSel;loadState:=loadIdle
+        }.otherwise{loadState:=loadReq}
+      }
+    }
+  }
+  when(state===setup && !aHighPending){
+    val fullTiles=(job.n-nBase)>>8
+    // A partial-width last tile gets its own group and slice mask. Otherwise
+    // masked columns would inflate executed-MAC accounting for earlier tiles.
+    val mt=(rows+&15.U)>>4
+    val availableN=MuxLookup(mt,1.U(3.W))(Seq(1.U->5.U(3.W),2.U->2.U(3.W)))
+    val nt=Mux(fullTiles===0.U,1.U,Mux(fullTiles>availableN,availableN,fullTiles))
+    mTiles:=mt;nContexts:=nt;contexts:=mt*nt
+    ready:=VecInit(Seq.fill(2)(false.B));loadSel:=false.B;nextLoadK:=0.U;loadState:=loadIdle
+    issueSel:=false.B;issueK:=0.U;issueContext:=0.U;allIssued:=false.B
+    groupStarted:=false.B;groupDone:=false.B;written:=0.U;writeState:=writeIdle;state:=execute
+  }
+  when(io.matrix.group.fire){groupStarted:=true.B}
+  when(io.matrix.done.fire){groupDone:=true.B;when(io.matrix.done.bits.error||io.matrix.done.bits.tag=/=job.tag){fail(Status.Protocol.U)}}
+  when(state===execute&&status===0.U&&loadState===loadIdle&&nextLoadK<job.k && !ready(loadSel)){
+    loadK:=nextLoadK;loadDepth:=0.U;loadContext:=0.U;loadBeat:=0.U;loadState:=loadReq
+  }
+  when(state===execute&&status===0.U&&groupDone&&written===contexts&&writeState===writeIdle){
+    when(nBase+(nContexts.pad(16)<<8)>=job.n){
+      when(rowBase+rows>=job.m){state:=finish}
+      .otherwise{rowBase:=rowBase+rows;rows:=Mux(job.m-rowBase-rows>capacityRows,capacityRows,job.m-rowBase-rows);nBase:=0.U;aRow:=0.U;aBeat:=0.U;state:=aReq}
+    }.otherwise{nBase:=nBase+(nContexts.pad(16)<<8);state:=setup}
+  }
+  when(state===execute&&status=/=0.U){
+    when(writeState===writeReq){writeState:=writeIdle}
+    when(loadState===loadReq){loadState:=loadIdle}
+    when((!groupStarted||groupDone)&&loadState=/=loadWait&&writeState=/=writeWait && writeState=/=writeData && !pending && !operands.io.deq.valid){state:=finish}
+  }
+  when(io.done.fire){state:=Mux(status===0.U,idle,locked)}
+}

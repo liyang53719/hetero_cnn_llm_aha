@@ -1,0 +1,1689 @@
+{
+  "status": "SOURCE_RECOVERY_ONLY",
+  "sources": [
+    {
+      "path": "source/AddRecFN.scala",
+      "bytes": 8776,
+      "sha256": "2746fea3b3291a8db97999a45303878fdeabc0a0c8acb318f4da4f52dda54a85",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/AddRecFN.scala"
+    },
+    {
+      "path": "source/Bf16CausalGqaOwner.scala",
+      "bytes": 20617,
+      "sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Bf16CausalGqaOwner.scala"
+    },
+    {
+      "path": "source/Bf16CausalGqaRuntimeOwnerV14.scala",
+      "bytes": 33486,
+      "sha256": "d146952bc2dfe3f5d7978662e2c0dca14fdfde3f3f4234a1d54b745bf7aa969f",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Bf16CausalGqaRuntimeOwnerV14.scala"
+    },
+    {
+      "path": "source/Bf16KvAppendOwner.scala",
+      "bytes": 7844,
+      "sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Bf16KvAppendOwner.scala"
+    },
+    {
+      "path": "source/Bf16KvAppendRuntimeOwnerV13.scala",
+      "bytes": 11021,
+      "sha256": "a6d436464c65d290a0a803ca4b821b6d6b089ef5fb5ed49a7fac38d9b9a90ca0",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Bf16KvAppendRuntimeOwnerV13.scala"
+    },
+    {
+      "path": "source/BlockAxiAdapter.scala",
+      "bytes": 4004,
+      "sha256": "52e8b5281f0517c3b08ceefff06c14bf85942a7d913c997548f54e7e804d3421",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/BlockAxiAdapter.scala"
+    },
+    {
+      "path": "source/BlockFloat.scala",
+      "bytes": 8313,
+      "sha256": "9863718ca90089bf812eb07dbd82ce16d982a8c74b04d7543de1bd2dfb1e37b5",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/BlockFloat.scala"
+    },
+    {
+      "path": "source/BlockScalarFloatPolicyV2.scala",
+      "bytes": 10944,
+      "sha256": "25b61c42cd0a1b46a7dc68f3ede15a349e4ff2e629ab2dbef34fb4e3c83f8c03",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/BlockScalarFloatPolicyV2.scala"
+    },
+    {
+      "path": "source/BlockWritebackFence.scala",
+      "bytes": 2436,
+      "sha256": "70e0303640904dd4044d6f5f61231b9766816da68cc71dbd58aa464a00a11054",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/BlockWritebackFence.scala"
+    },
+    {
+      "path": "source/BurstProtocol.scala",
+      "bytes": 3789,
+      "sha256": "c08502a0d194d6b69ad6911fce4258cfc24423af020d6c4232a120ea18273d91",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/BurstProtocol.scala"
+    },
+    {
+      "path": "source/CompareRecFN.scala",
+      "bytes": 3476,
+      "sha256": "b319e37c7e6c455a0bf39490a250e8b5ad8dbe54e22fa434f4f9ada134fe063d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/CompareRecFN.scala"
+    },
+    {
+      "path": "source/DenseBlockReductionCoordinator.scala",
+      "bytes": 11773,
+      "sha256": "2391e522acc2c40f97c75cbed25f7133bf4e8e4dcc9d5ee50840f19f3521bb01",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/DenseBlockReductionCoordinator.scala"
+    },
+    {
+      "path": "source/DenseOwnerIO.scala",
+      "bytes": 4717,
+      "sha256": "d806eb973206b9901fffb65d0cab4a9e7a215bac73920737ac3cfe6d9eecf2d1",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/DenseOwnerIO.scala"
+    },
+    {
+      "path": "source/DenseReadPlanner.scala",
+      "bytes": 3017,
+      "sha256": "0f4c981b32170344c316e0b8dfe6296f2f497d4901365e05e0b9d730d1fd1886",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/DenseReadPlanner.scala"
+    },
+    {
+      "path": "source/DenseTileSumBridge.scala",
+      "bytes": 6362,
+      "sha256": "2551ab7858fbb583f24e3709110a1180f3156b7861f9a775211ec88773ba516d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/DenseTileSumBridge.scala"
+    },
+    {
+      "path": "source/DiagnoseOriginalHostMoePhaseV5.scala",
+      "bytes": 7436,
+      "sha256": "8807829a0d018da029b7920dd99045fb28db8ec091a4f9599a65695848e49b57",
+      "observed_source": "<EXECUTION_ROOT>/fresh_diagnostic_helper_budget_20261028T2139/DiagnoseOriginalHostMoePhaseV5.scala"
+    },
+    {
+      "path": "source/DivSqrtRecF64.scala",
+      "bytes": 4428,
+      "sha256": "ce3c19d7433fef9a73044d80b4fbcd79466110fc527f6e40d91d83de2ad1dbd0",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/DivSqrtRecF64.scala"
+    },
+    {
+      "path": "source/DivSqrtRecF64_mulAddZ31.scala",
+      "bytes": 33929,
+      "sha256": "9ea19322eafb96006feb9cdee0da451dff59347459c5f4ac6813ea23f2fad776",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/DivSqrtRecF64_mulAddZ31.scala"
+    },
+    {
+      "path": "source/DivSqrtRecFN_small.scala",
+      "bytes": 20235,
+      "sha256": "905b3c0b4b47286d56b7f7d37a2886add7fd662336f5864df454680021e92da9",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/DivSqrtRecFN_small.scala"
+    },
+    {
+      "path": "source/ElementwiseMemoryEngine.scala",
+      "bytes": 10972,
+      "sha256": "5e5b32a95ba59947330d7e0469a3643925f0f7bd3bd44c101ae3730c9ac51773",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/ElementwiseMemoryEngine.scala"
+    },
+    {
+      "path": "source/ElementwiseRegisterLoan.scala",
+      "bytes": 6408,
+      "sha256": "e7a9d577cceb2746a2a7beb0d7fc948b29d6c504a32de0ddfaad2c83b3c9b815",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/ElementwiseRegisterLoan.scala"
+    },
+    {
+      "path": "source/EmitHeteroBF16Fma.scala",
+      "bytes": 3572,
+      "sha256": "9df0c5c2b499783dbf471cdf9bed3f1373a34c6713626a1c93d059e70e7a460f",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/EmitHeteroBF16Fma.scala"
+    },
+    {
+      "path": "source/EmitHeteroFP32Alu.scala",
+      "bytes": 1130,
+      "sha256": "83fb6b55fe4362b58ddf740f7bfccd16f86779bda68e2e6e879052749cad88b1",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/EmitHeteroFP32Alu.scala"
+    },
+    {
+      "path": "source/FfnResidentCoordinator.scala",
+      "bytes": 8141,
+      "sha256": "c2b58a685ec8adedace26a830e93c1e3d2b63093df878cccc4b6020ababdb9db",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/FfnResidentCoordinator.scala"
+    },
+    {
+      "path": "source/FfnTileSiluBridge.scala",
+      "bytes": 5032,
+      "sha256": "efc433714219745a0fa012899a0d1fb16fdc72ab797fcdbbf3674154eb58329b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/FfnTileSiluBridge.scala"
+    },
+    {
+      "path": "source/GdnChunkAddressPlan.scala",
+      "bytes": 9520,
+      "sha256": "f8534849bad082b77de88cf2cef43558a91f045122694640e9f33391f101b943",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnChunkAddressPlan.scala"
+    },
+    {
+      "path": "source/GdnChunkProtocol.scala",
+      "bytes": 3420,
+      "sha256": "877bca2b7816b2bff9566edd2dbf9ad55302b8fa6c8bd3ad7447412d9436b85c",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnChunkProtocol.scala"
+    },
+    {
+      "path": "source/GdnChunkStateTransferOwner.scala",
+      "bytes": 10591,
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnChunkStateTransferOwner.scala"
+    },
+    {
+      "path": "source/GdnConv4Owner.scala",
+      "bytes": 10423,
+      "sha256": "99b7e4a4cbf2df234fc831cd1a85d44b032f981221f57fde504f3f5aebe6a28a",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnConv4Owner.scala"
+    },
+    {
+      "path": "source/GdnElementwiseOwner.scala",
+      "bytes": 9614,
+      "sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnElementwiseOwner.scala"
+    },
+    {
+      "path": "source/GdnGatedNormOwner.scala",
+      "bytes": 10791,
+      "sha256": "00b47be5e72aa580ce9049c2036a23268da859ae7f1728bfea1d348f70a4f2db",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnGatedNormOwner.scala"
+    },
+    {
+      "path": "source/GdnInputPrepOwner.scala",
+      "bytes": 13048,
+      "sha256": "86fa350cd87bc140b762db2deb5650c25e3b30bae4fb12cef7fe407e6b4faffe",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnInputPrepOwner.scala"
+    },
+    {
+      "path": "source/GdnOwnerProtocol.scala",
+      "bytes": 1854,
+      "sha256": "bb1f8379ec4f8ff05f5b7752c693984ba56324274e9d729cd4527a9b82249e90",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnOwnerProtocol.scala"
+    },
+    {
+      "path": "source/GdnRecurrentOwner.scala",
+      "bytes": 13275,
+      "sha256": "42286b5f9757d7c3b1c349f632bc7d3f7047080bd12e665c8980d9aaec7b4250",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRecurrentOwner.scala"
+    },
+    {
+      "path": "source/GdnRecurrentProtocol.scala",
+      "bytes": 1760,
+      "sha256": "39ec02e1377472c6532da0ee36e7d2f1eb8c92f9836251b9ee9efcf3431804f0",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRecurrentProtocol.scala"
+    },
+    {
+      "path": "source/GdnRmsNormFixedBankOwner.scala",
+      "bytes": 29993,
+      "sha256": "46d7622f7c20416bc86cd7786cfd27ab8fe809911aeda1b3f097fb4c9a8ac915",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRmsNormFixedBankOwner.scala"
+    },
+    {
+      "path": "source/GdnRmsNormOwner.scala",
+      "bytes": 9456,
+      "sha256": "77beb04c0646eee8f53b8c44190f641f4efc900f552523ab6b0cc4f7aed8a065",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRmsNormOwner.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkCoordinator.scala",
+      "bytes": 19158,
+      "sha256": "b1fb9b108a788166b384c224f3f418489272dd886def06e3c0a261d699325877",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkCoordinator.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "bytes": 20779,
+      "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkDerivedAndPairV2Owner.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkExecuteOwner.scala",
+      "bytes": 16324,
+      "sha256": "77943e63fe0b580192e71be5020f712d4d7234521bd13cce0177fb151b0cfd8c",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkExecuteOwner.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkExecuteOwnerV8.scala",
+      "bytes": 16928,
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkExecuteOwnerV8.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkLayout.scala",
+      "bytes": 1290,
+      "sha256": "54451d4cf504ca76ed387c23790875828eb966ce1603aa08a2200406023ad346",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkLayout.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkLeafCollection.scala",
+      "bytes": 9706,
+      "sha256": "c8b494a77b32ca89ca5e9e3d7417f36e939a42793b79006574d676c5d2407275",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkLeafCollection.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkLoadPrepOwner.scala",
+      "bytes": 14575,
+      "sha256": "c9805d6ad4f6e5a6c280185d889956b5b92f7e180ec267b8dd89436db68b655b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkLoadPrepOwner.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkLoadPrepV2Owner.scala",
+      "bytes": 17265,
+      "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkLoadPrepV2Owner.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkNumericPolicy.scala",
+      "bytes": 639,
+      "sha256": "44b5cc96048f92f712c2164f680a43da061dbf8d376982c69d9bdd71f9d675fc",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkNumericPolicy.scala"
+    },
+    {
+      "path": "source/GdnRuntimeChunkTransposeV2Owner.scala",
+      "bytes": 12462,
+      "sha256": "839de9dba4d3a39670d8e33744dc9beb56399f9e39c3f7ab9f32d1cbca99a38a",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeChunkTransposeV2Owner.scala"
+    },
+    {
+      "path": "source/GdnRuntimeConv4OwnerRecoveredV7.scala",
+      "bytes": 15708,
+      "sha256": "b80c596ac832ef8140288a0c8a49e01007bff750af4a2eb9a6594e8649d7abf1",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeConv4OwnerRecoveredV7.scala"
+    },
+    {
+      "path": "source/GdnRuntimeElementwiseOwnerV15.scala",
+      "bytes": 14301,
+      "sha256": "bbdc76ac5c2b32f4dc111c3031cccbda2e0c7801c00f46342a63230460b5bad9",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeElementwiseOwnerV15.scala"
+    },
+    {
+      "path": "source/GdnRuntimeGatedNormOwnerV10.scala",
+      "bytes": 12750,
+      "sha256": "266352199366b7a9497e1db6cbe4cb832d94bfb3e2bfc21d01a7eddd10594341",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeGatedNormOwnerV10.scala"
+    },
+    {
+      "path": "source/GdnRuntimeGatedNormProtocolV10.scala",
+      "bytes": 1720,
+      "sha256": "b694be32a8480d791650bb4d6a50cc386792d61f44a4b8dcc1e41b6f5ad304b8",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeGatedNormProtocolV10.scala"
+    },
+    {
+      "path": "source/GdnRuntimeRawPrepOwnerV7.scala",
+      "bytes": 21735,
+      "sha256": "efc06d4f991e2427186b88e18d987fe7341596d2301e4f3c3e7a00fab12cf6fc",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeRawPrepOwnerV7.scala"
+    },
+    {
+      "path": "source/GdnRuntimeRawPrepProtocolV7.scala",
+      "bytes": 2688,
+      "sha256": "e9d035d1c2a60351c4acb2035164b8e8a386d36d9c8c0e9aba746fa719b19903",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeRawPrepProtocolV7.scala"
+    },
+    {
+      "path": "source/GdnRuntimeRawPrepReceiptV8.scala",
+      "bytes": 1330,
+      "sha256": "882897d0c8e8e265eb33ccdad7b4d5dc8d29e502bda909816df8b258e77d9a6f",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeRawPrepReceiptV8.scala"
+    },
+    {
+      "path": "source/GdnRuntimeRmsNormOwnerV3.scala",
+      "bytes": 17137,
+      "sha256": "d366a4d3165ab189366f1c9ff8c3f9c596940e15e46c68a0b7c9000931b43df8",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/GdnRuntimeRmsNormOwnerV3.scala"
+    },
+    {
+      "path": "source/HeldDecoupledOffer.scala",
+      "bytes": 912,
+      "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HeldDecoupledOffer.scala"
+    },
+    {
+      "path": "source/HeteroOperatorPrimitiveProtocol.scala",
+      "bytes": 7073,
+      "sha256": "1190511d8ce0f178f10c6509f320e1cedd105b11687b666d6128400597e2cf9d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HeteroOperatorPrimitiveProtocol.scala"
+    },
+    {
+      "path": "source/HeteroRuntimeMoeMerge.scala",
+      "bytes": 6806,
+      "sha256": "7d94ef0fd596c15d46afe661da03b48bfffbc2e72cd97803472c3f199d073489",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HeteroRuntimeMoeMerge.scala"
+    },
+    {
+      "path": "source/HeteroSelectionMemoryPrimitives.scala",
+      "bytes": 33917,
+      "sha256": "9f3744f2a7cc750cabc4ffbc1ba27edac0b38aa6cd91173e51f70acb4d94d05b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HeteroSelectionMemoryPrimitives.scala"
+    },
+    {
+      "path": "source/HostBlockCommands.scala",
+      "bytes": 106105,
+      "sha256": "94e6198a060044ae58a90328394ec8d11fe3311647fef62c1a1b975f2504ff4a",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostBlockCommands.scala"
+    },
+    {
+      "path": "source/HostBlockCommandsV4.scala",
+      "bytes": 190728,
+      "sha256": "d25425714cd0b123a0b5924568311f5faa8c9116a3026d53f3e5ebcfae0df108",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostBlockCommandsV4.scala"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 26923,
+      "sha256": "588fcba10ff4d55634192513469eeb4d757e81d4693fc9ac64b1143335537f8a",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostBlockTopV4.scala"
+    },
+    {
+      "path": "source/HostMoeArithmeticLeaseWiringV5.scala",
+      "bytes": 7157,
+      "sha256": "a90b65e5f2a73478a635062262932371b7e2e877365890fcac49f9d3e3a79dec",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoeArithmeticLeaseWiringV5.scala"
+    },
+    {
+      "path": "source/HostMoeDenseRoutingV5.scala",
+      "bytes": 3789,
+      "sha256": "9b2d734137572364a326b44db855eea7751a282093941bed0288658fc7b1db2f",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoeDenseRoutingV5.scala"
+    },
+    {
+      "path": "source/HostMoePhaseContextV4.scala",
+      "bytes": 3227,
+      "sha256": "e2a93d777dd1b28c80527ec91dd66c34d0b46ddfddbc8039c06f1a649643c0d4",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoePhaseContextV4.scala"
+    },
+    {
+      "path": "source/HostMoePhaseControlV5.scala",
+      "bytes": 1950,
+      "sha256": "cbd5c6457f5e32ba4202b06c30f3cf53356085e021f4369f97c9509e2c0f040a",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoePhaseControlV5.scala"
+    },
+    {
+      "path": "source/HostMoePhaseLifetimeWiringV5.scala",
+      "bytes": 13952,
+      "sha256": "574aba5b0321e49ecba87e5cbd4958410f1728d38b39bfd377740f55de9d01d8",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoePhaseLifetimeWiringV5.scala"
+    },
+    {
+      "path": "source/HostMoeRuntimePhaseProtocolV5.scala",
+      "bytes": 4230,
+      "sha256": "4096f77846567ba71fa85b3edff76a3af5c9664000718f5ef199e0f645e38f49",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoeRuntimePhaseProtocolV5.scala"
+    },
+    {
+      "path": "source/HostMoeSelectionServiceV5.scala",
+      "bytes": 4657,
+      "sha256": "c52656763eeb2c1649f99cb7ee4b6bcaf2652dfc0260d07e2dbdd8b50e1b4507",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoeSelectionServiceV5.scala"
+    },
+    {
+      "path": "source/HostMoeSharedGatePlanV5.scala",
+      "bytes": 5897,
+      "sha256": "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoeSharedGatePlanV5.scala"
+    },
+    {
+      "path": "source/HostMoeWeightScanV4.scala",
+      "bytes": 10521,
+      "sha256": "f5766b089e833be07013a57471dc01a1d29aeb0276446cbbfe07527eec8245a5",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostMoeWeightScanV4.scala"
+    },
+    {
+      "path": "source/HostResidualCommands.scala",
+      "bytes": 10393,
+      "sha256": "e3a87c3b425a46d876ff58ee2db8a04370ccd74139667b00c415eb515d328a7c",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostResidualCommands.scala"
+    },
+    {
+      "path": "source/HostRuntimeChunkProtocolV9.scala",
+      "bytes": 2346,
+      "sha256": "b356dfe90f9e897a10140638d4576eccbaea028134f7ae1c6ee5a156741b18c2",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostRuntimeChunkProtocolV9.scala"
+    },
+    {
+      "path": "source/HostRuntimeChunkWiringV9.scala",
+      "bytes": 17968,
+      "sha256": "7590e6c1732b9ae66c77eacabedbd95091f716d8e9861a747ce0af7885c5b183",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostRuntimeChunkWiringV9.scala"
+    },
+    {
+      "path": "source/HostRuntimeGatedDependencyV10.scala",
+      "bytes": 553,
+      "sha256": "7942dce9ba553e836a47a0cac760e059b5ba224a25c8d8e7a2bb2e8f777987e4",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostRuntimeGatedDependencyV10.scala"
+    },
+    {
+      "path": "source/HostRuntimeLaunchV4.scala",
+      "bytes": 2317,
+      "sha256": "4c8762f26f6849aba40a7f06555c275047ea0e23439daf9cb2b5fe38f8fcd6dd",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostRuntimeLaunchV4.scala"
+    },
+    {
+      "path": "source/HostRuntimeMoePhaseAllocatorV5.scala",
+      "bytes": 12974,
+      "sha256": "c8c5012b3463e64cc0ecd0066d3e0e9ff4df773c2ee40e144d03f0274dbf69c6",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostRuntimeMoePhaseAllocatorV5.scala"
+    },
+    {
+      "path": "source/HostRuntimeOwnerGuardV5.scala",
+      "bytes": 10809,
+      "sha256": "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostRuntimeOwnerGuardV5.scala"
+    },
+    {
+      "path": "source/HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 79145,
+      "sha256": "2062059293c4928e1983c3790e4a817d2d12705d19826f5ae05d60e9c22f20d3",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/HostRuntimePrefixLeaseWiringV8.scala"
+    },
+    {
+      "path": "source/INToRecFN.scala",
+      "bytes": 3417,
+      "sha256": "92090ded1e774a75811931ea4bd7e23fcb671ffbb5a55d9b2826a04d5c6d83eb",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/INToRecFN.scala"
+    },
+    {
+      "path": "source/IdmaWeightBurst.scala",
+      "bytes": 21460,
+      "sha256": "935365723aba8d79675c84a1e23ce531741707d736d88e40ff2355eeda431ba4",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/IdmaWeightBurst.scala"
+    },
+    {
+      "path": "source/LocalSramConfig.scala",
+      "bytes": 583,
+      "sha256": "6d8167530ae045ca038f644a93238731d6f2b645a01cf856d1ab111387de0464",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/LocalSramConfig.scala"
+    },
+    {
+      "path": "source/MatrixAccumulatorSeedController.scala",
+      "bytes": 7538,
+      "sha256": "c1bae7fdb444a828b69e7b3b5a8a0b49d93f87fc4173f2a6c3695d6c6793b9c3",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/MatrixAccumulatorSeedController.scala"
+    },
+    {
+      "path": "source/MatrixAccumulatorSeedProtocol.scala",
+      "bytes": 1851,
+      "sha256": "b34d04705f6990298fa78bb15879e76007df1c57ee3a768425c61d4555a9d13e",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/MatrixAccumulatorSeedProtocol.scala"
+    },
+    {
+      "path": "source/MatrixPipeline.scala",
+      "bytes": 19528,
+      "sha256": "d6bd82725d6b20788080b5bd17ab672a419c84212cfa50d21d175bae0d8c56d8",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/MatrixPipeline.scala"
+    },
+    {
+      "path": "source/MoeBf16ScalarConsumer.scala",
+      "bytes": 7231,
+      "sha256": "281f8a8c0d288ae835de263b484f9aee59f45a0d93a9c40c0b8e78e9e666f9e5",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/MoeBf16ScalarConsumer.scala"
+    },
+    {
+      "path": "source/MoeBf16VectorConsumerV2.scala",
+      "bytes": 6500,
+      "sha256": "10d0fcd89cc9a859878377f81702e83a64d437832c2681e84d368f64302e861e",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/MoeBf16VectorConsumerV2.scala"
+    },
+    {
+      "path": "source/MulAddRecFN.scala",
+      "bytes": 15353,
+      "sha256": "3f2ad5acd54ca0b514737779656b98ffb7f829d867c6b245716e2a1d186d630b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/MulAddRecFN.scala"
+    },
+    {
+      "path": "source/MulRecFN.scala",
+      "bytes": 5706,
+      "sha256": "cf42850379c249a97a073ac436ff6b4c564b56177e868c3e912be2f246243e1d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/MulRecFN.scala"
+    },
+    {
+      "path": "source/OverlappedSilu.scala",
+      "bytes": 6485,
+      "sha256": "63e3c41a4459a898db7d19a692bfd60c08c5a1b94b4596c0b45ada10378108f1",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/OverlappedSilu.scala"
+    },
+    {
+      "path": "source/PackedAttentionStreamClient.scala",
+      "bytes": 5469,
+      "sha256": "58fb22a6f78a224241b9b0368e3108e5c403a9ea7106527061b140ff5d83b8c0",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/PackedAttentionStreamClient.scala"
+    },
+    {
+      "path": "source/PartialRope64Owner.scala",
+      "bytes": 10567,
+      "sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/PartialRope64Owner.scala"
+    },
+    {
+      "path": "source/PartialRopeRuntimeOwnerV12.scala",
+      "bytes": 14605,
+      "sha256": "d7ba248ab794e409791532b6b4921f3b1d82d2f108130314326e15383b784fbd",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/PartialRopeRuntimeOwnerV12.scala"
+    },
+    {
+      "path": "source/Protocol.scala",
+      "bytes": 3123,
+      "sha256": "5c94def481dede0195f989608c1827ded32f2d83c752617945695f7d82f64783",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Protocol.scala"
+    },
+    {
+      "path": "source/Public21QkvReductionRouter.scala",
+      "bytes": 9110,
+      "sha256": "bb0f829330f3ce824ffdb73180a09bb90e43826c1aa15f0d10a2187e65b72ae3",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Public21QkvReductionRouter.scala"
+    },
+    {
+      "path": "source/QkNorm256Owner.scala",
+      "bytes": 16520,
+      "sha256": "c12183ddb29ab3ce66dc59083524c204f55554757218ced438c8f8ae4c7d60b6",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/QkNorm256Owner.scala"
+    },
+    {
+      "path": "source/QkNorm256RuntimeOwnerV11.scala",
+      "bytes": 26319,
+      "sha256": "0458e7aac6e9abf64e719b197ae9935d8fef3c5a9425160da1c66cd0ec84988d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/QkNorm256RuntimeOwnerV11.scala"
+    },
+    {
+      "path": "source/Qwen2Block.scala",
+      "bytes": 63652,
+      "sha256": "05248639be78683df68230ad1c4da3fe0449775d70e2fc7c3ff4aef0088567f9",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Qwen2Block.scala"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 91175,
+      "sha256": "7da3466f9720722a636301b163c72d795c556e75f020efef4b1120be365142d2",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/QwenOwnerProtocol.scala"
+    },
+    {
+      "path": "source/RecFNToIN.scala",
+      "bytes": 6827,
+      "sha256": "e56257592e88614f6be34877a3a9f412fdc09b1c4210ee3dfeaa6c67fdc670f3",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/RecFNToIN.scala"
+    },
+    {
+      "path": "source/RecFNToRecFN.scala",
+      "bytes": 3958,
+      "sha256": "97042141693cd2e8aaa90f88ee39d2c3c4177fc76c48f9ad46aaea71fee34f09",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/RecFNToRecFN.scala"
+    },
+    {
+      "path": "source/Record128Reader.scala",
+      "bytes": 4229,
+      "sha256": "4b7f33a150dcf3abf15e4ba54b2d1fbdc846d49f966dd7b3bb810ec05f1a9afb",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/Record128Reader.scala"
+    },
+    {
+      "path": "source/RetainedIdma.scala",
+      "bytes": 9977,
+      "sha256": "5d8873911046d0c4202e3f92ccfdc03c2ede3d8db06502473960ae3ed644f91e",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/RetainedIdma.scala"
+    },
+    {
+      "path": "source/RetainedMatrix.scala",
+      "bytes": 11938,
+      "sha256": "8c475372817104f7eee349a96f589d97dba94b6e7a17b5b88cfb2538f40bf7e9",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/RetainedMatrix.scala"
+    },
+    {
+      "path": "source/RoundAnyRawFNToRecFN.scala",
+      "bytes": 13901,
+      "sha256": "31cdb3be147471d52e721f14914031c19b915bd7aaffe5c0e333393a0c7fb67d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/RoundAnyRawFNToRecFN.scala"
+    },
+    {
+      "path": "source/SharedL2Fabric.scala",
+      "bytes": 4816,
+      "sha256": "10372482417b8802fcf494e10af6a8d202e1dc5bb39d1a637d27da259efa30c5",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/SharedL2Fabric.scala"
+    },
+    {
+      "path": "source/SharedMemoryArbiter.scala",
+      "bytes": 3727,
+      "sha256": "c110e660cc3750e2e0ce9dc3e71a40310f7c730ff5d49230f4c6d6b92d45a225",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/SharedMemoryArbiter.scala"
+    },
+    {
+      "path": "source/StreamingDense.scala",
+      "bytes": 20011,
+      "sha256": "010fbea5d12e952e2083fa1f3f57cb1219f9756946b79dc01482e924c0c21bc5",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/StreamingDense.scala"
+    },
+    {
+      "path": "source/TensorProgram.scala",
+      "bytes": 6094,
+      "sha256": "b0d926444002c993a238616c15a0611c17d7aacf4561ee8cac1614d2988b2de7",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/TensorProgram.scala"
+    },
+    {
+      "path": "source/TransposedDenseBanks.scala",
+      "bytes": 19261,
+      "sha256": "9fb0df82d82084ed7b6f68150c6117276eefd3d045f8d3b527a14486f2d9028d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/TransposedDenseBanks.scala"
+    },
+    {
+      "path": "source/TransposedDenseOwner.scala",
+      "bytes": 100246,
+      "sha256": "961f4e650b499fc1f15918d2e0f6aa51b4905431ba35ba681a609c98b42c5d14",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/TransposedDenseOwner.scala"
+    },
+    {
+      "path": "source/TypedTensorReader.scala",
+      "bytes": 4968,
+      "sha256": "a0641c72360e608238879f3c12f5882a8999ccac3c46d510beff6b0ffb0a1c3c",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/TypedTensorReader.scala"
+    },
+    {
+      "path": "source/UnifiedMoeActivationGatherV2.scala",
+      "bytes": 9172,
+      "sha256": "259e4a09dd4658ab71f940dddacdf6516f5080094b5e10ed672eba624b0576ce",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeActivationGatherV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeActivationGroupOwnerV3.scala",
+      "bytes": 10797,
+      "sha256": "ca59cee0fcd8f9e2d4c86f58011faed6faa90c1d46a3ab3bb8a1550b8e3acf6b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeActivationGroupOwnerV3.scala"
+    },
+    {
+      "path": "source/UnifiedMoeDenseWritebackV2.scala",
+      "bytes": 6015,
+      "sha256": "cd8606b3769c38e9286557a56a5d0a2db6e31bbdfc2929eead2be65e41177b52",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeDenseWritebackV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeDownDescriptorV4.scala",
+      "bytes": 1751,
+      "sha256": "6e364485bc7f0b87369253beb696715a0b4fc8aacb6b1d662479f0272f273624",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeDownDescriptorV4.scala"
+    },
+    {
+      "path": "source/UnifiedMoeDownTileReaderV5.scala",
+      "bytes": 8836,
+      "sha256": "20072b6e44f5890e570d1fa8df3da8e567d99558cbd8b28e77ab4c2325999f82",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeDownTileReaderV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeFfnGroupSequencerV3.scala",
+      "bytes": 12125,
+      "sha256": "60654e12ae008dbf96515da3dbddaa88b882f588acef916308e3f13118e4a8eb",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeFfnGroupSequencerV3.scala"
+    },
+    {
+      "path": "source/UnifiedMoeGatherFfnPlanV3.scala",
+      "bytes": 3230,
+      "sha256": "c1a9095b85ce37343c83ce2411ab7699cc4bb03bc932e6a4defb7857eae872ff",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeGatherFfnPlanV3.scala"
+    },
+    {
+      "path": "source/UnifiedMoeLogical32SigmoidConsumerV5.scala",
+      "bytes": 7398,
+      "sha256": "a0c2dd0f5dfc43ae90911b568737901ca2d7de9f24672c5933d188ad4d954387",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeLogical32SigmoidConsumerV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeLogical32SwiGluConsumerV3.scala",
+      "bytes": 7540,
+      "sha256": "8dae337ad4ce62d1b5031c4ec87e33dcf6f32e7315ac4dc34b1c992a2fb40ac4",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeLogical32SwiGluConsumerV3.scala"
+    },
+    {
+      "path": "source/UnifiedMoePhaseMergeOwnerV5.scala",
+      "bytes": 13995,
+      "sha256": "a92404dab262fbb825a14d8fe769f19b50093374d49b11d7071ccf4cef8d2eeb",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoePhaseMergeOwnerV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoePhaseResidualOwnerV5.scala",
+      "bytes": 11003,
+      "sha256": "53faa826ef155850b424b2a111f30d40417970ebfc3bb1d389f843be608af9cf",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoePhaseResidualOwnerV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoePhaseTileMergePortsV5.scala",
+      "bytes": 10667,
+      "sha256": "1bb1591268ad185a5de73aef99f7a59d192dc496283f27073d0975c6e929592d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoePhaseTileMergePortsV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeProducerBindingV5.scala",
+      "bytes": 7598,
+      "sha256": "ee3474e4139400f1db5b216cfca5b643b8739e1ce8cec40ffdfa231627a7992e",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeProducerBindingV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRouteGroupV2.scala",
+      "bytes": 11676,
+      "sha256": "e90d5437119274638aedd862885570e9f0f20e1e30e0ad6bbcebad25553199f1",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouteGroupV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRoutedSelectionReaderV5.scala",
+      "bytes": 11377,
+      "sha256": "06f53cb697518983bcab8cc5ee22b24b850176845bb5b71273e1bd9e515a7689",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRoutedSelectionReaderV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRouterDenseV2.scala",
+      "bytes": 5361,
+      "sha256": "22d1db98ec1d888c35ba0b13d82c338752ddc03fdf3a839721e3d2365bc05081",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouterDenseV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRouterLogitReaderV2.scala",
+      "bytes": 4675,
+      "sha256": "88b8e9dcc9795ba5b75dcedfd18e855028b55e6c95b4add151d9a9ef0272c50b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouterLogitReaderV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRouterNumericalOwnerV2.scala",
+      "bytes": 13055,
+      "sha256": "04ef8a11a5ec90af7622232dbec2369af9b574a0a1a74eb4f9236a9c8e549316",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouterNumericalOwnerV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRouterPipelineBindingV2.scala",
+      "bytes": 10958,
+      "sha256": "380b5b7b36fe238d2444ca530e92bd1dabb8852e9d42a42f88392dcd194dae0c",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouterPipelineBindingV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRouterSelectionClientV2.scala",
+      "bytes": 1568,
+      "sha256": "45e1cd72b4f07b436bf469d27d9585c75e463e1f7ee547badf896c43bf211966",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRouterSelectionClientV2.scala"
+    },
+    {
+      "path": "source/UnifiedMoeRuntimeExpertLoopV4.scala",
+      "bytes": 26467,
+      "sha256": "9a41408d5c846b1046957679731892dad7c06b177201975eeca22213d6eb8c8b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeRuntimeExpertLoopV4.scala"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 23674,
+      "sha256": "58d9fa77f6e29d0ad941573ede551537789626421e12425de30ac10609dc97d6",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeSharedArithmeticAdapterV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 6876,
+      "sha256": "7ec87dc6e9e8520da7dbb0e4f07143497231c06de9970ced0915a5444c0c0cdc",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeSharedArithmeticProtocolV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeSharedFfnPlanV5.scala",
+      "bytes": 4333,
+      "sha256": "ff45d2870939befe9a11c780b364a498201479a0aaedb8702c93c61466e0186b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeSharedFfnPlanV5.scala"
+    },
+    {
+      "path": "source/UnifiedMoeSharedGateSigmoidOwnerV5.scala",
+      "bytes": 12252,
+      "sha256": "9f6e18e36f278b0f063dbd5662ac56205347893791e67316e82bfe38d4070474",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedMoeSharedGateSigmoidOwnerV5.scala"
+    },
+    {
+      "path": "source/UnifiedOverlapProtocolV2.scala",
+      "bytes": 1822,
+      "sha256": "55f3deac3fc4c72cd3cab922cda8f32c7f120f24e420663443993574ac76887f",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedOverlapProtocolV2.scala"
+    },
+    {
+      "path": "source/UnifiedRuntimeProfile.scala",
+      "bytes": 4003,
+      "sha256": "c6b31a4802beccee3ddce20d45a8b1ce3ef37123879b55f8177ad409dd786963",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedRuntimeProfile.scala"
+    },
+    {
+      "path": "source/UnifiedScalarPolicyV2.scala",
+      "bytes": 858,
+      "sha256": "00e52e3c61586bb61cdab495319e6cfa17a3ac8433443f11873c6e884ada74b7",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedScalarPolicyV2.scala"
+    },
+    {
+      "path": "source/UnifiedSharedFormatProtocolV3.scala",
+      "bytes": 405,
+      "sha256": "d9dcf8bfc5ae93aa87c029d91bbed303cf6b1896830a0b12a0a214250825385b",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedSharedFormatProtocolV3.scala"
+    },
+    {
+      "path": "source/UnifiedSharedOperationProtocolV3.scala",
+      "bytes": 4285,
+      "sha256": "e3dd3442eb6465cf35216ceac966580edb27ab6894d128cbc43a18a4de86b063",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedSharedOperationProtocolV3.scala"
+    },
+    {
+      "path": "source/UnifiedVectorElement32BankV4.scala",
+      "bytes": 4361,
+      "sha256": "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedVectorElement32BankV4.scala"
+    },
+    {
+      "path": "source/UnifiedVectorElement32ProtocolV4.scala",
+      "bytes": 1682,
+      "sha256": "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/UnifiedVectorElement32ProtocolV4.scala"
+    },
+    {
+      "path": "source/VectorSilu.scala",
+      "bytes": 11873,
+      "sha256": "26fc929be7d68fe0bb3e8396ddcdd79114279745fc18ad14643b6b662f708c26",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/VectorSilu.scala"
+    },
+    {
+      "path": "source/WideMatrix.scala",
+      "bytes": 5838,
+      "sha256": "54f4b52aa6cdfb09cad8481bcfff2d395357d980c8cb1d3afabcb97c5fefcb3c",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/WideMatrix.scala"
+    },
+    {
+      "path": "source/classifyRecFN.scala",
+      "bytes": 2880,
+      "sha256": "787aa923a8b5f7bc13550183339fc5e38b8d3ca505dcdd3bec032dc8bb19bf16",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/classifyRecFN.scala"
+    },
+    {
+      "path": "source/common.scala",
+      "bytes": 3925,
+      "sha256": "ea83cdfac50db84f372d624ce4e0d45188207164a6a1eae5d42d8174241925cb",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/common.scala"
+    },
+    {
+      "path": "source/fNFromRecFN.scala",
+      "bytes": 2853,
+      "sha256": "7a114540c32ef9e43152e37d1610dd5bbb68dba6b3bbd1aa5600fa3bc411fa6d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/fNFromRecFN.scala"
+    },
+    {
+      "path": "source/primitives.scala",
+      "bytes": 5105,
+      "sha256": "134cfae67052244a836aebbae3f9252b0e9bf4800ab5cbcba4b92eb1c56e7c31",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/primitives.scala"
+    },
+    {
+      "path": "source/rawFloatFromFN.scala",
+      "bytes": 3037,
+      "sha256": "39fb14ae28318821906f68ad63803ca24eecb1115bf24aa4f3df497392357dce",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/rawFloatFromFN.scala"
+    },
+    {
+      "path": "source/rawFloatFromIN.scala",
+      "bytes": 2885,
+      "sha256": "d82c1285d20523fe0bcf7a32e2a2307ea76c3c2581ec0c329f8914004555c1e8",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/rawFloatFromIN.scala"
+    },
+    {
+      "path": "source/rawFloatFromRecFN.scala",
+      "bytes": 2877,
+      "sha256": "bf7e4b0e453569c91f6a9d8c414feb3a5fed6dc7354ba31cdc8c7c0f1ffd8317",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/rawFloatFromRecFN.scala"
+    },
+    {
+      "path": "source/recFNFromFN.scala",
+      "bytes": 2352,
+      "sha256": "90060c571a38718330f8781ecc4f555096ac45a0c75abb3fe5219e06dacdbd2d",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/recFNFromFN.scala"
+    },
+    {
+      "path": "source/resizeRawFloat.scala",
+      "bytes": 3237,
+      "sha256": "702084355b5b1d825ed0885ee2e014091d76ba08f07b071cb77bcb4cb392d561",
+      "observed_source": "<EXECUTION_ROOT>/fresh_chisel_closure_r2_20261028T2103/staged/resizeRawFloat.scala"
+    }
+  ],
+  "jars": [
+    {
+      "maven_path": "com/eed3si9n/shaded-apache-httpasyncclient/0.7.0/shaded-apache-httpasyncclient-0.7.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/eed3si9n/shaded-apache-httpasyncclient/0.7.0/shaded-apache-httpasyncclient-0.7.0.jar",
+      "sha256": "98e96c3720741283e5976938a35b0c617a90af653b1956f99368161f5951dc21",
+      "bytes": 2083419,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar",
+      "sha256": "814b15a9bf598e0fa854dd70ba9f6e03a413a97979de0c3f49317295e4352bc8",
+      "bytes": 881454,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/github/luben/zstd-jni/1.5.5-10/zstd-jni-1.5.5-10.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/github/luben/zstd-jni/1.5.5-10/zstd-jni-1.5.5-10.jar",
+      "sha256": "9465fb23f4e95630f225d0108dbf9830cd8bf537dd6c63792eb7c9a7014151c1",
+      "bytes": 6749816,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/github/mwiede/jsch/0.2.17/jsch-0.2.17.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/github/mwiede/jsch/0.2.17/jsch-0.2.17.jar",
+      "sha256": "744667315fcaaa1b00d2ef177fb2660036a9733f6ccd93a5c87ce800fde6b832",
+      "bytes": 544782,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/github/nscala-time/nscala-time_2.13/2.22.0/nscala-time_2.13-2.22.0.jar",
+      "sha256": "7fcdf69482982f0dd3f48b7dac27f091e3f1e3cb80eae4c7ac73890d51095c9c",
+      "bytes": 200745,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.13/2.13.5.2/jsoniter-scala-core_2.13-2.13.5.2.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/github/plokhotnyuk/jsoniter-scala/jsoniter-scala-core_2.13/2.13.5.2/jsoniter-scala-core_2.13-2.13.5.2.jar",
+      "sha256": "86d9f5335dc6418a3b5ac28d2cfb6ed939236541566738df3bc0da2420d0f100",
+      "bytes": 175634,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar",
+      "sha256": "5f2a0648230a662e8be049df308d583d7369f13af683e44ddf5829b6d741a228",
+      "bytes": 13854,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/geny_2.13/1.0.0/geny_2.13-1.0.0.jar",
+      "sha256": "078af5bf405bbf41d6eca6441b2bcd282551d054c47acf4f949b6c983063b117",
+      "bytes": 85362,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/sourcecode_2.13/0.3.1/sourcecode_2.13-0.3.1.jar",
+      "sha256": "0e663be9a6c81e9515bdd07c04831397e38ea648a211e85ad005300fe840a03d",
+      "bytes": 119360,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/ujson_2.13/3.1.0/ujson_2.13-3.1.0.jar",
+      "sha256": "dd34c47a41d005d0e0ca947e208a20fbc136ea02357333392ba9ba6a96beb1c7",
+      "bytes": 240608,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upack_2.13/3.1.0/upack_2.13-3.1.0.jar",
+      "sha256": "95d22fef52254a6ea3ddabec144dd01ed6d9046b02cf5b124b89cf3627e8869a",
+      "bytes": 110570,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upickle-core_2.13/3.1.0/upickle-core_2.13-3.1.0.jar",
+      "sha256": "39c52652da329751ed4bb05c62053ff91b1d86c3b06c9488b7f6bfd0d2e05feb",
+      "bytes": 205712,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upickle-implicits_2.13/3.1.0/upickle-implicits_2.13-3.1.0.jar",
+      "sha256": "b504db94ec69487b1460e3e97cc7cfdab7960d219d5724bb62d31c044f29d5df",
+      "bytes": 245064,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/upickle_2.13/3.1.0/upickle_2.13-3.1.0.jar",
+      "sha256": "9c00332462f16ccaf2f49fcd31af2040b28f0329200d02c7817e8c0841d28ebc",
+      "bytes": 114894,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar",
+      "sha256": "f412ecbb235c2460b45e63584109723dea8d94b819c78c9bfc38f50cba8546c0",
+      "bytes": 83064,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/outr/moduload_2.13/1.1.7/moduload_2.13-1.1.7.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/outr/moduload_2.13/1.1.7/moduload_2.13-1.1.7.jar",
+      "sha256": "53bdf91631e018b2cbb3a96151d34576d8c7551288a398444fc4ce6e1fbdbea1",
+      "bytes": 9645,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/outr/perfolation_2.13/1.2.9/perfolation_2.13-1.2.9.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/outr/perfolation_2.13/1.2.9/perfolation_2.13-1.2.9.jar",
+      "sha256": "cdf192a807103ea0e26d3b16b2fe316bef4cb7f1a4c3d0cc80b9955a93f4eb4f",
+      "bytes": 62101,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/outr/scribe_2.13/3.13.0/scribe_2.13-3.13.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/outr/scribe_2.13/3.13.0/scribe_2.13-3.13.0.jar",
+      "sha256": "7ab781667feef71f3da9f9170efea06771e324d7ebcfde5e1e77144550bda4e8",
+      "bytes": 483251,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/swoval/file-tree-views/2.1.12/file-tree-views-2.1.12.jar",
+      "sha256": "fd7373889b7a92cf3e97db36c920ba272aec158a9387b3259fca9f2dfaeda914",
+      "bytes": 226757,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar",
+      "sha256": "688cb118a6021d819138e855208c956031688be4b47a24bb615becc63acedf07",
+      "bytes": 34654,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/typesafe/config/1.4.2/config-1.4.2.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/typesafe/config/1.4.2/config-1.4.2.jar",
+      "sha256": "0076c249b4387d8369146528fd5dacb3efba098dc02ecf9ac81debdfc2e12fd5",
+      "bytes": 295444,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "commons-io/commons-io/2.15.0/commons-io-2.15.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.15.0/commons-io-2.15.0.jar",
+      "sha256": "a328dad730921d197b6a9b195dffa00e41c974c2dac8fe37e84d31706bca7792",
+      "bytes": 500628,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "dev/dirs/directories/26/directories-26.jar",
+      "url": "https://repo.maven.apache.org/maven2/dev/dirs/directories/26/directories-26.jar",
+      "sha256": "6d18fe25aa30b7e08b908cd21151d8f96e22965c640acd7751add9bbfe6137d4",
+      "bytes": 14239,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/get-coursier/coursier-cache_2.13/2.1.8/coursier-cache_2.13-2.1.8.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/get-coursier/coursier-cache_2.13/2.1.8/coursier-cache_2.13-2.1.8.jar",
+      "sha256": "1074ca0717d743296d8d4eec1206eb9a74cb31aa76abf307931da8fe4ac02067",
+      "bytes": 441834,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/get-coursier/coursier-core_2.13/2.1.8/coursier-core_2.13-2.1.8.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/get-coursier/coursier-core_2.13/2.1.8/coursier-core_2.13-2.1.8.jar",
+      "sha256": "0c83986214f80d6ae47c93884b982539feb7d07b0abf4714821d2144ea0e1378",
+      "bytes": 1356411,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/get-coursier/coursier-proxy-setup/2.1.8/coursier-proxy-setup-2.1.8.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/get-coursier/coursier-proxy-setup/2.1.8/coursier-proxy-setup-2.1.8.jar",
+      "sha256": "6898f545052f8ca57e21d09edc4e15eefb5c729f7f2e4a726cf3a88478ec5d98",
+      "bytes": 6831,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/get-coursier/coursier-util_2.13/2.1.8/coursier-util_2.13-2.1.8.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/get-coursier/coursier-util_2.13/2.1.8/coursier-util_2.13-2.1.8.jar",
+      "sha256": "f98c2a3dedcaf87873990bc0df49cc1c70202211e96dc76813ed50bcc49ad085",
+      "bytes": 563972,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/get-coursier/coursier_2.13/2.1.8/coursier_2.13-2.1.8.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/get-coursier/coursier_2.13/2.1.8/coursier_2.13-2.1.8.jar",
+      "sha256": "530c50e3a81e24e7ff4305ea8f637db378526c31f4d9474836a785da604ecd6e",
+      "bytes": 1106801,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/get-coursier/jniutils/windows-jni-utils/0.3.3/windows-jni-utils-0.3.3.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/get-coursier/jniutils/windows-jni-utils/0.3.3/windows-jni-utils-0.3.3.jar",
+      "sha256": "ab68efcf162355e20007b238d8108b7ffec0c06b467ee44cbb44ec3f8ac3a7e6",
+      "bytes": 82498,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/github/alexarchambault/concurrent-reference-hash-map/1.1.0/concurrent-reference-hash-map-1.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/github/alexarchambault/concurrent-reference-hash-map/1.1.0/concurrent-reference-hash-map-1.1.0.jar",
+      "sha256": "552707982209afb9feffdccb2e73cc4681a1353e34a47df1bf643d1d2e0a2f61",
+      "bytes": 27116,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/github/alexarchambault/data-class_2.13/0.2.6/data-class_2.13-0.2.6.jar",
+      "sha256": "2ed5882d03653438b52bee6a145bca84a95fe363f49afd06b9b92b5e7117afb5",
+      "bytes": 58017,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/github/alexarchambault/windows-ansi/windows-ansi/0.0.5/windows-ansi-0.0.5.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/github/alexarchambault/windows-ansi/windows-ansi/0.0.5/windows-ansi-0.0.5.jar",
+      "sha256": "f9acb082199470d4ca9165b36a4544ee9402ba09964476ba9710cd9ca4c41f69",
+      "bytes": 2948,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "io/github/java-diff-utils/java-diff-utils/4.15/java-diff-utils-4.15.jar",
+      "url": "https://repo.maven.apache.org/maven2/io/github/java-diff-utils/java-diff-utils/4.15/java-diff-utils-4.15.jar",
+      "sha256": "964c69e3a23a892db2778ae6806aa1d42f81230032bd8e4982dc8620582ee6b7",
+      "bytes": 75692,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "javax/inject/javax.inject/1/javax.inject-1.jar",
+      "url": "https://repo.maven.apache.org/maven2/javax/inject/javax.inject/1/javax.inject-1.jar",
+      "sha256": "91c77044a50c481636c32d916fd89c9118a72195390452c81065080f957de7ff",
+      "bytes": 2497,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "jline/jline/2.14.6/jline-2.14.6.jar",
+      "url": "https://repo.maven.apache.org/maven2/jline/jline/2.14.6/jline-2.14.6.jar",
+      "sha256": "97d1acaac82409be42e622d7a54d3ae9d08517e8aefdea3d2ba9791150c2f02d",
+      "bytes": 268780,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "joda-time/joda-time/2.10.1/joda-time-2.10.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar",
+      "sha256": "d269671656767e05a58dd634cbafc36ed70d417220b058d11c0d88dfd281616d",
+      "bytes": 640724,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar",
+      "sha256": "474d7b88f6e97009b6ec1d98c3024dd95c23187c65dabfbc35331bcac3d173dd",
+      "bytes": 1363209,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar",
+      "url": "https://repo.maven.apache.org/maven2/net/jcazevedo/moultingyaml_2.13/0.4.2/moultingyaml_2.13-0.4.2.jar",
+      "sha256": "a304da2389f760f1a36513d8b10ba546d50243cf0b94415ea2a76906114d7197",
+      "bytes": 314048,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "net/openhft/zero-allocation-hashing/0.16/zero-allocation-hashing-0.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/net/openhft/zero-allocation-hashing/0.16/zero-allocation-hashing-0.16.jar",
+      "sha256": "3bc39c640cc8314575de4ebcb1a0bca540516d3c60d49f8de7d638b09868553d",
+      "bytes": 90203,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/apache/commons/commons-compress/1.24.0/commons-compress-1.24.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.24.0/commons-compress-1.24.0.jar",
+      "sha256": "fbf2c5d275e513c08f4e4fb539726dbf3ac2142af956ba93efb983244f0c36bd",
+      "bytes": 1076223,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar",
+      "sha256": "d919d904486c037f8d193412da0c92e22a9fa24230b9d67a57855c5c31c7e94e",
+      "bytes": 587402,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar",
+      "sha256": "b0d8a4c8ab4fb8b1888d0095822703b0e6d4793c419550203da9e69196161de4",
+      "bytes": 301872,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar",
+      "sha256": "c967f223487980b9364e94a7c7f9a8a01fd3ee7c19bdbf0b0f9f8cb8511f3d41",
+      "bytes": 1790452,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/apache/logging/log4j/log4j-slf4j-impl/2.17.1/log4j-slf4j-impl-2.17.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.17.1/log4j-slf4j-impl-2.17.1.jar",
+      "sha256": "e9a03720e5d5076009c2530635da9d08485e28a0b0ec20708dadc51afb78e41e",
+      "bytes": 24279,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/apache/xbean/xbean-reflect/3.7/xbean-reflect-3.7.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/xbean/xbean-reflect/3.7/xbean-reflect-3.7.jar",
+      "sha256": "104e5e9bb5a669f86722f32281960700f7ec8e3209ef51b23eb9b6d23d1629cb",
+      "bytes": 148098,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar",
+      "sha256": "bce5c887460542d69c0ffce05919fef8f56f9964a1505a99f6ae69a58351507e",
+      "bytes": 212014,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb",
+      "bytes": 79111,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/firtool-resolver_2.13/1.3.0/firtool-resolver_2.13-1.3.0.jar",
+      "sha256": "c6cf214fb53b83fff73e082b6752eab53dc67c987bbece87461600e9c0e8ad38",
+      "bytes": 23881,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/codehaus/plexus/plexus-archiver/4.9.0/plexus-archiver-4.9.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/4.9.0/plexus-archiver-4.9.0.jar",
+      "sha256": "094d7eed03f8610cf149cade0340a5b2a55935dc77864e29f959c9e46a68a03e",
+      "bytes": 224611,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar",
+      "sha256": "52f77c5ec49f787c9c417ebed5d6efd9922f44a202f217376e4f94c0d74f3549",
+      "bytes": 52873,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-container-default/2.1.1/plexus-container-default-2.1.1.jar",
+      "sha256": "8b65840e41ca669a1a69ec1daedb3426304e560b24172cc93bb02e8c199e1ce7",
+      "bytes": 228336,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/codehaus/plexus/plexus-io/3.4.1/plexus-io-3.4.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/3.4.1/plexus-io-3.4.1.jar",
+      "sha256": "ac3be07c2968f98656604ddb8fdf08f1cfc560bc7b329fd17847f151510dc2c4",
+      "bytes": 79393,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/4.0.0/plexus-utils-4.0.0.jar",
+      "sha256": "270cd703b48c6e5c8c691f1875f22d62d22cfe072c73ae2f5814d83d68c1da0b",
+      "bytes": 192368,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/fusesource/jansi/jansi/1.18/jansi-1.18.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar",
+      "sha256": "109e64fc65767c7a1a3bd654709d76f107b0a3b39db32cbf11139e13a6f5229b",
+      "bytes": 287352,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/fusesource/jansi/jansi/2.4.1/jansi-2.4.1.jar",
+      "sha256": "2e5e775a9dc58ffa6bbd6aa6f099d62f8b62dcdeb4c3c3bbbe5cf2301bc2dcc1",
+      "bytes": 256999,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/iq80/snappy/snappy/0.4/snappy-0.4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/iq80/snappy/snappy/0.4/snappy-0.4.jar",
+      "sha256": "46a0c87d504ce9d6063e1ff6e4d20738feb49d8abf85b5071a7d18df4f11bac9",
+      "bytes": 57954,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline/3.27.1/jline-3.27.1-jdk8.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline/3.27.1/jline-3.27.1-jdk8.jar",
+      "sha256": "9d165aff3d714a455de2e711dc90df09fdb0a0969a1cd4d52aa72a44cb545db0",
+      "bytes": 1369150,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline-builtins/3.24.1/jline-builtins-3.24.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline-builtins/3.24.1/jline-builtins-3.24.1.jar",
+      "sha256": "a621bc48d38a12aed37b567d13407d389bc5dce935d187a01c19eaec969467d1",
+      "bytes": 271884,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline-native/3.24.1/jline-native-3.24.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline-native/3.24.1/jline-native-3.24.1.jar",
+      "sha256": "4337237502d3b647b981b007e14e75d79ec51497f52e9871baf6e2c6c9dfbd17",
+      "bytes": 187919,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline-reader/3.24.1/jline-reader-3.24.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline-reader/3.24.1/jline-reader-3.24.1.jar",
+      "sha256": "8263bdab9bf5be07e2324e98246c94d34cc7e0d451e527e8b08e410900c3b9db",
+      "bytes": 183527,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline-style/3.24.1/jline-style-3.24.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline-style/3.24.1/jline-style-3.24.1.jar",
+      "sha256": "1403880e2fa8426e9395585a4526b67a3f799b949488008fed2ab5063a11d4a1",
+      "bytes": 28121,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline-terminal/3.24.1/jline-terminal-3.24.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline-terminal/3.24.1/jline-terminal-3.24.1.jar",
+      "sha256": "d9e32b47e134718eec9adcfaebf838130a163999ced820fc32795d4420f159e2",
+      "bytes": 259162,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline-terminal-jansi/3.24.1/jline-terminal-jansi-3.24.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline-terminal-jansi/3.24.1/jline-terminal-jansi-3.24.1.jar",
+      "sha256": "1e53923725972413765093aac3cc5eb7d4690eaf758f4067a4972bd59d9e85a5",
+      "bytes": 48861,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/jline/jline-terminal-jna/3.24.1/jline-terminal-jna-3.24.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/jline/jline-terminal-jna/3.24.1/jline-terminal-jna-3.24.1.jar",
+      "sha256": "ec59d38160b0faa720472ff3f168564d22af4d991316ba30bffe2c163ae4040c",
+      "bytes": 73643,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/joda/joda-convert/2.2.0/joda-convert-2.2.0.jar",
+      "sha256": "6d9c8050943dce3e6e6cfb028a7cbd5fd46555c7edf89bf0d829061ff5d2ade6",
+      "bytes": 145596,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar",
+      "sha256": "1dee0481072d19c929b623e155e14d2f6085dc011529a0a0dbefc84cf571d865",
+      "bytes": 11369,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scala-lang/modules/scala-collection-compat_2.13/2.11.0/scala-collection-compat_2.13-2.11.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-collection-compat_2.13/2.11.0/scala-collection-compat_2.13-2.11.0.jar",
+      "sha256": "0c1108883b7b97851750e8932f9584346ccb23f1260c197f97295ac2e6c56cec",
+      "bytes": 7090,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.13.16/scala-compiler-2.13.16.jar",
+      "sha256": "f59982714591e321ba9c087af2c8666e2f5fb92b11a0cef72c2c5e9b342152d3",
+      "bytes": 12308669,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala2-sbt-bridge/2.13.16/scala2-sbt-bridge-2.13.16.jar",
+      "sha256": "776ef74d8bc1222f4b6e7b5dc5dd1f0abfc97ab853cb4932292dee0b32111906",
+      "bytes": 271996,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+      "sha256": "d3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0",
+      "bytes": 41125,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/tukaani/xz/1.9/xz-1.9.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/tukaani/xz/1.9/xz-1.9.jar",
+      "sha256": "211b306cfc44f8f96df3a0a3ddaf75ba8c5289eed77d60d72f889bb855f535e5",
+      "bytes": 116013,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/virtuslab/scala-cli/config_2.13/0.2.1/config_2.13-0.2.1.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/virtuslab/scala-cli/config_2.13/0.2.1/config_2.13-0.2.1.jar",
+      "sha256": "e9567682876d6941b7daac9d995ef241aebe1c1e3dc50e123245a4df53699626",
+      "bytes": 209024,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar",
+      "sha256": "d87d607e500885356c03c1cae61e8c2e05d697df8787d5aba13484c2eb76a844",
+      "bytes": 309001,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/chiseltest_2.13/6.0.0/chiseltest_2.13-6.0.0.jar",
+      "sha256": "3d442dab6f28e74980f598dd4bd28c886f4e081d0e5433102dfc02aab1c57dc5",
+      "bytes": 2707568,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.16/scala-library-2.13.16.jar",
+      "sha256": "1ebb2b6f9e4eb4022497c19b1e1e825019c08514f962aaac197145f88ed730f1",
+      "bytes": 5926340,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/chisel_2.13/6.7.0/chisel_2.13-6.7.0.jar",
+      "sha256": "ad3163d1b88094806cfec95fec58b4ebeeaa6af6ec6b2766a9c02becdbe42778",
+      "bytes": 5128708,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/edu/berkeley/cs/firrtl2_2.13/6.0.0/firrtl2_2.13-6.0.0.jar",
+      "sha256": "80fae7cd4516e6fe33469c2e135479f2c94bf9e5be4d00437de2df68ba40b47b",
+      "bytes": 4510129,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar",
+      "sha256": "131a6594969bc4f321d652ea2a33bc0e378ca312685ef87791b2c60b29d01ea5",
+      "bytes": 336742,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/github/scopt/scopt_2.13/4.1.0/scopt_2.13-4.1.0.jar",
+      "sha256": "2e5037bda974630b046794274e344273919abf4727acfcd86352617dce68f82b",
+      "bytes": 127408,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-native_2.13/4.1.0-M4/json4s-native_2.13-4.1.0-M4.jar",
+      "sha256": "a36d3e807bfe872972d55b6f80c883418b1d715f738f329c84d3678205398c7b",
+      "bytes": 10223,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-core_2.13/4.1.0-M4/json4s-core_2.13-4.1.0-M4.jar",
+      "sha256": "63d7610f4aa092cdc9401a338aada587792df6f1512e7b93bf365b7c07ffeb9f",
+      "bytes": 318845,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-ast_2.13/4.1.0-M4/json4s-ast_2.13-4.1.0-M4.jar",
+      "sha256": "2b84fb7bf25f2e4b51bd8cca802fb0bc0ec4c528c88c35cdeb8087349bb154b5",
+      "bytes": 594388,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-scalap_2.13/4.1.0-M4/json4s-scalap_2.13-4.1.0-M4.jar",
+      "sha256": "496ff9d3f423ac96e47d7a08136d1f7dbafa2ccbc228af553e7d1d90a2bc8224",
+      "bytes": 356326,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/json4s/json4s-native-core_2.13/4.1.0-M4/json4s-native-core_2.13-4.1.0-M4.jar",
+      "sha256": "7f7b8396cd29455e0a3653ae831e3c73b344ac6e1f37ba20d159ec13e7e2d6d3",
+      "bytes": 84495,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar",
+      "sha256": "770cd903fa7b604d1f7ef7ba17f84108667294b2b478be8ed1af3bffb4ae0018",
+      "bytes": 238400,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar",
+      "url": "https://repo.maven.apache.org/maven2/com/lihaoyi/os-lib_2.13/0.9.2/os-lib_2.13-0.9.2.jar",
+      "sha256": "814edf957545fd952e97a772d850643516acc18000119ad566c03368c43c60f2",
+      "bytes": 367336,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-parallel-collections_2.13/1.0.4/scala-parallel-collections_2.13-1.0.4.jar",
+      "sha256": "68f266c4fa37cb20a76e905ad940e241190ce288b7e4a9877f1dd1261cd1a9a7",
+      "bytes": 1127123,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest_2.13/3.2.19/scalatest_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest_2.13/3.2.19/scalatest_2.13-3.2.19.jar",
+      "sha256": "c37d97f16172d45b2aef0cebbe59dd2174b7d1ff2c2f272516707cf923015a52",
+      "bytes": 712,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-core_2.13/3.2.19/scalatest-core_2.13-3.2.19.jar",
+      "sha256": "30230081d029f6341b83fe7f157d336113e1c97497fe950169293d28a5bf2936",
+      "bytes": 3755368,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-compatible/3.2.19/scalatest-compatible-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-compatible/3.2.19/scalatest-compatible-3.2.19.jar",
+      "sha256": "5dc6b8fa5396fe9e1a7c2b72df174a8eb3e92770cdc3e70636d3eba673cd0da3",
+      "bytes": 1406,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalactic/scalactic_2.13/3.2.19/scalactic_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalactic/scalactic_2.13/3.2.19/scalactic_2.13-3.2.19.jar",
+      "sha256": "c27c33de17d450e29e66c16c5af4cfa33e8ffcf03c124f0a3d249d848cccd4af",
+      "bytes": 1592150,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.16/scala-reflect-2.13.16.jar",
+      "sha256": "fb49ccd9cac7464486ab993cda20a3c1569d8ef26f052e897577ad2a4970fb1d",
+      "bytes": 3801119,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scala-lang/modules/scala-xml_2.13/2.1.0/scala-xml_2.13-2.1.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scala-lang/modules/scala-xml_2.13/2.1.0/scala-xml_2.13-2.1.0.jar",
+      "sha256": "d122cbf93115ee714570de6a9c18e53001fedb474911d4cb5091758ee51f053a",
+      "bytes": 483090,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-featurespec_2.13/3.2.19/scalatest-featurespec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-featurespec_2.13/3.2.19/scalatest-featurespec_2.13-3.2.19.jar",
+      "sha256": "58a44e6be12409596feab4d4123900ef2af55d3fcb72033412059ce055e91dee",
+      "bytes": 81679,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-flatspec_2.13/3.2.19/scalatest-flatspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-flatspec_2.13/3.2.19/scalatest-flatspec_2.13-3.2.19.jar",
+      "sha256": "de4d28423dc69e91fdc8f3a03a4fb6b443c5626b819c896e5fbe4a73a375654a",
+      "bytes": 174360,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-freespec_2.13/3.2.19/scalatest-freespec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-freespec_2.13/3.2.19/scalatest-freespec_2.13-3.2.19.jar",
+      "sha256": "f3e463422cca38117bb48665602543474fbc2c37427b1133a9c34332f895b08a",
+      "bytes": 103459,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-funsuite_2.13/3.2.19/scalatest-funsuite_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funsuite_2.13/3.2.19/scalatest-funsuite_2.13-3.2.19.jar",
+      "sha256": "926aeb37193ad79d0b380160765c9ab61d4367b994c1ab715896fe4961241d5e",
+      "bytes": 63740,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-funspec_2.13/3.2.19/scalatest-funspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-funspec_2.13/3.2.19/scalatest-funspec_2.13-3.2.19.jar",
+      "sha256": "4c682781b67c5daeeebb9e132a78929b824f88747b963b9aa8bd24a0a7d6893b",
+      "bytes": 110329,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-propspec_2.13/3.2.19/scalatest-propspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-propspec_2.13/3.2.19/scalatest-propspec_2.13-3.2.19.jar",
+      "sha256": "6c1c7d557485861d920b1c26748a871232b626e93d466a3d9bb8dbbc6e38485d",
+      "bytes": 33934,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-refspec_2.13/3.2.19/scalatest-refspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-refspec_2.13/3.2.19/scalatest-refspec_2.13-3.2.19.jar",
+      "sha256": "7a4c836cf66c99c1e12ca96e6d94c4f68b7dbb49144f9e13af73ada4df752652",
+      "bytes": 26505,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-wordspec_2.13/3.2.19/scalatest-wordspec_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-wordspec_2.13/3.2.19/scalatest-wordspec_2.13-3.2.19.jar",
+      "sha256": "08050f3d05c72575cac29a1483185b443d5f9f34c1fcf80c683083330385ef93",
+      "bytes": 134854,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-diagrams_2.13/3.2.19/scalatest-diagrams_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-diagrams_2.13/3.2.19/scalatest-diagrams_2.13-3.2.19.jar",
+      "sha256": "a77294d3d5a564e1d8cd6550d4ac795ac042fa90efa91d139da123d7ec5f3bec",
+      "bytes": 53805,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-matchers-core_2.13/3.2.19/scalatest-matchers-core_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-matchers-core_2.13/3.2.19/scalatest-matchers-core_2.13-3.2.19.jar",
+      "sha256": "033f16c1143fbe51675d080b13ac319d98581d0331ba3ccebb121e3904a774a3",
+      "bytes": 2031514,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-shouldmatchers_2.13/3.2.19/scalatest-shouldmatchers_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-shouldmatchers_2.13/3.2.19/scalatest-shouldmatchers_2.13-3.2.19.jar",
+      "sha256": "64658d736039267baae0108af620617e8ce88b2f4683112e2e31e4ad2a603c0f",
+      "bytes": 184886,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/scalatest/scalatest-mustmatchers_2.13/3.2.19/scalatest-mustmatchers_2.13-3.2.19.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/scalatest/scalatest-mustmatchers_2.13/3.2.19/scalatest-mustmatchers_2.13-3.2.19.jar",
+      "sha256": "8ebbd5c12843d75f15283f31c35994b6e733ce737f666b05528fa8b6e67ad32e",
+      "bytes": 183616,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar",
+      "sha256": "34ed1e1f27fa896bca50dbc4e99cf3732967cec387a7a0d5e3486c09673fe8c6",
+      "bytes": 1878533,
+      "role": "classpath"
+    },
+    {
+      "maven_path": "org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/chipsalliance/chisel-plugin_2.13.16/6.7.0/chisel-plugin_2.13.16-6.7.0.jar",
+      "sha256": "3260acf1b41b399974d21ba7ef970124ff35df6e5b0a164e65d5038e3b803bfb",
+      "bytes": 79111,
+      "role": "plugin"
+    }
+  ],
+  "base_commit": "897f08f77b6c31fd567b32904079cf1ab20ee986",
+  "source_count": 155,
+  "scope": "Entire155sourceclosure retained directly, including new protocol, Conv4, MoE fix and384MiB diagnostichelper. No classes/IR/weights/data bundled. JDK current21 separatelypin; no historicaltoolchainequivalence."
+}

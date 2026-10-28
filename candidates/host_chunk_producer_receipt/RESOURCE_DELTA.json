@@ -1,0 +1,17 @@
+{
+  "scope": "declared source metadata widths; not elaborated/synthesized resources",
+  "rawprep_job_bits": 426,
+  "rawprep_result_bits": 595,
+  "producer_identity_bits": 112,
+  "retained_prefix_receipt_bits": 707,
+  "retained_prefix_valid_bits": 1,
+  "chunk_job_binding_bits": 538,
+  "chunk_terminal_binding_bits": 538,
+  "chunk_consumption_metadata_bits": 129,
+  "total_new_declared_register_bits": 1913,
+  "new_payload_banks": 0,
+  "new_arithmetic_modules": 0,
+  "new_dma_modules": 0,
+  "unchanged_common_resource_maximum": 4096,
+  "warning": "No RTL/physical resource proof. Existing module instances, Scalar8/Format9 service requests and retirement unchanged. Top Chunk Scalar8/Vector10 routing still absent."
+}

@@ -1,0 +1,57 @@
+{
+  "scope": "Digest-only original evidence; raw private paths, class bytes, tool tree and runtime records are not published",
+  "records": {
+    "candidate_freeze": {
+      "bytes": 8167,
+      "sha256": "72668fcd1637ba3995acfbb9ce964f927b2145b1a1038624753d21931a322c27"
+    },
+    "candidate_evidence_manifest": {
+      "bytes": 8498,
+      "sha256": "5855f93b3691b8cc16e116c02a398b89861a0277e3f08c7fc694f67e2737ff42"
+    },
+    "actual_summary": {
+      "bytes": 2613,
+      "sha256": "6e7fb86b2e3469cda34b571ba4ff13775bd0a20d8d26a6baaf814dd8e47f5bf2"
+    },
+    "actual_receipt": {
+      "bytes": 33075,
+      "sha256": "047fcf5413b8ed612fdf4feeb4387acd91e9924b4517471559eb20bc3c0fa109"
+    },
+    "actual_class_identities": {
+      "bytes": 103378,
+      "sha256": "c1328be4cbf2c4220c318e06accb01c93cdd43018e0a06a7e1cc51246dbd099a"
+    },
+    "actual_command": {
+      "bytes": 38207,
+      "sha256": "ca4238cfbc5ac117bb90201333b6998223081597437d96d84391f2e705e084eb"
+    },
+    "actual_input_pins": {
+      "bytes": 647153,
+      "sha256": "16c563e9ee5d692cf82bd1c1fdecfe4687fd104048e043b695b69ae681a409db"
+    },
+    "actual_freeze": {
+      "bytes": 2007,
+      "sha256": "dfa545c04a2c29a81fc2559abab1aa3b6db5424224f2be4835a0a5818f05209b"
+    },
+    "actual_runner": {
+      "bytes": 8419,
+      "sha256": "7eae4cbc2ae66df8145ad08a138e6827f77167112b2e154c655f915343f7eadd"
+    },
+    "original_source_checker": {
+      "bytes": 13717,
+      "sha256": "ac8efed9a72c20a1286cc967cc56c0187ebed1fb82e8da2572f509d8d07712c2"
+    },
+    "source_checks_normal": {
+      "bytes": 214,
+      "sha256": "a6d6b80e8ace805a08ab8998b7a99279c1f345574ee9a1b115412625e4a94c90"
+    },
+    "source_checks_optimized": {
+      "bytes": 214,
+      "sha256": "a6d6b80e8ace805a08ab8998b7a99279c1f345574ee9a1b115412625e4a94c90"
+    },
+    "contract_model_test": {
+      "bytes": 10877,
+      "sha256": "1578a7db2cb2e877028214cf712c48e18ec1921401d2c35a4131129f6a59b02a"
+    }
+  }
+}

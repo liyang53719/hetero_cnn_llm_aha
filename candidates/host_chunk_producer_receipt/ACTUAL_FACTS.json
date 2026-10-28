@@ -1,0 +1,63 @@
+{
+  "status": "PASS_ACTUAL_17_SOURCE_SCALA_COMPILER_ONLY",
+  "source_count": 17,
+  "retained_class_count": 858,
+  "removed_stale_classes": 39,
+  "class_count": 86,
+  "class_bytes": 3081279,
+  "by_source": {
+    "GdnChunkStateTransferOwner.scala": 4,
+    "GdnRuntimeChunkLeafCollection.scala": 7,
+    "GdnRuntimeChunkCoordinator.scala": 4,
+    "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+    "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+    "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+    "GdnRuntimeRawPrepReceiptV8.scala": 3,
+    "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+    "GdnRuntimeRawPrepProtocolV7.scala": 9,
+    "GdnRuntimeRawPrepOwnerV7.scala": 1,
+    "HeldDecoupledOffer.scala": 4,
+    "HostBlockCommandsV4.scala": 4,
+    "HostBlockTopV4.scala": 3,
+    "HostRuntimePrefixLeaseWiringV8.scala": 3,
+    "QwenOwnerProtocol.scala": 19,
+    "UnifiedMoeSharedArithmeticProtocolV5.scala": 9,
+    "UnifiedMoeSharedArithmeticAdapterV5.scala": 2
+  },
+  "native_compiler_exit": 0,
+  "wall_seconds": 52.01919443299994,
+  "cpu_seconds_sampled": 43.99,
+  "peak_rss_bytes": 548409344,
+  "peak_tree_bytes": 16636052,
+  "pre_post_pin_checks": 1382,
+  "strict_owned_compiler_group_terminal": true,
+  "source_and_original_pins_unchanged": true,
+  "compile_log_empty": true,
+  "compiled_scope": "Changed Kernel/prefix helper/Coordinator/Collection/V8 plus actual unchanged Top/Commands/RawPrep/bridge/leaf sources",
+  "blockers": [
+    "Top Chunk dispatch/trusted accepted C binding absent",
+    "Top snapshot-to-held one-shot Collection receipt route absent",
+    "Global Scalar8/Vector10 lease/tag/epoch routing absent"
+  ],
+  "not_run": [
+    "Chisel elaboration",
+    "CHIRRTL/RTL",
+    "native DUT",
+    "numerical/protocol simulation",
+    "M16/M128 fullblock"
+  ],
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "historical_source_checks_normal_and_optimized": 1172,
+  "historical_negative_source_mutations": 21,
+  "contract_model_tests_normal_and_optimized": 11,
+  "publication_compiler_or_dut_executions": 0,
+  "five_block_M128_Chisel_RTL": "0/5 unchanged",
+  "pin_count_interpretation": "1382 checks in each preflight and postflight pass",
+  "independent_review": {
+    "delivery": "collaboration conclusions, not an independent artifact file",
+    "source": "PASS source-only",
+    "actual": "PASS read-only 17 sources / 858 baseline / 86 output hashes and identities",
+    "limits": "No rerun, elaboration, RTL, DUT, numerical or routed-retention qualification"
+  }
+}

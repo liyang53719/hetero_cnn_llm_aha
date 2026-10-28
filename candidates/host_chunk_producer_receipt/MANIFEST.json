@@ -1,0 +1,80 @@
+{
+  "status": "TEMP_SOURCE_COMPILER_ONLY_REQUIRES_PARENT_NOT_HARDWARE_SIGNOFF",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 2485,
+      "sha256": "26792cba9df4b08614032a9c524f5f2093df2fbfcf1a209855cfe9552c1e0379"
+    },
+    {
+      "path": "CLASS_DELTA.json",
+      "bytes": 8725,
+      "sha256": "9264bd8bc82bdbe43048397d3b7ca67c1bf76ad8ad4294ee1b4528250af9ab83"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 1962,
+      "sha256": "3bf9e86d25424227ae9f6c9ebb05bf91c02e618ff60924826a0ecd51a873a4a8"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 3928,
+      "sha256": "b14df7c327f6560792cea1fb5635569d1b088bd39e118adaa780d1ba7c5838c3"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 3869,
+      "sha256": "b54c99a93ae552c243adfbaca13adcc0f4694a21b14b8a0475fdbb2d9238c6e0"
+    },
+    {
+      "path": "RESOURCE_DELTA.json",
+      "bytes": 717,
+      "sha256": "740b0c83da18f221fa058a6d4610158b168b148de09dd0d22d8f3990ad7d248c"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 5285,
+      "sha256": "b7e77610c3ea1e0ebf32f33430a40e3055a8b0ea773e9a4627d6c479f50e00dd"
+    },
+    {
+      "path": "check_source.py",
+      "bytes": 13978,
+      "sha256": "613e2137088d638c8b6b7bd4d828edadd70e802aa2695da8e1776f02355d33a0"
+    },
+    {
+      "path": "source/GdnRuntimeChunkCoordinator.scala",
+      "bytes": 19158,
+      "sha256": "b1fb9b108a788166b384c224f3f418489272dd886def06e3c0a261d699325877"
+    },
+    {
+      "path": "source/GdnRuntimeChunkLeafCollection.scala",
+      "bytes": 9706,
+      "sha256": "c8b494a77b32ca89ca5e9e3d7417f36e939a42793b79006574d676c5d2407275"
+    },
+    {
+      "path": "source/GdnRuntimeRawPrepReceiptV8.scala",
+      "bytes": 1330,
+      "sha256": "882897d0c8e8e265eb33ccdad7b4d5dc8d29e502bda909816df8b258e77d9a6f"
+    },
+    {
+      "path": "source/HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 14714,
+      "sha256": "8158f213d29cdc18eb35147012b6dee07016c5ed6fbd6a4c6c6fe84db96873af"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 64563,
+      "sha256": "cedea040d010b51a402fc6696b4e51db35b0867c83f949bf948ec0e8e75aa050"
+    },
+    {
+      "path": "tests/test_receipt_contract.py",
+      "bytes": 10877,
+      "sha256": "1578a7db2cb2e877028214cf712c48e18ec1921401d2c35a4131129f6a59b02a"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1115,
+      "sha256": "9552c2c37b3c456a466f72f90f01dda37d263c185d3b4eec928c54f8819c3e30"
+    }
+  ]
+}

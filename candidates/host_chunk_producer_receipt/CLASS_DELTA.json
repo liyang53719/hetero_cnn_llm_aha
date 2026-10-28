@@ -1,0 +1,230 @@
+{
+  "status": "REQUIRES_PARENT_CLASS_BYTES_AND_BUILD_CLOSURE_NOT_INCLUDED",
+  "base_commit": "28f992b3662eae68574e28e830f0abccee4d4178",
+  "base_package": "../host_chunk_collection_bridge",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 1609,
+      "sha256": "a82a47554ae94b76d13dc0bf347f4f4cafd941db110eff51c3d8707a455f05e8"
+    },
+    "CLASS_DELTA.json": {
+      "bytes": 4059,
+      "sha256": "01da435b1c8b29113148e7ca43f6c3486abb29eb10ba4d019c29b9ce18441490"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 1515,
+      "sha256": "3f20672261c9faba9f2d04f8a5a4514ebdb1777051ea22ed334d9b391808cd4e"
+    }
+  },
+  "original_class_count": 897,
+  "removed": [
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepJobV7$.class",
+      "bytes": 6570,
+      "sha256": "433169d7b6765e99563d4b74e0cbe6b84651721b784ffac3c1e43c0344e2ac6f"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepJobV7.class",
+      "bytes": 6578,
+      "sha256": "e81fc8e40da348dc45e3f9b0f8e8c4c83233c774f9455724e50756f8156e54f4"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepLayoutV7$.class",
+      "bytes": 2211,
+      "sha256": "9ad9da9fdfe011d679b23d6768d8af791fe2f81c38ef38d4fdfdbd854a38c35d"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepLayoutV7.class",
+      "bytes": 4890,
+      "sha256": "3c0a69df9dc24651ae3232a2ede2adf1d0cc7d28d49eb1d21d6bb09985c72b48"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepOwnerV7.class",
+      "bytes": 163773,
+      "sha256": "6c49e9d892906fa6a4248b57701304a192478aff067a73cc80f6e5bbe7cf10e9"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepPolicyV7$.class",
+      "bytes": 1036,
+      "sha256": "c08b08c38df5081af9dbd48d73c5a285af9aed3e6b72b4a3f2b550756059ce93"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepPolicyV7.class",
+      "bytes": 1213,
+      "sha256": "0580ba5aea4f4266e0663a16b0d1a7983308c3dd77f366be038831a852bdaf86"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepPortV7.class",
+      "bytes": 9293,
+      "sha256": "55bf99fc0364a030ab0ae4ade45018ac401bdc8acf863f281fb2a671b7f0dc6e"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepReadyV7.class",
+      "bytes": 4759,
+      "sha256": "8dc924ddfee237aa2572866ea8afabdc664f29748d32784889c64d168671d564"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeRawPrepResultV7.class",
+      "bytes": 5072,
+      "sha256": "9ae3944e8edae72bd2b7fa1af17a4d254fc628b1177186dfc39b7151704507b6"
+    },
+    {
+      "relative": "heteronpu/continuous/HostBlockCommandsV4$$anon$1.class",
+      "bytes": 15845,
+      "sha256": "c1bb2e8420609b6f2d44a79694498ea835dcfcc65577edbc9f23eda998faaf8b"
+    },
+    {
+      "relative": "heteronpu/continuous/HostBlockCommandsV4$.class",
+      "bytes": 2045,
+      "sha256": "6a32fc9824717f1692070f208e1bbad37e22c4b021795d35b1fc3b40d88b76fa"
+    },
+    {
+      "relative": "heteronpu/continuous/HostBlockCommandsV4$ResidentHostState.class",
+      "bytes": 6826,
+      "sha256": "d05235ae07d25eb362e7be5944cb57bfa1600365b3c1c96cdd6528df035ee6a3"
+    },
+    {
+      "relative": "heteronpu/continuous/HostBlockCommandsV4.class",
+      "bytes": 915698,
+      "sha256": "792f8864f505a9ed4f6a2aa49f1d4dc25980c2c40f8c7f6a3618f3cd3d72c3a6"
+    },
+    {
+      "relative": "heteronpu/continuous/HostBlockTopV4$$anon$1.class",
+      "bytes": 12089,
+      "sha256": "f23ebe14c324f07f31bf9f597ca497d5d08a51e3cfbab28a45b53228235919c2"
+    },
+    {
+      "relative": "heteronpu/continuous/HostBlockTopV4$.class",
+      "bytes": 2497,
+      "sha256": "a5cb1dc2a0e4d794ba6d7252b95078dead409e33324f4855dc61769b41599ad7"
+    },
+    {
+      "relative": "heteronpu/continuous/HostBlockTopV4.class",
+      "bytes": 204409,
+      "sha256": "598b366e60b887b01dd1582a2f593143931b0e09913ae08a1ccf2915b5cdb321"
+    },
+    {
+      "relative": "heteronpu/continuous/HostRuntimePrefixLeaseWiringV8$.class",
+      "bytes": 91522,
+      "sha256": "dfbd4df30469cc612e94871c8495b810846ea797a44e988a3799ef518db94ce3"
+    },
+    {
+      "relative": "heteronpu/continuous/HostRuntimePrefixLeaseWiringV8$View.class",
+      "bytes": 4940,
+      "sha256": "7fbbf0128e7e64909c74892a27696b8d3c75ea2b185c9a795318e48575149cdc"
+    },
+    {
+      "relative": "heteronpu/continuous/HostRuntimePrefixLeaseWiringV8.class",
+      "bytes": 2222,
+      "sha256": "6a65fe38e238d5ac57318d9edee24f3d073af185cd0ccb48fc27774c951582b4"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2NumericPolicy$.class",
+      "bytes": 2884,
+      "sha256": "f051f956cf8cfd5dbf78d20b3ff8ae1079a53ac6971d4d9b4e67245deb7c41e7"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2NumericPolicy$LegacyV0$.class",
+      "bytes": 2290,
+      "sha256": "9400ed3d1a09c71216eff7fd80a04ce9b53d4f544d54eef60af90683b0df0456"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2NumericPolicy$Qwen2OfficialBf16V2$.class",
+      "bytes": 2334,
+      "sha256": "3ea595a3ec2d63f5c6331aac8cfe704a54aa72d61692d37be53cbe112a6f5531"
+    },
+    {
+      "relative": "heteronpu/continuous/Qwen2NumericPolicy.class",
+      "bytes": 2153,
+      "sha256": "99521a3967b5d1603df7a116777c71254e6b039eae6eec0b017e7693c9e196d6"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenOwnerJob.class",
+      "bytes": 12389,
+      "sha256": "da1380deee49aa33c2cc6e23094371fa5c82ea785cc617f6941dce6569cb8446"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenOwnerKernel$$anon$1.class",
+      "bytes": 18555,
+      "sha256": "6cff2f196180c8e17787103003db053c100216fe6713a91abb78a07bdf482801"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenOwnerKernel$.class",
+      "bytes": 3060,
+      "sha256": "4983792ed8086420e28b96ed7ccb2482ab14e200533ebba648c591ad3ef1b447"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenOwnerKernel.class",
+      "bytes": 439935,
+      "sha256": "4cb3158756b53b762c2d3a850611bd11cb7361220bbb1d73bd920f57395cdde3"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenOwnerKind$.class",
+      "bytes": 2049,
+      "sha256": "784796c11fd19c6996984caa564f3978864eeae17b5c30765b806e1bbb3bab27"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenOwnerKind.class",
+      "bytes": 2116,
+      "sha256": "9efd4fa33a05fbb4be6922cd1aa45781a223542a79faaf37d7bd573beb60a9fc"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenOwnerResult.class",
+      "bytes": 4683,
+      "sha256": "78500b808824ff9de71d93f17d3768431494d261abf92499942452ce1e896310"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenRmsBorrowerControl.class",
+      "bytes": 4391,
+      "sha256": "d380b2c965b3eadf0a5a4b7909f64d1085b43f9dc49eb48134a8ff6fdd9bd515"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenRuntimeRmsClientV6.class",
+      "bytes": 5828,
+      "sha256": "a00de714252425edd1d9eb4eafbec7d5f1f3a61abee998669ee6e30d55af4ed9"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenSharedScalarContractV3$.class",
+      "bytes": 593,
+      "sha256": "bb7302d84cf9aba380bd7b1d03ee7bac5849a15e28ec3c82787be3d34e8ddd6d"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenSharedScalarContractV3.class",
+      "bytes": 717,
+      "sha256": "4b57bf59788134bd288f7f415dcc4e763ae22feec526e8351eceb4146b2afef1"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenSharedScalarRequestV3.class",
+      "bytes": 3458,
+      "sha256": "bd19ee780bbd8441b03ac4b485eb032e5f0c8fed982fb81504f30144770ebd13"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenSharedScalarResultV3.class",
+      "bytes": 3451,
+      "sha256": "f7393f8b9c184e4f18d8ab02dfd8e237acc29f4dd174cadfd3e529fea6baaf55"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenSharedScalarServiceV3.class",
+      "bytes": 4742,
+      "sha256": "8ec5375789eee300d639ff3e0fc89b3e256f6190af5a9232704fdda621ee11f6"
+    },
+    {
+      "relative": "heteronpu/continuous/QwenSharedScalarStatusV3.class",
+      "bytes": 4717,
+      "sha256": "31958e999e8b3865c1729e541052cd8eb3131464c047c643a78d5b8b5a8b4f87"
+    }
+  ],
+  "retained_class_count": 858,
+  "retained_class_bytes": 13518147,
+  "canonical_retained_sha256": "9031f00556a05e7ad7304277ca95489f5cbfeabd25caa1de739ffff60304233f",
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; bytes integer; trailing LF; keys relative/bytes/sha256 only",
+  "rawprep_overlap_count": 848,
+  "rawprep_overlap_conflicts": 0,
+  "tool_dependency_changes": 0,
+  "dependency_metadata": {
+    "commit": "65cbbb3e92079a859e4d4d8509a6b4383ba690fc",
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  }
+}

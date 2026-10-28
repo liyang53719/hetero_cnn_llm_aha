@@ -1,0 +1,6 @@
+{
+  "scope": "READ_ONLY_CHECKER_CORRECTIONS_NO_HARDWARE_CHANGE",
+  "r1": "Rejected because checker incorrectly assumed18 transformed memory representations meant18totalDefMemory. Correct current total927 retains original banks.",
+  "r2": "Wrong scalar module name prefix HeteroFP32Scalar counted0; actual module names BlockScalarFloat and BlockScalarFloatPolicyV2. Superseded.",
+  "r3": "Verified exact17BlockScalarFloat,81ALUs,32bankALUs and18transformed/927total memory scopes. Final ACTUAL_EMISSION_AUDIT.json usesR3 only."
+}

@@ -1,0 +1,210 @@
+{
+  "scope": "TEXT_SOURCE_AND_PRECISE_ACTUAL_EMISSION_EVIDENCE_ONLY_NOT_NUMERICAL_PASS",
+  "files": [
+    {
+      "path": "ACTUAL_EMISSION_AUDIT.json",
+      "bytes": 3101,
+      "sha256": "86dbc62d6c611023c6ccdad746e359db99323d288ace9bce6ef1a354f6cd3f37"
+    },
+    {
+      "path": "AUDIT_CHECKER_HISTORY.json",
+      "bytes": 529,
+      "sha256": "32fdbf1cdaa8c29dce870bd06021be412d1ba1de7b166ce6ec9ab0fcfa8b5b89"
+    },
+    {
+      "path": "AUDIT_R1_FAILURE.json",
+      "bytes": 369,
+      "sha256": "bf3c0a5ab72e84f6bf38cb6d9e3f4b5c7504505232fa5527236d3db8ed1d46c6"
+    },
+    {
+      "path": "BASELINE_CLASS_PINS.json",
+      "bytes": 148604,
+      "sha256": "37da17dc4060204b3e99402157dd8f859188cceafe1ac5f87e7a2812cfbbf6fe"
+    },
+    {
+      "path": "FAILURE_HISTORY.json",
+      "bytes": 827,
+      "sha256": "9f9c37fde3c842ddbccd7501d244539aae14aa5231706128cd5be5601657082c"
+    },
+    {
+      "path": "FMA_R1_FAILURE.json",
+      "bytes": 440,
+      "sha256": "e88f3d9dfeafe932bd6ea25e12650ea4bdbdefd5907318c24507f8d0871065b2"
+    },
+    {
+      "path": "FMA_R2_RESULT.json",
+      "bytes": 449,
+      "sha256": "5ab5fc96500acedfae5e2a5e8b6eaece51891a1a54d57da53fde9cffb637b8e9"
+    },
+    {
+      "path": "FRESH_EMITTER_COMPILE.json",
+      "bytes": 433,
+      "sha256": "da09b3ec663eeafb90a438cd5815282da1cbf2729197ab1b85f510867eb92009"
+    },
+    {
+      "path": "HELPER_CLASS_PINS.json",
+      "bytes": 156509,
+      "sha256": "4cba5e835250e1624d6851a882e8daedb348fffbbc82c32fa2c75e02ad2dab6f"
+    },
+    {
+      "path": "HELPER_COMPILE.json",
+      "bytes": 392,
+      "sha256": "74c839b5d51870612f4f52fb4bea1bb8f3fc022922e2d173f5ffc1a3e0af75f8"
+    },
+    {
+      "path": "HELPER_PREPARE_TEST_RESULT.json",
+      "bytes": 187,
+      "sha256": "96c29e69b594c0fa257c44bab5476def6f72970b8e246d2138e3365bb4ac52b9"
+    },
+    {
+      "path": "HOST_EMISSION_RESULT.json",
+      "bytes": 449,
+      "sha256": "742c906fa661ab17890a1482e2173ac3cc3e08e039f8835a10dc3e0fbaadd9db"
+    },
+    {
+      "path": "MATERIALIZER_TEST_RESULT.json",
+      "bytes": 358,
+      "sha256": "cadbabb3f08af552991d0ca7aa270420a9358cc2015ceaadaa68e65b9bed47a1"
+    },
+    {
+      "path": "PARSER_INVENTORY.json",
+      "bytes": 401,
+      "sha256": "2708f3d430a985f6b4e1a6495024b656c793776b03e1393c69306ec234ac4dca"
+    },
+    {
+      "path": "PARSER_MODULE_IDENTITIES.tsv",
+      "bytes": 375,
+      "sha256": "7fe755e7203b54c7d253cce9aaa0a0373cdad1c49379889793d731e10ff04447"
+    },
+    {
+      "path": "PARSER_SCOPE.txt",
+      "bytes": 103,
+      "sha256": "4802d04fd7c2a473420813deffcef94201c6b2f1327e043ac31c4fa9f51ac867"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 3918,
+      "sha256": "d8dcfaca3ff22399e0aead91142aeb33fb2c32e24bbacc06854f5936236876ba"
+    },
+    {
+      "path": "PORTABLE_PREPARE_TEST_RESULT.json",
+      "bytes": 214,
+      "sha256": "9ade0dbd66344134fca560db4ed5db8cce5a11197837b47c8f17641de1b4f517"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 4457,
+      "sha256": "1c154a3d42114d977c60a632926de722f46d3d9afa4e8c3965fe19ef896daefd"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 4556,
+      "sha256": "c56a79de187d50f557f2178189c093687b5cf35ff0ef06cea629439973b22af0"
+    },
+    {
+      "path": "TOOLCHAIN_PINS.json",
+      "bytes": 47255,
+      "sha256": "28ac194b961302e22d1c182ae983eb78a4ca1012ba63a481549f9f88c15e6164"
+    },
+    {
+      "path": "audit_actual.py",
+      "bytes": 5742,
+      "sha256": "0452c481f62ee0795a84b4b13400a42d6a1c67f4ae251aa39e50cdde26b96d70"
+    },
+    {
+      "path": "materialize_emitter.py",
+      "bytes": 2214,
+      "sha256": "e685731bf5d77e7fa137f33f0aa1726cc5c8df4fe827ac079394869e46e6bde0"
+    },
+    {
+      "path": "prepare_helper_inputs.py",
+      "bytes": 3510,
+      "sha256": "9f8d7f07d25ec838569122bdcea55c583d1a66ed68213883e6cb980a5fa9046c"
+    },
+    {
+      "path": "prepare_run_inputs.py",
+      "bytes": 4099,
+      "sha256": "602d664d2b8d7f4a6461454ee79b2f0707669e7018217c7f40a431fd0ea9f9f8"
+    },
+    {
+      "path": "run_fma_r2.py",
+      "bytes": 7272,
+      "sha256": "cb586edb8622be4588dddc186051c764599622cb05cbba62ff90f29dd85ddb52"
+    },
+    {
+      "path": "run_gate.py",
+      "bytes": 6253,
+      "sha256": "557f18997d0df54d548f8b3e3a581a6ba709005895ad7fee02e65c1373ed1792"
+    },
+    {
+      "path": "run_once.py",
+      "bytes": 7302,
+      "sha256": "39ad70712535500cef92906477a8de5dc65f6b14483bd6ffde720f4ce9797099"
+    },
+    {
+      "path": "source/FreshHostDenseAccMemoryLowering.scala",
+      "bytes": 7576,
+      "sha256": "b3ead7734b4ef18d14d6e3e027d3d5618ea23902c2f45b8690f092e36af40ab6"
+    },
+    {
+      "path": "source/FreshHostHighSimulationEmitter.scala",
+      "bytes": 22704,
+      "sha256": "49a12f0d34dcec7cb194a859658a9505a445ee2d5a886942db05ebc4f394c227"
+    },
+    {
+      "path": "source/FreshHostMatrixResultFifoMemoryLowering.scala",
+      "bytes": 5486,
+      "sha256": "64ec8dd65473e920511d969295909512b3132ba8a5616b7a5e4a828234882255"
+    },
+    {
+      "path": "source/HostLatestDenseAccMemoryLowering.scala",
+      "bytes": 7577,
+      "sha256": "82c45d548e259a5d60af80f0334d89a2ccef0194d7c668244962044025487c3c"
+    },
+    {
+      "path": "source/HostLatestHighSimulationEmitter.scala",
+      "bytes": 22652,
+      "sha256": "6e93847b93c5addc78b36a337669b53834984c244b7c4cacb1c8da07d9c5fd28"
+    },
+    {
+      "path": "source/HostMatrixResultFifoMemoryLowering.scala",
+      "bytes": 5481,
+      "sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb"
+    },
+    {
+      "path": "source/InspectFreshHostBackendInputs.scala",
+      "bytes": 3290,
+      "sha256": "7e6e2b93e18ab8534bac77c1279327e09940a14b62e7936e573ed57bc0bbff1b"
+    },
+    {
+      "path": "source/PhysicalFmaStageLibrary.scala",
+      "bytes": 2131,
+      "sha256": "bf313312faf48c65d26d250d5b5aa59049b3ec006c99fbc3692557dec7661aaf"
+    },
+    {
+      "path": "source/RetainedBackendCircuitGate.scala",
+      "bytes": 4009,
+      "sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a"
+    },
+    {
+      "path": "source/RetainedEndpointPortContract.scala",
+      "bytes": 825,
+      "sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6"
+    },
+    {
+      "path": "source/RetainedServicePhaseObserver.scala",
+      "bytes": 1647,
+      "sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7"
+    },
+    {
+      "path": "test_materialize.py",
+      "bytes": 1634,
+      "sha256": "8e87032f6beedd99a2b834881c1e37a5f3dad20e9576aebdc2338e82fe75f30d"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 763,
+      "sha256": "6007c162f55f85b53262a39f363784e11df2137c09ba7074c5167709aa315c3c"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "status": "EXACT_COMPILED_HELPER_SOURCES_PLUS_ONE_EXPLICIT_PATH_REDACTED_TEMPLATE",
+  "files": [
+    {
+      "path": "source/HostLatestDenseAccMemoryLowering.scala",
+      "compiled_original_bytes": 7577,
+      "compiled_original_sha256": "82c45d548e259a5d60af80f0334d89a2ccef0194d7c668244962044025487c3c",
+      "public_bytes": 7577,
+      "public_sha256": "82c45d548e259a5d60af80f0334d89a2ccef0194d7c668244962044025487c3c",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/HostLatestHighSimulationEmitter.scala",
+      "compiled_original_bytes": 22652,
+      "compiled_original_sha256": "6e93847b93c5addc78b36a337669b53834984c244b7c4cacb1c8da07d9c5fd28",
+      "public_bytes": 22652,
+      "public_sha256": "6e93847b93c5addc78b36a337669b53834984c244b7c4cacb1c8da07d9c5fd28",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/HostMatrixResultFifoMemoryLowering.scala",
+      "compiled_original_bytes": 5481,
+      "compiled_original_sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb",
+      "public_bytes": 5481,
+      "public_sha256": "718a8899bad7cb9d5f5b41015ed90fc5aa21c3aa4da739509330aff53b1057eb",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/InspectFreshHostBackendInputs.scala",
+      "compiled_original_bytes": 3290,
+      "compiled_original_sha256": "7e6e2b93e18ab8534bac77c1279327e09940a14b62e7936e573ed57bc0bbff1b",
+      "public_bytes": 3290,
+      "public_sha256": "7e6e2b93e18ab8534bac77c1279327e09940a14b62e7936e573ed57bc0bbff1b",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/PhysicalFmaStageLibrary.scala",
+      "compiled_original_bytes": 2131,
+      "compiled_original_sha256": "bf313312faf48c65d26d250d5b5aa59049b3ec006c99fbc3692557dec7661aaf",
+      "public_bytes": 2131,
+      "public_sha256": "bf313312faf48c65d26d250d5b5aa59049b3ec006c99fbc3692557dec7661aaf",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/RetainedBackendCircuitGate.scala",
+      "compiled_original_bytes": 4009,
+      "compiled_original_sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a",
+      "public_bytes": 4009,
+      "public_sha256": "0fda5f49c9d465a5dd00e933201d0b29921e25f50a07e4615fa9b80f7155012a",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/RetainedEndpointPortContract.scala",
+      "compiled_original_bytes": 825,
+      "compiled_original_sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6",
+      "public_bytes": 825,
+      "public_sha256": "ed617ff27dd48c838b5efc6a10991abb0a3cd41cff71681601b155282462bdc6",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/RetainedServicePhaseObserver.scala",
+      "compiled_original_bytes": 1647,
+      "compiled_original_sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7",
+      "public_bytes": 1647,
+      "public_sha256": "bd54a1c54cef1bd475e78794c826d245c0ae06b73a9e104229928c181a64e5d7",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/FreshHostDenseAccMemoryLowering.scala",
+      "compiled_original_bytes": 7576,
+      "compiled_original_sha256": "b3ead7734b4ef18d14d6e3e027d3d5618ea23902c2f45b8690f092e36af40ab6",
+      "public_bytes": 7576,
+      "public_sha256": "b3ead7734b4ef18d14d6e3e027d3d5618ea23902c2f45b8690f092e36af40ab6",
+      "redactions": [],
+      "scope": "exact source"
+    },
+    {
+      "path": "source/FreshHostHighSimulationEmitter.scala",
+      "compiled_original_bytes": 22894,
+      "compiled_original_sha256": "7cb32ac05b97cd43591fd0a9676f8757e40b2f585a193c57d8778e8fc0161222",
+      "public_bytes": 22704,
+      "public_sha256": "49a12f0d34dcec7cb194a859658a9505a445ee2d5a886942db05ebc4f394c227",
+      "redactions": [
+        {
+          "role": "ORIGINAL_HIGH",
+          "count": 1
+        },
+        {
+          "role": "ANNOTATIONS",
+          "count": 1
+        }
+      ],
+      "scope": "uncompiled path-redacted template"
+    },
+    {
+      "path": "source/FreshHostMatrixResultFifoMemoryLowering.scala",
+      "compiled_original_bytes": 5486,
+      "compiled_original_sha256": "64ec8dd65473e920511d969295909512b3132ba8a5616b7a5e4a828234882255",
+      "public_bytes": 5486,
+      "public_sha256": "64ec8dd65473e920511d969295909512b3132ba8a5616b7a5e4a828234882255",
+      "redactions": [],
+      "scope": "exact source"
+    }
+  ]
+}

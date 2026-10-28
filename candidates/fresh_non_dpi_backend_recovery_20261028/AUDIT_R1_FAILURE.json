@@ -1,0 +1,5 @@
+{
+  "status": "FAIL_AUDIT_SCRIPT_ONLY",
+  "source_sha256": "dabc392ff74bc9512addc113a8bfd488adfd9b426fa474e05f05f9929eb72ae9",
+  "reason": "Mistaken audit expected exactly18 total DefMemory nodes; actual fixed SharedL2Fabric retains additional original bank memories. 18 refers only sim_storage and sim_denseacc representation changes. No hardware/emission failure."
+}

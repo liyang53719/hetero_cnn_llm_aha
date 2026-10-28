@@ -1,0 +1,267 @@
+{
+  "status": "INCOMPLETE_TRANSPORT_ACCESS_UNAVAILABLE",
+  "actual_verified_tensor_count": 30,
+  "actual_verified_tensor_bytes": 357664,
+  "actual_postwrite_hashes_verified": true,
+  "exact_experimental_hidden_sha256": "c32e36dd356244838b17f8aebd8a0e647c5a09198365ad32c6f7996adef237bb",
+  "failure": {
+    "status": "FAIL_ACQUISITION_PRESERVE_PARTIALS_NO_RETRY",
+    "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "totals": {
+      "requested": 1590040,
+      "received": 672536,
+      "requests": 40
+    }
+  },
+  "profiles": {
+    "qwen2_1p5b:L0": 5,
+    "qwen3_5_0p8b:L0": 8,
+    "qwen3_5_0p8b:L3": 4,
+    "qwen3_5_35b_a3b:L0": 8,
+    "qwen3_5_35b_a3b:L3": 5
+  },
+  "network_retry_performed": false,
+  "rows": [
+    {
+      "name": "model.layers.0.input_layernorm.weight",
+      "model": "qwen2_1p5b",
+      "bytes": 3072,
+      "sha256": "ea77d5968e396420086f0c6c45c08df4ca4228e0c8a0be5d6ec5d0d247110a0e",
+      "file": "qwen2_1p5b/model.layers.0.input_layernorm.weight.bin",
+      "verification": "FRESH_PINNED_REVISION_HTTPS_DIGEST_NO_HISTORICAL_PAYLOAD_HASH"
+    },
+    {
+      "name": "model.layers.0.post_attention_layernorm.weight",
+      "model": "qwen2_1p5b",
+      "bytes": 3072,
+      "sha256": "762cfb39d378a8f4f1d2cdf1781a94089613e51d395acc0f4d3578be2459400a",
+      "file": "qwen2_1p5b/model.layers.0.post_attention_layernorm.weight.bin",
+      "verification": "FRESH_PINNED_REVISION_HTTPS_DIGEST_NO_HISTORICAL_PAYLOAD_HASH"
+    },
+    {
+      "name": "model.layers.0.self_attn.k_proj.bias",
+      "model": "qwen2_1p5b",
+      "bytes": 512,
+      "sha256": "56a716f9fd535d659a918afc9b7d25ad1d159dc0e9bd6da68549a155bb62ada0",
+      "file": "qwen2_1p5b/model.layers.0.self_attn.k_proj.bias.bin",
+      "verification": "FRESH_PINNED_REVISION_HTTPS_DIGEST_NO_HISTORICAL_PAYLOAD_HASH"
+    },
+    {
+      "name": "model.layers.0.self_attn.q_proj.bias",
+      "model": "qwen2_1p5b",
+      "bytes": 3072,
+      "sha256": "c68e4379e1c3701dabe73e98cda2fc87c85cce47adb6e4dc7f871fba9f497d9d",
+      "file": "qwen2_1p5b/model.layers.0.self_attn.q_proj.bias.bin",
+      "verification": "FRESH_PINNED_REVISION_HTTPS_DIGEST_NO_HISTORICAL_PAYLOAD_HASH"
+    },
+    {
+      "name": "model.layers.0.self_attn.v_proj.bias",
+      "model": "qwen2_1p5b",
+      "bytes": 512,
+      "sha256": "4ed960cd1895ac1bcc5012a0948f9b73e50b411b9b8015e9941d28e8d45fd29d",
+      "file": "qwen2_1p5b/model.layers.0.self_attn.v_proj.bias.bin",
+      "verification": "FRESH_PINNED_REVISION_HTTPS_DIGEST_NO_HISTORICAL_PAYLOAD_HASH"
+    },
+    {
+      "name": "model.language_model.layers.0.input_layernorm.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 2048,
+      "sha256": "032420ad60956b0e62b5f4afbfc3a51a7148c79946f746ea4eb6b0ceb6c67e37",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.input_layernorm.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.A_log",
+      "model": "qwen3_5_0p8b",
+      "bytes": 64,
+      "sha256": "ad78e0805c16a73f70c722e837d1d342df3d9714bea32d353d976e155dd73494",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.linear_attn.A_log.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.conv1d.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 49152,
+      "sha256": "130344a7183ae52ad58fc5da96539f28071b64d452bb3acf0890a7947da44188",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.linear_attn.conv1d.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.dt_bias",
+      "model": "qwen3_5_0p8b",
+      "bytes": 32,
+      "sha256": "058cec20af625f4e3971da95b131af08db8f9ab26b1301b90c6f6401c5243388",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.linear_attn.dt_bias.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 32768,
+      "sha256": "e5197a79fc1daa00d06a0c04fd11a97ac3c10a6bd6460e957fd8383700d5d87b",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.linear_attn.in_proj_a.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 32768,
+      "sha256": "02bab6a0eb77ad51435f77665d173876993d725ca3cd953f90c2b0754735db5e",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.linear_attn.in_proj_b.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.norm.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 512,
+      "sha256": "b92121af2866c2e156749dc12e27d5f873abb1595291be3a7465c8c65fd6e439",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.linear_attn.norm.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.post_attention_layernorm.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 2048,
+      "sha256": "9c5f1eafa39cd5af93a2f9fadafd3362bc886938ab1a1db3954baea7887fe303",
+      "file": "qwen3_5_0p8b/model.language_model.layers.0.post_attention_layernorm.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.3.input_layernorm.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 2048,
+      "sha256": "262f20f74b30264bb8244fd620dfd1356e8282ff09e4ba1d6892900d46d0635b",
+      "file": "qwen3_5_0p8b/model.language_model.layers.3.input_layernorm.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.3.post_attention_layernorm.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 2048,
+      "sha256": "480c483e9af2962e8213512464316402dd657d0dcfa37119a58409689330c7a2",
+      "file": "qwen3_5_0p8b/model.language_model.layers.3.post_attention_layernorm.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_norm.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 512,
+      "sha256": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a",
+      "file": "qwen3_5_0p8b/model.language_model.layers.3.self_attn.k_norm.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_norm.weight",
+      "model": "qwen3_5_0p8b",
+      "bytes": 512,
+      "sha256": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298",
+      "file": "qwen3_5_0p8b/model.language_model.layers.3.self_attn.q_norm.weight.bin",
+      "verification": "EXACT_NAME_SHA256"
+    },
+    {
+      "name": "model.language_model.layers.0.input_layernorm.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 4096,
+      "sha256": "140102e0751089c284fc4cb62b9ac11dbac28832f97f080dd22c01e3c8bae281",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.input_layernorm.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.A_log",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 128,
+      "sha256": "93a92ceddaef88832a54eb43e3d4fb2900df723d5cffee33881058e3fc19228d",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.linear_attn.A_log.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.conv1d.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 65536,
+      "sha256": "1a9f2d454872c9d3d00a83ef59c695f146363e72d57371df4e009dc859b67711",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.linear_attn.conv1d.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.dt_bias",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 64,
+      "sha256": "611c607b54815edb27d2f729cc3296f11c2278e9312a2597c9e00fce25f19030",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.linear_attn.dt_bias.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 131072,
+      "sha256": "bc836418f21d21c708a3decfddd11064d9d014c66e6756834fbe6c586d45822c",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.linear_attn.in_proj_a.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.0.linear_attn.norm.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 512,
+      "sha256": "51345f1b1c1490f1afb529af979721307c25260ab4f2276a88fc18bba27e3f12",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.linear_attn.norm.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.0.mlp.shared_expert_gate.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 4096,
+      "sha256": "c85c48dc1c18df12b7e8e2ab8204e00d031379f9fe840eb2b8bce128375e6ace",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.mlp.shared_expert_gate.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.0.post_attention_layernorm.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 4096,
+      "sha256": "2f331eb946dccbddc67529a69c0e20d8ec3810ff9658d6c4ecee4462fd3c3f47",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.0.post_attention_layernorm.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.3.input_layernorm.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 4096,
+      "sha256": "ee80a396347e7b7f6bc0497e561a8c1ce17d2ace16b0bd58c1f63db5970dd45e",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.3.input_layernorm.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.3.mlp.shared_expert_gate.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 4096,
+      "sha256": "55a1eb4a4ad7a6da2c1ffde06fa2b53f762bc30c784fd7a9db7333ba555977a9",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.3.mlp.shared_expert_gate.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.3.post_attention_layernorm.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 4096,
+      "sha256": "38cd875a33a7786783237db9398e3a8d516cc36af85d3b786bfb38defa4ee26d",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.3.post_attention_layernorm.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.k_norm.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 512,
+      "sha256": "35b152896631a5af922f1fa2924d753c79e2290b1ba1b78df73e4629ca8e2299",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.3.self_attn.k_norm.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    },
+    {
+      "name": "model.language_model.layers.3.self_attn.q_norm.weight",
+      "model": "qwen3_5_35b_a3b",
+      "bytes": 512,
+      "sha256": "f0589e0c697154b93aaafb1754bd6733f9b725f581969320e66a3054765a0009",
+      "file": "qwen3_5_35b_a3b/model.language_model.layers.3.self_attn.q_norm.weight.bin",
+      "verification": "PUBLISHED_RAW_SOURCE_SET_MEMBERSHIP"
+    }
+  ],
+  "numeric_or_rtl_pass": false
+}

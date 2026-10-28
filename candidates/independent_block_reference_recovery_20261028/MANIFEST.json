@@ -1,0 +1,58 @@
+{
+  "status": "TEMP_SOURCE_ONLY_FULL_REFERENCE_NOT_EXECUTED",
+  "files": [
+    {
+      "path": "run_reference.py",
+      "bytes": 15586,
+      "sha256": "0bdb54a54149f51649a2a3c2fcbe52e404f43b72bb134fef4c27d62044d7fc05"
+    },
+    {
+      "path": "stimulus.py",
+      "bytes": 1989,
+      "sha256": "8fd56838120a7bd1c1edab91af5a5006137d23423747771214e8ac3c8eaa6e22"
+    },
+    {
+      "path": "test_preparation.py",
+      "bytes": 4233,
+      "sha256": "825aa4a23721093e8a94dadb183a7aba5777a3567ba78ca67a7b7444280edd22"
+    },
+    {
+      "path": "profiles.json",
+      "bytes": 3338,
+      "sha256": "d1c846e7b17fb07fab77643f0470c16660d0b872e9f66354f571e6585b6472b0"
+    },
+    {
+      "path": "tensor_acquisition_plan.json",
+      "bytes": 31287,
+      "sha256": "df2d2a42cb3fa7c837b78ff5aabceca147f64015f1c3f36393deac76d826609f"
+    },
+    {
+      "path": "计划_中文.md",
+      "bytes": 4700,
+      "sha256": "e203e3a562fb1dd89b8876af94428067032c675121622fb6089747abf9da23e3"
+    },
+    {
+      "path": "TESTS.log",
+      "bytes": 1323,
+      "sha256": "42a80a4b1b46455fb99eca44726964b1352e3fecfd44a96a80e3417a4321ca3b"
+    },
+    {
+      "path": "TESTS_OPTIMIZED.log",
+      "bytes": 111,
+      "sha256": "04378905928ffc68f70f0166b6aa400a82be19a351c331436f01c49054a1b3b8"
+    }
+  ],
+  "offline_unittest_normal": 12,
+  "offline_unittest_optimized": 12,
+  "python_compile": true,
+  "torch_imported": false,
+  "official_forward_executed": false,
+  "chisel_executed": false,
+  "rtl_executed": false,
+  "weight_data_uploaded": false,
+  "limits": [
+    "Runtime and full raw weights unavailable after network403; no bypass/retry",
+    "Runner requires independent source/helper/runtime review and bounded launcher",
+    "Offline tests do not validate Torch Cache interfaces or real model arithmetic"
+  ]
+}

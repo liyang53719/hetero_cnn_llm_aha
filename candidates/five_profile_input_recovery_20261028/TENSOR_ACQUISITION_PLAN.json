@@ -1,0 +1,925 @@
+{
+  "qwen2_1p5b": {
+    "bundle_status": "VERIFIED_CURRENT_BYTES",
+    "model_id": "Qwen/Qwen2-1.5B-Instruct",
+    "revision": "ba1cf1846d7df0a0591d6c00649f57e798519da8",
+    "manifest_sha256": "46818a6fde79b4bff4615abc38cca7d8cb9386cdd0298bc07c403cb3d2ceab25",
+    "tensor_count": 12,
+    "bytes": 93595648,
+    "tensors": [
+      {
+        "name": "model.layers.0.input_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536
+        ],
+        "bytes": 3072,
+        "start": 466785928,
+        "end": 466788999,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.mlp.down_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536,
+          8960
+        ],
+        "bytes": 27525120,
+        "start": 466789000,
+        "end": 494314119,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.mlp.gate_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          8960,
+          1536
+        ],
+        "bytes": 27525120,
+        "start": 494314120,
+        "end": 521839239,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.mlp.up_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          8960,
+          1536
+        ],
+        "bytes": 27525120,
+        "start": 521839240,
+        "end": 549364359,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.post_attention_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536
+        ],
+        "bytes": 3072,
+        "start": 549364360,
+        "end": 549367431,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj.bias",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "bytes": 512,
+        "start": 549367432,
+        "end": 549367943,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.self_attn.k_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          1536
+        ],
+        "bytes": 786432,
+        "start": 549367944,
+        "end": 550154375,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.self_attn.o_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536,
+          1536
+        ],
+        "bytes": 4718592,
+        "start": 550154376,
+        "end": 554872967,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.self_attn.q_proj.bias",
+        "dtype": "BF16",
+        "shape": [
+          1536
+        ],
+        "bytes": 3072,
+        "start": 554872968,
+        "end": 554876039,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.self_attn.q_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1536,
+          1536
+        ],
+        "bytes": 4718592,
+        "start": 554876040,
+        "end": 559594631,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.self_attn.v_proj.bias",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "bytes": 512,
+        "start": 559594632,
+        "end": 559595143,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      },
+      {
+        "name": "model.layers.0.self_attn.v_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          1536
+        ],
+        "bytes": 786432,
+        "start": 559595144,
+        "end": 560381575,
+        "url": "https://huggingface.co/Qwen/Qwen2-1.5B-Instruct/resolve/ba1cf1846d7df0a0591d6c00649f57e798519da8/model.safetensors",
+        "shard_bytes": 3087467144
+      }
+    ]
+  },
+  "qwen3_5_0p8b": {
+    "bundle_status": "VERIFIED_CURRENT_BYTES",
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "manifest_sha256": "b10d1c78df5ef0e5535cb4eb04b45f73ef935e0867a21f3a48dd98e5a89afca5",
+    "tensor_count": 25,
+    "bytes": 79816288,
+    "tensors": [
+      {
+        "name": "model.language_model.layers.0.linear_attn.A_log",
+        "dtype": "F32",
+        "shape": [
+          16
+        ],
+        "bytes": 64,
+        "start": 59848,
+        "end": 59911,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.norm.weight",
+        "dtype": "F32",
+        "shape": [
+          128
+        ],
+        "bytes": 512,
+        "start": 59912,
+        "end": 60423,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.input_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024
+        ],
+        "bytes": 2048,
+        "start": 508629576,
+        "end": 508631623,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.conv1d.weight",
+        "dtype": "BF16",
+        "shape": [
+          6144,
+          1,
+          4
+        ],
+        "bytes": 49152,
+        "start": 508631624,
+        "end": 508680775,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.dt_bias",
+        "dtype": "BF16",
+        "shape": [
+          16
+        ],
+        "bytes": 32,
+        "start": 508680776,
+        "end": 508680807,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+        "dtype": "BF16",
+        "shape": [
+          16,
+          1024
+        ],
+        "bytes": 32768,
+        "start": 508680808,
+        "end": 508713575,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+        "dtype": "BF16",
+        "shape": [
+          16,
+          1024
+        ],
+        "bytes": 32768,
+        "start": 508713576,
+        "end": 508746343,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+        "dtype": "BF16",
+        "shape": [
+          6144,
+          1024
+        ],
+        "bytes": 12582912,
+        "start": 508746344,
+        "end": 521329255,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048,
+          1024
+        ],
+        "bytes": 4194304,
+        "start": 521329256,
+        "end": 525523559,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.out_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024,
+          2048
+        ],
+        "bytes": 4194304,
+        "start": 525523560,
+        "end": 529717863,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.down_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024,
+          3584
+        ],
+        "bytes": 7340032,
+        "start": 529717864,
+        "end": 537057895,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.gate_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          3584,
+          1024
+        ],
+        "bytes": 7340032,
+        "start": 537057896,
+        "end": 544397927,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.up_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          3584,
+          1024
+        ],
+        "bytes": 7340032,
+        "start": 544397928,
+        "end": 551737959,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.0.post_attention_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024
+        ],
+        "bytes": 2048,
+        "start": 551737960,
+        "end": 551740007,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.input_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024
+        ],
+        "bytes": 2048,
+        "start": 1215886312,
+        "end": 1215888359,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.down_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024,
+          3584
+        ],
+        "bytes": 7340032,
+        "start": 1215888360,
+        "end": 1223228391,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.gate_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          3584,
+          1024
+        ],
+        "bytes": 7340032,
+        "start": 1223228392,
+        "end": 1230568423,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.up_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          3584,
+          1024
+        ],
+        "bytes": 7340032,
+        "start": 1230568424,
+        "end": 1237908455,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.post_attention_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024
+        ],
+        "bytes": 2048,
+        "start": 1237908456,
+        "end": 1237910503,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.k_norm.weight",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "bytes": 512,
+        "start": 1237910504,
+        "end": 1237911015,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          1024
+        ],
+        "bytes": 1048576,
+        "start": 1237911016,
+        "end": 1238959591,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          1024,
+          2048
+        ],
+        "bytes": 4194304,
+        "start": 1238959592,
+        "end": 1243153895,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.q_norm.weight",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "bytes": 512,
+        "start": 1243153896,
+        "end": 1243154407,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          4096,
+          1024
+        ],
+        "bytes": 8388608,
+        "start": 1243154408,
+        "end": 1251543015,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          1024
+        ],
+        "bytes": 1048576,
+        "start": 1251543016,
+        "end": 1252591591,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/2fc06364715b967f1860aea9cf38778875588b17/model.safetensors-00001-of-00001.safetensors",
+        "shard_bytes": 1746942600
+      }
+    ]
+  },
+  "qwen3_5_35b_a3b": {
+    "bundle_status": "VERIFIED_CURRENT_BYTES",
+    "model_id": "Qwen/Qwen3.5-35B-A3B",
+    "revision": "62704185bd97ad488cfc404e7caea797396b74dc",
+    "manifest_sha256": "ca44aa87cfedd5d302b62c02d77ce64624009998edb78fe0bd025c42beaa4c8e",
+    "tensor_count": 33,
+    "bytes": 3357894336,
+    "tensors": [
+      {
+        "name": "model.language_model.layers.3.mlp.experts.gate_up_proj",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          1024,
+          2048
+        ],
+        "bytes": 1073741824,
+        "start": 2147484336,
+        "end": 3221226159,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00003-of-00014.safetensors",
+        "shard_bytes": 5368709808
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.experts.gate_up_proj",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          1024,
+          2048
+        ],
+        "bytes": 1073741824,
+        "start": 696,
+        "end": 1073742519,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00006-of-00014.safetensors",
+        "shard_bytes": 5368709816
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.experts.down_proj",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          2048,
+          512
+        ],
+        "bytes": 536870912,
+        "start": 2684355896,
+        "end": 3221226807,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00010-of-00014.safetensors",
+        "shard_bytes": 5368710456
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.experts.down_proj",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          2048,
+          512
+        ],
+        "bytes": 536870912,
+        "start": 1336,
+        "end": 536872247,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00012-of-00014.safetensors",
+        "shard_bytes": 5368710456
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+        "dtype": "BF16",
+        "shape": [
+          8192,
+          2048
+        ],
+        "bytes": 33554432,
+        "start": 23352,
+        "end": 33577783,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00013-of-00014.safetensors",
+        "shard_bytes": 5367839544
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_z.weight",
+        "dtype": "BF16",
+        "shape": [
+          4096,
+          2048
+        ],
+        "bytes": 16777216,
+        "start": 33577784,
+        "end": 50354999,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00013-of-00014.safetensors",
+        "shard_bytes": 5367839544
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.out_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048,
+          4096
+        ],
+        "bytes": 16777216,
+        "start": 50355000,
+        "end": 67132215,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00013-of-00014.safetensors",
+        "shard_bytes": 5367839544
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.o_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048,
+          4096
+        ],
+        "bytes": 16777216,
+        "start": 2533382968,
+        "end": 2550160183,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00013-of-00014.safetensors",
+        "shard_bytes": 5367839544
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.q_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          8192,
+          2048
+        ],
+        "bytes": 33554432,
+        "start": 2550160184,
+        "end": 2583714615,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00013-of-00014.safetensors",
+        "shard_bytes": 5367839544
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.A_log",
+        "dtype": "F32",
+        "shape": [
+          32
+        ],
+        "bytes": 128,
+        "start": 189080,
+        "end": 189207,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.norm.weight",
+        "dtype": "F32",
+        "shape": [
+          128
+        ],
+        "bytes": 512,
+        "start": 189208,
+        "end": 189719,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.input_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048
+        ],
+        "bytes": 4096,
+        "start": 208280,
+        "end": 212375,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.conv1d.weight",
+        "dtype": "BF16",
+        "shape": [
+          8192,
+          1,
+          4
+        ],
+        "bytes": 65536,
+        "start": 212376,
+        "end": 277911,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.dt_bias",
+        "dtype": "BF16",
+        "shape": [
+          32
+        ],
+        "bytes": 64,
+        "start": 277912,
+        "end": 277975,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_a.weight",
+        "dtype": "BF16",
+        "shape": [
+          32,
+          2048
+        ],
+        "bytes": 131072,
+        "start": 277976,
+        "end": 409047,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.linear_attn.in_proj_b.weight",
+        "dtype": "BF16",
+        "shape": [
+          32,
+          2048
+        ],
+        "bytes": 131072,
+        "start": 409048,
+        "end": 540119,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.gate.weight",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          2048
+        ],
+        "bytes": 1048576,
+        "start": 540120,
+        "end": 1588695,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.shared_expert.down_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048,
+          512
+        ],
+        "bytes": 2097152,
+        "start": 1588696,
+        "end": 3685847,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.shared_expert.gate_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          2048
+        ],
+        "bytes": 2097152,
+        "start": 3685848,
+        "end": 5782999,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.shared_expert.up_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          2048
+        ],
+        "bytes": 2097152,
+        "start": 5783000,
+        "end": 7880151,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.mlp.shared_expert_gate.weight",
+        "dtype": "BF16",
+        "shape": [
+          1,
+          2048
+        ],
+        "bytes": 4096,
+        "start": 7880152,
+        "end": 7884247,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.0.post_attention_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048
+        ],
+        "bytes": 4096,
+        "start": 7884248,
+        "end": 7888343,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.input_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048
+        ],
+        "bytes": 4096,
+        "start": 196187672,
+        "end": 196191767,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.gate.weight",
+        "dtype": "BF16",
+        "shape": [
+          256,
+          2048
+        ],
+        "bytes": 1048576,
+        "start": 196191768,
+        "end": 197240343,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.shared_expert.down_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048,
+          512
+        ],
+        "bytes": 2097152,
+        "start": 197240344,
+        "end": 199337495,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.shared_expert.gate_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          2048
+        ],
+        "bytes": 2097152,
+        "start": 199337496,
+        "end": 201434647,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.shared_expert.up_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          2048
+        ],
+        "bytes": 2097152,
+        "start": 201434648,
+        "end": 203531799,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.mlp.shared_expert_gate.weight",
+        "dtype": "BF16",
+        "shape": [
+          1,
+          2048
+        ],
+        "bytes": 4096,
+        "start": 203531800,
+        "end": 203535895,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.post_attention_layernorm.weight",
+        "dtype": "BF16",
+        "shape": [
+          2048
+        ],
+        "bytes": 4096,
+        "start": 203535896,
+        "end": 203539991,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.k_norm.weight",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "bytes": 512,
+        "start": 203539992,
+        "end": 203540503,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.k_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          2048
+        ],
+        "bytes": 2097152,
+        "start": 203540504,
+        "end": 205637655,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.q_norm.weight",
+        "dtype": "BF16",
+        "shape": [
+          256
+        ],
+        "bytes": 512,
+        "start": 205637656,
+        "end": 205638167,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      },
+      {
+        "name": "model.language_model.layers.3.self_attn.v_proj.weight",
+        "dtype": "BF16",
+        "shape": [
+          512,
+          2048
+        ],
+        "bytes": 2097152,
+        "start": 205638168,
+        "end": 207735319,
+        "url": "https://huggingface.co/Qwen/Qwen3.5-35B-A3B/resolve/62704185bd97ad488cfc404e7caea797396b74dc/model.safetensors-00014-of-00014.safetensors",
+        "shard_bytes": 2224764664
+      }
+    ]
+  }
+}

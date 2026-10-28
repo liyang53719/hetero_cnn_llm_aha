@@ -1,0 +1,10 @@
+{
+  "status": "PASS_PREPARATION_ONLY_NOT_COMPILED_OR_EMITTED",
+  "checks": [
+    "verified901baseline_and106jars",
+    "exact_path_rebind",
+    "fresh_output_only",
+    "works_under_python_O"
+  ],
+  "pins": 1191
+}

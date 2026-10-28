@@ -1,0 +1,93 @@
+{
+  "status": "PASS_READ_ONLY_ACTUAL_EMISSION_AUDIT_NOT_NUMERICAL",
+  "artifact_count": 12,
+  "artifacts": {
+    "EMITTER_SCOPE.txt": {
+      "bytes": 229,
+      "sha256": "a63aa0a44f831ea7f2603ebdf4db87c63e2f733cd6669247d8e4dcaa258f5a22"
+    },
+    "HostBlockTopV4.lo.fir": {
+      "bytes": 222447416,
+      "sha256": "4a8d61e13fc80db852f245da56446c1460050d2b958743ea26778d507298685b"
+    },
+    "HostBlockTopV4.sv": {
+      "bytes": 192485469,
+      "sha256": "5f9e60ab5993c4cc22b1dc2828d33080e62900a940817c4f400b57007b770dd6"
+    },
+    "accepted-original-annotations.json": {
+      "bytes": 1353384,
+      "sha256": "e40aecae9e15a890acd6eacabd6974d9470434cc83b40c847a0d50096b2bdeee"
+    },
+    "actual_top_ports.tsv": {
+      "bytes": 2548,
+      "sha256": "aa2e19f9818eef5356cdca910c3da3ba388dc552fa4afc558fcb9dd2fc6dceee"
+    },
+    "canonical-low-identity.json": {
+      "bytes": 237,
+      "sha256": "272b705b82a5a8464c1fd41d5751fcb36daa3f534cd33d04f07691a4acba2950"
+    },
+    "high-annotations.json": {
+      "bytes": 1353382,
+      "sha256": "c91a44019c7fcbe45371a9d0609c8a694fc007da5cbbe903bf8c593ade2a52aa"
+    },
+    "low-annotations.json": {
+      "bytes": 1680091,
+      "sha256": "375093f8fe2d671eca75acf2cca8f22eba7daa050cb19630d2c7b67487603e15"
+    },
+    "official-bridge-memory-high.fir": {
+      "bytes": 99645501,
+      "sha256": "55c2b7fcff6e3b5d5b291797e0783b369ee3a73b90c57548f90ba403d888a343"
+    },
+    "official-emission-ast.fir": {
+      "bytes": 191142198,
+      "sha256": "17ccafb65bdf0f4d94ec049e3197f7dc12c024bc0aac4b782453450107777b2f"
+    },
+    "official-emission-instances.tsv": {
+      "bytes": 12705,
+      "sha256": "570b2d71cf245b2fc90f2ad50c7f62c640186ae1f5c14039c38ec60f4ccf05d6"
+    },
+    "original-high-reference.json": {
+      "bytes": 352,
+      "sha256": "cdca48d22c6f2cd9df678712227c60f4f659667f44083303345cc79129141ff8"
+    }
+  },
+  "annotation_total": 8985,
+  "dont_touch": 8984,
+  "annotation_changes": "onlyTargetDir",
+  "ports": {
+    "total": 85,
+    "inputs": 41,
+    "outputs": 44,
+    "launch_bits": 844,
+    "axi_data_bits": 512
+  },
+  "expanded_hierarchy_instances": 1056,
+  "external_bindings": {
+    "qwen2_matrix_command_endpoint": 8,
+    "tc_clk_gating": 8,
+    "idma_backend_rw_axi_flat_wrap": 1
+  },
+  "logical_matrix_macs": 4096,
+  "shared_vector_bank_lanes": 32,
+  "whole_top_alu_instances": 81,
+  "whole_top_scalar_instances": 17,
+  "memory_representations": 18,
+  "total_DefMemory_nodes": 927,
+  "sv_modules": 92,
+  "fma_library": {
+    "bytes": 150095,
+    "sha256": "09e714962628ea2460e03df1d75872976578d2af34a3ec76da0703cd884e62ac"
+  },
+  "fma_modules": [
+    "MulAddRecFNToRaw_preMul_e8_s24",
+    "HeteroBF16FmaPre",
+    "HeteroBF16FmaMul",
+    "MulAddRecFNToRaw_postMul_e8_s24",
+    "HeteroBF16FmaPost",
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24",
+    "RoundRawFNToRecFN_e8_s24",
+    "HeteroBF16FmaRound",
+    "PhysicalFmaStageLibrary"
+  ],
+  "scope": "Simulation-backend emission and structural identity only; physical providers not linked here; no numerical test or final frozen RTL PASS; no utilization measurement."
+}

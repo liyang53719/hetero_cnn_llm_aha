@@ -1,0 +1,40 @@
+{
+  "status": "REQUIRES_VERIFIED_PARENT_CLASSES_AND_HIGH_COMPLETE_HELPER_SOURCE_RECOVERY_NOT_FRESH_CHECKOUT_END_TO_END",
+  "parent_source_commit": "7afcf3adf0d9265a8e746ecc55979c80fc34b6d2",
+  "parent_sources": 155,
+  "parent_compile": "Compile the published 155-source closure with its exact ordered toolchain and updated 384 MiB diagnostic helper. Verify the 860 class identities against BASELINE_CLASS_PINS.json. This bundle does not contain classes or generated IR.",
+  "first_helper_compile_sources": [
+    "HostLatestHighSimulationEmitter.scala",
+    "HostLatestDenseAccMemoryLowering.scala",
+    "HostMatrixResultFifoMemoryLowering.scala",
+    "RetainedBackendCircuitGate.scala",
+    "RetainedServicePhaseObserver.scala",
+    "RetainedEndpointPortContract.scala",
+    "PhysicalFmaStageLibrary.scala",
+    "InspectFreshHostBackendInputs.scala"
+  ],
+  "first_helper_compile": "Compile these eight source files together into a fresh copy of the 860 baseline classes using the same 106 ordered JARs, Chisel 6.7.0 plugin and Scala 2.13.16 compiler. Do not run the historical HostLatestHighSimulationEmitter main. Verify all 901 resulting class files against HELPER_CLASS_PINS.json; do not inherit a compile PASS.",
+  "official_parser_inventory": "Use InspectFreshHostBackendInputs against the accepted original high/annotations to reproduce exact official parser roundtrip and four module identities. New output directory is required. No custom lowering occurs in this stage.",
+  "fresh_emitter_sources": [
+    "FreshHostHighSimulationEmitter.scala",
+    "FreshHostDenseAccMemoryLowering.scala",
+    "FreshHostMatrixResultFifoMemoryLowering.scala"
+  ],
+  "materialize": "Run materialize_emitter.py with explicit --original-high, --annotations and a new --output directory. Inputs must match the fixed reviewed hashes. Only two path literals change; a resulting source hash is recorded. Different runtime paths constitute new source bytes and require fresh execution.",
+  "prepare": "Run prepare_run_inputs.py with explicit --baseline-classes (901), --classpath-file, --java-home, --rebound-emitter, --original-high, --annotations and a new --output directory. It checks exact classes/JARs/JDK/source hashes and writes INPUT_PINS.json with local paths; it never compiles or emits.",
+  "execute_after_resource_review": [
+    "python run_once.py compile --execute-approved-once",
+    "python run_fma_r2.py fma --execute-approved-once",
+    "python run_once.py host --execute-approved-once"
+  ],
+  "known_archived_failure": "The exact original run_once.py fma branch passes an absolute output path and fails Compiler.requireTargetDir. Never use that branch for retry; the separately identified run_fma_r2.py fixes only the output argument and fresh attempt directory. R1 evidence is preserved.",
+  "missing_external_inputs": [
+    "Freshly rebuilt high/annotations and exact901classbaseline, not stored in Git",
+    "Original actual endpoint/iDMA provider source closure for downstream binding",
+    "Real128token stimuli and independent references for allfiveprofiles"
+  ],
+  "identity_boundary": "A rebuilt high with different source-info paths or hardware bytes is a new identity; do not alter fixed hashes automatically or claim this historical emission. Independently inspect/review/pin the new input first.",
+  "qualification": "Helper compile, parser inventory and simulation-backend emission only; not full128token numerical or final frozen RTL PASS. Full numerical0/5 and finalRTL0/5 at preparation.",
+  "first_helper_compile_entry": "prepare_helper_inputs.py verifies explicit --baseline-classes (860), --classpath-file, --java-home, --original-high, --annotations and materializes a new --output. Then run_gate.py compile --execute-approved-once and run_gate.py inspect --execute-approved-once. The exact eight helper sources and bounded runner are included; newly produced classes must be checked against HELPER_CLASS_PINS.json before the next preparer.",
+  "baseline_path_caveat": "Chisel source-info literals may make rebuilt class/high hashes differ with compilation paths even when all155source files are available. A mismatch is a hard stop for this exact recovery identity, not permission to learn hashes. Rebuild the complete source closure with its documented paths/toolchain or independently audit and record a NEW baseline/high identity before adapting helper pins. This package does not claim fresh-checkout end-to-end reproduction."
+}

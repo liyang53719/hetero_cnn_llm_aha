@@ -1,0 +1,70 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED_ARCHIVAL_GRAPH_INCOMPLETE",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PACKAGE}/source/GdnRuntimeRmsNormOwnerV3.scala",
+    "{PACKAGE}/source/HostBlockCommandsV4.scala",
+    "{PACKAGE}/source/HostBlockTopV4.scala",
+    "{PACKAGE}/source/HostRuntimePrefixLeaseWiringV8.scala",
+    "{PACKAGE}/source/QwenOwnerProtocol.scala"
+  ],
+  "exact_inverse_verified": true,
+  "actual_sources": 5,
+  "final_source_closure": 29,
+  "baseline_count": 961,
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21 full314-file tree, exact symlink_target identities preserved",
+    "RUN": "Fresh output root with home/tmp/classes",
+    "BASELINE": "Exact961=(855 ancestor minus3 original RMS)+109 inherited classes; complete class source/build closure external",
+    "JAR_CP": "106 ordered jars in pinned sibling DEPENDENCY_PINS.json",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin",
+    "PACKAGE": "This package directory"
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "requirements": [
+    "Supply exact class/source/build closure,106 jars,314-file JDK and original bounded strict supervisor; no binaries bundled.",
+    "Preserve symlink kind/target/size/hash;129 inherited symlink targets retained unchanged. Do not relax verifier.",
+    "Verify inputs before/after; caps metadata is not executable supervision or launch permission.",
+    "Only5 sources compiled; final29 includes24 inherited sources.",
+    "Historical preparation8 models include actual-directory absence and are precompile-only. Public79 functional models are distinct.",
+    "No project main/elaboration/RTL/DUT/numeric/automatic retry; complete archival graph remains unverified."
+  ]
+}

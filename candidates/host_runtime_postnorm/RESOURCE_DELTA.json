@@ -1,0 +1,71 @@
+{
+  "scope": "Unchanged original RMS numeric storage plus new control/provenance metadata, not synthesized area or sameRTL proof",
+  "existing_numeric_storage": {
+    "cache_count": 3,
+    "elements_per_cache": 32,
+    "bits_per_element": 512,
+    "cache_bits": 49152,
+    "fp32_working_register_count": 4,
+    "working_register_bits": 128,
+    "total_bits": 49280,
+    "unchanged": true
+  },
+  "new_counter_register_bits": 160,
+  "new_counter_register_count": 5,
+  "counter_bits": 32,
+  "memory_returned_counter": "Reuses existing sequence register",
+  "additional_unquantified": [
+    "retained phase",
+    "full accepted specialized job/result",
+    "publication and held obligations",
+    "Commands/Prefix full Host and transaction64",
+    "Residual1 producer proof",
+    "postNorm pending/completion proof"
+  ],
+  "new_fpu": false,
+  "new_matrix": false,
+  "new_dma": false,
+  "new_memory_arbiter": false,
+  "new_scalar_bank": false,
+  "new_local_formatter": false,
+  "existing": {
+    "hub_clients": 17,
+    "memory_client": 1,
+    "adapter_clients": 11,
+    "shared_bank_lanes": 32,
+    "matrix_macs": 4096,
+    "authority_kind_bits": 4
+  },
+  "authority": {
+    "mode": 8,
+    "kind": 1,
+    "stage": 69,
+    "input_phase": 0,
+    "postnorm_phase": 3,
+    "scalar_slot": 8,
+    "format_slot": 9,
+    "new_kind10": false,
+    "new_stage78": false
+  },
+  "operations_per_row": {
+    "scalar": "5*H+H/16+44",
+    "format": "H",
+    "memory": "H/8",
+    "output_ack_bytes": "2*H"
+  },
+  "m128_contracts": {
+    "H1024": {
+      "scalar": 669184,
+      "format": 131072,
+      "memory": 16384,
+      "output_ack_bytes": 262144
+    },
+    "H2048": {
+      "scalar": 1332736,
+      "format": 262144,
+      "memory": 32768,
+      "output_ack_bytes": 524288
+    }
+  },
+  "hardware_qualification": false
+}

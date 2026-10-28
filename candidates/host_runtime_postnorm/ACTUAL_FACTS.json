@@ -1,0 +1,62 @@
+{
+  "status": "PASS_ACTUAL_POSTNORM_5_SOURCE_961_BASELINE_COMPILER_ONLY",
+  "compiled_source_count": 5,
+  "baseline_class_count": 961,
+  "new_class_count": 39,
+  "new_class_bytes": 2683287,
+  "final_source_closure_count": 29,
+  "final_recompiled_source_count": 5,
+  "final_class_count": 148,
+  "inherited_source_count": 24,
+  "inherited_class_count": 109,
+  "wall_seconds": 59.21023285598494,
+  "cpu_seconds_sampled": 48.43,
+  "peak_rss_bytes": 557105152,
+  "peak_tree_bytes": 18492889,
+  "pre_post_pin_checks": 3347,
+  "strict_owned_compiler_group_terminal": true,
+  "compile_log_empty": true,
+  "historical_transitive_graph_verified": false,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT",
+    "numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 15613,
+    "sha256": "3d3235dd6ce0f923c61520fdaa6e249d6ad2210dba452aa9114c884d0c0c7214"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_checks_each_mode": {
+    "rms_source": 80,
+    "rms_mutations": 21,
+    "rms_models": 19,
+    "prefix_source": 71,
+    "prefix_mutations": 68,
+    "prefix_models": 24,
+    "commands_source": 89,
+    "commands_required_defenses": 62,
+    "commands_mutations": 62,
+    "commands_models": 36
+  },
+  "historical_prepare_metadata_models_before_actual_only": 8,
+  "total_author_models_historically": 87,
+  "publication_functional_models_each_mode": 79,
+  "additional_independent_review_models": 15,
+  "independent_source_contracts": 47,
+  "independent_mutations": 31,
+  "publication_compiler_executions": 0,
+  "admission": "Attention2/4 M128 only; GDN1/3 M16/M128. Leaf1..128 is not whole-chain support. Cold generation0; private staging, launch/final roots remain sealed."
+}

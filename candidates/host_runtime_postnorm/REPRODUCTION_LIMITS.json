@@ -1,0 +1,20 @@
+{
+  "historical_transitive_graph_verified": false,
+  "active_closure": {
+    "status": "PASS_EXACT_ACTIVE_SOURCE_CLASS_TOOL_PIN_CLOSURE_NOT_ARCHIVAL_GRAPH",
+    "unique_pin_count": 1944,
+    "expanded_active_manifest_count": 13,
+    "nested_pin_record_count": 3748,
+    "historical_json_boundaries": 203,
+    "record": {
+      "bytes": 906689,
+      "sha256": "7e7b67f60b93957da725b46ffbae990bf177b1a113e00977c714560fbf3d16de"
+    }
+  },
+  "inherited_archival_diagnostic": {
+    "path": "../host_runtime_output/REPRODUCTION_LIMITS.json",
+    "bytes": 960,
+    "sha256": "bb258edec82cb6f2a727927487ec66d1a109e613627bb74a23351a239917c7a1"
+  },
+  "scope": "Current active compiler inputs and source/class lineage exact. Historical boundary JSON files pinned, not recursively proved complete. Inherited GQA diagnostic519 unresolved899 budget-skipped remains historical, not a fresh scan or repaired graph. No full-history PASS or self-contained reproduction."
+}

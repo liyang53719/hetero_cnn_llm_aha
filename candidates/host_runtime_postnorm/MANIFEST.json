@@ -1,0 +1,115 @@
+{
+  "status": "TEMP_POSTNORM_INCREMENTAL_TYPECOMPILE_REQUIRES_PARENT_ARCHIVAL_GRAPH_INCOMPLETE_NOT_HARDWARE",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 1973,
+      "sha256": "1a2c75502608f9d6de63f4d5616e5f8730d01fe4211badf681b520856d61244c"
+    },
+    {
+      "path": "CLASS_LINEAGE.json",
+      "bytes": 4612,
+      "sha256": "12e72c4d8191a5ebe01b9b7cc234ac48103bd59d1b4081c955acf252596bf9f6"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 5340,
+      "sha256": "bdf561165e509bcfa0de7ca760fa6d6d398e0df9871f9aa719da0b0f803f6a50"
+    },
+    {
+      "path": "HISTORICAL_FINDINGS.json",
+      "bytes": 5039,
+      "sha256": "4e2bce30afa4b3bff22aee6c74b98168fc225803e31e7f9255e179ffea39837a"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 5476,
+      "sha256": "e4554299039067f3f1e7aaf181c13dd5860b0dcbd0dfae88dc94bea7c0edad38"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 2569,
+      "sha256": "c048e6888517f0e16ceefb5ec71cacc1e154514520644e1537fca88721f6a89d"
+    },
+    {
+      "path": "REPRODUCTION_LIMITS.json",
+      "bytes": 958,
+      "sha256": "e901d36de3f8be6cfad891434fcd2b6a3860f7de82d1e011afe9f5a707efd35e"
+    },
+    {
+      "path": "RESOURCE_DELTA.json",
+      "bytes": 1804,
+      "sha256": "769b771fe9966b260a2105c562a8293515d25764fb35f8ab2a7b2e76216b592c"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 8667,
+      "sha256": "3c8624b4771fe197d41a1b1d09d232e2a17a201c76f0a1ecf6a7053bee4f5405"
+    },
+    {
+      "path": "SOURCE_PROVENANCE.json",
+      "bytes": 1335,
+      "sha256": "f889847d34d67247b888707dfb0fd6942ace564aae4a43ef62420d7fdfc510c4"
+    },
+    {
+      "path": "check_commands_postnorm.py",
+      "bytes": 9787,
+      "sha256": "bf1e9599ad84a3882421a32f08bfd76f9a2e26c8784e9963945ebc89c64f376a"
+    },
+    {
+      "path": "check_postnorm_prefix.py",
+      "bytes": 5798,
+      "sha256": "bdf61d55da4b6187ec4a30d1496b0fab7fd4038772653bdcd567651fac5d8fc0"
+    },
+    {
+      "path": "check_rms_kernel.py",
+      "bytes": 7142,
+      "sha256": "4a6994488c117affd0e25d5fb00d9d94179c3fdf3edd75148a0de494b15f0fe4"
+    },
+    {
+      "path": "source/GdnRuntimeRmsNormOwnerV3.scala",
+      "bytes": 17137,
+      "sha256": "d366a4d3165ab189366f1c9ff8c3f9c596940e15e46c68a0b7c9000931b43df8"
+    },
+    {
+      "path": "source/HostBlockCommandsV4.scala",
+      "bytes": 172293,
+      "sha256": "07bc6dd388e893e7db908fbf7407a609932f41f71526d6961124d4be5c42b37b"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 26192,
+      "sha256": "5e6095413f435d3decfd45b2d7fedb991b18bf0ed9ed096168b8ba7dcaaa00d3"
+    },
+    {
+      "path": "source/HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 69236,
+      "sha256": "28b0be0e131b90c6ae10c77451ce4b0cf8e92423319484593091d693f3f82720"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 90565,
+      "sha256": "7759a1de9e4e9832f5ba7ad71f06c536e50b014abd4423c30368bbfc63c6737f"
+    },
+    {
+      "path": "tests/test_commands_postnorm.py",
+      "bytes": 14193,
+      "sha256": "2dafc6ff37d423f93b7407a768f00480f669c7500b8bc6bc37d51663ce9ab672"
+    },
+    {
+      "path": "tests/test_postnorm_prefix.py",
+      "bytes": 9074,
+      "sha256": "8c2090c033eb5a626f22a50b55dc43f23810de2e3ada394a65220c6acfdb14e4"
+    },
+    {
+      "path": "tests/test_rms_kernel.py",
+      "bytes": 9159,
+      "sha256": "5c80f335e3acb9b395fe1fd187db4774eec13d7baf7139265b5b49943c1308b7"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1115,
+      "sha256": "9552c2c37b3c456a466f72f90f01dda37d263c185d3b4eec928c54f8819c3e30"
+    }
+  ]
+}

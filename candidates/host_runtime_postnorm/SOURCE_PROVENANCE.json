@@ -1,0 +1,29 @@
+{
+  "status": "ORIGINAL_RMS_SOURCE_AND_THREE_REPLACED_BASELINE_CLASSES_EXACT",
+  "source": {
+    "name": "GdnRuntimeRmsNormOwnerV3.scala",
+    "bytes": 13932,
+    "sha256": "f469d9fbb4435ff623cc49afa0696245cb0ed3c764b66dac0cd6e564a13667ae"
+  },
+  "original_actual_receipt": {
+    "bytes": 21273,
+    "sha256": "49820ffeb4f59d1e12f64d2db71a3fc25d467f0198815eb915495fd6dbca5eac"
+  },
+  "original_identity_review": {
+    "bytes": 52459,
+    "sha256": "6c16bd910b46e954872f2df5f1833e8982e58ddfd348b4a27a399e25ca95557d"
+  },
+  "original_classes_count": 3,
+  "original_classes_digest": "06184c4e4d28cb8bb78569096ccc05979c70cb4cb1a9b54a3120573897e67326",
+  "replaced_classes_digest": "06184c4e4d28cb8bb78569096ccc05979c70cb4cb1a9b54a3120573897e67326",
+  "original_record": {
+    "bytes": 7831,
+    "sha256": "e6a0d795563ac25c42f68e21abc0ad4ad69594d5c836f18f3344c1eb3654b31f"
+  },
+  "other_inherited_provenance": {
+    "path": "../host_runtime_output/SOURCE_PROVENANCE.json",
+    "bytes": 1753,
+    "sha256": "6aa18b6cb6ace916829bba53c83803957877dad63ddeb4dff0f6bec7b1103dd5"
+  },
+  "scope": "The current runtime RMS numerical source and all three actual class bytes match r2 evidence. This batch replaces the entire SourceFile family, not the legacy fixed RMS classes. A new specialized result does not certify arithmetic or DUT behavior."
+}

@@ -1,0 +1,110 @@
+{
+  "status": "TEMP_REAL_GATEDNORM_SOURCE_COMPILER_ONLY_REQUIRES_PARENT",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 3042,
+      "sha256": "634758c4e6f4c599d5088654905b8dc85117acccee9f0f6885051e0241ce7d05"
+    },
+    {
+      "path": "CLASS_BASELINE.json",
+      "bytes": 1274,
+      "sha256": "4c58e0a168c7928e299b1a8d895ab946d436141674c2928981e94793491ef181"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 3179,
+      "sha256": "a1a9616f19b3c0d023488eaf2e10ea398f0350c86165e6c18aa2ab4c4f3b1479"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 5332,
+      "sha256": "ac6d054e685193dc18abe43f382a918a0f695f9ef3c6a89e93a59eec53bebe65"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 4488,
+      "sha256": "9bfd71b85222096fe5a9f5a5980dde5f433a51ac71993655cb368c6f2b5aaf77"
+    },
+    {
+      "path": "RESOURCE_NOTES.json",
+      "bytes": 1205,
+      "sha256": "bf342dd0deb81cc0a0ce9741e5cf9f1dac6c0730aae89f875cd4c3d64e6e050d"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 9798,
+      "sha256": "ac81091cb7a33f8a0181b0fcc0aea6f379fb2124a5815d8a1728bb4bb09dcb76"
+    },
+    {
+      "path": "check_commands.py",
+      "bytes": 5235,
+      "sha256": "c0a0298161c541f6e56b47d4d8a96276657573d363bf64ad8b077e8f91883fe5"
+    },
+    {
+      "path": "check_source.py",
+      "bytes": 7378,
+      "sha256": "a02b2dcd3a980e9e10019f39e7850810dad015eaed5e51792219041462a9b5de"
+    },
+    {
+      "path": "source/GdnRuntimeGatedNormOwnerV10.scala",
+      "bytes": 12750,
+      "sha256": "266352199366b7a9497e1db6cbe4cb832d94bfb3e2bfc21d01a7eddd10594341"
+    },
+    {
+      "path": "source/GdnRuntimeGatedNormProtocolV10.scala",
+      "bytes": 1720,
+      "sha256": "b694be32a8480d791650bb4d6a50cc386792d61f44a4b8dcc1e41b6f5ad304b8"
+    },
+    {
+      "path": "source/HostBlockCommandsV4.scala",
+      "bytes": 148109,
+      "sha256": "5b44ddfa9e866823a4146eb91c21ed3748bfef6273075374f7af288e181117df"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 23351,
+      "sha256": "5ca40c99515d4bf2269d354de37af92cee0aac4f3088c4cc7d9e270c711ec589"
+    },
+    {
+      "path": "source/HostRuntimeChunkWiringV9.scala",
+      "bytes": 17968,
+      "sha256": "7590e6c1732b9ae66c77eacabedbd95091f716d8e9861a747ce0af7885c5b183"
+    },
+    {
+      "path": "source/HostRuntimeGatedDependencyV10.scala",
+      "bytes": 553,
+      "sha256": "7942dce9ba553e836a47a0cac760e059b5ba224a25c8d8e7a2bb2e8f777987e4"
+    },
+    {
+      "path": "source/HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 18707,
+      "sha256": "fa447a7c7564de4a5d03a5f657fb85a1f5318fb0530585e548acedd197c24cc3"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 69366,
+      "sha256": "7155b5f0f4438e3d6487b122a4160feef8819b6e17cdf1a468da4b356910f701"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 22249,
+      "sha256": "f0f64d1a9a3750404191dda1a1fc1e5a18f12c0c0b9d57d899a26212f78be67f"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 4991,
+      "sha256": "0fadd41884239259b528171fa8d66c3d7784cd2507963e3e253c46807c11f518"
+    },
+    {
+      "path": "tests/test_gated_contract.py",
+      "bytes": 4047,
+      "sha256": "5b283ce4d13bfb4dfb8dfd7fe70a9a6d4d7cdc75b83ca31277c8a40156fa0441"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1115,
+      "sha256": "9552c2c37b3c456a466f72f90f01dda37d263c185d3b4eec928c54f8819c3e30"
+    }
+  ]
+}

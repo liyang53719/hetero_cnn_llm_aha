@@ -1,0 +1,39 @@
+{
+  "scope": "Source declared fixed payload and partial metadata; NOT elaborated/synthesized area or complete register total",
+  "new_owner_payload_bits": 10240,
+  "owner_payload_groups": {
+    "gamma_128x32": 4096,
+    "core_128x16": 2048,
+    "gate_128x16": 2048,
+    "output_128x16": 2048
+  },
+  "commands_two_decoded_tensor_bits": 798,
+  "additional_unquantified_control": [
+    "owner ACK/Scalar/Format counters,state,terminal snapshot",
+    "Prefix/Chunk provenance metadata and held job control"
+  ],
+  "unchanged": {
+    "adapter_client_count": 11,
+    "hub_logical_clients": 17,
+    "shared_vector_bank_count": 1,
+    "bank_lanes": 32,
+    "matrix_mac_definition": 4096
+  },
+  "new_hub_clients": 0,
+  "new_arithmetic_bank": 0,
+  "new_dma": 0,
+  "new_local_formatter": 0,
+  "format_utilization": "Only lane0 effective per request, other31 physical lanes +0; no32-useful-results-per-cycle claim",
+  "expected_success_contract_not_measured": {
+    "per_head_scalar": 1284,
+    "per_head_format": 256,
+    "per_head_memory_ack": 12,
+    "per_job_gamma_reads": 8,
+    "M128_H32": {
+      "scalar": 5259264,
+      "format": 1048576,
+      "memory_ack": 49160,
+      "output_bytes": 1048576
+    }
+  }
+}

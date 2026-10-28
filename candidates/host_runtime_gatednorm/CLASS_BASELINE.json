@@ -1,0 +1,32 @@
+{
+  "status": "REQUIRES_PARENT_CLASS_BYTES_AND_SOURCE_BUILD_CLOSURE_NOT_INCLUDED",
+  "base_commit": "1c7e14b03a3ec8d21099d74147d923cad93bb0dd",
+  "base_package": "../host_chunk_top_dispatch",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 2973,
+      "sha256": "bbfb352aa4155fc5172d7a513e55772b73ac0f158973d518cf914ae12a72d6b7"
+    },
+    "CLASS_DELTA.json": {
+      "bytes": 1844,
+      "sha256": "b37a25be9b2127c2eb7f06bd96ffd0e90c3a5a0fdd95af94674ecb003b59ac97"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 2512,
+      "sha256": "08f0f90ff94a1740d140299a0fbb892ecf100968e898c899dcd796dcbc5bf7bc"
+    }
+  },
+  "original_class_count": 855,
+  "removed": [],
+  "retained_class_count": 855,
+  "retained_class_bytes": 13471647,
+  "canonical_retained_sha256": "4915e5ef11794e9fb11b7e829d1d5d706d5cb32fdd4ac45e2b00dff597d74ed7",
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; bytes integer; trailing LF; keys relative/bytes/sha256 only",
+  "tool_dependency_changes": 0,
+  "dependency_metadata": {
+    "commit": "65cbbb3e92079a859e4d4d8509a6b4383ba690fc",
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  }
+}

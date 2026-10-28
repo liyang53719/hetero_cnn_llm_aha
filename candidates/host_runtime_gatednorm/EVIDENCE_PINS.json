@@ -1,0 +1,89 @@
+{
+  "scope": "Digest-only evidence. Historical manifest/checker scopes are precompile records; actual compiler outcome is separate. No private paths/tool/class/runtime bytes are published.",
+  "records": {
+    "candidate_source_manifest": {
+      "bytes": 2646,
+      "sha256": "99643acb4e7ae748d68bfd3cdc524acc0e4d80f3fbb1d74588a97b3e2523f49d"
+    },
+    "candidate_source_set": {
+      "bytes": 6149,
+      "sha256": "cd4aedf55db622fb29787ac79238a06f0d97976673352062e322efc3f6afdeb0"
+    },
+    "actual_summary": {
+      "bytes": 2916,
+      "sha256": "37d6a08b7d6d6e4b977ca5f4b7dc28b113a0843f00640efdb72c5db5dc5dfa4d"
+    },
+    "actual_receipt": {
+      "bytes": 37975,
+      "sha256": "60a92f92b270fe9c4c6a425725755bbc5135bfc7d8194d04aba882b05d657bb9"
+    },
+    "actual_class_identities": {
+      "bytes": 120038,
+      "sha256": "2a61fa0775e256e47f67aab88c0657dad8226b6c504a533984a27a338289d8ff"
+    },
+    "actual_command": {
+      "bytes": 38851,
+      "sha256": "fdf886167578531e00f1a4ac0aa7543cf8990ccf805b6c6639f137bc0022b71e"
+    },
+    "actual_input_pins": {
+      "bytes": 662084,
+      "sha256": "ed660f050b04a1e0456933d10642a99a5952e093a2ff48aa218e3ac7ee77d2d2"
+    },
+    "actual_freeze": {
+      "bytes": 1955,
+      "sha256": "c536484817bfb93076fc1ce0afdd6b46b1e0300556433d42bf9f8654a53b6df9"
+    },
+    "actual_runner": {
+      "bytes": 8414,
+      "sha256": "09466cfd5f8907b26048fb9da5037f62e6d804ddd0610cab15fd7cf49752f5c1"
+    },
+    "original_source_checker": {
+      "bytes": 7202,
+      "sha256": "cd429f49cf7c539e8f9c13fc317aee91f529f1e4b3b449ec10105cced1294e03"
+    },
+    "original_commands_checker": {
+      "bytes": 5262,
+      "sha256": "92852a8e5ca217629d498660d7f8805fe8cc5a19be1067318222769bd747f4d4"
+    },
+    "source_checks_normal": {
+      "bytes": 135,
+      "sha256": "8e57f4e5a48ec92507d8d4910f3d339d5506074b806b14908e5db48bc60f02b0"
+    },
+    "source_checks_optimized": {
+      "bytes": 135,
+      "sha256": "8e57f4e5a48ec92507d8d4910f3d339d5506074b806b14908e5db48bc60f02b0"
+    },
+    "commands_checks_normal": {
+      "bytes": 358,
+      "sha256": "8eb6ca4119dd66d556b492fb231b162c9694ec509fc1dc4435fbf67a09ad2d33"
+    },
+    "commands_checks_optimized": {
+      "bytes": 358,
+      "sha256": "8eb6ca4119dd66d556b492fb231b162c9694ec509fc1dc4435fbf67a09ad2d33"
+    },
+    "contract_model_test": {
+      "bytes": 4047,
+      "sha256": "5b283ce4d13bfb4dfb8dfd7fe70a9a6d4d7cdc75b83ca31277c8a40156fa0441"
+    },
+    "final_verified_scope": {
+      "bytes": 1121,
+      "sha256": "0db4f177caa783f773de28ee83377e1da50682e7fb13a560af021239aa450e13"
+    },
+    "final_evidence_manifest": {
+      "bytes": 11165,
+      "sha256": "459a579383cf8393646efa4aa9caaa3d37f65c55cd39b13a0711f6193832f46d"
+    },
+    "final_result_and_next_gate": {
+      "bytes": 4845,
+      "sha256": "9c202d706ff5a4078eb13bc08aed94601f90fe4b6fad468eba3d9f4b29f48cbc"
+    },
+    "resource_delta_source": {
+      "bytes": 1206,
+      "sha256": "0e2a29b28b6095a544940a116f04a41f603abff0a3c9a26273236884a2bb4d26"
+    },
+    "independent_actual_audit": {
+      "bytes": 3661,
+      "sha256": "3d4664a0c76f11eb4fe32b81b8c207b87dcf5c13caec4f6699b14bedb9bc044e"
+    }
+  }
+}

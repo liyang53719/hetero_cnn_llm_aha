@@ -1,0 +1,91 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PARENT_SOURCES}/GdnRuntimeRawPrepOwnerV7.scala",
+    "{PARENT_SOURCES}/GdnRuntimeRawPrepProtocolV7.scala",
+    "{PACKAGE}/source/HostBlockCommandsV4.scala",
+    "{PACKAGE}/source/HostBlockTopV4.scala",
+    "{PACKAGE}/source/HostRuntimePrefixLeaseWiringV8.scala",
+    "{PACKAGE}/source/QwenOwnerProtocol.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+    "{PACKAGE}/../host_chunk_gradual_bridge/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+    "{PACKAGE}/../host_chunk_gradual_bridge/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+    "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeChunkLeafCollection.scala",
+    "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeChunkCoordinator.scala",
+    "{PARENT_SOURCES}/GdnRuntimeChunkLoadPrepV2Owner.scala",
+    "{PARENT_SOURCES}/GdnRuntimeChunkTransposeV2Owner.scala",
+    "{PARENT_SOURCES}/HeldDecoupledOffer.scala",
+    "{PARENT_SOURCES}/GdnChunkStateTransferOwner.scala",
+    "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeRawPrepReceiptV8.scala",
+    "{PACKAGE}/../host_chunk_top_dispatch/source/SharedMemoryArbiter.scala",
+    "{PACKAGE}/source/HostRuntimeChunkWiringV9.scala",
+    "{PACKAGE}/../host_chunk_top_dispatch/source/HostRuntimeChunkProtocolV9.scala",
+    "{PACKAGE}/source/GdnRuntimeGatedNormOwnerV10.scala",
+    "{PACKAGE}/source/HostRuntimeGatedDependencyV10.scala",
+    "{PACKAGE}/source/GdnRuntimeGatedNormProtocolV10.scala"
+  ],
+  "command_template_exact_inverse_verified": true,
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21 java; full314-file tool tree must be supplied from parent record.",
+    "RUN": "Fresh empty output root outside repository, with home/tmp/classes subdirectories.",
+    "BASELINE": "Exact855 class parent closure unchanged from prior Top dispatch; verify CLASS_BASELINE.json. Class bytes/source-build closure not bundled.",
+    "JAR_CP": "The unchanged106 ordered jars pinned by sibling host_chunk_gradual_bridge/DEPENDENCY_PINS.json at65cbbb3e; exact metadata hash in CLASS_BASELINE.json. Fetch/rebuild locally or CI; never commit binaries.",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin jar from DEPENDENCY_PINS.json.",
+    "PACKAGE": "This candidate directory.",
+    "PARENT_SOURCES": "Six historical compiler sources in SOURCE_PINS.json; not supplied. Seven unchanged sources are pinned sibling public files."
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "manual_requirements": [
+    "Supply21 exact original ancestry files incl original GdnRuntimeGatedNormOwner.scala recipe to check_source.py --parent-source-dir. Versions differ from current compiler inputs; do not substitute by basename.",
+    "check_commands.py reads pin-checked sibling host_chunk_top_dispatch/source/HostBlockCommandsV4.scala. Seven compiler sources use pinned public siblings.",
+    "Supply six historical compiler sources, exact855 source/build class closure,106 ordered jars,314-file JDK and bounded owned-process supervisor. This package is requires-parent, NOT fresh-checkout complete reproduction.",
+    "Caps are historical metadata, not executable supervision or new launch authorization. Fresh output root; pin all inputs before/after; scala.tools.nsc.Main only, no project main/elaboration/RTL/DUT/numeric or automatic retry."
+  ],
+  "not_a_claim": [
+    "fresh hermetic reproduction",
+    "common-parent compatibility",
+    "Chisel elaboration",
+    "numeric equivalence",
+    "full M128"
+  ]
+}

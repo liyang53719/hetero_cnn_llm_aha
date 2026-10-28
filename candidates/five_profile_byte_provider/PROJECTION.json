@@ -1,0 +1,39 @@
+{
+  "status": "PATH_PARAMETERIZED_SOURCE_NOT_BYTE_IDENTICAL_TO_PRIVATE_ORIGINALS",
+  "exact_copies": {
+    "memory_provider.py": {
+      "bytes": 7760,
+      "sha256": "fe3b463e26636b4d34a52fb1df974a099d48fdd5383759017db90bbd3844c512"
+    },
+    "test_memory_provider.py": {
+      "bytes": 2280,
+      "sha256": "8ecde96806b51d15e5f7e2fbeb2d8dbb489b213a5c288df405cd6b4fa5f8820d"
+    }
+  },
+  "original_reader_pins": {
+    "qwen2": {
+      "bytes": 3287,
+      "sha256": "06bf111174dd1917ec3f64c36b16b898ad1c68dd0cabfa257b1f5f68a5be88ae"
+    },
+    "qwen08": {
+      "bytes": 3620,
+      "sha256": "956820368b5ae198338a8070769d3d55fdb6ecb847e482d8c6ed370d8fb554c7"
+    },
+    "qwen35": {
+      "bytes": 7949,
+      "sha256": "4a37cf2d20de4020635b5c3fcf2a6f80ce08c569538f81eda112fceb58f23c1b"
+    }
+  },
+  "changes": [
+    "Replace private source/binding paths with explicit SHA256-to-operator-local-path lookup; preserve original binding/source hash checks and all layout arithmetic.",
+    "Qwen35 raw source records are copied in memory with resolved local path; upstream locators remain unbundled.",
+    "Program generator keeps profiles1..4 encoder body; profile0 reuses three exact hash-pinned generated metadata files from parent, not an invented published predecessor.",
+    "Integration harness writes only to a new caller-chosen result directory; it does not export test-written RW payloads."
+  ],
+  "not_claimed": [
+    "Full projected provider integration rerun",
+    "MultiGB payload rehash during publication",
+    "Frozen-current C++ backend or DUT execution",
+    "Standalone fresh-checkout reproduction"
+  ]
+}

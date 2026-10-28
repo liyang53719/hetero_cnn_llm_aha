@@ -1,0 +1,156 @@
+{
+  "status": "BYTE_PROVIDER_ONLY_NOT_DUT",
+  "profiles": [
+    {
+      "profile": 0,
+      "tensor_streams": 14,
+      "tensor_bytes": 188502016,
+      "ro_allocations": 16,
+      "transport_checks": 118,
+      "status": "BYTE_PROVIDER_ONLY_NOT_DUT",
+      "numeric_pass": false,
+      "test_writes_exported": false,
+      "timing_model": false
+    },
+    {
+      "profile": 1,
+      "tensor_streams": 16,
+      "tensor_bytes": 44470880,
+      "ro_allocations": 18,
+      "transport_checks": 127,
+      "status": "BYTE_PROVIDER_ONLY_NOT_DUT",
+      "numeric_pass": false,
+      "test_writes_exported": false,
+      "timing_model": false
+    },
+    {
+      "profile": 2,
+      "tensor_streams": 13,
+      "tensor_bytes": 36983808,
+      "ro_allocations": 15,
+      "transport_checks": 117,
+      "status": "BYTE_PROVIDER_ONLY_NOT_DUT",
+      "numeric_pass": false,
+      "test_writes_exported": false,
+      "timing_model": false
+    },
+    {
+      "profile": 3,
+      "tensor_streams": 22,
+      "tensor_bytes": 1688220352,
+      "ro_allocations": 24,
+      "transport_checks": 149,
+      "status": "BYTE_PROVIDER_ONLY_NOT_DUT",
+      "numeric_pass": false,
+      "test_writes_exported": false,
+      "timing_model": false
+    },
+    {
+      "profile": 4,
+      "tensor_streams": 19,
+      "tensor_bytes": 1673163776,
+      "ro_allocations": 21,
+      "transport_checks": 139,
+      "status": "BYTE_PROVIDER_ONLY_NOT_DUT",
+      "numeric_pass": false,
+      "test_writes_exported": false,
+      "timing_model": false
+    }
+  ],
+  "tensor_streams": 84,
+  "tensor_bytes": 3631340832,
+  "source_files_verified": 88,
+  "source_bytes_verified": 3534006784,
+  "export_profiles": [
+    {
+      "profile": 0,
+      "views": 16,
+      "allocations": 37,
+      "observations": 20,
+      "observed_bytes": 22544384,
+      "input_sha256": "c5c6c573b10cf38f398a265d7174400e7318ee7ffcd5a6307e9c8c025682c7af",
+      "views_sha256": "bd49f392764d0a91d14d501c6ae91b41c816c3e09c11e0cead13d060ef27c9c2"
+    },
+    {
+      "profile": 1,
+      "views": 149,
+      "allocations": 38,
+      "observations": 18,
+      "observed_bytes": 13426688,
+      "input_sha256": "71d1c32d59d4acb9d38059a0301ed9399c10b72107f8ded3162170df0bb05afa",
+      "views_sha256": "32233e220aef92c94b32f40fbc17e5afe7982142c40eeda3681ef26cf4711403"
+    },
+    {
+      "profile": 2,
+      "views": 18,
+      "allocations": 38,
+      "observations": 20,
+      "observed_bytes": 8781824,
+      "input_sha256": "298eeefc478d5e6c76a3d980c39eabeea3c025f98029d74a6d65ba276c62ed6f",
+      "views_sha256": "e9b1412054786f9114a35707734a043c65edc42c962eddbdfc04cc16dccecf2a"
+    },
+    {
+      "profile": 3,
+      "views": 28,
+      "allocations": 40,
+      "observations": 14,
+      "observed_bytes": 18694144,
+      "input_sha256": "8ea8ee3bf6849dcd24260ef07e950c714a2b6747ab52c3ece00a4366197752df",
+      "views_sha256": "42e34a82836ab2134233fdbd50b47476466446bf9f719346336c1a90e3158e3c"
+    },
+    {
+      "profile": 4,
+      "views": 24,
+      "allocations": 40,
+      "observations": 16,
+      "observed_bytes": 10747904,
+      "input_sha256": "d0fcf56e7e027ff634c5240c215d42e062baf05c52f53a807f3d5b37b006ec91",
+      "views_sha256": "c3a941ca1e11b6252045f508b85ac2a203166ba0fda88554278afd4f64734869"
+    }
+  ],
+  "cross_language": {
+    "status": "CROSS_LANGUAGE_BYTE_ONLY_PASS_NOT_DUT",
+    "numeric_pass": false,
+    "profiles": [
+      {
+        "profile": 0,
+        "checks": 96,
+        "readonly_allocations": 16,
+        "probe_sha256": "0456566a6305498b830520aa832619071523b519332ba13f3f8ebb6e36294284"
+      },
+      {
+        "profile": 1,
+        "checks": 106,
+        "readonly_allocations": 18,
+        "probe_sha256": "7b994f2cdbe0343d55a9e75ebc8e2aa82d2ed8f2f4bc2ad1f5d4734dc06585a0"
+      },
+      {
+        "profile": 2,
+        "checks": 90,
+        "readonly_allocations": 15,
+        "probe_sha256": "29ec2f655dcaaeb4e9a70222da3f66db674b94cbdb95ab7e9d4df1625333b8d6"
+      },
+      {
+        "profile": 3,
+        "checks": 143,
+        "readonly_allocations": 24,
+        "probe_sha256": "3ef2e041bd1afaa17e26c86023cd961f34da4f50052628c0022ccb0206e650cf"
+      },
+      {
+        "profile": 4,
+        "checks": 126,
+        "readonly_allocations": 21,
+        "probe_sha256": "d2e0550211e1ce7f38fd16b027451e79a7dd3dd7998be7a77ec4f1d9c358a3ff"
+      }
+    ]
+  },
+  "cpp_backend_source_bundled": false,
+  "full_chisel_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "numeric_pass": false,
+  "performance_measurement": false,
+  "publication_rehashed_multigb_payloads": false,
+  "publication_repeated_integration": false,
+  "scope": "Historical byte transport/source hash evidence, independent current metadata/probe identity checks, not DUT/numeric or present backend qualification.",
+  "cpp_backend_source_frozen_in_this_package": false
+}

@@ -1,0 +1,22 @@
+{
+  "status": "EXPECTED_DETERMINISTIC_BYTES_COMPUTED_IN_MEMORY_NOT_YET_MATERIALIZED",
+  "shape": [
+    1,
+    128,
+    2048
+  ],
+  "dtype": "BF16_LE",
+  "seed": 900727680,
+  "bytes": 524288,
+  "sha256": "c32e36dd356244838b17f8aebd8a0e647c5a09198365ad32c6f7996adef237bb",
+  "generator_sha256": "fdf79e75eccd01f927d2d8f437c204ae70b90ddc2f425c8d87b63bc401e8779c",
+  "origin": "standalone experimental input; not embedding or upstream layers",
+  "same_bytes_for_layer_0_and_3": true,
+  "positions": {
+    "start": 0,
+    "count": 128
+  },
+  "initial_state": "cold; no prior GDN state or attention KV",
+  "finite_BF16_only": true,
+  "zero_every_257": true
+}

@@ -1,0 +1,104 @@
+{
+  "scope": "FINITE INTEGER RANGE CHECK / LEXICAL SOURCE REACHABILITY ONLY; NOT RTL OR NUMERICAL PASS",
+  "offset_width": 6,
+  "burst_len_default": 8,
+  "page_width_preclamp": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "active_page_width": 10,
+  "checks": [
+    {
+      "page_address_width": 6,
+      "pairs": 2080,
+      "max_axi_len": 0
+    },
+    {
+      "page_address_width": 7,
+      "pairs": 8256,
+      "max_axi_len": 1
+    },
+    {
+      "page_address_width": 8,
+      "pairs": 32896,
+      "max_axi_len": 3
+    },
+    {
+      "page_address_width": 9,
+      "pairs": 131328,
+      "max_axi_len": 7
+    },
+    {
+      "page_address_width": 10,
+      "pairs": 524800,
+      "max_axi_len": 15
+    },
+    {
+      "page_address_width": 11,
+      "pairs": 2098176,
+      "max_axi_len": 31
+    },
+    {
+      "page_address_width": 12,
+      "pairs": 8390656,
+      "max_axi_len": 63
+    }
+  ],
+  "hashes": {
+    "physical_provider_recovery_20261028T2234/providers/idma_backend_rw_axi_flat_wrap.sv": "a82bc50fac9b29df3f5f68527361f9dfac4792dfea3178b84eb488428d8d12c0",
+    "physical_provider_recovery_20261028T2234/artifact/idma_export/idma/src/backend/idma_legalizer_page_splitter.sv": "d68f39261286410b7d88ab9ff90e25a25941facf49ff700ff981abe1ba480007",
+    "physical_provider_recovery_20261028T2234/artifact/idma_export/idma/target/rtl/idma_generated.sv": "b6423c42b193e9e96416f65b9cea01cc85b8c035693b173547f25a2fbed7f7c2",
+    "physical_provider_recovery_20261028T2234/artifact/idma_export/deps/axi_stream/src/axi_stream_cut.sv": "e1b797a1f0a34a02580ac5adf5c56f78e5278d7dbc5a4c05ec8cd8fdf6051788",
+    "physical_provider_recovery_20261028T2234/artifact/idma_export/deps/axi_stream/src/axi_stream_multicut.sv": "def42c19dd7330289ab0355835f8409280ba7c67474d92ef99697809225b7f06"
+  },
+  "stream_cut_name_occurrences": {
+    "physical_provider_recovery_20261028T2234/artifact/idma_export/deps/axi_stream/src/axi_stream_cut.sv": [
+      [
+        13,
+        "module axi_stream_cut #("
+      ],
+      [
+        52,
+        "endmodule : axi_stream_cut"
+      ],
+      [
+        59,
+        "module axi_stream_cut_intf #("
+      ],
+      [
+        100,
+        "axi_stream_cut #("
+      ],
+      [
+        114,
+        "endmodule : axi_stream_cut_intf"
+      ]
+    ],
+    "physical_provider_recovery_20261028T2234/artifact/idma_export/deps/axi_stream/src/axi_stream_multicut.sv": [
+      [
+        13,
+        "module axi_stream_multicut #("
+      ],
+      [
+        54,
+        "axi_stream_cut #("
+      ],
+      [
+        91,
+        "module axi_stream_multicut_intf #("
+      ],
+      [
+        132,
+        "axi_stream_multicut #("
+      ]
+    ]
+  },
+  "files_scanned": 523
+}

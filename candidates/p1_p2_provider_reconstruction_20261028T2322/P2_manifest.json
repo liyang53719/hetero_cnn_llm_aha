@@ -1,0 +1,834 @@
+{
+  "status": "METADATA_EMITTED_NOT_DUT_VALIDATED",
+  "commands_source_sha256": "d25425714cd0b123a0b5924568311f5faa8c9116a3026d53f3e5ebcfae0df108",
+  "requires_rank3_m128_scratch_admission": false,
+  "tokens": 128,
+  "launch": {
+    "version": 1,
+    "profileId": 2,
+    "commandBase": 65536,
+    "commandLimit": 65920,
+    "commands": 22,
+    "descriptorBase": 131072,
+    "descriptorLimit": 135296,
+    "descriptors": 261,
+    "epoch": 1,
+    "regions": [
+      {
+        "base": 65536,
+        "limit": 1048576,
+        "read": true,
+        "write": false
+      },
+      {
+        "base": 1048576,
+        "limit": 38033216,
+        "read": true,
+        "write": false
+      },
+      {
+        "base": 68719476736,
+        "limit": 68728784256,
+        "read": true,
+        "write": true
+      },
+      {
+        "base": 137438953472,
+        "limit": 139586437120,
+        "read": true,
+        "write": true
+      }
+    ]
+  },
+  "schedule": [
+    {
+      "pc": 0,
+      "name": "input_norm",
+      "a": "input",
+      "b": "input_gamma",
+      "d": "input_norm",
+      "roots": [
+        0,
+        3,
+        6
+      ],
+      "extras": [],
+      "outputs": [
+        "input_norm"
+      ]
+    },
+    {
+      "pc": 1,
+      "name": "q",
+      "a": "input_norm",
+      "b": "q_weight",
+      "d": "q",
+      "roots": [
+        11,
+        14,
+        17
+      ],
+      "extras": [],
+      "outputs": [
+        "q"
+      ]
+    },
+    {
+      "pc": 2,
+      "name": "k",
+      "a": "input_norm",
+      "b": "k_weight",
+      "d": "k",
+      "roots": [
+        23,
+        26,
+        29
+      ],
+      "extras": [],
+      "outputs": [
+        "k"
+      ]
+    },
+    {
+      "pc": 3,
+      "name": "v",
+      "a": "input_norm",
+      "b": "v_weight",
+      "d": "v",
+      "roots": [
+        35,
+        38,
+        41
+      ],
+      "extras": [],
+      "outputs": [
+        "v"
+      ]
+    },
+    {
+      "pc": 4,
+      "name": "qknorm_q",
+      "a": "q",
+      "b": "q_gamma",
+      "d": "qn",
+      "roots": [
+        47,
+        50,
+        53
+      ],
+      "extras": [
+        "qgate"
+      ],
+      "outputs": [
+        "qn",
+        "qgate"
+      ]
+    },
+    {
+      "pc": 5,
+      "name": "qknorm_k",
+      "a": "k",
+      "b": "k_gamma",
+      "d": "kn",
+      "roots": [
+        62,
+        65,
+        68
+      ],
+      "extras": [],
+      "outputs": [
+        "kn"
+      ]
+    },
+    {
+      "pc": 6,
+      "name": "rope_q",
+      "a": "qn",
+      "b": "trig",
+      "d": "qr",
+      "roots": [
+        74,
+        77,
+        80
+      ],
+      "extras": [],
+      "outputs": [
+        "qr"
+      ]
+    },
+    {
+      "pc": 7,
+      "name": "rope_k",
+      "a": "kn",
+      "b": "trig",
+      "d": "kr",
+      "roots": [
+        86,
+        89,
+        92
+      ],
+      "extras": [],
+      "outputs": [
+        "kr"
+      ]
+    },
+    {
+      "pc": 8,
+      "name": "kv_append",
+      "a": "kr",
+      "b": "v",
+      "d": "cache",
+      "roots": [
+        98,
+        101,
+        104
+      ],
+      "extras": [],
+      "outputs": [
+        "cache"
+      ]
+    },
+    {
+      "pc": 9,
+      "name": "qk",
+      "a": "qr",
+      "b": "cache",
+      "d": "score",
+      "roots": [
+        109,
+        112,
+        115
+      ],
+      "extras": [],
+      "outputs": [
+        "score"
+      ]
+    },
+    {
+      "pc": 10,
+      "name": "softmax",
+      "a": "score",
+      "b": null,
+      "d": "prob",
+      "roots": [
+        122,
+        16777215,
+        125
+      ],
+      "extras": [],
+      "outputs": [
+        "prob"
+      ]
+    },
+    {
+      "pc": 11,
+      "name": "pv",
+      "a": "prob",
+      "b": "cache",
+      "d": "context",
+      "roots": [
+        131,
+        134,
+        137
+      ],
+      "extras": [],
+      "outputs": [
+        "context"
+      ]
+    },
+    {
+      "pc": 12,
+      "name": "attention_gate",
+      "a": "qgate",
+      "b": "context",
+      "d": "gated_context",
+      "roots": [
+        144,
+        147,
+        150
+      ],
+      "extras": [],
+      "outputs": [
+        "gated_context"
+      ]
+    },
+    {
+      "pc": 13,
+      "name": "output_projection",
+      "a": "gated_context",
+      "b": "o_weight",
+      "d": "o",
+      "roots": [
+        156,
+        159,
+        162
+      ],
+      "extras": [],
+      "outputs": [
+        "o"
+      ]
+    },
+    {
+      "pc": 14,
+      "name": "residual1",
+      "a": "input",
+      "b": "o",
+      "d": "residual1",
+      "roots": [
+        168,
+        171,
+        174
+      ],
+      "extras": [],
+      "outputs": [
+        "residual1"
+      ]
+    },
+    {
+      "pc": 15,
+      "name": "post_norm",
+      "a": "residual1",
+      "b": "post_gamma",
+      "d": "post_norm",
+      "roots": [
+        180,
+        183,
+        186
+      ],
+      "extras": [],
+      "outputs": [
+        "post_norm"
+      ]
+    },
+    {
+      "pc": 16,
+      "name": "gate",
+      "a": "post_norm",
+      "b": "gate_weight",
+      "d": "gate",
+      "roots": [
+        191,
+        194,
+        197
+      ],
+      "extras": [],
+      "outputs": [
+        "gate"
+      ]
+    },
+    {
+      "pc": 17,
+      "name": "up",
+      "a": "post_norm",
+      "b": "up_weight",
+      "d": "up",
+      "roots": [
+        203,
+        206,
+        209
+      ],
+      "extras": [],
+      "outputs": [
+        "up"
+      ]
+    },
+    {
+      "pc": 18,
+      "name": "silu",
+      "a": "gate",
+      "b": "up",
+      "d": "silu",
+      "roots": [
+        215,
+        218,
+        221
+      ],
+      "extras": [],
+      "outputs": [
+        "silu"
+      ]
+    },
+    {
+      "pc": 19,
+      "name": "down",
+      "a": "silu",
+      "b": "down_weight",
+      "d": "down",
+      "roots": [
+        226,
+        229,
+        232
+      ],
+      "extras": [],
+      "outputs": [
+        "down"
+      ]
+    },
+    {
+      "pc": 20,
+      "name": "residual2",
+      "a": "residual1",
+      "b": "down",
+      "d": "output",
+      "roots": [
+        238,
+        241,
+        244
+      ],
+      "extras": [],
+      "outputs": [
+        "output"
+      ]
+    },
+    {
+      "pc": 21,
+      "name": "final_fence",
+      "a": "cache",
+      "b": "input",
+      "d": "output",
+      "roots": [
+        249,
+        252,
+        255
+      ],
+      "extras": [],
+      "outputs": []
+    }
+  ],
+  "tensors": {
+    "input": {
+      "address": 1048640,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "input_gamma": {
+      "address": 1310848,
+      "dims": [
+        1,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 2048,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "post_gamma": {
+      "address": 1312960,
+      "dims": [
+        1,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 2048,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "input_norm": {
+      "address": 68719476800,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "q_weight": {
+      "address": 1315072,
+      "dims": [
+        1024,
+        4096
+      ],
+      "dtype": 5,
+      "bytes": 8388608,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "q": {
+      "address": 68719739008,
+      "dims": [
+        128,
+        4096
+      ],
+      "dtype": 5,
+      "bytes": 1048576,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "k_weight": {
+      "address": 9703744,
+      "dims": [
+        1024,
+        512
+      ],
+      "dtype": 5,
+      "bytes": 1048576,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "k": {
+      "address": 68720787648,
+      "dims": [
+        128,
+        512
+      ],
+      "dtype": 5,
+      "bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "v_weight": {
+      "address": 10752384,
+      "dims": [
+        1024,
+        512
+      ],
+      "dtype": 5,
+      "bytes": 1048576,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "v": {
+      "address": 68720918784,
+      "dims": [
+        128,
+        512
+      ],
+      "dtype": 5,
+      "bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "q_gamma": {
+      "address": 11801024,
+      "dims": [
+        1,
+        256
+      ],
+      "dtype": 5,
+      "bytes": 512,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "k_gamma": {
+      "address": 11801600,
+      "dims": [
+        1,
+        256
+      ],
+      "dtype": 5,
+      "bytes": 512,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "trig": {
+      "address": 11802176,
+      "dims": [
+        128,
+        64
+      ],
+      "dtype": 5,
+      "bytes": 16384,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "qn": {
+      "address": 68721049920,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "kn": {
+      "address": 68721574272,
+      "dims": [
+        128,
+        512
+      ],
+      "dtype": 5,
+      "bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "qgate": {
+      "address": 68721705408,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "qr": {
+      "address": 68722229760,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "kr": {
+      "address": 68722754112,
+      "dims": [
+        128,
+        512
+      ],
+      "dtype": 5,
+      "bytes": 131072,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "cache": {
+      "address": 68722885248,
+      "dims": [
+        2,
+        128,
+        512
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "score": {
+      "address": 68723147456,
+      "dims": [
+        8,
+        128,
+        128
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": true,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "prob": {
+      "address": 68723409664,
+      "dims": [
+        8,
+        128,
+        128
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": true,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "context": {
+      "address": 68723671872,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "gated_context": {
+      "address": 68724196224,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "o_weight": {
+      "address": 11818624,
+      "dims": [
+        2048,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 4194304,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "o": {
+      "address": 68724720576,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "residual1": {
+      "address": 68724982784,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "post_norm": {
+      "address": 68725244992,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "gate_weight": {
+      "address": 16012992,
+      "dims": [
+        1024,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 7340032,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "gate": {
+      "address": 68725507200,
+      "dims": [
+        128,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 917504,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "up_weight": {
+      "address": 23353088,
+      "dims": [
+        1024,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 7340032,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "up": {
+      "address": 68726424768,
+      "dims": [
+        128,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 917504,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "silu": {
+      "address": 68727342336,
+      "dims": [
+        128,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 917504,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "down_weight": {
+      "address": 30693184,
+      "dims": [
+        3584,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 7340032,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "down": {
+      "address": 68728259904,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "output": {
+      "address": 68728522112,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    }
+  },
+  "intermediate_preloads": 0,
+  "expert_id_injection": false,
+  "numeric_pass": false,
+  "qknorm_recipe": "C2_Torch210CpuDefault256_EXISTING_REFERENCE_CONTRACT",
+  "weights_materialized": false,
+  "requires_real_readonly_payloads": true,
+  "sha256": {
+    "commands": "cb6ee24a9d28e89d4b672c2f8cf361cb2f6a49e15235579d68cf945d50862940",
+    "descriptors": "6985f5e359bf957291d0e49709557577b99c12e1448323b956288be730599950"
+  },
+  "input_identity": "NEW_EXTERNAL_BOUNDARY_T2307"
+}

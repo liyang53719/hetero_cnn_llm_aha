@@ -1,0 +1,762 @@
+{
+  "status": "METADATA_EMITTED_NOT_DUT_VALIDATED",
+  "commands_source_sha256": "d25425714cd0b123a0b5924568311f5faa8c9116a3026d53f3e5ebcfae0df108",
+  "requires_rank3_m128_scratch_admission": true,
+  "tokens": 128,
+  "launch": {
+    "version": 1,
+    "profileId": 1,
+    "commandBase": 65536,
+    "commandLimit": 65856,
+    "commands": 17,
+    "descriptorBase": 131072,
+    "descriptorLimit": 134592,
+    "descriptors": 219,
+    "epoch": 1,
+    "regions": [
+      {
+        "base": 65536,
+        "limit": 1048576,
+        "read": true,
+        "write": false
+      },
+      {
+        "base": 1048576,
+        "limit": 45520512,
+        "read": true,
+        "write": false
+      },
+      {
+        "base": 68719476736,
+        "limit": 68759774400,
+        "read": true,
+        "write": true
+      },
+      {
+        "base": 137438953472,
+        "limit": 139586437120,
+        "read": true,
+        "write": true
+      }
+    ]
+  },
+  "schedule": [
+    {
+      "pc": 0,
+      "name": "input_norm",
+      "a": "input",
+      "b": "input_gamma",
+      "d": "input_norm",
+      "roots": [
+        0,
+        3,
+        6
+      ],
+      "extras": [],
+      "outputs": [
+        "input_norm"
+      ]
+    },
+    {
+      "pc": 1,
+      "name": "qkv",
+      "a": "input_norm",
+      "b": "qkv_weight",
+      "d": "qkv",
+      "roots": [
+        11,
+        14,
+        17
+      ],
+      "extras": [],
+      "outputs": [
+        "qkv"
+      ]
+    },
+    {
+      "pc": 2,
+      "name": "z",
+      "a": "input_norm",
+      "b": "z_weight",
+      "d": "z",
+      "roots": [
+        23,
+        26,
+        29
+      ],
+      "extras": [],
+      "outputs": [
+        "z"
+      ]
+    },
+    {
+      "pc": 3,
+      "name": "ab",
+      "a": "input_norm",
+      "b": "ab_weight",
+      "d": "ab",
+      "roots": [
+        35,
+        38,
+        41
+      ],
+      "extras": [],
+      "outputs": [
+        "ab"
+      ]
+    },
+    {
+      "pc": 4,
+      "name": "conv",
+      "a": "qkv",
+      "b": "conv_weight",
+      "d": "conv",
+      "roots": [
+        47,
+        50,
+        53
+      ],
+      "extras": [
+        "history_in",
+        "history_out"
+      ],
+      "outputs": [
+        "conv",
+        "history_out"
+      ]
+    },
+    {
+      "pc": 5,
+      "name": "rawprep",
+      "a": "conv",
+      "b": "ab",
+      "d": "prepared",
+      "roots": [
+        65,
+        68,
+        71
+      ],
+      "extras": [
+        "a_log",
+        "dt_bias"
+      ],
+      "outputs": [
+        "prepared"
+      ]
+    },
+    {
+      "pc": 6,
+      "name": "chunk",
+      "a": "prepared",
+      "b": "state_in",
+      "d": "chunk",
+      "roots": [
+        83,
+        86,
+        89
+      ],
+      "extras": [
+        "state_out",
+        "chunk_scratch"
+      ],
+      "outputs": [
+        "chunk",
+        "state_out"
+      ]
+    },
+    {
+      "pc": 7,
+      "name": "gated_norm",
+      "a": "chunk",
+      "b": "z",
+      "d": "gated_norm",
+      "roots": [
+        101,
+        104,
+        107
+      ],
+      "extras": [
+        "gated_gamma"
+      ],
+      "outputs": [
+        "gated_norm"
+      ]
+    },
+    {
+      "pc": 8,
+      "name": "output_projection",
+      "a": "gated_norm",
+      "b": "o_weight",
+      "d": "o",
+      "roots": [
+        116,
+        119,
+        122
+      ],
+      "extras": [],
+      "outputs": [
+        "o"
+      ]
+    },
+    {
+      "pc": 9,
+      "name": "residual1",
+      "a": "input",
+      "b": "o",
+      "d": "residual1",
+      "roots": [
+        128,
+        131,
+        134
+      ],
+      "extras": [],
+      "outputs": [
+        "residual1"
+      ]
+    },
+    {
+      "pc": 10,
+      "name": "post_norm",
+      "a": "residual1",
+      "b": "post_gamma",
+      "d": "post_norm",
+      "roots": [
+        139,
+        142,
+        145
+      ],
+      "extras": [],
+      "outputs": [
+        "post_norm"
+      ]
+    },
+    {
+      "pc": 11,
+      "name": "gate",
+      "a": "post_norm",
+      "b": "gate_weight",
+      "d": "gate",
+      "roots": [
+        150,
+        153,
+        156
+      ],
+      "extras": [],
+      "outputs": [
+        "gate"
+      ]
+    },
+    {
+      "pc": 12,
+      "name": "up",
+      "a": "post_norm",
+      "b": "up_weight",
+      "d": "up",
+      "roots": [
+        162,
+        165,
+        168
+      ],
+      "extras": [],
+      "outputs": [
+        "up"
+      ]
+    },
+    {
+      "pc": 13,
+      "name": "silu",
+      "a": "gate",
+      "b": "up",
+      "d": "silu",
+      "roots": [
+        174,
+        177,
+        180
+      ],
+      "extras": [],
+      "outputs": [
+        "silu"
+      ]
+    },
+    {
+      "pc": 14,
+      "name": "down",
+      "a": "silu",
+      "b": "down_weight",
+      "d": "down",
+      "roots": [
+        185,
+        188,
+        191
+      ],
+      "extras": [],
+      "outputs": [
+        "down"
+      ]
+    },
+    {
+      "pc": 15,
+      "name": "residual2",
+      "a": "residual1",
+      "b": "down",
+      "d": "output",
+      "roots": [
+        197,
+        200,
+        203
+      ],
+      "extras": [],
+      "outputs": [
+        "output"
+      ]
+    },
+    {
+      "pc": 16,
+      "name": "final_fence",
+      "a": "history_out",
+      "b": "state_out",
+      "d": "output",
+      "roots": [
+        208,
+        211,
+        214
+      ],
+      "extras": [],
+      "outputs": []
+    }
+  ],
+  "tensors": {
+    "input": {
+      "address": 1048640,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "input_gamma": {
+      "address": 1310848,
+      "dims": [
+        1,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 2048,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "post_gamma": {
+      "address": 1312960,
+      "dims": [
+        1,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 2048,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "input_norm": {
+      "address": 68719476800,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "qkv_weight": {
+      "address": 1315072,
+      "dims": [
+        1024,
+        6144
+      ],
+      "dtype": 5,
+      "bytes": 12582912,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "qkv": {
+      "address": 68719739008,
+      "dims": [
+        128,
+        6144
+      ],
+      "dtype": 5,
+      "bytes": 1572864,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "z_weight": {
+      "address": 13898048,
+      "dims": [
+        1024,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 4194304,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "z": {
+      "address": 68721311936,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "ab_weight": {
+      "address": 18092416,
+      "dims": [
+        1024,
+        32
+      ],
+      "dtype": 5,
+      "bytes": 65536,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "ab": {
+      "address": 68721836288,
+      "dims": [
+        128,
+        32
+      ],
+      "dtype": 5,
+      "bytes": 8192,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "conv_weight": {
+      "address": 18158016,
+      "dims": [
+        6144,
+        4
+      ],
+      "dtype": 5,
+      "bytes": 49152,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "history_in": {
+      "address": 18207232,
+      "dims": [
+        6144,
+        4
+      ],
+      "dtype": 5,
+      "bytes": 49152,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "a_log": {
+      "address": 18256448,
+      "dims": [
+        1,
+        16
+      ],
+      "dtype": 7,
+      "bytes": 64,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "dt_bias": {
+      "address": 18256576,
+      "dims": [
+        1,
+        16
+      ],
+      "dtype": 5,
+      "bytes": 32,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "state_in": {
+      "address": 18256704,
+      "dims": [
+        16,
+        16384
+      ],
+      "dtype": 7,
+      "bytes": 1048576,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "gated_gamma": {
+      "address": 19305344,
+      "dims": [
+        1,
+        128
+      ],
+      "dtype": 7,
+      "bytes": 512,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "conv": {
+      "address": 68721844544,
+      "dims": [
+        128,
+        6144
+      ],
+      "dtype": 5,
+      "bytes": 1572864,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "history_out": {
+      "address": 68723417472,
+      "dims": [
+        6144,
+        4
+      ],
+      "dtype": 5,
+      "bytes": 49152,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "prepared": {
+      "address": 68723466688,
+      "dims": [
+        128,
+        6400
+      ],
+      "dtype": 7,
+      "bytes": 3276800,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "chunk": {
+      "address": 68726743552,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "state_out": {
+      "address": 68727267904,
+      "dims": [
+        16,
+        16384
+      ],
+      "dtype": 7,
+      "bytes": 1048576,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "chunk_scratch": {
+      "address": 68728316544,
+      "dims": [
+        16,
+        128,
+        3280
+      ],
+      "dtype": 7,
+      "bytes": 26869760,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "gated_norm": {
+      "address": 68755186368,
+      "dims": [
+        128,
+        2048
+      ],
+      "dtype": 5,
+      "bytes": 524288,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "o_weight": {
+      "address": 19305920,
+      "dims": [
+        2048,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 4194304,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "o": {
+      "address": 68755710720,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "residual1": {
+      "address": 68755972928,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "post_norm": {
+      "address": 68756235136,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "gate_weight": {
+      "address": 23500288,
+      "dims": [
+        1024,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 7340032,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "gate": {
+      "address": 68756497344,
+      "dims": [
+        128,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 917504,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "up_weight": {
+      "address": 30840384,
+      "dims": [
+        1024,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 7340032,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "up": {
+      "address": 68757414912,
+      "dims": [
+        128,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 917504,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "silu": {
+      "address": 68758332480,
+      "dims": [
+        128,
+        3584
+      ],
+      "dtype": 5,
+      "bytes": 917504,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "down_weight": {
+      "address": 38180480,
+      "dims": [
+        3584,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 7340032,
+      "readonly": true,
+      "virtual": false,
+      "initialization": "REAL_INPUT_OR_WEIGHT_REQUIRED"
+    },
+    "down": {
+      "address": 68759250048,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    },
+    "output": {
+      "address": 68759512256,
+      "dims": [
+        128,
+        1024
+      ],
+      "dtype": 5,
+      "bytes": 262144,
+      "readonly": false,
+      "virtual": false,
+      "initialization": "UNINITIALIZED_DUT_OUTPUT_OR_SCRATCH"
+    }
+  },
+  "intermediate_preloads": 0,
+  "expert_id_injection": false,
+  "numeric_pass": false,
+  "qknorm_recipe": null,
+  "weights_materialized": false,
+  "requires_real_readonly_payloads": true,
+  "sha256": {
+    "commands": "18e360d4535f7dded5cd78a819f052a00c00665fec42eee2df13ca73f9f6d413",
+    "descriptors": "b229976ebe8e1b0ba6553e37bd58d01978173b60455fa74f3780d995468a3ec4"
+  },
+  "input_identity": "NEW_EXTERNAL_BOUNDARY_T2307"
+}

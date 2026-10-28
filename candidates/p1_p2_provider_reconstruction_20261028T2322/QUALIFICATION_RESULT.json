@@ -1,0 +1,71 @@
+{
+  "status": "PASS_BYTE_PROVIDER_BOUNDARIES_AND_NEGATIVE_ADMISSION_ONLY",
+  "cases": [
+    {
+      "profile": 1,
+      "case": "actual",
+      "expected_accept": true,
+      "exit_code": 0,
+      "stdout": "PASS_INPUT_ONLY_PROVIDER_INDEPENDENT_BYTES profile=1 records=147 bytes=8387 DUT_NOT_EXECUTED",
+      "stderr": ""
+    },
+    {
+      "profile": 1,
+      "case": "source_sha_corrupt",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "source SHA256 mismatch"
+    },
+    {
+      "profile": 1,
+      "case": "independent_probe_corrupt",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "independent actual byte mismatch"
+    },
+    {
+      "profile": 1,
+      "case": "missing_allocation_view",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "readonly allocation missing views"
+    },
+    {
+      "profile": 2,
+      "case": "actual",
+      "expected_accept": true,
+      "exit_code": 0,
+      "stdout": "PASS_INPUT_ONLY_PROVIDER_INDEPENDENT_BYTES profile=2 records=124 bytes=7228 DUT_NOT_EXECUTED",
+      "stderr": ""
+    },
+    {
+      "profile": 2,
+      "case": "source_sha_corrupt",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "source SHA256 mismatch"
+    },
+    {
+      "profile": 2,
+      "case": "independent_probe_corrupt",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "independent actual byte mismatch"
+    },
+    {
+      "profile": 2,
+      "case": "missing_allocation_view",
+      "expected_accept": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "readonly allocation missing views"
+    }
+  ],
+  "dut_executed": false,
+  "numeric_pass": false
+}

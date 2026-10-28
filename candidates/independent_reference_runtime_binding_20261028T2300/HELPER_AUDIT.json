@@ -1,0 +1,34 @@
+[
+  {
+    "framework_revision": "14e738b5d0cc69aa27a95dde272aea41fde44f2f",
+    "helper_archive_hashes": {
+      "transformers/integrations/hub_kernels.py": "512f13b0506d154fdbe7957f2889f146d6ccb715177a37e2e932651429edd361",
+      "transformers/integrations/moe.py": "a4cdb41cd6c4e40a3e602644b5781a5dc53ac4ef227249db2ed40c7347990556",
+      "transformers/modeling_rope_utils.py": "ca1038b2f550a72a90ade70585b2e1f033a1440ba1ef7f2d627665ea3c064a7f",
+      "transformers/configuration_utils.py": "2f85c43a79770f43dfb98acb1f47e6fb35657c5dbe86325e21672640413d5f84"
+    },
+    "optional_packages_absent": [
+      "fla",
+      "causal_conv1d",
+      "kernels",
+      "triton"
+    ],
+    "scope": "Archive-derived helper match and source audit only; no model forward"
+  },
+  {
+    "framework_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+    "helper_archive_hashes": {
+      "transformers/integrations/hub_kernels.py": "fa5143bbbc6a928c70f7e05580b358caae16e88f53f49059c7002f0d01f6c832",
+      "transformers/integrations/moe.py": "2c8894f6d1392980a61ff265f90f7a99fa90678e0eec461d958b4d32fda9628c",
+      "transformers/modeling_rope_utils.py": "56fe0e57136198248913418b759a40986870fe1048a564dc32c675690a57d9df",
+      "transformers/configuration_utils.py": "0e9f22e2f2d500d28ba63b0ce4bedf7d6b90f95f50f1bbd916c8b1281e1a164f"
+    },
+    "optional_packages_absent": [
+      "fla",
+      "causal_conv1d",
+      "kernels",
+      "triton"
+    ],
+    "scope": "Archive-derived helper match and source audit only; no model forward"
+  }
+]

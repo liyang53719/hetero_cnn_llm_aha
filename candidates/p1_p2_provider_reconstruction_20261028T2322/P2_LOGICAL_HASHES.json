@@ -1,0 +1,80 @@
+{
+  "input": {
+    "address": 1048640,
+    "logical_bytes": 262144,
+    "allocation_bytes": 262144,
+    "sha256": "ac65a7629cd12fda22f07e8945fd2f99a343fed468236bacfea9aee38285d416"
+  },
+  "input_gamma": {
+    "address": 1310848,
+    "logical_bytes": 2048,
+    "allocation_bytes": 2048,
+    "sha256": "262f20f74b30264bb8244fd620dfd1356e8282ff09e4ba1d6892900d46d0635b"
+  },
+  "post_gamma": {
+    "address": 1312960,
+    "logical_bytes": 2048,
+    "allocation_bytes": 2048,
+    "sha256": "480c483e9af2962e8213512464316402dd657d0dcfa37119a58409689330c7a2"
+  },
+  "gate_weight": {
+    "address": 16012992,
+    "logical_bytes": 7340032,
+    "allocation_bytes": 7340032,
+    "sha256": "5e7d7f8917d58500ee994d151b248a666b82ca28f5425a1bcd4c39e1e1cdbe53"
+  },
+  "up_weight": {
+    "address": 23353088,
+    "logical_bytes": 7340032,
+    "allocation_bytes": 7340032,
+    "sha256": "6d2fdcf162c1a2d82ec91d63315422120faf5fd51d99cefb054c2a41c3bcb335"
+  },
+  "down_weight": {
+    "address": 30693184,
+    "logical_bytes": 7340032,
+    "allocation_bytes": 7340032,
+    "sha256": "62bc4adbc7f5d1f3a7b3cee267ef7bf554f14a03a1a52b113647d73c290f06fd"
+  },
+  "q_weight": {
+    "address": 1315072,
+    "logical_bytes": 8388608,
+    "allocation_bytes": 8388608,
+    "sha256": "1c80b8a12d8ea9345f478cfe1fd4a5c7b6adf9a2396a14d176f2d50228c3289b"
+  },
+  "k_weight": {
+    "address": 9703744,
+    "logical_bytes": 1048576,
+    "allocation_bytes": 1048576,
+    "sha256": "bc2df54b3f8e17d55427c0fbfac099736092c4d7451263ff738b7b1174905f4e"
+  },
+  "v_weight": {
+    "address": 10752384,
+    "logical_bytes": 1048576,
+    "allocation_bytes": 1048576,
+    "sha256": "5a80d0c65c5c35c6943a6b6042e520b2d0a9e8fa1f8e5b8449b24e4e63747024"
+  },
+  "o_weight": {
+    "address": 11818624,
+    "logical_bytes": 4194304,
+    "allocation_bytes": 4194304,
+    "sha256": "cfb07026ead17cbab983f08a04d2788c0958d4c200108503551593a9708ddad9"
+  },
+  "q_gamma": {
+    "address": 11801024,
+    "logical_bytes": 512,
+    "allocation_bytes": 512,
+    "sha256": "6fbc460e96b527aa6b54ab345195d141716dd4e34094baec92c65344f8bac298"
+  },
+  "k_gamma": {
+    "address": 11801600,
+    "logical_bytes": 512,
+    "allocation_bytes": 512,
+    "sha256": "424ead8a89f71d4e83858da7f28335665c4d61a8797b121cfaa26a56d1f5ea6a"
+  },
+  "trig": {
+    "address": 11802176,
+    "logical_bytes": 16384,
+    "allocation_bytes": 16384,
+    "sha256": "1156df1551f166fe3f816547b6a15eac1c2ff994683138d5276d2f64c68aa9bb"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "status": "ACQUIRED_70_ORIGINAL_TENSORS_ONLY",
+  "tensors": 70,
+  "tensor_bytes": 3531306272,
+  "totals": {
+    "requested": 2399456760,
+    "received": 2399456760,
+    "requests": 294
+  },
+  "reference_executed": false,
+  "dut_executed": false,
+  "actual_executed_acquirer_sha256": "2d8bc5f536ed3972a9fd014cd26d4459a0e58104c81914d3b56a9cf741a3793a",
+  "actual_prefix_validator_sha256": "b1cd8e44bb6a6f3b259f05c78c2a8c6c1297d1c177357ea7abf2548b05886c5d",
+  "raw_bindings_sha256": "ba840db51bbe511883f5be243829825760f0906abaec12a55ae044df40168a8e",
+  "postwrite_all70_rehashed": true,
+  "exact_fixed_plan_all_receipts_checked": true,
+  "reused_complete_tensors": 66,
+  "reused_contiguous_prefix_bytes": 822083584,
+  "prefix_tests": {
+    "normal": 10,
+    "optimized": 10
+  },
+  "full_chisel_numeric_passes": 0,
+  "full_rtl_numeric_passes": 0,
+  "transport_history": [
+    {
+      "attempt": "T2253",
+      "status": "environment_reattach_no_process_no_terminal_summary",
+      "complete_receipts": 52,
+      "last_error": "Remote end closed connection without response"
+    },
+    {
+      "attempt": "T2258",
+      "status": "FAIL_CLOSED_SHORT_BODY",
+      "complete_receipts": 66,
+      "expected_chunk_bytes": 8388608,
+      "actual_short_chunk_length": "not recorded by original version; not reused"
+    },
+    {
+      "attempt": "T2315",
+      "status": "COMPLETE_70_RAW_TENSORS_ONLY",
+      "native_exit_code": 0
+    }
+  ]
+}

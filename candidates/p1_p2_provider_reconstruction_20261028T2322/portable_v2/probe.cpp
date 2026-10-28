@@ -1,0 +1,5 @@
+// Input-only byte-provider qualification; no DUT instantiated.
+#define HOST_DRIVER_CONFIG_ONLY
+#include "host_axi_driver_non_dpi.cpp"
+#include <iomanip>
+int main(int argc,char**argv){try{need(argc==3,"runtime and private probes");Config cfg(argv[1]);stimulus::ReadOnly ro;std::vector<stimulus::ViewAllocation> allocations;for(const auto&a:cfg.allocations)if(a.access=="ro")allocations.push_back({a.name,a.address,a.bytes});stimulus::loadViews(cfg.viewManifest,allocations,ro);std::ifstream f(argv[2]);std::string line;size_t count=0,bytes=0;while(std::getline(f,line)){auto x=stimulus::split(line,'\t');need(x.size()==2&&x[1].size()%2==0,"probe format");auto address=stimulus::decimal(x[0]);for(size_t i=0;i<x[1].size();i+=2){auto value=std::stoul(x[1].substr(i,2),nullptr,16);need(ro.byte(address+i/2)==value,"independent actual byte mismatch");++bytes;}++count;}need(count>0,"empty probes");std::cout<<"PASS_INPUT_ONLY_PROVIDER_INDEPENDENT_BYTES profile="<<cfg.profile<<" records="<<count<<" bytes="<<bytes<<" DUT_NOT_EXECUTED\n";return 0;}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}

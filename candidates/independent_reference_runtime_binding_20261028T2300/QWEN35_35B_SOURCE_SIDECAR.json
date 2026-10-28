@@ -1,0 +1,41 @@
+{
+  "framework_revision": "42ca97014c85d71a88ad60d55f08cb9fb4d26e2c",
+  "module_sha256": {
+    "transformers.models.qwen3_5_moe.modeling_qwen3_5_moe": "ea77a3979cb659dd04dc1f6a1cd7d3df53ddc5759e40eb0d5e98846e95b39d30",
+    "transformers.models.qwen3_5_moe.configuration_qwen3_5_moe": "5053663170053d27610b88ef6a0e06952bb083b572efbb795685f7553521d414",
+    "transformers.activations": "5b20c0a3625edc0001a98f09ce3c6b5baa1100e1d7ad8dee649e4d45c8468665",
+    "transformers.cache_utils": "4b284431cb3a881b6e6f8b8c6430df6f2efdcb3366a2484c7984ae88c612c61a",
+    "transformers.masking_utils": "c159cd91c2a7fcafce04a8b6cbca55c320ce904b8ebf634383c97da5d9313ce3",
+    "torch.nn.functional": "f6335e443ce93ddf21ecf9d94bbb4d4a4d92e128c5bfb59826f35495c9c28703",
+    "torch._C": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8"
+  },
+  "module_relative_paths": {
+    "transformers.models.qwen3_5_moe.modeling_qwen3_5_moe": "transformers/models/qwen3_5_moe/modeling_qwen3_5_moe.py",
+    "transformers.models.qwen3_5_moe.configuration_qwen3_5_moe": "transformers/models/qwen3_5_moe/configuration_qwen3_5_moe.py",
+    "transformers.activations": "transformers/activations.py",
+    "transformers.cache_utils": "transformers/cache_utils.py",
+    "transformers.masking_utils": "transformers/masking_utils.py",
+    "torch.nn.functional": "torch/nn/functional.py",
+    "torch._C": "torch/_C.cpython-312-x86_64-linux-gnu.so"
+  },
+  "native_file_sha256": {
+    "torch/_C.cpython-312-x86_64-linux-gnu.so": "2a4e075c33f292a709006fe69bca669e681351fad1fcddd7c957fcf96362d1a8",
+    "torch/lib/libaoti_custom_ops.so": "249a640bf74e8e8ef69fa685b59ae4d46412144d39ffdd94338b729b75b27c7b",
+    "torch/lib/libbackend_with_compiler.so": "f3b85da9df199c6b735071c8a91278d20c95586f7fc782ac7607049f52334c4a",
+    "torch/lib/libc10.so": "7dc289cfb287f751eb8586c275022dba56979dd9e769cd01b73b2993f3442c84",
+    "torch/lib/libgomp.so.1": "78511033caddec6ccae8f4d62b94d56135f377c4cee33120e6d7df2ef499f69f",
+    "torch/lib/libjitbackend_test.so": "bb81f643ef833cc5afa3cef29281173c24984c50a8040c94def485db7913456f",
+    "torch/lib/libshm.so": "6705cdaa351819a15bdbd9688734a658dbf88bbd14224e59eeeaceec081658b3",
+    "torch/lib/libtorch.so": "59a95807d56ca89993351a173839f160ca9c2c6ec6f6b89a5e691d8f1392d3ff",
+    "torch/lib/libtorch_cpu.so": "4dc5b3a649b61d8f39be127866bc258dda19d74e339f449fe18103db63e8d76f",
+    "torch/lib/libtorch_global_deps.so": "2e5d497259a62960d95f4a7719abaeb24745429b49ffdf58e67672140205eb99",
+    "torch/lib/libtorch_python.so": "3c30b9ce8bc80e1a58f6c2288309439831b319d5af074bcbdb7c6c9f9d4e0c44",
+    "torch/lib/libtorchbind_test.so": "0db222a06ea5793086b895191e9857899daf2b3231eb3a865429999c971bb075"
+  },
+  "artifact_sha256": {
+    "framework": "69273c7d563dd207ad4d6ada4ab16105e7c21366ac4142be1e5f53649b23c5e9",
+    "torch": "ee40b8a4b4b2cf0670c6fd4f35a7ef23871af956fecb238fbf5da15a72650b1d"
+  },
+  "identity": "ARCHIVE_DERIVED_NOT_LIVE_IMPORT_CALIBRATED",
+  "limits": "Imported helper set is not complete transitive framework source closure. Native Torch shared libraries are separately checked before and after execution."
+}

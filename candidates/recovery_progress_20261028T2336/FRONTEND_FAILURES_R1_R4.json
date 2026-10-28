@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "status": "FAIL_OR_INCOMPLETE_R1_R4_NO_NUMERICAL_PASS",
+  "scope": "Chisel simulation backend frontend preparation only; no complete M128 block result, no frozen final RTL replay result",
+  "attempts": [
+    {
+      "attempt": "R1",
+      "run_identity": "physical_frontend_runner_20261028T2241",
+      "status": "FAIL_OR_INCOMPLETE",
+      "native_exit": 2,
+      "reason": "nested hierarchy child lost nested-filelist include paths and TARGET defines",
+      "elapsed_seconds": 99.78118674399957,
+      "observed_peak_rss_bytes": 5312442368,
+      "observed_cpu_seconds": 97.61,
+      "peak_tree_bytes": 585530,
+      "log_cap_bytes": 16777216,
+      "RSS_cap_bytes": 6442450944,
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "observed_remaining_count": 0,
+      "result_sha256": "ea7d52beb5902a443081b9524571f96517a17f1d2253d3b6fb2408de325a8f32",
+      "Host_header_completed": false
+    },
+    {
+      "attempt": "R2",
+      "run_identity": "physical_frontend_runner_r2_20261028T2255",
+      "status": "FAIL_OR_INCOMPLETE",
+      "native_exit": null,
+      "reason": "sampled aggregate RSS cap; include/define propagation corrected",
+      "elapsed_seconds": 113.03319358999943,
+      "observed_peak_rss_bytes": 6445969408,
+      "observed_cpu_seconds": 108.76,
+      "peak_tree_bytes": 581878,
+      "log_cap_bytes": 16777216,
+      "RSS_cap_bytes": 6442450944,
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "observed_remaining_count": 0,
+      "result_sha256": "80f71e82da60defbbff5479f4648e3b5ba92f46c1a749609e178d86c42ebbfb5",
+      "Host_header_completed": false
+    },
+    {
+      "attempt": "R3",
+      "run_identity": "physical_frontend_plan_r3_20261028T2307",
+      "status": "FAIL_OR_INCOMPLETE",
+      "native_exit": null,
+      "reason": "16MiB raw log cap during Host warning emission; completed lane/endpoint codegen only",
+      "elapsed_seconds": 315.00872549799897,
+      "observed_peak_rss_bytes": 5321609216,
+      "observed_cpu_seconds": 313.63,
+      "peak_tree_bytes": 101466754,
+      "log_cap_bytes": 16777216,
+      "RSS_cap_bytes": 6442450944,
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "observed_remaining_count": 0,
+      "result_sha256": "1514108ee057c6c0988cefdeb8a0994afefbe0bbb7228f43161a0283b1370a8f",
+      "Host_header_completed": false
+    },
+    {
+      "attempt": "R4",
+      "run_identity": "physical_frontend_host_r4_20261028T2326",
+      "status": "FAIL_OR_INCOMPLETE",
+      "native_exit": null,
+      "reason": "128MiB raw log cap during Host warning emission; native exit unavailable",
+      "elapsed_seconds": 214.61039187300048,
+      "observed_peak_rss_bytes": 5316775936,
+      "observed_cpu_seconds": 209.33,
+      "peak_tree_bytes": 134906129,
+      "log_cap_bytes": 134217728,
+      "RSS_cap_bytes": 6442450944,
+      "cleanup_status": "COMPLETE_OWNED_GROUP_ABSENCE_BEFORE_LEADER_REAP",
+      "observed_remaining_count": 0,
+      "result_sha256": "690be74d028942f5fbbec994452544028d83fbc65c52874222d0b160aa22eb86",
+      "Host_header_completed": false
+    }
+  ],
+  "limits": [
+    "Cleanup proof covers anchored original process group and observed stable identities only, not unseen escaped processes",
+    "RSS/CPU/log limits sampled; native_exit null is cap termination, not successful completion or numeric mismatch",
+    "R3 generated child artifacts do not prove active hierarchy partition or full4096 reachability; Host header not emitted",
+    "Published summary only; retained complete raw logs and original receipts remain local"
+  ]
+}

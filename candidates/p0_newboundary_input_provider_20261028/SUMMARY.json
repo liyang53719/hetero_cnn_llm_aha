@@ -1,0 +1,19 @@
+{
+  "status": "PASS_P0_INPUT_ONLY_TRANSPORT_NOT_FULL_BLOCK_CHISEL_OR_RTL",
+  "rebuild_source_sha256": {
+    "emit_tsv.py": "fe08d00c8a06a15c2fb734e1b637e09f96fe651a6cfb5d05fc8b5b0b3c323ec6",
+    "rebuild.py": "2654d6c0f3470111b24a551286fa78614a3f3d2faa480625f3bd642fd8101358"
+  },
+  "provider_result_sha256": "f0bb615b4095bd90421c49a9bb17797c1d1ff3bd041c708484c19467d290fbbb",
+  "manifest_sha256": "4f201e1744b8aa2c604a478ca837076abaf41a7235b62d8aa7ef14fcdc830163",
+  "source_spec_sha256": "3f9d941e06006f56669c437faac4ae9a32513976fff8478967ab828df41933f8",
+  "provider_source_sha256": "05ccf31e4e0284af6221f22c28778ddf578c3d8895327c3c1f171152f68ac83b",
+  "python_boundary_checks": 161,
+  "cpp_boundary_records": 110,
+  "cpp_compared_bytes": 6126,
+  "cpp_probe_scope": "HOST_DRIVER_CONFIG_ONLY; no DUT instantiated; selected bytes against original raw tensor coordinate mapping",
+  "all_ro_stream_hash_scope": "Python reader streams checked in full, all14; C++ only selected probes",
+  "new_input_identity": "external boundary; no historical embedding/prefix equivalence",
+  "data_publication_allowed": false,
+  "full_block_numeric_pass": false
+}

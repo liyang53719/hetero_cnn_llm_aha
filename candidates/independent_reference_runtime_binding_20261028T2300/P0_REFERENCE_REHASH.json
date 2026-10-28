@@ -1,0 +1,19 @@
+{
+  "status": "PASS_STORED_REFERENCE_HASH_INTEGRITY_ONLY",
+  "result_sha256": "7b3ba0ceba92fbd17d73b4d7bc37bffa426df239112792558729ad7fdff1ced1",
+  "tensor_count": 20,
+  "bytes": 10388480,
+  "output_storage": {
+    "file": "reference_only/output_storage.bin",
+    "shape": [
+      1,
+      128,
+      1536
+    ],
+    "dtype": "torch.float32",
+    "bytes": 786432,
+    "sha256": "66a2e7c6313d77e5b76726fda00838f97341c6e32e51feb51bd0ff8ae9c42870"
+  },
+  "numerical_scope": "Independent official Python full128 baseline/observer equality; no hardware execution/comparison",
+  "p0_cache_scope": "Official P0 use_cache=False; final persistent KV cache not captured"
+}

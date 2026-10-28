@@ -1,0 +1,124 @@
+{
+  "status": "PARTIAL_3_OF_5_OFFICIAL_PYTHON_REFERENCE_ONLY",
+  "profiles": [
+    {
+      "profile": 0,
+      "tokens": 128,
+      "status": "PASS_OFFICIAL_PYTHON_REFERENCE_OUTPUT_AND_FINAL_STATE_ONLY",
+      "runner_sha256": "5e4f13f2117e675ca9e308bf01cb7003003df21d9b9d8c59776cef0e1b69e9e4",
+      "result_sha256": "88da9d20bcd4653336a0196d50c55f836953079e10e9cb6e52f0f547b3350a2a",
+      "output_sha256": "66a2e7c6313d77e5b76726fda00838f97341c6e32e51feb51bd0ff8ae9c42870",
+      "output_dtype": "torch.float32",
+      "final_state": {
+        "final_cache.keys": {
+          "shape": [
+            1,
+            2,
+            128,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "750698ea4c7c3cbfb556f4d8c5360bd1dbf8221eaeb6b89be50c1014512b2974"
+        },
+        "final_cache.values": {
+          "shape": [
+            1,
+            2,
+            128,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "fdded63f8e3e068408f73378abf76131fbe7efb8fa0a9c7fe3f1a7852c347645"
+        }
+      },
+      "baseline_observer_exact": true,
+      "no_cache_output_equal": true,
+      "wall_seconds": 24.082810629999585,
+      "peak_rss_bytes": 537030656
+    },
+    {
+      "profile": 1,
+      "tokens": 128,
+      "status": "PASS_OFFICIAL_PYTHON_REFERENCE_OUTPUT_AND_FINAL_STATE_ONLY",
+      "runner_sha256": "434fae58b7196fe0098063f2df9214bf2a50d284ecd14288071ebc26512e442d",
+      "result_sha256": "8e0abb3c24e587bdee8603cd0e2abc4817870944246dc0d59e057fd9b2521ae0",
+      "output_sha256": "3e879ef4eda04e625ab82e49768929b55f9c92dcd90f786fd4ffc6609cadcda3",
+      "output_dtype": "torch.bfloat16",
+      "final_state": {
+        "final_cache.conv_states.0": {
+          "shape": [
+            1,
+            6144,
+            4
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "0c0d9482231ddd74c01a6dc130b511e97e4bedb93d01b0c29275921dfbaff19f"
+        },
+        "final_cache.recurrent_states.0": {
+          "shape": [
+            1,
+            16,
+            128,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "85c77154704340a2d51d384c1cb3d0085676e227b6c549cab368866f8a850b38"
+        }
+      },
+      "baseline_observer_exact": true,
+      "no_cache_output_equal": null,
+      "wall_seconds": 36.478046271000494,
+      "peak_rss_bytes": 412188672
+    },
+    {
+      "profile": 2,
+      "tokens": 128,
+      "status": "PASS_OFFICIAL_PYTHON_REFERENCE_OUTPUT_AND_FINAL_STATE_ONLY",
+      "runner_sha256": "434fae58b7196fe0098063f2df9214bf2a50d284ecd14288071ebc26512e442d",
+      "result_sha256": "3471355576ca8764eaac47c99a946711be34a5e4fe0347b1b38ba5f7b9ad56f4",
+      "output_sha256": "8cd69444db6016ff727fbd710758ba3cf5e8a0c2299180600cc6277e2962bad3",
+      "output_dtype": "torch.bfloat16",
+      "final_state": {
+        "final_cache.keys": {
+          "shape": [
+            1,
+            2,
+            128,
+            256
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "c8779857e5fcafa8d16b2dca289e7cf77a5155c75337bd6aa0c710bb8b7bda5b"
+        },
+        "final_cache.values": {
+          "shape": [
+            1,
+            2,
+            128,
+            256
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "85ec3b7f9c6a82f7ddb42cf073432014be320c84e50082e6bc69055210999b9b"
+        }
+      },
+      "baseline_observer_exact": true,
+      "no_cache_output_equal": null,
+      "wall_seconds": 19.397744201000023,
+      "peak_rss_bytes": 396492800
+    }
+  ],
+  "pending_profiles": [
+    3,
+    4
+  ],
+  "hardware_full_block_pass_count": 0,
+  "rtl_full_block_pass_count": 0,
+  "stimulus_identity": "NEW_DETERMINISTIC_EXTERNAL_BLOCK_BOUNDARY_NOT_EMBEDDING_OR_UPSTREAM_PREFIX",
+  "source_binding": "Independent official archive/wheel hashes; exact separate Qwen2 4.40.1,0.8B14e738,35B42ca; Python3.12.14 fresh runtime, no historical arithmetic equivalence claim",
+  "moe_policy": "Original torch.topk unchanged; small-ID tie contract pending",
+  "limits": [
+    "No hardware numerical equality or utilization measured",
+    "Leaf/control/structure results not counted as block numerical pass",
+    "Only captured module boundaries and finalstate; not every functional intermediate captured"
+  ],
+  "publication_policy": "Text source/pins/hash/summary only; no binary tensors, weights or encoded data"
+}

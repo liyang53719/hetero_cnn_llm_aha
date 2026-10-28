@@ -1,0 +1,44 @@
+{
+  "status": "PASS_STORED_REFERENCE_HASH_INTEGRITY_ONLY",
+  "result_sha256": "8e0abb3c24e587bdee8603cd0e2abc4817870944246dc0d59e057fd9b2521ae0",
+  "tensor_count": 19,
+  "bytes": 6439936,
+  "complete_block_tokens": 128,
+  "output_storage": {
+    "file": "reference_only/output_storage.bin",
+    "shape": [
+      1,
+      128,
+      1024
+    ],
+    "dtype": "torch.bfloat16",
+    "bytes": 262144,
+    "sha256": "3e879ef4eda04e625ab82e49768929b55f9c92dcd90f786fd4ffc6609cadcda3"
+  },
+  "cache": {
+    "final_cache.conv_states.0": {
+      "file": "reference_only/final_cache.conv_states.0.bin",
+      "shape": [
+        1,
+        6144,
+        4
+      ],
+      "dtype": "torch.bfloat16",
+      "bytes": 49152,
+      "sha256": "0c0d9482231ddd74c01a6dc130b511e97e4bedb93d01b0c29275921dfbaff19f"
+    },
+    "final_cache.recurrent_states.0": {
+      "file": "reference_only/final_cache.recurrent_states.0.bin",
+      "shape": [
+        1,
+        16,
+        128,
+        128
+      ],
+      "dtype": "torch.float32",
+      "bytes": 1048576,
+      "sha256": "85c77154704340a2d51d384c1cb3d0085676e227b6c549cab368866f8a850b38"
+    }
+  },
+  "scope": "Official independent Python reference only; no hardware PASS"
+}

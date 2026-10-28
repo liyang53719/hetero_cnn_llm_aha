@@ -1,0 +1,29 @@
+{
+  "status": "PASS_ACTUAL_BYTE_PROVIDER_AND_NEGATIVE_ADMISSION_ONLY_NOT_DUT",
+  "profiles": [
+    {
+      "profile": 1,
+      "commands": 17,
+      "descriptors": 219,
+      "native_sources": 14,
+      "logical_ro_bytes": 44470880,
+      "probe_records": 147,
+      "source_spec_sha256": "c2479e68cfd22095fcfa6e549ca357ed8a022d897e6d05ae4d5c267bef6c1a21",
+      "runtime_sha256": "885832b931ff6bd6104a7ad33927e1e486876bd4b5a48f859b4d0eb7765e08d5",
+      "views_sha256": "6b61b239edeb860a16a84a698eace0bbe9f997f60143b2802797b32e05a259ff"
+    },
+    {
+      "profile": 2,
+      "commands": 22,
+      "descriptors": 261,
+      "native_sources": 11,
+      "logical_ro_bytes": 36983808,
+      "probe_records": 124,
+      "source_spec_sha256": "098d62cc41801ee591eeb6c7f00429249ec8ffd5d56e586760ec29596bed5321",
+      "runtime_sha256": "6b37727780f6c2ae88a9416d874994ce144c1d4acfdaadd991b788c4b64b314f",
+      "views_sha256": "0725a7dc26f2f63db51229e30591bd2a6e24d3e7d4afa175475b8716c1d396d1"
+    }
+  ],
+  "numeric_pass": false,
+  "dut_executed": false
+}

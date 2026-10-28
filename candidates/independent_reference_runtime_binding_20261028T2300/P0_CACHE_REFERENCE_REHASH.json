@@ -1,0 +1,48 @@
+{
+  "status": "PASS_P0_OFFICIAL_REFERENCE_CACHE_ARM_ONLY",
+  "result_sha256": "88da9d20bcd4653336a0196d50c55f836953079e10e9cb6e52f0f547b3350a2a",
+  "exact_original_no_cache_output_equal": true,
+  "tensor_count": 24,
+  "bytes": 10650624,
+  "complete_block_tokens": 128,
+  "output_storage": {
+    "file": "reference_only/output_storage.bin",
+    "shape": [
+      1,
+      128,
+      1536
+    ],
+    "dtype": "torch.float32",
+    "bytes": 786432,
+    "sha256": "66a2e7c6313d77e5b76726fda00838f97341c6e32e51feb51bd0ff8ae9c42870"
+  },
+  "cache": {
+    "final_cache.keys": {
+      "file": "reference_only/final_cache.keys.bin",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "bytes": 65536,
+      "sha256": "750698ea4c7c3cbfb556f4d8c5360bd1dbf8221eaeb6b89be50c1014512b2974"
+    },
+    "final_cache.values": {
+      "file": "reference_only/final_cache.values.bin",
+      "shape": [
+        1,
+        2,
+        128,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "bytes": 65536,
+      "sha256": "fdded63f8e3e068408f73378abf76131fbe7efb8fa0a9c7fe3f1a7852c347645"
+    }
+  },
+  "wall_seconds": 24.082810629999585,
+  "peak_rss": 537030656,
+  "scope": "Official independent Python reference only; actual coldDynamicCache rotatedKV, baseline/observer equality. No Chisel/RTL PASS"
+}

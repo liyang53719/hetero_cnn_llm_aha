@@ -1,0 +1,19 @@
+{
+  "scope": "Three synthetic boundary tests only; actual MoE diagnosis pending references",
+  "files": {
+    "independent_reference_runtime_binding_20261028T2300/router_tie_diagnostics_v2.py": {
+      "bytes": 4296,
+      "sha256": "48ba4bd411db2ad74fa725874c1b8795f632687e9551f27609f91faf3e5b8128"
+    },
+    "router_tie_contract_tests_20261028T2330/test.py": {
+      "bytes": 804,
+      "sha256": "b803bbd471729c18e34cc93915b99542ca5f823c46cd7e64c18fbcad3d7240d2"
+    }
+  },
+  "test_result": {
+    "status": "PASS_3_SYNTHETIC_BOUNDARY_CLASSIFICATION_TESTS_ONLY",
+    "raw_and_softmax_ties_distinguished": true,
+    "actual_model_executed": false
+  },
+  "no_hardware_or_numeric_pass": true
+}

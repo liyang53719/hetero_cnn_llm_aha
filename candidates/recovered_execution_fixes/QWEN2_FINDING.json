@@ -1,0 +1,55 @@
+{
+  "scope": "CONCRETE_SOURCE_PREDICATE_FAILURE_AND_METADATA_FIX_CANDIDATE_NOT_DUT",
+  "commit": "897f08f77b6c31fd567b32904079cf1ab20ee986",
+  "old_descriptor": "d5ef2c75f7c8f790993a9aef04ff0af96209365af3df85b33fae9ff8d8cb3086",
+  "native_descriptor": "1e4d35da18b21a4d9de05d2f3129e5bd9717cd923837c83c8d5eb320bfcddb02",
+  "commands_unchanged": true,
+  "only_seven_dtype_bytes_change": true,
+  "changes": [
+    {
+      "pc": 1,
+      "root": 15,
+      "old_dtype": 7,
+      "new_dtype": 5
+    },
+    {
+      "pc": 4,
+      "root": 46,
+      "old_dtype": 7,
+      "new_dtype": 5
+    },
+    {
+      "pc": 7,
+      "root": 77,
+      "old_dtype": 7,
+      "new_dtype": 5
+    },
+    {
+      "pc": 13,
+      "root": 136,
+      "old_dtype": 7,
+      "new_dtype": 5
+    },
+    {
+      "pc": 16,
+      "root": 167,
+      "old_dtype": 7,
+      "new_dtype": 5
+    },
+    {
+      "pc": 17,
+      "root": 178,
+      "old_dtype": 7,
+      "new_dtype": 5
+    },
+    {
+      "pc": 19,
+      "root": 199,
+      "old_dtype": 7,
+      "new_dtype": 5
+    }
+  ],
+  "failure": "HostBlockCommandsV4.scala811 requiresBdtype5 nativeWeight;874officialRoleOK dense requiresnativeWeight;1645Unsupported. profile0 authoritativeBdtype7 means firstDensePC1rejected ifPC0completes.",
+  "original_contract": "pack_owner_bf16_weights.py2\u20137,ffn_public/fixture.py208\u2013238:onlyDenseB nativeBF16;allnonweights FP32unchanged",
+  "remaining": "ByteprovidercurrentlyexpandsDenseBtoFP32 mustalsochangeinNEWcandidate;actualweights unavailable;no numerics/RTLclaim"
+}

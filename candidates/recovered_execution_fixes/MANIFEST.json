@@ -1,0 +1,50 @@
+{
+  "status": "TEMP_NOT_COMPILED_OR_NUMERICALLY_VALIDATED",
+  "base_commit": "897f08f77b6c31fd567b32904079cf1ab20ee986",
+  "files": {
+    "Down_prefix_alias.patch": {
+      "bytes": 917,
+      "sha256": "b78527ac579260978caa0a0e6abf552e2dea6a2b8eb2d3ad11514a4cad8e667f"
+    },
+    "QWEN2_FINDING.json": {
+      "bytes": 1532,
+      "sha256": "36c10126dd8b1a404f2d3e4b820d92cd060f41331936f2d1b347a35450974e86"
+    },
+    "README_CN.md": {
+      "bytes": 3519,
+      "sha256": "9c1f37a7cdf5b03243f86fde3b60c9c05e148aeda3a37368ec92d92ec9b01cdb"
+    },
+    "provider_candidate/memory_provider.py": {
+      "bytes": 8413,
+      "sha256": "597abeb5f0fcc8b1865db81bfe9fe4b1fd70453265faadb5f41f967bed1ea489"
+    },
+    "provider_candidate/parent_inputs.py": {
+      "bytes": 1291,
+      "sha256": "39453923a1c6b05324c16318bd4927e45ef188bd2d6ac0e85148909aef3f2f3d"
+    },
+    "provider_candidate/qwen2/payloads.py": {
+      "bytes": 3855,
+      "sha256": "1279c5092b0c6cd026df464e2b20b495cd99019c6a5febe1bbf16ec63b67ad9f"
+    },
+    "reproduce.py": {
+      "bytes": 3307,
+      "sha256": "068ae859ce78fbafa16404c3d6b639046e1d785cada18dbb2ab0b7c5842df82b"
+    },
+    "test_candidate.py": {
+      "bytes": 1917,
+      "sha256": "09b8a396c5b3ae040d589f6b10a17acb190626935fb1c10b8cb6578f4ce2573d"
+    },
+    "test_counterexample.py": {
+      "bytes": 1849,
+      "sha256": "7e05bae0ba1479f48ca6f414c0435a581042ccb531aec0e2ae39d86511c57f60"
+    },
+    "test_independent_provider_candidate.py": {
+      "bytes": 2761,
+      "sha256": "0505a2416397526b7a8e100245460b888261bd58f5fa60a9a7ea907679c15cff"
+    },
+    "verify_manifest.py": {
+      "bytes": 905,
+      "sha256": "17b0064a7b37a6412487a5d617a16dd8631d6b8d689b63f6f48bd58b77b2fd3f"
+    }
+  }
+}

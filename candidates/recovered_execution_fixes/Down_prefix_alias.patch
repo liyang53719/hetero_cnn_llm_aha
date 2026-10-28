@@ -1,0 +1,13 @@
+--- verified
++++ candidate
+@@ -1047,7 +1047,9 @@
+     val aliases=(j.a.pad(66)<dEnd && j.dst.pad(66)<aEnd)||(j.b.pad(66)<dEnd && j.dst.pad(66)<bEnd)
+     val aligned=Seq(j.a,j.b,j.dst).map(_(5,0)===0.U).reduce(_&&_)
+     val pEnd=w.base.pad(66)+w.extent.pad(66)
+-    val prefixAliases=Seq((j.a,aEnd),(j.b,bEnd),(j.dst,dEnd)).map{case(base,end)=>
++    // No prefix read/write exists for single-K-chunk jobs; phase operands may
++    // occupy region3 then. Multi-chunk jobs retain the exact original alias fence.
++    val prefixAliases=(j.k>w.splitK) && Seq((j.a,aEnd),(j.b,bEnd),(j.dst,dEnd)).map{case(base,end)=>
+       w.base.pad(66)<end && base.pad(66)<pEnd}.reduce(_||_)
+     val tileConflict=if(enableFfnTiles)banks.io.tiles.get.leased && j.k>1536.U else false.B
+     when(if(enableFfnTiles)tileConflict || !w.valid || w.base(5,0)=/=0.U || w.extent===0.U || (j.k>w.splitK && w.extent<(j.n.pad(64)>>5)*16384.U) ||

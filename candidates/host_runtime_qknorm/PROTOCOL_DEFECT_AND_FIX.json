@@ -1,0 +1,31 @@
+{
+  "status": "R1_COMPILER_PASS_PROTOCOL_SOURCE_FAIL_FRESH_R2_MINIMAL_FIX",
+  "finding": {
+    "severity": "correctness: source Decoupled offer withdrawn before handshake",
+    "original_boundary": "Commands io.job.valid is generated directly from state===issue. In official resident configuration, resetRequired during issue invoked fail, setting state=complete. With job.ready=false this withdrew the already visible runtime prefix job.valid next cycle.",
+    "review_correction": "The r1 independent source review missed the Commands source-offer boundary; its no-blocker conclusion did not establish this invariant. The frozen r1 files and actual compile evidence are retained unchanged.",
+    "not_a_physical_refund": "The failing boundary occurs before source job.fire, so this specific counterexample does not erase a previously accepted physical operation or demonstrate fake physical retirement. It violates preservation of the visible unaccepted source offer.",
+    "fix": "Add only !boundRuntimePrefix to legacy resident-reset fail guard. Runtime prefix issue retains state and full bound payload; legacy non-prefix behavior remains unchanged.",
+    "resolution": "verified in final new Commands source"
+  },
+  "affected_prior_candidates": [
+    "runtime Norm",
+    "Dense",
+    "Conv",
+    "RawPrep",
+    "Chunk",
+    "GatedNorm"
+  ],
+  "historical_status": "All affected older candidates remain TEMP/typecheck evidence, NOT held-source-offer protocol qualification. Original frozen sources/logs/reviews remain unchanged.",
+  "r1_commands": {
+    "bytes": 151232,
+    "sha256": "fa184cdf1a7beb000abc3751a77e0708fb8755dbb29d593fbd5c385a7884b944"
+  },
+  "r2_commands": {
+    "bytes": 151478,
+    "sha256": "78ea48c40d1ab6e1897883186dd4e88ef420b655434c25d90fbe0d003d724f1a"
+  },
+  "fix_executable_condition": "!boundRuntimePrefix",
+  "physical_debt": "This counterexample is before source job.fire: no demonstrated erasure/refund of already accepted physical debt.",
+  "reset": "Poisoned unaccepted offer remains held until existing joint reset/transport isolation, not fake completion or local reset permission."
+}

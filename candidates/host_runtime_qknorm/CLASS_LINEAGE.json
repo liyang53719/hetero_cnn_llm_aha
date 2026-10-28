@@ -1,0 +1,127 @@
+{
+  "status": "INCREMENTAL_COMPILER_CLOSURE_ONLY_NOT_FULL_RECOMPILE",
+  "base_commit": "e9489568363263b819513c5af11bde356cbf705c",
+  "base_package": "../host_runtime_gatednorm",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 3518,
+      "sha256": "d0f67b1696a7c3487e8fde4011988b8b225adc0f614a4d477711cc6daba048f1"
+    },
+    "CLASS_BASELINE.json": {
+      "bytes": 1274,
+      "sha256": "4c58e0a168c7928e299b1a8d895ab946d436141674c2928981e94793491ef181"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 3179,
+      "sha256": "a1a9616f19b3c0d023488eaf2e10ea398f0350c86165e6c18aa2ab4c4f3b1479"
+    }
+  },
+  "r1": {
+    "compiled_sources": 24,
+    "baseline_count": 855,
+    "baseline_digest": "4915e5ef11794e9fb11b7e829d1d5d706d5cb32fdd4ac45e2b00dff597d74ed7",
+    "output_count": 108,
+    "output_bytes": 3846614,
+    "output_digest": "ef2b30023327857b586138ae118edc50004f712678eef2da80a759e8f0a6549c",
+    "protocol_scope": "compilerPASS but held source-offer protocolFAIL"
+  },
+  "r2": {
+    "compiled_sources": 1,
+    "incremental_baseline_count": 959,
+    "incremental_baseline_digest": "59b96e24c11775b86fdbcbc79dbf312395f7cd25b711346058492e9c70f58c0a",
+    "removed_r1_commands": [
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4$$anon$1.class",
+        "bytes": 16415,
+        "sha256": "5c1a38e0cc4b393d0a41a68557608ce980041614ca57c8346ed88f91207379f6"
+      },
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4$.class",
+        "bytes": 2139,
+        "sha256": "e65960274fff4ff28c33e8765b36f569f1da89ec24bc9dc43dfe1884bfdb2653"
+      },
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4$ResidentHostState.class",
+        "bytes": 6822,
+        "sha256": "a1007aaf4f57a34800fce1a30bd0c1e9259c548081873e982f8047cf3d26a29f"
+      },
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4.class",
+        "bytes": 965912,
+        "sha256": "258550510febfc577bd9cacdb7039e60d62707416274d762ab47ec486a466dd7"
+      }
+    ],
+    "inherited_r1_classes": 104,
+    "inherited_r1_digest": "6c80b8a77d9197dc7029c0d26a68847351cca31138f0bf33de8cec94251038b8",
+    "new_classes": [
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4$$anon$1.class",
+        "bytes": 16415,
+        "sha256": "5c1a38e0cc4b393d0a41a68557608ce980041614ca57c8346ed88f91207379f6",
+        "source_file": "HostBlockCommandsV4.scala"
+      },
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4$.class",
+        "bytes": 2139,
+        "sha256": "e65960274fff4ff28c33e8765b36f569f1da89ec24bc9dc43dfe1884bfdb2653",
+        "source_file": "HostBlockCommandsV4.scala"
+      },
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4$ResidentHostState.class",
+        "bytes": 6825,
+        "sha256": "49d44194d5fbe6e82c4882be013504a61db56b349527cb43d2f3cd33a33a45a4",
+        "source_file": "HostBlockCommandsV4.scala"
+      },
+      {
+        "relative": "heteronpu/continuous/HostBlockCommandsV4.class",
+        "bytes": 965973,
+        "sha256": "5bf6758f67d4b45689756b2217215dbce6a0bbb35bf10072559fa6316376094c",
+        "source_file": "HostBlockCommandsV4.scala"
+      }
+    ],
+    "new_count": 4,
+    "new_bytes": 991352
+  },
+  "final": {
+    "sources": 24,
+    "classes": 108,
+    "class_bytes": 3846678,
+    "class_digest": "8271dc97844ac5aad39c1ed903810569d767b84d8c285a292a5b2445ca1dbdba",
+    "inherited_sources": 23,
+    "actually_recompiled_sources": 1,
+    "by_source": {
+      "GdnChunkStateTransferOwner.scala": 4,
+      "GdnRuntimeChunkLeafCollection.scala": 7,
+      "GdnRuntimeChunkCoordinator.scala": 4,
+      "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+      "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+      "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+      "GdnRuntimeRawPrepReceiptV8.scala": 3,
+      "HostRuntimeGatedDependencyV10.scala": 1,
+      "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+      "GdnRuntimeGatedNormProtocolV10.scala": 4,
+      "GdnRuntimeGatedNormOwnerV10.scala": 1,
+      "GdnRuntimeRawPrepProtocolV7.scala": 9,
+      "GdnRuntimeRawPrepOwnerV7.scala": 1,
+      "HeldDecoupledOffer.scala": 4,
+      "HostBlockTopV4.scala": 3,
+      "HostRuntimeChunkProtocolV9.scala": 3,
+      "HostRuntimeChunkWiringV9.scala": 3,
+      "HostRuntimePrefixLeaseWiringV8.scala": 3,
+      "QkNorm256RuntimeOwnerV11.scala": 7,
+      "QwenOwnerProtocol.scala": 19,
+      "SharedMemoryArbiter.scala": 3,
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": 9,
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": 2,
+      "HostBlockCommandsV4.scala": 4
+    }
+  },
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; trailing LF; relative/bytes/sha256 only",
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "commit": "65cbbb3e92079a859e4d4d8509a6b4383ba690fc",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "requires_parent": "Exact855 ancestor classes plus104 inherited class bytes/source-build closure are not bundled. Digests do not make fresh-checkout reproduction complete."
+}

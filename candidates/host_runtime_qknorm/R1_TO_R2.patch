@@ -1,0 +1,17 @@
+--- a/HostBlockCommandsV4.scala
++++ b/HostBlockCommandsV4.scala
+@@ -1596,9 +1596,12 @@
+   }
+   // Under the explicitly enabled official binding, an external fault fences
+   // all new owner accepts. Metadata already in flight still retires naturally;
+-  // reaching issue with no accepted owner debt must terminate, not hang.
++  // Legacy issue with no accepted debt terminates. Runtime prefix already
++  // exposes job.valid at issue: a late fault MUST NOT retract that offer.
++  // Keep the full bound job stable; Guard forbids fresh acceptance and the
++  // poisoned transaction remains held until the existing joint reset.
+   if(enableResidentFfn && officialBf16){
+-    when(state===issue && io.resident.get.resetRequired){fail(Status.Protocol.U)}
++    when(state===issue && !boundRuntimePrefix && io.resident.get.resetRequired){fail(Status.Protocol.U)}
+   }
+   // The original done checks below are unchanged. Capture the semantic receipt
+   // only from the SAME successful handshake and exact full bound job, never

@@ -1,0 +1,25 @@
+{
+  "scope": "source-declared resources only; actual elaboration/RTL resource count NOT RUN",
+  "new_arithmetic_modules": 0,
+  "one_matrix_service": true,
+  "one_existing_32lane_bank": true,
+  "adapter_client_count": 11,
+  "qknorm_scalar_slot": 8,
+  "qknorm_authority": 6,
+  "qknorm_stage": 74,
+  "qknorm_format_lease": false,
+  "qknorm_max_scalar_operations": 2695168,
+  "qknorm_payload_bits": 16896,
+  "qknorm_scalar_work_regs_bits": 288,
+  "qk_policy_job_field_bits": 8,
+  "additional_metadata": [
+    "actual accepted owner and immutable terminal",
+    "actual scalar/memory accepted+returned counters",
+    "three Dense accepted job/result snapshots and full Host+txn snapshot",
+    "pending Dense job, QK producer snapshot, per-role consumption high-watermarks",
+    "held owner job bit"
+  ],
+  "commands_extra_register_definitions": 0,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0
+}

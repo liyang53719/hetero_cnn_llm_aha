@@ -1,0 +1,134 @@
+{
+  "status": "TWO_DISTINCT_REQUIRES_PARENT_MANUAL_RECIPES_NOT_SELF_CONTAINED",
+  "stages": [
+    {
+      "stage": "r1",
+      "argv_template": [
+        "{JAVA}",
+        "-Duser.home={RUN}/home",
+        "-Djava.io.tmpdir={RUN}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "{JAR_CP}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "{BASELINE}:{JAR_CP}",
+        "-Xplugin:{PLUGIN}",
+        "-language:reflectiveCalls",
+        "-d",
+        "{RUN}/classes",
+        "{PARENT_SOURCES}/GdnRuntimeRawPrepOwnerV7.scala",
+        "{PARENT_SOURCES}/GdnRuntimeRawPrepProtocolV7.scala",
+        "{R1_COMMANDS}",
+        "{PACKAGE}/source/HostBlockTopV4.scala",
+        "{PACKAGE}/source/HostRuntimePrefixLeaseWiringV8.scala",
+        "{PACKAGE}/source/QwenOwnerProtocol.scala",
+        "{PACKAGE}/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+        "{PACKAGE}/source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+        "{PACKAGE}/../host_chunk_gradual_bridge/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+        "{PACKAGE}/../host_chunk_gradual_bridge/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+        "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeChunkLeafCollection.scala",
+        "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeChunkCoordinator.scala",
+        "{PARENT_SOURCES}/GdnRuntimeChunkLoadPrepV2Owner.scala",
+        "{PARENT_SOURCES}/GdnRuntimeChunkTransposeV2Owner.scala",
+        "{PARENT_SOURCES}/HeldDecoupledOffer.scala",
+        "{PARENT_SOURCES}/GdnChunkStateTransferOwner.scala",
+        "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeRawPrepReceiptV8.scala",
+        "{PACKAGE}/../host_chunk_top_dispatch/source/SharedMemoryArbiter.scala",
+        "{PACKAGE}/../host_runtime_gatednorm/source/HostRuntimeChunkWiringV9.scala",
+        "{PACKAGE}/../host_chunk_top_dispatch/source/HostRuntimeChunkProtocolV9.scala",
+        "{PACKAGE}/../host_runtime_gatednorm/source/GdnRuntimeGatedNormOwnerV10.scala",
+        "{PACKAGE}/../host_runtime_gatednorm/source/HostRuntimeGatedDependencyV10.scala",
+        "{PACKAGE}/../host_runtime_gatednorm/source/GdnRuntimeGatedNormProtocolV10.scala",
+        "{PACKAGE}/source/QkNorm256RuntimeOwnerV11.scala"
+      ],
+      "source_count": 24,
+      "baseline_count": 855,
+      "exact_inverse_verified": true,
+      "original_caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 160,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 210,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 180,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 150
+      }
+    },
+    {
+      "stage": "r2",
+      "argv_template": [
+        "{JAVA}",
+        "-Duser.home={RUN}/home",
+        "-Djava.io.tmpdir={RUN}/tmp",
+        "-XX:-UsePerfData",
+        "-Xmx1g",
+        "-Xss4m",
+        "-XX:ActiveProcessorCount=1",
+        "-cp",
+        "{JAR_CP}",
+        "scala.tools.nsc.Main",
+        "-classpath",
+        "{BASELINE}:{JAR_CP}",
+        "-Xplugin:{PLUGIN}",
+        "-language:reflectiveCalls",
+        "-d",
+        "{RUN}/classes",
+        "{PACKAGE}/source/HostBlockCommandsV4.scala"
+      ],
+      "source_count": 1,
+      "baseline_count": 959,
+      "exact_inverse_verified": true,
+      "original_caps": {
+        "affinity": [
+          1
+        ],
+        "as_hard_bytes": 4294967296,
+        "cleanup_deadline_seconds": 160,
+        "cpu_seconds": 120,
+        "heap_bytes": 1073741824,
+        "log_bytes": 2097152,
+        "outer_wall_seconds": 210,
+        "rss_sampled_bytes": 2147483648,
+        "single_file_bytes": 50331648,
+        "total_wall_seconds": 180,
+        "tree_bytes": 67108864,
+        "work_wall_seconds": 150
+      }
+    }
+  ],
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21; full314-file tree external",
+    "RUN": "Fresh empty stage-specific output root with home/tmp/classes",
+    "BASELINE": "r1 exact855; r2 exact959=855+104 inherited r1, hash lineage in CLASS_LINEAGE.json",
+    "JAR_CP": "Unchanged106 ordered jars in pinned sibling DEPENDENCY_PINS.json; metadata hash in CLASS_LINEAGE.json",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin",
+    "PACKAGE": "This candidate directory",
+    "PARENT_SOURCES": "Six exact final historical compiler sources, not bundled",
+    "R1_COMMANDS": "Exact151232-byte historical r1 Commands, sha in SOURCE_PINS; supply parent original or reverse sanitized R1_TO_R2.patch, verify pin. r1 has known protocol bug."
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "requirements": [
+    "Supply parent source/build closure, exact class bytes,106 jars,314-file JDK and bounded owned-process supervisor. No binaries bundled.",
+    "Verify every input before/after. Historical caps are metadata, not executable supervision or new launch permission.",
+    "r1 is24-source actual compile; r2 is1-source actual incremental compile. Never describe final24-source closure as24 recompiled in r2.",
+    "No project main,elaboration,RTL,DUT,numeric or automatic retry. Owner/source/model checks are not hardware qualification."
+  ]
+}

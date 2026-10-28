@@ -1,0 +1,93 @@
+{
+  "scope": "Digest-only original records. Historical compilerPASS is not protocolPASS; raw private paths/runtime/class/tool bytes excluded.",
+  "records": {
+    "r1_source_manifest": {
+      "bytes": 1830,
+      "sha256": "bccebd948470fea622cc6965e9d2d578e52308b6a44101a245736a80727ee42c"
+    },
+    "r2_source_manifest": {
+      "bytes": 326,
+      "sha256": "ea9daf25636b24cca561858b34a1ce0de0eec06a8a63a5cb480eff7afbe59256"
+    },
+    "final_source_set": {
+      "bytes": 6423,
+      "sha256": "0e6e44d9a828fa213f43162229aed0e3ccfa6f1b3e5594d5f9c0d174cc7337d0"
+    },
+    "final_evidence_manifest": {
+      "bytes": 11894,
+      "sha256": "64731a60b5334d0830df804dcc220264419e16c4c1bda35f6b33c31a353a3a54"
+    },
+    "final_chinese_result": {
+      "bytes": 5617,
+      "sha256": "0a2b44a216ef108f29a8b73db95981eb62430bc213f3d3cc0c1d7044303f14d7"
+    },
+    "minimal_fix_independent_source_review": {
+      "bytes": 3820,
+      "sha256": "6fbbd430bcd972a502194a9d90c921abfcb8cf16e819b0b1c3663ac630cb96db"
+    },
+    "final_source_class_closure": {
+      "bytes": 132966,
+      "sha256": "0e1ace19bf045c966bc4c4cee51b19205e5d304561f1b3c431567d5a52945513"
+    },
+    "original_source_checker": {
+      "bytes": 5324,
+      "sha256": "64b596e86fd89432e88f839ee1f9e1915f9c340a9a04d240e8b9b24a50d97282"
+    },
+    "original_commands_checker": {
+      "bytes": 7270,
+      "sha256": "684d4b9a024e46103fc330117164a46e71dce1c83ccbe9bc623cefc2b68dc278"
+    },
+    "owner_job_initialization_audit": {
+      "bytes": 140262,
+      "sha256": "21c810a987c0b2614979161a05e6eded0cb2c17c576dc3bfaaca27546fb42819"
+    },
+    "owner_test_original": {
+      "bytes": 7814,
+      "sha256": "a670a4c108df3377bfee5111251e3defc1f2c3028d73f852ea46d9b8a8741470"
+    },
+    "r1_receipt": {
+      "bytes": 40071,
+      "sha256": "f1fb33689da05ae2da9df722f5c3a65cc918c9c76ec593178860200fc90f800c"
+    },
+    "r1_summary": {
+      "bytes": 2974,
+      "sha256": "3c62e93e4d55e4ceed123220a4ab642cd068717518fa1a9c7a9930ba2d779407"
+    },
+    "r1_command": {
+      "bytes": 38907,
+      "sha256": "710184be0fd0516cb7239f90c077e2849788d98629602860cc19b35766cbd74d"
+    },
+    "r1_pins": {
+      "bytes": 671577,
+      "sha256": "67b79835c7685c4b8d092dbb83a0371d9b5ac870c7846b81a02714f60c5d52bf"
+    },
+    "r1_freeze": {
+      "bytes": 1925,
+      "sha256": "d9302b1bc65f7520d1edc665c76017697ec0392d293dae45a608841dcde6db67"
+    },
+    "r2_receipt": {
+      "bytes": 3292,
+      "sha256": "f58e0b822e972b0fc027702ac5a259f306ba95f6318990065bf247c5a0363800"
+    },
+    "r2_summary": {
+      "bytes": 1188,
+      "sha256": "52f0a4692ca018b4387a8d5f77ef957471c338af80613ff4ad7052d2e9d35cf4"
+    },
+    "r2_command": {
+      "bytes": 35886,
+      "sha256": "396e327daa49a5ad83ddf5fa5119320e5d3793a206dd690f0d995a7b18b636bc"
+    },
+    "r2_pins": {
+      "bytes": 724980,
+      "sha256": "67c9f2abd5a85fa7891b8e40a23df5c51eec9a782a87e792a4ed19b16ecd4fe1"
+    },
+    "r2_freeze": {
+      "bytes": 1573,
+      "sha256": "8c10228d5a584e0894b63ce9335127e2243c8859b49d399c79107b2da1fcba5f"
+    },
+    "r1_class_identities": {
+      "bytes": 127377,
+      "sha256": "e60eb5a2e034ba08fd997cb77158d9a9019989caea32c525bd4a1c704a8f07a2"
+    }
+  }
+}

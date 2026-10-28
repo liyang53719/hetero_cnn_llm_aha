@@ -1,0 +1,104 @@
+{
+  "status": "ACTUAL_INCREMENTAL_COMPILER_CLOSURE_NOT_FULL_RECOMPILE",
+  "base_commit": "cb27a414abd4417f87fea7b7418c48bc1aa09732",
+  "base_package": "../host_runtime_ffn",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 4332,
+      "sha256": "499acb7c8a5106edfa01a76f339d0e74d7527dfa25161c5eec672d974a8e19c9"
+    },
+    "CLASS_LINEAGE.json": {
+      "bytes": 4895,
+      "sha256": "1e5c51adcbcb125cc1567895881f64f4247457412f27b4a1da7fc6a585ff14d0"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 5514,
+      "sha256": "2349e19df99e3743c2f36babbd405e34949f84e83dd86154c8e5712513e6bbc9"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 1592,
+      "sha256": "915bb601f64efc832dad2fdc518e2af4e0ea251f43f28fc2b38b1008bb23f84f"
+    },
+    "REPRODUCTION_LIMITS.json": {
+      "bytes": 1027,
+      "sha256": "050b808659c46129309a99710b57613be61582dcdffc801ea30c13fb3edb1a4a"
+    }
+  },
+  "baseline": {
+    "original_ancestor_count": 855,
+    "original_ancestor_digest": "4915e5ef11794e9fb11b7e829d1d5d706d5cb32fdd4ac45e2b00dff597d74ed7",
+    "previous_removed_rms_and_router_count": 5,
+    "previous_removed_digest": "27071ba34031fd1a8fa087414f4f19854cf98f4183428f419375a0e7ac4b2222",
+    "new_removed_dense_count": 8,
+    "new_removed_dense_digest": "1cdc87d0a1dbb538db987c1097278584b9392416fd2ba6cdc3f4fdfed52db4d5",
+    "retained_ancestor_count": 842,
+    "retained_ancestor_digest": "7976baf695bd3121c8d449c412765c5f1bf5e7c13dcf99ebbdb0b50753ca7e8e",
+    "previous_final_classes": 151,
+    "previous_final_digest": "7300e26330e46332d58daf394f88db6b4d565da34a6fb78e1ac25d8b7b7133aa",
+    "composed_count": 1001,
+    "removed_classes": 8,
+    "removed_source_families": [
+      "TransposedDenseOwner.scala"
+    ],
+    "removed_digest": "1cdc87d0a1dbb538db987c1097278584b9392416fd2ba6cdc3f4fdfed52db4d5",
+    "retained_count": 993,
+    "retained_digest": "c1e0af53957390b69afa44d896f2e11852076925544f010b088c703c483e02b8",
+    "inherited_class_count": 151,
+    "inherited_digest": "7300e26330e46332d58daf394f88db6b4d565da34a6fb78e1ac25d8b7b7133aa"
+  },
+  "actual": {
+    "compiled_sources": 1,
+    "new_classes": 8,
+    "new_class_bytes": 807883,
+    "new_digest": "af1bb2c6cb7f55f09eea1394aaf131a5ec1644cec0f398513f2a1ef34be3dde1"
+  },
+  "final": {
+    "sources": 31,
+    "classes": 159,
+    "class_bytes": 6173192,
+    "class_digest": "ab274a40511be7d0e3d5462f38da0cff2a5cf2565c1cbe4837eb6b6da8cfca2d",
+    "inherited_sources": 30,
+    "actually_compiled_sources": 1,
+    "by_source": {
+      "GdnChunkStateTransferOwner.scala": 4,
+      "GdnRuntimeChunkLeafCollection.scala": 7,
+      "GdnRuntimeChunkCoordinator.scala": 4,
+      "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+      "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+      "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+      "GdnRuntimeRawPrepReceiptV8.scala": 3,
+      "HostRuntimeGatedDependencyV10.scala": 1,
+      "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+      "GdnRuntimeGatedNormProtocolV10.scala": 4,
+      "GdnRuntimeGatedNormOwnerV10.scala": 1,
+      "GdnRuntimeRawPrepProtocolV7.scala": 9,
+      "GdnRuntimeRawPrepOwnerV7.scala": 1,
+      "HeldDecoupledOffer.scala": 4,
+      "HostRuntimeChunkProtocolV9.scala": 3,
+      "HostRuntimeChunkWiringV9.scala": 3,
+      "QkNorm256RuntimeOwnerV11.scala": 7,
+      "SharedMemoryArbiter.scala": 3,
+      "PartialRopeRuntimeOwnerV12.scala": 7,
+      "Bf16KvAppendRuntimeOwnerV13.scala": 7,
+      "Bf16CausalGqaRuntimeOwnerV14.scala": 10,
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": 2,
+      "GdnRuntimeRmsNormOwnerV3.scala": 6,
+      "GdnRuntimeElementwiseOwnerV15.scala": 6,
+      "HostBlockCommandsV4.scala": 4,
+      "HostBlockTopV4.scala": 3,
+      "HostRuntimePrefixLeaseWiringV8.scala": 7,
+      "Public21QkvReductionRouter.scala": 2,
+      "QwenOwnerProtocol.scala": 20,
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": 9,
+      "TransposedDenseOwner.scala": 8
+    }
+  },
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; trailing LF; relative/bytes/sha256 only",
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "commit": "cb27a414abd4417f87fea7b7418c48bc1aa09732",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "requires_parent": "Exact842 retained ancestor classes plus151 inherited class bytes and complete source/build closure not bundled. Current input identity PASS is not full archival graph PASS or fresh-checkout reproduction."
+}

@@ -1,0 +1,21 @@
+{
+  "historical_transitive_graph_verified": false,
+  "active_closure": {
+    "status": "PASS_EXACT_ACTIVE_SOURCE_CLASS_TOOL_PIN_CLOSURE_NOT_ARCHIVAL_GRAPH",
+    "unique_pin_count": 2167,
+    "expanded_active_manifest_count": 10,
+    "nested_pin_record_count": 3930,
+    "historical_json_boundaries": 272,
+    "record": {
+      "bytes": 1022237,
+      "sha256": "37b1dc78d48e4e2c1968ad0cc3782ecde1a06d755d172976beadab0d43c217fc"
+    }
+  },
+  "inherited_archival_diagnostic": {
+    "path": "../host_runtime_ffn/REPRODUCTION_LIMITS.json",
+    "bytes": 1027,
+    "sha256": "050b808659c46129309a99710b57613be61582dcdffc801ea30c13fb3edb1a4a"
+  },
+  "historical_original_compile_receipt_rechecked": false,
+  "scope": "Current source/class/tool closure exact. Historical boundary JSON hashes not recursively proved complete; original compiler receipt absent. Inherited missing/budget-skipped diagnostic remains historical, not fresh scan or repaired graph."
+}

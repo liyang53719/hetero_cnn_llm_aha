@@ -1,0 +1,45 @@
+{
+  "status": "PASS_ACTUAL_MOE_INCREMENTAL_COMPILER_ONLY",
+  "compiled_source_count": 1,
+  "baseline_class_count": 993,
+  "new_class_count": 8,
+  "new_class_bytes": 807883,
+  "final_source_closure_count": 31,
+  "final_class_count": 159,
+  "inherited_source_count": 30,
+  "inherited_class_count": 151,
+  "wall_seconds": 33.56668357702438,
+  "cpu_seconds_sampled": 26.86,
+  "peak_rss_bytes": 351899648,
+  "peak_tree_bytes": 18624151,
+  "pre_post_pin_checks": 3602,
+  "compile_log_empty": true,
+  "historical_transitive_graph_verified": false,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 4645,
+    "sha256": "4797b2f7dd5fb41ffd0ea1b5ec025d8e19534b43714e6b92657e5436c420b693"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "current_integer_schedule_address_cases_each_mode": 7680,
+  "current_source_mutations_each_mode": 5,
+  "independent_row_address_cases_each_mode": 1536,
+  "preparation_metadata_models": 4,
+  "publication_compiler_executions": 0,
+  "admission": "Only two normal DDR-backed TransposedDenseDownOwner row predicates now1..128. Specialized FFNwindow/drain and other old ordinary/Seed owner predicates unchanged. Not whole-chain arbitraryM support or fullMoE qualification."
+}

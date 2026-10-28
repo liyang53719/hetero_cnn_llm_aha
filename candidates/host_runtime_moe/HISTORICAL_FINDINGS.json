@@ -1,0 +1,75 @@
+{
+  "status": "NORMAL_DENSE_DYNAMIC_GROUP_ROWS_ADMISSION_FIXED_SOURCE_ONLY",
+  "independent_source_review": {
+    "bytes": 2058,
+    "sha256": "b49ab8844a035238e832a62ed7d61ac41d2f99372d032389615fb01607450322"
+  },
+  "reviewer_checks": {
+    "inverse_full_file_byte_equality": true,
+    "normal_io_job_only": true,
+    "ffn_window_and_drain_unchanged": true,
+    "independent_row_address_cases": 1536,
+    "integer_model_normal_and_optimized": true
+  },
+  "findings": [
+    {
+      "lines": "1056,1063",
+      "finding": "Only normal Down runtime row admission broadened to1..128."
+    },
+    {
+      "lines": "844-848,1110-1115",
+      "finding": "A DMA address retains global K stride and loops exactly real m rows; +& terminal comparison covers128."
+    },
+    {
+      "lines": "917-939,1070-1072",
+      "finding": "Inactive rows zero-masked; full physical bank clear maintained; useful MAC increments actual m*32 per accepted step."
+    },
+    {
+      "lines": "948-975,1001-1017",
+      "finding": "Final writes stop at real m; full prefix16KiB stored/restored unchanged; ACK-driven byte count preserved."
+    },
+    {
+      "lines": "1230-1545",
+      "finding": "Specialized FFN window/drain admission and indexing untouched."
+    }
+  ],
+  "prior_history": {
+    "path": "../host_runtime_ffn/HISTORICAL_FINDINGS.json",
+    "bytes": 4252,
+    "sha256": "6302c1687c7ca238b3252da9f6c52aa161771bb3d5fb79d7b464a9b10530e84d"
+  },
+  "closed_source_limit": "Normal production Down DDR M16/M128 admission was incompatible with real MoE expert groupRows. Two normal predicates now1..128; no padding or token loop, same numerical body.",
+  "still_open": "FFNwindow/drain retain real16/128 special indexing; global launches/finalHostACK/cache-state dualroot fence and full numerical/RTL qualification remain closed. Expert tie contract remains pending; no policy or official expert IDs changed.",
+  "entry_audit_record": {
+    "bytes": 3383,
+    "sha256": "10fb704276abd5900e1519421dea4bc219fa61000efb1e29536417264024de64"
+  },
+  "builder_audit_record": {
+    "bytes": 1579,
+    "sha256": "66b8a674ebcd5258b525d26da29ba7105813af03358da770960f5cc3d0d1cc98"
+  },
+  "entry_scope": "Existing actual postNorm→Guard physical retirement→allocator→router/routed/shared FFN→sigmoid→merge→residual source wiring reviewed; no new wrapper/dispatcher. Source compatibility is not DUT execution.",
+  "builder_scope": "Router, expert/shared FFN, and padded N1 QwenOwnerJob builders initialize the complete current bundle to zero and do not assign public21Reduction; thus the new Bool remains false under current bundle elaboration. Not an elaboration or DUT numerical result.",
+  "builder_source_pins": [
+    {
+      "name": "UnifiedMoeRouterDenseV2.scala",
+      "bytes": 5361,
+      "sha256": "22d1db98ec1d888c35ba0b13d82c338752ddc03fdf3a839721e3d2365bc05081"
+    },
+    {
+      "name": "UnifiedMoeDenseWritebackV2.scala",
+      "bytes": 6015,
+      "sha256": "cd8606b3769c38e9286557a56a5d0a2db6e31bbdfc2929eead2be65e41177b52"
+    },
+    {
+      "name": "HostMoeSharedGatePlanV5.scala",
+      "bytes": 5897,
+      "sha256": "d2bae8a00aa1edcdc366d63122fa2d8cf110ef6a957d2e7ab5b643be7fff09d6"
+    }
+  ],
+  "limits": [
+    "Not Scala compilation, Chisel elaboration, numerical DUT or RTL proof.",
+    "Small group rows retain full4096 physical cost and can have very low useful utilization.",
+    "Higher-level final Host/cache/state fences and full five-profile regression remain incomplete."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "status": "DIRECT_RECONSTRUCTED_DENSE_SOURCE_AND_CURRENT_BASELINE_IDENTITY_NOT_FULL_ARCHIVE",
+  "source": {
+    "name": "TransposedDenseOwner.scala",
+    "bytes": 100073,
+    "sha256": "f402c19b32fb9619b549bdbe4c65c3237d49fcde01210701ed048c24540f9ac6"
+  },
+  "recorded_original_compile_source_identity": {
+    "bytes": 100073,
+    "sha256": "f402c19b32fb9619b549bdbe4c65c3237d49fcde01210701ed048c24540f9ac6"
+  },
+  "reconstruction_report": {
+    "bytes": 66298,
+    "sha256": "f4157f476950d848dd295f0d9508c26dc092298cbfd267ba7d64840c8a572b43"
+  },
+  "historical_original_compile_receipt_rechecked": false,
+  "original_actual_receipt": null,
+  "old_baseline_classes_count": 8,
+  "old_baseline_classes_digest": "1cdc87d0a1dbb538db987c1097278584b9392416fd2ba6cdc3f4fdfed52db4d5",
+  "original_record": {
+    "bytes": 1217,
+    "sha256": "51d0a62cb4c853472c879a496e63427bf300fec91e89b087aab82f01d94805ab"
+  },
+  "other_inherited_provenance": {
+    "path": "../host_runtime_ffn/SOURCE_PROVENANCE.json",
+    "bytes": 1592,
+    "sha256": "915bb601f64efc832dad2fdc518e2af4e0ea251f43f28fc2b38b1008bb23f84f"
+  },
+  "scope": "Readable reconstructed source equals recorded source92 identity; exact current baseline whole SourceFile family verified. Missing original historical compile receipt NOT rechecked, no invented readable path or historical PASS. This batch actually recompiles complete Dense family."
+}

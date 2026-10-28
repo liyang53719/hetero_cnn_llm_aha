@@ -1,0 +1,36 @@
+{
+  "scope": "Only two existing normal DDR row admission expressions changed. No synthesized area/timing equivalence or utilization claim.",
+  "source_inverse_equality_except_two_predicates": true,
+  "changed_predicates": 2,
+  "normal_down_rows": [
+    1,
+    128
+  ],
+  "special_ffn_window_drain_rows": [
+    16,
+    128
+  ],
+  "new_numeric_registers": 0,
+  "new_interface_bits": 0,
+  "new_fpu": false,
+  "new_matrix": false,
+  "new_dma": false,
+  "new_cache_bank": false,
+  "new_formatter": false,
+  "new_module": false,
+  "existing": {
+    "matrix_macs": 4096,
+    "matrix_sram_banks": 32,
+    "matrix_sram_bytes": 786432,
+    "shared_bank_lanes": 32
+  },
+  "comparison_logic": "Runtime admission comparators change; not a zero-area or timing proof.",
+  "numerical_order_changed": false,
+  "bf16_rounding_changed": false,
+  "qwen2_fp32_storage_preserved": true,
+  "physical_mask_clear": "All128 physical rows cleared perKchunk; inactive rows masked, actualm DDR reads/writes only",
+  "mac_accounting": "Useful actualm*N*K; full4096 physical work and full-prefix16KiB/context retained, not padded-usefulMAC inflation",
+  "prefix_storage": "Existing full physical prefix workspace does not shrink for small groupRows",
+  "hardware_qualification": false,
+  "performance_uplift_claimed": false
+}

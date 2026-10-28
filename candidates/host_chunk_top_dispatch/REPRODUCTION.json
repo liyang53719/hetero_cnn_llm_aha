@@ -1,0 +1,88 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PARENT_SOURCES}/GdnRuntimeRawPrepOwnerV7.scala",
+    "{PARENT_SOURCES}/GdnRuntimeRawPrepProtocolV7.scala",
+    "{PACKAGE}/source/HostBlockCommandsV4.scala",
+    "{PACKAGE}/source/HostBlockTopV4.scala",
+    "{PACKAGE}/source/HostRuntimePrefixLeaseWiringV8.scala",
+    "{PACKAGE}/source/QwenOwnerProtocol.scala",
+    "{PACKAGE}/../host_chunk_gradual_bridge/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+    "{PACKAGE}/../host_chunk_gradual_bridge/source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+    "{PACKAGE}/../host_chunk_gradual_bridge/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+    "{PACKAGE}/../host_chunk_gradual_bridge/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+    "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeChunkLeafCollection.scala",
+    "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeChunkCoordinator.scala",
+    "{PARENT_SOURCES}/GdnRuntimeChunkLoadPrepV2Owner.scala",
+    "{PARENT_SOURCES}/GdnRuntimeChunkTransposeV2Owner.scala",
+    "{PARENT_SOURCES}/HeldDecoupledOffer.scala",
+    "{PARENT_SOURCES}/GdnChunkStateTransferOwner.scala",
+    "{PACKAGE}/../host_chunk_producer_receipt/source/GdnRuntimeRawPrepReceiptV8.scala",
+    "{PACKAGE}/source/SharedMemoryArbiter.scala",
+    "{PACKAGE}/source/HostRuntimeChunkWiringV9.scala",
+    "{PACKAGE}/source/HostRuntimeChunkProtocolV9.scala"
+  ],
+  "command_template_exact_inverse_verified": true,
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21 java; full314-file tool tree must be supplied from parent record.",
+    "RUN": "Fresh empty output root outside repository, with home/tmp/classes subdirectories.",
+    "BASELINE": "Exact855 class parent closure: prior858 minus SharedMemoryArbiter three-family records in CLASS_DELTA.json. Class bytes and source/build closure remain parent requirements.",
+    "JAR_CP": "The unchanged106 ordered jars pinned by sibling host_chunk_gradual_bridge/DEPENDENCY_PINS.json at65cbbb3e; exact metadata hash in CLASS_DELTA.json. Fetch/rebuild locally or CI; never commit binaries.",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin jar from DEPENDENCY_PINS.json.",
+    "PACKAGE": "This candidate directory.",
+    "PARENT_SOURCES": "Six exact historical compiler sources in SOURCE_PINS.json; not supplied. Seven unchanged sources are pin-checked sibling public files."
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "manual_requirements": [
+    "Supply18 exact historical original check inputs to check_source.py --parent-source-dir. Source-check original versions differ from candidate/compiler versions; do not substitute by basename.",
+    "Supply and verify six historical compiler sources, exact855 baseline source/build closure,106 ordered jars,314-file JDK and bounded owned-process supervisor. Seven other sources are pinned sibling public sources. This is requires-parent, NOT a fresh-checkout complete reproduction.",
+    "Caps are historical metadata, not executable supervision or launch authorization. Use a fresh output root and verify all inputs before/after.",
+    "Compiler-only scala.tools.nsc.Main. No project main, elaboration, RTL, DUT, numerical run or automatic retry."
+  ],
+  "not_a_claim": [
+    "fresh hermetic reproduction",
+    "common-parent compatibility",
+    "Chisel elaboration",
+    "numeric equivalence",
+    "full M128"
+  ]
+}

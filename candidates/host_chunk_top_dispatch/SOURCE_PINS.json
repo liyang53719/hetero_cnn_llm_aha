@@ -1,0 +1,235 @@
+{
+  "status": "REQUIRES_PARENT_FOR_SIX_COMPILER_SOURCES_AND_EIGHTEEN_ORIGINAL_CHECK_INPUTS",
+  "compiler_sources": [
+    {
+      "name": "GdnRuntimeRawPrepOwnerV7.scala",
+      "location": "requires_parent",
+      "bytes": 21740,
+      "sha256": "ce3b23ac721e8520a432b9d01a70c42ea1cef1d44a8fd50f1ad5b827e98a7c93"
+    },
+    {
+      "name": "GdnRuntimeRawPrepProtocolV7.scala",
+      "location": "requires_parent",
+      "bytes": 2883,
+      "sha256": "fa33d2fc2b86400863e45f9be4d238eff7f3b32f16e944e98f5d7ef45bcc8814"
+    },
+    {
+      "name": "HostBlockCommandsV4.scala",
+      "location": "this_package",
+      "bytes": 144654,
+      "sha256": "7324bebea8500f9c14bcc787a760307b832733b32ea235af57442c5a813e8ce7",
+      "path": "source/HostBlockCommandsV4.scala"
+    },
+    {
+      "name": "HostBlockTopV4.scala",
+      "location": "this_package",
+      "bytes": 23011,
+      "sha256": "6884dabf533df1cfffccd4f64b3eec5cd431005f15a559d022d29b006f0f2c92",
+      "path": "source/HostBlockTopV4.scala"
+    },
+    {
+      "name": "HostRuntimePrefixLeaseWiringV8.scala",
+      "location": "this_package",
+      "bytes": 15102,
+      "sha256": "c3a5851fb4067eb13612847c675238f7a8e32106eb3a5523fa7cc18954446242",
+      "path": "source/HostRuntimePrefixLeaseWiringV8.scala"
+    },
+    {
+      "name": "QwenOwnerProtocol.scala",
+      "location": "this_package",
+      "bytes": 67260,
+      "sha256": "f7ebf423e6f71768df9adf13860bbc7342a87c4b155cf2b8feab94bb6f1f8a7d",
+      "path": "source/QwenOwnerProtocol.scala"
+    },
+    {
+      "name": "UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "location": "shared_public",
+      "bytes": 21897,
+      "sha256": "4a01e104ca5c2d9995fe76426235a9269ef4de82a5173fb122ba6b81ffe8db82",
+      "path": "../host_chunk_gradual_bridge/source/UnifiedMoeSharedArithmeticAdapterV5.scala"
+    },
+    {
+      "name": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "location": "shared_public",
+      "bytes": 4811,
+      "sha256": "0dcd4ccfc259b582135845189a65dd826e3fbbeb05be8c116bb9ee9c1b73a256",
+      "path": "../host_chunk_gradual_bridge/source/UnifiedMoeSharedArithmeticProtocolV5.scala"
+    },
+    {
+      "name": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "location": "shared_public",
+      "bytes": 20779,
+      "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9",
+      "path": "../host_chunk_gradual_bridge/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala"
+    },
+    {
+      "name": "GdnRuntimeChunkExecuteOwnerV8.scala",
+      "location": "shared_public",
+      "bytes": 16928,
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e",
+      "path": "../host_chunk_gradual_bridge/source/GdnRuntimeChunkExecuteOwnerV8.scala"
+    },
+    {
+      "name": "GdnRuntimeChunkLeafCollection.scala",
+      "location": "shared_public",
+      "bytes": 9706,
+      "sha256": "c8b494a77b32ca89ca5e9e3d7417f36e939a42793b79006574d676c5d2407275",
+      "path": "../host_chunk_producer_receipt/source/GdnRuntimeChunkLeafCollection.scala"
+    },
+    {
+      "name": "GdnRuntimeChunkCoordinator.scala",
+      "location": "shared_public",
+      "bytes": 19158,
+      "sha256": "b1fb9b108a788166b384c224f3f418489272dd886def06e3c0a261d699325877",
+      "path": "../host_chunk_producer_receipt/source/GdnRuntimeChunkCoordinator.scala"
+    },
+    {
+      "name": "GdnRuntimeChunkLoadPrepV2Owner.scala",
+      "location": "requires_parent",
+      "bytes": 17265,
+      "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e"
+    },
+    {
+      "name": "GdnRuntimeChunkTransposeV2Owner.scala",
+      "location": "requires_parent",
+      "bytes": 12462,
+      "sha256": "839de9dba4d3a39670d8e33744dc9beb56399f9e39c3f7ab9f32d1cbca99a38a"
+    },
+    {
+      "name": "HeldDecoupledOffer.scala",
+      "location": "requires_parent",
+      "bytes": 912,
+      "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19"
+    },
+    {
+      "name": "GdnChunkStateTransferOwner.scala",
+      "location": "requires_parent",
+      "bytes": 10591,
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85"
+    },
+    {
+      "name": "GdnRuntimeRawPrepReceiptV8.scala",
+      "location": "shared_public",
+      "bytes": 1330,
+      "sha256": "882897d0c8e8e265eb33ccdad7b4d5dc8d29e502bda909816df8b258e77d9a6f",
+      "path": "../host_chunk_producer_receipt/source/GdnRuntimeRawPrepReceiptV8.scala"
+    },
+    {
+      "name": "SharedMemoryArbiter.scala",
+      "location": "this_package",
+      "bytes": 3727,
+      "sha256": "c110e660cc3750e2e0ce9dc3e71a40310f7c730ff5d49230f4c6d6b92d45a225",
+      "path": "source/SharedMemoryArbiter.scala"
+    },
+    {
+      "name": "HostRuntimeChunkWiringV9.scala",
+      "location": "this_package",
+      "bytes": 16870,
+      "sha256": "cb2c5b0a15f7042aba35aa39155d143df57dcfc83b566a701f89caf44a31cf76",
+      "path": "source/HostRuntimeChunkWiringV9.scala"
+    },
+    {
+      "name": "HostRuntimeChunkProtocolV9.scala",
+      "location": "this_package",
+      "bytes": 2346,
+      "sha256": "b356dfe90f9e897a10140638d4576eccbaea028134f7ae1c6ee5a156741b18c2",
+      "path": "source/HostRuntimeChunkProtocolV9.scala"
+    }
+  ],
+  "source_check_originals": [
+    {
+      "name": "GdnRuntimeRawPrepOwnerV7.scala",
+      "bytes": 21740,
+      "sha256": "ce3b23ac721e8520a432b9d01a70c42ea1cef1d44a8fd50f1ad5b827e98a7c93"
+    },
+    {
+      "name": "GdnRuntimeRawPrepProtocolV7.scala",
+      "bytes": 2883,
+      "sha256": "fa33d2fc2b86400863e45f9be4d238eff7f3b32f16e944e98f5d7ef45bcc8814"
+    },
+    {
+      "name": "HostBlockCommandsV4.scala",
+      "bytes": 140878,
+      "sha256": "4216faf60f9f2093690d0639f42f4ca3bb9f3b63eecbcf41a101397492f6ce73"
+    },
+    {
+      "name": "HostBlockTopV4.scala",
+      "bytes": 22297,
+      "sha256": "b7d4789668727c5003bc2b1ccd7c17e5e8e729b19888e8d28610f7285c975b45"
+    },
+    {
+      "name": "HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 14714,
+      "sha256": "8158f213d29cdc18eb35147012b6dee07016c5ed6fbd6a4c6c6fe84db96873af"
+    },
+    {
+      "name": "QwenOwnerProtocol.scala",
+      "bytes": 64563,
+      "sha256": "cedea040d010b51a402fc6696b4e51db35b0867c83f949bf948ec0e8e75aa050"
+    },
+    {
+      "name": "UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 21897,
+      "sha256": "4a01e104ca5c2d9995fe76426235a9269ef4de82a5173fb122ba6b81ffe8db82"
+    },
+    {
+      "name": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 4811,
+      "sha256": "0dcd4ccfc259b582135845189a65dd826e3fbbeb05be8c116bb9ee9c1b73a256"
+    },
+    {
+      "name": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "bytes": 20779,
+      "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9"
+    },
+    {
+      "name": "GdnRuntimeChunkExecuteOwnerV8.scala",
+      "bytes": 16928,
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e"
+    },
+    {
+      "name": "GdnRuntimeChunkLeafCollection.scala",
+      "bytes": 9706,
+      "sha256": "c8b494a77b32ca89ca5e9e3d7417f36e939a42793b79006574d676c5d2407275"
+    },
+    {
+      "name": "GdnRuntimeChunkCoordinator.scala",
+      "bytes": 19158,
+      "sha256": "b1fb9b108a788166b384c224f3f418489272dd886def06e3c0a261d699325877"
+    },
+    {
+      "name": "GdnRuntimeChunkLoadPrepV2Owner.scala",
+      "bytes": 17265,
+      "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e"
+    },
+    {
+      "name": "GdnRuntimeChunkTransposeV2Owner.scala",
+      "bytes": 12462,
+      "sha256": "839de9dba4d3a39670d8e33744dc9beb56399f9e39c3f7ab9f32d1cbca99a38a"
+    },
+    {
+      "name": "HeldDecoupledOffer.scala",
+      "bytes": 912,
+      "sha256": "9654e329f918981a89108b08606e8f284a4c2aac503245ab2ea7d51994467a19"
+    },
+    {
+      "name": "GdnChunkStateTransferOwner.scala",
+      "bytes": 10591,
+      "sha256": "8cdcf2d6a88306844f9a66ab828743e5948ee7b8b739b0933304d84eb85e6b85"
+    },
+    {
+      "name": "GdnRuntimeRawPrepReceiptV8.scala",
+      "bytes": 1330,
+      "sha256": "882897d0c8e8e265eb33ccdad7b4d5dc8d29e502bda909816df8b258e77d9a6f"
+    },
+    {
+      "name": "SharedMemoryArbiter.scala",
+      "bytes": 3570,
+      "sha256": "7807b0a7d34cbd776e07929b563b8b7269c0fc63c4f083e095bb62755fbff456"
+    }
+  ],
+  "shared_package_commits": {
+    "host_chunk_producer_receipt": "af86ffaa093950eb0d4c11d505f0730ca1184c4e",
+    "host_chunk_gradual_bridge": "65cbbb3e92079a859e4d4d8509a6b4383ba690fc"
+  }
+}

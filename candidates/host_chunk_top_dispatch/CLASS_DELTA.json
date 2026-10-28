@@ -1,0 +1,48 @@
+{
+  "status": "REQUIRES_PARENT_CLASS_BYTES_AND_SOURCE_BUILD_CLOSURE_NOT_INCLUDED",
+  "base_commit": "af86ffaa093950eb0d4c11d505f0730ca1184c4e",
+  "base_package": "../host_chunk_producer_receipt",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 2495,
+      "sha256": "6c0e9fd81a3221d1b2ef1a61b9a67e70b7c8152a549284cfe1319e2be3ebe022"
+    },
+    "CLASS_DELTA.json": {
+      "bytes": 8725,
+      "sha256": "9264bd8bc82bdbe43048397d3b7ca67c1bf76ad8ad4294ee1b4528250af9ab83"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 1962,
+      "sha256": "3bf9e86d25424227ae9f6c9ebb05bf91c02e618ff60924826a0ecd51a873a4a8"
+    }
+  },
+  "original_class_count": 858,
+  "removed": [
+    {
+      "relative": "heteronpu/continuous/SharedMemoryArbiter$$anon$1.class",
+      "bytes": 7995,
+      "sha256": "e4ca17c870f15e9c112213330d64e5e6f8a7960fa0b2b1d8003be7cd1742bcf2"
+    },
+    {
+      "relative": "heteronpu/continuous/SharedMemoryArbiter$.class",
+      "bytes": 566,
+      "sha256": "ead69ce7aeda917282cc6e16431b0aa2d5d952bbb453754f7f171141a48904d0"
+    },
+    {
+      "relative": "heteronpu/continuous/SharedMemoryArbiter.class",
+      "bytes": 37939,
+      "sha256": "c0fe9adaa61fac1a1ecc81147b199cc95c1fd46a2125a0b18bf70d7cac6bac85"
+    }
+  ],
+  "retained_class_count": 855,
+  "retained_class_bytes": 13471647,
+  "canonical_retained_sha256": "4915e5ef11794e9fb11b7e829d1d5d706d5cb32fdd4ac45e2b00dff597d74ed7",
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; bytes integer; trailing LF; keys relative/bytes/sha256 only",
+  "tool_dependency_changes": 0,
+  "dependency_metadata": {
+    "commit": "65cbbb3e92079a859e4d4d8509a6b4383ba690fc",
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  }
+}

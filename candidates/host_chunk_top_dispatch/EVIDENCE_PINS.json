@@ -1,0 +1,73 @@
+{
+  "scope": "Digest-only original evidence; no private paths, raw tool/class/runtime records or binary payloads",
+  "records": {
+    "candidate_source_manifest": {
+      "bytes": 4895,
+      "sha256": "0e22e777a6a5ba392637c321ce1e8e9ff5cfcf674722e16f47468d62c6f4c417"
+    },
+    "actual_summary": {
+      "bytes": 2724,
+      "sha256": "721e053c03ce008b81b0bb6fb2d7bd6bc3232cbdf5ab1b934f90438dd34aa09b"
+    },
+    "actual_receipt": {
+      "bytes": 36199,
+      "sha256": "91bf00fbcccbe0a24318ae5e00aa24803df91f371ace2f9de5347609213c7be8"
+    },
+    "actual_class_identities": {
+      "bytes": 113488,
+      "sha256": "b4e84bfe9c98b44a2cc15588fd3bd8f1b10a7733247f23f7a299792f34dc80c7"
+    },
+    "actual_command": {
+      "bytes": 38609,
+      "sha256": "a23624bba0beb168b57653c863f4db91bb9cd39c5731609b0306eec06f3217df"
+    },
+    "actual_input_pins": {
+      "bytes": 655357,
+      "sha256": "8d10aee7b220e2daf7ffc465969df3130899364345feec838b090d684e93cc90"
+    },
+    "actual_freeze": {
+      "bytes": 2000,
+      "sha256": "3d45f96e385358b732bc37bdde9cef087192925836696f4008e1abfc7dae59f3"
+    },
+    "actual_runner": {
+      "bytes": 8418,
+      "sha256": "197ec54660dbf556fdeb4c0e8c10b03855adbea71e4f4d9f82845f2bb52ae2fd"
+    },
+    "original_source_checker": {
+      "bytes": 6836,
+      "sha256": "c7c46436e9bd3d9ca1bbcbd9849f5dbaf9fd68a9f1769bfb4cebdc5ad3a4a96d"
+    },
+    "source_checks_normal": {
+      "bytes": 154,
+      "sha256": "e789a2559bf3e05832872beccdf93c243cd0ea9241734f8a3d3cbdceaf757bac"
+    },
+    "source_checks_optimized": {
+      "bytes": 154,
+      "sha256": "e789a2559bf3e05832872beccdf93c243cd0ea9241734f8a3d3cbdceaf757bac"
+    },
+    "contract_model_test": {
+      "bytes": 5184,
+      "sha256": "1d727d3916fa61e93521b7de15745495fd8cc50f7acc8523bd7a80d13b631aaf"
+    },
+    "r1_failure_receipt": {
+      "bytes": 1826,
+      "sha256": "306b941ea7aa0838cce1ab2db8557c7392bf79a2f855ac321fa994ec46dd8c41"
+    },
+    "r1_failure_log": {
+      "bytes": 335,
+      "sha256": "f3b2b03ad9ae1e5c98812c123cd28bd5192aaa9e57a3189f6431c351ecfd8ef1"
+    },
+    "r1_source_manifest": {
+      "bytes": 4581,
+      "sha256": "34a355204a7cc9b367cdcf08748c6f58d13577931fb85abc54e15513f4c8070e"
+    },
+    "final_evidence_manifest": {
+      "bytes": 2560,
+      "sha256": "945ec5a294f9a510b1a3cae9d10477d611f0caf8874c0710f7f8396825a3ddd3"
+    },
+    "final_result_and_next_gate": {
+      "bytes": 5961,
+      "sha256": "e93f043fc816709e3da4d8b940d91aa1517b877023c852722b473927ad72a766"
+    }
+  }
+}

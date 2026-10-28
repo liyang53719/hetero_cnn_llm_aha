@@ -1,0 +1,41 @@
+{
+  "status": "PRESERVED_REAL_FAILURE_THEN_SEPARATE_R2_COMPILER_ONLY_PASS",
+  "r1": {
+    "status": "FAIL",
+    "native_compiler_exit": 1,
+    "class_count": 0,
+    "wall_seconds": 26.140645807026885,
+    "cpu_seconds_sampled": 21.7,
+    "peak_rss_bytes": 376578048,
+    "preflight_checks": 1412,
+    "postflight_checks": 1412,
+    "strict_owned_group_cleanup": true,
+    "diagnostic": "HostRuntimeChunkProtocolV9.scala:10: QwenRuntimeChunkClientV9.binding collides with Chisel Bundle.binding: found GdnRuntimeChunkPrepBindingV8, required Option[chisel3.internal.Binding]",
+    "receipt": {
+      "bytes": 1826,
+      "sha256": "306b941ea7aa0838cce1ab2db8557c7392bf79a2f855ac321fa994ec46dd8c41"
+    },
+    "log": {
+      "bytes": 335,
+      "sha256": "f3b2b03ad9ae1e5c98812c123cd28bd5192aaa9e57a3189f6431c351ecfd8ef1"
+    },
+    "source_manifest": {
+      "bytes": 4581,
+      "sha256": "34a355204a7cc9b367cdcf08748c6f58d13577931fb85abc54e15513f4c8070e"
+    }
+  },
+  "r2": {
+    "fix": "Exactly one line in each of three files: private field binding -> prepBinding and its two references. Inverse exactly matches r1 source. No control/datapath/count/resource semantic change.",
+    "changed_files": [
+      "HostRuntimeChunkProtocolV9.scala",
+      "HostRuntimeChunkWiringV9.scala",
+      "QwenOwnerProtocol.scala"
+    ],
+    "native_compiler_exit": 0,
+    "actual_receipt": {
+      "bytes": 36199,
+      "sha256": "91bf00fbcccbe0a24318ae5e00aa24803df91f371ace2f9de5347609213c7be8"
+    }
+  },
+  "history": "r1 sources, failed receipt/log, all originals and older public candidates remain unchanged; no old failure reclassified as pass"
+}

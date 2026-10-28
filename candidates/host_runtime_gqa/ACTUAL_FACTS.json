@@ -1,0 +1,62 @@
+{
+  "status": "PASS_ACTUAL_GQA_7_SOURCE_937_BASELINE_COMPILER_ONLY",
+  "compiled_source_count": 7,
+  "baseline_class_count": 937,
+  "new_class_count": 52,
+  "new_class_bytes": 2684253,
+  "final_source_closure_count": 27,
+  "final_recompiled_source_count": 7,
+  "final_class_count": 134,
+  "inherited_source_count": 20,
+  "inherited_class_count": 82,
+  "wall_seconds": 59.205755867064,
+  "cpu_seconds_sampled": 48.6,
+  "peak_rss_bytes": 547774464,
+  "peak_tree_bytes": 18063513,
+  "pre_post_pin_checks": 3077,
+  "strict_owned_compiler_group_terminal": true,
+  "compile_log_empty": true,
+  "historical_transitive_graph_verified": false,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT",
+    "numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 20478,
+    "sha256": "c89627211f9a169daf954a4bf4db02d035fe4a06d5b936ebc4ac6ab904fec2ac"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "historical_checks_each_mode": {
+    "owner_source": 45,
+    "owner_mutations": 16,
+    "owner_models": 28,
+    "owner_geometry_cases": 65536,
+    "commands_source": 4030,
+    "commands_mutations": 15,
+    "commands_models": 19,
+    "prefix_source": 53,
+    "prefix_mutations": 21,
+    "prefix_models": 19,
+    "integration_source": 65121,
+    "integration_mutations": 7,
+    "integration_route_checks": 57344,
+    "arithmetic_source": 103574,
+    "arithmetic_mutations": 16,
+    "inherited_commands_models": 47
+  },
+  "publication_compiler_executions": 0,
+  "admission": "Installed GQA only cold M128/C128/cap128/order1; leaf M1..128/C1..256 capacity is not installed common-chain admission. Final roots/seals closed."
+}

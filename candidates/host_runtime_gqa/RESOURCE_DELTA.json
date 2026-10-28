@@ -1,0 +1,94 @@
+{
+  "scope": "Fixed declared GQA storage retained from r3 and newly integrated into common runtime; not zero area, optimized RAM/instance/synthesis report",
+  "fixed_major_staging_bits": {
+    "query": 65536,
+    "keys": 131072,
+    "scores": 131072,
+    "qk": 8192,
+    "output": 65536,
+    "value": 4096
+  },
+  "fixed_major_staging_total_bits": 405504,
+  "additional_maximum_register_bits": 512,
+  "local_terminal_bf16_rounders": 32,
+  "other_numeric_control": [
+    "scalarValue",
+    "sum",
+    "seen",
+    "FSM",
+    "accepted/returned counters",
+    "terminal",
+    "four publication observers",
+    "Prefix fullHost/txn64/two-producer/receipt metadata"
+  ],
+  "authority_kind_old_bits": 3,
+  "authority_kind_new_bits": 4,
+  "shared_interface_identity_changed": true,
+  "source_declared_authority_register_delta_bits": 23,
+  "authority_delta_breakdown": [
+    {
+      "authority_field_instances": 11,
+      "width_delta_bits_per_instance": 1,
+      "declared_delta_bits": 11,
+      "source_name": "UnifiedMoeSharedArithmeticAdapterV5.scala"
+    },
+    {
+      "authority_field_instances": 2,
+      "width_delta_bits_per_instance": 1,
+      "declared_delta_bits": 2,
+      "source_name": "HostRuntimePrefixLeaseWiringV8.scala"
+    },
+    {
+      "authority_field_instances": 2,
+      "width_delta_bits_per_instance": 1,
+      "declared_delta_bits": 2,
+      "source_name": "HostRuntimeChunkWiringV9.scala"
+    },
+    {
+      "authority_field_instances": 8,
+      "width_delta_bits_per_instance": 1,
+      "declared_delta_bits": 8,
+      "source_name": "HostMoeArithmeticLeaseWiringV5.scala"
+    }
+  ],
+  "width_audit": {
+    "bytes": 34195,
+    "sha256": "366b9beabe24e526151cd834b94fe60073415dcb3d09fa8fdc5d4b16083cc335"
+  },
+  "width_audit_scope": "978 old class records/85 source paths; inherited Chunk/MoE consumers dynamically construct same Bundle; source audit not elaboration.23bits is identified authority registers only, not total metadata area.",
+  "new_fpu": false,
+  "new_matrix": false,
+  "new_dma": false,
+  "new_scalar_bank": false,
+  "existing": {
+    "hub_clients": 17,
+    "memory_client": 1,
+    "adapter_clients": 11,
+    "vector_bank_lanes": 32,
+    "matrix_slices": 8,
+    "macs_per_slice": 512,
+    "total_matrix_macs": 4096
+  },
+  "authority": {
+    "mode": 13,
+    "kind": 8,
+    "stage": 76,
+    "scalar_slot": 8,
+    "cap": 3145728,
+    "format9": false,
+    "vector10": false
+  },
+  "capacity": {
+    "max_tokens": 128,
+    "score_capacity": 256,
+    "max_query_heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "installed_cold_tokens": 128,
+    "installed_cache_length": 128,
+    "installed_cache_capacity": 128,
+    "qk_order": 1
+  },
+  "qwen2_transposed_seed_packed_reduction_preserved": true,
+  "hardware_qualification": false
+}

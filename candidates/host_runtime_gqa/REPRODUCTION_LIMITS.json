@@ -1,0 +1,27 @@
+{
+  "historical_transitive_graph_verified": false,
+  "active_closure": {
+    "status": "PASS_EXACT_ACTIVE_SOURCE_CLASS_TOOL_PIN_CLOSURE_NOT_ARCHIVAL_GRAPH",
+    "unique_pin_count": 1685,
+    "expanded_active_manifest_count": 10,
+    "nested_pin_record_count": 2116,
+    "historical_json_boundaries": 139,
+    "record": {
+      "bytes": 777320,
+      "sha256": "87971b28cd29f4468d606c925e0ff0127a902521b6e2dfeba15bdde47d01f397"
+    }
+  },
+  "archival_diagnostic": {
+    "status": "ARCHIVAL_GRAPH_HAS_UNRESOLVED_OR_STALE_PINS_NOT_ACTIVE_COMPILE_FAILURE",
+    "pin_references": 6605,
+    "missing_or_unresolved_references": 519,
+    "changed": 0,
+    "budget_skipped": 899,
+    "rebound": 516,
+    "record": {
+      "bytes": 722498,
+      "sha256": "e52174a6d4997f7fb01521a9842113c1df7a28372d514ec939289ff30625968c"
+    }
+  },
+  "scope": "Exact active compiler consumed inputs and source/class lineage verified. Historical boundary JSON files were pinned as files, not recursively proved complete. Missing/moved/stale historical references remain unresolved; no inherited full-history PASS or self-contained fresh-checkout reproduction. Private absolute paths not exported."
+}

@@ -1,0 +1,76 @@
+{
+  "status": "TWO_SOURCE_P1_FIXES_AND_SEPARATE_PREFLIGHT_FAILURE_PRESERVED",
+  "source_findings": [
+    {
+      "id": "GQA-P1-01",
+      "severity": "P1",
+      "state": "FIXED_IN_REVIEWED_SOURCE_NOT_DUT_VERIFIED",
+      "evidence": "Leaf publishedOffer / heldOffer; Kernel Matrix publish gates; Top actual memory/Scalar publication observers.",
+      "original_failure": "Nested raw leaf hold latched a first offer vetoed before external publication, so sticky fault could pin issue state and prevent existing Matrix group abort/drain.",
+      "resolution": "Four read-only actual-publication observations now commit leaf held state. Unpublished private intents can stop on registered fault; externally published held offers persist.",
+      "hardware_consequence": "Prevented permanent issue-state deadlock without adding payload storage, numerical hardware, or combinational publication-to-valid/reset feedback.",
+      "mechanical_acceptance": "DUT inject independent fault on first and already-held memory/Scalar/group/step offers with ready0/1; verify external stability, no new publication, exact accepted-debt drain.",
+      "waiver": "No hardware waiver inferred from this source/model review."
+    },
+    {
+      "id": "GQA-P1-02",
+      "severity": "P1",
+      "state": "FIXED_IN_REVIEWED_SOURCE_NOT_DUT_VERIFIED",
+      "evidence": "Leaf fault transition .elsewhen(state =/= drain), versus prior faultNow || state =/= drain.",
+      "original_failure": "Persistent registered parentFault reasserted fail() every cycle and late state assignment overrode drain->finish even when known debts were zero.",
+      "resolution": "Already-draining state is no longer overwritten by repeated fault; idle faults lock without fabricating accepted-job terminal.",
+      "hardware_consequence": "Known debt can retire and produce failed terminal while poison remains sticky.",
+      "mechanical_acceptance": "Hold parentFault high from issue/wait/drain through every matching return; terminal must become error only after debts retire and remain stable under backpressure. Idle fault must never produce done.",
+      "waiver": "Unknown identity / early Matrix terminal remains explicit quarantine requiring joint reset, never fabricated drain."
+    }
+  ],
+  "first_attempt": {
+    "status": "FAIL",
+    "stage": "COMPILE_ONLY_NOT_TEST_OR_RTL",
+    "errors": [
+      "ValueError: pinned symlink kind drift",
+      "ValueError: pinned symlink kind drift"
+    ],
+    "owner": null,
+    "exit_code": null,
+    "peak_rss": 0,
+    "log_sha256": null,
+    "java_started": false,
+    "receipt": {
+      "bytes": 352,
+      "sha256": "d469d93419c359b7022cbf6db0f70d6fa89f85ced932b0e6f25a22418773fcca"
+    }
+  },
+  "metadata_pinfix": {
+    "omitted_symlink_target_rows": 129,
+    "restored_from_exact_predecessor": true,
+    "strict_verifier_unchanged": true,
+    "source_unchanged": true,
+    "caps_unchanged": true,
+    "filesystem_links_unchanged": true,
+    "new_actual_identity": true,
+    "negative_controls": [
+      "missing-target",
+      "wrong-target"
+    ],
+    "review": {
+      "bytes": 5872,
+      "sha256": "1dd78d21aa6266c3693bd84295c6c753ab8d92419fae80c05cceea3724b77b79"
+    },
+    "diagnosis": {
+      "bytes": 208037,
+      "sha256": "e8cf5e43a01bd8e1119f8968029bfb38b6c3efbba0be05825ac8c89d3fcc6aaa"
+    }
+  },
+  "prior_qknorm_history": {
+    "path": "../host_runtime_qknorm/PROTOCOL_DEFECT_AND_FIX.json",
+    "bytes": 2125,
+    "sha256": "9ade8c08d6623298482ae9bca33171afd92fa55435458fa44df419d4d42c5447"
+  },
+  "prior_kv_history": {
+    "path": "../host_runtime_kvappend/HISTORICAL_FINDINGS.json",
+    "bytes": 1867,
+    "sha256": "af976ef1ce78ae2d1e3f3e65c0810d0314f0502a13cdec660a1ece62d2e96f92"
+  },
+  "limits": "Source fixes not DUT proof. Old failed receipt/raw evidence preserved, no overwrite or relaxed verifier."
+}

@@ -1,0 +1,137 @@
+{
+  "scope": "Digest-only original records; scoped active PASS not full historical graph PASS; no raw private paths/class/tool bytes.",
+  "records": {
+    "source_manifest": {
+      "bytes": 1827,
+      "sha256": "3ce68f97fff4a67ae4f43d7173de3ec69ea221efe9284633cb041e41aa550780"
+    },
+    "final_source_set": {
+      "bytes": 7126,
+      "sha256": "cbad90ab775c492daec067db187e1b51f951eb5cb76b5710497486d6aafb6c6d"
+    },
+    "precompile_evidence": {
+      "bytes": 12219,
+      "sha256": "38d4155edd2cbb7051f69c3663a3f5c3173d5042712e96c89e5a923d5bdaecea"
+    },
+    "independent_source_review": {
+      "bytes": 7909,
+      "sha256": "815d911058d9156062081f1a2660808b8e5781f3d5c9fca6ffcadcacafb024d9"
+    },
+    "original_owner_result": {
+      "bytes": 1351,
+      "sha256": "88afd025e95e5b18d875f125c9e989c700640935a7f590dea3abb569984ad922"
+    },
+    "original_commands_checker": {
+      "bytes": 9099,
+      "sha256": "b663f241374bedfa89fe3df3df9cadd4cb449a4e47d8b91fc20a828c4fa10093"
+    },
+    "original_integration_checker": {
+      "bytes": 8986,
+      "sha256": "4c75584ed1aa45adad0eb7c75020b850e9e3bdd9683d1b96da0e6804a610e62d"
+    },
+    "original_prefix_checker": {
+      "bytes": 5570,
+      "sha256": "6cfb186cc67505c9cf92d6792435326387c2abb5bea2cadf68289cb8fd22af8a"
+    },
+    "original_arithmetic_delta": {
+      "bytes": 3774,
+      "sha256": "6fe617b78a0b91253a3cacd5a963ce53bec7ed1eda4c3825c6bf971b3baca586"
+    },
+    "original_arithmetic_test": {
+      "bytes": 8491,
+      "sha256": "6f90f3aefad4db6bb71e690610e12e429f11b64ade6d827cbab6106566834714"
+    },
+    "original_owner_test": {
+      "bytes": 13944,
+      "sha256": "4ec67d1a3ac98b2e1ea4f8d57c7e7d1cd7b2cf43026c63d928d62bde02a6eb9b"
+    },
+    "actual_receipt": {
+      "bytes": 20478,
+      "sha256": "c89627211f9a169daf954a4bf4db02d035fe4a06d5b936ebc4ac6ab904fec2ac"
+    },
+    "actual_summary": {
+      "bytes": 2528,
+      "sha256": "e4a63018f6d735bcf603fe619fa54f663d4ed21834dcc8b6af758c12e132325d"
+    },
+    "actual_class_identities": {
+      "bytes": 52231,
+      "sha256": "39f0a0b6ced7c2fef59b2ffb318bb02b65ae4615e5f1008b0a3e98bc63d565c8"
+    },
+    "final_source_class_closure": {
+      "bytes": 156102,
+      "sha256": "b2ed0f5896fc10e747dd8a063dab173cdf6019d171ad5fc33e59997d3ee12ece"
+    },
+    "original_command": {
+      "bytes": 36925,
+      "sha256": "a01a9651b9cb83e01a4e02e397185d45e6d14b3113a71ee5cbed6c8113730766"
+    },
+    "original_input_pins": {
+      "bytes": 1722301,
+      "sha256": "b2ec3134a0f75ddd8efd3329d0148008d7dbfeb9f168ef48f27c6ee200b8b7f3"
+    },
+    "prepare_freeze": {
+      "bytes": 4299,
+      "sha256": "6cdc98a0e33c326e0bf3f490e666b5855051e22531ddc1346546190e053030ee"
+    },
+    "class_composition": {
+      "bytes": 987271,
+      "sha256": "a4285aaa50d9c1e40809949bd5de9b480539bcc2f0d2a594dafa76a8ee822a42"
+    },
+    "source_provenance": {
+      "bytes": 15897,
+      "sha256": "2de571f6dfb36800c5d41fcc4a61df30249358e323ecee3bd584199e6f6e49b5"
+    },
+    "original_source_delta": {
+      "bytes": 117444,
+      "sha256": "090a782cb5ddc0fd25466921bc87141ccf6b4fd6919a1973efc4f59095cb1a84"
+    },
+    "width_audit": {
+      "bytes": 34195,
+      "sha256": "366b9beabe24e526151cd834b94fe60073415dcb3d09fa8fdc5d4b16083cc335"
+    },
+    "archival_diagnostic": {
+      "bytes": 722498,
+      "sha256": "e52174a6d4997f7fb01521a9842113c1df7a28372d514ec939289ff30625968c"
+    },
+    "known_archival_supervisor_diagnostic": {
+      "bytes": 1568,
+      "sha256": "7ebc7f94092d3560770668a609abfb3d0c1d8e29c1f8b8739e372893376bf193"
+    },
+    "first_failed_receipt": {
+      "bytes": 352,
+      "sha256": "d469d93419c359b7022cbf6db0f70d6fa89f85ced932b0e6f25a22418773fcca"
+    },
+    "first_prepare_freeze": {
+      "bytes": 3056,
+      "sha256": "0fcd49b5e5b099adbf62ef2a13f9d7e84498a2422bb12809e9533823656cc8de"
+    },
+    "pinfix_review": {
+      "bytes": 5872,
+      "sha256": "1dd78d21aa6266c3693bd84295c6c753ab8d92419fae80c05cceea3724b77b79"
+    },
+    "schema_diagnosis": {
+      "bytes": 208037,
+      "sha256": "e8cf5e43a01bd8e1119f8968029bfb38b6c3efbba0be05825ac8c89d3fcc6aaa"
+    },
+    "schema_negative_checks": {
+      "bytes": 99404,
+      "sha256": "aa99d278d68af1aa594fb1e351eee74b1348f54714bab00f4c5fb854809b375d"
+    },
+    "final_evidence_manifest": {
+      "bytes": 18434,
+      "sha256": "9e2dc131a29ec7d783b9bf37f4a19f947c7027a5d9f6b50d3e420dc41696a6b8"
+    },
+    "final_verified_scope": {
+      "bytes": 2995,
+      "sha256": "09da8a4d00dd0fe92cf8428508ce8e66a8f1f20f69735916074f22b6bf88e822"
+    },
+    "final_chinese_result": {
+      "bytes": 2900,
+      "sha256": "40a4ced777f0b90441ed425cfc7fb852bb08b7156df05f3a95839cf2ba38c773"
+    },
+    "original_public_mapping": {
+      "bytes": 15089,
+      "sha256": "871451eedd0af29d57d2eef15235d45ac42cbda19bd06dad7335175d7eb02c26"
+    }
+  }
+}

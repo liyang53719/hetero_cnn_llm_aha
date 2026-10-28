@@ -1,0 +1,135 @@
+{
+  "status": "TEMP_GQA_INCREMENTAL_TYPECOMPILE_REQUIRES_PARENT_ARCHIVAL_GRAPH_INCOMPLETE_NOT_HARDWARE",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 1908,
+      "sha256": "14e18c72a1332b13b794b8a7787388b584c30656ee87cb04a5d457d8179701af"
+    },
+    {
+      "path": "CLASS_LINEAGE.json",
+      "bytes": 4010,
+      "sha256": "5ddc573620d77602323c516de19f77241f16cc1b4435679daa2358df4cb00a4d"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 4835,
+      "sha256": "6317907726eec0e7449c8c83dab3774685ddd39c900c68c34bb2a074f611533b"
+    },
+    {
+      "path": "HISTORICAL_FINDINGS.json",
+      "bytes": 3838,
+      "sha256": "2afd3cb3f345b34fe4e3d9893b24030136ed831dd48454e87c5e69d7a3060443"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 7523,
+      "sha256": "7c97559183d8afd6fb21ccb02b4f3c1e90ed457b55b41e35d1df404aa9bc715d"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 2869,
+      "sha256": "cbbd0ab5630b0019061f576402617ea6ddc8e4b6adb9ff7830c04f0771da4ced"
+    },
+    {
+      "path": "REPRODUCTION_LIMITS.json",
+      "bytes": 1174,
+      "sha256": "0b00410a7276d41e1387d6f08d907ea3d0d55061fccaab2b25bc2e846c4a4155"
+    },
+    {
+      "path": "RESOURCE_DELTA.json",
+      "bytes": 2773,
+      "sha256": "4faf703a2d8ada741410ee02ae534993b69db5370d1bde617c469f4d9571fbf5"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 8778,
+      "sha256": "54419fa33132fbafcf3a07ca553c7802f5ba30ac3bbda0b5f5392fbd87b10bf1"
+    },
+    {
+      "path": "SOURCE_PROVENANCE.json",
+      "bytes": 1764,
+      "sha256": "688940f8581ada3c5362d94a5d6ba1778c35fd694267039d8272a38e2b423806"
+    },
+    {
+      "path": "arithmetic_delta.py",
+      "bytes": 3462,
+      "sha256": "a25451783d33d6535d425679a9c017b9335ea15dcecb7192a55da00c07245521"
+    },
+    {
+      "path": "check_commands_gqa.py",
+      "bytes": 8847,
+      "sha256": "a98abba5c8d379d30bc7ccc7e5f301e4d1f244817da24f5d8fc690c56d2a092a"
+    },
+    {
+      "path": "check_gqa_prefix.py",
+      "bytes": 5570,
+      "sha256": "6cfb186cc67505c9cf92d6792435326387c2abb5bea2cadf68289cb8fd22af8a"
+    },
+    {
+      "path": "check_integration_gqa.py",
+      "bytes": 9202,
+      "sha256": "3e1754029b4f25d5c77a5fe50b95955e30ad4e6fa200a36267ab6270581b3ce5"
+    },
+    {
+      "path": "source/Bf16CausalGqaRuntimeOwnerV14.scala",
+      "bytes": 33063,
+      "sha256": "c402469bbd1fe5d70c6e570474403cd72f4cc75f3f0a79e84de7d9bfd27e1902"
+    },
+    {
+      "path": "source/HostBlockCommandsV4.scala",
+      "bytes": 158218,
+      "sha256": "c2715a549acbb04e1def9811e22ddefeb10af6362fdf3789ace4f2ab322c7fc8"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 25222,
+      "sha256": "66cbc823a8037935fc0c6b887585857aed1b3b970b79cdd3407664e4949995e1"
+    },
+    {
+      "path": "source/HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 46627,
+      "sha256": "015e9c395d2429a6f5d510406c6f58226d494dd3216fe96da6c43ccb3e098758"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 84663,
+      "sha256": "6d0b56d6f902f487894b2c6b6093f3e37dddca3b6a1f6521c30d8784481a19c8"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 23308,
+      "sha256": "3c66fc90f8d20c1fb2232d8a839a64bdfef09b3160736bee5c77e6369b435fb6"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 6241,
+      "sha256": "d19428d909442d7f09479118ba46fe18400a6a1068f6e6a103be29ffe64a69ca"
+    },
+    {
+      "path": "tests/test_commands_gqa.py",
+      "bytes": 9550,
+      "sha256": "6b62ab305920b3da112737c7fbd19f5d7a4a05dce1151e88570e6362f9aa23d4"
+    },
+    {
+      "path": "tests/test_gqa_arithmetic_authority.py",
+      "bytes": 8491,
+      "sha256": "5c8d5e160e26d66d82c9041d9256eaeef209c7cda802d9ae6f917a319e1b28a5"
+    },
+    {
+      "path": "tests/test_gqa_owner.py",
+      "bytes": 14000,
+      "sha256": "08cf3bf1dcfe360c935ca653e5d5d8f4da0e3005f31679fd46e02d5ed93629cd"
+    },
+    {
+      "path": "tests/test_gqa_prefix.py",
+      "bytes": 8016,
+      "sha256": "bd641b46e36afc6bbea4ad60d31620e1156c0b0dbd15951a42243fd17342cda2"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1115,
+      "sha256": "9552c2c37b3c456a466f72f90f01dda37d263c185d3b4eec928c54f8819c3e30"
+    }
+  ]
+}

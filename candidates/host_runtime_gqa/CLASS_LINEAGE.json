@@ -1,0 +1,95 @@
+{
+  "status": "ACTUAL_INCREMENTAL_COMPILER_CLOSURE_NOT_FULL_RECOMPILE",
+  "base_commit": "97313d024c921f22fbaecf3e30022a6add2f24f7",
+  "base_package": "../host_runtime_kvappend",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 3619,
+      "sha256": "6136c65af5ec1120dfac03f384ac551b7d5467318f9b6af0b3284e43fe503b03"
+    },
+    "CLASS_LINEAGE.json": {
+      "bytes": 3819,
+      "sha256": "0a31657d50d669d71d725e568c22aaefa4c4fd75fe3ea3ac8d6f29f2d69b7842"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 3306,
+      "sha256": "84e669f66e1674e1ad38708d83235121b3c32f346f61460a93732540550d380b"
+    },
+    "INHERITED_HELPER_PINS.json": {
+      "bytes": 1918,
+      "sha256": "3c5f2db1410f2229ff0be573f8752bfcf8aa5a9a4437c8ff2645bcd8f55b5f00"
+    }
+  },
+  "baseline": {
+    "original_ancestor_count": 855,
+    "original_ancestor_digest": "4915e5ef11794e9fb11b7e829d1d5d706d5cb32fdd4ac45e2b00dff597d74ed7",
+    "previous_final_classes": 123,
+    "previous_final_digest": "0a075e3d8aac13feb948bbeb1c1e7737f268586c03941aca238a4352ad5d0a36",
+    "composed_count": 978,
+    "removed_classes": 41,
+    "removed_source_families": [
+      "HostBlockCommandsV4.scala",
+      "HostBlockTopV4.scala",
+      "HostRuntimePrefixLeaseWiringV8.scala",
+      "QwenOwnerProtocol.scala",
+      "UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "UnifiedMoeSharedArithmeticProtocolV5.scala"
+    ],
+    "removed_digest": "b38f039902bc60b64b2d8cedfb95687af696c6fd16c21f57426fa6b6c6e1638f",
+    "retained_count": 937,
+    "retained_digest": "4271de2e9b4bd28722e9bec956a37d680eb52389cd05900992d01108d43c290e",
+    "inherited_class_count": 82,
+    "inherited_digest": "fc3b1103a2a7a305fe6c08cef4132f2c46bcb0f11d353b1d2500a33bc73d5fc6"
+  },
+  "actual": {
+    "compiled_sources": 7,
+    "new_classes": 52,
+    "new_class_bytes": 2684253,
+    "new_digest": "63c8210de28475d379ddb98ba0a3db6c67abd9c63bf56d43fe403fa63c2d7640"
+  },
+  "final": {
+    "sources": 27,
+    "classes": 134,
+    "class_bytes": 4556781,
+    "class_digest": "9416e7dc51a2223a46e74fc5f7c6378435762ab23840182d7cd6a8d7cdc5269e",
+    "inherited_sources": 20,
+    "actually_compiled_sources": 7,
+    "by_source": {
+      "GdnChunkStateTransferOwner.scala": 4,
+      "GdnRuntimeChunkLeafCollection.scala": 7,
+      "GdnRuntimeChunkCoordinator.scala": 4,
+      "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+      "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+      "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+      "GdnRuntimeRawPrepReceiptV8.scala": 3,
+      "HostRuntimeGatedDependencyV10.scala": 1,
+      "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+      "GdnRuntimeGatedNormProtocolV10.scala": 4,
+      "GdnRuntimeGatedNormOwnerV10.scala": 1,
+      "GdnRuntimeRawPrepProtocolV7.scala": 9,
+      "GdnRuntimeRawPrepOwnerV7.scala": 1,
+      "HeldDecoupledOffer.scala": 4,
+      "HostRuntimeChunkProtocolV9.scala": 3,
+      "HostRuntimeChunkWiringV9.scala": 3,
+      "QkNorm256RuntimeOwnerV11.scala": 7,
+      "SharedMemoryArbiter.scala": 3,
+      "PartialRopeRuntimeOwnerV12.scala": 7,
+      "Bf16KvAppendRuntimeOwnerV13.scala": 7,
+      "Bf16CausalGqaRuntimeOwnerV14.scala": 10,
+      "HostBlockCommandsV4.scala": 4,
+      "HostBlockTopV4.scala": 3,
+      "HostRuntimePrefixLeaseWiringV8.scala": 4,
+      "QwenOwnerProtocol.scala": 20,
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": 9,
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": 2
+    }
+  },
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; trailing LF; relative/bytes/sha256 only",
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "commit": "97313d024c921f22fbaecf3e30022a6add2f24f7",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "requires_parent": "Exact855 ancestor classes plus82 inherited class bytes and complete source/build closure are not bundled. Active input identity PASS does not imply full archival graph PASS or fresh-checkout reproduction."
+}

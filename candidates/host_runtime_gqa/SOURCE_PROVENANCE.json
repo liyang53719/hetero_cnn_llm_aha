@@ -1,0 +1,37 @@
+{
+  "status": "DISTINCT_RUNTIME_R3_RECIPE_AND_RETAINED_LEGACY_GQA",
+  "runtime_numerical_source": {
+    "name": "Bf16CausalGqaOwner.scala",
+    "bytes": 25784,
+    "sha256": "d1dc6e1707ec0ae303b439b90904adb37dbce9df53e0156011e167a11ae92d18"
+  },
+  "legacy_source": {
+    "name": "Bf16CausalGqaOwner.scala",
+    "bytes": 20617,
+    "sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9"
+  },
+  "legacy_compiled_source_record": {
+    "relative": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16CausalGqaOwner.scala",
+    "expected_sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+    "stage_sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9",
+    "compiled_source_sha256": "d4c1047d275fa0b38d9498fdf6c22018f52138b21a49e55866661a4d4e635cd9"
+  },
+  "legacy_classes_count": 7,
+  "legacy_classes_digest": "13930fbce5e38bbb067338743684c8559615b5a4fe3b48dfe29dd0ca9d31b3b9",
+  "guard_source": {
+    "bytes": 10809,
+    "sha256": "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53"
+  },
+  "guard_classes_count": 7,
+  "guard_classes_digest": "9908d7b0e274257cbe573e7078bcfa62217a367d5c514931dca2ce8aad517e9d",
+  "original_record": {
+    "bytes": 15897,
+    "sha256": "2de571f6dfb36800c5d41fcc4a61df30249358e323ecee3bd584199e6f6e49b5"
+  },
+  "other_inherited_helpers": {
+    "path": "../host_runtime_kvappend/INHERITED_HELPER_PINS.json",
+    "bytes": 1918,
+    "sha256": "3c5f2db1410f2229ff0be573f8752bfcf8aa5a9a4437c8ff2645bcd8f55b5f00"
+  },
+  "scope": "New runtime source derives from pinned r3 numerical recipe. Retained legacy GQA classes derive from DIFFERENT pinned original source d4c1047d; neither is falsely relabeled as the other or claimed recompiled."
+}

@@ -1,0 +1,72 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED_ARCHIVAL_GRAPH_INCOMPLETE",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PACKAGE}/source/Bf16CausalGqaRuntimeOwnerV14.scala",
+    "{PACKAGE}/source/HostBlockCommandsV4.scala",
+    "{PACKAGE}/source/HostBlockTopV4.scala",
+    "{PACKAGE}/source/HostRuntimePrefixLeaseWiringV8.scala",
+    "{PACKAGE}/source/QwenOwnerProtocol.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticProtocolV5.scala"
+  ],
+  "exact_inverse_verified": true,
+  "actual_sources": 7,
+  "final_source_closure": 27,
+  "baseline_count": 937,
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21; full314-file tree external; preserve verified symlink_target metadata, not only content hashes",
+    "RUN": "Fresh output root with home/tmp/classes",
+    "BASELINE": "Exact937=855 ancestor+82 inherited classes; canonical hashes in CLASS_LINEAGE.json; complete class source/build closure external",
+    "JAR_CP": "106 ordered jars in pinned sibling DEPENDENCY_PINS.json",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin",
+    "PACKAGE": "This package directory"
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "requirements": [
+    "Supply exact historical class/source/build closure,106 jars,314-file JDK and original bounded strict supervisor. No binaries bundled.",
+    "Preserve symlink kind,target,identity,size,hash semantics. Missing129 metadata correctly caused initial preflightFAIL; do not weaken verifier.",
+    "Verify all inputs before/after. Caps metadata is not executable supervision or new launch permission.",
+    "Only7 sources compiled; final27 includes20 unchanged inherited sources. Runtime r3 recipe differs from retained legacy GQA bytecode source.",
+    "Exact active source/class/tool closure PASS is NOT complete archival graph PASS; unresolved/stale/moved references explicitly remain in REPRODUCTION_LIMITS.",
+    "No project main/elaboration/RTL/DUT/numeric/automatic retry."
+  ]
+}

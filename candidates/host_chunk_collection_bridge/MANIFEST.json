@@ -1,0 +1,49 @@
+{
+  "status": "TEMP_SOURCE_AND_HASH_METADATA_ONLY",
+  "files": {
+    "ACTUAL_FACTS.json": {
+      "bytes": 2969,
+      "sha256": "f24193a6be914cfc2feae746f77431d905e669e2c401017797241ad10336f9f4"
+    },
+    "CLASS_DELTA.json": {
+      "bytes": 4059,
+      "sha256": "01da435b1c8b29113148e7ca43f6c3486abb29eb10ba4d019c29b9ce18441490"
+    },
+    "CLASS_IDENTITIES.tsv": {
+      "bytes": 9534,
+      "sha256": "5c6fc76e37d2bb4f5b9a4a1f7c3f339d31ec61a4caa9e87e6899deae5bbdd602"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 1515,
+      "sha256": "3f20672261c9faba9f2d04f8a5a4514ebdb1777051ea22ed334d9b391808cd4e"
+    },
+    "README_ZH.md": {
+      "bytes": 5346,
+      "sha256": "f02a7739856e2bfe2275e1fc149fee865e6aa4773378e57a3a5349f56289fb09"
+    },
+    "REPRODUCTION.json": {
+      "bytes": 3553,
+      "sha256": "74c472acaac1bff9d5a387d5f5148ae68016cb53891f3aff16cfd50c3d1c2626"
+    },
+    "SOURCE_DELTA.patch": {
+      "bytes": 1053,
+      "sha256": "a06c647543f158bd4d7692c62b785c3ae130426ed0ced231224907ccd7ce157d"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 3345,
+      "sha256": "8cdf1839f2fb0def645eeb43f501ac46437917343fb327e2fc7b05959915995e"
+    },
+    "check_source.py": {
+      "bytes": 6761,
+      "sha256": "42569d59114492c113afcd3360f1641afa31c2a8e0090aa4dbf7735f90dda61d"
+    },
+    "source/GdnRuntimeChunkLeafCollection.scala": {
+      "bytes": 9705,
+      "sha256": "15798b8c3cba4522968e55b6a7f3306e5e5212b6b5abd8537ff9b5d38def7ca8"
+    },
+    "verify_package.py": {
+      "bytes": 5147,
+      "sha256": "6fd521801354380abcffc890b5aa0859d2456bc2acae4163a6b1cdd56be3fd09"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+--- historical/GdnRuntimeChunkLeafCollection.scala
++++ candidate/GdnRuntimeChunkLeafCollection.scala
+@@ -16,8 +16,8 @@
+   val response=Flipped(Decoupled(new MemoryResponse))
+ }
+ class GdnRuntimeChunkVectorClient extends Bundle {
+-  val request=Decoupled(new UnifiedVectorRequestV2)
+-  val result=Flipped(Decoupled(new UnifiedVectorResultV2))
++  val request=Decoupled(new UnifiedOrdinaryVectorRequestV5)
++  val result=Flipped(Decoupled(new UnifiedOrdinaryVectorResultV5))
+ }
+ /** One shared retained observation of an ACTUAL leaf job.fire. This is not
+   * owner-success/admission proof or the parent's txn64 identity. Parent binds
+@@ -79,7 +79,7 @@
+   val load=Module(new GdnRuntimeChunkLoadPrepV2Owner)
+   val derived=Module(new GdnRuntimeChunkDerivedAndPairV2Owner)
+   val transpose=Module(new GdnRuntimeChunkTransposeV2Owner)
+-  val execute=Module(new GdnRuntimeChunkExecuteOwner)
++  val execute=Module(new GdnRuntimeChunkExecuteOwnerV8)
+   coordinator.io.job<>io.job
+   coordinator.io.committed:=io.committed
+   coordinator.io.prepDone<>io.prepDone

@@ -1,0 +1,107 @@
+{
+  "status": "REQUIRES_PARENT_CLASS_BYTES_NOT_INCLUDED",
+  "base_commit": "65cbbb3e92079a859e4d4d8509a6b4383ba690fc",
+  "base_package": "../host_chunk_gradual_bridge",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 2435,
+      "sha256": "650a2203e4f8f1390935cf8fba778c77de00459e481e30b59dfaa3230d350988"
+    },
+    "BASELINE_CLASS_PINS.tsv": {
+      "bytes": 106247,
+      "sha256": "1ce0573594b68fc684d4373d21c72a1bff5778f0378c8bafaa1f96f441222722"
+    },
+    "DEPENDENCY_PINS.json": {
+      "bytes": 23148,
+      "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+    }
+  },
+  "original_class_count": 903,
+  "removed": [
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferJob.class",
+      "bytes": 5080,
+      "sha256": "1eb6421890ff2f28a7b43f83de03881615be752d6602aa6ca8d8c44966b46862"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferOwner.class",
+      "bytes": 64182,
+      "sha256": "3168e777b7138089e17e9d19b4750df5eda8eb597f1b2260a87c69b55553cab6"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferPort.class",
+      "bytes": 6615,
+      "sha256": "a672f8166250507c6227efaeedde43a8fa5164f945e89889ae429f2cff121889"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnChunkStateTransferResult.class",
+      "bytes": 6198,
+      "sha256": "bcbcb31e81f89a15b849a7d04243ee3c8933fc1bb8e34635561ceb4aa2d4ac06"
+    },
+    {
+      "relative": "heteronpu/continuous/HeldDecoupledOffer$.class",
+      "bytes": 5657,
+      "sha256": "77ef8dde0f3ff6377625c8cdd90b382f8bbc642918aace101108fc2e52e7cd49"
+    },
+    {
+      "relative": "heteronpu/continuous/HeldDecoupledOffer.class",
+      "bytes": 980,
+      "sha256": "bcf179a15b928c37c0a5d29964ecdc5ee21c490c56eda5945643967926bbe9c9"
+    },
+    {
+      "relative": "heteronpu/continuous/HeldDecoupledOfferSignals$.class",
+      "bytes": 2307,
+      "sha256": "0e5ee6caca7024261a40623958b682b8f0d79dae2c3f05f76a9d018e4d74b721"
+    },
+    {
+      "relative": "heteronpu/continuous/HeldDecoupledOfferSignals.class",
+      "bytes": 5988,
+      "sha256": "bc22184434d4fa8a9e52edaa4f2c01ee59a13839a7e62af7cbacb0b10c0e4cb7"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkLoadPrepV2Result.class",
+      "bytes": 5650,
+      "sha256": "82e022f9c7c1a90fe2fff4b7ec4d13c84042e9c691d1753c9f9db8f3254eee56"
+    }
+  ],
+  "added": [
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeInputPrepJob.class",
+      "bytes": 6084,
+      "sha256": "1275d439961f040bdaff9e07a076485e197d6d40e8029194cc222db7d866e9e5",
+      "source_file": "GdnRuntimeInputPrepOwner.scala",
+      "source_pin": {
+        "name": "GdnRuntimeInputPrepOwner.scala",
+        "bytes": 17229,
+        "sha256": "a60c6683a431872a4cd58a3acf02b2ce12db98474da5f87b09cbdadbf9bb7520"
+      }
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeInputPrepResult.class",
+      "bytes": 5081,
+      "sha256": "c8eae0ee0557fbb933a71a1c4a979b177ebd88c3d0f4cb173ef7d9bed4303b89",
+      "source_file": "GdnRuntimeInputPrepOwner.scala",
+      "source_pin": {
+        "name": "GdnRuntimeInputPrepOwner.scala",
+        "bytes": 17229,
+        "sha256": "a60c6683a431872a4cd58a3acf02b2ce12db98474da5f87b09cbdadbf9bb7520"
+      }
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkPreparedReceipt.class",
+      "bytes": 7474,
+      "sha256": "0ad5aa0283062f27ac6abf5d8804c2ef604b96cae7c06643bcdc5b9d23a3260d",
+      "source_file": "GdnRuntimeChunkLoadPrepOwner.scala",
+      "source_pin": {
+        "name": "GdnRuntimeChunkLoadPrepOwner.scala",
+        "bytes": 14575,
+        "sha256": "c9805d6ad4f6e5a6c280185d889956b5b92f7e180ec267b8dd89436db68b655b"
+      }
+    }
+  ],
+  "retained_class_count": 897,
+  "retained_class_bytes": 15501980,
+  "canonical_retained_sha256": "ceb927a31bfc5b322bb3425c4efd44bcd5dabb6a5bdb99ed82268f8507376d9d",
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; bytes integer; trailing LF; keys relative/bytes/sha256 only",
+  "tool_dependency_changes": 0
+}

@@ -1,0 +1,79 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{BRIDGE}/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+    "{BRIDGE}/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+    "{BRIDGE}/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+    "{BRIDGE}/source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+    "{PACKAGE}/source/GdnRuntimeChunkLeafCollection.scala",
+    "{PARENT_SOURCES}/GdnRuntimeChunkCoordinator.scala",
+    "{PARENT_SOURCES}/GdnRuntimeChunkLoadPrepV2Owner.scala",
+    "{PARENT_SOURCES}/GdnRuntimeChunkTransposeV2Owner.scala",
+    "{PARENT_SOURCES}/HeldDecoupledOffer.scala",
+    "{PARENT_SOURCES}/GdnChunkStateTransferOwner.scala"
+  ],
+  "command_template_exact_inverse_verified": true,
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21 java; full314-file tool tree must be supplied from parent record.",
+    "RUN": "Fresh empty output root outside repository, with home/tmp/classes subdirectories.",
+    "BASELINE": "Exact 897-class parent baseline: prior 903 metadata minus nine plus three, validated by CLASS_DELTA.json. Class bytes/source-build closure remain parent requirements.",
+    "JAR_CP": "The 106 ordered jars in sibling DEPENDENCY_PINS.json; unchanged from the prior bridge. Fetch/rebuild locally or in CI, never commit binary payloads.",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin jar from DEPENDENCY_PINS.json.",
+    "PACKAGE": "This candidate directory.",
+    "BRIDGE": "Sibling host_chunk_gradual_bridge at pinned base commit.",
+    "PARENT_SOURCES": "Five historical source files from SOURCE_PINS.json, verified byte-for-byte. Flat logical input directory; original paths are intentionally not exposed."
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "manual_requirements": [
+    "Supply the exact original Collection source to check_source.py --parent-source; default sibling bridge is pin-checked. This package does not supply historical parent source/build closure.",
+    "Supply and verify all five requires_parent sources from SOURCE_PINS.json, 897 baseline classes, 106 ordered jars, and full314-file JDK tool tree before launching. The original parent pin record is identified in EVIDENCE_PINS.json.",
+    "Use parent bounded owned-process supervision and fresh output root. Caps are historical metadata, NOT an executable supervisor. Do not launch this manual recipe automatically.",
+    "Verify all inputs before and after. scala.tools.nsc.Main only; no design main, elaboration, simulation or automatic retry."
+  ],
+  "not_a_claim": [
+    "fresh hermetic reproduction",
+    "common-parent compatibility",
+    "Chisel elaboration",
+    "numeric equivalence",
+    "full M128"
+  ]
+}

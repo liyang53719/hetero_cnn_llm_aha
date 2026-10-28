@@ -1,0 +1,45 @@
+{
+  "scope": "Digest-only original evidence bindings; raw private records and runtime files not published",
+  "records": {
+    "actual_summary": {
+      "bytes": 2542,
+      "sha256": "ad6928e0a4b113d0c553b0103abce2dcbc5db478a9900b408c05e87e4562e8b7"
+    },
+    "actual_receipt": {
+      "bytes": 17820,
+      "sha256": "b4da51e673d3aaaccf112a2e8fdaa9467929ce6883e4a352e2fa623124e7bab8"
+    },
+    "actual_class_identities": {
+      "bytes": 55114,
+      "sha256": "f425f8f593bf6804a0f83c6fbebdb8fc518ae1f38d0fb400cd9d3aad2611557d"
+    },
+    "actual_command": {
+      "bytes": 37305,
+      "sha256": "0662acc248c349f202285f0a5ca7897ab58a420b97cb5e808192c8ac12e3bcf3"
+    },
+    "actual_input_pins": {
+      "bytes": 650347,
+      "sha256": "6c0a7479eeae083291281a02633e4142b030cf067ede225054611c50bbd38828"
+    },
+    "actual_freeze": {
+      "bytes": 1947,
+      "sha256": "2ec7a525dfb125aaf2fee0dba96063a7156390ed90f7f8d1f0f169bc8506a834"
+    },
+    "actual_runner": {
+      "bytes": 8413,
+      "sha256": "5205cf1da458aaa5861a95c03296d294d264b0644e73bf326c6ba299e6d9744e"
+    },
+    "original_source_checker": {
+      "bytes": 6639,
+      "sha256": "d83d0aceea430d5c7c9c0df380bbe2a8690bbf32ce02dd957b07ded87b222f9a"
+    },
+    "source_checks_normal": {
+      "bytes": 381,
+      "sha256": "d55dadcb469cf6f9bda2d437e0202a2f9b1cd1d46f2b7eae951c5cdf92bc3ee3"
+    },
+    "source_checks_optimized": {
+      "bytes": 381,
+      "sha256": "6211f14a880907453bdc219bd440e01aa9c7762e35d545e90cc1c349a0879927"
+    }
+  }
+}

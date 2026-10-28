@@ -1,0 +1,57 @@
+{
+  "status": "PASS_ACTUAL_OUTPUT_TAIL_7_SOURCE_947_BASELINE_COMPILER_ONLY",
+  "compiled_source_count": 7,
+  "baseline_class_count": 947,
+  "new_class_count": 49,
+  "new_class_bytes": 2772173,
+  "final_source_closure_count": 28,
+  "final_recompiled_source_count": 7,
+  "final_class_count": 141,
+  "inherited_source_count": 21,
+  "inherited_class_count": 92,
+  "wall_seconds": 60.8650858750334,
+  "cpu_seconds_sampled": 49.92,
+  "peak_rss_bytes": 549662720,
+  "peak_tree_bytes": 18384152,
+  "pre_post_pin_checks": 3205,
+  "strict_owned_compiler_group_terminal": true,
+  "compile_log_empty": true,
+  "historical_transitive_graph_verified": false,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT",
+    "numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 19228,
+    "sha256": "56d5f2bb11aed6fef24bfe9e76afaa405489b0c081b07c4a6273da44493642c1"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "historical_checks_each_mode": {
+    "commands_source": 4230,
+    "commands_mutations": 22,
+    "commands_models": 21,
+    "prefix_source": 77,
+    "prefix_mutations": 26,
+    "prefix_models": 22,
+    "elementwise_review_models": 25,
+    "elementwise_source_mutations": 15,
+    "prepare_metadata_models_before_actual_only": 6,
+    "total_candidate_models": 74
+  },
+  "publication_functional_models_each_mode": 68,
+  "publication_compiler_executions": 0,
+  "admission": "Attention2/4 M128 only; GDN1/3 M16/M128. Cold generation0. Only Add0 and SigmoidMul2; private staging, launch/final roots remain sealed."
+}

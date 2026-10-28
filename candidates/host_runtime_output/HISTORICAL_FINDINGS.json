@@ -1,0 +1,56 @@
+{
+  "status": "THREE_TRANSPORT_FIXES_AND_PC_MATERIALIZATION_FIX_SOURCE_REVIEW_ONLY",
+  "review_composition": "Integration-author union of two independent scoped reviews; NOT a third independent review.",
+  "scoped_review_records": {
+    "ELEMENTWISE_INDEPENDENT_REVIEW.json": {
+      "bytes": 6377,
+      "sha256": "f38205c8d3e31196c5685db2df36dc81a622f059f4e88d1b21d2c98e8ebe9247"
+    },
+    "COMMANDS_PREFIX_INDEPENDENT_REVIEW.json": {
+      "bytes": 8837,
+      "sha256": "1f353c7c153e1fec56a94d56d2911eaa8febb28756132488987ec8c44ce5c9a9"
+    },
+    "INDEPENDENT_REVIEW.json": {
+      "bytes": 3965,
+      "sha256": "cd46ad4061d4e090826646a82b003e0bd64dcde8c14f301b6154ef26bfba3e2f"
+    }
+  },
+  "transport_findings": [
+    {
+      "id": "P1_CHILD_HELD_JOB",
+      "status": "FIXED_REVIEWED",
+      "detail": "Mode9 child job now uses ordinaryCanStart and elementJobHeld; late fault cannot withdraw a published-but-unaccepted child job."
+    },
+    {
+      "id": "P1_JOB_FIRE_FAULT_COMBINATIONAL_PATH",
+      "status": "FIXED_REVIEWED",
+      "detail": "Leaf resetRequired no longer reflects local faultNow, breaking job.fire -> bounds fail -> faultNow -> resetRequired -> gdnPoison -> canStart -> job.fire; poison registers local fault on next cycle; independent currentFault remains immediate."
+    },
+    {
+      "id": "P1_CAPTURED_SCALAR_INGRESS_STRANDING",
+      "status": "FIXED_REVIEWED_NARROW_MODE9_ONLY",
+      "detail": "Adapter sOffer is a registered packet captured by actual authorized client ingress. Active mode9 and this captured packet may bypass only gdnPoison in scheduler admission; rejected/sharedPoison/transportQuarantine/noAuxOwner/legacyDebt/rawReturn and Core ledger/physical checks remain. Other preexisting runtime modes unchanged."
+    }
+  ],
+  "pc_materialization_finding": {
+    "id": "pc_materialization_collision_fixed",
+    "result": "PASS_SOURCE",
+    "detail": "Final Commands bound.materializeDenseOutput excludes runtimeDenseProjection and runtimeDenseO; Prefix denseOShape also rejects materializeDenseOutput. Runtime O cannot accidentally use Qwen2 PC-derived materialization mode. Existing legacy profile0 path remains separate."
+  },
+  "source_review_limits": [
+    "No Scala compiler, Chisel elaboration, RTL, numerical DUT, synthesis or physical resource/hash proof run by reviewer.",
+    "The full Commands/Guard/Prefix producer provenance and arithmetic lease integration is outside this scoped review and requires separate final review.",
+    "Finite progress is conditional on cooperating non-quarantined services: a service poisoned before accepting a published held offer may require coordinated reset; held obligations are not withdrawn or refunded.",
+    "Whole-block fence remains separate; outputCommitted means private acknowledged staging only. Full M128 and same-RTL five-profile acceptance not established.",
+    "Existing mode13 GQA faultNow admission pattern was noted as inherited and not changed or certified here."
+  ],
+  "dense_fault_limit": "Existing accepted Dense transport late-fault behavior retained; poison rejects successful staging/final publish. No new abort interface or unconditional finite drain.",
+  "captured_scalar_exception": "Only active mode9 registered adapter sOffer may bypass leaf gdnPoison; physical/Core faults, quarantine and conflict fences remain.",
+  "postnorm_limit": "Original actual Commands residual completion and full-context Guard, no separate Prefix residual-to-postNorm receipt or complete postNorm/FFN/MoE/finalfence signoff.",
+  "prior_gqa_history": {
+    "path": "../host_runtime_gqa/HISTORICAL_FINDINGS.json",
+    "bytes": 3838,
+    "sha256": "2afd3cb3f345b34fe4e3d9893b24030136ed831dd48454e87c5e69d7a3060443"
+  },
+  "prepare_review_false_positive": "Initial review misclassified firtool-resolver.jar classpath membership as execution; no compiler failed because of that review finding. Resolved by exact compiler argv inspection; preserved original report."
+}

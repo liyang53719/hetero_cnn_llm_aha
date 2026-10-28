@@ -1,0 +1,117 @@
+{
+  "scope": "Digest-only original records; composed source review accurately attributed; active PASS not complete historical graph PASS; no private paths/class/tool bytes.",
+  "records": {
+    "source_manifest": {
+      "bytes": 1849,
+      "sha256": "eef0b67f12189c22a231307c131db0bfd0273f18ca693acf2cd197e393453864"
+    },
+    "final_source_set": {
+      "bytes": 7411,
+      "sha256": "4a5c022fc5cb6bd0c486d4c1967336dc7c15474905349140df9b9f6703efddce"
+    },
+    "precompile_evidence": {
+      "bytes": 10052,
+      "sha256": "f935a2f5fbb14f2acd909bce135f1a30909cf0981cf75f5195e4e3ef1aa246ec"
+    },
+    "composed_source_review": {
+      "bytes": 3965,
+      "sha256": "cd46ad4061d4e090826646a82b003e0bd64dcde8c14f301b6154ef26bfba3e2f"
+    },
+    "elementwise_scoped_review": {
+      "bytes": 6377,
+      "sha256": "f38205c8d3e31196c5685db2df36dc81a622f059f4e88d1b21d2c98e8ebe9247"
+    },
+    "commands_prefix_scoped_review": {
+      "bytes": 8837,
+      "sha256": "1f353c7c153e1fec56a94d56d2911eaa8febb28756132488987ec8c44ce5c9a9"
+    },
+    "original_commands_checker": {
+      "bytes": 10539,
+      "sha256": "b53a37fcef63ed3e65da260222abddd6760cbc2f82f8b73ea9f6bb81f522a7df"
+    },
+    "original_prefix_checker": {
+      "bytes": 7291,
+      "sha256": "b2c9d8f9f5e228e738d32e24634c85052a80e2aa75cf56cbaaa8e5d2bd226827"
+    },
+    "original_arithmetic_delta": {
+      "bytes": 3153,
+      "sha256": "c8239ef659c37d1025069da3e59cd18ad8261e90769ad91278a455d5299d77c5"
+    },
+    "original_elementwise_test": {
+      "bytes": 17292,
+      "sha256": "d28ef6f544deaca94eac4775cc6486987139ed8f98d546b76edb7391ab768b5a"
+    },
+    "historical_prepare_metadata_test": {
+      "bytes": 3948,
+      "sha256": "01ee27ccd23e06341710cfa5f9635e8b401cf94d8529cf81063d3cc727a62fa0"
+    },
+    "actual_receipt": {
+      "bytes": 19228,
+      "sha256": "56d5f2bb11aed6fef24bfe9e76afaa405489b0c081b07c4a6273da44493642c1"
+    },
+    "actual_summary": {
+      "bytes": 3752,
+      "sha256": "fb2bfca3961b6771d0c8e7d19e6af0648834b8d0ecbd4e977da9674521af1382"
+    },
+    "actual_class_identities": {
+      "bytes": 49412,
+      "sha256": "bf8982889b604247f0b339a15a050b5f04669b38b2ede4dea81fc3dfced1edfa"
+    },
+    "final_source_class_closure": {
+      "bytes": 164636,
+      "sha256": "9aa0f9ad97223aec83fa1348039510efcbf5a1720dd8273e8f92515fb9709de3"
+    },
+    "original_command": {
+      "bytes": 36918,
+      "sha256": "f355b9a8f3e9fee8975ad836ff1fb3de165d92f61a57b66e0e6123ef49a56230"
+    },
+    "original_input_pins": {
+      "bytes": 1780804,
+      "sha256": "310fa5c8efba3c148b23c7f8aced5812e00dc4dd2931cfc7a00973805ff5f778"
+    },
+    "prepare_freeze": {
+      "bytes": 3503,
+      "sha256": "8c61acef3757f718f843c9c1d742013ff8647fedf4b1a5acde11c816220c990d"
+    },
+    "class_composition": {
+      "bytes": 1007902,
+      "sha256": "d70a76afe3854fc6f7be7501033a3ccd74dae3d739a5ea55fa514adfd3fffc9c"
+    },
+    "source_provenance": {
+      "bytes": 8954,
+      "sha256": "3d3c58a4becf94e03ed58f8cde421317a02a65c79d3db46379a166981ee6f125"
+    },
+    "original_source_delta": {
+      "bytes": 99565,
+      "sha256": "1cc218b71d031ad27393a97222ce4fa2737a2d0afbc75875350e32a5a034b253"
+    },
+    "final_evidence_manifest": {
+      "bytes": 16957,
+      "sha256": "daf7233eb2d5793e00063f61fa6ab5d1e49c5fd5f1d3033daacad5d6ea6fd365"
+    },
+    "final_verified_scope": {
+      "bytes": 3013,
+      "sha256": "5f8d43572a97d8c41b9e4afd42c5d0a06790bdbaadc20e73abfe9bd073810128"
+    },
+    "final_chinese_result": {
+      "bytes": 1990,
+      "sha256": "c2e563645875011e3ac6a1346ff84a9173fd3de6aeb4593463d7186993257f50"
+    },
+    "public_source_mapping": {
+      "bytes": 15448,
+      "sha256": "b37cab4504c427ca6dc49cb20c999649e0ea3d72aa61f87a2ab2614f65487546"
+    },
+    "independent_actual_review": {
+      "bytes": 4208,
+      "sha256": "85b9b2c6ac81c903870f723b8a5ab4b8c495905d773fab51a87c4c85119915f5"
+    },
+    "independent_prepare_review": {
+      "bytes": 5016,
+      "sha256": "88900d3138bedf8bd41269325bc7349bf713da6dec19fababa4a751cf456e90d"
+    },
+    "initial_prepare_review_falsepositive_log": {
+      "bytes": 697,
+      "sha256": "7c0ae19c4d28af7e97102ba64207b89c3836a95220be2572e328d3c4e36364fa"
+    }
+  }
+}

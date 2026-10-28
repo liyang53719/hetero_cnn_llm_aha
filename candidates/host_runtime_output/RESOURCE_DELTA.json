@@ -1,0 +1,55 @@
+{
+  "scope": "Declared fixed runtime owner and shared existing services, not synthesized area or sameRTL proof",
+  "lanes_per_bank": 32,
+  "bits_per_lane": 16,
+  "additional_unquantified": [
+    "FSM",
+    "held child job",
+    "three actual-publication observers",
+    "service debt and accepted/returned counters",
+    "terminal",
+    "fullHost/txn64/producer receipts",
+    "private gate/O/residual stage metadata"
+  ],
+  "new_fpu": false,
+  "new_matrix": false,
+  "new_dma": false,
+  "new_memory_arbiter": false,
+  "new_scalar_bank": false,
+  "new_local_formatter": false,
+  "existing": {
+    "hub_clients": 17,
+    "memory_client": 1,
+    "adapter_clients": 11,
+    "shared_bank_lanes": 32,
+    "matrix_macs": 4096,
+    "authority_kind_bits": 4
+  },
+  "authority": {
+    "mode": 9,
+    "legacy_owner_kind": 13,
+    "kind": 9,
+    "stage": 77,
+    "scalar_slot": 8,
+    "format_slot": 9,
+    "scalar_cap": 2621440,
+    "format_cap": 1048576,
+    "vector10": false
+  },
+  "operations": {
+    "sigmoid_mul_scalar": 5,
+    "sigmoid_mul_format": 2,
+    "residual_add_scalar": 1,
+    "residual_add_format": 1
+  },
+  "hardware_qualification": false,
+  "numeric_payload_buffers": 3,
+  "not_additional_shared_arithmetic_banks": true,
+  "numeric_payload_buffer_subtotal_bits": 1536,
+  "scalar_intermediate_register_bits": 64,
+  "scalar_intermediate_registers": {
+    "value": 32,
+    "exponential": 32
+  },
+  "numeric_payload_including_scalar_intermediates_bits": 1600
+}

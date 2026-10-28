@@ -1,0 +1,40 @@
+{
+  "status": "ORIGINAL_ELEMENTWISE_RECIPE_AND_RETAINED_LEGACY_BYTECODE",
+  "source": {
+    "name": "GdnElementwiseOwner.scala",
+    "bytes": 9614,
+    "sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3"
+  },
+  "compiled_source_record": {
+    "relative": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/GdnElementwiseOwner.scala",
+    "expected_sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+    "stage_sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3",
+    "compiled_source_sha256": "01b394526f75b9732c3e605652c64f3968851aca97258a3a640bc056de1f2fe3"
+  },
+  "legacy_classes_count": 7,
+  "legacy_classes_digest": "1b6e887de2430c09ac92e2f57f4be174c088dff586003a46051451aa4893d6e6",
+  "original_record": {
+    "bytes": 8954,
+    "sha256": "3d3c58a4becf94e03ed58f8cde421317a02a65c79d3db46379a166981ee6f125"
+  },
+  "other_inherited_gqa": {
+    "path": "../host_runtime_gqa/SOURCE_PROVENANCE.json",
+    "bytes": 1764,
+    "sha256": "688940f8581ada3c5362d94a5d6ba1778c35fd694267039d8272a38e2b423806"
+  },
+  "other_original_records": {
+    "LEGACY_CONVERTER_PROVENANCE.json": {
+      "bytes": 9045,
+      "sha256": "994905fa374729e677c9043c5603bc60abaf3fd23364fe5161bd3c8069066c63"
+    },
+    "ORIGINAL_KV_GUARD_PROVENANCE.json": {
+      "bytes": 13684,
+      "sha256": "3b0148b11c94a59e0f640fbd348f843d970d9fb6c799b74d45da3a080d91b57f"
+    },
+    "GQA_SOURCE_PROVENANCE.json": {
+      "bytes": 15897,
+      "sha256": "46be2649e4b3b156729ab22eb53422b8fac01918e6f720c2bca760d0dbbc2175"
+    }
+  },
+  "scope": "Runtime V15 derives original Add and SigmoidMul FP32 order/BF16 boundaries; original legacy class bytes retained, not recompiled or relabeled as runtime."
+}

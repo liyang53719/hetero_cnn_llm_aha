@@ -1,0 +1,39 @@
+{
+  "scope": "Source declarations only, not synthesized area/instance report",
+  "new_owner_numeric_payload_bits": 6208,
+  "breakdown_bits": {
+    "trig": 1024,
+    "input": 4096,
+    "output": 1024,
+    "products": 64
+  },
+  "additional_unquantified": [
+    "FSM",
+    "counters",
+    "terminal",
+    "held metadata",
+    "Prefix fullHost/txn64/producer snapshots"
+  ],
+  "new_arithmetic_instances": 0,
+  "new_dma": 0,
+  "new_matrix": 0,
+  "new_hub_client": 0,
+  "new_job_abi_bits": 0,
+  "existing": {
+    "hub_clients": 17,
+    "adapter_clients": 11,
+    "shared_bank_lanes": 32,
+    "matrix_mac_definition": 4096
+  },
+  "authority": {
+    "kind": 7,
+    "stage": 75,
+    "mode": 11,
+    "scalar_client": 8,
+    "memory_client": 1,
+    "cap": 393216,
+    "format9": false,
+    "vector10": false
+  },
+  "hardware_qualification": false
+}

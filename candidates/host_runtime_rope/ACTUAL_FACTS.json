@@ -1,0 +1,59 @@
+{
+  "status": "PASS_ACTUAL_ROPE_7_SOURCE_923_BASELINE_COMPILER_ONLY",
+  "compiled_source_count": 7,
+  "baseline_class_count": 923,
+  "new_class_count": 47,
+  "new_class_bytes": 2381152,
+  "final_source_closure_count": 25,
+  "final_recompiled_source_count": 7,
+  "final_class_count": 115,
+  "inherited_source_count": 18,
+  "inherited_class_count": 68,
+  "wall_seconds": 47.29719192208722,
+  "cpu_seconds_sampled": 39.78,
+  "peak_rss_bytes": 509882368,
+  "peak_tree_bytes": 17540647,
+  "pre_post_pin_checks": 1582,
+  "strict_owned_compiler_group_terminal": true,
+  "compile_log_empty": true,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT",
+    "numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 18342,
+    "sha256": "053b0b009f7c0a2953f9c56bfe8bb5c2790daa06f95c96333133bf8180eced7e"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "historical_checks_each_mode": {
+    "owner_source": 45,
+    "owner_mutations": 18,
+    "owner_tests": 17,
+    "commands_source": 3997,
+    "commands_mutations": 14,
+    "commands_geometry": 12,
+    "commands_models": 18,
+    "held_models": 8,
+    "integration_source": 6707,
+    "integration_mutations": 47,
+    "integration_models": 25,
+    "arithmetic_source": 17795,
+    "arithmetic_mutations": 14,
+    "independent_assertions": 34
+  },
+  "publication_compiler_executions": 0,
+  "admission": "Common Dense chain onlyM16/M128; Commands cold wholewindow/base0/count=M/generation0/no cache/position0. Leaf1..128 and wider position range are not common chain support."
+}

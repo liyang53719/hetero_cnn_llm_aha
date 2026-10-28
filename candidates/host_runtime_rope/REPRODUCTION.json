@@ -1,0 +1,71 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PACKAGE}/source/HostBlockCommandsV4.scala",
+    "{PACKAGE}/source/HostBlockTopV4.scala",
+    "{PACKAGE}/source/HostRuntimePrefixLeaseWiringV8.scala",
+    "{PACKAGE}/source/PartialRopeRuntimeOwnerV12.scala",
+    "{PACKAGE}/source/QwenOwnerProtocol.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticProtocolV5.scala"
+  ],
+  "exact_inverse_verified": true,
+  "actual_sources": 7,
+  "final_source_closure": 25,
+  "baseline_count": 923,
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21; full314-file tree external",
+    "RUN": "Fresh output root with home/tmp/classes",
+    "BASELINE": "Exact923=855 ancestor+68 inherited classes; canonical hashes in CLASS_LINEAGE.json; complete class source/build closure external",
+    "JAR_CP": "106 ordered jars in pinned sibling DEPENDENCY_PINS.json",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin",
+    "PACKAGE": "This package directory"
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "requirements": [
+    "Supply exact historical class/source/build closure,106 jars,314-file JDK and bounded owned-process supervisor. No binaries bundled.",
+    "Verify all inputs before/after; caps metadata is not an executable supervisor or new launch permission.",
+    "Only7 sources actually compiled. Final25-source closure includes18 unchanged inherited sources.",
+    "Original PartialRope64Math converter remains a baseline class, not newly compiled; legacy provenance digest bound.",
+    "No project main/elaboration/RTL/DUT/numeric/automatic retry."
+  ]
+}

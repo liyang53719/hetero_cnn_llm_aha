@@ -1,0 +1,37 @@
+{
+  "status": "RETAINED_ACTUAL_BASELINE_HELPER_NOT_NEWLY_COMPILED",
+  "source": {
+    "name": "PartialRope64Owner.scala",
+    "bytes": 10567,
+    "sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322"
+  },
+  "historical_source_record": {
+    "relative": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/PartialRope64Owner.scala",
+    "expected_sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "stage_sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322",
+    "compiled_source_sha256": "7a3f5bffe06772671f30ac1484065afae9abc895063a2e4769999bf76487c322"
+  },
+  "legacy_class_count": 7,
+  "legacy_classes_digest": "0858f91a3d4ca4f2fa8504084b4d1a23c5873d381d3cacf785f07d9865aa66cf",
+  "helper_classes": [
+    {
+      "relative": "heteronpu/continuous/PartialRope64Math$.class",
+      "bytes": 9799,
+      "sha256": "5662695291c3363f3da4d2e15af472c7d4109179aa6613802106a53be2a102eb"
+    },
+    {
+      "relative": "heteronpu/continuous/PartialRope64Math.class",
+      "bytes": 888,
+      "sha256": "e95fc9e2c957f98c9b15d609fe573d1f043a9e671834d8388e2f108925638ac2"
+    }
+  ],
+  "original_record": {
+    "bytes": 9045,
+    "sha256": "bcddc837365e3fd84cff61123f41e30f4fd499332ecdd72bcbccd08f87d1d09f"
+  },
+  "historical_reuse_audit": {
+    "bytes": 192198,
+    "sha256": "09c8e4148adb149910fb1a73c0ba90795a52bbc2f0879e86ef9d7152d66f5b17"
+  },
+  "scope": "Original integer BF16 RNE helper is inherited from923 baseline; source/class provenance verified. No new helper compilation or numerical DUT proof."
+}

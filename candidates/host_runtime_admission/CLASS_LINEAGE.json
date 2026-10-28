@@ -1,0 +1,71 @@
+{
+  "status": "INCREMENTAL_COMPILER_ONLY",
+  "base_commit": "537bcf176504f4ff57a43f830681a6c14e5c9881",
+  "previous_package": "../host_runtime_top_structural",
+  "previous_manifest": {
+    "bytes": 2782,
+    "sha256": "62e8cb95377cdff2e90095ba2f1646c5c1db3328e2870c00c82bb8fc89e00999"
+  },
+  "baseline": {
+    "previous_final_classes": 159,
+    "previous_final_digest": "aba9162fb2dff89ee1ae7a8b2e4f9e52613eff935d2cedce150deb5bc22d118a",
+    "composed_count": 1001,
+    "removed_count": 4,
+    "removed_source": "HostBlockCommandsV4.scala",
+    "removed_digest": "6b4a00955722f09bca4be226e35ea5da1a8dd51097554b7df6ea653eb3fce95f",
+    "retained_count": 997,
+    "retained_digest": "37c738fecb943ca8779359a0aecf7d66e8017045c3d557cec366d352a8e50cf2",
+    "retained_ancestor_count": 842,
+    "retained_ancestor_digest": "7976baf695bd3121c8d449c412765c5f1bf5e7c13dcf99ebbdb0b50753ca7e8e",
+    "inherited_count": 155,
+    "inherited_digest": "91ab0c740ee909ae7e0f22d63acd674f2906847a91152a3b43f49e3a254f9920"
+  },
+  "actual": {
+    "compiled_sources": 1,
+    "new_classes": 4,
+    "new_class_bytes": 1164032,
+    "new_digest": "41bc3d40891b970e4b66f8897d5c4290b702b954f6351e17270cc9dda872d020"
+  },
+  "final": {
+    "sources": 31,
+    "classes": 159,
+    "class_bytes": 6211667,
+    "class_digest": "f6429fdb12e3363a032b9b4d3359e1ddb8e4eddff159def07fd83dad833f45bc",
+    "inherited_sources": 30,
+    "by_source": {
+      "GdnChunkStateTransferOwner.scala": 4,
+      "GdnRuntimeChunkLeafCollection.scala": 7,
+      "GdnRuntimeChunkCoordinator.scala": 4,
+      "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+      "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+      "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+      "GdnRuntimeRawPrepReceiptV8.scala": 3,
+      "HostRuntimeGatedDependencyV10.scala": 1,
+      "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+      "GdnRuntimeGatedNormProtocolV10.scala": 4,
+      "GdnRuntimeGatedNormOwnerV10.scala": 1,
+      "GdnRuntimeRawPrepProtocolV7.scala": 9,
+      "HeldDecoupledOffer.scala": 4,
+      "HostRuntimeChunkProtocolV9.scala": 3,
+      "HostRuntimeChunkWiringV9.scala": 3,
+      "QkNorm256RuntimeOwnerV11.scala": 7,
+      "SharedMemoryArbiter.scala": 3,
+      "PartialRopeRuntimeOwnerV12.scala": 7,
+      "Bf16KvAppendRuntimeOwnerV13.scala": 7,
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": 2,
+      "GdnRuntimeRmsNormOwnerV3.scala": 6,
+      "GdnRuntimeElementwiseOwnerV15.scala": 6,
+      "HostRuntimePrefixLeaseWiringV8.scala": 7,
+      "Public21QkvReductionRouter.scala": 2,
+      "QwenOwnerProtocol.scala": 20,
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": 9,
+      "TransposedDenseOwner.scala": 8,
+      "HostBlockTopV4.scala": 3,
+      "GdnRuntimeRawPrepOwnerV7.scala": 1,
+      "Bf16CausalGqaRuntimeOwnerV14.scala": 10,
+      "HostBlockCommandsV4.scala": 4
+    }
+  },
+  "canonical_encoding": "Sort relative; JSON sorted keys compact separators; trailing LF; relative/bytes/sha256 only.",
+  "requires_parent": "Exact baseline class bytes, source and build closure external; no full31 recompile or standalone reproduction."
+}

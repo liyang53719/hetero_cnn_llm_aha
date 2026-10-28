@@ -1,0 +1,70 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_COMPILER_RECIPE_NOT_SELF_CONTAINED",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PACKAGE}/source/HostBlockCommandsV4.scala"
+  ],
+  "exact_inverse_verified": true,
+  "actual_sources": 1,
+  "final_source_closure": 31,
+  "baseline_count": 997,
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "bindings": {
+    "JAVA": "Exact OpenJDK21 314-file tree, including129 symlink targets",
+    "RUN": "Fresh output root with home/tmp/classes",
+    "BASELINE": "997 classes=842 historical+155 inherited; complete bytes and build closure external",
+    "JAR_CP": "106 ordered jars in pinned sibling metadata",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin",
+    "PACKAGE": "This package"
+  },
+  "requirements": [
+    "Supply exact external source/class/tool closure and original strict bounded supervisor; recipe metadata is not executable supervision.",
+    "Preserve all strict symlink metadata; no verifier relaxation, no automatic rerun.",
+    "Only1 source compiled;30 inherited sources. Previous structural PASS not inherited.",
+    "Public checks are source/Boolean/integer models only; no elaboration, RTL, DUT or numerical proof.",
+    "No full program metadata generator or binary payload included."
+  ]
+}

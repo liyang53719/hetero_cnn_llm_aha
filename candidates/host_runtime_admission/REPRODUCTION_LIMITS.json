@@ -1,0 +1,18 @@
+{
+  "status": "REQUIRES_PARENT_NOT_SELF_CONTAINED",
+  "historical_transitive_graph_verified": false,
+  "active_closure": {
+    "status": "PASS_EXACT_ACTIVE_SOURCE_CLASS_TOOL_PIN_CLOSURE_NOT_ARCHIVAL_GRAPH",
+    "unique_pin_count": 2351,
+    "expanded_active_manifest_count": 10,
+    "nested_pin_record_count": 4159
+  },
+  "historical_json_boundaries": 371,
+  "active_record": {
+    "bytes": 1131484,
+    "sha256": "fd3b96d536139a042f466bc18c105af987459045959451d48d035f4f524f06ba"
+  },
+  "prior_structural_pass_inherited": false,
+  "full_program_backend_executed": false,
+  "scope": "Current consumed source/class/tool identities verified; historical boundary JSON hashes are not recursively complete archival proof. No program binaries, models, weights, IR, RTL or class/tool bytes bundled."
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "Five admission/descriptor source edit regions, not area/timing equivalence.",
+  "new_numerical_services": false,
+  "new_numeric_buffers": false,
+  "new_host_interface_bits": false,
+  "numerical_operations_or_rounding_changed": false,
+  "new_module": false,
+  "control_comparison_logic_changed": true,
+  "zero_area_claim": false,
+  "existing_matrix_logical_macs": 4096,
+  "existing_shared_bank_lanes": 32,
+  "rank3_scratch_dims": [
+    "heads",
+    128,
+    3280
+  ],
+  "rank3_scratch_element_strides": [
+    419840,
+    3280,
+    1
+  ],
+  "scratch_bytes_per_head": 1679360,
+  "scratch_heads": [
+    16,
+    32
+  ],
+  "physical_scratch_layout_capacity_unchanged": true,
+  "m16_rank2_preserved": true,
+  "common_entry_rows": 128,
+  "resource_proof": "Source inverse equality only; no new structure/synthesis/physical measurement. Previous81ALU17Scalar wholeTop census belongs only to the prior closed-seal build, not a newly measured census."
+}

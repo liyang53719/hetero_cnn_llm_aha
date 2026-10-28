@@ -1,0 +1,52 @@
+{
+  "status": "TEMP_SOURCE_ADMISSION_NOT_FULL_HARDWARE_ACCEPTANCE",
+  "findings": [
+    "Added retainedMatrix and matrixColumns256 requirement after independent review; official numeric shape check alone did not enforce physical shape.",
+    "M128 scratch uses rank3 descriptor geometry only; exact physical span and unchanged owner job c address, fixed ChunkWiring stride and collection preserved. M16 rank2 unchanged.",
+    "All changes are admission/control: no payload/FP32/BF16 arithmetic, resources or interfaces changed.",
+    "Runtime typed inputNorm must establish cold generation0 M128 before downstream issue; terminal fence and real producer snapshots remain mandatory.",
+    "Profile0 admission, exact21 program and FP32 storage remain unchanged.",
+    "Unknown profiles, incomplete common constructors and committed runtime checkpoint remain rejected."
+  ],
+  "source_checks": {
+    "inverse_entire_file_equal": true,
+    "exact_edit_regions": 5,
+    "scratch_geometry_heads": [
+      16,
+      32
+    ],
+    "scratch_strides_signed24_safe": true,
+    "capability_profile_checkpoint_boolean_cases": 16384,
+    "external_mutation_classes": 10,
+    "preserved_provenance_source_checks": 12
+  },
+  "prior_structural": {
+    "path": "../host_runtime_top_structural/HISTORICAL_FINDINGS.json",
+    "bytes": 2575,
+    "sha256": "e0e5355d8830c55a9be831e406e0d23aa35703b7b6c03fadd1b6591cf39c9978"
+  },
+  "prior_structural_pass_inherited": false,
+  "preserved_previous_failures": [
+    "RawPrep Bool.pad constructor failure before source repair",
+    "GQA admission combinational-loop failure before source repair"
+  ],
+  "new_issue_fixed": "Old M128 rank2 scratch dimension419840 exceeded18bits; rank3[heads,128,3280] preserves exact byte span and existing owner address/layout. Old structural PASS did not prove descriptor encodability.",
+  "qualification": "Opening launch reachability and changing scratch ABI invalidates inheritance of prior closed-seal structural PASS. New originalTop structural validation required.",
+  "remaining": [
+    "Full five-profile metadata programs/generator and original nonDPI backend are separate work, not bundled or executed here.",
+    "MoE tie contract unresolved.",
+    "No complete historical transitive graph, no fullM128 numerical or sameRTL result."
+  ],
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "public_checker_limitation_and_correction": {
+    "raw_checker": "Prefix snippet plus abstract truth table does not validate the full source expression. Early public inverse removed whole inserted regions without checking their content.",
+    "external_probe": {
+      "bytes": 339,
+      "sha256": "ba8823782aca1972bad6e78677ff05a579ad010f2532796ab05cc8a3966bba35"
+    },
+    "escaped_mutant": "Appending || true to commonRuntimeInstalled escaped raw snippet and initial inverse check normal/-O; full package hash still rejected alteration.",
+    "correction": "Public-only exact installed-expression region and both complete inserted-block checks before inversion; original frozen source/evidence unchanged.",
+    "compiler_rerun": false
+  }
+}

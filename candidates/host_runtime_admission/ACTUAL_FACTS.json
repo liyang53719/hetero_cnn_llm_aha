@@ -1,0 +1,49 @@
+{
+  "status": "PASS_ACTUAL_COMMON_ADMISSION_INCREMENTAL_COMPILER_ONLY",
+  "compiled_source_count": 1,
+  "baseline_class_count": 997,
+  "new_class_count": 4,
+  "new_class_bytes": 1164032,
+  "final_source_closure_count": 31,
+  "final_class_count": 159,
+  "inherited_source_count": 30,
+  "inherited_class_count": 155,
+  "wall_seconds": 47.77054312604014,
+  "cpu_seconds_sampled": 38.49,
+  "peak_rss_bytes": 448327680,
+  "peak_tree_bytes": 18662655,
+  "pre_post_pin_checks": 3790,
+  "compile_log_empty": true,
+  "historical_transitive_graph_verified": false,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 3299,
+    "sha256": "b6e17cd803c93ac0813c81415a49be5b7703edfc8e177827fcd8c8ea258aacb6"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "current_source_model_cases": 328,
+  "current_source_negative_classes": 14,
+  "independent_capability_cases": 16384,
+  "independent_source_mutations": 10,
+  "prior_structural_pass_inherited": false,
+  "new_structural_run": false,
+  "full_program_backend_executed": false,
+  "admission_opened": true,
+  "admission_scope": "Same installed common constructor, known profiles1..4, cold generation0 M128 typed inputNorm, no carried checkpoint; not five-profile numerical support PASS.",
+  "publication_compiler_executions": 0
+}

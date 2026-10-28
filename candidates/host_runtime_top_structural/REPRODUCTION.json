@@ -1,0 +1,103 @@
+{
+  "status": "REQUIRES_PARENT_STRUCTURE_RECIPE_NOT_SELF_CONTAINED",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx2g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{BASELINE}:{JAR_CP}",
+    "chiseltest.simulator.DiagnoseOriginalHostMoePhaseV5"
+  ],
+  "exact_inverse_verified": true,
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 6442450944,
+    "cleanup_deadline_seconds": 370,
+    "cpu_seconds": 240,
+    "heap_bytes": 2147483648,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 420,
+    "rss_sampled_bytes": 2684354560,
+    "single_file_bytes": 268435456,
+    "total_wall_seconds": 390,
+    "tree_bytes": 805306368,
+    "work_wall_seconds": 360
+  },
+  "disk_contract": {
+    "start_floor_bytes": 3221225472,
+    "end_floor_bytes": 2147483648,
+    "reserved_tree_bytes": 805306368,
+    "minimum_free_after_max_budget_at_start_floor_bytes": 2415919104,
+    "logical_budget_not_physical_preallocation": true,
+    "no_streaming_or_artifact_deletion_substitution": true
+  },
+  "diagnostic_main": {
+    "name": "DiagnoseOriginalHostMoePhaseV5.scala",
+    "bytes": 7436,
+    "sha256": "fb8f42ca53e88aa0f2c52f6948bed9b2485bae0a368ecaaa307dd3e327ea1a25",
+    "location": "requires_parent_unchanged_original_diagnostic"
+  },
+  "bindings": {
+    "JAVA": "Exact314-file OpenJDK21 tree with strict symlink identities",
+    "RUN": "Fresh output root, full14 artifact contract",
+    "BASELINE": "Exact1001 classes=842historical+latest31source159classes; source/build/class closure external",
+    "JAR_CP": "106 ordered jars from pinned sibling dependency metadata"
+  },
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "output_contract": {
+    "all_files_flat_nonempty": true,
+    "directory": "host-diagnostic",
+    "failure": "nonzero remains FAIL; incomplete flat artifacts inventoried, no automatic retry",
+    "high_annotations": "all actual annotations saved; unsupported bridge annotation still rejects",
+    "limits": "AST count checks do not qualify primitive numeric/physical SRAM/DDR/clock simulation; all warnings retained",
+    "log_rules": "13 exact ordered HOST_PHASE lines and13 unique HOST_ARTIFACT byte/hash lines, full supervised hashes agree; markers alone never success",
+    "low_annotations": "exact official result, no dropping annotations",
+    "required_success_files": [
+      "original-high.fir",
+      "high-annotations.json",
+      "high-hierarchy.tsv",
+      "high-top-ports.fir",
+      "high-extmodules.fir",
+      "high-summary.txt",
+      "official-low.fir",
+      "low-annotations.json",
+      "low-hierarchy.tsv",
+      "low-top-ports.fir",
+      "low-extmodules.fir",
+      "low-summary.txt",
+      "SCOPE.txt",
+      "HostBlockTopV4.lo.fir"
+    ],
+    "same_low_bytes": [
+      "official-low.fir",
+      "HostBlockTopV4.lo.fir"
+    ],
+    "success": "exit0 plus cleanup, strict outputs/checkers/prepost and actual structural review"
+  },
+  "requirements": [
+    "Two changed sources were separately typecompiled first; not31-source fullcompile. Full diagnostic source pin set56 includes25 extra requires-parent support sources.",
+    "Exact sources,1001 classes,106jars,314JDKfiles, original diagnostic and strict bounded supervisor required; no executable launch authorization from this recipe.",
+    "Same3GiB start/2GiB finish disk gate retained. No automatic follow-on, output deletion/truncation or memory cap reduction substituted.",
+    "Successful14 outputs and equal dual-low hashes are structural FIRRTL evidence, not finalRTLhash.",
+    "Global nonzero launch seal closed; fullfiveprofileM128numerical0/5 andRTL0/5, no utilization claim.",
+    "Complete historical archive unverified; migration changes old resolved runtime paths and does not relabel old pins."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "historical_transitive_graph_verified": false,
+  "latest_source_count": 31,
+  "full_diagnostic_source_pin_count": 56,
+  "additional_diagnostic_support_sources": 25,
+  "requires_parent_latest_sources": 5,
+  "prior_limits": {
+    "path": "../host_runtime_fence/REPRODUCTION_LIMITS.json",
+    "bytes": 921,
+    "sha256": "d98a7ffdffe2ade1a4fdc00970df09989652f16d80b8c2513c4ba18c2be6b32d"
+  },
+  "scope": "Current executed input pin closure and outputs verified. Historical original compile receipts/moved runtime resolved paths are not inherited as newly verified; no standalone fresh-checkout claim.",
+  "unbundled_class_count": 1001
+}

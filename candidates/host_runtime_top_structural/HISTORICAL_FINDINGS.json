@@ -1,0 +1,61 @@
+{
+  "attempts": [
+    {
+      "attempt": "1432",
+      "status": "FAIL",
+      "native_exit_code": 1,
+      "stage": "constructor",
+      "cause": "RawPrep Bool.asUInt retains Bool type; pad66 constructor requirement failure",
+      "receipt": {
+        "bytes": 2180,
+        "sha256": "7491372c0b596ecbb38cdaa9edc1e228fe3809fe423ad454b1590b31bb142598"
+      },
+      "log": {
+        "bytes": 8359,
+        "sha256": "60e4e880e58ec92c667931ee80bae77dc27fcdebb3e64f6017e7eef355679655"
+      },
+      "wall_seconds": 15.621991986990906
+    },
+    {
+      "attempt": "1450",
+      "status": "FAIL",
+      "native_exit_code": 1,
+      "stage": "official_low_combloop",
+      "cause": "GQA job.fire admission fail reflects faultNow/resetRequired through parent canStart back to job.valid",
+      "receipt": {
+        "bytes": 3709,
+        "sha256": "395186dee170705a832c4d19c257ce057a63007c12da49ce2cc4a8d892c3c679"
+      },
+      "log": {
+        "bytes": 13226,
+        "sha256": "fdbe68fd363b8931e57442e8a782a5cd64a97b34f637547e6fbafa5da53f2885"
+      },
+      "wall_seconds": 187.91128850600217
+    },
+    {
+      "attempt": "1500",
+      "status": "PASS_STRUCTURE_ONLY",
+      "native_exit_code": 0,
+      "stage": "official_high_low",
+      "cause": "Both fixes; original unchanged diagnostic reaches official low end",
+      "receipt": {
+        "bytes": 5651,
+        "sha256": "47ca3d9e828e4f2eadae310abafbc78c973ab314a7c12f5381d0d9e217e92770"
+      },
+      "log": {
+        "bytes": 8989,
+        "sha256": "5e233dc79643d59f697310c284742a6610922a52b50ea877c9105f3ae6bb4f2f"
+      },
+      "wall_seconds": 254.15158996300306
+    }
+  ],
+  "rawprep_fix": "One explicit UInt1 range slice head(4,4) instead of Bool head(4).asUInt before pad66. Same address value; constructor type identity fixed.",
+  "gqa_fix": "Only four io.job.fire rejection branches use edge-registered status/poison/drain. No current-cycle faultNow admission feedback; all active faults, unknown returns, numerical paths, held/debt code otherwise byte-identical.",
+  "prior_source_checks_were_insufficient": "Earlier compiler-only/source/model passes did not prove Chisel construction or combinational-loop freedom. Actual first two failed runs remain FAIL, not retroactive PASS.",
+  "prior_history": {
+    "path": "../host_runtime_fence/HISTORICAL_FINDINGS.json",
+    "bytes": 3742,
+    "sha256": "dcf09b3d6ecd36f24b41e4923758b7ec3a0c175097057f2645bfa33acdcca237"
+  },
+  "scope": "No wrapper change or blackbox replacement used to bypass failures; original sameTop and diagnostic main retained."
+}

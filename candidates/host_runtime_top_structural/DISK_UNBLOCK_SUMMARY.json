@@ -1,0 +1,34 @@
+{
+  "status": "SEPARATE_ROOT_VERIFIED_DEPENDENCY_MIGRATION_NOT_PUBLICATION_CLEANUP",
+  "migrated_installed_cache_locations": 5,
+  "verified_regular_files": 48284,
+  "verified_directories": 5095,
+  "before_free_bytes": 1440141312,
+  "after_free_bytes": 3510480896,
+  "reclaimed_bytes": 2070339584,
+  "destination_ephemeral": true,
+  "all_file_bytes_and_metadata_equal": true,
+  "inputs_weights_IR_RTL_deleted": false,
+  "repository_evidence_cleanup": false,
+  "import_or_numerical_validation": false,
+  "historical_runtime_path_pins_relabelled": false,
+  "records": {
+    "FINAL_MANIFEST.json": {
+      "bytes": 5036,
+      "sha256": "80ea564ef2209153587eb8cdcc4f6136d994aef9bc285297d621b5edf96e29bb"
+    },
+    "MIGRATION_RESULT.json": {
+      "bytes": 282,
+      "sha256": "d71d05b7c579f3fc9dc2c230dee8f1a6b8db77c58918beb195ebc70f00dbcaba"
+    },
+    "INDEPENDENT_PRE_REMOVAL_REVIEW.json": {
+      "bytes": 2747,
+      "sha256": "46ccc11c4ad35673f5287f000ca34ce6dd7d195d571a9d317779f934092cb31b"
+    },
+    "INDEPENDENT_POST_SWITCH_REVIEW.json": {
+      "bytes": 376,
+      "sha256": "c61cd1e57019d1f4f12d3d43a55e3747d1d72dbe5a8a953bae1801bb32bc442a"
+    }
+  },
+  "scope": "Root separately migrated rebuildable installed/runtime cache material after verified copies. No machine/private paths published; ephemeral target may require restoration. Publication performs no migration or cleanup."
+}

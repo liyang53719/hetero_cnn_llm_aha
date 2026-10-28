@@ -1,0 +1,225 @@
+{
+  "status": "OPEN_WARNINGS_RETAINED_NOT_NUMERICAL_ACCEPTANCE",
+  "count": 30,
+  "by_code": {
+    "W004": 21,
+    "W005": 9
+  },
+  "warnings": [
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 869,
+      "column": 57,
+      "code": "W004",
+      "message": "Dynamic index with width 16 is too wide for Vec of size 21 (expected index width 5)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 910,
+      "column": 38,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 910,
+      "column": 74,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 910,
+      "column": 175,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 914,
+      "column": 59,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 915,
+      "column": 57,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 929,
+      "column": 18,
+      "code": "W005",
+      "message": "Dynamic index with width 2 is too narrow for Vec of size 12 (expected index width 4)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 929,
+      "column": 53,
+      "code": "W005",
+      "message": "Dynamic index with width 2 is too narrow for Vec of size 12 (expected index width 4)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 160,
+      "column": 26,
+      "code": "W004",
+      "message": "Dynamic index with width 16 is too wide for Vec of size 21 (expected index width 5)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2150,
+      "column": 28,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2150,
+      "column": 63,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2151,
+      "column": 29,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2163,
+      "column": 56,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2164,
+      "column": 26,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2164,
+      "column": 71,
+      "code": "W004",
+      "message": "Dynamic index with width 2 is too wide for Vec of size 2 (expected index width 1)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2174,
+      "column": 39,
+      "code": "W005",
+      "message": "Dynamic index with width 2 is too narrow for Vec of size 12 (expected index width 4)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2195,
+      "column": 37,
+      "code": "W004",
+      "message": "Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2202,
+      "column": 29,
+      "code": "W004",
+      "message": "Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2202,
+      "column": 55,
+      "code": "W004",
+      "message": "Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2203,
+      "column": 30,
+      "code": "W004",
+      "message": "Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2203,
+      "column": 55,
+      "code": "W004",
+      "message": "Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2204,
+      "column": 25,
+      "code": "W004",
+      "message": "Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "HostBlockCommandsV4.scala",
+      "line": 2204,
+      "column": 50,
+      "code": "W004",
+      "message": "Dynamic index with width 3 is too wide for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "Qwen2Block.scala",
+      "line": 720,
+      "column": 57,
+      "code": "W005",
+      "message": "Dynamic index with width 4 is too narrow for Vec of size 256 (expected index width 8)."
+    },
+    {
+      "source": "Qwen2Block.scala",
+      "line": 720,
+      "column": 57,
+      "code": "W005",
+      "message": "Dynamic index with width 5 is too narrow for Vec of size 256 (expected index width 8)."
+    },
+    {
+      "source": "Qwen2Block.scala",
+      "line": 720,
+      "column": 57,
+      "code": "W005",
+      "message": "Dynamic index with width 6 is too narrow for Vec of size 256 (expected index width 8)."
+    },
+    {
+      "source": "Qwen2Block.scala",
+      "line": 720,
+      "column": 57,
+      "code": "W005",
+      "message": "Dynamic index with width 7 is too narrow for Vec of size 256 (expected index width 8)."
+    },
+    {
+      "source": "TransposedDenseOwner.scala",
+      "line": 966,
+      "column": 68,
+      "code": "W004",
+      "message": "Dynamic index with width 12 is too wide for Vec of size 256 (expected index width 8)."
+    },
+    {
+      "source": "HostRuntimePrefixLeaseWiringV8.scala",
+      "line": 465,
+      "column": 68,
+      "code": "W005",
+      "message": "Dynamic index with width 1 is too narrow for Vec of size 3 (expected index width 2)."
+    },
+    {
+      "source": "HostRuntimePrefixLeaseWiringV8.scala",
+      "line": 465,
+      "column": 98,
+      "code": "W005",
+      "message": "Dynamic index with width 1 is too narrow for Vec of size 3 (expected index width 2)."
+    }
+  ],
+  "original_record": {
+    "bytes": 6883,
+    "sha256": "e10f4cf3ff51e1f623bcae43418e2d31662957113a06bf1befc62514cfa18562"
+  },
+  "scope": "All30 warnings preserved with source basename/line only; environment paths removed. Bounds/numerical/protocol review remains separate."
+}

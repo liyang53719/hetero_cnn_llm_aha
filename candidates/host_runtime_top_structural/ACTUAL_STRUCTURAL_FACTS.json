@@ -1,0 +1,141 @@
+{
+  "status": "PASS_ACTUAL_ORIGINAL_TOP_HIGH_AND_OFFICIAL_LOW_STRUCTURE_ONLY",
+  "wall_seconds": 254.15158996300306,
+  "cpu_seconds": 204.5,
+  "peak_rss": 2681233408,
+  "max_tree": 635320582,
+  "disk_start": 3313868800,
+  "disk_end": 2676150272,
+  "class_count": 1001,
+  "latest_source_count": 31,
+  "latest_source_classes": 159,
+  "all_source_pins": 56,
+  "reachable_instances": 1056,
+  "module_definitions": 95,
+  "matrix_endpoints": 8,
+  "matrix_macs": 4096,
+  "element32_banks": 1,
+  "whole_top_fp32_alu_instances": 81,
+  "whole_top_scalar_instances": 17,
+  "idma_instances": 1,
+  "top_port_count": 85,
+  "input_ports": 41,
+  "output_ports": 44,
+  "launch_bits": 844,
+  "numerical_full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "launch_seal_closed": true,
+  "performance_measured": false,
+  "native_exit_code": 0,
+  "preflight_checks": 1656,
+  "postflight_checks": 1656,
+  "receipt": {
+    "bytes": 5651,
+    "sha256": "47ca3d9e828e4f2eadae310abafbc78c973ab314a7c12f5381d0d9e217e92770"
+  },
+  "diagnostic_log": {
+    "bytes": 8989,
+    "sha256": "5e233dc79643d59f697310c284742a6610922a52b50ea877c9105f3ae6bb4f2f"
+  },
+  "actual_output_count": 14,
+  "outputs": [
+    {
+      "relative": "host-diagnostic/HostBlockTopV4.lo.fir",
+      "bytes": 258102601,
+      "sha256": "f4bb8b87dea31205536d828d17bfab75e6ce255011ef7e15151055c29228691d"
+    },
+    {
+      "relative": "host-diagnostic/SCOPE.txt",
+      "bytes": 93,
+      "sha256": "2292550be86ec9868b02459d544f0996a3b9b195f2771863075b2a99f17d196e"
+    },
+    {
+      "relative": "host-diagnostic/high-annotations.json",
+      "bytes": 1350664,
+      "sha256": "d4f14dddab5da0ceb5740994126f889a7d501e656d42ea3d5a34455345051270"
+    },
+    {
+      "relative": "host-diagnostic/high-extmodules.fir",
+      "bytes": 16972,
+      "sha256": "d3681fdf191d1f21964a08e48de59934b8ab5f514ab1f27faf86e190d94f6ecd"
+    },
+    {
+      "relative": "host-diagnostic/high-hierarchy.tsv",
+      "bytes": 72314,
+      "sha256": "e9c13b422c6a4fcc1220d88f22658fa55c7554c8d53c395a95299124ae189ec8"
+    },
+    {
+      "relative": "host-diagnostic/high-summary.txt",
+      "bytes": 272,
+      "sha256": "0f2b943d47567b38c1df2206ec296d1c6ba5226563f6d6e4ee730b2fee7f8170"
+    },
+    {
+      "relative": "host-diagnostic/high-top-ports.fir",
+      "bytes": 1978,
+      "sha256": "2fc63db3578404951cbee2d3149b5f850b207642836aeb507863b6c44bf6b21b"
+    },
+    {
+      "relative": "host-diagnostic/low-annotations.json",
+      "bytes": 1677391,
+      "sha256": "e0e947d7ccd93e76af23319f498371945c5e6e2067a136e3989245cc21c2ddb8"
+    },
+    {
+      "relative": "host-diagnostic/low-extmodules.fir",
+      "bytes": 2692,
+      "sha256": "708e5fc7ea74415fe0edbe2eedb36df1707c7ee3e6851eeda64cd9f96cec0322"
+    },
+    {
+      "relative": "host-diagnostic/low-hierarchy.tsv",
+      "bytes": 69682,
+      "sha256": "32d40bc2d95c28944067c99a725c96f80846fb269b0042c28835b215ece77e50"
+    },
+    {
+      "relative": "host-diagnostic/low-summary.txt",
+      "bytes": 270,
+      "sha256": "89d01c813e26060a01ddaf6a9068f61b3d26a1a216ad7adcd0a64bae0d018794"
+    },
+    {
+      "relative": "host-diagnostic/low-top-ports.fir",
+      "bytes": 12659,
+      "sha256": "226e674302c377ca19f9b2cd17fdd6226bbdb2a0fdcad89f50239f9dddb9ca17"
+    },
+    {
+      "relative": "host-diagnostic/official-low.fir",
+      "bytes": 258102601,
+      "sha256": "f4bb8b87dea31205536d828d17bfab75e6ce255011ef7e15151055c29228691d"
+    },
+    {
+      "relative": "host-diagnostic/original-high.fir",
+      "bytes": 97256876,
+      "sha256": "62e150cc8f22b02eb0107892bf7cbfa0a3db59e3c6c1ec90ec90ade3718aba13"
+    }
+  ],
+  "qualification": "Actual original sameTop Chisel elaboration and official high-to-low structural pipeline PASS, including initialization/comb-loop checks. Not warning-free or primitive numeric/RTL/PPA proof.",
+  "compile_results": [
+    {
+      "source": "GdnRuntimeRawPrepOwnerV7.scala",
+      "summary": {
+        "bytes": 1649,
+        "sha256": "51d4300e56a3f15f5b21042c0dce492ba94feb78b3bd1e46f0a657c7408df8c7"
+      },
+      "wall_seconds": 18.299280675011687,
+      "pre_post_pin_checks": 3704,
+      "new_class_count": 1,
+      "new_class_bytes": 163747
+    },
+    {
+      "source": "Bf16CausalGqaRuntimeOwnerV14.scala",
+      "summary": {
+        "bytes": 1625,
+        "sha256": "aff4a381ef19e590a876ea60ac03ed616288bf72a6fc220c813a2f095bf07618"
+      },
+      "wall_seconds": 23.737326073925942,
+      "pre_post_pin_checks": 3742,
+      "new_class_count": 10,
+      "new_class_bytes": 233297
+    }
+  ],
+  "publication_java_executions": 0,
+  "sv_generated": false,
+  "rtl_simulated": false
+}

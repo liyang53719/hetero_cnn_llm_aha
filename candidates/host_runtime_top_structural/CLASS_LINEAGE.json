@@ -1,0 +1,104 @@
+{
+  "status": "TWO_SEQUENTIAL_INCREMENTAL_TYPECOMPILES_THEN_ORIGINAL_TOP_STRUCTURE",
+  "base_commit": "725355a92f936e90aff450062858bf5b9c28d690",
+  "base_package": "../host_runtime_fence",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 2625,
+      "sha256": "90dccf53cc962662f50536e849200b0334bf44bc67f3b34a96cfc4209810a50d"
+    },
+    "CLASS_LINEAGE.json": {
+      "bytes": 4423,
+      "sha256": "f13e56739915402b34e70944c1a7d9f5e08289ebcbc92863def8737be91f026a"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 4193,
+      "sha256": "d63bd208bb4cd40c84949fa270d6d0c18b24334f1d883804ba6a9bf14e0c2adc"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 1151,
+      "sha256": "0667a04d0363479d8608631d54a6e61a6b72f84505f25f4f415ef0796efc968a"
+    },
+    "REPRODUCTION_LIMITS.json": {
+      "bytes": 921,
+      "sha256": "d98a7ffdffe2ade1a4fdc00970df09989652f16d80b8c2513c4ba18c2be6b32d"
+    }
+  },
+  "fence_latest_classes": 159,
+  "fence_latest_digest": "d9927b2b0860f456829d9d1e05c980d21e0b38b55ac2f823790af09ef6793f5d",
+  "removed_old_class_count": 11,
+  "removed_old_digest": "53eac1695f2294f10db49ef296c2f388c6cb0b53c898171598b01bb4b546a860",
+  "inherited_fence_sources": 29,
+  "inherited_fence_classes": 148,
+  "inherited_fence_digest": "e540f45c0a04e8692423dc9f9601bf45afec9ad332fe3dd92f43f55430b2a4fb",
+  "compiles": [
+    {
+      "source": "GdnRuntimeRawPrepOwnerV7.scala",
+      "baseline": 1000,
+      "pruned": 1,
+      "new_classes": 1,
+      "new_class_bytes": 163747,
+      "new_digest": "fb2ba15a53b021614672f9989cf0ba4e19b9e935f714b4ef129d08afa25d94bd",
+      "receipt": {
+        "bytes": 2231,
+        "sha256": "fa8d203be32747eab63d8535bff78690e2bb4b4f7009ba56b32258c52088d908"
+      }
+    },
+    {
+      "source": "Bf16CausalGqaRuntimeOwnerV14.scala",
+      "baseline": 991,
+      "pruned": 10,
+      "new_classes": 10,
+      "new_class_bytes": 233297,
+      "new_digest": "e3c862a04e8bd3c1b6fc735a0cd4f9e45daabf1f7d2eca3974b22cf069a1bf2d",
+      "receipt": {
+        "bytes": 5474,
+        "sha256": "0e89a7ba90a9be2d65e59b07744ee91c3123e61638fc60928fbfd1a46af25de0"
+      }
+    }
+  ],
+  "final": {
+    "latest_sources": 31,
+    "latest_classes": 159,
+    "latest_class_bytes": 6210253,
+    "latest_class_digest": "aba9162fb2dff89ee1ae7a8b2e4f9e52613eff935d2cedce150deb5bc22d118a",
+    "historical_ancestor_classes": 842,
+    "actual_structural_classes": 1001,
+    "actual_structural_class_digest": "2a85dd58d3f445c7f3d5e0f0b1272d3f051c00d8e9c3b0c922e44527b816f29b",
+    "by_source": {
+      "GdnChunkStateTransferOwner.scala": 4,
+      "GdnRuntimeChunkLeafCollection.scala": 7,
+      "GdnRuntimeChunkCoordinator.scala": 4,
+      "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+      "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+      "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+      "GdnRuntimeRawPrepReceiptV8.scala": 3,
+      "HostRuntimeGatedDependencyV10.scala": 1,
+      "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+      "GdnRuntimeGatedNormProtocolV10.scala": 4,
+      "GdnRuntimeGatedNormOwnerV10.scala": 1,
+      "GdnRuntimeRawPrepProtocolV7.scala": 9,
+      "HeldDecoupledOffer.scala": 4,
+      "HostRuntimeChunkProtocolV9.scala": 3,
+      "HostRuntimeChunkWiringV9.scala": 3,
+      "QkNorm256RuntimeOwnerV11.scala": 7,
+      "SharedMemoryArbiter.scala": 3,
+      "PartialRopeRuntimeOwnerV12.scala": 7,
+      "Bf16KvAppendRuntimeOwnerV13.scala": 7,
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": 2,
+      "GdnRuntimeRmsNormOwnerV3.scala": 6,
+      "GdnRuntimeElementwiseOwnerV15.scala": 6,
+      "HostRuntimePrefixLeaseWiringV8.scala": 7,
+      "Public21QkvReductionRouter.scala": 2,
+      "QwenOwnerProtocol.scala": 20,
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": 9,
+      "TransposedDenseOwner.scala": 8,
+      "HostBlockCommandsV4.scala": 4,
+      "HostBlockTopV4.scala": 3,
+      "GdnRuntimeRawPrepOwnerV7.scala": 1,
+      "Bf16CausalGqaRuntimeOwnerV14.scala": 10
+    }
+  },
+  "canonical_encoding": "sort by relative; JSON sorted keys compact separators; trailing LF; relative/bytes/sha256 only",
+  "scope": "No simultaneous2-source or full31-source compile claim. Both changed sources bundled, all29 unchanged map to verified published fence ancestry or explicit requires-parent sources. Actual diagnostic consumes1001classes and56 pinned source identities."
+}

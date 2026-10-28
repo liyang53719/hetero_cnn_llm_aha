@@ -1,0 +1,69 @@
+{
+  "status": "TEMP_FOUR_SOURCE_SCALA_TYPECHECK_ONLY_REQUIRES_PARENT",
+  "files": {
+    "ACTUAL_FACTS.json": {
+      "bytes": 1615,
+      "sha256": "1a2df50e877d1d2a4c2a6e0cd5f603eec73927a3ba0c03555424904a09bd77d3"
+    },
+    "BASELINE_CLASS_PINS.tsv": {
+      "bytes": 106247,
+      "sha256": "1ce0573594b68fc684d4373d21c72a1bff5778f0378c8bafaa1f96f441222722"
+    },
+    "BASE_PINS.json": {
+      "bytes": 2890,
+      "sha256": "881fc3efc0ed1fee729c6b29e7bda0f38dfa3e7659b32539784a1c3a0aa21628"
+    },
+    "CLASS_SCOPE.json": {
+      "bytes": 10792,
+      "sha256": "7702fd8503b8c32ef1dd486ff103d8aeb5cef375d1c969164ff7f1ba66ab5200"
+    },
+    "DEPENDENCY_PINS.json": {
+      "bytes": 23148,
+      "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 3460,
+      "sha256": "b08f7fd8470c4aa260a6c4a01237fddc7f978ade7cd5dfd7dea644c5f8e63ae6"
+    },
+    "README_ZH.md": {
+      "bytes": 4664,
+      "sha256": "5e99dd6f5b2dc8f31f4661e09a3d0e25135af9b9044a3d395f271458cd8105be"
+    },
+    "REPRODUCTION.json": {
+      "bytes": 2775,
+      "sha256": "3c73b2e112531c865b9806c8dc2da52c2fa9af92d87f42ab5cdc86d6251303de"
+    },
+    "SOURCE_PINS.json": {
+      "bytes": 1446,
+      "sha256": "6461428536937251aeea66aa92c8b946d29cf953601a6e8fbce36f31620b1f0b"
+    },
+    "check_source.py": {
+      "bytes": 13328,
+      "sha256": "fd76badc3bc4dfeeb58f75eee0f5f3d8d621317f9a4c1c27b1a17a73e633fd82"
+    },
+    "source/GdnRuntimeChunkDerivedAndPairV2Owner.scala": {
+      "bytes": 20779,
+      "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9"
+    },
+    "source/GdnRuntimeChunkExecuteOwnerV8.scala": {
+      "bytes": 16928,
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e"
+    },
+    "source/UnifiedMoeSharedArithmeticAdapterV5.scala": {
+      "bytes": 21897,
+      "sha256": "4a01e104ca5c2d9995fe76426235a9269ef4de82a5173fb122ba6b81ffe8db82"
+    },
+    "source/UnifiedMoeSharedArithmeticProtocolV5.scala": {
+      "bytes": 4811,
+      "sha256": "0dcd4ccfc259b582135845189a65dd826e3fbbeb05be8c116bb9ee9c1b73a256"
+    },
+    "tests/test_bridge_contract.py": {
+      "bytes": 9891,
+      "sha256": "9d6a1dbde8e080517fa3b17c5bf3ae7f427eccf9bd2320d788055ed693089041"
+    },
+    "verify_package.py": {
+      "bytes": 3838,
+      "sha256": "55269fc36b7d49d4c7dbd9350b985b40400aa93d105bca54c147966c9265028a"
+    }
+  }
+}

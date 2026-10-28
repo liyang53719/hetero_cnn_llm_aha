@@ -1,0 +1,71 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PACKAGE}/source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+    "{PACKAGE}/source/GdnRuntimeChunkExecuteOwnerV8.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+    "{PACKAGE}/source/UnifiedMoeSharedArithmeticProtocolV5.scala"
+  ],
+  "command_template_exact_inverse_verified": true,
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21 java; full314-file tool tree must be supplied from parent record.",
+    "RUN": "Fresh empty output root outside repository, with home/tmp/classes subdirectories.",
+    "BASELINE": "Exact903 retained classes, verified against BASELINE_CLASS_PINS.tsv. Reconstruction source/build closure is NOT included.",
+    "JAR_CP": "Join DEPENDENCY_PINS.json ordered_classpath maven_path under a user-supplied dependency root with colon, preserving all106 entries.",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin jar from DEPENDENCY_PINS.json.",
+    "PACKAGE": "This candidate directory."
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "manual_requirements": [
+    "Restore exact parent originals/frozen source aliases from BASE_PINS.json before check_source.py.",
+    "Obtain/rebuild exact903-class parent baseline, original106 jar closure and full314-file JDK tool tree before any compiler launch. No download or parent source/build reconstruction is provided here.",
+    "Use bounded owned-process supervision equivalent to the pinned original runner; caps are historical metadata, not an executable supervisor. CPU affinity index is host-specific.",
+    "Verify all inputs before and after; scala.tools.nsc.Main only. No design main, elaboration, simulation or automatic retry."
+  ],
+  "not_a_claim": [
+    "fresh hermetic reproduction",
+    "common-parent compatibility",
+    "Chisel elaboration",
+    "numeric equivalence",
+    "full M128"
+  ]
+}

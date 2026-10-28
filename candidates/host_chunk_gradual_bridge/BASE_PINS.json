@@ -1,0 +1,84 @@
+{
+  "scope": "Requires externally supplied exact parent inputs under the relative aliases below. Hashes identify inputs, not a downloadable parent build closure.",
+  "sources": [
+    {
+      "path": "sources/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 4547,
+      "sha256": "edde8f6fb00cc8720209b2453a4b8b5ae0e9c58af4d5355dd1dafe2eb4e8697e"
+    },
+    {
+      "path": "sources/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 21090,
+      "sha256": "c1e2cbd8418cd91bbfdc46f8842835c870515d53af5ca59d06dc13215ac9e77a"
+    },
+    {
+      "path": "sources/GdnRuntimeChunkExecuteOwnerV8.scala",
+      "bytes": 16665,
+      "sha256": "c9e0adcf7ba2140e95ef8ecfdd8b0df36b2f86dcac5d5a6d414540c06203b017"
+    },
+    {
+      "path": "sources/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "bytes": 20354,
+      "sha256": "3fbcec65779eb5ef2d27dfde339efa4980c0e7d03f2ce717afa1a2417b78fa08"
+    }
+  ],
+  "frozen_original": [
+    {
+      "path": "frozen_original/FREEZE.json",
+      "bytes": 1319,
+      "sha256": "934a57b2f0350e8ea135441c5f0d1bb7d20601bedadb86f3d7ac123952c25a66"
+    },
+    {
+      "path": "frozen_original/CHECKS.json",
+      "bytes": 4568,
+      "sha256": "8d5563f9e239e87e49e3f99eade66a0ed2fad63e3428df7baee2fb6286d7f98d"
+    },
+    {
+      "path": "frozen_original/README.md",
+      "bytes": 6486,
+      "sha256": "d9aa7ab74996ed5090dd8158127691a9a48f3ec74137d883e5604ec3ef7bb053"
+    },
+    {
+      "path": "frozen_original/SOURCE_DELTA.patch",
+      "bytes": 17340,
+      "sha256": "e9dba973380790627e23db72b888f9416ee05b89b6e227078416ec56335a6eba"
+    },
+    {
+      "path": "frozen_original/SOURCE_PINS.json",
+      "bytes": 6709,
+      "sha256": "69260bc6e04599b6aa09fd2715292eea8f40d45c5ef7cd729ea6d078e1b53e18"
+    },
+    {
+      "path": "frozen_original/check_source.py",
+      "bytes": 11910,
+      "sha256": "341f5d3367110844fc5f052462eaa2b3de4b6c2e990157088e3f162c002cc796"
+    },
+    {
+      "path": "frozen_original/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 21090,
+      "sha256": "c1e2cbd8418cd91bbfdc46f8842835c870515d53af5ca59d06dc13215ac9e77a"
+    },
+    {
+      "path": "frozen_original/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 4547,
+      "sha256": "edde8f6fb00cc8720209b2453a4b8b5ae0e9c58af4d5355dd1dafe2eb4e8697e"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "dependencies/UnifiedOverlapProtocolV2.scala",
+      "bytes": 1795,
+      "sha256": "7ac3b0c58c666bef4255c018df53ad987ff1ac60f0ef14045215d5bae44aa724"
+    },
+    {
+      "path": "dependencies/UnifiedVectorElement32ProtocolV4.scala",
+      "bytes": 1682,
+      "sha256": "c8ed3fffbce8417c164cf1dd20999f2186842508953d1b617fda1a4ed6f3db9d"
+    },
+    {
+      "path": "dependencies/UnifiedVectorElement32BankV4.scala",
+      "bytes": 4361,
+      "sha256": "5f2c7a375262104d9f5e081127a8de94421e80f631a96aa1fe5cceefe94d4d28"
+    }
+  ]
+}

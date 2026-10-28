@@ -1,0 +1,43 @@
+{
+  "sources": [
+    {
+      "path": "source/GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "bytes": 20779,
+      "sha256": "684ef64617cd7303905e3efbdcced47ba556812ca6e5882a243c6eacb76796a9",
+      "byte_identical_to_actual_compiler_input": true
+    },
+    {
+      "path": "source/GdnRuntimeChunkExecuteOwnerV8.scala",
+      "bytes": 16928,
+      "sha256": "b4bc9397b88bc4542b72213fa14aad5b4df5e428881e96e2fd3893a49af3c15e",
+      "byte_identical_to_actual_compiler_input": true
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "bytes": 21897,
+      "sha256": "4a01e104ca5c2d9995fe76426235a9269ef4de82a5173fb122ba6b81ffe8db82",
+      "byte_identical_to_actual_compiler_input": true
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 4811,
+      "sha256": "0dcd4ccfc259b582135845189a65dd826e3fbbeb05be8c116bb9ee9c1b73a256",
+      "byte_identical_to_actual_compiler_input": true
+    }
+  ],
+  "check_source_path_only_portability": {
+    "original": {
+      "bytes": 13277,
+      "sha256": "6678dfcc8921af7dcb4d2a08bd33f9d4c44d4f137405c3d469f8bb5349d6f63a"
+    },
+    "published": {
+      "bytes": 13328,
+      "sha256": "fd76badc3bc4dfeeb58f75eee0f5f3d8d621317f9a4c1c27b1a17a73e633fd82"
+    },
+    "inverse_verified": true
+  },
+  "contract_test_unchanged": {
+    "bytes": 9891,
+    "sha256": "9d6a1dbde8e080517fa3b17c5bf3ae7f427eccf9bd2320d788055ed693089041"
+  }
+}

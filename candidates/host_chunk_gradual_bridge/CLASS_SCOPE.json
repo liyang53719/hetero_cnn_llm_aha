@@ -1,0 +1,242 @@
+{
+  "removed_replaced9": [
+    {
+      "relative": "heteronpu/continuous/UnifiedArithmeticAuthorityKindV5$.class",
+      "bytes": 940,
+      "sha256": "058873544fd0679bba9e5eb7e36e9875366b75676993305d79f7d7c583a1a69b"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedArithmeticAuthorityKindV5.class",
+      "bytes": 1106,
+      "sha256": "f7a3fbc5003c39c9e9500332ad3a79938129f475a261c1d6c499debfd22252b5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticClientStatusV5.class",
+      "bytes": 4631,
+      "sha256": "ac6bdee046db0558ddb0a6b532ce1171c9c3111efef45110fd7453200f18e0f8"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticClientV5$.class",
+      "bytes": 4622,
+      "sha256": "cc1963cd11c27d88cabccfdf0492623f6469fd0657526c27c315b79231428028"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticClientV5.class",
+      "bytes": 4062,
+      "sha256": "2b3b92f5f46ef1d4343d1d44ca870a53023e0739433744e4d5c75599e912b7a5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticLeaseV5.class",
+      "bytes": 4863,
+      "sha256": "ea78493234fe723307a2ad3489214745e1e909ed6228f34b42fca388bf3c1eec"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticRetireV5.class",
+      "bytes": 3701,
+      "sha256": "01248111dc38b2fa2c1936f8bfd772f14033af65836f117140d6e7c5cbb0482d"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeSharedArithmeticAdapterV5$$anon$1.class",
+      "bytes": 10800,
+      "sha256": "0be8b9ed000a9fcc1522a5d7c4b1489af2e1ea4f6f9b00f36046c68ad10992ce"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeSharedArithmeticAdapterV5.class",
+      "bytes": 134069,
+      "sha256": "8fc4a4c088ac76634ec7973b327e81897674fb4cfb54610c43a2533c099b99ee"
+    }
+  ],
+  "added_unchanged8": [
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkExecuteJob.class",
+      "bytes": 6387,
+      "sha256": "de36da5d4302910644eb76d6b415ba24e3215ea9e8bbf75a0b710ee3db46eaeb",
+      "source_file": "GdnRuntimeChunkExecuteOwner.scala",
+      "source_pin": {
+        "bytes": 16324,
+        "sha256": "77943e63fe0b580192e71be5020f712d4d7234521bd13cce0177fb151b0cfd8c"
+      }
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkExecuteResult.class",
+      "bytes": 6078,
+      "sha256": "f4381f53f86deb3385bbebe2b2dde76ddd442a77c7cf4b18ed589622e7ed6bbd",
+      "source_file": "GdnRuntimeChunkExecuteOwner.scala",
+      "source_pin": {
+        "bytes": 16324,
+        "sha256": "77943e63fe0b580192e71be5020f712d4d7234521bd13cce0177fb151b0cfd8c"
+      }
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkLoadPrepV2Result.class",
+      "bytes": 5650,
+      "sha256": "82e022f9c7c1a90fe2fff4b7ec4d13c84042e9c691d1753c9f9db8f3254eee56",
+      "source_file": "GdnRuntimeChunkLoadPrepV2Owner.scala",
+      "source_pin": {
+        "bytes": 17265,
+        "sha256": "bb74af67d6863ce179a34b1cc33bad7693389ae91c628481657995671ee0002e"
+      }
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkNumericPolicy$.class",
+      "bytes": 2212,
+      "sha256": "6bf2412ee4bfeb213f0a69a9dbf95f5bf8ea841c6a679213c8ac5c70b6b5656f",
+      "source_file": "GdnRuntimeChunkNumericPolicy.scala",
+      "source_pin": {
+        "bytes": 639,
+        "sha256": "44b5cc96048f92f712c2164f680a43da061dbf8d376982c69d9bdd71f9d675fc"
+      }
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkNumericPolicy.class",
+      "bytes": 4415,
+      "sha256": "cc30633b0b6e421b70ea0ac4455f0ae860e2234b03950f460ec6262577eddeb1",
+      "source_file": "GdnRuntimeChunkNumericPolicy.scala",
+      "source_pin": {
+        "bytes": 639,
+        "sha256": "44b5cc96048f92f712c2164f680a43da061dbf8d376982c69d9bdd71f9d675fc"
+      }
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkLayout$.class",
+      "bytes": 2197,
+      "sha256": "5ce30216ccac897d8c4ef9b15c786664e7c7cf166ffead2051b1875b9086c5e8",
+      "source_identity_detail": "See pinned parent source/tool record; this class-composition entry contains compiled identity only."
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkLayout.class",
+      "bytes": 4867,
+      "sha256": "934bf239adda74e59e391bd0d3879cb67a682e50d632c5848dfe655d64626c8b",
+      "source_identity_detail": "See pinned parent source/tool record; this class-composition entry contains compiled identity only."
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkPrivateDecay.class",
+      "bytes": 5149,
+      "sha256": "84eeebae3838b64fd9c682614052ccd38347b53439c29ae4db42a0e3285cccc1",
+      "source_identity_detail": "See pinned parent source/tool record; this class-composition entry contains compiled identity only."
+    }
+  ],
+  "new_actual17": [
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Job.class",
+      "bytes": 6142,
+      "sha256": "0d6dbcb7a5cf0caf1fa7901a302159294a8dc9df5aada9a7d933bb89c34e3b64",
+      "source_file": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "internal_name": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Job"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Owner.class",
+      "bytes": 142156,
+      "sha256": "b6d454559d8c6e5a92adbeea8869344623c531183b5d45d84d10cac19275ac99",
+      "source_file": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "internal_name": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Owner"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Port.class",
+      "bytes": 8602,
+      "sha256": "51f9fbddf7d67dd47a79730be8e2d5f5ff215b4ce242da369c9062cfac661573",
+      "source_file": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "internal_name": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Port"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Result.class",
+      "bytes": 7473,
+      "sha256": "a8ec3d5018cc2b665ca3a22d7fb374a0ce2784c700e88320c127d5f2c6d55c5d",
+      "source_file": "GdnRuntimeChunkDerivedAndPairV2Owner.scala",
+      "internal_name": "heteronpu/continuous/GdnRuntimeChunkDerivedAndPairV2Result"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkExecuteOwnerV8.class",
+      "bytes": 134669,
+      "sha256": "985f76af80c4a53e1e5840a48c4b067cf12db3acf488089645199d9a661dc212",
+      "source_file": "GdnRuntimeChunkExecuteOwnerV8.scala",
+      "internal_name": "heteronpu/continuous/GdnRuntimeChunkExecuteOwnerV8"
+    },
+    {
+      "relative": "heteronpu/continuous/GdnRuntimeChunkExecutePortV8.class",
+      "bytes": 8014,
+      "sha256": "cda68dc1f61463446e1a1cd58fc4d7ff4cd46ac098c21d2da49d50d8fed2c703",
+      "source_file": "GdnRuntimeChunkExecuteOwnerV8.scala",
+      "internal_name": "heteronpu/continuous/GdnRuntimeChunkExecutePortV8"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedArithmeticAuthorityKindV5$.class",
+      "bytes": 1043,
+      "sha256": "f442453b91956cae365e026e2c3ccea4ad208b08fe26c03d29836122181eca0c",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedArithmeticAuthorityKindV5$"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedArithmeticAuthorityKindV5.class",
+      "bytes": 1220,
+      "sha256": "c32d63cd84f6bb52a72dd5940d485bcfbdcffea0a4066f1841f021fc661e4391",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedArithmeticAuthorityKindV5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticClientStatusV5.class",
+      "bytes": 4631,
+      "sha256": "48aa7603b999af26e177dad408dcc13f7119250cbcb742370404a6f4b5b0a8ac",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedMoeArithmeticClientStatusV5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticClientV5$.class",
+      "bytes": 5240,
+      "sha256": "8f7ccad4c1e194dd190f677070400ea909102432548e25e25abed06d2ec5d5d2",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedMoeArithmeticClientV5$"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticClientV5.class",
+      "bytes": 4657,
+      "sha256": "2e9a8bfec68023d29cf61cb30ff06f897ea8c8e8abe473838fac1f85fd9caada",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedMoeArithmeticClientV5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticLeaseV5.class",
+      "bytes": 4863,
+      "sha256": "0cff005283b9655b53df232ccf55c95765a19bd3629c06af8387eae3986d4b5e",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedMoeArithmeticLeaseV5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeArithmeticRetireV5.class",
+      "bytes": 3701,
+      "sha256": "cc6dd2daa5587944633fdf0cfbbbb1e75fe5e1ae80fa08ab1df90c271b0b4de7",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedMoeArithmeticRetireV5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeSharedArithmeticAdapterV5$$anon$1.class",
+      "bytes": 12090,
+      "sha256": "83b4dea326b7682fc3ed45a25c247f4b81c9e877bd5369b1fe8caf3f848bc20c",
+      "source_file": "UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedMoeSharedArithmeticAdapterV5$$anon$1"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedMoeSharedArithmeticAdapterV5.class",
+      "bytes": 156147,
+      "sha256": "d54c43948496c6ce10d9d99fd65a97a2b0681977fcdb4ee61d20f42741a31c8d",
+      "source_file": "UnifiedMoeSharedArithmeticAdapterV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedMoeSharedArithmeticAdapterV5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedOrdinaryVectorRequestV5.class",
+      "bytes": 3767,
+      "sha256": "7762ab259e8850973c4ac86aa936c515d5baf978ab4390f201dca274ed269ff9",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedOrdinaryVectorRequestV5"
+    },
+    {
+      "relative": "heteronpu/continuous/UnifiedOrdinaryVectorResultV5.class",
+      "bytes": 4090,
+      "sha256": "f8035e370f5591abef3da53878e6253b6cae2404455f028529e7494948b976d2",
+      "source_file": "UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "internal_name": "heteronpu/continuous/UnifiedOrdinaryVectorResultV5"
+    }
+  ],
+  "baseline_no_overlap": true,
+  "scope": "Identity metadata only; no class files or stand-in source definitions published."
+}

@@ -1,0 +1,105 @@
+{
+  "scope": "Hashes of retained original local evidence. Original records are not uploaded because they contain private runtime paths; hashes do not make them publicly available. No original or failed attempt is overwritten.",
+  "records": [
+    {
+      "role": "actual/RECEIPT.json",
+      "bytes": 8087,
+      "sha256": "b117e1805f5f21f3a3b06997c074c31a6edd2a1bf4990582253e2d10d3c8901d"
+    },
+    {
+      "role": "actual/CLASS_IDENTITIES.json",
+      "bytes": 21769,
+      "sha256": "b1a4573ca998ab34e4c2a31ac2cc10145234e1dd9b48dd8f8c444ece58bcef26"
+    },
+    {
+      "role": "actual/SUMMARY.json",
+      "bytes": 2032,
+      "sha256": "44665f2ac9a3b3447d9416132b49e245520f881910e7ff94564b5f5839867dba"
+    },
+    {
+      "role": "actual/TOOL_TERMINAL.json",
+      "bytes": 412,
+      "sha256": "62c956a0dcfc3dba6e4b223a9e84d46ee5041a5e682603134b863a2173466bcd"
+    },
+    {
+      "role": "actual/compile.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "role": "prepare/COMMAND.json",
+      "bytes": 36458,
+      "sha256": "d24fba782bb855f19f01fe42996d37ff86614c7eb36fb4d5341b8063dea9f504"
+    },
+    {
+      "role": "prepare/SOURCE_AND_TOOL_PINS.json",
+      "bytes": 643686,
+      "sha256": "85390b212092cfc7460e9e54316162e6214785eb311bd95baf0afda0b9560382"
+    },
+    {
+      "role": "prepare/CLASS_COMPOSITION.json",
+      "bytes": 498584,
+      "sha256": "82d0c1fb24bc1731a5bd5bbfee47260f924b55135593b1dc6189198c328aee23"
+    },
+    {
+      "role": "prepare/INTERFACE_COVERAGE.json",
+      "bytes": 12817,
+      "sha256": "ca7844aec4c663a943d4b1fb3e866c0186d5e11edb2219be36e632750848cc0f"
+    },
+    {
+      "role": "prepare/FREEZE.json",
+      "bytes": 1545,
+      "sha256": "974b1022f6bfe1bb9e8ffc07bb6e59fa3202c7d30e6f868d3e003b036382d4dd"
+    },
+    {
+      "role": "runner/run_compile.py",
+      "bytes": 8006,
+      "sha256": "1e521c01909ca9a36f41ee08655ea67a7bfcf250b2c2e385187aaeb39bf5e5e1"
+    },
+    {
+      "role": "runner/verify_actual.py",
+      "bytes": 4929,
+      "sha256": "6d9873056474ddafdd92e9ad92c8a0a736619168de6ba75f152b0ff41b517724"
+    },
+    {
+      "role": "runner/EVIDENCE_MANIFEST.json",
+      "bytes": 1279,
+      "sha256": "d4f2a4ccb8957ce6a97224b514fa287d8e9d695e18966de7ff4bd14823f1e858"
+    },
+    {
+      "role": "source/MANIFEST.json",
+      "bytes": 3212,
+      "sha256": "b8e724bb44f06a195956904622f7c056b53c1e4f231616937bea44df4a412f86"
+    },
+    {
+      "role": "source/SOURCE_CHECKS.json",
+      "bytes": 6613,
+      "sha256": "5e0259a05eaebd647cc1c43575a2f3f8fbec36d6ebbf5ba1c6301ec5cd203835"
+    },
+    {
+      "role": "source/SOURCE_CHECKS_OPTIMIZED.json",
+      "bytes": 6613,
+      "sha256": "5e0259a05eaebd647cc1c43575a2f3f8fbec36d6ebbf5ba1c6301ec5cd203835"
+    },
+    {
+      "role": "source/CONTRACT_TESTS.log",
+      "bytes": 1780,
+      "sha256": "e6b9f5f7f66ac3136f4f745257f4572d88a3a2f619b255cef3f0cc373849874f"
+    },
+    {
+      "role": "source/CONTRACT_TESTS_OPTIMIZED.log",
+      "bytes": 1780,
+      "sha256": "e7e30fc2a4712b563e25c25242466b99ef68dfa09b0ed45c9899142305657ae8"
+    },
+    {
+      "role": "source/INDEPENDENT_REVIEW.md",
+      "bytes": 1144,
+      "sha256": "ce5b87ad982ca2c7a3a1e25600b46cfd2d6ad0dbf1b0db50cead3e6a69b89258"
+    },
+    {
+      "role": "source/SOURCE_DELTA.patch",
+      "bytes": 11621,
+      "sha256": "4d979c9964f33ab085bff5f559959cb35dfd029955f5ebab0f3e58d678ed6ff2"
+    }
+  ]
+}

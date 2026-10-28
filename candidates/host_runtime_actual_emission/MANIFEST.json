@@ -1,0 +1,65 @@
+{
+  "status": "EMISSION_IDENTITY_ONLY_REQUIRES_PARENT_NOT_FINAL_RTL",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 2038,
+      "sha256": "9d865983fcfad1e85366d5733687b1928d6967cfe5366613ba74dcfeab5cb980"
+    },
+    {
+      "path": "EMITTED_ARTIFACT_PINS.json",
+      "bytes": 5951,
+      "sha256": "7c15066696906a7ea023dd52915fafde9f848eda50eb1da3bd5826fe0a82e605"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 17859,
+      "sha256": "9242278d564336d74d6dc1896f09287a47a168ec0fc865b3d76907f85842904e"
+    },
+    {
+      "path": "PHYSICAL_CLOSURE.json",
+      "bytes": 4159,
+      "sha256": "a8eef52d151c2e000aa3d6658947ccfc42557bfc375d018e2602a303fc0ddb59"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 2613,
+      "sha256": "bec25e3bd5a673a6fe9365addf12fd6a693eb1f9c701a736f0acb3b577079bf1"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 1048,
+      "sha256": "2971e3c54539c6326401ee678b802b088a662311bdd1ab04ef2782dee68e41f8"
+    },
+    {
+      "path": "STRUCTURAL_AUDIT.json",
+      "bytes": 25224,
+      "sha256": "9d4dfa0c96a28cbe2edb80ca82252636e44e4cdbea14647629470dd38a2ef008"
+    },
+    {
+      "path": "source/HostLatestDenseAccMemoryLowering.scala",
+      "bytes": 7577,
+      "sha256": "82c45d548e259a5d60af80f0334d89a2ccef0194d7c668244962044025487c3c"
+    },
+    {
+      "path": "source/HostLatestHighSimulationEmitter.scala",
+      "bytes": 22652,
+      "sha256": "6e93847b93c5addc78b36a337669b53834984c244b7c4cacb1c8da07d9c5fd28"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1866,
+      "sha256": "19afab45efab487d07477f78925303f4bdd892952e1e1b534785f546c1e896bc"
+    },
+    {
+      "path": "verify_source_inverse.py",
+      "bytes": 1115,
+      "sha256": "b4f84eaf14699795caf475bcf8698698b798e1052b5c58562a319bd631add0be"
+    },
+    {
+      "path": "verify_summary.py",
+      "bytes": 2715,
+      "sha256": "2fd499f8182083e4068bd34152668b021abef142f6f7d6fc9cda0405b7e89681"
+    }
+  ]
+}

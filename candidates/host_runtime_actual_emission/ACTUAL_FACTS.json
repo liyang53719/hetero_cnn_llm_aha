@@ -1,0 +1,69 @@
+{
+  "scope": "CHISEL_SIMULATION_BACKEND_EMISSION_ONLY_NOT_FINAL_RTL",
+  "stages": {
+    "fma": {
+      "exit_code": 0,
+      "peak_rss": 168620032,
+      "peak_cpu": 4.45,
+      "max_tree": 19190848,
+      "wall_seconds": 6.752408065949567,
+      "preflight_checks": 1519,
+      "postflight_checks": 1519,
+      "cleanup_complete": true,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baseline_unchanged": true
+    },
+    "capture": {
+      "exit_code": 0,
+      "peak_rss": 1377980416,
+      "peak_cpu": 27.02,
+      "max_tree": 117881497,
+      "wall_seconds": 34.02923315798398,
+      "preflight_checks": 1517,
+      "postflight_checks": 1517,
+      "cleanup_complete": true,
+      "log_sha256": "4f3c49f018912fcc8b486dc3e16481bacf333d054f2a25c9eb1c3eeba65d4d96",
+      "baseline_unchanged": true
+    },
+    "tool_compile": {
+      "exit_code": 0,
+      "peak_rss": 274427904,
+      "peak_cpu": 14.64,
+      "max_tree": 19034366,
+      "wall_seconds": 19.040620140964165,
+      "preflight_checks": 1526,
+      "postflight_checks": 1526,
+      "cleanup_complete": true,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baseline_unchanged": true
+    },
+    "lower": {
+      "exit_code": 0,
+      "peak_rss": 3696582656,
+      "peak_cpu": 250.44,
+      "max_tree": 736490676,
+      "wall_seconds": 310.02086369600147,
+      "preflight_checks": 1555,
+      "postflight_checks": 1555,
+      "cleanup_complete": true,
+      "log_sha256": "a1b7fa288b23c1627ef396cdd01381ab6930c6b47575553551192e7788430a84",
+      "baseline_unchanged": true
+    }
+  },
+  "fma_emitted": true,
+  "host_emitted": true,
+  "physical_frontend_run": false,
+  "physical_link_run": false,
+  "dut_run": false,
+  "full_m128_numeric_pass": 0,
+  "full_m128_rtl_pass": 0,
+  "profiles": [
+    "Qwen2-1.5B",
+    "Qwen3.5-0.8B L0",
+    "Qwen3.5-0.8B L3",
+    "Qwen3.5-35B-A3B L0",
+    "Qwen3.5-35B-A3B L3"
+  ],
+  "utilization_measured": false,
+  "moe_tie_contract_approved": false
+}

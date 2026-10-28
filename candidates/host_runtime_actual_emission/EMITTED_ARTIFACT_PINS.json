@@ -1,0 +1,145 @@
+{
+  "scope": "HASH_ONLY_NO_GENERATED_RTL_BUNDLED",
+  "fma": {
+    "schema": 1,
+    "status": "PASS_ACTUAL_ORIGINAL_FOUR_STAGE_LIBRARY_EMISSION_STRUCTURE_ABI_ONLY",
+    "members": [
+      {
+        "path": "{LOCAL}/CLAIM.json",
+        "bytes": 17474,
+        "sha256": "1825839c291301e35d20a4fb42f0d6bd4454a3ce3385059cc1c603329f5f93cd"
+      },
+      {
+        "path": "{LOCAL}/RECEIPT.json",
+        "bytes": 3082,
+        "sha256": "2efc2eeffd541a670fe269db7c2486dfe7f06d193d715895646ab0d59ae389b4"
+      },
+      {
+        "path": "{LOCAL}/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "{LOCAL}/INDEPENDENT_FMA_ARTIFACT_REVIEW.json",
+        "bytes": 6245,
+        "sha256": "af2a1a144031ba25e4d166a4a1523a4f9be4cfea34d8c4d904d9e74c2eaf8278"
+      },
+      {
+        "path": "{LOCAL}/PhysicalFmaStageLibrary.lo.fir",
+        "bytes": 202921,
+        "sha256": "41d01b253d59704e4ab778f4f40df38511e667b934d56a51b0fc4ef0f1073c80"
+      },
+      {
+        "path": "{LOCAL}/PhysicalFmaStageLibrary.sv",
+        "bytes": 129417,
+        "sha256": "f0ef4c110a507e68761ab785d8b2667aa6ce1495f042e31f992e6d95059f192b"
+      },
+      {
+        "path": "{LOCAL}/SCOPE.txt",
+        "bytes": 72,
+        "sha256": "e50451c8a757312efb3f2b4c9272a3b73871519d34d98ba11665384cecb7787f"
+      }
+    ],
+    "launch_freeze": {
+      "path": "{LOCAL}/FREEZE.json",
+      "bytes": 2367,
+      "sha256": "3e7ca0ae55986597a964862bdbda91323746d8b0269900aac0cba57e51441a40"
+    },
+    "launch_review": {
+      "path": "{LOCAL}/INDEPENDENT_BUDGET_REVIEW.json",
+      "bytes": 1901,
+      "sha256": "b9454ce22583a98114b13186d946bda36295045a76763057def61e26bb542640"
+    },
+    "source_class_receipt": {
+      "path": "{LOCAL}/EMITTER_CLASS_IDENTITIES.json",
+      "bytes": 25360,
+      "sha256": "7bda4d82fd0b10272a676b3a55279ecb2588982390dbf04143a7d8d969de8e6f"
+    },
+    "module_count": 9,
+    "original_arithmetic_stages": [
+      "HeteroBF16FmaPre",
+      "HeteroBF16FmaMul",
+      "HeteroBF16FmaPost",
+      "HeteroBF16FmaRound"
+    ],
+    "arithmetic_identity_scope": "original source/class provenance plus emitted width/constant/connection audit; NOT numerical equivalence simulation",
+    "remaining": [
+      "not connected Host or physical4096 simulation",
+      "Host/FMA same-name/preprocessor dependency collision not checked until Host actual SV exists",
+      "exception flags timing under stalls not demonstrated",
+      "independent carrier IO does not replay pipeline stimuli"
+    ],
+    "full_128_blocks_numeric_pass": 0,
+    "final_frozen_rtl_numeric_pass": 0,
+    "no_software_arithmetic_provider": true
+  },
+  "host": {
+    "status": "PASS_ACTUAL_EMISSION_IDENTITY_ONLY_NOT_PHYSICAL_LINK_OR_NUMERICAL",
+    "scope": "Chisel numerical simulation backend SV; NOT final frozen RTL acceptance",
+    "artifacts": [
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/EMITTER_SCOPE.txt",
+        "bytes": 229,
+        "sha256": "a63aa0a44f831ea7f2603ebdf4db87c63e2f733cd6669247d8e4dcaa258f5a22"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/HostBlockTopV4.lo.fir",
+        "bytes": 225938853,
+        "sha256": "c1a67ef680c131afa492420d98ecbca278c4fdc1b876fdc2fbd18a1de915bb70"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/HostBlockTopV4.sv",
+        "bytes": 194990051,
+        "sha256": "d88192158fce78c4adb0a732e84757d471009396a8a4f0c0b0c5411a6e03802b"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/accepted-original-annotations.json",
+        "bytes": 1350668,
+        "sha256": "a73850fccb2e473f657c9ae71a6141f4ba7cd3660da6516af76c16c8c589ce4d"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/actual_top_ports.tsv",
+        "bytes": 2548,
+        "sha256": "aa2e19f9818eef5356cdca910c3da3ba388dc552fa4afc558fcb9dd2fc6dceee"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/canonical-low-identity.json",
+        "bytes": 237,
+        "sha256": "3ca1ea73f62e558b4828853921428fe3c305c0ae49d588f2a6ea0fa8aa7dbbea"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/high-annotations.json",
+        "bytes": 1350662,
+        "sha256": "648164f029ab114754f769d8f2dd0727df91df42d8d9c31952e7a8c727ef7ae1"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/low-annotations.json",
+        "bytes": 1677387,
+        "sha256": "50605e10d9a5f47672e1743cfe6960df8f080353c1be6af3ad96a55b4e2dc553"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/official-bridge-memory-high.fir",
+        "bytes": 98467752,
+        "sha256": "75776a975173d0c181d2c6d9e5431c00473889b18e64cc0a7c95c9058e5c1d24"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/official-emission-ast.fir",
+        "bytes": 193680538,
+        "sha256": "3b11611777fd8fca7116ad21d1d18c81b3e17cb65dd008a662f9534e9c82c3d5"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/official-emission-instances.tsv",
+        "bytes": 12696,
+        "sha256": "45bf65214e1943efad2895fbd46b630199fa9fd440e6243298d8d5780359c56c"
+      },
+      {
+        "path": "host_runtime_latest_high_lower_actual_20261028T1754_r3/compiled-host/original-high-reference.json",
+        "bytes": 358,
+        "sha256": "52585faa8b7585e2d482f52e60e326666cf4f5f2d4240bf8fff8a4cf1df55a05"
+      }
+    ],
+    "independent_review_sha256": "71398060a7d2dca6935fb9d40d62760d8c671b7b32678f2d87db7887067f56c9",
+    "fullblock_pass": 0,
+    "rtl_pass": 0
+  }
+}

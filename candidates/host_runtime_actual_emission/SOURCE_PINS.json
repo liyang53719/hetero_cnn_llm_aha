@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "path": "source/HostLatestDenseAccMemoryLowering.scala",
+      "original": {
+        "bytes": 7577,
+        "sha256": "82c45d548e259a5d60af80f0334d89a2ccef0194d7c668244962044025487c3c"
+      },
+      "public": {
+        "bytes": 7577,
+        "sha256": "82c45d548e259a5d60af80f0334d89a2ccef0194d7c668244962044025487c3c"
+      },
+      "projection": "exact",
+      "redactions": 0
+    },
+    {
+      "path": "source/HostLatestHighSimulationEmitter.scala",
+      "original": {
+        "bytes": 22864,
+        "sha256": "a59b9aab9b98b8036b3d03f7b08856a9419f3cbce338bed183d9814f4b0b5a9b"
+      },
+      "public": {
+        "bytes": 22652,
+        "sha256": "6e93847b93c5addc78b36a337669b53834984c244b7c4cacb1c8da07d9c5fd28"
+      },
+      "projection": "two_literal_redacted_uncompiled_template",
+      "redactions": 2
+    }
+  ],
+  "requires_parent": true,
+  "compiled_source_count": 2,
+  "new_class_count": 24,
+  "baseline_class_count": 1033,
+  "hardware_reelaborated_by_lower": false,
+  "public_template_compiled": false
+}

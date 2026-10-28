@@ -1,0 +1,1359 @@
+{
+  "status": "PASS_INDEPENDENT_ACTUAL_SIMULATION_BACKEND_EMISSION_AUDIT_NOT_NUMERICAL",
+  "annotation_preservation": {
+    "original_high_count": 8965,
+    "unique_donttouch": 8964,
+    "only_high_change": "single TargetDir relocation",
+    "low_count": 9950,
+    "low_class_counts": {
+      "firrtl2.transforms.DedupedResult": 978,
+      "firrtl2.EmitCircuitAnnotation": 1,
+      "firrtl2.options.TargetDirAnnotation": 1,
+      "firrtl2.transforms.DontTouchAnnotation": 8964,
+      "firrtl2.stage.InfoModeAnnotation": 1,
+      "firrtl2.transforms.BlackBoxTargetDirAnno": 1,
+      "firrtl2.stage.OutputFileAnnotation": 1,
+      "firrtl2.transforms.CombinationalPath": 3
+    },
+    "low_donttouch_exact_flattened_target_set": true
+  },
+  "high_modules": 1056,
+  "changed_high_modules_only": [
+    "Qwen2ContinuousBlock",
+    "MatrixResultFifo"
+  ],
+  "storage_representations": {
+    "high": {
+      "sim_storage_row_0": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_1": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_2": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_3": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_4": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_5": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_6": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_7": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_8": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_9": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_10": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_11": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_12": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_13": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_14": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_15": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_metadata": {
+        "data-type": [
+          "UInt<5>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_denseacc_rows": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "16"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w0",
+          "w1",
+          "w2",
+          "w3",
+          "w4",
+          "w5",
+          "w6",
+          "w7",
+          "w8",
+          "w9",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      }
+    },
+    "low": {
+      "sim_storage_row_0": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_1": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_2": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_3": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_4": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_5": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_6": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_7": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_8": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_9": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_10": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_11": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_12": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_13": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_14": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_15": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_metadata": {
+        "data-type": [
+          "UInt<5>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_denseacc_rows": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "16"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w0",
+          "w1",
+          "w2",
+          "w3",
+          "w4",
+          "w5",
+          "w6",
+          "w7",
+          "w8",
+          "w9",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      }
+    },
+    "terminal": {
+      "sim_storage_row_0": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_1": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_2": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_3": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_4": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_5": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_6": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_7": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_8": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_9": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_10": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_11": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_12": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_13": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_14": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_row_15": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_storage_metadata": {
+        "data-type": [
+          "UInt<5>"
+        ],
+        "depth": [
+          "2"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      },
+      "sim_denseacc_rows": {
+        "data-type": [
+          "UInt<8192>"
+        ],
+        "depth": [
+          "16"
+        ],
+        "read-latency": [
+          "0"
+        ],
+        "write-latency": [
+          "1"
+        ],
+        "reader": [
+          "r"
+        ],
+        "writer": [
+          "w0",
+          "w1",
+          "w2",
+          "w3",
+          "w4",
+          "w5",
+          "w6",
+          "w7",
+          "w8",
+          "w9",
+          "w10",
+          "w11",
+          "w12",
+          "w13",
+          "w14",
+          "w15"
+        ],
+        "read-under-write": [
+          "undefined"
+        ]
+      }
+    }
+  },
+  "actual_ports": 85,
+  "launch_bits": 844,
+  "sv_port_equals_terminal_fir_equals_tsv": true,
+  "external_bindings": {
+    "qwen2_matrix_command_endpoint": 8,
+    "tc_clk_gating": 8,
+    "idma_backend_rw_axi_flat_wrap": 1
+  },
+  "external_declaration_bodies_identical_ignoring_deduplicated_module_names": true,
+  "external_definitions_terminal": 3,
+  "external_instance_bindings": {
+    "HostBlockTopV4.owner.matrix.leaves_0": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.leaves_1": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.leaves_2": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.leaves_3": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.leaves_4": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.leaves_5": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.leaves_6": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.leaves_7": "qwen2_matrix_command_endpoint",
+    "HostBlockTopV4.owner.matrix.gate": "tc_clk_gating",
+    "HostBlockTopV4.owner.matrix.gate_1": "tc_clk_gating",
+    "HostBlockTopV4.owner.matrix.gate_2": "tc_clk_gating",
+    "HostBlockTopV4.owner.matrix.gate_3": "tc_clk_gating",
+    "HostBlockTopV4.owner.matrix.gate_4": "tc_clk_gating",
+    "HostBlockTopV4.owner.matrix.gate_5": "tc_clk_gating",
+    "HostBlockTopV4.owner.matrix.gate_6": "tc_clk_gating",
+    "HostBlockTopV4.owner.matrix.gate_7": "tc_clk_gating",
+    "HostBlockTopV4.dma.backend": "idma_backend_rw_axi_flat_wrap"
+  },
+  "fixed32_vector_alus": 32,
+  "SV_module_count": 92,
+  "no_DPI": true,
+  "source_guard_scope": "Executed pinned emitter enforces exact complete connector port/wire types and 8x512/32-lane resource paths; independent artifact audit checks identities, inventories, declarations and storage shape, not numerical semantics.",
+  "limits": [
+    "Physical provider library still unlinked; SV not compiled/simulated by this review",
+    "Storage representation semantic equivalence relies on exact source guards; no formal or numerical equivalence test claimed",
+    "Five complete128token Chisel blocks 0/5; final frozenRTL numerical0/5; no utilization claim"
+  ],
+  "java_executed_by_reviewer": false
+}

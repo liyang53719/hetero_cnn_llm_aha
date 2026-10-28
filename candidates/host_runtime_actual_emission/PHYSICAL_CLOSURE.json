@@ -1,0 +1,85 @@
+{
+  "scope": "PINNED_SOURCE_CLOSURE_ONLY_NOT_LINK_OR_BUILD_PASS",
+  "source_manifest": {
+    "bytes": 157376,
+    "sha256": "acc8a591a7b3981077a0b17dadd65a0cb3f87a947a1d8da6f2f59c7817294633"
+  },
+  "review": {
+    "bytes": 4995,
+    "sha256": "ef9f547e986c8d71dc44e37e9b76e4efb4496efaaad97c5497ad36d6b8688ea9"
+  },
+  "provider_count": 13,
+  "idma_source_entries": 294,
+  "include_tree_files": 52,
+  "pins_count": 367,
+  "selected_fma_modules": [
+    "MulAddRecFNToRaw_preMul_e8_s24",
+    "HeteroBF16FmaPre",
+    "HeteroBF16FmaMul",
+    "MulAddRecFNToRaw_postMul_e8_s24",
+    "HeteroBF16FmaPost",
+    "HeteroBF16FmaRound"
+  ],
+  "shared_identical_modules": {
+    "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24": "a4cdf0702480f84e6c48ffdb414f44a5d53c96446bc3eaf12bd4d4988ac671d6",
+    "RoundRawFNToRecFN_e8_s24": "5b664a37b3e818cc3d445fdf9e026331c7b864dad408d5989264b1fe4cf4132f"
+  },
+  "fma_subset": {
+    "bytes": 88522,
+    "sha256": "4c6bb560ede38d6d98214539dae756808580d6af1a1ce9dbe8e1fd57c61ba585"
+  },
+  "review_summary": {
+    "status": "PASS_INDEPENDENT_PINNED_SOURCE_CLOSURE_ONLY_NOT_LINK_BUILD_OR_NUMERICAL",
+    "all_manifest_file_pins_verified": 367,
+    "provider_count": 13,
+    "idma_source_entries_unique": 294,
+    "include_tree_files": 52,
+    "unreferenced_include_tree_DPI_testbench_files": [
+      "{LOCAL}/tb_idma_mxrand.sv",
+      "{LOCAL}/tb_idma_mxquant.sv",
+      "{LOCAL}/tb_idma_otf_transpose.sv",
+      "{LOCAL}/tb_idma_mxroundtrip.sv"
+    ],
+    "resolved_literal_include_reachable_files": 325,
+    "unresolved_inactive_UVM_include": "{LOCAL}/assert_rpt_pkg.sv",
+    "UVM_not_defined_in_pinned_input_closure": true,
+    "actual_compile_and_literal_include_closure_DPI_free": true,
+    "selected_FMA_modules": [
+      "MulAddRecFNToRaw_preMul_e8_s24",
+      "HeteroBF16FmaPre",
+      "HeteroBF16FmaMul",
+      "MulAddRecFNToRaw_postMul_e8_s24",
+      "HeteroBF16FmaPost",
+      "HeteroBF16FmaRound"
+    ],
+    "removed_duplicate_shared": [
+      "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24",
+      "RoundRawFNToRecFN_e8_s24"
+    ],
+    "removed_unused_carrier": "PhysicalFmaStageLibrary",
+    "exact_subset_bytes": true,
+    "empty_FMA_preprocessor_and_external_text": true,
+    "Host_external_text_empty": true,
+    "shared_module_bytes_identical_no_macro_uses": true,
+    "all_compile_file_literal_module_names_unique": 551,
+    "literal_DPI_import_export_absent_in_actual_compile_and_include_closure": true,
+    "hierarchy_recommendation": {
+      "config": "`verilator_config\nhier_block -module \"qwen2_matrix_command_endpoint\"\nhier_block -module \"bf16_context_lane_cluster16_rev8b_b_candidate\"\n",
+      "invocation": "Pass .vlt first and --hierarchical; cap jobs at1; separately supervise planning and all spawned child stages; do not add --build for an initial plan-only budget.",
+      "basis": "Installed documentation supports nested and parameterized hierarchy blocks. Endpoint and cluster16 boundaries expose flat signals, not modports; no RTL edits needed.",
+      "cautions": [
+        "Docs warn against dot-access into hierarchy blocks, tracing their internals, delays, and generated clocks crossing boundaries.",
+        "Need exact generated-clock path audit through upstream tc_clk_gating and boundary scheduling before execution approval.",
+        "Hierarchical libs may use generated simulator DPI wrappers internally; distinguish those from forbidden software arithmetic replacement of physical Matrix. No claim that every generated hierarchy artifact will be DPI-free.",
+        "No guaranteed resource reduction or numerical timing equivalence before actual supervised validation."
+      ]
+    },
+    "limits": [
+      "Lexical module/DPI inventory is not Verilog preprocessing or elaboration; macro-generated declarations and cross-file directive effects require actual tool validation.",
+      "Preparation script now hardpins accepted Host size/hash, provider binding/iDMA/FMA; all outputs/config/tool pins still require exact frozen launch review.",
+      "No Verilator/JVM/C++ tool run; no physical link or five-block numerical PASS."
+    ]
+  },
+  "actual_frontend_run": false,
+  "actual_link_run": false
+}

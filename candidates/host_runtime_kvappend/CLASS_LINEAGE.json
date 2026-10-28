@@ -1,0 +1,92 @@
+{
+  "status": "ACTUAL_INCREMENTAL_COMPILER_CLOSURE_NOT_FULL_RECOMPILE",
+  "base_commit": "7ff443eec1d30dbb82e9ebf570ca459be9f9d216",
+  "base_package": "../host_runtime_rope",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 3814,
+      "sha256": "84144f7578b7470abbe29487ae7f272cf53c5188d94fc8911c711700a2363ad0"
+    },
+    "CLASS_LINEAGE.json": {
+      "bytes": 3732,
+      "sha256": "68dedeb5ebfffd1b35b9811721675e422dedf948329b13fcb5eb6f08b57ea21b"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 3452,
+      "sha256": "ee5e17642b23edb6b1eaf7a5564888060ad1455abf11a4b11cf975134f0c98f5"
+    },
+    "LEGACY_CONVERTER_PIN.json": {
+      "bytes": 1589,
+      "sha256": "f6f887bc5b43fd3eec0cdedd17430b2b936a5b8d77daf8fc0c288316a9cae7ae"
+    }
+  },
+  "baseline": {
+    "original_ancestor_count": 855,
+    "original_ancestor_digest": "4915e5ef11794e9fb11b7e829d1d5d706d5cb32fdd4ac45e2b00dff597d74ed7",
+    "previous_final_classes": 115,
+    "previous_final_digest": "62187b40f998d8533161411ba4c7780c1b83d52e97c9541e051402822fad7119",
+    "composed_count": 970,
+    "removed_classes": 29,
+    "removed_source_families": [
+      "HostBlockCommandsV4.scala",
+      "HostBlockTopV4.scala",
+      "HostRuntimePrefixLeaseWiringV8.scala",
+      "QwenOwnerProtocol.scala"
+    ],
+    "removed_digest": "3979529191e4c5eddaab36631db790b15378e8f67249133f0ba99e54fdcab871",
+    "retained_count": 941,
+    "retained_digest": "0e1a13d8393ef40cb91b5436a45e71e2dc837fa4e2ce7deee04d3c0ba1f6ba24",
+    "inherited_class_count": 86,
+    "inherited_digest": "7c67348f72cbb77d9e49734e807caf79f3e450bcac18ace416d58d9f893b9d32"
+  },
+  "actual": {
+    "compiled_sources": 5,
+    "new_classes": 37,
+    "new_class_bytes": 2215576,
+    "new_digest": "8ba7ebbc6ba787185fe8c7db5e8b8c8a5e75d0d6630fd00d15303742b9ebd40c"
+  },
+  "final": {
+    "sources": 26,
+    "classes": 123,
+    "class_bytes": 4203268,
+    "class_digest": "0a075e3d8aac13feb948bbeb1c1e7737f268586c03941aca238a4352ad5d0a36",
+    "inherited_sources": 21,
+    "actually_compiled_sources": 5,
+    "by_source": {
+      "GdnChunkStateTransferOwner.scala": 4,
+      "GdnRuntimeChunkLeafCollection.scala": 7,
+      "GdnRuntimeChunkCoordinator.scala": 4,
+      "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+      "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+      "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+      "GdnRuntimeRawPrepReceiptV8.scala": 3,
+      "HostRuntimeGatedDependencyV10.scala": 1,
+      "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+      "GdnRuntimeGatedNormProtocolV10.scala": 4,
+      "GdnRuntimeGatedNormOwnerV10.scala": 1,
+      "GdnRuntimeRawPrepProtocolV7.scala": 9,
+      "GdnRuntimeRawPrepOwnerV7.scala": 1,
+      "HeldDecoupledOffer.scala": 4,
+      "HostRuntimeChunkProtocolV9.scala": 3,
+      "HostRuntimeChunkWiringV9.scala": 3,
+      "QkNorm256RuntimeOwnerV11.scala": 7,
+      "SharedMemoryArbiter.scala": 3,
+      "PartialRopeRuntimeOwnerV12.scala": 7,
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": 9,
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": 2,
+      "Bf16KvAppendRuntimeOwnerV13.scala": 7,
+      "HostBlockCommandsV4.scala": 4,
+      "HostBlockTopV4.scala": 3,
+      "HostRuntimePrefixLeaseWiringV8.scala": 4,
+      "QwenOwnerProtocol.scala": 19
+    }
+  },
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; trailing LF; relative/bytes/sha256 only",
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "commit": "7ff443eec1d30dbb82e9ebf570ca459be9f9d216",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "requires_parent": "Exact855 ancestor classes plus86 inherited class bytes and their complete source/build closure are not bundled. Digests do not make fresh-checkout reproduction complete."
+}

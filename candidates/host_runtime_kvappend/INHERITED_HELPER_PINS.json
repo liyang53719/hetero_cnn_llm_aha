@@ -1,0 +1,41 @@
+{
+  "status": "RETAINED_ACTUAL_BASELINE_LEGACY_KV_GUARD_MATH_NOT_NEWLY_COMPILED",
+  "original_kv_source": {
+    "name": "Bf16KvAppendOwner.scala",
+    "bytes": 7844,
+    "sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264"
+  },
+  "historical_source_record": {
+    "relative": "chisel/continuous_prefill/src/main/scala/heteronpu/continuous/Bf16KvAppendOwner.scala",
+    "expected_sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+    "stage_sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264",
+    "compiled_source_sha256": "bab2160771bf09755dc072d87bf72940bc62b41f8d5edf70cfe10da90caa5264"
+  },
+  "original_kv_class_count": 5,
+  "original_kv_class_digest": "960695191f8cc49a180b9466af871ce3e5705fcb70136bab4dc28a44a4d70fb3",
+  "guard_source": {
+    "bytes": 10809,
+    "sha256": "4680762977b005951751f77b4d3b9fc3ef2dd24143374ee20c7e47c241361e53"
+  },
+  "guard_source_name": "HostRuntimeOwnerGuardV5.scala",
+  "guard_class_count": 7,
+  "guard_class_digest": "9908d7b0e274257cbe573e7078bcfa62217a367d5c514931dca2ce8aad517e9d",
+  "original_record": {
+    "bytes": 13571,
+    "sha256": "ddc10150429f046a4dc9843b3cc1a34a09b9d729cc8447b028cddd5783d29e05"
+  },
+  "predecessor_actual_receipt": {
+    "bytes": 18342,
+    "sha256": "053b0b009f7c0a2953f9c56bfe8bb5c2790daa06f95c96333133bf8180eced7e"
+  },
+  "math_converter_public_metadata": {
+    "path": "../host_runtime_rope/LEGACY_CONVERTER_PIN.json",
+    "bytes": 1589,
+    "sha256": "f6f887bc5b43fd3eec0cdedd17430b2b936a5b8d77daf8fc0c288316a9cae7ae"
+  },
+  "math_converter_original_record": {
+    "bytes": 9045,
+    "sha256": "bcddc837365e3fd84cff61123f41e30f4fd499332ecdd72bcbccd08f87d1d09f"
+  },
+  "scope": "Legacy KV bytecode is not the hardened new runtime implementation. Guard and Math retain verified actual baseline provenance, not newly compiled. Source/class digests are not DUT proof."
+}

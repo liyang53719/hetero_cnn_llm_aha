@@ -1,0 +1,38 @@
+{
+  "scope": "Source declarations only, not synthesized area/instance report",
+  "new_owner_numeric_payload_bits": 512,
+  "additional_unquantified": [
+    "FSM",
+    "sequence and accepted-returned counters",
+    "K/V writeACK counters",
+    "terminal",
+    "held metadata",
+    "Prefix fullHost/txn64/two-producer snapshots",
+    "pending private cache proposal"
+  ],
+  "new_arithmetic_instances": 0,
+  "new_dma": 0,
+  "new_matrix": 0,
+  "new_hub_client": 0,
+  "new_job_abi_bits": 0,
+  "new_arithmetic_authority_kind": false,
+  "existing": {
+    "hub_clients": 17,
+    "adapter_clients": 11,
+    "shared_bank_lanes": 32,
+    "matrix_mac_definition": 4096,
+    "arithmetic_authority_kinds": "0..7 unchanged",
+    "arithmetic_authority_width": 3
+  },
+  "dispatch": {
+    "mode": 12,
+    "memory_client": 1,
+    "scalar_lease": false,
+    "format_lease": false,
+    "vector_lease": false,
+    "fixed_kv_heads": 2,
+    "head_dim": 256,
+    "capacity": 128
+  },
+  "hardware_qualification": false
+}

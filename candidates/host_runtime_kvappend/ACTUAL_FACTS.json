@@ -1,0 +1,56 @@
+{
+  "status": "PASS_ACTUAL_KVAPPEND_5_SOURCE_941_BASELINE_COMPILER_ONLY",
+  "compiled_source_count": 5,
+  "baseline_class_count": 941,
+  "new_class_count": 37,
+  "new_class_bytes": 2215576,
+  "final_source_closure_count": 26,
+  "final_recompiled_source_count": 5,
+  "final_class_count": 123,
+  "inherited_source_count": 21,
+  "inherited_class_count": 86,
+  "wall_seconds": 45.79407920897938,
+  "cpu_seconds_sampled": 38.31,
+  "peak_rss_bytes": 532574208,
+  "peak_tree_bytes": 17709757,
+  "pre_post_pin_checks": 1651,
+  "strict_owned_compiler_group_terminal": true,
+  "compile_log_empty": true,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT",
+    "numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 14865,
+    "sha256": "530e058f56fb20d7ae3fd5a1fa73844b95fad3b8b916f82f4336daca38dd70ff"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "historical_checks_each_mode": {
+    "owner_source": 65,
+    "owner_mutations": 19,
+    "owner_tests": 20,
+    "commands_source": 4027,
+    "commands_mutations": 17,
+    "commands_kv_models": 21,
+    "commands_rope_models": 18,
+    "held_models": 8,
+    "integration_source": 6182,
+    "integration_mutations": 53,
+    "integration_models": 17
+  },
+  "publication_compiler_executions": 0,
+  "admission": "Common Dense chain onlyM16/M128; Commands cold wholewindow/base0/count=M/length0/generation0/no cache/position0. Leaf1..128 is not common chain support. Cache/state roots remain sealed."
+}

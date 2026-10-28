@@ -1,0 +1,28 @@
+{
+  "status": "PRECOMPILE_REGRESSION_FIXED_BEFORE_FINAL_PINS_NO_WAIVER",
+  "kv_review_findings": [
+    {
+      "id": "KV-REVIEW-001",
+      "severity": "P1",
+      "status": "RESOLVED_IN_FINAL_SOURCE",
+      "evidence": [
+        "source/QwenOwnerProtocol.scala choose mode12",
+        "source/HostRuntimePrefixLeaseWiringV8.scala isPrefix"
+      ],
+      "finding": "Initial unconditional kind7 interception would reject the original Qwen2 non-BF16 KvAppend, which uses the same retained legacy owner-kind ABI.",
+      "hardware_consequence": "Previously legal profile0 append would fail or poison instead of reaching core mode0.",
+      "target_hierarchy": "HostBlockTopV4/QwenOwnerKernel ordinary dispatch and HostRuntimePrefixLeaseWiringV8",
+      "fix": "Final Kernel/Prefix intercept only kind7 with all three BF16 flags; Commands original legacy job is zero-initialized and does not set activation/output BF16. Actual runtime Commands sets all three and full KV shape/provenance are checked before effects.",
+      "mechanical_acceptance": "Independent source assertions reject unconditional selection mutation, plus route truth-table; actual full common DUT must later cover profile0 and profile2/4.",
+      "waiver": "No waiver; fixed before final source pin."
+    }
+  ],
+  "held_fix": "QKNormr2 !boundRuntimePrefix resident guard preserved",
+  "qknorm_history": {
+    "path": "../host_runtime_qknorm/PROTOCOL_DEFECT_AND_FIX.json",
+    "bytes": 2125,
+    "sha256": "9ade8c08d6623298482ae9bca33171afd92fa55435458fa44df419d4d42c5447"
+  },
+  "original_owner_fault": "Old wrongtag finish behavior hardened: unknown response never retires accepted debt or falsely claims drain; sticky quarantine requires joint reset after exact matching debt drain.",
+  "limits": "Source review fixes are not protocol DUT qualification. Historical originals remain unchanged."
+}

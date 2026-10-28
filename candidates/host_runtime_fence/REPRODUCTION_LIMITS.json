@@ -1,0 +1,21 @@
+{
+  "historical_transitive_graph_verified": false,
+  "active_closure": {
+    "status": "PASS_EXACT_ACTIVE_SOURCE_CLASS_TOOL_PIN_CLOSURE_NOT_ARCHIVAL_GRAPH",
+    "unique_pin_count": 2223,
+    "expanded_active_manifest_count": 10,
+    "nested_pin_record_count": 4048,
+    "historical_json_boundaries": 301,
+    "record": {
+      "bytes": 1054358,
+      "sha256": "7bec2d3ae20e183fbd01d942fbaf43923351e45b5c83e6806a2a2b37f541f5b5"
+    }
+  },
+  "inherited_archival_diagnostic": {
+    "path": "../host_runtime_moe/REPRODUCTION_LIMITS.json",
+    "bytes": 952,
+    "sha256": "718e89963129e35eea7fdc127af1d1fc5627fec1c6e7d2661e7a843134132c7d"
+  },
+  "historical_original_compile_receipt_rechecked": false,
+  "scope": "Current source/class/tool closure exact. Historical boundary JSON hashes not recursively proved complete; inherited missing original receipts and budget-skipped diagnostics not repaired or freshly rescanned."
+}

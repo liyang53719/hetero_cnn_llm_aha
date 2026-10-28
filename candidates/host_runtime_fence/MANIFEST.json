@@ -1,0 +1,85 @@
+{
+  "status": "TEMP_RUNTIME_FINAL_FENCE_INCREMENTAL_TYPECOMPILE_REQUIRES_PARENT_ARCHIVAL_GRAPH_INCOMPLETE_NOT_HARDWARE",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 1662,
+      "sha256": "dc76313439eebca6a9fb33ef4c6af00fcb7bb0e0ebcba7b7ccd8881a7eb14e28"
+    },
+    {
+      "path": "CLASS_LINEAGE.json",
+      "bytes": 4423,
+      "sha256": "f13e56739915402b34e70944c1a7d9f5e08289ebcbc92863def8737be91f026a"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 4193,
+      "sha256": "d63bd208bb4cd40c84949fa270d6d0c18b24334f1d883804ba6a9bf14e0c2adc"
+    },
+    {
+      "path": "HISTORICAL_FINDINGS.json",
+      "bytes": 3742,
+      "sha256": "dcf09b3d6ecd36f24b41e4923758b7ec3a0c175097057f2645bfa33acdcca237"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 5400,
+      "sha256": "78fc883a5804329fc6adfe8f7d714fd005a56a41ca8b1aae0661e0cb399722ea"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 2437,
+      "sha256": "430dfe0a4476481afa4a8a4368fad22946bf6de4a6a1a7e01a92413ffe129159"
+    },
+    {
+      "path": "REPRODUCTION_LIMITS.json",
+      "bytes": 921,
+      "sha256": "d98a7ffdffe2ade1a4fdc00970df09989652f16d80b8c2513c4ba18c2be6b32d"
+    },
+    {
+      "path": "RESOURCE_DELTA.json",
+      "bytes": 1077,
+      "sha256": "b5eaa5fa4630d353287d345fe84b6f55ae4977182e7f9aca105c796d754ee2f3"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 9257,
+      "sha256": "f37b7fd079526fdf3839e46cb6824ac309cb564daece529e821ad499a88f839f"
+    },
+    {
+      "path": "SOURCE_PROVENANCE.json",
+      "bytes": 1151,
+      "sha256": "0667a04d0363479d8608631d54a6e61a6b72f84505f25f4f415ef0796efc968a"
+    },
+    {
+      "path": "check_final_fence.py",
+      "bytes": 2829,
+      "sha256": "5b71b1a6ba081b7080db25e7df6027b434f8eef83f35d4034ef1a09aab2845ca"
+    },
+    {
+      "path": "check_top_fence.py",
+      "bytes": 1859,
+      "sha256": "1e969868ad43b4ac3b788ab137a6e5b909672ba5a660e9a2f33c23ef763a9f6c"
+    },
+    {
+      "path": "source/HostBlockCommandsV4.scala",
+      "bytes": 190154,
+      "sha256": "47eba1ba5950327340f52d51e689bd53b0334f36d928e31a43152819f7590280"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 26923,
+      "sha256": "588fcba10ff4d55634192513469eeb4d757e81d4693fc9ac64b1143335537f8a"
+    },
+    {
+      "path": "tests/test_final_fence.py",
+      "bytes": 3630,
+      "sha256": "211586329a3fc81d15871d21effdc850c4ae092a8189d912a3fe6559080447c6"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1115,
+      "sha256": "9552c2c37b3c456a466f72f90f01dda37d263c185d3b4eec928c54f8819c3e30"
+    }
+  ]
+}

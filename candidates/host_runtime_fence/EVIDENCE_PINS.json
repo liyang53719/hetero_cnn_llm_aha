@@ -1,0 +1,113 @@
+{
+  "scope": "Digest-only original records, no class/tool bytes/private paths. Earlier review retained as historical, final source and actual binding exact.",
+  "records": {
+    "SOURCE_MANIFEST.json": {
+      "bytes": 849,
+      "sha256": "94ca0c1f599bf3b6180097ef53e8b671368fd8b745d1faa547c555447b125fe2"
+    },
+    "SOURCE_SET.json": {
+      "bytes": 9366,
+      "sha256": "fd2d01e555408ac6c8904d7f0f4faf950770a01ffcc8c7e61350cd86747d8c09"
+    },
+    "PRECOMPILE_EVIDENCE.json": {
+      "bytes": 10895,
+      "sha256": "66155f8e2dfb67bf48ac25ec165a7e30682d0f6dce128d09c7cb00e9cdd3c9c4"
+    },
+    "INDEPENDENT_REVIEW.json": {
+      "bytes": 1332,
+      "sha256": "8fcc9feadea39b1497befc4918ecdc8cf70bda042eb04681462967fbd1e71788"
+    },
+    "BASELINE_SOURCE_PROVENANCE.json": {
+      "bytes": 166,
+      "sha256": "56e801ff127e710ce19d870fc53c1a631815fb96713533c1d407d86aa1eb5176"
+    },
+    "COMMANDS_FENCE_DELTA.patch": {
+      "bytes": 21521,
+      "sha256": "72398dd20a0297193cb064688352b0c99662fc6d14a5e1404802a1beb94e2afd"
+    },
+    "check_final_fence.py": {
+      "bytes": 1761,
+      "sha256": "e1f43eac2cc1f4419329edf651fcc3dbd797f3e18270da95fdbb28493970d785"
+    },
+    "check_top_fence.py": {
+      "bytes": 1630,
+      "sha256": "22f5cbef2b8d2c7620a94c989308a75789df3cd1ded3b3d62df4118813b5be20"
+    },
+    "tests/test_final_fence.py": {
+      "bytes": 3630,
+      "sha256": "211586329a3fc81d15871d21effdc850c4ae092a8189d912a3fe6559080447c6"
+    },
+    "tests/test_prepare_metadata.py": {
+      "bytes": 1920,
+      "sha256": "d481306cda01d8a0229c1b793f07a1beeacea33c34932735e374eee834a0f162"
+    },
+    "independent_review/INDEPENDENT_SOURCE_REVIEW.json": {
+      "bytes": 2202,
+      "sha256": "82eb199b495b7eb9c8e0a4be4dadd876ffaa286b315bef79f3a0e4d8622e17e9"
+    },
+    "independent_review/INDEPENDENT_SOURCE_REVIEW_before_count_scope.json": {
+      "bytes": 1994,
+      "sha256": "99cede08d41c711c1816dd5d03c195ff8a1b94c73772a1ce3da798b37913cfd3"
+    },
+    "independent_review/GENERATED_PREPARATION_REVIEW.json": {
+      "bytes": 1930,
+      "sha256": "ccb3c646e1905c7b7fb353d1e2fdf2a85291c61af2f319bbe20a040686cd9d46"
+    },
+    "actual_RECEIPT.json": {
+      "bytes": 4292,
+      "sha256": "0bee4850d665ac1db255a83a92456eaf89f0c16dcbdfc53ec72ee5c66edd5d0a"
+    },
+    "actual_SUMMARY.json": {
+      "bytes": 1609,
+      "sha256": "ca92c80c4929b0aa651b78ab5b49424e7610ba39dcd83297ab82c5f8dcf6b94f"
+    },
+    "actual_CLASS_IDENTITIES.json": {
+      "bytes": 7993,
+      "sha256": "fcc0a475e5bc7b27571210e4a6914eda66c8ea39e391d9b7292f6da2c6e63f22"
+    },
+    "actual_FINAL_SOURCE_CLASS_CLOSURE.json": {
+      "bytes": 194646,
+      "sha256": "e322d52fc05c6094602f544812dfb507fc6695203c9d71fabf643937503ac1d2"
+    },
+    "prepare_COMMAND.json": {
+      "bytes": 36115,
+      "sha256": "18c74393d6d4f7a571b878b745e52b8a6cb9b173aec87f61e5fc5978e8974448"
+    },
+    "prepare_SOURCE_AND_TOOL_PINS.json": {
+      "bytes": 1985343,
+      "sha256": "70442abfe05fb9a32d966d65c04b206527a88f16adb140267c47be02477d4761"
+    },
+    "prepare_FREEZE.json": {
+      "bytes": 4656,
+      "sha256": "ec515234dcd2bd25f06c0967d78fa215c3995d5618dc63d282f4835c6c02fdc4"
+    },
+    "prepare_CLASS_COMPOSITION.json": {
+      "bytes": 1087078,
+      "sha256": "fe271981a6d7cb630ab497ceb3a11d2f25e7b00e508ecc9cc78930e5916d3ce5"
+    },
+    "final_evidence_manifest": {
+      "bytes": 17878,
+      "sha256": "b11ac2322746432956ce09a0904bded161adb92081a7dd5fd7bfd09a0f8a1756"
+    },
+    "final_verified_scope": {
+      "bytes": 2223,
+      "sha256": "c0357775b0ae09b799cdf235cbeaba4cf49fdb1bc10fb312620b33055176ae86"
+    },
+    "final_chinese_result": {
+      "bytes": 891,
+      "sha256": "785b4b274c3a168fbb70f0a96071f95278cf72145074b90e2fac8c02f74ad7b3"
+    },
+    "public_source_mapping": {
+      "bytes": 19734,
+      "sha256": "a61ca2e23d98603e0e0228e50f9c6d2c3349541af2e5314baa4f167622ef3357"
+    },
+    "independent_actual_review": {
+      "bytes": 4755,
+      "sha256": "893005c425f8cecfc09cabc8f6179576be369516ba7928ce352e9cb1ab264ab8"
+    },
+    "actual_review_binding": {
+      "bytes": 1404,
+      "sha256": "f1b5ab3e6d1bfac8c2e9cc496e3a9c76fe92f8478c4587eb692e84b569e099cf"
+    }
+  }
+}

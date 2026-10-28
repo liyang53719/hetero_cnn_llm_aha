@@ -1,0 +1,67 @@
+{
+  "status": "REQUIRES_PARENT_MANUAL_RECIPE_NOT_SELF_CONTAINED_ARCHIVAL_GRAPH_INCOMPLETE",
+  "argv_template": [
+    "{JAVA}",
+    "-Duser.home={RUN}/home",
+    "-Djava.io.tmpdir={RUN}/tmp",
+    "-XX:-UsePerfData",
+    "-Xmx1g",
+    "-Xss4m",
+    "-XX:ActiveProcessorCount=1",
+    "-cp",
+    "{JAR_CP}",
+    "scala.tools.nsc.Main",
+    "-classpath",
+    "{BASELINE}:{JAR_CP}",
+    "-Xplugin:{PLUGIN}",
+    "-language:reflectiveCalls",
+    "-d",
+    "{RUN}/classes",
+    "{PACKAGE}/source/HostBlockCommandsV4.scala",
+    "{PACKAGE}/source/HostBlockTopV4.scala"
+  ],
+  "exact_inverse_verified": true,
+  "actual_sources": 2,
+  "final_source_closure": 31,
+  "baseline_count": 994,
+  "original_caps": {
+    "affinity": [
+      1
+    ],
+    "as_hard_bytes": 4294967296,
+    "cleanup_deadline_seconds": 160,
+    "cpu_seconds": 120,
+    "heap_bytes": 1073741824,
+    "log_bytes": 2097152,
+    "outer_wall_seconds": 210,
+    "rss_sampled_bytes": 2147483648,
+    "single_file_bytes": 50331648,
+    "total_wall_seconds": 180,
+    "tree_bytes": 67108864,
+    "work_wall_seconds": 150
+  },
+  "bindings": {
+    "JAVA": "Pinned OpenJDK21 full314-file tree with exact symlink_target identities",
+    "RUN": "Fresh output root with home/tmp/classes",
+    "BASELINE": "Exact994=842 historical+152 inherited classes; complete class/source/build closure external",
+    "JAR_CP": "106 ordered jars in pinned sibling DEPENDENCY_PINS.json",
+    "PLUGIN": "Pinned Chisel6.7.0 plugin",
+    "PACKAGE": "This package directory"
+  },
+  "environment": {
+    "HOME": "{RUN}/home",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "{RUN}/tmp"
+  },
+  "requirements": [
+    "Supply exact class/source/build closure,106 jars,314-file JDK and original bounded strict supervisor; no binaries bundled.",
+    "Preserve symlink kind/target/size/hash;129 inherited symlink targets unchanged. Do not relax verifier.",
+    "Verify inputs before/after; caps metadata not executable supervision or launch permission.",
+    "Only2 sources compiled; final31 includes29 inherited sources.",
+    "Public Python source/Boolean/protocol checks require adjacent pinned FFN Top source, not DUT/numerical proof. Four original preparation tests separately scope metadata, not current functional models.",
+    "No project main/elaboration/RTL/DUT/numeric/automatic retry; complete archival graph remains unverified."
+  ]
+}

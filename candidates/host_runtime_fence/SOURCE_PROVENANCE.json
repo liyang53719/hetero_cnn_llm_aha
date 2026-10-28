@@ -1,0 +1,27 @@
+{
+  "status": "REPLACES_TWO_PREVIOUS_PUBLIC_PARENT_SOURCE_FAMILIES_NO_NEW_HISTORICAL_FAMILY",
+  "previous_source_pins": {
+    "HostBlockCommandsV4.scala": {
+      "path": "../host_runtime_ffn/source/HostBlockCommandsV4.scala",
+      "bytes": 182673,
+      "sha256": "8bcb8bac58cfbc7feb54a78b3745c8085da5caa667cfd30e3fdde80b1d18b4f1"
+    },
+    "HostBlockTopV4.scala": {
+      "path": "../host_runtime_ffn/source/HostBlockTopV4.scala",
+      "bytes": 26241,
+      "sha256": "31025de2d2c4505a3562a47c3d4e9edc4bee0b518beceaae9313f75f76625609"
+    }
+  },
+  "new_historical_family": false,
+  "original_record": {
+    "bytes": 166,
+    "sha256": "56e801ff127e710ce19d870fc53c1a631815fb96713533c1d407d86aa1eb5176"
+  },
+  "inherited_provenance": {
+    "path": "../host_runtime_moe/SOURCE_PROVENANCE.json",
+    "bytes": 1402,
+    "sha256": "bf74371f263fade65f8e26202ce0a8b129d00c06698495deacc964c62f315e89"
+  },
+  "historical_transitive_graph_verified": false,
+  "scope": "Commands/Top were directly compiled in predecessor closure; exact7 old classes replaced. Prior missing original compiler receipts remain unverified. No new archive-availability claim."
+}

@@ -1,0 +1,51 @@
+{
+  "status": "PASS_ACTUAL_FENCE_INCREMENTAL_COMPILER_ONLY",
+  "compiled_source_count": 2,
+  "baseline_class_count": 994,
+  "new_class_count": 7,
+  "new_class_bytes": 1416213,
+  "final_source_closure_count": 31,
+  "final_class_count": 159,
+  "inherited_source_count": 29,
+  "inherited_class_count": 152,
+  "wall_seconds": 51.183284222963266,
+  "cpu_seconds_sampled": 41.09,
+  "peak_rss_bytes": 478900224,
+  "peak_tree_bytes": 18660773,
+  "pre_post_pin_checks": 3660,
+  "compile_log_empty": true,
+  "historical_transitive_graph_verified": false,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 4292,
+    "sha256": "0bee4850d665ac1db255a83a92456eaf89f0c16dcbdfc53ec72ee5c66edd5d0a"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "current_checks_each_mode": {
+    "commands_protocol_models": 11,
+    "command_count_cases_within_models": 350,
+    "commands_source_fragments": 17,
+    "commands_mutations": 17,
+    "top_boolean_combinations": 1024,
+    "top_source_mutations": 10,
+    "independent_lifecycle_cases": 512
+  },
+  "preparation_metadata_models": 4,
+  "publication_compiler_executions": 0,
+  "admission": "Runtime final fence only cold M128; profiles1..4 global launch seal remains closed; carried checkpoint binding unsupported. Profile0 exact21 command rule and result semantics preserved."
+}

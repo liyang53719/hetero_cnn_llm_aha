@@ -1,0 +1,44 @@
+{
+  "status": "RUNTIME_FINAL_COMMIT_GAPS_AND_LATE_FAULT_SCOPE_FIXED_SOURCE_ONLY",
+  "independent_source_review": {
+    "bytes": 2202,
+    "sha256": "82eb199b495b7eb9c8e0a4be4dadd876ffaa286b315bef79f3a0e4d8622e17e9"
+  },
+  "author_review_binding": {
+    "bytes": 1332,
+    "sha256": "8fcc9feadea39b1497befc4918ecdc8cf70bda042eb04681462967fbd1e71788"
+  },
+  "prior_before_count_scope_review": {
+    "bytes": 1994,
+    "sha256": "99cede08d41c711c1816dd5d03c195ff8a1b94c73772a1ce3da798b37913cfd3"
+  },
+  "reviewer_scope": "Original independent source report plus author identity binding; not two independent reviews. Before-count-scope report is historical different Commands hash, not final-source approval.",
+  "corrected_findings": [
+    "Resident resetRequired now covers held runtime fence and valid-runtime finish, preserving profile0.",
+    "First result success requires committed checkpoint and drain; failed qualification poisons.",
+    "Attention fence requires actual typed-policy branch.",
+    "Official21 command count guard is now profile0-only; same general maxCommands and runtime terminal fence remain enforced. Global nonzero-profile Host seal is unchanged."
+  ],
+  "source_conclusions": [
+    "Atomic roots written only on terminal completion.fire after prior physical ACK snapshots and final drain/identity/fault recheck.",
+    "Runtime final fence mandatory at last command; MoE cannot terminate without subsequent fence.",
+    "Top drain depends on original live services/leases/readers; retained staging receipts are excluded. Healthy Guard and MoE releases precede fence, no final-event circular wait found by source review.",
+    "Profile0 result timing and numerical source unchanged. Global runtime Host launch seal retained.",
+    "Runtime checkpoint cold-only; carried parameter binding unsupported."
+  ],
+  "prior_history": {
+    "path": "../host_runtime_moe/HISTORICAL_FINDINGS.json",
+    "bytes": 3492,
+    "sha256": "0fa31c884ee1c70bd212b391cb0cec9de9d9d0c596fc82b5d224594f2681ad2f"
+  },
+  "source_gap": "runtimePrefix lacked final fence; arbitrary intermediate last command could finish OK; complete MoE retirement lacked stored Residual2 provenance. Only final fence may terminate; MoE reserves following fence command.",
+  "checker_history": "Initial delete-first-fragment control missed repeated legacy fragments; raw checker was changed to compare counts within its current-input snapshot. Independent publication audit demonstrated that it still self-calibrates: deleting one of two duplicated root-write fragments can pass as a new expected count. Not a Scala/source/DUT defect. Public checker now uses fixed literal counts extracted from the exact compiled source; duplicate external deletion must reject. Raw evidence is preserved, not retroactively relabeled.",
+  "publication": "Actual final physical ACK/staging + fullHost/txn64 + real current drain/fault rechecked at original completion.fire; all GDN roots/generation or Attention cache/context/length/generation commit atomically. No success rollback claimed after later fault.",
+  "result": "First standalone result offer snapshots status after commit/drain/fault qualification. Once offered payload immutable; later faults report via resetRequired sideband.",
+  "still_open": "ColdM128 only; no carried full parameter identity binding. Legacy7/6 parameter tables not reused as complete runtimeMoE checkpoint authentication. Global profiles1..4 launch seal closed; completeM128/RTL0/5, tie contract pending.",
+  "limits": [
+    "No Java/elaboration/DUT/RTL/numerical/utilization proof.",
+    "Source review cannot certify all elaborated combinational loops or initialization.",
+    "Complete five-profile128token Chisel and RTL remain0/5."
+  ]
+}

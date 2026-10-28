@@ -1,0 +1,33 @@
+{
+  "scope": "Only control metadata and real drain observation; not synthesized area/timing or numerical qualification",
+  "new_numeric_buffers": 0,
+  "new_fpu": false,
+  "new_matrix": false,
+  "new_dma": false,
+  "new_cache_bank": false,
+  "new_formatter": false,
+  "new_numerical_module": false,
+  "existing": {
+    "matrix_macs": 4096,
+    "shared_bank_lanes": 32
+  },
+  "new_known_register_bits": {
+    "full_host": 844,
+    "transaction": 64,
+    "result_status": 8,
+    "subtotal_excluding_tensors_and_flags": 916
+  },
+  "additional_control": [
+    "two DecodedTensor snapshots: final output and state",
+    "boundRuntimeFence flag",
+    "runtimeCheckpointCommitted flag",
+    "runtimeResultQualified flag",
+    "identity/shape/provenance comparisons and mux",
+    "Top ten-way live drain observation"
+  ],
+  "new_private_drain_input_bits": 1,
+  "external_host_abi_changed": false,
+  "commit_edge": "Original terminal host-facing completion.fire, NOT later standalone result.fire",
+  "physical_resource_equivalence_proven": false,
+  "performance_uplift_claimed": false
+}

@@ -1,0 +1,33 @@
+{
+  "status": "DIRECT_RECONSTRUCTED_ROUTER_SOURCE_AND_CURRENT_BASELINE_IDENTITY_NOT_FULL_ARCHIVE",
+  "source": {
+    "name": "Public21QkvReductionRouter.scala",
+    "bytes": 8760,
+    "sha256": "aa9d28733ef6e101ad4f3ccb51e3844787970b0292427b847cdae230585be5dc"
+  },
+  "recorded_original_compile_source_identity": {
+    "bytes": 8760,
+    "sha256": "aa9d28733ef6e101ad4f3ccb51e3844787970b0292427b847cdae230585be5dc",
+    "source92_match": true
+  },
+  "reconstruction_report": {
+    "bytes": 66298,
+    "sha256": "f4157f476950d848dd295f0d9508c26dc092298cbfd267ba7d64840c8a572b43"
+  },
+  "historical_original_compile_receipt_rechecked": false,
+  "original_actual_receipt": null,
+  "original_identity_review": null,
+  "original_classes_count": 2,
+  "original_classes_digest": "28d462fb30704ab2908195972baaacacc14e0fa5bce9652ca85e46a3e9100234",
+  "replaced_classes_digest": "28d462fb30704ab2908195972baaacacc14e0fa5bce9652ca85e46a3e9100234",
+  "original_record": {
+    "bytes": 10670,
+    "sha256": "44ef882b1cba0d1388c5cf03e0e84f13e5bc84eb7e39c8e0b01ac4a74adca8ae"
+  },
+  "other_inherited_provenance": {
+    "path": "../host_runtime_postnorm/SOURCE_PROVENANCE.json",
+    "bytes": 1335,
+    "sha256": "f889847d34d67247b888707dfb0fd6942ace564aae4a43ef62420d7fdfc510c4"
+  },
+  "scope": "Readable reconstructed source equals recorded source92 identity and retained current baseline classes. Historical209 original compile receipt is absent and was NOT rechecked; current baseline bytes and direct manifests are verified, not full archival history. This batch freshly compiles whole Router family."
+}

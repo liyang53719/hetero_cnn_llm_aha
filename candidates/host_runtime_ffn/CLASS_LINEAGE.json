@@ -1,0 +1,111 @@
+{
+  "status": "ACTUAL_INCREMENTAL_COMPILER_CLOSURE_NOT_FULL_RECOMPILE",
+  "base_commit": "4f98c574b49b92708daba43247278fab4ccde635",
+  "base_package": "../host_runtime_postnorm",
+  "base_files": {
+    "MANIFEST.json": {
+      "bytes": 3628,
+      "sha256": "cf2bbfb52c70d65e7cc3a00ba14551ec5addf066ac27c8ed2039dd1f2d369a34"
+    },
+    "CLASS_LINEAGE.json": {
+      "bytes": 4612,
+      "sha256": "12e72c4d8191a5ebe01b9b7cc234ac48103bd59d1b4081c955acf252596bf9f6"
+    },
+    "EVIDENCE_PINS.json": {
+      "bytes": 5340,
+      "sha256": "bdf561165e509bcfa0de7ca760fa6d6d398e0df9871f9aa719da0b0f803f6a50"
+    },
+    "SOURCE_PROVENANCE.json": {
+      "bytes": 1335,
+      "sha256": "f889847d34d67247b888707dfb0fd6942ace564aae4a43ef62420d7fdfc510c4"
+    },
+    "REPRODUCTION_LIMITS.json": {
+      "bytes": 958,
+      "sha256": "e901d36de3f8be6cfad891434fcd2b6a3860f7de82d1e011afe9f5a707efd35e"
+    }
+  },
+  "baseline": {
+    "original_ancestor_count": 855,
+    "original_ancestor_digest": "4915e5ef11794e9fb11b7e829d1d5d706d5cb32fdd4ac45e2b00dff597d74ed7",
+    "previous_removed_rms_count": 3,
+    "previous_removed_rms_digest": "06184c4e4d28cb8bb78569096ccc05979c70cb4cb1a9b54a3120573897e67326",
+    "new_removed_router_count": 2,
+    "new_removed_router_digest": "28d462fb30704ab2908195972baaacacc14e0fa5bce9652ca85e46a3e9100234",
+    "retained_ancestor_count": 850,
+    "retained_ancestor_digest": "1c6a0851fad4e2d03c4ee0ac020b676904ea023df1c9d3aac14f3da95428048f",
+    "previous_final_classes": 148,
+    "previous_final_digest": "45881157df9a40bfcacb6237e87279f35d56a12589350c5fce3fe25f72ea8d32",
+    "composed_count": 1000,
+    "removed_classes": 50,
+    "removed_source_families": [
+      "GdnRuntimeElementwiseOwnerV15.scala",
+      "HostBlockCommandsV4.scala",
+      "HostBlockTopV4.scala",
+      "HostRuntimePrefixLeaseWiringV8.scala",
+      "Public21QkvReductionRouter.scala",
+      "QwenOwnerProtocol.scala",
+      "UnifiedMoeSharedArithmeticProtocolV5.scala"
+    ],
+    "removed_digest": "a406ae7873c1855b531aeacb47d26ff8ca7e8b396ad637229f770ce60a725cf4",
+    "removed_previous_final_count": 48,
+    "removed_previous_final_digest": "53fb8d2b1bd5bb583131edc26399c7cc19e0c6b2db882f49b44c5ac122f573db",
+    "retained_count": 950,
+    "retained_digest": "706f7ce66e95fa1f72501ce9e62dd351aec825e0acf1604cf18637af4b417f07",
+    "inherited_class_count": 100,
+    "inherited_digest": "1da5957e5e19e922a495993f0aada0a577f57737cc7fc034650930c7c47f8902"
+  },
+  "actual": {
+    "compiled_sources": 7,
+    "new_classes": 51,
+    "new_class_bytes": 2912824,
+    "new_digest": "767f125d2f84ed4d3f72d6fafa61a33128108926e048fa911c5aa0d14c8e5264"
+  },
+  "final": {
+    "sources": 30,
+    "classes": 151,
+    "class_bytes": 5365309,
+    "class_digest": "7300e26330e46332d58daf394f88db6b4d565da34a6fb78e1ac25d8b7b7133aa",
+    "inherited_sources": 23,
+    "actually_compiled_sources": 7,
+    "by_source": {
+      "GdnChunkStateTransferOwner.scala": 4,
+      "GdnRuntimeChunkLeafCollection.scala": 7,
+      "GdnRuntimeChunkCoordinator.scala": 4,
+      "GdnRuntimeChunkDerivedAndPairV2Owner.scala": 4,
+      "GdnRuntimeChunkExecuteOwnerV8.scala": 2,
+      "GdnRuntimeChunkLoadPrepV2Owner.scala": 4,
+      "GdnRuntimeRawPrepReceiptV8.scala": 3,
+      "HostRuntimeGatedDependencyV10.scala": 1,
+      "GdnRuntimeChunkTransposeV2Owner.scala": 4,
+      "GdnRuntimeGatedNormProtocolV10.scala": 4,
+      "GdnRuntimeGatedNormOwnerV10.scala": 1,
+      "GdnRuntimeRawPrepProtocolV7.scala": 9,
+      "GdnRuntimeRawPrepOwnerV7.scala": 1,
+      "HeldDecoupledOffer.scala": 4,
+      "HostRuntimeChunkProtocolV9.scala": 3,
+      "HostRuntimeChunkWiringV9.scala": 3,
+      "QkNorm256RuntimeOwnerV11.scala": 7,
+      "SharedMemoryArbiter.scala": 3,
+      "PartialRopeRuntimeOwnerV12.scala": 7,
+      "Bf16KvAppendRuntimeOwnerV13.scala": 7,
+      "Bf16CausalGqaRuntimeOwnerV14.scala": 10,
+      "UnifiedMoeSharedArithmeticAdapterV5.scala": 2,
+      "GdnRuntimeRmsNormOwnerV3.scala": 6,
+      "GdnRuntimeElementwiseOwnerV15.scala": 6,
+      "HostBlockCommandsV4.scala": 4,
+      "HostBlockTopV4.scala": 3,
+      "HostRuntimePrefixLeaseWiringV8.scala": 7,
+      "Public21QkvReductionRouter.scala": 2,
+      "QwenOwnerProtocol.scala": 20,
+      "UnifiedMoeSharedArithmeticProtocolV5.scala": 9
+    }
+  },
+  "canonical_encoding": "sort by relative; JSON sorted keys with compact separators; trailing LF; relative/bytes/sha256 only",
+  "dependency_metadata": {
+    "path": "../host_chunk_gradual_bridge/DEPENDENCY_PINS.json",
+    "commit": "4f98c574b49b92708daba43247278fab4ccde635",
+    "bytes": 23148,
+    "sha256": "dd489f27304d9c22bcd18f891e0ed628e9b72629c93dffd8c52fd3b87f1151fb"
+  },
+  "requires_parent": "Exact850 retained ancestor classes plus100 inherited class bytes and complete source/build closure are not bundled. Active input identity PASS does not imply complete archival graph PASS or fresh-checkout reproduction."
+}

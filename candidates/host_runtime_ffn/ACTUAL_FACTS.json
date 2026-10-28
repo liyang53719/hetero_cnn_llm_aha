@@ -1,0 +1,60 @@
+{
+  "status": "PASS_ACTUAL_FFN_7_SOURCE_950_BASELINE_COMPILER_ONLY",
+  "compiled_source_count": 7,
+  "baseline_class_count": 950,
+  "new_class_count": 51,
+  "new_class_bytes": 2912824,
+  "final_source_closure_count": 30,
+  "final_recompiled_source_count": 7,
+  "final_class_count": 151,
+  "inherited_source_count": 23,
+  "inherited_class_count": 100,
+  "wall_seconds": 55.6852636479307,
+  "cpu_seconds_sampled": 45.98,
+  "peak_rss_bytes": 592490496,
+  "peak_tree_bytes": 18624853,
+  "pre_post_pin_checks": 3464,
+  "strict_owned_compiler_group_terminal": true,
+  "compile_log_empty": true,
+  "historical_transitive_graph_verified": false,
+  "full_m128_passes": 0,
+  "rtl_five_profile_passes": 0,
+  "not_run": [
+    "Chisel elaboration",
+    "RTL",
+    "DUT",
+    "numerical/protocol simulation"
+  ],
+  "parser_negative_controls": [
+    "truncated",
+    "trailing",
+    "badmagic",
+    "version",
+    "unknowncp",
+    "source_attr_length"
+  ],
+  "native_exit_code": 0,
+  "original_receipt": {
+    "bytes": 19768,
+    "sha256": "7d3a129ce465df295b07a09987c41a46fbb895a67491b1f2a0a017732fd04663"
+  },
+  "empty_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_checks_each_mode": {
+    "commands_checks": 35,
+    "commands_mutations": 7,
+    "prefix_checks": 31,
+    "prefix_mutations": 7,
+    "elementwise_models": 17,
+    "commands_models": 29,
+    "prefix_models": 20,
+    "router_models": 15
+  },
+  "historical_prepare_metadata_models_before_actual_only": 9,
+  "total_author_models_historically": 90,
+  "publication_functional_models_each_mode": 81,
+  "independent_source_contracts": 36,
+  "independent_mutations": 7,
+  "independent_review": "Reexecutes same candidate models; not additional independent numerical/DUT models",
+  "publication_compiler_executions": 0,
+  "admission": "Only profiles1/2,H1024,F3584;profile1 M16/M128,profile2 M128;cold generation0;private Residual2 staging, launch/final roots remain sealed."
+}

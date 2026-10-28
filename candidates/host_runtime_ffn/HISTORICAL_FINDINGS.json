@@ -1,0 +1,30 @@
+{
+  "status": "FAULT_FEEDBACK_AND_PUBLIC21_PC_ALIAS_SOURCE_FIXES_PRESERVED",
+  "independent_source_review": {
+    "bytes": 9512,
+    "sha256": "d1c0f2b4dcb0b740dbd2aa56387ddb0b01cc7dbe4e18be9ed2fb062bbfc7ca46"
+  },
+  "verified_findings": [
+    "Actual original Commands and Guard issue all five Dense0.8 phases through the same Kernel Dense/Matrix and runtime Elementwise path; no second dispatcher or new numerical owner bank. Private Top receipt directly connects real physical terminals to original Commands.",
+    "Gate/up require actual postNorm full Host and txn64 plus logical/physical accepted payload. SiLU requires both real gate/up receipts, Down the actual SiLU receipt, Residual2 the original Residual1 and actual Down. Physical consumer IDs must strictly exceed non-sentinel producer IDs, with per-stage no-replay issue ledger.",
+    "Commands publish only after original done then completion.fire with unchanged full FFN proof. Weights and all operand/output allocations are typed and span-bound; full returned result is compared after logical tag remap. Dense useful and executed MAC accounting checks are retained.",
+    "Original SiLU graph preserves FP32 exp/denominator/inverse/sign/gate multiply then BF16(SiLU), then up multiply and BF16(output); exactly6 Scalar and2 Format per lane. Original Add/SigmoidMul modes and memory/fault/debt code regions are preserved.",
+    "Public21 semantic marker is generated only by original validated official profile0 Q/K/V Commands, not physical taglow or matching geometry. All Router source after val shape, including K-window/pairReverse/held transport, matches exact reconstructed original source.",
+    "Runtime Elementwise retains same three32lane BF16 banks and Scalar8/Format9 kind9/stage77. Only scalar operation quota is enlarged2752512; formatter quota1048576 and physical services unchanged. New4 internal job bits and receipt/stage/source metadata are nonzero area.",
+    "Original profiles1..4 launch seal remains closed and Residual2 is staged only; no cache/state generation/root final commit. Qwen2 FP32 storage policy and original MoE expert dispatch baseline are unchanged.",
+    "Selected TransposedDenseDownOwner source supports H1024/F3584 at M16/128 with ascending K and FP32 prefix accumulation; Down requires at least524288B existing region3 DDR workspace disjoint from A/W/D. This is not a new SRAM or proven synthesized resource count."
+  ],
+  "review_corrections": [
+    "Found initial combinational feedback through Prefix ffnNormInputs reading fault-masked authority.postnormCommitValid; parent removed it. Structural provenance now uses registered actual receipt and retained postnorm job. Actual-fire and publication retain separate live-fault vetoes; negative control restoring this read fails.",
+    "Research located original public21 physical-tag selector collision. Parent replaced selector with Commands validated semantic marker; independent review confirms original downstream numerical and transport body unchanged."
+  ],
+  "prior_history": {
+    "path": "../host_runtime_postnorm/HISTORICAL_FINDINGS.json",
+    "bytes": 5039,
+    "sha256": "4e2bce30afa4b3bff22aee6c74b98168fc225803e31e7f9255e179ffea39837a"
+  },
+  "router_defect": "Old physical tag low16==1/4/7 is not semantic PC after persistent Guard remap. Now only original validated official profile0 public21 Commands pc1/4/7 sets private marker. Shape alone cannot grant authority; unchanged downstream shape rejection/K1024+512/pairReverse/FP32 storage/held body.",
+  "prefix_defect": "Initial ffnNormInputs read fault-masked authority.postnormCommitValid causing combinational feedback; removed in favor of registered physical proof and retained job. Actual-fire and publication separately veto fault. Source review not elaborated loop freedom.",
+  "inherited_moe_limit": "Official expert IDs, tie policy, routing and scheduling baseline unchanged. Arbitrary MoE groupRows1..128 versus production Dense M16/M128 remains unresolved.",
+  "limits": "One compiler-only run after source fixes. Unknown/poisoned service may require joint isolation/reset; no unconditional bounded drain. Original standalone GDN layer0/Attention layer3 M1 evidence is not arbitrary layer or M128 qualification."
+}

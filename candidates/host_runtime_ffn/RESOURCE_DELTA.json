@@ -1,0 +1,76 @@
+{
+  "scope": "Same numerical services/storage with increased control/quota; not synthesized area or sameRTL proof",
+  "existing_elementwise_numeric_storage": {
+    "bf16_buffers": 3,
+    "elements_per_buffer": 32,
+    "bits_per_element": 16,
+    "buffer_bits": 1536,
+    "fp32_intermediate_bits": 64,
+    "total_bits": 1600,
+    "unchanged": true
+  },
+  "private_job_metadata_growth_bits": 4,
+  "private_job_fields": {
+    "runtimeFfnPhase_bits": 3,
+    "public21Reduction_bits": 1
+  },
+  "external_host_bits": 844,
+  "external_host_changed": false,
+  "operation_states_before": 6,
+  "operation_states_after": 7,
+  "operation_encoding_bits_before": 3,
+  "operation_encoding_bits_after": 3,
+  "additional_unquantified": [
+    "five phase receipt ledger",
+    "full Host and transaction64",
+    "typed source/weight/operand allocation and accepted snapshots",
+    "pending completion proof",
+    "comparators and mux/decoding"
+  ],
+  "new_fpu": false,
+  "new_matrix": false,
+  "new_dma": false,
+  "new_memory_arbiter": false,
+  "new_scalar_bank": false,
+  "new_local_formatter": false,
+  "existing": {
+    "hub_clients": 17,
+    "memory_client": 1,
+    "adapter_clients": 11,
+    "shared_bank_lanes": 32,
+    "matrix_macs": 4096,
+    "matrix_sram_banks": 32,
+    "matrix_sram_bytes": 786432,
+    "authority_kind_bits": 4
+  },
+  "authority": {
+    "mode": 9,
+    "kind": 9,
+    "stage": 77,
+    "scalar_slot": 8,
+    "format_slot": 9,
+    "scalar_cap_before": 2621440,
+    "scalar_cap_after": 2752512,
+    "format_cap": 1048576
+  },
+  "m128_contract": {
+    "dense_useful_macs_each": 469762048,
+    "dense_useful_macs_total": 1409286144,
+    "weight_bytes_each": 7340032,
+    "silu_scalar": 2752512,
+    "silu_format": 917504,
+    "silu_memory": 43008,
+    "silu_output_ack_bytes": 917504,
+    "residual2_scalar": 131072,
+    "residual2_format": 131072,
+    "residual2_memory": 12288,
+    "residual2_output_ack_bytes": 262144
+  },
+  "existing_down_workspace": {
+    "region": 3,
+    "minimum_bytes": 524288,
+    "disjoint_from": "A/W/D",
+    "storage": "Existing external DDR scratch requirement, NOT new SRAM"
+  },
+  "hardware_qualification": false
+}

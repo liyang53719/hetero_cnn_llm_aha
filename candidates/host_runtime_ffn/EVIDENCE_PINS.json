@@ -1,0 +1,149 @@
+{
+  "scope": "Digest-only original records, no class/tool bytes/private paths. Original historical receipt absence explicit; final independent actual binding added at finalization.",
+  "records": {
+    "SOURCE_MANIFEST.json": {
+      "bytes": 2816,
+      "sha256": "238f2710d3b18bc4744e80e50d41973aaa8af75a7a274b187d05ec896734cf3a"
+    },
+    "SOURCE_SET.json": {
+      "bytes": 9088,
+      "sha256": "6dd465a8087e378f9f83802f415bb20d502367049b918b65e3a8d5c04d60f977"
+    },
+    "PRECOMPILE_EVIDENCE.json": {
+      "bytes": 19921,
+      "sha256": "07635e4f8299b76d369641a4293b44f74c4d12a26a0ae4045c9abc43fc83188e"
+    },
+    "INDEPENDENT_REVIEW.json": {
+      "bytes": 9512,
+      "sha256": "d1c0f2b4dcb0b740dbd2aa56387ddb0b01cc7dbe4e18be9ed2fb062bbfc7ca46"
+    },
+    "PUBLIC21_ROUTER_BASE_PROVENANCE.json": {
+      "bytes": 10670,
+      "sha256": "44ef882b1cba0d1388c5cf03e0e84f13e5bc84eb7e39c8e0b01ac4a74adca8ae"
+    },
+    "PUBLIC21_ROUTER_SOURCE_PROVENANCE.json": {
+      "bytes": 6090,
+      "sha256": "319564c0872dcfd1272941d79f72234c040b3f64cea322ddaadbc39b4677cde2"
+    },
+    "PUBLIC21_ROUTER_RESULT.json": {
+      "bytes": 4992,
+      "sha256": "6bf4ecf99ff76895560b0ba2060e4f94148a0689ec5e037fe9d65e80945c9ec9"
+    },
+    "FFN_ORIGINAL_RESEARCH_CN.md": {
+      "bytes": 7585,
+      "sha256": "e45911dc24d9bca099304a3d030373843ca26dfdd1c1a0bc3d0d076002f711b3"
+    },
+    "FFN_ELEMENTWISE_RESULT.json": {
+      "bytes": 2411,
+      "sha256": "a632e1e546b18bbc7c3076b7472b36a15588d21678b94141ebbd9b16c9aa9e1e"
+    },
+    "COMMANDS_FFN_RESULT.json": {
+      "bytes": 3083,
+      "sha256": "7fafcfdd2d543117e6a53118f67c963b1738a0594a779b4c6b5a48602eca7a39"
+    },
+    "SOURCE_DELTA.patch": {
+      "bytes": 52070,
+      "sha256": "b44d91cb8de5960a15487e19ae726ccbc1b56d4e7d223cb544323a0344d9629f"
+    },
+    "check_commands_ffn.py": {
+      "bytes": 6067,
+      "sha256": "2c1e9ca9d659c3568bc43a9d6fbcede996985b5c6a6b93e3533cd9f73c1e9c15"
+    },
+    "check_ffn_prefix.py": {
+      "bytes": 5636,
+      "sha256": "1e893cf09888a91873dc61191ccf1f968c91fc231ec658f75e526dc59b9c9882"
+    },
+    "check_ffn_elementwise.py": {
+      "bytes": 1691,
+      "sha256": "f7ecc629e4e3b3e769517414531b1253da906d6d60c65ce2d54149100974dca1"
+    },
+    "check_public21_semantic_route.py": {
+      "bytes": 3220,
+      "sha256": "6a347ef968f384ed7e45259f42bdbb83fd93e444c46d1eca74989d4d685c5251"
+    },
+    "tests/test_commands_ffn.py": {
+      "bytes": 13299,
+      "sha256": "5f8274186cd5509f05b03345a4fcfc26959f06eb99bc54b6e0605dcd57a02d15"
+    },
+    "tests/test_ffn_prefix_contract.py": {
+      "bytes": 7576,
+      "sha256": "569f54370bdbbc49384f56fa2cde4233e63900663b945db3d5feff48a186ec26"
+    },
+    "tests/test_ffn_elementwise.py": {
+      "bytes": 16311,
+      "sha256": "91b083b54ef83f2b25f40492606ba2b56f5238980edcf22c7ccbc723b8de8c48"
+    },
+    "tests/test_public21_semantic_route.py": {
+      "bytes": 4921,
+      "sha256": "52d53591b264b743bdaaadb457d6cc9afc1f47739b34f5009986a641ebf7635e"
+    },
+    "tests/test_prepare_metadata.py": {
+      "bytes": 5058,
+      "sha256": "10bcada37a5ad801ba348a09f7808b163eb8742c85783bf78ab89c164bb39382"
+    },
+    "actual_RECEIPT.json": {
+      "bytes": 19768,
+      "sha256": "7d3a129ce465df295b07a09987c41a46fbb895a67491b1f2a0a017732fd04663"
+    },
+    "actual_SUMMARY.json": {
+      "bytes": 2495,
+      "sha256": "ebbea80afb9693282e5c22ad2d008c5d4bfac724abfd2ad2c3bd488f86599708"
+    },
+    "actual_CLASS_IDENTITIES.json": {
+      "bytes": 58204,
+      "sha256": "dbf4fd8e24a458764d0f1eee35a064220cd39bf71de3f66320fa9bbd1480a7d9"
+    },
+    "actual_FINAL_SOURCE_CLASS_CLOSURE.json": {
+      "bytes": 185013,
+      "sha256": "40bb0ea1d1138d1a7d33409e7f4db31afbf3c518b85a53634d4ea739d23fd350"
+    },
+    "prepare_COMMAND.json": {
+      "bytes": 36766,
+      "sha256": "89e1500012590403f3f0745f39045282a73187d90d964f99553e67f5b0afdad9"
+    },
+    "prepare_SOURCE_AND_TOOL_PINS.json": {
+      "bytes": 1886908,
+      "sha256": "bc464fc6aab725773138b06b332575ebc7d7b0d7bab0167307521bf4ef65fe41"
+    },
+    "prepare_FREEZE.json": {
+      "bytes": 4222,
+      "sha256": "773804d8609a6418a19d36ef164d2110817f22198d4a5902a69b145023529dfe"
+    },
+    "prepare_CLASS_COMPOSITION.json": {
+      "bytes": 1028737,
+      "sha256": "74e22080162968699c7500e4d94ea2da31bc8d32aabfb6ad647603cbd1fcb1cb"
+    },
+    "prepare_PUBLIC21_ROUTER_BASE_PROVENANCE.json": {
+      "bytes": 10670,
+      "sha256": "44ef882b1cba0d1388c5cf03e0e84f13e5bc84eb7e39c8e0b01ac4a74adca8ae"
+    },
+    "final_evidence_manifest": {
+      "bytes": 33125,
+      "sha256": "232fa96c8cce7c6682fc32c74e5cb2dac08fa3bd957b480ac05717236a9d4c2c"
+    },
+    "final_verified_scope": {
+      "bytes": 4967,
+      "sha256": "1494859df0984520684327e8a549126a51b7033f903fb7e836bc7520ee44cecc"
+    },
+    "final_chinese_result": {
+      "bytes": 2532,
+      "sha256": "0ad883cbcf8738f0e1e3205be54f39f72e6bed8a1993f7d8cfe875801f6f499a"
+    },
+    "public_source_mapping": {
+      "bytes": 18964,
+      "sha256": "3e53f5c9bbba17b14982913b7d78448982cbdac2e84c8b4b9e77f44d62534979"
+    },
+    "independent_actual_review": {
+      "bytes": 9877,
+      "sha256": "c20d7eccfa99b98627a399ea28b705545de794ecd39b652db0d5bac6fcb47e74"
+    },
+    "actual_review_binding": {
+      "bytes": 4423,
+      "sha256": "e3ce5cbcb68cb0fca8e46caf2d95c641bab37b1b8e2ef2c8e67077343f4690a1"
+    },
+    "postfreeze_binding_checker": {
+      "bytes": 1882,
+      "sha256": "1310b11b65c84b3853bd0a82b5be506d277520128547a37df93c6c18e669e56b"
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "status": "TEMP_DENSE_FFN_INCREMENTAL_TYPECOMPILE_REQUIRES_PARENT_ARCHIVAL_GRAPH_INCOMPLETE_NOT_HARDWARE",
+  "files": [
+    {
+      "path": "ACTUAL_FACTS.json",
+      "bytes": 1965,
+      "sha256": "f862af78df8cef20b3e7e731c45bfb0d01cb4680590625d9f500b521a6ee0ec9"
+    },
+    {
+      "path": "CLASS_LINEAGE.json",
+      "bytes": 4895,
+      "sha256": "1e5c51adcbcb125cc1567895881f64f4247457412f27b4a1da7fc6a585ff14d0"
+    },
+    {
+      "path": "EVIDENCE_PINS.json",
+      "bytes": 5514,
+      "sha256": "2349e19df99e3743c2f36babbd405e34949f84e83dd86154c8e5712513e6bbc9"
+    },
+    {
+      "path": "HISTORICAL_FINDINGS.json",
+      "bytes": 4252,
+      "sha256": "6302c1687c7ca238b3252da9f6c52aa161771bb3d5fb79d7b464a9b10530e84d"
+    },
+    {
+      "path": "PLAN_CN.md",
+      "bytes": 6691,
+      "sha256": "afba6fd951beed41f27fae6b3a7fdfb4b9bd13eb450cb9374b68ba8801168d3b"
+    },
+    {
+      "path": "REPRODUCTION.json",
+      "bytes": 2737,
+      "sha256": "e39aa3e80b469fc6c967f64bec3cbc2a4597d0aee4d874d613b318d6105e1225"
+    },
+    {
+      "path": "REPRODUCTION_LIMITS.json",
+      "bytes": 1027,
+      "sha256": "050b808659c46129309a99710b57613be61582dcdffc801ea30c13fb3edb1a4a"
+    },
+    {
+      "path": "RESOURCE_DELTA.json",
+      "bytes": 2149,
+      "sha256": "19f9779d980d4732a355bcaefce9e54fa53c7cf3e6c8a745818abc7eaede2b97"
+    },
+    {
+      "path": "SOURCE_PINS.json",
+      "bytes": 9403,
+      "sha256": "388b0eacf2b29dfc38cd1d251ce0779d3eaeb1b18e9c9e3004716ad432a340ba"
+    },
+    {
+      "path": "SOURCE_PROVENANCE.json",
+      "bytes": 1592,
+      "sha256": "915bb601f64efc832dad2fdc518e2af4e0ea251f43f28fc2b38b1008bb23f84f"
+    },
+    {
+      "path": "check_commands_ffn.py",
+      "bytes": 6298,
+      "sha256": "532265f2d3c57072fb819727c2ca8fad41e76a8844f2738a89040122d8d49cdf"
+    },
+    {
+      "path": "check_ffn_elementwise.py",
+      "bytes": 1691,
+      "sha256": "f7ecc629e4e3b3e769517414531b1253da906d6d60c65ce2d54149100974dca1"
+    },
+    {
+      "path": "check_ffn_prefix.py",
+      "bytes": 5636,
+      "sha256": "1e893cf09888a91873dc61191ccf1f968c91fc231ec658f75e526dc59b9c9882"
+    },
+    {
+      "path": "check_public21_semantic_route.py",
+      "bytes": 3258,
+      "sha256": "cf5d1b2b09a6fcbc5d15b4fb18d8a0caabd1a9e3e35755dc8a07ae9d787f012f"
+    },
+    {
+      "path": "source/GdnRuntimeElementwiseOwnerV15.scala",
+      "bytes": 14301,
+      "sha256": "bbdc76ac5c2b32f4dc111c3031cccbda2e0c7801c00f46342a63230460b5bad9"
+    },
+    {
+      "path": "source/HostBlockCommandsV4.scala",
+      "bytes": 182673,
+      "sha256": "8bcb8bac58cfbc7feb54a78b3745c8085da5caa667cfd30e3fdde80b1d18b4f1"
+    },
+    {
+      "path": "source/HostBlockTopV4.scala",
+      "bytes": 26241,
+      "sha256": "31025de2d2c4505a3562a47c3d4e9edc4bee0b518beceaae9313f75f76625609"
+    },
+    {
+      "path": "source/HostRuntimePrefixLeaseWiringV8.scala",
+      "bytes": 79145,
+      "sha256": "2062059293c4928e1983c3790e4a817d2d12705d19826f5ae05d60e9c22f20d3"
+    },
+    {
+      "path": "source/Public21QkvReductionRouter.scala",
+      "bytes": 9110,
+      "sha256": "bb0f829330f3ce824ffdb73180a09bb90e43826c1aa15f0d10a2187e65b72ae3"
+    },
+    {
+      "path": "source/QwenOwnerProtocol.scala",
+      "bytes": 91166,
+      "sha256": "36dc5a0d4fe1967f8dbd7cb63e5706b416a30c6899b51fdec6e896ed7d5b8e28"
+    },
+    {
+      "path": "source/UnifiedMoeSharedArithmeticProtocolV5.scala",
+      "bytes": 6876,
+      "sha256": "7ec87dc6e9e8520da7dbb0e4f07143497231c06de9970ced0915a5444c0c0cdc"
+    },
+    {
+      "path": "tests/test_commands_ffn.py",
+      "bytes": 13299,
+      "sha256": "5f8274186cd5509f05b03345a4fcfc26959f06eb99bc54b6e0605dcd57a02d15"
+    },
+    {
+      "path": "tests/test_ffn_elementwise.py",
+      "bytes": 16441,
+      "sha256": "16d5ff6d359d1a7fa040bbbd39cb425e030df21c75515256ba257c60c567f63a"
+    },
+    {
+      "path": "tests/test_ffn_prefix_contract.py",
+      "bytes": 7576,
+      "sha256": "569f54370bdbbc49384f56fa2cde4233e63900663b945db3d5feff48a186ec26"
+    },
+    {
+      "path": "tests/test_public21_semantic_route.py",
+      "bytes": 4963,
+      "sha256": "c8312b4eeb0a0acebe055f600838b7d0640f737b69d96dd52f4bc5a4defe326e"
+    },
+    {
+      "path": "verify_package.py",
+      "bytes": 1115,
+      "sha256": "9552c2c37b3c456a466f72f90f01dda37d263c185d3b4eec928c54f8819c3e30"
+    }
+  ]
+}

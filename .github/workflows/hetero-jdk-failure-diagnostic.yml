@@ -1,0 +1,44 @@
+name: hetero-jdk-failure-diagnostic-only
+on:
+  push:
+    branches: [main]
+    paths: [ci_launch/jdk_diagnostic_20261029_once.json]
+permissions:
+  contents: read
+concurrency:
+  group: hetero-exclusive-numeric-bootstrap
+  cancel-in-progress: false
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Validate unique diagnostic launch and source identity
+        id: launch
+        run: python3 -B candidates/jdk_failure_diagnostic_20261029/validate_one_shot_launch.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ steps.launch.outputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Collect bounded JDK diagnostic only
+        run: |
+          set -euo pipefail
+          python3 -B candidates/jdk_failure_diagnostic_20261029/diagnose_runner_jdk.py \
+            --output "$RUNNER_TEMP/hetero-jdk-diagnostic"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() && steps.launch.outputs.source_sha != '' }}
+        with:
+          name: jdk-diagnostic-only-${{ github.run_id }}
+          path: ${{ runner.temp }}/hetero-jdk-diagnostic/JDK_DIAGNOSTIC.json
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: false
+# No launch manifest in source publication. No JARs/download/compile/EDA/DUT.

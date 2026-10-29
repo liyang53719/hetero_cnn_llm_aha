@@ -1,0 +1,101 @@
+{
+  "scope": "CURRENT_LOCAL_RETAINED_FILES_ONLY_NOT_FRESH_CI_PEAK",
+  "samples": {
+    "qwen2_site": {
+      "schema": "JOB_LOCAL_LIVE_BYTES_V1",
+      "path_count_logical_bytes": 871930691,
+      "unique_inode_logical_bytes": 871930691,
+      "allocated_unique_bytes": 914788352,
+      "entries": 19302,
+      "symlinks_not_followed": 0,
+      "largest_file_sizes": [
+        443509856,
+        30844552,
+        25034001,
+        14975552,
+        13602328,
+        11835024,
+        11274016,
+        10808937
+      ],
+      "disk": {
+        "free_bytes": 15710429184,
+        "total_bytes": 33770192896
+      },
+      "elapsed_seconds": 0.3142587500042282,
+      "scope": "OBSERVED_SAMPLE_NOT_PEAK_OR_ATOMIC_SNAPSHOT"
+    },
+    "qwen35_08b_site": {
+      "schema": "JOB_LOCAL_LIVE_BYTES_V1",
+      "path_count_logical_bytes": 893790670,
+      "unique_inode_logical_bytes": 893790670,
+      "allocated_unique_bytes": 941211648,
+      "entries": 21684,
+      "symlinks_not_followed": 0,
+      "largest_file_sizes": [
+        443509856,
+        30844552,
+        25034001,
+        14975552,
+        13602328,
+        11317624,
+        11274016,
+        10808937
+      ],
+      "disk": {
+        "free_bytes": 15710429184,
+        "total_bytes": 33770192896
+      },
+      "elapsed_seconds": 0.41967241300153546,
+      "scope": "OBSERVED_SAMPLE_NOT_PEAK_OR_ATOMIC_SNAPSHOT"
+    },
+    "qwen35_35b_site": {
+      "schema": "JOB_LOCAL_LIVE_BYTES_V1",
+      "path_count_logical_bytes": 891753696,
+      "unique_inode_logical_bytes": 891753696,
+      "allocated_unique_bytes": 939266048,
+      "entries": 21574,
+      "symlinks_not_followed": 0,
+      "largest_file_sizes": [
+        443509856,
+        30844552,
+        25034001,
+        14975552,
+        13602328,
+        11317624,
+        11274016,
+        10808937
+      ],
+      "disk": {
+        "free_bytes": 15710429184,
+        "total_bytes": 33770192896
+      },
+      "elapsed_seconds": 0.39629593800054863,
+      "scope": "OBSERVED_SAMPLE_NOT_PEAK_OR_ATOMIC_SNAPSHOT"
+    },
+    "weights70": {
+      "schema": "JOB_LOCAL_LIVE_BYTES_V1",
+      "path_count_logical_bytes": 3532041004,
+      "unique_inode_logical_bytes": 3532041004,
+      "allocated_unique_bytes": 3532361728,
+      "entries": 155,
+      "symlinks_not_followed": 0,
+      "largest_file_sizes": [
+        1073741824,
+        1073741824,
+        536870912,
+        536870912,
+        33554432,
+        33554432,
+        27525120,
+        27525120
+      ],
+      "disk": {
+        "free_bytes": 15710429184,
+        "total_bytes": 33770192896
+      },
+      "elapsed_seconds": 0.0030159149973769672,
+      "scope": "OBSERVED_SAMPLE_NOT_PEAK_OR_ATOMIC_SNAPSHOT"
+    }
+  }
+}

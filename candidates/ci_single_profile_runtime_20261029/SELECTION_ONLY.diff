@@ -1,0 +1,57 @@
+--- all/prepare_runtimes.py
++++ selected/prepare_runtimes.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Fresh job-local exact official runtimes. Default plan; no historical readiness transfer."""
++"""Fresh job-local exact official runtime for ONE selected profile. Default plan; no historical readiness transfer."""
+ import argparse,hashlib,json,os,platform,shlex,shutil,stat,subprocess,sys,time,urllib.parse,urllib.request,zipfile
+ from pathlib import Path,PurePosixPath
+ D=Path(__file__).resolve().parent
+@@ -103,21 +103,31 @@
+   p=site/r['module_relative_paths'][name];need(p.is_file() and digest(p)==h,'installed original module '+name)
+  for rel,h in r['native_file_sha256'].items():need(digest(site/rel)==h,'installed original native file '+rel)
+ 
+-def prepare(repo,out,execute_reviewed=False):
++PROFILE_RUNTIME={0:'qwen2',1:'qwen35_08b',2:'qwen35_08b',3:'qwen35_35b',4:'qwen35_35b'}
++
++def selected_runtime(profile):
++ need(type(profile) is int and profile in PROFILE_RUNTIME,'one supported integer profile 0..4')
++ return PROFILE_RUNTIME[profile]
++
++def selected_artifacts(profile,items,specs):
++ key=selected_runtime(profile)
++ return items if key=='qwen2' else specs[key]['artifacts']+[specs[key]['transformers']]
++
++def prepare(repo,out,profile,execute_reviewed=False):
++ key=selected_runtime(profile)
+  repo=repo.resolve();out=out.resolve();need((repo/'src/heteronpu').is_dir(),'actual hetero repo');need(not out.exists(),'fresh output required');items,specs,torch=artifacts();contract=json.loads((D/'RUNTIME_CONTRACT.json').read_text())
+- plan={'status':'PLAN_NOT_EXECUTED','runtime_keys':list(contract['entries']),'output':str(out),'qwen2_wheels':len(items),'qwen35_wheels_each':38,'no_retained_runtime_dependency':True,'requires':'Python3.12 x86_64 AVX512f; >=8GiB disk; externally bounded single setup; no reference PASS transfer'}
++ plan={'status':'PLAN_NOT_EXECUTED','selected_profile':profile,'runtime_keys':[key],'output':str(out),'selected_wheel_count':len(items) if key=='qwen2' else len(specs[key]['artifacts']),'no_retained_runtime_dependency':True,'requires':'Python3.12 x86_64; P0 AVX512f only; >=8GiB disk; externally bounded single setup; no reference PASS transfer'}
+  if not execute_reviewed:return plan
+- need(sys.version_info[:2]==(3,12) and platform.machine()=='x86_64','exact CPU wheel ABI');need('avx512f' in Path('/proc/cpuinfo').read_text().split(),'Qwen2 original AVX512 policy, no AVX2 fallback');need(shutil.disk_usage(out.parent).free>=8*(1<<30),'8GiB setup disk gate')
++ need(sys.version_info[:2]==(3,12) and platform.machine()=='x86_64','exact CPU wheel ABI');need(key!='qwen2' or 'avx512f' in Path('/proc/cpuinfo').read_text().split(),'Qwen2 original AVX512 policy, no AVX2 fallback');need(shutil.disk_usage(out.parent).free>=8*(1<<30),'8GiB setup disk gate')
+  # Entire package is pinned before any download or subprocess.
+  manifest=json.loads((D/'SOURCE_MANIFEST.json').read_text())
+  for r in manifest['files']:need(digest(D/r['path'])==r['sha256'],'reviewed runtime glue source '+r['path'])
+  out.mkdir();cache=out/'artifacts';cache.mkdir();ledger=[];budget={'start':time.monotonic(),'bytes':0}
+  try:
+-  allitems=items+[x for s in specs.values() for x in s['artifacts']]+[s['transformers'] for s in specs.values()]
++  allitems=selected_artifacts(profile,items,specs)
+   for x in allitems:
+    path=acquire(x,cache,ledger,budget);check_wheel_metadata(x,path)
+-  installed={'qwen2':qwen2_install(out,cache,items)}
+-  for key,s in specs.items():installed[key]=qwen35_install(key,out,repo,cache,s,ledger)
++  installed={key:qwen2_install(out,cache,items) if key=='qwen2' else qwen35_install(key,out,repo,cache,specs[key],ledger)}
+   entries={}
+   for key,(home,site,wrapper,installation) in installed.items():
+    framework=next(x for x in items if x['name']=='transformers') if key=='qwen2' else specs[key]['transformers']
+@@ -127,7 +137,7 @@
+    need(digest(sidecar)==contract['entries'][key]['expected_sidecar_sha256'],'exact independent sidecar bytes');verify_sidecar(site,sidecar)
+    receipt=home/'FRESH_RUNTIME_RECEIPT.json';write(receipt,{'status':'FRESH_INSTALLED_ARCHIVE_BOUND_NOT_REFERENCE_TESTED','runtime':key,'python':sys.version,'python_executable':record(Path(sys.executable)),'installation':record(installation),'sidecar':record(sidecar),'wrapper':record(wrapper),'source_manifest':record(D/'SOURCE_MANIFEST.json'),'installed_module_and_native_hashes_verified':True,'historical_reference_pass_transferred':False,'limits':'not runtime arithmetic qualification, full reference replay, Chisel or RTL'})
+    entries[key]={'wrapper':str(wrapper.resolve()),'site':str(site.resolve()),'receipt':record(receipt),'sidecar':record(sidecar)}
+-  result={'status':'FRESH_THREE_RUNTIMES_NOT_REFERENCE_TESTED','entries':entries,'provider_python':entries['qwen35_08b']['wrapper']};write(out/'RUNTIMES.json',result);return result
++  result={'status':'FRESH_SELECTED_RUNTIME_NOT_REFERENCE_TESTED','profile':profile,'selected_runtime':key,'entries':entries,'provider_python':entries[key]['wrapper']};write(out/'RUNTIMES.json',result);return result
+  except BaseException as e:write(out/'FAILURE.json',{'status':'INCOMPLETE','error':repr(e),'partial_files_preserved':True,'network_bytes':budget['bytes']});raise
+ if __name__=='__main__':
+- p=argparse.ArgumentParser();p.add_argument('--repo',required=True,type=Path);p.add_argument('--output',required=True,type=Path);p.add_argument('--execute-reviewed',action='store_true');a=p.parse_args();print(json.dumps(prepare(a.repo,a.output,a.execute_reviewed),indent=2))
++ p=argparse.ArgumentParser();p.add_argument('--repo',required=True,type=Path);p.add_argument('--output',required=True,type=Path);p.add_argument('--profile',required=True,type=int,choices=range(5));p.add_argument('--execute-reviewed',action='store_true');a=p.parse_args();print(json.dumps(prepare(a.repo,a.output,a.profile,a.execute_reviewed),indent=2))

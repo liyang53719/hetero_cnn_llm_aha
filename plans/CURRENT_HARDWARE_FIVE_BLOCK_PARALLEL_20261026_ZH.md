@@ -1,5 +1,13 @@
 # 五类 block：原始 Chisel 完整 M128 数值后再 RTL 回放（2026-10-26）
 
+## 2026-10-29 原物料链到 same-job consumer 接线（TEMP / INCOMPLETE）
+
+新候选将原 selected materializer 的 runtime 安装、所选profile完整权重（五profile合计70张）、独立官方128-token参考及provider路径接到同job V3 consumer；保留V1原件，先核共同build身份与startup ABI receipt，再发布独立V3及消费argv。此处仅发布可复现源码，不替换现有生产入口、不新增workflow/launch、不运行loader、Torch或DUT。
+
+原独立复审41个测试方法及4组phase前置拒绝（P1误带P0字段、SV/driver/source同长度漂移）仅是metadata/control-flow测试，不是五块数值回归。本次便携复测每模式46方法（14连接+6原物料+13 ABI+4存活量+9 runtime）另记，不与历史41相加。真实metadata核70张共3,531,306,272B；本地保留目录存活量不是fresh CI安装/解包/reference/output峰值。P0仍缺实际共享source manifest的12anchors映射、retained消费证据与split-header准入闭包，gate/up继续REQUIRED_UNOBSERVED；完整五块350分钟预算及真实DUT速率未闭合，不压缩硬件/专家/原限制以通过。
+
+同job ABI只约束startup loader/library身份，later dlopen不在资格内。原R2构建binary已随job结束，不从摘要伪造可复用产物。五块原始Chisel/最终RTL完整M128数值均仍0/5，80%/90%目标无新实测。参见[接线候选](../candidates/same_job_materialization_20261029/README_CN.md)与[ABI/存活量账本](../candidates/runtime_abi_liveness_20261029/README_CN.md)。
+
 ## 2026-10-29 最新实测：共同 binary 构建通过，完整数值仍 INCOMPLETE 0/5
 
 LOCAL_DATA R2 [run40862676969](https://github.com/liyang53719/hetero_cnn_llm_aha/actions/runs/40862676969) / source `10a30bcf614af2d11ea9aaf3e61469fafd9801dc` / launch `ef6a5fcd95ff643c3d6527f91e4a80e5a1c914a6` 于 11:53:08 UTC 结束 SUCCESS。**PASS 精确范围：固定完整4096 MAC / Vector32 源码重新生成、SV身份、四原生frontend、真实三子库/Host库编译及Host链接、本job内七文件冻结检查；不是 DUT 执行或数值回归。** 27个记录阶段均native0，watchdog reason为空，cleanup/日志EOF完整。没有缩硬件、替换算术或放宽原资源上限。

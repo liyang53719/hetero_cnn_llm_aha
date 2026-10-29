@@ -1,0 +1,40 @@
+{
+  "consumer": {
+    "functions": {
+      "artifact_identity": "a027db408b3dd57f625feff216223168269026c85fa0f31844fe1bee4382b294",
+      "compare": "a5ad3338cdc2c3f10ab193497aed95f21b1e8714a1ea2d458afc0c8fa3429e7e",
+      "coverage_policy": "8240c2a31412691ed27dfd729da07afc9fab3ca34f68f83764ed4e7977087d8b",
+      "execute": "2a302d26e337a90ffed02c99d4d7c98260feb5cc44861a4a5e2105574460880b",
+      "expected": "b1783a34e0f8044ff375d7248b73390c7cb65d8ab7478ee1839c06d49de00334",
+      "load_binding": "4caad36ecd540261ffee02e155559e3e4a87befa8c8897d5a4b3c338bab5de18",
+      "main": "b56d53d76f4f89161fef6e15bcc93bb43516f420b06a30b324114a2718fd4892",
+      "need": "c1e19715960f18cbdfe73e9b9ea6d3565a5ec965407154b0f677ad14c3ad9896",
+      "pin": "40912b2e5bedb28081b3aae3d137ee2e9ea88066bde28ae756917c0a80321823",
+      "records": "5a7134524906e2152f730172bf4b9fc2fdc96bbb1e5111ed2979849346c3a4d5",
+      "reference": "2c7ade4d4007ef7939691187dd4613600ecc324d70b4631d6b4220e84ea90809",
+      "router_compare": "4d59a0722f97544876753746386cd73da7a2d9cf0993d92ad2aa0efbeb05a45b",
+      "sha": "393b45c6da8b50cfe24e6bad32d4a5b5974c6af919da04958859259392cf5a45",
+      "token_major": "7d0349d31559ae2acb7e20a704d9b70714676bd512f09e76919f1ac1a4236779",
+      "verify_download": "79e50ec84dfbd7b4b96b0ff6d31547d3812af9722fdc7eefa90ecec804b297e1",
+      "verify_frozen": "3f2f246b46e06535aeab397e921ce86a2b9f9e47587d4e7bfc12eed988a7f5e0",
+      "verify_launch_proof": "f22655b467ab75b88fa9b070cfa8f4f1e2675af1e91f608c86370a33903e138d"
+    },
+    "source_sha256": "81a4e6767de9067e246f08fe8697c27a50473a735d998321a3c0e7479009215b"
+  },
+  "prepare": {
+    "functions": {
+      "main": "e4b7f711247f44c0e8f8b68c2b0abecff1cd0c57e276efb4e473e15eeb498b3a",
+      "materialize": "2bb0c0ec7214a93853852696bf4d8228065e1e285c6da8c4b5eaf1234c0ae4a8",
+      "need": "6c31c0c50129ca459f26c889efff2a2b01531fe1a1f592fb6e337f879d3baef5",
+      "pin": "9ae50a4407ab99ce062f51b7a21af030a210e680f8350304a33f23388ff5a96c",
+      "programs": "2c9049fd8a7c1390d97ad78af1a91a52c8a95eff87e34eed7cd39a5d66d1707a",
+      "reference_command": "996d559e761871a0b3094d7488abb88e6cb6651d877ce04ca7ad815b50f67525",
+      "run": "da636021fd97301580fefa70b002e6eb6b3499fb714a0eb231e1eea992962b87",
+      "save": "15772df8df7ed34c1d09995aa91926a6b7a088505fdd8085281774cbc395c202",
+      "sha": "054323221434e8eeb4d0f2e0a771b65e378fa91ada22daaeef42c65d3de6ffce",
+      "sources": "807db8b1e52d4bb1b5436aaf7cb0e0d8e8dd41a7474377aa7eba98e94277d103",
+      "verify_pin": "4227c1f07d33705e8513d39ad603b0034a0f794fbf98cd7eca51b0ab32329805"
+    },
+    "source_sha256": "f91bddf96ed404ed97380bac6868683672225d3e77df031d3cce55deb8ad75b8"
+  }
+}

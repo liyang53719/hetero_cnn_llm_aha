@@ -1,0 +1,101 @@
+{
+  "status": "SOURCE_ONLY_SELECTED_RUNTIME_NOT_EXECUTED",
+  "files": [
+    {
+      "path": "BASELINE_LINEAGE.json",
+      "bytes": 316,
+      "sha256": "cb4a95c122accd600eba1a9251660ecf117fb570d955254a415021d646922e4d"
+    },
+    {
+      "path": "LIGHT_TEST_REVIEW.json",
+      "bytes": 604,
+      "sha256": "a858a15913028bb9fb21c0183219588145c6ebc8338a495718db24556a2585aa"
+    },
+    {
+      "path": "QWEN2_WHEEL_LOCK.json",
+      "bytes": 68921,
+      "sha256": "92e02a64b81a3433206ce85bfe1d65593088f0c4a40dbb0db3c3dd45d5ce0889"
+    },
+    {
+      "path": "README_CN.md",
+      "bytes": 2398,
+      "sha256": "0e64644dd8c883283254e329444eaae1e1ff5b1f86c4d13d7d9f44fa7ca46a22"
+    },
+    {
+      "path": "RUNTIME_CONTRACT.json",
+      "bytes": 702,
+      "sha256": "ae5cafb9d2294c890d6d5f2aae98761599cb92f354322cf16df27333a9c5f094"
+    },
+    {
+      "path": "SELECTION_ONLY.diff",
+      "bytes": 5911,
+      "sha256": "33acc7a3b8931026815a1f5ade110727a73175db5c038decd766f7507968aadc"
+    },
+    {
+      "path": "derive_sidecar.py",
+      "bytes": 4610,
+      "sha256": "e96130e044520444758b913ba38f7fe774ac752675daf85aaa95da77e136e274"
+    },
+    {
+      "path": "prepare_runtimes.py",
+      "bytes": 13084,
+      "sha256": "74207700971744b6bedb3e81b5c0733744b4b52006bc51da96c661e30eb3e274"
+    },
+    {
+      "path": "qwen35_08b/ARTIFACT_SPEC.json",
+      "bytes": 75691,
+      "sha256": "5f720e691773187f1f99108bf92748ae46e0c616d6b4ec8ec23dc63878d80469"
+    },
+    {
+      "path": "qwen35_08b/install_qwen35_official_runtime.py",
+      "bytes": 20695,
+      "sha256": "517a64fe24b195e8a469a388284292a23e4cabd91361613b4076cc2f57601642"
+    },
+    {
+      "path": "qwen35_08b/pip_qwen35_offline_driver.py",
+      "bytes": 7752,
+      "sha256": "d6b5953062250492f5fcb457b58704f4ed0122ac2e54f277c00b3b2cf569d193"
+    },
+    {
+      "path": "qwen35_08b/qwen35_backend_runner.py",
+      "bytes": 2141,
+      "sha256": "43a4c91380fc9ad6e3ca2d7780e623e2780a5c69126983d93c40b653a8e309e4"
+    },
+    {
+      "path": "qwen35_08b/qwen35_runtime_network_guard.py",
+      "bytes": 3226,
+      "sha256": "adf905304fe32c34ccb07892f2627fcb76417178d36058270b74a4666b28c2c5"
+    },
+    {
+      "path": "qwen35_35b/ARTIFACT_SPEC.json",
+      "bytes": 76273,
+      "sha256": "f68383f290f01e3ce9894e8b7421dec5fdfb1ce80522f3a583f73519adf22dba"
+    },
+    {
+      "path": "qwen35_35b/install_qwen35_official_runtime.py",
+      "bytes": 20752,
+      "sha256": "710ddbb28b64da2d6a8e4e7c1fa5f9b69c20d9cb6147332fdbab917ef9d68245"
+    },
+    {
+      "path": "qwen35_35b/pip_qwen35_offline_driver.py",
+      "bytes": 7752,
+      "sha256": "a8823f5a9c3a5b77345622a59d1c48da1a99f1f96903abd6d09e2c585cdffc85"
+    },
+    {
+      "path": "qwen35_35b/qwen35_backend_runner.py",
+      "bytes": 2141,
+      "sha256": "43a4c91380fc9ad6e3ca2d7780e623e2780a5c69126983d93c40b653a8e309e4"
+    },
+    {
+      "path": "qwen35_35b/qwen35_runtime_network_guard.py",
+      "bytes": 3226,
+      "sha256": "adf905304fe32c34ccb07892f2627fcb76417178d36058270b74a4666b28c2c5"
+    },
+    {
+      "path": "test_selected_runtime.py",
+      "bytes": 3026,
+      "sha256": "9f06e910c13acde1a0aae9c35eb9403523c7116248bf00386ab42dfb3531c779"
+    }
+  ],
+  "scope": "one profile selects one unchanged official runtime; no numerical PASS"
+}

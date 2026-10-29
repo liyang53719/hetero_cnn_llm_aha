@@ -1,0 +1,29 @@
+{
+  "status": "PASS_SOURCE_SELECTION_LIGHT_TESTS_ONLY",
+  "tests_normal": 9,
+  "tests_optimized": 9,
+  "unchanged_original_function_or_class_AST": [
+    "need",
+    "digest",
+    "write",
+    "record",
+    "allowed_url",
+    "OfficialRedirect",
+    "safe_relative",
+    "artifacts",
+    "acquire",
+    "check_wheel_metadata",
+    "bootstrap_pip",
+    "execute",
+    "environment",
+    "qwen2_install",
+    "qwen35_install",
+    "verify_sidecar"
+  ],
+  "changed_function": "prepare",
+  "new_functions": [
+    "selected_runtime",
+    "selected_artifacts"
+  ],
+  "no_runtime_or_numerical_execution": true
+}

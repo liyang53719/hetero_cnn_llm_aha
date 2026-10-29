@@ -1,0 +1,23 @@
+{
+  "scope": "SOURCE_METADATA_ONLY_NOT_REFERENCE_LOADER_OR_DUT_EXECUTION",
+  "base_commit": "f76f016206f65773674a49cbed7da523c2b0fe48",
+  "repo_dependencies": 219,
+  "existing_main_exact": 199,
+  "new_original_runtime_exact": 20,
+  "this_review_tests_per_mode": {
+    "portable_connection": 14,
+    "original_materializer": 6,
+    "ABI_parser_receipt": 13,
+    "liveness": 4,
+    "selected_runtime": 9
+  },
+  "historical_independent_review": {
+    "methods": 41,
+    "extra_phase_negative_groups": 4,
+    "manifest_sha256": "a0e0b7e41ad89d025fe5d0af129505f5f892bad382c3e4a7e6705b8f9465b94b"
+  },
+  "portable_test_manifest": "273e49e0db94a25b77c2af96b0af69eb16d95724901b726f34315191f5230be5",
+  "numerical_pass": false,
+  "P0": "BLOCKED_REAL_PRODUCER_MAPPING_RETAINED_EVIDENCE_SPLIT_HEADER",
+  "budget": "INCOMPLETE_FULL_FIVE_350MIN"
+}

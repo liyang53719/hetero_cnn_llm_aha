@@ -1,0 +1,19 @@
+{
+  "status": "PASS_SOURCE_METADATA_TESTS_ONLY",
+  "normal_tests": 33,
+  "optimized_tests": 33,
+  "groups": {
+    "connection": 14,
+    "original_materialization_metadata": 6,
+    "startup_abi_mock_parser": 13
+  },
+  "original_materializer_functions_except_main_ast_unchanged": true,
+  "numerical_and_policy_helpers_ast_unchanged": true,
+  "execute_delta": "explicit clean_env only",
+  "real_loader_executed": false,
+  "reference_executed": false,
+  "dut_executed": false,
+  "full_five_numeric_pass": false,
+  "p0_current_producer": "BLOCKED_SOURCE_MAPPING_RETAINED_RECEIPTS_SPLIT_HEADER",
+  "initial_failure": "missing copied DEPENDENCIES.json; exact original file restored; initial failure logs retained"
+}

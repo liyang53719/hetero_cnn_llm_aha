@@ -17,6 +17,36 @@ def summarize(root,commit):
   row['diagnostics']=stage_diagnostics(r,p.parent/'frontend.log.gz')
   if name in ('compile155','helper_compile'):row['compiler_errors']=compiler_errors(r,p.parent/'frontend.log.gz')
   row['error_count']=len(r.get('errors',[]));row['cleanup_recorded']=bool(r.get('cleanup_proof'));out['stages'].append(row)
+ p=root/'frontend/sv_identity/sv-identity.json'
+ if p.is_file() and not p.is_symlink() and p.stat().st_size<=16384:
+  v=json.loads(p.read_text());allowed_status={'FAIL_OR_INCOMPLETE','PASS_SV_SOURCEINFO_DIRECTORY_IDENTITY_ONLY_NO_NUMERICS'}
+  if isinstance(v,dict) and v.get('schema')=='SV_DIRECTORY_IDENTITY_RECEIPT_V2' and v.get('status') in allowed_status:
+   entry={'status':v['status']}
+   for key in ('expected_normalized_sha256','actual_normalized_sha256','raw_sha256','scanner_sha256'):
+    val=v.get(key)
+    if val is None or (isinstance(val,str) and re.fullmatch('[0-9a-f]{64}',val)):entry[key]=val
+   enums={'phase':{'scanner_pin','input_pin','sourceinfo_directory_digest','compare','complete'},'error_code':{'BASELINE_NOT_APPROVED','SCANNER_SOURCE_PIN_MISMATCH','SV_INPUT_BOUND','SV_DIRECTORY_NORMALIZED_BYTES_DIFFER_STOP_AUDIT','bounded line comment','unterminated lexical token/comment','SV_IDENTITY_UNCLASSIFIED_ERROR'},'exception_class':{'ValueError','OSError','FileNotFoundError','PermissionError','IsADirectoryError'}}
+   for key,allowed in enums.items():
+    val=v.get(key)
+    entry[key]=val if val is None or (isinstance(val,str) and val in allowed) else 'UNRECOGNIZED_DIAGNOSTIC_CODE'
+
+   if type(v.get('bytes')) is int and 0<=v['bytes']<=512*1024**2:entry['bytes']=v['bytes']
+   entry['counts']={k:x for k,x in (v.get('counts',{}) if isinstance(v.get('counts',{}),dict) else {}).items() if k in ('recognized_sourceinfo_comments','directory_changed_comments','unrecognized_sourceinfo_comments') and type(x)is int and 0<=x<=10000000}
+   md=v.get('module_diagnostics',{})
+   if isinstance(md,dict) and md.get('status') in ('COMPLETE_DIAGNOSTIC_ONLY','INCOMPLETE_DIAGNOSTIC_ONLY'):
+    dm={'status':md['status']}
+    for key in ('expected_count','actual_count','different_count'):
+     if type(md.get(key)) is int and 0<=md[key]<=4096:dm[key]=md[key]
+    if isinstance(md.get('all_differences_sha256'),str) and re.fullmatch('[0-9a-f]{64}',md['all_differences_sha256']):dm['all_differences_sha256']=md['all_differences_sha256']
+    diffs=[]
+    for x in (md.get('first_differences',[]) if isinstance(md.get('first_differences',[]),list) else [])[:16]:
+     if not isinstance(x,dict) or not isinstance(x.get('module'),str) or not re.fullmatch('[A-Za-z_][A-Za-z0-9_$]{0,127}',x['module']):continue
+     if any(x.get(k) is not None and (not isinstance(x[k],str) or not re.fullmatch('[0-9a-f]{64}',x[k])) for k in ('expected_sha256','actual_sha256')):continue
+     row={k:x.get(k) for k in ('module','expected_sha256','actual_sha256')};n=x.get('actual_sourceinfo_count')
+     if n is None or (type(n)is int and 0<=n<=10000000):row['actual_sourceinfo_count']=n
+     diffs.append(row)
+    dm['first_differences']=diffs;entry['module_diagnostics']=dm
+   out['sv_identity']=entry
  p=root/'jdk.json'
  if p.is_file() and not p.is_symlink() and p.stat().st_size<=1_000_000:
   j=json.loads(p.read_text())

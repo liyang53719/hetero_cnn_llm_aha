@@ -4,6 +4,22 @@ macros and directives. Conservative: noncomment formatting drift fails too.
 Not an SV parser or numerical qualification. Stream bounded, no whole SV loading.
 """
 import argparse,hashlib,pathlib,io,re
+# Observed official FIRRTL FileInfo grammar: filename then one or more locations;
+# a column may be a compressed comma set. Multiple filename groups allowed.
+PATH=rb'[A-Za-z0-9_./-]+\.scala'
+COLUMN=rb'(?:[0-9]+|\{[0-9]+(?:,[0-9]+)+\})'
+LOCATION=rb'[0-9]+:'+COLUMN
+GROUP=PATH+rb' '+LOCATION+rb'(?: '+LOCATION+rb')*'
+SOURCEINFO=re.compile(rb' @\['+GROUP+rb'(?: '+GROUP+rb')*\]')
+def normalize_sourceinfo(body,counts=None):
+ if SOURCEINFO.fullmatch(body):
+  normalized=re.sub(PATH,lambda m:m[0].split(b'/')[-1],body)
+  if counts is not None:
+   counts['recognized_sourceinfo_comments']=counts.get('recognized_sourceinfo_comments',0)+1
+   counts['directory_changed_comments']=counts.get('directory_changed_comments',0)+int(normalized!=body)
+  return normalized
+ if counts is not None and body.startswith(b' @['):counts['unrecognized_sourceinfo_comments']=counts.get('unrecognized_sourceinfo_comments',0)+1
+ return body
 class Stream:
  def __init__(self,f):self.f=f;self.buf=b'';self.i=0
  def get(self):
@@ -13,7 +29,7 @@ class Stream:
  def peek(self):
   if self.i==len(self.buf):self.buf=self.f.read(65536);self.i=0
   return self.buf[self.i] if self.buf else None
-def digest(f):
+def digest(f,counts=None):
  s=Stream(f);h=hashlib.sha256();out=bytearray();state='code';escaped=False;comment=bytearray()
  def emit(c):
   out.append(c)
@@ -26,9 +42,7 @@ def digest(f):
     body=bytes(comment)
     # Only Chisel/FIRRTL source-location line comments. Keep basename and
     # line:column; normalize directory prefix only. All other comments survive.
-    loc=rb' ([A-Za-z0-9_./-]+\.scala) ([0-9]+:[0-9]+)'
-    if re.fullmatch(rb' @\[(?:[A-Za-z0-9_./-]+\.scala [0-9]+:[0-9]+)(?: [A-Za-z0-9_./-]+\.scala [0-9]+:[0-9]+)*\]',body):
-     body=re.sub(rb'([A-Za-z0-9_./-]+\.scala)',lambda m:m[1].split(b'/')[-1],body)
+    body=normalize_sourceinfo(body,counts)
     for x in body:emit(x)
     comment.clear();emit(c);state='code'
    else:

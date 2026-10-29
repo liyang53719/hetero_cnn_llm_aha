@@ -1,0 +1,652 @@
+{
+  "scope": "DIAGNOSTIC_MODULE_HASHES_NOT_ALTERNATIVE_ACCEPTANCE",
+  "raw_sha256": "c7e9d25c128004bdfc90405171eead8a4441ba20e52e829d95de4bf1122e5d96",
+  "scanner_sha256": "b49c75780d2bfb295d3e90df6d478475f42c3129dba73c850b4d564e4114965b",
+  "modules": [
+    {
+      "module": "Record128Reader",
+      "bytes": 21080,
+      "raw_sha256": "ba58e4ba0d2db2e6fc8a14b032d1c3be74abf793ee4084c7ad458f59da25613a",
+      "normalized_sha256": "1f0c2948bea35f6e1b9631e36c21ae9f0088f0786ee4493f96431b6f231e84d2",
+      "sourceinfo_count": 126
+    },
+    {
+      "module": "TypedTensorReader",
+      "bytes": 80659,
+      "raw_sha256": "bf8c7b02dc6dcf06e4dd34a59bbd6434ea7db291bb4a8654f3a740007afd0c31",
+      "normalized_sha256": "99bdd929e37b83dbc2257b31cde34f7c0a4a9f467baee9b73d511af6cc5d0ea0",
+      "sourceinfo_count": 423
+    },
+    {
+      "module": "HostMoeWeightScanV4",
+      "bytes": 491978,
+      "raw_sha256": "c3d48259317186f4bbcdbc2cdc8e75d21ab1b04e69c6bdd1825ae2b00dd07c9e",
+      "normalized_sha256": "bab07ea9c2afabfdd4ccde6c2281bb5babae1b7e5173a4570a6fb544956607c8",
+      "sourceinfo_count": 2396
+    },
+    {
+      "module": "HostBlockCommandsV4",
+      "bytes": 17251426,
+      "raw_sha256": "4cc69dd5e80566cdd656060b9afcd05ef9d17d5a10768a3dafbd047ef9d6b942",
+      "normalized_sha256": "2cedd27b58109fd4811b5c7d72bc3ec1fab161d3c0fbd1abfd3fd11498667863",
+      "sourceinfo_count": 77723
+    },
+    {
+      "module": "FfnTileSiluBridge",
+      "bytes": 63100,
+      "raw_sha256": "69220799ecb69d9323c204efe6d4b00eb858e4cde0bdc5cbc8edbcd5c9e7b3ca",
+      "normalized_sha256": "155a066089425650de40594d8134da126b739ad39eebc7f0e010907661080965",
+      "sourceinfo_count": 369
+    },
+    {
+      "module": "FfnResidentCoordinator",
+      "bytes": 183287,
+      "raw_sha256": "c9e04e0b5a4d76abc7e7768daa3187350eecda41ba3315a205a1a72b5e571da1",
+      "normalized_sha256": "03ef11091abc22f4c493a43b862f53c6ed5e88fdbf6735d4addf32cafba78d04",
+      "sourceinfo_count": 977
+    },
+    {
+      "module": "DenseTileSumBridge",
+      "bytes": 90054,
+      "raw_sha256": "7183c0bb27fa6b2b186adbfe00cf073ac103d50ce7c8806f83811995da5b677e",
+      "normalized_sha256": "2759f9de7cf4469961d5e4b9857201e1aa3f34f6f6033c6b5757b9d90a48ee16",
+      "sourceinfo_count": 499
+    },
+    {
+      "module": "DenseBlockReductionCoordinator",
+      "bytes": 188165,
+      "raw_sha256": "e8e04a9713a5a0d8253e55a168ecf3ebed4dab37b396a9792d234602dd8f5664",
+      "normalized_sha256": "136901dfdd5b635db936acdebd4b1bd6ccd6eb683952557194a5069e54413e91",
+      "sourceinfo_count": 959
+    },
+    {
+      "module": "Public21QkvReductionRouter",
+      "bytes": 289985,
+      "raw_sha256": "44d6da40ed949536408f24c4e56a97a71fd68b5e3b8c1e81cf87bdda6e2ddc3e",
+      "normalized_sha256": "1e87261c949e8fe372f64ec54886aa597479cb1e6b23ab6c4311242c6b71271d",
+      "sourceinfo_count": 1461
+    },
+    {
+      "module": "AddRawFN",
+      "bytes": 25617,
+      "raw_sha256": "84d83ec4745cbb7abd21f016cfc49840cd4c9cebf9678eccc74259c7f9201800",
+      "normalized_sha256": "0f4957bb98d953cdab26c81c50c606c3fbd21904fc488ef4ea460eebe58143b6",
+      "sourceinfo_count": 146
+    },
+    {
+      "module": "RoundAnyRawFNToRecFN_ie8_is26_oe8_os24",
+      "bytes": 28406,
+      "raw_sha256": "f30363b61f89f6c9bb577a4156527795653a57a7bc0c529c99b332025445c2a4",
+      "normalized_sha256": "9b8e900d2ac3babbf5b3e586af6187d950d160aa14ccf3dfe6e0d93b215e57d7",
+      "sourceinfo_count": 162
+    },
+    {
+      "module": "RoundRawFNToRecFN_e8_s24",
+      "bytes": 6785,
+      "raw_sha256": "5745019064d88aff603993f1bac75ff914aa6776159ad2841c6e0df4eb5d70a0",
+      "normalized_sha256": "b5e2403654da6537648cfd5d44a297cb8c8ce0178c54045de1c1fdd61bb6a00d",
+      "sourceinfo_count": 38
+    },
+    {
+      "module": "AddRecFN",
+      "bytes": 14993,
+      "raw_sha256": "78ea0cd5957af508da202ea2b5bed8b7eff29b7d6f3e83a69c88f800e505b05e",
+      "normalized_sha256": "f734b550f7148a6f29f612561997d39223ca32cc6a7fecc48289be204760207e",
+      "sourceinfo_count": 87
+    },
+    {
+      "module": "MulFullRawFN",
+      "bytes": 5378,
+      "raw_sha256": "d3aef6e326c61d0356ceda3bf35857d3eea87ba478b4b7e6727a8a153eacef18",
+      "normalized_sha256": "39c978fe189d222faa045f832cf3005fde76af0edbfe5ff1373c14176c18ed1a",
+      "sourceinfo_count": 37
+    },
+    {
+      "module": "MulRawFN",
+      "bytes": 9249,
+      "raw_sha256": "7add688a598829f5145d243a769912e091adf5bbcfe7ad6ab315056fb3744bbf",
+      "normalized_sha256": "615564bc66beed993f90a285e1b4748b45a9a1ca7666ae8bf9c6a7e4bcde20f0",
+      "sourceinfo_count": 60
+    },
+    {
+      "module": "MulRecFN",
+      "bytes": 14201,
+      "raw_sha256": "faf926cfd437664505b8be0e423b79d72d181293f8fad734803f8b268565eb34",
+      "normalized_sha256": "c52c6bf743c9e8842d0dfeb296eede6eeef9aedad5dc56669bbd90fe91c7fbe6",
+      "sourceinfo_count": 82
+    },
+    {
+      "module": "HeteroFP32Alu",
+      "bytes": 24078,
+      "raw_sha256": "d47894369928d3fd49729e1f8ff1c46698f0d614988d7813358e41137b420a50",
+      "normalized_sha256": "658444559c3cddd84dc022f6773d0aea474d9ea25b8ceedcad345be0a81ff66a",
+      "sourceinfo_count": 148
+    },
+    {
+      "module": "DivSqrtRawFN_small_e8_s24",
+      "bytes": 46593,
+      "raw_sha256": "81d595e4688a0f6464a908488ce6c205cf07db94ececb216e522231acbfb6218",
+      "normalized_sha256": "7e30c719b25ba61d6a8ee5eaba7518546ac5ad64c429025c20f415cd5bb2231f",
+      "sourceinfo_count": 262
+    },
+    {
+      "module": "DivSqrtRecFMToRaw_small_e8_s24",
+      "bytes": 16998,
+      "raw_sha256": "3ef710079fde7dbfdc2f78687da8e9a76a682b8fc1b15ef9bc8f65231fcce990",
+      "normalized_sha256": "5a5783594ad11968b541b01e9432a5002dd2602b136a4edf6dd8ffd382039365",
+      "sourceinfo_count": 95
+    },
+    {
+      "module": "DivSqrtRecFM_small_e8_s24",
+      "bytes": 12424,
+      "raw_sha256": "3581b663d3816d25ac021f618b9b10cb40b30219f4e1aaffb63573243c742d4d",
+      "normalized_sha256": "cb1cef5cedb8ccb8d5ca05df38ef09147c1a39b6e72d0353279cd7072cb7dd9e",
+      "sourceinfo_count": 67
+    },
+    {
+      "module": "RecFNToIN_e8_s24_i32",
+      "bytes": 10890,
+      "raw_sha256": "7c8fa43b79a5f9571cfb6680a816878e9cd7dc5de1a78890f53c41e39a747557",
+      "normalized_sha256": "4d677c880ff494037fc52e8855ea7d8006538e57f1045ae5e1c1ae89906ccee9",
+      "sourceinfo_count": 65
+    },
+    {
+      "module": "RoundAnyRawFNToRecFN_ie6_is32_oe8_os24",
+      "bytes": 15080,
+      "raw_sha256": "243c9535cfd4f28630c4efb03c64192a15876c812d6d34e0c3d85f43f7ce3c8b",
+      "normalized_sha256": "fea4525fd72c71c776df7a68480edecf13ca61a74733465d65ca99cc2406e9a4",
+      "sourceinfo_count": 87
+    },
+    {
+      "module": "INToRecFN_i32_e8_s24",
+      "bytes": 12876,
+      "raw_sha256": "87a9c46502fadb27fab4e17a75138de9fc57c7995e030abc8034e52f76bc45f4",
+      "normalized_sha256": "826f4033ccfa725b86d04a788ad5b1fa72760a3f8cdc4303976e79f637707dd1",
+      "sourceinfo_count": 73
+    },
+    {
+      "module": "BlockScalarFloatPolicyV2",
+      "bytes": 139124,
+      "raw_sha256": "b1ca5516de1af75abd6e6eb04fe71c8248b1d6505f7effbcb14a34213129c152",
+      "normalized_sha256": "ba1e35fdd51f5921ef66701c1cfaeeac4f609fa0378e9086220232bf352e154b",
+      "sourceinfo_count": 766
+    },
+    {
+      "module": "SharedL2Fabric",
+      "bytes": 1285175,
+      "raw_sha256": "cb7f4c60581dcc2d3cdedc7cfa76f38a2d0740dedc6793bc2b43e5dceb001cb7",
+      "normalized_sha256": "39f2341929fb98ae9cded62df7c1a5478823bf6876908455e5a94982f0aea058",
+      "sourceinfo_count": 5461
+    },
+    {
+      "module": "PackedAttentionStreamClient",
+      "bytes": 2331235,
+      "raw_sha256": "d534095b12394d24bdf6e2fe215c460a7b9631fd6cffb256722df6a256a10a31",
+      "normalized_sha256": "daa6c2fac7b4c3414302906e9e67124a600c755252547ad50a1e6d3c2d0ddeb7",
+      "sourceinfo_count": 13239
+    },
+    {
+      "module": "SharedL2Fabric_1",
+      "bytes": 1282547,
+      "raw_sha256": "4e8fd811813a7123a019287eb09a00e8078b719ee1bcce3e6efa1154f9707c55",
+      "normalized_sha256": "ee71ecb52922459779080067e34acb5a691f437740ab1a1333b2d737fe9c182e",
+      "sourceinfo_count": 5461
+    },
+    {
+      "module": "ElementwiseMemoryEngine",
+      "bytes": 258487,
+      "raw_sha256": "8c3c382b4b4684155c8193da46e5245da6933b7a76c884bb63b138802d91472e",
+      "normalized_sha256": "f2865f4b2c4dea5d58abcb2d00638da17b497c8527c1a0ab0f4cbe2e23f072c0",
+      "sourceinfo_count": 1416
+    },
+    {
+      "module": "BlockWritebackFence",
+      "bytes": 25333,
+      "raw_sha256": "1ddb3b71c8d02e25e14d257af6c991a0f73e870bc8460b03096fb1da22e88452",
+      "normalized_sha256": "3269b257c560e3e658b2ac1e7c109da6aba6e145e4463d687d399259b54c65b2",
+      "sourceinfo_count": 135
+    },
+    {
+      "module": "Qwen2ContinuousBlock",
+      "bytes": 27801619,
+      "raw_sha256": "5d8083886093f952f450f8bb80e4b7034e5560afea1775228573299dfbfc1883",
+      "normalized_sha256": "f377c5cee23031d47f6e4a398e8066f21f62342e44a9e4e6b7c5089eb8970a80",
+      "sourceinfo_count": 134138
+    },
+    {
+      "module": "TransposedDownDenseBanks",
+      "bytes": 1324573,
+      "raw_sha256": "84146f5c4d70c67b8921608b75ce1b8a932a3c6e217e6003be45f51e52892dd7",
+      "normalized_sha256": "dc2bb77008e322f9c5a4466e0c24c119ca65a741e651301f4db31fc0829b3992",
+      "sourceinfo_count": 6668
+    },
+    {
+      "module": "Queue4_MatrixStreamStep",
+      "bytes": 559249,
+      "raw_sha256": "f98c6012f2c3467831a96d91044382c8dfa3423d80930df1ec6e35622f5bf5ae",
+      "normalized_sha256": "5e0d11d9d22ac49340b4bf957f220012bd43601a05dd2d5d132e01809e1ff3f3",
+      "sourceinfo_count": 3925
+    },
+    {
+      "module": "TransposedDenseDownOwner",
+      "bytes": 64823522,
+      "raw_sha256": "794ebe152065096da9fe452adb4146a1d83165318cf83a0ac910f47a2333508c",
+      "normalized_sha256": "e07f04f309da1a58a528082ab327d0f361dd117eb8fbc4bc878b4b15faa9b78f",
+      "sourceinfo_count": 267729
+    },
+    {
+      "module": "BlockScalarFloat",
+      "bytes": 99328,
+      "raw_sha256": "f3344b0cd290ca3f8a3e1276bbe6b4b28355c0fbbabb84b9e170ac836ee290bd",
+      "normalized_sha256": "9706dd84a97bfcb6f0165eee71a44cf52b6fbd56f3a292e945b98382f2050c7d",
+      "sourceinfo_count": 583
+    },
+    {
+      "module": "SiluVectorUnit",
+      "bytes": 202062,
+      "raw_sha256": "ab97e22292fcb925a314e52c577fc40966e8d6ae05710f08d2f08bcc0073fbb7",
+      "normalized_sha256": "f38c6529bd67ceea53a30b8f83d7521548c3e8083e1606c1597c9b0682fe63b4",
+      "sourceinfo_count": 1091
+    },
+    {
+      "module": "VectorSiluOwner",
+      "bytes": 95007,
+      "raw_sha256": "d09ccf4977f23c563295bc9a2940b645e14bd4ded6d54b492da8c726f4de1b9e",
+      "normalized_sha256": "0dc9f6b4296cea110f04444f856254252e77c03eb71563164167a1fc464adfcc",
+      "sourceinfo_count": 552
+    },
+    {
+      "module": "ScheduledSiluOwner",
+      "bytes": 48571,
+      "raw_sha256": "1000f57e4427bab7793c3f6d2ec369e93c696249cdb1595e50b5aeb888ad07cd",
+      "normalized_sha256": "e8401d5ce7c71e088d962c2bdb1c5f087be94324ca468b4d60e19783405738d6",
+      "sourceinfo_count": 273
+    },
+    {
+      "module": "Queue8_Meta",
+      "bytes": 13148,
+      "raw_sha256": "3058a55ab94e7b3459515969739268081fcd22f4bdf38656717a22fc990f5187",
+      "normalized_sha256": "5d3cebf72baf92f6bad843ff1aa9914847bf24634b4adb2a32b96ce62d3e496d",
+      "sourceinfo_count": 99
+    },
+    {
+      "module": "MatrixResultFifo",
+      "bytes": 1732523,
+      "raw_sha256": "9a18c2250135b420534ba0d0265569ca56a22cf49a522c21fcfd4b44ca34705d",
+      "normalized_sha256": "e1d750d4fa0576fc462639368bc34abcdb9886b4ab801fdcb28f57ca96ecbf57",
+      "sourceinfo_count": 8793
+    },
+    {
+      "module": "MatrixAccumulatorSeedController",
+      "bytes": 70587,
+      "raw_sha256": "646b31ad96a87647d672187f1f001450484170889a20e409b2bca1592c8a0bb0",
+      "normalized_sha256": "f5da8c37cc1f38492d453ad8327d07d72661c9d539a2f9fe0dbe6c168b2f1c39",
+      "sourceinfo_count": 381
+    },
+    {
+      "module": "MatrixPipelineService",
+      "bytes": 4388719,
+      "raw_sha256": "3f0078d25ae49d70bc62394fba01fdb8af0074ce49dc920ca2dbfb9f7405cdae",
+      "normalized_sha256": "e71c2117c929917e42c8064ec499d04419f67be78d31cb7cc960f12515a9287b",
+      "sourceinfo_count": 22424
+    },
+    {
+      "module": "LegacyMatrixStreamClient",
+      "bytes": 4485336,
+      "raw_sha256": "2d90c09d5496a7379d8a6680048db50159c8d70fc1dc5a96ffef2e5fbdd276ee",
+      "normalized_sha256": "e09285eb60041071162e112c68e05e2695f6b0d89d011d0d19bc204d5d81b5e2",
+      "sourceinfo_count": 26323
+    },
+    {
+      "module": "GdnRuntimeConv4OwnerRecoveredV7",
+      "bytes": 1557839,
+      "raw_sha256": "91866964c26efe04add373e047d5c40fc826746d4ceab0eb196df001b301ea60",
+      "normalized_sha256": "15805cdd894fba80f324a723555f53afdcb24b771b326db3607f9802fe5cfe68",
+      "sourceinfo_count": 7833
+    },
+    {
+      "module": "GdnRuntimeRawPrepOwnerV7",
+      "bytes": 3629300,
+      "raw_sha256": "06142285dffbc8253bca3450d1ea97a0033e0086fea36ef147540a4b6bdbaadd",
+      "normalized_sha256": "dcba679464437faf8fd82169d5358bebc4ce1b6c6bcc7a92792e4299476f2c6b",
+      "sourceinfo_count": 18787
+    },
+    {
+      "module": "GdnRuntimeChunkCoordinator",
+      "bytes": 558719,
+      "raw_sha256": "635c3debcea0d630a66bb9c6d014088c860bad12705b4396908bc400c1c8f238",
+      "normalized_sha256": "9939a2a1c3e889edb4c6dbe01bd34a3219465115aab5d93ee16c76a8a2278470",
+      "sourceinfo_count": 2730
+    },
+    {
+      "module": "GdnChunkStateTransferOwner",
+      "bytes": 68679,
+      "raw_sha256": "adb0bc20c390bd22f481d6815ccdfa9f46387a696a825f2f543971d6d6a355dd",
+      "normalized_sha256": "5a575ff09081d1defe6f3f656ecdb368c8e164d0db660ab901cc5d79bccffdb9",
+      "sourceinfo_count": 367
+    },
+    {
+      "module": "GdnRuntimeChunkLoadPrepV2Owner",
+      "bytes": 167422,
+      "raw_sha256": "2c1962e70a4ba51c047a997f4933be9ff630779eda04a33053951e0a3c966466",
+      "normalized_sha256": "fd5a153078916ff45a3313c8be8a26d69d7ace916575ae11abac9a94622c8779",
+      "sourceinfo_count": 868
+    },
+    {
+      "module": "GdnRuntimeChunkDerivedAndPairV2Owner",
+      "bytes": 231742,
+      "raw_sha256": "dd49383a22b7ba757d487850e553fbb70e71ec4d6fa2042a12b5d22f627c7a10",
+      "normalized_sha256": "6a56074e6ce552a5951fa3ce226aad0af50b07ec74bc5de28010f61bbfb3bfcf",
+      "sourceinfo_count": 1174
+    },
+    {
+      "module": "GdnRuntimeChunkTransposeV2Owner",
+      "bytes": 171971,
+      "raw_sha256": "c5903e1d040c74d56ac686e4dd502980ed2aa53e9526a5f0e72b588502eac36c",
+      "normalized_sha256": "f1a2051f0c77d0a773a07d49faa9a3d97876a25ea12b5c38437434986a3acdb7",
+      "sourceinfo_count": 893
+    },
+    {
+      "module": "GdnRuntimeChunkExecuteOwnerV8",
+      "bytes": 205797,
+      "raw_sha256": "427339a17579baa2a93a34aadd3dbf0e83104eb4adc7ff03d4c7929152ffea2d",
+      "normalized_sha256": "5e52c20f9621cbdad23bba4eee8f7728630ba18944fb4ac8f70e40695e91320f",
+      "sourceinfo_count": 1044
+    },
+    {
+      "module": "GdnRuntimeChunkLeafCollection",
+      "bytes": 579280,
+      "raw_sha256": "4a09b3fe729786e229dcfc40bd4b11854165402d6bc187649a846ee58c22e636",
+      "normalized_sha256": "a7b904ebbebc2e501f562df799d826409e6ca72c49109b0fafde5cc689e899c4",
+      "sourceinfo_count": 2469
+    },
+    {
+      "module": "GdnRuntimeGatedNormOwnerV10",
+      "bytes": 4475958,
+      "raw_sha256": "9fabf4c48feb11874da959f70ce5a1f9d9ca67439ad35129530b53e519e623b7",
+      "normalized_sha256": "5f161e291aac59cbb18805a46edacd9785bd39421f69f1ae67f5a8b12f96008a",
+      "sourceinfo_count": 22877
+    },
+    {
+      "module": "GdnRuntimeRmsNormOwnerV3",
+      "bytes": 418757,
+      "raw_sha256": "9828454074296766208fa0a2d650537df7d58a79892e05b186375fb6013a8911",
+      "normalized_sha256": "8195bcaa66d26d4ca5365f579d773b7b70d0ce793e1ffde103f4fad5ada833e8",
+      "sourceinfo_count": 2123
+    },
+    {
+      "module": "GdnRuntimeElementwiseOwnerV15",
+      "bytes": 256646,
+      "raw_sha256": "06c614defd3b2973ebf2d925af46414c43a9e1ad26c183619e564bf0eb638957",
+      "normalized_sha256": "1c08c67d4251dc6f779ed6f961c5ddf70ed4a10dff39dc1def5543811900a2e0",
+      "sourceinfo_count": 1291
+    },
+    {
+      "module": "QkNormRuntimeOwnerV11",
+      "bytes": 1778025,
+      "raw_sha256": "615e0100bc711c8c00c527865719e9002359e7109fa18a936bb50bcb17012da5",
+      "normalized_sha256": "144519f2b4047b295e07f3a79e3637d978ef86457787cb5621779fd8b4af147e",
+      "sourceinfo_count": 8860
+    },
+    {
+      "module": "PartialRopeRuntimeOwnerV12",
+      "bytes": 323375,
+      "raw_sha256": "683e769e0cbe724129bfe92c7e0dcd56ecc49c7d915d12e029f106729a800012",
+      "normalized_sha256": "09373a3589c30f9b392a27fcfe1b315c46be3aaf6612eb310c06404a8e2e805b",
+      "sourceinfo_count": 1612
+    },
+    {
+      "module": "Bf16KvAppendRuntimeOwnerV13",
+      "bytes": 91617,
+      "raw_sha256": "8c9877d5577208783d7e7d8c41a069e727101a090ed9a8ffa4112dc595b598fc",
+      "normalized_sha256": "1f262e57b776964f987dfea38e6a23a73ee4397ef9a24cf6c0bebb1e30e53b19",
+      "sourceinfo_count": 484
+    },
+    {
+      "module": "Bf16CausalGqaRuntimeOwnerV14",
+      "bytes": 3281062,
+      "raw_sha256": "761419946ffe75997ced55c485d80a12c07a1f267e3c90de05b39c59bca16af5",
+      "normalized_sha256": "d435d3d112d23375698f05ba1630a6f1e71ded3cc47c167df635a594e1999194",
+      "sourceinfo_count": 15974
+    },
+    {
+      "module": "QwenOwnerKernel",
+      "bytes": 13495684,
+      "raw_sha256": "f1374097e3d12a18dd8506c382dbd18dc498c3c8d324da7e4c9bbf23d5584a62",
+      "normalized_sha256": "fa57ec9039ac7c9342037c6970f89576f8ae9c727aa1487d18dfdc4f4580e34f",
+      "sourceinfo_count": 58242
+    },
+    {
+      "module": "RRArbiter",
+      "bytes": 50511,
+      "raw_sha256": "ff806194e5ace7425bc6fadd388b06e3ad7e625fba706ff35c8d7ceda1faac15",
+      "normalized_sha256": "ddfa89bcd11c57dec8ef072debaca099a5a9b892aa008b23f83939503bbaa471",
+      "sourceinfo_count": 369
+    },
+    {
+      "module": "SharedMemoryArbiter",
+      "bytes": 165519,
+      "raw_sha256": "c760e4436c45a4ce6ab040fe83ba81d6c7cffe4ee4ffa3011cdbbdf35feeda1d",
+      "normalized_sha256": "38acc51149115794e1f64f8434ffdc336b0a88d2a4df335e9bd94d4df30aadcd",
+      "sourceinfo_count": 981
+    },
+    {
+      "module": "UnifiedMoeRouterDenseFenceV2",
+      "bytes": 122357,
+      "raw_sha256": "1aa8b846b4463dfe6c58ff54c9359a605f4f52e21c7bab573e85a474648c4769",
+      "normalized_sha256": "5f51d19fdcdac459b8290a96a3486eed43e367c0f19efd9d04c35f493aa78ac5",
+      "sourceinfo_count": 651
+    },
+    {
+      "module": "UnifiedMoeRouterLogitReaderV2",
+      "bytes": 75892,
+      "raw_sha256": "f09c33e23e0da5ac4588b4b96d4236602a5beb67494fdccc607e2928155baeb6",
+      "normalized_sha256": "e43b69534a0102d271616347bc724984a0a16808f9606f3707f31711e38da899",
+      "sourceinfo_count": 388
+    },
+    {
+      "module": "UnifiedMoeRouterNumericalOwnerV2",
+      "bytes": 2641425,
+      "raw_sha256": "9a5f1230a1d20352b3f74e21fe67cf8fcf20dcff13a51f5baba6235f81f78377",
+      "normalized_sha256": "2c6898c5104622c02b9f27f0ba4c49a4b978195ef9d06711e6899e5cc9691dd0",
+      "sourceinfo_count": 13116
+    },
+    {
+      "module": "UnifiedMoeRouteGroupV2",
+      "bytes": 1265204,
+      "raw_sha256": "ee1b3eab4472f6f0d1ee5759d279f60a3dca4ba8c48330689504e1fba5d8e1dd",
+      "normalized_sha256": "eae568e463d8fb7cb23c344bd4076812ee2611160516fb54d6bffcbb65843c66",
+      "sourceinfo_count": 6284
+    },
+    {
+      "module": "UnifiedMoeRouterPipelineBindingV2",
+      "bytes": 641435,
+      "raw_sha256": "e6af5a91ef2fd6863380b9cbc48d449ca6bbb232f40b0418d4ed0f3c8bb712e9",
+      "normalized_sha256": "d78cd486343d14512bd087bedefade45d8368249b71268b641ca61ce887c1112",
+      "sourceinfo_count": 2834
+    },
+    {
+      "module": "UnifiedMoeActivationGatherV2",
+      "bytes": 201194,
+      "raw_sha256": "757c94584c87d36af531bb449e108083cabc5b565c2c5c171dfcebc3af9ba42d",
+      "normalized_sha256": "0ffd585e4dec1d52e73991a097625dff6281f5cd2333e4e86eb391896b720e82",
+      "sourceinfo_count": 1023
+    },
+    {
+      "module": "UnifiedMoeDenseWritebackFenceV2",
+      "bytes": 198188,
+      "raw_sha256": "de03ca66f4e296ed9e6d3f73b04225011759449d4cfc447feea11b07a4abea7b",
+      "normalized_sha256": "5c97c6cc98d8bfa564c6362f1eefd1788c6785030332a4572bd22b3374b0423d",
+      "sourceinfo_count": 1034
+    },
+    {
+      "module": "UnifiedMoeLogical32SwiGluConsumerV3",
+      "bytes": 113951,
+      "raw_sha256": "2c38ac403b1ed6a97a5bc07aa01b00341441a07d012ce813234850ea68a502c5",
+      "normalized_sha256": "699e324f3cd26c4359da7654df0fe657c5fcf2c04c7975b27c015f85c8eeda3b",
+      "sourceinfo_count": 600
+    },
+    {
+      "module": "UnifiedMoeActivationGroupOwnerV3",
+      "bytes": 254667,
+      "raw_sha256": "e1a2d3eff8edc80f964396b42cb6241724406dfd278017826fcbb5398f9ce8ba",
+      "normalized_sha256": "b1c06caddc5fda18a4fafadda7996795d5132f7505d9ecf53f262592c2944dfa",
+      "sourceinfo_count": 1243
+    },
+    {
+      "module": "UnifiedMoeFfnGroupSequencerV3",
+      "bytes": 1718701,
+      "raw_sha256": "a4b3b5906dca981ed743e08259b120ab94b0990685e53f33d52c2a90a5ce6ae7",
+      "normalized_sha256": "537d29dc8566b7f1f685ff5d0bdca70f9fc48bd126a2fdfc76934d75da906c97",
+      "sourceinfo_count": 7468
+    },
+    {
+      "module": "UnifiedMoeRuntimeExpertLoopV4",
+      "bytes": 3218908,
+      "raw_sha256": "888fd1562a058ffdc91e8c85520e1d23a9602308e34bb4a6ee246d1fc2a4dcca",
+      "normalized_sha256": "9a5c47bb097a2a5a88901bfbf0955d25255fdefd753c1c567b54739423b6c32a",
+      "sourceinfo_count": 14103
+    },
+    {
+      "module": "UnifiedMoeLogical32SigmoidConsumerV5",
+      "bytes": 120718,
+      "raw_sha256": "dc4bae54b51d1cde24c77a48d59a522ea71c871ce2f3d0061fa7bac35ec85b7d",
+      "normalized_sha256": "b57b5fa424560285aa077112a8864f91507b46075890aa8a4c59331f127b4345",
+      "sourceinfo_count": 603
+    },
+    {
+      "module": "UnifiedMoeSharedGateSigmoidOwnerV5",
+      "bytes": 1475184,
+      "raw_sha256": "eb0da3eb792d105b4726c2298f0bbe1ad904493fdade9c1d82e2cd0dc07cd072",
+      "normalized_sha256": "0aebb3db67112e6e5392cb7d953a82201de29ce606ee1407e0154927c49be5ec",
+      "sourceinfo_count": 6668
+    },
+    {
+      "module": "UnifiedMoeRoutedSelectionReaderV5",
+      "bytes": 341067,
+      "raw_sha256": "3e4cecb0077558deb3867b77552fe7a53fe07bd740b31f4bf7f9b10df9a08c8a",
+      "normalized_sha256": "191c236e6a042b769005cad5ff245d49cb62fe3de6b33275ddb15787a01c091f",
+      "sourceinfo_count": 1710
+    },
+    {
+      "module": "UnifiedMoeDownTileReaderV5",
+      "bytes": 211986,
+      "raw_sha256": "d463707a8764c4e6d89883cbd59bb77bbebe41d392b87f81b1af75a6120697aa",
+      "normalized_sha256": "b8448553303903eb1e865fdaf104fc18819adc680c2c865c5aa713909b35ef97",
+      "sourceinfo_count": 1065
+    },
+    {
+      "module": "HeteroRuntimeMoeMerge",
+      "bytes": 221541,
+      "raw_sha256": "d4a1c20e94241f86d28391b4e0b3a5d3ba47a4665fef45569330aa48a42d4403",
+      "normalized_sha256": "81d5056af5663eae93aa120fc17226bd53bc799ed4f9e0421220605ed9db0598",
+      "sourceinfo_count": 1250
+    },
+    {
+      "module": "UnifiedMoeProducerBindingV5",
+      "bytes": 81462,
+      "raw_sha256": "955a18dfe84eee152a84d4305a65f8e5a2513568dc7663e38b5a66556d269301",
+      "normalized_sha256": "bb75f7031adee31403656743a37846427fdb2435239d0ce2c909881ed05be19c",
+      "sourceinfo_count": 420
+    },
+    {
+      "module": "MoeBf16VectorConsumerV2",
+      "bytes": 467926,
+      "raw_sha256": "2cfe2e242e7f191f95820a99c38b251a8a0d7f8ffc399de0cf5c9d430f1d976f",
+      "normalized_sha256": "3a4078d26beaa635f17d11a74ce33b48f9f15cfae72b9b1514e9aadeb9f945a1",
+      "sourceinfo_count": 2455
+    },
+    {
+      "module": "UnifiedMoePhaseTileMergePortsV5",
+      "bytes": 304072,
+      "raw_sha256": "d7454ddefe921a22cbbf50b0b9cbdea64bfc9308e95d720ba8f8f6a74af54524",
+      "normalized_sha256": "c1d9ea3367cf2d82ad33508b05d39491f2639c73da51b05560476806d8e79602",
+      "sourceinfo_count": 1444
+    },
+    {
+      "module": "UnifiedMoePhaseMergeOwnerV5",
+      "bytes": 2031513,
+      "raw_sha256": "7f34c4523ed52c6025e97a4802f22c991a19fd5657cae245c39f8f36deb96bca",
+      "normalized_sha256": "6106f94f4cb90bcd13c8f99eb9b72d03caaec725e627d40b275edce7272d387b",
+      "sourceinfo_count": 8764
+    },
+    {
+      "module": "UnifiedMoePhaseResidualOwnerV5",
+      "bytes": 767628,
+      "raw_sha256": "0b4a5d54e5f7e800975836655617afcffe497c0f7de66e3751e00794735dd30a",
+      "normalized_sha256": "4a16dbb86c19a0f8e5bcf120c3fc85c275316a9cb02f836d7715147a9c8968a3",
+      "sourceinfo_count": 3576
+    },
+    {
+      "module": "UnifiedVectorElement32BankV4",
+      "bytes": 310638,
+      "raw_sha256": "d283f4469403eb9d4db02688cb226e62a802859fcfbecca850a4920539da06ca",
+      "normalized_sha256": "cbf984096bf2a1d89996623511ec74436e322a8e22132f2c814b0356056f76a7",
+      "sourceinfo_count": 1597
+    },
+    {
+      "module": "RRArbiter_1",
+      "bytes": 22087,
+      "raw_sha256": "774bafc2183c9ea9792759dfaf10d96df82f4feb0d0f78d60d43eba737e4029c",
+      "normalized_sha256": "0a456ed4a9b01321511ea9c1ec45d9730d26ed1c050a766aeff882c6949d46e2",
+      "sourceinfo_count": 176
+    },
+    {
+      "module": "RRArbiter_2",
+      "bytes": 144876,
+      "raw_sha256": "19b2895f827ba0f82ffe94a533805b291b8ff2567e426c53a9bb932a4246c6cf",
+      "normalized_sha256": "6ca9ab110c9bd622af1f6aed21901c2f7fefb358ce49d0be25f2c505c4a5d821",
+      "sourceinfo_count": 1222
+    },
+    {
+      "module": "UnifiedMoeSharedArithmeticAdapterV5",
+      "bytes": 1097528,
+      "raw_sha256": "f218f347104f6380946f7c39e81e991352dbd272b339f5f27a419f51bf8670a4",
+      "normalized_sha256": "cf2d1c68534f5cc8b083eb1b66ab6f7019a165a90975fc9fb21fc4f38bd7cd21",
+      "sourceinfo_count": 5189
+    },
+    {
+      "module": "HeteroStreamingTopK",
+      "bytes": 72432,
+      "raw_sha256": "1816f40fddba1ca3fc6d8a3167b5a5fadeec2bc6753ff67b847aa524290f93a8",
+      "normalized_sha256": "14879ea251a4d1a1c3282fe24604f7537bdcd957ada03b5aff12992304de733e",
+      "sourceinfo_count": 379
+    },
+    {
+      "module": "HostMoeSelectionServiceV5",
+      "bytes": 42176,
+      "raw_sha256": "e78fa0c4167a7ec54f729b2cc1be9aabd9883151059511a2a639976426d82c7e",
+      "normalized_sha256": "8098c917bd5c69e9833e8da30b8c910f4fbc7b65f4ada0b21b532af444ac8e45",
+      "sourceinfo_count": 223
+    },
+    {
+      "module": "HostRuntimeOwnerGuardV5",
+      "bytes": 478507,
+      "raw_sha256": "6d281c7bb42a516a5fc5a2e4ffb190ce24e49818533925f5c035ede7f680aefe",
+      "normalized_sha256": "4fa0e09214fff0d312eee7cf0a68de3a210a4005c15c95024e358c2f1983dd93",
+      "sourceinfo_count": 2434
+    },
+    {
+      "module": "HostRuntimeMoePhaseAllocatorV5",
+      "bytes": 709270,
+      "raw_sha256": "e4556561e14d5089e8f1d716f9df990cb8e848a5a7f9aaae8042050b33767e7b",
+      "normalized_sha256": "16a8ebf77fea9f5b1816aa79b9111f233693a82ae99a93b12c9f1b32850b41fa",
+      "sourceinfo_count": 3402
+    },
+    {
+      "module": "RetainedIdmaWeightBurstAdapter",
+      "bytes": 167479,
+      "raw_sha256": "27545262ba9d15d043c07c1290125546d2acc372764fed513d940644e3629bc6",
+      "normalized_sha256": "e51571eaf58966352800fa03f7f087042d964695d2f801d467644e8582b8975b",
+      "sourceinfo_count": 959
+    },
+    {
+      "module": "HostBlockTopV4",
+      "bytes": 11278199,
+      "raw_sha256": "20142dd89b53b88b32fa21655a53a4f83a8f31199ecd8477e82725797d5daf47",
+      "normalized_sha256": "c7f9c3e7226b461654a883769d38a8e013dd6f827c71050d1c43a7444361a6f2",
+      "sourceinfo_count": 44592
+    }
+  ],
+  "seconds": 58.38124095300009
+}
